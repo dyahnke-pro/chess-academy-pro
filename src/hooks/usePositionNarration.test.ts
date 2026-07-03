@@ -34,6 +34,15 @@ vi.mock('../services/stockfishEngine', () => ({
       topLines: [],
       nodesPerSecond: 0,
     }),
+    analyzeWithBudget: vi.fn().mockResolvedValue({
+      bestMove: 'e2e4',
+      evaluation: 0,
+      isMate: false,
+      mateIn: null,
+      depth: 16,
+      topLines: [],
+      nodesPerSecond: 0,
+    }),
   },
   // The hook now reads the active engine variant to size the Stockfish budget
   // (iOS asm.js needs a bigger budget than desktop WASM). Default to the fast
@@ -104,6 +113,7 @@ beforeEach(() => {
   auditCalls.length = 0;
   __resetStockfishCacheForTests();
   vi.mocked(stockfishEngine.analyzePosition).mockClear();
+  vi.mocked(stockfishEngine.analyzeWithBudget).mockClear();
 });
 
 // ── Tests ─────────────────────────────────────────────────────────────────
@@ -334,7 +344,7 @@ describe('usePositionNarration', () => {
     await waitFor(() => expect(chatCalls.length).toBe(1));
     chatResolver?.('Opening look.');
     await waitFor(() => expect(speakRecords.length).toBe(1));
-    const firstCallCount = vi.mocked(stockfishEngine.analyzePosition).mock.calls.length;
+    const firstCallCount = vi.mocked(stockfishEngine.analyzeWithBudget).mock.calls.length;
     expect(firstCallCount).toBe(1);
 
     // Finish first speak so the hook is idle again.
@@ -351,7 +361,7 @@ describe('usePositionNarration', () => {
     await waitFor(() => expect(chatCalls.length).toBe(1));
 
     // Stockfish NOT called again — cache hit.
-    expect(vi.mocked(stockfishEngine.analyzePosition).mock.calls.length).toBe(firstCallCount);
+    expect(vi.mocked(stockfishEngine.analyzeWithBudget).mock.calls.length).toBe(firstCallCount);
     expect(auditCalls.some((c) => c.kind === 'narration-stockfish-cache-hit')).toBe(true);
   });
 
@@ -371,7 +381,7 @@ describe('usePositionNarration', () => {
     speakRecords[0].resolve();
     await waitFor(() => expect(result.current.isNarrating).toBe(false));
 
-    const firstCallCount = vi.mocked(stockfishEngine.analyzePosition).mock.calls.length;
+    const firstCallCount = vi.mocked(stockfishEngine.analyzeWithBudget).mock.calls.length;
     chatResolver = null;
     chatCalls.length = 0;
 
@@ -382,6 +392,6 @@ describe('usePositionNarration', () => {
     await waitFor(() => expect(chatCalls.length).toBe(1));
 
     // New FEN → engine runs again, no cache-hit audit for THIS call.
-    expect(vi.mocked(stockfishEngine.analyzePosition).mock.calls.length).toBe(firstCallCount + 1);
+    expect(vi.mocked(stockfishEngine.analyzeWithBudget).mock.calls.length).toBe(firstCallCount + 1);
   });
 });

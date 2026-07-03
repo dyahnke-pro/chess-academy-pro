@@ -31,19 +31,6 @@ export interface UsePhaseNarrationResult {
   error: string | null;
 }
 
-/** Mirrors usePositionNarration's budgets (WO-COACH-NARRATION-05) so a
- *  hung engine, fetch, or TTS call can never strand the hook and the
- *  transition is always either spoken or logged-and-forgotten. */
-const STOCKFISH_TIMEOUT_MS = 8_000;
-/** Tap-latency race budget. PHASE-LAG-01 set 500ms mirroring POLISH-03;
- *  PHASE-LAG-02 tightened to 300ms; PHASE-LAG-03 drops to 150ms.
- *  PHASE_NARRATION_ADDITION tolerates a missing stockfishAnalysis block,
- *  so racing out fast is net-positive for detection-to-first-word
- *  latency — at typical depth-10 Stockfish times, most cold-cache runs
- *  exceed 300ms and we'd ship a stale analysis anyway. The race still
- *  lets fast cache hits through, so warm positions retain the engine
- *  signal at zero latency cost. */
-const STOCKFISH_FAST_BUDGET_MS = 150;
 /** Stockfish analysis depth for phase narration. PHASE-LAG-01 set 12;
  *  PHASE-LAG-02 drops to 10 to match Read Position. Deterministic
  *  tactics detection runs on every FEN in buildChessContextMessage
@@ -192,34 +179,29 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
         // analysis. PHASE_NARRATION_ADDITION already handles missing
         // stockfishAnalysis gracefully. WO-PHASE-LAG-02: depth 12 → 10,
         // budget 500ms → 300ms, successful analyses cached for reuse.
-        console.log('[PHASE-HOOK-03] stockfish analysis call (parallel)');
-        // Engine-aware budget (David 2026-07-03): iOS runs the pure-JS asm.js
-        // build (the WASM builds OOM / call_indirect-trap on iPhone), which
-        // can't reach depth-10 in 150ms — so the old race ALWAYS timed out on
-        // iOS and the brain got no eval ("equal material" guess). Give asm the
-        // ~3s it needs (it resolves early when faster); desktop/Android WASM
-        // stays snappy. The race still returns as soon as the engine answers,
-        // so this only adds latency when the engine is genuinely slow — and the
-        // code-counted material balance covers the timeout case regardless (G0).
+        console.log('[PHASE-HOOK-03] stockfish analysis call (budgeted)');
+        // David 2026-07-03: the old `analyzePosition(depth) raced-to-null`
+        // pattern searched to a FIXED depth (unbounded time) and threw the
+        // result away on timeout — so the slow iOS asm.js build (the WASM
+        // builds OOM / call_indirect-trap on iPhone) NEVER returned an eval and
+        // the brain guessed "equal material." `analyzeWithBudget` instead lets
+        // the engine search for the budget, then `stop()`s it and returns the
+        // BEST line it reached so far — depth 5/6 on asm, full depth on desktop
+        // (which resolves early). We take whatever it found in the time instead
+        // of demanding a target depth; a real shallow eval beats null. The
+        // code-counted material balance still covers a truly dead engine (G0).
+        // Budget is generous because desktop resolves on depth well before it,
+        // so it only bounds the genuinely-slow asm path.
         const engineIsAsm = resolveWorkerUrl().variant === 'asm';
-        const analysisDepth = engineIsAsm ? 8 : STOCKFISH_DEPTH;
-        const fastBudgetMs = engineIsAsm ? 3000 : Math.max(STOCKFISH_FAST_BUDGET_MS, 700);
-        const stockfishRace: Promise<StockfishAnalysis | null> = withTimeout(
-          stockfishEngine.analyzePosition(event.fen, analysisDepth),
-          STOCKFISH_TIMEOUT_MS,
-          'stockfish',
-        ).then(
-          (r) => {
+        const budgetMs = engineIsAsm ? 3000 : 1200;
+        stockfishAnalysis = await stockfishEngine
+          .analyzeWithBudget(event.fen, STOCKFISH_DEPTH, budgetMs)
+          .then((r) => {
             setCachedStockfish(event.fen, r);
-            return r;
-          },
-          () => null as StockfishAnalysis | null,
-        );
-        const stockfishBudget = new Promise<null>((resolve) =>
-          setTimeout(() => resolve(null), fastBudgetMs),
-        );
-        stockfishAnalysis = await Promise.race([stockfishRace, stockfishBudget]);
-        console.log('[PHASE-HOOK-04] stockfish race resolved', {
+            return r as StockfishAnalysis | null;
+          })
+          .catch(() => null as StockfishAnalysis | null);
+        console.log('[PHASE-HOOK-04] stockfish budget resolved', {
           hasAnalysis: stockfishAnalysis !== null,
         });
       }

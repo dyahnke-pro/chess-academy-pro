@@ -30,17 +30,6 @@ export interface UsePositionNarrationResult {
   error: string | null;
 }
 
-/** Stockfish analysis budget — a hung worker must not strand the hook.
- *  This is the outer safety timeout; the hook also races against a
- *  much shorter budget below to keep the tap→first-word latency down. */
-const STOCKFISH_TIMEOUT_MS = 8_000;
-/** Tap-latency race budget. WO-POLISH-03 set this at 500ms; WO-PHASE-
- *  PROSE-01 tightens to 300ms after confirming the narration prompt
- *  handles missing analysis cleanly and most tap-to-first-word time
- *  was spent waiting on the engine. 300ms keeps the fast path fast
- *  without increasing analysis-missing rate noticeably for positions
- *  where Stockfish takes >300ms to reach depth 10. */
-const STOCKFISH_FAST_BUDGET_MS = 300;
 /** Stockfish analysis depth for tap-time narration. WO-POLISH-03
  *  dropped 16 → 12; WO-PHASE-PROSE-01 drops 12 → 10. Deterministic
  *  tactics detection runs on every FEN regardless in
@@ -172,34 +161,23 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
         });
         stockfishAnalysis = cachedAnalysis;
       } else {
-        // WO-POLISH-03: fire Stockfish in PARALLEL with the rest of
-        // setup. Race against a short budget so LLM dispatch isn't
-        // blocked by engine analysis; whichever finishes first is what
-        // the LLM gets. If Stockfish is late, the narration prompt
-        // already handles missing stockfishAnalysis gracefully.
-        // Engine-aware budget (David 2026-07-03): the iOS asm.js build is pure
-        // JS and can't reach depth-10 in 300ms, so the eval never landed on
-        // iPhone. Give asm the time it needs (resolves early when faster);
-        // desktop/Android WASM stays snappy. Code-counted material in
-        // buildChessContextMessage covers any remaining timeout (G0).
+        // David 2026-07-03: use a time-BUDGETED search, not depth-raced-to-null.
+        // The old pattern ran to a fixed depth (unbounded time) and discarded
+        // the result on timeout, so the slow iOS asm.js engine never returned an
+        // eval. `analyzeWithBudget` searches for the budget then `stop()`s and
+        // returns the BEST line reached so far — desktop resolves early on
+        // depth, asm returns its shallow-but-real eval. We take what it found in
+        // the time; code-counted material (buildChessContextMessage) covers a
+        // dead engine (G0).
         const engineIsAsm = resolveWorkerUrl().variant === 'asm';
-        const analysisDepth = engineIsAsm ? 8 : STOCKFISH_DEPTH;
-        const fastBudgetMs = engineIsAsm ? 3000 : Math.max(STOCKFISH_FAST_BUDGET_MS, 700);
-        const stockfishRace: Promise<StockfishAnalysis | null> = withTimeout(
-          stockfishEngine.analyzePosition(args.fen, analysisDepth),
-          STOCKFISH_TIMEOUT_MS,
-          'stockfish',
-        ).then(
-          (r) => {
+        const budgetMs = engineIsAsm ? 3000 : 1200;
+        stockfishAnalysis = await stockfishEngine
+          .analyzeWithBudget(args.fen, STOCKFISH_DEPTH, budgetMs)
+          .then((r) => {
             setCachedStockfish(args.fen, r);
-            return r;
-          },
-          () => null as StockfishAnalysis | null,
-        );
-        const stockfishBudget = new Promise<null>((resolve) =>
-          setTimeout(() => resolve(null), fastBudgetMs),
-        );
-        stockfishAnalysis = await Promise.race([stockfishRace, stockfishBudget]);
+            return r as StockfishAnalysis | null;
+          })
+          .catch(() => null as StockfishAnalysis | null);
       }
       if (token !== activeTokenRef.current) return;
 
