@@ -61,6 +61,11 @@ export async function getRepertoireOpenings(
  *  live in src/services/openingAliases.ts). */
 export const OPENING_ID_ALIASES: Record<string, string> = {
   'pirc-defense': 'pirc-defence',
+  // The Glek System was promoted to its own masterclass (`glek-system`, David
+  // 2026-07-03). The raw Lichess ECO twin `c47-four-knights-game-glek-system`
+  // (Watch + book readings only) must resolve to the rich masterclass so a
+  // search/browse tap lands on the full course, not the bare reference page.
+  'c47-four-knights-game-glek-system': 'glek-system',
 };
 
 /** Returns a single opening by its ID. Honours `OPENING_ID_ALIASES`: if
@@ -101,6 +106,11 @@ export async function searchOpenings(query: string): Promise<OpeningRecord[]> {
   // Score every opening and keep matches
   const scored: Array<{ opening: OpeningRecord; score: number }> = [];
   for (const o of all) {
+    // Skip records that are an alias SOURCE — they resolve to a canonical
+    // masterclass (e.g. the bare `c47-four-knights-game-glek-system` ECO twin
+    // → `glek-system`). Listing both would double up a "Glek System" result;
+    // the canonical rich record is kept, the bare reference twin hidden.
+    if (o.id in OPENING_ID_ALIASES) continue;
     // ECO prefix match (always exact)
     if (o.eco.toLowerCase().startsWith(lower)) {
       scored.push({ opening: o, score: -1 });

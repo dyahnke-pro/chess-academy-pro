@@ -81,6 +81,16 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /glek/i, label: 'Glek System' },
     { test: /rubinstein/i, label: 'Rubinstein' },
   ],
+  // Glek System — the Four Knights 4.g3 fianchetto, promoted to its own
+  // masterclass (David 2026-07-03: "a complex enough opening to stand alone").
+  // Main-line pill = the classical 4...Bc5 calm line (Be3 trade + Nh4→f5, the
+  // showcase, exempt). Tabs = Black's other validated replies, frequency-ordered
+  // from the masters explorer (d5 663g · Bb4 182g · g6 52g).
+  'glek-system': [
+    { test: /central break|4\.\.\.d5/i, label: 'Central 4...d5' },
+    { test: /pin/i, label: 'Pin 4...Bb4' },
+    { test: /symmetrical|4\.\.\.g6/i, label: 'Fianchetto 4...g6' },
+  ],
   // London System — quiet, system-based White opening (Carlsen's workhorse).
   // Main-line pill = the London vs ...d5 / ...Qb6 poisoned-pawn line (the
   // showcase, exempt). Tabs are the two DB-anchored, distinct structures with

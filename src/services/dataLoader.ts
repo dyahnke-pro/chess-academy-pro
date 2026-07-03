@@ -119,7 +119,7 @@ const PRO_DATA_REVISION = '2026-07-02-caruana-najdorf-otb-variations';
 const PRO_REVISION_KEY = 'pro_data_revision';
 // Bump when repertoire.json CONTENT changes need to reach already-seeded
 // devices (the base repertoire is otherwise only loaded on first install).
-const BASE_DATA_REVISION = '2026-05-31-gambit-tab-reconcile';
+const BASE_DATA_REVISION = '2026-07-03-glek-system-masterclass';
 const BASE_REVISION_KEY = 'base_repertoire_revision';
 
 export async function isDatabaseSeeded(): Promise<boolean> {
@@ -443,10 +443,45 @@ export async function reconcileBaseRepertoire(): Promise<void> {
     if (meta?.value === BASE_DATA_REVISION) return;
 
     const toPut: OpeningRecord[] = [];
+    const defaults = createDefaultSrsFields();
     for (const entry of repertoireData as RepertoireEntry[]) {
       const existing = await db.openings.get(entry.id);
-      if (!existing) continue; // first-install seed handles brand-new entries
       const { fen, uci } = computePosition(entry.pgn);
+      if (!existing) {
+        // Brand-new masterclass added to repertoire.json AFTER this device was
+        // first seeded (e.g. glek-system, David 2026-07-03). The first-install
+        // seed only runs once, so reconcile must CREATE the record here or an
+        // existing user never sees the new opening. Build the full record with
+        // isRepertoire defaults, exactly as loadRepertoireData would.
+        toPut.push({
+          id: entry.id,
+          eco: entry.eco,
+          name: entry.name,
+          pgn: entry.pgn,
+          uci,
+          fen,
+          color: entry.color,
+          style: entry.style,
+          isRepertoire: true,
+          isGambit: entry.isGambit ?? false,
+          overview: entry.overview,
+          keyIdeas: entry.keyIdeas,
+          traps: entry.traps,
+          warnings: entry.warnings,
+          variations: entry.variations,
+          trapLines: entry.trapLines ?? null,
+          warningLines: entry.warningLines ?? null,
+          drillAccuracy: 0,
+          drillAttempts: 0,
+          lastStudied: null,
+          woodpeckerReps: 0,
+          woodpeckerSpeed: null,
+          woodpeckerLastDate: null,
+          isFavorite: false,
+          ...defaults,
+        });
+        continue;
+      }
       toPut.push({
         ...existing,
         eco: entry.eco,
