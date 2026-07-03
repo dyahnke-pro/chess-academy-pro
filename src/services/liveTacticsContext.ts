@@ -57,8 +57,9 @@ export function buildTacticsLiveContext(
   analysis: StockfishAnalysis | null,
   playerColor: 'w' | 'b',
   playerRating: number,
+  tacticsSkill?: number,
 ): TacticsLiveContext {
-  const lookaheadDepth = getTacticLookahead(playerRating);
+  const lookaheadDepth = getTacticLookahead(playerRating, tacticsSkill);
 
   // 1. Immediate tactics + hanging pieces — no PV needed.
   const immediate = detectImmediateTactics(fen, playerColor);
@@ -139,12 +140,18 @@ export async function buildFedTacticsContext(
   playerRating: number,
   cachedAnalysis?: StockfishAnalysis | null,
   analyze: (fen: string) => Promise<StockfishAnalysis | null> = defaultFedAnalyze,
+  // Optional adaptive signal (SkillRadar.tactics, 0-100). When supplied, a
+  // player strong/improving at tactics gets a deeper PV scan — see
+  // getTacticLookahead. Omitted → rating-only baseline (backward compatible).
+  // Passed LAST (after `analyze`) so existing 4-arg callers are unaffected;
+  // callers that want it but not a custom analyzer pass `undefined` for analyze.
+  tacticsSkill?: number,
 ): Promise<TacticsLiveContext> {
   let analysis = cachedAnalysis ?? null;
   if (!analysis || analysis.topLines.length === 0) {
     analysis = await analyze(fen);
   }
-  return buildTacticsLiveContext(fen, analysis, playerColor, playerRating);
+  return buildTacticsLiveContext(fen, analysis, playerColor, playerRating, tacticsSkill);
 }
 
 /** Deterministic ground-truth facts from the FEN — king squares, side

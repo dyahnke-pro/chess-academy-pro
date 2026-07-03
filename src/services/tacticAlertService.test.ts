@@ -164,20 +164,40 @@ describe('tacticAlertService', () => {
   // ─── Alert Delay ──────────────────────────────────────────────────────────
 
   describe('getTacticLookahead', () => {
-    it('returns 1 for beginners (alert 1 move ahead)', () => {
+    it('returns 1 for beginners (immediate threat only)', () => {
       expect(getTacticLookahead(800)).toBe(1);
     });
 
-    it('returns 2 for improvers', () => {
+    it('returns 2 for improvers (1 full move)', () => {
       expect(getTacticLookahead(1200)).toBe(2);
     });
 
-    it('returns 4 for intermediate players (calculate 2 moves)', () => {
-      expect(getTacticLookahead(1600)).toBe(4);
+    it('returns 6 for intermediate players (3 full moves)', () => {
+      expect(getTacticLookahead(1600)).toBe(6);
     });
 
-    it('returns 6 for advanced players (plan the whole sequence)', () => {
-      expect(getTacticLookahead(2000)).toBe(6);
+    it('returns 10 for advanced players (5 full moves)', () => {
+      expect(getTacticLookahead(2000)).toBe(10);
+    });
+
+    // Adaptive: tactics skill (0-100) pushes the horizon out, open-ended.
+    it('leaves the baseline unchanged for average tactical skill (<= 60)', () => {
+      expect(getTacticLookahead(1600, 55)).toBe(6);
+      expect(getTacticLookahead(2000, 60)).toBe(10);
+    });
+
+    it('extends the horizon for strong/improving tacticians (+1 move per 20 pts over 60)', () => {
+      expect(getTacticLookahead(1600, 80)).toBe(8);   // intermediate + strong tactics → 4 moves
+      expect(getTacticLookahead(1600, 100)).toBe(10); // → 5 moves
+      expect(getTacticLookahead(2000, 100)).toBe(14); // advanced + elite tactics → 7 moves (open-ended)
+    });
+
+    it('never over-faces a raw beginner even with high tactics skill', () => {
+      expect(getTacticLookahead(800, 100)).toBe(1);
+    });
+
+    it('is backward compatible when no tactics skill is supplied', () => {
+      expect(getTacticLookahead(1600)).toBe(6);
     });
   });
 

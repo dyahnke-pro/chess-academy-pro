@@ -40,7 +40,14 @@ describe('buildFedTacticsContext (ROOT fix — never starve the package)', () =>
     const ctx = await buildFedTacticsContext(STARTING_FEN, 'w', 1500, null, analyze);
     expect(ctx.threats).toEqual([]);
     expect(ctx.opportunities).toEqual([]);
-    expect(ctx.lookaheadDepth).toBe(4);
+    expect(ctx.lookaheadDepth).toBe(6);
+  });
+
+  it('threads tactics skill through to the adaptive lookahead', async () => {
+    const analyze = vi.fn().mockResolvedValue(null);
+    // 1500 baseline 6 plies + strong tactics (80) → 8 plies.
+    const ctx = await buildFedTacticsContext(STARTING_FEN, 'w', 1500, null, analyze, 80);
+    expect(ctx.lookaheadDepth).toBe(8);
   });
 });
 
@@ -53,9 +60,9 @@ describe('buildTacticsLiveContext', () => {
     expect(ctx.opportunities).toEqual([]);
   });
 
-  it('lookaheadDepth follows getTacticLookahead — 4 plies for intermediate (1400+)', () => {
+  it('lookaheadDepth follows getTacticLookahead — 6 plies (3 moves) for intermediate (1400+)', () => {
     const ctx = buildTacticsLiveContext(STARTING_FEN, null, 'w', 1500);
-    expect(ctx.lookaheadDepth).toBe(4);
+    expect(ctx.lookaheadDepth).toBe(6);
   });
 
   it('lookaheadDepth = 2 for improvers (1000-1399)', () => {
@@ -68,9 +75,15 @@ describe('buildTacticsLiveContext', () => {
     expect(ctx.lookaheadDepth).toBe(1);
   });
 
-  it('lookaheadDepth = 6 for advanced (1800+) — push them to calculate 3 full moves out', () => {
+  it('lookaheadDepth = 10 for advanced (1800+) — push them to calculate 5 full moves out', () => {
     const ctx = buildTacticsLiveContext(STARTING_FEN, null, 'w', 2000);
-    expect(ctx.lookaheadDepth).toBe(6);
+    expect(ctx.lookaheadDepth).toBe(10);
+  });
+
+  it('lookaheadDepth extends further when tactics skill is high (adaptive)', () => {
+    // Intermediate baseline 6 plies + strong tactics (80) → +1 move → 8 plies.
+    const ctx = buildTacticsLiveContext(STARTING_FEN, null, 'w', 1500, 80);
+    expect(ctx.lookaheadDepth).toBe(8);
   });
 
   it('detects a hanging piece — Black bishop hanging on c5 after 1.e4 e5 2.Bc4 Nf6 3.Nf3 Bc5 4.Nxe5 (Bxc5 wins)', () => {

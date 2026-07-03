@@ -704,8 +704,11 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           // game, the brain gets the named patterns + PV scan so it
           // can answer by tactic name instead of citing eval alone.
           const gameChatStudentColor = liveFen.split(' ')[1] === 'b' ? 'b' : 'w';
-          const gameChatStudentRating =
-            useAppStore.getState().activeProfile?.puzzleRating ?? 1200;
+          const gameChatProfile = useAppStore.getState().activeProfile;
+          const gameChatStudentRating = gameChatProfile?.puzzleRating ?? 1200;
+          // Adaptive tactical horizon — a player strong/improving at tactics
+          // gets a deeper PV scan (David 2026-07-03).
+          const gameChatTacticsSkill = gameChatProfile?.skillRadar?.tactics;
           // Sync thin context for the brain envelope — the SPINE re-feeds it
           // richly (coachService.ask runs buildFedTacticsContext when thin),
           // so we must NOT block the chat reply on an engine read here.
@@ -714,13 +717,14 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             null,
             gameChatStudentColor,
             gameChatStudentRating,
+            gameChatTacticsSkill,
           );
           // FED context for the SPOKEN gate (queueSpeak), fire-and-forget so
           // it never delays the reply (ROOT fix, David 2026-06-16). The voice
           // streams seconds later (after the brain responds), so this
           // resolves first; if not, the spoken gate falls back to board-only
           // for the first sentence and the displayed text stays spine-gated.
-          void buildFedTacticsContext(liveFen, gameChatStudentColor, gameChatStudentRating)
+          void buildFedTacticsContext(liveFen, gameChatStudentColor, gameChatStudentRating, undefined, undefined, gameChatTacticsSkill)
             .then((fed) => { currentTacticsRef.current = fed; })
             .catch(() => { /* engine down — leave board-only */ });
           void logAppAudit({

@@ -223,6 +223,8 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
         event.playerColor === 'white' ? 'w' : 'b',
         rating,
         stockfishAnalysis,
+        undefined, // default analyzer
+        profile?.skillRadar?.tactics, // adaptive lookahead (David 2026-07-03)
       ).catch(() => undefined);
       if (token !== activeTokenRef.current) return;
 

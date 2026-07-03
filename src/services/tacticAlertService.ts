@@ -233,16 +233,38 @@ export interface GameplayTacticAlert {
  * The missed-tactic notification ("you just missed one, take it back")
  * fires for ALL players regardless of rating — that's a separate system.
  */
-export function getTacticLookahead(playerRating: number): number {
-  // David's call (2026-05-18): "1 or 2 for beginners, 4 for intermediate
-  // users. This pushes the user to think ahead more bettering their
-  // game." + "Don't forget about advanced players!" — advanced gets
-  // a deeper scan so the coach can frame tactics they're expected
-  // to calculate without help (3 full moves out).
-  if (playerRating < 1000) return 1;  // Beginner: just the immediate threat
-  if (playerRating < 1400) return 2;  // Improver: 1 full move ahead
-  if (playerRating < 1800) return 4;  // Intermediate: 2 full moves ahead — calculate
-  return 6;                            // Advanced (1800+): 3 full moves ahead — calculate the whole sequence
+export function getTacticLookahead(
+  playerRating: number,
+  tacticsSkill?: number,
+): number {
+  // How many plies of the engine PV the coach scans for tactics it will
+  // surface — scaled to push the player to calculate as far as they can handle.
+  //
+  // David 2026-07-03: intermediate = 3 full moves, advanced = 5 full moves —
+  // and NOT a locked ceiling. The rating band sets a BASELINE; the player's
+  // tactics-skill radar (0-100, from real puzzle/game performance) adds plies on
+  // top, OPEN-ENDED, so as they get better at tactics the horizon keeps
+  // extending and no single number is fixed. (2026-05-18 anchors — 1/2 for
+  // beginners, deeper for stronger — kept; intermediate/advanced pushed out.)
+  //
+  // Bounded in practice by the length of Stockfish's PV: the scan walks what the
+  // engine returned and stops at the PV end, so an aggressive horizon degrades
+  // gracefully rather than inventing moves (G3).
+  let plies: number;
+  if (playerRating < 1000) plies = 1;        // Beginner: just the immediate threat
+  else if (playerRating < 1400) plies = 2;   // Improver: 1 full move ahead
+  else if (playerRating < 1800) plies = 6;   // Intermediate: 3 full moves ahead
+  else plies = 10;                           // Advanced (1800+): 5 full moves ahead
+
+  // Adaptive push: a player strong (or improving) at tactics for their level
+  // sees further. Every 20 points of tactics skill above 60 adds one full move
+  // (2 plies) — open-ended. Not applied to raw beginners (< 1000) so we never
+  // over-face them. tacticsSkill omitted → baseline behavior (backward compat).
+  if (typeof tacticsSkill === 'number' && playerRating >= 1000) {
+    const bonusMoves = Math.max(0, Math.floor((tacticsSkill - 60) / 20));
+    plies += bonusMoves * 2;
+  }
+  return plies;
 }
 
 /** Centipawn bar a proactive tactic alert must clear to be spoken. The
