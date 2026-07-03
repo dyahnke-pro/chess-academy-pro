@@ -53,3 +53,16 @@ export function hintStartTier(rating: number, skill?: number): 1 | 2 | 3 {
   if (effective < 1800) return 2; // intermediate — name the piece, hide the square
   return 1;                       // advanced (1800+) — WHY first, full ladder
 }
+
+/**
+ * How many wrong tries a training surface allows before it auto-offers a hint.
+ * Weaker players get help sooner (1), stronger players are left to struggle a
+ * bit longer (3) so they problem-solve first (David 2026-07-03). Pass the
+ * relevant category skill (e.g. SkillRadar.opening) to sharpen it.
+ */
+export function wrongTriesBeforeHint(rating: number, skill?: number): number {
+  const effective = rating + (typeof skill === 'number' ? (Math.max(0, Math.min(100, skill)) - 50) * 6 : 0);
+  if (effective < 1400) return 1;
+  if (effective < 1800) return 2;
+  return 3;
+}

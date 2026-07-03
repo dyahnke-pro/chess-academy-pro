@@ -38,8 +38,10 @@ import { useAdaptiveEndgameSession } from '../../hooks/useAdaptiveEndgameSession
 import {
   getDrillPositionsForLesson,
   getDrillPuzzleCount,
+  defaultDrillTier,
   type DrillTier,
 } from '../../services/endgameDrillService';
+import { useAppStore } from '../../stores/appStore';
 import { voiceService } from '../../services/voiceService';
 import { useNarration } from '../../hooks/useNarration';
 import {
@@ -233,7 +235,11 @@ interface LessonViewProps {
 
 function LessonView({ lesson, onExit }: LessonViewProps): JSX.Element {
   const [drillSeed, setDrillSeed] = useState<number>(() => Date.now());
-  const [tier, setTier] = useState<DrillTier>('beginner');
+  // Default the drill tier to the player's endgame level so a strong endgame
+  // player doesn't always open on 'beginner' (David 2026-07-03). Manual switch
+  // still available.
+  const endgameProfile = useAppStore((s) => s.activeProfile);
+  const [tier, setTier] = useState<DrillTier>(() => defaultDrillTier(endgameProfile));
   // Persisted mastery for the keystones — { fen → mastered }.
   // Loaded once on lesson open. Drill positions don't surface
   // mastery (they're DB-rotated, not the canonical set).

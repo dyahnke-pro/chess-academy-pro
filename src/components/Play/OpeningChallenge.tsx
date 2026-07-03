@@ -8,6 +8,8 @@ import { GameCompleteCard } from './GameCompleteCard';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useChessGame } from '../../hooks/useChessGame';
 import { useHintSystem } from '../../hooks/useHintSystem';
+import { useAppStore } from '../../stores/appStore';
+import { wrongTriesBeforeHint } from '../../services/skillScaling';
 import {
   recordDrillAttempt,
   updateWoodpecker,
@@ -214,8 +216,15 @@ export function OpeningChallenge({
         const msg = getWrongMoveMessage(opening, wrongMoveCountRef.current);
         chatRef.current?.injectAssistantMessage(msg);
 
-        // After 2 wrong attempts, auto-advance hint
-        if (wrongMoveCountRef.current >= 2 && hintState.level < 1) {
+        // Auto-offer a hint after N wrong tries — adaptive: weaker players get
+        // it sooner, stronger players struggle a bit longer first (David
+        // 2026-07-03: all training aids adaptive). Was frozen at 2 for everyone.
+        const ocProfile = useAppStore.getState().activeProfile;
+        const wrongBeforeHint = wrongTriesBeforeHint(
+          ocProfile?.currentRating ?? 1200,
+          ocProfile?.skillRadar?.opening,
+        );
+        if (wrongMoveCountRef.current >= wrongBeforeHint && hintState.level < 1) {
           requestHint();
         }
       }

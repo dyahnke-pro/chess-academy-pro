@@ -17,7 +17,7 @@ import {
   createAdaptiveEndgameState,
   pickAdaptivePuzzle,
   adaptivePuzzleToLessonPosition,
-  DEFAULT_ENDGAME_RATING,
+  deriveEndgameSeed,
   type AdaptiveEndgameState,
 } from '../services/adaptiveEndgameService';
 import { db } from '../db/schema';
@@ -67,11 +67,11 @@ export function useAdaptiveEndgameSession(
 ): AdaptiveEndgameSession {
   const activeProfile = useAppStore((s) => s.activeProfile);
   const setActiveProfile = useAppStore((s) => s.setActiveProfile);
-  // Start rating: explicit option > stored endgameRating > default.
-  const initial =
-    options.initialRating ??
-    activeProfile?.endgameRating ??
-    DEFAULT_ENDGAME_RATING;
+  // Start rating: explicit option > a seed that prefers the stored
+  // endgameRating but falls back to the player's OTHER signals (puzzle/current
+  // rating + endgame skill) so a strong newcomer isn't stuck grinding up from
+  // 1200 (David 2026-07-03: all training aids adaptive).
+  const initial = options.initialRating ?? deriveEndgameSeed(activeProfile);
   const themes = options.themes ?? lesson?.practiceThemes ?? [];
 
   const [state, setState] = useState<AdaptiveEndgameState>(() =>

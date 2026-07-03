@@ -88,6 +88,28 @@ export interface AdaptiveEndgameState {
 
 const WEAKNESS_BOOST_INTERVAL = 5;
 
+/**
+ * Seed a FIRST endgame/calculation/eval-lab session from the player's other
+ * signals when they have no persisted `endgameRating` yet — so a strong player
+ * who simply hasn't done endgames isn't forced to grind up from a flat 1200
+ * (David 2026-07-03: all training aids adaptive). Once `endgameRating` is
+ * persisted it wins (the session ramp owns it from then on). Falls back to
+ * puzzleRating → currentRating, nudged by SkillRadar.endgame (0-100; 50 neutral,
+ * ±~200 at the extremes).
+ */
+export function deriveEndgameSeed(profile?: {
+  endgameRating?: number;
+  puzzleRating?: number;
+  currentRating?: number;
+  skillRadar?: { endgame?: number };
+} | null): number {
+  if (typeof profile?.endgameRating === 'number') return clamp(profile.endgameRating);
+  const base = profile?.puzzleRating ?? profile?.currentRating ?? DEFAULT_ENDGAME_RATING;
+  const endgameSkill = profile?.skillRadar?.endgame;
+  const nudge = typeof endgameSkill === 'number' ? (Math.max(0, Math.min(100, endgameSkill)) - 50) * 4 : 0;
+  return clamp(base + nudge);
+}
+
 export function createAdaptiveEndgameState(initialUserRating?: number): AdaptiveEndgameState {
   const rating = clamp(initialUserRating ?? DEFAULT_ENDGAME_RATING);
   return {

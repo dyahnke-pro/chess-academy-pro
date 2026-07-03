@@ -55,7 +55,7 @@ import { lookupTablebase, type TablebaseLookupResult } from '../../services/lich
 import {
   applyAdaptiveOutcome,
   createAdaptiveEndgameState,
-  DEFAULT_ENDGAME_RATING,
+  deriveEndgameSeed,
   type AdaptiveEndgameState,
 } from '../../services/adaptiveEndgameService';
 import { calculateRatingDelta } from '../../services/puzzleService';
@@ -255,7 +255,9 @@ function pickNextItem(state: AdaptiveEndgameState): EvalLabItem | null {
 export function EvalLabQuiz({ onExit }: EvalLabQuizProps): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
   const setActiveProfile = useAppStore((s) => s.setActiveProfile);
-  const initialRating = activeProfile?.endgameRating ?? DEFAULT_ENDGAME_RATING;
+  // Seed from stored endgameRating, else the player's other signals so a strong
+  // newcomer doesn't cold-start at a flat 1200 (David 2026-07-03).
+  const initialRating = deriveEndgameSeed(activeProfile);
 
   const [state, setState] = useState<AdaptiveEndgameState>(() =>
     createAdaptiveEndgameState(initialRating),

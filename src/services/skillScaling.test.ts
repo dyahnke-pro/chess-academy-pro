@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { alertSensitivityMultiplier, hintStartTier } from './skillScaling';
+import { alertSensitivityMultiplier, hintStartTier, wrongTriesBeforeHint } from './skillScaling';
 
 describe('alertSensitivityMultiplier', () => {
   it('is ~1.0 at the 1500 anchor with neutral skill', () => {
@@ -49,5 +49,17 @@ describe('hintStartTier', () => {
     expect(hintStartTier(1500, 100)).toBe(1);
     // 1500 with weak tactics (10) subtracts ~-240 → tier 3.
     expect(hintStartTier(1500, 10)).toBe(3);
+  });
+});
+
+describe('wrongTriesBeforeHint', () => {
+  it('offers help sooner to weaker players, later to stronger ones', () => {
+    expect(wrongTriesBeforeHint(1000)).toBe(1);
+    expect(wrongTriesBeforeHint(1500)).toBe(2);
+    expect(wrongTriesBeforeHint(2000)).toBe(3);
+  });
+  it('sharpens by category skill', () => {
+    expect(wrongTriesBeforeHint(1500, 100)).toBe(3); // strong-for-rating → struggle longer
+    expect(wrongTriesBeforeHint(1500, 0)).toBe(1);   // weak-for-rating → help sooner
   });
 });

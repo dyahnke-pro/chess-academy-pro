@@ -7,6 +7,7 @@ import { describe, it, expect } from 'vitest';
 import {
   getDrillPositionsForLesson,
   getDrillPuzzleCount,
+  defaultDrillTier,
 } from './endgameDrillService';
 import { getEndgamePrinciples, getPawnEndings } from './endgameLessonsService';
 
@@ -127,5 +128,22 @@ describe('endgameDrillService', () => {
     if (!lesson) return;
     const all = getDrillPositionsForLesson(lesson, { seed: 1 });
     expect(all.length).toBeGreaterThan(50);
+  });
+
+  describe('defaultDrillTier', () => {
+    it('defaults to the player endgame level (skill preferred)', () => {
+      expect(defaultDrillTier({ skillRadar: { endgame: 80 } })).toBe('advanced');
+      expect(defaultDrillTier({ skillRadar: { endgame: 50 } })).toBe('intermediate');
+      expect(defaultDrillTier({ skillRadar: { endgame: 20 } })).toBe('beginner');
+    });
+    it('falls back to rating when no endgame skill', () => {
+      expect(defaultDrillTier({ currentRating: 1900 })).toBe('advanced');
+      expect(defaultDrillTier({ currentRating: 1500 })).toBe('intermediate');
+      expect(defaultDrillTier({ currentRating: 1100 })).toBe('beginner');
+    });
+    it('defaults to beginner when nothing is known', () => {
+      expect(defaultDrillTier(null)).toBe('beginner');
+      expect(defaultDrillTier(undefined)).toBe('beginner');
+    });
   });
 });

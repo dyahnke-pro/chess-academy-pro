@@ -44,6 +44,30 @@ const PUZZLES = puzzlesData as RawPuzzle[];
  *  default before the student narrows their target. */
 export type DrillTier = 'beginner' | 'intermediate' | 'advanced' | 'mixed';
 
+/**
+ * The drill tier a player STARTS the endgame-drill picker on, chosen by their
+ * endgame skill/rating so a strong endgame player doesn't always open on the
+ * beginner band (David 2026-07-03: all training aids adaptive). They can still
+ * switch tiers manually. Prefers SkillRadar.endgame (0-100); else currentRating.
+ */
+export function defaultDrillTier(profile?: {
+  currentRating?: number;
+  skillRadar?: { endgame?: number };
+} | null): DrillTier {
+  const skill = profile?.skillRadar?.endgame;
+  if (typeof skill === 'number') {
+    if (skill >= 66) return 'advanced';
+    if (skill >= 40) return 'intermediate';
+    return 'beginner';
+  }
+  const rating = profile?.currentRating;
+  if (typeof rating === 'number') {
+    if (rating >= 1800) return 'advanced';
+    if (rating >= 1400) return 'intermediate';
+  }
+  return 'beginner';
+}
+
 const TIER_BANDS: Record<Exclude<DrillTier, 'mixed'>, [number, number]> = {
   beginner: [0, 1300],
   intermediate: [1300, 1700],
