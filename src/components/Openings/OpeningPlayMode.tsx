@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Chess } from 'chess.js';
 import { ArrowLeft, Volume2, VolumeX, Swords, RotateCcw, MessageCircle, X, HelpCircle } from 'lucide-react';
 import { useChessGame } from '../../hooks/useChessGame';
+import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import { useHintSystem } from '../../hooks/useHintSystem';
 import { useCoachTips } from '../../hooks/useCoachTips';
@@ -159,6 +160,14 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
   const isPlayersTurn =
     (playerColor === 'white' && game.turn === 'w') ||
     (playerColor === 'black' && game.turn === 'b');
+
+  // Ponder on the student's clock (David 2026-07-03) — warm the engine cache
+  // for the current position while they think, so coach grounding is instant.
+  useEnginePonder(
+    game.fen,
+    isPlayersTurn && playPhase !== 'pregame' && playPhase !== 'postgame' && !game.isGameOver,
+  );
+
   const inOpeningForHint = playPhase === 'opening' && moveCountRef.current < openingMoves.length;
   const hintKnownMove = useMemo((): { from: string; to: string; san: string } | null => {
     if (!isPlayersTurn || playPhase === 'pregame' || playPhase === 'postgame') return null;

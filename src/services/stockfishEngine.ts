@@ -921,6 +921,17 @@ class StockfishEngine {
     }
   }
 
+  /**
+   * True while an analysis is in flight. Opportunistic background prewarming
+   * (pondering on the student's clock) checks this so it YIELDS to real,
+   * user-driven analyses instead of cancelling them — `analyzePosition` cancels
+   * any in-flight search, so a prewarm that fired blindly could clobber a
+   * live narration/eval request.
+   */
+  isBusy(): boolean {
+    return this.pending !== null;
+  }
+
   async getBestMove(fen: string, moveTimeMs: number = 1000): Promise<string> {
     await this.initialize();
 

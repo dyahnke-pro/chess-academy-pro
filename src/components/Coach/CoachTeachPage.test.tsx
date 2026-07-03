@@ -57,6 +57,24 @@ vi.mock('../../services/gameAnalysisService', () => ({
   gameNeedsAnalysis: vi.fn().mockReturnValue(false),
 }));
 
+// The page now ponders in the background (useEnginePonder) + reads the engine
+// directly; stub the engine so tests don't spin up a real Stockfish worker.
+vi.mock('../../services/stockfishEngine', () => {
+  const analysis = {
+    bestMove: 'e2e4', evaluation: 0, isMate: false, mateIn: null,
+    depth: 12, topLines: [], nodesPerSecond: 0,
+  };
+  return {
+    stockfishEngine: {
+      analyzePosition: vi.fn().mockResolvedValue(analysis),
+      analyzeWithBudget: vi.fn().mockResolvedValue(analysis),
+      isBusy: vi.fn(() => false),
+      newGame: vi.fn(),
+    },
+    resolveWorkerUrl: vi.fn(() => ({ url: '', variant: 'single', reason: 'test', workerType: 'classic' })),
+  };
+});
+
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
   return {

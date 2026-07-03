@@ -62,6 +62,30 @@ message landed as a detached bubble instead of flowing into the chat thread.
 Tests: coachPrompts.test (computeMaterialBalance + material-always) +
 usePositionNarration.test mock updated. ship-check green.
 
+## Follow-on (David 2026-07-03): engine persistence + pondering
+
+- **Warm transposition table** — `ucinewgame` was sent before EVERY analysis,
+  clearing Stockfish's hash so each search started cold. Moved it to init (once
+  per session); per-analysis dispatch only sends position/go. Added
+  `stockfishEngine.newGame()` (clears the table on a real new game) wired into
+  CoachGamePage restart + color-change. `stockfishEngine.test` updated to the
+  new contract (66 tests).
+- **Pondering on the student's clock** — new `useEnginePonder(fen, enabled)`
+  hook: while it's the student's turn, background-analyze the current position
+  (`analyzeWithBudget`, `isBusy`-gated so it yields to real requests, debounced)
+  and cache it — so `buildFedTacticsContext` (the brain's best-move/plan
+  grounding) + Read Position hit a warm cache instead of a cold/timed-out
+  search. Wired into ALL playing surfaces: `/coach/play` (CoachGamePage),
+  `/coach/teach` free-play (CoachTeachPage), and opening WLPP Play
+  (OpeningPlayMode). `useEnginePonder.test` (5 tests).
+- **Single engine, by design** — one Stockfish worker (more would OOM /
+  CPU-starve the iPhone). Desktop parallelizes via threads-in-one-engine. A
+  dedicated desktop-only "ponder" engine is a possible future optimization.
+
+Note: `CoachTeachPage.test.tsx` has 4 PRE-EXISTING failures (async 4s waitFor on
+the chat/VOICE flow) — identical on clean `main`, unrelated to these changes.
+Verified by stash baseline; my changed-code tests are all green (119).
+
 ## Also flagged
 - Per-move student narration may share the same stm-perspective latent bug
   (narrates after the student's move → opponent to move). Audit after F1 lands.

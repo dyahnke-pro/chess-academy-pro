@@ -20,6 +20,7 @@ import { AnalysisToggles } from '../Board/AnalysisToggles';
 import { useChessGame, type MoveResult } from '../../hooks/useChessGame';
 import { usePositionNarration } from '../../hooks/usePositionNarration';
 import { useTeachWalkthrough } from '../../hooks/useTeachWalkthrough';
+import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
 import type {
@@ -492,6 +493,16 @@ export function CoachTeachPage(): JSX.Element {
   // navigate-to-/coach/session/walkthrough flow that lost the chat
   // panel. See `useTeachWalkthrough` + `data/openingWalkthroughs/`.
   const walkthrough = useTeachWalkthrough();
+
+  // Ponder on the student's clock (David 2026-07-03) — while the free-play board
+  // is interactive (no walkthrough auto-driving it), warm the engine cache for
+  // the current position so coach positional grounding + Read Position are
+  // instant. Skipped during active auto-play walkthroughs (the position churns
+  // every advance) and when the game is over.
+  useEnginePonder(
+    game.fen,
+    (!walkthrough.isActive || walkthrough.phase === 'paused') && !game.isGameOver,
+  );
 
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
   const [streaming, setStreaming] = useState<string | null>(null);

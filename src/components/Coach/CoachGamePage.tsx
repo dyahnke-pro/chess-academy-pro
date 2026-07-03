@@ -110,6 +110,7 @@ import { resolveVerbosity, shouldCallLlmForMove } from '../../services/coachComm
 import { resolvePhaseNarrationVerbosity, resolveLlmNarrationDensity } from '../../utils/coachNarration';
 import { BLUNDER_ALERT_ADDITION, EXPLORE_REACTION_ADDITION } from '../../services/coachPrompts';
 import { stockfishEngine } from '../../services/stockfishEngine';
+import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { resolveConfig as resolvePlayConfig } from '../../services/coachPlaySession';
 import { detectOpening, getOpeningMoves, resolveOpeningEntry } from '../../services/openingDetectionService';
 import { stripSanAnnotations } from '../../data/openingWalkthroughs/validate';
@@ -1936,6 +1937,12 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   // the player isn't flagged for time spent off the main game board.
   const clockRunning =
     gameState.status === 'playing' && !game.isGameOver && !temporaryFen && !practicePosition && !isExploreMode;
+
+  // Ponder on the student's clock — analyse the current position in the
+  // background while it's their turn so the coach's positional grounding + Read
+  // Position hit a warm cache (David 2026-07-03). Same "live board + student to
+  // move" gate as the clock.
+  useEnginePonder(game.fen, clockRunning && isPlayersTurn);
   const { clock: clockState, enabled: clockEnabled, recordMove: recordClockMove, reset: resetClock, restore: restoreClock } = useChessClock({
     timeControl,
     turn: game.turn,
