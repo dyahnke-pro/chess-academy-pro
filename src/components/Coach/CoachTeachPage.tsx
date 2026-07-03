@@ -46,7 +46,14 @@ import {
 import { fuzzyMatchOpening } from '../../services/openingFuzzyMatcher';
 import { parseCoachIntent } from '../../services/coachAgent';
 import { matchTrainingAidRoute } from '../../services/trainingAidRouter';
-import { pickCoachDrill, isDrillableAid, type CoachDrill } from '../../services/coachDrillService';
+import {
+  pickCoachDrill,
+  isDrillableAid,
+  buildMistakeDrillQueue,
+  advanceMistakeDrill,
+  type CoachDrill,
+  type DrillProgress,
+} from '../../services/coachDrillService';
 import { reportCoachReask, isMoveReport } from '../../services/coachNonAnswer';
 import { tryCaptureOpeningIntent, tryCaptureForgetIntent } from '../../services/openingIntentCapture';
 import { findPlansForOpening, sessionFromPlan } from '../../services/middlegamePlanner';
@@ -643,7 +650,13 @@ export function CoachTeachPage(): JSX.Element {
   // expected move in `drill.solutionSan` (student moves at even indices,
   // opponent replies auto-played at odd). Null = no drill running, so all
   // existing walkthrough/play flows are untouched.
-  const activeDrillRef = useRef<{ drill: CoachDrill; step: number } | null>(null);
+  const activeDrillRef = useRef<{
+    drill: CoachDrill;
+    step: number;
+    /** Present in mistake-queue mode (adaptive tested-out loop); absent
+     *  for a single fallback drill. */
+    progress?: DrillProgress;
+  } | null>(null);
   // Background-fed tactics context (real PV tactics) for the SPOKEN + displayed
   // tactic strips, so the brain call never blocks on an engine read.
   const fedTacticsRef = useRef<TacticsLiveContext | null>(null);
@@ -992,17 +1005,23 @@ export function CoachTeachPage(): JSX.Element {
     void voiceService.speak(text);
   }, []);
 
-  /** Set a real drill up on the board and announce the challenge. */
-  const startCoachDrill = useCallback((drill: CoachDrill): void => {
-    // Stop any walkthrough playback so the drill owns the board.
-    walkthrough.stop();
-    voiceService.stop();
+  /** Put a drill's position on the board (no announce) + arm the ref. */
+  const loadDrillOntoBoard = useCallback((drill: CoachDrill, progress?: DrillProgress): void => {
     gameRef.current.loadFen(drill.setupFen);
     liveFenRef.current = drill.setupFen;
-    activeDrillRef.current = { drill, step: 0 };
+    activeDrillRef.current = { drill, step: 0, progress };
     setArrows([]);
     setHighlights([]);
-    const intro = `${drill.prompt} Play your move on the board.`;
+  }, []);
+
+  /** Set a real drill up on the board and announce the challenge. When
+   *  `progress` is passed the drill is part of the adaptive mistake queue;
+   *  `lead` prefixes the announce (e.g. "Starting with your Forks."). */
+  const startCoachDrill = useCallback((drill: CoachDrill, progress?: DrillProgress, lead?: string): void => {
+    walkthrough.stop();
+    voiceService.stop();
+    loadDrillOntoBoard(drill, progress);
+    const intro = `${lead ? `${lead} ` : ''}${drill.prompt} Play your move on the board.`;
     setMessages((prev) => [...prev, {
       id: `drill-intro-${Date.now()}`, role: 'assistant', content: intro, timestamp: Date.now(),
     }]);
@@ -1013,10 +1032,49 @@ export function CoachTeachPage(): JSX.Element {
       kind: 'coach-surface-migrated',
       category: 'subsystem',
       source: 'CoachTeachPage.startCoachDrill',
-      summary: `in-place drill ${drill.aid} puzzle=${drill.puzzleId} r=${drill.rating} (${drill.solutionSan.length}-ply line)`,
+      summary: `in-place drill ${drill.aid} puzzle=${drill.puzzleId} r=${drill.rating} queue=${progress ? `${progress.themeIdx}.${progress.puzzleIdx}` : 'single'}`,
     });
     void voiceService.speak(intro);
-  }, [walkthrough]);
+  }, [walkthrough, loadDrillOntoBoard]);
+
+  /** Load the user's mistake queue (most-common weakness first) and start
+   *  drilling it. Returns false when the user has no mistakes yet, so the
+   *  caller can fall back to a single DB-sourced drill. */
+  const startMistakeDrills = useCallback(async (): Promise<boolean> => {
+    const queue = await buildMistakeDrillQueue();
+    if (queue.length === 0) return false;
+    const progress: DrillProgress = { queue, themeIdx: 0, puzzleIdx: 0, consecutiveCorrect: 0 };
+    startCoachDrill(queue[0].drills[0], progress, `We'll start with your most common weakness — ${queue[0].label}.`);
+    return true;
+  }, [startCoachDrill]);
+
+  /** Called when the student SOLVES the current drill (whole line done).
+   *  Single drill → offer another. Mistake-queue → advance adaptively
+   *  (next puzzle, or tested-out → next weakness, or all done). */
+  const completeDrill = useCallback((solved: { drill: CoachDrill; step: number; progress?: DrillProgress }): void => {
+    if (!solved.progress) {
+      activeDrillRef.current = null;
+      coachDrillSay('Solved — nice. Say “drill” again for another.');
+      return;
+    }
+    const adv = advanceMistakeDrill(solved.progress);
+    if (adv.done) {
+      activeDrillRef.current = null;
+      coachDrillSay(
+        adv.testedOutLabel
+          ? `You've tested out of ${adv.testedOutLabel} — and that's every weakness we had queued. Great work.`
+          : "That's every weakness we had queued. Great work.",
+      );
+      return;
+    }
+    if (!adv.next) { activeDrillRef.current = null; return; }
+    loadDrillOntoBoard(adv.next.drill, adv.next.progress);
+    coachDrillSay(
+      adv.testedOut
+        ? `Nice — you've tested out of ${adv.testedOutLabel}. On to ${adv.nextLabel}. ${adv.next.drill.prompt}`
+        : `Good. ${adv.next.drill.prompt}`,
+    );
+  }, [coachDrillSay, loadDrillOntoBoard]);
 
   /** Validate a student board move against the active drill's solution.
    *  Returns true when the move was consumed by a drill (so the normal
@@ -1030,39 +1088,41 @@ export function CoachTeachPage(): JSX.Element {
     const expected = cur.drill.solutionSan[cur.step];
     const correct = move.san === expected || strip(move.san) === strip(expected);
     if (!correct) {
+      // Wrong → undo, reset the mastery streak, hint, let them retry.
       gameRef.current.undoMove();
       liveFenRef.current = gameRef.current.fen;
       setArrows([]);
       setHighlights([]);
+      if (cur.progress) {
+        activeDrillRef.current = { ...cur, progress: { ...cur.progress, consecutiveCorrect: 0 } };
+      }
       coachDrillSay("That's not the strongest here — take another look and try again.");
       return true;
     }
     liveFenRef.current = move.fen;
     const step = cur.step + 1;
     if (step >= cur.drill.solutionSan.length) {
-      // Student played the final move of the line.
-      activeDrillRef.current = null;
-      coachDrillSay("Solved — that's the whole line. Say “drill” again for another.");
+      // Student played the final move of the line → solved.
+      completeDrill(cur);
       return true;
     }
     // Auto-play the opponent's reply, then hand the move back.
     const oppReply = cur.drill.solutionSan[step];
     const afterOppStep = step + 1;
-    activeDrillRef.current = { drill: cur.drill, step };
+    activeDrillRef.current = { ...cur, step };
     window.setTimeout(() => {
       const r = handlePlayMove(oppReply);
       if (!r.ok) { activeDrillRef.current = null; return; }
       liveFenRef.current = gameRef.current.fen;
       if (afterOppStep >= cur.drill.solutionSan.length) {
-        activeDrillRef.current = null;
-        coachDrillSay("Solved — that's the whole line. Say “drill” again for another.");
+        completeDrill(cur);
       } else {
-        activeDrillRef.current = { drill: cur.drill, step: afterOppStep };
+        activeDrillRef.current = { ...cur, step: afterOppStep };
         coachDrillSay('Good. Keep going — find the next move.');
       }
     }, 650);
     return true;
-  }, [coachDrillSay, handlePlayMove]);
+  }, [coachDrillSay, handlePlayMove, completeDrill]);
 
   // Hand-off from another surface: `/coach/teach?drill=<aid>` (play /
   // chat / voice route drill requests here so the coach sets them up ON
@@ -1080,10 +1140,15 @@ export function CoachTeachPage(): JSX.Element {
       return next;
     }, { replace: true });
     if (!isDrillableAid(drillAid)) return;
-    const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200;
-    const drill = pickCoachDrill(drillAid, { rating });
-    if (drill) startCoachDrill(drill);
-  }, [searchParams, setSearchParams, activeProfile, startCoachDrill]);
+    void (async () => {
+      // Prefer the user's own mistakes (most common first, adaptive);
+      // fall back to a single DB-sourced drill for a new user.
+      if (await startMistakeDrills()) return;
+      const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200;
+      const drill = pickCoachDrill(drillAid, { rating });
+      if (drill) startCoachDrill(drill);
+    })();
+  }, [searchParams, setSearchParams, activeProfile, startCoachDrill, startMistakeDrills]);
 
   /** Notify the user when a background-generated stage finishes
    *  loading. Pushes a coach chat message + refreshes the
@@ -1707,6 +1772,13 @@ export function CoachTeachPage(): JSX.Element {
           // (David 2026-07-03: coach sets them up on the board under
           // Learn, never the tactics tab, never an LLM-invented drill).
           if (isDrillableAid(aid.aid)) {
+            // Prefer the user's OWN mistakes — most common weakness first,
+            // adaptive until they test out, then the next (David 2026-07-03).
+            if (await startMistakeDrills()) {
+              return;
+            }
+            // No mistakes on file yet → a single DB-sourced drill of the
+            // requested type so a new user still gets a real drill.
             const rating =
               activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200;
             const drill = pickCoachDrill(aid.aid, { rating });

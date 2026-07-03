@@ -25,6 +25,8 @@
  */
 import { Chess } from 'chess.js';
 import puzzlesData from '../data/puzzles.json';
+import { db } from '../db/schema';
+import type { MistakePuzzle } from '../types';
 
 interface RawPuzzle {
   id: string;
@@ -113,6 +115,10 @@ const DRILLABLE_AIDS = new Set<string>([
   'rook-endings',
   'endgame',
   'puzzle',
+  // "drill my mistakes" / "work on my weaknesses" → the adaptive mistake
+  // queue (startMistakeDrills). pickCoachDrill falls back to the generic
+  // tactics pool for a brand-new user with no mistakes on file.
+  'mistakes',
 ]);
 
 /** True when the aid can be set up as a board drill (so the coach loads
@@ -232,6 +238,222 @@ function toDrill(p: RawPuzzle, aid: string, label: string, goal: string): CoachD
   } catch {
     return null;
   }
+}
+
+// ─── Mistake-sourced drills (David 2026-07-03) ──────────────────────
+// "Make sure the puzzles pull from user mistakes. Most common to least."
+// The user's own blunders live in the `mistakePuzzles` Dexie store, each
+// already solve-ready: `fen` is the position where they erred (their
+// turn), `moves` is the correct line starting with the move they missed.
+// We bucket by the missed pattern (tacticType, else game phase), rank the
+// buckets by frequency (most common weakness first), and hand back a
+// queue of real drills. The adaptive "tested out → next theme" loop
+// (P3) walks this queue; see docs/plans/2026-07-03-coach-inplace-adaptive-drills.md.
+
+/** A weakness theme drawn from the user's mistakes, with its drills. */
+export interface MistakeDrillTheme {
+  /** Bucket key, e.g. 'tactic:fork' | 'phase:endgame'. */
+  key: string;
+  /** Display label, e.g. 'Forks', 'Endgame'. */
+  label: string;
+  /** How many mistakes fed this theme (drives the most→least ordering). */
+  count: number;
+  /** The drills for this theme, worst mistake (highest cp loss) first. */
+  drills: CoachDrill[];
+}
+
+const TACTIC_LABELS: Record<string, string> = {
+  fork: 'Forks',
+  pin: 'Pins',
+  skewer: 'Skewers',
+  discovered_attack: 'Discovered attacks',
+  back_rank: 'Back-rank tactics',
+  hanging_piece: 'Hanging pieces',
+  promotion: 'Promotions',
+  deflection: 'Deflections',
+  overloaded_piece: 'Overloaded pieces',
+  trapped_piece: 'Trapped pieces',
+  clearance: 'Clearance',
+  interference: 'Interference',
+  zwischenzug: 'Zwischenzug',
+  x_ray: 'X-ray tactics',
+  double_check: 'Double checks',
+  removing_the_guard: 'Removing the guard',
+  tactical_sequence: 'Tactical sequences',
+};
+
+const PHASE_LABELS: Record<string, string> = {
+  opening: 'Opening',
+  middlegame: 'Middlegame',
+  endgame: 'Endgame',
+};
+
+function bucketOf(mp: MistakePuzzle): { key: string; label: string } {
+  if (mp.tacticType) {
+    return { key: `tactic:${mp.tacticType}`, label: TACTIC_LABELS[mp.tacticType] ?? mp.tacticType };
+  }
+  return { key: `phase:${mp.gamePhase}`, label: PHASE_LABELS[mp.gamePhase] ?? 'Tactics' };
+}
+
+/** Convert one mistake puzzle to a solve-on-the-board drill. Unlike the
+ *  Lichess-DB path there is NO opponent setup move — `mp.fen` is already
+ *  the student's-turn position and `mp.moves` is the correct line from
+ *  it. Every move is chess.js-validated; a malformed record returns
+ *  null. Falls back to the single best move when the line won't replay. */
+export function mistakePuzzleToDrill(mp: MistakePuzzle): CoachDrill | null {
+  const { key, label } = bucketOf(mp);
+  // Invalid FEN → not a drill.
+  let playerColor: 'white' | 'black';
+  try {
+    playerColor = new Chess(mp.fen).turn() === 'w' ? 'white' : 'black';
+  } catch {
+    return null;
+  }
+  // Replay the recorded line. chess.js throws on an illegal move, so an
+  // isolated try lets a malformed line fall back to the single best move
+  // rather than discarding the whole drill.
+  let solutionSan: string[] = [];
+  try {
+    const chess = new Chess(mp.fen);
+    for (const u of (mp.moves ?? '').split(' ').filter(Boolean)) {
+      solutionSan.push(chess.move(uciToMove(u)).san);
+    }
+  } catch {
+    solutionSan = [];
+  }
+  if (solutionSan.length === 0 && mp.bestMoveSan) {
+    try {
+      solutionSan = [new Chess(mp.fen).move(mp.bestMoveSan).san];
+    } catch {
+      return null;
+    }
+  }
+  if (solutionSan.length === 0) return null;
+
+  const side = playerColor === 'white' ? 'White' : 'Black';
+  return {
+    aid: `mistake:${key}`,
+    label,
+    setupFen: mp.fen,
+    playerColor,
+    solutionSan,
+    prompt: `From one of your own games — ${side} to move. You missed the best move here. Find it.`,
+    puzzleId: mp.id,
+    rating: Math.max(400, Math.round(mp.cpLoss)) || 1200,
+  };
+}
+
+/**
+ * Build the user's mistake-drill queue: their real blunders bucketed by
+ * missed pattern and ranked MOST COMMON → least. Each theme's drills are
+ * ordered worst-mistake-first (highest cp loss). Returns [] when the user
+ * has no mistakes yet (the caller falls back to `pickCoachDrill`).
+ */
+export async function buildMistakeDrillQueue(): Promise<MistakeDrillTheme[]> {
+  let mistakes: MistakePuzzle[] = [];
+  try {
+    mistakes = await db.mistakePuzzles.toArray();
+  } catch {
+    return [];
+  }
+  if (mistakes.length === 0) return [];
+
+  const buckets = new Map<string, { label: string; items: MistakePuzzle[] }>();
+  for (const mp of mistakes) {
+    const { key, label } = bucketOf(mp);
+    const b = buckets.get(key) ?? { label, items: [] };
+    b.items.push(mp);
+    buckets.set(key, b);
+  }
+
+  const themes: MistakeDrillTheme[] = [];
+  for (const [key, b] of buckets) {
+    const ordered = [...b.items].sort((a, z) => z.cpLoss - a.cpLoss);
+    const drills = ordered
+      .map(mistakePuzzleToDrill)
+      .filter((d): d is CoachDrill => d !== null);
+    if (drills.length > 0) themes.push({ key, label: b.label, count: drills.length, drills });
+  }
+  // Most common weakness first; stable tie-break by label so the order is
+  // deterministic across reloads.
+  themes.sort((a, z) => (z.count - a.count) || a.label.localeCompare(z.label));
+  return themes;
+}
+
+// ─── Adaptive "tested out → next theme" loop (P3) ───────────────────
+// David: "run the drills until the adaptive tool feels the user has
+// tested out of the drill, then move to the next." A theme is tested out
+// when the user solves MASTERY in a row on it (or the theme runs out of
+// puzzles); then we advance to the next-most-common weakness. This is the
+// PURE decision the Learn surface applies on each solved puzzle so the
+// loop logic is unit-testable rather than buried in the component.
+
+/** Consecutive correct solves that count as "tested out" of a theme. */
+export const DRILL_MASTERY = 3;
+
+/** Where the user is in the mistake-drill queue. */
+export interface DrillProgress {
+  queue: MistakeDrillTheme[];
+  themeIdx: number;
+  puzzleIdx: number;
+  /** Consecutive correct solves on the CURRENT theme. */
+  consecutiveCorrect: number;
+}
+
+export interface DrillAdvance {
+  /** No themes left — the whole queue is tested out. */
+  done: boolean;
+  /** The user just tested out of a theme and moved to the next. */
+  testedOut: boolean;
+  /** Label of the theme just tested out of (when testedOut). */
+  testedOutLabel?: string;
+  /** Label of the theme now starting (when testedOut, not done). */
+  nextLabel?: string;
+  /** The next drill to load + the progress to store (when not done). */
+  next?: { drill: CoachDrill; progress: DrillProgress };
+}
+
+/**
+ * Decide what happens after the user SOLVES the current drill. Advances
+ * within the theme until MASTERY in a row (or the theme's puzzles run
+ * out), then moves to the next-most-common weakness. Pure — the Learn
+ * surface applies the result (load `next.drill`, store `next.progress`).
+ */
+export function advanceMistakeDrill(p: DrillProgress, mastery: number = DRILL_MASTERY): DrillAdvance {
+  const theme = p.queue[p.themeIdx];
+  if (!theme) return { done: true, testedOut: false };
+  const consecutiveCorrect = p.consecutiveCorrect + 1;
+  const outOfPuzzles = p.puzzleIdx + 1 >= theme.drills.length;
+  const testedOut = consecutiveCorrect >= mastery || outOfPuzzles;
+
+  if (!testedOut) {
+    const puzzleIdx = p.puzzleIdx + 1;
+    return {
+      done: false,
+      testedOut: false,
+      next: {
+        drill: theme.drills[puzzleIdx],
+        progress: { ...p, puzzleIdx, consecutiveCorrect },
+      },
+    };
+  }
+
+  // Tested out of this theme → advance to the next one.
+  const themeIdx = p.themeIdx + 1;
+  const nextTheme = p.queue[themeIdx];
+  if (!nextTheme) {
+    return { done: true, testedOut: true, testedOutLabel: theme.label };
+  }
+  return {
+    done: false,
+    testedOut: true,
+    testedOutLabel: theme.label,
+    nextLabel: nextTheme.label,
+    next: {
+      drill: nextTheme.drills[0],
+      progress: { queue: p.queue, themeIdx, puzzleIdx: 0, consecutiveCorrect: 0 },
+    },
+  };
 }
 
 function uciToMove(uci: string): { from: string; to: string; promotion?: string } {

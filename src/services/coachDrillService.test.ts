@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { pickCoachDrill } from './coachDrillService';
+import { pickCoachDrill, isDrillableAid } from './coachDrillService';
 
 /** Every drill must be a legal, solvable position: the setup FEN parses,
  *  it's the student's move, and the FIRST solution move is legal from
@@ -26,7 +26,7 @@ function assertPlayable(aid: string): void {
 
 describe('pickCoachDrill — every aid yields a real, playable drill', () => {
   for (const aid of ['calculation', 'mating-patterns', 'pawn-endings', 'rook-endings', 'endgame', 'puzzle']) {
-    it(`${aid}`, () => assertPlayable(aid));
+    it(aid, () => assertPlayable(aid));
   }
 
   it('themed puzzle "puzzle:fork" is playable and labeled', () => {
@@ -46,6 +46,15 @@ describe('pickCoachDrill — every aid yields a real, playable drill', () => {
     const a = pickCoachDrill('calculation', { rating: 1500, seed: 42 });
     const b = pickCoachDrill('calculation', { rating: 1500, seed: 42 });
     expect(a?.puzzleId).toBe(b?.puzzleId);
+  });
+
+  it('isDrillableAid gates board drills correctly', () => {
+    for (const aid of ['calculation', 'mating-patterns', 'pawn-endings', 'rook-endings', 'endgame', 'puzzle', 'mistakes', 'puzzle:fork']) {
+      expect(isDrillableAid(aid)).toBe(true);
+    }
+    for (const aid of ['eval-lab', 'drawing-patterns', 'endgame-principles', 'weaknesses']) {
+      expect(isDrillableAid(aid)).toBe(false);
+    }
   });
 
   it('picks near the requested rating', () => {

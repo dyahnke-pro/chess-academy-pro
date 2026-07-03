@@ -67,12 +67,17 @@ describe('matchTrainingAidRoute — tactics / puzzles (in-place Learn drill)', (
   });
 });
 
-describe('matchTrainingAidRoute — weaknesses / mistakes', () => {
-  it('routes "work on my weaknesses"', () => {
-    expect(matchTrainingAidRoute('work on my weaknesses')?.path).toBe('/weaknesses');
+describe('matchTrainingAidRoute — weaknesses / mistakes (adaptive mistake queue)', () => {
+  it('routes "work on my weaknesses" to the in-place mistake queue', () => {
+    const r = matchTrainingAidRoute('work on my weaknesses');
+    expect(r?.path).toBe('/coach/teach?drill=mistakes');
+    expect(r?.aid).toBe('mistakes');
   });
-  it('routes "drill my mistakes"', () => {
-    expect(matchTrainingAidRoute('drill my mistakes')?.path).toBe('/tactics/mistakes');
+  it('routes "drill my mistakes" to the in-place mistake queue', () => {
+    expect(matchTrainingAidRoute('drill my mistakes')?.path).toBe('/coach/teach?drill=mistakes');
+  });
+  it('does NOT hijack "what\'s my weakness in the Sicilian?"', () => {
+    expect(matchTrainingAidRoute("what's my weakness in the Sicilian?")).toBeNull();
   });
 });
 

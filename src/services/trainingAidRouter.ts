@@ -117,16 +117,20 @@ export function matchTrainingAidRoute(text: string): TrainingAidRoute | null {
     return drillRoute('endgame', 'an endgame');
   }
 
-  // 10. My mistakes → the mistakes trainer. Framed only, so a genuine
-  //     question ("why do I keep making mistakes?") isn't hijacked.
+  // 10. My mistakes → the adaptive mistake queue, ON THE BOARD in Learn
+  //     (David 2026-07-03: pull drills from the user's own mistakes, most
+  //     common first, until they test out, then the next). Framed only, so
+  //     "why do I keep making mistakes?" isn't hijacked. `mistakes` is a
+  //     drillable aid → startMistakeDrills builds the ranked queue.
   if (framed && (/\bmy\s+mistakes?\b/i.test(lower) || /\bmistakes?\s+(?:drill[s]?|trainer|practi[cs]e)\b/i.test(lower))) {
-    return { path: '/tactics/mistakes', ack: 'Pulling up your mistakes to drill.', aid: 'mistakes' };
+    return { path: '/coach/teach?drill=mistakes', ack: 'Pulling up your mistakes to drill on the board.', aid: 'mistakes' };
   }
 
-  // 11. Weaknesses → the weakness analyzer. Framed only, so
-  //     "what's my weakness in the Sicilian?" stays a brain question.
+  // 11. Weaknesses → the SAME adaptive mistake queue (drilling your
+  //     weaknesses IS drilling your mistakes). Framed only, so "what's my
+  //     weakness in the Sicilian?" stays a brain question.
   if (framed && (/\bweakness(?:es)?\b/i.test(lower) || /\bweak\s+(?:spots?|squares?)\b/i.test(lower))) {
-    return { path: '/weaknesses', ack: 'Opening your weaknesses.', aid: 'weaknesses' };
+    return { path: '/coach/teach?drill=mistakes', ack: "Let's drill your weaknesses on the board.", aid: 'mistakes' };
   }
 
   return null;
