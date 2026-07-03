@@ -14,6 +14,7 @@
 import { Chess } from 'chess.js';
 import { detectTacticType } from './missedTacticService';
 import { getStoredTacticalProfile } from './tacticalProfileService';
+import { alertSensitivityMultiplier } from './skillScaling';
 import type { TacticType, StockfishAnalysis } from '../types';
 import type { UpcomingTactic } from '../types/tacticTypes';
 
@@ -295,10 +296,18 @@ export function isCriticalThreat(
   tactic: Pick<UpcomingTactic, 'lineEval' | 'lineMate'>,
   playerColor: 'w' | 'b',
   isOpening: boolean,
+  playerRating?: number,
+  tacticsSkill?: number,
 ): boolean {
   if (tactic.lineMate !== null) return true; // a forced mate is always worth it
   const studentEval = playerColor === 'w' ? tactic.lineEval : -tactic.lineEval;
-  const bar = isOpening ? CRITICAL_THREAT_CP_OPENING : CRITICAL_THREAT_CP;
+  const baseBar = isOpening ? CRITICAL_THREAT_CP_OPENING : CRITICAL_THREAT_CP;
+  // Adaptive: weaker players get alerted on smaller swings (more help); stronger
+  // players only on bigger ones (less noise) — David 2026-07-03. Omitted rating
+  // → fixed baseline (backward compatible).
+  const bar = typeof playerRating === 'number'
+    ? baseBar * alertSensitivityMultiplier(playerRating, tacticsSkill)
+    : baseBar;
   return studentEval <= -bar; // opponent winning by ≥ the bar
 }
 

@@ -74,9 +74,9 @@ export interface TriggerResult {
  *  not a recapture / forced move. We don't have force-move detection
  *  here so the closest proxy is "delta in student's favor exceeds
  *  threshold and the move was best-or-near-best". */
-export function detectGreatMove(s: PlayerMoveSignal): TriggerResult | null {
+export function detectGreatMove(s: PlayerMoveSignal, sensitivity = 1): TriggerResult | null {
   const delta = s.evalAfter - s.evalBefore;
-  if (delta < GREAT_MOVE_DELTA_CP) return null;
+  if (delta < GREAT_MOVE_DELTA_CP * sensitivity) return null;
   // Require best-or-near-best so we don't praise random lucky bumps.
   if (!s.isBestMove && (s.bestMoveEval === null || s.bestMoveEval - s.evalAfter > 10)) return null;
   return {
@@ -88,11 +88,11 @@ export function detectGreatMove(s: PlayerMoveSignal): TriggerResult | null {
 /** Missed tactic — student played a fine move but a much stronger
  *  tactical alternative existed. Gap >= +1.00 cp AND best move was
  *  classified as tactical. */
-export function detectMissedTactic(s: PlayerMoveSignal): TriggerResult | null {
+export function detectMissedTactic(s: PlayerMoveSignal, sensitivity = 1): TriggerResult | null {
   if (s.isBestMove) return null;
   if (s.bestMoveEval === null) return null;
   const gap = s.bestMoveEval - s.evalAfter;
-  if (gap < MISSED_TACTIC_GAP_CP) return null;
+  if (gap < MISSED_TACTIC_GAP_CP * sensitivity) return null;
   if (!s.bestMoveWasTactical) return null;
   return {
     trigger: 'missed-tactic',
@@ -103,9 +103,9 @@ export function detectMissedTactic(s: PlayerMoveSignal): TriggerResult | null {
 /** Opponent blunder — opponent's move dropped the eval by ≥ 1.50 in
  *  student's favor. Eval is in student-perspective so the delta is
  *  positive when good for student. */
-export function detectOpponentBlunder(s: OpponentMoveSignal): TriggerResult | null {
+export function detectOpponentBlunder(s: OpponentMoveSignal, sensitivity = 1): TriggerResult | null {
   const delta = s.evalAfter - s.evalBefore;
-  if (delta < OPPONENT_BLUNDER_DELTA_CP) return null;
+  if (delta < OPPONENT_BLUNDER_DELTA_CP * sensitivity) return null;
   return {
     trigger: 'opponent-blunder',
     payload: { evalBefore: s.evalBefore, evalAfter: s.evalAfter, delta },
@@ -115,10 +115,10 @@ export function detectOpponentBlunder(s: OpponentMoveSignal): TriggerResult | nu
 /** Eval swing wrong — student's move dropped the eval ≥ 0.80 against
  *  them. Suppressed when there's a hanging piece (the POLISH-02
  *  blunder alert path covers that case with dedicated prose). */
-export function detectEvalSwingWrong(s: PlayerMoveSignal): TriggerResult | null {
+export function detectEvalSwingWrong(s: PlayerMoveSignal, sensitivity = 1): TriggerResult | null {
   if (s.hasHangingPiece) return null;
   const delta = s.evalAfter - s.evalBefore;
-  if (delta > -EVAL_SWING_WRONG_DELTA_CP) return null;
+  if (delta > -EVAL_SWING_WRONG_DELTA_CP * sensitivity) return null;
   return {
     trigger: 'eval-swing-wrong',
     payload: { evalBefore: s.evalBefore, evalAfter: s.evalAfter, delta },
@@ -167,17 +167,23 @@ export function pickHighestPriorityTrigger(
  *  directly. */
 export function evaluatePlayerMoveTriggers(
   s: PlayerMoveSignal,
+  // Adaptive alert sensitivity (David 2026-07-03): < 1 lowers every bar for
+  // weaker players (more/earlier interjections); > 1 raises them for stronger
+  // players (less noise). Default 1 → original fixed thresholds. Recovery is
+  // an acknowledgment, not noise, so it is intentionally left unscaled.
+  sensitivity = 1,
 ): { winner: TriggerResult | null; suppressed: TriggerResult[] } {
   return pickHighestPriorityTrigger([
-    detectGreatMove(s),
-    detectMissedTactic(s),
-    detectEvalSwingWrong(s),
+    detectGreatMove(s, sensitivity),
+    detectMissedTactic(s, sensitivity),
+    detectEvalSwingWrong(s, sensitivity),
     detectRecovery(s),
   ]);
 }
 
 export function evaluateOpponentMoveTriggers(
   s: OpponentMoveSignal,
+  sensitivity = 1,
 ): { winner: TriggerResult | null; suppressed: TriggerResult[] } {
-  return pickHighestPriorityTrigger([detectOpponentBlunder(s)]);
+  return pickHighestPriorityTrigger([detectOpponentBlunder(s, sensitivity)]);
 }

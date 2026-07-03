@@ -119,7 +119,10 @@ export function AdaptivePuzzlePage(): JSX.Element {
   }, []);
 
   const handleSelectDifficulty = useCallback(async (difficulty: AdaptiveDifficulty): Promise<void> => {
-    const newSession = createAdaptiveSession(difficulty, forcedWeakThemes);
+    // Seed the session at the player's real puzzle rating (clamped into the
+    // chosen difficulty's band) so a strong player picking Medium doesn't start
+    // at the fixed 1500 (David 2026-07-03: all training aids adaptive).
+    const newSession = createAdaptiveSession(difficulty, forcedWeakThemes, userRating);
     setSession(newSession);
     seenIdsRef.current = new Set();
     setPhase('loading');

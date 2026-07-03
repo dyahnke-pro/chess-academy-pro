@@ -308,8 +308,13 @@ export function MiddlegamePractice({
       // Student's color = the side that just moved (opposite of side-to-move
       // in the post-move FEN).
       const studentCC = fen.split(' ')[1] === 'w' ? 'b' : 'w';
-      const mgTactics = await buildFedTacticsContext(fen, studentCC, 1200, analysis, () => Promise.resolve(null))
-        .catch(() => undefined);
+      // Adaptive grounding horizon: real rating + tactics skill, not a frozen
+      // 1200 (David 2026-07-03: all training aids adaptive).
+      const mgProfile = useAppStore.getState().activeProfile;
+      const mgTactics = await buildFedTacticsContext(
+        fen, studentCC, mgProfile?.currentRating ?? 1200, analysis,
+        () => Promise.resolve(null), mgProfile?.skillRadar?.tactics,
+      ).catch(() => undefined);
       const mgBlock = mgTactics ? formatTacticsSubBlock(mgTactics) : '';
 
       const userMsg: CoachMessage = {

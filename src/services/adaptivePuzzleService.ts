@@ -106,17 +106,26 @@ export const DIFFICULTY_LABELS: Record<AdaptiveDifficulty, { label: string; desc
 export function createAdaptiveSession(
   difficulty: AdaptiveDifficulty,
   forcedWeakThemes?: string[],
+  playerPuzzleRating?: number,
 ): AdaptiveSessionState {
   const config = ADAPTIVE_CONFIGS[difficulty];
+  // Seed from the player's REAL puzzle rating when known, clamped into the
+  // chosen difficulty's band — so Easy/Medium/Hard still bound the range, but
+  // the START matches where the player actually is instead of a fixed constant
+  // (David 2026-07-03: a 1900 player picking Medium shouldn't start at 1500).
+  // Falls back to the band's nominal start when the rating is unknown.
+  const seedRating = typeof playerPuzzleRating === 'number'
+    ? Math.min(config.ratingCeiling, Math.max(config.ratingFloor, Math.round(playerPuzzleRating)))
+    : config.startRating;
   return {
     difficulty,
-    sessionRating: config.startRating,
+    sessionRating: seedRating,
     puzzlesSolved: 0,
     puzzlesFailed: 0,
     streak: 0,
     bestStreak: 0,
     consecutiveWrong: 0,
-    ratingHistory: [config.startRating],
+    ratingHistory: [seedRating],
     weakThemeBoost: false,
     totalPuzzles: 0,
     startedAt: new Date().toISOString(),

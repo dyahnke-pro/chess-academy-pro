@@ -2657,7 +2657,9 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
             (u) =>
               u.beneficiary === 'opponent' &&
               u.depthAhead <= 2 &&
-              isCriticalThreat(u, playerColorCode, isOpening),
+              // Adaptive alert bar: weaker players warned on smaller swings,
+              // stronger players spared the noise (David 2026-07-03).
+              isCriticalThreat(u, playerColorCode, isOpening, playerRating, activeProfile?.skillRadar?.tactics),
           );
           if (threats.length > 0) {
             const threat = threats[0];

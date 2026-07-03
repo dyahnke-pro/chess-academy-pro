@@ -25,6 +25,8 @@ import { getCachedStockfish } from './stockfishFenCache';
 import { groundCoachReply, applyCandidateArrows } from '../services/coachAnswerGates';
 import { voiceService } from '../services/voiceService';
 import { logAppAudit } from '../services/appAuditor';
+import { useAppStore } from '../stores/appStore';
+import { alertSensitivityMultiplier } from '../services/skillScaling';
 import {
   LIVE_COACH_GREAT_MOVE_ADDITION,
   LIVE_COACH_MISSED_TACTIC_ADDITION,
@@ -222,12 +224,16 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
       // David 2026-06-22). Latency-safe: reuse the eval bar's cached analysis,
       // never a fresh engine read (cache miss → sync FEN-only board facts).
       if (ctx.fenAfter) {
+        // Adaptive grounding horizon: real rating + tactics skill, not a frozen
+        // 1200 (David 2026-07-03: all training aids adaptive).
+        const lcProfile = useAppStore.getState().activeProfile;
         const tactics = await buildFedTacticsContext(
           ctx.fenAfter,
           playerColor === 'white' ? 'w' : 'b',
-          1200,
+          lcProfile?.currentRating ?? 1200,
           getCachedStockfish(ctx.fenAfter) ?? null,
           () => Promise.resolve(null),
+          lcProfile?.skillRadar?.tactics,
         ).catch(() => undefined);
         const block = tactics ? formatTacticsSubBlock(tactics) : '';
         if (block) userMessage = `${userMessage}\n\n${block}`;
@@ -328,7 +334,14 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
         recentEvalHistory: evalHistoryRef.current,
       };
 
-      const { winner, suppressed } = evaluatePlayerMoveTriggers(signal);
+      // Adaptive interjection sensitivity: quieter for stronger players, more
+      // attentive for weaker ones (David 2026-07-03: all training aids adaptive).
+      const lcTrigProfile = useAppStore.getState().activeProfile;
+      const lcSensitivity = alertSensitivityMultiplier(
+        lcTrigProfile?.currentRating ?? 1200,
+        lcTrigProfile?.skillRadar?.tactics,
+      );
+      const { winner, suppressed } = evaluatePlayerMoveTriggers(signal, lcSensitivity);
       for (const s of suppressed) {
         void logAppAudit({
           kind: 'live-coach-trigger-suppressed',
@@ -367,7 +380,12 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
         evalBefore: studentEvalBefore,
         evalAfter: studentEvalAfter,
       };
-      const { winner } = evaluateOpponentMoveTriggers(signal);
+      const oppProfile = useAppStore.getState().activeProfile;
+      const oppSensitivity = alertSensitivityMultiplier(
+        oppProfile?.currentRating ?? 1200,
+        oppProfile?.skillRadar?.tactics,
+      );
+      const { winner } = evaluateOpponentMoveTriggers(signal, oppSensitivity);
       if (!winner) return;
 
       void handleTrigger(winner, {

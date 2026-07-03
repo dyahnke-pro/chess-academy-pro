@@ -337,7 +337,11 @@ export function useCoachTips({
         // Third: scan for opponent tactics being set up against the player.
         // Uses the opponent's color to detect threats the player needs to defend.
         const opponentColor = playerColor === 'white' ? 'black' : 'white';
-        const opponentTactic = tacticAlerts ? scanUpcomingTactic(fen, analysis, opponentColor, 2) : null;
+        // Adaptive: warn stronger players about opponent threats further out
+        // (expected to calculate), weaker players only when close — same
+        // rating-scaled horizon as their own-tactic scan (was frozen at 2 plies
+        // for everyone; David 2026-07-03: all training aids adaptive).
+        const opponentTactic = tacticAlerts ? scanUpcomingTactic(fen, analysis, opponentColor, getTacticLookahead(playerRating)) : null;
         if (opponentTactic) {
           // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
           if (abortController.signal.aborted) return;
