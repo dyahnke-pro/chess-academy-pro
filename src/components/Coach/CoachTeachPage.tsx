@@ -51,6 +51,7 @@ import {
   isDrillableAid,
   buildMistakeDrillQueue,
   advanceMistakeDrill,
+  hasImportedGames,
   type CoachDrill,
   type DrillProgress,
 } from '../../services/coachDrillService';
@@ -1061,11 +1062,24 @@ export function CoachTeachPage(): JSX.Element {
    *  caller can fall back to a single DB-sourced drill. */
   const startMistakeDrills = useCallback(async (): Promise<boolean> => {
     const queue = await buildMistakeDrillQueue();
-    if (queue.length === 0) return false;
-    const progress: DrillProgress = { queue, themeIdx: 0, puzzleIdx: 0 };
-    startCoachDrill(queue[0].drills[0], progress, `We'll start with your most common weakness — ${queue[0].label}. Get these right over a few days and they'll test out.`);
-    return true;
-  }, [startCoachDrill]);
+    if (queue.length > 0) {
+      const progress: DrillProgress = { queue, themeIdx: 0, puzzleIdx: 0 };
+      startCoachDrill(queue[0].drills[0], progress, `We'll start with your most common weakness — ${queue[0].label}. Get these right over a few days and they'll test out.`);
+      return true;
+    }
+    // Nothing due. Two cases (David 2026-07-03):
+    //  - the user HAS uploaded games → they're genuinely caught up on
+    //    reviews; say so, don't serve a generic puzzle.
+    //  - no uploaded games at all → fall back to a DB tactic (return false
+    //    so the caller picks one).
+    if (await hasImportedGames()) {
+      coachDrillSay(
+        "You're all caught up — no mistakes are due to review today. The spaced-repetition tool will bring them back when it's time. Want a fresh tactic instead? Just say “drill tactics.”",
+      );
+      return true;
+    }
+    return false;
+  }, [startCoachDrill, coachDrillSay]);
 
   /** Called when the student SOLVES the current drill (whole line done).
    *  Single drill → offer another. Mistake-queue → advance to the next due

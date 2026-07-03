@@ -344,6 +344,27 @@ export function mistakePuzzleToDrill(mp: MistakePuzzle): CoachDrill | null {
 }
 
 /**
+ * True when the user has uploaded REAL games from lichess / chess.com (or
+ * a PGN import) — excluding the seeded `sample-*` review games, which
+ * carry lichess/chesscom sources but aren't the user's data. Drives the
+ * caught-up vs no-data fork (David 2026-07-03): no uploaded games → fall
+ * back to a DB tactic; games uploaded but nothing due → "you're caught up,
+ * nothing to do."
+ */
+export async function hasImportedGames(): Promise<boolean> {
+  try {
+    const games = await db.games.toArray();
+    return games.some(
+      (g) =>
+        (g.source === 'lichess' || g.source === 'chesscom' || g.source === 'import') &&
+        !g.id.startsWith('sample-'),
+    );
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Build the user's mistake-drill queue: their real blunders bucketed by
  * missed pattern and ranked MOST COMMON → least. Each theme's drills are
  * ordered worst-mistake-first (highest cp loss).

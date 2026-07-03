@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
-import { buildMistakeDrillQueue, mistakePuzzleToDrill } from './coachDrillService';
-import type { MistakePuzzle } from '../types';
+import { buildMistakeDrillQueue, mistakePuzzleToDrill, hasImportedGames } from './coachDrillService';
+import type { MistakePuzzle, GameRecord } from '../types';
 
 /** Build a valid-enough MistakePuzzle for the fields the drill code
  *  reads (fen, moves, bestMoveSan, playerColor, tacticType, gamePhase,
@@ -110,6 +110,35 @@ describe('buildMistakeDrillQueue — sourced from user mistakes, most common fir
       mk({ id: 'm-future', fen: FORK_A.fen, moves: 'g1f3', tacticType: 'fork', srsDueDate: '2099-01-01' }),
     ]);
     expect(await buildMistakeDrillQueue({ today: '2026-07-03' })).toEqual([]);
+  });
+});
+
+describe('hasImportedGames — real uploads vs seeded samples', () => {
+  function game(over: Partial<GameRecord> & { id: string; source: GameRecord['source'] }): GameRecord {
+    return { pgn: '', white: 'a', black: 'b', result: '1-0', date: '2026-01-01', ...over } as GameRecord;
+  }
+  beforeEach(async () => {
+    await db.games.clear();
+  });
+
+  it('false when no games', async () => {
+    expect(await hasImportedGames()).toBe(false);
+  });
+
+  it('false when only seeded sample games are present (sample- ids)', async () => {
+    await db.games.bulkAdd([
+      game({ id: 'sample-morphy-opera-1858', source: 'lichess' }),
+      game({ id: 'sample-italian-amateur-2', source: 'chesscom' }),
+    ]);
+    expect(await hasImportedGames()).toBe(false);
+  });
+
+  it('true when a real lichess/chess.com game is imported', async () => {
+    await db.games.bulkAdd([
+      game({ id: 'sample-morphy-opera-1858', source: 'lichess' }),
+      game({ id: 'lichess_abc123', source: 'lichess' }),
+    ]);
+    expect(await hasImportedGames()).toBe(true);
   });
 });
 
