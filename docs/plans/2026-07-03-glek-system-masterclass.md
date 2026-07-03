@@ -35,4 +35,20 @@ the Glek to its own masterclass so the standalone page is rich.
 - [x] modelGames-orientation PROTECTED += glek-system
 - [x] gates: all curated content gates + typecheck + lint green (glekSystemMasterclassTabs.test added)
 
-## Status: BUILT — gates green. Post-deploy 3-instrument audit owed after it lands on prod.
+## Voice grounding (David 2026-07-03: "use the YouTube video for the narrations")
+Re-pulled Naroditsky's DYI-speedrun transcript (video `fGBhk9oqdbg`, "Hippo &
+Glek Unveiled") via yt-dlp → `data/sources/naroditsky-voice/transcripts/`
+(gitignored, reference-only — no verbatim quoting, prose original per the
+plagiarism guard). His specific teaching, woven into the narration in original
+words:
+- The Glek as a clean, low-risk practical weapon at every level.
+- Replies: Bc5 (most popular) · d5 (the higher-level main line → "the typical
+  Glek pawn structure") · Bb4 (legitimate, same treatment).
+- The centre fork trick after an early …O-O (must know …d6): Nxe5, d4.
+- The KEY point — after …d6, do NOT play f4 first (it allows …Bxc3 hitting
+  e4); the **prophylactic Ne2** comes first, THEN f4 traps the bishop (…Nd7 the
+  only defence), and g4/g5/Ng3→f5 is a serious kingside initiative. Common
+  mistake #2 rewritten to f4-vs-Ne2; the f4-trap plan's overview + Ne2
+  annotation re-grounded on this.
+
+## Status: BUILT + voice-grounded — gates green. Post-deploy 3-instrument audit owed after it lands on prod.
