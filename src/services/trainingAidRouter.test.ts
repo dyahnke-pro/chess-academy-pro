@@ -1,63 +1,69 @@
 import { describe, it, expect } from 'vitest';
 import { matchTrainingAidRoute } from './trainingAidRouter';
 
-describe('matchTrainingAidRoute — calculation', () => {
+// Drillable aids now set a REAL puzzle up ON THE BOARD in Learn
+// (David 2026-07-03: no tab routing; coach sets them up on the board).
+// The handoff route is /coach/teach?drill=<aid>; the aid slug drives
+// coachDrillService.pickCoachDrill.
+describe('matchTrainingAidRoute — calculation (in-place Learn drill)', () => {
   it('routes "drill calculation" (the reported bug)', () => {
-    expect(matchTrainingAidRoute('drill calculation')?.path).toBe('/coach/endgame?tab=calculation');
+    const r = matchTrainingAidRoute('drill calculation');
+    expect(r?.path).toBe('/coach/teach?drill=calculation');
+    expect(r?.aid).toBe('calculation');
   });
   it('routes "work on my calculation"', () => {
-    expect(matchTrainingAidRoute('work on my calculation')?.path).toBe('/coach/endgame?tab=calculation');
+    expect(matchTrainingAidRoute('work on my calculation')?.aid).toBe('calculation');
   });
   it('routes "calculation practice"', () => {
-    expect(matchTrainingAidRoute('calculation practice')?.path).toBe('/coach/endgame?tab=calculation');
+    expect(matchTrainingAidRoute('calculation practice')?.aid).toBe('calculation');
   });
 });
 
 describe('matchTrainingAidRoute — endgame family', () => {
-  it('routes "practice mating patterns"', () => {
-    expect(matchTrainingAidRoute('practice mating patterns')?.path).toBe('/coach/endgame?tab=mating-patterns');
+  it('routes "practice mating patterns" to a board drill', () => {
+    expect(matchTrainingAidRoute('practice mating patterns')?.path).toBe('/coach/teach?drill=mating-patterns');
   });
   it('routes "checkmate practice"', () => {
-    expect(matchTrainingAidRoute('checkmate practice')?.path).toBe('/coach/endgame?tab=mating-patterns');
+    expect(matchTrainingAidRoute('checkmate practice')?.aid).toBe('mating-patterns');
   });
   it('routes "drill pawn endings"', () => {
-    expect(matchTrainingAidRoute('drill pawn endings')?.path).toBe('/coach/endgame?tab=pawn-endings');
+    expect(matchTrainingAidRoute('drill pawn endings')?.path).toBe('/coach/teach?drill=pawn-endings');
   });
   it('routes "rook endgame drill"', () => {
-    expect(matchTrainingAidRoute('rook endgame drill')?.path).toBe('/coach/endgame?tab=rook-endings');
+    expect(matchTrainingAidRoute('rook endgame drill')?.path).toBe('/coach/teach?drill=rook-endings');
   });
-  it('routes "drawing patterns"', () => {
+  it('routes "drawing patterns" to its lesson tab (not a board drill)', () => {
     expect(matchTrainingAidRoute('show me drawing patterns')?.path).toBe('/coach/endgame?tab=drawing-patterns');
   });
-  it('routes "endgame principles"', () => {
+  it('routes "endgame principles" to its lesson tab', () => {
     expect(matchTrainingAidRoute('teach endgame principles')?.path).toBe('/coach/endgame?tab=principles');
   });
-  it('routes "open the eval lab"', () => {
+  it('routes "open the eval lab" to its lesson tab', () => {
     expect(matchTrainingAidRoute('open the eval lab')?.path).toBe('/coach/endgame?tab=eval-lab');
   });
-  it('routes generic "practice endgames" to the endgame surface', () => {
-    expect(matchTrainingAidRoute('practice endgames')?.path).toBe('/coach/endgame');
+  it('routes generic "practice endgames" to a board drill', () => {
+    expect(matchTrainingAidRoute('practice endgames')?.path).toBe('/coach/teach?drill=endgame');
   });
 });
 
-describe('matchTrainingAidRoute — tactics / puzzles', () => {
-  it('routes "drill tactics" to the puzzle trainer', () => {
-    expect(matchTrainingAidRoute('drill tactics')?.path).toBe('/coach/session/puzzle');
+describe('matchTrainingAidRoute — tactics / puzzles (in-place Learn drill)', () => {
+  it('routes "drill tactics" to a board drill', () => {
+    expect(matchTrainingAidRoute('drill tactics')?.path).toBe('/coach/teach?drill=puzzle');
   });
   it('routes "give me a puzzle"', () => {
-    expect(matchTrainingAidRoute('give me a puzzle')?.path).toBe('/coach/session/puzzle');
+    expect(matchTrainingAidRoute('give me a puzzle')?.path).toBe('/coach/teach?drill=puzzle');
   });
   it('routes "give me a fork puzzle" with the theme', () => {
-    expect(matchTrainingAidRoute('give me a fork puzzle')?.path).toBe('/coach/session/puzzle?theme=fork');
+    expect(matchTrainingAidRoute('give me a fork puzzle')?.path).toBe('/coach/teach?drill=puzzle%3Afork');
   });
   it('routes "drill pins" (themed, framed, no puzzle word)', () => {
-    expect(matchTrainingAidRoute('drill pins')?.path).toBe('/coach/session/puzzle?theme=pin');
+    expect(matchTrainingAidRoute('drill pins')?.aid).toBe('puzzle:pin');
   });
   it('routes "discovered attack puzzles" (camelCase theme via spaced form)', () => {
-    expect(matchTrainingAidRoute('discovered attack puzzles')?.path).toBe('/coach/session/puzzle?theme=discoveredAttack');
+    expect(matchTrainingAidRoute('discovered attack puzzles')?.aid).toBe('puzzle:discoveredAttack');
   });
-  it('routes "endgame puzzles" to puzzles with theme=endgame (not the endgame tab)', () => {
-    expect(matchTrainingAidRoute('endgame puzzles')?.path).toBe('/coach/session/puzzle?theme=endgame');
+  it('routes "endgame puzzles" to a themed board drill', () => {
+    expect(matchTrainingAidRoute('endgame puzzles')?.aid).toBe('puzzle:endgame');
   });
 });
 

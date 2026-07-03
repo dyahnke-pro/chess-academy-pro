@@ -102,6 +102,25 @@ const AID_SPECS: Record<string, AidSpec> = {
   },
 };
 
+/** Aid slugs (as emitted by `trainingAidRouter`) that map to a real
+ *  solve-on-the-board drill. Lesson-shaped aids (eval-lab, principles,
+ *  drawing-patterns, weaknesses, mistakes) are NOT here — they aren't a
+ *  single-position puzzle. A `puzzle:<theme>` slug is always drillable. */
+const DRILLABLE_AIDS = new Set<string>([
+  'calculation',
+  'mating-patterns',
+  'pawn-endings',
+  'rook-endings',
+  'endgame',
+  'puzzle',
+]);
+
+/** True when the aid can be set up as a board drill (so the coach loads
+ *  a real puzzle on the Learn board instead of routing anywhere). */
+export function isDrillableAid(aid: string): boolean {
+  return DRILLABLE_AIDS.has(aid) || aid.startsWith('puzzle:');
+}
+
 /** Popularity / plays floors — keep novelty / under-tested puzzles out
  *  (same bar the calculation-drill surface uses). */
 const MIN_POPULARITY = 50;

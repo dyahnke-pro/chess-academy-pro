@@ -46,6 +46,7 @@ import {
 import { fuzzyMatchOpening } from '../../services/openingFuzzyMatcher';
 import { parseCoachIntent } from '../../services/coachAgent';
 import { matchTrainingAidRoute } from '../../services/trainingAidRouter';
+import { pickCoachDrill, isDrillableAid, type CoachDrill } from '../../services/coachDrillService';
 import { reportCoachReask, isMoveReport } from '../../services/coachNonAnswer';
 import { tryCaptureOpeningIntent, tryCaptureForgetIntent } from '../../services/openingIntentCapture';
 import { findPlansForOpening, sessionFromPlan } from '../../services/middlegamePlanner';
@@ -637,6 +638,12 @@ export function CoachTeachPage(): JSX.Element {
   // that: each play_move handler writes the chess instance's current
   // FEN into it, and getLiveFen reads from this ref. */
   const liveFenRef = useRef(game.fen);
+  // Active in-place drill (David 2026-07-03: the coach sets a REAL puzzle
+  // up ON THE BOARD under Learn, no tab routing). `step` indexes the NEXT
+  // expected move in `drill.solutionSan` (student moves at even indices,
+  // opponent replies auto-played at odd). Null = no drill running, so all
+  // existing walkthrough/play flows are untouched.
+  const activeDrillRef = useRef<{ drill: CoachDrill; step: number } | null>(null);
   // Background-fed tactics context (real PV tactics) for the SPOKEN + displayed
   // tactic strips, so the brain call never blocks on an engine read.
   const fedTacticsRef = useRef<TacticsLiveContext | null>(null);
@@ -968,6 +975,115 @@ export function CoachTeachPage(): JSX.Element {
     liveFenRef.current = STARTING_FEN;
     return { ok: true };
   }, []);
+
+  // ─── In-place drills (coach sets a REAL puzzle up on the board) ──────
+  // David 2026-07-03: "the coach sets them up on the board under learn
+  // tab" — not routed to the tactics tab, and NEVER an LLM-invented
+  // drill (G0). The puzzle + solution come from coachDrillService (the
+  // Lichess DB + chess.js); the coach only voices the prompt/feedback.
+
+  /** Append a coach line to the chat + memory and speak it. */
+  const coachDrillSay = useCallback((text: string): void => {
+    const id = `drill-say-${Date.now()}`;
+    setMessages((prev) => [...prev, { id, role: 'assistant', content: text, timestamp: Date.now() }]);
+    useCoachMemoryStore.getState().appendConversationMessage({
+      surface: 'chat-teach', role: 'coach', text, fen: gameRef.current.fen, trigger: null,
+    });
+    void voiceService.speak(text);
+  }, []);
+
+  /** Set a real drill up on the board and announce the challenge. */
+  const startCoachDrill = useCallback((drill: CoachDrill): void => {
+    // Stop any walkthrough playback so the drill owns the board.
+    walkthrough.stop();
+    voiceService.stop();
+    gameRef.current.loadFen(drill.setupFen);
+    liveFenRef.current = drill.setupFen;
+    activeDrillRef.current = { drill, step: 0 };
+    setArrows([]);
+    setHighlights([]);
+    const intro = `${drill.prompt} Play your move on the board.`;
+    setMessages((prev) => [...prev, {
+      id: `drill-intro-${Date.now()}`, role: 'assistant', content: intro, timestamp: Date.now(),
+    }]);
+    useCoachMemoryStore.getState().appendConversationMessage({
+      surface: 'chat-teach', role: 'coach', text: intro, fen: drill.setupFen, trigger: null,
+    });
+    void logAppAudit({
+      kind: 'coach-surface-migrated',
+      category: 'subsystem',
+      source: 'CoachTeachPage.startCoachDrill',
+      summary: `in-place drill ${drill.aid} puzzle=${drill.puzzleId} r=${drill.rating} (${drill.solutionSan.length}-ply line)`,
+    });
+    void voiceService.speak(intro);
+  }, [walkthrough]);
+
+  /** Validate a student board move against the active drill's solution.
+   *  Returns true when the move was consumed by a drill (so the normal
+   *  student-move flow must NOT run). Correct → auto-play the opponent
+   *  reply and advance; wrong → undo + hint and let them retry. */
+  const processDrillMove = useCallback((move: MoveResult): boolean => {
+    const cur = activeDrillRef.current;
+    if (!cur) return false;
+    voiceService.stop();
+    const strip = (s: string): string => s.replace(/[+#]$/, '');
+    const expected = cur.drill.solutionSan[cur.step];
+    const correct = move.san === expected || strip(move.san) === strip(expected);
+    if (!correct) {
+      gameRef.current.undoMove();
+      liveFenRef.current = gameRef.current.fen;
+      setArrows([]);
+      setHighlights([]);
+      coachDrillSay("That's not the strongest here — take another look and try again.");
+      return true;
+    }
+    liveFenRef.current = move.fen;
+    const step = cur.step + 1;
+    if (step >= cur.drill.solutionSan.length) {
+      // Student played the final move of the line.
+      activeDrillRef.current = null;
+      coachDrillSay("Solved — that's the whole line. Say “drill” again for another.");
+      return true;
+    }
+    // Auto-play the opponent's reply, then hand the move back.
+    const oppReply = cur.drill.solutionSan[step];
+    const afterOppStep = step + 1;
+    activeDrillRef.current = { drill: cur.drill, step };
+    window.setTimeout(() => {
+      const r = handlePlayMove(oppReply);
+      if (!r.ok) { activeDrillRef.current = null; return; }
+      liveFenRef.current = gameRef.current.fen;
+      if (afterOppStep >= cur.drill.solutionSan.length) {
+        activeDrillRef.current = null;
+        coachDrillSay("Solved — that's the whole line. Say “drill” again for another.");
+      } else {
+        activeDrillRef.current = { drill: cur.drill, step: afterOppStep };
+        coachDrillSay('Good. Keep going — find the next move.');
+      }
+    }, 650);
+    return true;
+  }, [coachDrillSay, handlePlayMove]);
+
+  // Hand-off from another surface: `/coach/teach?drill=<aid>` (play /
+  // chat / voice route drill requests here so the coach sets them up ON
+  // THE BOARD in Learn, per David 2026-07-03). Runs once, then strips the
+  // param so a reload doesn't re-trigger.
+  const drillParamHandledRef = useRef(false);
+  useEffect(() => {
+    if (drillParamHandledRef.current) return;
+    const drillAid = searchParams.get('drill');
+    if (!drillAid) return;
+    drillParamHandledRef.current = true;
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      next.delete('drill');
+      return next;
+    }, { replace: true });
+    if (!isDrillableAid(drillAid)) return;
+    const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200;
+    const drill = pickCoachDrill(drillAid, { rating });
+    if (drill) startCoachDrill(drill);
+  }, [searchParams, setSearchParams, activeProfile, startCoachDrill]);
 
   /** Notify the user when a background-generated stage finishes
    *  loading. Pushes a coach chat message + refreshes the
@@ -1579,39 +1695,47 @@ export function CoachTeachPage(): JSX.Element {
         const aid = matchTrainingAidRoute(text);
         if (aid) {
           const aidTurnId = freshTurnId('training-aid');
+          // Always echo the user's request.
           setMessages((prev) => [...prev, {
-            id: `${aidTurnId}-u`,
-            role: 'user',
-            content: text,
-            timestamp: Date.now(),
-          }, {
-            id: `${aidTurnId}-c`,
-            role: 'assistant',
-            content: aid.ack,
-            timestamp: Date.now(),
+            id: `${aidTurnId}-u`, role: 'user', content: text, timestamp: Date.now(),
           }]);
           useCoachMemoryStore.getState().appendConversationMessage({
-            surface: 'chat-teach',
-            role: 'user',
-            text,
-            fen: opts?.fenOverride ?? gameRef.current.fen,
-            trigger: null,
+            surface: 'chat-teach', role: 'user', text,
+            fen: opts?.fenOverride ?? gameRef.current.fen, trigger: null,
           });
-          useCoachMemoryStore.getState().appendConversationMessage({
-            surface: 'chat-teach',
-            role: 'coach',
-            text: aid.ack,
-            fen: opts?.fenOverride ?? gameRef.current.fen,
-            trigger: null,
-          });
-          void logAppAudit({
-            kind: 'coach-surface-migrated',
-            category: 'subsystem',
-            source: 'CoachTeachPage.handleSubmit.trainingAid',
-            summary: `training-aid intent "${text.slice(0, 50)}" → ${aid.aid} (${aid.path})`,
-          });
-          void navigate(aid.path);
-          return;
+          // Drillable aid → set a REAL puzzle up ON THE BOARD, in-place
+          // (David 2026-07-03: coach sets them up on the board under
+          // Learn, never the tactics tab, never an LLM-invented drill).
+          if (isDrillableAid(aid.aid)) {
+            const rating =
+              activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200;
+            const drill = pickCoachDrill(aid.aid, { rating });
+            if (drill) {
+              startCoachDrill(drill);
+              return;
+            }
+            // No puzzle matched (rare) — fall through to the brain rather
+            // than a dead navigation.
+          } else {
+            // Lesson-shaped aid (eval-lab / principles / drawing /
+            // weaknesses / mistakes) → its real surface, NOT the tactics
+            // tab. These aren't a single-position board drill.
+            setMessages((prev) => [...prev, {
+              id: `${aidTurnId}-c`, role: 'assistant', content: aid.ack, timestamp: Date.now(),
+            }]);
+            useCoachMemoryStore.getState().appendConversationMessage({
+              surface: 'chat-teach', role: 'coach', text: aid.ack,
+              fen: opts?.fenOverride ?? gameRef.current.fen, trigger: null,
+            });
+            void logAppAudit({
+              kind: 'coach-surface-migrated',
+              category: 'subsystem',
+              source: 'CoachTeachPage.handleSubmit.trainingAid',
+              summary: `lesson-aid intent "${text.slice(0, 50)}" → ${aid.aid} (${aid.path})`,
+            });
+            void navigate(aid.path);
+            return;
+          }
         }
       }
 
@@ -3454,6 +3578,12 @@ export function CoachTeachPage(): JSX.Element {
     // A board move DISMISSES the "Read this position" banner (clears its
     // text) — same as Play. The student answered the position by playing.
     positionNarration.cancel();
+    // In-place drill: when a drill is running the board move is a SOLVE
+    // attempt, validated against the puzzle's solution (code, not the
+    // LLM). Consumes the move and skips the normal opening-reply flow.
+    if (activeDrillRef.current) {
+      if (processDrillMove(move)) return;
+    }
     // Block a new move ONLY while the opponent is still computing its reply —
     // never while the coach is merely narrating the last move (that was the
     // 3+s lag David hit 2026-06-10). If the student moves while a prior

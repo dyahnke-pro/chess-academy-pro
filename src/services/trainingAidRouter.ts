@@ -53,22 +53,23 @@ export function matchTrainingAidRoute(text: string): TrainingAidRoute | null {
   const lower = raw.toLowerCase();
   const framed = FRAMING_RE.test(lower);
 
-  // 1. Calculation drills → the real puzzle-backed calc-skill surface.
+  // 1. Calculation drills → set a real puzzle up ON THE BOARD in Learn
+  //    (David: no tab routing; the coach sets them up on the board).
   //    verb↔noun in either order; British spelling; bare "calculation
   //    drill". Bare "how do I calculate?" (no framing) is NOT matched.
   if (
     /\b(?:drill|practi[cs]e|train(?:ing)?|work\s+on|sharpen|improve|exercise)\b[\s\w']{0,24}\bcalculat(?:e|es|ing|ion)\b/i.test(lower) ||
     /\bcalculat(?:e|es|ing|ion)\b[\s\w']{0,24}\b(?:drill[s]?|practi[cs]e|training|exercise[s]?)\b/i.test(lower)
   ) {
-    return { path: '/coach/endgame?tab=calculation', ack: 'Opening the calculation drills.', aid: 'calculation' };
+    return drillRoute('calculation', 'a calculation');
   }
 
-  // 2. Mating-pattern practice → the dedicated mating-patterns surface.
+  // 2. Mating-pattern practice → a real mate puzzle on the board.
   if (
     /\b(?:mating|mate|checkmate)\s+patterns?\b/i.test(lower) ||
     /\b(?:mating|checkmate|checkmating)\s+(?:practi[cs]e|drill[s]?|training|exercise[s]?)\b/i.test(lower)
   ) {
-    return { path: '/coach/endgame?tab=mating-patterns', ack: 'Loading mating-pattern practice.', aid: 'mating-patterns' };
+    return drillRoute('mating-patterns', 'a mating-pattern');
   }
 
   // 3. Eval Lab → position-evaluation drills.
@@ -76,14 +77,14 @@ export function matchTrainingAidRoute(text: string): TrainingAidRoute | null {
     return { path: '/coach/endgame?tab=eval-lab', ack: 'Opening the Eval Lab.', aid: 'eval-lab' };
   }
 
-  // 4. Pawn endings.
+  // 4. Pawn endings → a real pawn-endgame puzzle on the board.
   if (/\bpawn\s+(?:ending|endings|endgame|endgames)\b/i.test(lower)) {
-    return { path: '/coach/endgame?tab=pawn-endings', ack: 'Loading pawn-ending drills.', aid: 'pawn-endings' };
+    return drillRoute('pawn-endings', 'a pawn-ending');
   }
 
-  // 5. Rook endings.
+  // 5. Rook endings → a real rook-endgame puzzle on the board.
   if (/\brook\s+(?:ending|endings|endgame|endgames)\b/i.test(lower)) {
-    return { path: '/coach/endgame?tab=rook-endings', ack: 'Loading rook-ending drills.', aid: 'rook-endings' };
+    return drillRoute('rook-endings', 'a rook-ending');
   }
 
   // 6. Drawing patterns.
@@ -113,7 +114,7 @@ export function matchTrainingAidRoute(text: string): TrainingAidRoute | null {
   //    the puzzle branch, so "endgame puzzles" went to puzzles and
   //    "rook endings" went to its tab. Needs a framing verb.
   if (/\bend\s?games?\b/i.test(lower) && framed) {
-    return { path: '/coach/endgame', ack: 'Opening endgame training.', aid: 'endgame' };
+    return drillRoute('endgame', 'an endgame');
   }
 
   // 10. My mistakes → the mistakes trainer. Framed only, so a genuine
@@ -133,13 +134,23 @@ export function matchTrainingAidRoute(text: string): TrainingAidRoute | null {
 
 function puzzleRoute(theme: string | null): TrainingAidRoute {
   if (theme) {
-    return {
-      path: `/coach/session/puzzle?theme=${encodeURIComponent(theme)}`,
-      ack: `Loading ${spacedTheme(theme)} puzzles.`,
-      aid: `puzzle:${theme}`,
-    };
+    return drillRoute(`puzzle:${theme}`, `a ${spacedTheme(theme)} tactics`);
   }
-  return { path: '/coach/session/puzzle', ack: 'Loading the puzzle trainer.', aid: 'puzzle' };
+  return drillRoute('puzzle', 'a tactics');
+}
+
+/** A drill aid → set it up ON THE BOARD in the Learn tab. When the
+ *  request is typed on the Learn surface it's handled in-place (no
+ *  navigation); from any other surface (play / chat / voice) we hand off
+ *  to `/coach/teach?drill=<aid>`, which auto-starts the same in-place
+ *  drill. Either way the coach sets a REAL code-selected puzzle on the
+ *  board — never the tactics tab, never an LLM-invented drill. */
+function drillRoute(aid: string, article: string): TrainingAidRoute {
+  return {
+    path: `/coach/teach?drill=${encodeURIComponent(aid)}`,
+    ack: `Setting up ${article} drill on the board.`,
+    aid,
+  };
 }
 
 /** Match a free-text message against the known TACTICAL_THEMES set,

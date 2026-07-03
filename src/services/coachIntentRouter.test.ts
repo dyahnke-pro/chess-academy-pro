@@ -135,7 +135,7 @@ describe('tryRouteIntent — take-back target distinction (your vs my)', () => {
 });
 
 describe('tryRouteIntent — calculation drill (G0: LLM invents no drills)', () => {
-  const CALC_ROUTE = { kind: 'navigate_to_route', route: '/coach/endgame?tab=calculation' };
+  const CALC_ROUTE = { kind: 'navigate_to_route', route: '/coach/teach?drill=calculation' };
 
   it('routes "drill calculation" → calc tab (the reported bug)', () => {
     expect(tryRouteIntent('drill calculation', { currentFen: STARTING_FEN })).toEqual(CALC_ROUTE);

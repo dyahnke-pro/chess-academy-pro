@@ -121,12 +121,12 @@ describe('routeChatIntent', () => {
     // real puzzle surface, never an LLM-invented drill.
     const unknown = await routeChatIntent('give me a whatever puzzle');
     expect(unknown).not.toBeNull();
-    expect(unknown!.path).toBe('/coach/session/puzzle');
+    expect(unknown!.path).toBe('/coach/teach?drill=puzzle');
 
     const known = await routeChatIntent('give me a fork puzzle');
     expect(known).not.toBeNull();
-    expect(known!.path).toMatch(/^\/coach\/session\/puzzle/);
-    expect(known!.path).toContain('theme=fork');
+    expect(known!.path).toMatch(/^\/coach\/teach\?drill=/);
+    expect(known!.intent).toBeTruthy();
   });
 
   it('navigates continue-middlegame only when a plan or subject resolves', async () => {
