@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { getCoachChatResponse } from '../services/coachApi';
 import { isSpokenSentenceGrounded } from '../services/coachAnswerGates';
 import { voiceService } from '../services/voiceService';
-import { stockfishEngine } from '../services/stockfishEngine';
+import { stockfishEngine, resolveWorkerUrl } from '../services/stockfishEngine';
 import { buildChessContextMessage, POSITION_NARRATION_ADDITION } from '../services/coachPrompts';
 import { formatReadingFacts } from '../services/positionReadingService';
 import { logAppAudit } from '../services/appAuditor';
@@ -177,8 +177,16 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
         // blocked by engine analysis; whichever finishes first is what
         // the LLM gets. If Stockfish is late, the narration prompt
         // already handles missing stockfishAnalysis gracefully.
+        // Engine-aware budget (David 2026-07-03): the iOS asm.js build is pure
+        // JS and can't reach depth-10 in 300ms, so the eval never landed on
+        // iPhone. Give asm the time it needs (resolves early when faster);
+        // desktop/Android WASM stays snappy. Code-counted material in
+        // buildChessContextMessage covers any remaining timeout (G0).
+        const engineIsAsm = resolveWorkerUrl().variant === 'asm';
+        const analysisDepth = engineIsAsm ? 8 : STOCKFISH_DEPTH;
+        const fastBudgetMs = engineIsAsm ? 3000 : Math.max(STOCKFISH_FAST_BUDGET_MS, 700);
         const stockfishRace: Promise<StockfishAnalysis | null> = withTimeout(
-          stockfishEngine.analyzePosition(args.fen, STOCKFISH_DEPTH),
+          stockfishEngine.analyzePosition(args.fen, analysisDepth),
           STOCKFISH_TIMEOUT_MS,
           'stockfish',
         ).then(
@@ -189,7 +197,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
           () => null as StockfishAnalysis | null,
         );
         const stockfishBudget = new Promise<null>((resolve) =>
-          setTimeout(() => resolve(null), STOCKFISH_FAST_BUDGET_MS),
+          setTimeout(() => resolve(null), fastBudgetMs),
         );
         stockfishAnalysis = await Promise.race([stockfishRace, stockfishBudget]);
       }

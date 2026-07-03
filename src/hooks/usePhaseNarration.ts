@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { voiceService } from '../services/voiceService';
-import { stockfishEngine } from '../services/stockfishEngine';
+import { stockfishEngine, resolveWorkerUrl } from '../services/stockfishEngine';
 import { buildChessContextMessage } from '../services/coachPrompts';
 import { logAppAudit } from '../services/appAuditor';
 import { db } from '../db/schema';
@@ -193,8 +193,19 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
         // stockfishAnalysis gracefully. WO-PHASE-LAG-02: depth 12 → 10,
         // budget 500ms → 300ms, successful analyses cached for reuse.
         console.log('[PHASE-HOOK-03] stockfish analysis call (parallel)');
+        // Engine-aware budget (David 2026-07-03): iOS runs the pure-JS asm.js
+        // build (the WASM builds OOM / call_indirect-trap on iPhone), which
+        // can't reach depth-10 in 150ms — so the old race ALWAYS timed out on
+        // iOS and the brain got no eval ("equal material" guess). Give asm the
+        // ~3s it needs (it resolves early when faster); desktop/Android WASM
+        // stays snappy. The race still returns as soon as the engine answers,
+        // so this only adds latency when the engine is genuinely slow — and the
+        // code-counted material balance covers the timeout case regardless (G0).
+        const engineIsAsm = resolveWorkerUrl().variant === 'asm';
+        const analysisDepth = engineIsAsm ? 8 : STOCKFISH_DEPTH;
+        const fastBudgetMs = engineIsAsm ? 3000 : Math.max(STOCKFISH_FAST_BUDGET_MS, 700);
         const stockfishRace: Promise<StockfishAnalysis | null> = withTimeout(
-          stockfishEngine.analyzePosition(event.fen, STOCKFISH_DEPTH),
+          stockfishEngine.analyzePosition(event.fen, analysisDepth),
           STOCKFISH_TIMEOUT_MS,
           'stockfish',
         ).then(
@@ -205,7 +216,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
           () => null as StockfishAnalysis | null,
         );
         const stockfishBudget = new Promise<null>((resolve) =>
-          setTimeout(() => resolve(null), STOCKFISH_FAST_BUDGET_MS),
+          setTimeout(() => resolve(null), fastBudgetMs),
         );
         stockfishAnalysis = await Promise.race([stockfishRace, stockfishBudget]);
         console.log('[PHASE-HOOK-04] stockfish race resolved', {
@@ -254,6 +265,12 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
         playerMove: event.triggeringMoveSan,
         moveClassification: null,
         playerProfile: { rating, weaknesses: [] },
+        // G0 perspective: the transition fires right after the STUDENT's move,
+        // so the FEN's side-to-move is the OPPONENT. Hand the brain the
+        // student's real color so the grounded tactics block stays
+        // student-relative instead of inverting (David 2026-07-03 TestFlight
+        // report: White student narrated as Black).
+        perspective: event.playerColor === 'white' ? 'w' : 'b',
         additionalContext:
           `Transition: ${transitionLabel}. Student color: ${event.playerColor}. Triggering move (the student's move that just completed the transition): ${event.triggeringMoveSan}.\n` +
           `Narrate the transition as thoroughly as the position deserves. There is no length limit. Do not invent moves or pieces — every claim must be verifiable against the Position (FEN) line and the Stockfish / Tactics analysis blocks below.`,

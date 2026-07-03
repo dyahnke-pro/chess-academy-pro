@@ -35,6 +35,10 @@ vi.mock('../services/stockfishEngine', () => ({
       nodesPerSecond: 0,
     }),
   },
+  // The hook now reads the active engine variant to size the Stockfish budget
+  // (iOS asm.js needs a bigger budget than desktop WASM). Default to the fast
+  // non-asm path in tests.
+  resolveWorkerUrl: vi.fn(() => ({ url: '', variant: 'single', reason: 'test', workerType: 'classic' })),
 }));
 
 vi.mock('../db/schema', () => ({

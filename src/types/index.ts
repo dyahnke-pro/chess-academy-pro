@@ -1232,6 +1232,14 @@ export interface CoachContext {
     rating: number;
     weaknesses: string[];
   };
+  /** The STUDENT's color, as a code-computed fact (G0). When set, the
+   *  threat/opportunity framing in the grounded tactics block is built from
+   *  the student's side — NOT the FEN side-to-move. Callers that narrate right
+   *  after the student's move (phase transitions, per-move commentary) MUST set
+   *  this, or the block gets framed from the opponent's side (the FEN flips to
+   *  the opponent's turn) and the coach voices the student as the wrong color.
+   *  Omit it only when the student is genuinely on move (stm == student). */
+  perspective?: 'w' | 'b';
   additionalContext?: string;
 }
 

@@ -1016,10 +1016,42 @@ export function buildOpeningAnnotationContext(ctx: OpeningAnnotationContext): st
 
 // ─── Context Builder ────────────────────────────────────────────────────────
 
+/**
+ * Deterministic material balance from the FEN board field — pure board math,
+ * NO Stockfish (G0). The coach voices this instead of guessing "equal material"
+ * when the engine hasn't answered (e.g. the slow iOS asm.js build times out of
+ * a narration budget). Standard values p1 n3 b3 r5 q9; kings excluded.
+ * Returns e.g. "White +2" / "Black +5" / "even", or null on an unparseable FEN.
+ */
+export function computeMaterialBalance(fen: string): string | null {
+  const board = fen.split(' ')[0];
+  if (!board || !board.includes('/')) return null;
+  const value: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
+  let white = 0;
+  let black = 0;
+  for (const ch of board) {
+    const key = ch.toLowerCase();
+    if (!(key in value)) continue;
+    const v = value[key];
+    if (ch >= 'A' && ch <= 'Z') white += v;
+    else black += v;
+  }
+  const diff = white - black;
+  if (diff === 0) return 'even';
+  return diff > 0 ? `White +${diff}` : `Black +${-diff}`;
+}
+
 export function buildChessContextMessage(ctx: CoachContext): string {
   const lines: string[] = [];
 
   lines.push(`Position (FEN): ${ctx.fen}`);
+
+  // Deterministic material count (G0) — always present, engine-independent, so
+  // the brain never guesses material. Perspective-neutral (a count, not a claim).
+  const material = computeMaterialBalance(ctx.fen);
+  if (material) {
+    lines.push(`Material balance (code-counted, authoritative): ${material}`);
+  }
 
   if (ctx.lastMoveSan) {
     lines.push(`Last move: ${ctx.lastMoveSan} (Move ${ctx.moveNumber})`);
@@ -1076,7 +1108,15 @@ export function buildChessContextMessage(ctx: CoachContext): string {
   // labels use it). Guarded: an unparseable/partial FEN (or a starved engine)
   // falls back to the thin detectTactics summary rather than throwing.
   try {
-    const stm: 'w' | 'b' = ctx.fen.split(' ')[1] === 'b' ? 'b' : 'w';
+    // Perspective for threat/opportunity labels. Prefer the STUDENT's color
+    // (a code-computed fact) when the caller supplied it — otherwise fall back
+    // to the FEN side-to-move. The fallback is correct when the student is on
+    // move; it is WRONG right after the student moves (the FEN flips to the
+    // opponent's turn), which is exactly when phase/per-move narration fires —
+    // so those callers pass ctx.perspective and the block stays student-relative
+    // instead of inverting the student's color (G0).
+    const stm: 'w' | 'b' =
+      ctx.perspective ?? (ctx.fen.split(' ')[1] === 'b' ? 'b' : 'w');
     const tactics = buildTacticsLiveContext(
       ctx.fen,
       ctx.stockfishAnalysis,

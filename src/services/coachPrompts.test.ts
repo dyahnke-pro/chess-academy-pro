@@ -7,6 +7,7 @@ import {
   openingAnnotationPrompt,
   buildChessContextMessage,
   buildOpeningAnnotationContext,
+  computeMaterialBalance,
 } from './coachPrompts';
 import type { CoachContext, OpeningAnnotationContext, StockfishAnalysis } from '../types';
 
@@ -176,7 +177,39 @@ describe('coachPrompts', () => {
     });
   });
 
+  describe('computeMaterialBalance (deterministic, G0)', () => {
+    it('returns even for the start position', () => {
+      expect(computeMaterialBalance('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')).toBe('even');
+    });
+    it('counts White up a pawn+piece as +4', () => {
+      // White has an extra knight (3) + pawn (1) = +4 vs a bare-king black side.
+      expect(computeMaterialBalance('4k3/8/8/8/8/8/4P3/3NK3 w - - 0 1')).toBe('White +4');
+    });
+    it('counts Black ahead', () => {
+      // Black has a queen; White only a king → Black +9.
+      expect(computeMaterialBalance('3qk3/8/8/8/8/8/8/4K3 w - - 0 1')).toBe('Black +9');
+    });
+    it('returns null on an unparseable FEN', () => {
+      expect(computeMaterialBalance('not-a-fen')).toBeNull();
+    });
+  });
+
   describe('buildChessContextMessage', () => {
+    it('always emits a code-counted material balance (never guessed)', () => {
+      const ctx: CoachContext = {
+        fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+        lastMoveSan: null,
+        moveNumber: 1,
+        pgn: '',
+        openingName: null,
+        stockfishAnalysis: null,
+        playerMove: null,
+        moveClassification: null,
+        playerProfile: { rating: 1400, weaknesses: [] },
+      };
+      expect(buildChessContextMessage(ctx)).toContain('Material balance');
+    });
+
     it('includes FEN in output', () => {
       const ctx: CoachContext = {
         fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1',
