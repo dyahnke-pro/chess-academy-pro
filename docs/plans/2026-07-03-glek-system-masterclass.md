@@ -19,7 +19,7 @@ the Glek to its own masterclass so the standalone page is rich.
   - **Fianchetto 4...g6** — `…g6 Bg2 Bg7 O-O O-O d3 d6 h3 h6 Be3 Be6 Qd2 Kh7 d4 exd4 Nxd4` (proxy spine)
 - **Middlegame plans (3):** `mp-gleksystem-bc5-f5` (Nh4→f5 on the main), `mp-gleksystem-f4trap`
   (Ne2/f4 bishop-trap — re-key), `mp-gleksystem-d5-outpost` (d5 structure — re-key).
-- **Model games:** Mamedyarov–Kramnik 2013 1-0 (re-key) + more if sourced. studentSide white, wins only.
+- **Model games (4 — one per tab, all real elite White wins):** Mamedyarov–Kramnik 2013 (d5) · Rapport–Duda 2022 Candidates (Bc5 main) · Amonatov–Fressinet 2016 (Bb4) · Safarli–Amin 2013 World Cup (g6). Sourced from the masters explorer (topGames, winner=white), chess.js-validated, studentSide white.
 - **Common mistakes (≥3):** early …O-O fork-trick (Nxe5/d4), premature …f5 pawn ram, …d6 blunder (f4-trap).
 - **Gems:** 0 — the f4-trap is +0.6 (below the +1.0 crush bar → lesson point, not a weapon-gem). Honest 0.
 - **Endgame:** self-hides unless a real Glek game reaches a classifiable ending.
