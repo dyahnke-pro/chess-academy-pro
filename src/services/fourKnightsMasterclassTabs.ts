@@ -6,7 +6,7 @@ export const FOUR_KNIGHTS_TAB_PLAN_IDS: Record<string, string[]> = {
   main: ['mp-fourknightsgame-main'],
   'scotch four knights': ['mp-fourknightsgame-scotchfk'],
   'italian four knights': ['mp-fourknightsgame-italian'],
-  'glek system': ['mp-fourknightsgame-glek'],
+  'glek system': ['mp-fourknightsgame-glek', 'mp-fourknightsgame-glek-f4trap'],
   rubinstein: ['mp-fourknightsgame-rubinstein'],
 };
 
