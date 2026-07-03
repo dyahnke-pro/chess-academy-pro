@@ -44,6 +44,8 @@ import {
 } from './stockfishFenCache';
 import { useCoachMemoryStore } from '../stores/coachMemoryStore';
 import { logAppAudit } from '../services/appAuditor';
+import { useAppStore } from '../stores/appStore';
+import { hintStartTier } from '../services/skillScaling';
 import type {
   HintLevel,
   BoardArrow,
@@ -247,10 +249,17 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
     if (!enabled) return;
     if (levelRef.current >= 3) return;
 
-    // One tap → the full answer (David 2026-05-26: "All hint sources I
-    // want to just show the answer on first press"). Skip the WHY/WHICH
-    // ladder and jump straight to Tier 3 (move + green arrow + rationale).
-    const nextLevel = 3 as 1 | 2 | 3;
+    // Adaptive hints (David 2026-07-03: "I'm ok with adaptive hints" —
+    // supersedes the 2026-05-26 blanket "answer on first press"). Weaker
+    // players still get the answer on the first tap; stronger players start on
+    // the WHY (1) / WHICH (2) rung and CLIMB toward the answer on repeat taps,
+    // so they calculate before it's handed to them. The start rung is set by
+    // rating + tactics skill; every subsequent tap advances one rung to 3.
+    const tacticsSkill = useAppStore.getState().activeProfile?.skillRadar?.tactics;
+    const startTier = hintStartTier(playerRating ?? 1200, tacticsSkill);
+    const nextLevel = (levelRef.current === 0
+      ? startTier
+      : Math.min(3, levelRef.current + 1)) as 1 | 2 | 3;
     levelRef.current = nextLevel;
     // Bump the tier synchronously so the UI reflects the user's click
     // immediately. The brain call below populates nudgeText / arrows

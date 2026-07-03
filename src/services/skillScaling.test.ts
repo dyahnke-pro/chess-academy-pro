@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { alertSensitivityMultiplier } from './skillScaling';
+import { alertSensitivityMultiplier, hintStartTier } from './skillScaling';
 
 describe('alertSensitivityMultiplier', () => {
   it('is ~1.0 at the 1500 anchor with neutral skill', () => {
@@ -25,5 +25,29 @@ describe('alertSensitivityMultiplier', () => {
   it('stays within [0.5, 1.6]', () => {
     expect(alertSensitivityMultiplier(200, 0)).toBeGreaterThanOrEqual(0.5);
     expect(alertSensitivityMultiplier(3000, 100)).toBeLessThanOrEqual(1.6);
+  });
+});
+
+describe('hintStartTier', () => {
+  it('gives beginners the answer on the first tap (tier 3)', () => {
+    expect(hintStartTier(800)).toBe(3);
+    expect(hintStartTier(1100)).toBe(3);
+  });
+
+  it('gives intermediate players the WHICH rung (tier 2)', () => {
+    expect(hintStartTier(1400)).toBe(2);
+    expect(hintStartTier(1600)).toBe(2);
+  });
+
+  it('gives advanced players the full WHY ladder (tier 1)', () => {
+    expect(hintStartTier(1800)).toBe(1);
+    expect(hintStartTier(2200)).toBe(1);
+  });
+
+  it('tactics skill shifts the start rung (strong-for-rating starts higher)', () => {
+    // 1500 baseline → tier 2; elite tactics (100) adds ~+300 → tier 1.
+    expect(hintStartTier(1500, 100)).toBe(1);
+    // 1500 with weak tactics (10) subtracts ~-240 → tier 3.
+    expect(hintStartTier(1500, 10)).toBe(3);
   });
 });

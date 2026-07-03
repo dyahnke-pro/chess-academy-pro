@@ -191,6 +191,32 @@ describe('useHintSystem — one tap reveals the full answer', () => {
     expect(speakRecords.some((r) => r.method === 'speakForced')).toBe(true);
   });
 
+  it('ADAPTIVE: an advanced player starts on the WHY rung (tier 1, no arrow) and climbs on repeat taps', async () => {
+    // David 2026-07-03: adaptive hints. A strong player calculates first —
+    // first tap is the WHY (tier 1, no move/arrow), not the answer.
+    spineResponses.push('Your worst-placed piece is the one to activate; find the square that fights for the center.');
+    const { result } = renderHook(() =>
+      useHintSystem({
+        fen: FEN_AFTER_E4,
+        playerColor: 'black',
+        playerRating: 2000, // advanced → tier 1 first tap
+        enabled: true,
+        gameId: 'g-adv',
+        moveNumber: 1,
+        ply: 1,
+      }),
+    );
+
+    act(() => { result.current.requestHint(); });
+    await waitFor(() => expect(spineCalls.length).toBe(1));
+    // First tap = WHY tier, not the answer tier.
+    expect(spineCalls[0].ask).toContain(HINT_TIER_1_ADDITION);
+    expect(spineCalls[0].ask).not.toContain(HINT_TIER_3_ADDITION);
+    await waitFor(() => expect(result.current.hintState.level).toBe(1));
+    // No answer arrow at tier 1 — they have to find the move.
+    expect(result.current.hintState.arrows).toHaveLength(0);
+  });
+
   it('feeds the brain a code-computed tactics context so the hint can NAME the tactic', async () => {
     // The root fix for "tactics alert fired but the hint didn't say what the
     // tactic was" (David 2026-06-22): the hint now hands the brain a real
