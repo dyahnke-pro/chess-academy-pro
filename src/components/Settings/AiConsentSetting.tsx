@@ -1,6 +1,7 @@
 import { ShieldCheck } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { useAiConsentStore } from '../../stores/aiConsentStore';
+import { updateProfile } from '../../services/dbService';
 
 /**
  * Settings control to view and change the AI data-sharing consent
@@ -21,6 +22,9 @@ export function AiConsentSetting(): JSX.Element | null {
 
   const turnOff = (): void => {
     setActiveProfile({ ...activeProfile, aiDataConsent: 'denied' });
+    // Persist to Dexie so the revocation survives a full app close (matches
+    // the modal's write — setActiveProfile alone is in-memory only).
+    void updateProfile(activeProfile.id, { aiDataConsent: 'denied' });
   };
   const turnOn = (): void => {
     // Opens the blocking consent modal (full disclosure) since consent isn't

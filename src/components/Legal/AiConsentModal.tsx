@@ -4,6 +4,7 @@ import { ShieldCheck } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { useAiConsentStore } from '../../stores/aiConsentStore';
 import { logAppAudit } from '../../services/appAuditor';
+import { updateProfile } from '../../services/dbService';
 
 /**
  * AiConsentModal — the in-app permission for sharing gameplay data with the
@@ -24,7 +25,12 @@ export function AiConsentModal(): JSX.Element | null {
   if (!promptOpen || !activeProfile) return null;
 
   const decide = (granted: boolean): void => {
-    setActiveProfile({ ...activeProfile, aiDataConsent: granted ? 'granted' : 'denied' });
+    const decision = granted ? 'granted' : 'denied';
+    setActiveProfile({ ...activeProfile, aiDataConsent: decision });
+    // Persist to Dexie — setActiveProfile only updates in-memory Zustand
+    // state, so without this write the decision is lost on a full app close
+    // and the modal re-prompts on every cold boot (David 2026-07-03).
+    void updateProfile(activeProfile.id, { aiDataConsent: decision });
     void logAppAudit({
       kind: 'ai-consent-decision',
       category: 'app',
