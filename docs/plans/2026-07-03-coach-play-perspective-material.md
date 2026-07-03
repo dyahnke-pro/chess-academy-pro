@@ -53,7 +53,7 @@ message landed as a detached bubble instead of flowing into the chat thread.
   the engine at the budget and returns the BEST line reached so far (depth 5/6
   on asm, full depth on desktop which resolves early). We take what it found in
   the time instead of demanding a depth — never null unless the engine is dead
-  (material floor covers that). Budget: asm 3000ms, desktop 1200ms. Stockfish is
+  (material floor covers that). Budget: asm 5000ms (David 2026-07-03 "allow for 5 seconds"), desktop 1200ms. Stockfish is
   the #1 call; determinism is the fallback (David 2026-07-03).
 - F4 (integration) — already wired (`CoachGamePage:1670` onReport →
   injectAssistantMessage). The disconnect was the wrong content; fixed by F1/F2.

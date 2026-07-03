@@ -193,7 +193,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
         // Budget is generous because desktop resolves on depth well before it,
         // so it only bounds the genuinely-slow asm path.
         const engineIsAsm = resolveWorkerUrl().variant === 'asm';
-        const budgetMs = engineIsAsm ? 3000 : 1200;
+        const budgetMs = engineIsAsm ? 5000 : 1200;
         stockfishAnalysis = await stockfishEngine
           .analyzeWithBudget(event.fen, STOCKFISH_DEPTH, budgetMs)
           .then((r) => {

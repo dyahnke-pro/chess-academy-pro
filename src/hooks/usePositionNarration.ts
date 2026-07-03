@@ -170,7 +170,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
         // the time; code-counted material (buildChessContextMessage) covers a
         // dead engine (G0).
         const engineIsAsm = resolveWorkerUrl().variant === 'asm';
-        const budgetMs = engineIsAsm ? 3000 : 1200;
+        const budgetMs = engineIsAsm ? 5000 : 1200;
         stockfishAnalysis = await stockfishEngine
           .analyzeWithBudget(args.fen, STOCKFISH_DEPTH, budgetMs)
           .then((r) => {
