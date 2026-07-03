@@ -567,6 +567,48 @@
     "warningLines": []
   },
   {
+    "id": "glek-system",
+    "eco": "C47",
+    "name": "Four Knights: Glek System",
+    "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 g3 Bc5 Bg2 d6 d3 a6 O-O O-O h3 h6 Be3 Bxe3 fxe3 Ne7 Nh4 c6",
+    "color": "white",
+    "style": "Positional, System",
+    "overview": "The Glek System is the modern way to handle the Four Knights: instead of the old Spanish bishop on b5, White fianchettoes with g3 and Bg2, blending a King's Indian Attack idea into an open game. For generations the Four Knights was dismissed as drawish, but the Glek gives it real bite - behind the calm setup lies a concrete plan: trade off the dark-squared bishops, open the f-file, and reroute a knight to the f5 outpost, turning a placid centre into a kingside attack. Grandmaster Alexander Glek gave the line its name and Shakhriyar Mamedyarov has made it a feared practical weapon. It rewards patient understanding over memorised theory.",
+    "keyIdeas": [
+      "Fianchetto with g3 and Bg2 to rake the long light diagonal and keep a flexible, hard-to-crack setup",
+      "Trade the dark-squared bishops with Be3 and recapture fxe3 to open the f-file and build a broad centre",
+      "Reroute the knight via h4 to the f5 outpost - a square a pawn can never chase it from",
+      "Punish an early ...O-O with the fork trick Nxe5 and d4 to win the bishop pair"
+    ],
+    "traps": [
+      "If Black castles early with ...O-O before ...d6, the fork trick Nxe5 Nxe5 d4 regains the piece with the bishop pair and dark-square control.",
+      "After the bishop is boxed in on e5, Ne2 and f4 threaten to trap it - Black must find the only defence ...Nd7 or lose the piece."
+    ],
+    "warnings": [
+      "Don't ram f5 with the pawn too early - the sound plan routes the knight to f5, not the pawn.",
+      "The system is positional; rushing an attack before Be3 and the f-file are ready lets Black equalise comfortably."
+    ],
+    "variations": [
+      {
+        "name": "Central Break: 4...d5",
+        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 g3 d5 exd5 Nxd5 Bg2 Nxc3 bxc3 Bc5 O-O O-O Re1 Qf6 d3 Bb6",
+        "explanation": "Black's most principled try, striking the centre before White completes the fianchetto. After exd5 Nxd5 Bg2 Nxc3 bxc3, White accepts doubled c-pawns in exchange for a half-open b-file and the long-range g2-bishop. The resulting middlegame is balanced but hands White the easier, more natural plans."
+      },
+      {
+        "name": "Pin Variation: 4...Bb4",
+        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 g3 Bb4 Bg2 O-O O-O d6 d3 Bg4 h3 Bh5 g4 Bg6 Bg5 h6 Bh4",
+        "explanation": "Black pressures the c3-knight and pins on f3, but White ignores it and seizes the kingside: h3 and g4 grab space and chase the bishop to g6, then Bg5-h4 pins the f6-knight to the queen. The quiet fianchetto flowers into a genuine kingside initiative."
+      },
+      {
+        "name": "Symmetrical: 4...g6",
+        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 g3 g6 Bg2 Bg7 O-O O-O d3 d6 h3 h6 Be3 Be6 Qd2 Kh7 d4 exd4 Nxd4 Nxd4 Bxd4",
+        "explanation": "Black mirrors with a fianchetto of his own, but White is a full tempo ahead in the mirror and uses it to break first with d4. After the exchanges the dark-squared bishop dominates d4 and the long diagonal, and White's extra central pawn on e4 gives a durable space edge."
+      }
+    ],
+    "trapLines": [],
+    "warningLines": []
+  },
+  {
     "id": "sicilian-najdorf",
     "eco": "B90",
     "name": "Sicilian: Najdorf",

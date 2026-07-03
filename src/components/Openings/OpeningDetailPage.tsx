@@ -42,6 +42,7 @@ import { getCaroKannTabPlanIds } from '../../services/caroKannMasterclassTabs';
 import { getKingsGambitTabPlanIds } from '../../services/kingsGambitMasterclassTabs';
 import { getSicilianDragonTabPlanIds } from '../../services/sicilianDragonMasterclassTabs';
 import { getFourKnightsTabPlanIds } from '../../services/fourKnightsMasterclassTabs';
+import { getGlekSystemTabPlanIds } from '../../services/glekSystemMasterclassTabs';
 import { getLondonTabPlanIds } from '../../services/londonMasterclassTabs';
 import { getCatalanTabPlanIds } from '../../services/catalanMasterclassTabs';
 import { getEnglishTabPlanIds } from '../../services/englishMasterclassTabs';
@@ -1464,6 +1465,7 @@ export function OpeningDetailPage(): JSX.Element {
     getKingsGambitTabPlanIds(opening.id, tabKey) ??
     getSicilianDragonTabPlanIds(opening.id, tabKey) ??
     getFourKnightsTabPlanIds(opening.id, tabKey) ??
+    getGlekSystemTabPlanIds(opening.id, tabKey) ??
     getLondonTabPlanIds(opening.id, tabKey) ??
     getCatalanTabPlanIds(opening.id, tabKey) ??
     getEnglishTabPlanIds(opening.id, tabKey) ??

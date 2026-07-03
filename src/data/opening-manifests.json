@@ -126,6 +126,15 @@
     "warnings": 0,
     "keyIdeas": 4
   },
+  "glek-system": {
+    "variations": 3,
+    "middlegamePlans": 3,
+    "endgamePlans": 0,
+    "modelGames": 4,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
   "evans-gambit": {
     "variations": 8,
     "middlegamePlans": 4,
