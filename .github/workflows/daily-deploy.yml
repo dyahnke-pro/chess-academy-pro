@@ -106,6 +106,24 @@ jobs:
           echo "Production deploy: $url"
           echo "## Web deploy 🚀 $url" >> "$GITHUB_STEP_SUMMARY"
 
+      # Publish the just-built web bundle as a self-hosted OTA update (David
+      # 2026-07-03) so devices on a Capgo-plugin build pick up content/JS changes
+      # on next open — no TestFlight round-trip. NON-FATAL: OTA is an
+      # enhancement; a hiccup must not red the deploy or block the iOS build.
+      # `vercel build` above left dist/ in place and `vercel pull` wrote the
+      # project env (BLOB_READ_WRITE_TOKEN + KV creds) to
+      # .vercel/.env.production.local.
+      - name: Publish OTA bundle
+        if: steps.gate.outputs.run == 'true' && steps.changed.outputs.ship == 'true'
+        continue-on-error: true
+        run: |
+          set -a
+          [ -f .vercel/.env.production.local ] && . .vercel/.env.production.local
+          set +a
+          if [ ! -d dist ]; then npm run build; fi
+          node scripts/ci/publish-ota-bundle.mjs "$(git rev-parse --short HEAD)" \
+            || echo "::warning::OTA bundle publish failed (non-fatal) — testers stay on their current bundle."
+
       # --- iOS: build once (per-push auto-builds are off) then distribute -----
       # Per-push Xcode Cloud builds are disabled (the workflow's branch trigger
       # points at a dead branch), so this job is the ONLY thing that produces an

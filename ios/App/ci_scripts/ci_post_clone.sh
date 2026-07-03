@@ -35,6 +35,15 @@ rm -rf ios
 # Web bundle + native iOS project (mirrors `npm run setup:ios`).
 npm ci
 npm run build
+
+# OTA (David 2026-07-03): stamp the SHIPPED bundle's version = short git SHA so
+# it matches the OTA bundle published for this same commit
+# (scripts/ci/publish-ota-bundle.mjs) — a fresh install won't redundantly
+# re-download the bundle it already ships with. Read by capacitor.config.ts
+# CapacitorUpdater.version, baked into the native project by `cap sync`.
+export OTA_BUNDLE_VERSION="$(git -C "$CI_PRIMARY_REPOSITORY_PATH" rev-parse --short HEAD)"
+echo "OTA_BUNDLE_VERSION=$OTA_BUNDLE_VERSION"
+
 npx cap add ios
 npx cap sync ios
 

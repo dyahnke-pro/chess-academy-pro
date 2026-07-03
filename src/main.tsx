@@ -1,9 +1,25 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Capacitor } from '@capacitor/core';
+import { CapacitorUpdater } from '@capgo/capacitor-updater';
 import './index.css';
 import { App } from './App';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
+
+/**
+ * OTA readiness signal (David 2026-07-03). On native, tell the Capgo updater
+ * this bundle booted successfully so it COMMITS a freshly-applied OTA update
+ * instead of rolling it back. This is the load-bearing safety call: if a bad
+ * OTA bundle is ever applied and fails to reach here within `appReadyTimeout`
+ * (capacitor.config.ts), the plugin auto-reverts to the last good bundle — a
+ * broken update can never brick a tester. No-op / guarded on web (PWA).
+ */
+function signalOtaReady(): void {
+  let isNative = false;
+  try { isNative = Capacitor.isNativePlatform(); } catch { /* web */ }
+  if (!isNative) return;
+  void CapacitorUpdater.notifyAppReady().catch(() => { /* plugin absent / web */ });
+}
 
 const root = document.getElementById('root');
 if (!root) throw new Error('Root element not found');
@@ -68,6 +84,8 @@ async function killServiceWorkerOnNative(): Promise<void> {
     return;
   }
   mountApp();
+  // Commit the (possibly OTA-applied) bundle now that it has booted.
+  signalOtaReady();
 }
 
 void killServiceWorkerOnNative();

@@ -52,6 +52,7 @@
     "@capacitor-community/speech-recognition": "^7.0.1",
     "@capacitor/app": "^8.1.0",
     "@capacitor/core": "8.1.0",
+    "@capgo/capacitor-updater": "^8.50.2",
     "@dnd-kit/sortable": "^10.0.0",
     "@revenuecat/purchases-capacitor": "^13.2.0",
     "@revenuecat/purchases-js": "^1.46.0",
