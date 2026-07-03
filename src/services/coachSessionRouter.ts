@@ -26,6 +26,7 @@
  */
 import { parseCoachIntent } from './coachAgent';
 import type { CoachIntent, CoachDifficulty } from './coachAgent';
+import { matchTrainingAidRoute } from './trainingAidRouter';
 import type { GameRecord } from '../types';
 import { matchOpeningForSubject } from './walkthroughResolver';
 import {
@@ -137,6 +138,22 @@ export async function routeChatIntent(
       // see a consistent shape even though parseCoachIntent wouldn't
       // have matched the affirmation on its own.
       intent: { kind: 'play-against', subject, side: userSide, difficulty: 'auto', raw: text },
+    };
+  }
+
+  // Training-aid drills — calculation, mating patterns, endgame,
+  // tactics/puzzles, weaknesses, etc. Deterministic route to the real
+  // code-driven surface (G0: the LLM invents no drills). Runs before
+  // parseCoachIntent so "drill tactics" / "practice mating patterns" /
+  // "work on my calculation" route instead of falling to the brain.
+  // A themed puzzle ("give me a fork puzzle") lands on the same
+  // /coach/session/puzzle route the puzzle intent uses below.
+  const aid = matchTrainingAidRoute(text);
+  if (aid) {
+    return {
+      path: aid.path,
+      ackMessage: aid.ack,
+      intent: { kind: 'qa', raw: text },
     };
   }
 

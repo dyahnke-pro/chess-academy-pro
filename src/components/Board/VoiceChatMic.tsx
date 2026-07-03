@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Capacitor } from '@capacitor/core';
 import { Mic, MicOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -261,6 +262,7 @@ function detectOpeningRequest(text: string): string | null {
 }
 
 export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningRequest, engineSnapshot, lastMoveContext, onListeningChange, onArrows, onPlayMove, onTakeBackMove, onResetBoard, getMoveCount, getCurrentFen }: VoiceChatMicProps): JSX.Element {
+  const navigate = useNavigate();
   const [listening, setListening] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
@@ -394,6 +396,20 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
             ok = typeof r === 'boolean' ? r : r.ok;
             if (ok) ackText = 'Reset.';
             else reason = typeof r === 'object' && 'reason' in r ? r.reason : 'rejected';
+            break;
+          }
+          case 'navigate_to_route': {
+            // Deterministic drill routing (e.g. "drill calculation" →
+            // /coach/endgame?tab=calculation). Navigating away is the
+            // correct response to an explicit drill request — far better
+            // than the brain inventing a fake drill (G0).
+            try {
+              void navigate(routedIntent.route);
+              ok = true;
+              ackText = 'On it.';
+            } catch (err) {
+              reason = err instanceof Error ? err.message : String(err);
+            }
             break;
           }
           default:
@@ -617,7 +633,7 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
     setMessages((prev) => [...prev, assistantMsg]);
     recordMemory('coach', response);
     setIsStreaming(false);
-  }, [fen, pgn, turn, playerColor, engineSnapshot, lastMoveContext, onOpeningRequest, onArrows, onPlayMove, onTakeBackMove, onResetBoard, getMoveCount, getCurrentFen]);
+  }, [fen, pgn, turn, playerColor, engineSnapshot, lastMoveContext, onOpeningRequest, onArrows, onPlayMove, onTakeBackMove, onResetBoard, getMoveCount, getCurrentFen, navigate]);
 
   // Keep a ref to handleUserMessage so the onResult callback always uses the latest
   const handleUserMessageRef = useRef(handleUserMessage);

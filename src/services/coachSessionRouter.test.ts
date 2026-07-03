@@ -112,9 +112,16 @@ describe('routeChatIntent', () => {
     expect(routed!.path).toMatch(/^\/coach\/session\/play-against/);
   });
 
-  it('navigates puzzle only when theme resolves to a known tactic', async () => {
+  it('navigates puzzle requests to the trainer; a known theme deep-links', async () => {
+    // New contract (trainingAidRouter, 2026-07-03): a puzzle request is
+    // an explicit ask for the puzzle TRAINER, so an unresolved theme no
+    // longer falls through to the brain — it routes to the bare trainer
+    // (which serves adaptive puzzles at the user's level). A recognized
+    // theme still deep-links. G0-aligned: "give me a puzzle" gets the
+    // real puzzle surface, never an LLM-invented drill.
     const unknown = await routeChatIntent('give me a whatever puzzle');
-    expect(unknown).toBeNull();
+    expect(unknown).not.toBeNull();
+    expect(unknown!.path).toBe('/coach/session/puzzle');
 
     const known = await routeChatIntent('give me a fork puzzle');
     expect(known).not.toBeNull();

@@ -20,7 +20,7 @@
  * authorship at runtime.
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Chess, type Square } from 'chess.js';
 import { ArrowLeft, Crown, ChevronLeft, ChevronRight, RotateCw, Lightbulb, MessageCircle } from 'lucide-react';
 import type { PieceDropHandlerArgs } from 'react-chessboard';
@@ -82,7 +82,19 @@ const TAB_OPTIONS: { value: EndgameTab; label: string; ready: boolean }[] = [
 
 export function CoachEndgamePage(): JSX.Element {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<EndgameTab>('mating-patterns');
+  const [searchParams] = useSearchParams();
+  // Deep-link support: `/coach/endgame?tab=calculation` lands directly
+  // on the Calc tab. Used by the coach chat's calculation-drill intent
+  // route (coachIntentRouter) so "drill calculation" opens the real
+  // calc-drill surface instead of the brain inventing a fake drill.
+  // Validated against TAB_OPTIONS so a bad param falls back to the
+  // default tab rather than rendering nothing.
+  const [activeTab, setActiveTab] = useState<EndgameTab>(() => {
+    const requested = searchParams.get('tab');
+    return TAB_OPTIONS.some((o) => o.value === requested)
+      ? (requested as EndgameTab)
+      : 'mating-patterns';
+  });
   const [selectedPatternId, setSelectedPatternId] = useState<string | null>(null);
   // Legacy tier kept ONLY for the untagged-pattern fallback path
   // (a handful of patterns Lichess doesn't tag). For everything

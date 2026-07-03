@@ -23,6 +23,7 @@
  * + ack message.
  */
 import { Chess } from 'chess.js';
+import { matchTrainingAidRoute } from './trainingAidRouter';
 
 export type RoutedIntent =
   | { kind: 'play_move'; san: string }
@@ -161,6 +162,24 @@ function computeRoutedIntent(
     /\b(reset|start over|new (game|board)|fresh (board|start)|from the beginning|wipe (the )?board)\b/i.test(text)
   ) {
     return { kind: 'reset_board' };
+  }
+
+  // ─── training-aid drills (navigate_to_route) ────────────────────
+  // "drill calculation", "give me a fork puzzle", "practice mating
+  // patterns", "endgame drill", "work on my weaknesses". A HARD
+  // requirement of G0 (the LLM decides no chess content): before this
+  // route existed, a training-drill request fell through to the brain,
+  // which INVENTED fake drills (David's report: "drill calculation" →
+  // the LLM declared "the purest calculation drill is finding the best
+  // first move from the starting position" — chess nonsense). Route to
+  // the REAL, code-driven training surface instead (puzzles from the
+  // Lichess DB, mating-pattern lessons, endgame drills, the weakness
+  // analyzer). Shared matcher so every chat surface behaves the same;
+  // see `trainingAidRouter.ts`. Opening drills ("drill the Vienna") and
+  // bare questions ("how do I calculate?") do NOT match here.
+  const aid = matchTrainingAidRoute(text);
+  if (aid) {
+    return { kind: 'navigate_to_route', route: aid.path };
   }
 
   // No deterministic match — fall through to LLM.

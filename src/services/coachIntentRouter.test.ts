@@ -134,6 +134,42 @@ describe('tryRouteIntent — take-back target distinction (your vs my)', () => {
   });
 });
 
+describe('tryRouteIntent — calculation drill (G0: LLM invents no drills)', () => {
+  const CALC_ROUTE = { kind: 'navigate_to_route', route: '/coach/endgame?tab=calculation' };
+
+  it('routes "drill calculation" → calc tab (the reported bug)', () => {
+    expect(tryRouteIntent('drill calculation', { currentFen: STARTING_FEN })).toEqual(CALC_ROUTE);
+  });
+
+  it('routes "calculation drill"', () => {
+    expect(tryRouteIntent('calculation drill', { currentFen: STARTING_FEN })).toEqual(CALC_ROUTE);
+  });
+
+  it('routes "let\'s practice calculation"', () => {
+    expect(tryRouteIntent("let's practice calculation", { currentFen: STARTING_FEN })).toEqual(CALC_ROUTE);
+  });
+
+  it('routes "practise calculating" (British spelling)', () => {
+    expect(tryRouteIntent('practise calculating', { currentFen: STARTING_FEN })).toEqual(CALC_ROUTE);
+  });
+
+  it('routes "give me a calculation exercise"', () => {
+    expect(tryRouteIntent('give me a calculation exercise', { currentFen: STARTING_FEN })).toEqual(CALC_ROUTE);
+  });
+
+  it('routes "work on my calculation"', () => {
+    expect(tryRouteIntent('work on my calculation', { currentFen: STARTING_FEN })).toEqual(CALC_ROUTE);
+  });
+
+  it('does NOT route a bare question "how do I calculate better?" (brain answers)', () => {
+    expect(tryRouteIntent('how do I calculate better?', { currentFen: STARTING_FEN })).toBeNull();
+  });
+
+  it('does NOT route "what should I calculate here?" (in-position question)', () => {
+    expect(tryRouteIntent('what should I calculate here?', { currentFen: STARTING_FEN })).toBeNull();
+  });
+});
+
 describe('tryRouteIntent — non-matches fall through to LLM', () => {
   it('returns null for question-style asks', () => {
     expect(tryRouteIntent('what should I play here?', { currentFen: STARTING_FEN })).toBeNull();

@@ -45,6 +45,7 @@ import {
 } from '../../services/openingDetectionService';
 import { fuzzyMatchOpening } from '../../services/openingFuzzyMatcher';
 import { parseCoachIntent } from '../../services/coachAgent';
+import { matchTrainingAidRoute } from '../../services/trainingAidRouter';
 import { reportCoachReask, isMoveReport } from '../../services/coachNonAnswer';
 import { tryCaptureOpeningIntent, tryCaptureForgetIntent } from '../../services/openingIntentCapture';
 import { findPlansForOpening, sessionFromPlan } from '../../services/middlegamePlanner';
@@ -1560,6 +1561,57 @@ export function CoachTeachPage(): JSX.Element {
             }
             return;
           }
+        }
+      }
+
+      // ─── Training-aid drills (BYPASS opening-name resolution) ──────
+      // "drill calculation" / "give me a fork puzzle" / "practice mating
+      // patterns" / "endgame drill" / "work on my weaknesses" must route
+      // to the REAL training surface — NOT get eaten by the STAGE_PATTERNS
+      // below, which strip the drill verb and try to resolve the
+      // remainder ("calculation" / "tactics") as an OPENING name (it
+      // isn't one → fuzzy-match garbage or a brain hallucination). G0:
+      // the LLM invents no drills. Shared matcher (trainingAidRouter) so
+      // the Learn surface behaves like the play/chat surfaces. Opening
+      // drills ("drill the Vienna") return null here and fall through to
+      // the opening stage router below, unchanged.
+      {
+        const aid = matchTrainingAidRoute(text);
+        if (aid) {
+          const aidTurnId = freshTurnId('training-aid');
+          setMessages((prev) => [...prev, {
+            id: `${aidTurnId}-u`,
+            role: 'user',
+            content: text,
+            timestamp: Date.now(),
+          }, {
+            id: `${aidTurnId}-c`,
+            role: 'assistant',
+            content: aid.ack,
+            timestamp: Date.now(),
+          }]);
+          useCoachMemoryStore.getState().appendConversationMessage({
+            surface: 'chat-teach',
+            role: 'user',
+            text,
+            fen: opts?.fenOverride ?? gameRef.current.fen,
+            trigger: null,
+          });
+          useCoachMemoryStore.getState().appendConversationMessage({
+            surface: 'chat-teach',
+            role: 'coach',
+            text: aid.ack,
+            fen: opts?.fenOverride ?? gameRef.current.fen,
+            trigger: null,
+          });
+          void logAppAudit({
+            kind: 'coach-surface-migrated',
+            category: 'subsystem',
+            source: 'CoachTeachPage.handleSubmit.trainingAid',
+            summary: `training-aid intent "${text.slice(0, 50)}" → ${aid.aid} (${aid.path})`,
+          });
+          void navigate(aid.path);
+          return;
         }
       }
 
