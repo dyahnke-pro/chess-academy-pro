@@ -30,7 +30,7 @@ function mk(over: Partial<MistakePuzzle> & { id: string; fen: string; moves: str
     srsInterval: 0,
     srsEaseFactor: 2.5,
     srsRepetitions: 0,
-    srsDueDate: new Date(0).toISOString(),
+    srsDueDate: '2000-01-01', // date-only, due (app format)
     srsLastReview: null,
     status: 'unsolved',
     attempts: 0,
@@ -84,6 +84,32 @@ describe('buildMistakeDrillQueue — sourced from user mistakes, most common fir
         expect(drill.prompt).toMatch(/your own game/i);
       }
     }
+  });
+
+  it('excludes MASTERED mistakes (they tested out via SRS)', async () => {
+    await db.mistakePuzzles.bulkAdd([
+      FORK_A,
+      mk({ id: 'm-fork-mastered', fen: FORK_B.fen, moves: 'e4d5', tacticType: 'fork', status: 'mastered', cpLoss: 900 }),
+    ]);
+    const queue = await buildMistakeDrillQueue({ today: '2026-07-03' });
+    expect(queue.length).toBe(1);
+    expect(queue[0].drills.map((d) => d.puzzleId)).toEqual(['m-fork-a']);
+  });
+
+  it('excludes NOT-YET-DUE mistakes (SRS pushed them past today)', async () => {
+    await db.mistakePuzzles.bulkAdd([
+      FORK_A, // due 2000-01-01
+      mk({ id: 'm-fork-future', fen: FORK_B.fen, moves: 'e4d5', tacticType: 'fork', srsDueDate: '2099-01-01' }),
+    ]);
+    const queue = await buildMistakeDrillQueue({ today: '2026-07-03' });
+    expect(queue[0].drills.map((d) => d.puzzleId)).toEqual(['m-fork-a']);
+  });
+
+  it('returns [] when nothing is due today', async () => {
+    await db.mistakePuzzles.bulkAdd([
+      mk({ id: 'm-future', fen: FORK_A.fen, moves: 'g1f3', tacticType: 'fork', srsDueDate: '2099-01-01' }),
+    ]);
+    expect(await buildMistakeDrillQueue({ today: '2026-07-03' })).toEqual([]);
   });
 });
 

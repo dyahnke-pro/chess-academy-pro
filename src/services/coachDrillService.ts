@@ -346,16 +346,29 @@ export function mistakePuzzleToDrill(mp: MistakePuzzle): CoachDrill | null {
 /**
  * Build the user's mistake-drill queue: their real blunders bucketed by
  * missed pattern and ranked MOST COMMON → least. Each theme's drills are
- * ordered worst-mistake-first (highest cp loss). Returns [] when the user
- * has no mistakes yet (the caller falls back to `pickCoachDrill`).
+ * ordered worst-mistake-first (highest cp loss).
+ *
+ * Only DUE, NON-MASTERED mistakes are included — SRS controls what comes
+ * back (David 2026-07-03: "it drops out for the day, the SRS brings it
+ * back, and after ~3 days of consecutive no-mistake solves it drops
+ * out"). A mistake that mastered out (3 correct spaced reps via
+ * `gradeMistakePuzzle`) is gone from the pool everywhere; a mistake solved
+ * today has its due-date pushed to a future day, so it won't resurface
+ * until SRS schedules it. Returns [] when nothing is due (the caller
+ * falls back to `pickCoachDrill`).
  */
-export async function buildMistakeDrillQueue(): Promise<MistakeDrillTheme[]> {
+export async function buildMistakeDrillQueue(
+  options: { today?: string } = {},
+): Promise<MistakeDrillTheme[]> {
+  const today = options.today ?? new Date().toISOString().split('T')[0];
   let mistakes: MistakePuzzle[] = [];
   try {
     mistakes = await db.mistakePuzzles.toArray();
   } catch {
     return [];
   }
+  // SRS gate: skip mastered ("tested out") and not-yet-due mistakes.
+  mistakes = mistakes.filter((mp) => mp.status !== 'mastered' && mp.srsDueDate <= today);
   if (mistakes.length === 0) return [];
 
   const buckets = new Map<string, { label: string; items: MistakePuzzle[] }>();
@@ -380,78 +393,71 @@ export async function buildMistakeDrillQueue(): Promise<MistakeDrillTheme[]> {
   return themes;
 }
 
-// ─── Adaptive "tested out → next theme" loop (P3) ───────────────────
-// David: "run the drills until the adaptive tool feels the user has
-// tested out of the drill, then move to the next." A theme is tested out
-// when the user solves MASTERY in a row on it (or the theme runs out of
-// puzzles); then we advance to the next-most-common weakness. This is the
-// PURE decision the Learn surface applies on each solved puzzle so the
-// loop logic is unit-testable rather than buried in the component.
+// ─── Session progression through the mistake queue (P3) ─────────────
+// David 2026-07-03: real "test out" is the SRS mastery — a mistake drops
+// out for the day when solved, the SRS brings it back, and after ~3
+// correct spaced reps (`MASTERY_REPETITIONS` in mistakePuzzleService) it
+// masters out of the pool for good. That persisted grade — via
+// `gradeMistakePuzzle`, the SAME function MyMistakes / the SRS trainer
+// use — is applied by the Learn surface on every solve/miss (so the coach
+// drill stays in sync app-wide). This function only walks the CURRENT
+// SESSION's due queue: serve each due mistake once, then advance to the
+// next-most-common weakness. Pure, so it's unit-testable.
 
-/** Consecutive correct solves that count as "tested out" of a theme. */
-export const DRILL_MASTERY = 3;
-
-/** Where the user is in the mistake-drill queue. */
+/** Where the user is in this session's mistake queue. */
 export interface DrillProgress {
   queue: MistakeDrillTheme[];
   themeIdx: number;
   puzzleIdx: number;
-  /** Consecutive correct solves on the CURRENT theme. */
-  consecutiveCorrect: number;
 }
 
 export interface DrillAdvance {
-  /** No themes left — the whole queue is tested out. */
+  /** No more due mistakes this session. */
   done: boolean;
-  /** The user just tested out of a theme and moved to the next. */
-  testedOut: boolean;
-  /** Label of the theme just tested out of (when testedOut). */
-  testedOutLabel?: string;
-  /** Label of the theme now starting (when testedOut, not done). */
+  /** Just finished a theme's due mistakes and moved to the next. */
+  themeCompleted: boolean;
+  /** Label of the theme just completed for the session (when themeCompleted). */
+  completedLabel?: string;
+  /** Label of the theme now starting (when themeCompleted, not done). */
   nextLabel?: string;
   /** The next drill to load + the progress to store (when not done). */
   next?: { drill: CoachDrill; progress: DrillProgress };
 }
 
 /**
- * Decide what happens after the user SOLVES the current drill. Advances
- * within the theme until MASTERY in a row (or the theme's puzzles run
- * out), then moves to the next-most-common weakness. Pure — the Learn
- * surface applies the result (load `next.drill`, store `next.progress`).
+ * Decide what happens after the user finishes the current drill (the SRS
+ * grade is applied separately by the caller). Advances to the next due
+ * mistake in the theme; when the theme's due mistakes are exhausted for
+ * the session, moves to the next-most-common weakness; done when the
+ * whole due queue is worked. Pure — the Learn surface applies the result.
  */
-export function advanceMistakeDrill(p: DrillProgress, mastery: number = DRILL_MASTERY): DrillAdvance {
+export function advanceMistakeDrill(p: DrillProgress): DrillAdvance {
   const theme = p.queue[p.themeIdx];
-  if (!theme) return { done: true, testedOut: false };
-  const consecutiveCorrect = p.consecutiveCorrect + 1;
-  const outOfPuzzles = p.puzzleIdx + 1 >= theme.drills.length;
-  const testedOut = consecutiveCorrect >= mastery || outOfPuzzles;
+  if (!theme) return { done: true, themeCompleted: false };
 
-  if (!testedOut) {
-    const puzzleIdx = p.puzzleIdx + 1;
+  const puzzleIdx = p.puzzleIdx + 1;
+  if (puzzleIdx < theme.drills.length) {
     return {
       done: false,
-      testedOut: false,
-      next: {
-        drill: theme.drills[puzzleIdx],
-        progress: { ...p, puzzleIdx, consecutiveCorrect },
-      },
+      themeCompleted: false,
+      next: { drill: theme.drills[puzzleIdx], progress: { ...p, puzzleIdx } },
     };
   }
 
-  // Tested out of this theme → advance to the next one.
+  // Theme's due mistakes are done for the session → next weakness.
   const themeIdx = p.themeIdx + 1;
   const nextTheme = p.queue[themeIdx];
   if (!nextTheme) {
-    return { done: true, testedOut: true, testedOutLabel: theme.label };
+    return { done: true, themeCompleted: true, completedLabel: theme.label };
   }
   return {
     done: false,
-    testedOut: true,
-    testedOutLabel: theme.label,
+    themeCompleted: true,
+    completedLabel: theme.label,
     nextLabel: nextTheme.label,
     next: {
       drill: nextTheme.drills[0],
-      progress: { queue: p.queue, themeIdx, puzzleIdx: 0, consecutiveCorrect: 0 },
+      progress: { queue: p.queue, themeIdx, puzzleIdx: 0 },
     },
   };
 }

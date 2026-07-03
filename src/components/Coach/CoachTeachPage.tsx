@@ -54,6 +54,7 @@ import {
   type CoachDrill,
   type DrillProgress,
 } from '../../services/coachDrillService';
+import { gradeMistakePuzzle } from '../../services/mistakePuzzleService';
 import { reportCoachReask, isMoveReport } from '../../services/coachNonAnswer';
 import { tryCaptureOpeningIntent, tryCaptureForgetIntent } from '../../services/openingIntentCapture';
 import { findPlansForOpening, sessionFromPlan } from '../../services/middlegamePlanner';
@@ -653,9 +654,14 @@ export function CoachTeachPage(): JSX.Element {
   const activeDrillRef = useRef<{
     drill: CoachDrill;
     step: number;
-    /** Present in mistake-queue mode (adaptive tested-out loop); absent
-     *  for a single fallback drill. */
+    /** Present in mistake-queue mode; absent for a single fallback drill. */
     progress?: DrillProgress;
+    /** True once this puzzle has been SRS-graded this session (one grade
+     *  per review — first outcome wins, so an in-session retry to learn
+     *  doesn't double-count). */
+    graded: boolean;
+    /** ms epoch when this puzzle was loaded, for the SRS solve-time. */
+    startedAt: number;
   } | null>(null);
   // Background-fed tactics context (real PV tactics) for the SPOKEN + displayed
   // tactic strips, so the brain call never blocks on an engine read.
@@ -1009,9 +1015,22 @@ export function CoachTeachPage(): JSX.Element {
   const loadDrillOntoBoard = useCallback((drill: CoachDrill, progress?: DrillProgress): void => {
     gameRef.current.loadFen(drill.setupFen);
     liveFenRef.current = drill.setupFen;
-    activeDrillRef.current = { drill, step: 0, progress };
+    activeDrillRef.current = { drill, step: 0, progress, graded: false, startedAt: Date.now() };
     setArrows([]);
     setHighlights([]);
+  }, []);
+
+  /** Grade the current drill through the SAME SRS pipeline the rest of
+   *  the app uses (gradeMistakePuzzle → 'mastered' after MASTERY_REPETITIONS
+   *  correct spaced reps). One grade per puzzle per session — the first
+   *  outcome wins (David 2026-07-03). No-ops for a DB-fallback drill whose
+   *  id isn't a stored mistake. */
+  const gradeDrillOnce = useCallback((correct: boolean): void => {
+    const cur = activeDrillRef.current;
+    if (!cur || cur.graded) return;
+    cur.graded = true;
+    const solveTimeMs = Math.max(0, Date.now() - cur.startedAt);
+    void gradeMistakePuzzle(cur.drill.puzzleId, correct ? 'good' : 'again', correct, solveTimeMs);
   }, []);
 
   /** Set a real drill up on the board and announce the challenge. When
@@ -1043,14 +1062,15 @@ export function CoachTeachPage(): JSX.Element {
   const startMistakeDrills = useCallback(async (): Promise<boolean> => {
     const queue = await buildMistakeDrillQueue();
     if (queue.length === 0) return false;
-    const progress: DrillProgress = { queue, themeIdx: 0, puzzleIdx: 0, consecutiveCorrect: 0 };
-    startCoachDrill(queue[0].drills[0], progress, `We'll start with your most common weakness — ${queue[0].label}.`);
+    const progress: DrillProgress = { queue, themeIdx: 0, puzzleIdx: 0 };
+    startCoachDrill(queue[0].drills[0], progress, `We'll start with your most common weakness — ${queue[0].label}. Get these right over a few days and they'll test out.`);
     return true;
   }, [startCoachDrill]);
 
   /** Called when the student SOLVES the current drill (whole line done).
-   *  Single drill → offer another. Mistake-queue → advance adaptively
-   *  (next puzzle, or tested-out → next weakness, or all done). */
+   *  Single drill → offer another. Mistake-queue → advance to the next due
+   *  mistake / next weakness. The SRS grade (real "test out") is applied
+   *  by the caller before this runs. */
   const completeDrill = useCallback((solved: { drill: CoachDrill; step: number; progress?: DrillProgress }): void => {
     if (!solved.progress) {
       activeDrillRef.current = null;
@@ -1061,17 +1081,17 @@ export function CoachTeachPage(): JSX.Element {
     if (adv.done) {
       activeDrillRef.current = null;
       coachDrillSay(
-        adv.testedOutLabel
-          ? `You've tested out of ${adv.testedOutLabel} — and that's every weakness we had queued. Great work.`
-          : "That's every weakness we had queued. Great work.",
+        adv.completedLabel
+          ? `That's your due ${adv.completedLabel} — and every weakness due today. Solve them right across a few days and they'll test out for good.`
+          : "That's every mistake due today. Solve them right across a few days and they'll test out for good.",
       );
       return;
     }
     if (!adv.next) { activeDrillRef.current = null; return; }
     loadDrillOntoBoard(adv.next.drill, adv.next.progress);
     coachDrillSay(
-      adv.testedOut
-        ? `Nice — you've tested out of ${adv.testedOutLabel}. On to ${adv.nextLabel}. ${adv.next.drill.prompt}`
+      adv.themeCompleted
+        ? `Nice — that's your due ${adv.completedLabel} for today. On to ${adv.nextLabel}. ${adv.next.drill.prompt}`
         : `Good. ${adv.next.drill.prompt}`,
     );
   }, [coachDrillSay, loadDrillOntoBoard]);
@@ -1088,14 +1108,13 @@ export function CoachTeachPage(): JSX.Element {
     const expected = cur.drill.solutionSan[cur.step];
     const correct = move.san === expected || strip(move.san) === strip(expected);
     if (!correct) {
-      // Wrong → undo, reset the mastery streak, hint, let them retry.
+      // Wrong → SRS-grade 'again' (first outcome only; resets the rep
+      // streak so this mistake comes back sooner), undo, hint, retry.
+      gradeDrillOnce(false);
       gameRef.current.undoMove();
       liveFenRef.current = gameRef.current.fen;
       setArrows([]);
       setHighlights([]);
-      if (cur.progress) {
-        activeDrillRef.current = { ...cur, progress: { ...cur.progress, consecutiveCorrect: 0 } };
-      }
       coachDrillSay("That's not the strongest here — take another look and try again.");
       return true;
     }
@@ -1103,6 +1122,7 @@ export function CoachTeachPage(): JSX.Element {
     const step = cur.step + 1;
     if (step >= cur.drill.solutionSan.length) {
       // Student played the final move of the line → solved.
+      gradeDrillOnce(true);
       completeDrill(cur);
       return true;
     }
@@ -1115,6 +1135,7 @@ export function CoachTeachPage(): JSX.Element {
       if (!r.ok) { activeDrillRef.current = null; return; }
       liveFenRef.current = gameRef.current.fen;
       if (afterOppStep >= cur.drill.solutionSan.length) {
+        gradeDrillOnce(true);
         completeDrill(cur);
       } else {
         activeDrillRef.current = { ...cur, step: afterOppStep };
@@ -1122,7 +1143,7 @@ export function CoachTeachPage(): JSX.Element {
       }
     }, 650);
     return true;
-  }, [coachDrillSay, handlePlayMove, completeDrill]);
+  }, [coachDrillSay, handlePlayMove, completeDrill, gradeDrillOnce]);
 
   // Hand-off from another surface: `/coach/teach?drill=<aid>` (play /
   // chat / voice route drill requests here so the coach sets them up ON
