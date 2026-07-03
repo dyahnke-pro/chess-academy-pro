@@ -569,6 +569,15 @@ class StockfishEngine {
                 );
               }
               this.send('setoption name MultiPV value 3');
+              // ONE ucinewgame per engine session — initializes the hash tables
+              // at the configured size and starts clean. It is deliberately NOT
+              // sent per analysis (that would clear the transposition table
+              // before every search, forcing a cold search from scratch each
+              // move — David 2026-07-03). Keeping the table warm lets
+              // consecutive positions in a game (each one ply deeper) reuse the
+              // prior search tree and reach depth far faster, which matters most
+              // for the slow iOS asm.js build.
+              this.send('ucinewgame');
               this.send('isready');
               return;
             }
@@ -850,14 +859,20 @@ class StockfishEngine {
         }
       }, ANALYSIS_HARD_TIMEOUT_MS);
 
-      this.send('ucinewgame');
+      // NOTE: deliberately NO `ucinewgame` here — that would clear the
+      // transposition table before every search, so each analysis would start
+      // cold (David 2026-07-03). `ucinewgame` is sent ONCE at init; the table
+      // then stays warm across the session so related positions (the next move
+      // in a game) reuse the prior tree. `position fen` fully sets the board, so
+      // reusing TT entries is always correct (they're Zobrist-keyed). We still
+      // do the isready handshake to serialize cleanly after any prior stop.
       this.send('isready');
 
       // Wait for readyok before starting new analysis to avoid race with stop
       const readyHandler = (event: MessageEvent<string>): void => {
         if (event.data === 'readyok') {
           this.worker?.removeEventListener('message', readyHandler);
-          // Apply per-analysis options (e.g. Skill Level) after ucinewgame reset
+          // Apply per-analysis options (e.g. Skill Level). Persist until changed.
           if (options) {
             for (const [key, value] of Object.entries(options)) {
               this.send(`setoption name ${key} value ${value}`);
@@ -886,6 +901,24 @@ class StockfishEngine {
       };
       this.worker?.addEventListener('message', readyHandler);
     });
+  }
+
+  /**
+   * Signal the start of a genuinely NEW game — sends `ucinewgame`, clearing the
+   * transposition table so stale entries from the previous game don't linger in
+   * the (small, on iOS) hash. Cheap and safe between games.
+   *
+   * Do NOT call this per move: the whole point of NOT sending `ucinewgame` per
+   * analysis (see `_dispatchAnalysis`) is to keep the table WARM within a game
+   * so each search reuses the previous one's tree. Call it only when the board
+   * resets to a fresh, unrelated game (new coach game, restart, review of a
+   * different game).
+   */
+  newGame(): void {
+    if (this.worker && this.isReady) {
+      this.send('ucinewgame');
+      this.send('isready');
+    }
   }
 
   async getBestMove(fen: string, moveTimeMs: number = 1000): Promise<string> {

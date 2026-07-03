@@ -1531,6 +1531,10 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     // old position and won't match anything in the fresh game.
     cancelActiveQuizRef.current('game-restart');
     game.resetGame();
+    // Fresh game → clear Stockfish's transposition table so stale entries from
+    // the finished game don't linger in the (small, iOS) hash. Within a game we
+    // deliberately keep it warm; a genuine restart is when we reset it.
+    stockfishEngine.newGame();
     moveCountRef.current = 0;
     setGameState({
       gameId: `game-${Date.now()}`,
@@ -1570,6 +1574,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     });
     setPlayerColor(color);
     game.resetGame();
+    stockfishEngine.newGame(); // fresh game → clear the transposition table
     moveCountRef.current = 0;
     setGameState({
       gameId: `game-${Date.now()}`,

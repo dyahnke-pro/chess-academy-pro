@@ -418,21 +418,51 @@ describe('StockfishEngine', () => {
       expect(analysis.nodesPerSecond).toBe(0);
     });
 
-    it('sends ucinewgame before analysis', async () => {
+    it('sends ucinewgame ONCE at init, not per analysis (warm transposition table)', async () => {
+      // David 2026-07-03: ucinewgame clears Stockfish's transposition table, so
+      // sending it before every analysis forced a cold search each move. It is
+      // now sent once during init; per-analysis dispatch only sends
+      // position/go, keeping the table warm so consecutive positions reuse the
+      // prior search tree.
       const { stockfishEngine } = await getEngine();
       await initEngine(stockfishEngine);
 
+      // Init emitted exactly one ucinewgame.
+      const afterInitCount = mockWorker.postMessageCalls.filter(
+        (c) => c === 'ucinewgame',
+      ).length;
+      expect(afterInitCount).toBe(1);
+
+      // Two analyses back-to-back must NOT add more ucinewgame commands.
+      scheduleAnalysisResponse();
+      await stockfishEngine.analyzePosition(STARTING_FEN);
       scheduleAnalysisResponse();
       await stockfishEngine.analyzePosition(STARTING_FEN);
 
-      const ucinewgameIdx =
-        mockWorker.postMessageCalls.indexOf('ucinewgame');
-      const positionIdx = mockWorker.postMessageCalls.indexOf(
-        `position fen ${STARTING_FEN}`,
-      );
+      const totalUcinewgame = mockWorker.postMessageCalls.filter(
+        (c) => c === 'ucinewgame',
+      ).length;
+      expect(totalUcinewgame).toBe(1);
 
-      expect(ucinewgameIdx).toBeGreaterThanOrEqual(0);
-      expect(positionIdx).toBeGreaterThan(ucinewgameIdx);
+      // The position command is still issued for the analysis.
+      expect(
+        mockWorker.postMessageCalls.includes(`position fen ${STARTING_FEN}`),
+      ).toBe(true);
+    });
+
+    it('newGame() sends a fresh ucinewgame to clear the table between games', async () => {
+      const { stockfishEngine } = await getEngine();
+      await initEngine(stockfishEngine);
+      const before = mockWorker.postMessageCalls.filter(
+        (c) => c === 'ucinewgame',
+      ).length;
+
+      stockfishEngine.newGame();
+
+      const after = mockWorker.postMessageCalls.filter(
+        (c) => c === 'ucinewgame',
+      ).length;
+      expect(after).toBe(before + 1);
     });
   });
 
