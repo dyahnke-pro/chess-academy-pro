@@ -21,9 +21,15 @@ Owner: David · 2026-07-03 · Branch: `claude/brain-calculation-practice-da8jdl`
 |---|---|---|
 | P0 — kill the hallucination (deterministic routing) | **done, on `main`** (98f87dc) | training-aid requests handled in code, never the LLM |
 | P1 — in-place drill on the Learn board | **done, on branch** (1506e5f, 4e2b344) | coach loads a REAL puzzle on the Learn board + quizzes in-place |
-| P2 — source puzzles from the user's mistakes (most→least common) | **pending** | design + reuse map below |
-| P3 — adaptive "tested out → next theme" loop | **pending** | design + reuse map below |
-| P4 — 3-instrument interactive audit on prod | **blocked this session** | env restarted 3×; prod Chromium `ERR_CONNECTION_RESET`; owed on a stable session / device |
+| P2 — source puzzles from the user's mistakes (most→least common) | **done, on branch** (f83af35) | `buildMistakeDrillQueue` + `mistakePuzzleToDrill`; 7 fake-indexeddb tests |
+| P3 — adaptive "tested out → next theme" loop | **done, on branch** (f83af35) | `advanceMistakeDrill` (pure, 5 tests) + CoachTeachPage queue wiring |
+| P4 — 3-instrument interactive audit on prod | **still owed** | unit-verified; interactive E2E blocked this session (env restarted 3×; prod Chromium `ERR_CONNECTION_RESET`). Run on a stable session / device, then merge. |
+
+**Known polish (not blockers):** board orientation isn't flipped for a
+Black-side mistake drill (student still plays correctly, just sees White's
+view); adaptive `sessionRating` from `adaptivePuzzleService` is not yet
+threaded into puzzle difficulty selection within a theme (mastery is
+consecutive-correct today).
 
 ## What's built (P1) — the reusable pieces
 
