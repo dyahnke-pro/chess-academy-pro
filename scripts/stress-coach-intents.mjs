@@ -100,6 +100,31 @@ const BATTERY = [
     'where does my game fall apart', 'which part of the game is my weakest']],
   ['repertoireGap', ["what's missing in my prep", 'which openings catch me off guard',
     'where am i exposed', 'what do opponents get me with']],
+
+  // ═══ PASS 4 — ROBUSTNESS: caps, emoji, whitespace, terse, multi-intent ═══
+  ['stats', ['WHAT IS MY RECORD', "what's my rating 🔥", '  my win rate  ', 'HOW AM I DOING OVERALL',
+    "what's my rating and what am i weak at"]],   // multi-intent → stats runs first
+  ['strengths', ['WHAT AM I GOOD AT', 'my strengths 💪', '  what are my strengths  ']],
+  ['progress', ['WHAT ARE MY WEAKNESSES', 'my weaknesses', '  what should i work on  ', 'what am i weak at 😅']],
+  ['mistakes', ['HOW OFTEN DO I BLUNDER', 'do i blunder a lot??', '  what mistakes do i make  ']],
+  ['tacticsProfile', ['HOW ARE MY TACTICS', 'what tactics do i miss 👀']],
+  ['phase', ['WHICH PHASE AM I WEAKEST IN', "how's my endgame and what should i review"]], // multi → phase first
+  ['reviewDue', ["WHAT'S DUE FOR REVIEW TODAY", 'anything due??', '  how many cards are due  ']],
+  ['repertoireGap', ['WHATS A HOLE IN MY REPERTOIRE', 'what opening should i learn next 🤔']],
+  ['openingAccuracy', ['HOW ACCURATE AM I IN MY OPENING', '  which line should i work on  ']],
+];
+
+// GARBAGE / non-questions — MUST match NOTHING (false-positive guard).
+const GARBAGE = [
+  'asdf', '???', 'hello there', 'lol', '🔥🔥🔥', '12345', 'the the the', 'ok', 'thanks',
+  'chess', 'nice', 'hmm', 'what', 'yes', 'no', 'good game', 'gg', 'brb', '.....', 'a',
+];
+
+// TYPOS — INFORMATIONAL only (regex can't fuzzy-match; these fall through to the
+// LLM, which still answers — an acceptable degradation, flagged not failed).
+const TYPOS = [
+  ['stats', 'whats my raiting'], ['progress', 'what are my wekainesses'], ['mistakes', 'my blunder rait'],
+  ['phase', 'hows my endgaem'], ['tacticsProfile', 'how are my tactcs'], ['repertoireGap', 'hole in my reprtoire'],
 ];
 
 // Which OTHER detectors firing on a phrasing count as a real misroute. The
@@ -122,5 +147,19 @@ for (const [expected, phrasings] of BATTERY) {
     }
   }
 }
-console.log(`\n${total} phrasings · ${breaks} BREAKS · ${collisions} overlaps to review`);
+// GARBAGE — a false positive (any vertical firing on noise) IS a break.
+let falsePos = 0;
+for (const g of GARBAGE) {
+  const fired = Object.entries(DETECTORS).filter(([, fn]) => fn(g)).map(([k]) => k);
+  if (fired.length) { falsePos++; breaks++; console.log(`❌ FALSE-POS "${g}" → fired: ${fired.join(', ')}`); }
+}
+
+// TYPOS — informational (miss = falls through to LLM, acceptable).
+let typoMiss = 0;
+for (const [expected, t] of TYPOS) {
+  const fired = Object.entries(DETECTORS).filter(([, fn]) => fn(t)).map(([k]) => k);
+  if (!fired.includes(expected)) { typoMiss++; console.log(`ℹ️  typo-miss [${expected}] "${t}" → ${fired.join(', ') || '(none)'} (falls through to LLM)`); }
+}
+
+console.log(`\n${total} phrasings · ${breaks} BREAKS (${falsePos} false-pos) · ${collisions} overlaps · ${typoMiss}/${TYPOS.length} typo-miss (informational)`);
 process.exit(breaks ? 1 : 0);
