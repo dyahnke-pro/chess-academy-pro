@@ -34,6 +34,7 @@ import { stripUngroundedPlayerStats } from './claimValidator';
 import { injectCandidateArrows, injectCandidateHighlights, type RankedCandidate } from './arrowEngine';
 import { stockfishEngine } from './stockfishEngine';
 import { validateTacticClaims, stripUngroundedTacticSentences } from './tacticClaimValidator';
+import { stripIllegalMoveSequences } from './moveSequenceValidator';
 import { stripDisprovenEvalSentences } from './evalClaimValidator';
 import { validateOpeningNameClaims } from './openingNameClaimValidator';
 import type { TacticsLiveContext } from '../coach/types';
@@ -210,6 +211,30 @@ export function groundCoachReply(text: string, opts: CoachAnswerGateOptions): st
           source: `${source}.boardClaimGate`,
           summary: `dropped ${grounded.dropped.length} board-false sentence(s): ${grounded.violations.map((v) => v.reason).slice(0, 3).join('; ')}`,
           details: JSON.stringify({ source, fen, violations: grounded.violations, dropped: grounded.dropped }),
+          fen,
+        });
+      }
+    } catch { /* never block */ }
+  }
+
+  // (1b) Move-SEQUENCE gate — drop a sentence that narrates an ILLEGAL move
+  //      combination against the live board. The board/tactic gates check a
+  //      single position; they can't catch a fabricated LINE where each move is
+  //      legal from the current board but the sequence is impossible ("Qh5+, if
+  //      g6, Qxe4 wins" — Qxe4 is illegal after Qh5+ g6). David 2026-07-04: the
+  //      calc trainer's engine hung on iOS, so the ungrounded LLM invented this
+  //      combo and it was SPOKEN. Conservative (opponent-reply lines only).
+  if (fen) {
+    try {
+      const seqGate = stripIllegalMoveSequences(out, fen);
+      if (seqGate.dropped.length > 0) {
+        out = seqGate.clean;
+        void logAppAudit({
+          kind: 'claim-validator-trip',
+          category: 'subsystem',
+          source: `${source}.moveSequenceGate`,
+          summary: `dropped ${seqGate.dropped.length} illegal-move-sequence sentence(s)`,
+          details: JSON.stringify({ source, fen, dropped: seqGate.dropped }),
           fen,
         });
       }
