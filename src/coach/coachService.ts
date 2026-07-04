@@ -179,13 +179,13 @@ import {
   isPlanQuestion, isBestMoveQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
   isMasterPlayQuestion, isEndgameQuestion, isPlayerGamesQuestion, isConceptQuestion,
   isProgressQuestion, isOpeningProfileQuestion, openingProfileKind, buildQuestionGrounding,
-  isStatsQuestion, isStrengthsQuestion,
+  isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion,
 } from './questionIntents';
 export {
   isPlanQuestion, isBestMoveQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
   isMasterPlayQuestion, isEndgameQuestion, isPlayerGamesQuestion, isConceptQuestion,
   isProgressQuestion, isOpeningProfileQuestion, openingProfileKind, buildQuestionGrounding,
-  isStatsQuestion, isStrengthsQuestion,
+  isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion,
 };
 
 export interface CoachServiceOptions {
@@ -951,9 +951,10 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     const openingProfileQuestionEngage = isOpeningProfileQuestion(input.ask);
     const statsQuestionEngage = isStatsQuestion(input.ask);
     const strengthsQuestionEngage = isStrengthsQuestion(input.ask);
+    const openingAccuracyQuestionEngage = isOpeningAccuracyQuestion(input.ask);
     const autoGrounding =
       options.grounding ??
-      (input.liveState.fen || progressQuestion || conceptQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage
+      (input.liveState.fen || progressQuestion || conceptQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage
         ? {
             currentFen: input.liveState.fen,
             // DB-grounding: thread the move history through so the
@@ -1019,6 +1020,7 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
             openingProfileKind: openingProfileKind(input.ask),
             statsQuestion: statsQuestionEngage,
             strengthsQuestion: strengthsQuestionEngage,
+            openingAccuracyQuestion: openingAccuracyQuestionEngage,
             // STEP D Phase 4 — "how do masters play this?" voices the master-play
             // lookup's real top moves + frequencies (assembleMasterPlayAnswer).
             masterPlayQuestion: isMasterPlayQuestion(input.ask),

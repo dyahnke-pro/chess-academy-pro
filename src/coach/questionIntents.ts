@@ -433,6 +433,46 @@ export function isStrengthsQuestion(ask: string | undefined): boolean {
   return !!ask && STRENGTHS_QUESTION_RE.test(ask);
 }
 
+/** An OPENING-ACCURACY question — "how accurate am I in my favorite opening?",
+ *  "what's the weakest part of my opening theory I need to work on?", "which
+ *  line/variation should I drill?". Answered from the WITHIN-opening data:
+ *  OpeningRecord.drillAccuracy/Attempts + the weakest variation
+ *  (variationAccuracy) + the most-missed position (openingWeakSpots), via
+ *  assembleOpeningAccuracyAnswer (David 2026-07-04: "check accuracy throughout
+ *  the opening, identify what is weakest and what I need to work on the most").
+ *  Distinct from isOpeningProfileQuestion (WHICH opening) — this is HOW well /
+ *  which PART within one opening. Ordered BEFORE progress in the chokepoint so
+ *  "what should I work on in my opening" doesn't get a generic weakness-dump. */
+const OPENING_ACCURACY_RE = anyOf([
+  // "how accurate / accurately …" and "my/your accuracy …" are inherently
+  // performance questions — accept them even when the opening is named without
+  // the literal word "opening" ("how accurately do I play the London", "what's
+  // my accuracy in the Caro-Kann"). The coachApi block resolves the target
+  // opening from context / the weakest repertoire opening.
+  String.raw`\bhow\s+accura(?:te|tely)\b`,
+  String.raw`\b(?:my|your)\s+accura(?:te|cy)\b`,
+  // "accuracy / accurate" anchored to an opening/line/theory (either order)
+  String.raw`\baccura(?:te|cy)\b[^?.!]{0,50}\b(?:opening|openings|line|lines|variation|variations|repertoire|theory)\b`,
+  String.raw`\b(?:opening|openings|line|lines|variation|variations|repertoire|theory)\b[^?.!]{0,50}\baccura(?:te|cy)\b`,
+  // "(what) part of my opening (…work on)"
+  String.raw`\bpart\s+of\s+(?:my|the)\s+opening\b`,
+  // "weakest PART / line / variation" of an opening / theory
+  String.raw`\bweak(?:est)?\s+(?:part|line|lines|variation|variations|sub[\s-]?line|spot|point|area|link)\b[^?.!]{0,50}\b(?:opening|openings|line|variation|theory|repertoire|prep)\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+my\s+weakest\s+(?:line|variation|sub[\s-]?line)\b`,
+  // "which line/variation (do I / should I) work on / improve / drill"
+  String.raw`\bwhich\s+(?:opening\s+)?(?:line|lines|variation|variations|sub[\s-]?line)\s+(?:do\s+i|should\s+i|to|must\s+i)\b[^?.!]{0,40}\b(?:work\s+on|improve|study|practi[cs]e|drill|focus|shore\s+up)\b`,
+  // "what (do I) need to work on … opening theory / prep / repertoire"
+  String.raw`\b(?:work\s+on|improve|study|drill|shore\s+up|brush\s+up(?:\s+on)?)\b[^?.!]{0,40}\bopening\s+(?:theory|prep|preparation|repertoire|knowledge|line|lines)\b`,
+  String.raw`\bimprove\s+(?:my\s+)?opening\s+(?:theory|prep|preparation|repertoire|knowledge)\b`,
+  // "where am I weakest / do I slip in (the/my) opening/line"
+  String.raw`\bwhere\s+(?:am\s+i|do\s+i)\s+(?:the\s+)?(?:weakest|struggl(?:e|ing)|slip(?:ping)?|go(?:ing)?\s+wrong)\b[^?.!]{0,50}\b(?:opening|openings|line|variation|repertoire)\b`,
+  // "how well / accurately do I know / play (the/my) opening/line"
+  String.raw`\bhow\s+(?:well|accurately)\s+do\s+i\s+(?:know|play|drill)\s+(?:the|my)\b[^?.!]{0,40}\b(?:opening|openings|line|variation|defen[cs]e|repertoire)\b`,
+]);
+export function isOpeningAccuracyQuestion(ask: string | undefined): boolean {
+  return !!ask && OPENING_ACCURACY_RE.test(ask);
+}
+
 /**
  * buildQuestionGrounding — the SHARED grounding builder so the coach's
  * grounded-data brain fires IDENTICALLY on every talking surface (David
@@ -480,6 +520,7 @@ export function buildQuestionGrounding(
     openingProfileKind: openingProfileKind(ask),
     statsQuestion: isStatsQuestion(ask),
     strengthsQuestion: isStrengthsQuestion(ask),
+    openingAccuracyQuestion: isOpeningAccuracyQuestion(ask),
     masterPlayQuestion: isMasterPlayQuestion(ask),
     conceptQuestion: isConceptQuestion(ask),
     playerGamesQuestion: isPlayerGamesQuestion(ask),

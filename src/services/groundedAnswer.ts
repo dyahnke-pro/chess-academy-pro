@@ -973,3 +973,58 @@ export function assembleStrengthsAnswer(strengths: ReadonlyArray<string>): Groun
       : `What you do well, from your own games: ${open.join('; ')}.`;
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
+
+/** The student's drill accuracy within ONE opening (opening-level aggregate +
+ *  the weakest sub-line + the single position they miss most) — a structural
+ *  subset of the OpeningRecord + its weak-spot store, handed to
+ *  `assembleOpeningAccuracyAnswer` so the assembler stays a pure leaf.
+ *  `accuracy`/`variationAccuracy` are 0-1; `failCount` is a raw miss tally. */
+export interface OpeningAccuracyLike {
+  openingName: string;
+  color?: 'white' | 'black' | null;
+  drillAccuracy: number;   // 0-1
+  drillAttempts: number;
+  /** The lowest-accuracy variation (name + its 0-1 accuracy), if any drilled. */
+  weakestVariation?: { name: string; accuracy: number } | null;
+  /** The single position missed most (the correct move + how often missed). */
+  topWeakSpot?: { san: string; failCount: number } | null;
+}
+
+/**
+ * assembleOpeningAccuracyAnswer — the grounded "how accurate am I in my
+ * favorite opening / what's the weakest part of my opening theory I need to
+ * work on?" answer (David 2026-07-04: "check accuracy throughout the opening,
+ * identify what is weakest and what I need to work on the most"). All computed:
+ * opening-level drill accuracy (OpeningRecord.drillAccuracy/Attempts), the
+ * weakest variation (variationAccuracy zipped with variations[].name), and the
+ * single most-missed position (openingWeakSpots ranked by failCount). The LLM
+ * voices these numbers; it picks no move and invents no line. Returns null when
+ * there's nothing drilled AND no weak spot recorded (caller takes the no-data
+ * line). G0.
+ */
+export function assembleOpeningAccuracyAnswer(o: OpeningAccuracyLike): GroundedAnswer | null {
+  const drilled = o.drillAttempts > 0;
+  const weakVar = o.weakestVariation && o.weakestVariation.name ? o.weakestVariation : null;
+  const spot = o.topWeakSpot && o.topWeakSpot.san && o.topWeakSpot.failCount > 0 ? o.topWeakSpot : null;
+  if (!drilled && !spot && !weakVar) return null;
+
+  const where = o.color ? ` as ${o.color === 'white' ? 'White' : 'Black'}` : '';
+  const lead = drilled
+    ? `In your ${o.openingName}${where}, you're drilling at ${Math.round(o.drillAccuracy * 100)}% over ${o.drillAttempts} attempt${o.drillAttempts === 1 ? '' : 's'}.`
+    : `You haven't drilled the ${o.openingName}${where} main line yet.`;
+
+  const varLine = weakVar
+    ? ` Your weakest line is the ${weakVar.name} at ${Math.round(weakVar.accuracy * 100)}% — that's the part of your theory to shore up first.`
+    : '';
+
+  const spotLine = spot
+    ? ` The position you miss most: the right move is ${spot.san}, and you've slipped there ${spot.failCount} time${spot.failCount === 1 ? '' : 's'}.`
+    : '';
+
+  // When nothing finer than the aggregate is known, still point them at drilling.
+  const next = (weakVar || spot)
+    ? ' Want me to drill that with you?'
+    : ' Drill it a few times and I can pinpoint the exact line and move to work on.';
+
+  return { facts: lead + varLine + spotLine + next, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+}

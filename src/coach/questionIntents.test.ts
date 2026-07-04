@@ -14,6 +14,7 @@ import {
   buildQuestionGrounding,
   isStatsQuestion,
   isStrengthsQuestion,
+  isOpeningAccuracyQuestion,
 } from './coachService';
 
 // David 2026-06-14: "throw the thesaurus at this problem for ALL questions."
@@ -243,6 +244,36 @@ describe('isStrengthsQuestion (David 2026-07-04: inverse of the weakness path)',
   ])('does NOT match: %s', (q) => expect(isStrengthsQuestion(q)).toBe(false));
 });
 
+describe('isOpeningAccuracyQuestion (David 2026-07-04: accuracy WITHIN an opening / weakest sub-line)', () => {
+  it.each([
+    'how accurate am I in my favorite opening',
+    "what's my accuracy in the Caro-Kann",
+    'how accurate is my opening play',
+    "what's the weakest part of my opening theory",
+    'what is the weakest line in my repertoire',
+    'what part of my opening do I need to work on',
+    "what's my weakest variation",
+    'which line should I work on',
+    'which variation do I need to improve',
+    'what do I need to work on to improve my opening theory',
+    'help me improve my opening prep',
+    'where am I weakest in my opening',
+    'how well do I know my opening',
+    'how accurately do I play the London',
+    'what should I drill to improve my opening repertoire',
+  ])('matches "%s"', (q) => expect(isOpeningAccuracyQuestion(q)).toBe(true));
+  it.each([
+    "what's my strongest opening",   // WHICH opening → opening-profile
+    "what's my favorite opening",    // WHICH opening → opening-profile
+    'what are my weaknesses',        // general weakness → progress
+    'what should I train',           // general training → progress
+    "what's my rating",             // stats
+    'what is a fork',               // concept
+    'teach me the Caro-Kann',       // teach a line, not an accuracy query
+    'hi coach',
+  ])('does NOT match: %s', (q) => expect(isOpeningAccuracyQuestion(q)).toBe(false));
+});
+
 describe('buildQuestionGrounding — shared cross-surface grounding (David 2026-07-04)', () => {
   it('sets the progress flag for a weakness question (board-independent)', () => {
     const g = buildQuestionGrounding('what am I weak in?');
@@ -281,6 +312,12 @@ describe('buildQuestionGrounding — shared cross-surface grounding (David 2026-
     // progress no longer collides — positive predicates moved to the strengths path
     expect(g.progressQuestion).toBe(false);
   });
+  it('sets the opening-accuracy flag for a "weakest part of my opening theory" question', () => {
+    const g = buildQuestionGrounding("what's the weakest part of my opening theory");
+    expect(g.openingAccuracyQuestion).toBe(true);
+    expect(g.openingProfileQuestion).toBe(false); // not a WHICH-opening question
+    expect(g.statsQuestion).toBe(false);
+  });
   it('sets NO intent flags for a non-question utterance (falls to normal LLM)', () => {
     const g = buildQuestionGrounding('hey coach nice to see you');
     expect(g.progressQuestion).toBe(false);
@@ -289,6 +326,7 @@ describe('buildQuestionGrounding — shared cross-surface grounding (David 2026-
     expect(g.conceptQuestion).toBe(false);
     expect(g.statsQuestion).toBe(false);
     expect(g.strengthsQuestion).toBe(false);
+    expect(g.openingAccuracyQuestion).toBe(false);
   });
 });
 

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -229,6 +229,43 @@ describe('assembleStrengthsAnswer — grounded "what am I good at"', () => {
   it('returns null when nothing is computed', () => {
     expect(assembleStrengthsAnswer([])).toBeNull();
     expect(assembleStrengthsAnswer(['', '   '])).toBeNull();
+  });
+});
+
+describe('assembleOpeningAccuracyAnswer — grounded "how accurate am I in my opening / weakest part to work on"', () => {
+  const base = { openingName: 'Caro-Kann Defense', color: 'black', drillAccuracy: 0.78, drillAttempts: 12 };
+  it('voices the opening-level accuracy from drill data', () => {
+    const a = assembleOpeningAccuracyAnswer(base);
+    expect(a).not.toBeNull();
+    expect(a!.facts).toMatch(/In your Caro-Kann Defense as Black, you're drilling at 78% over 12 attempts/);
+    expect(a!.sources).toContain('data:your-games');
+  });
+  it('names the weakest variation when variationAccuracy is present', () => {
+    const a = assembleOpeningAccuracyAnswer({ ...base, weakestVariation: { name: 'Advance Variation', accuracy: 0.41 } });
+    expect(a!.facts).toMatch(/weakest line is the Advance Variation at 41%/);
+  });
+  it('names the most-missed position from the weak-spot store', () => {
+    const a = assembleOpeningAccuracyAnswer({ ...base, topWeakSpot: { san: 'Bf5', failCount: 4 } });
+    expect(a!.facts).toMatch(/the right move is Bf5, and you've slipped there 4 times/);
+  });
+  it('handles the singular "1 time" / "1 attempt" grammar', () => {
+    const a = assembleOpeningAccuracyAnswer({ ...base, drillAttempts: 1, topWeakSpot: { san: 'Bf5', failCount: 1 } });
+    expect(a!.facts).toMatch(/over 1 attempt\b/);
+    expect(a!.facts).toMatch(/slipped there 1 time\b/);
+  });
+  it('leads with an un-drilled line when there are weak spots but no drills', () => {
+    const a = assembleOpeningAccuracyAnswer({ ...base, drillAccuracy: 0, drillAttempts: 0, topWeakSpot: { san: 'Bf5', failCount: 2 } });
+    expect(a).not.toBeNull();
+    expect(a!.facts).toMatch(/haven't drilled the Caro-Kann Defense as Black main line yet/);
+    expect(a!.facts).toMatch(/the right move is Bf5/);
+  });
+  it('omits the color clause when color is null', () => {
+    const a = assembleOpeningAccuracyAnswer({ ...base, color: null });
+    expect(a!.facts).toMatch(/In your Caro-Kann Defense, you're drilling/);
+    expect(a!.facts).not.toMatch(/as (White|Black)/);
+  });
+  it('returns null when nothing drilled and no weak spot / variation data', () => {
+    expect(assembleOpeningAccuracyAnswer({ openingName: 'X', drillAccuracy: 0, drillAttempts: 0 })).toBeNull();
   });
 });
 

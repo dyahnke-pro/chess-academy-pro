@@ -62,9 +62,10 @@ import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, 
 import { lookupTablebase } from './lichessTablebaseService';
 import { detectBadHabits } from './badHabitDetector';
 import { getUnifiedWeaknessProfile } from './weaknessSpine';
-import { getStrongestOpenings, getMostPlayedOpenings, getWeakestOpenings } from './openingService';
+import { getStrongestOpenings, getMostPlayedOpenings, getWeakestOpenings, getOpeningById } from './openingService';
+import { getWeakSpotsForOpening } from './weakSpotService';
 import { getOverviewInsights } from './gameInsightsService';
-import { assembleStatsAnswer, assembleStrengthsAnswer } from './groundedAnswer';
+import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer } from './groundedAnswer';
 import { detectConceptsInText, getConcept } from './chessConceptService';
 import { validateClaims, type ClaimValidationResult } from './claimValidator';
 import { logAppAudit } from './appAuditor';
@@ -1231,6 +1232,12 @@ export interface MasterGroundingOptions {
   /** "what am I good at / my strengths?" — voiced from computed strengths
    *  (getOverviewInsights.strengths) via assembleStrengthsAnswer. No board. */
   strengthsQuestion?: boolean;
+  /** "how accurate am I in my opening / what's the weakest part of my opening
+   *  theory to work on?" — voiced from the WITHIN-opening data (drillAccuracy +
+   *  weakest variation + most-missed position) via assembleOpeningAccuracyAnswer.
+   *  Resolves the target opening from `openingId` when present, else the weakest/
+   *  favorite/strongest repertoire opening per the question. No board. */
+  openingAccuracyQuestion?: boolean;
   /** STEP D Phase 4 — true when this turn asks how MASTERS play the position
    *  ("how do masters play this?", "most popular move?"). Voices the master-play
    *  lookup's real top moves + frequencies (assembleMasterPlayAnswer) so the LLM
@@ -1800,6 +1807,7 @@ export async function getCoachChatResponse(
       grounding.openingProfileQuestion === true ||
       grounding.statsQuestion === true ||
       grounding.strengthsQuestion === true ||
+      grounding.openingAccuracyQuestion === true ||
       grounding.conceptQuestion === true ||
       grounding.playerGamesQuestion === true ||
       grounding.endgameQuestion === true ||
@@ -1852,6 +1860,69 @@ export async function getCoachChatResponse(
             const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'stats' });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
+        }
+
+        // ── OPENING ACCURACY — "how accurate am I in my favorite opening? /
+        // what's the weakest part of my opening theory I need to work on?"
+        // (David 2026-07-04: "check accuracy throughout the opening, identify
+        // what is weakest and what I need to work on the most"). Runs BEFORE
+        // progress so an opening-scoped "what should I work on" gets the
+        // within-opening breakdown, not the generic weakness-dump. No board.
+        // Resolves the target opening: the openingId in context (opening page /
+        // active lesson) wins; otherwise the favorite / strongest / weakest
+        // repertoire opening per the question (default weakest = "what to work
+        // on"). Then voices drillAccuracy + the weakest variation
+        // (variationAccuracy) + the most-missed position (openingWeakSpots).
+        if (grounding.openingAccuracyQuestion) {
+          try {
+            const text = (lastUserMessage() ?? '').toLowerCase();
+            let target = grounding.openingId ? await getOpeningById(grounding.openingId) : undefined;
+            if (!target) {
+              if (/\b(?:favou?rite|go[\s-]?to|most[\s-]?played|most[\s-]?used|play\s+(?:the\s+)?most)\b/.test(text)) {
+                target = (await getMostPlayedOpenings(1))[0]?.opening;
+              } else if (/\b(?:strongest|best)\b/.test(text)) {
+                target = (await getStrongestOpenings(1))[0];
+              } else {
+                target = (await getWeakestOpenings(1))[0];
+              }
+            }
+            if (target) {
+              // Weakest DRILLED variation: zip variations[] with the parallel
+              // variationAccuracy[]; consider only entries with a real numeric
+              // accuracy (never-drilled variations have no entry) — never invent
+              // a "0% weakest line" the student never touched.
+              let weakestVariation: { name: string; accuracy: number } | null = null;
+              const vaccs = target.variationAccuracy;
+              const vars = target.variations;
+              if (Array.isArray(vaccs) && Array.isArray(vars)) {
+                for (let i = 0; i < vars.length; i++) {
+                  const acc = vaccs[i];
+                  const name = vars[i]?.name;
+                  if (typeof acc === 'number' && Number.isFinite(acc) && name) {
+                    if (!weakestVariation || acc < weakestVariation.accuracy) weakestVariation = { name, accuracy: acc };
+                  }
+                }
+              }
+              const spots = await getWeakSpotsForOpening(target.id);
+              const top = spots[0];
+              const answer = assembleOpeningAccuracyAnswer({
+                openingName: target.name,
+                color: target.color,
+                drillAccuracy: target.drillAccuracy,
+                drillAttempts: target.drillAttempts,
+                weakestVariation,
+                topWeakSpot: top ? { san: top.correctMoveSan, failCount: top.failCount } : null,
+              });
+              if (answer) {
+                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-accuracy' });
+                if (voiced) return voiced;
+              }
+            }
+            // No opening drilled / no weak-spot data — computed no-data line (G0).
+            const noDataFact = "You haven't drilled an opening enough yet for me to grade your accuracy line by line. Drill one of your repertoire openings a few times and I'll pinpoint the exact variation and move to work on.";
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-accuracy' });
+            if (voicedNoData) return voicedNoData;
+          } catch { /* fall through to legacy path */ }
         }
 
         // ── PROGRESS (Phase 6) — the student's OWN computed history ────────
