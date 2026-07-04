@@ -1013,7 +1013,12 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           try {
             const fenNow = getLiveFen?.() ?? fen ?? null;
             if (fenNow) assistantText = stripDisprovenSentences(assistantText, fenNow).clean || assistantText;
-            const tac = stripUngroundedTacticSentences(assistantText, currentTacticsRef.current);
+            // Fall back to the SYNC gameChatTactics when the fed ref hasn't
+            // resolved yet — the reply can arrive before the fire-and-forget
+            // buildFedTacticsContext (line ~727) populates the ref, which would
+            // silently no-op this enforcing strip and let a fork/pin through to
+            // the bubble (David 2026-07-04 PostHog sweep).
+            const tac = stripUngroundedTacticSentences(assistantText, currentTacticsRef.current ?? gameChatTactics);
             if (tac.dropped.length > 0) assistantText = tac.clean || assistantText;
           } catch { /* keep the sanitized text on a validator fault */ }
           // G3 enforcement on in-game chat replies. Bounded vocabulary

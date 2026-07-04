@@ -54,7 +54,7 @@ import { withTimeout } from '../../coach/withTimeout';
 import { classifyPosition, scanUpcomingTactics } from '../../services/tacticClassifier';
 import { isCriticalThreat } from '../../services/tacticAlertService';
 import { buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
-import { validateTacticClaims, stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
+import { stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
 import { getScenarioTemplate } from '../../services/coachTemplates';
 import { generateMoveCommentary } from '../../services/coachMoveCommentary';
 import { isSpokenSentenceGrounded } from '../../services/coachAnswerGates';
@@ -1303,22 +1303,34 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
           systemPromptAddition: systemPrompt,
         },
       ).then((spineAnswer) => {
-        const reaction = unwrapSpineError(spineAnswer.text);
-        // G3 enforcement on explore-mode coach reactions.
-        const exploreValidation = validateTacticClaims(reaction, exploreTactics);
-        if (exploreValidation.violations.length > 0) {
-          void logAppAudit({
-            kind: 'claim-validator-trip',
-            category: 'subsystem',
-            source: 'CoachGamePage.exploreReaction.tacticClaimValidator',
-            summary: `out-of-vocab tactics: ${exploreValidation.violations.map((v) => v.type).join(', ')}`,
-            details: JSON.stringify({
-              violations: exploreValidation.violations,
-              surface: 'game-chat',
-              fen: newFen,
-            }),
-            fen: newFen,
-          });
+        let reaction = unwrapSpineError(spineAnswer.text);
+        // G3 ENFORCEMENT on explore-mode coach reactions: DROP any sentence
+        // claiming a tactic outside the bounded context (was audit-only — a
+        // hallucinated fork/pin reached the explore bubble; David 2026-07-04
+        // PostHog sweep). Keep the original prose if the strip empties it.
+        if (exploreTactics && reaction.trim()) {
+          try {
+            const strip = stripUngroundedTacticSentences(reaction, exploreTactics);
+            if (strip.dropped.length > 0) {
+              // Never fall back to the original prose — that reshows the very
+              // hallucination we dropped. If the strip empties it, a neutral
+              // no-claim line beats a false one (narration rule: silence/no
+              // false claim beats invented tactics).
+              reaction = strip.clean.trim() || 'Let’s see how the position develops from here.';
+              void logAppAudit({
+                kind: 'claim-validator-trip',
+                category: 'subsystem',
+                source: 'CoachGamePage.exploreReaction.tacticClaimGate',
+                summary: `out-of-vocab tactics · dropped ${strip.dropped.length} sentence(s)`,
+                details: JSON.stringify({
+                  dropped: strip.dropped.slice(0, 3),
+                  surface: 'game-chat',
+                  fen: newFen,
+                }),
+                fen: newFen,
+              });
+            }
+          } catch { /* keep prose on a validator fault */ }
         }
         setExploreMessages((prev) => [
           ...prev,
@@ -3656,25 +3668,31 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         const alertText = unwrapSpineError(spineAlert.text);
         const trimmed = alertText.trim();
         if (trimmed && !trimmed.startsWith('⚠️')) {
-          explanation = trimmed;
-          // G3 enforcement: scan the blunder-alert prose for tactic
-          // claims outside the bounded vocabulary the envelope shipped.
-          // Audit-only — observes hallucination rate in prod.
-          const validation = validateTacticClaims(trimmed, blunderTactics);
-          if (validation.violations.length > 0) {
-            void logAppAudit({
-              kind: 'claim-validator-trip',
-              category: 'subsystem',
-              source: 'CoachGamePage.blunderAlert.tacticClaimValidator',
-              summary: `out-of-vocab tactics: ${validation.violations.map((v) => v.type).join(', ')}`,
-              details: JSON.stringify({
-                violations: validation.violations,
-                surface: 'game-chat',
+          // G3 ENFORCEMENT: DROP any blunder-alert sentence claiming a tactic
+          // outside the bounded vocabulary the envelope shipped (was audit-only
+          // — a hallucinated fork/pin reached the blunder pause; David
+          // 2026-07-04 PostHog sweep). If the strip empties the LLM prose, keep
+          // the code-computed template `explanation` set above.
+          let alertProse = trimmed;
+          try {
+            const strip = stripUngroundedTacticSentences(alertProse, blunderTactics);
+            if (strip.dropped.length > 0) {
+              alertProse = strip.clean.trim();
+              void logAppAudit({
+                kind: 'claim-validator-trip',
+                category: 'subsystem',
+                source: 'CoachGamePage.blunderAlert.tacticClaimGate',
+                summary: `out-of-vocab tactics · dropped ${strip.dropped.length} sentence(s)`,
+                details: JSON.stringify({
+                  dropped: strip.dropped.slice(0, 3),
+                  surface: 'game-chat',
+                  fen: moveResult.fen,
+                }),
                 fen: moveResult.fen,
-              }),
-              fen: moveResult.fen,
-            });
-          }
+              });
+            }
+          } catch { /* keep prose on a validator fault */ }
+          if (alertProse) explanation = alertProse;
         }
       } catch {
         // fall through with the clean template

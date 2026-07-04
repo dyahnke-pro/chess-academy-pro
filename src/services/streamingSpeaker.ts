@@ -23,6 +23,8 @@
  */
 import { voiceService } from './voiceService';
 import { stripDisprovenSentences } from './boardClaimValidator';
+import { stripUngroundedTacticSentences } from './tacticClaimValidator';
+import type { TacticsLiveContext } from '../coach/types';
 
 export interface StreamingSpeaker {
   /** Add a completed sentence to the speech chain. Trims; empty
@@ -57,6 +59,13 @@ export function createStreamingSpeaker(
    *  everywhere, not just the written coach). Omit it (or return null) on
    *  surfaces with no live board — then it's a plain speak, zero change. */
   getFen?: () => string | null,
+  /** Optional bounded tactics-context getter. When it returns a context, an
+   *  out-of-vocabulary tactic sentence (a fork/pin/skewer the engine didn't
+   *  flag this turn) is dropped before it's spoken — the tactic twin of the
+   *  board gate above. This closed the last streamed-voice gap: the board
+   *  strip alone let a hallucinated tactic through to Polly (David 2026-07-04
+   *  PostHog sweep). Omit / return null → tactic gate is skipped, zero change. */
+  getTactics?: () => TacticsLiveContext | null,
 ): StreamingSpeaker {
   let chain: Promise<void> = Promise.resolve();
   let sentenceCount = 0;
@@ -75,6 +84,18 @@ export function createStreamingSpeaker(
           try {
             trimmed = stripDisprovenSentences(trimmed, fen).clean.trim();
           } catch { /* unparseable FEN — speak the raw sentence */ }
+          if (!trimmed) { sentenceCount += 1; return; }
+        }
+      }
+      // Tactic gate — drop a sentence naming a tactic outside the bounded
+      // context (marker-safe, negations preserved). Board-then-tactic mirrors
+      // the shared groundCoachReply order.
+      if (getTactics) {
+        const tactics = getTactics();
+        if (tactics) {
+          try {
+            trimmed = stripUngroundedTacticSentences(trimmed, tactics).clean.trim();
+          } catch { /* validator fault — speak the board-grounded sentence */ }
           if (!trimmed) { sentenceCount += 1; return; }
         }
       }
@@ -157,8 +178,11 @@ export function createStreamingDispatcher(
    *  grounded against the live board before it's spoken (David 2026-06-06).
    *  Omit on board-less surfaces — then it's a plain speak, zero change. */
   getFen?: () => string | null,
+  /** Optional bounded tactics-context getter, forwarded to the default speaker
+   *  so streamed sentences are tactic-grounded too (David 2026-07-04). */
+  getTactics?: () => TacticsLiveContext | null,
 ): StreamingDispatcher {
-  const activeSpeaker = speaker ?? createStreamingSpeaker(getFen);
+  const activeSpeaker = speaker ?? createStreamingSpeaker(getFen, getTactics);
   let cursor = 0;
   return {
     push(accumulatedText: string): void {

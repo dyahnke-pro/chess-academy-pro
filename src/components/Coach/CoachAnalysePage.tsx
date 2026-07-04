@@ -18,6 +18,7 @@ import {
 import { SENTENCE_END_RE, unwrapSpineError } from '../../services/sanitizeCoachText';
 import { logAppAudit } from '../../services/appAuditor';
 import type { StockfishAnalysis } from '../../types';
+import type { TacticsLiveContext } from '../../coach/types';
 
 const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -46,8 +47,12 @@ export function CoachAnalysePage(): JSX.Element {
   // `createStreamingDispatcher` tracks an accumulated-text cursor so
   // each sentence dispatches exactly once across all chunks (fixes
   // the 2026-05-16 voice-loop bug — same shape lived here too).
+  // Holds THIS ask's bounded tactics context so the streaming speaker can
+  // tactic-gate each spoken/queued sentence (the dispatcher is recreated before
+  // the tactics is built, so a lazy getter reads the ref at dispatch time).
+  const tacticsRef = useRef<TacticsLiveContext | null>(null);
   const dispatcherRef = useRef<StreamingDispatcher>(
-    createStreamingDispatcher(SENTENCE_END_RE, undefined, () => game.fen),
+    createStreamingDispatcher(SENTENCE_END_RE, undefined, () => game.fen, () => tacticsRef.current),
   );
 
   const analysePosition = useCallback(async (fen: string) => {
@@ -56,7 +61,8 @@ export function CoachAnalysePage(): JSX.Element {
     // Cut any in-flight TTS before starting a new narration. Fresh
     // speaker so a prior stream's abandoned flag doesn't carry over.
     voiceService.stop();
-    dispatcherRef.current = createStreamingDispatcher(SENTENCE_END_RE, undefined, () => game.fen);
+    tacticsRef.current = null; // reset until this ask's tactics is built
+    dispatcherRef.current = createStreamingDispatcher(SENTENCE_END_RE, undefined, () => game.fen, () => tacticsRef.current);
 
     try {
       // Run Stockfish analysis
@@ -110,6 +116,7 @@ export function CoachAnalysePage(): JSX.Element {
         analyseStudentColor,
         analyseStudentRating,
       );
+      tacticsRef.current = analyseTactics; // gate the streamed voice on it
       let explanation = '';
       // Thread the on-board move history when present so the book-
       // context loader in coachService.ask can ground the analysis
@@ -180,7 +187,8 @@ export function CoachAnalysePage(): JSX.Element {
   const handleFollowUp = useCallback(async (question: string) => {
     setLoading(true);
     voiceService.stop();
-    dispatcherRef.current = createStreamingDispatcher(SENTENCE_END_RE, undefined, () => game.fen);
+    tacticsRef.current = null; // reset until this ask's tactics is built
+    dispatcherRef.current = createStreamingDispatcher(SENTENCE_END_RE, undefined, () => game.fen, () => tacticsRef.current);
 
     const evalText = analysis
       ? (analysis.isMate
@@ -209,6 +217,7 @@ export function CoachAnalysePage(): JSX.Element {
       followStudentColor,
       followStudentRating,
     );
+    tacticsRef.current = followTactics; // gate the streamed voice on it
     let response = '';
     // Same shape as the analyse-position call above — thread the
     // on-board move history when present so the book-context loader

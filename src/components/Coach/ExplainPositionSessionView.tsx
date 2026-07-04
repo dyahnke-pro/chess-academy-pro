@@ -28,6 +28,7 @@ import { logAppAudit } from '../../services/appAuditor';
 import { useAppStore } from '../../stores/appStore';
 import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
 import type { StockfishAnalysis } from '../../types';
+import type { TacticsLiveContext } from '../../coach/types';
 
 const START_FEN =
   'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -58,8 +59,12 @@ export function ExplainPositionSessionView({
   // `createStreamingDispatcher` tracks an accumulated-text cursor so
   // each sentence dispatches exactly once across all chunks (fixes
   // the 2026-05-16 voice-loop bug — same shape lived here too).
+  // Holds THIS ask's bounded tactics context so the streaming speaker can
+  // tactic-gate each spoken sentence (lazy getter — the dispatcher is recreated
+  // before the tactics is built; David 2026-07-04 PostHog sweep).
+  const tacticsRef = useRef<TacticsLiveContext | null>(null);
   const dispatcherRef = useRef<StreamingDispatcher>(
-    createStreamingDispatcher(SENTENCE_END_RE, undefined, () => targetFen),
+    createStreamingDispatcher(SENTENCE_END_RE, undefined, () => targetFen, () => tacticsRef.current),
   );
   const pushAccumulated = useCallback((accumulated: string) => {
     if (voiceMuted) return;
@@ -92,7 +97,8 @@ export function ExplainPositionSessionView({
 
         // Reset speech chain for this position's narration. Fresh
         // speaker so a prior stream's abandoned flag doesn't carry over.
-        dispatcherRef.current = createStreamingDispatcher(SENTENCE_END_RE, undefined, () => targetFen);
+        tacticsRef.current = null; // reset until this ask's tactics is built
+        dispatcherRef.current = createStreamingDispatcher(SENTENCE_END_RE, undefined, () => targetFen, () => tacticsRef.current);
 
         const evalText = sf.isMate
           ? `Mate in ${sf.mateIn ?? '?'}`
@@ -127,6 +133,7 @@ export function ExplainPositionSessionView({
           explainStudentColor,
           explainStudentRating,
         );
+        tacticsRef.current = explainTactics; // gate the streamed voice on it
         let streamed = '';
         const result = await coachService.ask(
           {
@@ -193,7 +200,8 @@ export function ExplainPositionSessionView({
       if (!analysis) return;
       setLoading(true);
       voiceService.stop();
-      dispatcherRef.current = createStreamingDispatcher(SENTENCE_END_RE, undefined, () => targetFen);
+      tacticsRef.current = null; // reset until this ask's tactics is built
+      dispatcherRef.current = createStreamingDispatcher(SENTENCE_END_RE, undefined, () => targetFen, () => tacticsRef.current);
 
       const evalText = analysis.isMate
         ? `Mate in ${analysis.mateIn ?? '?'}`
@@ -217,6 +225,7 @@ export function ExplainPositionSessionView({
         askStudentColor,
         askStudentRating,
       );
+      tacticsRef.current = askTactics; // gate the streamed voice on it
       let response = '';
       const result = await coachService.ask(
         {

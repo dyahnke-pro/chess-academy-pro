@@ -94,3 +94,39 @@ describe('createStreamingDispatcher — no duplicate dispatches across chunks', 
     expect(d.count()).toBe(3);
   });
 });
+
+describe('createStreamingDispatcher — tactic gate on the streamed voice (David 2026-07-04)', () => {
+  const CTX_NO_TACTICS = {
+    immediate: [],
+    hanging: [],
+    threats: [],
+    opportunities: [],
+    lookaheadDepth: 4,
+  };
+
+  it('drops an out-of-vocab tactic sentence before speaking when a tactics getter is supplied', async () => {
+    const d = createStreamingDispatcher(SENTENCE_END_RE, undefined, undefined, () => CTX_NO_TACTICS);
+    d.push('Develop the knight to f3.');
+    d.push('Develop the knight to f3. There is a winning pin on the e-file.');
+    await new Promise((r) => setTimeout(r, 0));
+
+    const spoken = [
+      ...speakIfFreeMock.mock.calls.map((c) => c[0]),
+      ...speakForcedMock.mock.calls.map((c) => c[0]),
+    ];
+    expect(spoken).toContain('Develop the knight to f3.');
+    expect(spoken.join(' ')).not.toMatch(/pin/);
+  });
+
+  it('speaks every sentence when no tactics getter is supplied (zero behavior change)', async () => {
+    const d = createStreamingDispatcher(SENTENCE_END_RE);
+    d.push('There is a winning pin on the e-file.');
+    await new Promise((r) => setTimeout(r, 0));
+
+    const spoken = [
+      ...speakIfFreeMock.mock.calls.map((c) => c[0]),
+      ...speakForcedMock.mock.calls.map((c) => c[0]),
+    ];
+    expect(spoken).toEqual(['There is a winning pin on the e-file.']);
+  });
+});

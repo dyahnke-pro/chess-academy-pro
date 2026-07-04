@@ -38,6 +38,7 @@ import {
   validateBoardClaims,
   stripDisprovenSentences,
 } from '../services/boardClaimValidator';
+import { stripUngroundedTacticSentences } from '../services/tacticClaimValidator';
 import {
   getCachedStockfish,
   setCachedStockfish,
@@ -433,6 +434,26 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
             });
             return; // never speak a disproven board claim
           }
+          // Tactic gate on the streamed voice: this sentence is spoken BEFORE
+          // the spine's final-text gate, so an out-of-vocab fork/pin must be
+          // dropped HERE too — the board check above didn't cover it, so a
+          // hallucinated tactic was SPOKEN (David 2026-07-04 PostHog sweep).
+          if (tactics) {
+            try {
+              const t = stripUngroundedTacticSentences(cleaned, tactics);
+              if (t.dropped.length > 0) {
+                void logAppAudit({
+                  kind: 'claim-validator-trip',
+                  category: 'subsystem',
+                  source: 'useHintSystem.tacticClaimGate',
+                  summary: `dropped an ungrounded-tactic hint sentence before speaking`,
+                  details: JSON.stringify({ surface: 'hint', sentence: cleaned, dropped: t.dropped.slice(0, 2) }),
+                  fen,
+                });
+                return; // never speak an ungrounded tactic claim
+              }
+            } catch { /* never silence the hint on a validator fault */ }
+          }
           speechChain = speechChain
             .then(() => voiceService.speakForced(cleaned))
             .catch(() => undefined);
@@ -477,6 +498,25 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
               details: JSON.stringify({ surface: 'hint', dropped: stripped.dropped }),
               fen,
             });
+          }
+          // Mirror the tactic gate on the DISPLAYED bubble too — the board
+          // strip above didn't cover an out-of-vocab fork/pin, so the student
+          // could still READ the hallucinated tactic (David 2026-07-04 sweep).
+          if (tactics && response.trim()) {
+            try {
+              const t = stripUngroundedTacticSentences(response, tactics);
+              if (t.dropped.length > 0) {
+                response = t.clean;
+                void logAppAudit({
+                  kind: 'claim-validator-trip',
+                  category: 'subsystem',
+                  source: 'useHintSystem.tacticClaimGate.nudge',
+                  summary: `stripped ${t.dropped.length} ungrounded-tactic sentence(s) from hint bubble`,
+                  details: JSON.stringify({ surface: 'hint', dropped: t.dropped.slice(0, 2) }),
+                  fen,
+                });
+              }
+            } catch { /* keep the board-stripped text on a validator fault */ }
           }
         } catch (err) {
           const msg = err instanceof Error ? err.message : String(err);

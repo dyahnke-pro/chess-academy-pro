@@ -274,8 +274,11 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
         if (!trimmed) return;
         // Per-sentence spoken gate — this surface streams sentences to
         // Polly as they arrive (before the spine's final-text gate), so a
-        // board-false sentence must be dropped HERE, before it's spoken.
-        if (!isSpokenSentenceGrounded(trimmed, event.fen, 'usePhaseNarration')) return;
+        // board-false OR out-of-vocab-tactic sentence must be dropped HERE,
+        // before it's spoken. Pass phaseTactics so the tactic half fires too —
+        // it was omitted, so a hallucinated fork/pin was board-checked only and
+        // still SPOKEN (David 2026-07-04 PostHog sweep).
+        if (!isSpokenSentenceGrounded(trimmed, event.fen, 'usePhaseNarration', phaseTactics)) return;
         sentenceCount += 1;
         if (sentenceCount === 1) {
           const firstDispatchMs = Date.now() - detectedTs;
