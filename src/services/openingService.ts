@@ -74,6 +74,13 @@ export const OPENING_ID_ALIASES: Record<string, string> = {
 export async function getOpeningById(
   id: string,
 ): Promise<OpeningRecord | undefined> {
+  // Guard an undefined/empty key: `useParams` types the route id as `string`
+  // but returns `string | undefined` at runtime, and callers fire-and-forget
+  // (`void getOpeningById(id).then(...)`). `db.openings.get(undefined)` throws
+  // IndexedDB `DataError: Provided data is inadequate` → an unhandled rejection
+  // (24 hits on prod, iOS). No valid opening has a falsy id, so short-circuit
+  // to the "not found" contract every caller already handles.
+  if (!id) return undefined;
   // Alias FIRST — an alias source can also exist as its own bare DB record (the
   // ECO twin `c47-four-knights-game-glek-system` → `glek-system` masterclass);
   // a direct-first lookup would return the bare twin and never reach the alias.

@@ -193,6 +193,17 @@ describe('dbService', () => {
       const result = await getOpeningById('pirc-defense');
       expect(result).toBeUndefined();
     });
+
+    it('returns undefined (not a DataError throw) for an undefined/empty id', async () => {
+      // Route params type the id as `string` but hand back `string | undefined`
+      // at runtime, and callers fire-and-forget. `db.openings.get(undefined)`
+      // throws IndexedDB `DataError: Provided data is inadequate` → an unhandled
+      // rejection on prod (iOS). The guard short-circuits to "not found".
+      await expect(
+        getOpeningById(undefined as unknown as string),
+      ).resolves.toBeUndefined();
+      await expect(getOpeningById('')).resolves.toBeUndefined();
+    });
   });
 
   describe('updateOpeningProgress', () => {

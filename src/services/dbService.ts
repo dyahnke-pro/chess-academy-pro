@@ -136,6 +136,11 @@ export async function getRepertoireOpenings(): Promise<OpeningRecord[]> {
 }
 
 export async function getOpeningById(id: string): Promise<OpeningRecord | undefined> {
+  // Guard an undefined/empty key — `db.openings.get(undefined)` throws IndexedDB
+  // `DataError: Provided data is inadequate` (route param typed `string` but
+  // `string | undefined` at runtime; fire-and-forget callers → unhandled
+  // rejection). No valid opening has a falsy id. See openingService.ts.
+  if (!id) return undefined;
   // Alias FIRST. Some alias sources ALSO exist as their own (bare) DB record —
   // e.g. the Lichess ECO twin `c47-four-knights-game-glek-system` is seeded from
   // openings-lichess.json AND must resolve to the `glek-system` masterclass. A
