@@ -4,8 +4,18 @@ import { logAppAudit } from './appAuditor';
 
 /** Network timeout for any Lichess call. Keeps slow / unresponsive
  *  Lichess endpoints from stalling the UI — callers that don't wrap
- *  with their own timeout still get protection at the service edge. */
-const LICHESS_FETCH_TIMEOUT_MS = 8000;
+ *  with their own timeout still get protection at the service edge.
+ *
+ *  David 2026-07-04: raised 8s → 20s. This fetch is in the master-play /
+ *  best-move GROUNDING path — when it times out, the position's master
+ *  data comes back empty and the coach falls through to an UNGROUNDED LLM
+ *  answer (a wrong-but-fast answer beating a right-but-slow one is exactly
+ *  backwards). A correct grounded answer is worth waiting for; a cold,
+ *  uncached position on a slow network now gets up to 20s to return real
+ *  data before we give up. Warm positions (persisted Dexie cache + the
+ *  watcher's prefetch) still return instantly, so this ceiling only bites
+ *  the rare cold-slow case. Player fetches already get 25s below. */
+const LICHESS_FETCH_TIMEOUT_MS = 20000;
 
 /** The per-player explorer indexes a cold player's games on demand and
  *  can stream progress for a few seconds before the final aggregate —

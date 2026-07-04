@@ -186,7 +186,7 @@ import {
   isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion,
   isRepertoireGapQuestion, repertoireGapKind,
   isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion,
-  isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
+  isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, trainingRequestKind, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
 } from './questionIntents';
 export {
   isPlanQuestion, isBestMoveQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
@@ -197,8 +197,9 @@ export {
   isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion,
   isRepertoireGapQuestion, repertoireGapKind,
   isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion,
-  isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
+  isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, trainingRequestKind, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
 };
+export type { TrainingKind } from './questionIntents';
 
 export interface CoachServiceOptions {
   /** Override the active provider. Useful for tests. */
@@ -981,12 +982,13 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     const colorQuestionEngage = isColorQuestion(input.ask);
     const recordsQuestionEngage = isRecordsQuestion(input.ask);
     const recordVsTargetEngage = recordVsTarget(input.ask);
+    const trainingRequestEngage = trainingRequestKind(input.ask);
     const puzzleStatsQuestionEngage = isPuzzleStatsQuestion(input.ask);
     const transferGapQuestionEngage = isTransferGapQuestion(input.ask);
     const skillRadarQuestionEngage = isSkillRadarQuestion(input.ask);
     const autoGrounding =
       options.grounding ??
-      (input.liveState.fen || progressQuestion || conceptQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage
+      (input.liveState.fen || progressQuestion || conceptQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage
         ? {
             currentFen: input.liveState.fen,
             // DB-grounding: thread the move history through so the
@@ -1069,6 +1071,8 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
             recordVsTarget: recordVsTargetEngage ?? undefined,
             // "was that a good move?" — board-dependent; rides the fen gate.
             moveRatingQuestion: isMoveRatingQuestion(input.ask),
+            // "set up calculation training" — direct request to start a mode.
+            trainingRequestKind: trainingRequestEngage ?? undefined,
             puzzleStatsQuestion: puzzleStatsQuestionEngage,
             transferGapQuestion: transferGapQuestionEngage,
             skillRadarQuestion: skillRadarQuestionEngage,

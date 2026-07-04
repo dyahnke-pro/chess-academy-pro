@@ -535,6 +535,31 @@ export function resolveOpeningEntry(
   return emit(pick(tokenMatches));
 }
 
+/** The family-DEFINING move prefix for an opening query — the SHORTEST DB entry
+ *  carrying the resolved canonical name (e.g. "Pirc Defense" → ["e4","d6"];
+ *  "Najdorf" → the full Najdorf spine). Used to match a user's games to an
+ *  opening by their actual MOVES rather than the coarse ECO→name map, which is
+ *  internally inconsistent — `getOpeningNameByEco("B07")` is "Czech Defense",
+ *  NOT "Pirc Defense", so ECO-name matching both MISSED B07 Pirc games and
+ *  mis-INCLUDED unrelated B00 games (real-data audit, knight_mare_01, 2026-07-04).
+ *  Matching by the defining moves is how an opening is actually identified.
+ *  Returns null when the query doesn't resolve. */
+export function openingFamilyMoves(query: string): { canonicalName: string; moves: string[] } | null {
+  const resolved = resolveOpeningEntry(query);
+  if (!resolved) return null;
+  const norm = normalizeNameForMatch(resolved.canonicalName);
+  let shortest: OpeningEntry | null = null;
+  let shortestPlies = Infinity;
+  for (const e of openingsData) {
+    if (normalizeNameForMatch(e.name) !== norm) continue;
+    const plies = e.pgn.split(/\s+/).filter(Boolean).length;
+    if (plies > 0 && plies < shortestPlies) { shortest = e; shortestPlies = plies; }
+  }
+  const moves = shortest ? shortest.pgn.split(/\s+/).filter(Boolean) : resolved.moves;
+  if (moves.length === 0) return null;
+  return { canonicalName: resolved.canonicalName, moves };
+}
+
 /** Find the most specific Lichess DB entry whose canonical PGN
  *  matches the given SAN sequence as a prefix. Used by the deep-dive
  *  flow: when the user picks a branch in a walkthrough fork, the

@@ -26,6 +26,8 @@ import { __resetMasterPlayLookupForTests } from './masterPlayLookup';
 import { _resetLichessCircuitBreaker } from './lichessExplorerService';
 import { __resetProviderCooldownsForTests } from './coachApi';
 import { masterPlayCache } from './masterPlayCache';
+import { __resetMasterPlayPersistenceForTests } from './masterPlayPersistence';
+import { db } from '../db/schema';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 const STARTING_FEN_4 = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -';
@@ -111,11 +113,20 @@ function installFetchMock(plan: FetchPlan): { llmCalls: number; lichessCalls: nu
   return counters;
 }
 
-beforeEach(() => {
+beforeEach(async () => {
   __resetMasterPlayLookupForTests();
   _resetLichessCircuitBreaker();
   __resetProviderCooldownsForTests();
   masterPlayCache.clear();
+  // The DURABLE Dexie master-play cache (readPersistedMasterPlay, David
+  // 2026-06-17) survives the in-memory clear above and leaks across tests
+  // in the shared fake-indexeddb: the first test that hits STARTING_FEN
+  // persists its live result, so every later same-FEN test is served from
+  // disk and never calls /api/lichess-explorer — making a lichessCalls>0
+  // assertion fail even though the answer stays correctly grounded. Clear
+  // the persisted store so each test exercises the live path in isolation.
+  __resetMasterPlayPersistenceForTests();
+  await db.masterPlayCache.clear();
 });
 
 afterEach(() => {
@@ -198,6 +209,22 @@ describe('grounding — intent detection', () => {
 
   it('engages on "what about Nf3?" (a move question)', async () => {
     const { counters } = await ask('what about Nf3?', ['Nf3 is a fine developing move.']);
+    expect(counters.lichessCalls).toBeGreaterThan(0);
+  });
+
+  // Regression (David 2026-07-04): these phrasings trip the grounded
+  // detectors (isBestMoveQuestion / isMasterPlayQuestion / isPlanQuestion)
+  // but were MISSED by the legacy MOVE_QUESTION_PATTERNS, so the engage gate
+  // skipped grounding and the LLM answered the move question freely — an
+  // ungrounded G0 violation. The gate now also engages on the detector flags.
+  it.each([
+    "what's the strongest move here",
+    'best move in this position',
+    'how should I continue',
+    'what do the pros prefer here',
+    "what's my best option here",
+  ])('engages grounding on "%s" (previously slipped past the engage gate)', async (q) => {
+    const { counters } = await ask(q, ['e4 is the top choice here.']);
     expect(counters.lichessCalls).toBeGreaterThan(0);
   });
 

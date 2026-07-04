@@ -13,6 +13,7 @@ import {
   isEndgameQuestion, isPlayerGamesQuestion, isConceptQuestion, isPlanQuestion,
   isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion,
   isColorQuestion, isRecordsQuestion, isRecordVsQuestion, isMoveRatingQuestion, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
+  isTrainingRequest,
 } from '../src/coach/questionIntents.ts';
 
 const DETECTORS = {
@@ -25,6 +26,7 @@ const DETECTORS = {
   endgame: isEndgameQuestion, playerGames: isPlayerGamesQuestion, concept: isConceptQuestion, plan: isPlanQuestion,
   accuracy: isAccuracyQuestion, consistency: isConsistencyQuestion, converting: isConvertingQuestion,
   color: isColorQuestion, records: isRecordsQuestion, recordVs: isRecordVsQuestion, moveRating: isMoveRatingQuestion, puzzleStats: isPuzzleStatsQuestion, transferGap: isTransferGapQuestion, skillRadar: isSkillRadarQuestion,
+  trainingRequest: isTrainingRequest,
 };
 
 // expected: the detector that SHOULD fire. Rephrasings hammer each vertical.
@@ -149,6 +151,15 @@ const BATTERY = [
   ['moveRating', ['was my move correct', 'was my move sound', 'was that move ok', 'how was my move',
     'did i choose well', 'was picking that a mistake', 'was that a strong move', 'rate the last move',
     'was that move any good', 'was my last move a blunder']],
+
+  // ═══ TRAINING REQUEST — direct "set up / train / drill X" imperatives that
+  //     LAUNCH the game-sourced surface (David 2026-07-04). Distinct from the
+  //     diagnosis verticals ("what are my weaknesses"): those describe, this acts. ═══
+  ['trainingRequest', ['set up calculation training', 'start calculation practice', 'train my visualization',
+    'drill my tactics', 'practice tactics', 'work on my tactical vision', 'set up endgame training',
+    'train endgames', 'practice my endings', 'drill my mistakes', 'train on my blunders',
+    'practice my weaknesses', 'drill my weak spots', 'work on my openings', 'train my repertoire',
+    'start a game review', 'review my games', 'SET UP CALCULATION TRAINING', '  drill my tactics  ']],
 ];
 
 // GARBAGE / non-questions — MUST match NOTHING (false-positive guard).

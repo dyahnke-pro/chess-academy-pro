@@ -845,6 +845,36 @@ export function isMoveRatingQuestion(ask: string | undefined): boolean {
   return !!ask && MOVE_RATING_RE.test(ask);
 }
 
+/** "set up calculation training / train my tactics / drill my endgames" — a
+ *  DIRECT request to START a training mode (not a question). Returns which
+ *  training the student asked for so the interception can voice a confirm +
+ *  offer the matching game-sourced action chip (David 2026-07-04: "can it set
+ *  up calculation training when asked… pull from real user games"). Null when
+ *  it isn't a training request. */
+export type TrainingKind = 'calculation' | 'tactics' | 'endgame' | 'mistakes' | 'weakness' | 'opening' | 'review';
+const TRAIN_VERB = String.raw`(?:set\s*up|start|begin|give\s+me|do|run|open|launch|train|practi[sc]e|drill|work\s+on|improve|sharpen|hone|review|analy[sz]e)`;
+const TRAINING_REQUEST_RE = new RegExp(
+  String.raw`\b${TRAIN_VERB}\b[\s\S]*?\b(calculation|calculating|calculate|visuali[sz]ation|tactics?|tactical|endgames?|endings?|mistakes?|blunders?|weakness(?:es)?|weak\s+spots?|openings?|opening\s+theory|repertoire|game\s+review|my\s+games?)\b`,
+  'i',
+);
+export function trainingRequestKind(ask: string | undefined): TrainingKind | null {
+  if (!ask) return null;
+  const m = TRAINING_REQUEST_RE.exec(ask);
+  if (!m) return null;
+  const t = m[1].toLowerCase();
+  if (/calculat|visuali/.test(t)) return 'calculation';
+  if (/tactic/.test(t)) return 'tactics';
+  if (/endgame|ending/.test(t)) return 'endgame';
+  if (/mistake|blunder/.test(t)) return 'mistakes';
+  if (/weak/.test(t)) return 'weakness';
+  if (/opening|repertoire/.test(t)) return 'opening';
+  if (/review|my\s+games?/.test(t)) return 'review';
+  return null;
+}
+export function isTrainingRequest(ask: string | undefined): boolean {
+  return trainingRequestKind(ask) !== null;
+}
+
 /** "my puzzle rating / how many puzzles have I solved" → assemblePuzzleStatsAnswer. */
 const PUZZLE_STATS_RE = anyOf([
   String.raw`\bmy\s+puzzle\s+(?:rating|accuracy|stats?|score)\b`,
@@ -946,6 +976,7 @@ export function buildQuestionGrounding(
     recordsQuestion: isRecordsQuestion(ask),
     recordVsTarget: recordVsTarget(ask) ?? undefined,
     moveRatingQuestion: isMoveRatingQuestion(ask),
+    trainingRequestKind: trainingRequestKind(ask) ?? undefined,
     puzzleStatsQuestion: isPuzzleStatsQuestion(ask),
     transferGapQuestion: isTransferGapQuestion(ask),
     skillRadarQuestion: isSkillRadarQuestion(ask),

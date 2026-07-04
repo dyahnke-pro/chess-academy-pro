@@ -53,4 +53,30 @@ describe('ChatMessage — grounded action picker', () => {
     renderMessage(baseMessage());
     expect(screen.queryByTestId('action-start_review')).not.toBeInTheDocument();
   });
+
+  // Game-sourced training chips (David 2026-07-04: "pull from real user games").
+  it.each([
+    ['calc_training', 'games', 'Train calculation', '/tactics/analysis-practice'],
+    ['train_mistakes', 'games', 'Drill my mistakes', '/tactics/mistakes'],
+    ['endgame_training', 'convert', 'Train endgames', '/coach/endgame'],
+    ['review_games', 'best', 'Review my games', '/coach/review'],
+  ])('routes the %s chip to its game-sourced surface', (type, id, label, route) => {
+    renderMessage(baseMessage({ metadata: { actions: [{ type, id }] } }));
+    const chip = screen.getByTestId(`action-${type}`);
+    expect(chip).toHaveTextContent(label);
+    fireEvent.click(chip);
+    expect(navigateMock).toHaveBeenCalledWith(route);
+  });
+
+  it('routes an unscoped weakness_drill to the game-sourced weakness overview', () => {
+    renderMessage(baseMessage({ metadata: { actions: [{ type: 'weakness_drill', id: 'all' }] } }));
+    fireEvent.click(screen.getByTestId('action-weakness_drill'));
+    expect(navigateMock).toHaveBeenCalledWith('/tactics/weakness-themes');
+  });
+
+  it('routes a scoped weakness_drill to the adaptive surface with the forced theme', () => {
+    renderMessage(baseMessage({ metadata: { actions: [{ type: 'weakness_drill', id: 'fork' }] } }));
+    fireEvent.click(screen.getByTestId('action-weakness_drill'));
+    expect(navigateMock).toHaveBeenCalledWith('/tactics/adaptive', { state: { forcedWeakThemes: ['fork'] } });
+  });
 });

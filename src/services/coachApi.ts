@@ -1312,6 +1312,10 @@ export interface MasterGroundingOptions {
    *  position (moveRating.computeLastMoveRating → assembleMoveRatingAnswer).
    *  Needs `moveHistory`; falls through when absent. */
   moveRatingQuestion?: boolean;
+  /** A DIRECT request to start a training mode ("set up calculation training").
+   *  The interception voices a short confirm + offers the matching game-sourced
+   *  action chip (calc/tactics/endgame/mistakes/weakness/opening/review). */
+  trainingRequestKind?: 'calculation' | 'tactics' | 'endgame' | 'mistakes' | 'weakness' | 'opening' | 'review';
   puzzleStatsQuestion?: boolean;  // profile.puzzleRating + getPuzzleStats → assemblePuzzleStatsAnswer
   transferGapQuestion?: boolean;  // tacticTransferGap → assembleTransferGapAnswer
   skillRadarQuestion?: boolean;   // profile.skillRadar → assembleSkillRadarAnswer
@@ -1397,6 +1401,18 @@ const MOVE_QUESTION_PATTERNS: ReadonlyArray<RegExp> = [
   /\bmain\s+line\b/i,
   /\bcontinuation\s+(?:here|after)\b/i,
   /\bhow\s+do\s+(?:masters|pros|GMs)\s+continue\b/i,
+  // David 2026-07-04: these move questions tripped the grounded detectors
+  // (isBestMoveQuestion / isMasterPlayQuestion / isPlanQuestion) but slipped
+  // past every pattern above, so a bare-grounding caller (the voice mic, which
+  // passes only fen + studentColor) skipped grounding and the LLM answered the
+  // move question FREELY — a G0 violation. These close the gap at the pattern
+  // layer so grounding engages regardless of whether the caller pre-populated
+  // the intent flags. None match a general opening question ("what about the
+  // Caro-Kann?") — they all require a move/continuation noun.
+  /\bwhat'?s?\s+(?:my\s+|the\s+)?(?:strongest|top|sharpest|best|principled|critical|right|correct|only)\s+(?:move|continuation|option|choice|bet|reply|response|try)\b/i,
+  /\bbest\s+move\b/i,
+  /\bhow\s+(?:should|do|would|can)\s+i\s+(?:continue|proceed|develop|respond)\b/i,
+  /\bwhat\s+do\s+(?:the\s+)?(?:pros|masters|GMs|grandmasters|engines?|top\s+players?)\s+(?:prefer|like|favou?r|recommend|pick|choose|play|do)\b/i,
 ];
 
 /** Match the last user message. Returns true if any pattern fires. */
@@ -1700,8 +1716,11 @@ function stripUngroundedSentences(text: string, validation: ClaimValidationResul
  * call — STOP. The LLM is still deciding. Compute the answer in code and route
  * it through HERE instead.
  *
- * Returns null if no provider is configured (caller decides the fallback);
- * never throws.
+ * Never throws, and never returns null: the computed `facts` are already
+ * correct coach-voiced prose, so when the phrasing LLM is absent (no provider)
+ * or fails/times out, the raw facts are spoken directly rather than dropping
+ * the correct answer to an ungrounded fallback. Returns a non-empty string
+ * whenever `facts` is non-empty.
  */
 export async function voiceFacts(
   facts: string,
@@ -1718,7 +1737,12 @@ export async function voiceFacts(
   } = {},
 ): Promise<string | null> {
   const cfg = opts.providerConfig ?? (await getProviderConfig());
-  if (!cfg) return null;
+  // No provider configured → there's nothing to phrase WITH, but the computed
+  // `facts` are already correct, coach-voiced prose. Speak them directly rather
+  // than returning null and letting the caller fall through to an ungrounded
+  // path (David 2026-07-04: "make sure the correct answer gets to the user").
+  // The phrasing LLM is a nicety, not a requirement, for a grounded answer.
+  if (!cfg) return facts.trim();
 
   const system =
     'You are a warm, concise chess coach speaking to a student. You will be given ' +
@@ -1772,10 +1796,19 @@ export async function voiceFacts(
         });
         return facts.trim();
       }
+      return out;
     }
-    return out;
+    // Empty / whitespace-only phrasing → don't hand the caller a falsy value
+    // that drops it to the ungrounded path. Speak the computed facts.
+    return facts.trim();
   } catch {
-    return null; // never throws — caller falls through
+    // The phrasing call failed or TIMED OUT (the DeepSeek provider races a 30s
+    // ceiling). Returning null here would DROP the correct computed answer and
+    // let the caller fall through to the ungrounded legacy LLM — exactly the
+    // "a race prevents the correct answer" failure David flagged 2026-07-04.
+    // The facts are already correct coach prose, so speak them raw instead of
+    // throwing away a right answer over a phrasing hiccup.
+    return facts.trim();
   }
 }
 
@@ -1952,6 +1985,19 @@ export async function getCoachChatResponse(
     const intentFired =
       grounding.forceEngage === true ||
       detectMoveQuestionIntent(messages) ||
+      // Defense-in-depth for G0: the legacy MOVE_QUESTION_PATTERNS in
+      // detectMoveQuestionIntent don't cover every phrasing the grounded
+      // detectors do — "what's the strongest move", "best move here", "how
+      // should I continue", "what do the pros prefer" all trip
+      // isBestMoveQuestion/isMasterPlayQuestion/isPlanQuestion but slip past
+      // the patterns. Without these three flags in the gate, such a move
+      // question skipped the grounded branch and the LLM answered it FREELY
+      // (ungrounded, unvalidated chess content — a G0 violation). Engaging on
+      // the detector flags routes them to the computed answer; a miss still
+      // falls through to the legacy path, so this can only ADD grounding.
+      grounding.bestMoveQuestion === true ||
+      grounding.masterPlayQuestion === true ||
+      grounding.planQuestion === true ||
       grounding.tacticsQuestion === true ||
       grounding.progressQuestion === true ||
       grounding.openingProfileQuestion === true ||
@@ -1971,6 +2017,7 @@ export async function getCoachChatResponse(
       grounding.recordsQuestion === true ||
       (grounding.recordVsTarget !== undefined && grounding.recordVsTarget.length > 0) ||
       grounding.moveRatingQuestion === true ||
+      grounding.trainingRequestKind !== undefined ||
       grounding.puzzleStatsQuestion === true ||
       grounding.transferGapQuestion === true ||
       grounding.skillRadarQuestion === true ||
@@ -2025,6 +2072,51 @@ export async function getCoachChatResponse(
             const noDataFact = `I don't have any of your games against "${target}" logged yet. If that's an opening, drill it and I'll start tracking your record; if it's an opponent, we haven't played them in your imported games.`;
             const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'record-vs' });
             if (voicedNoData) return voicedNoData;
+          } catch { /* fall through */ }
+        }
+
+        // ── TRAINING REQUEST — "set up calculation training / train my endgames"
+        // (David 2026-07-04). A DIRECT request to START a training mode. Voices
+        // a short confirm and offers the matching GAME-SOURCED action chip (the
+        // trainer pulls from the student's own games). Runs BEFORE the weakness
+        // verticals since "train my weaknesses" also trips those. Opt-in: the
+        // chip navigates on tap, never automatically.
+        if (grounding.trainingRequestKind) {
+          try {
+            const kind = grounding.trainingRequestKind;
+            let fact: string;
+            let offer: CoachActionOffer | null = null;
+            if (kind === 'calculation') {
+              fact = "Let's train your calculation — Analysis Practice pulls real positions from your own games and asks you to read the line to the end. Tap to start.";
+              offer = { type: 'calc_training', id: 'games' };
+            } else if (kind === 'endgame') {
+              fact = "Endgame training it is — we'll drill the conversions and holds that actually decide your games. Tap to start.";
+              offer = { type: 'endgame_training', id: 'games' };
+            } else if (kind === 'mistakes') {
+              fact = "Let's turn your own blunders into puzzles — every position comes straight from a game you misplayed, so you fix the real pattern. Tap to start.";
+              offer = { type: 'train_mistakes', id: 'games' };
+            } else if (kind === 'tactics' || kind === 'weakness') {
+              fact = "Let's drill the patterns you miss most — sourced from the tactics you actually missed in your own games. Tap to start.";
+              offer = { type: 'weakness_drill', id: 'all' };
+            } else if (kind === 'review') {
+              fact = "Let's review your recent games and pull the lessons out of your real play. Tap to start.";
+              offer = { type: 'review_games', id: 'games' };
+            } else {
+              // opening — point at the weakest repertoire opening when we know it.
+              const weakest = (await getWeakestOpenings(1))[0];
+              if (weakest) {
+                fact = `Let's sharpen your ${weakest.name} — the opening your data says needs the most work. Tap to drill it.`;
+                offer = { type: 'drill_opening', id: weakest.id };
+              } else {
+                fact = "Let's work on your openings — drill one of your repertoire lines and I'll track your accuracy. Tap to open your repertoire.";
+                offer = { type: 'drill_opening', id: '' };
+              }
+            }
+            const voiced = await voiceFacts(fact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'training-request' });
+            if (voiced) {
+              if (offer) lastCoachActionOffer = [offer];
+              return voiced;
+            }
           } catch { /* fall through */ }
         }
 
@@ -2334,7 +2426,15 @@ export async function getCoachChatResponse(
             });
             if (answer) {
               const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'phase-profile' });
-              if (voiced) return voiced;
+              if (voiced) {
+                // Offer training scoped to the weakest phase (all game-sourced):
+                // endgame → the endgame room; opening → drill the softest
+                // opening; middlegame → the game-sourced weakness overview.
+                const weakest = [...ov.phaseAccuracy].filter((x) => x.moveCount > 0).sort((a, b) => a.accuracy - b.accuracy)[0];
+                if (weakest?.phase === 'endgame') lastCoachActionOffer = [{ type: 'endgame_training', id: 'weak-phase' }];
+                else lastCoachActionOffer = [{ type: 'weakness_drill', id: 'all' }];
+                return voiced;
+              }
             }
             const noDataFact = "You haven't analyzed enough games yet for me to break down your play by phase. Analyze a few games and I'll show you whether your opening, middlegame, or endgame needs the most work.";
             const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'phase-profile' });
@@ -2362,7 +2462,12 @@ export async function getCoachChatResponse(
             });
             if (answer) {
               const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'repertoire-gap' });
-              if (voiced) return voiced;
+              if (voiced) {
+                // Game-sourced: review the games where you left book so you
+                // see the exact positions the gap shows up in.
+                lastCoachActionOffer = [{ type: 'review_games', id: 'off-book' }];
+                return voiced;
+              }
             }
             const noDataFact = "You haven't played enough games yet for me to spot the holes in your repertoire. Play or import a few more and I'll show you what you leave unprepared and what to learn next.";
             const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'repertoire-gap' });
@@ -2384,7 +2489,13 @@ export async function getCoachChatResponse(
             });
             if (answer) {
               const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'accuracy' });
-              if (voiced) return voiced;
+              if (voiced) {
+                // Game-sourced calculation training — positions pulled from
+                // the student's own games sharpen the accuracy the answer just
+                // named.
+                lastCoachActionOffer = [{ type: 'calc_training', id: 'games' }];
+                return voiced;
+              }
             }
             const noDataFact = "You haven't analyzed enough games yet for me to grade your accuracy. Analyze a few and I'll show you how precise your play is and where to tighten up.";
             const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'accuracy' });
@@ -2403,7 +2514,10 @@ export async function getCoachChatResponse(
             });
             if (answer) {
               const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'consistency' });
-              if (voiced) return voiced;
+              if (voiced) {
+                lastCoachActionOffer = [{ type: 'review_games', id: 'recent' }];
+                return voiced;
+              }
             }
             const noDataFact = "You haven't played enough games yet for me to track your streaks and time-control form. Play a few more and I'll show you where you're steadiest.";
             const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'consistency' });
@@ -2422,7 +2536,12 @@ export async function getCoachChatResponse(
             });
             if (answer) {
               const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'converting' });
-              if (voiced) return voiced;
+              if (voiced) {
+                // Converting = closing out won positions → the endgame room,
+                // which draws technique from real endings.
+                lastCoachActionOffer = [{ type: 'endgame_training', id: 'convert' }];
+                return voiced;
+              }
             }
             const noDataFact = "You haven't analyzed enough games yet for me to see how you convert. Analyze a few and I'll show you whether you close out wins cleanly or let them slip.";
             const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'converting' });
@@ -2439,7 +2558,7 @@ export async function getCoachChatResponse(
               accuracyWhite: ov.accuracyWhite, accuracyBlack: ov.accuracyBlack,
               inversion: cm ? { preferredColor: cm.preferredColor, otherColor: cm.otherColor, inversionPoints: cm.inversionPoints } : null,
             });
-            if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'color' }); if (v) return v; }
+            if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'color' }); if (v) { lastCoachActionOffer = [{ type: 'review_games', id: 'by-color' }]; return v; } }
             const nd = await voiceFacts("You haven't played enough games with each colour yet for me to compare. Play a few more and I'll tell you which side you're stronger with.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'color' });
             if (nd) return nd;
           } catch { /* fall through */ }
@@ -2456,7 +2575,7 @@ export async function getCoachChatResponse(
               longestGame: pr.longestGame ? { moves: pr.longestGame.moves } : null,
               bestAccuracyGame: pr.bestAccuracyGame ? { accuracyPct: pr.bestAccuracyGame.accuracyPct } : null,
             });
-            if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'records' }); if (v) return v; }
+            if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'records' }); if (v) { lastCoachActionOffer = [{ type: 'review_games', id: 'best' }]; return v; } }
             const nd = await voiceFacts("You haven't played enough analyzed games yet for me to pull out your records. Play a few and I'll track your best games and fastest wins.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'records' });
             if (nd) return nd;
           } catch { /* fall through */ }
@@ -2471,7 +2590,7 @@ export async function getCoachChatResponse(
               totalAttempted: ps.totalAttempted, totalCorrect: ps.totalCorrect,
               overallAccuracy: ps.overallAccuracy, duePuzzles: ps.duePuzzles,
             });
-            if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'puzzle-stats' }); if (v) return v; }
+            if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'puzzle-stats' }); if (v) { lastCoachActionOffer = [{ type: 'puzzle_theme', id: 'adaptive' }]; return v; } }
             const nd = await voiceFacts("You haven't solved enough puzzles yet for me to track your puzzle rating. Solve a few and I'll show you your rating and accuracy.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'puzzle-stats' });
             if (nd) return nd;
           } catch { /* fall through */ }
@@ -2487,7 +2606,7 @@ export async function getCoachChatResponse(
             const answer = assembleTransferGapAnswer({
               worst: gapped ? { tacticType: gapped.tacticType, puzzleAccuracyPct: gapped.puzzleAccuracyPct as number, gameRecognitionPct: gapped.gameRecognitionPct as number, gapPoints: gapped.transferGapPoints as number } : null,
             });
-            if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'transfer-gap' }); if (v) return v; }
+            if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'transfer-gap' }); if (v) { lastCoachActionOffer = [{ type: 'weakness_drill', id: gapped?.tacticType ? gapped.tacticType.toLowerCase() : 'all' }]; return v; } }
             const nd = await voiceFacts("You haven't solved and played enough tactics yet for me to compare your puzzle skill to your in-game vision. Do a few more and I'll show you the gap.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'transfer-gap' });
             if (nd) return nd;
           } catch { /* fall through */ }
@@ -2499,7 +2618,23 @@ export async function getCoachChatResponse(
             const profile = await db.profiles.get('main');
             const sr = profile?.skillRadar;
             const answer = sr ? assembleSkillRadarAnswer({ opening: sr.opening, tactics: sr.tactics, endgame: sr.endgame, memory: sr.memory, calculation: sr.calculation }) : null;
-            if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'skill-radar' }); if (v) return v; }
+            if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'skill-radar' }); if (v) {
+              // Offer training scoped to the weakest skill dimension (all
+              // game-sourced): endgame → endgame room; else the weakness
+              // overview built from real games.
+              if (sr) {
+                const dims: Array<{ k: string; v: number }> = [
+                  { k: 'opening', v: sr.opening }, { k: 'tactics', v: sr.tactics }, { k: 'endgame', v: sr.endgame }, { k: 'memory', v: sr.memory }, { k: 'calculation', v: sr.calculation },
+                ];
+                const weak = dims.sort((a, b) => a.v - b.v)[0];
+                if (weak.k === 'endgame') lastCoachActionOffer = [{ type: 'endgame_training', id: 'weak-skill' }];
+                else if (weak.k === 'calculation') lastCoachActionOffer = [{ type: 'calc_training', id: 'weak-skill' }];
+                else lastCoachActionOffer = [{ type: 'weakness_drill', id: 'all' }];
+              } else {
+                lastCoachActionOffer = [{ type: 'weakness_drill', id: 'all' }];
+              }
+              return v;
+            } }
             const nd = await voiceFacts("You haven't played or drilled enough yet for me to build your skill breakdown. Play some games and solve some puzzles, and I'll rate your opening, tactics, endgame, memory, and calculation.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'skill-radar' });
             if (nd) return nd;
           } catch { /* fall through */ }
@@ -2534,7 +2669,14 @@ export async function getCoachChatResponse(
             }
             if (answer) {
               const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress' });
-              if (voiced) return voiced;
+              if (voiced) {
+                // The single most useful game-sourced follow-up: drill the
+                // weaknesses this answer just named. Unscoped → the weakness
+                // overview built from the student's own mistakes, where they
+                // pick the exact motif.
+                lastCoachActionOffer = [{ type: 'weakness_drill', id: 'all' }];
+                return voiced;
+              }
             }
             // No bad-habit data yet — voice a computed "not enough data" fallback
             // instead of falling through to the legacy LLM path (which talks about

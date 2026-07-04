@@ -30,6 +30,8 @@ import {
   isRecordVsQuestion,
   isRecordsQuestion,
   isMoveRatingQuestion,
+  trainingRequestKind,
+  isTrainingRequest,
 } from './coachService';
 
 // David 2026-06-14: "throw the thesaurus at this problem for ALL questions."
@@ -779,5 +781,52 @@ describe('isMoveRatingQuestion (David 2026-07-04: rate the move just played)', (
     // "was that the best move" is a rating (past); "what's the best move" is forward.
     expect(isMoveRatingQuestion('was that the best move')).toBe(true);
     expect(isBestMoveQuestion('what is the best move here')).toBe(true);
+  });
+});
+
+describe('trainingRequestKind (David 2026-07-04: "set up X training" → launch the game-sourced surface)', () => {
+  it.each([
+    ['set up calculation training', 'calculation'],
+    ['start calculation practice', 'calculation'],
+    ['train my visualization', 'calculation'],
+    ['give me calculation training', 'calculation'],
+    ['drill my tactics', 'tactics'],
+    ['practice tactics', 'tactics'],
+    ['work on my tactical vision', 'tactics'],
+    ['set up endgame training', 'endgame'],
+    ['train endgames', 'endgame'],
+    ['practice my endings', 'endgame'],
+    ['drill my mistakes', 'mistakes'],
+    ['train on my blunders', 'mistakes'],
+    ['practice my weaknesses', 'weakness'],
+    ['drill my weak spots', 'weakness'],
+    ['work on my openings', 'opening'],
+    ['train my repertoire', 'opening'],
+    ['start a game review', 'review'],
+    ['review my games', 'review'],
+    ['SET UP CALCULATION TRAINING', 'calculation'],
+    ['  drill my tactics  ', 'tactics'],
+  ] as const)('maps "%s" → %s', (q, kind) => {
+    expect(trainingRequestKind(q)).toBe(kind);
+    expect(isTrainingRequest(q)).toBe(true);
+  });
+
+  it.each([
+    'what are my weaknesses',          // progress — a diagnosis, not a "set up X" imperative
+    'which opening am I weakest in',   // opening-profile
+    'how accurate am I',               // accuracy
+    'what should I train',             // bare recommendation, no named topic → progress/rec, not a launch
+    'was that a good move',            // move-rating
+    'how do I do against the Sicilian',// record-vs
+    'what is the best move',           // best-move
+    '',                                // empty
+  ])('does NOT fire on: %s', (q) => {
+    expect(trainingRequestKind(q)).toBeNull();
+    expect(isTrainingRequest(q)).toBe(false);
+  });
+
+  it('undefined is safe', () => {
+    expect(trainingRequestKind(undefined)).toBeNull();
+    expect(isTrainingRequest(undefined)).toBe(false);
   });
 });

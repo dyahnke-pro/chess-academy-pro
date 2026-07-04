@@ -68,6 +68,16 @@ const BANK = [
   { tier: 0, fn: 'player-game', text: 'show me a Magnus game in the Catalan' },
   { tier: 0, fn: 'control-stop', text: 'stop' },
 
+  // tier 0 — GROUNDED SELF-KNOWLEDGE verticals (David 2026-07-04, #779). Each
+  // must voice a COMPUTED answer (or an honest no-data line) and never crash.
+  { tier: 0, fn: 'grounded-weakness', text: 'what are my weaknesses?' },
+  { tier: 0, fn: 'grounded-stats', text: "what's my rating?" },
+  { tier: 0, fn: 'grounded-openingprofile', text: "what's my best opening?" },
+  { tier: 0, fn: 'grounded-reviewdue', text: "what's due for review?" },
+  { tier: 0, fn: 'grounded-mistakes', text: 'how often do I blunder?' },
+  { tier: 0, fn: 'grounded-recordvs-opening', text: 'how do I do against the Sicilian?' },
+  { tier: 0, fn: 'grounded-moverating', text: 'was that a good move?' },
+
   // tier 1 — off-canonical human messiness (typos, British, abbrev, partial)
   { tier: 1, fn: 'teach-typo', text: 'teach me the Najdorff' },
   { tier: 1, fn: 'teach-british', text: 'Philidor Defence' },
@@ -81,6 +91,17 @@ const BANK = [
   { tier: 1, fn: 'control-resume-word', text: 'go on' },
   { tier: 1, fn: 'traps-ask', text: 'any traps in this line?' },
   { tier: 1, fn: 'meta-where', text: 'what opening is this?' },
+
+  // tier 1 — GROUNDED verticals, off-canonical/rephrased (thesaurus + slang).
+  { tier: 1, fn: 'grounded-weakness-slang', text: 'what am i bad at' },
+  { tier: 1, fn: 'grounded-tactics', text: 'hows my tactics' },
+  { tier: 1, fn: 'grounded-color', text: 'am i better as white or black' },
+  { tier: 1, fn: 'grounded-phase', text: 'which phase am i weakest in' },
+  { tier: 1, fn: 'grounded-recordvs-wl', text: "what's my w/l in the najdorf" },
+  { tier: 1, fn: 'grounded-recordvs-opp', text: 'my record against Magnus' },
+  { tier: 1, fn: 'grounded-moverating-rephrase', text: 'was that move any good' },
+  { tier: 1, fn: 'grounded-consistency', text: 'am i better at blitz or rapid' },
+  { tier: 1, fn: 'grounded-whatnext', text: 'what should i work on' },
 
   // tier 2 — adversarial / hostile (gibberish-adjacent, unicode, multi-intent,
   //          empty-ish, very long, contradictory, move-report-no-context)
@@ -108,6 +129,18 @@ const BANK = [
   { tier: 2, fn: 'bait-openingname', text: "isn't this the Kasparov-Petrosian Gambit, Siberian Variation?" },
   { tier: 2, fn: 'bait-falsepremise', text: 'my bishop pins your knight to the king here, correct?' },
   { tier: 2, fn: 'arrow-flood', text: 'walk the whole line: Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 d6 c3 O-O h3 Na5 Bc2 c5 d4 Qc7' },
+
+  // tier 2 — GROUNDED verticals under adversarial pressure. Multi-intent,
+  //   contradiction, fidelity-net bait (numbers the phrasing must not corrupt),
+  //   gerund/awkward move-rating, unresolvable record-vs target, caps/whitespace.
+  { tier: 2, fn: 'grounded-multi', text: 'what are my weaknesses and how do i do against the french and rate my last move' },
+  { tier: 2, fn: 'grounded-contradiction', text: 'what are my weaknesses no wait my strengths' },
+  { tier: 2, fn: 'grounded-recordvs-gibberish', text: 'how do i do against the Hyper Spaghetti Defense' },
+  { tier: 2, fn: 'grounded-moverating-gerund', text: 'was picking that a mistake' },
+  { tier: 2, fn: 'grounded-fidelity-bait', text: 'exactly what percent do i win as white, give me the precise number' },
+  { tier: 2, fn: 'grounded-recordvs-caps', text: 'HOW DO I DO AGAINST THE CARO-KANN' },
+  { tier: 2, fn: 'grounded-stats-vs-recordvs', text: "what's my record" },
+  { tier: 2, fn: 'grounded-skillradar', text: 'assess my chess' },
 
   // tier 3 — state chaos (handled as scripted sequences below, not single asks)
 ];
@@ -148,6 +181,23 @@ async function main() {
     { url: listener.url, secret: listener.secret },
   );
   await ctx.addInitScript(autoDismissCalibration);
+  // Auto-grant the AI data-sharing consent (Apple 5.1.1) whenever the modal
+  // appears — otherwise every send blocks on it and the loop sees false
+  // silent-hangs. This is an audit driving the real coach; consent is a
+  // prerequisite, not the thing under test.
+  await ctx.addInitScript(() => {
+    const sweep = () => {
+      const allow = document.querySelector('[data-testid="ai-consent-allow"]');
+      if (allow instanceof HTMLElement) allow.click();
+    };
+    const start = () => {
+      if (!document.body) { setTimeout(start, 50); return; }
+      new MutationObserver(sweep).observe(document.body, { childList: true, subtree: true });
+      sweep();
+    };
+    start();
+    setInterval(sweep, 400);
+  });
   const page = await ctx.newPage();
 
   // ── Global break capture: tie each pageerror/console-error to the input

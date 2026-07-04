@@ -55,6 +55,13 @@ function ActionButton({ action, onClick }: {
     review_game: 'Review Game',
     analyse_position: 'Analyse Position',
     start_review: 'Start review',
+    // Game-sourced training actions (David 2026-07-04: pull from real user
+    // games). Each routes to a surface that draws from the student's own games.
+    calc_training: 'Train calculation',
+    train_mistakes: 'Drill my mistakes',
+    weakness_drill: 'Drill my weaknesses',
+    endgame_training: 'Train endgames',
+    review_games: 'Review my games',
   };
 
   return (
@@ -95,6 +102,30 @@ export function ChatMessage({ message, isStreaming }: ChatMessageProps): JSX.Ele
         break;
       case 'start_review':
         void navigate('/openings/srs');
+        break;
+      // Game-sourced training. `action.id` may carry a weak theme for the
+      // weakness drill so it opens pre-scoped to what the data flagged.
+      case 'calc_training':
+        void navigate('/tactics/analysis-practice');
+        break;
+      case 'train_mistakes':
+        void navigate('/tactics/mistakes');
+        break;
+      case 'weakness_drill':
+        // Scoped to a specific motif → the adaptive surface auto-starts that
+        // exact theme (it consumes forcedWeakThemes, WeaknessThemesPage does
+        // not). Unscoped → the game-sourced weakness overview to pick from.
+        if (action.id && action.id !== 'all') {
+          void navigate('/tactics/adaptive', { state: { forcedWeakThemes: [action.id] } });
+        } else {
+          void navigate('/tactics/weakness-themes');
+        }
+        break;
+      case 'endgame_training':
+        void navigate('/coach/endgame');
+        break;
+      case 'review_games':
+        void navigate('/coach/review');
         break;
     }
   };

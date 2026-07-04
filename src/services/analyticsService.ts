@@ -28,7 +28,7 @@ import { Chess } from 'chess.js';
 import { getAppAuditLog, type AuditEntry, type AuditKind } from './appAuditor';
 import { db } from '../db/schema';
 import { getOverviewInsights, getOpeningInsights } from './gameInsightsService';
-import { getOpeningNameByEco, resolveOpeningEntry } from './openingDetectionService';
+import { getOpeningNameByEco, openingFamilyMoves } from './openingDetectionService';
 import { detectTacticType } from './missedTacticService';
 import type {
   GamePhase,
@@ -1195,23 +1195,21 @@ export interface OpeningVsRecord {
  *  to a real opening or no games reached it (so the caller can fall through
  *  to the opponent path or a no-data line). */
 export async function recordVsOpening(query: string): Promise<OpeningVsRecord | null> {
-  const resolved = resolveOpeningEntry(query);
-  if (!resolved) return null;
-  const canonical = resolved.canonicalName;
-  const familyNorm = canonical.toLowerCase();
-  const familyRoot = familyNorm.split(':')[0].trim();
-  const specific = familyNorm.includes(':');
+  const family = openingFamilyMoves(query);
+  if (!family) return null;
+  const prefix = family.moves;
 
   const playerGames = await loadPlayerGames();
   let games = 0, wins = 0, draws = 0, losses = 0, asWhite = 0, asBlack = 0;
   for (const { game, color } of playerGames) {
-    const name = game.eco ? getOpeningNameByEco(game.eco) : null;
-    const gname = (name ?? '').toLowerCase();
-    if (!gname) continue;
-    // Broad family: the game's opening name starts with the family root.
-    if (!gname.startsWith(familyRoot)) continue;
-    // Specific variation asked (query had a ":"): require the fuller prefix.
-    if (specific && !gname.startsWith(familyNorm)) continue;
+    // Match by the opening's DEFINING MOVES (how an opening is actually
+    // identified) rather than the coarse ECO→name map, which mislabels
+    // (B07="Czech Defense"≠"Pirc Defense") and mis-includes broad codes.
+    const sans = openingSans(game.pgn, prefix.length);
+    if (sans.length < prefix.length) continue;
+    let ok = true;
+    for (let i = 0; i < prefix.length; i++) { if (sans[i] !== prefix[i]) { ok = false; break; } }
+    if (!ok) continue;
     games++;
     if (color === 'white') asWhite++; else asBlack++;
     if (isWin(game, color)) wins++;
@@ -1220,10 +1218,29 @@ export async function recordVsOpening(query: string): Promise<OpeningVsRecord | 
   }
   if (games === 0) return null;
   return {
-    openingName: canonical,
+    openingName: family.canonicalName,
     games, wins, draws, losses, asWhite, asBlack,
     winRatePct: Math.round((wins / games) * 100),
   };
+}
+
+/** Extract the first `n` SAN half-moves from a PGN's movetext — strips
+ *  headers, move numbers, clock/comment braces, NAGs, and the result. Cheap +
+ *  tolerant of chess.com's `1. e4 {[%clk ...]} 1... d6` formatting. */
+function openingSans(pgn: string, n: number): string[] {
+  if (!pgn) return [];
+  const movetext = pgn.replace(/\[[^\]]*\]/g, ' ').replace(/\{[^}]*\}/g, ' ').replace(/\([^)]*\)/g, ' ');
+  const out: string[] = [];
+  for (let tok of movetext.split(/\s+/)) {
+    if (out.length >= n) break;
+    if (!tok) continue;
+    tok = tok.replace(/^\d+\.(\.\.)?/, ''); // strip "12." / "12..." move-number prefix
+    if (!tok) continue;
+    if (tok === '1-0' || tok === '0-1' || tok === '1/2-1/2' || tok === '*') break;
+    if (tok.startsWith('$')) continue; // NAG
+    if (/^[a-hNBRQKO]/.test(tok)) out.push(tok.replace(/[!?]+$/, ''));
+  }
+  return out;
 }
 
 export interface OpponentVsRecord {
