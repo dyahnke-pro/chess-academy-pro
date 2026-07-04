@@ -179,11 +179,13 @@ import {
   isPlanQuestion, isBestMoveQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
   isMasterPlayQuestion, isEndgameQuestion, isPlayerGamesQuestion, isConceptQuestion,
   isProgressQuestion, isOpeningProfileQuestion, openingProfileKind, buildQuestionGrounding,
+  isStatsQuestion, isStrengthsQuestion,
 } from './questionIntents';
 export {
   isPlanQuestion, isBestMoveQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
   isMasterPlayQuestion, isEndgameQuestion, isPlayerGamesQuestion, isConceptQuestion,
   isProgressQuestion, isOpeningProfileQuestion, openingProfileKind, buildQuestionGrounding,
+  isStatsQuestion, isStrengthsQuestion,
 };
 
 export interface CoachServiceOptions {
@@ -947,9 +949,11 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     const progressQuestion = isProgressQuestion(input.ask);
     const conceptQuestionEngage = isConceptQuestion(input.ask);
     const openingProfileQuestionEngage = isOpeningProfileQuestion(input.ask);
+    const statsQuestionEngage = isStatsQuestion(input.ask);
+    const strengthsQuestionEngage = isStrengthsQuestion(input.ask);
     const autoGrounding =
       options.grounding ??
-      (input.liveState.fen || progressQuestion || conceptQuestionEngage || openingProfileQuestionEngage
+      (input.liveState.fen || progressQuestion || conceptQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage
         ? {
             currentFen: input.liveState.fen,
             // DB-grounding: thread the move history through so the
@@ -1013,6 +1017,8 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
             // deterministic data the coach used to punt on).
             openingProfileQuestion: openingProfileQuestionEngage,
             openingProfileKind: openingProfileKind(input.ask),
+            statsQuestion: statsQuestionEngage,
+            strengthsQuestion: strengthsQuestionEngage,
             // STEP D Phase 4 — "how do masters play this?" voices the master-play
             // lookup's real top moves + frequencies (assembleMasterPlayAnswer).
             masterPlayQuestion: isMasterPlayQuestion(input.ask),

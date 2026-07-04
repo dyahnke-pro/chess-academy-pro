@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -165,6 +165,70 @@ describe('assembleOpeningProfileAnswer — grounded "strongest/favorite/weakest 
   it('returns null when there is no data (caller takes the no-data line)', () => {
     expect(assembleOpeningProfileAnswer({ kind: 'strongest', openings: [] })).toBeNull();
     expect(assembleOpeningProfileAnswer({ kind: 'favorite', openings: [{ name: '', color: 'white' }] })).toBeNull();
+  });
+});
+
+describe('assembleStatsAnswer — grounded "what\'s my rating / record / win rate"', () => {
+  const base = {
+    totalGames: 50, wins: 28, losses: 17, draws: 5,
+    winRate: 56, winRateWhite: 62, winRateBlack: 50,
+  };
+  it('voices the record + win rate from the real counts', () => {
+    const a = assembleStatsAnswer(base);
+    expect(a).not.toBeNull();
+    expect(a!.facts).toMatch(/Across 50 games your record is 28-17-5 \(wins-losses-draws\), a 56% win rate/);
+    expect(a!.sources).toContain('data:your-games');
+  });
+  it('adds per-color win rates when present', () => {
+    const a = assembleStatsAnswer(base);
+    expect(a!.facts).toMatch(/As White you win 62%, as Black 50%/);
+  });
+  it('adds the rating when a positive rating is supplied', () => {
+    const a = assembleStatsAnswer({ ...base, currentRating: 1487.4 });
+    expect(a!.facts).toMatch(/Your rating is about 1487\./);
+  });
+  it('omits the rating line when rating is null or zero', () => {
+    expect(assembleStatsAnswer({ ...base, currentRating: null })!.facts).not.toMatch(/rating is about/);
+    expect(assembleStatsAnswer({ ...base, currentRating: 0 })!.facts).not.toMatch(/rating is about/);
+  });
+  it('adds the best-scalp line from highestBeaten', () => {
+    const a = assembleStatsAnswer({ ...base, highestBeaten: { name: 'GM Smith', rating: 2410 } });
+    expect(a!.facts).toMatch(/best scalp: GM Smith \(2410\)/);
+  });
+  it('handles the singular "1 game" grammar', () => {
+    const a = assembleStatsAnswer({ totalGames: 1, wins: 1, losses: 0, draws: 0, winRate: 100, winRateWhite: 100, winRateBlack: 0 });
+    expect(a!.facts).toMatch(/Across 1 game your record/);
+  });
+  it('returns null when there are no games (caller takes the no-data line)', () => {
+    expect(assembleStatsAnswer({ ...base, totalGames: 0 })).toBeNull();
+  });
+});
+
+describe('assembleStrengthsAnswer — grounded "what am I good at"', () => {
+  it('voices the top strengths (capped at 3)', () => {
+    const a = assembleStrengthsAnswer([
+      '62% win rate as White',
+      '4 games with zero blunders',
+      'Strong opening preparation (81% accuracy)',
+      'a fourth strength that should be dropped',
+    ]);
+    expect(a).not.toBeNull();
+    expect(a!.facts).toMatch(/What you do well, from your own games:/);
+    expect(a!.facts).toMatch(/62% win rate as White/);
+    expect(a!.facts).not.toMatch(/fourth strength/);
+    expect(a!.sources).toContain('data:your-games');
+  });
+  it('phrases a single strength without a list', () => {
+    const a = assembleStrengthsAnswer(['62% win rate as White']);
+    expect(a!.facts).toMatch(/What you do well, from your own games: 62% win rate as White\./);
+  });
+  it('ignores blank entries', () => {
+    const a = assembleStrengthsAnswer(['', '  ', 'Real strength']);
+    expect(a!.facts).toMatch(/Real strength/);
+  });
+  it('returns null when nothing is computed', () => {
+    expect(assembleStrengthsAnswer([])).toBeNull();
+    expect(assembleStrengthsAnswer(['', '   '])).toBeNull();
   });
 });
 

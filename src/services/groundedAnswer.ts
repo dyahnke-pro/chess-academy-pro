@@ -916,3 +916,60 @@ export function assembleOpeningProfileAnswer(opts: {
       : ' Ask me to teach it or drill its traps to go deeper.';
   return { facts: facts + next, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
+
+/** The student's computed game-record stats (a structural subset of
+ *  OverviewInsights + the profile rating) — handed to `assembleStatsAnswer`
+ *  so the assembler stays a pure leaf. */
+export interface StatsLike {
+  totalGames: number;
+  wins: number;
+  losses: number;
+  draws: number;
+  winRate: number;        // 0-100
+  winRateWhite: number;   // 0-100
+  winRateBlack: number;   // 0-100
+  currentRating?: number | null;
+  highestBeaten?: { name: string; rating: number } | null;
+}
+
+/**
+ * assembleStatsAnswer — the grounded "what's my rating / record / win rate?"
+ * answer. The student's OWN game history (wins/losses/draws + per-color win
+ * rate, computed by getOverviewInsights) + their rating is handed in; this
+ * phrases it. The LLM voices real numbers; it invents no stat. Returns null
+ * when there are no games yet (caller takes the no-data line). G0.
+ */
+export function assembleStatsAnswer(s: StatsLike): GroundedAnswer | null {
+  if (s.totalGames <= 0) return null;
+  const rating = typeof s.currentRating === 'number' && s.currentRating > 0
+    ? ` Your rating is about ${Math.round(s.currentRating)}.`
+    : '';
+  const perColor = (s.winRateWhite || s.winRateBlack)
+    ? ` As White you win ${s.winRateWhite}%, as Black ${s.winRateBlack}%.`
+    : '';
+  const beat = s.highestBeaten && s.highestBeaten.name
+    ? ` Your best scalp: ${s.highestBeaten.name} (${s.highestBeaten.rating}).`
+    : '';
+  const facts =
+    `Across ${s.totalGames} game${s.totalGames === 1 ? '' : 's'} your record is ` +
+    `${s.wins}-${s.losses}-${s.draws} (wins-losses-draws), a ${s.winRate}% win rate.` +
+    perColor + rating + beat;
+  return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+}
+
+/**
+ * assembleStrengthsAnswer — the grounded "what am I good at?" answer. The
+ * strengths are COMPUTED (getOverviewInsights.strengths — "62% win rate as
+ * White", "N brilliant moves", zero-blunder games, etc.); this selects the top
+ * few and phrases them. Distinct from the weakness path so "what am I good at?"
+ * stops getting a weakness-dump. Returns null when no strengths computed. G0.
+ */
+export function assembleStrengthsAnswer(strengths: ReadonlyArray<string>): GroundedAnswer | null {
+  const open = strengths.filter((s) => !!s && s.trim().length > 0).slice(0, 3);
+  if (open.length === 0) return null;
+  const facts =
+    open.length === 1
+      ? `What you do well, from your own games: ${open[0]}.`
+      : `What you do well, from your own games: ${open.join('; ')}.`;
+  return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+}

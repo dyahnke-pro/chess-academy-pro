@@ -12,6 +12,8 @@ import {
   isOpeningProfileQuestion,
   openingProfileKind,
   buildQuestionGrounding,
+  isStatsQuestion,
+  isStrengthsQuestion,
 } from './coachService';
 
 // David 2026-06-14: "throw the thesaurus at this problem for ALL questions."
@@ -48,8 +50,9 @@ describe('isProgressQuestion (weakness / improvement — the thesaurus bug)', ()
     'what trips me up',
     'what am I worst at',
     "what's my biggest leak",
-    'what are my strengths',
     'what keeps costing me games',
+    // NB: "what are my strengths" is NO LONGER a progress question — it routes to
+    // the dedicated isStrengthsQuestion path (see its own describe block).
   ])('matches: %s', (q) => expect(isProgressQuestion(q)).toBe(true));
 
   // David 2026-07-04: the exact meta-questions that dead-ended at the picker,
@@ -172,6 +175,70 @@ describe('isOpeningProfileQuestion (David 2026-07-04: wire the deterministic ope
   ])('does NOT match: %s', (q) => expect(isOpeningProfileQuestion(q)).toBe(false));
 });
 
+describe('isStatsQuestion (David 2026-07-04: rating / record / win-rate)', () => {
+  it.each([
+    "what's my rating",
+    'what is my current rating',
+    "what's my elo",
+    "what's my rank",
+    "what's my win rate",
+    'what is my win-rate',
+    "what's my record",
+    'my overall record',
+    'my game record',
+    'my win rate',
+    'how many games have I won',
+    'how many games did I lose',
+    "how many games i've played",
+    'how often do I win',
+    "what's my winning percentage",
+    'how am I doing overall',
+    "what's my overall performance",
+    'what is my results',
+    'how good am I',
+    'how strong am I',
+    "what's my w/l",
+    "what's my stats",
+    'what is my statistics',
+  ])('matches "%s"', (q) => expect(isStatsQuestion(q)).toBe(true));
+  it.each([
+    'what are my weaknesses',       // weakness themes → progress
+    "what's my strongest opening",  // opening profile
+    'what am I good at',            // strengths, not stats
+    'teach me the Sicilian',
+    'what is a fork',
+    'hi coach',
+  ])('does NOT match: %s', (q) => expect(isStatsQuestion(q)).toBe(false));
+});
+
+describe('isStrengthsQuestion (David 2026-07-04: inverse of the weakness path)', () => {
+  it.each([
+    'what am I good at',
+    'what do I do well',
+    'what do I do best',
+    'what am I best at',
+    'what am I strong at',
+    'what am I strong in',
+    'what am I really strong at',
+    'what are my strengths',
+    "what's my biggest strength",
+    'what is my main strength',
+    'what are my top strengths',
+    'my strengths',
+    'my strong suit',
+    "what's my strongest suit",
+    "what's my best skill",
+  ])('matches "%s"', (q) => expect(isStrengthsQuestion(q)).toBe(true));
+  it.each([
+    'what are my weaknesses',       // the opposite → progress
+    'what am I bad at',             // weakness phrasing
+    "what's my strongest opening",  // opening profile, not general strengths
+    "what's my rating",            // stats
+    'what is a pin',               // concept
+    'nice to meet you coach',
+  ])('does NOT match: %s', (q) => expect(isStrengthsQuestion(q)).toBe(false));
+});
+
 describe('buildQuestionGrounding — shared cross-surface grounding (David 2026-07-04)', () => {
   it('sets the progress flag for a weakness question (board-independent)', () => {
     const g = buildQuestionGrounding('what am I weak in?');
@@ -197,12 +264,27 @@ describe('buildQuestionGrounding — shared cross-surface grounding (David 2026-
     expect(g.conceptQuestion).toBe(true);
     expect(g.openingId).toBe('italian-game');
   });
+  it('sets the stats flag for a rating question (board-independent)', () => {
+    const g = buildQuestionGrounding("what's my win rate");
+    expect(g.statsQuestion).toBe(true);
+    expect(g.strengthsQuestion).toBe(false);
+    expect(g.progressQuestion).toBe(false);
+  });
+  it('sets the strengths flag (and NOT progress) for a "what am I good at" question', () => {
+    const g = buildQuestionGrounding('what am I good at');
+    expect(g.strengthsQuestion).toBe(true);
+    expect(g.statsQuestion).toBe(false);
+    // progress no longer collides — positive predicates moved to the strengths path
+    expect(g.progressQuestion).toBe(false);
+  });
   it('sets NO intent flags for a non-question utterance (falls to normal LLM)', () => {
     const g = buildQuestionGrounding('hey coach nice to see you');
     expect(g.progressQuestion).toBe(false);
     expect(g.openingProfileQuestion).toBe(false);
     expect(g.tacticsQuestion).toBe(false);
     expect(g.conceptQuestion).toBe(false);
+    expect(g.statsQuestion).toBe(false);
+    expect(g.strengthsQuestion).toBe(false);
   });
 });
 

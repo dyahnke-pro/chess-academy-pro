@@ -331,11 +331,16 @@ const PROGRESS_QUESTION_RE = anyOf([
   String.raw`\bbiggest\s+(?:weakness|mistake|problem|issue|flaw|leak|gap)\b`,
   String.raw`\bweakest\s+(?:aspect|part|area|point|spot|skill|element|side|link|piece|phase|stage)\s+of\s+my\s+(?:game|play|chess)\b`,
   String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+)?weakest\s+(?:aspect|part|area|point|spot|side|phase|link)\b`,
-  String.raw`\b(?:my|the)\s+(?:progress|improvement|strengths?|strong\s+(?:points?|suits?|areas?))\b`,
+  // NB: "strengths" / "strong points" are NOT here — they route to the dedicated
+  // isStrengthsQuestion path (David 2026-07-04), so "what am I good at" stops
+  // getting a weakness-dump. Progress owns only progress/improvement wording.
+  String.raw`\b(?:my|the)\s+(?:progress|improvement)\b`,
   // ── weak / struggle PREDICATES (self, aggregate) ──
   String.raw`\bwhat\s+(?:am\s+i|i'?m|do\s+i)\s+` + WEAK_PRED + String.raw`\s+(?:at|in|on|with)\b`,
   String.raw`\bwhere\s+(?:am\s+i|i'?m|do\s+i)\s+(?:the\s+)?(?:` + WEAK_PRED + String.raw`|struggl(?:e|ing)|los(?:e|ing)|failing|need\s+work|go(?:ing)?\s+wrong|mess(?:ing)?\s+up|blunder(?:ing)?|fall(?:ing)?\s+short|drop(?:ping)?\s+(?:points?|games?))\b`,
-  String.raw`\bwhat\s+(?:am\s+i|do\s+i)\s+(?:bad|worst|good|best|strong|weak)\s+at\b`,
+  // positive predicates (good/best/strong) route to isStrengthsQuestion; progress
+  // keeps only the weakness predicates here.
+  String.raw`\bwhat\s+(?:am\s+i|do\s+i)\s+(?:bad|worst|weak)\s+at\b`,
   // informal self-predicate ("I suck at endgames", "I'm terrible at tactics",
   // "I'm no good at endings") — a plain statement of a weakness is a diagnosis.
   String.raw`\bi\s+(?:really\s+|totally\s+|just\s+)?(?:suck|stink|blow|bomb)\s+(?:at|in|with)\b`,
@@ -389,6 +394,42 @@ export function openingProfileKind(ask: string | undefined): 'strongest' | 'favo
   return 'strongest';
 }
 
+/** A STATS / RECORD question — "what's my rating / record / win rate?", "how
+ *  many games have I won?", "how am I doing overall?". Answered from the
+ *  student's own game history (getOverviewInsights + rating) via
+ *  assembleStatsAnswer (David 2026-07-04). Distinct from progress (weakness
+ *  themes) and opening-profile (which opening). */
+const STATS_QUESTION_RE = anyOf([
+  String.raw`\bwhat(?:'?s| is)?\s+my\s+(?:current\s+)?(?:rating|elo|rank)\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+my\s+(?:win[\s-]?rate|record|score|w[\s\/-]l|stats?|statistics)\b`,
+  String.raw`\bmy\s+(?:win[\s-]?rate|overall\s+record|game\s+record)\b`,
+  String.raw`\bhow\s+many\s+games\s+(?:have\s+i|did\s+i|do\s+i|i'?ve)\s+(?:won|win|lost|lose|played|play|drawn|draw|drew)\b`,
+  String.raw`\bhow\s+(?:many|often)\s+(?:do\s+i|have\s+i)\s+win\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+my\s+(?:win|winning)\s+percentage\b`,
+  String.raw`\bhow\s+am\s+i\s+doing\s+(?:overall|in\s+my\s+games)\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+my\s+(?:overall\s+)?(?:performance|results?)\b`,
+  String.raw`\bhow\s+(?:good|strong)\s+am\s+i\b`,
+]);
+export function isStatsQuestion(ask: string | undefined): boolean {
+  return !!ask && STATS_QUESTION_RE.test(ask);
+}
+
+/** A STRENGTHS question — "what am I good at?", "what are my strengths?", "what
+ *  do I do well?". Answered from the COMPUTED strengths (getOverviewInsights
+ *  .strengths) via assembleStrengthsAnswer — the inverse of the weakness path,
+ *  so "what am I good at" stops getting a weakness-dump (David 2026-07-04). */
+const STRENGTHS_QUESTION_RE = anyOf([
+  String.raw`\bwhat\s+(?:am\s+i|do\s+i)\s+(?:good|best|strong|great)\s+at\b`,
+  String.raw`\bwhat(?:'?s| is| are)?\s+my\s+(?:biggest\s+|main\s+|top\s+|greatest\s+)?strengths?\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+my\s+(?:strong(?:est)?\s+(?:suit|point|area|skill)|best\s+(?:skill|area|part))\b`,
+  String.raw`\bwhat\s+do\s+i\s+do\s+(?:well|best|right)\b`,
+  String.raw`\bwhat\s+am\s+i\s+(?:really\s+)?strong\s+(?:at|in)\b`,
+  String.raw`\bmy\s+(?:strengths?|strong\s+suits?)\b`,
+]);
+export function isStrengthsQuestion(ask: string | undefined): boolean {
+  return !!ask && STRENGTHS_QUESTION_RE.test(ask);
+}
+
 /**
  * buildQuestionGrounding — the SHARED grounding builder so the coach's
  * grounded-data brain fires IDENTICALLY on every talking surface (David
@@ -434,6 +475,8 @@ export function buildQuestionGrounding(
     progressQuestion: isProgressQuestion(ask),
     openingProfileQuestion: isOpeningProfileQuestion(ask),
     openingProfileKind: openingProfileKind(ask),
+    statsQuestion: isStatsQuestion(ask),
+    strengthsQuestion: isStrengthsQuestion(ask),
     masterPlayQuestion: isMasterPlayQuestion(ask),
     conceptQuestion: isConceptQuestion(ask),
     playerGamesQuestion: isPlayerGamesQuestion(ask),

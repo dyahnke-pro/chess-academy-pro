@@ -63,6 +63,8 @@ import { lookupTablebase } from './lichessTablebaseService';
 import { detectBadHabits } from './badHabitDetector';
 import { getUnifiedWeaknessProfile } from './weaknessSpine';
 import { getStrongestOpenings, getMostPlayedOpenings, getWeakestOpenings } from './openingService';
+import { getOverviewInsights } from './gameInsightsService';
+import { assembleStatsAnswer, assembleStrengthsAnswer } from './groundedAnswer';
 import { detectConceptsInText, getConcept } from './chessConceptService';
 import { validateClaims, type ClaimValidationResult } from './claimValidator';
 import { logAppAudit } from './appAuditor';
@@ -1223,6 +1225,12 @@ export interface MasterGroundingOptions {
    *  Needs no board. `openingProfileKind` says which slice to compute. */
   openingProfileQuestion?: boolean;
   openingProfileKind?: 'strongest' | 'favorite' | 'weakest';
+  /** "what's my rating / record / win rate?" — voiced from the student's game
+   *  history (getOverviewInsights) + rating via assembleStatsAnswer. No board. */
+  statsQuestion?: boolean;
+  /** "what am I good at / my strengths?" — voiced from computed strengths
+   *  (getOverviewInsights.strengths) via assembleStrengthsAnswer. No board. */
+  strengthsQuestion?: boolean;
   /** STEP D Phase 4 — true when this turn asks how MASTERS play the position
    *  ("how do masters play this?", "most popular move?"). Voices the master-play
    *  lookup's real top moves + frequencies (assembleMasterPlayAnswer) so the LLM
@@ -1790,6 +1798,8 @@ export async function getCoachChatResponse(
       grounding.tacticsQuestion === true ||
       grounding.progressQuestion === true ||
       grounding.openingProfileQuestion === true ||
+      grounding.statsQuestion === true ||
+      grounding.strengthsQuestion === true ||
       grounding.conceptQuestion === true ||
       grounding.playerGamesQuestion === true ||
       grounding.endgameQuestion === true ||
@@ -1803,6 +1813,46 @@ export async function getCoachChatResponse(
           }
           return undefined;
         };
+
+        // ── STRENGTHS — "what am I good at?" (runs BEFORE progress so the
+        // strengths question doesn't get a weakness-dump). Voiced from the
+        // computed strengths (getOverviewInsights.strengths). No board.
+        if (grounding.strengthsQuestion) {
+          try {
+            const ov = await getOverviewInsights();
+            const answer = assembleStrengthsAnswer(ov.strengths ?? []);
+            if (answer) {
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'strengths' });
+              if (voiced) return voiced;
+            }
+            const noDataFact = "You haven't played enough analyzed games yet for me to spot your strengths. Play a few more and I'll show you what you do well.";
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'strengths' });
+            if (voicedNoData) return voicedNoData;
+          } catch { /* fall through */ }
+        }
+
+        // ── STATS / RECORD — "what's my rating / record / win rate?". Voiced
+        // from the student's game history (getOverviewInsights) + rating. No board.
+        if (grounding.statsQuestion) {
+          try {
+            const [ov, profile] = await Promise.all([getOverviewInsights(), db.profiles.get('main')]);
+            const answer = assembleStatsAnswer({
+              totalGames: ov.totalGames, wins: ov.wins, losses: ov.losses, draws: ov.draws,
+              winRate: ov.winRate, winRateWhite: ov.winRateWhite, winRateBlack: ov.winRateBlack,
+              currentRating: profile?.currentRating ?? null,
+              highestBeaten: ov.highestBeaten
+                ? { name: ov.highestBeaten.name, rating: ov.highestBeaten.elo }
+                : null,
+            });
+            if (answer) {
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'stats' });
+              if (voiced) return voiced;
+            }
+            const noDataFact = "You haven't imported or played any games yet, so I don't have a record for you. Play or import some games and I'll track your rating and win rate.";
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'stats' });
+            if (voicedNoData) return voicedNoData;
+          } catch { /* fall through */ }
+        }
 
         // ── PROGRESS (Phase 6) — the student's OWN computed history ────────
         // No board needed. `detectBadHabits` recomputes the FRESH habit profile
