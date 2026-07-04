@@ -12,7 +12,7 @@ import {
   isBestMoveQuestion, isTacticsQuestion, isPositionAssessmentQuestion, isMasterPlayQuestion,
   isEndgameQuestion, isPlayerGamesQuestion, isConceptQuestion, isPlanQuestion,
   isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion,
-  isColorQuestion, isRecordsQuestion, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
+  isColorQuestion, isRecordsQuestion, isRecordVsQuestion, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
 } from '../src/coach/questionIntents.ts';
 
 const DETECTORS = {
@@ -24,7 +24,7 @@ const DETECTORS = {
   positionAssessment: isPositionAssessmentQuestion, masterPlay: isMasterPlayQuestion,
   endgame: isEndgameQuestion, playerGames: isPlayerGamesQuestion, concept: isConceptQuestion, plan: isPlanQuestion,
   accuracy: isAccuracyQuestion, consistency: isConsistencyQuestion, converting: isConvertingQuestion,
-  color: isColorQuestion, records: isRecordsQuestion, puzzleStats: isPuzzleStatsQuestion, transferGap: isTransferGapQuestion, skillRadar: isSkillRadarQuestion,
+  color: isColorQuestion, records: isRecordsQuestion, recordVs: isRecordVsQuestion, puzzleStats: isPuzzleStatsQuestion, transferGap: isTransferGapQuestion, skillRadar: isSkillRadarQuestion,
 };
 
 // expected: the detector that SHOULD fire. Rephrasings hammer each vertical.
@@ -124,6 +124,14 @@ const BATTERY = [
     'what time control am i best at', 'am i better at blitz or rapid', 'how often do i play', 'my best time control']],
   ['converting', ['do i convert winning positions', 'do i close out wins', 'do i throw away winning positions',
     'do i come back from losing positions', 'how do i win my games', 'am i a grinder or attacker']],
+
+  // ═══ RECORD-VS — opening OR opponent (the target is captured, disambiguated
+  //     at the interception: resolves as an opening else an opponent). ═══
+  ['recordVs', ['how do i do against the Sicilian', 'my record vs the French', "what's my record in the Najdorf",
+    'how do i fare against the Caro-Kann', 'results against the Italian', 'how do i perform vs the Dutch',
+    'my record against Magnus', 'how do i do versus Hikaru', 'results against DrNykterstein',
+    'how do i fare vs that player', "what's my head to head with Nakamura", 'my win rate against the London',
+    'HOW DO I DO AGAINST THE SICILIAN', '  my record vs the french  ']],
 ];
 
 // GARBAGE / non-questions — MUST match NOTHING (false-positive guard).

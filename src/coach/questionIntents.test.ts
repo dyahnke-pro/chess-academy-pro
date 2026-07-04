@@ -26,6 +26,9 @@ import {
   isAccuracyQuestion,
   isConsistencyQuestion,
   isConvertingQuestion,
+  recordVsTarget,
+  isRecordVsQuestion,
+  isRecordsQuestion,
 } from './coachService';
 
 // David 2026-06-14: "throw the thesaurus at this problem for ALL questions."
@@ -698,5 +701,38 @@ describe('cross-router disambiguation (must NOT collide)', () => {
   it('best-move stays distinct from master-play', () => {
     expect(isBestMoveQuestion('what should I play here')).toBe(true);
     expect(isMasterPlayQuestion('what do the masters play here')).toBe(true);
+  });
+});
+
+describe('recordVsTarget / isRecordVsQuestion (David 2026-07-04: record vs a specific opening OR opponent)', () => {
+  it('captures the opening target after against/vs/in', () => {
+    expect(recordVsTarget('how do I do against the Sicilian')).toBe('Sicilian');
+    expect(recordVsTarget('my record vs the French')).toBe('French');
+    expect(recordVsTarget("what's my record in the Najdorf")).toBe('Najdorf');
+    expect(recordVsTarget('how do I fare against the Caro-Kann')).toBe('Caro-Kann');
+  });
+  it('captures the opponent target', () => {
+    expect(recordVsTarget('my record against Magnus')).toBe('Magnus');
+    expect(recordVsTarget('results against DrNykterstein')).toBe('DrNykterstein');
+    expect(recordVsTarget("what's my head to head with Nakamura")).toBe('Nakamura');
+  });
+  it('is case- and whitespace-insensitive', () => {
+    expect(isRecordVsQuestion('HOW DO I DO AGAINST THE SICILIAN')).toBe(true);
+    expect(isRecordVsQuestion('  my record vs the french  ')).toBe(true);
+  });
+  it('does NOT fire on a bare records/stats question (no target)', () => {
+    expect(isRecordVsQuestion("what's my record")).toBe(false);
+    expect(isRecordVsQuestion('my win rate')).toBe(false);
+    expect(recordVsTarget("what's my best game")).toBe(null);
+    // The generic records/stats verticals still own those.
+    expect(isRecordsQuestion("what's my best game")).toBe(true);
+  });
+  it('drops a bare pronoun/filler target so it does not fire on nothing', () => {
+    expect(recordVsTarget('how do I do against them')).toBe(null);
+    expect(recordVsTarget('how do I do against it')).toBe(null);
+  });
+  it('keeps a qualified filler like "that player" (unresolvable → no-data, still covered)', () => {
+    expect(recordVsTarget('how do I fare vs that player')).toBe('that player');
+    expect(isRecordVsQuestion('how do I fare vs that player')).toBe(true);
   });
 });

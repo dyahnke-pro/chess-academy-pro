@@ -795,6 +795,36 @@ export function isRecordsQuestion(ask: string | undefined): boolean {
   return !!ask && RECORDS_QUESTION_RE.test(ask);
 }
 
+/** "how do I do against the Sicilian?" / "my record vs <name>?" →
+ *  assembleOpeningRecordAnswer OR assembleOpponentRecordAnswer. The
+ *  interception disambiguates opening-vs-opponent by trying to resolve
+ *  the captured TARGET as a real opening; else it's an opponent. This
+ *  detector both DETECTS and EXTRACTS the target term (mirrors
+ *  `openingProfileKind`). Requires a target after a preposition, so a
+ *  bare "what's my record" falls through to the generic records vertical. */
+const RECORD_VS_LEAD = String.raw`(?:my\s+)?(?:record|results?|win[\s-]?rate|score|h2h|head[\s-]?to[\s-]?head)|how\s+(?:do|did|have|has|'?s)\s+i\s+(?:do|done|doing|fare|fared|perform|performed|play|played|score|scored)`;
+const RECORD_VS_RE = new RegExp(
+  String.raw`\b(?:${RECORD_VS_LEAD})\b[\s\S]*?\b(?:against|versus|vs\.?|v\.?|facing|in|with|playing)\s+(?:the\s+)?([a-z0-9][a-z0-9'’\-.\s]*?)\s*[?.!]*$`,
+  'i',
+);
+/** Trailing/leading filler that isn't part of a real opening/opponent name. */
+const RECORD_VS_STOP = /^(?:it|that|them|this|those|me|him|her|us|people|players?|opponents?|everyone|anyone|games?)$/i;
+export function recordVsTarget(ask: string | undefined): string | null {
+  if (!ask) return null;
+  const m = RECORD_VS_RE.exec(ask.trim());
+  if (!m) return null;
+  const t = m[1].trim().replace(/\s+/g, ' ').replace(/[?.!]+$/, '').trim();
+  if (t.length < 2) return null;
+  // "how do I do vs that player" → "that player": keep the raw target (it just
+  // won't resolve to an opening OR a real opponent → no-data), but drop a
+  // bare pronoun/filler with no name so it doesn't fire on nothing.
+  if (RECORD_VS_STOP.test(t)) return null;
+  return t;
+}
+export function isRecordVsQuestion(ask: string | undefined): boolean {
+  return recordVsTarget(ask) !== null;
+}
+
 /** "my puzzle rating / how many puzzles have I solved" → assemblePuzzleStatsAnswer. */
 const PUZZLE_STATS_RE = anyOf([
   String.raw`\bmy\s+puzzle\s+(?:rating|accuracy|stats?|score)\b`,
@@ -894,6 +924,7 @@ export function buildQuestionGrounding(
     convertingQuestion: isConvertingQuestion(ask),
     colorQuestion: isColorQuestion(ask),
     recordsQuestion: isRecordsQuestion(ask),
+    recordVsTarget: recordVsTarget(ask) ?? undefined,
     puzzleStatsQuestion: isPuzzleStatsQuestion(ask),
     transferGapQuestion: isTransferGapQuestion(ask),
     skillRadarQuestion: isSkillRadarQuestion(ask),

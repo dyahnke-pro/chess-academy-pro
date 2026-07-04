@@ -28,7 +28,7 @@ import { Chess } from 'chess.js';
 import { getAppAuditLog, type AuditEntry, type AuditKind } from './appAuditor';
 import { db } from '../db/schema';
 import { getOverviewInsights, getOpeningInsights } from './gameInsightsService';
-import { getOpeningNameByEco } from './openingDetectionService';
+import { getOpeningNameByEco, resolveOpeningEntry } from './openingDetectionService';
 import { detectTacticType } from './missedTacticService';
 import type {
   GamePhase,
@@ -1166,6 +1166,113 @@ export async function personalRecords(): Promise<PersonalRecords> {
     bestAccuracyGame,
     longestWinStreak,
     totalGames: playerGames.length,
+  };
+}
+
+// ─── Record vs a specific opening / opponent ───────────────────────────
+//
+// "How do I do against the Sicilian?" / "What's my record vs DrNykterstein?"
+// Both aggregate the player's OWN games (loadPlayerGames excludes master
+// games + unfinished '*'), scoped by opening family or opponent name.
+// G0: the numbers are computed here in code; the LLM only voices them.
+
+export interface OpeningVsRecord {
+  /** Canonical family label resolved from the user's query. */
+  openingName: string;
+  games: number;
+  wins: number;
+  draws: number;
+  losses: number;
+  asWhite: number;
+  asBlack: number;
+  winRatePct: number;
+}
+
+/** W/D/L in the player's own games that reached the named opening family.
+ *  Resolves the free-text query to a canonical opening, then family-matches
+ *  each game by its ECO-derived name (e.g. "the Sicilian" matches every
+ *  "Sicilian Defense: …" game). Returns null when the query doesn't resolve
+ *  to a real opening or no games reached it (so the caller can fall through
+ *  to the opponent path or a no-data line). */
+export async function recordVsOpening(query: string): Promise<OpeningVsRecord | null> {
+  const resolved = resolveOpeningEntry(query);
+  if (!resolved) return null;
+  const canonical = resolved.canonicalName;
+  const familyNorm = canonical.toLowerCase();
+  const familyRoot = familyNorm.split(':')[0].trim();
+  const specific = familyNorm.includes(':');
+
+  const playerGames = await loadPlayerGames();
+  let games = 0, wins = 0, draws = 0, losses = 0, asWhite = 0, asBlack = 0;
+  for (const { game, color } of playerGames) {
+    const name = game.eco ? getOpeningNameByEco(game.eco) : null;
+    const gname = (name ?? '').toLowerCase();
+    if (!gname) continue;
+    // Broad family: the game's opening name starts with the family root.
+    if (!gname.startsWith(familyRoot)) continue;
+    // Specific variation asked (query had a ":"): require the fuller prefix.
+    if (specific && !gname.startsWith(familyNorm)) continue;
+    games++;
+    if (color === 'white') asWhite++; else asBlack++;
+    if (isWin(game, color)) wins++;
+    else if (game.result === '1/2-1/2') draws++;
+    else losses++;
+  }
+  if (games === 0) return null;
+  return {
+    openingName: canonical,
+    games, wins, draws, losses, asWhite, asBlack,
+    winRatePct: Math.round((wins / games) * 100),
+  };
+}
+
+export interface OpponentVsRecord {
+  /** The matched opponent's display name (most-frequent exact name). */
+  opponentName: string;
+  games: number;
+  wins: number;
+  draws: number;
+  losses: number;
+  avgOpponentElo: number | null;
+}
+
+/** W/D/L in the player's own games against a named opponent. Matches the
+ *  free-text query as a case-insensitive substring of the opponent's
+ *  username (either direction, so "Magnus" matches "DrNykterstein" only if
+ *  the stored name contains it — real chess.com/lichess handles). Returns
+ *  null when no opponent matches. */
+export async function recordVsOpponent(query: string): Promise<OpponentVsRecord | null> {
+  const q = query.trim().toLowerCase();
+  if (q.length < 2) return null;
+  const playerGames = await loadPlayerGames();
+
+  const matched: { game: GameRecord; color: 'white' | 'black'; opp: string; elo: number | null }[] = [];
+  for (const { game, color } of playerGames) {
+    const opp = color === 'white' ? game.black : game.white;
+    if (AI_NAMES.has(opp)) continue;
+    const oppLc = opp.toLowerCase();
+    if (oppLc.includes(q) || q.includes(oppLc)) {
+      matched.push({ game, color, opp, elo: color === 'white' ? game.blackElo : game.whiteElo });
+    }
+  }
+  if (matched.length === 0) return null;
+
+  // Display name = the most frequent exact opponent name among the matches.
+  const nameCounts = new Map<string, number>();
+  for (const m of matched) nameCounts.set(m.opp, (nameCounts.get(m.opp) ?? 0) + 1);
+  const opponentName = [...nameCounts.entries()].sort((a, b) => b[1] - a[1])[0][0];
+
+  let wins = 0, draws = 0, losses = 0, eloSum = 0, eloCount = 0;
+  for (const m of matched) {
+    if (isWin(m.game, m.color)) wins++;
+    else if (m.game.result === '1/2-1/2') draws++;
+    else losses++;
+    if (m.elo !== null) { eloSum += m.elo; eloCount++; }
+  }
+  return {
+    opponentName,
+    games: matched.length, wins, draws, losses,
+    avgOpponentElo: eloCount > 0 ? Math.round(eloSum / eloCount) : null,
   };
 }
 

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -503,6 +503,31 @@ describe('Wave 4 assemblers — colour / records / puzzle-stats / transfer-gap',
     const a = assembleRecordsAnswer({ totalGames: 40, highestBeaten: { name: 'GM X', elo: 2400 }, fastestWin: { moves: 14 }, longestGame: { moves: 96 }, bestAccuracyGame: { accuracyPct: 97 } });
     expect(a!.facts).toMatch(/best scalp is GM X \(2400\)/);
     expect(a!.facts).toMatch(/fastest win took 14 moves/);
+  });
+  it('assembleOpeningRecordAnswer voices W/D/L + win rate + a weak-spot suggestion', () => {
+    const a = assembleOpeningRecordAnswer({ openingName: 'Sicilian Defense', games: 20, wins: 6, draws: 4, losses: 10, asWhite: 0, asBlack: 20, winRatePct: 30 });
+    expect(a!.facts).toMatch(/Sicilian Defense you're 6W-4D-10L across 20 games/);
+    expect(a!.facts).toMatch(/30% win rate/);
+    expect(a!.facts).toMatch(/weak spot worth drilling/);
+    expect(a!.facts).toMatch(/20 as Black/);
+  });
+  it('assembleOpeningRecordAnswer calls out a strength above 60%', () => {
+    const a = assembleOpeningRecordAnswer({ openingName: 'Italian Game', games: 10, wins: 7, draws: 1, losses: 2, asWhite: 10, asBlack: 0, winRatePct: 70 });
+    expect(a!.facts).toMatch(/is a strength/);
+  });
+  it('assembleOpeningRecordAnswer returns null with no games', () => {
+    expect(assembleOpeningRecordAnswer({ openingName: 'French Defense', games: 0, wins: 0, draws: 0, losses: 0, asWhite: 0, asBlack: 0, winRatePct: 0 })).toBeNull();
+  });
+  it('assembleOpponentRecordAnswer voices the head-to-head + avg elo', () => {
+    const a = assembleOpponentRecordAnswer({ opponentName: 'DrNykterstein', games: 5, wins: 1, draws: 1, losses: 3, avgOpponentElo: 2850 });
+    expect(a!.facts).toMatch(/Against DrNykterstein \(averaging 2850\) you're 1W-1D-3L across 5 games/);
+    expect(a!.facts).toMatch(/better of it/);
+  });
+  it('assembleOpponentRecordAnswer omits elo when unknown and returns null with no games', () => {
+    const a = assembleOpponentRecordAnswer({ opponentName: 'rival42', games: 2, wins: 2, draws: 0, losses: 0, avgOpponentElo: null });
+    expect(a!.facts).toMatch(/Against rival42 you're 2W-0D-0L/);
+    expect(a!.facts).not.toMatch(/averaging/);
+    expect(assembleOpponentRecordAnswer({ opponentName: 'x', games: 0, wins: 0, draws: 0, losses: 0, avgOpponentElo: null })).toBeNull();
   });
   it('assemblePuzzleStatsAnswer voices rating + solved + due', () => {
     const a = assemblePuzzleStatsAnswer({ puzzleRating: 1650, totalAttempted: 200, totalCorrect: 150, overallAccuracy: 75, duePuzzles: 8 });

@@ -66,9 +66,9 @@ import { getStrongestOpenings, getMostPlayedOpenings, getWeakestOpenings, getOpe
 import { getWeakSpotsForOpening } from './weakSpotService';
 import type { OpeningRecord } from '../types';
 import { getOverviewInsights, getMistakeInsights, getTacticInsights, getOpeningInsights } from './gameInsightsService';
-import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer } from './groundedAnswer';
+import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer } from './groundedAnswer';
 import { getDueCount, getEnrolledOpenings, getSrsDueOpenings, getTotalEnrolled } from './srsOpeningService';
-import { criticalMomentsAccuracy, streaks, timeControlPerformance, comebackWins, winShapeStats, colorProficiencyMismatch, personalRecords, tacticTransferGap } from './analyticsService';
+import { criticalMomentsAccuracy, streaks, timeControlPerformance, comebackWins, winShapeStats, colorProficiencyMismatch, personalRecords, tacticTransferGap, recordVsOpening, recordVsOpponent } from './analyticsService';
 import { getPuzzleStats } from './puzzleService';
 import { detectConceptsInText, getConcept } from './chessConceptService';
 import { validateClaims, type ClaimValidationResult } from './claimValidator';
@@ -1301,6 +1301,11 @@ export interface MasterGroundingOptions {
   /** Wave 4 — colour, records, puzzle stats, tactic transfer gap. No board. */
   colorQuestion?: boolean;        // getOverviewInsights + colorProficiencyMismatch → assembleColorAnswer
   recordsQuestion?: boolean;      // personalRecords → assembleRecordsAnswer
+  /** The opening/opponent target captured from a "how do I do against X /
+   *  my record vs X" question. Present → the record-vs interception fires:
+   *  it resolves the target as an opening (recordVsOpening → assembleOpeningRecordAnswer)
+   *  and falls back to opponent (recordVsOpponent → assembleOpponentRecordAnswer). */
+  recordVsTarget?: string;
   puzzleStatsQuestion?: boolean;  // profile.puzzleRating + getPuzzleStats → assemblePuzzleStatsAnswer
   transferGapQuestion?: boolean;  // tacticTransferGap → assembleTransferGapAnswer
   skillRadarQuestion?: boolean;   // profile.skillRadar → assembleSkillRadarAnswer
@@ -1890,6 +1895,7 @@ export async function getCoachChatResponse(
       grounding.convertingQuestion === true ||
       grounding.colorQuestion === true ||
       grounding.recordsQuestion === true ||
+      (grounding.recordVsTarget !== undefined && grounding.recordVsTarget.length > 0) ||
       grounding.puzzleStatsQuestion === true ||
       grounding.transferGapQuestion === true ||
       grounding.skillRadarQuestion === true ||
@@ -1906,6 +1912,42 @@ export async function getCoachChatResponse(
           }
           return undefined;
         };
+
+        // ── RECORD VS OPENING / OPPONENT — "how do I do against the Sicilian? /
+        // what's my record vs <name>?" (David 2026-07-04, the last three
+        // weakness-tab gaps). Runs FIRST — before stats/records — because a
+        // targeted "my record vs X" also trips the generic stats/records
+        // detectors, and the specific answer must win. Disambiguates by trying
+        // to resolve the captured target as a real opening; else treats it as
+        // an opponent. No board.
+        if (grounding.recordVsTarget && grounding.recordVsTarget.length > 0) {
+          try {
+            const target = grounding.recordVsTarget;
+            const opening = await recordVsOpening(target);
+            if (opening) {
+              const answer = assembleOpeningRecordAnswer(opening);
+              if (answer) {
+                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'record-vs-opening' });
+                // No action chip here: we only have the opening's family NAME,
+                // not a routable openingId (the /openings/:id chip needs an id).
+                if (voiced) return voiced;
+              }
+            }
+            const opponent = await recordVsOpponent(target);
+            if (opponent) {
+              const answer = assembleOpponentRecordAnswer(opponent);
+              if (answer) {
+                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'record-vs-opponent' });
+                if (voiced) return voiced;
+              }
+            }
+            // Target didn't resolve to an opening we've played OR a known
+            // opponent — computed no-data line (G0), not an LLM guess.
+            const noDataFact = `I don't have any of your games against "${target}" logged yet. If that's an opening, drill it and I'll start tracking your record; if it's an opponent, we haven't played them in your imported games.`;
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'record-vs' });
+            if (voicedNoData) return voicedNoData;
+          } catch { /* fall through */ }
+        }
 
         // ── STRENGTHS — "what am I good at?" (runs BEFORE progress so the
         // strengths question doesn't get a weakness-dump). Voiced from the

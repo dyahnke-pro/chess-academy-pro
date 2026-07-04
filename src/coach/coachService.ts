@@ -186,7 +186,7 @@ import {
   isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion,
   isRepertoireGapQuestion, repertoireGapKind,
   isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion,
-  isColorQuestion, isRecordsQuestion, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
+  isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
 } from './questionIntents';
 export {
   isPlanQuestion, isBestMoveQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
@@ -197,7 +197,7 @@ export {
   isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion,
   isRepertoireGapQuestion, repertoireGapKind,
   isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion,
-  isColorQuestion, isRecordsQuestion, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
+  isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
 };
 
 export interface CoachServiceOptions {
@@ -980,12 +980,13 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     const convertingQuestionEngage = isConvertingQuestion(input.ask);
     const colorQuestionEngage = isColorQuestion(input.ask);
     const recordsQuestionEngage = isRecordsQuestion(input.ask);
+    const recordVsTargetEngage = recordVsTarget(input.ask);
     const puzzleStatsQuestionEngage = isPuzzleStatsQuestion(input.ask);
     const transferGapQuestionEngage = isTransferGapQuestion(input.ask);
     const skillRadarQuestionEngage = isSkillRadarQuestion(input.ask);
     const autoGrounding =
       options.grounding ??
-      (input.liveState.fen || progressQuestion || conceptQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage
+      (input.liveState.fen || progressQuestion || conceptQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage
         ? {
             currentFen: input.liveState.fen,
             // DB-grounding: thread the move history through so the
@@ -1065,6 +1066,7 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
             convertingQuestion: convertingQuestionEngage,
             colorQuestion: colorQuestionEngage,
             recordsQuestion: recordsQuestionEngage,
+            recordVsTarget: recordVsTargetEngage ?? undefined,
             puzzleStatsQuestion: puzzleStatsQuestionEngage,
             transferGapQuestion: transferGapQuestionEngage,
             skillRadarQuestion: skillRadarQuestionEngage,
