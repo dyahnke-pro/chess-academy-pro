@@ -39,7 +39,8 @@ chat, voice — "Coach is master of its domain, one coherent unit").
 | **Stats / record** ("what's my rating / record / win rate") | `isStatsQuestion` | `assembleStatsAnswer` | `getOverviewInsights` + `profile.currentRating` | `audit-coach-stats-strengths-grounding.mjs` (18/18 grounded) |
 | **Strengths** ("what am I good at") | `isStrengthsQuestion` | `assembleStrengthsAnswer` | `getOverviewInsights().strengths` | same (inverse of weakness path — no more weakness-dump) |
 | **Opening accuracy** ("how accurate am I in my opening / weakest part to work on") | `isOpeningAccuracyQuestion` | `assembleOpeningAccuracyAnswer` | `OpeningRecord.drillAccuracy/Attempts` + `variationAccuracy[]` + `getWeakSpotsForOpening` | `audit-coach-opening-accuracy-grounding.mjs` (7/7 grounded) |
-| **Opening traps** ("traps in my strongest opening / watch out for / how do you teach these") | `isOpeningTrapsQuestion` (+`opensTrapsSystemAsk`) | `assembleOpeningTrapsAnswer` | `OpeningRecord.trapLines`/`warningLines` (named) + strongest-per-color | `audit-coach-opening-traps-grounding.mjs` |
+| **Opening traps** ("traps in my strongest opening / watch out for / how do you teach these") | `isOpeningTrapsQuestion` (+`opensTrapsSystemAsk`) | `assembleOpeningTrapsAnswer` | `OpeningRecord.trapLines`/`warningLines` (named) + strongest-per-color | `audit-coach-opening-traps-grounding.mjs` (7/7; item-5 "how do you teach" → WLPP system, not a drill freestyle) |
+| **Review due (SRS)** ("what's due for review today / how many cards to review") | `isReviewDueQuestion` | `assembleReviewDueAnswer` | live `srsOpeningCards`: `getDueCount` + `getEnrolledOpenings` + `getSrsDueOpenings` | `audit-coach-review-due-grounding.mjs` (guards the review-GAME collision) |
 
 Pre-existing verticals (earlier sessions): progress/weakness, opening-profile
 (which opening), bestMove, tactics, masterPlay, concept, endgame, playerGames,
@@ -57,8 +58,7 @@ plan, positionAssessment.
 ## Roadmap — remaining verticals (next-session pickup)
 
 Grounded-ANSWER verticals (same 5-step pattern, low risk, chat-reply auditable):
-- **SRS / review-due** — "what's due for review today / what should I review":
-  flashcard + SRS store (Dexie). Assembler names counts + the top due items.
+- ~~**SRS / review-due**~~ ✅ SHIPPED (see table above).
 - **Play-eval threading** — on `/coach/play`, "am I winning / what's the eval"
   should voice the live Stockfish eval (thread `evalCp`/`bestMove` into the
   play surface's grounding; assemblers exist — `assemblePositionAssessment`).
@@ -104,6 +104,16 @@ exact "my strongest opening" phrasing is handled correctly today.
 - Audits: `scripts/audit-coach-stats-strengths-grounding.mjs`,
   `scripts/audit-coach-opening-accuracy-grounding.mjs`,
   `scripts/audit-coach-opening-traps-grounding.mjs`.
+
+## Follow-up cleanups (low priority)
+
+- `coachContextEnricher.buildStudyProgressBlock()` injects a passive LLM-context
+  line "Flashcards: N total, N due" reading the DORMANT legacy `db.flashcards`
+  store, not the live `srsOpeningCards`. The grounded review-due chokepoint
+  short-circuits before that context reaches the user for review questions, but
+  for OTHER questions the ambient block reports stale/zero counts. Repoint it at
+  `srsOpeningCards` (getDueCount + getTotalEnrolled) so the ambient context
+  matches the grounded answer.
 
 ## Notes
 
