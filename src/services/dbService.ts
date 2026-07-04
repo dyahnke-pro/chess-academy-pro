@@ -136,14 +136,17 @@ export async function getRepertoireOpenings(): Promise<OpeningRecord[]> {
 }
 
 export async function getOpeningById(id: string): Promise<OpeningRecord | undefined> {
-  const direct = await db.openings.get(id);
-  if (direct) return direct;
-  // Honour the slug-level alias map so /openings/<alias-spelling> URLs
-  // (and any service-layer caller) resolve to the canonical record.
-  // See src/services/openingService.ts for the full alias rationale.
+  // Alias FIRST. Some alias sources ALSO exist as their own (bare) DB record —
+  // e.g. the Lichess ECO twin `c47-four-knights-game-glek-system` is seeded from
+  // openings-lichess.json AND must resolve to the `glek-system` masterclass. A
+  // direct-first lookup would return the bare twin and never reach the alias, so
+  // resolve the alias before the direct id. See openingService.ts for rationale.
   const aliased = OPENING_ID_ALIASES[id];
-  if (aliased) return db.openings.get(aliased);
-  return undefined;
+  if (aliased) {
+    const canonical = await db.openings.get(aliased);
+    if (canonical) return canonical;
+  }
+  return db.openings.get(id);
 }
 
 export async function updateOpeningProgress(

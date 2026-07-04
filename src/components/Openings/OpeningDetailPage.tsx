@@ -43,6 +43,7 @@ import { getKingsGambitTabPlanIds } from '../../services/kingsGambitMasterclassT
 import { getSicilianDragonTabPlanIds } from '../../services/sicilianDragonMasterclassTabs';
 import { getFourKnightsTabPlanIds } from '../../services/fourKnightsMasterclassTabs';
 import { getGlekSystemTabPlanIds } from '../../services/glekSystemMasterclassTabs';
+import { resolveMasterclassRedirect } from '../../services/masterclassRedirect';
 import { getLondonTabPlanIds } from '../../services/londonMasterclassTabs';
 import { getCatalanTabPlanIds } from '../../services/catalanMasterclassTabs';
 import { getEnglishTabPlanIds } from '../../services/englishMasterclassTabs';
@@ -361,9 +362,21 @@ export function OpeningDetailPage(): JSX.Element {
       await whenFullySeeded();
       result = await getOpeningById(id);
     }
+    // If this is a raw ECO variation/subline of a curated masterclass, route to
+    // that masterclass with the correct tab pre-selected instead of showing the
+    // bare reference page (David 2026-07-03). The target is a masterclass, so it
+    // never re-redirects — no loop.
+    if (result) {
+      const redirect = resolveMasterclassRedirect(result);
+      if (redirect && redirect.to !== id) {
+        const qs = redirect.line ? `?line=${encodeURIComponent(redirect.line.toLowerCase())}` : '';
+        void navigate(`/openings/${redirect.to}${qs}`, { replace: true });
+        return;
+      }
+    }
     setOpening(result ?? null);
     setLoading(false);
-  }, [id]);
+  }, [id, navigate]);
 
   useEffect(() => {
     void loadOpening();

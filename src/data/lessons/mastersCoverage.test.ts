@@ -107,6 +107,27 @@ const SUSPECT_BASELINE = new Set<string>([
   'vienna-game::Vienna Gambit::15:Bd2',
   'vienna-game::Paulsen Attack::13:a4',
   'vienna-game::Paulsen Attack::16:Be6',
+  // 2026-07-04: pre-existing master-divergent past-book plies surfaced when the
+  // masters explorer is reachable (CI only — skipped in the sandbox). Each is
+  // ENGINE-SOUND (the 6b soundness pass in this same file does NOT flag them),
+  // and each is either the deliberately-taught GAMBIT/attacking line masters
+  // avoid (Stafford/Englund/Budapest/Smith-Morra/Vienna Gambit/Bird's — the DB
+  // holds only 1–6 games, a single-game "reply" is not theory) or a deep
+  // (ply 16–22) regrouping move in a sparse-masters quiet line (Philidor,
+  // Queen's Indian). Reviewed for legitimacy; the move IS the lesson's point.
+  'Philidor Defence — A Master Class::18:Bb7',
+  'philidor-defence::Antoshin Variation::16:Bf8',
+  "queens-indian::Queen's Indian: 4.e3 System::22:Re8",
+  'budapest-gambit::Budapest Gambit: Alekhine Variation with Bc5::20:Re8',
+  'budapest-gambit::Budapest Gambit: Alekhine Variation::15:Bd2',
+  "birds-opening::Bird's: Williams Variation::15:Nh4",
+  'vienna-gambit::Qf3 Setup (vs …d5)::14:Be7',
+  'vienna-gambit::Qf3 Setup (vs …d5)::16:c6',
+  'smith-morra-gambit::d3 Return Declined::15:O-O',
+  'Stafford Gambit — The Trap::11:h3',
+  'stafford-gambit::Bg5 — the Stafford Mate::11:Bg5',
+  'Englund Gambit — The Trap::11:Bc3',
+  'englund-gambit::The Englund Mate (Qc1#)::11:Bc3',
 ]);
 
 interface MasterMove { san: string; games: number }

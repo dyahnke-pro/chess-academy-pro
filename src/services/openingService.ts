@@ -74,11 +74,15 @@ export const OPENING_ID_ALIASES: Record<string, string> = {
 export async function getOpeningById(
   id: string,
 ): Promise<OpeningRecord | undefined> {
-  const direct = await db.openings.get(id);
-  if (direct) return direct;
+  // Alias FIRST — an alias source can also exist as its own bare DB record (the
+  // ECO twin `c47-four-knights-game-glek-system` → `glek-system` masterclass);
+  // a direct-first lookup would return the bare twin and never reach the alias.
   const aliased = OPENING_ID_ALIASES[id];
-  if (aliased) return db.openings.get(aliased);
-  return undefined;
+  if (aliased) {
+    const canonical = await db.openings.get(aliased);
+    if (canonical) return canonical;
+  }
+  return db.openings.get(id);
 }
 
 /** Returns all openings matching a given ECO code. */
