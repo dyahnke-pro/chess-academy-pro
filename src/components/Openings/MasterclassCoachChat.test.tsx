@@ -3,17 +3,25 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import type { ReactElement } from 'react';
 import { MasterclassCoachChat } from './MasterclassCoachChat';
+import { useAppStore } from '../../stores/appStore';
+import { buildUserProfile } from '../../test/factories';
 
 const wrap = (ui: ReactElement): ReturnType<typeof render> => render(<MemoryRouter>{ui}</MemoryRouter>);
 
 vi.mock('../../services/coachApi', () => ({
   getCoachChatResponse: vi.fn().mockResolvedValue('The plan is the …c5 break.'),
+  consumeCoachActionOffer: vi.fn().mockReturnValue(null),
 }));
 import { getCoachChatResponse } from '../../services/coachApi';
 const mockCoach = vi.mocked(getCoachChatResponse);
 
 describe('MasterclassCoachChat', () => {
-  beforeEach(() => mockCoach.mockClear());
+  beforeEach(() => {
+    mockCoach.mockClear();
+    // ChatInput gates sends on AI data-sharing consent (Apple 5.1.1);
+    // grant it so the send actually reaches the coach in the test.
+    useAppStore.setState({ activeProfile: buildUserProfile({ aiDataConsent: 'granted' }) });
+  });
 
   it('renders nothing for a non-masterclass opening', () => {
     const { container } = wrap(<MasterclassCoachChat openingId="not-a-real-opening" />);

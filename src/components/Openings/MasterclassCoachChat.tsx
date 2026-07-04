@@ -2,7 +2,7 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 import { MessageCircle, X } from 'lucide-react';
 import { ChatMessage } from '../Coach/ChatMessage';
 import { ChatInput } from '../Coach/ChatInput';
-import { getCoachChatResponse } from '../../services/coachApi';
+import { getCoachChatResponse, consumeCoachActionOffer } from '../../services/coachApi';
 import { buildQuestionGrounding } from '../../coach/questionIntents';
 import { groundCoachReply } from '../../services/coachAnswerGates';
 import { buildCourseScope } from '../../data/lessons';
@@ -66,11 +66,21 @@ export function MasterclassCoachChat({ openingId, variationName }: MasterclassCo
             undefined,
             buildQuestionGrounding(text, { openingId }, 'standalone-chat'),
           );
+          // Opt-in follow-up picker the grounded answer attached — read
+          // synchronously right after the await so the set→read pair runs
+          // in one tick (David 2026-07-04). Chip, never auto-launched.
+          const offer = consumeCoachActionOffer();
           // Runtime grounding gate (still runs as a belt-and-suspenders strip
           // of any ungrounded pro statistic in the free-LLM portion).
           const grounded = groundCoachReply(reply, { source: 'masterclassChat' });
           historyRef.current.push({ role: 'assistant', content: grounded });
-          setMessages((prev) => [...prev, { id: `a-${Date.now()}`, role: 'assistant', content: grounded, timestamp: Date.now() }]);
+          setMessages((prev) => [...prev, {
+            id: `a-${Date.now()}`,
+            role: 'assistant',
+            content: grounded,
+            timestamp: Date.now(),
+            ...(offer && offer.length > 0 ? { metadata: { actions: offer } } : {}),
+          }]);
         } catch {
           setMessages((prev) => [...prev, { id: `err-${Date.now()}`, role: 'assistant', content: "I couldn't reach the coach just now — try again in a moment.", timestamp: Date.now() }]);
         } finally {

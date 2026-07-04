@@ -730,6 +730,37 @@ export function consumeLastLlmMetadata(): LastLlmMetadata | null {
   return m;
 }
 
+/** One tappable follow-up the coach offers AFTER a grounded answer —
+ *  the "want to work on this?" picker (David 2026-07-04: "Tie it into
+ *  a picker once the coach answers... Don't just make it automatic").
+ *  `type` maps to a `handleAction` case in ChatMessage.tsx; `id`
+ *  carries the target (openingId, puzzle theme, srs, …). The offer is
+ *  NEVER auto-launched — the surface renders it as a chip the student
+ *  must tap. */
+export interface CoachActionOffer {
+  type: string;
+  id: string;
+}
+
+/** Module-level scratch space for the action offer the last grounded
+ *  answer attached. Mirrors the `lastLlmMetadata` scratch pattern:
+ *  set synchronously inside a grounding interception block right
+ *  before it returns the voiced answer, read synchronously by
+ *  `coachService.ask` immediately after its await so the set→read
+ *  pair runs in one event-loop tick. Reset at the top of every
+ *  `getCoachChatResponse` so a stale offer can't leak into an
+ *  unrelated turn (a plain Q&A that fires no grounded block leaves
+ *  this null → no chip). */
+let lastCoachActionOffer: CoachActionOffer[] | null = null;
+
+/** Read + clear the action offer from the most recent grounded answer.
+ *  Returns null when the last turn attached none. */
+export function consumeCoachActionOffer(): CoachActionOffer[] | null {
+  const o = lastCoachActionOffer;
+  lastCoachActionOffer = null;
+  return o;
+}
+
 async function callDeepSeek(
   apiKey: string,
   model: string,
@@ -1799,6 +1830,11 @@ export async function getCoachChatResponse(
    *  excluded by contract. */
   grounding?: MasterGroundingOptions,
 ): Promise<string> {
+  // Clear any action offer from a prior turn — only a grounded block
+  // that fires THIS turn re-populates it (else the surface shows no
+  // follow-up chip). See `consumeCoachActionOffer`.
+  lastCoachActionOffer = null;
+
   const config = forceProvider
     ? await getForcedProviderConfig(forceProvider)
     : await getProviderConfig();
@@ -1964,7 +2000,12 @@ export async function getCoachChatResponse(
               });
               if (answer) {
                 const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-accuracy' });
-                if (voiced) return voiced;
+                if (voiced) {
+                  // Opt-in "Practice Opening" chip → the resolved opening's
+                  // detail page, where the student drills the weak variation.
+                  lastCoachActionOffer = [{ type: 'drill_opening', id: target.id }];
+                  return voiced;
+                }
               }
             }
             // No opening drilled / no weak-spot data — computed no-data line (G0).
@@ -1996,9 +2037,11 @@ export async function getCoachChatResponse(
               ({ name: o.name, color: o.color, traps: trapNames(o), warnings: warnNames(o) });
 
             let sides: OpeningTrapsSideLike[] = [];
+            let primaryOpening: OpeningRecord | undefined;
             const ctx = grounding.openingId ? await getOpeningById(grounding.openingId) : undefined;
             if (ctx) {
               sides = [toSide(ctx)];
+              primaryOpening = ctx;
             } else {
               // Resolve the strongest opening per color; scope to one side when
               // the question names a color ("for white" / "black traps").
@@ -2008,12 +2051,19 @@ export async function getCoachChatResponse(
                 wantWhite ? getStrongestOpenings(1, 'white') : Promise.resolve([]),
                 wantBlack ? getStrongestOpenings(1, 'black') : Promise.resolve([]),
               ]);
-              sides = [...w, ...b].map(toSide);
+              const both = [...w, ...b];
+              sides = both.map(toSide);
+              primaryOpening = both[0];
             }
             const answer = assembleOpeningTrapsAnswer({ sides, explainSystem: grounding.openingTrapsSystemAsk });
             if (answer) {
               const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-traps' });
-              if (voiced) return voiced;
+              if (voiced) {
+                // Opt-in "Practice Opening" chip → the opening whose traps
+                // we just described, so the student can drill the weapons.
+                if (primaryOpening) lastCoachActionOffer = [{ type: 'drill_opening', id: primaryOpening.id }];
+                return voiced;
+              }
             }
             // No trap data yet — computed no-data line (G0).
             const noDataFact = "I don't have named traps logged for your strongest openings yet. Drill an opening's Watch and Learn rungs and I'll surface its trap weapons and the lines to watch out for.";
@@ -2039,7 +2089,12 @@ export async function getCoachChatResponse(
             const answer = assembleReviewDueAnswer({ dueCount, totalEnrolled, dueOpenings });
             if (answer) {
               const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'review-due' });
-              if (voiced) return voiced;
+              if (voiced) {
+                // Offer the opt-in "Start review" chip when there's
+                // actually something due — never auto-launch the trainer.
+                if (dueCount > 0) lastCoachActionOffer = [{ type: 'start_review', id: 'srs' }];
+                return voiced;
+              }
             }
             // Nothing enrolled yet — computed onboarding line (G0).
             const noDataFact = "You don't have any opening review cards yet. Finish an opening's Learn rung and I'll start scheduling spaced-repetition reps for it — then I can tell you what's due.";
@@ -2068,7 +2123,12 @@ export async function getCoachChatResponse(
             });
             if (answer) {
               const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'mistakes' });
-              if (voiced) return voiced;
+              if (voiced) {
+                // Opt-in "Try Puzzles" chip → adaptive tactics, so the
+                // student drills the error class we just named.
+                lastCoachActionOffer = [{ type: 'puzzle_theme', id: 'adaptive' }];
+                return voiced;
+              }
             }
             const noDataFact = "You haven't analyzed enough games yet for me to break down your mistakes. Analyze a few games and I'll show you exactly where you go wrong and what to drill.";
             const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'mistakes' });
@@ -2092,7 +2152,12 @@ export async function getCoachChatResponse(
             });
             if (answer) {
               const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'tactics-profile' });
-              if (voiced) return voiced;
+              if (voiced) {
+                // Opt-in "Try Puzzles" chip → adaptive tactics, so the
+                // student drills the motif they miss most.
+                lastCoachActionOffer = [{ type: 'puzzle_theme', id: 'adaptive' }];
+                return voiced;
+              }
             }
             const noDataFact = "You haven't analyzed enough games yet for me to profile your tactics. Analyze a few games or solve some puzzles and I'll show you which motifs you miss most.";
             const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'tactics-profile' });

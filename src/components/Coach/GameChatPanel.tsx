@@ -1041,6 +1041,12 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             timestamp: Date.now(),
             metadata: {
               annotations: annotations.length > 0 ? annotations : undefined,
+              // Opt-in follow-up picker the grounded answer attached
+              // (David 2026-07-04) — tappable chip, never auto-launched.
+              actions:
+                answer.actionOffer && answer.actionOffer.length > 0
+                  ? answer.actionOffer
+                  : undefined,
             },
           };
           setMessages((prev) => [...prev, assistantMsg]);
@@ -1298,6 +1304,11 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           role: 'assistant',
           content: drawerAssistantText,
           timestamp: Date.now(),
+          // Opt-in follow-up picker the grounded answer attached
+          // (David 2026-07-04) — tappable chip, never auto-launched.
+          ...(answer.actionOffer && answer.actionOffer.length > 0
+            ? { metadata: { actions: answer.actionOffer } }
+            : {}),
         };
         setMessages((prev) => [...prev, assistantMsg]);
         useCoachMemoryStore.getState().appendConversationMessage({

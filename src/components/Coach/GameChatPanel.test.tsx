@@ -28,6 +28,7 @@ vi.mock('../../services/voiceInputService', () => ({
 
 vi.mock('../../services/coachApi', () => ({
   getCoachChatResponse: (...args: unknown[]): Promise<string> => mockGetCoachChatResponse(...args) as Promise<string>,
+  consumeCoachActionOffer: (): null => null,
 }));
 
 const defaultProps = {
@@ -44,7 +45,9 @@ describe('GameChatPanel', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockGetCoachChatResponse.mockResolvedValue('I see a strong position for white.');
-    const profile = buildUserProfile({ id: 'main', name: 'Player' });
+    // ChatInput gates sends on AI data-sharing consent (Apple 5.1.1);
+    // grant it so the send actually reaches the coach in the test.
+    const profile = buildUserProfile({ id: 'main', name: 'Player', aiDataConsent: 'granted' });
     useAppStore.setState({ activeProfile: profile });
   });
 

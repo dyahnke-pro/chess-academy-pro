@@ -358,6 +358,12 @@ export function CoachChatPage(): JSX.Element {
         content: cleanText,
         modality,
         timestamp: Date.now(),
+        // Opt-in follow-up picker (David 2026-07-04). The grounded
+        // answer may attach a "want to work on this?" action; render it
+        // as a tappable chip — never auto-launch.
+        ...(answer.actionOffer && answer.actionOffer.length > 0
+          ? { metadata: { actions: answer.actionOffer } }
+          : {}),
       };
       appendMessage(assistantMsg);
       recordTurn('coach', cleanText);

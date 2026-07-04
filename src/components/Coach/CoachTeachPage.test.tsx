@@ -46,11 +46,20 @@ vi.mock('../../services/voiceService', () => ({
   },
 }));
 
-vi.mock('../../coach/coachService', () => ({
-  coachService: {
-    ask: vi.fn(),
-  },
-}));
+// Partial mock: only `coachService.ask` is stubbed. The question-intent
+// detectors (isProgressQuestion, isStatsQuestion, …) are pure regex
+// re-exports CoachTeachPage's fuzzy-skip guard imports from here — keep
+// the REAL ones so the guard behaves correctly (a bare `{ ask }` mock
+// left them undefined and crashed the send path).
+vi.mock('../../coach/coachService', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../../coach/coachService')>();
+  return {
+    ...actual,
+    coachService: {
+      ask: vi.fn(),
+    },
+  };
+});
 
 vi.mock('../../services/gameAnalysisService', () => ({
   analyzeRecentGames: vi.fn().mockResolvedValue(0),
@@ -93,7 +102,9 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
     await db.delete();
     await db.open();
     useAppStore.getState().reset();
-    useAppStore.getState().setActiveProfile(buildUserProfile({ name: 'Player' }));
+    // ChatInput gates sends on AI data-sharing consent (Apple 5.1.1);
+    // grant it so the send actually reaches the coach in the test.
+    useAppStore.getState().setActiveProfile(buildUserProfile({ name: 'Player', aiDataConsent: 'granted' }));
     mockSpeakForced.mockResolvedValue(undefined);
   });
 
@@ -162,10 +173,12 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
     expect(screen.queryByText(/Master games show/)).not.toBeInTheDocument();
   });
 
-  it('falls back to first sentence when the brain omits the [VOICE:] marker', async () => {
-    // Defensive fallback: if the brain forgets to wrap its voice
-    // summary, the surface speaks the first sentence so the student
-    // isn't left in silence.
+  it('speaks the full short reply when the brain omits the [VOICE:] marker', async () => {
+    // Defensive fallback (David 2026-07-04 voice-truncation fix): if the
+    // brain forgets to wrap its voice summary, the surface now speaks the
+    // FULL reply when it's short (≤600 chars) so the student hears the
+    // whole answer — not just the first sentence, which used to clip the
+    // grounded numbers off (the "5 master-level games" was going unspoken).
     const fullText = 'Pulling the Vienna explorer data right now. The position has 5 master-level games on this exact line.';
 
     vi.mocked(coachService.ask).mockImplementation(async (_input, options) => {
@@ -183,11 +196,11 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
       expect(spoken.some((s) => s.includes('Pulling the Vienna explorer data'))).toBe(true);
     }, { timeout: 4000 });
 
-    // The second sentence is NOT spoken under the fallback — only
-    // the first sentence is the rescue. The brain is supposed to
-    // emit [VOICE:] for the full summary.
+    // The full reply is spoken under the short-fallback — including the
+    // second sentence's grounded stat that the first-sentence-only
+    // fallback used to drop.
     const allSpoken = mockSpeakForced.mock.calls.map((c) => c[0] as string).join(' || ');
-    expect(allSpoken).not.toContain('5 master-level games');
+    expect(allSpoken).toContain('5 master-level games');
     expect(mockSpeakQueuedForced).not.toHaveBeenCalled();
   });
 

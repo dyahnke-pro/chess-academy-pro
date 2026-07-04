@@ -3560,6 +3560,11 @@ export function CoachTeachPage(): JSX.Element {
           role: 'assistant',
           content: displayText,
           timestamp: Date.now(),
+          // Opt-in follow-up picker the grounded answer attached
+          // (David 2026-07-04) — tappable chip, never auto-launched.
+          ...(result.actionOffer && result.actionOffer.length > 0
+            ? { metadata: { actions: result.actionOffer } }
+            : {}),
         }]);
         useCoachMemoryStore.getState().appendConversationMessage({
           surface: 'chat-teach',

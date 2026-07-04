@@ -57,6 +57,9 @@ const mockProfile = buildUserProfile({
   puzzleRating: 1400,
   xp: 500,
   level: 3,
+  // ChatInput gates sends on AI data-sharing consent (Apple 5.1.1);
+  // grant it so sends actually reach the coach in these tests.
+  aiDataConsent: 'granted',
 });
 
 // Mock scrollIntoView for JSDOM

@@ -37,6 +37,8 @@ import { loadMiddlegamePlanForLive } from './sources/middlegamePlan';
 import { loadModelGamesForLive } from './sources/modelGames';
 import { loadPlayerGamesForLive } from './sources/playerGames';
 import { loadProGameReferenceData } from '../services/proGameReferenceData';
+import { consumeCoachActionOffer } from '../services/coachApi';
+import type { CoachActionOffer } from '../services/coachApi';
 import { deepseekProvider } from './providers/deepseek';
 import { anthropicProvider } from './providers/anthropic';
 import { COACH_TOOLS, getTool, getToolDefinitions } from './tools/registry';
@@ -894,6 +896,11 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
   // Hoisted so the post-loop collapse-retry can re-call the provider with
   // the same grounding/task/maxTokens (see the collapse guard below).
   let lastProviderCallOptions: Parameters<typeof provider.call>[1];
+  // Opt-in follow-up chip a grounded block attached during a provider
+  // call this turn (David 2026-07-04 action-picker). Captured right
+  // after each provider.call so the set→read pair runs in one tick;
+  // held to the end and attached to the returned CoachAnswer.
+  let actionOffer: CoachActionOffer[] | null = null;
 
   for (let trip = 1; trip <= maxRoundTrips; trip++) {
     // Refresh liveFen between trips ONLY (trip > 1). Trip 1 uses the
@@ -1095,6 +1102,19 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     lastResponse = useStreaming && options.onChunk && provider.callStreaming
       ? await provider.callStreaming(currentEnvelope, options.onChunk, providerCallOptions)
       : await provider.call(currentEnvelope, providerCallOptions);
+
+    // Grab any action offer the grounded interception set during this
+    // provider call (read immediately so no unrelated call can clear it).
+    // Defensive: the offer is purely additive UX — a missing/throwing
+    // consumer (e.g. a partial coachApi mock in a test) must NEVER break
+    // the coach's answer.
+    let offeredThisTrip: CoachActionOffer[] | null = null;
+    try {
+      offeredThisTrip = consumeCoachActionOffer();
+    } catch {
+      offeredThisTrip = null;
+    }
+    if (offeredThisTrip) actionOffer = offeredThisTrip;
 
     if (lastResponse.toolCalls.length === 0) {
       // No tools emitted — terminal turn. Exit the loop.
@@ -1577,6 +1597,7 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     toolCallIds: dispatchedIds,
     dispatchedToolNames,
     provider: provider.name,
+    ...(actionOffer && actionOffer.length > 0 ? { actionOffer } : {}),
   };
 }
 
