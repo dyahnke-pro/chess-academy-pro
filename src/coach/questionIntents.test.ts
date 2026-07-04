@@ -11,6 +11,7 @@ import {
   isProgressQuestion,
   isOpeningProfileQuestion,
   openingProfileKind,
+  buildQuestionGrounding,
 } from './coachService';
 
 // David 2026-06-14: "throw the thesaurus at this problem for ALL questions."
@@ -169,6 +170,40 @@ describe('isOpeningProfileQuestion (David 2026-07-04: wire the deterministic ope
     'what are my weaknesses',      // weakness themes, not an opening
     'is the London good',          // opening opinion, not the student's profile
   ])('does NOT match: %s', (q) => expect(isOpeningProfileQuestion(q)).toBe(false));
+});
+
+describe('buildQuestionGrounding — shared cross-surface grounding (David 2026-07-04)', () => {
+  it('sets the progress flag for a weakness question (board-independent)', () => {
+    const g = buildQuestionGrounding('what am I weak in?');
+    expect(g.progressQuestion).toBe(true);
+    expect(g.openingProfileQuestion).toBe(false);
+    expect(g.currentFen).toBeUndefined();
+    expect(g.surface).toBe('/coach/chat');
+  });
+  it('sets the opening-profile flag + kind for a strongest-opening question', () => {
+    const g = buildQuestionGrounding("what's my strongest opening", {}, 'game-chat');
+    expect(g.openingProfileQuestion).toBe(true);
+    expect(g.openingProfileKind).toBe('strongest');
+    expect(g.surface).toBe('/coach/play');
+  });
+  it('threads the board fields + tactics flag for a live-board tactics question', () => {
+    const g = buildQuestionGrounding('is there a tactic here?', { fen: 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4', studentColor: 'white' }, 'game-chat');
+    expect(g.tacticsQuestion).toBe(true);
+    expect(g.currentFen).toContain('RNBQK2R');
+    expect(g.studentColor).toBe('white');
+  });
+  it('threads openingId + concept flag for a concept question on the course page', () => {
+    const g = buildQuestionGrounding('what is a fork', { openingId: 'italian-game' });
+    expect(g.conceptQuestion).toBe(true);
+    expect(g.openingId).toBe('italian-game');
+  });
+  it('sets NO intent flags for a non-question utterance (falls to normal LLM)', () => {
+    const g = buildQuestionGrounding('hey coach nice to see you');
+    expect(g.progressQuestion).toBe(false);
+    expect(g.openingProfileQuestion).toBe(false);
+    expect(g.tacticsQuestion).toBe(false);
+    expect(g.conceptQuestion).toBe(false);
+  });
 });
 
 describe('isBestMoveQuestion', () => {

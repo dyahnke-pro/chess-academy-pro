@@ -3,6 +3,7 @@ import { MessageCircle, X } from 'lucide-react';
 import { ChatMessage } from '../Coach/ChatMessage';
 import { ChatInput } from '../Coach/ChatInput';
 import { getCoachChatResponse } from '../../services/coachApi';
+import { buildQuestionGrounding } from '../../coach/questionIntents';
 import { groundCoachReply } from '../../services/coachAnswerGates';
 import { buildCourseScope } from '../../data/lessons';
 import type { ChatMessage as ChatMessageType } from '../../types';
@@ -48,17 +49,25 @@ export function MasterclassCoachChat({ openingId, variationName }: MasterclassCo
       setBusy(true);
       void (async () => {
         try {
+          // Ground the question BEFORE the free LLM so the opening-page coach
+          // is one coherent unit with Learn/Play (David 2026-07-04): "what am I
+          // weak in?" / "what's my strongest opening?" now voice the computed
+          // data via the same assemblers instead of the old free-narration
+          // punt. Board-independent here (no FEN on the course page); the
+          // openingId scopes any opening-context grounding.
           const reply = await getCoachChatResponse(
             historyRef.current,
             scope.systemAddition,
             undefined,
             'explore_reaction',
             512,
+            undefined,
+            undefined,
+            undefined,
+            buildQuestionGrounding(text, { openingId }, 'standalone-chat'),
           );
-          // Runtime grounding gate (bypasses the coach spine). No live
-          // board here, so the player-stat gate is the load-bearing one:
-          // a masterclass "how does <pro> play this" answer can't ship an
-          // ungrounded pro statistic. The name is kept; the bad stat drops.
+          // Runtime grounding gate (still runs as a belt-and-suspenders strip
+          // of any ungrounded pro statistic in the free-LLM portion).
           const grounded = groundCoachReply(reply, { source: 'masterclassChat' });
           historyRef.current.push({ role: 'assistant', content: grounded });
           setMessages((prev) => [...prev, { id: `a-${Date.now()}`, role: 'assistant', content: grounded, timestamp: Date.now() }]);
