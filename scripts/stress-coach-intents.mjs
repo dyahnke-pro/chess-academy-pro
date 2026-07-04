@@ -77,6 +77,29 @@ const BATTERY = [
   ['repertoireGap', ['what am i unprepared for', 'wheres the gap in my prep', 'what should i learn next',
     'what do i need an answer to', 'what gives me the most trouble']],
   ['openingTraps', ['any traps in my openings', 'gimme traps for my repertoire', 'what should i look out for']],
+
+  // ═══ PASS 3 — ENTIRELY DIFFERENT phrasings (David: run it again, different Qs) ═══
+  ['stats', ["what's my level", 'how strong a player am i', "what's my chess rating",
+    'do i win more than i lose', "how's my win rate", "what's my track record", 'am i any good']],
+  ['strengths', ["what's my forte", 'what do i have going for me', 'what am i naturally good at',
+    "what's working in my game", "what's my best quality"]],
+  ['progress', ["what's my biggest flaw", 'what holds me back', 'what should i fix',
+    "what's my achilles heel", 'what should i work on', 'how do i improve', 'what are my weaknesses']],
+  ['openingProfile', ['which opening suits me best', "what's my bread and butter opening",
+    'what do i open with most', "what's my go-to defense", "what's my best opening"]],
+  ['openingAccuracy', ['am i solid in my openings', 'how deep is my opening knowledge',
+    'do i know my openings well', 'where does my opening prep fall apart']],
+  ['openingTraps', ['any tricks in my openings', 'what tricks can i play', 'how do i trap my opponent']],
+  ['reviewDue', ["what's on my plate today for review", 'should i do my reps', 'how much review do i owe',
+    'are my flashcards ready']],
+  ['mistakes', ['what do i mess up', "where's my play sloppy", "what's costing me games",
+    'do i drop pieces', 'what am i screwing up']],
+  ['tacticsProfile', ['am i sharp tactically', "how's my tactical vision", 'do i find combinations',
+    'am i missing shots']],
+  ['phase', ['do i fade in long games', 'am i an opening or endgame player',
+    'where does my game fall apart', 'which part of the game is my weakest']],
+  ['repertoireGap', ["what's missing in my prep", 'which openings catch me off guard',
+    'where am i exposed', 'what do opponents get me with']],
 ];
 
 // Which OTHER detectors firing on a phrasing count as a real misroute. The
