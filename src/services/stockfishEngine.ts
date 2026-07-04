@@ -1040,25 +1040,34 @@ class StockfishEngine {
       });
       return cached;
     }
-    const promise = this.analyzePosition(fen, depth);
-    const timer = setTimeout(() => {
-      // Force Stockfish to emit bestmove from current best line.
-      this.stop();
-    }, budgetMs);
-    // Brain-path fast recovery: `stop()` above is a no-op on a dead worker,
-    // so if no bestmove lands within the grace, the engine is gone — recover
-    // NOW so the brain (and the coach UI awaiting it) doesn't hang. Rejecting
-    // here surfaces to stockfishEval → { ok:false } → the grounded
-    // "I can't verify" fallback, never a frozen turn (David 2026-06-16).
-    const graceTimer = setTimeout(() => {
-      this.recoverStuckAnalysis('budget grace exceeded (engine not responding to stop)');
-    }, budgetMs + ANALYSIS_BUDGET_GRACE_MS);
+    // One budgeted attempt: force a bestmove at the budget, and if nothing
+    // lands within the grace the (iOS) worker is dead → recover so the caller
+    // doesn't hang (David 2026-06-16).
+    const runOnce = async (): Promise<StockfishAnalysis> => {
+      const promise = this.analyzePosition(fen, depth);
+      const timer = setTimeout(() => this.stop(), budgetMs);
+      const graceTimer = setTimeout(() => {
+        this.recoverStuckAnalysis('budget grace exceeded (engine not responding to stop)');
+      }, budgetMs + ANALYSIS_BUDGET_GRACE_MS);
+      try {
+        return await promise;
+      } finally {
+        clearTimeout(timer);
+        clearTimeout(graceTimer);
+      }
+    };
     try {
-      const result = await promise;
-      return result;
-    } finally {
-      clearTimeout(timer);
-      clearTimeout(graceTimer);
+      return await runOnce();
+    } catch (err) {
+      // A deliberate prefetch drop is not a failure — don't retry it.
+      if (err instanceof PrefetchDroppedError) throw err;
+      // Worker died (the grace timer just reset it). Retry ONCE on a FRESH
+      // worker — the asm engine analyzes any position fine when alive (David
+      // 2026-07-04 node repro), so a respawn recovers instead of failing the
+      // grounding (calc/narration) to a cold timeout. This is the direct
+      // self-heal for every budgeted grounding caller, not just via ponder.
+      this.forceRestart('analyzeWithBudget retry-on-death');
+      return await runOnce();
     }
   }
 

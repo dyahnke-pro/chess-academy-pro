@@ -482,6 +482,12 @@ describe('StockfishEngine', () => {
       const pmMock = mockWorker.instance.postMessage as ReturnType<typeof vi.fn>;
       pmMock.mockImplementation((msg: string) => {
         mockWorker.postMessageCalls.push(msg);
+        // Complete the UCI handshake so a RESPAWNED worker (after a
+        // forceRestart self-heal) finishes init — it just stays silent on
+        // `go`, modelling a fresh-but-still-dead worker.
+        if (msg === 'uci') {
+          queueMicrotask(() => mockWorker.emit('uciok'));
+        }
         if (msg === 'isready') {
           queueMicrotask(() => mockWorker.emit('readyok'));
         }
@@ -517,8 +523,13 @@ describe('StockfishEngine', () => {
       const p = stockfishEngine.analyzeWithBudget(STARTING_FEN, 12, 300);
       const expectation = expect(p).rejects.toThrow(/analysis aborted/);
       await vi.advanceTimersByTimeAsync(0);
-      // budget(300) + grace(2000) ≈ 2.3s — recovers well before the 30s backstop.
-      await vi.advanceTimersByTimeAsync(2_400);
+      // analyzeWithBudget now RETRIES once on a fresh worker (self-heal for the
+      // transient iOS worker death — David 2026-07-04). With a permanently-dead
+      // mock (never returns bestmove) BOTH attempts hit their budget(300)+grace
+      // (2000) ≈ 2.3s, so it finally rejects after ~2× that — still well before
+      // the 30s backstop. In the REAL case the 2nd attempt hits a live respawned
+      // worker and resolves fast; only this dead-mock path exercises the reject.
+      await vi.advanceTimersByTimeAsync(5_200);
       await expectation;
       vi.useRealTimers();
     });
