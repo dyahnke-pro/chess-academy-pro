@@ -44,7 +44,17 @@ export function autoDismissCalibration() {
     const close = document.querySelector('[data-testid="page-help-close"]');
     if (close) close.click();
   };
-  const sweep = () => { inject(); clickBand(); closePageHelp(); };
+  // best-effort: ACCEPT the first-run AI-consent modal so the coach can call
+  // the LLM. It's a full-screen dialog shown once on boot when consent is
+  // "unasked"; without accepting it the coach's chat input sits behind the
+  // dialog and every audit click times out. Must be a real click (it writes the
+  // consent decision) — a coach audit's whole point is exercising the LLM, which
+  // requires consent. Reappears after an IndexedDB clear, so the sweep re-runs.
+  const acceptAiConsent = () => {
+    const allow = document.querySelector('[data-testid="ai-consent-allow"]');
+    if (allow) allow.click();
+  };
+  const sweep = () => { inject(); clickBand(); closePageHelp(); acceptAiConsent(); };
   const start = () => {
     if (!document.body) { setTimeout(start, 50); return; }
     new MutationObserver(sweep).observe(document.body, { childList: true, subtree: true });
