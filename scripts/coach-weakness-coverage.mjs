@@ -15,7 +15,7 @@ const DETECTORS = {
   masterPlay: Q.isMasterPlayQuestion, endgame: Q.isEndgameQuestion, playerGames: Q.isPlayerGamesQuestion,
   concept: Q.isConceptQuestion, plan: Q.isPlanQuestion,
   accuracy: Q.isAccuracyQuestion, consistency: Q.isConsistencyQuestion, converting: Q.isConvertingQuestion,
-  color: Q.isColorQuestion, records: Q.isRecordsQuestion, recordVs: Q.isRecordVsQuestion, puzzleStats: Q.isPuzzleStatsQuestion, transferGap: Q.isTransferGapQuestion, skillRadar: Q.isSkillRadarQuestion,
+  color: Q.isColorQuestion, records: Q.isRecordsQuestion, recordVs: Q.isRecordVsQuestion, moveRating: Q.isMoveRatingQuestion, puzzleStats: Q.isPuzzleStatsQuestion, transferGap: Q.isTransferGapQuestion, skillRadar: Q.isSkillRadarQuestion,
 };
 const fires = (q) => Object.entries(DETECTORS).filter(([, fn]) => fn(q)).map(([k]) => k);
 
@@ -59,7 +59,7 @@ const MATRIX = [
   ['personal records / bests', ["what's my best game", 'my fastest win', 'my longest game', 'my best scalp'], 'records'],
   ['record vs a specific opening', ['how do I do against the Sicilian', 'my record vs the French', 'what\'s my record in the Najdorf'], 'recordVs'],
   ['record vs a specific opponent', ['my record against Magnus', 'how do I fare versus Hikaru', 'results against DrNykterstein'], 'recordVs'],
-  ['rate my last move', ['was that a good move', 'rate my last move'], null],
+  ['rate my last move', ['was that a good move', 'rate my last move', 'was that a blunder', 'how good was that move'], 'moveRating'],
 ];
 
 let covered = 0, gaps = 0, misroutes = 0;

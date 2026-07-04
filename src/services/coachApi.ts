@@ -66,7 +66,8 @@ import { getStrongestOpenings, getMostPlayedOpenings, getWeakestOpenings, getOpe
 import { getWeakSpotsForOpening } from './weakSpotService';
 import type { OpeningRecord } from '../types';
 import { getOverviewInsights, getMistakeInsights, getTacticInsights, getOpeningInsights } from './gameInsightsService';
-import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer } from './groundedAnswer';
+import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer } from './groundedAnswer';
+import { computeLastMoveRating } from './moveRating';
 import { getDueCount, getEnrolledOpenings, getSrsDueOpenings, getTotalEnrolled } from './srsOpeningService';
 import { criticalMomentsAccuracy, streaks, timeControlPerformance, comebackWins, winShapeStats, colorProficiencyMismatch, personalRecords, tacticTransferGap, recordVsOpening, recordVsOpponent } from './analyticsService';
 import { getPuzzleStats } from './puzzleService';
@@ -1306,6 +1307,11 @@ export interface MasterGroundingOptions {
    *  it resolves the target as an opening (recordVsOpening → assembleOpeningRecordAnswer)
    *  and falls back to opponent (recordVsOpponent → assembleOpponentRecordAnswer). */
   recordVsTarget?: string;
+  /** "was that a good move? / rate my last move" — board-DEPENDENT. Rates the
+   *  student's LAST move by comparing it to the engine's best at the pre-move
+   *  position (moveRating.computeLastMoveRating → assembleMoveRatingAnswer).
+   *  Needs `moveHistory`; falls through when absent. */
+  moveRatingQuestion?: boolean;
   puzzleStatsQuestion?: boolean;  // profile.puzzleRating + getPuzzleStats → assemblePuzzleStatsAnswer
   transferGapQuestion?: boolean;  // tacticTransferGap → assembleTransferGapAnswer
   skillRadarQuestion?: boolean;   // profile.skillRadar → assembleSkillRadarAnswer
@@ -1896,6 +1902,7 @@ export async function getCoachChatResponse(
       grounding.colorQuestion === true ||
       grounding.recordsQuestion === true ||
       (grounding.recordVsTarget !== undefined && grounding.recordVsTarget.length > 0) ||
+      grounding.moveRatingQuestion === true ||
       grounding.puzzleStatsQuestion === true ||
       grounding.transferGapQuestion === true ||
       grounding.skillRadarQuestion === true ||
@@ -1946,6 +1953,36 @@ export async function getCoachChatResponse(
             const noDataFact = `I don't have any of your games against "${target}" logged yet. If that's an opening, drill it and I'll start tracking your record; if it's an opponent, we haven't played them in your imported games.`;
             const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'record-vs' });
             if (voicedNoData) return voicedNoData;
+          } catch { /* fall through */ }
+        }
+
+        // ── RATE MY LAST MOVE — "was that a good move? / rate my last move"
+        // (David 2026-07-04, the last weakness-tab gap). Board-DEPENDENT: rates
+        // the move the student JUST played by evaluating the position BEFORE it
+        // and comparing the played move to the engine's best (moveRating). G0 —
+        // the verdict + cp-loss are computed by Stockfish, the LLM only voices
+        // them. Falls through when there's no move history to reconstruct from.
+        if (grounding.moveRatingQuestion && grounding.moveHistory && grounding.moveHistory.length > 0) {
+          try {
+            const rating = await computeLastMoveRating(grounding.moveHistory);
+            if (rating) {
+              const answer = assembleMoveRatingAnswer(rating);
+              if (answer) {
+                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'move-rating' });
+                if (voiced) {
+                  // Offer an "Analyse Position" chip when the move was a real
+                  // error, so the student can dig into the line — opt-in.
+                  if (rating.quality === 'mistake' || rating.quality === 'blunder') {
+                    lastCoachActionOffer = [{ type: 'analyse_position', id: 'current' }];
+                  }
+                  return answer.bestMoveFromTo
+                    ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
+                    : voiced;
+                }
+              }
+            }
+            // Couldn't reconstruct / engine unavailable — fall through to the
+            // normal path rather than fabricate a rating (G0).
           } catch { /* fall through */ }
         }
 

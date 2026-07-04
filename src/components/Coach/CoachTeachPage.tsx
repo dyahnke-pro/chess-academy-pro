@@ -85,7 +85,7 @@ import { PlayerInfoBar } from './PlayerInfoBar';
 import { PositionNarrationBanner } from './PositionNarrationBanner';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
 import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
-import { coachService, isProgressQuestion, isConceptQuestion, isOpeningProfileQuestion, isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion, isOpeningTrapsQuestion, isReviewDueQuestion, isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion, isRepertoireGapQuestion, isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion, isColorQuestion, isRecordsQuestion, isRecordVsQuestion, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion } from '../../coach/coachService';
+import { coachService, isProgressQuestion, isConceptQuestion, isOpeningProfileQuestion, isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion, isOpeningTrapsQuestion, isReviewDueQuestion, isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion, isRepertoireGapQuestion, isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion, isColorQuestion, isRecordsQuestion, isRecordVsQuestion, isMoveRatingQuestion, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion } from '../../coach/coachService';
 import { logAppAudit, mintTurnId, setCurrentTurnId } from '../../services/appAuditor';
 import { resolveCoachNarration } from '../../utils/coachNarration';
 import { recoverCoachMoveFromText } from '../../utils/recoverCoachMove';
@@ -2112,7 +2112,7 @@ export function CoachTeachPage(): JSX.Element {
       // "am i improving" → "did you mean one of these?"). Falls through to the
       // Tier 2.5 pre-flight → brain, where isProgressQuestion/isConceptQuestion
       // route to the grounded voiceFacts path.
-      if (requestedName && !isProgressQuestion(text) && !isConceptQuestion(text) && !isOpeningProfileQuestion(text) && !isStatsQuestion(text) && !isStrengthsQuestion(text) && !isOpeningAccuracyQuestion(text) && !isOpeningTrapsQuestion(text) && !isReviewDueQuestion(text) && !isMistakesQuestion(text) && !isTacticsProfileQuestion(text) && !isPhaseQuestion(text) && !isRepertoireGapQuestion(text) && !isAccuracyQuestion(text) && !isConsistencyQuestion(text) && !isConvertingQuestion(text) && !isColorQuestion(text) && !isRecordsQuestion(text) && !isRecordVsQuestion(text) && !isPuzzleStatsQuestion(text) && !isTransferGapQuestion(text) && !isSkillRadarQuestion(text)) {
+      if (requestedName && !isProgressQuestion(text) && !isConceptQuestion(text) && !isOpeningProfileQuestion(text) && !isStatsQuestion(text) && !isStrengthsQuestion(text) && !isOpeningAccuracyQuestion(text) && !isOpeningTrapsQuestion(text) && !isReviewDueQuestion(text) && !isMistakesQuestion(text) && !isTacticsProfileQuestion(text) && !isPhaseQuestion(text) && !isRepertoireGapQuestion(text) && !isAccuracyQuestion(text) && !isConsistencyQuestion(text) && !isConvertingQuestion(text) && !isColorQuestion(text) && !isRecordsQuestion(text) && !isRecordVsQuestion(text) && !isMoveRatingQuestion(text) && !isPuzzleStatsQuestion(text) && !isTransferGapQuestion(text) && !isSkillRadarQuestion(text)) {
         const fuzzy = fuzzyMatchOpening(requestedName);
         if (fuzzy.autoAccept && fuzzy.candidates[0]) {
           const top = fuzzy.candidates[0];

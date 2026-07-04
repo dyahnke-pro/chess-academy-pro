@@ -12,7 +12,7 @@ import {
   isBestMoveQuestion, isTacticsQuestion, isPositionAssessmentQuestion, isMasterPlayQuestion,
   isEndgameQuestion, isPlayerGamesQuestion, isConceptQuestion, isPlanQuestion,
   isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion,
-  isColorQuestion, isRecordsQuestion, isRecordVsQuestion, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
+  isColorQuestion, isRecordsQuestion, isRecordVsQuestion, isMoveRatingQuestion, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
 } from '../src/coach/questionIntents.ts';
 
 const DETECTORS = {
@@ -24,7 +24,7 @@ const DETECTORS = {
   positionAssessment: isPositionAssessmentQuestion, masterPlay: isMasterPlayQuestion,
   endgame: isEndgameQuestion, playerGames: isPlayerGamesQuestion, concept: isConceptQuestion, plan: isPlanQuestion,
   accuracy: isAccuracyQuestion, consistency: isConsistencyQuestion, converting: isConvertingQuestion,
-  color: isColorQuestion, records: isRecordsQuestion, recordVs: isRecordVsQuestion, puzzleStats: isPuzzleStatsQuestion, transferGap: isTransferGapQuestion, skillRadar: isSkillRadarQuestion,
+  color: isColorQuestion, records: isRecordsQuestion, recordVs: isRecordVsQuestion, moveRating: isMoveRatingQuestion, puzzleStats: isPuzzleStatsQuestion, transferGap: isTransferGapQuestion, skillRadar: isSkillRadarQuestion,
 };
 
 // expected: the detector that SHOULD fire. Rephrasings hammer each vertical.
@@ -132,6 +132,13 @@ const BATTERY = [
     'my record against Magnus', 'how do i do versus Hikaru', 'results against DrNykterstein',
     'how do i fare vs that player', "what's my head to head with Nakamura", 'my win rate against the London',
     'HOW DO I DO AGAINST THE SICILIAN', '  my record vs the french  ']],
+
+  // ═══ MOVE RATING — "was that a good move?" (board-dependent; rates the
+  //     move just played). MUST stay distinct from bestMove ("what SHOULD I play"). ═══
+  ['moveRating', ['was that a good move', 'was that a good move?', 'rate my last move', 'was that a blunder',
+    'was that a mistake', 'how good was that move', 'was my last move good', 'was my move a mistake',
+    'did i play that right', 'grade my move', 'was that the best move', 'rate my move',
+    'WAS THAT A GOOD MOVE', '  rate my last move  ']],
 ];
 
 // GARBAGE / non-questions — MUST match NOTHING (false-positive guard).

@@ -825,6 +825,23 @@ export function isRecordVsQuestion(ask: string | undefined): boolean {
   return recordVsTarget(ask) !== null;
 }
 
+/** "was that a good move? / rate my last move" → assembleMoveRatingAnswer.
+ *  Board-DEPENDENT — rates the move the student JUST played by comparing it
+ *  to the engine's best at the pre-move position. Distinct from
+ *  isBestMoveQuestion ("what SHOULD I play?"): this grades a move already on
+ *  the board. The interception falls through when there's no move history. */
+const MOVE_RATING_RE = anyOf([
+  String.raw`\b(?:was|is|were)\s+(?:that|this|it|my\s+(?:last\s+)?move|my\s+move)\s+(?:a\s+|an\s+|the\s+)?(?:good|bad|great|strong|weak|sound|solid|best|right|correct|blunder|mistake|inaccuracy|error|ok|okay)\b`,
+  String.raw`\brate\s+(?:my|that|this|the)\s+(?:last\s+)?move\b`,
+  String.raw`\bgrade\s+(?:my|that|this|the)\s+(?:last\s+)?move\b`,
+  String.raw`\bhow\s+(?:good|bad|strong|was)\s+(?:was\s+)?(?:that|this|it|my\s+(?:last\s+)?move|my\s+move)\b`,
+  String.raw`\bdid\s+i\s+(?:play|make|pick|choose)\s+(?:that|it|the\s+right\s+move|a\s+good\s+move|well)\b`,
+  String.raw`\bwas\s+(?:that|my\s+(?:last\s+)?move)\s+(?:the\s+)?(?:right|best)\b`,
+]);
+export function isMoveRatingQuestion(ask: string | undefined): boolean {
+  return !!ask && MOVE_RATING_RE.test(ask);
+}
+
 /** "my puzzle rating / how many puzzles have I solved" → assemblePuzzleStatsAnswer. */
 const PUZZLE_STATS_RE = anyOf([
   String.raw`\bmy\s+puzzle\s+(?:rating|accuracy|stats?|score)\b`,
@@ -925,6 +942,7 @@ export function buildQuestionGrounding(
     colorQuestion: isColorQuestion(ask),
     recordsQuestion: isRecordsQuestion(ask),
     recordVsTarget: recordVsTarget(ask) ?? undefined,
+    moveRatingQuestion: isMoveRatingQuestion(ask),
     puzzleStatsQuestion: isPuzzleStatsQuestion(ask),
     transferGapQuestion: isTransferGapQuestion(ask),
     skillRadarQuestion: isSkillRadarQuestion(ask),

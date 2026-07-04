@@ -29,6 +29,7 @@ import {
   recordVsTarget,
   isRecordVsQuestion,
   isRecordsQuestion,
+  isMoveRatingQuestion,
 } from './coachService';
 
 // David 2026-06-14: "throw the thesaurus at this problem for ALL questions."
@@ -734,5 +735,39 @@ describe('recordVsTarget / isRecordVsQuestion (David 2026-07-04: record vs a spe
   it('keeps a qualified filler like "that player" (unresolvable → no-data, still covered)', () => {
     expect(recordVsTarget('how do I fare vs that player')).toBe('that player');
     expect(isRecordVsQuestion('how do I fare vs that player')).toBe(true);
+  });
+});
+
+describe('isMoveRatingQuestion (David 2026-07-04: rate the move just played)', () => {
+  it.each([
+    'was that a good move',
+    'was that a good move?',
+    'rate my last move',
+    'rate my move',
+    'was that a blunder',
+    'was that a mistake',
+    'was my last move good',
+    'was my move a mistake',
+    'how good was that move',
+    'how was that move',
+    'did i play that right',
+    'grade my move',
+    'was that the best move',
+    'WAS THAT A GOOD MOVE',
+    '  rate my last move  ',
+  ])('matches: %s', (q) => expect(isMoveRatingQuestion(q)).toBe(true));
+
+  it.each([
+    'what should I play here',      // asking for THE best (bestMove), not rating a played move
+    'what is the best move',        // bestMove
+    "what's a good opening",        // opening opinion
+    'what are my weaknesses',       // progress
+    'how do I do against the Sicilian', // record-vs
+  ])('does NOT match: %s', (q) => expect(isMoveRatingQuestion(q)).toBe(false));
+
+  it('stays distinct from the forward best-move ask (chokepoint runs rating first when a move was played)', () => {
+    // "was that the best move" is a rating (past); "what's the best move" is forward.
+    expect(isMoveRatingQuestion('was that the best move')).toBe(true);
+    expect(isBestMoveQuestion('what is the best move here')).toBe(true);
   });
 });

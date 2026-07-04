@@ -1545,6 +1545,49 @@ export function assembleOpponentRecordAnswer(r: OpponentRecordLike): GroundedAns
   };
 }
 
+/** Rating of the student's last move (computed by moveRating.ts). */
+export interface MoveRatingLike {
+  playedSan: string;
+  wasBest: boolean;
+  cpLoss: number;
+  quality: 'best' | 'excellent' | 'good' | 'inaccuracy' | 'mistake' | 'blunder';
+  betterSan: string | null;
+  betterFromTo: { from: string; to: string } | null;
+  missedMate: number | null;
+  allowedMate: number | null;
+}
+/** assembleMoveRatingAnswer — "was that a good move?" G0. States the computed
+ *  verdict, the eval swing, and the better move (with a green arrow) when the
+ *  student missed it. No praise-for-praise — the verdict IS the content. */
+export function assembleMoveRatingAnswer(r: MoveRatingLike): GroundedAnswer | null {
+  const pawns = (r.cpLoss / 100).toFixed(1);
+  const better = r.betterSan ? ` The engine preferred ${r.betterSan}.` : '';
+  const arrow = r.betterSan && r.betterFromTo
+    ? { bestMoveSan: r.betterSan, bestMoveFromTo: r.betterFromTo }
+    : { bestMoveSan: null, bestMoveFromTo: null };
+
+  let verdict: string;
+  if (r.allowedMate !== null) {
+    verdict = `${r.playedSan} walks into a forced mate in ${r.allowedMate}.${better}`;
+  } else if (r.missedMate !== null) {
+    verdict = `${r.playedSan} misses a forced mate in ${r.missedMate}.${better}`;
+  } else if (r.wasBest || r.quality === 'best') {
+    verdict = `${r.playedSan} was the engine's top move — you gave up nothing.`;
+  } else if (r.quality === 'excellent') {
+    verdict = `${r.playedSan} is within a whisker of best — about ${pawns} pawns.${better}`;
+  } else if (r.quality === 'good') {
+    verdict = `${r.playedSan} is fine; it cost only about ${pawns} pawns.${better}`;
+  } else if (r.quality === 'inaccuracy') {
+    verdict = `${r.playedSan} is a slight inaccuracy — it let about ${pawns} pawns slip.${better}`;
+  } else if (r.quality === 'mistake') {
+    verdict = `${r.playedSan} is a mistake: it cost about ${pawns} pawns.${better}`;
+  } else {
+    verdict = `${r.playedSan} is a blunder — it dropped about ${pawns} pawns.${better}`;
+  }
+
+  return { facts: verdict, ...arrow, sources: ['engine:stockfish'] };
+}
+
 /** Puzzle rating + solve stats. */
 export interface PuzzleStatsLike {
   puzzleRating: number | null;

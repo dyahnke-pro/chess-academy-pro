@@ -186,7 +186,7 @@ import {
   isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion,
   isRepertoireGapQuestion, repertoireGapKind,
   isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion,
-  isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
+  isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
 } from './questionIntents';
 export {
   isPlanQuestion, isBestMoveQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
@@ -197,7 +197,7 @@ export {
   isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion,
   isRepertoireGapQuestion, repertoireGapKind,
   isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion,
-  isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
+  isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
 };
 
 export interface CoachServiceOptions {
@@ -1067,6 +1067,8 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
             colorQuestion: colorQuestionEngage,
             recordsQuestion: recordsQuestionEngage,
             recordVsTarget: recordVsTargetEngage ?? undefined,
+            // "was that a good move?" — board-dependent; rides the fen gate.
+            moveRatingQuestion: isMoveRatingQuestion(input.ask),
             puzzleStatsQuestion: puzzleStatsQuestionEngage,
             transferGapQuestion: transferGapQuestionEngage,
             skillRadarQuestion: skillRadarQuestionEngage,
