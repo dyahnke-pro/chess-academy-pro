@@ -8,6 +8,7 @@ import { voiceService } from '../../services/voiceService';
 import { speechService } from '../../services/speechService';
 import { useAppStore } from '../../stores/appStore';
 import { getCoachChatResponse } from '../../services/coachApi';
+import { isSpokenSentenceGrounded, groundCoachReply } from '../../services/coachAnswerGates';
 import { buildQuestionGrounding } from '../../coach/questionIntents';
 import { tryRouteIntent } from '../../services/coachIntentRouter';
 import { logAppAudit } from '../../services/appAuditor';
@@ -563,6 +564,14 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
         .replace(/^(great question!?|excellent!?|good question!?|nice (one|question)!?|interesting!?|that'?s a (great|good|nice) (question|one)!?)\s*/i, '')
         .trim();
       if (!trimmed) return;
+      // Ground the streamed sentence against the live board BEFORE it's spoken.
+      // This voice path streams straight to Polly (before any final-text gate),
+      // so a board-false / out-of-vocab-tactic sentence must be dropped here or
+      // it's HEARD — the voice mic was the last ungated coach voice surface
+      // (David 2026-07-04 grounding-coverage sweep). Board-only (no tactics
+      // context on this surface yet; a fabricated piece-on-square is the risk).
+      const gfen = getCurrentFen?.() ?? fen ?? null;
+      if (!isSpokenSentenceGrounded(trimmed, gfen, 'VoiceChatMic')) return;
       speechChain = speechChain
         .then(() => voiceService.speakForced(trimmed))
         .catch((err: unknown) => {
@@ -626,7 +635,11 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
     const afterMemory = extractAndRememberNotes(rawResponse);
 
     // Extract arrow annotations before flushing remaining speech
-    const { arrows: responseArrows, cleanText: response } = extractArrows(afterMemory);
+    const { arrows: responseArrows, cleanText: rawClean } = extractArrows(afterMemory);
+    // Ground the DISPLAYED bubble the same way the spoken sentences are gated
+    // above (written == verbal) — drop board-false / ungrounded-stat sentences
+    // so the student never reads a hallucination the voice already refused.
+    const response = groundCoachReply(rawClean, { fen: getCurrentFen?.() ?? fen ?? null, source: 'VoiceChatMic' });
 
     // Flush remaining text (cleaned of arrow tags)
     const { cleanText: cleanBuffer } = extractArrows(sentenceBuffer);
