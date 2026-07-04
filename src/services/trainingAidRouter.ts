@@ -114,16 +114,27 @@ export function matchTrainingAidRoute(text: string): TrainingAidRoute | null {
     return { path: '/coach/endgame?tab=principles', ack: 'Loading endgame principles.', aid: 'endgame-principles' };
   }
 
-  // 8. Tactics / puzzles (+ named theme when present). The word
-  //    "puzzle"/"tactic" is an explicit trainer request; a bare named
-  //    theme ("drill forks") needs a framing verb so we don't hijack
-  //    "was that a fork?".
-  const hasPuzzleWord = /\b(?:puzzle|puzzles|tactic|tactics|tactical)\b/i.test(lower);
+  // 8. Tactics / puzzles (+ named theme when present).
+  //    A tactics QUESTION about the LIVE board ("is there a tactic here?",
+  //    "any tactics in this position?", "what tactics should I look for?") must
+  //    reach the grounded brain (isTacticsQuestion) — NOT get yanked into a
+  //    puzzle drill that navigates the student OUT of their live /coach/play
+  //    game (David 2026-07-04 adversarial audit). Two rules:
+  //      - "puzzle(s)" is an explicit TRAINER noun → always a drill request.
+  //      - a bare "tactic(s)/tactical" or a named motif ("fork") is ambiguous:
+  //        drill ONLY with a framing verb AND no live-board reference;
+  //        otherwise it's a board question and falls through to the brain.
+  const hasExplicitPuzzleWord = /\bpuzzles?\b/i.test(lower);
+  const hasTacticWord = /\b(?:tactics?|tactical)\b/i.test(lower);
+  const referencesLiveBoard = /\b(?:here|this position|this one|in this|on the board|right now|current position|this game)\b/i.test(lower);
   const theme = resolveTacticalTheme(lower);
-  if (hasPuzzleWord) {
+  if (hasExplicitPuzzleWord) {
     return puzzleRoute(theme);
   }
-  if (theme && theme !== 'endgame' && framed) {
+  if (hasTacticWord && framed && !referencesLiveBoard) {
+    return puzzleRoute(theme);
+  }
+  if (theme && theme !== 'endgame' && framed && !referencesLiveBoard) {
     return puzzleRoute(theme);
   }
 
