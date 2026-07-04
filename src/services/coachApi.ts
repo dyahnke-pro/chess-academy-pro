@@ -1975,9 +1975,12 @@ export async function getCoachChatResponse(
                   if (rating.quality === 'mistake' || rating.quality === 'blunder') {
                     lastCoachActionOffer = [{ type: 'analyse_position', id: 'current' }];
                   }
-                  return answer.bestMoveFromTo
-                    ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
-                    : voiced;
+                  // NO board arrow here: the better move was best at the PRE-move
+                  // position, but the board now shows the position AFTER the
+                  // student's move — its from-square is vacated, so an arrow
+                  // would render on the wrong board (a board-inaccurate marker).
+                  // The prose names the better move; that's grounded + enough.
+                  return voiced;
                 }
               }
             }

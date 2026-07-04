@@ -71,3 +71,30 @@ export function weaknessNudgeQuestion(topic: string | null | undefined): string 
   if (t.length < 2) return null;
   return `Why do I struggle with ${t}?`;
 }
+
+/** Build the full data-driven nudge QUESTION from a stored weakness item
+ *  (category + label) — so "the app identifies a weakness and suggests a study
+ *  session" (David 2026-07-04) with a SPECIFIC target, and the phrasing is
+ *  chosen per category so it ALWAYS routes to a grounded vertical:
+ *  - tactics / calculation / endgame → "Why do I struggle with <topic>?" (progress)
+ *  - openings → "What's my record in <name>?" (record-vs)
+ *  Returns null for categories that aren't a chess skill (time management),
+ *  aggregate labels ("3 openings never drilled"), or when nothing clean can be
+ *  extracted — the caller then shows only the generic rotating chips. */
+export function weaknessNudgeFromItem(category: string | undefined, label: string | undefined): string | null {
+  const cat = (category ?? '').toLowerCase();
+  const lbl = (label ?? '').trim();
+  if (cat === 'openings') {
+    const m = /(?:shaky in|weak at|weak in)\s+(.+)/i.exec(lbl);
+    const name = m?.[1]?.trim();
+    // Skip aggregate labels like "3 openings never drilled" / "Flashcard backlog".
+    if (name && !/^\d/.test(name) && !/backlog|never drilled/i.test(name)) {
+      return `What's my record in ${name}?`;
+    }
+    return null;
+  }
+  if (cat === 'tactics') return weaknessNudgeQuestion('tactics');
+  if (cat === 'calculation') return weaknessNudgeQuestion('calculation');
+  if (cat === 'endgame') return weaknessNudgeQuestion('endgames');
+  return null; // time_management + anything unmapped → no topic nudge
+}

@@ -23,7 +23,8 @@ import { useTeachWalkthrough } from '../../hooks/useTeachWalkthrough';
 import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
-import { pickGreeting, pickSuggestedQuestions } from '../../data/coachGreetings';
+import { pickGreeting, pickSuggestedQuestions, weaknessNudgeFromItem } from '../../data/coachGreetings';
+import { getStoredWeaknessProfile } from '../../services/weaknessAnalyzer';
 import type {
   WalkthroughTree,
   WalkthroughTreeNode,
@@ -3926,9 +3927,27 @@ export function CoachTeachPage(): JSX.Element {
         timestamp: Date.now(),
       }]);
       // On the open-ended (non-rolodex) entry, surface the suggested-question
-      // pickers so the student sees what they can ask.
+      // pickers so the student sees what they can ask. When we already have a
+      // computed weakness profile, lead with a data-driven nudge naming the
+      // student's top weakness (David 2026-07-04: "the app should identify
+      // something of weakness and suggest a study session") — still opt-in (a
+      // chip they tap), still grounded (routes to a computed vertical). Cheap
+      // stored read; null-guarded so a fresh profile just shows the generic set.
       if (!rolodexOpening) {
-        setCoachChoices(pickSuggestedQuestions(greetingRotation, 4));
+        const generic = pickSuggestedQuestions(greetingRotation, 4);
+        // Show the generic set immediately, then asynchronously upgrade to a
+        // nudge-led set if a stored weakness profile is available (non-blocking
+        // — the kickoff IIFE is synchronous). Null-guarded end to end.
+        setCoachChoices(generic);
+        void getStoredWeaknessProfile()
+          .then((profile) => {
+            const top = (profile?.items ?? []).slice().sort((a, b) => b.severity - a.severity)[0];
+            const nudge = top ? weaknessNudgeFromItem(top.category, top.label) : null;
+            if (nudge) {
+              setCoachChoices([nudge, ...generic.filter((q) => q !== nudge)].slice(0, 4));
+            }
+          })
+          .catch(() => { /* stored-profile read failed — generic chips stand */ });
       }
       useCoachMemoryStore.getState().appendConversationMessage({
         surface: 'chat-teach',

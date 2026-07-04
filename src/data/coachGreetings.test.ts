@@ -5,6 +5,7 @@ import {
   pickGreeting,
   pickSuggestedQuestions,
   weaknessNudgeQuestion,
+  weaknessNudgeFromItem,
 } from './coachGreetings';
 import { isProgressQuestion, isOpeningProfileQuestion, isStatsQuestion, isRecordVsQuestion } from '../coach/questionIntents';
 
@@ -64,5 +65,27 @@ describe('coachGreetings', () => {
     expect(q).toBe('Why do I struggle with endgames?');
     // The nudge phrasing must route to the progress (weakness) vertical.
     expect(isProgressQuestion(q!)).toBe(true);
+  });
+
+  it('weaknessNudgeFromItem builds a routing question per category (or null)', () => {
+    expect(weaknessNudgeFromItem('tactics', 'Weak at forks')).toBe('Why do I struggle with tactics?');
+    expect(weaknessNudgeFromItem('calculation', 'Frequent calculation errors')).toBe('Why do I struggle with calculation?');
+    expect(weaknessNudgeFromItem('endgame', 'Endgame technique needs work')).toBe('Why do I struggle with endgames?');
+    expect(weaknessNudgeFromItem('openings', 'Shaky in French Defense')).toBe("What's my record in French Defense?");
+    expect(weaknessNudgeFromItem('openings', 'Weak at the Sicilian')).toBe("What's my record in the Sicilian?");
+    // Aggregate / non-topic labels → null (fall back to generic chips).
+    expect(weaknessNudgeFromItem('openings', '3 openings never drilled')).toBeNull();
+    expect(weaknessNudgeFromItem('openings', 'Flashcard backlog')).toBeNull();
+    expect(weaknessNudgeFromItem('time_management', 'Inconsistent training')).toBeNull();
+    expect(weaknessNudgeFromItem('', '')).toBeNull();
+  });
+
+  it('the nudge for each mapped category routes to a grounded vertical', () => {
+    for (const [cat, lbl] of [['tactics', 'Weak at forks'], ['calculation', 'x'], ['endgame', 'x'], ['openings', 'Shaky in French Defense']] as const) {
+      const nudge = weaknessNudgeFromItem(cat, lbl);
+      expect(nudge).not.toBeNull();
+      // Every nudge must be recognized — progress (weakness) OR record-vs (opening).
+      expect(isProgressQuestion(nudge!) || isRecordVsQuestion(nudge!)).toBe(true);
+    }
   });
 });
