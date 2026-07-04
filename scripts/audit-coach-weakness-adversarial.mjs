@@ -149,7 +149,10 @@ async function boot() {
 async function outcome(qSince, beforeAssistantCount) {
   const start = Date.now();
   let drill = false, picker = false, grounded = 0, replied = false, pickerName = '';
-  while (Date.now() - start < 40000) {
+  // 60s budget — under the 40-question sequential load a brain-heavy turn can
+  // exceed 40s (proven load, not a bug: the same input answers in ~3s in
+  // isolation). A shorter window manufactures false silent-hangs.
+  while (Date.now() - start < 60000) {
     await page.waitForTimeout(1400);
     if (await page.locator('[data-testid="walkthrough-drill-active"],[data-testid="walkthrough-drill-picker"]').count()) { drill = true; break; }
     if (await page.locator('[data-testid="line-picker"]').count()) { picker = true; pickerName = await page.locator('[data-testid="line-picker"]').innerText().catch(() => ''); break; }
