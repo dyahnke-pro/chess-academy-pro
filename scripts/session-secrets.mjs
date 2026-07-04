@@ -19,29 +19,59 @@
 
 import { existsSync, readFileSync } from 'node:fs';
 
+// Each secret has a CANONICAL name the code reads, plus known ALIASES the key
+// has actually been set under in the env config. Checking aliases stops the
+// misleading "NOT set" that made sessions re-pull keys from Vercel when a usable
+// key was sitting right there under a different name (David 2026-07-04).
 const SECRETS = [
-  { env: 'DEEPSEEK_KEY', use: 'primary coach/brain LLM (client → api.deepseek.com); bakes into the build' },
-  { env: 'ANTHROPIC_KEY', use: 'fallback LLM provider' },
-  { env: 'AUDIT_STREAM_SECRET', use: 'x-audit-secret for GET /api/audit-stream (gate G2)' },
-  { env: 'VERCEL_TOKEN', use: 'Vercel API/CLI auth — deploy + manage project settings (e.g. Ignored Build Step to disable preview builds)' },
-  { env: 'POSTHOG_API_KEY', use: 'PostHog personal API key (phx_, read scopes) — query product analytics via `node scripts/posthog-query.mjs`; DO NOT ask David for it, it lives in the env config' },
+  { env: 'DEEPSEEK_KEY', aliases: ['VITE_DEEPSEEK_API_KEY'], use: 'primary coach/brain LLM — read SERVER-SIDE by api/llm-proxy.ts (NOT baked into the client)' },
+  { env: 'ANTHROPIC_KEY', aliases: ['VITE_ANTHROPIC_API_KEY'], use: 'fallback LLM provider (api/llm-proxy.ts, server-side)' },
+  { env: 'AUDIT_STREAM_SECRET', aliases: [], use: 'x-audit-secret for GET /api/audit-stream (gate G2)' },
+  { env: 'VERCEL_TOKEN', aliases: [], use: 'Vercel API/CLI auth — deploy + manage project settings (e.g. Ignored Build Step to disable preview builds)' },
+  { env: 'POSTHOG_API_KEY', aliases: ['Read_key_PostHog', 'POSTHOG_READ_KEY', 'POSTHOG_PERSONAL_API_KEY'], use: 'PostHog personal API key (phx_, read scopes) — query analytics via `node scripts/posthog-query.mjs` (its resolver already handles these aliases); DO NOT ask David for it' },
 ];
 
 const present = [];
 const missing = [];
+const aliasNotes = [];
 for (const s of SECRETS) {
-  if (process.env[s.env] && process.env[s.env].trim()) present.push(s);
-  else missing.push(s);
+  const found = [s.env, ...s.aliases].find((n) => process.env[n] && String(process.env[n]).trim());
+  if (found) {
+    present.push({ ...s, found });
+    if (found !== s.env) {
+      aliasNotes.push({ canonical: s.env, found, viteExposed: /^VITE_/.test(found) });
+    }
+  } else {
+    missing.push(s);
+  }
 }
 
 const localEnv = ['.env.local', '.env'].filter((f) => existsSync(f));
 
 const lines = ['── session secrets ──'];
 if (present.length) {
-  lines.push(`available in env (use freely, do not ask): ${present.map((s) => s.env).join(', ')}`);
+  lines.push(
+    `available in env (use freely, do not ask): ${present
+      .map((s) => (s.found === s.env ? s.env : `${s.env} (as ${s.found})`))
+      .join(', ')}`,
+  );
+}
+if (aliasNotes.length) {
+  lines.push(
+    `⚠ misnamed keys — code reads the CANONICAL name, these are set under an alias: ${aliasNotes
+      .map((a) => `${a.found}→${a.canonical}`)
+      .join(', ')}`,
+  );
+  lines.push('  → rename them in the Claude Code env-var config to the canonical name so the code + a local `vercel dev` find them without a fallback.');
+  const vite = aliasNotes.filter((a) => a.viteExposed);
+  if (vite.length) {
+    lines.push(
+      `  🔒 SECURITY: ${vite.map((a) => a.found).join(', ')} use a VITE_ prefix — vite makes VITE_* readable from client code via import.meta.env. Not leaked today (nothing references them), but any future client reference would inline the secret into the shipped bundle. A secret must NEVER be VITE_-prefixed — rename to the canonical (non-VITE) name.`,
+    );
+  }
 }
 if (missing.length) {
-  lines.push(`NOT set: ${missing.map((s) => s.env).join(', ')}`);
+  lines.push(`NOT set (under any known alias): ${missing.map((s) => s.env).join(', ')}`);
   lines.push('  → set these once in the Claude Code environment env-var config (web UI) so they persist across sessions; until then they must be passed inline.');
 }
 if (localEnv.length) lines.push(`local env file present: ${localEnv.join(', ')} (vite dev reads it)`);
