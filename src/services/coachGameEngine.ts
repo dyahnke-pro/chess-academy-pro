@@ -363,6 +363,34 @@ export async function getAdaptiveMove(
       });
     }
 
+    // Third attempt (hung-worker recovery): the first two hit a HUNG iOS
+    // worker — the asm engine analyzes any position fine in <4s (David
+    // 2026-07-04 node repro), so it's the WebKit Web Worker that dies
+    // transiently (memory/backgrounding), regardless of position. Force-respawn
+    // a fresh worker NOW (don't wait the 30s internal backstop) and retry once;
+    // a fresh worker recovers, which beats playing a random move.
+    try {
+      stockfishEngine.forceRestart('getAdaptiveMove hung-worker recovery');
+      const revivedMove = await Promise.race([
+        stockfishEngine.getBestMove(fen, 2000),
+        makeTimeoutPromise(6000),
+      ]).catch(() => null);
+      if (revivedMove && revivedMove !== '(none)') {
+        void logAppAudit({
+          kind: 'coach-opponent-move-source',
+          category: 'subsystem',
+          source: 'coachGameEngine.getAdaptiveMove',
+          summary: `source=stockfish-respawn move=${revivedMove} elo=${targetElo} (recovered a hung worker)`,
+          fen,
+        });
+        return {
+          move: revivedMove,
+          analysis: { ...FALLBACK_ANALYSIS, bestMove: revivedMove },
+          source: 'stockfish-fallback',
+        };
+      }
+    } catch { /* recovery failed too — fall to random below */ }
+
     // Last resort: random legal move (should be extremely rare)
     const fallbackMove = getRandomLegalMove(fen);
     if (!fallbackMove) throw new Error('No legal moves available');

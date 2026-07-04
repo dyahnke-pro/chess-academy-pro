@@ -59,7 +59,16 @@ export function useEnginePonder(
           if (!cancelled) setCachedStockfish(fen, analysis);
         })
         .catch(() => {
-          /* engine busy/cold/dead — the on-demand grounding path still runs */
+          // A ponder that fails while the engine is NOT busy means the (iOS
+          // WebKit) worker died — memory/backgrounding, transient (the asm
+          // engine analyzes fine on a fresh worker; David 2026-07-04 node
+          // repro). Ponder runs every turn on the student's clock, so make it
+          // the HEALER: respawn the dead worker now so the next ponder + the
+          // grounding path (calc/narration) hit a LIVE engine instead of a cold
+          // timeout. Guarded on !isBusy so we never clobber a foreground search.
+          if (!cancelled && !stockfishEngine.isBusy()) {
+            stockfishEngine.forceRestart('ponder detected a dead worker');
+          }
         });
     }, PONDER_DEBOUNCE_MS);
     return () => {

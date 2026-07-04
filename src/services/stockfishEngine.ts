@@ -737,6 +737,31 @@ class StockfishEngine {
     try { p.reject(new Error(`analysis aborted: ${reason}`)); } catch { /* ignore */ }
   }
 
+  /** Force-teardown the current (dead / hung) worker so the NEXT analyze
+   *  respawns a fresh one. Public so a caller that timed out BEFORE the 30s
+   *  internal hard-timeout fired can recover a hung iOS worker immediately and
+   *  retry, instead of waiting the backstop. Proven root cause (David 2026-07-04
+   *  + node repro): the asm.js engine analyzes every position fine in <4s — the
+   *  iOS WebKit Web Worker is what dies (memory/backgrounding), transiently and
+   *  regardless of position/variant/depth. A fresh worker recovers. Same
+   *  teardown as recoverStuckAnalysis; safe to call when idle (no-op-ish). */
+  forceRestart(reason: string = 'caller-forced'): void {
+    const p = this.pending;
+    this.pending = null;
+    if (p?.hardTimeout) clearTimeout(p.hardTimeout);
+    void logAppAudit({
+      kind: 'stockfish-analysis-stalled',
+      category: 'subsystem',
+      source: 'stockfishEngine.forceRestart',
+      summary: `forced worker respawn (${reason}); variant=${this.workerVariant ?? '?'}`,
+    });
+    try { this.worker?.terminate(); } catch { /* already gone */ }
+    this.worker = null;
+    this.isReady = false;
+    this.initPromise = null;
+    if (p) { try { p.reject(new Error(`analysis aborted: forceRestart (${reason})`)); } catch { /* ignore */ } }
+  }
+
   async analyzePosition(
     fen: string,
     depth: number = 18,
