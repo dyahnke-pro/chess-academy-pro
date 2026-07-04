@@ -23,6 +23,7 @@ import { CoachTeachPage } from './CoachTeachPage';
 import { useAppStore } from '../../stores/appStore';
 import { buildUserProfile } from '../../test/factories';
 import { db } from '../../db/schema';
+import { COACH_GREETINGS } from '../../data/coachGreetings';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
@@ -117,13 +118,21 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
     fireEvent.submit(input.closest('form')!);
   }
 
-  it('speaks the canned welcome line on mount via speakForced (no LLM call)', async () => {
+  it('speaks a rotating greeting on mount via speakForced (no LLM call) + shows suggested-question chips', async () => {
     vi.mocked(coachService.ask).mockResolvedValue({ text: '', toolCallIds: [], dispatchedToolNames: [], provider: 'anthropic' });
     render(<CoachTeachPage />);
 
+    // The greeting is now one of the rotating set (David 2026-07-04), not the
+    // static "welcome to my classroom" line.
     await waitFor(() => {
       const spoken = mockSpeakForced.mock.calls.map((c) => c[0] as string);
-      expect(spoken.some((s) => s.toLowerCase().includes('welcome to my classroom'))).toBe(true);
+      expect(spoken.some((s) => COACH_GREETINGS.includes(s))).toBe(true);
+    }, { timeout: 4000 });
+
+    // Suggested-question pickers render so the student sees what they can ask.
+    await waitFor(() => {
+      expect(screen.getByTestId('coach-choice-chips')).toBeInTheDocument();
+      expect(screen.getByTestId('coach-choice-chip-0')).toBeInTheDocument();
     }, { timeout: 4000 });
 
     // Student speaks first now — kickoff itself never invokes the brain.

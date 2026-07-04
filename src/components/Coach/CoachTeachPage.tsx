@@ -23,6 +23,7 @@ import { useTeachWalkthrough } from '../../hooks/useTeachWalkthrough';
 import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
+import { pickGreeting, pickSuggestedQuestions } from '../../data/coachGreetings';
 import type {
   WalkthroughTree,
   WalkthroughTreeNode,
@@ -3906,9 +3907,16 @@ export function CoachTeachPage(): JSX.Element {
       // Per WO spec: do NOT auto-launch the walkthrough. The student
       // confirms by typing "yes" / "start" / tapping a Start button.
       const rolodexOpening = searchParams.get('opening');
+      // Rotate the greeting + suggested-question chips per visit (David
+      // 2026-07-04: "instead of always saying welcome to my classroom … it
+      // should rotate through and give some pickers to choose"). Minute-
+      // granularity index → a returning student rarely hears the same line
+      // twice; the chips are grounded verticals the coach answers from
+      // computed data, and tapping one SENDS it (opt-in discovery, never auto).
+      const greetingRotation = Math.floor(Date.now() / 60000);
       const welcomeLine = rolodexOpening
         ? `Ready to start the ${rolodexOpening.trim()} walkthrough?`
-        : 'Welcome to my classroom — what would you like to learn today?';
+        : pickGreeting(greetingRotation);
       setKickoffStatus(null);
       const turnId = freshTurnId('welcome');
       setMessages((prev) => [...prev, {
@@ -3917,6 +3925,11 @@ export function CoachTeachPage(): JSX.Element {
         content: welcomeLine,
         timestamp: Date.now(),
       }]);
+      // On the open-ended (non-rolodex) entry, surface the suggested-question
+      // pickers so the student sees what they can ask.
+      if (!rolodexOpening) {
+        setCoachChoices(pickSuggestedQuestions(greetingRotation, 4));
+      }
       useCoachMemoryStore.getState().appendConversationMessage({
         surface: 'chat-teach',
         role: 'coach',
