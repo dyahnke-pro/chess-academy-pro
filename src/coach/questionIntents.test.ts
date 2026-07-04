@@ -17,6 +17,7 @@ import {
   isOpeningAccuracyQuestion,
   isOpeningTrapsQuestion,
   opensTrapsSystemAsk,
+  isReviewDueQuestion,
 } from './coachService';
 
 // David 2026-06-14: "throw the thesaurus at this problem for ALL questions."
@@ -314,6 +315,36 @@ describe('opensTrapsSystemAsk — "how do you teach these / what system"', () =>
   ])('false for "%s"', (q) => expect(opensTrapsSystemAsk(q)).toBe(false));
 });
 
+describe('isReviewDueQuestion (David 2026-07-04: SRS review-due — must NOT collide with review-game)', () => {
+  it.each([
+    "what's due for review today",
+    "what's due",
+    'anything due',
+    'are there cards due',
+    'how many cards do I have to review',
+    'how many reviews do I have',
+    'how many reps are due',
+    'what should I review',
+    'what do I need to review',
+    'review my cards',
+    'review my openings',
+    'show me my review queue',
+    'is my srs deck due',
+    'any flashcards due',
+    'what cards are due to review',
+  ])('matches "%s"', (q) => expect(isReviewDueQuestion(q)).toBe(true));
+  it.each([
+    'review my last game',          // single-GAME review → coachAgent review-game
+    'review my game',               // single-GAME review
+    'can you review that game',      // single-GAME review
+    "what's my rating",             // stats
+    'what am I good at',            // strengths
+    'teach me the Sicilian',
+    'what is a fork',
+    'hi coach',
+  ])('does NOT match: %s', (q) => expect(isReviewDueQuestion(q)).toBe(false));
+});
+
 describe('buildQuestionGrounding — shared cross-surface grounding (David 2026-07-04)', () => {
   it('sets the progress flag for a weakness question (board-independent)', () => {
     const g = buildQuestionGrounding('what am I weak in?');
@@ -378,6 +409,11 @@ describe('buildQuestionGrounding — shared cross-surface grounding (David 2026-
     expect(g.strengthsQuestion).toBe(false);
     expect(g.openingAccuracyQuestion).toBe(false);
     expect(g.openingTrapsQuestion).toBe(false);
+    expect(g.reviewDueQuestion).toBe(false);
+  });
+  it('sets the review-due flag for a "what\'s due" question', () => {
+    const g = buildQuestionGrounding("what's due for review today");
+    expect(g.reviewDueQuestion).toBe(true);
   });
 });
 

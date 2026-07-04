@@ -1099,3 +1099,48 @@ export function assembleOpeningTrapsAnswer(opts: {
   const systemTail = system ? ' ' + system : '';
   return { facts: parts.join(' ') + systemTail + next, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
+
+/** The student's spaced-repetition review state — a structural subset of the
+ *  live `srsOpeningCards` store (getDueCount + getEnrolledOpenings +
+ *  getSrsDueOpenings), handed to `assembleReviewDueAnswer` so the assembler
+ *  stays a pure leaf. */
+export interface ReviewDueLike {
+  /** Total cards due for review right now (nextReviewAt <= now). */
+  dueCount: number;
+  /** Total opening cards enrolled in the SRS (0 → nothing to review yet). */
+  totalEnrolled: number;
+  /** Openings that currently have due cards, name + count, richest first. */
+  dueOpenings: ReadonlyArray<{ name: string; dueCards: number }>;
+}
+
+/**
+ * assembleReviewDueAnswer — the grounded "what's due for review today / how many
+ * cards do I have to review?" answer (David 2026-07-04: "keep working these
+ * types of questions"). The counts + per-opening grouping are COMPUTED from the
+ * live SRS store (`srsOpeningCards`); this phrases them and points the student
+ * at the `/openings/srs` trainer. The LLM voices real numbers; it invents no
+ * count. Returns null when nothing is enrolled yet (caller takes the
+ * not-enrolled onboarding line). G0.
+ */
+export function assembleReviewDueAnswer(s: ReviewDueLike): GroundedAnswer | null {
+  if (s.totalEnrolled <= 0) return null;
+
+  // All caught up — nothing due, but cards are in rotation.
+  if (s.dueCount <= 0) {
+    return {
+      facts: `You're all caught up — nothing due for review right now. You've got ${s.totalEnrolled} opening card${s.totalEnrolled === 1 ? '' : 's'} in rotation, and I'll resurface them as they come due.`,
+      bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'],
+    };
+  }
+
+  const openings = s.dueOpenings.filter((o) => o.name && o.dueCards > 0).slice(0, 3);
+  const acrossN = s.dueOpenings.filter((o) => o.dueCards > 0).length;
+  const across = acrossN > 1 ? ` across ${acrossN} openings` : '';
+  const breakdown = openings.length
+    ? ` Mostly ${openings.map((o) => `the ${o.name} (${o.dueCards})`).join(', ')}.`
+    : '';
+  const facts =
+    `You've got ${s.dueCount} card${s.dueCount === 1 ? '' : 's'} due for review right now${across}.` +
+    breakdown + ` Say "review my openings" and I'll run today's reps.`;
+  return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+}

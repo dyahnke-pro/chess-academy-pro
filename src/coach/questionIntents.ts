@@ -508,6 +508,36 @@ export function opensTrapsSystemAsk(ask: string | undefined): boolean {
   return /\bhow\s+do\s+you\s+teach\b|\bwhat\s+system\b|\bhow\s+(?:are|do)\s+(?:these|they|the)?\s*(?:traps?\s+)?(?:taught|work)\b/.test(a);
 }
 
+/** A REVIEW-DUE / SRS question — "what's due for review today?", "how many cards
+ *  do I have to review?", "what should I review?", "anything due?". Answered from
+ *  the live spaced-repetition store (getDueCount + getEnrolledOpenings +
+ *  getSrsDueOpenings) via assembleReviewDueAnswer, and points the student at the
+ *  /openings/srs trainer (David 2026-07-04). MUST require SRS/deck/card/due/reps
+ *  phrasing so it does NOT collide with the single-GAME "review my last game"
+ *  intent (coachAgent `review-game`). */
+const REVIEW_DUE_RE = anyOf([
+  // "what's due (for review) (today)" — due is the load-bearing token
+  String.raw`\bwhat(?:'?s| is)?\s+due\b`,
+  String.raw`\banything\s+due\b`,
+  String.raw`\b(?:any|are\s+there)\s+(?:cards?|reviews?|reps?)\s+due\b`,
+  String.raw`\bdue\s+(?:for\s+review|to\s+review|today|cards?|reviews?)\b`,
+  String.raw`\bcards?\s+(?:are|is)\s+due\b`,
+  // "how many cards / reviews / reps (do I have) to review / due"
+  String.raw`\bhow\s+many\s+(?:cards?|reviews?|reps?|flash\s?cards?)\b`,
+  // "what should I review" / "what do I need to review" — REVIEW as SRS (not a game)
+  String.raw`\bwhat\s+(?:should\s+i|do\s+i\s+(?:need\s+to|have\s+to))\s+review\b`,
+  // explicit SRS / deck / flashcard / reps nouns
+  String.raw`\b(?:my\s+)?(?:review\s+queue|review\s+pile|srs|spaced\s+repetition|flash\s?cards?|review\s+deck|woodpecker)\b`,
+  String.raw`\breview\s+(?:my\s+)?(?:cards?|openings?|deck|reps?)\b`,
+  String.raw`\b(?:cards?|reps?)\s+(?:to\s+review|due)\b`,
+]);
+export function isReviewDueQuestion(ask: string | undefined): boolean {
+  if (!ask) return false;
+  // Guard: "review my (last) game" is the single-GAME review intent, not SRS.
+  if (/\breview\s+(?:my\s+|the\s+|that\s+|this\s+|last\s+)*(?:last\s+)?game\b/i.test(ask)) return false;
+  return REVIEW_DUE_RE.test(ask);
+}
+
 /**
  * buildQuestionGrounding — the SHARED grounding builder so the coach's
  * grounded-data brain fires IDENTICALLY on every talking surface (David
@@ -558,6 +588,7 @@ export function buildQuestionGrounding(
     openingAccuracyQuestion: isOpeningAccuracyQuestion(ask),
     openingTrapsQuestion: isOpeningTrapsQuestion(ask),
     openingTrapsSystemAsk: opensTrapsSystemAsk(ask),
+    reviewDueQuestion: isReviewDueQuestion(ask),
     masterPlayQuestion: isMasterPlayQuestion(ask),
     conceptQuestion: isConceptQuestion(ask),
     playerGamesQuestion: isPlayerGamesQuestion(ask),

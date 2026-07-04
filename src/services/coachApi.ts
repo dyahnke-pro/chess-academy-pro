@@ -66,7 +66,8 @@ import { getStrongestOpenings, getMostPlayedOpenings, getWeakestOpenings, getOpe
 import { getWeakSpotsForOpening } from './weakSpotService';
 import type { OpeningRecord } from '../types';
 import { getOverviewInsights } from './gameInsightsService';
-import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike } from './groundedAnswer';
+import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer } from './groundedAnswer';
+import { getDueCount, getEnrolledOpenings, getSrsDueOpenings, getTotalEnrolled } from './srsOpeningService';
 import { detectConceptsInText, getConcept } from './chessConceptService';
 import { validateClaims, type ClaimValidationResult } from './claimValidator';
 import { logAppAudit } from './appAuditor';
@@ -1248,6 +1249,10 @@ export interface MasterGroundingOptions {
   /** true when the traps question also asks how the coach TEACHES them ("what
    *  system do you use") — appends the WLPP teaching-system explanation. */
   openingTrapsSystemAsk?: boolean;
+  /** "what's due for review today / how many cards do I have to review?" —
+   *  voiced from the live SRS store (getDueCount + getEnrolledOpenings +
+   *  getSrsDueOpenings) via assembleReviewDueAnswer. No board. */
+  reviewDueQuestion?: boolean;
   /** STEP D Phase 4 — true when this turn asks how MASTERS play the position
    *  ("how do masters play this?", "most popular move?"). Voices the master-play
    *  lookup's real top moves + frequencies (assembleMasterPlayAnswer) so the LLM
@@ -1819,6 +1824,7 @@ export async function getCoachChatResponse(
       grounding.strengthsQuestion === true ||
       grounding.openingAccuracyQuestion === true ||
       grounding.openingTrapsQuestion === true ||
+      grounding.reviewDueQuestion === true ||
       grounding.conceptQuestion === true ||
       grounding.playerGamesQuestion === true ||
       grounding.endgameQuestion === true ||
@@ -1980,6 +1986,32 @@ export async function getCoachChatResponse(
             // No trap data yet — computed no-data line (G0).
             const noDataFact = "I don't have named traps logged for your strongest openings yet. Drill an opening's Watch and Learn rungs and I'll surface its trap weapons and the lines to watch out for.";
             const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-traps' });
+            if (voicedNoData) return voicedNoData;
+          } catch { /* fall through to legacy path */ }
+        }
+
+        // ── REVIEW DUE (SRS) — "what's due for review today / how many cards do
+        // I have to review?" (David 2026-07-04). Voices the live spaced-
+        // repetition state: total due now + the per-opening breakdown, and
+        // points at the /openings/srs trainer. No board.
+        if (grounding.reviewDueQuestion) {
+          try {
+            const [dueCount, enrolled, dueNamed, totalEnrolled] = await Promise.all([
+              getDueCount(), getEnrolledOpenings(), getSrsDueOpenings(), getTotalEnrolled(),
+            ]);
+            const nameById = new Map(dueNamed.map((o) => [o.openingId, o.name]));
+            const dueOpenings = enrolled
+              .filter((e) => e.dueCards > 0)
+              .sort((a, b) => b.dueCards - a.dueCards)
+              .map((e) => ({ name: nameById.get(e.openingId) ?? e.openingId, dueCards: e.dueCards }));
+            const answer = assembleReviewDueAnswer({ dueCount, totalEnrolled, dueOpenings });
+            if (answer) {
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'review-due' });
+              if (voiced) return voiced;
+            }
+            // Nothing enrolled yet — computed onboarding line (G0).
+            const noDataFact = "You don't have any opening review cards yet. Finish an opening's Learn rung and I'll start scheduling spaced-repetition reps for it — then I can tell you what's due.";
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'review-due' });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through to legacy path */ }
         }

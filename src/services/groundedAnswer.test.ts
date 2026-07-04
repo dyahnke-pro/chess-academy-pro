@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -317,6 +317,43 @@ describe('assembleOpeningTrapsAnswer — grounded "traps in my strongest opening
     expect(a!.facts).toMatch(/Ask me for the traps in your strongest opening/);
     // no named traps → no "punish lines for" drill-launch line
     expect(a!.facts).not.toMatch(/punish lines for/);
+  });
+});
+
+describe('assembleReviewDueAnswer — grounded "what\'s due for review today"', () => {
+  it('voices the due count + per-opening breakdown + the CTA', () => {
+    const a = assembleReviewDueAnswer({
+      dueCount: 14, totalEnrolled: 40,
+      dueOpenings: [{ name: 'Caro-Kann Defense', dueCards: 9 }, { name: 'Italian Game', dueCards: 5 }],
+    });
+    expect(a).not.toBeNull();
+    expect(a!.facts).toMatch(/14 cards due for review right now across 2 openings/);
+    expect(a!.facts).toMatch(/Mostly the Caro-Kann Defense \(9\), the Italian Game \(5\)/);
+    expect(a!.facts).toMatch(/Say "review my openings" and I'll run today's reps/);
+    expect(a!.sources).toContain('data:your-games');
+  });
+  it('caps the per-opening breakdown at 3', () => {
+    const a = assembleReviewDueAnswer({
+      dueCount: 20, totalEnrolled: 50,
+      dueOpenings: [
+        { name: 'A', dueCards: 8 }, { name: 'B', dueCards: 6 }, { name: 'C', dueCards: 4 }, { name: 'D', dueCards: 2 },
+      ],
+    });
+    expect(a!.facts).toMatch(/the A \(8\), the B \(6\), the C \(4\)/);
+    expect(a!.facts).not.toMatch(/the D \(2\)/);
+  });
+  it('handles the singular "1 card" grammar', () => {
+    const a = assembleReviewDueAnswer({ dueCount: 1, totalEnrolled: 10, dueOpenings: [{ name: 'X', dueCards: 1 }] });
+    expect(a!.facts).toMatch(/1 card due for review right now\b/);
+    expect(a!.facts).not.toMatch(/across \d+ openings/); // 1 opening → no "across"
+  });
+  it('gives the all-caught-up line when nothing is due but cards are enrolled', () => {
+    const a = assembleReviewDueAnswer({ dueCount: 0, totalEnrolled: 25, dueOpenings: [] });
+    expect(a!.facts).toMatch(/all caught up/);
+    expect(a!.facts).toMatch(/25 opening cards in rotation/);
+  });
+  it('returns null when nothing is enrolled (caller takes the onboarding line)', () => {
+    expect(assembleReviewDueAnswer({ dueCount: 0, totalEnrolled: 0, dueOpenings: [] })).toBeNull();
   });
 });
 
