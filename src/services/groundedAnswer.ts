@@ -1323,3 +1323,116 @@ export function assembleRepertoireGapAnswer(g: RepertoireGapLike): GroundedAnswe
     `Your softest spot is ${top.name} — you score just ${top.winRate}% against it over ${top.games} games, your worst matchup${runnerUp}. That's the gap to plug. Want a solid line against ${top.name}?`;
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
+
+// ═══ WAVE 3 — accuracy/move-quality, consistency/activity, converting/winning.
+// The rest of the weakness-tab numbers, each ending in a suggestion. ═══
+
+/** Accuracy + move-quality profile — a subset of getOverviewInsights. */
+export interface AccuracyLike {
+  totalGames: number;
+  avgAccuracy: number;
+  accuracyWhite: number;
+  accuracyBlack: number;
+  bestMoveAgreement: number;      // % of moves matching the engine's top choice
+  brilliant: number;
+  great: number;
+  blunders: number;
+}
+
+/**
+ * assembleAccuracyAnswer — "how accurate am I / how engine-like is my play?"
+ * Voices average accuracy, per-colour accuracy, best-move agreement, and the
+ * move-quality highlights, then suggests where to tighten up. Computed
+ * (getOverviewInsights). Returns null with no analyzed games. G0.
+ */
+export function assembleAccuracyAnswer(a: AccuracyLike): GroundedAnswer | null {
+  if (a.totalGames <= 0 || a.avgAccuracy <= 0) return null;
+  const perColor = (a.accuracyWhite > 0 || a.accuracyBlack > 0)
+    ? ` As White you play at ${a.accuracyWhite}%, as Black ${a.accuracyBlack}%.`
+    : '';
+  const agree = a.bestMoveAgreement > 0
+    ? ` You match the engine's top move ${a.bestMoveAgreement}% of the time.`
+    : '';
+  const quality = (a.brilliant > 0 || a.great > 0 || a.blunders > 0)
+    ? ` Across your games: ${a.brilliant} brilliant and ${a.great} great moves, against ${a.blunders} blunders.`
+    : '';
+  // Suggestion — the biggest lever.
+  const colorGap = Math.abs(a.accuracyWhite - a.accuracyBlack);
+  const suggest = colorGap >= 8 && (a.accuracyWhite > 0 && a.accuracyBlack > 0)
+    ? ` Your ${a.accuracyWhite < a.accuracyBlack ? 'White' : 'Black'} games are the weaker side — put your reps there.`
+    : a.bestMoveAgreement > 0 && a.bestMoveAgreement < 45
+      ? ' Work on calculation — you\'re leaving the best move on the table too often.'
+      : ' Cutting blunders is the fastest way to lift this — drill your saved mistake puzzles.';
+  return { facts: `Your average accuracy is ${a.avgAccuracy}%.` + perColor + agree + quality + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+}
+
+/** Consistency + activity + time-control profile. */
+export interface ConsistencyLike {
+  currentWinStreak: number;
+  longestWinStreak: number;
+  timeControls: ReadonlyArray<{ bucket: string; winRatePct: number; games: number; avgAccuracyPct: number | null }>;
+}
+
+/**
+ * assembleConsistencyAnswer — "how consistent am I / what time control am I best
+ * at / am I on a streak?" Voices the win streak + the best/worst time control,
+ * then suggests where to focus. Computed (streaks + timeControlPerformance).
+ * Returns null with no games. G0.
+ */
+export function assembleConsistencyAnswer(c: ConsistencyLike): GroundedAnswer | null {
+  const tc = c.timeControls.filter((t) => t.games > 0).sort((a, b) => b.winRatePct - a.winRatePct);
+  if (tc.length === 0 && c.longestWinStreak <= 0) return null;
+  const streak = c.longestWinStreak > 0
+    ? c.currentWinStreak > 0
+      ? `You're on a ${c.currentWinStreak}-game win streak (your best is ${c.longestWinStreak}).`
+      : `Your longest win streak is ${c.longestWinStreak} games.`
+    : `You're building your first win streak.`;
+  const best = tc[0] ?? null;
+  const worst = tc.length > 1 ? tc[tc.length - 1] : null;
+  const tcLine = best
+    ? ` You play best at ${best.bucket} (${best.winRatePct}% over ${best.games} games)${worst ? `, and weakest at ${worst.bucket} (${worst.winRatePct}%)` : ''}.`
+    : '';
+  const suggest = worst
+    ? ` If you want a steadier rating, slow down in your ${worst.bucket} games — that's where results dip.`
+    : ' Keep a regular cadence and I\'ll track your consistency over time.';
+  return { facts: streak + tcLine + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+}
+
+/** Converting / winning-shape profile. */
+export interface ConvertingLike {
+  totalWins: number;
+  thrownWins: number;
+  comebackWins: number;
+  quickWins: number;
+  grindWins: number;
+  midLengthWins: number;
+}
+
+/**
+ * assembleConvertingAnswer — "do I convert winning positions / do I throw away
+ * wins / how do I win?" Voices thrown wins vs comebacks + the win-shape mix, then
+ * suggests the lever. Computed (getMistakeInsights.thrownWins + comebackWins +
+ * winShapeStats). Returns null with no wins/data. G0.
+ */
+export function assembleConvertingAnswer(c: ConvertingLike): GroundedAnswer | null {
+  if (c.totalWins <= 0 && c.thrownWins <= 0) return null;
+  const thrown = c.thrownWins > 0
+    ? `You've thrown away ${c.thrownWins} winning position${c.thrownWins === 1 ? '' : 's'}.`
+    : `You rarely let a winning position slip — nice.`;
+  const comeback = c.comebackWins > 0
+    ? ` On the flip side, you've pulled off ${c.comebackWins} comeback win${c.comebackWins === 1 ? '' : 's'} from a losing spot.`
+    : '';
+  const shapeParts: string[] = [];
+  if (c.quickWins > 0) shapeParts.push(`${c.quickWins} quick`);
+  if (c.midLengthWins > 0) shapeParts.push(`${c.midLengthWins} mid-length`);
+  if (c.grindWins > 0) shapeParts.push(`${c.grindWins} grind`);
+  const shape = shapeParts.length && c.totalWins > 0
+    ? ` Of your ${c.totalWins} wins: ${shapeParts.join(', ')}.`
+    : '';
+  const suggest = c.thrownWins >= 2
+    ? ' Converting winning positions is your biggest leak — practice technique from a winning position, not just tactics.'
+    : c.grindWins > c.quickWins
+      ? ' You win by grinding — sharpening your attacking play could turn some of those long games into quick ones.'
+      : ' Keep converting cleanly; add endgame technique to close out the tight ones.';
+  return { facts: thrown + comeback + shape + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+}

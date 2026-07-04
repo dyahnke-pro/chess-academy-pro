@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -453,6 +453,39 @@ describe('assembleRepertoireGapAnswer — Wave 2 (the promoted cluster + suggest
   it('returns null with no data', () => {
     expect(assembleRepertoireGapAnswer({ kind: 'hole', offBookPct: null, totalGames: 0, worstAgainst: [] })).toBeNull();
     expect(assembleRepertoireGapAnswer({ kind: 'learn-next', offBookPct: null, totalGames: 50, worstAgainst: [] })).toBeNull();
+  });
+});
+
+describe('Wave 3 assemblers (staged) — accuracy / consistency / converting', () => {
+  it('assembleAccuracyAnswer voices accuracy, per-colour, agreement + suggestion', () => {
+    const a = assembleAccuracyAnswer({ totalGames: 40, avgAccuracy: 82, accuracyWhite: 86, accuracyBlack: 74, bestMoveAgreement: 51, brilliant: 3, great: 12, blunders: 40 });
+    expect(a!.facts).toMatch(/average accuracy is 82%/);
+    expect(a!.facts).toMatch(/As White you play at 86%, as Black 74%/);
+    expect(a!.facts).toMatch(/match the engine's top move 51%/);
+    expect(a!.facts).toMatch(/Black games are the weaker side/); // colorGap 12 ≥ 8
+    expect(a!.sources).toContain('data:your-games');
+  });
+  it('assembleAccuracyAnswer returns null with no analyzed games', () => {
+    expect(assembleAccuracyAnswer({ totalGames: 0, avgAccuracy: 0, accuracyWhite: 0, accuracyBlack: 0, bestMoveAgreement: 0, brilliant: 0, great: 0, blunders: 0 })).toBeNull();
+  });
+  it('assembleConsistencyAnswer voices streak + best/worst time control + suggestion', () => {
+    const a = assembleConsistencyAnswer({ currentWinStreak: 3, longestWinStreak: 7, timeControls: [
+      { bucket: 'blitz', winRatePct: 61, games: 120, avgAccuracyPct: 80 },
+      { bucket: 'bullet', winRatePct: 44, games: 60, avgAccuracyPct: 72 },
+    ] });
+    expect(a!.facts).toMatch(/on a 3-game win streak \(your best is 7\)/);
+    expect(a!.facts).toMatch(/play best at blitz \(61% over 120 games\), and weakest at bullet \(44%\)/);
+    expect(a!.facts).toMatch(/slow down in your bullet games/);
+  });
+  it('assembleConvertingAnswer voices thrown wins vs comebacks + win shape + suggestion', () => {
+    const a = assembleConvertingAnswer({ totalWins: 28, thrownWins: 4, comebackWins: 2, quickWins: 6, grindWins: 14, midLengthWins: 8 });
+    expect(a!.facts).toMatch(/thrown away 4 winning positions/);
+    expect(a!.facts).toMatch(/pulled off 2 comeback wins/);
+    expect(a!.facts).toMatch(/Of your 28 wins: 6 quick, 8 mid-length, 14 grind/);
+    expect(a!.facts).toMatch(/Converting winning positions is your biggest leak/); // thrownWins ≥ 2
+  });
+  it('assembleConvertingAnswer returns null with no wins or data', () => {
+    expect(assembleConvertingAnswer({ totalWins: 0, thrownWins: 0, comebackWins: 0, quickWins: 0, grindWins: 0, midLengthWins: 0 })).toBeNull();
   });
 });
 
