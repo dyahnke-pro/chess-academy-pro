@@ -55,10 +55,65 @@ plan, positionAssessment.
   dedicated strengths path so `"what am I good at"` stops colliding with
   progress.
 
-## Roadmap — remaining verticals (next-session pickup)
+## The FULL question inventory (David 2026-07-04: "all of those gaps are important … keep thinking of other phrases and add those")
 
-Grounded-ANSWER verticals (same 5-step pattern, low risk, chat-reply auditable):
-- ~~**SRS / review-due**~~ ✅ SHIPPED (see table above).
+The concept map — every question the coach should be grounded to. ✅ = shipped,
+◻ = to build. Each ◻ is the same 5-step pattern (detector → assembler →
+chokepoint → wiring → audit). Data availability is being confirmed by the scout;
+build the data-backed ones, flag any NOT-AVAILABLE for a data-plumbing job.
+
+**Your game — self-knowledge (no board):**
+- ✅ Rating / record / win rate
+- ✅ Strengths ("what am I good at")
+- ✅ Weaknesses / what to train
+- ✅ Opening profile (strongest / favorite / weakest)
+- ✅ Opening accuracy (within one opening / weakest line)
+- ✅ Review due (SRS)
+- ◻ **Improvement / trend over time** — "am I getting better this month"
+- ◻ **Record vs a specific opening** — "how do I do against the Sicilian"
+- ◻ **Record vs a specific opponent** — "my record against <name>"
+- ◻ **Most common mistakes / blunder rate** — "what mistakes do I make most"
+- ◻ **Which tactics I miss most** — forks / pins / back-rank
+- ◻ **Which phase I lose in** — opening / middlegame / endgame
+- ◻ **Puzzle rating & count solved**
+- ◻ **Overall game accuracy**
+- ◻ **Win/loss streak & best time control**
+
+**The position (live board):**
+- ✅ Best move here
+- ✅ Tactics / hanging pieces
+- ✅ Who's winning / eval
+- ✅ Plans & ideas
+- ✅ How masters play
+- ✅ Endgame technique (tablebase)
+- ◻ **Rate my last move** — "was that good?" (assembleMoveEvalAnswer exists;
+  needs the last-move + fen-before/after + engine eval threaded on the surface)
+
+**Openings & study:**
+- ✅ Opening traps / watch-out-for
+- ✅ Games by a pro
+- ✅ Chess concepts (book corpus)
+- ◻ **What to play against X** — "what do I play vs 1.d4 / the Sicilian"
+  (repertoire answer, from the user's repertoire keyed by what it responds to)
+- ◻ **Repertoire overview** — "what should I play as White / Black"
+
+**Actions (the picker layer — see `2026-07-04-coach-action-layer.md`):**
+- ◻ **Quiz me on X** — launchable stage (walkthrough 'quiz'/'findMove'), an
+  ACTION not an answer.
+- ◻ every answer → **"want to drill/work on this?" picker** → real drill/review.
+
+**App-facing discoverability (David 2026-07-04):**
+- ◻ **Rotating greeting** — replace the static "welcome to my classroom" with a
+  rotation of suggested questions + tappable pickers so users DISCOVER what they
+  can ask. (Find the current greeting: coach chat mount / empty-state.)
+- ◻ **Proactive weakness nudge** — the app identifies the user's biggest
+  weakness (getUnifiedWeaknessProfile) and offers a study session UNPROMPTED
+  (e.g. on coach home / chat open), gated behind a pick (never auto-launch).
+
+Keep brainstorming more phrasings and fold them into the detectors as found.
+
+## Older roadmap notes (still valid)
+
 - **Play-eval threading** — on `/coach/play`, "am I winning / what's the eval"
   should voice the live Stockfish eval (thread `evalCp`/`bestMove` into the
   play surface's grounding; assemblers exist — `assemblePositionAssessment`).
