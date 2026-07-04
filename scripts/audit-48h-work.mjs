@@ -8,8 +8,15 @@
 // via bundle grep + the audit-stream.
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { startProdBridge } from './audit-lib/prod-bridge.mjs';
 
-const URL = process.env.AUDIT_SMOKE_URL || 'http://localhost:5173';
+// AUDIT_PROD_BRIDGE=1 audits the LIVE prod app: Chromium's HTTPS handshake is
+// reset by this container's TLS-re-terminating egress proxy, so we bridge prod
+// over plain HTTP on localhost (see prod-bridge.mjs). Otherwise target
+// AUDIT_SMOKE_URL (a localhost dev server).
+const bridge = process.env.AUDIT_PROD_BRIDGE === '1' ? await startProdBridge(Number(process.env.AUDIT_BRIDGE_PORT || 8099)) : null;
+const URL = bridge ? bridge.url : (process.env.AUDIT_SMOKE_URL || 'http://localhost:5173');
+if (bridge) console.log(`[bridge] auditing LIVE PROD via ${bridge.url} → ${bridge.prod}`);
 const results = [];
 const rec = (name, status, detail) => { results.push({ name, status, detail }); console.log(`  [${status}] ${name}${detail ? ': ' + detail : ''}`); };
 
@@ -107,6 +114,7 @@ for (const [label, path, mustSee] of [
 }
 
 await browser.close();
+if (bridge) await bridge.close();
 const pass = results.filter((r) => r.status === 'PASS').length;
 const fail = results.filter((r) => r.status === 'FAIL');
 console.log(`\n=== ${pass} PASS / ${fail.length} FAIL / ${results.filter((r) => r.status === 'WARN').length} WARN ===`);
