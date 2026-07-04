@@ -48,6 +48,88 @@ describe('isProgressQuestion (weakness / improvement — the thesaurus bug)', ()
     'what are my strengths',
     'what keeps costing me games',
   ])('matches: %s', (q) => expect(isProgressQuestion(q)).toBe(true));
+
+  // David 2026-07-04: the exact meta-questions that dead-ended at the picker,
+  // plus the theorist's full verb/noun/predicate surface. "Fill all verbs."
+  it.each([
+    // David's six probe questions
+    'What should I train?',
+    'What should I learn next?',
+    'What tactics am I weak in?',
+    'What are my biggest weaknesses?',
+    'What should I work on to improve my chess?',
+    'Where am I losing most of my games?',
+    // training verbs (recommendation frames)
+    'what should I study next',
+    'what should I hone',
+    'what should I sharpen',
+    'what should I master first',
+    'what to work on next',
+    'what to train',
+    'what should I grind',
+    "what's the best thing to work on",
+    'what should I be working on',
+    'help me improve',
+    'help me get better',
+    'tell me what to train',
+    'give me something to work on',
+    'where should I focus my energy',
+    'what area needs the most work',
+    'what needs work',
+    'I want to improve',
+    'I need to work on something',
+    'I wanna level up',
+    // weakness nouns / idioms
+    "what's my kryptonite",
+    'what is my downfall',
+    "what's my achilles heel",
+    'where are the holes in my game',
+    'what are my leaks',
+    'my sticking points',
+    "what's my weakest phase",
+    // struggle / predicate
+    'what am I bad at',
+    'what am I terrible at',
+    'where do I struggle',
+    'what am I weak at',
+    'I keep hanging pieces',
+    'I always blunder in the endgame',
+    'why do I keep losing',
+    "why can't I improve",
+    'why am I stuck',
+    'which phase do I lose in',
+    'what mistakes do I keep making',
+    // holding back / costing
+    "what's holding my rating back",
+    "what's capping my rating",
+    'what keeps costing me points',
+    // topic-scoped weakness
+    'what openings do I lose in',
+    'where am I weak in the endgame',
+    'am I bad at calculation',
+    'I struggle with tactics',
+    'weak in endgames',
+    // diagnose
+    'diagnose my chess',
+    'assess my game',
+  ])('matches (theorist surface): %s', (q) => expect(isProgressQuestion(q)).toBe(true));
+
+  // NEGATIVES — near-misses that must NOT fire the weakness recommendation.
+  it.each([
+    'learn the Sicilian',            // opening-teach, not a recommendation
+    'teach me the Najdorf',          // opening-teach
+    'I want to learn the Caro-Kann', // opening-teach (desire frame excludes REC_VERBS)
+    'study the London with me',      // opening-teach
+    'what is a fork',                // concept
+    'explain zugzwang',              // concept
+    'why did I lose that game',      // single-game review (no keep/always)
+    'what went wrong in my last game', // single-game review
+    'is d5 a weak square here',      // positional weakness, not personal
+    "what's the Sicilian weak against", // opening's weakness, not the student
+    'drill my forks',                // drill imperative
+    'practice tactics',              // drill imperative
+    'give me a tactics puzzle',      // drill imperative
+  ])('does NOT match (near-miss): %s', (q) => expect(isProgressQuestion(q)).toBe(false));
 });
 
 describe('isBestMoveQuestion', () => {

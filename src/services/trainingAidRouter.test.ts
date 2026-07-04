@@ -81,6 +81,37 @@ describe('matchTrainingAidRoute — weaknesses / mistakes (adaptive mistake queu
   });
 });
 
+describe('matchTrainingAidRoute — diagnosis questions fall through to the grounded brain (David 2026-07-04)', () => {
+  // A DIAGNOSIS / recommendation QUESTION must NOT be hijacked into a drill —
+  // it's the grounded coach's job to name the student's weaknesses. The word
+  // "tactics"/"endgame" in the QUESTION used to trigger the drill branch.
+  it.each([
+    'what tactics am I weak in?',
+    'what tactics am I bad at',
+    'where am I weakest in tactics',
+    'what endgames do I struggle with',
+    'where am I losing my games',
+    'what should I train?',
+    'what should I learn next?',
+    'what am I worst at',
+    'which phase do I lose in',
+    "what's holding me back",
+  ])('diagnosis → null (brain grounds it): %s', (q) => {
+    expect(matchTrainingAidRoute(q)).toBeNull();
+  });
+
+  // But an explicit drill IMPERATIVE (no interrogative lead-in) STILL drills.
+  it('imperative "drill my weaknesses" still routes to the mistake queue', () => {
+    expect(matchTrainingAidRoute('drill my weaknesses')?.aid).toBe('mistakes');
+  });
+  it('imperative "give me a tactics puzzle" still routes to a puzzle drill', () => {
+    expect(matchTrainingAidRoute('give me a tactics puzzle')?.path).toBe('/coach/teach?drill=puzzle');
+  });
+  it('imperative "practice endgames" still routes to an endgame drill', () => {
+    expect(matchTrainingAidRoute('practice endgames')?.path).toBe('/coach/teach?drill=endgame');
+  });
+});
+
 describe('matchTrainingAidRoute — non-matches (fall through to brain / opening router)', () => {
   it('does NOT match an opening drill "drill the Vienna"', () => {
     expect(matchTrainingAidRoute('drill the Vienna')).toBeNull();

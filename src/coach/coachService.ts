@@ -701,27 +701,75 @@ export function isConceptQuestion(ask: string | undefined): boolean {
  *  the grounding inversion (Phase 6) routes it through `assembleProgressAnswer`
  *  → voiceFacts. The LLM voices the student's real data; it invents no weakness. */
 // Reusable fragments for the progress/weakness router (the most-worded ask).
-const IMPROVE_VERBS = String.raw`(?:work\s+on|improve(?:\s+on)?|practi[sc]e|focus\s+on|get\s+better(?:\s+at)?|fix|address|sharpen|study|brush\s+up\s+on|shore\s+up)`;
-const WEAKNESS_NOUNS = String.raw`(?:weakness(?:es)?|weak\s+(?:spots?|points?|areas?|aspects?|parts?|sides?)|weakest\s+(?:spot|point|area|aspect|part|skill|move|link|element|side)|flaws?|shortcomings?|blind\s+spots?|achilles\s+heel|leaks?|holes?|gaps?|sticking\s+points?|bad\s+habits?|recurring\s+(?:mistakes?|errors?)|common\s+(?:mistakes?|errors?))`;
+// The verb surface is exhaustive by design (David 2026-07-04: "use a theorist
+// to fill all possible verbs") — morphological, phrasal, and informal variants,
+// UK/US spellings. Split into two sets so an opening OBJECT can't slip through:
+//
+//  • IMPROVE_VERBS — recommendation-safe in EVERY frame (they don't take a
+//    named opening as a teach object, so "I want to work on X" is always a
+//    training ask, never "teach me opening X").
+//  • REC_VERBS — verbs that CAN take an opening object ("learn the Sicilian",
+//    "study the London"). Allowed ONLY in interrogative recommendation frames
+//    ("what should I learn?", "what to study next?") where such an object is
+//    ungrammatical — kept OUT of the bare-desire frame so "I want to learn the
+//    Caro-Kann" stays a teach request (opening resolution runs first anyway).
+const IMPROVE_VERBS = String.raw`(?:work\s+(?:on|at|through)|improve(?:\s+on)?|practi[sc]e|focus\s+on|get\s+(?:better|good|sharper)(?:\s+at)?|fix|address|sharpen|hone|strengthen|grind|polish|refine|prioriti[sz]e|brush\s+up(?:\s+on)?|shore\s+up|bone\s+up(?:\s+on)?|read\s+up(?:\s+on)?|level\s+up|tighten\s+up|iron\s+out|build\s+up|dial\s+in|plug|patch\s+up|clean\s+up|firm\s+up|beef\s+up)`;
+const REC_VERBS = String.raw`(?:train|learn|study|master|develop|review|prep(?:are)?)`;
+const ANY_TRAIN_VERB = String.raw`(?:` + IMPROVE_VERBS + String.raw`|` + REC_VERBS + String.raw`)`;
+const WEAKNESS_NOUNS = String.raw`(?:weakness(?:es)?|weak\s+(?:spots?|points?|areas?|aspects?|parts?|sides?|links?|zones?)|weakest\s+(?:spot|point|area|aspect|part|skill|move|link|element|side|phase|stage)|flaws?|shortcomings?|deficienc(?:y|ies)|deficits?|blind\s+spots?|achilles(?:'?s)?\s+heel|leaks?|holes?|gaps?|sticking\s+points?|bad\s+habits?|recurring\s+(?:mistakes?|errors?|patterns?)|common\s+(?:mistakes?|errors?)|repeated\s+(?:mistakes?|errors?)|kryptonite|downfall|undoing|soft\s+spots?|nemesis|bugbear|b[eê]te\s+noire|stumbling\s+blocks?|trouble\s+(?:spots?|areas?)|problem\s+areas?|pain\s+points?|failings?|limitations?|vulnerabilit(?:y|ies))`;
+// weak / poor / struggle predicates (with in/at/on/with prepositions)
+const WEAK_PRED = String.raw`(?:weak(?:est)?|bad|worst|poor|terrible|awful|horrible|hopeless|useless|rubbish|crap(?:py)?|garbage|trash|shaky|rough|not\s+(?:good|great))`;
 const PROGRESS_QUESTION_RE = anyOf([
+  // ── "am I improving / how am I doing" (progress-over-time) ──
   String.raw`\bam\s+i\s+(?:improving|getting\s+(?:better|worse)|progressing|developing|growing|any\s+good|good\s+enough|getting\s+anywhere)\b`,
   String.raw`\bhow\s+am\s+i\s+(?:doing|progressing|playing|improving|developing|getting\s+on)\b`,
   String.raw`\bhow(?:'?s| is| has)\s+my\s+(?:game|play|chess|progress|improvement)\b`,
-  String.raw`\bwhat\s+(?:should|do|can|must|ought)\s+i\s+(?:(?:need|want|have|like|try)\s+to\s+)?` + IMPROVE_VERBS + String.raw`\b`,
-  String.raw`\b(?:need|want|have|trying|gotta|got\s+to)\s+to?\s*` + IMPROVE_VERBS + String.raw`\b`,
-  String.raw`\bwhat\s+(?:are|is|to)\s+(?:my\s+)?(?:work\s+on|improve)\b`,
-  String.raw`\b(?:my|the)\s+(?:biggest\s+|main\s+|worst\s+|greatest\s+|number\s+one\s+)?` + WEAKNESS_NOUNS + String.raw`\b`,
-  String.raw`\b` + WEAKNESS_NOUNS + String.raw`\s+(?:in|of)\s+my\s+(?:game|play|chess)\b`,
-  String.raw`\bweakest\s+(?:aspect|part|area|point|spot|skill|element|side|link|piece)\s+of\s+my\s+(?:game|play|chess)\b`,
-  String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+)?weakest\s+(?:aspect|part|area|point|spot|side)\b`,
+  String.raw`\bhow\s+(?:can|do|should|could|might)\s+i\s+(?:get\s+better|improve|progress|level\s+up|get\s+good)\b`,
+  // ── recommendation: "what should I train/work on/learn (next)?" ──
+  String.raw`\bwhat\s+(?:should|shall|do|can|could|would|must|ought)\s+i\s+(?:(?:need|want|have|like|try|be)\s+to\s+)?` + ANY_TRAIN_VERB + String.raw`\b`,
+  // progressive "-ing" recommendation ("what should I be working on")
+  String.raw`\bwhat\s+(?:should|am|do)\s+i\s+(?:be\s+)?(?:working\s+on|focusing\s+on|practi[sc]ing|improving|studying|training|learning|honing|sharpening|grinding|developing)\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+)?(?:best|most\s+important|first|next)\s+thing\s+to\s+` + ANY_TRAIN_VERB + String.raw`\b`,
+  String.raw`\bwhat\s+to\s+` + ANY_TRAIN_VERB + String.raw`\b`,
+  String.raw`\bwhat\s+(?:area|part|phase|aspect|skill)\s+(?:of\s+my\s+(?:game|play|chess)\s+)?(?:should\s+i|do\s+i|to)\s+` + ANY_TRAIN_VERB + String.raw`\b`,
+  // ── recommendation: bare desire ("I want to improve / need to work on") ──
+  String.raw`\b(?:need|want|wanna|have|trying|tryna|gotta|got\s+to|gonna|hoping|looking|keen)\s+(?:to\s+)?` + IMPROVE_VERBS + String.raw`\b`,
+  String.raw`\bhelp\s+me\s+(?:` + IMPROVE_VERBS + String.raw`|get\s+better|improve|level\s+up)\b`,
+  String.raw`\b(?:tell|show|point)\s+me\s+(?:what\s+to\s+` + ANY_TRAIN_VERB + String.raw`|where\s+to\s+focus|at\s+what\s+to\s+` + ANY_TRAIN_VERB + String.raw`)\b`,
+  String.raw`\b(?:give|suggest|recommend)\s+(?:me\s+)?(?:something|a\s+plan|a\s+focus|an?\s+area|what)\s+to\s+(?:` + ANY_TRAIN_VERB + String.raw`|drill|practi[sc]e)\b`,
+  // ── focus / priority ──
+  String.raw`\b(?:where|what)\s+should\s+(?:i\s+focus|my\s+focus\s+be|i\s+(?:put|spend)\s+my\s+(?:time|energy|effort))\b`,
+  String.raw`\bwhat\s+(?:area|part|phase|aspect|skill)\s+(?:of\s+my\s+(?:game|play|chess)\s+)?needs?\s+(?:the\s+most\s+)?(?:work|attention|improvement)\b`,
+  String.raw`\bwhat\s+needs?\s+(?:the\s+most\s+)?(?:work|improvement|attention)\b`,
+  String.raw`\b(?:study|training|practice)\s+plan\b`,
+  // ── weakness NOUNS ──
+  String.raw`\b(?:my|the)\s+(?:biggest\s+|main\s+|worst\s+|greatest\s+|number\s+one\s+|top\s+)?` + WEAKNESS_NOUNS + String.raw`\b`,
+  String.raw`\b` + WEAKNESS_NOUNS + String.raw`\s+(?:in|of|with)\s+my\s+(?:game|play|chess)\b`,
+  String.raw`\bwhat\s+(?:are|is|'?s)\s+my\s+(?:biggest\s+|main\s+|worst\s+|top\s+)?` + WEAKNESS_NOUNS + String.raw`\b`,
+  String.raw`\bbiggest\s+(?:weakness|mistake|problem|issue|flaw|leak|gap)\b`,
+  String.raw`\bweakest\s+(?:aspect|part|area|point|spot|skill|element|side|link|piece|phase|stage)\s+of\s+my\s+(?:game|play|chess)\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+)?weakest\s+(?:aspect|part|area|point|spot|side|phase|link)\b`,
   String.raw`\b(?:my|the)\s+(?:progress|improvement|strengths?|strong\s+(?:points?|suits?|areas?))\b`,
-  String.raw`\bwhere\s+(?:am\s+i|do\s+i)\s+(?:keep\s+)?(?:weak|struggl(?:e|ing)|los(?:e|ing)|need\s+work|go(?:ing)?\s+wrong|mess(?:ing)?\s+up|blunder(?:ing)?|fall(?:ing)?\s+short|drop(?:ping)?\s+points?)\b`,
-  String.raw`\bwhat(?:'?s| is)?\s+holding\s+me\s+back\b`,
-  String.raw`\bwhat\s+(?:trips|throws|holds)\s+me\s+(?:up|back)\b`,
+  // ── weak / struggle PREDICATES (self, aggregate) ──
+  String.raw`\bwhat\s+(?:am\s+i|i'?m|do\s+i)\s+` + WEAK_PRED + String.raw`\s+(?:at|in|on|with)\b`,
+  String.raw`\bwhere\s+(?:am\s+i|i'?m|do\s+i)\s+(?:the\s+)?(?:` + WEAK_PRED + String.raw`|struggl(?:e|ing)|los(?:e|ing)|failing|need\s+work|go(?:ing)?\s+wrong|mess(?:ing)?\s+up|blunder(?:ing)?|fall(?:ing)?\s+short|drop(?:ping)?\s+(?:points?|games?))\b`,
   String.raw`\bwhat\s+(?:am\s+i|do\s+i)\s+(?:bad|worst|good|best|strong|weak)\s+at\b`,
-  String.raw`\bwhat\s+do\s+i\s+(?:do|get|keep\s+(?:doing|getting))\s+wrong\b`,
-  String.raw`\bbiggest\s+(?:weakness|mistake|problem|issue|flaw|leak)\b`,
-  String.raw`\bwhat\s+(?:keeps?\s+)?(?:costing|losing)\s+me\s+(?:games|points|rating)\b`,
+  // aggregate error habits — guarded by keep/always so a SINGLE-game "why did I
+  // lose that game" (single-game review) does NOT match.
+  String.raw`\b(?:i\s+)?(?:keep|always|constantly|usually|often|repeatedly)\s+(?:losing|blunder(?:ing)?|messing\s+up|screwing\s+up|going\s+wrong|hanging\s+(?:pieces|my\s+\w+|stuff)|dropping\s+(?:pieces|points))\b`,
+  String.raw`\bwhat\s+(?:do\s+i|am\s+i)\s+(?:keep\s+)?(?:doing|getting)\s+wrong\b`,
+  String.raw`\bwhat\s+(?:mistakes?|errors?)\s+do\s+i\s+(?:keep|always|repeatedly|usually)\s+(?:make|making|repeat)\b`,
+  String.raw`\bwhy\s+(?:do\s+i|can'?t\s+i|am\s+i)\s+(?:keep\s+|always\s+|constantly\s+)?(?:los(?:e|ing)|(?:not\s+)?improv(?:e|ing)?|stuck|blunder(?:ing)?)\b`,
+  String.raw`\bwhich\s+(?:phase|part|area|stage)\s+(?:do\s+i|am\s+i)\s+(?:lose|los(?:e|ing)|weak(?:est)?|struggl(?:e|ing)|worst)\b`,
+  // ── "holding me back / costing me" ──
+  String.raw`\bwhat(?:'?s| is)?\s+(?:holding|keeping|stopping|capping|limiting|dragging)\s+(?:me|my\s+(?:rating|game|chess|progress))(?:\s+(?:back|down|from|up))?\b`,
+  String.raw`\bwhat\s+(?:trips|throws|holds)\s+me\s+(?:up|back)\b`,
+  String.raw`\bwhat\s+(?:keeps?\s+)?(?:costing|losing)\s+me\s+(?:games?|points?|rating|elo)\b`,
+  // ── topic-scoped weakness ("what tactics am I weak in", "weak in endgames") ──
+  String.raw`\bwhat\s+(?:kind\s+of\s+)?(?:tactics?|tactical|openings?|repertoire|endgames?|endings?|middlegames?|calculation|positional|strategy|defen[cs]e|attack(?:ing)?)\b[\s\w']{0,20}\b(?:am\s+i|i'?m|do\s+i)\s+(?:` + WEAK_PRED + String.raw`|struggl(?:e|ing)|los(?:e|ing)|miss(?:ing)?)\b`,
+  String.raw`\b(?:` + WEAK_PRED + String.raw`|struggl(?:e|ing))\s+(?:at|in|on|with)\s+(?:my\s+)?(?:tactics?|tactical|openings?|repertoire|endgames?|endings?|middlegames?|calculation|positional|strategy|defen[cs]e|attack(?:ing)?|conversion|time\s+management|blunders?|forks?|pins?|skewers?|back[\s-]?rank|king\s+safety|pawn\s+structures?)\b`,
+  // ── explicit "diagnose my chess" ──
+  String.raw`\b(?:diagnose|analy[sz]e|assess|evaluate)\s+my\s+(?:chess|game|play|weakness\w*)\b`,
 ]);
 export function isProgressQuestion(ask: string | undefined): boolean {
   return !!ask && PROGRESS_QUESTION_RE.test(ask);

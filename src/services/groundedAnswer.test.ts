@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -97,6 +97,60 @@ describe('assembleProgressAnswer — Phase 6 (voice the student\'s real history)
   it('ignores resolved habits and returns null when none remain', () => {
     expect(assembleProgressAnswer([habit({ isResolved: true })])).toBeNull();
     expect(assembleProgressAnswer([])).toBeNull();
+  });
+});
+
+describe('assembleWeaknessRecommendation — the grounded "what should I train" answer', () => {
+  const w = (label: string, openCount: number, bucket?: string) => ({ label, openCount, bucket });
+  it('voices the top open weaknesses, most frequent first, with a drill next-step', () => {
+    const a = assembleWeaknessRecommendation([
+      w('Forks', 4, 'tactical'),
+      w('Rook endgames', 9, 'endgame'),
+      w('Back-rank', 2, 'tactical'),
+    ]);
+    expect(a).not.toBeNull();
+    // ranked by openCount desc: 9, 4, 2
+    expect(a!.facts).toMatch(/Rook endgames \(9 times\).*Forks \(4 times\).*Back-rank \(2 times\)/);
+    expect(a!.facts).toMatch(/drill your mistakes/i);
+    expect(a!.sources).toContain('data:your-games');
+  });
+  it('caps at the top 3 and skips zero-open / unlabeled rows', () => {
+    const a = assembleWeaknessRecommendation([
+      w('A', 5, 'tactical'), w('B', 4, 'tactical'), w('C', 3, 'tactical'), w('D', 2, 'tactical'),
+      w('Z', 0, 'tactical'), w('', 8, 'tactical'),
+    ]);
+    expect(a!.facts).toContain('A (5 times)');
+    expect(a!.facts).not.toContain('D (2 times)'); // 4th, dropped
+    expect(a!.facts).not.toContain('Z ('); // zero-open, dropped
+  });
+  it('filters to a named topic bucket when scoped', () => {
+    const rows = [w('Rook endgames', 9, 'endgame'), w('Forks', 4, 'tactical'), w('Pins', 3, 'tactical')];
+    const a = assembleWeaknessRecommendation(rows, { topic: 'tactical' });
+    expect(a!.facts).toContain('Forks (4 times)');
+    expect(a!.facts).toContain('Pins (3 times)');
+    expect(a!.facts).not.toContain('Rook endgames'); // wrong bucket, excluded
+    expect(a!.facts).toMatch(/tactical area/i);
+  });
+  it('returns null when nothing is open (caller falls back)', () => {
+    expect(assembleWeaknessRecommendation([])).toBeNull();
+    expect(assembleWeaknessRecommendation([w('X', 0, 'tactical')])).toBeNull();
+    // topic filter that empties the pool → null (caller retries unscoped)
+    expect(assembleWeaknessRecommendation([w('Forks', 4, 'tactical')], { topic: 'endgame' })).toBeNull();
+  });
+});
+
+describe('weaknessTopicFromText — scope extraction', () => {
+  it.each([
+    ['what tactics am I weak in', 'tactical'],
+    ['am I bad at forks', 'tactical'],
+    ['where am I weak in the endgame', 'endgame'],
+    ['what openings do I lose in', 'opening'],
+    ['struggle with my positional play', 'positional'],
+  ] as const)('%s → %s', (t, topic) => expect(weaknessTopicFromText(t)).toBe(topic));
+  it('returns null when unscoped', () => {
+    expect(weaknessTopicFromText('what should I train')).toBeNull();
+    expect(weaknessTopicFromText('what are my weaknesses')).toBeNull();
+    expect(weaknessTopicFromText(undefined)).toBeNull();
   });
 });
 

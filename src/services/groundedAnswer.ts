@@ -773,3 +773,76 @@ export function assembleProgressAnswer(badHabits: ReadonlyArray<BadHabit>): Grou
 
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
+
+/** Topic a student scoped a weakness/training question to, so the
+ *  recommendation filters the ranked profile to that family. Maps to the
+ *  `MisconceptionBucket` an aggregated weakness carries. Returns null when the
+ *  question is unscoped ("what should I train?" → the whole profile). */
+export type WeaknessTopic = 'tactical' | 'opening' | 'endgame' | 'positional';
+
+export function weaknessTopicFromText(text: string | undefined | null): WeaknessTopic | null {
+  if (!text) return null;
+  const t = text.toLowerCase();
+  // Tactics first — the most-asked scope, and its motifs (fork/pin/…) are
+  // unambiguous even when the word "tactic" is absent.
+  if (/\btactic(?:s|al)?\b|\bcombination|\bfork|\bpins?\b|\bskewer|\bdiscover|\bdouble\s+attack|\bback[\s-]?rank\b/.test(t)) return 'tactical';
+  if (/\bend[\s-]?games?\b|\bendings?\b|\brook\s+ending|\bpawn\s+ending|\bconvert(?:ing)?\b/.test(t)) return 'endgame';
+  if (/\bopening|\brepertoire\b|\bopening\s+prep/.test(t)) return 'opening';
+  if (/\bpositional|\bstrateg|\bplan(?:ning|s)?\b|\bstructure/.test(t)) return 'positional';
+  return null;
+}
+
+/** The minimal shape `assembleWeaknessRecommendation` reads — a structural
+ *  subset of `UnifiedWeakness` (weaknessSpine) so the assembler stays a pure
+ *  leaf that imports no service. The caller computes the ranked profile
+ *  (`getUnifiedWeaknessProfile`) and hands the rows in. */
+export interface WeaknessLike {
+  /** Plain-English label, no SAN/jargon (e.g. "Forks", "Rook endgames"). */
+  label: string;
+  /** Instances due/open right now — the ranking + selection key. */
+  openCount: number;
+  /** MisconceptionBucket family, for topic filtering. */
+  bucket?: string;
+}
+
+/**
+ * assembleWeaknessRecommendation — the grounded "what should I train / what am
+ * I weak in" answer. The student's OWN ranked weakness profile (computed by
+ * `getUnifiedWeaknessProfile` across every capture pipeline — tactics, openings,
+ * phase-of-loss, conversion, board-vision) is handed in; this SELECTS the top
+ * few (most-frequent first), optionally scoped to a named topic, and packages
+ * them for `voiceFacts`. The LLM voices the student's real numbers + a true
+ * next-step fact; it never invents a weakness. Returns null when there's
+ * nothing open (caller falls back to the bad-habit profile, then a no-data
+ * line). G0: no chess content decided here — only phrasing downstream.
+ */
+export function assembleWeaknessRecommendation(
+  weaknesses: ReadonlyArray<WeaknessLike>,
+  opts: { topic?: WeaknessTopic | null } = {},
+): GroundedAnswer | null {
+  const topic = opts.topic ?? null;
+  const pool = topic ? weaknesses.filter((w) => w.bucket === topic) : weaknesses;
+  const open = pool
+    .filter((w) => w.openCount > 0 && !!w.label)
+    .sort((a, b) => b.openCount - a.openCount)
+    .slice(0, 3);
+  if (open.length === 0) return null;
+
+  const phrase = (w: WeaknessLike): string =>
+    `${w.label} (${w.openCount} time${w.openCount === 1 ? '' : 's'})`;
+  const topicNoun =
+    topic === 'tactical' ? 'tactical area'
+      : topic === 'opening' ? 'opening'
+        : topic === 'endgame' ? 'endgame area'
+          : topic === 'positional' ? 'positional area'
+            : 'area';
+  const lead =
+    open.length === 1
+      ? `The ${topicNoun} to train, from your own games: ${phrase(open[0])}.`
+      : `The ${topicNoun}s to train, most frequent first, from your own games: ${open.map(phrase).join('; ')}.`;
+  // A TRUE capability fact (not invented chess content) so the coach can offer
+  // the concrete next step — drilling routes to the real mistake queue.
+  const facts = `${lead} You can practice these on the board anytime by asking to drill your mistakes.`;
+
+  return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+}
