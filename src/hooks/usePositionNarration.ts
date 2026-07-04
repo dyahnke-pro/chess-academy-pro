@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { getCoachChatResponse } from '../services/coachApi';
 import { isSpokenSentenceGrounded } from '../services/coachAnswerGates';
+import { buildFedTacticsContext } from '../services/liveTacticsContext';
 import { voiceService } from '../services/voiceService';
 import { stockfishEngine, resolveWorkerUrl } from '../services/stockfishEngine';
 import { buildChessContextMessage, POSITION_NARRATION_ADDITION } from '../services/coachPrompts';
@@ -184,6 +185,23 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
       const profile = await db.profiles.get('main');
       const rating = profile?.currentRating ?? 1200;
 
+      // Build the bounded tactics context so the per-sentence spoken gate below
+      // can drop an out-of-vocab fork/pin too, not just a board-false fact — a
+      // "read this position" narration naming a tactic that isn't there was the
+      // one remaining tactic-ungated read-aloud (David 2026-07-04 sweep).
+      // Reuses the stockfishAnalysis already computed above — no extra engine
+      // read; falls back to a FEN-only scan if that analysis is thin.
+      const posStudentCC = args.playerColor === 'white' ? 'w' : 'b';
+      const posTactics = (await buildFedTacticsContext(
+        args.fen,
+        posStudentCC,
+        rating,
+        stockfishAnalysis,
+        () => Promise.resolve(null), // latency-safe: reuse the cached analysis, no extra engine read
+        profile?.skillRadar?.tactics,
+      ).catch(() => undefined)) ?? null;
+      if (token !== activeTokenRef.current) return;
+
       // G0 — compute the extra reading facts (SEE-accurate material at risk,
       // pawn breaks, good/bad piece quality) in code and hand them to the coach
       // so its spoken read is grounded, not eyeballed. Complements the tactics
@@ -225,7 +243,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
         // Per-sentence spoken gate. This surface streams each sentence
         // straight to TTS as it arrives (no final-text chokepoint), so the
         // gate must run HERE — never speak a provably-false board fact.
-        if (!isSpokenSentenceGrounded(trimmed, args.fen, 'usePositionNarration')) return;
+        if (!isSpokenSentenceGrounded(trimmed, args.fen, 'usePositionNarration', posTactics)) return;
         sentenceCount += 1;
         if (sentenceCount === 1) {
           const firstDispatchMs = Date.now() - tapTs;
