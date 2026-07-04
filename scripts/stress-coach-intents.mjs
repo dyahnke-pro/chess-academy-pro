@@ -139,6 +139,16 @@ const BATTERY = [
     'was that a mistake', 'how good was that move', 'was my last move good', 'was my move a mistake',
     'did i play that right', 'grade my move', 'was that the best move', 'rate my move',
     'WAS THAT A GOOD MOVE', '  rate my last move  ']],
+
+  // ═══ ESCALATION PASS — messier phrasings for the new verticals + the tricky
+  //     overlaps, per David's "ask it different ways, find where it breaks". ═══
+  ['recordVs', ['how do i score against the caro-kann', 'my results versus the london system',
+    "what's my w/l in the najdorf", 'how have i done against the kings gambit',
+    'record against magnuscarlsen', 'how do i fare facing the dutch', 'my head-to-head with that guy',
+    'how do i perform in the italian game', 'results vs the scandinavian']],
+  ['moveRating', ['was my move correct', 'was my move sound', 'was that move ok', 'how was my move',
+    'did i choose well', 'was picking that a mistake', 'was that a strong move', 'rate the last move',
+    'was that move any good', 'was my last move a blunder']],
 ];
 
 // GARBAGE / non-questions — MUST match NOTHING (false-positive guard).

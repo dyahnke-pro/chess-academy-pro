@@ -88,6 +88,46 @@ describe('computeLastMoveRating', () => {
     expect(r!.quality).toBe('blunder');
   });
 
+  it('rates a Black BEST move as best (sign-flip, wasBest true)', async () => {
+    // After 1.e4, Black to move plays the engine pick c7c5. White eval steady.
+    analyzePosition
+      .mockResolvedValueOnce(mk(15, 'c7c5'))   // pre-move, Black to move
+      .mockResolvedValueOnce(mk(15, 'g1f3'));  // post-move, White to move
+    const r = await computeLastMoveRating(['e4', 'c5']);
+    expect(r).not.toBeNull();
+    expect(r!.studentColor).toBe('black');
+    expect(r!.wasBest).toBe(true);
+    expect(r!.cpLoss).toBe(0);
+    expect(r!.quality).toBe('best');
+  });
+
+  it('clamps cpLoss to 0 when the position eval improves for the mover (never negative)', async () => {
+    // Depth noise / a sharpening move can read the post-position as BETTER for
+    // the student than the pre. cpLoss must floor at 0, not go negative.
+    analyzePosition
+      .mockResolvedValueOnce(mk(20, 'd2d4'))   // pre: White +0.2, best d4
+      .mockResolvedValueOnce(mk(90, 'e7e5'));  // post: White +0.9 (improved)
+    const r = await computeLastMoveRating(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'd3']);
+    expect(r).not.toBeNull();
+    expect(r!.studentColor).toBe('white');
+    expect(r!.cpLoss).toBe(0);       // max(0, 20 - 90) = 0, NOT -70
+    expect(r!.quality).toBe('best'); // cpLoss < 20
+  });
+
+  it('a Black inaccuracy: White eval RISING is the loss (sign convention pinned)', async () => {
+    // The bug class this guards: forgetting to flip, so a Black mistake (White
+    // eval up) reads as a gain. Pre White +0.1, post White +1.6 → Black gave up
+    // 1.5 → mistake, NOT "best".
+    analyzePosition
+      .mockResolvedValueOnce(mk(10, 'g8f6'))   // pre, Black to move
+      .mockResolvedValueOnce(mk(160, 'd2d4')); // post, White to move — White jumped
+    const r = await computeLastMoveRating(['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4']);
+    expect(r).not.toBeNull();
+    expect(r!.studentColor).toBe('black');
+    expect(r!.cpLoss).toBe(150);       // -10 - (-160) = 150 in student POV
+    expect(r!.quality).toBe('inaccuracy');
+  });
+
   it('returns null on empty history or engine failure', async () => {
     expect(await computeLastMoveRating([])).toBeNull();
     analyzePosition.mockRejectedValueOnce(new Error('engine down'));

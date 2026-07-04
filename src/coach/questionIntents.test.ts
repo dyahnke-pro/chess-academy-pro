@@ -711,6 +711,9 @@ describe('recordVsTarget / isRecordVsQuestion (David 2026-07-04: record vs a spe
     expect(recordVsTarget('my record vs the French')).toBe('French');
     expect(recordVsTarget("what's my record in the Najdorf")).toBe('Najdorf');
     expect(recordVsTarget('how do I fare against the Caro-Kann')).toBe('Caro-Kann');
+    // Escalation-pass break (2026-07-04) — "w/l" lead now recognized.
+    expect(recordVsTarget("what's my w/l in the najdorf")).toBe('najdorf');
+    expect(isRecordVsQuestion('my win/loss vs the london')).toBe(true);
   });
   it('captures the opponent target', () => {
     expect(recordVsTarget('my record against Magnus')).toBe('Magnus');
@@ -755,6 +758,13 @@ describe('isMoveRatingQuestion (David 2026-07-04: rate the move just played)', (
     'was that the best move',
     'WAS THAT A GOOD MOVE',
     '  rate my last move  ',
+    // Escalation-pass breaks (2026-07-04 adversarial run) — now regression-locked.
+    'was that move ok',
+    'was that move any good',
+    'was picking that a mistake',
+    'was my move correct',
+    'was my move sound',
+    'was that a strong move',
   ])('matches: %s', (q) => expect(isMoveRatingQuestion(q)).toBe(true));
 
   it.each([

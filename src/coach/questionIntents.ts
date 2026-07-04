@@ -802,7 +802,7 @@ export function isRecordsQuestion(ask: string | undefined): boolean {
  *  detector both DETECTS and EXTRACTS the target term (mirrors
  *  `openingProfileKind`). Requires a target after a preposition, so a
  *  bare "what's my record" falls through to the generic records vertical. */
-const RECORD_VS_LEAD = String.raw`(?:my\s+)?(?:record|results?|win[\s-]?rate|score|h2h|head[\s-]?to[\s-]?head)|how\s+(?:do|did|have|has|'?s)\s+i\s+(?:do|done|doing|fare|fared|perform|performed|play|played|score|scored)`;
+const RECORD_VS_LEAD = String.raw`(?:my\s+)?(?:record|results?|win[\s/-]?rate|w\/?l|win[\s/-]?loss|score|h2h|head[\s-]?to[\s-]?head)|how\s+(?:do|did|have|has|'?s)\s+i\s+(?:do|done|doing|fare|fared|perform|performed|play|played|score|scored)`;
 const RECORD_VS_RE = new RegExp(
   String.raw`\b(?:${RECORD_VS_LEAD})\b[\s\S]*?\b(?:against|versus|vs\.?|v\.?|facing|in|with|playing)\s+(?:the\s+)?([a-z0-9][a-z0-9'’\-.\s]*?)\s*[?.!]*$`,
   'i',
@@ -831,12 +831,15 @@ export function isRecordVsQuestion(ask: string | undefined): boolean {
  *  isBestMoveQuestion ("what SHOULD I play?"): this grades a move already on
  *  the board. The interception falls through when there's no move history. */
 const MOVE_RATING_RE = anyOf([
-  String.raw`\b(?:was|is|were)\s+(?:that|this|it|my\s+(?:last\s+)?move|my\s+move)\s+(?:a\s+|an\s+|the\s+)?(?:good|bad|great|strong|weak|sound|solid|best|right|correct|blunder|mistake|inaccuracy|error|ok|okay)\b`,
+  // "was that (move) (any) good/ok/a mistake" — subjects incl. "that/this/the move".
+  String.raw`\b(?:was|is|were)\s+(?:(?:that|this|the)\s+move|that|this|it|my\s+(?:last\s+)?move|my\s+move)\s+(?:a\s+|an\s+|the\s+|any\s+)?(?:good|bad|great|strong|weak|sound|solid|best|right|correct|blunder|mistake|inaccuracy|error|ok|okay)\b`,
   String.raw`\brate\s+(?:my|that|this|the)\s+(?:last\s+)?move\b`,
   String.raw`\bgrade\s+(?:my|that|this|the)\s+(?:last\s+)?move\b`,
   String.raw`\bhow\s+(?:good|bad|strong|was)\s+(?:was\s+)?(?:that|this|it|my\s+(?:last\s+)?move|my\s+move)\b`,
   String.raw`\bdid\s+i\s+(?:play|make|pick|choose)\s+(?:that|it|the\s+right\s+move|a\s+good\s+move|well)\b`,
   String.raw`\bwas\s+(?:that|my\s+(?:last\s+)?move)\s+(?:the\s+)?(?:right|best)\b`,
+  // gerund frame: "was playing/picking/choosing/making that a mistake/good"
+  String.raw`\bwas\s+(?:playing|picking|choosing|making)\s+(?:that|it|this)\s+(?:a\s+|an\s+)?(?:good|bad|sound|weak|blunder|mistake|inaccuracy|error|ok|okay)\b`,
 ]);
 export function isMoveRatingQuestion(ask: string | undefined): boolean {
   return !!ask && MOVE_RATING_RE.test(ask);
