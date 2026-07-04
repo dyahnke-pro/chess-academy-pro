@@ -11,6 +11,7 @@ import {
   isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion, isRepertoireGapQuestion,
   isBestMoveQuestion, isTacticsQuestion, isPositionAssessmentQuestion, isMasterPlayQuestion,
   isEndgameQuestion, isPlayerGamesQuestion, isConceptQuestion, isPlanQuestion,
+  isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion,
 } from '../src/coach/questionIntents.ts';
 
 const DETECTORS = {
@@ -21,6 +22,7 @@ const DETECTORS = {
   repertoireGap: isRepertoireGapQuestion, bestMove: isBestMoveQuestion, tacticsLive: isTacticsQuestion,
   positionAssessment: isPositionAssessmentQuestion, masterPlay: isMasterPlayQuestion,
   endgame: isEndgameQuestion, playerGames: isPlayerGamesQuestion, concept: isConceptQuestion, plan: isPlanQuestion,
+  accuracy: isAccuracyQuestion, consistency: isConsistencyQuestion, converting: isConvertingQuestion,
 };
 
 // expected: the detector that SHOULD fire. Rephrasings hammer each vertical.
@@ -112,6 +114,14 @@ const BATTERY = [
   ['reviewDue', ["WHAT'S DUE FOR REVIEW TODAY", 'anything due??', '  how many cards are due  ']],
   ['repertoireGap', ['WHATS A HOLE IN MY REPERTOIRE', 'what opening should i learn next 🤔']],
   ['openingAccuracy', ['HOW ACCURATE AM I IN MY OPENING', '  which line should i work on  ']],
+
+  // ═══ WAVE 3 detectors — accuracy / consistency / converting ═══
+  ['accuracy', ['how accurate am i overall', "what's my accuracy", 'how precise is my play',
+    'how often do i find the best move', 'how engine-like am i', "what's my move quality", 'how many brilliant moves']],
+  ['consistency', ['am i on a streak', "what's my win streak", 'how consistent am i',
+    'what time control am i best at', 'am i better at blitz or rapid', 'how often do i play', 'my best time control']],
+  ['converting', ['do i convert winning positions', 'do i close out wins', 'do i throw away winning positions',
+    'do i come back from losing positions', 'how do i win my games', 'am i a grinder or attacker']],
 ];
 
 // GARBAGE / non-questions — MUST match NOTHING (false-positive guard).

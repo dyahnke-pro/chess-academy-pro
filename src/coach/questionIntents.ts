@@ -661,6 +661,7 @@ const PHASE_QUESTION_RE = anyOf([
   String.raw`\bdo\s+i\s+(?:fade|tire|weaken)\s+in\s+(?:long\s+games|the\s+endgame)\b`,
   String.raw`\b(?:opening|middlegame)\s+or\s+(?:middlegame|endgame)\s+player\b`,
   String.raw`\bwhich\s+(?:part|stage|phase)\s+of\s+(?:the\s+game|my\s+game)\b`,
+  String.raw`\b(?:handle|play|do\s+in|at)\s+(?:the\s+)?critical\s+moments?\b`,
 ]);
 export function isPhaseQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
@@ -698,6 +699,7 @@ const REPERTOIRE_GAP_RE = anyOf([
   String.raw`\bwhat\s+should\s+i\s+(?:learn|add\s+to\s+my\s+repertoire)\s+next\b`,
   String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+)?next\s+opening\s+(?:for\s+me\s+)?to\s+(?:learn|study)\b`,
   String.raw`\bwhat\s+should\s+i\s+add\s+to\s+my\s+repertoire\b`,
+  String.raw`\bwhat\s+to\s+learn\s+next\b`,
 ]);
 export function isRepertoireGapQuestion(ask: string | undefined): boolean {
   return !!ask && REPERTOIRE_GAP_RE.test(ask);
@@ -708,6 +710,62 @@ export function repertoireGapKind(ask: string | undefined): 'out-of-book' | 'hol
   if (/\blearn\b|\badd\b|\bnext\s+opening\b|\bshould\s+i\s+(?:learn|study|add)\b/.test(a)) return 'learn-next';
   if (/\b(?:leave|leaving|out\s+of|off)\s+(?:the\s+|my\s+|your\s+)?(?:book|theory|prep)|\bdrift\b|\bdeviate\b/.test(a)) return 'out-of-book';
   return 'hole';
+}
+
+/** WAVE 3 — accuracy/move-quality, consistency/time-control, converting/winning.
+ *  Each is about the STUDENT'S OWN play (no board), voiced from the analytics. */
+
+/** "how accurate am I overall / how often do I find the best move / my move
+ *  quality?" → assembleAccuracyAnswer. Guarded against the opening-scoped
+ *  accuracy question (isOpeningAccuracyQuestion). */
+const ACCURACY_QUESTION_RE = anyOf([
+  String.raw`\bhow\s+accurate\s+am\s+i\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+my\s+(?:overall\s+)?accuracy\b`,
+  String.raw`\bhow\s+precise\s+is\s+my\s+play\b`,
+  String.raw`\bhow\s+(?:often|frequently)\s+do\s+i\s+(?:find|play)\s+the\s+best\s+move\b`,
+  String.raw`\bhow\s+engine[\s-]?like\b`,
+  String.raw`\bmy\s+(?:best[\s-]?move\s+)?(?:agreement|accuracy)\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+my\s+move\s+quality\b`,
+  String.raw`\bhow\s+many\s+brilliant\s+moves?\b`,
+]);
+export function isAccuracyQuestion(ask: string | undefined): boolean {
+  if (!ask) return false;
+  // Opening-scoped accuracy belongs to isOpeningAccuracyQuestion.
+  if (/\b(?:opening|line|variation|repertoire|theory)\b/i.test(ask)) return false;
+  return ACCURACY_QUESTION_RE.test(ask);
+}
+
+/** "am I on a streak / what time control am I best at / how consistent am I?" →
+ *  assembleConsistencyAnswer (streaks + timeControlPerformance). */
+const CONSISTENCY_QUESTION_RE = anyOf([
+  String.raw`\b(?:am\s+i\s+on|what(?:'?s| is)?\s+my)\s+(?:a\s+)?(?:win(?:ning)?\s+)?streak\b`,
+  String.raw`\bwin\s+streak\b`,
+  String.raw`\bhow\s+consistent\s+am\s+i\b`,
+  String.raw`\bwhat\s+time\s+control\s+am\s+i\s+(?:best|worst)\s+at\b`,
+  String.raw`\bam\s+i\s+better\s+at\s+(?:blitz|bullet|rapid|classical)\b`,
+  String.raw`\bhow\s+(?:often|much)\s+do\s+i\s+play\b`,
+  String.raw`\bdo\s+i\s+(?:practi[cs]e|play)\s+(?:regularly|consistently|often)\b`,
+  String.raw`\bmy\s+(?:best|worst)\s+time\s+control\b`,
+]);
+export function isConsistencyQuestion(ask: string | undefined): boolean {
+  return !!ask && CONSISTENCY_QUESTION_RE.test(ask);
+}
+
+/** "do I convert winning positions / do I come back / how do I win?" →
+ *  assembleConvertingAnswer (thrownWins + comebackWins + winShape). */
+const CONVERTING_QUESTION_RE = anyOf([
+  String.raw`\bdo\s+i\s+convert\b`,
+  String.raw`\bdo\s+i\s+(?:close\s+out|finish|seal)\s+(?:my\s+)?(?:wins|games|winning\s+positions?)\b`,
+  String.raw`\bdo\s+i\s+(?:throw\s+away|blow|squander|let\s+slip)\s+(?:winning|won)\b`,
+  String.raw`\bdo\s+i\s+(?:come\s+back|comeback|bounce\s+back)\b`,
+  String.raw`\bhow\s+(?:often\s+)?do\s+i\s+(?:comeback|come\s+back)\b`,
+  String.raw`\bhow\s+do\s+i\s+win\s+(?:my\s+)?games\b`,
+  String.raw`\bam\s+i\s+a\s+(?:grinder|attacker|closer)\b`,
+  String.raw`\b(?:grinder|attacker)\s+or\s+(?:grinder|attacker)\b`,
+  String.raw`\bdo\s+i\s+convert\s+(?:winning|won)\s+(?:positions?|games?|endgames?)\b`,
+]);
+export function isConvertingQuestion(ask: string | undefined): boolean {
+  return !!ask && CONVERTING_QUESTION_RE.test(ask);
 }
 
 /**
@@ -766,6 +824,9 @@ export function buildQuestionGrounding(
     phaseQuestion: isPhaseQuestion(ask),
     repertoireGapQuestion: isRepertoireGapQuestion(ask),
     repertoireGapKind: repertoireGapKind(ask),
+    accuracyQuestion: isAccuracyQuestion(ask),
+    consistencyQuestion: isConsistencyQuestion(ask),
+    convertingQuestion: isConvertingQuestion(ask),
     masterPlayQuestion: isMasterPlayQuestion(ask),
     conceptQuestion: isConceptQuestion(ask),
     playerGamesQuestion: isPlayerGamesQuestion(ask),

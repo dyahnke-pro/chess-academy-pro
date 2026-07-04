@@ -66,9 +66,9 @@ import { getStrongestOpenings, getMostPlayedOpenings, getWeakestOpenings, getOpe
 import { getWeakSpotsForOpening } from './weakSpotService';
 import type { OpeningRecord } from '../types';
 import { getOverviewInsights, getMistakeInsights, getTacticInsights, getOpeningInsights } from './gameInsightsService';
-import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer } from './groundedAnswer';
+import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer } from './groundedAnswer';
 import { getDueCount, getEnrolledOpenings, getSrsDueOpenings, getTotalEnrolled } from './srsOpeningService';
-import { criticalMomentsAccuracy } from './analyticsService';
+import { criticalMomentsAccuracy, streaks, timeControlPerformance, comebackWins, winShapeStats } from './analyticsService';
 import { detectConceptsInText, getConcept } from './chessConceptService';
 import { validateClaims, type ClaimValidationResult } from './claimValidator';
 import { logAppAudit } from './appAuditor';
@@ -1262,6 +1262,10 @@ export interface MasterGroundingOptions {
    *  what to learn next" → getOpeningInsights → assembleRepertoireGapAnswer. */
   repertoireGapQuestion?: boolean;
   repertoireGapKind?: 'out-of-book' | 'hole' | 'learn-next';
+  /** Wave 3 — accuracy/move-quality, consistency/time-control, converting. No board. */
+  accuracyQuestion?: boolean;     // getOverviewInsights → assembleAccuracyAnswer
+  consistencyQuestion?: boolean;  // streaks + timeControlPerformance → assembleConsistencyAnswer
+  convertingQuestion?: boolean;   // thrownWins + comebackWins + winShape → assembleConvertingAnswer
   /** STEP D Phase 4 — true when this turn asks how MASTERS play the position
    *  ("how do masters play this?", "most popular move?"). Voices the master-play
    *  lookup's real top moves + frequencies (assembleMasterPlayAnswer) so the LLM
@@ -1838,6 +1842,9 @@ export async function getCoachChatResponse(
       grounding.tacticsProfileQuestion === true ||
       grounding.phaseQuestion === true ||
       grounding.repertoireGapQuestion === true ||
+      grounding.accuracyQuestion === true ||
+      grounding.consistencyQuestion === true ||
+      grounding.convertingQuestion === true ||
       grounding.conceptQuestion === true ||
       grounding.playerGamesQuestion === true ||
       grounding.endgameQuestion === true ||
@@ -2124,6 +2131,66 @@ export async function getCoachChatResponse(
             }
             const noDataFact = "You haven't played enough games yet for me to spot the holes in your repertoire. Play or import a few more and I'll show you what you leave unprepared and what to learn next.";
             const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'repertoire-gap' });
+            if (voicedNoData) return voicedNoData;
+          } catch { /* fall through */ }
+        }
+
+        // ── ACCURACY / MOVE QUALITY (Wave 3) — "how accurate am I / how often
+        // do I find the best move?" Voiced from getOverviewInsights.
+        if (grounding.accuracyQuestion) {
+          try {
+            const ov = await getOverviewInsights();
+            const answer = assembleAccuracyAnswer({
+              totalGames: ov.totalGames, avgAccuracy: ov.avgAccuracy,
+              accuracyWhite: ov.accuracyWhite, accuracyBlack: ov.accuracyBlack,
+              bestMoveAgreement: ov.bestMoveAgreement,
+              brilliant: ov.classificationCounts.brilliant, great: ov.classificationCounts.great,
+              blunders: ov.classificationCounts.blunder,
+            });
+            if (answer) {
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'accuracy' });
+              if (voiced) return voiced;
+            }
+            const noDataFact = "You haven't analyzed enough games yet for me to grade your accuracy. Analyze a few and I'll show you how precise your play is and where to tighten up.";
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'accuracy' });
+            if (voicedNoData) return voicedNoData;
+          } catch { /* fall through */ }
+        }
+
+        // ── CONSISTENCY / TIME CONTROL (Wave 3) — "am I on a streak / what time
+        // control am I best at?" Voiced from streaks + timeControlPerformance.
+        if (grounding.consistencyQuestion) {
+          try {
+            const [st, tcs] = await Promise.all([streaks(), timeControlPerformance()]);
+            const answer = assembleConsistencyAnswer({
+              currentWinStreak: st.currentWinStreak, longestWinStreak: st.longestWinStreak,
+              timeControls: tcs.map((t) => ({ bucket: t.bucket, winRatePct: t.winRatePct, games: t.games, avgAccuracyPct: t.avgAccuracyPct })),
+            });
+            if (answer) {
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'consistency' });
+              if (voiced) return voiced;
+            }
+            const noDataFact = "You haven't played enough games yet for me to track your streaks and time-control form. Play a few more and I'll show you where you're steadiest.";
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'consistency' });
+            if (voicedNoData) return voicedNoData;
+          } catch { /* fall through */ }
+        }
+
+        // ── CONVERTING / WINNING (Wave 3) — "do I convert / do I come back / how
+        // do I win?" Voiced from thrownWins + comebackWins + winShapeStats.
+        if (grounding.convertingQuestion) {
+          try {
+            const [mi, cb, ws] = await Promise.all([getMistakeInsights(), comebackWins(), winShapeStats()]);
+            const answer = assembleConvertingAnswer({
+              totalWins: ws.totalWins, thrownWins: mi.thrownWins, comebackWins: cb.comebackWins,
+              quickWins: ws.quickWins, grindWins: ws.grindWins, midLengthWins: ws.midLengthWins,
+            });
+            if (answer) {
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'converting' });
+              if (voiced) return voiced;
+            }
+            const noDataFact = "You haven't analyzed enough games yet for me to see how you convert. Analyze a few and I'll show you whether you close out wins cleanly or let them slip.";
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'converting' });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
         }

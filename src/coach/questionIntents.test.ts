@@ -23,6 +23,9 @@ import {
   isPhaseQuestion,
   isRepertoireGapQuestion,
   repertoireGapKind,
+  isAccuracyQuestion,
+  isConsistencyQuestion,
+  isConvertingQuestion,
 } from './coachService';
 
 // David 2026-06-14: "throw the thesaurus at this problem for ALL questions."
@@ -435,6 +438,26 @@ describe('isRepertoireGapQuestion + repertoireGapKind (David 2026-07-04: the pro
     'teach me the Sicilian',
     'hi coach',
   ])('does NOT match: %s', (q) => expect(isRepertoireGapQuestion(q)).toBe(false));
+});
+
+describe('Wave 3 detectors — accuracy / consistency / converting', () => {
+  it.each(['how accurate am I overall', "what's my accuracy", 'how precise is my play',
+    'how often do I find the best move', 'how engine-like am I', "what's my move quality"])(
+    'accuracy matches "%s"', (q) => expect(isAccuracyQuestion(q)).toBe(true));
+  it.each(['how accurate am I in my opening', "what's my rating", 'hi coach'])(
+    'accuracy does NOT match: %s', (q) => expect(isAccuracyQuestion(q)).toBe(false));
+
+  it.each(['am I on a streak', "what's my win streak", 'how consistent am I',
+    'what time control am I best at', 'am I better at blitz or rapid', 'my best time control'])(
+    'consistency matches "%s"', (q) => expect(isConsistencyQuestion(q)).toBe(true));
+  it.each(["what's my rating", 'hi coach'])(
+    'consistency does NOT match: %s', (q) => expect(isConsistencyQuestion(q)).toBe(false));
+
+  it.each(['do I convert winning positions', 'do I close out wins', 'do I throw away winning positions',
+    'do I come back from losing positions', 'how do I win my games', 'am I a grinder or attacker'])(
+    'converting matches "%s"', (q) => expect(isConvertingQuestion(q)).toBe(true));
+  it.each(["what's my rating", 'teach me the Sicilian', 'hi coach'])(
+    'converting does NOT match: %s', (q) => expect(isConvertingQuestion(q)).toBe(false));
 });
 
 describe('buildQuestionGrounding — shared cross-surface grounding (David 2026-07-04)', () => {
