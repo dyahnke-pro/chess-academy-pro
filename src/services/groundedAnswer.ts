@@ -1518,3 +1518,33 @@ export function assembleTransferGapAnswer(t: TransferGapLike): GroundedAnswer | 
     bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'],
   };
 }
+
+/** The student's 5-axis skill radar (0-100 each) — from profile.skillRadar. */
+export interface SkillRadarLike {
+  opening: number; tactics: number; endgame: number; memory: number; calculation: number;
+}
+/**
+ * assembleSkillRadarAnswer — "what's my skill breakdown / assess my chess?"
+ * Voices the 5-axis skill radar, names the strongest + weakest axis, and points
+ * the student at the weakest. Computed (weaknessAnalyzer.computeSkillRadar,
+ * persisted on profile.skillRadar). Returns null when nothing's computed. G0.
+ */
+export function assembleSkillRadarAnswer(s: SkillRadarLike): GroundedAnswer | null {
+  const axes: Array<{ name: string; v: number }> = [
+    { name: 'opening', v: s.opening }, { name: 'tactics', v: s.tactics },
+    { name: 'endgame', v: s.endgame }, { name: 'memory', v: s.memory },
+    { name: 'calculation', v: s.calculation },
+  ];
+  if (axes.every((a) => !a.v || a.v <= 0)) return null;
+  const readout = axes.map((a) => `${a.name} ${Math.round(a.v)}`).join(', ');
+  const rated = axes.filter((a) => a.v > 0);
+  const best = [...rated].sort((a, b) => b.v - a.v)[0];
+  const worst = [...rated].sort((a, b) => a.v - b.v)[0];
+  const facts =
+    `Your skill breakdown (out of 100): ${readout}.` +
+    (best && worst && best.name !== worst.name
+      ? ` Your strongest is ${best.name} (${Math.round(best.v)}) and your weakest is ${worst.name} (${Math.round(worst.v)}) — that's where the fastest gains are.`
+      : '') +
+    (worst ? ` Put your training into ${worst.name}.` : '');
+  return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+}

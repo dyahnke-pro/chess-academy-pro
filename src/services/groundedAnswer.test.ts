@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -518,6 +518,18 @@ describe('Wave 4 assemblers — colour / records / puzzle-stats / transfer-gap',
   it('assembleTransferGapAnswer returns null when the gap is small', () => {
     expect(assembleTransferGapAnswer({ worst: { tacticType: 'pin', puzzleAccuracyPct: 70, gameRecognitionPct: 65, gapPoints: 5 } })).toBeNull();
     expect(assembleTransferGapAnswer({ worst: null })).toBeNull();
+  });
+});
+
+describe('assembleSkillRadarAnswer — Wave 4 (skill breakdown + weakest-axis suggestion)', () => {
+  it('voices the 5 axes, names strongest + weakest, suggests the weakest', () => {
+    const a = assembleSkillRadarAnswer({ opening: 72, tactics: 55, endgame: 40, memory: 68, calculation: 60 });
+    expect(a!.facts).toMatch(/opening 72, tactics 55, endgame 40, memory 68, calculation 60/);
+    expect(a!.facts).toMatch(/strongest is opening \(72\) and your weakest is endgame \(40\)/);
+    expect(a!.facts).toMatch(/Put your training into endgame/);
+  });
+  it('returns null when nothing is computed', () => {
+    expect(assembleSkillRadarAnswer({ opening: 0, tactics: 0, endgame: 0, memory: 0, calculation: 0 })).toBeNull();
   });
 });
 

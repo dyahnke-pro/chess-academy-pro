@@ -819,6 +819,20 @@ export function isTransferGapQuestion(ask: string | undefined): boolean {
   return !!ask && TRANSFER_GAP_RE.test(ask);
 }
 
+/** "what's my skill breakdown / assess my chess?" → assembleSkillRadarAnswer. */
+const SKILL_RADAR_RE = anyOf([
+  String.raw`\bmy\s+skill\s+(?:breakdown|profile|radar|scores?|ratings?)\b`,
+  String.raw`\bwhat(?:'?s| is| are)?\s+my\s+skill\b`,
+  String.raw`\brate\s+my\s+(?:chess|game|play)\b`,
+  String.raw`\bassess\s+my\s+(?:chess|game|play)\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+your\s+(?:overall\s+)?(?:read|assessment|take)\s+(?:on|of)\s+my\s+(?:chess|game|play)\b`,
+  String.raw`\bbreak\s+down\s+my\s+(?:skills?|game|chess)\b`,
+  String.raw`\bhow\s+would\s+you\s+rate\s+my\s+(?:chess|game|play)\b`,
+]);
+export function isSkillRadarQuestion(ask: string | undefined): boolean {
+  return !!ask && SKILL_RADAR_RE.test(ask);
+}
+
 /**
  * buildQuestionGrounding — the SHARED grounding builder so the coach's
  * grounded-data brain fires IDENTICALLY on every talking surface (David
@@ -882,6 +896,7 @@ export function buildQuestionGrounding(
     recordsQuestion: isRecordsQuestion(ask),
     puzzleStatsQuestion: isPuzzleStatsQuestion(ask),
     transferGapQuestion: isTransferGapQuestion(ask),
+    skillRadarQuestion: isSkillRadarQuestion(ask),
     masterPlayQuestion: isMasterPlayQuestion(ask),
     conceptQuestion: isConceptQuestion(ask),
     playerGamesQuestion: isPlayerGamesQuestion(ask),

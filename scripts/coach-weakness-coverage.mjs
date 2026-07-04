@@ -15,7 +15,7 @@ const DETECTORS = {
   masterPlay: Q.isMasterPlayQuestion, endgame: Q.isEndgameQuestion, playerGames: Q.isPlayerGamesQuestion,
   concept: Q.isConceptQuestion, plan: Q.isPlanQuestion,
   accuracy: Q.isAccuracyQuestion, consistency: Q.isConsistencyQuestion, converting: Q.isConvertingQuestion,
-  color: Q.isColorQuestion, records: Q.isRecordsQuestion, puzzleStats: Q.isPuzzleStatsQuestion, transferGap: Q.isTransferGapQuestion,
+  color: Q.isColorQuestion, records: Q.isRecordsQuestion, puzzleStats: Q.isPuzzleStatsQuestion, transferGap: Q.isTransferGapQuestion, skillRadar: Q.isSkillRadarQuestion,
 };
 const fires = (q) => Object.entries(DETECTORS).filter(([, fn]) => fn(q)).map(([k]) => k);
 
@@ -52,8 +52,8 @@ const MATRIX = [
   ['comeback wins', ['do I come back from losing positions', 'how often do I comeback'], 'converting'],
   ['win shape (quick/grind)', ['how do I win my games', 'am I a grinder or an attacker'], 'converting'],
   ['better as white or black', ['am I better as white or black', 'which colour do I do better with'], 'color'],
-  ['skill radar (5-axis)', ["what's my skill breakdown", 'rate my chess by skill', "what's my skill profile"], null],
-  ['overall assessment', ['assess my chess', "what's your overall read on my game"], null],
+  ['skill radar (5-axis)', ["what's my skill breakdown", 'rate my chess', "what's my skill profile"], 'skillRadar'],
+  ['overall assessment', ['assess my chess', "what's your overall read on my game"], 'skillRadar'],
   ['puzzle rating / solved', ["what's my puzzle rating", 'how many puzzles have I solved', 'my puzzle accuracy'], 'puzzleStats'],
   ['tactic transfer gap', ['do I spot tactics in games as well as puzzles', "what's my tactic transfer gap"], 'transferGap'],
   ['personal records / bests', ["what's my best game", 'my fastest win', 'my longest game', 'my best scalp'], 'records'],

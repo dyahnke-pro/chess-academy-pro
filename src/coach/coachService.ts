@@ -184,7 +184,7 @@ import {
   isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion,
   isRepertoireGapQuestion, repertoireGapKind,
   isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion,
-  isColorQuestion, isRecordsQuestion, isPuzzleStatsQuestion, isTransferGapQuestion,
+  isColorQuestion, isRecordsQuestion, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
 } from './questionIntents';
 export {
   isPlanQuestion, isBestMoveQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
@@ -195,7 +195,7 @@ export {
   isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion,
   isRepertoireGapQuestion, repertoireGapKind,
   isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion,
-  isColorQuestion, isRecordsQuestion, isPuzzleStatsQuestion, isTransferGapQuestion,
+  isColorQuestion, isRecordsQuestion, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
 };
 
 export interface CoachServiceOptions {
@@ -975,9 +975,10 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     const recordsQuestionEngage = isRecordsQuestion(input.ask);
     const puzzleStatsQuestionEngage = isPuzzleStatsQuestion(input.ask);
     const transferGapQuestionEngage = isTransferGapQuestion(input.ask);
+    const skillRadarQuestionEngage = isSkillRadarQuestion(input.ask);
     const autoGrounding =
       options.grounding ??
-      (input.liveState.fen || progressQuestion || conceptQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || puzzleStatsQuestionEngage || transferGapQuestionEngage
+      (input.liveState.fen || progressQuestion || conceptQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage
         ? {
             currentFen: input.liveState.fen,
             // DB-grounding: thread the move history through so the
@@ -1059,6 +1060,7 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
             recordsQuestion: recordsQuestionEngage,
             puzzleStatsQuestion: puzzleStatsQuestionEngage,
             transferGapQuestion: transferGapQuestionEngage,
+            skillRadarQuestion: skillRadarQuestionEngage,
             // STEP D Phase 4 — "how do masters play this?" voices the master-play
             // lookup's real top moves + frequencies (assembleMasterPlayAnswer).
             masterPlayQuestion: isMasterPlayQuestion(input.ask),
