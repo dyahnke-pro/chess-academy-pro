@@ -538,6 +538,70 @@ export function isReviewDueQuestion(ask: string | undefined): boolean {
   return REVIEW_DUE_RE.test(ask);
 }
 
+/** WAVE 1 "where do I go wrong" cluster (David 2026-07-04) — voice the
+ *  weakness-tab numbers. Each is about the STUDENT'S OWN play over their games,
+ *  distinct from the live-board tactic/endgame/position intents. */
+
+/** "what mistakes do I make / how often do I blunder / where do I go wrong?" →
+ *  assembleMistakesAnswer (getMistakeInsights). */
+const MISTAKES_QUESTION_RE = anyOf([
+  String.raw`\bwhat\s+(?:kind\s+of\s+)?(?:mistakes?|blunders?|errors?)\s+do\s+i\b`,
+  String.raw`\bwhat(?:'?s| is| are)?\s+my\s+(?:biggest\s+|common\s+|most\s+common\s+|worst\s+|costliest\s+|typical\s+)?(?:mistakes?|blunders?|errors?)\b`,
+  String.raw`\bhow\s+(?:often|much|many)\s+do\s+i\s+(?:blunder|mistake|err|go\s+wrong|hang)\b`,
+  String.raw`\bhow\s+many\s+(?:blunders?|mistakes?|errors?)\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+my\s+(?:blunder|mistake|error)\s+rate\b`,
+  String.raw`\bdo\s+i\s+(?:blunder|make\s+(?:a\s+lot\s+of\s+)?(?:mistakes?|blunders?|errors?)|hang\s+(?:pieces|stuff))\b`,
+  String.raw`\bwhere\s+do\s+i\s+(?:go\s+wrong|slip|mess\s+up|blunder)\b`,
+  String.raw`\bwhat\s+do\s+i\s+do\s+wrong\b`,
+  String.raw`\bmy\s+(?:costliest|worst)\s+(?:mistake|blunder|move)\b`,
+]);
+export function isMistakesQuestion(ask: string | undefined): boolean {
+  return !!ask && MISTAKES_QUESTION_RE.test(ask);
+}
+
+/** "how are my tactics / what tactics do I miss?" → assembleTacticsProfileAnswer
+ *  (getTacticInsights). Guarded against the LIVE-board "is there a tactic here"
+ *  (isTacticsQuestion) — this is about the student's tactics OVER TIME. */
+const TACTICS_PROFILE_RE = anyOf([
+  String.raw`\bhow\s+(?:are|is|good\s+are|good\s+is)\s+my\s+tactics?\b`,
+  String.raw`\bwhat\s+tactics?\s+do\s+i\s+miss\b`,
+  String.raw`\bdo\s+i\s+miss\s+(?:tactics?|combinations?)\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+my\s+tactical\s+(?:awareness|accuracy|rate|profile|weakness(?:es)?)\b`,
+  String.raw`\bam\s+i\s+(?:good|weak|bad)\s+at\s+tactics?\b`,
+  String.raw`\bwhat\s+(?:tactic|motif|pattern)\s+do\s+i\s+miss\s+(?:the\s+)?most\b`,
+  String.raw`\bmy\s+(?:tactical\s+)?(?:weaknesses?|blind\s+spots?)\s+(?:in\s+)?tactics?\b`,
+  String.raw`\bdo\s+i\s+see\s+tactics?\b`,
+]);
+export function isTacticsProfileQuestion(ask: string | undefined): boolean {
+  if (!ask) return false;
+  // Live-board tactic questions ("is there a tactic here / in this position")
+  // belong to isTacticsQuestion — never here.
+  if (/\b(?:here|in\s+this\s+position|right\s+now|on\s+the\s+board)\b/i.test(ask)) return false;
+  return TACTICS_PROFILE_RE.test(ask);
+}
+
+/** "which phase am I weakest in / where do I lose / how's my endgame play?" →
+ *  assemblePhaseProfileAnswer (phaseAccuracy + criticalMomentsAccuracy). Guarded
+ *  against the LIVE-board endgame question (isEndgameQuestion = "is THIS endgame
+ *  winning"). */
+const PHASE_QUESTION_RE = anyOf([
+  String.raw`\bwhich\s+phase\s+(?:am\s+i|do\s+i)\b`,
+  String.raw`\bwhat\s+phase\s+do\s+i\s+(?:lose|struggle|blunder|play\s+worst)\b`,
+  String.raw`\bwhat\s+(?:part|stage)\s+of\s+the\s+game\s+(?:am\s+i|do\s+i)\b`,
+  String.raw`\bwhere\s+do\s+i\s+lose\s+(?:my\s+)?games?\b`,
+  String.raw`\bhow(?:'?s| is| are)\s+my\s+(?:opening|middlegame|middle\s+game|endgame|end\s+game)s?(?:\s+(?:play|accuracy|game))?\b`,
+  String.raw`\bhow\s+(?:good|bad|strong|weak)\s+(?:is|are)\s+my\s+(?:opening|middlegame|endgame)s?\b`,
+  String.raw`\bam\s+i\s+(?:better|worse|weaker|stronger)\s+in\s+the\s+(?:opening|middlegame|endgame)\b`,
+  String.raw`\bmy\s+(?:worst|weakest|best|strongest)\s+phase\b`,
+  String.raw`\baccuracy\s+by\s+phase\b`,
+]);
+export function isPhaseQuestion(ask: string | undefined): boolean {
+  if (!ask) return false;
+  // "is this endgame winning / how do I hold this" is the live tablebase intent.
+  if (/\bthis\s+(?:endgame|position)\b|\bhold\s+this\b|\bwinning\s+here\b/i.test(ask)) return false;
+  return PHASE_QUESTION_RE.test(ask);
+}
+
 /**
  * buildQuestionGrounding — the SHARED grounding builder so the coach's
  * grounded-data brain fires IDENTICALLY on every talking surface (David
@@ -589,6 +653,9 @@ export function buildQuestionGrounding(
     openingTrapsQuestion: isOpeningTrapsQuestion(ask),
     openingTrapsSystemAsk: opensTrapsSystemAsk(ask),
     reviewDueQuestion: isReviewDueQuestion(ask),
+    mistakesQuestion: isMistakesQuestion(ask),
+    tacticsProfileQuestion: isTacticsProfileQuestion(ask),
+    phaseQuestion: isPhaseQuestion(ask),
     masterPlayQuestion: isMasterPlayQuestion(ask),
     conceptQuestion: isConceptQuestion(ask),
     playerGamesQuestion: isPlayerGamesQuestion(ask),

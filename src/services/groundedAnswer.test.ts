@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -354,6 +354,75 @@ describe('assembleReviewDueAnswer — grounded "what\'s due for review today"', 
   });
   it('returns null when nothing is enrolled (caller takes the onboarding line)', () => {
     expect(assembleReviewDueAnswer({ dueCount: 0, totalEnrolled: 0, dueOpenings: [] })).toBeNull();
+  });
+});
+
+describe('assembleMistakesAnswer — Wave 1 "where do I go wrong" (+ suggestion)', () => {
+  const base = {
+    totalGames: 40, blundersPerGame: 1.2, mistakesPerGame: 2.4, avgCpLoss: 55,
+    worstPhase: { phase: 'middlegame', errors: 31 },
+    thrownWins: 1,
+    costliest: { san: 'Qxd4', cpLoss: 640, opponentName: 'GM Smith', openingName: 'Caro-Kann' },
+  };
+  it('voices the rate, worst phase, and costliest slip with a suggestion', () => {
+    const a = assembleMistakesAnswer(base);
+    expect(a).not.toBeNull();
+    expect(a!.facts).toMatch(/Across 40 games you average 1\.2 blunders and 2\.4 mistakes a game, losing about 55 centipawns/);
+    expect(a!.facts).toMatch(/Most of your errors land in the middlegame \(31 there\)/);
+    expect(a!.facts).toMatch(/costliest slip was Qxd4 against GM Smith, dropping 6\.4 pawns in the Caro-Kann/);
+    expect(a!.facts).toMatch(/Focus your training on the middlegame/);
+    expect(a!.sources).toContain('data:your-games');
+  });
+  it('suggests converting when thrown wins dominate', () => {
+    const a = assembleMistakesAnswer({ ...base, thrownWins: 4 });
+    expect(a!.facts).toMatch(/let 4 winning positions slip/);
+    expect(a!.facts).toMatch(/converting winning positions/);
+  });
+  it('returns null with no analyzed games', () => {
+    expect(assembleMistakesAnswer({ ...base, totalGames: 0 })).toBeNull();
+  });
+});
+
+describe('assembleTacticsProfileAnswer — Wave 1 (+ drill suggestion)', () => {
+  const base = {
+    totalGames: 40, awarenessRate: 62, found: 18, missed: 11,
+    missedByType: [{ type: 'fork', count: 6 }, { type: 'pin', count: 3 }],
+    worstPhase: { phase: 'middlegame', count: 7 },
+  };
+  it('voices awareness + top missed motif + phase, and suggests drilling it', () => {
+    const a = assembleTacticsProfileAnswer(base);
+    expect(a!.facts).toMatch(/tactical awareness is 62% — you spot 18 tactics and miss 11/);
+    expect(a!.facts).toMatch(/motif you miss most is the fork \(6 times\)/);
+    expect(a!.facts).toMatch(/misses come in the middlegame/);
+    expect(a!.facts).toMatch(/Drill fork puzzles to close that gap/);
+  });
+  it('returns null when there is no found/missed data', () => {
+    expect(assembleTacticsProfileAnswer({ ...base, found: 0, missed: 0 })).toBeNull();
+    expect(assembleTacticsProfileAnswer({ ...base, totalGames: 0 })).toBeNull();
+  });
+});
+
+describe('assemblePhaseProfileAnswer — Wave 1 (+ focus suggestion)', () => {
+  const base = {
+    phaseAccuracy: [
+      { phase: 'opening', accuracy: 88, mistakes: 2, moveCount: 300 },
+      { phase: 'middlegame', accuracy: 74, mistakes: 20, moveCount: 500 },
+      { phase: 'endgame', accuracy: 61, mistakes: 12, moveCount: 180 },
+    ],
+    criticalByPhase: [
+      { phase: 'opening', accuracyPct: 80, total: 20 },
+      { phase: 'endgame', accuracyPct: 45, total: 15 },
+    ],
+  };
+  it('reads out per-phase accuracy, names the weakest, and folds in critical moments', () => {
+    const a = assemblePhaseProfileAnswer(base);
+    expect(a!.facts).toMatch(/opening 88%, middlegame 74%, endgame 61%/);
+    expect(a!.facts).toMatch(/weakest is the endgame at 61%/);
+    expect(a!.facts).toMatch(/critical moments, the endgame is softest — you find the best move 45%/);
+    expect(a!.facts).toMatch(/Put your training into the endgame/);
+  });
+  it('returns null when no phase has played moves', () => {
+    expect(assemblePhaseProfileAnswer({ phaseAccuracy: [{ phase: 'opening', accuracy: 0, mistakes: 0, moveCount: 0 }], criticalByPhase: [] })).toBeNull();
   });
 });
 

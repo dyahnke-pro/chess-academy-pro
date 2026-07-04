@@ -112,6 +112,77 @@ build the data-backed ones, flag any NOT-AVAILABLE for a data-plumbing job.
 
 Keep brainstorming more phrasings and fold them into the detectors as found.
 
+## FULL WEAKNESS-TAB COVERAGE — the ~54 computed-but-unvoiced metrics (David 2026-07-04: "every data collected the coach needs access to and articulate it … and suggest things to work on")
+
+The `/weaknesses` (GameInsightsPage: Overview/ThinkingErrors/Openings/Mistakes/
+Tactics/Patterns) + StatsPage surfaces compute ~54 quantitative metrics via
+`gameInsightsService` (getOverviewInsights/getMistakeInsights/getTacticInsights/
+getOpeningInsights), `analyticsService` (streaks, timeControlPerformance,
+criticalMomentsAccuracy, openingProficiencyMatrix, phaseStrengthOverTime,
+tacticTransferGap, comebackWins, winShapeStats, colorProficiencyMismatch,
+personalRecords, repeatMistakes, firstTryMasteryAggregate, activityHeatmap,
+tacticTypeBreadth, brilliantConcentration), `weaknessSpine` (conversion, time-
+trouble, board-vision aggregators), and `weaknessAnalyzer` (skillRadar,
+sessionConsistency, flashcard backlog, overallAssessment). Before this work the
+coach voiced only the unified weakness LABELS + counts + record/rating/strengths;
+every quantitative Insights/Patterns number was UNCOVERED.
+
+**Architecture decision (locked): themed answers, not 54 micro-verticals.** One
+detector + assembler per THEME (below), each voicing that theme's key computed
+numbers AND ending in a concrete "work on this" suggestion (David's rule). Fewer,
+matches how a human asks, far less collision surface. Every assembler stays a
+pure leaf over an existing data fn; the data is fetched in the coachApi block and
+handed in.
+
+| Theme vertical | Detector (to build) | Data fn(s) | Covers metrics # |
+|---|---|---|---|
+| My mistakes | `isMistakesQuestion` | getMistakeInsights + getOverviewInsights | 1,2,3,10-18,53 |
+| My tactics | `isTacticsProfileQuestion` | getTacticInsights + tacticTransferGap | 19-25,33,34,36,49 |
+| Where I lose (phases) | `isPhaseQuestion` | phaseAccuracy + errorsByPhase + criticalMomentsAccuracy | 5,13,42 |
+| Accuracy & move quality | `isAccuracyQuestion` | overview accuracy/agreement/classificationCounts | 4,6,7,11,12 |
+| Consistency & activity | `isConsistencyQuestion` | streaks + activityHeatmap + timeControlPerformance + sessionConsistency | 38,39,41,50 |
+| Converting & winning | `isConversionQuestion` | thrownWins + comebackWins + winShape + conversionFailures | 15,31,32,44 |
+| Openings performance | `isOpeningPerfQuestion` | getOpeningInsights + openingProficiencyMatrix | 26-29,52 · vs-named-opening |
+| Improvement over time | `isTrendQuestion` | phaseStrengthOverTime | 43 |
+| Better as White/Black | `isColorQuestion` | colorProficiencyMismatch + per-color acc | 30,6 |
+| Skill breakdown | `isSkillRadarQuestion` | computeSkillRadar + overallAssessment | 48,54 |
+| Puzzle stats | `isPuzzleStatsQuestion` | profile.puzzleRating + getPuzzleStats + getThemeSkills | (puzzle) |
+| Records & bests | `isRecordsQuestion` | personalRecords + highest/lowest | 40,8 |
+
+### 🌟 REPERTOIRE-GAP cluster — PROMOTED PRIORITY (David 2026-07-04: "I LOVE THIS STYLE OF QUESTION!")
+
+The "the app knows a hole you don't" category. Needs new compute (faced-openings
+vs repertoire cross-reference), so it's its own wave:
+- **Where do I leave theory / go out of book?** — `getOpeningInsights().repertoireCoverage`
+  (inBook/offBook %) + `openingWeakSpots` (the plies where the student deviates).
+  Voice: "X% of your games leave book, most often in the [opening] around move N."
+- **What's a hole in my repertoire — what do I have no answer for?** — cross-ref
+  the openings the user FACES (from `db.games` ECO, split by the side the user
+  was — as White the ECO reflects Black's choice = what you faced; as Black it
+  reflects White's) against `getRepertoireOpenings(color)`. A frequently-FACED
+  opening with no repertoire line answering it = a hole. NEW compute:
+  `findRepertoireHoles()` — group faced openings, subtract those the repertoire
+  answers (by responding move / eco family), rank by frequency × how badly the
+  user scores against them.
+- **What opening should I learn next?** — builds on the hole analysis: the
+  most-faced hole (biggest exposure) OR the worst-scoring faced opening
+  (`worstResults`), recommended as the next thing to add to the repertoire.
+
+Data plumbing to build first: a faced-opening extractor (ECO → opponent's
+opening family, per user side) + the repertoire-answer matcher. Then one detector
+`isRepertoireGapQuestion` (+ a kind: out-of-book / hole / learn-next) →
+`assembleRepertoireGapAnswer`.
+
+Build in waves (each shipped + prod-verified with a paced adversarial audit):
+- **Wave 1** — mistakes, tactics, phases (the "where do I go wrong" cluster).
+- **Wave 2 (PROMOTED)** — the repertoire-gap cluster above.
+- **Wave 3** — accuracy/move-quality, consistency/time-control, converting/winning.
+- **Wave 4** — openings-performance/vs-opening, trend, color, skill-radar, puzzle-stats, records.
+
+Then the ⚠ data-plumbing items (rating-history store, time-trouble capture,
+endgame-type classification, opponent index) as separate jobs, and the ACTION
+picker layer + discoverability greeting.
+
 ## Older roadmap notes (still valid)
 
 - **Play-eval threading** — on `/coach/play`, "am I winning / what's the eval"

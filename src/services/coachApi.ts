@@ -65,9 +65,10 @@ import { getUnifiedWeaknessProfile } from './weaknessSpine';
 import { getStrongestOpenings, getMostPlayedOpenings, getWeakestOpenings, getOpeningById } from './openingService';
 import { getWeakSpotsForOpening } from './weakSpotService';
 import type { OpeningRecord } from '../types';
-import { getOverviewInsights } from './gameInsightsService';
-import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer } from './groundedAnswer';
+import { getOverviewInsights, getMistakeInsights, getTacticInsights } from './gameInsightsService';
+import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer } from './groundedAnswer';
 import { getDueCount, getEnrolledOpenings, getSrsDueOpenings, getTotalEnrolled } from './srsOpeningService';
+import { criticalMomentsAccuracy } from './analyticsService';
 import { detectConceptsInText, getConcept } from './chessConceptService';
 import { validateClaims, type ClaimValidationResult } from './claimValidator';
 import { logAppAudit } from './appAuditor';
@@ -1253,6 +1254,10 @@ export interface MasterGroundingOptions {
    *  voiced from the live SRS store (getDueCount + getEnrolledOpenings +
    *  getSrsDueOpenings) via assembleReviewDueAnswer. No board. */
   reviewDueQuestion?: boolean;
+  /** Wave 1 "where do I go wrong" — voiced from the weakness-tab analytics. No board. */
+  mistakesQuestion?: boolean;      // getMistakeInsights → assembleMistakesAnswer
+  tacticsProfileQuestion?: boolean; // getTacticInsights → assembleTacticsProfileAnswer
+  phaseQuestion?: boolean;          // phaseAccuracy + criticalMoments → assemblePhaseProfileAnswer
   /** STEP D Phase 4 — true when this turn asks how MASTERS play the position
    *  ("how do masters play this?", "most popular move?"). Voices the master-play
    *  lookup's real top moves + frequencies (assembleMasterPlayAnswer) so the LLM
@@ -1825,6 +1830,9 @@ export async function getCoachChatResponse(
       grounding.openingAccuracyQuestion === true ||
       grounding.openingTrapsQuestion === true ||
       grounding.reviewDueQuestion === true ||
+      grounding.mistakesQuestion === true ||
+      grounding.tacticsProfileQuestion === true ||
+      grounding.phaseQuestion === true ||
       grounding.conceptQuestion === true ||
       grounding.playerGamesQuestion === true ||
       grounding.endgameQuestion === true ||
@@ -2014,6 +2022,77 @@ export async function getCoachChatResponse(
             const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'review-due' });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through to legacy path */ }
+        }
+
+        // ── MISTAKES (Wave 1) — "what mistakes do I make / how often do I
+        // blunder / where do I go wrong?" Voiced from getMistakeInsights +
+        // getOverviewInsights, ending in a suggestion. Runs BEFORE progress so
+        // the specific error question gets the numbers, not the generic label.
+        if (grounding.mistakesQuestion) {
+          try {
+            const [mi, ov] = await Promise.all([getMistakeInsights(), getOverviewInsights()]);
+            const worstPhase = [...mi.errorsByPhase].sort((a, b) => b.errors - a.errors)[0] ?? null;
+            const top = mi.costliestMistakes[0] ?? null;
+            const answer = assembleMistakesAnswer({
+              totalGames: mi.totalGames,
+              blundersPerGame: ov.avgBlundersPerGame,
+              mistakesPerGame: ov.avgMistakesPerGame,
+              avgCpLoss: mi.avgCpLoss,
+              worstPhase: worstPhase ? { phase: worstPhase.phase, errors: worstPhase.errors } : null,
+              thrownWins: mi.thrownWins,
+              costliest: top ? { san: top.san, cpLoss: top.cpLoss, opponentName: top.opponentName, openingName: top.openingName } : null,
+            });
+            if (answer) {
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'mistakes' });
+              if (voiced) return voiced;
+            }
+            const noDataFact = "You haven't analyzed enough games yet for me to break down your mistakes. Analyze a few games and I'll show you exactly where you go wrong and what to drill.";
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'mistakes' });
+            if (voicedNoData) return voicedNoData;
+          } catch { /* fall through */ }
+        }
+
+        // ── TACTICS PROFILE (Wave 1) — "how are my tactics / what do I miss?"
+        // Voiced from getTacticInsights. Distinct from the live-board tactic scan.
+        if (grounding.tacticsProfileQuestion) {
+          try {
+            const ti = await getTacticInsights();
+            const worstPhase = [...ti.missedByPhase].sort((a, b) => b.count - a.count)[0] ?? null;
+            const answer = assembleTacticsProfileAnswer({
+              totalGames: ti.totalGames,
+              awarenessRate: ti.awarenessRate,
+              found: ti.foundVsMissed.found,
+              missed: ti.foundVsMissed.missed,
+              missedByType: ti.missedByType.map((x) => ({ type: x.type, count: x.count })),
+              worstPhase: worstPhase ? { phase: worstPhase.phase, count: worstPhase.count } : null,
+            });
+            if (answer) {
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'tactics-profile' });
+              if (voiced) return voiced;
+            }
+            const noDataFact = "You haven't analyzed enough games yet for me to profile your tactics. Analyze a few games or solve some puzzles and I'll show you which motifs you miss most.";
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'tactics-profile' });
+            if (voicedNoData) return voicedNoData;
+          } catch { /* fall through */ }
+        }
+
+        // ── PHASE PROFILE (Wave 1) — "which phase am I weakest / where do I
+        // lose?" Voiced from getOverviewInsights.phaseAccuracy + criticalMoments.
+        if (grounding.phaseQuestion) {
+          try {
+            const [ov, crit] = await Promise.all([getOverviewInsights(), criticalMomentsAccuracy()]);
+            const answer = assemblePhaseProfileAnswer({
+              phaseAccuracy: ov.phaseAccuracy.map((x) => ({ phase: x.phase, accuracy: x.accuracy, mistakes: x.mistakes, moveCount: x.moveCount })),
+              criticalByPhase: crit.byPhase.map((x) => ({ phase: x.phase, accuracyPct: x.accuracyPct, total: x.total })),
+            });
+            if (answer) {
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'phase-profile' });
+              if (voiced) return voiced;
+            }
+            const noDataFact = "You haven't analyzed enough games yet for me to break down your play by phase. Analyze a few games and I'll show you whether your opening, middlegame, or endgame needs the most work.";
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'phase-profile' });
+            if (voicedNoData) return voicedNoData;
+          } catch { /* fall through */ }
         }
 
         // ── PROGRESS (Phase 6) — the student's OWN computed history ────────

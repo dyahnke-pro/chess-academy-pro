@@ -181,6 +181,7 @@ import {
   isProgressQuestion, isOpeningProfileQuestion, openingProfileKind, buildQuestionGrounding,
   isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion,
   isOpeningTrapsQuestion, opensTrapsSystemAsk, isReviewDueQuestion,
+  isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion,
 } from './questionIntents';
 export {
   isPlanQuestion, isBestMoveQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
@@ -188,6 +189,7 @@ export {
   isProgressQuestion, isOpeningProfileQuestion, openingProfileKind, buildQuestionGrounding,
   isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion,
   isOpeningTrapsQuestion, opensTrapsSystemAsk, isReviewDueQuestion,
+  isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion,
 };
 
 export interface CoachServiceOptions {
@@ -956,9 +958,12 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     const openingAccuracyQuestionEngage = isOpeningAccuracyQuestion(input.ask);
     const openingTrapsQuestionEngage = isOpeningTrapsQuestion(input.ask);
     const reviewDueQuestionEngage = isReviewDueQuestion(input.ask);
+    const mistakesQuestionEngage = isMistakesQuestion(input.ask);
+    const tacticsProfileQuestionEngage = isTacticsProfileQuestion(input.ask);
+    const phaseQuestionEngage = isPhaseQuestion(input.ask);
     const autoGrounding =
       options.grounding ??
-      (input.liveState.fen || progressQuestion || conceptQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage
+      (input.liveState.fen || progressQuestion || conceptQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage
         ? {
             currentFen: input.liveState.fen,
             // DB-grounding: thread the move history through so the
@@ -1028,6 +1033,9 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
             openingTrapsQuestion: openingTrapsQuestionEngage,
             openingTrapsSystemAsk: opensTrapsSystemAsk(input.ask),
             reviewDueQuestion: reviewDueQuestionEngage,
+            mistakesQuestion: mistakesQuestionEngage,
+            tacticsProfileQuestion: tacticsProfileQuestionEngage,
+            phaseQuestion: phaseQuestionEngage,
             // STEP D Phase 4 — "how do masters play this?" voices the master-play
             // lookup's real top moves + frequencies (assembleMasterPlayAnswer).
             masterPlayQuestion: isMasterPlayQuestion(input.ask),

@@ -18,6 +18,9 @@ import {
   isOpeningTrapsQuestion,
   opensTrapsSystemAsk,
   isReviewDueQuestion,
+  isMistakesQuestion,
+  isTacticsProfileQuestion,
+  isPhaseQuestion,
 } from './coachService';
 
 // David 2026-06-14: "throw the thesaurus at this problem for ALL questions."
@@ -343,6 +346,65 @@ describe('isReviewDueQuestion (David 2026-07-04: SRS review-due — must NOT col
     'what is a fork',
     'hi coach',
   ])('does NOT match: %s', (q) => expect(isReviewDueQuestion(q)).toBe(false));
+});
+
+describe('Wave 1 — where-do-I-go-wrong cluster (David 2026-07-04)', () => {
+  describe('isMistakesQuestion', () => {
+    it.each([
+      'what mistakes do I make',
+      'what are my biggest mistakes',
+      "what's my most common mistake",
+      'how often do I blunder',
+      "what's my blunder rate",
+      'do I blunder a lot',
+      'do I make a lot of mistakes',
+      'where do I go wrong',
+      'what do I do wrong',
+      "what's my worst blunder",
+      'how many blunders do I make',
+    ])('matches "%s"', (q) => expect(isMistakesQuestion(q)).toBe(true));
+    it.each(["what's my rating", 'teach me the Sicilian', 'is there a tactic here', 'what is a fork', 'hi coach'])(
+      'does NOT match: %s', (q) => expect(isMistakesQuestion(q)).toBe(false));
+  });
+
+  describe('isTacticsProfileQuestion (guarded vs live-board tactics)', () => {
+    it.each([
+      'how are my tactics',
+      'what tactics do I miss',
+      'do I miss tactics',
+      "what's my tactical awareness",
+      'am I good at tactics',
+      'what motif do I miss the most',
+      'do I see tactics',
+    ])('matches "%s"', (q) => expect(isTacticsProfileQuestion(q)).toBe(true));
+    it.each([
+      'is there a tactic here',       // live board → isTacticsQuestion
+      'any tactics here',
+      'is there a tactic in this position',
+      "what's my rating",
+      'hi coach',
+    ])('does NOT match: %s', (q) => expect(isTacticsProfileQuestion(q)).toBe(false));
+  });
+
+  describe('isPhaseQuestion (guarded vs live-board endgame)', () => {
+    it.each([
+      'which phase am I weakest in',
+      'what phase do I lose in',
+      'where do I lose games',
+      "how's my endgame play",
+      'how is my opening',
+      'how good is my middlegame',
+      'am I better in the opening or endgame',
+      "what's my worst phase",
+    ])('matches "%s"', (q) => expect(isPhaseQuestion(q)).toBe(true));
+    it.each([
+      'is this endgame winning',      // live tablebase → isEndgameQuestion
+      'how do I hold this',
+      "what's my rating",
+      'teach me the Sicilian',
+      'hi coach',
+    ])('does NOT match: %s', (q) => expect(isPhaseQuestion(q)).toBe(false));
+  });
 });
 
 describe('buildQuestionGrounding — shared cross-surface grounding (David 2026-07-04)', () => {

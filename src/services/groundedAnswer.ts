@@ -1144,3 +1144,116 @@ export function assembleReviewDueAnswer(s: ReviewDueLike): GroundedAnswer | null
     breakdown + ` Say "review my openings" and I'll run today's reps.`;
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
+
+/** Readable phase word for narration. */
+function phaseWord(p: string): string {
+  return p === 'middlegame' ? 'middlegame' : p === 'endgame' ? 'endgame' : 'opening';
+}
+/** Pawns, one decimal, from centipawns. */
+function pawns(cp: number): string { return (Math.abs(cp) / 100).toFixed(1); }
+
+// ═══ WAVE 1 — the "where do I go wrong" cluster (David 2026-07-04): voice the
+// weakness-tab numbers the coach never spoke, each ending in a suggestion. ═══
+
+/** The student's mistake profile — a structural subset of getMistakeInsights +
+ *  getOverviewInsights, handed to `assembleMistakesAnswer`. */
+export interface MistakesLike {
+  totalGames: number;
+  blundersPerGame: number;
+  mistakesPerGame: number;
+  avgCpLoss: number;                 // centipawns lost per game
+  worstPhase: { phase: string; errors: number } | null;
+  thrownWins: number;
+  costliest: { san: string; cpLoss: number; opponentName: string; openingName: string | null } | null;
+}
+
+/**
+ * assembleMistakesAnswer — "what mistakes do I make / how often do I blunder /
+ * where do I go wrong?" Voices the real error numbers (blunder/mistake rate, avg
+ * centipawn loss, worst phase, thrown-away wins, the single costliest slip) and
+ * ends with a concrete thing to work on. All computed (getMistakeInsights); the
+ * LLM invents no number. Returns null with no analyzed games. G0.
+ */
+export function assembleMistakesAnswer(m: MistakesLike): GroundedAnswer | null {
+  if (m.totalGames <= 0) return null;
+  const rate = `Across ${m.totalGames} game${m.totalGames === 1 ? '' : 's'} you average ${m.blundersPerGame} blunder${m.blundersPerGame === 1 ? '' : 's'} and ${m.mistakesPerGame} mistake${m.mistakesPerGame === 1 ? '' : 's'} a game, losing about ${Math.round(m.avgCpLoss)} centipawns per game.`;
+  const phase = m.worstPhase && m.worstPhase.errors > 0
+    ? ` Most of your errors land in the ${phaseWord(m.worstPhase.phase)} (${m.worstPhase.errors} there).`
+    : '';
+  const thrown = m.thrownWins > 0
+    ? ` You've let ${m.thrownWins} winning position${m.thrownWins === 1 ? '' : 's'} slip.`
+    : '';
+  const costly = m.costliest && m.costliest.san
+    ? ` Your costliest slip was ${m.costliest.san} against ${m.costliest.opponentName || 'an opponent'}, dropping ${pawns(m.costliest.cpLoss)} pawns${m.costliest.openingName ? ` in the ${m.costliest.openingName}` : ''}.`
+    : '';
+  // Suggestion — pick the dominant lever.
+  const suggest = m.thrownWins >= 2
+    ? ' Work on converting winning positions — that\'s costing you the most.'
+    : m.worstPhase && m.worstPhase.errors > 0
+      ? ` Focus your training on the ${phaseWord(m.worstPhase.phase)}, and drill your saved mistake puzzles from there.`
+      : ' Drill your saved mistake puzzles to turn these into second nature.';
+  return { facts: rate + phase + thrown + costly + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+}
+
+/** The student's tactical profile — a subset of getTacticInsights. */
+export interface TacticsProfileLike {
+  totalGames: number;
+  awarenessRate: number;               // %
+  found: number;
+  missed: number;
+  missedByType: ReadonlyArray<{ type: string; count: number }>;   // desc by count
+  worstPhase: { phase: string; count: number } | null;
+}
+
+/**
+ * assembleTacticsProfileAnswer — "how are my tactics / what tactics do I miss?"
+ * Voices tactical awareness rate, found-vs-missed, the motif missed most, and
+ * the phase where misses cluster, then suggests drilling that motif. Computed
+ * (getTacticInsights). Distinct from the live-board "is there a tactic here"
+ * (isTacticsQuestion). Returns null with no tactic data. G0.
+ */
+export function assembleTacticsProfileAnswer(t: TacticsProfileLike): GroundedAnswer | null {
+  if (t.totalGames <= 0 || (t.found + t.missed) <= 0) return null;
+  const top = t.missedByType.find((x) => x.type && x.count > 0) ?? null;
+  const lead = `Your tactical awareness is ${t.awarenessRate}% — you spot ${t.found} tactic${t.found === 1 ? '' : 's'} and miss ${t.missed}.`;
+  const byType = top
+    ? ` The motif you miss most is the ${top.type} (${top.count} time${top.count === 1 ? '' : 's'}).`
+    : '';
+  const phase = t.worstPhase && t.worstPhase.count > 0
+    ? ` Most of those misses come in the ${phaseWord(t.worstPhase.phase)}.`
+    : '';
+  const suggest = top
+    ? ` Drill ${top.type} puzzles to close that gap.`
+    : ' Keep drilling mixed tactics to lift your awareness rate.';
+  return { facts: lead + byType + phase + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+}
+
+/** The student's per-phase profile — phaseAccuracy + critical-moment accuracy. */
+export interface PhaseProfileLike {
+  phaseAccuracy: ReadonlyArray<{ phase: string; accuracy: number; mistakes: number; moveCount: number }>;
+  criticalByPhase: ReadonlyArray<{ phase: string; accuracyPct: number; total: number }>;
+}
+
+/**
+ * assemblePhaseProfileAnswer — "which phase am I weakest in / where do I lose?"
+ * Voices accuracy per phase (opening/middlegame/endgame), names the weakest, and
+ * folds in critical-moment decision quality, then suggests focusing there.
+ * Computed (getOverviewInsights.phaseAccuracy + criticalMomentsAccuracy).
+ * Returns null with no analyzed moves. G0.
+ */
+export function assemblePhaseProfileAnswer(p: PhaseProfileLike): GroundedAnswer | null {
+  const played = p.phaseAccuracy.filter((x) => x.moveCount > 0 && x.accuracy > 0);
+  if (played.length === 0) return null;
+  const order: Record<string, number> = { opening: 0, middlegame: 1, endgame: 2 };
+  const sorted = [...played].sort((a, b) => (order[a.phase] ?? 9) - (order[b.phase] ?? 9));
+  const readout = sorted.map((x) => `${phaseWord(x.phase)} ${x.accuracy}%`).join(', ');
+  const worst = [...played].sort((a, b) => a.accuracy - b.accuracy)[0];
+  const worstLine = ` Your weakest is the ${phaseWord(worst.phase)} at ${worst.accuracy}%${worst.mistakes > 0 ? `, where you also make the most mistakes` : ''}.`;
+  const crit = p.criticalByPhase.filter((x) => x.total > 0);
+  const critWorst = crit.length ? [...crit].sort((a, b) => a.accuracyPct - b.accuracyPct)[0] : null;
+  const critLine = critWorst
+    ? ` On the game's critical moments, the ${phaseWord(critWorst.phase)} is softest — you find the best move ${critWorst.accuracyPct}% of the time there.`
+    : '';
+  const suggest = ` Put your training into the ${phaseWord(worst.phase)}.`;
+  return { facts: `Your accuracy by phase: ${readout}.` + worstLine + critLine + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+}
