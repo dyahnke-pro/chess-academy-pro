@@ -3421,10 +3421,20 @@ export function CoachTeachPage(): JSX.Element {
         const firstSentence = firstSentenceMatch
           ? firstSentenceMatch[1].trim()
           : finalText.trim();
-        if (firstSentence) {
+        // Grounded answers (stats / mistakes / repertoire-gap / …) are concise,
+        // complete, and carry NO [VOICE:] marker — they must be spoken in FULL,
+        // not truncated to one sentence (David 2026-07-04 voice attachments). The
+        // brief-cap in voiceService.speakInternal still clips them to ≤2 sentences
+        // on 'brief', so 'full' hears the whole answer and 'brief' hears the gist.
+        // Long free-form prose (> ~600 chars) still falls back to the first
+        // sentence so a rambling brain turn isn't read out wholesale.
+        const speakText = finalText.length > 0 && finalText.length <= 600
+          ? finalText.trim()
+          : firstSentence;
+        if (speakText) {
           voiceSpokenForTurn = true;
           // Transcript mirrors the spoken fallback too (text == narration).
-          spokenDisplayText = firstSentence;
+          spokenDisplayText = speakText;
           // Same suppression as the [VOICE:] path: walkthrough audio
           // always wins. The fallback first-sentence speech also gets
           // suppressed when the walkthrough is running.
@@ -3435,12 +3445,12 @@ export function CoachTeachPage(): JSX.Element {
             category: 'subsystem',
             source: 'CoachTeachPage.fallback',
             summary: walkthroughOwnsAudio
-              ? `SUPPRESSED fallback first sentence (walkthrough owns audio, ${firstSentence.length} chars)`
-              : `[VOICE:] missing — fallback spoke first sentence (${firstSentence.length} chars)`,
-            details: JSON.stringify({ length: firstSentence.length, preview: firstSentence.slice(0, 80) }),
+              ? `SUPPRESSED fallback voice (walkthrough owns audio, ${speakText.length} chars)`
+              : `[VOICE:] missing — fallback spoke ${speakText.length === firstSentence.length ? 'first sentence' : 'full grounded answer'} (${speakText.length} chars)`,
+            details: JSON.stringify({ length: speakText.length, preview: speakText.slice(0, 80) }),
           });
           if (!walkthroughOwnsAudio) {
-            queueSpeak(firstSentence);
+            queueSpeak(speakText);
           }
         } else {
           void logAppAudit({
