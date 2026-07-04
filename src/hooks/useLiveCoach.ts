@@ -23,6 +23,7 @@ import { getCoachChatResponse } from '../services/coachApi';
 import { buildFedTacticsContext, formatTacticsSubBlock } from '../services/liveTacticsContext';
 import { getCachedStockfish } from './stockfishFenCache';
 import { groundCoachReply, applyCandidateArrows } from '../services/coachAnswerGates';
+import type { TacticsLiveContext } from '../coach/types';
 import { voiceService } from '../services/voiceService';
 import { logAppAudit } from '../services/appAuditor';
 import { useAppStore } from '../stores/appStore';
@@ -223,18 +224,23 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
       // inventing a pin/fork (PostHog liveCoach.tacticClaimGate + boardClaimGate,
       // David 2026-06-22). Latency-safe: reuse the eval bar's cached analysis,
       // never a fresh engine read (cache miss → sync FEN-only board facts).
+      // The context is hoisted to trigger-scope so it can ALSO feed the
+      // ENFORCING tactic gate below — building it only for the prompt while
+      // grounding audit-only let hallucinated tactics ("fork", "removal of
+      // guard", "pin") reach Ruth's voice (PostHog 2026-07-04, David's session).
+      let tactics: TacticsLiveContext | null = null;
       if (ctx.fenAfter) {
         // Adaptive grounding horizon: real rating + tactics skill, not a frozen
         // 1200 (David 2026-07-03: all training aids adaptive).
         const lcProfile = useAppStore.getState().activeProfile;
-        const tactics = await buildFedTacticsContext(
+        tactics = (await buildFedTacticsContext(
           ctx.fenAfter,
           playerColor === 'white' ? 'w' : 'b',
           lcProfile?.currentRating ?? 1200,
           getCachedStockfish(ctx.fenAfter) ?? null,
           () => Promise.resolve(null),
           lcProfile?.skillRadar?.tactics,
-        ).catch(() => undefined);
+        ).catch(() => undefined)) ?? null;
         const block = tactics ? formatTacticsSubBlock(tactics) : '';
         if (block) userMessage = `${userMessage}\n\n${block}`;
       }
@@ -286,7 +292,7 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
       // drop board-false + ungrounded player-stat sentences before voicing;
       // arrows are the async engine-colored pass.
       const text = (await applyCandidateArrows(
-        groundCoachReply(response, { fen: ctx.fenAfter, source: 'liveCoach' }),
+        groundCoachReply(response, { fen: ctx.fenAfter, tactics, source: 'liveCoach' }),
         ctx.fenAfter,
         'liveCoach',
       )).trim();

@@ -311,10 +311,10 @@ export function MiddlegamePractice({
       // Adaptive grounding horizon: real rating + tactics skill, not a frozen
       // 1200 (David 2026-07-03: all training aids adaptive).
       const mgProfile = useAppStore.getState().activeProfile;
-      const mgTactics = await buildFedTacticsContext(
+      const mgTactics = (await buildFedTacticsContext(
         fen, studentCC, mgProfile?.currentRating ?? 1200, analysis,
         () => Promise.resolve(null), mgProfile?.skillRadar?.tactics,
-      ).catch(() => undefined);
+      ).catch(() => undefined)) ?? null;
       const mgBlock = mgTactics ? formatTacticsSubBlock(mgTactics) : '';
 
       const userMsg: CoachMessage = {
@@ -346,7 +346,7 @@ export function MiddlegamePractice({
       // it runs the shared gate set itself): drop board-false + ungrounded
       // player-stat sentences. Arrows are the async engine-colored pass.
       const grounded = await applyCandidateArrows(
-        groundCoachReply(response, { fen, source: 'middlegamePractice' }),
+        groundCoachReply(response, { fen, tactics: mgTactics, source: 'middlegamePractice' }),
         fen,
         'middlegamePractice',
       );
