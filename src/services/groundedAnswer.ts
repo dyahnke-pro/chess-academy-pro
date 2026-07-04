@@ -1257,3 +1257,69 @@ export function assemblePhaseProfileAnswer(p: PhaseProfileLike): GroundedAnswer 
   const suggest = ` Put your training into the ${phaseWord(worst.phase)}.`;
   return { facts: `Your accuracy by phase: ${readout}.` + worstLine + critLine + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
+
+// ═══ WAVE 2 — the REPERTOIRE-GAP cluster (David 2026-07-04: "I LOVE THIS STYLE
+// OF QUESTION!"): where you leave book, the holes you're least prepared for, and
+// what to learn next. Grounded in getOpeningInsights (repertoireCoverage +
+// worstResults). ═══
+
+/** The student's repertoire-gap picture — off-book rate + the openings they
+ *  score worst against (their softest matchups) — a subset of getOpeningInsights,
+ *  handed to `assembleRepertoireGapAnswer`. */
+export interface RepertoireGapLike {
+  kind: 'out-of-book' | 'hole' | 'learn-next';
+  offBookPct: number | null;         // 0-100, % of games leaving prep (or null)
+  totalGames: number;
+  /** Openings the student scores worst against, richest signal first. */
+  worstAgainst: ReadonlyArray<{ name: string; winRate: number; games: number }>;
+}
+
+/**
+ * assembleRepertoireGapAnswer — the grounded "where do I leave theory / what's a
+ * hole in my repertoire / what should I learn next?" answer (David 2026-07-04).
+ * Voiced from the off-book rate + the openings the student scores worst against
+ * (getOpeningInsights). Honest: it names the softest matchup by the real score,
+ * never claims a coverage number it didn't compute. Ends by pointing at the fix.
+ * Returns null with no opening/game data. G0.
+ */
+export function assembleRepertoireGapAnswer(g: RepertoireGapLike): GroundedAnswer | null {
+  const worst = g.worstAgainst.filter((w) => w.name && w.games > 0);
+  const top = worst[0] ?? null;
+  const offBook = typeof g.offBookPct === 'number' && g.offBookPct >= 0;
+  if (g.totalGames <= 0 || (!top && !offBook)) return null;
+
+  if (g.kind === 'out-of-book') {
+    const lead = offBook
+      ? `About ${Math.round(g.offBookPct as number)}% of your games leave your prepared repertoire.`
+      : `You drift out of your prep more than you'd like.`;
+    const where = top
+      ? ` Where it costs you most: you score only ${top.winRate}% against ${top.name} over ${top.games} games.`
+      : '';
+    const suggest = top
+      ? ` Extend your prep against ${top.name} first — that's where leaving book hurts most.`
+      : ` Pin down your lines a few moves deeper so you're not improvising early.`;
+    return { facts: lead + where + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+  }
+
+  if (g.kind === 'learn-next') {
+    if (!top) return null;
+    const facts =
+      `The opening to learn next is a real answer to ${top.name} — it's your worst matchup at ${top.winRate}% over ${top.games} games` +
+      (worst[1] ? `, with ${worst[1].name} (${worst[1].winRate}%) close behind` : '') +
+      `. Want me to teach you a line against it?`;
+    return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+  }
+
+  // 'hole'
+  if (!top) {
+    // No worst-matchup signal but we know the off-book rate.
+    return {
+      facts: `The clearest gap is your prep depth — about ${Math.round(g.offBookPct as number)}% of your games leave book. Drill your repertoire lines deeper so you're not improvising.`,
+      bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'],
+    };
+  }
+  const runnerUp = worst[1] ? `, then ${worst[1].name} (${worst[1].winRate}%)` : '';
+  const facts =
+    `Your softest spot is ${top.name} — you score just ${top.winRate}% against it over ${top.games} games, your worst matchup${runnerUp}. That's the gap to plug. Want a solid line against ${top.name}?`;
+  return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+}

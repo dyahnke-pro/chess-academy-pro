@@ -65,8 +65,8 @@ import { getUnifiedWeaknessProfile } from './weaknessSpine';
 import { getStrongestOpenings, getMostPlayedOpenings, getWeakestOpenings, getOpeningById } from './openingService';
 import { getWeakSpotsForOpening } from './weakSpotService';
 import type { OpeningRecord } from '../types';
-import { getOverviewInsights, getMistakeInsights, getTacticInsights } from './gameInsightsService';
-import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer } from './groundedAnswer';
+import { getOverviewInsights, getMistakeInsights, getTacticInsights, getOpeningInsights } from './gameInsightsService';
+import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer } from './groundedAnswer';
 import { getDueCount, getEnrolledOpenings, getSrsDueOpenings, getTotalEnrolled } from './srsOpeningService';
 import { criticalMomentsAccuracy } from './analyticsService';
 import { detectConceptsInText, getConcept } from './chessConceptService';
@@ -1258,6 +1258,10 @@ export interface MasterGroundingOptions {
   mistakesQuestion?: boolean;      // getMistakeInsights → assembleMistakesAnswer
   tacticsProfileQuestion?: boolean; // getTacticInsights → assembleTacticsProfileAnswer
   phaseQuestion?: boolean;          // phaseAccuracy + criticalMoments → assemblePhaseProfileAnswer
+  /** Wave 2 repertoire gaps — "where do I leave book / hole in my repertoire /
+   *  what to learn next" → getOpeningInsights → assembleRepertoireGapAnswer. */
+  repertoireGapQuestion?: boolean;
+  repertoireGapKind?: 'out-of-book' | 'hole' | 'learn-next';
   /** STEP D Phase 4 — true when this turn asks how MASTERS play the position
    *  ("how do masters play this?", "most popular move?"). Voices the master-play
    *  lookup's real top moves + frequencies (assembleMasterPlayAnswer) so the LLM
@@ -1833,6 +1837,7 @@ export async function getCoachChatResponse(
       grounding.mistakesQuestion === true ||
       grounding.tacticsProfileQuestion === true ||
       grounding.phaseQuestion === true ||
+      grounding.repertoireGapQuestion === true ||
       grounding.conceptQuestion === true ||
       grounding.playerGamesQuestion === true ||
       grounding.endgameQuestion === true ||
@@ -2091,6 +2096,34 @@ export async function getCoachChatResponse(
             }
             const noDataFact = "You haven't analyzed enough games yet for me to break down your play by phase. Analyze a few games and I'll show you whether your opening, middlegame, or endgame needs the most work.";
             const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'phase-profile' });
+            if (voicedNoData) return voicedNoData;
+          } catch { /* fall through */ }
+        }
+
+        // ── REPERTOIRE GAP (Wave 2) — "where do I leave book / what's a hole in
+        // my repertoire / what should I learn next?" (David 2026-07-04, promoted
+        // priority). Voiced from getOpeningInsights: the off-book rate + the
+        // openings the student scores worst against (their softest matchups).
+        if (grounding.repertoireGapQuestion) {
+          try {
+            const oi = await getOpeningInsights();
+            const totalBook = oi.repertoireCoverage.inBook + oi.repertoireCoverage.offBook;
+            const offBookPct = totalBook > 0 ? (oi.repertoireCoverage.offBook / totalBook) * 100 : null;
+            const worstAgainst = oi.worstResults
+              .filter((o) => o.name && o.games > 0)
+              .map((o) => ({ name: o.name, winRate: o.winRate, games: o.games }));
+            const answer = assembleRepertoireGapAnswer({
+              kind: grounding.repertoireGapKind ?? 'hole',
+              offBookPct,
+              totalGames: totalBook,
+              worstAgainst,
+            });
+            if (answer) {
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'repertoire-gap' });
+              if (voiced) return voiced;
+            }
+            const noDataFact = "You haven't played enough games yet for me to spot the holes in your repertoire. Play or import a few more and I'll show you what you leave unprepared and what to learn next.";
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'repertoire-gap' });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
         }

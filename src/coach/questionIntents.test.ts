@@ -21,6 +21,8 @@ import {
   isMistakesQuestion,
   isTacticsProfileQuestion,
   isPhaseQuestion,
+  isRepertoireGapQuestion,
+  repertoireGapKind,
 } from './coachService';
 
 // David 2026-06-14: "throw the thesaurus at this problem for ALL questions."
@@ -405,6 +407,34 @@ describe('Wave 1 — where-do-I-go-wrong cluster (David 2026-07-04)', () => {
       'hi coach',
     ])('does NOT match: %s', (q) => expect(isPhaseQuestion(q)).toBe(false));
   });
+});
+
+describe('isRepertoireGapQuestion + repertoireGapKind (David 2026-07-04: the promoted cluster)', () => {
+  it.each([
+    ['where do I leave theory', 'out-of-book'],
+    ['where do I go out of book', 'out-of-book'],
+    ['how often do I leave book', 'out-of-book'],
+    ['where do I leave my prep', 'out-of-book'],
+    ["what's a hole in my repertoire", 'hole'],
+    ['what do I have no answer for', 'hole'],
+    ['what am I not prepared for', 'hole'],
+    ['what are the gaps in my repertoire', 'hole'],
+    ['what do I struggle against', 'hole'],
+    ['what openings give me trouble', 'hole'],
+    ['what opening should I learn next', 'learn-next'],
+    ['what should I add to my repertoire', 'learn-next'],
+    ["what's the next opening to learn", 'learn-next'],
+  ])('matches "%s" (kind=%s)', (q, kind) => {
+    expect(isRepertoireGapQuestion(q)).toBe(true);
+    expect(repertoireGapKind(q)).toBe(kind);
+  });
+  it.each([
+    "what's my strongest opening",     // opening-profile
+    'how accurate am I in my opening',  // opening-accuracy
+    "what's my rating",
+    'teach me the Sicilian',
+    'hi coach',
+  ])('does NOT match: %s', (q) => expect(isRepertoireGapQuestion(q)).toBe(false));
 });
 
 describe('buildQuestionGrounding — shared cross-surface grounding (David 2026-07-04)', () => {

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -423,6 +423,36 @@ describe('assemblePhaseProfileAnswer — Wave 1 (+ focus suggestion)', () => {
   });
   it('returns null when no phase has played moves', () => {
     expect(assemblePhaseProfileAnswer({ phaseAccuracy: [{ phase: 'opening', accuracy: 0, mistakes: 0, moveCount: 0 }], criticalByPhase: [] })).toBeNull();
+  });
+});
+
+describe('assembleRepertoireGapAnswer — Wave 2 (the promoted cluster + suggestion)', () => {
+  const worst = [{ name: 'Sicilian Defense', winRate: 34, games: 22 }, { name: 'French Defense', winRate: 41, games: 15 }];
+  it('out-of-book: voices the off-book rate + costliest matchup + suggestion', () => {
+    const a = assembleRepertoireGapAnswer({ kind: 'out-of-book', offBookPct: 38, totalGames: 60, worstAgainst: worst });
+    expect(a!.facts).toMatch(/About 38% of your games leave your prepared repertoire/);
+    expect(a!.facts).toMatch(/score only 34% against Sicilian Defense over 22 games/);
+    expect(a!.facts).toMatch(/Extend your prep against Sicilian Defense/);
+    expect(a!.sources).toContain('data:your-games');
+  });
+  it('hole: names the softest matchup + runner-up + a fix offer', () => {
+    const a = assembleRepertoireGapAnswer({ kind: 'hole', offBookPct: 38, totalGames: 60, worstAgainst: worst });
+    expect(a!.facts).toMatch(/softest spot is Sicilian Defense — you score just 34% against it over 22 games/);
+    expect(a!.facts).toMatch(/then French Defense \(41%\)/);
+    expect(a!.facts).toMatch(/Want a solid line against Sicilian Defense/);
+  });
+  it('learn-next: recommends a line against the worst matchup', () => {
+    const a = assembleRepertoireGapAnswer({ kind: 'learn-next', offBookPct: null, totalGames: 60, worstAgainst: worst });
+    expect(a!.facts).toMatch(/opening to learn next is a real answer to Sicilian Defense/);
+    expect(a!.facts).toMatch(/worst matchup at 34% over 22 games/);
+  });
+  it('hole with only off-book data (no worst matchup) points at prep depth', () => {
+    const a = assembleRepertoireGapAnswer({ kind: 'hole', offBookPct: 45, totalGames: 30, worstAgainst: [] });
+    expect(a!.facts).toMatch(/about 45% of your games leave book/);
+  });
+  it('returns null with no data', () => {
+    expect(assembleRepertoireGapAnswer({ kind: 'hole', offBookPct: null, totalGames: 0, worstAgainst: [] })).toBeNull();
+    expect(assembleRepertoireGapAnswer({ kind: 'learn-next', offBookPct: null, totalGames: 50, worstAgainst: [] })).toBeNull();
   });
 });
 

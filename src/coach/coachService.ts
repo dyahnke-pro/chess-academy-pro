@@ -182,6 +182,7 @@ import {
   isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion,
   isOpeningTrapsQuestion, opensTrapsSystemAsk, isReviewDueQuestion,
   isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion,
+  isRepertoireGapQuestion, repertoireGapKind,
 } from './questionIntents';
 export {
   isPlanQuestion, isBestMoveQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
@@ -190,6 +191,7 @@ export {
   isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion,
   isOpeningTrapsQuestion, opensTrapsSystemAsk, isReviewDueQuestion,
   isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion,
+  isRepertoireGapQuestion, repertoireGapKind,
 };
 
 export interface CoachServiceOptions {
@@ -961,9 +963,10 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     const mistakesQuestionEngage = isMistakesQuestion(input.ask);
     const tacticsProfileQuestionEngage = isTacticsProfileQuestion(input.ask);
     const phaseQuestionEngage = isPhaseQuestion(input.ask);
+    const repertoireGapQuestionEngage = isRepertoireGapQuestion(input.ask);
     const autoGrounding =
       options.grounding ??
-      (input.liveState.fen || progressQuestion || conceptQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage
+      (input.liveState.fen || progressQuestion || conceptQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage
         ? {
             currentFen: input.liveState.fen,
             // DB-grounding: thread the move history through so the
@@ -1036,6 +1039,8 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
             mistakesQuestion: mistakesQuestionEngage,
             tacticsProfileQuestion: tacticsProfileQuestionEngage,
             phaseQuestion: phaseQuestionEngage,
+            repertoireGapQuestion: repertoireGapQuestionEngage,
+            repertoireGapKind: repertoireGapKind(input.ask),
             // STEP D Phase 4 — "how do masters play this?" voices the master-play
             // lookup's real top moves + frequencies (assembleMasterPlayAnswer).
             masterPlayQuestion: isMasterPlayQuestion(input.ask),

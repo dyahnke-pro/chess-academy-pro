@@ -602,6 +602,41 @@ export function isPhaseQuestion(ask: string | undefined): boolean {
   return PHASE_QUESTION_RE.test(ask);
 }
 
+/** WAVE 2 — the REPERTOIRE-GAP cluster (David 2026-07-04: "I LOVE THIS STYLE OF
+ *  QUESTION!"). "where do I leave theory / go out of book?", "what's a hole in
+ *  my repertoire / what do I have no answer for?", "what opening should I learn
+ *  next?" → assembleRepertoireGapAnswer (getOpeningInsights: off-book rate +
+ *  worst matchups). Distinct from opening-profile (which opening I PLAY best) and
+ *  opening-accuracy (how well I drill ONE opening). */
+const REPERTOIRE_GAP_RE = anyOf([
+  // out-of-book
+  String.raw`\b(?:leave|leaving|out\s+of|off)\s+(?:the\s+)?(?:book|theory|prep(?:aration)?)\b`,
+  String.raw`\bwhere\s+do\s+i\s+(?:leave|drift|deviate|go\s+off)\b`,
+  String.raw`\bhow\s+(?:often|deep)\s+(?:do\s+i|am\s+i)\s+(?:go\s+off|leave|in|out\s+of)\s+(?:book|prep|theory)\b`,
+  // hole / no answer
+  String.raw`\b(?:hole|holes|gap|gaps|weak\s+spot)\s+(?:in|of)\s+my\s+(?:repertoire|prep(?:aration)?|openings?)\b`,
+  String.raw`\bwhat\s+(?:do\s+i|don'?t\s+i)\s+(?:have\s+)?no\s+answer\s+(?:for|to|against)\b`,
+  String.raw`\bwhat\s+am\s+i\s+not\s+(?:prepared|ready)\s+(?:for|against)\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+missing\s+(?:from|in)\s+my\s+(?:repertoire|prep|openings?)\b`,
+  String.raw`\bwhat\s+do\s+i\s+struggle\s+(?:against|with)\b`,
+  String.raw`\bwhat\s+openings?\s+(?:do\s+i|give\s+me)\s+(?:the\s+most\s+)?(?:trouble|problems?)\b`,
+  // learn-next
+  String.raw`\bwhat\s+opening\s+should\s+i\s+(?:learn|study|add)\s+(?:next|to\s+my\s+repertoire)?\b`,
+  String.raw`\bwhat\s+should\s+i\s+(?:learn|add\s+to\s+my\s+repertoire)\s+next\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+)?next\s+opening\s+(?:for\s+me\s+)?to\s+(?:learn|study)\b`,
+  String.raw`\bwhat\s+should\s+i\s+add\s+to\s+my\s+repertoire\b`,
+]);
+export function isRepertoireGapQuestion(ask: string | undefined): boolean {
+  return !!ask && REPERTOIRE_GAP_RE.test(ask);
+}
+/** Which slice of the repertoire-gap answer to compute. */
+export function repertoireGapKind(ask: string | undefined): 'out-of-book' | 'hole' | 'learn-next' {
+  const a = (ask ?? '').toLowerCase();
+  if (/\blearn\b|\badd\b|\bnext\s+opening\b|\bshould\s+i\s+(?:learn|study|add)\b/.test(a)) return 'learn-next';
+  if (/\b(?:leave|leaving|out\s+of|off)\s+(?:the\s+|my\s+|your\s+)?(?:book|theory|prep)|\bdrift\b|\bdeviate\b/.test(a)) return 'out-of-book';
+  return 'hole';
+}
+
 /**
  * buildQuestionGrounding — the SHARED grounding builder so the coach's
  * grounded-data brain fires IDENTICALLY on every talking surface (David
@@ -656,6 +691,8 @@ export function buildQuestionGrounding(
     mistakesQuestion: isMistakesQuestion(ask),
     tacticsProfileQuestion: isTacticsProfileQuestion(ask),
     phaseQuestion: isPhaseQuestion(ask),
+    repertoireGapQuestion: isRepertoireGapQuestion(ask),
+    repertoireGapKind: repertoireGapKind(ask),
     masterPlayQuestion: isMasterPlayQuestion(ask),
     conceptQuestion: isConceptQuestion(ask),
     playerGamesQuestion: isPlayerGamesQuestion(ask),
