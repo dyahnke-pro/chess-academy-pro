@@ -66,10 +66,10 @@ import { getStrongestOpenings, getMostPlayedOpenings, getWeakestOpenings, getOpe
 import { getWeakSpotsForOpening } from './weakSpotService';
 import type { OpeningRecord } from '../types';
 import { getOverviewInsights, getMistakeInsights, getTacticInsights, getOpeningInsights } from './gameInsightsService';
-import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer } from './groundedAnswer';
+import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleTrendAnswer } from './groundedAnswer';
 import { computeLastMoveRating } from './moveRating';
 import { getDueCount, getEnrolledOpenings, getSrsDueOpenings, getTotalEnrolled } from './srsOpeningService';
-import { criticalMomentsAccuracy, streaks, timeControlPerformance, comebackWins, winShapeStats, colorProficiencyMismatch, personalRecords, tacticTransferGap, recordVsOpening, recordVsOpponent } from './analyticsService';
+import { criticalMomentsAccuracy, streaks, timeControlPerformance, comebackWins, winShapeStats, colorProficiencyMismatch, personalRecords, tacticTransferGap, recordVsOpening, recordVsOpponent, phaseStrengthOverTime } from './analyticsService';
 import { getPuzzleStats } from './puzzleService';
 import { detectConceptsInText, getConcept } from './chessConceptService';
 import { validateClaims, type ClaimValidationResult } from './claimValidator';
@@ -1257,6 +1257,11 @@ export interface MasterGroundingOptions {
    *  bad-habit profile (assembleProgressAnswer), voiced via voiceFacts. Needs
    *  no board, so the pipeline engages even with no `currentFen`. */
   progressQuestion?: boolean;
+  /** "am I improving / getting better / trending up?" — the TEMPORAL answer
+   *  (assembleTrendAnswer over phaseStrengthOverTime), distinct from the
+   *  weakness-dump progress vertical. Routed BEFORE progress so a trend
+   *  question stops getting a current-weakness list (David 2026-07-04). */
+  trendQuestion?: boolean;
   /** "what's my strongest / favorite / weakest opening?" — voiced from the
    *  repertoire's drill accuracy + real game counts (assembleOpeningProfileAnswer).
    *  Needs no board. `openingProfileKind` says which slice to compute. */
@@ -1734,8 +1739,22 @@ export async function voiceFacts(
      *  (move-rating) where a corrupted move is a chess hallucination the number
      *  net can't catch (d4→e4 keeps the digit). See the fidelity net below. */
     mustPreserve?: string[];
+    /** LEAN-ON-RAW (David 2026-07-04: "do raw as often as possible"). When true,
+     *  skip the phrasing LLM entirely and speak the computed `facts` verbatim.
+     *  The self-knowledge / analytics assemblers already write tight coach prose
+     *  ("You've played 52 games against the Sicilian, scoring 43%…"), so the
+     *  phrasing model added only variety at the cost of a call, latency, and the
+     *  fidelity risk. For those factual readouts raw IS the answer — cheaper,
+     *  instant, and the purest G0 (no model in the loop). Reserve the LLM call
+     *  for genuinely conversational / teaching turns where varied phrasing earns
+     *  its keep (concept, progress, board-teaching). */
+    preferRaw?: boolean;
   } = {},
 ): Promise<string | null> {
+  // Lean-on-raw short-circuit — the computed facts ARE the answer; don't spend
+  // an LLM call to re-say them. Runs before the provider lookup so it costs
+  // nothing when a whole vertical opts into raw.
+  if (opts.preferRaw) return facts.trim();
   const cfg = opts.providerConfig ?? (await getProviderConfig());
   // No provider configured → there's nothing to phrase WITH, but the computed
   // `facts` are already correct, coach-voiced prose. Speak them directly rather
@@ -1872,7 +1891,7 @@ export async function explainPuzzleMoveGrounded(opts: {
   if (facts) {
     const voiced = await voiceFacts(facts, {
       studentMessage: opts.studentMessage ?? `Why is ${opts.bestMoveSan} the best move here?`,
-      intent: 'best-move',
+      intent: 'best-move', preferRaw: true,
     });
     return voiced ?? facts; // provider down → the computed facts are already true
   }
@@ -2000,6 +2019,7 @@ export async function getCoachChatResponse(
       grounding.planQuestion === true ||
       grounding.tacticsQuestion === true ||
       grounding.progressQuestion === true ||
+      grounding.trendQuestion === true ||
       grounding.openingProfileQuestion === true ||
       grounding.statsQuestion === true ||
       grounding.strengthsQuestion === true ||
@@ -2053,7 +2073,7 @@ export async function getCoachChatResponse(
                 // swap (French → Sicilian) falls back to the computed prose,
                 // while still allowing the model to drop "Defense"/abbreviate.
                 const familyRoot = opening.openingName.split(/\s+/)[0];
-                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'record-vs-opening', mustPreserve: familyRoot ? [familyRoot] : undefined });
+                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'record-vs-opening', preferRaw: true, mustPreserve: familyRoot ? [familyRoot] : undefined });
                 // No action chip here: we only have the opening's family NAME,
                 // not a routable openingId (the /openings/:id chip needs an id).
                 if (voiced) return voiced;
@@ -2063,14 +2083,14 @@ export async function getCoachChatResponse(
             if (opponent) {
               const answer = assembleOpponentRecordAnswer(opponent);
               if (answer) {
-                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'record-vs-opponent' });
+                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'record-vs-opponent', preferRaw: true });
                 if (voiced) return voiced;
               }
             }
             // Target didn't resolve to an opening we've played OR a known
             // opponent — computed no-data line (G0), not an LLM guess.
             const noDataFact = `I don't have any of your games against "${target}" logged yet. If that's an opening, drill it and I'll start tracking your record; if it's an opponent, we haven't played them in your imported games.`;
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'record-vs' });
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'record-vs', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
         }
@@ -2112,7 +2132,7 @@ export async function getCoachChatResponse(
                 offer = { type: 'drill_opening', id: '' };
               }
             }
-            const voiced = await voiceFacts(fact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'training-request' });
+            const voiced = await voiceFacts(fact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'training-request', preferRaw: true });
             if (voiced) {
               if (offer) lastCoachActionOffer = [offer];
               return voiced;
@@ -2136,7 +2156,7 @@ export async function getCoachChatResponse(
                 // content the answer hinges on — require them verbatim so a
                 // phrasing slip (d4→e4) serves the computed prose instead.
                 const mustPreserve = [rating.playedSan, rating.betterSan].filter((s): s is string => !!s);
-                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'move-rating', mustPreserve });
+                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'move-rating', preferRaw: true, mustPreserve });
                 if (voiced) {
                   // Offer an "Analyse Position" chip when the move was a real
                   // error, so the student can dig into the line — opt-in.
@@ -2165,11 +2185,11 @@ export async function getCoachChatResponse(
             const ov = await getOverviewInsights();
             const answer = assembleStrengthsAnswer(ov.strengths ?? []);
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'strengths' });
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'strengths', preferRaw: true });
               if (voiced) return voiced;
             }
             const noDataFact = "You haven't played enough analyzed games yet for me to spot your strengths. Play a few more and I'll show you what you do well.";
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'strengths' });
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'strengths', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
         }
@@ -2188,11 +2208,11 @@ export async function getCoachChatResponse(
                 : null,
             });
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'stats' });
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'stats', preferRaw: true });
               if (voiced) return voiced;
             }
             const noDataFact = "You haven't imported or played any games yet, so I don't have a record for you. Play or import some games and I'll track your rating and win rate.";
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'stats' });
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'stats', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
         }
@@ -2249,7 +2269,7 @@ export async function getCoachChatResponse(
                 topWeakSpot: top ? { san: top.correctMoveSan, failCount: top.failCount } : null,
               });
               if (answer) {
-                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-accuracy' });
+                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-accuracy', preferRaw: true });
                 if (voiced) {
                   // Opt-in "Practice Opening" chip → the resolved opening's
                   // detail page, where the student drills the weak variation.
@@ -2260,7 +2280,7 @@ export async function getCoachChatResponse(
             }
             // No opening drilled / no weak-spot data — computed no-data line (G0).
             const noDataFact = "You haven't drilled an opening enough yet for me to grade your accuracy line by line. Drill one of your repertoire openings a few times and I'll pinpoint the exact variation and move to work on.";
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-accuracy' });
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-accuracy', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through to legacy path */ }
         }
@@ -2307,7 +2327,7 @@ export async function getCoachChatResponse(
             }
             const answer = assembleOpeningTrapsAnswer({ sides, explainSystem: grounding.openingTrapsSystemAsk });
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-traps' });
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-traps', preferRaw: true });
               if (voiced) {
                 // Opt-in "Practice Opening" chip → the opening whose traps
                 // we just described, so the student can drill the weapons.
@@ -2317,7 +2337,7 @@ export async function getCoachChatResponse(
             }
             // No trap data yet — computed no-data line (G0).
             const noDataFact = "I don't have named traps logged for your strongest openings yet. Drill an opening's Watch and Learn rungs and I'll surface its trap weapons and the lines to watch out for.";
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-traps' });
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-traps', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through to legacy path */ }
         }
@@ -2338,7 +2358,7 @@ export async function getCoachChatResponse(
               .map((e) => ({ name: nameById.get(e.openingId) ?? e.openingId, dueCards: e.dueCards }));
             const answer = assembleReviewDueAnswer({ dueCount, totalEnrolled, dueOpenings });
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'review-due' });
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'review-due', preferRaw: true });
               if (voiced) {
                 // Offer the opt-in "Start review" chip when there's
                 // actually something due — never auto-launch the trainer.
@@ -2348,7 +2368,7 @@ export async function getCoachChatResponse(
             }
             // Nothing enrolled yet — computed onboarding line (G0).
             const noDataFact = "You don't have any opening review cards yet. Finish an opening's Learn rung and I'll start scheduling spaced-repetition reps for it — then I can tell you what's due.";
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'review-due' });
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'review-due', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through to legacy path */ }
         }
@@ -2372,7 +2392,7 @@ export async function getCoachChatResponse(
               costliest: top ? { san: top.san, cpLoss: top.cpLoss, opponentName: top.opponentName, openingName: top.openingName } : null,
             });
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'mistakes' });
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'mistakes', preferRaw: true });
               if (voiced) {
                 // Opt-in "Try Puzzles" chip → adaptive tactics, so the
                 // student drills the error class we just named.
@@ -2381,7 +2401,7 @@ export async function getCoachChatResponse(
               }
             }
             const noDataFact = "You haven't analyzed enough games yet for me to break down your mistakes. Analyze a few games and I'll show you exactly where you go wrong and what to drill.";
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'mistakes' });
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'mistakes', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
         }
@@ -2401,7 +2421,7 @@ export async function getCoachChatResponse(
               worstPhase: worstPhase ? { phase: worstPhase.phase, count: worstPhase.count } : null,
             });
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'tactics-profile' });
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'tactics-profile', preferRaw: true });
               if (voiced) {
                 // Opt-in "Try Puzzles" chip → adaptive tactics, so the
                 // student drills the motif they miss most.
@@ -2410,7 +2430,7 @@ export async function getCoachChatResponse(
               }
             }
             const noDataFact = "You haven't analyzed enough games yet for me to profile your tactics. Analyze a few games or solve some puzzles and I'll show you which motifs you miss most.";
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'tactics-profile' });
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'tactics-profile', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
         }
@@ -2425,7 +2445,7 @@ export async function getCoachChatResponse(
               criticalByPhase: crit.byPhase.map((x) => ({ phase: x.phase, accuracyPct: x.accuracyPct, total: x.total })),
             });
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'phase-profile' });
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'phase-profile', preferRaw: true });
               if (voiced) {
                 // Offer training scoped to the weakest phase (all game-sourced):
                 // endgame → the endgame room; opening → drill the softest
@@ -2437,7 +2457,7 @@ export async function getCoachChatResponse(
               }
             }
             const noDataFact = "You haven't analyzed enough games yet for me to break down your play by phase. Analyze a few games and I'll show you whether your opening, middlegame, or endgame needs the most work.";
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'phase-profile' });
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'phase-profile', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
         }
@@ -2461,7 +2481,7 @@ export async function getCoachChatResponse(
               worstAgainst,
             });
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'repertoire-gap' });
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'repertoire-gap', preferRaw: true });
               if (voiced) {
                 // Game-sourced: review the games where you left book so you
                 // see the exact positions the gap shows up in.
@@ -2470,7 +2490,7 @@ export async function getCoachChatResponse(
               }
             }
             const noDataFact = "You haven't played enough games yet for me to spot the holes in your repertoire. Play or import a few more and I'll show you what you leave unprepared and what to learn next.";
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'repertoire-gap' });
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'repertoire-gap', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
         }
@@ -2488,7 +2508,7 @@ export async function getCoachChatResponse(
               blunders: ov.classificationCounts.blunder,
             });
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'accuracy' });
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'accuracy', preferRaw: true });
               if (voiced) {
                 // Game-sourced calculation training — positions pulled from
                 // the student's own games sharpen the accuracy the answer just
@@ -2498,7 +2518,7 @@ export async function getCoachChatResponse(
               }
             }
             const noDataFact = "You haven't analyzed enough games yet for me to grade your accuracy. Analyze a few and I'll show you how precise your play is and where to tighten up.";
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'accuracy' });
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'accuracy', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
         }
@@ -2513,14 +2533,14 @@ export async function getCoachChatResponse(
               timeControls: tcs.map((t) => ({ bucket: t.bucket, winRatePct: t.winRatePct, games: t.games, avgAccuracyPct: t.avgAccuracyPct })),
             });
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'consistency' });
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'consistency', preferRaw: true });
               if (voiced) {
                 lastCoachActionOffer = [{ type: 'review_games', id: 'recent' }];
                 return voiced;
               }
             }
             const noDataFact = "You haven't played enough games yet for me to track your streaks and time-control form. Play a few more and I'll show you where you're steadiest.";
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'consistency' });
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'consistency', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
         }
@@ -2535,7 +2555,7 @@ export async function getCoachChatResponse(
               quickWins: ws.quickWins, grindWins: ws.grindWins, midLengthWins: ws.midLengthWins,
             });
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'converting' });
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'converting', preferRaw: true });
               if (voiced) {
                 // Converting = closing out won positions → the endgame room,
                 // which draws technique from real endings.
@@ -2544,7 +2564,7 @@ export async function getCoachChatResponse(
               }
             }
             const noDataFact = "You haven't analyzed enough games yet for me to see how you convert. Analyze a few and I'll show you whether you close out wins cleanly or let them slip.";
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'converting' });
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'converting', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
         }
@@ -2558,8 +2578,8 @@ export async function getCoachChatResponse(
               accuracyWhite: ov.accuracyWhite, accuracyBlack: ov.accuracyBlack,
               inversion: cm ? { preferredColor: cm.preferredColor, otherColor: cm.otherColor, inversionPoints: cm.inversionPoints } : null,
             });
-            if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'color' }); if (v) { lastCoachActionOffer = [{ type: 'review_games', id: 'by-color' }]; return v; } }
-            const nd = await voiceFacts("You haven't played enough games with each colour yet for me to compare. Play a few more and I'll tell you which side you're stronger with.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'color' });
+            if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'color', preferRaw: true }); if (v) { lastCoachActionOffer = [{ type: 'review_games', id: 'by-color' }]; return v; } }
+            const nd = await voiceFacts("You haven't played enough games with each colour yet for me to compare. Play a few more and I'll tell you which side you're stronger with.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'color', preferRaw: true });
             if (nd) return nd;
           } catch { /* fall through */ }
         }
@@ -2575,8 +2595,8 @@ export async function getCoachChatResponse(
               longestGame: pr.longestGame ? { moves: pr.longestGame.moves } : null,
               bestAccuracyGame: pr.bestAccuracyGame ? { accuracyPct: pr.bestAccuracyGame.accuracyPct } : null,
             });
-            if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'records' }); if (v) { lastCoachActionOffer = [{ type: 'review_games', id: 'best' }]; return v; } }
-            const nd = await voiceFacts("You haven't played enough analyzed games yet for me to pull out your records. Play a few and I'll track your best games and fastest wins.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'records' });
+            if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'records', preferRaw: true }); if (v) { lastCoachActionOffer = [{ type: 'review_games', id: 'best' }]; return v; } }
+            const nd = await voiceFacts("You haven't played enough analyzed games yet for me to pull out your records. Play a few and I'll track your best games and fastest wins.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'records', preferRaw: true });
             if (nd) return nd;
           } catch { /* fall through */ }
         }
@@ -2590,8 +2610,8 @@ export async function getCoachChatResponse(
               totalAttempted: ps.totalAttempted, totalCorrect: ps.totalCorrect,
               overallAccuracy: ps.overallAccuracy, duePuzzles: ps.duePuzzles,
             });
-            if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'puzzle-stats' }); if (v) { lastCoachActionOffer = [{ type: 'puzzle_theme', id: 'adaptive' }]; return v; } }
-            const nd = await voiceFacts("You haven't solved enough puzzles yet for me to track your puzzle rating. Solve a few and I'll show you your rating and accuracy.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'puzzle-stats' });
+            if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'puzzle-stats', preferRaw: true }); if (v) { lastCoachActionOffer = [{ type: 'puzzle_theme', id: 'adaptive' }]; return v; } }
+            const nd = await voiceFacts("You haven't solved enough puzzles yet for me to track your puzzle rating. Solve a few and I'll show you your rating and accuracy.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'puzzle-stats', preferRaw: true });
             if (nd) return nd;
           } catch { /* fall through */ }
         }
@@ -2606,8 +2626,8 @@ export async function getCoachChatResponse(
             const answer = assembleTransferGapAnswer({
               worst: gapped ? { tacticType: gapped.tacticType, puzzleAccuracyPct: gapped.puzzleAccuracyPct as number, gameRecognitionPct: gapped.gameRecognitionPct as number, gapPoints: gapped.transferGapPoints as number } : null,
             });
-            if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'transfer-gap' }); if (v) { lastCoachActionOffer = [{ type: 'weakness_drill', id: gapped?.tacticType ? gapped.tacticType.toLowerCase() : 'all' }]; return v; } }
-            const nd = await voiceFacts("You haven't solved and played enough tactics yet for me to compare your puzzle skill to your in-game vision. Do a few more and I'll show you the gap.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'transfer-gap' });
+            if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'transfer-gap', preferRaw: true }); if (v) { lastCoachActionOffer = [{ type: 'weakness_drill', id: gapped?.tacticType ? gapped.tacticType.toLowerCase() : 'all' }]; return v; } }
+            const nd = await voiceFacts("You haven't solved and played enough tactics yet for me to compare your puzzle skill to your in-game vision. Do a few more and I'll show you the gap.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'transfer-gap', preferRaw: true });
             if (nd) return nd;
           } catch { /* fall through */ }
         }
@@ -2618,7 +2638,7 @@ export async function getCoachChatResponse(
             const profile = await db.profiles.get('main');
             const sr = profile?.skillRadar;
             const answer = sr ? assembleSkillRadarAnswer({ opening: sr.opening, tactics: sr.tactics, endgame: sr.endgame, memory: sr.memory, calculation: sr.calculation }) : null;
-            if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'skill-radar' }); if (v) {
+            if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'skill-radar', preferRaw: true }); if (v) {
               // Offer training scoped to the weakest skill dimension (all
               // game-sourced): endgame → endgame room; else the weakness
               // overview built from real games.
@@ -2635,9 +2655,37 @@ export async function getCoachChatResponse(
               }
               return v;
             } }
-            const nd = await voiceFacts("You haven't played or drilled enough yet for me to build your skill breakdown. Play some games and solve some puzzles, and I'll rate your opening, tactics, endgame, memory, and calculation.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'skill-radar' });
+            const nd = await voiceFacts("You haven't played or drilled enough yet for me to build your skill breakdown. Play some games and solve some puzzles, and I'll rate your opening, tactics, endgame, memory, and calculation.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'skill-radar', preferRaw: true });
             if (nd) return nd;
           } catch { /* fall through */ }
+        }
+
+        // ── IMPROVEMENT TREND — "am I improving / getting better over time?"
+        // (David 2026-07-04 misroute fix). Runs BEFORE progress because "am I
+        // improving" trips isProgressQuestion too, but the honest answer is a
+        // TEMPORAL trend (phaseStrengthOverTime), not a current-weakness dump.
+        // Falls through to progress (then the legacy path) when there isn't
+        // enough dated, analyzed history to call a trend. No board needed.
+        if (grounding.trendQuestion) {
+          try {
+            const matrix = await phaseStrengthOverTime();
+            const answer = assembleTrendAnswer(matrix);
+            if (answer) {
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'trend', preferRaw: true });
+              if (voiced) {
+                // Game-sourced follow-up: drill the phase/weakness the trend
+                // surfaced. Unscoped → the weakness overview built from real games.
+                lastCoachActionOffer = [{ type: 'weakness_drill', id: 'all' }];
+                return voiced;
+              }
+            }
+            // Not enough dated history yet — voice a computed fallback instead of
+            // falling through to the weakness-dump (which answers the wrong
+            // question) or the ungrounded legacy path.
+            const noDataFact = "I don't have enough analyzed games across different months yet to show a trend. Play and analyze a few more over the coming weeks and I'll tell you whether you're improving.";
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'trend', preferRaw: true });
+            if (voicedNoData) return voicedNoData;
+          } catch { /* fall through to progress */ }
         }
 
         // ── PROGRESS (Phase 6) — the student's OWN computed history ────────
@@ -2668,7 +2716,7 @@ export async function getCoachChatResponse(
               answer = profile ? assembleProgressAnswer(await detectBadHabits(profile)) : null;
             }
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress' });
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress', preferRaw: true });
               if (voiced) {
                 // The single most useful game-sourced follow-up: drill the
                 // weaknesses this answer just named. Unscoped → the weakness
@@ -2684,7 +2732,7 @@ export async function getCoachChatResponse(
             // contract from assembleProgressAnswer's docstring: "caller takes the
             // one fallback — e.g. 'play a few games and I'll spot patterns'".
             const noDataFact = "You haven't played enough games or puzzles yet for me to identify patterns in your play. Play a few more and I'll analyze your weaknesses.";
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress' });
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through to legacy path */ }
         }
@@ -2701,27 +2749,42 @@ export async function getCoachChatResponse(
             const toStat = (o: { name: string; color: 'white' | 'black'; drillAccuracy: number; drillAttempts: number }, games?: number): OpeningStat =>
               ({ name: o.name, color: o.color, drillAccuracy: o.drillAccuracy, drillAttempts: o.drillAttempts, games });
             let openings: OpeningStat[] = [];
+            // Track the primary opening's id so the answer can offer a
+            // drill-this-opening chip (the opening-accuracy vertical already
+            // does; opening-profile named a concrete opening but offered no
+            // follow-up — David 2026-07-04 action-offer gap).
+            let primaryOpeningId: string | null = null;
             if (kind === 'favorite') {
               const [w, b] = await Promise.all([getMostPlayedOpenings(1, 'white'), getMostPlayedOpenings(1, 'black')]);
-              openings = [...w, ...b].map((x) => toStat(x.opening, x.games));
+              const merged = [...w, ...b];
+              openings = merged.map((x) => toStat(x.opening, x.games));
+              primaryOpeningId = merged[0]?.opening.id ?? null;
             } else if (kind === 'weakest') {
               const [w, b] = await Promise.all([getWeakestOpenings(1, 'white'), getWeakestOpenings(1, 'black')]);
-              openings = [...w, ...b].map((o) => toStat(o));
+              const merged = [...w, ...b];
+              openings = merged.map((o) => toStat(o));
+              // Weakest → the single lowest-accuracy line is the one to drill.
+              primaryOpeningId = [...merged].sort((a, z) => a.drillAccuracy - z.drillAccuracy)[0]?.id ?? null;
             } else {
               const [w, b] = await Promise.all([getStrongestOpenings(1, 'white'), getStrongestOpenings(1, 'black')]);
-              openings = [...w, ...b].map((o) => toStat(o));
+              const merged = [...w, ...b];
+              openings = merged.map((o) => toStat(o));
+              primaryOpeningId = merged[0]?.id ?? null;
             }
             const answer = assembleOpeningProfileAnswer({ kind, openings });
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-profile' });
-              if (voiced) return voiced;
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-profile', preferRaw: true });
+              if (voiced) {
+                if (primaryOpeningId) lastCoachActionOffer = [{ type: 'drill_opening', id: primaryOpeningId }];
+                return voiced;
+              }
             }
             // No repertoire/game data yet — computed no-data line (G0, never the
             // "only you can tell me" punt the coach used to give).
             const noDataFact = kind === 'favorite'
               ? "You haven't played or drilled enough openings yet for me to see a favorite. Play a few games or drill an opening and I'll track it."
               : "You haven't drilled enough openings yet for me to rank them. Drill a few opening lines and I'll tell you your " + kind + " one.";
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-profile' });
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-profile', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through to legacy path */ }
         }
@@ -2781,7 +2844,7 @@ export async function getCoachChatResponse(
                 : null;
             const answer = assembleMoveEvalAnswer({ fen: bestFen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn });
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'best-move' });
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'best-move', preferRaw: true });
               if (voiced) {
                 return answer.bestMoveFromTo
                   ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
@@ -2805,7 +2868,7 @@ export async function getCoachChatResponse(
             studentSide: grounding.enginePlan.studentSide,
           });
           if (answer) {
-            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'plan' });
+            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'plan', preferRaw: true });
             if (voiced) {
               return answer.bestMoveFromTo
                 ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
@@ -2825,7 +2888,7 @@ export async function getCoachChatResponse(
             ((grounding.currentFen ?? '').split(' ')[1] === 'b' ? 'black' : 'white');
           const answer = assembleTacticsAnswer(grounding.tactics, sc);
           if (answer) {
-            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'tactics' });
+            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'tactics', preferRaw: true });
             if (voiced) return voiced;
           }
         }
@@ -2838,7 +2901,7 @@ export async function getCoachChatResponse(
         if (grounding.masterPlayQuestion && masterPlayContext && masterPlayContext.current.moves.length > 0) {
           const answer = assembleMasterPlayAnswer(masterPlayContext.current);
           if (answer) {
-            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'master-play' });
+            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'master-play', preferRaw: true });
             if (voiced) {
               return answer.bestMoveFromTo
                 ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
@@ -2856,7 +2919,7 @@ export async function getCoachChatResponse(
         if (grounding.playerGamesQuestion && grounding.playerGames) {
           const answer = assemblePlayerGamesAnswer(grounding.playerGames);
           if (answer) {
-            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'player-games' });
+            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'player-games', preferRaw: true });
             if (voiced) return voiced;
           }
         }
@@ -2875,7 +2938,7 @@ export async function getCoachChatResponse(
                 (grounding.currentFen.split(' ')[1] === 'b' ? 'black' : 'white');
               const answer = assembleEndgameAnswer({ result: tb, studentColor: sc });
               if (answer) {
-                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'endgame' });
+                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'endgame', preferRaw: true });
                 if (voiced) return voiced;
               }
             }
@@ -2897,7 +2960,7 @@ export async function getCoachChatResponse(
             studentColor: sc,
           });
           if (answer) {
-            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'position-assessment' });
+            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'position-assessment', preferRaw: true });
             if (voiced) return voiced;
           }
         }

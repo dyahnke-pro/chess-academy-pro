@@ -205,4 +205,30 @@ describe('answerKidGameQuestion', () => {
     });
     expect(out).not.toMatch(/Qf3/);
   });
+
+  it('strips an INVENTED board fact — a kid never hears a hallucinated piece (P0)', async () => {
+    // SCHOLAR has an empty d5. The LLM hallucinates a queen there; the board-
+    // claim gate must strip it so the child is never told a made-up move.
+    vi.spyOn(coachApi, 'getKidLlmResponse').mockResolvedValue(
+      'The black queen on d5 is hanging, so grab it!',
+    );
+    const out = await answerKidGameQuestion({
+      question: 'what should I do?', fen: SCHOLAR, gameTitle: 'Game', history: [],
+    });
+    expect(out).not.toMatch(/d5/i);
+    expect(out).not.toMatch(/queen on d5/i);
+    // The only sentence was false → gate empties it → safe canned fallback.
+    expect(out.length).toBeGreaterThan(0);
+  });
+
+  it('keeps a TRUE board fact through the gate', async () => {
+    // Black knight really is on c6 in SCHOLAR — a true claim must survive.
+    vi.spyOn(coachApi, 'getKidLlmResponse').mockResolvedValue(
+      'Your knight on c6 is guarding the center nicely!',
+    );
+    const out = await answerKidGameQuestion({
+      question: 'how am I doing?', fen: SCHOLAR, gameTitle: 'Game', history: [],
+    });
+    expect(out).toMatch(/knight/i);
+  });
 });

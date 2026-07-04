@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { numericTokens, introducedNumbers, droppedTokens } from './coachApi';
+import { numericTokens, introducedNumbers, droppedTokens, voiceFacts } from './coachApi';
 
 // The number-fidelity net behind voiceFacts (David 2026-07-04: "make sure the
 // CORRECT answer is getting to the user — no good if gates flag wrong answers
@@ -63,5 +63,20 @@ describe('droppedTokens — critical SAN preservation (move-mentioning verticals
   });
   it('catches a dropped move (prose omitted the SAN entirely)', () => {
     expect(droppedTokens(['d4'], 'a quiet pawn push was better')).toEqual(['d4']);
+  });
+});
+
+describe('voiceFacts preferRaw (David 2026-07-04: lean on raw for factual answers)', () => {
+  it('returns the computed facts verbatim WITHOUT an LLM call when preferRaw is set', async () => {
+    // No provider config passed; preferRaw short-circuits before any provider
+    // lookup, so this resolves purely from the computed prose — no network.
+    const facts = 'You have played 52 games against the Sicilian, scoring 43%.';
+    const out = await voiceFacts(facts, { preferRaw: true });
+    expect(out).toBe(facts);
+  });
+
+  it('trims but never alters the facts under preferRaw', async () => {
+    const out = await voiceFacts('  Your puzzle rating is 1523.  ', { preferRaw: true });
+    expect(out).toBe('Your puzzle rating is 1523.');
   });
 });

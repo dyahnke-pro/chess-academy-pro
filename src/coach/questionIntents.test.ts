@@ -32,6 +32,7 @@ import {
   isMoveRatingQuestion,
   trainingRequestKind,
   isTrainingRequest,
+  isImprovementTrendQuestion,
 } from './coachService';
 
 // David 2026-06-14: "throw the thesaurus at this problem for ALL questions."
@@ -828,5 +829,52 @@ describe('trainingRequestKind (David 2026-07-04: "set up X training" → launch 
   it('undefined is safe', () => {
     expect(trainingRequestKind(undefined)).toBeNull();
     expect(isTrainingRequest(undefined)).toBe(false);
+  });
+});
+
+describe('isImprovementTrendQuestion (David 2026-07-04: "am I improving?" wants a TREND, not a weakness dump)', () => {
+  it.each([
+    'am I improving',
+    'am I improving?',
+    'am I getting better',
+    'am I getting any better',
+    'am I getting worse',
+    'am I progressing',
+    'am I plateauing',
+    'am I regressing',
+    'have I improved',
+    'have I gotten better',
+    'did I improve',
+    'is my game improving',
+    'is my accuracy going up',
+    'is my rating trending up',
+    'is my chess getting better',
+    'is my play declining',
+    'how am I trending',
+    "how's my improvement been",
+    'how has my progress been going',
+    'am I better than I was',
+    'am I better than last month',
+    'am I making progress',
+    'my improvement over time',
+    'AM I IMPROVING',
+  ])('matches: %s', (q) => expect(isImprovementTrendQuestion(q)).toBe(true));
+
+  it.each([
+    'what are my weaknesses',           // progress — current weakness dump
+    'what should I work on',            // recommendation
+    "what's my weakest opening",        // opening-profile
+    'how do I improve my tactics',      // training request
+    'what is the best move',            // best-move
+    '',
+  ])('does NOT match: %s', (q) => expect(isImprovementTrendQuestion(q)).toBe(false));
+
+  it('trend is checked BEFORE progress in the chokepoint — both may fire, trend must win', () => {
+    // "am I improving" trips BOTH detectors; coachApi runs the trend block
+    // first. This asserts the overlap exists (so the ordering matters) — the
+    // routing order is enforced in coachApi, verified by the master-integration
+    // path. Here we just lock that trend recognizes the phrasing progress owns.
+    expect(isImprovementTrendQuestion('am I improving')).toBe(true);
+    expect(isProgressQuestion('am I improving')).toBe(true);
   });
 });

@@ -180,7 +180,7 @@ import {
   coachSurfaceToRoute,
   isPlanQuestion, isBestMoveQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
   isMasterPlayQuestion, isEndgameQuestion, isPlayerGamesQuestion, isConceptQuestion,
-  isProgressQuestion, isOpeningProfileQuestion, openingProfileKind, buildQuestionGrounding,
+  isProgressQuestion, isImprovementTrendQuestion, isOpeningProfileQuestion, openingProfileKind, buildQuestionGrounding,
   isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion,
   isOpeningTrapsQuestion, opensTrapsSystemAsk, isReviewDueQuestion,
   isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion,
@@ -191,7 +191,7 @@ import {
 export {
   isPlanQuestion, isBestMoveQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
   isMasterPlayQuestion, isEndgameQuestion, isPlayerGamesQuestion, isConceptQuestion,
-  isProgressQuestion, isOpeningProfileQuestion, openingProfileKind, buildQuestionGrounding,
+  isProgressQuestion, isImprovementTrendQuestion, isOpeningProfileQuestion, openingProfileKind, buildQuestionGrounding,
   isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion,
   isOpeningTrapsQuestion, opensTrapsSystemAsk, isReviewDueQuestion,
   isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion,
@@ -965,6 +965,7 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     // so engage grounding even with no FEN. Other grounded intents need a live
     // position.
     const progressQuestion = isProgressQuestion(input.ask);
+    const trendQuestionEngage = isImprovementTrendQuestion(input.ask);
     const conceptQuestionEngage = isConceptQuestion(input.ask);
     const openingProfileQuestionEngage = isOpeningProfileQuestion(input.ask);
     const statsQuestionEngage = isStatsQuestion(input.ask);
@@ -988,7 +989,7 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     const skillRadarQuestionEngage = isSkillRadarQuestion(input.ask);
     const autoGrounding =
       options.grounding ??
-      (input.liveState.fen || progressQuestion || conceptQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage
+      (input.liveState.fen || progressQuestion || trendQuestionEngage || conceptQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage
         ? {
             currentFen: input.liveState.fen,
             // DB-grounding: thread the move history through so the
@@ -1046,6 +1047,9 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
             // tactics answer warn about the STUDENT's hanging pieces.
             tacticsQuestion: isTacticsQuestion(input.ask),
             progressQuestion,
+            // "am I improving?" → the TEMPORAL trend (assembleTrendAnswer),
+            // routed before progress so it stops getting a weakness dump.
+            trendQuestion: trendQuestionEngage,
             // "what's my strongest / favorite / weakest opening?" → the
             // repertoire's drill accuracy + real game counts, voiced by
             // assembleOpeningProfileAnswer (David 2026-07-04: wire in the

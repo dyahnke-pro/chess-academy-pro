@@ -1,6 +1,7 @@
 import { db } from '../db/schema';
 import { fetchLichessExplorer } from './lichessExplorerService';
 import { getCoachCommentary } from './coachApi';
+import { gradeNarrationText } from './coachAnswerGates';
 import type {
   CoachContext,
   GeneratedContent,
@@ -150,7 +151,12 @@ Provide a detailed explanation of this middlegame plan. Explain:
 Be specific and reference actual moves and squares. Do NOT invent statistics — use only the data provided above.`,
   };
 
-  const result = await getCoachCommentary('middlegame_plan_generation', context);
+  const raw = await getCoachCommentary('middlegame_plan_generation', context);
+  // Board-claim gate (David 2026-07-04): this content is generated once and
+  // STORED, so an invented piece/square claim would live in the DB forever
+  // un-audited. gradeNarrationText drops only sentences provably false at the
+  // plan's critical position — conservative, never touches a fuzzy judgement.
+  const result = gradeNarrationText(raw, plan.criticalPositionFen, 'contentGeneration.middlegamePlan') ?? raw;
   await storeContent(opening.id, 'middlegame_plan', result, JSON.stringify(grounding));
   return result;
 }
@@ -200,7 +206,10 @@ Explain:
 Be concise (3-4 paragraphs). Use ONLY the provided statistics. Do not invent game data.`,
   };
 
-  const result = await getCoachCommentary('sideline_explanation', context);
+  const raw = await getCoachCommentary('sideline_explanation', context);
+  // Board-claim gate (stored content) — drop sentences provably false at the
+  // sideline position before it's cached.
+  const result = gradeNarrationText(raw, fen, 'contentGeneration.sideline') ?? raw;
   // Cache writes must not break the user-visible explanation — if the
   // Dexie put fails (quota, schema drift) we still return the text.
   try {
@@ -251,5 +260,8 @@ Explain this critical moment in 2-3 sentences. Focus on:
 Use the Lichess data to support your analysis. Be specific about moves and plans.`,
   };
 
-  return getCoachCommentary('model_game_annotation', context);
+  const raw = await getCoachCommentary('model_game_annotation', context);
+  // Board-claim gate (returned + often stored by callers) — drop sentences
+  // provably false at the annotated position.
+  return gradeNarrationText(raw, fen, 'contentGeneration.modelGameAnnotation') ?? raw;
 }

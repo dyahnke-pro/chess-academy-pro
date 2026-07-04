@@ -375,6 +375,28 @@ export function isProgressQuestion(ask: string | undefined): boolean {
   return !!ask && PROGRESS_QUESTION_RE.test(ask);
 }
 
+/** An IMPROVEMENT-TREND question — "am I improving?", "am I getting better /
+ *  worse?", "is my accuracy trending up?", "have I improved lately?". Distinct
+ *  from isProgressQuestion (which dumps CURRENT weaknesses): a trend question
+ *  wants the DIRECTION of the student's play OVER TIME, answered from
+ *  phaseStrengthOverTime. Routed BEFORE progress in the chokepoint so "am I
+ *  improving" stops getting a weakness list it didn't ask for (David 2026-07-04
+ *  misroute fix). Scoped tight to temporal-improvement wording so it never
+ *  hijacks a "what should I work on" recommendation. */
+const IMPROVEMENT_TREND_RE = anyOf([
+  String.raw`\bam\s+i\s+(?:improving|getting\s+(?:any\s+)?(?:better|worse)|progressing|declining|regressing|plateau(?:ing|ed)?|stagnating|going\s+backwards?|trending\s+(?:up|down))\b`,
+  String.raw`\b(?:have|did)\s+i\s+(?:improv(?:e|ed)|gotten?\s+(?:better|worse)|progress(?:ed)?|declin(?:e|ed)|regress(?:ed)?)\b`,
+  String.raw`\bis\s+my\s+(?:game|play|chess|accuracy|rating|elo|improvement|progress)\s+(?:improving|getting\s+(?:better|worse)|going\s+(?:up|down)|trending\s+(?:up|down)|climbing|rising|falling|declining|stagnant|stalling|plateau(?:ing|ed)?)\b`,
+  String.raw`\bhow\s+(?:am|have)\s+i\s+(?:trending|improv(?:ing|ed)|progress(?:ing|ed)|develop(?:ing|ed))\s*(?:over\s+time|lately|recently)?\b`,
+  String.raw`\bhow(?:'?s| is| has)\s+my\s+(?:improvement|progress|trajectory)\s+(?:been|going|trending|looking|coming\s+along)\b`,
+  String.raw`\bam\s+i\s+(?:better|worse)\s+than\s+(?:i\s+(?:was|used\s+to\s+be)|last\s+(?:month|week)|before|a\s+(?:month|while)\s+ago)\b`,
+  String.raw`\b(?:my\s+)?(?:improvement|progress)\s+(?:over\s+time|trend|trajectory)\b`,
+  String.raw`\bam\s+i\s+(?:making\s+progress|moving\s+(?:up|forward)|headed\s+(?:up|in\s+the\s+right\s+direction))\b`,
+]);
+export function isImprovementTrendQuestion(ask: string | undefined): boolean {
+  return !!ask && IMPROVEMENT_TREND_RE.test(ask);
+}
+
 /** An OPENING-PROFILE question — "what's my strongest / favorite / most-played
  *  / weakest opening?". Distinct from `isProgressQuestion` (tactical/positional
  *  weakness THEMES): this asks WHICH OPENING, answered from the repertoire's
@@ -956,6 +978,7 @@ export function buildQuestionGrounding(
     bestMoveQuestion: isBestMoveQuestion(ask),
     tacticsQuestion: isTacticsQuestion(ask),
     progressQuestion: isProgressQuestion(ask),
+    trendQuestion: isImprovementTrendQuestion(ask),
     openingProfileQuestion: isOpeningProfileQuestion(ask),
     openingProfileKind: openingProfileKind(ask),
     statsQuestion: isStatsQuestion(ask),

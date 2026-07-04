@@ -79,4 +79,12 @@ describe('ChatMessage — grounded action picker', () => {
     fireEvent.click(screen.getByTestId('action-weakness_drill'));
     expect(navigateMock).toHaveBeenCalledWith('/tactics/adaptive', { state: { forcedWeakThemes: ['fork'] } });
   });
+
+  // Dead-wire guard (David 2026-07-04): every chip must land on a REAL route.
+  // analyse_position used to navigate to /analysis, which was never registered.
+  it('routes analyse_position to the real analysis board (/coach/analyse, not a dead /analysis)', () => {
+    renderMessage(baseMessage({ metadata: { actions: [{ type: 'analyse_position', id: 'current' }] } }));
+    fireEvent.click(screen.getByTestId('action-analyse_position'));
+    expect(navigateMock).toHaveBeenCalledWith('/coach/analyse');
+  });
 });

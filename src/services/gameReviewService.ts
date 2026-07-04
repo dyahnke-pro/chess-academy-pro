@@ -3,6 +3,7 @@
 
 import { db } from '../db/schema';
 import { getCoachCommentary } from './coachApi';
+import { groundCoachReply } from './coachAnswerGates';
 import { analyzeSingleGame } from './gameAnalysisService';
 import type { CoachContext, MoveAnnotation } from '../types';
 
@@ -41,7 +42,16 @@ export async function requestGameReview(
     additionalContext: buildReviewPrompt(game.white, game.black, game.result, game.pgn, annotations),
   };
 
-  const analysis = await getCoachCommentary('game_post_review', context, onStream);
+  const raw = await getCoachCommentary('game_post_review', context, onStream);
+
+  // Player-stat gate before STORING (David 2026-07-04): this review is written
+  // once and persisted to the game record, so an invented third-person pro-stat
+  // ("Carlsen scores 70% here") would live in the DB un-audited. No single FEN
+  // to board-gate a whole-game narrative (that would false-flag every
+  // mid-game position against the start), and the gate's attribution regex is
+  // third-person only — a first-person review ("you had 2 blunders") is never
+  // touched. Same fence the opening-section narrator uses.
+  const analysis = groundCoachReply(raw, { source: 'gameReviewService', playerDataGrounded: false });
 
   // Store both engine annotations and coach text
   await db.games.update(gameId, {

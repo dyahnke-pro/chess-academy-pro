@@ -89,7 +89,10 @@ export function ChatMessage({ message, isStreaming }: ChatMessageProps): JSX.Ele
   const handleAction = (action: { type: string; id: string }): void => {
     switch (action.type) {
       case 'drill_opening':
-        void navigate(`/openings/${action.id}`);
+        // With a concrete opening id → its detail page; with no id (the coach
+        // couldn't name a weakest opening) → the explorer to pick one, never a
+        // bare `/openings/` trailing-slash route.
+        void navigate(action.id ? `/openings/${action.id}` : '/openings');
         break;
       case 'puzzle_theme':
         void navigate('/tactics/adaptive');
@@ -98,7 +101,10 @@ export function ChatMessage({ message, isStreaming }: ChatMessageProps): JSX.Ele
         void navigate('/games');
         break;
       case 'analyse_position':
-        void navigate('/analysis');
+        // The analysis board lives at /coach/analyse (CoachAnalysePage) —
+        // /analysis was never a registered route, so this chip used to land on
+        // a blank 404 (David 2026-07-04 dead-wire fix).
+        void navigate('/coach/analyse');
         break;
       case 'start_review':
         void navigate('/openings/srs');

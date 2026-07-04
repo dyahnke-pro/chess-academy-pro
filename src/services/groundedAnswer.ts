@@ -1258,6 +1258,76 @@ export function assemblePhaseProfileAnswer(p: PhaseProfileLike): GroundedAnswer 
   return { facts: `Your accuracy by phase: ${readout}.` + worstLine + critLine + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
 
+// ═══ IMPROVEMENT TREND (David 2026-07-04 misroute fix) — "am I improving?" ═══
+// The temporal answer a trend question actually wants: is the student's play
+// getting BETTER OVER TIME, not a dump of current weaknesses (that's the
+// progress vertical). Grounded in phaseStrengthOverTime (per-phase monthly
+// accuracy from the student's OWN analyzed games).
+
+/** The subset of `PhaseStrengthMatrix` the trend answer needs. */
+export interface TrendMatrixLike {
+  monthLabels: string[];
+  monthsAsc: string[];
+  rows: ReadonlyArray<{
+    phase: 'opening' | 'middlegame' | 'endgame';
+    cells: ReadonlyArray<{ accuracyPct: number | null; samples: number }>;
+  }>;
+}
+
+/**
+ * assembleTrendAnswer — "am I improving / getting better / trending up?". Voiced
+ * from phaseStrengthOverTime: computes a samples-weighted OVERALL accuracy per
+ * month, then reports the DIRECTION + magnitude from the earliest month with
+ * data to the latest, plus the standout phase. Returns null with fewer than two
+ * months of analyzed data (you can't call a trend from one point) so the caller
+ * falls through to a computed "not enough history yet" line. Every number is
+ * read from the matrix — nothing invented. G0.
+ */
+export function assembleTrendAnswer(matrix: TrendMatrixLike): GroundedAnswer | null {
+  const n = matrix.monthsAsc.length;
+  const monthly: Array<{ label: string; acc: number | null }> = [];
+  for (let i = 0; i < n; i++) {
+    let sum = 0;
+    let samples = 0;
+    for (const row of matrix.rows) {
+      const cell = row.cells[i];
+      if (cell && cell.accuracyPct !== null && cell.samples > 0) {
+        sum += cell.accuracyPct * cell.samples;
+        samples += cell.samples;
+      }
+    }
+    monthly.push({ label: matrix.monthLabels[i] ?? matrix.monthsAsc[i], acc: samples > 0 ? Math.round(sum / samples) : null });
+  }
+  const withData = monthly.filter((m): m is { label: string; acc: number } => m.acc !== null);
+  if (withData.length < 2) return null;
+  const first = withData[0];
+  const last = withData[withData.length - 1];
+  const delta = last.acc - first.acc;
+  const parts: string[] = [];
+  if (delta >= 4) {
+    parts.push(`Over the last few months your overall accuracy has climbed from ${first.acc}% in ${first.label} to ${last.acc}% in ${last.label} — you're improving.`);
+  } else if (delta <= -4) {
+    parts.push(`Over the last few months your overall accuracy has slipped from ${first.acc}% in ${first.label} to ${last.acc}% in ${last.label}.`);
+  } else {
+    parts.push(`Over the last few months your overall accuracy has held roughly steady, around ${last.acc}% (${first.label}: ${first.acc}%, ${last.label}: ${last.acc}%).`);
+  }
+  // Standout phase — biggest first→last accuracy swing among phases with ≥2 data points.
+  let standout: { phase: string; delta: number; from: number; to: number } | null = null;
+  for (const row of matrix.rows) {
+    const pts = row.cells.filter((c): c is { accuracyPct: number; samples: number } => c.accuracyPct !== null && c.samples > 0);
+    if (pts.length < 2) continue;
+    const d = pts[pts.length - 1].accuracyPct - pts[0].accuracyPct;
+    if (!standout || Math.abs(d) > Math.abs(standout.delta)) {
+      standout = { phase: row.phase, delta: d, from: pts[0].accuracyPct, to: pts[pts.length - 1].accuracyPct };
+    }
+  }
+  if (standout && Math.abs(standout.delta) >= 5) {
+    const verb = standout.delta > 0 ? 'improved the most' : 'slipped the most';
+    parts.push(`Your ${phaseWord(standout.phase)} ${verb}, from ${standout.from}% to ${standout.to}%.`);
+  }
+  return { facts: parts.join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+}
+
 // ═══ WAVE 2 — the REPERTOIRE-GAP cluster (David 2026-07-04: "I LOVE THIS STYLE
 // OF QUESTION!"): where you leave book, the holes you're least prepared for, and
 // what to learn next. Grounded in getOpeningInsights (repertoireCoverage +

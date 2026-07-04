@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleTrendAnswer, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -865,5 +865,70 @@ describe('describeMoveGeometry — grounded one-phrase "what the move does" (Dav
 
   it('returns null for an illegal move (never invents)', () => {
     expect(describeMoveGeometry('4k3/8/8/8/8/8/4P3/4K3 w - - 0 1', 'Qh7', 'white')).toBeNull();
+  });
+});
+
+describe('assembleTrendAnswer (David 2026-07-04: "am I improving?" → temporal trend)', () => {
+  // Minimal PhaseStrengthMatrix-shaped fixture: 3 months, 3 phases.
+  const matrix = (cells: Record<'opening' | 'middlegame' | 'endgame', Array<[number | null, number]>>) => ({
+    monthsAsc: ['2026-05', '2026-06', '2026-07'],
+    monthLabels: ['May 26', 'Jun 26', 'Jul 26'],
+    rows: (['opening', 'middlegame', 'endgame'] as const).map((phase) => ({
+      phase,
+      cells: cells[phase].map(([accuracyPct, samples]) => ({ accuracyPct, samples })),
+    })),
+  });
+
+  it('reports a CLIMB when overall accuracy rose', () => {
+    const out = assembleTrendAnswer(matrix({
+      opening: [[60, 10], [70, 10], [80, 10]],
+      middlegame: [[50, 10], [55, 10], [60, 10]],
+      endgame: [[40, 10], [45, 10], [50, 10]],
+    }));
+    expect(out).not.toBeNull();
+    expect(out!.facts).toContain('climbed');
+    expect(out!.facts).toContain('improving');
+    // Every number spoken must come from the computed monthly averages.
+    expect(out!.facts).toMatch(/50%.*63%|climbed from 50% in May 26 to 63% in Jul 26/);
+  });
+
+  it('reports a SLIP when overall accuracy fell', () => {
+    const out = assembleTrendAnswer(matrix({
+      opening: [[80, 10], [70, 10], [60, 10]],
+      middlegame: [[80, 10], [70, 10], [60, 10]],
+      endgame: [[80, 10], [70, 10], [60, 10]],
+    }));
+    expect(out).not.toBeNull();
+    expect(out!.facts).toContain('slipped');
+  });
+
+  it('reports STEADY when accuracy barely moved', () => {
+    const out = assembleTrendAnswer(matrix({
+      opening: [[70, 10], [71, 10], [70, 10]],
+      middlegame: [[70, 10], [70, 10], [71, 10]],
+      endgame: [[70, 10], [69, 10], [70, 10]],
+    }));
+    expect(out).not.toBeNull();
+    expect(out!.facts).toContain('held roughly steady');
+  });
+
+  it('returns null with fewer than two months of data (never fakes a trend)', () => {
+    const out = assembleTrendAnswer(matrix({
+      opening: [[null, 0], [null, 0], [80, 10]],
+      middlegame: [[null, 0], [null, 0], [60, 10]],
+      endgame: [[null, 0], [null, 0], [50, 10]],
+    }));
+    expect(out).toBeNull();
+  });
+
+  it('names the standout phase when one swung hardest', () => {
+    const out = assembleTrendAnswer(matrix({
+      opening: [[50, 10], [65, 10], [80, 10]],   // +30 — biggest swing
+      middlegame: [[60, 10], [61, 10], [62, 10]],
+      endgame: [[60, 10], [60, 10], [61, 10]],
+    }));
+    expect(out).not.toBeNull();
+    expect(out!.facts).toContain('opening');
+    expect(out!.facts).toContain('improved the most');
   });
 });

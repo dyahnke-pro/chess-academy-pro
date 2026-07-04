@@ -22,6 +22,8 @@
 import { Chess } from 'chess.js';
 import { getKidLlmResponse } from './coachApi';
 import { buildFedTacticsContext, formatTacticsSubBlock } from './liveTacticsContext';
+import { groundCoachAnswerBoardClaims } from './boardClaimValidator';
+import { logAppAudit } from './appAuditor';
 
 /** Single-letter piece type → kid word. */
 function pieceWord(piece: string): string {
@@ -256,7 +258,26 @@ export async function answerKidGameQuestion(input: KidGameQuestionInput): Promis
       256,
     );
     const clean = sanitizeKidCoachText(reply, 300);
-    return clean || KID_QUESTION_FALLBACK;
+    if (!clean) return KID_QUESTION_FALLBACK;
+    // CHESS-CLAIM GATE (David 2026-07-04, P0 kid non-negotiable): the language
+    // sanitizer above cleans WORDS, but it can't catch an INVENTED board fact —
+    // "your knight can take the queen on d5" when d5 is empty. Kid mode's
+    // supreme rule is "an LLM hallucinating chess content is a P0 bug", so run
+    // the same board-claim gate the coach surfaces use: strip any sentence
+    // whose piece/square/capture/mate claim is provably false on THIS position.
+    // The kid never hears a made-up move. If the gate empties the answer
+    // (every sentence was false), serve the safe canned line.
+    const gated = groundCoachAnswerBoardClaims(clean, input.fen);
+    if (gated.dropped.length > 0) {
+      void logAppAudit({
+        kind: 'claim-validator-trip',
+        category: 'subsystem',
+        source: 'kidGameCoach.answerKidGameQuestion.boardClaimGate',
+        summary: `kid Q&A stripped ${gated.dropped.length} board-false sentence(s)`,
+        details: JSON.stringify({ dropped: gated.dropped.slice(0, 3), fen: input.fen }),
+      });
+    }
+    return gated.text.trim() || KID_QUESTION_FALLBACK;
   } catch {
     return KID_QUESTION_FALLBACK;
   }
