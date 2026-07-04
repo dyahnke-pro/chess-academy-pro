@@ -85,7 +85,7 @@ import { PlayerInfoBar } from './PlayerInfoBar';
 import { PositionNarrationBanner } from './PositionNarrationBanner';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
 import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
-import { coachService } from '../../coach/coachService';
+import { coachService, isProgressQuestion, isConceptQuestion } from '../../coach/coachService';
 import { logAppAudit, mintTurnId, setCurrentTurnId } from '../../services/appAuditor';
 import { resolveCoachNarration } from '../../utils/coachNarration';
 import { recoverCoachMoveFromText } from '../../utils/recoverCoachMove';
@@ -2103,7 +2103,16 @@ export function CoachTeachPage(): JSX.Element {
       // David's wide-berth rule (2026-05-19): when in doubt, ASK —
       // never silently pick. The matcher's auto-accept gate is the
       // tight cutoff that decides "ask" vs "go."
-      if (requestedName) {
+      // Pure DIAGNOSIS / PROGRESS ("am I improving?", "I keep hanging my
+      // queen", "what's my worst opening") and CONCEPT ("what is a fork")
+      // questions need NO opening — they are grounded Q&A. Skip the fuzzy
+      // opening matcher for them, or it hijacks the ask into a bogus
+      // "did you mean <opening>?" picker and the student never reaches the
+      // grounded weakness/concept answer (David 2026-07-04 adversarial audit:
+      // "am i improving" → "did you mean one of these?"). Falls through to the
+      // Tier 2.5 pre-flight → brain, where isProgressQuestion/isConceptQuestion
+      // route to the grounded voiceFacts path.
+      if (requestedName && !isProgressQuestion(text) && !isConceptQuestion(text)) {
         const fuzzy = fuzzyMatchOpening(requestedName);
         if (fuzzy.autoAccept && fuzzy.candidates[0]) {
           const top = fuzzy.candidates[0];

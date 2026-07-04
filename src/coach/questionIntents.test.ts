@@ -112,6 +112,15 @@ describe('isProgressQuestion (weakness / improvement — the thesaurus bug)', ()
     // diagnose
     'diagnose my chess',
     'assess my game',
+    // informal self-predicates + opening-weakness (2026-07-04 adversarial audit)
+    'i suck at endgames',
+    'i suck at tactics what do i do',
+    "I'm terrible at endgames",
+    "i'm no good at calculation",
+    'i stink at the endgame',
+    "what's my worst opening",
+    'what is my weakest opening',
+    'whats my worst defense',
   ])('matches (theorist surface): %s', (q) => expect(isProgressQuestion(q)).toBe(true));
 
   // NEGATIVES — near-misses that must NOT fire the weakness recommendation.

@@ -718,7 +718,7 @@ const REC_VERBS = String.raw`(?:train|learn|study|master|develop|review|prep(?:a
 const ANY_TRAIN_VERB = String.raw`(?:` + IMPROVE_VERBS + String.raw`|` + REC_VERBS + String.raw`)`;
 const WEAKNESS_NOUNS = String.raw`(?:weakness(?:es)?|weak\s+(?:spots?|points?|areas?|aspects?|parts?|sides?|links?|zones?)|weakest\s+(?:spot|point|area|aspect|part|skill|move|link|element|side|phase|stage)|flaws?|shortcomings?|deficienc(?:y|ies)|deficits?|blind\s+spots?|achilles(?:'?s)?\s+heel|leaks?|holes?|gaps?|sticking\s+points?|bad\s+habits?|recurring\s+(?:mistakes?|errors?|patterns?)|common\s+(?:mistakes?|errors?)|repeated\s+(?:mistakes?|errors?)|kryptonite|downfall|undoing|soft\s+spots?|nemesis|bugbear|b[eê]te\s+noire|stumbling\s+blocks?|trouble\s+(?:spots?|areas?)|problem\s+areas?|pain\s+points?|failings?|limitations?|vulnerabilit(?:y|ies))`;
 // weak / poor / struggle predicates (with in/at/on/with prepositions)
-const WEAK_PRED = String.raw`(?:weak(?:est)?|bad|worst|poor|terrible|awful|horrible|hopeless|useless|rubbish|crap(?:py)?|garbage|trash|shaky|rough|not\s+(?:good|great))`;
+const WEAK_PRED = String.raw`(?:weak(?:est)?|bad|worst|poor|terrible|awful|horrible|hopeless|useless|rubbish|crap(?:py)?|garbage|trash|shaky|rough|suck(?:s|y)?|stink(?:s|y)?|not\s+(?:good|great))`;
 const PROGRESS_QUESTION_RE = anyOf([
   // ── "am I improving / how am I doing" (progress-over-time) ──
   String.raw`\bam\s+i\s+(?:improving|getting\s+(?:better|worse)|progressing|developing|growing|any\s+good|good\s+enough|getting\s+anywhere)\b`,
@@ -754,6 +754,13 @@ const PROGRESS_QUESTION_RE = anyOf([
   String.raw`\bwhat\s+(?:am\s+i|i'?m|do\s+i)\s+` + WEAK_PRED + String.raw`\s+(?:at|in|on|with)\b`,
   String.raw`\bwhere\s+(?:am\s+i|i'?m|do\s+i)\s+(?:the\s+)?(?:` + WEAK_PRED + String.raw`|struggl(?:e|ing)|los(?:e|ing)|failing|need\s+work|go(?:ing)?\s+wrong|mess(?:ing)?\s+up|blunder(?:ing)?|fall(?:ing)?\s+short|drop(?:ping)?\s+(?:points?|games?))\b`,
   String.raw`\bwhat\s+(?:am\s+i|do\s+i)\s+(?:bad|worst|good|best|strong|weak)\s+at\b`,
+  // informal self-predicate ("I suck at endgames", "I'm terrible at tactics",
+  // "I'm no good at endings") — a plain statement of a weakness is a diagnosis.
+  String.raw`\bi\s+(?:really\s+|totally\s+|just\s+)?(?:suck|stink|blow|bomb)\s+(?:at|in|with)\b`,
+  String.raw`\bi'?m\s+(?:really\s+|so\s+|just\s+)?(?:terrible|awful|horrible|hopeless|useless|garbage|trash|rubbish|bad|no\s+good|weak|shaky)\s+(?:at|in|with)\b`,
+  // "what's my worst/weakest opening/line/phase" — an opening-WEAKNESS diagnosis
+  // (the student's worst-scoring line), NOT a request to teach that opening.
+  String.raw`\bwhat(?:'?s| is)?\s+my\s+(?:worst|weakest)\s+(?:opening|line|variation|defen[cs]e|phase|piece|colou?r)\b`,
   // aggregate error habits — guarded by keep/always so a SINGLE-game "why did I
   // lose that game" (single-game review) does NOT match.
   String.raw`\b(?:i\s+)?(?:keep|always|constantly|usually|often|repeatedly)\s+(?:losing|blunder(?:ing)?|messing\s+up|screwing\s+up|going\s+wrong|hanging\s+(?:pieces|my\s+\w+|stuff)|dropping\s+(?:pieces|points))\b`,
