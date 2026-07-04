@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { numericTokens, introducedNumbers } from './coachApi';
+import { numericTokens, introducedNumbers, droppedTokens } from './coachApi';
 
 // The number-fidelity net behind voiceFacts (David 2026-07-04: "make sure the
 // CORRECT answer is getting to the user — no good if gates flag wrong answers
@@ -42,5 +42,26 @@ describe('introducedNumbers — the fidelity check', () => {
 
   it('treats 2.50 and 2.5 as equal (value-normalized, no false trip)', () => {
     expect(introducedNumbers('cost 2.5 pawns', 'cost 2.50 pawns')).toEqual([]);
+  });
+});
+
+describe('droppedTokens — critical SAN preservation (move-mentioning verticals)', () => {
+  it('returns [] when unset', () => {
+    expect(droppedTokens(undefined, 'anything')).toEqual([]);
+    expect(droppedTokens([], 'anything')).toEqual([]);
+  });
+  it('returns [] when every token survives (even wrapped in prose)', () => {
+    expect(droppedTokens(['d3', 'd4'], 'd3 is a mistake — the d-pawn to d4 was cleaner.')).toEqual([]);
+    // case-insensitive
+    expect(droppedTokens(['Nf3'], 'developing with nf3 keeps the edge')).toEqual([]);
+  });
+  it('catches a file/piece swap the number net misses (d4 → e4 keeps the digit)', () => {
+    // facts said the better move was d4; the model voiced e4. Number net sees
+    // "4" in both → passes. droppedTokens catches that "d4" is absent.
+    expect(introducedNumbers('the engine preferred d4', 'the engine preferred e4')).toEqual([]);
+    expect(droppedTokens(['d4'], 'the engine preferred e4')).toEqual(['d4']);
+  });
+  it('catches a dropped move (prose omitted the SAN entirely)', () => {
+    expect(droppedTokens(['d4'], 'a quiet pawn push was better')).toEqual(['d4']);
   });
 });

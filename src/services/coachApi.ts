@@ -1705,7 +1705,17 @@ function stripUngroundedSentences(text: string, validation: ClaimValidationResul
  */
 export async function voiceFacts(
   facts: string,
-  opts: { studentMessage?: string; providerConfig?: ProviderConfig | null; intent?: string } = {},
+  opts: {
+    studentMessage?: string;
+    providerConfig?: ProviderConfig | null;
+    intent?: string;
+    /** Critical chess tokens (SANs, exact move names) that MUST appear verbatim
+     *  in the phrased output — if the model drops or changes one, the exact
+     *  computed prose is served instead. Used by move-mentioning verticals
+     *  (move-rating) where a corrupted move is a chess hallucination the number
+     *  net can't catch (d4→e4 keeps the digit). See the fidelity net below. */
+    mustPreserve?: string[];
+  } = {},
 ): Promise<string | null> {
   const cfg = opts.providerConfig ?? (await getProviderConfig());
   if (!cfg) return null;
@@ -1751,13 +1761,14 @@ export async function voiceFacts(
     // hears fewer); inventing/altering one is what we refuse to speak.
     if (typeof out === 'string' && out.trim()) {
       const introduced = introducedNumbers(facts, out);
-      if (introduced.length > 0) {
+      const dropped = droppedTokens(opts.mustPreserve, out);
+      if (introduced.length > 0 || dropped.length > 0) {
         void logAppAudit({
           kind: 'claim-validator-trip',
           category: 'subsystem',
           source: 'voiceFacts.numberFidelity',
-          summary: `phrasing introduced number(s) [${introduced.join(', ')}] not in facts (intent=${opts.intent ?? 'n/a'}) → served computed prose`,
-          details: JSON.stringify({ intent: opts.intent ?? null, introduced, facts: facts.slice(0, 200), out: out.slice(0, 200) }),
+          summary: `phrasing fidelity trip (intent=${opts.intent ?? 'n/a'}): introduced [${introduced.join(', ')}] dropped [${dropped.join(', ')}] → served computed prose`,
+          details: JSON.stringify({ intent: opts.intent ?? null, introduced, dropped, facts: facts.slice(0, 200), out: out.slice(0, 200) }),
         });
         return facts.trim();
       }
@@ -1785,6 +1796,18 @@ export function numericTokens(text: string): string[] {
 export function introducedNumbers(facts: string, out: string): string[] {
   const factsNums = new Set(numericTokens(facts));
   return numericTokens(out).filter((n) => !factsNums.has(n));
+}
+
+/** The `mustPreserve` tokens (critical SANs / move names) that are ABSENT from
+ *  the phrased output — i.e. the model dropped or changed a move the answer
+ *  hinges on. Case-insensitive substring match (prose keeps the SAN token even
+ *  when it wraps it: "the d-pawn to d4" still contains "d4"). Empty when
+ *  mustPreserve is unset. The number net can't see a file/piece swap that keeps
+ *  the rank digit (d4→e4); this closes that gap for move-mentioning verticals. */
+export function droppedTokens(mustPreserve: string[] | undefined, out: string): string[] {
+  if (!mustPreserve || mustPreserve.length === 0) return [];
+  const lower = out.toLowerCase();
+  return mustPreserve.filter((t) => t && t.trim() && !lower.includes(t.toLowerCase()));
 }
 
 /**
@@ -2013,7 +2036,11 @@ export async function getCoachChatResponse(
             if (rating) {
               const answer = assembleMoveRatingAnswer(rating);
               if (answer) {
-                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'move-rating' });
+                // The played move + the engine's better move are the chess
+                // content the answer hinges on — require them verbatim so a
+                // phrasing slip (d4→e4) serves the computed prose instead.
+                const mustPreserve = [rating.playedSan, rating.betterSan].filter((s): s is string => !!s);
+                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'move-rating', mustPreserve });
                 if (voiced) {
                   // Offer an "Analyse Position" chip when the move was a real
                   // error, so the student can dig into the line — opt-in.
