@@ -129,6 +129,17 @@ const AUDIT_EVENT_MAP: Partial<Record<AuditKind, string>> = {
   // Provider failover/retry (DeepSeek↔Anthropic). Seeing this fire tells us a
   // provider is degraded before users feel it as slow/empty coach replies.
   'coach-brain-provider-retry': 'coach_provider_retry',
+  // Grounding gate TRIP (David 2026-07-04). This fires when a guardrail CAUGHT
+  // the LLM inventing chess (a board-false / eval-false / out-of-vocab-tactic
+  // sentence) and DROPPED it before it was spoken — the guardrail SUCCEEDING,
+  // not a crash. It was in DEFECT_KINDS ($exception), so ~30 successful catches
+  // in 3 days buried the real crashes (an IDB DataError) in the exception list
+  // and spammed the autofix cron. Mirror as an event instead (queryable, not
+  // $exception) so the RATE stays visible — a high rate is the G0 signal that
+  // the LLM is still deciding — without alarming on the guardrail doing its job.
+  // The EXHAUSTION case (gate gave up, served the stock "I can't verify" reply)
+  // stays a defect via `master-play-enforcement-fallback`.
+  'claim-validator-trip': 'coach_grounding_gate_tripped',
   // Eval-bar caller miss — the bar requested an analysis that timed out/empty
   // and never updated. Event (not defect) so we see the RATE; a spike means
   // the engine's alive but too slow, or a UI-wiring regression.
@@ -356,9 +367,12 @@ const DEFECT_KINDS: ReadonlySet<AuditKind> = new Set<AuditKind>([
   'mate-claim',
   'illegal-san',
   'sanitizer-leak',
-  // Live coach grounding failures
+  // Live coach grounding failures. NB: `claim-validator-trip` (the gate
+  // catching + dropping an invented sentence) was moved OUT of DEFECT_KINDS to
+  // a product event — a successful catch is the guardrail working, not a defect
+  // (David 2026-07-04). What stays here is genuine breakage: a hard-blocked
+  // board claim and the EXHAUSTION fallback (gate gave up, served stock reply).
   'coach-board-claim-blocked',
-  'claim-validator-trip',
   'master-play-enforcement-fallback',
   // Board desync + silence-where-narration-expected
   'fen-desync',

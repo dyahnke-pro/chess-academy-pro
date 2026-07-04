@@ -93,6 +93,17 @@ describe('auditKindToEvent — curated allowlist', () => {
     expect(auditKindToEvent('polly-fallback')).toBe('polly_fallback');
   });
 
+  it('routes a caught grounding-gate trip to an event, NOT an $exception', () => {
+    // A `claim-validator-trip` = the guardrail CAUGHT the LLM inventing chess
+    // and dropped the sentence — a success, not a defect. It must mirror as a
+    // queryable event (rate = the G0 "LLM still deciding" signal) and NOT hit
+    // the exception bridge / autofix cron (David 2026-07-04). The exhaustion
+    // fallback stays a defect and is asserted below.
+    expect(auditKindToEvent('claim-validator-trip')).toBe('coach_grounding_gate_tripped');
+    expect(auditKindToEvent('master-play-enforcement-fallback')).toBeUndefined();
+    expect(auditKindToEvent('coach-board-claim-blocked')).toBeUndefined();
+  });
+
   it('returns undefined for forensic/high-volume kinds that should NOT mirror', () => {
     // Per the doctrine: per-move noise + crash forensics stay out of PostHog.
     expect(auditKindToEvent('move-attempt')).toBeUndefined();
