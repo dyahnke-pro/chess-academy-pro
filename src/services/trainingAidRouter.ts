@@ -47,10 +47,27 @@ export interface TrainingAidRoute {
 const FRAMING_RE =
   /\b(?:drill|drills|practi[cs]e|practi[cs]ing|train(?:ing)?|work\s+on|sharpen|improve|quiz(?:\s+me)?|give\s+me|show\s+me|let'?s\s+(?:do|try|practi[cs]e|work\s+on)|i\s+(?:want|need)|start)\b/i;
 
+/** A weakness-DIAGNOSIS / recommendation QUESTION ("what tactics am I weak
+ *  in?", "where am I losing?", "what should I train?") is NOT a drill
+ *  imperative — it's the grounded coach's job to name the student's real
+ *  weaknesses from their own data (G0, via `isProgressQuestion` →
+ *  `assembleWeaknessRecommendation`). Without this guard the tactics/endgame
+ *  drill branches below would hijack the DIAGNOSIS word ("tactics") and start
+ *  a drill instead of answering the question David actually asked
+ *  (2026-07-04). Kept self-contained (no coachService import) so every surface
+ *  that shares this router inherits the same diagnosis-vs-drill precedence.
+ *  Interrogative-led ONLY — a real drill IMPERATIVE ("drill my weaknesses",
+ *  "give me a tactics puzzle") has no what/which/where/why/how lead-in, so it
+ *  still routes to a drill. */
+const DIAGNOSIS_RE =
+  /\b(?:what|which|where|why|how)\b[\s\S]{0,50}?\b(?:weak(?:est|ness(?:es)?)?|bad\s+at|worst\s+at|poor\s+at|struggl(?:e|ing)|los(?:e|ing)|blunder(?:ing)?|go(?:ing)?\s+wrong|mess(?:ing)?\s+up|holding\s+me\s+back|costing\s+me|need(?:s)?\s+(?:the\s+most\s+)?work|should\s+i\s+(?:train|learn|study|work\s+on|focus|improve|practi[sc]e)|do\s+i\s+(?:need\s+to|train|learn|work\s+on|focus|improve))\b/i;
+
 export function matchTrainingAidRoute(text: string): TrainingAidRoute | null {
   const raw = text.trim();
   if (!raw) return null;
   const lower = raw.toLowerCase();
+  // Diagnosis/recommendation QUESTIONS go to the grounded brain, not a drill.
+  if (DIAGNOSIS_RE.test(lower)) return null;
   const framed = FRAMING_RE.test(lower);
 
   // 1. Calculation drills → set a real puzzle up ON THE BOARD in Learn

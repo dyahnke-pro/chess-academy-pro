@@ -58,9 +58,10 @@ function deepseekCacheSplit(usage: unknown): { hit: number | null; miss: number 
   };
 }
 import { lookupMasterPlay } from './masterPlayLookup';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded } from './groundedAnswer';
 import { lookupTablebase } from './lichessTablebaseService';
 import { detectBadHabits } from './badHabitDetector';
+import { getUnifiedWeaknessProfile } from './weaknessSpine';
 import { detectConceptsInText, getConcept } from './chessConceptService';
 import { validateClaims, type ClaimValidationResult } from './claimValidator';
 import { logAppAudit } from './appAuditor';
@@ -1804,8 +1805,25 @@ export async function getCoachChatResponse(
         // the legacy path when there's NO bad-habit data.
         if (grounding.progressQuestion) {
           try {
-            const profile = await db.profiles.get('main');
-            const answer = profile ? assembleProgressAnswer(await detectBadHabits(profile)) : null;
+            // RICHEST source first: the unified, ranked weakness profile
+            // (tactics / openings / phase-of-loss / conversion / board-vision),
+            // merged + deduped across every capture pipeline. When the student
+            // scoped the ask ("what TACTICS am I weak in?"), filter to that
+            // bucket; if that empties the list, retry unscoped so they still
+            // get their top weaknesses. This is what turns "what should I
+            // train?" into a real, grounded recommendation naming their own
+            // numbers — not just generic bad habits.
+            const topic = weaknessTopicFromText(lastUserMessage());
+            const unified = await getUnifiedWeaknessProfile();
+            let answer =
+              assembleWeaknessRecommendation(unified, { topic }) ??
+              (topic ? assembleWeaknessRecommendation(unified, { topic: null }) : null);
+            // Fall back to the bad-habit profile when the unified profile is
+            // empty (fewer analyzed games, but habits may still exist).
+            if (!answer) {
+              const profile = await db.profiles.get('main');
+              answer = profile ? assembleProgressAnswer(await detectBadHabits(profile)) : null;
+            }
             if (answer) {
               const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress' });
               if (voiced) return voiced;
