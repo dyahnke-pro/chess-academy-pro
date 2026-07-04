@@ -37,6 +37,8 @@ import { loadMiddlegamePlanForLive } from './sources/middlegamePlan';
 import { loadModelGamesForLive } from './sources/modelGames';
 import { loadPlayerGamesForLive } from './sources/playerGames';
 import { loadProGameReferenceData } from '../services/proGameReferenceData';
+import { consumeCoachActionOffer } from '../services/coachApi';
+import type { CoachActionOffer } from '../services/coachApi';
 import { deepseekProvider } from './providers/deepseek';
 import { anthropicProvider } from './providers/anthropic';
 import { COACH_TOOLS, getTool, getToolDefinitions } from './tools/registry';
@@ -184,7 +186,7 @@ import {
   isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion,
   isRepertoireGapQuestion, repertoireGapKind,
   isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion,
-  isColorQuestion, isRecordsQuestion, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
+  isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
 } from './questionIntents';
 export {
   isPlanQuestion, isBestMoveQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
@@ -195,7 +197,7 @@ export {
   isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion,
   isRepertoireGapQuestion, repertoireGapKind,
   isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion,
-  isColorQuestion, isRecordsQuestion, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
+  isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
 };
 
 export interface CoachServiceOptions {
@@ -894,6 +896,11 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
   // Hoisted so the post-loop collapse-retry can re-call the provider with
   // the same grounding/task/maxTokens (see the collapse guard below).
   let lastProviderCallOptions: Parameters<typeof provider.call>[1];
+  // Opt-in follow-up chip a grounded block attached during a provider
+  // call this turn (David 2026-07-04 action-picker). Captured right
+  // after each provider.call so the set→read pair runs in one tick;
+  // held to the end and attached to the returned CoachAnswer.
+  let actionOffer: CoachActionOffer[] | null = null;
 
   for (let trip = 1; trip <= maxRoundTrips; trip++) {
     // Refresh liveFen between trips ONLY (trip > 1). Trip 1 uses the
@@ -973,12 +980,13 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     const convertingQuestionEngage = isConvertingQuestion(input.ask);
     const colorQuestionEngage = isColorQuestion(input.ask);
     const recordsQuestionEngage = isRecordsQuestion(input.ask);
+    const recordVsTargetEngage = recordVsTarget(input.ask);
     const puzzleStatsQuestionEngage = isPuzzleStatsQuestion(input.ask);
     const transferGapQuestionEngage = isTransferGapQuestion(input.ask);
     const skillRadarQuestionEngage = isSkillRadarQuestion(input.ask);
     const autoGrounding =
       options.grounding ??
-      (input.liveState.fen || progressQuestion || conceptQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage
+      (input.liveState.fen || progressQuestion || conceptQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage
         ? {
             currentFen: input.liveState.fen,
             // DB-grounding: thread the move history through so the
@@ -1058,6 +1066,9 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
             convertingQuestion: convertingQuestionEngage,
             colorQuestion: colorQuestionEngage,
             recordsQuestion: recordsQuestionEngage,
+            recordVsTarget: recordVsTargetEngage ?? undefined,
+            // "was that a good move?" — board-dependent; rides the fen gate.
+            moveRatingQuestion: isMoveRatingQuestion(input.ask),
             puzzleStatsQuestion: puzzleStatsQuestionEngage,
             transferGapQuestion: transferGapQuestionEngage,
             skillRadarQuestion: skillRadarQuestionEngage,
@@ -1095,6 +1106,19 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     lastResponse = useStreaming && options.onChunk && provider.callStreaming
       ? await provider.callStreaming(currentEnvelope, options.onChunk, providerCallOptions)
       : await provider.call(currentEnvelope, providerCallOptions);
+
+    // Grab any action offer the grounded interception set during this
+    // provider call (read immediately so no unrelated call can clear it).
+    // Defensive: the offer is purely additive UX — a missing/throwing
+    // consumer (e.g. a partial coachApi mock in a test) must NEVER break
+    // the coach's answer.
+    let offeredThisTrip: CoachActionOffer[] | null = null;
+    try {
+      offeredThisTrip = consumeCoachActionOffer();
+    } catch {
+      offeredThisTrip = null;
+    }
+    if (offeredThisTrip) actionOffer = offeredThisTrip;
 
     if (lastResponse.toolCalls.length === 0) {
       // No tools emitted — terminal turn. Exit the loop.
@@ -1577,6 +1601,7 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     toolCallIds: dispatchedIds,
     dispatchedToolNames,
     provider: provider.name,
+    ...(actionOffer && actionOffer.length > 0 ? { actionOffer } : {}),
   };
 }
 

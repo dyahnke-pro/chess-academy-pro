@@ -1485,6 +1485,109 @@ export function assembleRecordsAnswer(r: RecordsLike): GroundedAnswer | null {
   return { facts: `Your records: ${parts.join('; ')}. Want to replay your best game?`, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
 
+/** Record vs a specific opening family. */
+export interface OpeningRecordLike {
+  openingName: string;
+  games: number;
+  wins: number;
+  draws: number;
+  losses: number;
+  asWhite: number;
+  asBlack: number;
+  winRatePct: number;
+}
+/** assembleOpeningRecordAnswer — "how do I do against the Sicilian?" G0. */
+export function assembleOpeningRecordAnswer(r: OpeningRecordLike): GroundedAnswer | null {
+  if (r.games <= 0) return null;
+  const side = r.asWhite > 0 && r.asBlack > 0
+    ? ` (${r.asWhite} as White, ${r.asBlack} as Black)`
+    : r.asWhite > 0
+      ? ` (${r.asWhite} as White)`
+      : r.asBlack > 0
+        ? ` (${r.asBlack} as Black)`
+        : '';
+  const wdl = `${r.wins}W-${r.draws}D-${r.losses}L`;
+  // Suggestion keys off the win rate: below 45% is a real weak spot to drill.
+  const suggest = r.winRatePct < 45
+    ? ` That's below your average — the ${r.openingName} is a weak spot worth drilling.`
+    : r.winRatePct >= 60
+      ? ` The ${r.openingName} is a strength — keep leaning on it.`
+      : ` Solid but not dominant — a few drilled lines would tip more of these your way.`;
+  return {
+    facts: `In the ${r.openingName} you're ${wdl} across ${r.games} game${r.games === 1 ? '' : 's'}${side} — a ${r.winRatePct}% win rate.` + suggest,
+    bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'],
+  };
+}
+
+/** Record vs a specific opponent. */
+export interface OpponentRecordLike {
+  opponentName: string;
+  games: number;
+  wins: number;
+  draws: number;
+  losses: number;
+  avgOpponentElo: number | null;
+}
+/** assembleOpponentRecordAnswer — "what's my record vs <name>?" G0. */
+export function assembleOpponentRecordAnswer(r: OpponentRecordLike): GroundedAnswer | null {
+  if (r.games <= 0) return null;
+  const wdl = `${r.wins}W-${r.draws}D-${r.losses}L`;
+  const elo = r.avgOpponentElo ? ` (averaging ${r.avgOpponentElo})` : '';
+  const winRate = Math.round((r.wins / r.games) * 100);
+  const suggest = r.wins > r.losses
+    ? ` You have their number — keep doing what works.`
+    : r.losses > r.wins
+      ? ` They've had the better of it — worth reviewing those losses to find the pattern.`
+      : ` Dead even — the next few games decide it.`;
+  return {
+    facts: `Against ${r.opponentName}${elo} you're ${wdl} across ${r.games} game${r.games === 1 ? '' : 's'} — ${winRate}%.` + suggest,
+    bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'],
+  };
+}
+
+/** Rating of the student's last move (computed by moveRating.ts). */
+export interface MoveRatingLike {
+  playedSan: string;
+  wasBest: boolean;
+  cpLoss: number;
+  quality: 'best' | 'excellent' | 'good' | 'inaccuracy' | 'mistake' | 'blunder';
+  betterSan: string | null;
+  betterFromTo: { from: string; to: string } | null;
+  missedMate: number | null;
+  allowedMate: number | null;
+}
+/** assembleMoveRatingAnswer — "was that a good move?" G0. States the computed
+ *  verdict, the eval swing, and the better move (with a green arrow) when the
+ *  student missed it. No praise-for-praise — the verdict IS the content. */
+export function assembleMoveRatingAnswer(r: MoveRatingLike): GroundedAnswer | null {
+  const pawns = (r.cpLoss / 100).toFixed(1);
+  const better = r.betterSan ? ` The engine preferred ${r.betterSan}.` : '';
+  const arrow = r.betterSan && r.betterFromTo
+    ? { bestMoveSan: r.betterSan, bestMoveFromTo: r.betterFromTo }
+    : { bestMoveSan: null, bestMoveFromTo: null };
+
+  let verdict: string;
+  if (r.allowedMate !== null) {
+    verdict = `${r.playedSan} walks into a forced mate in ${r.allowedMate}.${better}`;
+  } else if (r.missedMate !== null) {
+    verdict = `${r.playedSan} misses a forced mate in ${r.missedMate}.${better}`;
+  } else if (r.wasBest || r.quality === 'best') {
+    verdict = `${r.playedSan} was the engine's top move — you gave up nothing.`;
+  } else if (r.quality === 'excellent') {
+    verdict = `${r.playedSan} is within a whisker of best — about ${pawns} pawns.${better}`;
+  } else if (r.quality === 'good') {
+    verdict = `${r.playedSan} is fine; it cost only about ${pawns} pawns.${better}`;
+  } else if (r.quality === 'inaccuracy') {
+    verdict = `${r.playedSan} is a slight inaccuracy — it let about ${pawns} pawns slip.${better}`;
+  } else if (r.quality === 'mistake') {
+    verdict = `${r.playedSan} is a mistake: it cost about ${pawns} pawns.${better}`;
+  } else {
+    verdict = `${r.playedSan} is a blunder — it dropped about ${pawns} pawns.${better}`;
+  }
+
+  return { facts: verdict, ...arrow, sources: ['engine:stockfish'] };
+}
+
 /** Puzzle rating + solve stats. */
 export interface PuzzleStatsLike {
   puzzleRating: number | null;

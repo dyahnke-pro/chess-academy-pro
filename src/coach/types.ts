@@ -726,4 +726,10 @@ export interface CoachAnswer {
   dispatchedToolNames: string[];
   /** Provider used for this call (for debugging / audit). */
   provider: ProviderName;
+  /** Opt-in follow-up action(s) the grounded answer offered — the
+   *  "want to work on this?" picker (David 2026-07-04). The surface
+   *  renders these as tappable chips; they are NEVER auto-launched.
+   *  Empty/absent when the turn fired no grounded block that attaches
+   *  an offer. Populated from `consumeCoachActionOffer()` on coachApi. */
+  actionOffer?: { type: string; id: string }[];
 }

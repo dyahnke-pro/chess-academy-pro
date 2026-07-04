@@ -54,6 +54,7 @@ function ActionButton({ action, onClick }: {
     puzzle_theme: 'Try Puzzles',
     review_game: 'Review Game',
     analyse_position: 'Analyse Position',
+    start_review: 'Start review',
   };
 
   return (
@@ -91,6 +92,9 @@ export function ChatMessage({ message, isStreaming }: ChatMessageProps): JSX.Ele
         break;
       case 'analyse_position':
         void navigate('/analysis');
+        break;
+      case 'start_review':
+        void navigate('/openings/srs');
         break;
     }
   };

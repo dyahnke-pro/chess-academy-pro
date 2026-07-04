@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Volume2, VolumeOff } from 'lucide-react';
@@ -8,6 +8,7 @@ import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { routeChatIntent } from '../../services/coachSessionRouter';
 import { detectNarrationToggle, applyNarrationToggle } from '../../services/coachAgentRunner';
 import { coachService } from '../../coach/coachService';
+import { pickSuggestedQuestions } from '../../data/coachGreetings';
 import type { LiveState } from '../../coach/types';
 import { logAppAudit } from '../../services/appAuditor';
 import { reportCoachNonAnswer } from '../../services/coachNonAnswer';
@@ -35,13 +36,14 @@ const stripTags = (text: string): string => stripCoachMarkup(text);
 let __chatMsgSeq = 0;
 const chatMsgId = (suffix: string): string => `msg-${Date.now()}-${(++__chatMsgSeq).toString(36)}-${suffix}`;
 
-const STARTER_CHIPS = [
-  'Play the Italian against me',
+/** Durable action starters (things to DO). Blended at render with a rotating
+ *  window of grounded self-knowledge questions (David 2026-07-04 discovery
+ *  pickers) so the chip set varies per visit and surfaces what the coach can
+ *  now answer from computed data. */
+const ACTION_STARTERS = [
   'Play Black against me',
   'Narrate my last game',
   'Walk me through the Sicilian',
-  'Key insights from my last game',
-  "What's my worst opening?",
 ] as const;
 
 /** "Read this to me" / "read that aloud" / "speak it" — user wants the
@@ -72,6 +74,13 @@ export function CoachChatPage(): JSX.Element {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const activeProfile = useAppStore((s) => s.activeProfile);
+  // Blend the durable action starters with a rotating window of grounded
+  // self-knowledge questions so the discovery chips vary per visit (computed
+  // once per mount — stable within the session).
+  const starterChips = useMemo(
+    () => [...ACTION_STARTERS, ...pickSuggestedQuestions(Math.floor(Date.now() / 60000), 3)],
+    [],
+  );
   const chatMessages = useCoachSessionStore((s) => s.messages);
   const appendMessage = useCoachSessionStore((s) => s.appendMessage);
   const hydrate = useCoachSessionStore((s) => s.hydrate);
@@ -358,6 +367,12 @@ export function CoachChatPage(): JSX.Element {
         content: cleanText,
         modality,
         timestamp: Date.now(),
+        // Opt-in follow-up picker (David 2026-07-04). The grounded
+        // answer may attach a "want to work on this?" action; render it
+        // as a tappable chip — never auto-launch.
+        ...(answer.actionOffer && answer.actionOffer.length > 0
+          ? { metadata: { actions: answer.actionOffer } }
+          : {}),
       };
       appendMessage(assistantMsg);
       recordTurn('coach', cleanText);
@@ -500,7 +515,7 @@ export function CoachChatPage(): JSX.Element {
                 You can ask me to:
               </p>
               <div className="flex flex-wrap gap-2">
-                {STARTER_CHIPS.map((chip) => (
+                {starterChips.map((chip) => (
                   <button
                     key={chip}
                     onClick={() => void handleSend(chip)}

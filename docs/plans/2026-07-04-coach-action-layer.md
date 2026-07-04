@@ -103,6 +103,42 @@ navigation / drill mount / stage launch (G7 — drive the real affordance, asser
 the post-state, per-function coverage grid). A green chat reply is NOT enough —
 the action must actually fire and land on the right surface.
 
+## SHIPPED (2026-07-04) — pilot + 4 verticals, scratch-var plumbing
+
+Landed the picker end-to-end. Implementation chose the **scratch-var pattern**
+(mirrors `consumeLastLlmMetadata`) over threading a new `actionOffer` through the
+4 type layers of `voiceFacts`/`ProviderResponse`/`getCoachChatResponse` — the
+latter is invasive and `getCoachChatResponse` returns a bare `Promise<string>`.
+Six touch points:
+
+1. **`coachApi.ts`** — `CoachActionOffer` type + module-scope `lastCoachActionOffer`
+   + `consumeCoachActionOffer()` (read-and-clear). Reset to `null` at the top of
+   every `getCoachChatResponse`. Set inside each grounded interception block right
+   before `return voiced`:
+   - review-due → `[{type:'start_review', id:'srs'}]` (only when `dueCount > 0`)
+   - opening-accuracy → `[{type:'drill_opening', id: target.id}]`
+   - opening-traps → `[{type:'drill_opening', id: primaryOpening.id}]`
+   - mistakes → `[{type:'puzzle_theme', id:'adaptive'}]`
+   - tactics-profile → `[{type:'puzzle_theme', id:'adaptive'}]`
+2. **`coachService.ask`** — captures `consumeCoachActionOffer()` right after each
+   `provider.call`; attaches to `CoachAnswer.actionOffer` (new optional field on
+   the type).
+3. **Surfaces attach `answer.actionOffer` → `metadata.actions`:** CoachChatPage,
+   GameChatPanel (in-game + drawer paths), CoachTeachPage (Learn Q&A render),
+   MasterclassCoachChat (calls `getCoachChatResponse` directly → consumes the
+   scratch var itself). VoiceChatMic intentionally skipped — voice-only, no bubble.
+4. **`ChatMessage.tsx`** — added `start_review: 'Start review'` label +
+   `case 'start_review': navigate('/openings/srs')`. `drill_opening` →
+   `/openings/:id` and `puzzle_theme` → `/tactics/adaptive` already existed.
+5. **Test:** `ChatMessage.test.tsx` — chip renders, taps navigate to `/openings/srs`,
+   NO navigation until tapped (proves opt-in, not auto), no chip when no offer.
+
+Still TODO (future PRs): the in-Learn `startAtStageMenu(tree,'punish'|'drill')`
+dispatch (deeper than a navigate — the `drill_opening` chip currently just opens
+the opening page); the puzzle-theme chip routing the SPECIFIC weak theme rather
+than generic adaptive; interactive Playwright audit that TAPs each chip and
+asserts the post-navigation surface mounts.
+
 ## Risks / notes
 
 - The two-color trap-drill AUTO-LAUNCH (drill White's strongest, then Black's,

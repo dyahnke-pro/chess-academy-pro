@@ -795,6 +795,56 @@ export function isRecordsQuestion(ask: string | undefined): boolean {
   return !!ask && RECORDS_QUESTION_RE.test(ask);
 }
 
+/** "how do I do against the Sicilian?" / "my record vs <name>?" →
+ *  assembleOpeningRecordAnswer OR assembleOpponentRecordAnswer. The
+ *  interception disambiguates opening-vs-opponent by trying to resolve
+ *  the captured TARGET as a real opening; else it's an opponent. This
+ *  detector both DETECTS and EXTRACTS the target term (mirrors
+ *  `openingProfileKind`). Requires a target after a preposition, so a
+ *  bare "what's my record" falls through to the generic records vertical. */
+const RECORD_VS_LEAD = String.raw`(?:my\s+)?(?:record|results?|win[\s/-]?rate|w\/?l|win[\s/-]?loss|score|h2h|head[\s-]?to[\s-]?head)|how\s+(?:do|did|have|has|'?s)\s+i\s+(?:do|done|doing|fare|fared|perform|performed|play|played|score|scored)`;
+const RECORD_VS_RE = new RegExp(
+  String.raw`\b(?:${RECORD_VS_LEAD})\b[\s\S]*?\b(?:against|versus|vs\.?|v\.?|facing|in|with|playing)\s+(?:the\s+)?([a-z0-9][a-z0-9'’\-.\s]*?)\s*[?.!]*$`,
+  'i',
+);
+/** Trailing/leading filler that isn't part of a real opening/opponent name. */
+const RECORD_VS_STOP = /^(?:it|that|them|this|those|me|him|her|us|people|players?|opponents?|everyone|anyone|games?)$/i;
+export function recordVsTarget(ask: string | undefined): string | null {
+  if (!ask) return null;
+  const m = RECORD_VS_RE.exec(ask.trim());
+  if (!m) return null;
+  const t = m[1].trim().replace(/\s+/g, ' ').replace(/[?.!]+$/, '').trim();
+  if (t.length < 2) return null;
+  // "how do I do vs that player" → "that player": keep the raw target (it just
+  // won't resolve to an opening OR a real opponent → no-data), but drop a
+  // bare pronoun/filler with no name so it doesn't fire on nothing.
+  if (RECORD_VS_STOP.test(t)) return null;
+  return t;
+}
+export function isRecordVsQuestion(ask: string | undefined): boolean {
+  return recordVsTarget(ask) !== null;
+}
+
+/** "was that a good move? / rate my last move" → assembleMoveRatingAnswer.
+ *  Board-DEPENDENT — rates the move the student JUST played by comparing it
+ *  to the engine's best at the pre-move position. Distinct from
+ *  isBestMoveQuestion ("what SHOULD I play?"): this grades a move already on
+ *  the board. The interception falls through when there's no move history. */
+const MOVE_RATING_RE = anyOf([
+  // "was that (move) (any) good/ok/a mistake" — subjects incl. "that/this/the move".
+  String.raw`\b(?:was|is|were)\s+(?:(?:that|this|the)\s+move|that|this|it|my\s+(?:last\s+)?move|my\s+move)\s+(?:a\s+|an\s+|the\s+|any\s+)?(?:good|bad|great|strong|weak|sound|solid|best|right|correct|blunder|mistake|inaccuracy|error|ok|okay)\b`,
+  String.raw`\brate\s+(?:my|that|this|the)\s+(?:last\s+)?move\b`,
+  String.raw`\bgrade\s+(?:my|that|this|the)\s+(?:last\s+)?move\b`,
+  String.raw`\bhow\s+(?:good|bad|strong|was)\s+(?:was\s+)?(?:that|this|it|my\s+(?:last\s+)?move|my\s+move)\b`,
+  String.raw`\bdid\s+i\s+(?:play|make|pick|choose)\s+(?:that|it|the\s+right\s+move|a\s+good\s+move|well)\b`,
+  String.raw`\bwas\s+(?:that|my\s+(?:last\s+)?move)\s+(?:the\s+)?(?:right|best)\b`,
+  // gerund frame: "was playing/picking/choosing/making that a mistake/good"
+  String.raw`\bwas\s+(?:playing|picking|choosing|making)\s+(?:that|it|this)\s+(?:a\s+|an\s+)?(?:good|bad|sound|weak|blunder|mistake|inaccuracy|error|ok|okay)\b`,
+]);
+export function isMoveRatingQuestion(ask: string | undefined): boolean {
+  return !!ask && MOVE_RATING_RE.test(ask);
+}
+
 /** "my puzzle rating / how many puzzles have I solved" → assemblePuzzleStatsAnswer. */
 const PUZZLE_STATS_RE = anyOf([
   String.raw`\bmy\s+puzzle\s+(?:rating|accuracy|stats?|score)\b`,
@@ -894,6 +944,8 @@ export function buildQuestionGrounding(
     convertingQuestion: isConvertingQuestion(ask),
     colorQuestion: isColorQuestion(ask),
     recordsQuestion: isRecordsQuestion(ask),
+    recordVsTarget: recordVsTarget(ask) ?? undefined,
+    moveRatingQuestion: isMoveRatingQuestion(ask),
     puzzleStatsQuestion: isPuzzleStatsQuestion(ask),
     transferGapQuestion: isTransferGapQuestion(ask),
     skillRadarQuestion: isSkillRadarQuestion(ask),

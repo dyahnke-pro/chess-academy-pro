@@ -23,6 +23,8 @@ import { useTeachWalkthrough } from '../../hooks/useTeachWalkthrough';
 import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
+import { pickGreeting, pickSuggestedQuestions, weaknessNudgeFromItem } from '../../data/coachGreetings';
+import { getStoredWeaknessProfile } from '../../services/weaknessAnalyzer';
 import type {
   WalkthroughTree,
   WalkthroughTreeNode,
@@ -85,7 +87,7 @@ import { PlayerInfoBar } from './PlayerInfoBar';
 import { PositionNarrationBanner } from './PositionNarrationBanner';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
 import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
-import { coachService, isProgressQuestion, isConceptQuestion, isOpeningProfileQuestion, isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion, isOpeningTrapsQuestion, isReviewDueQuestion, isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion, isRepertoireGapQuestion, isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion, isColorQuestion, isRecordsQuestion, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion } from '../../coach/coachService';
+import { coachService, isProgressQuestion, isConceptQuestion, isOpeningProfileQuestion, isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion, isOpeningTrapsQuestion, isReviewDueQuestion, isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion, isRepertoireGapQuestion, isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion, isColorQuestion, isRecordsQuestion, isRecordVsQuestion, isMoveRatingQuestion, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion } from '../../coach/coachService';
 import { logAppAudit, mintTurnId, setCurrentTurnId } from '../../services/appAuditor';
 import { resolveCoachNarration } from '../../utils/coachNarration';
 import { recoverCoachMoveFromText } from '../../utils/recoverCoachMove';
@@ -2112,7 +2114,7 @@ export function CoachTeachPage(): JSX.Element {
       // "am i improving" → "did you mean one of these?"). Falls through to the
       // Tier 2.5 pre-flight → brain, where isProgressQuestion/isConceptQuestion
       // route to the grounded voiceFacts path.
-      if (requestedName && !isProgressQuestion(text) && !isConceptQuestion(text) && !isOpeningProfileQuestion(text) && !isStatsQuestion(text) && !isStrengthsQuestion(text) && !isOpeningAccuracyQuestion(text) && !isOpeningTrapsQuestion(text) && !isReviewDueQuestion(text) && !isMistakesQuestion(text) && !isTacticsProfileQuestion(text) && !isPhaseQuestion(text) && !isRepertoireGapQuestion(text) && !isAccuracyQuestion(text) && !isConsistencyQuestion(text) && !isConvertingQuestion(text) && !isColorQuestion(text) && !isRecordsQuestion(text) && !isPuzzleStatsQuestion(text) && !isTransferGapQuestion(text) && !isSkillRadarQuestion(text)) {
+      if (requestedName && !isProgressQuestion(text) && !isConceptQuestion(text) && !isOpeningProfileQuestion(text) && !isStatsQuestion(text) && !isStrengthsQuestion(text) && !isOpeningAccuracyQuestion(text) && !isOpeningTrapsQuestion(text) && !isReviewDueQuestion(text) && !isMistakesQuestion(text) && !isTacticsProfileQuestion(text) && !isPhaseQuestion(text) && !isRepertoireGapQuestion(text) && !isAccuracyQuestion(text) && !isConsistencyQuestion(text) && !isConvertingQuestion(text) && !isColorQuestion(text) && !isRecordsQuestion(text) && !isRecordVsQuestion(text) && !isMoveRatingQuestion(text) && !isPuzzleStatsQuestion(text) && !isTransferGapQuestion(text) && !isSkillRadarQuestion(text)) {
         const fuzzy = fuzzyMatchOpening(requestedName);
         if (fuzzy.autoAccept && fuzzy.candidates[0]) {
           const top = fuzzy.candidates[0];
@@ -3560,6 +3562,11 @@ export function CoachTeachPage(): JSX.Element {
           role: 'assistant',
           content: displayText,
           timestamp: Date.now(),
+          // Opt-in follow-up picker the grounded answer attached
+          // (David 2026-07-04) — tappable chip, never auto-launched.
+          ...(result.actionOffer && result.actionOffer.length > 0
+            ? { metadata: { actions: result.actionOffer } }
+            : {}),
         }]);
         useCoachMemoryStore.getState().appendConversationMessage({
           surface: 'chat-teach',
@@ -3901,9 +3908,16 @@ export function CoachTeachPage(): JSX.Element {
       // Per WO spec: do NOT auto-launch the walkthrough. The student
       // confirms by typing "yes" / "start" / tapping a Start button.
       const rolodexOpening = searchParams.get('opening');
+      // Rotate the greeting + suggested-question chips per visit (David
+      // 2026-07-04: "instead of always saying welcome to my classroom … it
+      // should rotate through and give some pickers to choose"). Minute-
+      // granularity index → a returning student rarely hears the same line
+      // twice; the chips are grounded verticals the coach answers from
+      // computed data, and tapping one SENDS it (opt-in discovery, never auto).
+      const greetingRotation = Math.floor(Date.now() / 60000);
       const welcomeLine = rolodexOpening
         ? `Ready to start the ${rolodexOpening.trim()} walkthrough?`
-        : 'Welcome to my classroom — what would you like to learn today?';
+        : pickGreeting(greetingRotation);
       setKickoffStatus(null);
       const turnId = freshTurnId('welcome');
       setMessages((prev) => [...prev, {
@@ -3912,6 +3926,29 @@ export function CoachTeachPage(): JSX.Element {
         content: welcomeLine,
         timestamp: Date.now(),
       }]);
+      // On the open-ended (non-rolodex) entry, surface the suggested-question
+      // pickers so the student sees what they can ask. When we already have a
+      // computed weakness profile, lead with a data-driven nudge naming the
+      // student's top weakness (David 2026-07-04: "the app should identify
+      // something of weakness and suggest a study session") — still opt-in (a
+      // chip they tap), still grounded (routes to a computed vertical). Cheap
+      // stored read; null-guarded so a fresh profile just shows the generic set.
+      if (!rolodexOpening) {
+        const generic = pickSuggestedQuestions(greetingRotation, 4);
+        // Show the generic set immediately, then asynchronously upgrade to a
+        // nudge-led set if a stored weakness profile is available (non-blocking
+        // — the kickoff IIFE is synchronous). Null-guarded end to end.
+        setCoachChoices(generic);
+        void getStoredWeaknessProfile()
+          .then((profile) => {
+            const top = (profile?.items ?? []).slice().sort((a, b) => b.severity - a.severity)[0];
+            const nudge = top ? weaknessNudgeFromItem(top.category, top.label) : null;
+            if (nudge) {
+              setCoachChoices([nudge, ...generic.filter((q) => q !== nudge)].slice(0, 4));
+            }
+          })
+          .catch(() => { /* stored-profile read failed — generic chips stand */ });
+      }
       useCoachMemoryStore.getState().appendConversationMessage({
         surface: 'chat-teach',
         role: 'coach',

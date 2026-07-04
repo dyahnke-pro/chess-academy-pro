@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -503,6 +503,49 @@ describe('Wave 4 assemblers — colour / records / puzzle-stats / transfer-gap',
     const a = assembleRecordsAnswer({ totalGames: 40, highestBeaten: { name: 'GM X', elo: 2400 }, fastestWin: { moves: 14 }, longestGame: { moves: 96 }, bestAccuracyGame: { accuracyPct: 97 } });
     expect(a!.facts).toMatch(/best scalp is GM X \(2400\)/);
     expect(a!.facts).toMatch(/fastest win took 14 moves/);
+  });
+  it('assembleOpeningRecordAnswer voices W/D/L + win rate + a weak-spot suggestion', () => {
+    const a = assembleOpeningRecordAnswer({ openingName: 'Sicilian Defense', games: 20, wins: 6, draws: 4, losses: 10, asWhite: 0, asBlack: 20, winRatePct: 30 });
+    expect(a!.facts).toMatch(/Sicilian Defense you're 6W-4D-10L across 20 games/);
+    expect(a!.facts).toMatch(/30% win rate/);
+    expect(a!.facts).toMatch(/weak spot worth drilling/);
+    expect(a!.facts).toMatch(/20 as Black/);
+  });
+  it('assembleOpeningRecordAnswer calls out a strength above 60%', () => {
+    const a = assembleOpeningRecordAnswer({ openingName: 'Italian Game', games: 10, wins: 7, draws: 1, losses: 2, asWhite: 10, asBlack: 0, winRatePct: 70 });
+    expect(a!.facts).toMatch(/is a strength/);
+  });
+  it('assembleOpeningRecordAnswer returns null with no games', () => {
+    expect(assembleOpeningRecordAnswer({ openingName: 'French Defense', games: 0, wins: 0, draws: 0, losses: 0, asWhite: 0, asBlack: 0, winRatePct: 0 })).toBeNull();
+  });
+  it('assembleOpponentRecordAnswer voices the head-to-head + avg elo', () => {
+    const a = assembleOpponentRecordAnswer({ opponentName: 'DrNykterstein', games: 5, wins: 1, draws: 1, losses: 3, avgOpponentElo: 2850 });
+    expect(a!.facts).toMatch(/Against DrNykterstein \(averaging 2850\) you're 1W-1D-3L across 5 games/);
+    expect(a!.facts).toMatch(/better of it/);
+  });
+  it('assembleOpponentRecordAnswer omits elo when unknown and returns null with no games', () => {
+    const a = assembleOpponentRecordAnswer({ opponentName: 'rival42', games: 2, wins: 2, draws: 0, losses: 0, avgOpponentElo: null });
+    expect(a!.facts).toMatch(/Against rival42 you're 2W-0D-0L/);
+    expect(a!.facts).not.toMatch(/averaging/);
+    expect(assembleOpponentRecordAnswer({ opponentName: 'x', games: 0, wins: 0, draws: 0, losses: 0, avgOpponentElo: null })).toBeNull();
+  });
+  it('assembleMoveRatingAnswer voices "best" with no arrow', () => {
+    const a = assembleMoveRatingAnswer({ playedSan: 'Nf3', wasBest: true, cpLoss: 0, quality: 'best', betterSan: null, betterFromTo: null, missedMate: null, allowedMate: null });
+    expect(a!.facts).toMatch(/Nf3 was the engine's top move/);
+    expect(a!.bestMoveFromTo).toBeNull();
+    expect(a!.sources).toContain('engine:stockfish');
+  });
+  it('assembleMoveRatingAnswer voices a mistake with the better move + arrow', () => {
+    const a = assembleMoveRatingAnswer({ playedSan: 'd3', wasBest: false, cpLoss: 250, quality: 'mistake', betterSan: 'd4', betterFromTo: { from: 'd2', to: 'd4' }, missedMate: null, allowedMate: null });
+    expect(a!.facts).toMatch(/d3 is a mistake: it cost about 2\.5 pawns\. The engine preferred d4\./);
+    expect(a!.bestMoveFromTo).toEqual({ from: 'd2', to: 'd4' });
+    expect(a!.bestMoveSan).toBe('d4');
+  });
+  it('assembleMoveRatingAnswer calls out a missed mate and a walked-into mate', () => {
+    const missed = assembleMoveRatingAnswer({ playedSan: 'Nc3', wasBest: false, cpLoss: 40, quality: 'blunder', betterSan: 'Qh5', betterFromTo: { from: 'd1', to: 'h5' }, missedMate: 2, allowedMate: null });
+    expect(missed!.facts).toMatch(/Nc3 misses a forced mate in 2/);
+    const walked = assembleMoveRatingAnswer({ playedSan: 'Kg1', wasBest: false, cpLoss: 900, quality: 'blunder', betterSan: 'Rf1', betterFromTo: { from: 'f8', to: 'f1' }, missedMate: null, allowedMate: 1 });
+    expect(walked!.facts).toMatch(/Kg1 walks into a forced mate in 1/);
   });
   it('assemblePuzzleStatsAnswer voices rating + solved + due', () => {
     const a = assemblePuzzleStatsAnswer({ puzzleRating: 1650, totalAttempted: 200, totalCorrect: 150, overallAccuracy: 75, duePuzzles: 8 });

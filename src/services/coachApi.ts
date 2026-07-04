@@ -66,9 +66,10 @@ import { getStrongestOpenings, getMostPlayedOpenings, getWeakestOpenings, getOpe
 import { getWeakSpotsForOpening } from './weakSpotService';
 import type { OpeningRecord } from '../types';
 import { getOverviewInsights, getMistakeInsights, getTacticInsights, getOpeningInsights } from './gameInsightsService';
-import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer } from './groundedAnswer';
+import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer } from './groundedAnswer';
+import { computeLastMoveRating } from './moveRating';
 import { getDueCount, getEnrolledOpenings, getSrsDueOpenings, getTotalEnrolled } from './srsOpeningService';
-import { criticalMomentsAccuracy, streaks, timeControlPerformance, comebackWins, winShapeStats, colorProficiencyMismatch, personalRecords, tacticTransferGap } from './analyticsService';
+import { criticalMomentsAccuracy, streaks, timeControlPerformance, comebackWins, winShapeStats, colorProficiencyMismatch, personalRecords, tacticTransferGap, recordVsOpening, recordVsOpponent } from './analyticsService';
 import { getPuzzleStats } from './puzzleService';
 import { detectConceptsInText, getConcept } from './chessConceptService';
 import { validateClaims, type ClaimValidationResult } from './claimValidator';
@@ -730,6 +731,37 @@ export function consumeLastLlmMetadata(): LastLlmMetadata | null {
   return m;
 }
 
+/** One tappable follow-up the coach offers AFTER a grounded answer —
+ *  the "want to work on this?" picker (David 2026-07-04: "Tie it into
+ *  a picker once the coach answers... Don't just make it automatic").
+ *  `type` maps to a `handleAction` case in ChatMessage.tsx; `id`
+ *  carries the target (openingId, puzzle theme, srs, …). The offer is
+ *  NEVER auto-launched — the surface renders it as a chip the student
+ *  must tap. */
+export interface CoachActionOffer {
+  type: string;
+  id: string;
+}
+
+/** Module-level scratch space for the action offer the last grounded
+ *  answer attached. Mirrors the `lastLlmMetadata` scratch pattern:
+ *  set synchronously inside a grounding interception block right
+ *  before it returns the voiced answer, read synchronously by
+ *  `coachService.ask` immediately after its await so the set→read
+ *  pair runs in one event-loop tick. Reset at the top of every
+ *  `getCoachChatResponse` so a stale offer can't leak into an
+ *  unrelated turn (a plain Q&A that fires no grounded block leaves
+ *  this null → no chip). */
+let lastCoachActionOffer: CoachActionOffer[] | null = null;
+
+/** Read + clear the action offer from the most recent grounded answer.
+ *  Returns null when the last turn attached none. */
+export function consumeCoachActionOffer(): CoachActionOffer[] | null {
+  const o = lastCoachActionOffer;
+  lastCoachActionOffer = null;
+  return o;
+}
+
 async function callDeepSeek(
   apiKey: string,
   model: string,
@@ -1270,6 +1302,16 @@ export interface MasterGroundingOptions {
   /** Wave 4 — colour, records, puzzle stats, tactic transfer gap. No board. */
   colorQuestion?: boolean;        // getOverviewInsights + colorProficiencyMismatch → assembleColorAnswer
   recordsQuestion?: boolean;      // personalRecords → assembleRecordsAnswer
+  /** The opening/opponent target captured from a "how do I do against X /
+   *  my record vs X" question. Present → the record-vs interception fires:
+   *  it resolves the target as an opening (recordVsOpening → assembleOpeningRecordAnswer)
+   *  and falls back to opponent (recordVsOpponent → assembleOpponentRecordAnswer). */
+  recordVsTarget?: string;
+  /** "was that a good move? / rate my last move" — board-DEPENDENT. Rates the
+   *  student's LAST move by comparing it to the engine's best at the pre-move
+   *  position (moveRating.computeLastMoveRating → assembleMoveRatingAnswer).
+   *  Needs `moveHistory`; falls through when absent. */
+  moveRatingQuestion?: boolean;
   puzzleStatsQuestion?: boolean;  // profile.puzzleRating + getPuzzleStats → assemblePuzzleStatsAnswer
   transferGapQuestion?: boolean;  // tacticTransferGap → assembleTransferGapAnswer
   skillRadarQuestion?: boolean;   // profile.skillRadar → assembleSkillRadarAnswer
@@ -1663,7 +1705,17 @@ function stripUngroundedSentences(text: string, validation: ClaimValidationResul
  */
 export async function voiceFacts(
   facts: string,
-  opts: { studentMessage?: string; providerConfig?: ProviderConfig | null; intent?: string } = {},
+  opts: {
+    studentMessage?: string;
+    providerConfig?: ProviderConfig | null;
+    intent?: string;
+    /** Critical chess tokens (SANs, exact move names) that MUST appear verbatim
+     *  in the phrased output — if the model drops or changes one, the exact
+     *  computed prose is served instead. Used by move-mentioning verticals
+     *  (move-rating) where a corrupted move is a chess hallucination the number
+     *  net can't catch (d4→e4 keeps the digit). See the fidelity net below. */
+    mustPreserve?: string[];
+  } = {},
 ): Promise<string | null> {
   const cfg = opts.providerConfig ?? (await getProviderConfig());
   if (!cfg) return null;
@@ -1694,10 +1746,68 @@ export async function voiceFacts(
         );
     // Leak audit fires at the primitive (callAnthropic/callDeepSeek) with
     // task='grounded_voice' → tagged grounded=true there. No emit needed here.
+    //
+    // NUMBER-FIDELITY NET (David 2026-07-04: "make sure the CORRECT answer is
+    // getting to the user — no good if gates flag wrong answers but the brain
+    // still pushes them through"). The phrasing model is trusted to preserve
+    // the facts, but if it INTRODUCES or CHANGES a number (a win-rate, a count,
+    // a cp-loss, a rating), that corrupted number would otherwise reach the
+    // student ungated. So: every number in the OUTPUT must already appear in
+    // the computed FACTS. If any doesn't, serve the exact computed prose
+    // instead — the facts string is already coach-voiced and is guaranteed
+    // correct. This is NOT a re-decide / re-call (the disease the inversion
+    // doctrine warns about): zero extra LLM calls, and the fallback is the
+    // computed answer, not a regen. Omitting a number is fine (the student just
+    // hears fewer); inventing/altering one is what we refuse to speak.
+    if (typeof out === 'string' && out.trim()) {
+      const introduced = introducedNumbers(facts, out);
+      const dropped = droppedTokens(opts.mustPreserve, out);
+      if (introduced.length > 0 || dropped.length > 0) {
+        void logAppAudit({
+          kind: 'claim-validator-trip',
+          category: 'subsystem',
+          source: 'voiceFacts.numberFidelity',
+          summary: `phrasing fidelity trip (intent=${opts.intent ?? 'n/a'}): introduced [${introduced.join(', ')}] dropped [${dropped.join(', ')}] → served computed prose`,
+          details: JSON.stringify({ intent: opts.intent ?? null, introduced, dropped, facts: facts.slice(0, 200), out: out.slice(0, 200) }),
+        });
+        return facts.trim();
+      }
+    }
     return out;
   } catch {
     return null; // never throws — caller falls through
   }
+}
+
+/** Normalized numeric tokens in a string — every run of digits (with an
+ *  optional decimal), value-normalized so "2.50" and "2.5" compare equal and
+ *  "6W-4D-10L" yields 6, 4, 10. */
+export function numericTokens(text: string): string[] {
+  const m = text.match(/\d+(?:\.\d+)?/g);
+  return m ? m.map((s) => String(parseFloat(s))) : [];
+}
+
+/** The numbers present in `out` that are NOT in `facts` — i.e. numbers the
+ *  phrasing model INVENTED or CHANGED. Empty when the output is faithful
+ *  (omitting a number is fine; only introduced/altered ones are returned).
+ *  This is the fidelity check behind voiceFacts's "serve the computed prose
+ *  instead" fallback (David 2026-07-04). Pure + exported so it's unit-tested
+ *  without touching the LLM. */
+export function introducedNumbers(facts: string, out: string): string[] {
+  const factsNums = new Set(numericTokens(facts));
+  return numericTokens(out).filter((n) => !factsNums.has(n));
+}
+
+/** The `mustPreserve` tokens (critical SANs / move names) that are ABSENT from
+ *  the phrased output — i.e. the model dropped or changed a move the answer
+ *  hinges on. Case-insensitive substring match (prose keeps the SAN token even
+ *  when it wraps it: "the d-pawn to d4" still contains "d4"). Empty when
+ *  mustPreserve is unset. The number net can't see a file/piece swap that keeps
+ *  the rank digit (d4→e4); this closes that gap for move-mentioning verticals. */
+export function droppedTokens(mustPreserve: string[] | undefined, out: string): string[] {
+  if (!mustPreserve || mustPreserve.length === 0) return [];
+  const lower = out.toLowerCase();
+  return mustPreserve.filter((t) => t && t.trim() && !lower.includes(t.toLowerCase()));
 }
 
 /**
@@ -1799,6 +1909,11 @@ export async function getCoachChatResponse(
    *  excluded by contract. */
   grounding?: MasterGroundingOptions,
 ): Promise<string> {
+  // Clear any action offer from a prior turn — only a grounded block
+  // that fires THIS turn re-populates it (else the surface shows no
+  // follow-up chip). See `consumeCoachActionOffer`.
+  lastCoachActionOffer = null;
+
   const config = forceProvider
     ? await getForcedProviderConfig(forceProvider)
     : await getProviderConfig();
@@ -1854,6 +1969,8 @@ export async function getCoachChatResponse(
       grounding.convertingQuestion === true ||
       grounding.colorQuestion === true ||
       grounding.recordsQuestion === true ||
+      (grounding.recordVsTarget !== undefined && grounding.recordVsTarget.length > 0) ||
+      grounding.moveRatingQuestion === true ||
       grounding.puzzleStatsQuestion === true ||
       grounding.transferGapQuestion === true ||
       grounding.skillRadarQuestion === true ||
@@ -1870,6 +1987,83 @@ export async function getCoachChatResponse(
           }
           return undefined;
         };
+
+        // ── RECORD VS OPENING / OPPONENT — "how do I do against the Sicilian? /
+        // what's my record vs <name>?" (David 2026-07-04, the last three
+        // weakness-tab gaps). Runs FIRST — before stats/records — because a
+        // targeted "my record vs X" also trips the generic stats/records
+        // detectors, and the specific answer must win. Disambiguates by trying
+        // to resolve the captured target as a real opening; else treats it as
+        // an opponent. No board.
+        if (grounding.recordVsTarget && grounding.recordVsTarget.length > 0) {
+          try {
+            const target = grounding.recordVsTarget;
+            const opening = await recordVsOpening(target);
+            if (opening) {
+              const answer = assembleOpeningRecordAnswer(opening);
+              if (answer) {
+                // Require the opening's FAMILY-root word verbatim so a phrasing
+                // swap (French → Sicilian) falls back to the computed prose,
+                // while still allowing the model to drop "Defense"/abbreviate.
+                const familyRoot = opening.openingName.split(/\s+/)[0];
+                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'record-vs-opening', mustPreserve: familyRoot ? [familyRoot] : undefined });
+                // No action chip here: we only have the opening's family NAME,
+                // not a routable openingId (the /openings/:id chip needs an id).
+                if (voiced) return voiced;
+              }
+            }
+            const opponent = await recordVsOpponent(target);
+            if (opponent) {
+              const answer = assembleOpponentRecordAnswer(opponent);
+              if (answer) {
+                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'record-vs-opponent' });
+                if (voiced) return voiced;
+              }
+            }
+            // Target didn't resolve to an opening we've played OR a known
+            // opponent — computed no-data line (G0), not an LLM guess.
+            const noDataFact = `I don't have any of your games against "${target}" logged yet. If that's an opening, drill it and I'll start tracking your record; if it's an opponent, we haven't played them in your imported games.`;
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'record-vs' });
+            if (voicedNoData) return voicedNoData;
+          } catch { /* fall through */ }
+        }
+
+        // ── RATE MY LAST MOVE — "was that a good move? / rate my last move"
+        // (David 2026-07-04, the last weakness-tab gap). Board-DEPENDENT: rates
+        // the move the student JUST played by evaluating the position BEFORE it
+        // and comparing the played move to the engine's best (moveRating). G0 —
+        // the verdict + cp-loss are computed by Stockfish, the LLM only voices
+        // them. Falls through when there's no move history to reconstruct from.
+        if (grounding.moveRatingQuestion && grounding.moveHistory && grounding.moveHistory.length > 0) {
+          try {
+            const rating = await computeLastMoveRating(grounding.moveHistory);
+            if (rating) {
+              const answer = assembleMoveRatingAnswer(rating);
+              if (answer) {
+                // The played move + the engine's better move are the chess
+                // content the answer hinges on — require them verbatim so a
+                // phrasing slip (d4→e4) serves the computed prose instead.
+                const mustPreserve = [rating.playedSan, rating.betterSan].filter((s): s is string => !!s);
+                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'move-rating', mustPreserve });
+                if (voiced) {
+                  // Offer an "Analyse Position" chip when the move was a real
+                  // error, so the student can dig into the line — opt-in.
+                  if (rating.quality === 'mistake' || rating.quality === 'blunder') {
+                    lastCoachActionOffer = [{ type: 'analyse_position', id: 'current' }];
+                  }
+                  // NO board arrow here: the better move was best at the PRE-move
+                  // position, but the board now shows the position AFTER the
+                  // student's move — its from-square is vacated, so an arrow
+                  // would render on the wrong board (a board-inaccurate marker).
+                  // The prose names the better move; that's grounded + enough.
+                  return voiced;
+                }
+              }
+            }
+            // Couldn't reconstruct / engine unavailable — fall through to the
+            // normal path rather than fabricate a rating (G0).
+          } catch { /* fall through */ }
+        }
 
         // ── STRENGTHS — "what am I good at?" (runs BEFORE progress so the
         // strengths question doesn't get a weakness-dump). Voiced from the
@@ -1964,7 +2158,12 @@ export async function getCoachChatResponse(
               });
               if (answer) {
                 const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-accuracy' });
-                if (voiced) return voiced;
+                if (voiced) {
+                  // Opt-in "Practice Opening" chip → the resolved opening's
+                  // detail page, where the student drills the weak variation.
+                  lastCoachActionOffer = [{ type: 'drill_opening', id: target.id }];
+                  return voiced;
+                }
               }
             }
             // No opening drilled / no weak-spot data — computed no-data line (G0).
@@ -1996,9 +2195,11 @@ export async function getCoachChatResponse(
               ({ name: o.name, color: o.color, traps: trapNames(o), warnings: warnNames(o) });
 
             let sides: OpeningTrapsSideLike[] = [];
+            let primaryOpening: OpeningRecord | undefined;
             const ctx = grounding.openingId ? await getOpeningById(grounding.openingId) : undefined;
             if (ctx) {
               sides = [toSide(ctx)];
+              primaryOpening = ctx;
             } else {
               // Resolve the strongest opening per color; scope to one side when
               // the question names a color ("for white" / "black traps").
@@ -2008,12 +2209,19 @@ export async function getCoachChatResponse(
                 wantWhite ? getStrongestOpenings(1, 'white') : Promise.resolve([]),
                 wantBlack ? getStrongestOpenings(1, 'black') : Promise.resolve([]),
               ]);
-              sides = [...w, ...b].map(toSide);
+              const both = [...w, ...b];
+              sides = both.map(toSide);
+              primaryOpening = both[0];
             }
             const answer = assembleOpeningTrapsAnswer({ sides, explainSystem: grounding.openingTrapsSystemAsk });
             if (answer) {
               const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-traps' });
-              if (voiced) return voiced;
+              if (voiced) {
+                // Opt-in "Practice Opening" chip → the opening whose traps
+                // we just described, so the student can drill the weapons.
+                if (primaryOpening) lastCoachActionOffer = [{ type: 'drill_opening', id: primaryOpening.id }];
+                return voiced;
+              }
             }
             // No trap data yet — computed no-data line (G0).
             const noDataFact = "I don't have named traps logged for your strongest openings yet. Drill an opening's Watch and Learn rungs and I'll surface its trap weapons and the lines to watch out for.";
@@ -2039,7 +2247,12 @@ export async function getCoachChatResponse(
             const answer = assembleReviewDueAnswer({ dueCount, totalEnrolled, dueOpenings });
             if (answer) {
               const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'review-due' });
-              if (voiced) return voiced;
+              if (voiced) {
+                // Offer the opt-in "Start review" chip when there's
+                // actually something due — never auto-launch the trainer.
+                if (dueCount > 0) lastCoachActionOffer = [{ type: 'start_review', id: 'srs' }];
+                return voiced;
+              }
             }
             // Nothing enrolled yet — computed onboarding line (G0).
             const noDataFact = "You don't have any opening review cards yet. Finish an opening's Learn rung and I'll start scheduling spaced-repetition reps for it — then I can tell you what's due.";
@@ -2068,7 +2281,12 @@ export async function getCoachChatResponse(
             });
             if (answer) {
               const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'mistakes' });
-              if (voiced) return voiced;
+              if (voiced) {
+                // Opt-in "Try Puzzles" chip → adaptive tactics, so the
+                // student drills the error class we just named.
+                lastCoachActionOffer = [{ type: 'puzzle_theme', id: 'adaptive' }];
+                return voiced;
+              }
             }
             const noDataFact = "You haven't analyzed enough games yet for me to break down your mistakes. Analyze a few games and I'll show you exactly where you go wrong and what to drill.";
             const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'mistakes' });
@@ -2092,7 +2310,12 @@ export async function getCoachChatResponse(
             });
             if (answer) {
               const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'tactics-profile' });
-              if (voiced) return voiced;
+              if (voiced) {
+                // Opt-in "Try Puzzles" chip → adaptive tactics, so the
+                // student drills the motif they miss most.
+                lastCoachActionOffer = [{ type: 'puzzle_theme', id: 'adaptive' }];
+                return voiced;
+              }
             }
             const noDataFact = "You haven't analyzed enough games yet for me to profile your tactics. Analyze a few games or solve some puzzles and I'll show you which motifs you miss most.";
             const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'tactics-profile' });
