@@ -1060,7 +1060,24 @@ export function assembleOpeningTrapsAnswer(opts: {
   const clean = (xs: ReadonlyArray<string>): string[] =>
     xs.filter((s) => !!s && s.trim().length > 0).map((s) => s.trim());
   const sides = opts.sides.filter((s) => s.name && (clean(s.traps).length > 0 || clean(s.warnings).length > 0));
-  if (sides.length === 0) return null;
+  // The teaching-system explanation — grounded in the app's REAL WLPP grammar +
+  // trap taxonomy (not invented). Fires whenever the student asked "how do you
+  // teach these / what system"; it does NOT depend on having named traps.
+  const system = opts.explainSystem
+    ? 'I teach every trap the same four-rung way — Watch, Learn, Practice, Play: you watch the trap spring with the key squares lit up, then I guide you through the punish move by move, then you play it silently, then you drill it live. Each trap is tagged too — a forced tactic, a positional mistake to punish, or a longer maneuvering idea.'
+    : '';
+
+  // No named traps to voice. If the student asked about the SYSTEM, still answer
+  // that (it's the same regardless of which traps exist); otherwise null so the
+  // caller takes the no-data line. G0 — the "how do you teach traps" answer is a
+  // computed fact, not something the LLM should freestyle into a drill setup.
+  if (sides.length === 0) {
+    if (!system) return null;
+    return {
+      facts: system + ' Ask me for the traps in your strongest opening and I\'ll name them.',
+      bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'],
+    };
+  }
 
   const parts: string[] = [];
   let firstDrillName = '';
@@ -1075,16 +1092,10 @@ export function assembleOpeningTrapsAnswer(opts: {
     parts.push(line);
   }
 
-  // The teaching-system explanation — grounded in the app's REAL WLPP grammar +
-  // trap taxonomy (not invented). Only when the student asked "how do you teach
-  // these / what system".
-  const system = opts.explainSystem
-    ? ' I teach every trap the same four-rung way — Watch, Learn, Practice, Play: you watch the trap spring with the key squares lit up, then I guide you through the punish move by move, then you play it silently, then you drill it live. Each trap is tagged too — a forced tactic, a positional mistake to punish, or a longer maneuvering idea.'
-    : '';
-
   const next = firstDrillName
     ? ` Say "punish lines for the ${firstDrillName}" and I'll run the drill.`
     : '';
 
-  return { facts: parts.join(' ') + system + next, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+  const systemTail = system ? ' ' + system : '';
+  return { facts: parts.join(' ') + systemTail + next, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }

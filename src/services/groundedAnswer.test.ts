@@ -306,9 +306,17 @@ describe('assembleOpeningTrapsAnswer — grounded "traps in my strongest opening
     expect(a!.facts).not.toMatch(/Empty/);
     expect(a!.facts).toMatch(/Caro-Kann/);
   });
-  it('returns null when no side carries any trap or warning', () => {
+  it('returns null when no side carries any trap or warning (and no system ask)', () => {
     expect(assembleOpeningTrapsAnswer({ sides: [] })).toBeNull();
     expect(assembleOpeningTrapsAnswer({ sides: [{ name: 'X', color: 'white', traps: [], warnings: [] }] })).toBeNull();
+  });
+  it('answers the teaching-SYSTEM ask even with no named traps (never a drill freestyle)', () => {
+    const a = assembleOpeningTrapsAnswer({ sides: [], explainSystem: true });
+    expect(a).not.toBeNull();
+    expect(a!.facts).toMatch(/Watch, Learn, Practice, Play/);
+    expect(a!.facts).toMatch(/Ask me for the traps in your strongest opening/);
+    // no named traps → no "punish lines for" drill-launch line
+    expect(a!.facts).not.toMatch(/punish lines for/);
   });
 });
 
