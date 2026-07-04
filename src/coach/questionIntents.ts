@@ -402,7 +402,10 @@ export function openingProfileKind(ask: string | undefined): 'strongest' | 'favo
 const STATS_QUESTION_RE = anyOf([
   String.raw`\bwhat(?:'?s| is)?\s+my\s+(?:current\s+)?(?:rating|elo|rank)\b`,
   String.raw`\bwhat(?:'?s| is)?\s+my\s+(?:win[\s-]?rate|record|score|w[\s\/-]l|stats?|statistics)\b`,
-  String.raw`\bmy\s+(?:win[\s-]?rate|overall\s+record|game\s+record)\b`,
+  // bare "my …" record/win-rate phrasings (no "what's" lead-in) — incl.
+  // "my w-l record" / "my w/l" (the adversarial audit's compound-question miss,
+  // David 2026-07-04). "my record" alone is unambiguously a stats question.
+  String.raw`\bmy\s+(?:win[\s-]?rate|(?:overall\s+|game\s+|w[\s\/-]l\s+)?record|w[\s\/-]l)\b`,
   String.raw`\bhow\s+many\s+games\s+(?:have\s+i|did\s+i|do\s+i|i'?ve)\s+(?:won|win|lost|lose|played|play|drawn|draw|drew)\b`,
   String.raw`\bhow\s+(?:many|often)\s+(?:do\s+i|have\s+i)\s+win\b`,
   String.raw`\bwhat(?:'?s| is)?\s+my\s+(?:win|winning)\s+percentage\b`,

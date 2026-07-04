@@ -200,6 +200,10 @@ describe('isStatsQuestion (David 2026-07-04: rating / record / win-rate)', () =>
     "what's my w/l",
     "what's my stats",
     'what is my statistics',
+    'my record',
+    'my w-l record',
+    'my w/l',
+    'my w-l record and how am i doing',  // adversarial compound-question miss
   ])('matches "%s"', (q) => expect(isStatsQuestion(q)).toBe(true));
   it.each([
     'what are my weaknesses',       // weakness themes → progress
