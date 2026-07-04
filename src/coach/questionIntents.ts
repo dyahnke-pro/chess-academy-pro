@@ -768,6 +768,57 @@ export function isConvertingQuestion(ask: string | undefined): boolean {
   return !!ask && CONVERTING_QUESTION_RE.test(ask);
 }
 
+/** WAVE 4 — colour, records/bests, puzzle stats, tactic transfer gap. */
+
+/** "am I better as White or Black?" → assembleColorAnswer. */
+const COLOR_QUESTION_RE = anyOf([
+  String.raw`\b(?:am\s+i|do\s+i\s+play|am\s+i\s+stronger)\s+(?:better\s+)?(?:as\s+|with\s+)?(?:white\s+or\s+black|black\s+or\s+white)\b`,
+  String.raw`\bbetter\s+(?:as|with)\s+(?:white|black)\b`,
+  String.raw`\bwhich\s+colou?r\s+(?:do\s+i|am\s+i)\b`,
+  String.raw`\b(?:white\s+or\s+black|black\s+or\s+white)\s+player\b`,
+  String.raw`\bam\s+i\s+a\s+(?:white|black)\s+player\b`,
+]);
+export function isColorQuestion(ask: string | undefined): boolean {
+  return !!ask && COLOR_QUESTION_RE.test(ask);
+}
+
+/** "my best game / fastest win / records" → assembleRecordsAnswer. */
+const RECORDS_QUESTION_RE = anyOf([
+  String.raw`\bmy\s+(?:best|fastest|longest|most\s+accurate)\s+(?:game|win|scalp)\b`,
+  String.raw`\bwhat(?:'?s| is| are)?\s+my\s+(?:records?|personal\s+bests?|bests?)\b`,
+  String.raw`\bmy\s+fastest\s+win\b`,
+  String.raw`\bmy\s+longest\s+game\b`,
+  String.raw`\bmy\s+best\s+(?:scalp|result|win)\b`,
+  String.raw`\bhighest\s+(?:rated\s+)?(?:player|opponent)\s+i(?:'?ve)?\s+(?:beat|beaten)\b`,
+]);
+export function isRecordsQuestion(ask: string | undefined): boolean {
+  return !!ask && RECORDS_QUESTION_RE.test(ask);
+}
+
+/** "my puzzle rating / how many puzzles have I solved" → assemblePuzzleStatsAnswer. */
+const PUZZLE_STATS_RE = anyOf([
+  String.raw`\bmy\s+puzzle\s+(?:rating|accuracy|stats?|score)\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+my\s+puzzle\s+(?:rating|accuracy)\b`,
+  String.raw`\bhow\s+many\s+puzzles?\s+(?:have\s+i|did\s+i|i'?ve)\s+(?:solved|done|completed)\b`,
+  String.raw`\bhow\s+(?:good|strong)\s+am\s+i\s+at\s+puzzles?\b`,
+  String.raw`\bpuzzle\s+rating\b`,
+]);
+export function isPuzzleStatsQuestion(ask: string | undefined): boolean {
+  return !!ask && PUZZLE_STATS_RE.test(ask);
+}
+
+/** "do I spot tactics in games as well as puzzles?" → assembleTransferGapAnswer. */
+const TRANSFER_GAP_RE = anyOf([
+  String.raw`\bspot\s+tactics?\s+in\s+(?:my\s+)?games?\s+as\s+well\s+as\s+(?:in\s+)?puzzles?\b`,
+  String.raw`\b(?:tactic\s+)?transfer\s+gap\b`,
+  String.raw`\bam\s+i\s+better\s+at\s+puzzles?\s+than\s+(?:in\s+)?(?:my\s+)?games?\b`,
+  String.raw`\bdo\s+i\s+(?:find|spot|see)\s+(?:in\s+games?\s+)?(?:the\s+)?tactics?\s+i\s+(?:solve|know)\b`,
+  String.raw`\bpuzzles?\s+vs\s+(?:my\s+)?games?\b`,
+]);
+export function isTransferGapQuestion(ask: string | undefined): boolean {
+  return !!ask && TRANSFER_GAP_RE.test(ask);
+}
+
 /**
  * buildQuestionGrounding — the SHARED grounding builder so the coach's
  * grounded-data brain fires IDENTICALLY on every talking surface (David
@@ -827,6 +878,10 @@ export function buildQuestionGrounding(
     accuracyQuestion: isAccuracyQuestion(ask),
     consistencyQuestion: isConsistencyQuestion(ask),
     convertingQuestion: isConvertingQuestion(ask),
+    colorQuestion: isColorQuestion(ask),
+    recordsQuestion: isRecordsQuestion(ask),
+    puzzleStatsQuestion: isPuzzleStatsQuestion(ask),
+    transferGapQuestion: isTransferGapQuestion(ask),
     masterPlayQuestion: isMasterPlayQuestion(ask),
     conceptQuestion: isConceptQuestion(ask),
     playerGamesQuestion: isPlayerGamesQuestion(ask),

@@ -66,9 +66,10 @@ import { getStrongestOpenings, getMostPlayedOpenings, getWeakestOpenings, getOpe
 import { getWeakSpotsForOpening } from './weakSpotService';
 import type { OpeningRecord } from '../types';
 import { getOverviewInsights, getMistakeInsights, getTacticInsights, getOpeningInsights } from './gameInsightsService';
-import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer } from './groundedAnswer';
+import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer } from './groundedAnswer';
 import { getDueCount, getEnrolledOpenings, getSrsDueOpenings, getTotalEnrolled } from './srsOpeningService';
-import { criticalMomentsAccuracy, streaks, timeControlPerformance, comebackWins, winShapeStats } from './analyticsService';
+import { criticalMomentsAccuracy, streaks, timeControlPerformance, comebackWins, winShapeStats, colorProficiencyMismatch, personalRecords, tacticTransferGap } from './analyticsService';
+import { getPuzzleStats } from './puzzleService';
 import { detectConceptsInText, getConcept } from './chessConceptService';
 import { validateClaims, type ClaimValidationResult } from './claimValidator';
 import { logAppAudit } from './appAuditor';
@@ -1266,6 +1267,11 @@ export interface MasterGroundingOptions {
   accuracyQuestion?: boolean;     // getOverviewInsights → assembleAccuracyAnswer
   consistencyQuestion?: boolean;  // streaks + timeControlPerformance → assembleConsistencyAnswer
   convertingQuestion?: boolean;   // thrownWins + comebackWins + winShape → assembleConvertingAnswer
+  /** Wave 4 — colour, records, puzzle stats, tactic transfer gap. No board. */
+  colorQuestion?: boolean;        // getOverviewInsights + colorProficiencyMismatch → assembleColorAnswer
+  recordsQuestion?: boolean;      // personalRecords → assembleRecordsAnswer
+  puzzleStatsQuestion?: boolean;  // profile.puzzleRating + getPuzzleStats → assemblePuzzleStatsAnswer
+  transferGapQuestion?: boolean;  // tacticTransferGap → assembleTransferGapAnswer
   /** STEP D Phase 4 — true when this turn asks how MASTERS play the position
    *  ("how do masters play this?", "most popular move?"). Voices the master-play
    *  lookup's real top moves + frequencies (assembleMasterPlayAnswer) so the LLM
@@ -1845,6 +1851,10 @@ export async function getCoachChatResponse(
       grounding.accuracyQuestion === true ||
       grounding.consistencyQuestion === true ||
       grounding.convertingQuestion === true ||
+      grounding.colorQuestion === true ||
+      grounding.recordsQuestion === true ||
+      grounding.puzzleStatsQuestion === true ||
+      grounding.transferGapQuestion === true ||
       grounding.conceptQuestion === true ||
       grounding.playerGamesQuestion === true ||
       grounding.endgameQuestion === true ||
@@ -2192,6 +2202,69 @@ export async function getCoachChatResponse(
             const noDataFact = "You haven't analyzed enough games yet for me to see how you convert. Analyze a few and I'll show you whether you close out wins cleanly or let them slip.";
             const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'converting' });
             if (voicedNoData) return voicedNoData;
+          } catch { /* fall through */ }
+        }
+
+        // ── COLOUR (Wave 4) — "am I better as White or Black?" ─────────────
+        if (grounding.colorQuestion) {
+          try {
+            const [ov, cm] = await Promise.all([getOverviewInsights(), colorProficiencyMismatch()]);
+            const answer = assembleColorAnswer({
+              totalGames: ov.totalGames, winRateWhite: ov.winRateWhite, winRateBlack: ov.winRateBlack,
+              accuracyWhite: ov.accuracyWhite, accuracyBlack: ov.accuracyBlack,
+              inversion: cm ? { preferredColor: cm.preferredColor, otherColor: cm.otherColor, inversionPoints: cm.inversionPoints } : null,
+            });
+            if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'color' }); if (v) return v; }
+            const nd = await voiceFacts("You haven't played enough games with each colour yet for me to compare. Play a few more and I'll tell you which side you're stronger with.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'color' });
+            if (nd) return nd;
+          } catch { /* fall through */ }
+        }
+
+        // ── RECORDS (Wave 4) — "my best game / fastest win / records?" ─────
+        if (grounding.recordsQuestion) {
+          try {
+            const pr = await personalRecords();
+            const answer = assembleRecordsAnswer({
+              totalGames: pr.totalGames,
+              highestBeaten: pr.highestBeaten ? { name: pr.highestBeaten.name, elo: pr.highestBeaten.elo } : null,
+              fastestWin: pr.fastestWin ? { moves: pr.fastestWin.moves } : null,
+              longestGame: pr.longestGame ? { moves: pr.longestGame.moves } : null,
+              bestAccuracyGame: pr.bestAccuracyGame ? { accuracyPct: pr.bestAccuracyGame.accuracyPct } : null,
+            });
+            if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'records' }); if (v) return v; }
+            const nd = await voiceFacts("You haven't played enough analyzed games yet for me to pull out your records. Play a few and I'll track your best games and fastest wins.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'records' });
+            if (nd) return nd;
+          } catch { /* fall through */ }
+        }
+
+        // ── PUZZLE STATS (Wave 4) — "my puzzle rating / how many solved?" ──
+        if (grounding.puzzleStatsQuestion) {
+          try {
+            const [ps, profile] = await Promise.all([getPuzzleStats(), db.profiles.get('main')]);
+            const answer = assemblePuzzleStatsAnswer({
+              puzzleRating: profile?.puzzleRating ?? null,
+              totalAttempted: ps.totalAttempted, totalCorrect: ps.totalCorrect,
+              overallAccuracy: ps.overallAccuracy, duePuzzles: ps.duePuzzles,
+            });
+            if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'puzzle-stats' }); if (v) return v; }
+            const nd = await voiceFacts("You haven't solved enough puzzles yet for me to track your puzzle rating. Solve a few and I'll show you your rating and accuracy.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'puzzle-stats' });
+            if (nd) return nd;
+          } catch { /* fall through */ }
+        }
+
+        // ── TRANSFER GAP (Wave 4) — "do I spot tactics in games like in puzzles?"
+        if (grounding.transferGapQuestion) {
+          try {
+            const rows = await tacticTransferGap();
+            const gapped = rows
+              .filter((r) => r.transferGapPoints !== null && r.puzzleAccuracyPct !== null && r.gameRecognitionPct !== null)
+              .sort((a, b) => (b.transferGapPoints ?? 0) - (a.transferGapPoints ?? 0))[0] ?? null;
+            const answer = assembleTransferGapAnswer({
+              worst: gapped ? { tacticType: gapped.tacticType, puzzleAccuracyPct: gapped.puzzleAccuracyPct as number, gameRecognitionPct: gapped.gameRecognitionPct as number, gapPoints: gapped.transferGapPoints as number } : null,
+            });
+            if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'transfer-gap' }); if (v) return v; }
+            const nd = await voiceFacts("You haven't solved and played enough tactics yet for me to compare your puzzle skill to your in-game vision. Do a few more and I'll show you the gap.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'transfer-gap' });
+            if (nd) return nd;
           } catch { /* fall through */ }
         }
 

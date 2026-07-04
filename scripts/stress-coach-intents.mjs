@@ -12,6 +12,7 @@ import {
   isBestMoveQuestion, isTacticsQuestion, isPositionAssessmentQuestion, isMasterPlayQuestion,
   isEndgameQuestion, isPlayerGamesQuestion, isConceptQuestion, isPlanQuestion,
   isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion,
+  isColorQuestion, isRecordsQuestion, isPuzzleStatsQuestion, isTransferGapQuestion,
 } from '../src/coach/questionIntents.ts';
 
 const DETECTORS = {
@@ -23,6 +24,7 @@ const DETECTORS = {
   positionAssessment: isPositionAssessmentQuestion, masterPlay: isMasterPlayQuestion,
   endgame: isEndgameQuestion, playerGames: isPlayerGamesQuestion, concept: isConceptQuestion, plan: isPlanQuestion,
   accuracy: isAccuracyQuestion, consistency: isConsistencyQuestion, converting: isConvertingQuestion,
+  color: isColorQuestion, records: isRecordsQuestion, puzzleStats: isPuzzleStatsQuestion, transferGap: isTransferGapQuestion,
 };
 
 // expected: the detector that SHOULD fire. Rephrasings hammer each vertical.

@@ -15,6 +15,7 @@ const DETECTORS = {
   masterPlay: Q.isMasterPlayQuestion, endgame: Q.isEndgameQuestion, playerGames: Q.isPlayerGamesQuestion,
   concept: Q.isConceptQuestion, plan: Q.isPlanQuestion,
   accuracy: Q.isAccuracyQuestion, consistency: Q.isConsistencyQuestion, converting: Q.isConvertingQuestion,
+  color: Q.isColorQuestion, records: Q.isRecordsQuestion, puzzleStats: Q.isPuzzleStatsQuestion, transferGap: Q.isTransferGapQuestion,
 };
 const fires = (q) => Object.entries(DETECTORS).filter(([, fn]) => fn(q)).map(([k]) => k);
 
@@ -50,12 +51,12 @@ const MATRIX = [
   ['converting winning positions', ['do I convert winning positions', 'do I close out wins'], 'converting'],
   ['comeback wins', ['do I come back from losing positions', 'how often do I comeback'], 'converting'],
   ['win shape (quick/grind)', ['how do I win my games', 'am I a grinder or an attacker'], 'converting'],
-  ['better as white or black', ['am I better as white or black', 'which colour do I do better with'], null],
+  ['better as white or black', ['am I better as white or black', 'which colour do I do better with'], 'color'],
   ['skill radar (5-axis)', ["what's my skill breakdown", 'rate my chess by skill', "what's my skill profile"], null],
   ['overall assessment', ['assess my chess', "what's your overall read on my game"], null],
-  ['puzzle rating / solved', ["what's my puzzle rating", 'how many puzzles have I solved', 'my puzzle accuracy'], null],
-  ['tactic transfer gap', ['do I spot tactics in games as well as puzzles', "what's my tactic transfer gap"], null],
-  ['personal records / bests', ["what's my best game", 'my fastest win', 'my longest game', 'my best scalp'], null],
+  ['puzzle rating / solved', ["what's my puzzle rating", 'how many puzzles have I solved', 'my puzzle accuracy'], 'puzzleStats'],
+  ['tactic transfer gap', ['do I spot tactics in games as well as puzzles', "what's my tactic transfer gap"], 'transferGap'],
+  ['personal records / bests', ["what's my best game", 'my fastest win', 'my longest game', 'my best scalp'], 'records'],
   ['record vs a specific opening', ['how do I do against the Sicilian', 'my record vs the French'], null],
   ['record vs a specific opponent', ['my record against Magnus', 'how do I do vs that player'], null],
   ['rate my last move', ['was that a good move', 'rate my last move'], null],

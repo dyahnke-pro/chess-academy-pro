@@ -1436,3 +1436,85 @@ export function assembleConvertingAnswer(c: ConvertingLike): GroundedAnswer | nu
       : ' Keep converting cleanly; add endgame technique to close out the tight ones.';
   return { facts: thrown + comeback + shape + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
+
+// ═══ WAVE 4 — colour, records/bests, puzzle stats, tactic transfer gap. ═══
+
+/** Better-as-White-or-Black profile. */
+export interface ColorLike {
+  totalGames: number;
+  winRateWhite: number; winRateBlack: number;
+  accuracyWhite: number; accuracyBlack: number;
+  /** From colorProficiencyMismatch — the inversion (better at the colour you
+   *  play less), when it exists; null otherwise. */
+  inversion: { preferredColor: string; otherColor: string; inversionPoints: number } | null;
+}
+/** assembleColorAnswer — "am I better as White or Black?" G0. */
+export function assembleColorAnswer(c: ColorLike): GroundedAnswer | null {
+  if (c.totalGames <= 0 || (c.winRateWhite <= 0 && c.winRateBlack <= 0)) return null;
+  const better = c.winRateWhite >= c.winRateBlack ? 'White' : 'Black';
+  const acc = (c.accuracyWhite > 0 || c.accuracyBlack > 0)
+    ? ` Your accuracy is ${c.accuracyWhite}% as White, ${c.accuracyBlack}% as Black.`
+    : '';
+  const inversion = c.inversion && c.inversion.inversionPoints >= 5 ? c.inversion : null;
+  const inv = inversion
+    ? ` Interesting — you play ${inversion.preferredColor} more, but you actually score better as ${inversion.otherColor}.`
+    : '';
+  const suggest = inversion
+    ? ` Lean into your ${inversion.otherColor} games — that's your stronger side.`
+    : ` You're stronger as ${better} — your ${better === 'White' ? 'Black' : 'White'} games are where the points are hiding.`;
+  return { facts: `As White you win ${c.winRateWhite}%, as Black ${c.winRateBlack}%.` + acc + inv + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+}
+
+/** Personal records / bests. */
+export interface RecordsLike {
+  totalGames: number;
+  highestBeaten: { name: string; elo: number } | null;
+  fastestWin: { moves: number } | null;
+  longestGame: { moves: number } | null;
+  bestAccuracyGame: { accuracyPct: number } | null;
+}
+/** assembleRecordsAnswer — "my best game / fastest win / records". G0. */
+export function assembleRecordsAnswer(r: RecordsLike): GroundedAnswer | null {
+  if (r.totalGames <= 0) return null;
+  const parts: string[] = [];
+  if (r.highestBeaten) parts.push(`your best scalp is ${r.highestBeaten.name} (${r.highestBeaten.elo})`);
+  if (r.bestAccuracyGame) parts.push(`your most accurate game hit ${r.bestAccuracyGame.accuracyPct}%`);
+  if (r.fastestWin) parts.push(`your fastest win took ${r.fastestWin.moves} moves`);
+  if (r.longestGame) parts.push(`your longest game ran ${r.longestGame.moves} moves`);
+  if (parts.length === 0) return null;
+  return { facts: `Your records: ${parts.join('; ')}. Want to replay your best game?`, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+}
+
+/** Puzzle rating + solve stats. */
+export interface PuzzleStatsLike {
+  puzzleRating: number | null;
+  totalAttempted: number;
+  totalCorrect: number;
+  overallAccuracy: number;
+  duePuzzles: number;
+}
+/** assemblePuzzleStatsAnswer — "my puzzle rating / how many solved". G0. */
+export function assemblePuzzleStatsAnswer(p: PuzzleStatsLike): GroundedAnswer | null {
+  if (p.totalAttempted <= 0 && !(p.puzzleRating && p.puzzleRating > 0)) return null;
+  const rating = p.puzzleRating && p.puzzleRating > 0 ? `Your puzzle rating is ${Math.round(p.puzzleRating)}.` : '';
+  const solved = p.totalAttempted > 0 ? ` You've solved ${p.totalCorrect} of ${p.totalAttempted} (${p.overallAccuracy}%).` : '';
+  const due = p.duePuzzles > 0 ? ` ${p.duePuzzles} are due to retry.` : '';
+  const suggest = p.duePuzzles > 0 ? ' Clear your due puzzles to lock the patterns in.' : ' Keep the daily streak going to push your rating up.';
+  return { facts: (rating + solved + due).trim() + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+}
+
+/** Tactic transfer gap (puzzle-strong / game-weak per motif). */
+export interface TransferGapLike {
+  /** The motif with the biggest positive transfer gap (good at puzzles, weak
+   *  in games), or null if none is clearly worse in games. */
+  worst: { tacticType: string; puzzleAccuracyPct: number; gameRecognitionPct: number; gapPoints: number } | null;
+}
+/** assembleTransferGapAnswer — "do I spot tactics in games as well as puzzles?". G0. */
+export function assembleTransferGapAnswer(t: TransferGapLike): GroundedAnswer | null {
+  const w = t.worst;
+  if (!w || w.gapPoints < 10) return null;
+  return {
+    facts: `Your pattern knowledge is ahead of your board vision: you solve ${w.tacticType} puzzles at ${w.puzzleAccuracyPct}% but only spot them in your own games ${w.gameRecognitionPct}% of the time — a ${w.gapPoints}-point gap. Slow down and scan for ${w.tacticType}s in real games; the knowledge is there, the recognition isn't yet.`,
+    bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'],
+  };
+}

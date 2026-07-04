@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -486,6 +486,38 @@ describe('Wave 3 assemblers (staged) — accuracy / consistency / converting', (
   });
   it('assembleConvertingAnswer returns null with no wins or data', () => {
     expect(assembleConvertingAnswer({ totalWins: 0, thrownWins: 0, comebackWins: 0, quickWins: 0, grindWins: 0, midLengthWins: 0 })).toBeNull();
+  });
+});
+
+describe('Wave 4 assemblers — colour / records / puzzle-stats / transfer-gap', () => {
+  it('assembleColorAnswer voices per-colour win rate + inversion callout', () => {
+    const a = assembleColorAnswer({ totalGames: 50, winRateWhite: 58, winRateBlack: 66, accuracyWhite: 80, accuracyBlack: 82, inversion: { preferredColor: 'White', otherColor: 'Black', inversionPoints: 8 } });
+    expect(a!.facts).toMatch(/As White you win 58%, as Black 66%/);
+    expect(a!.facts).toMatch(/you play White more, but you actually score better as Black/);
+    expect(a!.facts).toMatch(/Lean into your Black games/);
+  });
+  it('assembleColorAnswer returns null with no games', () => {
+    expect(assembleColorAnswer({ totalGames: 0, winRateWhite: 0, winRateBlack: 0, accuracyWhite: 0, accuracyBlack: 0, inversion: null })).toBeNull();
+  });
+  it('assembleRecordsAnswer voices the bests', () => {
+    const a = assembleRecordsAnswer({ totalGames: 40, highestBeaten: { name: 'GM X', elo: 2400 }, fastestWin: { moves: 14 }, longestGame: { moves: 96 }, bestAccuracyGame: { accuracyPct: 97 } });
+    expect(a!.facts).toMatch(/best scalp is GM X \(2400\)/);
+    expect(a!.facts).toMatch(/fastest win took 14 moves/);
+  });
+  it('assemblePuzzleStatsAnswer voices rating + solved + due', () => {
+    const a = assemblePuzzleStatsAnswer({ puzzleRating: 1650, totalAttempted: 200, totalCorrect: 150, overallAccuracy: 75, duePuzzles: 8 });
+    expect(a!.facts).toMatch(/puzzle rating is 1650/);
+    expect(a!.facts).toMatch(/solved 150 of 200 \(75%\)/);
+    expect(a!.facts).toMatch(/8 are due to retry/);
+  });
+  it('assembleTransferGapAnswer voices the puzzle-vs-game gap for the worst motif', () => {
+    const a = assembleTransferGapAnswer({ worst: { tacticType: 'fork', puzzleAccuracyPct: 82, gameRecognitionPct: 55, gapPoints: 27 } });
+    expect(a!.facts).toMatch(/solve fork puzzles at 82% but only spot them in your own games 55%/);
+    expect(a!.facts).toMatch(/27-point gap/);
+  });
+  it('assembleTransferGapAnswer returns null when the gap is small', () => {
+    expect(assembleTransferGapAnswer({ worst: { tacticType: 'pin', puzzleAccuracyPct: 70, gameRecognitionPct: 65, gapPoints: 5 } })).toBeNull();
+    expect(assembleTransferGapAnswer({ worst: null })).toBeNull();
   });
 });
 
