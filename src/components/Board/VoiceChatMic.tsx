@@ -8,6 +8,7 @@ import { voiceService } from '../../services/voiceService';
 import { speechService } from '../../services/speechService';
 import { useAppStore } from '../../stores/appStore';
 import { getCoachChatResponse } from '../../services/coachApi';
+import { buildQuestionGrounding } from '../../coach/questionIntents';
 import { tryRouteIntent } from '../../services/coachIntentRouter';
 import { logAppAudit } from '../../services/appAuditor';
 import { stockfishEngine } from '../../services/stockfishEngine';
@@ -603,7 +604,19 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
       undefined, // verbosityOverride
       undefined, // forceProvider
       undefined, // skipPersonality
-      fen ? { currentFen: getCurrentFen?.() ?? fen, surface: '/voice-chat' } : undefined,
+      // Voice used to pass a bare { currentFen } with NO intent flags, so the
+      // grounded assemblers never fired — a spoken "what am I weak in?" /
+      // "what's my strongest opening?" got an ungrounded free-LLM reply. Build
+      // the SAME grounding the typed surfaces get so voice is one coherent unit
+      // with Learn/Play (David 2026-07-04). Board-independent intents (progress
+      // / opening-profile / concept) ground even at the start position; the FEN
+      // lets master-play + best-move engage. (Eval/tactics sign-threading is a
+      // tracked follow-up.)
+      buildQuestionGrounding(
+        text,
+        { fen: getCurrentFen?.() ?? fen ?? undefined, studentColor: playerColor === 'white' ? 'white' : 'black' },
+        'game-chat',
+      ),
     );
 
     // Strip + persist any [[REMEMBER: ...]] notes the coach emitted.
