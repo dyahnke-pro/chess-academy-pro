@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -136,6 +136,35 @@ describe('assembleWeaknessRecommendation — the grounded "what should I train" 
     expect(assembleWeaknessRecommendation([w('X', 0, 'tactical')])).toBeNull();
     // topic filter that empties the pool → null (caller retries unscoped)
     expect(assembleWeaknessRecommendation([w('Forks', 4, 'tactical')], { topic: 'endgame' })).toBeNull();
+  });
+});
+
+describe('assembleOpeningProfileAnswer — grounded "strongest/favorite/weakest opening"', () => {
+  const o = (name: string, color: 'white' | 'black', extra: Record<string, number> = {}) => ({ name, color, ...extra });
+  it('voices strongest per color when both sides present', () => {
+    const a = assembleOpeningProfileAnswer({ kind: 'strongest', openings: [
+      o('Italian Game', 'white', { drillAccuracy: 0.92, drillAttempts: 11 }),
+      o('Caro-Kann', 'black', { drillAccuracy: 0.81, drillAttempts: 7 }),
+    ] });
+    expect(a).not.toBeNull();
+    expect(a!.facts).toMatch(/strongest opening as White is Italian Game \(92% over 11 drills\)/);
+    expect(a!.facts).toMatch(/as Black it's Caro-Kann \(81% over 7 drills\)/);
+    expect(a!.sources).toContain('data:your-games');
+  });
+  it('voices favorite from real game counts', () => {
+    const a = assembleOpeningProfileAnswer({ kind: 'favorite', openings: [
+      o('Sicilian Defense', 'black', { games: 42 }),
+    ] });
+    expect(a!.facts).toMatch(/most-played opening is Sicilian Defense \(42 games\)/);
+  });
+  it('phrases the drill-count fallback as "most-drilled" when games are 0', () => {
+    const a = assembleOpeningProfileAnswer({ kind: 'favorite', openings: [o('London System', 'white', { games: 0 })] });
+    expect(a!.facts).toMatch(/most-drilled/);
+    expect(a!.facts).not.toMatch(/0 games/);
+  });
+  it('returns null when there is no data (caller takes the no-data line)', () => {
+    expect(assembleOpeningProfileAnswer({ kind: 'strongest', openings: [] })).toBeNull();
+    expect(assembleOpeningProfileAnswer({ kind: 'favorite', openings: [{ name: '', color: 'white' }] })).toBeNull();
   });
 });
 

@@ -67,6 +67,32 @@ describe('matchTrainingAidRoute — tactics / puzzles (in-place Learn drill)', (
   });
 });
 
+describe('matchTrainingAidRoute — a tactics QUESTION about the live board is NOT a drill (David 2026-07-04 audit)', () => {
+  // On a live /coach/play game these must reach the grounded brain, not yank
+  // the student out to a puzzle drill.
+  it.each([
+    'is there a tactic here?',
+    'any tactics in this position?',
+    'what tactics should I look for?',
+    'was there a tactic I missed?',
+    "what's the tactic here",
+    'do I have a tactic?',
+    'show me the tactic here',   // framed but live-board reference
+    'show me a fork in this position',
+  ])('QUESTION → null (grounded brain): %s', (q) => {
+    expect(matchTrainingAidRoute(q)).toBeNull();
+  });
+  // IMPERATIVE trainer requests STILL drill.
+  it.each([
+    ['give me a tactics puzzle', '/coach/teach?drill=puzzle'],
+    ['drill tactics', '/coach/teach?drill=puzzle'],
+    ['tactics puzzle please', '/coach/teach?drill=puzzle'],
+    ['show me a fork puzzle', '/coach/teach?drill=puzzle%3Afork'],
+  ])('IMPERATIVE → drill: %s', (q, path) => {
+    expect(matchTrainingAidRoute(q)?.path).toBe(path);
+  });
+});
+
 describe('matchTrainingAidRoute — weaknesses / mistakes (adaptive mistake queue)', () => {
   it('routes "work on my weaknesses" to the in-place mistake queue', () => {
     const r = matchTrainingAidRoute('work on my weaknesses');

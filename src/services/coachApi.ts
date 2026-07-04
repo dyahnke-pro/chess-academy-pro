@@ -58,10 +58,11 @@ function deepseekCacheSplit(usage: unknown): { hit: number | null; miss: number 
   };
 }
 import { lookupMasterPlay } from './masterPlayLookup';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded } from './groundedAnswer';
 import { lookupTablebase } from './lichessTablebaseService';
 import { detectBadHabits } from './badHabitDetector';
 import { getUnifiedWeaknessProfile } from './weaknessSpine';
+import { getStrongestOpenings, getMostPlayedOpenings, getWeakestOpenings } from './openingService';
 import { detectConceptsInText, getConcept } from './chessConceptService';
 import { validateClaims, type ClaimValidationResult } from './claimValidator';
 import { logAppAudit } from './appAuditor';
@@ -1217,6 +1218,11 @@ export interface MasterGroundingOptions {
    *  bad-habit profile (assembleProgressAnswer), voiced via voiceFacts. Needs
    *  no board, so the pipeline engages even with no `currentFen`. */
   progressQuestion?: boolean;
+  /** "what's my strongest / favorite / weakest opening?" — voiced from the
+   *  repertoire's drill accuracy + real game counts (assembleOpeningProfileAnswer).
+   *  Needs no board. `openingProfileKind` says which slice to compute. */
+  openingProfileQuestion?: boolean;
+  openingProfileKind?: 'strongest' | 'favorite' | 'weakest';
   /** STEP D Phase 4 — true when this turn asks how MASTERS play the position
    *  ("how do masters play this?", "most popular move?"). Voices the master-play
    *  lookup's real top moves + frequencies (assembleMasterPlayAnswer) so the LLM
@@ -1783,6 +1789,7 @@ export async function getCoachChatResponse(
       detectMoveQuestionIntent(messages) ||
       grounding.tacticsQuestion === true ||
       grounding.progressQuestion === true ||
+      grounding.openingProfileQuestion === true ||
       grounding.conceptQuestion === true ||
       grounding.playerGamesQuestion === true ||
       grounding.endgameQuestion === true ||
@@ -1835,6 +1842,43 @@ export async function getCoachChatResponse(
             // one fallback — e.g. 'play a few games and I'll spot patterns'".
             const noDataFact = "You haven't played enough games or puzzles yet for me to identify patterns in your play. Play a few more and I'll analyze your weaknesses.";
             const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress' });
+            if (voicedNoData) return voicedNoData;
+          } catch { /* fall through to legacy path */ }
+        }
+
+        // ── OPENING PROFILE — "what's my strongest / favorite / weakest
+        // opening?" (David 2026-07-04: wire the deterministic repertoire data
+        // into the coach so it stops punting "only you can tell me"). No board
+        // needed. Computes the answer from drill accuracy + real game counts
+        // and voices it; both colors are computed so "for both white and black"
+        // reads as one line. Falls back to a computed no-data line.
+        if (grounding.openingProfileQuestion) {
+          try {
+            const kind = grounding.openingProfileKind ?? 'strongest';
+            const toStat = (o: { name: string; color: 'white' | 'black'; drillAccuracy: number; drillAttempts: number }, games?: number): OpeningStat =>
+              ({ name: o.name, color: o.color, drillAccuracy: o.drillAccuracy, drillAttempts: o.drillAttempts, games });
+            let openings: OpeningStat[] = [];
+            if (kind === 'favorite') {
+              const [w, b] = await Promise.all([getMostPlayedOpenings(1, 'white'), getMostPlayedOpenings(1, 'black')]);
+              openings = [...w, ...b].map((x) => toStat(x.opening, x.games));
+            } else if (kind === 'weakest') {
+              const [w, b] = await Promise.all([getWeakestOpenings(1, 'white'), getWeakestOpenings(1, 'black')]);
+              openings = [...w, ...b].map((o) => toStat(o));
+            } else {
+              const [w, b] = await Promise.all([getStrongestOpenings(1, 'white'), getStrongestOpenings(1, 'black')]);
+              openings = [...w, ...b].map((o) => toStat(o));
+            }
+            const answer = assembleOpeningProfileAnswer({ kind, openings });
+            if (answer) {
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-profile' });
+              if (voiced) return voiced;
+            }
+            // No repertoire/game data yet — computed no-data line (G0, never the
+            // "only you can tell me" punt the coach used to give).
+            const noDataFact = kind === 'favorite'
+              ? "You haven't played or drilled enough openings yet for me to see a favorite. Play a few games or drill an opening and I'll track it."
+              : "You haven't drilled enough openings yet for me to rank them. Drill a few opening lines and I'll tell you your " + kind + " one.";
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-profile' });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through to legacy path */ }
         }
