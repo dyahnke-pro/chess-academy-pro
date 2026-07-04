@@ -2002,7 +2002,11 @@ export async function getCoachChatResponse(
             if (opening) {
               const answer = assembleOpeningRecordAnswer(opening);
               if (answer) {
-                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'record-vs-opening' });
+                // Require the opening's FAMILY-root word verbatim so a phrasing
+                // swap (French → Sicilian) falls back to the computed prose,
+                // while still allowing the model to drop "Defense"/abbreviate.
+                const familyRoot = opening.openingName.split(/\s+/)[0];
+                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'record-vs-opening', mustPreserve: familyRoot ? [familyRoot] : undefined });
                 // No action chip here: we only have the opening's family NAME,
                 // not a routable openingId (the /openings/:id chip needs an id).
                 if (voiced) return voiced;
