@@ -782,6 +782,31 @@ export function isProgressQuestion(ask: string | undefined): boolean {
   return !!ask && PROGRESS_QUESTION_RE.test(ask);
 }
 
+/** An OPENING-PROFILE question — "what's my strongest / favorite / most-played
+ *  / weakest opening?". Distinct from `isProgressQuestion` (tactical/positional
+ *  weakness THEMES): this asks WHICH OPENING, answered from the repertoire's
+ *  drill accuracy + real game counts (getStrongestOpenings / getMostPlayedOpenings
+ *  / getWeakestOpenings) via `assembleOpeningProfileAnswer`. The coach used to
+ *  punt ("only you can tell me your favorite") though the data is on file — the
+ *  deterministic data is now wired in (David 2026-07-04). */
+const OPENING_PROFILE_RE = anyOf([
+  String.raw`\bwhat(?:'?s| is| are)?\s+my\s+(?:(?:biggest|main|number\s+one|top)\s+)?(?:strongest|best|favou?rite|go[\s-]?to|most[\s-]?played|most[\s-]?used|weakest|worst)\s+(?:opening|openings|line|lines|defen[cs]e|repertoire)\b`,
+  String.raw`\bmy\s+(?:strongest|best|favou?rite|go[\s-]?to|most[\s-]?played|most[\s-]?used|weakest|worst)\s+(?:opening|openings|defen[cs]e)\b`,
+  String.raw`\bwhich\s+opening\s+(?:do\s+i|am\s+i)\s+(?:play|use)\s+(?:the\s+)?(?:most|best)\b`,
+  String.raw`\bwhat\s+opening\s+(?:am\s+i|do\s+i)\s+(?:play\s+(?:the\s+)?most|best|strongest|worst|weakest)\b`,
+  String.raw`\bwhat\s+(?:opening|openings)\s+do\s+i\s+play\s+(?:the\s+)?most\b`,
+]);
+export function isOpeningProfileQuestion(ask: string | undefined): boolean {
+  return !!ask && OPENING_PROFILE_RE.test(ask);
+}
+/** Which slice of the opening profile the question asks for. */
+export function openingProfileKind(ask: string | undefined): 'strongest' | 'favorite' | 'weakest' {
+  const a = (ask ?? '').toLowerCase();
+  if (/\b(?:weakest|worst)\b/.test(a)) return 'weakest';
+  if (/\b(?:favou?rite|go[\s-]?to|most[\s-]?played|most[\s-]?used|play\s+(?:the\s+)?most)\b/.test(a)) return 'favorite';
+  return 'strongest';
+}
+
 async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Promise<CoachAnswer> {
   // WO-COACH-UNIFY-01 visibility: include task + maxTokens in the
   // ask-received audit so paste-back audit logs show which surface
@@ -1286,9 +1311,10 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     // position.
     const progressQuestion = isProgressQuestion(input.ask);
     const conceptQuestionEngage = isConceptQuestion(input.ask);
+    const openingProfileQuestionEngage = isOpeningProfileQuestion(input.ask);
     const autoGrounding =
       options.grounding ??
-      (input.liveState.fen || progressQuestion || conceptQuestionEngage
+      (input.liveState.fen || progressQuestion || conceptQuestionEngage || openingProfileQuestionEngage
         ? {
             currentFen: input.liveState.fen,
             // DB-grounding: thread the move history through so the
@@ -1346,6 +1372,12 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
             // tactics answer warn about the STUDENT's hanging pieces.
             tacticsQuestion: isTacticsQuestion(input.ask),
             progressQuestion,
+            // "what's my strongest / favorite / weakest opening?" → the
+            // repertoire's drill accuracy + real game counts, voiced by
+            // assembleOpeningProfileAnswer (David 2026-07-04: wire in the
+            // deterministic data the coach used to punt on).
+            openingProfileQuestion: openingProfileQuestionEngage,
+            openingProfileKind: openingProfileKind(input.ask),
             // STEP D Phase 4 — "how do masters play this?" voices the master-play
             // lookup's real top moves + frequencies (assembleMasterPlayAnswer).
             masterPlayQuestion: isMasterPlayQuestion(input.ask),

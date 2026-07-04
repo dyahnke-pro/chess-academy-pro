@@ -9,6 +9,8 @@ import {
   isPlayerGamesQuestion,
   isConceptQuestion,
   isProgressQuestion,
+  isOpeningProfileQuestion,
+  openingProfileKind,
 } from './coachService';
 
 // David 2026-06-14: "throw the thesaurus at this problem for ALL questions."
@@ -124,6 +126,7 @@ describe('isProgressQuestion (weakness / improvement — the thesaurus bug)', ()
   ])('matches (theorist surface): %s', (q) => expect(isProgressQuestion(q)).toBe(true));
 
   // NEGATIVES — near-misses that must NOT fire the weakness recommendation.
+  // (opening-profile has its own describe block below.)
   it.each([
     'learn the Sicilian',            // opening-teach, not a recommendation
     'teach me the Najdorf',          // opening-teach
@@ -139,6 +142,33 @@ describe('isProgressQuestion (weakness / improvement — the thesaurus bug)', ()
     'practice tactics',              // drill imperative
     'give me a tactics puzzle',      // drill imperative
   ])('does NOT match (near-miss): %s', (q) => expect(isProgressQuestion(q)).toBe(false));
+});
+
+describe('isOpeningProfileQuestion (David 2026-07-04: wire the deterministic opening data)', () => {
+  it.each([
+    ["what's my strongest opening", 'strongest'],
+    ['what is my best opening', 'strongest'],
+    ['what opening am I strongest at', 'strongest'],
+    ["what's my favorite opening", 'favorite'],
+    ["what's my favourite opening", 'favorite'], // UK
+    ['what is my go-to opening', 'favorite'],
+    ['what opening do I play the most', 'favorite'],
+    ['which opening do I play most', 'favorite'],
+    ["what's my most-played opening", 'favorite'],
+    ['my most played defense', 'favorite'],
+    ["what's my weakest opening", 'weakest'],
+    ['what is my worst opening', 'weakest'],
+    ['what opening am I weakest at', 'weakest'],
+  ])('matches "%s" (kind=%s)', (q, kind) => {
+    expect(isOpeningProfileQuestion(q)).toBe(true);
+    expect(openingProfileKind(q)).toBe(kind);
+  });
+  it.each([
+    'teach me the Sicilian',       // teach a named opening, not a profile query
+    'what is a fork',              // concept
+    'what are my weaknesses',      // weakness themes, not an opening
+    'is the London good',          // opening opinion, not the student's profile
+  ])('does NOT match: %s', (q) => expect(isOpeningProfileQuestion(q)).toBe(false));
 });
 
 describe('isBestMoveQuestion', () => {

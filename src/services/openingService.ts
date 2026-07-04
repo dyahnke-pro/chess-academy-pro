@@ -232,6 +232,68 @@ export async function getWeakestOpenings(
 }
 
 /**
+ * Returns the repertoire openings the student drills BEST — highest drill
+ * accuracy first, among openings actually practiced (drillAttempts >= MIN).
+ * Never-drilled openings are excluded (you can't be "strongest" at something
+ * you've never trained). The deterministic backing for the coach's
+ * "what's my strongest opening?" answer (G0 — code computes, LLM voices).
+ */
+const MIN_DRILL_ATTEMPTS_FOR_STRENGTH = 3;
+export async function getStrongestOpenings(
+  limit: number = 3,
+  color?: 'white' | 'black',
+): Promise<OpeningRecord[]> {
+  const repertoire = await getRepertoireOpenings(color);
+  return repertoire
+    .filter((o) => o.drillAttempts >= MIN_DRILL_ATTEMPTS_FOR_STRENGTH)
+    .sort((a, b) => b.drillAccuracy - a.drillAccuracy || b.drillAttempts - a.drillAttempts)
+    .slice(0, limit);
+}
+
+/**
+ * Returns the student's MOST-PLAYED openings, counted from their real game
+ * history (`db.games` grouped by `openingId`), joined to the repertoire record
+ * for the display name + color. The deterministic backing for "what's my
+ * favorite / most-played opening?". Falls back to most-DRILLED (drillAttempts)
+ * when there's no game history yet. `withCount` carries the game tally so the
+ * coach can voice "you've played the Sicilian 42 times".
+ */
+export async function getMostPlayedOpenings(
+  limit: number = 3,
+  color?: 'white' | 'black',
+): Promise<Array<{ opening: OpeningRecord; games: number }>> {
+  const repertoire = await getRepertoireOpenings(color);
+  const byId = new Map(repertoire.map((o) => [o.id, o]));
+  // Count games per openingId (only openings that are in the repertoire so we
+  // have a clean display name + color).
+  const counts = new Map<string, number>();
+  try {
+    const games = await db.games.toArray();
+    for (const g of games) {
+      if (!g.openingId) continue;
+      const rec = byId.get(g.openingId);
+      if (!rec) continue;
+      if (color && rec.color !== color) continue;
+      counts.set(g.openingId, (counts.get(g.openingId) ?? 0) + 1);
+    }
+  } catch {
+    /* no games store / read error — fall through to the drill fallback */
+  }
+  const played = [...counts.entries()]
+    .map(([id, games]) => ({ opening: byId.get(id) as OpeningRecord, games }))
+    .filter((x) => x.opening)
+    .sort((a, b) => b.games - a.games);
+  if (played.length > 0) return played.slice(0, limit);
+  // Fallback: most-DRILLED opening = de-facto favorite (report games: 0 so the
+  // assembler phrases it as "most-practiced" rather than "most-played").
+  return repertoire
+    .filter((o) => o.drillAttempts > 0)
+    .sort((a, b) => b.drillAttempts - a.drillAttempts)
+    .slice(0, limit)
+    .map((opening) => ({ opening, games: 0 }));
+}
+
+/**
  * Returns openings due for Woodpecker review — those not drilled in the
  * last N days or never drilled.
  */

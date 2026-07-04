@@ -846,3 +846,73 @@ export function assembleWeaknessRecommendation(
 
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
+
+/** One opening's computed stats — a structural subset of OpeningRecord (+ a
+ *  game tally) so the assembler stays a pure leaf. The caller computes these
+ *  from openingService (getStrongestOpenings / getMostPlayedOpenings /
+ *  getWeakestOpenings) and hands them in. */
+export interface OpeningStat {
+  name: string;
+  color: 'white' | 'black';
+  /** 0-1 drill accuracy (strongest/weakest). */
+  drillAccuracy?: number;
+  drillAttempts?: number;
+  /** real games played in this opening (most-played); 0 = drill-count fallback. */
+  games?: number;
+}
+
+/**
+ * assembleOpeningProfileAnswer — the grounded "what's my strongest / favorite /
+ * most-played opening?" answer. The student's OWN repertoire stats (drill
+ * accuracy, drill attempts, real game counts) are computed in code and handed
+ * in; this SELECTS + phrases them, grouped by color so "for both white and
+ * black" reads naturally. The LLM voices the real numbers; it never invents an
+ * opening or a stat. Returns null when there's no data (caller falls back to a
+ * "play/drill a few and I'll tell you" line). G0: no chess content decided
+ * here — only phrasing downstream.
+ */
+export function assembleOpeningProfileAnswer(opts: {
+  kind: 'strongest' | 'favorite' | 'weakest';
+  openings: ReadonlyArray<OpeningStat>;
+}): GroundedAnswer | null {
+  const { kind, openings } = opts;
+  const rows = openings.filter((o) => o.name);
+  if (rows.length === 0) return null;
+
+  const pct = (a: number | undefined): string =>
+    typeof a === 'number' ? `${Math.round(a * 100)}%` : '';
+  const stat = (o: OpeningStat): string => {
+    if (kind === 'favorite') {
+      return o.games && o.games > 0
+        ? `${o.name} (${o.games} game${o.games === 1 ? '' : 's'})`
+        : `${o.name} (your most-drilled)`;
+    }
+    // strongest / weakest → accuracy over attempts
+    const acc = pct(o.drillAccuracy);
+    if (acc && o.drillAttempts) return `${o.name} (${acc} over ${o.drillAttempts} drill${o.drillAttempts === 1 ? '' : 's'})`;
+    if (acc) return `${o.name} (${acc})`;
+    return o.name;
+  };
+
+  const white = rows.filter((o) => o.color === 'white');
+  const black = rows.filter((o) => o.color === 'black');
+  const label = kind === 'strongest' ? 'strongest' : kind === 'weakest' ? 'weakest' : 'most-played';
+
+  let facts: string;
+  if (white.length > 0 && black.length > 0) {
+    // both colors requested — one per side
+    facts = `Your ${label} opening as White is ${stat(white[0])}; as Black it's ${stat(black[0])}.`;
+  } else {
+    const list = rows.slice(0, 3);
+    facts =
+      list.length === 1
+        ? `Your ${label} opening is ${stat(list[0])}.`
+        : `Your ${label} openings, ${kind === 'weakest' ? 'weakest' : 'best'} first: ${list.map(stat).join('; ')}.`;
+  }
+  // True next-step capability facts (no invented chess content).
+  const next =
+    kind === 'weakest'
+      ? ' Ask me to drill it and I\'ll set the line up on the board.'
+      : ' Ask me to teach it or drill its traps to go deeper.';
+  return { facts: facts + next, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+}
