@@ -1736,10 +1736,55 @@ export async function voiceFacts(
         );
     // Leak audit fires at the primitive (callAnthropic/callDeepSeek) with
     // task='grounded_voice' → tagged grounded=true there. No emit needed here.
+    //
+    // NUMBER-FIDELITY NET (David 2026-07-04: "make sure the CORRECT answer is
+    // getting to the user — no good if gates flag wrong answers but the brain
+    // still pushes them through"). The phrasing model is trusted to preserve
+    // the facts, but if it INTRODUCES or CHANGES a number (a win-rate, a count,
+    // a cp-loss, a rating), that corrupted number would otherwise reach the
+    // student ungated. So: every number in the OUTPUT must already appear in
+    // the computed FACTS. If any doesn't, serve the exact computed prose
+    // instead — the facts string is already coach-voiced and is guaranteed
+    // correct. This is NOT a re-decide / re-call (the disease the inversion
+    // doctrine warns about): zero extra LLM calls, and the fallback is the
+    // computed answer, not a regen. Omitting a number is fine (the student just
+    // hears fewer); inventing/altering one is what we refuse to speak.
+    if (typeof out === 'string' && out.trim()) {
+      const introduced = introducedNumbers(facts, out);
+      if (introduced.length > 0) {
+        void logAppAudit({
+          kind: 'claim-validator-trip',
+          category: 'subsystem',
+          source: 'voiceFacts.numberFidelity',
+          summary: `phrasing introduced number(s) [${introduced.join(', ')}] not in facts (intent=${opts.intent ?? 'n/a'}) → served computed prose`,
+          details: JSON.stringify({ intent: opts.intent ?? null, introduced, facts: facts.slice(0, 200), out: out.slice(0, 200) }),
+        });
+        return facts.trim();
+      }
+    }
     return out;
   } catch {
     return null; // never throws — caller falls through
   }
+}
+
+/** Normalized numeric tokens in a string — every run of digits (with an
+ *  optional decimal), value-normalized so "2.50" and "2.5" compare equal and
+ *  "6W-4D-10L" yields 6, 4, 10. */
+export function numericTokens(text: string): string[] {
+  const m = text.match(/\d+(?:\.\d+)?/g);
+  return m ? m.map((s) => String(parseFloat(s))) : [];
+}
+
+/** The numbers present in `out` that are NOT in `facts` — i.e. numbers the
+ *  phrasing model INVENTED or CHANGED. Empty when the output is faithful
+ *  (omitting a number is fine; only introduced/altered ones are returned).
+ *  This is the fidelity check behind voiceFacts's "serve the computed prose
+ *  instead" fallback (David 2026-07-04). Pure + exported so it's unit-tested
+ *  without touching the LLM. */
+export function introducedNumbers(facts: string, out: string): string[] {
+  const factsNums = new Set(numericTokens(facts));
+  return numericTokens(out).filter((n) => !factsNums.has(n));
 }
 
 /**
