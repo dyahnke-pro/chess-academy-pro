@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -266,6 +266,49 @@ describe('assembleOpeningAccuracyAnswer — grounded "how accurate am I in my op
   });
   it('returns null when nothing drilled and no weak spot / variation data', () => {
     expect(assembleOpeningAccuracyAnswer({ openingName: 'X', drillAccuracy: 0, drillAttempts: 0 })).toBeNull();
+  });
+});
+
+describe('assembleOpeningTrapsAnswer — grounded "traps in my strongest opening / watch out for"', () => {
+  const white = { name: 'Italian Game', color: 'white' as const, traps: ['Fried Liver Attack', 'Legal Mate'], warnings: ['Blackburne Shilling Gambit'] };
+  const black = { name: 'Caro-Kann Defense', color: 'black' as const, traps: ['Elephant Trap'], warnings: [] };
+  it('names trap weapons + watch-outs per side and points at the drill', () => {
+    const a = assembleOpeningTrapsAnswer({ sides: [white, black] });
+    expect(a).not.toBeNull();
+    expect(a!.facts).toMatch(/Your strongest White opening is the Italian Game\./);
+    expect(a!.facts).toMatch(/Trap weapons you can spring: Fried Liver Attack; Legal Mate\./);
+    expect(a!.facts).toMatch(/Watch out for: Blackburne Shilling Gambit\./);
+    expect(a!.facts).toMatch(/Your strongest Black opening is the Caro-Kann Defense\./);
+    expect(a!.facts).toMatch(/Say "punish lines for the Italian Game" and I'll run the drill\./);
+    expect(a!.sources).toContain('data:your-games');
+  });
+  it('caps trap weapons at 3', () => {
+    const a = assembleOpeningTrapsAnswer({ sides: [{ name: 'X', color: 'white', traps: ['a', 'b', 'c', 'd', 'e'], warnings: [] }] });
+    expect(a!.facts).toMatch(/a; b; c\./);
+    expect(a!.facts).not.toMatch(/\bd; e\b/);
+  });
+  it('appends the WLPP teaching-system explanation only when asked', () => {
+    const withSys = assembleOpeningTrapsAnswer({ sides: [white], explainSystem: true });
+    expect(withSys!.facts).toMatch(/Watch, Learn, Practice, Play/);
+    const without = assembleOpeningTrapsAnswer({ sides: [white] });
+    expect(without!.facts).not.toMatch(/Watch, Learn, Practice, Play/);
+  });
+  it('handles a side with only warnings (no trap weapons)', () => {
+    const a = assembleOpeningTrapsAnswer({ sides: [{ name: 'Petroff', color: 'black', traps: [], warnings: ['the early queen sortie'] }] });
+    expect(a!.facts).toMatch(/Watch out for: the early queen sortie\./);
+    expect(a!.facts).not.toMatch(/Trap weapons/);
+  });
+  it('filters empty strings and drops sides with no traps or warnings', () => {
+    const a = assembleOpeningTrapsAnswer({ sides: [
+      { name: 'Empty', color: 'white', traps: ['', '  '], warnings: [] },
+      black,
+    ] });
+    expect(a!.facts).not.toMatch(/Empty/);
+    expect(a!.facts).toMatch(/Caro-Kann/);
+  });
+  it('returns null when no side carries any trap or warning', () => {
+    expect(assembleOpeningTrapsAnswer({ sides: [] })).toBeNull();
+    expect(assembleOpeningTrapsAnswer({ sides: [{ name: 'X', color: 'white', traps: [], warnings: [] }] })).toBeNull();
   });
 });
 

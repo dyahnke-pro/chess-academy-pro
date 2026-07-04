@@ -15,6 +15,8 @@ import {
   isStatsQuestion,
   isStrengthsQuestion,
   isOpeningAccuracyQuestion,
+  isOpeningTrapsQuestion,
+  opensTrapsSystemAsk,
 } from './coachService';
 
 // David 2026-06-14: "throw the thesaurus at this problem for ALL questions."
@@ -274,6 +276,44 @@ describe('isOpeningAccuracyQuestion (David 2026-07-04: accuracy WITHIN an openin
   ])('does NOT match: %s', (q) => expect(isOpeningAccuracyQuestion(q)).toBe(false));
 });
 
+describe('isOpeningTrapsQuestion (David 2026-07-04: traps in my strongest opening / watch out for)', () => {
+  it.each([
+    'what traps can I use in my strongest opening',
+    'drill me on opening traps in my strongest opening for both white and black',
+    'what should I watch out for in the Caro-Kann',
+    'what are the traps in the Italian',
+    'teach me the traps for my strongest opening',
+    'what traps should I know',
+    'show me some opening traps',
+    'give me the traps for my repertoire',
+    'how do you teach these traps',
+    'what system do you use to teach these',
+    'what should I look out for',
+    'what are the common pitfalls in the Sicilian',
+    'what traps do I need to watch out for',
+  ])('matches "%s"', (q) => expect(isOpeningTrapsQuestion(q)).toBe(true));
+  it.each([
+    "what's my strongest opening",   // WHICH opening → opening-profile
+    "what's my rating",             // stats
+    'what is a fork',               // concept
+    'teach me the Sicilian',        // teach a line, no trap
+    'how accurate am I in my opening', // opening-accuracy
+    'hi coach',
+  ])('does NOT match: %s', (q) => expect(isOpeningTrapsQuestion(q)).toBe(false));
+});
+
+describe('opensTrapsSystemAsk — "how do you teach these / what system"', () => {
+  it.each([
+    'how do you teach these traps',
+    'what system do you use to teach these',
+    'how are these traps taught',
+  ])('true for "%s"', (q) => expect(opensTrapsSystemAsk(q)).toBe(true));
+  it.each([
+    'what traps can I use in my strongest opening',
+    'what should I watch out for',
+  ])('false for "%s"', (q) => expect(opensTrapsSystemAsk(q)).toBe(false));
+});
+
 describe('buildQuestionGrounding — shared cross-surface grounding (David 2026-07-04)', () => {
   it('sets the progress flag for a weakness question (board-independent)', () => {
     const g = buildQuestionGrounding('what am I weak in?');
@@ -318,6 +358,16 @@ describe('buildQuestionGrounding — shared cross-surface grounding (David 2026-
     expect(g.openingProfileQuestion).toBe(false); // not a WHICH-opening question
     expect(g.statsQuestion).toBe(false);
   });
+  it('sets the opening-traps flag (+ system ask) for a teaching-system trap question', () => {
+    const g = buildQuestionGrounding('how do you teach these traps');
+    expect(g.openingTrapsQuestion).toBe(true);
+    expect(g.openingTrapsSystemAsk).toBe(true);
+  });
+  it('sets the opening-traps flag without the system ask for a plain trap question', () => {
+    const g = buildQuestionGrounding('what traps can I use in my strongest opening');
+    expect(g.openingTrapsQuestion).toBe(true);
+    expect(g.openingTrapsSystemAsk).toBe(false);
+  });
   it('sets NO intent flags for a non-question utterance (falls to normal LLM)', () => {
     const g = buildQuestionGrounding('hey coach nice to see you');
     expect(g.progressQuestion).toBe(false);
@@ -327,6 +377,7 @@ describe('buildQuestionGrounding — shared cross-surface grounding (David 2026-
     expect(g.statsQuestion).toBe(false);
     expect(g.strengthsQuestion).toBe(false);
     expect(g.openingAccuracyQuestion).toBe(false);
+    expect(g.openingTrapsQuestion).toBe(false);
   });
 });
 

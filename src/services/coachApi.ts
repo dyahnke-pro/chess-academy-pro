@@ -64,8 +64,9 @@ import { detectBadHabits } from './badHabitDetector';
 import { getUnifiedWeaknessProfile } from './weaknessSpine';
 import { getStrongestOpenings, getMostPlayedOpenings, getWeakestOpenings, getOpeningById } from './openingService';
 import { getWeakSpotsForOpening } from './weakSpotService';
+import type { OpeningRecord } from '../types';
 import { getOverviewInsights } from './gameInsightsService';
-import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer } from './groundedAnswer';
+import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike } from './groundedAnswer';
 import { detectConceptsInText, getConcept } from './chessConceptService';
 import { validateClaims, type ClaimValidationResult } from './claimValidator';
 import { logAppAudit } from './appAuditor';
@@ -1238,6 +1239,15 @@ export interface MasterGroundingOptions {
    *  Resolves the target opening from `openingId` when present, else the weakest/
    *  favorite/strongest repertoire opening per the question. No board. */
   openingAccuracyQuestion?: boolean;
+  /** "what traps can I use in my strongest opening / what should I watch out
+   *  for?" — voiced from the REAL trap data on the OpeningRecord (named
+   *  trapLines = weapons, warningLines = watch-out-for) via
+   *  assembleOpeningTrapsAnswer. Resolves the strongest opening per color (or
+   *  the openingId in context). No board. */
+  openingTrapsQuestion?: boolean;
+  /** true when the traps question also asks how the coach TEACHES them ("what
+   *  system do you use") — appends the WLPP teaching-system explanation. */
+  openingTrapsSystemAsk?: boolean;
   /** STEP D Phase 4 — true when this turn asks how MASTERS play the position
    *  ("how do masters play this?", "most popular move?"). Voices the master-play
    *  lookup's real top moves + frequencies (assembleMasterPlayAnswer) so the LLM
@@ -1808,6 +1818,7 @@ export async function getCoachChatResponse(
       grounding.statsQuestion === true ||
       grounding.strengthsQuestion === true ||
       grounding.openingAccuracyQuestion === true ||
+      grounding.openingTrapsQuestion === true ||
       grounding.conceptQuestion === true ||
       grounding.playerGamesQuestion === true ||
       grounding.endgameQuestion === true ||
@@ -1921,6 +1932,54 @@ export async function getCoachChatResponse(
             // No opening drilled / no weak-spot data — computed no-data line (G0).
             const noDataFact = "You haven't drilled an opening enough yet for me to grade your accuracy line by line. Drill one of your repertoire openings a few times and I'll pinpoint the exact variation and move to work on.";
             const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-accuracy' });
+            if (voicedNoData) return voicedNoData;
+          } catch { /* fall through to legacy path */ }
+        }
+
+        // ── OPENING TRAPS — "what traps can I use in my strongest opening (for
+        // both colors), what should I watch out for, and how do you teach these?"
+        // (David 2026-07-04). Voices the REAL trap data on the OpeningRecord —
+        // named trapLines = weapons the student springs, warningLines =
+        // anti-traps to avoid (G3: named, never invented) — resolving the
+        // strongest opening per color (or the openingId in context), and points
+        // the student at the existing "punish lines for X" drill launch. No board.
+        if (grounding.openingTrapsQuestion) {
+          try {
+            const text = (lastUserMessage() ?? '').toLowerCase();
+            const trapNames = (o: OpeningRecord): string[] => {
+              const named = (o.trapLines ?? []).map((v) => v.name).filter((n): n is string => !!n && n.trim().length > 0);
+              return named.length ? named : (o.traps ?? []).filter((t) => !!t && t.trim().length > 0);
+            };
+            const warnNames = (o: OpeningRecord): string[] => {
+              const named = (o.warningLines ?? []).map((v) => v.name).filter((n): n is string => !!n && n.trim().length > 0);
+              return named.length ? named : (o.warnings ?? []).filter((t) => !!t && t.trim().length > 0);
+            };
+            const toSide = (o: OpeningRecord): OpeningTrapsSideLike =>
+              ({ name: o.name, color: o.color, traps: trapNames(o), warnings: warnNames(o) });
+
+            let sides: OpeningTrapsSideLike[] = [];
+            const ctx = grounding.openingId ? await getOpeningById(grounding.openingId) : undefined;
+            if (ctx) {
+              sides = [toSide(ctx)];
+            } else {
+              // Resolve the strongest opening per color; scope to one side when
+              // the question names a color ("for white" / "black traps").
+              const wantWhite = /\bwhite\b/.test(text) || !/\bblack\b/.test(text);
+              const wantBlack = /\bblack\b/.test(text) || !/\bwhite\b/.test(text);
+              const [w, b] = await Promise.all([
+                wantWhite ? getStrongestOpenings(1, 'white') : Promise.resolve([]),
+                wantBlack ? getStrongestOpenings(1, 'black') : Promise.resolve([]),
+              ]);
+              sides = [...w, ...b].map(toSide);
+            }
+            const answer = assembleOpeningTrapsAnswer({ sides, explainSystem: grounding.openingTrapsSystemAsk });
+            if (answer) {
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-traps' });
+              if (voiced) return voiced;
+            }
+            // No trap data yet — computed no-data line (G0).
+            const noDataFact = "I don't have named traps logged for your strongest openings yet. Drill an opening's Watch and Learn rungs and I'll surface its trap weapons and the lines to watch out for.";
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-traps' });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through to legacy path */ }
         }

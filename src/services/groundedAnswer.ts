@@ -1028,3 +1028,63 @@ export function assembleOpeningAccuracyAnswer(o: OpeningAccuracyLike): GroundedA
 
   return { facts: lead + varLine + spotLine + next, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
+
+/** One side's opening + its real trap weapons and "watch out for" warnings —
+ *  drawn from the OpeningRecord (named trapLines / traps prose = weapons; named
+ *  warningLines / warnings prose = anti-traps). Handed to
+ *  `assembleOpeningTrapsAnswer` so the assembler stays a pure leaf. */
+export interface OpeningTrapsSideLike {
+  name: string;
+  color: 'white' | 'black';
+  /** Trap WEAPONS — named traps the student can spring (opponent slips). */
+  traps: ReadonlyArray<string>;
+  /** "WATCH OUT FOR" — anti-traps where the STUDENT is the one who slips. */
+  warnings: ReadonlyArray<string>;
+}
+
+/**
+ * assembleOpeningTrapsAnswer — the grounded "what traps can I use in my
+ * strongest opening (for both colors), and what should I watch out for?" answer
+ * (David 2026-07-04: "drill me on opening traps in your strongest opening for
+ * both white and black … teach me what to look out for … and what system it
+ * uses to teach these"). The traps + warnings are REAL, hand-authored data on
+ * the OpeningRecord (G3 — never invented); this names them per side, optionally
+ * explains the WLPP teaching system, and points the student at the drill. The
+ * LLM voices these names; it invents no trap. Returns null when no side carries
+ * any trap or warning. G0.
+ */
+export function assembleOpeningTrapsAnswer(opts: {
+  sides: ReadonlyArray<OpeningTrapsSideLike>;
+  explainSystem?: boolean;
+}): GroundedAnswer | null {
+  const clean = (xs: ReadonlyArray<string>): string[] =>
+    xs.filter((s) => !!s && s.trim().length > 0).map((s) => s.trim());
+  const sides = opts.sides.filter((s) => s.name && (clean(s.traps).length > 0 || clean(s.warnings).length > 0));
+  if (sides.length === 0) return null;
+
+  const parts: string[] = [];
+  let firstDrillName = '';
+  for (const s of sides) {
+    if (!firstDrillName) firstDrillName = s.name;
+    const traps = clean(s.traps).slice(0, 3);
+    const warns = clean(s.warnings).slice(0, 2);
+    const side = s.color === 'white' ? 'White' : 'Black';
+    let line = `Your strongest ${side} opening is the ${s.name}.`;
+    if (traps.length) line += ` Trap weapons you can spring: ${traps.join('; ')}.`;
+    if (warns.length) line += ` Watch out for: ${warns.join('; ')}.`;
+    parts.push(line);
+  }
+
+  // The teaching-system explanation — grounded in the app's REAL WLPP grammar +
+  // trap taxonomy (not invented). Only when the student asked "how do you teach
+  // these / what system".
+  const system = opts.explainSystem
+    ? ' I teach every trap the same four-rung way — Watch, Learn, Practice, Play: you watch the trap spring with the key squares lit up, then I guide you through the punish move by move, then you play it silently, then you drill it live. Each trap is tagged too — a forced tactic, a positional mistake to punish, or a longer maneuvering idea.'
+    : '';
+
+  const next = firstDrillName
+    ? ` Say "punish lines for the ${firstDrillName}" and I'll run the drill.`
+    : '';
+
+  return { facts: parts.join(' ') + system + next, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+}

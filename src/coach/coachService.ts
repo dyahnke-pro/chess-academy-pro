@@ -180,12 +180,14 @@ import {
   isMasterPlayQuestion, isEndgameQuestion, isPlayerGamesQuestion, isConceptQuestion,
   isProgressQuestion, isOpeningProfileQuestion, openingProfileKind, buildQuestionGrounding,
   isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion,
+  isOpeningTrapsQuestion, opensTrapsSystemAsk,
 } from './questionIntents';
 export {
   isPlanQuestion, isBestMoveQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
   isMasterPlayQuestion, isEndgameQuestion, isPlayerGamesQuestion, isConceptQuestion,
   isProgressQuestion, isOpeningProfileQuestion, openingProfileKind, buildQuestionGrounding,
   isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion,
+  isOpeningTrapsQuestion, opensTrapsSystemAsk,
 };
 
 export interface CoachServiceOptions {
@@ -952,9 +954,10 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     const statsQuestionEngage = isStatsQuestion(input.ask);
     const strengthsQuestionEngage = isStrengthsQuestion(input.ask);
     const openingAccuracyQuestionEngage = isOpeningAccuracyQuestion(input.ask);
+    const openingTrapsQuestionEngage = isOpeningTrapsQuestion(input.ask);
     const autoGrounding =
       options.grounding ??
-      (input.liveState.fen || progressQuestion || conceptQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage
+      (input.liveState.fen || progressQuestion || conceptQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage
         ? {
             currentFen: input.liveState.fen,
             // DB-grounding: thread the move history through so the
@@ -1021,6 +1024,8 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
             statsQuestion: statsQuestionEngage,
             strengthsQuestion: strengthsQuestionEngage,
             openingAccuracyQuestion: openingAccuracyQuestionEngage,
+            openingTrapsQuestion: openingTrapsQuestionEngage,
+            openingTrapsSystemAsk: opensTrapsSystemAsk(input.ask),
             // STEP D Phase 4 — "how do masters play this?" voices the master-play
             // lookup's real top moves + frequencies (assembleMasterPlayAnswer).
             masterPlayQuestion: isMasterPlayQuestion(input.ask),

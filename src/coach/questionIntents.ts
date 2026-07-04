@@ -473,6 +473,41 @@ export function isOpeningAccuracyQuestion(ask: string | undefined): boolean {
   return !!ask && OPENING_ACCURACY_RE.test(ask);
 }
 
+/** An OPENING-TRAPS question — "what traps can I use in my strongest opening?",
+ *  "drill me on opening traps in my strongest opening for both colors", "what
+ *  should I watch out for in the Caro-Kann?", "how do you teach these traps?".
+ *  Answered from the REAL trap data on the OpeningRecord (named trapLines =
+ *  weapons, warningLines = watch-out-for) via assembleOpeningTrapsAnswer, and
+ *  points the student at the existing "punish lines for X" drill launch (David
+ *  2026-07-04). The trap/gem/warning data is hand-authored + engine-verified
+ *  (G3) — the coach names it, never invents it. */
+const OPENING_TRAPS_RE = anyOf([
+  // "traps / gambit traps / pitfalls" tied to openings / a repertoire / theory
+  String.raw`\b(?:opening\s+)?traps?\b[^?.!]{0,50}\b(?:opening|openings|line|lines|repertoire|defen[cs]e|theory)\b`,
+  String.raw`\b(?:opening|openings|line|lines|repertoire|defen[cs]e)\b[^?.!]{0,50}\btraps?\b`,
+  // "what traps (can I / do I / should I) …" — a trap question on its own
+  String.raw`\bwhat\s+traps?\b`,
+  String.raw`\b(?:drill|teach|show|give)\s+(?:me\s+)?(?:some\s+|the\s+)?(?:opening\s+)?traps?\b`,
+  String.raw`\btraps?\s+(?:can\s+i|do\s+i|should\s+i)\s+(?:use|play|spring|know)\b`,
+  // "what (should I / do I) watch out for" — the anti-trap / pitfall side
+  String.raw`\bwatch\s+out\s+for\b`,
+  String.raw`\bwhat\s+(?:should\s+i|do\s+i\s+need\s+to)\s+(?:watch|look)\s+(?:out\s+)?for\b`,
+  String.raw`\bwhat\s+(?:are\s+the\s+)?(?:common\s+)?(?:pitfalls?|traps?)\s+(?:in|of|to\s+avoid)\b`,
+  // "how do you teach (these) traps / what system" — the teaching-system ask
+  String.raw`\bhow\s+do\s+you\s+teach\s+(?:me\s+)?(?:these|the|opening)?\s*traps?\b`,
+  String.raw`\bwhat\s+system\s+(?:do\s+you|does\s+it)\s+use\b`,
+]);
+export function isOpeningTrapsQuestion(ask: string | undefined): boolean {
+  return !!ask && OPENING_TRAPS_RE.test(ask);
+}
+
+/** True when an opening-traps question asks about the teaching SYSTEM ("how do
+ *  you teach these", "what system do you use") — appends the WLPP explanation. */
+export function opensTrapsSystemAsk(ask: string | undefined): boolean {
+  const a = (ask ?? '').toLowerCase();
+  return /\bhow\s+do\s+you\s+teach\b|\bwhat\s+system\b|\bhow\s+(?:are|do)\s+(?:these|they|the)?\s*(?:traps?\s+)?(?:taught|work)\b/.test(a);
+}
+
 /**
  * buildQuestionGrounding — the SHARED grounding builder so the coach's
  * grounded-data brain fires IDENTICALLY on every talking surface (David
@@ -521,6 +556,8 @@ export function buildQuestionGrounding(
     statsQuestion: isStatsQuestion(ask),
     strengthsQuestion: isStrengthsQuestion(ask),
     openingAccuracyQuestion: isOpeningAccuracyQuestion(ask),
+    openingTrapsQuestion: isOpeningTrapsQuestion(ask),
+    openingTrapsSystemAsk: opensTrapsSystemAsk(ask),
     masterPlayQuestion: isMasterPlayQuestion(ask),
     conceptQuestion: isConceptQuestion(ask),
     playerGamesQuestion: isPlayerGamesQuestion(ask),
