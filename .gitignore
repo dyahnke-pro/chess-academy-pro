@@ -91,3 +91,8 @@ src/data/grounding-respine-proposals.json
 src/data/spine-report-lessons.json
 src/data/spine-report-repertoire.json
 src/data/spine-report-plans.json
+
+# The in-repo Capacitor plugin ships its built dist (consumed by the app's
+# tsc/vite build in CI); it must be tracked despite the global `dist` rule above.
+!native-plugins/capacitor-stockfish-native/dist/
+!native-plugins/capacitor-stockfish-native/dist/**
