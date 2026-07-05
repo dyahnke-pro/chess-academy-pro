@@ -710,6 +710,40 @@ export function forcingPrefix(fen: string, line: readonly string[]): string[] {
   return out;
 }
 
+export interface ForcingCandidate {
+  /** Legal SAN of the forcing try. */
+  san: string;
+  /** Destination square (the reliable click/short-form accept token). */
+  to: Square;
+  /** CCT class — the calculation method's ordering (checks, then captures, then threats). */
+  kind: 'check' | 'capture';
+}
+
+/**
+ * The CCT candidate moves for the side to move — every CHECK and every CAPTURE
+ * legal in the position (David 2026-07-04, calculation-method drill). These are
+ * the moves a trained player enumerates FIRST, before calculating any single
+ * line ("candidates-first / checks-captures-threats"). Deterministic chess.js —
+ * the answer key for "name your candidate forcing moves". Checks before captures
+ * (the CCT order), most-forcing first; capped so the list stays teachable.
+ */
+export function findForcingCandidates(fen: string, cap = 8): ForcingCandidate[] {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return []; }
+  const checks: ForcingCandidate[] = [];
+  const captures: ForcingCandidate[] = [];
+  for (const mv of chess.moves({ verbose: true })) {
+    const gives = mv.san.includes('+') || mv.san.includes('#');
+    if (gives) checks.push({ san: mv.san, to: mv.to, kind: 'check' });
+    else if (mv.captured) captures.push({ san: mv.san, to: mv.to, kind: 'capture' });
+  }
+  // A move that is BOTH a check and a capture already counted as a check (more
+  // forcing) — dedupe by SAN so it isn't listed twice.
+  const seen = new Set(checks.map((c) => c.san));
+  const uniqueCaptures = captures.filter((c) => !seen.has(c.san));
+  return [...checks, ...uniqueCaptures].slice(0, cap);
+}
+
 export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, opts: ReadingQuestionOpts = {}): ReadingQuestion[] {
   const out: ReadingQuestion[] = [];
   const facts = tactics.boardFacts;
@@ -827,16 +861,14 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
     });
   }
 
-  // CALCULATION PRACTICE — "find the forcing sequence that wins material; I'll
-  // tell you the LAST move, you find the first" (David 2026-06-28). Grounded in
-  // the SEE swap-off: the deepest winnable enemy piece gives a real forcing line
-  // (≥2 plies) whose finish we reveal and whose start the student must find;
-  // the whole line plays out on the board (demoLine). Prefer the engine PV when
-  // supplied (deeper combos); fall back to the SEE line.
+  // CALCULATION METHOD DRILL (David 2026-07-04 — "how would you teach someone to
+  // calculate"). Not just "grade a rep" — teach the METHOD, in order, on ONE real
+  // forcing line: (1) candidates-first — enumerate the forcing tries BEFORE
+  // committing; (2) calculate the main line to its quiet end; (3) evaluate the
+  // endpoint (who's better?). Three grounded questions on the same line — the
+  // ordering IS the lesson. Grounded in the engine PV's forcing prefix (deep
+  // combos) or the SEE swap-off (material wins) — real legal moves only (G3).
   {
-    // The forcing line: the engine PV's forcing (check/capture) prefix when
-    // available (can run deep), else the SEE swap-off. The STUDENT calculates it
-    // to the end and names the LAST move (David 2026-06-28 — an advanced skill).
     const enemyWins = findHangingBySee(fen).filter((h) => h.color === enemy);
     let calcSeq: string[] = [];
     if (opts.pvSan && opts.pvSan.length >= 2) calcSeq = forcingPrefix(fen, opts.pvSan);
@@ -845,12 +877,36 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
     const r = opts.rating ?? 1200;
     const minLen = r < 1400 ? 3 : r < 1900 ? 4 : 6;
     if (calcSeq.length >= minLen) {
+      const first = calcSeq[0];
       const last = calcSeq[calcSeq.length - 1];
       let lastTo: Square | null = null;
-      try { const c = new Chess(fen); for (const m of calcSeq) { const mv = c.move(m); if (mv) lastTo = mv.to; } } catch { lastTo = null; }
+      try { const c = new Chess(fen); for (const m of calcSeq) { const mv = c.move(m); if (mv) lastTo = mv.to; } } catch { /* keep null */ }
+
+      // STEP 1 — CANDIDATES FIRST. Name the forcing tries (checks + captures)
+      // before calculating any single line. The grounded key is every CCT move
+      // in the position; the RIGHT one to calculate is the line's first move,
+      // but naming any real candidate is a correct read of the method.
+      const candidates = findForcingCandidates(fen);
+      if (candidates.length > 0) {
+        const candTokens = [...new Set(candidates.flatMap((c) => [sq(c.to), c.san.toLowerCase()]))];
+        out.push({
+          id: 'calc-candidates', type: 'plan', bucket: 'calculation', misconceptionTag: 'missed-tactic',
+          prompt: 'Calculation, step 1 — candidates first. Before you calculate anything, name a forcing candidate move: a check or a capture worth looking at.',
+          answer: `Your forcing candidates: ${candidates.map((c) => c.san).join(', ')}. The one that works starts ${first}.`,
+          acceptTokens: candTokens,
+          answerSquares: candidates.map((c) => c.to),
+          answerMoves: candidates.map((c) => c.san),
+          negative: false,
+        });
+      }
+
+      // STEP 2 — CALCULATE TO THE END. Pick the critical candidate and read it
+      // to the quiet end; name the LAST move (visualize the endpoint). The whole
+      // line plays out on the board (demoLine) — including the opponent's best
+      // replies, so the student SEES the defense held.
       out.push({
         id: 'calculation', type: 'plan', bucket: 'calculation', misconceptionTag: 'missed-tactic',
-        prompt: `There's a forcing line that wins material here. Calculate it to the end — what is the LAST move of the combination?`,
+        prompt: `Calculation, step 2 — calculate it out. Starting with ${first}, read the forcing line to its end. What is the LAST move of the combination?`,
         answer: `The line is ${calcSeq.join(' ')} — it ends with ${last}.`,
         acceptTokens: [sq(last), ...(lastTo ? [sq(lastTo)] : [])],
         answerMoves: [last],
@@ -858,6 +914,23 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
         demoLine: calcSeq,
         negative: false,
       });
+
+      // STEP 3 — EVALUATE THE ENDPOINT. Calculation isn't done until you JUDGE
+      // the final position: don't calculate into something worse. The engine
+      // eval (evalToVerdict) is the eval assuming best play — i.e. the eval AT
+      // the end of this line — so it grounds who's-better at the endpoint. Only
+      // asked when an eval is available (never a guessed verdict, G3).
+      const endVerdict = evalToVerdict(opts.evalCp, opts.mateIn, sideToMove);
+      if (endVerdict) {
+        out.push({
+          id: 'calc-evaluate', type: 'who-is-winning', bucket: 'calculation',
+          prompt: `Calculation, step 3 — evaluate the endpoint. After ${last}, the smoke clears. Who is better, and by roughly how much?`,
+          answer: `${endVerdict.answer} That's the payoff of the line — calculation ends in a JUDGEMENT, not just a move.`,
+          acceptTokens: endVerdict.tokens,
+          answerSquares: lastTo ? [lastTo] : undefined,
+          negative: false,
+        });
+      }
     }
   }
 

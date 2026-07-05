@@ -18,6 +18,7 @@ import {
   kingSafetyRead,
   developmentRead,
   findPawnGrabs,
+  findForcingCandidates,
   readingHint,
 } from './positionReadingService';
 import type { WeaknessCategory } from '../types';
@@ -528,6 +529,75 @@ describe('calculation practice — student names the LAST move, adaptive depth (
     expect(calc?.answerMoves?.[0]).toBe('exd5');
   });
 })
+
+describe('findForcingCandidates — CCT candidate moves (David 2026-07-04, calc method)', () => {
+  it('lists every legal check and capture, checks before captures', () => {
+    // White: Qd5 (can check on d8/e5/etc + capture on c6), pawns c4/e4.
+    // Black knight on d5? No — use a clean position: white queen b3, black bishop c8, pawn b7.
+    const cands = findForcingCandidates('2b1k3/1p6/8/8/8/1Q6/8/4K3 w - - 0 1');
+    // Qxb7 is a capture; Qb8+ / Qe6+ etc. are checks. All checks must precede captures.
+    const kinds = cands.map((c) => c.kind);
+    const firstCapture = kinds.indexOf('capture');
+    const lastCheck = kinds.lastIndexOf('check');
+    if (firstCapture !== -1 && lastCheck !== -1) expect(lastCheck).toBeLessThan(firstCapture);
+    // the b7 grab is present as a capture
+    expect(cands.some((c) => c.to === 'b7' && c.kind === 'capture')).toBe(true);
+  });
+
+  it('returns nothing when there are no checks or captures (quiet position)', () => {
+    expect(findForcingCandidates('4k3/8/8/8/8/8/8/4K3 w - - 0 1')).toEqual([]);
+  });
+
+  it('does not double-count a move that both checks and captures', () => {
+    const cands = findForcingCandidates('3qk3/8/8/8/8/8/8/3QK3 w - - 0 1'); // Qxd8+ is check+capture
+    const sans = cands.map((c) => c.san);
+    expect(new Set(sans).size).toBe(sans.length);
+  });
+});
+
+describe('calculation METHOD drill — candidates → calculate → evaluate (David 2026-07-04)', () => {
+  // cxd5 cxd5 exd5 wins the knight by force (3-ply, weak-player depth).
+  const fen = '4k3/8/2p5/3n4/2P1P3/8/8/4K3 w - - 0 1';
+
+  it('emits the three method steps in order (candidates, calculate, evaluate)', () => {
+    const qs = buildReadingQuestions(fen, emptyTactics(), { rating: 1200, evalCp: 300 });
+    const ids = qs.map((q) => q.id);
+    const iCand = ids.indexOf('calc-candidates');
+    const iCalc = ids.indexOf('calculation');
+    const iEval = ids.indexOf('calc-evaluate');
+    expect(iCand).toBeGreaterThanOrEqual(0);
+    expect(iCalc).toBeGreaterThan(iCand);
+    expect(iEval).toBeGreaterThan(iCalc);
+  });
+
+  it('step 1 accepts any forcing candidate (its SAN or destination square)', () => {
+    const q = buildReadingQuestions(fen, emptyTactics(), { rating: 1200 }).find((x) => x.id === 'calc-candidates')!;
+    expect(q.bucket).toBe('calculation');
+    expect(q.prompt).toMatch(/candidate/i);
+    // the winning first move is a candidate
+    expect(q.acceptTokens).toContain('d5'); // cxd5 lands on d5
+    expect(q.negative).toBe(false);
+  });
+
+  it('step 3 grounds the endpoint verdict in the engine eval (only when eval supplied)', () => {
+    const withEval = buildReadingQuestions(fen, emptyTactics(), { rating: 1200, evalCp: 320 });
+    const ev = withEval.find((x) => x.id === 'calc-evaluate');
+    expect(ev).toBeDefined();
+    expect(ev?.type).toBe('who-is-winning');
+    expect(ev?.acceptTokens).toContain('white'); // +320 cp → White better
+    // no eval → no endpoint-evaluation step (never a guessed verdict, G3)
+    const noEval = buildReadingQuestions(fen, emptyTactics(), { rating: 1200 });
+    expect(noEval.find((x) => x.id === 'calc-evaluate')).toBeUndefined();
+  });
+
+  it('all three steps still gate on the adaptive depth floor', () => {
+    // 3-ply line is below the advanced floor (6) → no calc method at all.
+    const qs = buildReadingQuestions(fen, emptyTactics(), { rating: 2100, evalCp: 300 });
+    expect(qs.find((q) => q.id === 'calc-candidates')).toBeUndefined();
+    expect(qs.find((q) => q.id === 'calculation')).toBeUndefined();
+    expect(qs.find((q) => q.id === 'calc-evaluate')).toBeUndefined();
+  });
+});
 
 describe('readingHint — progressive GROUNDED hint ladder (David 2026-06-28, approved)', () => {
   const hangingQ = buildReadingQuestions('4k3/8/5n2/3Q4/4P3/8/8/4K3 w - - 0 1', emptyTactics()).find((q) => q.type === 'hanging')!;

@@ -283,6 +283,7 @@ export function AnalysisPracticePage(): JSX.Element {
           title="Analysis Practice"
           steps={[
             { label: 'Read the position', body: 'A position from one of your games appears. Answer the question in the box — tactics, threats, hanging pieces, material, pawn breaks.' },
+            { label: 'Learn to calculate', body: 'When a forcing line exists, the drill walks you through the calculation METHOD in order: name your candidate moves first (checks and captures), calculate the main line to its quiet end, then evaluate the endpoint — who is better. Calculation ends in a judgement, not just a move.' },
             { label: 'Get graded', body: 'The coach checks your read against the engine + board facts and shows you the right answer when you miss. Nothing is invented — every answer is computed.' },
             { label: 'From my mistakes', body: 'Switch the source to drill the exact positions you faced right before your own inaccuracies and blunders — the diagnostic workout.' },
           ]}
