@@ -1,0 +1,33 @@
+name: ASC — add free-trial intro offer
+
+# Manual, on-demand. Adds a FREE_TRIAL introductory offer to an App Store
+# subscription via the App Store Connect API (runs where the ASC secrets live).
+# Default target is the yearly plan, to match the monthly plan's 7-day trial.
+on:
+  workflow_dispatch:
+    inputs:
+      product_id:
+        description: 'Subscription product id to add the free trial to'
+        type: string
+        default: chess_academy_pro_yearly
+      duration:
+        description: 'ASC trial duration enum (ONE_WEEK, THREE_DAYS, ONE_MONTH, …)'
+        type: string
+        default: ONE_WEEK
+
+jobs:
+  add-offer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Add free-trial introductory offer
+        env:
+          APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          SUB_PRODUCT_ID: ${{ inputs.product_id }}
+          TRIAL_DURATION: ${{ inputs.duration }}
+        run: node scripts/ci/add-intro-offer.mjs
