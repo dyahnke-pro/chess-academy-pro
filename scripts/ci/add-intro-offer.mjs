@@ -89,33 +89,61 @@ const main = async () => {
   if (!sub) { console.error(`::error::subscription with productId=${PRODUCT_ID} not found`); process.exit(1); }
   console.log(`target for free trial: ${sub.attributes.productId} [${sub.attributes.state}] (${sub.id})`);
 
-  // 2. Already has a free-trial introductory offer? Then we're done.
-  const existing = await api('GET', `/v1/subscriptions/${sub.id}/introductoryOffers?limit=200&fields[subscriptionIntroductoryOffers]=offerMode,duration,numberOfPeriods,startDate,endDate`);
-  const offers = existing.j.data || [];
-  console.log(`existing introductory offers: ${offers.length}`);
-  for (const o of offers) console.log(`  · ${o.attributes.offerMode} ${o.attributes.duration} x${o.attributes.numberOfPeriods} (end=${o.attributes.endDate ?? 'none'})`);
-  const activeFreeTrial = offers.find((o) => o.attributes.offerMode === 'FREE_TRIAL' && !o.attributes.endDate);
-  if (activeFreeTrial) {
-    console.log(`\n✓ Yearly already has an open-ended FREE_TRIAL (${activeFreeTrial.attributes.duration}) — nothing to do.`);
-    return;
+  // Introductory offers are PER-TERRITORY (ASC requires a territory relationship
+  // — that's why monthly has ~175 offers). Match the yearly plan's coverage to
+  // the monthly plan's exactly: copy monthly's territory set.
+  const template = allSubs.find((s) => s.attributes.productId === (process.env.TEMPLATE_PRODUCT_ID || 'chess_academy_pro_monthly'));
+  if (!template) { console.error('::error::template (monthly) subscription not found — cannot copy territory set'); process.exit(1); }
+
+  async function territoriesWithFreeTrial(subId) {
+    const set = new Set();
+    let path = `/v1/subscriptions/${subId}/introductoryOffers?include=territory&limit=200&fields[subscriptionIntroductoryOffers]=offerMode,duration`;
+    while (path) {
+      const r = await api('GET', path);
+      for (const o of r.j.data || []) {
+        if (o.attributes.offerMode === 'FREE_TRIAL') {
+          const tid = o.relationships?.territory?.data?.id;
+          if (tid) set.add(tid);
+        }
+      }
+      path = r.j.links?.next ? r.j.links.next.replace('https://api.appstoreconnect.apple.com', '') : null;
+    }
+    return set;
   }
 
-  // 3. Create the free-trial offer. No territory ⇒ all territories; no price
-  //    point needed for FREE_TRIAL; no end date ⇒ open-ended.
-  const body = {
-    data: {
-      type: 'subscriptionIntroductoryOffers',
-      attributes: { duration: DURATION, offerMode: 'FREE_TRIAL', numberOfPeriods: 1 },
-      relationships: { subscription: { data: { type: 'subscriptions', id: sub.id } } },
-    },
-  };
-  const created = await api('POST', '/v1/subscriptionIntroductoryOffers', body);
-  console.log(`\ncreate: ${created.status}`);
-  if (created.status >= 400) {
-    console.error(`::error::create failed ${created.status} ${JSON.stringify(created.j)}`);
+  const wanted = await territoriesWithFreeTrial(template.id);
+  const already = await territoriesWithFreeTrial(sub.id);
+  console.log(`\nmonthly covers ${wanted.size} territories; yearly already has ${already.size}.`);
+  const todo = [...wanted].filter((t) => !already.has(t));
+  if (todo.length === 0) {
+    console.log('✓ Yearly already has the free trial in every territory monthly covers — nothing to do.');
+    return;
+  }
+  console.log(`creating FREE_TRIAL ${DURATION} on yearly for ${todo.length} territories…`);
+
+  let ok = 0;
+  const fails = [];
+  for (const tid of todo) {
+    const body = {
+      data: {
+        type: 'subscriptionIntroductoryOffers',
+        attributes: { duration: DURATION, offerMode: 'FREE_TRIAL', numberOfPeriods: 1 },
+        relationships: {
+          subscription: { data: { type: 'subscriptions', id: sub.id } },
+          territory: { data: { type: 'territories', id: tid } },
+        },
+      },
+    };
+    const created = await api('POST', '/v1/subscriptionIntroductoryOffers', body);
+    if (created.status < 400) ok++;
+    else fails.push(`${tid}:${created.status}:${JSON.stringify(created.j).slice(0, 120)}`);
+  }
+  console.log(`\n✓ created ${ok}/${todo.length} territory offers.`);
+  if (fails.length) {
+    console.log(`⚠ ${fails.length} failed:`);
+    for (const f of fails.slice(0, 10)) console.log(`   ${f}`);
     process.exit(1);
   }
-  console.log(`✓ Created FREE_TRIAL ${DURATION} on ${PRODUCT_ID} (offer id ${created.j.data?.id}).`);
-  console.log('The paywall will show the yearly trial automatically — no rebuild needed.');
+  console.log('The paywall will show the yearly 7-day trial automatically — no rebuild needed.');
 };
 main().catch((e) => { console.error(e); process.exit(1); });
