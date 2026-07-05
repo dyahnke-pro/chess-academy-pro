@@ -21,6 +21,14 @@ on:
         description: 'Review submission id to dump (diagnostic)'
         type: string
         default: ''
+      delete_item:
+        description: 'reviewSubmissionItem id to delete (unstick version)'
+        type: string
+        default: ''
+      cancel_sub:
+        description: 'reviewSubmission id to cancel'
+        type: string
+        default: ''
 
 jobs:
   resubmit:
@@ -39,4 +47,6 @@ jobs:
           TARGET_BUILD_VERSION: ${{ inputs.build_version }}
           REVIEWER_NOTES: ${{ inputs.reviewer_notes }}
           DUMP_SUB: ${{ inputs.dump_sub }}
+          DELETE_ITEM: ${{ inputs.delete_item }}
+          CANCEL_SUB: ${{ inputs.cancel_sub }}
         run: node scripts/ci/asc-resubmit.mjs

@@ -36,6 +36,17 @@ async function api(method, path, body) {
 }
 
 const main = async () => {
+  // Optional: delete a stale reviewSubmissionItem that pins the version to an
+  // old (rejected) submission, blocking re-add to a fresh submission.
+  if (process.env.DELETE_ITEM) {
+    const d = await api('DELETE', `/v1/reviewSubmissionItems/${process.env.DELETE_ITEM}`);
+    console.log(`DELETE item ${process.env.DELETE_ITEM}: ${d.status === 204 ? 'OK (204)' : d.status + ' ' + JSON.stringify(d.j).slice(0, 400)}`);
+  }
+  // Optional: cancel a dangling/empty review submission.
+  if (process.env.CANCEL_SUB) {
+    const c = await api('PATCH', `/v1/reviewSubmissions/${process.env.CANCEL_SUB}`, { data: { type: 'reviewSubmissions', id: process.env.CANCEL_SUB, attributes: { canceled: true } } });
+    console.log(`CANCEL submission ${process.env.CANCEL_SUB}: ${c.status} ${c.status >= 400 ? JSON.stringify(c.j).slice(0, 300) : 'state=' + c.j.data?.attributes?.state}`);
+  }
   console.log('══════════ APP STORE VERSIONS ══════════');
   const vers = await api('GET', `/v1/apps/${APP}/appStoreVersions?limit=20&fields[appStoreVersions]=versionString,appStoreState,platform,createdDate`);
   if (vers.status >= 400) { console.error(`::error::versions ${vers.status} ${JSON.stringify(vers.j).slice(0, 300)}`); process.exit(1); }
