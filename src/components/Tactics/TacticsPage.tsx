@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Eye, AlertTriangle, Shuffle, Trophy, Wrench, Crosshair, MapPin, Lightbulb } from 'lucide-react';
+import { Eye, AlertTriangle, Shuffle, Trophy, Wrench, Crosshair, MapPin, Lightbulb, Calculator } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { PageHelp } from '../Layout/PageHelp';
@@ -57,6 +57,7 @@ const TOP_BUTTONS: { key: string; label: string; icon: React.ComponentType<{ siz
   { key: 'my mistakes', label: 'My Mistakes', icon: AlertTriangle, route: '/tactics/mistakes', color: 'text-red-400', bgColor: 'bg-red-500/10', rgb: '239, 68, 68' },
   { key: 'my-weaknesses', label: 'My Weaknesses', icon: Crosshair, route: '/tactics/weakness-themes', color: 'text-rose-400', bgColor: 'bg-rose-500/10', rgb: '244, 63, 94' },
   { key: 'analysis-practice', label: 'Analysis Practice', icon: Lightbulb, route: '/tactics/analysis-practice', color: 'text-indigo-400', bgColor: 'bg-indigo-500/10', rgb: '99, 102, 241' },
+  { key: 'calculation', label: 'Calculation', icon: Calculator, route: '/tactics/calculation', color: 'text-blue-400', bgColor: 'bg-blue-500/10', rgb: '59, 130, 246' },
 ];
 
 const BOTTOM_BUTTONS: { key: string; label: string; icon: React.ComponentType<{ size?: number; className?: string }>; route: string; color: string; bgColor: string; rgb: string }[] = [

@@ -161,7 +161,7 @@ export function CoachHomePage(): JSX.Element {
           icon={<Crown size={28} className="text-fuchsia-400" />}
           label="Endgame"
           info={
-            "The endgame surface. 8 tabs:\n\n• Mating — named patterns (Anastasia, Boden, Smothered…) drilled via Lichess puzzles at your rating.\n• Principles / Pawn / Rook / Drawn — keystone positions with curator prose, then adaptive drills from the puzzle DB.\n• Eval Lab — recognition + find-the-move + play-it-out, three grades per puzzle.\n• Calc — six skills + an Adaptive (auto) tile. Weakness-boost biases every fifth puzzle.\n• Your Games — mined mistakes from your imports.\n\nAll surfaces share a single persistent endgame Elo (Stats page) and max-strength Stockfish on play-out."
+            "The endgame surface. 7 tabs:\n\n• Mating — named patterns (Anastasia, Boden, Smothered…) drilled via Lichess puzzles at your rating.\n• Principles / Pawn / Rook / Drawn — keystone positions with curator prose, then adaptive drills from the puzzle DB.\n• Eval Lab — recognition + find-the-move + play-it-out, three grades per puzzle.\n• Your Games — mined mistakes from your imports.\n\n(Calculation drills moved to Tactics → Calculation.)\n\nAll surfaces share a single persistent endgame Elo (Stats page) and max-strength Stockfish on play-out."
           }
           rgb="217, 70, 239"
           bgClass="bg-fuchsia-500/10"

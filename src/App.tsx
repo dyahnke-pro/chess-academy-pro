@@ -58,6 +58,7 @@ import { CoachPage } from './components/Coach/CoachPage';
 import { TacticsPage } from './components/Tactics/TacticsPage';
 import { FindSquarePage } from './components/Tactics/FindSquarePage';
 import { AnalysisPracticePage } from './components/Tactics/AnalysisPracticePage';
+import { CalculationDrillPage } from './components/Tactics/CalculationDrillPage';
 import { TacticalProfilePage } from './components/Tactics/TacticalProfilePage';
 import { TacticDrillPage } from './components/Tactics/TacticDrillPage';
 import { TacticSetupPage } from './components/Tactics/TacticSetupPage';
@@ -391,6 +392,7 @@ export function App(): JSX.Element {
           <Route path="/tactics/mistakes" element={<ErrorBoundary><MyMistakesPage /></ErrorBoundary>} />
           <Route path="/tactics/find-square" element={<ErrorBoundary><FindSquarePage /></ErrorBoundary>} />
           <Route path="/tactics/analysis-practice" element={<ErrorBoundary><AnalysisPracticePage /></ErrorBoundary>} />
+          <Route path="/tactics/calculation" element={<ErrorBoundary><CalculationDrillPage /></ErrorBoundary>} />
           <Route path="/tactics/adaptive" element={<ErrorBoundary><AdaptivePuzzlePage /></ErrorBoundary>} />
           <Route path="/tactics/classic" element={<ErrorBoundary><PuzzleTrainerPage /></ErrorBoundary>} />
           <Route path="/tactics/weakness-drill" element={<ErrorBoundary><WeaknessTagDrillPage /></ErrorBoundary>} />

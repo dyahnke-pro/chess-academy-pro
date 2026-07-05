@@ -48,7 +48,6 @@ import {
 } from '../../services/endgameLessonsService';
 import { EndgameLessonTab } from './EndgameLessonTab';
 import { EvalLabQuiz } from './EvalLabQuiz';
-import { CalculationTab } from './CalculationTab';
 import { FromYourGamesTab } from './FromYourGamesTab';
 import { useAppStore } from '../../stores/appStore';
 import { logAppAudit } from '../../services/appAuditor';
@@ -67,7 +66,6 @@ type EndgameTab =
   | 'rook-endings'
   | 'drawing-patterns'
   | 'eval-lab'
-  | 'calculation'
   | 'from-your-games';
 const TAB_OPTIONS: { value: EndgameTab; label: string; ready: boolean }[] = [
   { value: 'mating-patterns', label: 'Mating', ready: true },
@@ -76,7 +74,8 @@ const TAB_OPTIONS: { value: EndgameTab; label: string; ready: boolean }[] = [
   { value: 'rook-endings', label: 'Rook', ready: true },
   { value: 'drawing-patterns', label: 'Drawn', ready: true },
   { value: 'eval-lab', label: 'Eval Lab', ready: true },
-  { value: 'calculation', label: 'Calc', ready: true },
+  // Calculation moved to its own Tactics surface (/tactics/calculation) —
+  // it isn't an endgame topic (David 2026-07-05).
   { value: 'from-your-games', label: 'Your Games', ready: true },
 ];
 
@@ -399,10 +398,6 @@ function PatternPicker({ onPick, onBack, activeTab, onTabChange }: PickerProps):
 
       {activeTab === 'eval-lab' && (
         <EvalLabQuiz onExit={() => onTabChange('mating-patterns')} />
-      )}
-
-      {activeTab === 'calculation' && (
-        <CalculationTab onExit={() => onTabChange('mating-patterns')} />
       )}
 
       {activeTab === 'from-your-games' && (
