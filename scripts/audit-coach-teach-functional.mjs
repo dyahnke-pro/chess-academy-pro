@@ -83,13 +83,14 @@ async function ask(text) {
   await waitInput();
   const input = page.locator('[data-testid="chat-text-input"]');
   await input.fill('').catch(() => undefined);
-  // pressSequentially fires React onChange per keystroke; fill() alone does NOT,
-  // so the controlled textarea's React state stays EMPTY and the send button
-  // submits nothing → a false "silent-hang" on EVERY typed input. This was the
-  // 2026-07-05 false-positive: the whole grid read 9/32 + the loop "hung" on
-  // everything, while the app worked fine (the probe used Enter and dodged it).
+  // pressSequentially fires React onChange per keystroke; fill() alone does NOT.
   await input.pressSequentially(text, { delay: 4 }).catch(() => undefined);
-  await page.locator('[data-testid="chat-send-btn"]').click({ force: true }).catch(() => undefined);
+  // SUBMIT WITH ENTER, not the send-button click. A/B/C probe (2026-07-05) on
+  // prod proved it: force-clicking the (enabled) chat-send-btn → walkthrough
+  // NEVER STARTED; pressing Enter → STARTED in 6s. The send-button-click path
+  // was the false-positive root cause — the whole grid read 9/32 and the loop
+  // "hung" on everything, while the app was fine.
+  await page.keyboard.press('Enter').catch(() => undefined);
 }
 async function transcript() { return page.locator('[data-testid="teach-transcript"]').innerText({ timeout: 2000 }).catch(() => ''); }
 // wait until `pred()` is true or timeout; returns bool (REACHED or not)
