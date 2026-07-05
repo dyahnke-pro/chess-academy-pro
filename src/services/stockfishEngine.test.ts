@@ -553,6 +553,76 @@ describe('StockfishEngine', () => {
       const analysis = await stockfishEngine.analyzePosition(STARTING_FEN, 18);
       expect(analysis.bestMove).toBeTruthy();
     });
+
+    // -----------------------------------------------------------------------
+    // asm/iOS liveness guard (David 2026-07-05): a slow-but-ALIVE asm worker
+    // (streaming `info` lines) must NOT be torn down on the budget grace —
+    // tearing it down forces a 45s cold re-parse of the 1.58MB asm bundle,
+    // the init-timeout thrash seen in PostHog. A truly silent (dead) worker
+    // is STILL torn down (the June-2026 freeze fix stays intact).
+    // -----------------------------------------------------------------------
+    const IOS_UA =
+      'Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148';
+
+    it('does NOT tear down a slow-but-ALIVE asm worker on the budget grace', async () => {
+      vi.stubGlobal('window', { crossOriginIsolated: false });
+      vi.stubGlobal('navigator', { userAgent: IOS_UA, maxTouchPoints: 5, hardwareConcurrency: 4 });
+      const { stockfishEngine } = await getEngine();
+      await initEngine(stockfishEngine);
+      expect(stockfishEngine.status).toBe('ready');
+
+      // On `go`, stream an info line but withhold bestmove — a slow, ALIVE search.
+      const pmMock = mockWorker.instance.postMessage as ReturnType<typeof vi.fn>;
+      pmMock.mockImplementation((msg: string) => {
+        mockWorker.postMessageCalls.push(msg);
+        if (msg === 'isready') queueMicrotask(() => mockWorker.emit('readyok'));
+        if (msg.startsWith('go ')) {
+          queueMicrotask(() =>
+            mockWorker.emit('info depth 10 multipv 1 score cp 20 pv e2e4 e7e5'),
+          );
+        }
+      });
+
+      vi.useFakeTimers();
+      const p = stockfishEngine.analyzeWithBudget(STARTING_FEN, 12, 300);
+      await vi.advanceTimersByTimeAsync(0); // settle readyok → go → first info
+
+      // Advance across the window that WOULD have torn the worker down
+      // (budget 300 + grace 2000), keeping the worker alive with periodic info.
+      for (let i = 0; i < 3; i++) {
+        await vi.advanceTimersByTimeAsync(2_000);
+        mockWorker.emit(`info depth ${12 + i} multipv 1 score cp 25 pv e2e4 e7e5`);
+      }
+      // Alive the whole time → never terminated, never respawned.
+      expect(workerConstructorCallCount).toBe(1);
+      expect(mockWorker.instance.terminate).not.toHaveBeenCalled();
+
+      // It finally returns bestmove → the call RESOLVES (no reject/thrash).
+      mockWorker.emit('bestmove e2e4');
+      const result = await p;
+      expect(result.bestMove).toBe('e2e4');
+      vi.useRealTimers();
+    });
+
+    it('STILL tears down a truly silent (dead) asm worker — freeze fix preserved', async () => {
+      vi.stubGlobal('window', { crossOriginIsolated: false });
+      vi.stubGlobal('navigator', { userAgent: IOS_UA, maxTouchPoints: 5, hardwareConcurrency: 4 });
+      const { stockfishEngine } = await getEngine();
+      await initEngine(stockfishEngine);
+      // Handshake completes but `go` yields NOTHING — a dead/backgrounded worker.
+      scheduleReadyButNoBestmove();
+
+      vi.useFakeTimers();
+      const p = stockfishEngine.analyzeWithBudget(STARTING_FEN, 12, 300);
+      const expectation = expect(p).rejects.toThrow(/analysis aborted/);
+      await vi.advanceTimersByTimeAsync(0);
+      // No message ever → liveness window lapses → recovered (with the one
+      // retry-on-death respawn, also silent, it finally rejects). Must NOT hang.
+      await vi.advanceTimersByTimeAsync(40_000);
+      await expectation;
+      expect(mockWorker.instance.terminate).toHaveBeenCalled();
+      vi.useRealTimers();
+    });
   });
 
   // -----------------------------------------------------------------------

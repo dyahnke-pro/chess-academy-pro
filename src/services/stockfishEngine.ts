@@ -39,6 +39,10 @@ interface PendingAnalysis {
   /** Hard-timeout handle that recovers this analysis if the worker dies
    *  silently (no bestmove). Cleared when the analysis settles. */
   hardTimeout?: ReturnType<typeof setTimeout>;
+  /** Wall-clock ms when this analysis was dispatched. Used by the asm/iOS
+   *  liveness guard to bound how long a slow-but-alive worker may be
+   *  nudged before it's force-recovered anyway. */
+  startedAt?: number;
 }
 
 interface QueueEntry {
@@ -201,6 +205,21 @@ const ANALYSIS_HARD_TIMEOUT_MS = 30_000;
  *  30s engine-level backstop) — reject → the brain serves its grounded
  *  "I can't verify" fallback instead of freezing. */
 const ANALYSIS_BUDGET_GRACE_MS = 2_000;
+/** asm/iOS liveness window. The asm.js build is SLOW and slow to honor
+ *  `stop` on iOS WebKit, but it streams `info` lines throughout a search —
+ *  so a worker that emitted ANY message within this window is ALIVE, just
+ *  slow, and must NOT be torn down (tearing it down forces a 45s cold
+ *  re-parse of the 1.58MB asm bundle → the init-timeout thrash cascade,
+ *  David 2026-07-05 PostHog). A truly dead / iOS-background-killed worker
+ *  emits nothing, so it stays past this window and is still recovered
+ *  (the June freeze fix is preserved). asm variant ONLY — other variants
+ *  keep the original teardown-on-grace behavior untouched. */
+const ASM_WORKER_LIVENESS_MS = 4_000;
+/** Absolute ceiling from analysis dispatch after which an asm worker is
+ *  force-recovered EVEN IF still emitting — bounds the worst case (an
+ *  engine ignoring `stop` and streaming forever) so the liveness guard
+ *  can never hang a caller indefinitely. */
+const ASM_RECOVER_CEILING_MS = 15_000;
 /** localStorage key for the persisted "multi-thread is broken on
  *  this host" flag. Per audit cycle ccd0057: multi-thread crashes
  *  reliably on David's machine. Without persistence, every new
@@ -233,6 +252,12 @@ class StockfishEngine {
   // folded into the init-timeout message to name where the iOS hang occurs
   // (David 2026-06-15).
   private _lastInitStage: string | null = null;
+  // Wall-clock ms of the last message received from the current worker (any
+  // message: __sfstage__, error:, info, uciok, readyok, bestmove). The
+  // asm/iOS liveness guard reads this to tell a slow-but-alive worker (still
+  // streaming info) apart from a dead one (silent) before tearing it down.
+  // Reset when a new worker is spawned.
+  private _lastMessageAt = 0;
   private worker: Worker | null = null;
   private isReady = false;
   private pending: PendingAnalysis | null = null;
@@ -436,8 +461,13 @@ class StockfishEngine {
           this.worker = resolved.workerType === 'module'
             ? new Worker(resolved.url, { type: 'module' })
             : new Worker(resolved.url);
+          // Fresh worker → reset liveness clock so a stale timestamp from a
+          // prior worker can't make this one look alive before it speaks.
+          this._lastMessageAt = Date.now();
 
           this.worker.onmessage = (event: MessageEvent<string>) => {
+            // Liveness heartbeat — ANY message means the worker is running.
+            this._lastMessageAt = Date.now();
             const line = event.data;
             // Bridge init stage marker (David 2026-06-15) — records where the
             // iOS init hang occurs; NOT a UCI line, so consume it here.
@@ -702,6 +732,32 @@ class StockfishEngine {
    *  the UI (David 2026-06-16). No-ops if `pending` already settled. */
   private recoverStuckAnalysis(reason: string): void {
     if (!this.pending) return;
+    // asm/iOS LIVENESS GUARD — do NOT tear down a slow-but-alive worker.
+    // The asm.js build streams `info` lines during search and is slow to
+    // honor `stop` on iOS WebKit; if it emitted a message within the
+    // liveness window it's alive, and terminating it would force a 45s cold
+    // re-parse of the 1.58MB asm bundle (the init-timeout thrash cascade,
+    // David 2026-07-05 PostHog). Instead: re-send `stop` to nudge a
+    // bestmove and re-arm a short re-check. Bounded by an absolute ceiling
+    // from dispatch so a genuinely stuck search still recovers. A dead /
+    // background-killed worker emits nothing → falls straight through to
+    // the teardown below (the June-2026 freeze fix is preserved). Guarded
+    // to the asm variant so every other variant keeps its exact behavior.
+    if (this.workerVariant === 'asm') {
+      const alive = Date.now() - this._lastMessageAt < ASM_WORKER_LIVENESS_MS;
+      const startedAgo = Date.now() - (this.pending.startedAt ?? 0);
+      if (alive && startedAgo < ASM_RECOVER_CEILING_MS) {
+        const held = this.pending;
+        this.send('stop');
+        if (held.hardTimeout) clearTimeout(held.hardTimeout);
+        held.hardTimeout = setTimeout(() => {
+          if (this.pending === held) {
+            this.recoverStuckAnalysis(`${reason} (asm liveness re-check)`);
+          }
+        }, ASM_WORKER_LIVENESS_MS);
+        return;
+      }
+    }
     const p = this.pending;
     this.pending = null;
     if (p.hardTimeout) clearTimeout(p.hardTimeout);
@@ -871,6 +927,7 @@ class StockfishEngine {
         priority,
         cacheFen: options ? undefined : fen,
         cacheDepth: options ? undefined : depth,
+        startedAt: Date.now(),
       };
 
       // Hard-recovery backstop covering the WHOLE window (readyok-never AND
