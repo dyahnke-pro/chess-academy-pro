@@ -49,7 +49,8 @@ const main = async () => {
     const cur = await api('GET', `/v1/reviewSubmissions/${id}`);
     console.log(`resubmit target ${id}: state=${cur.j.data?.attributes?.state} submitted=${cur.j.data?.attributes?.submitted}`);
     const r = await api('PATCH', `/v1/reviewSubmissions/${id}`, { data: { type: 'reviewSubmissions', id, attributes: { submitted: true } } });
-    console.log(`RESUBMIT ${id}: ${r.status} ${r.status >= 400 ? JSON.stringify(r.j).slice(0, 600) : 'state=' + r.j.data?.attributes?.state}`);
+    console.log(`RESUBMIT ${id}: ${r.status}`);
+    console.log(r.status >= 400 ? 'FULL:\n' + JSON.stringify(r.j, null, 1) : 'state=' + r.j.data?.attributes?.state);
     return;
   }
   // Optional: cancel a dangling/empty review submission.
