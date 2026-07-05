@@ -1,0 +1,37 @@
+name: ASC — inspect / resubmit for review
+
+# Manual. READ-ONLY by default (prints version + build + submission state).
+# Set submit=true to attach the build and submit for App Review.
+on:
+  workflow_dispatch:
+    inputs:
+      submit:
+        description: 'Attach build + submit for review (false = read-only inspect)'
+        type: boolean
+        default: false
+      build_version:
+        description: 'Build number to attach (blank = latest VALID)'
+        type: string
+        default: ''
+      reviewer_notes:
+        description: 'App Review notes'
+        type: string
+        default: ''
+
+jobs:
+  resubmit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Inspect / resubmit
+        env:
+          APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          SUBMIT: ${{ inputs.submit && '1' || '' }}
+          TARGET_BUILD_VERSION: ${{ inputs.build_version }}
+          REVIEWER_NOTES: ${{ inputs.reviewer_notes }}
+        run: node scripts/ci/asc-resubmit.mjs
