@@ -11,6 +11,9 @@ export default tseslint.config(
       '.vercel',
       'ios',
       'android',
+      // Local Capacitor plugin — its own TS package, outside the app's
+      // tsconfig project, so type-aware lint can't parse it here.
+      'native-plugins',
       'node_modules',
       'capacitor.config.ts',
       'tailwind.config.js',

@@ -58,6 +58,7 @@
     "@revenuecat/purchases-js": "^1.46.0",
     "@upstash/redis": "^1.37.0",
     "@vercel/blob": "^2.4.0",
+    "capacitor-stockfish-native": "file:./native-plugins/capacitor-stockfish-native",
     "chess.js": "1.4.0",
     "dexie": "4.3.0",
     "framer-motion": "12.34.4",

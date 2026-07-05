@@ -1,3 +1,5 @@
+import { Capacitor } from '@capacitor/core';
+import { StockfishNative } from 'capacitor-stockfish-native';
 import type { StockfishAnalysis, AnalysisLine } from '../types';
 import { MATE_EVAL_VALUE } from './engineConstants';
 import { stockfishCache } from './stockfishCache';
@@ -77,7 +79,7 @@ const MAX_CRASH_RETRIES = 3;
  *  slow first-load WASM compilation to finish. */
 const MT_EARLY_FAILURE_WINDOW_MS = 5_000;
 
-export type StockfishVariant = 'multi' | 'single' | 'lila' | 'asm';
+export type StockfishVariant = 'multi' | 'single' | 'lila' | 'asm' | 'ios-native';
 
 export interface ResolvedWorker {
   url: string;
@@ -247,6 +249,106 @@ function writePersistedMultiFallback(): void {
   }
 }
 
+/** True only in the native iOS app (Capacitor WKWebView) with the native
+ *  Stockfish plugin registered. There we run Stockfish as a real ARM binary
+ *  instead of asm.js in the WebView — no 1.58MB re-parse, no worker-kill, no
+ *  init-timeout thrash (David 2026-07-05 PostHog), and vastly faster. Web +
+ *  Android + mobile-web keep the JS engine, so this is false there. */
+function isNativeIosStockfishAvailable(): boolean {
+  try {
+    return (
+      Capacitor.isNativePlatform() &&
+      Capacitor.getPlatform() === 'ios' &&
+      Capacitor.isPluginAvailable('StockfishNative')
+    );
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Worker-compatible adapter over the native Stockfish plugin. Presents the
+ * exact surface the engine uses on a `Worker` (`postMessage`, `onmessage`,
+ * `onerror`, `addEventListener('message')`, `removeEventListener`,
+ * `terminate`) so the UCI state machine in `StockfishEngine` is UNCHANGED —
+ * only the transport differs. Outbound commands are queued until the async
+ * `start()` completes, then flushed; inbound UCI lines arrive on the plugin's
+ * `output` listener and are delivered as `MessageEvent`-shaped objects.
+ */
+class NativeStockfishTransport {
+  onmessage: ((event: MessageEvent<string>) => void) | null = null;
+  onerror: ((event: ErrorEvent) => void) | null = null;
+  private readonly _msgHandlers = new Set<(event: MessageEvent<string>) => void>();
+  private readonly _outQueue: string[] = [];
+  private _ready = false;
+  private _dead = false;
+  private _listenerHandle: { remove: () => Promise<void> } | null = null;
+
+  constructor() {
+    void this._boot();
+  }
+
+  private async _boot(): Promise<void> {
+    try {
+      this._listenerHandle = await StockfishNative.addListener(
+        'output',
+        (data: { line: string }) => this._deliver(data?.line ?? ''),
+      );
+      await StockfishNative.start();
+      if (this._dead) return;
+      this._ready = true;
+      for (const cmd of this._outQueue.splice(0)) {
+        void StockfishNative.cmd({ cmd }).catch((err: unknown) => this._fail(err));
+      }
+    } catch (err) {
+      this._fail(err);
+    }
+  }
+
+  private _deliver(line: string): void {
+    if (this._dead || !line) return;
+    const event = { data: line } as MessageEvent<string>;
+    this.onmessage?.(event);
+    for (const handler of [...this._msgHandlers]) handler(event);
+  }
+
+  private _fail(err: unknown): void {
+    if (this._dead) return;
+    const message = `native stockfish transport failed: ${
+      err instanceof Error ? err.message : String(err)
+    }`;
+    // Shape enough of an ErrorEvent for the engine's onerror handler (reads
+    // `.message`, calls `.preventDefault?.()`).
+    const event = { message, preventDefault() {} } as unknown as ErrorEvent;
+    this.onerror?.(event);
+  }
+
+  postMessage(cmd: string): void {
+    if (this._dead) return;
+    if (this._ready) void StockfishNative.cmd({ cmd }).catch((err: unknown) => this._fail(err));
+    else this._outQueue.push(cmd);
+  }
+
+  addEventListener(type: 'message', listener: (event: MessageEvent<string>) => void): void {
+    if (type === 'message') this._msgHandlers.add(listener);
+  }
+
+  removeEventListener(type: 'message', listener: (event: MessageEvent<string>) => void): void {
+    if (type === 'message') this._msgHandlers.delete(listener);
+  }
+
+  terminate(): void {
+    this._dead = true;
+    this._msgHandlers.clear();
+    this.onmessage = null;
+    this.onerror = null;
+    const handle = this._listenerHandle;
+    this._listenerHandle = null;
+    void handle?.remove().catch(() => {});
+    void StockfishNative.exit().catch(() => {});
+  }
+}
+
 class StockfishEngine {
   // Last init stage the (lila) bridge reported via a `__sfstage__` marker —
   // folded into the init-timeout message to name where the iOS hang occurs
@@ -293,6 +395,10 @@ class StockfishEngine {
   // multi-thread bundle (saves ~2 s of init on every load on
   // affected devices).
   private _runtimeFallbackAttempted = readPersistedMultiFallback();
+  // Sticky once the native iOS Stockfish plugin has failed to boot in this
+  // session. When set, initialize() stops picking `ios-native` and falls back
+  // to the asm.js Worker so the iOS app is never left with no engine.
+  private _nativeFallbackAttempted = false;
   // Phase 8 — coalesce worker error spam. Multi-thread crashes can
   // emit 60+ ErrorEvents in ~100ms; we want one audit-log row, not
   // 60. Tracks the first error timestamp + count in the current
@@ -382,7 +488,17 @@ class StockfishEngine {
         // recovering from a multi-thread failure; iOS short-circuits before
         // them so a multi crash there can never route iOS to the broken single
         // build (David 2026-06-28, after the iOS multi-OOM cascade in PostHog).
-        if (isIosSafari()) {
+        if (isNativeIosStockfishAvailable() && !this._nativeFallbackAttempted) {
+          // Native iOS app: run Stockfish as an ARM binary via the plugin,
+          // bypassing the asm.js WebView engine entirely. `url` is unused —
+          // the construction branch keys off `variant === 'ios-native'`.
+          resolved = {
+            url: '',
+            variant: 'ios-native',
+            reason: 'iOS native Stockfish plugin (asm.js WebView bypass)',
+            workerType: 'classic',
+          };
+        } else if (isIosSafari()) {
           resolved = resolveWorkerUrl();
         } else if (forceSingle) {
           resolved = {
@@ -458,9 +574,11 @@ class StockfishEngine {
           // WO-STOCKFISH-SWAP — module worker shape for the lila
           // bridge (which uses ES module imports); classic worker
           // for the legacy stockfish-18-lite bundle.
-          this.worker = resolved.workerType === 'module'
-            ? new Worker(resolved.url, { type: 'module' })
-            : new Worker(resolved.url);
+          this.worker = resolved.variant === 'ios-native'
+            ? (new NativeStockfishTransport() as unknown as Worker)
+            : resolved.workerType === 'module'
+              ? new Worker(resolved.url, { type: 'module' })
+              : new Worker(resolved.url);
           // Fresh worker → reset liveness clock so a stale timestamp from a
           // prior worker can't make this one look alive before it speaks.
           this._lastMessageAt = Date.now();
@@ -518,6 +636,28 @@ class StockfishEngine {
             }
             this._workerErrorWindow = { startedAt: now, count: 1 };
             console.error('[Stockfish] worker.onerror:', msg);
+            // Native iOS engine failed to boot — demote to the asm.js Worker
+            // (sticky for the session) so the app is never left engine-less.
+            if (
+              this.workerVariant === 'ios-native' &&
+              !this._nativeFallbackAttempted
+            ) {
+              this._nativeFallbackAttempted = true;
+              void logAppAudit({
+                kind: 'stockfish-variant-fallback',
+                category: 'subsystem',
+                source: 'stockfishEngine.initialize',
+                summary: `native iOS engine failed to boot (${msg.slice(0, 120)}); falling back to asm.js`,
+              });
+              if (earlyFailureTimer !== null) {
+                clearTimeout(earlyFailureTimer);
+                earlyFailureTimer = null;
+              }
+              this.worker?.terminate();
+              this.worker = null;
+              setTimeout(() => tryStart(false), WASM_RECLAIM_DELAY_MS);
+              return true;
+            }
             // Multi-thread bundle failed early — try the runtime
             // fallback before treating this as a fatal init error.
             if (
