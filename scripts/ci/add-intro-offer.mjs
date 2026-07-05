@@ -97,7 +97,10 @@ const main = async () => {
 
   async function territoriesWithFreeTrial(subId) {
     const set = new Set();
-    let path = `/v1/subscriptions/${subId}/introductoryOffers?include=territory&limit=200&fields[subscriptionIntroductoryOffers]=offerMode,duration`;
+    // NB: do NOT restrict fields[subscriptionIntroductoryOffers] — naming only
+    // attributes there drops the `territory` relationship from the payload
+    // (which is exactly what silently made this read 0 the first time).
+    let path = `/v1/subscriptions/${subId}/introductoryOffers?include=territory&limit=200`;
     while (path) {
       const r = await api('GET', path);
       for (const o of r.j.data || []) {
