@@ -585,6 +585,10 @@ export function CoachTeachPage(): JSX.Element {
   // the board until the next coach turn clears them.
   const [arrows, setArrows] = useState<BoardArrow[]>([]);
   const [highlights, setHighlights] = useState<BoardHighlight[]>([]);
+  // "Hint" button — Stockfish computes the best move for the current
+  // position and we lead the eye to it with an arrow. The engine decides
+  // (G0/G3), never the LLM. `hintBusy` gates the spinner.
+  const [hintBusy, setHintBusy] = useState(false);
   const [kickoffStatus, setKickoffStatus] = useState<{
     label: string;
     step: number;
@@ -4040,6 +4044,30 @@ export function CoachTeachPage(): JSX.Element {
     void positionNarration.narrate();
   }, [positionNarration]);
 
+  // Hint: ask Stockfish for the best move at the live position and draw a
+  // lead-the-eye arrow to it (yellow, from-square highlighted). Grounded in
+  // the engine — the LLM invents nothing (G0/G3). Cleared on the next move
+  // like every other board marker.
+  const handleHint = useCallback(async () => {
+    if (hintBusy) return;
+    const fen = liveFenRef.current;
+    setHintBusy(true);
+    try {
+      const analysis = await stockfishEngine.analyzePosition(fen, 15);
+      const uci = analysis?.bestMove ?? '';
+      if (uci.length >= 4) {
+        const from = uci.slice(0, 2);
+        const to = uci.slice(2, 4);
+        setArrows([{ startSquare: from, endSquare: to, color: '#eab308' }]);
+        setHighlights([{ square: from, color: '#eab308' }]);
+      }
+    } catch {
+      /* engine unavailable — no hint rather than a guess */
+    } finally {
+      setHintBusy(false);
+    }
+  }, [hintBusy]);
+
   return (
     <div
       className="relative flex flex-col md:flex-row h-full overflow-x-hidden overflow-y-auto md:overflow-hidden pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-0"
@@ -4437,7 +4465,24 @@ export function CoachTeachPage(): JSX.Element {
           // unchanged; only the look matches Play. Plus the "Read this
           // position" row above (emerald, Volume2), identical to Play's.
           <div className="flex flex-col gap-2 px-4 py-2">
-          <div className="flex justify-center">
+          <div className="flex items-center justify-center gap-2">
+            <button
+              onClick={() => void handleHint()}
+              disabled={hintBusy}
+              className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-yellow-500/30 text-sm font-medium text-yellow-400 hover:text-yellow-300 hover:bg-yellow-500/10 disabled:opacity-40 transition-all duration-200"
+              style={{ boxShadow: '0 0 10px rgba(234, 179, 8, 0.25), 0 0 3px rgba(234, 179, 8, 0.15)' }}
+              onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 18px rgba(234, 179, 8, 0.45), 0 0 6px rgba(234, 179, 8, 0.25)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 10px rgba(234, 179, 8, 0.25), 0 0 3px rgba(234, 179, 8, 0.15)'; }}
+              data-testid="teach-hint-btn"
+              aria-label="Show a hint — the best move"
+            >
+              {hintBusy ? (
+                <Loader2 size={16} className="animate-spin" />
+              ) : (
+                <Lightbulb size={16} />
+              )}
+              <span>{hintBusy ? 'Thinking…' : 'Hint'}</span>
+            </button>
             <button
               onClick={handleReadPosition}
               className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-emerald-500/30 text-sm font-medium text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 transition-all duration-200"

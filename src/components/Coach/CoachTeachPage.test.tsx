@@ -20,6 +20,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, waitFor, fireEvent, screen } from '../../test/utils';
 import { CoachTeachPage } from './CoachTeachPage';
+import { stockfishEngine } from '../../services/stockfishEngine';
 import { useAppStore } from '../../stores/appStore';
 import { buildUserProfile } from '../../test/factories';
 import { db } from '../../db/schema';
@@ -265,5 +266,21 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
       const opts = call[1] as { providerOverride?: { name: string } } | undefined;
       expect(opts?.providerOverride).toBeUndefined();
     }
+  });
+
+  it('Hint button grounds on Stockfish (best move), not the LLM', async () => {
+    render(<CoachTeachPage />);
+    const hintBtn = await screen.findByTestId('teach-hint-btn');
+    // Ignore the mount-time position-grounding calls (depth 12); we want to
+    // prove the HINT itself queries the engine.
+    vi.mocked(stockfishEngine.analyzePosition).mockClear();
+    fireEvent.click(hintBtn);
+    await waitFor(() => {
+      const calls = vi.mocked(stockfishEngine.analyzePosition).mock.calls;
+      // The hint requests depth 15 — a distinct signature from grounding.
+      expect(calls.some((c) => c[1] === 15)).toBe(true);
+    });
+    // No LLM call is made for the hint — the engine decides the move (G0/G3).
+    expect(coachService.ask).not.toHaveBeenCalled();
   });
 });
