@@ -343,12 +343,17 @@ async function main() {
     let sendErr = null;
     try {
       const input = page.locator('[data-testid="chat-text-input"]');
-      // fill() focuses + sets value (waits for "editable", NOT "stable"), and
-      // the send click is FORCED — a human can tap to type even while the
-      // board auto-animates a walkthrough (Playwright's stability heuristic
-      // otherwise times out on the continuous animation). If the input were
-      // genuinely covered, the response check below catches it as silent-hang.
-      await input.fill(text, { timeout: 8000 });
+      // The send click is FORCED — a human can tap to type even while the board
+      // auto-animates a walkthrough (Playwright's stability heuristic otherwise
+      // times out on the continuous animation).
+      // 🚨 pressSequentially, NOT fill(): the chat box is a CONTROLLED React
+      // textarea. fill() sets the DOM value without firing React's onChange, so
+      // the component's state stays EMPTY and the send submits nothing → a false
+      // "silent-hang" on EVERY typed input (the 2026-07-05 false positive that
+      // made the whole loop look broken while the app worked). pressSequentially
+      // fires onChange per keystroke so React state = the text.
+      await input.fill('', { timeout: 8000 });
+      await input.pressSequentially(text, { delay: 4, timeout: 15000 });
       await page.locator('[data-testid="chat-send-btn"]').click({ timeout: 8000, force: true });
     } catch (e) {
       sendErr = String(e?.message ?? e);

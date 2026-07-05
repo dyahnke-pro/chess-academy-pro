@@ -81,7 +81,14 @@ async function gotoTeach() {
 // have no button; this is real human use, not command-injection-as-shortcut.
 async function ask(text) {
   await waitInput();
-  await page.locator('[data-testid="chat-text-input"]').fill(text).catch(() => undefined);
+  const input = page.locator('[data-testid="chat-text-input"]');
+  await input.fill('').catch(() => undefined);
+  // pressSequentially fires React onChange per keystroke; fill() alone does NOT,
+  // so the controlled textarea's React state stays EMPTY and the send button
+  // submits nothing → a false "silent-hang" on EVERY typed input. This was the
+  // 2026-07-05 false-positive: the whole grid read 9/32 + the loop "hung" on
+  // everything, while the app worked fine (the probe used Enter and dodged it).
+  await input.pressSequentially(text, { delay: 4 }).catch(() => undefined);
   await page.locator('[data-testid="chat-send-btn"]').click({ force: true }).catch(() => undefined);
 }
 async function transcript() { return page.locator('[data-testid="teach-transcript"]').innerText({ timeout: 2000 }).catch(() => ''); }
