@@ -298,7 +298,7 @@ class NativeStockfishTransport {
       if (this._dead) return;
       this._ready = true;
       for (const cmd of this._outQueue.splice(0)) {
-        void StockfishNative.cmd({ cmd }).catch((err) => this._fail(err));
+        void StockfishNative.cmd({ cmd }).catch((err: unknown) => this._fail(err));
       }
     } catch (err) {
       this._fail(err);
@@ -325,7 +325,7 @@ class NativeStockfishTransport {
 
   postMessage(cmd: string): void {
     if (this._dead) return;
-    if (this._ready) void StockfishNative.cmd({ cmd }).catch((err) => this._fail(err));
+    if (this._ready) void StockfishNative.cmd({ cmd }).catch((err: unknown) => this._fail(err));
     else this._outQueue.push(cmd);
   }
 
