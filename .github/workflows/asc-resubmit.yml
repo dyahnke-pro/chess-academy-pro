@@ -17,6 +17,10 @@ on:
         description: 'App Review notes'
         type: string
         default: ''
+      dump_sub:
+        description: 'Review submission id to dump (diagnostic)'
+        type: string
+        default: ''
 
 jobs:
   resubmit:
@@ -34,4 +38,5 @@ jobs:
           SUBMIT: ${{ inputs.submit && '1' || '' }}
           TARGET_BUILD_VERSION: ${{ inputs.build_version }}
           REVIEWER_NOTES: ${{ inputs.reviewer_notes }}
+          DUMP_SUB: ${{ inputs.dump_sub }}
         run: node scripts/ci/asc-resubmit.mjs

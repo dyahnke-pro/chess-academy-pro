@@ -62,10 +62,21 @@ const main = async () => {
   const targetBuild = wantVer ? (builds.j.data || []).find((b) => b.attributes.version === wantVer) : (builds.j.data || [])[0];
   console.log(`\nbuild to attach: ${targetBuild ? targetBuild.attributes.version + ' (' + targetBuild.id + ')' : 'NONE FOUND'}`);
 
-  // Review submission state (the unified submission model)
-  const subs = await api('GET', `/v1/apps/${APP}/reviewSubmissions?filter[platform]=IOS&limit=5&fields[reviewSubmissions]=state,submitted,platform`);
-  console.log('\nreview submissions:');
-  for (const s of subs.j.data || []) console.log(`  ${s.id} state=${s.attributes.state} submitted=${s.attributes.submitted}`);
+  // Review submission state (the unified submission model). No platform filter
+  // so we see terminal/rejected ones too; include items to see what holds the version.
+  const subs = await api('GET', `/v1/apps/${APP}/reviewSubmissions?limit=50&include=items&fields[reviewSubmissions]=state,submitted,platform,createdDate`);
+  console.log('\nreview submissions (all):');
+  for (const s of subs.j.data || []) {
+    const items = (s.relationships?.items?.data || []).length;
+    console.log(`  ${s.id} state=${s.attributes.state} submitted=${s.attributes.submitted} platform=${s.attributes.platform} items=${items} created=${s.attributes.createdDate}`);
+  }
+  if (process.env.DUMP_SUB) {
+    const one = await api('GET', `/v1/reviewSubmissions/${process.env.DUMP_SUB}?include=items`);
+    console.log(`\nDUMP ${process.env.DUMP_SUB}:\n` + JSON.stringify(one.j, null, 1).slice(0, 2000));
+    // item states
+    const its = await api('GET', `/v1/reviewSubmissions/${process.env.DUMP_SUB}/items?include=appStoreVersion`);
+    console.log('items:\n' + JSON.stringify(its.j, null, 1).slice(0, 2000));
+  }
 
   // App review detail (reviewer notes / contact) for the version
   const detail = await api('GET', `/v1/appStoreVersions/${version.id}/appStoreReviewDetail?fields[appStoreReviewDetails]=notes,contactFirstName,contactLastName,contactEmail`);
