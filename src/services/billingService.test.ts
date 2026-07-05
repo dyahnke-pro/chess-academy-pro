@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { initBilling, isBillingConfigured, getBillingPackages, purchasePackage, restorePurchases } from './billingService';
+import { initBilling, isBillingConfigured, getBillingPackages, purchasePackage, restorePurchases, clearBillingError } from './billingService';
 import { useEntitlementStore } from '../stores/entitlementStore';
 
 // The audit sink is a fire-and-forget side effect — stub it so the test stays
@@ -30,5 +30,12 @@ describe('billingService — keyless (graceful degradation)', () => {
     await expect(getBillingPackages()).resolves.toEqual([]);
     await expect(purchasePackage('monthly')).resolves.toBe(false);
     await expect(restorePurchases()).resolves.toBe(false);
+  });
+
+  it('clearBillingError wipes a stored error so the paywall banner cannot linger', () => {
+    useEntitlementStore.getState().setError('StoreKit exploded');
+    expect(useEntitlementStore.getState().lastError).toBe('StoreKit exploded');
+    clearBillingError();
+    expect(useEntitlementStore.getState().lastError).toBeNull();
   });
 });

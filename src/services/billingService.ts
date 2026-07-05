@@ -75,6 +75,12 @@ export function isBillingConfigured(): boolean {
   return resolvePlatformKey() !== null;
 }
 
+/** Clear any stored billing error (used by the paywall so a stale boot-time
+ *  error never lingers as a permanent banner — Apple 2.1(b)). */
+export function clearBillingError(): void {
+  useEntitlementStore.getState().setError(null);
+}
+
 /**
  * Initialize billing at app boot and resolve entitlement into the store.
  * Safe to call unconditionally — no key ⇒ marks `unconfigured`/Pro and returns.
@@ -112,6 +118,33 @@ export async function initBilling(appUserId?: string): Promise<void> {
   }
 }
 
+/**
+ * Map a RevenueCat CustomerInfo object into the entitlement store. Shared by
+ * `refreshEntitlement` (which fetches it) and `purchasePackage` (which already
+ * has it from the purchase result) so a successful purchase applies its
+ * entitlement WITHOUT a second network round-trip that could fail and leave the
+ * user "paid but still walled" — the exact 2.1(b) class Apple flagged.
+ */
+function applyCustomerInfo(customerInfo: {
+  entitlements: { active: Record<string, { periodType: string; store: string; expirationDate: string | null }> };
+}): void {
+  const store = useEntitlementStore.getState();
+  const ent = customerInfo.entitlements.active[PRO_ENTITLEMENT_ID];
+  if (ent) {
+    const periodType = ent.periodType; // 'NORMAL' | 'INTRO' | 'TRIAL'
+    const isTrial = periodType === 'TRIAL' || periodType === 'INTRO';
+    const source: EntitlementSource = isTrial
+      ? 'trial'
+      : ent.store === 'PROMOTIONAL'
+        ? 'promo'
+        : 'subscription';
+    const expiresAt = ent.expirationDate ? new Date(ent.expirationDate).getTime() : null;
+    store.setEntitlement({ isPro: true, source, expiresAt });
+  } else {
+    store.setEntitlement({ isPro: false, source: 'none', expiresAt: null });
+  }
+}
+
 /** Pull the latest customer info and map the `pro` entitlement into the store. */
 export async function refreshEntitlement(): Promise<void> {
   const store = useEntitlementStore.getState();
@@ -119,20 +152,7 @@ export async function refreshEntitlement(): Promise<void> {
   try {
     const { Purchases } = await import('@revenuecat/purchases-capacitor');
     const { customerInfo } = await Purchases.getCustomerInfo();
-    const ent = customerInfo.entitlements.active[PRO_ENTITLEMENT_ID];
-    if (ent) {
-      const periodType = ent.periodType; // 'NORMAL' | 'INTRO' | 'TRIAL'
-      const isTrial = periodType === 'TRIAL' || periodType === 'INTRO';
-      const source: EntitlementSource = isTrial
-        ? 'trial'
-        : ent.store === 'PROMOTIONAL'
-          ? 'promo'
-          : 'subscription';
-      const expiresAt = ent.expirationDate ? new Date(ent.expirationDate).getTime() : null;
-      store.setEntitlement({ isPro: true, source, expiresAt });
-    } else {
-      store.setEntitlement({ isPro: false, source: 'none', expiresAt: null });
-    }
+    applyCustomerInfo(customerInfo);
   } catch (err) {
     const message = err instanceof Error ? err.message : 'entitlement refresh failed';
     store.setError(message);
@@ -174,8 +194,14 @@ export async function purchasePackage(packageId: string): Promise<boolean> {
     const { current } = await Purchases.getOfferings();
     const pkg = current?.availablePackages.find((p) => p.identifier === packageId);
     if (!pkg) return false;
-    await Purchases.purchasePackage({ aPackage: pkg });
-    await refreshEntitlement();
+    // Apply the entitlement straight from the purchase result — no second
+    // getCustomerInfo call that could fail after the money already moved.
+    const result = await Purchases.purchasePackage({ aPackage: pkg });
+    if (result?.customerInfo) {
+      applyCustomerInfo(result.customerInfo);
+    } else {
+      await refreshEntitlement();
+    }
     logBilling('billing-purchase', 'billingService.purchasePackage', packageId);
     return true;
   } catch (err) {

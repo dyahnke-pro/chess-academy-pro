@@ -7,6 +7,7 @@ import {
   purchasePackage,
   restorePurchases,
   isBillingConfigured,
+  clearBillingError,
   type BillingPackage,
 } from '../../services/billingService';
 
@@ -28,7 +29,7 @@ const FEATURES: readonly string[] = [
 ];
 
 export function PaywallPage(): JSX.Element {
-  const { isResolving, lastError } = useEntitlement();
+  const { isResolving } = useEntitlement();
   const [packages, setPackages] = useState<BillingPackage[] | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -38,12 +39,16 @@ export function PaywallPage(): JSX.Element {
 
   useEffect(() => {
     let cancelled = false;
+    // Clear any stale billing error from boot so a transient init hiccup never
+    // leaves a permanent error banner on the paywall (Apple 2.1(b)).
+    clearBillingError();
     void (async () => {
       try {
         const pkgs = await getBillingPackages();
         if (!cancelled) setPackages(pkgs);
-      } catch (err) {
-        if (!cancelled) setLoadError(err instanceof Error ? err.message : 'Could not load plans');
+      } catch {
+        // Never surface a raw StoreKit/RevenueCat error string to the user.
+        if (!cancelled) setLoadError('Plans couldn’t load right now. Please try again.');
       }
     })();
     return () => {
@@ -60,15 +65,19 @@ export function PaywallPage(): JSX.Element {
     if (!selected) return;
     setBusy(true);
     setNotice(null);
+    // Clear stale errors before the attempt so the banner reflects THIS attempt.
+    clearBillingError();
     const ok = await purchasePackage(selected.id);
     setBusy(false);
-    if (!ok) setNotice('Purchase didn’t complete. You can try again.');
+    // A failed/cancelled purchase shows one calm line — never a raw error dump.
+    if (!ok) setNotice('Purchase didn’t complete. No charge was made — you can try again.');
     // On success the entitlement updates and PaywallGate swaps to the app.
   }
 
   async function handleRestore(): Promise<void> {
     setRestoring(true);
     setNotice(null);
+    clearBillingError();
     const ok = await restorePurchases();
     setRestoring(false);
     setNotice(ok ? 'Subscription restored.' : 'No active subscription found to restore.');
@@ -121,8 +130,9 @@ export function PaywallPage(): JSX.Element {
                   <div>
                     <p className="font-semibold">{p.isAnnual ? 'Yearly' : 'Monthly'}</p>
                     <p className="mt-0.5 text-sm text-zinc-400">
-                      {p.priceString}/{p.isAnnual ? 'year' : 'month'}
-                      {p.hasFreeTrial ? ' · 7-day free trial' : ''}
+                      {p.hasFreeTrial
+                        ? `7-day free trial, then ${p.priceString}/${p.isAnnual ? 'year' : 'month'}`
+                        : `${p.priceString}/${p.isAnnual ? 'year' : 'month'}`}
                     </p>
                   </div>
                   {p.isAnnual && (
@@ -142,13 +152,24 @@ export function PaywallPage(): JSX.Element {
           )}
         </div>
 
-        {(loadError || lastError) && (
+        {loadError && (
           <div className="mb-3 flex items-center gap-2 rounded-lg bg-red-500/10 px-3 py-2 text-xs text-red-300">
             <AlertCircle className="h-4 w-4 shrink-0" />
-            <span>{loadError ?? lastError}</span>
+            <span>{loadError}</span>
           </div>
         )}
         {notice && <p className="mb-3 text-center text-xs text-zinc-400">{notice}</p>}
+
+        {/* Apple 3.1.2(c): the binding price + auto-renew statement must be
+            clear and CONSPICUOUS, directly next to the purchase button — not
+            buried in fine print. This line does that. */}
+        {selected && (
+          <p className="mb-3 text-center text-sm font-medium text-zinc-200">
+            {selected.hasFreeTrial
+              ? `7-day free trial, then ${selected.priceString}/${periodLabel}. Auto-renews until cancelled.`
+              : `${selected.priceString}/${periodLabel}. Auto-renews until cancelled.`}
+          </p>
+        )}
 
         <button
           type="button"
@@ -174,15 +195,17 @@ export function PaywallPage(): JSX.Element {
           {restoring ? 'Restoring…' : 'Restore Purchases'}
         </button>
 
-        {/* Apple 3.1.2 required disclosure + legal links */}
-        <p className="mt-5 text-center text-[11px] leading-relaxed text-zinc-500">
+        {/* Apple 3.1.2 full required disclosure + legal links. Higher contrast
+            than fine print so the terms are legible, not hidden. */}
+        <p className="mt-5 text-center text-xs leading-relaxed text-zinc-400">
           {selected?.hasFreeTrial && selected
-            ? `Your 7-day free trial converts to a ${selected.priceString}/${periodLabel} subscription unless cancelled at least 24 hours before it ends. `
+            ? `Your 7-day free trial automatically converts to a paid ${selected.priceString}/${periodLabel} subscription, and payment is charged to your Apple ID account, unless you cancel at least 24 hours before the trial ends. `
             : ''}
-          Payment is charged to your store account at confirmation of purchase.
-          The subscription renews automatically each {periodLabel} unless
-          auto-renew is turned off at least 24 hours before the period ends.
-          Manage or cancel anytime in your store account settings.
+          Payment is charged to your Apple ID account at confirmation of
+          purchase. The subscription renews automatically at {selected?.priceString ?? 'the listed price'}/{periodLabel},
+          and your account is charged for renewal within 24 hours before the
+          current period ends, unless auto-renew is turned off beforehand. You
+          can manage or cancel anytime in your App Store account settings.
         </p>
         <p className="mt-3 text-center text-[11px] text-zinc-500">
           <Link to="/terms" className="underline">
