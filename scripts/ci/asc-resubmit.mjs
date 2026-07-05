@@ -94,19 +94,25 @@ const main = async () => {
     }
   }
 
-  // 3) Create a review submission (if none open) and add the version, then submit
-  let submissionId = (subs.j.data || []).find((s) => s.attributes.state === 'READY_FOR_REVIEW' || s.attributes.state === 'COMPLETING')?.id;
+  // 3) Reuse an existing non-terminal review submission (avoid spawning dupes);
+  //    otherwise create one. Then add the version item + submit.
+  const reusable = (subs.j.data || []).find((s) => !['COMPLETE', 'CANCELING', 'CANCELED'].includes(s.attributes.state));
+  let submissionId = reusable?.id;
+  if (submissionId) console.log(`reusing submission ${submissionId} (state=${reusable.attributes.state})`);
   if (!submissionId) {
     const create = await api('POST', `/v1/reviewSubmissions`, { data: { type: 'reviewSubmissions', attributes: { platform: 'IOS' }, relationships: { app: { data: { type: 'apps', id: APP } } } } });
-    console.log(`create submission: ${create.status} ${create.status >= 400 ? JSON.stringify(create.j).slice(0, 300) : ''}`);
+    console.log(`create submission: ${create.status} ${create.status >= 400 ? JSON.stringify(create.j).slice(0, 600) : ''}`);
     submissionId = create.j.data?.id;
   }
   if (!submissionId) { console.error('::error::no review submission id'); process.exit(1); }
 
   const addItem = await api('POST', `/v1/reviewSubmissionItems`, { data: { type: 'reviewSubmissionItems', relationships: { reviewSubmission: { data: { type: 'reviewSubmissions', id: submissionId } }, appStoreVersion: { data: { type: 'appStoreVersions', id: version.id } } } } });
-  console.log(`add version item: ${addItem.status} ${addItem.status >= 400 ? JSON.stringify(addItem.j).slice(0, 300) : ''}`);
+  console.log(`add version item: ${addItem.status}`);
+  if (addItem.status >= 400) console.log('addItem error FULL:\n' + JSON.stringify(addItem.j, null, 1));
 
-  const submit = await api('PATCH', `/v1/reviewSubmissions/${submissionId}`, { data: { type: 'reviewSubmissions', id: submissionId, attributes: { submitted: true } } });
-  console.log(`SUBMIT: ${submit.status} ${submit.status >= 400 ? JSON.stringify(submit.j).slice(0, 300) : 'state=' + submit.j.data?.attributes?.state}`);
+  if (process.env.SUBMIT_FINAL !== '0') {
+    const submit = await api('PATCH', `/v1/reviewSubmissions/${submissionId}`, { data: { type: 'reviewSubmissions', id: submissionId, attributes: { submitted: true } } });
+    console.log(`SUBMIT: ${submit.status} ${submit.status >= 400 ? JSON.stringify(submit.j).slice(0, 400) : 'state=' + submit.j.data?.attributes?.state}`);
+  }
 };
 main().catch((e) => { console.error(e); process.exit(1); });
