@@ -33,6 +33,10 @@ on:
         description: 'reviewSubmission id to (re)submit directly'
         type: string
         default: ''
+      compliance_build:
+        description: 'build id to set export compliance on'
+        type: string
+        default: ''
 
 jobs:
   resubmit:
@@ -54,4 +58,5 @@ jobs:
           DELETE_ITEM: ${{ inputs.delete_item }}
           CANCEL_SUB: ${{ inputs.cancel_sub }}
           RESUBMIT_SUB: ${{ inputs.resubmit_sub }}
+          COMPLIANCE_BUILD: ${{ inputs.compliance_build }}
         run: node scripts/ci/asc-resubmit.mjs

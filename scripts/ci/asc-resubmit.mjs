@@ -42,6 +42,15 @@ const main = async () => {
     const d = await api('DELETE', `/v1/reviewSubmissionItems/${process.env.DELETE_ITEM}`);
     console.log(`DELETE item ${process.env.DELETE_ITEM}: ${d.status === 204 ? 'OK (204)' : d.status + ' ' + JSON.stringify(d.j).slice(0, 400)}`);
   }
+  // Optional: set export-compliance (usesNonExemptEncryption=false) on a build,
+  // which can otherwise silently block submission ("version not ready").
+  if (process.env.COMPLIANCE_BUILD) {
+    const b = process.env.COMPLIANCE_BUILD;
+    const cur = await api('GET', `/v1/builds/${b}?fields[builds]=usesNonExemptEncryption,version`);
+    console.log(`build ${cur.j.data?.attributes?.version} usesNonExemptEncryption(before)=${cur.j.data?.attributes?.usesNonExemptEncryption}`);
+    const c = await api('PATCH', `/v1/builds/${b}`, { data: { type: 'builds', id: b, attributes: { usesNonExemptEncryption: false } } });
+    console.log(`compliance PATCH ${b}: ${c.status === 200 ? 'OK' : c.status + ' ' + JSON.stringify(c.j).slice(0, 200)}`);
+  }
   // Optional: directly (re)submit an EXISTING review submission by id — the
   // API equivalent of the web "Resubmit to App Review" on the rejected one.
   if (process.env.RESUBMIT_SUB) {
