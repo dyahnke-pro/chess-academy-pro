@@ -23,6 +23,11 @@ const HEADED = process.env.AUDIT_SMOKE_HEADED === '1';
 const stamp = new Date().toISOString().replace(/[:.]/g, '-');
 const OUT = process.env.AUDIT_OUT_DIR ?? `audit-reports/tactics-analysis-practice-${stamp}`;
 const sel = (t) => `[data-testid="${t}"]`;
+// The grade is a live LLM round-trip (browser → /api/llm proxy → DeepSeek);
+// through the prod-bridge that can take longer than a snappy local reply, so the
+// verdict/hint wait is configurable. Default 30s (fast local); bump via
+// AUDIT_GRADE_TIMEOUT_MS to actually capture a real grade over the bridge.
+const GRADE_TIMEOUT_MS = Number(process.env.AUDIT_GRADE_TIMEOUT_MS ?? 30000);
 
 const SEED_GAME = {
   id: 'audit-analysis-practice-1',
@@ -140,8 +145,8 @@ async function main() {
       // prove the grader ran + the surface reacted). Waiting only for the
       // verdict would false-fail on any position whose first question the
       // generic answer doesn't nail.
-      const verdictUp = page.locator(sel('analysis-practice-verdict')).waitFor({ timeout: 30000 }).then(() => 'verdict').catch(() => null);
-      const hintUp = page.locator(sel('analysis-practice-hint')).waitFor({ timeout: 30000 }).then(() => 'hint').catch(() => null);
+      const verdictUp = page.locator(sel('analysis-practice-verdict')).waitFor({ timeout: GRADE_TIMEOUT_MS }).then(() => 'verdict').catch(() => null);
+      const hintUp = page.locator(sel('analysis-practice-hint')).waitFor({ timeout: GRADE_TIMEOUT_MS }).then(() => 'hint').catch(() => null);
       const responded = await Promise.race([verdictUp, hintUp]);
       graded = responded !== null;
       if (graded) {
@@ -203,7 +208,11 @@ async function main() {
           if (isCalc1) calcSeen = true;
           await typeRead(page, isCalc1 ? 'a check or a capture' : 'nothing concrete');
           await page.locator(sel('analysis-practice-submit')).click({ timeout: 5000 }).catch(() => {});
-          await page.locator(sel('analysis-practice-verdict')).waitFor({ timeout: 25000 }).catch(() => {});
+          // wait for the grader to respond (verdict OR hint) before advancing
+          await Promise.race([
+            page.locator(sel('analysis-practice-verdict')).waitFor({ timeout: GRADE_TIMEOUT_MS }).catch(() => {}),
+            page.locator(sel('analysis-practice-hint')).waitFor({ timeout: GRADE_TIMEOUT_MS }).catch(() => {}),
+          ]);
           await page.locator(sel('analysis-practice-next')).click({ timeout: 3000 }).catch(() => {});
           if (isCalc1) {
             const step2 = await promptEl.waitFor({ timeout: 12000 }).then(() => promptEl.innerText()).catch(() => '');
