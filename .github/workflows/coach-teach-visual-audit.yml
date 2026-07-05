@@ -55,6 +55,27 @@ jobs:
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
 
+      - name: Warm prod (never audit a cold deploy — David 2026-07-05)
+        # A cold Vercel serverless function (the coach /api/llm-proxy) on the
+        # first hits after a deploy takes longer than the audit's 90s wait, which
+        # the loop then logs as false "silent-hangs" (the 2026-07-05 false
+        # positive). Warm the app + the coach LLM function BEFORE driving, so the
+        # first real probe isn't the cold-start victim.
+        env:
+          URL: ${{ github.event.inputs.url }}
+        run: |
+          echo "Warming $URL ..."
+          for i in 1 2 3; do
+            curl -s -o /dev/null -w "  app GET: %{http_code} %{time_total}s\n" "$URL/?warm=$i" || true
+            # POST the coach proxy to spin up the DeepSeek function (400 on the
+            # empty body is fine — it means the function is up and responding).
+            curl -s -o /dev/null -w "  llm-proxy POST: %{http_code} %{time_total}s\n" \
+              -X POST -H 'Content-Type: application/json' -d '{"warm":1}' \
+              "$URL/api/llm-proxy" --max-time 60 || true
+            sleep 5
+          done
+          echo "Warm-up done."
+
       - name: Functional audit (drives every function + screenshots each state)
         id: functional
         continue-on-error: true
