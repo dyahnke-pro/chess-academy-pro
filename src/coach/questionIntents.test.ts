@@ -289,7 +289,39 @@ describe('isOpeningAccuracyQuestion (David 2026-07-04: accuracy WITHIN an openin
     'what is a fork',               // concept
     'teach me the Caro-Kann',       // teach a line, not an accuracy query
     'hi coach',
+    // David 2026-07-05 visual audit: a BARE / OVERALL accuracy ask has no
+    // opening object → it belongs to isAccuracyQuestion, not here. This used to
+    // hijack to opening-accuracy (which runs first) and answer "drill a line".
+    'how accurate am I overall?',
+    'how accurate am I',
+    "what's my accuracy",
+    'how precise is my play',
+    'my accuracy in general',
   ])('does NOT match: %s', (q) => expect(isOpeningAccuracyQuestion(q)).toBe(false));
+
+  // The overall-accuracy counterparts DO route to isAccuracyQuestion.
+  it.each([
+    'how accurate am I overall?',
+    'how accurate am I',
+    "what's my accuracy",
+    'how precise is my play',
+  ])('overall accuracy "%s" → isAccuracyQuestion', (q) => expect(isAccuracyQuestion(q)).toBe(true));
+});
+
+describe('records vs opening-profile — "best opening" is NOT a records ask (David 2026-07-05 visual audit)', () => {
+  it.each([
+    'what is my best opening?',
+    "what's my best opening",
+  ])('"%s" → opening-profile, NOT records', (q) => {
+    expect(isOpeningProfileQuestion(q)).toBe(true);
+    expect(isRecordsQuestion(q)).toBe(false);
+  });
+  it.each([
+    "what's my best scalp",
+    'my best game',
+    'my fastest win',
+    'what are my bests',
+  ])('"%s" → still a records ask', (q) => expect(isRecordsQuestion(q)).toBe(true));
 });
 
 describe('isOpeningTrapsQuestion (David 2026-07-04: traps in my strongest opening / watch out for)', () => {

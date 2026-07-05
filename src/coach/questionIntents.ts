@@ -498,13 +498,21 @@ export function isStrengthsQuestion(ask: string | undefined): boolean {
  *  which PART within one opening. Ordered BEFORE progress in the chokepoint so
  *  "what should I work on in my opening" doesn't get a generic weakness-dump. */
 const OPENING_ACCURACY_RE = anyOf([
-  // "how accurate / accurately …" and "my/your accuracy …" are inherently
-  // performance questions — accept them even when the opening is named without
-  // the literal word "opening" ("how accurately do I play the London", "what's
-  // my accuracy in the Caro-Kann"). The coachApi block resolves the target
-  // opening from context / the weakest repertoire opening.
-  String.raw`\bhow\s+accura(?:te|tely)\b`,
-  String.raw`\b(?:my|your)\s+accura(?:te|cy)\b`,
+  // OPENING-scoped accuracy only: "how accurately do I PLAY/KNOW …" (an opening
+  // is the object). A BARE "how accurate am I" / "what's my accuracy" has NO
+  // opening object and is an OVERALL-accuracy question (isAccuracyQuestion) —
+  // matching it here made opening-accuracy hijack it, since it runs first in the
+  // chokepoint (David 2026-07-05 visual audit: "how accurate am I overall?" got
+  // the drill-a-line answer). The anchored "accuracy … opening/line/theory"
+  // alternatives below still catch "how accurate am I in my opening".
+  String.raw`\bhow\s+accura(?:te|tely)\s+(?:do|did|can|have)\s+i\s+(?:play|know|handle|remember|drill)\b`,
+  // Named-opening accuracy: "accuracy … in/with/against/playing THE <opening>"
+  // ("what's my accuracy in the Caro-Kann", "how accurate am I in the
+  // Sicilian"). Requires the preposition + an article (the/my/a) so a BARE or
+  // OVERALL ask ("how accurate am I overall", "my accuracy in general") does NOT
+  // match — the article gate excludes "in general/overall" (no article) and the
+  // lookahead excludes "the game(s)/overall".
+  String.raw`\baccura(?:te|cy)\b[^?.!]{0,25}\b(?:in|with|against|playing|into|versus|vs\.?)\s+(?:the|my|an?)\s+(?!general\b|overall\b|games?\b|life\b)[a-z][\w'-]+`,
   // "accuracy / accurate" anchored to an opening/line/theory (either order)
   String.raw`\baccura(?:te|cy)\b[^?.!]{0,50}\b(?:opening|openings|line|lines|variation|variations|repertoire|theory)\b`,
   String.raw`\b(?:opening|openings|line|lines|variation|variations|repertoire|theory)\b[^?.!]{0,50}\baccura(?:te|cy)\b`,
@@ -807,7 +815,13 @@ export function isColorQuestion(ask: string | undefined): boolean {
 /** "my best game / fastest win / records" → assembleRecordsAnswer. */
 const RECORDS_QUESTION_RE = anyOf([
   String.raw`\bmy\s+(?:best|fastest|longest|most\s+accurate)\s+(?:game|win|scalp)\b`,
-  String.raw`\bwhat(?:'?s| is| are)?\s+my\s+(?:records?|personal\s+bests?|bests?)\b`,
+  // NB: standalone form requires the PLURAL "bests" ("what are my bests?").
+  // A bare singular "best" is too greedy — "what is my best opening/line" is an
+  // opening-profile question, not a records one, and records runs first in the
+  // chokepoint so it would hijack it (David 2026-07-05 visual audit). The
+  // specific "my best game/win/scalp/result" alternatives below still catch a
+  // real records ask.
+  String.raw`\bwhat(?:'?s| is| are)?\s+my\s+(?:records?|personal\s+bests?|bests)\b`,
   String.raw`\bmy\s+fastest\s+win\b`,
   String.raw`\bmy\s+longest\s+game\b`,
   String.raw`\bmy\s+best\s+(?:scalp|result|win)\b`,

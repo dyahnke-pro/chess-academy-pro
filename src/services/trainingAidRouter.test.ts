@@ -138,6 +138,26 @@ describe('matchTrainingAidRoute — diagnosis questions fall through to the grou
   });
 });
 
+describe('matchTrainingAidRoute — puzzle STATS questions fall through to the grounded brain (David 2026-07-05 functional audit)', () => {
+  // "what's my puzzle rating?" is a STATS question (isPuzzleStatsQuestion), not a
+  // drill — the word "puzzle" used to hijack it into a puzzle drill ("no
+  // mistakes due to review").
+  it.each([
+    "what's my puzzle rating?",
+    'what is my puzzle rating',
+    'how many puzzles have I solved',
+    'my puzzle accuracy',
+    'my puzzle stats',
+    'how good am I at puzzles',
+  ])('puzzle-stats → null (brain grounds it): %s', (q) => {
+    expect(matchTrainingAidRoute(q)).toBeNull();
+  });
+  // But an explicit puzzle-drill IMPERATIVE still drills.
+  it('imperative "give me a puzzle" still routes to a puzzle drill', () => {
+    expect(matchTrainingAidRoute('give me a puzzle')?.aid).toBe('puzzle');
+  });
+});
+
 describe('matchTrainingAidRoute — non-matches (fall through to brain / opening router)', () => {
   it('does NOT match an opening drill "drill the Vienna"', () => {
     expect(matchTrainingAidRoute('drill the Vienna')).toBeNull();

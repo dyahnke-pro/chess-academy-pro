@@ -161,8 +161,16 @@ async function run() {
 async function typeAndSend(page, text) {
   const input = page.locator('[data-testid="chat-text-input"]');
   await input.waitFor({ timeout: 20_000 });
-  await input.fill(text);
+  await input.click();
+  await input.fill('');
+  // pressSequentially fires React onChange per keystroke; fill() alone does NOT
+  // reliably trigger it, so the send button stays disabled and the turn never
+  // registers (the false "silent-hang" the earlier run manufactured). Empty
+  // input has nothing to type — go straight to Enter to prove the no-op.
+  if (text.length > 0) await input.pressSequentially(text, { delay: 4 });
   const btn = page.locator('[data-testid="chat-send-btn"]');
+  // Wait for the send button to enable (onChange landed) before clicking.
+  await btn.waitFor({ timeout: 3000 }).catch(() => {});
   if (await btn.isEnabled().catch(() => false)) await btn.click({ force: true });
   else await input.press('Enter');
 }

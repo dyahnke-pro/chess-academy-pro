@@ -62,12 +62,25 @@ const FRAMING_RE =
 const DIAGNOSIS_RE =
   /\b(?:what|which|where|why|how)\b[\s\S]{0,50}?\b(?:weak(?:est|ness(?:es)?)?|bad\s+at|worst\s+at|poor\s+at|struggl(?:e|ing)|los(?:e|ing)|blunder(?:ing)?|go(?:ing)?\s+wrong|mess(?:ing)?\s+up|holding\s+me\s+back|costing\s+me|need(?:s)?\s+(?:the\s+most\s+)?work|should\s+i\s+(?:train|learn|study|work\s+on|focus|improve|practi[sc]e)|do\s+i\s+(?:need\s+to|train|learn|work\s+on|focus|improve))\b/i;
 
+/** A puzzle/tactic STATS question ("my puzzle rating", "how many puzzles have I
+ *  solved", "my puzzle accuracy") is answered by the grounded coach
+ *  (isPuzzleStatsQuestion → assemblePuzzleStatsAnswer), NOT a drill. Without
+ *  this guard the `hasExplicitPuzzleWord` branch below hijacked any "puzzle"
+ *  mention — including a stats question — into a puzzle drill (David 2026-07-05
+ *  functional audit: "what's my puzzle rating?" → "no mistakes due to review").
+ *  Interrogative/possessive-led, so a real drill imperative ("give me a puzzle",
+ *  "drill a fork puzzle") has no rating/accuracy/count noun and still drills. */
+const STATS_RE =
+  /\bmy\s+puzzle\s+(?:rating|accuracy|score|stats?|elo)\b|\bhow\s+many\s+puzzles?\s+(?:have\s+i|did\s+i|i'?ve)\s+(?:solved|done|completed|gotten)\b|\bhow\s+(?:good|strong)\s+am\s+i\s+at\s+puzzles?\b|\bwhat(?:'?s| is)?\s+my\s+puzzle\s+(?:rating|accuracy|score|stats?)\b/i;
+
 export function matchTrainingAidRoute(text: string): TrainingAidRoute | null {
   const raw = text.trim();
   if (!raw) return null;
   const lower = raw.toLowerCase();
   // Diagnosis/recommendation QUESTIONS go to the grounded brain, not a drill.
   if (DIAGNOSIS_RE.test(lower)) return null;
+  // Puzzle/tactic STATS questions go to the grounded brain, not a drill.
+  if (STATS_RE.test(lower)) return null;
   const framed = FRAMING_RE.test(lower);
 
   // 1. Calculation drills → set a real puzzle up ON THE BOARD in Learn
