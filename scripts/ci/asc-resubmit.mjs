@@ -37,8 +37,9 @@ async function api(method, path, body) {
 
 const main = async () => {
   console.log('══════════ APP STORE VERSIONS ══════════');
-  const vers = await api('GET', `/v1/apps/${APP}/appStoreVersions?limit=10&fields[appStoreVersions]=versionString,appStoreState,platform,createdDate&sort=-createdDate`);
+  const vers = await api('GET', `/v1/apps/${APP}/appStoreVersions?limit=20&fields[appStoreVersions]=versionString,appStoreState,platform,createdDate`);
   if (vers.status >= 400) { console.error(`::error::versions ${vers.status} ${JSON.stringify(vers.j).slice(0, 300)}`); process.exit(1); }
+  (vers.j.data || []).sort((a, b) => String(b.attributes.createdDate).localeCompare(String(a.attributes.createdDate)));
   for (const v of vers.j.data || []) {
     console.log(`  ${v.attributes.versionString} [${v.attributes.platform}] state=${v.attributes.appStoreState} (${v.id})`);
   }
