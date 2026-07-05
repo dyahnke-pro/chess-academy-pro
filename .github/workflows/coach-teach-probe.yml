@@ -1,0 +1,38 @@
+name: Coach-teach probe (diagnose the silent-hang)
+
+# Fast (~4 min) focused diagnostic: type "teach me the Vienna" on prod and dump
+# the on-screen state (all testids, transcript, body text) into the JOB LOG,
+# so we can SEE what the loop audit's "silent-hang" actually is — real bug vs
+# cold-deploy vs stale-harness — without needing the (auth-gated) artifact.
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: 'Target URL'
+        required: false
+        default: 'https://chess-academy-pro.vercel.app'
+
+concurrency:
+  group: coach-teach-probe
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci --no-audit --no-fund --prefer-offline
+      - run: npx playwright install --with-deps chromium
+      - name: Probe
+        env:
+          AUDIT_SMOKE_URL: ${{ github.event.inputs.url }}
+        run: node scripts/coach-teach-probe.mjs
