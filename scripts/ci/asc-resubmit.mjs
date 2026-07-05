@@ -42,6 +42,16 @@ const main = async () => {
     const d = await api('DELETE', `/v1/reviewSubmissionItems/${process.env.DELETE_ITEM}`);
     console.log(`DELETE item ${process.env.DELETE_ITEM}: ${d.status === 204 ? 'OK (204)' : d.status + ' ' + JSON.stringify(d.j).slice(0, 400)}`);
   }
+  // Optional: directly (re)submit an EXISTING review submission by id — the
+  // API equivalent of the web "Resubmit to App Review" on the rejected one.
+  if (process.env.RESUBMIT_SUB) {
+    const id = process.env.RESUBMIT_SUB;
+    const cur = await api('GET', `/v1/reviewSubmissions/${id}`);
+    console.log(`resubmit target ${id}: state=${cur.j.data?.attributes?.state} submitted=${cur.j.data?.attributes?.submitted}`);
+    const r = await api('PATCH', `/v1/reviewSubmissions/${id}`, { data: { type: 'reviewSubmissions', id, attributes: { submitted: true } } });
+    console.log(`RESUBMIT ${id}: ${r.status} ${r.status >= 400 ? JSON.stringify(r.j).slice(0, 600) : 'state=' + r.j.data?.attributes?.state}`);
+    return;
+  }
   // Optional: cancel a dangling/empty review submission.
   if (process.env.CANCEL_SUB) {
     const c = await api('PATCH', `/v1/reviewSubmissions/${process.env.CANCEL_SUB}`, { data: { type: 'reviewSubmissions', id: process.env.CANCEL_SUB, attributes: { canceled: true } } });

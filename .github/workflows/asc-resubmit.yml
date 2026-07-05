@@ -29,6 +29,10 @@ on:
         description: 'reviewSubmission id to cancel'
         type: string
         default: ''
+      resubmit_sub:
+        description: 'reviewSubmission id to (re)submit directly'
+        type: string
+        default: ''
 
 jobs:
   resubmit:
@@ -49,4 +53,5 @@ jobs:
           DUMP_SUB: ${{ inputs.dump_sub }}
           DELETE_ITEM: ${{ inputs.delete_item }}
           CANCEL_SUB: ${{ inputs.cancel_sub }}
+          RESUBMIT_SUB: ${{ inputs.resubmit_sub }}
         run: node scripts/ci/asc-resubmit.mjs
