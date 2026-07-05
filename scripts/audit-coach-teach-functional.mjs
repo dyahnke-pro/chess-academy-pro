@@ -50,9 +50,16 @@ page.on('pageerror', (e) => errs.push('PAGEERROR: ' + e.message.slice(0, 160)));
 
 // ── grid: every programmed function → result ──
 const GRID = [];
+let shotN = 0;
 function record(fn, reached, detail) {
   GRID.push({ fn, reached, detail });
   console.log(`  ${reached ? '✅' : '❌'} ${fn.padEnd(34)} ${detail}`);
+  // Visual trail: fire-and-forget a screenshot of the UI at each checkpoint so
+  // the run can be EYEBALLED (David 2026-07-04: "visualize the UI to see what
+  // comes up"). Non-blocking — never changes the audit's timing or verdict.
+  shotN += 1;
+  const tag = `${String(shotN).padStart(2, '0')}-${reached ? 'ok' : 'FAIL'}-${fn.replace(/[^a-z0-9]+/gi, '-').slice(0, 40)}`;
+  void page.screenshot({ path: join(OUT, 'shots', `${tag}.png`) }).catch(() => undefined);
 }
 
 async function visible(sel) { return page.locator(sel).first().isVisible().catch(() => false); }

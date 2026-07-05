@@ -1,0 +1,88 @@
+name: Coach-teach visual audit (prod)
+
+# On-demand adversarial FUNCTIONAL + LOOP audit of /coach/teach, run on a
+# GitHub runner (full internet egress) against the LIVE prod app — because the
+# Claude Code sandbox this repo is developed from has CONNECT-proxy-only egress
+# that headless Chromium can't use (browser can't reach prod / the lichess
+# piece CDN / the coach LLM). The runner CAN, so the "play it like a real user
+# + visualize the UI" audit (David 2026-07-04) actually runs here.
+#
+#   • audit-coach-teach-functional.mjs — drives every programmed function like a
+#     real person (taps chips/tiles/board squares), asserts each is REACHED,
+#     and SCREENSHOTS every checkpoint (shots/ subdir) so the run can be eyeballed.
+#   • audit-coach-teach-loop.mjs — adversarial "break it" loop: messy human
+#     input, escalating chaos each pass, one screenshot per pass.
+#
+# Audits whatever prod currently serves (no deploy-wait) — the coach-teach code
+# is already live. Uploads all reports + screenshots as an artifact.
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: 'Target URL to audit.'
+        required: false
+        default: 'https://chess-academy-pro.vercel.app'
+      max_passes:
+        description: 'Adversarial loop passes (escalating).'
+        required: false
+        default: '3'
+
+concurrency:
+  group: coach-teach-visual-audit
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund --prefer-offline
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Functional audit (drives every function + screenshots each state)
+        id: functional
+        continue-on-error: true
+        env:
+          AUDIT_SMOKE_URL: ${{ github.event.inputs.url }}
+        run: node scripts/audit-coach-teach-functional.mjs
+
+      - name: Adversarial loop audit (break it, escalate each pass)
+        id: loop
+        continue-on-error: true
+        env:
+          AUDIT_SMOKE_URL: ${{ github.event.inputs.url }}
+          AUDIT_MAX_PASSES: ${{ github.event.inputs.max_passes }}
+        run: node scripts/audit-coach-teach-loop.mjs
+
+      - name: Upload reports + screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coach-teach-visual-audit
+          path: audit-reports/
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Summarize
+        if: always()
+        run: |
+          echo "## Coach-teach visual audit" >> "$GITHUB_STEP_SUMMARY"
+          echo "- functional: ${{ steps.functional.outcome }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- loop: ${{ steps.loop.outcome }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "Screenshots + coverage grid + break report are in the uploaded artifact." >> "$GITHUB_STEP_SUMMARY"
