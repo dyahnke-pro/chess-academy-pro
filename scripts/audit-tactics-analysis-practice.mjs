@@ -46,6 +46,19 @@ async function dismiss(page) {
   }
 }
 
+// Type into the answer box the way a human does — pressSequentially fires
+// React's onChange so the controlled `answer` state fills and the submit button
+// enables. `.fill()` does NOT reliably fire onChange on a controlled textarea,
+// leaving submit `disabled` → a FALSE "no verdict" (the 2026-05 harness lesson).
+async function typeRead(page, text) {
+  const input = page.locator(sel('analysis-practice-input'));
+  await input.click({ timeout: 5000 }).catch(() => {});
+  await input.fill('').catch(() => {});
+  await input.pressSequentially(text, { delay: 8 }).catch(() => {});
+  // wait for the send button to actually enable before the caller clicks it
+  await page.locator(`${sel('analysis-practice-submit')}:not([disabled])`).waitFor({ timeout: 5000 }).catch(() => {});
+}
+
 async function seedGame(page) {
   return await page.evaluate(async (game) => {
     return await new Promise((resolve) => {
@@ -119,7 +132,7 @@ async function main() {
       const boardUp = await page.locator(sel('analysis-practice-page')).locator('[data-square], [data-testid="board"]').first().isVisible().catch(() => false);
       mark('board-renders', boardUp, boardUp ? 'board rendered for the position' : 'no board element');
 
-      await page.locator(sel('analysis-practice-input')).fill('material is even, nothing is hanging').catch(() => {});
+      await typeRead(page, 'material is even, nothing is hanging');
       await page.locator(sel('analysis-practice-submit')).click({ timeout: 5000 }).catch(() => {});
       graded = await page.locator(sel('analysis-practice-verdict')).waitFor({ timeout: 30000 }).then(() => true).catch(() => false);
       mark('grades-answer', graded, graded ? 'the typed read was graded (verdict shown)' : 'no verdict appeared after submit');
@@ -137,50 +150,44 @@ async function main() {
       }
     }
 
-    // ── CASE 3: calculation METHOD flow (David 2026-07-04) ──
+    // ── CASE 3 (opt-in, AUDIT_CALC_SCAN=1): calculation METHOD flow ──
     // The calc drill is a 3-step method — "Calculation, step 1/2/3". Positions
-    // are sampled randomly, so we cycle through questions looking for the
-    // sequence; when we hit step 1 we assert steps 2 & 3 follow AND grade. If no
-    // forcing position turns up in the sampled set that's expected (many
-    // positions are quiet) — informational, not a failure. The METHOD LOGIC is
-    // deterministically proven by positionReadingService.test.ts (81 tests).
-    let calcSeen = false;
-    let calcOrdered = false;
-    let calcGraded = false;
-    try {
-      for (let i = 0; i < 18 && !calcOrdered; i += 1) {
-        const promptEl = page.locator(sel('analysis-practice-prompt'));
-        const up = await promptEl.waitFor({ timeout: 15000 }).then(() => true).catch(() => false);
-        if (!up) break;
-        const text = (await promptEl.innerText().catch(() => '')) || '';
-        if (/Calculation, step 1/i.test(text)) {
-          calcSeen = true;
-          // Answer step 1 (candidates) — a generic forcing word keeps us moving;
-          // grade, then advance to look for step 2.
-          await page.locator(sel('analysis-practice-input')).fill('a check or a capture').catch(() => {});
+    // are sampled randomly, so we cycle through a BOUNDED set of questions
+    // looking for the sequence; when we hit step 1 we assert step 2 follows in
+    // order. Each grade is a live LLM round-trip, so this is SLOW — gated behind
+    // a flag so the default deploy-health audit stays fast. If no forcing
+    // position turns up that's expected (many positions are quiet); the METHOD
+    // LOGIC is deterministically proven by positionReadingService.test.ts.
+    if (process.env.AUDIT_CALC_SCAN === '1' && graded) {
+      let calcSeen = false;
+      let calcOrdered = false;
+      try {
+        for (let i = 0; i < 8 && !calcOrdered; i += 1) {
+          const promptEl = page.locator(sel('analysis-practice-prompt'));
+          const up = await promptEl.waitFor({ timeout: 12000 }).then(() => true).catch(() => false);
+          if (!up) break;
+          const text = (await promptEl.innerText().catch(() => '')) || '';
+          const isCalc1 = /Calculation, step 1/i.test(text);
+          if (isCalc1) calcSeen = true;
+          await typeRead(page, isCalc1 ? 'a check or a capture' : 'nothing concrete');
           await page.locator(sel('analysis-practice-submit')).click({ timeout: 5000 }).catch(() => {});
-          await page.locator(sel('analysis-practice-verdict')).waitFor({ timeout: 30000 }).catch(() => {});
-          calcGraded = true;
-          // advance (correct auto-advances; a miss needs the Next button)
+          await page.locator(sel('analysis-practice-verdict')).waitFor({ timeout: 25000 }).catch(() => {});
           await page.locator(sel('analysis-practice-next')).click({ timeout: 3000 }).catch(() => {});
-          const step2 = await promptEl.waitFor({ timeout: 15000 }).then(() => promptEl.innerText()).catch(() => '');
-          if (/Calculation, step 2/i.test(step2 || '')) {
-            calcOrdered = true;
-            mark('calc-method-ordering', true, 'step 1 (candidates) → step 2 (calculate) rendered in order on the live surface');
+          if (isCalc1) {
+            const step2 = await promptEl.waitFor({ timeout: 12000 }).then(() => promptEl.innerText()).catch(() => '');
+            if (/Calculation, step 2/i.test(step2 || '')) {
+              calcOrdered = true;
+              mark('calc-method-ordering', true, 'step 1 (candidates) → step 2 (calculate) rendered in order on the live surface');
+            }
+            break;
           }
-          break;
         }
-        // not a calc question — answer generically and advance
-        await page.locator(sel('analysis-practice-input')).fill('nothing concrete').catch(() => {});
-        await page.locator(sel('analysis-practice-submit')).click({ timeout: 5000 }).catch(() => {});
-        await page.locator(sel('analysis-practice-verdict')).waitFor({ timeout: 30000 }).catch(() => {});
-        await page.locator(sel('analysis-practice-next')).click({ timeout: 3000 }).catch(() => {});
-      }
-    } catch { /* best-effort scan */ }
-    mark('calc-method-encountered', true,
-      calcOrdered ? 'calc-method sequence exercised + ordered on the live surface'
-        : calcSeen ? `calc step 1 seen (graded=${calcGraded}); step 2 not reached in the sampled set`
-          : 'no forcing position in the sampled set (expected — logic proven by 81 unit tests)');
+      } catch { /* best-effort scan */ }
+      mark('calc-method-encountered', true,
+        calcOrdered ? 'calc-method sequence exercised + ordered on the live surface'
+          : calcSeen ? 'calc step 1 seen; step 2 not reached in the sampled set'
+            : 'no forcing position in the sampled set (expected — logic proven by 81 unit tests)');
+    }
 
     mark('no-page-errors', pageErrors.length === 0, pageErrors.length === 0 ? 'no uncaught page errors' : `${pageErrors.length}: ${pageErrors.slice(0, 3).join(' | ')}`);
   } catch (e) {
