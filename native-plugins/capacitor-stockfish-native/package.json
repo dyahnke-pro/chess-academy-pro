@@ -1,0 +1,23 @@
+{
+  "name": "capacitor-stockfish-native",
+  "version": "0.1.0",
+  "description": "Native Stockfish 14.1 (classical) engine for Capacitor iOS, streaming UCI over the bridge.",
+  "license": "GPL-3.0-only",
+  "main": "dist/esm/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "files": [
+    "dist/",
+    "ios/",
+    "Package.swift"
+  ],
+  "author": "Chess Academy Pro",
+  "capacitor": {
+    "ios": {
+      "src": "ios"
+    }
+  },
+  "peerDependencies": {
+    "@capacitor/core": "^8.0.0"
+  }
+}
