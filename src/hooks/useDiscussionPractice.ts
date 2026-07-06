@@ -342,6 +342,13 @@ export function useDiscussionPractice(
       bucket: loggedTag ? getMisconceptionTag(loggedTag)?.bucket ?? null : null,
     });
 
+    // NARRATE the grounded reveal AFTER the student commits (David 2026-07-06:
+    // "it should be narrated after asking why I moved there" — the coach voice
+    // was showing in the card but never spoken). Automatic in-game narration →
+    // speakForced, so it honors the verbosity gate. Skip an empty note (the
+    // honest `other` fallback has none).
+    if (note.trim()) void voiceService.speakForced(note).catch(() => undefined);
+
     ctxRef.current = null;
     setTeach(note);
     setPhase('teaching');

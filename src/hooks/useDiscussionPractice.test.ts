@@ -94,6 +94,9 @@ describe('useDiscussionPractice — Learn (interruptive)', () => {
       logged_tag: 'missed-tactic',
       bucket: 'tactical',
     });
+    // The grounded reveal is NARRATED after the student commits (not just shown).
+    expect(voiceService.speakForced).toHaveBeenCalledWith('note');
+    expect(result.current.teach).toBe('note');
   });
 
   it('records response_mode=hint when the student taps Hint', async () => {
