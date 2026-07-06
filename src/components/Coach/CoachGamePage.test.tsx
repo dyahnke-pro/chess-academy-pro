@@ -45,6 +45,19 @@ vi.mock('../../services/stockfishEngine', () => ({
       nodesPerSecond: 1000000,
     }),
     initialize: vi.fn().mockResolvedValue(undefined),
+    // useEnginePonder polls isBusy() on an interval; async tests give that
+    // interval time to fire, so the mock must provide it (real method:
+    // stockfishEngine.isBusy, engine line ~1153).
+    isBusy: vi.fn(() => false),
+    analyzeWithBudget: vi.fn().mockResolvedValue({
+      bestMove: 'e2e4',
+      evaluation: 30,
+      isMate: false,
+      mateIn: null,
+      depth: 12,
+      topLines: [{ rank: 1, evaluation: 30, moves: ['e2e4'], mate: null }],
+      nodesPerSecond: 1000000,
+    }),
   },
 }));
 

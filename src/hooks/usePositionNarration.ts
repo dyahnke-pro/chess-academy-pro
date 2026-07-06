@@ -21,6 +21,12 @@ export interface UsePositionNarrationArgs {
   moveNumber: number;
   playerColor: 'white' | 'black';
   openingName?: string | null;
+  /** Persist the finished "Read this position" narration as a chat message
+   *  below the board (David 2026-07-06: "read position ... placed in the
+   *  chat/text area below the board") — the SAME treatment phase-transition
+   *  narration got. The banner is the live subtitle; this is the durable,
+   *  rereadable copy. Fires once per read with the full text. */
+  onReport?: (text: string) => void;
 }
 
 export interface UsePositionNarrationResult {
@@ -350,6 +356,15 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
         }
       }
 
+      // Mirror the finished read into the CHAT transcript below the board
+      // (David 2026-07-06) — same treatment as phase-transition narration.
+      // The banner is the live subtitle; the chat is the durable copy the
+      // student can scroll back and reread.
+      const finalReadText = fullText.trim() || apiResponse.trim();
+      if (finalReadText && !finalReadText.startsWith('⚠️')) {
+        args.onReport?.(finalReadText);
+      }
+
       // Block isNarrating true until the speech chain drains — preserves
       // the "board frozen while main voice speaks" invariant from
       // WO-COACH-NARRATION-05. Single-engine Polly chain means the
@@ -380,7 +395,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
         setIsNarrating(false);
       }
     }
-  }, [args.fen, args.pgn, args.moveNumber, args.playerColor, args.openingName]);
+  }, [args.fen, args.pgn, args.moveNumber, args.playerColor, args.openingName, args.onReport]);
 
   return { narrate, cancel, isNarrating, currentText, error };
 }

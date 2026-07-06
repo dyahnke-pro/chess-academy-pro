@@ -1668,6 +1668,9 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     moveNumber: moveCountRef.current,
     playerColor,
     openingName: detectedOpening?.name ?? null,
+    // Mirror the finished read into the chat below the board (David 2026-07-06)
+    // — same as phase-transition narration. The banner stays as live subtitle.
+    onReport: (text) => gameChatRef.current?.injectAssistantMessage(text),
   });
 
   const handleReadPosition = useCallback(() => {
