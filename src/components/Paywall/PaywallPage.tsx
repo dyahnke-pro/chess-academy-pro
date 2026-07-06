@@ -19,7 +19,13 @@ import {
  *
  * Dormant by default — only mounts when `VITE_PAYWALL_ENABLED=true` AND the
  * user is not Pro (see PaywallGate). Renders loading / empty / error states.
+ *
+ * Beta test builds set `VITE_PAYWALL_TEST_MODE=true` to render a conspicuous
+ * disclaimer that this is a preview and purchases run in Apple's StoreKit
+ * Sandbox (never a real charge). MUST stay off for the public-launch build —
+ * you cannot tell real App Store users "you won't be charged."
  */
+const PAYWALL_TEST_MODE = import.meta.env.VITE_PAYWALL_TEST_MODE === 'true';
 const FEATURES: readonly string[] = [
   'Unlimited AI coach — ask anything, mid-game',
   '42 guided opening masterclasses, move by move',
@@ -97,6 +103,18 @@ export function PaywallPage(): JSX.Element {
             Your AI chess coach — learn, play, and drill your weaknesses shut.
           </p>
         </header>
+
+        {PAYWALL_TEST_MODE && (
+          <div className="mb-6 rounded-2xl border-2 border-amber-400/40 bg-amber-400/10 px-4 py-3 text-center">
+            <p className="text-sm font-bold text-amber-300">🧪 Beta test — not a real charge</p>
+            <p className="mt-1 text-xs leading-relaxed text-amber-200/80">
+              This is a preview screen. Purchases run in Apple’s TestFlight
+              Sandbox and will <span className="font-semibold">never bill your
+              card or Apple ID</span>. Tap around freely — nothing here charges
+              real money.
+            </p>
+          </div>
+        )}
 
         <ul className="mb-6 space-y-2">
           {FEATURES.map((f) => (

@@ -13,6 +13,10 @@ interface ImportMetaEnv {
   /** Master switch for the hard paywall gate. `'true'` makes the gate
    *  LIVE (locks non-Pro users out of the whole app). Dormant otherwise. */
   readonly VITE_PAYWALL_ENABLED?: string;
+  /** Beta-test builds set `'true'` to show the "not a real charge — Sandbox
+   *  purchases only" disclaimer on the paywall. MUST be unset/false for the
+   *  public-launch build (can't tell real App Store users they won't be charged). */
+  readonly VITE_PAYWALL_TEST_MODE?: string;
 }
 
 // __ANTHROPIC_KEY__ / __DEEPSEEK_KEY__ removed 2026-06-09 — provider keys no
