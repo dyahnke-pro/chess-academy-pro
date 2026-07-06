@@ -91,6 +91,12 @@ export function groundArrows(
   fen: string,
   max = 5,
 ): BoardArrow[] {
+  // NEVER render a red arrow (David 2026-07-06): an arrow on a mistake reads as
+  // the coach telling the student to play it. Belt-and-suspenders on top of the
+  // green/yellow-only candidate colorizer — red can't reach the board from ANY
+  // source (a stray LLM marker, legacy data). Drop before grounding so the
+  // bad-FEN fallback below can't leak one either.
+  arrows = arrows.filter((a) => a.color !== 'red');
   let game: Chess;
   try {
     game = new Chess(fen);

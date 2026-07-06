@@ -49,4 +49,15 @@ describe('groundArrows', () => {
     const r = groundArrows([a('b1', 'c3'), a('e4', 'e5')], 'not-a-fen', 5);
     expect(r).toHaveLength(2);
   });
+
+  it('DROPS red arrows — never point at a mistake (David 2026-07-06)', () => {
+    const red = (from: string, to: string): BoardArrow => ({ startSquare: from, endSquare: to, color: 'red' });
+    // A valid green knight arrow survives; the red one is dropped even though
+    // its geometry is legal.
+    const r = groundArrows([a('b1', 'c3'), red('g1', 'f3')], START);
+    expect(r).toHaveLength(1);
+    expect(r[0].color).toBe('green');
+    // Red is dropped even on the unparseable-FEN fallback path.
+    expect(groundArrows([red('b1', 'c3')], 'not-a-fen')).toHaveLength(0);
+  });
 });

@@ -93,12 +93,12 @@ describe('resolveSanToArrow', () => {
 });
 
 describe('colorForRank', () => {
-  it('maps engine rank to color', () => {
+  it('maps engine rank to GREEN/YELLOW only — off-top-3 draws nothing', () => {
     expect(colorForRank(1)).toBe('green');
-    expect(colorForRank(2)).toBe('blue');
+    expect(colorForRank(2)).toBe('yellow');
     expect(colorForRank(3)).toBe('yellow');
-    expect(colorForRank(4)).toBe('red');
-    expect(colorForRank(null)).toBe('red');
+    expect(colorForRank(4)).toBeNull(); // mistake/threat — never drawn
+    expect(colorForRank(null)).toBeNull();
   });
 });
 
@@ -112,10 +112,12 @@ describe('injectCandidateArrows', () => {
     expect(injected).toEqual([{ san: 'Nf3', color: 'green' }]);
   });
 
-  it('colors an unranked (off-top-3) mention red', async () => {
+  it('draws NO arrow for an unranked (off-top-3) mention — never point at a mistake', async () => {
     const analyze = async (): Promise<RankedCandidate[]> => [{ from: 'e2', to: 'e4', rank: 1 }];
-    const { text } = await injectCandidateArrows('Avoid the loose Nh3.', start, analyze);
-    expect(text).toContain('[BOARD: arrow:g1-h3:red]');
+    const { text, injected } = await injectCandidateArrows('Avoid the loose Nh3.', start, analyze);
+    expect(text).not.toContain('g1-h3'); // the off-top-3 move is dropped
+    expect(text).not.toContain(':red');
+    expect(injected.some((i) => i.san === 'Nh3')).toBe(false);
   });
 
   it('strips any LLM-emitted markers and re-derives', async () => {
@@ -136,12 +138,16 @@ describe('injectCandidateArrows', () => {
     expect(injected).toHaveLength(0);
   });
 
-  it('survives an engine failure (geometry still resolved, color falls to red)', async () => {
+  it('draws NO arrow on engine failure — never an ungrounded/red fallback', async () => {
     const analyze = async (): Promise<RankedCandidate[]> => {
       throw new Error('engine down');
     };
-    const { text } = await injectCandidateArrows('Try Nf3.', start, analyze);
-    expect(text).toContain('[BOARD: arrow:g1-f3:red]');
+    const { text, injected } = await injectCandidateArrows('Try Nf3.', start, analyze);
+    // Without a rank we can't call it green/yellow, so we draw nothing rather
+    // than fall back to a red/ungrounded arrow (David 2026-07-06). The primary
+    // best-move green arrow comes from the grounded answer path independently.
+    expect(text).toBe('Try Nf3.');
+    expect(injected).toHaveLength(0);
   });
 
   it('CAPS the arrows so a chatty answer never floods the board', async () => {

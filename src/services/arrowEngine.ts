@@ -193,15 +193,17 @@ export interface RankedCandidate {
  *  singleton). Returns the top moves at `fen`, ranked. */
 export type MultipvAnalyzer = (fen: string) => Promise<RankedCandidate[]>;
 
-/** Color a candidate by its engine rank. Green=#1, blue=#2, yellow=#3,
- *  red = outside the top 3 (the coach mentioned a move the engine
- *  doesn't rate among the best — usually a threat to avoid or a
- *  mistake to warn against). */
-export function colorForRank(rank: number | null): ArrowColor {
+/** Color a candidate by its engine rank — GREEN and YELLOW ONLY (David
+ *  2026-07-06). Green = the engine's #1 (the move being suggested); yellow =
+ *  a real secondary candidate (#2/#3). A move OUTSIDE the top 3 returns
+ *  null: it is NOT drawn at all. We never put a red arrow on a mistake — an
+ *  arrow on a bad move reads as the coach telling the student to play it.
+ *  Green must populate whenever a suggestion is made; the best move always
+ *  ranks #1, so it always lands green. */
+export function colorForRank(rank: number | null): ArrowColor | null {
   if (rank === 1) return 'green';
-  if (rank === 2) return 'blue';
-  if (rank === 3) return 'yellow';
-  return 'red';
+  if (rank === 2 || rank === 3) return 'yellow';
+  return null; // off-top-3 (mistake/threat) — draw nothing
 }
 
 /** Inject CANDIDATE arrows for every move the coach mentioned: strip
@@ -251,11 +253,17 @@ export async function injectCandidateArrows(
   // first (the real best moves), then the rest — hard-capped. The
   // masterclass standard: one well-anchored arrow beats a paragraph.
   resolved.sort((a, b) => (a.rank ?? 99) - (b.rank ?? 99));
-  const capped = resolved.slice(0, MAX_CANDIDATE_ARROWS);
+  // DROP any move that isn't a real suggestion (green/yellow). A mistake the
+  // coach names in prose gets NO arrow — we don't point at a bad move
+  // (David 2026-07-06). Filter BEFORE the cap so the drawable candidates
+  // aren't crowded out by dropped ones.
+  const drawable = resolved
+    .map((r) => ({ ...r, color: colorForRank(r.rank) }))
+    .filter((r): r is typeof r & { color: ArrowColor } => r.color !== null);
+  const capped = drawable.slice(0, MAX_CANDIDATE_ARROWS);
   const markers: string[] = [];
   const injected: { san: string; color: ArrowColor }[] = [];
-  for (const { san, from, to, rank } of capped) {
-    const color = colorForRank(rank);
+  for (const { san, from, to, color } of capped) {
     markers.push(`[BOARD: arrow:${from}-${to}:${color}]`);
     injected.push({ san, color });
   }
