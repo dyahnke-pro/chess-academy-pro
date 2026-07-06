@@ -21,8 +21,20 @@ prose. Grounded per G0 — the coach VOICES computed facts (engine eval,
 - **Play (`/coach/play`, OpeningPlayMode play) — PURE PLAYING SURFACE.** No
   blocking picker. Only phase-transition narration (may mention a couple of
   mistakes with positional analysis). Never stop the game.
-- **Post-game review** — the full diagnostic for Play games. Wiring is
-  designed WITH David first. NOT built unprompted.
+- **Post-game review** — the full diagnostic for Play games. **BUILT
+  2026-07-06** (David prompted: "wire the new coach style into post game
+  review… I want that section to respond like learn with coach"; chose "Full
+  faucet (like Learn)"). Stepping onto one of the student's own mistakes in the
+  review walk raises the SAME "why'd you play that?" picker → narrated grounded
+  reveal → weakness bucket (source `game-review`), REPLACING the reading-
+  challenge prompt on mistakes (same trigger + `readingChallengesInReview`
+  toggle). Impl: `useDiscussionPractice.raiseSlipPrompt` (known-data entry, no
+  engine re-eval) wired in `CoachGameReview.handleWalkForward` /
+  `resumeAfterFaucet` + the `DiscussionPracticePanel`.
+- **Also landed 2026-07-06:** good-move picker CUT → non-blocking spoken line;
+  the grounded reveal is now NARRATED after the student commits (was card-only);
+  `discussion_response` / `discussion_good_move` analytics; the bucket-delivery
+  audit engine + gate.
 - "We will talk about how to add to both surfaces together" — the Learn picker
   and the Play→review path are designed together, not unilaterally.
 
