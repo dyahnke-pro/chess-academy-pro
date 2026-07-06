@@ -56,10 +56,37 @@ isn't logged, so bucket delivery is currently *inferred*, not *verifiable*.
   bucket map + delivery/organization rollup. 3-consecutive-clean-pass contract.
 - Wire into ship-check gate list, the Post-Deploy Audit matrix, `docs/AUDIT_INDEX.md`.
 
-## Follow-on (flagged, not in this pass)
-- Log the raw picker answer (`userReason` is collected but the *chip* choice
-  isn't) so "what I said vs what the board showed" is fully auditable per-answer.
-- Emit a `discussion-picker-shown` audit so pickers-shown vs buckets-delivered
-  can be reconciled (the two-popups-one-bucket question).
+## PostHog events added (standing order: document event names + props)
 
-Status: engine — in progress.
+- **`discussion_response`** — fired on every LEARN picker answer.
+  Props: `surface`, `kind` ('slip'), `response` (the answer text or
+  "(could not say)"), `response_mode` ('chip'|'typed'|'hint'), `was_hint`,
+  `move`, `game_phase`, `cp_loss`, `should_count`, `student_rating`,
+  `logged_tag` (the classified misconception tag), `bucket`. **This is "see
+  how the user responds to the pop-ups."**
+- **`discussion_good_move`** — fired when a near-best move that set up a tactic
+  is recognized (NON-BLOCKING, no picker). Props: `surface`, `move`,
+  `game_phase`, `cp_loss`, `student_rating`. Lets us see the good/slip ratio.
+
+Query how users respond:
+`node scripts/posthog-query.mjs "SELECT properties.response_mode, count() FROM
+events WHERE event='discussion_response' AND timestamp > now() - INTERVAL 7 DAY
+GROUP BY properties.response_mode"`
+
+## Delivered (2026-07-06)
+
+- ✅ **Audit engine** `bucketPipelineAudit.ts` (13 invariants) + unit gate
+  `bucketPipelineAudit.test.ts` (6/6) — in ship-check.
+- ✅ **Good-move picker cut** — `useDiscussionPractice` routes a good move to a
+  non-blocking spoken "atta boy" (`speakForced`, honors verbosity) + a
+  `discussion_good_move` event; the blocking picker is slips-only.
+- ✅ **Response logging** — `discussion_response` on every picker answer,
+  carrying the raw response + mode + resulting bucket.
+- ✅ **Adaptive verified** — `slipWarrantsInterjection` gate wired end-to-end
+  (rating passed from `CoachTeachPage:3759`); covered by the hook test's
+  "120cp mistake interrupts a 1200 but not an 800" case.
+- ✅ **Live audit tool** `window.__bucketAudit` bridge + `audit-bucket-delivery-loop.mjs`
+  (clean-delivery + drop-detection scenarios). Registered in AUDIT_INDEX.
+
+Status: COMPLETE. Follow-on (future): a `discussion_picker_shown` event to
+reconcile pickers-shown vs buckets-delivered directly.

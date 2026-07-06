@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import './services/bucketAuditBridge'; // installs window.__bucketAudit for the bucket-delivery audit (no-op for real users)
 import { useAppStore } from './stores/appStore';
 import { getOrCreateMainProfile } from './services/dbService';
 import { calibrateStrength } from './services/strengthCalibrationService';

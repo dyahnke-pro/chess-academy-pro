@@ -30,6 +30,9 @@ import { detectSlip, slipWarrantsInterjection, isNearBest } from '../services/sl
 import { detectTactics } from '../services/tacticsDetector';
 import { buildWhyPrompt, buildGroundedReveal, captureMisconception } from '../services/discussionPractice';
 import { buildMoveReasonOptions } from '../services/moveReasonOptions';
+import { voiceService } from '../services/voiceService';
+import { captureEvent } from '../services/analytics';
+import { getMisconceptionTag } from '../data/misconceptionTags';
 
 /** Sentinel the panel's Hint button submits — the hook treats it as an honest
  *  "I couldn't say" (reveal the answer, log the gap), never a typed reason. */
@@ -90,10 +93,21 @@ export interface RaiseSlipPromptArgs {
   studentRating?: number;
 }
 
+/** A recognized good move — a NON-BLOCKING "atta boy" (David 2026-07-06:
+ *  "do we need the picker on good moves? I don't think so"). The coach speaks
+ *  `line` and this transient signal lets the surface flash it; it never opens
+ *  the blocking picker. Cleared on the next evaluated move or reset. */
+export interface GoodMoveRecognition {
+  line: string;
+  playedSan: string;
+}
+
 export interface UseDiscussionPracticeResult {
   phase: DiscussionPhase;
   prompt: DiscussionPrompt | null;
   teach: string | null;
+  /** Non-blocking good-move recognition (spoken + flashable), or null. */
+  goodMove: GoodMoveRecognition | null;
   evaluatePlayerMove: (args: EvaluatePlayerMoveArgs) => Promise<void>;
   raiseSlipPrompt: (args: RaiseSlipPromptArgs) => void;
   submitReason: (reason: string) => Promise<void>;
@@ -120,6 +134,9 @@ interface MoveContext {
   shouldCount: boolean;
   reveal: string;
   moverChar: 'w' | 'b';
+  /** The reason chips shown, so submitReason can tell a chip pick from a
+   *  typed answer when logging how the student responded. */
+  options: string[];
 }
 
 /** UCI -> SAN against a FEN (chess.js). Returns undefined on any bad input. */
@@ -150,6 +167,7 @@ export function useDiscussionPractice(
   const [phase, setPhase] = useState<DiscussionPhase>('idle');
   const [prompt, setPrompt] = useState<DiscussionPrompt | null>(null);
   const [teach, setTeach] = useState<string | null>(null);
+  const [goodMove, setGoodMove] = useState<GoodMoveRecognition | null>(null);
   const ctxRef = useRef<MoveContext | null>(null);
   const busyRef = useRef(false);
 
@@ -161,6 +179,7 @@ export function useDiscussionPractice(
     setPhase('idle');
     setPrompt(null);
     setTeach(null);
+    setGoodMove(null);
   }, []);
 
   const evaluatePlayerMove = useCallback(
@@ -199,23 +218,48 @@ export function useDiscussionPractice(
         learned: args.learned,
       });
 
-      let kind: 'slip' | 'good' | null = null;
-      if (slip.isSlip && slipWarrantsInterjection(cpLoss, args.studentRating)) {
-        kind = 'slip';
-      } else if (isNearBest(cpLoss) && createdTactic(args.fenAfter)) {
-        kind = 'good';
+      // The interjection bar is RATING-ADAPTIVE (slipWarrantsInterjection):
+      // beginner→blunders, intermediate→mistakes, advanced→inaccuracies. The
+      // coach interrupts a slip at the level it matters for THIS player.
+      const isSlip = slip.isSlip && slipWarrantsInterjection(cpLoss, args.studentRating);
+      const isGood = !isSlip && isNearBest(cpLoss) && createdTactic(args.fenAfter);
+      if (!isSlip && !isGood) {
+        setGoodMove(null); // an unremarkable move clears any lingering atta-boy
+        return;
       }
-      if (!kind) return;
 
-      const reveal = buildGroundedReveal({ kind, fenAfter: args.fenAfter, moverColor: moverChar, bestSan });
+      // GOOD MOVE — NO blocking picker (David 2026-07-06: "do we need the
+      // picker on good moves? I don't think so"). Stopping a student cold
+      // after a strong move is the wrong reward. Recognition still fires, but
+      // as a NON-BLOCKING spoken "atta boy" (automatic in-game narration →
+      // speakForced, so it honors the verbosity gate). We log that it fired so
+      // the good/slip ratio is visible. The blocking picker is slips only.
+      if (isGood) {
+        const line = buildGroundedReveal({ kind: 'good', fenAfter: args.fenAfter, moverColor: moverChar, bestSan });
+        setGoodMove({ line, playedSan: args.playedSan });
+        void voiceService.speakForced(line).catch(() => undefined);
+        captureEvent('discussion_good_move', {
+          surface: opts.surface ?? 'unknown',
+          move: args.playedSan,
+          game_phase: args.gamePhase,
+          cp_loss: Math.round(cpLoss),
+          student_rating: args.studentRating ?? null,
+        });
+        return; // non-blocking — never opens the picker, never sets busy
+      }
 
+      // SLIP — the blocking "why'd you play that?" picker.
+      const options = buildMoveReasonOptions(args.fenBefore, args.playedSan);
+      const reveal = buildGroundedReveal({ kind: 'slip', fenAfter: args.fenAfter, moverColor: moverChar, bestSan });
+
+      setGoodMove(null);
       busyRef.current = true;
-      ctxRef.current = { args, bestSan, cpLoss, kind, shouldCount: slip.shouldCount, reveal, moverChar };
+      ctxRef.current = { args, bestSan, cpLoss, kind: 'slip', shouldCount: slip.shouldCount, reveal, moverChar, options };
       setPrompt({
         question: buildWhyPrompt(slip),
-        options: buildMoveReasonOptions(args.fenBefore, args.playedSan),
+        options,
         hintReveal: reveal,
-        kind,
+        kind: 'slip',
         fenBefore: args.fenBefore,
         fenAfter: args.fenAfter,
         playedSan: args.playedSan,
@@ -227,7 +271,7 @@ export function useDiscussionPractice(
       });
       setPhase('asking');
     },
-    [active],
+    [active, opts.surface],
   );
 
   const submitReason = useCallback(async (reason: string): Promise<void> => {
@@ -235,13 +279,22 @@ export function useDiscussionPractice(
     if (!ctx) return;
     setPhase('thinking');
 
-    const userReason = reason === HINT_SENTINEL ? '(could not say)' : reason;
+    const wasHint = reason === HINT_SENTINEL;
+    const userReason = wasHint ? '(could not say)' : reason;
+    // How did the student answer? chip pick / typed / tapped Hint — the raw
+    // signal David wants visible ("we need to see how the user responds").
+    const responseMode: 'chip' | 'typed' | 'hint' = wasHint
+      ? 'hint'
+      : ctx.options.includes(reason)
+        ? 'chip'
+        : 'typed';
 
     // A SLIP is classified + logged to the weakness bucket (-> drillable
     // mistakePuzzle). A GOOD move teaches without inflating the weakness
     // profile. The reveal text is the classifier's grounded coachNote when
     // available (slip), else the pre-computed grounded reveal.
     let note = ctx.reveal;
+    let loggedTag: string | undefined;
     if (ctx.kind === 'slip') {
       try {
         const res = await captureMisconception({
@@ -266,15 +319,33 @@ export function useDiscussionPractice(
           },
         });
         if (res.coachNote) note = res.coachNote;
+        loggedTag = res.record?.tag;
       } catch {
         /* keep the pre-computed grounded reveal */
       }
     }
 
+    // Log HOW the student answered the pop-up + where it bucketed, so the
+    // response (and the said-vs-board delta) is durably visible in analytics.
+    captureEvent('discussion_response', {
+      surface: opts.surface ?? 'unknown',
+      kind: ctx.kind,
+      response: userReason,
+      response_mode: responseMode,
+      was_hint: wasHint,
+      move: ctx.args.playedSan,
+      game_phase: ctx.args.gamePhase,
+      cp_loss: Math.round(ctx.cpLoss),
+      should_count: ctx.shouldCount,
+      student_rating: ctx.args.studentRating ?? null,
+      logged_tag: loggedTag ?? null,
+      bucket: loggedTag ? getMisconceptionTag(loggedTag)?.bucket ?? null : null,
+    });
+
     ctxRef.current = null;
     setTeach(note);
     setPhase('teaching');
-  }, []);
+  }, [opts.surface]);
 
   // raiseSlipPrompt kept for API compatibility (callers may still invoke it);
   // the eval-driven evaluatePlayerMove path is the live one.
@@ -288,6 +359,7 @@ export function useDiscussionPractice(
     phase,
     prompt,
     teach,
+    goodMove,
     evaluatePlayerMove,
     raiseSlipPrompt,
     submitReason,
