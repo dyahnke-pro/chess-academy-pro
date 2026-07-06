@@ -2815,6 +2815,137 @@ robotic and tune out fast.
 Code templates that violate these rules are bugs. When in doubt,
 prefer silence.
 
+### 🔒🔒 THE APP'S COACH VOICE + THE "WHY DID YOU PLAY THAT?" FAUCET — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")
+
+This is the single voice of the coach across the whole app — every spoken
+line, every teaching interjection. It governs (and is consistent with) the
+Narration Voice Rules above and the Naroditsky house-voice doctrine. Full
+spec + build plan: `docs/plans/2026-07-06-coach-voice-why-faucet.md`. Read
+it before touching any coach voice / in-game narration / discussion-practice
+surface.
+
+**🔒 SURFACE PLACEMENT — the blocking picker lives in LEARN, NEVER in PLAY
+(David 2026-07-06, emphatic: "Put this into the learn tab!!! Not the PLAY
+tab!!! That is a pure playing surface").**
+- **Learn (`/coach/teach`)** — the interruptive "why did you play that?"
+  picker lives HERE. Learn is a teaching surface; a blocking probe belongs.
+- **Play (`/coach/play`, `OpeningPlayMode` play phase) — PURE PLAYING
+  SURFACE. NO blocking interruptions, EVER.** During a Play game the coach
+  may only speak **phase-transition narration** (opening→middlegame→endgame)
+  — non-blocking, and it may mention a couple of the mistakes made with the
+  positional analysis, but it NEVER stops the game with a picker.
+- **The full diagnostic for a Play game happens in POST-GAME REVIEW**, not
+  live. Wiring the "why did you play that?" into review is a SEPARATE step
+  to be **designed with David first** ("we will wire it into that after we
+  discuss how" / "we will talk about how to add to both surfaces together").
+  Do NOT build the review wiring unprompted.
+
+**THE VOICE — Naroditsky's instructive register, stripped of philosophy.**
+Deterministic. Facts first, then the point. Concept-first (names the idea
+behind the move), warm but RIGOROUS — one clipped spark of warmth ("clean",
+"there it is"), never sentiment, never "widen your eyes" philosophizing.
+Calibrated against his real teaching (the "How To Calculate In Chess:
+CHECKS" cadence — "rook f7 check, king g8 … knight D5, and it's a
+checkmate"). It is a STYLE, not attribution — the app is depersonalized.
+Original prose, never his sentences. Grounded per G0 — the coach VOICES
+facts computed in code (engine eval, `detectTactics`, the PV plan); it
+DECIDES nothing.
+
+**TWO CHANNELS, ONE COACH — and only one is gated.**
+
+1. **NARRATION (voice, non-blocking)** — the coach's natural running
+   commentary. Fires **whenever it INSTRUCTS** — a threat appears, tension
+   breaks, a nice maneuver, a critical moment. Spoken, ambient, demands
+   nothing, play continues. Quiet only when a word would be filler (the
+   quality rule of the Narration Voice Rules — never a cost rule). The
+   app's EXISTING in-game narration is held to THIS bar: grounded, Danya,
+   deterministic.
+
+2. **THE "WHY DID YOU PLAY THAT?" PICKER (blocking)** — the diagnostic
+   interrupt. Fires **only when the moment is worth stopping play** =
+   the rating-adaptive gate ALREADY coded in
+   `slipDetector.slipWarrantsInterjection` (David 2026-06-04):
+   - beginner (< 1000) → **blunder** only (cpLoss ≥ 200)
+   - intermediate (1000–2000) → **mistakes that really cost** (≥ 100)
+   - advanced (> 2000) → **inaccuracies** and up (≥ 50)
+   This tuning is PEDAGOGY (the right lesson at the level it lands), NOT
+   throttling. Good-move prompts ride a separate, deliberately notable
+   trigger (a genuine decision point the student FOUND, or a move that set
+   up a real tactic) — never a routine recapture/only-move.
+
+**THE PICKER FLOW — never hand over the answer (the honesty contract):**
+1. **Clean neutral probe** — *"Why'd you play that?"* — IDENTICAL for good
+   and bad moves. ZERO board facts: no piece, no square, no tactic, not
+   even a "nice" that reveals it was good. The student must not know if
+   they're praised or corrected, or the reasoning data is contaminated.
+2. **The student commits a reason** — a **deterministic reason PICKER**
+   (chips generated from the move's mechanics — capture→"win material",
+   check→"attack the king", develop, king-safety, space, defend, "saw a
+   tactic", "looked natural" — with decoys so no chip telegraphs the
+   answer) **+ "Type your answer"** (free text) **+ a Hint button that
+   reveals the grounded answer** (tapping Hint is itself honest data =
+   "I didn't know").
+3. **Grounded reveal — ONLY AFTER they commit** — now the board speaks and
+   GRADES their reason against the truth ("Right — that's the fork" /
+   "It set up a fork — did you spot it?" / "That drops the knight").
+4. **Bucket it** — the delta between what they SAID and what the board
+   SHOWS picks the misconception tag → logged to the weakness bucket +
+   (concrete slip w/ best move) a drillable `mistakePuzzle` → ranked
+   most→least common → becomes the next calculation/mistake drill. The
+   "why?" answers ARE the fuel for the drills.
+
+**WINNING / KEEP-PRESSING = a GUIDED FIND-THE-MOVE, never a handed answer.**
+Name the PIECE + the GOAL, WITHHOLD the square: *"A knight wants into this
+attack — where's its best square?"* → the student plays it → right → press
+on; wrong → *"Not quite — want to take that back and look again?"* (offer
+takeback, retry); stuck → Hint reveals the square. Never name the square in
+the prompt.
+
+**THE THREE UNBREAKABLE RULES:**
+1. The probe contains **zero board facts** — not the tactic, not the
+   square, not even good-vs-bad. (This rule was violated repeatedly in
+   design; enforce it.)
+2. The answer appears **only after** the student commits (pick / type /
+   Hint) — honest self-report comes first, always.
+3. Everything the coach says is **computed** (engine + `detectTactics` +
+   PV). Danya voices it; he never decides it (G0).
+
+**COORDINATION:** on the LEARN surface, a picker moment SUPPRESSES narration
+(the clean probe replaces any comment, so nothing leaks); ordinary moments
+narrate freely. On PLAY, there is no picker to coordinate with — only
+phase-transition narration.
+
+**QUALITY IS THE ONLY METRIC — COST IS NEVER A FACTOR (David 2026-07-06:
+"I don't care about cost, I care about quality and providing value and
+instruction to my users").** Do not gate/ration for tokens or TTS spend.
+Speak when it instructs, interrupt when it's worth the interruption, stay
+silent when silence teaches better. The gates exist for pedagogy, not
+budget. Strip cost-flavored reasoning ("sparse", "rate-limited to save")
+from any design of this surface.
+
+**BUILD REALITY — the whole chain EXISTS; one link is dead.** The probe
+engine (`discussionPractice.ts`), the gate (`slipDetector.ts`), the
+classifier + buckets (`misconceptionClassifier` / `misconceptionService` /
+`weaknessSpine`), the mistake-puzzle bridge (`addMistakePuzzleFromCapture`),
+the drill queue, the pop-up panel (`DiscussionPracticePanel`), and the
+per-surface voice effects are ALL alive. The ONLY dead link is
+`useDiscussionPractice` — an inert no-op stub since the 2026-06-11
+retirement. **That retirement was a mistake** (the "automated post-game
+capture makes the live faucet redundant" reasoning was wrong — the analyst
+never replaces the coach asking in the moment). The faucet is CORE, always-on
+**on Learn**, **not disable-able**.
+
+The build (per the SURFACE PLACEMENT rule above):
+- **LEARN** — un-retire the hook → clean probe → good AND bad triggers →
+  deterministic reason picker + Hint → grounded reveal → buckets → drill.
+  Rating gate on the picker. Voice it in Danya's cadence. Do NOT re-stub.
+- **PLAY** — keep it a pure playing surface: NO picker. Only phase-transition
+  narration that may mention a couple of mistakes with positional analysis.
+- **POST-GAME REVIEW** — the full diagnostic for Play games goes here; its
+  wiring is designed WITH David first (do not build unprompted).
+- Guided find-the-move (winning position) + the narration-channel upgrade are
+  later phases (see the plan doc).
+
 ### State Management
 - **Zustand** for global app state (user profile, settings, current session, theme).
 - **React state** (`useState`) for local component state only.
