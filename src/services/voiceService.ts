@@ -1218,15 +1218,27 @@ class VoiceService {
     // existing polly-fallback event only fires on `noFallback`
     // skips; this catches the in-flow demotion that today is silent
     // unless someone reads the lastTier change.
+    // Capture WHY Polly failed in the SUMMARY (PostHog stores summary, not
+    // details — David 2026-07-06: 69 identical fallovers in one game with no
+    // cause recorded). The reason distinguishes a server error (status/AWS
+    // code) from a client-side iOS playback failure (element/stream), which is
+    // the difference between "Polly is down" and "iOS WKWebView can't play it".
+    const pollyReason =
+      this.lastSpeakDiagnostic.error ??
+      (this.lastSpeakDiagnostic.pollyStatus
+        ? `http ${this.lastSpeakDiagnostic.pollyStatus}`
+        : 'client playback failed (no server error)');
     void import('./appAuditor').then(({ logAppAudit }) => {
       void logAppAudit({
         kind: 'voice-fallover',
         category: 'subsystem',
         source: 'voiceService.speakInternal',
-        summary: `Polly failed → Web Speech for "${text.slice(0, 40)}"`,
+        summary: `Polly failed (${pollyReason}) → Web Speech for "${text.slice(0, 32)}"`,
         details: JSON.stringify({
           fromTier: 'polly',
           toTier: 'web-speech',
+          reason: pollyReason,
+          pollyStatus: this.lastSpeakDiagnostic.pollyStatus ?? null,
           textLength: text.length,
           textPreview: text.slice(0, 120),
         }),
