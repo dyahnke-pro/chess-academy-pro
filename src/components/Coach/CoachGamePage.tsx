@@ -2719,6 +2719,9 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
                 fen: result.fen,
                 trigger: null,
               });
+              // Mirror the spoken alert into the VISIBLE chat transcript
+              // (David 2026-07-06) — the stores above are brain memory only.
+              gameChatRef.current?.injectAssistantMessage(warning);
               // WO-VOICE-LAYER-01 (b): use the personality's secondary
               // voice so the alert cuts through with a different timbre
               // than the main narration.
@@ -3456,6 +3459,13 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
             fen: game.fen,
             trigger: null,
           });
+          // MIRROR the spoken narration into the VISIBLE chat transcript
+          // (David 2026-07-06: "have every spoken phrase be mirrored in the
+          // chat so I can go back and reread it"). The session/memory stores
+          // above feed the brain; only injectAssistantMessage reaches the
+          // GameChatPanel the student actually reads (+ persists via
+          // saveCoachPlayChat). Every spoken narration site must do this.
+          gameChatRef.current?.injectAssistantMessage(llm);
         }
       } catch {
         commentary = tacticSuffix.trim();
@@ -3508,6 +3518,10 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
           fen: game.fen,
           trigger: null,
         });
+        // Mirror the spoken line into the VISIBLE chat transcript (see the
+        // llm-path note above — the stores feed the brain, injectAssistantMessage
+        // feeds the chat the student reads).
+        gameChatRef.current?.injectAssistantMessage(fastLine);
       } else {
         commentary = tacticSuffix.trim();
         llmProducedSpeech = false;
@@ -3735,6 +3749,10 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
           summary: `verbosity=${verbosity} chars=${explanation.length}`,
           fen: moveResult.fen,
         });
+        // Mirror the spoken blunder explanation into the VISIBLE chat so the
+        // student can reread it (David 2026-07-06). The blunder overlay is
+        // transient; the transcript is not.
+        gameChatRef.current?.injectAssistantMessage(explanation);
         void voiceService.speak(explanation).catch((err: unknown) => {
           console.warn('[CoachGame] blunder narration TTS failed:', err);
         });
