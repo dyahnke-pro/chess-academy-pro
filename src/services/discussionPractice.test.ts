@@ -23,11 +23,16 @@ describe('evaluateMove', () => {
 });
 
 describe('buildWhyPrompt', () => {
-  it('distinguishes leaving book from a general slip', () => {
-    expect(buildWhyPrompt({ isSlip: true, reason: 'left-book', severity: 'mistake', cpLoss: 120, shouldCount: true }))
-      .toMatch(/main line/i);
-    expect(buildWhyPrompt({ isSlip: true, reason: 'eval-drop', severity: 'blunder', cpLoss: 250, shouldCount: true }))
-      .toMatch(/idea behind/i);
+  // CLEAN PROBE contract (David 2026-07-06, LOCKED): the question is IDENTICAL
+  // for good and bad moves and carries ZERO board facts — no "steps away from
+  // the main line" tell, no square/piece/tactic. The old leaky behavior
+  // (left-book → "main line") was the exact contamination this rule forbids.
+  it('is a clean neutral probe — identical regardless of the move, no leak', () => {
+    const a = buildWhyPrompt({ isSlip: true, reason: 'left-book', severity: 'mistake', cpLoss: 120, shouldCount: true });
+    const b = buildWhyPrompt({ isSlip: true, reason: 'eval-drop', severity: 'blunder', cpLoss: 250, shouldCount: true });
+    expect(a).toBe(b);
+    expect(a).toBe("Why'd you play that?");
+    expect(a).not.toMatch(/main line|fork|hang|nice|good|blunder|[a-h][1-8]/i);
   });
 });
 

@@ -4,9 +4,9 @@
 // in useDiscussionPractice / services. Mounts inside a play surface.
 
 import { useState, useCallback, type ReactNode } from 'react';
-import { Send, X } from 'lucide-react';
+import { Send, X, Lightbulb, PencilLine } from 'lucide-react';
 import { ExplanationCard } from './ExplanationCard';
-import type { DiscussionPhase, DiscussionPrompt } from '../../hooks/useDiscussionPractice';
+import { HINT_SENTINEL, type DiscussionPhase, type DiscussionPrompt } from '../../hooks/useDiscussionPractice';
 
 interface DiscussionPracticePanelProps {
   phase: DiscussionPhase;
@@ -26,10 +26,12 @@ export function DiscussionPracticePanel({
   onDismissTeach,
 }: DiscussionPracticePanelProps): JSX.Element | null {
   const [text, setText] = useState('');
+  const [typing, setTyping] = useState(false);
 
   const submit = useCallback(() => {
     const r = text.trim();
     setText('');
+    setTyping(false);
     onSubmit(r);
   }, [text, onSubmit]);
 
@@ -63,6 +65,12 @@ export function DiscussionPracticePanel({
 
   if (phase !== 'asking' || !prompt) return null;
 
+  // The picker: deterministic reason chips (never telegraph the answer) +
+  // "Type your answer" + Hint (reveals the grounded answer). CLEAN probe — the
+  // question carries ZERO board facts; the answer only appears after a commit.
+  const options = prompt.options ?? [];
+  const showPicker = options.length > 0 && !typing;
+
   return (
     <Shell>
       <div data-testid="discussion-prompt">
@@ -78,25 +86,57 @@ export function DiscussionPracticePanel({
             <X size={16} />
           </button>
         </div>
-        <div className="flex items-center gap-2">
-          <input
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            onKeyDown={(e) => { if (e.key === 'Enter') submit(); }}
-            placeholder="Say or type your reasoning…"
-            className="flex-1 px-3 py-2 rounded-lg bg-theme-bg border border-theme-border text-sm text-theme-text placeholder:text-theme-text-muted focus:outline-none focus:border-theme-accent"
-            data-testid="discussion-input"
-            autoFocus
-          />
-          <button
-            onClick={submit}
-            className="p-2 rounded-lg bg-theme-accent text-white hover:opacity-90 shrink-0"
-            aria-label="Send"
-            data-testid="discussion-send"
-          >
-            <Send size={16} />
-          </button>
-        </div>
+
+        {showPicker ? (
+          <div className="flex flex-col gap-1.5" data-testid="discussion-reason-picker">
+            {options.map((opt) => (
+              <button
+                key={opt}
+                onClick={() => onSubmit(opt)}
+                className="w-full text-left px-3 py-2 rounded-lg bg-theme-bg border border-theme-border text-sm text-theme-text hover:border-theme-accent hover:bg-theme-border/40"
+                data-testid="discussion-reason-option"
+              >
+                {opt}
+              </button>
+            ))}
+            <div className="flex items-center gap-2 mt-1">
+              <button
+                onClick={() => setTyping(true)}
+                className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-theme-border text-xs text-theme-text-muted hover:text-theme-text"
+                data-testid="discussion-type-toggle"
+              >
+                <PencilLine size={13} /> Type your answer
+              </button>
+              <button
+                onClick={() => onSubmit(HINT_SENTINEL)}
+                className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-amber-500/40 text-xs text-amber-300 hover:bg-amber-500/10"
+                data-testid="discussion-hint"
+              >
+                <Lightbulb size={13} /> Hint
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="flex items-center gap-2">
+            <input
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter') submit(); }}
+              placeholder="Say or type your reasoning…"
+              className="flex-1 px-3 py-2 rounded-lg bg-theme-bg border border-theme-border text-sm text-theme-text placeholder:text-theme-text-muted focus:outline-none focus:border-theme-accent"
+              data-testid="discussion-input"
+              autoFocus
+            />
+            <button
+              onClick={submit}
+              className="p-2 rounded-lg bg-theme-accent text-white hover:opacity-90 shrink-0"
+              aria-label="Send"
+              data-testid="discussion-send"
+            >
+              <Send size={16} />
+            </button>
+          </div>
+        )}
       </div>
     </Shell>
   );

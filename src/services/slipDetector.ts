@@ -72,6 +72,20 @@ export function slipWarrantsInterjection(cpLoss: number, rating: number | undefi
   return cpLoss >= SLIP_CP.blunder;
 }
 
+/** Max centipawn loss for a move to count as "near-best" — the good-move
+ *  recognition gate (David 2026-07-06): the coach also asks "why'd you play
+ *  that?" on a move the student got RIGHT, but only when it was genuinely
+ *  strong (near-best) AND did something (paired with a created tactic in the
+ *  caller). Kept tight so a routine best-move doesn't trigger recognition. */
+export const GOOD_MOVE_MAX_CPLOSS = 20;
+
+/** A played move held its ground (didn't shed meaningful eval). Pairs with a
+ *  "the move created a tactic" check in the caller to fire good-move
+ *  recognition without nagging on every accurate move. */
+export function isNearBest(cpLoss: number): boolean {
+  return cpLoss <= GOOD_MOVE_MAX_CPLOSS;
+}
+
 /** Decide whether a played move is a slip worth teaching. Pure logic —
  *  callers supply book status (opening DB) + evals (Stockfish). */
 export function detectSlip(input: SlipInput): SlipResult {

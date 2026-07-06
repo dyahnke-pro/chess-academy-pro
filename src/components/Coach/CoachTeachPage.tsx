@@ -820,7 +820,7 @@ export function CoachTeachPage(): JSX.Element {
   // the COACH's move (not the student's slip), so the "why?" prompt fills
   // the gap instead of conflicting. Honors the coachInGameDiscussion setting
   // (falls back to silent capture when the user turned the interjection off).
-  const discussion = useDiscussionPractice(true, { surface: 'coach-teach' });
+  const discussion = useDiscussionPractice(true, { surface: 'coach-teach', interruptive: true });
   const [coachTipsOn, setCoachTipsOn] = useState<boolean>(true);
   const [evalBarOverride, setEvalBarOverride] = useState<boolean | null>(null);
 
