@@ -33,6 +33,7 @@ import { buildMoveReasonOptions } from '../services/moveReasonOptions';
 import { voiceService } from '../services/voiceService';
 import { captureEvent } from '../services/analytics';
 import { getMisconceptionTag } from '../data/misconceptionTags';
+import type { MisconceptionSource } from '../types';
 
 /** Sentinel the panel's Hint button submits — the hook treats it as an honest
  *  "I couldn't say" (reveal the answer, log the gap), never a typed reason. */
@@ -122,6 +123,10 @@ export interface UseDiscussionPracticeOptions {
   /** Opt-in to the blocking "why did you play that?" picker. LEARN sets this;
    *  the pure PLAY surfaces do NOT, keeping this hook inert for them. */
   interruptive?: boolean;
+  /** Which capture pipeline a logged slip is attributed to. LEARN =
+   *  'discussion-practice' (default); post-game REVIEW passes 'game-review'
+   *  so a review-captured slip is tagged to the game it came from. */
+  source?: MisconceptionSource;
 }
 
 const ANALYSIS_DEPTH = 14;
@@ -305,7 +310,7 @@ export function useDiscussionPractice(
             gamePhase: ctx.args.gamePhase,
             userReason,
           },
-          source: 'discussion-practice',
+          source: opts.source ?? 'discussion-practice',
           shouldCount: ctx.shouldCount,
           context: {
             fen: ctx.args.fenBefore,
@@ -352,11 +357,48 @@ export function useDiscussionPractice(
     ctxRef.current = null;
     setTeach(note);
     setPhase('teaching');
-  }, [opts.surface]);
+  }, [opts.surface, opts.source]);
 
-  // raiseSlipPrompt kept for API compatibility (callers may still invoke it);
-  // the eval-driven evaluatePlayerMove path is the live one.
-  const raiseSlipPrompt = useCallback((): void => { /* handled via evaluatePlayerMove */ }, []);
+  // raiseSlipPrompt opens the SLIP picker from KNOWN mistake data (no Stockfish
+  // re-eval) — the post-game REVIEW entry point (David 2026-07-06: "I want that
+  // section to respond like learn with coach"). Review already knows each slip's
+  // fen/played/best/cpLoss from the analyzed game, so it hands them straight in
+  // and the shared submitReason → narrated reveal → bucket flow does the rest.
+  const raiseSlipPrompt = useCallback((args: RaiseSlipPromptArgs): void => {
+    if (!active) return;
+    if (busyRef.current) return;
+
+    let moverChar: 'w' | 'b' = 'w';
+    try {
+      moverChar = new Chess(args.fenBefore).turn();
+    } catch {
+      return; // unparseable position — never guess (G3)
+    }
+    const options = buildMoveReasonOptions(args.fenBefore, args.playedSan);
+    const reveal = buildGroundedReveal({
+      kind: 'slip', fenAfter: args.fenAfter, moverColor: moverChar, bestSan: args.bestSan,
+    });
+
+    setGoodMove(null);
+    busyRef.current = true;
+    ctxRef.current = {
+      args: {
+        fenBefore: args.fenBefore, fenAfter: args.fenAfter, playedSan: args.playedSan,
+        playerColor: moverChar === 'w' ? 'white' : 'black', inBook: false,
+        learned: args.shouldCount, gamePhase: args.gamePhase, moveNumber: args.moveNumber,
+        openingId: args.openingId, openingName: args.openingName, studentRating: args.studentRating,
+      },
+      bestSan: args.bestSan, cpLoss: args.cpLoss, kind: 'slip',
+      shouldCount: args.shouldCount, reveal, moverChar, options,
+    };
+    setPrompt({
+      question: buildWhyPrompt(), options, hintReveal: reveal, kind: 'slip',
+      fenBefore: args.fenBefore, fenAfter: args.fenAfter, playedSan: args.playedSan,
+      bestSan: args.bestSan, cpLoss: args.cpLoss, shouldCount: args.shouldCount,
+      gamePhase: args.gamePhase, moveNumber: args.moveNumber,
+    });
+    setPhase('asking');
+  }, [active]);
 
   const skip = useCallback((): Promise<void> => { reset(); return Promise.resolve(); }, [reset]);
 

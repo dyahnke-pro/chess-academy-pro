@@ -47,6 +47,7 @@ function setEvals(beforeCp: number, afterCp: number): void {
 beforeEach(() => {
   vi.mocked(captureEvent).mockClear();
   vi.mocked(voiceService.speakForced).mockClear();
+  vi.mocked(stockfishEngine.analyzePosition).mockReset();
 });
 
 describe('useDiscussionPractice — Play stays pure (non-interruptive)', () => {
@@ -130,6 +131,26 @@ describe('useDiscussionPractice — Learn (interruptive)', () => {
     expect(voiceService.speakForced).toHaveBeenCalledTimes(1);
     const good = vi.mocked(captureEvent).mock.calls.find((c) => c[0] === 'discussion_good_move');
     expect(good).toBeTruthy();
+  });
+
+  it('raiseSlipPrompt opens the picker from known review data (no engine)', async () => {
+    // Post-game review hands in a known mistake — no analyzePosition call needed.
+    const { result } = renderHook(() => useDiscussionPractice(true, { ...opts, source: 'game-review' }));
+    act(() => {
+      result.current.raiseSlipPrompt({
+        fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
+        bestSan: 'd4', cpLoss: 200, shouldCount: true, gamePhase: 'opening',
+        studentRating: 1500,
+      });
+    });
+    expect(result.current.phase).toBe('asking');
+    expect(result.current.prompt?.kind).toBe('slip');
+    expect(vi.mocked(stockfishEngine.analyzePosition)).not.toHaveBeenCalled();
+
+    await act(async () => { await result.current.submitReason('I opened the center'); });
+    const call = vi.mocked(captureEvent).mock.calls.find((c) => c[0] === 'discussion_response');
+    expect(call?.[1]).toMatchObject({ surface: 'coach-teach', kind: 'slip' });
+    expect(voiceService.speakForced).toHaveBeenCalled(); // reveal narrated
   });
 
   it('is RATING-ADAPTIVE: a 120cp mistake interrupts a 1200 but not an 800', async () => {

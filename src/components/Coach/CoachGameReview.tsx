@@ -14,7 +14,9 @@ import { useReviewBlunderCapture } from '../../hooks/useReviewBlunderCapture';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 import { useSettings } from '../../hooks/useSettings';
 import { calculateAccuracy, getClassificationCounts, detectMisses } from '../../services/accuracyService';
-import { getPhaseBreakdown } from '../../services/gamePhaseService';
+import { getPhaseBreakdown, classifyPhase } from '../../services/gamePhaseService';
+import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
+import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
 import { detectMissedTactics } from '../../services/missedTacticService';
 import {
   generateNarrativeSummary,
@@ -464,8 +466,23 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setReadingGate(null);
   }, [props.gameId]);
 
+  // The "why'd you play that?" faucet — post-game review now responds like
+  // Learn-with-Coach (David 2026-07-06). Landing on one of the student's own
+  // mistakes raises the SAME picker → narrated grounded reveal → weakness
+  // bucket, tagged to THIS game (source game-review). It REPLACES the reading
+  // challenge on mistakes (same trigger point + the readingChallengesInReview
+  // toggle) so the student never gets two prompts on one move.
+  const reviewFaucet = useDiscussionPractice(true, {
+    surface: 'coach-review', interruptive: true, source: 'game-review',
+  });
+  // The hook's callbacks are stable (memoized); destructure them so the
+  // walk-forward + resume callbacks don't churn on every render (the hook
+  // returns a fresh object each render). `phase` is the one live value.
+  const { phase: faucetPhase, raiseSlipPrompt: raiseFaucet, reset: resetFaucet } = reviewFaucet;
+
   const handleWalkForward = useCallback((): void => {
-    if (readingGate) return; // a gate is already open
+    if (readingGate) return;             // a legacy gate is open (defensive)
+    if (faucetPhase !== 'idle') return;  // faucet is mid-question
     if (readingQuizOn) {
       const nextPly = walkPlayback.currentPly + 1;
       const seg = walkNarration?.segments.find((s) => s.ply === nextPly) ?? null;
@@ -473,13 +490,35 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         && seg.playerColor === playerColor
         && (seg.classification === 'inaccuracy' || seg.classification === 'mistake' || seg.classification === 'blunder');
       if (seg && isStudentMistake && !quizzedPliesRef.current.has(nextPly)) {
+        quizzedPliesRef.current.add(nextPly);
         // The board already shows seg.fenBefore (the position before the move).
-        setReadingGate({ ply: nextPly, fen: seg.fenBefore });
-        return;
+        const sign = playerColor === 'white' ? 1 : -1;
+        const cpLoss = seg.evalBefore != null && seg.evalAfter != null
+          ? (seg.evalBefore - seg.evalAfter) * sign : 0;
+        raiseFaucet({
+          fenBefore: seg.fenBefore,
+          fenAfter: seg.fenAfter,
+          playedSan: seg.san,
+          bestSan: seg.bestMoveSan ?? undefined,
+          cpLoss: cpLoss > 0 ? cpLoss : 0,
+          shouldCount: true, // a deliberate review of your own game → it counts
+          gamePhase: classifyPhase(seg.fenBefore, nextPly),
+          moveNumber: seg.moveNumber,
+          openingName: openingName ?? undefined,
+          studentRating: playerRating ?? undefined,
+        });
+        return; // pause the walk; resumes when the student answers + dismisses
       }
     }
     walkPlayback.goForward();
-  }, [readingGate, readingQuizOn, walkPlayback, walkNarration, playerColor]);
+  }, [readingGate, faucetPhase, raiseFaucet, readingQuizOn, walkPlayback, walkNarration, playerColor, openingName, playerRating]);
+
+  // Advance the walk once the faucet is done (answered + reveal dismissed, or
+  // skipped) — the "resume" side of the pause above.
+  const resumeAfterFaucet = useCallback((): void => {
+    resetFaucet();
+    walkPlayback.goForward();
+  }, [resetFaucet, walkPlayback]);
 
   const resolveReadingGate = useCallback((): void => {
     setReadingGate((g) => { if (g) quizzedPliesRef.current.add(g.ply); return null; });
@@ -1548,6 +1587,17 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 onProceed={resolveReadingGate}
               />
             )}
+            {/* The "why'd you play that?" faucet — post-game review responds
+                like Learn-with-Coach: picker → narrated grounded reveal →
+                weakness bucket. Skipping or dismissing resumes the walk. */}
+            <DiscussionPracticePanel
+              phase={reviewFaucet.phase}
+              prompt={reviewFaucet.prompt}
+              teach={reviewFaucet.teach}
+              onSubmit={(reason) => void reviewFaucet.submitReason(reason)}
+              onSkip={resumeAfterFaucet}
+              onDismissTeach={resumeAfterFaucet}
+            />
             {/* Current-move narration banner */}
             <div className="px-3 pt-2 pb-1">
               <div
