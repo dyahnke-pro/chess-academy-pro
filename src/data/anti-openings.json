@@ -348,14 +348,19 @@
     "id": "anti-benoni-push",
     "eco": "A56",
     "name": "Anti-Benoni/Benko: The d5 Push",
-    "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 g6 Nc3 Bxa6 e4 Bxf1",
-    "uci": "d2d4 g8f6 c2c4 c7c5 d4d5 b7b5 c4b5 a7a6 b5a6 g7g6 b1c3 c8a6 e2e4 a6f1",
-    "fen": "rn1qkb1r/3ppp1p/5np1/2pP4/4P3/2N5/PP3PPP/R1BQKbNR w KQkq - 0 8",
+    "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 Nf3 g6 e4 Bxf1 Kxf1 Bg7 g3 O-O Kg2 Nbd7",
+    "uci": "d2d4 g8f6 c2c4 c7c5 d4d5 b7b5 c4b5 a7a6 b5a6 c8a6 b1c3 d7d6 g1f3 g7g6 e2e4 a6f1 e1f1 f8g7 g2g3 e8g8 f1g2 b8d7",
+    "fen": "r2q1rk1/3nppbp/3p1np1/2pP4/4P3/2N2NP1/PP3PKP/R1BQ3R w - - 3 12",
     "color": "white",
     "style": "positional",
     "isRepertoire": true,
-    "overview": null,
-    "keyIdeas": null,
+    "overview": "Against the Benoni push Black offers the Benko/Volga pawn with ...b5, sacrificing for slow queenside pressure on the a- and b-files. The soundest answer is the most direct: take it cleanly with cxb5 and give the square back with bxa6 so Black recaptures with the bishop. Then build a big e4 centre, trade the light bishops, and walk the king to g2 by hand. Engine-verified a healthy pawn up (+0.93) with the Benko's counterplay defused.",
+    "keyIdeas": [
+      "Accept the gambit: cxb5, then bxa6 so Black recaptures with the bishop, not a rook-file.",
+      "Raise a broad e4/d5 pawn front to wall off Black's queenside counterplay.",
+      "Trade the light bishops (Bxf1 Kxf1) and finish the king by hand with g3 and Kg2.",
+      "Keep the extra pawn and convert patiently — the Benko pressure never crashes through."
+    ],
     "traps": null,
     "warnings": null,
     "variations": [
@@ -386,20 +391,30 @@
     "woodpeckerReps": 0,
     "woodpeckerSpeed": null,
     "woodpeckerLastDate": null,
-    "isFavorite": false
+    "isFavorite": false,
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-initiative",
+      "https://en.wikipedia.org/wiki/Benko_Gambit"
+    ]
   },
   {
     "id": "anti-englund",
     "eco": "A40",
     "name": "Anti-Englund Gambit",
-    "pgn": "d4 e5 dxe5 Nc6 Nf3 Qe7 Nc3 Nxe5 e4 c6 a3 c5 b3 c4",
-    "uci": "d2d4 e7e5 d4e5 b8c6 g1f3 d8e7 b1c3 c6e5 e2e4 c7c6 a2a3 c6c5 b2b3 c5c4",
-    "fen": "r1b1kbnr/pp1pqppp/8/4n3/2p1P3/PPN2N2/2P2PPP/R1BQKB1R w KQkq - 0 8",
+    "pgn": "d4 e5 dxe5 Nc6 Nf3 Qe7 Bf4 Qb4+ Bd2 Qxb2 Nc3 Bb4 Rb1 Qa3 Nd5 Ba5 Rb5 Bxd2+ Qxd2 Rb8 c3 a6",
+    "uci": "d2d4 e7e5 d4e5 b8c6 g1f3 d8e7 c1f4 e7b4 f4d2 b4b2 b1c3 f8b4 a1b1 b2a3 c3d5 b4a5 b1b5 a5d2 d1d2 a8b8 c2c3 a7a6",
+    "fen": "1rb1k1nr/1ppp1ppp/p1n5/1R1NP3/8/q1P2N2/P2QPPPP/4KB1R w Kk - 0 12",
     "color": "white",
     "style": "classical",
     "isRepertoire": true,
-    "overview": null,
-    "keyIdeas": null,
+    "overview": "The Englund Gambit (1.d4 e5) throws a pawn away for cheap tricks and is simply unsound. You take the pawn, guard it with Nf3 and Bf4, and when Black lashes out with ...Qb4+ and grabs a second pawn on b2, you spring the trap: Nc3, Rb1 and Nd5/Rb5 hunt the greedy queen down on the rim. Engine-verified winning for White (+1.97) — greed punished by a clean queen hunt.",
+    "keyIdeas": [
+      "Take the e5-pawn and hold it simply — Nf3 guards, Bf4 develops and defends.",
+      "Let Black overreach: ...Qb4+ and ...Qxb2 sends the queen pawn-hunting into your camp.",
+      "Spring the net with Nc3 and Rb1 — every developing move also chases the queen.",
+      "Finish with Nd5 and Rb5, boxing the queen on the edge — winning material by force."
+    ],
     "traps": null,
     "warnings": null,
     "variations": [
@@ -425,7 +440,12 @@
     "woodpeckerReps": 0,
     "woodpeckerSpeed": null,
     "woodpeckerLastDate": null,
-    "isFavorite": false
+    "isFavorite": false,
+    "sources": [
+      "concept:pos-initiative",
+      "concept:tac-trap",
+      "https://en.wikipedia.org/wiki/Englund_Gambit"
+    ]
   },
   {
     "id": "anti-kid-saemisch",
@@ -623,14 +643,19 @@
     "id": "anti-dutch-staunton",
     "eco": "A82",
     "name": "Anti-Dutch: Staunton Gambit",
-    "pgn": "d4 f5 e4 fxe4 Nc3 Nf6 Bg5 Nc6",
-    "uci": "d2d4 f7f5 e2e4 f5e4 b1c3 g8f6 c1g5 b8c6",
-    "fen": "r1bqkb1r/ppppp1pp/2n2n2/6B1/3Pp3/2N5/PPP2PPP/R2QKBNR w KQkq - 4 5",
+    "pgn": "d4 f5 e4 fxe4 Nc3 Nf6 Bg5 c6 f3 d5 fxe4 Nxe4 Nxe4 dxe4 Bc4 Qd6 c3 Qg6 Qd2 Bf5 Ne2 Nd7",
+    "uci": "d2d4 f7f5 e2e4 f5e4 b1c3 g8f6 c1g5 c7c6 f2f3 d7d5 f3e4 f6e4 c3e4 d5e4 f1c4 d8d6 c2c3 d6g6 d1d2 c8f5 g1e2 b8d7",
+    "fen": "r3kb1r/pp1np1pp/2p3q1/5bB1/2BPp3/2P5/PP1QN1PP/R3K2R w KQkq - 5 12",
     "color": "white",
     "style": "aggressive",
     "isRepertoire": true,
-    "overview": null,
-    "keyIdeas": null,
+    "overview": "The Staunton Gambit meets the Dutch with 2.e4, sacrificing a pawn to blow the position open before Black is developed. Bg5 hits the f6-knight and threatens to wreck the kingside; f3 undermines the extra e4-pawn at its base; Bc4 rakes the diagonal at Black's airy king. Objectively about level, but a dangerous practical surprise weapon — engine-verified with active, pleasant compensation (+0.25) and a fragile black e4-pawn to round up.",
+    "keyIdeas": [
+      "Gambit e4 to rip open lines against the loosened Dutch king.",
+      "Bg5 hits f6 and threatens Bxf6 to shatter Black's kingside pawns.",
+      "Undermine the extra e4-pawn with f3 — it is weak and destined to fall.",
+      "Rake the a2-g8 diagonal with Bc4 and regroup Qd2/Ne2 to win the pawn back with the initiative."
+    ],
     "traps": null,
     "warnings": null,
     "variations": [
@@ -656,7 +681,12 @@
     "woodpeckerReps": 0,
     "woodpeckerSpeed": null,
     "woodpeckerLastDate": null,
-    "isFavorite": false
+    "isFavorite": false,
+    "sources": [
+      "concept:pos-initiative",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/Dutch_Defence,_Staunton_Gambit"
+    ]
   },
   {
     "id": "anti-qgd-exchange",
@@ -705,14 +735,19 @@
     "id": "anti-budapest",
     "eco": "A52",
     "name": "Anti-Budapest: 4.Bf4",
-    "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Bf4 Nc6 Nf3",
-    "uci": "d2d4 g8f6 c2c4 e7e5 d4e5 f6g4 c1f4 b8c6 g1f3",
-    "fen": "r1bqkb1r/pppp1ppp/2n5/4P3/2P2Bn1/5N2/PP2PPPP/RN1QKB1R b KQkq - 4 5",
+    "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Bf4 Nc6 Nf3 Bb4+ Nbd2 Qe7 e3 Ngxe5 Nxe5 Nxe5 a3 Bxd2+ Qxd2 d6 Be2 O-O",
+    "uci": "d2d4 g8f6 c2c4 e7e5 d4e5 f6g4 c1f4 b8c6 g1f3 f8b4 b1d2 d8e7 e2e3 g4e5 f3e5 c6e5 a2a3 b4d2 d1d2 d7d6 f1e2 e8g8",
+    "fen": "r1b2rk1/ppp1qppp/3p4/4n3/2P2B2/P3P3/1P1QBPPP/R3K2R w KQ - 2 12",
     "color": "white",
     "style": "classical",
     "isRepertoire": true,
-    "overview": null,
-    "keyIdeas": null,
+    "overview": "The Budapest Gambit sacrifices the e5-pawn and chases it with ...Ng4. The critical, greed-free reply is 4.Bf4: it defends the extra pawn a second time AND develops — no h3/Nf3 tangles. Black regains the pawn by force, but a well-timed a3 wins the two bishops, and you emerge with the bishop pair, a healthy central pawn and the freer game. Engine-verified a small, durable edge (+0.35).",
+    "keyIdeas": [
+      "Meet ...Ng4 with the clean Bf4 — defend e5 and develop, never cling greedily.",
+      "Answer ...Bb4+ with Nbd2, developing rather than retreating, and shore up with e3.",
+      "Win the bishop pair with a3 once Black regains the pawn (Bxd2+ Qxd2).",
+      "Nurse the two bishops and the c4-pawn for a small, lasting pull."
+    ],
     "traps": null,
     "warnings": null,
     "variations": [
@@ -738,7 +773,12 @@
     "woodpeckerReps": 0,
     "woodpeckerSpeed": null,
     "woodpeckerLastDate": null,
-    "isFavorite": false
+    "isFavorite": false,
+    "sources": [
+      "concept:pos-initiative",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/Budapest_Gambit"
+    ]
   },
   {
     "id": "anti-london-black",
@@ -830,14 +870,19 @@
     "id": "anti-trompowsky-black",
     "eco": "A45",
     "name": "Anti-Trompowsky: 2…Ne4 (Black)",
-    "pgn": "d4 Nf6 Bg5 Ne4 Bf4 c5 f3 Qa5+ c3 Nf6 a3 c4 b3 a6",
-    "uci": "d2d4 g8f6 c1g5 f6e4 g5f4 c7c5 f2f3 d8a5 c2c3 e4f6 a2a3 c5c4 b2b3 a7a6",
-    "fen": "rnb1kb1r/1p1ppppp/p4n2/q7/2pP1B2/PPP2P2/4P1PP/RN1QKBNR w KQkq - 0 8",
+    "pgn": "d4 Nf6 Bg5 Ne4 Bf4 d5 e3 c5 Nd2 Nxd2 Qxd2 Nc6 Nf3 cxd4 exd4 Bf5 Bd3 Bxd3 Qxd3 e6 O-O Bd6",
+    "uci": "d2d4 g8f6 c1g5 f6e4 g5f4 d7d5 e2e3 c7c5 b1d2 e4d2 d1d2 b8c6 g1f3 c5d4 e3d4 c8f5 f1d3 f5d3 d2d3 e7e6 e1g1 f8d6",
+    "fen": "r2qk2r/pp3ppp/2nbp3/3p4/3P1B2/3Q1N2/PPP2PPP/R4RK1 w kq - 2 12",
     "color": "black",
     "style": "classical",
     "isRepertoire": true,
-    "overview": null,
-    "keyIdeas": null,
+    "overview": "The Trompowsky's Bg5 wants to trade for your f6-knight and hand you doubled pawns. You refuse at the root with 2...Ne4 — the knight leaps to the centre, hits the bishop and dodges the pin. From there ...d5/...c5 stake a big centre, an active ...Bf5 frees your light bishop OUTSIDE the pawn chain before ...e6, and ...Bd6 challenges the last active enemy piece. Engine-verified dead level (-0.18) — the surprise met by pure principle.",
+    "keyIdeas": [
+      "Refuse the pin with 2...Ne4 — jump to the centre and hit the bishop.",
+      "Stake a big centre with ...d5 and ...c5; after ...cxd4 exd4 White has a lone d-pawn to mind.",
+      "Free the good bishop with ...Bf5 before ...e6 ever locks it in — the Caro-Kann principle.",
+      "Challenge the dark-squared bishop with ...Bd6 and reach a symmetrical, equal game."
+    ],
     "traps": null,
     "warnings": null,
     "variations": [],
@@ -847,7 +892,12 @@
     "woodpeckerReps": 0,
     "woodpeckerSpeed": null,
     "woodpeckerLastDate": null,
-    "isFavorite": false
+    "isFavorite": false,
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-initiative",
+      "https://en.wikipedia.org/wiki/Trompowsky_Attack"
+    ]
   },
   {
     "id": "anti-colle-black",
