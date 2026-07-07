@@ -25,6 +25,7 @@ import { PRO_AMAN_RETI_LESSON } from './proAmanReti';
 import { PRO_AMAN_RETI_VARIATION_LESSONS } from './proAmanRetiVariations';
 import { PRO_AMAN_CARO_KANN_LESSON } from './proAmanCaroKann';
 import { ANTI_SICILIAN_ROSSOLIMO_LESSON } from './antiSicilianRossolimo';
+import { ANTI_SICILIAN_ROSSOLIMO_VARIATION_LESSONS } from './antiSicilianRossolimoVariations';
 import { PRO_AMAN_CARO_KANN_VARIATION_LESSONS } from './proAmanCaroKannVariations';
 import { PRO_AMAN_NIMZO_INDIAN_LESSON } from './proAmanNimzoIndian';
 import { PRO_AMAN_NIMZO_INDIAN_VARIATION_LESSONS } from './proAmanNimzoIndianVariations';
@@ -417,6 +418,7 @@ const LESSONS: Record<string, LessonScript> = {
 };
 
 const VARIATION_LESSONS: Record<string, LessonScript> = {
+  ...ANTI_SICILIAN_ROSSOLIMO_VARIATION_LESSONS,
   ...RUY_VARIATION_LESSONS,
   ...PIRC_VARIATION_LESSONS,
   ...VIENNA_VARIATION_LESSONS,
