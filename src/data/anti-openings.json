@@ -514,14 +514,19 @@
     "id": "anti-nimzo-qc2",
     "eco": "E32",
     "name": "Anti-Nimzo-Indian: Classical 4.Qc2",
-    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O",
+    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 b6 Bg5 Bb7 f3 h6 Bh4 d5 cxd5 exd5 e3 Re8",
     "uci": "d2d4 g8f6 c2c4 e7e6 b1c3 f8b4 d1c2 e8g8",
     "fen": "rnbq1rk1/pppp1ppp/4pn2/8/1bPP4/2N5/PPQ1PPPP/R1B1KBNR w KQ - 4 5",
     "color": "white",
     "style": "classical",
     "isRepertoire": true,
-    "overview": null,
-    "keyIdeas": null,
+    "overview": "The Classical 4.Qc2 is White's principled answer to the Nimzo-Indian: by defending c3 in advance, you recapture on c3 with the queen after ...Bxc3+, sidestepping the doubled pawns the Nimzo is designed to inflict and banking the bishop pair. Be honest — the Nimzo is a top defence and this is roughly level; the two bishops are your small, lasting edge.",
+    "keyIdeas": [
+      "Qc2 defends c3 so ...Bxc3+ is met by Qxc3 — no doubled pawns, and you win the bishop pair.",
+      "Prod with a3 to invite the trade on your terms.",
+      "Clamp e4 with f3 and Bg5, preparing the broad centre your bishops crave.",
+      "It is roughly equal — play the two bishops for a riskless, long-game pull."
+    ],
     "traps": null,
     "warnings": null,
     "variations": [
@@ -547,20 +552,29 @@
     "woodpeckerReps": 0,
     "woodpeckerSpeed": null,
     "woodpeckerLastDate": null,
-    "isFavorite": false
+    "isFavorite": false,
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-initiative"
+    ]
   },
   {
     "id": "anti-qid-fianchetto",
     "eco": "E15",
     "name": "Anti-Queen’s Indian: Fianchetto",
-    "pgn": "d4 Nf6 c4 e6 Nf3 b6 g3 Ba6 b3 Bb4+ Bd2",
+    "pgn": "d4 Nf6 c4 e6 Nf3 b6 g3 Ba6 b3 Bb4+ Bd2 Be7 Bg2 c6 Bc3 d5 Nbd2 Nbd7 e4 Nxe4 Nxe4 dxe4",
     "uci": "d2d4 g8f6 c2c4 e7e6 g1f3 b7b6 g2g3 c8a6 b2b3 f8b4 c1d2",
     "fen": "rn1qk2r/p1pp1ppp/bp2pn2/8/1bPP4/1P3NP1/P2BPP1P/RN1QKB1R b KQkq - 2 6",
     "color": "white",
     "style": "positional",
     "isRepertoire": true,
-    "overview": null,
-    "keyIdeas": null,
+    "overview": "Against the Queen's Indian, the g3 fianchetto meets Black on the long light diagonal his whole setup fights for. b3 shores up c4, Bg2 and later Bc3 put both bishops on their long diagonals, and the e4 break opens the game for them. A small, classical pull.",
+    "keyIdeas": [
+      "Answer the ...b6/...Ba6 setup with the mirror fianchetto g3 and Bg2, contesting the long light diagonal.",
+      "Defend c4 with b3 so the a6-bishop bites on granite.",
+      "Place both bishops on their long diagonals (Bg2 light, Bc3 dark) for a harmonious build.",
+      "Break with e4 to open the position for your bishops when Black plays ...d5."
+    ],
     "traps": null,
     "warnings": null,
     "variations": [
@@ -581,7 +595,11 @@
     "woodpeckerReps": 0,
     "woodpeckerSpeed": null,
     "woodpeckerLastDate": null,
-    "isFavorite": false
+    "isFavorite": false,
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-initiative"
+    ]
   },
   {
     "id": "anti-dutch-staunton",
@@ -626,14 +644,19 @@
     "id": "anti-qgd-exchange",
     "eco": "D35",
     "name": "Anti-QGD: Exchange + Minority Attack",
-    "pgn": "d4 d5 c4 e6 cxd5 exd5 Nc3 Nf6 Bg5 c6 e3 Be7",
+    "pgn": "d4 d5 c4 e6 cxd5 exd5 Nc3 Nf6 Bg5 c6 e3 Be7 Bd3 O-O Nf3 Nbd7 O-O Ne4 Bf4 Ndf6 Ne5 Bd6",
     "uci": "d2d4 d7d5 c2c4 e7e6 c4d5 e6d5 b1c3 g8f6 c1g5 c7c6 e2e3 f8e7",
     "fen": "rnbqk2r/pp2bppp/2p2n2/3p2B1/3P4/2N1P3/PP3PPP/R2QKBNR w KQkq - 1 7",
     "color": "white",
     "style": "positional",
     "isRepertoire": true,
-    "overview": null,
-    "keyIdeas": null,
+    "overview": "The Exchange Variation gives the Queen's Gambit Declined a clear, classical plan: the Carlsbad structure and the minority attack. You trade on d5, develop with Bg5 and Bd3, and push b4-b5 to fix a weak, backward pawn on c6 that you besiege for the rest of the game. Low-risk, high-clarity.",
+    "keyIdeas": [
+      "Take on d5 for the Carlsbad structure and the famous minority-attack plan (b4-b5).",
+      "Pin with Bg5 and pressure d5; Black's ...c6 becomes your target.",
+      "Post the bishop on d3 aiming at the king and plant a knight on e5.",
+      "Choose your squeeze: the queenside minority attack or a kingside build behind the e5-knight."
+    ],
     "traps": null,
     "warnings": null,
     "variations": [
@@ -654,7 +677,11 @@
     "woodpeckerReps": 0,
     "woodpeckerSpeed": null,
     "woodpeckerLastDate": null,
-    "isFavorite": false
+    "isFavorite": false,
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-initiative"
+    ]
   },
   {
     "id": "anti-budapest",
