@@ -101,14 +101,19 @@
     "id": "anti-pirc-austrian",
     "eco": "B09",
     "name": "Anti-Pirc: Austrian Attack",
-    "pgn": "e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3",
+    "pgn": "e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 O-O Bd3 Na6 O-O c5 d5 c4 Bxc4 b5 Nxb5 Nxe4 Qe1 Nac5",
     "uci": "e2e4 d7d6 d2d4 g8f6 b1c3 g7g6 f2f4 f8g7 g1f3",
     "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PPP2/2N2N2/PPP3PP/R1BQKB1R b KQkq - 2 5",
     "color": "white",
     "style": "aggressive",
     "isRepertoire": true,
-    "overview": null,
-    "keyIdeas": null,
+    "overview": "The Austrian Attack is the sharpest weapon against the Pirc: a towering e4-d4-f4 pawn front backing a direct kingside attack. Develop the pieces toward Black's king (Nf3, Bd3), and when Black counters in the centre with ...c5/...c4/...b5, accurate grabs (Bxc4, Nxb5) turn his charging pawns into targets and leave you a clean pawn up.",
+    "keyIdeas": [
+      "Grab space and attacking potential with the big e4-d4-f4 pawn front.",
+      "Aim the pieces kingside — Nf3 toward e5/g5, Bd3 on the b1-h7 diagonal.",
+      "Meet ...c5 with d5, keeping the front intact and gaining more space.",
+      "Answer the ...c4/...b5 counter accurately — Bxc4 and Nxb5 win pawns; Qe1 parries ...Nxe4."
+    ],
     "traps": null,
     "warnings": null,
     "variations": [
@@ -129,7 +134,11 @@
     "woodpeckerReps": 0,
     "woodpeckerSpeed": null,
     "woodpeckerLastDate": null,
-    "isFavorite": false
+    "isFavorite": false,
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-initiative"
+    ]
   },
   {
     "id": "anti-scandinavian",
@@ -237,14 +246,19 @@
     "id": "anti-modern-150",
     "eco": "B06",
     "name": "Anti-Modern: 150 Attack",
-    "pgn": "e4 g6 d4 Bg7 Nc3 d6 Be3 a6 Qd2 b5 a3 b4 b3 a5",
+    "pgn": "e4 g6 d4 Bg7 Nc3 d6 Be3 a6 Qd2 Nf6 f3 O-O O-O-O Nc6 Nd5 a5 Nxf6+ exf6 h4 f5 h5 fxe4",
     "uci": "e2e4 g7g6 d2d4 f8g7 b1c3 d7d6 c1e3 a7a6 d1d2 b7b5 a2a3 b5b4 b2b3 a6a5",
     "fen": "rnbqk1nr/2p1ppbp/3p2p1/p7/1p1PP3/PPN1B3/2PQ1PPP/R3KBNR w KQkq - 0 8",
     "color": "white",
     "style": "aggressive",
     "isRepertoire": true,
-    "overview": null,
-    "keyIdeas": null,
+    "overview": "The 150 Attack is the classic anti-fianchetto recipe against the Modern and Pirc: build the Be3/Qd2 battery, play f3 to make the centre granite, castle queenside, and storm the kingside with h4-h5 while trading off Black's dark-squared bishop. Direct, thematic, and brutally effective against passive play.",
+    "keyIdeas": [
+      "Build the Be3 + Qd2 battery, aiming Bh6 to trade Black's fianchettoed bishop.",
+      "Play f3 to bolt down e4 and free the g- and h-pawns to storm.",
+      "Castle queenside and roll h4-h5 into the fianchetto while Black's counterplay lags.",
+      "Use the Nd5 outpost and Nxf6+ to shatter Black's kingside pawns and open lines."
+    ],
     "traps": null,
     "warnings": null,
     "variations": [
@@ -270,7 +284,11 @@
     "woodpeckerReps": 0,
     "woodpeckerSpeed": null,
     "woodpeckerLastDate": null,
-    "isFavorite": false
+    "isFavorite": false,
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-initiative"
+    ]
   },
   {
     "id": "anti-sicilian-rossolimo",
