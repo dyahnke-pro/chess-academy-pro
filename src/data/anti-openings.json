@@ -889,14 +889,19 @@
     "id": "anti-smith-morra-black",
     "eco": "B21",
     "name": "Anti-Smith-Morra: Accepted (Black)",
-    "pgn": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 e6 Bc4 a6 O-O Nge7",
+    "pgn": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 e6 Bc4 a6 O-O Nge7 Bg5 f6 Be3 b5 Be2 Bb7 Rc1 Nc8",
     "uci": "e2e4 c7c5 d2d4 c5d4 c2c3 d4c3 b1c3 b8c6 g1f3 e7e6 f1c4 a7a6 e1g1 g8e7",
     "fen": "r1bqkb1r/1p1pnppp/p1n1p3/8/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 w kq - 2 8",
     "color": "black",
     "style": "classical",
     "isRepertoire": true,
-    "overview": null,
-    "keyIdeas": null,
+    "overview": "The soundest way to meet the Smith-Morra Gambit is to accept the pawn and consolidate. The ...a6/...e6/...Nge7 wall blunts White's development lead move by move: ...e6 shuts the c4-bishop, ...a6 and ...b5 gain queenside space, and ...Nge7 keeps the knight unpinned. Be honest — White has real compensation and it is roughly level, but with careful play the extra pawn tells.",
+    "keyIdeas": [
+      "Accept the pawn — it is real, and White's compensation is manageable with a plan.",
+      "Build the ...e6/...a6/...Nge7 wall that defuses White's attack piece by piece.",
+      "Answer Bg5 with ...f6 and keep the dark squares solid.",
+      "Expand with ...b5 and ...Bb7, absorb the initiative, and let the extra pawn count."
+    ],
     "traps": null,
     "warnings": null,
     "variations": [
@@ -917,20 +922,29 @@
     "woodpeckerReps": 0,
     "woodpeckerSpeed": null,
     "woodpeckerLastDate": null,
-    "isFavorite": false
+    "isFavorite": false,
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-initiative"
+    ]
   },
   {
     "id": "anti-alapin-black",
     "eco": "B22",
     "name": "Anti-Alapin: 2…Nf6 (Black)",
-    "pgn": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 Nf3 Nc6 cxd4 d6 a3 a6",
+    "pgn": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 Nf3 Nc6 cxd4 d6 Bc4 Nb6 Bb5 dxe5 Nxe5 Bd7 Nxd7 Qxd7 O-O e6",
     "uci": "e2e4 c7c5 c2c3 g8f6 e4e5 f6d5 d2d4 c5d4 g1f3 b8c6 c3d4 d7d6 a2a3 a7a6",
     "fen": "r1bqkb1r/1p2pppp/p1np4/3nP3/3P4/P4N2/1P3PPP/RNBQKB1R w KQkq - 0 8",
     "color": "black",
     "style": "classical",
     "isRepertoire": true,
-    "overview": null,
-    "keyIdeas": null,
+    "overview": "Against the Alapin (2.c3), ...Nf6 is the most testing reply: it hits e4 immediately and forces White to commit before completing his big-centre setup. After e5 the knight sits proudly on d5, you chip at the centre with ...cxd4 and ...Nc6, and the freeing ...d6 dissolves White's space edge into a comfortable, equal game.",
+    "keyIdeas": [
+      "Meet 2.c3 with ...Nf6, attacking e4 and dictating the tempo.",
+      "After e5 Nd5, strike the centre with ...cxd4 and develop ...Nc6.",
+      "Play ...d6 to challenge the cramping e5-pawn and free your position.",
+      "Trade into equality with the isolated d4-pawn as a long-term target."
+    ],
     "traps": null,
     "warnings": null,
     "variations": [
@@ -951,7 +965,11 @@
     "woodpeckerReps": 0,
     "woodpeckerSpeed": null,
     "woodpeckerLastDate": null,
-    "isFavorite": false
+    "isFavorite": false,
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-initiative"
+    ]
   },
   {
     "id": "anti-grand-prix-black",
@@ -1000,14 +1018,19 @@
     "id": "anti-kings-gambit-black",
     "eco": "C30",
     "name": "Refuting the King’s Gambit (Black)",
-    "pgn": "e4 e5 f4 exf4 Nf3 g5 h4 g4 Ne5 Nf6 Bc4 d5 exd5 Bd6",
+    "pgn": "e4 e5 f4 exf4 Nf3 d5 exd5 Nf6 Bc4 Nxd5 O-O Be6 Qe2 Nc6 d4 Qd6 Nc3 O-O-O Nxd5 Bxd5 Bxd5 Qxd5",
     "uci": "e2e4 e7e5 f2f4 e5f4 g1f3 g7g5 h2h4 g5g4 f3e5 g8f6 f1c4 d7d5 e4d5 f8d6",
     "fen": "rnbqk2r/ppp2p1p/3b1n2/3PN3/2B2ppP/8/PPPP2P1/RNBQK2R w KQkq - 1 8",
     "color": "black",
     "style": "aggressive",
     "isRepertoire": true,
-    "overview": null,
-    "keyIdeas": null,
+    "overview": "The Modern Defence is the clean, reliable way to meet the King's Gambit. You take the f4-pawn, then strike back with ...d5 — handing the pawn back for a raking lead in development. Instead of clinging to material and getting mated, you turn White's own open lines against him and emerge with the safer king and the better game.",
+    "keyIdeas": [
+      "Answer the gambit with ...d5 — counter-attack the centre, don't hoard the f4-pawn.",
+      "Develop before recapturing: ...Nf6 first, then ...Nxd5.",
+      "Bring every piece out with tempo (...Be6, ...Nc6) and castle queenside to safety.",
+      "Trade into a middlegame where you are better developed, safer, and often still up the pawn."
+    ],
     "traps": null,
     "warnings": null,
     "variations": [
@@ -1028,6 +1051,10 @@
     "woodpeckerReps": 0,
     "woodpeckerSpeed": null,
     "woodpeckerLastDate": null,
-    "isFavorite": false
+    "isFavorite": false,
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-initiative"
+    ]
   }
 ]
