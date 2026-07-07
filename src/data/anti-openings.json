@@ -135,14 +135,19 @@
     "id": "anti-scandinavian",
     "eco": "B01",
     "name": "Anti-Scandinavian: Main Line",
-    "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 c6 Bc4 Bf5",
+    "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 c6 Bc4 Bf5 Bd2 e6 Ne4 Qd8 Ng3 Bg4 c3 Nbd7 h3 Bxf3",
     "uci": "e2e4 d7d5 e4d5 d8d5 b1c3 d5a5 d2d4 g8f6 g1f3 c7c6 f1c4 c8f5",
     "fen": "rn2kb1r/pp2pppp/2p2n2/q4b2/2BP4/2N2N2/PPP2PPP/R1BQK2R w KQkq - 2 7",
     "color": "white",
     "style": "classical",
     "isRepertoire": true,
-    "overview": null,
-    "keyIdeas": null,
+    "overview": "Against the Scandinavian (1.e4 d5 2.exd5 Qxd5), White's edge is time. Because Black recaptures with the queen so early, every developing move you make comes with a threat to it: Nc3, then Ne4 and Ng3 harry Black's forces while you build a big centre and finish development for free. You emerge with the bishop pair, more space, and a clear lead in development — a clean, low-maintenance plus.",
+    "keyIdeas": [
+      "Develop with tempo — Nc3 hits the queen; every queen move Black makes is a move you spend building.",
+      "Stake out the centre with d4 and post the bishop actively on c4, eyeing f7.",
+      "Harry the pieces with Ne4 and Ng3, driving the knight and bishop to worse squares while gaining time.",
+      "Bank the bishop pair and the development lead — a comfortable, risk-free edge to convert."
+    ],
     "traps": null,
     "warnings": null,
     "variations": [
@@ -168,7 +173,12 @@
     "woodpeckerReps": 0,
     "woodpeckerSpeed": null,
     "woodpeckerLastDate": null,
-    "isFavorite": false
+    "isFavorite": false,
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-initiative",
+      "https://en.wikipedia.org/wiki/Scandinavian_Defense"
+    ]
   },
   {
     "id": "anti-alekhine-modern",
