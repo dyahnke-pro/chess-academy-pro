@@ -153,9 +153,20 @@ the Watch lessons on these next (main = Nc6/Qb6):
 ## Status table (tick as they land)
 | # | opening | spine | lesson | gems | plans | models | pitfalls | shipped |
 |---|---------|-------|--------|------|-------|--------|----------|---------|
-| 1 | anti-sicilian-rossolimo | ✅ main+3var | ✅ main + 3 var (gate-green) | | | | | Watch layer |
-| 2 | anti-caro-fantasy | | | | | | | |
-| 3–24 | (rest per priority) | | | | | | | |
+| 1 | anti-sicilian-rossolimo | ✅ main+3var | ✅ main + 3 var | | ✅ 1 | | | Watch+Understand+plan |
+| 2 | anti-caro-fantasy | ✅ 4 (sound) | ✅ main (dxe4) | | | | | main+Understand |
+| 3 | anti-french-advance | ✅ 2 (sound) | ✅ main | | | | | main+Understand |
+| 4 | anti-scandinavian | ✅ main (sound) | ✅ main | | | | | main+Understand |
+| 5 | anti-pirc-austrian | ✅ main (sound, sharp) | | | | | | spine prepped |
+| 6–24 | (rest per priority) | | | | | | | |
+
+**Progress (2026-07-07):** 4 anti-openings have verified, gate-green main-line
+Watch lessons on `main` (Rossolimo full incl. 3 variation tabs + a middlegame
+plan). All 4-axis verified (DB/Stockfish data · board-accurate · engine-sound ·
+no blunders). Openings #5-6 spines prepped. NEXT: pirc-austrian main (careful,
+sharp), then continue main lessons for the clean openings; variation tabs + gems
+(Pass 2) after the main-line breadth. Author only clean/thematic or honestly-
+framed lines — defer messy/marginal ones (no garbage).
 
 **Opening #1 progress (anti-sicilian-rossolimo):** main-line Watch `LessonScript`
 authored (`antiSicilianRossolimo.ts`, 6 beats to move 15) + registered — Watch
