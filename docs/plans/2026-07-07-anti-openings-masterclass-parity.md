@@ -114,6 +114,21 @@ Rossolimo (shipped) verified on all four: worst swing 0.16–0.39, no blunders.
    `anti-qid-fianchetto`, `anti-nimzo-qc2`, `anti-grunfeld-exchange`,
    `anti-kid-saemisch`, `anti-dutch-staunton`, `anti-englund`).
 
+## Opening #2 — anti-caro-fantasy (data prepped, sound spines verified)
+The pre-existing anti-openings.json pgns were BLUNDER-INFLATED garbage (the g6
+line: `...c5??` +3.48, White `b3` gives it back, `...c4??` +4.19 — a mutual-
+blunder mess). Rebuilt with `build-sound-spine.mjs` — both-sides-sound to a
+middlegame, engine-verified. FINDING: the Fantasy is an honest SURPRISE weapon
+(≈ equal, not a clean edge), so narration must be honest — no fake "+edge":
+- **dxe4** (+0.26): `e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 c3 Nd7 Bd3 Ngf6 O-O Bd6 a4 O-O Nbd2 Re8 Qc2 Bc7`
+- **g6** (+0.07): `e4 c6 d4 d5 f3 g6 Nc3 Bg7 Be3 Qb6 Na4 Qa5+ c3 e5 dxe5 Ne7 Nc5 Bxe5 f4 Bg7 e5 f6`
+- **qb6** (+0.09): `e4 c6 d4 d5 f3 Qb6 Nc3 dxe4 fxe4 e5 Nf3 exd4 Qxd4 Qxd4 Nxd4 Bc5 Be3 Nd7 O-O-O Ngf6 Na4 Nxe4`
+- **e6** (−0.15, MARGINAL — reconsider White's plan; a slightly-worse line is
+  borderline for a "weapon", judge before authoring): `e4 c6 d4 d5 f3 e6 Nc3 Bb4 Bf4 Ne7 Qd3 O-O a3 Ba5 h4 b5 h5 h6 Ne2 Nd7 O-O-O b4`
+Gems for the Fantasy = the amateur blunders (`...c5??`, `...c4??`) — Pass 2 via
+the amateur explorer (reachable) + Stockfish refutation. Next: author the Watch
+lessons on THESE sound spines (honest surprise-weapon narration), then #3.
+
 ## Status table (tick as they land)
 | # | opening | spine | lesson | gems | plans | models | pitfalls | shipped |
 |---|---------|-------|--------|------|-------|--------|----------|---------|
