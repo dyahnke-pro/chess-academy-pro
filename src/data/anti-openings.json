@@ -184,14 +184,19 @@
     "id": "anti-alekhine-modern",
     "eco": "B04",
     "name": "Anti-Alekhine: Modern Variation",
-    "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 Bg4 Be2",
+    "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 Bg4 Be2 e6 O-O Be7 h3 Bh5 c4 Nb6 exd6 cxd6 Nc3 O-O Re1 d5",
     "uci": "e2e4 g8f6 e4e5 f6d5 d2d4 d7d6 g1f3 c8g4 f1e2",
     "fen": "rn1qkb1r/ppp1pppp/3p4/3nP3/3P2b1/5N2/PPP1BPPP/RNBQK2R b KQkq - 3 5",
     "color": "white",
     "style": "classical",
     "isRepertoire": true,
-    "overview": null,
-    "keyIdeas": null,
+    "overview": "Against the Alekhine, the Modern/Exchange approach takes the space Black offers: e5 and d4 build a broad centre, c4 gains more and chases the knight to the rim, and calm development banks the space plus a lead in development. Low theory, a lasting pull.",
+    "keyIdeas": [
+      "Grab the big e5+d4 centre the Alekhine dares you to build, then support it.",
+      "c4 gains space and kicks the d5-knight back to the passive b6.",
+      "Develop calmly (Nf3, Be2, O-O) — the Modern line is a slow squeeze, not a shootout.",
+      "Bank the space and development lead against Black's backward d6-pawn."
+    ],
     "traps": null,
     "warnings": null,
     "variations": [
@@ -222,7 +227,11 @@
     "woodpeckerReps": 0,
     "woodpeckerSpeed": null,
     "woodpeckerLastDate": null,
-    "isFavorite": false
+    "isFavorite": false,
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-space"
+    ]
   },
   {
     "id": "anti-modern-150",
@@ -404,14 +413,19 @@
     "id": "anti-kid-saemisch",
     "eco": "E80",
     "name": "Anti-KID: Sämisch",
-    "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3",
+    "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 e5 d5 c6 Bd3 cxd5 cxd5 Na6 Nge2 Nc5 Bc2 a5",
     "uci": "d2d4 g8f6 c2c4 g7g6 b1c3 f8g7 e2e4 d7d6 f2f3 e8g8 c1e3",
     "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N1BP2/PP4PP/R2QKBNR b KQ - 2 6",
     "color": "white",
     "style": "aggressive",
     "isRepertoire": true,
-    "overview": null,
-    "keyIdeas": null,
+    "overview": "The Sämisch is the King's Indian's toughest test: f3 bolts down e4 so White can build a huge c4-d4-e4 centre, clamp with d5, and storm the kingside with Qd2 and g4-h4 while Black is cramped. A space bind with real attacking chances.",
+    "keyIdeas": [
+      "f3 supports e4 and lets you build the biggest centre in chess — c4, d4 and e4.",
+      "Meet ...e5 with d5, the Sämisch clamp that cramps Black on both wings.",
+      "Keep the good bishop (Bd3-c2) and grab the half-open c-file after ...c6 cxd5.",
+      "Play for Qd2 and a g4-h4 kingside pawn storm behind the space bind."
+    ],
     "traps": null,
     "warnings": null,
     "variations": [
@@ -447,20 +461,29 @@
     "woodpeckerReps": 0,
     "woodpeckerSpeed": null,
     "woodpeckerLastDate": null,
-    "isFavorite": false
+    "isFavorite": false,
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-space"
+    ]
   },
   {
     "id": "anti-grunfeld-exchange",
     "eco": "D85",
     "name": "Anti-Grünfeld: Exchange",
-    "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Bc4 c5",
+    "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Bc4 c5 Ne2 Nc6 Be3 O-O O-O Bg4 f3 Na5",
     "uci": "d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 c4d5 f6d5 e2e4 d5c3 b2c3 f8g7 f1c4 c7c5",
     "fen": "rnbqk2r/pp2ppbp/6p1/2p5/2BPP3/2P5/P4PPP/R1BQK1NR w KQkq - 0 8",
     "color": "white",
     "style": "classical",
     "isRepertoire": true,
-    "overview": null,
-    "keyIdeas": null,
+    "overview": "The Exchange Grünfeld is the principled reply: you accept the classical big centre (c3, d4, e4) that Black invites, then defend it against the ...c5 lever and the g7-bishop. Every attacker is met by a defender, and the phalanx becomes a rolling asset.",
+    "keyIdeas": [
+      "Build the classical c3-d4-e4 phalanx after bxc3 — the Grünfeld's challenge to meet head-on.",
+      "Develop Ne2 (not Nf3) so the g7-bishop can't pin it, keeping d4 defended.",
+      "Over-defend the centre with Be3 and castle; it is defended as often as it is hit.",
+      "Answer ...Bg4 and ...Na5 with f3 — one move that kicks the bishop and cements e4."
+    ],
     "traps": null,
     "warnings": null,
     "variations": [
@@ -481,7 +504,11 @@
     "woodpeckerReps": 0,
     "woodpeckerSpeed": null,
     "woodpeckerLastDate": null,
-    "isFavorite": false
+    "isFavorite": false,
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-space"
+    ]
   },
   {
     "id": "anti-nimzo-qc2",
