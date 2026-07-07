@@ -37,6 +37,27 @@ the repertoire's identifying prefix (same as the masterclass rebuild doctrine �
 `scripts/build-opening-spine.mjs <id> "<seed>"`), walked to a middlegame. Every
 move DB-anchored + chess.js-legal (G3).
 
+## 🚨 THREE-AXIS VERIFICATION — MANDATORY before ANY line ships (David 2026-07-07: "be absolutely 100% sure every line is accurate, data-supported, with proper narration. Don't pump out garbage")
+Every authored line (main + each variation + each plan/gem/model line) MUST pass ALL THREE, verified, before commit:
+1. **DATA-SUPPORTED, THEN STOCKFISH TO THE MIDDLEGAME** (David 2026-07-07:
+   "Stockfish advances the lines to the middlegame. Same with the sublines") —
+   follow the most-played master move from `openings-masters-db.json` while it
+   stays common (real theory); the moment the DB runs dry before a middlegame is
+   reached, ADVANCE with the Stockfish best move (sound by construction) to a
+   real middlegame — exactly the engine-primary method the subline extender uses
+   (`extend-subline-responses.mjs`). NEVER extend along the most-played move of a
+   thin sample — that is precisely how the fabricated sublines crept in. Every
+   move chess.js-legal. For a gem/tactic the refutation is the Stockfish best move.
+2. **BOARD-ACCURATE NARRATION** — passes lessonIntegrity + narrationAccuracy:
+   every piece/square the prose names is true on the board at that ply; arrows
+   originate on real pieces with clear sight-lines.
+3. **ENGINE-SOUND** — the terminus, evaluated from the STUDENT's side, is NOT
+   worse than ≈ −0.3 (an anti-opening should give White an edge; a quiet line
+   that leaves the student worse is a DEFECT, not a showcase). Verify with the
+   `_engine-eval.mjs` helper (Stockfish, movetime ≥ 1500). Rossolimo baseline:
+   main +0.74, e6 +0.42, d6 +0.51, Nf6 +0.40 — all healthy edges.
+A line failing ANY axis does NOT ship. Empty > generic > garbage.
+
 ## Per-opening pipeline (adapts §G9.2)
 1. Extend the main spine + each variation to a middlegame (build-opening-spine).
 2. Identify the real variation tabs from the data branches.
