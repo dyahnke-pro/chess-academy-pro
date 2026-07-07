@@ -73,7 +73,7 @@ move DB-anchored + chess.js-legal (G3).
 ## Status table (tick as they land)
 | # | opening | spine | lesson | gems | plans | models | pitfalls | shipped |
 |---|---------|-------|--------|------|-------|--------|----------|---------|
-| 1 | anti-sicilian-rossolimo | ✅ main+3var | ✅ main (gate-green) | | | | | main lesson |
+| 1 | anti-sicilian-rossolimo | ✅ main+3var | ✅ main + 3 var (gate-green) | | | | | Watch layer |
 | 2 | anti-caro-fantasy | | | | | | | |
 | 3–24 | (rest per priority) | | | | | | | |
 
