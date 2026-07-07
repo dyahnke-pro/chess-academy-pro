@@ -445,6 +445,13 @@
       "concept:pos-initiative",
       "concept:tac-trap",
       "https://en.wikipedia.org/wiki/Englund_Gambit"
+    ],
+    "trapLines": [
+      {
+        "name": "Englund Queen Trap (…Qxb2)",
+        "pgn": "d4 e5 dxe5 Nc6 Nf3 Qe7 Bf4 Qb4+ Bd2 Qxb2 Nc3 Bb4 Rb1 Qa3 Nd5 Ba5 Rb5",
+        "explanation": "The Englund's main try is the greedy queen raid …Qb4+ and …Qxb2, snatching a second pawn. Punish it: Nc3 develops with tempo, Rb1 swings onto the b-file to cut off the queen's retreat, and Nd5 (threatening Nc7+) with Rb5 boxes the queen on the rim while hitting the bishop. White emerges winning by a wide margin — engine-verified about +2.2. Greed punished by a clean hunt."
+      }
     ]
   },
   {
