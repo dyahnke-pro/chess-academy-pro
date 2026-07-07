@@ -56,7 +56,19 @@ Every authored line (main + each variation + each plan/gem/model line) MUST pass
    that leaves the student worse is a DEFECT, not a showcase). Verify with the
    `_engine-eval.mjs` helper (Stockfish, movetime ≥ 1500). Rossolimo baseline:
    main +0.74, e6 +0.42, d6 +0.51, Nf6 +0.40 — all healthy edges.
+4. **BOTH SIDES SOUND — NO BLUNDERS IN THE MAIN LINE (David 2026-07-07: "that
+   goes under the gems if black blunders how white wins from it!!").** Walk the
+   line ply-by-ply; the worst single-move eval swing against the mover must be
+   < 1.0. A Watch/variation line where the OPPONENT blunders (e.g. an inflated
+   +3.5 terminus that only exists because Black played ...c5??) is GARBAGE — it
+   teaches the student that the opponent plays badly. Rebuild it so BOTH sides
+   play the engine-best/most-played move to a realistic middlegame edge (a
+   modest +0.3…+0.8, like Rossolimo — NOT +3). **The blunder itself becomes a
+   PUNISH-GEM:** the common opponent slip + the Stockfish refutation showing how
+   White wins from it (that IS the weapon layer). Extract every such blunder to a
+   gem; never leave it in the teaching spine.
 A line failing ANY axis does NOT ship. Empty > generic > garbage.
+Rossolimo (shipped) verified on all four: worst swing 0.16–0.39, no blunders.
 
 ## Per-opening pipeline (adapts §G9.2)
 1. Extend the main spine + each variation to a middlegame (build-opening-spine).
@@ -75,6 +87,17 @@ A line failing ANY axis does NOT ship. Empty > generic > garbage.
     orphans (G8).
 13. Gates: the §G9.2 STEP-15 vitest list + `npm run ship-check` → READY TO PUSH.
 14. Ship to main (batched), 3-instrument prod audit for `/openings/<id>`.
+
+## Two-pass build (quality-first; David: "100% accurate, no garbage")
+- **Pass 1 — the verified core, across all 24:** extended DB/Stockfish spine +
+  Watch lesson (main + every variation) + Understand zone (overview/keyIdeas) +
+  ONE Master middlegame plan, EVERY line 3-axis verified (data / board / sound).
+  This is what makes them "match the opening tab" in the core WLPP experience,
+  with guaranteed quality. Rossolimo (opening #1) is the completed template.
+- **Pass 2 — enrichment:** hand-found + Stockfish-verified punish-gems (weapons),
+  real White-winning model games, pitfalls. Layered on once Pass 1 is broad.
+  Gems use the amateur explorer (reachable) for the slip + Stockfish for the
+  refutation — never invented, never a thin-sample bot pick.
 
 ## Priority order (highest-traffic defenses first)
 1. `anti-sicilian-rossolimo` (Bb5 vs Sicilian) ← STARTING
