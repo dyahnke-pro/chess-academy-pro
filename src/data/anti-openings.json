@@ -760,14 +760,19 @@
     "id": "anti-catalan-black",
     "eco": "E04",
     "name": "Anti-Catalan: Open (Black)",
-    "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 a6 O-O",
+    "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 a6 O-O Nc6 e3 Bd7 Qe2 Bd6 Qxc4 O-O Rd1 Qe7 Nc3 h6",
     "uci": "d2d4 g8f6 c2c4 e7e6 g2g3 d7d5 f1g2 d5c4 g1f3 a7a6 e1g1",
     "fen": "rnbqkb1r/1pp2ppp/p3pn2/8/2pP4/5NP1/PP2PPBP/RNBQ1RK1 b kq - 1 6",
     "color": "black",
     "style": "positional",
     "isRepertoire": true,
-    "overview": null,
-    "keyIdeas": null,
+    "overview": "Against the Catalan, the Open with ...dxc4 is Black's soundest, most reliable equaliser. You take the c4-pawn, hold it a moment with ...a6, and use the tempo White spends recovering it to develop every piece to a natural square. The result is a comfortable, level game with nothing for the fianchettoed bishop to squeeze.",
+    "keyIdeas": [
+      "Take on c4 — grabbing the pawn clears the tension and buys you time.",
+      "Play ...a6 to threaten ...b5 so White must work to regain the pawn.",
+      "Develop naturally (...Nc6, ...Bd7, ...Bd6) while White fusses over c4.",
+      "Reach full equality with no weaknesses and the Catalan bishop neutralised."
+    ],
     "traps": null,
     "warnings": null,
     "variations": [
@@ -788,7 +793,11 @@
     "woodpeckerReps": 0,
     "woodpeckerSpeed": null,
     "woodpeckerLastDate": null,
-    "isFavorite": false
+    "isFavorite": false,
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-initiative"
+    ]
   },
   {
     "id": "anti-trompowsky-black",
@@ -817,14 +826,19 @@
     "id": "anti-colle-black",
     "eco": "D04",
     "name": "Anti-Colle/Stonewall (Black)",
-    "pgn": "d4 d5 Nf3 Nf6 e3 c5 c4 cxd4 exd4 g6 Nc3 Bg7",
+    "pgn": "d4 d5 Nf3 Nf6 e3 c5 c4 e6 Nc3 Nc6 a3 a6 dxc5 Bxc5 b4 Bd6 cxd5 exd5 Bb2 Be6 Be2 O-O",
     "uci": "d2d4 d7d5 g1f3 g8f6 e2e3 c7c5 c2c4 c5d4 e3d4 g7g6 b1c3 f8g7",
     "fen": "rnbqk2r/pp2ppbp/5np1/3p4/2PP4/2N2N2/PP3PPP/R1BQKB1R w KQkq - 2 7",
     "color": "black",
     "style": "classical",
     "isRepertoire": true,
-    "overview": null,
-    "keyIdeas": null,
+    "overview": "The Colle System hopes to cramp you and attack; you refuse to cooperate. An early ...c5 strikes at d4 before White walls in his own bishop, opening the game into a healthy, active position where the Colle's slow plan never gets going. Easy equality with the freer pieces.",
+    "keyIdeas": [
+      "Strike with ...c5 at once — deny the Colle its cosy e3/Bd3/c3 bind.",
+      "Develop actively (...e6, ...Nc6, ...Bd6) into an open Queen's-Gambit-style game.",
+      "Welcome trades — every exchange frees your position against a cramping system.",
+      "Reach an equal middlegame with the freer, easier side to play."
+    ],
     "traps": null,
     "warnings": null,
     "variations": [
@@ -865,7 +879,11 @@
     "woodpeckerReps": 0,
     "woodpeckerSpeed": null,
     "woodpeckerLastDate": null,
-    "isFavorite": false
+    "isFavorite": false,
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-initiative"
+    ]
   },
   {
     "id": "anti-smith-morra-black",
@@ -939,14 +957,19 @@
     "id": "anti-grand-prix-black",
     "eco": "B23",
     "name": "Anti-Grand-Prix: …g6 (Black)",
-    "pgn": "e4 c5 Nc3 Nc6 f4 g6 Nf3 Bg7",
+    "pgn": "e4 c5 Nc3 Nc6 f4 g6 Nf3 Bg7 Bc4 e6 f5 Nge7 fxe6 dxe6 d3 O-O O-O h6 a4 b6 Ne2 Na5",
     "uci": "e2e4 c7c5 b1c3 b8c6 f2f4 g7g6 g1f3 f8g7",
     "fen": "r1bqk1nr/pp1pppbp/2n3p1/2p5/4PP2/2N2N2/PPPP2PP/R1BQKB1R w KQkq - 2 5",
     "color": "black",
     "style": "positional",
     "isRepertoire": true,
-    "overview": null,
-    "keyIdeas": null,
+    "overview": "The Grand Prix Attack (f4) aims for a kingside mating attack, but the fianchetto defence takes all the sting out of it. ...g6 and ...Bg7 shield your king, ...e6 blunts the c4-bishop and the f5 break, and ...Na5 trades off White's most dangerous piece. Handled this way, Black is not just safe — Black is better.",
+    "keyIdeas": [
+      "Fianchetto with ...g6/...Bg7 to guard the dark squares around your king.",
+      "Play ...e6 to shut the c4-bishop's diagonal and control f5.",
+      "Meet the f5 thrust calmly with ...Nge7 and recapture toward the centre.",
+      "Hit the c4-bishop with ...Na5 and take over — the attack has spent itself."
+    ],
     "traps": null,
     "warnings": null,
     "variations": [
@@ -967,7 +990,11 @@
     "woodpeckerReps": 0,
     "woodpeckerSpeed": null,
     "woodpeckerLastDate": null,
-    "isFavorite": false
+    "isFavorite": false,
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-initiative"
+    ]
   },
   {
     "id": "anti-kings-gambit-black",

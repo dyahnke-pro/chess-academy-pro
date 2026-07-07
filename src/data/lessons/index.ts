@@ -35,6 +35,9 @@ import { ANTI_GRUNFELD_EXCHANGE_LESSON } from './antiGrunfeldExchange';
 import { ANTI_QGD_EXCHANGE_LESSON } from './antiQgdExchange';
 import { ANTI_QID_FIANCHETTO_LESSON } from './antiQidFianchetto';
 import { ANTI_NIMZO_QC2_LESSON } from './antiNimzoQc2';
+import { ANTI_CATALAN_BLACK_LESSON } from './antiCatalanBlack';
+import { ANTI_COLLE_BLACK_LESSON } from './antiColleBlack';
+import { ANTI_GRAND_PRIX_BLACK_LESSON } from './antiGrandPrixBlack';
 import { PRO_AMAN_CARO_KANN_VARIATION_LESSONS } from './proAmanCaroKannVariations';
 import { PRO_AMAN_NIMZO_INDIAN_LESSON } from './proAmanNimzoIndian';
 import { PRO_AMAN_NIMZO_INDIAN_VARIATION_LESSONS } from './proAmanNimzoIndianVariations';
@@ -378,6 +381,9 @@ const LESSONS: Record<string, LessonScript> = {
   [ANTI_QGD_EXCHANGE_LESSON.openingId]: ANTI_QGD_EXCHANGE_LESSON,
   [ANTI_QID_FIANCHETTO_LESSON.openingId]: ANTI_QID_FIANCHETTO_LESSON,
   [ANTI_NIMZO_QC2_LESSON.openingId]: ANTI_NIMZO_QC2_LESSON,
+  [ANTI_CATALAN_BLACK_LESSON.openingId]: ANTI_CATALAN_BLACK_LESSON,
+  [ANTI_COLLE_BLACK_LESSON.openingId]: ANTI_COLLE_BLACK_LESSON,
+  [ANTI_GRAND_PRIX_BLACK_LESSON.openingId]: ANTI_GRAND_PRIX_BLACK_LESSON,
   [PRO_AMAN_NIMZO_INDIAN_LESSON.openingId]: PRO_AMAN_NIMZO_INDIAN_LESSON,
   [PRO_AMAN_SICILIAN_KAN_LESSON.openingId]: PRO_AMAN_SICILIAN_KAN_LESSON,
   [PRO_GOTHAMCHESS_TROMPOWSKY_LESSON.openingId]: PRO_GOTHAMCHESS_TROMPOWSKY_LESSON,
