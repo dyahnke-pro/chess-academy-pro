@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { Swords, Play, Pause, SkipForward, SkipBack, Headphones } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Swords, Play, Pause, SkipForward, SkipBack, Headphones, Library, ChevronRight } from 'lucide-react';
 import { voiceService } from '../../services/voiceService';
 import { PHILOSOPHY_OF_A_GENERAL } from '../../data/academy/philosophyOfAGeneral';
 import { PageHelp } from '../Layout/PageHelp';
@@ -50,6 +51,7 @@ export function chunkForTts(text: string): string[] {
  * chapter to read its text + CliffsNotes. Zero-LLM: authored prose only.
  */
 export function AcademyPage(): JSX.Element {
+  const navigate = useNavigate();
   const book = PHILOSOPHY_OF_A_GENERAL;
   const [index, setIndex] = useState(0);
   const [playing, setPlaying] = useState(false);
@@ -151,14 +153,31 @@ export function AcademyPage(): JSX.Element {
             helpId="academy"
             title="The Academy"
             steps={[
+              { label: 'The Coaches Library', body: "The masters' own public-domain books, read aloud with live playable boards where the original printed a diagram." },
               { label: 'Listen', body: 'Tap play to hear the whole book read aloud — made for the commute. It keeps playing chapter to chapter, so you can pocket the phone and just listen.' },
               { label: 'Read', body: 'Tap any chapter to open its full text, CliffsNotes, and sources, and read along.' },
-              { label: 'The doctrine', body: 'Learn to think like a general: see the whole field, seize the initiative, mass at the decisive point, and impose your will.' },
-              { label: 'Openings', body: 'Looking for opening courses? They live in Openings — Masterclasses, Gambits, Elite, and every line via search.' },
+              { label: 'Openings', body: 'Looking for opening courses? They live in Openings — Masterclasses, Gambits, Counter-Weapons, Elite, and every line via search.' },
             ]}
           />
         </div>
       </div>
+
+      {/* Coaches Library — the masters' own books, read aloud with live boards.
+          Kept prominent here so the books stay one tap away (David 2026-07-07:
+          "keep the books in the academy tab available … maybe a library tab"). */}
+      <button
+        type="button"
+        data-testid="academy-library-link"
+        onClick={() => { void navigate('/coach/library'); }}
+        className="max-w-lg mx-auto w-full rounded-2xl bg-rose-500/10 border-2 border-rose-500/30 p-5 flex items-center gap-4 text-left hover:bg-rose-500/20 transition-colors"
+      >
+        <Library size={32} className="text-rose-400 shrink-0" />
+        <span className="flex-1 min-w-0">
+          <span className="block text-lg font-bold text-rose-300">The Coaches Library</span>
+          <span className="block text-sm" style={{ color: 'var(--color-text-muted)' }}>Five master books, read aloud with live playable boards — the masters' own words.</span>
+        </span>
+        <ChevronRight size={20} className="text-rose-300/70 shrink-0" />
+      </button>
 
       {/* Book / audiobook hero */}
       <div
