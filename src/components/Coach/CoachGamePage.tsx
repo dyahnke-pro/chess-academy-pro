@@ -3596,15 +3596,27 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       // NEVER falls back to tacticSuffix — that's template prose with
       // "Hanging: White pawn on d2" shape Dave wants gone.
       let explanation: string;
-      const firstHanging = tacticResult?.hangingPieces[0];
-      if (firstHanging) {
+      // The blunder explanation must describe why the STUDENT's move was bad,
+      // so only THEIR OWN hanging piece counts (David 2026-07-07: "not all
+      // accurate"). An OPPONENT's hanging pawn is an opportunity, not the
+      // reason this move blundered — surfacing it as the blunder cause was the
+      // "Opponent's pawn on e5 is hanging" false alert. And when nothing of the
+      // student's is actually hanging, do NOT assert "loses material" — the
+      // blunder may be positional (a lost outpost, a walked-into attack), where
+      // claiming material loss is simply false.
+      const studentChar = playerColor === 'white' ? 'w' : 'b';
+      const ownHanging = (tacticResult?.hangingPieces ?? []).find(
+        (h) => h.color === studentChar && h.piece.toLowerCase() !== 'k',
+      );
+      if (ownHanging) {
         const pieceName = {
           p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
-        }[firstHanging.piece.toLowerCase()] ?? firstHanging.piece;
-        const ownership = (firstHanging.color === 'w') === (playerColor === 'white') ? 'Your' : "Opponent's";
-        explanation = `${ownership} ${pieceName} on ${firstHanging.square} is hanging.`;
+        }[ownHanging.piece.toLowerCase()] ?? ownHanging.piece;
+        explanation = `Your ${pieceName} on ${ownHanging.square} is hanging.`;
       } else {
-        explanation = 'That move loses material — take another look at the position.';
+        // No hanging piece of the student's — positional blunder or an indirect
+        // loss. State the honest verdict without a fabricated material claim.
+        explanation = 'That gives back a big chunk of your position — there was a much stronger move here.';
       }
 
       // WO-POLISH-02: LLM-generated coach-voice alert. Uses the grounded
