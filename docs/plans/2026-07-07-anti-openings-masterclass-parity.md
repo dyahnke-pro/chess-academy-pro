@@ -73,9 +73,17 @@ move DB-anchored + chess.js-legal (G3).
 ## Status table (tick as they land)
 | # | opening | spine | lesson | gems | plans | models | pitfalls | shipped |
 |---|---------|-------|--------|------|-------|--------|----------|---------|
-| 1 | anti-sicilian-rossolimo | in-progress | | | | | | |
+| 1 | anti-sicilian-rossolimo | ✅ main+3var | ✅ main (gate-green) | | | | | main lesson |
 | 2 | anti-caro-fantasy | | | | | | | |
 | 3–24 | (rest per priority) | | | | | | | |
+
+**Opening #1 progress (anti-sicilian-rossolimo):** main-line Watch `LessonScript`
+authored (`antiSicilianRossolimo.ts`, 6 beats to move 15) + registered — Watch
+now uses `LessonPlayer` (Gate A) on the DB-grounded middlegame-reaching spine
+(Gate B). Passes lessonIntegrity + narrationAccuracy + lessonSources + lessonDepth
++ wlppNarration. STILL TODO for #1: per-variation lessons (e6/d6/Nf6 tabs),
+gems, middlegame plans, model games (White wins), pitfalls, overview/keyIdeas,
+extend the variation pgns in anti-openings.json.
 
 ## Already shipped this session (context)
 - 20 fabricated sublines re-extended + false narration removed (main `f6ae844`).
