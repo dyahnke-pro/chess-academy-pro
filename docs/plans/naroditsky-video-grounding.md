@@ -56,3 +56,15 @@ engine-verify his line is sound → rebuild the Watch lesson (main + variations)
 + sublines to teach HIS repertoire in original prose → gate → ship. This is the
 new standard for the whole anti-opening set (and matches the house Naroditsky
 voice already locked for the repertoire).
+
+## Transcripts pulled (available for the rollout, gitignored)
+- `kings-gambit.en.vtt` — Opening Lab (mainline; KG lesson calibrated ✅)
+- `alapin-advfrench.en.vtt` — covers anti-alapin-black + anti-french-advance
+- `smithmorra-nimzo-london.en.vtt` — covers anti-smith-morra-black, anti-nimzo-qc2, anti-london-black
+
+The Alapin/Advance-French and Smith-Morra/Nimzo/London videos are EXPLOITATION-
+focused speedruns (common mistakes / tactical paths) — ideal source for the GEMS
+and sublines layer (how the side punishes a common blunder). Use Opening-Lab
+videos (like the KG one) for clean mainline Watch narration; mine the speedruns
+for the punishing lines. Next session: extract each recommended line, engine-
+verify sound, rebuild the Watch (main + variations) + gems in original prose.
