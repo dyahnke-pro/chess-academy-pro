@@ -129,6 +129,23 @@ Gems for the Fantasy = the amateur blunders (`...c5??`, `...c4??`) — Pass 2 vi
 the amateur explorer (reachable) + Stockfish refutation. Next: author the Watch
 lessons on THESE sound spines (honest surprise-weapon narration), then #3.
 
+## Opening #3 — anti-french-advance (data prepped, sound spines verified — CLEAN)
+A genuinely teachable opening (unlike the messy Fantasy variations): both spines
+thematic Advance-French structures, both-sides-sound, small White edge. Author
+the Watch lessons on these next (main = Nc6/Qb6):
+- **main** (+0.18): `e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Be2 cxd4 cxd4 Nh6 Bd3 Bd7 Bc2 Nf5 Bxf5 exf5 O-O Be6`
+- **Qb6-first** (+0.22): `e4 e6 d4 d5 e5 c5 c3 Qb6 Nf3 Nc6 a3 c4 Nbd2 Na5 Be2 Bd7 Rb1 Ne7 h4 O-O-O h5 h6`
+
+## ⚖️ PER-OPENING JUDGEMENT (David: no garbage) — not every anti-opening is a clean edge
+- **Clean/thematic** (author confidently): Rossolimo (+0.4…+0.74), French Advance
+  (+0.18/+0.22). Real edge, thematic play, easy to teach properly.
+- **Honest surprise weapon** (author with honest ≈equal framing): Caro Fantasy
+  main dxe4 (+0.26). Value = practical + amateur-blunder gems, NOT an edge.
+- **Messy engine lines / marginal** (do NOT rush; reconsider the line or defer):
+  Fantasy g6/qb6 (sharp +0.07/+0.09 with hard-to-explain maneuvers), Fantasy e6
+  (−0.15). Author only when a clean, board-accurate, properly-explained line is
+  found — a shaky lesson IS garbage. Empty > generic > invented.
+
 ## Status table (tick as they land)
 | # | opening | spine | lesson | gems | plans | models | pitfalls | shipped |
 |---|---------|-------|--------|------|-------|--------|----------|---------|
