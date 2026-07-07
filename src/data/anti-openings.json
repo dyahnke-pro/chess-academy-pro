@@ -57,25 +57,30 @@
     "id": "anti-french-advance",
     "eco": "C02",
     "name": "Anti-French: Advance Variation",
-    "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Bd7 Be2",
+    "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Be2 cxd4 cxd4 Nh6 Bd3 Bd7 Bc2 Nf5 Bxf5 exf5 O-O Be6",
     "uci": "e2e4 e7e6 d2d4 d7d5 e4e5 c7c5 c2c3 b8c6 g1f3 c8d7 f1e2",
     "fen": "r2qkbnr/pp1b1ppp/2n1p3/2ppP3/3P4/2P2N2/PP2BPPP/RNBQK2R b KQkq - 4 6",
     "color": "white",
     "style": "positional",
     "isRepertoire": true,
-    "overview": null,
-    "keyIdeas": null,
+    "overview": "The Advance Variation, 3.e5, is White's most principled counter to the French. You grab space with the e5 wedge and lock in Black's light-squared bishop behind its own e6-pawn — the bad piece that plagues the whole French complex. Your plan is simple and enduring: defend the d4 base of the pawn chain (c3, Nf3, Be2), keep your good light bishop, and squeeze the extra space. A clean, thematic edge with well-charted plans.",
+    "keyIdeas": [
+      "The e5 wedge grabs space and buries Black's light-squared bishop behind the e6-pawn — the French's eternal problem.",
+      "Hold the d4 base of the chain with c3, Nf3 and Be2 against the ...c5/...Nc6/...Qb6 pressure.",
+      "Keep your good bishop: reposition Bd3-c2 onto the b1-h7 diagonal instead of trading it cheaply.",
+      "When Black blockades with ...Nf5, trade it with Bxf5 — the recapture ...exf5 hands Black doubled f-pawns."
+    ],
     "traps": null,
     "warnings": null,
     "variations": [
       {
         "name": "Advance Variation, Euwe Variation",
-        "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Bd7 Be2",
+        "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Be2 cxd4 cxd4 Nh6 Bd3 Bd7 Bc2 Nf5 Bxf5 exf5 O-O Be6",
         "explanation": ""
       },
       {
         "name": "Advance Variation",
-        "pgn": "e4 e6 d4 d5 e5 c5 c3 Qb6 Nf3 Nc6 a3 c4 Nbd2 Na5",
+        "pgn": "e4 e6 d4 d5 e5 c5 c3 Qb6 Nf3 Nc6 a3 c4 Nbd2 Na5 Be2 Bd7 Rb1 Ne7 h4 O-O-O h5 h6",
         "explanation": ""
       }
     ],
@@ -85,7 +90,12 @@
     "woodpeckerReps": 0,
     "woodpeckerSpeed": null,
     "woodpeckerLastDate": null,
-    "isFavorite": false
+    "isFavorite": false,
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-space",
+      "https://en.wikipedia.org/wiki/French_Defence,_Advance_Variation"
+    ]
   },
   {
     "id": "anti-pirc-austrian",
