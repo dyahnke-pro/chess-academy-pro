@@ -136,6 +136,10 @@ the Watch lessons on these next (main = Nc6/Qb6):
 - **main** (+0.18): `e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Be2 cxd4 cxd4 Nh6 Bd3 Bd7 Bc2 Nf5 Bxf5 exf5 O-O Be6`
 - **Qb6-first** (+0.22): `e4 e6 d4 d5 e5 c5 c3 Qb6 Nf3 Nc6 a3 c4 Nbd2 Na5 Be2 Bd7 Rb1 Ne7 h4 O-O-O h5 h6`
 
+## Openings #4–6 — data prepped, sound spines verified
+- **anti-scandinavian** (+0.60, CLEAN/thematic — author confidently): `e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 c6 Bc4 Bf5 Bd2 e6 Ne4 Qd8 Ng3 Bg4 c3 Nbd7 h3 Bxf3` (classic ...Qa5/...Bf5 main line, natural White development, comfortable edge).
+- **anti-pirc-austrian** (+0.81, strong edge but SHARP/tactical — author carefully): `e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 O-O Bd3 Na6 O-O c5 d5 c4 Bxc4 b5 Nxb5 Nxe4 Qe1 Nac5` (Austrian Attack; concrete tactics on c4/b5 — explain each or pick a calmer sound line).
+
 ## ⚖️ PER-OPENING JUDGEMENT (David: no garbage) — not every anti-opening is a clean edge
 - **Clean/thematic** (author confidently): Rossolimo (+0.4…+0.74), French Advance
   (+0.18/+0.22). Real edge, thematic play, easy to teach properly.
