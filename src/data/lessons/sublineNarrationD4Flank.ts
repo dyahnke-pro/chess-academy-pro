@@ -822,16 +822,6 @@ const WALBLASK: SublineNarration = {
   ],
   sources: ['concept:tac-trap', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Albin_Countergambit'],
 };
-// WAVE WENGRAID :: 1 keys
-const WENGRAID: SublineNarration = {
-  intro: { say: "Bxb4 — the trades clear the way for the Englund's notorious queen raid: …Qxa1, snatching the rook in the corner. Be clear-eyed — this is a desperado surprise, not a sound line: your queen is buried deep in White's camp and must scramble out, and with accurate play White stands better. Play it for the trap value and the practical chance that White goes wrong.", sayShort: "…Bxb4 — the risky …Qxa1 raid" },
-  beats: [
-    { atMove: 12, say: "Bxb4 — White trades to open lines toward your raiding queen on b2. You recapture and the corner rook beckons, but tread knowingly: this grab is double-edged at best.", sayShort: "Bxb4 — trades open lines", highlights: [_H('b4', KEY)] },
-    { atMove: 13, say: "…Nxb4 — recapture, eyeing the a1-rook and keeping the knight active near White's queenside. The raid is on, but so is the risk to your adventuring pieces.", sayShort: "…Nxb4 — recapture, eye a1", highlights: [_H('a1', KEY)] },
-    { atMove: 15, say: "…Qxa1 — you snatch the rook, but now the truth: your queen is marooned in the corner and White will hunt it with a3, Kc1 and the minor pieces. Material in hand, but you must find …Be6 and …Ba2 to free her — a practical gamble, not equality.", sayShort: "…Qxa1 — grab it, queen in peril", highlights: [_H('a1', KEY)] },
-  ],
-  sources: ['concept:pos-initiative', 'concept:tac-trap', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
-};
 // WAVE WNIMNE2 :: 1 keys
 
 const LN01: SublineNarration = {
@@ -16117,7 +16107,6 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'englund-gambit::0::Nc3@10': EENG,
   'englund-gambit::0::Nc3@8': C117,
   'englund-gambit::0::Nbd2@8': C117,
-  'englund-gambit::0::Bxb4@12': WENGRAID,
   'englund-gambit::0::Qd2@8': C117,
   'englund-gambit::0::c3@8': C117,
   'englund-gambit::0::Qd3@12': C118,

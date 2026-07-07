@@ -4,8 +4,11 @@ import { PageHelp } from '../Layout/PageHelp';
 
 /**
  * The Academy — the school surface, reached from Coach. It is a SEPARATE
- * build from the Openings explorer: it holds the structured Opening
- * Courses and the Coaches Library of master books, kept together here.
+ * build from the Openings explorer: it holds the board-free doctrine
+ * (The Philosophy of a General, audiobook) and the Coaches Library of
+ * master books. Opening courses were removed (David 2026-07-07: redundant
+ * with the Openings explorer — Masterclasses / Gambits / every line live
+ * there); the audiobook and library stay.
  */
 export function CoachAcademyPage(): JSX.Element {
   const navigate = useNavigate();
@@ -31,9 +34,9 @@ export function CoachAcademyPage(): JSX.Element {
             helpId="coach-academy"
             title="The Academy"
             steps={[
-              { label: 'Opening Courses', body: 'Enrolled GM-style opening courses — a numbered chapter syllabus with progress and a finish line. Pick up where you left off.' },
+              { label: 'The Philosophy of a General', body: 'Our board-free doctrine, read aloud as an audiobook — tap play and it reads chapter to chapter for the commute.' },
               { label: 'The Coaches Library', body: "The masters' own public-domain books, read aloud with live playable boards where the original printed a diagram." },
-              { label: 'Separate from Openings', body: 'The Academy is its own build — distinct from the Openings explorer, which stays your reference and repertoire trainer.' },
+              { label: 'Openings live in Openings', body: 'Looking for opening courses? They live in the Openings explorer — Masterclasses, Gambits, Counter-Weapons, Elite, and every line via search.' },
             ]}
           />
         </div>
@@ -42,14 +45,14 @@ export function CoachAcademyPage(): JSX.Element {
       <div className="grid grid-cols-1 gap-3 flex-1 content-start max-w-lg mx-auto w-full">
         <button
           type="button"
-          data-testid="academy-tile-courses"
+          data-testid="academy-tile-book"
           onClick={() => { void navigate('/academy'); }}
           className="border-2 rounded-2xl bg-indigo-500/10 border-indigo-500/30 py-8 px-5 flex items-center gap-4 text-left hover:bg-indigo-500/20 transition-colors"
         >
           <GraduationCap size={40} className="text-indigo-400 shrink-0" />
           <span>
-            <span className="block text-lg font-bold text-indigo-300">Opening Courses</span>
-            <span className="block text-sm text-theme-text-muted">Structured GM-style courses — a chapter syllabus with progress and a finish line.</span>
+            <span className="block text-lg font-bold text-indigo-300">The Philosophy of a General</span>
+            <span className="block text-sm text-theme-text-muted">Our board-free doctrine, read aloud as an audiobook — chapter to chapter.</span>
           </span>
         </button>
 

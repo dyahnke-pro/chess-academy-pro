@@ -14,10 +14,11 @@ import type { OpeningRecord, SmartSearchResult } from '../../types';
 import { ProRepertoiresTab } from './ProRepertoiresTab';
 import { GambitsTab } from './GambitsTab';
 import { MasterclassesTab } from './MasterclassesTab';
+import { CounterWeaponsTab } from './CounterWeaponsTab';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
-import { BookOpen, Library, ChevronDown, ChevronRight, Users, Swords, Sparkles, GraduationCap } from 'lucide-react';
+import { BookOpen, Library, ChevronDown, ChevronRight, Users, Swords, Sparkles, GraduationCap, Shield } from 'lucide-react';
 
-type TabMode = 'masterclasses' | 'pro' | 'gambits' | 'all';
+type TabMode = 'masterclasses' | 'pro' | 'gambits' | 'counter' | 'all';
 
 /** Favorited openings pinned to the top of a list (David 2026-06-06:
  *  "favorite openings are not saved at the top"). Stable: preserves the
@@ -181,6 +182,7 @@ export function OpeningExplorerPage(): JSX.Element {
             steps={[
               { label: 'Masterclasses', body: 'Deep, hand-built courses on full openings — Watch the ideas, Learn the moves, Practice them, Play them vs the coach.' },
               { label: 'Pick what you play', body: 'Start with an opening you actually use as White or Black — not at random.' },
+              { label: 'Counter-Weapons', body: 'White anti-opening repertoires — clean, aggressive systems to beat the Sicilian, Caro, Pirc, Modern and the other defenses amateurs struggle against.' },
               { label: 'Climb each line', body: 'Do the main line and every variation tab through Watch → Learn → Practice → Play.' },
               { label: 'Weapons', body: 'Each line shows the common mistakes opponents make and exactly how to punish them.' },
             ]}
@@ -207,11 +209,12 @@ export function OpeningExplorerPage(): JSX.Element {
       </button>
 
       {/* Tab toggle */}
-      <div className="grid grid-cols-4 gap-1 mb-4 p-1 bg-theme-surface rounded-xl" data-testid="tab-toggle">
+      <div className="grid grid-cols-5 gap-1 mb-4 p-1 bg-theme-surface rounded-xl" data-testid="tab-toggle">
         {([
           { id: 'masterclasses' as const, label: 'Masterclasses', icon: GraduationCap, testId: 'tab-masterclasses', activeClasses: 'bg-amber-500/25 text-amber-200', borderColor: 'border-amber-400/80 shadow-[0_0_6px_rgba(245,158,11,0.7),0_0_14px_rgba(245,158,11,0.45),0_0_24px_rgba(245,158,11,0.25)]' },
           { id: 'pro' as const, label: 'Elite', icon: Users, testId: 'tab-pro', activeClasses: 'bg-emerald-500/25 text-emerald-200', borderColor: 'border-emerald-400/80 shadow-[0_0_6px_rgba(16,185,129,0.7),0_0_14px_rgba(16,185,129,0.45),0_0_24px_rgba(16,185,129,0.25)]' },
           { id: 'gambits' as const, label: 'Gambits', icon: Swords, testId: 'tab-gambits', activeClasses: 'bg-rose-500/25 text-rose-200', borderColor: 'border-rose-400/80 shadow-[0_0_6px_rgba(244,63,94,0.7),0_0_14px_rgba(244,63,94,0.45),0_0_24px_rgba(244,63,94,0.25)]' },
+          { id: 'counter' as const, label: 'Counter', icon: Shield, testId: 'tab-counter', activeClasses: 'bg-sky-500/25 text-sky-200', borderColor: 'border-sky-400/80 shadow-[0_0_6px_rgba(56,189,248,0.7),0_0_14px_rgba(56,189,248,0.45),0_0_24px_rgba(56,189,248,0.25)]' },
           { id: 'all' as const, label: 'All', icon: Library, testId: 'tab-all', activeClasses: 'bg-violet-500/25 text-violet-200', borderColor: 'border-violet-400/80 shadow-[0_0_6px_rgba(139,92,246,0.7),0_0_14px_rgba(139,92,246,0.45),0_0_24px_rgba(139,92,246,0.25)]' },
         ]).map(({ id, label, icon: Icon, testId, activeClasses, borderColor }) => (
           <button
@@ -246,6 +249,9 @@ export function OpeningExplorerPage(): JSX.Element {
 
       {/* ─── Gambits tab ─────────────────────────────────────────────────── */}
       {tab === 'gambits' && <GambitsTab />}
+
+      {/* ─── Counter-Weapons tab (anti-openings; David 2026-07-07) ────────── */}
+      {tab === 'counter' && <CounterWeaponsTab />}
 
       {/* ─── All Openings tab ────────────────────────────────────────────── */}
       {tab === 'all' && (

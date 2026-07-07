@@ -3,7 +3,12 @@ import { Swords, Play, Pause, SkipForward, SkipBack, Headphones } from 'lucide-r
 import { voiceService } from '../../services/voiceService';
 import { PHILOSOPHY_OF_A_GENERAL } from '../../data/academy/philosophyOfAGeneral';
 import { PageHelp } from '../Layout/PageHelp';
-import { AcademyCourses } from './AcademyCourses';
+// AcademyCourses (the opening-course shelves) was removed from this surface
+// (David 2026-07-07: "remove the academy openings … they are redundant"). Every
+// course opening is reachable via /openings — Masterclasses + Gambits have their
+// own explorer tabs, and all 24 anti-openings are DB-seeded so they appear in the
+// explorer's All tab + search and each has an /openings/:id detail page. The
+// component + course routes are KEPT (not deleted), just unmounted from the UI.
 
 /** Polly / `/api/tts` rejects any request over 3000 chars. Stay well
  *  under it (chapters were silently failing at 3.4k–4.3k). */
@@ -140,23 +145,20 @@ export function AcademyPage(): JSX.Element {
       data-testid="academy"
     >
       <div className="relative mt-2">
-        <h1 className="text-xl font-bold text-center">Opening Courses</h1>
+        <h1 className="text-xl font-bold text-center">The Academy</h1>
         <div className="absolute right-0 top-1/2 -translate-y-1/2">
           <PageHelp
             helpId="academy"
-            title="Opening Courses"
+            title="The Academy"
             steps={[
-              { label: 'Courses', body: 'Enrolled GM-style opening courses — a numbered chapter syllabus with progress and a finish line. Tap a course to pick up where you left off.' },
               { label: 'Listen', body: 'Tap play to hear the whole book read aloud — made for the commute. It keeps playing chapter to chapter, so you can pocket the phone and just listen.' },
               { label: 'Read', body: 'Tap any chapter to open its full text, CliffsNotes, and sources, and read along.' },
               { label: 'The doctrine', body: 'Learn to think like a general: see the whole field, seize the initiative, mass at the decisive point, and impose your will.' },
+              { label: 'Openings', body: 'Looking for opening courses? They live in Openings — Masterclasses, Gambits, Elite, and every line via search.' },
             ]}
           />
         </div>
       </div>
-
-      {/* Courses — the enrolled GM-style opening masterclasses */}
-      <AcademyCourses />
 
       {/* Book / audiobook hero */}
       <div

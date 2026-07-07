@@ -103,14 +103,25 @@ export function detectDuplicatePlanLines(): string[] {
 }
 
 /** Same passage text in Classic-Wisdom (chess-concepts) and From-the-Books with a different author. */
+// The SAME passage showing in BOTH the Classic Wisdom card and the From-the-Books
+// reader on one opening page — the on-page "wisdom and the book repeat themselves"
+// redundancy (David 2026-07-07). The old author-difference guard MISSED every real
+// case: the framing intros are all authored ("Chess Academy"), so a same-author
+// duplicate slipped through (13 openings shipped the identical intro twice). We
+// now flag ANY text overlap regardless of author — a shared 80-char prefix, or one
+// passage containing the other's opening — so a re-introduced repeat fails the gate.
 export function detectClassicWisdomBookClash(): string[] {
   const out: string[] = [];
   for (const id of CURATED_IDS) {
     for (const cw of CW[id] ?? []) {
       for (const fb of BOOK[id] ?? []) {
         const ct = norm(cw.text), ft = norm(fb.text);
-        if (ct && ft && ct.slice(0, 80) === ft.slice(0, 80) && norm(cw.author) !== norm(fb.author)) {
-          out.push(`${id}::${norm(cw.author)}|${norm(fb.author)}`);
+        if (!ct || !ft) continue;
+        const prefixClash = ct.slice(0, 80) === ft.slice(0, 80);
+        const containClash = ct.length > 40 && ft.length > 40 &&
+          (ct.includes(ft.slice(0, 120)) || ft.includes(ct.slice(0, 120)));
+        if (prefixClash || containClash) {
+          out.push(`${id}::${ct.slice(0, 40)}`);
         }
       }
     }
