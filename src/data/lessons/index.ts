@@ -26,6 +26,7 @@ import { PRO_AMAN_RETI_VARIATION_LESSONS } from './proAmanRetiVariations';
 import { PRO_AMAN_CARO_KANN_LESSON } from './proAmanCaroKann';
 import { ANTI_SICILIAN_ROSSOLIMO_LESSON } from './antiSicilianRossolimo';
 import { ANTI_SICILIAN_ROSSOLIMO_VARIATION_LESSONS } from './antiSicilianRossolimoVariations';
+import { ANTI_CARO_FANTASY_LESSON } from './antiCaroFantasy';
 import { PRO_AMAN_CARO_KANN_VARIATION_LESSONS } from './proAmanCaroKannVariations';
 import { PRO_AMAN_NIMZO_INDIAN_LESSON } from './proAmanNimzoIndian';
 import { PRO_AMAN_NIMZO_INDIAN_VARIATION_LESSONS } from './proAmanNimzoIndianVariations';
@@ -360,6 +361,7 @@ const LESSONS: Record<string, LessonScript> = {
   [PRO_AMAN_RETI_LESSON.openingId]: PRO_AMAN_RETI_LESSON,
   [PRO_AMAN_CARO_KANN_LESSON.openingId]: PRO_AMAN_CARO_KANN_LESSON,
   [ANTI_SICILIAN_ROSSOLIMO_LESSON.openingId]: ANTI_SICILIAN_ROSSOLIMO_LESSON,
+  [ANTI_CARO_FANTASY_LESSON.openingId]: ANTI_CARO_FANTASY_LESSON,
   [PRO_AMAN_NIMZO_INDIAN_LESSON.openingId]: PRO_AMAN_NIMZO_INDIAN_LESSON,
   [PRO_AMAN_SICILIAN_KAN_LESSON.openingId]: PRO_AMAN_SICILIAN_KAN_LESSON,
   [PRO_GOTHAMCHESS_TROMPOWSKY_LESSON.openingId]: PRO_GOTHAMCHESS_TROMPOWSKY_LESSON,

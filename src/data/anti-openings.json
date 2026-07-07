@@ -3,35 +3,40 @@
     "id": "anti-caro-fantasy",
     "eco": "B12",
     "name": "Anti-Caro: Fantasy Variation",
-    "pgn": "e4 c6 d4 d5 f3 e6 Nc3 Bb4 Bf4 c5 a3 c4 b3 e5",
+    "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 c3 Nd7 Bd3 Ngf6 O-O Bd6 a4 O-O Nbd2 Re8 Qc2 Bc7",
     "uci": "e2e4 c7c6 d2d4 d7d5 f2f3 e7e6 b1c3 f8b4 c1f4 c6c5 a2a3 c5c4 b2b3 e6e5",
     "fen": "rnbqk1nr/pp3ppp/8/3pp3/1bpPPB2/PPN2P2/2P3PP/R2QKBNR w KQkq - 0 8",
     "color": "white",
     "style": "aggressive",
     "isRepertoire": true,
-    "overview": null,
-    "keyIdeas": null,
+    "overview": "The Fantasy Variation, 3.f3, is a surprise weapon against the Caro-Kann. Be honest: it is not a refutation — with best play it is roughly equal. Its value is practical: f3 props up e4 and builds a broad d4+e4 pawn centre, dragging the well-booked Caro player off theory and into a rich middlegame where they, not you, must find the moves. Club opponents stumble in it constantly.",
+    "keyIdeas": [
+      "After ...dxe4 recapture with fxe4 — the broad d4+e4 centre and the half-open f-file are the whole point.",
+      "Bolt down d4 with c3 and Nf3 so Black's ...e5 break never wins the centre.",
+      "Develop the Bd3+Qc2 battery on the b1-h7 diagonal, poised to fire at the king once the e4-pawn advances.",
+      "It is a practical weapon, not a refutation — play for the small pull and Black's unfamiliarity, and mine the amateur blunders (…c5, …c4) as tactics."
+    ],
     "traps": null,
     "warnings": null,
     "variations": [
       {
         "name": "Maróczy Variation (e6)",
-        "pgn": "e4 c6 d4 d5 f3 e6 Nc3 Bb4 Bf4 c5 a3 c4 b3 e5",
+        "pgn": "e4 c6 d4 d5 f3 e6 Nc3 Bb4 Bf4 Ne7 Qd3 O-O a3 Ba5 h4 b5 h5 h6 Ne2 Nd7 O-O-O b4",
         "explanation": ""
       },
       {
         "name": "Maróczy Variation (dxe4)",
-        "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 a3 c5 b3 c4",
+        "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 c3 Nd7 Bd3 Ngf6 O-O Bd6 a4 O-O Nbd2 Re8 Qc2 Bc7",
         "explanation": ""
       },
       {
         "name": "Maróczy Variation (g6)",
-        "pgn": "e4 c6 d4 d5 f3 g6 Nc3 Bg7 Be3 Qb6 a3 c5 b3 c4",
+        "pgn": "e4 c6 d4 d5 f3 g6 Nc3 Bg7 Be3 Qb6 Na4 Qa5+ c3 e5 dxe5 Ne7 Nc5 Bxe5 f4 Bg7 e5 f6",
         "explanation": ""
       },
       {
         "name": "Maróczy Variation (Qb6)",
-        "pgn": "e4 c6 d4 d5 f3 Qb6 Nc3 dxe4 fxe4 c5 a3 c4 b3 a6",
+        "pgn": "e4 c6 d4 d5 f3 Qb6 Nc3 dxe4 fxe4 e5 Nf3 exd4 Qxd4 Qxd4 Nxd4 Bc5 Be3 Nd7 O-O-O Ngf6 Na4 Nxe4",
         "explanation": ""
       }
     ],
@@ -41,7 +46,12 @@
     "woodpeckerReps": 0,
     "woodpeckerSpeed": null,
     "woodpeckerLastDate": null,
-    "isFavorite": false
+    "isFavorite": false,
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-initiative",
+      "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence,_Fantasy_Variation"
+    ]
   },
   {
     "id": "anti-french-advance",
