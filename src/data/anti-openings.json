@@ -726,14 +726,19 @@
     "id": "anti-london-black",
     "eco": "D02",
     "name": "Anti-London (Black)",
-    "pgn": "d4 d5 Bf4 c5 e3 Nc6 c3 c4 a3 a6 b3 a5 f3 a4",
+    "pgn": "d4 d5 Bf4 Nf6 e3 Bf5 c4 e6 Nd2 Nbd7 Ngf3 a5 Be2 c6 Qb3 Ra7 c5 Be7 O-O Nh5 Be5 Nhf6",
     "uci": "d2d4 d7d5 c1f4 c7c5 e2e3 b8c6 c2c3 c5c4 a2a3 a7a6 b2b3 a6a5 f2f3 a5a4",
     "fen": "r1bqkbnr/1p2pppp/2n5/3p4/p1pP1B2/PPP1PP2/6PP/RN1QKBNR w KQkq - 0 8",
     "color": "black",
     "style": "aggressive",
     "isRepertoire": true,
-    "overview": null,
-    "keyIdeas": null,
+    "overview": "The London System's whole edge is its good bishop on f4, developed outside the pawn chain. You neutralise it at the root by mirroring: ...Nf6 and ...Bf5 to get your own light-squared bishop out BEFORE ...e6 shuts it in — the same principle that makes the Caro-Kann rock-solid. From a healthy setup the ...c5 break gives full equality. Be honest: the London is sound, so this is level, but Black has no problems and the freer minor pieces.",
+    "keyIdeas": [
+      "Develop ...Bf5 before ...e6 — copy the London's idea and take away its one trump, the good bishop.",
+      "Only then play ...e6: your light bishop is already active outside the chain.",
+      "Grab space with ...a5 and prepare the freeing ...c5 break — play actively, not passively.",
+      "Reach a level game with both bishops good, no weaknesses, and the ...c5/...b6 breaks in hand."
+    ],
     "traps": null,
     "warnings": null,
     "variations": [
@@ -754,7 +759,11 @@
     "woodpeckerReps": 0,
     "woodpeckerSpeed": null,
     "woodpeckerLastDate": null,
-    "isFavorite": false
+    "isFavorite": false,
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-initiative"
+    ]
   },
   {
     "id": "anti-catalan-black",
