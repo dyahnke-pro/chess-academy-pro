@@ -151,18 +151,13 @@
     "warnings": null,
     "variations": [
       {
-        "name": "Main Line, Mieses Variation",
-        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 c6 Bc4 Bf5",
-        "explanation": ""
-      },
-      {
         "name": "Bronstein Variation",
-        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd6 d4 Nf6 Nf3 a6 g3 Bg4",
+        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd6 d4 Nf6 Nf3 a6 g3 Bg4 Bg2 Nc6 Be3 e6 h3 Bh5 O-O Be7 Bf4 Qd8",
         "explanation": ""
       },
       {
         "name": "Valencian Variation, Main Line",
-        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd8 d4 Nf6 Nf3 Bg4",
+        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd8 d4 Nf6 Nf3 Bg4 h3 Bxf3 Qxf3 c6 Be3 e6 a3 Nd5 Nxd5 Qxd5 Qg3",
         "explanation": ""
       }
     ],
