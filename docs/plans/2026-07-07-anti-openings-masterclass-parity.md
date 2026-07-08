@@ -416,3 +416,50 @@ typecheck clean. Shipped main f545c9c (top-8) + 34556ac (mid-8) + [this commit]
 anti-colle-black (60), anti-kid-saemisch (50), anti-alekhine-modern (39),
 anti-benoni-push (39). E4-family remaining constants in sublineNarrationE4Other.ts;
 E4E5 + D4Flank families in their own files.
+
+## SUBLINE ARCHITECTURE MAP + ROLLOUT STATE (2026-07-08 — READ THIS FIRST next session)
+
+**The merge (sublineNarration.ts `_SUBLINE_NARRATION`, later spread WINS):**
+base `E4E5 → E4OTHER → D4FLANK`, then override passes
+`HELP_A → A2 → B → C → D → E → FIXES → HELP_F`, then all the `PRO_*` maps. A key
+defined in HELP_F beats the same key in a base file. My french-advance +
+caro-fantasy edits live in E4OTHER and are NOT overridden by any HELP/FIXES key
+(verified) — they render live. ✅
+
+**🚨 The ENTIRE subline corpus is SPARSE (~2-4 beats/key), base AND HELP files
+alike.** The HELP_A-F pass (David 2026-06-19 "covers completely") only means
+every key has an intro + a FEW beats — NOT per-move. E.g. HelpF `AGE_BG7_5`
+(anti-grunfeld) = 2 beats on a 20-ply line. So per David's "per-move / explain
+every step" bar, EVERY family still needs densification — being HELP-covered
+does NOT mean done. (HELP families at least have board-CORRECT sparse beats;
+several base-file families additionally have board-WRONG copy-paste beats — the
+worse neglect — which is why french-advance/caro-fantasy were the right first
+targets.)
+
+**anti-* families by owning file (where to edit) — DONE / TODO:**
+- ✅ DONE (per-move, this session): anti-french-advance (16, E4OTHER),
+  anti-caro-fantasy (38, E4OTHER).
+- TODO in E4OTHER (base, generic — warm file, same pattern/helpers as done work):
+  anti-alekhine-modern (39), anti-modern-150 (27), anti-scandinavian (24),
+  anti-grand-prix-black (20), anti-smith-morra-black (20), anti-alapin-black (19),
+  anti-kings-gambit-black (16), anti-sicilian-rossolimo (16), anti-pirc-austrian (2).
+- TODO in D4FLANK (base, generic, C-prefixed constants): anti-colle-black (60).
+- TODO in HELP files (sparse-but-correct; lower priority — densify after the
+  generic base families): anti-benoni-push (39, HelpB), anti-kid-saemisch (50,
+  HelpF/A), anti-qgd-exchange (20, HelpB), anti-london-black (20, HelpB),
+  anti-catalan-black (16, HelpB), anti-dutch-staunton (21), anti-nimzo-qc2 (25),
+  anti-englund (20), anti-qid-fianchetto (13), anti-grunfeld-exchange (6),
+  anti-budapest (10). Edit the HELP constant that WINS the merge, not the dead
+  base one.
+
+**NB — beyond the anti-* task:** course-sublines.json ALSO has the masterclass
+base openings (french-defence 100, ruy-lopez 90, sicilian-najdorf 90, …) and all
+pro-rep families (pro-carlsen-*, pro-hikaru-*, …), thousands of keys, same sparse
+state. Those are separate tasks (masterclass / pro-rep), not task #5 (anti-*).
+
+**REUSABLE TOOL built this session — the arrow sight-line checker.** Slider
+arrows (B/R/Q) drawn THROUGH a blocking pawn/knight are the #1 board-accuracy bug
+(caught ~14 across the two families). Before shipping any subline batch, run the
+checker: per constant, replay the line to each beat's atMove and confirm every
+`A(from,to)` has a clear path (knights/kings/pawns exempt). Snippet is in the
+session transcript; it should be promoted to a committed test or script.
