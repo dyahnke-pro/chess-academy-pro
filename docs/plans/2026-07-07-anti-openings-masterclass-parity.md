@@ -463,3 +463,31 @@ arrows (B/R/Q) drawn THROUGH a blocking pawn/knight are the #1 board-accuracy bu
 checker: per constant, replay the line to each beat's atMove and confirm every
 `A(from,to)` has a clear path (knights/kings/pawns exempt). Snippet is in the
 session transcript; it should be promoted to a committed test or script.
+
+## CORRECTION — file-ownership ≠ generic; density spot-check (2026-07-08)
+
+The owning-file map above tells you WHERE to edit, NOT whether a family needs
+work. Spot-checked the E4OTHER "TODO" families: ALL are ~3.0 beats/key (sparse,
+not per-move), but they split into two quality tiers:
+- **Generic copy-paste stubs (board-WRONG risk — TOP priority, same as
+  caro-fantasy was):** anti-alekhine-modern, anti-scandinavian, anti-modern-150,
+  anti-sicilian-rossolimo — carry the tell-tale phrases ("gain space, kick",
+  "storm the kingside", "keep the big centre") and may misframe their actual line.
+- **Well-written but sparse (like anti-pirc-austrian — lower priority; existing
+  beats are board-correct, just need the in-between moves filled to per-move):**
+  anti-grand-prix-black, anti-smith-morra-black, anti-alapin-black,
+  anti-kings-gambit-black, and anti-pirc-austrian itself (already rich, 2 keys —
+  effectively fine; leave unless doing a full per-move sweep).
+
+So the priority order for the per-move rollout: (1) the generic-stub families
+above (board-accuracy + density), (2) anti-colle-black (60, D4Flank — check its
+tier), (3) the well-written-but-sparse families (density only), (4) the HELP-file
+families (sparse-but-correct). Always ENGINE-CHECK each terminus (student POV) and
+run the ARROW SIGHT-LINE CHECKER before shipping — both caught real bugs every
+batch. Per-family: dump moves → FEN-walk → eval terminus → per-move beats → arrow
+check → valid concept sources → gate + typecheck → ship to main → verify prod.
+
+**Session tally (2026-07-08):** anti-french-advance (16) + anti-caro-fantasy (38)
+= 54 keys taken to per-move parity, board-verified, engine-sound, shipped to main
+(commits f66fc12 → 31f26a4) and verified live on prod. ~470 anti-* keys remain
+(multi-session); method + architecture + priority order all locked above.
