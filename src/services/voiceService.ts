@@ -493,6 +493,14 @@ class VoiceService {
    *  were silently blocked. Reusing one element keeps the unlock the
    *  first gesture earned, so the lecture keeps speaking on its own. */
   private streamAudioEl: HTMLAudioElement | null = null;
+  /** Consecutive real (non-supersession) element-playback failures. iOS 18.7's
+   *  audio decoder gets transiently WEDGED under rapid reuse of the shared
+   *  <audio> element — once wedged it fails EVERY subsequent beat with
+   *  MEDIA_ERR_DECODE (David 2026-07-08: 69 code=3 fallovers in one game). After
+   *  a run of failures the element is provably useless, so we discard it and
+   *  rebuild fresh (see playViaElement entry) to escape the wedge. Reset to 0 on
+   *  any clean playback. */
+  private consecutiveElementFailures = 0;
   /** True once the streaming element has been play()'d inside a real
    *  user gesture (iOS programmatic-play permission earned). */
   private streamingAudioPrimed = false;
@@ -1466,6 +1474,17 @@ class VoiceService {
    *  hardware-mute switch (element playback counts as media). */
   private async playViaElement(src: string, isObjectUrl: boolean, sourceDiag?: Record<string, unknown>): Promise<boolean> {
     const myGen = this.stopGeneration;
+    // If the shared element has failed repeatedly, its iOS decoder is wedged
+    // and will fail every beat — discard it so we rebuild a fresh element and
+    // escape the wedge (root-cause fix for the clustered code=3 runs). The
+    // fresh element may need the next user gesture to unlock on iOS, but a
+    // wedged element is already silent, so rebuilding can only help.
+    if (this.consecutiveElementFailures >= 3 && this.streamAudioEl) {
+      try { this.streamAudioEl.pause(); this.streamAudioEl.removeAttribute('src'); this.streamAudioEl.load(); } catch { /* gone */ }
+      this.streamAudioEl = null;
+      this.streamingAudioPrimed = false;
+      this.consecutiveElementFailures = 0;
+    }
     const audio = this.streamAudioEl ?? new Audio();
     this.streamAudioEl = audio;
     // Reset the shared, gesture-primed element by PAUSING only — do NOT
@@ -1502,7 +1521,7 @@ class VoiceService {
         if (isObjectUrl) { try { URL.revokeObjectURL(src); } catch { /* already revoked */ } }
         resolve(ok);
       };
-      audio.onended = (): void => finish(true);
+      audio.onended = (): void => { this.consecutiveElementFailures = 0; finish(true); };
       audio.onerror = (): void => {
         // A newer utterance (or a stop()) reset this shared element out from
         // under us — the resulting error is supersession, not a real playback
@@ -1511,6 +1530,9 @@ class VoiceService {
         const err = audio.error;
         const detail = `element playback error: code=${err?.code ?? '?'} ${err?.message ?? ''}`.trim();
         this.lastSpeakDiagnostic.error = detail;
+        // Count the real failure so a persistent iOS decoder wedge (repeated
+        // code=3) triggers the element rebuild at the next entry.
+        this.consecutiveElementFailures += 1;
         // Observability: this is the iOS-audio failure mode. Emit a
         // streamed audit so it surfaces in the audit-stream / cron watch
         // instead of dying silently on the device.
@@ -1541,6 +1563,7 @@ class VoiceService {
           if (aborted || myGen !== this.stopGeneration) { finish(false); return; }
           const detail = `element play() rejected: ${err instanceof Error ? err.message : String(err)}`;
           this.lastSpeakDiagnostic.error = detail;
+          this.consecutiveElementFailures += 1;
           this.logElementPlaybackFailure(detail, isObjectUrl, sourceDiag);
           finish(false);
         });
@@ -2040,12 +2063,17 @@ audio.playbackRate = this.speed;
     if (ok) return true;
     // A stop()/supersede caused the failure → abandon, don't retry.
     if (this.stopGeneration !== genBefore) return false;
-    // Genuine element playback failure on valid Polly bytes — the intermittent
-    // iOS WKWebView audio-element decode flake. ONE bounded retry with a fresh
-    // blob URL clears it far more often than not, turning a silent drop into an
-    // audible beat (David 2026-07-08 device data: recurring client-side
-    // playback failures with Polly returning HTTP 200). Bounded to a single
-    // retry so a genuinely-undecodable clip can't loop.
+    // Root cause (David 2026-07-08 device data): iOS 18.7 WKWebView throws
+    // MEDIA_ERR_DECODE (code=3) on COMPLETE, valid Polly MP3 blobs — and the
+    // failures CLUSTER within a game (69 in a row once), which is the tell that
+    // the shared, rapidly-reused <audio> decoder gets transiently WEDGED under
+    // back-to-back sentence-grained beats, not that any one clip is bad. So the
+    // recovery is: let the decoder settle, then retry on a fresh blob URL — one
+    // bounded retry clears the transient wedge far more often than not, turning
+    // a silent drop into an audible beat. Bounded so a truly-undecodable clip
+    // can't loop.
+    await new Promise<void>((r) => { setTimeout(r, 160); });
+    if (this.stopGeneration !== genBefore) return false;
     const retryUrl = URL.createObjectURL(new Blob([buf], { type: 'audio/mpeg' }));
     return this.playViaElement(retryUrl, true, srcDiag);
   }
