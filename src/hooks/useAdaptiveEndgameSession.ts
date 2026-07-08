@@ -11,7 +11,7 @@
  * Replaces `useAdaptiveDrillSession` for endgame surfaces. Other
  * surfaces (Play with Coach, Learn) are untouched.
  */
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   applyAdaptiveOutcome,
   createAdaptiveEndgameState,
@@ -19,6 +19,7 @@ import {
   adaptivePuzzleToLessonPosition,
   deriveEndgameSeed,
   type AdaptiveEndgameState,
+  type RawPuzzle,
 } from '../services/adaptiveEndgameService';
 import { db } from '../db/schema';
 import { useAppStore } from '../stores/appStore';
@@ -59,6 +60,13 @@ interface UseAdaptiveEndgameOptions {
   /** Override the starting user rating (defaults to the value
    *  stored on the active profile, falling back to 1200). */
   initialRating?: number;
+  /** Game-derived puzzles (from the student's own games) to blend
+   *  into the stream. Empty/omitted → pure static pool (unchanged
+   *  behavior for the Endgame surfaces). */
+  extraPuzzles?: ReadonlyArray<RawPuzzle>;
+  /** Prefer a game-derived puzzle every Nth pick. Only meaningful
+   *  when `extraPuzzles` is non-empty. */
+  preferExtraEvery?: number;
 }
 
 export function useAdaptiveEndgameSession(
@@ -74,6 +82,18 @@ export function useAdaptiveEndgameSession(
   const initial = options.initialRating ?? deriveEndgameSeed(activeProfile);
   const themes = options.themes ?? lesson?.practiceThemes ?? [];
 
+  // Game-derived puzzles load asynchronously; hold them in refs so
+  // every pick reads the latest pool without churning callback deps.
+  const extraRef = useRef<ReadonlyArray<RawPuzzle>>(options.extraPuzzles ?? []);
+  extraRef.current = options.extraPuzzles ?? [];
+  const preferRef = useRef<number>(options.preferExtraEvery ?? 0);
+  preferRef.current = options.preferExtraEvery ?? 0;
+  const pickOptions = (): Parameters<typeof pickAdaptivePuzzle>[1] => ({
+    themes,
+    extraPuzzles: extraRef.current,
+    preferExtraEvery: preferRef.current,
+  });
+
   const [state, setState] = useState<AdaptiveEndgameState>(() =>
     createAdaptiveEndgameState(initial),
   );
@@ -85,7 +105,7 @@ export function useAdaptiveEndgameSession(
   useEffect(() => {
     const fresh = createAdaptiveEndgameState(initial);
     setState(fresh);
-    setCurrentRaw(pickAdaptivePuzzle(fresh, { themes }));
+    setCurrentRaw(pickAdaptivePuzzle(fresh, pickOptions()));
     // We intentionally exclude `themes` from the dep array — its
     // identity changes on every render via the `??` lookup. Lesson
     // id is the stable signal we care about.
@@ -107,7 +127,7 @@ export function useAdaptiveEndgameSession(
         puzzleThemes: currentRaw.themes,
       });
       setState(next);
-      setCurrentRaw(pickAdaptivePuzzle(next, { themes }));
+      setCurrentRaw(pickAdaptivePuzzle(next, pickOptions()));
       // Persist the new user rating to the active profile + Dexie.
       if (activeProfile) {
         const updated = { ...activeProfile, endgameRating: next.userRating };
@@ -125,7 +145,7 @@ export function useAdaptiveEndgameSession(
   const reset = useCallback(() => {
     const fresh = createAdaptiveEndgameState(initial);
     setState(fresh);
-    setCurrentRaw(pickAdaptivePuzzle(fresh, { themes }));
+    setCurrentRaw(pickAdaptivePuzzle(fresh, pickOptions()));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initial, lesson?.id]);
 
