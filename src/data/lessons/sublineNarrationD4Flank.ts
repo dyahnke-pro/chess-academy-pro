@@ -15014,6 +15014,286 @@ const QGD_12: SublineNarration = {
   sources: ['concept:pos-space', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
 };
 
+const NIM_0: SublineNarration = {
+  intro: { say: "Black steers into a QGD/Ragozin with …d5 and …Bb4. Pin with Bg5, and after the tactical flurry on c3 and c5 the queens stay on but you keep the bishop pair and the sounder structure. Round up the loose c5-pawn with the rook and press — a stable pull.", sayShort: "…d5 QGD — Bg5, keep the bishop pair" },
+  beats: [
+    { atMove: 6, say: "Bg5 pins the f6-knight, pressuring the centre.", sayShort: "Bg5 — pin the knight", highlights: [_H('g5')] },
+    { atMove: 8, say: "cxd5 opens the position, fixing Black's structure.", sayShort: "cxd5 — open the centre", highlights: [_H('d5')] },
+    { atMove: 10, say: "Bxf6 damages Black's kingside pawns.", sayShort: "Bxf6 — damage the pawns", highlights: [_H('f6')] },
+    { atMove: 12, say: "Ke2 sidesteps; the smoke clears with your structure sounder.", sayShort: "Ke2 — hold firm", highlights: [_H('e2')] },
+    { atMove: 14, say: "Rc1 activates the rook on the c-file.", sayShort: "Rc1 — the c-file", highlights: [_H('c1')] },
+    { atMove: 16, say: "Rxc5 rounds up the loose pawn, keeping the pull.", sayShort: "Rxc5 — grab the pawn", highlights: [_H('c5')] },
+    { atMove: 22, say: "Rc1 regroups the rook; a stable pull with the bishop pair.", sayShort: "Rc1 — regroup; a pull", highlights: [_H('c1')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
+};
+
+const NIM_1: SublineNarration = {
+  intro: { say: "The classical 4.Qc2 Nimzo with …d5. Develop e3 and Nf3, resolve with cxd5, and post Be2 and Bb2. Expand with b4 to gain queenside space; Black holds comfortably, so the game is roughly equal — nurse the small structural nuances and stay solid.", sayShort: "…d5 Nimzo — develop; roughly equal" },
+  beats: [
+    { atMove: 7, say: "…d5 strikes the centre — you'll resolve it favourably.", sayShort: "…d5 — Black hits the centre", highlights: [_H('d5')] },
+    { atMove: 8, say: "e3 braces the centre and frees the light bishop.", sayShort: "e3 — brace, develop", highlights: [_H('e3')] },
+    { atMove: 12, say: "cxd5 opens the position, clarifying the structure.", sayShort: "cxd5 — clarify", highlights: [_H('d5')] },
+    { atMove: 14, say: "Be2 develops, readying castling.", sayShort: "Be2 — develop", highlights: [_H('e2')] },
+    { atMove: 18, say: "a3 questions the b4-bishop.", sayShort: "a3 — question the bishop", highlights: [_H('a3')] },
+    { atMove: 20, say: "b4 gains queenside space.", sayShort: "b4 — queenside space", highlights: [_H('b4')] },
+    { atMove: 22, say: "Bb2 completes development; roughly equal, stay solid.", sayShort: "Bb2 — develop; equal", highlights: [_H('b2')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
+};
+
+const NIM_2: SublineNarration = {
+  intro: { say: "Black strikes …c5. Take dxc5 and after …Bxc5 develop naturally with Nf3, Bg5 and Rd1. Gain queenside space with a3, keep the tension, and prepare the e4-break. Your bishop pair potential and central space give a roughly level but slightly more pleasant game.", sayShort: "…c5 — dxc5, develop, prep e4" },
+  beats: [
+    { atMove: 7, say: "…c5 strikes at d4 — you'll take and keep a lead.", sayShort: "…c5 — Black hits d4", highlights: [_H('c5')] },
+    { atMove: 8, say: "dxc5 opens the centre with a small lead.", sayShort: "dxc5 — open the centre", highlights: [_H('c5')] },
+    { atMove: 10, say: "Nf3 develops behind the centre.", sayShort: "Nf3 — develop", highlights: [_H('f3')] },
+    { atMove: 12, say: "Bg5 pins, pressuring the centre.", sayShort: "Bg5 — pin the knight", highlights: [_H('g5')] },
+    { atMove: 14, say: "a3 gains space and keeps the bishop from b4.", sayShort: "a3 — gain space", highlights: [_H('a3')] },
+    { atMove: 16, say: "Rd1 loads the d-file.", sayShort: "Rd1 — the d-file", highlights: [_H('d1')] },
+    { atMove: 22, say: "e4 prepares the central break; a pleasant, level game.", sayShort: "e4 — prep the break; level", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
+};
+
+const NIM_3: SublineNarration = {
+  intro: { say: "Black lunges …c5 early and you clamp with d5-d6, jamming a pawn deep in his camp. Develop Nf3, e4 and Bc4 behind the wedge; the advanced d6-pawn cramps Black badly. His pieces tangle around it and you enjoy a clear, pleasant space advantage.", sayShort: "…c5 — d5-d6 clamp; clear edge" },
+  beats: [
+    { atMove: 6, say: "d5 clamps the centre, gaining a big space edge.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 10, say: "d6 rams a pawn deep, cramping Black's camp.", sayShort: "d6 — cramp him", highlights: [_H('d6')] },
+    { atMove: 12, say: "Nf3 develops behind the wedge.", sayShort: "Nf3 — develop", highlights: [_H('f3')] },
+    { atMove: 14, say: "e4 builds the broad centre.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 16, say: "Bc4 develops, eyeing f7 behind the space.", sayShort: "Bc4 — eye f7", highlights: [_H('c4')] },
+    { atMove: 18, say: "O-O tucks the king safe.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+    { atMove: 22, say: "Bh6 pressures the kingside; a clear space edge.", sayShort: "Bh6 — press; clear edge", highlights: [_H('h6')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
+};
+
+const NIM_4: SublineNarration = {
+  intro: { say: "Black plays the restrained …d6. Develop e3 and Bd2, take dxc5, and reroute Na4 to swap the dark bishops. Post the knight to g3; the game is balanced and solid, so out-coordinate Black patiently from a roughly equal middlegame.", sayShort: "…d6 restrained — develop; equal" },
+  beats: [
+    { atMove: 8, say: "e3 braces the centre and frees the bishop.", sayShort: "e3 — brace, develop", highlights: [_H('e3')] },
+    { atMove: 10, say: "Bd2 develops, supporting the c3-knight.", sayShort: "Bd2 — support c3", highlights: [_H('d2')] },
+    { atMove: 12, say: "dxc5 opens the position.", sayShort: "dxc5 — open the centre", highlights: [_H('c5')] },
+    { atMove: 14, say: "Na4 reroutes to swap the dark bishops.", sayShort: "Na4 — swap the bishops", highlights: [_H('a4')] },
+    { atMove: 16, say: "Nxc5 trades, simplifying.", sayShort: "Nxc5 — trade off", highlights: [_H('c5')] },
+    { atMove: 18, say: "Ne2 develops, heading for g3.", sayShort: "Ne2 — reroute to g3", highlights: [_H('e2')] },
+    { atMove: 22, say: "Ng3 eyes f5 and h5; balanced, out-coordinate patiently.", sayShort: "Ng3 — eye f5; equal", highlights: [_H('g3')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
+};
+
+const NIM_5: SublineNarration = {
+  intro: { say: "Black develops …Nc6 and later castles queenside with …O-O-O behind …d6/…e5. Develop Nf3 and Bd2, take the bishop pair with a3-Bxc3, and castle long yourself. With both kings on the queenside, push g4-h3 and storm — your bishop pair and space give a clear edge.", sayShort: "…Nc6 — take the pair, storm; clear edge" },
+  beats: [
+    { atMove: 8, say: "Nf3 develops, eyeing the centre.", sayShort: "Nf3 — develop", highlights: [_H('f3')] },
+    { atMove: 10, say: "Bd2 develops, supporting c3.", sayShort: "Bd2 — support c3", highlights: [_H('d2')] },
+    { atMove: 12, say: "a3 puts the question to the b4-bishop.", sayShort: "a3 — question the bishop", highlights: [_H('a3')] },
+    { atMove: 14, say: "Bxc3 recaptures, keeping the bishop pair.", sayShort: "Bxc3 — the bishop pair", highlights: [_H('c3')] },
+    { atMove: 16, say: "O-O-O castles long, connecting the rooks.", sayShort: "O-O-O — king safe", highlights: [_H('c1')] },
+    { atMove: 18, say: "e3 braces the centre.", sayShort: "e3 — brace the centre", highlights: [_H('e3')] },
+    { atMove: 22, say: "g4 storms the kingside; bishop pair and space — clear edge.", sayShort: "g4 — storm; clear edge", highlights: [_H('g4')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
+};
+
+const NIM_6: SublineNarration = {
+  intro: { say: "Black fianchettoes …b6 and gives up the bishop with …Bxc3. Recapture bxc3 for a broad centre and the bishop pair, develop Bd3 and Ne2, and castle. Roll f4-e5-f5 for a kingside pawn storm; your two bishops and central space give a clear, pleasant advantage.", sayShort: "…b6 — bishop pair, f4-f5 storm; clear edge" },
+  beats: [
+    { atMove: 8, say: "e4 builds the broad centre at once.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 10, say: "bxc3 recaptures, keeping the bishop pair.", sayShort: "bxc3 — the bishop pair", highlights: [_H('c3')] },
+    { atMove: 12, say: "Bd3 develops, eyeing the kingside.", sayShort: "Bd3 — eye the kingside", highlights: [_H('d3')] },
+    { atMove: 14, say: "Ne2 develops behind the centre.", sayShort: "Ne2 — develop", highlights: [_H('e2')] },
+    { atMove: 16, say: "O-O tucks the king safe.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+    { atMove: 18, say: "f4 rolls the kingside pawns forward.", sayShort: "f4 — roll the pawns", highlights: [_H('f4')] },
+    { atMove: 22, say: "f5 storms the kingside; a clear advantage.", sayShort: "f5 — storm; clear edge", highlights: [_H('f5')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
+};
+
+const NIM_7: SublineNarration = {
+  intro: { say: "The main line: Black castles and you grab the centre with e4-e5. Develop Nf3 and Bd3, meet …c5 by keeping the centre, and post Bf4. The tactics settle with your central space intact and a small, stable pull — Black holds but you press the more comfortable side.", sayShort: "…O-O — e4-e5 centre; a small pull" },
+  beats: [
+    { atMove: 8, say: "e4 grabs the full centre.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 10, say: "e5 gains space, kicking the f6-knight.", sayShort: "e5 — gain space", highlights: [_H('e5')] },
+    { atMove: 12, say: "Nf3 develops behind the centre.", sayShort: "Nf3 — develop", highlights: [_H('f3')] },
+    { atMove: 14, say: "Bd3 develops, eyeing the kingside.", sayShort: "Bd3 — eye the kingside", highlights: [_H('d3')] },
+    { atMove: 16, say: "Nxd4 recaptures, centralising.", sayShort: "Nxd4 — centralise", highlights: [_H('d4')] },
+    { atMove: 18, say: "Bf4 develops actively.", sayShort: "Bf4 — active bishop", highlights: [_H('f4')] },
+    { atMove: 22, say: "O-O tucks the king safe; a small, stable pull.", sayShort: "O-O — safe; a small pull", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
+};
+
+const NIM_8: SublineNarration = {
+  intro: { say: "Black recaptures …Qxd5 and offers a queen trade with …Qf5. Take it: Qxf5 leaves Black with doubled f-pawns. Develop Bd2, expand h4-h5, and clamp the kingside. The shattered pawns and your freer pieces give a comfortable pull in the ending.", sayShort: "…Qxd5 — trade queens, double his f-pawns" },
+  beats: [
+    { atMove: 8, say: "cxd5 opens the position.", sayShort: "cxd5 — open the centre", highlights: [_H('d5')] },
+    { atMove: 12, say: "Qxf5 trades queens, doubling Black's f-pawns.", sayShort: "Qxf5 — double the f-pawns", highlights: [_H('f5')] },
+    { atMove: 14, say: "Bd2 develops, supporting c3.", sayShort: "Bd2 — develop", highlights: [_H('d2')] },
+    { atMove: 16, say: "h4 gains kingside space.", sayShort: "h4 — kingside space", highlights: [_H('h4')] },
+    { atMove: 18, say: "h5 clamps, fixing the weaknesses.", sayShort: "h5 — clamp", highlights: [_H('h5')] },
+    { atMove: 20, say: "a3 tidies the queenside.", sayShort: "a3 — tidy up", highlights: [_H('a3')] },
+    { atMove: 22, say: "Bf4 develops actively; the doubled pawns give a pull.", sayShort: "Bf4 — press; a pull", highlights: [_H('f4')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
+};
+
+const NIM_9: SublineNarration = {
+  intro: { say: "Black plays …c5 and …Na6-c5. Take dxc5, fianchetto Bg2, and after …Bxc3 recapture with the queen, keeping the bishop pair. Break cxd5 and centralise; the tactics settle with your two bishops and central control giving a small, pleasant pull.", sayShort: "…Na6 — Bg2, keep the bishop pair" },
+  beats: [
+    { atMove: 8, say: "dxc5 opens the position with a small lead.", sayShort: "dxc5 — open the centre", highlights: [_H('c5')] },
+    { atMove: 10, say: "g3 prepares the fianchetto.", sayShort: "g3 — prep Bg2", highlights: [_H('g3')] },
+    { atMove: 12, say: "Bg2 fianchettoes, pressuring the centre.", sayShort: "Bg2 — the long diagonal", highlights: [_H('g2')] },
+    { atMove: 14, say: "a3 questions the bishop.", sayShort: "a3 — question the bishop", highlights: [_H('a3')] },
+    { atMove: 16, say: "Qxc3 recaptures, keeping the bishop pair.", sayShort: "Qxc3 — the bishop pair", highlights: [_H('c3')] },
+    { atMove: 18, say: "cxd5 opens lines favourably.", sayShort: "cxd5 — open lines", highlights: [_H('d5')] },
+    { atMove: 22, say: "b4 gains queenside space; a small, pleasant pull.", sayShort: "b4 — space; a pull", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
+};
+
+const NIM_10: SublineNarration = {
+  intro: { say: "Black plays …c5 and …Qc7. Take dxc5, gain the bishop pair with a3, and build the big centre with e4. Develop Be2 and Bg5, load Rd1, and castle. Your two bishops and broad centre press Black's slightly loose setup for a clear, pleasant edge.", sayShort: "…Qc7 — bishop pair, big centre; clear edge" },
+  beats: [
+    { atMove: 8, say: "dxc5 opens the position.", sayShort: "dxc5 — open the centre", highlights: [_H('c5')] },
+    { atMove: 10, say: "a3 puts the question to the bishop.", sayShort: "a3 — question the bishop", highlights: [_H('a3')] },
+    { atMove: 12, say: "e4 builds the broad centre.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 14, say: "Be2 develops, readying castling.", sayShort: "Be2 — develop", highlights: [_H('e2')] },
+    { atMove: 16, say: "Bg5 pins, pressuring the centre.", sayShort: "Bg5 — pin the knight", highlights: [_H('g5')] },
+    { atMove: 18, say: "Rd1 loads the d-file.", sayShort: "Rd1 — the d-file", highlights: [_H('d1')] },
+    { atMove: 22, say: "O-O tucks the king safe; two bishops — a clear edge.", sayShort: "O-O — safe; clear edge", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
+};
+
+const QID_0: SublineNarration = {
+  intro: { say: "Black transposes to a Ragozin QGD with …d5 and …Bb4+. Resolve with cxd5, take dxc5, and after …Bxc3 you get the bishop pair. A small tactic on b5 keeps material level and you emerge with the two bishops and a stable pull.", sayShort: "…d5 QGD — bishop pair; a pull" },
+  beats: [
+    { atMove: 6, say: "Bg5 pins the f6-knight.", sayShort: "Bg5 — pin the knight", highlights: [_H('g5')] },
+    { atMove: 12, say: "cxd5 opens the position.", sayShort: "cxd5 — open the centre", highlights: [_H('d5')] },
+    { atMove: 14, say: "dxc5 grabs a pawn, opening lines.", sayShort: "dxc5 — grab, open lines", highlights: [_H('c5')] },
+    { atMove: 16, say: "bxc3 accepts doubled pawns for the bishop pair.", sayShort: "bxc3 — the bishop pair", highlights: [_H('c3')] },
+    { atMove: 18, say: "Bb5 develops with tempo, harrying Black.", sayShort: "Bb5 — develop with tempo", highlights: [_H('b5')] },
+    { atMove: 20, say: "Bh4 keeps the pin.", sayShort: "Bh4 — keep the pin", highlights: [_H('h4')] },
+    { atMove: 22, say: "Bxf6 damages Black's pawns; the two bishops give a pull.", sayShort: "Bxf6 — bishop pair; a pull", highlights: [_H('f6')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Indian_Defence'],
+};
+
+const QID_1: SublineNarration = {
+  intro: { say: "Black checks …Bb4+ and trades the dark bishops. Recapture Qxd2, fianchetto Bg2, and build the harmonious g3 setup with Qc2 and Nbd2. Expand b4 on the queenside; your bishop and easy development give a small, pleasant space edge.", sayShort: "…Bb4+ trade — g3 setup; a small edge" },
+  beats: [
+    { atMove: 6, say: "Bd2 blocks the check, offering the trade.", sayShort: "Bd2 — offer the trade", highlights: [_H('d2')] },
+    { atMove: 10, say: "g3 prepares the fianchetto.", sayShort: "g3 — prep Bg2", highlights: [_H('g3')] },
+    { atMove: 12, say: "Bg2 fianchettoes, pressuring the centre.", sayShort: "Bg2 — the long diagonal", highlights: [_H('g2')] },
+    { atMove: 14, say: "Qc2 lifts the queen to a flexible post.", sayShort: "Qc2 — flexible queen", highlights: [_H('c2')] },
+    { atMove: 16, say: "Nbd2 develops behind the centre.", sayShort: "Nbd2 — develop", highlights: [_H('d2')] },
+    { atMove: 18, say: "O-O tucks the king safe.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+    { atMove: 22, say: "b4 gains queenside space; a small, pleasant edge.", sayShort: "b4 — space; a small edge", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Queen%27s_Indian_Defence'],
+};
+
+const QID_2: SublineNarration = {
+  intro: { say: "Black lunges …c5 and you clamp with d5. Build the broad e4 centre behind the wedge, develop Bf4 and Bd3, and castle. The advanced d5-pawn cramps Black in a Benoni-style structure; your central space gives a comfortable, pleasant pull.", sayShort: "…c5 — d5 clamp, big centre; a pull" },
+  beats: [
+    { atMove: 6, say: "d5 clamps the centre, grabbing space.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 8, say: "Nc3 develops, supporting the wedge.", sayShort: "Nc3 — support d5", highlights: [_H('c3')] },
+    { atMove: 12, say: "e4 builds the broad centre.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 16, say: "Bf4 develops actively.", sayShort: "Bf4 — active bishop", highlights: [_H('f4')] },
+    { atMove: 18, say: "Bd3 develops, eyeing the kingside.", sayShort: "Bd3 — eye the kingside", highlights: [_H('d3')] },
+    { atMove: 20, say: "O-O tucks the king safe.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+    { atMove: 22, say: "Rc1 activates on the c-file; a comfortable pull.", sayShort: "Rc1 — the c-file; a pull", highlights: [_H('c1')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Indian_Defence'],
+};
+
+const QID_3: SublineNarration = {
+  intro: { say: "Black plays the classical …Bb7 and trades dark bishops. Recapture Qxd2, develop Nc3, and post Qd3. When Black strikes …d5 and …f5, jump Ne5 and swing Qb5 to press the queenside; your active pieces and space give a stable pull.", sayShort: "…Bb7 — Ne5, Qb5 press; a pull" },
+  beats: [
+    { atMove: 8, say: "Bd2 blocks the check, offering the trade.", sayShort: "Bd2 — offer the trade", highlights: [_H('d2')] },
+    { atMove: 12, say: "Qxd2 recaptures, the queen well placed.", sayShort: "Qxd2 — recapture", highlights: [_H('d2')] },
+    { atMove: 14, say: "Nc3 develops, eyeing d5 and e4.", sayShort: "Nc3 — develop", highlights: [_H('c3')] },
+    { atMove: 16, say: "Qd3 lifts the queen to a flexible post.", sayShort: "Qd3 — flexible queen", highlights: [_H('d3')] },
+    { atMove: 18, say: "cxd5 opens lines favourably.", sayShort: "cxd5 — open lines", highlights: [_H('d5')] },
+    { atMove: 20, say: "Ne5 leaps to a dominant central outpost.", sayShort: "Ne5 — the outpost", highlights: [_H('e5')] },
+    { atMove: 22, say: "Qb5 presses the queenside; a stable pull.", sayShort: "Qb5 — press; a pull", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Indian_Defence'],
+};
+
+const QID_4: SublineNarration = {
+  intro: { say: "Black checks …Bb4+ and plays …a5. Trade the bishops, fianchetto Bg2, and develop Nc3. When Black jumps …Ne4, trade it off and load Rac1; your bishop, central control and the half-open c-file give a small, pleasant edge to press.", sayShort: "…Bb4+/…a5 — Rc1 press; a small edge" },
+  beats: [
+    { atMove: 6, say: "Bd2 blocks the check.", sayShort: "Bd2 — block the check", highlights: [_H('d2')] },
+    { atMove: 8, say: "Bg2 fianchettoes, pressuring the centre.", sayShort: "Bg2 — the long diagonal", highlights: [_H('g2')] },
+    { atMove: 12, say: "Qxd2 recaptures, the queen well placed.", sayShort: "Qxd2 — recapture", highlights: [_H('d2')] },
+    { atMove: 14, say: "Nc3 develops, eyeing the centre.", sayShort: "Nc3 — develop", highlights: [_H('c3')] },
+    { atMove: 16, say: "Nxe4 trades off the intruding knight.", sayShort: "Nxe4 — trade off", highlights: [_H('e4')] },
+    { atMove: 18, say: "Rac1 loads the c-file.", sayShort: "Rac1 — the c-file", highlights: [_H('c1')] },
+    { atMove: 22, say: "Qe3 centralises; a small, pleasant edge.", sayShort: "Qe3 — press; a small edge", highlights: [_H('e3')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Queen%27s_Indian_Defence'],
+};
+
+const QID_5: SublineNarration = {
+  intro: { say: "Black plays …Ba6 to hit c4, then …Bb7. Defend with b3, fianchetto Bg2, and trade the dark bishops. Post Qb2 on the long diagonal; your central control and the two bishops' scope give a small, stable pull as Black's …d5 leaves a slightly loose structure.", sayShort: "…Ba6/…Bb7 — Qb2 press; a pull" },
+  beats: [
+    { atMove: 8, say: "b3 defends c4, meeting …Ba6.", sayShort: "b3 — defend c4", highlights: [_H('b3')] },
+    { atMove: 10, say: "Bg2 fianchettoes, pressuring the centre.", sayShort: "Bg2 — the long diagonal", highlights: [_H('g2')] },
+    { atMove: 14, say: "O-O tucks the king safe.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+    { atMove: 16, say: "a3 questions the b4-bishop.", sayShort: "a3 — question the bishop", highlights: [_H('a3')] },
+    { atMove: 18, say: "Qxd2 recaptures.", sayShort: "Qxd2 — recapture", highlights: [_H('d2')] },
+    { atMove: 20, say: "cxd5 opens lines favourably.", sayShort: "cxd5 — open lines", highlights: [_H('d5')] },
+    { atMove: 22, say: "Qb2 posts on the long diagonal; a stable pull.", sayShort: "Qb2 — press; a pull", highlights: [_H('b2')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Indian_Defence'],
+};
+
+const QID_6: SublineNarration = {
+  intro: { say: "Black plays …Ba6 and …d5. Defend b3, fianchetto Bg2, and post Bb2 on the long diagonal. Jump Ne5 to the central outpost and reroute Nd2; your bishop pair scope and central control give a small, pleasant edge to nurse.", sayShort: "…Ba6/…d5 — Ne5 outpost; a small edge" },
+  beats: [
+    { atMove: 8, say: "b3 defends c4, meeting …Ba6.", sayShort: "b3 — defend c4", highlights: [_H('b3')] },
+    { atMove: 10, say: "Bg2 fianchettoes, pressuring the centre.", sayShort: "Bg2 — the long diagonal", highlights: [_H('g2')] },
+    { atMove: 12, say: "O-O tucks the king safe.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+    { atMove: 14, say: "Bb2 develops on the long diagonal.", sayShort: "Bb2 — the long diagonal", highlights: [_H('b2')] },
+    { atMove: 16, say: "cxd5 opens lines favourably.", sayShort: "cxd5 — open lines", highlights: [_H('d5')] },
+    { atMove: 18, say: "Ne5 leaps to a dominant central outpost.", sayShort: "Ne5 — the outpost", highlights: [_H('e5')] },
+    { atMove: 22, say: "Rc1 loads the c-file; a small, pleasant edge.", sayShort: "Rc1 — the c-file; a small edge", highlights: [_H('c1')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Indian_Defence'],
+};
+
+const QID_7: SublineNarration = {
+  intro: { say: "Black grabs space with …Ba6 and …b5. Lift Qc2, fianchetto Bg2, and after the trades on c4 and b4 develop Nbd2. Your central control and the two bishops give a stable pull; Black's loosened queenside pawns are a lasting target.", sayShort: "…Ba6/…b5 — press the loose queenside" },
+  beats: [
+    { atMove: 8, say: "b3 defends c4, meeting …Ba6.", sayShort: "b3 — defend c4", highlights: [_H('b3')] },
+    { atMove: 10, say: "Qc2 lifts the queen, defending c4 and eyeing the centre.", sayShort: "Qc2 — defend c4", highlights: [_H('c2')] },
+    { atMove: 12, say: "Bg2 fianchettoes, pressuring the centre.", sayShort: "Bg2 — the long diagonal", highlights: [_H('g2')] },
+    { atMove: 16, say: "bxc4 recaptures, keeping the structure sound.", sayShort: "bxc4 — keep it sound", highlights: [_H('c4')] },
+    { atMove: 18, say: "Bd2 develops, eyeing the b4-pawn.", sayShort: "Bd2 — eye b4", highlights: [_H('d2')] },
+    { atMove: 20, say: "Bxb4 collects the loose pawn.", sayShort: "Bxb4 — grab the pawn", highlights: [_H('b4')] },
+    { atMove: 22, say: "Nbd2 develops; a stable pull, loose Black pawns.", sayShort: "Nbd2 — develop; a pull", highlights: [_H('d2')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Queen%27s_Indian_Defence'],
+};
+
+const QID_8: SublineNarration = {
+  intro: { say: "The main line: …Ba6, …Bb4+ and …d5. Trade the dark bishops, develop Nc3, and fianchetto Bg2. Resolve with cxd5, castle, and jump Ne5 to the central outpost. Your bishop, the isolated d5-pawn target and central control give a small, stable pull.", sayShort: "…Ba6 main — Ne5, press d5; a pull" },
+  beats: [
+    { atMove: 6, say: "Bd2 blocks the check, offering the trade.", sayShort: "Bd2 — offer the trade", highlights: [_H('d2')] },
+    { atMove: 10, say: "Nc3 develops, eyeing d5 and e4.", sayShort: "Nc3 — develop", highlights: [_H('c3')] },
+    { atMove: 12, say: "Bg2 fianchettoes, pressuring the centre.", sayShort: "Bg2 — the long diagonal", highlights: [_H('g2')] },
+    { atMove: 14, say: "cxd5 opens the position, fixing Black's IQP.", sayShort: "cxd5 — make the IQP", highlights: [_H('d5')] },
+    { atMove: 18, say: "O-O tucks the king safe.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+    { atMove: 20, say: "Ne5 leaps to a dominant central outpost.", sayShort: "Ne5 — the outpost", highlights: [_H('e5')] },
+    { atMove: 22, say: "Rc1 loads the c-file; press the d5-pawn — a pull.", sayShort: "Rc1 — press d5; a pull", highlights: [_H('c1')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Queen%27s_Indian_Defence'],
+};
+
 export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'catalan-opening::6::Bb4+@5': CATR_60,
   'catalan-opening::5::c6@9': CATR_50,
@@ -16743,45 +17023,45 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'anti-grunfeld-exchange::1::c5@13': GRU_3,
   'anti-grunfeld-exchange::1::c5@11': GRU_2,
   // ── anti-nimzo-qc2 ──
-  'anti-nimzo-qc2::0::d5@5': C132,
-  'anti-nimzo-qc2::0::d5@7': C132,
-  'anti-nimzo-qc2::0::c5@7': C133,
-  'anti-nimzo-qc2::0::c5@5': C132,
-  'anti-nimzo-qc2::0::d6@7': C134,
-  'anti-nimzo-qc2::0::Nc6@7': C134,
-  'anti-nimzo-qc2::0::b6@7': C133,
-  'anti-nimzo-qc2::1::O-O@7': C135,
-  'anti-nimzo-qc2::1::d5@5': C132,
-  'anti-nimzo-qc2::1::c5@7': C133,
-  'anti-nimzo-qc2::1::c5@5': C132,
-  'anti-nimzo-qc2::1::d6@7': C134,
-  'anti-nimzo-qc2::1::Nc6@7': C134,
-  'anti-nimzo-qc2::1::Qxd5@9': EANIM,
-  'anti-nimzo-qc2::1::b6@7': C133,
-  'anti-nimzo-qc2::2::O-O@7': C135,
-  'anti-nimzo-qc2::2::d5@5': C132,
-  'anti-nimzo-qc2::2::d5@7': C132,
-  'anti-nimzo-qc2::2::c5@5': C132,
-  'anti-nimzo-qc2::2::d6@7': C134,
-  'anti-nimzo-qc2::2::Nc6@7': C134,
-  'anti-nimzo-qc2::2::Bxc5@9': C133,
-  'anti-nimzo-qc2::2::Na6@9': C133,
-  'anti-nimzo-qc2::2::b6@7': C133,
-  'anti-nimzo-qc2::2::Qc7@9': C133,
+  'anti-nimzo-qc2::0::d5@5': NIM_0,
+  'anti-nimzo-qc2::0::d5@7': NIM_1,
+  'anti-nimzo-qc2::0::c5@7': NIM_2,
+  'anti-nimzo-qc2::0::c5@5': NIM_3,
+  'anti-nimzo-qc2::0::d6@7': NIM_4,
+  'anti-nimzo-qc2::0::Nc6@7': NIM_5,
+  'anti-nimzo-qc2::0::b6@7': NIM_6,
+  'anti-nimzo-qc2::1::O-O@7': NIM_7,
+  'anti-nimzo-qc2::1::d5@5': NIM_0,
+  'anti-nimzo-qc2::1::c5@7': NIM_2,
+  'anti-nimzo-qc2::1::c5@5': NIM_3,
+  'anti-nimzo-qc2::1::d6@7': NIM_4,
+  'anti-nimzo-qc2::1::Nc6@7': NIM_5,
+  'anti-nimzo-qc2::1::Qxd5@9': NIM_8,
+  'anti-nimzo-qc2::1::b6@7': NIM_6,
+  'anti-nimzo-qc2::2::O-O@7': NIM_7,
+  'anti-nimzo-qc2::2::d5@5': NIM_0,
+  'anti-nimzo-qc2::2::d5@7': NIM_1,
+  'anti-nimzo-qc2::2::c5@5': NIM_3,
+  'anti-nimzo-qc2::2::d6@7': NIM_4,
+  'anti-nimzo-qc2::2::Nc6@7': NIM_5,
+  'anti-nimzo-qc2::2::Bxc5@9': NIM_2,
+  'anti-nimzo-qc2::2::Na6@9': NIM_9,
+  'anti-nimzo-qc2::2::b6@7': NIM_6,
+  'anti-nimzo-qc2::2::Qc7@9': NIM_10,
   // ── anti-qid-fianchetto ──
-  'anti-qid-fianchetto::0::d5@5': C136,
-  'anti-qid-fianchetto::0::Bb4+@5': C137,
-  'anti-qid-fianchetto::0::c5@5': C136,
-  'anti-qid-fianchetto::0::Bb7@7': C138,
-  'anti-qid-fianchetto::0::Bb4+@7': C137,
-  'anti-qid-fianchetto::0::Bb7@9': C139,
-  'anti-qid-fianchetto::0::d5@9': C139,
-  'anti-qid-fianchetto::0::b5@9': C139,
-  'anti-qid-fianchetto::1::d5@5': C136,
-  'anti-qid-fianchetto::1::Bb4+@5': C137,
-  'anti-qid-fianchetto::1::Ba6@7': EAQID,
-  'anti-qid-fianchetto::1::c5@5': C136,
-  'anti-qid-fianchetto::1::Bb4+@7': C137,
+  'anti-qid-fianchetto::0::d5@5': QID_0,
+  'anti-qid-fianchetto::0::Bb4+@5': QID_1,
+  'anti-qid-fianchetto::0::c5@5': QID_2,
+  'anti-qid-fianchetto::0::Bb7@7': QID_3,
+  'anti-qid-fianchetto::0::Bb4+@7': QID_4,
+  'anti-qid-fianchetto::0::Bb7@9': QID_5,
+  'anti-qid-fianchetto::0::d5@9': QID_6,
+  'anti-qid-fianchetto::0::b5@9': QID_7,
+  'anti-qid-fianchetto::1::d5@5': QID_0,
+  'anti-qid-fianchetto::1::Bb4+@5': QID_1,
+  'anti-qid-fianchetto::1::Ba6@7': QID_8,
+  'anti-qid-fianchetto::1::c5@5': QID_2,
+  'anti-qid-fianchetto::1::Bb4+@7': QID_4,
   // ── anti-dutch-staunton ──
   'anti-dutch-staunton::0::d5@5': C140,
   'anti-dutch-staunton::0::g6@7': C141,
