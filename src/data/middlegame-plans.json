@@ -76074,5 +76074,145 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-antigrandprix-clamp",
+    "openingId": "anti-grand-prix-black",
+    "criticalPositionFen": "r1bq1rk1/p3npb1/1p2p1pp/n1p5/P1B1P3/3P1N2/1PP1N1PP/R1BQ1RK1 w - - 2 12",
+    "title": "Clamp with …c4 and strike the wedge with …f6",
+    "overview": "White's Grand Prix kingside push has fizzled — the f5–exf6 break spent itself and your king is snug behind ...e6 and ...h6. Now Black takes over. ...c4 clamps the queenside and freezes White's d3-pawn as a permanent backward weakness, ...Bb7 rakes the long diagonal at White's centre, and when White clamps with e5 you undermine its head with ...f6. Queenside space plus the two bishops hand Black the more pleasant game.",
+    "pawnBreaks": [
+      "...c4 to clamp the queenside and fix d3 as a backward pawn",
+      "...f6 to strike the head of White's e5 wedge"
+    ],
+    "pieceManeuvers": [
+      "...Bb7 onto the long diagonal, eyeing e4 at the centre",
+      "...Qd7 to connect the rooks and improve on the light squares"
+    ],
+    "strategicThemes": [
+      "the queenside space clamp with ...c4",
+      "White's backward d3-pawn as a fixed target",
+      "the two bishops in an open position"
+    ],
+    "endgameTransitions": [
+      "convert the queenside space and bishop pair into a better endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/p3npb1/1p2p1pp/n1p5/P1B1P3/3P1N2/1PP1N1PP/R1BQ1RK1 w - - 2 12",
+        "title": "...c4 clamp and ...f6 strike",
+        "intro": "Black clamps the queenside, develops the bishop to the long diagonal, and undermines White's central wedge.",
+        "moves": [
+          "Ba2",
+          "c4",
+          "d4",
+          "Bb7",
+          "e5",
+          "Qd7",
+          "c3",
+          "f6"
+        ],
+        "annotations": [
+          "White tucks the bishop back to a2, but with your pawn on e6 that once-dangerous a2–g8 diagonal is walled off — the bishop bites on granite.",
+          "...c4 is the clamp. You grab queenside space and freeze White's d3-pawn as a permanent backward weakness, fixing a target you'll press all game.",
+          "White pushes d4 to break free in the centre — the only way to make something happen before your queenside space suffocates him.",
+          "...Bb7 completes development and rakes the long diagonal, the bishop staring straight through c6 and d5 at e4, the heart of White's centre.",
+          "White clamps with e5, gaining space and shutting the diagonal — but the wedge is a commitment, and its base is fixed for you to hit.",
+          "...Qd7 connects your rooks and improves on the light squares while White's centre has run out of pawn breaks.",
+          "White props the d4-pawn with c3, but every pawn move is a tempo stolen from an attack that already stalled.",
+          "...f6 strikes the head of the wedge. Undermine e5 at its tip, and when the centre opens your two bishops and queenside clamp give you the more pleasant game — Black is comfortable and a shade for choice."
+        ],
+        "learnCues": [
+          "Bishop to a2 — bites on e6 granite.",
+          "...c4 — clamp, fix d3 backward.",
+          "White breaks with d4.",
+          "...Bb7 — rake the long diagonal.",
+          "White clamps with e5.",
+          "...Qd7 — connect and improve.",
+          "White props with c3.",
+          "...f6 — strike the e5 wedge."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "b7",
+              "to": "e4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "a2",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "b7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pawn-backward",
+          "concept:pos-space",
+          "concept:pos-bishop-pair",
+          "https://en.wikipedia.org/wiki/Grand_Prix_Attack"
+        ]
+      }
+    ]
   }
 ]
