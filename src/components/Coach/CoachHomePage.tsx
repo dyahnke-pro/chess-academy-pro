@@ -125,23 +125,25 @@ export function CoachHomePage(): JSX.Element {
           testId="coach-action-play"
         />
 
-        {/* The Academy — the school surface: the structured Opening
-            Courses (the build) plus the Coaches Library of master books,
-            kept together and SEPARATE from the openings explorer. */}
+        {/* The Coaches Library — opens straight to the books (David 2026-07-08:
+            "change academy to just say library … open directly to the books").
+            The old Academy hub was a redundant middle step now that the opening
+            courses live in the Openings explorer; this tile goes right to the
+            shelf. */}
         <PrimaryTile
           icon={<Library size={40} className="text-rose-400" />}
-          label="The Academy"
-          subtitle="Your school: structured Opening Courses and the Coaches Library of master books."
+          label="The Coaches Library"
+          subtitle="The masters' own books — plus our own doctrine — read aloud with live playable boards."
           info={
-            "The Academy holds two things, side by side:\n\n• Opening Courses — enrolled GM-style courses with a numbered chapter syllabus, progress and a finish line.\n\n• The Coaches Library — five complete public-domain master books (Capablanca, Nimzowitsch, Edward Lasker, and our own), read aloud with live playable boards where the original printed a diagram.\n\nThis is a separate build from the Openings explorer."
+            "The Coaches Library — five complete public-domain master books (Capablanca, Nimzowitsch, Edward Lasker) plus our own doctrine, The Philosophy of a General — read aloud with live playable boards where the original printed a diagram.\n\nOpening courses live in the Openings explorer — Masterclasses, Gambits, Counter-Weapons, Elite, and every line via search."
           }
           rgb="244, 63, 94"
           bgClass="bg-rose-500/10"
           textColorClass="text-rose-400"
-          onClick={goTo('academy', '/coach/academy')}
+          onClick={goTo('library', '/coach/library')}
           gB={gB}
           gS={gS}
-          testId="coach-action-academy"
+          testId="coach-action-library"
           wide
         />
 

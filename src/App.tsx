@@ -52,7 +52,6 @@ import { GamesDrilldownPage } from './components/Insights/GamesDrilldownPage';
 import { CoachTeachPage } from './components/Coach/CoachTeachPage';
 import { CoachEndgamePage } from './components/Coach/CoachEndgamePage';
 import { CoachesLibraryPage } from './components/Coach/CoachesLibraryPage';
-import { CoachAcademyPage } from './components/Coach/CoachAcademyPage';
 import { CoachReviewListPage } from './components/Coach/CoachReviewListPage';
 import { CoachReviewSessionPage } from './components/Coach/CoachReviewSessionPage';
 import { CoachPage } from './components/Coach/CoachPage';
@@ -380,7 +379,7 @@ export function App(): JSX.Element {
           <Route path="/coach/train" element={<ErrorBoundary><CoachTrainPage /></ErrorBoundary>} />
           <Route path="/coach/teach" element={<ErrorBoundary><CoachTeachPage /></ErrorBoundary>} />
           <Route path="/coach/endgame" element={<ErrorBoundary><CoachEndgamePage /></ErrorBoundary>} />
-          <Route path="/coach/academy" element={<ErrorBoundary><CoachAcademyPage /></ErrorBoundary>} />
+          <Route path="/coach/academy" element={<Navigate to="/coach/library" replace />} />
           <Route path="/coach/library" element={<ErrorBoundary><CoachesLibraryPage /></ErrorBoundary>} />
           <Route path="/coach/review" element={<ErrorBoundary><CoachReviewListPage /></ErrorBoundary>} />
           <Route path="/coach/review/:gameId" element={<ErrorBoundary><CoachReviewSessionPage /></ErrorBoundary>} />

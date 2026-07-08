@@ -8,7 +8,7 @@ import {
   GraduationCap,
   Target,
   AlertTriangle,
-  Swords,
+  Library,
   Baby,
   Settings,
 } from 'lucide-react';
@@ -86,7 +86,7 @@ const SECTIONS: TocSection[] = [
     items: [
       { label: 'Learn with Coach', route: '/coach/teach', desc: 'Guided, voice-narrated walkthroughs of any line.' },
       { label: 'Play with Coach', route: '/coach/play', desc: 'Real game vs the engine, coach narrating and hinting.' },
-      { label: 'The Academy', route: '/coach/academy', desc: 'The Coaches Library of master books and the board-free doctrine — a separate build.' },
+      { label: 'The Coaches Library', route: '/coach/library', desc: "The masters' own books plus our own doctrine, read aloud with live playable boards." },
       { label: 'Game Insights', route: '/coach/report', desc: 'Analytics across all your games.' },
       {
         label: 'Endgame',
@@ -143,16 +143,17 @@ const SECTIONS: TocSection[] = [
     ],
   },
   {
-    key: 'academy',
-    label: 'The Academy',
-    rgb: '99, 102, 241',
-    colorClass: 'text-indigo-400',
-    icon: Swords,
+    key: 'library',
+    label: 'The Coaches Library',
+    rgb: '244, 63, 94',
+    colorClass: 'text-rose-400',
+    icon: Library,
     items: [
-      // "Opening Courses" removed (David 2026-07-07: redundant with the Openings
-      // section above — Masterclasses / Gambits / Elite / every line all live at
-      // /openings). The Academy is now the audiobook + the Coaches Library.
-      { label: 'The Coaches Library', route: '/coach/library', desc: 'Master books read aloud with live playable boards.' },
+      // The old "Academy" hub + its Opening Courses were removed (David
+      // 2026-07-07 / 2026-07-08). "Academy" is now just the Coaches Library,
+      // which opens straight to the books — the master titles plus our own
+      // doctrine, The Philosophy of a General, live on the same shelf.
+      { label: 'The Coaches Library', route: '/coach/library', desc: "The masters' own books plus our own doctrine, read aloud with live playable boards." },
       { label: 'The Philosophy of a General', route: '/academy', desc: 'Our board-free doctrine, read aloud as an audiobook.' },
     ],
   },
