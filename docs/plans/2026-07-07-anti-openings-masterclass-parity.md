@@ -176,9 +176,15 @@ anti-openings.json "variations" are polluted with main-line prefixes + move-orde
 transpositions — TRIAGE each for distinctness, drop the dupes, rebuild the
 genuinely-distinct spine sound. modern-150 variations DEFERRED (all transpose to
 the one 150-Attack plan the main lesson already teaches). ✅ VARIATION-TAB LAYER
-EFFECTIVELY COMPLETE — 34 TABS across 21 of 24 openings (only kings-gambit
-[sharp sac theory], trompowsky [0 declared variations], modern-150 [pure
-transpositions] remain, all honestly deferred). Added since the 26-tab note:
+COMPLETE — 36 TABS across 21 of 24 openings. Recovered 2 more from the deferred
+pile via the extend-past-recapture method: colle-Zukertort (b3, +0.48 Black) and
+kid-saemisch …Nbd7 (the O-O-O + h4-h5 storm, +1.12). Only kings-gambit [sharp
+sac theory], trompowsky [0 declared variations], modern-150 [pure transpositions]
+have NO tabs. The last few deferred sharp sub-lines (staun-Lasker, benoni-g6,
+alapin-Nf3, kid-c5, englund-Nxe5) were re-tested with the extend method and
+resolve to MURKY material-vs-compensation or sacrificial positions that don't
+give a cleanly-narratable stable terminus — genuinely deferred per no-garbage,
+not lazy. Added since the 26-tab note:
 dutch-staunton(Nc6 gambit), smith-morra(Qe2), london(+Nf3), pirc(Dragon),
 kid-saemisch(Nc6/a6), benoni(Modern/Czech), colle(c3/dxc5), englund(d6/
 Zilbermints), alapin(a3), grand-prix(Bb5, extended past the queen-trade to a
