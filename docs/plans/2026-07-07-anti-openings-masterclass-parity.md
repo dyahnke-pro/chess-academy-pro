@@ -261,7 +261,22 @@ systems (nimzo/qid/qgd/grunfeld/catalan/colle/french/scandinavian) the middlegam
 is a slow squeeze that resists a crisp forcing line — anchor a plan there only if
 you can author a SOUND thematic line by hand (engine-verify every move; do NOT
 force non-top moves to hit a theme square = soundness risk). Expect this layer to
-cover maybe 6-10 openings honestly, not all 24. Same empty > generic rule. Added since the 26-tab note:
+cover maybe 6-10 openings honestly, not all 24. Same empty > generic rule.
+
+✅ MIDDLEGAME-PLANS LAYER — the demonstrable ones are DONE (2026-07-08). 5 anti-
+opening plans shipped, each anchored at a variation/main spine terminus (Gate C
+continuity), every move engine-verified sound + board-accurate, all gate-green
+(middlegamePlanThemes / MiddlegamePlansSection / EndgamePlansSection /
+middlegamePlanner, 72 tests): rossolimo (e-file squeeze, pre-existing), benoni-
+Modern (e5 break + d6 passer), 150 Attack (hxg6 h-file + e5 clamp), pirc Austrian
+(f5 break + Ra3 lift, a pawn up), alekhine (c5/b4 queenside space + bishop pair).
+CONFIRMED not-demonstrable (slow squeezes, engine just shuffles — do NOT force a
+plan): french-advance, qgd Carlsbad (minority attack is too slow to show
+forcibly), czech-benoni, grunfeld, caro-fantasy. The plans layer is therefore
+~5-6 openings by nature, like the weapons layer — that's correct. REMAINING
+PARITY LAYERS: student-side pitfalls (common-mistakes.json — a position where the
+STUDENT's natural move is a mistake; mine via explorer+engine like weapons) and
+the Naroditsky-voice re-narration pass. Both are careful per-item hand work. Added since the 26-tab note:
 dutch-staunton(Nc6 gambit), smith-morra(Qe2), london(+Nf3), pirc(Dragon),
 kid-saemisch(Nc6/a6), benoni(Modern/Czech), colle(c3/dxc5), englund(d6/
 Zilbermints), alapin(a3), grand-prix(Bb5, extended past the queen-trade to a
