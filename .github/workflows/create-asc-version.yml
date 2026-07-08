@@ -11,6 +11,10 @@ on:
         description: "What's New release notes (blank = leave as-is)"
         required: false
         default: ''
+      promo_text:
+        description: 'Promotional text, max 170 chars (blank = leave as-is)'
+        required: false
+        default: ''
       release_type:
         description: 'MANUAL | AFTER_APPROVAL | SCHEDULED'
         required: false
@@ -32,5 +36,6 @@ jobs:
           APP_BUNDLE_ID: com.chessacademy.pro
           APP_VERSION: '3.0'
           WHATS_NEW: ${{ github.event.inputs.whats_new }}
+          PROMO_TEXT: ${{ github.event.inputs.promo_text }}
           RELEASE_TYPE: ${{ github.event.inputs.release_type }}
         run: node scripts/ci/create-asc-version.mjs

@@ -21,6 +21,7 @@ const ISSUER_ID = req('ASC_ISSUER_ID');
 const BUNDLE_ID = process.env.APP_BUNDLE_ID || 'com.chessacademy.pro';
 const VERSION = process.env.APP_VERSION || '3.0';
 const WHATS_NEW = process.env.WHATS_NEW || '';
+const PROMO_TEXT = process.env.PROMO_TEXT || '';
 const RELEASE_TYPE = process.env.RELEASE_TYPE || 'AFTER_APPROVAL';
 
 function req(n) { const v = process.env[n]; if (!v) throw new Error(`Missing env ${n}`); return v; }
@@ -69,24 +70,31 @@ async function main() {
   // version, but create it if absent) and set the "What's New" notes if given.
   const locs = (await api('GET', `/v1/appStoreVersions/${version.id}/appStoreVersionLocalizations?limit=20`)).data;
   let enUS = locs.find((l) => l.attributes?.locale === 'en-US');
+  const setAttrs = {
+    ...(WHATS_NEW ? { whatsNew: WHATS_NEW } : {}),
+    ...(PROMO_TEXT ? { promotionalText: PROMO_TEXT } : {}),
+  };
   if (!enUS) {
     console.log('en-US localization missing — creating…');
     enUS = (await api('POST', '/v1/appStoreVersionLocalizations', {
       data: {
         type: 'appStoreVersionLocalizations',
-        attributes: { locale: 'en-US', ...(WHATS_NEW ? { whatsNew: WHATS_NEW } : {}) },
+        attributes: { locale: 'en-US', ...setAttrs },
         relationships: { appStoreVersion: { data: { type: 'appStoreVersions', id: version.id } } },
       },
     })).data;
     console.log(`✅ created en-US localization → ${enUS.id}`);
-  } else if (WHATS_NEW) {
+  } else if (Object.keys(setAttrs).length) {
     await api('PATCH', `/v1/appStoreVersionLocalizations/${enUS.id}`, {
-      data: { type: 'appStoreVersionLocalizations', id: enUS.id, attributes: { whatsNew: WHATS_NEW } },
+      data: { type: 'appStoreVersionLocalizations', id: enUS.id, attributes: setAttrs },
     });
-    console.log(`✅ set "What's New" on en-US (${WHATS_NEW.length} chars)`);
+    if (WHATS_NEW) console.log(`✅ set "What's New" on en-US (${WHATS_NEW.length} chars)`);
+    if (PROMO_TEXT) console.log(`✅ set Promotional text on en-US (${PROMO_TEXT.length} chars)`);
   } else {
-    const cur = enUS.attributes?.whatsNew;
-    console.log(`en-US localization → ${enUS.id}; whatsNew currently: ${cur ? `"${cur.slice(0, 60)}…"` : 'EMPTY (set with WHATS_NEW before submit)'}`);
+    const a = enUS.attributes || {};
+    console.log(`en-US localization → ${enUS.id}`);
+    console.log(`  whatsNew: ${a.whatsNew ? `"${a.whatsNew.slice(0, 50)}…"` : 'EMPTY'}`);
+    console.log(`  promotionalText: ${a.promotionalText ? `"${a.promotionalText.slice(0, 50)}…"` : 'EMPTY'}`);
   }
 
   console.log('\n✅ create-asc-version done (no submit).');
