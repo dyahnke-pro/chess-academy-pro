@@ -2363,8 +2363,28 @@ const N167: SublineNarration = {
 };
 
 const N168: SublineNarration = {
-  intro: { say: "…Qd6 — in this main line choose the restrained g3 setup, planning Bg2 and a fianchetto over the sharp Bc4 systems. He answers …Bg4, pinning your f3-knight to the queen before your bishop reaches g2, then follows with …Nc6 and …e6 or …e5 to make d4 a target. Note his …a6 already rules out any Nb5 hop at the queen.", sayShort: "g3 fianchetto — …Bg4 pins f3" },
-  sources: ['concept:tac-pin', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
+  intro: { say: "…Qd6 — the modern main line. Against Black's fianchetto, set up the aggressive Bg5 + Qd2 battery, castle long, and prepare to storm his kingside with h4-h5 while your bishops rake toward his king. Opposite-side castling with you the better-developed side and the faster attack — a clear, dangerous edge.", sayShort: "…Qd6 — Bg5/Qd2, O-O-O, storm the king" },
+  beats: [
+    { atMove: 6, say: "d4 — stake the big pawn centre, the space that's the Scandinavian's price.", sayShort: "d4 — stake the centre.", highlights: [H('d4')] },
+    { atMove: 7, say: "…Nf6 — Black develops.", sayShort: "…Nf6 — develop.", highlights: [H('f6', SOFT)] },
+    { atMove: 8, say: "Nf3 — develop and control the e5-square.", sayShort: "Nf3 — develop, control e5.", highlights: [H('f3')] },
+    { atMove: 9, say: "…g6 — Black prepares to fianchetto.", sayShort: "…g6 — prep the fianchetto.", highlights: [H('g6', SOFT)] },
+    { atMove: 10, say: "Bg5 — develop with a pin-threat on the f6-knight, part of the aggressive setup.", sayShort: "Bg5 — pin-threat on f6.", highlights: [H('g5')] },
+    { atMove: 11, say: "…Bg7 — Black completes the fianchetto.", sayShort: "…Bg7 — the fianchetto.", highlights: [H('g7', SOFT)] },
+    { atMove: 12, say: "Qd2 — connect the Bg5-Qd2 battery aimed at h6 and prepare to castle long.", sayShort: "Qd2 — the h6 battery.", highlights: [H('d2')] },
+    { atMove: 13, say: "…O-O — Black castles kingside, into the wing you're about to storm.", sayShort: "…O-O — castles into the storm.", highlights: [H('g8', SOFT)] },
+    { atMove: 14, say: "O-O-O — castle long. Opposite-side castling: now h4-h5 and the bishop battery all point at Black's king.", sayShort: "O-O-O — opposite sides, storm coming.", highlights: [H('c1')] },
+    { atMove: 15, say: "…Bg4 — Black pins your f3-knight, seeking counterplay.", sayShort: "…Bg4 — pin the knight.", highlights: [H('g4', SOFT)] },
+    { atMove: 16, say: "Be2 — break the pin calmly, keeping your attacking setup intact.", sayShort: "Be2 — break the pin.", highlights: [H('e2')] },
+    { atMove: 17, say: "…Nbd7 — Black develops.", sayShort: "…Nbd7 — develop.", highlights: [H('d7', SOFT)] },
+    { atMove: 18, say: "Bf4 — reroute the bishop with tempo, hitting the d6-queen and eyeing the b8-h2 diagonal.", sayShort: "Bf4 — hit the queen.", arrows: [A('f4', 'd6')], highlights: [H('d6')] },
+    { atMove: 19, say: "…Qb6 — the queen sidesteps to b6.", sayShort: "…Qb6 — sidestep.", highlights: [H('b6', SOFT)] },
+    { atMove: 20, say: "h3 — question the g4-bishop, forcing it to decide.", sayShort: "h3 — question the bishop.", highlights: [H('h3')] },
+    { atMove: 21, say: "…Bxf3 — Black trades, handing you the bishop pair.", sayShort: "…Bxf3 — gives the bishops.", highlights: [H('f3', SOFT)] },
+    { atMove: 22, say: "Bxf3 — recapture; you own the two bishops and the bishop rakes toward b7.", sayShort: "Bxf3 — bishop pair.", highlights: [H('f3')] },
+    { atMove: 23, say: "…c6 — Black solidifies. You're clearly better: opposite-side castling with the faster attack (h4-h5 and the bishops aimed at Black's king), the bishop pair, and more space.", sayShort: "…c6 — you have the faster attack.", highlights: [H('c6', SOFT)] },
+  ],
+  sources: ['concept:att-kingside-storm', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
 };
 
 const N169: SublineNarration = {
@@ -2496,13 +2516,24 @@ const N176: SublineNarration = {
 };
 
 const N177: SublineNarration = {
-  intro: { say: "…g6 — with the queen on d6 he fianchettos but then lunges …g5-g4 to harass your f3-knight, loosening his own kingside. Keep your d4-centre solid, brace the queenside with a3 and b3, and retreat the knight to e5 or d2 with tempo. His advancing g-pawns leave f5 and h5 weak, and your compact centre dominates his airy king.", sayShort: "g4 chases knight — kingside left weak" },
+  intro: { say: "…g6 — with the queen on d6, Black fianchettoes. Set up the aggressive Bg5 + Qd2 battery, castle long, and prepare to storm his kingside with h4-h5 while your bishops rake toward his king. Opposite-side castling with you the better-developed side and the faster attack — a clear, dangerous edge.", sayShort: "…g6 — Bg5/Qd2, O-O-O, storm the king" },
   beats: [
-    { atMove: 10, say: "Bg5 develops with a pin, pressuring Black's setup before the attack.", sayShort: "Bg5 — pin and pressure.", highlights: [H('g5')] },
-    { atMove: 12, say: "Qd2 connects, preparing O-O-O and the kingside attack against the fianchetto.", sayShort: "Qd2 — prep O-O-O.", highlights: [H('d2')] },
-    { atMove: 14, say: "O-O-O castles into the attack, your rooks joining the assault.", sayShort: "O-O-O — castle, attack.", highlights: [H('c1')] },
+    { atMove: 10, say: "Bg5 — develop with a pin-threat on the f6-knight, part of the aggressive setup.", sayShort: "Bg5 — pin-threat on f6.", highlights: [H('g5')] },
+    { atMove: 11, say: "…Bg7 — Black completes the fianchetto.", sayShort: "…Bg7 — the fianchetto.", highlights: [H('g7', SOFT)] },
+    { atMove: 12, say: "Qd2 — connect the Bg5-Qd2 battery aimed at h6 and prepare to castle long.", sayShort: "Qd2 — the h6 battery.", highlights: [H('d2')] },
+    { atMove: 13, say: "…O-O — Black castles kingside, into the wing you're about to storm.", sayShort: "…O-O — castles into the storm.", highlights: [H('g8', SOFT)] },
+    { atMove: 14, say: "O-O-O — castle long. Opposite-side castling: h4-h5 and the bishop battery all point at Black's king.", sayShort: "O-O-O — opposite sides, storm coming.", highlights: [H('c1')] },
+    { atMove: 15, say: "…Bg4 — Black pins your f3-knight, seeking counterplay.", sayShort: "…Bg4 — pin the knight.", highlights: [H('g4', SOFT)] },
+    { atMove: 16, say: "Be2 — break the pin calmly, keeping your attacking setup intact.", sayShort: "Be2 — break the pin.", highlights: [H('e2')] },
+    { atMove: 17, say: "…Nbd7 — Black develops.", sayShort: "…Nbd7 — develop.", highlights: [H('d7', SOFT)] },
+    { atMove: 18, say: "Bf4 — reroute the bishop with tempo, hitting the d6-queen and eyeing the b8-h2 diagonal.", sayShort: "Bf4 — hit the queen.", arrows: [A('f4', 'd6')], highlights: [H('d6')] },
+    { atMove: 19, say: "…Qb6 — the queen sidesteps to b6.", sayShort: "…Qb6 — sidestep.", highlights: [H('b6', SOFT)] },
+    { atMove: 20, say: "h3 — question the g4-bishop, forcing it to decide.", sayShort: "h3 — question the bishop.", highlights: [H('h3')] },
+    { atMove: 21, say: "…Bxf3 — Black trades, handing you the bishop pair.", sayShort: "…Bxf3 — gives the bishops.", highlights: [H('f3', SOFT)] },
+    { atMove: 22, say: "Bxf3 — recapture; you own the two bishops and the bishop rakes toward b7.", sayShort: "Bxf3 — bishop pair.", highlights: [H('f3')] },
+    { atMove: 23, say: "…c6 — Black solidifies. You're clearly better: opposite-side castling with the faster attack, the bishop pair, and more space.", sayShort: "…c6 — you have the faster attack.", highlights: [H('c6', SOFT)] },
   ],
-  sources: ['concept:pos-center', 'concept:pos-weak-squares', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
+  sources: ['concept:att-kingside-storm', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
 };
 
 const N178: SublineNarration = {
@@ -7304,11 +7335,7 @@ export const SUBLINE_NARRATION_E4OTHER: Record<string, SublineNarration> = {
   'anti-scandinavian::0::Bg4@11': N165,
   'anti-scandinavian::0::Bg4@9': N166,
   'anti-scandinavian::0::Nc6@9': N167,
-  'anti-scandinavian::0::Qd6@5': { ...N168, beats: [
-    { atMove: 6, say: "d4 stakes the big centre, your space the Scandinavian's price.", sayShort: "d4 — stake the centre.", highlights: [H('d4')] },
-    { atMove: 10, say: "Bg5 develops with a pin, pressuring Black's setup before the attack.", sayShort: "Bg5 — pin and pressure.", highlights: [H('g5')] },
-    { atMove: 14, say: "O-O-O castles into the attack, your rooks joining the assault.", sayShort: "O-O-O — castle, attack.", highlights: [H('c1')] },
-  ] },
+  'anti-scandinavian::0::Qd6@5': N168,
   'anti-scandinavian::0::Qd8@5': N169,
   'anti-scandinavian::0::c6@7': N170,
   'anti-scandinavian::1::Bg4@9': N171,
@@ -7321,11 +7348,7 @@ export const SUBLINE_NARRATION_E4OTHER: Record<string, SublineNarration> = {
   'anti-scandinavian::1::g6@9': N177,
   'anti-scandinavian::2::Bf5@9': N178,
   'anti-scandinavian::2::Qa5@5': N172,
-  'anti-scandinavian::2::Qd6@5': { ...N168, beats: [
-    { atMove: 6, say: "d4 stakes the big centre, your space the Scandinavian's price.", sayShort: "d4 — stake the centre.", highlights: [H('d4')] },
-    { atMove: 10, say: "Bg5 develops with a pin, pressuring Black's setup before the attack.", sayShort: "Bg5 — pin and pressure.", highlights: [H('g5')] },
-    { atMove: 14, say: "O-O-O castles into the attack, your rooks joining the assault.", sayShort: "O-O-O — castle, attack.", highlights: [H('c1')] },
-  ] },
+  'anti-scandinavian::2::Qd6@5': N168,
   'anti-scandinavian::2::a6@9': N179,
   'anti-scandinavian::2::c6@7': N180,
   'anti-scandinavian::2::c6@9': N181,
