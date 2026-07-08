@@ -34,7 +34,6 @@ export function ChatInput({ onSend, disabled, placeholder, coachChoices, onPickC
   const [listening, setListening] = useState(false);
   const [micError, setMicError] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const voiceSupported = voiceInputService.isSupported();
   const prefersReducedMotion = usePrefersReducedMotion();
 
   // Auto-focus the textarea on mount (dedicated chat pages). Board-companion
@@ -139,6 +138,14 @@ export function ChatInput({ onSend, disabled, placeholder, coachChoices, onPickC
         },
       });
       setListening(started);
+      if (!started) {
+        // Recognition unsupported/failed to start on this platform — tell the
+        // user instead of a dead button (the button now always renders so
+        // Learn-with-Coach shows a mic even when isSupported() was falsy at
+        // mount; David 2026-07-08).
+        setMicError('Mic unavailable on this device.');
+        setTimeout(() => setMicError(null), 4000);
+      }
     }
   }, [listening]);
 
@@ -226,23 +233,25 @@ export function ChatInput({ onSend, disabled, placeholder, coachChoices, onPickC
         data-testid="chat-text-input"
       />
 
-      {voiceSupported && (
-        <motion.button
-          onClick={handleVoice}
-          disabled={disabled}
-          // min-h/w 44px = WCAG AA tap target minimum
-          className={`min-h-[44px] min-w-[44px] p-3 rounded-xl border transition-colors flex items-center justify-center ${
-            listening
-              ? 'border-red-500 bg-red-500/10 text-red-500'
-              : 'border-theme-border text-theme-text-muted hover:text-theme-text'
-          } disabled:opacity-50`}
-          animate={listening && !prefersReducedMotion ? { scale: [1, 1.1, 1] } : { scale: 1 }}
-          transition={listening && !prefersReducedMotion ? { duration: 1, repeat: Infinity } : {}}
-          data-testid="voice-input-btn"
-        >
-          {listening ? <MicOff size={18} /> : <Mic size={18} />}
-        </motion.button>
-      )}
+      {/* Always render the mic (mirrors Play's always-on VoiceChatMic button).
+          Was gated on isSupported() captured once at mount, which hid the mic
+          on Learn-with-Coach whenever the Capacitor bridge wasn't ready yet
+          (David 2026-07-08). Support is re-checked on tap via startListening. */}
+      <motion.button
+        onClick={handleVoice}
+        disabled={disabled}
+        // min-h/w 44px = WCAG AA tap target minimum
+        className={`min-h-[44px] min-w-[44px] p-3 rounded-xl border transition-colors flex items-center justify-center ${
+          listening
+            ? 'border-red-500 bg-red-500/10 text-red-500'
+            : 'border-theme-border text-theme-text-muted hover:text-theme-text'
+        } disabled:opacity-50`}
+        animate={listening && !prefersReducedMotion ? { scale: [1, 1.1, 1] } : { scale: 1 }}
+        transition={listening && !prefersReducedMotion ? { duration: 1, repeat: Infinity } : {}}
+        data-testid="voice-input-btn"
+      >
+        {listening ? <MicOff size={18} /> : <Mic size={18} />}
+      </motion.button>
 
       <button
         type="submit"
