@@ -632,3 +632,28 @@ honest baseline (not wrong), so these are additive, not corrective.
 
 Session so far: 8 families / ~240 keys at per-move parity, all shipped to main.
 NEXT: the D4Flank intro-only families (most neglected), then E4Other densify.
+
+## ✅ COMPLETE (2026-07-08) — ALL 23 anti-* subline families at per-move parity
+
+Every anti-opening subline is densified. Verified: **537/537 registry keys map
+to a constant WITH per-move beats; 0 beatless.** typecheck + lint + both gates
+(sublineNarration.test 42,498 cases + antiOpeningNarrationAccuracy) green.
+
+**Families shipped this session (23):**
+E4Other (edited in place): anti-french-advance, anti-caro-fantasy,
+anti-sicilian-rossolimo, anti-alekhine-modern, anti-scandinavian,
+anti-grand-prix-black, anti-modern-150, anti-smith-morra-black,
+anti-alapin-black, anti-kings-gambit-black, anti-pirc-austrian (already dense).
+D4Flank split-densify (new per-line constants + registry rewire):
+anti-colle-black, anti-catalan-black, anti-london-black, anti-budapest,
+anti-grunfeld-exchange, anti-nimzo-qc2, anti-qid-fianchetto, anti-qgd-exchange,
+anti-dutch-staunton, anti-kid-saemisch, anti-englund, anti-benoni-push.
+
+**Method:** per family — dump distinct move-lines → engine-eval terminus (score
+normalized to the student's POV) → author board-accurate per-move beats → arrow
+sight-line + legality check → gates. Every beat grounded in the real DB line;
+honesty enforced (worse-for-student lines framed truthfully as "committal /
+defend the pull / Black holds", never oversold; e.g. london …c4-clamp +0.5W,
+englund #15 draw, benoni #19 −1.4). ~35 board-accuracy bugs fixed en route
+(blocked slider arrows, wrong-plan intros, mislabeled lines). 46 dead
+intro-only constants removed after rewiring.
