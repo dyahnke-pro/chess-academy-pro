@@ -25,11 +25,6 @@
         "explanation": ""
       },
       {
-        "name": "Maróczy Variation (dxe4)",
-        "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 c3 Nd7 Bd3 Ngf6 O-O Bd6 a4 O-O Nbd2 Re8 Qc2 Bc7",
-        "explanation": ""
-      },
-      {
         "name": "Maróczy Variation (g6)",
         "pgn": "e4 c6 d4 d5 f3 g6 Nc3 Bg7 Be3 Qb6 Na4 Qa5+ c3 e5 dxe5 Ne7 Nc5 Bxe5 f4 Bg7 e5 f6",
         "explanation": ""
@@ -73,11 +68,6 @@
     "traps": null,
     "warnings": null,
     "variations": [
-      {
-        "name": "Advance Variation, Euwe Variation",
-        "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Be2 cxd4 cxd4 Nh6 Bd3 Bd7 Bc2 Nf5 Bxf5 exf5 O-O Be6",
-        "explanation": ""
-      },
       {
         "name": "Advance Variation",
         "pgn": "e4 e6 d4 d5 e5 c5 c3 Qb6 Nf3 Nc6 a3 c4 Nbd2 Na5 Be2 Bd7 Rb1 Ne7 h4 O-O-O h5 h6",
