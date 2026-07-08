@@ -520,6 +520,201 @@ const EACAT: SublineNarration = {
   ],
   sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
 };
+
+const CATB_0: SublineNarration = {
+  intro: { say: "White delays the fianchetto with Nf3, transposing to a Ragozin Queen's Gambit. Check …Bb4+, break …c5, and double his c-pawns with …Bxc3+. A little tactic on b5 restores the material and you reach a sound, fully-equal game — no Catalan pressure ever materialises.", sayShort: "QGD transposition — solid equality" },
+  beats: [
+    { atMove: 7, say: "…Bb4+ develops with tempo, pinning the coming knight against his king.", sayShort: "…Bb4+ — develop, pin", highlights: [_H('b4')] },
+    { atMove: 9, say: "…O-O tucks the king safe.", sayShort: "…O-O — king safe", highlights: [_H('g8')] },
+    { atMove: 11, say: "…c5 strikes at d4 while his pieces are half-committed.", sayShort: "…c5 — hit d4", highlights: [_H('c5')] },
+    { atMove: 13, say: "…exd5 recaptures, keeping a sound central structure.", sayShort: "…exd5 — recapture soundly", highlights: [_H('d5')] },
+    { atMove: 15, say: "…Bxc3+ doubles his c-pawns — a permanent structural target.", sayShort: "…Bxc3+ — double the c-pawns", highlights: [_H('c3')] },
+    { atMove: 17, say: "…Be6 develops and guards the d5-pawn.", sayShort: "…Be6 — develop, hold d5", highlights: [_H('e6'), _H('d5', SOFT)] },
+    { atMove: 21, say: "…Qa5 hits the loose b5-bishop along the fifth rank.", sayShort: "…Qa5 — hit the b5-bishop", highlights: [_H('a5')] },
+    { atMove: 23, say: "…Qxb5 restores the material; fully equal, no problems.", sayShort: "…Qxb5 — restore material; equal", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+
+const CATB_1: SublineNarration = {
+  intro: { say: "Nc3 instead of the fianchetto invites a Nimzo-Indian: pin with …Bb4. Take …cxd4, castle, and fracture White's queenside with …Bxc3+. Post the knight on e4 and break …f5 — you reach comfortable, well-charted equality where White's doubled pawns balance his bishop pair.", sayShort: "…Bb4 Nimzo — comfortable equality" },
+  beats: [
+    { atMove: 5, say: "…Bb4 pins the c3-knight, fighting for the e4-square.", sayShort: "…Bb4 — the Nimzo pin", highlights: [_H('b4')] },
+    { atMove: 7, say: "…c5 strikes at d4, the standard Nimzo lever.", sayShort: "…c5 — hit d4", highlights: [_H('c5')] },
+    { atMove: 9, say: "…cxd4 opens the centre, springing your pieces.", sayShort: "…cxd4 — open the centre", highlights: [_H('d4')] },
+    { atMove: 11, say: "…O-O tucks the king safe.", sayShort: "…O-O — king safe", highlights: [_H('g8')] },
+    { atMove: 13, say: "…Bxc3+ fractures White's queenside pawns.", sayShort: "…Bxc3+ — fracture the pawns", highlights: [_H('c3')] },
+    { atMove: 15, say: "…d5 strikes the centre, freeing your game.", sayShort: "…d5 — strike the centre", highlights: [_H('d5')] },
+    { atMove: 19, say: "…Ne4 posts the knight on a dominant central outpost.", sayShort: "…Ne4 — the outpost", highlights: [_H('e4')] },
+    { atMove: 23, say: "…f5 bolsters the e4-knight and grabs kingside space; fully equal.", sayShort: "…f5 — bolster e4; equal", highlights: [_H('f5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+
+const CATB_2: SublineNarration = {
+  intro: { say: "The Open Catalan: you've grabbed the c4-pawn. Check …Bb4+ and trade the dark bishops with …a5 and …Bxd2+, defusing White's pressure. Hold the pawn with …b5 and …cxb3, complete development, and reach an equal game where the famous g2-bishop bites on thin air.", sayShort: "…Bb4+ trade, hold c4 — equal" },
+  beats: [
+    { atMove: 7, say: "…dxc4 takes the pawn, the Open Catalan's principled grab.", sayShort: "…dxc4 — grab the pawn", highlights: [_H('c4')] },
+    { atMove: 9, say: "…Bb4+ checks, offering to trade off a piece with tempo.", sayShort: "…Bb4+ — check, offer trade", highlights: [_H('b4')] },
+    { atMove: 11, say: "…a5 supports the bishop, readying the trade on d2.", sayShort: "…a5 — support the bishop", highlights: [_H('a5')] },
+    { atMove: 13, say: "…Bxd2+ swaps the dark bishops, defusing White's initiative.", sayShort: "…Bxd2+ — trade, defuse", highlights: [_H('d2')] },
+    { atMove: 15, say: "…b5 holds the extra c4-pawn and gains queenside space.", sayShort: "…b5 — hold the pawn", highlights: [_H('b5')] },
+    { atMove: 17, say: "…cxb3 keeps the structure sound as pieces come off.", sayShort: "…cxb3 — keep it sound", highlights: [_H('b3')] },
+    { atMove: 19, say: "…O-O tucks the king safe.", sayShort: "…O-O — king safe", highlights: [_H('g8')] },
+    { atMove: 23, say: "…Ra7 lifts the rook to defend along the seventh; fully equal.", sayShort: "…Ra7 — regroup; equal", highlights: [_H('a7')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+
+const CATB_3: SublineNarration = {
+  intro: { say: "White lunges Ne5 to regain the c4-pawn, but it over-presses. Check …Bb4+, then grab the centre with …Qxd4! The tactics resolve with the queens active and material level; after the dust settles you stand comfortably equal with the freer pieces.", sayShort: "…Bb4+ and …Qxd4 — comfortable" },
+  beats: [
+    { atMove: 7, say: "…dxc4 grabs the pawn, the Open Catalan.", sayShort: "…dxc4 — grab the pawn", highlights: [_H('c4')] },
+    { atMove: 9, say: "…a6 prepares to hold the c4-pawn with …b5.", sayShort: "…a6 — prep …b5", highlights: [_H('a6')] },
+    { atMove: 11, say: "…Bb4+ checks, disrupting White before he regains the pawn.", sayShort: "…Bb4+ — check, disrupt", highlights: [_H('b4')] },
+    { atMove: 13, say: "…Qxd4 grabs the central pawn as White over-presses.", sayShort: "…Qxd4 — grab the centre", highlights: [_H('d4')] },
+    { atMove: 15, say: "…Qxe5 collects the knight, keeping material level.", sayShort: "…Qxe5 — collect, stay level", highlights: [_H('e5')] },
+    { atMove: 17, say: "…Nc6 develops with tempo, harrying White's pieces.", sayShort: "…Nc6 — develop with tempo", highlights: [_H('c6')] },
+    { atMove: 19, say: "…bxc6 recaptures toward the centre.", sayShort: "…bxc6 — recapture", highlights: [_H('c6')] },
+    { atMove: 23, say: "…Qf5 centralises the queen; comfortable and equal.", sayShort: "…Qf5 — centralise; equal", highlights: [_H('f5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+
+const CATB_4: SublineNarration = {
+  intro: { say: "Qa4+ regains the c4-pawn, but the check costs time and your pieces come out naturally. Block …Nbd7, expand the queenside, and develop …Bd6. Break …e5 in the centre, and your harmonious development fully equalises against the g2-bishop.", sayShort: "…Nbd7, then …e5 — equalise" },
+  beats: [
+    { atMove: 7, say: "…dxc4 grabs the pawn, the Open Catalan.", sayShort: "…dxc4 — grab the pawn", highlights: [_H('c4')] },
+    { atMove: 9, say: "…Nbd7 blocks the check and develops.", sayShort: "…Nbd7 — block, develop", highlights: [_H('d7')] },
+    { atMove: 11, say: "…Rb8 prepares …b5 and queenside expansion.", sayShort: "…Rb8 — prep …b5", highlights: [_H('b8')] },
+    { atMove: 13, say: "…a6 supports the …b5 break.", sayShort: "…a6 — support …b5", highlights: [_H('a6')] },
+    { atMove: 15, say: "…Bd6 develops the bishop toward the kingside.", sayShort: "…Bd6 — develop, eye kingside", highlights: [_H('d6')] },
+    { atMove: 17, say: "…O-O tucks the king safe.", sayShort: "…O-O — king safe", highlights: [_H('g8')] },
+    { atMove: 19, say: "…e5 breaks in the centre, freeing your game.", sayShort: "…e5 — the central break", highlights: [_H('e5')] },
+    { atMove: 23, say: "…Nc5 leaps to a fine outpost, hitting White's queen; fully equal.", sayShort: "…Nc5 — outpost; equal", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+
+const CATB_5: SublineNarration = {
+  intro: { say: "White plays a4 to stop …b5, but it loosens his queenside. Strike …c5 to hit d4, take …cxd4, and develop naturally with …Nc6 and …Bc5. Your active pieces and the concession on b4 leave you comfortably equal — White's fianchetto bishop finds no targets.", sayShort: "…c5 and …Bc5 — active, equal" },
+  beats: [
+    { atMove: 7, say: "…dxc4 grabs the pawn, the Open Catalan.", sayShort: "…dxc4 — grab the pawn", highlights: [_H('c4')] },
+    { atMove: 9, say: "…a6 keeps queenside options open.", sayShort: "…a6 — flexible queenside", highlights: [_H('a6')] },
+    { atMove: 11, say: "…c5 strikes at d4, opening the centre.", sayShort: "…c5 — hit d4", highlights: [_H('c5')] },
+    { atMove: 13, say: "…cxd4 opens the centre, springing your pieces.", sayShort: "…cxd4 — open the centre", highlights: [_H('d4')] },
+    { atMove: 15, say: "…Nc6 develops with pressure on d4.", sayShort: "…Nc6 — pressure d4", highlights: [_H('c6')] },
+    { atMove: 17, say: "…Bc5 develops actively, eyeing the centre and f2.", sayShort: "…Bc5 — active bishop", highlights: [_H('c5')] },
+    { atMove: 19, say: "…O-O tucks the king safe.", sayShort: "…O-O — king safe", highlights: [_H('g8')] },
+    { atMove: 23, say: "…Ba7 tucks the bishop safe on the a7-g1 diagonal; fully equal.", sayShort: "…Ba7 — regroup; equal", highlights: [_H('a7')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+
+const CATB_6: SublineNarration = {
+  intro: { say: "The main-line Open Catalan. Hold the pawn with …a6, develop …Nc6 and …Bd7, and reroute …Bd6 toward the kingside. White regains c4, but by then you're fully developed and break …e5 in the centre — a solid, equal game where the g2-bishop is well contained.", sayShort: "…a6, …Nc6, then …e5 — solid equality" },
+  beats: [
+    { atMove: 7, say: "…dxc4 grabs the pawn, the Open Catalan.", sayShort: "…dxc4 — grab the pawn", highlights: [_H('c4')] },
+    { atMove: 9, say: "…a6 prepares …b5 to hold the extra pawn.", sayShort: "…a6 — prep …b5", highlights: [_H('a6')] },
+    { atMove: 11, say: "…Nc6 develops with pressure on d4.", sayShort: "…Nc6 — pressure d4", highlights: [_H('c6')] },
+    { atMove: 13, say: "…Bd7 develops and connects, eyeing the queenside.", sayShort: "…Bd7 — develop, connect", highlights: [_H('d7')] },
+    { atMove: 15, say: "…Bd6 reroutes the bishop toward the kingside.", sayShort: "…Bd6 — eye the kingside", highlights: [_H('d6')] },
+    { atMove: 17, say: "…O-O tucks the king safe.", sayShort: "…O-O — king safe", highlights: [_H('g8')] },
+    { atMove: 19, say: "…Qe7 connects the rooks and readies …e5.", sayShort: "…Qe7 — prep …e5", highlights: [_H('e7')] },
+    { atMove: 23, say: "…e5 breaks in the centre, freeing your game; fully equal.", sayShort: "…e5 — the central break; equal", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+
+const CATB_7: SublineNarration = {
+  intro: { say: "White regains the pawn via Qa4+ and Nf3. Block …Nbd7, hold with …a6 and …Rb8, then expand …b5 and fianchetto …Bb7. Break …c5 in the centre and you equalise cleanly — the g2-bishop is answered by your own long-diagonal bishop.", sayShort: "…b5 and …Bb7 — clean equality" },
+  beats: [
+    { atMove: 9, say: "…Nbd7 blocks the check and develops.", sayShort: "…Nbd7 — block, develop", highlights: [_H('d7')] },
+    { atMove: 11, say: "…a6 prepares …b5 to hold and expand.", sayShort: "…a6 — prep …b5", highlights: [_H('a6')] },
+    { atMove: 13, say: "…Rb8 loads the b-file for …b5.", sayShort: "…Rb8 — prep …b5", highlights: [_H('b8')] },
+    { atMove: 15, say: "…b5 gains queenside space with tempo.", sayShort: "…b5 — queenside space", highlights: [_H('b5')] },
+    { atMove: 17, say: "…Bb7 fianchettoes, contesting the long diagonal.", sayShort: "…Bb7 — contest the diagonal", highlights: [_H('b7')] },
+    { atMove: 19, say: "…Rc8 lifts the rook to the c-file.", sayShort: "…Rc8 — the c-file", highlights: [_H('c8')] },
+    { atMove: 21, say: "…c5 breaks in the centre, freeing your game.", sayShort: "…c5 — the central break", highlights: [_H('c5')] },
+    { atMove: 23, say: "…Bxc5 recaptures, active and equal.", sayShort: "…Bxc5 — active; equal", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+
+const CATB_8: SublineNarration = {
+  intro: { say: "White recaptures with Nd2 instead of Nf3. Block …Nbd7, expand …Rb8, and break …c5 at once. Develop the bishop actively to c5 and d4, centralise the knight on e5, and press with …Qb6 — your active pieces give you a comfortable, slightly-better game.", sayShort: "…c5 and …Bd4 — active, a touch better" },
+  beats: [
+    { atMove: 9, say: "…Nbd7 blocks the check and develops.", sayShort: "…Nbd7 — block, develop", highlights: [_H('d7')] },
+    { atMove: 11, say: "…Rb8 prepares queenside expansion.", sayShort: "…Rb8 — prep …b5", highlights: [_H('b8')] },
+    { atMove: 13, say: "…c5 breaks in the centre at once.", sayShort: "…c5 — the central break", highlights: [_H('c5')] },
+    { atMove: 15, say: "…Bxc5 recaptures, the bishop actively placed.", sayShort: "…Bxc5 — active bishop", highlights: [_H('c5')] },
+    { atMove: 17, say: "…Qb6 swings the queen out, pressing b2 and f2.", sayShort: "…Qb6 — press b2/f2", highlights: [_H('b6')] },
+    { atMove: 19, say: "…Ne5 centralises the knight on a dominant square.", sayShort: "…Ne5 — centralise", highlights: [_H('e5')] },
+    { atMove: 21, say: "…Bd4 plants the bishop in the centre, cramping White.", sayShort: "…Bd4 — dominate the centre", highlights: [_H('d4')] },
+    { atMove: 23, say: "…Qa6 offers the queen trade, keeping the edge.", sayShort: "…Qa6 — press; a touch better", highlights: [_H('a6')] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+
+const CATB_9: SublineNarration = {
+  intro: { say: "White develops Be3 after regaining the pawn. Develop harmoniously with …Bd6 and castle, then complete the double fianchetto with …b6 and …Bb7. Your pieces sit actively and contest the long diagonal — a solid, equal middlegame with no weaknesses.", sayShort: "…Bd6 and …Bb7 — solid equality" },
+  beats: [
+    { atMove: 9, say: "…Nbd7 blocks the check and develops.", sayShort: "…Nbd7 — block, develop", highlights: [_H('d7')] },
+    { atMove: 11, say: "…a6 keeps the queenside flexible.", sayShort: "…a6 — flexible queenside", highlights: [_H('a6')] },
+    { atMove: 13, say: "…Bd6 develops the bishop toward the kingside.", sayShort: "…Bd6 — eye the kingside", highlights: [_H('d6')] },
+    { atMove: 15, say: "…O-O tucks the king safe.", sayShort: "…O-O — king safe", highlights: [_H('g8')] },
+    { atMove: 17, say: "…Rb8 prepares …b6 and …Bb7.", sayShort: "…Rb8 — prep …Bb7", highlights: [_H('b8')] },
+    { atMove: 19, say: "…b6 opens the fianchetto for the light bishop.", sayShort: "…b6 — prep …Bb7", highlights: [_H('b6')] },
+    { atMove: 21, say: "…h6 makes luft, tidying the kingside.", sayShort: "…h6 — luft", highlights: [_H('h6')] },
+    { atMove: 23, say: "…Bb7 completes the fianchetto, contesting the diagonal; fully equal.", sayShort: "…Bb7 — contest the diagonal; equal", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+
+const CATB_10: SublineNarration = {
+  intro: { say: "White lifts the queen to d3. Break …c5 at once, expand …b5, and after the central trades develop the bishop to c5 and b6. Complete the fianchetto with …Bb7 — your active pieces and queenside space fully equalise against the Catalan bishop.", sayShort: "…c5 and …Bb7 — equalise" },
+  beats: [
+    { atMove: 9, say: "…Nbd7 blocks the check and develops.", sayShort: "…Nbd7 — block, develop", highlights: [_H('d7')] },
+    { atMove: 11, say: "…a6 prepares …b5 to hold and expand.", sayShort: "…a6 — prep …b5", highlights: [_H('a6')] },
+    { atMove: 13, say: "…c5 breaks in the centre.", sayShort: "…c5 — the central break", highlights: [_H('c5')] },
+    { atMove: 15, say: "…b5 gains queenside space with tempo.", sayShort: "…b5 — queenside space", highlights: [_H('b5')] },
+    { atMove: 17, say: "…Bxc5 recaptures, the bishop actively placed.", sayShort: "…Bxc5 — active bishop", highlights: [_H('c5')] },
+    { atMove: 19, say: "…Rb8 lifts the rook to the b-file.", sayShort: "…Rb8 — the b-file", highlights: [_H('b8')] },
+    { atMove: 21, say: "…Bb6 tucks the bishop to a safe, active diagonal.", sayShort: "…Bb6 — regroup actively", highlights: [_H('b6')] },
+    { atMove: 23, say: "…Bb7 completes the fianchetto, contesting the diagonal; fully equal.", sayShort: "…Bb7 — contest the diagonal; equal", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+
+const CATB_11: SublineNarration = {
+  intro: { say: "White grabs greedily with Qc6 to win the c7-pawn, but it costs time. Expand …b5, develop …Bb7, and after the queen trade you check …Bb4+ and swing …Rc8 to round up his overextended pieces. Material stays level and your activity leaves you comfortably equal.", sayShort: "…b5, …Bb7 — round up the queen" },
+  beats: [
+    { atMove: 9, say: "…Nbd7 blocks the check and develops.", sayShort: "…Nbd7 — block, develop", highlights: [_H('d7')] },
+    { atMove: 11, say: "…a6 prepares …b5 to hold and expand.", sayShort: "…a6 — prep …b5", highlights: [_H('a6')] },
+    { atMove: 13, say: "…b5 gains queenside space, daring the greedy Qc6.", sayShort: "…b5 — queenside space", highlights: [_H('b5')] },
+    { atMove: 15, say: "…Rb8 defends and prepares …Bb7.", sayShort: "…Rb8 — defend, prep …Bb7", highlights: [_H('b8')] },
+    { atMove: 17, say: "…Bb7 develops, hitting the overextended queen.", sayShort: "…Bb7 — hit the queen", highlights: [_H('b7')] },
+    { atMove: 19, say: "…Qxc7 recaptures, keeping material level.", sayShort: "…Qxc7 — recapture, stay level", highlights: [_H('c7')] },
+    { atMove: 21, say: "…Bb4+ checks, disrupting White's coordination.", sayShort: "…Bb4+ — check, disrupt", highlights: [_H('b4')] },
+    { atMove: 23, say: "…Rc8 rounds up the c7-bishop; comfortable and equal.", sayShort: "…Rc8 — round up; equal", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+
+const CATB_12: SublineNarration = {
+  intro: { say: "White develops Nc3 and regains the pawn. Brace …c6, strike …e5 in the centre, and after the trades reroute …Nb6 and develop …Bc5. A little tactic on e6 and e3 nets you the bishop pair, and you reach a comfortable, fully-equal middlegame.", sayShort: "…c6 and …e5 — comfortable equality" },
+  beats: [
+    { atMove: 9, say: "…Nbd7 blocks the check and develops.", sayShort: "…Nbd7 — block, develop", highlights: [_H('d7')] },
+    { atMove: 11, say: "…c6 braces the centre, readying …e5.", sayShort: "…c6 — brace, prep …e5", highlights: [_H('c6')] },
+    { atMove: 13, say: "…e5 strikes in the centre, freeing your game.", sayShort: "…e5 — the central break", highlights: [_H('e5')] },
+    { atMove: 15, say: "…exd4 opens the centre with active pieces.", sayShort: "…exd4 — open the centre", highlights: [_H('d4')] },
+    { atMove: 17, say: "…Nb6 reroutes the knight, hitting White's queen.", sayShort: "…Nb6 — reroute, hit the queen", highlights: [_H('b6')] },
+    { atMove: 19, say: "…Bc5 develops actively, eyeing the centre.", sayShort: "…Bc5 — active bishop", highlights: [_H('c5')] },
+    { atMove: 21, say: "…Be6 offers the trade, winning the bishop pair.", sayShort: "…Be6 — win the bishop pair", highlights: [_H('e6')] },
+    { atMove: 23, say: "…Bxe3 collects; comfortable, fully equal with the two bishops.", sayShort: "…Bxe3 — the bishop pair; equal", highlights: [_H('e3')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
 // DEEP EACOL :: anti-colle-black::3::exd4@8
 // DEEP TQGQGA :: queens-gambit::3::Nc6@11
 // DEEP TLON :: london-system::0::b6@15
@@ -16107,22 +16302,22 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'anti-london-black::1::c3@4': C148,
   'anti-london-black::1::Nc3@4': C148,
   // ── anti-catalan-black ──
-  'anti-catalan-black::0::Nf3@4': C150,
-  'anti-catalan-black::0::Nc3@4': C151,
-  'anti-catalan-black::0::Nf3@6': C152,
-  'anti-catalan-black::0::Ne5@10': C152,
-  'anti-catalan-black::0::Qa4+@8': C153,
-  'anti-catalan-black::0::a4@10': C150,
-  'anti-catalan-black::1::Nf3@4': C150,
-  'anti-catalan-black::1::Nc3@4': C151,
-  'anti-catalan-black::1::Nf3@6': C152,
-  'anti-catalan-black::1::Nf3@8': EACAT,
-  'anti-catalan-black::1::Nf3@10': C153,
-  'anti-catalan-black::1::Nd2@10': C153,
-  'anti-catalan-black::1::Be3@12': C153,
-  'anti-catalan-black::1::Qd3@12': C153,
-  'anti-catalan-black::1::Nf3@12': C153,
-  'anti-catalan-black::1::Nc3@10': C153,
+  'anti-catalan-black::0::Nf3@4': CATB_0,
+  'anti-catalan-black::0::Nc3@4': CATB_1,
+  'anti-catalan-black::0::Nf3@6': CATB_2,
+  'anti-catalan-black::0::Ne5@10': CATB_3,
+  'anti-catalan-black::0::Qa4+@8': CATB_4,
+  'anti-catalan-black::0::a4@10': CATB_5,
+  'anti-catalan-black::1::Nf3@4': CATB_0,
+  'anti-catalan-black::1::Nc3@4': CATB_1,
+  'anti-catalan-black::1::Nf3@6': CATB_2,
+  'anti-catalan-black::1::Nf3@8': CATB_6,
+  'anti-catalan-black::1::Nf3@10': CATB_7,
+  'anti-catalan-black::1::Nd2@10': CATB_8,
+  'anti-catalan-black::1::Be3@12': CATB_9,
+  'anti-catalan-black::1::Qd3@12': CATB_10,
+  'anti-catalan-black::1::Nf3@12': CATB_11,
+  'anti-catalan-black::1::Nc3@10': CATB_12,
   // ── anti-colle-black ──
   'anti-colle-black::0::c4@4': ACR_0,
   'anti-colle-black::0::Bf4@4': ACR_1,
