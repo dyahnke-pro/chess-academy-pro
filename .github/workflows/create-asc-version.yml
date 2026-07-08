@@ -1,0 +1,36 @@
+name: Create ASC version (idempotent, no submit)
+
+# Creates the App Store version (versionString) if it does not exist yet —
+# Apple does not auto-create it on build upload, so finalize/attach/readiness/
+# submit all throw "No version X" until this runs. Idempotent; reversible;
+# does NOT submit. Optionally sets the en-US "What's New" release notes.
+on:
+  workflow_dispatch:
+    inputs:
+      whats_new:
+        description: "What's New release notes (blank = leave as-is)"
+        required: false
+        default: ''
+      release_type:
+        description: 'MANUAL | AFTER_APPROVAL | SCHEDULED'
+        required: false
+        default: 'AFTER_APPROVAL'
+
+jobs:
+  create-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Create version
+        env:
+          ASC_KEY_P8: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          APP_BUNDLE_ID: com.chessacademy.pro
+          APP_VERSION: '3.0'
+          WHATS_NEW: ${{ github.event.inputs.whats_new }}
+          RELEASE_TYPE: ${{ github.event.inputs.release_type }}
+        run: node scripts/ci/create-asc-version.mjs

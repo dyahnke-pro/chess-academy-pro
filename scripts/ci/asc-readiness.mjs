@@ -36,8 +36,19 @@ const mark = (ok, label, note) => console.log(`${ok ? '✅' : '❌'} ${label}${n
 async function main() {
   const app = (await api(`/v1/apps?filter[bundleId]=${encodeURIComponent(BUNDLE_ID)}&limit=1`)).data[0];
   const appFull = await api(`/v1/apps/${app.id}`);
-  const version = (await api(`/v1/apps/${app.id}/appStoreVersions?filter[platform]=IOS&limit=20`)).data
-    .find((v) => v.attributes?.versionString === VERSION);
+  const allVersions = (await api(`/v1/apps/${app.id}/appStoreVersions?filter[platform]=IOS&limit=20`)).data;
+  const version = allVersions.find((v) => v.attributes?.versionString === VERSION);
+  if (!version) {
+    // Diagnose instead of crashing on undefined.attributes — a readiness probe
+    // must report the state, and "the version doesn't exist yet" IS the state.
+    // Apple does NOT auto-create the appStoreVersion on build upload; run
+    // create-asc-version.yml (create-asc-version.mjs) first.
+    console.log(`\n=== ${BUNDLE_ID} v${VERSION} ===\n`);
+    mark(false, `appStoreVersion ${VERSION}`, 'DOES NOT EXIST — run create-asc-version.yml to create it first');
+    const existing = allVersions.map((v) => `${v.attributes?.versionString} (${v.attributes?.appStoreState})`).join(', ');
+    console.log(`existing iOS versions: ${existing || 'none'}`);
+    process.exit(1);
+  }
   console.log(`\n=== ${BUNDLE_ID} v${VERSION} — state ${version.attributes?.appStoreState} ===\n`);
 
   mark(!!version.attributes?.copyright, 'Copyright', version.attributes?.copyright || 'MISSING');
