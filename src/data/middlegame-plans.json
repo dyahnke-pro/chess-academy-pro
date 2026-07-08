@@ -75933,5 +75933,146 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-antialekhinemodern-queenside",
+    "openingId": "anti-alekhine-modern",
+    "criticalPositionFen": "rn1q1rk1/pp2bppp/1n2p3/3p3b/2PP4/2N2N1P/PP2BPP1/R1BQR1K1 w - - 0 12",
+    "title": "Queenside space and the bishop pair",
+    "overview": "Against the Alekhine you have the classical centre and, after the light bishops come off, the two bishops. The plan is to convert that into a lasting bind: clamp the queenside with c5 and b4, drive Black's pieces to passive squares, and use the extra space and the bishop pair to squeeze. No risk, all pressure.",
+    "pawnBreaks": [
+      "c5 and b4 to grab queenside space and clamp Black's position"
+    ],
+    "pieceManeuvers": [
+      "Rb1 supporting the queenside pawn advance"
+    ],
+    "strategicThemes": [
+      "the bishop pair",
+      "the c5-b4 queenside space clamp",
+      "the d4 central pawn"
+    ],
+    "endgameTransitions": [
+      "convert the two bishops and extra space into a winning endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "rn1q1rk1/pp2bppp/1n2p3/3p3b/2PP4/2N2N1P/PP2BPP1/R1BQR1K1 w - - 0 12",
+        "title": "c5, b4 and the queenside clamp",
+        "intro": "White grabs queenside space, keeps the two bishops, and squeezes.",
+        "moves": [
+          "c5",
+          "Bxf3",
+          "Bxf3",
+          "Nc8",
+          "b4",
+          "a6",
+          "Rb1",
+          "Nc6",
+          "Be3"
+        ],
+        "annotations": [
+          "c5 grabs queenside space and drives the b6-knight to the rim — the first step of a space-gaining clamp.",
+          "Black trades the light bishops with Bxf3, hoping to ease his cramped position.",
+          "You recapture with the bishop and keep BOTH bishops — Black has parted with his light-squared one for nothing.",
+          "The knight retreats to c8, passive and out of play; your pieces have all the freedom.",
+          "b4 rolls the queenside pawns forward, a broad front clamping down and supporting the c5-pawn.",
+          "Black plays a6 to prepare freeing breaks, but your space advantage keeps him cramped.",
+          "Rb1 backs the queenside pawns, ready to expand further with a4-a5 or b5 when the moment comes.",
+          "Black finally develops the knight to c6, but he is a step behind on every front.",
+          "Be3 completes development. You have the two bishops, the c5-d4 space clamp and all the play — a riskless, lasting squeeze. This is how you punish the Alekhine."
+        ],
+        "learnCues": [
+          "c5 — grab queenside space.",
+          "Black trades light bishops.",
+          "Bxf3 — keep the bishop pair.",
+          "Black's knight goes passive.",
+          "b4 — clamp the queenside.",
+          "Black prepares …a6.",
+          "Rb1 — back the pawns.",
+          "Black develops …Nc6.",
+          "Be3 — two bishops, big clamp."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "b6",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "b1",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-center",
+          "concept:pos-initiative",
+          "https://en.wikipedia.org/wiki/Alekhine%27s_Defence"
+        ]
+      }
+    ]
   }
 ]
