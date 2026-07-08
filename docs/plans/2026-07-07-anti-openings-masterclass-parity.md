@@ -657,3 +657,34 @@ defend the pull / Black holds", never oversold; e.g. london …c4-clamp +0.5W,
 englund #15 draw, benoni #19 −1.4). ~35 board-accuracy bugs fixed en route
 (blocked slider arrows, wrong-plan intros, mislabeled lines). 46 dead
 intro-only constants removed after rewiring.
+
+## ✅ MIDDLEGAME-PLAN LAYER COMPLETE — all 24 (2026-07-08)
+Every anti-opening now carries a `middlegame-plans.json` entry (was 5/24).
+Method: `criticalPositionFen` = the variation's spine TERMINUS (Gate C
+continuity), then the plan's `playableLines[0]` is an 8-ply engine-best-play
+line from that terminus (`_engwalk` / `_batch_lines.mjs` → Stockfish
+`/usr/games/stockfish`). Masters/amateur explorer is EMPTY at these offbeat
+termini (verified 200-but-no-games), so engine best-play is the grounded sound
+source — moves engine-real (like gems), ideas theory/YouTube-grounded. Every
+line re-verified sound from the STUDENT POV at the terminus: worst is
+smith-morra −0.21, all others ≥ −0.17 (well above the −1.0 floor); the two
+gambit-refutation lines are big pluses (englund Nxc7+ fork **+1.94**,
+kings-gambit pawn-harvest **+0.83**, scandinavian **+0.78**). Honest framing on
+the equal/compensation lines (grunfeld exchange-sac = "full compensation,
+level"; london/catalan/alapin/colle = "comfortable equality"; smith-morra =
+"pawn balances White's activity"). Each plan declares a real STUDENT-move
+landing square as its pawnBreak/pieceManeuver theme (middlegamePlanThemes gate
+green); two registers (annotation + ≤8-word learnCue) + lead-the-eye highlights
+per move (student square yellow, opponent blue, key targets extra); sources =
+concept-corpus ids + wikipedia. Gates green: middlegamePlanThemes,
+MiddlegamePlansSection, middlegamePlanFenCoherence, middlegamePlanner,
+middlegamePlanService, MiddlegamePlanStudy (89 tests). Commits 52512c5 (grand-
+prix template) + 2620245 (18 remaining).
+
+Remaining parity layers (per doctrine, honesty-gated): pitfalls (common-
+mistakes) + weapons/gems — a mechanical eval-drop scan surfaces mostly
+hanging-piece noise, NOT instructive "looks-good-but-refuted" pitfalls, so these
+are hand-triaged to keep ONLY genuine tempting errors with clean refutations
+(empty > generic > invented); the positional anti-openings legitimately have few
+or none. Extra model games (multiple student-side wins/variation) + Naroditsky-
+voice re-narration polish remain.
