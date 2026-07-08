@@ -228,7 +228,25 @@ gain (englund …Qxb2 queen-trap; scandinavian …Qh5?? hxg4 piece-win). Expect 
 real weapons total across all 24, concentrated in the tactical/gambit openings;
 the positional ones (nimzo/qid/qgd/grunfeld/catalan/colle/london) legitimately
 get ZERO. The weapon layer is therefore much smaller than the variation layer by
-nature — that's correct, not incomplete. Added since the 26-tab note:
+nature — that's correct, not incomplete.
+
+✅ MODEL-GAMES LAYER COMPLETE (2026-07-08) — all 24 anti-openings now carry a
+real, on-repertoire, student-side-WIN model game with a hand-authored overview,
+pulled from the masters explorer + game-export proxy (both reachable) and
+gate-verified (modelGames-orientation + modelGames legality, 643 tests green).
+Many follow the exact lesson lines (Karjakin's Austrian, Mamedyarov's Benoni
+…b5/Nxb5, Carlsen bt So in the Colle dxc5, Mamedyarov's Trompowsky …Ne4, the
+Staunton …Nc6, the Englund …d6). Headline games: Firouzja MATES Carlsen in the
+Scandinavian; Kasparov bt Kramnik (Nimzo) & Anand (Grand Prix); Caruana bt
+Carlsen (Rossolimo) & Nepo (French) & Aronian (150); Carlsen bt Kramnik (QGD)
+& Grischuk (Grünfeld, Sämisch). Procedure for future pros/openings: query
+`?source=masters&play=<uci>` topGames, filter winner===studentColor, fetch full
+PGN via `/api/lichess-game-export?id=<id>&format=pgn`, strip headers+comments to
+bare SAN (try/catch each token — chess.js THROWS on illegal, doesn't return
+null), verify studentSide-win + on-repertoire opening, hand-author a real
+overview (boilerplate is filtered by isNarratedModelGame). REMAINING PARITY
+LAYERS: middlegame plans (finicky — board-accurate playable lines + themes gate),
+student-side pitfalls, and the Naroditsky-voice re-narration. Added since the 26-tab note:
 dutch-staunton(Nc6 gambit), smith-morra(Qe2), london(+Nf3), pirc(Dragon),
 kid-saemisch(Nc6/a6), benoni(Modern/Czech), colle(c3/dxc5), englund(d6/
 Zilbermints), alapin(a3), grand-prix(Bb5, extended past the queen-trade to a
