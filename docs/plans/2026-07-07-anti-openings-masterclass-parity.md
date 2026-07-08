@@ -739,3 +739,26 @@ elite student-side wins), overview + 4 keyIdeas. Weapons: 2 genuine (englund,
 scandinavian); rest honestly none. Pitfalls: thin-by-nature (see above).
 Naroditsky house-voice polish + anti-trompowsky-black variation tab remain as
 future polish. Core masterclass parity = DONE.
+
+## ✅ NARODITSKY-VOICE RE-NARRATION (2026-07-08)
+Per the July-2 house-voice lock ("entire repertoire in Naroditsky's teaching
+style"). All **24 main Watch lessons** re-narrated in his register — concept-
+first setups ("Here's the whole story…in a single move"), the tempo/idea framed
+before the move, warm-but-rigorous sparks, de-robotified — grounded in his
+actual transcripts where held (scandi/grandprix/alekhine/french/alapin/
+smithmorra/kingsgambit, yt-dlp reference-only, never quoted). EVERY board claim
+preserved verbatim in meaning; `antiOpeningNarrationAccuracy` (legality + square-
+piece claims) + all 17 lesson gates (47,851 tests) + typecheck green after each
+of 6 batches. Commits 28b9200→f39fac1.
+
+**Subline voice check (David 2026-07-08 "run this check over the sublines too"):**
+scanned ALL **23,480** subline say/sayShort units for the banned register
+patterns (move-number prefixes, interface refs, acknowledgments, first-person/
+meta, filler). Result: already clean — exactly ONE real violation (a "4.Qc2"
+move-number prefix), stripped; the 120 "press the"/"swipe" flags were chess
+idiom, not UI. The sublines were already authored in the concrete board-focused
+voice. Commit f458fef.
+
+Remaining voice polish: the ~38 variation lessons + plan/gem narration share the
+same already-solid register; a spot voice-check over them is the natural next
+pass (main lessons — the STAR surface — are done).
