@@ -12,7 +12,7 @@ const ASC = 'https://api.appstoreconnect.apple.com';
 const KEY_ID = req('ASC_KEY_ID');
 const ISSUER_ID = req('ASC_ISSUER_ID');
 const BUNDLE_ID = process.env.APP_BUNDLE_ID || 'com.chessacademy.pro';
-const VERSION = process.env.APP_VERSION || '2.8';
+const VERSION = process.env.APP_VERSION || '3.0';
 
 // Per-product display name (≤30) + description shown on the manage-subscription
 // screen. Keyed by productId suffix.

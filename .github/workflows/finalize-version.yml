@@ -28,7 +28,7 @@ jobs:
           ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
           ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
           APP_BUNDLE_ID: com.chessacademy.pro
-          APP_VERSION: '2.8'
+          APP_VERSION: '3.0'
           SET_BUILD: ${{ github.event.inputs.set_build }}
           SET_AGE_RATING: ${{ github.event.inputs.set_age_rating }}
         run: node scripts/ci/finalize-asc-version.mjs

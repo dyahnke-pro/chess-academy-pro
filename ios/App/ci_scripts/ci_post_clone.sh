@@ -75,7 +75,12 @@ cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
 # passes 72 (next build = 73 > 72). Do NOT try to override the build number here
 # (epoch/agvtool tricks just fought the auto-increment and lost) — let Xcode Cloud
 # own it.
-IOS_MARKETING_VERSION="2.8"
+# BUMP 2.8 → 3.0 (David 2026-07-08): 2.8 is RELEASED on the App Store, so Apple
+# rejects any new build uploaded under that version ("must be a higher version").
+# 3.0 is the next public release (all the anti-openings masterclass parity,
+# academy→library, and the iOS voice-drop root-cause fixes). New TestFlight builds
+# and the eventual App Store submission both ride 3.0.
+IOS_MARKETING_VERSION="3.0"
 sed -i '' -e "s/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = ${IOS_MARKETING_VERSION};/g" \
   ios/App/App.xcodeproj/project.pbxproj
 echo "ci_post_clone: MARKETING_VERSION set to ${IOS_MARKETING_VERSION} (build ${CI_BUILD_NUMBER:-?})"

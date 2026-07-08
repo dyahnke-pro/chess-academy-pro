@@ -8,7 +8,7 @@
 import crypto from 'node:crypto';
 
 const APP = process.env.APP_ID || '6776418777';
-const VERSION = process.env.APP_VERSION || '2.8';
+const VERSION = process.env.APP_VERSION || '3.0';
 const need = (n) => { const v = process.env[n]; if (!v) { console.error(`::error::missing env ${n}`); process.exit(1); } return v; };
 const KEY_ID = need('APP_STORE_CONNECT_API_KEY_ID');
 const ISSUER_ID = need('APP_STORE_CONNECT_API_ISSUER_ID');
