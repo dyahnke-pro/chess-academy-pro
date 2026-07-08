@@ -2085,163 +2085,241 @@ const N130: SublineNarration = {
 };
 
 const N131: SublineNarration = {
-  intro: { say: "Bc4 — White eyes f7 in this King's Gambit, but you're set for the Hanstein: you've already propped your f4-pawn with …g5, so fianchetto …Bg7 to bear down on his centre and king. After he castles into the half-open f-file, develop calmly with …d6 and …Nc6, keeping your extra pawn and the powerful g7-bishop. With sound development and material in hand, you neutralise the attack and convert the gambit pawn.", sayShort: "Hanstein — …Bg7 holds the booty" },
+  intro: { say: "Bc4 g4 — White's knight is chased back to g1, so seize the initiative. Check …Qh4+ to strip his castling, develop the knights, and plant …Bh6 to guard the extra f4-pawn. Ram …f3 to jam his kingside; with material in hand and his king stranded, you're clearly on top.", sayShort: "…Qh4+ and …Bh6 — hold f4, press" },
   beats: [
-    { atMove: 9, say: "…Qh4+ checks and disrupts White's king, exploiting the open kingside after the gambit.", sayShort: "…Qh4+ — check the open king.", highlights: [H('h4')] },
-    { atMove: 11, say: "…Nc6 develops with pressure, your extra pawn backed by active pieces.", sayShort: "…Nc6 — develop with pressure.", highlights: [H('c6')] },
-    { atMove: 15, say: "…Bh6 develops the bishop to defend and hold the f4-pawn.", sayShort: "…Bh6 — defend the pawn.", highlights: [H('h6')] },
+    { atMove: 9, say: "…Qh4+ checks and strips White's castling rights, exploiting the open kingside.", sayShort: "…Qh4+ — strip the castling", highlights: [H('h4')] },
+    { atMove: 11, say: "…Nc6 develops with pressure, your extra pawn backed by active pieces.", sayShort: "…Nc6 — develop with pressure", highlights: [H('c6')] },
+    { atMove: 13, say: "…Nge7 develops the knight, eyeing f5 and g6 to bolster the kingside grip.", sayShort: "…Nge7 — develop, eye f5", highlights: [H('e7')] },
+    { atMove: 15, say: "…Bh6 plants the bishop to guard the extra f4-pawn.", sayShort: "…Bh6 — guard the f4-pawn", highlights: [H('h6'), H('f4', SOFT)] },
+    { atMove: 17, say: "…f3 rams the pawn deep, jamming White's kingside and pieces.", sayShort: "…f3 — jam the kingside", highlights: [H('f3')] },
+    { atMove: 19, say: "…fxg2+ prises open the king, winning material with check.", sayShort: "…fxg2+ — prise open the king", highlights: [H('g2')] },
+    { atMove: 23, say: "…Bxf4 collects the pawn; you're up material with the safer king.", sayShort: "…Bxf4 — collect; on top", highlights: [H('f4')] },
   ],
-  sources: ['concept:pawn-fianchetto', 'concept:pos-development', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
+  sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
 };
 
 const N132: SublineNarration = {
-  intro: { say: "Bxd5 — White grabs the d5-pawn in this Kieseritzky line, but stay unbothered and push …f3, sending the passed pawn deep into his kingside. The f3-pawn cramps him, and the open lines from your …d5 break hand you active piece play against his uncastled king. You've given a pawn back but gained a dangerous initiative.", sayShort: "…f3 storms the exposed kingside" },
+  intro: { say: "h4 Ne5 Bc4 — the sharp Kieseritzky, but …d5! is the great equaliser-plus. Return a pawn to blast the centre open, recapture …Nxd5, and jam his king with …f6 and …f3. Your development and the cramping f3-pawn hand you a clear initiative against his exposed king.", sayShort: "…d5! then …f3 — clear initiative" },
   beats: [
-    { atMove: 13, say: "…Nxd5 recaptures, your knight central and your extra structure holding the gambit pawn.", sayShort: "…Nxd5 — recapture central.", highlights: [H('d5')] },
-    { atMove: 17, say: "…Bd6 develops the dark bishop, eyeing the f4-pawn you're trying to win or hold.", sayShort: "…Bd6 — eye f4.", highlights: [H('f4')] },
-    { atMove: 19, say: "…O-O tucks the king safe, your solid setup ready to consolidate the edge.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
+    { atMove: 9, say: "…Nf6 develops and hits the e4-pawn, challenging his centre.", sayShort: "…Nf6 — develop, hit e4", highlights: [H('f6'), H('e4', SOFT)] },
+    { atMove: 11, say: "…d5! — the freeing break; return a pawn to blow the centre open.", sayShort: "…d5 — the freeing break", highlights: [H('d5')] },
+    { atMove: 13, say: "…Nxd5 recaptures, the knight central and active.", sayShort: "…Nxd5 — recapture, central", highlights: [H('d5')] },
+    { atMove: 15, say: "…f6 kicks the e5-knight back, seizing the initiative.", sayShort: "…f6 — kick the knight", highlights: [H('f6')] },
+    { atMove: 17, say: "…Bd6 develops the bishop, eyeing the kingside dark squares.", sayShort: "…Bd6 — eye the kingside", highlights: [H('d6')] },
+    { atMove: 19, say: "…O-O tucks the king safe, ready to press.", sayShort: "…O-O — king safe", highlights: [H('g8')] },
+    { atMove: 21, say: "…f3 rams the pawn deep, jamming White's kingside.", sayShort: "…f3 — jam the kingside", highlights: [H('f3')] },
+    { atMove: 23, say: "…Rf7 lifts the rook to the f-file; you're clearly better, attacking.", sayShort: "…Rf7 — the f-file; better", highlights: [H('f7')] },
   ],
-  sources: ['concept:pawn-passed', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
+  sources: ['concept:pos-initiative', 'concept:pos-center', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
 };
 
 const N133: SublineNarration = {
-  intro: { say: "Nc3 — White develops and tries to undermine your g5-pawn rather than the sharp h4-thrust. Support the chain, and meet g3 with …g4 to lock the kingside and kick the f3-knight off the defence of f4. You keep the extra f4-pawn and a cramping structure while he lacks the central presence to justify the gambit.", sayShort: "Hold f4, lock with …g4" },
+  intro: { say: "Nc3 — White develops and tries to undermine …g5 rather than the sharp h4. Support the chain with …d6, lock the kingside with …g4 to kick the f3-knight off f4's defence, and ram …f3. You keep the extra f4-pawn and a cramping grip while he lacks the centre to justify the gambit — clearly better.", sayShort: "Hold f4, lock with …g4 and …f3" },
   beats: [
-    { atMove: 7, say: "…d6 braces the centre, supporting your extra f4-pawn and the kingside grip.", sayShort: "…d6 — brace, hold the pawn.", highlights: [H('d6')] },
-    { atMove: 11, say: "…Be7 develops and prepares to hold the gambit pawn with …Bf5 support.", sayShort: "…Be7 — develop, hold.", highlights: [H('e7')] },
-    { atMove: 21, say: "…Nc6 develops with pressure, completing your solid extra-pawn setup.", sayShort: "…Nc6 — develop with pressure.", highlights: [H('c6')] },
+    { atMove: 7, say: "…d6 braces the centre, supporting your extra f4-pawn.", sayShort: "…d6 — brace, hold the pawn", highlights: [H('d6')] },
+    { atMove: 9, say: "…g4 kicks the f3-knight off f4's defence, locking the kingside.", sayShort: "…g4 — kick the knight", highlights: [H('g4')] },
+    { atMove: 11, say: "…Be7 develops, eyeing h4 to harry the knight.", sayShort: "…Be7 — develop, harry Nh4", highlights: [H('e7')] },
+    { atMove: 13, say: "…Bxf5 trades off the intruding knight cleanly.", sayShort: "…Bxf5 — trade the knight", highlights: [H('f5')] },
+    { atMove: 15, say: "…h5 shores up the g4-pawn, keeping the kingside locked.", sayShort: "…h5 — hold the chain", highlights: [H('h5')] },
+    { atMove: 17, say: "…f3 rams the pawn deep, jamming White's kingside for good.", sayShort: "…f3 — jam the kingside", highlights: [H('f3')] },
+    { atMove: 19, say: "…Bf6 develops the bishop, pressing the centre and long diagonal.", sayShort: "…Bf6 — press the centre", highlights: [H('f6')] },
+    { atMove: 23, say: "…Nce7 reroutes to challenge the d5-knight; you're clearly better, a pawn up.", sayShort: "…Nce7 — challenge d5; better", highlights: [H('e7')] },
   ],
   sources: ['concept:pawn-chain', 'concept:pos-space', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
 };
 
 const N134: SublineNarration = {
-  intro: { say: "Ng5 — the Allgaier-style knight sac on g5 to chase your king, but keep cool with …d5 to open the centre for defence. After d4, play …h6 to question the knight, then …f3 to jam his kingside and blunt the attack. With an extra piece once the knight is dealt with, you weather the storm a clear pawn up.", sayShort: "…d5 and …h6 refute the Ng5 sac" },
+  intro: { say: "Ng5 — the Allgaier-style knight sac to chase your king, but keep cool. Strike …d5 to open lines for the defence, question the knight with …h6, and ram …f3 to jam his kingside. Once the knight is dealt with you're up a piece and weather the storm a clear pawn — and more — to the good.", sayShort: "…d5 and …h6 refute the Ng5 sac" },
   beats: [
-    { atMove: 9, say: "…d5 strikes the centre, the freeing counter that opens lines for your pieces.", sayShort: "…d5 — strike the centre.", arrows: [A('d5', 'e4')], highlights: [H('e4')] },
-    { atMove: 11, say: "…h6 questions White's knight, gaining tempo as you consolidate.", sayShort: "…h6 — question the knight.", highlights: [H('h6')] },
-    { atMove: 21, say: "…Nc6 develops with pressure, completing your solid setup.", sayShort: "…Nc6 — develop with pressure.", highlights: [H('c6')] },
+    { atMove: 9, say: "…d5 — the freeing counter that opens lines for your pieces.", sayShort: "…d5 — strike the centre", highlights: [H('d5')] },
+    { atMove: 11, say: "…h6 questions White's knight, gaining tempo as you consolidate.", sayShort: "…h6 — question the knight", highlights: [H('h6')] },
+    { atMove: 13, say: "…Be7 develops and covers the checks, calming the position.", sayShort: "…Be7 — develop, cover checks", highlights: [H('e7')] },
+    { atMove: 15, say: "…f5 kicks the e4-knight, seizing space with your extra material.", sayShort: "…f5 — kick the knight", highlights: [H('f5')] },
+    { atMove: 17, say: "…f3 rams the pawn deep, jamming White's kingside.", sayShort: "…f3 — jam the kingside", highlights: [H('f3')] },
+    { atMove: 19, say: "…Qxd5 recaptures, the queen centralised and dominant.", sayShort: "…Qxd5 — centralise the queen", highlights: [H('d5')] },
+    { atMove: 21, say: "…Nc6 develops with pressure, consolidating the extra material.", sayShort: "…Nc6 — develop, consolidate", highlights: [H('c6')] },
+    { atMove: 23, say: "…Qf7 regroups the queen safely; you're clearly on top, up material.", sayShort: "…Qf7 — regroup; winning", highlights: [H('f7')] },
   ],
-  sources: ['concept:tac-sacrifice', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
+  sources: ['concept:pos-king-safety', 'concept:pos-development', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
 };
 
 const N135: SublineNarration = {
-  intro: { say: "Nxg4 — White tries to win the g4-pawn back in the Kieseritzky, so hit the centre with …Nxe4, restoring material with a strongly centralised knight. After d3 dislodges it, surge the f-pawn with …f3 to cramp his kingside and fix the weaknesses around his king. Your active pieces and that f3-pawn leave him struggling to untangle.", sayShort: "…Nxe4 centralizes, …f3 cramps White" },
+  intro: { say: "Nxg4 — White grabs the g4-pawn, so hit the centre with …Nxe4, restoring material with a strong knight. Fork with …Ng3 and pick up the exchange, then round up the loose pieces. The tactics settle into a comfortable, roughly level game where your activity fully compensates.", sayShort: "…Nxe4 and …Ng3 — comfortable" },
   beats: [
-    { atMove: 11, say: "…Nxe4 snaps the central pawn, your pieces active in the opened position.", sayShort: "…Nxe4 — snap the pawn.", highlights: [H('e4')] },
-    { atMove: 15, say: "…Qe7+ checks and develops with tempo, dragging White's king awkward.", sayShort: "…Qe7+ — develop with check.", highlights: [H('e7')] },
-    { atMove: 19, say: "…Rxg4 regains material on the open g-file, your initiative telling.", sayShort: "…Rxg4 — regain material.", highlights: [H('g4')] },
+    { atMove: 9, say: "…Nf6 develops and eyes the loose e4-pawn.", sayShort: "…Nf6 — develop, eye e4", highlights: [H('f6'), H('e4', SOFT)] },
+    { atMove: 11, say: "…Nxe4 snaps the central pawn, restoring material with an active knight.", sayShort: "…Nxe4 — restore material", highlights: [H('e4')] },
+    { atMove: 13, say: "…Ng3 forks the rook, winning the exchange.", sayShort: "…Ng3 — fork the rook", highlights: [H('g3')] },
+    { atMove: 15, say: "…Qe7+ checks and develops with tempo, dragging his king awkward.", sayShort: "…Qe7+ — develop with check", highlights: [H('e7')] },
+    { atMove: 17, say: "…Rg8 activates the rook on the open g-file.", sayShort: "…Rg8 — the open g-file", highlights: [H('g8')] },
+    { atMove: 19, say: "…Rxg4 regains material on the g-file, your initiative telling.", sayShort: "…Rxg4 — regain material", highlights: [H('g4')] },
+    { atMove: 21, say: "…Rxg2 snatches another pawn, keeping the pressure.", sayShort: "…Rxg2 — grab another pawn", highlights: [H('g2')] },
+    { atMove: 23, say: "…d5 seizes the centre; comfortable and balanced with active pieces.", sayShort: "…d5 — seize the centre; level", highlights: [H('d5')] },
   ],
-  sources: ['concept:pos-centralization', 'concept:pawn-passed', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
+  sources: ['concept:pos-development', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
 };
 
 const N136: SublineNarration = {
-  intro: { say: "d4 — this is the Kieseritzky: hold the f4-pawn with your …g5 and …g4 chain and kick the f3-knight to e5. After d4 and the retreat Nd3, snap the central e4-pawn with …Nxe4, winning a second pawn with the kingside chain intact. Pawns on f4 and g4 cramp him; defend the booty and trade into a winning endgame.", sayShort: "Kieseritzky — grab e4 with …Nxe4" },
+  intro: { say: "d4 — the Kieseritzky proper. Hold the f4-pawn with your …g5-g4 chain that kicked the knight to e5, brace with …d6, and after Nd3 snap the loose e4-pawn with …Nxe4 — a second pawn, chain intact. Fianchetto …Bg7, castle, and grind the extra material toward a won ending.", sayShort: "…Nxe4 grabs a second pawn — better" },
   beats: [
-    { atMove: 11, say: "…d6 braces the centre, blunting White's initiative and holding your edge.", sayShort: "…d6 — brace the centre.", highlights: [H('d6')] },
-    { atMove: 13, say: "…Nxe4 snaps the central pawn, exploiting White's loosened setup.", sayShort: "…Nxe4 — snap the pawn.", highlights: [H('e4')] },
-    { atMove: 15, say: "…Bg7 fianchettoes onto the long diagonal, your bishop raking the centre.", sayShort: "…Bg7 — the long diagonal.", arrows: [A('g7', 'b2')], highlights: [H('b2')] },
+    { atMove: 9, say: "…Nf6 develops and eyes the e4-pawn.", sayShort: "…Nf6 — develop, eye e4", highlights: [H('f6'), H('e4', SOFT)] },
+    { atMove: 11, say: "…d6 kicks the e5-knight back, keeping the chain intact.", sayShort: "…d6 — kick the knight", highlights: [H('d6')] },
+    { atMove: 13, say: "…Nxe4 snaps the loose central pawn — a second pawn to the good.", sayShort: "…Nxe4 — grab the pawn", highlights: [H('e4')] },
+    { atMove: 15, say: "…Bg7 fianchettoes onto the long diagonal.", sayShort: "…Bg7 — the long diagonal", highlights: [H('g7')] },
+    { atMove: 17, say: "…Nxc3 trades and doubles White's pawns, easing your game.", sayShort: "…Nxc3 — trade, double his pawns", highlights: [H('c3')] },
+    { atMove: 19, say: "…O-O tucks the king safe, up material.", sayShort: "…O-O — king safe; up material", highlights: [H('g8')] },
+    { atMove: 21, say: "…Qe8+ checks, gaining time to consolidate.", sayShort: "…Qe8+ — check, gain time", highlights: [H('e8')] },
+    { atMove: 23, say: "…Nd7 develops the last piece; you're clearly better, two pawns up.", sayShort: "…Nd7 — develop; winning", highlights: [H('d7')] },
   ],
-  sources: ['concept:pawn-passed', 'concept:pos-center', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
 };
 
 const N137: SublineNarration = {
-  intro: { say: "d4 — White offers the knight, so take it with …gxf3, accepting a second pawn since the attack can be parried. After Bxf4 and Qxf3, strike the centre with …d6 and …d5, returning a pawn to blunt the queen and open lines for development. You emerge with a sound structure and the initiative once the counterthrust neutralises his pieces.", sayShort: "Take on f3, then …d5 counters" },
+  intro: { say: "d4 — White offers the knight, so take it: …g4 and …gxf3 net a second pawn since the attack can be parried. Trade queens off the …Qh4+ check, strike back with …d5 to blunt his pieces, and develop. You emerge with a sound structure and the initiative, a clear pawn up.", sayShort: "…gxf3, then …d5 — a clear pawn up" },
   beats: [
-    { atMove: 9, say: "…Qh4+ checks and disrupts White's king after the gambit's open lines.", sayShort: "…Qh4+ — check the open king.", highlights: [H('h4')] },
-    { atMove: 15, say: "…Nc6 develops with pressure, your active pieces and extra pawn telling.", sayShort: "…Nc6 — develop with pressure.", highlights: [H('c6')] },
-    { atMove: 21, say: "…Bd6 develops the dark bishop, consolidating your material edge.", sayShort: "…Bd6 — develop, consolidate.", highlights: [H('d6')] },
+    { atMove: 7, say: "…g4 kicks the f3-knight, winning the piece or a second pawn.", sayShort: "…g4 — kick the knight", highlights: [H('g4')] },
+    { atMove: 9, say: "…Qh4+ checks, forcing the weakening g3 and trades to come.", sayShort: "…Qh4+ — check, force g3", highlights: [H('h4')] },
+    { atMove: 11, say: "…fxg3 opens lines toward White's king, grabbing material.", sayShort: "…fxg3 — open lines, grab material", highlights: [H('g3')] },
+    { atMove: 13, say: "…Qxg4 trades queens, safely banking the extra pawn.", sayShort: "…Qxg4 — trade into a pawn-up game", highlights: [H('g4')] },
+    { atMove: 15, say: "…Nc6 develops with pressure on the centre.", sayShort: "…Nc6 — develop, press", highlights: [H('c6')] },
+    { atMove: 17, say: "…d5 strikes the centre, returning a pawn to blunt his pieces.", sayShort: "…d5 — strike, blunt White", highlights: [H('d5')] },
+    { atMove: 21, say: "…Bd6 develops the dark bishop, consolidating.", sayShort: "…Bd6 — develop, consolidate", highlights: [H('d6')] },
+    { atMove: 23, say: "…Nf6 completes development; sound and a clear pawn up.", sayShort: "…Nf6 — finish; a pawn up", highlights: [H('f6')] },
   ],
   sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
 };
 
 const N138: SublineNarration = {
-  intro: { say: "Nf3 — after Bb3 retreats and your freeing …d5, this lets you push …d4, gaining space and kicking the c3-knight from the centre. Ram on with …d3 to wedge deep into his position, cramping the queenside and disrupting his development. Hold the extra f4-pawn while the queenside spearhead gives you a lasting space and structural edge.", sayShort: "…d4 and …d3 wedge cramps White" },
+  intro: { say: "The Bishop's Gambit with Bb3 — meet it in the modern way: …Nf6, …c6 and …d5 to blast the centre. Grab …Nxe4 and, when he sacs the exchange on e4, develop …Bf5 and …Nd7 to consolidate. Two clean pawns up with a rock-solid structure — you're clearly winning.", sayShort: "…d5 and …Nxe4 — clearly winning" },
   beats: [
-    { atMove: 11, say: "…Nxe4 snaps the central pawn, your pieces active in the opened centre.", sayShort: "…Nxe4 — snap the pawn.", highlights: [H('e4')] },
-    { atMove: 13, say: "…Bd6 develops the dark bishop to an active diagonal.", sayShort: "…Bd6 — active bishop.", highlights: [H('d6')] },
-    { atMove: 19, say: "…Bf5 develops the bishop actively, eyeing the light squares.", sayShort: "…Bf5 — active bishop.", highlights: [H('f5')] },
+    { atMove: 7, say: "…c6 prepares the …d5 break, bracing against Bb3.", sayShort: "…c6 — prep …d5", highlights: [H('c6')] },
+    { atMove: 9, say: "…d5 blasts the centre open, freeing your game.", sayShort: "…d5 — blast the centre", highlights: [H('d5')] },
+    { atMove: 11, say: "…Nxe4 snaps the central pawn, a clean extra pawn in hand.", sayShort: "…Nxe4 — grab the pawn", highlights: [H('e4')] },
+    { atMove: 13, say: "…Bd6 develops the bishop, eyeing the kingside.", sayShort: "…Bd6 — eye the kingside", highlights: [H('d6')] },
+    { atMove: 15, say: "…O-O tucks the king safe, consolidating.", sayShort: "…O-O — king safe", highlights: [H('g8')] },
+    { atMove: 17, say: "…dxe4 recaptures; White's exchange sac only helps you.", sayShort: "…dxe4 — recapture, up material", highlights: [H('e4')] },
+    { atMove: 19, say: "…Bf5 develops with tempo, guarding the extra e4-pawn.", sayShort: "…Bf5 — develop, guard e4", highlights: [H('f5')] },
+    { atMove: 23, say: "…Qc7 lines up on the b8-h2 diagonal; clearly winning, pawns up.", sayShort: "…Qc7 — press; winning", highlights: [H('c7')] },
   ],
-  sources: ['concept:pos-space', 'concept:pawn-passed', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
 };
 
 const N139: SublineNarration = {
-  intro: { say: "Nf3 — White covers the kingside in the Bishop's Gambit, so break at once with …d5 to free the position and challenge the centre. After exd5, prepare to recapture with …c5, mobilising your whole army with the extra f4-pawn still in hand. You open lines for the pieces and keep the structural and material edge while he lags in development.", sayShort: "…d5 and …c5 free the position" },
+  intro: { say: "Bc4 Nc3 Nf3 — a solid Bishop's Gambit setup, so meet it solidly: …c6 and …d5 free your game with the extra pawn banked. Recapture …cxd5, develop …Nc6 and …Bd6, and gain kingside space with …g5. Sound structure, a clean pawn up — you stand clearly better.", sayShort: "…c6/…d5 — a clean pawn up" },
   beats: [
-    { atMove: 9, say: "…d5 strikes the centre, the freeing counter that opens lines.", sayShort: "…d5 — strike the centre.", highlights: [H('d5')] },
-    { atMove: 13, say: "…Nc6 develops with pressure on the centre, your pieces active.", sayShort: "…Nc6 — develop with pressure.", highlights: [H('c6')] },
-    { atMove: 15, say: "…Bd6 develops the dark bishop, eyeing the f4-weakness.", sayShort: "…Bd6 — eye f4.", highlights: [H('f4')] },
+    { atMove: 7, say: "…c6 prepares the …d5 break.", sayShort: "…c6 — prep …d5", highlights: [H('c6')] },
+    { atMove: 9, say: "…d5 frees the centre, the extra pawn secure.", sayShort: "…d5 — free the centre", highlights: [H('d5')] },
+    { atMove: 11, say: "…cxd5 recaptures, a healthy central structure.", sayShort: "…cxd5 — recapture soundly", highlights: [H('d5')] },
+    { atMove: 13, say: "…Nc6 develops with pressure on d4.", sayShort: "…Nc6 — pressure d4", highlights: [H('c6')] },
+    { atMove: 15, say: "…Bd6 develops the bishop, eyeing the kingside.", sayShort: "…Bd6 — eye the kingside", highlights: [H('d6')] },
+    { atMove: 17, say: "…Ne7 reroutes the knight to bolster the kingside and f5.", sayShort: "…Ne7 — reroute, eye f5", highlights: [H('e7')] },
+    { atMove: 19, say: "…g5 gains kingside space, holding the extra f-pawn's cousin.", sayShort: "…g5 — kingside space", highlights: [H('g5')] },
+    { atMove: 23, say: "…Bb8 tucks the bishop safe, keeping the extra pawn; clearly better.", sayShort: "…Bb8 — regroup; a pawn up", highlights: [H('b8')] },
   ],
   sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
 };
 
 const N140: SublineNarration = {
-  intro: { say: "Qe2 — defends e4 but again exposes the queen on the e-file. Play your …d5, and after exd5+ slot in the zwischenzug …Ne4, blocking the check and planting a powerful knight in the centre with tempo. Then push …f3 to hit his queen and jam the kingside, keeping your initiative while he scrambles to coordinate.", sayShort: "…Ne4 blocks, …f3 hits the queen" },
+  intro: { say: "Qe2 — an awkward queen sortie. Strike …d5 and jam the centre with …d4, then …Ng4 and …Nxe5 pick off White's overextended pawns. Check …Bb4+ to drag his king out, develop with …Bg4, and your active pieces plus extra material leave you clearly on top.", sayShort: "…d5-d4, then win the pawns — better" },
   beats: [
-    { atMove: 9, say: "…d5 strikes the centre, the freeing counter that opens lines for your pieces.", sayShort: "…d5 — strike the centre.", highlights: [H('d5')] },
-    { atMove: 13, say: "…Ng4 leaps in to win back the e5-pawn, your pieces active.", sayShort: "…Ng4 — hit e5.", highlights: [H('e5')] },
-    { atMove: 17, say: "…Bb4+ develops with check, gaining tempo before you castle.", sayShort: "…Bb4+ — develop with check.", highlights: [H('b4')] },
-  ],
-  sources: ['concept:tac-zwischen', 'concept:pos-centralization', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
-};
-
-const N141: SublineNarration = {
-  intro: { say: "Qf3 — defends e4 but parks the queen on an exposed square in front of his king. Hit back at once with …d5, and after exd5 free the position with the gambit …c5, preparing to recapture d5 with full development. You keep the f4-pawn and gain time on his loose queen while the open centre exposes his king.", sayShort: "…d5 hits the loose queen" },
-  beats: [
-    { atMove: 9, say: "…d5 strikes the centre, the freeing counter that opens lines.", sayShort: "…d5 — strike the centre.", highlights: [H('d5')] },
-    { atMove: 15, say: "…O-O tucks the king safe, your solid setup ready to press.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
-    { atMove: 17, say: "…b5 expands on the queenside, gaining space in the comfortable game.", sayShort: "…b5 — queenside space.", highlights: [H('b5')] },
-  ],
-  sources: ['concept:pos-center', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
-};
-
-const N142: SublineNarration = {
-  intro: { say: "d3 — White bolsters e4 after your …d5 break, so march the f-pawn with …f3, splitting his kingside pawns. The runner reaches f2 with check, lodging right beside his king on e1 and tying down his defence. With the centre opened by …d5 and a dangerous passed pawn deep in his camp, you hold a clear structural and material edge.", sayShort: "…f3-f2+ jams the white king" },
-  beats: [
-    { atMove: 11, say: "…Bb4 pins and develops, gaining tempo against White's setup.", sayShort: "…Bb4 — pin and develop.", highlights: [H('b4')] },
-    { atMove: 13, say: "…O-O tucks the king safe, your active pieces ready to press.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
-    { atMove: 15, say: "…Bg4 develops with a pin, pressuring White's kingside.", sayShort: "…Bg4 — pin the knight.", highlights: [H('g4')] },
-  ],
-  sources: ['concept:pawn-passed', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
-};
-
-const N143: SublineNarration = {
-  intro: { say: "d3 — White develops modestly in the Bishop's Gambit, but slow play hands you the centre. …d5 is the thematic counterstrike, hitting the c4-bishop and the e4-pawn together; after exd5 the position cracks open with your development lead and the extra f4-pawn still firmly in hand.", sayShort: "d3 — …d5 strikes the centre." },
-  beats: [
-    { atMove: 7, say: "…Bb4+ develops with check, gaining tempo before you grab the centre.", sayShort: "…Bb4+ — develop with check.", highlights: [H('b4')] },
-    { atMove: 11, say: "…Nxe4 snaps the central pawn, your pieces active.", sayShort: "…Nxe4 — snap the pawn.", highlights: [H('e4')] },
-    { atMove: 15, say: "…d5 strikes the centre, freeing your game with active pieces.", sayShort: "…d5 — strike the centre.", highlights: [H('d5')] },
+    { atMove: 9, say: "…d5 strikes the centre, opening lines with the extra pawn in hand.", sayShort: "…d5 — strike the centre", highlights: [H('d5')] },
+    { atMove: 11, say: "…d4 jams the centre, cramping White's pieces.", sayShort: "…d4 — jam the centre", highlights: [H('d4')] },
+    { atMove: 13, say: "…Ng4 leaps in, attacking the overextended e5-pawn.", sayShort: "…Ng4 — attack e5", highlights: [H('g4'), H('e5', SOFT)] },
+    { atMove: 15, say: "…Nxe5 wins the pawn back, a second pawn to the good.", sayShort: "…Nxe5 — win the pawn", highlights: [H('e5')] },
+    { atMove: 17, say: "…Bb4+ checks, dragging White's king out of safety.", sayShort: "…Bb4+ — drag the king out", highlights: [H('b4')] },
+    { atMove: 19, say: "…O-O tucks your king safe, up material.", sayShort: "…O-O — king safe; up material", highlights: [H('g8')] },
+    { atMove: 21, say: "…Bg4 develops with a pin, piling on.", sayShort: "…Bg4 — pin and press", highlights: [H('g4')] },
+    { atMove: 23, say: "…Nbd7 develops the last piece; you're clearly better, pawns up.", sayShort: "…Nbd7 — develop; winning", highlights: [H('d7')] },
   ],
   sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
 };
 
-const N144: SublineNarration = {
-  intro: { say: "d4 — after your …d5 break, White grabs the centre, but ignore it and push …f3 to split his kingside pawns. The runner reaches f2 with check, sitting beside his king on e1 and disrupting his coordination. With the centre already challenged and a dangerous passed pawn deep in his position, you hold the structural and material edge.", sayShort: "…f3-f2+ splits White's kingside" },
+const N141: SublineNarration = {
+  intro: { say: "Qf3 — White eyes f7, but it costs time. Break …d5 to open the centre, develop …Bd6, and roll the queenside with …b5-b4 to kick the c3-knight. Your development and the extra pawn tell; after the pieces come off you stand clearly better with the sounder structure.", sayShort: "…d5 and …b5-b4 — clearly better" },
   beats: [
-    { atMove: 11, say: "…Bg4 develops with a pin, pressuring White's loosened kingside.", sayShort: "…Bg4 — pin the knight.", highlights: [H('g4')] },
-    { atMove: 15, say: "…Qxd4 grabs the central pawn, your queen active with the better game.", sayShort: "…Qxd4 — grab the centre.", highlights: [H('d4')] },
-    { atMove: 19, say: "…Qd6 repositions the queen safely, consolidating your edge.", sayShort: "…Qd6 — reposition, consolidate.", highlights: [H('d6')] },
+    { atMove: 9, say: "…d5 strikes the centre, opening lines against his early queen.", sayShort: "…d5 — strike the centre", highlights: [H('d5')] },
+    { atMove: 11, say: "…Bd6 develops the bishop, eyeing the kingside.", sayShort: "…Bd6 — eye the kingside", highlights: [H('d6')] },
+    { atMove: 13, say: "…Be7 covers the check and completes development.", sayShort: "…Be7 — cover the check", highlights: [H('e7')] },
+    { atMove: 15, say: "…O-O tucks the king safe.", sayShort: "…O-O — king safe", highlights: [H('g8')] },
+    { atMove: 17, say: "…b5 expands and prepares …b4 to kick the c3-knight.", sayShort: "…b5 — expand, prep …b4", highlights: [H('b5')] },
+    { atMove: 19, say: "…b4 kicks the knight, cracking White's queenside.", sayShort: "…b4 — kick, crack the queenside", highlights: [H('b4')] },
+    { atMove: 21, say: "…cxd5 recaptures, restoring a sound structure a pawn up.", sayShort: "…cxd5 — recapture; a pawn up", highlights: [H('d5')] },
+    { atMove: 23, say: "…Bxf6 recaptures; clearly better with the safer king.", sayShort: "…Bxf6 — recapture; better", highlights: [H('f6')] },
   ],
-  sources: ['concept:pawn-passed', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
+};
+
+const N142: SublineNarration = {
+  intro: { say: "Bb3 d3 — a passive Bishop's Gambit. Pin with …Bb4, break …d5, and develop the bishop actively to g4. Gain kingside space with …g5 to nail down the extra f4-pawn, then reroute …Bc5 to press f2. A clean pawn up with the initiative — you're clearly winning.", sayShort: "…Bb4, …d5, …g5 — clearly winning" },
+  beats: [
+    { atMove: 9, say: "…d5 breaks the centre open, the extra pawn secure.", sayShort: "…d5 — break the centre", highlights: [H('d5')] },
+    { atMove: 11, say: "…Bb4 pins the c3-knight, adding pressure.", sayShort: "…Bb4 — pin the knight", highlights: [H('b4')] },
+    { atMove: 13, say: "…O-O tucks the king safe.", sayShort: "…O-O — king safe", highlights: [H('g8')] },
+    { atMove: 15, say: "…Bg4 develops the bishop actively, eyeing the kingside.", sayShort: "…Bg4 — active bishop", highlights: [H('g4')] },
+    { atMove: 17, say: "…Re8 loads the e-file, pressing White's centre.", sayShort: "…Re8 — load the e-file", highlights: [H('e8')] },
+    { atMove: 19, say: "…g5 gains space and nails down the extra f4-pawn.", sayShort: "…g5 — hold the f4-pawn", highlights: [H('g5'), H('f4', SOFT)] },
+    { atMove: 21, say: "…Bh5 keeps the bishop active, eyeing e2 and f3.", sayShort: "…Bh5 — keep it active", highlights: [H('h5')] },
+    { atMove: 23, say: "…Bc5 reroutes to press f2; clearly winning, a pawn up.", sayShort: "…Bc5 — press f2; winning", highlights: [H('c5'), H('f2', SOFT)] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
+};
+
+const N143: SublineNarration = {
+  intro: { say: "d3 Bb4+ — check to disrupt, then grab …Nxe4 when White overreaches with d4. His Qh5 lunge is met by …Qe7 and …d5, returning material to blunt the queen. You keep a sound structure and the extra pawn, standing clearly better.", sayShort: "…Bb4+ and …Nxe4 — clearly better" },
+  beats: [
+    { atMove: 7, say: "…Bb4+ checks, developing with tempo and disrupting White.", sayShort: "…Bb4+ — check, disrupt", highlights: [H('b4')] },
+    { atMove: 9, say: "…Bc5 repositions, eyeing f2 and the centre.", sayShort: "…Bc5 — eye f2", highlights: [H('c5'), H('f2', SOFT)] },
+    { atMove: 11, say: "…Nxe4 snaps the central pawn as White overreaches.", sayShort: "…Nxe4 — grab the pawn", highlights: [H('e4')] },
+    { atMove: 13, say: "…Qe7 defends and eyes the e-file, meeting Qh5.", sayShort: "…Qe7 — defend, eye e-file", highlights: [H('e7')] },
+    { atMove: 15, say: "…d5 returns a pawn to blunt the queen and free your game.", sayShort: "…d5 — return, blunt the queen", highlights: [H('d5')] },
+    { atMove: 17, say: "…Bd6 develops the bishop, eyeing the kingside.", sayShort: "…Bd6 — eye the kingside", highlights: [H('d6')] },
+    { atMove: 19, say: "…Nf6 kicks the queen and develops with tempo.", sayShort: "…Nf6 — kick the queen", highlights: [H('f6')] },
+    { atMove: 23, say: "…c6 shores up the queenside; clearly better, sound and a pawn up.", sayShort: "…c6 — shore up; better", highlights: [H('c6')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
+};
+
+const N144: SublineNarration = {
+  intro: { say: "Bb3 d4 — White builds a big centre, so pin with …Bg4 and break …dxe4. Snatch …Qxd4 to grab the centre pawn, trade off the pieces cleanly, and check …Qb4+ to keep the initiative. With the extra material and the safer game, you stand clearly better.", sayShort: "…Bg4, …dxe4, …Qxd4 — a pawn up" },
+  beats: [
+    { atMove: 9, say: "…d5 breaks the centre, opening lines with the extra pawn in hand.", sayShort: "…d5 — break the centre", highlights: [H('d5')] },
+    { atMove: 11, say: "…Bg4 pins White's knight, adding pressure.", sayShort: "…Bg4 — pin the knight", highlights: [H('g4')] },
+    { atMove: 13, say: "…dxe4 opens the centre, undermining White's pawns.", sayShort: "…dxe4 — open, undermine", highlights: [H('e4')] },
+    { atMove: 15, say: "…Qxd4 grabs the central pawn, a clean extra pawn.", sayShort: "…Qxd4 — grab the pawn", highlights: [H('d4')] },
+    { atMove: 17, say: "…Bxe2 trades off, simplifying toward the extra pawn.", sayShort: "…Bxe2 — trade, simplify", highlights: [H('e2')] },
+    { atMove: 19, say: "…Qd6 regroups the queen safely, holding material.", sayShort: "…Qd6 — regroup, hold material", highlights: [H('d6')] },
+    { atMove: 21, say: "…Nbd7 develops the last piece, consolidating.", sayShort: "…Nbd7 — develop, consolidate", highlights: [H('d7')] },
+    { atMove: 23, say: "…Qb4+ checks, keeping the initiative; clearly better, a pawn up.", sayShort: "…Qb4+ — check; better", highlights: [H('b4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
 };
 
 const N145: SublineNarration = {
-  intro: { say: "d4 — White grabs the centre, so pin the c3-knight with …Bb4, undermining the defender of e4 and piling onto the centre. You've prepared the freeing …d5 with …c6 and developed …Nf6 to hit e4; with the f4-pawn still in pocket and active development, you keep the material edge and a comfortable, well-coordinated position.", sayShort: "…Bb4 pins, prepares the …d5 break" },
+  intro: { say: "d4 d5 — the mainline Bishop's Gambit. Trade …cxd5, block Bb5+ with …Bd7, and pin with …Bb4. Once the light bishops come off you castle into a sound game where you hold the extra f4-pawn's compensation. Comfortable, with a small but persistent edge.", sayShort: "…cxd5, …Bb4 — a small, safe edge" },
   beats: [
-    { atMove: 9, say: "…d5 strikes the centre, the freeing counter that opens lines.", sayShort: "…d5 — strike the centre.", highlights: [H('d5')] },
-    { atMove: 15, say: "…Bb4 pins and pressures White's structure, gaining tempo.", sayShort: "…Bb4 — pin and pressure.", highlights: [H('b4')] },
-    { atMove: 19, say: "…O-O tucks the king safe, your active pieces ready to press.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
+    { atMove: 9, say: "…d5 breaks the centre, freeing your game.", sayShort: "…d5 — break the centre", highlights: [H('d5')] },
+    { atMove: 11, say: "…cxd5 recaptures, a healthy central structure.", sayShort: "…cxd5 — recapture soundly", highlights: [H('d5')] },
+    { atMove: 13, say: "…Bd7 blocks the check and offers to trade.", sayShort: "…Bd7 — block, offer trade", highlights: [H('d7')] },
+    { atMove: 15, say: "…Bb4 pins the c3-knight, adding pressure.", sayShort: "…Bb4 — pin the knight", highlights: [H('b4')] },
+    { atMove: 17, say: "…Nbxd7 recaptures, developing cleanly.", sayShort: "…Nbxd7 — develop, recapture", highlights: [H('d7')] },
+    { atMove: 19, say: "…O-O tucks the king safe.", sayShort: "…O-O — king safe", highlights: [H('g8')] },
+    { atMove: 21, say: "…Qb6 swings the queen out, pressing d4 and b2.", sayShort: "…Qb6 — press d4 and b2", highlights: [H('b6')] },
+    { atMove: 23, say: "…Rac8 activates on the c-file; comfortable, a small edge.", sayShort: "…Rac8 — the c-file; a small edge", highlights: [H('c8')] },
   ],
-  sources: ['concept:tac-pin', 'concept:pos-center', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
 };
 
 const N146: SublineNarration = {
-  intro: { say: "e5 — White's pawn hits your f6-knight, so march the passed f-pawn with …f3, splitting his kingside and reaching f2 with check, a thorn next to his king. You'd already grabbed on f4 and struck with …d5 — the classical refutation that opens lines before he's ready. The extra pawn and your active pieces give you a healthy plus while his king sits exposed on e1.", sayShort: "…d5 break, the f-pawn runs to f2" },
+  intro: { say: "Bb3 d5 e5 — White pushes past instead of taking, so plant …Ne4 on a dominant outpost. Clamp the queenside with …a5, gain kingside space with …g5, and ram …d4-d3 to fracture his pawns. Your beautiful e4-knight and the extra pawn leave you clearly better.", sayShort: "…Ne4 outpost, …d4-d3 — better" },
   beats: [
-    { atMove: 11, say: "…Ne4 centralises the knight on a dominant square, eyeing White's weaknesses.", sayShort: "…Ne4 — dominant knight.", highlights: [H('e4')] },
-    { atMove: 15, say: "…g5 gains kingside space, your pawns rolling against White.", sayShort: "…g5 — gain kingside space.", highlights: [H('g5')] },
-    { atMove: 17, say: "…Nc5 reroutes the knight to a fine outpost, eyeing d3 and the centre.", sayShort: "…Nc5 — fine outpost.", highlights: [H('c5')] },
+    { atMove: 11, say: "…Ne4 plants the knight on a dominant central outpost.", sayShort: "…Ne4 — the outpost", highlights: [H('e4')] },
+    { atMove: 13, say: "…a5 clamps the queenside, gaining space and eyeing …a4.", sayShort: "…a5 — clamp the queenside", highlights: [H('a5')] },
+    { atMove: 15, say: "…g5 gains kingside space, your pawns rolling.", sayShort: "…g5 — kingside space", highlights: [H('g5')] },
+    { atMove: 17, say: "…Nc5 reroutes the knight to a fine outpost, eyeing d3.", sayShort: "…Nc5 — fine outpost, eye d3", highlights: [H('c5'), H('d3', SOFT)] },
+    { atMove: 19, say: "…d4 rams forward, cramping White's centre.", sayShort: "…d4 — ram, cramp him", highlights: [H('d4')] },
+    { atMove: 21, say: "…d3 fractures White's pawns, prising open lines.", sayShort: "…d3 — fracture the pawns", highlights: [H('d3')] },
+    { atMove: 23, say: "…Nxd3 collects the pawn; clearly better, up material.", sayShort: "…Nxd3 — collect; winning", highlights: [H('d3')] },
   ],
-  sources: ['concept:pos-center', 'concept:pawn-passed', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
+  sources: ['concept:pos-outpost', 'concept:pos-center', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
 };
 
 const N147: SublineNarration = {
