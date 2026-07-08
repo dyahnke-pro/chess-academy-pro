@@ -175,16 +175,21 @@ lessonIntegrity/narrationAccuracy never saw them). KEY METHOD LEARNED: the
 anti-openings.json "variations" are polluted with main-line prefixes + move-order
 transpositions — TRIAGE each for distinctness, drop the dupes, rebuild the
 genuinely-distinct spine sound. modern-150 variations DEFERRED (all transpose to
-the one 150-Attack plan the main lesson already teaches). 20 VARIATION TABS
-shipped across 12 openings now (+ grunfeld O-O, qgd Be7, nimzo Noa/Berlin, qid
-Bb7 white; london Steinitz-c3, catalan Alekhine black). DEFERRED — need a careful
-dedicated pass (gambit material subtleties / sharp tactical termini = high
-garbage-risk): staunton (Nc6/Lasker gambits), london Steinitz-Nf3 (…Qxc3 grab),
-smith-morra Qe2 (gambit), grand-prix Bb5 (…Qxd1 tactics), kg Kieseritzky (sharp
-sac, +0.78 Black but tactical), colle (6 garbage-tail auto-tabs), alapin
-(marginal move-orders), trompowsky (0 vars). NEXT: the deferred sharp/gambit
-variations (careful pass), then pitfalls across all 24, then gems + plans +
-model games + Naroditsky-voice rollout.
+the one 150-Attack plan the main lesson already teaches). 26 VARIATION TABS
+shipped across 16 openings now — rossolimo(3), caro-fantasy(3), french(1),
+scandinavian(2), alekhine(3), budapest(1), grunfeld(1), qgd(1), nimzo(2),
+qid(1), london(2: Steinitz c3+Nf3), catalan(1), dutch-staunton(1: Nc6 gambit,
+material-verified), smith-morra(1: Qe2 gambit), pirc(1: Dragon), kid-saemisch(2:
+Nc6 Panno + a6). Method for gambit/sharp lines: compute exact material per beat
+so narration never misstates who's up a pawn; only ship lines with a STABLE
+(non-mid-capture) terminus. DEFERRED — unstable mid-capture termini or too sharp,
+need a careful trim+reverify pass: staunton-Lasker, grand-prix-Bb5 (…Qxd1),
+kg-Kieseritzky (sac line), kid-c5 (…b5 Benko-sac), kid-Nbd7 (opposite-castling,
+mid-exchange terminus), englund variations (gambit), benoni variations (mixed),
+colle (6 garbage-tail auto-tabs), alapin (marginal), trompowsky (0 vars),
+modern-150 (transpositions). NEXT: the deferred sharp/gambit variations (careful
+pass), then pitfalls across all 24, then gems + plans + model games +
+Naroditsky-voice rollout.
 
 **Progress (2026-07-07):** 4 anti-openings have verified, gate-green main-line
 Watch lessons on `main` (Rossolimo full incl. 3 variation tabs + a middlegame
