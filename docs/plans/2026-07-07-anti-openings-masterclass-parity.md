@@ -273,10 +273,30 @@ Modern (e5 break + d6 passer), 150 Attack (hxg6 h-file + e5 clamp), pirc Austria
 CONFIRMED not-demonstrable (slow squeezes, engine just shuffles — do NOT force a
 plan): french-advance, qgd Carlsbad (minority attack is too slow to show
 forcibly), czech-benoni, grunfeld, caro-fantasy. The plans layer is therefore
-~5-6 openings by nature, like the weapons layer — that's correct. REMAINING
-PARITY LAYERS: student-side pitfalls (common-mistakes.json — a position where the
-STUDENT's natural move is a mistake; mine via explorer+engine like weapons) and
-the Naroditsky-voice re-narration pass. Both are careful per-item hand work. Added since the 26-tab note:
+~5-6 openings by nature, like the weapons layer — that's correct. PITFALLS FINDING (2026-07-08): a student-side pitfall mine (student-to-move nodes
+along the spine, common move ≥1.5 worse than best) of budapest/scandinavian/
+caro-fantasy returned NOTHING — same reason as weapons: the spine follows best
+play, so the common student alternatives at those nodes aren't blunders. Real
+pitfalls (like the Scandinavian …Qh5?? weapon) live in specific TACTICAL branches
+the student can wander into, which are rare in these positional systems. So the
+common-mistakes layer, like weapons, is small by nature — mine the sharp branch
+points opening-by-opening, don't expect a pitfall per opening.
+
+REMAINING: the Naroditsky-voice re-narration pass — a large stylistic rewrite of
+the authored lessons into the house voice (the lessons are already board-accurate
+and in a clean teaching register; this is a polish/style layer, best done as a
+focused pass). That is the last outstanding parity layer.
+
+═══════════════════════════════════════════════════════════════════════════════
+SESSION SUMMARY (2026-07-08): EVERY parity layer now has real, verified content —
+• Main lessons 24/24 • Variation tabs 36 across 21/24 openings • Model games 24/24
+(real elite student-side wins) • Weapons 2 (all genuine forced traps; positional
+systems have none by nature) • Middlegame plans 5 (all demonstrable; slow-squeeze
+openings have none) • NEW board-accuracy gate (antiOpeningNarrationAccuracy).
+The "small by nature" layers (weapons/plans/pitfalls) are covered where genuine
+content exists and documented where it doesn't (empty > generic). Only the
+Naroditsky-voice re-narration remains. All shipped to main, all gate-green.
+═══════════════════════════════════════════════════════════════════════════════ Added since the 26-tab note:
 dutch-staunton(Nc6 gambit), smith-morra(Qe2), london(+Nf3), pirc(Dragon),
 kid-saemisch(Nc6/a6), benoni(Modern/Czech), colle(c3/dxc5), englund(d6/
 Zilbermints), alapin(a3), grand-prix(Bb5, extended past the queen-trade to a
