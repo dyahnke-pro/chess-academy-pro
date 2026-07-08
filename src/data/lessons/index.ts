@@ -52,6 +52,8 @@ import { ANTI_TROMPOWSKY_BLACK_LESSON } from './antiTrompowskyBlack';
 import { ANTI_CARO_FANTASY_VARIATION_LESSONS } from './antiCaroFantasyVariations';
 import { ANTI_FRENCH_ADVANCE_VARIATION_LESSONS } from './antiFrenchAdvanceVariations';
 import { ANTI_SCANDINAVIAN_VARIATION_LESSONS } from './antiScandinavianVariations';
+import { ANTI_ALEKHINE_MODERN_VARIATION_LESSONS } from './antiAlekhineModernVariations';
+import { ANTI_BUDAPEST_VARIATION_LESSONS } from './antiBudapestVariations';
 import { PRO_AMAN_CARO_KANN_VARIATION_LESSONS } from './proAmanCaroKannVariations';
 import { PRO_AMAN_NIMZO_INDIAN_LESSON } from './proAmanNimzoIndian';
 import { PRO_AMAN_NIMZO_INDIAN_VARIATION_LESSONS } from './proAmanNimzoIndianVariations';
@@ -471,6 +473,8 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...ANTI_CARO_FANTASY_VARIATION_LESSONS,
   ...ANTI_FRENCH_ADVANCE_VARIATION_LESSONS,
   ...ANTI_SCANDINAVIAN_VARIATION_LESSONS,
+  ...ANTI_ALEKHINE_MODERN_VARIATION_LESSONS,
+  ...ANTI_BUDAPEST_VARIATION_LESSONS,
   ...RUY_VARIATION_LESSONS,
   ...PIRC_VARIATION_LESSONS,
   ...VIENNA_VARIATION_LESSONS,

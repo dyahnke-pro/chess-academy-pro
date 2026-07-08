@@ -195,23 +195,18 @@
     "warnings": null,
     "variations": [
       {
-        "name": "Modern Variation, Main Line",
-        "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 Bg4 Be2",
-        "explanation": ""
-      },
-      {
         "name": "Modern Variation, Larsen Variation",
-        "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 dxe5 Nxe5 c6 Be2 Bf5",
+        "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 dxe5 Nxe5 c6 Be2 Bf5 O-O Nd7 Nf3 e6 c4 N5f6 Bf4 Nh5 Be3 Bd6",
         "explanation": ""
       },
       {
         "name": "Modern Variation, Alburt Variation",
-        "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 g6 Bc4 Nb6 Bb3 Bg7",
+        "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 g6 Bc4 Nb6 Bb3 Bg7 Ng5 e6 Qf3 Qe7 Ne4 h6 exd6 cxd6 Bf4 d5",
         "explanation": ""
       },
       {
         "name": "Modern Variation, Schmid Variation",
-        "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 Nb6 a4 a5 Bb5+ c6 b3 Kd7",
+        "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 Nb6 a4 a5 Bb5+ c6 Bd3 Bg4 exd6 Qxd6 O-O e6 Nbd2 Qc7 Ne4 N8d7",
         "explanation": ""
       }
     ],
@@ -744,18 +739,8 @@
     "warnings": null,
     "variations": [
       {
-        "name": "Budapest Defense, Rubinstein Variation (Nc6)",
-        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Bf4 Nc6 Nf3",
-        "explanation": ""
-      },
-      {
         "name": "Budapest Defense, Rubinstein Variation (g5)",
-        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Bf4 g5 Bg3 Bg7 Nf3",
-        "explanation": ""
-      },
-      {
-        "name": "Budapest Defense, Rubinstein Variation (Bb4+)",
-        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Bf4 Bb4+ Nd2",
+        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Bf4 g5 Bg3 Bg7 Nf3 Nc6 h4 Ngxe5 Nxe5 Nxe5 Nc3 h6 Qc2 d6 e3 Be6",
         "explanation": ""
       }
     ],
