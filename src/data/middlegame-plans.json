@@ -75667,5 +75667,133 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-antimodern150-hfile",
+    "openingId": "anti-modern-150",
+    "criticalPositionFen": "r1bq1rk1/1pp2pbp/2np2p1/p6P/3Pp3/4BP2/PPPQ2P1/2KR1BNR w - - 0 12",
+    "title": "Open the h-file and clamp with e5 — the 150 attack",
+    "overview": "The 150 Attack has done its work: Black's fianchettoed bishop is traded off and your h-pawn has reached h5 with the rook already primed on h1. Now you cash in. hxg6 tears open the h-file straight at the black king, while fxe4 and e5 rebuild a central wedge and Re1 piles the heavy pieces into the attack. Space and open lines converge on the king.",
+    "pawnBreaks": [
+      "hxg6 to prise open the h-file at Black's king",
+      "e5 to clamp the centre and gain space"
+    ],
+    "pieceManeuvers": [
+      "Rh1 and Re1 lifting the heavy pieces onto the open h- and e-files"
+    ],
+    "strategicThemes": [
+      "the open h-file toward the black king",
+      "the e5 central wedge",
+      "opposite-side attacking chess"
+    ],
+    "endgameTransitions": [
+      "convert the attack, or the extra central space, into a winning endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/1pp2pbp/2np2p1/p6P/3Pp3/4BP2/PPPQ2P1/2KR1BNR w - - 0 12",
+        "title": "hxg6 and the e5 clamp",
+        "intro": "White rips open the h-file and clamps the centre for a decisive kingside attack.",
+        "moves": [
+          "hxg6",
+          "fxg6",
+          "fxe4",
+          "d5",
+          "e5",
+          "Bg4",
+          "Re1",
+          "Nb4"
+        ],
+        "annotations": [
+          "hxg6 rips open the h-file straight at Black's king — and your rook is already primed on h1, staring right down it.",
+          "Black must recapture with fxg6, but now the h-file is a highway leading to his king.",
+          "fxe4 regains the pawn and rebuilds a broad centre — attack and structure at the same time.",
+          "Black strikes back with d5, hitting your e4-pawn and trying to open lines of his own.",
+          "e5 clamps the centre shut and seizes more space, freezing Black's counterplay while your attack keeps rolling.",
+          "Black develops the bishop to g4 with tempo, but he is a full step behind the assault.",
+          "Re1 loads the e-file behind the e5 wedge — every heavy piece is now committed to the attack.",
+          "Black seeks counterplay with Nb4, but your open h-file, central wedge and far safer king leave you clearly winning. The 150 Attack, delivered."
+        ],
+        "learnCues": [
+          "hxg6 — rip open the h-file.",
+          "Black recaptures on g6.",
+          "fxe4 — regain and rebuild.",
+          "Black hits back with …d5.",
+          "e5 — clamp the centre.",
+          "Black develops …Bg4.",
+          "Re1 — load the e-file.",
+          "Winning: open h-file, big centre."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "h8",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-initiative",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Pirc_Defence"
+        ]
+      }
+    ]
   }
 ]
