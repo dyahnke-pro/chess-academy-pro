@@ -578,3 +578,26 @@ All lines done, per-move, board-verified, engine-sound, YouTube-grounded, shippe
 (commits up to e28bcaa). Session totals now: 5 complete anti-* families
 (french-advance 16, caro-fantasy 38, rossolimo 16, alekhine-modern 39,
 scandinavian 24) = ~133 keys at per-move parity.
+
+## UPDATE (2026-07-08) — families #6 + #7 shipped
+
+**6. anti-grand-prix-black (11 constants / 20 keys), student=BLACK — commit 23b6967.**
+Per-move beats for the Closed Sicilian / Grand Prix defence: mirror fianchetto,
+queenside storm (…Rb8/…b5-b4), …Nd4 outpost + …cxd4 wedge, …f5 counter-break.
+Engine-checked Black-POV; the level/slightly-worse lines (g3@4 -0.24, Nge2@4
+-0.34, Nf3@4 -0.15, a4@8 -0.10, d3@8 -0.28) framed HONESTLY as comfortable/level,
+never sold as Black edges. Arrows clean.
+
+**7. anti-modern-150 (15 constants / 27 keys), student=WHITE — commit 5d6d5fc.**
+Per-move beats for the 150 Attack (Be3/Qd2 battery, Bh6 trade, h4/Nh3-g5, Nd5
+outpost, f4 broad centre). All termini White-positive (+0.16 to +1.45). Fixed
+board-WRONG stubs: N154 (invented an "e2-pawn blockade" that never occurs → real
+e5 French clamp), N152/N155 (claimed long-castle h-storm on lines that castle
+SHORT), N151 (real d5 clamp + d-file pin). Arrows clean.
+
+**Session tally: 7 complete anti-* families** (french-advance 16, caro-fantasy 38,
+rossolimo 16, alekhine-modern 39, scandinavian 24, grand-prix-black 20,
+modern-150 27) = ~180 keys at per-move parity.
+
+**NEXT:** anti-colle-black (60 keys, D4Flank file — biggest remaining), then the
+HELP-file families. Keep pulling Naroditsky YouTube transcripts per family.
