@@ -75795,5 +75795,143 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-antipircaustrian-f5attack",
+    "openingId": "anti-pirc-austrian",
+    "criticalPositionFen": "r1bq1rk1/p3ppbp/3p2p1/1NnP4/2B1nP2/5N2/PPP3PP/R1B1QRK1 w - - 2 12",
+    "title": "The f5 break and rook lift — the Austrian attack",
+    "overview": "Black's queenside counterplay has spent itself and left you a clean pawn up in the Austrian Attack. Now you attack where you are strongest — the kingside. a4 props up your advanced knight, f5 blasts the kingside open, a rook lift with Ra3 swings a heavy piece toward the king, and the b5-knight reroutes to the dominant d4-square. Extra pawn plus a raging attack.",
+    "pawnBreaks": [
+      "f5 to blast open the kingside and prise open lines at Black's king"
+    ],
+    "pieceManeuvers": [
+      "Ra3 lifting the rook to the third rank to swing into the attack",
+      "Nb5-d4 rerouting the knight to the strong central square"
+    ],
+    "strategicThemes": [
+      "the extra pawn",
+      "the kingside pawn break f5",
+      "the rook lift to the third rank"
+    ],
+    "endgameTransitions": [
+      "with an extra pawn, convert to a winning endgame if the attack is defused"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/p3ppbp/3p2p1/1NnP4/2B1nP2/5N2/PPP3PP/R1B1QRK1 w - - 2 12",
+        "title": "a4, f5 and the rook lift",
+        "intro": "White supports the advanced knight, breaks with f5, and lifts a rook into the attack.",
+        "moves": [
+          "a4",
+          "Bb7",
+          "f5",
+          "gxf5",
+          "Ra3",
+          "a6",
+          "Nbd4",
+          "Qc8",
+          "Ba2"
+        ],
+        "annotations": [
+          "a4 props up your advanced knight on b5 and gains queenside space — a useful move before you switch fronts.",
+          "Black develops the bishop to b7 on the long diagonal, but the action is about to erupt on the other wing.",
+          "The break! f5 blasts open the kingside, striking at g6 and prising open lines straight toward Black's king.",
+          "Black must recapture with gxf5, but now the diagonals and files around his king are cracked wide open.",
+          "Ra3 lifts the rook to the third rank — the classic attacking manoeuvre, swinging the heavy piece over toward the kingside.",
+          "Black nudges the knight with a6, but there is a far better square waiting for it.",
+          "Nbd4 reroutes the knight back into the game via the dominant central d4-square, adding another attacker.",
+          "Black shuffles the queen to c8 to defend, but he is hopelessly on the back foot.",
+          "Ba2 tucks the bishop safely onto the a2-g8 diagonal — and with an extra pawn, an open kingside and a rook swinging over, White is winning. The Austrian Attack delivered."
+        ],
+        "learnCues": [
+          "a4 — support the b5-knight.",
+          "Black develops …Bb7.",
+          "f5 — blast open the kingside!",
+          "Black recaptures on f5.",
+          "Ra3 — the rook lift.",
+          "Black plays …a6.",
+          "Nbd4 — reroute to the centre.",
+          "Black defends …Qc8.",
+          "Ba2 — winning: extra pawn, big attack."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b7",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "g6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "a3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "a2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-initiative",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Pirc_Defence,_Austrian_Attack"
+        ]
+      }
+    ]
   }
 ]
