@@ -108,13 +108,8 @@
     "warnings": null,
     "variations": [
       {
-        "name": "Austrian Attack",
-        "pgn": "e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 O-O",
-        "explanation": ""
-      },
-      {
         "name": "Austrian Attack, Dragon Formation",
-        "pgn": "e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 c5",
+        "pgn": "e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 c5 Bb5+ Bd7 e5 Ng4 Bxd7+ Qxd7 h3 cxd4 Qxd4 Nc6 Qe4 Nh6",
         "explanation": ""
       }
     ],
@@ -461,17 +456,12 @@
       },
       {
         "name": "Sämisch Variation, Yates Defense",
-        "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 Nc6",
-        "explanation": ""
-      },
-      {
-        "name": "Sämisch Variation, Orthodox Variation",
-        "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 e5",
+        "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 Nc6 Nge2 a6 Qd2 Rb8 Rc1 Bd7 Nd1 e5 d5 Ne7",
         "explanation": ""
       },
       {
         "name": "Sämisch Variation, Normal Defense (a6)",
-        "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 a6",
+        "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 a6 Qd2 c5 dxc5 dxc5 Qxd8 Rxd8 Bxc5 Nc6 Bb6 Rd6",
         "explanation": ""
       },
       {
