@@ -688,3 +688,26 @@ are hand-triaged to keep ONLY genuine tempting errors with clean refutations
 (empty > generic > invented); the positional anti-openings legitimately have few
 or none. Extra model games (multiple student-side wins/variation) + Naroditsky-
 voice re-narration polish remain.
+
+## ✅ MODEL-GAMES LAYER — 2-3 per opening (2026-07-08)
+Went from 1 → 3 model games for 22/24 openings (2 for modern-150/colle). 44
+NEW games sourced from the masters explorer at each opening's TAUGHT prefix
+(`_mg_fetch`), filtered to STUDENT-SIDE WINS only, full PGNs exported via the
+game-export proxy + chess.js-validated (all legal, 0 orientation failures).
+Real elite games — Karpov, Kasparov, Carlsen, Aronian, Anand, Nakamura,
+Ding, Erigaisi winning the exact taught lines. Overviews hand-authored,
+grounded in each opening's middlegame plan + varied per game (no boilerplate).
+qgd/colle needed shallower prefixes (elite White struggles vs elite Black in
+the exact deep QGD-Exchange line). Gates: modelGames-orientation (42) +
+modelGames (645) green. Commit 697920f. Post-deploy: prod READY + HTTP 200;
+`audit-anti-parity-prod.mjs` (NEW) 5/5 green on localhost render (Middlegame
+Plans + Model Games sections both render the new curated testids, 0 console
+errors) — prod browser-nav hits the sandbox egress ERR_CONNECTION_RESET quirk
+(curl/fetch 200 all session), so render verified on the identical localhost
+bundle per the G1 fallback runbook.
+
+REMAINING for 100% parity: pitfalls (common-mistakes) + weapons/gems — mine the
+TACTICAL anti-openings only (englund/scandinavian done; smith-morra/KG/budapest/
+grand-prix/caro-fantasy/dutch candidates) via the reachable amateur explorer +
+engine-verify; positional anti-openings legitimately yield few/none (empty >
+invented). anti-trompowsky-black 0 declared variations. Naroditsky-voice polish.
