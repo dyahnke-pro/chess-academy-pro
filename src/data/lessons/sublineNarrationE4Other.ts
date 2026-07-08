@@ -10,6 +10,7 @@ import type { SublineNarration } from '../../services/sublineLesson';
 
 const KEY = 'rgba(255,214,0,0.88)';
 const ATK = 'rgba(40,185,95,0.92)';
+const SOFT = 'rgba(80,140,255,0.32)';
 const H = (square: string, color = KEY): AnnotationHighlight => ({ square, color });
 const A = (from: string, to: string, color = ATK): AnnotationArrow => ({ from, to, color });
 
@@ -1099,11 +1100,22 @@ const N109: SublineNarration = {
 };
 
 const N110: SublineNarration = {
-  intro: { say: "…Qb6 — it pressures d4 and b2, and his c4 thrust releases the tension to clamp the queenside and free Na5 toward b3 and c4. Your a3 took b4 from his knights, so reroute with Nbd2 toward b1-c3 or f1-e3, eyeing the holes he created. The chain's locked, so play on the wings: build your f4-f5 kingside break while his knight drifts to the rim on a5.", sayShort: "Locked chain — kingside break beckons" },
+  intro: { say: "…Qb6 — the queen leans on d4 and b2, the heartbeat of every Advance French. Your centre is fine: d4 is held by c3 and the f3-knight, so don't panic and don't rush to defend b2. The story of this whole line is that Black's coming …c4 will lock the chain — and the moment the centre is frozen, the game becomes a fight on the wings where your space is the trump.", sayShort: "…Qb6 leans on d4 — stay calm" },
   beats: [
-    { atMove: 10, say: "a3 prepares b4 and shores up the d4-chain, the Advance French's standard answer to …Qb6.", sayShort: "a3 — shore up the chain.", highlights: [H('a3')] },
-    { atMove: 18, say: "h4 launches the kingside pawn storm, your space edge freeing the flank assault.", sayShort: "h4 — storm the kingside.", highlights: [H('h4')] },
-    { atMove: 22, say: "Rh3 lifts the rook to swing into the kingside attack, your pieces converging.", sayShort: "Rh3 — rook lift to attack.", highlights: [H('h3')] },
+    { atMove: 10, say: "a3 first — a small, important move. It denies b4 to Black's pieces and quietly readies the b-pawn, and notice you simply let b2 be: after …Qxb2 the queen gets trapped chasing pawns while you develop. This is the mature answer to …Qb6.", sayShort: "a3 — deny b4, ignore b2.", highlights: [H('a3')] },
+    { atMove: 11, say: "…c4 — and there it is. Black grabs queenside space but releases all the tension on d4; the pawn chain is now locked solid, e5 versus d5 with no breaks in the centre. From here it's a wing war, and your job is to know which wing.", sayShort: "…c4 locks the chain.", highlights: [H('c4', SOFT), H('d4')] },
+    { atMove: 12, say: "Nbd2 — with c4 sealing the b1-h7 diagonal, the light bishop has no future there, so the knight reroutes instead. From d2 it eyes f1-e3 to press d5, and it keeps an eye on the b3-square Black is aiming at.", sayShort: "Nbd2 — reroute the knight.", highlights: [H('d2'), H('e3', SOFT)] },
+    { atMove: 13, say: "…Na5 — the knight drifts to the rim, heading for the b3-outpost that …c4 handed it. It looks active, but on a5 it's far from Black's king, and that matters once lines open on the queenside.", sayShort: "…Na5 — heading for b3.", arrows: [A('a5', 'b3')], highlights: [H('b3')] },
+    { atMove: 14, say: "Be2 — modest and correct. The bishop's best diagonal is shut, so it just tucks in, connects the rooks, and stands ready to support the pawn pushes on both wings. Not every piece gets a glamorous square.", sayShort: "Be2 — quiet, connect the rooks.", highlights: [H('e2')] },
+    { atMove: 15, say: "…h6 — Black takes the g5-square away from your pieces and makes a little luft before deciding where the king goes. A useful, non-committal move.", sayShort: "…h6 — take g5, make luft.", highlights: [H('h6', SOFT)] },
+    { atMove: 16, say: "Rb1 — here's your plan crystallising. The rook backs the b3-break: play b3, hit c4, and pry the queenside open. Keep this square in mind, because Black is about to castle straight into it.", sayShort: "Rb1 — load the b3 break.", highlights: [H('b1'), H('b3', SOFT)] },
+    { atMove: 17, say: "…Bd7 — Black connects and clears the back rank, and now the intention is unmistakable: the king is coming to the queenside.", sayShort: "…Bd7 — clear for O-O-O.", highlights: [H('d7', SOFT)] },
+    { atMove: 18, say: "h4 — grab kingside space, and note the second point: this frees h1, so the rook can later lift to h3 and reposition. One pawn move, two ideas.", sayShort: "h4 — space, and free the lift.", highlights: [H('h4')] },
+    { atMove: 19, say: "…O-O-O — Black commits the king to the queenside. That's the signal you've been waiting for: now you know exactly where to aim — the b-file and the b3-lever land right on his king.", sayShort: "…O-O-O — king to the queenside.", highlights: [H('c8', SOFT)] },
+    { atMove: 20, say: "h5 — clamp more space. It fixes Black's kingside pawns and keeps that a5-knight and the kingside pieces from ever getting active, so you can work the other wing in peace.", sayShort: "h5 — fix the kingside.", highlights: [H('h5')] },
+    { atMove: 21, say: "…Kb8 — Black tucks the king off the c-file, sensing the b3-break coming. Sensible prophylaxis, but it doesn't change the target.", sayShort: "…Kb8 — off the c-file.", highlights: [H('b8', SOFT)] },
+    { atMove: 22, say: "Rh3 — the rook steps onto the third rank, a flexible reserve. It eyes the h-file, ready to blast it open if Black ever meets h5 with …g6, and it clears the back rank so your other pieces can organise the b3-break. Your position plays itself — space on the kingside, the b3-break waiting on the queenside.", sayShort: "Rh3 — flexible third-rank lift.", highlights: [H('h3')] },
+    { atMove: 23, say: "…Qc7 — Black regroups the queen off b6, unblocking his own b-pawn and eyeing the defence of his king. A balanced middlegame, but it's you who has the space, the wedge on e5, and the clear plan. That's the Advance French doing exactly what it promises.", sayShort: "…Qc7 — Black regroups; you press.", highlights: [H('c7', SOFT)] },
   ],
   sources: ['concept:pos-space', 'concept:pawn-chain', 'https://en.wikipedia.org/wiki/French_Defence'],
 };
@@ -1139,26 +1151,65 @@ const N113: SublineNarration = {
 };
 
 const N114: SublineNarration = {
-  intro: { say: "…Bd7 — he swings the light-squared bishop toward b5 to trade off the piece his e5 chain otherwise buries behind e6. Hit it with c4, challenging d5 and the bishop at once; after Bxc4 you've given a pawn but ripped the centre open and gained the bishop pair plus a development lead. Round up the loose c4-bishop and use the open lines while his queen sits awkwardly on b6.", sayShort: "c4 break — bishop pair, open lines" },
+  intro: { say: "…Bd7 — the Wade Variation. It's a respected, solid try: Black readies …Bb5 to trade off his 'bad' French bishop and leans on d4. The line that follows is the sharpest answer — you'll let Black grab two pawns and hurl your whole army at his stranded king. Be honest with yourself: objectively this is only balanced, a hair in Black's favour. But at human speed the initiative is worth every pawn. Play for the attack, never for the material.", sayShort: "…Bd7 Wade — sac pawns for attack" },
   beats: [
-    { atMove: 10, say: "Bd3 develops the bishop toward Black's king, the b1-h7 diagonal yours.", sayShort: "Bd3 — aim at the king.", arrows: [A('d3', 'h7')], highlights: [H('h7')] },
-    { atMove: 14, say: "O-O tucks the king safe, your space edge ready to press.", sayShort: "O-O — king safe.", highlights: [H('g1')] },
-    { atMove: 22, say: "Qh5 swings the queen to the kingside, building pressure on Black's king.", sayShort: "Qh5 — eye the kingside.", highlights: [H('h5')] },
+    { atMove: 10, say: "Bd3 — development over defence. You let the tension on d4 sit and aim the bishop down the b1-h7 diagonal at Black's kingside. The whole plan is speed: get your pieces out before Black untangles.", sayShort: "Bd3 — develop, aim at h7.", arrows: [A('d3', 'h7')], highlights: [H('h7')] },
+    { atMove: 11, say: "…cxd4 — Black cashes in, taking on d4 and opening the c-file. He's happy to win a pawn; you're happy to open lines for your pieces.", sayShort: "…cxd4 — Black takes.", highlights: [H('d4', SOFT)] },
+    { atMove: 12, say: "Nxd4 — recapture, centralising the knight on its best square. Material's level again, and your lead in development is already telling.", sayShort: "Nxd4 — centralise.", highlights: [H('d4')] },
+    { atMove: 13, say: "…Bc5 — Black attacks the centralised knight and offers a trade, trying to swap off your attackers before you get rolling.", sayShort: "…Bc5 — hit the knight.", arrows: [A('c5', 'd4')], highlights: [H('d4', SOFT)] },
+    { atMove: 14, say: "O-O — don't blink. Tuck the king away and keep developing; you have no interest in defending the knight, because the coming pawn-grabs only drag Black's queen away from his own king.", sayShort: "O-O — king safe, keep coming.", highlights: [H('g1')] },
+    { atMove: 15, say: "…Bxd4 — Black trades off a defender, still chasing simplification.", sayShort: "…Bxd4 — trade down.", highlights: [H('d4', SOFT)] },
+    { atMove: 16, say: "cxd4 — recapture, and now you have a broad d4-e5 pawn pair and half-open lines. The position is opening exactly the way an attacker wants.", sayShort: "cxd4 — big pawn pair, open lines.", highlights: [H('d4'), H('e5', SOFT)] },
+    { atMove: 17, say: "…Qxd4 — the first pawn falls, and notice the cost: Black's queen is now the only developed piece he owns, roaming the centre while his king sits on e8 and his queenside sleeps.", sayShort: "…Qxd4 — one pawn, queen adrift.", highlights: [H('d4', SOFT)] },
+    { atMove: 18, say: "Na3 — the last piece joins with a purpose: it's heading for b5, hitting c7 and d6 right next to Black's king. Every one of your pieces now points at him.", sayShort: "Na3 — reroute toward b5.", arrows: [A('a3', 'b5')], highlights: [H('b5')] },
+    { atMove: 19, say: "…Qxe5 — the second pawn goes, but the queen drifts even further from home. Two pawns up and hopelessly behind in development, Black is playing with fire.", sayShort: "…Qxe5 — two up, king exposed.", highlights: [H('e5', SOFT)] },
+    { atMove: 20, say: "Re1 — the rook slams onto the open file with tempo, kicking the queen and pinning Black's whole position to the e-file where his king still lives.", sayShort: "Re1 — open file, gain tempo.", arrows: [A('e1', 'e5')], highlights: [H('e5')] },
+    { atMove: 21, say: "…Qf6 — the queen scrambles back to defend; Black spends yet another move with the same overworked piece while his rooks and knight never move.", sayShort: "…Qf6 — the lone piece retreats.", highlights: [H('f6', SOFT)] },
+    { atMove: 22, say: "Qh5 — bring the queen into the attack, eyeing f7 and h7 and keeping Black's king pinned to the centre. Every tempo you spend develops with threats; every tempo Black spends just shuffles his queen.", sayShort: "Qh5 — pile in, hit f7.", arrows: [A('h5', 'f7')], highlights: [H('f7')] },
+    { atMove: 23, say: "…Qe7 — Black finally braces to castle by hand. You're two pawns down on the scoreboard, but you have every piece developed and aimed at a king that hasn't moved. This is the Wade gambit's bargain: material for a lasting, dangerous initiative. Keep the pieces on and keep coming.", sayShort: "…Qe7 — you keep the initiative.", highlights: [H('e7', SOFT)] },
   ],
-  sources: ['concept:pos-center', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/French_Defence'],
+  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/French_Defence'],
 };
 
 const N115: SublineNarration = {
   intro: { say: "…Nc6 — this is the main-line Advance French battery against d4, with …c5, …Nc6, and …Bd7 readying …Qb6. His whole game targets your d4-pawn, defended only by c3 and the f3-knight. Expect …Qb6 hitting d4 and b2, then …Rc8 and …cxd4 or …Nh6-f5, piling on the base of the chain until your centre cracks — so shore it up.", sayShort: "Advance — battery on d4, …Qb6 next" },
+  beats: [
+    { atMove: 7, say: "…Nc6 — the knight joins the assault on d4. Together with the c5-pawn it's the first layer of Black's whole plan: overload the base of your chain until something gives.", sayShort: "…Nc6 — pile onto d4.", arrows: [A('c6', 'd4')], highlights: [H('d4')] },
+    { atMove: 8, say: "Nf3 — the natural developing move, and the key defender of d4. Now the pawn is held twice, by c3 and the knight, and you're ready to castle. Don't overthink the Advance's early moves; solid development is the point.", sayShort: "Nf3 — develop, hold d4.", highlights: [H('f3'), H('d4', SOFT)] },
+    { atMove: 9, say: "…Qb6 — the queen leans on d4 and b2, the heartbeat of the Advance French. Your centre is fine: don't panic, don't rush to defend b2. Black's coming …c4 will lock the chain — and once the centre is frozen, this becomes a wing war where your space is the trump.", sayShort: "…Qb6 leans on d4 — stay calm.", highlights: [H('b6', SOFT)] },
+    { atMove: 10, say: "a3 first — a small, important move. It denies b4 to Black's pieces and readies your b-pawn, and notice you simply leave b2: after …Qxb2 the queen gets trapped chasing pawns while you develop. The mature answer to …Qb6.", sayShort: "a3 — deny b4, ignore b2.", highlights: [H('a3')] },
+    { atMove: 11, say: "…c4 — and there it is. Black grabs queenside space but releases all the tension on d4; the chain locks solid, e5 versus d5 with no central breaks. From here it's a wing war, and your job is to know which wing.", sayShort: "…c4 locks the chain.", highlights: [H('c4', SOFT), H('d4')] },
+    { atMove: 12, say: "Nbd2 — with c4 sealing the b1-h7 diagonal, the light bishop has no future there, so the knight reroutes. From d2 it eyes f1-e3 to press d5, and it watches the b3-square Black is aiming at.", sayShort: "Nbd2 — reroute the knight.", highlights: [H('d2'), H('e3', SOFT)] },
+    { atMove: 13, say: "…Na5 — the knight drifts to the rim toward the b3-outpost that …c4 handed it. It looks active, but on a5 it's far from Black's king — and that matters the moment lines open on the queenside.", sayShort: "…Na5 — heading for b3.", arrows: [A('a5', 'b3')], highlights: [H('b3')] },
+    { atMove: 14, say: "Be2 — modest and correct. The bishop's best diagonal is shut, so it tucks in, connects the rooks, and stands ready to support pushes on both wings. Not every piece gets a glamorous square.", sayShort: "Be2 — quiet, connect the rooks.", highlights: [H('e2')] },
+    { atMove: 15, say: "…h6 — Black takes g5 from your pieces and makes a little luft before deciding where the king goes. Useful and non-committal.", sayShort: "…h6 — take g5, make luft.", highlights: [H('h6', SOFT)] },
+    { atMove: 16, say: "Rb1 — your plan crystallising. The rook backs the b3-break: play b3, hit c4, pry the queenside open. Remember this square, because Black is about to castle straight into it.", sayShort: "Rb1 — load the b3 break.", highlights: [H('b1'), H('b3', SOFT)] },
+    { atMove: 17, say: "…Bd7 — Black connects and clears the back rank, and the intention is unmistakable: the king is coming to the queenside.", sayShort: "…Bd7 — clear for O-O-O.", highlights: [H('d7', SOFT)] },
+    { atMove: 18, say: "h4 — grab kingside space, and note the second point: it frees h1 so the rook can later lift to h3. One pawn move, two ideas.", sayShort: "h4 — space, and free the lift.", highlights: [H('h4')] },
+    { atMove: 19, say: "…O-O-O — Black commits the king to the queenside. That's the signal: now you know exactly where to aim — the b-file and the b3-lever land right on his king.", sayShort: "…O-O-O — king to the queenside.", highlights: [H('c8', SOFT)] },
+    { atMove: 20, say: "h5 — clamp more space. It fixes Black's kingside pawns and keeps the a5-knight and kingside pieces passive, so you can work the other wing in peace.", sayShort: "h5 — fix the kingside.", highlights: [H('h5')] },
+    { atMove: 21, say: "…Kb8 — Black tucks the king off the c-file, sensing the b3-break. Sensible prophylaxis, but it doesn't change the target.", sayShort: "…Kb8 — off the c-file.", highlights: [H('b8', SOFT)] },
+    { atMove: 22, say: "Rh3 — the rook steps to the third rank, a flexible reserve. It eyes the h-file, ready to blast it open if Black ever meets h5 with …g6, and clears the back rank for the b3-break. Space on the kingside, the b3-break waiting on the queenside — the position plays itself.", sayShort: "Rh3 — flexible third-rank lift.", highlights: [H('h3')] },
+    { atMove: 23, say: "…Qc7 — Black regroups the queen off b6, unblocking his b-pawn and eyeing the defence. A balanced middlegame, but it's you with the space, the e5-wedge, and the clear plan. The Advance French doing exactly what it promises.", sayShort: "…Qc7 — Black regroups; you press.", highlights: [H('c7', SOFT)] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pawn-chain', 'concept:pos-development'],
 };
 
 const N116: SublineNarration = {
-  intro: { say: "…Nh6 — the knight steers to f5 to hit d4 and e3, the classic French way to pressure the base of the chain. Answer a3 and b4, grabbing queenside space and daring him to release the centre; after cxd4 the structure clarifies and you recapture toward a mobile centre. Your b4 has cramped his queenside while the e5 spearhead keeps strangling the kingside.", sayShort: "b4 grabs space — Nh6 reroutes" },
+  intro: { say: "…Nh6 — the knight is bound for f5, the classic French square, where it would hit d4 and press the base of your chain. The idea that runs through this whole line is simple: don't let it get there. You'll grab space on the queenside, then snip the knight off on h6 the moment it's worth it, leaving Black with a wrecked kingside for the price of your dark bishop.", sayShort: "…Nh6 wants f5 — don't let it" },
   beats: [
-    { atMove: 12, say: "b4 gains queenside space and supports the d4-chain, cramping Black.", sayShort: "b4 — gain space, support d4.", highlights: [H('b4')] },
-    { atMove: 14, say: "Bxh6 trades to damage Black's kingside, your bishop pair telling.", sayShort: "Bxh6 — damage the kingside.", highlights: [H('h6')] },
-    { atMove: 16, say: "cxd4 recaptures, your big centre restored with the space edge.", sayShort: "cxd4 — restore the centre.", highlights: [H('d4')] },
+    { atMove: 12, say: "b4 — grab queenside space and cramp Black. His …Qb6 is offside on that wing, so the pawn rolls forward with tempo and eyes b5 to hit the c6-knight later.", sayShort: "b4 — space, cramp the queenside.", highlights: [H('b4')] },
+    { atMove: 13, say: "…cxd4 — Black releases the tension and takes, hoping to open the centre before you finish the plan on the kingside.", sayShort: "…cxd4 — Black takes.", highlights: [H('d4', SOFT)] },
+    { atMove: 14, say: "Bxh6 — the key moment: take the knight before it ever reaches f5. You give up your dark bishop, but the payoff is Black's ruined kingside — doubled, isolated h-pawns and no shelter for his king.", sayShort: "Bxh6 — snip it before f5.", highlights: [H('h6')] },
+    { atMove: 15, say: "…gxh6 — forced recapture, and look at the damage: Black's pawns are shattered, h6 and h7 doubled, the g-file ripped open in front of his own king. That structural wound lasts the whole game.", sayShort: "…gxh6 — Black's shelter is wrecked.", highlights: [H('h6', SOFT), H('h7', SOFT)] },
+    { atMove: 16, say: "cxd4 — recapture and restore the broad d4-e5 pawn centre. You've traded a bishop for a permanent weakness, and your space plus that centre are the compensation.", sayShort: "cxd4 — restore the big centre.", highlights: [H('d4'), H('e5', SOFT)] },
+    { atMove: 17, say: "…Bd7 — Black develops and tries to get his own pieces moving, aiming to use the open g-file his ruined pawns handed him.", sayShort: "…Bd7 — develop, eye the g-file.", highlights: [H('d7', SOFT)] },
+    { atMove: 18, say: "g3 — a small prophylactic move: it shores up the light squares in front of your king and blunts the open g-file before Black's rook can make trouble there. Take the sting out of his only source of play.", sayShort: "g3 — shield the g-file.", highlights: [H('g3')] },
+    { atMove: 19, say: "…Rg8 — Black swings the rook to the half-open g-file, his most natural try for activity given the wrecked structure.", sayShort: "…Rg8 — onto the g-file.", highlights: [H('g8', SOFT)] },
+    { atMove: 20, say: "Ra2 — an unusual but useful lift: the rook steps to the second rank, ready to slide to d2 or e2 and cover the sensitive squares. Solid, unhurried defence while your extra structure does the work.", sayShort: "Ra2 — lift to the second rank.", highlights: [H('a2')] },
+    { atMove: 21, say: "…Rg4 — the rook probes forward, hunting your d4 and e5 pawns. Let him — every piece he throws forward is a piece not defending his shattered kingside.", sayShort: "…Rg4 — Black probes.", highlights: [H('g4', SOFT)] },
+    { atMove: 22, say: "Rd2 — the lifted rook slides across to reinforce d4 and the centre, calmly meeting Black's activity. Nothing Black tries actually breaks through.", sayShort: "Rd2 — reinforce the centre.", highlights: [H('d2')] },
+    { atMove: 23, say: "…Re4+ — the rook infiltrates with a check, and it looks scary, but it's a puff of smoke: you simply block with Be2 and you're comfortably equal — a hair better, in fact, because Black's kingside is a permanent ruin and yours is whole. That's the bargain of Bxh6: a lasting weakness for a bishop.", sayShort: "…Re4+ — block Be2, you're fine.", highlights: [H('e4', SOFT)] },
   ],
   sources: ['concept:pos-space', 'concept:pawn-chain', 'https://en.wikipedia.org/wiki/French_Defence'],
 };
@@ -6432,11 +6483,7 @@ export const SUBLINE_NARRATION_E4OTHER: Record<string, SublineNarration> = {
   'anti-french-advance::1::Bd7@13': N113,
   'anti-french-advance::1::Bd7@7': N106,
   'anti-french-advance::1::Bd7@9': N114,
-  'anti-french-advance::1::Nc6@7': { ...N115, beats: [
-    { atMove: 8, say: "Nf3 develops and defends the d4-chain, the Advance French's anchor.", sayShort: "Nf3 — defend the chain.", highlights: [H('f3')] },
-    { atMove: 10, say: "a3 prepares b4 and shores up the chain against …Qb6 ideas.", sayShort: "a3 — shore up the chain.", highlights: [H('a3')] },
-    { atMove: 18, say: "h4 launches the kingside pawn storm at Black's cramped king.", sayShort: "h4 — storm the kingside.", highlights: [H('h4')] },
-  ] },
+  'anti-french-advance::1::Nc6@7': N115,
   'anti-french-advance::1::Nh6@11': N116,
   'anti-french-advance::1::a5@11': N117,
   'anti-french-advance::1::b6@5': N111,
