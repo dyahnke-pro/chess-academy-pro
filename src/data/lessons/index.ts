@@ -60,6 +60,8 @@ import { ANTI_NIMZO_QC2_VARIATION_LESSONS } from './antiNimzoQc2Variations';
 import { ANTI_QID_FIANCHETTO_VARIATION_LESSONS } from './antiQidFianchettoVariations';
 import { ANTI_LONDON_BLACK_VARIATION_LESSONS } from './antiLondonBlackVariations';
 import { ANTI_CATALAN_BLACK_VARIATION_LESSONS } from './antiCatalanBlackVariations';
+import { ANTI_DUTCH_STAUNTON_VARIATION_LESSONS } from './antiDutchStauntonVariations';
+import { ANTI_SMITH_MORRA_BLACK_VARIATION_LESSONS } from './antiSmithMorraBlackVariations';
 import { PRO_AMAN_CARO_KANN_VARIATION_LESSONS } from './proAmanCaroKannVariations';
 import { PRO_AMAN_NIMZO_INDIAN_LESSON } from './proAmanNimzoIndian';
 import { PRO_AMAN_NIMZO_INDIAN_VARIATION_LESSONS } from './proAmanNimzoIndianVariations';
@@ -487,6 +489,8 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...ANTI_QID_FIANCHETTO_VARIATION_LESSONS,
   ...ANTI_LONDON_BLACK_VARIATION_LESSONS,
   ...ANTI_CATALAN_BLACK_VARIATION_LESSONS,
+  ...ANTI_DUTCH_STAUNTON_VARIATION_LESSONS,
+  ...ANTI_SMITH_MORRA_BLACK_VARIATION_LESSONS,
   ...RUY_VARIATION_LESSONS,
   ...PIRC_VARIATION_LESSONS,
   ...VIENNA_VARIATION_LESSONS,

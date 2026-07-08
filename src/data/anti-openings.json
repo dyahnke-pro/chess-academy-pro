@@ -633,7 +633,7 @@
     "variations": [
       {
         "name": "Staunton Gambit",
-        "pgn": "d4 f5 e4 fxe4 Nc3 Nf6 Bg5 Nc6",
+        "pgn": "d4 f5 e4 fxe4 Nc3 Nf6 Bg5 Nc6 d5 Ne5 Qe2 Nf7 Bxf6 exf6 Nxe4 Qe7 d6 Nxd6 Nxd6+ cxd6 g3 d5",
         "explanation": ""
       },
       {
@@ -764,7 +764,7 @@
       },
       {
         "name": "Accelerated London System, Steinitz Countergambit (Nf3)",
-        "pgn": "d4 d5 Bf4 c5 e3 Nc6 Nf3 c4 a3 c3 b3 a6 g3 a5",
+        "pgn": "d4 d5 Bf4 c5 e3 Nc6 Nf3 Nf6 Bb5 Qa5+ Nc3 Ne4 Bxc6+ bxc6 O-O Nxc3 bxc3 Qxc3 Ne5 cxd4 exd4 Bf5",
         "explanation": ""
       }
     ],
@@ -935,13 +935,8 @@
     "warnings": null,
     "variations": [
       {
-        "name": "Smith-Morra Gambit Accepted, Paulsen Formation (Bg5)",
-        "pgn": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 e6 Bc4 a6 O-O Nge7 Bg5",
-        "explanation": ""
-      },
-      {
         "name": "Smith-Morra Gambit Accepted, Paulsen Formation (Qe2)",
-        "pgn": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 e6 Bc4 a6 O-O Nge7 Qe2",
+        "pgn": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 e6 Bc4 a6 O-O Nge7 Qe2 b5 Bd3 Ng6 Be3 Bd6 Rfd1 Nf4",
         "explanation": ""
       }
     ],

@@ -39,6 +39,33 @@ const STEINITZ_C3_LESSON: LessonScript = {
   ],
 };
 
+// The Nf3 Steinitz — the sharp pawn-grab: White pins with Bb5; you win the c3-
+// pawn with …Ne4/…Nxc3/…Qxc3. Engine-verified +0.05 from Black's side (a pawn
+// up, White has just enough activity to balance it — for the ambitious player).
+const STEINITZ_NF3_LESSON: LessonScript = {
+  openingId: OID, sources: SRC, orientation: 'black',
+  title: 'Anti-London — the sharp Steinitz pawn-grab (Nf3)', minutes: 6,
+  beats: [
+    b({ id: 'lon-nf3-1', moves: 'd4 d5 Bf4 c5 e3 Nc6 Nf3 Nf6 Bb5 Qa5+',
+      say: "The Nf3 Steinitz: after …c5 and …Nc6 White develops Nf3 and pins your knight with Bb5. You strike back with the in-between check …Qa5+, developing the queen with tempo and eyeing White's loose queenside. This is the sharp, ambitious road against the London.",
+      sayShort: "…Qa5+ — check, develop with tempo.",
+      highlights: [H('a5', KEY), H('b5', SOFT)] }),
+    b({ id: 'lon-nf3-2', moves: 'd4 d5 Bf4 c5 e3 Nc6 Nf3 Nf6 Bb5 Qa5+ Nc3 Ne4 Bxc6+ bxc6',
+      say: "White blocks the check with Nc3; you leap in with the active …Ne4, and after Bxc6+ bxc6 you accept doubled c-pawns in return for a half-open b-file and fast, aggressive piece play. The position turns sharp and double-edged — exactly the messy fight the London player was hoping to avoid.",
+      sayShort: "…Ne4 — active, sharp, double-edged.",
+      highlights: [H('e4', KEY), H('c6', SOFT)] }),
+    b({ id: 'lon-nf3-3', moves: 'd4 d5 Bf4 c5 e3 Nc6 Nf3 Nf6 Bb5 Qa5+ Nc3 Ne4 Bxc6+ bxc6 O-O Nxc3 bxc3 Qxc3',
+      say: "You trade on c3 and snatch the pawn — …Nxc3, bxc3, …Qxc3 — grabbing material right out of White's camp. You are a clean pawn up. White will get some activity for it with the open b-file, but for the player who wants to beat the London rather than just equalize, this is a genuine winning try.",
+      sayShort: "…Qxc3 — snatch the pawn, play for the win.",
+      highlights: [H('c3', KEY)] }),
+    b({ id: 'lon-nf3-4', moves: 'd4 d5 Bf4 c5 e3 Nc6 Nf3 Nf6 Bb5 Qa5+ Nc3 Ne4 Bxc6+ bxc6 O-O Nxc3 bxc3 Qxc3 Ne5 cxd4 exd4 Bf5',
+      say: "White generates play with Ne5; you clarify the centre with …cxd4 and develop the bishop actively to f5. You hold the extra pawn while White has just enough activity to balance it — the engine calls it level. A sharp, ambitious way to meet the London a pawn to the good, for the player who plays for two results.",
+      sayShort: "…Bf5 — hold the pawn, level and sharp.",
+      highlights: [H('e5', SOFT), H('f5', KEY)] }),
+  ],
+};
+
 export const ANTI_LONDON_BLACK_VARIATION_LESSONS: Record<string, LessonScript> = {
   [`${OID}::Accelerated London System, Steinitz Countergambit (c3)`]: STEINITZ_C3_LESSON,
+  [`${OID}::Accelerated London System, Steinitz Countergambit (Nf3)`]: STEINITZ_NF3_LESSON,
 };
