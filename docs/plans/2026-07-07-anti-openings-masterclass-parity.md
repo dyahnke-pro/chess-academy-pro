@@ -184,7 +184,23 @@ have NO tabs. The last few deferred sharp sub-lines (staun-Lasker, benoni-g6,
 alapin-Nf3, kid-c5, englund-Nxe5) were re-tested with the extend method and
 resolve to MURKY material-vs-compensation or sacrificial positions that don't
 give a cleanly-narratable stable terminus — genuinely deferred per no-garbage,
-not lazy. Added since the 26-tab note:
+not lazy.
+
+NEXT LAYER = PITFALLS / GEMS (mining) — DE-RISKED THIS SESSION: the amateur
+explorer proxy IS reachable from the web container
+(`/api/lichess-explorer?...&ratings=1600,1800,2000&fen=...` → 200 with amateur
+move data). So pitfalls (common-mistakes.json) and punish-gems can be MINED
+honestly here — no CI fallback needed. Procedure per opening: at each
+opponent-to-move node along the taught main + variation lines, query the
+explorer for the common (amateur) reply, engine-check (`_engine-eval.mjs`, ≥1500ms)
+which common replies BLUNDER (student-POV swing), keep the ones the engine
+refutes with a clear line, author `fen/wrongMove/correctMove/explanation/
+shortNarration/sources` (common-mistakes.json, keyed by openingId) + full
+punish-gem narration where the refutation is a real weapon. Gate: board-accurate
+per the antiOpeningNarrationAccuracy pattern + engine-verified refutation. THEN
+middlegame plans (anchor `criticalPositionFen` at each variation's spine
+terminus for Gate C continuity — the 36 spines are all in anti-openings.json now),
+model games (real, student-side wins), and the Naroditsky-voice re-narration. Added since the 26-tab note:
 dutch-staunton(Nc6 gambit), smith-morra(Qe2), london(+Nf3), pirc(Dragon),
 kid-saemisch(Nc6/a6), benoni(Modern/Czech), colle(c3/dxc5), englund(d6/
 Zilbermints), alapin(a3), grand-prix(Bb5, extended past the queen-trade to a

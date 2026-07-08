@@ -167,6 +167,13 @@
       "concept:pos-center",
       "concept:pos-initiative",
       "https://en.wikipedia.org/wiki/Scandinavian_Defense"
+    ],
+    "trapLines": [
+      {
+        "name": "Scandinavian Bishop Trap (…Qh5?)",
+        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bg4 h3 Qh5 hxg4 Qxg4 Rh4",
+        "explanation": "In the main-line Scandinavian, after 6.h3 attacks the g4-bishop, Black's natural-looking …Qh5 tries to keep the pin by defending the bishop with the queen. It's a blunder played in tens of thousands of amateur games: hxg4 simply wins the bishop, and after …Qxg4 the rook lift Rh4 hunts the queen while White stays up a clean piece. Engine-verified crushing (about +5.8). Punish the greedy queen."
+      }
     ]
   },
   {
