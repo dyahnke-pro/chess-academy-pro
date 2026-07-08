@@ -393,3 +393,26 @@ scandinavian N168+, caro-kann N209+, alekhine N0-N9); E4E5 + D4Flank in their
 own files. Also sweep the 26 inline `{ ...Nxxx, beats: [...] }` overrides — most
 are legit (shared intro, per-line beats) but each likely carries the same 3
 generic stale beats and needs the same board-accurate densification.
+
+## SUBLINE ROLLOUT — anti-caro-fantasy COMPLETE (2026-07-08 cont.)
+
+**DONE — anti-caro-fantasy: ALL 38 subline keys (28 constants N78-N105)** densified
+to per-move, board-accurate teaching. Replaced the generic 3-beat stubs (which
+routinely overclaimed a winning attack / "castle into the attack" with queens
+off / "storm the kingside" against a central king). Every terminus engine-checked
+from the STUDENT's POV: winning lines taught as wins (N97 queen-trap +5.3, N93/N99
+passed-pawn/pawn-up, N102/N94 attacks), pleasant edges as edges, and the genuinely
+EQUAL lines (N92/N104/N83/N105/N100) + the one slightly-worse line (N78 −0.47)
+framed HONESTLY ("it's level, don't overpress") rather than sold as advantages.
+The sharp king-walk line (N91/N103) taught as a queenless small-edge endgame.
+Arrow sight-line checker run on every batch — caught + fixed ~9 slider arrows
+drawn through a blocking pawn/knight across the family. Gates green (42498),
+typecheck clean. Shipped main f545c9c (top-8) + 34556ac (mid-8) + [this commit]
+(final-8).
+
+**Two families now fully done:** anti-french-advance (15 keys) + anti-caro-fantasy
+(38 keys) = 53 subline keys at per-move parity. ~470 keys remain across the other
+~38 families. Method unchanged (see the block above). Next biggest untouched:
+anti-colle-black (60), anti-kid-saemisch (50), anti-alekhine-modern (39),
+anti-benoni-push (39). E4-family remaining constants in sublineNarrationE4Other.ts;
+E4E5 + D4Flank families in their own files.

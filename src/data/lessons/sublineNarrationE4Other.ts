@@ -864,13 +864,24 @@ const N81: SublineNarration = {
 };
 
 const N82: SublineNarration = {
-  intro: { say: "…Qa5 — paired with …Bb4 it piles on your pinned c3-knight, so play a3 to question the bishop and unpin with b4 ideas. After …c5-c4, lever the c4-pawn with b3 while your d4-e4 centre and f3 hold. Your Bf4 and central space carry the initiative, and that a5-queen becomes a target once b4 comes.", sayShort: "Qa5 piles on Nc3 — a3 unpins" },
+  intro: { say: "…Qa5 — the queen joins the …Bb4 pin on your c3-knight, but she'll spend the whole opening shuffling. Break the pin, chase the queen with tempo, and calmly build your centre while she loses move after move. You come out clearly better with more space and a big lead in useful development.", sayShort: "…Qa5 — chase the queen, gain tempo" },
   beats: [
-    { atMove: 10, say: "Bd2 unpins and prepares to chase Black's queen, your centre holding firm.", sayShort: "Bd2 — unpin, hold the centre.", highlights: [H('d2')] },
-    { atMove: 12, say: "Na4 hits Black's queen and heads for the strong c5-square with tempo.", sayShort: "Na4 — hit the queen.", highlights: [H('a4')] },
-    { atMove: 16, say: "Bd3 develops the bishop toward the kingside, your big centre behind it.", sayShort: "Bd3 — aim at the king.", highlights: [H('d3')] },
+    { atMove: 10, say: "Bd2 — break the pin and offer to harass the queen. Your knight is free and your centre stands.", sayShort: "Bd2 — break the pin.", highlights: [H('d2')] },
+    { atMove: 11, say: "…Qb6 — the queen sidesteps, still eyeing b2 and d4.", sayShort: "…Qb6 — sidestep.", highlights: [H('b6', SOFT)] },
+    { atMove: 12, say: "Na4 — hit the queen and head for the strong c5-outpost, gaining a tempo.", sayShort: "Na4 — hit the queen.", arrows: [A('a4', 'b6')], highlights: [H('b6')] },
+    { atMove: 13, say: "…Qa5 — the queen shuffles back to a5; that's two tempi wasted already.", sayShort: "…Qa5 — shuffles back.", highlights: [H('a5', SOFT)] },
+    { atMove: 14, say: "c3 — solidify d4 and permanently take the b4-square from Black's pieces.", sayShort: "c3 — solidify d4.", highlights: [H('c3')] },
+    { atMove: 15, say: "…Be7 — the bishop retreats, its pin gone and its adventure over.", sayShort: "…Be7 — retreat.", highlights: [H('e7', SOFT)] },
+    { atMove: 16, say: "Bd3 — develop the light bishop toward Black's kingside.", sayShort: "Bd3 — develop.", highlights: [H('d3')] },
+    { atMove: 17, say: "…Qc7 — the queen finally finds a home, having achieved nothing.", sayShort: "…Qc7 — the queen settles.", highlights: [H('c7', SOFT)] },
+    { atMove: 18, say: "Ne2 — reroute the knight toward g3 or f4, keeping the centre rock-solid.", sayShort: "Ne2 — reroute.", highlights: [H('e2')] },
+    { atMove: 19, say: "…b6 — Black prepares …Ba6 to trade off his passive light bishop.", sayShort: "…b6 — prep …Ba6.", highlights: [H('b6', SOFT)] },
+    { atMove: 20, say: "b4 — grab queenside space and secure the a4-knight's route to c5.", sayShort: "b4 — grab space.", highlights: [H('b4')] },
+    { atMove: 21, say: "…Ba6 — Black trades off the bad bishop.", sayShort: "…Ba6 — trade.", highlights: [H('a6', SOFT)] },
+    { atMove: 22, say: "Bxa6 — accept the trade, keeping it simple with your edge intact.", sayShort: "Bxa6 — accept the trade.", highlights: [H('a6')] },
+    { atMove: 23, say: "…Nxa6 — Black recaptures, the knight offside on a6. You're clearly better: the queen wasted three tempi, and you have more space, the c5-outpost, and the far better development.", sayShort: "…Nxa6 — you're clearly better.", highlights: [H('a6', SOFT)] },
   ],
-  sources: ['concept:tac-pin', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
+  sources: ['concept:pos-tempo', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
 };
 
 const N83: SublineNarration = {
@@ -899,13 +910,24 @@ const N83: SublineNarration = {
 };
 
 const N84: SublineNarration = {
-  intro: { say: "…b6 — he expands with …b5 and a fianchetto, but it leaves c6 and the long light diagonal weak. Answer a3 to question the Bb4 and b3 to brace the queenside, keeping your d4-e4 centre intact. Your central space and Bf4 outrun his slow flank play, with c6 a lasting hole to target.", sayShort: "b6-b5 flank — weak c6, strong centre" },
+  intro: { say: "…b6 — Black adds a fianchetto to his French-style setup, but it's slow. Kick with e5, take the bishop pair when he trades on c3, and grab space on both wings while his king lingers in the centre. Your extra room and the e5-clamp give a clear, pleasant edge.", sayShort: "…b6 — slow; clamp and take the bishops" },
   beats: [
-    { atMove: 12, say: "e5 gains space and clamps Black's position, your broad centre rolling.", sayShort: "e5 — gain space, clamp.", highlights: [H('e5')] },
-    { atMove: 14, say: "h4 launches the kingside storm, your centre freeing the assault.", sayShort: "h4 — storm the kingside.", highlights: [H('h4')] },
-    { atMove: 22, say: "h5 rams forward, prying open the h-file at Black's king.", sayShort: "h5 — pry open the h-file.", highlights: [H('h5')] },
+    { atMove: 10, say: "Qd2 — develop the queen and connect, quietly covering the …Bxc3 doubling idea.", sayShort: "Qd2 — develop, connect.", highlights: [H('d2')] },
+    { atMove: 11, say: "…Nf6 — Black develops and pokes at your e4-pawn.", sayShort: "…Nf6 — pressure e4.", arrows: [A('f6', 'e4')], highlights: [H('e4')] },
+    { atMove: 12, say: "e5 — kick the knight and grab space, clamping the dark squares.", sayShort: "e5 — gain space, kick.", highlights: [H('e5')] },
+    { atMove: 13, say: "…Nfd7 — the knight retreats, its outpost taken.", sayShort: "…Nfd7 — retreat.", highlights: [H('d7', SOFT)] },
+    { atMove: 14, say: "h4 — grab kingside space; with Black's king still uncommitted, this probe costs him nothing to allow but gains you room.", sayShort: "h4 — grab space.", highlights: [H('h4')] },
+    { atMove: 15, say: "…c5 — Black strikes at the base of your chain on d4.", sayShort: "…c5 — hit d4.", highlights: [H('c5', SOFT)] },
+    { atMove: 16, say: "a3 — question the b4-bishop and make it commit.", sayShort: "a3 — question the bishop.", highlights: [H('a3')] },
+    { atMove: 17, say: "…Bxc3 — Black trades, handing you the bishop pair.", sayShort: "…Bxc3 — gives the bishops.", highlights: [H('c3', SOFT)] },
+    { atMove: 18, say: "bxc3 — recapture toward the centre; doubled c-pawns, but the two bishops and a fortress centre.", sayShort: "bxc3 — bishop pair, strong centre.", highlights: [H('c3'), H('d4', SOFT)] },
+    { atMove: 19, say: "…Ba6 — Black trades off his passive light bishop to ease the cramp.", sayShort: "…Ba6 — trade the bad bishop.", highlights: [H('a6', SOFT)] },
+    { atMove: 20, say: "Bxa6 — accept the trade; simplicity favours the side with more space.", sayShort: "Bxa6 — accept the trade.", highlights: [H('a6')] },
+    { atMove: 21, say: "…Nxa6 — Black recaptures, the knight offside on a6.", sayShort: "…Nxa6 — knight to the rim.", highlights: [H('a6', SOFT)] },
+    { atMove: 22, say: "h5 — advance the pawn, clamping more kingside space and cramping Black further.", sayShort: "h5 — clamp the kingside.", highlights: [H('h5')] },
+    { atMove: 23, say: "…h6 — Black makes luft. You're clearly better: the e5 space clamp, room on both wings, the surviving dark bishop against a knight, and a Black king still stuck in the centre.", sayShort: "…h6 — you're clearly better.", highlights: [H('h6', SOFT)] },
   ],
-  sources: ['concept:pos-center', 'concept:pos-weak-squares', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
 };
 
 const N85: SublineNarration = {
@@ -1001,13 +1023,26 @@ const N88: SublineNarration = {
 };
 
 const N89: SublineNarration = {
-  intro: { say: "…Nd7 — he expands with …c5-c4 and preps …b5 with …a6 to hold c4. Build the c3-d4-e4 chain with a3, b3, and c3 to anchor the centre; that earlier b3-lever still leaves c4 loose. Your broad centre and half-open f-file dominate while his queenside pawns overreach with his king uncastled.", sayShort: "Nd7 and c4 — c3 anchors centre" },
+  intro: { say: "…Nd7 — Black heads for a fianchetto after the central trade. Clamp with e5, gain space on both wings, castle long and develop your pieces to active posts. Your broad centre and the extra room leave Black cramped — a clear, pleasant edge.", sayShort: "…Nd7 — clamp with e5, space both wings" },
   beats: [
-    { atMove: 8, say: "e5 gains space and clamps Black's setup, your broad centre dominant.", sayShort: "e5 — gain space, clamp.", highlights: [H('e5')] },
-    { atMove: 14, say: "Bf4 develops the bishop to an active diagonal, supporting your centre.", sayShort: "Bf4 — active bishop.", highlights: [H('f4')] },
-    { atMove: 20, say: "O-O-O castles into the attack, your rooks joining the assault.", sayShort: "O-O-O — castle, attack.", highlights: [H('c1')] },
+    { atMove: 8, say: "e5 — clamp the centre and grab space, cramping Black's setup from the start.", sayShort: "e5 — gain space, clamp.", highlights: [H('e5')] },
+    { atMove: 9, say: "…g6 — Black prepares to fianchetto the bishop.", sayShort: "…g6 — prep the fianchetto.", highlights: [H('g6', SOFT)] },
+    { atMove: 10, say: "Nc3 — develop and defend e4, building your position.", sayShort: "Nc3 — develop, defend e4.", highlights: [H('c3')] },
+    { atMove: 11, say: "…Nb6 — Black reroutes the knight toward c4 or a4.", sayShort: "…Nb6 — reroute.", highlights: [H('b6', SOFT)] },
+    { atMove: 12, say: "a4 — grab queenside space and threaten a5 to kick the b6-knight.", sayShort: "a4 — grab space, threaten a5.", highlights: [H('a4')] },
+    { atMove: 13, say: "…a5 — Black stops a5, but concedes the b5-square for good.", sayShort: "…a5 — concedes b5.", highlights: [H('b5', SOFT)] },
+    { atMove: 14, say: "Bf4 — develop the bishop to an active diagonal, guarding e5 and eyeing the c1-h6 line.", sayShort: "Bf4 — active bishop.", highlights: [H('f4')] },
+    { atMove: 15, say: "…h5 — Black grabs some kingside space to keep your pieces off g4.", sayShort: "…h5 — take kingside space.", highlights: [H('h5', SOFT)] },
+    { atMove: 16, say: "Qd2 — develop the queen, connect the rooks, and prepare to castle long.", sayShort: "Qd2 — develop, prep O-O-O.", highlights: [H('d2')] },
+    { atMove: 17, say: "…Bh6 — Black offers to trade the dark-squared bishops.", sayShort: "…Bh6 — offer a trade.", highlights: [H('h6', SOFT)] },
+    { atMove: 18, say: "Nf3 — develop and lend another defender to your e5-spearhead.", sayShort: "Nf3 — defend e5.", highlights: [H('f3')] },
+    { atMove: 19, say: "…Bg4 — Black pins the knight, trying to chip at your centre.", sayShort: "…Bg4 — pin the knight.", highlights: [H('g4', SOFT)] },
+    { atMove: 20, say: "O-O-O — castle long, connecting the rooks and seizing the open d-file.", sayShort: "O-O-O — king safe, take the d-file.", highlights: [H('c1')] },
+    { atMove: 21, say: "…Nd5 — Black centralises the knight, offering trades to relieve the cramp.", sayShort: "…Nd5 — centralise.", highlights: [H('d5', SOFT)] },
+    { atMove: 22, say: "Nxd5 — take, opening lines while keeping your space edge.", sayShort: "Nxd5 — take, open lines.", highlights: [H('d5')] },
+    { atMove: 23, say: "…Bxf3 — Black grabs the knight, but after you recapture you stay clearly better: the e5 space clamp, the open d-file for your rook, and the more active pieces.", sayShort: "…Bxf3 — you're clearly better.", highlights: [H('f3', SOFT)] },
   ],
-  sources: ['concept:pos-center', 'concept:pawn-chain', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
 };
 
 const N90: SublineNarration = {
@@ -1034,13 +1069,28 @@ const N90: SublineNarration = {
 };
 
 const N91: SublineNarration = {
-  intro: { say: "…e5 — he strikes early, so grab the pawn with dxe5 while he tries …Bc5 and the …d4-d3-d2+ run to disrupt you. That d2-pawn is only a harmless check — scoop it with Bxd2 or Qxd2 and stay a clean pawn ahead. Your extra e5-pawn and his loose, undefended advance decide it once you catch up in development.", sayShort: "dxe5 grabs pawn — d2 check is harmless" },
+  intro: { say: "…e5 — a premature strike that simply drops a pawn. Grab it with dxe5 and don't be rattled by the …Bf2+ check and …Qd4 tricks that follow: trade the queens, let your king step up, and steer into a queenless middlegame where your king becomes a strong central piece. You keep a small, safe edge.", sayShort: "…e5 — grab the pawn, trade down" },
   beats: [
-    { atMove: 6, say: "dxe5 recaptures, keeping your broad centre and a comfortable space edge.", sayShort: "dxe5 — recapture, hold space.", highlights: [H('e5')] },
-    { atMove: 8, say: "Nc3 develops with a hit on the centre, your pieces harmonious.", sayShort: "Nc3 — develop, defend e4.", highlights: [H('c3')] },
-    { atMove: 14, say: "Qxd4 centralises the queen, your active king and pieces holding the balance.", sayShort: "Qxd4 — centralise the queen.", highlights: [H('d4')] },
+    { atMove: 6, say: "dxe5 — take the pawn; Black's early …e5 just gives you a free centre pawn.", sayShort: "dxe5 — win the pawn.", highlights: [H('e5')] },
+    { atMove: 7, say: "…Qb6 — Black eyes b2 and f2, trying to conjure disruption for the pawn.", sayShort: "…Qb6 — seek tricks.", highlights: [H('b6', SOFT)] },
+    { atMove: 8, say: "Nc3 — develop and defend e4, keeping your pieces coordinated.", sayShort: "Nc3 — develop, defend e4.", highlights: [H('c3')] },
+    { atMove: 9, say: "…Bc5 — Black develops with a threat against f2.", sayShort: "…Bc5 — eye f2.", highlights: [H('c5', SOFT)] },
+    { atMove: 10, say: "Na4 — hit both the c5-bishop and the b6-queen at once, gaining tempo.", sayShort: "Na4 — hit two pieces.", arrows: [A('a4', 'c5')], highlights: [H('c5'), H('b6', SOFT)] },
+    { atMove: 11, say: "…Bf2+ — a disruptive check, but it leads nowhere concrete.", sayShort: "…Bf2+ — a spite check.", highlights: [H('f2', SOFT)] },
+    { atMove: 12, say: "Ke2 — step the king up. With queens about to leave the board, the king is perfectly safe.", sayShort: "Ke2 — the king steps up.", highlights: [H('e2')] },
+    { atMove: 13, say: "…Qd4 — Black centralises the queen, offering a trade.", sayShort: "…Qd4 — offer a trade.", highlights: [H('d4', SOFT)] },
+    { atMove: 14, say: "Qxd4 — take the trade; with queens off, all of Black's disruption fizzles out.", sayShort: "Qxd4 — trade queens.", highlights: [H('d4')] },
+    { atMove: 15, say: "…Bxd4 — Black recaptures.", sayShort: "…Bxd4 — recapture.", highlights: [H('d4', SOFT)] },
+    { atMove: 16, say: "f4 — support your extra e5-pawn and grab more space.", sayShort: "f4 — support e5.", highlights: [H('f4')] },
+    { atMove: 17, say: "…dxe4 — Black regains a pawn, opening the centre.", sayShort: "…dxe4 — regain a pawn.", highlights: [H('e4', SOFT)] },
+    { atMove: 18, say: "Be3 — offer to trade the strong d4-bishop, simplifying toward a clean game.", sayShort: "Be3 — offer the trade.", highlights: [H('e3')] },
+    { atMove: 19, say: "…Bxe3 — Black trades.", sayShort: "…Bxe3 — trade.", highlights: [H('e3', SOFT)] },
+    { atMove: 20, say: "Kxe3 — recapture with the king; queenless, it's an active fighting piece, not a liability.", sayShort: "Kxe3 — the active king.", highlights: [H('e3')] },
+    { atMove: 21, say: "…f6 — Black strikes at your e5-pawn to open lines.", sayShort: "…f6 — hit e5.", highlights: [H('f6', SOFT)] },
+    { atMove: 22, say: "Kxe4 — the king marches boldly to e4, a superb central post with no queens to fear.", sayShort: "Kxe4 — king to the centre.", highlights: [H('e4')] },
+    { atMove: 23, say: "…fxe5 — Black regains the pawn. It's an unusual queenless middlegame where you hold a small, safe edge: your king dominates the centre and your structure is the sounder. Play it as an endgame.", sayShort: "…fxe5 — a small, safe edge.", highlights: [H('e5', SOFT)] },
   ],
-  sources: ['concept:pos-tempo', 'concept:tac-trap', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
+  sources: ['concept:pos-tempo', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
 };
 
 const N92: SublineNarration = {
@@ -1113,13 +1163,26 @@ const N94: SublineNarration = {
 };
 
 const N95: SublineNarration = {
-  intro: { say: "…g6 — after the e4-trade he fianchettos but then lashes out with …g5, weakening his own kingside. Build the c3-d4-e4 chain with a3, b3, and c3 to anchor the centre, and note the holes that loose …g5 leaves on f5 and h5. Your solid centre against his airy kingside is a clear structural edge with targets to attack.", sayShort: "g5 weakens kingside — solid centre punishes" },
+  intro: { say: "…g6 — a fianchetto after the central trade, but Black's …b5 lunge overreaches on the queenside. Develop actively toward f7, retreat your bishop to safety, clamp with e5, then hit the loose b5-pawn with a4. You end up with a big centre, the bishop pair, and targets on Black's ragged queenside.", sayShort: "…g6 — clamp, then punish …b5" },
   beats: [
-    { atMove: 8, say: "Nf3 develops and bolsters the centre, your space advantage growing.", sayShort: "Nf3 — bolster the centre.", arrows: [A('f3', 'e5')], highlights: [H('e5')] },
-    { atMove: 10, say: "Bc4 develops the bishop, eyeing f7 and Black's loosened kingside.", sayShort: "Bc4 — aim at f7.", arrows: [A('c4', 'f7')], highlights: [H('f7')] },
-    { atMove: 14, say: "e5 gains space, your broad centre clamping Black's position.", sayShort: "e5 — gain space, clamp.", highlights: [H('e5')] },
+    { atMove: 8, say: "Nf3 — develop and defend your d4-pawn, the anchor of the centre.", sayShort: "Nf3 — develop, hold d4.", highlights: [H('f3')] },
+    { atMove: 9, say: "…Bg7 — Black fianchettoes, aiming down the long diagonal.", sayShort: "…Bg7 — the fianchetto.", highlights: [H('g7', SOFT)] },
+    { atMove: 10, say: "Bc4 — develop the bishop straight at f7, Black's most sensitive square.", sayShort: "Bc4 — aim at f7.", arrows: [A('c4', 'f7')], highlights: [H('f7')] },
+    { atMove: 11, say: "…b5 — Black lashes out, hitting your bishop, but this overreaches and loosens his queenside.", sayShort: "…b5 — overreaches.", highlights: [H('b5', SOFT)] },
+    { atMove: 12, say: "Bb3 — retreat, keeping the bishop on the strong a2-g8 diagonal aimed at f7.", sayShort: "Bb3 — keep the diagonal.", highlights: [H('b3')] },
+    { atMove: 13, say: "…Nf6 — Black develops and pokes at your e4-pawn.", sayShort: "…Nf6 — pressure e4.", arrows: [A('f6', 'e4')], highlights: [H('e4')] },
+    { atMove: 14, say: "e5 — kick the knight and clamp the centre, grabbing space.", sayShort: "e5 — gain space, kick.", highlights: [H('e5')] },
+    { atMove: 15, say: "…Nd5 — the knight hops to the centre.", sayShort: "…Nd5 — into the centre.", highlights: [H('d5', SOFT)] },
+    { atMove: 16, say: "Nc3 — develop and challenge the d5-knight.", sayShort: "Nc3 — challenge the knight.", highlights: [H('c3')] },
+    { atMove: 17, say: "…O-O — Black castles.", sayShort: "…O-O — Black castles.", highlights: [H('g8', SOFT)] },
+    { atMove: 18, say: "a4 — strike at the overextended b5-pawn, prying open Black's loose queenside.", sayShort: "a4 — hit the b5-pawn.", highlights: [H('a4'), H('b5', SOFT)] },
+    { atMove: 19, say: "…Nxc3 — Black trades off before you win a piece with the pin.", sayShort: "…Nxc3 — trade.", highlights: [H('c3', SOFT)] },
+    { atMove: 20, say: "bxc3 — recapture toward the centre: now you have a towering c3-d4-e5 pawn mass.", sayShort: "bxc3 — towering centre.", highlights: [H('c3'), H('e5', SOFT)] },
+    { atMove: 21, say: "…bxa4 — Black grabs the pawn to avoid losing it outright.", sayShort: "…bxa4 — Black takes.", highlights: [H('a4', SOFT)] },
+    { atMove: 22, say: "Rxa4 — recapture; the rook is active on the open a-file and Black's queenside is full of holes.", sayShort: "Rxa4 — active rook.", highlights: [H('a4')] },
+    { atMove: 23, say: "…Nd7 — Black develops. You're clearly better: the big centre, the bishop pair, an active rook, and lasting targets on Black's shattered queenside pawns.", sayShort: "…Nd7 — you're clearly better.", highlights: [H('d7', SOFT)] },
   ],
-  sources: ['concept:pos-center', 'concept:pos-weak-squares', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
+  sources: ['concept:pos-center', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
 };
 
 const N96: SublineNarration = {
@@ -1163,13 +1226,26 @@ const N97: SublineNarration = {
 };
 
 const N98: SublineNarration = {
-  intro: { say: "…dxe4 — he fianchettos …Bg7 to pressure your d4-e4 centre along the long diagonal. Secure the queenside with a3 and b3, and after …c5-c4 expose the pawn with the b3-lever. Your broad central pawns and half-open f-file give space and an attacking base while his queenside pushes loosen his own structure.", sayShort: "Bg7 eyes centre — b3 hits c4" },
+  intro: { say: "…dxe4 — Black trades and fianchettoes. Recapture to build the broad centre, develop smoothly and castle, then roll forward with e5 and plant a knight on the dominant e4-square. Your central space and the active pieces leave Black cramped — a clear, pleasant edge.", sayShort: "…dxe4 — big centre, dominate e4" },
   beats: [
-    { atMove: 8, say: "fxe4 recaptures, keeping your massive e4/d4 pawn centre.", sayShort: "fxe4 — keep the big centre.", highlights: [H('e4')] },
-    { atMove: 10, say: "Nf3 develops and bolsters the centre, your space advantage growing.", sayShort: "Nf3 — bolster the centre.", arrows: [A('f3', 'e5')], highlights: [H('e5')] },
-    { atMove: 16, say: "e5 gains space and kicks Black's knight, your centre rolling forward.", sayShort: "e5 — gain space, kick.", highlights: [H('e5')] },
+    { atMove: 8, say: "fxe4 — recapture and there's your broad d4-e4 pawn centre.", sayShort: "fxe4 — the big centre.", highlights: [H('e4'), H('d4', SOFT)] },
+    { atMove: 9, say: "…Bg7 — Black fianchettoes, aiming down the long diagonal at your centre.", sayShort: "…Bg7 — the fianchetto.", highlights: [H('g7', SOFT)] },
+    { atMove: 10, say: "Nf3 — develop and defend d4, meeting the diagonal pressure calmly.", sayShort: "Nf3 — develop, hold d4.", highlights: [H('f3')] },
+    { atMove: 11, say: "…Nf6 — Black develops and pokes at your e4-pawn.", sayShort: "…Nf6 — pressure e4.", arrows: [A('f6', 'e4')], highlights: [H('e4')] },
+    { atMove: 12, say: "Be2 — modest development, connecting toward castling.", sayShort: "Be2 — develop.", highlights: [H('e2')] },
+    { atMove: 13, say: "…O-O — Black castles to safety.", sayShort: "…O-O — Black castles.", highlights: [H('g8', SOFT)] },
+    { atMove: 14, say: "O-O — castle, king safe, your centre intact.", sayShort: "O-O — king safe.", highlights: [H('g1')] },
+    { atMove: 15, say: "…Bg4 — Black pins your knight, trying to chip at your centre.", sayShort: "…Bg4 — pin the knight.", highlights: [H('g4', SOFT)] },
+    { atMove: 16, say: "e5 — push and kick the f6-knight, rolling the centre forward and gaining space.", sayShort: "e5 — gain space, kick.", highlights: [H('e5')] },
+    { atMove: 17, say: "…Nd5 — the knight hops to the centre, but you have a fine square waiting.", sayShort: "…Nd5 — into the centre.", highlights: [H('d5', SOFT)] },
+    { atMove: 18, say: "Ne4 — plant the knight on the dominant e4-outpost, eyeing d6, f6 and g5.", sayShort: "Ne4 — the e4 outpost.", highlights: [H('e4')] },
+    { atMove: 19, say: "…f6 — Black strikes at your e5-spearhead to break the bind.", sayShort: "…f6 — strike the wedge.", highlights: [H('f6', SOFT)] },
+    { atMove: 20, say: "c4 — kick the d5-knight and widen the centre, gaining still more room.", sayShort: "c4 — kick, widen.", highlights: [H('c4')] },
+    { atMove: 21, say: "…Nc7 — the knight retreats to the rim, out of play.", sayShort: "…Nc7 — to the rim.", highlights: [H('c7', SOFT)] },
+    { atMove: 22, say: "exf6 — take, opening lines toward Black's king.", sayShort: "exf6 — open lines.", highlights: [H('f6')] },
+    { atMove: 23, say: "…exf6 — Black recaptures. You're clearly better: the broad centre, the dominant e4-knight, more space, and Black's knight stranded on c7. Press the space and the open lines.", sayShort: "…exf6 — you're clearly better.", highlights: [H('f6', SOFT)] },
   ],
-  sources: ['concept:pos-center', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
+  sources: ['concept:pos-center', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
 };
 
 const N99: SublineNarration = {
@@ -1213,13 +1289,26 @@ const N100: SublineNarration = {
 };
 
 const N101: SublineNarration = {
-  intro: { say: "…e6 — he mixes …g6 with …e6 and a quick …b5-b4, loosening both wings. Meet …b4 with a3 to challenge it and b3 to keep the queenside firm, supporting d4 with Be3 while e4 holds. His committal pushes leave his king uncastled and his pawns overextended against your compact d4-e4 centre.", sayShort: "b5-b4 overextends — White centre stays compact" },
+  intro: { say: "…e6 — Black mixes a fianchetto with a French wall. Develop, sidestep the …Qb6 pressure with Rb1, and roll out the e5-f4 space clamp. When Black strikes with …c5 you trade cleanly through the centre and keep the extra room. Your broad centre and better development give a clear, pleasant edge.", sayShort: "…e6 — clamp with e5/f4, big space" },
   beats: [
-    { atMove: 8, say: "Be3 develops and supports your big d4/e4 centre.", sayShort: "Be3 — support the centre.", highlights: [H('e3')] },
-    { atMove: 12, say: "e5 gains space and clamps Black's position, your broad centre dominant.", sayShort: "e5 — gain space, clamp.", highlights: [H('e5')] },
-    { atMove: 14, say: "f4 rolls the pawns, a Four-Pawns-style space clamp burying Black.", sayShort: "f4 — roll the pawns.", highlights: [H('f4')] },
+    { atMove: 8, say: "Be3 — develop the bishop and reinforce your d4-e4 centre.", sayShort: "Be3 — reinforce the centre.", highlights: [H('e3')] },
+    { atMove: 9, say: "…Qb6 — the queen leans on b2 and d4, the standard pressure.", sayShort: "…Qb6 — lean on b2/d4.", highlights: [H('b6', SOFT)] },
+    { atMove: 10, say: "Rb1 — a tidy prophylactic move: it sidesteps …Qxb2 and readies the b-file, so you never have to worry about the pawn.", sayShort: "Rb1 — sidestep …Qxb2.", highlights: [H('b1')] },
+    { atMove: 11, say: "…Nf6 — Black develops and pokes at your e4-pawn.", sayShort: "…Nf6 — pressure e4.", arrows: [A('f6', 'e4')], highlights: [H('e4')] },
+    { atMove: 12, say: "e5 — kick the knight and clamp the centre, seizing space.", sayShort: "e5 — gain space, kick.", highlights: [H('e5')] },
+    { atMove: 13, say: "…Nfd7 — the knight retreats, its outpost gone.", sayShort: "…Nfd7 — retreat.", highlights: [H('d7', SOFT)] },
+    { atMove: 14, say: "f4 — build the broad pawn front. d4, e5 and f4 together are a suffocating bind.", sayShort: "f4 — build the front.", highlights: [H('f4')] },
+    { atMove: 15, say: "…c5 — Black strikes at the base of your chain on d4.", sayShort: "…c5 — hit d4.", highlights: [H('c5', SOFT)] },
+    { atMove: 16, say: "Nf3 — develop and add a defender to d4, meeting the pressure calmly.", sayShort: "Nf3 — develop, hold d4.", highlights: [H('f3')] },
+    { atMove: 17, say: "…a6 — Black prepares …b5 for queenside counterplay.", sayShort: "…a6 — prep …b5.", highlights: [H('a6', SOFT)] },
+    { atMove: 18, say: "Qd2 — develop the queen and connect the rooks, completing your setup.", sayShort: "Qd2 — develop, connect.", highlights: [H('d2')] },
+    { atMove: 19, say: "…cxd4 — Black releases the tension, opening the centre.", sayShort: "…cxd4 — Black takes.", highlights: [H('d4', SOFT)] },
+    { atMove: 20, say: "Nxd4 — recapture, centralising the knight on its best square.", sayShort: "Nxd4 — centralise.", highlights: [H('d4')] },
+    { atMove: 21, say: "…Qc7 — the queen steps back to a safer post.", sayShort: "…Qc7 — regroup.", highlights: [H('c7', SOFT)] },
+    { atMove: 22, say: "Bd3 — develop the bishop toward Black's kingside, completing your mobilisation.", sayShort: "Bd3 — develop.", highlights: [H('d3')] },
+    { atMove: 23, say: "…Be7 — Black develops. You're clearly better: the e5-f4-d4 space clamp gives lasting room, your pieces are all active, and Black stays cramped. Hold the bind and pick your break.", sayShort: "…Be7 — you hold the bind.", highlights: [H('e7', SOFT)] },
   ],
-  sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
 };
 
 const N102: SublineNarration = {
@@ -1244,13 +1333,26 @@ const N102: SublineNarration = {
 };
 
 const N103: SublineNarration = {
-  intro: { say: "…e5 — lunge into it with dxe5 to win the pawn while he tries the …d4-d3-d2+ runner to jam you. That d2-pawn is a harmless check cut off from support — take it with Bxd2 or Qxd2 and stay a clean pawn up. His wrecked centre and exposed king decide the position in your favour.", sayShort: "dxe5 wins pawn — d2 runner falls" },
+  intro: { say: "…e5 — with the queen already on b6, Black lunges at your centre, but it just drops a pawn. Take it with dxe5, ride out the …Bf2+ and …Qd4 disruption by trading queens, and steer into a queenless middlegame where your king strides to the centre as a strong piece. You hold a small, safe edge.", sayShort: "…e5 — grab the pawn, trade down" },
   beats: [
-    { atMove: 8, say: "dxe5 recaptures, keeping your broad centre and a comfortable space edge.", sayShort: "dxe5 — recapture, hold space.", highlights: [H('e5')] },
-    { atMove: 10, say: "Na4 heads for the strong c5-square, your pieces pressing Black's position.", sayShort: "Na4 — head for c5.", highlights: [H('a4')] },
-    { atMove: 14, say: "Qxd4 centralises the queen, your active king and pieces holding the balance.", sayShort: "Qxd4 — centralise the queen.", highlights: [H('d4')] },
+    { atMove: 8, say: "dxe5 — take the pawn; the …e5 lunge simply hands you a free centre pawn.", sayShort: "dxe5 — win the pawn.", highlights: [H('e5')] },
+    { atMove: 9, say: "…Bc5 — Black develops with a threat on f2, chasing complications.", sayShort: "…Bc5 — eye f2.", highlights: [H('c5', SOFT)] },
+    { atMove: 10, say: "Na4 — hit the c5-bishop and the b6-queen together, gaining a tempo.", sayShort: "Na4 — hit two pieces.", arrows: [A('a4', 'c5')], highlights: [H('c5'), H('b6', SOFT)] },
+    { atMove: 11, say: "…Bf2+ — a disruptive check that leads nowhere concrete.", sayShort: "…Bf2+ — a spite check.", highlights: [H('f2', SOFT)] },
+    { atMove: 12, say: "Ke2 — step the king up; with the queens about to come off, it's perfectly safe.", sayShort: "Ke2 — the king steps up.", highlights: [H('e2')] },
+    { atMove: 13, say: "…Qd4 — Black centralises and offers a queen trade.", sayShort: "…Qd4 — offer a trade.", highlights: [H('d4', SOFT)] },
+    { atMove: 14, say: "Qxd4 — take it; queens off, and Black's disruption evaporates.", sayShort: "Qxd4 — trade queens.", highlights: [H('d4')] },
+    { atMove: 15, say: "…Bxd4 — Black recaptures.", sayShort: "…Bxd4 — recapture.", highlights: [H('d4', SOFT)] },
+    { atMove: 16, say: "f4 — support the extra e5-pawn and take more space.", sayShort: "f4 — support e5.", highlights: [H('f4')] },
+    { atMove: 17, say: "…dxe4 — Black regains a pawn, opening the centre.", sayShort: "…dxe4 — regain a pawn.", highlights: [H('e4', SOFT)] },
+    { atMove: 18, say: "Be3 — offer to trade the d4-bishop, simplifying toward a clean position.", sayShort: "Be3 — offer the trade.", highlights: [H('e3')] },
+    { atMove: 19, say: "…Bxe3 — Black trades.", sayShort: "…Bxe3 — trade.", highlights: [H('e3', SOFT)] },
+    { atMove: 20, say: "Kxe3 — recapture with the king; in a queenless game it's an asset, not a target.", sayShort: "Kxe3 — the active king.", highlights: [H('e3')] },
+    { atMove: 21, say: "…f6 — Black strikes at your e5-pawn to open lines.", sayShort: "…f6 — hit e5.", highlights: [H('f6', SOFT)] },
+    { atMove: 22, say: "Kxe4 — march the king to e4, a commanding central square with no queens to fear.", sayShort: "Kxe4 — king to the centre.", highlights: [H('e4')] },
+    { atMove: 23, say: "…fxe5 — Black regains the pawn. It's a queenless middlegame with a small, safe edge for you: your king rules the centre and your structure is sounder. Treat it as an endgame.", sayShort: "…fxe5 — a small, safe edge.", highlights: [H('e5', SOFT)] },
   ],
-  sources: ['concept:pos-tempo', 'concept:tac-trap', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
+  sources: ['concept:pos-tempo', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
 };
 
 const N104: SublineNarration = {
