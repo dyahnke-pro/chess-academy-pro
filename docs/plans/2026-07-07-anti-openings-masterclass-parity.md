@@ -246,7 +246,22 @@ bare SAN (try/catch each token — chess.js THROWS on illegal, doesn't return
 null), verify studentSide-win + on-repertoire opening, hand-author a real
 overview (boilerplate is filtered by isNarratedModelGame). REMAINING PARITY
 LAYERS: middlegame plans (finicky — board-accurate playable lines + themes gate),
-student-side pitfalls, and the Naroditsky-voice re-narration. Added since the 26-tab note:
+student-side pitfalls, and the Naroditsky-voice re-narration.
+
+MIDDLEGAME-PLANS FINDING (2026-07-08): most anti-opening middlegames are SLOW
+MANEUVERING positions with no crisp forcing plan — an engine-walk from the
+french-advance a3 terminus just shuffles (Kf1/Kg1/Nf1/Be3), it does NOT play the
+"thematic" b4-b5 storm (the …c4-fixed structure denies it). So a demonstrable
+plan line (student move landing on a declared break/maneuver square, per the
+themes gate) can only be authored for the openings that DO have a forcing plan —
+the ATTACKING ones: kid-saemisch (O-O-O + h4-h5-hxg6 storm, the Nbd7 variation),
+pirc Austrian (kingside piece-storm, Karjakin's model game shows it), benoni
+(the space bind + f4-f5), 150 Attack (Bh6 + kingside). For the positional
+systems (nimzo/qid/qgd/grunfeld/catalan/colle/french/scandinavian) the middlegame
+is a slow squeeze that resists a crisp forcing line — anchor a plan there only if
+you can author a SOUND thematic line by hand (engine-verify every move; do NOT
+force non-top moves to hit a theme square = soundness risk). Expect this layer to
+cover maybe 6-10 openings honestly, not all 24. Same empty > generic rule. Added since the 26-tab note:
 dutch-staunton(Nc6 gambit), smith-morra(Qe2), london(+Nf3), pirc(Dragon),
 kid-saemisch(Nc6/a6), benoni(Modern/Czech), colle(c3/dxc5), englund(d6/
 Zilbermints), alapin(a3), grand-prix(Bb5, extended past the queen-trade to a
