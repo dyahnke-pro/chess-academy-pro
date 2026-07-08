@@ -521,3 +521,21 @@ slider arrows, "grabs" vs "recaptures", overclaimed attacks on equal/quiet
 lines). Priority for next: finish anti-scandinavian, then anti-modern-150 (27,
 generic stubs), then anti-colle-black (60, D4Flank), then the sparse-but-correct
 + HELP-file families.
+
+
+## UPDATE (2026-07-08, later) — anti-scandinavian now 11/~21 constants
+
+DONE (all lines >=9% frequency, shipped, per-move, engine-checked, arrow-clean):
+N172 Qa5@5 52%, N168 Qd6@5 38% (+ both Qd6@5 keys repointed to fixed N168;
+its intro had described a g3/Bg2 setup the line never plays), N175 c6@9 37%,
+N164 Bf5@9 30%, N170 c6@7 24%, N173 b5@11 21%, N166 Bg4@9 19%, N177 g6@9 17%,
+N165 Bg4@11 16%, N169 Qd8@5 10%, N167 Nc6@9 9%.
+TODO (all <9%, lower priority): N183 g6@7 7%, N182 e6@9 5%, N179 a6@9 4%,
+N176 g6@11 3%, and the v1/v2 distinct-line variants N171/N174/N178/N180/N181/
+N184 (confirmed NOT duplicates — each has a different queen square / continuation,
+so each needs its own authoring; no consolidation possible).
+
+Session totals: 4 complete families (french-advance 16, caro-fantasy 38,
+rossolimo 16, alekhine-modern 39) + anti-scandinavian 11/21 = ~130 anti-* keys
+to per-move parity. ~25 board-accuracy bugs fixed. Next: finish anti-scandinavian
+tail, then anti-modern-150 (generic stubs), then anti-colle-black (60, D4Flank).
