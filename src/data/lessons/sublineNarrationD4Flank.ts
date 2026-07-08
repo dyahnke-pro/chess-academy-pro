@@ -715,6 +715,259 @@ const CATB_12: SublineNarration = {
   ],
   sources: ['concept:pos-development', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
 };
+
+const LOND_0: SublineNarration = {
+  intro: { say: "You've clamped the queenside with …c4, gaining space — but it's committal. White breaks with e4, and after the central trades and the queen swap he keeps a small, nagging pull. Stay solid: develop …Bf5 and …Nf6, hold your extra space, and defend the resulting ending accurately.", sayShort: "…c4 clamp — committal; hold firm" },
+  beats: [
+    { atMove: 7, say: "…c4 clamps the queenside and grabs space — committal, but it fixes White's structure.", sayShort: "…c4 — clamp, grab space", highlights: [_H('c4')] },
+    { atMove: 9, say: "…Bf5 develops the bishop to its best square, outside the chain.", sayShort: "…Bf5 — the good bishop", highlights: [_H('f5')] },
+    { atMove: 11, say: "…Nf6 develops and eyes the centre.", sayShort: "…Nf6 — develop", highlights: [_H('f6')] },
+    { atMove: 15, say: "…dxe4 opens the centre as White breaks; stay accurate.", sayShort: "…dxe4 — meet the break", highlights: [_H('e4')] },
+    { atMove: 17, say: "…Nc5 reroutes the knight to a fine outpost.", sayShort: "…Nc5 — the outpost", highlights: [_H('c5')] },
+    { atMove: 19, say: "…Rxd8 recaptures into the ending; White has a small pull, so defend.", sayShort: "…Rxd8 — into the ending", highlights: [_H('d8')] },
+    { atMove: 23, say: "…Rc8 activates on the c-file; solid but a touch passive — hold.", sayShort: "…Rc8 — activate; hold", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-development', 'https://en.wikipedia.org/wiki/London_System'],
+};
+
+const LOND_1: SublineNarration = {
+  intro: { say: "…c4 clamps, but White answers with e4-e5, gaining a central spearhead. It's committal: you get queenside space and a locked structure, yet White's kingside pawns give him a small pull. Develop …Nf6, reroute the knight to b6, and expand …a5-a4 to fight for your own play.", sayShort: "…c4 clamp — White pushes e5; hold" },
+  beats: [
+    { atMove: 7, say: "…c4 clamps the queenside, fixing White's chain.", sayShort: "…c4 — clamp, grab space", highlights: [_H('c4')] },
+    { atMove: 9, say: "…Nf6 develops and challenges the centre.", sayShort: "…Nf6 — develop, hit e4", highlights: [_H('f6')] },
+    { atMove: 11, say: "…b5 expands, supporting the …c4-clamp.", sayShort: "…b5 — support the clamp", highlights: [_H('b5')] },
+    { atMove: 13, say: "…Nd7 reroutes the knight to challenge the e5-wedge.", sayShort: "…Nd7 — reroute, hit e5", highlights: [_H('d7')] },
+    { atMove: 15, say: "…Nb6 heads for the strong c4/a4 squares.", sayShort: "…Nb6 — reroute to c4", highlights: [_H('b6')] },
+    { atMove: 17, say: "…e6 braces the centre solidly.", sayShort: "…e6 — brace the centre", highlights: [_H('e6')] },
+    { atMove: 21, say: "…b4 rams the queenside, seeking counterplay.", sayShort: "…b4 — ram the queenside", highlights: [_H('b4')] },
+    { atMove: 23, say: "…a4 expands further; committal but you have your own play — defend well.", sayShort: "…a4 — expand; fight on", highlights: [_H('a4')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pawn-chain', 'https://en.wikipedia.org/wiki/London_System'],
+};
+
+const LOND_2: SublineNarration = {
+  intro: { say: "…c4, and White undermines it with b3. After the trades you keep a sound structure, but White's pieces are a touch more active — he holds a small pull. Simplify the dark bishops with …Bd6, trade queens, and steer for a solid, defensible endgame.", sayShort: "…c4 clamp — b3 undermines; simplify" },
+  beats: [
+    { atMove: 7, say: "…c4 clamps the queenside, fixing White's chain.", sayShort: "…c4 — clamp, grab space", highlights: [_H('c4')] },
+    { atMove: 9, say: "…cxb3 keeps the structure sound as White undermines.", sayShort: "…cxb3 — keep it sound", highlights: [_H('b3')] },
+    { atMove: 11, say: "…e6 braces the centre and frees the f8-bishop.", sayShort: "…e6 — brace, develop", highlights: [_H('e6')] },
+    { atMove: 13, say: "…Bd6 offers to trade the dark bishops, easing your game.", sayShort: "…Bd6 — offer the trade", highlights: [_H('d6')] },
+    { atMove: 15, say: "…Qxd6 recaptures, the queen centralised.", sayShort: "…Qxd6 — centralise", highlights: [_H('d6')] },
+    { atMove: 17, say: "…Kf8 sidesteps the check, keeping the king safe.", sayShort: "…Kf8 — sidestep the check", highlights: [_H('f8')] },
+    { atMove: 19, say: "…Qxg3 trades queens into a solid ending.", sayShort: "…Qxg3 — trade into the ending", highlights: [_H('g3')] },
+    { atMove: 23, say: "…g6 shores up the kingside; White has a small pull, so defend accurately.", sayShort: "…g6 — shore up; hold", highlights: [_H('g6')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pawn-chain', 'https://en.wikipedia.org/wiki/London_System'],
+};
+
+const LOND_3: SublineNarration = {
+  intro: { say: "…c4 clamps, and White's Be2 and g4 lunge just loosen his kingside. Develop …Bf5 and …Nf6, jump …Ne4 into the centre, and shuffle the light bishop to hold the strong points. The position is fully equal — his g4 advance gives you targets.", sayShort: "…c4 clamp — g4 loosens; equal" },
+  beats: [
+    { atMove: 7, say: "…c4 clamps the queenside, fixing White's chain.", sayShort: "…c4 — clamp, grab space", highlights: [_H('c4')] },
+    { atMove: 9, say: "…Bf5 develops the bishop to its best square.", sayShort: "…Bf5 — the good bishop", highlights: [_H('f5')] },
+    { atMove: 11, say: "…Nf6 develops and eyes the centre.", sayShort: "…Nf6 — develop", highlights: [_H('f6')] },
+    { atMove: 15, say: "…Ne4 jumps to a dominant central outpost.", sayShort: "…Ne4 — the outpost", highlights: [_H('e4')] },
+    { atMove: 17, say: "…Bxe4 recaptures, keeping the light squares.", sayShort: "…Bxe4 — keep the light squares", highlights: [_H('e4')] },
+    { atMove: 19, say: "…Bd3 harasses the bishop, holding the strong post.", sayShort: "…Bd3 — harass, hold", highlights: [_H('d3')] },
+    { atMove: 23, say: "…Bd3 keeps the bishop dominant; fully equal, his g4 a weakness.", sayShort: "…Bd3 — dominant bishop; equal", highlights: [_H('d3')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-development', 'https://en.wikipedia.org/wiki/London_System'],
+};
+
+const LOND_4: SublineNarration = {
+  intro: { say: "…c4 clamps, and White's slow h3 lets you seize the initiative. Expand …b5, develop, and reroute …Ba3 to harass b2. When White grabs on c4 you recapture with the bishop and pin with …Bb2 — your active pieces and queenside pressure hand you the better game.", sayShort: "…c4 clamp — h3 slow; you press" },
+  beats: [
+    { atMove: 7, say: "…c4 clamps the queenside, fixing White's chain.", sayShort: "…c4 — clamp, grab space", highlights: [_H('c4')] },
+    { atMove: 9, say: "…b5 expands, supporting the clamp and gaining space.", sayShort: "…b5 — expand, support c4", highlights: [_H('b5')] },
+    { atMove: 11, say: "…e6 braces the centre and frees the f8-bishop.", sayShort: "…e6 — brace, develop", highlights: [_H('e6')] },
+    { atMove: 13, say: "…Nf6 develops and eyes the centre.", sayShort: "…Nf6 — develop", highlights: [_H('f6')] },
+    { atMove: 15, say: "…a6 shores up the b5-pawn, holding the queenside grip.", sayShort: "…a6 — hold the grip", highlights: [_H('a6')] },
+    { atMove: 17, say: "…Ba3 harasses b2, exploiting White's slow play.", sayShort: "…Ba3 — harass b2", highlights: [_H('a3')] },
+    { atMove: 21, say: "…bxc4 recaptures toward the centre, keeping the initiative.", sayShort: "…bxc4 — recapture, press", highlights: [_H('c4')] },
+    { atMove: 23, say: "…Bb2 pins and presses; your active pieces give the better game.", sayShort: "…Bb2 — press; you're better", highlights: [_H('b2')] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-space', 'https://en.wikipedia.org/wiki/London_System'],
+};
+
+const LOND_5: SublineNarration = {
+  intro: { say: "…c4, and White's a4 loosens the queenside. Swing …Qb6 to hit b2 and d4, block …Bd7, and trade off White's pieces. A little tactic collects a pawn on c3 — your active queen and queenside pressure leave you comfortably better.", sayShort: "…Qb6 hits b2 — comfortably better" },
+  beats: [
+    { atMove: 7, say: "…c4 clamps the queenside, fixing White's chain.", sayShort: "…c4 — clamp, grab space", highlights: [_H('c4')] },
+    { atMove: 9, say: "…Qb6 swings out, hitting b2 and the queenside.", sayShort: "…Qb6 — hit b2", highlights: [_H('b6')] },
+    { atMove: 11, say: "…cxb3 opens lines toward White's loosened queenside.", sayShort: "…cxb3 — open lines", highlights: [_H('b3')] },
+    { atMove: 13, say: "…Bd7 develops and prepares to trade cleanly.", sayShort: "…Bd7 — develop, prep trade", highlights: [_H('d7')] },
+    { atMove: 15, say: "…Rc8 lifts the rook to the c-file.", sayShort: "…Rc8 — the c-file", highlights: [_H('c8')] },
+    { atMove: 17, say: "…a6 nudges the b5-bishop, gaining a tempo.", sayShort: "…a6 — nudge the bishop", highlights: [_H('a6')] },
+    { atMove: 19, say: "…Qxc6 recaptures, the queen active.", sayShort: "…Qxc6 — active queen", highlights: [_H('c6')] },
+    { atMove: 23, say: "…Qxb3 collects the pawn; you're comfortably better.", sayShort: "…Qxb3 — grab the pawn; better", highlights: [_H('b3')] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/London_System'],
+};
+
+const LOND_6: SublineNarration = {
+  intro: { say: "Instead of the committal …c4, take the tension with …cxd4 and swing …Qb6 at b2. Develop …Nf6 and challenge the London bishop with …Nh5. After the trades you reach a fully equal game where White's dark-squared bishop is neutralised.", sayShort: "…Qb6 and …Nh5 — equal" },
+  beats: [
+    { atMove: 5, say: "…Nc6 develops with pressure on d4.", sayShort: "…Nc6 — pressure d4", highlights: [_H('c6')] },
+    { atMove: 9, say: "…Qb6 swings out, hitting b2 and pressing d4.", sayShort: "…Qb6 — hit b2", highlights: [_H('b6')] },
+    { atMove: 11, say: "…Nf6 develops and eyes the centre.", sayShort: "…Nf6 — develop", highlights: [_H('f6')] },
+    { atMove: 13, say: "…Nh5 challenges the London bishop, offering a trade.", sayShort: "…Nh5 — challenge the bishop", highlights: [_H('h5')] },
+    { atMove: 15, say: "…cxd4 opens the centre with active pieces.", sayShort: "…cxd4 — open the centre", highlights: [_H('d4')] },
+    { atMove: 17, say: "…Nxd4 recaptures, centralising the knight.", sayShort: "…Nxd4 — centralise", highlights: [_H('d4')] },
+    { atMove: 21, say: "…Nxe2+ trades off, simplifying to equality.", sayShort: "…Nxe2+ — simplify", highlights: [_H('e2')] },
+    { atMove: 23, say: "…Bb4 develops with pressure; fully equal.", sayShort: "…Bb4 — develop; equal", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/London_System'],
+};
+
+const LOND_7: SublineNarration = {
+  intro: { say: "White lashes out with e4 instead of the quiet London — an overreach. Take …dxe4 and hit the centre with …cxd4. His pieces scramble for the loose pawns while your development flows; after the queens come off you emerge with a clear, healthy extra pawn and the better game.", sayShort: "e4 overreach — grab the centre, better" },
+  beats: [
+    { atMove: 3, say: "…c5 hits the centre before White is developed.", sayShort: "…c5 — hit the centre", highlights: [_H('c5')] },
+    { atMove: 5, say: "…dxe4 grabs the pawn as White overreaches.", sayShort: "…dxe4 — grab the pawn", highlights: [_H('e4')] },
+    { atMove: 7, say: "…cxd4 opens the centre, springing your pieces.", sayShort: "…cxd4 — open the centre", highlights: [_H('d4')] },
+    { atMove: 9, say: "…Na6 develops, guarding the key squares against Nb5.", sayShort: "…Na6 — cover Nb5", highlights: [_H('a6')] },
+    { atMove: 11, say: "…Qxd4 trades queens, banking the extra pawn.", sayShort: "…Qxd4 — trade into a pawn-up game", highlights: [_H('d4')] },
+    { atMove: 13, say: "…Bd7 develops and connects, unwinding cleanly.", sayShort: "…Bd7 — develop, connect", highlights: [_H('d7')] },
+    { atMove: 15, say: "…Nf6 develops with tempo, eyeing the centre.", sayShort: "…Nf6 — develop", highlights: [_H('f6')] },
+    { atMove: 23, say: "…Kd8 sidesteps the knight check; you're clearly better, a pawn up.", sayShort: "…Kd8 — sidestep; better", highlights: [_H('d8')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/London_System'],
+};
+
+const LOND_8: SublineNarration = {
+  intro: { say: "White develops Nc3, so take …cxd4 and develop naturally. Trade the London bishop's counterpart with …Bf5 and …Bxd3, complete development, and castle. The isolated d4-pawn is a long-term target and the position is fully equal.", sayShort: "…cxd4 and …Bf5 — equal" },
+  beats: [
+    { atMove: 5, say: "…Nc6 develops with pressure on d4.", sayShort: "…Nc6 — pressure d4", highlights: [_H('c6')] },
+    { atMove: 7, say: "…cxd4 opens the centre, leaving White an isolated d-pawn.", sayShort: "…cxd4 — make the IQP", highlights: [_H('d4')] },
+    { atMove: 9, say: "…a6 keeps the queenside flexible.", sayShort: "…a6 — flexible queenside", highlights: [_H('a6')] },
+    { atMove: 11, say: "…Bf5 develops the bishop to its best square.", sayShort: "…Bf5 — the good bishop", highlights: [_H('f5')] },
+    { atMove: 13, say: "…Bxd3 trades off White's active bishop.", sayShort: "…Bxd3 — trade the bishop", highlights: [_H('d3')] },
+    { atMove: 15, say: "…e6 braces the centre solidly.", sayShort: "…e6 — brace the centre", highlights: [_H('e6')] },
+    { atMove: 19, say: "…Nf6 develops, eyeing the isolated d4-pawn.", sayShort: "…Nf6 — develop, eye d4", highlights: [_H('f6')] },
+    { atMove: 23, say: "…Rc8 activates on the c-file; fully equal.", sayShort: "…Rc8 — the c-file; equal", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/London_System'],
+};
+
+const LOND_9: SublineNarration = {
+  intro: { say: "White supports d4 with c3, so swing …Qb6 to pressure b2 and d4. Develop …Nf6 and …Nc6; White trades on c5 and later opens with c4, keeping a small pull. Trade the dark bishops, recapture soundly, and defend the slightly worse but comfortable game.", sayShort: "…Qb6 — a small White pull; defend" },
+  beats: [
+    { atMove: 5, say: "…Qb6 swings out, hitting b2 and d4.", sayShort: "…Qb6 — hit b2 and d4", highlights: [_H('b6')] },
+    { atMove: 7, say: "…Nf6 develops and eyes the centre.", sayShort: "…Nf6 — develop", highlights: [_H('f6')] },
+    { atMove: 9, say: "…Nc6 develops with pressure on d4.", sayShort: "…Nc6 — pressure d4", highlights: [_H('c6')] },
+    { atMove: 11, say: "…Qxc5 recovers the pawn, the queen active.", sayShort: "…Qxc5 — recover the pawn", highlights: [_H('c5')] },
+    { atMove: 13, say: "…e6 braces the centre and frees the f8-bishop.", sayShort: "…e6 — brace, develop", highlights: [_H('e6')] },
+    { atMove: 15, say: "…Bd6 offers to trade the dark bishops.", sayShort: "…Bd6 — offer the trade", highlights: [_H('d6')] },
+    { atMove: 19, say: "…Qe7 regroups the queen safely.", sayShort: "…Qe7 — regroup", highlights: [_H('e7')] },
+    { atMove: 23, say: "…O-O tucks the king safe; White has a small pull, defend accurately.", sayShort: "…O-O — king safe; hold", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/London_System'],
+};
+
+const LOND_10: SublineNarration = {
+  intro: { say: "…c4 clamps, White supports with c3 and prepares the e4-break. It's committal — after the trades White's e5-spearhead gives him a small pull. Develop soundly with …a6, …e6, …Bd7 and …Nf6, trade off pieces, and defend the slightly passive but solid position.", sayShort: "…c4 clamp — e4-e5; defend solidly" },
+  beats: [
+    { atMove: 7, say: "…c4 clamps the queenside, fixing White's chain.", sayShort: "…c4 — clamp, grab space", highlights: [_H('c4')] },
+    { atMove: 9, say: "…a6 supports a future …b5 and holds the grip.", sayShort: "…a6 — hold the grip", highlights: [_H('a6')] },
+    { atMove: 11, say: "…e6 braces the centre solidly.", sayShort: "…e6 — brace the centre", highlights: [_H('e6')] },
+    { atMove: 13, say: "…Bd7 develops and prepares to trade.", sayShort: "…Bd7 — develop, prep trade", highlights: [_H('d7')] },
+    { atMove: 15, say: "…Nf6 develops and eyes the centre.", sayShort: "…Nf6 — develop", highlights: [_H('f6')] },
+    { atMove: 17, say: "…Be7 develops, readying castling.", sayShort: "…Be7 — develop, ready O-O", highlights: [_H('e7')] },
+    { atMove: 19, say: "…Qxd7 recaptures, connecting the pieces.", sayShort: "…Qxd7 — recapture, connect", highlights: [_H('d7')] },
+    { atMove: 23, say: "…Nd7 challenges the e5-wedge; White has a small pull — defend.", sayShort: "…Nd7 — hit e5; hold", highlights: [_H('d7')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pawn-chain', 'https://en.wikipedia.org/wiki/London_System'],
+};
+
+const LOND_11: SublineNarration = {
+  intro: { say: "…c4, and White undermines with b3. Keep the structure sound with …cxb3, develop …Bd6 and trade the dark bishops. White regains the initiative with a small pull; castle, expand …b6 and …a5, and hold the slightly worse but defensible middlegame.", sayShort: "…c4 clamp — b3 undermines; hold" },
+  beats: [
+    { atMove: 7, say: "…c4 clamps the queenside.", sayShort: "…c4 — clamp, grab space", highlights: [_H('c4')] },
+    { atMove: 9, say: "…cxb3 keeps the structure sound.", sayShort: "…cxb3 — keep it sound", highlights: [_H('b3')] },
+    { atMove: 11, say: "…e6 braces the centre and frees the bishop.", sayShort: "…e6 — brace, develop", highlights: [_H('e6')] },
+    { atMove: 13, say: "…Bd6 offers to trade the dark bishops.", sayShort: "…Bd6 — offer the trade", highlights: [_H('d6')] },
+    { atMove: 15, say: "…Ne7 reroutes the knight, avoiding the trade of a good piece.", sayShort: "…Ne7 — reroute", highlights: [_H('e7')] },
+    { atMove: 17, say: "…Qxd6 recaptures, the queen centralised.", sayShort: "…Qxd6 — centralise", highlights: [_H('d6')] },
+    { atMove: 19, say: "…O-O tucks the king safe.", sayShort: "…O-O — king safe", highlights: [_H('g8')] },
+    { atMove: 23, say: "…a5 expands on the queenside; a small White pull — defend accurately.", sayShort: "…a5 — expand; hold", highlights: [_H('a5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pawn-chain', 'https://en.wikipedia.org/wiki/London_System'],
+};
+
+const LOND_12: SublineNarration = {
+  intro: { say: "…c4, and White develops Nc3. Pin with …Bg4, trade on f3 to damage his structure, and check …Bb4. Grab …Bxc3 to double his pawns, then win the London bishop with …Nxf4. The tactics settle into a roughly equal game with the better structure.", sayShort: "…Bg4, …Bxc3 — roughly equal" },
+  beats: [
+    { atMove: 7, say: "…c4 clamps the queenside.", sayShort: "…c4 — clamp, grab space", highlights: [_H('c4')] },
+    { atMove: 9, say: "…Bg4 pins the f3-knight.", sayShort: "…Bg4 — pin the knight", highlights: [_H('g4')] },
+    { atMove: 11, say: "…Bxf3 trades, damaging White's kingside structure.", sayShort: "…Bxf3 — damage the structure", highlights: [_H('f3')] },
+    { atMove: 13, say: "…e6 braces the centre.", sayShort: "…e6 — brace the centre", highlights: [_H('e6')] },
+    { atMove: 15, say: "…Bb4 pins the c3-knight.", sayShort: "…Bb4 — pin the knight", highlights: [_H('b4')] },
+    { atMove: 17, say: "…Bxc3 doubles White's queenside pawns.", sayShort: "…Bxc3 — double the pawns", highlights: [_H('c3')] },
+    { atMove: 19, say: "…Nf6 develops and eyes the centre.", sayShort: "…Nf6 — develop", highlights: [_H('f6')] },
+    { atMove: 23, say: "…Nxf4 wins the London bishop; roughly equal, better structure.", sayShort: "…Nxf4 — win the bishop; equal", highlights: [_H('f4')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/London_System'],
+};
+
+const LOND_13: SublineNarration = {
+  intro: { say: "…c4, and White's Be2 and b3 prise the clamp open. It's committal — after the trades White's freer pieces give him a clear small pull. Challenge the London bishop with …Nh5, trade it off, develop, and defend the slightly worse but solid position carefully.", sayShort: "…c4 clamp — b3 opens it; defend" },
+  beats: [
+    { atMove: 7, say: "…c4 clamps the queenside.", sayShort: "…c4 — clamp, grab space", highlights: [_H('c4')] },
+    { atMove: 9, say: "…Nf6 develops and eyes the centre.", sayShort: "…Nf6 — develop", highlights: [_H('f6')] },
+    { atMove: 11, say: "…cxb3 keeps the structure sound as White undermines.", sayShort: "…cxb3 — keep it sound", highlights: [_H('b3')] },
+    { atMove: 13, say: "…Nh5 challenges the London bishop.", sayShort: "…Nh5 — challenge the bishop", highlights: [_H('h5')] },
+    { atMove: 15, say: "…f6 kicks the bishop back, gaining space.", sayShort: "…f6 — kick the bishop", highlights: [_H('f6')] },
+    { atMove: 17, say: "…Nxg3 trades off White's good bishop.", sayShort: "…Nxg3 — trade the bishop", highlights: [_H('g3')] },
+    { atMove: 19, say: "…e6 braces the centre and frees the f8-bishop.", sayShort: "…e6 — brace, develop", highlights: [_H('e6')] },
+    { atMove: 23, say: "…Bd6 develops the bishop; White has a small pull — defend accurately.", sayShort: "…Bd6 — develop; hold", highlights: [_H('d6')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-space', 'https://en.wikipedia.org/wiki/London_System'],
+};
+
+const LOND_14: SublineNarration = {
+  intro: { say: "…c4, and White's Nbd2 is passive. Develop …e6 and expand …b5, brace with c3-supported structure, and castle. Undermine White's queenside with …cxb3 and …b4 — your space and queenside play fully equalise against the passive London setup.", sayShort: "…c4 clamp — Nbd2 passive; equal" },
+  beats: [
+    { atMove: 7, say: "…c4 clamps the queenside.", sayShort: "…c4 — clamp, grab space", highlights: [_H('c4')] },
+    { atMove: 9, say: "…e6 braces the centre and frees the f8-bishop.", sayShort: "…e6 — brace, develop", highlights: [_H('e6')] },
+    { atMove: 11, say: "…b5 expands, supporting the clamp.", sayShort: "…b5 — expand, support c4", highlights: [_H('b5')] },
+    { atMove: 13, say: "…Nf6 develops and eyes the centre.", sayShort: "…Nf6 — develop", highlights: [_H('f6')] },
+    { atMove: 15, say: "…Be7 develops, readying castling.", sayShort: "…Be7 — develop, ready O-O", highlights: [_H('e7')] },
+    { atMove: 17, say: "…O-O tucks the king safe.", sayShort: "…O-O — king safe", highlights: [_H('g8')] },
+    { atMove: 21, say: "…b4 rams the queenside, opening lines.", sayShort: "…b4 — ram, open lines", highlights: [_H('b4')] },
+    { atMove: 23, say: "…Bd7 develops the last piece; fully equal with queenside play.", sayShort: "…Bd7 — develop; equal", highlights: [_H('d7')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-development', 'https://en.wikipedia.org/wiki/London_System'],
+};
+
+const LOND_15: SublineNarration = {
+  intro: { say: "The main line: instead of the committal …c4, take the tension with …cxd4 and swing …Qb6. Develop …Bf5 and …Nd7, meet h4 with …h6, and complete development. A solid, roughly equal game where White's London bishop is well contained.", sayShort: "…Qb6, …cxd4 — solid, roughly equal" },
+  beats: [
+    { atMove: 5, say: "…Qb6 swings out, hitting b2 and d4.", sayShort: "…Qb6 — hit b2 and d4", highlights: [_H('b6')] },
+    { atMove: 7, say: "…Nf6 develops and eyes the centre.", sayShort: "…Nf6 — develop", highlights: [_H('f6')] },
+    { atMove: 9, say: "…cxd4 opens the centre with active pieces.", sayShort: "…cxd4 — open the centre", highlights: [_H('d4')] },
+    { atMove: 13, say: "…Bf5 develops the bishop to its best square.", sayShort: "…Bf5 — the good bishop", highlights: [_H('f5')] },
+    { atMove: 15, say: "…Nd7 reroutes, eyeing the strong central squares.", sayShort: "…Nd7 — reroute", highlights: [_H('d7')] },
+    { atMove: 17, say: "…h6 makes luft, denying White's pieces g5.", sayShort: "…h6 — luft", highlights: [_H('h6')] },
+    { atMove: 19, say: "…e6 braces the centre solidly.", sayShort: "…e6 — brace the centre", highlights: [_H('e6')] },
+    { atMove: 23, say: "…Na5 reroutes the knight to press c4; roughly equal.", sayShort: "…Na5 — press c4; equal", highlights: [_H('a5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/London_System'],
+};
+
+const LOND_16: SublineNarration = {
+  intro: { say: "White lashes out with an early Nc3 and e4, but it fizzles into an equal ending. Take …cxd4, and after the forced trades on d5 and c6 the queens come off. Recapture soundly, develop …Nf6, and reach a balanced endgame where your structure holds firm.", sayShort: "Nc3/e4 fizzles — equal ending" },
+  beats: [
+    { atMove: 3, say: "…c5 hits the centre before White is set up.", sayShort: "…c5 — hit the centre", highlights: [_H('c5')] },
+    { atMove: 5, say: "…Nc6 develops with pressure on d4.", sayShort: "…Nc6 — pressure d4", highlights: [_H('c6')] },
+    { atMove: 7, say: "…cxd4 opens the centre into the forcing line.", sayShort: "…cxd4 — open the centre", highlights: [_H('d4')] },
+    { atMove: 11, say: "…Qxd1+ trades queens, heading into the ending.", sayShort: "…Qxd1+ — trade queens", highlights: [_H('d1')] },
+    { atMove: 13, say: "…bxc6 recaptures toward the centre.", sayShort: "…bxc6 — recapture", highlights: [_H('c6')] },
+    { atMove: 15, say: "…Nf6 develops, eyeing the centre.", sayShort: "…Nf6 — develop", highlights: [_H('f6')] },
+    { atMove: 17, say: "…Nd5 centralises the knight on a fine square.", sayShort: "…Nd5 — centralise", highlights: [_H('d5')] },
+    { atMove: 23, say: "…e5 grabs central space in the ending; fully equal.", sayShort: "…e5 — central space; equal", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/London_System'],
+};
 // DEEP EACOL :: anti-colle-black::3::exd4@8
 // DEEP TQGQGA :: queens-gambit::3::Nc6@11
 // DEEP TLON :: london-system::0::b6@15
@@ -16281,26 +16534,26 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'anti-budapest::2::Ne4@5': C146,
   'anti-budapest::2::g5@7': C147,
   // ── anti-london-black ──
-  'anti-london-black::0::Nf3@8': C148,
-  'anti-london-black::0::Nd2@8': C148,
-  'anti-london-black::0::b3@8': C148,
-  'anti-london-black::0::Be2@8': C148,
-  'anti-london-black::0::h3@8': C148,
-  'anti-london-black::0::a4@8': C148,
-  'anti-london-black::0::Nf3@6': C148,
-  'anti-london-black::0::e4@4': C149,
-  'anti-london-black::0::Nc3@6': C148,
-  'anti-london-black::0::c3@4': C148,
-  'anti-london-black::1::c3@8': C148,
-  'anti-london-black::1::b3@8': C148,
-  'anti-london-black::1::Nc3@8': C148,
-  'anti-london-black::1::Be2@8': C148,
-  'anti-london-black::1::Nbd2@8': C148,
-  'anti-london-black::1::c3@6': EALON,
-  'anti-london-black::1::e4@4': C149,
-  'anti-london-black::1::Nc3@6': C148,
-  'anti-london-black::1::c3@4': C148,
-  'anti-london-black::1::Nc3@4': C148,
+  'anti-london-black::0::Nf3@8': LOND_0,
+  'anti-london-black::0::Nd2@8': LOND_1,
+  'anti-london-black::0::b3@8': LOND_2,
+  'anti-london-black::0::Be2@8': LOND_3,
+  'anti-london-black::0::h3@8': LOND_4,
+  'anti-london-black::0::a4@8': LOND_5,
+  'anti-london-black::0::Nf3@6': LOND_6,
+  'anti-london-black::0::e4@4': LOND_7,
+  'anti-london-black::0::Nc3@6': LOND_8,
+  'anti-london-black::0::c3@4': LOND_9,
+  'anti-london-black::1::c3@8': LOND_10,
+  'anti-london-black::1::b3@8': LOND_11,
+  'anti-london-black::1::Nc3@8': LOND_12,
+  'anti-london-black::1::Be2@8': LOND_13,
+  'anti-london-black::1::Nbd2@8': LOND_14,
+  'anti-london-black::1::c3@6': LOND_15,
+  'anti-london-black::1::e4@4': LOND_7,
+  'anti-london-black::1::Nc3@6': LOND_8,
+  'anti-london-black::1::c3@4': LOND_9,
+  'anti-london-black::1::Nc3@4': LOND_16,
   // ── anti-catalan-black ──
   'anti-catalan-black::0::Nf3@4': CATB_0,
   'anti-catalan-black::0::Nc3@4': CATB_1,
