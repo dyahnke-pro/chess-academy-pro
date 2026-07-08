@@ -76214,5 +76214,2262 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-anticaro-fantasy-queenside-clamp",
+    "openingId": "anti-caro-fantasy",
+    "criticalPositionFen": "r2qr1k1/ppbn1ppp/2p2n2/4p3/P2PP1b1/2PB1N2/1PQN2PP/R1B2RK1 w - - 5 12",
+    "title": "Queenside minority attack — b4-b5xc6",
+    "overview": "The Fantasy Caro (3.f3) handed you a broad centre; now you turn to the wing. With the kingside sealed, b4-b5 rolls forward and bxc6 rips open the b-file straight at Black's queenside, leaving him with a weak c6-pawn to defend for the rest of the game.",
+    "pawnBreaks": [
+      "b4 and b5 expanding on the queenside",
+      "bxc6 opening the b-file at Black's weak pawn"
+    ],
+    "pieceManeuvers": [
+      "Kh1 tucking the king before the wing push"
+    ],
+    "strategicThemes": [
+      "the queenside pawn majority",
+      "the open b-file",
+      "Black's weak c6-pawn"
+    ],
+    "endgameTransitions": [
+      "convert the b-file pressure and c6 weakness into a better endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "r2qr1k1/ppbn1ppp/2p2n2/4p3/P2PP1b1/2PB1N2/1PQN2PP/R1B2RK1 w - - 5 12",
+        "title": "Queenside minority attack — b4-b5xc6",
+        "intro": "The Fantasy Caro (3.f3) handed you a broad centre; now you turn to the wing.",
+        "moves": [
+          "Kh1",
+          "Nf8",
+          "b4",
+          "Ng6",
+          "b5",
+          "Rc8",
+          "bxc6",
+          "bxc6"
+        ],
+        "annotations": [
+          "Kh1 tucks the king onto the corner, a quiet prophylactic step before the queenside pawns start rolling.",
+          "Black shuffles the knight back toward g6; his pieces have no break, so you are free to play on the wing.",
+          "b4 begins the minority attack — two pawns marching at Black's three, aiming to create a lasting weakness.",
+          "The knight reaches g6, but it eyes empty squares; the real game is on the other flank.",
+          "b5 fixes the target. Black's c6-pawn is now under fire and can never feel safe.",
+          "Black lifts a rook to c8 to defend along the file, tied to the coming weakness.",
+          "bxc6 tears open the b-file. Black's recapture leaves him a permanent weak pawn on c6.",
+          "Black recaptures with the b-pawn, and you own the open b-file pointing at his fixed c6 weakness — a clean pull for the whole game."
+        ],
+        "learnCues": [
+          "Kh1 — tuck the king first.",
+          "Black regroups the knight.",
+          "b4 — start the minority attack.",
+          "Knight back to g6.",
+          "b5 — fix the c6 target.",
+          "Black defends with …Rc8.",
+          "bxc6 — rip open the b-file.",
+          "White owns the b-file."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "h1",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f8",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pawn-minority-attack",
+          "concept:pos-space",
+          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-antifrench-advance-space-reroute",
+    "openingId": "anti-french-advance",
+    "criticalPositionFen": "r3kb1r/pp3ppp/1qn1b3/3pPp2/3P4/5N2/PP3PPP/RNBQ1RK1 w kq - 2 12",
+    "title": "Hold the chain, reroute the knight",
+    "overview": "In the Advance French your e5-d4 chain grants a durable space edge. The plan is calm consolidation: Nge2 keeps the option of f4-and-Nf4 or g3, h4 grabs kingside room, and Rb1 readies b4 to blunt Black's queenside counter. You are never worse and always the one pressing.",
+    "pawnBreaks": [
+      "h4 to gain kingside space"
+    ],
+    "pieceManeuvers": [
+      "Nge2 rerouting toward f4 or g3 behind the chain",
+      "Rb1 preparing b4 on the queenside"
+    ],
+    "strategicThemes": [
+      "the e5-d4 space chain",
+      "the kingside space edge",
+      "restraining Black's queenside break"
+    ],
+    "endgameTransitions": [
+      "press the space advantage into a favourable endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "r3kb1r/pp3ppp/1qn1b3/3pPp2/3P4/5N2/PP3PPP/RNBQ1RK1 w kq - 2 12",
+        "title": "Hold the chain, reroute the knight",
+        "intro": "In the Advance French your e5-d4 chain grants a durable space edge.",
+        "moves": [
+          "Nc3",
+          "Be7",
+          "Ne2",
+          "h6",
+          "h4",
+          "a5",
+          "Rb1",
+          "O-O"
+        ],
+        "annotations": [
+          "Nc3 develops toward the centre, keeping an eye on the d5 and b5 squares while the chain holds firm.",
+          "Black completes development with …Be7, a solid but passive posting behind his own pawn chain.",
+          "Ne2 reroutes the knight — from here it heads to f4 or g3, pressing the light squares around Black's king.",
+          "Black plays …h6, a useful luft, but it does nothing to challenge your space.",
+          "h4 claims kingside room, the pawn a spearhead should you later open lines against the king.",
+          "Black expands with …a5, seeking his only real counterplay on the queenside.",
+          "Rb1 backs up b4 — you meet the queenside push head-on and keep the file under control.",
+          "Black castles into a cramped but sound position; your space on both wings gives you the easier game to play."
+        ],
+        "learnCues": [
+          "Nc3 — eye d5 and b5.",
+          "Black develops …Be7.",
+          "Ne2 — reroute toward f4.",
+          "Black plays …h6 luft.",
+          "h4 — grab kingside space.",
+          "Black expands …a5.",
+          "Rb1 — prepare b4.",
+          "White has the space edge."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "b1",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pawn-chain",
+          "concept:pos-space",
+          "https://en.wikipedia.org/wiki/French_Defence"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-antiscandinavian-central-files",
+    "openingId": "anti-scandinavian",
+    "criticalPositionFen": "r2qkb1r/pp1n1ppp/2p1pn2/8/2BP4/2P2bNP/PP1B1PP1/R2QK2R w KQkq - 0 12",
+    "title": "Two bishops, central files, lead in development",
+    "overview": "Against the Scandinavian your quick development and the bishop pair give a stable edge. Recapture on f3 with the queen to keep structure, castle, and pour the rooks onto the open d- and e-files. Black has no weaknesses to attack; you simply out-develop him and press the centre.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      "Rfe1 and Rad1 seizing the central files",
+      "Qxf3 recapturing to keep the pawn structure intact"
+    ],
+    "strategicThemes": [
+      "the two bishops",
+      "the lead in development",
+      "control of the central files"
+    ],
+    "endgameTransitions": [
+      "trade into an endgame where the two bishops dominate"
+    ],
+    "playableLines": [
+      {
+        "fen": "r2qkb1r/pp1n1ppp/2p1pn2/8/2BP4/2P2bNP/PP1B1PP1/R2QK2R w KQkq - 0 12",
+        "title": "Two bishops, central files, lead in development",
+        "intro": "Against the Scandinavian your quick development and the bishop pair give a stable edge.",
+        "moves": [
+          "Qxf3",
+          "a5",
+          "O-O",
+          "Bd6",
+          "Rfe1",
+          "O-O",
+          "Rad1",
+          "Qb6"
+        ],
+        "annotations": [
+          "Qxf3 recaptures with the queen, keeping the pawns healthy and the queen active on the kingside.",
+          "Black nudges …a5 to gain a little queenside space, but it creates nothing concrete.",
+          "Castling tucks the king away and connects the rooks — your development is already a step ahead.",
+          "Black develops the bishop to d6, eyeing the b8-h2 diagonal but running into your solid setup.",
+          "Rfe1 takes the open e-file, the rook adding weight to the centre.",
+          "Black castles at last, but you are already coordinated and pressing.",
+          "Rad1 seizes the d-file too — both rooks now command the centre.",
+          "Black tries …Qb6 for counterplay, yet your two bishops and central grip leave you clearly the more comfortable."
+        ],
+        "learnCues": [
+          "Qxf3 — recapture, keep structure.",
+          "Black plays …a5.",
+          "Castle — connect the rooks.",
+          "Black develops …Bd6.",
+          "Rfe1 — take the e-file.",
+          "Black castles.",
+          "Rad1 — grip the d-file.",
+          "Two bishops, central control."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-bishop-pair",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Scandinavian_Defense"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-antienglund-nc7-fork",
+    "openingId": "anti-englund",
+    "criticalPositionFen": "1rb1k1nr/1ppp1ppp/p1n5/1R1NP3/8/q1P2N2/P2QPPPP/4KB1R w Kk - 0 12",
+    "title": "Refute the gambit — Nc7+ fork and knight raid",
+    "overview": "The Englund Gambit (1.d4 e5?!) is unsound, and you punish it concretely. Nxc7+ forks king and rook, and the knight raids on through d5 to b6, harvesting material while Black's pieces flail. This is a winning line, not a plan for a pull — take what the gambit gives you.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      "Nxc7+ forking the king and rook",
+      "Nd5 and Nb6 raiding into Black's camp"
+    ],
+    "strategicThemes": [
+      "the extra material",
+      "Black's exposed king",
+      "the dominant knight"
+    ],
+    "endgameTransitions": [
+      "convert the extra exchange into a winning endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "1rb1k1nr/1ppp1ppp/p1n5/1R1NP3/8/q1P2N2/P2QPPPP/4KB1R w Kk - 0 12",
+        "title": "Refute the gambit — Nc7+ fork and knight raid",
+        "intro": "The Englund Gambit (1.d4 e5?!) is unsound, and you punish it concretely.",
+        "moves": [
+          "Nxc7+",
+          "Kd8",
+          "Rb3",
+          "Qc5",
+          "Nd5",
+          "Nge7",
+          "Nb6",
+          "Nxe5"
+        ],
+        "annotations": [
+          "Nxc7+ is the refutation — a family fork hitting the king and the a8-rook at once.",
+          "Black must step the king to d8, abandoning the corner rook to its fate.",
+          "Rb3 lifts the rook, keeping the queenside bind while the knight prepares its next leap.",
+          "Black scrambles with …Qc5, trying to bother your pieces, but the material is already gone.",
+          "Nd5 springs forward, the knight a monster in the centre eyeing b6 and e7.",
+          "Black develops …Nge7 to challenge, but it is far too late to matter.",
+          "Nb6 forks again, snaffling the a8-rook and cementing a decisive material edge.",
+          "Black grabs the e5-pawn in return, but a full exchange down with a wrecked position, he is simply lost."
+        ],
+        "learnCues": [
+          "Nxc7+ — fork king and rook.",
+          "King runs to d8.",
+          "Rb3 — keep the bind.",
+          "Black tries …Qc5.",
+          "Nd5 — the knight leaps in.",
+          "Black develops …Nge7.",
+          "Nb6 — win the rook.",
+          "White is winning."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "a8",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "a8",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-initiative",
+          "concept:pos-outpost",
+          "https://en.wikipedia.org/wiki/Englund_Gambit"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-antikid-saemisch-queenside-a-file",
+    "openingId": "anti-kid-saemisch",
+    "criticalPositionFen": "r1bq1rk1/1p3pbp/3p1np1/p1nPp3/4P3/2N1BP2/PPB1N1PP/R2QK2R w KQ - 0 12",
+    "title": "Sämisch queenside play — a4, Nb5, open the a-file",
+    "overview": "In the Sämisch King's Indian your big pawn centre lets you open a second front. a4 gains space and Nb5 pokes at c7 and d6; when Black takes the knight, axb5 opens the a-file for your rook. You play on the wing where you are strong while Black's kingside counterplay is slow.",
+    "pawnBreaks": [
+      "a4 gaining queenside space",
+      "axb5 opening the a-file"
+    ],
+    "pieceManeuvers": [
+      "Nb5 hitting the c7 and d6 squares"
+    ],
+    "strategicThemes": [
+      "the queenside space edge",
+      "the open a-file",
+      "the broad e4-d5 centre"
+    ],
+    "endgameTransitions": [
+      "use the a-file and space to press in the endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/1p3pbp/3p1np1/p1nPp3/4P3/2N1BP2/PPB1N1PP/R2QK2R w KQ - 0 12",
+        "title": "Sämisch queenside play — a4, Nb5, open the a-file",
+        "intro": "In the Sämisch King's Indian your big pawn centre lets you open a second front.",
+        "moves": [
+          "a4",
+          "Bd7",
+          "Qd2",
+          "Rc8",
+          "Nb5",
+          "Bxb5",
+          "axb5",
+          "Ra8"
+        ],
+        "annotations": [
+          "a4 grabs queenside space and takes the b5-square away from Black's pieces — the first step of a wing plan.",
+          "Black develops …Bd7, connecting his queenside and preparing to contest the a-file.",
+          "Qd2 links the rooks and supports a coming knight jump, the queen eyeing the h6-square too.",
+          "Black lifts …Rc8 onto the half-open c-file, seeking his own counterplay.",
+          "Nb5 leaps in, jabbing at the c7- and d6-squares and forcing Black to react.",
+          "Black takes the knight with …Bxb5, the only way to relieve the pressure.",
+          "axb5 recaptures toward the centre and swings the a-file wide open for your rook.",
+          "Black's rook drops back to a8 to fight for the file, but you got there first and hold the more pleasant space edge."
+        ],
+        "learnCues": [
+          "a4 — grab queenside space.",
+          "Black develops …Bd7.",
+          "Qd2 — connect and support.",
+          "Black lifts …Rc8.",
+          "Nb5 — jab at c7/d6.",
+          "Black takes …Bxb5.",
+          "axb5 — open the a-file.",
+          "White holds the space edge."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(80,140,255,0.35)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "a1",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "a8",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pawn-minority-attack",
+          "concept:pos-space",
+          "https://en.wikipedia.org/wiki/King%27s_Indian_Defence"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-antigrunfeld-exchange-big-centre",
+    "openingId": "anti-grunfeld-exchange",
+    "criticalPositionFen": "r2q1rk1/pp2ppbp/6p1/n1p5/2BPP1b1/2P1BP2/P3N1PP/R2Q1RK1 w - - 1 12",
+    "title": "The classical centre — d4-e4 and the long diagonal",
+    "overview": "The Exchange Grünfeld is the great centre-versus-piece-pressure battle. You build the d4-e4 pawn mass and, in the sharpest line, meet Black's …Bxa1 by recapturing with the queen — the monarch rakes the long diagonal while your central pawns roll. Engine-equal, dynamically rich, and exactly the fight the variation is about.",
+    "pawnBreaks": [
+      "d5 advancing the central pawn mass"
+    ],
+    "pieceManeuvers": [
+      "Qxa1 recapturing onto the long diagonal"
+    ],
+    "strategicThemes": [
+      "the big d4-e4 pawn centre",
+      "the a1-h8 long diagonal",
+      "central space versus the exchange"
+    ],
+    "endgameTransitions": [
+      "push the central pawns toward promotion in the endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "r2q1rk1/pp2ppbp/6p1/n1p5/2BPP1b1/2P1BP2/P3N1PP/R2Q1RK1 w - - 1 12",
+        "title": "The classical centre — d4-e4 and the long diagonal",
+        "intro": "The Exchange Grünfeld is the great centre-versus-piece-pressure battle.",
+        "moves": [
+          "Bd3",
+          "cxd4",
+          "cxd4",
+          "Be6",
+          "d5",
+          "Bxa1",
+          "Qxa1",
+          "f6"
+        ],
+        "annotations": [
+          "Bd3 develops the bishop behind the centre, aiming it at Black's kingside as the pawns prepare to advance.",
+          "Black strikes the base with …cxd4, the standard Grünfeld try to loosen your centre.",
+          "cxd4 recaptures and restores the broad d4-e4 duo — the pawns stand proud in the middle of the board.",
+          "Black develops …Be6, pressuring c4 and eyeing the queenside light squares.",
+          "d5 rams the centre forward, gaining space and hitting Black's pieces with tempo.",
+          "Black grabs the exchange with …Bxa1, the thematic Grünfeld transaction — a rook for the fianchetto bishop.",
+          "Qxa1 recaptures onto the long diagonal, the queen now raking toward Black's king while your centre rolls; full compensation for the exchange.",
+          "Black shores up with …f6, but your central pawns and diagonal pressure fully balance the material — a dynamic, roughly level fight."
+        ],
+        "learnCues": [
+          "Bd3 — aim at the kingside.",
+          "Black hits …cxd4.",
+          "cxd4 — restore the centre.",
+          "Black develops …Be6.",
+          "d5 — ram the centre.",
+          "Black takes …Bxa1.",
+          "Qxa1 — take the long diagonal.",
+          "Full compensation, level."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "a1",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "a1",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "h8",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-center",
+          "concept:pawn-chain",
+          "https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-antinimzo-qc2-bishop-pair-files",
+    "openingId": "anti-nimzo-qc2",
+    "criticalPositionFen": "rn1qr1k1/pbp2pp1/1p3n1p/3p4/3P3B/P1Q1PP2/1P4PP/R3KBNR w KQ - 1 12",
+    "title": "Nimzo Qc2 — the bishop pair and the central files",
+    "overview": "The whole point of 4.Qc2 is to recapture on c3 with the queen and keep the bishop pair with no doubled pawns. Now you convert that structural asset: Rd1 and Rc1 grip the central files, Ne2 and Bf2 regroup behind the pawns, and you sit on a small, durable pull with the two bishops.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      "Rd1 and Rc1 doubling on the central files",
+      "Ne2 and Bf2 regrouping behind the centre"
+    ],
+    "strategicThemes": [
+      "the two bishops with a clean structure",
+      "control of the c- and d-files",
+      "slow central pressure"
+    ],
+    "endgameTransitions": [
+      "let the bishop pair tell in an open endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "rn1qr1k1/pbp2pp1/1p3n1p/3p4/3P3B/P1Q1PP2/1P4PP/R3KBNR w KQ - 1 12",
+        "title": "Nimzo Qc2 — the bishop pair and the central files",
+        "intro": "The whole point of 4.Qc2 is to recapture on c3 with the queen and keep the bishop pair with no doubled pawns.",
+        "moves": [
+          "Rd1",
+          "Qe7",
+          "Ne2",
+          "c6",
+          "Rc1",
+          "Nbd7",
+          "Bf2",
+          "c5"
+        ],
+        "annotations": [
+          "Rd1 takes the d-file, the rook lining up behind the central pawns and Black's queen.",
+          "Black plays …Qe7, unpinning and connecting, but with no way to challenge your bishops.",
+          "Ne2 regroups the knight, clearing the way for the dark-squared bishop and eyeing f4 and g3.",
+          "Black props the centre with …c6, a solid but modest move that concedes you time.",
+          "Rc1 doubles your rooks onto the central files — both are now ideally placed.",
+          "Black develops …Nbd7, preparing a freeing …c5 break of his own.",
+          "Bf2 tucks the bishop onto the long diagonal, adding to your control of the centre.",
+          "Black finally strikes with …c5, but your two bishops and file control keep the pull firmly on your side."
+        ],
+        "learnCues": [
+          "Rd1 — take the d-file.",
+          "Black plays …Qe7.",
+          "Ne2 — regroup the knight.",
+          "Black props …c6.",
+          "Rc1 — double on the files.",
+          "Black prepares …Nbd7.",
+          "Bf2 — onto the long diagonal.",
+          "Two bishops, small pull."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "f2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-bishop-pair",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-antiqid-fianchetto-e4-central",
+    "openingId": "anti-qid-fianchetto",
+    "criticalPositionFen": "r2qk2r/p2nbppp/bpp1p3/8/2PPp3/1PB2NP1/P4PBP/R2QK2R w KQkq - 0 12",
+    "title": "Fight for e4 — the central knight and the wedge",
+    "overview": "The Queen's Indian is a battle for the e4-square. You plant a knight on e5, and after the trade dxe5 builds a central wedge that cramps Black; Bxe4 then collects the light-squared prize the fianchetto was meant to guard. Small, clean edge on the squares Black's whole setup was built to control.",
+    "pawnBreaks": [
+      "dxe5 building a central wedge"
+    ],
+    "pieceManeuvers": [
+      "Ne5 planting the knight in the centre",
+      "Bxe4 winning the key light square"
+    ],
+    "strategicThemes": [
+      "the fight for e4",
+      "the central e5-wedge",
+      "the light squares"
+    ],
+    "endgameTransitions": [
+      "carry the central and light-square edge into the endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "r2qk2r/p2nbppp/bpp1p3/8/2PPp3/1PB2NP1/P4PBP/R2QK2R w KQkq - 0 12",
+        "title": "Fight for e4 — the central knight and the wedge",
+        "intro": "The Queen's Indian is a battle for the e4-square.",
+        "moves": [
+          "Ne5",
+          "Nxe5",
+          "dxe5",
+          "b5",
+          "Bxe4",
+          "O-O",
+          "O-O",
+          "Qc7"
+        ],
+        "annotations": [
+          "Ne5 plants the knight on the strong central square, challenging Black's grip and eyeing the light squares.",
+          "Black trades it off with …Nxe5, unwilling to let the knight sit there dominating.",
+          "dxe5 recaptures into a wedge — the pawn on e5 cramps Black and fixes the centre in your favour.",
+          "Black lunges …b5 for queenside space, but it loosens his structure and leaves e4 tender.",
+          "Bxe4 collects the key light square, the very square Black's fianchetto was built to hold.",
+          "Black castles to safety, a move behind in the fight for the centre.",
+          "Castling tucks your king away with the central pull already banked.",
+          "Black plays …Qc7, but your e5-wedge and light-square bishop give you the more pleasant game."
+        ],
+        "learnCues": [
+          "Ne5 — plant the central knight.",
+          "Black trades …Nxe5.",
+          "dxe5 — build the wedge.",
+          "Black lunges …b5.",
+          "Bxe4 — win the light square.",
+          "Black castles.",
+          "White castles too.",
+          "Wedge plus light-square edge."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c7",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-center",
+          "concept:pos-outpost",
+          "https://en.wikipedia.org/wiki/Queen%27s_Indian_Defense"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-antidutch-staunton-piece-activity",
+    "openingId": "anti-dutch-staunton",
+    "criticalPositionFen": "r3kb1r/pp1np1pp/2p3q1/5bB1/2BPp3/2P5/PP1QN1PP/R3K2R w KQkq - 5 12",
+    "title": "Staunton Gambit — lead in development for the pawn",
+    "overview": "The Staunton Gambit trades a pawn for a lead in development against the Dutch. You keep the initiative simple: castle, swing the queen to f4 and the bishop to h4 to press the dark squares and pin Black's pieces. When the smoke clears you have activity and easy play worth every bit of the pawn.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      "Qf4 and Bh4 pressing the dark squares",
+      "O-O completing development to justify the gambit"
+    ],
+    "strategicThemes": [
+      "the lead in development",
+      "dark-square pressure",
+      "the initiative for the pawn"
+    ],
+    "endgameTransitions": [
+      "keep enough activity to hold the balance if queens come off"
+    ],
+    "playableLines": [
+      {
+        "fen": "r3kb1r/pp1np1pp/2p3q1/5bB1/2BPp3/2P5/PP1QN1PP/R3K2R w KQkq - 5 12",
+        "title": "Staunton Gambit — lead in development for the pawn",
+        "intro": "The Staunton Gambit trades a pawn for a lead in development against the Dutch.",
+        "moves": [
+          "O-O",
+          "e6",
+          "Qf4",
+          "h6",
+          "Bh4",
+          "Qg4",
+          "Qxg4",
+          "Bxg4"
+        ],
+        "annotations": [
+          "Castling completes development and connects the rooks — the gambit's whole idea is to be faster than Black.",
+          "Black shores up with …e6, blunting your light-squared bishop but conceding more time.",
+          "Qf4 swings the queen to the active square, pressing the dark squares around Black's centre.",
+          "Black plays …h6, questioning your bishop and gaining a touch of kingside room.",
+          "Bh4 keeps the pin alive, the bishop eyeing the f6-knight and the e7-square behind it.",
+          "Black offers a queen trade with …Qg4, hoping to blunt your initiative by simplifying.",
+          "Qxg4 accepts — even with queens off, your lead in development gives full value for the pawn.",
+          "Black recaptures …Bxg4; the position is balanced, your activity exactly offsetting the missing pawn."
+        ],
+        "learnCues": [
+          "Castle — finish developing.",
+          "Black shores up …e6.",
+          "Qf4 — press the dark squares.",
+          "Black plays …h6.",
+          "Bh4 — keep the pin.",
+          "Black offers …Qg4.",
+          "Qxg4 — trade, keep activity.",
+          "Balanced, pawn compensated."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-initiative",
+          "concept:pos-weak-squares",
+          "https://en.wikipedia.org/wiki/Staunton_Gambit"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-antiqgd-exchange-central-restraint",
+    "openingId": "anti-qgd-exchange",
+    "criticalPositionFen": "r1bq1rk1/pp3ppp/2pb1n2/3pN3/3PnB2/2NBP3/PP3PPP/R2Q1RK1 w - - 11 12",
+    "title": "Exchange QGD — restrain, then grind the centre",
+    "overview": "The Exchange QGD gives you the classic minority-attack structure, but the flexible modern handling is to first restrain Black's counterplay. a4 stops …b5 and …a5, Qc2 and the rooks pile behind the centre, and you keep every option — minority attack or central e-file play — while Black has none.",
+    "pawnBreaks": [
+      "a4 restraining Black's queenside break"
+    ],
+    "pieceManeuvers": [
+      "Qc2 and Rad1 massing behind the centre"
+    ],
+    "strategicThemes": [
+      "the flexible pawn structure",
+      "restraint of Black's …b5",
+      "control of the centre"
+    ],
+    "endgameTransitions": [
+      "steer into a favourable minority-attack endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/pp3ppp/2pb1n2/3pN3/3PnB2/2NBP3/PP3PPP/R2Q1RK1 w - - 11 12",
+        "title": "Exchange QGD — restrain, then grind the centre",
+        "intro": "The Exchange QGD gives you the classic minority-attack structure, but the flexible modern handling is to first restrain Black's counterplay.",
+        "moves": [
+          "h3",
+          "Qe7",
+          "a4",
+          "a5",
+          "Qc2",
+          "Re8",
+          "Rad1",
+          "g6"
+        ],
+        "annotations": [
+          "h3 makes a calm luft, taking the g4-square from Black's bishop before you commit the heavy pieces.",
+          "Black plays …Qe7, developing and connecting, but with no active break available.",
+          "a4 clamps the queenside, freezing Black's …b5 and …a5 counterplay before it can start.",
+          "Black answers …a5 to fix the queenside, but this only hands you the b5-square as a lasting outpost.",
+          "Qc2 lines the queen up behind the centre, eyeing both the b1-h7 diagonal and the coming rook lift.",
+          "Black plays …Re8, contesting the e-file where the game may open.",
+          "Rad1 completes your ideal setup — every piece is poised, and Black still has no plan.",
+          "Black plays …g6 for kingside safety; you keep all the options and the easier position to play."
+        ],
+        "learnCues": [
+          "h3 — a calm luft.",
+          "Black develops …Qe7.",
+          "a4 — clamp the queenside.",
+          "Black fixes …a5.",
+          "Qc2 — line up behind the centre.",
+          "Black contests …Re8.",
+          "Rad1 — complete the setup.",
+          "White keeps every option."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pawn-minority-attack",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-antibudapest-queenside-space",
+    "openingId": "anti-budapest",
+    "criticalPositionFen": "r1b2rk1/ppp1qppp/3p4/4n3/2P2B2/P3P3/1P1QBPPP/R3K2R w KQ - 2 12",
+    "title": "Refuse the Budapest — keep the space, expand a4-b4",
+    "overview": "Return the Budapest pawn on your terms and keep a lasting space edge. With the centre stable, a4 and b4 roll on the queenside, gaining room and squares while Black's gambit pieces have nothing to bite on. Simple, strong, and exactly how to neutralise a tricky gambit — take the space and play chess.",
+    "pawnBreaks": [
+      "b4 and a4 expanding on the queenside"
+    ],
+    "pieceManeuvers": [
+      "Rfd1 supporting the centre before the wing push"
+    ],
+    "strategicThemes": [
+      "the queenside space edge",
+      "the extra central pawn",
+      "denying Black counterplay"
+    ],
+    "endgameTransitions": [
+      "convert the space edge into a better endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1b2rk1/ppp1qppp/3p4/4n3/2P2B2/P3P3/1P1QBPPP/R3K2R w KQ - 2 12",
+        "title": "Refuse the Budapest — keep the space, expand a4-b4",
+        "intro": "Return the Budapest pawn on your terms and keep a lasting space edge.",
+        "moves": [
+          "O-O",
+          "b6",
+          "b4",
+          "Re8",
+          "Rfd1",
+          "Bf5",
+          "a4",
+          "Nd7"
+        ],
+        "annotations": [
+          "Castling completes development safely — with the gambit neutralised you simply finish mobilising.",
+          "Black plays …b6 to fianchetto, hunting for activity his gambit never quite delivered.",
+          "b4 begins the queenside roll, grabbing space and taking the c5-square away from Black's pieces.",
+          "Black lifts …Re8 onto the e-file, probing for a break that isn't there.",
+          "Rfd1 backs up the centre, making sure everything is solid before the pawns advance further.",
+          "Black develops …Bf5, eyeing your kingside, but you are already the one dictating play.",
+          "a4 rolls the second pawn forward — your queenside space keeps expanding, squeezing Black.",
+          "Black regroups …Nd7; with a stable centre and growing space, you hold the easier and better game."
+        ],
+        "learnCues": [
+          "Castle — finish developing.",
+          "Black fianchettoes …b6.",
+          "b4 — start the queenside roll.",
+          "Black lifts …Re8.",
+          "Rfd1 — back up the centre.",
+          "Black develops …Bf5.",
+          "a4 — expand further.",
+          "White has the space edge."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-space",
+          "concept:pawn-minority-attack",
+          "https://en.wikipedia.org/wiki/Budapest_Gambit"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-antilondon-black-trade-and-equalise",
+    "openingId": "anti-london-black",
+    "criticalPositionFen": "3qk2r/rp1nbppp/2p1pn2/p1PpBb2/3P4/1Q2PN2/PP1NBPPP/R4RK1 w k - 5 12",
+    "title": "Neutralise the London — trade the pieces, reach equality",
+    "overview": "The London System wants a cosy attacking setup; you defuse it by trading. Meet the e5-knight and later the d3-bishop with clean exchanges — every swap kills a piece of White's attack. When the dust settles you have a sound, symmetrical position and full equality, exactly what Black is after against a system opening.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      "…Nxe5 trading off White's active knight",
+      "…Bxd3 removing the London attacking bishop"
+    ],
+    "strategicThemes": [
+      "trading White's active pieces",
+      "reaching a sound equality",
+      "the solid pawn structure"
+    ],
+    "endgameTransitions": [
+      "simplify into a comfortable, level endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "3qk2r/rp1nbppp/2p1pn2/p1PpBb2/3P4/1Q2PN2/PP1NBPPP/R4RK1 w k - 5 12",
+        "title": "Neutralise the London — trade the pieces, reach equality",
+        "intro": "The London System wants a cosy attacking setup; you defuse it by trading.",
+        "moves": [
+          "h3",
+          "Nxe5",
+          "Nxe5",
+          "Nd7",
+          "Nxd7",
+          "Qxd7",
+          "Bd3",
+          "Bxd3"
+        ],
+        "annotations": [
+          "White nudges h3 for luft; you use the pause to begin trading down his attacking pieces.",
+          "…Nxe5 removes White's proud central knight — the first of the exchanges that neutralise the London.",
+          "White recaptures with the knight, keeping a piece on the active square for now.",
+          "…Nd7 offers to trade again, chipping away at White's coordinated setup.",
+          "White swaps on d7; each exchange takes another attacker off the board.",
+          "…Qxd7 recaptures naturally, your development smooth and your structure sound.",
+          "White develops the bishop to d3, aiming at your kingside in classic London style.",
+          "…Bxd3 trades it off — the London's key attacking bishop is gone, and the position is dead level."
+        ],
+        "learnCues": [
+          "White plays h3.",
+          "…Nxe5 — trade the central knight.",
+          "White recaptures.",
+          "…Nd7 — offer another trade.",
+          "White swaps on d7.",
+          "…Qxd7 — recapture.",
+          "White develops …Bd3.",
+          "…Bxd3 — kill the attack, equal."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "h3",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-bishop-pair",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/London_System"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-anticatalan-black-e5-break",
+    "openingId": "anti-catalan-black",
+    "criticalPositionFen": "r4rk1/1ppbqpp1/p1nbpn1p/8/2QP4/2N1PNP1/PP3PBP/R1BR2K1 w - - 0 12",
+    "title": "Free yourself with …e5",
+    "overview": "Against the Catalan the freeing break is …e5. Once your pieces are ready, …e5 challenges White's centre, opens lines for your bishops and unshackles the position Black's setup can feel cramped in. The engine calls it dead equal — and the initiative that comes with a well-timed central break is worth more than the number suggests.",
+    "pawnBreaks": [
+      "…e5 the freeing central break"
+    ],
+    "pieceManeuvers": [
+      "…Ng4 hitting the dark-squared bishop after the break"
+    ],
+    "strategicThemes": [
+      "the …e5 freeing break",
+      "opening lines for the bishops",
+      "full central equality"
+    ],
+    "endgameTransitions": [
+      "reach a balanced endgame with active pieces"
+    ],
+    "playableLines": [
+      {
+        "fen": "r4rk1/1ppbqpp1/p1nbpn1p/8/2QP4/2N1PNP1/PP3PBP/R1BR2K1 w - - 0 12",
+        "title": "Free yourself with …e5",
+        "intro": "Against the Catalan the freeing break is …e5.",
+        "moves": [
+          "e4",
+          "e5",
+          "Be3",
+          "Rfd8",
+          "Rac1",
+          "Ng4",
+          "Nxe5",
+          "Nxe3"
+        ],
+        "annotations": [
+          "White plays e4, grabbing the centre and daring you to challenge it head-on.",
+          "…e5 is the thematic freeing break — you strike at White's centre and open lines for your pieces at once.",
+          "White develops the bishop to e3, holding the centre together and eyeing the queenside.",
+          "…Rfd8 backs up the centre, the rook lending weight to the …e5 point and the d-file.",
+          "White centralises …Rac1, keeping the tension and pressing on the half-open file.",
+          "…Ng4 jabs at the e3-bishop, using the space your break created to trade a defender.",
+          "White meets it with Nxe5, grabbing the pawn but walking into a trade.",
+          "…Nxe3 removes White's dark-squared bishop; the position is fully equal with active, freed-up pieces."
+        ],
+        "learnCues": [
+          "White grabs e4.",
+          "…e5 — the freeing break.",
+          "White develops …Be3.",
+          "…Rfd8 — back up the centre.",
+          "White centralises …Rac1.",
+          "…Ng4 — hit the bishop.",
+          "White takes Nxe5.",
+          "…Nxe3 — equal, pieces freed."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e4",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-center",
+          "concept:pawn-chain",
+          "https://en.wikipedia.org/wiki/Catalan_Opening"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-antitrompowsky-black-queenside-expand",
+    "openingId": "anti-trompowsky-black",
+    "criticalPositionFen": "r2qk2r/pp3ppp/2nbp3/3p4/3P1B2/3Q1N2/PPP2PPP/R4RK1 w kq - 2 12",
+    "title": "Take the bishop pair, expand …b5-a5",
+    "overview": "When the Trompowsky bishop takes on d6 you recapture and pocket the bishop pair. From there the plan is queenside expansion: …b5 and …a5 roll forward, gaining space and the two bishops a stable base to grow into. Comfortable equality with the long-term asset firmly in Black's pocket.",
+    "pawnBreaks": [
+      "…b5 and …a5 expanding on the queenside"
+    ],
+    "pieceManeuvers": [
+      "…Rb8 backing the queenside pawn advance"
+    ],
+    "strategicThemes": [
+      "the two bishops",
+      "queenside space",
+      "the long-term structural edge"
+    ],
+    "endgameTransitions": [
+      "let the bishop pair and space tell in the endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "r2qk2r/pp3ppp/2nbp3/3p4/3P1B2/3Q1N2/PPP2PPP/R4RK1 w kq - 2 12",
+        "title": "Take the bishop pair, expand …b5-a5",
+        "intro": "When the Trompowsky bishop takes on d6 you recapture and pocket the bishop pair.",
+        "moves": [
+          "Bxd6",
+          "Qxd6",
+          "c3",
+          "Rb8",
+          "a3",
+          "b5",
+          "b4",
+          "a5"
+        ],
+        "annotations": [
+          "White trades on d6 to damage your structure, but you recapture and keep the two bishops.",
+          "…Qxd6 recaptures actively, the queen well placed and the bishop pair now yours for the long game.",
+          "White plays c3, shoring up d4 and preparing a slow queenside setup of his own.",
+          "…Rb8 prepares the pawn storm, the rook lining up behind the coming …b5.",
+          "White plays a3, trying to blunt your expansion before it gets going.",
+          "…b5 rolls forward, claiming queenside space and giving your bishops room to breathe.",
+          "White answers b4 to fix the queenside, but this only opens more lines for your bishop pair.",
+          "…a5 keeps the pressure on; with the two bishops and more space, Black is comfortable and pressing."
+        ],
+        "learnCues": [
+          "White trades on d6.",
+          "…Qxd6 — keep the bishop pair.",
+          "White plays c3.",
+          "…Rb8 — prepare the storm.",
+          "White plays a3.",
+          "…b5 — claim queenside space.",
+          "White fixes with b4.",
+          "…a5 — keep pressing, comfortable."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d6",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "b8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "a3",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-bishop-pair",
+          "concept:pos-space",
+          "https://en.wikipedia.org/wiki/Trompowsky_Attack"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-anticolle-black-e4-outpost",
+    "openingId": "anti-colle-black",
+    "criticalPositionFen": "r2q1rk1/1p3ppp/p1nbbn2/3p4/1P6/P1N1PN2/1B2BPPP/R2QK2R w KQ - 4 12",
+    "title": "Plant the knight on e4",
+    "overview": "The Colle is a quiet system, and the cleanest antidote is a piece on e4. You double rooks on the central files and drop a knight into e4 — a permanent outpost in the heart of White's cramped setup. From that square the knight radiates, and Black takes over the initiative in an equal but easier-to-play position.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      "…Ne4 planting a knight on the central outpost",
+      "…Rc8 and …Re8 gripping the central files"
+    ],
+    "strategicThemes": [
+      "the e4 outpost",
+      "control of the central files",
+      "easy piece play against a passive system"
+    ],
+    "endgameTransitions": [
+      "carry the better-placed pieces into the endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "r2q1rk1/1p3ppp/p1nbbn2/3p4/1P6/P1N1PN2/1B2BPPP/R2QK2R w KQ - 4 12",
+        "title": "Plant the knight on e4",
+        "intro": "The Colle is a quiet system, and the cleanest antidote is a piece on e4.",
+        "moves": [
+          "O-O",
+          "Rc8",
+          "Rc1",
+          "Re8",
+          "Na4",
+          "Ne4",
+          "Ba1",
+          "h6"
+        ],
+        "annotations": [
+          "White castles into the standard quiet Colle setup, hoping for a slow attacking build-up.",
+          "…Rc8 takes the half-open c-file, the rook eyeing White's c-pawn and the centre.",
+          "White plays Rc1 to contest the file, matching your rook.",
+          "…Re8 grabs the e-file too — both your rooks now command the centre.",
+          "White shuffles …Na4, a knight heading nowhere useful on the rim.",
+          "…Ne4 is the point: a knight parks on the perfect central outpost, radiating over White's position.",
+          "White tucks the bishop to a1, conceding the centre to your beautifully placed knight.",
+          "…h6 makes luft; with the e4-outpost and both files, Black holds the initiative in a comfortable game."
+        ],
+        "learnCues": [
+          "White plays the quiet Colle.",
+          "…Rc8 — take the c-file.",
+          "White contests …Rc1.",
+          "…Re8 — grab the e-file.",
+          "White drifts …Na4.",
+          "…Ne4 — plant the outpost.",
+          "White retreats …Ba1.",
+          "…h6 — Black has the initiative."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g1",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "a1",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-outpost",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Colle_System"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-antismith-morra-black-hold-the-pawn",
+    "openingId": "anti-smith-morra-black",
+    "criticalPositionFen": "r1nqkb1r/1b1p2pp/p1n1pp2/1p6/4P3/2N1BN2/PP2BPPP/2RQ1RK1 w kq - 4 12",
+    "title": "Accept the Morra, hold the pawn, untangle",
+    "overview": "The Smith-Morra hands you a pawn for development; the sound path is to take it, return it if needed, and complete development safely. Here you meet White's central e5 break with …fxe5, then tuck the king away and regroup with …Qe8. White keeps some initiative for the pawn, but the position is balanced and Black is solid.",
+    "pawnBreaks": [
+      "…fxe5 blunting White's central break"
+    ],
+    "pieceManeuvers": [
+      "…Qe8 unpinning and regrouping the queen"
+    ],
+    "strategicThemes": [
+      "the extra pawn versus White's development",
+      "a solid, untangled setup",
+      "neutralising the initiative"
+    ],
+    "endgameTransitions": [
+      "reach an endgame where the extra pawn can tell"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1nqkb1r/1b1p2pp/p1n1pp2/1p6/4P3/2N1BN2/PP2BPPP/2RQ1RK1 w kq - 4 12",
+        "title": "Accept the Morra, hold the pawn, untangle",
+        "intro": "The Smith-Morra hands you a pawn for development; the sound path is to take it, return it if needed, and complete development safely.",
+        "moves": [
+          "e5",
+          "fxe5",
+          "Ne4",
+          "Be7",
+          "Bd3",
+          "O-O",
+          "Bb1",
+          "Qe8"
+        ],
+        "annotations": [
+          "White strikes with e5, the thematic Morra break trying to blow open lines against your king.",
+          "…fxe5 meets it head-on — you take the pawn and refuse to let White's centre roll unchallenged.",
+          "White reroutes the knight to e4, keeping pieces active in return for the material.",
+          "…Be7 develops calmly, preparing to castle and connect your position.",
+          "White develops the bishop to d3, aiming at the h7-square in gambit style.",
+          "…O-O tucks the king to safety — the single most important move against a gambit is getting castled.",
+          "White retreats the bishop to b1, loading the b1-h7 battery, but you are ready for it.",
+          "…Qe8 unpins and regroups, defusing the battery; Black is solid, the extra pawn balancing White's activity."
+        ],
+        "learnCues": [
+          "White strikes e5.",
+          "…fxe5 — take the pawn.",
+          "White reroutes Ne4.",
+          "…Be7 — develop calmly.",
+          "White develops …Bd3.",
+          "…O-O — king to safety.",
+          "White loads …Bb1.",
+          "…Qe8 — defuse, solid."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e5",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b1",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-initiative",
+          "concept:pawn-chain",
+          "https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-antialapin-black-central-files",
+    "openingId": "anti-alapin-black",
+    "criticalPositionFen": "r3kb1r/pp1q1ppp/1nn1p3/1B6/3P4/8/PP3PPP/RNBQ1RK1 w kq - 0 12",
+    "title": "Alapin — centralise the rooks, sit on equality",
+    "overview": "Against the c3 Alapin, sound development neutralises White's centre. Drop both rooks onto the central files, complete development with …Be7 and castle, and Black reaches a rock-solid, equal middlegame with no weaknesses. White's small space edge means nothing when every file is covered and every piece is ideally placed.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      "…Rd8 and …Rfe8 seizing the central files"
+    ],
+    "strategicThemes": [
+      "control of the central files",
+      "a weakness-free structure",
+      "full equality"
+    ],
+    "endgameTransitions": [
+      "reach a balanced endgame with well-placed rooks"
+    ],
+    "playableLines": [
+      {
+        "fen": "r3kb1r/pp1q1ppp/1nn1p3/1B6/3P4/8/PP3PPP/RNBQ1RK1 w kq - 0 12",
+        "title": "Alapin — centralise the rooks, sit on equality",
+        "intro": "Against the c3 Alapin, sound development neutralises White's centre.",
+        "moves": [
+          "Nc3",
+          "Rd8",
+          "Be3",
+          "Be7",
+          "Qg4",
+          "O-O",
+          "Rad1",
+          "Rfe8"
+        ],
+        "annotations": [
+          "White develops the knight to c3, completing the classical Alapin setup.",
+          "…Rd8 seizes the d-file, the rook lining up behind White's central pawn.",
+          "White develops …Be3, connecting and eyeing the queenside.",
+          "…Be7 finishes development smoothly, preparing to castle into safety.",
+          "White swings the queen to g4, probing your kingside for a target.",
+          "…O-O calmly castles — there is nothing for White's queen to hit.",
+          "White centralises …Rad1, contesting the file you already control.",
+          "…Rfe8 doubles your rooks onto the central files; the position is level and Black is completely comfortable."
+        ],
+        "learnCues": [
+          "White develops …Nc3.",
+          "…Rd8 — take the d-file.",
+          "White develops …Be3.",
+          "…Be7 — finish developing.",
+          "White probes …Qg4.",
+          "…O-O — castle safely.",
+          "White centralises …Rad1.",
+          "…Rfe8 — equal, comfortable."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c3",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-center",
+          "concept:pos-initiative",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Alapin_Variation"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-antikings-gambit-black-keep-the-pawn",
+    "openingId": "anti-kings-gambit-black",
+    "criticalPositionFen": "2kr1b1r/ppp2ppp/2n5/3q4/3P1p2/5N2/PPP1Q1PP/R1B2RK1 w - - 0 12",
+    "title": "Refute the King's Gambit — hold the pawn, grab more",
+    "overview": "The classical antidote to the King's Gambit is to hold the extra pawn and develop. Here it goes further: …Nxd4 and …Qxd4+ win a second pawn and, after the king steps aside, …Qxb2 harvests a third while raking White's queenside. Two pawns up with a sound position, Black is simply better — the gambit refuted.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      "…Nxd4 and …Qxd4+ winning central pawns",
+      "…Qxb2 raiding the queenside"
+    ],
+    "strategicThemes": [
+      "the extra pawns",
+      "Black's sound structure",
+      "the refuted gambit"
+    ],
+    "endgameTransitions": [
+      "convert the extra pawns in the endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "2kr1b1r/ppp2ppp/2n5/3q4/3P1p2/5N2/PPP1Q1PP/R1B2RK1 w - - 0 12",
+        "title": "Refute the King's Gambit — hold the pawn, grab more",
+        "intro": "The classical antidote to the King's Gambit is to hold the extra pawn and develop.",
+        "moves": [
+          "Bxf4",
+          "Nxd4",
+          "Nxd4",
+          "Qxd4+",
+          "Kh1",
+          "Qxb2",
+          "Be5",
+          "Qb6"
+        ],
+        "annotations": [
+          "White recaptures on f4, restoring material balance for the moment — but your pieces are ready to strike.",
+          "…Nxd4 wins a central pawn, the knight crashing in and forcing the issue.",
+          "White trades knights on d4, hoping to blunt your initiative by simplifying.",
+          "…Qxd4+ recaptures with check, snatching the pawn and gaining a crucial tempo.",
+          "White blocks the check with Kh1, tucking the king into the corner.",
+          "…Qxb2 grabs a second pawn and rakes the long diagonal, hitting White's queenside.",
+          "White lashes out …Be5, trying to trap the raiding queen and drum up compensation.",
+          "…Qb6 steps the queen to safety; two clean pawns up with a solid position, Black is clearly better."
+        ],
+        "learnCues": [
+          "White recaptures Bxf4.",
+          "…Nxd4 — win a central pawn.",
+          "White trades Nxd4.",
+          "…Qxd4+ — take with check.",
+          "White blocks Kh1.",
+          "…Qxb2 — grab a second pawn.",
+          "White tries …Be5.",
+          "…Qb6 — safe, two pawns up."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f4",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "h1",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "b2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-initiative",
+          "concept:pawn-chain",
+          "https://en.wikipedia.org/wiki/King%27s_Gambit"
+        ]
+      }
+    ]
   }
 ]
