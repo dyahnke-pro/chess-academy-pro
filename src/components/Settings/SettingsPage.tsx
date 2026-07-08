@@ -947,7 +947,7 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
 // ─── Coach Gameplay Section ──────────────────────────────────────────────────
 
 function CoachGameplaySection({ profile, setProfile }: TabProps): JSX.Element {
-  const handleToggle = async (key: 'coachBlunderAlerts' | 'coachTacticAlerts' | 'coachPositionalTips' | 'coachMissedTacticTakeback' | 'coachReviewVoice' | 'coachInGameDiscussion' | 'coachedReview' | 'readingChallengesInReview', value: boolean): Promise<void> => {
+  const handleToggle = async (key: 'coachBlunderAlerts' | 'coachTacticAlerts' | 'coachPositionalTips' | 'coachMissedTacticTakeback' | 'coachReviewVoice' | 'coachInGameDiscussion' | 'coachedReview' | 'readingChallengesInReview' | 'calcHintVoice', value: boolean): Promise<void> => {
     const updatedPrefs = { ...profile.preferences, [key]: value };
     await db.profiles.update(profile.id, { preferences: updatedPrefs });
     setProfile({ ...profile, preferences: updatedPrefs });
@@ -973,6 +973,13 @@ function CoachGameplaySection({ profile, setProfile }: TabProps): JSX.Element {
         ]}
         onChange={(v) => void handleCoachNarrationChange(v as CoachNarration)}
         testId="coach-narration-select"
+      />
+      <ToggleRow
+        label="Speak Calculation Hints"
+        tooltip="Read the calculation-drill concept hint aloud when it appears (after a wrong first attempt). Stays silent when Coach Narration is set to Silent."
+        checked={profile.preferences.calcHintVoice ?? true}
+        onChange={(v) => void handleToggle('calcHintVoice', v)}
+        testId="calc-hint-voice-toggle"
       />
       {/* Legacy coachVerbosity + coachCommentaryVerbosity UIs removed.
           The fields stay on UserPreferences and are read by

@@ -922,6 +922,11 @@ export interface UserPreferences {
    *  honored across every narration path. The legacy fields are still
    *  read by resolveCoachNarration as a migration fallback. */
   coachNarration?: CoachNarration;
+  /** Speak the calculation-drill concept hint aloud when it appears
+   *  (after a wrong first attempt). On by default; the user can turn it
+   *  off in Settings. Routed through voiceService.speakLecture, so it
+   *  still stays silent when coachNarration is 'silent'. */
+  calcHintVoice?: boolean;
   /** How much the coach says PER TURN when it does talk. Wired through
    *  to the brain's TEACH_MODE_ADDITION + OPERATOR_BASE_BODY teaching
    *  block to clamp response length. (Distinct from the older

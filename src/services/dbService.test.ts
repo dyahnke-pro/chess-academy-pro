@@ -50,6 +50,8 @@ describe('dbService', () => {
       expect(profile.preferences.dailySessionMinutes).toBe(45);
       expect(profile.preferences.soundEnabled).toBe(true);
       expect(profile.preferences.apiKeyEncrypted).toBeNull();
+      // Spoken calculation hints are ON by default (user can disable in Settings).
+      expect(profile.preferences.calcHintVoice).toBe(true);
     });
 
     it('sets default skill radar to 50 for all skills', async () => {

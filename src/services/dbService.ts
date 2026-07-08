@@ -42,6 +42,7 @@ export async function getOrCreateMainProfile(): Promise<UserProfile> {
       showEngineLines: false,
       soundEnabled: true,
       voiceEnabled: true,
+      calcHintVoice: true,
       dailySessionMinutes: 45,
       aiProvider: 'deepseek',
       apiKeyEncrypted: null,

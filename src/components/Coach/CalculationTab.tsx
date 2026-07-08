@@ -13,11 +13,15 @@
  *      red flash + retry. Difficulty steps via
  *      useAdaptiveEndgameSession.
  *
- * Architectural contract: positions and moves come from the
- * puzzle DB (already on disk, 15K curated). The UI verifies user
- * input via chess.js. No runtime LLM authorship.
+ * Architectural contract: positions and moves come from the curated
+ * Lichess puzzle DB (15K on disk) BLENDED with the student's own
+ * game-derived puzzles (mined mistakes) — but a game puzzle only feeds
+ * a skill when its solution line PROVABLY matches that skill's pattern
+ * (see gameCalculationPuzzleService + calculationSkillMatch; the match
+ * is computed with chess.js, never assumed from a stored tag). The UI
+ * verifies user input via chess.js. No runtime LLM authorship.
  */
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ArrowLeft,
   Check,
@@ -37,8 +41,12 @@ import {
   getDrillPuzzleCount,
   type CalculationSkill,
 } from '../../services/calculationDrillService';
+import { countGameCalculationPuzzlesBySkill } from '../../services/gameCalculationPuzzleService';
 import type { EndgameLessonPosition } from '../../types/endgameLesson';
 import { useAdaptiveEndgameSession } from '../../hooks/useAdaptiveEndgameSession';
+import { useGameCalculationPuzzles } from '../../hooks/useGameCalculationPuzzles';
+import { voiceService } from '../../services/voiceService';
+import { useAppStore } from '../../stores/appStore';
 
 interface CalculationTabProps {
   onExit: () => void;
@@ -100,6 +108,20 @@ interface SkillPickerProps {
 
 function SkillPicker({ onPick, onBack: _onBack }: SkillPickerProps): JSX.Element {
   const skills = useMemo(() => getCalculationSkills(), []);
+  const [gameCounts, setGameCounts] = useState<Record<string, number>>({});
+  useEffect(() => {
+    let cancelled = false;
+    countGameCalculationPuzzlesBySkill(skills.map((s) => s.id))
+      .then((counts) => {
+        if (!cancelled) setGameCounts(counts);
+      })
+      .catch(() => {
+        /* no game puzzles — picker just shows static counts */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [skills]);
   return (
     <div className="flex flex-col gap-4 max-w-lg mx-auto w-full">
       <div className="text-center">
@@ -111,6 +133,7 @@ function SkillPicker({ onPick, onBack: _onBack }: SkillPickerProps): JSX.Element
       <div className="grid grid-cols-1 gap-2">
         {skills.map((skill, idx) => {
           const count = getDrillPuzzleCount(skill.id);
+          const gameCount = gameCounts[skill.id] ?? 0;
           return (
             <button
               key={skill.id}
@@ -133,6 +156,14 @@ function SkillPicker({ onPick, onBack: _onBack }: SkillPickerProps): JSX.Element
                   </p>
                   <div className="text-[10px] text-cyan-400 mt-1.5">
                     {count.toLocaleString()} puzzles available
+                    {gameCount > 0 && (
+                      <span
+                        className="ml-1.5 text-emerald-400 font-semibold"
+                        data-testid={`calc-game-count-${skill.id}`}
+                      >
+                        · +{gameCount} from your games
+                      </span>
+                    )}
                   </div>
                 </div>
                 <ChevronRight size={16} className="text-cyan-400 flex-shrink-0 mt-1" />
@@ -195,9 +226,18 @@ interface AdaptiveDrillScreenProps {
 }
 
 function AdaptiveDrillScreen({ skill, onExit }: AdaptiveDrillScreenProps): JSX.Element {
+  // Blend the student's OWN game-derived puzzles (only those whose
+  // solution line matches THIS skill's pattern) into the stream.
+  const { puzzles: gamePuzzles } = useGameCalculationPuzzles(skill.id);
   // Adaptive endgame session scoped to this skill's puzzle themes.
   // currentDrill auto-advances when recordOutcome is called.
-  const adaptive = useAdaptiveEndgameSession(null, { themes: skill.themes });
+  const adaptive = useAdaptiveEndgameSession(null, {
+    themes: skill.themes,
+    extraPuzzles: gamePuzzles,
+    // Roughly every other puzzle prefers one of the student's own
+    // games when the matched pool has an unplayed one.
+    preferExtraEvery: 2,
+  });
 
   if (!adaptive.currentDrill) {
     // Pool exhausted (or still loading the first puzzle on initial mount).
@@ -259,6 +299,10 @@ function AdaptivePuzzleRunner({
 }: AdaptivePuzzleRunnerProps): JSX.Element {
   const studentSide: 'white' | 'black' =
     drill.fen.split(' ')[1] === 'w' ? 'white' : 'black';
+  // Game-derived puzzles are tagged with this title by
+  // adaptivePuzzleToLessonPosition; surface the origin so the student
+  // knows they're calculating their own missed shot.
+  const fromGame = drill.title === 'From your game';
 
   // Drive the puzzle through the playout runner with max-strength
   // Stockfish extending to obvious win after the curated line.
@@ -273,6 +317,27 @@ function AdaptivePuzzleRunner({
   const clickToMove = useClickToMove(playout);
 
   const [recorded, setRecorded] = useState(false);
+
+  // Speak the concept hint aloud the first time it appears (after a
+  // wrong first attempt), when the user hasn't turned it off. The
+  // AdaptivePuzzleRunner is remounted per puzzle (see the `key` in
+  // AdaptiveDrillScreen), so this ref resets naturally each puzzle.
+  // Routed through speakLecture — streams per G4, isn't clipped by the
+  // brief cap, and still stays silent when Coach Narration is 'silent'.
+  const hintSpokenRef = useRef(false);
+  const showHint =
+    !playout.isComplete && playout.wrongAttempts > 0 && Boolean(drill.conceptHint);
+  useEffect(() => {
+    if (!showHint || hintSpokenRef.current) return;
+    hintSpokenRef.current = true;
+    const speakHints =
+      useAppStore.getState().activeProfile?.preferences.calcHintVoice ?? true;
+    if (speakHints && drill.conceptHint) {
+      void voiceService.speakLecture(drill.conceptHint);
+    }
+  }, [showHint, drill.conceptHint]);
+  // Stop any in-flight hint speech when leaving the puzzle/drill.
+  useEffect(() => () => voiceService.stop(), []);
 
   const wrongFlash = useMemo<Record<string, CSSProperties>>(() => {
     if (!playout.wrongSquare) return {};
@@ -341,6 +406,15 @@ function AdaptivePuzzleRunner({
   const controls = (
     <div className="flex flex-col gap-3 px-2 pb-4">
       <div className="rounded-xl border border-theme-border bg-theme-surface p-3 flex flex-col gap-2">
+        {fromGame && (
+          <div
+            className="inline-flex items-center gap-1.5 self-start text-[11px] font-semibold text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 rounded-full px-2 py-0.5"
+            data-testid="calc-from-your-game"
+            title={drill.source}
+          >
+            From your game
+          </div>
+        )}
         <p className="text-sm text-theme-text">
           {studentSide === 'white' ? 'White' : 'Black'} to play.{' '}
           {playout.isComplete

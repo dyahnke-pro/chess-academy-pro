@@ -30,7 +30,7 @@ import { calculateRatingDelta } from './puzzleService';
 import { pickConceptHint } from './puzzleConceptHint';
 import type { EndgameLesson, EndgameLessonPosition } from '../types/endgameLesson';
 
-interface RawPuzzle {
+export interface RawPuzzle {
   id: string;
   fen: string;
   moves: string;
@@ -39,6 +39,21 @@ interface RawPuzzle {
   openingTags: string | string[] | null;
   popularity: number;
   nbPlays: number;
+  /** Game-derived puzzles only. When true, `fen` is ALREADY the
+   *  student-to-move position and every entry in `moves` is part of
+   *  the solution — no leading setup ply is auto-played (unlike a
+   *  Lichess puzzle, whose `moves[0]` is the opponent's setup move).
+   *  Also exempts the puzzle from the popularity/plays floors, which
+   *  a mined-from-your-games puzzle has no data for. */
+  noSetupMove?: boolean;
+  /** Game-derived puzzles only. Concept hint carried from the source
+   *  mistake puzzle; preferred over the theme-mapped hint. */
+  conceptHint?: string;
+  /** Game-derived puzzles only. Human label for the drill source
+   *  ("From your game vs …") shown instead of the Lichess citation. */
+  sourceLabel?: string;
+  /** Game-derived puzzles only. The game this position came from. */
+  sourceGameId?: string;
 }
 
 const PUZZLES = puzzlesData as RawPuzzle[];
@@ -225,12 +240,48 @@ export function pickAdaptivePuzzle(
     themes?: ReadonlyArray<string>;
     minPopularity?: number;
     minPlays?: number;
+    /** Game-derived puzzles mixed into the stream. Selected on the
+     *  prefer-turns dictated by `preferExtraEvery`; ignored (behaves
+     *  exactly like the static-only picker) when empty. */
+    extraPuzzles?: ReadonlyArray<RawPuzzle>;
+    /** Prefer a game-derived puzzle every Nth pick (1-indexed within
+     *  the modulo, so `2` → puzzles #2, #4, #6 … prefer a game puzzle
+     *  when one is available). 0/undefined disables the preference. */
+    preferExtraEvery?: number;
   } = {},
 ): RawPuzzle | null {
   const themes = options.themes ?? [];
   const minPopularity = options.minPopularity ?? 50;
   const minPlays = options.minPlays ?? 80;
   const themeSet = themes.length > 0 ? new Set(themes) : null;
+
+  // ── Game-derived blend ─────────────────────────────────────────
+  // On prefer-turns, serve one of the student's own game puzzles when
+  // an unplayed, theme-matched one exists. The pool is small, so we
+  // pick the closest-to-target directly (no band gate) — the whole
+  // point is to surface the student's mistakes, not to ration them.
+  // Falls through to the static pick when none qualifies (incl. the
+  // fresh-user zero-game case, which is byte-identical to before).
+  const extras = options.extraPuzzles ?? [];
+  const preferEvery = options.preferExtraEvery ?? 0;
+  const pickIndex = state.solved + state.failed;
+  const isPreferTurn =
+    preferEvery > 0 && extras.length > 0 && pickIndex % preferEvery === preferEvery - 1;
+  if (isPreferTurn) {
+    const eligibleExtras = extras.filter((p) => {
+      if (state.playedIds.has(p.id)) return false;
+      if (themeSet && !p.themes.some((t) => themeSet.has(t))) return false;
+      return true;
+    });
+    if (eligibleExtras.length > 0) {
+      eligibleExtras.sort(
+        (a, b) =>
+          Math.abs(a.rating - state.sessionRating) -
+          Math.abs(b.rating - state.sessionRating),
+      );
+      return eligibleExtras[0];
+    }
+  }
 
   // Weakness-boost: every WEAKNESS_BOOST_INTERVAL puzzles, prefer
   // a puzzle from the student's weakest theme (if one has emerged
@@ -298,9 +349,40 @@ export function adaptivePuzzleToLessonPosition(
   lesson?: EndgameLesson,
 ): EndgameLessonPosition | null {
   const ucis = p.moves.split(/\s+/).filter(Boolean);
-  if (ucis.length < 2) return null;
+  // Lichess puzzles auto-play a setup ply (moves[0]) then hand the
+  // student the move — they need ≥2 plies. Game-derived puzzles are
+  // already at the student-to-move position, so a single-ply solution
+  // is valid.
+  const minPlies = p.noSetupMove ? 1 : 2;
+  if (ucis.length < minPlies) return null;
   const chess = new Chess(p.fen);
   try {
+    // Game-derived puzzle: FEN is already student-to-move; play NO
+    // setup ply and treat every UCI as part of the solution.
+    if (p.noSetupMove) {
+      const sans: string[] = [];
+      for (let i = 0; i < ucis.length; i += 1) {
+        const m = chess.move({
+          from: ucis[i].slice(0, 2),
+          to: ucis[i].slice(2, 4),
+          promotion: ucis[i].length > 4 ? ucis[i][4] : undefined,
+        });
+        sans.push(m.san);
+      }
+      if (sans.length === 0) return null;
+      const stm: string = p.fen.split(' ')[1];
+      const studentSide = stm === 'w' ? 'white' : 'black';
+      return {
+        fen: p.fen,
+        title: 'From your game',
+        explanation: '',
+        result: studentSide === 'white' ? 'white-wins' : 'black-wins',
+        bestMove: sans[0],
+        solution: sans,
+        source: p.sourceLabel ?? 'From one of your games',
+        conceptHint: p.conceptHint ?? pickConceptHint(p.themes) ?? undefined,
+      };
+    }
     chess.move({
       from: ucis[0].slice(0, 2),
       to: ucis[0].slice(2, 4),
