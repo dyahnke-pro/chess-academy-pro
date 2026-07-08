@@ -1693,6 +1693,13 @@ audio.playbackRate = this.speed;
     const sourceBuffer = mediaSource.addSourceBuffer('audio/mpeg');
     sourceBuffer.mode = 'sequence';
 
+    // Tracks a mid-stream decode failure (iOS ManagedMediaSource's flaky
+    // mode). Load-bearing: without it, this method returned `true` even after
+    // the audio element errored — reporting SUCCESS on a clip the user never
+    // heard, so speakPolly never fell back and the narration silently dropped.
+    // That is the silent-drop class behind the voice_fallover flood (David
+    // 2026-07-08 device data: iOS "Polly 200 OK but playback FAILED").
+    let playbackErrored = false;
     const ended = new Promise<void>((resolve) => {
       const onEnded = (): void => {
         this.playing = false;
@@ -1702,8 +1709,12 @@ audio.playbackRate = this.speed;
       };
       audio.addEventListener('ended', onEnded, { once: true });
       audio.addEventListener('error', () => {
-        // Audio decode failed mid-stream. Stop playback, resolve so
-        // the awaiter unblocks; the cache write below will not fire.
+        // Audio decode failed mid-stream. Flag it so we return false and
+        // speakPolly self-heals to the reliable buffered-element path;
+        // resolve so the awaiter unblocks; the cache write below won't fire.
+        playbackErrored = true;
+        this.lastSpeakDiagnostic.error =
+          `stream playback error: code=${audio.error?.code ?? '?'} ${audio.error?.message ?? ''}`.trim();
         this.playing = false;
         this.currentAudioElement = null;
         URL.revokeObjectURL(objectUrl);
@@ -1791,6 +1802,12 @@ audio.playbackRate = this.speed;
     const pumpOk = await pumpResult;
     await ended;
 
+    // The audio element errored mid-decode → the user heard nothing (or a
+    // broken fragment). Report failure so speakPolly re-fetches and plays the
+    // COMPLETE clip through the proven buffered-element path instead of
+    // returning a phantom success. Don't cache a clip that just failed to play.
+    if (playbackErrored) return false;
+
     // Cache the full audio for next speak of the same text. Only
     // when the pump completed cleanly — partial streams cached as
     // valid would replay broken on the next call.
@@ -1823,6 +1840,7 @@ audio.playbackRate = this.speed;
       // Web Audio is silent on the affected older iPhones. Desktop keeps
       // the decodeAudioData path, which is reliable there.
       if (cachedBuffer) {
+        const genAtCached = this.stopGeneration;
         this.lastSpeakDiagnostic.pollyOk = true;
         this.lastSpeakDiagnostic.pollyStatus = 200;
         let played: boolean;
@@ -1832,11 +1850,21 @@ audio.playbackRate = this.speed;
         } else {
           played = await this.playAudioBuffer(cachedBuffer.slice(0));
         }
-        if (!played) {
-          this.lastSpeakDiagnostic.error ??= 'cached audio playback failed';
-          return false;
+        if (played) return true;
+        // A stop()/supersede while the cached clip was playing → intentionally
+        // abandoned; do NOT refetch (that would overlap the next narration).
+        if (this.stopGeneration !== genAtCached) return false;
+        // Genuine cached-clip playback failure (the intermittent iOS element
+        // decode flake). Evict the entry and RE-FETCH a fresh clip, playing it
+        // through the proven buffered-element path, rather than dropping to
+        // silence — self-heals the "cached audio playback failed" fallovers
+        // (David 2026-07-08 device data). On desktop, fall through to the
+        // network path below.
+        this.audioCache.delete(key);
+        this.lastSpeakDiagnostic.error = 'cached audio playback failed — refetching';
+        if (this.isIosPlatform()) {
+          return await this.playBufferedPollyFallback(getTtsUrl(text, voice, true, style), key);
         }
-        return true;
       }
 
       const url = getTtsUrl(text, voice, true, style);
@@ -2006,8 +2034,20 @@ audio.playbackRate = this.speed;
       return false;
     }
     this.setAudioCacheEntry(cacheKey, buf);
+    const genBefore = this.stopGeneration;
     const blobUrl = URL.createObjectURL(new Blob([buf], { type: 'audio/mpeg' }));
-    return this.playViaElement(blobUrl, true, srcDiag);
+    const ok = await this.playViaElement(blobUrl, true, srcDiag);
+    if (ok) return true;
+    // A stop()/supersede caused the failure → abandon, don't retry.
+    if (this.stopGeneration !== genBefore) return false;
+    // Genuine element playback failure on valid Polly bytes — the intermittent
+    // iOS WKWebView audio-element decode flake. ONE bounded retry with a fresh
+    // blob URL clears it far more often than not, turning a silent drop into an
+    // audible beat (David 2026-07-08 device data: recurring client-side
+    // playback failures with Polly returning HTTP 200). Bounded to a single
+    // retry so a genuinely-undecodable clip can't loop.
+    const retryUrl = URL.createObjectURL(new Blob([buf], { type: 'audio/mpeg' }));
+    return this.playViaElement(retryUrl, true, srcDiag);
   }
 
   /** Buffered-Polly fallback (David 2026-05-31). Runs when the
