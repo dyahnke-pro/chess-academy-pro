@@ -539,3 +539,42 @@ Session totals: 4 complete families (french-advance 16, caro-fantasy 38,
 rossolimo 16, alekhine-modern 39) + anti-scandinavian 11/21 = ~130 anti-* keys
 to per-move parity. ~25 board-accuracy bugs fixed. Next: finish anti-scandinavian
 tail, then anti-modern-150 (generic stubs), then anti-colle-black (60, D4Flank).
+
+## YOUTUBE NARRATION GROUNDING (2026-07-08, David: "keep searching for YouTube videos for narration support")
+
+yt-dlp WORKS in this env (v2026.07.04). Per the locked doctrine (G9.1 step 8 +
+the standing voice-research note): pull the relevant Naroditsky teaching video's
+auto-sub transcript for each opening being narrated, save to gitignored
+`data/sources/naroditsky-voice/transcripts/`, and use it as a REFERENCE to
+ground/confirm the narration ideas — REFERENCE-ONLY, NEVER QUOTE (plagiarism
+guard). The house voice is Naroditsky's teaching register across the whole
+repertoire.
+
+Command: `yt-dlp --write-auto-sub --skip-download --sub-format vtt --sub-langs en
+-o "data/sources/naroditsky-voice/transcripts/<slug>.%(ext)s" "<url>"`.
+Clean a VTT to plain deduped text: `grep -v '^\s*$' f.vtt | grep -vE
+'^(WEBVTT|Kind:|Language:|[0-9]{2}:[0-9]{2})' | sed 's/<[^>]*>//g' | awk '!seen[$0]++'`.
+
+Transcripts pulled + on disk (gitignored): naroditsky-scandi-{attack-kingside,
+modern-develop,queenside-castle}, naroditsky-alekhine-{fourpawns,castle-choice},
+naroditsky-grandprix-{sensei,castle-queenside}, plus the earlier alapin-advfrench,
+kings-gambit, smithmorra-nimzo-london.
+
+VALIDATION: the Scandinavian transcripts CONFIRM my narration is grounded in his
+real teaching ("developing move with tempo", "stronghold on d4", "important to
+start with d4 because Nf3 lets the knight be pushed off d5", "castle and only then
+Bf4", the Bc4 + …b5 trap, "development in this line is very simple", the Bxf7+
+motif). The "translation not invention" doctrine held — my board-accurate,
+engine-grounded, principle-based narration matches how he actually teaches it.
+
+WORKFLOW going forward: before/while authoring a family, search
+`Naroditsky <opening> <white|black> speedrun` → pull the transcript → skim for
+the key ideas he emphasizes at each move → make sure the narration teaches those
+(in original words). Grand Prix + Alekhine transcripts are staged for the next
+families.
+
+## 5th COMPLETE FAMILY: anti-scandinavian (all ~21 constants / 24 keys)
+All lines done, per-move, board-verified, engine-sound, YouTube-grounded, shipped
+(commits up to e28bcaa). Session totals now: 5 complete anti-* families
+(french-advance 16, caro-fantasy 38, rossolimo 16, alekhine-modern 39,
+scandinavian 24) = ~133 keys at per-move parity.
