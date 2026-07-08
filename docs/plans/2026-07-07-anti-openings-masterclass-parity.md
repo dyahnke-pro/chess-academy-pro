@@ -601,3 +601,34 @@ modern-150 27) = ~180 keys at per-move parity.
 
 **NEXT:** anti-colle-black (60 keys, D4Flank file — biggest remaining), then the
 HELP-file families. Keep pulling Naroditsky YouTube transcripts per family.
+
+## UPDATE (2026-07-08) — family #8 + the remaining-work MAP
+
+**8. anti-colle-black (60 constants / 23 distinct lines), student=Black — commit da49ae6.**
+Split+densified: each of 23 distinct move-sequences got a dense 7-8-beat rep
+constant; the 37 duplicate constants now alias their rep. Two worse lines
+(Nbd2 broad centre -0.80, g3 Catalan -0.60) framed honestly. All green.
+
+### REMAINING anti-* families — precise structure (measured 2026-07-08)
+
+Two classes:
+- **E4Other "sparse-but-correct" (all constants already have 3-4 beats, board-
+  correct — need DENSIFY to per-move):** anti-smith-morra-black (11 consts),
+  anti-alapin-black (14), anti-kings-gambit-black (16), anti-pirc-austrian (2).
+- **D4Flank "INTRO-ONLY" (the genuinely neglected — a plan-intro, NO per-move
+  beats, silent walk; ONE constant serves MANY opponent triggers whose move-
+  lines DIFFER, so densifying REQUIRES the colle-style SPLIT: author a dense
+  constant per distinct line + rewire each registry trigger):**
+  anti-benoni-push (5 consts→~26 lines), anti-englund (4→20), anti-kid-saemisch
+  (5→11, 0 withBeats), anti-grunfeld-exchange (3→4, 0 withBeats), anti-nimzo-qc2
+  (5→12), anti-qid-fianchetto (5→9), anti-dutch-staunton (4→12), anti-qgd-exchange
+  (4→13), anti-budapest (3→5), anti-london-black (3→~15), anti-catalan-black
+  (5→13).
+
+**Method for INTRO-ONLY families (per colle): read course-sublines → dedup by
+moves → dense per-move constant per line → rewire `<fam>::<vi>::<trig>` registry
+keys → arrow-sightline check → gates.** The intro-only plan text is a safe,
+honest baseline (not wrong), so these are additive, not corrective.
+
+Session so far: 8 families / ~240 keys at per-move parity, all shipped to main.
+NEXT: the D4Flank intro-only families (most neglected), then E4Other densify.
