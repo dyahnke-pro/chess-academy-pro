@@ -67,7 +67,34 @@ const A6_LESSON: LessonScript = {
   ],
 };
 
+/** vs 6...Nbd7 — the ambitious plan: castle long and storm with h4-h5, ignoring
+ *  material for the opposite-wing attack. Engine-verified +1.12 (extended one ply
+ *  past the pawn-grabs to the key attacking move h5, even material). */
+const NBD7_LESSON: LessonScript = {
+  openingId: OID, sources: SRC, orientation: 'white',
+  title: 'Sämisch KID vs …Nbd7 — castle long and storm', minutes: 6,
+  beats: [
+    b({ id: 'kid-n7-1', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 Nbd7',
+      say: "The Sämisch against …Nbd7: Black develops the knight to a flexible square, supporting the …e5 and …c5 breaks. This is your cue for the most ambitious plan in the whole variation — castle queenside and launch a kingside pawn storm at Black's king, while your own king sits safe on the far wing.",
+      sayShort: "…Nbd7 — time for the opposite-wing storm.",
+      highlights: [H('c4', KEY), H('d4', KEY), H('e4', KEY)] }),
+    b({ id: 'kid-n7-2', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 Nbd7 Qd2 a6 O-O-O Rb8',
+      say: "Qd2 completes the battery and you castle long — king tucked safe on the queenside, rooks connected, and the g- and h-pawns freed to storm. Black readies his own counter-attack with a6 and Rb8. It's a race of opposite-wing assaults, and you are the one aiming straight at the enemy king.",
+      sayShort: "O-O-O — king safe, pawns freed to storm.",
+      highlights: [H('d2', KEY), H('c1', SOFT)] }),
+    b({ id: 'kid-n7-3', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 Nbd7 Qd2 a6 O-O-O Rb8 e5 Ne8 h4 c5',
+      say: "You strike in the centre with e5, driving the knight back to e8, and then h4 lights the fuse — the pawn storm is under way. Black hits back with …c5 on the queenside. Both attacks are racing now, but yours is closer to the enemy king and it moves first.",
+      sayShort: "e5, h4 — light the fuse.",
+      highlights: [H('e5', KEY), H('h4', KEY), H('c5', SOFT)] }),
+    b({ id: 'kid-n7-4', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 Nbd7 Qd2 a6 O-O-O Rb8 e5 Ne8 h4 c5 dxc5 Nxe5 h5',
+      say: "Here's the key idea: after pawns are grabbed on both sides — dxc5, …Nxe5 — you play h5 WITHOUT a second thought for the material. The attack is everything. h5 rips into g6 to pry open the h-file straight at Black's king, and the engine confirms you are winning the race by a clear margin. Even material, but a decisive assault. This is the Sämisch dream against …Nbd7.",
+      sayShort: "h5 — ignore the pawns, open the h-file.",
+      highlights: [H('h5', KEY), H('g6', ATK)] }),
+  ],
+};
+
 export const ANTI_KID_SAEMISCH_VARIATION_LESSONS: Record<string, LessonScript> = {
   [`${OID}::Sämisch Variation, Yates Defense`]: NC6_LESSON,
   [`${OID}::Sämisch Variation, Normal Defense (a6)`]: A6_LESSON,
+  [`${OID}::Sämisch Variation, Normal Defense (Nbd7)`]: NBD7_LESSON,
 };
