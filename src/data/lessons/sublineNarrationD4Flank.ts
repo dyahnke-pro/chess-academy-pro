@@ -14767,7 +14767,7 @@ const NIM_0: SublineNarration = {
 };
 
 const NIM_1: SublineNarration = {
-  intro: { say: "The classical 4.Qc2 Nimzo with …d5. Develop e3 and Nf3, resolve with cxd5, and post Be2 and Bb2. Expand with b4 to gain queenside space; Black holds comfortably, so the game is roughly equal — nurse the small structural nuances and stay solid.", sayShort: "…d5 Nimzo — develop; roughly equal" },
+  intro: { say: "The classical Qc2 Nimzo with …d5. Develop e3 and Nf3, resolve with cxd5, and post Be2 and Bb2. Expand with b4 to gain queenside space; Black holds comfortably, so the game is roughly equal — nurse the small structural nuances and stay solid.", sayShort: "…d5 Nimzo — develop; roughly equal" },
   beats: [
     { atMove: 7, say: "…d5 strikes the centre — you'll resolve it favourably.", sayShort: "…d5 — Black hits the centre", highlights: [_H('d5')] },
     { atMove: 8, say: "e3 braces the centre and frees the light bishop.", sayShort: "e3 — brace, develop", highlights: [_H('e3')] },
