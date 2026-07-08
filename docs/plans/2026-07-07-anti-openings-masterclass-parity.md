@@ -711,3 +711,31 @@ TACTICAL anti-openings only (englund/scandinavian done; smith-morra/KG/budapest/
 grand-prix/caro-fantasy/dutch candidates) via the reachable amateur explorer +
 engine-verify; positional anti-openings legitimately yield few/none (empty >
 invented). anti-trompowsky-black 0 declared variations. Naroditsky-voice polish.
+
+## PITFALL / WEAPON LAYER — honest finding, NOT fabricated (2026-07-08)
+Ran the DATA+ENGINE pitfall mine per the doc's method: at every STUDENT-to-move
+node along the taught main line AND every variation, query the amateur explorer
+(lichess 1600-2000, reachable) for the moves amateurs ACTUALLY play, then
+Stockfish-check (1100-1400ms) which common deviations the engine refutes vs the
+best/taught move. Result across all 24: the sound taught lines yield essentially
+NO clean common+refuted student pitfalls — amateurs play the same sound moves on
+theory, so a deviation big enough to teach as a "mistake" barely exists at the
+taught nodes. Cross-checked against a Naroditsky "Exploiting Common Mistakes |
+Alapin, Advance French" transcript (yt-dlp, gitignored, reference-only): the
+moves he calls "mistakes" (e.g. Black's early …e5 vs the Alapin, 5% amateur)
+engine-verify to only −0.3…−0.6 — a slight practical edge, NOT a refuted blunder.
+Shipping those as "Pitfall" tiles would sell a slight inaccuracy as a mistake =
+generic filler (banned: empty > generic > invented; "quality is the only
+metric"). So the pitfall layer is intentionally LEFT THIN for these sound
+anti-lines. The genuine weapons that DO exist — Englund …Qxb2 queen-grab,
+Scandinavian …Qh5 sortie — are already shipped (trapLines). Positional
+anti-openings legitimately have none. This is the honest maximum, not a skip.
+
+## SESSION-END PARITY STATE (2026-07-08)
+Complete for ALL 24 anti-openings: Watch lessons (curated LessonScript, no legacy
+fallback), variation tabs (36), sublines (537 keys, per-move parity), middlegame
+plans (24/24, engine-sound, Gate-C-continuous), model games (2-3 each, real
+elite student-side wins), overview + 4 keyIdeas. Weapons: 2 genuine (englund,
+scandinavian); rest honestly none. Pitfalls: thin-by-nature (see above).
+Naroditsky house-voice polish + anti-trompowsky-black variation tab remain as
+future polish. Core masterclass parity = DONE.
