@@ -15629,6 +15629,634 @@ const KID_10: SublineNarration = {
   sources: ['concept:pos-bishop-pair', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence,_S%C3%A4misch_Variation'],
 };
 
+const ENG_0: SublineNarration = {
+  intro: { say: "The Englund Gambit is unsound — you're simply up the e5-pawn and better developed. Grab it, develop with Nf3 and Nc3, meet …Nxe5 with e4, and complete with Bf4 and Be2. Castle and consolidate; your clean extra pawn and superior structure win.", sayShort: "Englund — up a pawn; winning" },
+  beats: [
+    { atMove: 4, say: "Nf3 develops, attacking the e5-pawn.", sayShort: "Nf3 — attack e5", highlights: [_H('f3')] },
+    { atMove: 6, say: "Nc3 develops, controlling the centre.", sayShort: "Nc3 — develop", highlights: [_H('c3')] },
+    { atMove: 8, say: "e4 grabs the centre, meeting …Nxe5.", sayShort: "e4 — grab the centre", highlights: [_H('e4')] },
+    { atMove: 12, say: "Bf4 develops actively, eyeing c7.", sayShort: "Bf4 — active bishop", highlights: [_H('f4')] },
+    { atMove: 16, say: "Rd1 loads the d-file.", sayShort: "Rd1 — the d-file", highlights: [_H('e2')] },
+    { atMove: 20, say: "Qg3 lifts the queen toward the kingside.", sayShort: "Qg3 — swing at the kingside", highlights: [_H('g3')] },
+    { atMove: 22, say: "O-O tucks the king safe; a pawn up — winning.", sayShort: "O-O — safe; winning", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
+};
+
+const ENG_1: SublineNarration = {
+  intro: { say: "Black tries …Nf6 to muddy things, but it fails tactically. Develop Bf4, and after the trades Bxc7 nets a second pawn while the queens come off. Consolidate with O-O-O; two clean pawns up with a sound position leaves you simply winning.", sayShort: "…Nf6 — Bxc7, two pawns up; winning" },
+  beats: [
+    { atMove: 6, say: "Nc3 develops, controlling the centre.", sayShort: "Nc3 — develop", highlights: [_H('c3')] },
+    { atMove: 8, say: "e4 grabs the centre.", sayShort: "e4 — grab the centre", highlights: [_H('e4')] },
+    { atMove: 10, say: "Bf4 develops, eyeing c7.", sayShort: "Bf4 — eye c7", highlights: [_H('f4')] },
+    { atMove: 12, say: "Bxc7 nets a second pawn.", sayShort: "Bxc7 — a second pawn", highlights: [_H('e4')] },
+    { atMove: 14, say: "Qe2 offers the queen trade into a winning ending.", sayShort: "Qe2 — trade into a win", highlights: [_H('c7')] },
+    { atMove: 20, say: "O-O-O connects the rooks; two pawns up — winning.", sayShort: "O-O-O — winning", highlights: [_H('c1')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
+};
+
+const ENG_2: SublineNarration = {
+  intro: { say: "Black plays …d6, so jump Nd5 to harry the queen and trade into a winning ending. Centralise Qd4, swap on f3, and win the b-pawn with Bxb6. Your extra material and the two bishops give a decisive advantage.", sayShort: "…d6 — Nd5, Bxb6; winning" },
+  beats: [
+    { atMove: 8, say: "e4 grabs the centre.", sayShort: "e4 — grab the centre", highlights: [_H('e4')] },
+    { atMove: 10, say: "Nd5 jumps in, harrying the queen.", sayShort: "Nd5 — harry the queen", highlights: [_H('d5')] },
+    { atMove: 12, say: "Qd4 centralises, hitting the knight.", sayShort: "Qd4 — centralise", highlights: [_H('d4')] },
+    { atMove: 16, say: "Nc3 reroutes, eyeing the queenside.", sayShort: "Nc3 — reroute", highlights: [_H('c3')] },
+    { atMove: 18, say: "Be3 develops, eyeing b6.", sayShort: "Be3 — eye b6", highlights: [_H('e3')] },
+    { atMove: 20, say: "Qxb6 trades into a winning ending.", sayShort: "Qxb6 — into a win", highlights: [_H('b6')] },
+    { atMove: 22, say: "Bxb6 wins the b-pawn; winning.", sayShort: "Bxb6 — win the pawn; winning", highlights: [_H('b6')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
+};
+
+const ENG_3: SublineNarration = {
+  intro: { say: "Black retreats …Nc6, so develop Bb5 and castle. Jump Nd5 to a dominant outpost and expand b4; you keep the clean extra pawn with a huge lead in development. Consolidate and convert the material.", sayShort: "…Nc6 — Bb5, Nd5; winning" },
+  beats: [
+    { atMove: 8, say: "e4 grabs the centre.", sayShort: "e4 — grab the centre", highlights: [_H('e4')] },
+    { atMove: 10, say: "Bb5 develops, pinning toward c6.", sayShort: "Bb5 — pin", highlights: [_H('b5')] },
+    { atMove: 12, say: "O-O tucks the king safe.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+    { atMove: 16, say: "Nd5 jumps to a dominant outpost.", sayShort: "Nd5 — the outpost", highlights: [_H('d5')] },
+    { atMove: 18, say: "b4 gains queenside space.", sayShort: "b4 — queenside space", highlights: [_H('b4')] },
+    { atMove: 20, say: "Bb3 keeps the bishop active.", sayShort: "Bb3 — active bishop", highlights: [_H('b3')] },
+    { atMove: 22, say: "Bb2 develops on the long diagonal; winning.", sayShort: "Bb2 — winning", highlights: [_H('b2')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
+};
+
+const ENG_4: SublineNarration = {
+  intro: { say: "Black plays …c6 and …Nf6. Centralise Qd4, swap on f3, and after …dxe4 recapture Nxe4. Develop Bd3 and Qe3; your extra pawn and the two bishops give a clear, winning advantage.", sayShort: "…c6/…Nf6 — Qd4; clear edge" },
+  beats: [
+    { atMove: 10, say: "a3 secures b4, denying …Nb4/…Bb4.", sayShort: "a3 — secure b4", highlights: [_H('a3')] },
+    { atMove: 12, say: "Qd4 centralises, hitting the knight.", sayShort: "Qd4 — centralise", highlights: [_H('d4')] },
+    { atMove: 16, say: "Rg1 activates on the half-open g-file.", sayShort: "Rg1 — the g-file", highlights: [_H('g1')] },
+    { atMove: 18, say: "Nxe4 recaptures, centralising.", sayShort: "Nxe4 — centralise", highlights: [_H('e4')] },
+    { atMove: 20, say: "Bd3 develops, eyeing the kingside.", sayShort: "Bd3 — eye the kingside", highlights: [_H('d3')] },
+    { atMove: 22, say: "Qe3 centralises; a clear, winning edge.", sayShort: "Qe3 — press; winning", highlights: [_H('e3')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
+};
+
+const ENG_5: SublineNarration = {
+  intro: { say: "Black plays …c6 and …d6. Develop Be3 and reroute the knight to d4; meet the tricks calmly. Your clean extra pawn and sound structure leave you clearly better — consolidate and convert.", sayShort: "…d6 — Be3, Nd4; clear edge" },
+  beats: [
+    { atMove: 10, say: "a3 secures b4.", sayShort: "a3 — secure b4", highlights: [_H('a3')] },
+    { atMove: 12, say: "Be3 develops, controlling d4.", sayShort: "Be3 — control d4", highlights: [_H('e3')] },
+    { atMove: 14, say: "Bg5 pins, gaining a tempo.", sayShort: "Bg5 — pin", highlights: [_H('g5')] },
+    { atMove: 16, say: "h3 denies the g4-square.", sayShort: "h3 — deny g4", highlights: [_H('h3')] },
+    { atMove: 18, say: "Nd4 centralises the knight.", sayShort: "Nd4 — centralise", highlights: [_H('d4')] },
+    { atMove: 20, say: "Qd2 connects the pieces.", sayShort: "Qd2 — connect", highlights: [_H('d2')] },
+    { atMove: 22, say: "Be3 regroups; a clear edge, a pawn up.", sayShort: "Be3 — press; clear edge", highlights: [_H('e3')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
+};
+
+const ENG_6: SublineNarration = {
+  intro: { say: "Black plays …c6 and …d5. Centralise Qd4, swap on f3, and recapture toward the centre. Trade queens into a winning ending; your extra pawn and the bishop pair give a decisive edge.", sayShort: "…d5 — Qd4, trade; winning" },
+  beats: [
+    { atMove: 10, say: "a3 secures b4.", sayShort: "a3 — secure b4", highlights: [_H('a3')] },
+    { atMove: 12, say: "Qd4 centralises, hitting the knight.", sayShort: "Qd4 — centralise", highlights: [_H('d4')] },
+    { atMove: 16, say: "Be3 develops, controlling d4.", sayShort: "Be3 — control d4", highlights: [_H('e3')] },
+    { atMove: 18, say: "fxe4 recaptures, keeping the centre.", sayShort: "fxe4 — keep the centre", highlights: [_H('e4')] },
+    { atMove: 20, say: "f4 rolls the pawns forward.", sayShort: "f4 — roll the pawns", highlights: [_H('f4')] },
+    { atMove: 22, say: "O-O-O connects the rooks; winning.", sayShort: "O-O-O — winning", highlights: [_H('c1')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
+};
+
+const ENG_7: SublineNarration = {
+  intro: { say: "Black swaps …Nxf3+ and plays …d5. Recapture Qxf3, develop Be3, and trade off into a superior ending. Your clean extra pawn and Black's shattered kingside after …gxf6 leave you clearly winning.", sayShort: "…Nxf3+ — trade into a winning ending" },
+  beats: [
+    { atMove: 10, say: "a3 secures b4.", sayShort: "a3 — secure b4", highlights: [_H('a3')] },
+    { atMove: 12, say: "Qxf3 recaptures, the queen active.", sayShort: "Qxf3 — active queen", highlights: [_H('f3')] },
+    { atMove: 14, say: "Be3 develops, controlling d4.", sayShort: "Be3 — control d4", highlights: [_H('e3')] },
+    { atMove: 16, say: "Nxe4 recaptures, centralising.", sayShort: "Nxe4 — centralise", highlights: [_H('e4')] },
+    { atMove: 18, say: "Nxf6+ trades, damaging Black's pawns.", sayShort: "Nxf6+ — damage the pawns", highlights: [_H('f6')] },
+    { atMove: 20, say: "Qxf6 trades queens into a win.", sayShort: "Qxf6 — into a win", highlights: [_H('f6')] },
+    { atMove: 22, say: "O-O-O connects the rooks; winning ending.", sayShort: "O-O-O — winning", highlights: [_H('c1')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
+};
+
+const ENG_8: SublineNarration = {
+  intro: { say: "Black fianchettoes …g6. Trade Nxe5 and swing Qf3, then develop Bc4 and trade the dark bishops. Your extra pawn and lead in development give a clear, winning advantage — press the loose Black centre.", sayShort: "…g6 — Nxe5, Bc4; winning" },
+  beats: [
+    { atMove: 10, say: "a3 secures b4.", sayShort: "a3 — secure b4", highlights: [_H('a3')] },
+    { atMove: 12, say: "Nxe5 trades, keeping the extra pawn.", sayShort: "Nxe5 — keep the pawn", highlights: [_H('e5')] },
+    { atMove: 14, say: "Qf3 lifts the queen, eyeing b7.", sayShort: "Qf3 — eye b7", highlights: [_H('f3')] },
+    { atMove: 16, say: "Bc4 develops, eyeing f7.", sayShort: "Bc4 — eye f7", highlights: [_H('c4')] },
+    { atMove: 18, say: "Bf4 offers the dark-bishop trade.", sayShort: "Bf4 — offer the trade", highlights: [_H('f4')] },
+    { atMove: 20, say: "Qxf4 recaptures, centralised.", sayShort: "Qxf4 — centralise", highlights: [_H('f4')] },
+    { atMove: 22, say: "Bb3 keeps the bishop aimed at f7; winning.", sayShort: "Bb3 — press; winning", highlights: [_H('b3')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
+};
+
+const ENG_9: SublineNarration = {
+  intro: { say: "Black plays …h6. Trade Nxe5 and centralise Be3-Bd4, then roll f4 to build the centre. Develop Qf3 and Be2; your clean extra pawn and central control give a clear, winning advantage.", sayShort: "…h6 — Nxe5, Bd4; winning" },
+  beats: [
+    { atMove: 10, say: "a3 secures b4.", sayShort: "a3 — secure b4", highlights: [_H('a3')] },
+    { atMove: 12, say: "Nxe5 trades, keeping the extra pawn.", sayShort: "Nxe5 — keep the pawn", highlights: [_H('e5')] },
+    { atMove: 14, say: "Be3 develops, controlling d4.", sayShort: "Be3 — control d4", highlights: [_H('e3')] },
+    { atMove: 16, say: "Bd4 centralises the bishop.", sayShort: "Bd4 — centralise", highlights: [_H('d4')] },
+    { atMove: 18, say: "f4 builds the broad centre.", sayShort: "f4 — the big centre", highlights: [_H('f4')] },
+    { atMove: 20, say: "Qf3 lifts the queen actively.", sayShort: "Qf3 — active queen", highlights: [_H('f3')] },
+    { atMove: 22, say: "h3 tidies up; a clear, winning edge.", sayShort: "h3 — press; winning", highlights: [_H('h3')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
+};
+
+const ENG_10: SublineNarration = {
+  intro: { say: "Black plays the …d6 line with …f6. Take exf6, build the e4 centre, and develop Nc3 and Bf4. Castle and reroute Bg3; your central space and better structure give a clear, pleasant advantage.", sayShort: "…f6 — exf6, e4 centre; clear edge" },
+  beats: [
+    { atMove: 6, say: "Bg5 pins, pressuring f6.", sayShort: "Bg5 — pin", highlights: [_H('g5')] },
+    { atMove: 8, say: "exf6 opens lines, keeping the edge.", sayShort: "exf6 — open lines", highlights: [_H('f6')] },
+    { atMove: 10, say: "e4 builds the broad centre.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 12, say: "Nc3 develops, controlling the centre.", sayShort: "Nc3 — develop", highlights: [_H('c3')] },
+    { atMove: 14, say: "Bf4 develops actively.", sayShort: "Bf4 — active bishop", highlights: [_H('f4')] },
+    { atMove: 16, say: "Qd2 connects the pieces.", sayShort: "Qd2 — connect", highlights: [_H('d2')] },
+    { atMove: 22, say: "O-O tucks the king safe; a clear edge.", sayShort: "O-O — safe; clear edge", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
+};
+
+const ENG_11: SublineNarration = {
+  intro: { say: "Black trades with …Be7. Swap on e7, take exd6, and develop soundly with e3 and Be2. Castle and centralise Qd3; your lead in development and Black's weak d6-pawn give a clear, pleasant edge.", sayShort: "…Be7 — exd6, press d6; clear edge" },
+  beats: [
+    { atMove: 6, say: "Bg5 pins, pressuring f6.", sayShort: "Bg5 — pin", highlights: [_H('g5')] },
+    { atMove: 8, say: "Bxe7 trades, simplifying favourably.", sayShort: "Bxe7 — simplify", highlights: [_H('e7')] },
+    { atMove: 10, say: "exd6 opens lines, leaving Black a weak d-pawn.", sayShort: "exd6 — fix the weakness", highlights: [_H('d6')] },
+    { atMove: 12, say: "e3 braces the centre.", sayShort: "e3 — brace the centre", highlights: [_H('e3')] },
+    { atMove: 14, say: "Be2 develops, readying castling.", sayShort: "Be2 — develop", highlights: [_H('e2')] },
+    { atMove: 16, say: "O-O tucks the king safe.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+    { atMove: 22, say: "Nbd2 develops; press d6 — a clear edge.", sayShort: "Nbd2 — press d6; clear edge", highlights: [_H('d2')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
+};
+
+const ENG_12: SublineNarration = {
+  intro: { say: "Black plays …Nge7. Take exd6, build the e4 centre, and develop Be3 and Nc3. Pin with Bb5 and jump Nd4; your central space and better structure give a clear, pleasant advantage.", sayShort: "…Nge7 — exd6, e4; clear edge" },
+  beats: [
+    { atMove: 6, say: "Bg5 pins, pressuring f6.", sayShort: "Bg5 — pin", highlights: [_H('g5')] },
+    { atMove: 8, say: "exd6 opens lines, keeping the edge.", sayShort: "exd6 — open lines", highlights: [_H('d6')] },
+    { atMove: 10, say: "e4 builds the broad centre.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 12, say: "Be3 develops, controlling d4.", sayShort: "Be3 — control d4", highlights: [_H('e3')] },
+    { atMove: 14, say: "Nc3 develops, supporting the centre.", sayShort: "Nc3 — develop", highlights: [_H('c3')] },
+    { atMove: 16, say: "Bb5 pins, adding pressure.", sayShort: "Bb5 — pin", highlights: [_H('b5')] },
+    { atMove: 22, say: "Nd4 centralises; a clear edge.", sayShort: "Nd4 — press; clear edge", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
+};
+
+const ENG_13: SublineNarration = {
+  intro: { say: "The Englund main line: Black plays …c6 and …c5-c4. Jump Nd5 to fork, swap on f3, and roll b4-b5 to chase the queen. Nc7+ forks king and rook — your material and attack are overwhelming, simply winning.", sayShort: "…c5 main — Nd5, Nc7+; winning" },
+  beats: [
+    { atMove: 10, say: "a3 secures b4.", sayShort: "a3 — secure b4", highlights: [_H('a3')] },
+    { atMove: 12, say: "b3 undermines the …c4 pawn.", sayShort: "b3 — undermine c4", highlights: [_H('b3')] },
+    { atMove: 14, say: "Nd5 jumps in, forking the queen.", sayShort: "Nd5 — fork the queen", highlights: [_H('d5')] },
+    { atMove: 16, say: "gxf3 recaptures, opening the g-file.", sayShort: "gxf3 — open the g-file", highlights: [_H('f3')] },
+    { atMove: 18, say: "b4 chases the queen with tempo.", sayShort: "b4 — chase the queen", highlights: [_H('b4')] },
+    { atMove: 20, say: "b5 keeps chasing, gaining space.", sayShort: "b5 — keep chasing", highlights: [_H('b5')] },
+    { atMove: 22, say: "Nc7+ forks king and rook; crushing.", sayShort: "Nc7+ — the fork; crushing", highlights: [_H('c7')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
+};
+
+const ENG_14: SublineNarration = {
+  intro: { say: "Black plays …Qd7 and …h6-g5. Develop Bf4-Bg3, take exd6, and after the …Bxb2 grab develop Nbd2 and Nc4 to harry the loose bishop. Your extra pawn and Black's overextension give a clear, winning advantage.", sayShort: "…h6/…g5 — exd6; clear edge" },
+  beats: [
+    { atMove: 8, say: "Bf4 develops, eyeing the …g5 weakness.", sayShort: "Bf4 — active bishop", highlights: [_H('a3')] },
+    { atMove: 10, say: "Bg3 retreats, keeping the bishop's grip.", sayShort: "Bg3 — keep the grip", highlights: [_H('f4')] },
+    { atMove: 12, say: "exd6 opens lines, keeping the edge.", sayShort: "exd6 — open lines", highlights: [_H('g3')] },
+    { atMove: 14, say: "Nbd2 develops, targeting the loose bishop.", sayShort: "Nbd2 — target the bishop", highlights: [_H('d6')] },
+    { atMove: 16, say: "Rb1 activates on the b-file.", sayShort: "Rb1 — the b-file", highlights: [_H('d2')] },
+    { atMove: 18, say: "Nc4 harries the overextended bishop.", sayShort: "Nc4 — harry the bishop", highlights: [_H('b1')] },
+    { atMove: 22, say: "Nfd2 reroutes; a clear, winning edge.", sayShort: "Nfd2 — press; winning", highlights: [_H('d2')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
+};
+
+const ENG_15: SublineNarration = {
+  intro: { say: "Black plays …Qd7 and recaptures …dxe5, trading queens. Take Qxd7+ and develop; here Black equalises and even stands a shade better after the trades, so play accurately for the draw — develop soundly and hold the balance.", sayShort: "…dxe5 — trade queens; hold the balance" },
+  beats: [
+    { atMove: 8, say: "Bg5 pins, pressuring f6.", sayShort: "Bg5 — pin", highlights: [_H('a3')] },
+    { atMove: 10, say: "Qxd7+ trades queens, simplifying.", sayShort: "Qxd7+ — trade queens", highlights: [_H('d7')] },
+    { atMove: 12, say: "e4 grabs central space.", sayShort: "e4 — central space", highlights: [_H('e4')] },
+    { atMove: 14, say: "Bd2 regroups the bishop.", sayShort: "Bd2 — regroup", highlights: [_H('d2')] },
+    { atMove: 16, say: "Bd3 develops, eyeing the kingside.", sayShort: "Bd3 — develop", highlights: [_H('d3')] },
+    { atMove: 18, say: "Be3 develops, controlling d4.", sayShort: "Be3 — control d4", highlights: [_H('e3')] },
+    { atMove: 22, say: "Bb5 develops; Black holds — play for the draw.", sayShort: "Bb5 — hold the balance", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
+};
+
+const ENG_16: SublineNarration = {
+  intro: { say: "Black plays …Nge7. Develop Bf4, take exd6, and trade the dark bishops with Bg3-Bxd6. Centralise Qd2 and reroute Na4; your extra pawn and lead in development give a clear, winning advantage.", sayShort: "…Nge7 — exd6, trade; winning" },
+  beats: [
+    { atMove: 6, say: "Bf4 develops actively, eyeing d6.", sayShort: "Bf4 — active bishop", highlights: [_H('f4')] },
+    { atMove: 8, say: "exd6 opens lines, keeping the edge.", sayShort: "exd6 — open lines", highlights: [_H('d6')] },
+    { atMove: 10, say: "Bg3 keeps the bishop's grip.", sayShort: "Bg3 — keep the grip", highlights: [_H('g3')] },
+    { atMove: 12, say: "Nc3 develops, controlling the centre.", sayShort: "Nc3 — develop", highlights: [_H('c3')] },
+    { atMove: 14, say: "Bxd6 trades, keeping the extra pawn.", sayShort: "Bxd6 — keep the pawn", highlights: [_H('d6')] },
+    { atMove: 16, say: "Qd2 connects the pieces.", sayShort: "Qd2 — connect", highlights: [_H('d2')] },
+    { atMove: 22, say: "O-O-O connects the rooks; winning.", sayShort: "O-O-O — winning", highlights: [_H('c1')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
+};
+
+const ENG_17: SublineNarration = {
+  intro: { say: "Black lashes out …f6 and …g5, but it collapses. Retreat Bg3, take exf6, and check f7+ to expose the king. Be5 and Qd5+ crash through; you win material with a decisive attack — simply winning.", sayShort: "…f6/…g5 — f7+, Qd5+; crushing" },
+  beats: [
+    { atMove: 6, say: "Bf4 develops, meeting …g5.", sayShort: "Bf4 — active bishop", highlights: [_H('f4')] },
+    { atMove: 8, say: "Bg3 retreats, keeping the grip.", sayShort: "Bg3 — keep the grip", highlights: [_H('g3')] },
+    { atMove: 10, say: "exf6 opens lines toward the king.", sayShort: "exf6 — open lines", highlights: [_H('f6')] },
+    { atMove: 12, say: "f7+ prises open Black's king.", sayShort: "f7+ — prise the king open", highlights: [_H('f7')] },
+    { atMove: 14, say: "Be5 centralises, attacking.", sayShort: "Be5 — centralise, attack", highlights: [_H('e5')] },
+    { atMove: 16, say: "Qd5+ checks, forking king and knight.", sayShort: "Qd5+ — the forking check", highlights: [_H('d5')] },
+    { atMove: 22, say: "Nxg5 wins material; crushing.", sayShort: "Nxg5 — win material; crushing", highlights: [_H('g5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
+};
+
+const ENG_18: SublineNarration = {
+  intro: { say: "Black plays …Qd7-Qf5. Take exd6, develop Nc3 and e3, and expand b4 to harry the queen. Your extra pawn and lead in development give a clear, winning advantage — press Black's exposed queen.", sayShort: "…Qf5 — exd6, b4; winning" },
+  beats: [
+    { atMove: 8, say: "Bg5 pins, pressuring f6.", sayShort: "Bg5 — pin", highlights: [_H('a3')] },
+    { atMove: 10, say: "exd6 opens lines, keeping the edge.", sayShort: "exd6 — open lines", highlights: [_H('d6')] },
+    { atMove: 12, say: "Nc3 develops, controlling the centre.", sayShort: "Nc3 — develop", highlights: [_H('h4')] },
+    { atMove: 14, say: "e3 braces the centre.", sayShort: "e3 — brace the centre", highlights: [_H('c3')] },
+    { atMove: 16, say: "b4 harries the exposed queen.", sayShort: "b4 — harry the queen", highlights: [_H('e3')] },
+    { atMove: 18, say: "h3 denies the g4-square.", sayShort: "h3 — deny g4", highlights: [_H('b4')] },
+    { atMove: 22, say: "Bg3 keeps the bishop active; winning.", sayShort: "Bg3 — press; winning", highlights: [_H('g3')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
+};
+
+const ENG_19: SublineNarration = {
+  intro: { say: "Black plays …Qd7 and …Nxe5. Develop Nc3 and Qd2, trade the dark bishops, and reroute Nfd4. Your clean extra pawn and better structure give a clear, winning advantage — consolidate and convert.", sayShort: "…Nxe5 — Qd2, Nd4; winning" },
+  beats: [
+    { atMove: 8, say: "Bg5 pins, pressuring f6.", sayShort: "Bg5 — pin", highlights: [_H('a3')] },
+    { atMove: 10, say: "Nc3 develops, controlling the centre.", sayShort: "Nc3 — develop", highlights: [_H('c3')] },
+    { atMove: 12, say: "Qd2 connects, preparing to trade.", sayShort: "Qd2 — connect", highlights: [_H('d2')] },
+    { atMove: 14, say: "Qxg5 trades the dark bishops.", sayShort: "Qxg5 — trade off", highlights: [_H('g5')] },
+    { atMove: 16, say: "Qd2 regroups the queen.", sayShort: "Qd2 — regroup", highlights: [_H('d2')] },
+    { atMove: 18, say: "Nb5 harries the queenside.", sayShort: "Nb5 — harry", highlights: [_H('b5')] },
+    { atMove: 22, say: "Nfd4 centralises; a clear, winning edge.", sayShort: "Nfd4 — press; winning", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
+};
+
+const BEN_0: SublineNarration = {
+  intro: { say: "Black gambits the b-pawn with …b5. Accept it: cxb5-bxa6 and trade Black's pieces off. Build the e4 centre, develop Nf3, and castle; you keep the clean extra pawn with a broad centre and Black's compensation falls short — a clear, pleasant advantage.", sayShort: "…b5 gambit — up a pawn; clear edge" },
+  beats: [
+    { atMove: 4, say: "d5 clamps the centre, grabbing a big space edge.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 6, say: "cxb5 accepts the gambit pawn.", sayShort: "cxb5 — take the pawn", highlights: [_H('b5')] },
+    { atMove: 8, say: "bxa6 grabs a second pawn, unravelling Black’s gambit.", sayShort: "bxa6 — up material", highlights: [_H('a6')] },
+    { atMove: 10, say: "Nc3 develops, supporting the d5-wedge.", sayShort: "Nc3 — support d5", highlights: [_H('c3')] },
+    { atMove: 12, say: "e4 builds the broad centre, the heart of your space edge.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 14, say: "Bxa6 trades, keeping the extra material.", sayShort: "Bxa6 — keep material", highlights: [_H('a6')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+
+const BEN_1: SublineNarration = {
+  intro: { say: "The Benoni …e6 push. Clamp with cxd5 and build the e4-f4 centre. Check Bb5+ to disrupt, develop Nf3, and castle; your huge central space and Black's cramped setup give a clear, pleasant advantage — the Four Pawns bind tells.", sayShort: "…e6 — Four Pawns bind; clear edge" },
+  beats: [
+    { atMove: 4, say: "d5 clamps the centre, grabbing a big space edge.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 6, say: "Nc3 develops, supporting the d5-wedge.", sayShort: "Nc3 — support d5", highlights: [_H('c3')] },
+    { atMove: 8, say: "cxd5 keeps the protected passed d-pawn, cramping Black.", sayShort: "cxd5 — the d5 anchor", highlights: [_H('d5')] },
+    { atMove: 10, say: "e4 builds the broad centre, the heart of your space edge.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 12, say: "f4 builds the Four Pawns bind, seizing maximum space.", sayShort: "f4 — the Four Pawns bind", highlights: [_H('f4')] },
+    { atMove: 14, say: "Bb5+ checks, disrupting Black before he coordinates.", sayShort: "Bb5+ — disrupt", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+
+const BEN_2: SublineNarration = {
+  intro: { say: "Black gambits …b5 and delays. Accept it, build e4-e5, and after the trades develop Nf3 and castle. Your extra pawn and the e5-wedge cramp Black badly; a clear, winning advantage — consolidate and convert.", sayShort: "…b5 gambit — e5 wedge; winning" },
+  beats: [
+    { atMove: 4, say: "d5 clamps the centre, grabbing a big space edge.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 6, say: "cxb5 accepts the gambit pawn.", sayShort: "cxb5 — take the pawn", highlights: [_H('b5')] },
+    { atMove: 8, say: "bxa6 grabs a second pawn, unravelling Black’s gambit.", sayShort: "bxa6 — up material", highlights: [_H('a6')] },
+    { atMove: 10, say: "Nc3 develops, supporting the d5-wedge.", sayShort: "Nc3 — support d5", highlights: [_H('c3')] },
+    { atMove: 12, say: "e4 builds the broad centre, the heart of your space edge.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 14, say: "Bxa6 trades, keeping the extra material.", sayShort: "Bxa6 — keep material", highlights: [_H('a6')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+
+const BEN_3: SublineNarration = {
+  intro: { say: "The …g6 Benoni. Build the modern h3-e4 setup, develop Nf3 and Be2, and meet …exd5 with exd5. When Black tries …Bf5-Be4, kick with g4 and pin Bg5; your space and the bishop pair give a small, pleasant pull.", sayShort: "…g6 — h3, g4; a pull" },
+  beats: [
+    { atMove: 4, say: "d5 clamps the centre, grabbing a big space edge.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 6, say: "Nc3 develops, supporting the d5-wedge.", sayShort: "Nc3 — support d5", highlights: [_H('c3')] },
+    { atMove: 8, say: "h3 secures g4, denying Black’s pieces the square.", sayShort: "h3 — deny g4", highlights: [_H('h3')] },
+    { atMove: 10, say: "e4 builds the broad centre, the heart of your space edge.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 12, say: "Nf3 develops, controlling e5 and the centre.", sayShort: "Nf3 — develop", highlights: [_H('f3')] },
+    { atMove: 14, say: "Be2 develops solidly behind the centre.", sayShort: "Be2 — develop", highlights: [_H('e2')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+
+const BEN_4: SublineNarration = {
+  intro: { say: "Black plays the …e5 Benoni. Build the e4 centre, develop Be2 and Be3, and meet the …h5-h4 lunge calmly with Nf3. Your space edge and Black's loose kingside give a small, pleasant pull; press patiently.", sayShort: "…e5 — e4 centre; a pull" },
+  beats: [
+    { atMove: 4, say: "d5 clamps the centre, grabbing a big space edge.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 6, say: "Nc3 develops, supporting the d5-wedge.", sayShort: "Nc3 — support d5", highlights: [_H('c3')] },
+    { atMove: 8, say: "e4 builds the broad centre, the heart of your space edge.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 10, say: "Be2 develops solidly behind the centre.", sayShort: "Be2 — develop", highlights: [_H('e2')] },
+    { atMove: 12, say: "h3 secures g4, denying Black’s pieces the square.", sayShort: "h3 — deny g4", highlights: [_H('h3')] },
+    { atMove: 14, say: "Be3 develops, controlling the dark squares.", sayShort: "Be3 — control the dark squares", highlights: [_H('e3')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+
+const BEN_5: SublineNarration = {
+  intro: { say: "Black gambits …b5 and takes …Bxf1. Recapture Kxf1 and untangle with g3 and Kg2; the king is safe behind the pawns. Develop Nf3 and castle by hand; your extra pawn and broad centre give a clear, pleasant advantage.", sayShort: "…Bxf1 — untangle; clear edge" },
+  beats: [
+    { atMove: 4, say: "d5 clamps the centre, grabbing a big space edge.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 6, say: "cxb5 accepts the gambit pawn.", sayShort: "cxb5 — take the pawn", highlights: [_H('b5')] },
+    { atMove: 8, say: "bxa6 grabs a second pawn, unravelling Black’s gambit.", sayShort: "bxa6 — up material", highlights: [_H('a6')] },
+    { atMove: 10, say: "Nc3 develops, supporting the d5-wedge.", sayShort: "Nc3 — support d5", highlights: [_H('c3')] },
+    { atMove: 12, say: "e4 builds the broad centre, the heart of your space edge.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 14, say: "Kxf1 recaptures; the king is safe behind the pawns.", sayShort: "Kxf1 — king safe", highlights: [_H('f1')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+
+const BEN_6: SublineNarration = {
+  intro: { say: "The …d6 Benoni. Build the modern h3-e4 setup, develop Nf3 and Be2, and meet …exd5 with exd5. Kick …Be4 with g4 and pin Bg5; your central space and the bishop pair give a small, pleasant pull.", sayShort: "…d6 — h3, g4; a pull" },
+  beats: [
+    { atMove: 4, say: "d5 clamps the centre, grabbing a big space edge.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 6, say: "Nc3 develops, supporting the d5-wedge.", sayShort: "Nc3 — support d5", highlights: [_H('c3')] },
+    { atMove: 8, say: "h3 secures g4, denying Black’s pieces the square.", sayShort: "h3 — deny g4", highlights: [_H('h3')] },
+    { atMove: 10, say: "e4 builds the broad centre, the heart of your space edge.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 12, say: "Nf3 develops, controlling e5 and the centre.", sayShort: "Nf3 — develop", highlights: [_H('f3')] },
+    { atMove: 14, say: "Be2 develops solidly behind the centre.", sayShort: "Be2 — develop", highlights: [_H('e2')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+
+const BEN_7: SublineNarration = {
+  intro: { say: "Black gambits …b5 and you push a7 to win the exchange-ish tempo. Build the e4 centre, develop Nf3 and Be2, and castle. Your extra pawn and central space give a clear, pleasant advantage; Black's compensation is thin.", sayShort: "…b5/a7 — up material; clear edge" },
+  beats: [
+    { atMove: 4, say: "d5 clamps the centre, grabbing a big space edge.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 6, say: "cxb5 accepts the gambit pawn.", sayShort: "cxb5 — take the pawn", highlights: [_H('b5')] },
+    { atMove: 8, say: "bxa6 grabs a second pawn, unravelling Black’s gambit.", sayShort: "bxa6 — up material", highlights: [_H('a6')] },
+    { atMove: 10, say: "Nc3 develops, supporting the d5-wedge.", sayShort: "Nc3 — support d5", highlights: [_H('c3')] },
+    { atMove: 12, say: "a7 pushes the passer, winning time and material.", sayShort: "a7 — the passer", highlights: [_H('a7')] },
+    { atMove: 14, say: "e4 builds the broad centre, the heart of your space edge.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+
+const BEN_8: SublineNarration = {
+  intro: { say: "Black gambits …b5 and plays …e6. Accept, resolve the centre with Nxd5, and trade the pieces off. Your extra pawn and broad e4 centre give a clear, pleasant advantage; consolidate and press.", sayShort: "…b5/…e6 — up a pawn; clear edge" },
+  beats: [
+    { atMove: 4, say: "d5 clamps the centre, grabbing a big space edge.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 6, say: "cxb5 accepts the gambit pawn.", sayShort: "cxb5 — take the pawn", highlights: [_H('b5')] },
+    { atMove: 8, say: "bxa6 grabs a second pawn, unravelling Black’s gambit.", sayShort: "bxa6 — up material", highlights: [_H('a6')] },
+    { atMove: 10, say: "Nc3 develops, supporting the d5-wedge.", sayShort: "Nc3 — support d5", highlights: [_H('c3')] },
+    { atMove: 12, say: "Nxd5 resolves the centre, keeping the edge.", sayShort: "Nxd5 — resolve the centre", highlights: [_H('d5')] },
+    { atMove: 14, say: "e4 builds the broad centre, the heart of your space edge.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+
+const BEN_9: SublineNarration = {
+  intro: { say: "The Benoni …e6 with …Be7. Clamp cxd5, build e4, and develop Bd3 and Nf3. Trade on e5 and castle; your central space and the protected d5-pawn give a small, pleasant pull to press.", sayShort: "…Be7 — d5 clamp; a pull" },
+  beats: [
+    { atMove: 4, say: "d5 clamps the centre, grabbing a big space edge.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 6, say: "Nc3 develops, supporting the d5-wedge.", sayShort: "Nc3 — support d5", highlights: [_H('c3')] },
+    { atMove: 8, say: "cxd5 keeps the protected passed d-pawn, cramping Black.", sayShort: "cxd5 — the d5 anchor", highlights: [_H('d5')] },
+    { atMove: 10, say: "e4 builds the broad centre, the heart of your space edge.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 12, say: "h3 secures g4, denying Black’s pieces the square.", sayShort: "h3 — deny g4", highlights: [_H('h3')] },
+    { atMove: 14, say: "Bd3 develops, eyeing the kingside behind the space.", sayShort: "Bd3 — eye the kingside", highlights: [_H('d3')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+
+const BEN_10: SublineNarration = {
+  intro: { say: "The Benoni with …d6 and …exd5. Build the e4 centre, develop Bd3 and Nf3, and meet …b5 with Nxb5. Your central space and the d5-pawn give a clear, pleasant advantage; Black's counterplay falls short.", sayShort: "…d6 — Nxb5; clear edge" },
+  beats: [
+    { atMove: 4, say: "d5 clamps the centre, grabbing a big space edge.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 6, say: "Nc3 develops, supporting the d5-wedge.", sayShort: "Nc3 — support d5", highlights: [_H('c3')] },
+    { atMove: 8, say: "h3 secures g4, denying Black’s pieces the square.", sayShort: "h3 — deny g4", highlights: [_H('h3')] },
+    { atMove: 10, say: "cxd5 keeps the protected passed d-pawn, cramping Black.", sayShort: "cxd5 — the d5 anchor", highlights: [_H('d5')] },
+    { atMove: 12, say: "e4 builds the broad centre, the heart of your space edge.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 14, say: "Nf3 develops, controlling e5 and the centre.", sayShort: "Nf3 — develop", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+
+const BEN_11: SublineNarration = {
+  intro: { say: "The Benoni …e6 with …a6. Build the e4-f4 centre, develop Nf3, and ram e5. Develop Bd3 and castle; your huge central space and the e5-wedge give a clear, winning advantage — the Four Pawns bind crushes.", sayShort: "…a6 — e5 wedge; winning" },
+  beats: [
+    { atMove: 4, say: "d5 clamps the centre, grabbing a big space edge.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 6, say: "Nc3 develops, supporting the d5-wedge.", sayShort: "Nc3 — support d5", highlights: [_H('c3')] },
+    { atMove: 8, say: "cxd5 keeps the protected passed d-pawn, cramping Black.", sayShort: "cxd5 — the d5 anchor", highlights: [_H('d5')] },
+    { atMove: 10, say: "e4 builds the broad centre, the heart of your space edge.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 12, say: "f4 builds the Four Pawns bind, seizing maximum space.", sayShort: "f4 — the Four Pawns bind", highlights: [_H('f4')] },
+    { atMove: 14, say: "Nf3 develops, controlling e5 and the centre.", sayShort: "Nf3 — develop", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+
+const BEN_12: SublineNarration = {
+  intro: { say: "The Benoni …e6 with …Nbd7. Build e4, develop Nf3 and Bd3, and castle. Pin with Bg5 and develop Be3; your central space and the d5-pawn give a clear, pleasant advantage — press the cramped Black setup.", sayShort: "…Nbd7 — Bg5; clear edge" },
+  beats: [
+    { atMove: 4, say: "d5 clamps the centre, grabbing a big space edge.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 6, say: "Nc3 develops, supporting the d5-wedge.", sayShort: "Nc3 — support d5", highlights: [_H('c3')] },
+    { atMove: 8, say: "cxd5 keeps the protected passed d-pawn, cramping Black.", sayShort: "cxd5 — the d5 anchor", highlights: [_H('d5')] },
+    { atMove: 10, say: "e4 builds the broad centre, the heart of your space edge.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 12, say: "Nf3 develops, controlling e5 and the centre.", sayShort: "Nf3 — develop", highlights: [_H('f3')] },
+    { atMove: 14, say: "h3 secures g4, denying Black’s pieces the square.", sayShort: "h3 — deny g4", highlights: [_H('h3')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+
+const BEN_13: SublineNarration = {
+  intro: { say: "The Benoni …a6 with the Four Pawns f4-e5. Ram e5, develop Nf3, and recapture toward the centre. Develop Bf4 and Be2; your huge central space and the e5-wedge give a clear, pleasant advantage.", sayShort: "…a6 — Four Pawns, e5; clear edge" },
+  beats: [
+    { atMove: 4, say: "d5 clamps the centre, grabbing a big space edge.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 6, say: "Nc3 develops, supporting the d5-wedge.", sayShort: "Nc3 — support d5", highlights: [_H('c3')] },
+    { atMove: 8, say: "e4 builds the broad centre, the heart of your space edge.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 10, say: "f4 builds the Four Pawns bind, seizing maximum space.", sayShort: "f4 — the Four Pawns bind", highlights: [_H('f4')] },
+    { atMove: 12, say: "e5 rams the wedge deeper, cramping Black badly.", sayShort: "e5 — cramp him", highlights: [_H('e5')] },
+    { atMove: 14, say: "Nf3 develops, controlling e5 and the centre.", sayShort: "Nf3 — develop", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+
+const BEN_14: SublineNarration = {
+  intro: { say: "The Benoni with …Bg4. Lift Qc2, kick the bishop back with h3, and develop Nf3 and Be2. Pin Bg5 and reroute Bf4; your central space and the bishop pair give a small, pleasant pull.", sayShort: "…Bg4 — h3 kick; a pull" },
+  beats: [
+    { atMove: 4, say: "d5 clamps the centre, grabbing a big space edge.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 6, say: "Nc3 develops, supporting the d5-wedge.", sayShort: "Nc3 — support d5", highlights: [_H('c3')] },
+    { atMove: 8, say: "cxd5 keeps the protected passed d-pawn, cramping Black.", sayShort: "cxd5 — the d5 anchor", highlights: [_H('d5')] },
+    { atMove: 10, say: "e4 builds the broad centre, the heart of your space edge.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 12, say: "Qc2 lifts the queen to a flexible central post.", sayShort: "Qc2 — flexible queen", highlights: [_H('c2')] },
+    { atMove: 14, say: "h3 secures g4, denying Black’s pieces the square.", sayShort: "h3 — deny g4", highlights: [_H('h3')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+
+const BEN_15: SublineNarration = {
+  intro: { say: "Black plays …Be7 and you ram d6, jamming a pawn deep. Build e4, lift Qd3, and roll f4; the advanced d6-wedge cramps Black terribly. A little tactic nets material — a clear, winning advantage.", sayShort: "…Be7 — d6 wedge; winning" },
+  beats: [
+    { atMove: 4, say: "d5 clamps the centre, grabbing a big space edge.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 6, say: "Nc3 develops, supporting the d5-wedge.", sayShort: "Nc3 — support d5", highlights: [_H('c3')] },
+    { atMove: 8, say: "d6 rams a pawn deep into Black’s camp, jamming his development.", sayShort: "d6 — the deep wedge", highlights: [_H('d6')] },
+    { atMove: 10, say: "e4 builds the broad centre, the heart of your space edge.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 12, say: "Qd3 lifts the queen behind the d6-wedge.", sayShort: "Qd3 — behind the wedge", highlights: [_H('d3')] },
+    { atMove: 14, say: "f4 builds the Four Pawns bind, seizing maximum space.", sayShort: "f4 — the Four Pawns bind", highlights: [_H('f4')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+
+const BEN_16: SublineNarration = {
+  intro: { say: "The Benoni with an early …Qa5. Meet it with Bd2, build the e4-f4 centre, and develop Nf3 and Bd3. Castle; your central space and Black's misplaced queen give a clear, pleasant advantage.", sayShort: "…Qa5 — Bd2, big centre; clear edge" },
+  beats: [
+    { atMove: 4, say: "d5 clamps the centre, grabbing a big space edge.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 6, say: "Nc3 develops, supporting the d5-wedge.", sayShort: "Nc3 — support d5", highlights: [_H('c3')] },
+    { atMove: 8, say: "cxd5 keeps the protected passed d-pawn, cramping Black.", sayShort: "cxd5 — the d5 anchor", highlights: [_H('d5')] },
+    { atMove: 10, say: "e4 builds the broad centre, the heart of your space edge.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 12, say: "Bd2 develops, meeting the …Qa5 sortie.", sayShort: "Bd2 — meet …Qa5", highlights: [_H('d2')] },
+    { atMove: 14, say: "f4 builds the Four Pawns bind, seizing maximum space.", sayShort: "f4 — the Four Pawns bind", highlights: [_H('f4')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+
+const BEN_17: SublineNarration = {
+  intro: { say: "The …g6 Benoni with a3. Build the e4 centre, develop Nf3 and Be2, and castle. Meet …Bg4 by keeping the bishop pair after …Bxf3; your central space and the two bishops give a small, pleasant pull.", sayShort: "…g6/a3 — bishop pair; a pull" },
+  beats: [
+    { atMove: 4, say: "d5 clamps the centre, grabbing a big space edge.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 6, say: "Nc3 develops, supporting the d5-wedge.", sayShort: "Nc3 — support d5", highlights: [_H('c3')] },
+    { atMove: 8, say: "a3 secures b4 and prepares queenside expansion.", sayShort: "a3 — secure b4", highlights: [_H('a3')] },
+    { atMove: 10, say: "e4 builds the broad centre, the heart of your space edge.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 12, say: "Nf3 develops, controlling e5 and the centre.", sayShort: "Nf3 — develop", highlights: [_H('f3')] },
+    { atMove: 14, say: "Be2 develops solidly behind the centre.", sayShort: "Be2 — develop", highlights: [_H('e2')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+
+const BEN_18: SublineNarration = {
+  intro: { say: "The …g6 Benoni with a3 and …d6. Build the e4 centre, develop Nf3 and Be2, and castle. Keep the bishop pair after …Bxf3; your central space and the two bishops give a small, pleasant pull to press.", sayShort: "…d6/a3 — bishop pair; a pull" },
+  beats: [
+    { atMove: 4, say: "d5 clamps the centre, grabbing a big space edge.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 6, say: "Nc3 develops, supporting the d5-wedge.", sayShort: "Nc3 — support d5", highlights: [_H('c3')] },
+    { atMove: 8, say: "a3 secures b4 and prepares queenside expansion.", sayShort: "a3 — secure b4", highlights: [_H('a3')] },
+    { atMove: 10, say: "Nf3 develops, controlling e5 and the centre.", sayShort: "Nf3 — develop", highlights: [_H('f3')] },
+    { atMove: 12, say: "e4 builds the broad centre, the heart of your space edge.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 14, say: "Be2 develops solidly behind the centre.", sayShort: "Be2 — develop", highlights: [_H('e2')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+
+const BEN_19: SublineNarration = {
+  intro: { say: "Black plays …e6 and you ram d6, but here the wedge overextends. Build e4, develop Bd3 and Nf3, and roll f4-e5; Black's active pieces give real counterplay, so this line is difficult — play accurately, Black stands a shade better.", sayShort: "…e6/d6 — sharp; Black holds" },
+  beats: [
+    { atMove: 4, say: "d5 clamps the centre, grabbing a big space edge.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 6, say: "Nc3 develops, supporting the d5-wedge.", sayShort: "Nc3 — support d5", highlights: [_H('c3')] },
+    { atMove: 8, say: "a3 secures b4 and prepares queenside expansion.", sayShort: "a3 — secure b4", highlights: [_H('a3')] },
+    { atMove: 10, say: "d6 rams a pawn deep into Black’s camp, jamming his development.", sayShort: "d6 — the deep wedge", highlights: [_H('d6')] },
+    { atMove: 12, say: "e4 builds the broad centre, the heart of your space edge.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 14, say: "Bd3 develops, eyeing the kingside behind the space.", sayShort: "Bd3 — eye the kingside", highlights: [_H('d3')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+
+const BEN_20: SublineNarration = {
+  intro: { say: "The …g6 Benoni with a3 and …a6. Build the e4 centre, develop Nf3 and Bd3, and castle. Develop Bf4; your central space and the protected d5-pawn give a small, pleasant pull — press patiently.", sayShort: "…a6/a3 — d5 space; a pull" },
+  beats: [
+    { atMove: 4, say: "d5 clamps the centre, grabbing a big space edge.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 6, say: "Nc3 develops, supporting the d5-wedge.", sayShort: "Nc3 — support d5", highlights: [_H('c3')] },
+    { atMove: 8, say: "a3 secures b4 and prepares queenside expansion.", sayShort: "a3 — secure b4", highlights: [_H('a3')] },
+    { atMove: 10, say: "e4 builds the broad centre, the heart of your space edge.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 12, say: "Nf3 develops, controlling e5 and the centre.", sayShort: "Nf3 — develop", highlights: [_H('f3')] },
+    { atMove: 14, say: "h3 secures g4, denying Black’s pieces the square.", sayShort: "h3 — deny g4", highlights: [_H('h3')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+
+const BEN_21: SublineNarration = {
+  intro: { say: "The …g6 Benoni with …Qa5. Meet it with Bd2, build e4, and develop Bd3 and Nf3. Kick with h3 and develop Be3; your central space and Black's misplaced queen give a small, pleasant pull.", sayShort: "…Qa5 — Bd2; a pull" },
+  beats: [
+    { atMove: 4, say: "d5 clamps the centre, grabbing a big space edge.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 6, say: "Nc3 develops, supporting the d5-wedge.", sayShort: "Nc3 — support d5", highlights: [_H('c3')] },
+    { atMove: 8, say: "a3 secures b4 and prepares queenside expansion.", sayShort: "a3 — secure b4", highlights: [_H('a3')] },
+    { atMove: 10, say: "Bd2 develops, meeting the …Qa5 sortie.", sayShort: "Bd2 — meet …Qa5", highlights: [_H('d2')] },
+    { atMove: 12, say: "e4 builds the broad centre, the heart of your space edge.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 14, say: "Bd3 develops, eyeing the kingside behind the space.", sayShort: "Bd3 — eye the kingside", highlights: [_H('d3')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+
+const BEN_22: SublineNarration = {
+  intro: { say: "Black plays the …e5 Benoni with …Bd6 and lashes …Nxg4. Develop Nf3, jump Nb5 to trade the bishop, and ram d6. Your advanced wedge and the exposed Black queen give a clear, winning advantage.", sayShort: "…Bd6/…Nxg4 — Nb5, d6; winning" },
+  beats: [
+    { atMove: 4, say: "d5 clamps the centre, grabbing a big space edge.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 6, say: "Nc3 develops, supporting the d5-wedge.", sayShort: "Nc3 — support d5", highlights: [_H('c3')] },
+    { atMove: 8, say: "g4 kicks the bishop back, gaining kingside space.", sayShort: "g4 — kick, gain space", highlights: [_H('g4')] },
+    { atMove: 10, say: "Nf3 develops, controlling e5 and the centre.", sayShort: "Nf3 — develop", highlights: [_H('f3')] },
+    { atMove: 12, say: "Nb5 leaps in, hitting the bishop with tempo.", sayShort: "Nb5 — hit with tempo", highlights: [_H('b5')] },
+    { atMove: 14, say: "Nxc7+ forks king and rook.", sayShort: "Nxc7+ — the fork", highlights: [_H('c7')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+
+const BEN_23: SublineNarration = {
+  intro: { say: "The …e5 Benoni with …a6. Build the e4 centre, develop Bd3 and Nf3, and meet the …h5-h4 lunge with f4. Recapture toward the centre; your space edge and Black's loose kingside give a clear, pleasant advantage.", sayShort: "…a6 — f4; clear edge" },
+  beats: [
+    { atMove: 4, say: "d5 clamps the centre, grabbing a big space edge.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 6, say: "Nc3 develops, supporting the d5-wedge.", sayShort: "Nc3 — support d5", highlights: [_H('c3')] },
+    { atMove: 8, say: "e4 builds the broad centre, the heart of your space edge.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 10, say: "h3 secures g4, denying Black’s pieces the square.", sayShort: "h3 — deny g4", highlights: [_H('h3')] },
+    { atMove: 12, say: "Bd3 develops, eyeing the kingside behind the space.", sayShort: "Bd3 — eye the kingside", highlights: [_H('d3')] },
+    { atMove: 14, say: "Qe2 connects the pieces behind the centre.", sayShort: "Qe2 — connect", highlights: [_H('e2')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+
+const BEN_24: SublineNarration = {
+  intro: { say: "The …e5 Benoni main line with …Be7. Build the e4 centre, develop Bd3, and expand a3-a4-h4 on the wings. Reroute Bb1; your space edge and Black's cramped, passive pieces give a clear, pleasant advantage.", sayShort: "…Be7 — space bind; clear edge" },
+  beats: [
+    { atMove: 4, say: "d5 clamps the centre, grabbing a big space edge.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 6, say: "Nc3 develops, supporting the d5-wedge.", sayShort: "Nc3 — support d5", highlights: [_H('c3')] },
+    { atMove: 8, say: "e4 builds the broad centre, the heart of your space edge.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 10, say: "a3 secures b4 and prepares queenside expansion.", sayShort: "a3 — secure b4", highlights: [_H('a3')] },
+    { atMove: 12, say: "Bd3 develops, eyeing the kingside behind the space.", sayShort: "Bd3 — eye the kingside", highlights: [_H('d3')] },
+    { atMove: 14, say: "h4 gains kingside space, starting a bind.", sayShort: "h4 — kingside space", highlights: [_H('h4')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+
+const BEN_25: SublineNarration = {
+  intro: { say: "The …e5 Benoni with …Nbd7. Roll h4 and g3 on the kingside, reroute Nh3, and expand a4-a5 on the queenside. Your space on both wings and Black's passive, cramped pieces give a clear, winning advantage.", sayShort: "…Nbd7 — two-wing bind; winning" },
+  beats: [
+    { atMove: 4, say: "d5 clamps the centre, grabbing a big space edge.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 6, say: "Nc3 develops, supporting the d5-wedge.", sayShort: "Nc3 — support d5", highlights: [_H('c3')] },
+    { atMove: 8, say: "e4 builds the broad centre, the heart of your space edge.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 10, say: "h4 gains kingside space, starting a bind.", sayShort: "h4 — kingside space", highlights: [_H('h4')] },
+    { atMove: 12, say: "g3 shores up the kingside, readying Kg2.", sayShort: "g3 — shore up", highlights: [_H('g3')] },
+    { atMove: 14, say: "Nh3 reroutes toward f2, sidestepping trades.", sayShort: "Nh3 — reroute", highlights: [_H('h3')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+
+const BEN_26: SublineNarration = {
+  intro: { say: "The …e5 Benoni with …Be7 and …Nbd7. Build e4, develop Bd3 and Nf3, and expand a3-a4. Lift Qc2 and press; your space edge and Black's passive setup give a clear, pleasant advantage to grind.", sayShort: "…Be7/…Nbd7 — space bind; clear edge" },
+  beats: [
+    { atMove: 4, say: "d5 clamps the centre, grabbing a big space edge.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 6, say: "Nc3 develops, supporting the d5-wedge.", sayShort: "Nc3 — support d5", highlights: [_H('c3')] },
+    { atMove: 8, say: "e4 builds the broad centre, the heart of your space edge.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 10, say: "a3 secures b4 and prepares queenside expansion.", sayShort: "a3 — secure b4", highlights: [_H('a3')] },
+    { atMove: 12, say: "Bd3 develops, eyeing the kingside behind the space.", sayShort: "Bd3 — eye the kingside", highlights: [_H('d3')] },
+    { atMove: 14, say: "Nf3 develops, controlling e5 and the centre.", sayShort: "Nf3 — develop", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+
 export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'catalan-opening::6::Bb4+@5': CATR_60,
   'catalan-opening::5::c6@9': CATR_50,
@@ -17239,66 +17867,66 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'englund-gambit::0::Nxc3@14': C118,
   'englund-gambit::0::Nbd2@12': C118,
   // ── anti-benoni-push ──
-  'anti-benoni-push::0::d6@13': C119,
-  'anti-benoni-push::0::e6@5': EABEN,
-  'anti-benoni-push::0::Bg7@13': C119,
-  'anti-benoni-push::0::g6@5': C121,
-  'anti-benoni-push::0::e5@5': C122,
-  'anti-benoni-push::0::Bxa6@9': C119,
-  'anti-benoni-push::0::d6@5': C121,
-  'anti-benoni-push::0::Bg7@11': C119,
-  'anti-benoni-push::0::e6@9': C119,
-  'anti-benoni-push::1::Be7@11': C120,
-  'anti-benoni-push::1::d6@7': C120,
-  'anti-benoni-push::1::a6@11': C120,
-  'anti-benoni-push::1::Nbd7@11': C120,
-  'anti-benoni-push::1::a6@7': C120,
-  'anti-benoni-push::1::Bg4@11': C120,
-  'anti-benoni-push::1::Be7@7': C120,
-  'anti-benoni-push::1::Qa5@11': C120,
-  'anti-benoni-push::1::b5@5': C119,
-  'anti-benoni-push::1::g6@5': C121,
-  'anti-benoni-push::2::b5@5': C119,
-  'anti-benoni-push::2::e6@5': EABEN,
-  'anti-benoni-push::2::e5@5': C122,
-  'anti-benoni-push::2::d6@5': C121,
-  'anti-benoni-push::2::d6@7': C121,
-  'anti-benoni-push::2::O-O@9': C121,
-  'anti-benoni-push::2::d6@9': C121,
-  'anti-benoni-push::2::e6@9': C120,
-  'anti-benoni-push::2::a6@9': C121,
-  'anti-benoni-push::2::Qa5@9': C121,
-  'anti-benoni-push::3::b5@5': C119,
-  'anti-benoni-push::3::e6@5': EABEN,
-  'anti-benoni-push::3::Bd6@7': C122,
-  'anti-benoni-push::3::a6@7': C122,
-  'anti-benoni-push::3::g6@5': C121,
-  'anti-benoni-push::3::d6@5': C121,
-  'anti-benoni-push::3::O-O@11': C122,
-  'anti-benoni-push::3::Nbd7@9': C122,
-  'anti-benoni-push::3::g6@9': C122,
-  'anti-benoni-push::3::Nbd7@11': C122,
+  'anti-benoni-push::0::d6@13': BEN_0,
+  'anti-benoni-push::0::e6@5': BEN_1,
+  'anti-benoni-push::0::Bg7@13': BEN_2,
+  'anti-benoni-push::0::g6@5': BEN_3,
+  'anti-benoni-push::0::e5@5': BEN_4,
+  'anti-benoni-push::0::Bxa6@9': BEN_5,
+  'anti-benoni-push::0::d6@5': BEN_6,
+  'anti-benoni-push::0::Bg7@11': BEN_7,
+  'anti-benoni-push::0::e6@9': BEN_8,
+  'anti-benoni-push::1::Be7@11': BEN_9,
+  'anti-benoni-push::1::d6@7': BEN_10,
+  'anti-benoni-push::1::a6@11': BEN_11,
+  'anti-benoni-push::1::Nbd7@11': BEN_12,
+  'anti-benoni-push::1::a6@7': BEN_13,
+  'anti-benoni-push::1::Bg4@11': BEN_14,
+  'anti-benoni-push::1::Be7@7': BEN_15,
+  'anti-benoni-push::1::Qa5@11': BEN_16,
+  'anti-benoni-push::1::b5@5': BEN_8,
+  'anti-benoni-push::1::g6@5': BEN_3,
+  'anti-benoni-push::2::b5@5': BEN_8,
+  'anti-benoni-push::2::e6@5': BEN_1,
+  'anti-benoni-push::2::e5@5': BEN_4,
+  'anti-benoni-push::2::d6@5': BEN_6,
+  'anti-benoni-push::2::d6@7': BEN_3,
+  'anti-benoni-push::2::O-O@9': BEN_17,
+  'anti-benoni-push::2::d6@9': BEN_18,
+  'anti-benoni-push::2::e6@9': BEN_19,
+  'anti-benoni-push::2::a6@9': BEN_20,
+  'anti-benoni-push::2::Qa5@9': BEN_21,
+  'anti-benoni-push::3::b5@5': BEN_8,
+  'anti-benoni-push::3::e6@5': BEN_1,
+  'anti-benoni-push::3::Bd6@7': BEN_22,
+  'anti-benoni-push::3::a6@7': BEN_23,
+  'anti-benoni-push::3::g6@5': BEN_3,
+  'anti-benoni-push::3::d6@5': BEN_6,
+  'anti-benoni-push::3::O-O@11': BEN_24,
+  'anti-benoni-push::3::Nbd7@9': BEN_25,
+  'anti-benoni-push::3::g6@9': BEN_4,
+  'anti-benoni-push::3::Nbd7@11': BEN_26,
   // ── anti-englund ──
-  'anti-englund::0::Nxf3+@9': C123,
-  'anti-englund::0::Nf6@9': C123,
-  'anti-englund::0::d6@9': C124,
-  'anti-englund::0::Nc6@9': C123,
-  'anti-englund::0::Nf6@11': C123,
-  'anti-englund::0::d6@11': C124,
-  'anti-englund::0::d5@11': C123,
-  'anti-englund::0::Nxf3+@11': C123,
-  'anti-englund::0::g6@11': C123,
-  'anti-englund::0::h6@11': C123,
-  'anti-englund::1::f6@7': C124,
-  'anti-englund::1::Be7@7': C124,
-  'anti-englund::1::Nge7@7': C124,
-  'anti-englund::1::Qe7@5': EAENG,
-  'anti-englund::1::h6@9': C124,
-  'anti-englund::1::dxe5@9': C124,
-  'anti-englund::1::Nge7@5': C125,
-  'anti-englund::1::f6@5': C124,
-  'anti-englund::1::Qf5@9': C124,
-  'anti-englund::1::Nxe5@9': C124,
+  'anti-englund::0::Nxf3+@9': ENG_0,
+  'anti-englund::0::Nf6@9': ENG_1,
+  'anti-englund::0::d6@9': ENG_2,
+  'anti-englund::0::Nc6@9': ENG_3,
+  'anti-englund::0::Nf6@11': ENG_4,
+  'anti-englund::0::d6@11': ENG_5,
+  'anti-englund::0::d5@11': ENG_6,
+  'anti-englund::0::Nxf3+@11': ENG_7,
+  'anti-englund::0::g6@11': ENG_8,
+  'anti-englund::0::h6@11': ENG_9,
+  'anti-englund::1::f6@7': ENG_10,
+  'anti-englund::1::Be7@7': ENG_11,
+  'anti-englund::1::Nge7@7': ENG_12,
+  'anti-englund::1::Qe7@5': ENG_13,
+  'anti-englund::1::h6@9': ENG_14,
+  'anti-englund::1::dxe5@9': ENG_15,
+  'anti-englund::1::Nge7@5': ENG_16,
+  'anti-englund::1::f6@5': ENG_17,
+  'anti-englund::1::Qf5@9': ENG_18,
+  'anti-englund::1::Nxe5@9': ENG_19,
   // ── anti-kid-saemisch ──
   'anti-kid-saemisch::0::d5@5': KID_0,
   'anti-kid-saemisch::0::O-O@7': KID_1,
