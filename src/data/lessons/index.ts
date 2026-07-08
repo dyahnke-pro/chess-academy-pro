@@ -50,6 +50,7 @@ import { ANTI_DUTCH_STAUNTON_LESSON } from './antiDutchStaunton';
 import { ANTI_BUDAPEST_LESSON } from './antiBudapest';
 import { ANTI_TROMPOWSKY_BLACK_LESSON } from './antiTrompowskyBlack';
 import { ANTI_CARO_FANTASY_VARIATION_LESSONS } from './antiCaroFantasyVariations';
+import { ANTI_TROMPOWSKY_BLACK_VARIATION_LESSONS } from './antiTrompowskyBlackVariations';
 import { ANTI_FRENCH_ADVANCE_VARIATION_LESSONS } from './antiFrenchAdvanceVariations';
 import { ANTI_SCANDINAVIAN_VARIATION_LESSONS } from './antiScandinavianVariations';
 import { ANTI_ALEKHINE_MODERN_VARIATION_LESSONS } from './antiAlekhineModernVariations';
@@ -486,6 +487,7 @@ const LESSONS: Record<string, LessonScript> = {
 const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...ANTI_SICILIAN_ROSSOLIMO_VARIATION_LESSONS,
   ...ANTI_CARO_FANTASY_VARIATION_LESSONS,
+  ...ANTI_TROMPOWSKY_BLACK_VARIATION_LESSONS,
   ...ANTI_FRENCH_ADVANCE_VARIATION_LESSONS,
   ...ANTI_SCANDINAVIAN_VARIATION_LESSONS,
   ...ANTI_ALEKHINE_MODERN_VARIATION_LESSONS,

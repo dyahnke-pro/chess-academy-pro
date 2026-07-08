@@ -834,7 +834,18 @@
     ],
     "traps": null,
     "warnings": null,
-    "variations": [],
+    "variations": [
+      {
+        "name": "Solid Line (2...e6)",
+        "pgn": "d4 Nf6 Bg5 e6 e4 h6 Bxf6 Qxf6 Nc3 d6 Qd2 g5 O-O-O Bg7 g3",
+        "explanation": "Black declines with ...e6, takes the bishop pair after Bxf6, and clamps the kingside with ...g5 — a rock-solid, fully equal setup."
+      },
+      {
+        "name": "Vaganian Gambit (2...c5)",
+        "pgn": "d4 Nf6 Bg5 c5 Bxf6 gxf6 d5 Qb6 Qc1 f5 c4 Bg7 Nc3 d6 e3 Nd7 Qc2 Nf6",
+        "explanation": "The sharp Vaganian: ...c5 strikes d4 and invites Bxf6, trading structure for the two bishops and a half-open g-file — objectively a shade worse but rich in practical chances."
+      }
+    ],
     "drillAccuracy": 0,
     "drillAttempts": 0,
     "lastStudied": null,
