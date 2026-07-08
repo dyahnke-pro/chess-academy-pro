@@ -75540,5 +75540,132 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-antibenonipush-central-roll",
+    "openingId": "anti-benoni-push",
+    "criticalPositionFen": "r1bq1rk1/pp1n1pbp/3p2p1/1BpP4/Pn2PP2/2N2N2/1P4PP/R1BQ1RK1 w - - 5 12",
+    "title": "Roll the central pawns — the e5 break and the d6 passer",
+    "overview": "In the Modern Benoni you have handed Black nothing and kept the big d5-e4-f4 pawn front. The winning plan is to turn that static space into dynamic force: reposition the bishop to the a2-g8 diagonal, then crack the centre open with e5 and ram the d-pawn to d6, planting a passed pawn deep in Black's camp that splits his position and ties his pieces down. Space converted into a rolling central initiative.",
+    "pawnBreaks": [
+      "e5 to crack open the centre, then d5-d6 to plant a passed pawn deep in Black's position"
+    ],
+    "pieceManeuvers": [
+      "Bb5-c4 to reposition the bishop onto the a2-g8 diagonal"
+    ],
+    "strategicThemes": [
+      "the Benoni d5-e4-f4 space bind",
+      "the central passed pawn on d6",
+      "the a2-g8 diagonal"
+    ],
+    "endgameTransitions": [
+      "convert the d6 passed pawn in a favourable ending"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/pp1n1pbp/3p2p1/1BpP4/Pn2PP2/2N2N2/1P4PP/R1BQ1RK1 w - - 5 12",
+        "title": "The e5 break and the d6 thrust",
+        "intro": "White repositions the bishop, cracks the centre with e5, and rams the passed pawn to d6.",
+        "moves": [
+          "h3",
+          "a6",
+          "Bc4",
+          "f5",
+          "e5",
+          "dxe5",
+          "d6+",
+          "Kh8"
+        ],
+        "annotations": [
+          "A quiet luft — h3 tucks the king and takes the g4-square away from Black's pieces before you commit to the break.",
+          "Black nudges the bishop with a6; you are only too happy to reroute it to a better diagonal.",
+          "Bc4 swings the bishop onto the a2-g8 diagonal, eyeing f7 and reinforcing the d5-pawn behind the break.",
+          "Black lashes out with f5, trying to blunt the coming central break before it lands.",
+          "The break! e5 cracks the centre open and strikes at d6 — your static space suddenly becomes dynamic force.",
+          "Black captures on e5, but this only clears the path for your passed d-pawn to run.",
+          "The thrust: d6+ rams the pawn deep into Black's camp with check, a monster passer that splits his position in two.",
+          "The king steps aside, but the d6-pawn is a permanent dagger — the Benoni space bind has become a winning central roll."
+        ],
+        "learnCues": [
+          "h3 — luft before the break.",
+          "Black questions the bishop.",
+          "Bc4 — the a2-g8 diagonal.",
+          "Black tries …f5.",
+          "e5 — the central break!",
+          "Black takes on e5.",
+          "d6+ — the passed-pawn dagger.",
+          "King steps aside; d6 dominates."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(80,140,255,0.35)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-center",
+          "concept:pos-initiative",
+          "https://en.wikipedia.org/wiki/Benoni_Defense"
+        ]
+      }
+    ]
   }
 ]
