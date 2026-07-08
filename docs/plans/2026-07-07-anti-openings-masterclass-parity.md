@@ -175,9 +175,16 @@ lessonIntegrity/narrationAccuracy never saw them). KEY METHOD LEARNED: the
 anti-openings.json "variations" are polluted with main-line prefixes + move-order
 transpositions — TRIAGE each for distinctness, drop the dupes, rebuild the
 genuinely-distinct spine sound. modern-150 variations DEFERRED (all transpose to
-the one 150-Attack plan the main lesson already teaches). NEXT: finish variation
-tabs (dutch-staunton/grunfeld/qgd/nimzo/qid white; then black openings), then
-pitfalls across all 24, then gems + plans.
+the one 150-Attack plan the main lesson already teaches). 20 VARIATION TABS
+shipped across 12 openings now (+ grunfeld O-O, qgd Be7, nimzo Noa/Berlin, qid
+Bb7 white; london Steinitz-c3, catalan Alekhine black). DEFERRED — need a careful
+dedicated pass (gambit material subtleties / sharp tactical termini = high
+garbage-risk): staunton (Nc6/Lasker gambits), london Steinitz-Nf3 (…Qxc3 grab),
+smith-morra Qe2 (gambit), grand-prix Bb5 (…Qxd1 tactics), kg Kieseritzky (sharp
+sac, +0.78 Black but tactical), colle (6 garbage-tail auto-tabs), alapin
+(marginal move-orders), trompowsky (0 vars). NEXT: the deferred sharp/gambit
+variations (careful pass), then pitfalls across all 24, then gems + plans +
+model games + Naroditsky-voice rollout.
 
 **Progress (2026-07-07):** 4 anti-openings have verified, gate-green main-line
 Watch lessons on `main` (Rossolimo full incl. 3 variation tabs + a middlegame

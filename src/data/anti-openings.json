@@ -759,7 +759,7 @@
     "variations": [
       {
         "name": "Accelerated London System, Steinitz Countergambit (c3)",
-        "pgn": "d4 d5 Bf4 c5 e3 Nc6 c3 c4 a3 a6 b3 a5 f3 a4",
+        "pgn": "d4 d5 Bf4 c5 e3 Nc6 c3 Bf5 Qb3 Qd7 Nf3 e6 dxc5 Bxc5 Ne5 Qc8 Nd2 Nf6 Qa4 O-O Nxc6 bxc6",
         "explanation": ""
       },
       {
@@ -801,13 +801,8 @@
     "warnings": null,
     "variations": [
       {
-        "name": "Open Defense",
-        "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 a6 O-O",
-        "explanation": ""
-      },
-      {
         "name": "Open Defense, Alekhine Variation",
-        "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Qa4+ Nbd7 Qxc4 a6 Qc2 c5",
+        "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Qa4+ Nbd7 Qxc4 a6 Qc2 c5 Nf3 b6 dxc5 Bxc5 Ne5 Nd5 Nd3 Bb7",
         "explanation": ""
       }
     ],
