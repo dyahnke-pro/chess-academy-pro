@@ -14711,6 +14711,124 @@ const CATR_69: SublineNarration = {
   sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
 };
 
+const BUD_0: SublineNarration = {
+  intro: { say: "The Fajarowicz …Ne4 plants the knight aggressively, but it has no real support. Gain space with a3 and b4 to chase it, return the pawn on your terms with exd6, and complete development with Bb2, Nc3 and long castling. The knight gets shuffled to the rim while you keep the extra space and the better game.", sayShort: "Fajarowicz — chase the knight, keep space" },
+  beats: [
+    { atMove: 6, say: "a3 takes queenside space, preparing b4 to harry the e4-knight.", sayShort: "a3 — prep b4, harry the knight", highlights: [_H('a3')] },
+    { atMove: 10, say: "b4 gains space and chases the knight around the rim.", sayShort: "b4 — chase the knight", highlights: [_H('b4')] },
+    { atMove: 12, say: "exd6 returns the pawn on your terms, opening the position with a lead.", sayShort: "exd6 — return, open with the lead", highlights: [_H('d6')] },
+    { atMove: 14, say: "Bb2 develops on the long diagonal, eyeing Black's kingside.", sayShort: "Bb2 — the long diagonal", highlights: [_H('b2')] },
+    { atMove: 16, say: "b5 clamps the queenside, gaining more space.", sayShort: "b5 — clamp, gain space", highlights: [_H('b5')] },
+    { atMove: 18, say: "Nc3 develops with tempo, building your setup.", sayShort: "Nc3 — develop", highlights: [_H('c3')] },
+    { atMove: 20, say: "O-O-O tucks the king safe and connects the rooks.", sayShort: "O-O-O — king safe", highlights: [_H('c1')] },
+    { atMove: 22, say: "Nf3 completes development; you keep the extra space and the better game.", sayShort: "Nf3 — finish; better", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
+};
+
+const BUD_1: SublineNarration = {
+  intro: { say: "Black lunges …g5 to hold the e5-pawn, but it fatally weakens the kingside. Retreat Bg3, develop Nf3, and prise the kingside open with h4. After the trades on e5 and the h-file, Black's king is exposed and your Qa4 leaps to the attack — you emerge with the freer position and the initiative.", sayShort: "…g5 weakens the king — h4 opens it" },
+  beats: [
+    { atMove: 6, say: "Bf4 holds the extra e5-pawn, the principled anti-Budapest.", sayShort: "Bf4 — hold e5", highlights: [_H('f4')] },
+    { atMove: 8, say: "Bg3 retreats, sidestepping …g5 while keeping the bishop's grip.", sayShort: "Bg3 — retreat, keep the grip", highlights: [_H('g3')] },
+    { atMove: 10, say: "Nf3 develops and prepares to open the kingside.", sayShort: "Nf3 — develop, prep h4", highlights: [_H('f3')] },
+    { atMove: 12, say: "h4 prises open the weakened kingside …g5 created.", sayShort: "h4 — open the kingside", highlights: [_H('h4')] },
+    { atMove: 14, say: "Nxe5 trades in the centre, simplifying favourably.", sayShort: "Nxe5 — trade in the centre", highlights: [_H('e5')] },
+    { atMove: 18, say: "hxg5 rips the h-file open toward Black's king.", sayShort: "hxg5 — open the h-file", highlights: [_H('g5')] },
+    { atMove: 20, say: "Rxh8+ trades rooks, exposing the king further.", sayShort: "Rxh8+ — expose the king", highlights: [_H('h8')] },
+    { atMove: 22, say: "Qa4 leaps to the attack; you have the freer game and the initiative.", sayShort: "Qa4 — attack; better", highlights: [_H('a4')] },
+  ],
+  sources: ['concept:pos-king-safety', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
+};
+
+const BUD_2: SublineNarration = {
+  intro: { say: "Black checks …Bb4+ to disrupt, but block Nd2 and develop calmly. Return the pawn on your terms after the trades on e5, keep the bishop pair with a3, and clamp with c5. You emerge with more space, the bishop pair and the sounder structure — a clear, pleasant edge.", sayShort: "…Bb4+ — block, keep the bishop pair" },
+  beats: [
+    { atMove: 6, say: "Bf4 holds the extra e5-pawn.", sayShort: "Bf4 — hold e5", highlights: [_H('f4')] },
+    { atMove: 8, say: "Nd2 blocks the check, keeping the structure intact.", sayShort: "Nd2 — block the check", highlights: [_H('d2')] },
+    { atMove: 10, say: "Nf3 develops, adding a defender to e5.", sayShort: "Nf3 — develop", highlights: [_H('f3')] },
+    { atMove: 12, say: "e3 braces the centre and frees the light bishop.", sayShort: "e3 — brace, develop", highlights: [_H('e3')] },
+    { atMove: 14, say: "Nxe5 trades in the centre, simplifying favourably.", sayShort: "Nxe5 — trade in the centre", highlights: [_H('e5')] },
+    { atMove: 16, say: "Be2 develops, readying castling with the bishop pair.", sayShort: "Be2 — develop, keep the pair", highlights: [_H('e2')] },
+    { atMove: 20, say: "Qxd2 recaptures, the queen well placed.", sayShort: "Qxd2 — recapture", highlights: [_H('d2')] },
+    { atMove: 22, say: "c5 clamps the queenside; you keep the space and bishop pair — better.", sayShort: "c5 — clamp; better", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
+};
+
+const BUD_3: SublineNarration = {
+  intro: { say: "The main line: Black regains the pawn with …Nc6 and …Bb4+/…Bxc3. Take bxc3 to build a broad centre and the bishop pair, then centralise Qd5 to hit the f7- and e5-squares. Return the pawn with exf6, complete development with g3 and Bg2, and your two bishops plus central space give you the better game.", sayShort: "Main line — bishop pair, big centre" },
+  beats: [
+    { atMove: 6, say: "Bf4 holds the extra e5-pawn, the principled way.", sayShort: "Bf4 — hold e5", highlights: [_H('f4')] },
+    { atMove: 8, say: "Nf3 develops, adding a defender to e5.", sayShort: "Nf3 — develop", highlights: [_H('f3')] },
+    { atMove: 10, say: "Nc3 develops, daring the …Bxc3 trade.", sayShort: "Nc3 — develop", highlights: [_H('c3')] },
+    { atMove: 12, say: "bxc3 builds a broad centre and hands you the bishop pair.", sayShort: "bxc3 — big centre, bishop pair", highlights: [_H('c3')] },
+    { atMove: 14, say: "Qd5 centralises the queen, hitting f7 and holding e5.", sayShort: "Qd5 — centralise, hit f7", highlights: [_H('d5'), _H('f7', SOFT)] },
+    { atMove: 16, say: "exf6 returns the pawn on your terms, opening lines.", sayShort: "exf6 — return, open lines", highlights: [_H('f6')] },
+    { atMove: 18, say: "Qd3 regroups the queen to a flexible post.", sayShort: "Qd3 — regroup", highlights: [_H('d3')] },
+    { atMove: 22, say: "Bg2 completes the fianchetto; the bishop pair and centre give you the edge.", sayShort: "Bg2 — finish; better", highlights: [_H('g2')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
+};
+
+const GRU_0: SublineNarration = {
+  intro: { say: "A King's-Indian-flavoured setup with …d6 rather than the pure Grünfeld …d5. Build the broad e4-d4 centre, castle behind h4-h5 if he allows it, and swap the dark bishops with Bg5-e3. Clamp with d5 when he strikes …c5, and your space edge tells — you stand comfortably better.", sayShort: "Big centre, d5 clamp — comfortably better" },
+  beats: [
+    { atMove: 6, say: "e4 builds the broad centre, the heart of your space edge.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 8, say: "Be2 develops solidly behind the centre.", sayShort: "Be2 — develop", highlights: [_H('e2')] },
+    { atMove: 10, say: "h4 probes the kingside, gaining space.", sayShort: "h4 — probe the kingside", highlights: [_H('h4')] },
+    { atMove: 12, say: "Bg5 pressures the knight, angling to trade a defender.", sayShort: "Bg5 — pressure the knight", highlights: [_H('g5')] },
+    { atMove: 16, say: "Qd2 completes the setup, connecting the pieces.", sayShort: "Qd2 — complete the setup", highlights: [_H('d2')] },
+    { atMove: 18, say: "d5 clamps the centre, grabbing a big Benoni-style space edge.", sayShort: "d5 — clamp, take space", highlights: [_H('d5')] },
+    { atMove: 20, say: "dxe6 opens the position while you're better developed.", sayShort: "dxe6 — open with the lead", highlights: [_H('e6')] },
+    { atMove: 22, say: "Nf3 develops the last knight; your space edge gives the better game.", sayShort: "Nf3 — finish; better", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'],
+};
+
+const GRU_1: SublineNarration = {
+  intro: { say: "The Exchange Grünfeld proper: you've built the broad d4-e4 centre and Black hammers it with …Bg7 and …c5. Prop it — Bc4, Ne2, castle, Be3 — and meet …c5 by keeping the tension. Black's piece pressure balances your space, so the game is roughly equal; nurse the centre and stay solid.", sayShort: "Exchange Grünfeld — prop the centre; equal" },
+  beats: [
+    { atMove: 9, say: "Nxc3 recaptures; you now have the broad c3-d4-e4 centre.", sayShort: "Nxc3 — the big centre", highlights: [_H('c3')] },
+    { atMove: 11, say: "Bg7 aims at your centre — you'll prop d4 rather than release it.", sayShort: "…Bg7 — he pressures d4", highlights: [_H('g7')] },
+    { atMove: 12, say: "Bc4 develops the bishop actively, eyeing f7.", sayShort: "Bc4 — develop, eye f7", highlights: [_H('c4')] },
+    { atMove: 14, say: "Ne2 develops, adding a defender to the d4-pawn.", sayShort: "Ne2 — support d4", highlights: [_H('e2')] },
+    { atMove: 16, say: "O-O tucks the king safe.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+    { atMove: 18, say: "Be3 props d4, the keystone of your centre.", sayShort: "Be3 — prop d4", highlights: [_H('e3')] },
+    { atMove: 20, say: "Rb1 activates the rook on the half-open b-file.", sayShort: "Rb1 — the b-file", highlights: [_H('b1')] },
+    { atMove: 22, say: "dxc5 releases the tension favourably; roughly equal, nurse the centre.", sayShort: "dxc5 — release; equal", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'],
+};
+
+const GRU_2: SublineNarration = {
+  intro: { say: "Black delays …Bg7 for …c5, hitting d4 at once. Develop Nf3 and Be3 to prop the centre, and when he pins with …Qa5, offer the queen trade with Qd2. After the trades on d4 you keep a healthy d4-e4 duo and the freer pieces — a small but real pull.", sayShort: "…c5 early — Qd2 trade, keep the centre" },
+  beats: [
+    { atMove: 9, say: "Nxc3 recaptures; you have the broad centre.", sayShort: "Nxc3 — the big centre", highlights: [_H('c3')] },
+    { atMove: 12, say: "Nf3 develops, adding a defender to d4.", sayShort: "Nf3 — support d4", highlights: [_H('f3')] },
+    { atMove: 14, say: "Be3 props d4, the keystone of your centre.", sayShort: "Be3 — prop d4", highlights: [_H('e3')] },
+    { atMove: 16, say: "Qd2 offers the queen trade, defusing the …Qa5 pin.", sayShort: "Qd2 — offer the trade", highlights: [_H('d2')] },
+    { atMove: 18, say: "Rc1 activates the rook on the half-open c-file.", sayShort: "Rc1 — the c-file", highlights: [_H('c1')] },
+    { atMove: 20, say: "cxd4 recaptures, keeping the d4-e4 duo intact.", sayShort: "cxd4 — keep the duo", highlights: [_H('d4')] },
+    { atMove: 22, say: "Nxd2 recaptures into a pleasant ending, freer pieces.", sayShort: "Nxd2 — into a pleasant ending", highlights: [_H('d2')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'],
+};
+
+const GRU_3: SublineNarration = {
+  intro: { say: "The main-line Exchange Grünfeld: Bc4, Ne2 and Be3 prop the centre while Black pressures with …c5 and …Nc6. Meet the …Na5 hop with Bd3, keep the d4-e4 duo intact, and activate Rb1 on the b-file. Your central space and the bishop pair's scope give you a comfortable, better game.", sayShort: "Main line — prop d4, keep the space" },
+  beats: [
+    { atMove: 9, say: "Nxc3 recaptures; you now hold the broad centre.", sayShort: "Nxc3 — the big centre", highlights: [_H('c3')] },
+    { atMove: 12, say: "Bc4 develops actively, eyeing f7.", sayShort: "Bc4 — develop, eye f7", highlights: [_H('c4')] },
+    { atMove: 14, say: "Ne2 develops, adding a defender to d4.", sayShort: "Ne2 — support d4", highlights: [_H('e2')] },
+    { atMove: 16, say: "Be3 props d4, the keystone of your centre.", sayShort: "Be3 — prop d4", highlights: [_H('e3')] },
+    { atMove: 18, say: "O-O tucks the king safe.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+    { atMove: 20, say: "Bd3 sidesteps the …Na5 hit, keeping the bishop active.", sayShort: "Bd3 — keep the bishop active", highlights: [_H('d3')] },
+    { atMove: 22, say: "Rb1 activates on the half-open b-file; your space gives the better game.", sayShort: "Rb1 — the b-file; better", highlights: [_H('b1')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'],
+};
+
 export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'catalan-opening::6::Bb4+@5': CATR_60,
   'catalan-opening::5::c6@9': CATR_50,
@@ -16433,12 +16551,12 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'anti-kid-saemisch::4::c6@9': C127,
   'anti-kid-saemisch::4::a6@9': C127,
   // ── anti-grunfeld-exchange ──
-  'anti-grunfeld-exchange::0::Bg7@5': C130,
-  'anti-grunfeld-exchange::0::O-O@13': C131,
-  'anti-grunfeld-exchange::0::c5@11': C131,
-  'anti-grunfeld-exchange::1::Bg7@5': C130,
-  'anti-grunfeld-exchange::1::c5@13': TAGRU,
-  'anti-grunfeld-exchange::1::c5@11': C131,
+  'anti-grunfeld-exchange::0::Bg7@5': GRU_0,
+  'anti-grunfeld-exchange::0::O-O@13': GRU_1,
+  'anti-grunfeld-exchange::0::c5@11': GRU_2,
+  'anti-grunfeld-exchange::1::Bg7@5': GRU_0,
+  'anti-grunfeld-exchange::1::c5@13': GRU_3,
+  'anti-grunfeld-exchange::1::c5@11': GRU_2,
   // ── anti-nimzo-qc2 ──
   'anti-nimzo-qc2::0::d5@5': C132,
   'anti-nimzo-qc2::0::d5@7': C132,
@@ -16523,16 +16641,16 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'anti-qgd-exchange::1::Bb4@9': C145,
   'anti-qgd-exchange::1::Nbd7@9': C145,
   // ── anti-budapest ──
-  'anti-budapest::0::Ne4@5': C146,
-  'anti-budapest::0::g5@7': C147,
-  'anti-budapest::0::Bb4+@7': C147,
-  'anti-budapest::1::Nc6@7': EABUD,
-  'anti-budapest::1::Ne4@5': C146,
-  'anti-budapest::1::Bb4+@7': C147,
-  'anti-budapest::1::Nc6@9': C147,
-  'anti-budapest::2::Nc6@7': EABUD,
-  'anti-budapest::2::Ne4@5': C146,
-  'anti-budapest::2::g5@7': C147,
+  'anti-budapest::0::Ne4@5': BUD_0,
+  'anti-budapest::0::g5@7': BUD_1,
+  'anti-budapest::0::Bb4+@7': BUD_2,
+  'anti-budapest::1::Nc6@7': BUD_3,
+  'anti-budapest::1::Ne4@5': BUD_0,
+  'anti-budapest::1::Bb4+@7': BUD_2,
+  'anti-budapest::1::Nc6@9': BUD_1,
+  'anti-budapest::2::Nc6@7': BUD_3,
+  'anti-budapest::2::Ne4@5': BUD_0,
+  'anti-budapest::2::g5@7': BUD_1,
   // ── anti-london-black ──
   'anti-london-black::0::Nf3@8': LOND_0,
   'anti-london-black::0::Nd2@8': LOND_1,
