@@ -12214,5 +12214,33 @@
     "event": "World Rapid Championship",
     "pgn": "d4 Nf6 Bg5 Ne4 Bf4 d5 f3 Nd6 Nc3 e6 e3 Be7 Qd2 Nd7 O-O-O O-O Kb1 c6 Bd3 b5 Bxd6 Bxd6 f4 b4 Nce2 c5 dxc5 Nxc5 Nf3 a5 Ned4 a4 h4 Ba6 g4 Qb6 Ka1 Bxd3 cxd3 Nb3+ Nxb3 axb3 a3 bxa3 Kb1 Bb4 Qe2 axb2 Qxb2 Ra2 Qxb3 Ra3 Qb2 Rb8 Rc1 Qa6 Rc7",
     "overview": "Mamedyarov meets Jobava’s Trompowsky with the principled 2…Ne4, refusing the pin and fighting for the centre. He equalizes cleanly, castles into safety, and storms the queenside — …b5-b4, …a5-a4 and a piece sacrifice open White’s king. The model …Ne4 antidote, beating a Tromp specialist at his own game."
+  },
+  {
+    "id": "mg-andreikin-kamsky-morra",
+    "openingId": "anti-smith-morra-black",
+    "studentSide": "black",
+    "white": "Gata Kamsky",
+    "black": "Dmitry Andreikin",
+    "whiteElo": 2705,
+    "blackElo": 2509,
+    "result": "0-1",
+    "year": 2007,
+    "event": "Kamsky–Andreikin Match",
+    "pgn": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Bc4 e6 Nf3 a6 a4 Nge7 h4 Ng6 h5 Nge5 Nxe5 Nxe5 Ba2 Bc5 f4 Nc6 h6 Rg8 e5 Bb4 Qg4 f5 exf6 Qxf6 Bd2 d5 O-O-O Bd7 f5 O-O-O Bg5 gxh6 Bxf6 Rxg4 Bxd8 Kxd8 fxe6 Bxc3 Rxd5 Rd4 bxc3 Rxd5 Bxd5 Ne7 c4 Bxa4 Bxb7 a5 Rxh6 Kc7 Bd5 Kd6 Rxh7 Bb3 Rxe7 Kxe7 Kb2 Bd1 Ka3 Kd6 g3 Bg4 Ka4 Kc5 e7 Bd7+ Kxa5 Kd6 g4 Kxe7 g5 Kd6 Kb6 Bf5 Bg8 Bd3 c5+ Ke7 Bb3 Bf5 c6 Bd7 c7 Bc6 Bd5 Kd7 c8=Q+ Kd6",
+    "overview": "Andreikin refutes the Smith-Morra from the Black side. He accepts both gambit pawns, builds the rock-solid Kan structure with …e6/…a6/…Nge7, weathers White’s pawn-storm, and in a sharp battle emerges with the extra material and converts. The model: don’t fear the Morra — accept, consolidate, and win the endgame."
+  },
+  {
+    "id": "mg-carlsen-kramnik-qgd",
+    "openingId": "anti-qgd-exchange",
+    "studentSide": "white",
+    "white": "Magnus Carlsen",
+    "black": "Vladimir Kramnik",
+    "whiteElo": 2851,
+    "blackElo": 2801,
+    "result": "1-0",
+    "year": 2016,
+    "event": "Norway Chess",
+    "pgn": "d4 d5 c4 e6 Nc3 Nf6 cxd5 exd5 Bg5 c6 e3 Bf5 Qf3 Bg6 Bxf6 Qxf6 Qxf6 gxf6 Nf3 Nd7 Nh4 Be7 Ne2 Nb6 Ng3 Bb4+ Kd1 Na4 Ngf5 Kd7 Rb1 Ke6 Bd3 Rhc8 Ke2 Bf8 g4 c5 Ng2 cxd4 exd4 Bd6 h4 h5 Ng7+ Ke7 gxh5 Bxd3+ Kxd3 Kd7 Ne3 Nb6 Ng4 Rh8 Rhe1 Be7 Nf5 Bd8 h6 Rc8 b3 Rc6 Nge3 Bc7 Rbc1 Rxc1 Rxc1 Bf4 Rc5 Ke6 Ng7+ Kd6 Ng4 Nd7 Rc2 f5 Nxf5+ Ke6 Ng7+ Kd6 Re2 Kc6 Re8 Rxe8 Nxe8 Nf8 Ne5+ Bxe5 dxe5 Kd7 Nf6+ Ke6 h5 Kxe5 Nd7+ Nxd7 h7 Nc5+ Ke2",
+    "overview": "Carlsen grinds down Kramnik in the QGD Exchange. From the Carlsbad structure he steers into a queenless middlegame, manoeuvres his knights to dominant squares, and pushes the h-pawn to decide a long technical ending. The model for the anti-QGD Exchange — patient squeezing from the classic pawn structure."
   }
 ]
