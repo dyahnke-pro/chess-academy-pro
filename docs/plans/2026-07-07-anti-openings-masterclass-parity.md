@@ -175,8 +175,22 @@ lessonIntegrity/narrationAccuracy never saw them). KEY METHOD LEARNED: the
 anti-openings.json "variations" are polluted with main-line prefixes + move-order
 transpositions — TRIAGE each for distinctness, drop the dupes, rebuild the
 genuinely-distinct spine sound. modern-150 variations DEFERRED (all transpose to
-the one 150-Attack plan the main lesson already teaches). 26 VARIATION TABS
-shipped across 16 openings now — rossolimo(3), caro-fantasy(3), french(1),
+the one 150-Attack plan the main lesson already teaches). ✅ VARIATION-TAB LAYER
+EFFECTIVELY COMPLETE — 34 TABS across 21 of 24 openings (only kings-gambit
+[sharp sac theory], trompowsky [0 declared variations], modern-150 [pure
+transpositions] remain, all honestly deferred). Added since the 26-tab note:
+dutch-staunton(Nc6 gambit), smith-morra(Qe2), london(+Nf3), pirc(Dragon),
+kid-saemisch(Nc6/a6), benoni(Modern/Czech), colle(c3/dxc5), englund(d6/
+Zilbermints), alapin(a3), grand-prix(Bb5, extended past the queen-trade to a
+stable terminus). METHOD for gambit/tactical lines: compute exact material at
+every beat; only ship a STABLE (non-mid-capture) terminus — extend one ply past
+a forced recapture if needed. NEXT LAYER: pitfalls (common-mistakes) across all
+24, then gems + middlegame plans + model games + Naroditsky-voice rollout. The
+handful of still-deferred sharp variations (staun-Lasker, kid-c5/Nbd7, benoni-g6,
+colle-b3, englund-Nxe5, alapin-Nf3, kg lines) want a careful trim-and-reverify
+pass like the grand-prix one.
+
+Earlier note — 26 VARIATION TABS across 16 openings — rossolimo(3), caro-fantasy(3), french(1),
 scandinavian(2), alekhine(3), budapest(1), grunfeld(1), qgd(1), nimzo(2),
 qid(1), london(2: Steinitz c3+Nf3), catalan(1), dutch-staunton(1: Nc6 gambit,
 material-verified), smith-morra(1: Qe2 gambit), pirc(1: Dragon), kid-saemisch(2:
