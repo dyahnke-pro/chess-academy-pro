@@ -346,7 +346,7 @@
       },
       {
         "name": "Pawn Storm Variation",
-        "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 e4 g6 f4 Bg7",
+        "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 e4 g6 f4 Bg7 Bb5+ Nfd7 a4 O-O Nf3 Na6 O-O Nb4",
         "explanation": ""
       },
       {
@@ -356,7 +356,7 @@
       },
       {
         "name": "Czech Benoni Defense",
-        "pgn": "d4 Nf6 c4 c5 d5 e5 Nc3 d6 e4 Be7 a3 a6 b3 a5",
+        "pgn": "d4 Nf6 c4 c5 d5 e5 Nc3 d6 e4 Be7 Nf3 Na6 h3 O-O Bd3 Nc7 Bd2 Kh8 Qe2 g6 Bh6 Re8",
         "explanation": ""
       }
     ],
@@ -868,12 +868,12 @@
       },
       {
         "name": "Colle System (c3)",
-        "pgn": "d4 d5 Nf3 Nf6 e3 c5 c3 e6 Bd3 Nc6",
+        "pgn": "d4 d5 Nf3 Nf6 e3 c5 c3 e6 Bd3 Nc6 Nbd2 Bd6 O-O O-O dxc5 Bxc5 b4 Bd6 Bb2 Ne5 Nxe5 Bxe5",
         "explanation": ""
       },
       {
         "name": "Colle System (dxc5)",
-        "pgn": "d4 d5 Nf3 Nf6 e3 c5 dxc5 e6 a3 d4 b3 d3 c3 d2+",
+        "pgn": "d4 d5 Nf3 Nf6 e3 c5 dxc5 e6 b4 a5 c3 axb4 cxb4 b6 a4 bxc5 bxc5 Bxc5 Nbd2 Ba6 Bxa6 Nxa6",
         "explanation": ""
       },
       {
