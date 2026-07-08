@@ -400,12 +400,12 @@
       },
       {
         "name": "Englund Gambit",
-        "pgn": "d4 e5 dxe5 Nc6 Nf3 d6 Bg5 Qd7 a3 d5 b3 d4 c3 d3",
+        "pgn": "d4 e5 dxe5 Nc6 Nf3 d6 Bg5 Qd7 exd6 Bxd6 Nc3 h6 Bh4 Nge7 Nb5 Nf5 Nxd6+ Nxd6 Bg3 Ne4 Qxd7+ Bxd7",
         "explanation": ""
       },
       {
         "name": "Zilbermints Gambit",
-        "pgn": "d4 e5 dxe5 Nc6 Nf3 Nge7 Nc3",
+        "pgn": "d4 e5 dxe5 Nc6 Nf3 Nge7 Bf4 h6 e4 Ng6 Bg3 Bb4+ c3 Be7 Nbd2 O-O Bb5 d6 exd6 Bxd6 O-O Bf4",
         "explanation": ""
       }
     ],
@@ -964,7 +964,7 @@
     "variations": [
       {
         "name": "Alapin Variation, Smith-Morra Declined",
-        "pgn": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 Nf3 Nc6 cxd4 d6 a3 a6",
+        "pgn": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 Nf3 Nc6 cxd4 d6 a3 dxe5 dxe5 Be6 Bd2 g6 Bb5 Bg7 Bxc6+ bxc6",
         "explanation": ""
       },
       {
