@@ -491,3 +491,33 @@ check → valid concept sources → gate + typecheck → ship to main → verify
 = 54 keys taken to per-move parity, board-verified, engine-sound, shipped to main
 (commits f66fc12 → 31f26a4) and verified live on prod. ~470 anti-* keys remain
 (multi-session); method + architecture + priority order all locked above.
+
+## SUBLINE ROLLOUT PROGRESS (2026-07-08, session cont.)
+
+**COMPLETE anti-* families (per-move, board-verified, engine-sound, shipped):**
+1. anti-french-advance (16 keys) — E4Other
+2. anti-caro-fantasy (38 keys) — E4Other
+3. anti-sicilian-rossolimo (16 keys) — E4Other; fixed the 50% g6 line that was
+   written from BLACK's side + cited the wrong opening (Sveshnikov).
+4. anti-alekhine-modern (39 keys) — E4Other; the 34% Bg4@7 line was an inline
+   {...N4} override using a Black-perspective intro shared with alekhine-defence
+   — built a dedicated White-oriented `AME_BG4` constant and repointed all 3 keys.
+
+**IN PROGRESS — anti-scandinavian (24 keys, ~21 constants), student=White:**
+- DONE (top-6 by frequency, shipped): N172 (Qa5@5 52%), N175 (c6@9/Qd6 37%),
+  N164 (Bf5@9 30%), N170 (c6@7 24%), N173 (b5@11 21%), N166 (Bg4@9 19%). Fixed
+  N166's "O-O-O castles into the attack" (queens are OFF, king's central).
+- TODO: N165 (Bg4@11 16%), N167 (Nc6@9 9%), N168+inline (Qd6@5 38% — note the
+  Qd6@5 KEY is an inline `{...N168, beats}`; densify N168's intro AND the inline
+  beats), N169 (Qd8@5 10%), N171/N177/N178/N179-N184 (lower-freq + several are
+  DUPLICATE constants for the same line, e.g. N164≡N178 Bf5@9, N170≡N174≡N180
+  c6@7, N177≡N184 g6@9 — consider consolidating to one constant like AME_BG4).
+
+**Session tally so far:** 4 families complete + anti-scandinavian top-6 = ~115
+anti-* subline keys taken to per-move parity, all shipped to main
+(f66fc12 → this commit), gates green, prod-verified. ALL termini engine-checked
+(student POV); ~20 board-accuracy bugs fixed (wrong-side narration, blocked
+slider arrows, "grabs" vs "recaptures", overclaimed attacks on equal/quiet
+lines). Priority for next: finish anti-scandinavian, then anti-modern-150 (27,
+generic stubs), then anti-colle-black (60, D4Flank), then the sparse-but-correct
++ HELP-file families.
