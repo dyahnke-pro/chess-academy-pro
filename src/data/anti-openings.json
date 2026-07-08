@@ -513,13 +513,8 @@
     "warnings": null,
     "variations": [
       {
-        "name": "Exchange Variation, Classical Variation (c5)",
-        "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Bc4 c5",
-        "explanation": ""
-      },
-      {
         "name": "Exchange Variation, Classical Variation (O-O)",
-        "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Bc4 O-O",
+        "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Bc4 O-O Ne2 c5 O-O Nc6 Be3 Bg4 f3 Na5",
         "explanation": ""
       }
     ],
@@ -556,18 +551,13 @@
     "warnings": null,
     "variations": [
       {
-        "name": "Classical Variation",
-        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O",
-        "explanation": ""
-      },
-      {
         "name": "Classical Variation, Noa Variation",
-        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 d5 cxd5 exd5 Bg5",
+        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 d5 cxd5 exd5 Bg5 h6 Bh4 Nc6 e3 g5 Bg3 h5 Bb5 h4 Be5 O-O",
         "explanation": ""
       },
       {
         "name": "Classical Variation, Berlin Variation, Pirc Variation",
-        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 c5 dxc5 O-O",
+        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 c5 dxc5 O-O a3 Bxc5 Nf3 b6 Bf4 Bb7 Rd1 Nc6 b4 Be7 e4 Nh5",
         "explanation": ""
       }
     ],
@@ -604,13 +594,8 @@
     "warnings": null,
     "variations": [
       {
-        "name": "Fianchetto Variation, Check Variation",
-        "pgn": "d4 Nf6 c4 e6 Nf3 b6 g3 Ba6 b3 Bb4+ Bd2",
-        "explanation": ""
-      },
-      {
         "name": "Fianchetto Variation, Traditional Line",
-        "pgn": "d4 Nf6 c4 e6 Nf3 b6 g3 Bb7 Bg2",
+        "pgn": "d4 Nf6 c4 e6 Nf3 b6 g3 Bb7 Bg2 Be7 O-O O-O Nc3 Ne4 Bd2 f5 Ne5 Nxc3 Bxc3 Bxg2 Kxg2 a5",
         "explanation": ""
       }
     ],
@@ -696,13 +681,8 @@
     "warnings": null,
     "variations": [
       {
-        "name": "Queen's Gambit Declined (c6)",
-        "pgn": "d4 d5 c4 e6 cxd5 exd5 Nc3 Nf6 Bg5 c6 e3 Be7",
-        "explanation": ""
-      },
-      {
         "name": "Queen's Gambit Declined (Be7)",
-        "pgn": "d4 d5 c4 e6 cxd5 exd5 Nc3 Nf6 Bg5 Be7",
+        "pgn": "d4 d5 c4 e6 cxd5 exd5 Nc3 Nf6 Bg5 Be7 e3 O-O Bd3 Nbd7 Nge2 c6 Qc2 Re8 O-O a5 Bh4 h6",
         "explanation": ""
       }
     ],

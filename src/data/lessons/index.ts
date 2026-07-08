@@ -54,6 +54,10 @@ import { ANTI_FRENCH_ADVANCE_VARIATION_LESSONS } from './antiFrenchAdvanceVariat
 import { ANTI_SCANDINAVIAN_VARIATION_LESSONS } from './antiScandinavianVariations';
 import { ANTI_ALEKHINE_MODERN_VARIATION_LESSONS } from './antiAlekhineModernVariations';
 import { ANTI_BUDAPEST_VARIATION_LESSONS } from './antiBudapestVariations';
+import { ANTI_GRUNFELD_EXCHANGE_VARIATION_LESSONS } from './antiGrunfeldExchangeVariations';
+import { ANTI_QGD_EXCHANGE_VARIATION_LESSONS } from './antiQgdExchangeVariations';
+import { ANTI_NIMZO_QC2_VARIATION_LESSONS } from './antiNimzoQc2Variations';
+import { ANTI_QID_FIANCHETTO_VARIATION_LESSONS } from './antiQidFianchettoVariations';
 import { PRO_AMAN_CARO_KANN_VARIATION_LESSONS } from './proAmanCaroKannVariations';
 import { PRO_AMAN_NIMZO_INDIAN_LESSON } from './proAmanNimzoIndian';
 import { PRO_AMAN_NIMZO_INDIAN_VARIATION_LESSONS } from './proAmanNimzoIndianVariations';
@@ -475,6 +479,10 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...ANTI_SCANDINAVIAN_VARIATION_LESSONS,
   ...ANTI_ALEKHINE_MODERN_VARIATION_LESSONS,
   ...ANTI_BUDAPEST_VARIATION_LESSONS,
+  ...ANTI_GRUNFELD_EXCHANGE_VARIATION_LESSONS,
+  ...ANTI_QGD_EXCHANGE_VARIATION_LESSONS,
+  ...ANTI_NIMZO_QC2_VARIATION_LESSONS,
+  ...ANTI_QID_FIANCHETTO_VARIATION_LESSONS,
   ...RUY_VARIATION_LESSONS,
   ...PIRC_VARIATION_LESSONS,
   ...VIENNA_VARIATION_LESSONS,

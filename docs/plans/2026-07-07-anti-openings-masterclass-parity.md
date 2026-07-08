@@ -162,16 +162,22 @@ the Watch lessons on these next (main = Nc6/Qb6):
 
 **Progress (2026-07-08):** 24/24 main-line Watch lessons authored, verified &
 LIVE on `main` (all 4-axis: DB/Stockfish data · board-accurate · engine-sound ·
-no both-sides blunder). Variation tabs started: anti-caro-fantasy (e6/g6/Qb6)
-+ anti-french-advance (Advance) authored & full-ply engine-scanned clean. Two
-DUPLICATE variation entries removed (fantasy "dxe4" and french "Euwe" were
-byte-identical to their main lines — a tab replaying the main line is a defect).
+no both-sides blunder). VARIATION TABS shipped (13 tabs / 6 openings, all spines
+build-sound-spine + full-ply engine-scanned, no both-sides blunder): rossolimo
+(e6/d6/Nf6), caro-fantasy (e6/g6/Qb6), french-advance (Advance), scandinavian
+(Bronstein/Valencian), alekhine (Larsen/Alburt/Schmid), budapest (…g5). Several
+DUPLICATE / transposition / main-prefix variation entries removed as found
+(fantasy dxe4, french Euwe, scand Mieses, alekhine Main Line, budapest Nc6/Bb4+).
 Englund Queen Trap weapon added (trapLine, +2.2). NEW durable gate
 `antiOpeningNarrationAccuracy.test.ts` brings ALL anti-* runtime lessons under
 legality + board-accuracy checks (they were outside ALL_LESSONS/registry.ts, so
-lessonIntegrity/narrationAccuracy never saw them). NEXT: variation tabs for the
-remaining openings (rebuild each variation spine sound where the current pgn is
-thin/duplicate), then pitfalls across all 24, then gems + plans.
+lessonIntegrity/narrationAccuracy never saw them). KEY METHOD LEARNED: the
+anti-openings.json "variations" are polluted with main-line prefixes + move-order
+transpositions — TRIAGE each for distinctness, drop the dupes, rebuild the
+genuinely-distinct spine sound. modern-150 variations DEFERRED (all transpose to
+the one 150-Attack plan the main lesson already teaches). NEXT: finish variation
+tabs (dutch-staunton/grunfeld/qgd/nimzo/qid white; then black openings), then
+pitfalls across all 24, then gems + plans.
 
 **Progress (2026-07-07):** 4 anti-openings have verified, gate-green main-line
 Watch lessons on `main` (Rossolimo full incl. 3 variation tabs + a middlegame
