@@ -200,7 +200,35 @@ punish-gem narration where the refutation is a real weapon. Gate: board-accurate
 per the antiOpeningNarrationAccuracy pattern + engine-verified refutation. THEN
 middlegame plans (anchor `criticalPositionFen` at each variation's spine
 terminus for Gate C continuity — the 36 spines are all in anti-openings.json now),
-model games (real, student-side wins), and the Naroditsky-voice re-narration. Added since the 26-tab note:
+model games (real, student-side wins), and the Naroditsky-voice re-narration.
+
+WEAPON-MINING FINDING (2026-07-08): a generic scan of an opening's MAIN LINE
+yields ~no weapons — the spine follows the DB's SOUND continuation, so the
+opponent doesn't blunder on it (verified: caro-fantasy / alekhine / pirc main
+lines all clean). Weapons live in specific TACTICAL SIDELINES the opponent
+commonly wanders into — e.g. the Scandinavian's early …Qh5?? queen sortie
+(shipped) or the Englund …Qxb2 queen-grab (shipped). So mine per-opening by
+targeting the sharp branch points (early queen sorties, premature pins/grabs,
+gambit-accepted greed), NOT the positional main spine. Best yield: the tactical/
+gambit anti-openings (englund done, scandinavian done; try smith-morra-accepted
+greed, KG-accepted, budapest …Qf6/…d6 tricks, alekhine …Nb4/…Bxf3 lines). The
+positional anti-openings (nimzo, qid, qgd, grunfeld, catalan, colle) will have
+FEW or no forced amateur traps — that's expected, not a gap (empty > invented).
+2 weapons shipped so far (englund, scandinavian); the layer continues by
+targeted tactical mining, opening by opening.
+
+REALITY CHECK (2026-07-08, after a targeted tactical mine of budapest/alekhine/
+benoni/scandi branches): genuine FORCED tactical weapons are RARE in this set —
+most anti-openings are positional systems where the opponent's inferior tries
+just leave them "slightly worse / down a pawn" (a `mistake`-tier positional edge,
+e.g. budapest 4…Bc5 → +2.5 but White merely keeps the gambit pawn), NOT a forced
+material-winning trap. Per empty > generic, DON'T ship those marginal positional
+edges as red TRAP weapons — only ship a weapon when the punish is a real forced
+gain (englund …Qxb2 queen-trap; scandinavian …Qh5?? hxg4 piece-win). Expect ~2-4
+real weapons total across all 24, concentrated in the tactical/gambit openings;
+the positional ones (nimzo/qid/qgd/grunfeld/catalan/colle/london) legitimately
+get ZERO. The weapon layer is therefore much smaller than the variation layer by
+nature — that's correct, not incomplete. Added since the 26-tab note:
 dutch-staunton(Nc6 gambit), smith-morra(Qe2), london(+Nf3), pirc(Dragon),
 kid-saemisch(Nc6/a6), benoni(Modern/Czech), colle(c3/dxc5), englund(d6/
 Zilbermints), alapin(a3), grand-prix(Bb5, extended past the queen-trade to a
