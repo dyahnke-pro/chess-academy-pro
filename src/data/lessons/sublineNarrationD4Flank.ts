@@ -15294,6 +15294,341 @@ const QID_8: SublineNarration = {
   sources: ['concept:pos-outpost', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Queen%27s_Indian_Defence'],
 };
 
+const DUT_0: SublineNarration = {
+  intro: { say: "Against the Staunton Gambit Black grabs …d5, but Qh5+ turns the screw: pick up the loose d5-pawn and trade queens into a clean extra pawn. Castle long, regain the e4-pawn with f3, and develop; your material edge and lead in development leave you clearly better.", sayShort: "…d5 — Qh5+ wins a pawn; clearly better" },
+  beats: [
+    { atMove: 6, say: "Qh5+ checks, forking the king and the loose d5-pawn.", sayShort: "Qh5+ — fork the pawn", highlights: [_H('h5')] },
+    { atMove: 8, say: "Qxd5 grabs the pawn, hitting the queen and rook.", sayShort: "Qxd5 — grab the pawn", highlights: [_H('d5')] },
+    { atMove: 10, say: "Qxd8+ trades queens into a clean extra pawn.", sayShort: "Qxd8+ — into a pawn-up game", highlights: [_H('d8')] },
+    { atMove: 12, say: "Bd2 develops, preparing long castling.", sayShort: "Bd2 — prep O-O-O", highlights: [_H('d2')] },
+    { atMove: 16, say: "f3 undermines the e4-pawn, regaining material.", sayShort: "f3 — regain e4", highlights: [_H('f3')] },
+    { atMove: 18, say: "Nxf3 recaptures, developing with the extra pawn.", sayShort: "Nxf3 — develop; a pawn up", highlights: [_H('f3')] },
+    { atMove: 22, say: "Bb5 develops with tempo; clearly better, up material.", sayShort: "Bb5 — press; better", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+
+const DUT_1: SublineNarration = {
+  intro: { say: "Black meets Bg5 with …g6 and holds with …d5. Break with f3 and fxe4, trade the knights, and check Bb5+ to disrupt. The position is roughly equal here — Black defends accurately — so develop soundly with Qe2 and Be3 and press the small structural nuances.", sayShort: "…g6 — f3 break; roughly equal" },
+  beats: [
+    { atMove: 6, say: "Bg5 develops with pressure on the f6-knight.", sayShort: "Bg5 — pressure the knight", highlights: [_H('g5')] },
+    { atMove: 8, say: "f3 undermines the e4-pawn.", sayShort: "f3 — undermine e4", highlights: [_H('f3')] },
+    { atMove: 10, say: "fxe4 opens the position, regaining material.", sayShort: "fxe4 — regain material", highlights: [_H('e4')] },
+    { atMove: 12, say: "Nxe4 trades, simplifying the centre.", sayShort: "Nxe4 — trade off", highlights: [_H('e4')] },
+    { atMove: 14, say: "Bb5+ checks, disrupting Black's development.", sayShort: "Bb5+ — check, disrupt", highlights: [_H('b5')] },
+    { atMove: 16, say: "Qe2 develops, connecting the pieces.", sayShort: "Qe2 — develop", highlights: [_H('e2')] },
+    { atMove: 20, say: "Be3 develops; roughly equal, press the nuances.", sayShort: "Be3 — develop; equal", highlights: [_H('e3')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+
+const DUT_2: SublineNarration = {
+  intro: { say: "Black plays …c6 and …d5. Break f3-fxe4, develop Bc4 with tempo, and pin with Bg5. Trade on f6 to damage Black's pawns and swap queens; your lead in development, the bishop pair and Black's shattered structure leave you clearly better.", sayShort: "…c6 — f3 break, damage the pawns; better" },
+  beats: [
+    { atMove: 6, say: "Bg5 develops with pressure on the knight.", sayShort: "Bg5 — pressure the knight", highlights: [_H('g5')] },
+    { atMove: 8, say: "f3 undermines the e4-pawn.", sayShort: "f3 — undermine e4", highlights: [_H('f3')] },
+    { atMove: 10, say: "fxe4 opens the position, regaining material.", sayShort: "fxe4 — regain material", highlights: [_H('e4')] },
+    { atMove: 12, say: "Bc4 develops with tempo, eyeing f7.", sayShort: "Bc4 — develop, eye f7", highlights: [_H('c4')] },
+    { atMove: 14, say: "Qd2 connects, preparing to trade favourably.", sayShort: "Qd2 — connect", highlights: [_H('d2')] },
+    { atMove: 16, say: "Bxf6 damages Black's pawns.", sayShort: "Bxf6 — damage the pawns", highlights: [_H('f6')] },
+    { atMove: 22, say: "Re1 loads the e-file; clearly better, freer pieces.", sayShort: "Re1 — the e-file; better", highlights: [_H('e1')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+
+const DUT_3: SublineNarration = {
+  intro: { say: "Black plays …e6 and develops …Be7. Take Nxe4 to regain the pawn and swap on f6, then develop Nf3 and roll h4. Break Nxf6+ and centralise Qd2; your extra space, the bishop pair and lead in development give a clear, pleasant advantage.", sayShort: "…e6 — Nxe4 regain; clear edge" },
+  beats: [
+    { atMove: 6, say: "Bg5 develops with pressure on the knight.", sayShort: "Bg5 — pressure the knight", highlights: [_H('g5')] },
+    { atMove: 8, say: "Nxe4 regains the pawn, centralising.", sayShort: "Nxe4 — regain, centralise", highlights: [_H('e4')] },
+    { atMove: 10, say: "Bxf6 damages Black's structure.", sayShort: "Bxf6 — damage the structure", highlights: [_H('f6')] },
+    { atMove: 12, say: "c3 braces the centre.", sayShort: "c3 — brace the centre", highlights: [_H('c3')] },
+    { atMove: 14, say: "Nf3 develops, eyeing e5.", sayShort: "Nf3 — develop", highlights: [_H('f3')] },
+    { atMove: 16, say: "h4 gains kingside space.", sayShort: "h4 — kingside space", highlights: [_H('h4')] },
+    { atMove: 22, say: "Qd2 centralises; a clear, pleasant advantage.", sayShort: "Qd2 — press; clear edge", highlights: [_H('d2')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+
+const DUT_4: SublineNarration = {
+  intro: { say: "The main line: Black develops …Nc6 and you clamp with d5. Trade on f6, regain the e4-pawn with Nxe4, and ram d6 to jam a pawn in Black's camp. Your space, the bishop pair and the advanced d6-wedge give a clear, pleasant advantage.", sayShort: "…Nc6 — d5 clamp, d6 wedge; clear edge" },
+  beats: [
+    { atMove: 6, say: "Bg5 develops with pressure on the knight.", sayShort: "Bg5 — pressure the knight", highlights: [_H('g5')] },
+    { atMove: 8, say: "d5 clamps the centre, kicking the knight.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 12, say: "Bxf6 damages Black's structure.", sayShort: "Bxf6 — damage the structure", highlights: [_H('f6')] },
+    { atMove: 14, say: "Nxe4 regains the pawn, centralising.", sayShort: "Nxe4 — regain, centralise", highlights: [_H('e4')] },
+    { atMove: 18, say: "d6 rams a pawn deep, cramping Black.", sayShort: "d6 — cramp him", highlights: [_H('d6')] },
+    { atMove: 20, say: "Ng3 reroutes toward f5 and the kingside.", sayShort: "Ng3 — reroute", highlights: [_H('g3')] },
+    { atMove: 22, say: "O-O-O connects the rooks; a clear edge with the wedge.", sayShort: "O-O-O — safe; clear edge", highlights: [_H('c1')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+
+const DUT_5: SublineNarration = {
+  intro: { say: "Black returns the pawn with …exf3. Recapture Nxf3, develop Qd2 and Bh6 to swap Black's fianchetto bishop, and castle long. Your lead in development, the bishop pair and pressure on the weakened dark squares give a clear, pleasant advantage.", sayShort: "…exf3 — Bh6 swap; clear edge" },
+  beats: [
+    { atMove: 6, say: "Bg5 develops with pressure on the knight.", sayShort: "Bg5 — pressure the knight", highlights: [_H('g5')] },
+    { atMove: 10, say: "Nxf3 recaptures, developing with a lead.", sayShort: "Nxf3 — develop with a lead", highlights: [_H('f3')] },
+    { atMove: 12, say: "Qd2 connects, preparing Bh6.", sayShort: "Qd2 — prep Bh6", highlights: [_H('d2')] },
+    { atMove: 14, say: "Bh6 offers to swap Black's fianchetto bishop.", sayShort: "Bh6 — swap the defender", highlights: [_H('h6')] },
+    { atMove: 16, say: "O-O-O connects the rooks.", sayShort: "O-O-O — king safe", highlights: [_H('c1')] },
+    { atMove: 18, say: "h3 tidies the kingside.", sayShort: "h3 — tidy up", highlights: [_H('h3')] },
+    { atMove: 22, say: "Rhe1 loads the e-file; a clear, pleasant edge.", sayShort: "Rhe1 — the e-file; clear edge", highlights: [_H('e1')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+
+const DUT_6: SublineNarration = {
+  intro: { say: "Black tries to hold …d5 and …dxe4, but it collapses. Centralise Qd2-Qxe3, castle long, and develop Bc4 and Nf3; your huge lead in development and the exposed Black king give a crushing advantage. Pile onto the centre and the king with the rooks.", sayShort: "…dxe4 — Qxe3, huge lead; crushing" },
+  beats: [
+    { atMove: 6, say: "Bg5 develops with pressure on the knight.", sayShort: "Bg5 — pressure the knight", highlights: [_H('g5')] },
+    { atMove: 12, say: "Qd2 connects, preparing to regain material.", sayShort: "Qd2 — connect", highlights: [_H('d2')] },
+    { atMove: 14, say: "Qxe3 recovers the pawn, the queen centralised.", sayShort: "Qxe3 — centralise", highlights: [_H('e3')] },
+    { atMove: 16, say: "O-O-O connects the rooks for the attack.", sayShort: "O-O-O — king safe, attack", highlights: [_H('c1')] },
+    { atMove: 18, say: "Bc4 develops, eyeing f7.", sayShort: "Bc4 — eye f7", highlights: [_H('c4')] },
+    { atMove: 20, say: "Nf3 develops with a huge lead.", sayShort: "Nf3 — huge lead", highlights: [_H('f3')] },
+    { atMove: 22, say: "Bb3 keeps the bishop aimed at the king; crushing.", sayShort: "Bb3 — press; crushing", highlights: [_H('b3')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+
+const DUT_7: SublineNarration = {
+  intro: { say: "Black lashes out …e3 to disrupt, but it just loses time. Grab it with Qe2-Qxe3, castle long, and storm with g4-h4. Your development lead is enormous and Black's king is stuck; roll the pawns and pile the rooks in — a crushing, winning attack.", sayShort: "…e3 — Qxe3, storm; winning" },
+  beats: [
+    { atMove: 6, say: "Bg5 develops with pressure on the knight.", sayShort: "Bg5 — pressure the knight", highlights: [_H('g5')] },
+    { atMove: 10, say: "Qe2 prepares to collect the e3-pawn.", sayShort: "Qe2 — collect e3", highlights: [_H('e2')] },
+    { atMove: 12, say: "Qxe3 recovers the pawn, centralising.", sayShort: "Qxe3 — centralise", highlights: [_H('e3')] },
+    { atMove: 14, say: "O-O-O connects the rooks for the attack.", sayShort: "O-O-O — king safe, attack", highlights: [_H('c1')] },
+    { atMove: 16, say: "g4 storms the kingside.", sayShort: "g4 — storm", highlights: [_H('g4')] },
+    { atMove: 18, say: "h4 rolls the pawns forward.", sayShort: "h4 — roll the pawns", highlights: [_H('h4')] },
+    { atMove: 22, say: "Bf4 piles on; a crushing, winning attack.", sayShort: "Bf4 — press; winning", highlights: [_H('f4')] },
+  ],
+  sources: ['concept:att-kingside-storm', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+
+const DUT_8: SublineNarration = {
+  intro: { say: "Black plays …c6, …Qa5 and returns the pawn. Recapture Nxf3, develop Bc4 and Bd3, castle, and trade off Black's pieces. Your lead in development and Black's loose queenside leave you clearly better; centralise and press the weaknesses.", sayShort: "…c6/…Qa5 — develop, press; better" },
+  beats: [
+    { atMove: 6, say: "Bg5 develops with pressure on the knight.", sayShort: "Bg5 — pressure the knight", highlights: [_H('g5')] },
+    { atMove: 10, say: "Qd2 connects, defending c3.", sayShort: "Qd2 — connect", highlights: [_H('d2')] },
+    { atMove: 12, say: "Nxf3 recaptures, developing with a lead.", sayShort: "Nxf3 — develop with a lead", highlights: [_H('f3')] },
+    { atMove: 14, say: "Bc4 develops, eyeing f7.", sayShort: "Bc4 — eye f7", highlights: [_H('c4')] },
+    { atMove: 16, say: "Bd3 repositions, eyeing the kingside.", sayShort: "Bd3 — eye the kingside", highlights: [_H('d3')] },
+    { atMove: 18, say: "O-O tucks the king safe.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+    { atMove: 22, say: "Qd2 regroups; clearly better, freer pieces.", sayShort: "Qd2 — press; better", highlights: [_H('d2')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+
+const DUT_9: SublineNarration = {
+  intro: { say: "Black plays …c6 and …d5. Break f3-fxe4, trade the knights, and swap queens off the …Qxd2 check. Take Bxf6 to shatter Black's kingside; your lead in development and Black's broken pawns give a clear, pleasant edge in the ending.", sayShort: "…c6/…d5 — shatter the kingside; better" },
+  beats: [
+    { atMove: 6, say: "Bg5 develops with pressure on the knight.", sayShort: "Bg5 — pressure the knight", highlights: [_H('g5')] },
+    { atMove: 8, say: "Qd2 connects, preparing the trades.", sayShort: "Qd2 — connect", highlights: [_H('d2')] },
+    { atMove: 10, say: "fxe4 opens the position, regaining material.", sayShort: "fxe4 — regain material", highlights: [_H('e4')] },
+    { atMove: 12, say: "Nxe4 trades, simplifying.", sayShort: "Nxe4 — trade off", highlights: [_H('e4')] },
+    { atMove: 14, say: "Nxd2 recaptures into a better ending.", sayShort: "Nxd2 — into a better ending", highlights: [_H('d2')] },
+    { atMove: 16, say: "Bxf6 shatters Black's kingside pawns.", sayShort: "Bxf6 — shatter the pawns", highlights: [_H('f6')] },
+    { atMove: 22, say: "Ngf3 develops; a clear edge in the ending.", sayShort: "Ngf3 — press; better", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+
+const DUT_10: SublineNarration = {
+  intro: { say: "Black plays …c6 and …e3. Grab it with Bxe3, develop, and storm with h4-h5-h6, prising open Black's king. Reroute Ne4 and trade queens into a superior ending; your space and Black's weak dark squares give a clear, pleasant advantage.", sayShort: "…e3 — Bxe3, h-storm; clear edge" },
+  beats: [
+    { atMove: 6, say: "Bg5 develops with pressure on the knight.", sayShort: "Bg5 — pressure the knight", highlights: [_H('g5')] },
+    { atMove: 12, say: "Bxe3 recovers the pawn, developing.", sayShort: "Bxe3 — recover, develop", highlights: [_H('e3')] },
+    { atMove: 14, say: "h4 gains kingside space.", sayShort: "h4 — kingside space", highlights: [_H('h4')] },
+    { atMove: 16, say: "h5 rolls the pawn forward.", sayShort: "h5 — roll forward", highlights: [_H('h5')] },
+    { atMove: 18, say: "h6 prises open Black's king.", sayShort: "h6 — prise the king open", highlights: [_H('h6')] },
+    { atMove: 20, say: "Ne4 reroutes toward the kingside.", sayShort: "Ne4 — reroute", highlights: [_H('e4')] },
+    { atMove: 22, say: "Kxd2 recaptures into a superior ending; clear edge.", sayShort: "Kxd2 — press; clear edge", highlights: [_H('d2')] },
+  ],
+  sources: ['concept:att-kingside-storm', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+
+const DUT_11: SublineNarration = {
+  intro: { say: "Black returns the pawn with …exf3 and holds with …d5 and …g6. Recapture Nxf3, develop Bd3, castle, and centralise the rooks. Your lead in development and central control give a clear, pleasant edge; open lines with dxc5 and press Black's slightly loose setup.", sayShort: "…exf3/…g6 — develop, press; clear edge" },
+  beats: [
+    { atMove: 6, say: "Bg5 develops with pressure on the knight.", sayShort: "Bg5 — pressure the knight", highlights: [_H('g5')] },
+    { atMove: 10, say: "Nxf3 recaptures, developing with a lead.", sayShort: "Nxf3 — develop with a lead", highlights: [_H('f3')] },
+    { atMove: 12, say: "Bd3 develops, eyeing the kingside.", sayShort: "Bd3 — eye the kingside", highlights: [_H('d3')] },
+    { atMove: 14, say: "O-O tucks the king safe.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+    { atMove: 16, say: "Qd2 connects, centralising.", sayShort: "Qd2 — connect", highlights: [_H('d2')] },
+    { atMove: 18, say: "Rae1 loads the e-file.", sayShort: "Rae1 — the e-file", highlights: [_H('e1')] },
+    { atMove: 20, say: "dxc5 opens lines favourably; a clear edge.", sayShort: "dxc5 — open lines; clear edge", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+
+const DUT_12: SublineNarration = {
+  intro: { say: "Black lashes …e3. Grab it with Qd3-Qxe3, roll f4 to build the centre, and develop Nf3. Swap on f6 and castle long; your development lead, extra space and Black's exposed king give a clear, pleasant advantage — press with the rooks.", sayShort: "…e3 — Qxe3, f4 centre; clear edge" },
+  beats: [
+    { atMove: 6, say: "Bg5 develops with pressure on the knight.", sayShort: "Bg5 — pressure the knight", highlights: [_H('g5')] },
+    { atMove: 10, say: "Qd3 prepares to collect the e3-pawn.", sayShort: "Qd3 — collect e3", highlights: [_H('d3')] },
+    { atMove: 12, say: "Qxe3 recovers the pawn, centralising.", sayShort: "Qxe3 — centralise", highlights: [_H('e3')] },
+    { atMove: 14, say: "f4 builds the broad centre.", sayShort: "f4 — the big centre", highlights: [_H('f4')] },
+    { atMove: 16, say: "Nf3 develops behind the centre.", sayShort: "Nf3 — develop", highlights: [_H('f3')] },
+    { atMove: 18, say: "Bxf6 damages Black's structure.", sayShort: "Bxf6 — damage the structure", highlights: [_H('f6')] },
+    { atMove: 22, say: "O-O-O connects the rooks; a clear edge.", sayShort: "O-O-O — safe; clear edge", highlights: [_H('c1')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+
+const KID_0: SublineNarration = {
+  intro: { say: "Black plays an early …d5, a Grünfeld try. Develop Nf3 and Bf4, take dxc5, and trade queens off …Qxd8. Your bishop pair and the queenside majority in the ending give a small, stable pull; press the structure patiently.", sayShort: "…d5 — Bf4, trade into a pull" },
+  beats: [
+    { atMove: 6, say: "Nf3 develops, controlling the centre.", sayShort: "Nf3 — develop", highlights: [_H('f3')] },
+    { atMove: 8, say: "Bf4 develops actively.", sayShort: "Bf4 — active bishop", highlights: [_H('f4')] },
+    { atMove: 10, say: "dxc5 opens the position with a small lead.", sayShort: "dxc5 — open the centre", highlights: [_H('c5')] },
+    { atMove: 12, say: "Qxd8 trades queens into a better ending.", sayShort: "Qxd8 — into a better ending", highlights: [_H('d8')] },
+    { atMove: 14, say: "e4 builds the broad centre.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 16, say: "e5 gains space, kicking the knight.", sayShort: "e5 — gain space", highlights: [_H('e5')] },
+    { atMove: 22, say: "c6 rams a pawn deep; a small, stable pull.", sayShort: "c6 — cramp; a pull", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-space', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence,_S%C3%A4misch_Variation'],
+};
+
+const KID_1: SublineNarration = {
+  intro: { say: "The Sämisch KID: e4, f3 and Be3 build a granite centre. Black castles and strikes …e5-f5; clamp with d5, meet …f5 with exf5, and reroute Nh4. Your space and the closed centre give a small, pleasant pull; play on the queenside where you're stronger.", sayShort: "Sämisch — d5 clamp; a pull" },
+  beats: [
+    { atMove: 6, say: "e4 builds the broad Sämisch centre.", sayShort: "e4 — the big centre", highlights: [_H('e4')] },
+    { atMove: 10, say: "h3 secures g4, denying Black's pieces the square.", sayShort: "h3 — secure g4", highlights: [_H('h3')] },
+    { atMove: 12, say: "d5 clamps the centre, grabbing space.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 14, say: "g3 shores up the kingside against …f5.", sayShort: "g3 — shore up f4", highlights: [_H('g3')] },
+    { atMove: 16, say: "exf5 opens lines favourably.", sayShort: "exf5 — open lines", highlights: [_H('f5')] },
+    { atMove: 18, say: "Nh4 reroutes toward f5 and g6.", sayShort: "Nh4 — reroute", highlights: [_H('h4')] },
+    { atMove: 22, say: "a3 gains queenside space; a small, pleasant pull.", sayShort: "a3 — space; a pull", highlights: [_H('a3')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence,_S%C3%A4misch_Variation'],
+};
+
+const KID_2: SublineNarration = {
+  intro: { say: "The Sämisch main line with …Nc6. Build e4-f3-Be3-Qd2, storm h4, and clamp with d5 to kick the knight. Jump Nd5 and trade on f6, damaging Black's pawns. Your space and the queenside play give a small, stable pull to press.", sayShort: "…Nc6 — d5, Nd5; a pull" },
+  beats: [
+    { atMove: 8, say: "f3 braces e4, the Sämisch keystone.", sayShort: "f3 — brace e4", highlights: [_H('f3')] },
+    { atMove: 10, say: "Be3 develops, controlling the dark squares.", sayShort: "Be3 — control the dark squares", highlights: [_H('e3')] },
+    { atMove: 12, say: "Qd2 connects, preparing to castle long.", sayShort: "Qd2 — connect", highlights: [_H('d2')] },
+    { atMove: 14, say: "h4 storms the kingside.", sayShort: "h4 — storm", highlights: [_H('h4')] },
+    { atMove: 16, say: "Nge2 develops, supporting d5.", sayShort: "Nge2 — support d5", highlights: [_H('e2')] },
+    { atMove: 18, say: "Nd5 jumps to a dominant central outpost.", sayShort: "Nd5 — the outpost", highlights: [_H('d5')] },
+    { atMove: 20, say: "Nxf6+ trades, damaging Black's pawns.", sayShort: "Nxf6+ — damage the pawns", highlights: [_H('f6')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence,_S%C3%A4misch_Variation'],
+};
+
+const KID_3: SublineNarration = {
+  intro: { say: "The classical Sämisch with …e5. Clamp with d5, meet …f5 with exf5, and reroute Nh3-f2. Castle long and play g4 to hold the kingside; your space edge and the closed centre give a small, pleasant pull with queenside prospects.", sayShort: "…e5 — d5 clamp; a pull" },
+  beats: [
+    { atMove: 8, say: "f3 braces e4, the Sämisch keystone.", sayShort: "f3 — brace e4", highlights: [_H('f3')] },
+    { atMove: 10, say: "Be3 develops, controlling the dark squares.", sayShort: "Be3 — control the dark squares", highlights: [_H('e3')] },
+    { atMove: 12, say: "d5 clamps the centre, kicking the knight.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 14, say: "Qd2 connects, preparing to castle long.", sayShort: "Qd2 — connect", highlights: [_H('d2')] },
+    { atMove: 16, say: "exf5 opens lines favourably.", sayShort: "exf5 — open lines", highlights: [_H('f5')] },
+    { atMove: 18, say: "Nh3 reroutes toward f2 and g5.", sayShort: "Nh3 — reroute", highlights: [_H('h3')] },
+    { atMove: 20, say: "O-O-O connects the rooks.", sayShort: "O-O-O — king safe", highlights: [_H('c1')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence,_S%C3%A4misch_Variation'],
+};
+
+const KID_4: SublineNarration = {
+  intro: { say: "The Sämisch with …a6. Build the granite centre, storm h4-h5, and clamp d5 when Black strikes …e5. Reroute Nce2 to bolster the centre; your space and the kingside pawn storm give a small, pleasant pull to press.", sayShort: "…a6 — h-storm, d5 clamp; a pull" },
+  beats: [
+    { atMove: 8, say: "f3 braces e4, the Sämisch keystone.", sayShort: "f3 — brace e4", highlights: [_H('f3')] },
+    { atMove: 10, say: "h4 storms the kingside early.", sayShort: "h4 — storm", highlights: [_H('h4')] },
+    { atMove: 12, say: "Qd2 connects, preparing to castle long.", sayShort: "Qd2 — connect", highlights: [_H('d2')] },
+    { atMove: 14, say: "Rd1 loads the d-file.", sayShort: "Rd1 — the d-file", highlights: [_H('d1')] },
+    { atMove: 16, say: "Bd3 develops, eyeing the kingside.", sayShort: "Bd3 — eye the kingside", highlights: [_H('d3')] },
+    { atMove: 20, say: "d5 clamps the centre, kicking the knight.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 22, say: "Nce2 reroutes, bolstering; a small, pleasant pull.", sayShort: "Nce2 — bolster; a pull", highlights: [_H('e2')] },
+  ],
+  sources: ['concept:pos-space', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence,_S%C3%A4misch_Variation'],
+};
+
+const KID_5: SublineNarration = {
+  intro: { say: "The Sämisch with …Nbd7. Build the centre, reroute Nh3-f2, clamp d5, and storm g4-h4 on the kingside. Your space edge and the pawn storm give a clear, pleasant pull; Black's cramped pieces struggle for counterplay.", sayShort: "…Nbd7 — d5 clamp, g4-h4 storm; clear pull" },
+  beats: [
+    { atMove: 8, say: "f3 braces e4, the Sämisch keystone.", sayShort: "f3 — brace e4", highlights: [_H('f3')] },
+    { atMove: 10, say: "Nh3 reroutes toward f2, sidestepping …Bxh3.", sayShort: "Nh3 — reroute to f2", highlights: [_H('h3')] },
+    { atMove: 12, say: "d5 clamps the centre, kicking the knight.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 14, say: "g4 storms the kingside.", sayShort: "g4 — storm", highlights: [_H('g4')] },
+    { atMove: 16, say: "Nf2 completes the reroute, bolstering.", sayShort: "Nf2 — bolster", highlights: [_H('f2')] },
+    { atMove: 18, say: "Qd2 connects, preparing to castle long.", sayShort: "Qd2 — connect", highlights: [_H('d2')] },
+    { atMove: 22, say: "h4 rolls the pawns; a clear, pleasant pull.", sayShort: "h4 — roll; clear pull", highlights: [_H('h4')] },
+  ],
+  sources: ['concept:pos-space', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence,_S%C3%A4misch_Variation'],
+};
+
+const KID_6: SublineNarration = {
+  intro: { say: "The Sämisch with …b6. Build the centre, connect Qd2, and clamp d5 when Black strikes …c5. Meet …e6 with dxe6, load Rd1, and expand b3-Nge2; your space and the queenside majority give a small, pleasant pull.", sayShort: "…b6 — d5 clamp; a pull" },
+  beats: [
+    { atMove: 8, say: "f3 braces e4, the Sämisch keystone.", sayShort: "f3 — brace e4", highlights: [_H('f3')] },
+    { atMove: 10, say: "Qd2 connects, preparing to castle long.", sayShort: "Qd2 — connect", highlights: [_H('d2')] },
+    { atMove: 12, say: "d5 clamps the centre, kicking any …c5.", sayShort: "d5 — the space clamp", highlights: [_H('d5')] },
+    { atMove: 14, say: "dxe6 opens lines favourably.", sayShort: "dxe6 — open lines", highlights: [_H('e6')] },
+    { atMove: 16, say: "Rd1 loads the d-file.", sayShort: "Rd1 — the d-file", highlights: [_H('d1')] },
+    { atMove: 18, say: "b3 shores up c4, keeping the space.", sayShort: "b3 — shore up c4", highlights: [_H('b3')] },
+    { atMove: 22, say: "Nge2 develops; a small, pleasant pull.", sayShort: "Nge2 — develop; a pull", highlights: [_H('e2')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence,_S%C3%A4misch_Variation'],
+};
+
+const KID_7: SublineNarration = {
+  intro: { say: "The Sämisch with …c6. Develop Nge2, connect Qd2, storm h4, and castle long. Reroute Bh6 to swap Black's fianchetto bishop; your space, the kingside storm and the weakened dark squares give a small, pleasant pull.", sayShort: "…c6 — h4 storm, Bh6 swap; a pull" },
+  beats: [
+    { atMove: 8, say: "f3 braces e4, the Sämisch keystone.", sayShort: "f3 — brace e4", highlights: [_H('f3')] },
+    { atMove: 10, say: "Nge2 develops, supporting the centre.", sayShort: "Nge2 — support the centre", highlights: [_H('e2')] },
+    { atMove: 12, say: "Qd2 connects, preparing to castle long.", sayShort: "Qd2 — connect", highlights: [_H('d2')] },
+    { atMove: 14, say: "h4 storms the kingside.", sayShort: "h4 — storm", highlights: [_H('h4')] },
+    { atMove: 16, say: "O-O-O connects the rooks.", sayShort: "O-O-O — king safe", highlights: [_H('c1')] },
+    { atMove: 18, say: "Kb1 tidies the king, sidestepping checks.", sayShort: "Kb1 — tidy the king", highlights: [_H('b1')] },
+    { atMove: 22, say: "Bh6 swaps Black's fianchetto bishop; a pull.", sayShort: "Bh6 — swap; a pull", highlights: [_H('h6')] },
+  ],
+  sources: ['concept:pos-space', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence,_S%C3%A4misch_Variation'],
+};
+
+const KID_8: SublineNarration = {
+  intro: { say: "The Sämisch with an early …c6 and …b5. Develop Be3, connect Qd2, castle long, and ram e5 to open lines. Roll f4 and jump Ne4; your space and central break give a small, pleasant pull, though Black's queenside counterplay demands accuracy.", sayShort: "…c6/…b5 — e5 break; a pull" },
+  beats: [
+    { atMove: 6, say: "f3 braces e4, the Sämisch keystone.", sayShort: "f3 — brace e4", highlights: [_H('f3')] },
+    { atMove: 10, say: "Qd2 connects, preparing to castle long.", sayShort: "Qd2 — connect", highlights: [_H('d2')] },
+    { atMove: 12, say: "O-O-O connects the rooks.", sayShort: "O-O-O — king safe", highlights: [_H('c1')] },
+    { atMove: 14, say: "e5 rams the centre open.", sayShort: "e5 — open the centre", highlights: [_H('e5')] },
+    { atMove: 16, say: "dxe5 recaptures, keeping the space.", sayShort: "dxe5 — keep the space", highlights: [_H('e5')] },
+    { atMove: 18, say: "f4 rolls the pawns forward.", sayShort: "f4 — roll the pawns", highlights: [_H('f4')] },
+    { atMove: 20, say: "Ne4 jumps to a dominant outpost; a pull.", sayShort: "Ne4 — the outpost; a pull", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence,_S%C3%A4misch_Variation'],
+};
+
+const KID_9: SublineNarration = {
+  intro: { say: "The Sämisch with …a6. Develop Be3, take dxc5, and trade queens off …Qxd8. Grab the bishop pair with Bxc5, harry with Bb6, and press; your bishop pair and the queenside majority in the ending give a small, pleasant pull.", sayShort: "…a6 — trade into a bishop-pair pull" },
+  beats: [
+    { atMove: 6, say: "f3 braces e4, the Sämisch keystone.", sayShort: "f3 — brace e4", highlights: [_H('f3')] },
+    { atMove: 10, say: "Qd2 connects the pieces.", sayShort: "Qd2 — connect", highlights: [_H('d2')] },
+    { atMove: 12, say: "dxc5 opens the position.", sayShort: "dxc5 — open the centre", highlights: [_H('c5')] },
+    { atMove: 14, say: "Qxd8 trades queens into a better ending.", sayShort: "Qxd8 — into a better ending", highlights: [_H('d8')] },
+    { atMove: 16, say: "Bxc5 grabs the bishop pair.", sayShort: "Bxc5 — the bishop pair", highlights: [_H('c5')] },
+    { atMove: 18, say: "Bb6 harasses, keeping the bishop active.", sayShort: "Bb6 — harass", highlights: [_H('b6')] },
+    { atMove: 22, say: "Be3 regroups; a small, pleasant pull.", sayShort: "Be3 — press; a pull", highlights: [_H('e3')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-development', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence,_S%C3%A4misch_Variation'],
+};
+
+const KID_10: SublineNarration = {
+  intro: { say: "The Sämisch main line with …c5. Take dxc5, trade queens off …Qxd8, and grab the bishop pair with Bxc5. Jump Nd5 to a dominant outpost and trade favourably; your bishop pair and central control give a small, stable pull in the ending.", sayShort: "…c5 — Bxc5, Nd5; a pull" },
+  beats: [
+    { atMove: 12, say: "dxc5 opens the position.", sayShort: "dxc5 — open the centre", highlights: [_H('c5')] },
+    { atMove: 14, say: "Qxd8 trades queens into a better ending.", sayShort: "Qxd8 — into a better ending", highlights: [_H('d8')] },
+    { atMove: 16, say: "Bxc5 grabs the bishop pair.", sayShort: "Bxc5 — the bishop pair", highlights: [_H('c5')] },
+    { atMove: 18, say: "Nd5 jumps to a dominant central outpost.", sayShort: "Nd5 — the outpost", highlights: [_H('d5')] },
+    { atMove: 20, say: "Ne7+ forks, simplifying favourably.", sayShort: "Ne7+ — fork, simplify", highlights: [_H('e7')] },
+    { atMove: 22, say: "Bxe7 collects; a small, stable pull.", sayShort: "Bxe7 — press; a pull", highlights: [_H('e7')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence,_S%C3%A4misch_Variation'],
+};
+
 export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'catalan-opening::6::Bb4+@5': CATR_60,
   'catalan-opening::5::c6@9': CATR_50,
@@ -16965,56 +17300,56 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'anti-englund::1::Qf5@9': C124,
   'anti-englund::1::Nxe5@9': C124,
   // ── anti-kid-saemisch ──
-  'anti-kid-saemisch::0::d5@5': C126,
-  'anti-kid-saemisch::0::O-O@7': C127,
-  'anti-kid-saemisch::0::Nc6@11': C128,
-  'anti-kid-saemisch::0::e5@11': C129,
-  'anti-kid-saemisch::0::a6@11': C127,
-  'anti-kid-saemisch::0::Nbd7@11': C127,
-  'anti-kid-saemisch::0::b6@11': C127,
-  'anti-kid-saemisch::0::c6@11': C127,
-  'anti-kid-saemisch::0::c6@9': C127,
-  'anti-kid-saemisch::0::a6@9': C127,
-  'anti-kid-saemisch::1::d5@5': C126,
-  'anti-kid-saemisch::1::O-O@7': C127,
-  'anti-kid-saemisch::1::c5@11': TAKID,
-  'anti-kid-saemisch::1::e5@11': C129,
-  'anti-kid-saemisch::1::a6@11': C127,
-  'anti-kid-saemisch::1::Nbd7@11': C127,
-  'anti-kid-saemisch::1::b6@11': C127,
-  'anti-kid-saemisch::1::c6@11': C127,
-  'anti-kid-saemisch::1::c6@9': C127,
-  'anti-kid-saemisch::1::a6@9': C127,
-  'anti-kid-saemisch::2::d5@5': C126,
-  'anti-kid-saemisch::2::O-O@7': C127,
-  'anti-kid-saemisch::2::c5@11': C126,
-  'anti-kid-saemisch::2::Nc6@11': C128,
-  'anti-kid-saemisch::2::a6@11': C127,
-  'anti-kid-saemisch::2::Nbd7@11': C127,
-  'anti-kid-saemisch::2::b6@11': C127,
-  'anti-kid-saemisch::2::c6@11': C127,
-  'anti-kid-saemisch::2::c6@9': C127,
-  'anti-kid-saemisch::2::a6@9': C127,
-  'anti-kid-saemisch::3::d5@5': C126,
-  'anti-kid-saemisch::3::O-O@7': C127,
-  'anti-kid-saemisch::3::c5@11': C126,
-  'anti-kid-saemisch::3::Nc6@11': C128,
-  'anti-kid-saemisch::3::e5@11': C129,
-  'anti-kid-saemisch::3::Nbd7@11': C127,
-  'anti-kid-saemisch::3::b6@11': C127,
-  'anti-kid-saemisch::3::c6@11': C127,
-  'anti-kid-saemisch::3::c6@9': C127,
-  'anti-kid-saemisch::3::a6@9': C127,
-  'anti-kid-saemisch::4::d5@5': C126,
-  'anti-kid-saemisch::4::O-O@7': C127,
-  'anti-kid-saemisch::4::c5@11': C126,
-  'anti-kid-saemisch::4::Nc6@11': C128,
-  'anti-kid-saemisch::4::e5@11': C129,
-  'anti-kid-saemisch::4::a6@11': C127,
-  'anti-kid-saemisch::4::b6@11': C127,
-  'anti-kid-saemisch::4::c6@11': C127,
-  'anti-kid-saemisch::4::c6@9': C127,
-  'anti-kid-saemisch::4::a6@9': C127,
+  'anti-kid-saemisch::0::d5@5': KID_0,
+  'anti-kid-saemisch::0::O-O@7': KID_1,
+  'anti-kid-saemisch::0::Nc6@11': KID_2,
+  'anti-kid-saemisch::0::e5@11': KID_3,
+  'anti-kid-saemisch::0::a6@11': KID_4,
+  'anti-kid-saemisch::0::Nbd7@11': KID_5,
+  'anti-kid-saemisch::0::b6@11': KID_6,
+  'anti-kid-saemisch::0::c6@11': KID_7,
+  'anti-kid-saemisch::0::c6@9': KID_8,
+  'anti-kid-saemisch::0::a6@9': KID_9,
+  'anti-kid-saemisch::1::d5@5': KID_0,
+  'anti-kid-saemisch::1::O-O@7': KID_1,
+  'anti-kid-saemisch::1::c5@11': KID_10,
+  'anti-kid-saemisch::1::e5@11': KID_3,
+  'anti-kid-saemisch::1::a6@11': KID_4,
+  'anti-kid-saemisch::1::Nbd7@11': KID_5,
+  'anti-kid-saemisch::1::b6@11': KID_6,
+  'anti-kid-saemisch::1::c6@11': KID_7,
+  'anti-kid-saemisch::1::c6@9': KID_8,
+  'anti-kid-saemisch::1::a6@9': KID_9,
+  'anti-kid-saemisch::2::d5@5': KID_0,
+  'anti-kid-saemisch::2::O-O@7': KID_1,
+  'anti-kid-saemisch::2::c5@11': KID_10,
+  'anti-kid-saemisch::2::Nc6@11': KID_2,
+  'anti-kid-saemisch::2::a6@11': KID_4,
+  'anti-kid-saemisch::2::Nbd7@11': KID_5,
+  'anti-kid-saemisch::2::b6@11': KID_6,
+  'anti-kid-saemisch::2::c6@11': KID_7,
+  'anti-kid-saemisch::2::c6@9': KID_8,
+  'anti-kid-saemisch::2::a6@9': KID_9,
+  'anti-kid-saemisch::3::d5@5': KID_0,
+  'anti-kid-saemisch::3::O-O@7': KID_1,
+  'anti-kid-saemisch::3::c5@11': KID_10,
+  'anti-kid-saemisch::3::Nc6@11': KID_2,
+  'anti-kid-saemisch::3::e5@11': KID_3,
+  'anti-kid-saemisch::3::Nbd7@11': KID_5,
+  'anti-kid-saemisch::3::b6@11': KID_6,
+  'anti-kid-saemisch::3::c6@11': KID_7,
+  'anti-kid-saemisch::3::c6@9': KID_8,
+  'anti-kid-saemisch::3::a6@9': KID_9,
+  'anti-kid-saemisch::4::d5@5': KID_0,
+  'anti-kid-saemisch::4::O-O@7': KID_1,
+  'anti-kid-saemisch::4::c5@11': KID_10,
+  'anti-kid-saemisch::4::Nc6@11': KID_2,
+  'anti-kid-saemisch::4::e5@11': KID_3,
+  'anti-kid-saemisch::4::a6@11': KID_4,
+  'anti-kid-saemisch::4::b6@11': KID_6,
+  'anti-kid-saemisch::4::c6@11': KID_7,
+  'anti-kid-saemisch::4::c6@9': KID_8,
+  'anti-kid-saemisch::4::a6@9': KID_9,
   // ── anti-grunfeld-exchange ──
   'anti-grunfeld-exchange::0::Bg7@5': GRU_0,
   'anti-grunfeld-exchange::0::O-O@13': GRU_1,
@@ -17063,27 +17398,27 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'anti-qid-fianchetto::1::c5@5': QID_2,
   'anti-qid-fianchetto::1::Bb4+@7': QID_4,
   // ── anti-dutch-staunton ──
-  'anti-dutch-staunton::0::d5@5': C140,
-  'anti-dutch-staunton::0::g6@7': C141,
-  'anti-dutch-staunton::0::c6@7': C142,
-  'anti-dutch-staunton::0::e6@7': C142,
-  'anti-dutch-staunton::1::d5@5': C140,
-  'anti-dutch-staunton::1::Nc6@7': C142,
-  'anti-dutch-staunton::1::c6@7': C142,
-  'anti-dutch-staunton::1::e6@7': C142,
-  'anti-dutch-staunton::1::exf3@9': C142,
-  'anti-dutch-staunton::1::dxe4@11': EADUT,
-  'anti-dutch-staunton::1::e3@9': C142,
-  'anti-dutch-staunton::2::d5@5': C140,
-  'anti-dutch-staunton::2::Nc6@7': C142,
-  'anti-dutch-staunton::2::g6@7': C141,
-  'anti-dutch-staunton::2::exf3@11': C142,
-  'anti-dutch-staunton::2::d5@11': C141,
-  'anti-dutch-staunton::2::e6@7': C142,
-  'anti-dutch-staunton::2::d5@9': C141,
-  'anti-dutch-staunton::2::e3@11': C142,
-  'anti-dutch-staunton::2::exf3@9': C141,
-  'anti-dutch-staunton::2::e3@9': C141,
+  'anti-dutch-staunton::0::d5@5': DUT_0,
+  'anti-dutch-staunton::0::g6@7': DUT_1,
+  'anti-dutch-staunton::0::c6@7': DUT_2,
+  'anti-dutch-staunton::0::e6@7': DUT_3,
+  'anti-dutch-staunton::1::d5@5': DUT_0,
+  'anti-dutch-staunton::1::Nc6@7': DUT_4,
+  'anti-dutch-staunton::1::c6@7': DUT_2,
+  'anti-dutch-staunton::1::e6@7': DUT_3,
+  'anti-dutch-staunton::1::exf3@9': DUT_5,
+  'anti-dutch-staunton::1::dxe4@11': DUT_6,
+  'anti-dutch-staunton::1::e3@9': DUT_7,
+  'anti-dutch-staunton::2::d5@5': DUT_0,
+  'anti-dutch-staunton::2::Nc6@7': DUT_4,
+  'anti-dutch-staunton::2::g6@7': DUT_1,
+  'anti-dutch-staunton::2::exf3@11': DUT_8,
+  'anti-dutch-staunton::2::d5@11': DUT_9,
+  'anti-dutch-staunton::2::e6@7': DUT_3,
+  'anti-dutch-staunton::2::d5@9': DUT_2,
+  'anti-dutch-staunton::2::e3@11': DUT_10,
+  'anti-dutch-staunton::2::exf3@9': DUT_11,
+  'anti-dutch-staunton::2::e3@9': DUT_12,
   // ── anti-qgd-exchange ──
   'anti-qgd-exchange::0::c6@7': QGD_0,
   'anti-qgd-exchange::0::Qxd5@5': QGD_1,
