@@ -350,3 +350,46 @@ pipeline. Read `docs/opening-masterclass-playbook.md` +
 `docs/pro-rep-efficient-build-recipe.md` first. Data first — never author from
 memory. Empty > generic > invented. Anti-opening data lives in
 `anti-openings.json` + `course-sublines.json`; spine extends from the masters DB.
+
+## SUBLINE PER-MOVE NARRATION (2026-07-08) — David: "sublines neglected, per-move narrations, use Naroditsky's teaching"
+
+**KEY FINDING — the neglect is worse than "sparse."** Many sublines carried
+GENERIC copy-paste beats ("h4 — storm the kingside", "O-O — king safe", "Rh3 —
+rook lift to attack", "Bd3 — aim at the king") that were board-WRONG for their
+specific line. In anti-french-advance alone, 6 constants had intros/beats that
+described a DIFFERENT line than the moves actually play (e.g. "storm the
+kingside" when Black castles QUEENSIDE; an intro about a …Bb5/c4 break on a line
+with no such moves; "Nxa5 grabs the pawn" when it's a knight trade). Fixing
+these board-lies is higher-value than merely adding beats — it IS the neglect
+David sensed. **Every future family: read each subline's ACTUAL move list +
+per-ply FENs before touching narration; do not trust the existing beats.**
+
+**DONE — anti-french-advance: ALL 15 subline keys (14 constants N106-N119)**
+densified to genuine per-move, board-accurate teaching in the house voice,
+engine-checked termini (all sound: +0.3..+1.1 White, except Wade N114 a
+sanctioned -0.5 sharp gambit framed honestly). Removed a stale inline-beats
+override on the 73% Nc6@7 key that was masking the densified N115. Gates green
+(sublineNarration 42501 tests + antiOpeningNarrationAccuracy), typecheck clean.
+Shipped main `f66fc12` (4 top lines) + `8c96a76` (remaining 10).
+
+**METHOD (locked for the rollout):** per subline — (1) dump the real move list
+from course-sublines.json; (2) `node` a chess.js walk to print per-ply FENs;
+(3) engine-check the terminus from the STUDENT's POV (`scripts/_engine-eval.mjs`,
+`score cp` is side-to-move — a sound line is ≥ ~-1.0; a negative eval is only OK
+for an honest sharp gambit, framed as such); (4) author a beat on EVERY move
+from the trigger onward, each saying something TRUE about that move in THAT
+position (plan/idea/why), ≤8-word `sayShort` cue; (5) arrows only from a PIECE
+with a clear sight-line (pawn-origin arrows auto-convert to highlights), else
+highlights (KEY yellow / SOFT blue); (6) sources = valid concept ids
+(verify against chess-concepts.json — pos-space/pawn-chain/pos-center/
+pos-initiative/pos-development/pos-bishop-pair/pos-outpost/att-kingside-storm
+exist; pos-weak-pawns/pos-weakness do NOT) + a reputable URL.
+
+**REMAINING (~522 subline keys across ~40 families) — multi-session.** Big
+counts first: anti-colle-black 60, anti-kid-saemisch 50, anti-alekhine-modern
+39, anti-benoni-push 39, anti-caro-fantasy 38. E4-family sublines live in
+`sublineNarrationE4Other.ts` (caro-fantasy N87-N105, grand-prix N120+,
+scandinavian N168+, caro-kann N209+, alekhine N0-N9); E4E5 + D4Flank in their
+own files. Also sweep the 26 inline `{ ...Nxxx, beats: [...] }` overrides — most
+are legit (shared intro, per-line beats) but each likely carries the same 3
+generic stale beats and needs the same board-accurate densification.
