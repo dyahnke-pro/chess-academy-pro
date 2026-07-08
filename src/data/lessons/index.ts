@@ -68,6 +68,7 @@ import { ANTI_BENONI_PUSH_VARIATION_LESSONS } from './antiBenoniPushVariations';
 import { ANTI_COLLE_BLACK_VARIATION_LESSONS } from './antiColleBlackVariations';
 import { ANTI_ENGLUND_VARIATION_LESSONS } from './antiEnglundVariations';
 import { ANTI_ALAPIN_BLACK_VARIATION_LESSONS } from './antiAlapinBlackVariations';
+import { ANTI_GRAND_PRIX_BLACK_VARIATION_LESSONS } from './antiGrandPrixBlackVariations';
 import { PRO_AMAN_CARO_KANN_VARIATION_LESSONS } from './proAmanCaroKannVariations';
 import { PRO_AMAN_NIMZO_INDIAN_LESSON } from './proAmanNimzoIndian';
 import { PRO_AMAN_NIMZO_INDIAN_VARIATION_LESSONS } from './proAmanNimzoIndianVariations';
@@ -503,6 +504,7 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...ANTI_COLLE_BLACK_VARIATION_LESSONS,
   ...ANTI_ENGLUND_VARIATION_LESSONS,
   ...ANTI_ALAPIN_BLACK_VARIATION_LESSONS,
+  ...ANTI_GRAND_PRIX_BLACK_VARIATION_LESSONS,
   ...RUY_VARIATION_LESSONS,
   ...PIRC_VARIATION_LESSONS,
   ...VIENNA_VARIATION_LESSONS,

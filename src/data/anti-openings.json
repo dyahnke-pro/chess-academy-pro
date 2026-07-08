@@ -1007,7 +1007,7 @@
     "variations": [
       {
         "name": "Grand Prix Attack (Bb5)",
-        "pgn": "e4 c5 Nc3 Nc6 f4 g6 Nf3 Bg7 Bb5",
+        "pgn": "e4 c5 Nc3 Nc6 f4 g6 Nf3 Bg7 Bb5 Nd4 O-O Nxb5 Nxb5 d5 d3 a6 Nc3 Bxc3 bxc3 dxe4 dxe4 Qxd1 Rxd1",
         "explanation": ""
       },
       {
