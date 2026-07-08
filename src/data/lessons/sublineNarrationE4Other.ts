@@ -1858,113 +1858,173 @@ const N119: SublineNarration = {
 };
 
 const N120: SublineNarration = {
-  intro: { say: "Bb5 — leap in with …Nd4, planting the knight on a dominant central outpost and gaining a tempo on the bishop. After Bc4, solidify with …e6 and …e5 to build a broad pawn front and lock that d4-knight in place. It cramps his whole position while you expand with …a6 and …a5 on the queenside.", sayShort: "…Nd4 outpost, …e5 builds the front" },
+  intro: { say: "Bb5 — the Rossolimo-flavoured pin against your Closed Sicilian. Answer with the thematic …Nd4, jumping into the hole and hitting the bishop with tempo. You trade the knight off for his light-squared bishop, saddle him with doubled b-pawns, and settle into a comfortable, fully-equal middlegame with the bishop pair as your long-term trump.", sayShort: "…Nd4 — jump in, take the bishop pair" },
   beats: [
-    { atMove: 5, say: "…Nd4 — the strong central jump, offering a trade that eases your slightly cramped Sicilian.", sayShort: "…Nd4 — dominant central knight.", highlights: [H('d4')] },
-    { atMove: 9, say: "…Nf6 develops with a hit on e4, putting White to the test.", sayShort: "…Nf6 — develop, hit e4.", arrows: [A('f6', 'e4')], highlights: [H('e4')] },
-    { atMove: 21, say: "…Bb7 completes the fianchetto, the bishop raking e4 and the long diagonal.", sayShort: "…Bb7 — rake the diagonal.", arrows: [A('b7', 'e4')], highlights: [H('e4')] },
+    { atMove: 5, say: "…Nd4 — straight into the outpost, hitting the b5-bishop and offering the trade that unknots a cramped Sicilian.", sayShort: "…Nd4 — outpost, hit the bishop.", arrows: [A('d4', 'b5')], highlights: [H('d4'), H('b5')] },
+    { atMove: 7, say: "…e6 braces the centre, taking d5 away from his pieces and clearing e7 for the knight next.", sayShort: "…e6 — brace, prep …Nf6.", highlights: [H('e6'), H('d5', SOFT)] },
+    { atMove: 9, say: "…Nf6 develops and leans on e4, forcing White to tend the pawn.", sayShort: "…Nf6 — develop, hit e4.", arrows: [A('f6', 'e4')], highlights: [H('e4')] },
+    { atMove: 11, say: "…a6 grabs queenside space and prepares …b5 — your play is on this wing.", sayShort: "…a6 — space, prep …b5.", highlights: [H('a6'), H('b5', SOFT)] },
+    { atMove: 13, say: "…d6 completes the small centre and frees the c8-bishop.", sayShort: "…d6 — solid centre.", highlights: [H('d6')] },
+    { atMove: 15, say: "…Nxb3 — the point: your outpost knight snaps off White's light-squared bishop, doubling his b-pawns while you keep the pair.", sayShort: "…Nxb3 — take the bishop pair.", highlights: [H('b3')] },
+    { atMove: 17, say: "…b6 opens the road for …Bb7, where the bishop will rake the long light diagonal.", sayShort: "…b6 — prep …Bb7.", highlights: [H('b6'), H('b7', SOFT)] },
+    { atMove: 21, say: "…Bb7 completes the fianchetto, x-raying e4 down the newly-cleared diagonal.", sayShort: "…Bb7 — rake e4.", arrows: [A('b7', 'e4')], highlights: [H('e4')] },
+    { atMove: 23, say: "…Be7 quietly breaks the g5-pin and readies castling; two bishops against his doubled pawns leave you comfortable and fully equal.", sayShort: "…Be7 — unpin, castle; equal.", highlights: [H('e7')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Grand_Prix_Attack'],
+};
+
+const N121: SublineNarration = {
+  intro: { say: "Bb5 — he pins into the f4-Grand Prix, but you meet it with the energetic …Nd4, hitting the bishop and offering trades. After the knights come off you'll recapture toward the centre with …cxd4, planting a protected pawn that cramps his whole game. Level and comfortable, with easy queenside play to follow.", sayShort: "…Nd4, then the …cxd4 wedge" },
+  beats: [
+    { atMove: 7, say: "…Nd4 leaps into the outpost, hitting the b5-bishop and forcing it to declare.", sayShort: "…Nd4 — outpost, hit the bishop.", arrows: [A('d4', 'b5')], highlights: [H('d4')] },
+    { atMove: 9, say: "…a6 puts the question to the bishop, winning a tempo for your setup.", sayShort: "…a6 — question the bishop.", highlights: [H('a6')] },
+    { atMove: 11, say: "…Bg7 fianchettoes, propping the d4-knight and glaring down the long diagonal.", sayShort: "…Bg7 — back the knight.", arrows: [A('g7', 'd4')], highlights: [H('d4')] },
+    { atMove: 13, say: "…d6 shores up the centre and opens the c8-bishop's path.", sayShort: "…d6 — shore up the centre.", highlights: [H('d6')] },
+    { atMove: 15, say: "…cxd4 — recapture toward the centre, and now a protected pawn on d4 cramps White for good.", sayShort: "…cxd4 — the d4 wedge.", highlights: [H('d4')] },
+    { atMove: 17, say: "…Bd7 develops and connects, eyeing the queenside where you'll expand.", sayShort: "…Bd7 — develop, connect.", highlights: [H('d7')] },
+    { atMove: 21, say: "…Nf6 develops with a hit on e4.", sayShort: "…Nf6 — develop, hit e4.", arrows: [A('f6', 'e4')], highlights: [H('e4')] },
+    { atMove: 23, say: "…b5 grabs queenside space; with the minor pieces traded down the game is level and easy for you.", sayShort: "…b5 — expand; equal.", highlights: [H('b5')] },
   ],
   sources: ['concept:pos-outpost', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Grand_Prix_Attack'],
 };
 
-const N121: SublineNarration = {
-  intro: { say: "Bb5 — meet the f4-Grand Prix with the energetic …Nd4, taking the central outpost and hitting the bishop. After Nf3, grab space with …c4 and even counterstrike with …g5 against his f4-pawn before his attack gets rolling. The d4-knight is a thorn in his camp while you take over the initiative on both flanks.", sayShort: "…Nd4, then …g5 counterstrikes f4" },
-  beats: [
-    { atMove: 7, say: "…Nd4 — the strong central jump, planting the knight on a dominant square and offering a trade that eases your game.", sayShort: "…Nd4 — dominant central knight.", highlights: [H('d4')] },
-    { atMove: 11, say: "…Bg7 fianchettoes onto the long diagonal, your bishop raking the centre and queenside.", sayShort: "…Bg7 — the long diagonal.", arrows: [A('g7', 'b2')], highlights: [H('b2')] },
-    { atMove: 23, say: "…b5 expands on the queenside, gaining space and the freer game.", sayShort: "…b5 — queenside expansion.", highlights: [H('b5')] },
-  ],
-  sources: ['concept:pos-outpost', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Grand_Prix_Attack'],
-};
-
 const N122: SublineNarration = {
-  intro: { say: "Bc4 — White aims at f7 early, but your g7-bishop already counters on the long diagonal and …e6 will shut its view of f7. Finish the kingside fianchetto with …Bg7, then prepare …e6 and …Nge7 to control the key f5-square. Blunt the attacking bishop, strike in the centre, and turn to queenside expansion.", sayShort: "…Bg7 and …e6 defuse the attack" },
+  intro: { say: "Bc4 — the aggressive Grand Prix bishop lunges at f7, but here it over-extends. Fianchetto …Bg7 to answer on the long diagonal, jump …Nd4 into the centre, and roll your queenside majority with …b5 and …a5. His bishop gets kicked around while your pieces flood the light squares — you get a genuine pull.", sayShort: "…Bg7, …Nd4, roll the queenside" },
   beats: [
-    { atMove: 7, say: "…Bg7 fianchettoes onto the long diagonal, your bishop raking the centre.", sayShort: "…Bg7 — the long diagonal.", arrows: [A('g7', 'b2')], highlights: [H('b2')] },
-    { atMove: 9, say: "…Nd4 plants the knight on a dominant central square, easing your game.", sayShort: "…Nd4 — dominant knight.", highlights: [H('d4')] },
-    { atMove: 17, say: "…b5 expands on the queenside, hitting White's bishop and gaining space.", sayShort: "…b5 — expand, hit the bishop.", highlights: [H('b5')] },
+    { atMove: 7, say: "…Bg7 fianchettoes, the bishop bearing down the long diagonal at his c3-knight and centre.", sayShort: "…Bg7 — the long diagonal.", arrows: [A('g7', 'c3')], highlights: [H('c3')] },
+    { atMove: 9, say: "…Nd4 seizes the central outpost, a dominant knight White must reckon with.", sayShort: "…Nd4 — dominant outpost.", highlights: [H('d4')] },
+    { atMove: 11, say: "…Nf6 develops and kicks the d5-bishop, winning a tempo as it retreats.", sayShort: "…Nf6 — hit the d5-bishop.", arrows: [A('f6', 'd5')], highlights: [H('d5')] },
+    { atMove: 13, say: "…d6 anchors the centre and opens the c8-bishop.", sayShort: "…d6 — anchor the centre.", highlights: [H('d6')] },
+    { atMove: 17, say: "…b5 hits the bishop and rolls your queenside majority forward — this is your side of the board.", sayShort: "…b5 — expand, hit the bishop.", highlights: [H('b5')] },
+    { atMove: 19, say: "…Qb6 swings out, pressuring b2 and eyeing the soft f2-square behind his pawns.", sayShort: "…Qb6 — press b2 and f2.", highlights: [H('b2', SOFT), H('f2', SOFT)] },
+    { atMove: 21, say: "…Bb7 completes the second fianchetto, x-raying e4 as your pieces flood the light squares.", sayShort: "…Bb7 — rake e4.", arrows: [A('b7', 'e4')], highlights: [H('e4')] },
+    { atMove: 23, say: "…a5 keeps rolling; your space and initiative on the queenside give you a real pull.", sayShort: "…a5 — roll the queenside.", highlights: [H('a5')] },
   ],
-  sources: ['concept:att-kingside-storm', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Grand_Prix_Attack'],
+  sources: ['concept:pos-space', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Grand_Prix_Attack'],
 };
 
 const N123: SublineNarration = {
-  intro: { say: "Bc4 — the aggressive Grand Prix bishop, eyeing f7 and backing a future f5-break at your king. Neutralise it: prepare …e6 and …Nge7 to blunt the diagonal and control the f5-square the attack relies on. With your g7-bishop raking the long diagonal, answer the storm by hitting back in the centre and queenside with …d6, …a6 and …b5.", sayShort: "Blunt the c4-bishop with …e6" },
+  intro: { say: "Bc4 — the main tabiya of the c4-Grand Prix. The whole plan turns on one square: f5. Play …e6 to wall off his bishop and clamp d5 and f5, reroute …Nge7 to that f5-outpost, and break in the centre with …d5. Trade his attacking bishop with …Ba6 and the storm has no bite — you end a shade better.", sayShort: "…e6, …Nge7-f5, …d5 — grip f5" },
   beats: [
-    { atMove: 9, say: "…e6 braces the centre, the solid setup preparing …d5 to challenge White.", sayShort: "…e6 — brace, prep …d5.", highlights: [H('e6')] },
-    { atMove: 13, say: "…b6 prepares the fianchetto, your bishop heading for the long diagonal.", sayShort: "…b6 — prep the fianchetto.", highlights: [H('b6')] },
-    { atMove: 19, say: "…d5 strikes the centre, freeing your game with active pieces.", sayShort: "…d5 — strike the centre.", highlights: [H('d5')] },
+    { atMove: 9, say: "…e6 — the key move: it walls off the c4-bishop's stare at f7 and clamps the d5- and f5-squares your knight is heading for.", sayShort: "…e6 — blunt Bc4, grip f5.", highlights: [H('e6'), H('f5', SOFT), H('d5', SOFT)] },
+    { atMove: 11, say: "…Nge7 routes the knight toward f5, the outpost the whole plan is built around.", sayShort: "…Nge7 — reroute to f5.", arrows: [A('e7', 'f5')], highlights: [H('f5')] },
+    { atMove: 13, say: "…b6 prepares …Ba6, aiming to swap off his dangerous light-squared bishop.", sayShort: "…b6 — prep …Ba6.", highlights: [H('b6')] },
+    { atMove: 15, say: "…O-O tucks the king behind the fianchetto, safe and sound.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
+    { atMove: 17, say: "…Ba6 develops actively down the a6-f1 diagonal, pressing the d3-pawn and the light squares.", sayShort: "…Ba6 — press d3, light squares.", arrows: [A('a6', 'd3')], highlights: [H('d3')] },
+    { atMove: 19, say: "…d5 — the thematic central break, hitting e4 and freeing your game.", sayShort: "…d5 — the central break.", highlights: [H('d5')] },
+    { atMove: 21, say: "…Nf5 — the knight arrives on its dream outpost, immovable and glaring at the dark squares by his king.", sayShort: "…Nf5 — the dream outpost.", highlights: [H('f5')] },
+    { atMove: 23, say: "…Nh4 sidesteps the g4-kick with tempo, hitting f3 and keeping your grip; you stand a shade better.", sayShort: "…Nh4 — sidestep, hit f3.", arrows: [A('h4', 'f3')], highlights: [H('f3')] },
   ],
-  sources: ['concept:att-kingside-storm', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Grand_Prix_Attack'],
+  sources: ['concept:pos-outpost', 'concept:pos-weak-squares', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Grand_Prix_Attack'],
 };
 
 const N124: SublineNarration = {
-  intro: { say: "Nf3 — with no f4-thrust, grab the centre directly with your …e5, Sveshnikov-style. Your e5-pawn controls d4 and f4, denying him the very squares the Grand Prix attack craves. Follow with …Be7 and quick development, intending …d6 and …Nf6 for a sound, space-gaining structure with no kingside attack to fear.", sayShort: "…e5 seizes the center" },
+  intro: { say: "Nf3 without f4 — so grab the centre yourself with …e5, Boleslavsky-style. That pawn rules d4 and f4, the very squares a Grand Prix craves, and leaves you nothing to fear on the kingside. Develop calmly, swap the dark-squared bishops to ease the game, and settle into a balanced, easy-to-play middlegame.", sayShort: "…e5 clamps the centre" },
   beats: [
-    { atMove: 5, say: "…e5 stakes the centre, claiming space and freeing your pieces.", sayShort: "…e5 — stake the centre.", highlights: [H('e5')] },
-    { atMove: 21, say: "…Be6 develops the bishop to a fine post, guarding d5 and the centre.", sayShort: "…Be6 — fine bishop post.", arrows: [A('e6', 'd5')], highlights: [H('d5')] },
-    { atMove: 23, say: "…Nb4 jumps to harass White's pieces and eye d5 and c2 with tempo.", sayShort: "…Nb4 — harass, eye d5.", highlights: [H('b4')] },
+    { atMove: 5, say: "…e5 — with no f4 coming, clamp the centre yourself; the pawn rules d4 and f4.", sayShort: "…e5 — clamp the centre.", highlights: [H('e5'), H('d4', SOFT), H('f4', SOFT)] },
+    { atMove: 7, say: "…Be7 develops calmly, readying castling.", sayShort: "…Be7 — develop, ready O-O.", highlights: [H('e7')] },
+    { atMove: 9, say: "…d6 braces e5 and completes a rock-solid centre.", sayShort: "…d6 — brace e5.", highlights: [H('d6')] },
+    { atMove: 11, say: "…Bg5 eyes the c1-h6 diagonal, angling to swap the dark-squared bishops for an easy game.", sayShort: "…Bg5 — offer the trade.", highlights: [H('g5')] },
+    { atMove: 15, say: "…Bxc1 snaps off the dark-squared bishop; fewer pieces, fewer worries.", sayShort: "…Bxc1 — swap, simplify.", highlights: [H('c1')] },
+    { atMove: 17, say: "…O-O brings the king to safety.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
+    { atMove: 19, say: "…h6 pokes the queen back, winning a tempo to finish developing.", sayShort: "…h6 — kick the queen.", highlights: [H('h6')] },
+    { atMove: 21, say: "…Be6 develops, offering to trade the c4-bishop and cementing d5.", sayShort: "…Be6 — challenge Bc4, hold d5.", arrows: [A('e6', 'c4')], highlights: [H('c4'), H('d5', SOFT)] },
+    { atMove: 23, say: "…Nb4 leaps in with tempo, eyeing d3 and c2; the position is balanced and easy to play.", sayShort: "…Nb4 — leap in, eye d3.", highlights: [H('b4'), H('d3', SOFT)] },
   ],
   sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Grand_Prix_Attack'],
 };
 
 const N125: SublineNarration = {
-  intro: { say: "Nge2 — keeps his options open but blocks his own f1-bishop and delays the kingside attack. Develop actively with your …Nf6, pressuring e4 and preparing …d5 or …g6 with a fianchetto. With his pieces tangled on the back rank, get your development in fast and contest the centre before any f4-storm can be organised.", sayShort: "…Nf6 hits e4, develop quickly" },
+  intro: { say: "Nge2 heads for the Chameleon — he'll play d4 and hand you an Open Sicilian. Fine: meet it with a healthy Dragon. Fianchetto …g6 and …Bg7, recapture toward the centre, and when he castles long you race him on the queenside down the half-open b-file. Sharp and roughly balanced — your kind of fight.", sayShort: "…g6/…Bg7 Dragon, race the queenside" },
   beats: [
-    { atMove: 5, say: "…g6 prepares the fianchetto, your bishop bound for the long diagonal.", sayShort: "…g6 — prep the fianchetto.", highlights: [H('g6')] },
-    { atMove: 9, say: "…Bg7 takes the long diagonal, your bishop raking the centre.", sayShort: "…Bg7 — the long diagonal.", arrows: [A('g7', 'b2')], highlights: [H('b2')] },
-    { atMove: 23, say: "…Bg4 develops with a pin, pressuring White's setup.", sayShort: "…Bg4 — pin and pressure.", highlights: [H('g4')] },
+    { atMove: 5, say: "…g6 sets up the Dragon bishop, your best piece on the long dark diagonal.", sayShort: "…g6 — Dragon bishop coming.", highlights: [H('g6')] },
+    { atMove: 7, say: "…cxd4 opens the centre; you'll meet the Open Sicilian with a sound Dragon structure.", sayShort: "…cxd4 — open, go Dragon.", highlights: [H('d4')] },
+    { atMove: 9, say: "…Bg7 takes the long diagonal, glaring through the centre at his d4-knight and beyond.", sayShort: "…Bg7 — the long diagonal.", arrows: [A('g7', 'd4')], highlights: [H('d4')] },
+    { atMove: 11, say: "…Nf6 develops and pressures e4.", sayShort: "…Nf6 — develop, hit e4.", arrows: [A('f6', 'e4')], highlights: [H('e4')] },
+    { atMove: 13, say: "…bxc6 — recapture toward the centre; the half-open b-file is your highway to his king.", sayShort: "…bxc6 — open the b-file.", highlights: [H('c6'), H('b2', SOFT)] },
+    { atMove: 17, say: "…Nh6 reroutes the knight toward f5 and g4, back into the game.", sayShort: "…Nh6 — reroute to f5/g4.", highlights: [H('h6'), H('f5', SOFT)] },
+    { atMove: 19, say: "…d6 chips at the e5-wedge, prising open lines for your pieces.", sayShort: "…d6 — hit the e5-wedge.", highlights: [H('d6'), H('e5', SOFT)] },
+    { atMove: 21, say: "…O-O — he's castled long, so tuck your king away and race him on the queenside with the b-file.", sayShort: "…O-O — opposite castling; you race.", highlights: [H('g8'), H('c1', SOFT)] },
+    { atMove: 23, say: "…Bg4 develops with bite, pressuring the d1-rook and the light squares by his king; sharp and level.", sayShort: "…Bg4 — pressure d1, king hunt.", arrows: [A('g4', 'd1')], highlights: [H('d1')] },
   ],
-  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Grand_Prix_Attack'],
+  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Grand_Prix_Attack'],
 };
 
 const N126: SublineNarration = {
-  intro: { say: "a4 — White stops your …b5 but spends a tempo on the flank instead of developing or attacking. Ignore the wing gesture: develop with …d6 and …e6, keeping your g7-bishop strong on the long diagonal. Punish the slow play by hitting the centre with …e5 or …d5, since his delayed development leaves e4 under-defended.", sayShort: "Ignore a4, strike the center" },
+  intro: { say: "a4 — he stops your …b5 but spends a tempo on the flank. Develop calmly with …d6 and, when he swaps on c6, recapture with the bishop to keep a pristine structure and the pair. Then play the thematic Grand Prix answer: reroute …Ne7 and break with …f5, striking e4 and grabbing kingside space. Fully equal and easy.", sayShort: "…Bxc6, then …Ne7 and …f5" },
   beats: [
-    { atMove: 9, say: "…d6 braces the centre, your solid setup complete against White's Bb5.", sayShort: "…d6 — brace the centre.", highlights: [H('d6')] },
-    { atMove: 15, say: "…Bxc6 recaptures the trade, keeping a sound structure and the bishop pair in sight.", sayShort: "…Bxc6 — recapture soundly.", highlights: [H('c6')] },
-    { atMove: 23, say: "…f5 stakes a kingside pawn front, gaining space and the initiative.", sayShort: "…f5 — stake the kingside.", highlights: [H('f5')] },
+    { atMove: 9, say: "…d6 completes a solid centre, unfazed by the flank push a4.", sayShort: "…d6 — solid centre.", highlights: [H('d6')] },
+    { atMove: 11, say: "…Bd7 develops and readies a clean recapture on c6, keeping your pawns intact.", sayShort: "…Bd7 — prep a clean recapture.", highlights: [H('d7')] },
+    { atMove: 13, say: "…a6 puts the question to the b5-bishop.", sayShort: "…a6 — question the bishop.", highlights: [H('a6')] },
+    { atMove: 15, say: "…Bxc6 — recapture with the bishop: a pristine structure, the bishop pair, and a piece raking e4.", sayShort: "…Bxc6 — bishop pair, hit e4.", arrows: [A('c6', 'e4')], highlights: [H('e4')] },
+    { atMove: 17, say: "…e6 braces the centre and clears e7 for the knight, readying …f5.", sayShort: "…e6 — brace, prep …f5.", highlights: [H('e6'), H('f5', SOFT)] },
+    { atMove: 19, say: "…Ne7 reroutes toward f5, supporting the coming break.", sayShort: "…Ne7 — reroute, back …f5.", arrows: [A('e7', 'f5')], highlights: [H('f5')] },
+    { atMove: 21, say: "…Qd7 connects the rooks and lends a hand to the …f5 push.", sayShort: "…Qd7 — connect, back …f5.", highlights: [H('d7')] },
+    { atMove: 23, say: "…f5 — the thematic Grand Prix counter-break, hitting e4 and grabbing kingside space; fully equal and easy for you.", sayShort: "…f5 — the counter-break; equal.", highlights: [H('f5'), H('e4', SOFT)] },
   ],
-  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Grand_Prix_Attack'],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Grand_Prix_Attack'],
 };
 
 const N127: SublineNarration = {
-  intro: { say: "d3 — restrained: it supports e4 but cedes the quick f5-break and leaves him short of central space. Develop harmoniously with …d6 and …e6, keeping your g7-bishop active on the long diagonal. With the position semi-closed, expand on the queenside with …a6 and …b5 while his modest setup offers no kingside threats.", sayShort: "…d6, …e6, expand on the queenside" },
+  intro: { say: "d3 — a restrained, modest setup. Build a double fianchetto with …b6 and …Bb7, then choose a concrete idea: give the dark bishop with …Bxc3+ to double his c-pawns, and strike the centre with …d5. You trade your Dragon bishop for a permanent structural weakness in his camp — a balanced, double-edged game with a target to nag.", sayShort: "…Bb7, …Bxc3+ doubles his pawns" },
   beats: [
-    { atMove: 9, say: "…b6 prepares the fianchetto, your bishop bound for the long diagonal.", sayShort: "…b6 — prep the fianchetto.", highlights: [H('b6')] },
-    { atMove: 11, say: "…Bb7 takes the long diagonal, the bishop raking e4 and White's centre.", sayShort: "…Bb7 — rake the diagonal.", arrows: [A('b7', 'e4')], highlights: [H('e4')] },
-    { atMove: 15, say: "…d5 strikes the centre, freeing your game with active pieces.", sayShort: "…d5 — strike the centre.", highlights: [H('d5')] },
+    { atMove: 9, say: "…b6 prepares a second fianchetto, aiming a bishop down the long light diagonal.", sayShort: "…b6 — prep …Bb7.", highlights: [H('b6')] },
+    { atMove: 11, say: "…Bb7 completes the double fianchetto, the bishop lined up behind your c6-knight on the long diagonal.", sayShort: "…Bb7 — double fianchetto.", highlights: [H('b7'), H('e4', SOFT)] },
+    { atMove: 13, say: "…Bxc3+ — a concrete trade: you give the dark bishop to double his c-pawns and leave a permanent weakness.", sayShort: "…Bxc3+ — double his pawns.", highlights: [H('c3')] },
+    { atMove: 15, say: "…d5 strikes the centre while his pawns are loose, opening lines for your light-squared bishop.", sayShort: "…d5 — strike the centre.", highlights: [H('d5')] },
+    { atMove: 17, say: "…Qxd5 recaptures in the centre, the queen eyeing his weakened queenside pawns.", sayShort: "…Qxd5 — centralise, eye c3.", highlights: [H('d5'), H('c3', SOFT)] },
+    { atMove: 19, say: "…Nh6 reroutes the knight toward the f5- and g4-squares.", sayShort: "…Nh6 — reroute to f5/g4.", highlights: [H('h6'), H('f5', SOFT)] },
+    { atMove: 21, say: "…e6 shores up the centre and blunts tricks on the long diagonal.", sayShort: "…e6 — shore up the centre.", highlights: [H('e6')] },
+    { atMove: 23, say: "…Qd7 tucks the queen to a flexible post; with his doubled c-pawns as a target, the game is balanced.", sayShort: "…Qd7 — regroup; balanced.", highlights: [H('d7')] },
   ],
-  sources: ['concept:pos-space', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Grand_Prix_Attack'],
+  sources: ['concept:pawn-doubled', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Grand_Prix_Attack'],
 };
 
 const N128: SublineNarration = {
-  intro: { say: "g3 — White fianchettoes into a closed Sicilian rather than the sharp f4-attack, fighting for the long light diagonal. Mirror him with your …g6 and …Bg7, contesting that diagonal and the dark squares around d4. With both kings tucked behind fianchettoes, prepare …d6 and …e5, or …Rb8 and …b5, to expand where his pieces are least active.", sayShort: "Mirror the fianchetto, expand queenside" },
+  intro: { say: "g3 — the Closed Sicilian, not the sharp f4-attack. This is the main line, and Black's plan is a classic: mirror the fianchetto, then storm the queenside where he's slow. Load the b-file with …Rb8, roll …a6 and …b5-b4 at his knight, and you're faster there than he is on the kingside. Dead level and thematic.", sayShort: "Mirror, then …Rb8 and …b5-b4" },
   beats: [
-    { atMove: 5, say: "…g6 prepares the fianchetto, your bishop bound for the long diagonal.", sayShort: "…g6 — prep the fianchetto.", highlights: [H('g6')] },
-    { atMove: 7, say: "…Bg7 takes the long diagonal, your bishop raking the centre and queenside.", sayShort: "…Bg7 — the long diagonal.", arrows: [A('g7', 'b2')], highlights: [H('b2')] },
-    { atMove: 15, say: "…b5 expands on the queenside, gaining space and the freer game.", sayShort: "…b5 — queenside expansion.", highlights: [H('b5')] },
+    { atMove: 5, say: "…g6 — mirror his setup; your bishop is heading to the same long diagonal he wants.", sayShort: "…g6 — mirror the fianchetto.", highlights: [H('g6')] },
+    { atMove: 7, say: "…Bg7 takes the long dark diagonal, x-raying his c3-knight and the queenside.", sayShort: "…Bg7 — the long diagonal.", arrows: [A('g7', 'c3')], highlights: [H('c3')] },
+    { atMove: 9, say: "…Rb8 — the Closed Sicilian plan in one move: load the b-file for the …b5-b4 storm at his queenside.", sayShort: "…Rb8 — load …b5-b4.", highlights: [H('b8'), H('b5', SOFT)] },
+    { atMove: 11, say: "…d6 anchors the centre so your queenside push has a solid base.", sayShort: "…d6 — anchor the centre.", highlights: [H('d6')] },
+    { atMove: 13, say: "…a6 prepares …b5, priming the pawn storm.", sayShort: "…a6 — prime …b5.", highlights: [H('a6')] },
+    { atMove: 15, say: "…b5 rolls forward — you're faster on the queenside than he is on the kingside.", sayShort: "…b5 — the pawn storm.", highlights: [H('b5')] },
+    { atMove: 17, say: "…axb5 recaptures and opens the a-file for your rook.", sayShort: "…axb5 — open the a-file.", highlights: [H('b5')] },
+    { atMove: 19, say: "…e6 kicks the centralised knight back, winning a tempo.", sayShort: "…e6 — kick the knight.", highlights: [H('e6')] },
+    { atMove: 21, say: "…Qb6 swings the queen to an active square, pressing the queenside and b2.", sayShort: "…Qb6 — press the queenside.", highlights: [H('b6'), H('b2', SOFT)] },
+    { atMove: 23, say: "…Nf6 completes development; your queenside initiative balances his kingside, dead level.", sayShort: "…Nf6 — develop; level.", highlights: [H('f6')] },
   ],
-  sources: ['concept:pawn-fianchetto', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Grand_Prix_Attack'],
+  sources: ['concept:pos-initiative', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Grand_Prix_Attack'],
 };
 
 const N129: SublineNarration = {
-  intro: { say: "g3 — combined with f4 it's slow, weakening the dark squares around his king and forfeiting the bite of the c4 or b5 bishop. Continue calmly with …d6 and …e6, keeping your g7-bishop's diagonal open and preparing central play. With his kingside light squares loosened, aim at the e4-pawn and the long diagonal where your bishop dominates.", sayShort: "Exploit the loosened dark squares" },
+  intro: { say: "f4 and g3 together — a slow combination that never lands a punch. You're first to strike: load the b-file with …Rb8, roll …a6, …b5 and …b4 to crack his queenside, and jump …Nf6 to hit anything he centralises. Level and comfortable, with all the initiative on your wing.", sayShort: "…Rb8, …b5-b4 — first to strike" },
   beats: [
-    { atMove: 9, say: "…Rb8 prepares the …b5 queenside expansion, loading the b-file.", sayShort: "…Rb8 — prep …b5.", highlights: [H('b8')] },
-    { atMove: 15, say: "…b5 expands on the queenside, gaining space and the freer game.", sayShort: "…b5 — queenside expansion.", highlights: [H('b5')] },
-    { atMove: 19, say: "…b4 rams forward, kicking White's knight and prying open the queenside.", sayShort: "…b4 — ram, open the queenside.", highlights: [H('b4')] },
+    { atMove: 9, say: "…Rb8 loads the b-file; with f4 and g3 both slow, you're first to strike on the queenside.", sayShort: "…Rb8 — load …b5-b4.", highlights: [H('b8'), H('b5', SOFT)] },
+    { atMove: 11, say: "…d6 anchors the centre behind your storm.", sayShort: "…d6 — anchor the centre.", highlights: [H('d6')] },
+    { atMove: 13, say: "…a6 primes …b5.", sayShort: "…a6 — prime …b5.", highlights: [H('a6')] },
+    { atMove: 15, say: "…b5 begins the pawn storm at his knight and queenside.", sayShort: "…b5 — the pawn storm.", highlights: [H('b5')] },
+    { atMove: 17, say: "…axb5 recaptures and opens the a-file.", sayShort: "…axb5 — open the a-file.", highlights: [H('b5')] },
+    { atMove: 19, say: "…b4 rams on, kicking the c3-knight and cracking his queenside open.", sayShort: "…b4 — ram, open lines.", highlights: [H('b4'), H('c3', SOFT)] },
+    { atMove: 21, say: "…Nf6 develops and hits the d5-knight, gaining time.", sayShort: "…Nf6 — hit the d5-knight.", arrows: [A('f6', 'd5')], highlights: [H('d5')] },
+    { atMove: 23, say: "…O-O tucks the king away; your queenside play fully balances the game.", sayShort: "…O-O — king safe; level.", highlights: [H('g8')] },
   ],
-  sources: ['concept:pos-weak-squares', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Grand_Prix_Attack'],
+  sources: ['concept:pos-initiative', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Grand_Prix_Attack'],
 };
 
 const N130: SublineNarration = {
-  intro: { say: "Bb5 — the critical Grand Prix try, pinning your c6-knight and threatening to swap it off to soften your grip on e5 and d4. Welcome Bxc6: after …bxc6 the doubled c-pawns reinforce your centre and your g7-bishop grows into a monster on the long diagonal. The half-open b-file and bishop pair fully compensate, so stake your claim with …d6 and …e5.", sayShort: "Allow Bxc6 — bishop pair, long diagonal" },
+  intro: { say: "Bb5 — by far his most popular try, pinning your c6-knight. Break it at once with …Nd4, recapture toward the centre for a protected d4-wedge, and kick the bishop with …a6. Then strike with …d5 and undermine his e5-pawn with …f6 — you'll win the pawn back with a dominant Dragon bishop and stand comfortably better.", sayShort: "…Nd4, …d5, …f6 — win the centre" },
   beats: [
-    { atMove: 9, say: "…Nd4 — the strong central jump, planting the knight on a dominant square.", sayShort: "…Nd4 — dominant knight.", highlights: [H('d4')] },
-    { atMove: 13, say: "…a6 puts the question to White's bishop, gaining tempo for your setup.", sayShort: "…a6 — question the bishop.", highlights: [H('a6')] },
-    { atMove: 21, say: "…Bxe5 recaptures, your dark bishop active on the long diagonal.", sayShort: "…Bxe5 — active bishop.", arrows: [A('e5', 'b2')], highlights: [H('b2')] },
+    { atMove: 9, say: "…Nd4 — the key leap: it breaks the pin by hitting the b5-bishop and plants a monster on the outpost.", sayShort: "…Nd4 — break the pin, outpost.", arrows: [A('d4', 'b5')], highlights: [H('d4')] },
+    { atMove: 11, say: "…cxd4 — recapture toward the centre; that protected d4-pawn is a permanent cramp on White.", sayShort: "…cxd4 — the d4 wedge.", highlights: [H('d4')] },
+    { atMove: 13, say: "…a6 puts the question to the b5-bishop, winning a tempo.", sayShort: "…a6 — question the bishop.", highlights: [H('a6')] },
+    { atMove: 15, say: "…d5 — strike the centre while he's still untangling; the pawn hits e4 and frees your game.", sayShort: "…d5 — strike the centre.", highlights: [H('d5'), H('e4', SOFT)] },
+    { atMove: 17, say: "…f6 — undermine the e5-wedge; you'll prise open the f-file straight at his uncastled king.", sayShort: "…f6 — undermine e5.", highlights: [H('e5', SOFT), H('f6')] },
+    { atMove: 19, say: "…fxe5 rips the centre open, the f-file yawning toward f2.", sayShort: "…fxe5 — open the f-file.", highlights: [H('e5'), H('f2', SOFT)] },
+    { atMove: 21, say: "…Bxe5 — the Dragon bishop scoops the pawn and lands on a commanding central square.", sayShort: "…Bxe5 — win the pawn, dominate.", highlights: [H('e5')] },
+    { atMove: 23, say: "…Bg4 pins the f3-knight to the queen; you're comfortably the better side, active on every light square.", sayShort: "…Bg4 — pin, press; you're better.", arrows: [A('g4', 'f3')], highlights: [H('f3'), H('d1', SOFT)] },
   ],
-  sources: ['concept:pos-bishop-pair', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Grand_Prix_Attack'],
+  sources: ['concept:pos-outpost', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Grand_Prix_Attack'],
 };
 
 const N131: SublineNarration = {
