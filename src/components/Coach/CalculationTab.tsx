@@ -21,7 +21,7 @@
  * is computed with chess.js, never assumed from a stored tag). The UI
  * verifies user input via chess.js. No runtime LLM authorship.
  */
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ArrowLeft,
   Check,
@@ -45,6 +45,8 @@ import { countGameCalculationPuzzlesBySkill } from '../../services/gameCalculati
 import type { EndgameLessonPosition } from '../../types/endgameLesson';
 import { useAdaptiveEndgameSession } from '../../hooks/useAdaptiveEndgameSession';
 import { useGameCalculationPuzzles } from '../../hooks/useGameCalculationPuzzles';
+import { voiceService } from '../../services/voiceService';
+import { useAppStore } from '../../stores/appStore';
 
 interface CalculationTabProps {
   onExit: () => void;
@@ -315,6 +317,27 @@ function AdaptivePuzzleRunner({
   const clickToMove = useClickToMove(playout);
 
   const [recorded, setRecorded] = useState(false);
+
+  // Speak the concept hint aloud the first time it appears (after a
+  // wrong first attempt), when the user hasn't turned it off. The
+  // AdaptivePuzzleRunner is remounted per puzzle (see the `key` in
+  // AdaptiveDrillScreen), so this ref resets naturally each puzzle.
+  // Routed through speakLecture — streams per G4, isn't clipped by the
+  // brief cap, and still stays silent when Coach Narration is 'silent'.
+  const hintSpokenRef = useRef(false);
+  const showHint =
+    !playout.isComplete && playout.wrongAttempts > 0 && Boolean(drill.conceptHint);
+  useEffect(() => {
+    if (!showHint || hintSpokenRef.current) return;
+    hintSpokenRef.current = true;
+    const speakHints =
+      useAppStore.getState().activeProfile?.preferences.calcHintVoice ?? true;
+    if (speakHints && drill.conceptHint) {
+      void voiceService.speakLecture(drill.conceptHint);
+    }
+  }, [showHint, drill.conceptHint]);
+  // Stop any in-flight hint speech when leaving the puzzle/drill.
+  useEffect(() => () => voiceService.stop(), []);
 
   const wrongFlash = useMemo<Record<string, CSSProperties>>(() => {
     if (!playout.wrongSquare) return {};
