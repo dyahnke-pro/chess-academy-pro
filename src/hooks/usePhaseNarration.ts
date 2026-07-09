@@ -1,14 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { voiceService } from '../services/voiceService';
 import { stockfishEngine, resolveWorkerUrl } from '../services/stockfishEngine';
-import { buildChessContextMessage } from '../services/coachPrompts';
+import { groundedMoveFeedback } from '../services/coachApi';
 import { logAppAudit } from '../services/appAuditor';
 import { db } from '../db/schema';
 import { getCachedStockfish, setCachedStockfish } from './stockfishFenCache';
-import { coachService } from '../coach/coachService';
 import { isSpokenSentenceGrounded } from '../services/coachAnswerGates';
 import { buildFedTacticsContext } from '../services/liveTacticsContext';
-import type { CoachContext, PhaseNarrationVerbosity, StockfishAnalysis } from '../types';
+import type { PhaseNarrationVerbosity, StockfishAnalysis } from '../types';
 import type { PhaseTransitionEvent } from '../services/phaseTransitionDetector';
 
 export interface UsePhaseNarrationArgs {
@@ -232,35 +231,23 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
         ? 'Opening → Middlegame'
         : 'Middlegame → Endgame';
 
-      // WO-PHASE-PROSE-01: verbosity branching removed from the user
-      // message. The prompt now invites full prose regardless of the
-      // student's global verbosity setting — phase transitions are
-      // rich moments that deserve the whole board read. Verbosity
-      // remains a function parameter for API compatibility; a future
-      // Coach Settings WO can re-introduce it with saner semantics.
+      // Verbosity is not a length knob here — a phase transition is a rich
+      // moment. Kept as a param for API compatibility.
       void verbosity;
-      const context: CoachContext = {
-        fen: event.fen,
-        lastMoveSan: event.triggeringMoveSan,
-        moveNumber: event.moveNumber,
-        pgn: getPgn(),
-        openingName: getOpeningName(),
-        stockfishAnalysis,
-        playerMove: event.triggeringMoveSan,
-        moveClassification: null,
-        playerProfile: { rating, weaknesses: [] },
-        // G0 perspective: the transition fires right after the STUDENT's move,
-        // so the FEN's side-to-move is the OPPONENT. Hand the brain the
-        // student's real color so the grounded tactics block stays
-        // student-relative instead of inverting (David 2026-07-03 TestFlight
-        // report: White student narrated as Black).
-        perspective: event.playerColor === 'white' ? 'w' : 'b',
-        additionalContext:
-          `Transition: ${transitionLabel}. Student color: ${event.playerColor}. Triggering move (the student's move that just completed the transition): ${event.triggeringMoveSan}.\n` +
-          `Narrate the transition as thoroughly as the position deserves. There is no length limit. Do not invent moves or pieces — every claim must be verifiable against the Position (FEN) line and the Stockfish / Tactics analysis blocks below.`,
-      };
-
-      const userMessage = buildChessContextMessage(context);
+      void transitionLabel;
+      void getPgn;
+      void getOpeningName;
+      // GROUNDED framing (David 2026-07-09 + the 2026-07-06 voice law):
+      // in-game narration VOICES facts computed in code and DECIDES nothing.
+      // The transition label is the ONLY authored framing; the eval + tactics
+      // that follow are all code-computed. `bestUci` is the engine PV[0] at
+      // `event.fen` (the FEN's side-to-move is the OPPONENT — the transition
+      // fires right after the student's move — and serveGroundedPositionDefault
+      // handles the perspective flip + the student-relative assessment).
+      const bestUci = stockfishAnalysis?.bestMove || stockfishAnalysis?.topLines?.[0]?.moves?.[0];
+      const transitionSentence = event.kind === 'opening-to-middlegame'
+        ? "The opening's set — we're into the middlegame now."
+        : 'This is heading into an endgame.';
 
       // Sentence-buffered streaming TTS. Every sentence chains through
       // speakForced so each Polly call awaits the previous one's
@@ -315,84 +302,55 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
         if (lastEnd > 0) sentenceBuffer = sentenceBuffer.slice(lastEnd);
       };
 
-      console.log('[PHASE-HOOK-05] LLM call dispatched', {
-        surface: 'phase-narration',
-        viaSpine: true,
-        task: 'position_analysis_chat',
-        maxTokens: 600,
-      });
       void logAppAudit({
         kind: 'coach-surface-migrated',
         category: 'subsystem',
         source: 'usePhaseNarration',
-        summary: `surface=phase-narration viaSpine=true task=position_analysis_chat (WO-COACH-UNIFY-01 commit 2)`,
+        summary: `surface=phase-narration grounded=voiceFacts (G0 in-game narration, David 2026-07-09)`,
         fen: event.fen,
       });
       try {
-        // WO-COACH-UNIFY-01 commit 2: route phase-narration through
-        // the Coach Brain Spine. The PHASE_NARRATION_ADDITION prompt
-        // is now appended in envelope.ts when surface='phase-narration',
-        // so memory + live-state + tool-belt grounding propagate here
-        // for free. Bug fixes to the spine (asterisk strip, sentence
-        // prefix preservation) automatically apply to /coach/play
-        // and /coach/teach phase narrations alike.
-        const spineAnswer = await withTimeout(
-          coachService.ask(
-            {
-              surface: 'phase-narration',
-              ask: userMessage,
-              liveState: {
-                surface: 'phase-narration',
-                fen: event.fen,
-                moveHistory: undefined,
-                userJustDid: `Phase transition: ${event.kind} after ${event.triggeringMoveSan}`,
-                whoseTurn: event.fen.split(' ')[1] === 'b' ? 'black' : 'white',
-                tactics: phaseTactics,
-              },
-            },
-            {
-              task: 'chat_response',
-              // WO-COACH-UNIFY-01 audit-driven correction (build 82b6a28):
-              // bumping maxTokens 600 → 1500 didn't fix the empty-text
-              // regression — deepseek-reasoner was spending its whole
-              // token budget on reasoning_content and emitting zero
-              // content even at 1500 tokens, AND taking 21s (well past
-              // the 12s NARRATION_API_TIMEOUT_MS), so the fallback
-              // fired before the call returned. Root cause: the spine
-              // envelope is much heavier than legacy (full identity +
-              // 22 tools + memory snapshot + 200-msg history), and
-              // reasoning_content scales with input length.
-              //
-              // Fix: route phase-narration through `chat_response`
-              // task. Chat-tier models (deepseek-chat /
-              // claude-sonnet-4-6) don't have reasoning_content
-              // overhead — they use the full token budget for the
-              // actual narration. They're also faster, so the call
-              // lands inside the 12s wrapper. Phase narration is
-              // descriptive prose, not a tactical puzzle — chat
-              // models handle it fine.
-              maxTokens: 800,
-              maxToolRoundTrips: 1,
-              onChunk: (chunk: string) => {
-                if (token !== activeTokenRef.current) return;
-                fullText += chunk;
-                setCurrentText(fullText);
-                sentenceBuffer += chunk;
-                flushCompletedSentences();
-              },
-            },
-          ),
+        // GROUNDED (David 2026-07-09 + the 2026-07-06 voice law): compute the
+        // transition read — engine eval + the board-verified tactics computed
+        // above — and phrase it WARMLY through the ONE voiceFacts chokepoint
+        // via `groundedMoveFeedback`. NO coachService.ask: that routes to the
+        // Q&A grounding seal (a one-line default) AND would let the LLM
+        // free-compose the board read, the exact G0 violation this build rips
+        // out. The transition label rides in as `extraFacts` so the warm voice
+        // leads with "we're into the middlegame" truthfully.
+        const grounded = await withTimeout(
+          groundedMoveFeedback({
+            fen: event.fen,
+            bestMoveUci: bestUci,
+            evalCp: stockfishAnalysis?.evaluation,
+            mateIn: stockfishAnalysis?.mateIn,
+            tactics: phaseTactics,
+            studentColor: event.playerColor,
+            surface: 'phase-narration',
+            extraFacts: transitionSentence,
+            warm: true,
+          }),
           NARRATION_API_TIMEOUT_MS,
           'phase-narration-api',
         );
-        apiResponse = spineAnswer.text;
-        console.log('[PHASE-HOOK-06] LLM returned', {
+        apiResponse = grounded ?? '';
+        // Feed the grounded text through the SAME streaming sentence pipeline so
+        // the per-sentence TTS pacing (Polly chain) is unchanged. The per-
+        // sentence board gate still runs (defense in depth) but can't drop a
+        // computed sentence about the real position.
+        if (token === activeTokenRef.current && apiResponse) {
+          fullText = apiResponse;
+          setCurrentText(fullText);
+          sentenceBuffer = apiResponse;
+          flushCompletedSentences();
+        }
+        console.log('[PHASE-HOOK-06] grounded narration ready', {
           length: apiResponse.length,
           startsWithWarning: apiResponse.startsWith('⚠️'),
         });
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : String(err);
-        console.log('[PHASE-HOOK-06] LLM errored', msg);
+        console.log('[PHASE-HOOK-06] grounded narration errored', msg);
         setError(msg);
         if (msg.endsWith('-timeout')) {
           apiTimedOut = true;
@@ -400,7 +358,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             kind: 'llm-error',
             category: 'subsystem',
             source: 'usePhaseNarration',
-            summary: `phase narration API timed out (${event.kind})`,
+            summary: `phase narration compute timed out (${event.kind})`,
             details: msg,
             fen: event.fen,
           });

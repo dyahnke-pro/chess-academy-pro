@@ -1830,11 +1830,20 @@ export async function groundedMoveFeedback(opts: {
    *  — the warm voice acknowledges it truthfully because it's derived from the
    *  eval numbers, not decided by the model. */
   moment?: MoveMoment;
+  /** A COMPUTED framing line the caller derived in code — e.g. a phase-transition
+   *  label ("The opening's set; we're into the middlegame now.") or a move
+   *  context. Prepended to the fact bundle so the warm voice can lead with it
+   *  truthfully (it's code-computed, never model-decided). Combined with the
+   *  `moment` cue when both are present. */
+  extraFacts?: string;
   /** Deliver in the warm house voice (default true for move feedback). Set
    *  false for the terse plain readout. */
   warm?: boolean;
 }): Promise<string | null> {
   const config = await getProviderConfig();
+  const framing = [opts.extraFacts?.trim(), describeMoveMoment(opts.moment)]
+    .filter((s): s is string => Boolean(s && s.trim()))
+    .join(' ');
   return serveGroundedPositionDefault(
     {
       surface: opts.surface ?? 'grounded-move-feedback',
@@ -1847,7 +1856,7 @@ export async function groundedMoveFeedback(opts: {
     },
     config,
     opts.studentMessage,
-    { warm: opts.warm !== false, extraFacts: describeMoveMoment(opts.moment) },
+    { warm: opts.warm !== false, extraFacts: framing || undefined },
   );
 }
 
