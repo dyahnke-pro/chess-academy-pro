@@ -160,7 +160,29 @@ author `noreply@anthropic.com`):**
     biggest remaining slice and touches production-bound core commentary — do it
     with fresh focus, one task per commit, and re-verify the review/content-gen
     surfaces after each.
-- ⏳ **Item #7 — Phase 4: prove it + the SINGLE push to `main` (production).**
+- 🔨 **Item #7 — Phase 4 (STARTED 2026-07-09).**
+  - ✅ **Coverage instrument built** (`scripts/audit-coach-grounding-coverage.mjs`,
+    commit `7ec8cb08`). Drives a coverage battery through /coach/teach, captures
+    every `coach-llm-call` event via the narration-listener sidecar, reports
+    grounded/ungrounded per intent + the exact leaks. KEY telemetry fact:
+    `coach-llm-call` is audit-stream-ONLY (not in analytics `AUDIT_EVENT_MAP`),
+    so coverage is captured LIVE during a run, NOT from PostHog. PostHog carries
+    `coach-brain-ask-received` → `coach_question_asked` (the real question
+    distribution) — use that for WHAT users ask, the live listener for the
+    grounded RATE.
+  - ⚠️ **Measurement is inherently a LIVE run.** This build isn't deployed (main
+    is pre-build) and the PostHog read key is currently 401, so a real
+    fall-through number requires running the instrument against a local dev
+    server built from this branch, or against prod post-deploy. Run:
+    `AUDIT_SANDBOX=1 AUDIT_SMOKE_URL=http://127.0.0.1:8099 node scripts/audit-coach-grounding-coverage.mjs`
+    (needs `npm run dev` up). The sandbox's ~2-min container-restart cycle makes
+    a multi-minute Playwright run unreliable here — run it in a stable container
+    / post-deploy.
+  - ⏳ **Remaining #7:** run the coverage instrument → drive fall-through to ~0
+    (close any leaks it names, each via the detector→assembler→voiceFacts
+    pattern); `npm run ship-check` (READY TO PUSH) + `npm run build` (tsc -b);
+    the 3-instrument prod audit; THEN the single `git push origin main`.
+- (superseded) original #7 note:
   Only after #6: pull `coach-grounding-coverage` + `coach-brain-ask-received`
   from PostHog/audit-stream, drive the free-LLM fall-through rate to ~0, then
   `npm run ship-check` (READY TO PUSH) + `npm run build` (tsc -b) + the
