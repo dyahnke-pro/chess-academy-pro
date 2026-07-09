@@ -44,8 +44,24 @@ author `noreply@anthropic.com`):**
 8. `c68a2d8` theme action — "switch to dark/light/named theme". Settings =
    data + actions COMPLETE.
 
+**PROGRESS (resumed session 2026-07-09, pushed to this branch as landed):**
+- ✅ **Item #1 — GameChatPanel** → dispatchCoachTurn (`905de82f`). Both ask paths
+  unified; mid-game skipActionRouter:true, game-over full dispatch; hand-rolled
+  routeChatIntent pre-pass deleted. 21 tests green.
+- ✅ **Item #2 chunk a — MasterclassCoachChat** → dispatchCoachTurn (`10a55456`).
+  Course scope via options.systemPromptAddition; gains tool loop + onNavigate;
+  continuity via shared memory store; dead historyRef removed. 2 tests green.
+- ✅ **Item #2 chunk b — VoiceChatMic** → dispatchCoachTurn (`1c1eec4c`) — the
+  heavy one. Deleted the ~100-line hand-rolled envelope (buildSystemAddition) +
+  7 dead imports; live board threaded via liveState; Polly streaming + grounded-
+  sentence gate preserved; skipActionRouter:true (keeps its tryRouteIntent
+  pre-pass until chunk c). 6 tests green.
+- ⏳ **Item #2 chunk c (NEXT) — router merge:** fold coachIntentRouter/
+  tryRouteIntent INTO the shared routeChatIntent + DELETE coachIntentRouter;
+  then VoiceChatMic drops its own pre-pass (skipActionRouter→false).
+
 **REMAINING work (in priority order):**
-1. **GameChatPanel** → `dispatchCoachTurn`, DELETE its hand-rolled
+1. ✅ **GameChatPanel** → `dispatchCoachTurn`, DELETE its hand-rolled
    `routeChatIntent` pre-pass (`GameChatPanel.tsx:642-673`). NUANCE: routing is
    gated on `isGameOver`; MID-game it deliberately skips routing (finish your
    move first) and has a SEPARATE streaming `ask` path (~682+) and a post-game
