@@ -3558,6 +3558,42 @@ export async function getCoachCommentary(
   const config = await getProviderConfig();
   if (!config) return OFFLINE_FALLBACKS[task] ?? OFFLINE_FALLBACKS.default;
 
+  // ── Phase 3b (grounding inversion, item #6) — the ATOMIC position-assessment
+  // commentary tasks are voiced from the engine eval computed in CODE and
+  // phrased through `voiceFacts`: the LLM decides no chess content (G0), it only
+  // phrases the pre-computed "how you stand" fact. Gated on a KNOWN student POV
+  // (`context.perspective`, the code-computed side) so the eval sign is never
+  // guessed, and on a real engine analysis — falls through to the
+  // grounded-by-injection path below on ANY miss, so no caller regresses.
+  // NOTE (deliberate): the PROSE commentary tasks (sideline_explanation,
+  // opening_overview, model_game_annotation, game_narrative_summary) are NOT
+  // inverted here — routing multi-paragraph pedagogy through voiceFacts would
+  // strip the teaching. They stay on the complete-and-gated injection path
+  // (their board-claims are already gradeNarrationText-gated at the call site).
+  if (
+    (task === 'position_analysis_chat' || task === 'deep_analysis') &&
+    context.stockfishAnalysis &&
+    context.perspective
+  ) {
+    try {
+      const sa = context.stockfishAnalysis;
+      const answer = assemblePositionAssessment({
+        evalCp: sa.isMate ? null : sa.evaluation,
+        mateIn: sa.mateIn,
+        studentColor: context.perspective === 'b' ? 'black' : 'white',
+      });
+      if (answer) {
+        const voiced = await voiceFacts(answer.facts, {
+          studentMessage: context.additionalContext,
+          providerConfig: config,
+          intent: 'position-assessment',
+          preferRaw: true,
+        });
+        if (voiced) return voiced;
+      }
+    } catch { /* fall through to the grounded-by-injection path */ }
+  }
+
   // Universal narration grounding: pull the four curated sources
   // (annotations / classical book passages / middlegame plans /
   // model games) into the system prompt so this bypass path gets
