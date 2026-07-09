@@ -186,8 +186,12 @@ describe('grounding — intent detection', () => {
       undefined,
       { currentFen: STARTING_FEN, surface: '/coach/chat' },
     );
-    expect(r).toContain('Sicilian');
-    expect(counters.lichessCalls).toBe(0);
+    // RIP #2 (coach grounding build): the coach no longer FREE-explains an
+    // opening with fabricated "1.e4 c5" moves. With no books/pedagogy assembler
+    // yet, an opening-definition question stays dormant (no master-play) and
+    // serves the honest line; the F3/F11 assembler grounds it properly later.
+    expect(counters.lichessCalls).toBe(0); // grounding stayed dormant
+    expect(r).toContain("can't verify");
   });
 
   it('engages on "what should I play here?"', async () => {
@@ -240,9 +244,12 @@ describe('grounding — intent detection', () => {
       '', undefined, 'chat_response', 1024, undefined, undefined, undefined,
       { currentFen: STARTING_FEN, surface: '/coach/teach' },
     );
-    expect(r).toContain('Caro-Kann');
-    expect(r).not.toContain("can't verify");
+    // RIP #2: no free opening explanation. Grounding still stays dormant (the
+    // original 2026-06-02 bug — engaging master-play on the wrong FEN and
+    // stocking out — must not return); the honest line is served until the F3
+    // books assembler grounds "what is opening X" properly.
     expect(counters.lichessCalls).toBe(0); // grounding stayed dormant
+    expect(r).toContain("can't verify");
   });
 
   it('engages on forceEngage even without intent match', async () => {

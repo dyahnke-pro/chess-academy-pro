@@ -599,6 +599,15 @@ export type AuditKind =
   //   coach served the stock "I can't verify which moves are sound"
   //   response. Last-line G3 protection.
   | 'master-play-enforcement-fallback'
+  // `coach-grounding-coverage`: which lane served a coach turn — the
+  //   coverage telemetry for the grounding-inversion. `lane` in the summary:
+  //   an assembler intent (grounded), `safe-default-position` (computed
+  //   eval/best-move fallback), `safe-default-stock` (honest can't-verify),
+  //   `conversational` / `conversational-stripped` (non-chess phrasing lane).
+  //   Drives the free-LLM fall-through rate toward zero — see the coach
+  //   grounding plan. Every unmapped chess turn should read grounded or stock,
+  //   never a free-LLM chess answer.
+  | 'coach-grounding-coverage'
   // `coach-llm-call`: the grounding-inversion leak audit (STEP E). Fires on
   //   EVERY coach-facing LLM call with `grounded` in the summary/details:
   //   grounded=true  → the answer was COMPUTED in code and routed through the

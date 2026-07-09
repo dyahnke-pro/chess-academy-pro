@@ -1705,6 +1705,143 @@ function stripUngroundedSentences(text: string, validation: ClaimValidationResul
   return kept.join(' ').trim();
 }
 
+// ── RIP #2: the safe grounded default + the non-chess conversational lane ──
+// The grounding inversion's last hole was the fall-through: when no assembler
+// matched a turn, the coach dropped to a FREE LLM that decided chess content
+// (evals, moves, "masters play X") with no validator teeth off-book. This
+// replaces that hole with two structurally-safe lanes:
+//   • a CHESS turn we couldn't map → the computed position default (engine
+//     eval + best line) or the honest stock line — NEVER a free-LLM guess;
+//   • a NON-CHESS turn (greeting, thanks, meta) → a constrained conversational
+//     reply that is forbidden chess content and swept for stray chess claims.
+// The LLM keeps ONLY phrasing; it never decides a chess fact again (G0).
+
+/** System-prompt addendum for the non-chess conversational lane. The LLM may
+ *  ONLY talk conversationally here — it must state NO chess fact (move, eval,
+ *  line, tactic, opening theory, "what masters/pros play"). If the student's
+ *  message is actually a chess question, it must defer, not answer. */
+const NO_CHESS_CONTENT_ADDENDUM =
+  '\n\n═══ GROUNDING (non-negotiable) ═══\n' +
+  'This is a conversational turn. You may be warm and brief, but you must NOT ' +
+  'state any chess content — no move, square, evaluation, opening line, tactic, ' +
+  'trap, plan, or claim about what masters/pros/engines play. Those are computed ' +
+  'elsewhere and verified; you never invent them. If the student is actually ' +
+  'asking a chess question, do NOT answer it — say you\'ll pull it up and invite ' +
+  'them to ask for the best move, the plan, or what\'s hanging. Otherwise just ' +
+  'respond naturally.';
+
+/** SAN-shaped token / explicit stat / master-play claim — the fabrication
+ *  vectors we sweep from a conversational reply that strayed into chess. */
+const STRAY_CHESS_PATTERNS: ReadonlyArray<RegExp> = [
+  /\b(?:O-O(?:-O)?|[KQRBN][a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?|[a-h]x[a-h][1-8](?:=[QRBN])?[+#]?)\b/, // SAN (piece move / capture)
+  /\d+\s*%/,                                   // a percentage ("55%")
+  /[+-]\d(?:\.\d)?\b/,                          // a pawn eval ("+2.3", "-1.5")
+  /\b(?:masters?|grandmasters?|pros?|GMs?|engines?)\b[^.?!]*\b(?:play|prefer|choose|favou?r|recommend)\b/i,
+  /\b[a-h][1-8]\b/,                             // a bare square / pawn push ("e4", "d5")
+];
+
+const CHESS_VOCAB_RE =
+  /\b(?:move|moves|position|eval|evaluation|winning|losing|better|worse|advantage|hanging|threat|threaten(?:ing|ed)?|tactic|tactics|fork|pin|skewer|discovered|mate|checkmate|check|sacrifice|sac|attack|defend|defence|defense|plan|strateg(?:y|ic)|idea|opening|gambit|variation|endgame|middlegame|pawn|knight|bishop|rook|queen|king|castle|develop|blunder|mistake|inaccuracy|trap|square|file|rank|diagonal|outpost|tempo|initiative|structure|weak(?:ness)?|piece|capture|exchange|promote|zugzwang|fortress|stalemate|opposition|teach|drill|quiz|repertoire|masterclass)\b/i;
+
+/** Deterministic "does this message ask about chess content?" gate. Broad by
+ *  design: over-detecting routes a borderline turn to the honest stock line
+ *  (safe), under-detecting risks a chess turn slipping to the conversational
+ *  lane. Combines the move-question patterns with a chess-vocabulary sweep and
+ *  a bare-SAN token. */
+export function hasChessContentSignal(text: string): boolean {
+  if (!text || !text.trim()) return false;
+  if (detectMoveQuestionIntent([{ role: 'user', content: text }])) return true;
+  // A SAN-shaped token ("is Nf3 good", "what about exd5").
+  if (STRAY_CHESS_PATTERNS[0].test(text)) return true;
+  // A "masters/pros play X" phrasing ("how do masters play this?").
+  if (STRAY_CHESS_PATTERNS[3].test(text)) return true;
+  return CHESS_VOCAB_RE.test(text);
+}
+
+/** Sweep any sentence that strayed into chess content out of a conversational
+ *  reply. Belt-and-suspenders for the non-chess lane: `validateClaims` is a
+ *  no-op without a grounding context (casual chat), so this is the guard that
+ *  keeps a stray SAN / stat / "masters play X" out. Never severs directive
+ *  markers. Returns '' only when every sentence was chessy. */
+export function stripChessyStraySentences(text: string): string {
+  if (!text.trim()) return '';
+  const sentences = text.split(/(?<=[.!?])\s+/);
+  const kept: string[] = [];
+  for (const s of sentences) {
+    const trimmed = s.trim();
+    if (!trimmed) continue;
+    const hasMarker = /\[\[?[A-Z]/.test(trimmed); // protect directive markers
+    const strayed = !hasMarker && STRAY_CHESS_PATTERNS.some((re) => re.test(trimmed));
+    if (!strayed) kept.push(trimmed);
+  }
+  return kept.join(' ').trim();
+}
+
+/** Coverage telemetry: which lane served a coach turn. Drives the free-LLM
+ *  fall-through rate toward zero (see the coach grounding plan). */
+function emitGroundingCoverage(
+  lane: string,
+  surface: string,
+  sessionId: string | undefined,
+  extra?: Record<string, unknown>,
+): void {
+  void logAppAudit({
+    kind: 'coach-grounding-coverage',
+    category: 'subsystem',
+    source: 'coachApi.getCoachChatResponse',
+    summary: `lane=${lane} surface=${surface}`,
+    details: JSON.stringify({ lane, surface, sessionId, ...(extra ?? {}) }),
+  });
+}
+
+/** SAFE GROUNDED DEFAULT — the computed answer for an unmapped CHESS turn:
+ *  the engine's best move + eval (richest) when the surface threaded a
+ *  Stockfish snapshot, else the eval + top live-tactic (position assessment).
+ *  Everything is computed by the existing assemblers and voiced through
+ *  `voiceFacts`; the LLM decides nothing. Returns null when there's no
+ *  board/engine data to ground on (caller then serves the honest stock line). */
+async function serveGroundedPositionDefault(
+  grounding: MasterGroundingOptions,
+  config: ProviderConfig | null,
+  studentMessage: string | undefined,
+): Promise<string | null> {
+  const fen = grounding.currentFen ?? null;
+  const bestUci = grounding.engineBestMoveUci ?? null;
+  if (bestUci && fen) {
+    const blackToMove = fen.split(' ')[1] === 'b';
+    const stmEvalCp =
+      typeof grounding.engineEvalCp === 'number'
+        ? (blackToMove ? -grounding.engineEvalCp : grounding.engineEvalCp)
+        : null;
+    const stmMateIn =
+      typeof grounding.engineMateIn === 'number'
+        ? (blackToMove ? -grounding.engineMateIn : grounding.engineMateIn)
+        : null;
+    const answer = assembleMoveEvalAnswer({ fen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn });
+    if (answer) {
+      const voiced = await voiceFacts(answer.facts, { studentMessage, providerConfig: config, intent: 'safe-default-bestmove', preferRaw: true });
+      if (voiced) {
+        return answer.bestMoveFromTo
+          ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
+          : voiced;
+      }
+    }
+  }
+  const sc: 'white' | 'black' =
+    grounding.studentColor ?? ((grounding.currentFen ?? '').split(' ')[1] === 'b' ? 'black' : 'white');
+  const assess = assemblePositionAssessment({
+    evalCp: grounding.engineEvalCp,
+    mateIn: grounding.engineMateIn,
+    tactics: grounding.tactics,
+    studentColor: sc,
+  });
+  if (assess) {
+    const voiced = await voiceFacts(assess.facts, { studentMessage, providerConfig: config, intent: 'safe-default-assessment', preferRaw: true });
+    if (voiced) return voiced;
+  }
+  return null;
+}
+
 /**
  * voiceFacts — THE CHOKEPOINT for the grounding inversion
  * (docs/plans/2026-06-10-coach-chat-grounding-inversion.md).
@@ -3138,10 +3275,80 @@ export async function getCoachChatResponse(
     }
   };
 
-  // ── Non-grounded path: existing behavior, streaming-as-passed ──
-  // (Leak audit fires at the primitive — this call lands as grounded=false.)
+  // ── Fall-through (RIP #2): NEVER a free-LLM chess answer ────────────
+  // No assembler matched this turn. The old code dropped to a FREE LLM here
+  // (streamed, and — off-book — with the validator a no-op, so ungrounded).
+  // That was path #2, the hallucination surface. Now we route by whether the
+  // turn is about chess content:
+  //   • chess signal → the COMPUTED position default (eval + best line) when
+  //     the surface threaded engine data, else the honest stock line. The LLM
+  //     never decides chess here.
+  //   • no chess signal → a constrained conversational reply (chess content
+  //     forbidden + swept) so greetings/thanks/meta still feel human.
+  // `validateClaims` is a no-op without a grounding context, so the chess-signal
+  // gate + the stray-chess sweep are the structural guards, not the validator.
   if (!groundingEngaged) {
-    return callOnce(buildSystemPromptFor(), true);
+    // Callers that pass NO grounding keep their existing path for now: the kid
+    // lane (`getKidLlmResponse`, task `kid_puzzle_gen` — a P0-safe surface that
+    // gets its OWN grounded lane in this build, NOT the adult stock line),
+    // game commentary, and explicit opt-out callers. They're converted in
+    // Phase 2/3; nothing ships until the whole build (kid lane included) lands.
+    // The seal below applies to GROUNDED coach surfaces (chat/teach/mic) whose
+    // turn matched no assembler — the actual hallucination hole.
+    if (!grounding) {
+      return callOnce(buildSystemPromptFor(), true);
+    }
+    const surface = grounding.surface ?? 'unknown';
+    const sessionId = grounding.sessionId;
+    const originalQuery = (() => {
+      for (let i = messages.length - 1; i >= 0; i -= 1) {
+        if (messages[i].role === 'user') return messages[i].content;
+      }
+      return '';
+    })();
+
+    // Step-by-step MOVE-NARRATION / MOVE-REPORT turns (the Learn flow: "I played
+    // Nc3. Your move.", plus the engine-driven replies the coach narrates) keep
+    // their existing path for now — sealing them here would stock-out the deep
+    // Learn teaching where the coach names the played move + a continuation a ply
+    // ahead (David's iPhone audit, 2026-06-04). These are a Phase 3 conversion to
+    // a grounded narration assembler; until then they ride the validated/free
+    // narration path they already used.
+    if (
+      grounding.moveNarration === true ||
+      /\bI\s+(?:just\s+)?played\b/i.test(originalQuery) ||
+      /\byour\s+move\b/i.test(originalQuery)
+    ) {
+      return callOnce(buildSystemPromptFor(), true);
+    }
+
+    if (hasChessContentSignal(originalQuery)) {
+      // A chess question no assembler caught. Compute the position default when
+      // the surface threaded engine data; otherwise serve the honest stock line.
+      const grounded = await serveGroundedPositionDefault(grounding, config, originalQuery || undefined);
+      if (grounded) {
+        emitGroundingCoverage('safe-default-position', surface, sessionId);
+        if (onStream) onStream(grounded);
+        return grounded;
+      }
+      emitGroundingCoverage('safe-default-stock', surface, sessionId, { reason: 'chess-signal-no-assembler' });
+      if (onStream) onStream(STOCK_GROUNDING_FALLBACK);
+      return STOCK_GROUNDING_FALLBACK;
+    }
+
+    // Non-chess conversational turn — phrasing is fine (no chess fact to fake),
+    // but chess content is forbidden and swept as a belt-and-suspenders guard.
+    const convoResponse = await callOnce(buildSystemPromptFor(NO_CHESS_CONTENT_ADDENDUM), false);
+    const cleaned = stripChessyStraySentences(convoResponse);
+    if (cleaned) {
+      emitGroundingCoverage(cleaned === convoResponse.trim() ? 'conversational' : 'conversational-stripped', surface, sessionId);
+      if (onStream) onStream(cleaned);
+      return cleaned;
+    }
+    // The reply was entirely chess content that got swept — serve the honest line.
+    emitGroundingCoverage('safe-default-stock', surface, sessionId, { reason: 'conversational-fully-stripped' });
+    if (onStream) onStream(STOCK_GROUNDING_FALLBACK);
+    return STOCK_GROUNDING_FALLBACK;
   }
 
   // ── Grounded path: ONE call → ONE validator backstop → in-code strip ──
