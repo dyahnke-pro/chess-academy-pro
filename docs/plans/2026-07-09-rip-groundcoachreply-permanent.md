@@ -111,6 +111,19 @@ The audit:
   every computer tested correct; fall-through ~0.
 - **P5 — 3-instrument prod audit + the single batched push.**
 
+## Progress (2026-07-09)
+- ✅ **`getCoachCommentary` DELETED** (1 of the 5 LLM commands gone). All callers
+  now compute facts → `voiceFacts`: game review (`assembleGameReviewAnswer`), the
+  4 coachFeature reports, the 3 contentGeneration tasks (authored plan/variation
+  explanations + Lichess data), the opening-section narrator. Orphaned
+  `callCommentaryWithConfig` + `buildChessContextMessage`/`CoachContext` imports
+  removed. `CoachPanel` (orphaned free-LLM surface) deleted.
+- ✅ Move feedback (`groundedMoveFeedback`), MiddlegamePractice, useLiveCoach.
+- ✅ `voiceFacts` `warm` + `kid` registers; computed pedagogical `moment`.
+- **NEXT: the spine** (`coachService.ask` free-compose + `runAnswerGates`/
+  `groundCoachReply` at :442 + the 3 redundant post-strip callers + the
+  move-narration exemption). The careful, highest-risk pass — the live chat path.
+
 ## Done this session (aligned with the above)
 - `voiceFacts` gained `kid` + `warm` registers (params on the one command).
 - `groundedMoveFeedback` computer (move eval + tactic + computed pedagogical
