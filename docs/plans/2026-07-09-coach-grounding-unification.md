@@ -69,9 +69,14 @@ author `noreply@anthropic.com`):**
   satisfies "one router / delete coachIntentRouter" without that risk.
 
   **➡️ Item #1 + Item #2 COMPLETE — the heavy surface-migration + router half is
-  done. Next: the easier additive grounded families (#3 F15 app-help, #4 F9/F12
-  tactics-teaching), then verify P-families (#5), Phase 3b commentary (#6),
-  Phase 4 audit + single push to main (#7).**
+  done.**
+- ✅ **Item #3 — F15 app-help assembler** (`aa19cbe3`). New grounded family:
+  "what does the Tactics tab do?" voices APP_ROUTES_MANIFEST (title +
+  description) via assembleAppHelpAnswer; isAppHelpQuestion anchored on a
+  UI-surface noun so it can't mis-fire on a chess ask; matchRouteByTopic
+  extracted in navigationRouter (DRY with matchNavigationRoute). Tests green.
+  **Next: #4 F9/F12 tactics-teaching, then verify P-families (#5), Phase 3b
+  commentary (#6), Phase 4 audit + single push to main (#7).**
 
 **REMAINING work (in priority order):**
 1. ✅ **GameChatPanel** → `dispatchCoachTurn`, DELETE its hand-rolled
