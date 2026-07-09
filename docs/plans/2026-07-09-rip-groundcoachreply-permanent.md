@@ -38,6 +38,30 @@
 4. **Unmapped tail → SAFE default** (`serveGroundedPositionDefault` → engine eval,
    or the honest "I can't verify" line). Never free-LLM chess.
 
+## TWO LANES through the North Star (David 2026-07-09: "the coach still needs to set up games and positions — route it through the North Star")
+
+The one command governs VOICING. Actions are the second lane, and they route
+through the SAME discipline: code decides, the LLM only phrases the confirmation.
+
+- **Lane 1 — VOICE.** compute facts → `voiceFacts`. (The surfaces above.)
+- **Lane 2 — ACT.** the coach sets up a position / starts a game / takes back /
+  navigates / launches a walkthrough. Flow: the **deterministic router**
+  classifies the intent → **code computes the target** (the position FEN from the
+  DB — never an LLM-emitted FEN; the route from `APP_ROUTES_MANIFEST`; the
+  opening from the resolver) → the **operator tool fires**
+  (`onSetBoardPosition` / `onPlayMove` / `onResetBoard` / `onNavigate` /
+  `onStartWalkthroughForOpening`) → `voiceFacts` confirms. The LLM classifies
+  intent (routing ≠ deciding chess content, allowed) and phrases the
+  confirmation; it NEVER invents a FEN or picks the move. Every set-up position
+  is DB-sourced + chess.js-validated (G3).
+
+**Consequence for the spine rip:** the agentic tool loop is NOT deleted — its
+legitimate job becomes exactly (a) GATHER facts and (b) FIRE actions. What's
+removed is free-composing prose. The operator/setup tools MUST keep working;
+only the "LLM writes its own chess analysis" step dies. Do NOT break
+`onSetBoardPosition` / `onPlayMove` / walkthrough / navigate when deleting
+`groundCoachReply`.
+
 ## What gets DELETED (the 5 other LLM commands + the bandaid)
 
 - `getCoachCommentary` (free prose/report) — replaced by computer→voiceFacts.
