@@ -356,7 +356,13 @@ describe('CoachChatPage', () => {
     // reads as garbage. The streaming buffer's TAG_STRIP_RE is the
     // gate; this test exercises it via the streamed-chunks path.
     vi.mocked(routeChatIntent).mockResolvedValueOnce(null);
-    vi.mocked(getCoachChatResponse).mockImplementationOnce(async (_msgs, _sys, onChunk) => {
+    // Persistent (not Once): the surface now routes through dispatchCoachTurn →
+    // coachService.ask, whose grounding path may make its own provider call
+    // before the streaming one, so a Once would be consumed early and the
+    // streamed answer would fall back to the default mock. This tests the
+    // real behavior — tags stripped from the streamed bubble — regardless of
+    // call ordering.
+    vi.mocked(getCoachChatResponse).mockImplementation(async (_msgs, _sys, onChunk) => {
       const raw = '[BOARD: arrow:e2-e4:green] Push the e-pawn. [[ACTION:set_intended_opening {"name":"Italian"}]] Done.';
       onChunk?.(raw);
       return raw;

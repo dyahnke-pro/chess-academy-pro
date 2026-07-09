@@ -5,9 +5,8 @@ import { ArrowLeft, Volume2, VolumeOff } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { useCoachSessionStore } from '../../stores/coachSessionStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
-import { routeChatIntent } from '../../services/coachSessionRouter';
+import { dispatchCoachTurn } from '../../coach/dispatchCoachTurn';
 import { detectNarrationToggle, applyNarrationToggle } from '../../services/coachAgentRunner';
-import { coachService } from '../../coach/coachService';
 import { pickSuggestedQuestions } from '../../data/coachGreetings';
 import type { LiveState } from '../../coach/types';
 import { logAppAudit } from '../../services/appAuditor';
@@ -211,42 +210,14 @@ export function CoachChatPage(): JSX.Element {
       }
     }
 
-    // Fast-path: deterministic intent router for explicit phrases like
-    // "play the KIA against me" or "review my last Catalan". Routes
-    // instantly without an LLM round-trip. Falls through to the agent
-    // loop for everything it doesn't recognize — that's where actions
-    // like list_games / start_play with arbitrary openings live.
-    try {
-      const lastAssistantMessage = [...chatMessages]
-        .reverse()
-        .find((m) => m.role === 'assistant')?.content;
-      const routed = await routeChatIntent(text, { lastAssistantMessage });
-      if (routed) {
-        appendMessage({
-          id: chatMsgId('u'),
-          role: 'user',
-          content: text,
-          modality,
-          timestamp: Date.now(),
-        });
-        recordTurn('user', text);
-        appendMessage({
-          id: chatMsgId('ack'),
-          role: 'assistant',
-          content: routed.ackMessage,
-          modality,
-          timestamp: Date.now(),
-        });
-        recordTurn('coach', routed.ackMessage);
-        if (routed.path) {
-          void navigate(routed.path);
-        }
-        inFlightRef.current = false;
-        return;
-      }
-    } catch (err: unknown) {
-      console.warn('[CoachChatPage] intent routing failed:', err);
-    }
+    // Deterministic action routing (settings toggles, navigation, training-aid
+    // drills, session starts) now runs INSIDE dispatchCoachTurn below — the ONE
+    // entry point, so this surface has the exact same capabilities as every
+    // other. The prior hand-rolled routeChatIntent pre-pass was removed here
+    // (David: no duplicate wiring — new wire in, old wire out).
+    const lastAssistantMessage = [...chatMessages]
+      .reverse()
+      .find((m) => m.role === 'assistant')?.content;
 
     // ── WO-BRAIN-05a — STANDALONE CHAT ROUTES THROUGH coachService ────
     // The legacy `runCoachTurn` path that built its own system prompt
@@ -309,7 +280,7 @@ export function CoachChatPage(): JSX.Element {
     });
 
     try {
-      const answer = await coachService.ask(
+      const answer = await dispatchCoachTurn(
         { surface: 'standalone-chat', ask: text, liveState },
         {
           // WO-COACH-GROUNDING (PR #338 part C): bumped from 1 to 3 so
@@ -317,6 +288,8 @@ export function CoachChatPage(): JSX.Element {
           // see the result, and synthesize a grounded answer instead of
           // skipping tools to fit a single round-trip budget.
           maxToolRoundTrips: 3,
+          // Lets the action router catch "coach proposed a game → user says yes".
+          lastAssistantMessage,
           onNavigate: (path: string) => {
             void navigate(path);
           },
