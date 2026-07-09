@@ -485,6 +485,150 @@ export function describeMoveGeometry(
   return null;
 }
 
+const CENTRAL_SQUARES: ReadonlyArray<string> = ['d4', 'd5', 'e4', 'e5', 'c4', 'c5', 'f4', 'f5'];
+
+/** True when NO enemy pawn can ever advance to attack `sq` — the classic
+ *  outpost test. For a white piece on (file, rank) the attacking squares are
+ *  (file±1, rank+1); a black pawn reaches them from any higher rank on those
+ *  files. So it's an outpost iff neither adjacent file carries an enemy pawn
+ *  that could still push to the attacking rank. Pure chess.js board read. */
+function isOutpostSquare(board: Chess, sq: string, moverColor: 'white' | 'black'): boolean {
+  const file = sq.charCodeAt(0); // 'a'..'h'
+  const rank = parseInt(sq[1], 10);
+  const enemy = moverColor === 'white' ? 'b' : 'w';
+  const attackRank = moverColor === 'white' ? rank + 1 : rank - 1;
+  if (attackRank < 1 || attackRank > 8) return false;
+  for (const df of [-1, 1]) {
+    const f = file + df;
+    if (f < 97 || f > 104) continue; // off-board file
+    const adjFile = String.fromCharCode(f);
+    for (let r = 1; r <= 8; r += 1) {
+      const p = board.get(`${adjFile}${r}` as Square);
+      if (!p || p.type !== 'p' || p.color !== enemy) continue;
+      // Can this enemy pawn ever reach (adjFile, attackRank)? White pawns move
+      // up (increasing rank), black down. Enemy = the side NOT moverColor.
+      const canReach = enemy === 'w' ? r <= attackRank : r >= attackRank;
+      if (canReach) return false;
+    }
+  }
+  return true;
+}
+
+function lowerFirst(s: string): string {
+  return s ? s.charAt(0).toLowerCase() + s.slice(1) : s;
+}
+function upperFirst(s: string): string {
+  return s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
+}
+
+export interface MovePurpose extends GroundedAnswer {
+  /** The purpose broken into ORDERED clauses, most-important-first, so the
+   *  caller can voice the top-N by the student's verbosity (full = all,
+   *  brief = 1-2, silent = none). `facts` is the chosen clauses joined. */
+  clauses: string[];
+}
+
+/**
+ * assembleMovePurpose — the RICH, multi-clause "the ENTIRE purpose of this move"
+ * fact bundle for the teaching voice (David 2026-07-09: "Naroditsky explains the
+ * entire purpose behind a move — we can account for that with deterministic data
+ * can't we?"). YES: every clause here is computed from the board + engine, never
+ * invented (G0):
+ *   1. WHAT IT DOES   — concrete geometry (fork/pin/check/wins/attacks) or, for a
+ *                       quiet move, the development + the central squares it eyes.
+ *   2. OUTPOST        — a minor piece on a square no enemy pawn can ever attack.
+ *   3. THE POINT      — the threat/opportunity it creates (from detectTactics).
+ *   4. THE PLAN       — the mover's follow-up in the engine PV.
+ *   5. THE ASSESSMENT — the eval, in words, from the student's POV.
+ * The clauses are ordered so the caller slices the top-N by verbosity. voiceFacts
+ * then phrases the bundle in the house teaching voice. Returns null only when the
+ * move is illegal (otherwise clause 1 is always available).
+ */
+export function assembleMovePurpose(opts: {
+  fenBefore: string;
+  san: string;
+  moverColor: 'white' | 'black';
+  /** Engine PV in SAN from the position AFTER the move (index 0 = the opponent's
+   *  reply, index 1 = the mover's follow-up). */
+  pvSan?: ReadonlyArray<string>;
+  /** White-perspective eval AFTER the move. */
+  evalCp?: number | null;
+  mateIn?: number | null;
+  /** detectTactics on the position AFTER the move (opportunities = the mover's). */
+  tactics?: TacticsLiveContext | null;
+  studentSide?: 'white' | 'black';
+  /** Verbosity cap on the number of clauses (full = undefined/all, brief = 2). */
+  maxClauses?: number;
+}): MovePurpose | null {
+  let before: Chess;
+  let mv;
+  try {
+    before = new Chess(opts.fenBefore);
+    mv = before.move(opts.san);
+  } catch {
+    return null;
+  }
+  if (!mv) return null;
+  const afterBoard = before; // `before` now reflects the position AFTER the move
+  const clauses: string[] = [];
+  const pieceName = REVIEW_PIECE_NAME[mv.piece];
+
+  // 1) WHAT IT DOES.
+  const geo = describeMoveGeometry(opts.fenBefore, opts.san, opts.moverColor);
+  if (geo) {
+    clauses.push(`The ${pieceName} ${geo}.`);
+  } else if (mv.piece === 'p') {
+    clauses.push(`The pawn goes to ${mv.to}, staking out space in the center.`);
+  } else {
+    const mc = opts.moverColor === 'white' ? 'w' : 'b';
+    const eyes = CENTRAL_SQUARES.filter((s) => {
+      try {
+        return afterBoard.attackers(s as Square, mc).includes(mv.to as Square);
+      } catch {
+        return false;
+      }
+    });
+    if (eyes.length > 0) {
+      clauses.push(`The ${pieceName} develops to ${mv.to}, eyeing ${eyes.slice(0, 2).join(' and ')}.`);
+    } else {
+      clauses.push(`The ${pieceName} develops to ${mv.to}.`);
+    }
+  }
+
+  // 2) OUTPOST — a minor piece planted where no pawn can chase it.
+  if ((mv.piece === 'n' || mv.piece === 'b') && isOutpostSquare(afterBoard, mv.to, opts.moverColor)) {
+    const rank = parseInt(mv.to[1], 10);
+    const advanced = opts.moverColor === 'white' ? rank >= 5 : rank <= 4;
+    if (advanced) clauses.push(`It's an outpost — no pawn can ever chase it off ${mv.to}.`);
+  }
+
+  // 3) THE POINT — the threat/opportunity the move creates (computed tactics).
+  const point = opts.tactics?.opportunities?.[0] ?? opts.tactics?.immediate?.[0];
+  if (point?.description) clauses.push(`The point: ${lowerFirst(point.description)}.`);
+
+  // 4) THE PLAN — the mover's follow-up in the engine PV (index 1; index 0 is
+  //    the opponent's reply).
+  const followUp = opts.pvSan?.[1];
+  if (followUp) clauses.push(`The plan is to follow with ${followUp}.`);
+
+  // 5) THE ASSESSMENT — eval in words, student POV.
+  const ss = opts.studentSide ?? opts.moverColor;
+  const studentEvalCp = opts.evalCp == null ? null : (ss === 'white' ? opts.evalCp : -opts.evalCp);
+  const studentMate = opts.mateIn == null ? null : (ss === 'white' ? opts.mateIn : -opts.mateIn);
+  const ev = evalPhrase(studentEvalCp, studentMate, ss);
+  if (ev) clauses.push(`${upperFirst(ev)}.`);
+
+  if (clauses.length === 0) return null;
+  const chosen = typeof opts.maxClauses === 'number' ? clauses.slice(0, Math.max(1, opts.maxClauses)) : clauses;
+  return {
+    facts: chosen.join(' '),
+    clauses,
+    bestMoveSan: mv.san,
+    bestMoveFromTo: { from: mv.from, to: mv.to },
+    sources: ['board:chess.js', 'engine:stockfish'],
+  };
+}
+
 export interface MoveOrderExplanation {
   /** Grounded prose: why the better order is stronger (+ the cost of the wrong
    *  order when a refutation is supplied). */

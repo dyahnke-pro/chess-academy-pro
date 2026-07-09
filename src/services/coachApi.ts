@@ -2006,15 +2006,20 @@ export async function voiceFacts(
       'in plain words ("the knight goes to f3"), NEVER chess notation. No praise ("great ' +
       'job"), no slang, no idioms — just describe the idea kindly so the child learns.'
     : opts.warm
-    ? 'You are a warm, encouraging chess coach in the clear, idea-first teaching voice ' +
-      'of a great instructor — vivid, human, a quick spark of warmth ("clean", "there it ' +
-      'is", "nice recovery"), reaching for a clarifying image when it helps. You will be ' +
-      'given FACTS that are already true and verified. Deliver THOSE facts to the student ' +
-      'warmly, in one or two sentences. This is the ONLY rule you cannot break: add NO ' +
-      'chess content that is not in the facts — no move, square, piece, eval number, ' +
-      'name, opening, or claim of your own. The warmth, the framing, the encouragement, ' +
-      'an analogy — all yours. The chess — only what the facts say. Never hedge, never ' +
-      'recommend running an engine.'
+    ? 'You are a chess coach who teaches in the clear, concept-FIRST register of a great ' +
+      'instructor: you explain the PURPOSE behind a move, never just its name. You will be ' +
+      'given a set of FACTS about a position or move — already true and verified. Voice ALL ' +
+      'of them, in the order given, as ONE piece of flowing teaching speech: open with the ' +
+      'idea, name what the move does and the square it targets, give the plan it sets up, ' +
+      'and land the assessment. Teach with a natural spoken cadence — reach for "the point ' +
+      'is…", "the idea here is…", "notice that…", "what this really does is…", and a quick ' +
+      'warm aside where it fits ("clean", "nothing wrong with that", "simple chess"). Vary ' +
+      'your sentence length so it sounds like a person talking, not a list. THE ONE RULE ' +
+      'YOU CANNOT BREAK: add NO chess content that is not in the facts — no move, square, ' +
+      'piece, eval number, name, opening, threat, or claim of your own; if a fact is not ' +
+      'given, you do not know it. The teaching voice, the connective phrasing, the warmth ' +
+      'are all yours; every chess fact is only what the facts say. Never hedge, never ' +
+      'mention an engine or analysis.'
     : 'You are a warm, concise chess coach speaking to a student. You will be given ' +
     'FACTS that are already true and verified. Your ONLY job is to say those facts ' +
     'to the student naturally, as a coach would. Add NOTHING: do not introduce any ' +
@@ -2025,17 +2030,18 @@ export async function voiceFacts(
     `FACTS (say these, add nothing):\n${facts}` +
     (opts.studentMessage ? `\n\nThe student asked: "${opts.studentMessage}"` : '');
 
-  // Phrasing only → always the cheap model. Tight token budget; no reasoning.
-  // (Deliberately NOT cfg.preferredModel — voicing facts never needs the
-  // pricier model, and that field is a string|object union anyway.)
+  // Phrasing only → always the cheap model. No reasoning. The warm teaching
+  // voice narrates the FULL move-purpose bundle (up to ~4 clauses), so it needs
+  // more room than the terse plain/kid readout — bump the cap in warm mode.
+  const voiceMaxTokens = opts.warm ? 420 : 240;
   try {
     const out = cfg.provider === 'anthropic'
-      ? await callAnthropic(cfg.apiKey, ANTHROPIC_MODEL_MAP.move_commentary, system, [{ role: 'user', content: user }], 240, 'grounded_voice')
+      ? await callAnthropic(cfg.apiKey, ANTHROPIC_MODEL_MAP.move_commentary, system, [{ role: 'user', content: user }], voiceMaxTokens, 'grounded_voice')
       : await callDeepSeek(
           cfg.apiKey,
           DEEPSEEK_MODEL_MAP.move_commentary,
           [{ role: 'system', content: system }, { role: 'user', content: user }],
-          240,
+          voiceMaxTokens,
           'grounded_voice',
         );
     // Leak audit fires at the primitive (callAnthropic/callDeepSeek) with

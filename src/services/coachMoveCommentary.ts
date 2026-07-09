@@ -29,7 +29,7 @@
  */
 import { Chess } from 'chess.js';
 import { groundedMoveFeedback, voiceFacts } from './coachApi';
-import { explainBestMoveGrounded } from './groundedAnswer';
+import { explainBestMoveGrounded, assembleMovePurpose } from './groundedAnswer';
 import { logAppAudit } from './appAuditor';
 import type { TacticsLiveContext, CoachPersonality, IntensityLevel } from '../coach/types';
 import type { ChatMessage, CoachVerbosity, MoveClassification } from '../types';
@@ -243,6 +243,47 @@ async function getGroundedCommentary(
   const fenAfter = gameAfter.fen();
   const studentColorFull: 'white' | 'black' | undefined =
     studentColor === 'w' ? 'white' : studentColor === 'b' ? 'black' : undefined;
+
+  // RICH MOVE PURPOSE (David 2026-07-09: "Naroditsky explains the ENTIRE purpose
+  // behind a move — we can account for that with deterministic data"). Compute
+  // the full purpose of the move just played — what it does (geometry), an
+  // outpost, the point/threat, the plan (PV), the assessment — and voice ALL of
+  // it in his teaching register through voiceFacts(warm). Verbosity caps the
+  // clause count (slow/full = all; medium = 3; fast = 2). Every clause is
+  // computed; the LLM only phrases them (G0).
+  const moverColorFull: 'white' | 'black' = mover === 'w' ? 'white' : 'black';
+  const maxClauses = input.verbosity === 'fast' ? 2 : input.verbosity === 'medium' ? 3 : undefined;
+  let fenBeforeMove: string | null = null;
+  try {
+    const cb = new Chess();
+    cb.loadPgn(gameAfter.pgn());
+    cb.undo();
+    fenBeforeMove = cb.fen();
+  } catch {
+    fenBeforeMove = null;
+  }
+  if (fenBeforeMove && last) {
+    const purpose = assembleMovePurpose({
+      fenBefore: fenBeforeMove,
+      san: last.san,
+      moverColor: moverColorFull,
+      pvSan: input.bestReplySan ? [input.bestReplySan] : undefined,
+      evalCp: evalAfter,
+      tactics: tactics ?? undefined,
+      studentSide: studentColorFull,
+      maxClauses,
+    });
+    if (purpose) {
+      const lead = subject ? `We're in the ${subject}. ` : '';
+      const voiced = await voiceFacts(`${lead}${purpose.facts}`, { intent: 'move-purpose', warm: true });
+      const outP = voiced ?? purpose.facts;
+      if (onStream && outP) onStream(outP);
+      return outP;
+    }
+  }
+
+  // Fallback: the plain position read (eval + tactics) when the move can't be
+  // replayed to compute its purpose.
   const framing = subject ? `This is still the ${subject}.` : undefined;
   const grounded = await groundedMoveFeedback({
     fen: fenAfter,

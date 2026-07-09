@@ -36,21 +36,23 @@ describe('classifyEvalSwing', () => {
   });
 });
 
-// GROUNDED contract (David 2026-07-09 — full G0 for in-game narration). The
-// coach no longer free-composes: every non-empty commentary comes from the
-// COMPUTED grounded read via `groundedMoveFeedback` (which computes facts and
-// voices them through the ONE `voiceFacts` chokepoint). The tests below assert
-// (a) the guard short-circuits, and (b) the grounded read is the sole source —
-// there is no free-LLM prompt to inspect.
-describe('generateMoveCommentary — grounded', () => {
+// GROUNDED contract (David 2026-07-09 — full G0 + the RICH move-purpose voice).
+// A non-empty commentary is the COMPUTED move-purpose bundle (assembleMovePurpose
+// → clauses) phrased through the ONE voiceFacts chokepoint. The tests mock
+// voiceFacts to echo the facts it's handed, so we can assert the purpose reaches
+// it — there is no free-LLM prompt to inspect.
+describe('generateMoveCommentary — grounded move purpose', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
+    // voiceFacts echoes the facts it is given (the computed purpose), so the
+    // returned commentary === the computed bundle. Real voiceFacts would phrase
+    // it warmly; the FACTS are what we assert are grounded.
+    vi.spyOn(coachApi, 'voiceFacts').mockImplementation(async (facts: string) => facts);
   });
 
-  it('routes the position read through groundedMoveFeedback (no free compose)', async () => {
-    const spy = vi
-      .spyOn(coachApi, 'groundedMoveFeedback')
-      .mockResolvedValue('You are holding a small edge — keep an eye on the open f-file.');
+  it('narrates the COMPUTED purpose of the move just played', async () => {
+    const spy = vi.spyOn(coachApi, 'voiceFacts');
+    // White just played f4 (the King's Gambit thrust) after e4 e5.
     const out = await generateMoveCommentary({
       gameAfter: gameAfter(['e4', 'e5', 'f4']),
       mover: 'w',
@@ -59,33 +61,41 @@ describe('generateMoveCommentary — grounded', () => {
       studentColor: 'b',
     });
     expect(spy).toHaveBeenCalled();
-    expect(out).toBe('You are holding a small edge — keep an eye on the open f-file.');
+    // The purpose is non-empty computed prose (geometry/eval), not a stock line.
+    expect(out.length).toBeGreaterThan(0);
+    expect(out.toLowerCase()).not.toContain("can't verify");
   });
 
-  it('returns empty string (no narration) when nothing is computable', async () => {
-    vi.spyOn(coachApi, 'groundedMoveFeedback').mockResolvedValue(null);
-    const out = await generateMoveCommentary({
-      gameAfter: gameAfter(['e4', 'e5', 'Nf3']),
+  it('threads the opening subject into the purpose lead', async () => {
+    const spy = vi.spyOn(coachApi, 'voiceFacts');
+    await generateMoveCommentary({
+      gameAfter: gameAfter(['e4', 'c5', 'Nf3']),
       mover: 'w',
       evalBefore: 20,
       evalAfter: 25,
+      subject: 'Sicilian Najdorf',
     });
-    expect(out).toBe('');
+    expect(spy).toHaveBeenCalled();
+    const facts = spy.mock.calls[0]?.[0] as string;
+    expect(facts.toLowerCase()).toContain('sicilian najdorf');
   });
 
-  it('returns empty string when the grounded read rejects', async () => {
-    vi.spyOn(coachApi, 'groundedMoveFeedback').mockRejectedValue(new Error('network down'));
-    const out = await generateMoveCommentary({
-      gameAfter: gameAfter(['e4']),
-      mover: 'w',
-      evalBefore: 0,
-      evalAfter: 10,
-    });
-    expect(out).toBe('');
+  it('caps clauses by verbosity (fast = fewer than full)', async () => {
+    const spy = vi.spyOn(coachApi, 'voiceFacts');
+    // A capturing/attacking move so several clauses are available.
+    const moves = ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Bxc6'];
+    await generateMoveCommentary({ gameAfter: gameAfter(moves), mover: 'w', evalBefore: 20, evalAfter: 30, studentColor: 'b', verbosity: 'fast' });
+    const fastFacts = String(spy.mock.calls[0]?.[0] ?? '');
+    spy.mockClear();
+    await generateMoveCommentary({ gameAfter: gameAfter(moves), mover: 'w', evalBefore: 20, evalAfter: 30, studentColor: 'b', verbosity: 'slow' });
+    const slowFacts = String(spy.mock.calls[0]?.[0] ?? '');
+    // Full (slow) never voices FEWER sentences than fast.
+    const count = (s: string): number => (s.match(/[.!?]/g) ?? []).length;
+    expect(count(slowFacts)).toBeGreaterThanOrEqual(count(fastFacts));
   });
 
-  it('returns empty string when offline=true is passed (no compute at all)', async () => {
-    const spy = vi.spyOn(coachApi, 'groundedMoveFeedback').mockResolvedValue('should not be used');
+  it('returns empty string when offline=true (no compute at all)', async () => {
+    const spy = vi.spyOn(coachApi, 'voiceFacts');
     const out = await generateMoveCommentary({
       gameAfter: gameAfter(['e4']),
       mover: 'w',
@@ -98,7 +108,7 @@ describe('generateMoveCommentary — grounded', () => {
   });
 
   it('returns empty string when verbosity is none', async () => {
-    const spy = vi.spyOn(coachApi, 'groundedMoveFeedback').mockResolvedValue('nope');
+    const spy = vi.spyOn(coachApi, 'voiceFacts');
     const out = await generateMoveCommentary({
       gameAfter: gameAfter(['e4']),
       mover: 'w',
@@ -111,7 +121,7 @@ describe('generateMoveCommentary — grounded', () => {
   });
 
   it('returns empty string when no move has been played yet', async () => {
-    const spy = vi.spyOn(coachApi, 'groundedMoveFeedback');
+    const spy = vi.spyOn(coachApi, 'voiceFacts');
     const out = await generateMoveCommentary({
       gameAfter: new Chess(),
       mover: 'w',
@@ -120,21 +130,5 @@ describe('generateMoveCommentary — grounded', () => {
     });
     expect(out).toBe('');
     expect(spy).not.toHaveBeenCalled();
-  });
-
-  it('threads the opening subject to the grounded read as computed framing', async () => {
-    const spy = vi
-      .spyOn(coachApi, 'groundedMoveFeedback')
-      .mockResolvedValue('grounded read');
-    await generateMoveCommentary({
-      gameAfter: gameAfter(['e4', 'c5']),
-      mover: 'b',
-      evalBefore: 20,
-      evalAfter: 25,
-      subject: 'Sicilian Najdorf',
-    });
-    expect(spy).toHaveBeenCalled();
-    const arg = spy.mock.calls[0]?.[0] as { extraFacts?: string } | undefined;
-    expect(arg?.extraFacts?.toLowerCase()).toContain('sicilian najdorf');
   });
 });
