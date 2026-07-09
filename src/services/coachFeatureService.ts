@@ -3,17 +3,11 @@ import { explainBestMoveGrounded, explainMoveOrder } from './groundedAnswer';
 import { detectBadHabits } from './badHabitDetector';
 import { db } from '../db/schema';
 import { voiceFacts } from './coachApi';
-import { buildChessContextMessage } from './coachPrompts';
-import { coachService } from '../coach/coachService';
-// REVIEW_MOVE_SEGMENT_ADDITION dropped in ship-3 — the per-ply segments
-// are now built deterministically from the engine annotations. See
-// `buildReviewSegments` / `generateReviewNarration` for the new path.
-import {
-  GAME_POST_REVIEW_ADDITION,
-  REVIEW_INTRO_ADDITION,
-} from './coachPrompts';
+// Post-game review narration is now GROUNDED (David 2026-07-09): the intro,
+// closing, and recap are COMPUTED from the engine annotations and phrased by
+// `voiceFacts` — no coachService.ask / free-LLM prose, no per-move segment
+// LLM call (those are deterministic via `buildReviewSegments`).
 import { logAppAudit } from './appAuditor';
-import { sanitizeCoachStream, sanitizeCoachText, unwrapSpineError } from './sanitizeCoachText';
 import { resolveCoachNarration } from '../utils/coachNarration';
 import type { BadHabit, CoachContext, UserProfile, CoachNarration } from '../types';
 
@@ -203,23 +197,8 @@ export interface NarrativeMoveData {
  *  analysis is empty. The UI surfaces this verbatim — do not prettify. */
 export const NARRATIVE_SUMMARY_NO_DATA = 'I need a moment to analyze this game. Tap Full Review for complete analysis.';
 
-/** Format a single move row for the grounded [Per-move analysis] block.
- *  Columns: full move number, color, SAN, eval before, eval after, best,
- *  classification. Every field is either derived from the move record or
- *  explicitly marked "n/a" so the LLM cannot invent the missing value. */
-function formatMoveRow(m: NarrativeMoveData, prevEvalCp: number | null, coachColor: 'White' | 'Black'): string {
-  const fullMove = Math.ceil(m.moveNumber / 2);
-  const moverColor: 'White' | 'Black' = m.moveNumber % 2 === 1 ? 'White' : 'Black';
-  const side = m.isCoachMove ? `${moverColor}/coach` : moverColor === coachColor ? `${moverColor}/coach` : `${moverColor}/student`;
-  const evalBefore = prevEvalCp !== null ? (prevEvalCp / 100).toFixed(2) : 'n/a';
-  const evalAfter = m.evaluation !== null ? (m.evaluation / 100).toFixed(2) : 'n/a';
-  const best = m.bestMove ?? 'n/a';
-  const classification = m.classification ?? 'unclassified';
-  return `Move ${fullMove}. ${m.san} (${side}) — eval before: ${evalBefore}, eval after: ${evalAfter}, best: ${best}, classification: ${classification}`;
-}
-
 export async function generateNarrativeSummary(
-  pgn: string,
+  _pgn: string,
   playerColor: string,
   openingName: string | null,
   result: string,
@@ -252,163 +231,82 @@ export async function generateNarrativeSummary(
     onStream?.(stub);
     return stub;
   }
-  // briefRules / fullRules are appended to GAME_POST_REVIEW_ADDITION
-  // so the spine prompt's grounding rules stay untouched. The verbosity
-  // delta is the LAST text the LLM reads, so it overrides the default
-  // 2-4 moments / 180 words ceiling baked into the addition.
-  const verbosityRules = verbosity === 'brief'
-    ? `\n\nVERBOSITY OVERRIDE — BRIEF: the student set Coach Narration to "Brief". Identify ONE moment only. Keep the entire summary to 1-2 short sentences (< 40 words total). Skip the "next-game tip" sentence. If you find yourself writing a second moment, STOP.`
-    : '';  // full → no override (existing GAME_POST_REVIEW_ADDITION rules apply)
-  const verbosityMaxTokens = verbosity === 'brief' ? 200 : 800;
+  // GROUNDED (David 2026-07-09: "check every spoken word path" / G0). The
+  // narrative recap is COMPUTED from the engine annotations (moveData) and
+  // phrased by voiceFacts — never free-composed by the LLM. Routing a PGN
+  // prompt through coachService.ask now trips the Q&A grounding seal (which
+  // serves a one-line position-default, NOT a game recap), so the facts are
+  // assembled here and voiced. The LLM only chooses words; every number,
+  // move, and classification below is code-computed.
+  const coachColor: 'White' | 'Black' = playerColor === 'white' ? 'Black' : 'White';
 
-  // Count errors across ALL student (non-coach) moves for the tone guide.
+  // Count errors across ALL student (non-coach) moves + collect the flagged
+  // moments (with the engine's preferred move + the eval swing) in ply order.
   let blunderCount = 0;
   let mistakeCount = 0;
   let inaccuracyCount = 0;
-  for (const m of moveData) {
-    if (m.isCoachMove) continue;
-    if (m.classification === 'blunder') blunderCount++;
-    else if (m.classification === 'mistake') mistakeCount++;
-    else if (m.classification === 'inaccuracy') inaccuracyCount++;
-  }
-  const totalErrors = blunderCount + mistakeCount + inaccuracyCount;
-  const toneGuide = totalErrors === 0
-    ? 'The student played cleanly — praise the accuracy without overclaiming brilliance.'
-    : totalErrors <= 2
-      ? 'Mostly solid play with a couple areas to improve. Be constructive.'
-      : `The student made ${totalErrors} errors (${blunderCount} blunders, ${mistakeCount} mistakes, ${inaccuracyCount} inaccuracies). Be honest about what went wrong — do NOT call the game "excellent" or "great". Focus on the specific errors and what to learn from them.`;
-
-  // Build a [Per-move analysis] block with EVERY move. Previously the
-  // filter limited this to blunders/mistakes/inaccuracies, which left
-  // the LLM free to invent narrative for unanalyzed moves — the
-  // hallucination mode WO-REVIEW-01 is fixing. Every move gets a row.
-  const coachColor: 'White' | 'Black' = playerColor === 'white' ? 'Black' : 'White';
-  const rows: string[] = [];
+  const keyMoments: string[] = [];
   let prevEvalCp: number | null = 0;
   for (const m of moveData) {
-    rows.push(formatMoveRow(m, prevEvalCp, coachColor));
+    const moverColor: 'White' | 'Black' = m.moveNumber % 2 === 1 ? 'White' : 'Black';
+    const isStudent = !m.isCoachMove && moverColor === coachColor;
+    if (isStudent && m.classification === 'blunder') blunderCount++;
+    else if (isStudent && m.classification === 'mistake') mistakeCount++;
+    else if (isStudent && m.classification === 'inaccuracy') inaccuracyCount++;
+    if (isStudent && (m.classification === 'blunder' || m.classification === 'mistake')) {
+      const fullMove = Math.ceil(m.moveNumber / 2);
+      const swing = prevEvalCp !== null && m.evaluation !== null
+        ? ` (the evaluation moved from ${(prevEvalCp / 100).toFixed(1)} to ${(m.evaluation / 100).toFixed(1)})`
+        : '';
+      keyMoments.push(
+        `On move ${fullMove}, ${m.san} was a ${m.classification}${m.bestMove ? `; the engine preferred ${m.bestMove}` : ''}${swing}.`,
+      );
+    }
     prevEvalCp = m.evaluation;
   }
+  const totalErrors = blunderCount + mistakeCount + inaccuracyCount;
 
-  const perMoveBlock = `[Per-move analysis]\n${rows.join('\n')}`;
-  const resultLine = `Game result: ${result}.`;
-  const openingLine = openingName
-    ? `Opening: ${openingName}.`
-    : 'Opening: (not classified).';
-  const playerLine = `Student color: ${playerColor}. Student rating: ~${playerRating}.`;
-  const errorSummary = `Student errors — blunders: ${blunderCount}, mistakes: ${mistakeCount}, inaccuracies: ${inaccuracyCount}.`;
+  // Result → student-relative outcome (computed, not asked).
+  const outcomeClause =
+    result === '1-0' || result === '0-1'
+      ? (result === '1-0') === (playerColor === 'white')
+        ? 'The student won.'
+        : 'The student lost.'
+      : result === '1/2-1/2' || result === '½-½'
+        ? 'The game was a draw.'
+        : `The game ended ${result}.`;
+  const openingClause = openingName ? `the ${openingName}` : 'this game';
 
-  const userMessage = [
-    playerLine,
-    openingLine,
-    resultLine,
-    errorSummary,
-    `Tone: ${toneGuide}`,
-    '',
-    perMoveBlock,
-    '',
-    `PGN: ${pgn}`,
-  ].join('\n');
+  // Verbosity caps the number of moments named (brief = 1) — the SAME hard
+  // contract the old prompt tried to hint at, now enforced in code (G5).
+  const momentBudget = verbosity === 'brief' ? 1 : 3;
+  const errorClause =
+    totalErrors === 0
+      ? 'The engine flagged no blunders, mistakes, or inaccuracies — the student played cleanly.'
+      : `The student made ${blunderCount} blunder(s), ${mistakeCount} mistake(s), and ${inaccuracyCount} inaccuracy/inaccuracies.`;
+  const tipClause =
+    totalErrors === 0
+      ? 'Reinforce the accuracy and pick one sharper idea to try next game.'
+      : 'The one thing to carry into the next game is to slow down on the flagged moment(s).';
 
-  // WO-COACH-UNIFY-01 Review-tab parity: route through coachService.ask
-  // with surface='review' so the unified envelope (REVIEW_MODE_ADDITION
-  // identity + memory + live-state) wraps every Review-tab LLM call —
-  // same shape as /coach/teach and /coach/play. GAME_POST_REVIEW_ADDITION
-  // threads as systemPromptAddition. Empty string on provider error
-  // preserves the legacy "graceful blank" contract.
-  // Extract both the final FEN and the SAN history from the PGN so
-  // the brain envelope can carry moveHistory + opening grounding
-  // alongside the asked text. The annotation-context loader in
-  // coachService.ask keys off moveHistory.length > 0 (or
-  // lichessSnapshot.name) to pull the matching opening-book passages,
-  // so without these the post-game summary fires book-blind.
-  const { finalFen, moveHistory } = (() => {
-    try {
-      const chess = new Chess();
-      chess.loadPgn(pgn);
-      return { finalFen: chess.fen(), moveHistory: chess.history() };
-    } catch {
-      return { finalFen: undefined as string | undefined, moveHistory: [] as string[] };
-    }
-  })();
-  const reviewLichessSnapshot = openingName
-    ? {
-        eco: '',
-        name: openingName,
-        topAmateurMoves: [],
-        topMasterMoves: [],
-        topMasterGames: [],
-      }
-    : undefined;
-  // Defense-in-depth: even with suppressSurfaceMode the brain occasionally
-  // emits `[[ACTION:...]]` / `[BOARD:...]` markers (seen in prod on the
-  // Review summary card — chesscom-971406909 leaked a raw
-  // `[[ACTION:record_blunder ...]]` into the rendered bubble). Wrap the
-  // stream callback with `sanitizeCoachStream` so partial markers buffer
-  // until they close, and run `sanitizeCoachText` over the final text.
-  let markupBuffer = '';
-  const wrappedOnStream = onStream
-    ? (chunk: string) => {
-        markupBuffer += chunk;
-        const { safe, pending } = sanitizeCoachStream(markupBuffer);
-        markupBuffer = pending;
-        if (safe) onStream(safe);
-      }
-    : undefined;
+  const factParts =
+    verbosity === 'brief'
+      ? [
+          `Post-game recap of ${openingClause}. ${outcomeClause}`,
+          errorClause,
+          ...keyMoments.slice(0, momentBudget),
+        ]
+      : [
+          `Post-game recap of ${openingClause} (student rated about ${playerRating}). ${outcomeClause}`,
+          errorClause,
+          ...keyMoments.slice(0, momentBudget),
+          tipClause,
+        ];
+  const facts = factParts.filter(Boolean).join(' ');
 
-  const spineAnswer = await coachService.ask(
-    {
-      surface: 'review',
-      ask: userMessage,
-      liveState: {
-        surface: 'review',
-        fen: finalFen,
-        moveHistory,
-        lichessSnapshot: reviewLichessSnapshot,
-        userJustDid: 'Reviewing the completed game',
-        whoseTurn: finalFen?.split(' ')[1] === 'b' ? 'black' : 'white',
-      },
-    },
-    {
-      // chat_response (not game_narrative_summary) so the spine
-      // envelope doesn't push deepseek-reasoner into empty-content.
-      // See the segments call below for the full rationale.
-      task: 'chat_response',
-      // Verbosity-driven cap. Brief mode pulls the ceiling down so
-      // the brain doesn't generate 800 tokens we then truncate to
-      // 1-2 sentences. Full mode keeps the existing budget.
-      maxTokens: verbosityMaxTokens,
-      maxToolRoundTrips: 1,
-      // Appending verbosity rules AFTER the base addition so the
-      // override is the last instruction the brain reads. Empty
-      // string for full mode is a no-op.
-      systemPromptAddition: GAME_POST_REVIEW_ADDITION + verbosityRules,
-      // GAME_POST_REVIEW_ADDITION wants grounded prose; surface block's
-      // [VOICE:] / [BOARD:] marker mandate would leak markers into the
-      // streamed summary card. Memory + live-state still inject.
-      suppressSurfaceMode: true,
-      // Drop the toolbelt entirely — this is pure narrative over the
-      // pre-computed `moveData`. The brain has no live board to mutate
-      // and no reason to call `record_blunder` / `stockfish_eval` /
-      // `lichess_*`. Removing the toolbelt block removes the
-      // `[[ACTION:...]]` preamble that the brain was honoring (audit:
-      // chesscom-971406909 streamed `[[ACTION:record_blunder ...]]`
-      // into the rendered bubble — display-layer strip catches the
-      // leak, this stops the brain from emitting it in the first place).
-      suppressToolbelt: true,
-      onChunk: wrappedOnStream,
-    },
-  );
-
-  // Flush any text still held in the streaming buffer (a half-arrived
-  // marker that never closed, or trailing prose).
-  if (onStream && markupBuffer) {
-    const tail = sanitizeCoachText(markupBuffer);
-    if (tail) onStream(tail);
-    markupBuffer = '';
-  }
-
-  return sanitizeCoachText(unwrapSpineError(spineAnswer.text));
+  const voiced = (await voiceFacts(facts, { intent: `review-recap:${verbosity}`, warm: true })) ?? facts;
+  onStream?.(voiced);
+  return voiced;
 }
 
 // ─── Review Narration Segments ─────────────────────────────────────────────
@@ -419,135 +317,72 @@ export interface ReviewNarrationSegments {
 }
 
 export async function generateReviewNarrationSegments(
-  pgn: string,
+  _pgn: string,
   playerColor: string,
   openingName: string | null,
   result: string,
   playerRating: number,
   moveData?: NarrativeMoveData[],
 ): Promise<ReviewNarrationSegments> {
-  let analysisContext = '';
-  if (moveData && moveData.length > 0) {
-    const keyMoves = moveData.filter((m) =>
-      !m.isCoachMove && m.classification &&
-      m.classification !== 'good' && m.classification !== 'book',
-    );
-    if (keyMoves.length > 0) {
-      analysisContext = '\n\nEngine analysis of key moments:\n' +
-        keyMoves.map((m) => {
-          const evalText = m.evaluation !== null ? ` (eval: ${(m.evaluation / 100).toFixed(1)})` : '';
-          const bestText = m.bestMove ? `, best was ${m.bestMove}` : '';
-          return `- Move ${Math.ceil(m.moveNumber / 2)} ${m.san}: ${m.classification}${evalText}${bestText}`;
-        }).join('\n');
+  // GROUNDED (David 2026-07-09: "check every spoken word path"). The intro +
+  // closing are COMPUTED from the engine analysis (moveData) and voiced — not
+  // free-LLM JSON generation (which the Q&A grounding seal now correctly
+  // intercepts, breaking the old path). The facts are the opening, the
+  // student-relative outcome, the error counts, and the flagged key moments;
+  // voiceFacts phrases them warmly. The `_pgn` is unused — moveData carries
+  // every fact the narration needs (G0: nothing is re-derived from the PGN).
+  const coachColor: 'White' | 'Black' = playerColor === 'white' ? 'Black' : 'White';
+  let blunders = 0;
+  let mistakes = 0;
+  let inaccuracies = 0;
+  const keyMoments: string[] = [];
+  for (const m of moveData ?? []) {
+    const moverColor: 'White' | 'Black' = m.moveNumber % 2 === 1 ? 'White' : 'Black';
+    // Only the STUDENT's own errors are the review's subject (a coach/opponent
+    // slip isn't the student's lesson).
+    if (m.isCoachMove || moverColor !== coachColor) continue;
+    if (m.classification === 'blunder') {
+      blunders += 1;
+      keyMoments.push(`move ${Math.ceil(m.moveNumber / 2)} ${m.san} (a blunder${m.bestMove ? `; the engine preferred ${m.bestMove}` : ''})`);
+    } else if (m.classification === 'mistake') {
+      mistakes += 1;
+    } else if (m.classification === 'inaccuracy') {
+      inaccuracies += 1;
     }
   }
+  const total = blunders + mistakes + inaccuracies;
+  const openingClause = openingName ? `the ${openingName}` : 'this game';
+  const outcomeClause =
+    result === '1-0' || result === '0-1'
+      ? (result === '1-0') === (playerColor === 'white')
+        ? 'The student won.'
+        : 'The student lost.'
+      : result === '1/2-1/2' || result === '½-½'
+        ? 'The game was a draw.'
+        : `The game ended ${result}.`;
 
-  const context: CoachContext = {
-    fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
-    lastMoveSan: null,
-    moveNumber: 0,
-    pgn,
-    openingName,
-    stockfishAnalysis: null,
-    playerMove: null,
-    moveClassification: null,
-    playerProfile: {
-      rating: playerRating,
-      weaknesses: [],
-    },
-    additionalContext: `Player color: ${playerColor}. Game result: ${result}.
-Generate two short narration segments for a move-by-move game review (2-3 sentences each, spoken aloud):
+  const introFacts = [
+    `This is a review of ${openingClause} (student rated about ${playerRating}). ${outcomeClause}`,
+    total > 0
+      ? `The engine flagged ${total} moment(s) to look at — ${blunders} blunder(s) and ${mistakes} mistake(s).`
+      : 'The engine flagged no significant errors in this game.',
+    keyMoments.length > 0 ? `Watch especially for ${keyMoments.slice(0, 2).join(', and ')}.` : '',
+  ].filter(Boolean).join(' ');
 
-1. INTRO: Spoken before any moves play. Set the scene — mention the opening, early impressions, and what to watch for.
-2. CLOSING: Spoken after the last move. Summarize takeaways — what went well, what to improve, and an encouraging note.
+  const verdict =
+    blunders >= 2 ? 'There were several blunders to address.'
+    : blunders === 1 ? 'One blunder was the main turning point.'
+    : total <= 1 ? 'This was cleanly played.'
+    : 'A solid game with a few things to tighten up.';
+  const closingFacts = [
+    `In this game: ${blunders} blunder(s), ${mistakes} mistake(s), ${inaccuracies} inaccuracy/inaccuracies.`,
+    verdict,
+    'Keep practicing and learning from each game.',
+  ].join(' ');
 
-Respond ONLY with valid JSON: {"intro": "...", "closing": "..."}
-Do not include any other text outside the JSON.${analysisContext}`,
-  };
-
-  // WO-COACH-UNIFY-01 final review-tab parity: route through
-  // coachService.ask with surface='review' so this prep call ALSO
-  // rides the unified envelope (REVIEW_MODE_ADDITION + memory +
-  // live-state). Was the last legacy LLM caller in the Review path.
-  // The JSON-only instruction lives inside `context.additionalContext`,
-  // so it ends up in the user message via buildChessContextMessage —
-  // identical wire shape as the legacy getCoachCommentary call.
-  const userMessage = buildChessContextMessage(context);
-  // Pull moveHistory + opening grounding into liveState so the
-  // book-context loader has something to anchor on. Without this
-  // the intro/closing call fires book-blind and the narration
-  // misses the curated Capablanca/Lasker passages we pre-loaded.
-  const { segmentsHistory } = (() => {
-    try {
-      const chess = new Chess();
-      chess.loadPgn(pgn);
-      return { segmentsHistory: chess.history() };
-    } catch {
-      return { segmentsHistory: [] as string[] };
-    }
-  })();
-  const segmentsLichessSnapshot = openingName
-    ? {
-        eco: '',
-        name: openingName,
-        topAmateurMoves: [],
-        topMasterMoves: [],
-        topMasterGames: [],
-      }
-    : undefined;
-  let raw = '';
-  try {
-    const spineAnswer = await coachService.ask(
-      {
-        surface: 'review',
-        ask: userMessage,
-        liveState: {
-          surface: 'review',
-          fen: context.fen,
-          moveHistory: segmentsHistory,
-          lichessSnapshot: segmentsLichessSnapshot,
-          userJustDid: 'Generating intro/closing narration for the review',
-        },
-      },
-      {
-        // chat_response avoids the deepseek-reasoner empty-content
-        // regression — see segments call for full rationale.
-        task: 'chat_response',
-        maxTokens: 800,
-        maxToolRoundTrips: 1,
-        // The user message asks for `{"intro":..., "closing":...}` JSON
-        // only. REVIEW_MODE_ADDITION's [VOICE:] / [BOARD:] marker
-        // mandate fights that. Skip the surface block so the JSON
-        // contract wins; memory + live-state still load.
-        suppressSurfaceMode: true,
-        // JSON-only response — no tools needed. Skip the toolbelt
-        // block so the brain doesn't pad the JSON with `[[ACTION:...]]`
-        // tags that fight the parser (same disease as the narrative-
-        // summary leak in chesscom-971406909).
-        suppressToolbelt: true,
-      },
-    );
-    raw = unwrapSpineError(spineAnswer.text);
-  } catch {
-    // Fall through to the deterministic fallback below.
-  }
-  try {
-    // Extract JSON from the response (may have markdown fences).
-    const jsonMatch = raw.match(/\{[\s\S]*\}/);
-    if (jsonMatch) {
-      const parsed = JSON.parse(jsonMatch[0]) as { intro: string; closing: string };
-      return { intro: parsed.intro, closing: parsed.closing };
-    }
-  } catch {
-    // Fallback: split the text in half
-  }
-  // Fallback if parsing fails
-  return {
-    intro: openingName
-      ? `Let's review this game. You played the ${openingName}.`
-      : `Let's walk through this game together.`,
-    closing: 'That wraps up the review. Keep practicing and learning from each game!',
-  };
+  const intro = (await voiceFacts(introFacts, { intent: 'review-intro', warm: true })) ?? introFacts;
+  const closing = (await voiceFacts(closingFacts, { intent: 'review-closing', warm: true })) ?? closingFacts;
+  return { intro, closing };
 }
 
 // ─── Build Context from Profile ─────────────────────────────────────────────
@@ -1003,16 +838,10 @@ function defaultIntroText(params: {
  * narration voice rules; templated prose on inaccuracy/mistake/blunder/
  * brilliant with stem rotation to avoid repetition.
  *
- * The intro LLM call is preserved — it's short (200 tokens), useful
- * framing, and doesn't load-bear the per-ply experience. If it fails,
- * a deterministic default intro covers the gap.
+ * The intro is the deterministic, outcome-grounded `defaultIntroText`,
+ * warmed by `voiceFacts` (never free-composed); if the warming pass
+ * misses, the deterministic text is spoken verbatim.
  */
-/** Max wait for the optional LLM intro prose before the review walk mounts
- *  with the deterministic intro fallback. The per-ply segments (and the
- *  best-move display) don't need the LLM, so this only bounds the opening
- *  sentence — kept short so a cold-prod brain stall can't gate the walk. */
-const REVIEW_INTRO_TIMEOUT_MS = 8000;
-
 export async function generateReviewNarration(params: {
   moves: ReviewMoveInput[];
   playerColor: 'white' | 'black';
@@ -1051,87 +880,19 @@ export async function generateReviewNarration(params: {
     };
   }
 
-  const introUserMessage = [
-    `Student color: ${playerColor}.`,
-    `Game result: ${result}.`,
-    openingName ? `Opening: ${openingName}.` : 'Opening: (not classified).',
-    `Student errors: ${mistakeCount} (blunders + mistakes + inaccuracies).`,
-  ].join('\n');
-
-  // Per-ply segments are now built deterministically from the engine
-  // annotations — no LLM round-trip. The intro LLM call still rides
-  // the unified envelope so it picks up memory + live-state context.
-  // Thread moveHistory + opening grounding so the book-context loader
-  // pulls the curated annotation passages for this opening into the
-  // envelope — the intro narration becomes Capablanca/Lasker-grounded
-  // instead of LLM-freestyle.
-  const introMoveHistory = moves
-    .slice(0, usableCount)
-    .map((m) => m.san)
-    .filter((san): san is string => typeof san === 'string' && san.length > 0);
-  const introLichessSnapshot = openingName
-    ? {
-        eco: '',
-        name: openingName,
-        topAmateurMoves: [],
-        topMasterMoves: [],
-        topMasterGames: [],
-      }
-    : undefined;
-  const reviewLiveState = {
-    surface: 'review' as const,
-    fen: fenChain[fenChain.length - 1]?.fenAfter,
-    moveHistory: introMoveHistory,
-    lichessSnapshot: introLichessSnapshot,
-    userJustDid: 'Opening review of the completed game (prep scan)',
-  };
-  // Silent mode: skip the LLM intro entirely (speakInternal silences
-  // playback anyway, so the spent tokens would be invisible). Falls
-  // through to the deterministic defaultIntroText below.
+  // Intro narration — GROUNDED (David 2026-07-09 "check every spoken word
+  // path" / G0). The intro is the deterministic, outcome-grounded
+  // `defaultIntroText`; voiceFacts only WARMS the phrasing (it never adds a
+  // chess fact). It NO LONGER routes through coachService.ask — that path now
+  // hits the Q&A grounding seal (which serves a one-line position-eval, NOT a
+  // review intro) and would also stall the walk on a cold-prod brain. Silent
+  // verbosity skips the warming pass (playback is silenced anyway); on any
+  // voiceFacts miss we speak the deterministic default verbatim.
+  const groundedIntro = defaultIntroText({ playerColor, result, openingName, mistakeCount });
   const skipIntroLlm = coachNarration === 'silent';
-  // Brief mode: cap the intro at ~80 tokens so the spoken line stays
-  // tight (~1 sentence). Full mode keeps the 200-token allowance.
-  const introMaxTokens = coachNarration === 'brief' ? 80 : 200;
-  // 🔒 NEVER block the walk on the intro prose (David 2026-06-05). The
-  // per-ply segments below are DETERMINISTIC (no LLM) and carry the
-  // best-move / classification the walk renders — but this intro is a
-  // single LLM round-trip, and on a cold prod context it can hang well
-  // past a minute, so the whole narration (and therefore the walk view +
-  // every per-move best-move) never became ready (all 5 review samples
-  // stalled >75s in the 2026-06-05 prod drive). Race the intro against a
-  // short timeout: if it's fast you get the LLM prose; if not, fall back
-  // to the grounded defaultIntroText immediately so the walk mounts in
-  // seconds and the best-move display is reachable.
-  const introLlmPromise = skipIntroLlm
-    ? Promise.resolve('')
-    : coachService.ask(
-      {
-        surface: 'review',
-        ask: introUserMessage,
-        liveState: reviewLiveState,
-      },
-      {
-        task: 'chat_response',
-        maxTokens: introMaxTokens,
-        maxToolRoundTrips: 1,
-        systemPromptAddition: REVIEW_INTRO_ADDITION,
-        // REVIEW_INTRO_ADDITION asks for prose only; REVIEW_MODE_ADDITION
-        // (surface block) mandates [VOICE:] / [BOARD:] markers per turn.
-        // Keep memory + live-state injection via surface='review', but
-        // skip the surface mode block so the prose-only contract wins.
-        suppressSurfaceMode: true,
-        // Intro prose has no use for tools — drop the toolbelt to
-        // remove the `[[ACTION:...]]` temptation (audit:
-        // chesscom-971406909).
-        suppressToolbelt: true,
-      },
-    ).then((a) => unwrapSpineError(a.text)).catch(() => '');
   const introRaw = skipIntroLlm
     ? ''
-    : await Promise.race([
-      introLlmPromise,
-      new Promise<string>((resolve) => setTimeout(() => resolve(''), REVIEW_INTRO_TIMEOUT_MS)),
-    ]).catch(() => '');
+    : (await voiceFacts(groundedIntro, { intent: 'review-intro', warm: true }).catch(() => '')) ?? '';
 
   // Intro: use LLM response if non-empty and not the ⚠️ error placeholder;
   // else fall back to a grounded default.
