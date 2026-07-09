@@ -934,9 +934,10 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
         <CoachGameplaySection profile={profile} setProfile={setProfile} />
       </SettingsModalRow>
 
-      {/* Row 3 (inline): Voice & Personality. PersonalityPanel is now
-       *  rendered INSIDE VoiceSettingsPanel between the Coach Voice
-       *  toggle and the Cloud Voice section, per WO-SETTINGS-CLEANUP. */}
+      {/* Row 3 (inline): Voice. The coach speaks in ONE house voice (the
+       *  2026-07-06 voice law), so the Coach Personality picker was removed
+       *  (David 2026-07-09) — VoiceSettingsPanel now carries only the voice
+       *  toggle + Cloud Voice section. */}
       <div className="pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
         <VoiceSettingsPanel />
       </div>

@@ -5,7 +5,6 @@ import { POLLY_VOICES, getTtsUrl, voiceService, sanitizeForTTS, type VoiceTier }
 import { speechService } from '../../services/speechService';
 import type { SystemVoice } from '../../services/speechService';
 import { Volume2, Play, Mic, Sparkles, AlertCircle } from 'lucide-react';
-import { PersonalityPanel } from './PersonalityPanel';
 
 /** Curated quality voice names — prioritized at top of system voice list */
 const QUALITY_VOICES = [
@@ -210,10 +209,10 @@ export function VoiceSettingsPanel(): JSX.Element {
         </p>
       </div>
 
-      {/* ── Coach Personality (between Coach Voice and Cloud Voice) ── */}
-      {activeProfile && (
-        <PersonalityPanel profile={activeProfile} setProfile={setActiveProfile} />
-      )}
+      {/* Coach Personality picker REMOVED (David 2026-07-09): the coach speaks
+          in ONE depersonalized house voice (the 2026-07-06 voice law), so the
+          personality dials are vestigial. The stored prefs default to the house
+          voice for every consumer. */}
 
       {/* ── Amazon Polly (Cloud Voice) ──────────────────────────── */}
       <div className="space-y-3">
