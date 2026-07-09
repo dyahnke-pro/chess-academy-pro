@@ -6,7 +6,7 @@ import { buildTacticsLiveContext, buildFedTacticsContext } from '../../services/
 import { validateTacticClaims, stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
 import { stripDisprovenSentences } from '../../services/boardClaimValidator';
 import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech } from '../../services/sanitizeCoachText';
-import { routeChatIntent } from '../../services/coachSessionRouter';
+import { dispatchCoachTurn } from '../../coach/dispatchCoachTurn';
 import { detectNarrationToggle, applyNarrationToggle } from '../../services/coachAgentRunner';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { extractMoveArrows } from '../../services/coachMoveExtractor';
@@ -15,7 +15,7 @@ import { detectInGameChatIntent } from '../../services/inGameChatIntent';
 import { tryCaptureForgetIntent, tryCaptureOpeningIntent } from '../../services/openingIntentCapture';
 import { tryRouteIntent } from '../../services/coachIntentRouter';
 import { parseActions } from '../../services/coachActionDispatcher';
-import { coachService, isPlanQuestion } from '../../coach/coachService';
+import { isPlanQuestion } from '../../coach/coachService';
 import { buildEnginePlan } from '../../services/enginePlanContext';
 import { withTimeout } from '../../coach/withTimeout';
 import type { LiveState, TacticsLiveContext } from '../../coach/types';
@@ -635,44 +635,13 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         }
       }
 
-      // Intent routing: outside of an active game, let "play against me",
-      // "explain this position", etc. launch dedicated sessions instead of
-      // running through the chat LLM. We skip routing mid-game so the
+      // Intent routing (settings toggles, "take me to X", session starts)
+      // now runs INSIDE dispatchCoachTurn on the game-over / drawer branch
+      // below — the ONE shared action router (remove-old-wiring rule). The
+      // mid-game branch deliberately skips it (skipActionRouter: true) so the
       // in-game chat stays in-game — the user can finish their move first.
-      if (isGameOver) {
-        try {
-          // Grab the most recent assistant message so the router can
-          // detect "coach proposed a game → user said yes". Walk back
-          // from the end of the existing chat history (pre-userMsg).
-          const lastAssistantMessage = [...messagesRef.current]
-            .reverse()
-            .find((m) => m.role === 'assistant')?.content;
-          const routed = await routeChatIntent(text, { currentFen: fen, lastAssistantMessage });
-          if (routed) {
-            const ackMsg: ChatMessageType = {
-              id: `gmsg-${Date.now()}-ack`,
-              role: 'assistant',
-              content: routed.ackMessage,
-              timestamp: Date.now(),
-            };
-            setMessages([...updatedMessages, ackMsg]);
-            recordCoachAck(routed.ackMessage);
-            // Reply-only routes (no `path`) just inject the ack as the
-            // coach's response and stay in chat — used for cases like
-            // "review my last Catalan" when the user has no Catalan
-            // games. The ack ends with a play-game offer so the user's
-            // next "yes" hits the affirmation-after-proposal path.
-            if (routed.path) {
-              void navigate(routed.path);
-            }
-            return;
-          }
-        } catch (err: unknown) {
-          console.warn('[GameChatPanel] intent routing failed:', err);
-        }
-      }
 
-      // ── WO-BRAIN-02 — IN-GAME BRANCH ROUTES THROUGH coachService ─────
+      // ── WO-BRAIN-02 — IN-GAME BRANCH ROUTES THROUGH THE SPINE ────────
       // Mid-game chat goes through the unified Coach Brain spine. The
       // envelope assembled in coachService.ask carries the four sources
       // of truth (identity, memory, app map, live state) plus the full
@@ -789,9 +758,13 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           // shared withTimeout so a hung spine surfaces a graceful
           // error to the user instead of a forever-spinning indicator.
           const askResult = await withTimeout(
-            coachService.ask(
+            dispatchCoachTurn(
             { surface: 'game-chat', ask: text, liveState },
             {
+              // Mid-game: run the SAME spine every surface uses, but skip the
+              // deterministic action router — a "take me to X" mid-game must
+              // not yank the user off their game before they finish the move.
+              skipActionRouter: true,
               // WO-COACH-GROUNDING (PR #338 part C): chat surfaces need
               // multiple round-trips so the brain can call stockfish_eval
               // (or any cerebellum lookup), see the result, and synthesize
@@ -1068,7 +1041,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             onBoardAnnotation?.(annotations);
           }
         } catch (err: unknown) {
-          console.error('[GameChatPanel] coachService.ask failed:', err);
+          console.error('[GameChatPanel] dispatchCoachTurn failed:', err);
           const errMsg: ChatMessageType = {
             id: `gmsg-${Date.now()}-err`,
             role: 'assistant',
@@ -1123,10 +1096,20 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         });
         // WO-COACH-RESILIENCE: same withTimeout wrap as the in-game
         // branch.
+        // Grab the most recent assistant message so the action router (run
+        // inside dispatchCoachTurn) can detect "coach proposed a game → user
+        // said yes" — the affirmation flow the deleted pre-pass used to own.
+        const lastAssistantMessage = [...messagesRef.current]
+          .reverse()
+          .find((m) => m.role === 'assistant')?.content;
         const drawerAskResult = await withTimeout(
-          coachService.ask(
+          dispatchCoachTurn(
           { surface: 'home-chat', ask: text, liveState: drawerLiveState },
           {
+            // Full dispatch (action router ON): settings toggles, "take me to
+            // X", session starts route deterministically here — replacing the
+            // hand-rolled routeChatIntent pre-pass (remove-old-wiring rule).
+            lastAssistantMessage,
             // WO-COACH-GROUNDING (PR #338 part C): see the in-game branch
             // above for rationale. Drawer surface needs the same budget
             // so tactical questions during a walkthrough or pre-game
@@ -1324,7 +1307,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           trigger: null,
         });
       } catch (err: unknown) {
-        console.error('[GameChatPanel] coachService.ask (drawer) failed:', err);
+        console.error('[GameChatPanel] dispatchCoachTurn (drawer) failed:', err);
         const errMsg: ChatMessageType = {
           id: `gmsg-${Date.now()}-err`,
           role: 'assistant',
