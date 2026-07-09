@@ -77,6 +77,35 @@ author `noreply@anthropic.com`):**
   extracted in navigationRouter (DRY with matchNavigationRoute). Tests green.
   **Next: #4 F9/F12 tactics-teaching, then verify P-families (#5), Phase 3b
   commentary (#6), Phase 4 audit + single push to main (#7).**
+- ⏭️ **Item #4 — SKIPPED (David 2026-07-09).** F9/F12 tactics-teaching overlaps
+  the already-shipped concept family (F14): the concept assembler already
+  answers "what's a fork / back-rank mate / smothered mate" from the book
+  corpus, and those mate-pattern names ARE present in `chess-concepts.json`.
+  Marginal new value + real collision risk → deprioritized. Revisit only if a
+  gap shows.
+- ✅ **Item #5 — P-family store-reach VERIFICATION done (2026-07-09).** Every
+  P-family reaches its PRIMARY store correctly — NO broken wiring. The "partial"
+  status is unread SECONDARY stores, each a new-family-sized enhancement (not a
+  bug). Ranked gaps for a future pass:
+  - **F10 endgame (HIGH):** the dispatch (`coachApi.ts` ~3155) voices only the
+    SYZYGY tablebase verdict for a ≤7-piece FEN. The 4 endgame TEACHING stores
+    (`endgame-principles.json`, `pawn-endings.json`, `rook-endings.json`,
+    `drawn-patterns.json`) are UNREAD, so a technique question ("how do I win a
+    rook ending", no tablebase FEN) falls through to the free LLM — a genuine G0
+    hole. Highest-value follow-up: an endgame-technique assembler over those 4
+    stores, dispatched when the tablebase misses.
+  - **F6 books/library (MED):** `bookGrounding` injects book pages as AMBIENT
+    context (~3266) but there is no dedicated `assembleBookAnswer` for "what does
+    <book> say about <topic>" → it's context, not a grounded answer.
+  - **F2 pro-games (MED):** `assemblePlayerGamesAnswer` reaches
+    `proGameReferences` (count + standout game) but not the pro-rep SPINE/persona
+    ("how does <pro> play the <opening>" as a move-by-move walk).
+  - **F1 openings (LOW):** sublines / tab-order / gambit-ideas unread.
+  - **F7/F8 traps (LOW):** the chat traps answer voices OpeningRecord
+    trapLines/warningLines (correct for chat); punish-gems / common-mistakes are
+    WLPP surfaces, not chat — intentionally not voiced here.
+  - Fully wired, no gap: F5 plan (middlegame-plans.json), F14 concept
+    (chess-concepts.json), F3 master-play (openings-masters-db.json).
 
 **REMAINING work (in priority order):**
 1. ✅ **GameChatPanel** → `dispatchCoachTurn`, DELETE its hand-rolled
