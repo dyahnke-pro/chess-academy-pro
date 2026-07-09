@@ -16,7 +16,7 @@ import { Chess } from 'chess.js';
 import type { Square, PieceSymbol } from 'chess.js';
 import { seeGain } from './positionReadingService';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
-import type { BadHabit, LessonScript } from '../types';
+import type { BadHabit, LessonScript, MoveAnnotation } from '../types';
 import type { MasterPlayResult } from './masterPlayTypes';
 import type { ConceptEntry } from './chessConceptService';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
@@ -1832,4 +1832,60 @@ export function assembleSkillRadarAnswer(s: SkillRadarLike): GroundedAnswer | nu
       : '') +
     (worst ? ` Put your training into ${worst.name}.` : '');
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+}
+
+/**
+ * assembleGameReviewAnswer — GROUNDED whole-game review from the COMPUTED engine
+ * annotations (David 2026-07-09: "rip out the hallucinations"). The old review
+ * free-LLM'd a narrative over the PGN ("explain WHY it was bad") — invented
+ * reasoning. Here every fact is the engine's: the result, the error counts, and
+ * each critical moment's move + eval + the engine's preferred move. The LLM only
+ * phrases these; it never reasons about the game. Returns null when there are no
+ * annotations to ground on.
+ */
+export function assembleGameReviewAnswer(opts: {
+  white: string;
+  black: string;
+  result: string;
+  moveCount: number;
+  annotations: MoveAnnotation[] | null;
+}): GroundedAnswer | null {
+  const anns = opts.annotations;
+  if (!anns || anns.length === 0) return null;
+  const blunders = anns.filter((a) => a.classification === 'blunder');
+  const mistakes = anns.filter((a) => a.classification === 'mistake');
+  const inaccuracies = anns.filter((a) => a.classification === 'inaccuracy');
+  const total = blunders.length + mistakes.length + inaccuracies.length;
+
+  const parts: string[] = [
+    `Game: ${opts.white} (White) vs ${opts.black} (Black). Result: ${opts.result}. About ${opts.moveCount} moves.`,
+    `Engine analysis (Stockfish): ${blunders.length} blunder(s), ${mistakes.length} mistake(s), ${inaccuracies.length} inaccuracy/inaccuracies.`,
+  ];
+
+  // Each critical moment is grounded: the move played, the eval AFTER it, and the
+  // engine's preferred move. No free "why" — the eval swing + the better move ARE
+  // the why.
+  const critical = anns.filter(
+    (a) => a.classification === 'blunder' || a.classification === 'mistake' || a.classification === 'brilliant',
+  );
+  if (critical.length > 0) {
+    parts.push('Critical moments:');
+    for (const m of critical.slice(0, 8)) {
+      const dot = m.color === 'black' ? '…' : '.';
+      const evalStr = m.evaluation !== null ? `eval ${m.evaluation > 0 ? '+' : ''}${(m.evaluation / 100).toFixed(1)} for White` : '';
+      const bestStr = m.bestMove ? `the engine preferred ${m.bestMove}` : '';
+      parts.push(`- Move ${m.moveNumber}${dot} ${m.san} — ${m.classification.toUpperCase()}${evalStr ? `, ${evalStr}` : ''}${bestStr ? `; ${bestStr}` : ''}.`);
+    }
+  }
+
+  // Honest, computed calibration — never "well played" when the engine disagrees.
+  const verdict =
+    blunders.length >= 2 ? 'Multiple blunders — significant issues to address.'
+    : blunders.length === 1 ? 'One blunder was the main turning point.'
+    : mistakes.length >= 2 ? 'A few mistakes cost ground.'
+    : total <= 1 ? 'Cleanly played — very few engine-flagged errors.'
+    : 'A solid game with a few inaccuracies to tighten up.';
+  parts.push(verdict);
+
+  return { facts: parts.join('\n'), bestMoveSan: null, bestMoveFromTo: null, sources: ['engine:stockfish'] };
 }
