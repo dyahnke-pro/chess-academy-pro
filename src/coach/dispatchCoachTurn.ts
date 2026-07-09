@@ -21,7 +21,7 @@
  * ExplainPosition) gain the full action set by adopting it.
  */
 import { coachService, type CoachServiceOptions } from './coachService';
-import type { CoachAskInput, CoachAnswer, ProviderName } from './types';
+import type { CoachAskInput, CoachAnswer } from './types';
 import { routeChatIntent } from '../services/coachSessionRouter';
 
 export interface DispatchCoachTurnOptions extends CoachServiceOptions {
@@ -52,7 +52,7 @@ export async function dispatchCoachTurn(
           text: routed.ackMessage,
           toolCallIds: [],
           dispatchedToolNames: routed.path ? ['navigate_to_route'] : [],
-          provider: (options.provider ?? 'deepseek') as ProviderName,
+          provider: options.provider ?? 'deepseek',
           ...(routed.path ? { actionOffer: [{ type: 'navigate', id: routed.path }] } : {}),
         };
       }
