@@ -2,8 +2,7 @@ import { Chess } from 'chess.js';
 import { explainBestMoveGrounded, explainMoveOrder } from './groundedAnswer';
 import { detectBadHabits } from './badHabitDetector';
 import { db } from '../db/schema';
-import { getCoachCommentary } from './coachApi';
-import { groundCoachReply } from './coachAnswerGates';
+import { voiceFacts } from './coachApi';
 import { buildChessContextMessage } from './coachPrompts';
 import { coachService } from '../coach/coachService';
 // REVIEW_MOVE_SEGMENT_ADDITION dropped in ship-3 — the per-ply segments
@@ -69,17 +68,52 @@ export async function getWeeklyReport(
   return gateReport('weekly_report', context, onStream);
 }
 
-/** These report surfaces are non-board prose about the STUDENT's own
- *  games, so the load-bearing gate is the ungrounded-player-stat strip
- *  (a report can't ship an unsupported pro statistic). No FEN, so the
- *  board/arrow gates self-skip. */
+/** These report surfaces are non-board prose about the STUDENT's own data.
+ *  GROUNDED (David 2026-07-09: one LLM command): the facts — rating, the
+ *  computed bad-habit list, the recent-game count — are assembled in code and
+ *  voiced through the one chokepoint. The LLM reasons about nothing, so the
+ *  free getCoachCommentary + the groundCoachReply bandaid are gone. */
 async function gateReport(
   task: 'post_game_analysis' | 'daily_lesson' | 'bad_habit_report' | 'weekly_report',
   context: CoachContext,
   onStream?: (chunk: string) => void,
 ): Promise<string> {
-  const raw = await getCoachCommentary(task, context, onStream);
-  return groundCoachReply(raw, { source: `coachFeature:${task}` });
+  const facts = await buildReportFacts(task, context);
+  const voiced = (await voiceFacts(facts, { intent: `report:${task}`, warm: true })) ?? facts;
+  if (onStream) onStream(voiced);
+  return voiced;
+}
+
+/** Assemble the COMPUTED facts for a report — rating + the flagged bad habits
+ *  (already computed by detectBadHabits), plus the recent-game count for the
+ *  weekly view. Nothing here is invented; the LLM only phrases it. */
+async function buildReportFacts(
+  task: 'post_game_analysis' | 'daily_lesson' | 'bad_habit_report' | 'weekly_report',
+  context: CoachContext,
+): Promise<string> {
+  const rating = context.playerProfile.rating;
+  const weaknesses = context.playerProfile.weaknesses;
+  const focusList = weaknesses.length > 0 ? weaknesses.map((w) => `- ${w}`).join('\n') : '';
+  switch (task) {
+    case 'bad_habit_report':
+      return weaknesses.length > 0
+        ? `The student's rating is ${rating}. Their currently-flagged recurring patterns to work on:\n${focusList}`
+        : `The student's rating is ${rating}. No recurring bad habits are currently flagged.`;
+    case 'daily_lesson':
+      return weaknesses.length > 0
+        ? `The student's rating is ${rating}. Today's single focus, drawn from their flagged patterns: ${weaknesses[0]}. The lesson is to drill that one pattern.`
+        : `The student's rating is ${rating}. No specific weakness is flagged, so today's lesson is a balanced training session.`;
+    case 'weekly_report': {
+      const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+      const recent = await db.games.where('date').aboveOrEqual(weekAgo).count().catch(() => 0);
+      const head = `The student's rating is ${rating}. They played ${recent} game(s) in the last seven days.`;
+      return weaknesses.length > 0 ? `${head} Patterns still flagged to work on:\n${focusList}` : `${head} No recurring bad habits are currently flagged.`;
+    }
+    case 'post_game_analysis':
+      return weaknesses.length > 0
+        ? `The student's rating is ${rating}. Their flagged recurring patterns:\n${focusList}`
+        : `The student's rating is ${rating}. No recurring patterns are currently flagged.`;
+  }
 }
 
 // ─── Bad Habit Detection from Coach Game ────────────────────────────────────
