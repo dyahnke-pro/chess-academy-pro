@@ -646,6 +646,9 @@ const REVIEW_DUE_RE = anyOf([
   String.raw`\b(?:my\s+)?(?:review\s+queue|review\s+pile|srs|spaced\s+repetition|flash\s?cards?|review\s+deck|woodpecker)\b`,
   String.raw`\breview\s+(?:my\s+)?(?:cards?|openings?|deck|reps?)\b`,
   String.raw`\b(?:cards?|reps?)\s+(?:to\s+review|due)\b`,
+  // "what reviews are due", "any reviews due", "reviews due yet" (coverage
+  // harness 2026-07-09 — natural phrasing the card/rep patterns missed).
+  String.raw`\breviews?\s+(?:are\s+)?due\b`,
   String.raw`\bdo\s+i\s+have\s+(?:any\s+)?reviews?\b`,
   String.raw`\banything\s+to\s+review\b`,
   String.raw`\bshould\s+i\s+do\s+my\s+(?:reps|reviews?|cards|flash\s?cards)\b`,
@@ -1062,7 +1065,7 @@ export function isTeachingMethodQuestion(ask: string | undefined): boolean {
 // "set verbosity brief") which the action layer handles — those command verbs
 // (turn/enable/disable/switch) are NOT queries and never match here.
 const SETTINGS_QUERY_RE: ReadonlyArray<RegExp> = [
-  /\b(?:is|are)\s+(?:my\s+|the\s+)?(?:voice|narration|hints?|sound|premium\s+voice|polly)\s+(?:on|off|enabled|disabled|muted|silent)\b/i,
+  /\b(?:is|are)\s+(?:my\s+|the\s+)?(?:voice\s+narration|voice|narration|hints?|sound|premium\s+voice|polly)\s+(?:on|off|enabled|disabled|muted|silent)\b/i,
   /\bwhat(?:'?s| is| are)\s+(?:my\s+)?(?:settings?|narration(?:\s+level)?|verbosity|coach\s+personality|voice\s+setting)\b/i,
   /\bwhat\s+(?:are\s+)?my\s+settings?\b/i,
   /\bhow\s+(?:am\s+i|is\s+(?:the\s+)?(?:coach|voice|narration))\s+set(?:\s+up)?\b/i,
