@@ -749,6 +749,14 @@ export type AuditKind =
   | 'mic-start-failed'
   | 'mic-error'
   | 'mic-gave-up'
+  // Mic→coach pipeline visibility (David 2026-07-09): make every step past
+  // `mic-started` observable so a "captured but no response" failure is
+  // diagnosable from the stream. heard-speech = recognizer got a partial;
+  // native-stopped = iOS ended the session (+ pending transcript);
+  // final-dispatched = a final was dispatched (+ how many handlers received it).
+  | 'mic-heard-speech'
+  | 'mic-native-stopped'
+  | 'mic-final-dispatched'
   // Billing / subscriptions (Productization Phase 4 — RevenueCat). Fired by
   // billingService. `billing-error` forwards to PostHog Error Tracking as a
   // defect; purchase/restore are conversion-funnel signals.

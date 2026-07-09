@@ -235,8 +235,7 @@ class VoiceInputService {
       // no trace to root-cause. These make every step observable in the stream.
       | 'mic-heard-speech'
       | 'mic-final-dispatched'
-      | 'mic-native-stopped'
-      | 'mic-result-handlers',
+      | 'mic-native-stopped',
     summary: string,
     details?: Record<string, unknown>,
   ): void {
