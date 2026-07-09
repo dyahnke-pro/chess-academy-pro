@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { tryRouteIntent } from './coachIntentRouter';
+import { tryRouteIntent } from './coachSessionRouter';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 

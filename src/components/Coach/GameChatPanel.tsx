@@ -13,7 +13,7 @@ import { extractMoveArrows } from '../../services/coachMoveExtractor';
 import { groundArrows } from '../../utils/arrowGrounding';
 import { detectInGameChatIntent } from '../../services/inGameChatIntent';
 import { tryCaptureForgetIntent, tryCaptureOpeningIntent } from '../../services/openingIntentCapture';
-import { tryRouteIntent } from '../../services/coachIntentRouter';
+import { tryRouteIntent } from '../../services/coachSessionRouter';
 import { parseActions } from '../../services/coachActionDispatcher';
 import { isPlanQuestion } from '../../coach/coachService';
 import { buildEnginePlan } from '../../services/enginePlanContext';

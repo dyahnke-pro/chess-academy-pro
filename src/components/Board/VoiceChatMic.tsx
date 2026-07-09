@@ -9,7 +9,7 @@ import { speechService } from '../../services/speechService';
 import { useAppStore } from '../../stores/appStore';
 import { dispatchCoachTurn } from '../../coach/dispatchCoachTurn';
 import { isSpokenSentenceGrounded, groundCoachReply } from '../../services/coachAnswerGates';
-import { tryRouteIntent } from '../../services/coachIntentRouter';
+import { tryRouteIntent } from '../../services/coachSessionRouter';
 import { logAppAudit } from '../../services/appAuditor';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { extractAndRememberNotes } from '../../services/coachMemoryService';
