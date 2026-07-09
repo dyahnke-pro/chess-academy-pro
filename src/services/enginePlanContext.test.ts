@@ -7,6 +7,10 @@ const analyzePosition = vi.fn<(fen: string, depth?: number) => Promise<Stockfish
 vi.mock('./stockfishEngine', () => ({
   stockfishEngine: { analyzePosition: (fen: string, depth?: number) => analyzePosition(fen, depth) },
 }));
+const getCachedStockfish = vi.fn<(fen: string) => StockfishAnalysis | undefined>();
+vi.mock('../hooks/stockfishFenCache', () => ({
+  getCachedStockfish: (fen: string) => getCachedStockfish(fen),
+}));
 
 import { buildEnginePlan } from './enginePlanContext';
 
@@ -26,17 +30,43 @@ function analysis(over: Partial<StockfishAnalysis>): StockfishAnalysis {
 }
 
 describe('buildEnginePlan', () => {
-  beforeEach(() => analyzePosition.mockReset());
+  beforeEach(() => {
+    analyzePosition.mockReset();
+    getCachedStockfish.mockReset();
+    getCachedStockfish.mockReturnValue(undefined);
+  });
 
   it('converts the UCI PV to SAN and maps the white-perspective eval', async () => {
     analyzePosition.mockResolvedValue(analysis({}));
     const plan = await buildEnginePlan(START, 'white');
     expect(plan).not.toBeNull();
     expect(plan!.pvSan).toEqual(['e4', 'e5', 'Nf3', 'Nc6']);
+    expect(plan!.bestMoveUci).toBe('e2e4'); // PV[0] UCI for the grounded best-move answer
     expect(plan!.evalCp).toBe(30);
     expect(plan!.mateIn).toBeNull();
     expect(plan!.studentSide).toBe('white');
     expect(plan!.depth).toBe(18);
+  });
+
+  it('falls back to the CACHED analysis when a fresh search stalls (David 2026-07-09 live prod)', async () => {
+    // The intermittent "no uciok within 5s" stall: analyzePosition throws, but
+    // the eval-bar/prefetch already cached an analysis for this FEN.
+    analyzePosition.mockRejectedValue(new Error('no uciok within 5s of spawn'));
+    getCachedStockfish.mockReturnValue(
+      analysis({ evaluation: 45, topLines: [{ rank: 1, evaluation: 45, mate: null, moves: ['d2d4', 'd7d5'] }] }),
+    );
+    const plan = await buildEnginePlan(START, 'white');
+    expect(plan).not.toBeNull();
+    expect(plan!.pvSan).toEqual(['d4', 'd5']);
+    expect(plan!.bestMoveUci).toBe('d2d4');
+    expect(plan!.evalCp).toBe(45);
+    expect(getCachedStockfish).toHaveBeenCalledWith(START);
+  });
+
+  it('returns null when BOTH the fresh search stalls AND the cache is empty', async () => {
+    analyzePosition.mockRejectedValue(new Error('worker crash'));
+    getCachedStockfish.mockReturnValue(undefined);
+    expect(await buildEnginePlan(START, 'white')).toBeNull();
   });
 
   it('caps the PV at 6 plies', async () => {

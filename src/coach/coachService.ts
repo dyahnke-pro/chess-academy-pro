@@ -1010,7 +1010,12 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
             // LLM the board. All optional; the interception falls through to the
             // master-play top move / legacy path when absent. The engine move is
             // what lets OFF-BOOK positions (no master data) ground.
-            engineBestMoveUci: input.liveState.engineBestMoveUci,
+            // Fall back to the engine plan's PV[0] when the surface didn't
+            // thread an explicit best move — so "what's my best move" NAMES the
+            // move (and draws its arrow) on every surface that pre-injects a
+            // plan (game-chat, teach), not just the eval (David 2026-07-09 live
+            // prod: best-move asks were stock-ing out during eval-bar stalls).
+            engineBestMoveUci: input.liveState.engineBestMoveUci ?? input.liveState.enginePlan?.bestMoveUci,
             // enginePlan carries a white-perspective eval for plan turns; the
             // eval-bar snapshot carries one for every turn. Either is fine — both
             // are white-perspective (the interception converts to side-to-move).

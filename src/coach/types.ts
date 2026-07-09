@@ -277,6 +277,10 @@ export interface LiveState {
     /** Principal variation in SAN from the current FEN, alternating
      *  sides (~6 plies). `pvSan[0]` is the side-to-move's best move. */
     pvSan: string[];
+    /** The side-to-move's best move in UCI (PV[0]) — lets the grounded
+     *  best-move answer name the move + draw its arrow without re-deriving it
+     *  from SAN. Same move as `pvSan[0]`. */
+    bestMoveUci?: string;
     /** White-perspective centipawn eval of the line; null when forced mate. */
     evalCp: number | null;
     /** Mate distance in plies (signed, white positive); null when not forced. */

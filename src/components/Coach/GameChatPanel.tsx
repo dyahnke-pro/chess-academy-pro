@@ -761,10 +761,15 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             dispatchCoachTurn(
             { surface: 'game-chat', ask: text, liveState },
             {
-              // Mid-game: run the SAME spine every surface uses, but skip the
-              // deterministic action router — a "take me to X" mid-game must
-              // not yank the user off their game before they finish the move.
-              skipActionRouter: true,
+              // Mid-game: run the SAME spine + the deterministic action router
+              // (David 2026-07-09, live prod: "take me to tactics" / "play the
+              // Caro-Kann against me" typed mid-game fell to the stock line
+              // because the router was skipped). The router is deterministic and
+              // only fires on EXPLICIT action commands — a position question
+              // ("what should I play?", "is this safe?") returns null and falls
+              // through to the brain — so honoring an explicit navigate/play/
+              // settings request mid-game is correct, not a stray yank.
+              lastAssistantMessage: [...messagesRef.current].reverse().find((m) => m.role === 'assistant')?.content,
               // WO-COACH-GROUNDING (PR #338 part C): chat surfaces need
               // multiple round-trips so the brain can call stockfish_eval
               // (or any cerebellum lookup), see the result, and synthesize

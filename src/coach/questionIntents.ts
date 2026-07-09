@@ -141,7 +141,14 @@ const TACTICS_QUESTION_RE = anyOf([
   String.raw`\b(?:anything|something)\s+tactical\b`,
 ]);
 export function isTacticsQuestion(ask: string | undefined): boolean {
-  return !!ask && TACTICS_QUESTION_RE.test(ask);
+  if (!ask) return false;
+  // A tactics-PROFILE ask ("what's my weakest tactic", "how are my tactics")
+  // is about the student over time — the bare `\btactics?\b` pattern below
+  // would otherwise misroute it to the live-board scan (live prod 2026-07-09).
+  // `isTacticsProfileQuestion` is a hoisted declaration, so this precedence
+  // guard is safe despite the definition order.
+  if (isTacticsProfileQuestion(ask)) return false;
+  return TACTICS_QUESTION_RE.test(ask);
 }
 
 /** A POSITION-ASSESSMENT question — "who's winning?", "how do I stand here?",
@@ -715,6 +722,12 @@ const TACTICS_PROFILE_RE = anyOf([
   String.raw`\b(?:am\s+i\s+)?sharp\s+tactically\b`,
   String.raw`\bdo\s+i\s+(?:find|spot|see|miss)\s+combinations?\b`,
   String.raw`\bam\s+i\s+missing\s+(?:shots|tactics|combinations?)\b`,
+  // "what is my weakest/worst tactic", "which motif am I worst at" — a PROFILE
+  // ask about the student over time, not the live board (live prod, David
+  // 2026-07-09: "What is my weakest tactic?" was misrouting to the board scan).
+  String.raw`\bwhat(?:'?s| is| are)?\s+my\s+(?:weakest|worst|biggest|poorest)\s+(?:tactic|motif|pattern|theme|combination)s?\b`,
+  String.raw`\bwhich\s+(?:tactic|motif|pattern|theme)s?\s+(?:am\s+i\s+(?:weakest|worst)|do\s+i\s+(?:miss|struggle|fail|overlook))\b`,
+  String.raw`\bwhat\s+(?:tactic|motif|pattern|theme)s?\s+(?:am\s+i\s+(?:weakest|worst)|do\s+i\s+(?:struggle|fail)\s+(?:with|at))\b`,
 ]);
 export function isTacticsProfileQuestion(ask: string | undefined): boolean {
   if (!ask) return false;

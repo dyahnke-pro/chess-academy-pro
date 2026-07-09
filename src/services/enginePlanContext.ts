@@ -19,6 +19,8 @@
 import { Chess } from 'chess.js';
 import type { Square } from 'chess.js';
 import { stockfishEngine } from './stockfishEngine';
+import { getCachedStockfish } from '../hooks/stockfishFenCache';
+import type { StockfishAnalysis } from '../types';
 import type { LiveState } from '../coach/types';
 
 /** Search depth for the plan PV. Deep enough for a meaningful line, shallow
@@ -39,12 +41,27 @@ export async function buildEnginePlan(
   fen: string,
   studentSide: 'white' | 'black',
 ): Promise<EnginePlan | null> {
-  let analysis;
+  // Fresh deep search first; on a stall/crash (the intermittent
+  // "no uciok within 5s" / asm worker crash seen on real devices — David
+  // 2026-07-09 live prod, where "what's my best move" stock-out'd during an
+  // eval-bar stall) fall back to the CACHED analysis for this exact FEN. The
+  // eval-bar + child-position prefetch populate `stockfishFenCache`, so a
+  // recent eval is usually on hand even when a fresh search times out — that
+  // keeps the grounded coach answering the eval/best-move instead of serving
+  // the honest-but-useless "I can't verify" line.
+  let analysis: StockfishAnalysis | undefined;
   try {
     analysis = await stockfishEngine.analyzePosition(fen, PLAN_DEPTH);
   } catch {
-    return null;
+    analysis = undefined;
   }
+  const hasLine = (a: StockfishAnalysis | undefined): boolean =>
+    !!a && (!!a.topLines?.[0]?.moves?.length || !!a.bestMove);
+  if (!hasLine(analysis)) {
+    const cached = getCachedStockfish(fen);
+    if (hasLine(cached)) analysis = cached;
+  }
+  if (!analysis) return null;
   const uciSeq =
     analysis.topLines?.[0]?.moves?.length
       ? analysis.topLines[0].moves
@@ -77,6 +94,7 @@ export async function buildEnginePlan(
 
   return {
     pvSan,
+    bestMoveUci: uciSeq[0],
     evalCp: analysis.isMate ? null : Math.round(analysis.evaluation),
     mateIn: analysis.mateIn,
     depth: analysis.depth,

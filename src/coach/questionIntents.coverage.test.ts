@@ -82,6 +82,7 @@ const BANK: ReadonlyArray<{ q: string; lane: 'assembler' | 'position' | 'convo';
   { q: "what's my record against the Sicilian?", lane: 'assembler' },
   { q: 'show me my skill radar', lane: 'assembler' },
   { q: "what's my tactics profile?", lane: 'assembler' },
+  { q: 'what is my weakest tactic?', lane: 'assembler' }, // live prod misroute fix (2026-07-09)
   { q: 'what reviews are due?', lane: 'assembler' },
   // F1 opening profile / accuracy / traps / repertoire gap
   { q: "what's my strongest opening?", lane: 'assembler' },
