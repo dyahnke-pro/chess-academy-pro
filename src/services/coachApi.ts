@@ -4,7 +4,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import { Capacitor } from '@capacitor/core';
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
-import { SYSTEM_PROMPT, buildChessContextMessage, getVerbosityInstruction } from './coachPrompts';
+import { SYSTEM_PROMPT, getVerbosityInstruction } from './coachPrompts';
 import { recordApiUsage } from './coachCostService';
 
 /** Audit-instrumentation phase-1 (2026-05-19): emit a per-LLM-call
@@ -82,7 +82,7 @@ import type { MasterPlayContext, MasterPlayResult, OpeningDbEntry } from './mast
 import { buildOpeningDbEntries } from './openingDbGrounding';
 import { buildNarrationGroundingBlock } from './narrationGrounding';
 import { buildLessonReferenceBlock, getLessonScript } from '../data/lessons';
-import type { CoachTask, CoachContext, CoachVerbosity, AiProvider } from '../types';
+import type { CoachTask, CoachVerbosity, AiProvider } from '../types';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 
 // WO-COACH-MASTER-INTEGRATION audit bridge — installs window.__masterPlayAudit
@@ -3668,113 +3668,14 @@ async function loadResponseLengthAddition(): Promise<string> {
   }
 }
 
-async function callCommentaryWithConfig(
-  config: ProviderConfig,
-  task: CoachTask,
-  userMessage: string,
-  systemPrompt: string,
-  onStream?: (chunk: string) => void,
-): Promise<string> {
-  const model = getModel(task, config.provider, config.preferredModel);
-  if (config.provider === 'anthropic') {
-    const messages: { role: 'user' | 'assistant'; content: string }[] = [
-      { role: 'user', content: userMessage },
-    ];
-    if (onStream) {
-      return await callAnthropicStream(config.apiKey, model, systemPrompt, messages, 512, onStream, task);
-    }
-    return await callAnthropic(config.apiKey, model, systemPrompt, messages, 1024, task);
-  } else {
-    const messages: OpenAI.Chat.ChatCompletionMessageParam[] = [
-      { role: 'system', content: systemPrompt },
-      { role: 'user', content: userMessage },
-    ];
-    if (onStream) {
-      return await callDeepSeekStream(config.apiKey, model, messages, 512, onStream, task);
-    }
-    return await callDeepSeek(config.apiKey, model, messages, 1024, task);
-  }
-}
+// callCommentaryWithConfig — DELETED with getCoachCommentary (its only caller).
 
-export async function getCoachCommentary(
-  task: CoachTask,
-  context: CoachContext,
-  onStream?: (chunk: string) => void,
-): Promise<string> {
-  const verbosity = await getCoachVerbosity();
-  if (verbosity === 'none') return '';
-
-  const config = await getProviderConfig();
-  if (!config) return OFFLINE_FALLBACKS[task] ?? OFFLINE_FALLBACKS.default;
-
-  // NOTE (item #6, verified 2026-07-09): every task that actually reaches
-  // getCoachCommentary is a PROSE / REPORT task — sideline_explanation,
-  // model_game_annotation, middlegame_plan_generation (contentGenerationService),
-  // game_post_review (gameReviewService), and post_game_analysis / daily_lesson /
-  // bad_habit_report / weekly_report (coachFeatureService.gateReport). These are
-  // multi-paragraph pedagogy grounded by INJECTION + gated at the call site
-  // (gradeNarrationText / groundCoachReply); routing them through voiceFacts
-  // would strip the teaching, so they correctly stay here. The ATOMIC tasks that
-  // WOULD invert cleanly (position_analysis_chat, deep_analysis) do NOT flow
-  // through this function — they route through getCoachChatResponse /
-  // coachService.ask, where Phase 1 already grounds them via the
-  // positionAssessmentQuestion → assemblePositionAssessment → voiceFacts path.
-  // So there is no atomic-task inversion to add here.
-
-  // Universal narration grounding: pull the four curated sources
-  // (annotations / classical book passages / middlegame plans /
-  // model games) into the system prompt so this bypass path gets
-  // the same opening-book context `coachService.ask` injects via
-  // its envelope. Without this, every getCoachCommentary call —
-  // puzzle feedback, post-game analysis, daily lesson, weekly
-  // report, content-generation prose, lesson narration — shipped
-  // book-blind. See `src/services/narrationGrounding.ts`.
-  const groundingMoveHistory = (() => {
-    if (!context.pgn) return [];
-    return context.pgn
-      .replace(/\d+\.+/g, ' ')
-      .split(/\s+/)
-      .filter((t) => t && !/^(1-0|0-1|1\/2-1\/2|\*)$/.test(t));
-  })();
-  const grounding = await buildNarrationGroundingBlock({
-    askText: context.additionalContext ?? '',
-    openingName: context.openingName,
-    moveHistory: groundingMoveHistory,
-    auditSource: `coachApi.commentary.${task}`,
-  });
-  const systemPrompt = buildSystemPromptWithVerbosity(
-    SYSTEM_PROMPT,
-    verbosity,
-    grounding.block || undefined,
-  );
-  const userMessage = buildChessContextMessage(context);
-
-  // The commentary/report tasks (move commentary, puzzle feedback, post-game
-  // review, reports, model-game annotation, …) are grounded-by-INJECTION but
-  // still let the LLM phrase freely — they don't route through voiceFacts. The
-  // leak audit tags them grounded=false at the primitive with intent=<task>.
-  try {
-    return await callCommentaryWithConfig(config, task, userMessage, systemPrompt, onStream);
-  } catch (error) {
-    console.warn(`[CoachAPI] ${config.provider} failed for ${task}, trying fallback...`, error);
-    emitProviderFailureAudit('primary', config.provider, task, error);
-    markProviderDead(config.provider);
-    const fallback = getFallbackConfig(config.provider);
-    if (fallback) {
-      try {
-        return await callCommentaryWithConfig(fallback, task, userMessage, systemPrompt, onStream);
-      } catch (fallbackError) {
-        console.error('[CoachAPI] Fallback also failed:', fallbackError);
-        emitProviderFailureAudit('fallback', fallback.provider, task, fallbackError);
-        markProviderDead(fallback.provider);
-        reportCoachOffline(task, 'commentary-both-providers-failed', fallbackError);
-        return OFFLINE_FALLBACKS[task] ?? OFFLINE_FALLBACKS.default;
-      }
-    }
-    reportCoachOffline(task, 'commentary-no-fallback', error);
-    return OFFLINE_FALLBACKS[task] ?? OFFLINE_FALLBACKS.default;
-  }
-}
+// getCoachCommentary — DELETED (David 2026-07-09: "one command that calls the
+// llm"). It was the free-prose / report LLM command; every caller (game review,
+// the 4 coachFeature reports, the 3 contentGeneration tasks, the opening-section
+// narrator) now COMPUTES its facts and voices them through voiceFacts — the one
+// chokepoint. No surface free-composes report prose anymore, so the command +
+// its INJECTION-grounded, phrase-freely contract are gone.
 
 // ─── Kid-mode safety lane ──────────────────────────────────────────────
 //

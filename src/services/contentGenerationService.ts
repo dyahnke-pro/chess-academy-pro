@@ -1,9 +1,7 @@
 import { db } from '../db/schema';
 import { fetchLichessExplorer } from './lichessExplorerService';
-import { getCoachCommentary } from './coachApi';
-import { gradeNarrationText } from './coachAnswerGates';
+import { voiceFacts } from './coachApi';
 import type {
-  CoachContext,
   GeneratedContent,
   GeneratedContentType,
   LichessExplorerResult,
@@ -119,44 +117,20 @@ export async function generateMiddlegamePlanAnalysis(
 
   const grounding = await fetchGroundingData(plan.criticalPositionFen);
 
-  const context: CoachContext = {
-    fen: plan.criticalPositionFen,
-    lastMoveSan: null,
-    moveNumber: 15,
-    pgn: opening.pgn,
-    openingName: opening.name,
-    stockfishAnalysis: null,
-    playerMove: null,
-    moveClassification: null,
-    playerProfile: { rating: 1400, weaknesses: [] },
-    additionalContext: `You are analyzing the middlegame plans for the ${opening.name}.
+  // GROUNDED (David 2026-07-09: one LLM command). The plan's AUTHORED fields
+  // (title, overview, pawn-break + maneuver explanations, themes) ARE the facts,
+  // plus the real Lichess continuations. voiceFacts weaves them and adds nothing
+  // — no free "why/counterplay" reasoning to invent, no board-claim gate needed.
+  const facts = [
+    `Middlegame plan for the ${opening.name}: "${plan.title}".`,
+    plan.overview ? plan.overview : '',
+    ...plan.pawnBreaks.map((b) => `Pawn break ${b.move}: ${b.explanation}`),
+    ...plan.pieceManeuvers.map((m) => `Maneuver — the ${m.piece} via ${m.route}: ${m.explanation}`),
+    ...plan.strategicThemes.map((t) => `Theme: ${t}`),
+    grounding.topMoves ? `Most-played continuations from this position:\n${grounding.topMoves}` : '',
+  ].filter(Boolean).join('\n');
 
-GROUNDING DATA (from Lichess game database — use ONLY this data for statistics):
-${grounding.gameStats}
-
-Top continuation moves from this position:
-${grounding.topMoves}
-
-The plan being studied: "${plan.title}"
-Strategic themes: ${plan.strategicThemes.join(', ')}
-Pawn breaks available: ${plan.pawnBreaks.map((b) => b.move).join(', ')}
-Piece maneuvers: ${plan.pieceManeuvers.map((m) => `${m.piece}: ${m.route}`).join(', ')}
-
-Provide a detailed explanation of this middlegame plan. Explain:
-1. WHY each pawn break works (referencing the game statistics where relevant)
-2. HOW the piece maneuvers support the plan
-3. WHAT the opponent's best counterplay is and how to handle it
-4. WHEN to transition to an endgame
-
-Be specific and reference actual moves and squares. Do NOT invent statistics — use only the data provided above.`,
-  };
-
-  const raw = await getCoachCommentary('middlegame_plan_generation', context);
-  // Board-claim gate (David 2026-07-04): this content is generated once and
-  // STORED, so an invented piece/square claim would live in the DB forever
-  // un-audited. gradeNarrationText drops only sentences provably false at the
-  // plan's critical position — conservative, never touches a fuzzy judgement.
-  const result = gradeNarrationText(raw, plan.criticalPositionFen, 'contentGeneration.middlegamePlan') ?? raw;
+  const result = (await voiceFacts(facts, { intent: 'middlegame-plan', warm: true })) ?? facts;
   await storeContent(opening.id, 'middlegame_plan', result, JSON.stringify(grounding));
   return result;
 }
@@ -176,40 +150,22 @@ export async function generateSidelineExplanation(
 
   const grounding = await fetchGroundingData(fen);
 
-  const context: CoachContext = {
-    fen,
-    lastMoveSan: null,
-    moveNumber: 5,
-    pgn: sidelinePgn,
-    openingName: opening.name,
-    stockfishAnalysis: null,
-    playerMove: null,
-    moveClassification: null,
-    playerProfile: { rating: 1400, weaknesses: [] },
-    additionalContext: `You are explaining a sideline in the ${opening.name}.
+  // GROUNDED (David 2026-07-09: one LLM command). Voice the AUTHORED variation
+  // explanation where the opening data has one for this sideline (rich), plus
+  // the real Lichess results + continuations. voiceFacts adds nothing — the old
+  // free "why/common-mistakes" reasoning (a hallucination surface with no board
+  // gate on the invented squares) is gone.
+  const authored = (opening.variations ?? []).find(
+    (v) => v.name.toLowerCase() === sidelineName.toLowerCase(),
+  )?.explanation;
+  const facts = [
+    `Sideline in the ${opening.name}: "${sidelineName}" (moves ${sidelinePgn}).`,
+    authored ? authored : '',
+    grounding.gameStats ? `Database results here: ${grounding.gameStats}` : '',
+    grounding.topMoves ? `Most-played responses from this position:\n${grounding.topMoves}` : '',
+  ].filter(Boolean).join('\n');
 
-GROUNDING DATA (from Lichess game database):
-${grounding.gameStats}
-
-Top moves from this position:
-${grounding.topMoves}
-
-Sideline being studied: "${sidelineName}"
-Moves: ${sidelinePgn}
-
-Explain:
-1. WHY the opponent plays this sideline (what are they hoping for?)
-2. What is the BEST response and why (reference the Lichess statistics)
-3. What common MISTAKES do players make against this sideline?
-4. What is the resulting position's character?
-
-Be concise (3-4 paragraphs). Use ONLY the provided statistics. Do not invent game data.`,
-  };
-
-  const raw = await getCoachCommentary('sideline_explanation', context);
-  // Board-claim gate (stored content) — drop sentences provably false at the
-  // sideline position before it's cached.
-  const result = gradeNarrationText(raw, fen, 'contentGeneration.sideline') ?? raw;
+  const result = (await voiceFacts(facts, { intent: 'sideline-explanation', warm: true })) ?? facts;
   // Cache writes must not break the user-visible explanation — if the
   // Dexie put fails (quota, schema drift) we still return the text.
   try {
@@ -227,41 +183,21 @@ Be concise (3-4 paragraphs). Use ONLY the provided statistics. Do not invent gam
 export async function generateModelGameAnnotation(
   openingName: string,
   fen: string,
-  pgn: string,
+  _pgn: string,
   moveNumber: number,
   white: string,
   black: string,
 ): Promise<string> {
   const grounding = await fetchGroundingData(fen);
 
-  const context: CoachContext = {
-    fen,
-    lastMoveSan: null,
-    moveNumber,
-    pgn,
-    openingName,
-    stockfishAnalysis: null,
-    playerMove: null,
-    moveClassification: null,
-    playerProfile: { rating: 1400, weaknesses: [] },
-    additionalContext: `You are annotating a critical moment in the game ${white} vs ${black}.
+  // GROUNDED (David 2026-07-09: one LLM command). The annotation voices the real
+  // Lichess results + continuations at this position — no free reasoning about
+  // "what makes it critical" to invent. voiceFacts adds nothing.
+  const facts = [
+    `Position from ${white} versus ${black} at move ${moveNumber}, in the ${openingName}.`,
+    grounding.gameStats ? `Database results here: ${grounding.gameStats}` : '',
+    grounding.topMoves ? `Most-played continuations from this position:\n${grounding.topMoves}` : '',
+  ].filter(Boolean).join('\n');
 
-GROUNDING DATA (from Lichess game database for this position):
-${grounding.gameStats}
-
-Top moves from this position:
-${grounding.topMoves}
-
-Explain this critical moment in 2-3 sentences. Focus on:
-- What makes this position critical
-- What the key decision is
-- How this connects to the opening's typical middlegame themes
-
-Use the Lichess data to support your analysis. Be specific about moves and plans.`,
-  };
-
-  const raw = await getCoachCommentary('model_game_annotation', context);
-  // Board-claim gate (returned + often stored by callers) — drop sentences
-  // provably false at the annotated position.
-  return gradeNarrationText(raw, fen, 'contentGeneration.modelGameAnnotation') ?? raw;
+  return (await voiceFacts(facts, { intent: 'model-game-annotation', warm: true })) ?? facts;
 }
