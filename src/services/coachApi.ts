@@ -58,7 +58,7 @@ function deepseekCacheSplit(usage: unknown): { hit: number | null; miss: number 
   };
 }
 import { lookupMasterPlay } from './masterPlayLookup';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleTeachingAnswer, explainBestMoveGrounded } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleTeachingAnswer, assembleSettingsAnswer, explainBestMoveGrounded } from './groundedAnswer';
 import { lookupTablebase } from './lichessTablebaseService';
 import { detectBadHabits } from './badHabitDetector';
 import { getUnifiedWeaknessProfile } from './weaknessSpine';
@@ -1359,6 +1359,11 @@ export interface MasterGroundingOptions {
    *  own teaching structure (WLPP + the curated LessonScript) via
    *  assembleTeachingAnswer — grounds "how we teach" instead of a free-LLM guess. */
   teachingMethodQuestion?: boolean;
+  /** F17 settings (DATA half) — true when the turn asks about CURRENT settings
+   *  ("is voice on?", "what's my narration level?"). Voiced from the user's
+   *  live preferences via assembleSettingsAnswer. The mutate half ("turn voice
+   *  on") is the settings-action layer, not this. */
+  settingsQuestion?: boolean;
   /** Which side the STUDENT plays — so the tactics answer warns about THEIR
    *  hanging pieces. Falls back to side-to-move when absent. */
   studentColor?: 'white' | 'black';
@@ -2187,7 +2192,8 @@ export async function getCoachChatResponse(
       grounding.playerGamesQuestion === true ||
       grounding.endgameQuestion === true ||
       grounding.positionAssessmentQuestion === true ||
-      grounding.teachingMethodQuestion === true;
+      grounding.teachingMethodQuestion === true ||
+      grounding.settingsQuestion === true;
     if (intentFired) {
       try {
         // Helper: the latest user message, for voiceFacts context.
@@ -2970,6 +2976,29 @@ export async function getCoachChatResponse(
             if (answer) {
               const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'teaching-method', preferRaw: true });
               if (voiced) return voiced;
+            }
+          } catch { /* fall through */ }
+        }
+
+        // ── SETTINGS DATA (F17) — voice the user's CURRENT preferences ──────
+        // "is voice on? what's my narration level?" reads live prefs and voices
+        // them. No board, no master-play. The mutate half is the action layer.
+        if (grounding.settingsQuestion) {
+          try {
+            const profile = await db.profiles.get('main');
+            const prefs = profile?.preferences;
+            if (prefs) {
+              const answer = assembleSettingsAnswer({
+                voiceOn: prefs.coachVoiceOn ?? prefs.voiceEnabled,
+                narration: prefs.coachNarration ?? null,
+                showHints: prefs.showHints,
+                pollyEnabled: prefs.pollyEnabled,
+                personality: prefs.coachPersonality ?? null,
+              });
+              if (answer) {
+                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'settings', preferRaw: true });
+                if (voiced) return voiced;
+              }
             }
           } catch { /* fall through */ }
         }

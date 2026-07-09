@@ -111,6 +111,38 @@ export function assemblePositionAssessment(opts: {
 }
 
 /**
+ * assembleSettingsAnswer — the DATA half of settings (F17): "is voice on?",
+ * "what's my narration level?", "what are my settings?". Reads the user's
+ * CURRENT preferences (passed in by the caller so this stays a pure leaf) and
+ * voices them. The mutate half ("turn voice on") is a separate action. Returns
+ * null when there's nothing to report.
+ */
+export function assembleSettingsAnswer(opts: {
+  voiceOn?: boolean | null;
+  narration?: 'silent' | 'brief' | 'full' | null;
+  showHints?: boolean | null;
+  pollyEnabled?: boolean | null;
+  personality?: string | null;
+}): GroundedAnswer | null {
+  const parts: string[] = [];
+  if (typeof opts.voiceOn === 'boolean') parts.push(`Voice narration is ${opts.voiceOn ? 'on' : 'off'}.`);
+  if (opts.narration) {
+    const desc =
+      opts.narration === 'silent' ? 'silent — no spoken narration'
+      : opts.narration === 'brief' ? 'brief — short, capped narration'
+      : 'full — complete narration';
+    parts.push(`Your narration level is ${desc}.`);
+  }
+  if (typeof opts.showHints === 'boolean') parts.push(`Hints are ${opts.showHints ? 'on' : 'off'}.`);
+  if (typeof opts.pollyEnabled === 'boolean' && !opts.pollyEnabled) {
+    parts.push('The premium voice is off, so narration uses the device voice.');
+  }
+  if (opts.personality && opts.personality !== 'default') parts.push(`Coach personality is set to ${opts.personality}.`);
+  if (parts.length === 0) return null;
+  return { facts: parts.join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: ['app:settings'] };
+}
+
+/**
  * assembleTeachingAnswer — "how do you teach the X?", "how does the app teach
  * this opening?", "how do the lessons work?" (F11 pedagogy). The fact source is
  * the app's OWN teaching structure: the WLPP grammar (Watch/Learn/Practice/Play)

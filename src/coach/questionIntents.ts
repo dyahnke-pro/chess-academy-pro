@@ -1057,6 +1057,25 @@ export function isTeachingMethodQuestion(ask: string | undefined): boolean {
   return TEACHING_METHOD_RE.some((re) => re.test(ask));
 }
 
+// F17 settings — the DATA/QUERY half ("is voice on? what's my narration level?
+// what are my settings?"). Distinct from the settings ACTIONS ("turn on voice",
+// "set verbosity brief") which the action layer handles — those command verbs
+// (turn/enable/disable/switch) are NOT queries and never match here.
+const SETTINGS_QUERY_RE: ReadonlyArray<RegExp> = [
+  /\b(?:is|are)\s+(?:my\s+|the\s+)?(?:voice|narration|hints?|sound|premium\s+voice|polly)\s+(?:on|off|enabled|disabled|muted|silent)\b/i,
+  /\bwhat(?:'?s| is| are)\s+(?:my\s+)?(?:settings?|narration(?:\s+level)?|verbosity|coach\s+personality|voice\s+setting)\b/i,
+  /\bwhat\s+(?:are\s+)?my\s+settings?\b/i,
+  /\bhow\s+(?:am\s+i|is\s+(?:the\s+)?(?:coach|voice|narration))\s+set(?:\s+up)?\b/i,
+  /\b(?:voice|narration|hint)\s+(?:setting|level|status)\b/i,
+];
+
+export function isSettingsQuestion(ask: string | undefined): boolean {
+  if (!ask) return false;
+  // Command verbs → an ACTION (mutate), not a query. Handled by the action layer.
+  if (/\b(?:turn|enable|disable|switch)\b/i.test(ask)) return false;
+  return SETTINGS_QUERY_RE.some((re) => re.test(ask));
+}
+
 /**
  * buildQuestionGrounding — the SHARED grounding builder so the coach's
  * grounded-data brain fires IDENTICALLY on every talking surface (David
@@ -1131,5 +1150,6 @@ export function buildQuestionGrounding(
     endgameQuestion: isEndgameQuestion(ask),
     positionAssessmentQuestion: isPositionAssessmentQuestion(ask),
     teachingMethodQuestion: isTeachingMethodQuestion(ask),
+    settingsQuestion: isSettingsQuestion(ask),
   };
 }
