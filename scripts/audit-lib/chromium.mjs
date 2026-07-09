@@ -59,7 +59,22 @@ export const SANDBOX_CHROMIUM_ARGS = [
  * 2026-05-20). With the flag set, the same clicks navigate cleanly.
  */
 export function sandboxLaunchArgs() {
-  return process.env.AUDIT_SANDBOX === '1' ? SANDBOX_CHROMIUM_ARGS : [];
+  if (process.env.AUDIT_SANDBOX !== '1') return [];
+  // Opt-in egress proxy (AUDIT_PROXY=$HTTPS_PROXY). In some containers the
+  // agent proxy RESETS a direct Chromium connection to prod (curl works
+  // because it honors HTTPS_PROXY; Chromium does not unless told). Route
+  // Chromium through the same proxy, but BYPASS localhost so localhost dev
+  // -server audits (no proxy needed) are never affected. Gated on the env
+  // var so a runner without it behaves exactly as before.
+  const proxy = process.env.AUDIT_PROXY;
+  if (proxy) {
+    return [
+      ...SANDBOX_CHROMIUM_ARGS,
+      `--proxy-server=${proxy}`,
+      '--proxy-bypass-list=127.0.0.1;localhost;<-loopback>',
+    ];
+  }
+  return SANDBOX_CHROMIUM_ARGS;
 }
 
 export function sandboxContextOptions() {
