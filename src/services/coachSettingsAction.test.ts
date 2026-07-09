@@ -30,6 +30,13 @@ describe('resolveSettingsCommand', () => {
     expect(resolveSettingsCommand('turn on polly')?.prefsPatch).toMatchObject({ pollyEnabled: true });
   });
 
+  it('switches the theme (dark/light/named)', () => {
+    expect(resolveSettingsCommand('switch to dark theme')?.prefsPatch).toMatchObject({ theme: 'dark-premium' });
+    expect(resolveSettingsCommand('switch to light mode')?.prefsPatch).toMatchObject({ theme: 'light-minimal' });
+    expect(resolveSettingsCommand('change to the neon theme')?.prefsPatch).toMatchObject({ theme: 'neon' });
+    expect(resolveSettingsCommand('set dark mode')?.confirmation).toMatch(/theme/i);
+  });
+
   it('returns null for a QUERY (not a command)', () => {
     expect(resolveSettingsCommand('is voice on?')).toBeNull();
     expect(resolveSettingsCommand('what are my settings?')).toBeNull();

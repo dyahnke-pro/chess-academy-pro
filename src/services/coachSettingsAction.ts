@@ -19,6 +19,22 @@ import { db } from '../db/schema';
 import { useAppStore } from '../stores/appStore';
 import type { CoachNarration, UserProfile } from '../types';
 import { logAppAudit } from './appAuditor';
+import { THEMES, getThemeById, applyTheme } from './themeService';
+
+/** Resolve a theme phrase to a real theme id from the registry. "dark"/"light"
+ *  map to the premium/minimal defaults; a named theme ("midnight blue", "neon")
+ *  matches by id/name. kid-mode is never coach-selectable. */
+function resolveThemeId(t: string): string | null {
+  if (/\b(dark|night|black)\b/.test(t)) return 'dark-premium';
+  if (/\b(light|day|bright|minimal)\b/.test(t)) return 'light-minimal';
+  for (const th of THEMES) {
+    if (th.id === 'kid-mode') continue;
+    const idWords = th.id.replace(/-/g, ' ');
+    const nameWords = (th.name ?? '').toLowerCase();
+    if ((idWords && t.includes(idWords)) || (nameWords && t.includes(nameWords))) return th.id;
+  }
+  return null;
+}
 
 export interface SettingsCommandResult {
   /** Human confirmation the coach voices ("Voice narration is on now."). */
@@ -119,10 +135,22 @@ export function resolveSettingsCommand(text: string): ResolvedCommand | null {
     };
   }
 
-  // NOTE: theme switching ("dark/light") is deferred — AppTheme is a full theme
-  // OBJECT resolved from the theme registry, not a 'dark'|'light' string, so it
-  // needs the registry wired in. Voice/narration/hints/premium-voice cover the
-  // common asks; theme lands in a follow-up.
+  // ── Theme (dark / light / a named theme) ─────────────────────────────
+  if (/\b(theme|mode|dark|light|night|day)\b/.test(t)) {
+    const themeId = resolveThemeId(t);
+    if (themeId) {
+      const theme = getThemeById(themeId);
+      return {
+        key: 'theme',
+        confirmation: `Switched to the ${theme.name ?? themeId} theme.`,
+        prefsPatch: { theme: themeId } as PrefsPatch,
+        applyStore: () => {
+          applyTheme(theme);
+          useAppStore.getState().setActiveTheme(theme);
+        },
+      };
+    }
+  }
 
   return null;
 }
