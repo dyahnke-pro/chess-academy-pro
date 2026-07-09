@@ -37,6 +37,7 @@ import { TACTICAL_THEMES } from './puzzleService';
 import { findLastMatchingGame } from './gameContextService';
 import { getWeakestOpenings } from './openingService';
 import { applyCoachSetting } from './coachSettingsAction';
+import { matchNavigationRoute } from './navigationRouter';
 
 export interface RoutedChatIntent {
   /** Relative path (starts with `/`) for the session route. When
@@ -167,6 +168,19 @@ export async function routeChatIntent(
     return {
       path: aid.path,
       ackMessage: aid.ack,
+      intent: { kind: 'qa', raw: text },
+    };
+  }
+
+  // Generic navigation — "take me to Tactics", "open Settings", "go to my
+  // weaknesses". Resolved deterministically to a real route (unified action
+  // layer, David: "allow actions like open this tab / take me to X"). Runs
+  // AFTER training-aids so "show me a fork puzzle" stays a drill, not a nav.
+  const nav = matchNavigationRoute(text);
+  if (nav) {
+    return {
+      path: nav.path,
+      ackMessage: nav.ack,
       intent: { kind: 'qa', raw: text },
     };
   }
