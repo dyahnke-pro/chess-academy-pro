@@ -20,10 +20,17 @@
  *   • No per-move praise (kid #5) — the prompt restates the move's EFFECT.
  */
 import { Chess } from 'chess.js';
-import { getKidLlmResponse } from './coachApi';
+import { getKidLlmResponse, voiceFacts } from './coachApi';
 import { buildFedTacticsContext, formatTacticsSubBlock } from './liveTacticsContext';
 import { groundCoachAnswerBoardClaims } from './boardClaimValidator';
 import { logAppAudit } from './appAuditor';
+import { buildQuestionGrounding } from '../coach/questionIntents';
+import { assembleConceptAnswer, assembleTeachingAnswer, assembleAppHelpAnswer } from './groundedAnswer';
+import { detectConceptsInText, getConcept, resolveOpeningIdFromName } from './chessConceptService';
+import { getLessonScript } from '../data/lessons';
+import { getOpeningById } from './openingService';
+import { matchRouteByTopic } from './navigationRouter';
+import { APP_ROUTES_MANIFEST } from '../data/appRoutesManifest';
 
 /** Single-letter piece type → kid word. */
 function pieceWord(piece: string): string {
@@ -205,6 +212,110 @@ Say ONE kind, encouraging sentence (max ~20 words) nudging them toward that move
   }
 }
 
+/**
+ * Voice a computed fact bundle KID-SAFE, through the ONE grounding chokepoint
+ * (`voiceFacts` with `kidSafe: true`), then sanitize. Returns null when nothing
+ * usable remains so the caller falls through. The facts are computed in code by
+ * the SHARED assemblers — the model only phrases them for a child (G0).
+ */
+async function voiceKidFacts(facts: string, question: string): Promise<string | null> {
+  try {
+    const voiced = await voiceFacts(facts, {
+      studentMessage: question,
+      kidSafe: true,
+      intent: 'kid-grounded',
+    });
+    const clean = sanitizeKidCoachText(voiced ?? '', 300);
+    return clean || null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * getKidGroundedResponse — TIE THE KID SECTION INTO THE UNIFIED SPINE (David:
+ * "no reason it needs to be isolated out"). A child's question runs through the
+ * SAME intent detector (`buildQuestionGrounding`) and the SAME fact-assemblers
+ * (`assembleConceptAnswer` / `assembleTeachingAnswer` / `assembleAppHelpAnswer`)
+ * the adult coach uses — the kid is no longer on a knowledge island that only
+ * knows the live board. The ONLY kid-specific step is the voicing register:
+ * facts are phrased kid-safe (spelled-out moves, warm, no praise) at the shared
+ * `voiceFacts` chokepoint, then sanitized.
+ *
+ * Scoped to the kid-appropriate knowledge families a 5-10 y.o. actually asks —
+ * "what's a fork?" (concept), "how do you teach the Italian?" (pedagogy), "what
+ * does the puzzles page do?" (app help). Adult-only families (weakness stats,
+ * pro repertoires, settings mutations, records) are deliberately NOT surfaced
+ * to a child. Returns null when no kid family fires so the caller falls back to
+ * the live-board Q&A path. Every answer is grounded + sanitized; a hallucinated
+ * board fact in kid mode is a P0 bug, so the caller still runs the board-claim
+ * gate on the live-board path.
+ */
+export async function getKidGroundedResponse(
+  question: string,
+  fen: string,
+): Promise<string | null> {
+  let g;
+  try {
+    g = buildQuestionGrounding(question, { fen });
+  } catch {
+    return null;
+  }
+
+  // CONCEPT — "what's a fork / a pin / checkmate?" Definition from the book
+  // corpus (chess-concepts.json), never training memory (G3). Confirm a real
+  // concept token fired (the detector only checked shape).
+  if (g.conceptQuestion) {
+    const ids = detectConceptsInText(question);
+    if (ids.length > 0) {
+      const concept = getConcept(ids[0]);
+      const answer = concept ? assembleConceptAnswer(concept) : null;
+      if (answer) {
+        const voiced = await voiceKidFacts(answer.facts, question);
+        if (voiced) return voiced;
+      }
+    }
+  }
+
+  // HOW WE TEACH — "how do you teach the Italian?" The WLPP grammar + the
+  // curated LessonScript for the named opening. Fact source is our own lesson
+  // data, so no board / master-play lookup.
+  if (g.teachingMethodQuestion) {
+    try {
+      const openingId = g.openingId ?? resolveOpeningIdFromName(question) ?? null;
+      const lesson = openingId ? getLessonScript(openingId) : null;
+      let openingName: string | null = null;
+      if (openingId) {
+        const rec = await getOpeningById(openingId);
+        openingName = rec?.name ?? null;
+      }
+      const answer = assembleTeachingAnswer({ openingName, lesson });
+      if (answer) {
+        const voiced = await voiceKidFacts(answer.facts, question);
+        if (voiced) return voiced;
+      }
+    } catch { /* fall through */ }
+  }
+
+  // APP HELP — "what does the puzzles page do?" Voiced from the app route
+  // manifest's own copy (title + description), never a free-LLM guess.
+  if (g.appHelpQuestion) {
+    try {
+      const topic = matchRouteByTopic(question);
+      const entry = topic ? APP_ROUTES_MANIFEST.find((e) => e.path === topic.path) : null;
+      if (entry) {
+        const answer = assembleAppHelpAnswer({ title: entry.title, description: entry.description });
+        if (answer) {
+          const voiced = await voiceKidFacts(answer.facts, question);
+          if (voiced) return voiced;
+        }
+      }
+    } catch { /* fall through */ }
+  }
+
+  return null;
+}
+
 export interface KidGameQuestionInput {
   /** The child's typed/spoken question. */
   question: string;
@@ -229,6 +340,21 @@ const KID_QUESTION_FALLBACK =
  * kid-safe; falls back to a safe canned line on any anomaly.
  */
 export async function answerKidGameQuestion(input: KidGameQuestionInput): Promise<string> {
+  // TIE-IN (David): a knowledge question ("what's a fork?", "how do you teach
+  // the Italian?", "what does the puzzles page do?") routes through the SAME
+  // shared grounding spine as the adult coach, voiced kid-safe. Only when no
+  // kid knowledge family fires do we fall to the live-board Q&A below — so a
+  // board question ("what should I do?") still gets the tuned board grounding.
+  try {
+    const grounded = await getKidGroundedResponse(input.question, input.fen);
+    // The grounded answer describes a CONCEPT / a DIFFERENT opening's position,
+    // not the live board — so it is NOT board-claim-gated (that gate is for the
+    // live-board path below). It is safe by construction: the facts are computed
+    // by the shared assemblers, voiceFacts adds no numbers, sanitize strips any
+    // SAN. Return it directly when a kid knowledge family fired.
+    if (grounded) return grounded;
+  } catch { /* fall through to live-board path */ }
+
   let groundingBlock = '';
   try {
     const sideToMove: 'w' | 'b' = input.fen.split(' ')[1] === 'b' ? 'b' : 'w';

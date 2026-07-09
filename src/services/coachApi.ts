@@ -1903,12 +1903,20 @@ export async function voiceFacts(
      *  for genuinely conversational / teaching turns where varied phrasing earns
      *  its keep (concept, progress, board-teaching). */
     preferRaw?: boolean;
+    /** KID-SAFE VOICING (David: "tie the kid section in"). When true, the SAME
+     *  computed facts are phrased for a child aged 5-10: warm, literal, moves
+     *  spelled out (never notation), no praise. The kid caller still sanitizes
+     *  the result. Overrides `preferRaw` — the raw facts may carry a SAN token,
+     *  so kid text must be phrased (spelled out), not spoken verbatim. This keeps
+     *  the kid path on the ONE grounding chokepoint instead of a separate island. */
+    kidSafe?: boolean;
   } = {},
 ): Promise<string | null> {
   // Lean-on-raw short-circuit — the computed facts ARE the answer; don't spend
   // an LLM call to re-say them. Runs before the provider lookup so it costs
-  // nothing when a whole vertical opts into raw.
-  if (opts.preferRaw) return facts.trim();
+  // nothing when a whole vertical opts into raw. Kid-safe voicing overrides raw:
+  // the facts may carry a SAN token, and a child must hear moves spelled out.
+  if (opts.preferRaw && !opts.kidSafe) return facts.trim();
   const cfg = opts.providerConfig ?? (await getProviderConfig());
   // No provider configured → there's nothing to phrase WITH, but the computed
   // `facts` are already correct, coach-voiced prose. Speak them directly rather
@@ -1917,8 +1925,14 @@ export async function voiceFacts(
   // The phrasing LLM is a nicety, not a requirement, for a grounded answer.
   if (!cfg) return facts.trim();
 
-  const system =
-    'You are a warm, concise chess coach speaking to a student. You will be given ' +
+  const system = opts.kidSafe
+    ? 'You are a warm, friendly chess coach talking to a child aged 5 to 10. You will ' +
+      'be given FACTS that are already true and verified. Say those facts to the child ' +
+      'in ONE or TWO short, simple sentences. Add NOTHING: do not introduce any move, ' +
+      'square, piece, number, name, or claim that is not in the facts. Spell moves out ' +
+      'in plain words ("the knight goes to f3"), NEVER chess notation. No praise ("great ' +
+      'job"), no slang, no idioms — just describe the idea kindly so the child learns.'
+    : 'You are a warm, concise chess coach speaking to a student. You will be given ' +
     'FACTS that are already true and verified. Your ONLY job is to say those facts ' +
     'to the student naturally, as a coach would. Add NOTHING: do not introduce any ' +
     'move, square, piece, number, name, opening, or claim that is not in the facts. ' +
