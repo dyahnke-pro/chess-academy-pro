@@ -1,5 +1,4 @@
 import { Capacitor } from '@capacitor/core';
-import { voiceService } from './voiceService';
 
 type ResultHandler = (text: string) => void;
 type InterimHandler = (text: string) => void;
@@ -434,10 +433,6 @@ class VoiceInputService {
       await SpeechRecognition.addListener('partialResults', (data: { matches: string[] }) => {
         const m = data.matches?.[0]?.trim();
         if (!m) return;
-        // Half-duplex: while the coach is speaking (TTS), ignore mic audio so
-        // it doesn't transcribe the coach's OWN voice or fire barge-in on it
-        // (echo / self-cutoff fix, David 2026-07-08 "picks up its own voice").
-        if (voiceService.isPlaying()) return;
         this.nativeLatest = m;
         if (!this.speechStartFired) { this.speechStartFired = true; this.speechStartHandler?.(); }
         this.interimHandler?.(m);
@@ -516,10 +511,6 @@ class VoiceInputService {
     this.finalDispatched = false;
 
     this.recognition.onresult = (event: SpeechRecognitionEvent) => {
-      // Half-duplex: ignore mic audio while the coach is speaking (TTS) so the
-      // recognizer doesn't hear the coach's own voice (echo fix, David
-      // 2026-07-08). Web path mirror of the native partialResults guard.
-      if (voiceService.isPlaying()) return;
       let interimText = '';
       let finalText = '';
       let finalConfidence = 0;
