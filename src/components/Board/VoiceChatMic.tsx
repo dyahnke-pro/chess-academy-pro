@@ -7,21 +7,13 @@ import { voiceInputService } from '../../services/voiceInputService';
 import { voiceService } from '../../services/voiceService';
 import { speechService } from '../../services/speechService';
 import { useAppStore } from '../../stores/appStore';
-import { getCoachChatResponse } from '../../services/coachApi';
+import { dispatchCoachTurn } from '../../coach/dispatchCoachTurn';
 import { isSpokenSentenceGrounded, groundCoachReply } from '../../services/coachAnswerGates';
-import { buildQuestionGrounding } from '../../coach/questionIntents';
 import { tryRouteIntent } from '../../services/coachIntentRouter';
 import { logAppAudit } from '../../services/appAuditor';
 import { stockfishEngine } from '../../services/stockfishEngine';
-import { buildStudentStateBlock } from '../../services/studentStateBlock';
-import { buildCoachMemoryBlock, extractAndRememberNotes } from '../../services/coachMemoryService';
+import { extractAndRememberNotes } from '../../services/coachMemoryService';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
-import { buildGroundingBlock } from '../../services/coachContextEnricher';
-import {
-  buildCoachContextSnapshot,
-  formatCoachContextSnapshot,
-} from '../../services/coachContextSnapshot';
-import { COACH_CONVERSATION_RULES } from '../../services/coachPrompts';
 import { db } from '../../db/schema';
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
 
@@ -100,7 +92,6 @@ interface VoiceChatMicProps {
   getCurrentFen?: () => string;
 }
 
-const MAX_HISTORY_PAIRS = 3;
 const VOICE_ENGINE_DEPTH = 10;
 /** Tokens cap for voice replies. Previously 120 (set in PR #230 for
  *  latency), but that truncates the first-ever greeting's
@@ -118,106 +109,6 @@ const ENGINE_REQUIRED_RE = /\b(best|blunder|mistake|inaccur|trade|sacrifice|hang
 
 function shouldIncludeEngine(userText: string): boolean {
   return ENGINE_REQUIRED_RE.test(userText);
-}
-
-function buildSystemAddition(
-  fen: string,
-  pgn: string | undefined,
-  turn: string | undefined,
-  playerColor: 'white' | 'black',
-  engineData: EngineSnapshot | null,
-  lastMove: LastMoveContext | null | undefined,
-): string {
-  const opponentColor = playerColor === 'white' ? 'Black' : 'White';
-  const playerLabel = playerColor === 'white' ? 'White' : 'Black';
-  const isStudentTurn = (turn === 'w' && playerColor === 'white') || (turn === 'b' && playerColor === 'black');
-  const sideToMove = turn === 'b' ? 'Black' : 'White';
-  const sideToMoveRole = isStudentTurn ? 'STUDENT' : 'COACH';
-
-  // Engine block — label every move with whose move it is
-  let engineBlock = '';
-  if (engineData) {
-    const bestMoveLabel = isStudentTurn
-      ? `Best move for the STUDENT (${playerLabel}): ${engineData.bestMove}`
-      : `Best move for the COACH (${opponentColor}): ${engineData.bestMove} ← THIS IS YOUR MOVE, NOT THE STUDENT'S`;
-
-    const evalNum = engineData.isMate
-      ? `Mate in ${engineData.mateIn}`
-      : `${(engineData.evaluation / 100).toFixed(1)} pawns`;
-    const evalExplain = engineData.evaluation > 0 ? '(White is better)' : engineData.evaluation < 0 ? '(Black is better)' : '(equal)';
-
-    const lines = engineData.topLines.slice(0, 3).map(
-      (l, i) => `Line ${i + 1}: ${l.moves.join(' ')} (${l.mate !== null ? `M${l.mate}` : (l.evaluation / 100).toFixed(1)})`,
-    );
-
-    engineBlock = `
-[Engine Analysis — TRUST THIS DATA, DO NOT GUESS]
-It is currently ${sideToMove}'s turn (the ${sideToMoveRole}).
-${bestMoveLabel}
-Evaluation: ${evalNum} ${evalExplain}
-${lines.join('\n')}`;
-  }
-
-  // Last move block — label whose move and what color piece moved
-  let lastMoveBlock = '';
-  if (lastMove) {
-    const evalShift = lastMove.evalBefore !== null && lastMove.evalAfter !== null
-      ? ((lastMove.evalAfter - lastMove.evalBefore) / 100).toFixed(1)
-      : null;
-    const isStudentMove = lastMove.player === 'you';
-    const whoPlayed = isStudentMove
-      ? `the STUDENT (${playerLabel} pieces)`
-      : `the COACH, which is you (${opponentColor} pieces)`;
-    const colorMoved = isStudentMove ? playerLabel : opponentColor;
-
-    lastMoveBlock = `
-[Last Move Played]
-Move: ${lastMove.san} — a ${colorMoved} move played by ${whoPlayed}
-${lastMove.classification ? `Classification: ${lastMove.classification}` : ''}
-${evalShift !== null ? `Eval change: ${Number(evalShift) >= 0 ? '+' : ''}${evalShift} pawns` : ''}
-${lastMove.bestMove ? `Engine's best move was: ${lastMove.bestMove} (for ${colorMoved})` : ''}`;
-  }
-
-  return `VOICE CHAT — You are a chess coach playing a live game against a student.
-
-[ROLES — READ CAREFULLY]
-- YOU (the coach/AI) are playing the ${opponentColor} pieces.
-- The STUDENT is playing the ${playerLabel} pieces.
-- The student's pieces are on the BOTTOM of the board. Your pieces are on the TOP.
-- You are both the opponent AND the coach — you make ${opponentColor} moves AND answer questions.
-
-[RULES FOR RESPONDING — YOUR RESPONSES ARE SPOKEN ALOUD VIA TEXT-TO-SPEECH]
-1. NEVER start with "Great question!", "Excellent!", "Good thinking!" — jump straight to the answer.
-2. When the student asks what THEY should play: ONLY suggest ${playerLabel} moves. ${isStudentTurn
-    ? `It IS the student's turn — tell them the best move from [Engine Analysis].`
-    : `It is NOT the student's turn right now (it's your turn as ${opponentColor}). Talk about the position or their last move instead.`}
-3. CRITICAL: The student plays ${playerLabel}. NEVER suggest a ${opponentColor} move as the student's move. ${opponentColor} moves are YOUR moves.
-4. When the student asks about a move: use [Last Move Played]. Say if it was good/inaccuracy/mistake and why.
-5. Length follows the student's current verbosity setting — a routine exchange is a sentence, a teachable moment can be longer. No filler either way.
-5a. MATCH THE STUDENT'S LANGUAGE. If the student's most recent message is in Spanish / French / German / Portuguese / any non-English language, reply in THAT language and stay there for the whole reply. Do not switch back to English mid-reply. English is the default only when the student speaks English.
-5b. READ THE ROOM. If the student sounds frustrated ("ugh", "why did I", "I always do this"), lead with a one-beat acknowledgement ("yeah, that one gets everyone") before teaching. If they're on a good run, match the energy.
-6. CRITICAL — SPEAK LIKE A HUMAN, NOT A COMPUTER. Your response is read aloud by text-to-speech. NEVER output chess notation like "Nc3", "Qd8", "O-O", "e4", "Bxf7", etc. ALSO NEVER use single-letter piece shorthand like "P on e4", "N on c3", "Q to d8", "the K is on g1" — the letters sound wrong when spoken. ALWAYS translate into plain spoken English. Examples:
-   - "Nc3" → "move your knight to c3"
-   - "Qd8" → "queen back to d8"
-   - "O-O" → "castle kingside"
-   - "Bxf7" → "take the pawn on f7 with your bishop"
-   - "e4" → "push your pawn to e4"
-   - "exd5" → "capture on d5 with your e pawn"
-   - "P on e4" → "pawn on e4"
-   - "hanging N" → "hanging knight"
-   Also explain WHY the move is good in plain language. For example: "Move your knight to c3 — it develops a piece and attacks their queen, forcing it to retreat."
-7. Base advice ONLY on the engine data below — never guess. Lichess is the source of truth for opening theory and named traps; Stockfish is the source of truth for evaluations and best moves. If either is absent for the current position, say so — do NOT invent moves, traps, or lines from your training, and NEVER describe a move that isn't legal in the current position (e.g. "push the e-pawn" when a pawn already blocks e5).
-8. Own your moves: "I played my queen to d6 because..." (you are ${opponentColor}).
-9. ARROWS: If the student asks you to "show me" a move on the board, include [ARROW:from:to] at the END of your response. Use lowercase algebraic squares (e.g. [ARROW:e2:e4]). You can include multiple arrows. Only add arrows when the student asks to see something on the board — do NOT add them by default.
-
-[Current Position]
-FEN: ${fen}
-${pgn ? `PGN so far: ${pgn}` : 'Game just started — no moves yet.'}
-STUDENT color: ${playerLabel} (bottom of board)
-COACH color: ${opponentColor} (top of board, that's you)
-Current turn: ${sideToMove} to move (the ${sideToMoveRole})
-${engineBlock}
-${lastMoveBlock}`;
 }
 
 /**
@@ -263,7 +154,7 @@ function detectOpeningRequest(text: string): string | null {
   return nameMap[raw] ?? raw;
 }
 
-export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningRequest, engineSnapshot, lastMoveContext, onListeningChange, onArrows, onPlayMove, onTakeBackMove, onResetBoard, getMoveCount, getCurrentFen }: VoiceChatMicProps): JSX.Element {
+export function VoiceChatMic({ fen, turn, playerColor = 'white', onOpeningRequest, engineSnapshot, lastMoveContext, onListeningChange, onArrows, onPlayMove, onTakeBackMove, onResetBoard, getMoveCount, getCurrentFen }: VoiceChatMicProps): JSX.Element {
   const navigate = useNavigate();
   const [listening, setListening] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -503,46 +394,15 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
       }
     }
 
-    const recent = currentMessages.slice(-(MAX_HISTORY_PAIRS * 2));
-    const formatted = recent.map((m) => ({ role: m.role, content: m.content }));
-    const baseSystem = buildSystemAddition(fen, pgn, turn, playerColor, engineData, lastMoveContext);
-
-    // Voice chat was flying blind vs. the chat coach: it skipped the
-    // conversation rules (greeting structure, data-access rule), the
-    // session-state snapshot, and the grounded-data block. With none
-    // of those, the LLM had no stats to cite and fell back to bare
-    // "Hi." replies. Inject the same trainer-grade blocks the main
-    // coach runner uses so voice greetings land with real content.
-    // Tempo: PREVIOUS user message's timestamp, not the one that
-    // just arrived. Date.now() always flagged FAST → LLM kept replies
-    // tight → every greeting became "Hi." Undefined when this is the
-    // first voice exchange; builder skips tempo in that case.
-    const previousUserMsg = currentMessages
-      .slice(0, -1)
-      .filter((m) => m.role === 'user')
-      .at(-1);
-    const studentStateBlock = buildStudentStateBlock({
-      recentChat: currentMessages,
-      lastUserInteractionMs: previousUserMsg?.timestamp,
-      turn: engineData && turn === (playerColor === 'white' ? 'w' : 'b') ? 'student' : 'coach',
-      contextLabel: 'in-game voice chat',
-    });
-    const [memoryBlock, snapshot, groundingBlock] = await Promise.all([
-      buildCoachMemoryBlock(),
-      buildCoachContextSnapshot(),
-      buildGroundingBlock({ userText: text, currentFen: fen }),
-    ]);
-    const snapshotText = formatCoachContextSnapshot(snapshot);
-    const systemAddition = [
-      baseSystem,
-      COACH_CONVERSATION_RULES,
-      snapshotText,
-      memoryBlock,
-      studentStateBlock,
-      groundingBlock,
-    ]
-      .filter((s): s is string => !!s && s.length > 0)
-      .join('\n\n');
+    // The voice surface used to HAND-BUILD the whole envelope here (base
+    // system + conversation rules + context snapshot + memory + student-state +
+    // grounding) as a workaround for the flat getCoachChatResponse path having
+    // no envelope. That is exactly the "same trainer-grade blocks the main coach
+    // runner uses" — i.e. `coachService.ask`. Migrating onto the shared spine
+    // (dispatchCoachTurn → ask) gives those blocks NATIVELY, so the greeting/
+    // tempo fix now rides the envelope instead of a hand-rolled copy. The live
+    // board state is threaded through `liveState`; grounding + memory are
+    // rebuilt inside `ask`. (identical-capabilities rule; remove-old-wiring.)
 
     // Stop any in-flight TTS (per-move narration from CoachGamePage, a
     // previous voice reply that's still playing, etc.) before the voice
@@ -604,29 +464,39 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
     // play?"). Voice is one of the most likely surfaces to hit this
     // intent. The watcher's not mounted on voice but the cache may
     // already be warm from the host board surface.
-    const rawResponse = await getCoachChatResponse(
-      formatted,
-      systemAddition,
-      onChunk,
-      'chat_response',
-      VOICE_MAX_TOKENS,
-      undefined, // verbosityOverride
-      undefined, // forceProvider
-      undefined, // skipPersonality
-      // Voice used to pass a bare { currentFen } with NO intent flags, so the
-      // grounded assemblers never fired — a spoken "what am I weak in?" /
-      // "what's my strongest opening?" got an ungrounded free-LLM reply. Build
-      // the SAME grounding the typed surfaces get so voice is one coherent unit
-      // with Learn/Play (David 2026-07-04). Board-independent intents (progress
-      // / opening-profile / concept) ground even at the start position; the FEN
-      // lets master-play + best-move engage. (Eval/tactics sign-threading is a
-      // tracked follow-up.)
-      buildQuestionGrounding(
-        text,
-        { fen: getCurrentFen?.() ?? fen ?? undefined, studentColor: playerColor === 'white' ? 'white' : 'black' },
-        'game-chat',
-      ),
+    // The spine auto-grounds (buildQuestionGrounding fires inside `ask` when a
+    // FEN is present or any intent detector matches) so a spoken "what am I weak
+    // in?" / "what should I play?" voices the SAME computed data the typed
+    // surfaces do — voice is one coherent unit with Learn/Play. The live board
+    // (FEN, whose-turn, student side, pre-computed eval) is handed via liveState
+    // so the envelope carries ground truth without a redundant engine trip.
+    const answer = await dispatchCoachTurn(
+      {
+        surface: 'game-chat',
+        ask: text,
+        liveState: {
+          surface: 'game-chat',
+          fen: getCurrentFen?.() ?? fen,
+          whoseTurn: turn === 'w' ? 'white' : 'black',
+          studentColor: playerColor === 'white' ? 'white' : 'black',
+          userJustDid: text,
+          ...(engineData?.evaluation !== undefined ? { evalCp: engineData.evaluation } : {}),
+        },
+      },
+      {
+        // VoiceChatMic runs its own deterministic board-command pre-pass
+        // (tryRouteIntent) above, so skip the spine's action router here; the
+        // agentic tool loop still handles teach/navigate. Folding tryRouteIntent
+        // into the shared routeChatIntent is the follow-up chunk.
+        skipActionRouter: true,
+        onChunk,
+        task: 'chat_response',
+        maxTokens: VOICE_MAX_TOKENS,
+        maxToolRoundTrips: 3,
+        onNavigate: (path: string) => { void navigate(path); },
+      },
     );
+    const rawResponse = answer.text;
 
     // Strip + persist any [[REMEMBER: ...]] notes the coach emitted.
     // Voice chat now grows the same cross-session memory as the main
@@ -659,7 +529,7 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
     setMessages((prev) => [...prev, assistantMsg]);
     recordMemory('coach', response);
     setIsStreaming(false);
-  }, [fen, pgn, turn, playerColor, engineSnapshot, lastMoveContext, onOpeningRequest, onArrows, onPlayMove, onTakeBackMove, onResetBoard, getMoveCount, getCurrentFen, navigate]);
+  }, [fen, turn, playerColor, engineSnapshot, lastMoveContext, onOpeningRequest, onArrows, onPlayMove, onTakeBackMove, onResetBoard, getMoveCount, getCurrentFen, navigate]);
 
   // Keep a ref to handleUserMessage so the onResult callback always uses the latest
   const handleUserMessageRef = useRef(handleUserMessage);
