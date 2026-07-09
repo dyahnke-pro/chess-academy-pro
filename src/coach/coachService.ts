@@ -29,7 +29,7 @@
 import { Chess } from 'chess.js';
 import { logAppAudit } from '../services/appAuditor';
 import { scanPositionForTrap } from '../services/positionTrapScan';
-import { groundCoachReply, applyCandidateArrows } from '../services/coachAnswerGates';
+import { applyCandidateArrows } from '../services/coachAnswerGates';
 import { assembleEnvelope } from './envelope';
 import { loadAnnotationContextForLive } from './sources/annotationContext';
 import { loadBookGroundingForLive } from './sources/bookGrounding';
@@ -52,7 +52,6 @@ import type {
   Provider,
   ProviderName,
   ProviderResponse,
-  TacticsLiveContext,
   ToolExecutionContext,
 } from './types';
 
@@ -425,29 +424,9 @@ function previewToolResult(
   return null;
 }
 
-/** Runtime grounding gates applied to EVERY coach answer in the spine.
- *  Thin wrapper over the shared `groundCoachReply` (services/
- *  coachAnswerGates) — the SAME gate set every bypass surface uses, so
- *  there is one implementation and no drift. See that module for the
- *  per-gate contract. */
-function runAnswerGates(
-  finalText: string,
-  fen: string | null,
-  tactics: TacticsLiveContext | null,
-  surface: string,
-  playerDataGrounded: boolean,
-  evalCp: number | undefined,
-  evalMateIn: number | undefined,
-): string {
-  return groundCoachReply(finalText, {
-    fen,
-    tactics,
-    playerDataGrounded,
-    evalCp,
-    evalMateIn,
-    source: `coachService:${surface}`,
-  });
-}
+// runAnswerGates — DELETED (David 2026-07-09: "finish ripping"). It wrapped
+// groundCoachReply as the spine's validate-after bandaid. The spine no longer
+// free-composes chess, so there is nothing to gate.
 
 /** A PLAN / STRATEGY question — the answer names forward moves several
  *  plies ahead that the bare-SAN claim gate would otherwise flag as
@@ -1516,23 +1495,14 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
       '[VOICE: Let me start that lesson.] Tell me the opening you want to learn — say "walk me through it" — and I\'ll animate it move by move on the board.';
   }
 
-  // ── RUNTIME GROUNDING GATES (run on EVERY coach answer, EVERY surface) ──
-  // Previously these lived only on individual surfaces (board-claim on the
-  // hint hook, arrow/tactic on CoachTeachPage) — so masterclass-chat,
-  // middlegame-practice, live-coach, game-chat etc. shipped UNVALIDATED
-  // prose, and the teach hallucination ("the knight on a3" on an empty a3)
-  // sailed through. Centralising them in the spine wires every gate into
-  // every turn. The board the prose describes is `boardFenForClaims`
-  // (live FEN advanced by this turn's board-changing tools).
-  finalText = runAnswerGates(
-    finalText,
-    boardFenForClaims,
-    input.liveState.tactics ?? null,
-    input.surface,
-    playerDataGrounded,
-    input.liveState.evalCp,
-    input.liveState.evalMateIn,
-  );
+  // RUNTIME GROUNDING GATES (groundCoachReply) — DELETED (David 2026-07-09:
+  // "finish ripping"). They were the validate-after bandaid: strip board-false /
+  // ungrounded-stat sentences AFTER the LLM free-composed. That free-compose is
+  // gone — getCoachChatResponse now grounds every turn (assembler → voiceFacts,
+  // or the computed grounded default, or chess-forbidden conversational), so
+  // there is nothing to strip. The board-truth guarantee comes from the facts
+  // being computed, not from a downstream gate. `applyCandidateArrows` stays —
+  // it is the arrow-DISPLAY pass (engine-colored), not a grounding gate.
   // Arrow standard (async, engine-colored) — the ONE arrow path. Every
   // move the coach mentioned gets a code-resolved, Stockfish-rank-
   // colored arrow; the LLM no longer emits [BOARD: arrow:] markers.

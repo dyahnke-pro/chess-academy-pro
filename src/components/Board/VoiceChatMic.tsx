@@ -8,7 +8,7 @@ import { voiceService } from '../../services/voiceService';
 import { speechService } from '../../services/speechService';
 import { useAppStore } from '../../stores/appStore';
 import { dispatchCoachTurn } from '../../coach/dispatchCoachTurn';
-import { isSpokenSentenceGrounded, groundCoachReply } from '../../services/coachAnswerGates';
+import { isSpokenSentenceGrounded } from '../../services/coachAnswerGates';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
 import { logAppAudit } from '../../services/appAuditor';
 import { stockfishEngine } from '../../services/stockfishEngine';
@@ -506,10 +506,10 @@ export function VoiceChatMic({ fen, turn, playerColor = 'white', onOpeningReques
 
     // Extract arrow annotations before flushing remaining speech
     const { arrows: responseArrows, cleanText: rawClean } = extractArrows(afterMemory);
-    // Ground the DISPLAYED bubble the same way the spoken sentences are gated
-    // above (written == verbal) — drop board-false / ungrounded-stat sentences
-    // so the student never reads a hallucination the voice already refused.
-    const response = groundCoachReply(rawClean, { fen: getCurrentFen?.() ?? fen ?? null, source: 'VoiceChatMic' });
+    // The answer came from the grounded spine (dispatchCoachTurn → coachService.ask),
+    // which computes every fact and voices it — so the displayed bubble is already
+    // grounded. The post-hoc groundCoachReply strip is DELETED (David 2026-07-09).
+    const response = rawClean;
 
     // Flush remaining text (cleaned of arrow tags)
     const { cleanText: cleanBuffer } = extractArrows(sentenceBuffer);

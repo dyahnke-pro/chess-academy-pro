@@ -39,7 +39,7 @@ import type { LiveState } from '../../coach/types';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { useAppStore } from '../../stores/appStore';
 import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
-import { groundCoachReply } from '../../services/coachAnswerGates';
+// groundCoachReply import removed — the spine grounds the answer (David 2026-07-09).
 import { resolveCoachNarration } from '../../utils/coachNarration';
 import { logAppAudit } from '../../services/appAuditor';
 import { generateMistakePuzzlesFromGame } from '../../services/mistakePuzzleService';
@@ -742,16 +742,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       if (!match) return;
       const rawInner = match[1].trim();
       if (!rawInner) return;
-      // G3 ENFORCEMENT: this spoken [VOICE:] block was ungated — a hallucinated
-      // fork/pin/board-fact was SPOKEN and shown verbatim (David 2026-07-04
-      // PostHog sweep). Run the shared grounding gate (board + tactic, enforcing
-      // because reviewTactics is present) before speaking + displaying. WRITTEN
-      // == VERBAL: spokenDisplayText feeds the bubble, so both get the clean text.
-      const inner = groundCoachReply(rawInner, {
-        fen: fenForQ,
-        tactics: reviewTactics,
-        source: 'CoachGameReview.voice',
-      }).trim();
+      // The [VOICE:] block came from the grounded spine (coachService.ask) —
+      // computed facts, voiced. The post-hoc groundCoachReply strip is DELETED
+      // (David 2026-07-09 — "finish ripping"); there is nothing to gate.
+      const inner = rawInner.trim();
       if (!inner) return;
       voiceSpokenForTurn = true;
       spokenDisplayText = inner;
@@ -836,16 +830,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       .then((answer) => {
         // WO-BRAIN-04: persist coach reply into conversation history.
         if (!abortSignal.aborted && answer.text.trim().length > 0) {
-          // G3 ENFORCEMENT on the review-ask reply: DROP board-false +
-          // out-of-vocab-tactic sentences before they enter memory (rehydration
-          // re-feeds prior assistant text into the next prompt, so a stored lie
-          // teaches the brain the wrong protocol). Was audit-only; David
-          // 2026-07-04 PostHog sweep.
-          const groundedAnswer = groundCoachReply(answer.text, {
-            fen: fenForQ,
-            tactics: reviewTactics,
-            source: 'CoachGameReview.askResponse',
-          });
+          // The review-ask reply is spine-grounded (coachService.ask) — computed
+          // facts, voiced. The post-hoc groundCoachReply strip is DELETED (David
+          // 2026-07-09 — "finish ripping"); the stored text is already grounded.
+          const groundedAnswer = answer.text;
           useCoachMemoryStore.getState().appendConversationMessage({
             surface: 'chat-review-ask',
             role: 'coach',

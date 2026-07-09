@@ -309,35 +309,36 @@ describe('grounding — the grounded default (no free-compose)', () => {
     expect(response).not.toContain('58%');
   });
 
-  // MOVE-NARRATION exemption (the Learn step-by-step flow) is NOT ripped — the
-  // coach still narrates the played move + a ply-ahead continuation there.
-  it('does NOT gate bare SANs on a MOVE-NARRATION turn (deep Learn teaching)', async () => {
+  // MOVE-NARRATION is no longer exempt (David 2026-07-09: "finish ripping"). The
+  // Learn flow ("I played Nc3. Your move.") now GROUNDS on the engine snapshot
+  // CoachTeachPage threads (engineBestMoveUci + tactics), so the coach voices the
+  // COMPUTED best move + real tactics instead of a free ply-ahead narration.
+  it('grounds a MOVE-NARRATION turn on the threaded engine data (no free-compose)', async () => {
     const counters = installFetchMock({ lichess: LICHESS_PAYLOAD, llmTexts: [
-      'Good — and if I recapture with bxc3, my pawns double but the b-file opens for your rook.',
+      'and if I recapture with bxc3 my pawns double',  // deliberately hallucinatory — must NOT surface
     ] });
     const r = await getCoachChatResponse(
       [{ role: 'user', content: 'I played Nc3. Your move.' }],
       '', undefined, 'chat_response', 1024, undefined, undefined, undefined,
-      { currentFen: STARTING_FEN, moveNarration: true, surface: '/coach/teach', sessionId: 'test-session' },
+      { currentFen: STARTING_FEN, moveNarration: true, surface: '/coach/teach', sessionId: 'test-session',
+        engineBestMoveUci: 'g1f3', engineEvalCp: 25 },
     );
-    expect(r).toContain('bxc3');
-    expect(r).not.toContain("can't verify");
-    expect(counters.llmCalls).toBe(1);
+    expect(r).toContain('f3');              // the engine's COMPUTED best move
+    expect(r).not.toContain('bxc3');        // the free ply-ahead narration NEVER surfaces
+    expect(counters.llmCalls).toBe(0);      // grounded default — the LLM decides nothing
   });
 
-  it('does NOT trip when the coach names the move JUST PLAYED (engine-driven Learn step)', async () => {
-    const POST_C5_FEN = 'rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+  it('serves the honest line on a MOVE-NARRATION turn with no engine snapshot', async () => {
     const counters = installFetchMock({ lichess: LICHESS_PAYLOAD, llmTexts: [
-      'c5 is the Sicilian Defense — Black fights for the center from the flank. Your move.',
+      'c5 is the Sicilian Defense — Black fights for the center.',  // hallucinatory, must not surface
     ] });
     const r = await getCoachChatResponse(
-      [{ role: 'user', content: 'I played e4.' }],
+      [{ role: 'user', content: 'I played e4. Your move.' }],
       '', undefined, 'chat_response', 1024, undefined, undefined, undefined,
-      { currentFen: POST_C5_FEN, moveHistory: ['e4', 'c5'], surface: '/coach/teach', sessionId: 'test-session' },
+      { currentFen: STARTING_FEN, surface: '/coach/teach', sessionId: 'test-session' },
     );
-    expect(r).toContain('Sicilian');
-    expect(r).not.toContain("can't verify");
-    expect(counters.llmCalls).toBe(1);
+    expect(r).toContain("can't verify"); // no engine data → honest default, not free prose
+    expect(counters.llmCalls).toBe(0);
   });
 });
 

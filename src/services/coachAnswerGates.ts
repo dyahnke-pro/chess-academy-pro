@@ -29,14 +29,11 @@
  * surface) so the audit log shows where a gate tripped.
  */
 import { logAppAudit } from './appAuditor';
-import { groundCoachAnswerBoardClaims, validateBoardClaims, stripDisprovenSentences } from './boardClaimValidator';
-import { stripUngroundedPlayerStats } from './claimValidator';
+import { validateBoardClaims, stripDisprovenSentences } from './boardClaimValidator';
 import { injectCandidateArrows, injectCandidateHighlights, type RankedCandidate } from './arrowEngine';
 import { stockfishEngine } from './stockfishEngine';
-import { validateTacticClaims, stripUngroundedTacticSentences } from './tacticClaimValidator';
-import { stripIllegalMoveSequences } from './moveSequenceValidator';
+import { stripUngroundedTacticSentences } from './tacticClaimValidator';
 import { stripDisprovenEvalSentences } from './evalClaimValidator';
-import { validateOpeningNameClaims } from './openingNameClaimValidator';
 import type { TacticsLiveContext } from '../coach/types';
 
 /** Per-sentence spoken gate for STREAMING-TTS surfaces. Those hand each
@@ -155,157 +152,15 @@ export interface CoachAnswerGateOptions {
   source: string;
 }
 
-/** Run every grounding gate on a coach answer. Returns the cleaned text
- *  (lying sentences dropped, missing arrows synthesised). Pure aside from
- *  fire-and-forget audit logging. */
-export function groundCoachReply(text: string, opts: CoachAnswerGateOptions): string {
-  let out = text;
-  if (!out.trim()) return out;
-  const { fen, tactics = null, playerDataGrounded = false, evalCp, evalMateIn, source } = opts;
-
-  // (eval) Who's-winning gate — drop a sentence whose assessment
-  // egregiously contradicts the ground-truth engine eval ("you're up a
-  // pawn" after losing the queen). Conservative thresholds (multi-pawn);
-  // a fuzzy judgment call is never touched. Runs only when an eval exists.
-  if (typeof evalCp === 'number' || typeof evalMateIn === 'number') {
-    try {
-      const evalGate = stripDisprovenEvalSentences(out, evalCp, evalMateIn);
-      if (evalGate.dropped.length > 0) {
-        out = evalGate.clean;
-        void logAppAudit({
-          kind: 'claim-validator-trip',
-          category: 'subsystem',
-          source: `${source}.evalClaimGate`,
-          summary: `dropped ${evalGate.dropped.length} eval-false sentence(s) (engine ${typeof evalMateIn === 'number' ? `mate ${evalMateIn}` : ((evalCp ?? 0) / 100).toFixed(1)})`,
-          details: JSON.stringify({ source, evalCp, evalMateIn, dropped: evalGate.dropped }),
-          fen: fen ?? undefined,
-        });
-      }
-    } catch { /* never block */ }
-  }
-
-  // (0) Player-stat gate.
-  try {
-    const statGate = stripUngroundedPlayerStats(out, playerDataGrounded);
-    if (statGate.dropped.length > 0) {
-      out = statGate.text;
-      void logAppAudit({
-        kind: 'claim-validator-trip',
-        category: 'subsystem',
-        source: `${source}.playerStatGate`,
-        summary: `dropped ${statGate.dropped.length} ungrounded player-stat sentence(s)`,
-        details: JSON.stringify({ source, dropped: statGate.dropped }),
-      });
-    }
-  } catch { /* never block */ }
-
-  // (1) Board-claim gate.
-  if (fen) {
-    try {
-      const grounded = groundCoachAnswerBoardClaims(out, fen);
-      if (grounded.violations.length > 0) {
-        out = grounded.text;
-        void logAppAudit({
-          kind: 'claim-validator-trip',
-          category: 'subsystem',
-          source: `${source}.boardClaimGate`,
-          summary: `dropped ${grounded.dropped.length} board-false sentence(s): ${grounded.violations.map((v) => v.reason).slice(0, 3).join('; ')}`,
-          details: JSON.stringify({ source, fen, violations: grounded.violations, dropped: grounded.dropped }),
-          fen,
-        });
-      }
-    } catch { /* never block */ }
-  }
-
-  // (1b) Move-SEQUENCE gate — drop a sentence that narrates an ILLEGAL move
-  //      combination against the live board. The board/tactic gates check a
-  //      single position; they can't catch a fabricated LINE where each move is
-  //      legal from the current board but the sequence is impossible ("Qh5+, if
-  //      g6, Qxe4 wins" — Qxe4 is illegal after Qh5+ g6). David 2026-07-04: the
-  //      calc trainer's engine hung on iOS, so the ungrounded LLM invented this
-  //      combo and it was SPOKEN. Conservative (opponent-reply lines only).
-  if (fen) {
-    try {
-      const seqGate = stripIllegalMoveSequences(out, fen);
-      if (seqGate.dropped.length > 0) {
-        out = seqGate.clean;
-        void logAppAudit({
-          kind: 'claim-validator-trip',
-          category: 'subsystem',
-          source: `${source}.moveSequenceGate`,
-          summary: `dropped ${seqGate.dropped.length} illegal-move-sequence sentence(s)`,
-          details: JSON.stringify({ source, fen, dropped: seqGate.dropped }),
-          fen,
-        });
-      }
-    } catch { /* never block */ }
-  }
-
-  // (2) Arrow injection moved OUT of this sync gate — arrows are now
-  //     computed (geometry + Stockfish-rank color) by the shared
-  //     arrowEngine via the ASYNC `applyCandidateArrows`, which
-  //     fen-bearing surfaces call after this gate. groundCoachReply
-  //     stays sync; the engine-colored arrow pass needs await. See
-  //     docs/plans/2026-06-10-unified-arrow-engine.md.
-
-  // (3) Tactic gate. ENFORCING when a bounded tactics context was sent this
-  //     turn — a named tactic absent from it is a provable out-of-vocabulary
-  //     hallucination, so drop the sentence (negation/avoidance phrasing is
-  //     kept; see stripUngroundedTacticSentences). AUDIT-ONLY when no context
-  //     block exists — we can't disprove a pure concept mention. (David
-  //     2026-06-04: PostHog showed the brain shipping an ungrounded "pin" to
-  //     the user on /openings/trompowsky-attack; audit-only wasn't enough.)
-  try {
-    const tacticV = validateTacticClaims(out, tactics);
-    if (tacticV.violations.length > 0) {
-      if (tactics) {
-        const strip = stripUngroundedTacticSentences(out, tactics);
-        const enforced = strip.dropped.length > 0;
-        if (enforced) out = strip.clean;
-        void logAppAudit({
-          kind: 'claim-validator-trip',
-          category: 'subsystem',
-          source: `${source}.tacticClaimGate`,
-          summary: `out-of-vocab tactics: ${tacticV.violations.map((v) => v.type).join(', ')} · ${enforced ? `dropped ${strip.dropped.length} sentence(s)` : 'kept (negation/no positive claim)'}`,
-          details: JSON.stringify({ source, violations: tacticV.violations, dropped: strip.dropped, enforced }),
-          fen: fen ?? undefined,
-        });
-      } else {
-        // No bounded context to disprove against — audit-only.
-        void logAppAudit({
-          kind: 'claim-validator-trip',
-          category: 'subsystem',
-          source: `${source}.tacticClaimGate`,
-          summary: `out-of-vocab tactics: ${tacticV.violations.map((v) => v.type).join(', ')} · audit-only (no tactics context)`,
-          details: JSON.stringify({ source, violations: tacticV.violations, enforced: false }),
-        });
-      }
-    }
-  } catch { /* never block */ }
-
-  // (4) Opening-NAME gate (AUDIT-ONLY). Flags an invented opening / variation
-  //     name that doesn't resolve in the canonical Lichess DB (the "Saduleto
-  //     line" class — a fabricated proper-noun no other gate catches). Audit-
-  //     only for now: a precise ENFORCING version needs the conversation's
-  //     opening context (real sub-variation names don't resolve standalone),
-  //     so we gather the real false-positive rate from PostHog before
-  //     stripping. NEVER mutates the answer. (David 2026-06-04.)
-  try {
-    const nameV = validateOpeningNameClaims(out);
-    if (nameV.violations.length > 0) {
-      void logAppAudit({
-        kind: 'claim-validator-trip',
-        category: 'subsystem',
-        source: `${source}.openingNameGate`,
-        summary: `unresolved opening name(s): ${nameV.violations.map((v) => v.name).join(', ')} · audit-only`,
-        details: JSON.stringify({ source, violations: nameV.violations, enforced: false }),
-        fen: fen ?? undefined,
-      });
-    }
-  } catch { /* never block */ }
-
-  return out;
-}
+// groundCoachReply — DELETED (David 2026-07-09: "finish ripping"). It was the
+// runtime validate-after bandaid: run every strip gate (eval / player-stat /
+// board-claim / move-sequence / tactic / opening-name) on a FREE-composed coach
+// answer. The coach no longer free-composes chess — every turn is computed and
+// voiced through voiceFacts — so there is nothing to strip. The board-truth
+// guarantee is now structural (facts computed in code), not a downstream gate.
+// `isSpokenSentenceGrounded` (VoiceChatMic's real-time spoken-sentence check)
+// and `applyCandidateArrows` (the arrow-display pass) remain — neither is a
+// free-compose gate.
 
 /** Stockfish multipv adapter for the arrow engine: rank the top moves
  *  at `fen` so candidate arrows get engine-rank colors (no LLM, no

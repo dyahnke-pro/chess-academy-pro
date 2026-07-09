@@ -4,7 +4,7 @@ import { MessageCircle, X } from 'lucide-react';
 import { ChatMessage } from '../Coach/ChatMessage';
 import { ChatInput } from '../Coach/ChatInput';
 import { dispatchCoachTurn } from '../../coach/dispatchCoachTurn';
-import { groundCoachReply } from '../../services/coachAnswerGates';
+// groundCoachReply import removed — the spine grounds the answer (David 2026-07-09).
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { buildCourseScope } from '../../data/lessons';
 import type { ChatMessage as ChatMessageType } from '../../types';
@@ -71,9 +71,9 @@ export function MasterclassCoachChat({ openingId, variationName }: MasterclassCo
               onNavigate: (path: string) => { void navigate(path); },
             },
           );
-          // Runtime grounding gate (belt-and-suspenders strip of any ungrounded
-          // pro statistic — should be a no-op now the answer is spine-grounded).
-          const grounded = groundCoachReply(answer.text, { source: 'masterclassChat' });
+          // The answer is spine-grounded (dispatchCoachTurn → coachService.ask);
+          // the post-hoc strip is DELETED (David 2026-07-09 — "finish ripping").
+          const grounded = answer.text;
           useCoachMemoryStore.getState().appendConversationMessage({ surface: 'chat-home', role: 'coach', text: grounded, trigger: null });
           setMessages((prev) => [...prev, {
             id: `a-${Date.now()}`,

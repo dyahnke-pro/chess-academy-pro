@@ -3481,21 +3481,16 @@ export async function getCoachChatResponse(
       return '';
     })();
 
-    // Step-by-step MOVE-NARRATION / MOVE-REPORT turns (the Learn flow: "I played
-    // Nc3. Your move.", plus the engine-driven replies the coach narrates) keep
-    // their existing path for now — sealing them here would stock-out the deep
-    // Learn teaching where the coach names the played move + a continuation a ply
-    // ahead (David's iPhone audit, 2026-06-04). These are a Phase 3 conversion to
-    // a grounded narration assembler; until then they ride the validated/free
-    // narration path they already used.
-    if (
-      grounding.moveNarration === true ||
-      /\bI\s+(?:just\s+)?played\b/i.test(originalQuery) ||
-      /\byour\s+move\b/i.test(originalQuery)
-    ) {
-      return callOnce(buildSystemPromptFor(), true);
-    }
-
+    // MOVE-NARRATION exemption — DELETED (David 2026-07-09: "finish ripping").
+    // The Learn flow ("I played Nc3. Your move.") used to free-compose here so
+    // the coach could name a ply-ahead continuation. The 2026-06-04 stock-out it
+    // avoided was the old VALIDATOR flagging bare SANs — NOT the grounded
+    // default. CoachTeachPage threads engineBestMoveUci + the live tactics into
+    // this turn, so it now flows to the chess-signal seal below and grounds on
+    // the engine best move + the real tactical ideas (serveGroundedPositionDefault)
+    // — honest teaching, no free-compose. This was the LAST free-chess path in
+    // getCoachChatResponse; with it gone, groundCoachReply/runAnswerGates are
+    // fully redundant and deleted.
     if (hasChessContentSignal(originalQuery)) {
       // A chess question no assembler caught. Compute the position default when
       // the surface threaded engine data; otherwise serve the honest stock line.
