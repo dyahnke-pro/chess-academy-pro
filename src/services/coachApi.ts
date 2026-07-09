@@ -3562,11 +3562,11 @@ export async function getCoachChatResponse(
       // the surface threaded engine data; otherwise serve the honest stock line.
       const grounded = await serveGroundedPositionDefault(grounding, config, originalQuery || undefined);
       if (grounded) {
-        emitGroundingCoverage('safe-default-position', surface, sessionId);
+        emitGroundingCoverage('safe-default-position', surface, sessionId, { question: originalQuery.slice(0, 100) });
         if (onStream) onStream(grounded);
         return grounded;
       }
-      emitGroundingCoverage('safe-default-stock', surface, sessionId, { reason: 'chess-signal-no-assembler' });
+      emitGroundingCoverage('safe-default-stock', surface, sessionId, { reason: 'chess-signal-no-assembler', question: originalQuery.slice(0, 100) });
       if (onStream) onStream(STOCK_GROUNDING_FALLBACK);
       return STOCK_GROUNDING_FALLBACK;
     }
@@ -3576,12 +3576,12 @@ export async function getCoachChatResponse(
     const convoResponse = await callOnce(buildSystemPromptFor(NO_CHESS_CONTENT_ADDENDUM), false);
     const cleaned = stripChessyStraySentences(convoResponse);
     if (cleaned) {
-      emitGroundingCoverage(cleaned === convoResponse.trim() ? 'conversational' : 'conversational-stripped', surface, sessionId);
+      emitGroundingCoverage(cleaned === convoResponse.trim() ? 'conversational' : 'conversational-stripped', surface, sessionId, { question: originalQuery.slice(0, 100) });
       if (onStream) onStream(cleaned);
       return cleaned;
     }
     // The reply was entirely chess content that got swept — serve the honest line.
-    emitGroundingCoverage('safe-default-stock', surface, sessionId, { reason: 'conversational-fully-stripped' });
+    emitGroundingCoverage('safe-default-stock', surface, sessionId, { reason: 'conversational-fully-stripped', question: originalQuery.slice(0, 100) });
     if (onStream) onStream(STOCK_GROUNDING_FALLBACK);
     return STOCK_GROUNDING_FALLBACK;
   }
@@ -3601,8 +3601,11 @@ export async function getCoachChatResponse(
 
   // Grounding context was injected but no assembler produced the answer, so the
   // LLM still reasons freely (the validator backstop + in-code strip guard it).
-  // This call lands as grounded=false at the primitive — the remaining hole the
-  // general-path inversion will close (→ gate 0).
+  // This call lands as grounded=false at the primitive — THE load-bearing hole
+  // the general-path inversion will close (→ gate 0). Tagged as its own coverage
+  // lane WITH the question so the pre-rip audit can measure exactly which real
+  // questions still hit the free-compose (the gate for deleting this path).
+  emitGroundingCoverage('general-free-compose', surface, sessionId, { question: originalQuery.slice(0, 100) });
   const response = await callOnce(buildSystemPromptFor(), false);
   const validation = validateClaims(response, masterPlayContext);
   if (validation.ok) {

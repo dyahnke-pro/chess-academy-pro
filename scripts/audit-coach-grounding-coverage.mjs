@@ -130,53 +130,56 @@ async function run() {
   await browser.close();
   await listener.stop?.();
 
-  // ── Tally coverage from coach-llm-call events ──────────────────────────────
-  const calls = events.filter((e) => e.kind === 'coach-llm-call');
-  const parsed = calls.map((e) => {
-    let d = {};
-    try { d = typeof e.details === 'string' ? JSON.parse(e.details) : (e.details ?? {}); } catch { /* */ }
-    return { grounded: d.grounded === true, intent: d.intent ?? 'unknown', question: d.question ?? null };
-  });
-  const total = parsed.length;
-  const grounded = parsed.filter((c) => c.grounded).length;
-  const ungrounded = total - grounded;
-  const fallThroughRate = total > 0 ? ungrounded / total : null;
+  // ── Tally coverage from coach-grounding-coverage events (lane + question) ────
+  // Every FALL-THROUGH lane emits one (safe-default-position / safe-default-stock
+  // / conversational / general-free-compose), tagged with the question. A turn
+  // the ASSEMBLERS answered emits NONE — so assembler-grounded is inferred by
+  // absence. `general-free-compose` is THE hole: an intent engaged grounding but
+  // no assembler answered and the LLM reasoned freely. Those questions are the
+  // assembler gaps to close before the spine free-compose can be deleted.
+  const cov = events
+    .filter((e) => e.kind === 'coach-grounding-coverage')
+    .map((e) => {
+      let d = {};
+      try { d = typeof e.details === 'string' ? JSON.parse(e.details) : (e.details ?? {}); } catch { /* */ }
+      return { lane: d.lane ?? 'unknown', question: d.question ?? null, surface: d.surface ?? '?' };
+    });
 
-  const perIntent = {};
-  for (const c of parsed) {
-    const k = c.intent;
-    perIntent[k] ??= { grounded: 0, ungrounded: 0 };
-    perIntent[k][c.grounded ? 'grounded' : 'ungrounded'] += 1;
-  }
-  const leaks = parsed.filter((c) => !c.grounded);
+  const byLane = {};
+  for (const c of cov) byLane[c.lane] = (byLane[c.lane] ?? 0) + 1;
+  const freeCompose = cov.filter((c) => c.lane === 'general-free-compose');
+  const askedCount = asked.length;
+  const fellThrough = cov.length; // any coverage event = a fall-through lane
+  const assemblerGrounded = Math.max(0, askedCount - fellThrough);
+  const holeRate = askedCount > 0 ? freeCompose.length / askedCount : null;
 
   console.log('\n══════════ COACH GROUNDING COVERAGE ══════════');
-  console.log(`coach-llm-call events captured: ${total}`);
-  if (total === 0) {
-    console.log('⚠ NO coach-llm-call events captured. Either the app did not POST to the');
-    console.log('  listener (auditStreamUrl not honored on this build) or no turns fired.');
-    console.log('  Verify the build emits emitCoachLlmCallAudit + auditStreamUrl is wired.');
-  } else {
-    console.log(`grounded=true : ${grounded}  (${((grounded / total) * 100).toFixed(1)}%)`);
-    console.log(`grounded=false: ${ungrounded}  (fall-through ${(fallThroughRate * 100).toFixed(1)}%)  ← drive toward 0`);
-    console.log('\nper-intent (grounded / ungrounded):');
-    for (const [intent, c] of Object.entries(perIntent).sort((a, b) => b[1].ungrounded - a[1].ungrounded)) {
-      console.log(`  ${intent.padEnd(28)} ${String(c.grounded).padStart(3)} / ${String(c.ungrounded).padStart(3)}`);
-    }
-    if (leaks.length) {
-      console.log('\nUNGROUNDED turns (the leaks to close):');
-      for (const l of leaks.slice(0, 40)) console.log(`  [${l.intent}] ${l.question ?? '(no question captured)'}`);
-    }
+  console.log(`questions asked: ${askedCount} | coverage events: ${cov.length}`);
+  if (cov.length === 0) {
+    console.log('⚠ NO coach-grounding-coverage events captured — either every turn was');
+    console.log('  assembler-grounded (great) OR the listener wasn\'t wired (auditStreamUrl).');
+    console.log('  Cross-check: if replies came back, the assemblers covered them all.');
+  }
+  console.log(`\nassembler-grounded (no fall-through event): ~${assemblerGrounded}/${askedCount}`);
+  console.log('fall-through lanes:');
+  for (const [lane, n] of Object.entries(byLane).sort((a, b) => b[1] - a[1])) {
+    const flag = lane === 'general-free-compose' ? '  ← THE HOLE (free-LLM)' : lane.startsWith('safe-default') ? '  (grounded default, safe)' : '';
+    console.log(`  ${lane.padEnd(26)} ${String(n).padStart(3)}${flag}`);
+  }
+  console.log(`\ngeneral-free-compose rate: ${holeRate === null ? 'n/a' : (holeRate * 100).toFixed(1) + '%'}  ← drive to 0 before ripping 3606`);
+  if (freeCompose.length) {
+    console.log('\nQUESTIONS THAT HIT THE FREE-COMPOSE (build an assembler for each):');
+    for (const l of freeCompose.slice(0, 40)) console.log(`  [${l.surface}] ${l.question ?? '(no question captured)'}`);
   }
   if (pageErrs.length) console.log(`\n⚠ ${pageErrs.length} page error(s) during the run — see report.`);
 
   mkdirSync(REPORT_DIR, { recursive: true });
-  const report = { base: BASE, asked, total, grounded, ungrounded, fallThroughRate, perIntent, leaks, pageErrs };
+  const report = { base: BASE, asked, askedCount, coverageEvents: cov, byLane, assemblerGrounded, freeCompose, holeRate, pageErrs };
   writeFileSync(`${REPORT_DIR}/report.json`, JSON.stringify(report, null, 2));
   console.log(`\nreport: ${REPORT_DIR}/report.json`);
 
-  // Non-zero exit when there is real fall-through, so CI / a wrapper can gate.
-  if (total > 0 && ungrounded > 0) process.exitCode = 1;
+  // Non-zero exit when the free-compose hole was hit, so CI / a wrapper can gate.
+  if (freeCompose.length > 0) process.exitCode = 1;
 }
 
 run().catch((e) => { console.error('[coverage] fatal:', e); process.exit(2); });

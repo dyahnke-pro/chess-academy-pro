@@ -124,6 +124,34 @@ The audit:
   `groundCoachReply` at :442 + the 3 redundant post-strip callers + the
   move-narration exemption). The careful, highest-risk pass — the live chat path.
 
+## 🔑 SPINE MAP + THE COVERAGE GATE (verified 2026-07-09, David: "good plan")
+
+`getCoachChatResponse` has FOUR free-LLM (`callOnce`) spots:
+- **3534** `if (!grounding)` — no-grounding callers (kid uses its OWN grounded
+  lane; other opt-out callers). 
+- **3557** move-narration exemption (`I played… / your move`) — the Learn
+  step-by-step. Self-contained; groundable via a narration computer.
+- **3576** non-chess conversational — chess FORBIDDEN + `stripChessyStraySentences`.
+  Already safe.
+- **3606 — THE LOAD-BEARING HOLE.** "Grounded path": an intent ENGAGED grounding
+  (context built) but NO assembler produced the answer → the LLM reasons FREELY
+  over the injected context, guarded by `validateClaims` (here) + `groundCoachReply`
+  (coachService :442). The code comment: "the remaining hole… → gate 0."
+
+**THE GATE (reorders the finish):** 3606's free-compose CANNOT be deleted until
+the assemblers are PROVEN to cover the real questions. Replacing it with the safe
+default TODAY would turn every question type lacking an assembler into "I can't
+verify that" — degrading the coach, not securing it. So the "double-check every
+data point" audit David asked for is not the finale — it is the GATE, and it's
+about COVERAGE (which real questions hit 3606) as much as correctness.
+
+**Order:** (1) instrument 3606 as a measurable lane (`general-free-compose`) +
+tag every coverage event with the question → (2) drive real question classes,
+measure which hit 3606 → (3) fill the assembler gaps → (4) THEN rip 3606 → safe
+default + delete `validateClaims` + `groundCoachReply`/`runAnswerGates` + the 3
+redundant callers. Doing it in THIS order = grounded coach; doing it blind =
+"I can't verify" to half of what users ask.
+
 ## Done this session (aligned with the above)
 - `voiceFacts` gained `kid` + `warm` registers (params on the one command).
 - `groundedMoveFeedback` computer (move eval + tactic + computed pedagogical
