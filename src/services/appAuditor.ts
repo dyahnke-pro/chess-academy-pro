@@ -608,6 +608,11 @@ export type AuditKind =
   //   grounding plan. Every unmapped chess turn should read grounded or stock,
   //   never a free-LLM chess answer.
   | 'coach-grounding-coverage'
+  // `coach-setting-changed`: the coach mutated a user preference on command
+  //   (settings-as-actions). `key` in the details names which pref changed
+  //   (coachVoiceOn / coachNarration / showHints / pollyEnabled). Safe
+  //   whitelist only — keys/backup/destructive are never reachable.
+  | 'coach-setting-changed'
   // `coach-llm-call`: the grounding-inversion leak audit (STEP E). Fires on
   //   EVERY coach-facing LLM call with `grounded` in the summary/details:
   //   grounded=true  → the answer was COMPUTED in code and routed through the

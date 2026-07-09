@@ -36,6 +36,7 @@ import {
 import { TACTICAL_THEMES } from './puzzleService';
 import { findLastMatchingGame } from './gameContextService';
 import { getWeakestOpenings } from './openingService';
+import { applyCoachSetting } from './coachSettingsAction';
 
 export interface RoutedChatIntent {
   /** Relative path (starts with `/`) for the session route. When
@@ -100,6 +101,19 @@ export async function routeChatIntent(
   text: string,
   options: RouteChatIntentOptions = {},
 ): Promise<RoutedChatIntent | null> {
+  // Settings-as-actions — "turn on voice", "set narration to brief", "enable
+  // hints", "disable the premium voice". The coach mutates a SAFE whitelisted
+  // preference in code and confirms. Runs FIRST so a settings command never
+  // falls through to a lookup/chat. Reply-only (no navigation). A non-settings
+  // message resolves to null and is a no-op here.
+  const settingResult = await applyCoachSetting(text);
+  if (settingResult) {
+    return {
+      ackMessage: settingResult.confirmation,
+      intent: { kind: 'qa', raw: text },
+    };
+  }
+
   // Affirmation-after-proposal: the coach's prior turn offered a game
   // and the user just said "yes" / "let's do it" / etc. Carry the
   // assistant's proposal as a `focus` param so the play page's coach
