@@ -224,7 +224,19 @@ class VoiceInputService {
    *  start / error / give-up now lands in the stream. Auditing must never
    *  throw into the mic flow. */
   private audit(
-    kind: 'mic-start-requested' | 'mic-started' | 'mic-start-failed' | 'mic-error' | 'mic-gave-up',
+    kind:
+      | 'mic-start-requested'
+      | 'mic-started'
+      | 'mic-start-failed'
+      | 'mic-error'
+      | 'mic-gave-up'
+      // Pipeline-visibility events (David 2026-07-09): the mic path past
+      // `mic-started` was silent, so a "captured but no response" failure left
+      // no trace to root-cause. These make every step observable in the stream.
+      | 'mic-heard-speech'
+      | 'mic-final-dispatched'
+      | 'mic-native-stopped'
+      | 'mic-result-handlers',
     summary: string,
     details?: Record<string, unknown>,
   ): void {
@@ -434,11 +446,19 @@ class VoiceInputService {
         const m = data.matches?.[0]?.trim();
         if (!m) return;
         this.nativeLatest = m;
-        if (!this.speechStartFired) { this.speechStartFired = true; this.speechStartHandler?.(); }
+        if (!this.speechStartFired) {
+          this.speechStartFired = true;
+          this.speechStartHandler?.();
+          this.audit('mic-heard-speech', `native partial heard: "${m.slice(0, 60)}"`);
+        }
         this.interimHandler?.(m);
       });
       await SpeechRecognition.addListener('listeningState', (data: { status: 'started' | 'stopped' }) => {
         if (data.status !== 'stopped') return;
+        this.audit(
+          'mic-native-stopped',
+          `native session stopped; pending="${this.nativeLatest.trim().slice(0, 60)}" listening=${this.nativeListening}`,
+        );
         // The recognizer stopped (user stop, silence timeout, or end of
         // speech). Dispatch the latest partial as the final transcript and end
         // the session — no auto-restart loop (the user taps again to keep
@@ -731,6 +751,13 @@ class VoiceInputService {
     if (this.finalDispatched) return;
     const trimmed = text.trim();
     if (!trimmed) return;
+    // Pipeline visibility (David 2026-07-09): record every finalized transcript
+    // + how many handlers receive it, so a "captured but no coach response"
+    // failure is diagnosable from the stream instead of guessed.
+    this.audit(
+      'mic-final-dispatched',
+      `dispatch "${trimmed.slice(0, 60)}" → ${this.resultHandlers.length} handler(s)`,
+    );
     this.finalDispatched = true;
     // Reset the per-utterance interim/final state so the next
     // utterance starts clean within the same listening session.
