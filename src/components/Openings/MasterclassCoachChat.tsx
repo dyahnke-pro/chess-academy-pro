@@ -1,10 +1,11 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { MessageCircle, X } from 'lucide-react';
 import { ChatMessage } from '../Coach/ChatMessage';
 import { ChatInput } from '../Coach/ChatInput';
-import { getCoachChatResponse, consumeCoachActionOffer } from '../../services/coachApi';
-import { buildQuestionGrounding } from '../../coach/questionIntents';
+import { dispatchCoachTurn } from '../../coach/dispatchCoachTurn';
 import { groundCoachReply } from '../../services/coachAnswerGates';
+import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { buildCourseScope } from '../../data/lessons';
 import type { ChatMessage as ChatMessageType } from '../../types';
 
@@ -27,10 +28,10 @@ interface MasterclassCoachChatProps {
  */
 export function MasterclassCoachChat({ openingId, variationName }: MasterclassCoachChatProps): JSX.Element | null {
   const scope = useMemo(() => buildCourseScope(openingId, variationName), [openingId, variationName]);
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
   const [busy, setBusy] = useState(false);
-  const historyRef = useRef<{ role: 'user' | 'assistant'; content: string }[]>([]);
 
   const openChat = useCallback(() => {
     if (!scope) return;
@@ -45,7 +46,9 @@ export function MasterclassCoachChat({ openingId, variationName }: MasterclassCo
       if (!scope || !text.trim() || busy) return;
       const userMsg: ChatMessageType = { id: `u-${Date.now()}`, role: 'user', content: text, timestamp: Date.now() };
       setMessages((prev) => [...prev, userMsg]);
-      historyRef.current.push({ role: 'user', content: text });
+      // Continuity: the unified spine reads conversation history from the
+      // shared memory store (not a passed array), so thread the user turn in.
+      useCoachMemoryStore.getState().appendConversationMessage({ surface: 'chat-home', role: 'user', text, trigger: null });
       setBusy(true);
       void (async () => {
         try {
@@ -55,31 +58,31 @@ export function MasterclassCoachChat({ openingId, variationName }: MasterclassCo
           // data via the same assemblers instead of the old free-narration
           // punt. Board-independent here (no FEN on the course page); the
           // openingId scopes any opening-context grounding.
-          const reply = await getCoachChatResponse(
-            historyRef.current,
-            scope.systemAddition,
-            undefined,
-            'explore_reaction',
-            512,
-            undefined,
-            undefined,
-            undefined,
-            buildQuestionGrounding(text, { openingId }, 'standalone-chat'),
+          // Route through the ONE shared spine (identical-capabilities rule).
+          // The course scope rides the spine's per-call system hook
+          // (systemPromptAddition), grounding is auto-built inside ask, and the
+          // agentic tool loop gives the course chat navigate/teach — which the
+          // old flat getCoachChatResponse path could not do.
+          const answer = await dispatchCoachTurn(
+            { surface: 'standalone-chat', ask: text, liveState: { surface: 'standalone-chat', userJustDid: text } },
+            {
+              systemPromptAddition: scope.systemAddition,
+              maxToolRoundTrips: 3,
+              onNavigate: (path: string) => { void navigate(path); },
+            },
           );
-          // Opt-in follow-up picker the grounded answer attached — read
-          // synchronously right after the await so the set→read pair runs
-          // in one tick (David 2026-07-04). Chip, never auto-launched.
-          const offer = consumeCoachActionOffer();
-          // Runtime grounding gate (still runs as a belt-and-suspenders strip
-          // of any ungrounded pro statistic in the free-LLM portion).
-          const grounded = groundCoachReply(reply, { source: 'masterclassChat' });
-          historyRef.current.push({ role: 'assistant', content: grounded });
+          // Runtime grounding gate (belt-and-suspenders strip of any ungrounded
+          // pro statistic — should be a no-op now the answer is spine-grounded).
+          const grounded = groundCoachReply(answer.text, { source: 'masterclassChat' });
+          useCoachMemoryStore.getState().appendConversationMessage({ surface: 'chat-home', role: 'coach', text: grounded, trigger: null });
           setMessages((prev) => [...prev, {
             id: `a-${Date.now()}`,
             role: 'assistant',
             content: grounded,
             timestamp: Date.now(),
-            ...(offer && offer.length > 0 ? { metadata: { actions: offer } } : {}),
+            // Opt-in follow-up picker the grounded answer attached (David
+            // 2026-07-04) — tappable chip, never auto-launched.
+            ...(answer.actionOffer && answer.actionOffer.length > 0 ? { metadata: { actions: answer.actionOffer } } : {}),
           }]);
         } catch {
           setMessages((prev) => [...prev, { id: `err-${Date.now()}`, role: 'assistant', content: "I couldn't reach the coach just now — try again in a moment.", timestamp: Date.now() }]);
@@ -88,7 +91,7 @@ export function MasterclassCoachChat({ openingId, variationName }: MasterclassCo
         }
       })();
     },
-    [scope, busy],
+    [scope, busy, navigate],
   );
 
   if (!scope) return null;
