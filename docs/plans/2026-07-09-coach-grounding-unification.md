@@ -56,9 +56,22 @@ author `noreply@anthropic.com`):**
   7 dead imports; live board threaded via liveState; Polly streaming + grounded-
   sentence gate preserved; skipActionRouter:true (keeps its tryRouteIntent
   pre-pass until chunk c). 6 tests green.
-- ⏳ **Item #2 chunk c (NEXT) — router merge:** fold coachIntentRouter/
-  tryRouteIntent INTO the shared routeChatIntent + DELETE coachIntentRouter;
-  then VoiceChatMic drops its own pre-pass (skipActionRouter→false).
+- ✅ **Item #2 chunk c — router unification** (`cb299b56`). The board-command
+  matcher (tryRouteIntent + RoutedIntent + helpers) RELOCATED from the divergent
+  coachIntentRouter.ts into the coachSessionRouter module (one router home);
+  coachIntentRouter.ts DELETED; VoiceChatMic + GameChatPanel repoint their import
+  and keep their instrumented board pre-passes UNCHANGED (zero behaviour change).
+  55 tests green. **DEFERRED (by design):** having routeChatIntent absorb
+  board-dispatch for EVERY surface would replace the two live-board surfaces'
+  just-hardened mic-pipeline instrumentation with generic dispatch — a
+  regression in observability. Board commands only matter on the live-board
+  surfaces, which already own instrumented pipelines, so the relocation fully
+  satisfies "one router / delete coachIntentRouter" without that risk.
+
+  **➡️ Item #1 + Item #2 COMPLETE — the heavy surface-migration + router half is
+  done. Next: the easier additive grounded families (#3 F15 app-help, #4 F9/F12
+  tactics-teaching), then verify P-families (#5), Phase 3b commentary (#6),
+  Phase 4 audit + single push to main (#7).**
 
 **REMAINING work (in priority order):**
 1. ✅ **GameChatPanel** → `dispatchCoachTurn`, DELETE its hand-rolled
