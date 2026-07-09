@@ -106,7 +106,34 @@ author `noreply@anthropic.com`):**
     WLPP surfaces, not chat — intentionally not voiced here.
   - Fully wired, no gap: F5 plan (middlegame-plans.json), F14 concept
     (chess-concepts.json), F3 master-play (openings-masters-db.json).
-- ⏳ **Item #6 — Phase 3b commentary conversion (ANALYSIS done, build pending).**
+- 🔨 **Item #6 — Phase 3b commentary conversion (STARTED — first slice landed
+  `0aab3ed1`).** KEY CORRECTION to the handoff's plan: the commentary tasks
+  split into ATOMIC (single computable fact) and PROSE (multi-paragraph
+  pedagogy). The handoff's "swap every task to voiceFacts" is WRONG for the
+  prose tasks — routing multi-paragraph teaching through voiceFacts strips it.
+  So:
+  - ✅ **Atomic position-assessment tasks DONE** (`position_analysis_chat`,
+    `deep_analysis`): added a safe additive branch in getCoachCommentary that
+    computes the eval fact (assemblePositionAssessment) and voices it through
+    voiceFacts (G0). Gated on a KNOWN student POV (context.perspective) so the
+    sign is never guessed; falls through to the injection path on any miss.
+  - ⏳ **Atomic tasks REMAINING (each needs its caller's fact-semantics verified
+    before wiring — do NOT guess):** `whatif_commentary` (eval of the
+    hypothetical move + line — assembleMoveEvalAnswer, needs the what-if move +
+    resulting eval threaded), `puzzle_feedback` (the puzzle solution + move
+    correctness — moveClassification + solution), `explore_reaction` (AMBIGUOUS:
+    position-assessment of the explored FEN vs a before/after move-DELTA — verify
+    the caller's context before choosing the assembler).
+  - 🚫 **PROSE tasks stay on complete-and-gated injection (NOT voiceFacts):**
+    `sideline_explanation`, `opening_overview`, `model_game_annotation`,
+    `game_narrative_summary`. Their board-claims are already gradeNarrationText-
+    gated at the call site; deepening them means making the INJECTED facts more
+    complete, not stripping the pedagogy.
+  - The real verification of #6 is the leak-audit coverage drop (grounded=false →
+    grounded=true per task) — which is #7's audit infrastructure. Build #6
+    task-by-task WITH that audit loop.
+
+- (superseded) original #6 note:
   `getCoachCommentary` (`coachApi.ts:3550`) is the SHARED chokepoint for every
   commentary/report task. Today it is **grounded-by-INJECTION**: it injects the
   four curated sources (`buildNarrationGroundingBlock`) into the system prompt,
