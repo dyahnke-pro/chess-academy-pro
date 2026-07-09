@@ -142,7 +142,6 @@ describe('grounding coverage — the Phase-4 fall-through gate', () => {
       }
     }
 
-    // eslint-disable-next-line no-console
     console.log(
       `[coverage] assembler=${assembler} position-default=${position} conversational=${convo} ` +
         `| chess-question rich-assembler coverage = ${assembler}/${assembler + position} ` +
