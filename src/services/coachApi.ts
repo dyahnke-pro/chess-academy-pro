@@ -1825,6 +1825,55 @@ function emitGroundingCoverage(
  * caller then stays silent rather than inventing an interjection). The
  * best-move arrow marker is appended when available.
  */
+/** A pedagogical MOMENT — the KIND is COMPUTED by the caller from eval math
+ *  (the live-coach triggers), never decided by the LLM. David 2026-07-09:
+ *  "good recovery can be when the eval swings or jumps up in the user's favor." */
+export type MoveMomentKind =
+  | 'great-move' | 'recovery' | 'blunder' | 'opponent-blunder' | 'missed-tactic' | 'eval-swing-wrong';
+
+export interface MoveMoment {
+  kind: MoveMomentKind;
+  /** Student-perspective eval (pawns) BEFORE the move, if known. */
+  studentEvalBeforePawns?: number;
+  /** Student-perspective eval (pawns) AFTER the move, if known. */
+  studentEvalAfterPawns?: number;
+  /** Student-perspective WORST recent eval (pawns) — for a recovery. */
+  studentWorstPawns?: number;
+}
+
+/** Turn a COMPUTED moment into a grounded fact line the warm voice can speak
+ *  truthfully. Pure: the wording is derived from the eval numbers, so nothing
+ *  is invented (a "recovery" is literally the eval swinging up in the student's
+ *  favor). Returns '' when there's nothing computable to say. */
+function describeMoveMoment(m: MoveMoment | undefined): string {
+  if (!m) return '';
+  const before = m.studentEvalBeforePawns;
+  const after = m.studentEvalAfterPawns;
+  const worst = m.studentWorstPawns;
+  const fmt = (p: number): string => `${p >= 0 ? '+' : ''}${p.toFixed(1)}`;
+  switch (m.kind) {
+    case 'recovery':
+      return worst !== undefined && after !== undefined
+        ? `The evaluation has swung back in the student's favor, from a low of ${fmt(worst)} to ${fmt(after)} — a genuine recovery.`
+        : `The evaluation has swung back in the student's favor — a genuine recovery.`;
+    case 'great-move':
+      return before !== undefined && after !== undefined
+        ? `The student's move was strong; the evaluation held at ${fmt(after)} in their favor.`
+        : `The student found a strong move that keeps them in control.`;
+    case 'opponent-blunder':
+      return after !== undefined
+        ? `The opponent just erred; the evaluation jumped to ${fmt(after)} for the student.`
+        : `The opponent just made a mistake that swings the position toward the student.`;
+    case 'blunder':
+    case 'eval-swing-wrong':
+      return before !== undefined && after !== undefined
+        ? `The evaluation dropped against the student, from ${fmt(before)} to ${fmt(after)}.`
+        : `The evaluation just moved against the student.`;
+    case 'missed-tactic':
+      return `A stronger continuation was available and went unplayed.`;
+  }
+}
+
 export async function groundedMoveFeedback(opts: {
   fen: string;
   /** Engine best move in UCI (e.g. `g1f3`) — Stockfish PV[0]. */
@@ -1838,6 +1887,13 @@ export async function groundedMoveFeedback(opts: {
   studentMessage?: string;
   /** Surface tag for audit attribution. */
   surface?: string;
+  /** A COMPUTED pedagogical moment (eval-swing recovery, great move, blunder…)
+   *  — the warm voice acknowledges it truthfully because it's derived from the
+   *  eval numbers, not decided by the model. */
+  moment?: MoveMoment;
+  /** Deliver in the warm house voice (default true for move feedback). Set
+   *  false for the terse plain readout. */
+  warm?: boolean;
 }): Promise<string | null> {
   const config = await getProviderConfig();
   return serveGroundedPositionDefault(
@@ -1852,6 +1908,7 @@ export async function groundedMoveFeedback(opts: {
     },
     config,
     opts.studentMessage,
+    { warm: opts.warm !== false, extraFacts: describeMoveMoment(opts.moment) },
   );
 }
 
@@ -1865,7 +1922,14 @@ async function serveGroundedPositionDefault(
   grounding: MasterGroundingOptions,
   config: ProviderConfig | null,
   studentMessage: string | undefined,
+  /** Voicing controls. `warm` delivers the SAME computed facts in the house
+   *  voice (phrasing model) instead of the plain raw readout; `extraFacts` is a
+   *  COMPUTED pedagogical cue line (e.g. an eval-swing "recovery") prepended to
+   *  the fact bundle so the warm voice can acknowledge it truthfully. */
+  voice?: { warm?: boolean; extraFacts?: string },
 ): Promise<string | null> {
+  const warm = voice?.warm === true;
+  const prefix = voice?.extraFacts ? `${voice.extraFacts.trim()}\n` : '';
   const fen = grounding.currentFen ?? null;
   const bestUci = grounding.engineBestMoveUci ?? null;
   if (bestUci && fen) {
@@ -1880,7 +1944,7 @@ async function serveGroundedPositionDefault(
         : null;
     const answer = assembleMoveEvalAnswer({ fen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn });
     if (answer) {
-      const voiced = await voiceFacts(answer.facts, { studentMessage, providerConfig: config, intent: 'safe-default-bestmove', preferRaw: true });
+      const voiced = await voiceFacts(`${prefix}${answer.facts}`, { studentMessage, providerConfig: config, intent: 'safe-default-bestmove', preferRaw: !warm, warm });
       if (voiced) {
         return answer.bestMoveFromTo
           ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
@@ -1897,7 +1961,14 @@ async function serveGroundedPositionDefault(
     studentColor: sc,
   });
   if (assess) {
-    const voiced = await voiceFacts(assess.facts, { studentMessage, providerConfig: config, intent: 'safe-default-assessment', preferRaw: true });
+    const voiced = await voiceFacts(`${prefix}${assess.facts}`, { studentMessage, providerConfig: config, intent: 'safe-default-assessment', preferRaw: !warm, warm });
+    if (voiced) return voiced;
+  }
+  // Nothing engine/tactic-backed, but a COMPUTED moment cue can still stand on
+  // its own (e.g. a pure eval-swing recovery) — voice it warmly rather than
+  // dropping the interjection.
+  if (prefix.trim()) {
+    const voiced = await voiceFacts(prefix.trim(), { studentMessage, providerConfig: config, intent: 'safe-default-moment', preferRaw: !warm, warm });
     if (voiced) return voiced;
   }
   return null;
@@ -1954,13 +2025,23 @@ export async function voiceFacts(
      *  so kid text must be phrased (spelled out), not spoken verbatim. This keeps
      *  the kid path on the ONE grounding chokepoint instead of a separate island. */
     kidSafe?: boolean;
+    /** WARM VOICING (David 2026-07-09: "is there a way to code the language to be
+     *  more warm once it's gone?"). Grounding removes the LLM's freedom to DECIDE
+     *  chess content, NOT its freedom to phrase warmly — warmth is phrasing, and
+     *  phrasing stays with the model. When true, the SAME computed facts are
+     *  delivered in the house voice (encouraging, vivid, an analogy when it lands)
+     *  instead of the plain readout. Every chess token is still computed; the
+     *  number-fidelity net still refuses any the model tries to add. Overrides
+     *  `preferRaw` (warmth needs the phrasing model, not a raw echo). */
+    warm?: boolean;
   } = {},
 ): Promise<string | null> {
   // Lean-on-raw short-circuit — the computed facts ARE the answer; don't spend
   // an LLM call to re-say them. Runs before the provider lookup so it costs
-  // nothing when a whole vertical opts into raw. Kid-safe voicing overrides raw:
-  // the facts may carry a SAN token, and a child must hear moves spelled out.
-  if (opts.preferRaw && !opts.kidSafe) return facts.trim();
+  // nothing when a whole vertical opts into raw. Kid-safe AND warm voicing both
+  // override raw: kid text must spell out any SAN, and warm text must be phrased
+  // (a raw echo can't be warm).
+  if (opts.preferRaw && !opts.kidSafe && !opts.warm) return facts.trim();
   const cfg = opts.providerConfig ?? (await getProviderConfig());
   // No provider configured → there's nothing to phrase WITH, but the computed
   // `facts` are already correct, coach-voiced prose. Speak them directly rather
@@ -1976,6 +2057,16 @@ export async function voiceFacts(
       'square, piece, number, name, or claim that is not in the facts. Spell moves out ' +
       'in plain words ("the knight goes to f3"), NEVER chess notation. No praise ("great ' +
       'job"), no slang, no idioms — just describe the idea kindly so the child learns.'
+    : opts.warm
+    ? 'You are a warm, encouraging chess coach in the clear, idea-first teaching voice ' +
+      'of a great instructor — vivid, human, a quick spark of warmth ("clean", "there it ' +
+      'is", "nice recovery"), reaching for a clarifying image when it helps. You will be ' +
+      'given FACTS that are already true and verified. Deliver THOSE facts to the student ' +
+      'warmly, in one or two sentences. This is the ONLY rule you cannot break: add NO ' +
+      'chess content that is not in the facts — no move, square, piece, eval number, ' +
+      'name, opening, or claim of your own. The warmth, the framing, the encouragement, ' +
+      'an analogy — all yours. The chess — only what the facts say. Never hedge, never ' +
+      'recommend running an engine.'
     : 'You are a warm, concise chess coach speaking to a student. You will be given ' +
     'FACTS that are already true and verified. Your ONLY job is to say those facts ' +
     'to the student naturally, as a coach would. Add NOTHING: do not introduce any ' +

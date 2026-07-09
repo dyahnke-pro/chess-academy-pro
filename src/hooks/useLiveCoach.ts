@@ -186,6 +186,16 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
           tactics: tactics ?? undefined,
           studentColor: playerColor,
           studentMessage: ctx.san ? `Played ${ctx.san}` : undefined,
+          // The trigger + eval numbers are COMPUTED (liveCoachTriggers); pass them
+          // as a moment so the warm voice can say "nice recovery" TRUTHFULLY
+          // (David 2026-07-09: "good recovery … when the eval swings up").
+          warm: true,
+          moment: {
+            kind: winner.trigger,
+            studentEvalBeforePawns: ctx.studentEvalBefore / 100,
+            studentEvalAfterPawns: ctx.studentEvalAfter / 100,
+            studentWorstPawns: ctx.worstEval !== undefined ? ctx.worstEval / 100 : undefined,
+          },
         }).then((t) => t ?? '');
         const timeout = new Promise<string>((_, reject) =>
           setTimeout(() => reject(new Error('live-coach-timeout')), LIVE_COACH_API_TIMEOUT_MS),
