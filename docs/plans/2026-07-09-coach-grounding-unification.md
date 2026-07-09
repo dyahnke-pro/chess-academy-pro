@@ -106,6 +106,40 @@ author `noreply@anthropic.com`):**
     WLPP surfaces, not chat — intentionally not voiced here.
   - Fully wired, no gap: F5 plan (middlegame-plans.json), F14 concept
     (chess-concepts.json), F3 master-play (openings-masters-db.json).
+- ⏳ **Item #6 — Phase 3b commentary conversion (ANALYSIS done, build pending).**
+  `getCoachCommentary` (`coachApi.ts:3550`) is the SHARED chokepoint for every
+  commentary/report task. Today it is **grounded-by-INJECTION**: it injects the
+  four curated sources (`buildNarrationGroundingBlock`) into the system prompt,
+  then `callCommentaryWithConfig` lets the LLM phrase FREELY — it does NOT route
+  through `voiceFacts`, so the LLM still DECIDES chess content within the
+  injected context (the leak audit tags these `grounded=false`, intent=<task>).
+  Phase-3b = flip each task to voiceFacts (compute the facts in code, LLM only
+  phrases). Status per task:
+  - `move_commentary` — ✅ ALREADY grounded via `coachMoveCommentary.generateMoveCommentary`
+    (move + eval + explainBestMoveGrounded, line ~339). Not through
+    getCoachCommentary's free path.
+  - Still injection-only (the #6 work), each its own fact-computer → voiceFacts:
+    `whatif_commentary` (chess.js legality + Stockfish eval(X) + line),
+    `position_analysis_chat` (eval + liveTacticsContext), `game_commentary` /
+    `game_narrative_summary` (per-move eval + classification), `sideline_explanation`
+    (the sideline's DB moves), `opening_overview` (openings DB / repertoire),
+    `model_game_annotation` (the model game's moves + computed annotations),
+    `deep_analysis` (Stockfish deep PV), `puzzle_feedback` (the puzzle solution +
+    move correctness), `explore_reaction` (eval of the explored position).
+  - **The surgery:** getCoachCommentary is a shared chokepoint with many callers
+    (coachFeatureService, contentGenerationService, review, play). Convert by
+    branching per-task to a grounded voiceFacts path BEFORE the shared free-inject
+    path, task-by-task, each with a test, so no caller regresses. This is the
+    biggest remaining slice and touches production-bound core commentary — do it
+    with fresh focus, one task per commit, and re-verify the review/content-gen
+    surfaces after each.
+- ⏳ **Item #7 — Phase 4: prove it + the SINGLE push to `main` (production).**
+  Only after #6: pull `coach-grounding-coverage` + `coach-brain-ask-received`
+  from PostHog/audit-stream, drive the free-LLM fall-through rate to ~0, then
+  `npm run ship-check` (READY TO PUSH) + `npm run build` (tsc -b) + the
+  3-instrument prod audit (Playwright + audit-stream + narration listener) on the
+  coach surfaces, THEN the one `git push origin main`. This is the "no incremental
+  ship" culmination — it hits beta users; gate on the full audit.
 
 **REMAINING work (in priority order):**
 1. ✅ **GameChatPanel** → `dispatchCoachTurn`, DELETE its hand-rolled
