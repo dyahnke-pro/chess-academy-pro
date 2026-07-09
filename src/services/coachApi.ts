@@ -58,7 +58,7 @@ function deepseekCacheSplit(usage: unknown): { hit: number | null; miss: number 
   };
 }
 import { lookupMasterPlay } from './masterPlayLookup';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleTeachingAnswer, explainBestMoveGrounded } from './groundedAnswer';
 import { lookupTablebase } from './lichessTablebaseService';
 import { detectBadHabits } from './badHabitDetector';
 import { getUnifiedWeaknessProfile } from './weaknessSpine';
@@ -71,7 +71,7 @@ import { computeLastMoveRating } from './moveRating';
 import { getDueCount, getEnrolledOpenings, getSrsDueOpenings, getTotalEnrolled } from './srsOpeningService';
 import { criticalMomentsAccuracy, streaks, timeControlPerformance, comebackWins, winShapeStats, colorProficiencyMismatch, personalRecords, tacticTransferGap, recordVsOpening, recordVsOpponent, phaseStrengthOverTime } from './analyticsService';
 import { getPuzzleStats } from './puzzleService';
-import { detectConceptsInText, getConcept } from './chessConceptService';
+import { detectConceptsInText, getConcept, resolveOpeningIdFromName } from './chessConceptService';
 import { validateClaims, type ClaimValidationResult } from './claimValidator';
 import { logAppAudit } from './appAuditor';
 import { captureException } from './analytics';
@@ -79,7 +79,7 @@ import { buildVerifiedPuzzleContext } from './verifiedLineLibrary';
 import type { MasterPlayContext, MasterPlayResult, OpeningDbEntry } from './masterPlayTypes';
 import { buildOpeningDbEntries } from './openingDbGrounding';
 import { buildNarrationGroundingBlock } from './narrationGrounding';
-import { buildLessonReferenceBlock } from '../data/lessons';
+import { buildLessonReferenceBlock, getLessonScript } from '../data/lessons';
 import type { CoachTask, CoachContext, CoachVerbosity, AiProvider } from '../types';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 
@@ -1354,6 +1354,11 @@ export interface MasterGroundingOptions {
    *  eval + top live tactic (assemblePositionAssessment) — grounds the biggest
    *  slice of the free-reasoning chat fallback. */
   positionAssessmentQuestion?: boolean;
+  /** F11 pedagogy — true when the turn asks HOW the app teaches ("how do you
+   *  teach the Caro-Kann?", "how do the lessons work?"). Voiced from the app's
+   *  own teaching structure (WLPP + the curated LessonScript) via
+   *  assembleTeachingAnswer — grounds "how we teach" instead of a free-LLM guess. */
+  teachingMethodQuestion?: boolean;
   /** Which side the STUDENT plays — so the tactics answer warns about THEIR
    *  hanging pieces. Falls back to side-to-move when absent. */
   studentColor?: 'white' | 'black';
@@ -2181,7 +2186,8 @@ export async function getCoachChatResponse(
       grounding.conceptQuestion === true ||
       grounding.playerGamesQuestion === true ||
       grounding.endgameQuestion === true ||
-      grounding.positionAssessmentQuestion === true;
+      grounding.positionAssessmentQuestion === true ||
+      grounding.teachingMethodQuestion === true;
     if (intentFired) {
       try {
         // Helper: the latest user message, for voiceFacts context.
@@ -2942,6 +2948,30 @@ export async function getCoachChatResponse(
               if (voiced) return voiced;
             }
           }
+        }
+
+        // ── HOW WE TEACH (F11 pedagogy) — voice the app's OWN teaching
+        // structure: the WLPP grammar + the curated LessonScript for the
+        // opening (minutes, beat count, authored idea cues). No board, no
+        // master-play — the fact source is our lesson data, so this runs BEFORE
+        // the master-play build to avoid a needless Lichess lookup. Falls
+        // through when nothing voices (never fabricates).
+        if (grounding.teachingMethodQuestion) {
+          try {
+            let teachOpeningId = grounding.openingId ?? null;
+            if (!teachOpeningId) teachOpeningId = resolveOpeningIdFromName(lastUserMessage() ?? '') ?? null;
+            const lesson = teachOpeningId ? getLessonScript(teachOpeningId) : null;
+            let teachOpeningName: string | null = null;
+            if (teachOpeningId) {
+              const rec = await getOpeningById(teachOpeningId);
+              teachOpeningName = rec?.name ?? null;
+            }
+            const answer = assembleTeachingAnswer({ openingName: teachOpeningName, lesson });
+            if (answer) {
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'teaching-method', preferRaw: true });
+              if (voiced) return voiced;
+            }
+          } catch { /* fall through */ }
         }
 
         masterPlayContext = await buildMasterPlayContext(grounding);

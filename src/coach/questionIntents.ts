@@ -1037,6 +1037,26 @@ export function isSkillRadarQuestion(ask: string | undefined): boolean {
   return !!ask && SKILL_RADAR_RE.test(ask);
 }
 
+// F11 pedagogy — "how do you teach X / how do the lessons work / your approach
+// to teaching". A META question about the app's teaching METHOD, distinct from
+// "teach me X" (a request to START a lesson — those must NOT match here).
+const TEACHING_METHOD_RE: ReadonlyArray<RegExp> = [
+  /\bhow\s+(?:do|does|would|can|should)\s+(?:you|we|i|the\s+app|the\s+coach|this\s+app|the\s+lessons?)\s+(?:teach|cover|approach|structure|present)\b/i,
+  /\bhow\s+(?:is|are)\b[^?]*\b(?:taught|structured)\b/i,
+  /\bhow\s+do\s+(?:the\s+|your\s+)?lessons?\s+(?:work|go|run|flow)\b/i,
+  /\b(?:your|the)\s+(?:approach|method|system)\s+(?:to|for)\s+teaching\b/i,
+  /\bhow\s+do\s+you\s+cover\b/i,
+  /\bwhat'?s?\s+(?:your|the)\s+(?:teaching\s+)?(?:method|approach|system)\b/i,
+  /\bhow\s+does\s+(?:the\s+)?(?:learn|watch|practice|wlpp|walkthrough)\b/i,
+];
+
+export function isTeachingMethodQuestion(ask: string | undefined): boolean {
+  if (!ask) return false;
+  // "teach me X" is a request to start a lesson, NOT a method question.
+  if (/\bteach\s+me\b/i.test(ask)) return false;
+  return TEACHING_METHOD_RE.some((re) => re.test(ask));
+}
+
 /**
  * buildQuestionGrounding — the SHARED grounding builder so the coach's
  * grounded-data brain fires IDENTICALLY on every talking surface (David
@@ -1110,5 +1130,6 @@ export function buildQuestionGrounding(
     playerGamesQuestion: isPlayerGamesQuestion(ask),
     endgameQuestion: isEndgameQuestion(ask),
     positionAssessmentQuestion: isPositionAssessmentQuestion(ask),
+    teachingMethodQuestion: isTeachingMethodQuestion(ask),
   };
 }

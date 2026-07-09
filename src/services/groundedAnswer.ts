@@ -16,7 +16,7 @@ import { Chess } from 'chess.js';
 import type { Square, PieceSymbol } from 'chess.js';
 import { seeGain } from './positionReadingService';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
-import type { BadHabit } from '../types';
+import type { BadHabit, LessonScript } from '../types';
 import type { MasterPlayResult } from './masterPlayTypes';
 import type { ConceptEntry } from './chessConceptService';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
@@ -108,6 +108,67 @@ export function assemblePositionAssessment(opts: {
   if (parts.length === 0) return null;
   const sources = tactics ? ['engine:stockfish', 'board:chess.js'] : ['engine:stockfish'];
   return { facts: parts.join(' '), bestMoveSan: null, bestMoveFromTo: null, sources };
+}
+
+/**
+ * assembleTeachingAnswer — "how do you teach the X?", "how does the app teach
+ * this opening?", "how do the lessons work?" (F11 pedagogy). The fact source is
+ * the app's OWN teaching structure: the WLPP grammar (Watch/Learn/Practice/Play)
+ * plus, when a curated `LessonScript` exists for the opening, its real shape
+ * (minutes, beat count, the authored short-register idea cues) and any supporting
+ * plans/traps/quiz. The LLM decides nothing — this describes how we actually
+ * teach, grounded in the lesson data. When no specific lesson resolves, it still
+ * describes the general WLPP method (a true description of the app). Returns null
+ * only when there is nothing to say. `lesson` is passed in by the caller so this
+ * module stays a pure leaf (no data-layer import).
+ */
+export function assembleTeachingAnswer(opts: {
+  openingName?: string | null;
+  lesson: LessonScript | null;
+  extras?: { plans?: number; traps?: number; quiz?: boolean };
+}): GroundedAnswer | null {
+  const { lesson } = opts;
+  const name = opts.openingName?.trim() || null;
+  const parts: string[] = [];
+
+  // The WLPP method is how EVERY opening is taught — always true, always safe.
+  const wlpp =
+    'It runs through four rungs — Watch, Learn, Practice, Play. You watch the ' +
+    'line played move by move with narration, then play each move yourself as I ' +
+    'cue it, then play it again silently with a hint if you need one, then a full ' +
+    'game locked to the line so you own it.';
+
+  if (lesson && lesson.beats.length > 0) {
+    parts.push(name ? `Here's how we teach the ${name}.` : "Here's how the opening lessons work.");
+    parts.push(wlpp);
+    parts.push(
+      `The ${name ?? 'lesson'} lesson runs about ${lesson.minutes} minute${lesson.minutes === 1 ? '' : 's'} ` +
+      `across ${lesson.beats.length} key position${lesson.beats.length === 1 ? '' : 's'}.`,
+    );
+    const cues = lesson.beats
+      .map((b) => b.sayShort)
+      .filter((s): s is string => !!s && s.trim().length > 0)
+      .slice(0, 3);
+    if (cues.length > 0) parts.push(`The ideas you'll drill: ${cues.join('; ')}.`);
+    const extras: string[] = [];
+    if (opts.extras?.plans) extras.push(`${opts.extras.plans} middlegame plan${opts.extras.plans === 1 ? '' : 's'}`);
+    if (opts.extras?.traps) extras.push(`${opts.extras.traps} trap${opts.extras.traps === 1 ? '' : 's'} to spring or sidestep`);
+    if (opts.extras?.quiz) extras.push('checkpoint quizzes');
+    if (extras.length > 0) parts.push(`It also carries ${extras.join(', ')}.`);
+    const sources = lesson.sources && lesson.sources.length > 0 ? lesson.sources : ['app:lesson'];
+    return { facts: parts.join(' '), bestMoveSan: null, bestMoveFromTo: null, sources };
+  }
+
+  // No curated lesson for this opening — describe the general method (true for
+  // every opening), naming the opening if we have it.
+  parts.push(
+    name
+      ? `We teach the ${name} the same way we teach every opening.`
+      : 'Here\'s how the opening lessons work.',
+  );
+  parts.push(wlpp);
+  parts.push('Every move is led by arrows and highlights so your eye lands where the idea is, and the coach can lock a real game to the exact line so you practice it, not a lookalike.');
+  return { facts: parts.join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: ['app:lesson-method'] };
 }
 
 /**
