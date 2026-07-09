@@ -3320,6 +3320,10 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
           // move-commentary path compute the move's real tactical effect in
           // code and voice it via voiceFacts (G0), instead of the LLM inventing.
           bestMoveUci: engineBestMoveUci ?? undefined,
+          // Board-verified tactics at the POST-move position (already computed
+          // above for the spoken-sentence gate) — so the grounded position read
+          // names the REAL threats/hanging pieces, not an invented tactic (G0).
+          tactics: moveTactics,
           chatHistory: sessionMessages,
           // Threading the resolved subject (URL > committed intent >
           // auto-detected) activates the OPENING TEACHING MODE branch

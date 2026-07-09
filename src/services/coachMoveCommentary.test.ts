@@ -5,7 +5,6 @@ import {
   generateMoveCommentary,
 } from './coachMoveCommentary';
 import * as coachApi from './coachApi';
-import { coachService } from '../coach/coachService';
 
 function gameAfter(moves: string[]): Chess {
   const c = new Chess();
@@ -37,30 +36,45 @@ describe('classifyEvalSwing', () => {
   });
 });
 
-describe('generateMoveCommentary', () => {
+// GROUNDED contract (David 2026-07-09 — full G0 for in-game narration). The
+// coach no longer free-composes: every non-empty commentary comes from the
+// COMPUTED grounded read via `groundedMoveFeedback` (which computes facts and
+// voices them through the ONE `voiceFacts` chokepoint). The tests below assert
+// (a) the guard short-circuits, and (b) the grounded read is the sole source —
+// there is no free-LLM prompt to inspect.
+describe('generateMoveCommentary — grounded', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
   });
 
-  it('returns trimmed LLM output when the call succeeds', async () => {
-    const llmOut = 'The f4 push sharpens the center and opens the f-file for a future rook swing, but it commits the king to short castling and concedes the e4 square to Black pieces.';
+  it('routes the position read through groundedMoveFeedback (no free compose)', async () => {
     const spy = vi
-      .spyOn(coachApi, 'getCoachChatResponse')
-      .mockResolvedValue('  ' + llmOut + '  ');
+      .spyOn(coachApi, 'groundedMoveFeedback')
+      .mockResolvedValue('You are holding a small edge — keep an eye on the open f-file.');
     const out = await generateMoveCommentary({
       gameAfter: gameAfter(['e4', 'e5', 'f4']),
       mover: 'w',
       evalBefore: 20,
       evalAfter: -30,
+      studentColor: 'b',
     });
-    expect(out).toBe(llmOut);
     expect(spy).toHaveBeenCalled();
+    expect(out).toBe('You are holding a small edge — keep an eye on the open f-file.');
   });
 
-  it('returns empty string when the LLM surfaces the no-key banner', async () => {
-    vi
-      .spyOn(coachApi, 'getCoachChatResponse')
-      .mockResolvedValue('⚠️ No API key configured.');
+  it('returns empty string (no narration) when nothing is computable', async () => {
+    vi.spyOn(coachApi, 'groundedMoveFeedback').mockResolvedValue(null);
+    const out = await generateMoveCommentary({
+      gameAfter: gameAfter(['e4', 'e5', 'Nf3']),
+      mover: 'w',
+      evalBefore: 20,
+      evalAfter: 25,
+    });
+    expect(out).toBe('');
+  });
+
+  it('returns empty string when the grounded read rejects', async () => {
+    vi.spyOn(coachApi, 'groundedMoveFeedback').mockRejectedValue(new Error('network down'));
     const out = await generateMoveCommentary({
       gameAfter: gameAfter(['e4']),
       mover: 'w',
@@ -70,23 +84,8 @@ describe('generateMoveCommentary', () => {
     expect(out).toBe('');
   });
 
-  it('returns empty string when the LLM call rejects', async () => {
-    vi
-      .spyOn(coachApi, 'getCoachChatResponse')
-      .mockRejectedValue(new Error('network down'));
-    const out = await generateMoveCommentary({
-      gameAfter: gameAfter(['e4']),
-      mover: 'w',
-      evalBefore: 0,
-      evalAfter: 10,
-    });
-    expect(out).toBe('');
-  });
-
-  it('returns empty string when offline=true is passed', async () => {
-    const spy = vi
-      .spyOn(coachApi, 'getCoachChatResponse')
-      .mockResolvedValue('should not be used');
+  it('returns empty string when offline=true is passed (no compute at all)', async () => {
+    const spy = vi.spyOn(coachApi, 'groundedMoveFeedback').mockResolvedValue('should not be used');
     const out = await generateMoveCommentary({
       gameAfter: gameAfter(['e4']),
       mover: 'w',
@@ -98,8 +97,21 @@ describe('generateMoveCommentary', () => {
     expect(spy).not.toHaveBeenCalled();
   });
 
+  it('returns empty string when verbosity is none', async () => {
+    const spy = vi.spyOn(coachApi, 'groundedMoveFeedback').mockResolvedValue('nope');
+    const out = await generateMoveCommentary({
+      gameAfter: gameAfter(['e4']),
+      mover: 'w',
+      evalBefore: 0,
+      evalAfter: 10,
+      verbosity: 'none',
+    });
+    expect(out).toBe('');
+    expect(spy).not.toHaveBeenCalled();
+  });
+
   it('returns empty string when no move has been played yet', async () => {
-    const spy = vi.spyOn(coachApi, 'getCoachChatResponse');
+    const spy = vi.spyOn(coachApi, 'groundedMoveFeedback');
     const out = await generateMoveCommentary({
       gameAfter: new Chess(),
       mover: 'w',
@@ -110,65 +122,19 @@ describe('generateMoveCommentary', () => {
     expect(spy).not.toHaveBeenCalled();
   });
 
-  it('passes review tone when reviewTone=true', async () => {
-    // The per-move prompt rides as `systemPromptAddition` into coachService.ask;
-    // inspect it there (a blunder swing so the LLM path is actually reached).
+  it('threads the opening subject to the grounded read as computed framing', async () => {
     const spy = vi
-      .spyOn(coachService, 'ask')
-      .mockResolvedValue({ text: 'ok' } as never);
+      .spyOn(coachApi, 'groundedMoveFeedback')
+      .mockResolvedValue('grounded read');
     await generateMoveCommentary({
-      gameAfter: gameAfter(['e4', 'e5', 'f4']),
-      mover: 'w',
-      evalBefore: 20,
-      evalAfter: -30,
-      reviewTone: true,
-    });
-    expect(spy).toHaveBeenCalled();
-    const opts = spy.mock.calls[0]?.[1] as { systemPromptAddition?: string } | undefined;
-    expect(String(opts?.systemPromptAddition).toLowerCase()).toContain('reviewing');
-  });
-
-  it('uses the play-context system prompt when reviewTone is omitted', async () => {
-    const spy = vi
-      .spyOn(coachService, 'ask')
-      .mockResolvedValue({ text: 'ok' } as never);
-    await generateMoveCommentary({
-      gameAfter: gameAfter(['e4', 'e5', 'f4']),
-      mover: 'w',
-      evalBefore: 20,
-      evalAfter: -30,
-    });
-    expect(spy).toHaveBeenCalled();
-    const opts = spy.mock.calls[0]?.[1] as { systemPromptAddition?: string } | undefined;
-    expect(String(opts?.systemPromptAddition).toLowerCase()).toContain('game-against-ai');
-  });
-
-  it('includes the best reply suggestion when provided', async () => {
-    const spy = vi
-      .spyOn(coachApi, 'getCoachChatResponse')
-      .mockImplementation(async (messages) => JSON.stringify(messages));
-    const out = await generateMoveCommentary({
-      gameAfter: gameAfter(['e4', 'e5', 'Nf3']),
-      mover: 'w',
-      evalBefore: 20,
-      evalAfter: 25,
-      bestReplySan: 'Nc6',
-    });
-    expect(out).toContain('Nc6');
-    expect(spy).toHaveBeenCalled();
-  });
-
-  it('passes the subject to the prompt when provided', async () => {
-    vi
-      .spyOn(coachApi, 'getCoachChatResponse')
-      .mockImplementation(async (messages) => JSON.stringify(messages));
-    const out = await generateMoveCommentary({
       gameAfter: gameAfter(['e4', 'c5']),
       mover: 'b',
       evalBefore: 20,
       evalAfter: 25,
       subject: 'Sicilian Najdorf',
     });
-    expect(out.toLowerCase()).toContain('sicilian najdorf');
+    expect(spy).toHaveBeenCalled();
+    const arg = spy.mock.calls[0]?.[0] as { extraFacts?: string } | undefined;
+    expect(arg?.extraFacts?.toLowerCase()).toContain('sicilian najdorf');
   });
 });
