@@ -209,3 +209,28 @@ text), kid voice (`kidGameCoach` kid-safe lane), Learn-with-Coach walkthrough
 
 ship-check: **READY TO PUSH** (typecheck ✓, 0 lint errors, content gates ✓,
 changed-file tests ✓). Coach-area suite 76 green.
+
+## Phase 4 — PROVE IT (David 2026-07-09: "do 4 first")
+
+**Real prod distribution (PostHog, 30-day pull, 19 users):**
+- `coach_question_asked` via coachService.ask: **452** (teach / game-chat / hint / mic).
+- `coach_grounding_gate_tripped`: **~150** — the validate-after bandaids CATCHING
+  real hallucinations (teach.tacticClaimGate 24, getCoachChatResponse 23,
+  teach.boardClaimGate 19, liveCoach/VoiceChatMic/…). This is the disease the rip
+  cures STRUCTURALLY → these should fall to ~0 post-ship. **This IS the proof the
+  rip was needed.**
+- `coach_non_answer`: 65. Spoken surfaces (game-chat / phase-narration / review /
+  liveCoach arrow engines) all live — confirming the grounded spoken paths matter.
+
+**Pre-ship coverage gate — `src/coach/questionIntents.coverage.test.ts` (pure,
+no browser/LLM):** a 39-question prod-informed bank through the real
+`buildQuestionGrounding` router → **33 rich-assembler + 3 safe-position-default +
+3 conversational**. Every chess question grounds (92% rich, rest via engine-eval
+default); ZERO free-compose (none exists); no conversational turn fabricates a
+chess intent. Surfaced + fixed 2 real natural-phrasing gaps (reviewDue "what
+reviews are due?", settings "is my voice narration on?").
+
+**The real post-ship proof (watch on prod):** `coach_grounding_gate_tripped` →
+~0 (nothing left to strip because nothing free-composes), and the new
+`coach-grounding-coverage` lanes show assembler / safe-default, never
+free-compose. That's the 3-instrument prod audit's job once this lands on main.
