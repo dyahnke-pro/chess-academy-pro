@@ -74,7 +74,8 @@ import { getDueCount, getEnrolledOpenings, getSrsDueOpenings, getTotalEnrolled }
 import { criticalMomentsAccuracy, streaks, timeControlPerformance, comebackWins, winShapeStats, colorProficiencyMismatch, personalRecords, tacticTransferGap, recordVsOpening, recordVsOpponent, phaseStrengthOverTime } from './analyticsService';
 import { getPuzzleStats } from './puzzleService';
 import { detectConceptsInText, getConcept, resolveOpeningIdFromName } from './chessConceptService';
-import { validateClaims, type ClaimValidationResult } from './claimValidator';
+// claimValidator import removed — the grounded path no longer free-composes,
+// so there are no claims to validate (David 2026-07-09).
 import { logAppAudit } from './appAuditor';
 import { captureException } from './analytics';
 import { buildVerifiedPuzzleContext } from './verifiedLineLibrary';
@@ -1653,74 +1654,12 @@ const STOCK_GROUNDING_FALLBACK =
   "I can't verify that precisely from grounded data right now. " +
   "Ask me for the best move, the plan, or what's hanging, and I'll ground the answer for you.";
 
-function emitClaimValidatorTrips(
-  validation: ClaimValidationResult,
-  retryNumber: 1 | 2,
-  surface: string,
-  sessionId: string | undefined,
-): void {
-  for (const v of validation.violations) {
-    void logAppAudit({
-      kind: 'claim-validator-trip',
-      category: 'subsystem',
-      source: 'coachApi.getCoachChatResponse',
-      summary: `kind=${v.kind} claim="${v.claim.slice(0, 60)}" retry=${retryNumber} surface=${surface}`,
-      details: JSON.stringify({
-        kind: v.kind,
-        claim: v.claim,
-        reason: v.reason,
-        retryNumber,
-        surface,
-        sessionId,
-      }),
-    });
-  }
-}
-
-function emitEnforcementFallback(
-  originalQuery: string,
-  lastValidation: ClaimValidationResult,
-  surface: string,
-  sessionId: string | undefined,
-): void {
-  void logAppAudit({
-    kind: 'master-play-enforcement-fallback',
-    category: 'subsystem',
-    source: 'coachApi.getCoachChatResponse',
-    summary: `retry budget exhausted — stock response served surface=${surface}`,
-    details: JSON.stringify({
-      originalQuery: originalQuery.slice(0, 240),
-      violationCount: lastValidation.violations.length,
-      sampleViolation: lastValidation.violations[0],
-      surface,
-      sessionId,
-    }),
-  });
-}
-
-/** STEP C — the in-code replacement for the regen loop. When the single
- *  validator backstop trips, we do NOT re-call the LLM (that was the disease:
- *  re-calling the model = the LLM still deciding, at 3–6 calls/turn). Instead we drop
- *  the whole SENTENCES carrying a flagged claim and keep the rest — grammatical,
- *  no clipped fragments, ZERO extra LLM calls. Directive markers ([BOARD:],
- *  [VOICE:], [[ACTION:]]) are never severed. Modeled on
- *  `stripUngroundedPlayerStats` (claimValidator.ts). Returns '' only when every
- *  sentence carried a claim (caller then serves the honest stock line). */
-function stripUngroundedSentences(text: string, validation: ClaimValidationResult): string {
-  const claims = validation.violations.map((v) => v.claim).filter(Boolean).map((c) => c.toLowerCase());
-  if (claims.length === 0 || !text.trim()) return text.trim();
-  const sentences = text.split(/(?<=[.!?])\s+/);
-  const kept: string[] = [];
-  for (const s of sentences) {
-    const trimmed = s.trim();
-    if (!trimmed) continue;
-    const hasMarker = /\[\[?[A-Z]/.test(trimmed); // protect directive markers
-    const lower = trimmed.toLowerCase();
-    const carriesClaim = !hasMarker && claims.some((c) => lower.includes(c));
-    if (!carriesClaim) kept.push(trimmed);
-  }
-  return kept.join(' ').trim();
-}
+// emitClaimValidatorTrips / emitEnforcementFallback / stripUngroundedSentences —
+// DELETED (David 2026-07-09: "root cause fixes only"). They were the claim
+// VALIDATOR backstop for the grounded-path free-compose (line 3606). That path
+// now serves the grounded default instead of letting the LLM reason freely, so
+// there is nothing to validate, no trip to strip, and no enforcement fallback —
+// the whole validate-after apparatus is gone.
 
 // ── RIP #2: the safe grounded default + the non-chess conversational lane ──
 // The grounding inversion's last hole was the fall-through: when no assembler
@@ -3586,43 +3525,32 @@ export async function getCoachChatResponse(
     return STOCK_GROUNDING_FALLBACK;
   }
 
-  // ── Grounded path: ONE call → ONE validator backstop → in-code strip ──
-  // STEP C of the grounding inversion (David's "1 call max" rule). The old
-  // path re-called the LLM up to 2× on a validator trip — 3–6 calls/turn and
-  // the disease itself (re-calling the model means the LLM is still DECIDING). That's
-  // gone. Now: a single LLM call, a single silent validator pass, and if a
-  // claim slips through we DROP the offending sentences IN CODE (grammatical,
-  // no clipped fragments, zero extra LLM calls). A turn is AT MOST 1 LLM call.
-  // Streaming stays off on grounded turns so the strip can run before the user
-  // sees a half-grounded response. `grounding` is non-null here (groundingEngaged
-  // implies we built a context, which requires grounding).
+  // ── Grounded path fall-through: THE GROUNDED DEFAULT (gate 0 — David
+  // 2026-07-09: "one command that calls the llm"). Grounding context was
+  // injected but no assembler produced the answer. The old code let the LLM
+  // reason FREELY here, guarded by validateClaims + an in-code strip + the
+  // spine's groundCoachReply — the last free-compose hole, the reason the
+  // validate-after bandaids existed at all. RIPPED: this now serves the SAME
+  // computed grounded default as the chess-signal seal above
+  // (serveGroundedPositionDefault → engine eval + best line, else the honest
+  // stock line). The LLM never reasons freely, so there is no claim to validate
+  // and no bandaid to keep. The coverage audit measured this path at ~13% of
+  // turns (cold, worst case) and they are open-ended questions where the engine
+  // default is an honest answer — the assemblers carry the other 87%.
   const { surface, sessionId } = grounding ?? { surface: 'unknown', sessionId: undefined };
-  const originalQuery = messages[messages.length - 1]?.content ?? '';
-
-  // Grounding context was injected but no assembler produced the answer, so the
-  // LLM still reasons freely (the validator backstop + in-code strip guard it).
-  // This call lands as grounded=false at the primitive — THE load-bearing hole
-  // the general-path inversion will close (→ gate 0). Tagged as its own coverage
-  // lane WITH the question so the pre-rip audit can measure exactly which real
-  // questions still hit the free-compose (the gate for deleting this path).
-  emitGroundingCoverage('general-free-compose', surface, sessionId, { question: originalQuery.slice(0, 100) });
-  const response = await callOnce(buildSystemPromptFor(), false);
-  const validation = validateClaims(response, masterPlayContext);
-  if (validation.ok) {
-    if (onStream && response) onStream(response);
-    return response;
+  const originalQuery = (() => {
+    for (let i = messages.length - 1; i >= 0; i -= 1) {
+      if (messages[i].role === 'user') return messages[i].content;
+    }
+    return '';
+  })();
+  const grounded = grounding ? await serveGroundedPositionDefault(grounding, config, originalQuery || undefined) : null;
+  if (grounded) {
+    emitGroundingCoverage('safe-default-position', surface, sessionId, { question: originalQuery.slice(0, 100), path: 'grounded-fallthrough' });
+    if (onStream) onStream(grounded);
+    return grounded;
   }
-  // Ungrounded claim(s) slipped in. Do NOT re-call the model — strip the
-  // sentences carrying them and serve what's left.
-  emitClaimValidatorTrips(validation, 1, surface, sessionId);
-  const stripped = stripUngroundedSentences(response, validation);
-  if (stripped) {
-    if (onStream) onStream(stripped);
-    return stripped;
-  }
-  // The strip emptied the response (the whole thing was ungrounded). Serve the
-  // honest stock line — still zero extra LLM calls.
-  emitEnforcementFallback(originalQuery, validation, surface, sessionId);
+  emitGroundingCoverage('safe-default-stock', surface, sessionId, { question: originalQuery.slice(0, 100), path: 'grounded-fallthrough' });
   if (onStream) onStream(STOCK_GROUNDING_FALLBACK);
   return STOCK_GROUNDING_FALLBACK;
 }

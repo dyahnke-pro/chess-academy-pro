@@ -195,12 +195,15 @@ describe('grounding — intent detection', () => {
   });
 
   it('engages on "what should I play here?"', async () => {
+    // Grounding ENGAGES (lichess fetched). With no engine snapshot threaded, the
+    // grounded-path fall-through serves the honest default (no free LLM call) —
+    // RIP (David 2026-07-09): the LLM no longer free-composes a move answer here.
     const { counters } = await ask(
       'what should I play here?',
       ['The most popular move here is e4, played in many master games.'],
     );
     expect(counters.lichessCalls).toBeGreaterThan(0);
-    expect(counters.llmCalls).toBe(1);
+    expect(counters.llmCalls).toBe(0); // grounded default, no free-compose
   });
 
   it('engages on "what do masters play?"', async () => {
@@ -265,63 +268,50 @@ describe('grounding — intent detection', () => {
       undefined,
       { currentFen: STARTING_FEN, surface: '/coach/chat', forceEngage: true },
     );
-    expect(r).toBe('Sure.');
+    // forceEngage builds the grounding context (cache warmed) but no assembler
+    // answers "tell me about this" and no engine snapshot is threaded — so the
+    // grounded default serves the honest line, NOT the free 'Sure.' (RIP).
+    expect(r).toContain("can't verify");
     expect(masterPlayCache.has(STARTING_FEN_4)).toBe(true);
   });
 });
 
-describe('grounding — pre-injection + clean validation', () => {
-  it('passes through a fully-grounded response on first attempt', async () => {
-    // Use only data drawn from context: e4 is in moves; "around 22000
-    // games" matches e4's per-move count (white+draws+black = 9000+8500+4500).
-    const { response, counters } = await ask(
-      'what do masters play here?',
-      ['Masters most commonly play e4 — around 22000 master games show the line.'],
+// RIP (David 2026-07-09): the grounded-path fall-through no longer lets the LLM
+// reason freely. When no assembler answers, it serves the COMPUTED default —
+// the engine's best move + eval when a snapshot is threaded, else the honest
+// stock line. The LLM decides no chess, so invented SANs / players / percentages
+// can NEVER reach the user: there is nothing to strip, and both the claim
+// validator and groundCoachReply are deleted. The `llmReplies` in these tests
+// are deliberately hallucinatory to prove they never surface.
+describe('grounding — the grounded default (no free-compose)', () => {
+  it('serves the computed best move when an engine snapshot is threaded', async () => {
+    const counters = installFetchMock({ lichess: LICHESS_PAYLOAD, llmTexts: ['ignored'] });
+    const r = await getCoachChatResponse(
+      [{ role: 'user', content: 'what should I play here?' }],
+      '', undefined, 'chat_response', 1024, undefined, undefined, undefined,
+      { currentFen: STARTING_FEN, surface: '/coach/chat', engineBestMoveUci: 'g1f3', engineEvalCp: 30 },
     );
-    expect(response).toContain('e4');
-    expect(counters.llmCalls).toBe(1); // no retry needed
-  });
-});
-
-// STEP C (grounding inversion, 2026-06-10): the regen loop is GONE. A validator
-// trip no longer re-calls the LLM (that was 3–6 calls/turn and the disease).
-// Now: ONE call, ONE silent validator pass, then the offending SENTENCES are
-// stripped IN CODE. A turn is AT MOST 1 LLM call. These tests assert the new
-// contract — single call, ungrounded sentence dropped, grounded sentence kept.
-describe('grounding — in-code sentence strip on validator trip (no regen)', () => {
-  it('strips the invented-SAN sentence in code and keeps the grounded one — ONE call', async () => {
-    const { response, counters } = await ask(
-      'what should I play here?',
-      [
-        // Sentence 1 invents Nh6 (not in context); sentence 2 is grounded (e4/d4 are master moves).
-        'I recommend Nh6 here. Masters favor e4 or d4 in this position.',
-      ],
-    );
-    expect(response).not.toContain('Nh6'); // ungrounded sentence stripped
-    expect(response).toContain('e4');       // grounded sentence survives
-    expect(counters.llmCalls).toBe(1);      // NO regen — one call
+    expect(r).toContain('f3');                 // Nf3 — the engine's COMPUTED best move
+    expect(r).not.toContain("can't verify");
+    expect(counters.llmCalls).toBe(0);         // voiceFacts raw — the LLM decides nothing
   });
 
-  it('stocks out when EVERY sentence is ungrounded — still ONE call', async () => {
-    const { response, counters } = await ask(
-      'what should I play here?',
-      [
-        // All three SANs are invented; the strip empties the response → stock line.
-        'The best move is Nh6. Try Bf6 instead. Maybe Rf2 is good.',
-      ],
-    );
-    expect(response).toContain("can't verify"); // stock fallback (strip emptied it)
-    expect(counters.llmCalls).toBe(1);           // NO retries — one call
+  it('serves the honest stock line when nothing can be grounded (no engine data)', async () => {
+    const { response, counters } = await ask('what should I play here?', ['I recommend Nh6. Masters favor e4.']);
+    expect(response).toContain("can't verify"); // grounded default — no free-compose
+    expect(response).not.toContain('Nh6');       // the LLM's invented move NEVER reaches the user
+    expect(counters.llmCalls).toBe(0);           // the LLM is never called to decide chess
   });
 
+  it('never lets an invented player or percentage reach the user', async () => {
+    const { response } = await ask('what do masters play here?', ['Carlsen plays this. Nf3 scores 58% here.']);
+    expect(response).not.toContain('Carlsen'); // structurally impossible — LLM not asked to decide
+    expect(response).not.toContain('58%');
+  });
+
+  // MOVE-NARRATION exemption (the Learn step-by-step flow) is NOT ripped — the
+  // coach still narrates the played move + a ply-ahead continuation there.
   it('does NOT gate bare SANs on a MOVE-NARRATION turn (deep Learn teaching)', async () => {
-    // David's iPhone + deep audit, 2026-06-04: deep into a Learn game the coach
-    // narrates the played move and names a tactical continuation a ply or two
-    // ahead ("…then bxc3 doubles my pawns") that is neither legal-now nor in
-    // the history. With master/DB data present the bare-SAN gate flagged it,
-    // retries exhausted, and ~half the deep game stocked out. moveNarration
-    // exempts the bare-SAN gate for these turns (G6 arrow validator still
-    // board-verifies every SAN; stat/player/comparative guards stay on).
     const counters = installFetchMock({ lichess: LICHESS_PAYLOAD, llmTexts: [
       'Good — and if I recapture with bxc3, my pawns double but the b-file opens for your rook.',
     ] });
@@ -331,30 +321,11 @@ describe('grounding — in-code sentence strip on validator trip (no regen)', ()
       { currentFen: STARTING_FEN, moveNarration: true, surface: '/coach/teach', sessionId: 'test-session' },
     );
     expect(r).toContain('bxc3');
-    expect(r).not.toContain("can't verify"); // no stock-out
-    expect(counters.llmCalls).toBe(1);        // no retry — gate skipped
-  });
-
-  it('STILL gates a "what masters play" turn when moveNarration is OFF (guard intact)', async () => {
-    // The exemption must NOT leak into the "what do masters play here?" case —
-    // there an invented SAN IS a fabrication worth flagging. Same invented SAN,
-    // no moveNarration → the SAN gate trips and the sentence is stripped in code.
-    const { response, counters } = await ask(
-      'what should I play here?',
-      ['The best move is Nh6.'],
-    );
-    expect(response).not.toContain('Nh6'); // flagged + stripped (guard intact)
-    expect(counters.llmCalls).toBe(1);     // one call — no regen
+    expect(r).not.toContain("can't verify");
+    expect(counters.llmCalls).toBe(1);
   });
 
   it('does NOT trip when the coach names the move JUST PLAYED (engine-driven Learn step)', async () => {
-    // David's iPhone, 2026-06-04: on the engine-driven /coach/teach step the
-    // engine plays the reply (…c5) and the coach narrates it — "c5 is the
-    // Sicilian Defense …". The validator only grounded the LEGAL moves of the
-    // POST-move position, from which c5 is no longer legal, so every engine
-    // reply (c5/e6/Qc7) tripped kind=san, exhausted 2 retries, and served the
-    // stock fallback — the student heard the non-answer. The played move lives
-    // in moveHistory; grounding it must make naming it safe (no retry).
     const POST_C5_FEN = 'rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
     const counters = installFetchMock({ lichess: LICHESS_PAYLOAD, llmTexts: [
       'c5 is the Sicilian Defense — Black fights for the center from the flank. Your move.',
@@ -365,111 +336,8 @@ describe('grounding — in-code sentence strip on validator trip (no regen)', ()
       { currentFen: POST_C5_FEN, moveHistory: ['e4', 'c5'], surface: '/coach/teach', sessionId: 'test-session' },
     );
     expect(r).toContain('Sicilian');
-    expect(r).not.toContain("can't verify"); // no stock fallback
-    expect(counters.llmCalls).toBe(1);        // grounded first try, no retry
-  });
-
-  it('strips an invented-player sentence in code, keeps the grounded one — ONE call', async () => {
-    const { response, counters } = await ask(
-      'what do masters play here?',
-      [
-        // Sentence 1 names Carlsen (NOT in topGames → flagged); sentence 2 names
-        // Kasparov (IN topGames) playing e4 (in moves) → grounded, survives.
-        'Carlsen plays this often. Kasparov plays e4 here.',
-      ],
-    );
-    expect(counters.llmCalls).toBe(1);        // one call — no regen
-    expect(response).not.toContain('Carlsen'); // ungrounded player sentence stripped
-    expect(response).toContain('Kasparov');    // grounded sentence survives
-  });
-});
-
-describe('grounding — no master data (source:none)', () => {
-  // FIX C strengthened (audit 2026-06-02 finding #1): OFF-BOOK (no master
-  // data AND no DB entry) bare SANs are NOT flagged — a SAN is legitimate
-  // move discussion (a plan / candidate), not a fabricated "masters play
-  // X" claim. Flagging them nuked plan answers into the stock fallback
-  // (a multi-move plan names FUTURE moves that aren't in the current
-  // legal-move grounding set). The real fabrication vectors —
-  // percentages, player names, comparatives — stay gated (tests below).
-  it('does NOT stock-out on bare SANs when off-book (plan/move discussion serves)', async () => {
-    const counters = installFetchMock({ lichess: EMPTY_LICHESS_PAYLOAD, llmTexts: [
-      'A reasonable plan is Nf3 and then d4, aiming to contest the center.',
-    ] });
-    const r = await getCoachChatResponse(
-      [{ role: 'user', content: 'what should I play here?' }],
-      '',
-      undefined,
-      'chat_response',
-      1024,
-      undefined,
-      undefined,
-      undefined,
-      { currentFen: STARTING_FEN, surface: '/coach/chat' },
-    );
-    expect(r).not.toContain("can't verify"); // served, no stock fallback
-    expect(r).toContain('Nf3');
-    expect(counters.llmCalls).toBe(1);
-  });
-
-  it('grounds a LEGAL move even with no master data (FIX C — no false stock-out)', async () => {
-    const counters = installFetchMock({ lichess: EMPTY_LICHESS_PAYLOAD, llmTexts: [
-      'A solid developing plan is Nf3, then d4 to contest the center.', // both legal on move 1
-    ] });
-    const r = await getCoachChatResponse(
-      [{ role: 'user', content: 'what should I play here?' }],
-      '',
-      undefined,
-      'chat_response',
-      1024,
-      undefined,
-      undefined,
-      undefined,
-      { currentFen: STARTING_FEN, surface: '/coach/chat' },
-    );
-    expect(r).toContain('Nf3'); // passed through — not the stock fallback
     expect(r).not.toContain("can't verify");
-    expect(counters.llmCalls).toBe(1); // no retry needed
-  });
-
-  it('still flags a fabricated percentage even when the SAN is legal (numeric gating intact, stripped in code)', async () => {
-    const counters = installFetchMock({ lichess: EMPTY_LICHESS_PAYLOAD, llmTexts: [
-      // Sentence 1 cites a fabricated 58% (no master data) → flagged + stripped;
-      // sentence 2 is a legal move with no fabricated stat → survives.
-      'Nf3 scores 58% for White here. Nf3 is a sound developing move.',
-    ] });
-    const r = await getCoachChatResponse(
-      [{ role: 'user', content: 'what should I play here?' }],
-      '',
-      undefined,
-      'chat_response',
-      1024,
-      undefined,
-      undefined,
-      undefined,
-      { currentFen: STARTING_FEN, surface: '/coach/chat' },
-    );
-    expect(r).toContain('sound developing'); // grounded sentence survives
-    expect(r).not.toContain('58%');           // fabricated percentage stripped
-    expect(counters.llmCalls).toBe(1);        // one call — no regen
-  });
-
-  it('passes a response that honestly says it cannot verify', async () => {
-    installFetchMock({ lichess: EMPTY_LICHESS_PAYLOAD, llmTexts: [
-      "I don't have grounded master data for this position. Try the engine.",
-    ] });
-    const r = await getCoachChatResponse(
-      [{ role: 'user', content: 'what should I play here?' }],
-      '',
-      undefined,
-      'chat_response',
-      1024,
-      undefined,
-      undefined,
-      undefined,
-      { currentFen: STARTING_FEN, surface: '/coach/chat' },
-    );
-    expect(r).toContain('grounded master data');
+    expect(counters.llmCalls).toBe(1);
   });
 });
 
