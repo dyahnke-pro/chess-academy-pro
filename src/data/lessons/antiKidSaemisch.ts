@@ -6,7 +6,6 @@ import type { LessonScript, LessonBeat, AnnotationArrow, AnnotationHighlight } f
 // ...c6/...f5 counter. Spine both-sides-sound (build-sound-spine.mjs), engine-
 // verified (+0.74 White). chess.js-legal.
 
-const ATK = 'rgba(40,185,95,0.92)';
 const KEY = 'rgba(255,214,0,0.88)';
 const SOFT = 'rgba(80,140,255,0.32)';
 const H = (square: string, color = KEY): AnnotationHighlight => ({ square, color });
