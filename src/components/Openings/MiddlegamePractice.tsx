@@ -4,9 +4,9 @@ import { EngineLines } from '../Board/EngineLines';
 import { useChessGame } from '../../hooks/useChessGame';
 import { useSettings } from '../../hooks/useSettings';
 import { stockfishEngine } from '../../services/stockfishEngine';
-import { getCoachChatResponse } from '../../services/coachApi';
-import { buildFedTacticsContext, formatTacticsSubBlock } from '../../services/liveTacticsContext';
-import { groundCoachReply, applyCandidateArrows } from '../../services/coachAnswerGates';
+import { groundedMoveFeedback } from '../../services/coachApi';
+import { buildFedTacticsContext } from '../../services/liveTacticsContext';
+import { applyCandidateArrows } from '../../services/coachAnswerGates';
 import { speechService } from '../../services/speechService';
 import { sanitizeForTTS } from '../../services/voiceService';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
@@ -43,59 +43,12 @@ function uciToSquares(uci: string): { from: string; to: string } {
   return { from: uci.slice(0, 2), to: uci.slice(2, 4) };
 }
 
-function buildPlanContext(plan: MiddlegamePlan): string {
-  const lines: string[] = [];
-  lines.push(`MIDDLEGAME PLAN: "${plan.title}"`);
-  lines.push(`OVERVIEW: ${plan.overview}`);
-
-  if (plan.pawnBreaks.length > 0) {
-    lines.push('\nKEY PAWN BREAKS:');
-    for (const pb of plan.pawnBreaks) {
-      lines.push(`- ${pb.move}: ${pb.explanation}`);
-    }
-  }
-
-  if (plan.pieceManeuvers.length > 0) {
-    lines.push('\nKEY PIECE MANEUVERS:');
-    for (const pm of plan.pieceManeuvers) {
-      lines.push(`- ${pm.piece} (${pm.route}): ${pm.explanation}`);
-    }
-  }
-
-  if (plan.strategicThemes.length > 0) {
-    lines.push('\nSTRATEGIC THEMES:');
-    for (const theme of plan.strategicThemes) {
-      lines.push(`- ${theme}`);
-    }
-  }
-
-  if (plan.endgameTransitions.length > 0) {
-    lines.push('\nENDGAME TRANSITIONS:');
-    for (const et of plan.endgameTransitions) {
-      lines.push(`- ${et}`);
-    }
-  }
-
-  return lines.join('\n');
-}
-
-const MIDDLEGAME_PRACTICE_PROMPT = `You are coaching a student through middlegame practice. They are playing from a specific position and you know the middlegame plan they should be executing.
-
-YOUR JOB:
-- After each student move, give brief feedback (1-2 sentences max)
-- If the move MATCHES a plan idea (a pawn break, piece maneuver, or strategic theme), praise it and explain why it's good
-- If the move is REASONABLE but doesn't match the plan, acknowledge it and gently suggest the plan's idea
-- If the move is BAD (Stockfish says it loses material or position), warn them concisely
-- Reference the specific plan ideas (pawn breaks, maneuvers) by name when relevant
-- Keep it conversational and encouraging — like a coach sitting next to them
-
-DO NOT:
-- Give long lectures — keep each comment under 40 words
-- Repeat the move notation back to them
-- List engine lines or evaluation numbers
-- Be discouraging — always frame suggestions positively
-
-After 10+ moves, if asked for a summary, give a brief assessment of how well they executed the plan.`;
+// The move feedback is COMPUTED (eval + best move + live tactic) and voiced
+// through `groundedMoveFeedback` → voiceFacts (David 2026-07-09: "root cause
+// fixes only"). The old free-LLM prompt + a hand-built plan-context blob are
+// gone — deciding "does this move fit the plan?" was an LLM judgment (a
+// hallucination surface), not a computed fact. `plan` still drives the board
+// setup below; its prose no longer feeds a free prompt.
 
 /** Strip a leading move-notation citation from text destined for TTS.
  *  The system prompt instructs the LLM not to repeat the move
@@ -197,7 +150,6 @@ export function MiddlegamePractice({
   }, []);
 
   const chatHistoryRef = useRef<CoachMessage[]>([]);
-  const planContextRef = useRef(buildPlanContext(plan));
   const isMountedRef = useRef(true);
 
   // ─── Discussion Practice (the live faucet) ──────────────────────────────
@@ -297,16 +249,13 @@ export function MiddlegamePractice({
       const analysis = await stockfishEngine.queueAnalysis(fen, 14);
       if (!isMountedRef.current) return;
 
-      const evalStr = analysis.isMate
-        ? `Mate in ${analysis.mateIn}`
-        : `${(analysis.evaluation / 100).toFixed(1)} pawns`;
-
-      // G0 INVERSION: this surface bypasses the spine, so inject the same
-      // code-computed BOARD FACTS + tactics block so the feedback VOICES the
-      // real tactics instead of free-reading the board (David 2026-06-22).
-      // Reuses the `analysis` just computed (PV present) — no extra engine read.
-      // Student's color = the side that just moved (opposite of side-to-move
-      // in the post-move FEN).
+      // ROOT-CAUSE GROUNDING (David 2026-07-09: "no bandaids, root cause fixes
+      // only"). The move feedback is COMPUTED — eval + best move + the live
+      // tactic — and voiced through the ONE chokepoint (`groundedMoveFeedback`
+      // → assembleMoveEvalAnswer/assemblePositionAssessment → voiceFacts). The
+      // LLM decides no chess content, so there is nothing to validate after:
+      // the old free getCoachChatResponse + groundCoachReply bandaid is gone.
+      // Student's color = the side that just moved (opposite of side-to-move).
       const studentCC = fen.split(' ')[1] === 'w' ? 'b' : 'w';
       // Adaptive grounding horizon: real rating + tactics skill, not a frozen
       // 1200 (David 2026-07-03: all training aids adaptive).
@@ -315,42 +264,29 @@ export function MiddlegamePractice({
         fen, studentCC, mgProfile?.currentRating ?? 1200, analysis,
         () => Promise.resolve(null), mgProfile?.skillRadar?.tactics,
       ).catch(() => undefined)) ?? null;
-      const mgBlock = mgTactics ? formatTacticsSubBlock(mgTactics) : '';
 
-      const userMsg: CoachMessage = {
-        role: 'user',
-        content: `Position (FEN): ${fen}\nStudent played: ${moveSan} (move ${moveCount + 1})\nStockfish evaluation after this move: ${evalStr} (depth ${analysis.depth})\nBest move was: ${analysis.bestMove}\n\nGive brief feedback on this move in context of the middlegame plan.${mgBlock ? `\n\n${mgBlock}` : ''}`,
-      };
-
-      chatHistoryRef.current.push(userMsg);
-
-      const systemAddition = `${MIDDLEGAME_PRACTICE_PROMPT}\n\n${planContextRef.current}`;
-
-      // WO-COACH-MASTER-INTEGRATION: pass the current FEN so the
-      // brain can ground move-question feedback against master data.
-      const response = await getCoachChatResponse(
-        chatHistoryRef.current,
-        systemAddition,
-        undefined,
-        'explore_reaction',
-        256,
-        undefined, // verbosityOverride
-        undefined, // forceProvider
-        undefined, // skipPersonality
-        fen ? { currentFen: fen, surface: '/openings/middlegame-practice' } : undefined,
-      );
+      const feedback = await groundedMoveFeedback({
+        fen,
+        bestMoveUci: analysis.bestMove,
+        evalCp: analysis.evaluation,
+        mateIn: analysis.isMate ? analysis.mateIn : undefined,
+        tactics: mgTactics ?? undefined,
+        studentColor: studentCC === 'w' ? 'white' : 'black',
+        studentMessage: `Student played ${moveSan} in middlegame practice`,
+      });
 
       if (!isMountedRef.current) return;
 
-      // Runtime grounding gates (this surface bypasses the coach spine, so
-      // it runs the shared gate set itself): drop board-false + ungrounded
-      // player-stat sentences. Arrows are the async engine-colored pass.
+      // Grounded prose is final; only the async engine-colored arrow pass
+      // remains (a display feature, not a grounding gate). Fall back to a
+      // neutral nudge only when there was no engine/tactic data to ground on.
       const grounded = await applyCandidateArrows(
-        groundCoachReply(response, { fen, tactics: mgTactics, source: 'middlegamePractice' }),
+        feedback ?? 'Keep going — play your next move!',
         fen,
         'middlegamePractice',
       );
 
+      chatHistoryRef.current.push({ role: 'user', content: `Student played ${moveSan} (move ${moveCount + 1})` });
       const assistantMsg: CoachMessage = { role: 'assistant', content: grounded };
       chatHistoryRef.current.push(assistantMsg);
 

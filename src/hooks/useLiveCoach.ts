@@ -19,26 +19,18 @@
  * for the same trigger).
  */
 import { useCallback, useRef } from 'react';
-import { getCoachChatResponse } from '../services/coachApi';
-import { buildFedTacticsContext, formatTacticsSubBlock } from '../services/liveTacticsContext';
+import { groundedMoveFeedback } from '../services/coachApi';
+import { buildFedTacticsContext } from '../services/liveTacticsContext';
 import { getCachedStockfish } from './stockfishFenCache';
-import { groundCoachReply, applyCandidateArrows } from '../services/coachAnswerGates';
+import { applyCandidateArrows } from '../services/coachAnswerGates';
 import type { TacticsLiveContext } from '../coach/types';
 import { voiceService } from '../services/voiceService';
 import { logAppAudit } from '../services/appAuditor';
 import { useAppStore } from '../stores/appStore';
 import { alertSensitivityMultiplier } from '../services/skillScaling';
 import {
-  LIVE_COACH_GREAT_MOVE_ADDITION,
-  LIVE_COACH_MISSED_TACTIC_ADDITION,
-  LIVE_COACH_OPPONENT_BLUNDER_ADDITION,
-  LIVE_COACH_EVAL_SWING_WRONG_ADDITION,
-  LIVE_COACH_RECOVERY_ADDITION,
-} from '../services/coachPrompts';
-import {
   evaluateOpponentMoveTriggers,
   evaluatePlayerMoveTriggers,
-  type LiveCoachTrigger,
   type PlayerMoveSignal,
   type OpponentMoveSignal,
   type TriggerResult,
@@ -93,76 +85,11 @@ export interface UseLiveCoachResult {
 }
 
 const LIVE_COACH_API_TIMEOUT_MS = 30_000;
-const LIVE_COACH_MAX_TOKENS = 600;
 
 /** Convert white-perspective eval into student-perspective. */
 function toStudentEval(whitePerspectiveCp: number, color: 'white' | 'black'): number {
   return color === 'white' ? whitePerspectiveCp : -whitePerspectiveCp;
 }
-
-function pawnsFromCp(cp: number): string {
-  const sign = cp >= 0 ? '+' : '';
-  return `${sign}${(cp / 100).toFixed(2)}`;
-}
-
-function buildUserMessage(
-  trigger: LiveCoachTrigger,
-  ctx: {
-    playerSan?: string | null;
-    bestMoveSan?: string | null;
-    studentEvalBefore?: number;
-    studentEvalAfter?: number;
-    worstEval?: number;
-    last3Moves?: string[];
-  },
-): string {
-  switch (trigger) {
-    case 'great-move':
-      return [
-        `San: ${ctx.playerSan ?? '?'}`,
-        `Eval before: ${ctx.studentEvalBefore !== undefined ? pawnsFromCp(ctx.studentEvalBefore) : 'n/a'}`,
-        `Eval after: ${ctx.studentEvalAfter !== undefined ? pawnsFromCp(ctx.studentEvalAfter) : 'n/a'}`,
-        ctx.bestMoveSan ? `Engine confirms best: ${ctx.bestMoveSan}` : '',
-      ].filter(Boolean).join('\n');
-    case 'missed-tactic':
-      return [
-        `Played: ${ctx.playerSan ?? '?'}`,
-        `Eval after: ${ctx.studentEvalAfter !== undefined ? pawnsFromCp(ctx.studentEvalAfter) : 'n/a'}`,
-        // Intentionally omit the missed move's SAN from the user
-        // message — the prompt forbids naming it. Telling the LLM
-        // would leak.
-      ].filter(Boolean).join('\n');
-    case 'opponent-blunder':
-      return [
-        `Opponent's move: ${ctx.playerSan ?? '?'}`,
-        `Eval before: ${ctx.studentEvalBefore !== undefined ? pawnsFromCp(ctx.studentEvalBefore) : 'n/a'}`,
-        `Eval after: ${ctx.studentEvalAfter !== undefined ? pawnsFromCp(ctx.studentEvalAfter) : 'n/a'}`,
-      ].filter(Boolean).join('\n');
-    case 'eval-swing-wrong':
-      return [
-        `Played: ${ctx.playerSan ?? '?'}`,
-        `Eval before: ${ctx.studentEvalBefore !== undefined ? pawnsFromCp(ctx.studentEvalBefore) : 'n/a'}`,
-        `Eval after: ${ctx.studentEvalAfter !== undefined ? pawnsFromCp(ctx.studentEvalAfter) : 'n/a'}`,
-        ctx.bestMoveSan ? `Best was: ${ctx.bestMoveSan}` : '',
-      ].filter(Boolean).join('\n');
-    case 'recovery':
-      return [
-        `Worst eval recent: ${ctx.worstEval !== undefined ? pawnsFromCp(ctx.worstEval) : 'n/a'}`,
-        `Current eval: ${ctx.studentEvalAfter !== undefined ? pawnsFromCp(ctx.studentEvalAfter) : 'n/a'}`,
-        ctx.last3Moves && ctx.last3Moves.length > 0
-          ? `Recent moves: ${ctx.last3Moves.join(' ')}`
-          : '',
-      ].filter(Boolean).join('\n');
-  }
-}
-
-const ADDITION_BY_TRIGGER: Record<LiveCoachTrigger, string> = {
-  'great-move': LIVE_COACH_GREAT_MOVE_ADDITION,
-  'missed-tactic': LIVE_COACH_MISSED_TACTIC_ADDITION,
-  'opponent-blunder': LIVE_COACH_OPPONENT_BLUNDER_ADDITION,
-  'eval-swing-wrong': LIVE_COACH_EVAL_SWING_WRONG_ADDITION,
-  'recovery': LIVE_COACH_RECOVERY_ADDITION,
-};
 
 function speakStreamed(text: string): void {
   const sentences = text.match(/([^.!?]+[.!?])(?=\s|$)/g) ?? [text];
@@ -209,25 +136,12 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
       inFlightRef.current = true;
       lastSpokenPlyRef.current = ctx.ply;
 
-      let userMessage = buildUserMessage(winner.trigger, {
-        playerSan: ctx.san,
-        bestMoveSan: ctx.bestMoveSan,
-        studentEvalBefore: ctx.studentEvalBefore,
-        studentEvalAfter: ctx.studentEvalAfter,
-        worstEval: ctx.worstEval,
-        last3Moves: ctx.last3Moves,
-      });
-
-      // G0 INVERSION: this hook bypasses the spine envelope, so inject the SAME
-      // code-computed BOARD FACTS + tactics block the spine would — the live
-      // interjection then VOICES the real tactics instead of free-reasoning and
-      // inventing a pin/fork (PostHog liveCoach.tacticClaimGate + boardClaimGate,
-      // David 2026-06-22). Latency-safe: reuse the eval bar's cached analysis,
-      // never a fresh engine read (cache miss → sync FEN-only board facts).
-      // The context is hoisted to trigger-scope so it can ALSO feed the
-      // ENFORCING tactic gate below — building it only for the prompt while
-      // grounding audit-only let hallucinated tactics ("fork", "removal of
-      // guard", "pin") reach Ruth's voice (PostHog 2026-07-04, David's session).
+      // ROOT-CAUSE GROUNDING (David 2026-07-09): the interjection content is
+      // COMPUTED below (eval + best move + the live tactic) and voiced through
+      // `groundedMoveFeedback` → voiceFacts. The trigger fired the WHEN; the
+      // content is the grounded truth. No hand-built free-LLM message, no
+      // trigger-flavored prompt — the LLM decides no chess content. Latency-
+      // safe: reuse the eval bar's cached analysis, never a fresh engine read.
       let tactics: TacticsLiveContext | null = null;
       if (ctx.fenAfter) {
         // Adaptive grounding horizon: real rating + tactics skill, not a frozen
@@ -241,8 +155,8 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
           () => Promise.resolve(null),
           lcProfile?.skillRadar?.tactics,
         ).catch(() => undefined)) ?? null;
-        const block = tactics ? formatTacticsSubBlock(tactics) : '';
-        if (block) userMessage = `${userMessage}\n\n${block}`;
+        // Tactics ride in liveState (below) so the spine injects + grounds them
+        // — no longer hand-formatted into the prompt.
       }
 
       void logAppAudit({
@@ -256,20 +170,23 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
 
       let response = '';
       try {
-        // WO-COACH-MASTER-INTEGRATION: pass the post-move FEN so live
-        // interjections can be grounded if the trigger fires on a
-        // move-question-shaped turn.
-        const promise = getCoachChatResponse(
-          [{ role: 'user', content: userMessage }],
-          ADDITION_BY_TRIGGER[winner.trigger],
-          undefined,
-          'chat_response',
-          LIVE_COACH_MAX_TOKENS,
-          'medium',
-          undefined, // forceProvider
-          undefined, // skipPersonality
-          ctx.fenAfter ? { currentFen: ctx.fenAfter, surface: '/coach/play' } : undefined,
-        );
+        // ROOT-CAUSE GROUNDING (David 2026-07-09: "no bandaids, root cause
+        // fixes only"). The interjection is COMPUTED — the post-move eval +
+        // best move + the live tactic — and voiced through the ONE chokepoint
+        // (`groundedMoveFeedback` → assembler → voiceFacts). The LLM decides no
+        // chess content, so the old free getCoachChatResponse + the post-hoc
+        // groundCoachReply bandaid are both gone. Returns null (→ stay silent)
+        // when there's no engine/tactic data to ground on.
+        const cached = ctx.fenAfter ? getCachedStockfish(ctx.fenAfter) : null;
+        const promise = groundedMoveFeedback({
+          fen: ctx.fenAfter ?? '',
+          bestMoveUci: cached?.bestMove ?? null,
+          evalCp: cached?.evaluation ?? null,
+          mateIn: cached?.isMate ? cached.mateIn : undefined,
+          tactics: tactics ?? undefined,
+          studentColor: playerColor,
+          studentMessage: ctx.san ? `Played ${ctx.san}` : undefined,
+        }).then((t) => t ?? '');
         const timeout = new Promise<string>((_, reject) =>
           setTimeout(() => reject(new Error('live-coach-timeout')), LIVE_COACH_API_TIMEOUT_MS),
         );
@@ -288,14 +205,9 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
         return;
       }
 
-      // Runtime grounding gates (this hook bypasses the coach spine):
-      // drop board-false + ungrounded player-stat sentences before voicing;
-      // arrows are the async engine-colored pass.
-      const text = (await applyCandidateArrows(
-        groundCoachReply(response, { fen: ctx.fenAfter, tactics, source: 'liveCoach' }),
-        ctx.fenAfter,
-        'liveCoach',
-      )).trim();
+      // The spine already grounded the text; only the async engine-colored
+      // arrow pass remains (a display feature, not a grounding gate).
+      const text = (await applyCandidateArrows(response, ctx.fenAfter, 'liveCoach')).trim();
       if (!text || text.startsWith('⚠️')) {
         inFlightRef.current = false;
         return;

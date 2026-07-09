@@ -1811,6 +1811,50 @@ function emitGroundingCoverage(
   });
 }
 
+/**
+ * groundedMoveFeedback — the PUBLIC root-cause move-feedback primitive
+ * (David 2026-07-09: "no bandaids, root cause fixes only").
+ *
+ * Auto-narration surfaces that comment on a move the student just played
+ * (middlegame practice, live-coach interjections) MUST NOT free-LLM the
+ * feedback and validate it after (the `groundCoachReply` bandaid). Instead
+ * they compute the engine analysis + tactics THEY ALREADY HAVE and hand it
+ * here: this assembles the move-eval / position-assessment facts in code and
+ * voices them through the ONE chokepoint (`voiceFacts`). The LLM decides
+ * nothing. Returns null when there is no engine/tactic data to ground on (the
+ * caller then stays silent rather than inventing an interjection). The
+ * best-move arrow marker is appended when available.
+ */
+export async function groundedMoveFeedback(opts: {
+  fen: string;
+  /** Engine best move in UCI (e.g. `g1f3`) — Stockfish PV[0]. */
+  bestMoveUci?: string | null;
+  /** Eval in centipawns, WHITE's perspective (StockfishAnalysis.evaluation). */
+  evalCp?: number | null;
+  /** Mate-in-N, WHITE's perspective. */
+  mateIn?: number | null;
+  tactics?: MasterGroundingOptions['tactics'];
+  studentColor?: 'white' | 'black';
+  studentMessage?: string;
+  /** Surface tag for audit attribution. */
+  surface?: string;
+}): Promise<string | null> {
+  const config = await getProviderConfig();
+  return serveGroundedPositionDefault(
+    {
+      surface: opts.surface ?? 'grounded-move-feedback',
+      currentFen: opts.fen,
+      engineBestMoveUci: opts.bestMoveUci ?? undefined,
+      engineEvalCp: opts.evalCp ?? undefined,
+      engineMateIn: opts.mateIn ?? undefined,
+      tactics: opts.tactics,
+      studentColor: opts.studentColor,
+    },
+    config,
+    opts.studentMessage,
+  );
+}
+
 /** SAFE GROUNDED DEFAULT — the computed answer for an unmapped CHESS turn:
  *  the engine's best move + eval (richest) when the surface threaded a
  *  Stockfish snapshot, else the eval + top live-tactic (position assessment).
