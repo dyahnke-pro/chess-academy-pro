@@ -1076,6 +1076,24 @@ export function isSettingsQuestion(ask: string | undefined): boolean {
   return SETTINGS_QUERY_RE.some((re) => re.test(ask));
 }
 
+// F15 app-help — "what does the Tactics tab DO?", "how does the Calculation
+// trainer work?", "what's the Training Plan for?". Anchored on a UI-surface
+// noun (tab / page / screen / section / tool / trainer / feature) so it can't
+// mis-fire on a chess question ("how does the Sicilian work" has no anchor).
+const APP_HELP_RE: ReadonlyArray<RegExp> = [
+  /\bwhat(?:'?s| is| does| do| are)?\b[\w'\s-]{0,30}?\b(?:tab|page|screen|section|trainer|feature)\b/i,
+  /\bhow\s+(?:does|do|can|should)\b[\w'\s-]{0,30}?\b(?:tab|page|screen|section|trainer|feature)\b/i,
+  /\bwhat\s+can\s+i\s+do\s+(?:in|on|with|here)\b/i,
+  /\bexplain\b[\w'\s-]{0,30}?\b(?:tab|page|screen|section|trainer|feature)\b/i,
+];
+
+export function isAppHelpQuestion(ask: string | undefined): boolean {
+  if (!ask) return false;
+  // "teach me X" / "how do I play X" are lesson/chess asks, not app-help.
+  if (/\bteach\s+me\b/i.test(ask)) return false;
+  return APP_HELP_RE.some((re) => re.test(ask));
+}
+
 /**
  * buildQuestionGrounding — the SHARED grounding builder so the coach's
  * grounded-data brain fires IDENTICALLY on every talking surface (David
@@ -1151,5 +1169,6 @@ export function buildQuestionGrounding(
     positionAssessmentQuestion: isPositionAssessmentQuestion(ask),
     teachingMethodQuestion: isTeachingMethodQuestion(ask),
     settingsQuestion: isSettingsQuestion(ask),
+    appHelpQuestion: isAppHelpQuestion(ask),
   };
 }

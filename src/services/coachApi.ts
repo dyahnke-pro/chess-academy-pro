@@ -58,7 +58,9 @@ function deepseekCacheSplit(usage: unknown): { hit: number | null; miss: number 
   };
 }
 import { lookupMasterPlay } from './masterPlayLookup';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleTeachingAnswer, assembleSettingsAnswer, explainBestMoveGrounded } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, explainBestMoveGrounded } from './groundedAnswer';
+import { matchRouteByTopic } from './navigationRouter';
+import { APP_ROUTES_MANIFEST } from '../data/appRoutesManifest';
 import { lookupTablebase } from './lichessTablebaseService';
 import { detectBadHabits } from './badHabitDetector';
 import { getUnifiedWeaknessProfile } from './weaknessSpine';
@@ -1364,6 +1366,11 @@ export interface MasterGroundingOptions {
    *  live preferences via assembleSettingsAnswer. The mutate half ("turn voice
    *  on") is the settings-action layer, not this. */
   settingsQuestion?: boolean;
+  /** F15 app-help — true when the turn asks what a tab/page/tool DOES ("what
+   *  does the Tactics tab do?", "how does the Calculation trainer work?").
+   *  Voiced from APP_ROUTES_MANIFEST (title + description) via
+   *  assembleAppHelpAnswer — the app's own copy, not a free-LLM guess. */
+  appHelpQuestion?: boolean;
   /** Which side the STUDENT plays — so the tactics answer warns about THEIR
    *  hanging pieces. Falls back to side-to-move when absent. */
   studentColor?: 'white' | 'black';
@@ -2193,7 +2200,8 @@ export async function getCoachChatResponse(
       grounding.endgameQuestion === true ||
       grounding.positionAssessmentQuestion === true ||
       grounding.teachingMethodQuestion === true ||
-      grounding.settingsQuestion === true;
+      grounding.settingsQuestion === true ||
+      grounding.appHelpQuestion === true;
     if (intentFired) {
       try {
         // Helper: the latest user message, for voiceFacts context.
@@ -2997,6 +3005,25 @@ export async function getCoachChatResponse(
               });
               if (answer) {
                 const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'settings', preferRaw: true });
+                if (voiced) return voiced;
+              }
+            }
+          } catch { /* fall through */ }
+        }
+
+        // ── APP HELP (F15) — voice what a tab/page/tool DOES from the app route
+        // manifest (hand-maintained title + description). The caller resolves
+        // WHICH route the question names (matchRouteByTopic, no nav verb needed)
+        // and the assembler voices the app's own copy. No board, no master-play;
+        // falls through when no curated route is named (never fabricates).
+        if (grounding.appHelpQuestion) {
+          try {
+            const topic = matchRouteByTopic(lastUserMessage() ?? '');
+            const entry = topic ? APP_ROUTES_MANIFEST.find((e) => e.path === topic.path) : null;
+            if (entry) {
+              const answer = assembleAppHelpAnswer({ title: entry.title, description: entry.description });
+              if (answer) {
+                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'app-help', preferRaw: true });
                 if (voiced) return voiced;
               }
             }

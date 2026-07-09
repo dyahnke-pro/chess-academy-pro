@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { isAppHelpQuestion } from './questionIntents';
 import {
   isPlanQuestion,
   isBestMoveQuestion,
@@ -908,5 +909,25 @@ describe('isImprovementTrendQuestion (David 2026-07-04: "am I improving?" wants 
     // path. Here we just lock that trend recognizes the phrasing progress owns.
     expect(isImprovementTrendQuestion('am I improving')).toBe(true);
     expect(isProgressQuestion('am I improving')).toBe(true);
+  });
+});
+
+describe('isAppHelpQuestion (F15: what does the X tab/tool DO)', () => {
+  it('matches app-surface help questions', () => {
+    expect(isAppHelpQuestion('what does the tactics tab do?')).toBe(true);
+    expect(isAppHelpQuestion('how does the calculation trainer work?')).toBe(true);
+    expect(isAppHelpQuestion('what can I do in here?')).toBe(true);
+    expect(isAppHelpQuestion('explain the review page')).toBe(true);
+  });
+
+  it('does NOT fire on a chess question (no UI-surface anchor)', () => {
+    expect(isAppHelpQuestion('how does the Sicilian work?')).toBe(false);
+    expect(isAppHelpQuestion('what does the knight do?')).toBe(false);
+    expect(isAppHelpQuestion('teach me the London system')).toBe(false);
+  });
+
+  it('is empty-safe', () => {
+    expect(isAppHelpQuestion(undefined)).toBe(false);
+    expect(isAppHelpQuestion('')).toBe(false);
   });
 });

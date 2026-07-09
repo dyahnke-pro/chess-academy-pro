@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { matchNavigationRoute } from './navigationRouter';
+import { matchNavigationRoute, matchRouteByTopic } from './navigationRouter';
 
 // Unified action layer: "take me to X" / "open X" resolves to a REAL route in
 // code — deterministic, never invented, works on every surface via dispatch.
@@ -38,5 +38,23 @@ describe('matchNavigationRoute', () => {
     // "show me" is a nav trigger, but with no known destination it declines
     // (the training-aid router upstream handles "show me a fork puzzle").
     expect(matchNavigationRoute('show me a fork puzzle')).toBeNull();
+  });
+});
+
+// F15 app-help: resolve the route a question NAMES, without a navigation verb.
+describe('matchRouteByTopic', () => {
+  it('resolves a destination named without a nav verb', () => {
+    expect(matchRouteByTopic('what does the tactics tab do?')?.path).toBe('/tactics');
+    expect(matchRouteByTopic('how does the calculation trainer work?')?.path).toBe('/tactics/calculation');
+    expect(matchRouteByTopic("what's the training plan for?")?.path).toBe('/coach/plan');
+  });
+
+  it('returns a human label alongside the path', () => {
+    expect(matchRouteByTopic('what does the settings screen do?')).toEqual({ path: '/settings', label: 'Settings' });
+  });
+
+  it('returns null when no curated route is named', () => {
+    expect(matchRouteByTopic('what does the knight do?')).toBeNull();
+    expect(matchRouteByTopic('how does en passant work?')).toBeNull();
   });
 });

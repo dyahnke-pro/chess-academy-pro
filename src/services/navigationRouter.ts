@@ -56,19 +56,28 @@ const NAV_ALIASES: NavAlias[] = [
 const NAV_INTENT_RE =
   /\b(?:take me to|take me home|go to|go home|navigate to|bring up|jump to|switch to|open(?:\s+up)?|show me)\b/i;
 
-/** Match a navigation command to a real route, or null. */
-export function matchNavigationRoute(text: string): NavigationMatch | null {
+/** Resolve a route TOPIC (the destination named in the text) to a real
+ *  route + label, WITHOUT requiring a navigation verb. Used by the app-help
+ *  grounding (F15) — "what does the Tactics tab do?" names a route but isn't a
+ *  navigation command. Returns null when no curated destination is named. */
+export function matchRouteByTopic(text: string): { path: string; label: string } | null {
   if (!text) return null;
   const t = text.toLowerCase();
-  if (!NAV_INTENT_RE.test(t)) return null;
   for (const alias of NAV_ALIASES) {
     for (const name of alias.names) {
       // Word-boundary match so "settings" doesn't fire inside "unsettling".
       const re = new RegExp(`\\b${name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
-      if (re.test(t)) {
-        return { path: alias.path, ack: `Opening ${alias.label}.` };
-      }
+      if (re.test(t)) return { path: alias.path, label: alias.label };
     }
   }
   return null;
+}
+
+/** Match a navigation command to a real route, or null. Adds the navigation-
+ *  verb gate on top of the topic match (so a bare "tactics" mention doesn't
+ *  navigate — only "take me to tactics" / "open tactics" does). */
+export function matchNavigationRoute(text: string): NavigationMatch | null {
+  if (!text || !NAV_INTENT_RE.test(text.toLowerCase())) return null;
+  const m = matchRouteByTopic(text);
+  return m ? { path: m.path, ack: `Opening ${m.label}.` } : null;
 }

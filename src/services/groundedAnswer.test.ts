@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleTrendAnswer, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleTrendAnswer, assembleAppHelpAnswer, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -930,5 +930,25 @@ describe('assembleTrendAnswer (David 2026-07-04: "am I improving?" → temporal 
     expect(out).not.toBeNull();
     expect(out!.facts).toContain('opening');
     expect(out!.facts).toContain('improved the most');
+  });
+});
+
+describe('assembleAppHelpAnswer — F15 grounded "what does the X tab do"', () => {
+  it('voices the app route manifest title + description', () => {
+    const a = assembleAppHelpAnswer({
+      title: 'Play with the Coach',
+      description: 'Live chess game against the coach with adaptive difficulty, hints, and post-game review.',
+    });
+    expect(a).not.toBeNull();
+    expect(a!.facts).toContain('Play with the Coach');
+    expect(a!.facts).toContain('adaptive difficulty');
+    expect(a!.sources).toEqual(['app:routes']);
+    // Pure app-copy answer — no chess move attached.
+    expect(a!.bestMoveSan).toBeNull();
+  });
+
+  it('returns null when there is nothing to voice', () => {
+    expect(assembleAppHelpAnswer({ title: '', description: 'x' })).toBeNull();
+    expect(assembleAppHelpAnswer({ title: 'Tactics', description: '   ' })).toBeNull();
   });
 });

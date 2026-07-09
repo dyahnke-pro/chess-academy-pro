@@ -143,6 +143,25 @@ export function assembleSettingsAnswer(opts: {
 }
 
 /**
+ * assembleAppHelpAnswer — "what does the Tactics tab do?", "how does the
+ * Calculation trainer work?", "what's the Training Plan for?" (F15 app-help).
+ * The fact source is `APP_ROUTES_MANIFEST` (hand-maintained truth about every
+ * navigable surface — title + editorial description). The caller resolves WHICH
+ * route the question names (matchRouteByTopic) and hands the entry in, so this
+ * stays a pure leaf. The LLM decides nothing — it voices the app's own copy.
+ * Returns null when the entry has no description to voice.
+ */
+export function assembleAppHelpAnswer(opts: {
+  title: string;
+  description: string;
+}): GroundedAnswer | null {
+  const title = opts.title?.trim();
+  const description = opts.description?.trim();
+  if (!title || !description) return null;
+  return { facts: `${title}: ${description}`, bestMoveSan: null, bestMoveFromTo: null, sources: ['app:routes'] };
+}
+
+/**
  * assembleTeachingAnswer — "how do you teach the X?", "how does the app teach
  * this opening?", "how do the lessons work?" (F11 pedagogy). The fact source is
  * the app's OWN teaching structure: the WLPP grammar (Watch/Learn/Practice/Play)
