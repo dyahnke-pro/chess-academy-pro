@@ -167,3 +167,45 @@ redundant callers. Doing it in THIS order = grounded coach; doing it blind =
 - One batched push at the end (no incremental ship).
 - UX: open-ended / live prose gets more grounded; the `warm` register keeps it
   human. Warmth is phrasing (kept); deciding chess is removed (the lies).
+
+## Spoken-word path sweep — DONE (David 2026-07-09: "check every spoken word path… wired back correctly")
+
+After the 3606/move-narration rip, the Q&A grounding SEAL (unmapped chess turn →
+`serveGroundedPositionDefault`) correctly intercepts ANY content-generation
+prompt routed through `coachService.ask`/`getCoachChatResponse` — which silently
+degraded three CONTENT-GEN-that-speaks surfaces. Root-caused each to
+compute→`voiceFacts` (no seal, no free-compose):
+
+- **Post-game review narration** (`coachFeatureService`): `generateNarrativeSummary`,
+  `generateReviewNarrationSegments`, and `generateReviewNarration`'s intro were
+  free-composing (JSON-gen / PGN prompt / `REVIEW_INTRO_ADDITION`) → the seal
+  turned them into a one-line position eval / a `JSON.parse` failure → canned
+  fallback. Now all COMPUTE from `moveData` (student-relative outcome + error
+  counts + flagged key moments, verbosity-capped) → `voiceFacts(warm)`. Deleted
+  `formatMoveRow`, `REVIEW_INTRO_TIMEOUT_MS`, the coachService/coachPrompts/
+  sanitize imports.
+- **Phase-transition narration** (`usePhaseNarration`): routed a
+  `buildChessContextMessage` prompt through `coachService.ask` → seal one-liner
+  (and pre-rip, free-composed the board read). Now COMPUTES the transition read
+  — engine eval + the board-verified `liveTactics` already computed in the hook
+  — via `groundedMoveFeedback(warm)` with the transition label as `extraFacts`.
+  Streamed through the same per-sentence TTS pipeline. `groundedMoveFeedback`
+  gained an `extraFacts` param (a code-computed framing line).
+- **In-game move commentary** (`coachMoveCommentary`): David's scope call →
+  **full G0**. The AI-opponent's-own-move + opening-teaching FREE-compose
+  (PLAY_SYSTEM_PROMPT, personality dials, pieceRoster prompt, `[[REMEMBER]]`
+  memory) is RETIRED. Two grounded paths only: student's own move →
+  `explainBestMoveGrounded`→`voiceFacts`; every other moment →
+  `groundedMoveFeedback` (eval + threaded `moveTactics`, student-relative, warm,
+  opening name as framing, NO best-move spoiler). Personality dials kept as
+  ignored interface fields (2026-07-06 voice law = one depersonalized house
+  voice). Opening-teaching depth re-enters later via the F11 pedagogy assembler.
+
+**Verified SAFE (grounded via the shared spine or authored data, voice fires):**
+`VoiceChatMic` (per-sentence gate), `useHintSystem` (grounded best-move/eval read
++ per-sentence gate), `usePositionNarration` + opening read-aloud (authored
+text), kid voice (`kidGameCoach` kid-safe lane), Learn-with-Coach walkthrough
+(`useTeachWalkthrough` — LessonScript data, untouched).
+
+ship-check: **READY TO PUSH** (typecheck ✓, 0 lint errors, content gates ✓,
+changed-file tests ✓). Coach-area suite 76 green.
