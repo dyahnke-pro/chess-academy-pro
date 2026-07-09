@@ -13,8 +13,7 @@
  * `meta` table. On cache hit the call resolves immediately; on LLM
  * failure we gracefully fall back to the joined bullet string.
  */
-import { getCoachChatResponse } from './coachApi';
-import { groundCoachReply } from './coachAnswerGates';
+import { voiceFacts } from './coachApi';
 import { db } from '../db/schema';
 
 /** Cache version — bump to invalidate all cached paragraphs when the
@@ -69,41 +68,21 @@ async function requestParagraph(
 ): Promise<string> {
   const sectionLabel =
     input.kind === 'traps' ? 'traps and pitfalls' : 'things to watch out for';
+  const colorClause = input.color ? ` The student plays the ${input.color} side.` : '';
 
-  const colorClause = input.color
-    ? ` The student is studying this opening from the ${input.color} side.`
-    : '';
-
-  const systemAdditions = [
-    'You are a chess opening coach narrating a short teaching segment that will be read aloud.',
-    `Produce ONE flowing paragraph (3-6 sentences, 80-140 words) covering every bullet about the ${sectionLabel} in the given opening.`,
-    'Do NOT list the bullets verbatim. Weave them into a cohesive explanation: what the danger is, why it arises from this opening\'s structure, and one concrete visual cue (a square, file, diagonal, or tactical motif) the student should watch for.',
-    'Cite squares, pieces, and motifs concretely. Avoid generic filler like "be careful", "this is important", or "the position is sharp".',
-    'Write in plain prose suitable for text-to-speech — no markdown, no bullet characters, no headings.',
-    'Return only the paragraph. No preface, no quotation marks.',
-  ].join(' ');
-
-  const bulletList = bullets.map((b, i) => `${i + 1}. ${b}`).join('\n');
-  const userMessage = [
-    `Opening: ${input.openingName}.${colorClause}`,
-    '',
-    `Bullets covering ${sectionLabel}:`,
-    bulletList,
-    '',
-    `Write one cohesive paragraph (80-140 words) covering every bullet.`,
+  // GROUNDED (David 2026-07-09: one LLM command). The authored bullets ARE the
+  // facts; voiceFacts weaves them into a cohesive paragraph and adds NOTHING —
+  // so the old prompt's invited hallucination ("invent one concrete visual cue,
+  // a square/file/diagonal") is structurally impossible here, and there is
+  // nothing to strip after. The number-fidelity net still blocks any added
+  // stat, and the voiceFacts contract blocks any added square/piece/claim.
+  const facts = [
+    `These are the ${sectionLabel} in the ${input.openingName}.${colorClause}`,
+    ...bullets.map((b) => `- ${b}`),
   ].join('\n');
 
-  const raw = await getCoachChatResponse(
-    [{ role: 'user', content: userMessage }],
-    systemAdditions,
-    undefined,
-    'chat_response',
-    500,
-  );
-  // No live board here (section prose, not a position), so the gate's
-  // load-bearing check is the ungrounded-player-stat strip — a traps/
-  // pitfalls paragraph can't ship an unsupported "<pro> wins 70%" claim.
-  return groundCoachReply(sanitize(raw), { source: 'openingSectionNarrator' });
+  const voiced = await voiceFacts(facts, { intent: `opening-section:${input.kind}`, warm: true });
+  return sanitize(voiced ?? '');
 }
 
 function sanitize(raw: string): string {
