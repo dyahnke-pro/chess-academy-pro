@@ -76,7 +76,7 @@ describe('generateMoveCommentary — grounded move purpose', () => {
       subject: 'Sicilian Najdorf',
     });
     expect(spy).toHaveBeenCalled();
-    const facts = spy.mock.calls[0]?.[0] as string;
+    const facts = spy.mock.calls[0]?.[0];
     expect(facts.toLowerCase()).toContain('sicilian najdorf');
   });
 
@@ -85,10 +85,10 @@ describe('generateMoveCommentary — grounded move purpose', () => {
     // A capturing/attacking move so several clauses are available.
     const moves = ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Bxc6'];
     await generateMoveCommentary({ gameAfter: gameAfter(moves), mover: 'w', evalBefore: 20, evalAfter: 30, studentColor: 'b', verbosity: 'fast' });
-    const fastFacts = String(spy.mock.calls[0]?.[0] ?? '');
+    const fastFacts = (spy.mock.calls[0]?.[0] ?? '');
     spy.mockClear();
     await generateMoveCommentary({ gameAfter: gameAfter(moves), mover: 'w', evalBefore: 20, evalAfter: 30, studentColor: 'b', verbosity: 'slow' });
-    const slowFacts = String(spy.mock.calls[0]?.[0] ?? '');
+    const slowFacts = (spy.mock.calls[0]?.[0] ?? '');
     // Full (slow) never voices FEWER sentences than fast.
     const count = (s: string): number => (s.match(/[.!?]/g) ?? []).length;
     expect(count(slowFacts)).toBeGreaterThanOrEqual(count(fastFacts));

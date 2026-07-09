@@ -583,7 +583,7 @@ export function assembleMovePurpose(opts: {
     const mc = opts.moverColor === 'white' ? 'w' : 'b';
     const eyes = CENTRAL_SQUARES.filter((s) => {
       try {
-        return afterBoard.attackers(s as Square, mc).includes(mv.to as Square);
+        return afterBoard.attackers(s as Square, mc).includes(mv.to);
       } catch {
         return false;
       }
