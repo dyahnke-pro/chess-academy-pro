@@ -10,6 +10,7 @@ import { useAppStore } from '../../stores/appStore';
 import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { coachService } from '../../coach/coachService';
+import { dispatchCoachTurn } from '../../coach/dispatchCoachTurn';
 import { voiceService } from '../../services/voiceService';
 import {
   createStreamingDispatcher,
@@ -224,7 +225,10 @@ export function CoachAnalysePage(): JSX.Element {
     // gets an opening to anchor against. Follow-up questions inherit
     // whatever board state the user has built up since loading.
     const followHistory = game.history.length > 0 ? game.history : undefined;
-    const result = await coachService.ask(
+    // Unified dispatch: the user's typed question routes through the action
+    // router first (settings / "take me to X" / "drill Y" all work here now),
+    // then the grounded brain. Same capabilities as chat/teach.
+    const result = await dispatchCoachTurn(
       {
         surface: 'standalone-chat',
         ask,
@@ -241,7 +245,8 @@ export function CoachAnalysePage(): JSX.Element {
       {
         task: 'chat_response',
         maxTokens: 400,
-        maxToolRoundTrips: 1,
+        maxToolRoundTrips: 3,
+        onNavigate: (path: string) => void navigate(path),
         onChunk: (chunk: string) => {
           response += chunk;
           setCoachExplanation((prev) => prev + '\n\n' + response);

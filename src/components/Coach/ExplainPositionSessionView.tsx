@@ -11,6 +11,7 @@
  * chat and we have — or pick up — a FEN to analyse.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Loader, Volume2, VolumeOff } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
@@ -18,6 +19,7 @@ import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
 import { ChatInput } from './ChatInput';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { coachService } from '../../coach/coachService';
+import { dispatchCoachTurn } from '../../coach/dispatchCoachTurn';
 import { voiceService } from '../../services/voiceService';
 import {
   createStreamingDispatcher,
@@ -48,6 +50,7 @@ export function ExplainPositionSessionView({
   const activeProfile = useAppStore((s) => s.activeProfile);
   const targetFen = fen && fen.trim() ? fen : START_FEN;
 
+  const navigate = useNavigate();
   const [analysis, setAnalysis] = useState<StockfishAnalysis | null>(null);
   const [explanation, setExplanation] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
@@ -227,7 +230,9 @@ export function ExplainPositionSessionView({
       );
       tacticsRef.current = askTactics; // gate the streamed voice on it
       let response = '';
-      const result = await coachService.ask(
+      // Unified dispatch — the user's question gets the action router (settings,
+      // navigation, drills) then the grounded brain, same as chat/teach.
+      const result = await dispatchCoachTurn(
         {
           surface: 'standalone-chat',
           ask,
@@ -243,7 +248,8 @@ export function ExplainPositionSessionView({
         {
           task: 'chat_response',
           maxTokens: 400,
-          maxToolRoundTrips: 1,
+          maxToolRoundTrips: 3,
+          onNavigate: (path: string) => void navigate(path),
           onChunk: (chunk: string) => {
             if (!mountedRef.current) return;
             response += chunk;
