@@ -765,7 +765,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             enginePlan,
             engineBestMoveUci: cachedSf?.bestMove,
             evalCp: cachedSf && !cachedSf.isMate ? cachedSf.evaluation : undefined,
-            evalMateIn: cachedSf?.isMate ? cachedSf.mateIn : undefined,
+            evalMateIn: cachedSf?.isMate ? (cachedSf.mateIn ?? undefined) : undefined,
           };
           void logAppAudit({
             kind: 'coach-surface-migrated',
