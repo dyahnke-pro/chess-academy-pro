@@ -94,6 +94,7 @@ import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech, SENTENCE_END_R
 import { stripDisprovenSentences } from '../../services/boardClaimValidator';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { voiceService } from '../../services/voiceService';
+import { applyCoachSetting } from '../../services/coachSettingsAction';
 import { useAppStore } from '../../stores/appStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { useSettings } from '../../hooks/useSettings';
@@ -1593,6 +1594,32 @@ export function CoachTeachPage(): JSX.Element {
           }]);
         }
         return;
+      }
+
+      // ─── Settings-as-actions (David 2026-07-10 settings audit). "turn off
+      // hints" / "set narration to silent|brief|full" / "switch to dark theme"
+      // fell through to a greeting on Learn — the coach must change SAFE prefs
+      // from EVERY surface, like Play does via dispatchCoachTurn. applyCoachSetting
+      // resolves the command, persists it (Dexie + live store), and returns the
+      // confirmation; unrelated input returns null and falls through. ───
+      {
+        const settingResult = await applyCoachSetting(text);
+        if (settingResult) {
+          setMessages((prev) => [...prev, {
+            id: `setting-${Date.now()}`,
+            role: 'assistant',
+            content: settingResult.confirmation,
+            timestamp: Date.now(),
+          }]);
+          void voiceService.speak(settingResult.confirmation);
+          void logAppAudit({
+            kind: 'coach-setting-changed',
+            category: 'subsystem',
+            source: 'CoachTeachPage.handleSubmit.setting',
+            summary: `key=${settingResult.key} — ${settingResult.confirmation}`,
+          });
+          return;
+        }
       }
 
       // ─── Player-game request (BYPASS opening-name resolution) ───

@@ -228,9 +228,20 @@ export async function applyCoachSetting(text: string): Promise<SettingsCommandRe
       if (profile) {
         const updatedPrefs = { ...profile.preferences, ...cmd.prefsPatch };
         await db.profiles.update(profile.id, { preferences: updatedPrefs });
+        // SYNC THE LIVE STORE (David 2026-07-10 settings audit). The verbosity
+        // gate reads `useAppStore.getState().activeProfile` at speak time and
+        // voiceService caches prefs — so a Dexie-only write (the case for
+        // showHints + coachNarration, which had no `applyStore`) didn't take
+        // effect until reload. Update the live profile + drop the voice cache so
+        // silent/brief/hints apply IMMEDIATELY, on every surface.
+        const store = useAppStore.getState();
+        if (store.activeProfile && store.activeProfile.id === profile.id) {
+          store.setActiveProfile({ ...store.activeProfile, preferences: { ...store.activeProfile.preferences, ...cmd.prefsPatch } });
+        }
       }
     }
     if (cmd.applyStore) cmd.applyStore();
+    try { const { voiceService } = await import('./voiceService'); voiceService.clearCache?.(); } catch { /* voice absent (SSR/test) */ }
     void logAppAudit({
       kind: 'coach-setting-changed',
       category: 'subsystem',
