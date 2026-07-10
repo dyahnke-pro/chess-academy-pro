@@ -1979,15 +1979,6 @@ async function serveGroundedPositionDefault(
  * the correct answer to an ungrounded fallback. Returns a non-empty string
  * whenever `facts` is non-empty.
  */
-/** The language of the CURRENT coach turn, set by the turn choke (askImpl) when
- *  the student wrote in a non-English language. voiceFacts reads it so grounded
- *  answers are phrased back in that language even though the ask was translated
- *  to English for intent routing. Single-user app → a module var is safe (turns
- *  are sequential); every turn sets it (to a language or undefined) so it never
- *  leaks across turns. */
-let activeTurnLanguage: string | undefined;
-export function setActiveTurnLanguage(name: string | undefined): void { activeTurnLanguage = name; }
-
 /** Translate a student message to English for INTENT ROUTING (David 2026-07-10:
  *  "make sure all commands work in those languages"). The ~35 intent detectors +
  *  the settings/nav command router are English pattern-matchers, so a Spanish
@@ -2070,8 +2061,11 @@ export async function voiceFacts(
   // language is the caller's explicit choice, else auto-detected from the
   // student's own message (ask in Spanish → answered in Spanish; David
   // 2026-07-10). Grounding-safe: only the language of expression changes.
+  // Language comes ONLY from an explicit opt or the student's own message — NO
+  // module-global carry (that leaked a prior turn's language into later turns,
+  // e.g. an English question answered in Portuguese; the polyglot audit caught it
+  // 2026-07-10). Explicit per-call resolution can't leak.
   const targetLanguage = opts.targetLanguage
-    ?? activeTurnLanguage
     ?? (opts.studentMessage ? detectLanguage(opts.studentMessage).name : undefined);
   const translating = !!targetLanguage && targetLanguage !== 'English';
   if (opts.preferRaw && !opts.kidSafe && !opts.warm && !translating) return facts.trim();

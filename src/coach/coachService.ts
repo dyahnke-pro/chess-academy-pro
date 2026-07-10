@@ -38,7 +38,7 @@ import { loadMiddlegamePlanForLive } from './sources/middlegamePlan';
 import { loadModelGamesForLive } from './sources/modelGames';
 import { loadPlayerGamesForLive, resolvePlayerIdFromAsk } from './sources/playerGames';
 import { loadProGameReferenceData } from '../services/proGameReferenceData';
-import { consumeCoachActionOffer, translateToEnglish, setActiveTurnLanguage } from '../services/coachApi';
+import { consumeCoachActionOffer, translateToEnglish } from '../services/coachApi';
 import type { CoachActionOffer } from '../services/coachApi';
 import { detectLanguage } from '../utils/detectLanguage';
 import { deepseekProvider } from './providers/deepseek';
@@ -472,14 +472,16 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
   // (G0-safe — understanding the question, not deciding chess content), and set
   // the turn language so voiceFacts phrases the COMPUTED answer BACK in the
   // student's language. The original ask is preserved in the audit above.
+  // Translate a non-English ask to English so the ~35 English-pattern intent
+  // detectors route it to the grounded path (a Spanish question used to fall to
+  // the generic greeting). NO module-global language carry — that leaked a prior
+  // turn's language into later turns (the polyglot audit caught an English
+  // question answered in Portuguese, 2026-07-10). Answers phrase back in-language
+  // via voiceFacts' per-call studentMessage detection (explicit-thread follow-up).
   {
     const askLang = detectLanguage(input.ask);
     if (askLang.nonEnglish) {
-      const english = await translateToEnglish(input.ask);
-      input = { ...input, ask: english };
-      setActiveTurnLanguage(askLang.name);
-    } else {
-      setActiveTurnLanguage(undefined);
+      input = { ...input, ask: await translateToEnglish(input.ask) };
     }
   }
 
