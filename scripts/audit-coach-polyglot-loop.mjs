@@ -325,7 +325,10 @@ async function main() {
           return await page.evaluate(() => {
             const out = [];
             document.querySelectorAll('[data-testid="chat-message-assistant"]').forEach((el) => {
-              let t = (el.textContent || '').replace(/\s+/g, ' ').trim().replace(/^C\s+/, '');
+              // textContent concatenates the "C" badge div + the bubble text
+              // ("CThe best move…") — strip a single leading badge "C" when a
+              // message char follows, so a pre-stream bare "C" reads as empty.
+              const t = (el.textContent || '').replace(/\s+/g, ' ').trim().replace(/^C(?=[A-Za-zÀ-ÿ¿¡0-9])/, '').trim();
               if (t) out.push(t);
             });
             return out;
@@ -355,15 +358,29 @@ async function main() {
         // up-front clear — accept it so the swallowed send re-fires.
         const consentAllow = page.locator('[data-testid="ai-consent-allow"]');
         if (await consentAllow.isVisible().catch(() => false)) await consentAllow.click({ force: true }).catch(() => {});
+        // Wait for a new bubble with SUBSTANTIAL text (≥8 chars, not the bare "C"
+        // badge nor a one-word streaming fragment) so we never read a half-streamed
+        // reply as a non-answer.
         await page.waitForFunction((prev) => {
           const cur = [];
           document.querySelectorAll('[data-testid="chat-message-assistant"]').forEach((el) => {
-            const t = (el.textContent || '').replace(/\s+/g, ' ').trim().replace(/^C\s+/, '');
-            if (t) cur.push(t);
+            const t = (el.textContent || '').replace(/\s+/g, ' ').trim().replace(/^C(?=[A-Za-zÀ-ÿ¿¡0-9])/, '').trim();
+            if (t.length >= 8) cur.push(t);
           });
           return cur.some((t) => !prev.includes(t));
         }, [...before], { timeout: settleMs }).catch(() => {});
-        await page.waitForTimeout(2000);
+        // Let streaming finish: poll until no streaming-indicator AND the last
+        // fresh reply stops growing (or a hard cap), so we read the FINAL text.
+        let lastLen = -1, stableTicks = 0;
+        for (let i = 0; i < 20; i++) {
+          await page.waitForTimeout(700);
+          const streaming = await page.locator('[data-testid="streaming-indicator"]').count().catch(() => 0);
+          const cur = await readCoachReplies();
+          const freshNow = cur.filter((t) => !before.has(t));
+          const len = freshNow.length ? freshNow[freshNow.length - 1].length : 0;
+          if (!streaming && len === lastLen && len > 0) { if (++stableTicks >= 2) break; } else stableTicks = 0;
+          lastLen = len;
+        }
         const after = await readCoachReplies();
         const fresh = after.filter((t) => !before.has(t));
         const reply = (fresh.length ? fresh[fresh.length - 1] : (after[after.length - 1] ?? '')).trim();
@@ -510,14 +527,17 @@ const BUTTONS = {
     { id: 'teach-takeback', kind: 'takeback', effect: 'clickable', optional: true },
     { id: 'teach-restart', kind: 'restart', effect: 'clickable', destructive: true, optional: true },
   ],
+  // optional:true on Play — an aggressive audit game can reach game-over, which
+  // legitimately removes the in-game button row (no hint/takeback after mate).
+  // A MISSING button then isn't a bug; but when PRESENT its effect is still checked.
   play: [
-    { id: 'hint-button', kind: 'hint', effect: 'either' },
-    { id: 'why-button', kind: 'why', effect: 'message' },
-    { id: 'read-position-btn', kind: 'read-position', effect: 'tts' },
-    { id: 'coach-tips-toggle', kind: 'tips', effect: 'clickable' },
+    { id: 'hint-button', kind: 'hint', effect: 'either', optional: true },
+    { id: 'why-button', kind: 'why', effect: 'message', optional: true },
+    { id: 'read-position-btn', kind: 'read-position', effect: 'tts', optional: true },
+    { id: 'coach-tips-toggle', kind: 'tips', effect: 'clickable', optional: true },
     { id: 'takeback-btn', kind: 'takeback', effect: 'clickable', optional: true },
-    { id: 'restart-btn', kind: 'restart', effect: 'clickable', destructive: true },
-    { id: 'resign-btn', kind: 'resign', effect: 'clickable', destructive: true, confirm: 'resign-yes' },
+    { id: 'restart-btn', kind: 'restart', effect: 'clickable', destructive: true, optional: true },
+    { id: 'resign-btn', kind: 'resign', effect: 'clickable', destructive: true, confirm: 'resign-yes', optional: true },
   ],
 };
 
