@@ -128,6 +128,7 @@ const PLAN_QUESTION_RE = anyOf([
   String.raw`\b(?:king\s?side|queen\s?side)\s+or\s+(?:king\s?side|queen\s?side)\b`,
   String.raw`\bwhere\s+should\s+i\s+(?:attack|expand|push|play|break)\b`,
   String.raw`\bwhich\s+(?:minor\s+)?piece\s+(?:first|to\s+develop|should\s+i\s+develop)\b`,
+  String.raw`\bhow\s+(?:should|do)\s+i\s+(?:try\s+to\s+)?win\s+(?:this|from\s+here)\b`,
   // piece-placement / outpost / best-square + "should my rook go to X" (p16).
   String.raw`\b(?:best\s+)?outpost\b`,
   String.raw`\bbest\s+square\s+for\s+my\s+\w+\b`,
@@ -259,6 +260,7 @@ export function isTacticsQuestion(ask: string | undefined): boolean {
   // "do I hang/drop/miss ..." is a blunder-HABIT (mistakes / tactics-profile),
   // not a live-board scan (matrix pass 17).
   if (/\bdo\s+i\s+(?:hang|drop|lose|blunder|miss|overlook)\b/i.test(ask)) return false;
+  if (/\bi\s+(?:keep|always|constantly|often|usually)\s+(?:miss|hang|drop|blunder|overlook)/i.test(ask)) return false;
   return TACTICS_QUESTION_RE.test(ask);
 }
 
@@ -305,6 +307,11 @@ const POSITION_ASSESSMENT_RE = anyOf([
   String.raw`\bwhat(?:'?s| is)?\s+on\s+the\s+board\b`,
   // "evaluate / analyze MY position" (the "my" variant of the assess patterns).
   String.raw`\b(?:evaluate|analy[sz]e|assess|read)\s+my\s+position\b`,
+  // position CHARACTER — sharp / quiet / drawish / wild (matrix pass 18).
+  String.raw`\bis\s+(?:this|it|the)\s+(?:position\s+)?(?:sharp|quiet|tactical|positional|calm|wild|double[\s-]edged|drawish|dry|messy|complicated)\b`,
+  String.raw`\bis\s+it\s+sharp\s+or\s+quiet\b`,
+  // development state — "have I developed enough", "am I behind in development"
+  String.raw`\bhave\s+i\s+developed\s+(?:enough|all\s+my\s+pieces)\b`,
   String.raw`\b(?:do\s+i\s+have\s+(?:any\s+)?)?weak\s+(?:pawns?|squares?)\b`,
   String.raw`\b(?:how(?:'?s| is)\s+)?my\s+pawn\s+structure\b`,
   // plural / "are my ..." piece-quality + "sound/solid/healthy structure" (p12)
@@ -522,6 +529,9 @@ const PROGRESS_QUESTION_RE = anyOf([
   // "how has my play/game been (lately/recently)" — a progress-over-time ask.
   String.raw`\bhow\s+(?:has|have)\s+my\s+(?:play|game|chess|form|results?)\s+been\b`,
   String.raw`\bam\s+i\s+doing\s+(?:well|ok(?:ay)?|good|alright|fine)\b`,
+  // lesson-meta — "what lesson should I do", "what's the next lesson" (p18).
+  String.raw`\bwhat\s+lesson\s+(?:should\s+i\s+do|is\s+next|do\s+i\s+do\s+next)\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+)?next\s+lesson\b`,
   String.raw`\bhow\s+am\s+i\s+(?:doing|progressing|playing|improving|developing|getting\s+on)\b`,
   String.raw`\bhow(?:'?s| is| has)\s+my\s+(?:game|play|chess|progress|improvement)\b`,
   String.raw`\bhow\s+(?:can|do|should|could|might)\s+i\s+(?:get\s+better|improve|progress|level\s+up|get\s+good)\b`,
@@ -1003,6 +1013,8 @@ const TACTICS_PROFILE_RE = anyOf([
   // "do I miss forks / pins / skewers" — a tactical-motif WEAKNESS (over time),
   // not a live-board scan (matrix pass 17, 2026-07-10).
   String.raw`\bdo\s+i\s+(?:miss|overlook|blunder|fail\s+to\s+see)\s+(?:forks?|pins?|skewers?|mates?|combinations?|discoveries|discovered\s+attacks?)\b`,
+  // statement form — "I keep/always miss pins / the tactic" (matrix pass 18).
+  String.raw`\bi\s+(?:keep|always|constantly|often|usually)\s+miss(?:ing)?\s+(?:the\s+)?(?:forks?|pins?|skewers?|mates?|tactics?|tactic|combinations?|shots?)\b`,
   // "what is my weakest/worst tactic", "which motif am I worst at" — a PROFILE
   // ask about the student over time, not the live board (live prod, David
   // 2026-07-09: "What is my weakest tactic?" was misrouting to the board scan).
@@ -1134,6 +1146,7 @@ const ACCURACY_QUESTION_RE = anyOf([
   String.raw`\bmy\s+(?:best[\s-]?move\s+)?(?:agreement|accuracy)\b`,
   String.raw`\bwhat(?:'?s| is)?\s+my\s+move\s+quality\b`,
   String.raw`\bhow\s+many\s+brilliant\s+moves?\b`,
+  String.raw`\bhow\s+(?:far\s+off|close\s+to)\s+(?:the\s+)?(?:engine|perfect|optimal)\b`,
   String.raw`\bwhat\s+accuracy\s+do\s+i\s+(?:average|get|have|typically\s+(?:get|score|hit))\b`,
   String.raw`\bdo\s+i\s+play\s+accurate(?:ly)?\b`,
   String.raw`\bmy\s+average\s+accuracy\b`,

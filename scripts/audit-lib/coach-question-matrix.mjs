@@ -556,6 +556,14 @@ export const STRUCTURAL_PROBES = [
   { id: 'skill-radar', cat: 'self-knowledge', q: 'summarize my chess' },
   { id: 'skill-radar', cat: 'self-knowledge', q: 'give me a report card' },
   { id: 'repertoire-gap', cat: 'self-knowledge', q: 'whats next after the italian' },
+  // Pass 18 — engine-gap / missing-theme habit / position-character / lesson-meta.
+  { id: 'accuracy', cat: 'self-knowledge', q: 'how far off the engine am i' },
+  { id: 'tactics-profile', cat: 'self-knowledge', q: 'i keep missing pins' },
+  { id: 'tactics-profile', cat: 'self-knowledge', q: 'i always miss the tactic', notKey: 'tacticsQuestion' },
+  { id: 'position-assessment', cat: 'live-board', q: 'is it sharp or quiet' },
+  { id: 'position-assessment', cat: 'live-board', q: 'have i developed enough' },
+  { id: 'progress', cat: 'self-knowledge', q: 'what lesson should i do' },
+  { id: 'plan', cat: 'live-board', q: 'how should i try to win this' },
 ];
 
 /** All phrasings for a row across EVERY pass. */
