@@ -531,6 +531,14 @@ export const STRUCTURAL_PROBES = [
   { id: 'opening-accuracy', cat: 'self-knowledge', q: 'how much theory do i need' },
   { id: 'position-assessment', cat: 'live-board', q: 'evaluate my position' },
   { id: 'trend', cat: 'self-knowledge', q: 'was i better last year' },
+  // Pass 15 — named sacs / attack-defend / playstyle / opponent-aggregate.
+  { id: 'tactics-live', cat: 'live-board', q: 'is this a greek gift' },
+  { id: 'plan', cat: 'live-board', q: 'should i attack or defend' },
+  { id: 'plan', cat: 'live-board', q: 'kingside or queenside' },
+  { id: 'plan', cat: 'live-board', q: 'where should i attack' },
+  { id: 'converting', cat: 'self-knowledge', q: 'am i better attacking or defending', notKey: 'positionAssessmentQuestion' },
+  { id: 'converting', cat: 'self-knowledge', q: 'am i an attacker or a defender' },
+  { id: 'records', cat: 'self-knowledge', q: 'who beats me' },
 ];
 
 /** All phrasings for a row across EVERY pass. */

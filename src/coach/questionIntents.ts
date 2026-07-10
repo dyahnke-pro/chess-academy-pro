@@ -123,6 +123,11 @@ const PLAN_QUESTION_RE = anyOf([
   // prophylaxis — the OPPONENT's plan/idea (matrix pass 14, 2026-07-10).
   String.raw`\bwhat(?:'?s| is)?\s+(?:his|her|their|my\s+opponent'?s?|black'?s?|white'?s?)\s+(?:plan|idea|threat)\b`,
   String.raw`\bwhat\s+(?:does|is)\s+(?:he|she|my\s+opponent|black|white)\s+(?:want|planning|trying\s+to\s+do|up\s+to|after)\b`,
+  // attack/defend & flank strategic decisions (matrix pass 15).
+  String.raw`\bshould\s+i\s+attack\s+or\s+defend\b`,
+  String.raw`\b(?:king\s?side|queen\s?side)\s+or\s+(?:king\s?side|queen\s?side)\b`,
+  String.raw`\bwhere\s+should\s+i\s+(?:attack|expand|push|play|break)\b`,
+  String.raw`\bwhich\s+(?:minor\s+)?piece\s+(?:first|to\s+develop|should\s+i\s+develop)\b`,
 ]);
 export function isPlanQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
@@ -231,6 +236,8 @@ const TACTICS_QUESTION_RE = anyOf([
   String.raw`\battack\s+(?:his|her|their|the)\s+king\b`,
   String.raw`\bperpetual\b`,
   String.raw`\bcan\s+i\s+force\s+(?:a\s+)?(?:draw|perpetual|repetition)\b`,
+  // named sacrifice / mating patterns on the board (matrix pass 15).
+  String.raw`\b(?:greek\s+gift|fried\s+liver|smothered|boden'?s?|legal'?s?|anastasia'?s?|arabian|damiano|lolli|blackburne)\b`,
 ]);
 export function isTacticsQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
@@ -317,6 +324,9 @@ export function isPositionAssessmentQuestion(ask: string | undefined): boolean {
   // "am I better" trigger would otherwise misroute it to the live position eval
   // (matrix pass 7, 2026-07-10). Defer to the skill/phase/converting verticals.
   if (/\b(?:better|worse|stronger|weaker|good|bad)\s+(?:at|in)\s+(?:tactics|endgames?|openings?|middlegames?|calculation|converting|defen[cs]e|attack)/i.test(ask)) return false;
+  // "am I better ATTACKING or DEFENDING" / "an attacker or a defender" is a
+  // PLAYSTYLE question, not a board read (matrix pass 15, 2026-07-10).
+  if (/\b(?:better\s+)?attacking\s+or\s+defending\b|\b(?:an?\s+)?attacker\s+or\s+(?:a\s+)?defender\b/i.test(ask)) return false;
   // "am I better THAN I was last month / before" is an over-time TREND, not a
   // board assessment (matrix pass 9). Defer to the trend vertical.
   if (/\b(?:better|worse|stronger|weaker)\s+than\s+(?:i\s+(?:was|used\s+to)|last\s+(?:month|week|year)|before|a\s+\w+\s+ago|i\s+used)/i.test(ask)) return false;
@@ -1157,8 +1167,9 @@ const CONVERTING_QUESTION_RE = anyOf([
   String.raw`\bdo\s+i\s+(?:come\s+back|comeback|bounce\s+back)\b`,
   String.raw`\bhow\s+(?:often\s+)?do\s+i\s+(?:comeback|come\s+back)\b`,
   String.raw`\bhow\s+do\s+i\s+win\s+(?:my\s+)?games\b`,
-  String.raw`\bam\s+i\s+a\s+(?:grinder|attacker|closer)\b`,
-  String.raw`\b(?:grinder|attacker)\s+or\s+(?:grinder|attacker)\b`,
+  String.raw`\bam\s+i\s+an?\s+(?:grinder|attacker|closer|defender|defensive\s+player|attacking\s+player)\b`,
+  String.raw`\b(?:grinder|attacker|defender)\s+or\s+(?:a\s+)?(?:grinder|attacker|defender)\b`,
+  String.raw`\b(?:better\s+)?attacking\s+or\s+defending\b`,
   String.raw`\bdo\s+i\s+convert\s+(?:winning|won)\s+(?:positions?|games?|endgames?)\b`,
 ]);
 export function isConvertingQuestion(ask: string | undefined): boolean {
@@ -1205,6 +1216,10 @@ const RECORDS_QUESTION_RE = anyOf([
   String.raw`\bhighest[\s-]?rated\s+(?:player|opponent)\s+i(?:'?ve| have)?\s+(?:ever\s+)?(?:beat|beaten|defeated|took\s+down|knocked\s+off)\b`,
   String.raw`\bwho(?:'?s| is)?\s+the\s+(?:best|highest[\s-]?rated|strongest)\s+(?:player|opponent)\s+i(?:'?ve| have)?\s+(?:ever\s+)?(?:beat|beaten|defeated)\b`,
   String.raw`\bmy\s+(?:biggest|best)\s+upset\b`,
+  // opponent-aggregate — "who do I lose to most", "who beats me" (records has
+  // highestBeaten / lowestLostTo). Matrix pass 15.
+  String.raw`\bwho\s+(?:do\s+i\s+lose\s+to|beats?\s+me|gives?\s+me\s+trouble)\b`,
+  String.raw`\bwho\s+(?:have\s+i|do\s+i)\s+(?:beaten|lost\s+to)\s+(?:the\s+)?most\b`,
 ]);
 export function isRecordsQuestion(ask: string | undefined): boolean {
   return !!ask && RECORDS_QUESTION_RE.test(ask);
