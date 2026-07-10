@@ -235,7 +235,10 @@ export function useDiscussionPractice(
         bestUci = before.bestMove;
         // The engine's best LINE (PV) from the position before the move — feeds
         // the "best move + why" reasoning walk in the reveal (David 2026-07-10).
-        bestPvUci = before.topLines[0]?.moves ?? (before.bestMove ? [before.bestMove] : []);
+        // Defensive `?.` on topLines: the type says non-null, but engine
+        // responses (and test mocks) can omit it — reading [0] of undefined
+        // would throw and abort the whole slip check (2026-07-10 regression).
+        bestPvUci = before.topLines?.[0]?.moves ?? (before.bestMove ? [before.bestMove] : []);
         bestLineEvalW = before.isMate ? undefined : before.evaluation;
         bestLineMate = before.isMate ? before.mateIn : null;
       } catch {
