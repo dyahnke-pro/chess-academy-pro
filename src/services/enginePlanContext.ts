@@ -41,25 +41,25 @@ export async function buildEnginePlan(
   fen: string,
   studentSide: 'white' | 'black',
 ): Promise<EnginePlan | null> {
-  // Fresh deep search first; on a stall/crash (the intermittent
-  // "no uciok within 5s" / asm worker crash seen on real devices — David
-  // 2026-07-09 live prod, where "what's my best move" stock-out'd during an
-  // eval-bar stall) fall back to the CACHED analysis for this exact FEN. The
-  // eval-bar + child-position prefetch populate `stockfishFenCache`, so a
-  // recent eval is usually on hand even when a fresh search times out — that
-  // keeps the grounded coach answering the eval/best-move instead of serving
-  // the honest-but-useless "I can't verify" line.
-  let analysis: StockfishAnalysis | undefined;
-  try {
-    analysis = await stockfishEngine.analyzePosition(fen, PLAN_DEPTH);
-  } catch {
-    analysis = undefined;
-  }
+  // PREFER the eval-bar's CACHED analysis for this exact FEN (David 2026-07-10:
+  // "I'm getting two best moves … not the most accurate read"). The eval bar +
+  // child-position prefetch populate `stockfishFenCache` continuously, so the
+  // cache holds the SAME deep analysis the board is showing. Building the plan
+  // from it means the coach's best move MATCHES the displayed eval bar — one
+  // source of truth, no conflicting second best move — and it's instant. Only
+  // when the cache is empty/thin (a position the eval bar hasn't reached) do we
+  // run a fresh search. On a slow single-threaded engine a redundant fresh
+  // depth-18 search was returning a DIFFERENT (shallower) move than the cache —
+  // that was the "two best moves" bug.
   const hasLine = (a: StockfishAnalysis | undefined): boolean =>
     !!a && (!!a.topLines?.[0]?.moves?.length || !!a.bestMove);
+  let analysis: StockfishAnalysis | undefined = getCachedStockfish(fen);
   if (!hasLine(analysis)) {
-    const cached = getCachedStockfish(fen);
-    if (hasLine(cached)) analysis = cached;
+    try {
+      analysis = await stockfishEngine.analyzePosition(fen, PLAN_DEPTH);
+    } catch {
+      analysis = undefined;
+    }
   }
   if (!analysis) return null;
   const uciSeq =
