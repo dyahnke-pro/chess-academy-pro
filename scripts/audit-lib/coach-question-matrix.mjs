@@ -539,6 +539,14 @@ export const STRUCTURAL_PROBES = [
   { id: 'converting', cat: 'self-knowledge', q: 'am i better attacking or defending', notKey: 'positionAssessmentQuestion' },
   { id: 'converting', cat: 'self-knowledge', q: 'am i an attacker or a defender' },
   { id: 'records', cat: 'self-knowledge', q: 'who beats me' },
+  // Pass 16 — outpost/best-square / today / draw-rate / doing-well / predictable.
+  { id: 'plan', cat: 'live-board', q: 'best outpost for my knight' },
+  { id: 'position-assessment', cat: 'live-board', q: 'is d5 a good square for me' },
+  { id: 'stats', cat: 'self-knowledge', q: 'how many games today' },
+  { id: 'stats', cat: 'self-knowledge', q: "what's my draw rate" },
+  { id: 'progress', cat: 'self-knowledge', q: 'am i doing well' },
+  { id: 'opening-profile', cat: 'self-knowledge', q: 'am i predictable' },
+  { id: 'opening-profile', cat: 'self-knowledge', q: 'what opening is dragging me down' },
 ];
 
 /** All phrasings for a row across EVERY pass. */

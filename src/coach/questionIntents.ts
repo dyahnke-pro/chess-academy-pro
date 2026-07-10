@@ -128,6 +128,10 @@ const PLAN_QUESTION_RE = anyOf([
   String.raw`\b(?:king\s?side|queen\s?side)\s+or\s+(?:king\s?side|queen\s?side)\b`,
   String.raw`\bwhere\s+should\s+i\s+(?:attack|expand|push|play|break)\b`,
   String.raw`\bwhich\s+(?:minor\s+)?piece\s+(?:first|to\s+develop|should\s+i\s+develop)\b`,
+  // piece-placement / outpost / best-square + "should my rook go to X" (p16).
+  String.raw`\b(?:best\s+)?outpost\b`,
+  String.raw`\bbest\s+square\s+for\s+my\s+\w+\b`,
+  String.raw`\bshould\s+my\s+(?:knight|bishop|rook|queen|king|pawn)\s+go\s+to\b`,
 ]);
 export function isPlanQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
@@ -313,7 +317,7 @@ const POSITION_ASSESSMENT_RE = anyOf([
   String.raw`\bhow\s+likely\s+am\s+i\s+to\s+(?:win|lose|draw|hold)\b`,
   String.raw`\bwinning\s+chances\b`,
   // square / file positional judgment on the live board.
-  String.raw`\bis\s+[a-h][1-8]\s+(?:weak|strong|weakened|hanging|a\s+(?:weak|strong)\s+square|defended|covered|contested)\b`,
+  String.raw`\bis\s+[a-h][1-8]\s+(?:weak|strong|weakened|hanging|a\s+(?:weak|strong|good|bad|key)\s+square|defended|covered|contested)\b`,
   String.raw`\b(?:is\s+)?(?:the\s+)?[a-h][\s-]?file\s+(?:open|closed|weak|mine|contested|half[\s-]?open)\b`,
   String.raw`\bwhat(?:'?s| is)?\s+going\s+on\s+with\s+the\s+[a-h][\s-]?file\b`,
 ]);
@@ -513,6 +517,7 @@ const PROGRESS_QUESTION_RE = anyOf([
   String.raw`\bwhat\s+(?:bad|recurring|repeated|common)\s+patterns?\b`,
   // "how has my play/game been (lately/recently)" — a progress-over-time ask.
   String.raw`\bhow\s+(?:has|have)\s+my\s+(?:play|game|chess|form|results?)\s+been\b`,
+  String.raw`\bam\s+i\s+doing\s+(?:well|ok(?:ay)?|good|alright|fine)\b`,
   String.raw`\bhow\s+am\s+i\s+(?:doing|progressing|playing|improving|developing|getting\s+on)\b`,
   String.raw`\bhow(?:'?s| is| has)\s+my\s+(?:game|play|chess|progress|improvement)\b`,
   String.raw`\bhow\s+(?:can|do|should|could|might)\s+i\s+(?:get\s+better|improve|progress|level\s+up|get\s+good)\b`,
@@ -651,6 +656,10 @@ const OPENING_PROFILE_RE = anyOf([
   String.raw`\bwhat\s+opening\s+should\s+i\s+(?:stop\s+playing|drop|ditch|abandon|give\s+up|quit)\b`,
   // "which of my openings is letting me down / underperforming" — weakest ask.
   String.raw`\bwhich\s+of\s+my\s+openings?\s+is\s+(?:letting\s+me\s+down|underperforming|dragging\s+me\s+down|failing\s+me)\b`,
+  String.raw`\bwhat\s+opening\s+is\s+(?:dragging\s+me\s+down|letting\s+me\s+down|hurting\s+me|underperforming)\b`,
+  // predictability = a most-played-frequency read (matrix pass 16).
+  String.raw`\bam\s+i\s+predictable\b`,
+  String.raw`\bdo\s+i\s+always\s+play\s+the\s+same\b`,
   // "which opening do I score best/worst with"
   String.raw`\bwhich\s+opening\s+do\s+i\s+score\s+(?:best|worst)\s+with\b`,
   // two-opening comparison for the student — "is the Caro better than the French
@@ -715,6 +724,10 @@ const STATS_QUESTION_RE = anyOf([
   String.raw`\bhow\s+(?:have|did|am|are)\s+i\s+(?:done|doing|do)\s+(?:this\s+(?:week|month)|lately|recently|today|so\s+far)\b`,
   String.raw`\bhow\s+(?:are|were|have)\s+(?:my\s+)?(?:last|recent|past)\s+\d+\s+games\b`,
   String.raw`\bmy\s+(?:last|recent|past)\s+\d+\s+games\b`,
+  String.raw`\bhow\s+many\s+games\s+(?:today|this\s+(?:week|month)|so\s+far)\b`,
+  String.raw`\bdid\s+i\s+play\s+(?:today|much|any\s+games)\b`,
+  String.raw`\b(?:what(?:'?s| is)?\s+my\s+|do\s+i\s+have\s+a\s+high\s+)?draw\s+rate\b`,
+  String.raw`\bdo\s+i\s+draw\s+(?:a\s+lot|too\s+(?:much|many)|often)\b`,
   String.raw`^\s*(?:my\s+)?rating\s*\??\s*$`,   // bare terse "rating?" / "my rating"
 ]);
 export function isStatsQuestion(ask: string | undefined): boolean {
