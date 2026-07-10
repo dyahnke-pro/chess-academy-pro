@@ -439,7 +439,7 @@ function previewToolResult(
 // ─────────────────────────────────────────────────────────────────────────
 // THE QUESTION-INTENT THESAURUS (David 2026-06-14: "throw the thesaurus at
 
-async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Promise<CoachAnswer> {
+async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}): Promise<CoachAnswer> {
   // WO-COACH-UNIFY-01 visibility: include task + maxTokens in the
   // ask-received audit so paste-back audit logs show which surface
   // picked which model. Surfaces migrated onto the spine are
@@ -451,6 +451,10 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     category: 'subsystem',
     source: 'coachService.ask',
     summary: `surface=${input.surface} task=${options.task ?? 'chat_response'} maxTokens=${options.maxTokens ?? 'default'} ask="${input.ask.slice(0, 60)}"`,
+    // Full ask text (David 2026-07-10: "full access to the conversations") so
+    // `coach_question_asked` in PostHog carries the whole question, not the
+    // 60-char summary preview.
+    askText: input.ask,
     details: JSON.stringify({
       surface: input.surface,
       askLen: input.ask.length,
@@ -1604,6 +1608,42 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
   };
 }
 
+
+/** Thin wrapper over `askImpl` that captures the FULL ask→answer pair for
+ *  durable conversation review (David 2026-07-10: "add the audit tools to tell
+ *  what the asks are — full access to the conversations"). Emits one
+ *  `coach-brain-answered` audit per turn, mirrored to PostHog as `coach_answer`
+ *  with `ask_text` + `answer_text`, so every coach turn is queryable end to
+ *  end — the ask, the reply, the provider, and which tools it dispatched.
+ *  Never alters the answer or throws into the coach path. */
+async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Promise<CoachAnswer> {
+  let answer: CoachAnswer | undefined;
+  let failure: unknown;
+  try {
+    answer = await askImpl(input, options);
+    return answer;
+  } catch (e) {
+    failure = e;
+    throw e;
+  } finally {
+    void logAppAudit({
+      kind: 'coach-brain-answered',
+      category: 'subsystem',
+      source: 'coachService.ask',
+      summary: `surface=${input.surface} provider=${answer?.provider ?? 'error'} tools=[${(answer?.dispatchedToolNames ?? []).join(',')}] answered ${answer ? answer.text.length : 0} chars`,
+      askText: input.ask,
+      answerText: answer?.text ?? (failure ? `(ask threw: ${failure instanceof Error ? failure.message : typeof failure === 'string' ? failure : 'non-error thrown'})` : ''),
+      details: JSON.stringify({
+        surface: input.surface,
+        provider: answer?.provider ?? null,
+        tools: answer?.dispatchedToolNames ?? [],
+        toolCallIds: answer?.toolCallIds ?? [],
+        actionOffer: answer?.actionOffer ?? null,
+        errored: failure ? true : false,
+      }),
+    });
+  }
+}
 
 /** Single-method service object. Surfaces import this and call
  *  `coachService.ask(...)`. No other entry points. */

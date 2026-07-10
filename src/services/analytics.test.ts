@@ -74,6 +74,9 @@ describe('auditKindToEvent — curated allowlist', () => {
     expect(auditKindToEvent('llm-token-usage')).toBe('llm_call');
     expect(auditKindToEvent('opening-cache-miss')).toBe('opening_generated');
     expect(auditKindToEvent('coach-brain-ask-received')).toBe('coach_question_asked');
+    // Full ask→answer capture (David 2026-07-10: "full access to the
+    // conversations") mirrors as its own queryable product event.
+    expect(auditKindToEvent('coach-brain-answered')).toBe('coach_answer');
   });
 
   it('mirrors voice / narration kinds so voice bugs are diagnosable in PostHog', () => {
@@ -147,5 +150,24 @@ describe('buildEventProps — lean, safe payloads', () => {
   it('bounds narration_text at 2000 chars', () => {
     const props = buildEventProps(entry({ kind: 'coach-narration-spoken', narrationText: 'x'.repeat(5000) }));
     expect((props.narration_text as string).length).toBe(2000);
+  });
+
+  it('forwards the FULL ask + answer for durable conversation capture', () => {
+    // David 2026-07-10: "add the audit tools to tell what the asks are — full
+    // access to the conversations". The whole turn (ask + reply) reaches
+    // PostHog as ask_text / answer_text, not the 60-char summary preview.
+    const ask = 'why is knight to d5 the best move here and what does it threaten?';
+    const answer = 'The knight to d5 forks the queen on c7 and the bishop on e7 — it wins material.';
+    const props = buildEventProps(entry({ kind: 'coach-brain-answered', askText: ask, answerText: answer }));
+    expect(props.ask_text).toBe(ask);
+    expect(props.answer_text).toBe(answer);
+  });
+
+  it('bounds ask_text / answer_text at 4000 chars', () => {
+    const props = buildEventProps(
+      entry({ kind: 'coach-brain-answered', askText: 'a'.repeat(9000), answerText: 'b'.repeat(9000) }),
+    );
+    expect((props.ask_text as string).length).toBe(4000);
+    expect((props.answer_text as string).length).toBe(4000);
   });
 });

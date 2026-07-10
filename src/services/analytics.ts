@@ -79,6 +79,10 @@ const AUDIT_EVENT_MAP: Partial<Record<AuditKind, string>> = {
   'quiz-started': 'quiz_started',
   'quiz-resolved': 'quiz_resolved',
   'coach-brain-ask-received': 'coach_question_asked',
+  // Full ask→answer capture (David 2026-07-10: "full access to the
+  // conversations"). Carries `ask_text` + `answer_text` so every coach turn is
+  // queryable in PostHog, not just a 60-char summary.
+  'coach-brain-answered': 'coach_answer',
   'llm-token-usage': 'llm_call', // cost driver — feeds margin analysis
   'opening-cache-miss': 'opening_generated', // the expensive build op
   'strength-calibrated': 'strength_calibrated',
@@ -186,6 +190,12 @@ export function buildEventProps(entry: AuditEntry): Record<string, unknown> {
   // narration for accuracy review. Bounded generously — a single spoken
   // sentence never approaches this.
   if (entry.narrationText) props.narration_text = entry.narrationText.slice(0, 2000);
+  // Full conversation capture (David 2026-07-10). The student's complete ask +
+  // the coach's complete reply, so PostHog holds every turn for review — not
+  // the 60-char preview `summary` truncates to. Bounded generously; a teaching
+  // answer can run long but never near this.
+  if (entry.askText) props.ask_text = entry.askText.slice(0, 4000);
+  if (entry.answerText) props.answer_text = entry.answerText.slice(0, 4000);
   return props;
 }
 

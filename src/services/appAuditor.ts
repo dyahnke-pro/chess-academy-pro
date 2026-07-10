@@ -151,6 +151,11 @@ export type AuditKind =
   | 'live-coach-trigger-suppressed'
   // Coach Brain spine (WO-BRAIN-01)
   | 'coach-brain-ask-received'
+  // Full ask→answer pair for durable conversation capture (David 2026-07-10:
+  // "add the audit tools to tell what the asks are — full access to the
+  // conversations"). Mirrored to PostHog as `coach_answer` carrying the
+  // complete `askText` + `answerText`, so we can read every coach turn.
+  | 'coach-brain-answered'
   | 'coach-brain-envelope-assembled'
   | 'coach-brain-provider-called'
   | 'coach-brain-provider-retry'
@@ -825,6 +830,14 @@ export interface AuditEntry {
    *  the real text for narration-accuracy review. Forwarded by
    *  `analytics.buildEventProps` as `narration_text`. */
   narrationText?: string;
+  /** Full conversation capture (David 2026-07-10: "full access to the
+   *  conversations"). `askText` = the student's complete message this turn;
+   *  `answerText` = the coach's complete reply. The `summary` only carries a
+   *  60-char ask preview and no answer; these hold the real strings so PostHog
+   *  stores the whole turn. Forwarded by `analytics.buildEventProps` as
+   *  `ask_text` / `answer_text`. */
+  askText?: string;
+  answerText?: string;
 }
 
 /** Build identifier injected at vite-build time. Falls back to
