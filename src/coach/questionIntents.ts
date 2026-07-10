@@ -178,6 +178,12 @@ const BEST_MOVE_QUESTION_RE = anyOf([
   // move-consequence hypothetical — "what happens if I play e5", "if I take"
   String.raw`\bwhat\s+happens\s+if\s+i\s+(?:play|go|take|push|capture|castle|move)\b`,
   String.raw`\bis\s+(?:it\s+good\s+to\s+trade|trading\s+\w+\s+good)\b`,
+  // trade-value + forced-move (matrix pass 19).
+  String.raw`\bis\s+a\s+\w+\s+worth\s+a\s+\w+\b`,
+  String.raw`\bgood\s+trade\s+or\s+bad\s+trade\b`,
+  String.raw`\bis\s+(?:this|it|that)\s+(?:a\s+)?(?:good|bad|fair)\s+trade\b`,
+  String.raw`\bis\s+(?:this|it|my\s+move)\s+forced\b`,
+  String.raw`\bdo\s+i\s+have\s+(?:a\s+)?(?:choice|options?|alternatives?)\s+here\b`,
   // "which piece should I develop / move" — a development move decision.
   String.raw`\bwhich\s+piece\s+should\s+i\s+(?:develop|move|play|bring\s+out)\b`,
   String.raw`\bwhat\s+move\s+should\s+i\s+(?:make|play|pick|choose|go\s+(?:for|with))\b`,
@@ -559,6 +565,10 @@ const PROGRESS_QUESTION_RE = anyOf([
   String.raw`\b(?:where|what)\s+should\s+(?:i\s+focus|my\s+focus\s+be|i\s+(?:put|spend)\s+my\s+(?:time|energy|effort))\b`,
   String.raw`\bwhat\s+(?:area|part|phase|aspect|skill)\s+(?:of\s+my\s+(?:game|play|chess)\s+)?needs?\s+(?:the\s+most\s+)?(?:work|attention|improvement)\b`,
   String.raw`\bwhat\s+needs?\s+(?:the\s+most\s+)?(?:work|improvement|attention)\b`,
+  // improvement priority — "my number one priority", "what matters most" (p19).
+  String.raw`\b(?:my\s+)?(?:number\s+one|top|biggest|main|#1)\s+priority\b`,
+  String.raw`\bwhat\s+matters\s+most\s+for\s+(?:me|my\s+(?:game|improvement))\b`,
+  String.raw`\btrain\s+what\s+i(?:'?m| am)\s+worst\s+at\b`,
   String.raw`\b(?:study|training|practice)\s+plan\b`,
   String.raw`\bplan\s+(?:out\s+)?my\s+(?:training|study|studying|practi[cs]e|improvement)\b`,
   // ── weakness NOUNS ──
@@ -1110,6 +1120,11 @@ const REPERTOIRE_GAP_RE = anyOf([
   String.raw`\bwhat\s+to\s+learn\s+next\b`,
   String.raw`\bwhat(?:'?s| is)?\s+next\s+after\s+(?:the\s+)?[a-z][\w'-]+\b`,
   String.raw`\bwhat\s+should\s+i\s+learn\s+after\s+(?:the\s+)?[a-z][\w'-]+\b`,
+  // repertoire coverage + learn-a-specific-opening (matrix pass 19).
+  String.raw`\bdo\s+i\s+have\s+(?:a\s+line|answers?|prep)\s+against\s+everything\b`,
+  String.raw`\bis\s+my\s+repertoire\s+(?:complete|solid|ready|full)\b`,
+  String.raw`\bshould\s+i\s+learn\s+(?:the\s+)?(?!tactics|endgames?|calculation|strategy|theory\b)[a-z][\w'-]+\b`,
+  String.raw`\bis\s+it\s+worth\s+learning\s+(?:a\s+)?(?:new\s+)?opening\b`,
   // "what am I missing in my openings" (I-framed, vs the "what's missing" above)
   String.raw`\bwhat\s+am\s+i\s+missing\s+(?:from|in)\s+my\s+(?:repertoire|openings?|prep)\b`,
   // "what lines do I need to learn / prepare"
@@ -1284,7 +1299,7 @@ const RECORD_VS_OPP_RE = new RegExp(
   'i',
 );
 /** Trailing/leading filler that isn't part of a real opening/opponent name. */
-const RECORD_VS_STOP = /^(?:it|that|them|this|those|me|him|her|us|people|players?|opponents?|everyone|anyone|games?|blitz|rapid|bullet|classical|(?:the\s+)?clock|time|time\s+control)$/i;
+const RECORD_VS_STOP = /^(?:it|that|them|this|those|me|him|her|us|people|players?|opponents?|everyone|anyone|games?|blitz|rapid|bullet|classical|(?:the\s+)?clock|time|time\s+control|knights?|bishops?|rooks?|pawns?|queens?|kings?|pieces?)$/i;
 export function recordVsTarget(ask: string | undefined): string | null {
   if (!ask) return null;
   const trimmed = ask.trim();

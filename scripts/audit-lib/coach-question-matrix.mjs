@@ -564,6 +564,13 @@ export const STRUCTURAL_PROBES = [
   { id: 'position-assessment', cat: 'live-board', q: 'have i developed enough' },
   { id: 'progress', cat: 'self-knowledge', q: 'what lesson should i do' },
   { id: 'plan', cat: 'live-board', q: 'how should i try to win this' },
+  // Pass 19 — coverage / learn-specific / priority / trade-value / forced + guard.
+  { id: 'repertoire-gap', cat: 'self-knowledge', q: 'do i have a line against everything' },
+  { id: 'repertoire-gap', cat: 'self-knowledge', q: 'should i learn the sicilian' },
+  { id: 'progress', cat: 'self-knowledge', q: 'whats my number one priority' },
+  { id: 'best-move', cat: 'live-board', q: 'is a knight worth a bishop here' },
+  { id: 'best-move', cat: 'live-board', q: 'good trade or bad trade' },
+  { id: 'best-move', cat: 'live-board', q: 'is this forced' },
 ];
 
 /** All phrasings for a row across EVERY pass. */
