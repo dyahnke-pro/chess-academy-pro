@@ -2158,12 +2158,45 @@ export async function explainPuzzleMoveGrounded(opts: {
   bestMoveUci: string | null;
   bestMoveSan: string;
   playedSan: string | null;
+  /** The solution line in UCI half-moves (player, opponent, player, …). When
+   *  present, the "why" RECALLS the full engine-reasoning walk — the same
+   *  computed content the coach chat gives (David 2026-07-10: "the why button
+   *  to recall this information") — via `assembleEngineReasoning`. */
+  pvUci?: ReadonlyArray<string>;
   studentMessage?: string;
 }): Promise<string> {
   // The mover (whose best move + played move these are) is whoever is to move
   // in the FEN — derive it from the FEN, never trust a possibly-mismatched
   // stored color, or the enemy/hanging checks invert.
   const moverColor: 'white' | 'black' = opts.fen.split(' ')[1] === 'b' ? 'black' : 'white';
+
+  // PREFER the reasoning walk over the solution PV — it names WHAT the best move
+  // does AND walks the forced line, the richest grounded "why". Convert the UCI
+  // PV to SAN from the puzzle FEN, then assemble. Falls through to the
+  // single-move explanation below when there's no PV / it can't be walked.
+  if (opts.pvUci && opts.pvUci.length > 0) {
+    try {
+      const c = new Chess(opts.fen);
+      const pvSan: string[] = [];
+      for (const u of opts.pvUci) {
+        if (u.length < 4) break;
+        const mv = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined });
+        if (!mv) break;
+        pvSan.push(mv.san);
+      }
+      const reasoning = pvSan.length > 0
+        ? assembleEngineReasoning({ fenBefore: opts.fen, pvSan, moverColor, studentSide: moverColor })
+        : null;
+      if (reasoning) {
+        const voiced = await voiceFacts(reasoning.facts, {
+          studentMessage: opts.studentMessage ?? `Why is ${opts.bestMoveSan} the best move here?`,
+          intent: 'best-move', preferRaw: true,
+        });
+        return voiced ?? reasoning.facts;
+      }
+    } catch { /* fall through to the single-move explanation */ }
+  }
+
   const facts = explainBestMoveGrounded(opts.fen, opts.playedSan, opts.bestMoveUci, moverColor);
   if (facts) {
     const voiced = await voiceFacts(facts, {

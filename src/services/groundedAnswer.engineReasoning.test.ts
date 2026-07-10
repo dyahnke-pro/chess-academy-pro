@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { assembleEngineReasoning } from './groundedAnswer';
+import { assembleEngineReasoning, assembleGameReviewAnswer } from './groundedAnswer';
+import type { MoveAnnotation } from '../types';
 
 /**
  * assembleEngineReasoning — proves the coach's "why does the engine like this
@@ -53,5 +54,31 @@ describe('assembleEngineReasoning — decipher Stockfish\'s line', () => {
     const fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
     expect(assembleEngineReasoning({ fenBefore: fen, pvSan: [], moverColor: 'white' })).toBeNull();
     expect(assembleEngineReasoning({ fenBefore: fen, pvSan: ['Qh8'], moverColor: 'white' })).toBeNull();
+  });
+});
+
+describe('assembleGameReviewAnswer — review rooted in the engine reasoning', () => {
+  it('names the preferred move in SAN + WHY (geometry), not a raw UCI', () => {
+    // 1.e4 e5 2.Bc4 Nc6 3.Qh5 Nf6?? — Nf6 is a blunder (allows Qxf7#). The engine
+    // preferred ...g6, which attacks the queen on h5. The review must say the SAN
+    // + the reason, never the raw UCI "g7g6".
+    const pgn = '1. e4 e5 2. Bc4 Nc6 3. Qh5 Nf6';
+    const anns: MoveAnnotation[] = [
+      { moveNumber: 3, color: 'black', san: 'Nf6', evaluation: 900, bestMove: 'g7g6', bestMoveEval: 20, classification: 'blunder', comment: null },
+    ];
+    const a = assembleGameReviewAnswer({ white: 'me', black: 'you', result: '1-0', moveCount: 3, annotations: anns, pgn });
+    expect(a).not.toBeNull();
+    expect(a!.facts).toMatch(/engine preferred g6/);
+    expect(a!.facts).toMatch(/attacks the queen on h5/);
+    expect(a!.facts).not.toMatch(/g7g6/); // no raw UCI leaks
+  });
+
+  it('degrades to the raw best move when no PGN is supplied', () => {
+    const anns: MoveAnnotation[] = [
+      { moveNumber: 3, color: 'black', san: 'Nf6', evaluation: 900, bestMove: 'g7g6', bestMoveEval: 20, classification: 'blunder', comment: null },
+    ];
+    const a = assembleGameReviewAnswer({ white: 'me', black: 'you', result: '1-0', moveCount: 3, annotations: anns });
+    expect(a).not.toBeNull();
+    expect(a!.facts).toMatch(/engine preferred g7g6/); // no board to compute SAN/geometry
   });
 });

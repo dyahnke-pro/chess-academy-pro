@@ -38,6 +38,9 @@ export async function requestGameReview(
     result: game.result,
     moveCount: estimateMoveCount(game.pgn),
     annotations,
+    // The PGN roots each critical moment in the engine-reasoning walk (names
+    // the preferred move + WHY, not a raw UCI) — David 2026-07-10.
+    pgn: game.pgn,
   });
 
   const analysis = grounded

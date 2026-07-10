@@ -510,6 +510,9 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
       bestMoveUci: puzzle.bestMove,
       bestMoveSan: puzzle.bestMoveSan,
       playedSan: puzzle.playerMoveSan,
+      // The solution line (UCI half-moves) so the "Why?" RECALLS the full
+      // engine-reasoning walk, not just the single move (David 2026-07-10).
+      pvUci: puzzle.moves ? puzzle.moves.split(/\s+/).filter(Boolean) : undefined,
     }).then((response) => {
       setWhyLoading(false);
       setSubtitle(response);

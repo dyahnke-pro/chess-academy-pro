@@ -2107,9 +2107,50 @@ export function assembleGameReviewAnswer(opts: {
   result: string;
   moveCount: number;
   annotations: MoveAnnotation[] | null;
+  /** The game PGN. When present, each critical moment is ROOTED in the engine-
+   *  reasoning walk (David 2026-07-10: "root of review with coach's narration"):
+   *  we reconstruct the position, convert the engine's best move to SAN, and name
+   *  WHY the engine preferred it (fork/pin/wins/… via `describeMoveGeometry`)
+   *  instead of dumping a raw UCI. Optional — without it the review still lists
+   *  the moves + evals, just without the per-move geometry. */
+  pgn?: string;
 }): GroundedAnswer | null {
   const anns = opts.annotations;
   if (!anns || anns.length === 0) return null;
+
+  // Reconstruct the position BEFORE each ply so a critical move's engine reason
+  // (and its best-move SAN) can be computed from the board. Keyed moveNumber+color.
+  const fenBeforeByKey = new Map<string, string>();
+  if (opts.pgn) {
+    try {
+      const walk = new Chess();
+      walk.loadPgn(opts.pgn);
+      const history = walk.history({ verbose: true });
+      const replay = new Chess();
+      for (const h of history) {
+        const moveNo = Number(h.before.split(' ')[5]) || 0;
+        fenBeforeByKey.set(`${moveNo}:${h.color === 'w' ? 'white' : 'black'}`, h.before);
+        replay.move(h.san);
+      }
+    } catch { /* bad PGN — reasons just won't be computed */ }
+  }
+  /** The engine's preferred move as SAN + the reason it's preferred (geometry). */
+  const engineReason = (m: MoveAnnotation): { san: string; why: string | null } | null => {
+    if (!m.bestMove || m.bestMove.length < 4) return null;
+    const fenBefore = fenBeforeByKey.get(`${m.moveNumber}:${m.color}`);
+    if (!fenBefore) return null;
+    try {
+      const c = new Chess(fenBefore);
+      const u = m.bestMove;
+      const mv = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined });
+      if (!mv) return null;
+      const why = describeMoveGeometry(fenBefore, mv.san, m.color);
+      return { san: mv.san, why };
+    } catch {
+      return null;
+    }
+  };
+
   const blunders = anns.filter((a) => a.classification === 'blunder');
   const mistakes = anns.filter((a) => a.classification === 'mistake');
   const inaccuracies = anns.filter((a) => a.classification === 'inaccuracy');
@@ -2131,7 +2172,14 @@ export function assembleGameReviewAnswer(opts: {
     for (const m of critical.slice(0, 8)) {
       const dot = m.color === 'black' ? '…' : '.';
       const evalStr = m.evaluation !== null ? `eval ${m.evaluation > 0 ? '+' : ''}${(m.evaluation / 100).toFixed(1)} for White` : '';
-      const bestStr = m.bestMove ? `the engine preferred ${m.bestMove}` : '';
+      // ROOT the "why" in the engine-reasoning walk: name the engine's preferred
+      // move in SAN + what it achieves (fork/pin/wins/…), not a raw UCI.
+      const reason = engineReason(m);
+      const bestStr = reason
+        ? `the engine preferred ${reason.san}${reason.why ? `, which ${reason.why}` : ''}`
+        : m.bestMove
+          ? `the engine preferred ${m.bestMove}`
+          : '';
       parts.push(`- Move ${m.moveNumber}${dot} ${m.san} — ${m.classification.toUpperCase()}${evalStr ? `, ${evalStr}` : ''}${bestStr ? `; ${bestStr}` : ''}.`);
     }
   }
