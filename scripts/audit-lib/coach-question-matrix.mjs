@@ -503,6 +503,17 @@ export const STRUCTURAL_PROBES = [
   { id: 'consistency', cat: 'self-knowledge', q: 'how do i do in rapid', notKey: 'recordVsTarget' },
   { id: 'time-trouble', cat: 'self-knowledge', q: 'am i good with the clock', notKey: 'recordVsTarget' },
   { id: 'last-game', cat: 'self-knowledge', q: 'did i lose the last one' },
+  // Pass 12 — coordination / practical decisions / rating-band, + 2 misroutes.
+  { id: 'position-assessment', cat: 'live-board', q: 'are my bishops any good' },
+  { id: 'position-assessment', cat: 'live-board', q: 'should i offer a draw' },
+  { id: 'position-assessment', cat: 'live-board', q: 'is my structure sound' },
+  { id: 'plan', cat: 'live-board', q: 'where does my knight belong' },
+  { id: 'opening-profile', cat: 'self-knowledge', q: 'is this a good opening for me', notKey: 'moveRatingQuestion' },
+  { id: 'opening-profile', cat: 'self-knowledge', q: 'should i keep playing the caro' },
+  { id: 'move-rating', cat: 'live-board', q: 'why did i play that', notKey: 'playerGamesQuestion' },
+  { id: 'move-rating', cat: 'live-board', q: 'was e4 the right call' },
+  { id: 'master-play', cat: 'live-board', q: 'how do 1500s play this' },
+  { id: 'tactics-live', cat: 'live-board', q: 'is this a perpetual' },
 ];
 
 /** All phrasings for a row across EVERY pass. */

@@ -113,7 +113,7 @@ const PLAN_QUESTION_RE = anyOf([
   String.raw`\boutline\s+(?:a|my|the)?\s*(?:plan|strategy)\b`,
   String.raw`\bwhat(?:'?s| is)?\s+my\s+(?:goal|objective|aim)\b`,
   String.raw`\bwhat(?:'?s| is)?\s+(?:my|the)\s+(?:setup|structure|formation|pawn\s+structure)\b`,
-  String.raw`\bwhere\s+(?:do|should)\s+(?:my\s+)?(?:pieces?|knights?|bishops?|rooks?|queen|king)\s+(?:go|belong|head)\b`,
+  String.raw`\bwhere\s+(?:do|does|should)\s+(?:my\s+)?(?:pieces?|knights?|bishops?|rooks?|queen|king)\s+(?:go|goes|belong|belongs|head)\b`,
   String.raw`\bhow\s+do\s+i\s+(?:make\s+progress|build\s+up|improve\s+my\s+position|attack|defend|press|convert\s+my\s+edge)\b`,
   String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+)?(?:right|correct|best)\s+(?:plan|setup|approach|way\s+to\s+play)\b`,
   String.raw`\bwhat\s+am\s+i\s+(?:supposed|meant)\s+to\s+do\b`,
@@ -226,6 +226,8 @@ const TACTICS_QUESTION_RE = anyOf([
   String.raw`\b(?:anything|something)\s+tactical\b`,
   String.raw`\bcan\s+i\s+attack\b`,
   String.raw`\battack\s+(?:his|her|their|the)\s+king\b`,
+  String.raw`\bperpetual\b`,
+  String.raw`\bcan\s+i\s+force\s+(?:a\s+)?(?:draw|perpetual|repetition)\b`,
 ]);
 export function isTacticsQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
@@ -280,6 +282,11 @@ const POSITION_ASSESSMENT_RE = anyOf([
   String.raw`\bis\s+my\s+(?:bishop|knight|rook|queen|king|pawn|pieces?|structure|position)\s+(?:bad|good|active|passive|strong|weak|misplaced|awkward|fine|ok(?:ay)?)\b`,
   String.raw`\b(?:do\s+i\s+have\s+(?:any\s+)?)?weak\s+(?:pawns?|squares?)\b`,
   String.raw`\b(?:how(?:'?s| is)\s+)?my\s+pawn\s+structure\b`,
+  // plural / "are my ..." piece-quality + "sound/solid/healthy structure" (p12)
+  String.raw`\bare\s+my\s+(?:bishops?|knights?|rooks?|pieces?|pawns?)\s+(?:any\s+)?(?:good|bad|active|passive|strong|weak|placed|coordinated)\b`,
+  String.raw`\bis\s+my\s+(?:pawn\s+)?structure\s+(?:sound|solid|healthy|weak|bad|good|broken|ok(?:ay)?)\b`,
+  // draw decision = a read of the eval — "should I offer / take / accept a draw"
+  String.raw`\bshould\s+i\s+(?:offer|take|accept|decline|go\s+for)\s+(?:a\s+|the\s+)?draw\b`,
   // win-probability / outcome = a read of the eval (pass 9).
   String.raw`\b(?:what\s+are\s+)?my\s+(?:winning\s+)?chances\b`,
   String.raw`\bwill\s+i\s+win\s+(?:this|here|from\s+here)\b`,
@@ -325,6 +332,10 @@ const MASTER_PLAY_QUESTION_RE = anyOf([
   String.raw`\bbest\s+by\s+test\b`,
   String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+)?(?:engine|database)\s+(?:top|favou?rite)\b`,
   String.raw`\b(?:played|done|preferred|chosen|handled|met|answered|treated)\s+at\s+(?:the\s+)?(?:top|elite|gm|master|highest)\s+level\b`,
+  // rating-band play — "how do 1500s play this", "players at my level"
+  String.raw`\bhow\s+do\s+\d{3,4}s?\s+(?:play|handle|treat|meet)\b`,
+  String.raw`\bwhat\s+do\s+players?\s+(?:at\s+)?my\s+(?:level|rating)\b`,
+  String.raw`\bwhat\s+move\s+order\b`,
   String.raw`\bwhat(?:'?s| is)?\s+book\b`,
   String.raw`\bat\s+(?:the\s+)?(?:top|elite|gm|master|highest)\s+level\b`,
 ]);
@@ -395,7 +406,12 @@ const PLAYER_GAMES_QUESTION_RE = anyOf([
   String.raw`\b(?:show|find|pull\s+up|get|see)\s+(?:me\s+)?(?:a|an|one|any)\s+\w+(?:'s)?\s+games?\b`,
 ]);
 export function isPlayerGamesQuestion(ask: string | undefined): boolean {
-  return !!ask && PLAYER_GAMES_QUESTION_RE.test(ask);
+  if (!ask) return false;
+  // First-person "why did I play that / what did I do" is about the STUDENT'S
+  // own move (move-rating / review), NOT a pro-game lookup — the greedy `\w+`
+  // player-subject would otherwise catch "i" (matrix pass 12, 2026-07-10).
+  if (/\b(?:did|has|do|does)\s+i\b/i.test(ask)) return false;
+  return PLAYER_GAMES_QUESTION_RE.test(ask);
 }
 
 /** A CONCEPT / DEFINITION question — "what's a fork?", "explain zwischenzug",
@@ -608,6 +624,10 @@ const OPENING_PROFILE_RE = anyOf([
   String.raw`\bwhich\s+of\s+my\s+openings?\s+is\s+(?:letting\s+me\s+down|underperforming|dragging\s+me\s+down|failing\s+me)\b`,
   // "which opening do I score best/worst with"
   String.raw`\bwhich\s+opening\s+do\s+i\s+score\s+(?:best|worst)\s+with\b`,
+  // "is this a good opening for me" / "should I keep playing the <opening>" —
+  // an is-this-opening-working-for-me question (matrix pass 12).
+  String.raw`\bis\s+(?:this|the\s+\w+)\s+a\s+good\s+opening\s+for\s+me\b`,
+  String.raw`\bshould\s+i\s+(?:keep|continue)\s+playing\s+(?:the\s+)?[a-z][\w'-]+\b`,
   // "most successful/effective opening" (adds to the strongest/best set above)
   String.raw`\bmy\s+most\s+(?:successful|effective|winning)\s+(?:opening|line|defen[cs]e)\b`,
   String.raw`\bwhat(?:'?s| is)?\s+my\s+most\s+(?:successful|effective|winning)\s+opening\b`,
@@ -1216,9 +1236,17 @@ const MOVE_RATING_RE = anyOf([
   // gerund frame: "was playing/picking/choosing/making that a mistake/good"
   String.raw`\bwas\s+(?:playing|picking|choosing|making)\s+(?:that|it|this)\s+(?:a\s+|an\s+)?(?:good|bad|sound|weak|blunder|mistake|inaccuracy|error|ok|okay)\b`,
   String.raw`\bdid\s+i\s+(?:just\s+)?(?:blunder|hang\s+(?:something|a\s+\w+)|mess\s+up|screw\s+up|goof|err|drop\s+(?:something|a\s+\w+))\b`,
+  // "was e4 the right call / a mistake" — a NAMED move as the subject.
+  String.raw`\bwas\s+[A-Za-z]{1,2}[1-8x][A-Za-z0-9=+#-]*\s+(?:the\s+|a\s+|an\s+)?(?:right|best|good|bad|correct|a\s+mistake|a\s+blunder|the\s+right\s+call)\b`,
+  // "why did I play that / why is my move bad" — asks to rate the last move.
+  String.raw`\bwhy\s+(?:did\s+i\s+play|is\s+my\s+move|was\s+(?:that|my\s+move))\b`,
 ]);
 export function isMoveRatingQuestion(ask: string | undefined): boolean {
-  return !!ask && MOVE_RATING_RE.test(ask);
+  if (!ask) return false;
+  // "is this a good OPENING/line for me" is an opening-profile question, not a
+  // move-rating — the "is this ... good" shape would misroute it (pass 12).
+  if (/\b(?:good|bad|strong|weak)\s+(?:opening|line|defen[cs]e|variation|repertoire)\b/i.test(ask)) return false;
+  return MOVE_RATING_RE.test(ask);
 }
 
 /** "set up calculation training / train my tactics / drill my endgames" — a
