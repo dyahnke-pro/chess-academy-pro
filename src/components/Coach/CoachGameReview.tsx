@@ -1277,13 +1277,16 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
             <div className="px-2 pt-1 pb-2 flex justify-center relative">
               {/* Cap the board to a viewport-relative width on mobile so the
                   square board can't eat the screen and STARVE the flex-1
-                  scroll middle (narration banner + Ask chat). David 2026-06-27:
+                  scroll middle (Ask chat + move list). David 2026-06-27:
                   "Play Again / Back to Coach … preventing me from seeing the
                   chat" — the top block is shrink-0, so an uncapped full-width
-                  board left the middle ~0px tall. 46vh keeps >50vh for the
-                  scrollable narration/chat above the bottom bar. Desktop keeps
+                  board left the middle ~0px tall. Trimmed 46vh→42vh (David
+                  2026-07-10, same report recurring) now that the narration
+                  banner is PINNED in the fixed region above the middle — the
+                  board + header + nav + pinned narration + bottom bar must
+                  still leave the middle usable for the Ask panel. Desktop keeps
                   the original 420px (height is not the constraint there). */}
-              <div className="w-full max-w-[46vh] mx-auto md:max-w-[420px] relative">
+              <div className="w-full max-w-[32vh] mx-auto md:max-w-[420px] relative">
                 <ChessBoard
                   // Re-key on exploration toggle so the underlying chess
                   // instance resets cleanly when the user enters or
@@ -1559,9 +1562,29 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 Ask
               </button>
             </div>
+
+            {/* Current-move narration banner — PINNED in the fixed region so
+                the coach's per-move "why" is ALWAYS visible. It used to live in
+                the flex-1 scroll middle, which the board + nav + bottom bar
+                starve to a sliver on a phone (David 2026-07-10: "something is
+                blocking me from seeing the narration/chat field"). The banner is
+                short (2-3 lines); keeping it here guarantees the student reads
+                the WHY without scrolling, and frees the middle for Ask + the
+                move list. */}
+            <div className="px-3 pt-1 pb-2 border-t border-theme-border">
+              <div
+                className="rounded-xl backdrop-blur-md border border-emerald-500/30 px-3 py-2 max-h-[4.5rem] overflow-y-auto"
+                style={{ background: 'color-mix(in srgb, var(--color-bg) 85%, rgba(16,185,129,0.3))' }}
+                data-testid="review-narration-banner"
+              >
+                <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text)' }}>
+                  {walkPlayback.currentText ?? '(this move passes silently — tap forward to continue)'}
+                </p>
+              </div>
+            </div>
           </div>
 
-          {/* ── Scrollable middle: narration, move list, tactics, ask ── */}
+          {/* ── Scrollable middle: move list, tactics, ask ── */}
           <div className="flex-1 min-h-0 overflow-y-auto" data-testid="review-scroll-middle">
             {/* Surface A: reading gate — paused before the student's next
                 mistake, asks them to read the (clean) position before the move
@@ -1586,18 +1609,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
               onSkip={resumeAfterFaucet}
               onDismissTeach={resumeAfterFaucet}
             />
-            {/* Current-move narration banner */}
-            <div className="px-3 pt-2 pb-1">
-              <div
-                className="rounded-xl backdrop-blur-md border border-emerald-500/30 px-3 py-2"
-                style={{ background: 'color-mix(in srgb, var(--color-bg) 85%, rgba(16,185,129,0.3))' }}
-                data-testid="review-narration-banner"
-              >
-                <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text)' }}>
-                  {walkPlayback.currentText ?? '(this move passes silently — tap forward to continue)'}
-                </p>
-              </div>
-            </div>
 
             {/* Engine lines panel (WO-REVIEW-02b) */}
             <div className="px-3 pt-2 pb-1" data-testid="review-engine-lines-section">

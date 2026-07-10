@@ -1,5 +1,5 @@
 import { Chess } from 'chess.js';
-import { explainBestMoveGrounded, explainMoveOrder } from './groundedAnswer';
+import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice } from './groundedAnswer';
 import { detectBadHabits } from './badHabitDetector';
 import { db } from '../db/schema';
 import { voiceFacts } from './coachApi';
@@ -637,13 +637,31 @@ function buildDeterministicNarration(params: {
   bestMoveSan: string | null;
   preMoveEval: number | null;
   evaluation: number | null;
+  /** Board BEFORE the move + the move played + the mover's colour — so a
+   *  strong/brilliant move can be explained by WHAT IT DID on the board
+   *  (David 2026-07-10: no more "Strong, accurate move" filler). */
+  fenBefore: string;
+  playedSan: string;
+  moverColor: 'white' | 'black';
 }): string | null {
-  const { ply, isStudentMove, classification, bestMoveSan, preMoveEval, evaluation } = params;
+  const { ply, isStudentMove, classification, bestMoveSan, preMoveEval, evaluation, fenBefore, playedSan, moverColor } = params;
   if (classification === null || classification === 'book' || classification === 'good') {
     return null;
   }
 
   const variant = ply % 3;
+
+  // The student's eval AFTER the move, in words — the honest fallback when a
+  // strong move has no nameable geometry (a quiet consolidating move). Grounded
+  // in the engine eval, never praise-for-praise's-sake.
+  const studentEvalCp = evaluation === null ? null : (moverColor === 'white' ? evaluation : -evaluation);
+  const studentEvalWord =
+    studentEvalCp === null ? null
+      : studentEvalCp >= 300 ? "you're winning"
+      : studentEvalCp >= 100 ? "you're clearly better"
+      : studentEvalCp >= 40 ? 'you hold a pull'
+      : studentEvalCp >= -40 ? 'the position stays balanced'
+      : null;
 
   // Swing magnitude in pawns (positive = how much the moving side
   // conceded). Both evals are centipawns, white POV; the absolute
@@ -658,8 +676,18 @@ function buildDeterministicNarration(params: {
       ? ` Drops about ${swingPawns.toFixed(1)} pawns.`
       : '';
 
+  // WHY a strong move was strong — the concrete thing it DID on the board,
+  // computed from chess.js (G3), never generic praise (David 2026-07-10). The
+  // move is SOUND by classification (brilliant/great), so a piece it gives up is
+  // a real sacrifice (decoy/deflection), not a hang — name it as such rather
+  // than mislabel it as development or fall silent.
+  const playedMerit = isStudentMove
+    ? (describeMoveMerit(fenBefore, playedSan, moverColor) ?? describeSacrifice(fenBefore, playedSan))
+    : null;
+
   if (classification === 'brilliant') {
     if (isStudentMove) {
+      if (playedMerit) return `Brilliant — it ${playedMerit}.`;
       const stems = [
         'Brilliant — that was the move.',
         'Brilliant find.',
@@ -671,7 +699,16 @@ function buildDeterministicNarration(params: {
   }
 
   if (classification === 'great') {
-    return isStudentMove ? 'Strong, accurate move.' : null;
+    if (!isStudentMove) return null;
+    // NO "Strong, accurate move." filler — say WHAT the move accomplished.
+    // A sacrifice pairs with the eval so the student sees it's sound.
+    if (playedMerit) {
+      const isSac = playedMerit.startsWith('sacrifices');
+      return isSac && studentEvalWord ? `It ${playedMerit} — and ${studentEvalWord}.` : `It ${playedMerit}.`;
+    }
+    // No nameable geometry — anchor on the eval so the student still learns why
+    // it held up, instead of empty praise.
+    return studentEvalWord ? `Accurate — ${studentEvalWord}.` : null;
   }
 
   if (classification === 'miss') {
@@ -774,6 +811,9 @@ export function buildReviewSegments(
       bestMoveSan,
       preMoveEval: m.preMoveEval,
       evaluation: m.evaluation,
+      fenBefore: fenPair.fenBefore,
+      playedSan: m.san,
+      moverColor,
     });
     // Append the GROUNDED "why the best move is best" clause — chess.js
     // board truth only, never LLM-guessed (David 2026-06-05). Only on the

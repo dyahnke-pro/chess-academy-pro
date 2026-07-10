@@ -467,6 +467,23 @@ export function explainBestMoveGrounded(
         }
       }
       if (!bestClause && c.inCheck()) bestClause = 'it comes with check';
+      // POSITIONAL fallback (David 2026-07-10: "tell the user WHY it's best" —
+      // on EVERY wrong move, not just forcing ones). When the best move makes no
+      // fork/pin/check/material threat, name its quiet purpose — the outpost it
+      // takes, the centre it develops toward — so a mistake's "why the engine's
+      // move was better" is never empty on a quiet position. Pure board geometry
+      // (G3): quietPurposePhrase returns null rather than invent.
+      if (!bestClause) {
+        const q = quietPurposePhrase(fenBefore, mv.san, moverColor);
+        if (q) bestClause = `it ${q}`;
+      }
+      // NB: we do NOT name a bare "sacrifice" as the reason the best move is best
+      // here — from the best-move's inputs alone we can't show the compensation
+      // (the deflection payoff lives in the follow-up line), and "it sacrifices
+      // the rook" with no why reads as nonsense. A sound sacrifice is named only
+      // where the classification already establishes soundness — the student's
+      // own brilliant/great move (see buildDeterministicNarration). Forcing sacs
+      // (check/fork/capture) are still caught by the geometry above.
     }
   } catch { /* board fact unavailable — stay silent */ }
 
@@ -668,6 +685,120 @@ function isOutpostSquare(board: Chess, sq: string, moverColor: 'white' | 'black'
     }
   }
   return true;
+}
+
+/**
+ * quietPurposePhrase — the POSITIONAL merit of a NON-forcing move, as a
+ * sub-clause ("develops the bishop to c4, eyeing d5 and e6", "plants a knight
+ * on the d5 outpost…", "stakes out the centre with the pawn to e4"). Pure
+ * chess.js board truth (G3): an outpost the piece can't be chased off, the
+ * central squares a developed piece now eyes, a central pawn advance. Returns
+ * null when the move has no concrete positional point worth naming — silence >
+ * generic filler ("brings the knight to e2" says nothing). Used to explain WHY
+ * a quiet best move is best, and to voice a strong/brilliant move the engine
+ * liked, without ever inventing a reason.
+ */
+export function quietPurposePhrase(
+  fenBefore: string,
+  san: string,
+  moverColor: 'white' | 'black',
+): string | null {
+  try {
+    const b = new Chess(fenBefore);
+    const mv = b.move(san);
+    if (!mv) return null;
+    const mc = moverColor === 'white' ? 'w' : 'b';
+    // SAFETY (recapture-safety, mirrors explainBestMoveGrounded): never praise a
+    // piece that HANGS on its landing square. If the opponent can win material
+    // there by SEE, the move isn't a positional gain — stay silent (a rook that
+    // "develops eyeing the centre" but drops to a queen is not a merit).
+    if (seeGain(b, mv.to) > 0) return null;
+    // Outpost — a minor piece planted where no enemy pawn can ever attack it.
+    if ((mv.piece === 'n' || mv.piece === 'b') && isOutpostSquare(b, mv.to, moverColor)) {
+      const rank = parseInt(mv.to[1], 10);
+      const advanced = moverColor === 'white' ? rank >= 5 : rank <= 4;
+      if (advanced) {
+        return `plants a ${REVIEW_PIECE_NAME[mv.piece]} on the ${mv.to} outpost, where no pawn can chase it off`;
+      }
+    }
+    // Central pawn advance — real space; a wing pawn shuffle is not worth naming.
+    if (mv.piece === 'p') {
+      return CENTRAL_SQUARES.includes(mv.to)
+        ? `stakes out the centre with the pawn to ${mv.to}`
+        : null;
+    }
+    // A developed piece that now eyes central squares.
+    const eyes = CENTRAL_SQUARES.filter((s) => {
+      try { return b.attackers(s as Square, mc).includes(mv.to); } catch { return false; }
+    });
+    if (eyes.length > 0) {
+      return `develops the ${REVIEW_PIECE_NAME[mv.piece]} to ${mv.to}, eyeing ${eyes.slice(0, 2).join(' and ')}`;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * describeMoveMerit — the strongest grounded reason a move the student ACTUALLY
+ * PLAYED was good, as a sub-clause: the concrete geometry it created
+ * (fork/pin/check/material/attack) or, failing that, its quiet positional
+ * purpose (outpost / central development). Pure board truth (G3) — returns null
+ * when nothing concrete is provable so the caller stays silent instead of
+ * praising with filler ("Strong, accurate move"). This is the WHY behind a
+ * great/brilliant move in post-game review (David 2026-07-10: "WHY WHY WHY").
+ */
+export function describeMoveMerit(
+  fenBefore: string,
+  san: string,
+  moverColor: 'white' | 'black',
+): string | null {
+  const geo = describeMoveGeometry(fenBefore, san, moverColor);
+  // STRONG, unambiguous geometry is the point — fork / real pin / check / mate /
+  // a winning capture. Say it.
+  if (geo && !geo.startsWith('attacks') && !geo.startsWith('pins the pawn')) return geo;
+  // A bare tempo-attack ("attacks the pawn on e5" for a developing knight, where
+  // the pawn is defended) or a pawn-to-piece x-ray "pin" is technically true but
+  // shallow — for a quiet developing move the real teaching point is the
+  // development + the centre. Prefer that when there is one; fall back to the
+  // weak read only if there's no positional point to name.
+  return quietPurposePhrase(fenBefore, san, moverColor) ?? geo;
+}
+
+/**
+ * describeSacrifice — names a move that gives NET material as a sacrifice
+ * ("sacrifices the knight on d5"). Pure board truth (G3): the mover captures
+ * `capturedVal`, the opponent wins back `seeGain` on the landing square, and the
+ * move is a sacrifice only when the opponent's take exceeds what was captured
+ * (net material handed over) — so an even recapture/trade is NEVER called a sac.
+ *
+ * Soundness is NOT decided here — a hang and a brilliant decoy sac look
+ * identical on this one ply; the DIFFERENCE is the follow-up, which lives in the
+ * classification (brilliant/great = the engine sees the compensation) or the
+ * eval. Callers gate on that: the review names a sacrifice only on a move the
+ * engine already judged strong (David 2026-07-10: a deflection sac hangs a piece
+ * ON PURPOSE — don't silence its WHY, and don't lie and call it development).
+ */
+export function describeSacrifice(
+  fenBefore: string,
+  san: string,
+): string | null {
+  try {
+    const b = new Chess(fenBefore);
+    const mv = b.move(san);
+    if (!mv) return null;
+    const capturedVal = mv.captured ? (REVIEW_PIECE_VALUE[mv.captured] ?? 0) : 0;
+    const opponentWins = seeGain(b, mv.to); // material the opponent wins back on `to`
+    // Net material handed over. ≥ 2 (a minor piece's worth) so a 1-pawn poke
+    // isn't dressed up as a "sacrifice".
+    if (opponentWins - capturedVal >= 2) {
+      return `sacrifices the ${REVIEW_PIECE_NAME[mv.piece]} on ${mv.to}`;
+    }
+    return null;
+  } catch {
+    return null;
+  }
 }
 
 function lowerFirst(s: string): string {

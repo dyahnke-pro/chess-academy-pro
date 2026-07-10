@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { db } from '../db/schema';
 import { detectBadHabits, detectBadHabitsFromGame, buildProfileContext, buildReviewSegments, buildReviewCitations } from './coachFeatureService';
-import { explainBestMoveGrounded } from './groundedAnswer';
+import { explainBestMoveGrounded, describeSacrifice } from './groundedAnswer';
 import type { ReviewMoveInput } from './coachFeatureService';
 import { buildUserProfile, buildBadHabit } from '../test/factories';
 import type { UserProfile } from '../types';
@@ -38,11 +38,12 @@ describe('explainBestMoveGrounded — GROUNDED best-move explanation (no LLM, ch
     expect(r).toBe('Your move let White play Rxe5+, winning the queen with check.');
   });
 
-  it('returns null when nothing is provably true on the board (name-only fallback)', () => {
-    // Quiet position, best move is a normal developing move that neither
-    // captures nor checks, and the played move hangs nothing.
+  it('names the quiet POSITIONAL purpose of a developing best move (David 2026-07-10: WHY on every wrong move)', () => {
+    // Quiet position, best move Nf3 neither captures nor checks — but it DOES
+    // fight for the centre. The review must still say WHY it's best, grounded in
+    // board geometry (the central squares it now eyes), never generic filler.
     const r = explainBestMoveGrounded('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'a3', 'g1f3', 'white');
-    expect(r).toBeNull();
+    expect(r).toBe('It develops the knight to f3, eyeing d4 and e5.');
   });
 
   it('never claims a "win" on an even recapture (exchange, not a free piece)', () => {
@@ -59,6 +60,21 @@ describe('explainBestMoveGrounded — GROUNDED best-move explanation (no LLM, ch
     // e8-king and the a8-rook. The merit clause is the fork, not a bare capture.
     const r = explainBestMoveGrounded('r3k3/8/8/1N6/8/8/8/4K3 w - - 0 1', 'Ke2', 'b5c7', 'white');
     expect(r).toBe('It forks the king on e8 and the rook on a8.');
+  });
+});
+
+describe('describeSacrifice — a move that gives NET material (decoy/deflection sac)', () => {
+  it('names a quiet piece sacrifice (bishop offered to a pawn, no immediate recapture value)', () => {
+    // White Bf3 plays Bd5; the e6 pawn can take it (exd5) for a clean piece.
+    // The bishop captured nothing, so net material handed over = 3 ≥ 2 → a sac.
+    const r = describeSacrifice('4k3/8/4p3/8/8/5B2/8/4K3 w - - 0 1', 'Bd5');
+    expect(r).toBe('sacrifices the bishop on d5');
+  });
+
+  it('is NOT a sacrifice on an even trade (knight takes knight, recaptured by a pawn)', () => {
+    // Ne3xd5 wins a knight (3) but c6xd5 wins it straight back (3) → net 0.
+    const r = describeSacrifice('2k5/8/2p5/3n4/8/4N3/8/4K3 w - - 0 1', 'Nxd5');
+    expect(r).toBeNull();
   });
 });
 
