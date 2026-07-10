@@ -50,9 +50,12 @@ const config: CapacitorConfig = {
       version: process.env.OTA_BUNDLE_VERSION || undefined,
       // Our self-hosted manifest endpoint (Capgo self-hosted protocol).
       updateUrl: 'https://chess-academy-pro.vercel.app/api/ota/manifest',
-      // Apply the downloaded bundle on the next background→foreground rather
-      // than blocking the current launch — reliable and non-janky.
-      directUpdate: false,
+      // Apply the downloaded update as soon as it's fetched (David 2026-07-10:
+      // "flip to auto") — the new bundle goes live on the launch it's detected
+      // instead of waiting for the next background→foreground, so testers don't
+      // have to fully quit + reopen to pick up a web/content change. The
+      // appReadyTimeout revert below still protects against a bad bundle.
+      directUpdate: true,
       // If the new bundle doesn't signal ready within this window, revert.
       appReadyTimeout: 10000,
       responseTimeout: 20,
