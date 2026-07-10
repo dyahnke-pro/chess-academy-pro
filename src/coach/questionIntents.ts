@@ -195,6 +195,9 @@ const BEST_MOVE_QUESTION_RE = anyOf([
   String.raw`\b(?:give|show)\s+me\s+(?:the\s+)?(?:strongest|best|top)\s+(?:continuation|move|line|option)\b`,
   String.raw`\bbest\s+here\b`,
   String.raw`^\s*best\s*\??\s*$`,   // bare terse "best?" / "best"
+  // "cleanest/quickest/simplest win / way to win / path to victory" (pass 21).
+  String.raw`\b(?:cleanest|clearest|quickest|fastest|simplest|most\s+direct|surest)\s+(?:win|path|way\s+to\s+(?:win|finish)|route)\b`,
+  String.raw`\bhow\s+do\s+i\s+(?:finish|win|convert)\s+(?:this|it|him|her|them)\s+off\b`,
 ]);
 export function isBestMoveQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
@@ -302,6 +305,10 @@ const POSITION_ASSESSMENT_RE = anyOf([
   String.raw`\bevaluate\s+(?:this|the\s+position)\b`,
   String.raw`\bwhat(?:'?s| is)?\s+going\s+on\s+(?:here|in\s+this)\b`,
   String.raw`\bwhat(?:'?s| is)?\s+the\s+(?:situation|status)\b`,
+  // conversational "read me the position" / "lay of the land here" (pass 21).
+  String.raw`\bread\s+(?:me\s+)?(?:the|this|my)\s+position\b`,
+  String.raw`\b(?:the\s+)?lay\s+of\s+the\s+land\b`,
+  String.raw`\b(?:give\s+me\s+the\s+|what(?:'?s| is)?\s+the\s+)?(?:rundown|breakdown|picture|overview)\s+(?:here|of\s+(?:this|the)\s+position)\b`,
   String.raw`\bwho\s+stands\s+better\b`,
   String.raw`\bhow\s+(?:bad|good)\s+is\s+(?:it|this)\b`,
   String.raw`\bam\s+i\s+(?:up|down)\s+(?:material|a\s+pawn|a\s+piece|the\s+exchange)\b`,
@@ -670,6 +677,8 @@ const IMPROVEMENT_TREND_RE = anyOf([
   String.raw`\btrending\s+up\s+or\s+down\b`,
   String.raw`\bhow\s+many\s+(?:rating\s+)?points?\s+(?:did\s+i|have\s+i)\s+(?:gain|gained|lose|lost|drop|dropped|pick\s+up)\b`,
   String.raw`\b(?:rating\s+)?points?\s+(?:gained|lost|dropped)\s+(?:this\s+(?:week|month)|lately|recently)\b`,
+  // "do the numbers/stats/data say I'm improving / getting better" (pass 21).
+  String.raw`\b(?:do|does)\s+(?:the\s+)?(?:numbers?|stats?|data|metrics)\s+(?:say|show|suggest|tell\s+me|indicate)\b[\s\S]{0,25}(?:improv|getting\s+(?:better|worse)|progress|declin|trend)`,
 ]);
 export function isImprovementTrendQuestion(ask: string | undefined): boolean {
   return !!ask && IMPROVEMENT_TREND_RE.test(ask);
@@ -689,6 +698,8 @@ const OPENING_PROFILE_RE = anyOf([
   String.raw`\bwhat\s+opening\s+(?:am\s+i|do\s+i)\s+(?:play\s+(?:the\s+)?most|best|strongest|worst|weakest)\b`,
   String.raw`\bwhat\s+(?:opening|openings)\s+do\s+i\s+play\s+(?:the\s+)?most\b`,
   String.raw`\bwhich\s+opening\s+suits\s+me\b`,
+  // "which opening do I botch/butcher/play worst" — my weakest opening (pass 21).
+  String.raw`\bwhich\s+opening\s+do\s+i\s+(?:botch|butcher|mess\s+up|screw\s+up|play\s+(?:the\s+)?worst|struggle\s+with)\b`,
   String.raw`\bwhich\s+opening\s+is\s+my\s+(?:absolute\s+|single\s+|overall\s+|clear\s+)?(?:strongest|best|weakest|worst|favou?rite|go[\s-]?to)\b`,
   String.raw`\b(?:my\s+)?bread\s+and\s+butter(?:\s+opening)?\b`,
   String.raw`\bwhat\s+do\s+i\s+open\s+with\b`,
@@ -1006,6 +1017,8 @@ const MISTAKES_QUESTION_RE = anyOf([
   String.raw`\bwhat\s+(?:do\s+i|am\s+i)\s+(?:mess|screw|botch)(?:ing)?\s+up\b`,
   String.raw`\bmy\s+play\s+(?:sloppy|careless)\b|\bwhere(?:'?s| is)?\s+my\s+play\s+(?:sloppy|careless|weak)\b`,
   String.raw`\bwhat(?:'?s| is)?\s+costing\s+me\s+games\b`,
+  // "where do I bleed/leak/hemorrhage rating/points" — where I lose (pass 21).
+  String.raw`\bwhere\s+do\s+i\s+(?:bleed|leak|hemorrhage|haemorrhage|shed|drop|lose)\s+(?:rating|points?|elo|games?)\b`,
   String.raw`\bdo\s+i\s+(?:drop|hang|lose)\s+pieces\b`,
   // "what mistakes/errors show up / come up / recur (most)"
   String.raw`\bwhat\s+(?:mistakes?|blunders?|errors?)\s+(?:show\s+up|come\s+up|crop\s+up|appear|happen|recur|repeat)\b`,
@@ -1086,6 +1099,9 @@ const PHASE_QUESTION_RE = anyOf([
   String.raw`\bis\s+my\s+(?:opening|middlegame|middle\s+game|endgame|end\s+game)\s+(?:weak|bad|strong|good|solid|shaky)\b`,
   String.raw`\bwhere\s+do(?:es)?\s+(?:i|my\s+game)\s+(?:drop\s+the\s+ball|fall\s+apart|collapse|break\s+down)\b`,
   String.raw`\bdo\s+i\s+(?:fade|tire|weaken)\s+in\s+(?:long\s+games|the\s+endgame)\b`,
+  // "do I drift / lose the thread / play aimlessly in the opening/middlegame/
+  // endgame" — a phase-quality weakness (matrix pass 21).
+  String.raw`\bdo\s+i\s+(?:drift|lose\s+the\s+thread|play\s+aimlessly|meander|wander)\s+(?:in\s+)?(?:the\s+)?(?:opening|middlegame|middle\s?game|endgame|end\s?game)s?\b`,
   String.raw`\b(?:opening|middlegame)\s+or\s+(?:middlegame|endgame)\s+player\b`,
   String.raw`\bwhich\s+(?:part|stage|phase)\s+of\s+(?:the\s+game|my\s+game)\b`,
   String.raw`\b(?:handle|play|do\s+in|at)\s+(?:the\s+)?critical\s+moments?\b`,
@@ -1241,6 +1257,9 @@ const CONVERTING_QUESTION_RE = anyOf([
   // "am I good at / how well do I close out / convert / finish (off) wins"
   String.raw`\b(?:am\s+i\s+(?:good|any\s+good)\s+at|how\s+(?:good|well)\s+(?:am\s+i|do\s+i))\s+(?:at\s+)?(?:clos(?:e|ing)(?:\s+out)?|convert(?:ing)?|finish(?:ing)?(?:\s+off)?|seal(?:ing)?)\b`,
   String.raw`\bdo\s+i\s+(?:tend\s+to\s+|often\s+|usually\s+|sometimes\s+|ever\s+)?(?:throw\s+away|blow|squander|let\s+slip)\s+(?:winning|won)\b`,
+  // "do I choke when ahead / when winning" — throwing wins (matrix pass 21).
+  String.raw`\bdo\s+i\s+(?:tend\s+to\s+|often\s+|usually\s+|ever\s+)?choke\b`,
+  String.raw`\b(?:snatch(?:ing)?\s+defeat|defeat\s+from\s+(?:the\s+)?jaws\s+of\s+victory)\b`,
   String.raw`\bdo\s+i\s+(?:come\s+back|comeback|bounce\s+back)\b`,
   String.raw`\bhow\s+(?:often\s+)?do\s+i\s+(?:comeback|come\s+back)\b`,
   String.raw`\bhow\s+do\s+i\s+win\s+(?:my\s+)?games\b`,
@@ -1262,7 +1281,7 @@ export function isConvertingQuestion(ask: string | undefined): boolean {
 const COLOR_QUESTION_RE = anyOf([
   String.raw`\b(?:am\s+i|do\s+i\s+play|am\s+i\s+stronger)\s+(?:better\s+)?(?:as\s+|with\s+)?(?:white\s+or\s+black|black\s+or\s+white)\b`,
   String.raw`\b(?:better|stronger|worse|weaker)\s+(?:as|with|playing)\s+(?:the\s+)?(?:white|black)(?:\s+pieces?)?\b`,
-  String.raw`\bwhich\s+colou?r\s+(?:do\s+i|am\s+i)\b`,
+  String.raw`\bwhich\s+colou?r\s+(?:do\s+i|am\s+i|suits\s+me|is\s+(?:my\s+)?(?:best|stronger|better))\b`,
   String.raw`\b(?:white\s+or\s+black|black\s+or\s+white)\s+player\b`,
   String.raw`\bam\s+i\s+a\s+(?:white|black)\s+player\b`,
   // "how do I do/fare/play/score with the white/black pieces"

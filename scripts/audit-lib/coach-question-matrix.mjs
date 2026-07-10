@@ -580,6 +580,17 @@ export const STRUCTURAL_PROBES = [
   { id: 'converting', cat: 'self-knowledge', q: 'do i win short or long games' },
   { id: 'converting', cat: 'self-knowledge', q: 'am i better in long games', notKey: 'positionAssessmentQuestion' },
   { id: 'tactics-live', cat: 'live-board', q: 'show me the pin' },
+  // Pass 21 — novel oblique phrasings (answer-correctness overlay, 2026-07-10).
+  { id: 'opening-profile', cat: 'self-knowledge', q: 'which opening do i botch the most' },
+  { id: 'mistakes', cat: 'self-knowledge', q: 'where do i bleed rating' },
+  { id: 'trend', cat: 'self-knowledge', q: 'do the numbers say im improving' },
+  { id: 'best-move', cat: 'live-board', q: 'whats the cleanest win here' },
+  { id: 'converting', cat: 'self-knowledge', q: 'do i choke when ahead' },
+  { id: 'color', cat: 'self-knowledge', q: 'which color suits me best' },
+  { id: 'position-assessment', cat: 'live-board', q: 'read me the position' },
+  { id: 'position-assessment', cat: 'live-board', q: 'gimme the lay of the land here' },
+  { id: 'phase', cat: 'self-knowledge', q: 'do i drift in the middlegame' },
+  { id: 'endgame', cat: 'live-board', q: 'am i a patzer in the endgame' },
 ];
 
 /** All phrasings for a row across EVERY pass. */
