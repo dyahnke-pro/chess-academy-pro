@@ -819,7 +819,14 @@ export function CoachTeachPage(): JSX.Element {
   // the COACH's move (not the student's slip), so the "why?" prompt fills
   // the gap instead of conflicting. Honors the coachInGameDiscussion setting
   // (falls back to silent capture when the user turned the interjection off).
-  const discussion = useDiscussionPractice(true, { surface: 'coach-teach', interruptive: true });
+  const discussion = useDiscussionPractice(true, {
+    surface: 'coach-teach',
+    interruptive: true,
+    // After the student answers "why did you play that?", the picker pop-up
+    // disappears and the reveal (best move + the engine's why) lands in the
+    // chat — no lingering card (David 2026-07-10).
+    onReveal: (text) => setMessages((prev) => [...prev, { id: `why-reveal-${Date.now()}`, role: 'assistant', content: text, timestamp: Date.now() }]),
+  });
   const [coachTipsOn, setCoachTipsOn] = useState<boolean>(true);
   const [evalBarOverride, setEvalBarOverride] = useState<boolean | null>(null);
 

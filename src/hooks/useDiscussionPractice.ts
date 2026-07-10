@@ -26,9 +26,9 @@
 import { useCallback, useRef, useState } from 'react';
 import { Chess } from 'chess.js';
 import { stockfishEngine } from '../services/stockfishEngine';
-import { detectSlip, slipWarrantsInterjection, isNearBest } from '../services/slipDetector';
+import { detectSlip, slipWarrantsInterjection, isNearBest, slipSeverityLabel, type SlipSeverity } from '../services/slipDetector';
 import { detectTactics } from '../services/tacticsDetector';
-import { buildWhyPrompt, buildGroundedReveal, captureMisconception } from '../services/discussionPractice';
+import { buildWhyPrompt, buildGroundedReveal, buildSlipReveal, captureMisconception } from '../services/discussionPractice';
 import { buildMoveReasonOptions } from '../services/moveReasonOptions';
 import { voiceService } from '../services/voiceService';
 import { captureEvent } from '../services/analytics';
@@ -61,6 +61,10 @@ export interface DiscussionPrompt {
   hintReveal?: string;
   /** Whether this fired on a slip (bad) or good-move recognition. */
   kind?: 'slip' | 'good';
+  /** The move's classification (blunder / mistake / inaccuracy) — shown on the
+   *  card so the student KNOWS what they're being asked about (David 2026-07-10:
+   *  "I need to know if it's a blunder or mistake I'm clicking on"). */
+  severity?: SlipSeverity;
 }
 
 export interface EvaluatePlayerMoveArgs {
@@ -127,6 +131,12 @@ export interface UseDiscussionPracticeOptions {
    *  'discussion-practice' (default); post-game REVIEW passes 'game-review'
    *  so a review-captured slip is tagged to the game it came from. */
   source?: MisconceptionSource;
+  /** When set, the reveal (best move + why) is handed here after the student
+   *  commits, and the picker pop-up DISAPPEARS (David 2026-07-10: "I want the
+   *  pop up to disappear after a selection is pressed"). The surface routes the
+   *  reveal into the chat. Without it, the reveal shows in the transient
+   *  teaching card (legacy behavior). */
+  onReveal?: (text: string) => void;
 }
 
 const ANALYSIS_DEPTH = 14;
@@ -154,6 +164,23 @@ function uciToSan(fen: string, uci: string | undefined): string | undefined {
   } catch {
     return undefined;
   }
+}
+
+/** A UCI PV -> SAN sequence from `fen`, stopping at the first illegal move.
+ *  Feeds the best-move reasoning walk in the slip reveal (David 2026-07-10). */
+function uciSeqToSan(fen: string, seq: string[] | undefined, max = 5): string[] {
+  if (!seq || seq.length === 0) return [];
+  const out: string[] = [];
+  try {
+    const c = new Chess(fen);
+    for (const uci of seq) {
+      if (out.length >= max || !uci || uci.length < 4) break;
+      const mv = c.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.length > 4 ? uci[4] : undefined });
+      if (!mv) break;
+      out.push(mv.san);
+    }
+  } catch { /* return what we have */ }
+  return out;
 }
 
 /** The near-best move set up a real tactic on the board (the good-move gate). */
@@ -195,6 +222,9 @@ export function useDiscussionPractice(
       let evalBeforeW: number;
       let evalAfterW: number;
       let bestUci: string | undefined;
+      let bestPvUci: string[] | undefined;
+      let bestLineEvalW: number | undefined;
+      let bestLineMate: number | null | undefined;
       try {
         const [before, after] = await Promise.all([
           stockfishEngine.analyzePosition(args.fenBefore, ANALYSIS_DEPTH),
@@ -203,6 +233,11 @@ export function useDiscussionPractice(
         evalBeforeW = before.evaluation; // white-perspective cp (mate = huge)
         evalAfterW = after.evaluation;
         bestUci = before.bestMove;
+        // The engine's best LINE (PV) from the position before the move — feeds
+        // the "best move + why" reasoning walk in the reveal (David 2026-07-10).
+        bestPvUci = before.topLines[0]?.moves ?? (before.bestMove ? [before.bestMove] : []);
+        bestLineEvalW = before.isMate ? undefined : before.evaluation;
+        bestLineMate = before.isMate ? before.mateIn : null;
       } catch {
         return; // engine down → never guess (G0/G3)
       }
@@ -253,9 +288,23 @@ export function useDiscussionPractice(
         return; // non-blocking — never opens the picker, never sets busy
       }
 
-      // SLIP — the blocking "why'd you play that?" picker.
+      // SLIP — the blocking "why'd you play that?" picker. The reveal (shown
+      // AFTER the student commits) is the RICH teach: the classification + what
+      // slipped + the best move and the engine's reasoning walk (David
+      // 2026-07-10: "I want the best move to be told, along with the why").
       const options = buildMoveReasonOptions(args.fenBefore, args.playedSan);
-      const reveal = buildGroundedReveal({ kind: 'slip', fenAfter: args.fenAfter, moverColor: moverChar, bestSan });
+      const bestPvSan = uciSeqToSan(args.fenBefore, bestPvUci);
+      const reveal = buildSlipReveal({
+        cpLoss,
+        fenBefore: args.fenBefore,
+        fenAfter: args.fenAfter,
+        moverColor: moverChar,
+        bestSan,
+        bestPvSan,
+        evalCp: bestLineEvalW ?? null,
+        mateIn: bestLineMate ?? null,
+      });
+      const severity = slipSeverityLabel(cpLoss) ?? undefined;
 
       setGoodMove(null);
       busyRef.current = true;
@@ -265,6 +314,7 @@ export function useDiscussionPractice(
         options,
         hintReveal: reveal,
         kind: 'slip',
+        severity,
         fenBefore: args.fenBefore,
         fenAfter: args.fenAfter,
         playedSan: args.playedSan,
@@ -295,10 +345,14 @@ export function useDiscussionPractice(
         : 'typed';
 
     // A SLIP is classified + logged to the weakness bucket (-> drillable
-    // mistakePuzzle). A GOOD move teaches without inflating the weakness
-    // profile. The reveal text is the classifier's grounded coachNote when
-    // available (slip), else the pre-computed grounded reveal.
-    let note = ctx.reveal;
+    // mistakePuzzle). The REVEAL shown/spoken is ALWAYS the grounded rich
+    // teach (classification + best move + the engine's why) — NEVER the
+    // classifier's LLM coachNote (David 2026-07-10: the LLM note was
+    // OVERRIDING the best-move-why with an "unknown"-feeling line; "I want the
+    // best move to be told, along with the why"). We still run the classifier
+    // to LOG the misconception to the weakness bucket, but the LLM prose is not
+    // shown — G0: the coach voices the computed facts, not a free-composed note.
+    const note = ctx.reveal;
     let loggedTag: string | undefined;
     if (ctx.kind === 'slip') {
       try {
@@ -323,10 +377,9 @@ export function useDiscussionPractice(
             openingName: ctx.args.openingName,
           },
         });
-        if (res.coachNote) note = res.coachNote;
         loggedTag = res.record?.tag;
       } catch {
-        /* keep the pre-computed grounded reveal */
+        /* logging failed — the grounded reveal is already correct */
       }
     }
 
@@ -355,9 +408,16 @@ export function useDiscussionPractice(
     if (note.trim()) void voiceService.speakForced(note).catch(() => undefined);
 
     ctxRef.current = null;
-    setTeach(note);
-    setPhase('teaching');
-  }, [opts.surface, opts.source]);
+    if (opts.onReveal) {
+      // The picker pop-up DISAPPEARS after the selection; the reveal (best move
+      // + why) goes to the chat + voice, not a lingering card (David 2026-07-10).
+      if (note.trim()) opts.onReveal(note);
+      reset();
+    } else {
+      setTeach(note);
+      setPhase('teaching');
+    }
+  }, [opts.surface, opts.source, opts.onReveal, reset]);
 
   // raiseSlipPrompt opens the SLIP picker from KNOWN mistake data (no Stockfish
   // re-eval) — the post-game REVIEW entry point (David 2026-07-06: "I want that
@@ -375,9 +435,14 @@ export function useDiscussionPractice(
       return; // unparseable position — never guess (G3)
     }
     const options = buildMoveReasonOptions(args.fenBefore, args.playedSan);
-    const reveal = buildGroundedReveal({
-      kind: 'slip', fenAfter: args.fenAfter, moverColor: moverChar, bestSan: args.bestSan,
+    // Review path has no fresh PV, so the reasoning walk falls back to naming
+    // the best move; the classification + hanging-piece read still compute.
+    const reveal = buildSlipReveal({
+      cpLoss: args.cpLoss, fenBefore: args.fenBefore, fenAfter: args.fenAfter,
+      moverColor: moverChar, bestSan: args.bestSan,
+      bestPvSan: args.bestSan ? [args.bestSan] : undefined,
     });
+    const severity = slipSeverityLabel(args.cpLoss) ?? undefined;
 
     setGoodMove(null);
     busyRef.current = true;
@@ -392,7 +457,7 @@ export function useDiscussionPractice(
       shouldCount: args.shouldCount, reveal, moverChar, options,
     };
     setPrompt({
-      question: buildWhyPrompt(), options, hintReveal: reveal, kind: 'slip',
+      question: buildWhyPrompt(), options, hintReveal: reveal, kind: 'slip', severity,
       fenBefore: args.fenBefore, fenAfter: args.fenAfter, playedSan: args.playedSan,
       bestSan: args.bestSan, cpLoss: args.cpLoss, shouldCount: args.shouldCount,
       gamePhase: args.gamePhase, moveNumber: args.moveNumber,

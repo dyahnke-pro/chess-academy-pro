@@ -95,9 +95,36 @@ describe('useDiscussionPractice — Learn (interruptive)', () => {
       logged_tag: 'missed-tactic',
       bucket: 'tactical',
     });
-    // The grounded reveal is NARRATED after the student commits (not just shown).
-    expect(voiceService.speakForced).toHaveBeenCalledWith('note');
-    expect(result.current.teach).toBe('note');
+    // The GROUNDED reveal is narrated + shown (not the classifier's LLM note):
+    // classification + the best move + the engine's why (David 2026-07-10). The
+    // teaching card is used because this test does NOT pass onReveal.
+    expect(result.current.teach).toMatch(/best move was/i);
+    expect(result.current.teach).toMatch(/blunder|mistake/i);
+    expect(voiceService.speakForced).toHaveBeenCalledWith(result.current.teach);
+  });
+
+  it('onReveal routes the reveal away + closes the picker (no teaching card)', async () => {
+    setEvals(100, -200);
+    const reveals: string[] = [];
+    const { result } = renderHook(() =>
+      useDiscussionPractice(true, { ...opts, onReveal: (t) => reveals.push(t) }),
+    );
+    await act(async () => {
+      await result.current.evaluatePlayerMove({
+        fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
+        playerColor: 'white', inBook: false, learned: true, gamePhase: 'opening',
+        studentRating: 1200,
+      });
+    });
+    await act(async () => {
+      await result.current.submitReason('I wanted to attack the center');
+    });
+    // Pop-up gone; reveal delivered to the callback (the surface posts it to chat).
+    expect(result.current.phase).toBe('idle');
+    expect(result.current.prompt).toBeNull();
+    expect(result.current.teach).toBeNull();
+    expect(reveals).toHaveLength(1);
+    expect(reveals[0]).toMatch(/best move was/i);
   });
 
   it('records response_mode=hint when the student taps Hint', async () => {

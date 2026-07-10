@@ -55,21 +55,28 @@ function severityFor(cpLoss: number): SlipSeverity | null {
   return null;
 }
 
-/** Rating-adaptive interjection bar (David 2026-06-04): the coach's
- *  "why did you play that?" question gets PICKIER as the player improves —
- *  don't nag a beginner about every inaccuracy, but a 2000+ player wants the
- *  sharper feedback.
+/** Rating-adaptive interjection bar (David 2026-06-04, re-confirmed 2026-07-10:
+ *  "Only advanced players get the inaccuracy pop up … it should be adaptive to
+ *  player rating/strength"). The blocking "why did you play that?" picker gets
+ *  PICKIER as the player improves — don't nag a beginner about every inaccuracy,
+ *  but a 2000+ player wants the sharper feedback:
  *    - beginner     (< 1000):    blunders only
  *    - intermediate (1000–2000): mistakes + blunders
  *    - advanced     (> 2000):    inaccuracies + mistakes + blunders
  *  The slip is still CAPTURED to the weakness bucket below the bar — this
- *  governs only whether to INTERRUPT with the spoken question. Defaults the
- *  rating to 1200 (intermediate) when unknown. */
+ *  governs only whether to INTERRUPT. Defaults the rating to 1200 when unknown. */
 export function slipWarrantsInterjection(cpLoss: number, rating: number | undefined | null): boolean {
   const r = rating ?? 1200;
   if (r > 2000) return cpLoss >= SLIP_CP.inaccuracy;
   if (r >= 1000) return cpLoss >= SLIP_CP.mistake;
   return cpLoss >= SLIP_CP.blunder;
+}
+
+/** The blunder/mistake/inaccuracy label for a cpLoss — shown so the student
+ *  KNOWS what they're being asked about (David 2026-07-10: "I need to know if
+ *  it's a blunder or mistake I'm clicking on"). */
+export function slipSeverityLabel(cpLoss: number): SlipSeverity | null {
+  return severityFor(cpLoss);
 }
 
 /** Max centipawn loss for a move to count as "near-best" — the good-move

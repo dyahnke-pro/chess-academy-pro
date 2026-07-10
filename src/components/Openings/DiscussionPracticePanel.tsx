@@ -75,7 +75,24 @@ export function DiscussionPracticePanel({
     <Shell>
       <div data-testid="discussion-prompt">
         <div className="flex items-start justify-between gap-2 mb-2">
-          <p className="text-sm font-semibold text-amber-300">{prompt.question}</p>
+          <div className="flex items-center gap-2 flex-wrap">
+            <p className="text-sm font-semibold text-amber-300">{prompt.question}</p>
+            {prompt.severity && (
+              <span
+                data-testid="discussion-severity"
+                className={
+                  'text-[10px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded ' +
+                  (prompt.severity === 'blunder'
+                    ? 'bg-red-500/20 text-red-300'
+                    : prompt.severity === 'mistake'
+                      ? 'bg-orange-500/20 text-orange-300'
+                      : 'bg-yellow-500/20 text-yellow-300')
+                }
+              >
+                {prompt.severity}
+              </span>
+            )}
+          </div>
           <button
             onClick={onSkip}
             className="p-1 rounded-lg hover:bg-theme-border/60 text-theme-text-muted shrink-0"

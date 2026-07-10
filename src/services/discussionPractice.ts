@@ -8,8 +8,9 @@
 // (or skips) -> classifyMisconception maps it to a closed-set tag -> we
 // log it to the shared bucket (gated by the learned/count-against rule).
 
-import { detectSlip, type SlipInput, type SlipResult } from './slipDetector';
+import { detectSlip, slipSeverityLabel, type SlipInput, type SlipResult } from './slipDetector';
 import { detectTactics } from './tacticsDetector';
+import { assembleEngineReasoning } from './groundedAnswer';
 import {
   classifyMisconception,
   type ClassifyMisconceptionInput,
@@ -66,6 +67,63 @@ export function buildGroundedReveal(args: {
 const PIECE_LABEL: Record<string, string> = {
   p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
 };
+
+/**
+ * buildSlipReveal — the FULL grounded teach shown after the "why did you play
+ * that?" picker (David 2026-07-10: "I want the best move to be told, along with
+ * the why behind it" + "I need to know if it's a blunder or mistake"). Composes,
+ * all from the board + engine (G0, never invented):
+ *   1. the CLASSIFICATION — "That was a blunder." / "a mistake."
+ *   2. WHAT the move let slip — a hanging mover piece, when there is one.
+ *   3. the BEST move + the engine's REASONING walk (assembleEngineReasoning over
+ *      the engine PV) — the thing the student should have played, and why.
+ * Falls back gracefully: no PV → just names the best move; no hang → skips (2).
+ */
+export function buildSlipReveal(args: {
+  cpLoss: number;
+  fenBefore: string;
+  fenAfter: string;
+  moverColor: 'w' | 'b';
+  bestSan?: string;
+  /** The engine's best line in SAN from `fenBefore` (index 0 = the best move). */
+  bestPvSan?: string[];
+  /** White-perspective eval at the best line's end, for the verdict clause. */
+  evalCp?: number | null;
+  mateIn?: number | null;
+}): string {
+  const parts: string[] = [];
+
+  const severity = slipSeverityLabel(args.cpLoss);
+  if (severity) parts.push(`That was ${severity === 'inaccuracy' ? 'an' : 'a'} ${severity}.`);
+
+  // What the move let slip — a hanging mover piece (precise, side-aware).
+  const det = detectTactics(args.fenAfter);
+  const hang = det.hangingPieces.find((hp) => hp.color === args.moverColor);
+  if (hang) parts.push(`It leaves the ${PIECE_LABEL[hang.piece] ?? 'piece'} on ${hang.square} hanging.`);
+
+  // The best move + the engine's reasoning walk — the headline teach.
+  const moverFull: 'white' | 'black' = args.moverColor === 'w' ? 'white' : 'black';
+  const reasoning = args.bestPvSan && args.bestPvSan.length > 0
+    ? assembleEngineReasoning({
+        fenBefore: args.fenBefore,
+        pvSan: args.bestPvSan,
+        moverColor: moverFull,
+        evalCp: args.evalCp ?? null,
+        mateIn: args.mateIn ?? null,
+        studentSide: moverFull,
+      })
+    : null;
+  if (reasoning) {
+    // Reframe "The engine plays X" → "The best move was X" for a slip teach.
+    parts.push(reasoning.facts.replace(/^The engine plays /, 'The best move was '));
+  } else if (args.bestSan) {
+    parts.push(`The best move was ${args.bestSan}.`);
+  } else if (!hang) {
+    parts.push('There was better.');
+  }
+
+  return parts.join(' ').trim();
+}
 
 export interface CaptureMisconceptionArgs {
   classifyInput: ClassifyMisconceptionInput;

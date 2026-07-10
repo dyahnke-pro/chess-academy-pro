@@ -96,3 +96,36 @@ describe('captureMisconception', () => {
     expect(r.logged).toBe(false);
   });
 });
+
+describe('buildSlipReveal — classification + best move + engine why (David 2026-07-10)', () => {
+  it('names the severity, the best move, and the engine reasoning (fork)', async () => {
+    const { buildSlipReveal } = await import('./discussionPractice');
+    // White Nb5; the student shuffled the king (a blunder), best = Nc7+ forking
+    // the e8-king and a8-rook. cpLoss huge → blunder.
+    const reveal = buildSlipReveal({
+      cpLoss: 600,
+      fenBefore: 'r3k3/8/8/1N6/8/8/8/4K3 w - - 0 1',
+      fenAfter: 'r3k3/8/8/1N6/8/8/8/5K2 b - - 1 1',
+      moverColor: 'w',
+      bestSan: 'Nc7+',
+      bestPvSan: ['Nc7+'],
+      evalCp: 500,
+    });
+    expect(reveal).toMatch(/blunder/i);
+    expect(reveal).toMatch(/best move was Nc7/i);
+    expect(reveal).toMatch(/forks the king on e8 and the rook on a8/i);
+  });
+
+  it('falls back to naming the best move when there is no PV', async () => {
+    const { buildSlipReveal } = await import('./discussionPractice');
+    const reveal = buildSlipReveal({
+      cpLoss: 120,
+      fenBefore: 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2',
+      fenAfter: 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2',
+      moverColor: 'w',
+      bestSan: 'Nf3',
+    });
+    expect(reveal).toMatch(/mistake/i);
+    expect(reveal).toMatch(/best move was Nf3/i);
+  });
+});
