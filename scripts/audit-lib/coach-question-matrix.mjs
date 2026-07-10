@@ -473,6 +473,14 @@ export const STRUCTURAL_PROBES = [
   { id: 'app-help', cat: 'knowledge', q: 'whats the best way to use this app', notKey: 'bestMoveQuestion' },
   { id: 'opening-profile', cat: 'self-knowledge', q: 'whats my best opening', notKey: 'bestMoveQuestion' },
   { id: 'trend', cat: 'self-knowledge', q: 'am i better than i was last month', notKey: 'positionAssessmentQuestion' },
+  // Pass 10 — list/quantity, rating-goal, double-negation, recent-form.
+  { id: 'weakness', cat: 'self-knowledge', q: 'list my top 3 weaknesses' },
+  { id: 'progress', cat: 'self-knowledge', q: 'give me three things to work on' },
+  { id: 'progress', cat: 'self-knowledge', q: 'what are the top 5 things holding me back' },
+  { id: 'progress', cat: 'self-knowledge', q: 'how do i get to 2000' },
+  { id: 'progress', cat: 'self-knowledge', q: 'what will get me to 1800' },
+  { id: 'strengths', cat: 'self-knowledge', q: 'what am i not weak at' },
+  { id: 'consistency', cat: 'self-knowledge', q: 'whats my recent form' },
 ];
 
 /** All phrasings for a row across EVERY pass. */

@@ -478,7 +478,11 @@ const PROGRESS_QUESTION_RE = anyOf([
   String.raw`\b(?:need|want|wanna|have|trying|tryna|gotta|got\s+to|gonna|hoping|looking|keen)\s+(?:to\s+)?` + IMPROVE_VERBS + String.raw`\b`,
   String.raw`\bhelp\s+me\s+(?:` + IMPROVE_VERBS + String.raw`|get\s+better|improve|level\s+up)\b`,
   String.raw`\b(?:tell|show|point)\s+me\s+(?:what\s+to\s+` + ANY_TRAIN_VERB + String.raw`|where\s+to\s+focus|at\s+what\s+to\s+` + ANY_TRAIN_VERB + String.raw`)\b`,
-  String.raw`\b(?:give|suggest|recommend)\s+(?:me\s+)?(?:something|a\s+plan|a\s+focus|an?\s+area|what)\s+to\s+(?:` + ANY_TRAIN_VERB + String.raw`|drill|practi[sc]e)\b`,
+  String.raw`\b(?:give|suggest|recommend)\s+(?:me\s+)?(?:something|a\s+plan|a\s+focus|an?\s+area|what|(?:\d+\s+|a\s+few\s+|some\s+|three\s+|two\s+)?(?:things|areas|stuff|pointers|tips))\s+to\s+(?:` + ANY_TRAIN_VERB + String.raw`|drill|practi[sc]e)\b`,
+  // rating-goal improvement — "how do I get to 2000", "what will get me to 1800"
+  String.raw`\bhow\s+do\s+i\s+(?:get|climb|rise|reach|hit|make\s+it)\s+to\s+\d{3,4}\b`,
+  String.raw`\bwhat\s+(?:will|would|do\s+i\s+need\s+to)\s+(?:get\s+me\s+to|reach|hit)\s+\d{3,4}\b`,
+  String.raw`\bto\s+(?:get|reach|climb)\s+to\s+\d{3,4}\b`,
   // ── focus / priority ──
   String.raw`\b(?:where|what)\s+should\s+(?:i\s+focus|my\s+focus\s+be|i\s+(?:put|spend)\s+my\s+(?:time|energy|effort))\b`,
   String.raw`\bwhat\s+(?:area|part|phase|aspect|skill)\s+(?:of\s+my\s+(?:game|play|chess)\s+)?needs?\s+(?:the\s+most\s+)?(?:work|attention|improvement)\b`,
@@ -486,7 +490,11 @@ const PROGRESS_QUESTION_RE = anyOf([
   String.raw`\b(?:study|training|practice)\s+plan\b`,
   String.raw`\bplan\s+(?:out\s+)?my\s+(?:training|study|studying|practi[cs]e|improvement)\b`,
   // ── weakness NOUNS ──
-  String.raw`\b(?:my|the)\s+(?:biggest\s+|main\s+|worst\s+|greatest\s+|number\s+one\s+|top\s+)?` + WEAKNESS_NOUNS + String.raw`\b`,
+  String.raw`\b(?:my|the)\s+(?:biggest\s+|main\s+|worst\s+|greatest\s+|number\s+one\s+|top\s+)?(?:\d+\s+)?` + WEAKNESS_NOUNS + String.raw`\b`,
+  // "list my top 3 weaknesses" / "top 5 weak spots"
+  String.raw`\b(?:list|show|name|give\s+me)\s+(?:my\s+|the\s+)?(?:top\s+)?(?:\d+\s+)?` + WEAKNESS_NOUNS + String.raw`\b`,
+  // "things/areas holding me back" — standalone (not just "what's holding me")
+  String.raw`\b(?:holding|keeping|dragging)\s+me\s+(?:back|down)\b`,
   String.raw`\b` + WEAKNESS_NOUNS + String.raw`\s+(?:in|of|with)\s+my\s+(?:game|play|chess)\b`,
   String.raw`\bwhat\s+(?:are|is|'?s)\s+my\s+(?:biggest\s+|main\s+|worst\s+|top\s+)?` + WEAKNESS_NOUNS + String.raw`\b`,
   String.raw`\bbiggest\s+(?:weakness|mistake|problem|issue|flaw|leak|gap)\b`,
@@ -673,6 +681,8 @@ const STRENGTHS_QUESTION_RE = anyOf([
   String.raw`\b(?:tell|show)\s+me\s+what\s+i(?:'?m| am)\s+good\s+at\b`,
   String.raw`\bmy\s+best\s+(?:areas?|skills?|parts?)\b`,
   String.raw`\bwhat\s+am\s+i\s+great\s+at\b`,
+  // double-negation — "what am I NOT weak/bad at" = a strength.
+  String.raw`\bwhat\s+am\s+i\s+not\s+(?:weak|bad|terrible|poor|awful)\s+(?:at|in)\b`,
   // "where am I strong/strongest" (parallel to "where do I excel")
   String.raw`\bwhere\s+(?:am\s+i|do\s+i\s+feel)\s+(?:the\s+)?(?:strong|strongest|solid|confident)\b`,
   // "what part/area of my game is best/strongest/good"
@@ -1058,6 +1068,9 @@ const CONSISTENCY_QUESTION_RE = anyOf([
   // "how steady/consistent are my results/games"
   String.raw`\bhow\s+(?:steady|consistent)\s+(?:are|is)\s+my\s+(?:results?|games?|play|form)\b`,
   String.raw`\bdo\s+i\s+play\s+(?:steadily|consistently)\b`,
+  // "my recent form / how's my form" — recent steadiness of results.
+  String.raw`\b(?:what(?:'?s| is)?\s+)?my\s+(?:recent\s+)?form\b`,
+  String.raw`\bhow(?:'?s| is)\s+my\s+form\b`,
   String.raw`\bdo\s+i\s+play\s+(?:at\s+)?the\s+same\s+(?:level|standard)\b`,
   String.raw`\bsame\s+level\s+every\s+game\b`,
   String.raw`\bhow\s+(?:reliable|dependable|steady)\s+is\s+my\s+(?:play|game|chess|form)\b`,
