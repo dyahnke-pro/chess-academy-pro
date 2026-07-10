@@ -521,6 +521,16 @@ export const STRUCTURAL_PROBES = [
   { id: 'repertoire-gap', cat: 'self-knowledge', q: 'what do i play against the caro as white' },
   { id: 'position-assessment', cat: 'live-board', q: 'do i have enough for the sacrifice' },
   { id: 'progress', cat: 'self-knowledge', q: 'how long to reach 2000' },
+  // Pass 14 — prophylaxis / piece-square / material / simplify / comparison.
+  { id: 'plan', cat: 'live-board', q: "what's my opponent's plan" },
+  { id: 'position-assessment', cat: 'live-board', q: 'is my knight on d5 good' },
+  { id: 'best-move', cat: 'live-board', q: 'should i move my a-pawn' },
+  { id: 'position-assessment', cat: 'live-board', q: 'how many pieces do i have' },
+  { id: 'best-move', cat: 'live-board', q: 'should i simplify' },
+  { id: 'opening-profile', cat: 'self-knowledge', q: 'is the caro better than the french for me' },
+  { id: 'opening-accuracy', cat: 'self-knowledge', q: 'how much theory do i need' },
+  { id: 'position-assessment', cat: 'live-board', q: 'evaluate my position' },
+  { id: 'trend', cat: 'self-knowledge', q: 'was i better last year' },
 ];
 
 /** All phrasings for a row across EVERY pass. */

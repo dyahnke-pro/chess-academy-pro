@@ -120,6 +120,9 @@ const PLAN_QUESTION_RE = anyOf([
   String.raw`\blong[-\s]?(?:range|haul)\b`,
   String.raw`\bwhat\s+should\s+i\s+be\s+(?:aiming|going|gunning|pushing|playing)\s+for\b`,
   String.raw`\bwhat\s+am\s+i\s+(?:aiming|going|gunning|pushing|playing)\s+for\b`,
+  // prophylaxis — the OPPONENT's plan/idea (matrix pass 14, 2026-07-10).
+  String.raw`\bwhat(?:'?s| is)?\s+(?:his|her|their|my\s+opponent'?s?|black'?s?|white'?s?)\s+(?:plan|idea|threat)\b`,
+  String.raw`\bwhat\s+(?:does|is)\s+(?:he|she|my\s+opponent|black|white)\s+(?:want|planning|trying\s+to\s+do|up\s+to|after)\b`,
 ]);
 export function isPlanQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
@@ -155,7 +158,7 @@ const BEST_MOVE_QUESTION_RE = anyOf([
   String.raw`\bhow\s+should\s+(?:i|we)\s+(?:continue|respond|recapture)\b`,
   String.raw`\bwhat(?:'?s| is)?\s+the\s+move\b`,
   String.raw`\bis\s+(?:this|that|it|[A-Za-z0-9+#=-]{1,6})\s+(?:the\s+)?(?:best|sound|good|winning|correct|playable|right|strong|a\s+(?:good|sound|strong)\s+move)\b`,
-  String.raw`\bshould\s+i\s+(?:play|go\s+for|take|capture|push|trade|castle)\b`,
+  String.raw`\bshould\s+i\s+(?:play|go\s+for|take|capture|push|trade|castle|move|advance|develop|simplify|trade\s+(?:down|off)|keep\s+pieces\s+on|exchange)\b`,
   String.raw`\bcandidate\s+moves?\b`,
   String.raw`\bwhat\s+(?:do|should)\s+i\s+do\s+(?:here|now|in\s+this)\b`,
   String.raw`\bis\s+there\s+(?:a\s+)?better\s+(?:move|option|continuation)\b`,
@@ -279,7 +282,14 @@ const POSITION_ASSESSMENT_RE = anyOf([
   String.raw`\bis\s+it\s+worth\s+(?:playing\s+on|continuing|fighting\s+on|carrying\s+on)\b`,
   String.raw`\bis\s+(?:this|it|the\s+position)\s+(?:resignable|hopeless|salvageable)\b`,
   // piece-quality / pawn-structure positional judgment.
-  String.raw`\bis\s+my\s+(?:bishop|knight|rook|queen|king|pawn|pieces?|structure|position)\s+(?:bad|good|active|passive|strong|weak|misplaced|awkward|fine|ok(?:ay)?)\b`,
+  String.raw`\bis\s+my\s+(?:bishop|knight|rook|queen|king|pawn|pieces?|structure|position)\s+(?:on\s+[a-h][1-8]\s+)?(?:bad|good|active|passive|strong|weak|misplaced|awkward|fine|ok(?:ay)?)\b`,
+  // material count / board description — "how many pieces do I have", "material
+  // count", "what's on the board" (matrix pass 14).
+  String.raw`\bhow\s+many\s+(?:pieces|pawns)\s+do\s+i\s+have\b`,
+  String.raw`\b(?:what(?:'?s| is)?\s+the\s+)?material\s+(?:count|balance|situation)\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+on\s+the\s+board\b`,
+  // "evaluate / analyze MY position" (the "my" variant of the assess patterns).
+  String.raw`\b(?:evaluate|analy[sz]e|assess|read)\s+my\s+position\b`,
   String.raw`\b(?:do\s+i\s+have\s+(?:any\s+)?)?weak\s+(?:pawns?|squares?)\b`,
   String.raw`\b(?:how(?:'?s| is)\s+)?my\s+pawn\s+structure\b`,
   // plural / "are my ..." piece-quality + "sound/solid/healthy structure" (p12)
@@ -592,6 +602,7 @@ const IMPROVEMENT_TREND_RE = anyOf([
   String.raw`\bhow\s+(?:am|have)\s+i\s+(?:trending|improv(?:ing|ed)|progress(?:ing|ed)|develop(?:ing|ed))\s*(?:over\s+time|lately|recently)?\b`,
   String.raw`\bhow(?:'?s| is| has)\s+my\s+(?:improvement|progress|trajectory)\s+(?:been|going|trending|looking|coming\s+along)\b`,
   String.raw`\bam\s+i\s+(?:better|worse)\s+than\s+(?:i\s+(?:was|used\s+to\s+be)|last\s+(?:month|week)|before|a\s+(?:month|while)\s+ago)\b`,
+  String.raw`\bwas\s+i\s+(?:better|worse|stronger|weaker)\s+(?:last\s+(?:year|month|week)|a\s+(?:year|month|while)\s+ago|before|back\s+then)\b`,
   String.raw`\b(?:my\s+)?(?:improvement|progress)\s+(?:over\s+time|trend|trajectory)\b`,
   String.raw`\bam\s+i\s+(?:making\s+progress|moving\s+(?:up|forward)|headed\s+(?:up|in\s+the\s+right\s+direction))\b`,
   String.raw`\btrending\s+up\s+or\s+down\b`,
@@ -632,6 +643,10 @@ const OPENING_PROFILE_RE = anyOf([
   String.raw`\bwhich\s+of\s+my\s+openings?\s+is\s+(?:letting\s+me\s+down|underperforming|dragging\s+me\s+down|failing\s+me)\b`,
   // "which opening do I score best/worst with"
   String.raw`\bwhich\s+opening\s+do\s+i\s+score\s+(?:best|worst)\s+with\b`,
+  // two-opening comparison for the student — "is the Caro better than the French
+  // for me", "which is better for me, Caro or French" (matrix pass 14).
+  String.raw`\bis\s+(?:the\s+)?[\w'-]+\s+better\s+than\s+(?:the\s+)?[\w'-]+\s+for\s+me\b`,
+  String.raw`\bwhich\s+is\s+better\s+for\s+me[,\s]+[\w'-]+\s+or\s+[\w'-]+\b`,
   // "is this a good opening for me" / "should I keep playing the <opening>" —
   // an is-this-opening-working-for-me question (matrix pass 12).
   String.raw`\bis\s+(?:this|the\s+\w+)\s+a\s+good\s+opening\s+for\s+me\b`,
@@ -785,6 +800,9 @@ const OPENING_ACCURACY_RE = anyOf([
   String.raw`\bhow\s+(?:sharp|good|solid|strong|deep)\s+is\s+my\s+opening\b`,
   String.raw`\bam\s+i\s+solid\s+in\s+my\s+openings?\b`,
   String.raw`\bhow\s+deep\s+is\s+my\s+opening\s+knowledge\b`,
+  // opening-prep depth — "how much theory do I need", "how deep should I know this"
+  String.raw`\bhow\s+much\s+theory\s+do\s+i\s+(?:need|have\s+to\s+know)\b`,
+  String.raw`\bhow\s+deep\s+(?:should\s+i|do\s+i\s+need\s+to)\s+know\b`,
   String.raw`\bdo\s+i\s+know\s+my\s+openings?\s+well\b`,
   String.raw`\bwhere\s+does\s+my\s+opening\s+(?:prep|preparation|play|theory)\s+(?:fall\s+apart|break\s+down|end)\b`,
   // NAMED-opening accuracy WITHOUT an anchor word ("how good is my Sicilian?",
