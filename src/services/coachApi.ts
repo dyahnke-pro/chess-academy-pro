@@ -58,7 +58,7 @@ function deepseekCacheSplit(usage: unknown): { hit: number | null; miss: number 
   };
 }
 import { lookupMasterPlay } from './masterPlayLookup';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleEngineReasoning, explainBestMoveGrounded } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleEngineReasoning, explainBestMoveGrounded } from './groundedAnswer';
 import { matchRouteByTopic } from './navigationRouter';
 import { APP_ROUTES_MANIFEST } from '../data/appRoutesManifest';
 import { lookupTablebase } from './lichessTablebaseService';
@@ -1234,6 +1234,20 @@ export interface MasterGroundingOptions {
    *  same computed walk is the root of the per-move "why" button + review
    *  narration. */
   whyBestMoveQuestion?: boolean;
+  /** NAMED-CANDIDATE evaluation — "is Qf3 ok / can I play Qf3 / what about Nf3"
+   *  (David 2026-07-10: "evaluate the OTHER moves against database and
+   *  stockfish"). The student named a specific move; the answer must EVALUATE
+   *  that move (cp-loss vs best + DB frequency), not deflect to the best move.
+   *  Dispatched BEFORE `bestMoveQuestion`. `candidateMoveSan` is the SAN;
+   *  `candidateEvalCp`/`candidateMateIn` are the WHITE-perspective eval of the
+   *  position AFTER the candidate (the dispatch flips to side-to-move POV, like
+   *  the best-move branch). `masterFreqPct` is how often masters play it here,
+   *  when the explorer has it. */
+  candidateMoveQuestion?: boolean;
+  candidateMoveSan?: string;
+  candidateEvalCp?: number | null;
+  candidateMateIn?: number | null;
+  masterFreqPct?: number | null;
   /** GROUNDING INVERSION (STEP A) — the live engine snapshot, threaded from
    *  the surface (`CoachTeachPage`/play) so the chat layer can ground a
    *  best-move / eval / tactics answer in CODE and voice it through
@@ -2326,6 +2340,7 @@ export async function getCoachChatResponse(
       // falls through to the legacy path, so this can only ADD grounding.
       grounding.bestMoveQuestion === true ||
       grounding.whyBestMoveQuestion === true ||
+      grounding.candidateMoveQuestion === true ||
       grounding.masterPlayQuestion === true ||
       grounding.planQuestion === true ||
       grounding.tacticsQuestion === true ||
@@ -3282,6 +3297,60 @@ export async function getCoachChatResponse(
           }
           if (answer) {
             const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'best-move', preferRaw: true });
+            if (voiced) {
+              return answer.bestMoveFromTo
+                ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
+                : voiced;
+            }
+          }
+        }
+
+        // NAMED-CANDIDATE evaluation — "is Qf3 ok / can I play Qf3 / what about
+        // Nf3" (David 2026-07-10: "evaluate the OTHER moves against database and
+        // stockfish"). EVALUATE the named move (cp-loss vs best + DB frequency)
+        // rather than reciting the best move. Dispatched BEFORE bestMove so a
+        // named-move ask never deflects. All computed → voiceFacts (G0).
+        if (grounding.candidateMoveQuestion && grounding.candidateMoveSan && grounding.currentFen) {
+          const candFen = grounding.currentFen;
+          const blackToMove = candFen.split(' ')[1] === 'b';
+          // Side-to-move POV (like the best-move branch). engineEvalCp +
+          // candidateEvalCp are WHITE-perspective; flip for Black to move.
+          const stmBestEval =
+            typeof grounding.engineEvalCp === 'number'
+              ? (blackToMove ? -grounding.engineEvalCp : grounding.engineEvalCp)
+              : null;
+          const stmCandEval =
+            typeof grounding.candidateEvalCp === 'number'
+              ? (blackToMove ? -grounding.candidateEvalCp : grounding.candidateEvalCp)
+              : null;
+          const stmCandMate =
+            typeof grounding.candidateMateIn === 'number'
+              ? (blackToMove ? -grounding.candidateMateIn : grounding.candidateMateIn)
+              : null;
+          let candBestUci: string | null = grounding.engineBestMoveUci ?? null;
+          if (!candBestUci && masterPlayContext && masterPlayContext.current.moves.length > 0) {
+            candBestUci = masterPlayContext.current.moves[0].uci ?? null;
+          }
+          // DB frequency for the named move, when the explorer covers it — an
+          // independent "is this a real move" ground alongside the engine eval.
+          let masterFreqPct: number | null = null;
+          if (masterPlayContext && masterPlayContext.current.totalGames > 0) {
+            const hit = masterPlayContext.current.moves.find((m) => m.san === grounding.candidateMoveSan);
+            if (hit && typeof hit.games === 'number') {
+              masterFreqPct = (hit.games / masterPlayContext.current.totalGames) * 100;
+            }
+          }
+          const answer = assembleCandidateMoveAnswer({
+            fen: candFen,
+            candidateSan: grounding.candidateMoveSan,
+            bestMoveUci: candBestUci,
+            bestEvalCp: stmBestEval,
+            candidateEvalCp: stmCandEval,
+            candidateMateIn: stmCandMate,
+            masterFreqPct,
+          });
+          if (answer) {
+            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'candidate-move', preferRaw: true });
             if (voiced) {
               return answer.bestMoveFromTo
                 ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`

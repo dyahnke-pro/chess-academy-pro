@@ -283,6 +283,147 @@ export function assembleMoveEvalAnswer(opts: {
 }
 
 /**
+ * assembleCandidateMoveAnswer — the GROUNDED answer to "is <move> ok / can I
+ * play <move> / what about <move>" (David 2026-07-10: "Coach needs to evaluate
+ * the OTHER moves against database and stockfish" — not deflect to "the best
+ * move is X"). Everything is computed (chess.js legality + Stockfish eval + DB
+ * frequency); the LLM only phrases it via voiceFacts. Returns null only when
+ * the candidate SAN is unparseable AND we have nothing honest to say.
+ *
+ * Sign convention: `bestEvalCp` and `candidateEvalCp` are BOTH from the MOVER's
+ * point of view (positive = good for the side to move). The runtime negates the
+ * post-candidate opponent-POV eval before passing it in, so `cpLoss =
+ * bestEvalCp - candidateEvalCp` is a non-negative "how much worse than best".
+ */
+export function assembleCandidateMoveAnswer(opts: {
+  fen: string;
+  /** The move the student named, in SAN (e.g. "Qf3"). */
+  candidateSan: string;
+  /** Engine best move in UCI — from Stockfish PV[0]. */
+  bestMoveUci: string | null;
+  /** Mover-POV eval of the position (value of best play). */
+  bestEvalCp?: number | null;
+  /** Mover-POV value of the candidate (post-move eval, already negated to
+   *  mover POV by the runtime). */
+  candidateEvalCp?: number | null;
+  /** Mover-POV mate distance after the candidate (negative = candidate gets
+   *  mated). */
+  candidateMateIn?: number | null;
+  /** % of master games that play the candidate here, when the explorer has it. */
+  masterFreqPct?: number | null;
+}): GroundedAnswer | null {
+  const { fen, candidateSan } = opts;
+  const raw = (candidateSan ?? '').trim();
+  if (!raw) return null;
+
+  let chess: Chess;
+  try {
+    chess = new Chess(fen);
+  } catch {
+    return null;
+  }
+  const mover: 'white' | 'black' = chess.turn() === 'w' ? 'white' : 'black';
+
+  // Legality is chess.js truth. An illegal proposal gets an honest answer, not
+  // a fabricated evaluation (empty > invented).
+  let candNorm: string | null = null;
+  try {
+    const probe = new Chess(fen);
+    const mv = probe.move(raw);
+    candNorm = mv ? mv.san : null;
+  } catch {
+    candNorm = null;
+  }
+  if (!candNorm) {
+    return {
+      facts: `${raw} isn't a legal move in this position.`,
+      bestMoveSan: null,
+      bestMoveFromTo: null,
+      sources: ['board:chess.js'],
+    };
+  }
+
+  // Best move SAN + from/to from the UCI (chess.js is the truth).
+  let bestSan: string | null = null;
+  let bestFromTo: { from: string; to: string } | null = null;
+  if (opts.bestMoveUci && opts.bestMoveUci.length >= 4) {
+    try {
+      const probe = new Chess(fen);
+      const from = opts.bestMoveUci.slice(0, 2);
+      const to = opts.bestMoveUci.slice(2, 4);
+      const promotion = opts.bestMoveUci.length > 4 ? opts.bestMoveUci[4] : undefined;
+      const mv = probe.move({ from, to, promotion });
+      if (mv) {
+        bestSan = mv.san;
+        bestFromTo = { from, to };
+      }
+    } catch {
+      bestSan = null;
+    }
+  }
+
+  const sources = ['engine:stockfish', 'board:chess.js'];
+  const geo = describeMoveGeometry(fen, candNorm, mover); // what the candidate DOES
+  const freqText =
+    typeof opts.masterFreqPct === 'number' && opts.masterFreqPct >= 1
+      ? `Masters play it about ${Math.round(opts.masterFreqPct)}% of the time here.`
+      : null;
+
+  // Candidate IS the engine's best move → affirm it (with the grounded why).
+  if (bestSan && candNorm === bestSan) {
+    const why = explainBestMoveGrounded(fen, null, opts.bestMoveUci, mover);
+    const parts = [`Yes — ${candNorm} is the best move here.`];
+    if (why) parts.push(why);
+    if (freqText) parts.push(freqText);
+    return { facts: parts.join(' '), bestMoveSan: bestSan, bestMoveFromTo: bestFromTo, sources };
+  }
+
+  // Candidate mated / gets mated after it.
+  if (typeof opts.candidateMateIn === 'number' && opts.candidateMateIn < 0) {
+    const parts = [`${candNorm} loses — it walks into mate in ${Math.abs(opts.candidateMateIn)}.`];
+    if (bestSan) parts.push(`Play ${bestSan} instead.`);
+    return { facts: parts.join(' '), bestMoveSan: bestSan, bestMoveFromTo: bestFromTo, sources };
+  }
+
+  // Compute the cp-loss vs best (both mover-POV). Absent evals → a bounded,
+  // honest verdict that still names the best alternative rather than guessing.
+  const haveEvals =
+    typeof opts.bestEvalCp === 'number' && typeof opts.candidateEvalCp === 'number';
+  const cpLoss = haveEvals ? Math.max(0, (opts.bestEvalCp as number) - (opts.candidateEvalCp as number)) : null;
+  const pawns = cpLoss !== null ? (cpLoss / 100).toFixed(1) : null;
+
+  let verdict: string;
+  if (cpLoss === null) {
+    verdict = bestSan
+      ? `${candNorm} is playable, but ${bestSan} is the engine's top choice here.`
+      : `${candNorm} is a legal move here.`;
+  } else if (cpLoss <= 30) {
+    verdict = `${candNorm} is perfectly fine — essentially equal to the best move${bestSan ? ` ${bestSan}` : ''}.`;
+  } else if (cpLoss <= 90) {
+    verdict = `${candNorm} is playable, just slightly worse than ${bestSan ?? 'the best move'} — about ${pawns} of a pawn.`;
+  } else if (cpLoss <= 200) {
+    verdict = `${candNorm} is an inaccuracy — it gives up about ${pawns} of a pawn versus ${bestSan ?? 'the best move'}.`;
+  } else {
+    verdict = `${candNorm} is a mistake — it loses about ${pawns} pawns; ${bestSan ?? 'the engine move'} is much better.`;
+  }
+
+  const parts = [verdict];
+  // Name WHAT the candidate does when the geometry is concrete (not a bare
+  // "attacks"), so the student hears the reason, not just the grade.
+  if (geo && !geo.startsWith('attacks')) parts.push(`It ${geo}.`);
+  const evalText = evalPhrase(opts.candidateEvalCp, opts.candidateMateIn, mover);
+  if (evalText) parts.push(`After it, ${evalText}.`);
+  if (freqText) parts.push(freqText);
+
+  return {
+    facts: parts.join(' '),
+    bestMoveSan: bestSan,
+    bestMoveFromTo: bestFromTo,
+    sources,
+  };
+}
+
+/**
  * explainBestMoveGrounded — the GROUNDED, LLM-FREE "why" (moved here from
  * coachFeatureService 2026-06-10 to break the import cycle: pure board-fact
  * computers belong in the leaf, not in a service tangled with coachApi). It

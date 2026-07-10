@@ -101,3 +101,43 @@ export async function buildEnginePlan(
     studentSide,
   };
 }
+
+/**
+ * buildCandidateEval — Stockfish eval of the position AFTER a NAMED candidate
+ * move (David 2026-07-10: "evaluate the OTHER moves against database and
+ * stockfish"). Applies `candidateSan` to `fen` (chess.js is the legality
+ * truth), then evals the resulting position — CACHE-FIRST (the eval bar +
+ * child-position prefetch usually already hold it), else a fresh depth-18
+ * search. Returns WHITE-PERSPECTIVE `{ evalCp, mateIn }` (same convention as
+ * the eval-bar snapshot; the dispatch flips to side-to-move POV), or null when
+ * the move is illegal / the engine is unavailable. Never throws.
+ */
+export async function buildCandidateEval(
+  fen: string,
+  candidateSan: string,
+): Promise<{ evalCp: number | null; mateIn: number | null } | null> {
+  let after: Chess;
+  try {
+    after = new Chess(fen);
+    const mv = after.move(candidateSan);
+    if (!mv) return null; // illegal — caller answers "not legal" from the SAN
+  } catch {
+    return null;
+  }
+  const afterFen = after.fen();
+  const hasEval = (a: StockfishAnalysis | undefined): boolean =>
+    !!a && (typeof a.evaluation === 'number' || !!a.isMate);
+  let analysis: StockfishAnalysis | undefined = getCachedStockfish(afterFen);
+  if (!hasEval(analysis)) {
+    try {
+      analysis = await stockfishEngine.analyzePosition(afterFen, PLAN_DEPTH);
+    } catch {
+      analysis = undefined;
+    }
+  }
+  if (!analysis) return null;
+  return {
+    evalCp: analysis.isMate ? null : Math.round(analysis.evaluation),
+    mateIn: analysis.isMate ? analysis.mateIn : null,
+  };
+}

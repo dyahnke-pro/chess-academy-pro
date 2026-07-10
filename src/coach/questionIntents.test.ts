@@ -31,6 +31,8 @@ import {
   isRecordVsQuestion,
   isRecordsQuestion,
   isMoveRatingQuestion,
+  isCandidateMoveQuestion,
+  extractCandidateSan,
   trainingRequestKind,
   isTrainingRequest,
   isImprovementTrendQuestion,
@@ -932,5 +934,44 @@ describe('isAppHelpQuestion (F15: what does the X tab/tool DO)', () => {
   it('is empty-safe', () => {
     expect(isAppHelpQuestion(undefined)).toBe(false);
     expect(isAppHelpQuestion('')).toBe(false);
+  });
+});
+
+describe('isCandidateMoveQuestion / extractCandidateSan (Bug 2, David 2026-07-10)', () => {
+  it.each([
+    'is Qf3 ok to play?',
+    'is Qf3 ok',
+    'can I play Nf3 here?',
+    'what about Bc4',
+    'is exd5 a good move',
+    'would Qh5 be ok',
+    'should I play O-O',
+    'does Ng5 work',
+    'is a3 playable',
+  ])('matches a NAMED-move soundness ask: %s', (q) => {
+    expect(isCandidateMoveQuestion(q)).toBe(true);
+  });
+
+  it.each([
+    'what is the best move',          // best-move, no named candidate
+    'why is Nf3 the best move',       // engine-reasoning (why) wins
+    'is this ok',                      // no SAN named
+    'how does GothamChess play this',  // player-games, not a candidate
+    'what should I do here',
+  ])('does NOT match: %s', (q) => {
+    expect(isCandidateMoveQuestion(q)).toBe(false);
+  });
+
+  it('extracts the named SAN (piece, pawn, capture, castle)', () => {
+    expect(extractCandidateSan('is Qf3 ok')).toBe('Qf3');
+    expect(extractCandidateSan('can I play exd5')).toBe('exd5');
+    expect(extractCandidateSan('what about e4')).toBe('e4');
+    expect(extractCandidateSan('should I play O-O')).toBe('O-O');
+    expect(extractCandidateSan('is Rxe7+ any good')).toBe('Rxe7+');
+  });
+
+  it('does not grab a plain word as a move', () => {
+    expect(extractCandidateSan('is the Najdorf ok')).toBeNull();
+    expect(extractCandidateSan('what about the endgame')).toBeNull();
   });
 });

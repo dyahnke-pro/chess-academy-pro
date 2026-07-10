@@ -243,6 +243,45 @@ export function isWhyBestMoveQuestion(ask: string | undefined): boolean {
   return WHY_BEST_MOVE_RE.test(ask);
 }
 
+/** SAN-shaped token — the move the student NAMED ("is Qf3 ok", "what about
+ *  Nf3", "can I play exd5"). Piece moves (Qf3, Nbd7, Rxe7+), pawn moves (e4,
+ *  exd5, a8=Q), castling (O-O / 0-0-0). Piece letters are UPPERCASE-only so it
+ *  never grabs a plain word ("Najdorf", "game"); chess.js is the final legality
+ *  judge downstream, so this only needs to be SAN-SHAPED. */
+const SAN_TOKEN_RE = /\b(O-O-O|O-O|0-0-0|0-0|(?:[KQRBN][a-h1-8]?x?[a-h][1-8]|[a-h]x?[a-h]?[1-8])(?:=[QRBN])?[+#]?)(?![A-Za-z0-9])/;
+
+/** Pull the candidate SAN the student named (castling normalized to O-O form),
+ *  or null when the ask names no move-shaped token. */
+export function extractCandidateSan(ask: string | undefined): string | null {
+  if (!ask) return null;
+  const m = ask.match(SAN_TOKEN_RE);
+  if (!m) return null;
+  return m[1].replace(/^0-0-0$/, 'O-O-O').replace(/^0-0$/, 'O-O');
+}
+
+/** "Is <move> ok / can I play <move> / what about <move> / would <move> work" —
+ *  the student NAMES a candidate and asks whether it's playable. The answer must
+ *  EVALUATE that move (Stockfish cp-loss vs best + DB frequency), NOT recite the
+ *  engine's best (David 2026-07-10: "evaluate the OTHER moves against database
+ *  and stockfish"). Distinct from isBestMoveQuestion (wants the best) and
+ *  isWhyBestMoveQuestion (wants the engine's reasoning). Requires BOTH a
+ *  candidate-question phrasing AND a SAN-shaped token, so it never grabs a bare
+ *  "is this ok". */
+const CANDIDATE_MOVE_RE = anyOf([
+  String.raw`\bis\s+[A-Za-z0-9+#=-]{2,6}\s+(?:ok(?:ay)?|fine|alright|all\s+right|playable|sound|safe|reasonable|decent|good|bad|wrong|any\s+good|a\s+(?:good|bad|sound|reasonable|decent|blunder|mistake|misstep))\b`,
+  String.raw`\b(?:can|could|should|may)\s+i\s+(?:play|go\s+for|try|go\s+with|pick|choose)\b`,
+  String.raw`\b(?:what|how)\s+about\b`,
+  String.raw`\bis\s+it\s+(?:ok(?:ay)?|fine|safe|good|playable|alright)\s+to\s+play\b`,
+  String.raw`\bwould\s+[A-Za-z0-9+#=-]{2,6}\s+(?:be\s+)?(?:ok(?:ay)?|fine|work|playable|good|sound|safe)\b`,
+  String.raw`\bdoes\s+[A-Za-z0-9+#=-]{2,6}\s+(?:work|hold|lose|win|blunder)\b`,
+]);
+export function isCandidateMoveQuestion(ask: string | undefined): boolean {
+  if (!ask) return false;
+  if (isWhyBestMoveQuestion(ask)) return false; // "why is X best" is engine-reasoning
+  if (!extractCandidateSan(ask)) return false;  // must NAME a move
+  return CANDIDATE_MOVE_RE.test(ask);
+}
+
 /** A TACTICS / DANGER question — "is anything hanging?", "what's the threat?",
  *  "is there a fork / pin / mate here?", "am I in danger?", "is my queen safe?".
  *  The answer is `liveTacticsContext`'s ALREADY-computed descriptions (forks,
@@ -1708,7 +1747,12 @@ export function buildQuestionGrounding(
     openingId: liveState.openingId,
     surface: coachSurfaceToRoute(surface),
     planQuestion: isPlanQuestion(a),
-    bestMoveQuestion: isBestMoveQuestion(a),
+    // A NAMED-candidate ask ("is Qf3 ok") must EVALUATE that move, not deflect
+    // to the best move — so it takes precedence over best-move / move-rating
+    // (David 2026-07-10). whyBestMove still wins for "why is X best".
+    candidateMoveQuestion: isCandidateMoveQuestion(a),
+    candidateMoveSan: extractCandidateSan(a) ?? undefined,
+    bestMoveQuestion: isBestMoveQuestion(a) && !isCandidateMoveQuestion(a),
     whyBestMoveQuestion: isWhyBestMoveQuestion(a),
     tacticsQuestion: isTacticsQuestion(a),
     progressQuestion: isProgressQuestion(a),
@@ -1735,7 +1779,7 @@ export function buildQuestionGrounding(
     // A "why is that the BEST move" ask reads as move-rating too, but it wants
     // the engine-reasoning WALK, not a played-move grade — the why-form wins
     // (David 2026-07-10, live audit: move-rating was hijacking the why turn).
-    moveRatingQuestion: isMoveRatingQuestion(a) && !isWhyBestMoveQuestion(a),
+    moveRatingQuestion: isMoveRatingQuestion(a) && !isWhyBestMoveQuestion(a) && !isCandidateMoveQuestion(a),
     trainingRequestKind: trainingRequestKind(a) ?? undefined,
     puzzleStatsQuestion: isPuzzleStatsQuestion(a),
     transferGapQuestion: isTransferGapQuestion(a),

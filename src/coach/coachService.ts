@@ -28,7 +28,7 @@
  */
 import { Chess } from 'chess.js';
 import { logAppAudit } from '../services/appAuditor';
-import { buildEnginePlan } from '../services/enginePlanContext';
+import { buildEnginePlan, buildCandidateEval } from '../services/enginePlanContext';
 import { scanPositionForTrap } from '../services/positionTrapScan';
 import { applyCandidateArrows } from '../services/coachAnswerGates';
 import { assembleEnvelope } from './envelope';
@@ -187,7 +187,7 @@ import {
   isRepertoireGapQuestion, repertoireGapKind,
   isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion,
   isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, trainingRequestKind, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
-  isWhyBestMoveQuestion,
+  isWhyBestMoveQuestion, isCandidateMoveQuestion, extractCandidateSan,
 } from './questionIntents';
 export {
   isPlanQuestion, isBestMoveQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
@@ -199,7 +199,7 @@ export {
   isRepertoireGapQuestion, repertoireGapKind,
   isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion,
   isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, trainingRequestKind, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
-  isWhyBestMoveQuestion,
+  isWhyBestMoveQuestion, isCandidateMoveQuestion, extractCandidateSan,
 };
 export type { TrainingKind } from './questionIntents';
 
@@ -983,9 +983,25 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
       const sideToMove: 'white' | 'black' = (input.liveState.fen.split(' ')[1] ?? 'w') === 'b' ? 'black' : 'white';
       resolvedEnginePlan = (await buildEnginePlan(input.liveState.fen, input.liveState.studentColor ?? sideToMove)) ?? undefined;
     }
+    // NAMED-CANDIDATE eval — "is Qf3 ok" must be answered by EVALUATING Qf3
+    // (David 2026-07-10). Compute the WHITE-perspective eval of the position
+    // AFTER the named move so the dispatch can grade its cp-loss vs the best
+    // move. Best-effort + null-safe; illegal / no-engine → the assembler still
+    // answers honestly from the SAN alone.
+    const candidateMoveEngage = isCandidateMoveQuestion(input.ask);
+    const candidateMoveSan = candidateMoveEngage ? (extractCandidateSan(input.ask) ?? undefined) : undefined;
+    let candidateEvalCp: number | null = null;
+    let candidateMateIn: number | null = null;
+    if (candidateMoveSan && input.liveState.fen) {
+      const cand = await buildCandidateEval(input.liveState.fen, candidateMoveSan);
+      if (cand) {
+        candidateEvalCp = cand.evalCp;
+        candidateMateIn = cand.mateIn;
+      }
+    }
     const autoGrounding =
       options.grounding ??
-      (input.liveState.fen || progressQuestion || trendQuestionEngage || conceptQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage || whyBestMoveEngage
+      (input.liveState.fen || progressQuestion || trendQuestionEngage || conceptQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage || whyBestMoveEngage || candidateMoveEngage
         ? {
             currentFen: input.liveState.fen,
             // DB-grounding: thread the move history through so the
@@ -1020,8 +1036,15 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // stat/count/player/comparative guards still apply. (David
             // 2026-06-09 "No bueno": the coach refused a plain "best move
             // here?" because the explanation's forward SANs tripped the gate.)
-            bestMoveQuestion: isBestMoveQuestion(input.ask),
+            // A NAMED-candidate ask ("is Qf3 ok") EVALUATES that move — it must
+            // take precedence over the best-move branch (which would just recite
+            // the best move). Guard best-move off when a candidate fired.
+            bestMoveQuestion: isBestMoveQuestion(input.ask) && !candidateMoveEngage,
             whyBestMoveQuestion: whyBestMoveEngage,
+            candidateMoveQuestion: candidateMoveEngage,
+            candidateMoveSan,
+            candidateEvalCp,
+            candidateMateIn,
             // GROUNDING INVERSION (STEP A) — thread the live engine snapshot +
             // tactics so the chat layer can COMPUTE a best-move / eval / tactics
             // answer and voice it through `voiceFacts`, instead of handing the
