@@ -84,7 +84,6 @@ import { ChatInput } from './ChatInput';
 import { DifficultyToggle } from './DifficultyToggle';
 import type { CoachDifficulty, MiddlegamePlan } from '../../types';
 import { PlayerInfoBar } from './PlayerInfoBar';
-import { PositionNarrationBanner } from './PositionNarrationBanner';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
 import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
 import { coachService, isProgressQuestion, isImprovementTrendQuestion, isConceptQuestion, isOpeningProfileQuestion, isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion, isOpeningTrapsQuestion, isReviewDueQuestion, isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion, isRepertoireGapQuestion, isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion, isColorQuestion, isRecordsQuestion, isRecordVsQuestion, isMoveRatingQuestion, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion } from '../../coach/coachService';
@@ -3711,6 +3710,26 @@ export function CoachTeachPage(): JSX.Element {
     openingName: walkthrough.tree?.openingName ?? null,
   });
 
+  // Stream the "Read this position" narration into the CHAT as it arrives — the
+  // banner is gone (David 2026-07-10: "read position and phase narration needs
+  // to go in the chat section. No more special place for them."). One growing
+  // assistant bubble per read; voice still plays live.
+  const readStreamIdRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (positionNarration.isNarrating && positionNarration.currentText) {
+      if (!readStreamIdRef.current) {
+        const id = `read-${Date.now()}`;
+        readStreamIdRef.current = id;
+        setMessages((prev) => [...prev, { id, role: 'assistant', content: positionNarration.currentText, timestamp: Date.now() }]);
+      } else {
+        const id = readStreamIdRef.current;
+        setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, content: positionNarration.currentText } : m)));
+      }
+    } else if (!positionNarration.isNarrating && readStreamIdRef.current) {
+      readStreamIdRef.current = null; // read ended — the last content stays in chat
+    }
+  }, [positionNarration.isNarrating, positionNarration.currentText]);
+
   const handleStudentMove = useCallback((move: MoveResult): void => {
     // A board move DISMISSES the "Read this position" banner (clears its
     // text) — same as Play. The student answered the position by playing.
@@ -4304,15 +4323,9 @@ export function CoachTeachPage(): JSX.Element {
           />
         </div>
 
-        {/* "Read this position" subtitle — same banner Play uses. Persists
-            until the student taps X or makes a board move (onDismiss → the
-            dismissible mode). Only meaningful in free play; the walkthrough
-            has its own narration overlay. */}
-        <PositionNarrationBanner
-          text={positionNarration.currentText}
-          active={positionNarration.isNarrating}
-          onDismiss={() => positionNarration.cancel()}
-        />
+        {/* The "Read this position" banner is GONE (David 2026-07-10: "no more
+            special place for them"). The read now STREAMS into the chat panel
+            (see the streaming effect above). Voice still plays live. */}
 
         {/* Board — same `<ControlledChessBoard>` Play uses, so click-
             to-move, legal-move dots, drag-and-drop, last-move highlight

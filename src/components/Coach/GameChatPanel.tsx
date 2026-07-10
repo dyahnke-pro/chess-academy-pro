@@ -139,6 +139,13 @@ interface GameChatPanelProps {
 
 export interface GameChatPanelHandle {
   injectAssistantMessage: (text: string) => void;
+  /** Begin a STREAMING assistant message in the chat and return an updater.
+   *  Used by "Read this position" narration so the read streams into the chat
+   *  live (replacing the old transient banner — David 2026-07-10: "read
+   *  position and phase narration needs to go in the chat section. No more
+   *  special place for them."). `update` replaces the growing message content;
+   *  drop the handle when the read ends (the last content stays in the chat). */
+  streamAssistantMessage: () => { update: (text: string) => void };
   /** Send a user message through the grounded coach pipeline, as if typed —
    *  triggers a real (grounded) coach response. Used by the "Why?" button so
    *  every Why explanation routes through the same grounded coach. */
@@ -297,6 +304,17 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         // "Hanging: White pawn on h7"). Text surface retained: the
         // message still renders in the chat panel — only TTS is muted.
         void text;
+      },
+      streamAssistantMessage() {
+        // One growing assistant bubble the caller updates as tokens arrive —
+        // the chat home for "Read this position" narration (no more banner).
+        const id = `coach-read-${Date.now()}`;
+        setMessages((prev) => [...prev, { id, role: 'assistant', content: '', timestamp: Date.now() }]);
+        return {
+          update: (text: string) => {
+            setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, content: text } : m)));
+          },
+        };
       },
     }), [setMessages]);
 

@@ -23,7 +23,6 @@ import type { GameChatPanelHandle } from './GameChatPanel';
 import { PlayerInfoBar } from './PlayerInfoBar';
 import { MoveListPanel } from './MoveListPanel';
 import { ResignButton } from './ResignButton';
-import { PositionNarrationBanner } from './PositionNarrationBanner';
 import { usePositionNarration } from '../../hooks/usePositionNarration';
 import { usePhaseNarration } from '../../hooks/usePhaseNarration';
 import { useNarration } from '../../hooks/useNarration';
@@ -1668,14 +1667,31 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     moveNumber: moveCountRef.current,
     playerColor,
     openingName: detectedOpening?.name ?? null,
-    // Mirror the finished read into the chat below the board (David 2026-07-06)
-    // — same as phase-transition narration. The banner stays as live subtitle.
-    onReport: (text) => gameChatRef.current?.injectAssistantMessage(text),
+    // The read now STREAMS into the chat below the board (see the effect below),
+    // so no separate final-report inject — that would duplicate the streamed
+    // bubble. David 2026-07-10: "no more special place for them."
   });
 
   const handleReadPosition = useCallback(() => {
     void positionNarration.narrate();
   }, [positionNarration]);
+
+  // Stream the "Read this position" narration into the CHAT as it arrives —
+  // the banner is gone (David 2026-07-10: "read position and phase narration
+  // needs to go in the chat section. No more special place for them."). One
+  // growing assistant bubble per read; the last streamed text stays in the
+  // transcript so the student can scroll back and reread. Voice still plays live.
+  const readStreamRef = useRef<{ update: (t: string) => void } | null>(null);
+  useEffect(() => {
+    if (positionNarration.isNarrating && positionNarration.currentText) {
+      if (!readStreamRef.current) {
+        readStreamRef.current = gameChatRef.current?.streamAssistantMessage() ?? null;
+      }
+      readStreamRef.current?.update(positionNarration.currentText);
+    } else if (!positionNarration.isNarrating && readStreamRef.current) {
+      readStreamRef.current = null; // read ended — leave the last content in chat
+    }
+  }, [positionNarration.isNarrating, positionNarration.currentText]);
 
   // Phase-transition narration — fires at most twice per game
   // (opening→middlegame, middlegame→endgame) per WO-PHASE-NARRATION-01.
@@ -4760,22 +4776,11 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
           )}
         </AnimatePresence>
 
-        {/* Narration subtitle — "Read this position" (user-triggered) ONLY.
-            Phase-transition reports no longer render here; they persist as
-            chat messages under the board via onReport → injectAssistantMessage
-            (David 2026-07-01), instead of this transient banner that pops up
-            then disappears. Voice for phase narration still plays live. */}
-        <PositionNarrationBanner
-          text={positionNarration.currentText}
-          active={positionNarration.isNarrating}
-          // "Read this position" (user-tapped) PERSISTS until dismissed via the
-          // X or a board move (David 2026-06-15).
-          onDismiss={
-            positionNarration.isNarrating || positionNarration.currentText
-              ? () => positionNarration.cancel()
-              : undefined
-          }
-        />
+        {/* The "Read this position" banner is GONE (David 2026-07-10: "no more
+            special place for them"). The read + phase-transition narration now
+            live entirely in the chat section below the board — the read STREAMS
+            into a chat bubble (see the streaming effect above), phase reports
+            inject as chat messages. Voice still plays live for both. */}
 
         {/* Board — flex-shrink-0 so it never shrinks regardless of content above/below */}
         <div className="px-2 py-1 flex justify-center flex-shrink-0">
