@@ -100,15 +100,23 @@ describe('QUESTION MATRIX — PASS 4: filler robustness + hard structure', () =>
     });
   }
 
-  // The distinct harder-structure phrasings pass 4 surfaced.
-  interface Probe { id: string; cat: string; q: string }
+  // The distinct harder-structure phrasings passes 4-8 surfaced. `notKey` (when
+  // present) is an intent flag that must NOT fire — a misroute guard (e.g. a
+  // training-plan ask must not fire the board planQuestion).
+  interface Probe { id: string; cat: string; q: string; notKey?: keyof MasterGroundingOptions }
   for (const p of STRUCTURAL_PROBES as Probe[]) {
-    it(`STRUCT [${p.id}] "${p.q}" routes`, async () => {
+    it(`STRUCT [${p.id}] "${p.q}" routes${p.notKey ? ` (not ${p.notKey})` : ''}`, async () => {
       if (p.cat === 'action') {
         const routed = await routeChatIntent(p.q, { currentFen: FEN }).catch(() => null);
         expect(routed, `STRUCT-GAP (${p.id}): "${p.q}" matched NO action`).not.toBeNull();
       } else {
-        expect(firedIntent(buildQuestionGrounding(p.q, { fen: FEN })), `STRUCT-GAP (${p.id}): "${p.q}" fired NO intent`).toBe(true);
+        const g = buildQuestionGrounding(p.q, { fen: FEN });
+        expect(firedIntent(g), `STRUCT-GAP (${p.id}): "${p.q}" fired NO intent`).toBe(true);
+        if (p.notKey) {
+          const v = g[p.notKey];
+          const fired = typeof v === 'boolean' ? v : v !== undefined && v !== null;
+          expect(fired, `MISROUTE (${p.id}): "${p.q}" wrongly fired ${p.notKey}`).toBe(false);
+        }
       }
     });
   }

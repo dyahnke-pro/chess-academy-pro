@@ -122,7 +122,12 @@ const PLAN_QUESTION_RE = anyOf([
   String.raw`\bwhat\s+am\s+i\s+(?:aiming|going|gunning|pushing|playing)\s+for\b`,
 ]);
 export function isPlanQuestion(ask: string | undefined): boolean {
-  return !!ask && PLAN_QUESTION_RE.test(ask);
+  if (!ask) return false;
+  // A "training / study / practice plan" is a study-recommendation, NOT a board
+  // plan — the bare "plan" trigger would misroute it to the live position plan
+  // (matrix pass 8, 2026-07-10). Defer to the progress/training verticals.
+  if (/\b(?:training|study|practi[cs]e|improvement|learning|lesson)\s+plan\b|\bplan\s+(?:my|out\s+my)\s+(?:training|study|studying|practi[cs]e|improvement|learning)\b/i.test(ask)) return false;
+  return PLAN_QUESTION_RE.test(ask);
 }
 
 /** A BEST-MOVE / SOUNDNESS question — "what's the best move here?", "is
@@ -159,6 +164,8 @@ const BEST_MOVE_QUESTION_RE = anyOf([
   String.raw`\bwhat\s+now\b`,
   // move-consequence hypothetical — "what happens if I play e5", "if I take"
   String.raw`\bwhat\s+happens\s+if\s+i\s+(?:play|go|take|push|capture|castle|move)\b`,
+  // "which piece should I develop / move" — a development move decision.
+  String.raw`\bwhich\s+piece\s+should\s+i\s+(?:develop|move|play|bring\s+out)\b`,
   String.raw`\bwhat\s+move\s+should\s+i\s+(?:make|play|pick|choose|go\s+(?:for|with))\b`,
   String.raw`\bwhat\s+would\s+(?:the\s+)?(?:engine|computer|stockfish|a\s+gm|a\s+master)\s+(?:play|do|pick|choose|go\s+for|recommend)\b`,
   String.raw`\b(?:give|show)\s+me\s+(?:the\s+)?(?:strongest|best|top)\s+(?:continuation|move|line|option)\b`,
@@ -182,6 +189,8 @@ const TACTICS_QUESTION_RE = anyOf([
   String.raw`\b(?:any\s+)?threats?\b`,
   String.raw`\bthreaten(?:ing|ed|s)?\b`,
   String.raw`\b(?:get(?:ting)?\s+|be\s+|about\s+to\s+(?:get\s+)?)?mated\b`,
+  String.raw`\bworried\s+about\s+my\s+king\b`,
+  String.raw`\bis\s+my\s+king\s+(?:in\s+danger|under\s+attack|exposed|weak|vulnerable)\b`,
   String.raw`\b(?:a\s+)?forks?\b`,
   String.raw`\bpinn?(?:ed|ing)?\b`,
   String.raw`\bskewers?\b`,
@@ -217,6 +226,10 @@ export function isTacticsQuestion(ask: string | undefined): boolean {
   // `isTacticsProfileQuestion` is a hoisted declaration, so this precedence
   // guard is safe despite the definition order.
   if (isTacticsProfileQuestion(ask)) return false;
+  // "teach me forks / drill me on back-rank mates / quiz me on pins" is a
+  // LEARNING request (concept or training), NOT a live-board scan — the tactic
+  // NOUN would otherwise misroute it to "is there a fork HERE" (matrix pass 8).
+  if (/\b(?:teach|drill|quiz|test|show)\s+me\b/i.test(ask)) return false;
   return TACTICS_QUESTION_RE.test(ask);
 }
 
@@ -250,6 +263,14 @@ const POSITION_ASSESSMENT_RE = anyOf([
   String.raw`\bis\s+(?:it|this)\s+(?:lost|won|winning|losing|equal|level|holdable)\b`,
   String.raw`\bhow\s+much\s+(?:better|worse|ahead|behind)\b`,
   String.raw`\bwhat(?:'?s| is)?\s+the\s+(?:engine\s+)?(?:eval|number|advantage)\b`,
+  // resign / play-on decision = an assessment of how lost I am (pass 8).
+  String.raw`\bshould\s+i\s+resign\b`,
+  String.raw`\bis\s+it\s+worth\s+(?:playing\s+on|continuing|fighting\s+on|carrying\s+on)\b`,
+  String.raw`\bis\s+(?:this|it|the\s+position)\s+(?:resignable|hopeless|salvageable)\b`,
+  // piece-quality / pawn-structure positional judgment.
+  String.raw`\bis\s+my\s+(?:bishop|knight|rook|queen|king|pawn|pieces?|structure|position)\s+(?:bad|good|active|passive|strong|weak|misplaced|awkward|fine|ok(?:ay)?)\b`,
+  String.raw`\b(?:do\s+i\s+have\s+(?:any\s+)?)?weak\s+(?:pawns?|squares?)\b`,
+  String.raw`\b(?:how(?:'?s| is)\s+)?my\s+pawn\s+structure\b`,
 ]);
 export function isPositionAssessmentQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
@@ -363,6 +384,10 @@ const CONCEPT_QUESTION_RE = anyOf([
   String.raw`\bexplain\b`,
   String.raw`\bdefine\b`,
   String.raw`\b(?:tell|teach)\s+me\s+about\b`,
+  // "teach me forks" (no "about") — a named tactic/strategy CONCEPT, so it
+  // routes to the book-grounded definition, not the live-board scan (pass 8).
+  String.raw`\bteach\s+me\s+(?:a\s+|an\s+|the\s+)?(?:fork|pin|skewer|zwischenzug|outpost|zugzwang|back[\s-]?rank|discovered|deflection|decoy|overload|interference|windmill|battery|fianchetto|prophylaxis|tempo|opposition|triangulation|en\s*passant|combination|sacrifice)\w*\b`,
+  String.raw`\bhow\s+do\s+\w+s\s+work\b`,   // "how do pins work"
   String.raw`\bdescribe\b`,
   String.raw`\bwhat\s+does\s+\w+\s+mean\b`,
   String.raw`\bhow\s+does\s+(?:a|an|the)\b`,
@@ -400,7 +425,7 @@ export function isConceptQuestion(ask: string | undefined): boolean {
 //    ("what should I learn?", "what to study next?") where such an object is
 //    ungrammatical — kept OUT of the bare-desire frame so "I want to learn the
 //    Caro-Kann" stays a teach request (opening resolution runs first anyway).
-const IMPROVE_VERBS = String.raw`(?:work\s+(?:on|at|through)|improve(?:\s+on)?|practi[sc]e|focus\s+on|get\s+(?:better|good|sharper)(?:\s+at)?|fix|address|sharpen|hone|strengthen|grind|polish|refine|prioriti[sz]e|brush\s+up(?:\s+on)?|shore\s+up|bone\s+up(?:\s+on)?|read\s+up(?:\s+on)?|level\s+up|tighten\s+up|iron\s+out|build\s+up|dial\s+in|plug|patch\s+up|clean\s+up|firm\s+up|beef\s+up)`;
+const IMPROVE_VERBS = String.raw`(?:work\s+(?:on|at|through)|improve(?:\s+on)?|practi[sc]e|drill|focus\s+on|get\s+(?:better|good|sharper)(?:\s+at)?|fix|address|sharpen|hone|strengthen|grind|polish|refine|prioriti[sz]e|brush\s+up(?:\s+on)?|shore\s+up|bone\s+up(?:\s+on)?|read\s+up(?:\s+on)?|level\s+up|tighten\s+up|iron\s+out|build\s+up|dial\s+in|plug|patch\s+up|clean\s+up|firm\s+up|beef\s+up)`;
 const REC_VERBS = String.raw`(?:train|learn|study|master|develop|review|prep(?:are)?)`;
 const ANY_TRAIN_VERB = String.raw`(?:` + IMPROVE_VERBS + String.raw`|` + REC_VERBS + String.raw`)`;
 const WEAKNESS_NOUNS = String.raw`(?:weakness(?:es)?|weak\s+(?:spots?|points?|areas?|aspects?|parts?|sides?|links?|zones?)|weakest\s+(?:spot|point|area|aspect|part|skill|move|link|element|side|phase|stage)|flaws?|shortcomings?|deficienc(?:y|ies)|deficits?|blind\s+spots?|achilles(?:'?s)?\s+heel|leaks?|holes?|gaps?|sticking\s+points?|bad\s+habits?|recurring\s+(?:mistakes?|errors?|patterns?)|common\s+(?:mistakes?|errors?)|repeated\s+(?:mistakes?|errors?)|kryptonite|downfall|undoing|soft\s+spots?|nemesis|bugbear|b[eê]te\s+noire|stumbling\s+blocks?|trouble\s+(?:spots?|areas?)|problem\s+areas?|pain\s+points?|failings?|limitations?|vulnerabilit(?:y|ies))`;
@@ -437,6 +462,7 @@ const PROGRESS_QUESTION_RE = anyOf([
   String.raw`\bwhat\s+(?:area|part|phase|aspect|skill)\s+(?:of\s+my\s+(?:game|play|chess)\s+)?needs?\s+(?:the\s+most\s+)?(?:work|attention|improvement)\b`,
   String.raw`\bwhat\s+needs?\s+(?:the\s+most\s+)?(?:work|improvement|attention)\b`,
   String.raw`\b(?:study|training|practice)\s+plan\b`,
+  String.raw`\bplan\s+(?:out\s+)?my\s+(?:training|study|studying|practi[cs]e|improvement)\b`,
   // ── weakness NOUNS ──
   String.raw`\b(?:my|the)\s+(?:biggest\s+|main\s+|worst\s+|greatest\s+|number\s+one\s+|top\s+)?` + WEAKNESS_NOUNS + String.raw`\b`,
   String.raw`\b` + WEAKNESS_NOUNS + String.raw`\s+(?:in|of|with)\s+my\s+(?:game|play|chess)\b`,
@@ -926,6 +952,9 @@ const REPERTOIRE_GAP_RE = anyOf([
   String.raw`\bwhat\s+(?:openings?\s+)?(?:do\s+i|give\s+me)\s+(?:the\s+most\s+)?(?:trouble|problems?)\b`,
   String.raw`\bwhat\s+gives\s+me\s+(?:the\s+)?(?:most\s+)?trouble\b`,
   String.raw`\bneed\s+an?\s+answer\s+(?:to|for|against)\b`,
+  // opponent prep — "how do I prepare for a 1.e4 player", "prep against d4"
+  String.raw`\b(?:how\s+do\s+i\s+)?prepare\s+(?:for|against)\s+(?:a\s+)?\w+(?:\s+player)?\b`,
+  String.raw`\bprep\s+(?:for|against)\s+(?:a\s+)?\w+\b`,
   String.raw`\bwhere(?:'?s| is)?\s+(?:the\s+)?gap\s+in\s+my\s+(?:prep|repertoire|openings?)\b`,
   String.raw`\bcatch\s+me\s+off\s+guard\b`,
   String.raw`\bwhere\s+am\s+i\s+(?:exposed|vulnerable|unprepared|caught\s+out|weak\s+in\s+(?:my\s+)?(?:prep|openings?|repertoire))\b`,
@@ -1146,7 +1175,7 @@ export function isMoveRatingQuestion(ask: string | undefined): boolean {
 export type TrainingKind = 'calculation' | 'tactics' | 'endgame' | 'mistakes' | 'weakness' | 'opening' | 'review';
 const TRAIN_VERB = String.raw`(?:set\s*up|start|begin|give\s+me|do|run|open|launch|train|practi[sc]e|drill|work\s+on|improve|sharpen|hone|review|analy[sz]e)`;
 const TRAINING_REQUEST_RE = new RegExp(
-  String.raw`\b${TRAIN_VERB}\b[\s\S]*?\b(calculation|calculating|calculate|visuali[sz]ation|tactics?|tactical|endgames?|endings?|mistakes?|blunders?|weakness(?:es)?|weak\s+spots?|openings?|opening\s+theory|repertoire|game\s+review|my\s+games?)\b`,
+  String.raw`\b${TRAIN_VERB}\b[\s\S]*?\b(calculation|calculating|calculate|visuali[sz]ation|tactics?|tactical|endgames?|endings?|mistakes?|blunders?|weakness(?:es)?|weak\s+spots?|openings?|opening\s+theory|repertoire|game\s+review|my\s+games?|mates?|forks?|pins?|skewers?|back[\s-]?rank|discovered|combinations?)\b`,
   'i',
 );
 export function trainingRequestKind(ask: string | undefined): TrainingKind | null {
@@ -1155,7 +1184,7 @@ export function trainingRequestKind(ask: string | undefined): TrainingKind | nul
   if (!m) return null;
   const t = m[1].toLowerCase();
   if (/calculat|visuali/.test(t)) return 'calculation';
-  if (/tactic/.test(t)) return 'tactics';
+  if (/tactic|mate|fork|pin|skewer|back.?rank|discover|combination/.test(t)) return 'tactics';
   if (/endgame|ending/.test(t)) return 'endgame';
   if (/mistake|blunder/.test(t)) return 'mistakes';
   if (/weak/.test(t)) return 'weakness';

@@ -444,6 +444,23 @@ export const STRUCTURAL_PROBES = [
   { id: 'skill-radar', cat: 'self-knowledge', q: 'what do you actually know about my chess' },
   { id: 'skill-radar', cat: 'self-knowledge', q: 'am i better at tactics or endgames' },
   { id: 'master-play', cat: 'live-board', q: 'what the top players play in this position' },
+  // Pass 8 — decisions / piece-pawn / study-planning / opponent-prep, and the
+  // MISROUTE GUARDS (`notKey` = an intent that must NOT fire, or the ask would
+  // get the wrong answer). `notKey` on a Q&A probe asserts that flag is absent.
+  { id: 'position-assessment', cat: 'live-board', q: 'should i resign' },
+  { id: 'position-assessment', cat: 'live-board', q: 'is it worth playing on' },
+  { id: 'position-assessment', cat: 'live-board', q: 'is my bishop bad' },
+  { id: 'position-assessment', cat: 'live-board', q: 'do i have weak pawns' },
+  { id: 'best-move', cat: 'live-board', q: 'which piece should i develop' },
+  { id: 'tactics-live', cat: 'live-board', q: 'should i be worried about my king' },
+  { id: 'repertoire-gap', cat: 'self-knowledge', q: 'how do i prepare for a 1.e4 player' },
+  { id: 'progress', cat: 'self-knowledge', q: 'what should i drill' },
+  { id: 'concept', cat: 'knowledge', q: 'how do pins work' },
+  // misroute guards — the "must NOT fire the board intent" cases
+  { id: 'progress', cat: 'self-knowledge', q: 'make me a training plan', notKey: 'planQuestion' },
+  { id: 'progress', cat: 'self-knowledge', q: 'plan my training', notKey: 'planQuestion' },
+  { id: 'concept', cat: 'knowledge', q: 'teach me forks', notKey: 'tacticsQuestion' },
+  { id: 'tactics-profile', cat: 'self-knowledge', q: 'am i better at tactics or endgames', notKey: 'positionAssessmentQuestion' },
 ];
 
 /** All phrasings for a row across EVERY pass. */

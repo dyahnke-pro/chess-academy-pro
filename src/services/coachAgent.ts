@@ -185,7 +185,7 @@ export function parseCoachIntent(query: string): CoachIntent {
   //     source and subject separately (one combined regex gets brittle
   //     fast across the phrasings people actually use).
   const REVIEW_VERBS_RE =
-    /\b(?:review|run\s+(?:me\s+)?through|walk\s+(?:me\s+)?through|show\s+me|go\s+(?:over|through)|narrate|recap|replay|analy[sz]e|insights?\s+(?:from|on|about))\b/;
+    /\b(?:review|run\s+(?:me\s+)?through|walk\s+(?:me\s+)?through|show\s+me|look\s+at|go\s+(?:over|through)|narrate|recap|replay|analy[sz]e|insights?\s+(?:from|on|about))\b/;
   const NARRATE_VERBS_RE = /\b(?:narrate|recap|replay)\b/;
   const LAST_MARKER_RE = /\b(?:last|most\s+recent|latest|previous)\b/;
   if (REVIEW_VERBS_RE.test(lower) && LAST_MARKER_RE.test(lower)) {
