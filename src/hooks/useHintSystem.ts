@@ -94,6 +94,13 @@ export interface HintState {
   ghostMove: GhostMoveData | null;
   isAnalyzing: boolean;
   hintsUsed: number;
+  /** The exact best move the hint computed for a position, keyed by FEN, so the
+   *  blunder classifier can GROUND its verdict on the SAME data that drew the
+   *  arrow (David 2026-07-10: "the board flash grounded to the same deterministic
+   *  data"). Without this the flash ran a SECOND, separate engine analysis that
+   *  could disagree with the hint — flagging the very move the coach recommended
+   *  as a blunder. Playing this move must never flash red. */
+  resolvedBestMove: { fen: string; uci: string } | null;
 }
 
 export interface UseHintSystemReturn {
@@ -113,6 +120,7 @@ const INITIAL_STATE: HintState = {
   ghostMove: null,
   isAnalyzing: false,
   hintsUsed: 0,
+  resolvedBestMove: null,
 };
 
 function uciToSquares(uci: string): { from: string; to: string } {
@@ -290,6 +298,11 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
           return;
         }
         bestMoveRef.current = best;
+        // Publish the resolved best move so the blunder classifier grounds its
+        // verdict on the SAME data that drew the hint arrow (never flags a hinted
+        // move as a blunder). Keyed by FEN so a stale hint can't mis-clear a later
+        // position's move.
+        setHintState((s) => ({ ...s, resolvedBestMove: { fen, uci: best.bestMoveUci } }));
 
         // Build the per-tier framing that goes inside the `ask` text.
         // Post WO-BRAIN-05b the spine assembles the four-source

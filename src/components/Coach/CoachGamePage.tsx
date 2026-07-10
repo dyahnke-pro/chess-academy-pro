@@ -990,6 +990,14 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     enabled: gameState.status === 'playing' && isPlayersTurn && !game.isGameOver,
   });
 
+  // Mirror the hint's resolved best move into a ref so the (long-lived) player-
+  // move handler reads the LATEST hinted move at move time, not a stale closure
+  // value — used to ground the blunder flash (David 2026-07-10).
+  const hintResolvedMoveRef = useRef<{ fen: string; uci: string } | null>(null);
+  useEffect(() => {
+    hintResolvedMoveRef.current = hintState.resolvedBestMove;
+  }, [hintState.resolvedBestMove]);
+
   // WO-LIVE-COACH-01: live-coach interjection driver. Receives per-move
   // analysis from this component's existing Stockfish pipeline (we do
   // NOT re-run the engine inside the hook) and dispatches LLM speech
@@ -2990,8 +2998,23 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       }
     }
 
-    // If the engine's best move matches what the player played, override to 'good'
-    if (isEngineBestMove || engineBestMoveSan === moveResult.san) {
+    // GROUND THE BOARD FLASH TO THE SAME DETERMINISTIC DATA AS THE HINT (David
+    // 2026-07-10: "make sure the board flash is also grounded to the same
+    // deterministic data"). The flash follows `classification`, which used a
+    // SECOND, separate engine analysis (a different cache than the hint's) that
+    // could disagree — flagging the very move the coach's arrow recommended as a
+    // blunder. A move must NOT be flagged a blunder if ANY of:
+    //  1. this move's fresh pre-analysis agrees it's best;
+    //  2. it's the move the HINT arrow recommended for THIS exact position;
+    //  3. the pre-move analysis is missing (5s timeout / engine hiccup) — we
+    //     can't know what was best, so never assert a blunder off no data.
+    const hintResolved = hintResolvedMoveRef.current;
+    const playedMatchesHint =
+      hintResolved?.fen === preFen && hintResolved.uci === playerUci;
+    if (isEngineBestMove || engineBestMoveSan === moveResult.san || playedMatchesHint) {
+      classification = 'good';
+    }
+    if (!preAnalysis && (classification === 'blunder' || classification === 'mistake' || classification === 'inaccuracy')) {
       classification = 'good';
     }
 
