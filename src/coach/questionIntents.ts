@@ -176,6 +176,7 @@ const BEST_MOVE_QUESTION_RE = anyOf([
   String.raw`\bwhat\s+now\b`,
   // move-consequence hypothetical — "what happens if I play e5", "if I take"
   String.raw`\bwhat\s+happens\s+if\s+i\s+(?:play|go|take|push|capture|castle|move)\b`,
+  String.raw`\bis\s+(?:it\s+good\s+to\s+trade|trading\s+\w+\s+good)\b`,
   // "which piece should I develop / move" — a development move decision.
   String.raw`\bwhich\s+piece\s+should\s+i\s+(?:develop|move|play|bring\s+out)\b`,
   String.raw`\bwhat\s+move\s+should\s+i\s+(?:make|play|pick|choose|go\s+(?:for|with))\b`,
@@ -255,6 +256,9 @@ export function isTacticsQuestion(ask: string | undefined): boolean {
   // LEARNING request (concept or training), NOT a live-board scan — the tactic
   // NOUN would otherwise misroute it to "is there a fork HERE" (matrix pass 8).
   if (/\b(?:teach|drill|quiz|test|show)\s+me\b/i.test(ask)) return false;
+  // "do I hang/drop/miss ..." is a blunder-HABIT (mistakes / tactics-profile),
+  // not a live-board scan (matrix pass 17).
+  if (/\bdo\s+i\s+(?:hang|drop|lose|blunder|miss|overlook)\b/i.test(ask)) return false;
   return TACTICS_QUESTION_RE.test(ask);
 }
 
@@ -666,6 +670,7 @@ const OPENING_PROFILE_RE = anyOf([
   // for me", "which is better for me, Caro or French" (matrix pass 14).
   String.raw`\bis\s+(?:the\s+)?[\w'-]+\s+better\s+than\s+(?:the\s+)?[\w'-]+\s+for\s+me\b`,
   String.raw`\bwhich\s+is\s+better\s+for\s+me[,\s]+[\w'-]+\s+or\s+[\w'-]+\b`,
+  String.raw`\bis\s+(?:the\s+)?[\w'-]+\s+or\s+(?:the\s+)?[\w'-]+\s+better\s+for\s+me\b`,
   // "is this a good opening for me" / "should I keep playing the <opening>" —
   // an is-this-opening-working-for-me question (matrix pass 12).
   String.raw`\bis\s+(?:this|the\s+\w+)\s+a\s+good\s+opening\s+for\s+me\b`,
@@ -965,6 +970,9 @@ const MISTAKES_QUESTION_RE = anyOf([
   String.raw`\bwhat\s+do\s+i\s+(?:keep\s+)?(?:getting|get)\s+wrong\b`,
   // statement form — "I blunder too much / a lot", "I hang pieces constantly"
   String.raw`\bi\s+(?:blunder|hang\s+pieces|mess\s+up|drop\s+pieces)\s+(?:too\s+much|a\s+lot|constantly|all\s+the\s+time)\b`,
+  // "do I hang/drop/lose my queen/pawns" — a blunder-HABIT (over time), guarded
+  // against the live "is my queen hanging RIGHT NOW" by requiring "do I" (p17).
+  String.raw`\bdo\s+i\s+(?:hang|drop|lose|blunder)\s+(?:my\s+)?(?:queen|rook|bishop|knight|pawns?|pieces?|material)\b`,
   // "what dumb/silly/careless mistakes do I keep repeating" — an adjective
   // between "what" and the mistake noun (matrix pass 4, 2026-07-10).
   String.raw`\bwhat\s+\w+\s+(?:mistakes?|blunders?|errors?)\s+do\s+i\b`,
@@ -992,6 +1000,9 @@ const TACTICS_PROFILE_RE = anyOf([
   String.raw`\b(?:am\s+i\s+)?sharp\s+tactically\b`,
   String.raw`\bdo\s+i\s+(?:find|spot|see|miss)\s+combinations?\b`,
   String.raw`\bam\s+i\s+missing\s+(?:shots|tactics|combinations?)\b`,
+  // "do I miss forks / pins / skewers" — a tactical-motif WEAKNESS (over time),
+  // not a live-board scan (matrix pass 17, 2026-07-10).
+  String.raw`\bdo\s+i\s+(?:miss|overlook|blunder|fail\s+to\s+see)\s+(?:forks?|pins?|skewers?|mates?|combinations?|discoveries|discovered\s+attacks?)\b`,
   // "what is my weakest/worst tactic", "which motif am I worst at" — a PROFILE
   // ask about the student over time, not the live board (live prod, David
   // 2026-07-09: "What is my weakest tactic?" was misrouting to the board scan).
@@ -1085,6 +1096,8 @@ const REPERTOIRE_GAP_RE = anyOf([
   String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+)?next\s+opening\s+(?:for\s+me\s+)?to\s+(?:learn|study|prepare)\b`,
   String.raw`\bwhat\s+should\s+i\s+add\s+to\s+my\s+repertoire\b`,
   String.raw`\bwhat\s+to\s+learn\s+next\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+next\s+after\s+(?:the\s+)?[a-z][\w'-]+\b`,
+  String.raw`\bwhat\s+should\s+i\s+learn\s+after\s+(?:the\s+)?[a-z][\w'-]+\b`,
   // "what am I missing in my openings" (I-framed, vs the "what's missing" above)
   String.raw`\bwhat\s+am\s+i\s+missing\s+(?:from|in)\s+my\s+(?:repertoire|openings?|prep)\b`,
   // "what lines do I need to learn / prepare"
@@ -1394,6 +1407,8 @@ const SKILL_RADAR_RE = anyOf([
   String.raw`\bmap\s+out\s+(?:all\s+)?my\s+skills?\b`,
   String.raw`\bwhere\s+do\s+(?:all\s+)?my\s+skills?\s+(?:sit|stand|land|rank)\b`,
   String.raw`\b(?:full|complete)\s+breakdown\s+of\s+(?:all\s+)?my\s+(?:skills?|abilities)\b`,
+  String.raw`\bsummari[sz]e\s+my\s+(?:chess|game|play|skills?)\b`,
+  String.raw`\b(?:give\s+me\s+(?:a\s+)?)?report\s+card\b`,
   // "am I better at X or Y" — a skill COMPARISON; the radar breaks all skills
   // down, which answers the comparison (matrix pass 7, 2026-07-10).
   String.raw`\bam\s+i\s+(?:better|stronger|worse|weaker|good|bad)\s+(?:at|in)\s+\w+\s+or\s+\w+\b`,

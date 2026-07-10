@@ -547,6 +547,15 @@ export const STRUCTURAL_PROBES = [
   { id: 'progress', cat: 'self-knowledge', q: 'am i doing well' },
   { id: 'opening-profile', cat: 'self-knowledge', q: 'am i predictable' },
   { id: 'opening-profile', cat: 'self-knowledge', q: 'what opening is dragging me down' },
+  // Pass 17 — habit-vs-live tactic guards + trades / comparison / summary.
+  { id: 'tactics-profile', cat: 'self-knowledge', q: 'do i miss forks', notKey: 'tacticsQuestion' },
+  { id: 'mistakes', cat: 'self-knowledge', q: 'do i hang my queen', notKey: 'tacticsQuestion' },
+  { id: 'mistakes', cat: 'self-knowledge', q: 'do i drop my pawns' },
+  { id: 'best-move', cat: 'live-board', q: 'is trading queens good here' },
+  { id: 'opening-profile', cat: 'self-knowledge', q: 'is e4 or d4 better for me' },
+  { id: 'skill-radar', cat: 'self-knowledge', q: 'summarize my chess' },
+  { id: 'skill-radar', cat: 'self-knowledge', q: 'give me a report card' },
+  { id: 'repertoire-gap', cat: 'self-knowledge', q: 'whats next after the italian' },
 ];
 
 /** All phrasings for a row across EVERY pass. */
