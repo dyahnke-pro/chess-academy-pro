@@ -629,6 +629,115 @@ export function assembleMovePurpose(opts: {
   };
 }
 
+/**
+ * assembleEngineReasoning — "why does the engine like this move?" / "walk me
+ * through Stockfish's line" (David 2026-07-10: "get the coach deciphering why
+ * Stockfish likes a move… coach is master of all now"). The engine's REASONING
+ * IS its principal variation: we WALK the PV and name what each of the engine's
+ * moves achieves, ending on the eval verdict. Every clause is computed from the
+ * board (`describeMoveGeometry`) + the engine (PV + eval) — the LLM decides
+ * nothing (G0). Unlike `assembleMoveEvalAnswer` (names the move + eval only)
+ * this explains the WHY; unlike `assembleMovePurpose` (the purpose of a move the
+ * student just PLAYED, one follow-up) this walks the forced line move-by-move so
+ * the student sees the engine's proof, not just its verdict.
+ *
+ * `pvSan` is the PV from the CURRENT position: index 0 = the engine's move,
+ * 1 = the opponent's reply, 2 = the engine's follow-up, 3 = reply, … Returns
+ * null on an illegal/empty PV (empty > generic > invented); degrades to just the
+ * best move's geometry + eval when the PV is a single move.
+ */
+export function assembleEngineReasoning(opts: {
+  fenBefore: string;
+  pvSan: ReadonlyArray<string>;
+  /** Side to move in `fenBefore` — whose move the engine's line begins with. */
+  moverColor: 'white' | 'black';
+  /** White-perspective eval at the end of the line (LiveState convention). */
+  evalCp?: number | null;
+  mateIn?: number | null;
+  studentSide?: 'white' | 'black';
+  /** How many of the ENGINE's follow-up moves to narrate past the first (default
+   *  2 — a real walk without a wall of text). */
+  maxFollowUps?: number;
+}): GroundedAnswer | null {
+  if (!opts.pvSan || opts.pvSan.length === 0) return null;
+  const mc: 'w' | 'b' = opts.moverColor === 'white' ? 'w' : 'b';
+
+  // Advance a board through the PV, snapshotting the FEN BEFORE each ply so the
+  // geometry of each move is computed from the right position.
+  let board: Chess;
+  try {
+    board = new Chess(opts.fenBefore);
+  } catch {
+    return null;
+  }
+  interface Ply { san: string; fenBefore: string; isMover: boolean; }
+  const plies: Ply[] = [];
+  for (let i = 0; i < opts.pvSan.length; i += 1) {
+    const fenBeforePly = board.fen();
+    let mv;
+    try {
+      mv = board.move(opts.pvSan[i]);
+    } catch {
+      break; // PV move illegal from here — stop the line cleanly.
+    }
+    if (!mv) break;
+    plies.push({ san: mv.san, fenBefore: fenBeforePly, isMover: mv.color === mc });
+  }
+  if (plies.length === 0 || !plies[0].isMover) return null;
+
+  const clauses: string[] = [];
+
+  // 1) THE ENGINE'S MOVE — what it does on the board.
+  const firstGeo = describeMoveGeometry(plies[0].fenBefore, plies[0].san, opts.moverColor);
+  clauses.push(
+    firstGeo
+      ? `The engine plays ${plies[0].san} — it ${firstGeo}.`
+      : `The engine plays ${plies[0].san}.`,
+  );
+
+  // 2..N) WALK THE LINE — each subsequent ENGINE move, framed by the opponent's
+  //   reply that precedes it ("if <reply>, then <engine move> <geometry>").
+  const maxFollow = Math.max(0, opts.maxFollowUps ?? 2);
+  let narrated = 0;
+  for (let i = 1; i < plies.length && narrated < maxFollow; i += 1) {
+    if (!plies[i].isMover) continue; // opponent ply — used only as setup below
+    const reply = plies[i - 1]; // the opponent's move immediately before
+    const geo = describeMoveGeometry(plies[i].fenBefore, plies[i].san, opts.moverColor);
+    if (reply && !reply.isMover) {
+      clauses.push(
+        geo
+          ? `If ${reply.san}, then ${plies[i].san} — it ${geo}.`
+          : `If ${reply.san}, then ${plies[i].san}.`,
+      );
+    } else if (geo) {
+      clauses.push(`Then ${plies[i].san} — it ${geo}.`);
+    }
+    narrated += 1;
+  }
+
+  // Final) THE VERDICT — the eval from the student's POV.
+  const ss = opts.studentSide ?? opts.moverColor;
+  const studentEvalCp = opts.evalCp == null ? null : (ss === 'white' ? opts.evalCp : -opts.evalCp);
+  const studentMate = opts.mateIn == null ? null : (ss === 'white' ? opts.mateIn : -opts.mateIn);
+  const ev = evalPhrase(studentEvalCp, studentMate, ss);
+  if (ev) clauses.push(`${cap(ev)}.`);
+
+  const first = plies[0];
+  let fromTo: { from: string; to: string } | null = null;
+  try {
+    const probe = new Chess(opts.fenBefore);
+    const mv = probe.move(first.san);
+    if (mv) fromTo = { from: mv.from, to: mv.to };
+  } catch { /* arrow optional */ }
+
+  return {
+    facts: clauses.join(' '),
+    bestMoveSan: first.san,
+    bestMoveFromTo: fromTo,
+    sources: ['board:chess.js', 'engine:stockfish'],
+  };
+}
+
 export interface MoveOrderExplanation {
   /** Grounded prose: why the better order is stronger (+ the cost of the wrong
    *  order when a refutation is supplied). */
