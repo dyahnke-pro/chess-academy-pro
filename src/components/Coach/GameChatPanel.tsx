@@ -17,6 +17,7 @@ import { tryRouteIntent } from '../../services/coachSessionRouter';
 import { parseActions } from '../../services/coachActionDispatcher';
 import { isPlanQuestion } from '../../coach/coachService';
 import { buildEnginePlan } from '../../services/enginePlanContext';
+import { getCachedStockfish } from '../../hooks/stockfishFenCache';
 import { withTimeout } from '../../coach/withTimeout';
 import type { LiveState, TacticsLiveContext } from '../../coach/types';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
@@ -743,6 +744,12 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
               fen: liveFen,
             });
           }
+          // Thread the eval-bar's CACHED Stockfish snapshot (non-blocking cache
+          // read) so a "why is that the best move" turn always has an engine
+          // best move + eval to ground the reasoning walk — even before the
+          // on-demand deep plan resolves (David 2026-07-10: "coach still not
+          // answering why a move is best"; the cold-start fallback was empty).
+          const cachedSf = getCachedStockfish(liveFen);
           const liveState: LiveState = {
             surface: 'game-chat',
             fen: liveFen,
@@ -756,6 +763,9 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             currentRoute: '/coach/play',
             tactics: gameChatTactics,
             enginePlan,
+            engineBestMoveUci: cachedSf?.bestMove,
+            evalCp: cachedSf && !cachedSf.isMate ? cachedSf.evaluation : undefined,
+            evalMateIn: cachedSf?.isMate ? cachedSf.mateIn : undefined,
           };
           void logAppAudit({
             kind: 'coach-surface-migrated',
