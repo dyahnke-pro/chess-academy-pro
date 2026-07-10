@@ -416,6 +416,16 @@ export const STRUCTURAL_PROBES = [
   { id: 'color', cat: 'self-knowledge', q: 'am I honestly just better with the white pieces' },
   { id: 'converting', cat: 'self-knowledge', q: 'do I tend to throw away winning positions' },
   { id: 'navigate', cat: 'action', q: 'hey can you take me over to the tactics trainer' },
+  // Pass 5 — ultra-terse tier (the verb/filler-stripped bones of a question).
+  { id: 'position-assessment', cat: 'live-board', q: 'so, winning or losing?' },
+  { id: 'best-move', cat: 'live-board', q: 'best here?' },
+  { id: 'stats', cat: 'self-knowledge', q: 'rating?' },
+  { id: 'trend', cat: 'self-knowledge', q: 'trending up or down' },
+  { id: 'tactics-profile', cat: 'self-knowledge', q: 'worst tactical motif for me' },
+  { id: 'review-due', cat: 'self-knowledge', q: 'anything to review' },
+  { id: 'set-hints', cat: 'action', q: 'hints on' },
+  { id: 'set-verbosity', cat: 'action', q: 'narration to full' },
+  { id: 'teach-opening', cat: 'action', q: 'teach the caro' },
 ];
 
 /** All phrasings for a row across EVERY pass. */

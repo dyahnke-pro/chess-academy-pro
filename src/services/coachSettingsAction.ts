@@ -84,6 +84,22 @@ export function resolveSettingsCommand(text: string): ResolvedCommand | null {
     };
   }
 
+  // ── Terse noun-first shortcuts ("hints on", "narration to full") ──────────
+  // Real users drop the verb (matrix pass 5, 2026-07-10). Handle the
+  // unambiguous noun+value forms up front, before the imperative-verb gate.
+  {
+    const hintsTerse = t.match(/^\s*hints?\s+(on|off)\s*$/);
+    if (hintsTerse) {
+      const on = hintsTerse[1] === 'on';
+      return { key: 'showHints', confirmation: on ? 'Hints are on now.' : 'Hints are off now.', prefsPatch: { showHints: on } };
+    }
+    const narrTerse = t.match(/^\s*(?:narration|verbosity)\s+(?:to\s+)?(\w+)\s*$/);
+    if (narrTerse && NARRATION_WORD[narrTerse[1]]) {
+      const value = NARRATION_WORD[narrTerse[1]];
+      return { key: 'coachNarration', confirmation: `Narration is set to ${value} now.`, prefsPatch: { coachNarration: value } };
+    }
+  }
+
   // Must look like a COMMAND (not a query) — an imperative settings verb.
   const isCommand = /\b(turn|switch|set|enable|disable|make|change|mute|unmute|use|put|silence|activate|deactivate|keep|give|want|go|stop|show)\b/.test(t);
   if (!isCommand) return null;

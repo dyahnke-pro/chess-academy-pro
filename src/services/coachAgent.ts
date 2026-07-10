@@ -369,7 +369,7 @@ export function parseCoachIntent(query: string): CoachIntent {
     // "(I want to / wanna / I'd like to / let's) learn the <opening>"
     lower.match(/(?:i\s+)?(?:want(?:\s+to)?|wanna|would\s+like\s+to|i'?d\s+like\s+to|let'?s|help\s+me)\s+learn\s+(?:the\s+)?(.+)/) ||
     lower.match(/walk\s+(?:me\s+)?through\s+(?:the\s+)?(.+)/) ||
-    lower.match(/teach\s+me\s+(?:the\s+main\s+line\s+of\s+)?(?:the\s+)?(.+)/) ||
+    lower.match(/teach\s+(?:me\s+)?(?:the\s+main\s+line\s+of\s+)?(?:the\s+)?(.+)/) ||
     lower.match(/show\s+me\s+(?:the\s+)?(.+?)(?:\s+opening)?$/) ||
     lower.match(/study\s+(?:the\s+)?(.+)/);
   if (walkthroughMatch) {

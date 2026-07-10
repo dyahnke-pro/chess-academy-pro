@@ -136,6 +136,8 @@ const BEST_MOVE_QUESTION_RE = anyOf([
   String.raw`\bwhat\s+move\s+should\s+i\s+(?:make|play|pick|choose|go\s+(?:for|with))\b`,
   String.raw`\bwhat\s+would\s+(?:the\s+)?(?:engine|computer|stockfish|a\s+gm|a\s+master)\s+(?:play|do|pick|choose|go\s+for|recommend)\b`,
   String.raw`\b(?:give|show)\s+me\s+(?:the\s+)?(?:strongest|best|top)\s+(?:continuation|move|line|option)\b`,
+  String.raw`\bbest\s+here\b`,
+  String.raw`^\s*best\s*\??\s*$`,   // bare terse "best?" / "best"
 ]);
 export function isBestMoveQuestion(ask: string | undefined): boolean {
   return !!ask && BEST_MOVE_QUESTION_RE.test(ask);
@@ -203,6 +205,7 @@ const POSITION_ASSESSMENT_RE = anyOf([
   String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+)?(?:score|assessment|verdict)\b`,
   String.raw`\b(?:am\s+i|are\s+we)\s+(?:better|worse|winning|losing|ahead|behind|equal|fine|ok(?:ay)?|in\s+trouble|in\s+good\s+shape|busted|lost|dead|cooked|toast|done\s+for)\b`,
   String.raw`\bplus\s+or\s+minus\b`,
+  String.raw`\b(?:am\s+i\s+)?winning\s+or\s+losing\b`,
   String.raw`\bis\s+(?:this|that|it|the|my)\s+(?:position\s+)?(?:good|bad|better|worse|winning|won|losing|lost|equal|level|balanced|fine|ok(?:ay)?|drawish|close|unclear|dangerous)\b`,
   String.raw`\bhow\s+(?:do\s+i|am\s+i)\s+(?:stand|standing|doing\s+here)\b`,
   String.raw`\bwhere\s+do\s+i\s+stand\b`,
@@ -466,6 +469,7 @@ const IMPROVEMENT_TREND_RE = anyOf([
   String.raw`\bam\s+i\s+(?:better|worse)\s+than\s+(?:i\s+(?:was|used\s+to\s+be)|last\s+(?:month|week)|before|a\s+(?:month|while)\s+ago)\b`,
   String.raw`\b(?:my\s+)?(?:improvement|progress)\s+(?:over\s+time|trend|trajectory)\b`,
   String.raw`\bam\s+i\s+(?:making\s+progress|moving\s+(?:up|forward)|headed\s+(?:up|in\s+the\s+right\s+direction))\b`,
+  String.raw`\btrending\s+up\s+or\s+down\b`,
 ]);
 export function isImprovementTrendQuestion(ask: string | undefined): boolean {
   return !!ask && IMPROVEMENT_TREND_RE.test(ask);
@@ -549,6 +553,7 @@ const STATS_QUESTION_RE = anyOf([
   String.raw`\bmy\s+win(?:ning)?\s+(?:percentage|percent|rate)\b`,
   String.raw`\bam\s+i\s+winning\s+more\b`,
   String.raw`\bmy\s+score\b`,
+  String.raw`^\s*(?:my\s+)?rating\s*\??\s*$`,   // bare terse "rating?" / "my rating"
 ]);
 export function isStatsQuestion(ask: string | undefined): boolean {
   return !!ask && STATS_QUESTION_RE.test(ask);
@@ -733,7 +738,7 @@ const REVIEW_DUE_RE = anyOf([
   String.raw`\breviews?\s+(?:are\s+)?due\b`,
   String.raw`\bdo\s+i\s+have\s+(?:any\s+)?reviews?\b`,
   String.raw`\bany\s+reviews?\b`,
-  String.raw`\banything\s+to\s+(?:review|study|do)\s+(?:today|now|yet)?\b`,
+  String.raw`\banything\s+to\s+(?:review|study|do)\b`,
   String.raw`\bis\s+there\s+anything\s+to\s+(?:review|study)\b`,
   String.raw`\bshould\s+i\s+do\s+my\s+(?:reps|reviews?|cards|flash\s?cards)\b`,
   String.raw`\bdo\s+i\s+need\s+to\s+(?:do|review)\s+(?:my\s+)?(?:reps|reviews?|cards|flash\s?cards)\b`,
@@ -814,6 +819,7 @@ const TACTICS_PROFILE_RE = anyOf([
   // "which tactical motif/pattern do I struggle with" — an adjective ("tactical")
   // before the motif noun broke the tighter patterns above (matrix pass 2).
   String.raw`\bwhich\s+tactical\s+(?:motif|pattern|theme|tactic|idea)s?\b`,
+  String.raw`\b(?:weakest|worst|poorest)\s+tactical\s+(?:motif|pattern|theme|tactic|idea)s?\b`,
   String.raw`\bwhat\s+tactics?\s+(?:should|do|can)\s+i\s+(?:drill|practi[sc]e|work\s+on|train)\b`,
 ]);
 export function isTacticsProfileQuestion(ask: string | undefined): boolean {
