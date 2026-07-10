@@ -244,11 +244,22 @@ async function main() {
 
       const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 1180, height: 940 } });
       const page = await ctx.newPage();
-      page.on('console', (m) => {
+      const sameKeySeen = new Set();
+      page.on('console', async (m) => {
         const t = m.text();
-        // Ignore: network noise + the vite HMR websocket (the relay doesn't
-        // proxy ws:// — dev-server-only, never in the prod bundle).
-        if (m.type() === 'error' && !/ERR_|Failed to load resource|favicon|manifest|net::|WebSocket|ws:\/\/|HMR|\[vite\]/i.test(t)) recordBreak('console-error', t.slice(0, 160));
+        // Ignore: network noise + the vite HMR websocket (dev-server only).
+        if (m.type() !== 'error' || /ERR_|Failed to load resource|favicon|manifest|net::|WebSocket|ws:\/\/|HMR|\[vite\]/i.test(t)) return;
+        // Duplicate-key warning (the 2026-06-12 arrow-regression class): capture
+        // the KEY VALUE (args[1]) + component stack (last arg) — the warning text
+        // alone is useless. Dedupe by key so 70 identical floods → 1 break.
+        if (/same key|unique .?key|Each child in a list/i.test(t)) {
+          let keyVal = '', stack = '';
+          try { const a = m.args(); keyVal = a[1] ? String(await a[1].jsonValue().catch(() => '')) : ''; const last = a[a.length - 1]; stack = last ? String(await last.jsonValue().catch(() => '')).slice(0, 200) : ''; } catch { /* */ }
+          const sig = `dupkey:${keyVal}`;
+          if (!sameKeySeen.has(sig)) { sameKeySeen.add(sig); recordBreak('react-dup-key', `key="${keyVal}" stack=${stack.replace(/\s+/g, ' ')}`); }
+          return;
+        }
+        recordBreak('console-error', t.slice(0, 160));
       });
       page.on('pageerror', (e) => recordBreak('pageerror', (e?.message ?? String(e)).slice(0, 160)));
       // capture spoken text off the relayed /api/tts request bodies
@@ -466,6 +477,7 @@ async function main() {
 /** Grade a question's answer: non-answer, false board-claim, and — the headline
  *  new check — was it answered in the LANGUAGE it was asked in. */
 function gradeAnswer(q, reply, spokenDuring, fen, lang, recordBreak) {
+  console.log(`      Q[${lang.code}/${q.kind}] "${q.text}"\n        → "${String(reply).replace(/^C/, '').slice(0, 140)}"`);
   if (!reply || reply.length < 4 || /hit a snag|having trouble connecting|coach is unavailable|not sure what you mean/i.test(reply)) {
     recordBreak('non-answer', `[${lang.code}/${q.kind}] "${q.text}" → "${String(reply).slice(0, 100)}"`);
     return;
@@ -480,6 +492,7 @@ function gradeAnswer(q, reply, spokenDuring, fen, lang, recordBreak) {
  *  at least acknowledges the setting). */
 async function runAction(act, sendChat, recordBreak, label, lang) {
   const { reply } = await sendChat(act.text);
+  console.log(`      ACTION[${lang.code}/${act.kind}] "${act.text}"\n        → "${String(reply).replace(/^C/, '').slice(0, 110)}"`);
   if (!reply || reply.length < 3) { recordBreak('action-non-answer', `[${lang.code}/${act.kind}] "${act.text}" → ""`); return; }
   if (!act.confirm.test(reply)) recordBreak('action-not-confirmed', `[${lang.code}/${act.kind}] "${act.text}" → "${reply.slice(0, 110)}"`);
 }
@@ -525,10 +538,12 @@ async function testButtons(page, surface, spoken, readReplies, openChatIfNeeded,
       const after = await readReplies();
       const newMsg = after.some((t) => !before.has(t));
       const newTts = spoken.length > ttsBefore;
-      if (b.effect === 'message' && !newMsg) recordBreak('button-no-effect', `${b.id}: no coach message after click`);
-      else if (b.effect === 'tts' && !newTts && !newMsg) recordBreak('button-no-effect', `${b.id}: no voice/message after click`);
-      else if (b.effect === 'either' && !newMsg && !newTts) recordBreak('button-no-effect', `${b.id}: no message and no voice after click`);
+      let ok = true;
+      if (b.effect === 'message' && !newMsg) { recordBreak('button-no-effect', `${b.id}: no coach message after click`); ok = false; }
+      else if (b.effect === 'tts' && !newTts && !newMsg) { recordBreak('button-no-effect', `${b.id}: no voice/message after click`); ok = false; }
+      else if (b.effect === 'either' && !newMsg && !newTts) { recordBreak('button-no-effect', `${b.id}: no message and no voice after click`); ok = false; }
       // 'clickable' — success = it clicked without throwing (pageerror caught globally)
+      console.log(`      BUTTON[${b.kind}] ${b.id} → ${ok ? '✓' : '✗'}${newMsg ? ' msg' : ''}${newTts ? ' voice' : ''}`);
     } catch (e) {
       recordBreak('button-error', `${b.id}: ${(e?.message ?? String(e)).slice(0, 90)}`);
     }
