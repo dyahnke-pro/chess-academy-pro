@@ -184,7 +184,12 @@ async function main() {
       // Play case and never delays a fast reply.
       const sendChat = async (text, settleMs = 30000) => {
         await openChatIfNeeded();
-        const input = page.locator('[data-testid="chat-input"], [data-testid="chat-text-input"]').first();
+        // `chat-input` is the <form> WRAPPER (not editable); the real textarea is
+        // `chat-text-input`. Target the textarea first — filling the form throws
+        // "Element is not an <input>/<textarea>" and, being caught, silently sent
+        // nothing (David 2026-07-10: Play read empty because the form matched
+        // .first() and the fill no-op'd). Fall back to any real editable/textarea.
+        const input = page.locator('[data-testid="chat-text-input"], textarea[data-testid], [data-testid="chat-input"] textarea, [data-testid="chat-input"] input').first();
         if ((await input.count()) === 0) { recordBreak('no-chat-input', `chat-input absent on ${surface}`); return { reply: '', spokenDuring: [] }; }
         const before = new Set(await readCoachReplies());
         const t0 = Date.now();
