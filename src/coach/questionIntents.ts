@@ -220,7 +220,7 @@ const WHY_BEST_MOVE_RE = anyOf([
   // "why is that/this/Nf5 (the) best/right/winning move" — a reason ask.
   String.raw`\bwhy\s+(?:is|would|does|should|was)\b[\s\S]{0,30}\b(?:best|the\s+move|winning|right|correct|strong(?:est)?|good)\b`,
   // "why does the engine/computer/stockfish like/pick/choose/prefer/play/want X"
-  String.raw`\bwhy\s+(?:does|would|did|is)?\s*(?:the\s+)?(?:engine|computer|stockfish|it)\s+(?:like|likes|pick|picks|choose|chooses|prefer|prefers|play|plays|want|wants|recommend|suggest|go(?:es)?\s+for)\b`,
+  String.raw`\bwhy\s+(?:does|would|did|is|are)?\s*(?:the\s+)?(?:engine|computer|stockfish|it)\s+(?:like|likes|pick|picks|choose|chooses|prefer|prefers|play|plays|want|wants|recommend|recommending|suggest|suggesting|suggests|consider|considering|go(?:es|ing)?\s+for|point(?:ing)?\s+(?:to|at))\b`,
   // "why not <my move>" / "why not just <SAN>" — why the alternative is worse.
   String.raw`\bwhy\s+not\b`,
   // "explain / break down the best move / the engine's move / the line / choice"
@@ -245,18 +245,34 @@ export function isWhyBestMoveQuestion(ask: string | undefined): boolean {
 
 /** SAN-shaped token — the move the student NAMED ("is Qf3 ok", "what about
  *  Nf3", "can I play exd5"). Piece moves (Qf3, Nbd7, Rxe7+), pawn moves (e4,
- *  exd5, a8=Q), castling (O-O / 0-0-0). Piece letters are UPPERCASE-only so it
- *  never grabs a plain word ("Najdorf", "game"); chess.js is the final legality
- *  judge downstream, so this only needs to be SAN-SHAPED. */
-const SAN_TOKEN_RE = /\b(O-O-O|O-O|0-0-0|0-0|(?:[KQRBN][a-h1-8]?x?[a-h][1-8]|[a-h]x?[a-h]?[1-8])(?:=[QRBN])?[+#]?)(?![A-Za-z0-9])/;
+ *  exd5, a8=Q), castling (O-O / 0-0-0). Case-INSENSITIVE (`i` flag) so lowercase
+ *  "qf3" and all-caps "QF3" both match — a mate rank digit is required so it
+ *  never grabs a plain word ("Najdorf", "game", "bad"); chess.js is the final
+ *  legality judge downstream, so this only needs to be SAN-SHAPED. */
+const SAN_TOKEN_RE = /\b(O-O-O|O-O|0-0-0|0-0|(?:[KQRBN][a-h1-8]?x?[a-h][1-8]|[a-h]x?[a-h]?[1-8])(?:=[QRBN])?[+#]?)(?![A-Za-z0-9])/i;
 
-/** Pull the candidate SAN the student named (castling normalized to O-O form),
- *  or null when the ask names no move-shaped token. */
+/** Canonicalize a matched token to standard SAN case (piece UPPER, squares
+ *  lower, promotion UPPER) so chess.js parses it — the regex accepts any case. */
+function normalizeSan(tok: string): string {
+  const up = tok.toUpperCase();
+  if (up === '0-0-0' || up === 'O-O-O') return 'O-O-O';
+  if (up === '0-0' || up === 'O-O') return 'O-O';
+  if (/^[kqrbn]/i.test(tok)) return tok[0].toUpperCase() + tok.slice(1).toLowerCase();
+  return tok.toLowerCase().replace(/=([qrbn])/i, (_m, p: string) => `=${p.toUpperCase()}`);
+}
+
+/** Pull the candidate SAN the student named (normalized to standard SAN case),
+ *  or null when the ask names no move-shaped token. Also maps castling named in
+ *  words ("castle long / queenside" → O-O-O, else O-O) so "is castling ok" and
+ *  "would castling long be ok" resolve to a real move. */
 export function extractCandidateSan(ask: string | undefined): string | null {
   if (!ask) return null;
   const m = ask.match(SAN_TOKEN_RE);
-  if (!m) return null;
-  return m[1].replace(/^0-0-0$/, 'O-O-O').replace(/^0-0$/, 'O-O');
+  if (m) return normalizeSan(m[1]);
+  if (/\bcastl(?:e|ing|es)\b/i.test(ask)) {
+    return /\b(?:long|queen'?s?\s*side|queenside)\b/i.test(ask) ? 'O-O-O' : 'O-O';
+  }
+  return null;
 }
 
 /** "Is <move> ok / can I play <move> / what about <move> / would <move> work" —
@@ -268,12 +284,17 @@ export function extractCandidateSan(ask: string | undefined): string | null {
  *  candidate-question phrasing AND a SAN-shaped token, so it never grabs a bare
  *  "is this ok". */
 const CANDIDATE_MOVE_RE = anyOf([
-  String.raw`\bis\s+[A-Za-z0-9+#=-]{2,6}\s+(?:ok(?:ay)?|fine|alright|all\s+right|playable|sound|safe|reasonable|decent|good|bad|wrong|any\s+good|a\s+(?:good|bad|sound|reasonable|decent|blunder|mistake|misstep))\b`,
-  String.raw`\b(?:can|could|should|may)\s+i\s+(?:play|go\s+for|try|go\s+with|pick|choose)\b`,
+  // "is (that/the move) X (too) ok/good/winning/..." — the named move + a
+  // soundness word (an optional "that/the move" prefix and "too" qualifier).
+  String.raw`\bis\s+(?:(?:that|the|this)\s+move\s+)?[A-Za-z0-9+#=-]{2,6}\s+(?:too\s+)?(?:ok(?:ay)?|fine|alright|all\s+right|playable|sound|safe|reasonable|decent|good|bad|wrong|winning|losing|strong|solid|risky|dubious|passive|any\s+good|a\s+(?:good|bad|sound|reasonable|decent|blunder|mistake|misstep))\b`,
+  String.raw`\b(?:can|could|should|may)\s+i\s+(?:play|go(?:\s+(?:for|with))?|try|pick|choose|castle)\b`,
   String.raw`\b(?:what|how)\s+about\b`,
-  String.raw`\bis\s+it\s+(?:ok(?:ay)?|fine|safe|good|playable|alright)\s+to\s+play\b`,
+  String.raw`\bis\s+it\s+(?:ok(?:ay)?|fine|safe|good|playable|alright)\s+to\s+(?:play|castle)\b`,
   String.raw`\bwould\s+[A-Za-z0-9+#=-]{2,6}\s+(?:be\s+)?(?:ok(?:ay)?|fine|work|playable|good|sound|safe)\b`,
   String.raw`\bdoes\s+[A-Za-z0-9+#=-]{2,6}\s+(?:work|hold|lose|win|blunder)\b`,
+  // Castling named in words — "is castling ok", "would castling long be ok",
+  // "should I castle here". extractCandidateSan maps it to O-O / O-O-O.
+  String.raw`\b(?:is|would|can|could|should)\b[\s\S]{0,20}\bcastl(?:e|ing)\b`,
 ]);
 export function isCandidateMoveQuestion(ask: string | undefined): boolean {
   if (!ask) return false;

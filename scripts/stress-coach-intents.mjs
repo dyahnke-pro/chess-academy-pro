@@ -13,7 +13,7 @@ import {
   isEndgameQuestion, isPlayerGamesQuestion, isConceptQuestion, isPlanQuestion,
   isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion,
   isColorQuestion, isRecordsQuestion, isRecordVsQuestion, isMoveRatingQuestion, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
-  isTrainingRequest,
+  isTrainingRequest, isCandidateMoveQuestion, isWhyBestMoveQuestion,
 } from '../src/coach/questionIntents.ts';
 
 const DETECTORS = {
@@ -27,6 +27,7 @@ const DETECTORS = {
   accuracy: isAccuracyQuestion, consistency: isConsistencyQuestion, converting: isConvertingQuestion,
   color: isColorQuestion, records: isRecordsQuestion, recordVs: isRecordVsQuestion, moveRating: isMoveRatingQuestion, puzzleStats: isPuzzleStatsQuestion, transferGap: isTransferGapQuestion, skillRadar: isSkillRadarQuestion,
   trainingRequest: isTrainingRequest,
+  candidateMove: isCandidateMoveQuestion, whyBestMove: isWhyBestMoveQuestion,
 };
 
 // expected: the detector that SHOULD fire. Rephrasings hammer each vertical.
@@ -160,6 +161,43 @@ const BATTERY = [
     'train endgames', 'practice my endings', 'drill my mistakes', 'train on my blunders',
     'practice my weaknesses', 'drill my weak spots', 'work on my openings', 'train my repertoire',
     'start a game review', 'review my games', 'SET UP CALCULATION TRAINING', '  drill my tactics  ']],
+
+  // ═══ PASS 5 — CANDIDATE MOVE (David 2026-07-10: "evaluate the OTHER moves").
+  //     "is Qf3 ok" must EVALUATE the named move, not deflect to best. Every
+  //     probe NAMES a move + asks if it's playable. ═══
+  ['candidateMove', ['is Qf3 ok', 'is Qf3 ok to play', 'is Qf3 okay', 'is Nf3 fine',
+    'can i play Nf3', 'can I play Nf3 here', 'could i play Bc4', 'should i play d4 here',
+    'what about Bc4', 'what about Nge2', 'how about Qh5', 'is exd5 sound', 'is exd5 a good move',
+    'is exd5 any good', 'would Qh5 work', 'would Qh5 be ok', 'does Ng5 work', 'is a3 playable',
+    'is O-O safe', 'is Bb5 a mistake', 'is Nxe5 a blunder', 'is dxe5 reasonable', 'is Rxe7 winning',
+    'IS QF3 OK', '  what about Bc4  ']],
+
+  // ═══ PASS 5 — WHY-BEST-MOVE (engine reasoning walk, distinct from bestMove). ═══
+  ['whyBestMove', ['why is Nf3 best', 'why is that the best move', 'why is this the best move',
+    'why does the engine like this', 'why does stockfish prefer that', 'why does the computer pick that',
+    'explain the best move', "what's the idea behind the engine move", 'why not Qxd4', 'why not just take',
+    'walk me through the engine line', 'break down the best move', 'why is it best', 'why though',
+    'what does the engine see here', 'how does the engine see this']],
+
+  // ═══ PASS 5 — PLAYER GAMES BY NAME (David 2026-07-10: "how does GothamChess
+  //     play this line" — the coach must scope to the NAMED pro). ═══
+  ['playerGames', ['how does GothamChess play this', 'how does Gotham play the caro', 'how does Levy play this line',
+    'how does Naroditsky handle this', 'how does Danya play it', 'how does Magnus play this',
+    'how does Hikaru meet this', 'how does Carlsen approach this', 'how does he play this line',
+    'how does Caruana continue here', 'how does Firouzja treat this']],
+  // Generic "the pros / masters" (no named person) is a masterPlay ask, NOT a
+  // named-player lookup — kept here to guard the boundary.
+  ['masterPlay', ['how do the pros play this', 'what do masters play here', 'how do grandmasters handle this']],
+
+  // ═══ PASS 6 — HARDER novel phrasings for the new verticals (loop: nastier
+  //     each pass). ═══
+  ['candidateMove', ['is nf3 ok', 'IS NF3 OK', 'can i go Bc4', 'what about playing Qh5', 'is exd5 winning',
+    'is Rxe7 winning', 'is Qxd4 losing', 'is g4 too risky', 'is O-O-O safe', 'would castling long be ok',
+    'is Bxf7 sound', 'is d4 solid', 'is that move Nf3 ok']],
+  ['whyBestMove', ['why that move', "what's the point of the engine move", 'why is the computer suggesting that',
+    'reason through the best move', 'why does it want that', 'break down why', 'why is the top move best']],
+  ['playerGames', ['how does gothamchess play this', 'HOW DOES MAGNUS PLAY THIS', 'how does danya handle the caro',
+    'how does levy meet this', 'how did hikaru play this line', 'how does she play this']],
 ];
 
 // GARBAGE / non-questions — MUST match NOTHING (false-positive guard).
