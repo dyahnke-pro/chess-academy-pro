@@ -571,6 +571,15 @@ export const STRUCTURAL_PROBES = [
   { id: 'best-move', cat: 'live-board', q: 'is a knight worth a bishop here' },
   { id: 'best-move', cat: 'live-board', q: 'good trade or bad trade' },
   { id: 'best-move', cat: 'live-board', q: 'is this forced' },
+  // Pass 20 — center/initiative / move-comparison / game-length / data-meta.
+  { id: 'position-assessment', cat: 'live-board', q: 'who controls the center' },
+  { id: 'position-assessment', cat: 'live-board', q: 'do i have the attack' },
+  { id: 'best-move', cat: 'live-board', q: 'which is better nf3 or d4' },
+  { id: 'best-move', cat: 'live-board', q: 'nf3 or bc4' },
+  { id: 'skill-radar', cat: 'self-knowledge', q: 'what data do you have on me' },
+  { id: 'converting', cat: 'self-knowledge', q: 'do i win short or long games' },
+  { id: 'converting', cat: 'self-knowledge', q: 'am i better in long games', notKey: 'positionAssessmentQuestion' },
+  { id: 'tactics-live', cat: 'live-board', q: 'show me the pin' },
 ];
 
 /** All phrasings for a row across EVERY pass. */

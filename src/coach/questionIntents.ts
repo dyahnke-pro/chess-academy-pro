@@ -184,6 +184,10 @@ const BEST_MOVE_QUESTION_RE = anyOf([
   String.raw`\bis\s+(?:this|it|that)\s+(?:a\s+)?(?:good|bad|fair)\s+trade\b`,
   String.raw`\bis\s+(?:this|it|my\s+move)\s+forced\b`,
   String.raw`\bdo\s+i\s+have\s+(?:a\s+)?(?:choice|options?|alternatives?)\s+here\b`,
+  // move A-vs-B comparison — SAN "which is better Nf3 or d4", "Nf3 or Bc4" (p20)
+  String.raw`\bis\s+[A-Za-z]{1,2}[1-8x]\w*\s+better\s+than\s+[A-Za-z]{1,2}[1-8x]\w*\b`,
+  String.raw`\bwhich\s+is\s+better[,\s]+[A-Za-z]{1,2}[1-8x]\w*\s+or\s+[A-Za-z]{1,2}[1-8x]\w*\b`,
+  String.raw`^\s*[A-Za-z]{1,2}[1-8x]\w*\s+or\s+[A-Za-z]{1,2}[1-8x]\w*\s*\??\s*$`,
   // "which piece should I develop / move" — a development move decision.
   String.raw`\bwhich\s+piece\s+should\s+i\s+(?:develop|move|play|bring\s+out)\b`,
   String.raw`\bwhat\s+move\s+should\s+i\s+(?:make|play|pick|choose|go\s+(?:for|with))\b`,
@@ -262,7 +266,9 @@ export function isTacticsQuestion(ask: string | undefined): boolean {
   // "teach me forks / drill me on back-rank mates / quiz me on pins" is a
   // LEARNING request (concept or training), NOT a live-board scan — the tactic
   // NOUN would otherwise misroute it to "is there a fork HERE" (matrix pass 8).
-  if (/\b(?:teach|drill|quiz|test|show)\s+me\b/i.test(ask)) return false;
+  // "teach/drill/quiz me forks" is a LEARNING request; but "SHOW me the pin"
+  // (article) is a live point-it-out ask, so 'show' is NOT excluded (pass 20).
+  if (/\b(?:teach|drill|quiz|test)\s+me\b/i.test(ask)) return false;
   // "do I hang/drop/miss ..." is a blunder-HABIT (mistakes / tactics-profile),
   // not a live-board scan (matrix pass 17).
   if (/\bdo\s+i\s+(?:hang|drop|lose|blunder|miss|overlook)\b/i.test(ask)) return false;
@@ -318,6 +324,12 @@ const POSITION_ASSESSMENT_RE = anyOf([
   String.raw`\bis\s+it\s+sharp\s+or\s+quiet\b`,
   // development state — "have I developed enough", "am I behind in development"
   String.raw`\bhave\s+i\s+developed\s+(?:enough|all\s+my\s+pieces)\b`,
+  // center / space / initiative / attack (matrix pass 20).
+  String.raw`\bwho\s+controls\s+the\s+(?:cent(?:er|re)|board)\b`,
+  String.raw`\bdo\s+i\s+have\s+(?:more|the)\s+(?:space|cent(?:er|re))\b`,
+  String.raw`\bis\s+the\s+cent(?:er|re)\s+mine\b`,
+  String.raw`\bdo\s+i\s+have\s+(?:the\s+)?(?:attack|initiative|pressure)\b`,
+  String.raw`\bam\s+i\s+pressing\b`,
   String.raw`\b(?:do\s+i\s+have\s+(?:any\s+)?)?weak\s+(?:pawns?|squares?)\b`,
   String.raw`\b(?:how(?:'?s| is)\s+)?my\s+pawn\s+structure\b`,
   // plural / "are my ..." piece-quality + "sound/solid/healthy structure" (p12)
@@ -351,6 +363,9 @@ export function isPositionAssessmentQuestion(ask: string | undefined): boolean {
   // "am I better THAN I was last month / before" is an over-time TREND, not a
   // board assessment (matrix pass 9). Defer to the trend vertical.
   if (/\b(?:better|worse|stronger|weaker)\s+than\s+(?:i\s+(?:was|used\s+to)|last\s+(?:month|week|year)|before|a\s+\w+\s+ago|i\s+used)/i.test(ask)) return false;
+  // "am I better in long/short games" is a win-shape question (converting), not
+  // a board read (matrix pass 20).
+  if (/\bbetter\s+in\s+(?:long|short|quick|slow)\s+games\b/i.test(ask)) return false;
   return POSITION_ASSESSMENT_RE.test(ask);
 }
 
@@ -1225,6 +1240,9 @@ const CONVERTING_QUESTION_RE = anyOf([
   String.raw`\b(?:grinder|attacker|defender)\s+or\s+(?:a\s+)?(?:grinder|attacker|defender)\b`,
   String.raw`\b(?:better\s+)?attacking\s+or\s+defending\b`,
   String.raw`\bdo\s+i\s+convert\s+(?:winning|won)\s+(?:positions?|games?|endgames?)\b`,
+  // win-shape / game-length — quickWins vs grindWins (matrix pass 20).
+  String.raw`\bdo\s+i\s+win\s+(?:short|long|quick)\s+(?:or\s+(?:long|short|slow)\s+)?games\b`,
+  String.raw`\bam\s+i\s+better\s+in\s+(?:long|short|quick|slow)\s+games\b`,
 ]);
 export function isConvertingQuestion(ask: string | undefined): boolean {
   return !!ask && CONVERTING_QUESTION_RE.test(ask);
@@ -1442,6 +1460,7 @@ const SKILL_RADAR_RE = anyOf([
   String.raw`\bam\s+i\s+(?:better|stronger|worse|weaker|good|bad)\s+(?:at|in)\s+\w+\s+or\s+\w+\b`,
   // "what do you know about my chess/game" — a meta ask for the full profile.
   String.raw`\bwhat\s+do\s+you\s+(?:actually\s+)?know\s+about\s+my\s+(?:chess|game|play)\b`,
+  String.raw`\bwhat\s+data\s+do\s+you\s+have\s+(?:on|about)\s+me\b`,
 ]);
 export function isSkillRadarQuestion(ask: string | undefined): boolean {
   return !!ask && SKILL_RADAR_RE.test(ask);
