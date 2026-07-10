@@ -1,5 +1,6 @@
 // All LLM API calls must go through this file only — per CLAUDE.md
 import OpenAI from 'openai';
+import { detectLanguage } from '../utils/detectLanguage';
 import Anthropic from '@anthropic-ai/sdk';
 import { Capacitor } from '@capacitor/core';
 import { Chess } from 'chess.js';
@@ -2016,6 +2017,14 @@ export async function voiceFacts(
      *  number-fidelity net still refuses any the model tries to add. Overrides
      *  `preferRaw` (warmth needs the phrasing model, not a raw echo). */
     warm?: boolean;
+    /** MULTILINGUAL PHRASING (David 2026-07-10: "make sure all languages work").
+     *  The human name of the language to phrase in ("Spanish", "French"). When
+     *  set to a non-English language the SAME computed facts are voiced in that
+     *  language — grounding-safe, because language is phrasing, not chess content
+     *  (every SAN/number is still preserved verbatim by the fidelity net below).
+     *  Forces the phrasing model even under preferRaw (raw facts are English and
+     *  must be translated). Detected from the student's message by the caller. */
+    targetLanguage?: string;
   } = {},
 ): Promise<string | null> {
   // Lean-on-raw short-circuit — the computed facts ARE the answer; don't spend
@@ -2023,7 +2032,15 @@ export async function voiceFacts(
   // nothing when a whole vertical opts into raw. Kid-safe AND warm voicing both
   // override raw: kid text must spell out any SAN, and warm text must be phrased
   // (a raw echo can't be warm).
-  if (opts.preferRaw && !opts.kidSafe && !opts.warm) return facts.trim();
+  // A non-English language must go through the phrasing model to translate —
+  // the raw facts are English, so preferRaw can't short-circuit. The target
+  // language is the caller's explicit choice, else auto-detected from the
+  // student's own message (ask in Spanish → answered in Spanish; David
+  // 2026-07-10). Grounding-safe: only the language of expression changes.
+  const targetLanguage = opts.targetLanguage
+    ?? (opts.studentMessage ? detectLanguage(opts.studentMessage).name : undefined);
+  const translating = !!targetLanguage && targetLanguage !== 'English';
+  if (opts.preferRaw && !opts.kidSafe && !opts.warm && !translating) return facts.trim();
   const cfg = opts.providerConfig ?? (await getProviderConfig());
   // No provider configured → there's nothing to phrase WITH, but the computed
   // `facts` are already correct, coach-voiced prose. Speak them directly rather
@@ -2032,7 +2049,7 @@ export async function voiceFacts(
   // The phrasing LLM is a nicety, not a requirement, for a grounded answer.
   if (!cfg) return facts.trim();
 
-  const system = opts.kidSafe
+  const systemBase = opts.kidSafe
     ? 'You are a warm, friendly chess coach talking to a child aged 5 to 10. You will ' +
       'be given FACTS that are already true and verified. Say those facts to the child ' +
       'in ONE or TWO short, simple sentences. Add NOTHING: do not introduce any move, ' +
@@ -2060,6 +2077,14 @@ export async function voiceFacts(
     'move, square, piece, number, name, opening, or claim that is not in the facts. ' +
     'Do not analyze further, do not hedge, do not recommend running an engine. Just ' +
     'voice the facts in one or two friendly sentences.';
+  // Multilingual phrasing: same facts, target language. Chess notation + numbers
+  // stay verbatim (they don't translate, and the fidelity net enforces it).
+  const langInstruction = translating
+    ? ` Write your ENTIRE reply in ${targetLanguage}. Keep chess moves in standard ` +
+      `algebraic notation (e4, Nf3, O-O, Qxd5) and all numbers exactly as given; ` +
+      `translate every other word into ${targetLanguage}.`
+    : '';
+  const system = systemBase + langInstruction;
   const user =
     `FACTS (say these, add nothing):\n${facts}` +
     (opts.studentMessage ? `\n\nThe student asked: "${opts.studentMessage}"` : '');
