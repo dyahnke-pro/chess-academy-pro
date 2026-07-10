@@ -273,6 +273,9 @@ export function isTacticsQuestion(ask: string | undefined): boolean {
   // not a live-board scan (matrix pass 17).
   if (/\bdo\s+i\s+(?:hang|drop|lose|blunder|miss|overlook)\b/i.test(ask)) return false;
   if (/\bi\s+(?:keep|always|constantly|often|usually)\s+(?:miss|hang|drop|blunder|overlook)/i.test(ask)) return false;
+  // "is my king exposed/safe" is a static king-safety FEATURE (route to the
+  // positional assembler), not a live tactic scan (pass 20+).
+  if (positionalTopic(ask) === 'king') return false;
   return TACTICS_QUESTION_RE.test(ask);
 }
 
@@ -366,6 +369,9 @@ export function isPositionAssessmentQuestion(ask: string | undefined): boolean {
   // "am I better in long/short games" is a win-shape question (converting), not
   // a board read (matrix pass 20).
   if (/\bbetter\s+in\s+(?:long|short|quick|slow)\s+games\b/i.test(ask)) return false;
+  // A specific POSITIONAL-FEATURE ask (centre/material/structure/king/piece)
+  // routes to the feature assembler (real static data), not the eval (pass 20+).
+  if (positionalTopic(ask)) return false;
   return POSITION_ASSESSMENT_RE.test(ask);
 }
 
@@ -1544,6 +1550,25 @@ export function isAppHelpQuestion(ask: string | undefined): boolean {
   return APP_HELP_RE.some((re) => re.test(ask));
 }
 
+// POSITIONAL-FEATURE topic (David 2026-07-10: "answers calculated with the
+// CORRECT deterministic data"). These board questions need STATIC features
+// (material / centre / development / structure / king / piece quality), NOT the
+// Stockfish eval — so they route to assemblePositionalAnswer, which computes the
+// real feature from the FEN. Returns the topic, or null when it's a plain
+// eval/assessment question (which stays on assemblePositionAssessment).
+export type PositionalTopic = 'material' | 'center' | 'development' | 'structure' | 'king' | 'piece';
+export function positionalTopic(ask: string | undefined): PositionalTopic | null {
+  if (!ask) return null;
+  const a = ask.toLowerCase();
+  if (/\bhow\s+many\s+(?:pieces|pawns)\s+do\s+i\s+have\b|\bmaterial\s+(?:count|balance|situation)\b|\bam\s+i\s+up\s+material\b|\bhow\s+much\s+material\b/.test(a)) return 'material';
+  if (/\bwho\s+controls\s+the\s+(?:cent(?:er|re)|board)\b|\bdo\s+i\s+have\s+(?:more|the)\s+(?:space|cent(?:er|re))\b|\bis\s+the\s+cent(?:er|re)\s+mine\b/.test(a)) return 'center';
+  if (/\bhave\s+i\s+developed\b|\bam\s+i\s+(?:behind|ahead)\s+in\s+development\b|\bhow(?:'?s| is)\s+my\s+development\b/.test(a)) return 'development';
+  if (/\bis\s+my\s+(?:pawn\s+)?structure\b|\bdo\s+i\s+have\s+(?:any\s+)?weak\s+(?:pawns|squares)\b|\bweak\s+pawns?\b/.test(a)) return 'structure';
+  if (/\bis\s+my\s+king\s+(?:exposed|safe|weak|in\s+danger|under\s+attack|vulnerable)\b|\bworried\s+about\s+my\s+king\b|\bmy\s+king\s+safety\b|\bhow(?:'?s| is)\s+my\s+king\b/.test(a)) return 'king';
+  if (/\bis\s+my\s+(?:bishop|knight|rook|queen)\s+(?:on\s+[a-h][1-8]\s+)?(?:bad|good|active|passive|misplaced|awkward)\b|\bare\s+my\s+(?:bishops|knights|rooks|pieces)\s+(?:any\s+)?(?:good|bad|active|coordinated|placed)\b|\bare\s+my\s+pieces\s+coordinated\b|\bis\s+[a-h][1-8]\s+a\s+(?:good|key|weak|strong)\s+square\b/.test(a)) return 'piece';
+  return null;
+}
+
 // TIME-TROUBLE — "do I play too fast / am I flagging / do I lose on time / do I
 // blunder in time trouble". Data-capture (2026-07-10): grounded from
 // `detectTimeTrouble` (blunders under the low-clock bar). Distinct from the
@@ -1667,5 +1692,6 @@ export function buildQuestionGrounding(
     appHelpQuestion: isAppHelpQuestion(a),
     timeTroubleQuestion: isTimeTroubleQuestion(a),
     lastGameQuestion: isLastGameQuestion(a),
+    positionalTopic: positionalTopic(a) ?? undefined,
   };
 }

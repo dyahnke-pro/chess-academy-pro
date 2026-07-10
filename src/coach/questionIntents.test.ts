@@ -706,7 +706,10 @@ describe('strengthened vocabulary across every router', () => {
     ['tactics', isTacticsQuestion, 'can I sacrifice'],
     ['tactics', isTacticsQuestion, 'is there a back-rank weakness'],
     ['position', isPositionAssessmentQuestion, 'how bad is it'],
-    ['position', isPositionAssessmentQuestion, 'am I up material'],
+    // NB: "am I up material" now routes to the positional-FEATURE assembler
+    // (material topic), not the eval — see positionalTopic (David 2026-07-10,
+    // "answers calculated with the correct deterministic data").
+    ['position', isPositionAssessmentQuestion, 'am I winning here'],
     ['position', isPositionAssessmentQuestion, 'who has the edge'],
     ['position', isPositionAssessmentQuestion, 'is it lost'],
     ['master-play', isMasterPlayQuestion, 'what is standard here'],

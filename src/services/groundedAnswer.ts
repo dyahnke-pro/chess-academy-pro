@@ -2098,3 +2098,77 @@ export function assembleLastGameAnswer(g: LastGameLike | null): GroundedAnswer |
   const facts = `Your last game: you ${verb}${as}${vs}${opn}${how}${len}.`;
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// POSITIONAL-FEATURE answers (David 2026-07-10: "make sure the answers are
+// calculated with the correct deterministic data"). The eval-only
+// assemblePositionAssessment answers "who's winning" but NOT "who controls the
+// center / how many pieces / is my structure sound" — those need the STATIC
+// features, computed here from the FEN via assessPosition + positionReading
+// service (pure chess.js). One assembler, dispatched by TOPIC.
+// ─────────────────────────────────────────────────────────────────────────────
+import { assessPosition } from './positionAssessor';
+import { findPieceQuality, findWeakPawns, developmentRead, kingSafetyRead } from './positionReadingService';
+
+export type PositionalTopic = 'material' | 'center' | 'development' | 'structure' | 'king' | 'piece';
+
+const PIECE_WORD: Record<string, string> = { p: 'pawns', n: 'knights', b: 'bishops', r: 'rooks', q: 'queen', k: 'king' };
+
+export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'black', topic: PositionalTopic): GroundedAnswer | null {
+  let a: ReturnType<typeof assessPosition>;
+  try { a = assessPosition(fen); } catch { return null; }
+  const me = studentColor;
+  const opp = studentColor === 'white' ? 'black' : 'white';
+  const myC: 'w' | 'b' = me === 'white' ? 'w' : 'b';
+  const src = ['board:chess.js'];
+
+  if (topic === 'material') {
+    const adv = me === 'white' ? a.materialAdvantage : -a.materialAdvantage;
+    const mineCount = me === 'white' ? a.material.white : a.material.black;
+    const pieces = (['q', 'r', 'b', 'n', 'p'] as const)
+      .filter((p) => (mineCount[p] ?? 0) > 0)
+      .map((p) => `${mineCount[p]} ${PIECE_WORD[p]}`)
+      .join(', ');
+    const balance = adv === 0 ? 'Material is even.' : adv > 0 ? `You're up ${adv} point${adv === 1 ? '' : 's'} of material.` : `You're down ${Math.abs(adv)} point${Math.abs(adv) === 1 ? '' : 's'} of material.`;
+    return { facts: `${balance} You have ${pieces}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  }
+
+  if (topic === 'center') {
+    const mine = me === 'white' ? a.pieceActivity.whiteCentralPieces : a.pieceActivity.blackCentralPieces;
+    const theirs = me === 'white' ? a.pieceActivity.blackCentralPieces : a.pieceActivity.whiteCentralPieces;
+    const verdict = mine > theirs ? `you control the center` : mine < theirs ? `${opp} controls the center` : `the center is contested`;
+    return { facts: `You have ${mine} piece${mine === 1 ? '' : 's'} bearing on the centre to ${opp}'s ${theirs} — ${verdict}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  }
+
+  if (topic === 'development') {
+    const d = developmentRead(fen, myC);
+    if (!d) return null;
+    const castled = d.castled ? 'and you have castled' : 'and you have not castled yet';
+    return { facts: `You've developed ${d.developedMinors} of your ${d.totalMinors} minor pieces ${castled}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  }
+
+  if (topic === 'structure') {
+    const wp = findWeakPawns(fen, myC);
+    const iso = wp.isolated.length ? `isolated pawn${wp.isolated.length === 1 ? '' : 's'} on ${wp.isolated.join(', ')}` : '';
+    const dbl = wp.doubled.length ? `doubled pawn${wp.doubled.length === 1 ? '' : 's'} on ${wp.doubled.join(', ')}` : '';
+    const faults = [iso, dbl].filter(Boolean).join(' and ');
+    return { facts: faults ? `Your pawn structure has ${faults}.` : `Your pawn structure is sound — no isolated or doubled pawns.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  }
+
+  if (topic === 'king') {
+    const k = kingSafetyRead(fen, myC);
+    const castled = (me === 'white' ? a.kingSafety.whiteCastled : a.kingSafety.blackCastled);
+    const exposed = (me === 'white' ? a.kingSafety.whiteKingExposed : a.kingSafety.blackKingExposed) || !!k?.exposed;
+    const detail = exposed && k?.exposed ? ' Its pawn shield is compromised.' : '';
+    return { facts: `Your king is ${castled ? 'castled' : 'not castled'} and ${exposed ? 'looks exposed' : 'reasonably safe'}.${detail}`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  }
+
+  // piece quality
+  const quality = findPieceQuality(fen).filter((q) => q.color === myC);
+  if (quality.length === 0) return { facts: `None of your pieces stand out as especially good or bad right now.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  const good = quality.filter((q) => q.quality === 'good').map((q) => `${PIECE_WORD[q.piece] ?? q.piece} on ${q.square} (${q.reason})`);
+  const bad = quality.filter((q) => q.quality === 'bad').map((q) => `${PIECE_WORD[q.piece] ?? q.piece} on ${q.square} (${q.reason})`);
+  const g = good.length ? `Well-placed: your ${good.join(', ')}.` : '';
+  const b = bad.length ? `Poorly-placed: your ${bad.join(', ')}.` : '';
+  return { facts: [g, b].filter(Boolean).join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: src };
+}

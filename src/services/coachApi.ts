@@ -58,7 +58,7 @@ function deepseekCacheSplit(usage: unknown): { hit: number | null; miss: number 
   };
 }
 import { lookupMasterPlay } from './masterPlayLookup';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, explainBestMoveGrounded } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, explainBestMoveGrounded } from './groundedAnswer';
 import { matchRouteByTopic } from './navigationRouter';
 import { APP_ROUTES_MANIFEST } from '../data/appRoutesManifest';
 import { lookupTablebase } from './lichessTablebaseService';
@@ -1379,6 +1379,12 @@ export interface MasterGroundingOptions {
   /** Data-capture (2026-07-10) — "did I win my last game / what was the result".
    *  Voiced from the most-recent game record via assembleLastGameAnswer. No board. */
   lastGameQuestion?: boolean;
+  /** Answer-correctness (2026-07-10) — a positional-FEATURE ask (centre /
+   *  material / development / structure / king / piece quality). Routes to
+   *  assemblePositionalAnswer, which computes the STATIC feature from the FEN
+   *  (the eval-only assemblePositionAssessment can't answer these). Needs the
+   *  currentFen. */
+  positionalTopic?: 'material' | 'center' | 'development' | 'structure' | 'king' | 'piece';
   /** Which side the STUDENT plays — so the tactics answer warns about THEIR
    *  hanging pieces. Falls back to side-to-move when absent. */
   studentColor?: 'white' | 'black';
@@ -2311,7 +2317,10 @@ export async function getCoachChatResponse(
       grounding.positionAssessmentQuestion === true ||
       grounding.teachingMethodQuestion === true ||
       grounding.settingsQuestion === true ||
-      grounding.appHelpQuestion === true;
+      grounding.appHelpQuestion === true ||
+      grounding.timeTroubleQuestion === true ||
+      grounding.lastGameQuestion === true ||
+      grounding.positionalTopic !== undefined;
     if (intentFired) {
       try {
         // Helper: the latest user message, for voiceFacts context.
@@ -3309,6 +3318,24 @@ export async function getCoachChatResponse(
               }
             }
           } catch { /* tablebase unreachable — fall through to engine eval */ }
+        }
+
+        // ── POSITIONAL FEATURE (answer-correctness 2026-07-10) — "who controls
+        // the centre / how many pieces / is my structure sound / is my king
+        // exposed / is my bishop bad?" These need the STATIC feature computed
+        // from the FEN (material/centre/development/structure/king/piece), NOT
+        // the eval — assemblePositionalAnswer supplies the real data. Runs
+        // BEFORE the eval assessment so a feature ask gets the feature, not a
+        // pawn-count eval.
+        if (grounding.positionalTopic && grounding.currentFen) {
+          const sc: 'white' | 'black' =
+            grounding.studentColor ??
+            ((grounding.currentFen ?? '').split(' ')[1] === 'b' ? 'black' : 'white');
+          const answer = assemblePositionalAnswer(grounding.currentFen, sc, grounding.positionalTopic);
+          if (answer) {
+            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'positional-feature', preferRaw: true });
+            if (voiced) return voiced;
+          }
         }
 
         // ── POSITION ASSESSMENT (Phase 1 cont) — "who's winning / how do I
