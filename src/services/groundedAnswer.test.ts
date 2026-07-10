@@ -995,3 +995,21 @@ describe('assembleCandidateMoveAnswer — evaluate the NAMED move', () => {
     expect(a?.facts).toMatch(/8%/);
   });
 });
+
+describe('assemblePlayerGamesAnswer — honest empty for a NAMED player (Bug 1)', () => {
+  it('answers honestly when we have no games for the named player (never invents)', () => {
+    const a = assemblePlayerGamesAnswer({
+      playerId: 'gothamchess', requestedPlayerName: 'GothamChess',
+      openingId: 'caro-kann', openingName: 'Caro-Kann', totalAvailable: 0, games: [],
+    });
+    expect(a?.facts).toMatch(/don't have/i);
+    expect(a?.facts).toMatch(/GothamChess/);
+    expect(a?.facts).toMatch(/Caro-Kann/);
+  });
+
+  it('still returns null for an UN-named empty lookup (falls through, no honest-empty)', () => {
+    expect(assemblePlayerGamesAnswer({
+      playerId: null, openingId: 'x', openingName: 'X', totalAvailable: 0, games: [],
+    })).toBeNull();
+  });
+});

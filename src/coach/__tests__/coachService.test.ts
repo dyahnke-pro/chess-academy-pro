@@ -70,6 +70,8 @@ describe('coachService.ask', () => {
       'coach-brain-tool-parse-result',
       'coach-brain-provider-called',
       'coach-brain-answer-returned',
+      // Full ask→answer capture wraps ask() and fires last (David 2026-07-10).
+      'coach-brain-answered',
     ]);
   });
 

@@ -364,6 +364,12 @@ export interface LiveModelGameContext {
 export interface LivePlayerGamesContext {
   /** App player id whose games these are (e.g. "naroditsky"), when scoped. */
   playerId: string | null;
+  /** Display name of the pro the student NAMED in the ask ("how does
+   *  GothamChess play this") when we scoped the lookup to them. Set even when
+   *  `games` is empty so the coach can say honestly "I don't have GothamChess's
+   *  games in this line" instead of showing another pro's games or going mute
+   *  (David 2026-07-10). Undefined for an un-named, opening-only lookup. */
+  requestedPlayerName?: string;
   /** Base opening id resolved for the lookup (e.g. "caro-kann"). */
   openingId: string;
   openingName: string;

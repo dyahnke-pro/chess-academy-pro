@@ -20,13 +20,56 @@
 import type { LivePlayerGamesContext } from '../types';
 import { detectOpening } from '../../services/openingDetectionService';
 import { getProGameReferenceDataSync } from '../../services/proGameReferenceData';
-import proRepertoireData from '../../data/pro-repertoires.json';
 import type { ProGameReference } from '../../types';
 
-/** App player id -> display name, from the pro roster. */
-const PLAYER_NAMES: Record<string, string> = Object.fromEntries(
-  (proRepertoireData as { players: { id: string; name: string }[] }).players.map((p) => [p.id, p.name]),
-);
+/** App player id -> the pro's real display handle (the roster `name` is the
+ *  repertoire TITLE, not the person). Used for the honest-empty message + the
+ *  scoped answer's byline (David 2026-07-10). */
+const PLAYER_DISPLAY: Record<string, string> = {
+  naroditsky: 'Naroditsky', gothamchess: 'GothamChess', carlsen: 'Carlsen',
+  hikaru: 'Hikaru', caruana: 'Caruana', firouzja: 'Firouzja', dubov: 'Dubov',
+  gukesh: 'Gukesh', praggnanandhaa: 'Praggnanandhaa', niemann: 'Niemann',
+  ericrosen: 'Eric Rosen', annacramling: 'Anna Cramling', chesswithakeem: 'Akeem',
+  samayraina: 'Samay Raina', aman: 'Aman',
+};
+
+/** Name / handle aliases -> app player id. Matched with word boundaries against
+ *  the ask so "how does GothamChess / Levy / Danya play this" resolves to the
+ *  right pro. Longer/more-specific aliases are fine; the first \b-match wins. */
+const PLAYER_ALIASES: Record<string, string> = {
+  naroditsky: 'naroditsky', danya: 'naroditsky',
+  gothamchess: 'gothamchess', gotham: 'gothamchess', levy: 'gothamchess', rozman: 'gothamchess',
+  carlsen: 'carlsen', magnus: 'carlsen',
+  hikaru: 'hikaru', nakamura: 'hikaru',
+  caruana: 'caruana', fabiano: 'caruana', fabi: 'caruana',
+  firouzja: 'firouzja', alireza: 'firouzja',
+  dubov: 'dubov', daniil: 'dubov',
+  gukesh: 'gukesh',
+  praggnanandhaa: 'praggnanandhaa', pragg: 'praggnanandhaa',
+  niemann: 'niemann', hans: 'niemann',
+  rosen: 'ericrosen', imrosen: 'ericrosen',
+  cramling: 'annacramling',
+  akeem: 'chesswithakeem',
+  samay: 'samayraina', raina: 'samayraina',
+  aman: 'aman', hambleton: 'aman', chessbrah: 'aman',
+};
+
+/** Resolve the pro the student NAMED in the ask to an app player id, or null
+ *  when no known pro is named. Word-boundary matched so a short alias never
+ *  fires inside another word. */
+export function resolvePlayerIdFromAsk(ask: string | undefined): string | null {
+  if (!ask) return null;
+  const lower = ask.toLowerCase();
+  for (const [alias, id] of Object.entries(PLAYER_ALIASES)) {
+    if (new RegExp(`\\b${alias}\\b`).test(lower)) return id;
+  }
+  return null;
+}
+
+/** The pro's display handle for messages (falls back to the id). */
+export function playerDisplayName(id: string): string {
+  return PLAYER_DISPLAY[id] ?? id;
+}
 
 /** Max games shipped into the envelope per call — breadth without
  *  ballooning the token budget. The lookup_player_games tool surfaces
@@ -86,15 +129,28 @@ export function loadPlayerGamesForLive(args: {
   moveHistory: string[];
   /** When set (a pro opening surface), scope to this one pro opening. */
   proOpeningId?: string | null;
+  /** When the student NAMED a pro ("how does GothamChess play this"), scope the
+   *  games to THAT player and, if they have none in this line, return an honest
+   *  empty context so the coach says so instead of showing another pro's games
+   *  (David 2026-07-10). */
+  askedPlayerId?: string | null;
 }): LivePlayerGamesContext | null {
   // Reads the in-memory cache primed by loadProGameReferenceData (awaited
   // in coachService before this runs, and on boot by dataLoader). Empty
   // until that resolves — the block is simply absent on a cold envelope.
   const ALL_REFS = getProGameReferenceDataSync();
+  const asked = args.askedPlayerId ?? null;
+  const scopeToAsked = <T extends ProGameReference>(games: T[]): T[] =>
+    asked ? games.filter((g) => g.playerId === asked) : games;
   // Fast path: a specific pro opening surface.
   if (args.proOpeningId) {
-    const scoped = ALL_REFS.filter((g) => g.proOpeningId === args.proOpeningId && !studentLost(g));
-    if (scoped.length === 0) return null;
+    let scoped = ALL_REFS.filter((g) => g.proOpeningId === args.proOpeningId && !studentLost(g));
+    scoped = scopeToAsked(scoped);
+    if (scoped.length === 0) {
+      return asked
+        ? emptyForPlayer(asked, args.openingName ?? args.proOpeningId ?? 'this line')
+        : null;
+    }
     return shape(scoped, scoped[0].openingId, args.openingName ?? scoped[0].variationLabel, scoped[0].playerId);
   }
 
@@ -104,17 +160,38 @@ export function loadPlayerGamesForLive(args: {
     const detected = detectOpening(args.moveHistory);
     if (detected?.name) openingName = detected.name;
   }
-  if (!openingName) return null;
+  if (!openingName) {
+    // Named a pro but we can't resolve the line → still answer honestly about
+    // the player rather than going mute.
+    return asked ? emptyForPlayer(asked, 'this line') : null;
+  }
 
   const openingId = openingNameToId(openingName);
-  if (!openingId) return null;
+  if (!openingId) return asked ? emptyForPlayer(asked, openingName) : null;
   const candidates = openingIdCandidates(openingId);
   const stem = openingStem(openingId);
 
-  const matches = ALL_REFS.filter((g) => gameMatchesOpening(g, candidates, stem) && !studentLost(g));
-  if (matches.length === 0) return null;
+  let matches = ALL_REFS.filter((g) => gameMatchesOpening(g, candidates, stem) && !studentLost(g));
+  matches = scopeToAsked(matches);
+  if (matches.length === 0) {
+    return asked ? emptyForPlayer(asked, openingName, openingId) : null;
+  }
 
-  return shape(matches, openingId, openingName, null);
+  return shape(matches, openingId, openingName, asked);
+}
+
+/** Honest empty context for a NAMED player with no games in the line — the
+ *  assembler voices "I don't have <Name>'s games in this line" (David
+ *  2026-07-10). */
+function emptyForPlayer(playerId: string, openingName: string, openingId?: string): LivePlayerGamesContext {
+  return {
+    playerId,
+    requestedPlayerName: playerDisplayName(playerId),
+    openingId: openingId ?? openingNameToId(openingName) ?? openingName,
+    openingName,
+    totalAvailable: 0,
+    games: [],
+  };
 }
 
 /** Rank (highest opponent rating first) + cap + project into the
@@ -139,7 +216,7 @@ function shape(
       const opponent = g.studentSide === 'white' ? g.black : g.white;
       return {
         id: g.id,
-        player: PLAYER_NAMES[g.playerId] ?? g.playerId,
+        player: playerDisplayName(g.playerId),
         studentSide: g.studentSide,
         opponent,
         opponentRating: g.opponentRating,

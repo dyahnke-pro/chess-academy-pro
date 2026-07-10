@@ -36,7 +36,7 @@ import { loadAnnotationContextForLive } from './sources/annotationContext';
 import { loadBookGroundingForLive } from './sources/bookGrounding';
 import { loadMiddlegamePlanForLive } from './sources/middlegamePlan';
 import { loadModelGamesForLive } from './sources/modelGames';
-import { loadPlayerGamesForLive } from './sources/playerGames';
+import { loadPlayerGamesForLive, resolvePlayerIdFromAsk } from './sources/playerGames';
 import { loadProGameReferenceData } from '../services/proGameReferenceData';
 import { consumeCoachActionOffer } from '../services/coachApi';
 import type { CoachActionOffer } from '../services/coachApi';
@@ -630,7 +630,11 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
   // id across every pro who plays the line. The brain walks + cites a
   // pro's actual games during teaching + walkthroughs instead of the
   // ~2 hand-narrated model games alone. (David 2026-06-01.)
-  if (!input.liveState.playerGames && (hasOpeningSignal || input.liveState.proOpeningId)) {
+  // The pro the student NAMED in the ask ("how does GothamChess play this") —
+  // scope the reference games to THEM (David 2026-07-10). Also lets the load
+  // run when a pro is named even without a strong opening signal.
+  const askedPlayerId = resolvePlayerIdFromAsk(input.ask);
+  if (!input.liveState.playerGames && (hasOpeningSignal || input.liveState.proOpeningId || askedPlayerId)) {
     try {
       // Prime the reference cache (fetched from public/data, not bundled)
       // so the synchronous loadPlayerGamesForLive read below sees it.
@@ -639,6 +643,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
         openingName: input.liveState.lichessSnapshot?.name,
         moveHistory: input.liveState.moveHistory ?? [],
         proOpeningId: input.liveState.proOpeningId ?? null,
+        askedPlayerId,
       });
       if (games) {
         input = {

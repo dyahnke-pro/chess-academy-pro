@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll } from 'vitest';
-import { loadPlayerGamesForLive } from './playerGames';
+import { loadPlayerGamesForLive, resolvePlayerIdFromAsk } from './playerGames';
 import proGameReferencesData from '../../../public/data/pro-game-references.json';
 import { __setProGameReferenceCache } from '../../services/proGameReferenceData';
 import type { ProGameReference } from '../../types';
@@ -63,5 +63,47 @@ describe('loadPlayerGamesForLive', () => {
     const ratings = ctx!.games.map((g) => g.opponentRating ?? 0);
     const sorted = [...ratings].sort((a, b) => b - a);
     expect(ratings).toEqual(sorted);
+  });
+});
+
+describe('resolvePlayerIdFromAsk (Bug 1, David 2026-07-10)', () => {
+  it.each([
+    ['how does GothamChess play this line', 'gothamchess'],
+    ['how does Gotham play the Caro', 'gothamchess'],
+    ['what does Levy do here', 'gothamchess'],
+    ['how does Naroditsky handle this', 'naroditsky'],
+    ['how does Danya play it', 'naroditsky'],
+    ['what does Magnus play here', 'carlsen'],
+    ['how does Hikaru meet this', 'hikaru'],
+  ])('resolves "%s" -> %s', (ask, id) => expect(resolvePlayerIdFromAsk(ask)).toBe(id));
+
+  it('returns null when no known pro is named', () => {
+    expect(resolvePlayerIdFromAsk('how do I play this line')).toBeNull();
+    expect(resolvePlayerIdFromAsk('what is the best move')).toBeNull();
+  });
+});
+
+describe('loadPlayerGamesForLive — named-player scoping (Bug 1)', () => {
+  it('scopes games to the named player', () => {
+    const ctx = loadPlayerGamesForLive({
+      openingName: null, moveHistory: [],
+      proOpeningId: SAMPLE.proOpeningId, askedPlayerId: SAMPLE.playerId,
+    });
+    expect(ctx).not.toBeNull();
+    expect(ctx!.playerId).toBe(SAMPLE.playerId);
+    expect(ctx!.games.length).toBeGreaterThan(0);
+  });
+
+  it('returns an HONEST empty context for a named player with no games in the line', () => {
+    // A pro who has no games in SAMPLE's opening → empty, but NAMED so the
+    // coach can say so honestly instead of showing another pro's games.
+    const ctx = loadPlayerGamesForLive({
+      openingName: null, moveHistory: [],
+      proOpeningId: SAMPLE.proOpeningId, askedPlayerId: '__no_such_pro__',
+    });
+    expect(ctx).not.toBeNull();
+    expect(ctx!.games).toHaveLength(0);
+    expect(ctx!.totalAvailable).toBe(0);
+    expect(ctx!.requestedPlayerName).toBeTruthy();
   });
 });

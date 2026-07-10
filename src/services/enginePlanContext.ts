@@ -126,7 +126,7 @@ export async function buildCandidateEval(
   }
   const afterFen = after.fen();
   const hasEval = (a: StockfishAnalysis | undefined): boolean =>
-    !!a && (typeof a.evaluation === 'number' || !!a.isMate);
+    !!a && (typeof a.evaluation === 'number' || a.isMate);
   let analysis: StockfishAnalysis | undefined = getCachedStockfish(afterFen);
   if (!hasEval(analysis)) {
     try {

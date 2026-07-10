@@ -1171,7 +1171,20 @@ function proWonGame(result: string, studentSide: 'white' | 'black'): boolean {
  * falls through). The LLM never invents a "<pro> plays X" game.
  */
 export function assemblePlayerGamesAnswer(ctx: LivePlayerGamesContext): GroundedAnswer | null {
-  if (!ctx.games || ctx.games.length === 0) return null;
+  if (!ctx.games || ctx.games.length === 0) {
+    // Honest empty for a NAMED player we simply don't have games for in this
+    // line — never invent, never show a different pro's games (David 2026-07-10:
+    // "how does GothamChess play this line" couldn't be answered).
+    if (ctx.requestedPlayerName) {
+      return {
+        facts: `I don't have any of ${ctx.requestedPlayerName}'s games in the ${ctx.openingName} in our data.`,
+        bestMoveSan: null,
+        bestMoveFromTo: null,
+        sources: [`player-games:${ctx.playerId ?? 'pro'}`],
+      };
+    }
+    return null;
+  }
   const player = ctx.games[0].player;
   // Prefer a win over the strongest opponent; else just the strongest opponent.
   const ranked = [...ctx.games].sort((a, b) => (b.opponentRating ?? 0) - (a.opponentRating ?? 0));
