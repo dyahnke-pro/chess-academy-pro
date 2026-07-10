@@ -1798,12 +1798,17 @@ export interface RecordsLike {
   fastestWin: { moves: number } | null;
   longestGame: { moves: number } | null;
   bestAccuracyGame: { accuracyPct: number } | null;
+  /** The strongest player who has BEATEN the student — answers "who beats me"
+   *  (overview.lowestLostTo). Added 2026-07-10 so "who beats me" gets real data
+   *  instead of a best-scalp mismatch (David: "answers must make sense"). */
+  nemesis?: { name: string; elo: number } | null;
 }
 /** assembleRecordsAnswer — "my best game / fastest win / records". G0. */
 export function assembleRecordsAnswer(r: RecordsLike): GroundedAnswer | null {
   if (r.totalGames <= 0) return null;
   const parts: string[] = [];
   if (r.highestBeaten) parts.push(`your best scalp is ${r.highestBeaten.name} (${r.highestBeaten.elo})`);
+  if (r.nemesis) parts.push(`the strongest player to beat you was ${r.nemesis.name} (${r.nemesis.elo})`);
   if (r.bestAccuracyGame) parts.push(`your most accurate game hit ${r.bestAccuracyGame.accuracyPct}%`);
   if (r.fastestWin) parts.push(`your fastest win took ${r.fastestWin.moves} moves`);
   if (r.longestGame) parts.push(`your longest game ran ${r.longestGame.moves} moves`);

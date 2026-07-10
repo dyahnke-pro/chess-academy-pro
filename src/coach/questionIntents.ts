@@ -322,9 +322,11 @@ const POSITION_ASSESSMENT_RE = anyOf([
   String.raw`\bwhat(?:'?s| is)?\s+on\s+the\s+board\b`,
   // "evaluate / analyze MY position" (the "my" variant of the assess patterns).
   String.raw`\b(?:evaluate|analy[sz]e|assess|read)\s+my\s+position\b`,
-  // position CHARACTER — sharp / quiet / drawish / wild (matrix pass 18).
-  String.raw`\bis\s+(?:this|it|the)\s+(?:position\s+)?(?:sharp|quiet|tactical|positional|calm|wild|double[\s-]edged|drawish|dry|messy|complicated)\b`,
-  String.raw`\bis\s+it\s+sharp\s+or\s+quiet\b`,
+  // "is this drawish / balanced" IS answerable from the eval (near-0 = drawish).
+  // NB: sharp / quiet / wild / complicated are NOT computed by the eval and were
+  // REMOVED (David 2026-07-10, "answers must make sense") — they safe-default
+  // honestly rather than answer sharpness with a pawn-count eval.
+  String.raw`\bis\s+(?:this|it|the)\s+(?:position\s+)?(?:drawish|balanced|level|equal)\b`,
   // development state — "have I developed enough", "am I behind in development"
   String.raw`\bhave\s+i\s+developed\s+(?:enough|all\s+my\s+pieces)\b`,
   // center / space / initiative / attack (matrix pass 20).

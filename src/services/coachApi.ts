@@ -2896,13 +2896,14 @@ export async function getCoachChatResponse(
         // ── RECORDS (Wave 4) — "my best game / fastest win / records?" ─────
         if (grounding.recordsQuestion) {
           try {
-            const pr = await personalRecords();
+            const [pr, ovr] = await Promise.all([personalRecords(), getOverviewInsights()]);
             const answer = assembleRecordsAnswer({
               totalGames: pr.totalGames,
               highestBeaten: pr.highestBeaten ? { name: pr.highestBeaten.name, elo: pr.highestBeaten.elo } : null,
               fastestWin: pr.fastestWin ? { moves: pr.fastestWin.moves } : null,
               longestGame: pr.longestGame ? { moves: pr.longestGame.moves } : null,
               bestAccuracyGame: pr.bestAccuracyGame ? { accuracyPct: pr.bestAccuracyGame.accuracyPct } : null,
+              nemesis: ovr.lowestLostTo ? { name: ovr.lowestLostTo.name, elo: ovr.lowestLostTo.elo } : null,
             });
             if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'records', preferRaw: true }); if (v) { lastCoachActionOffer = [{ type: 'review_games', id: 'best' }]; return v; } }
             const nd = await voiceFacts("You haven't played enough analyzed games yet for me to pull out your records. Play a few and I'll track your best games and fastest wins.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'records', preferRaw: true });

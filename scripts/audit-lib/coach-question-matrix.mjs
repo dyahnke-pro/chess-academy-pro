@@ -560,7 +560,7 @@ export const STRUCTURAL_PROBES = [
   { id: 'accuracy', cat: 'self-knowledge', q: 'how far off the engine am i' },
   { id: 'tactics-profile', cat: 'self-knowledge', q: 'i keep missing pins' },
   { id: 'tactics-profile', cat: 'self-knowledge', q: 'i always miss the tactic', notKey: 'tacticsQuestion' },
-  { id: 'position-assessment', cat: 'live-board', q: 'is it sharp or quiet' },
+  { id: 'position-assessment', cat: 'live-board', q: 'is this drawish' },
   { id: 'position-assessment', cat: 'live-board', q: 'have i developed enough' },
   { id: 'progress', cat: 'self-knowledge', q: 'what lesson should i do' },
   { id: 'plan', cat: 'live-board', q: 'how should i try to win this' },
