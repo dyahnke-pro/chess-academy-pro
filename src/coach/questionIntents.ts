@@ -173,7 +173,14 @@ const BEST_MOVE_QUESTION_RE = anyOf([
   String.raw`^\s*best\s*\??\s*$`,   // bare terse "best?" / "best"
 ]);
 export function isBestMoveQuestion(ask: string | undefined): boolean {
-  return !!ask && BEST_MOVE_QUESTION_RE.test(ask);
+  if (!ask) return false;
+  // "my best OPENING / defence / repertoire" is an opening-profile question, not
+  // a board best-MOVE — the bare "best" trigger would misroute it (matrix pass
+  // 9, 2026-07-10). ("best line/move here" stays a board question.)
+  if (/\bbest\s+(?:opening|defen[cs]e|repertoire|system)\b/i.test(ask)) return false;
+  // "best way to use / learn this app" is an app-help question, not a move.
+  if (/\bbest\s+way\s+to\s+(?:use|learn|study|navigate|improve)\b/i.test(ask)) return false;
+  return BEST_MOVE_QUESTION_RE.test(ask);
 }
 
 /** A TACTICS / DANGER question — "is anything hanging?", "what's the threat?",
@@ -271,6 +278,15 @@ const POSITION_ASSESSMENT_RE = anyOf([
   String.raw`\bis\s+my\s+(?:bishop|knight|rook|queen|king|pawn|pieces?|structure|position)\s+(?:bad|good|active|passive|strong|weak|misplaced|awkward|fine|ok(?:ay)?)\b`,
   String.raw`\b(?:do\s+i\s+have\s+(?:any\s+)?)?weak\s+(?:pawns?|squares?)\b`,
   String.raw`\b(?:how(?:'?s| is)\s+)?my\s+pawn\s+structure\b`,
+  // win-probability / outcome = a read of the eval (pass 9).
+  String.raw`\b(?:what\s+are\s+)?my\s+(?:winning\s+)?chances\b`,
+  String.raw`\bwill\s+i\s+win\s+(?:this|here|from\s+here)\b`,
+  String.raw`\bhow\s+likely\s+am\s+i\s+to\s+(?:win|lose|draw|hold)\b`,
+  String.raw`\bwinning\s+chances\b`,
+  // square / file positional judgment on the live board.
+  String.raw`\bis\s+[a-h][1-8]\s+(?:weak|strong|weakened|hanging|a\s+(?:weak|strong)\s+square|defended|covered|contested)\b`,
+  String.raw`\b(?:is\s+)?(?:the\s+)?[a-h][\s-]?file\s+(?:open|closed|weak|mine|contested|half[\s-]?open)\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+going\s+on\s+with\s+the\s+[a-h][\s-]?file\b`,
 ]);
 export function isPositionAssessmentQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
@@ -279,6 +295,9 @@ export function isPositionAssessmentQuestion(ask: string | undefined): boolean {
   // "am I better" trigger would otherwise misroute it to the live position eval
   // (matrix pass 7, 2026-07-10). Defer to the skill/phase/converting verticals.
   if (/\b(?:better|worse|stronger|weaker|good|bad)\s+(?:at|in)\s+(?:tactics|endgames?|openings?|middlegames?|calculation|converting|defen[cs]e|attack)/i.test(ask)) return false;
+  // "am I better THAN I was last month / before" is an over-time TREND, not a
+  // board assessment (matrix pass 9). Defer to the trend vertical.
+  if (/\b(?:better|worse|stronger|weaker)\s+than\s+(?:i\s+(?:was|used\s+to)|last\s+(?:month|week|year)|before|a\s+\w+\s+ago|i\s+used)/i.test(ask)) return false;
   return POSITION_ASSESSMENT_RE.test(ask);
 }
 
@@ -364,6 +383,9 @@ const PLAYER_GAMES_QUESTION_RE = anyOf([
   String.raw`\b(?:do\s+you\s+have|is\s+there|got|have\s+you\s+got)\s+(?:a\s+|any\s+)?games?\s+(?:in|with|for|from|of|here)\b`,
   // "what game shows/demonstrates this idea"
   String.raw`\bwhat\s+games?\s+(?:shows?|demonstrates?|illustrates?|has|features?)\b`,
+  // "show me a hikaru game (in this line)" — a NAMED player's game, the name
+  // sitting between the article and "game" (matrix pass 9, 2026-07-10).
+  String.raw`\b(?:show|find|pull\s+up|get|see)\s+(?:me\s+)?(?:a|an|one|any)\s+\w+(?:'s)?\s+games?\b`,
 ]);
 export function isPlayerGamesQuestion(ask: string | undefined): boolean {
   return !!ask && PLAYER_GAMES_QUESTION_RE.test(ask);
@@ -532,6 +554,8 @@ const IMPROVEMENT_TREND_RE = anyOf([
   String.raw`\b(?:my\s+)?(?:improvement|progress)\s+(?:over\s+time|trend|trajectory)\b`,
   String.raw`\bam\s+i\s+(?:making\s+progress|moving\s+(?:up|forward)|headed\s+(?:up|in\s+the\s+right\s+direction))\b`,
   String.raw`\btrending\s+up\s+or\s+down\b`,
+  String.raw`\bhow\s+many\s+(?:rating\s+)?points?\s+(?:did\s+i|have\s+i)\s+(?:gain|gained|lose|lost|drop|dropped|pick\s+up)\b`,
+  String.raw`\b(?:rating\s+)?points?\s+(?:gained|lost|dropped)\s+(?:this\s+(?:week|month)|lately|recently)\b`,
 ]);
 export function isImprovementTrendQuestion(ask: string | undefined): boolean {
   return !!ask && IMPROVEMENT_TREND_RE.test(ask);
@@ -592,6 +616,7 @@ const STATS_QUESTION_RE = anyOf([
   String.raw`\bmy\s+(?:chess\s+)?(?:current\s+)?(?:rating|elo)\b`,   // bare "my (chess) rating"
   String.raw`\bwhat\s+rating\s+am\s+i\b`,                            // "what rating am I"
   String.raw`\bwhat\s+am\s+i\s+rated\b`,                             // "what am I rated"
+  String.raw`\bwhat(?:'?s| is)?\s+my\s+(?:exact|current|precise|actual|real)\s+rating\b`,
   String.raw`\bwin\s*[\/-]\s*loss\b|\bwin[\s-]loss\b`,               // "win/loss", "win-loss"
   String.raw`\bwhat(?:'?s| is)?\s+my\s+(?:level|track\s+record)\b`,
   String.raw`\bhow\s+strong\s+(?:a\s+player\s+)?am\s+i\b`,
@@ -1330,6 +1355,9 @@ const APP_HELP_RE: ReadonlyArray<RegExp> = [
   /\bhow\s+(?:does|do|can|should)\b[\w'\s-]{0,30}?\b(?:tab|page|screen|section|trainer|feature)\b/i,
   /\bwhat\s+can\s+i\s+do\s+(?:in|on|with|here)\b/i,
   /\bexplain\b[\w'\s-]{0,30}?\b(?:tab|page|screen|section|trainer|feature)\b/i,
+  // "how / best way to use this app (to improve)" — app-usage guidance (pass 9).
+  /\b(?:how|best\s+way|what(?:'?s| is)\s+the\s+best\s+way)\s+(?:should\s+i\s+|to\s+|do\s+i\s+)?use\s+(?:this\s+|the\s+)?app\b/i,
+  /\bhow\s+do\s+i\s+(?:get\s+the\s+most\s+out\s+of|make\s+the\s+most\s+of)\s+(?:this\s+|the\s+)?app\b/i,
 ];
 
 export function isAppHelpQuestion(ask: string | undefined): boolean {

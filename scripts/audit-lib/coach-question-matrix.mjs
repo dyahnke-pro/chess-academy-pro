@@ -461,6 +461,18 @@ export const STRUCTURAL_PROBES = [
   { id: 'progress', cat: 'self-knowledge', q: 'plan my training', notKey: 'planQuestion' },
   { id: 'concept', cat: 'knowledge', q: 'teach me forks', notKey: 'tacticsQuestion' },
   { id: 'tactics-profile', cat: 'self-knowledge', q: 'am i better at tactics or endgames', notKey: 'positionAssessmentQuestion' },
+  // Pass 9 — probability / square-file / pro-game / exact-numeric / app-usage,
+  // and 3 more misroute guards.
+  { id: 'position-assessment', cat: 'live-board', q: 'what are my chances here' },
+  { id: 'position-assessment', cat: 'live-board', q: 'will i win this' },
+  { id: 'position-assessment', cat: 'live-board', q: 'is e4 weak' },
+  { id: 'player-games', cat: 'live-board', q: 'show me a hikaru game in this line' },
+  { id: 'stats', cat: 'self-knowledge', q: 'whats my exact rating' },
+  { id: 'trend', cat: 'self-knowledge', q: 'how many rating points did i gain' },
+  { id: 'app-help', cat: 'knowledge', q: 'how should i use this app to improve' },
+  { id: 'app-help', cat: 'knowledge', q: 'whats the best way to use this app', notKey: 'bestMoveQuestion' },
+  { id: 'opening-profile', cat: 'self-knowledge', q: 'whats my best opening', notKey: 'bestMoveQuestion' },
+  { id: 'trend', cat: 'self-knowledge', q: 'am i better than i was last month', notKey: 'positionAssessmentQuestion' },
 ];
 
 /** All phrasings for a row across EVERY pass. */
