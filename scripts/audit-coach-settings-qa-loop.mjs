@@ -145,22 +145,68 @@ async function main() {
         const help = page.locator('[data-testid="page-help-modal"]');
         if (await help.count()) { await page.keyboard.press('Escape'); await help.waitFor({ state: 'detached', timeout: 8000 }).catch(() => {}); }
       };
-      // Send a chat message; return { reply, spokenDuring } — the new assistant
+      // Read every coach message text on ANY surface. ChatMessage carries a
+      // `coach-badge`; climb to the largest-text ancestor = the bubble. Works on
+      // /coach/teach (Learn), /coach/play (GameChatPanel), and /coach/chat alike.
+      const readCoachReplies = async () => {
+        try {
+          return await page.evaluate(() => {
+            const out = [];
+            document.querySelectorAll('[data-testid="coach-badge"]').forEach((b) => {
+              let n = b, best = b;
+              for (let i = 0; i < 6 && n; i++) { n = n.parentElement; if (n && (n.textContent || '').length > (best.textContent || '').length && (n.textContent || '').length < 1200) best = n; }
+              const t = (best.textContent || '').replace(/\s+/g, ' ').trim();
+              if (t) out.push(t);
+            });
+            return out;
+          });
+        } catch { return []; }
+      };
+      // On Play the chat sits behind an "Open chat" button that opens a DRAWER
+      // (setCoachDrawerOpen). Click it, then WAIT for the chat input to actually
+      // mount + become visible — the drawer animates in, so a bare 600ms wait
+      // races the mount (David 2026-07-10 loop audit: Play read empty).
+      const openChatIfNeeded = async () => {
+        const btn = page.locator('[data-testid="play-chat-button"]').first();
+        if (await btn.count()) {
+          await btn.click({ timeout: 4000, force: true }).catch(() => {});
+          await page.locator('[data-testid="chat-input"], [data-testid="chat-text-input"]').first()
+            .waitFor({ state: 'visible', timeout: 6000 }).catch(() => {});
+        }
+      };
+      // Send a chat message; return { reply, spokenDuring } — the NEW coach
       // bubble text + the /api/tts lines that fired while answering.
-      const sendChat = async (text, settleMs = 9000) => {
-        const input = page.locator('[data-testid="chat-input"]').first();
+      // settle default 30s: on Play the mid-game agentic `ask` (engine eval +
+      // tool loop) streams its first token well past the old 9s ceiling, so the
+      // wait timed out and read empty (Learn's grounded assemblers resolve fast,
+      // which is why Learn was clean at 9s). waitForFunction still returns the
+      // instant a new bubble appears, so a higher ceiling only helps the slow
+      // Play case and never delays a fast reply.
+      const sendChat = async (text, settleMs = 30000) => {
+        await openChatIfNeeded();
+        const input = page.locator('[data-testid="chat-input"], [data-testid="chat-text-input"]').first();
         if ((await input.count()) === 0) { recordBreak('no-chat-input', `chat-input absent on ${surface}`); return { reply: '', spokenDuring: [] }; }
-        const before = await page.locator('[data-testid="chat-message-assistant"]').count();
+        const before = new Set(await readCoachReplies());
         const t0 = Date.now();
         await input.click({ timeout: 4000 }).catch(() => {});
         await input.fill(text).catch(() => {});
         const send = page.locator('[data-testid="chat-send-btn"]').first();
         if (await send.count()) await send.click({ timeout: 4000, force: true }).catch(() => {}); else await input.press('Enter').catch(() => {});
-        // Wait for a new assistant message (or timeout).
-        await page.waitForFunction((n) => document.querySelectorAll('[data-testid="chat-message-assistant"]').length > n, before, { timeout: settleMs }).catch(() => {});
+        // Wait for a NEW coach bubble (text not present before), or timeout.
+        await page.waitForFunction((prev) => {
+          const cur = [];
+          document.querySelectorAll('[data-testid="coach-badge"]').forEach((b) => {
+            let n = b, best = b;
+            for (let i = 0; i < 6 && n; i++) { n = n.parentElement; if (n && (n.textContent || '').length > (best.textContent || '').length && (n.textContent || '').length < 1200) best = n; }
+            const t = (best.textContent || '').replace(/\s+/g, ' ').trim();
+            if (t) cur.push(t);
+          });
+          return cur.some((t) => !prev.includes(t));
+        }, [...before], { timeout: settleMs }).catch(() => {});
         await page.waitForTimeout(1800); // let the voice fire
-        const replies = await page.locator('[data-testid="chat-message-assistant"]').allInnerTexts().catch(() => []);
-        const reply = replies.length ? replies[replies.length - 1].trim() : '';
+        const after = await readCoachReplies();
+        const fresh = after.filter((t) => !before.has(t));
+        const reply = (fresh.length ? fresh[fresh.length - 1] : (after[after.length - 1] ?? '')).trim();
         const spokenDuring = spoken.filter((s) => s.ts >= t0);
         return { reply, spokenDuring };
       };
