@@ -54,9 +54,32 @@ const LEADING_FILLER_RE =
 const MID_FILLER_RE =
   /\b(?:actually|honestly|basically|literally|seriously|really|just|even|simply|roughly|currently|kinda|sorta|pretty\s+much|i\s+guess|you\s+know|these\s+days|at\s+all|or\s+what|again|then)\b/gi;
 
-/** Strip leading greetings/hedges + a fixed set of mid-sentence filler words so
- *  the intent predicates match a padded question. Never returns empty (falls
- *  back to the original ask) and never touches disambiguating cue words. */
+// Common misspellings of the high-frequency chess/self-knowledge nouns the
+// intent regexes key on (matrix pass 6, 2026-07-10). Same philosophy as the
+// opening NAME_ALIASES — a curated map, since a typo'd word breaks a regex and
+// the safe default (correct but less rich) is the fallback for anything not
+// mapped. Every key is a NON-word, so whole-word replacement is safe. Opening
+// NAMES are handled separately by NAME_ALIASES in openingDetectionService.
+const COMMON_TYPOS: Record<string, string> = {
+  ratng: 'rating', raiting: 'rating', ratign: 'rating', reting: 'rating',
+  accuarcy: 'accuracy', accuracey: 'accuracy', acuracy: 'accuracy', accurracy: 'accuracy',
+  mistaks: 'mistakes', mistkaes: 'mistakes', mistaes: 'mistakes', misakes: 'mistakes',
+  tactc: 'tactic', tactcs: 'tactics', tatic: 'tactic', tatics: 'tactics', tactis: 'tactics',
+  improvng: 'improving', imrpoving: 'improving', improveing: 'improving',
+  winnig: 'winning', winnin: 'winning', wining: 'winning',
+  weaknes: 'weakness', weeknes: 'weakness', weaknesss: 'weakness',
+  endgam: 'endgame', endgme: 'endgame', engame: 'endgame',
+  openning: 'opening', opeing: 'opening', openin: 'opening',
+  blundr: 'blunder', blunderr: 'blunder', blnder: 'blunder',
+  strenght: 'strength', strentgh: 'strength', strenghts: 'strengths',
+  positon: 'position', posistion: 'position', poisiton: 'position',
+};
+const TYPO_RE = new RegExp(`\\b(${Object.keys(COMMON_TYPOS).join('|')})\\b`, 'gi');
+
+/** Strip leading greetings/hedges + a fixed set of mid-sentence filler words,
+ *  and correct common misspellings, so the intent predicates match a padded /
+ *  typo'd question. Never returns empty (falls back to the original ask) and
+ *  never touches disambiguating cue words or opening names. */
 export function stripQuestionFiller(ask: string | undefined): string {
   if (!ask) return ask ?? '';
   let s = ask;
@@ -67,6 +90,7 @@ export function stripQuestionFiller(ask: string | undefined): string {
   } while (s !== prev && s.length > 0);
   s = s
     .replace(MID_FILLER_RE, ' ')
+    .replace(TYPO_RE, (m) => COMMON_TYPOS[m.toLowerCase()] ?? m)
     .replace(/\s{2,}/g, ' ')
     .replace(/\s+([?.!,])/g, '$1')
     .trim();
@@ -133,6 +157,8 @@ const BEST_MOVE_QUESTION_RE = anyOf([
   String.raw`\bwhat(?:'?s| is)?\s+the\s+(?:engine|computer)('?s)?\s+(?:move|pick|choice|line)\b`,
   String.raw`\btop\s+(?:choice|pick|move)\b`,
   String.raw`\bwhat\s+now\b`,
+  // move-consequence hypothetical — "what happens if I play e5", "if I take"
+  String.raw`\bwhat\s+happens\s+if\s+i\s+(?:play|go|take|push|capture|castle|move)\b`,
   String.raw`\bwhat\s+move\s+should\s+i\s+(?:make|play|pick|choose|go\s+(?:for|with))\b`,
   String.raw`\bwhat\s+would\s+(?:the\s+)?(?:engine|computer|stockfish|a\s+gm|a\s+master)\s+(?:play|do|pick|choose|go\s+for|recommend)\b`,
   String.raw`\b(?:give|show)\s+me\s+(?:the\s+)?(?:strongest|best|top)\s+(?:continuation|move|line|option)\b`,
@@ -154,6 +180,8 @@ const TACTICS_QUESTION_RE = anyOf([
   String.raw`\ben\s*prise\b`,
   String.raw`\bloose\s+piece`,
   String.raw`\b(?:any\s+)?threats?\b`,
+  String.raw`\bthreaten(?:ing|ed|s)?\b`,
+  String.raw`\b(?:get(?:ting)?\s+|be\s+|about\s+to\s+(?:get\s+)?)?mated\b`,
   String.raw`\b(?:a\s+)?forks?\b`,
   String.raw`\bpinn?(?:ed|ing)?\b`,
   String.raw`\bskewers?\b`,
@@ -224,7 +252,13 @@ const POSITION_ASSESSMENT_RE = anyOf([
   String.raw`\bwhat(?:'?s| is)?\s+the\s+(?:engine\s+)?(?:eval|number|advantage)\b`,
 ]);
 export function isPositionAssessmentQuestion(ask: string | undefined): boolean {
-  return !!ask && POSITION_ASSESSMENT_RE.test(ask);
+  if (!ask) return false;
+  // "am I better AT tactics / in the endgame" is a SKILL/phase comparison about
+  // the student over time, NOT a board assessment ("am I better HERE"). The bare
+  // "am I better" trigger would otherwise misroute it to the live position eval
+  // (matrix pass 7, 2026-07-10). Defer to the skill/phase/converting verticals.
+  if (/\b(?:better|worse|stronger|weaker|good|bad)\s+(?:at|in)\s+(?:tactics|endgames?|openings?|middlegames?|calculation|converting|defen[cs]e|attack)/i.test(ask)) return false;
+  return POSITION_ASSESSMENT_RE.test(ask);
 }
 
 /** A "HOW DO MASTERS PLAY THIS?" / "most popular move?" question — Phase 4.
@@ -245,6 +279,7 @@ const MASTER_PLAY_QUESTION_RE = anyOf([
   String.raw`\bwhat(?:'?s| is)?\s+(?:played|standard|normal)\s+(?:here|in\s+this)\b`,
   String.raw`\bhow\s+is\s+(?:this|it)\s+(?:usually|normally|typically)\s+(?:played|met|handled|answered)\b`,
   String.raw`\bwhat\s+do\s+the\s+(?:best|elite|top)\s+players?\b`,
+  String.raw`\bwhat\s+(?:the\s+)?(?:best|elite|top|strong|titled|good)\s+players?\s+(?:play|do|prefer|choose|go\s+for)\b`,
   String.raw`\bbest\s+by\s+test\b`,
   String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+)?(?:engine|database)\s+(?:top|favou?rite)\b`,
   String.raw`\b(?:played|done|preferred|chosen|handled|met|answered|treated)\s+at\s+(?:the\s+)?(?:top|elite|gm|master|highest)\s+level\b`,
@@ -384,6 +419,7 @@ const PROGRESS_QUESTION_RE = anyOf([
   String.raw`\bhow\s+am\s+i\s+(?:doing|progressing|playing|improving|developing|getting\s+on)\b`,
   String.raw`\bhow(?:'?s| is| has)\s+my\s+(?:game|play|chess|progress|improvement)\b`,
   String.raw`\bhow\s+(?:can|do|should|could|might)\s+i\s+(?:get\s+better|improve|progress|level\s+up|get\s+good)\b`,
+  String.raw`\b(?:fastest|quickest|best|surest)\s+way\s+(?:for\s+me\s+)?to\s+improve\b`,
   // ── recommendation: "what should I train/work on/learn (next)?" ──
   String.raw`\bwhat\s+(?:should|shall|do|can|could|would|must|ought)\s+i\s+(?:(?:need|want|have|like|try|be)\s+to\s+)?` + ANY_TRAIN_VERB + String.raw`\b`,
   // progressive "-ing" recommendation ("what should I be working on")
@@ -489,6 +525,7 @@ const OPENING_PROFILE_RE = anyOf([
   String.raw`\bwhat\s+opening\s+(?:am\s+i|do\s+i)\s+(?:play\s+(?:the\s+)?most|best|strongest|worst|weakest)\b`,
   String.raw`\bwhat\s+(?:opening|openings)\s+do\s+i\s+play\s+(?:the\s+)?most\b`,
   String.raw`\bwhich\s+opening\s+suits\s+me\b`,
+  String.raw`\bwhich\s+opening\s+is\s+my\s+(?:absolute\s+|single\s+|overall\s+|clear\s+)?(?:strongest|best|weakest|worst|favou?rite|go[\s-]?to)\b`,
   String.raw`\b(?:my\s+)?bread\s+and\s+butter(?:\s+opening)?\b`,
   String.raw`\bwhat\s+do\s+i\s+open\s+with\b`,
   // "which opening do I score/perform/win best/most in?" — a WHICH-opening ask
@@ -553,6 +590,10 @@ const STATS_QUESTION_RE = anyOf([
   String.raw`\bmy\s+win(?:ning)?\s+(?:percentage|percent|rate)\b`,
   String.raw`\bam\s+i\s+winning\s+more\b`,
   String.raw`\bmy\s+score\b`,
+  // temporal-window stats — "how have I done this week", "my last 10 games"
+  String.raw`\bhow\s+(?:have|did|am|are)\s+i\s+(?:done|doing|do)\s+(?:this\s+(?:week|month)|lately|recently|today|so\s+far)\b`,
+  String.raw`\bhow\s+(?:are|were|have)\s+(?:my\s+)?(?:last|recent|past)\s+\d+\s+games\b`,
+  String.raw`\bmy\s+(?:last|recent|past)\s+\d+\s+games\b`,
   String.raw`^\s*(?:my\s+)?rating\s*\??\s*$`,   // bare terse "rating?" / "my rating"
 ]);
 export function isStatsQuestion(ask: string | undefined): boolean {
@@ -1185,6 +1226,11 @@ const SKILL_RADAR_RE = anyOf([
   String.raw`\bmap\s+out\s+(?:all\s+)?my\s+skills?\b`,
   String.raw`\bwhere\s+do\s+(?:all\s+)?my\s+skills?\s+(?:sit|stand|land|rank)\b`,
   String.raw`\b(?:full|complete)\s+breakdown\s+of\s+(?:all\s+)?my\s+(?:skills?|abilities)\b`,
+  // "am I better at X or Y" — a skill COMPARISON; the radar breaks all skills
+  // down, which answers the comparison (matrix pass 7, 2026-07-10).
+  String.raw`\bam\s+i\s+(?:better|stronger|worse|weaker|good|bad)\s+(?:at|in)\s+\w+\s+or\s+\w+\b`,
+  // "what do you know about my chess/game" — a meta ask for the full profile.
+  String.raw`\bwhat\s+do\s+you\s+(?:actually\s+)?know\s+about\s+my\s+(?:chess|game|play)\b`,
 ]);
 export function isSkillRadarQuestion(ask: string | undefined): boolean {
   return !!ask && SKILL_RADAR_RE.test(ask);

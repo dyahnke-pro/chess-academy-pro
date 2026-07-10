@@ -426,6 +426,24 @@ export const STRUCTURAL_PROBES = [
   { id: 'set-hints', cat: 'action', q: 'hints on' },
   { id: 'set-verbosity', cat: 'action', q: 'narration to full' },
   { id: 'teach-opening', cat: 'action', q: 'teach the caro' },
+  // Pass 6 — common typos (normalized by the COMMON_TYPOS map).
+  { id: 'progress', cat: 'self-knowledge', q: 'am i improvng at all' },
+  { id: 'stats', cat: 'self-knowledge', q: 'whats my ratng' },
+  { id: 'mistakes', cat: 'self-knowledge', q: 'what mistaks do i make' },
+  { id: 'tactics-profile', cat: 'self-knowledge', q: 'whats my weakest tactc' },
+  { id: 'accuracy', cat: 'self-knowledge', q: 'how accurate am i overal' },
+  { id: 'position-assessment', cat: 'live-board', q: 'whos winnin here' },
+  // Pass 7 — genuinely NEW question shapes (comparatives, temporal, hypothetical,
+  // threat/mate, meta) + the position-vs-skill misroute guard.
+  { id: 'tactics-live', cat: 'live-board', q: 'what is my opponent threatening right now' },
+  { id: 'tactics-live', cat: 'live-board', q: 'am i about to get mated' },
+  { id: 'progress', cat: 'self-knowledge', q: 'what is the fastest way for me to improve' },
+  { id: 'best-move', cat: 'live-board', q: 'what happens if i play e5 here' },
+  { id: 'stats', cat: 'self-knowledge', q: 'how have i done this week' },
+  { id: 'stats', cat: 'self-knowledge', q: 'how are my last 10 games' },
+  { id: 'skill-radar', cat: 'self-knowledge', q: 'what do you actually know about my chess' },
+  { id: 'skill-radar', cat: 'self-knowledge', q: 'am i better at tactics or endgames' },
+  { id: 'master-play', cat: 'live-board', q: 'what the top players play in this position' },
 ];
 
 /** All phrasings for a row across EVERY pass. */
