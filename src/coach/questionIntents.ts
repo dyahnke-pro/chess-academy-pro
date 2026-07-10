@@ -97,6 +97,8 @@ const BEST_MOVE_QUESTION_RE = anyOf([
   String.raw`\btop\s+(?:choice|pick|move)\b`,
   String.raw`\bwhat\s+now\b`,
   String.raw`\bwhat\s+move\s+should\s+i\s+(?:make|play|pick|choose|go\s+(?:for|with))\b`,
+  String.raw`\bwhat\s+would\s+(?:the\s+)?(?:engine|computer|stockfish|a\s+gm|a\s+master)\s+(?:play|do|pick|choose|go\s+for|recommend)\b`,
+  String.raw`\b(?:give|show)\s+me\s+(?:the\s+)?(?:strongest|best|top)\s+(?:continuation|move|line|option)\b`,
 ]);
 export function isBestMoveQuestion(ask: string | undefined): boolean {
   return !!ask && BEST_MOVE_QUESTION_RE.test(ask);
@@ -126,7 +128,7 @@ const TACTICS_QUESTION_RE = anyOf([
   String.raw`\bcan\s+(?:i|it|he|she|they|white|black)\s+be\s+(?:punished|taken|captured|trapped|exploited)\b`,
   String.raw`\b(?:is\s+there\s+(?:a\s+)?)?mate(?:\s+(?:here|in\s+\w+|threat))?\b`,
   String.raw`\btactics?\b`,
-  String.raw`\bcombination\b`,
+  String.raw`\bcombinations?\b`,
   String.raw`\b(?:any\s+)?(?:shot|sac(?:rifice)?|trick|tactic)\s+(?:here|available|on|in\s+this)?\b`,
   String.raw`\bcan\s+i\s+(?:win|grab|take|snag|pick\s+up)\s+(?:material|a\s+piece|a\s+pawn|the)\b`,
   String.raw`\bwin\s+(?:material|a\s+piece|a\s+pawn)\b`,
@@ -204,7 +206,9 @@ const MASTER_PLAY_QUESTION_RE = anyOf([
   String.raw`\bwhat\s+do\s+the\s+(?:best|elite|top)\s+players?\b`,
   String.raw`\bbest\s+by\s+test\b`,
   String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+)?(?:engine|database)\s+(?:top|favou?rite)\b`,
-  String.raw`\b(?:played|done|preferred|chosen)\s+at\s+(?:the\s+)?(?:top|elite|gm|master|highest)\s+level\b`,
+  String.raw`\b(?:played|done|preferred|chosen|handled|met|answered|treated)\s+at\s+(?:the\s+)?(?:top|elite|gm|master|highest)\s+level\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+book\b`,
+  String.raw`\bat\s+(?:the\s+)?(?:top|elite|gm|master|highest)\s+level\b`,
 ]);
 export function isMasterPlayQuestion(ask: string | undefined): boolean {
   return !!ask && MASTER_PLAY_QUESTION_RE.test(ask);
@@ -230,6 +234,8 @@ const ENDGAME_QUESTION_RE = anyOf([
   String.raw`\bopposite[-\s]?colou?red?\s+bishops?\b`,
   String.raw`\bhow\s+do\s+i\s+(?:convert|finish|win)\s+(?:from\s+here|this\s+(?:ending|endgame))\b`,
   String.raw`\bking\s+and\s+pawn\b`,
+  String.raw`\b(?:what(?:'?s| is)?\s+the\s+)?(?:winning\s+)?technique\s+to\s+(?:convert|win|hold|draw|promote)\b`,
+  String.raw`\bhow\s+do\s+i\s+(?:not\s+lose|avoid\s+losing)\s+(?:this|the)\s+(?:ending|endgame)\b`,
 ]);
 export function isEndgameQuestion(ask: string | undefined): boolean {
   return !!ask && ENDGAME_QUESTION_RE.test(ask);
@@ -327,6 +333,13 @@ const WEAK_PRED = String.raw`(?:weak(?:est)?|bad|worst|poor|terrible|awful|horri
 const PROGRESS_QUESTION_RE = anyOf([
   // ── "am I improving / how am I doing" (progress-over-time) ──
   String.raw`\bam\s+i\s+(?:improving|getting\s+(?:better|worse)|progressing|developing|growing|any\s+good|good\s+enough|getting\s+anywhere)\b`,
+  // "am I actually/really/even getting (any) better" — an adverb between "am i"
+  // and "getting" broke the tight pattern above (matrix pass 2, 2026-07-10).
+  String.raw`\bam\s+i\s+(?:actually|really|even|genuinely|at\s+all)\s+getting\s+(?:any\s+)?(?:better|worse)\b`,
+  // "what bad / recurring patterns (keep showing up / do I make)" — a habit ask.
+  String.raw`\bwhat\s+(?:bad|recurring|repeated|common)\s+patterns?\b`,
+  // "how has my play/game been (lately/recently)" — a progress-over-time ask.
+  String.raw`\bhow\s+(?:has|have)\s+my\s+(?:play|game|chess|form|results?)\s+been\b`,
   String.raw`\bhow\s+am\s+i\s+(?:doing|progressing|playing|improving|developing|getting\s+on)\b`,
   String.raw`\bhow(?:'?s| is| has)\s+my\s+(?:game|play|chess|progress|improvement)\b`,
   String.raw`\bhow\s+(?:can|do|should|could|might)\s+i\s+(?:get\s+better|improve|progress|level\s+up|get\s+good)\b`,
@@ -360,7 +373,7 @@ const PROGRESS_QUESTION_RE = anyOf([
   String.raw`\b(?:my|the)\s+(?:progress|improvement)\b`,
   // ── weak / struggle PREDICATES (self, aggregate) ──
   String.raw`\bwhat\s+(?:am\s+i|i'?m|do\s+i)\s+` + WEAK_PRED + String.raw`\s+(?:at|in|on|with)\b`,
-  String.raw`\bwhere\s+(?:am\s+i|i'?m|do\s+i)\s+(?:the\s+)?(?:` + WEAK_PRED + String.raw`|struggl(?:e|ing)|los(?:e|ing)|failing|need\s+work|go(?:ing)?\s+wrong|mess(?:ing)?\s+up|blunder(?:ing)?|fall(?:ing)?\s+short|drop(?:ping)?\s+(?:points?|games?))\b`,
+  String.raw`\bwhere\s+(?:am\s+i|i'?m|do\s+i)\s+(?:the\s+)?(?:` + WEAK_PRED + String.raw`|struggl(?:e|ing)|los(?:e|ing)|failing|need\s+work|go(?:ing)?\s+wrong|mess(?:ing)?\s+up|blunder(?:ing)?|fall(?:ing)?\s+short|drop(?:ping)?\s+(?:points?|games?)|leak(?:ing)?\s+(?:points?|rating|elo))\b`,
   // positive predicates (good/best/strong) route to isStrengthsQuestion; progress
   // keeps only the weakness predicates here.
   String.raw`\bwhat\s+(?:am\s+i|do\s+i)\s+(?:bad|worst|weak)\s+at\b`,
@@ -443,6 +456,12 @@ const OPENING_PROFILE_RE = anyOf([
   String.raw`\bwhich\s+of\s+my\s+openings?\b`,
   // "what opening should I play?" (a repertoire recommendation, not a board move)
   String.raw`\bwhat\s+opening\s+should\s+i\s+play\b`,
+  // "what opening should I stop playing / drop / ditch" — the weakest-opening ask.
+  String.raw`\bwhat\s+opening\s+should\s+i\s+(?:stop\s+playing|drop|ditch|abandon|give\s+up|quit)\b`,
+  // "which of my openings is letting me down / underperforming" — weakest ask.
+  String.raw`\bwhich\s+of\s+my\s+openings?\s+is\s+(?:letting\s+me\s+down|underperforming|dragging\s+me\s+down|failing\s+me)\b`,
+  // "which opening do I score best/worst with"
+  String.raw`\bwhich\s+opening\s+do\s+i\s+score\s+(?:best|worst)\s+with\b`,
   // "most successful/effective opening" (adds to the strongest/best set above)
   String.raw`\bmy\s+most\s+(?:successful|effective|winning)\s+(?:opening|line|defen[cs]e)\b`,
   String.raw`\bwhat(?:'?s| is)?\s+my\s+most\s+(?:successful|effective|winning)\s+opening\b`,
@@ -453,7 +472,7 @@ export function isOpeningProfileQuestion(ask: string | undefined): boolean {
 /** Which slice of the opening profile the question asks for. */
 export function openingProfileKind(ask: string | undefined): 'strongest' | 'favorite' | 'weakest' {
   const a = (ask ?? '').toLowerCase();
-  if (/\b(?:weakest|worst)\b/.test(a)) return 'weakest';
+  if (/\b(?:weakest|worst|stop\s+playing|drop|ditch|abandon|give\s+up|quit|letting\s+me\s+down|underperforming|failing\s+me)\b/.test(a)) return 'weakest';
   if (/\b(?:favou?rite|go[\s-]?to|most[\s-]?played|most[\s-]?used|play\s+(?:the\s+)?most)\b/.test(a)) return 'favorite';
   return 'strongest';
 }
@@ -467,6 +486,7 @@ const STATS_QUESTION_RE = anyOf([
   String.raw`\bwhat(?:'?s| is)?\s+my\s+(?:current\s+)?(?:rating|elo|rank)\b`,
   String.raw`\bmy\s+(?:chess\s+)?(?:current\s+)?(?:rating|elo)\b`,   // bare "my (chess) rating"
   String.raw`\bwhat\s+rating\s+am\s+i\b`,                            // "what rating am I"
+  String.raw`\bwhat\s+am\s+i\s+rated\b`,                             // "what am I rated"
   String.raw`\bwin\s*[\/-]\s*loss\b|\bwin[\s-]loss\b`,               // "win/loss", "win-loss"
   String.raw`\bwhat(?:'?s| is)?\s+my\s+(?:level|track\s+record)\b`,
   String.raw`\bhow\s+strong\s+(?:a\s+player\s+)?am\s+i\b`,
@@ -511,6 +531,9 @@ const STRENGTHS_QUESTION_RE = anyOf([
   String.raw`\bwhat\s+am\s+i\s+(?:really\s+)?strong\s+(?:at|in)\b`,
   String.raw`\bmy\s+(?:strengths?|strong\s+suits?|strong\s+points?)\b`,
   String.raw`\bwhere\s+do\s+i\s+excel\b`,
+  String.raw`\bwhere\s+do\s+i\s+play\s+(?:well|my\s+best|best|strongest)\b`,
+  String.raw`\bwhat\s+do\s+i\s+do\s+best\s+(?:over\s+the\s+board|otb|in\s+my\s+games)\b`,
+  String.raw`\bmy\s+best\s+skills?\b`,
   String.raw`\bwhat\s+are\s+my\s+strong\s+points?\b`,
   String.raw`\b(?:tell|show)\s+me\s+what\s+i(?:'?m| am)\s+good\s+at\b`,
   String.raw`\bmy\s+best\s+(?:areas?|skills?|parts?)\b`,
@@ -582,6 +605,15 @@ const OPENING_ACCURACY_RE = anyOf([
   String.raw`\bhow\s+deep\s+is\s+my\s+opening\s+knowledge\b`,
   String.raw`\bdo\s+i\s+know\s+my\s+openings?\s+well\b`,
   String.raw`\bwhere\s+does\s+my\s+opening\s+(?:prep|preparation|play|theory)\s+(?:fall\s+apart|break\s+down|end)\b`,
+  // NAMED-opening accuracy WITHOUT an anchor word ("how good is my Sicilian?",
+  // "how clean is my Caro-Kann play?") — the token after "my" is an opening
+  // NAME, not a stat/phase noun. The negative lookahead excludes the stat/phase
+  // nouns so this never hijacks "how good is my rating/endgame/game" (those own
+  // their verticals). The dispatch resolves the name; a non-opening → safe
+  // default (matrix pass 2, 2026-07-10).
+  String.raw`\bhow\s+(?:good|clean|sharp|solid|strong|accurate|deep)\s+is\s+my\s+(?!rating\b|record\b|accuracy\b|game\b|play\b|chess\b|form\b|tactics?\b|endgame\b|middlegame\b|middle\s?game\b|opening\b|puzzle\b|win\b|skill)[a-z][\w'-]+`,
+  // "do I play the <opening> accurately/well/cleanly" — a named opening object.
+  String.raw`\bdo\s+i\s+play\s+the\s+[a-z][\w'-]+\s+(?:accurately|well|cleanly|precisely|sharply|solidly)\b`,
 ]);
 export function isOpeningAccuracyQuestion(ask: string | undefined): boolean {
   return !!ask && OPENING_ACCURACY_RE.test(ask);
@@ -610,8 +642,10 @@ const OPENING_TRAPS_RE = anyOf([
   String.raw`\b(?:pitfalls?|traps?)\s+(?:should\s+i\s+|to\s+)?avoid\b`,
   String.raw`\bwhat\s+(?:pitfalls?|traps?)\s+should\s+i\s+(?:avoid|know|watch)\b`,
   String.raw`\b(?:tricks?|traps?)\s+(?:in|for)\s+my\s+(?:openings?|repertoire)\b`,
-  String.raw`\bwhat\s+tricks?\s+can\s+i\s+play\b`,
+  String.raw`\bwhat\s+tricks?\s+(?:can\s+i\s+play|are\s+there|do\s+i\s+have|should\s+i\s+know|exist)\b`,
   String.raw`\bhow\s+do\s+i\s+trap\s+(?:my\s+)?opponent\b`,
+  // "how do I get tricked/trapped/caught" — the anti-trap (what to watch for).
+  String.raw`\bhow\s+(?:do|can|could|might)\s+i\s+get\s+(?:tricked|trapped|caught|fooled|swindled)\b`,
   // "(any) traps in/for the <opening>" — a trap ask scoped to a named opening.
   String.raw`\b(?:any\s+)?traps?\s+(?:in|for|against|with)\s+(?:the|my|this)\b`,
   // "what tricks/traps can I fall for / walk into" — the anti-trap side.
@@ -658,8 +692,11 @@ const REVIEW_DUE_RE = anyOf([
   String.raw`\breviews?\s+(?:are\s+)?due\b`,
   String.raw`\bdo\s+i\s+have\s+(?:any\s+)?reviews?\b`,
   String.raw`\bany\s+reviews?\b`,
-  String.raw`\banything\s+to\s+review\b`,
+  String.raw`\banything\s+to\s+(?:review|study|do)\s+(?:today|now|yet)?\b`,
+  String.raw`\bis\s+there\s+anything\s+to\s+(?:review|study)\b`,
   String.raw`\bshould\s+i\s+do\s+my\s+(?:reps|reviews?|cards|flash\s?cards)\b`,
+  String.raw`\bdo\s+i\s+need\s+to\s+(?:do|review)\s+(?:my\s+)?(?:reps|reviews?|cards|flash\s?cards)\b`,
+  String.raw`\bhow\s+many\s+flash\s?cards?\s+(?:are\s+)?(?:waiting|due|left|to\s+do)\b`,
   String.raw`\bhow\s+much\s+review\b`,
   String.raw`\b(?:are\s+)?my\s+flash\s?cards?\s+(?:ready|due)\b`,
   String.raw`\bon\s+my\s+plate\b[^?.!]{0,20}\breview\b`,
@@ -729,6 +766,10 @@ const TACTICS_PROFILE_RE = anyOf([
   String.raw`\bwhat(?:'?s| is| are)?\s+my\s+(?:weakest|worst|biggest|poorest)\s+(?:tactic|motif|pattern|theme|combination)s?\b`,
   String.raw`\bwhich\s+(?:tactic|motif|pattern|theme)s?\s+(?:am\s+i\s+(?:weakest|worst)|do\s+i\s+(?:miss|struggle|fail|overlook))\b`,
   String.raw`\bwhat\s+(?:tactic|motif|pattern|theme)s?\s+(?:am\s+i\s+(?:weakest|worst)|do\s+i\s+(?:struggle|fail)\s+(?:with|at))\b`,
+  // "which tactical motif/pattern do I struggle with" — an adjective ("tactical")
+  // before the motif noun broke the tighter patterns above (matrix pass 2).
+  String.raw`\bwhich\s+tactical\s+(?:motif|pattern|theme|tactic|idea)s?\b`,
+  String.raw`\bwhat\s+tactics?\s+(?:should|do|can)\s+i\s+(?:drill|practi[sc]e|work\s+on|train)\b`,
 ]);
 export function isTacticsProfileQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
@@ -759,6 +800,9 @@ const PHASE_QUESTION_RE = anyOf([
   String.raw`\b(?:opening|middlegame)\s+or\s+(?:middlegame|endgame)\s+player\b`,
   String.raw`\bwhich\s+(?:part|stage|phase)\s+of\s+(?:the\s+game|my\s+game)\b`,
   String.raw`\b(?:handle|play|do\s+in|at)\s+(?:the\s+)?critical\s+moments?\b`,
+  // "is my middlegame the problem / my weak spot" — a phase-diagnosis ask that
+  // names the problem noun rather than a good/bad adjective (matrix pass 2).
+  String.raw`\bis\s+(?:my|the)\s+(?:opening|middlegame|middle\s?game|endgame|end\s?game)\s+(?:my\s+)?(?:the\s+)?(?:problem|issue|weakness|weak\s+spot|holding\s+me\s+back|letting\s+me\s+down)\b`,
 ]);
 export function isPhaseQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
@@ -795,11 +839,17 @@ const REPERTOIRE_GAP_RE = anyOf([
   String.raw`\bwhere\s+am\s+i\s+(?:exposed|vulnerable)\b`,
   String.raw`\bwhat\s+do\s+opponents?\s+get\s+me\s+with\b`,
   // learn-next
-  String.raw`\bwhat\s+opening\s+should\s+i\s+(?:learn|study|add)\s+(?:next|to\s+my\s+repertoire)?\b`,
-  String.raw`\bwhat\s+should\s+i\s+(?:learn|add\s+to\s+my\s+repertoire)\s+next\b`,
-  String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+)?next\s+opening\s+(?:for\s+me\s+)?to\s+(?:learn|study)\b`,
+  String.raw`\bwhat\s+(?:opening|openings|lines?)\s+should\s+i\s+(?:learn|study|add|prepare|prep)\s+(?:next|to\s+my\s+repertoire)?\b`,
+  String.raw`\bwhat\s+should\s+i\s+(?:learn|add\s+to\s+my\s+repertoire|prepare|prep)\s+next\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+)?next\s+opening\s+(?:for\s+me\s+)?to\s+(?:learn|study|prepare)\b`,
   String.raw`\bwhat\s+should\s+i\s+add\s+to\s+my\s+repertoire\b`,
   String.raw`\bwhat\s+to\s+learn\s+next\b`,
+  // "what am I missing in my openings" (I-framed, vs the "what's missing" above)
+  String.raw`\bwhat\s+am\s+i\s+missing\s+(?:from|in)\s+my\s+(?:repertoire|openings?|prep)\b`,
+  // "what lines do I need to learn / prepare"
+  String.raw`\bwhat\s+(?:lines?|openings?)\s+do\s+i\s+need\s+to\s+(?:learn|study|add|prepare|prep|know)\b`,
+  // "where is my repertoire thin / weak / light" — a gap diagnosis.
+  String.raw`\b(?:where(?:'?s| is)?\s+)?my\s+repertoire\s+(?:is\s+)?(?:thin|weak|light|lacking|shallow|full\s+of\s+holes)\b`,
 ]);
 export function isRepertoireGapQuestion(ask: string | undefined): boolean {
   return !!ask && REPERTOIRE_GAP_RE.test(ask);
@@ -807,7 +857,7 @@ export function isRepertoireGapQuestion(ask: string | undefined): boolean {
 /** Which slice of the repertoire-gap answer to compute. */
 export function repertoireGapKind(ask: string | undefined): 'out-of-book' | 'hole' | 'learn-next' {
   const a = (ask ?? '').toLowerCase();
-  if (/\blearn\b|\badd\b|\bnext\s+opening\b|\bshould\s+i\s+(?:learn|study|add)\b/.test(a)) return 'learn-next';
+  if (/\blearn\b|\badd\b|\bprepare\b|\bnext\s+opening\b|\bneed\s+to\s+(?:learn|prepare|know)\b|\bshould\s+i\s+(?:learn|study|add|prepare)\b/.test(a)) return 'learn-next';
   if (/\b(?:leave|leaving|out\s+of|off)\s+(?:the\s+|my\s+|your\s+)?(?:book|theory|prep)|\bdrift\b|\bdeviate\b/.test(a)) return 'out-of-book';
   return 'hole';
 }
@@ -829,6 +879,9 @@ const ACCURACY_QUESTION_RE = anyOf([
   String.raw`\bmy\s+(?:best[\s-]?move\s+)?(?:agreement|accuracy)\b`,
   String.raw`\bwhat(?:'?s| is)?\s+my\s+move\s+quality\b`,
   String.raw`\bhow\s+many\s+brilliant\s+moves?\b`,
+  String.raw`\bwhat\s+accuracy\s+do\s+i\s+(?:average|get|have|typically\s+(?:get|score|hit))\b`,
+  String.raw`\bdo\s+i\s+play\s+accurate(?:ly)?\b`,
+  String.raw`\bmy\s+average\s+accuracy\b`,
 ]);
 export function isAccuracyQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
@@ -858,6 +911,9 @@ const CONSISTENCY_QUESTION_RE = anyOf([
   // "how steady/consistent are my results/games"
   String.raw`\bhow\s+(?:steady|consistent)\s+(?:are|is)\s+my\s+(?:results?|games?|play|form)\b`,
   String.raw`\bdo\s+i\s+play\s+(?:steadily|consistently)\b`,
+  String.raw`\bdo\s+i\s+play\s+(?:at\s+)?the\s+same\s+(?:level|standard)\b`,
+  String.raw`\bsame\s+level\s+every\s+game\b`,
+  String.raw`\bhow\s+(?:reliable|dependable|steady)\s+is\s+my\s+(?:play|game|chess|form)\b`,
 ]);
 export function isConsistencyQuestion(ask: string | undefined): boolean {
   return !!ask && CONSISTENCY_QUESTION_RE.test(ask);
@@ -867,7 +923,9 @@ export function isConsistencyQuestion(ask: string | undefined): boolean {
  *  assembleConvertingAnswer (thrownWins + comebackWins + winShape). */
 const CONVERTING_QUESTION_RE = anyOf([
   String.raw`\bdo\s+i\s+convert\b`,
-  String.raw`\bdo\s+i\s+(?:close\s+out|finish(?:\s+off)?|seal|convert)\s+(?:my\s+)?(?:wins|games|winning\s+positions?)\b`,
+  String.raw`\bdo\s+i\s+(?:close\s+out|finish(?:\s+off)?|seal|convert)\s+(?:won\s+|winning\s+|my\s+)*(?:wins|games|positions?|endgames?)\b`,
+  String.raw`\bcan\s+i\s+(?:finish(?:\s+off)?|close\s+out|convert|seal)\s+(?:a\s+|my\s+)?(?:winning|won)?\s*(?:game|position|win)?\b`,
+  String.raw`\bdo\s+i\s+let\s+(?:wins|winning\s+(?:positions?|games?)|won\s+games?)\s+slip\b`,
   // "am I good at / how well do I close out / convert / finish (off) wins"
   String.raw`\b(?:am\s+i\s+(?:good|any\s+good)\s+at|how\s+(?:good|well)\s+(?:am\s+i|do\s+i))\s+(?:at\s+)?(?:clos(?:e|ing)(?:\s+out)?|convert(?:ing)?|finish(?:ing)?(?:\s+off)?|seal(?:ing)?)\b`,
   String.raw`\bdo\s+i\s+(?:throw\s+away|blow|squander|let\s+slip)\s+(?:winning|won)\b`,
@@ -893,6 +951,12 @@ const COLOR_QUESTION_RE = anyOf([
   String.raw`\bam\s+i\s+a\s+(?:white|black)\s+player\b`,
   // "how do I do/fare/play/score with the white/black pieces"
   String.raw`\bhow\s+do\s+i\s+(?:do|fare|play|score|perform)\s+(?:as\s+|with\s+)?(?:the\s+)?(?:white|black)(?:\s+pieces?|\s+side)?\b`,
+  // bare "white or black" in any framing ("is white or black my stronger side")
+  String.raw`\b(?:white\s+or\s+black|black\s+or\s+white)\b`,
+  // "do I struggle as/with the white/black (pieces)"
+  String.raw`\bdo\s+i\s+struggle\s+(?:as|with)\s+(?:the\s+)?(?:white|black)\b`,
+  // "which side suits me / am I better / do I prefer"
+  String.raw`\bwhich\s+side\s+(?:suits\s+me|am\s+i\s+(?:better|stronger)|do\s+i\s+(?:prefer|play\s+better))\b`,
 ]);
 export function isColorQuestion(ask: string | undefined): boolean {
   return !!ask && COLOR_QUESTION_RE.test(ask);
@@ -928,16 +992,24 @@ export function isRecordsQuestion(ask: string | undefined): boolean {
  *  detector both DETECTS and EXTRACTS the target term (mirrors
  *  `openingProfileKind`). Requires a target after a preposition, so a
  *  bare "what's my record" falls through to the generic records vertical. */
-const RECORD_VS_LEAD = String.raw`(?:my\s+)?(?:record|results?|win[\s/-]?rate|w\/?l|win[\s/-]?loss|score|h2h|head[\s-]?to[\s-]?head)|how\s+(?:do|did|have|has|'?s)\s+i\s+(?:do|done|doing|fare|fared|perform|performed|play|played|score|scored)`;
+const RECORD_VS_LEAD = String.raw`(?:my\s+)?(?:record|results?|win[\s/-]?rate|w\/?l|win[\s/-]?loss|score|h2h|head[\s-]?to[\s-]?head)|how\s+(?:do|did|have|has|'?s)\s+i\s+(?:do|done|doing|fare|fared|perform|performed|play|played|score|scored)|(?:do|did)\s+i\s+struggle|am\s+i\s+(?:any\s+)?(?:good|bad|weak|strong|winning|losing)`;
 const RECORD_VS_RE = new RegExp(
   String.raw`\b(?:${RECORD_VS_LEAD})\b[\s\S]*?\b(?:against|versus|vs\.?|v\.?|facing|in|with|playing)\s+(?:the\s+)?([a-z0-9][a-z0-9'’\-.\s]*?)\s*[?.!]*$`,
+  'i',
+);
+// OPPONENT-record verb shapes that name a player WITHOUT an against/vs
+// preposition — "have I ever beaten iankane21?", "how many times have I lost to
+// Magnus?", "have I played hikaru?" (matrix pass 2, 2026-07-10).
+const RECORD_VS_OPP_RE = new RegExp(
+  String.raw`\b(?:have\s+i\s+(?:ever\s+)?(?:beat(?:en)?|lost\s+to|drawn?\s+(?:with|against|to)|faced|played|met)|how\s+(?:many\s+times|often)\s+have\s+i\s+(?:beat(?:en)?|lost\s+to|played|faced|met|drawn?\s+(?:with|against)))\s+(?:the\s+)?([a-z0-9][a-z0-9'’\-.]*)`,
   'i',
 );
 /** Trailing/leading filler that isn't part of a real opening/opponent name. */
 const RECORD_VS_STOP = /^(?:it|that|them|this|those|me|him|her|us|people|players?|opponents?|everyone|anyone|games?)$/i;
 export function recordVsTarget(ask: string | undefined): string | null {
   if (!ask) return null;
-  const m = RECORD_VS_RE.exec(ask.trim());
+  const trimmed = ask.trim();
+  const m = RECORD_VS_RE.exec(trimmed) ?? RECORD_VS_OPP_RE.exec(trimmed);
   if (!m) return null;
   const t = m[1].trim().replace(/\s+/g, ' ').replace(/[?.!]+$/, '').trim();
   if (t.length < 2) return null;
@@ -966,6 +1038,7 @@ const MOVE_RATING_RE = anyOf([
   String.raw`\bwas\s+(?:that|my\s+(?:last\s+)?move)\s+(?:the\s+)?(?:right|best)\b`,
   // gerund frame: "was playing/picking/choosing/making that a mistake/good"
   String.raw`\bwas\s+(?:playing|picking|choosing|making)\s+(?:that|it|this)\s+(?:a\s+|an\s+)?(?:good|bad|sound|weak|blunder|mistake|inaccuracy|error|ok|okay)\b`,
+  String.raw`\bdid\s+i\s+(?:just\s+)?(?:blunder|hang\s+(?:something|a\s+\w+)|mess\s+up|screw\s+up|goof|err|drop\s+(?:something|a\s+\w+))\b`,
 ]);
 export function isMoveRatingQuestion(ask: string | undefined): boolean {
   return !!ask && MOVE_RATING_RE.test(ask);
@@ -1003,8 +1076,10 @@ export function isTrainingRequest(ask: string | undefined): boolean {
 
 /** "my puzzle rating / how many puzzles have I solved" → assemblePuzzleStatsAnswer. */
 const PUZZLE_STATS_RE = anyOf([
-  String.raw`\bmy\s+puzzle\s+(?:rating|accuracy|stats?|score|streak|level|tactics?)\b`,
-  String.raw`\bwhat(?:'?s| is)?\s+my\s+puzzle\s+(?:rating|accuracy|streak|score|level)\b`,
+  String.raw`\bmy\s+puzzle\s+(?:rating|accuracy|stats?|score|streak|level|tactics?|rush)\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+my\s+puzzle\s+(?:rating|accuracy|streak|score|level|rush)\b`,
+  String.raw`\bhow\s+good\s+is\s+my\s+puzzle\s+(?:rush|rating|streak)\b`,
+  String.raw`\bhow\s+many\s+tactics?\s+(?:have\s+i|did\s+i|i'?ve)\s+(?:done|solved|completed)\b`,
   String.raw`\bhow\s+many\s+puzzles?\s+(?:have\s+i|did\s+i|i'?ve)\s+(?:solved|done|completed|got(?:ten)?)\b`,
   String.raw`\bhow\s+(?:good|strong)\s+am\s+i\s+at\s+puzzles?\b`,
   String.raw`\bpuzzle\s+(?:rating|streak)\b`,
@@ -1031,6 +1106,10 @@ const TRANSFER_GAP_RE = anyOf([
   String.raw`\bwhy\s+do\s+i\b[^?.!]{0,40}\bpuzzles?\b[^?.!]{0,40}\bgames?\b`,
   String.raw`\bwhy\s+do\s+i\s+miss\b[^?.!]{0,25}\bgames?\b[^?.!]{0,30}\bpuzzles?\b`,
   String.raw`\bpuzzle\s+(?:rating|skills?|ability)\b[^?.!]{0,30}\b(?:my\s+)?games?\b`,
+  // "why am I good at puzzles but bad in games" — the classic transfer complaint.
+  String.raw`\b(?:good|better|sharp|great|strong)\s+at\s+puzzles?\b[^?.!]{0,25}\b(?:bad|worse|weak|awful|terrible)\b[^?.!]{0,15}\bgames?\b`,
+  // "does my puzzle skill show up over the board / OTB"
+  String.raw`\bpuzzle\s+(?:skills?|rating|ability)\b[^?.!]{0,30}\b(?:show\s+up|carry|translate|transfer)\b[^?.!]{0,25}\b(?:over\s+the\s+board|otb|real\s+games?|my\s+games?|games?)\b`,
 ]);
 export function isTransferGapQuestion(ask: string | undefined): boolean {
   return !!ask && TRANSFER_GAP_RE.test(ask);
@@ -1051,6 +1130,9 @@ const SKILL_RADAR_RE = anyOf([
   String.raw`\b(?:give|show)\s+me\s+(?:a\s+|an\s+)?(?:breakdown|overview|rundown|summary|full\s+picture)\b[^?.!]{0,20}\bmy\s+(?:skills?|game|chess|abilities|play)\b`,
   String.raw`\b(?:breakdown|overview|rundown)\s+of\s+(?:all\s+)?my\s+(?:skills?|game|chess|abilities|play)\b`,
   String.raw`\bhow\s+would\s+you\s+rate\s+my\s+(?:chess|game|play)\b`,
+  String.raw`\bmap\s+out\s+(?:all\s+)?my\s+skills?\b`,
+  String.raw`\bwhere\s+do\s+(?:all\s+)?my\s+skills?\s+(?:sit|stand|land|rank)\b`,
+  String.raw`\b(?:full|complete)\s+breakdown\s+of\s+(?:all\s+)?my\s+(?:skills?|abilities)\b`,
 ]);
 export function isSkillRadarQuestion(ask: string | undefined): boolean {
   return !!ask && SKILL_RADAR_RE.test(ask);
@@ -1067,6 +1149,12 @@ const TEACHING_METHOD_RE: ReadonlyArray<RegExp> = [
   /\bhow\s+do\s+you\s+cover\b/i,
   /\bwhat'?s?\s+(?:your|the)\s+(?:teaching\s+)?(?:method|approach|system)\b/i,
   /\bhow\s+does\s+(?:the\s+)?(?:learn|watch|practice|wlpp|walkthrough)\b/i,
+  // "walk me through how you teach X" / "how you teach the French" — no modal
+  // between "how" and "you", which the modal-gated patterns above miss.
+  /\bhow\s+you\s+teach\b/i,
+  /\bwalk\s+me\s+through\s+(?:how\s+you\s+)?teach(?:ing)?\b/i,
+  // "how would you break down / approach teaching X"
+  /\bhow\s+would\s+you\s+(?:break\s+down\s+|approach\s+|go\s+about\s+|structure\s+)?teach(?:ing)?\b/i,
 ];
 
 export function isTeachingMethodQuestion(ask: string | undefined): boolean {
@@ -1086,12 +1174,22 @@ const SETTINGS_QUERY_RE: ReadonlyArray<RegExp> = [
   /\bwhat\s+(?:are\s+)?my\s+settings?\b/i,
   /\bhow\s+(?:am\s+i|is\s+(?:the\s+)?(?:coach|voice|narration))\s+set(?:\s+up)?\b/i,
   /\b(?:voice|narration|hint)\s+(?:setting|level|status)\b/i,
+  // "do I have the voice (turned) on/off" — a state query in a "do I have" frame.
+  /\bdo\s+i\s+have\s+(?:the\s+|my\s+)?(?:voice\s+narration|voice|narration|hints?|sound|premium\s+voice|polly)\s+(?:turned\s+)?(?:on|off|enabled|disabled|muted)\b/i,
+  // "how verbose/detailed/long/short is my narration (set)"
+  /\bhow\s+(?:verbose|detailed|long|short)\s+is\s+(?:my\s+)?narration\b/i,
+  // "what theme am I using / which theme is active"
+  /\bwhat\s+theme\s+(?:am\s+i\s+(?:using|on)|is\s+(?:set|active|selected))\b/i,
+  /\bwhich\s+theme\s+(?:am\s+i|is)\b/i,
 ];
 
 export function isSettingsQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
   // Command verbs → an ACTION (mutate), not a query. Handled by the action layer.
-  if (/\b(?:turn|enable|disable|switch)\b/i.test(ask)) return false;
+  // "turned on" in a "do I have … turned on" QUERY is not a command, so exclude
+  // the bare "turn" only when it's an imperative lead (not "turned").
+  if (/\b(?:enable|disable|switch)\b/i.test(ask)) return false;
+  if (/\bturn\b/i.test(ask) && !/\bturned\b/i.test(ask)) return false;
   return SETTINGS_QUERY_RE.some((re) => re.test(ask));
 }
 

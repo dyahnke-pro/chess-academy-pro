@@ -3,7 +3,7 @@ import { buildQuestionGrounding } from './questionIntents';
 import { routeChatIntent } from '../services/coachSessionRouter';
 import type { MasterGroundingOptions } from '../services/coachApi';
 // @ts-expect-error — .mjs matrix, no types
-import { QUESTION_MATRIX } from '../../scripts/audit-lib/coach-question-matrix.mjs';
+import { QUESTION_MATRIX, allPhrasings } from '../../scripts/audit-lib/coach-question-matrix.mjs';
 
 /**
  * THE COACH QUESTION-MATRIX AUDIT (David 2026-07-09: "list out all of the
@@ -43,16 +43,18 @@ function firedIntent(g: MasterGroundingOptions): boolean {
 // A live FEN for the board-dependent probes (a normal middlegame).
 const FEN = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 4 4';
 
-interface Row { id: string; cat: string; lane: string; qs: string[]; knownGap?: string }
+interface Row { id: string; cat: string; lane: string; qs: string[]; qs2?: string[]; knownGap?: string }
 
 describe('QUESTION MATRIX — every capability routes (no stock fall-through)', () => {
   const rows = QUESTION_MATRIX as Row[];
 
-  // Q&A families: every question must fire an intent.
+  // Q&A families: EVERY phrasing across EVERY pass must fire an intent.
+  // (pass 1 = `qs` natural; pass 2 = `qs2` harder/oblique — David: "each pass
+  // is all questions three different ways… then it gets harder on the second".)
   for (const row of rows.filter((r) => r.cat !== 'action')) {
-    it(`Q&A [${row.cat}/${row.id}] every phrasing fires an intent`, () => {
+    it(`Q&A [${row.cat}/${row.id}] every phrasing (all passes) fires an intent`, () => {
       const misses: string[] = [];
-      for (const q of row.qs) {
+      for (const q of allPhrasings(row) as string[]) {
         const g = buildQuestionGrounding(q, { fen: FEN });
         if (!firedIntent(g)) misses.push(q);
       }
@@ -60,15 +62,16 @@ describe('QUESTION MATRIX — every capability routes (no stock fall-through)', 
     });
   }
 
-  // Action families: every command must match the deterministic router.
-  // Rows flagged `knownGap` are documented unbuilt features (e.g. drill-from-chat
-  // = task #19) — reported via `it.skip` so the audit stays green on plugged
-  // items while keeping the gap visible.
+  // Action families: every command (all passes) must match the deterministic
+  // router. Rows flagged `knownGap` are documented unbuilt features (drill /
+  // favorite / repertoire / board-control from chat = task #19) — reported via
+  // `it.skip` so the audit stays green on plugged items while keeping the gap
+  // visible in the run output.
   for (const row of rows.filter((r) => r.cat === 'action')) {
     const runner = row.knownGap ? it.skip : it;
-    runner(`ACTION [${row.id}] every phrasing routes to an action${row.knownGap ? ` (KNOWN GAP: ${row.knownGap})` : ''}`, async () => {
+    runner(`ACTION [${row.id}] every phrasing (all passes) routes to an action${row.knownGap ? ` (KNOWN GAP: ${row.knownGap})` : ''}`, async () => {
       const misses: string[] = [];
-      for (const q of row.qs) {
+      for (const q of allPhrasings(row) as string[]) {
         let routed: unknown = null;
         try {
           routed = await routeChatIntent(q, { currentFen: FEN });

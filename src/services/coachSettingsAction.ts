@@ -66,8 +66,26 @@ const NARRATION_WORD: Record<string, CoachNarration> = {
 export function resolveSettingsCommand(text: string): ResolvedCommand | null {
   const t = text.toLowerCase().trim();
 
+  // ── "stop talking / be quiet / shut up" → voice off ───────────────────────
+  // A bare "stop"/"quiet" imperative with a talk/speak/narrate object clearly
+  // silences the coach, but names no explicit "voice" noun the structured
+  // branch matches (matrix pass 2, 2026-07-10). Handled up front, before the
+  // generic command gate (which "stop talking" wouldn't otherwise pass).
+  if (
+    /\b(?:stop|quit|cut\s+out|knock\s+off|cut)\s+(?:the\s+)?(?:talk(?:ing)?|speak(?:ing)?|narrat(?:ing|ion)|chatter(?:ing)?)\b/.test(t) ||
+    /\bbe\s+quiet\b/.test(t) ||
+    /\bshut\s+up\b/.test(t)
+  ) {
+    return {
+      key: 'coachVoiceOn',
+      confirmation: 'Voice narration is off now.',
+      prefsPatch: { coachVoiceOn: false, voiceEnabled: false },
+      applyStore: () => useAppStore.getState().setCoachVoiceOn(false),
+    };
+  }
+
   // Must look like a COMMAND (not a query) — an imperative settings verb.
-  const isCommand = /\b(turn|switch|set|enable|disable|make|change|mute|unmute|use|put|silence|activate|deactivate)\b/.test(t);
+  const isCommand = /\b(turn|switch|set|enable|disable|make|change|mute|unmute|use|put|silence|activate|deactivate|keep|give|want|go|stop|show)\b/.test(t);
   if (!isCommand) return null;
 
   const onWord = /\b(on|enable|enabled|start|unmute|use|activate)\b/.test(t);
@@ -96,6 +114,7 @@ export function resolveSettingsCommand(text: string): ResolvedCommand | null {
   if (
     /\b(voice|narration|narrate|coach\s+voice|speak|talk|audio)\b/.test(t) &&
     !/\bverbosity\b/.test(t) &&
+    !/\b(premium|polly|natural|better|nicer|realistic|human|higher[\s-]quality)\s+voice\b/.test(t) &&
     !/\b(premium|polly|natural)\b/.test(t)
   ) {
     // Narration LEVEL takes priority when a level word is present.
@@ -143,13 +162,20 @@ export function resolveSettingsCommand(text: string): ResolvedCommand | null {
   }
 
   // ── Premium voice (Polly) ─────────────────────────────────────────────
-  if (/\b(premium\s+voice|polly|natural\s+voice)\b/.test(t) && (onWord || offWord)) {
-    const on = onWord && !offWord;
-    return {
-      key: 'pollyEnabled',
-      confirmation: on ? 'The premium voice is on now.' : 'The premium voice is off; narration uses the device voice.',
-      prefsPatch: { pollyEnabled: on },
-    };
+  // "premium/polly/natural voice" plus the descriptive synonyms a user reaches
+  // for ("the better/nicer/realistic/human voice"). "switch to the better
+  // voice" carries no on-word, so treat a "switch/change to" as ON here (a
+  // "switch to X voice" means enable X) — matrix pass 2, 2026-07-10.
+  if (/\b(premium\s+voice|polly|natural\s+voice|better\s+voice|nicer\s+voice|realistic\s+voice|human\s+voice|higher[\s-]quality\s+voice)\b/.test(t)) {
+    const switchTo = /\b(?:switch|change)\s+to\b/.test(t);
+    if (onWord || offWord || switchTo) {
+      const on = !offWord;
+      return {
+        key: 'pollyEnabled',
+        confirmation: on ? 'The premium voice is on now.' : 'The premium voice is off; narration uses the device voice.',
+        prefsPatch: { pollyEnabled: on },
+      };
+    }
   }
 
   // ── Theme (dark / light / a named theme) ─────────────────────────────

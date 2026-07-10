@@ -233,7 +233,11 @@ export function parseCoachIntent(query: string): CoachIntent {
   ) {
     const subjectMatch =
       lower.match(/middle\s*game\b[^.?!]*?\b(?:for|of|in|from)\s+(?:the\s+)?([a-z][a-z\s'-]+)/) ||
-      lower.match(/(?:for|of|in|from)\s+(?:the\s+)?([a-z][a-z\s'-]+?)\s+middle\s*game/);
+      lower.match(/(?:for|of|in|from)\s+(?:the\s+)?([a-z][a-z\s'-]+?)\s+middle\s*game/) ||
+      // "<verb> the <opening> middlegame" — "walk me through the Sicilian
+      // middlegame", "continue the London middlegame" (matrix pass 2). The
+      // opening name sits directly before "middlegame" with no for/of/in/from.
+      lower.match(/(?:continue|through|teach|learn|explain|run\s+(?:me\s+)?through|walk\s+(?:me\s+)?through|show\s+(?:me\s+)?)\s+(?:the\s+)?(?!(?:the|a|an|my|this|that|opening|middle|end)\b)([a-z][a-z\s'-]+?)\s+middle\s*game/);
     const subject = subjectMatch ? cleanSubject(subjectMatch[1]) : '';
     return {
       kind: 'continue-middlegame',
@@ -278,7 +282,9 @@ export function parseCoachIntent(query: string): CoachIntent {
     // "give me a game" / "give me a match"
     lower.match(/\bgive\s+me\s+(?:a\s+)?(?:game|match)(?:\s+(?:with|against)\s+(?:the\s+)?(.+))?/) ||
     // "ready to play" / "ready for a game"
-    lower.match(/\bready\s+(?:to\s+play|for\s+(?:a\s+)?(?:game|match))\b/);
+    lower.match(/\bready\s+(?:to\s+play|for\s+(?:a\s+)?(?:game|match))\b/) ||
+    // "spar (with me) (in/with the <opening>)" — sparring is a play request.
+    lower.match(/\bspar\b(?:\s+with\s+me)?(?:\s+(?:in|with|on|against)\s+(?:the\s+)?(.+))?/);
   if (playMatch) {
     const rawSubject = playMatch[1] ? cleanSubject(playMatch[1]) : '';
     // A play-against subject is an opening NAME, not a sentence. "I want
@@ -354,6 +360,14 @@ export function parseCoachIntent(query: string): CoachIntent {
   //    "show me the London System opening" picks up the "opening"
   //    suffix variant first.
   const walkthroughMatch =
+    // "show me how the <opening> works / goes / plays" — a learn request whose
+    // "how … works" wrapper the generic "show me X" pattern would treat as a
+    // sentence and bail on (matrix pass 2, 2026-07-10).
+    lower.match(/show\s+me\s+how\s+(?:the\s+)?(.+?)\s+(?:works?|goes|plays?|is\s+played)\s*[?.!]*$/) ||
+    // "go through the <opening> (with me)" — a walkthrough request.
+    lower.match(/go\s+through\s+(?:the\s+)?(.+?)(?:\s+with\s+me)?\s*[?.!]*$/) ||
+    // "(I want to / wanna / I'd like to / let's) learn the <opening>"
+    lower.match(/(?:i\s+)?(?:want(?:\s+to)?|wanna|would\s+like\s+to|i'?d\s+like\s+to|let'?s|help\s+me)\s+learn\s+(?:the\s+)?(.+)/) ||
     lower.match(/walk\s+(?:me\s+)?through\s+(?:the\s+)?(.+)/) ||
     lower.match(/teach\s+me\s+(?:the\s+main\s+line\s+of\s+)?(?:the\s+)?(.+)/) ||
     lower.match(/show\s+me\s+(?:the\s+)?(.+?)(?:\s+opening)?$/) ||
