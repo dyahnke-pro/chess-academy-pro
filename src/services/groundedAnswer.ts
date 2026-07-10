@@ -306,7 +306,18 @@ export function explainBestMoveGrounded(
     const captured = c.get(to as never);
     const mv = c.move({ from: bestMoveUci.slice(0, 2), to, promotion: bestMoveUci.length > 4 ? bestMoveUci[4] : undefined });
     if (mv) {
-      if (captured && captured.color !== mc) {
+      // Prefer the RICH, hand-audited geometry (fork/pin/mate/check/material) so
+      // the "why it was a mistake" narration names the concrete point of the best
+      // move — the engine-reasoning form (David 2026-07-10). EXCLUDE the bare
+      // "attacks the X" clause: this function promises recapture-safety (it must
+      // NOT claim merit on a move whose piece just hangs), and a lone attack can
+      // fire from a piece that is itself en prise. Forks/pins/mate/check/material
+      // are all forcing or material-safe. Falls back to the narrow capture/check
+      // read when no strong geometry is computable.
+      const geo = describeMoveGeometry(fenBefore, mv.san, moverColor);
+      if (geo && !geo.startsWith('attacks')) {
+        bestClause = `it ${geo}`;
+      } else if (captured && captured.color !== mc) {
         const recapturable = c.attackers(to as never, captured.color).length > 0;
         const movedVal = REVIEW_PIECE_VALUE[mv.piece] ?? 0;
         const capVal = REVIEW_PIECE_VALUE[captured.type] ?? 0;

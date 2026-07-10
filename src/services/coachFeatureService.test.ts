@@ -47,10 +47,18 @@ describe('explainBestMoveGrounded — GROUNDED best-move explanation (no LLM, ch
 
   it('never claims a "win" on an even recapture (exchange, not a free piece)', () => {
     // Rxd4 but the bishop is defended by the queen on d8 → recapturable, and
-    // rook(5) > bishop(3), so it is NOT a win. No merit clause, played move
-    // (Kf1) hangs nothing → null.
+    // rook(5) > bishop(3), so it is NOT a win. The rich geometry would say
+    // "attacks the queen on d4→d8" but that clause is EXCLUDED (the rook itself
+    // hangs to that queen), so no merit clause; played move hangs nothing → null.
     const r = explainBestMoveGrounded('3qk3/8/8/8/3b4/8/8/3RK3 w - - 0 1', 'Kf1', 'd1d4', 'white');
     expect(r).toBeNull();
+  });
+
+  it('names the RICH reason (fork) when the best move forks — engine-reasoning form', () => {
+    // White Nb5; the player shuffled the king (Ke1-e2), best = Nc7+ forking the
+    // e8-king and the a8-rook. The merit clause is the fork, not a bare capture.
+    const r = explainBestMoveGrounded('r3k3/8/8/1N6/8/8/8/4K3 w - - 0 1', 'Ke2', 'b5c7', 'white');
+    expect(r).toBe('It forks the king on e8 and the rook on a8.');
   });
 });
 
