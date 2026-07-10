@@ -25,8 +25,8 @@ import { THEMES, getThemeById, applyTheme } from './themeService';
  *  map to the premium/minimal defaults; a named theme ("midnight blue", "neon")
  *  matches by id/name. kid-mode is never coach-selectable. */
 function resolveThemeId(t: string): string | null {
-  if (/\b(dark|night|black)\b/.test(t)) return 'dark-premium';
-  if (/\b(light|day|bright|minimal)\b/.test(t)) return 'light-minimal';
+  if (/\b(dark|night|black|midnight|dim)\b/.test(t)) return 'dark-premium';
+  if (/\b(light|day|bright|minimal|white)\b/.test(t)) return 'light-minimal';
   for (const th of THEMES) {
     if (th.id === 'kid-mode') continue;
     const idWords = th.id.replace(/-/g, ' ');
@@ -67,11 +67,28 @@ export function resolveSettingsCommand(text: string): ResolvedCommand | null {
   const t = text.toLowerCase().trim();
 
   // Must look like a COMMAND (not a query) — an imperative settings verb.
-  const isCommand = /\b(turn|switch|set|enable|disable|make|change|mute|unmute)\b/.test(t);
+  const isCommand = /\b(turn|switch|set|enable|disable|make|change|mute|unmute|use|put|silence|activate|deactivate)\b/.test(t);
   if (!isCommand) return null;
 
-  const onWord = /\b(on|enable|enabled|start|unmute)\b/.test(t);
-  const offWord = /\b(off|disable|disabled|stop|mute|muted|silence)\b/.test(t);
+  const onWord = /\b(on|enable|enabled|start|unmute|use|activate)\b/.test(t);
+  const offWord = /\b(off|disable|disabled|stop|mute|muted|silence|deactivate)\b/.test(t);
+
+  // ── Unambiguous "silence/mute the coach" + "make it silent/quiet" ─────────
+  // Natural phrasings that name no explicit "voice/narration" noun but clearly
+  // silence the coach (matrix audit 2026-07-09: "mute the coach", "make the
+  // coach silent"). Handled up front so the structured branches below don't
+  // need to over-match on the bare word "coach".
+  if (/\b(mute|silence)\b/.test(t) && /\b(coach|voice|narration|audio|it|you|everything)\b/.test(t)) {
+    return {
+      key: 'coachVoiceOn',
+      confirmation: 'Voice narration is off now.',
+      prefsPatch: { coachVoiceOn: false, voiceEnabled: false },
+      applyStore: () => useAppStore.getState().setCoachVoiceOn(false),
+    };
+  }
+  if (/\b(silent|quiet)\b/.test(t) && /\b(make|set|keep|coach|narration|it|you)\b/.test(t)) {
+    return { key: 'coachNarration', confirmation: 'Narration is set to silent now.', prefsPatch: { coachNarration: 'silent' } };
+  }
 
   // ── Voice narration on/off ────────────────────────────────────────────
   // Exclude "premium voice"/"polly"/"natural voice" — those are the Polly

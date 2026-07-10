@@ -657,6 +657,7 @@ const REVIEW_DUE_RE = anyOf([
   // harness 2026-07-09 — natural phrasing the card/rep patterns missed).
   String.raw`\breviews?\s+(?:are\s+)?due\b`,
   String.raw`\bdo\s+i\s+have\s+(?:any\s+)?reviews?\b`,
+  String.raw`\bany\s+reviews?\b`,
   String.raw`\banything\s+to\s+review\b`,
   String.raw`\bshould\s+i\s+do\s+my\s+(?:reps|reviews?|cards|flash\s?cards)\b`,
   String.raw`\bhow\s+much\s+review\b`,
@@ -907,6 +908,8 @@ const RECORDS_QUESTION_RE = anyOf([
   // specific "my best game/win/scalp/result" alternatives below still catch a
   // real records ask.
   String.raw`\bwhat(?:'?s| is| are)?\s+my\s+(?:records?|personal\s+bests?|bests)\b`,
+  // Standalone "my records" / "show my records" (matrix audit 2026-07-09).
+  String.raw`\b(?:show\s+(?:me\s+)?)?my\s+records?\b`,
   String.raw`\bmy\s+fastest\s+win\b`,
   String.raw`\bmy\s+longest\s+game\b`,
   String.raw`\bmy\s+(?:best|biggest)\s+(?:scalp|result|win|upset|victory)\b`,

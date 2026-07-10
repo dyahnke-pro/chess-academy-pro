@@ -1,0 +1,83 @@
+import { describe, it, expect } from 'vitest';
+import { buildQuestionGrounding } from './questionIntents';
+import { routeChatIntent } from '../services/coachSessionRouter';
+import type { MasterGroundingOptions } from '../services/coachApi';
+// @ts-expect-error — .mjs matrix, no types
+import { QUESTION_MATRIX } from '../../scripts/audit-lib/coach-question-matrix.mjs';
+
+/**
+ * THE COACH QUESTION-MATRIX AUDIT (David 2026-07-09: "list out all of the
+ * questions… all parts of the app, all actions… if it comes back with the stock
+ * answer we track it down and plug it in").
+ *
+ * Drives EVERY question the app can answer + EVERY action the coach takes,
+ * and asserts each ROUTES to a real intent / action — not the stock fall-through.
+ * A Q&A probe that fires NO intent, or an action probe that matches nothing, is
+ * the wiring gap that would surface as the stock line at runtime. The
+ * ASSEMBLER-produces-facts half is covered by the per-assembler unit tests; this
+ * audit proves the ROUTING is wired for every capability.
+ */
+
+// The intent flags that route a Q&A turn to an assembler (the *Kind refinements
+// carry defaults, so they don't count as "an intent fired" on their own).
+const INTENT_KEYS: ReadonlyArray<keyof MasterGroundingOptions> = [
+  'planQuestion', 'bestMoveQuestion', 'tacticsQuestion', 'progressQuestion',
+  'trendQuestion', 'openingProfileQuestion', 'statsQuestion', 'strengthsQuestion',
+  'openingAccuracyQuestion', 'openingTrapsQuestion', 'openingTrapsSystemAsk',
+  'reviewDueQuestion', 'mistakesQuestion', 'tacticsProfileQuestion', 'phaseQuestion',
+  'repertoireGapQuestion', 'accuracyQuestion', 'consistencyQuestion',
+  'convertingQuestion', 'colorQuestion', 'recordsQuestion', 'recordVsTarget',
+  'moveRatingQuestion', 'trainingRequestKind', 'puzzleStatsQuestion',
+  'transferGapQuestion', 'skillRadarQuestion', 'masterPlayQuestion', 'conceptQuestion',
+  'playerGamesQuestion', 'endgameQuestion', 'positionAssessmentQuestion',
+  'teachingMethodQuestion', 'settingsQuestion', 'appHelpQuestion',
+];
+
+function firedIntent(g: MasterGroundingOptions): boolean {
+  return INTENT_KEYS.some((k) => {
+    const v = g[k];
+    return typeof v === 'boolean' ? v : v !== undefined && v !== null;
+  });
+}
+
+// A live FEN for the board-dependent probes (a normal middlegame).
+const FEN = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 4 4';
+
+interface Row { id: string; cat: string; lane: string; qs: string[]; knownGap?: string }
+
+describe('QUESTION MATRIX — every capability routes (no stock fall-through)', () => {
+  const rows = QUESTION_MATRIX as Row[];
+
+  // Q&A families: every question must fire an intent.
+  for (const row of rows.filter((r) => r.cat !== 'action')) {
+    it(`Q&A [${row.cat}/${row.id}] every phrasing fires an intent`, () => {
+      const misses: string[] = [];
+      for (const q of row.qs) {
+        const g = buildQuestionGrounding(q, { fen: FEN });
+        if (!firedIntent(g)) misses.push(q);
+      }
+      expect(misses, `STOCK-GAP (${row.id}): these fired NO intent → would return the stock line: ${JSON.stringify(misses)}`).toEqual([]);
+    });
+  }
+
+  // Action families: every command must match the deterministic router.
+  // Rows flagged `knownGap` are documented unbuilt features (e.g. drill-from-chat
+  // = task #19) — reported via `it.skip` so the audit stays green on plugged
+  // items while keeping the gap visible.
+  for (const row of rows.filter((r) => r.cat === 'action')) {
+    const runner = row.knownGap ? it.skip : it;
+    runner(`ACTION [${row.id}] every phrasing routes to an action${row.knownGap ? ` (KNOWN GAP: ${row.knownGap})` : ''}`, async () => {
+      const misses: string[] = [];
+      for (const q of row.qs) {
+        let routed: unknown = null;
+        try {
+          routed = await routeChatIntent(q, { currentFen: FEN });
+        } catch {
+          routed = null;
+        }
+        if (!routed) misses.push(q);
+      }
+      expect(misses, `ACTION-GAP (${row.id}): these matched NO action → would fall to the brain/stock: ${JSON.stringify(misses)}`).toEqual([]);
+    });
+  }
+});
