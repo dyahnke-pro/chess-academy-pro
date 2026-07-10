@@ -514,6 +514,13 @@ export const STRUCTURAL_PROBES = [
   { id: 'move-rating', cat: 'live-board', q: 'was e4 the right call' },
   { id: 'master-play', cat: 'live-board', q: 'how do 1500s play this' },
   { id: 'tactics-live', cat: 'live-board', q: 'is this a perpetual' },
+  // Pass 13 — soundness / coach-meta / repertoire-vs / compensation / goal-time.
+  { id: 'master-play', cat: 'live-board', q: 'is the najdorf sound' },
+  { id: 'master-play', cat: 'live-board', q: 'is this line any good' },
+  { id: 'app-help', cat: 'knowledge', q: 'what can you do' },
+  { id: 'repertoire-gap', cat: 'self-knowledge', q: 'what do i play against the caro as white' },
+  { id: 'position-assessment', cat: 'live-board', q: 'do i have enough for the sacrifice' },
+  { id: 'progress', cat: 'self-knowledge', q: 'how long to reach 2000' },
 ];
 
 /** All phrasings for a row across EVERY pass. */

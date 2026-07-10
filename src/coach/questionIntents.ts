@@ -287,6 +287,9 @@ const POSITION_ASSESSMENT_RE = anyOf([
   String.raw`\bis\s+my\s+(?:pawn\s+)?structure\s+(?:sound|solid|healthy|weak|bad|good|broken|ok(?:ay)?)\b`,
   // draw decision = a read of the eval — "should I offer / take / accept a draw"
   String.raw`\bshould\s+i\s+(?:offer|take|accept|decline|go\s+for)\s+(?:a\s+|the\s+)?draw\b`,
+  // sacrifice / compensation — "do I have enough for the sacrifice / compensation"
+  String.raw`\bdo\s+i\s+have\s+(?:enough|compensation|comp)\b`,
+  String.raw`\benough\s+for\s+(?:the\s+)?(?:sac(?:rifice)?|piece|exchange|pawn)\b`,
   // win-probability / outcome = a read of the eval (pass 9).
   String.raw`\b(?:what\s+are\s+)?my\s+(?:winning\s+)?chances\b`,
   String.raw`\bwill\s+i\s+win\s+(?:this|here|from\s+here)\b`,
@@ -338,6 +341,10 @@ const MASTER_PLAY_QUESTION_RE = anyOf([
   String.raw`\bwhat\s+move\s+order\b`,
   String.raw`\bwhat(?:'?s| is)?\s+book\b`,
   String.raw`\bat\s+(?:the\s+)?(?:top|elite|gm|master|highest)\s+level\b`,
+  // line-soundness / theory verdict — "is the Najdorf sound", "is this line
+  // any good / playable" (matrix pass 13, 2026-07-10).
+  String.raw`\bis\s+(?:the\s+)?[\w'-]+\s+(?:sound|playable|reliable|dubious|refuted)\b`,
+  String.raw`\bis\s+(?:this|my)\s+(?:line|opening|variation)\s+(?:sound|any\s+good|good|playable|solid|reliable|dubious)\b`,
 ]);
 export function isMasterPlayQuestion(ask: string | undefined): boolean {
   return !!ask && MASTER_PLAY_QUESTION_RE.test(ask);
@@ -508,6 +515,7 @@ const PROGRESS_QUESTION_RE = anyOf([
   String.raw`\bhow\s+do\s+i\s+(?:get|climb|rise|reach|hit|make\s+it)\s+to\s+\d{3,4}\b`,
   String.raw`\bwhat\s+(?:will|would|do\s+i\s+need\s+to)\s+(?:get\s+me\s+to|reach|hit)\s+\d{3,4}\b`,
   String.raw`\bto\s+(?:get|reach|climb)\s+to\s+\d{3,4}\b`,
+  String.raw`\bhow\s+long\s+(?:to|until|till|before\s+i)\s+(?:reach|hit|get\s+to|improve)\b`,
   // ── focus / priority ──
   String.raw`\b(?:where|what)\s+should\s+(?:i\s+focus|my\s+focus\s+be|i\s+(?:put|spend)\s+my\s+(?:time|energy|effort))\b`,
   String.raw`\bwhat\s+(?:area|part|phase|aspect|skill)\s+(?:of\s+my\s+(?:game|play|chess)\s+)?needs?\s+(?:the\s+most\s+)?(?:work|attention|improvement)\b`,
@@ -1028,6 +1036,8 @@ const REPERTOIRE_GAP_RE = anyOf([
   String.raw`\bcatch\s+me\s+off\s+guard\b`,
   String.raw`\bwhere\s+am\s+i\s+(?:exposed|vulnerable|unprepared|caught\s+out|weak\s+in\s+(?:my\s+)?(?:prep|openings?|repertoire))\b`,
   String.raw`\bwhat\s+do\s+opponents?\s+get\s+me\s+with\b`,
+  // "what do I play against the <opening>" — a repertoire-choice ask.
+  String.raw`\bwhat\s+(?:do|should)\s+i\s+play\s+against\s+(?:the\s+)?[a-z][\w'-]+\b`,
   // learn-next
   String.raw`\bwhat\s+(?:opening|openings|lines?)\s+should\s+i\s+(?:learn|study|add|prepare|prep)\s+(?:next|to\s+my\s+repertoire)?\b`,
   String.raw`\bwhat\s+should\s+i\s+(?:learn|add\s+to\s+my\s+repertoire|prepare|prep)\s+next\b`,
@@ -1412,6 +1422,7 @@ const APP_HELP_RE: ReadonlyArray<RegExp> = [
   /\bwhat(?:'?s| is| does| do| are)?\b[\w'\s-]{0,30}?\b(?:tab|page|screen|section|trainer|feature)\b/i,
   /\bhow\s+(?:does|do|can|should)\b[\w'\s-]{0,30}?\b(?:tab|page|screen|section|trainer|feature)\b/i,
   /\bwhat\s+can\s+i\s+do\s+(?:in|on|with|here)\b/i,
+  /\bwhat\s+can\s+(?:you|the\s+coach|this\s+app)\s+do\b/i,
   /\bexplain\b[\w'\s-]{0,30}?\b(?:tab|page|screen|section|trainer|feature)\b/i,
   // "how / best way to use this app (to improve)" — app-usage guidance (pass 9).
   /\b(?:how|best\s+way|what(?:'?s| is)\s+the\s+best\s+way)\s+(?:should\s+i\s+|to\s+|do\s+i\s+)?use\s+(?:this\s+|the\s+)?app\b/i,
