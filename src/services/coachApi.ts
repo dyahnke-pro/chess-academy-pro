@@ -1979,6 +1979,39 @@ async function serveGroundedPositionDefault(
  * the correct answer to an ungrounded fallback. Returns a non-empty string
  * whenever `facts` is non-empty.
  */
+/** The language of the CURRENT coach turn, set by the turn choke (askImpl) when
+ *  the student wrote in a non-English language. voiceFacts reads it so grounded
+ *  answers are phrased back in that language even though the ask was translated
+ *  to English for intent routing. Single-user app → a module var is safe (turns
+ *  are sequential); every turn sets it (to a language or undefined) so it never
+ *  leaks across turns. */
+let activeTurnLanguage: string | undefined;
+export function setActiveTurnLanguage(name: string | undefined): void { activeTurnLanguage = name; }
+
+/** Translate a student message to English for INTENT ROUTING (David 2026-07-10:
+ *  "make sure all commands work in those languages"). The ~35 intent detectors +
+ *  the settings/nav command router are English pattern-matchers, so a Spanish
+ *  question never routed to the grounded path. Translating the ASK is not
+ *  deciding chess content (G0-safe) — it's understanding the question; the ANSWER
+ *  is still computed in code and phrased back in the original language by
+ *  voiceFacts. Chess notation is preserved. Falls back to the original on any
+ *  failure (degrade to English routing, never lose the turn). */
+export async function translateToEnglish(text: string, providerConfig?: ProviderConfig | null): Promise<string> {
+  const cfg = providerConfig ?? (await getProviderConfig());
+  if (!cfg) return text;
+  const system =
+    'Translate the following chess student message into English. It is a chess ' +
+    'question or a command. Keep chess moves in standard algebraic notation ' +
+    '(e4, Nf3, O-O, Qxd5) unchanged. Output ONLY the English translation — no ' +
+    'quotes, no explanation, nothing else.';
+  try {
+    const out = cfg.provider === 'anthropic'
+      ? await callAnthropic(cfg.apiKey, ANTHROPIC_MODEL_MAP.move_commentary, system, [{ role: 'user', content: text }], 120, 'translate_to_english')
+      : await callDeepSeek(cfg.apiKey, DEEPSEEK_MODEL_MAP.move_commentary, [{ role: 'system', content: system }, { role: 'user', content: text }], 120, 'translate_to_english');
+    return typeof out === 'string' && out.trim() ? out.trim() : text;
+  } catch { return text; }
+}
+
 export async function voiceFacts(
   facts: string,
   opts: {
@@ -2038,6 +2071,7 @@ export async function voiceFacts(
   // student's own message (ask in Spanish → answered in Spanish; David
   // 2026-07-10). Grounding-safe: only the language of expression changes.
   const targetLanguage = opts.targetLanguage
+    ?? activeTurnLanguage
     ?? (opts.studentMessage ? detectLanguage(opts.studentMessage).name : undefined);
   const translating = !!targetLanguage && targetLanguage !== 'English';
   if (opts.preferRaw && !opts.kidSafe && !opts.warm && !translating) return facts.trim();

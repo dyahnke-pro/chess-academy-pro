@@ -38,6 +38,8 @@ import { TACTICAL_THEMES } from './puzzleService';
 import { findLastMatchingGame } from './gameContextService';
 import { getWeakestOpenings } from './openingService';
 import { applyCoachSetting } from './coachSettingsAction';
+import { translateToEnglish } from './coachApi';
+import { detectLanguage } from '../utils/detectLanguage';
 import { matchNavigationRoute } from './navigationRouter';
 
 export interface RoutedChatIntent {
@@ -103,6 +105,17 @@ export async function routeChatIntent(
   text: string,
   options: RouteChatIntentOptions = {},
 ): Promise<RoutedChatIntent | null> {
+  // MULTILINGUAL COMMANDS (David 2026-07-10: "make sure all commands work in
+  // those languages"). Every command matcher below (settings, nav, training-aid)
+  // is an English pattern, so a Spanish/French command never matched. Translate
+  // a non-English message to English and match on THAT (G0-safe — understanding
+  // the command, not deciding chess content). Commands return their (English)
+  // confirmation before any answer-phrasing, so the turn language is untouched
+  // here; a non-command falls through to the brain, which re-detects + phrases
+  // in-language. English input is a no-op (no extra call).
+  const cmdLang = detectLanguage(text);
+  text = cmdLang.nonEnglish ? await translateToEnglish(text) : text;
+
   // Settings-as-actions — "turn on voice", "set narration to brief", "enable
   // hints", "disable the premium voice". The coach mutates a SAFE whitelisted
   // preference in code and confirms. Runs FIRST so a settings command never

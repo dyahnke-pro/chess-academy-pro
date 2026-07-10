@@ -38,8 +38,9 @@ import { loadMiddlegamePlanForLive } from './sources/middlegamePlan';
 import { loadModelGamesForLive } from './sources/modelGames';
 import { loadPlayerGamesForLive, resolvePlayerIdFromAsk } from './sources/playerGames';
 import { loadProGameReferenceData } from '../services/proGameReferenceData';
-import { consumeCoachActionOffer } from '../services/coachApi';
+import { consumeCoachActionOffer, translateToEnglish, setActiveTurnLanguage } from '../services/coachApi';
 import type { CoachActionOffer } from '../services/coachApi';
+import { detectLanguage } from '../utils/detectLanguage';
 import { deepseekProvider } from './providers/deepseek';
 import { anthropicProvider } from './providers/anthropic';
 import { COACH_TOOLS, getTool, getToolDefinitions } from './tools/registry';
@@ -463,6 +464,24 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
       providerOverride: options.providerOverride?.name ?? null,
     }),
   });
+
+  // MULTILINGUAL ROUTING (David 2026-07-10: "make sure all commands work in those
+  // languages"). The ~35 intent detectors below are English pattern-matchers, so
+  // a non-English ask never routed to the grounded path (it fell to the generic
+  // greeting). Detect the language, translate the ASK to English for routing
+  // (G0-safe — understanding the question, not deciding chess content), and set
+  // the turn language so voiceFacts phrases the COMPUTED answer BACK in the
+  // student's language. The original ask is preserved in the audit above.
+  {
+    const askLang = detectLanguage(input.ask);
+    if (askLang.nonEnglish) {
+      const english = await translateToEnglish(input.ask);
+      input = { ...input, ask: english };
+      setActiveTurnLanguage(askLang.name);
+    } else {
+      setActiveTurnLanguage(undefined);
+    }
+  }
 
   // NOTE on hallucinated tactics (David 2026-06-16, false "knight fork"):
   // the fix is NOT a blocking engine read here. `runAnswerGates` below

@@ -50,7 +50,7 @@ const ACCENT_HINTS: Array<[RegExp, string]> = [
 
 export function detectLanguage(text: string | undefined | null): DetectedLanguage {
   if (!text) return EN;
-  const raw = String(text);
+  const raw = text;
   // Non-Latin scripts — decisive.
   if (/[Ѐ-ӿ]/.test(raw)) return { code: 'ru', name: LANG_NAME.ru, nonEnglish: true };
   if (/[؀-ۿݐ-ݿ]/.test(raw)) return { code: 'ar', name: LANG_NAME.ar, nonEnglish: true };
