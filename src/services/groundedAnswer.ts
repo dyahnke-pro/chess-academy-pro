@@ -449,6 +449,10 @@ export function describeMoveGeometry(
   const to = mv.to;
   const mc = moverColor === 'white' ? 'w' : 'b';
 
+  // CHECKMATE outranks everything — a coach must say mate, not "gives check"
+  // (hand-audit 2026-07-10: Ra8# was reported as "gives check"). Board truth.
+  if (c.isCheckmate()) return 'delivers checkmate';
+
   // Every enemy piece the moved piece now attacks (king included).
   const targets: { square: Square; piece: PieceSymbol }[] = [];
   for (const sq of c.board().flat()) {

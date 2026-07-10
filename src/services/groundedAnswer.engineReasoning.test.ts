@@ -55,6 +55,30 @@ describe('assembleEngineReasoning — decipher Stockfish\'s line', () => {
     expect(assembleEngineReasoning({ fenBefore: fen, pvSan: [], moverColor: 'white' })).toBeNull();
     expect(assembleEngineReasoning({ fenBefore: fen, pvSan: ['Qh8'], moverColor: 'white' })).toBeNull();
   });
+
+  it('says checkmate (not "gives check") when the move is mate — hand-audit fix', () => {
+    // Back-rank: Ra8# with the g8-king boxed by its own f7/g7/h7 pawns.
+    const fen = '6k1/5ppp/8/8/8/8/8/R6K w - - 0 1';
+    const a = assembleEngineReasoning({ fenBefore: fen, pvSan: ['Ra8#'], moverColor: 'white', evalCp: 10000, studentSide: 'white' });
+    expect(a).not.toBeNull();
+    expect(a!.facts).toMatch(/delivers checkmate/i);
+    expect(a!.facts).not.toMatch(/gives check\b/i);
+  });
+
+  it('names a real pin, and refuses a blocked (fake) pin — hand-audit', () => {
+    // e7 EMPTY → Bg5 genuinely pins Nf6 to Qd8.
+    const real = assembleEngineReasoning({
+      fenBefore: 'rnbqk2r/pppp1ppp/4pn2/8/5B2/8/PPPP1PPP/RNBQK2R w KQkq - 0 1',
+      pvSan: ['Bg5'], moverColor: 'white', evalCp: 30, studentSide: 'white',
+    });
+    expect(real!.facts).toMatch(/pins the knight on f6 to the queen on d8/i);
+    // e7 PAWN blocks the diagonal → NOT a pin; must not claim one.
+    const blocked = assembleEngineReasoning({
+      fenBefore: 'rnbqkb1r/ppp1pppp/5n2/3p4/3P4/5N2/PPP1PPPP/RNBQKB1R w KQkq - 4 3',
+      pvSan: ['Bg5'], moverColor: 'white', evalCp: 30, studentSide: 'white',
+    });
+    expect(blocked!.facts).not.toMatch(/pins/i);
+  });
 });
 
 describe('assembleGameReviewAnswer — review rooted in the engine reasoning', () => {
