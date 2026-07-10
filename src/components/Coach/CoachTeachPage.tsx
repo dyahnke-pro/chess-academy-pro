@@ -10,6 +10,7 @@
  * actions.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { uid } from '../../utils/uid';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Chess } from 'chess.js';
 import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, X, Check, MessageCircle, Zap, Undo2, RotateCcw, Volume2 } from 'lucide-react';
@@ -826,7 +827,7 @@ export function CoachTeachPage(): JSX.Element {
     // After the student answers "why did you play that?", the picker pop-up
     // disappears and the reveal (best move + the engine's why) lands in the
     // chat — no lingering card (David 2026-07-10).
-    onReveal: (text) => setMessages((prev) => [...prev, { id: `why-reveal-${Date.now()}`, role: 'assistant', content: text, timestamp: Date.now() }]),
+    onReveal: (text) => setMessages((prev) => [...prev, { id: uid('why-reveal'), role: 'assistant', content: text, timestamp: Date.now() }]),
   });
   const [coachTipsOn, setCoachTipsOn] = useState<boolean>(true);
   const [evalBarOverride, setEvalBarOverride] = useState<boolean | null>(null);
@@ -1056,7 +1057,7 @@ export function CoachTeachPage(): JSX.Element {
     loadDrillOntoBoard(drill, progress);
     const intro = `${lead ? `${lead} ` : ''}${drill.prompt} Play your move on the board.`;
     setMessages((prev) => [...prev, {
-      id: `drill-intro-${Date.now()}`, role: 'assistant', content: intro, timestamp: Date.now(),
+      id: uid('drill-intro'), role: 'assistant', content: intro, timestamp: Date.now(),
     }]);
     useCoachMemoryStore.getState().appendConversationMessage({
       surface: 'chat-teach', role: 'coach', text: intro, fen: drill.setupFen, trigger: null,
@@ -1571,7 +1572,7 @@ export function CoachTeachPage(): JSX.Element {
           const { db } = await import('../../db/schema');
           await db.cachedOpenings.clear();
           setMessages((prev) => [...prev, {
-            id: `clearcache-${Date.now()}`,
+            id: uid('clearcache'),
             role: 'assistant',
             content: 'Cleared cached openings. Reloading the app to refresh service worker + cache storage…',
             timestamp: Date.now(),
@@ -1587,7 +1588,7 @@ export function CoachTeachPage(): JSX.Element {
           await hardRefresh();
         } catch (err) {
           setMessages((prev) => [...prev, {
-            id: `clearcache-err-${Date.now()}`,
+            id: uid('clearcache-err'),
             role: 'assistant',
             content: `Cache clear failed: ${err instanceof Error ? err.message : String(err)}`,
             timestamp: Date.now(),
@@ -1606,7 +1607,7 @@ export function CoachTeachPage(): JSX.Element {
         const settingResult = await applyCoachSetting(text);
         if (settingResult) {
           setMessages((prev) => [...prev, {
-            id: `setting-${Date.now()}`,
+            id: uid('setting'),
             role: 'assistant',
             content: settingResult.confirmation,
             timestamp: Date.now(),

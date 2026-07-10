@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { uid } from '../../utils/uid';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Undo2, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2, Lightbulb, AlertTriangle, GraduationCap, Compass, RotateCcw, Volume2, MessageCircle, Timer, HelpCircle } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -2721,7 +2722,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
               // asks "what did you just say?" the brain can recall the
               // alert it just spoke. WO-NARR-POLICY-02.
               useCoachSessionStore.getState().appendMessage({
-                id: `tactic-alert-${Date.now()}`,
+                id: uid('tactic-alert'),
                 role: 'assistant',
                 content: warning,
                 timestamp: Date.now(),
@@ -3470,7 +3471,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         // to the brain, so the LLM forgot its own observations).
         if (llm) {
           useCoachSessionStore.getState().appendMessage({
-            id: `narr-${Date.now()}`,
+            id: uid('narr'),
             role: 'assistant',
             content: llm,
             timestamp: Date.now(),
@@ -3529,7 +3530,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         // Mirror into the shared session + brain memory so the next
         // chat turn / move stays consistent with what was just spoken.
         useCoachSessionStore.getState().appendMessage({
-          id: `narr-${Date.now()}`,
+          id: uid('narr'),
           role: 'assistant',
           content: fastLine,
           timestamp: Date.now(),

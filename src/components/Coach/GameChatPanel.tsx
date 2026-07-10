@@ -26,6 +26,8 @@ import { voiceService } from '../../services/voiceService';
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
 import type { ChatMessage as ChatMessageType, BoardAnnotationCommand } from '../../types';
+import { uid } from '../../utils/uid';
+
 
 /** Strip [BOARD: ...] tags so they don't flash during streaming.
  *  Action tags ([[ACTION:...]] and [ACTION:...]) are stripped via a
@@ -292,7 +294,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       },
       injectAssistantMessage(text: string) {
         const msg: ChatMessageType = {
-          id: `coach-${Date.now()}`,
+          id: uid('coach'),
           role: 'assistant',
           content: text,
           timestamp: Date.now(),
@@ -371,7 +373,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
 
       // Add user message
       const userMsg: ChatMessageType = {
-        id: `gmsg-${Date.now()}`,
+        id: uid('gmsg'),
         role: 'user',
         content: text,
         timestamp: Date.now(),
@@ -511,7 +513,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           // a response. Mirrors the pattern existing intercepts use
           // (e.g., the restart-game / play-opening ack blocks below).
           const ackMsg: ChatMessageType = {
-            id: `gmsg-${Date.now()}-routed`,
+            id: uid('gmsg-routed'),
             role: 'assistant',
             content: ackText,
             timestamp: Date.now(),
@@ -557,7 +559,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       if (narrationToggle) {
         const ack = applyNarrationToggle(narrationToggle.enable);
         const ackMsg: ChatMessageType = {
-          id: `gmsg-${Date.now()}-narr`,
+          id: uid('gmsg-narr'),
           role: 'assistant',
           content: ack,
           timestamp: Date.now(),
@@ -584,7 +586,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           voiceService.stop();
           const ack = 'Voice narration is off.';
           const ackMsg: ChatMessageType = {
-            id: `gmsg-${Date.now()}-ack`,
+            id: uid('gmsg-ack'),
             role: 'assistant',
             content: ack,
             timestamp: Date.now(),
@@ -596,7 +598,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         if (inGame?.kind === 'restart' && onRestartGame) {
           onRestartGame();
           const ack: ChatMessageType = {
-            id: `gmsg-${Date.now()}-ack`,
+            id: uid('gmsg-ack'),
             role: 'assistant',
             content: 'Fresh board — starting over. Your move.',
             timestamp: Date.now(),
@@ -618,7 +620,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             ? "Board's set. Your move."
             : "I couldn't set that position — the FEN looked off.";
           const ackMsg: ChatMessageType = {
-            id: `gmsg-${Date.now()}-ack`,
+            id: uid('gmsg-ack'),
             role: 'assistant',
             content: ack,
             timestamp: Date.now(),
@@ -640,7 +642,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           onRestartGame?.();
           onPlayOpening(inGame.openingName);
           const ack: ChatMessageType = {
-            id: `gmsg-${Date.now()}-ack`,
+            id: uid('gmsg-ack'),
             role: 'assistant',
             content: `Starting a fresh game — I'll play the ${inGame.openingName} against you.`,
             timestamp: Date.now(),
@@ -913,7 +915,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
               summary: `coach-turn-ask timeout label=${askResult.label}`,
             });
             const timeoutMsg: ChatMessageType = {
-              id: `gmsg-${Date.now()}-timeout`,
+              id: uid('gmsg-timeout'),
               role: 'assistant',
               content: '⚠️ Coach is taking too long to respond. Try again in a moment.',
               timestamp: Date.now(),
@@ -1046,7 +1048,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             });
           }
           const assistantMsg: ChatMessageType = {
-            id: `gmsg-${Date.now()}-resp`,
+            id: uid('gmsg-resp'),
             role: 'assistant',
             content: assistantText,
             timestamp: Date.now(),
@@ -1076,7 +1078,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         } catch (err: unknown) {
           console.error('[GameChatPanel] dispatchCoachTurn failed:', err);
           const errMsg: ChatMessageType = {
-            id: `gmsg-${Date.now()}-err`,
+            id: uid('gmsg-err'),
             role: 'assistant',
             content: 'Sorry — I couldn\'t reach the coach just now. Try again in a moment.',
             timestamp: Date.now(),
@@ -1251,7 +1253,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             summary: `coach-turn-ask timeout label=${drawerAskResult.label}`,
           });
           const timeoutMsg: ChatMessageType = {
-            id: `gmsg-${Date.now()}-timeout-drawer`,
+            id: uid('gmsg-timeout-drawer'),
             role: 'assistant',
             content: '⚠️ Coach is taking too long to respond. Try again in a moment.',
             timestamp: Date.now(),
@@ -1321,7 +1323,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         // WO-COACH-TTS-STRIP-01: sanitize before bubble + memory.
         const drawerAssistantText = sanitizeCoachText(drawerCleanText);
         const assistantMsg: ChatMessageType = {
-          id: `gmsg-${Date.now()}-resp`,
+          id: uid('gmsg-resp'),
           role: 'assistant',
           content: drawerAssistantText,
           timestamp: Date.now(),
@@ -1342,7 +1344,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       } catch (err: unknown) {
         console.error('[GameChatPanel] dispatchCoachTurn (drawer) failed:', err);
         const errMsg: ChatMessageType = {
-          id: `gmsg-${Date.now()}-err`,
+          id: uid('gmsg-err'),
           role: 'assistant',
           content: 'Sorry — I couldn\'t reach the coach just now. Try again in a moment.',
           timestamp: Date.now(),

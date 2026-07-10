@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { uid } from '../../utils/uid';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Volume2, VolumeOff } from 'lucide-react';
@@ -372,7 +373,7 @@ export function CoachChatPage(): JSX.Element {
       const detail = err instanceof Error ? err.message : 'Please try again.';
       const failureText = `⚠️ Coach is unavailable right now (${detail}). Your message is saved — tap send to retry when you\u2019re back online.`;
       appendMessage({
-        id: `err-${Date.now()}`,
+        id: uid('err'),
         role: 'assistant',
         content: failureText,
         timestamp: Date.now(),
