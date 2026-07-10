@@ -49,4 +49,18 @@ describe('isWhyBestMoveQuestion — decipher the engine', () => {
     expect(isWhyBestMoveQuestion("what's the best move")).toBe(false);
     expect(isWhyBestMoveQuestion('why is it the best move')).toBe(true);
   });
+
+  it('a why-question does NOT also fire move-rating (the reasoning form wins)', () => {
+    // Live-audit bug 2026-07-10: "why is that the best move?" fired BOTH
+    // whyBestMove AND moveRating; move-rating (dispatched first) hijacked the
+    // turn with a played-move grade. The grounding builder now suppresses
+    // move-rating for a why-question so the reasoning walk wins.
+    const g = buildQuestionGrounding('why is that the best move?', { fen: FEN, moveHistory: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5'] });
+    expect(g.whyBestMoveQuestion).toBe(true);
+    expect(g.moveRatingQuestion).toBeFalsy();
+    // A genuine move-rating ask ("was that a good move?") still fires move-rating.
+    const r = buildQuestionGrounding('was that a good move?', { fen: FEN, moveHistory: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5'] });
+    expect(r.whyBestMoveQuestion).toBeFalsy();
+    expect(r.moveRatingQuestion).toBe(true);
+  });
 });

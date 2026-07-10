@@ -1072,7 +1072,9 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
             recordsQuestion: recordsQuestionEngage,
             recordVsTarget: recordVsTargetEngage ?? undefined,
             // "was that a good move?" — board-dependent; rides the fen gate.
-            moveRatingQuestion: isMoveRatingQuestion(input.ask),
+            // A "why is that the BEST move" ask wants the reasoning walk, not a
+            // played-move grade — the why-form wins (live audit 2026-07-10).
+            moveRatingQuestion: isMoveRatingQuestion(input.ask) && !isWhyBestMoveQuestion(input.ask),
             // "set up calculation training" — direct request to start a mode.
             trainingRequestKind: trainingRequestEngage ?? undefined,
             puzzleStatsQuestion: puzzleStatsQuestionEngage,

@@ -1732,7 +1732,10 @@ export function buildQuestionGrounding(
     colorQuestion: isColorQuestion(a),
     recordsQuestion: isRecordsQuestion(a),
     recordVsTarget: recordVsTarget(a) ?? undefined,
-    moveRatingQuestion: isMoveRatingQuestion(a),
+    // A "why is that the BEST move" ask reads as move-rating too, but it wants
+    // the engine-reasoning WALK, not a played-move grade — the why-form wins
+    // (David 2026-07-10, live audit: move-rating was hijacking the why turn).
+    moveRatingQuestion: isMoveRatingQuestion(a) && !isWhyBestMoveQuestion(a),
     trainingRequestKind: trainingRequestKind(a) ?? undefined,
     puzzleStatsQuestion: isPuzzleStatsQuestion(a),
     transferGapQuestion: isTransferGapQuestion(a),
