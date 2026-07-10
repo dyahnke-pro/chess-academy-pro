@@ -2033,3 +2033,68 @@ export function assembleGameReviewAnswer(opts: {
 
   return { facts: parts.join('\n'), bestMoveSan: null, bestMoveFromTo: null, sources: ['engine:stockfish'] };
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DATA-CAPTURE for the previously-missing questions (David 2026-07-10: "add in
+// the data capture to the missing questions"). Each is a PURE fact-computer over
+// data the app already persists — G0: compute the fact in code, voiceFacts
+// phrases it, the LLM decides nothing.
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** Time-trouble profile — how often the student blunders on a low clock.
+ *  Sourced from `detectTimeTrouble` (blunders made at/under LOW_TIME_MS crossed
+ *  against per-ply `clockRemainingMs`). Answers "do I play too fast / flag / lose
+ *  on time". */
+export interface TimeTroubleLike {
+  /** Blunders made at/under the low-time bar. */
+  hits: number;
+  /** Total analyzed blunders (the denominator for the share). */
+  totalBlunders: number;
+  /** How many of the student's games carry per-ply clock data. */
+  gamesWithClock: number;
+  /** The lowest clock (ms) a blunder was made on, if any. */
+  lowestClockMs: number | null;
+}
+export function assembleTimeTroubleAnswer(t: TimeTroubleLike): GroundedAnswer | null {
+  // No clock data at all → nothing to compute (the caller serves a no-data line).
+  if (t.gamesWithClock <= 0) return null;
+  if (t.hits <= 0) {
+    const facts =
+      `Across your ${t.gamesWithClock} game${t.gamesWithClock === 1 ? '' : 's'} with clock data, ` +
+      `none of your blunders came in time trouble — your errors aren't clock-driven, so slowing down isn't the fix here.`;
+    return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games', 'engine:stockfish'] };
+  }
+  const share = t.totalBlunders > 0 ? Math.round((t.hits / t.totalBlunders) * 100) : 0;
+  const shareStr = share > 0 ? ` — about ${share}% of your analyzed blunders` : '';
+  const lowest = typeof t.lowestClockMs === 'number'
+    ? ` Your worst came with just ${Math.max(0, Math.round(t.lowestClockMs / 1000))} seconds left.`
+    : '';
+  const facts =
+    `${t.hits} of your blunders came in time trouble${shareStr} — mistakes made with under 30 seconds on the clock.` +
+    lowest +
+    ` That's a clock-management leak: bank time earlier so you're not deciding critical moves on the increment.`;
+  return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games', 'engine:stockfish'] };
+}
+
+/** Most-recent-game result — answers "did I win my last game / what was the
+ *  result / how did my last game go". Pure formatter over the latest game record. */
+export interface LastGameLike {
+  outcome: 'win' | 'loss' | 'draw';
+  playerColor: 'white' | 'black';
+  opponent?: string | null;
+  opening?: string | null;
+  /** Human phrase for how it ended ("checkmate", "resignation", "on time", …). */
+  endReason?: string | null;
+  movesPlayed?: number | null;
+}
+export function assembleLastGameAnswer(g: LastGameLike | null): GroundedAnswer | null {
+  if (!g) return null;
+  const verb = g.outcome === 'win' ? 'won' : g.outcome === 'loss' ? 'lost' : 'drew';
+  const vs = g.opponent ? ` against ${g.opponent}` : '';
+  const as = ` as ${g.playerColor}`;
+  const opn = g.opening ? ` in the ${g.opening}` : '';
+  const how = g.endReason ? ` (${g.endReason})` : '';
+  const len = typeof g.movesPlayed === 'number' && g.movesPlayed > 0 ? ` after ${g.movesPlayed} moves` : '';
+  const facts = `Your last game: you ${verb}${as}${vs}${opn}${how}${len}.`;
+  return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+}

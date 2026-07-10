@@ -809,3 +809,56 @@ export async function getGamesByOpening(eco: string): Promise<GameRecord[]> {
     .filter((g) => !g.isMasterGame)
     .toArray();
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DATA-CAPTURE for previously-unanswerable coach questions (David 2026-07-10).
+// ─────────────────────────────────────────────────────────────────────────────
+import { detectTimeTrouble } from './timeTroubleDetector';
+import type { TimeTroubleLike, LastGameLike } from './groundedAnswer';
+
+/** Time-trouble profile — blunders made on a low clock, crossed from
+ *  `clockRemainingMs` against `mistakePuzzles`. Answers "do I play too fast /
+ *  flag / lose on time". Empty (gamesWithClock 0) when no clocked games exist. */
+export async function getTimeTroubleProfile(): Promise<TimeTroubleLike> {
+  const [games, mistakes] = await Promise.all([
+    db.games.filter((g) => !g.isMasterGame).toArray(),
+    db.mistakePuzzles.toArray(),
+  ]);
+  const hits = detectTimeTrouble(games, mistakes);
+  const gamesWithClock = games.filter((g) => g.clockRemainingMs && g.clockRemainingMs.length > 0).length;
+  return {
+    hits: hits.length,
+    totalBlunders: mistakes.length,
+    gamesWithClock,
+    lowestClockMs: hits.length > 0 ? hits[0].remainingMs : null, // hits sorted ascending
+  };
+}
+
+/** The student's most-recent game outcome (by date). Answers "did I win my last
+ *  game / what was the result". Null when there are no player games. */
+export async function getLastGameResult(): Promise<LastGameLike | null> {
+  const pg = await getPlayerGames();
+  if (pg.length === 0) return null;
+  const sorted = [...pg].sort((a, b) => (b.game.date ?? '').localeCompare(a.game.date ?? ''));
+  const { game, playerColor } = sorted[0];
+  const outcome: 'win' | 'loss' | 'draw' = isWin(game, playerColor) ? 'win' : isLoss(game, playerColor) ? 'loss' : 'draw';
+  const opponent = (playerColor === 'white' ? game.black : game.white) || null;
+  const opening = game.eco ? (getOpeningNameByEco(game.eco) ?? null) : null;
+  const movesPlayed = game.pgn ? countFullMovesInPgn(game.pgn) : null;
+  return { outcome, playerColor, opponent, opening, endReason: terminationPhrase(game.termination), movesPlayed };
+}
+
+/** Map a raw platform termination string to a human phrase for the coach. */
+function terminationPhrase(t: string | undefined): string | null {
+  if (!t) return null;
+  const s = t.toLowerCase();
+  if (/mate|checkmated/.test(s)) return 'checkmate';
+  if (/resign/.test(s)) return 'resignation';
+  if (/outoftime|timeout|on\s*time/.test(s)) return 'on time';
+  if (/agreed|agreement/.test(s)) return 'by agreement';
+  if (/stalemate/.test(s)) return 'stalemate';
+  if (/repetition|threefold/.test(s)) return 'by repetition';
+  if (/insufficient/.test(s)) return 'insufficient material';
+  if (/abandon|aborted/.test(s)) return null;
+  return null;
+}

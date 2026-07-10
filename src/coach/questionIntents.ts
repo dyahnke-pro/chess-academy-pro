@@ -1380,6 +1380,44 @@ export function isAppHelpQuestion(ask: string | undefined): boolean {
   return APP_HELP_RE.some((re) => re.test(ask));
 }
 
+// TIME-TROUBLE — "do I play too fast / am I flagging / do I lose on time / do I
+// blunder in time trouble". Data-capture (2026-07-10): grounded from
+// `detectTimeTrouble` (blunders under the low-clock bar). Distinct from the
+// consistency/time-control question (WHICH time control I'm best at).
+const TIME_TROUBLE_RE: ReadonlyArray<RegExp> = [
+  /\b(?:in\s+)?time\s+(?:trouble|pressure|scramble)\b/i,
+  /\bdo\s+i\s+(?:play|move|go)\s+too\s+(?:fast|quickly|quick)\b/i,
+  /\bdo\s+i\s+rush\b/i,
+  /\bam\s+i\s+flagging\b/i,
+  /\bdo\s+i\s+(?:lose|flag|blunder|crumble|panic)\s+(?:on|under|in|with)\s+(?:time|(?:a\s+|the\s+)?(?:low\s+)?clock|low\s+time)\b/i,
+  /\bdo\s+i\s+lose\s+on\s+time\b/i,
+  /\b(?:blunder|mistakes?|errors?)\s+(?:in|under|on)\s+(?:time\s+trouble|low\s+time|the\s+clock)\b/i,
+  /\bhow(?:'?s| is)\s+my\s+(?:clock|time)\s+management\b/i,
+  /\bdo\s+i\s+manage\s+(?:my\s+)?(?:clock|time)\b/i,
+];
+export function isTimeTroubleQuestion(ask: string | undefined): boolean {
+  return !!ask && TIME_TROUBLE_RE.some((re) => re.test(ask));
+}
+
+// LAST-GAME RESULT — "did I win my last game / how did my last game go / what
+// was the result". Data-capture (2026-07-10): the most-recent game record's
+// outcome. A factual QUERY (distinct from the review-game ACTION, which walks
+// the moves) — no review/walk verb, just asks the outcome.
+const LAST_GAME_RE: ReadonlyArray<RegExp> = [
+  /\bdid\s+i\s+(?:win|lose|draw)\s+(?:my\s+)?(?:last|latest|most\s+recent|previous)\s+game\b/i,
+  /\b(?:what(?:'?s| was)?\s+)?(?:the\s+)?result\s+of\s+my\s+(?:last|latest|most\s+recent|previous)\s+game\b/i,
+  /\bhow\s+did\s+(?:my\s+(?:last|latest|previous)\s+game\s+go|i\s+do\s+(?:in\s+)?(?:my\s+)?(?:last|latest|previous)\s+game)\b/i,
+  /\bwon\s+or\s+lost\s+(?:my\s+)?last\s+game\b/i,
+];
+export function isLastGameQuestion(ask: string | undefined): boolean {
+  if (!ask) return false;
+  // A "review / walk me through / go over my last game" is the ACTION, not this
+  // factual query — defer so we don't answer with a bare result when the user
+  // wants the walkthrough.
+  if (/\b(?:review|walk\s+(?:me\s+)?through|go\s+(?:over|through)|run\s+(?:me\s+)?through|narrate|recap|replay|analy[sz]e)\b/i.test(ask)) return false;
+  return LAST_GAME_RE.some((re) => re.test(ask));
+}
+
 /**
  * buildQuestionGrounding — the SHARED grounding builder so the coach's
  * grounded-data brain fires IDENTICALLY on every talking surface (David
@@ -1460,5 +1498,7 @@ export function buildQuestionGrounding(
     teachingMethodQuestion: isTeachingMethodQuestion(a),
     settingsQuestion: isSettingsQuestion(a),
     appHelpQuestion: isAppHelpQuestion(a),
+    timeTroubleQuestion: isTimeTroubleQuestion(a),
+    lastGameQuestion: isLastGameQuestion(a),
   };
 }

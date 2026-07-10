@@ -31,6 +31,7 @@ const INTENT_KEYS: ReadonlyArray<keyof MasterGroundingOptions> = [
   'transferGapQuestion', 'skillRadarQuestion', 'masterPlayQuestion', 'conceptQuestion',
   'playerGamesQuestion', 'endgameQuestion', 'positionAssessmentQuestion',
   'teachingMethodQuestion', 'settingsQuestion', 'appHelpQuestion',
+  'timeTroubleQuestion', 'lastGameQuestion',
 ];
 
 function firedIntent(g: MasterGroundingOptions): boolean {

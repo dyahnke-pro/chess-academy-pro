@@ -67,8 +67,8 @@ import { getUnifiedWeaknessProfile } from './weaknessSpine';
 import { getStrongestOpenings, getMostPlayedOpenings, getWeakestOpenings, getOpeningById } from './openingService';
 import { getWeakSpotsForOpening } from './weakSpotService';
 import type { OpeningRecord } from '../types';
-import { getOverviewInsights, getMistakeInsights, getTacticInsights, getOpeningInsights } from './gameInsightsService';
-import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleTrendAnswer } from './groundedAnswer';
+import { getOverviewInsights, getMistakeInsights, getTacticInsights, getOpeningInsights, getTimeTroubleProfile, getLastGameResult } from './gameInsightsService';
+import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleTrendAnswer, assembleTimeTroubleAnswer, assembleLastGameAnswer } from './groundedAnswer';
 import { computeLastMoveRating } from './moveRating';
 import { getDueCount, getEnrolledOpenings, getSrsDueOpenings, getTotalEnrolled } from './srsOpeningService';
 import { criticalMomentsAccuracy, streaks, timeControlPerformance, comebackWins, winShapeStats, colorProficiencyMismatch, personalRecords, tacticTransferGap, recordVsOpening, recordVsOpponent, phaseStrengthOverTime } from './analyticsService';
@@ -1372,6 +1372,13 @@ export interface MasterGroundingOptions {
    *  Voiced from APP_ROUTES_MANIFEST (title + description) via
    *  assembleAppHelpAnswer — the app's own copy, not a free-LLM guess. */
   appHelpQuestion?: boolean;
+  /** Data-capture (2026-07-10) — "do I play too fast / flag / lose on time".
+   *  Voiced from detectTimeTrouble (blunders under the low-clock bar) via
+   *  assembleTimeTroubleAnswer. No board. */
+  timeTroubleQuestion?: boolean;
+  /** Data-capture (2026-07-10) — "did I win my last game / what was the result".
+   *  Voiced from the most-recent game record via assembleLastGameAnswer. No board. */
+  lastGameQuestion?: boolean;
   /** Which side the STUDENT plays — so the tactics answer warns about THEIR
    *  hanging pieces. Falls back to side-to-move when absent. */
   studentColor?: 'white' | 'black';
@@ -2801,6 +2808,39 @@ export async function getCoachChatResponse(
             }
             const noDataFact = "You haven't played enough games yet for me to track your streaks and time-control form. Play a few more and I'll show you where you're steadiest.";
             const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'consistency', preferRaw: true });
+            if (voicedNoData) return voicedNoData;
+          } catch { /* fall through */ }
+        }
+
+        // ── TIME-TROUBLE (data-capture 2026-07-10) — "do I play too fast / flag /
+        // lose on time?" Voiced from detectTimeTrouble (blunders under the low
+        // clock). Runs BEFORE consistency's time-control answer so a clock-
+        // management ask gets the trouble profile, not "which time control".
+        if (grounding.timeTroubleQuestion) {
+          try {
+            const tt = await getTimeTroubleProfile();
+            const answer = assembleTimeTroubleAnswer(tt);
+            if (answer) {
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'time-trouble', preferRaw: true });
+              if (voiced) { lastCoachActionOffer = [{ type: 'review_games', id: 'recent' }]; return voiced; }
+            }
+            const noDataFact = "You haven't played any games with clock data yet, so I can't see whether time pressure is costing you. Play a few timed games and I'll show you if your blunders cluster on a low clock.";
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'time-trouble', preferRaw: true });
+            if (voicedNoData) return voicedNoData;
+          } catch { /* fall through */ }
+        }
+
+        // ── LAST-GAME RESULT (data-capture 2026-07-10) — "did I win my last game
+        // / what was the result?" Voiced from the most-recent game record.
+        if (grounding.lastGameQuestion) {
+          try {
+            const answer = assembleLastGameAnswer(await getLastGameResult());
+            if (answer) {
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'last-game', preferRaw: true });
+              if (voiced) { lastCoachActionOffer = [{ type: 'review_games', id: 'last' }]; return voiced; }
+            }
+            const noDataFact = "I don't have any of your games on file yet. Import your games and I'll be able to tell you how your last one went.";
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'last-game', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
         }

@@ -227,6 +227,19 @@ export const SELF_KNOWLEDGE = [
     qs2: ['give me the full breakdown of my abilities', 'map out all my skills', 'where do all my skills sit?'],
     qs3: ['show my skill radar', 'break down my skills', 'rate my chess'],
   },
+  // DATA-CAPTURE (2026-07-10) — previously safe-defaulted; now real assemblers.
+  {
+    id: 'time-trouble', lane: 'assembleTimeTroubleAnswer', needsData: 'games+clock+mistakes',
+    qs: ['do I play too fast?', 'am I flagging a lot?', 'do I lose on time?'],
+    qs2: ['do I blunder in time trouble?', "how's my clock management?", 'do I crumble under time pressure?'],
+    qs3: ['do I rush?', 'do I manage my time?', 'do I panic on a low clock?'],
+  },
+  {
+    id: 'last-game', lane: 'assembleLastGameAnswer', needsData: 'games',
+    qs: ['did I win my last game?', 'what was the result of my last game?', 'how did my last game go?'],
+    qs2: ['did I lose my latest game?', 'how did I do in my most recent game?', 'won or lost my last game?'],
+    qs3: ['did I win my last game?', 'result of my previous game?', 'how did my last game go?'],
+  },
 ];
 
 // ── C. KNOWLEDGE / PEDAGOGY Q&A (no student data needed) ──────────────────────
