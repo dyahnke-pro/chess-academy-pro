@@ -237,7 +237,7 @@ export function parseCoachIntent(query: string): CoachIntent {
       // "<verb> the <opening> middlegame" — "walk me through the Sicilian
       // middlegame", "continue the London middlegame" (matrix pass 2). The
       // opening name sits directly before "middlegame" with no for/of/in/from.
-      lower.match(/(?:continue|through|teach|learn|explain|run\s+(?:me\s+)?through|walk\s+(?:me\s+)?through|show\s+(?:me\s+)?)\s+(?:the\s+)?(?!(?:the|a|an|my|this|that|opening|middle|end)\b)([a-z][a-z\s'-]+?)\s+middle\s*game/);
+      lower.match(/(?:continue|through|teach|learn|explain|run(?:\s+me)?\s+through|walk(?:\s+me)?\s+through|show(?:\s+me)?)\s+(?:the\s+)?(?!(?:the|a|an|my|this|that|opening|middle|end|me|us|you)\b)([a-z][a-z\s'-]+?)\s+middle\s*game/);
     const subject = subjectMatch ? cleanSubject(subjectMatch[1]) : '';
     return {
       kind: 'continue-middlegame',

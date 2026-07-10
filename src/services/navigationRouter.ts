@@ -55,7 +55,7 @@ const NAV_ALIASES: NavAlias[] = [
 ];
 
 const NAV_INTENT_RE =
-  /\b(?:take me to|take me home|go to|go home|navigate to|bring up|pull up|jump to|switch to|open(?:\s+up)?|show me)\b/i;
+  /\b(?:take me (?:over |on )?to|take me home|go to|go home|navigate to|bring up|pull up|jump to|switch to|open(?:\s+up)?|show me)\b/i;
 
 /** Resolve a route TOPIC (the destination named in the text) to a real
  *  route + label, WITHOUT requiring a navigation verb. Used by the app-help

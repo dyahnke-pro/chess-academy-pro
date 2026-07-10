@@ -3,7 +3,7 @@ import { buildQuestionGrounding } from './questionIntents';
 import { routeChatIntent } from '../services/coachSessionRouter';
 import type { MasterGroundingOptions } from '../services/coachApi';
 // @ts-expect-error — .mjs matrix, no types
-import { QUESTION_MATRIX, allPhrasings } from '../../scripts/audit-lib/coach-question-matrix.mjs';
+import { QUESTION_MATRIX, allPhrasings, fillerVariants, STRUCTURAL_PROBES } from '../../scripts/audit-lib/coach-question-matrix.mjs';
 
 /**
  * THE COACH QUESTION-MATRIX AUDIT (David 2026-07-09: "list out all of the
@@ -81,6 +81,35 @@ describe('QUESTION MATRIX — every capability routes (no stock fall-through)', 
         if (!routed) misses.push(q);
       }
       expect(misses, `ACTION-GAP (${row.id}): these matched NO action → would fall to the brain/stock: ${JSON.stringify(misses)}`).toEqual([]);
+    });
+  }
+});
+
+describe('QUESTION MATRIX — PASS 4: filler robustness + hard structure', () => {
+  const rows = QUESTION_MATRIX as Row[];
+
+  // Every Q&A family's pass-1 phrasings, wrapped in conversational filler, must
+  // still fire an intent (the runtime normalizes filler away).
+  for (const row of rows.filter((r) => r.cat !== 'action')) {
+    it(`FILLER [${row.cat}/${row.id}] padded phrasings still fire`, () => {
+      const misses: string[] = [];
+      for (const q of fillerVariants(row) as string[]) {
+        if (!firedIntent(buildQuestionGrounding(q, { fen: FEN }))) misses.push(q);
+      }
+      expect(misses, `FILLER-GAP (${row.id}): padded asks fired NO intent: ${JSON.stringify(misses)}`).toEqual([]);
+    });
+  }
+
+  // The distinct harder-structure phrasings pass 4 surfaced.
+  interface Probe { id: string; cat: string; q: string }
+  for (const p of STRUCTURAL_PROBES as Probe[]) {
+    it(`STRUCT [${p.id}] "${p.q}" routes`, async () => {
+      if (p.cat === 'action') {
+        const routed = await routeChatIntent(p.q, { currentFen: FEN }).catch(() => null);
+        expect(routed, `STRUCT-GAP (${p.id}): "${p.q}" matched NO action`).not.toBeNull();
+      } else {
+        expect(firedIntent(buildQuestionGrounding(p.q, { fen: FEN })), `STRUCT-GAP (${p.id}): "${p.q}" fired NO intent`).toBe(true);
+      }
     });
   }
 });

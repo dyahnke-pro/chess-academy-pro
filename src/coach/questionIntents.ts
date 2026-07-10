@@ -39,6 +39,40 @@ export function coachSurfaceToRoute(surface: string): string {
 // boundaries are baked into each fragment as needed.
 const anyOf = (alts: string[]): RegExp => new RegExp(alts.join('|'), 'i');
 
+// ── Conversational-filler normalizer (matrix pass 4, 2026-07-10) ──────────────
+// Real users pad questions with greetings and hedges — "hey so um whos winning",
+// "honestly what should I work on", "roughly how accurate is my play these
+// days". The intent regexes match the QUESTION, not the padding, so the coach
+// dropped to the stock line on filler-laden asks. We normalize the ask ONCE at
+// the top of `buildQuestionGrounding` (the shared runtime path) so every
+// predicate sees the de-fillered text. The set is a fixed, conservative list of
+// non-content tokens — it never strips chess words, opening names, or the
+// positional/temporal cues ("here", "right now", "in this position") that
+// disambiguate live-board from over-time questions.
+const LEADING_FILLER_RE =
+  /^(?:hey|hi|hiya|yo|ok|okay|kk?|alright|alrighty|so|well|um+|uh+|erm|hmm+|look|listen|like|and|but|also|please|yeah|yep|sup|dude|man|bro|ma'?am|sir|be\s+real\s+with\s+me|real\s+quick|quick\s+(?:one|question)|tell\s+me|i\s+mean|let\s+me\s+ask|i\s+(?:wanna|want\s+to)\s+know|i\s+was\s+wondering|can\s+you\s+tell\s+me|so\s+like)\b[\s,.:;–—-]*/i;
+const MID_FILLER_RE =
+  /\b(?:actually|honestly|basically|literally|seriously|really|just|even|simply|roughly|currently|kinda|sorta|pretty\s+much|i\s+guess|you\s+know|these\s+days|at\s+all|or\s+what|again|then)\b/gi;
+
+/** Strip leading greetings/hedges + a fixed set of mid-sentence filler words so
+ *  the intent predicates match a padded question. Never returns empty (falls
+ *  back to the original ask) and never touches disambiguating cue words. */
+export function stripQuestionFiller(ask: string | undefined): string {
+  if (!ask) return ask ?? '';
+  let s = ask;
+  let prev: string;
+  do {
+    prev = s;
+    s = s.replace(LEADING_FILLER_RE, '');
+  } while (s !== prev && s.length > 0);
+  s = s
+    .replace(MID_FILLER_RE, ' ')
+    .replace(/\s{2,}/g, ' ')
+    .replace(/\s+([?.!,])/g, '$1')
+    .trim();
+  return s.length > 0 ? s : ask;
+}
+
 const PLAN_QUESTION_RE = anyOf([
   String.raw`\bplans?\b`,
   String.raw`\bstrateg(?:y|ies|ize|ic)\b`,
@@ -51,6 +85,7 @@ const PLAN_QUESTION_RE = anyOf([
   String.raw`\bhow\s+(?:do\s+i|should\s+i|to)\s+(?:proceed|continue|play|approach|handle|develop|set\s+up)\b`,
   String.raw`\bwhat(?:'?s| is)?\s+(?:the|my)\s+(?:plan|idea|strategy|approach|goal|aim)\b`,
   String.raw`\bwhat(?:'?s| is| am)?\s+i\s+(?:trying|aiming|looking)\s+to\s+(?:do|achieve)\b`,
+  String.raw`\bwhat\s+am\s+i\s+doing\s+(?:here|in\s+this)\b`,
   String.raw`\boutline\s+(?:a|my|the)?\s*(?:plan|strategy)\b`,
   String.raw`\bwhat(?:'?s| is)?\s+my\s+(?:goal|objective|aim)\b`,
   String.raw`\bwhat(?:'?s| is)?\s+(?:my|the)\s+(?:setup|structure|formation|pawn\s+structure)\b`,
@@ -60,6 +95,7 @@ const PLAN_QUESTION_RE = anyOf([
   String.raw`\bwhat\s+am\s+i\s+(?:supposed|meant)\s+to\s+do\b`,
   String.raw`\blong[-\s]?(?:range|haul)\b`,
   String.raw`\bwhat\s+should\s+i\s+be\s+(?:aiming|going|gunning|pushing|playing)\s+for\b`,
+  String.raw`\bwhat\s+am\s+i\s+(?:aiming|going|gunning|pushing|playing)\s+for\b`,
 ]);
 export function isPlanQuestion(ask: string | undefined): boolean {
   return !!ask && PLAN_QUESTION_RE.test(ask);
@@ -83,6 +119,7 @@ const BEST_MOVE_QUESTION_RE = anyOf([
   String.raw`\bonly\s+(?:\w+\s+){0,3}(?:good\s+)?moves?\b`,
   String.raw`\bone\s+(?:good\s+)?move\b`,
   String.raw`\bwhat\s+should\s+(?:i|white|black|we)\s+play\b`,
+  String.raw`\bwhat\s+should\s+i\s+be\s+(?:playing|doing)\b`,
   String.raw`\bwhat\s+(?:do|would|can|must|should)\s+(?:i|we|you)\s+play(?:\s+here)?\b`,
   String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+|white'?s?\s+|black'?s?\s+|my\s+)?best(?:\s+(?:move|here|option|play))?\b`,
   String.raw`\bwhat(?:'?s| is)?\s+the\s+(?:right|correct|winning|strongest)\s+(?:move|continuation)\b`,
@@ -129,7 +166,7 @@ const TACTICS_QUESTION_RE = anyOf([
   String.raw`\b(?:is\s+there\s+(?:a\s+)?)?mate(?:\s+(?:here|in\s+\w+|threat))?\b`,
   String.raw`\btactics?\b`,
   String.raw`\bcombinations?\b`,
-  String.raw`\b(?:any\s+)?(?:shot|sac(?:rifice)?|trick|tactic)\s+(?:here|available|on|in\s+this)?\b`,
+  String.raw`\b(?:any\s+)?(?:shots?|sac(?:rifice)?s?|tricks?|tactics?)\s+(?:here|available|on|in\s+this)?\b`,
   String.raw`\bcan\s+i\s+(?:win|grab|take|snag|pick\s+up)\s+(?:material|a\s+piece|a\s+pawn|the)\b`,
   String.raw`\bwin\s+(?:material|a\s+piece|a\s+pawn)\b`,
   String.raw`\bundefended\b`,
@@ -164,7 +201,8 @@ const POSITION_ASSESSMENT_RE = anyOf([
   String.raw`\bwho(?:'?s| is| has)\s+(?:winning|better|worse|ahead|on\s+top|the\s+(?:advantage|edge|initiative|upper\s+hand))\b`,
   String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+)?eval(?:uation)?\b`,
   String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+)?(?:score|assessment|verdict)\b`,
-  String.raw`\b(?:am\s+i|are\s+we)\s+(?:better|worse|winning|losing|ahead|behind|equal|fine|ok(?:ay)?|in\s+trouble|in\s+good\s+shape)\b`,
+  String.raw`\b(?:am\s+i|are\s+we)\s+(?:better|worse|winning|losing|ahead|behind|equal|fine|ok(?:ay)?|in\s+trouble|in\s+good\s+shape|busted|lost|dead|cooked|toast|done\s+for)\b`,
+  String.raw`\bplus\s+or\s+minus\b`,
   String.raw`\bis\s+(?:this|that|it|the|my)\s+(?:position\s+)?(?:good|bad|better|worse|winning|won|losing|lost|equal|level|balanced|fine|ok(?:ay)?|drawish|close|unclear|dangerous)\b`,
   String.raw`\bhow\s+(?:do\s+i|am\s+i)\s+(?:stand|standing|doing\s+here)\b`,
   String.raw`\bwhere\s+do\s+i\s+stand\b`,
@@ -447,7 +485,7 @@ const OPENING_PROFILE_RE = anyOf([
   String.raw`\bwhat\s+opening\s+(?:am\s+i|do\s+i)\s+(?:play\s+(?:the\s+)?most|best|strongest|worst|weakest)\b`,
   String.raw`\bwhat\s+(?:opening|openings)\s+do\s+i\s+play\s+(?:the\s+)?most\b`,
   String.raw`\bwhich\s+opening\s+suits\s+me\b`,
-  String.raw`\b(?:my\s+)?bread\s+and\s+butter\s+opening\b`,
+  String.raw`\b(?:my\s+)?bread\s+and\s+butter(?:\s+opening)?\b`,
   String.raw`\bwhat\s+do\s+i\s+open\s+with\b`,
   // "which opening do I score/perform/win best/most in?" — a WHICH-opening ask
   // grounded in the student's per-opening results.
@@ -637,6 +675,9 @@ const OPENING_TRAPS_RE = anyOf([
   String.raw`\btraps?\s+(?:can\s+i|do\s+i|should\s+i)\s+(?:use|play|spring|know)\b`,
   // "what (should I / do I) watch out for" — the anti-trap / pitfall side
   String.raw`\bwatch\s+out\s+for\b`,
+  String.raw`\bwhat\s+to\s+(?:watch|look)\s+(?:out\s+)?for\b`,
+  // "any tricks in/for the <opening>" — the trick side scoped to an opening.
+  String.raw`\b(?:any\s+)?tricks?\s+(?:in|for|against|with)\s+(?:the|my|this)\b`,
   String.raw`\bwhat\s+(?:should\s+i|do\s+i\s+need\s+to)\s+(?:watch|look)\s+(?:out\s+)?for\b`,
   String.raw`\bwhat\s+(?:are\s+the\s+)?(?:common\s+)?(?:pitfalls?|traps?)\s+(?:in|of|to\s+avoid)\b`,
   String.raw`\b(?:pitfalls?|traps?)\s+(?:should\s+i\s+|to\s+)?avoid\b`,
@@ -737,6 +778,10 @@ const MISTAKES_QUESTION_RE = anyOf([
   String.raw`\bwhat\s+(?:mistakes?|blunders?|errors?)\s+(?:show\s+up|come\s+up|crop\s+up|appear|happen|recur|repeat)\b`,
   // "what do I (keep) get(ting) wrong"
   String.raw`\bwhat\s+do\s+i\s+(?:keep\s+)?(?:getting|get)\s+wrong\b`,
+  // "what dumb/silly/careless mistakes do I keep repeating" — an adjective
+  // between "what" and the mistake noun (matrix pass 4, 2026-07-10).
+  String.raw`\bwhat\s+\w+\s+(?:mistakes?|blunders?|errors?)\s+do\s+i\b`,
+  String.raw`\b(?:mistakes?|blunders?|errors?)\s+do\s+i\s+keep\s+(?:making|repeating|committing)\b`,
 ]);
 export function isMistakesQuestion(ask: string | undefined): boolean {
   return !!ask && MISTAKES_QUESTION_RE.test(ask);
@@ -836,7 +881,7 @@ const REPERTOIRE_GAP_RE = anyOf([
   String.raw`\bneed\s+an?\s+answer\s+(?:to|for|against)\b`,
   String.raw`\bwhere(?:'?s| is)?\s+(?:the\s+)?gap\s+in\s+my\s+(?:prep|repertoire|openings?)\b`,
   String.raw`\bcatch\s+me\s+off\s+guard\b`,
-  String.raw`\bwhere\s+am\s+i\s+(?:exposed|vulnerable)\b`,
+  String.raw`\bwhere\s+am\s+i\s+(?:exposed|vulnerable|unprepared|caught\s+out|weak\s+in\s+(?:my\s+)?(?:prep|openings?|repertoire))\b`,
   String.raw`\bwhat\s+do\s+opponents?\s+get\s+me\s+with\b`,
   // learn-next
   String.raw`\bwhat\s+(?:opening|openings|lines?)\s+should\s+i\s+(?:learn|study|add|prepare|prep)\s+(?:next|to\s+my\s+repertoire)?\b`,
@@ -870,6 +915,7 @@ export function repertoireGapKind(ask: string | undefined): 'out-of-book' | 'hol
  *  accuracy question (isOpeningAccuracyQuestion). */
 const ACCURACY_QUESTION_RE = anyOf([
   String.raw`\bhow\s+accurate\s+am\s+i\b`,
+  String.raw`\bhow\s+accurate\s+is\s+my\s+play\b`,
   String.raw`\bhow\s+accura(?:te|tely)\s+do\s+i\s+play\b`,   // bare "how accurately do I play" (no opening)
   String.raw`\bwhat(?:'?s| is)?\s+my\s+(?:overall\s+|average\s+|typical\s+|general\s+)?accuracy\b`,
   String.raw`\bhow\s+precise\s+is\s+my\s+play\b`,
@@ -928,7 +974,7 @@ const CONVERTING_QUESTION_RE = anyOf([
   String.raw`\bdo\s+i\s+let\s+(?:wins|winning\s+(?:positions?|games?)|won\s+games?)\s+slip\b`,
   // "am I good at / how well do I close out / convert / finish (off) wins"
   String.raw`\b(?:am\s+i\s+(?:good|any\s+good)\s+at|how\s+(?:good|well)\s+(?:am\s+i|do\s+i))\s+(?:at\s+)?(?:clos(?:e|ing)(?:\s+out)?|convert(?:ing)?|finish(?:ing)?(?:\s+off)?|seal(?:ing)?)\b`,
-  String.raw`\bdo\s+i\s+(?:throw\s+away|blow|squander|let\s+slip)\s+(?:winning|won)\b`,
+  String.raw`\bdo\s+i\s+(?:tend\s+to\s+|often\s+|usually\s+|sometimes\s+|ever\s+)?(?:throw\s+away|blow|squander|let\s+slip)\s+(?:winning|won)\b`,
   String.raw`\bdo\s+i\s+(?:come\s+back|comeback|bounce\s+back)\b`,
   String.raw`\bhow\s+(?:often\s+)?do\s+i\s+(?:comeback|come\s+back)\b`,
   String.raw`\bhow\s+do\s+i\s+win\s+(?:my\s+)?games\b`,
@@ -945,7 +991,7 @@ export function isConvertingQuestion(ask: string | undefined): boolean {
 /** "am I better as White or Black?" → assembleColorAnswer. */
 const COLOR_QUESTION_RE = anyOf([
   String.raw`\b(?:am\s+i|do\s+i\s+play|am\s+i\s+stronger)\s+(?:better\s+)?(?:as\s+|with\s+)?(?:white\s+or\s+black|black\s+or\s+white)\b`,
-  String.raw`\b(?:better|stronger|worse|weaker)\s+(?:as|with|playing)\s+(?:white|black)\b`,
+  String.raw`\b(?:better|stronger|worse|weaker)\s+(?:as|with|playing)\s+(?:the\s+)?(?:white|black)(?:\s+pieces?)?\b`,
   String.raw`\bwhich\s+colou?r\s+(?:do\s+i|am\s+i)\b`,
   String.raw`\b(?:white\s+or\s+black|black\s+or\s+white)\s+player\b`,
   String.raw`\bam\s+i\s+a\s+(?:white|black)\s+player\b`,
@@ -1172,6 +1218,7 @@ const SETTINGS_QUERY_RE: ReadonlyArray<RegExp> = [
   /\b(?:is|are)\s+(?:my\s+|the\s+)?(?:voice\s+narration|voice|narration|hints?|sound|premium\s+voice|polly)\s+(?:on|off|enabled|disabled|muted|silent)\b/i,
   /\bwhat(?:'?s| is| are)\s+(?:my\s+)?(?:settings?|narration(?:\s+level)?|verbosity|coach\s+personality|voice\s+setting)\b/i,
   /\bwhat\s+(?:are\s+)?my\s+settings?\b/i,
+  /\b(?:show\s+(?:me\s+)?|check\s+)?my\s+settings\b/i,
   /\bhow\s+(?:am\s+i|is\s+(?:the\s+)?(?:coach|voice|narration))\s+set(?:\s+up)?\b/i,
   /\b(?:voice|narration|hint)\s+(?:setting|level|status)\b/i,
   // "do I have the voice (turned) on/off" — a state query in a "do I have" frame.
@@ -1240,6 +1287,10 @@ export function buildQuestionGrounding(
   } = {},
   surface: string = 'standalone-chat',
 ): import('../services/coachApi').MasterGroundingOptions {
+  // Normalize conversational filler ONCE so every predicate below sees the
+  // de-padded question ("hey so um whos winning" → "whos winning"). Matrix
+  // pass 4, 2026-07-10.
+  const a = stripQuestionFiller(ask);
   return {
     currentFen: liveState.fen,
     moveHistory: liveState.moveHistory,
@@ -1250,42 +1301,42 @@ export function buildQuestionGrounding(
     studentColor: liveState.studentColor,
     openingId: liveState.openingId,
     surface: coachSurfaceToRoute(surface),
-    planQuestion: isPlanQuestion(ask),
-    bestMoveQuestion: isBestMoveQuestion(ask),
-    tacticsQuestion: isTacticsQuestion(ask),
-    progressQuestion: isProgressQuestion(ask),
-    trendQuestion: isImprovementTrendQuestion(ask),
-    openingProfileQuestion: isOpeningProfileQuestion(ask),
-    openingProfileKind: openingProfileKind(ask),
-    statsQuestion: isStatsQuestion(ask),
-    strengthsQuestion: isStrengthsQuestion(ask),
-    openingAccuracyQuestion: isOpeningAccuracyQuestion(ask),
-    openingTrapsQuestion: isOpeningTrapsQuestion(ask),
-    openingTrapsSystemAsk: opensTrapsSystemAsk(ask),
-    reviewDueQuestion: isReviewDueQuestion(ask),
-    mistakesQuestion: isMistakesQuestion(ask),
-    tacticsProfileQuestion: isTacticsProfileQuestion(ask),
-    phaseQuestion: isPhaseQuestion(ask),
-    repertoireGapQuestion: isRepertoireGapQuestion(ask),
-    repertoireGapKind: repertoireGapKind(ask),
-    accuracyQuestion: isAccuracyQuestion(ask),
-    consistencyQuestion: isConsistencyQuestion(ask),
-    convertingQuestion: isConvertingQuestion(ask),
-    colorQuestion: isColorQuestion(ask),
-    recordsQuestion: isRecordsQuestion(ask),
-    recordVsTarget: recordVsTarget(ask) ?? undefined,
-    moveRatingQuestion: isMoveRatingQuestion(ask),
-    trainingRequestKind: trainingRequestKind(ask) ?? undefined,
-    puzzleStatsQuestion: isPuzzleStatsQuestion(ask),
-    transferGapQuestion: isTransferGapQuestion(ask),
-    skillRadarQuestion: isSkillRadarQuestion(ask),
-    masterPlayQuestion: isMasterPlayQuestion(ask),
-    conceptQuestion: isConceptQuestion(ask),
-    playerGamesQuestion: isPlayerGamesQuestion(ask),
-    endgameQuestion: isEndgameQuestion(ask),
-    positionAssessmentQuestion: isPositionAssessmentQuestion(ask),
-    teachingMethodQuestion: isTeachingMethodQuestion(ask),
-    settingsQuestion: isSettingsQuestion(ask),
-    appHelpQuestion: isAppHelpQuestion(ask),
+    planQuestion: isPlanQuestion(a),
+    bestMoveQuestion: isBestMoveQuestion(a),
+    tacticsQuestion: isTacticsQuestion(a),
+    progressQuestion: isProgressQuestion(a),
+    trendQuestion: isImprovementTrendQuestion(a),
+    openingProfileQuestion: isOpeningProfileQuestion(a),
+    openingProfileKind: openingProfileKind(a),
+    statsQuestion: isStatsQuestion(a),
+    strengthsQuestion: isStrengthsQuestion(a),
+    openingAccuracyQuestion: isOpeningAccuracyQuestion(a),
+    openingTrapsQuestion: isOpeningTrapsQuestion(a),
+    openingTrapsSystemAsk: opensTrapsSystemAsk(a),
+    reviewDueQuestion: isReviewDueQuestion(a),
+    mistakesQuestion: isMistakesQuestion(a),
+    tacticsProfileQuestion: isTacticsProfileQuestion(a),
+    phaseQuestion: isPhaseQuestion(a),
+    repertoireGapQuestion: isRepertoireGapQuestion(a),
+    repertoireGapKind: repertoireGapKind(a),
+    accuracyQuestion: isAccuracyQuestion(a),
+    consistencyQuestion: isConsistencyQuestion(a),
+    convertingQuestion: isConvertingQuestion(a),
+    colorQuestion: isColorQuestion(a),
+    recordsQuestion: isRecordsQuestion(a),
+    recordVsTarget: recordVsTarget(a) ?? undefined,
+    moveRatingQuestion: isMoveRatingQuestion(a),
+    trainingRequestKind: trainingRequestKind(a) ?? undefined,
+    puzzleStatsQuestion: isPuzzleStatsQuestion(a),
+    transferGapQuestion: isTransferGapQuestion(a),
+    skillRadarQuestion: isSkillRadarQuestion(a),
+    masterPlayQuestion: isMasterPlayQuestion(a),
+    conceptQuestion: isConceptQuestion(a),
+    playerGamesQuestion: isPlayerGamesQuestion(a),
+    endgameQuestion: isEndgameQuestion(a),
+    positionAssessmentQuestion: isPositionAssessmentQuestion(a),
+    teachingMethodQuestion: isTeachingMethodQuestion(a),
+    settingsQuestion: isSettingsQuestion(a),
+    appHelpQuestion: isAppHelpQuestion(a),
   };
 }
