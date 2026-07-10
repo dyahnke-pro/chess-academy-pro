@@ -494,6 +494,15 @@ export const STRUCTURAL_PROBES = [
   { id: 'progress', cat: 'self-knowledge', q: 'what will get me to 1800' },
   { id: 'strengths', cat: 'self-knowledge', q: 'what am i not weak at' },
   { id: 'consistency', cat: 'self-knowledge', q: 'whats my recent form' },
+  // Pass 11 — statement-form / coaching-meta / time-control, + endgame misroute.
+  { id: 'phase-profile', cat: 'self-knowledge', q: 'i always lose the endgame', notKey: 'endgameQuestion' },
+  { id: 'mistakes', cat: 'self-knowledge', q: 'i blunder too much' },
+  { id: 'progress', cat: 'self-knowledge', q: 'what should we work on today' },
+  { id: 'progress', cat: 'self-knowledge', q: 'give me some homework' },
+  { id: 'tactics-live', cat: 'live-board', q: 'can i attack his king' },
+  { id: 'consistency', cat: 'self-knowledge', q: 'how do i do in rapid', notKey: 'recordVsTarget' },
+  { id: 'time-trouble', cat: 'self-knowledge', q: 'am i good with the clock', notKey: 'recordVsTarget' },
+  { id: 'last-game', cat: 'self-knowledge', q: 'did i lose the last one' },
 ];
 
 /** All phrasings for a row across EVERY pass. */

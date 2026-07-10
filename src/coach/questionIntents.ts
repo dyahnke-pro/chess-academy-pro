@@ -224,6 +224,8 @@ const TACTICS_QUESTION_RE = anyOf([
   String.raw`\bdeflect(?:ion|ing)?\b`,
   String.raw`\bremoving\s+the\s+defender\b`,
   String.raw`\b(?:anything|something)\s+tactical\b`,
+  String.raw`\bcan\s+i\s+attack\b`,
+  String.raw`\battack\s+(?:his|her|their|the)\s+king\b`,
 ]);
 export function isTacticsQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
@@ -354,7 +356,12 @@ const ENDGAME_QUESTION_RE = anyOf([
   String.raw`\bhow\s+do\s+i\s+(?:not\s+lose|avoid\s+losing)\s+(?:this|the)\s+(?:ending|endgame)\b`,
 ]);
 export function isEndgameQuestion(ask: string | undefined): boolean {
-  return !!ask && ENDGAME_QUESTION_RE.test(ask);
+  if (!ask) return false;
+  // "I always/keep LOSE the endgame" is a phase-WEAKNESS statement about the
+  // student over time, NOT "is THIS endgame winning" — the bare "endgame" token
+  // would misroute it to the live tablebase (matrix pass 11, 2026-07-10).
+  if (/\bi\s+(?:always|keep|usually|constantly|often|tend\s+to)\s+(?:los|blunder|struggl|mess|screw)/i.test(ask)) return false;
+  return ENDGAME_QUESTION_RE.test(ask);
 }
 
 /** A PRO-GAME question — "how does Naroditsky play this?", "show me his games
@@ -468,7 +475,9 @@ const PROGRESS_QUESTION_RE = anyOf([
   String.raw`\bhow\s+(?:can|do|should|could|might)\s+i\s+(?:get\s+better|improve|progress|level\s+up|get\s+good)\b`,
   String.raw`\b(?:fastest|quickest|best|surest)\s+way\s+(?:for\s+me\s+)?to\s+improve\b`,
   // ── recommendation: "what should I train/work on/learn (next)?" ──
-  String.raw`\bwhat\s+(?:should|shall|do|can|could|would|must|ought)\s+i\s+(?:(?:need|want|have|like|try|be)\s+to\s+)?` + ANY_TRAIN_VERB + String.raw`\b`,
+  String.raw`\bwhat\s+(?:should|shall|do|can|could|would|must|ought)\s+(?:i|we)\s+(?:(?:need|want|have|like|try|be)\s+to\s+)?` + ANY_TRAIN_VERB + String.raw`\b`,
+  // coaching-meta training ask — "give me some homework", "what's my assignment"
+  String.raw`\b(?:give\s+me\s+(?:some\s+)?|what(?:'?s| is)?\s+my\s+)?(?:homework|assignment|drills?\s+to\s+do)\b`,
   // progressive "-ing" recommendation ("what should I be working on")
   String.raw`\bwhat\s+(?:should|am|do)\s+i\s+(?:be\s+)?(?:working\s+on|focusing\s+on|practi[sc]ing|improving|studying|training|learning|honing|sharpening|grinding|developing)\b`,
   String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+)?(?:best|most\s+important|first|next)\s+thing\s+to\s+` + ANY_TRAIN_VERB + String.raw`\b`,
@@ -885,6 +894,8 @@ const MISTAKES_QUESTION_RE = anyOf([
   String.raw`\bwhat\s+(?:mistakes?|blunders?|errors?)\s+(?:show\s+up|come\s+up|crop\s+up|appear|happen|recur|repeat)\b`,
   // "what do I (keep) get(ting) wrong"
   String.raw`\bwhat\s+do\s+i\s+(?:keep\s+)?(?:getting|get)\s+wrong\b`,
+  // statement form — "I blunder too much / a lot", "I hang pieces constantly"
+  String.raw`\bi\s+(?:blunder|hang\s+pieces|mess\s+up|drop\s+pieces)\s+(?:too\s+much|a\s+lot|constantly|all\s+the\s+time)\b`,
   // "what dumb/silly/careless mistakes do I keep repeating" — an adjective
   // between "what" and the mistake noun (matrix pass 4, 2026-07-10).
   String.raw`\bwhat\s+\w+\s+(?:mistakes?|blunders?|errors?)\s+do\s+i\b`,
@@ -953,6 +964,9 @@ const PHASE_QUESTION_RE = anyOf([
   String.raw`\b(?:opening|middlegame)\s+or\s+(?:middlegame|endgame)\s+player\b`,
   String.raw`\bwhich\s+(?:part|stage|phase)\s+of\s+(?:the\s+game|my\s+game)\b`,
   String.raw`\b(?:handle|play|do\s+in|at)\s+(?:the\s+)?critical\s+moments?\b`,
+  // "I always/keep lose (in) the opening/middlegame/endgame" — a phase-weakness
+  // habit statement (matrix pass 11).
+  String.raw`\bi\s+(?:always|keep|usually|constantly|often)\s+los(?:e|ing)\s+(?:in\s+)?(?:the\s+)?(?:opening|middlegame|middle\s?game|endgame|end\s?game)s?\b`,
   // "is my middlegame the problem / my weak spot" — a phase-diagnosis ask that
   // names the problem noun rather than a good/bad adjective (matrix pass 2).
   String.raw`\bis\s+(?:my|the)\s+(?:opening|middlegame|middle\s?game|endgame|end\s?game)\s+(?:my\s+)?(?:the\s+)?(?:problem|issue|weakness|weak\s+spot|holding\s+me\s+back|letting\s+me\s+down)\b`,
@@ -1071,6 +1085,9 @@ const CONSISTENCY_QUESTION_RE = anyOf([
   // "my recent form / how's my form" — recent steadiness of results.
   String.raw`\b(?:what(?:'?s| is)?\s+)?my\s+(?:recent\s+)?form\b`,
   String.raw`\bhow(?:'?s| is)\s+my\s+form\b`,
+  // time-control performance — "how do I do in blitz/rapid/bullet/classical"
+  String.raw`\bhow\s+do\s+i\s+(?:do|fare|play|score|perform)\s+(?:in|at)\s+(?:blitz|rapid|bullet|classical)\b`,
+  String.raw`\bam\s+i\s+better\s+at\s+(?:blitz|rapid|bullet|classical)\b`,
   String.raw`\bdo\s+i\s+play\s+(?:at\s+)?the\s+same\s+(?:level|standard)\b`,
   String.raw`\bsame\s+level\s+every\s+game\b`,
   String.raw`\bhow\s+(?:reliable|dependable|steady)\s+is\s+my\s+(?:play|game|chess|form)\b`,
@@ -1165,7 +1182,7 @@ const RECORD_VS_OPP_RE = new RegExp(
   'i',
 );
 /** Trailing/leading filler that isn't part of a real opening/opponent name. */
-const RECORD_VS_STOP = /^(?:it|that|them|this|those|me|him|her|us|people|players?|opponents?|everyone|anyone|games?)$/i;
+const RECORD_VS_STOP = /^(?:it|that|them|this|those|me|him|her|us|people|players?|opponents?|everyone|anyone|games?|blitz|rapid|bullet|classical|(?:the\s+)?clock|time|time\s+control)$/i;
 export function recordVsTarget(ask: string | undefined): string | null {
   if (!ask) return null;
   const trimmed = ask.trim();
@@ -1394,6 +1411,8 @@ const TIME_TROUBLE_RE: ReadonlyArray<RegExp> = [
   /\b(?:blunder|mistakes?|errors?)\s+(?:in|under|on)\s+(?:time\s+trouble|low\s+time|the\s+clock)\b/i,
   /\bhow(?:'?s| is)\s+my\s+(?:clock|time)\s+management\b/i,
   /\bdo\s+i\s+manage\s+(?:my\s+)?(?:clock|time)\b/i,
+  /\b(?:am\s+i|how\s+am\s+i)\s+(?:good|bad|any\s+good)?\s*with\s+(?:the\s+)?(?:clock|time)\b/i,
+  /\bgood\s+with\s+the\s+clock\b/i,
 ];
 export function isTimeTroubleQuestion(ask: string | undefined): boolean {
   return !!ask && TIME_TROUBLE_RE.some((re) => re.test(ask));
@@ -1408,6 +1427,7 @@ const LAST_GAME_RE: ReadonlyArray<RegExp> = [
   /\b(?:what(?:'?s| was)?\s+)?(?:the\s+)?result\s+of\s+my\s+(?:last|latest|most\s+recent|previous)\s+game\b/i,
   /\bhow\s+did\s+(?:my\s+(?:last|latest|previous)\s+game\s+go|i\s+do\s+(?:in\s+)?(?:my\s+)?(?:last|latest|previous)\s+game)\b/i,
   /\bwon\s+or\s+lost\s+(?:my\s+)?last\s+game\b/i,
+  /\bdid\s+i\s+(?:win|lose|draw)\s+(?:the\s+)?last\s+one\b/i,
 ];
 export function isLastGameQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
