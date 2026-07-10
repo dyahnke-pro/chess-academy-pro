@@ -58,7 +58,7 @@ function deepseekCacheSplit(usage: unknown): { hit: number | null; miss: number 
   };
 }
 import { lookupMasterPlay } from './masterPlayLookup';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, explainBestMoveGrounded } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleEngineReasoning, explainBestMoveGrounded } from './groundedAnswer';
 import { matchRouteByTopic } from './navigationRouter';
 import { APP_ROUTES_MANIFEST } from '../data/appRoutesManifest';
 import { lookupTablebase } from './lichessTablebaseService';
@@ -1227,6 +1227,13 @@ export interface MasterGroundingOptions {
    *  turn while every fabrication guard stays in force. Detected via
    *  `isBestMoveQuestion` in coachService (David 2026-06-09 "No bueno"). */
   bestMoveQuestion?: boolean;
+  /** "WHY does the engine like this move / walk me through Stockfish's line"
+   *  (David 2026-07-10). Distinct from `bestMoveQuestion` (names the move +
+   *  eval): this walks the engine PV via `assembleEngineReasoning` so the coach
+   *  DECIPHERS the reasoning. Dispatched BEFORE the thin best-move branch. The
+   *  same computed walk is the root of the per-move "why" button + review
+   *  narration. */
+  whyBestMoveQuestion?: boolean;
   /** GROUNDING INVERSION (STEP A) — the live engine snapshot, threaded from
    *  the surface (`CoachTeachPage`/play) so the chat layer can ground a
    *  best-move / eval / tactics answer in CODE and voice it through
@@ -2285,6 +2292,7 @@ export async function getCoachChatResponse(
       // the detector flags routes them to the computed answer; a miss still
       // falls through to the legacy path, so this can only ADD grounding.
       grounding.bestMoveQuestion === true ||
+      grounding.whyBestMoveQuestion === true ||
       grounding.masterPlayQuestion === true ||
       grounding.planQuestion === true ||
       grounding.tacticsQuestion === true ||
@@ -3194,6 +3202,61 @@ export async function getCoachChatResponse(
         // docs/plans/2026-06-10-coach-chat-grounding-inversion.md. If you're
         // about to add a validator here — STOP: compute it and route it through
         // voiceFacts instead.
+        // ── WHY THE ENGINE LIKES IT (2026-07-10) — decipher Stockfish's line ──
+        // "why is that the best move / walk me through the engine's line" wants
+        // the REASONING, not just the move + eval. assembleEngineReasoning walks
+        // the engine PV (real, legal, chess.js-verified) naming what each engine
+        // move achieves, ending on the eval verdict — all computed, LLM voices
+        // only (G0). Dispatched BEFORE the thin best-move branch so a "why" gets
+        // the full walk. Degrades to the single-move geometry when only the best
+        // move UCI is known; falls through to best-move / legacy on any miss.
+        if (grounding.whyBestMoveQuestion) {
+          const fen = grounding.currentFen ?? null;
+          const plan = grounding.enginePlan;
+          let answer = null;
+          if (fen && plan && plan.pvSan.length > 0) {
+            const moverColor: 'white' | 'black' = fen.split(' ')[1] === 'b' ? 'black' : 'white';
+            answer = assembleEngineReasoning({
+              fenBefore: fen,
+              pvSan: plan.pvSan,
+              moverColor,
+              evalCp: plan.evalCp,
+              mateIn: plan.mateIn,
+              studentSide: plan.studentSide,
+            });
+          } else if (fen && grounding.engineBestMoveUci) {
+            // No full PV — walk the single best move (still names WHAT + verdict).
+            const moverColor: 'white' | 'black' = fen.split(' ')[1] === 'b' ? 'black' : 'white';
+            let bestSan: string | null = null;
+            try {
+              const c = new Chess(fen);
+              const u = grounding.engineBestMoveUci;
+              const mv = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined });
+              bestSan = mv?.san ?? null;
+            } catch { bestSan = null; }
+            if (bestSan) {
+              // engineEvalCp/engineMateIn are WHITE-perspective (LiveState
+              // convention) — assembleEngineReasoning flips to student POV itself.
+              answer = assembleEngineReasoning({
+                fenBefore: fen,
+                pvSan: [bestSan],
+                moverColor,
+                evalCp: typeof grounding.engineEvalCp === 'number' ? grounding.engineEvalCp : null,
+                mateIn: typeof grounding.engineMateIn === 'number' ? grounding.engineMateIn : null,
+                studentSide: grounding.studentColor ?? moverColor,
+              });
+            }
+          }
+          if (answer) {
+            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'best-move', preferRaw: true });
+            if (voiced) {
+              return answer.bestMoveFromTo
+                ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
+                : voiced;
+            }
+          }
+        }
+
         if (grounding.bestMoveQuestion) {
           // Prefer Stockfish's TRUE best move (threaded from the surface engine
           // snapshot, STEP A); fall back to the top master move when the engine

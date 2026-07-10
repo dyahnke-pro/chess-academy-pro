@@ -28,6 +28,7 @@
  */
 import { Chess } from 'chess.js';
 import { logAppAudit } from '../services/appAuditor';
+import { buildEnginePlan } from '../services/enginePlanContext';
 import { scanPositionForTrap } from '../services/positionTrapScan';
 import { applyCandidateArrows } from '../services/coachAnswerGates';
 import { assembleEnvelope } from './envelope';
@@ -186,6 +187,7 @@ import {
   isRepertoireGapQuestion, repertoireGapKind,
   isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion,
   isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, trainingRequestKind, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
+  isWhyBestMoveQuestion,
 } from './questionIntents';
 export {
   isPlanQuestion, isBestMoveQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
@@ -197,6 +199,7 @@ export {
   isRepertoireGapQuestion, repertoireGapKind,
   isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion,
   isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, trainingRequestKind, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
+  isWhyBestMoveQuestion,
 };
 export type { TrainingKind } from './questionIntents';
 
@@ -966,9 +969,19 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     const puzzleStatsQuestionEngage = isPuzzleStatsQuestion(input.ask);
     const transferGapQuestionEngage = isTransferGapQuestion(input.ask);
     const skillRadarQuestionEngage = isSkillRadarQuestion(input.ask);
+    // "WHY does the engine like this move" needs the engine PV to walk. CENTRALIZE
+    // it here (David 2026-07-10: "coach is master of all now, no isolated tabs")
+    // so EVERY surface gets the reasoning walk — not just the ones that pre-inject
+    // a plan. Build it on demand when the surface didn't; best-effort + null-safe.
+    const whyBestMoveEngage = isWhyBestMoveQuestion(input.ask);
+    let resolvedEnginePlan = input.liveState.enginePlan;
+    if (!resolvedEnginePlan && whyBestMoveEngage && input.liveState.fen) {
+      const sideToMove: 'white' | 'black' = (input.liveState.fen.split(' ')[1] ?? 'w') === 'b' ? 'black' : 'white';
+      resolvedEnginePlan = (await buildEnginePlan(input.liveState.fen, input.liveState.studentColor ?? sideToMove)) ?? undefined;
+    }
     const autoGrounding =
       options.grounding ??
-      (input.liveState.fen || progressQuestion || trendQuestionEngage || conceptQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage
+      (input.liveState.fen || progressQuestion || trendQuestionEngage || conceptQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage || whyBestMoveEngage
         ? {
             currentFen: input.liveState.fen,
             // DB-grounding: thread the move history through so the
@@ -1004,6 +1017,7 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
             // 2026-06-09 "No bueno": the coach refused a plain "best move
             // here?" because the explanation's forward SANs tripped the gate.)
             bestMoveQuestion: isBestMoveQuestion(input.ask),
+            whyBestMoveQuestion: whyBestMoveEngage,
             // GROUNDING INVERSION (STEP A) — thread the live engine snapshot +
             // tactics so the chat layer can COMPUTE a best-move / eval / tactics
             // answer and voice it through `voiceFacts`, instead of handing the
@@ -1022,7 +1036,7 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
             engineEvalCp: input.liveState.enginePlan?.evalCp ?? input.liveState.evalCp,
             engineMateIn: input.liveState.enginePlan?.mateIn ?? input.liveState.evalMateIn,
             // STEP D Phase 3 — the engine PV backs a PLAN answer (assemblePlanAnswer).
-            enginePlan: input.liveState.enginePlan,
+            enginePlan: resolvedEnginePlan,
             tactics: input.liveState.tactics,
             // STEP B — tactics/danger (Phase 2) + student-progress (Phase 6).
             // Both assemblers exist; these flags tell the interception to

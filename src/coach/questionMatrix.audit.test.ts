@@ -21,7 +21,7 @@ import { QUESTION_MATRIX, allPhrasings, fillerVariants, STRUCTURAL_PROBES } from
 // The intent flags that route a Q&A turn to an assembler (the *Kind refinements
 // carry defaults, so they don't count as "an intent fired" on their own).
 const INTENT_KEYS: ReadonlyArray<keyof MasterGroundingOptions> = [
-  'planQuestion', 'bestMoveQuestion', 'tacticsQuestion', 'progressQuestion',
+  'planQuestion', 'bestMoveQuestion', 'whyBestMoveQuestion', 'tacticsQuestion', 'progressQuestion',
   'trendQuestion', 'openingProfileQuestion', 'statsQuestion', 'strengthsQuestion',
   'openingAccuracyQuestion', 'openingTrapsQuestion', 'openingTrapsSystemAsk',
   'reviewDueQuestion', 'mistakesQuestion', 'tacticsProfileQuestion', 'phaseQuestion',

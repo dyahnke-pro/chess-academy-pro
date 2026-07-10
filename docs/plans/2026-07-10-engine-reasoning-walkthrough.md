@@ -60,6 +60,27 @@ ending on the eval verdict. Pure board + engine facts; the LLM only phrases them
    question matrix (3+ phrasings, escalating). ship-check, then push to main +
    3-instrument audit.
 
+## `assembleEngineReasoning` IS THE SHARED ROOT (David 2026-07-10)
+
+- "I then want the why button to recall this information." → the per-move **"why"
+  button** (discussion-practice grounded reveal) must surface THIS engine-
+  reasoning walk, not a separate/thinner explanation. One computed source.
+- "And I want this to be the root of review with coach's narration." → **review-
+  with-coach** narrates each critical move by calling `assembleEngineReasoning`
+  (the engine's line for the played/best move) as its BACKBONE — grounded, not a
+  free-LLM recap. gameReviewService / CoachGameReview narration routes through it.
+
+So the same assembler feeds: (a) general chat "why does the engine like X",
+(b) the "why" button recall, (c) review narration. Build the root (chunks 1-4),
+then point both consumers at it (chunks 6-7).
+
+6. **"Why" button → recall the reasoning.** Wire the per-move why affordance to
+   `assembleEngineReasoning` for the move's position + engine PV, voiced through
+   `voiceFacts`. It "recalls" the same facts the chat path computes.
+7. **Review narration root.** gameReviewService / review-with-coach per-move
+   narration is BUILT on `assembleEngineReasoning` (best move's line + the played
+   move's cost) instead of free prose. The engine walk is the narration backbone.
+
 ## Non-negotiables
 - G0/G3: the LLM decides zero chess content — every move + reason is computed.
 - Reasoning degrades SAFE: no PV → single-move geometry; no engine data → the

@@ -210,6 +210,39 @@ export function isBestMoveQuestion(ask: string | undefined): boolean {
   return BEST_MOVE_QUESTION_RE.test(ask);
 }
 
+/** A "WHY is the best move best / walk me through the engine's line / decipher
+ *  Stockfish's reasoning" question (David 2026-07-10: "get the coach deciphering
+ *  why Stockfish likes a move"). DISTINCT from `isBestMoveQuestion` (which NAMES
+ *  the move + eval): this asks for the ENGINE'S REASONING — answered by walking
+ *  the PV via `assembleEngineReasoning`. Dispatched BEFORE the thin best-move
+ *  branch so a "why" gets the full grounded walk, not just the move + number. */
+const WHY_BEST_MOVE_RE = anyOf([
+  // "why is that/this/Nf5 (the) best/right/winning move" — a reason ask.
+  String.raw`\bwhy\s+(?:is|would|does|should|was)\b[\s\S]{0,30}\b(?:best|the\s+move|winning|right|correct|strong(?:est)?|good)\b`,
+  // "why does the engine/computer/stockfish like/pick/choose/prefer/play/want X"
+  String.raw`\bwhy\s+(?:does|would|did|is)?\s*(?:the\s+)?(?:engine|computer|stockfish|it)\s+(?:like|likes|pick|picks|choose|chooses|prefer|prefers|play|plays|want|wants|recommend|suggest|go(?:es)?\s+for)\b`,
+  // "why not <my move>" / "why not just <SAN>" — why the alternative is worse.
+  String.raw`\bwhy\s+not\b`,
+  // "explain / break down the best move / the engine's move / the line / choice"
+  String.raw`\b(?:explain|break\s+down|unpack|decipher|justify|walk\s+me\s+through|talk\s+me\s+through|reason\s+(?:out|through))\b[\s\S]{0,40}\b(?:best\s+move|engine(?:'?s)?\s+(?:move|line|choice|pick|reasoning|thinking)|the\s+(?:move|line|recommendation)|why)\b`,
+  // "what's the idea/reasoning/point behind the (best/engine's) move"
+  String.raw`\bwhat(?:'?s| is)?\s+the\s+(?:idea|reasoning|logic|point|thinking|rationale)\s+(?:behind|of|for)\b[\s\S]{0,30}\b(?:best|move|engine|line|recommendation|pick)\b`,
+  // "how does the engine see this / what does the engine see (here)"
+  String.raw`\bhow\s+does\s+(?:the\s+)?(?:engine|computer|stockfish)\s+(?:see|read|evaluate|view)\b`,
+  String.raw`\bwhat\s+does\s+(?:the\s+)?(?:engine|computer|stockfish)\s+see\b`,
+  // "walk/talk me through the (best) line / the engine line / the reasoning"
+  String.raw`\b(?:walk|talk|take)\s+me\s+through\s+(?:the\s+)?(?:engine(?:'?s)?\s+)?(?:line|reasoning|thinking|idea|plan|move)\b`,
+  // bare "why is it best / why though" right after a best-move answer.
+  String.raw`\bwhy\s+(?:is\s+it|though|that|is\s+that)\b`,
+]);
+export function isWhyBestMoveQuestion(ask: string | undefined): boolean {
+  if (!ask) return false;
+  // "why did I lose / blunder / play badly" is a self-review ask, not engine
+  // reasoning about a best move — keep it out.
+  if (/\bwhy\s+(?:did|do|am|are|is)\s+(?:i|my|we)\b[\s\S]{0,20}\b(?:los(?:e|ing|t)|blunder|bad|worse|struggl|drop)/i.test(ask)) return false;
+  return WHY_BEST_MOVE_RE.test(ask);
+}
+
 /** A TACTICS / DANGER question — "is anything hanging?", "what's the threat?",
  *  "is there a fork / pin / mate here?", "am I in danger?", "is my queen safe?".
  *  The answer is `liveTacticsContext`'s ALREADY-computed descriptions (forks,
@@ -1676,6 +1709,7 @@ export function buildQuestionGrounding(
     surface: coachSurfaceToRoute(surface),
     planQuestion: isPlanQuestion(a),
     bestMoveQuestion: isBestMoveQuestion(a),
+    whyBestMoveQuestion: isWhyBestMoveQuestion(a),
     tacticsQuestion: isTacticsQuestion(a),
     progressQuestion: isProgressQuestion(a),
     trendQuestion: isImprovementTrendQuestion(a),

@@ -44,6 +44,12 @@ export const LIVE_BOARD = [
     qs3: ["what's best?", 'what do I do here?', 'what should I play?'],
   },
   {
+    id: 'why-best-move', lane: 'assembleEngineReasoning', needsData: 'fen+enginePV',
+    qs: ['why is that the best move?', 'why does the engine like that move?', 'explain the best move'],
+    qs2: ["what's the idea behind the engine's move?", 'walk me through the engine line', 'break down why that move is best'],
+    qs3: ['why is it best?', 'how does the engine see this?', 'talk me through the reasoning'],
+  },
+  {
     id: 'plan', lane: 'assemblePlanAnswer', needsData: 'fen+enginePV',
     qs: ["what's my plan here?", "what's the idea in this position?", 'what should my plan be?'],
     qs2: ['what am I trying to do here?', 'how should I proceed from this position?', 'where do my pieces belong?', "what's the long-term idea?"],
