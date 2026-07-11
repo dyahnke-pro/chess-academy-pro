@@ -19,6 +19,19 @@ describe('buildOpeningChainFacts — named continuations', () => {
     const out = buildOpeningChainFacts({ historySans: [], studentColor: 'white' });
     expect(out.facts).toEqual([]);
     expect(out.trapNames).toEqual([]);
+    expect(out.arrows).toEqual([]);
+    expect(out.highlights).toEqual([]);
+  });
+
+  it('paints green lead-the-eye arrows for named continuations, legal on the board', () => {
+    const out = buildOpeningChainFacts({ historySans: ['e4', 'e5'], studentColor: 'white' });
+    const green = out.arrows.filter((a) => a.color === '#22c55e');
+    expect(green.length).toBeGreaterThan(0);
+    // Continuation arrows originate on a real White piece (back ranks / e4).
+    for (const a of green) expect(a.startSquare).toMatch(/^[a-h][1-4]$/);
+    // One yellow key-square highlight per arrow, on its destination.
+    expect(out.highlights.map((h) => h.square)).toEqual(out.arrows.map((a) => a.endSquare));
+    expect(out.highlights.every((h) => h.color === '#eab308')).toBe(true);
   });
 
   it('returns no continuation fact once out of book', () => {
@@ -97,6 +110,14 @@ describe('buildOpeningChainFacts — punish-gem heads-ups', () => {
     expect(gemFact).toBeDefined();
     expect(gemFact).toContain('the punish is exf3');
     expect(out.trapNames.some((n) => n.startsWith('gem:caro-kann:f3'))).toBe(true);
+    // The slip is the opponent's very next move → an arrow lands on f2→f3
+    // (red from the gem, or amber when a verified named line on the same
+    // path painted it first — either way the eye lands on f3) + a yellow
+    // key square on f3.
+    const slip = out.arrows.find((a) => a.endSquare === 'f3');
+    expect(slip?.startSquare).toBe('f2');
+    expect(['#ef4444', '#f59e0b']).toContain(slip?.color);
+    expect(out.highlights.some((h) => h.square === 'f3' && h.color === '#eab308')).toBe(true);
   });
 
   it('stays quiet for the wrong color and off-path histories', () => {

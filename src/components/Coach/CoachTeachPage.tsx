@@ -893,6 +893,13 @@ export function CoachTeachPage(): JSX.Element {
   /** Traps/gems already announced this game (openingFactChains dedup) — the
    *  same lurking line isn't re-announced on every ply it stays live. */
   const announcedTrapsRef = useRef(new Set<string>());
+  /** The chain's lead-the-eye arrows/highlights for the CURRENT position
+   *  (David 2026-07-11: "help the user visualize the moves the coach is
+   *  talking about"). Painted the moment the reply lands and merged into the
+   *  narration's own arrow pass so the later setArrows doesn't wipe them.
+   *  Cleared on the student's next move with the rest of the board art. */
+  const chainArrowsRef = useRef<BoardArrow[]>([]);
+  const chainHighlightsRef = useRef<BoardHighlight[]>([]);
 
   const clearThreatCheck = useCallback((): void => {
     threatCheckRef.current = null;
@@ -3692,8 +3699,11 @@ export function CoachTeachPage(): JSX.Element {
           if (cmd.type === 'arrow' && cmd.arrows) codeArrows.push(...cmd.arrows);
           if (cmd.type === 'highlight' && cmd.highlights) codeHighlights.push(...cmd.highlights);
         }
-        setArrows(uniqueArrows(groundArrows(codeArrows, fen)));
-        setHighlights(codeHighlights);
+        // Merge the opening-chain's lead-the-eye arrows so the narration's
+        // own arrow pass doesn't wipe them — both describe THIS reply.
+        // groundArrows re-validates everything against the live fen.
+        setArrows(uniqueArrows(groundArrows([...codeArrows, ...chainArrowsRef.current], fen)));
+        setHighlights([...codeHighlights, ...chainHighlightsRef.current]);
         setMessages((prev) => [...prev, {
           id: `${turnId}-c`,
           role: 'assistant',
@@ -3925,6 +3935,8 @@ export function CoachTeachPage(): JSX.Element {
     // 2026-06-04). The coach's narration repaints fresh arrows for its reply.
     setArrows([]);
     setHighlights([]);
+    chainArrowsRef.current = [];
+    chainHighlightsRef.current = [];
     // Silent faucet: a genuine eval-worsening slip during guided play feeds
     // the bucket so it resurfaces as a drill. No panel/voice — the brain is
     // already narrating this move.
@@ -4086,6 +4098,16 @@ export function CoachTeachPage(): JSX.Element {
                       });
                       for (const n of chain.trapNames) announcedTrapsRef.current.add(n);
                       facts.push(...chain.facts);
+                      // Lead the eye NOW — the arrows land with the words
+                      // (green = named continuation, amber/red = lurking
+                      // slip; yellow key squares). All chess.js-derived from
+                      // moves legal on this exact board.
+                      if (chain.arrows.length > 0) {
+                        chainArrowsRef.current = chain.arrows;
+                        chainHighlightsRef.current = chain.highlights;
+                        setArrows((prev) => uniqueArrows([...prev, ...chain.arrows]));
+                        setHighlights((prev) => [...prev, ...chain.highlights]);
+                      }
                     }
                   } catch { /* the chain is a bonus, never a blocker */ }
                 }
