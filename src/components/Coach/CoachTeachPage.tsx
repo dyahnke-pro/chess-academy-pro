@@ -77,6 +77,7 @@ import { classifyPhase } from '../../services/gamePhaseService';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { shouldOfferGuidedFind, buildGuidedFindChallenge, judgeGuidedFindAttempt, type GuidedFindChallenge } from '../../services/guidedFindTheMove';
 import { buildThreatCheckQuestion, judgeThreatCheckPick, type ThreatCheckQuestion } from '../../services/threatCheck';
+import { buildOpeningChainFacts } from '../../services/openingFactChains';
 import { captureEvent } from '../../services/analytics';
 
 /** Min plies between guided find-the-move questions — the coach quizzes at
@@ -888,6 +889,9 @@ export function CoachTeachPage(): JSX.Element {
   const [threatCheck, setThreatCheck] = useState<ThreatCheckQuestion | null>(null);
   const threatCheckRef = useRef<ThreatCheckQuestion | null>(null);
   const threatCheckLastAskPlyRef = useRef(-999);
+  /** Traps/gems already announced this game (openingFactChains dedup) — the
+   *  same lurking line isn't re-announced on every ply it stays live. */
+  const announcedTrapsRef = useRef(new Set<string>());
 
   const clearThreatCheck = useCallback((): void => {
     threatCheckRef.current = null;
@@ -4063,6 +4067,27 @@ export function CoachTeachPage(): JSX.Element {
                 // Tactics facts reach the narration ONLY when no question is
                 // open — otherwise they leak the answer.
                 if (!questionArmed) facts.push(...tacticsFacts);
+                // OPENING FACT-CHAIN (David 2026-07-11: "the purpose of each
+                // move and what traps might form") — during the opening, hand
+                // the narration where the moves LEAD (named DB continuations)
+                // + any engine-verified trap/gem forming on this exact path.
+                // Suppressed while a question is open (nothing extra leaks),
+                // and each lurking line is announced once per game.
+                if (!questionArmed) {
+                  try {
+                    const chainHistory = [...move.history, m.san];
+                    if (chainHistory.length <= 2) announcedTrapsRef.current.clear(); // fresh game
+                    if (classifyPhase(probe.fen(), chainHistory.length) === 'opening') {
+                      const chain = buildOpeningChainFacts({
+                        historySans: chainHistory,
+                        studentColor: playerColor,
+                        announcedTraps: announcedTrapsRef.current,
+                      });
+                      for (const n of chain.trapNames) announcedTrapsRef.current.add(n);
+                      facts.push(...chain.facts);
+                    }
+                  } catch { /* the chain is a bonus, never a blocker */ }
+                }
                 replyFact = `GROUNDED FACTS (voice ONLY these — never invent a capture, check, tactic, or threat not listed here): ${facts.join(' ')}`;
               }
             } catch {
