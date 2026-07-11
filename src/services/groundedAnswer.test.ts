@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleTrendAnswer, assembleAppHelpAnswer, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleTrendAnswer, assembleAppHelpAnswer, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry, assembleAlternativesAnswer } from './groundedAnswer';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -1011,5 +1011,75 @@ describe('assemblePlayerGamesAnswer — honest empty for a NAMED player (Bug 1)'
     expect(assemblePlayerGamesAnswer({
       playerId: null, openingId: 'x', openingName: 'X', totalAvailable: 0, games: [],
     })).toBeNull();
+  });
+});
+
+describe('assembleAlternativesAnswer — grounded "why are the alternatives worse" (David 2026-07-11)', () => {
+  const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
+  it('names the best move, grades each alternative by cp-gap, cites the punishing reply', () => {
+    const a = assembleAlternativesAnswer({
+      fen: START,
+      lines: [
+        { san: 'e4', replySan: 'e5', evalCp: 30, mateIn: null },
+        { san: 'd4', replySan: 'd5', evalCp: 25, mateIn: null },   // 5cp gap → essentially as good
+        { san: 'f3', replySan: 'e5', evalCp: -80, mateIn: null },  // 110cp gap → real concession
+      ],
+    });
+    expect(a).not.toBeNull();
+    expect(a?.facts).toMatch(/best move is e4/i);
+    expect(a?.bestMoveSan).toBe('e4');
+    expect(a?.bestMoveFromTo).toEqual({ from: 'e2', to: 'e4' });
+    // d4 within 30cp → honest "essentially as good", never an invented gap.
+    expect(a?.facts).toMatch(/d4 is essentially as good/i);
+    // f3 at 110cp loss → concession, with the pawn magnitude.
+    expect(a?.facts).toMatch(/f3 concedes about 1\.1 pawns/i);
+  });
+
+  it('flips evals to mover POV for Black to move', () => {
+    // After 1.e4 — Black to move; WHITE-perspective evals: best reply c5 (+0.3
+    // for White = -0.3 mover POV)… a Black alternative at +2.0 White-persp is
+    // a 170cp mover-POV loss.
+    const AFTER_E4 = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
+    const a = assembleAlternativesAnswer({
+      fen: AFTER_E4,
+      lines: [
+        { san: 'c5', replySan: 'Nf3', evalCp: 30, mateIn: null },
+        { san: 'g5', replySan: 'd4', evalCp: 200, mateIn: null },
+      ],
+    });
+    expect(a?.facts).toMatch(/best move is c5/i);
+    // mover-POV: best -30, alt -200 → 170cp loss → "concedes about 1.7 pawns"
+    expect(a?.facts).toMatch(/g5 concedes about 1\.7 pawns/i);
+  });
+
+  it('says an alternative walks into mate when its line is mated', () => {
+    // Scholar's-mate-threat board: White to move; f3-ish junk alt gets mated.
+    const a = assembleAlternativesAnswer({
+      fen: START,
+      lines: [
+        { san: 'e4', replySan: 'e5', evalCp: 30, mateIn: null },
+        { san: 'g4', replySan: 'e5', evalCp: null, mateIn: -3 },  // white gets mated in 3
+      ],
+    });
+    expect(a?.facts).toMatch(/g4 loses outright — it walks into a mate in 3/i);
+  });
+
+  it('returns null with fewer than 2 lines (nothing to compare — falls through)', () => {
+    expect(assembleAlternativesAnswer({ fen: START, lines: [{ san: 'e4', replySan: null, evalCp: 30, mateIn: null }] })).toBeNull();
+    expect(assembleAlternativesAnswer({ fen: START, lines: [] })).toBeNull();
+  });
+
+  it('drops an illegal alternative line instead of fabricating', () => {
+    const a = assembleAlternativesAnswer({
+      fen: START,
+      lines: [
+        { san: 'e4', replySan: 'e5', evalCp: 30, mateIn: null },
+        { san: 'Ke2', replySan: null, evalCp: 0, mateIn: null }, // illegal at start
+        { san: 'd4', replySan: 'd5', evalCp: 20, mateIn: null },
+      ],
+    });
+    expect(a?.facts).not.toMatch(/Ke2/);
+    expect(a?.facts).toMatch(/d4/);
   });
 });

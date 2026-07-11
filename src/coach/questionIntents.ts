@@ -210,6 +210,37 @@ export function isBestMoveQuestion(ask: string | undefined): boolean {
   return BEST_MOVE_QUESTION_RE.test(ask);
 }
 
+/** An ALTERNATIVES-COMPARISON question — "why are the (natural) alternatives
+ *  worse / what else could I play / what are my other options / compare the
+ *  candidate moves" (David 2026-07-11: the live-prod ask "explain the key idea
+ *  and why the natural alternatives are worse", retried 3×, got the same
+ *  generic PV recitation — nothing COMPUTED the comparison). Answered by
+ *  `assembleAlternativesAnswer` over the MultiPV top lines: best + each
+ *  alternative's cp-gap + the engine reply that punishes it. Dispatched BEFORE
+ *  whyBestMove/bestMove so the comparative ask wins over the generic walk. */
+const ALTERNATIVES_QUESTION_RE = anyOf([
+  // "why are the (natural/other) alternatives/other moves worse/bad/weaker/inferior/not as good"
+  String.raw`\bwhy\s+(?:are|is)\b[\s\S]{0,30}\b(?:alternatives?|other\s+(?:moves?|options?|choices?))\b[\s\S]{0,20}\b(?:worse|bad|weaker|inferior|not\s+as\s+good|wrong)\b`,
+  // "…and why the (natural) alternatives are worse" (the compound best-move ask)
+  String.raw`\b(?:alternatives?|other\s+moves?)\s+(?:are|is|were)\s+(?:worse|bad|weaker|inferior|not\s+as\s+good|wrong)\b`,
+  // "what else could/can/should I play/do (here/instead)"
+  String.raw`\bwhat\s+else\s+(?:could|can|should|would|might)\s+i\s+(?:play|do|try|consider)\b`,
+  // "what are my (other) options/choices/alternatives/candidate moves"
+  String.raw`\bwhat\s+(?:are|about)\s+(?:my|the)\s+(?:other\s+)?(?:options?|choices?|alternatives?|candidate\s+moves?)\b`,
+  // "compare it/that/the best move to/with/against the alternatives/other moves"
+  String.raw`\bcompare\b[\s\S]{0,30}\b(?:alternatives?|other\s+moves?|options?|candidates?)\b`,
+  // "(are there) any other (good) moves (here / that work)"
+  String.raw`\b(?:any|are\s+there)\s+other\s+(?:good\s+|decent\s+|strong\s+)?moves?\b`,
+  // "what could/should I play instead" — the instead-form.
+  String.raw`\bwhat\s+(?:could|should|can|would)\s+i\s+(?:have\s+)?play(?:ed)?\s+instead\b`,
+  // "why is <move/it> better than the alternatives / everything else / other moves"
+  String.raw`\bbetter\s+than\s+(?:the\s+)?(?:alternatives?|other\s+moves?|everything\s+else|the\s+rest|anything\s+else)\b`,
+]);
+export function isAlternativesQuestion(ask: string | undefined): boolean {
+  if (!ask) return false;
+  return ALTERNATIVES_QUESTION_RE.test(ask);
+}
+
 /** A "WHY is the best move best / walk me through the engine's line / decipher
  *  Stockfish's reasoning" question (David 2026-07-10: "get the coach deciphering
  *  why Stockfish likes a move"). DISTINCT from `isBestMoveQuestion` (which NAMES

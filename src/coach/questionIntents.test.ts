@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { isAppHelpQuestion } from './questionIntents';
 import {
+  isAlternativesQuestion,
   isPlanQuestion,
   isBestMoveQuestion,
   isTacticsQuestion,
@@ -973,5 +974,31 @@ describe('isCandidateMoveQuestion / extractCandidateSan (Bug 2, David 2026-07-10
   it('does not grab a plain word as a move', () => {
     expect(extractCandidateSan('is the Najdorf ok')).toBeNull();
     expect(extractCandidateSan('what about the endgame')).toBeNull();
+  });
+});
+
+describe('isAlternativesQuestion — comparative "why are the alternatives worse" (2026-07-11)', () => {
+  it('matches the live-prod compound ask that motivated the assembler', () => {
+    expect(isAlternativesQuestion(
+      "What's the strongest move for me in this exact position, and why is it the best? Explain the key idea and why the natural alternatives are worse.",
+    )).toBe(true);
+  });
+
+  it('matches the direct comparative phrasings', () => {
+    expect(isAlternativesQuestion('why are the alternatives worse?')).toBe(true);
+    expect(isAlternativesQuestion('why are the other moves not as good')).toBe(true);
+    expect(isAlternativesQuestion('what else could I play here?')).toBe(true);
+    expect(isAlternativesQuestion('what are my other options')).toBe(true);
+    expect(isAlternativesQuestion('any other good moves here?')).toBe(true);
+    expect(isAlternativesQuestion('compare Nf3 with the alternatives')).toBe(true);
+    expect(isAlternativesQuestion('what should I play instead?')).toBe(true);
+    expect(isAlternativesQuestion('why is Qe3 better than the other moves?')).toBe(true);
+  });
+
+  it('does NOT fire on plain best-move / why-best asks (those keep their branches)', () => {
+    expect(isAlternativesQuestion("what's the best move?")).toBe(false);
+    expect(isAlternativesQuestion('why is Qe3 best?')).toBe(false);
+    expect(isAlternativesQuestion('is Qf3 ok to play?')).toBe(false);
+    expect(isAlternativesQuestion(undefined)).toBe(false);
   });
 });

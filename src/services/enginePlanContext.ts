@@ -112,6 +112,68 @@ export async function buildEnginePlan(
  * the eval-bar snapshot; the dispatch flips to side-to-move POV), or null when
  * the move is illegal / the engine is unavailable. Never throws.
  */
+/**
+ * buildAlternativesContext — the MultiPV top lines for an ALTERNATIVES-
+ * comparison ask ("why are the natural alternatives worse / what else could I
+ * play", David 2026-07-11). The engine already searches MultiPV 3; this
+ * surfaces each line's FIRST move (SAN), the engine's REPLY to it (SAN), and
+ * the WHITE-perspective eval — everything chess.js-validated, ready for
+ * `assembleAlternativesAnswer`. CACHE-FIRST like the plan builder; a cached
+ * single-line analysis (no MultiPV siblings) triggers ONE fresh search.
+ * Returns null when fewer than 2 lines are available. Never throws.
+ */
+export async function buildAlternativesContext(
+  fen: string,
+): Promise<Array<{ san: string; replySan: string | null; evalCp: number | null; mateIn: number | null }> | null> {
+  const hasMulti = (a: StockfishAnalysis | undefined): boolean =>
+    !!a && (a.topLines?.filter((l) => l.moves?.length).length ?? 0) >= 2;
+  let analysis: StockfishAnalysis | undefined = getCachedStockfish(fen);
+  if (!hasMulti(analysis)) {
+    try {
+      analysis = await stockfishEngine.analyzePosition(fen, PLAN_DEPTH);
+    } catch {
+      analysis = undefined;
+    }
+  }
+  if (!analysis || !hasMulti(analysis)) return null;
+
+  const out: Array<{ san: string; replySan: string | null; evalCp: number | null; mateIn: number | null }> = [];
+  for (const line of analysis.topLines) {
+    if (out.length >= 4) break;
+    if (!line.moves?.length) continue;
+    let chess: Chess;
+    try {
+      chess = new Chess(fen);
+    } catch {
+      return null;
+    }
+    // First move of the line → SAN (chess.js is the legality truth).
+    let san: string | null = null;
+    let replySan: string | null = null;
+    try {
+      const u0 = line.moves[0];
+      const mv = chess.move({ from: u0.slice(0, 2) as Square, to: u0.slice(2, 4) as Square, promotion: u0.length > 4 ? u0[4] : undefined });
+      if (!mv) continue;
+      san = mv.san;
+      if (line.moves.length > 1) {
+        const u1 = line.moves[1];
+        const rv = chess.move({ from: u1.slice(0, 2) as Square, to: u1.slice(2, 4) as Square, promotion: u1.length > 4 ? u1[4] : undefined });
+        replySan = rv?.san ?? null;
+      }
+    } catch {
+      continue; // line's UCI illegal from this position — drop the line
+    }
+    if (!san) continue;
+    out.push({
+      san,
+      replySan,
+      evalCp: line.mate !== null ? null : Math.round(line.evaluation),
+      mateIn: line.mate,
+    });
+  }
+  return out.length >= 2 ? out : null;
+}
+
 export async function buildCandidateEval(
   fen: string,
   candidateSan: string,

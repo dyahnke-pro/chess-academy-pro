@@ -423,6 +423,160 @@ export function assembleCandidateMoveAnswer(opts: {
   };
 }
 
+/** One engine line for the alternatives comparison: the first move (SAN),
+ *  the engine's reply to it (SAN, when the PV carries one), and the
+ *  WHITE-perspective eval of the line. Built by `buildAlternativesContext`
+ *  from the MultiPV analysis — everything chess.js-validated. */
+export interface AlternativeLineFact {
+  san: string;
+  replySan: string | null;
+  evalCp: number | null;
+  mateIn: number | null;
+}
+
+/**
+ * assembleAlternativesAnswer — the GROUNDED answer to "why is the best move
+ * better than the alternatives / what else could I play / why are the natural
+ * alternatives worse" (David 2026-07-11: the thrice-repeated live-prod ask
+ * "explain the key idea and why the natural alternatives are worse" got the
+ * same generic PV recitation each time — NOTHING computed the comparison).
+ *
+ * The fact source is Stockfish's MultiPV top lines: the best line plus the
+ * next alternatives, each with its eval and the engine's REPLY that punishes
+ * it. cp-gaps grade each alternative honestly (nearly-as-good / slightly
+ * worse / a real concession / loses outright); the reply names the concrete
+ * consequence. Everything computed (G0) — the LLM only phrases via voiceFacts.
+ *
+ * `lines` evals are WHITE-perspective (StockfishAnalysis convention); this
+ * assembler flips to mover POV itself. Returns null when fewer than 2 lines
+ * are available (nothing to compare — fall through to the best-move branch).
+ */
+export function assembleAlternativesAnswer(opts: {
+  fen: string;
+  lines: ReadonlyArray<AlternativeLineFact>;
+}): GroundedAnswer | null {
+  const { fen, lines } = opts;
+  if (!lines || lines.length < 2) return null;
+
+  let chess: Chess;
+  try {
+    chess = new Chess(fen);
+  } catch {
+    return null;
+  }
+  const mover: 'white' | 'black' = chess.turn() === 'w' ? 'white' : 'black';
+  const flip = mover === 'black' ? -1 : 1;
+
+  // Validate + normalize the best line's first move (chess.js is the truth).
+  const best = lines[0];
+  let bestSan: string | null = null;
+  let bestFromTo: { from: string; to: string } | null = null;
+  let bestUci: string | null = null;
+  try {
+    const probe = new Chess(fen);
+    const mv = probe.move(best.san);
+    if (mv) {
+      bestSan = mv.san;
+      bestFromTo = { from: mv.from, to: mv.to };
+      bestUci = `${mv.from}${mv.to}${mv.promotion ?? ''}`;
+    }
+  } catch {
+    return null;
+  }
+  if (!bestSan || !bestUci) return null;
+
+  const bestEvalStm = typeof best.evalCp === 'number' ? best.evalCp * flip : null;
+  const bestMateStm = typeof best.mateIn === 'number' && best.mateIn !== null ? best.mateIn * flip : null;
+
+  const parts: string[] = [];
+  // 1. The best move + the grounded WHY (fork/pin/mate/material/positional).
+  const why = explainBestMoveGrounded(fen, null, bestUci, mover);
+  parts.push(`The best move is ${bestSan}.`);
+  if (why) parts.push(why);
+
+  // 2. Each alternative, graded by its cp-gap to best, with the engine's
+  //    punishing reply as the concrete consequence.
+  const closeOnes: string[] = [];
+  for (const alt of lines.slice(1, 4)) {
+    // Validate the alternative's first move on THIS board.
+    let altSan: string | null = null;
+    let altAfter: Chess | null = null;
+    try {
+      const probe = new Chess(fen);
+      const mv = probe.move(alt.san);
+      if (mv) {
+        altSan = mv.san;
+        altAfter = probe;
+      }
+    } catch {
+      continue;
+    }
+    if (!altSan || altSan === bestSan) continue;
+
+    const altEvalStm = typeof alt.evalCp === 'number' ? alt.evalCp * flip : null;
+    const altMateStm = typeof alt.mateIn === 'number' && alt.mateIn !== null ? alt.mateIn * flip : null;
+
+    // The engine's reply to the alternative — validated on the post-alt board.
+    let replyClause: string | null = null;
+    if (alt.replySan && altAfter) {
+      try {
+        const replyProbe = new Chess(altAfter.fen());
+        const replyMv = replyProbe.move(alt.replySan);
+        if (replyMv) {
+          const opp: 'white' | 'black' = mover === 'white' ? 'black' : 'white';
+          const replyGeo = describeMoveGeometry(altAfter.fen(), replyMv.san, opp);
+          replyClause = replyGeo
+            ? `the reply ${replyMv.san} ${replyGeo}`
+            : `the engine answers ${replyMv.san}`;
+        }
+      } catch { /* reply illegal on this board — skip the clause */ }
+    }
+
+    // Alternative walks into mate → say that, nothing else matters.
+    if (typeof altMateStm === 'number' && altMateStm < 0) {
+      parts.push(`${altSan} loses outright — it walks into a mate in ${Math.abs(altMateStm)}.`);
+      continue;
+    }
+
+    const cpLoss =
+      bestEvalStm !== null && altEvalStm !== null ? Math.max(0, bestEvalStm - altEvalStm) : null;
+    if (cpLoss === null) {
+      // No eval to compare — name the reply consequence if we have one, else skip.
+      if (replyClause) parts.push(`Against ${altSan}, ${replyClause}.`);
+      continue;
+    }
+    const pawns = (cpLoss / 100).toFixed(1);
+    if (cpLoss <= 30) {
+      closeOnes.push(altSan);
+    } else if (cpLoss <= 90) {
+      parts.push(`${altSan} is playable but slightly worse — about ${pawns} of a pawn${replyClause ? `; ${replyClause}` : ''}.`);
+    } else if (cpLoss <= 200) {
+      parts.push(`${altSan} concedes about ${pawns} pawns${replyClause ? ` — ${replyClause}` : ''}.`);
+    } else {
+      parts.push(`${altSan} is much worse — it gives up about ${pawns} pawns${replyClause ? `; ${replyClause}` : ''}.`);
+    }
+  }
+  // Honest when the engine says several moves are fine: don't invent a gap.
+  if (closeOnes.length > 0) {
+    parts.push(
+      closeOnes.length === 1
+        ? `${closeOnes[0]} is essentially as good — a real alternative.`
+        : `${closeOnes.join(' and ')} are essentially as good — this position offers more than one route.`,
+    );
+  }
+
+  // 3. The verdict eval of best play.
+  const evalText = evalPhrase(bestEvalStm, bestMateStm, mover);
+  if (evalText) parts.push(`With ${bestSan}, ${evalText}.`);
+
+  return {
+    facts: parts.join(' '),
+    bestMoveSan: bestSan,
+    bestMoveFromTo: bestFromTo,
+    sources: ['engine:stockfish', 'board:chess.js'],
+  };
+}
+
 /**
  * explainBestMoveGrounded — the GROUNDED, LLM-FREE "why" (moved here from
  * coachFeatureService 2026-06-10 to break the import cycle: pure board-fact
