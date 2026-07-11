@@ -234,7 +234,7 @@ describe('out-of-book live-fetch cutoff (2026-07-11 rate-limit root fix)', () =>
   });
 
   it('a non-empty current-position result resets the streak (transposition back into book re-arms)', async () => {
-    const fetchFn = stubFetch(EMPTY_PAYLOAD);
+    stubFetch(EMPTY_PAYLOAD);
     await prefetchMasterPlay(OOB_FEN_1, { surface: '/coach/play' });
     await prefetchMasterPlay(OOB_FEN_2, { surface: '/coach/play' });
     // In-book position: payload with games resets the streak…

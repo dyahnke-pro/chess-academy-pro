@@ -51,7 +51,7 @@ const HEADED = process.env.AUDIT_SMOKE_HEADED === '1';
 const stamp = new Date().toISOString().replace(/[:.]/g, '-');
 const OUT_DIR = `audit-reports/coach-play-${stamp}`;
 
-const BOOT_TIMEOUT_MS = 30_000;
+const BOOT_TIMEOUT_MS = 60_000; // localhost cold vite compile can exceed 30s
 const SHORT_SETTLE_MS = 3500;
 const MOVE_SETTLE_MS = 7000; // student move + Stockfish reply + narration
 
@@ -271,11 +271,21 @@ async function main() {
     // A surface's page-help modal can open a beat AFTER navigation
     // settles (it pops on the dashboard / coach-home / play surface with
     // a delay), so a too-early dismissal misses it and the NEXT click is
-    // intercepted. Wait briefly for either overlay to appear first.
+    // intercepted. Wait briefly for any overlay to appear first.
     await Promise.race([
+      page.locator('[data-testid="ai-consent-modal"]').waitFor({ state: 'visible', timeout: 1500 }).catch(() => undefined),
       page.locator('[data-testid="page-help-modal"]').waitFor({ state: 'visible', timeout: 1500 }).catch(() => undefined),
       page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ state: 'visible', timeout: 1500 }).catch(() => undefined),
     ]);
+    // The AI-CONSENT sheet (App Store compliance, 2026-07) blocks first-run
+    // BEFORE the calibration bubble — the rot that took this audit red on CI
+    // (every click died behind it). Allow: the audit exercises the coach +
+    // audit-stream paths, which the consent gates.
+    const consent = page.locator('[data-testid="ai-consent-modal"]');
+    if (await consent.count()) {
+      await page.locator('[data-testid="ai-consent-allow"]').first().click({ timeout: 5000 }).catch(() => undefined);
+      await consent.waitFor({ state: 'detached', timeout: 10000 }).catch(() => undefined);
+    }
     // Both overlays can re-open per-surface and Escape alone proved
     // unreliable on the page-help "order of operations" modal (it kept
     // intercepting the coach-action-play click). Loop: answer the
@@ -316,7 +326,14 @@ async function main() {
 
   await record('coach-hub', async () => {
     await clearFirstRunOverlays(); // dashboard page-help can still be up
-    await page.getByRole('link', { name: 'Coach' }).first().click();
+    // The desktop sidebar renders HIDDEN (`hidden md:flex`) but stays in the
+    // DOM before the mobile bottom nav, so `getByRole('link').first()` grabs
+    // the invisible sidebar link and click() waits forever (the rot that
+    // took this audit red on CI since 2026-07-11 02:06). Target the VISIBLE
+    // nav entry: the mobile bottom-nav tab testid, role-link fallback.
+    const coachTab = page.locator('[data-testid="nav-coach-home-tab"]:visible');
+    if (await coachTab.count()) await coachTab.first().click();
+    else await page.getByRole('link', { name: 'Coach' }).locator('visible=true').first().click();
     await page.locator('[data-testid="coach-home-page"]').waitFor({ timeout: 15000 });
     await clearFirstRunOverlays(); // PageHelp "How the Coach works" pops here
   });
