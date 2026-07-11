@@ -106,23 +106,13 @@ jobs:
           echo "Production deploy: $url"
           echo "## Web deploy 🚀 $url" >> "$GITHUB_STEP_SUMMARY"
 
-      # Publish the just-built web bundle as a self-hosted OTA update (David
-      # 2026-07-03) so devices on a Capgo-plugin build pick up content/JS changes
-      # on next open — no TestFlight round-trip. NON-FATAL: OTA is an
-      # enhancement; a hiccup must not red the deploy or block the iOS build.
-      # `vercel build` above left dist/ in place and `vercel pull` wrote the
-      # project env (BLOB_READ_WRITE_TOKEN + KV creds) to
-      # .vercel/.env.production.local.
-      - name: Publish OTA bundle
-        if: steps.gate.outputs.run == 'true' && steps.changed.outputs.ship == 'true'
-        continue-on-error: true
-        run: |
-          set -a
-          [ -f .vercel/.env.production.local ] && . .vercel/.env.production.local
-          set +a
-          if [ ! -d dist ]; then npm run build; fi
-          node scripts/ci/publish-ota-bundle.mjs "$(git rev-parse --short HEAD)" \
-            || echo "::warning::OTA bundle publish failed (non-fatal) — testers stay on their current bundle."
+      # OTA publish REMOVED (David 2026-07-11: "I don't want OTA anymore").
+      # The self-hosted Capgo hot-update path is retired — every change now
+      # reaches testers only through a real TestFlight build, nothing hot-patched
+      # underneath them. The plugin is inert (autoUpdate:false in
+      # capacitor.config.ts) and the manifest endpoint is emptied server-side, so
+      # publishing new bundles here would be a no-op anyway. Do not re-add this
+      # step unless OTA is explicitly wanted again.
 
       # --- iOS: build once (per-push auto-builds are off) then distribute -----
       # Per-push Xcode Cloud builds are disabled (the workflow's branch trigger

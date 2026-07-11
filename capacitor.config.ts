@@ -41,26 +41,21 @@ const config: CapacitorConfig = {
     // `appReadyTimeout` (see src/main.tsx) — a bad OTA bundle can't brick a
     // tester; worst case they stay on the last good bundle.
     CapacitorUpdater: {
-      autoUpdate: true,
-      // The builtin (shipped) bundle's version. Stamped at iOS build time by
-      // ci_post_clone.sh (OTA_BUNDLE_VERSION = short git SHA) to MATCH the OTA
-      // bundle published for the same commit — so a fresh install doesn't
-      // redundantly re-download the bundle it already ships with. Unset on
-      // web / local → the plugin falls back to the native app version.
+      // 🔒 OTA DISABLED (David 2026-07-11: "I don't want OTA anymore").
+      // autoUpdate:false → the plugin no longer polls the manifest or downloads
+      // web bundles at all; the app runs ONLY the bundle baked into the native
+      // build it shipped with. Every change now reaches testers through a real
+      // TestFlight build, nothing hot-patched underneath them. (OTA never
+      // touched the App Store — that was the nightly daily-deploy pipeline — but
+      // David wants the hot-update path gone regardless.) The manifest endpoint
+      // is also emptied server-side so already-installed builds stop pulling,
+      // and the CI publish step is removed. Leaving the plugin present-but-inert
+      // avoids a native API change; flip back to true only if OTA is ever wanted
+      // again.
+      autoUpdate: false,
       version: process.env.OTA_BUNDLE_VERSION || undefined,
-      // Our self-hosted manifest endpoint (Capgo self-hosted protocol).
       updateUrl: 'https://chess-academy-pro.vercel.app/api/ota/manifest',
-      // Apply the downloaded update on the NEXT background→foreground (cold
-      // start), NOT mid-session. directUpdate:true (the 2026-07-10 "flip to
-      // auto") reloaded the webview the instant a new bundle was detected on
-      // launch — and with many pushes/day the app saw a fresh bundle almost
-      // every open, so a reload kept colliding with the ACTIVE native mic /
-      // AVAudioSession and CRASHED the app on iOS (David 2026-07-11: mic
-      // crashing on build 119; worked on 117 which had this false). Reverted:
-      // testers still get every OTA fix, just applied on the next launch
-      // instead of yanking the webview out from under a live session.
       directUpdate: false,
-      // If the new bundle doesn't signal ready within this window, revert.
       appReadyTimeout: 10000,
       responseTimeout: 20,
       autoDeleteFailed: true,
