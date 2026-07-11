@@ -24,16 +24,17 @@ name: Daily deploy + TestFlight external (21:00 America/Chicago)
 # the old nightly cron and Apple rejected it — this stops that from recurring.)
 # Re-add a `schedule:` block only if David explicitly wants nightly builds back.
 on:
-  # Tag-push trigger (David 2026-07-11 workaround): the agent proxy blocks the
-  # Actions dispatch API (403), but git push — including TAG push — is allowed,
-  # and GitHub runs the workflow itself with no proxy involved. So pushing a tag
-  # `ios-build-*` fires an INTERNAL-only build (github.event_name != 'schedule'
-  # and no external input → TF_EXTERNAL stays empty, no external-tester email).
-  # A NORMAL commit does NOT trigger this (tags only) — so it is not an
-  # auto-send; it only fires when someone deliberately pushes an ios-build-* tag.
+  # Trigger-file build (David 2026-07-11 workaround): the agent proxy 403s the
+  # Actions dispatch API AND tag pushes, but a normal branch push to main is
+  # allowed and GitHub runs the workflow itself (no proxy). So a push to main
+  # that changes the `.ci-build-trigger` file fires an INTERNAL-only build
+  # (event is 'push', no external input → TF_EXTERNAL empty → no external email).
+  # A NORMAL commit does NOT trigger this — only a change to that one file — so
+  # it is not an auto-send; you build by bumping .ci-build-trigger and pushing.
   push:
-    tags:
-      - 'ios-build-*'
+    branches: [main]
+    paths:
+      - '.ci-build-trigger'
   workflow_dispatch:       # manual on-demand run (external opt-in below)
     inputs:
       external:
