@@ -17,11 +17,14 @@ name: Daily deploy + TestFlight external (21:00 America/Chicago)
 # the last built commit, so a no-work day = no build. concurrency + main-changed
 # dedup the two crons (the second sees the first build's commit == HEAD, skips).
 
+# 🔒 AUTO-SUBMIT DISABLED (David 2026-07-11: "stop the auto send"). The nightly
+# schedule crons are removed — builds NO LONGER go to TestFlight/Apple on their
+# own. This workflow now runs ONLY on an explicit manual dispatch, so nothing is
+# submitted to Apple unless David asks for it. (Build 120 was auto-submitted by
+# the old nightly cron and Apple rejected it — this stops that from recurring.)
+# Re-add a `schedule:` block only if David explicitly wants nightly builds back.
 on:
-  schedule:
-    - cron: '0 2 * * *'   # 21:00 CDT (summer, UTC-5)
-    - cron: '0 3 * * *'   # 21:00 CST (winter, UTC-6)
-  workflow_dispatch:       # manual on-demand run (external opt-in below)
+  workflow_dispatch:       # manual on-demand run ONLY (external opt-in below)
     inputs:
       external:
         description: 'Also push to EXTERNAL beta testers (sends a tester email). Default OFF — internal-only, no tester email.'
