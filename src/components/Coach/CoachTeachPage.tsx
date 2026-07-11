@@ -75,6 +75,12 @@ import { OpeningPlayMode } from '../Openings/OpeningPlayMode';
 import type { WalkthroughSession } from '../../types/walkthrough';
 import { classifyPhase } from '../../services/gamePhaseService';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
+import { shouldOfferGuidedFind, buildGuidedFindChallenge, judgeGuidedFindAttempt, type GuidedFindChallenge } from '../../services/guidedFindTheMove';
+import { captureEvent } from '../../services/analytics';
+
+/** Min plies between guided find-the-move questions — the coach quizzes at
+ *  real moments, not every move of a won game. */
+const GUIDED_FIND_MIN_PLY_GAP = 6;
 import { getNeonColor, scaledShadow } from '../../utils/neonColors';
 import {
   getCompletedStages,
@@ -833,6 +839,49 @@ export function CoachTeachPage(): JSX.Element {
   });
   const [coachTipsOn, setCoachTipsOn] = useState<boolean>(true);
   const [evalBarOverride, setEvalBarOverride] = useState<boolean | null>(null);
+
+  // GUIDED FIND-THE-MOVE (P2 of the faucet — David 2026-07-11: "I would love
+  // for the coach to ask the user questions"). When the student is clearly
+  // winning and the engine's move is notable, the coach names the piece + goal
+  // and WITHHOLDS the square; the student answers by playing it on the board.
+  // Everything computed (guidedFindTheMove.ts); the narration LLM is handed
+  // ONLY the question, never the answer, so it cannot leak it. The card below
+  // the board carries Hint (reveals) + Skip.
+  const [guidedFind, setGuidedFind] = useState<GuidedFindChallenge | null>(null);
+  const guidedFindRef = useRef<GuidedFindChallenge | null>(null);
+  const guidedFindAttemptsRef = useRef(0);
+  /** Ply of the last question asked — min-gap throttle so the coach doesn't
+   *  quiz every single move of a won game. */
+  const guidedFindLastAskPlyRef = useRef(-999);
+
+  const clearGuidedFind = useCallback((): void => {
+    guidedFindRef.current = null;
+    guidedFindAttemptsRef.current = 0;
+    setGuidedFind(null);
+  }, []);
+
+  const handleGuidedFindHint = useCallback((): void => {
+    const ch = guidedFindRef.current;
+    if (!ch) return;
+    captureEvent('guided_find_result', { surface: 'coach-teach', outcome: 'hint', attempts: guidedFindAttemptsRef.current, answer: ch.answerSan });
+    setMessages((prev) => [...prev, { id: uid('guided-hint'), role: 'assistant', content: ch.hint, timestamp: Date.now() }]);
+    void voiceService.speakForced(ch.hint).catch(() => undefined);
+    clearGuidedFind(); // answer revealed — the student plays on freely
+  }, [clearGuidedFind]);
+
+  const handleGuidedFindSkip = useCallback((): void => {
+    const ch = guidedFindRef.current;
+    if (!ch) return;
+    captureEvent('guided_find_result', { surface: 'coach-teach', outcome: 'skip', attempts: guidedFindAttemptsRef.current, answer: ch.answerSan });
+    clearGuidedFind();
+  }, [clearGuidedFind]);
+
+  // A walkthrough taking over the board supersedes any open question — the
+  // judge's stale-FEN check already refuses to score a drifted board; this
+  // just removes the card so it never lingers over a lesson.
+  useEffect(() => {
+    if (walkthrough.isActive) clearGuidedFind();
+  }, [walkthrough.isActive, clearGuidedFind]);
 
   // Auto-flip the board when a walkthrough loads a tree whose
   // studentSide differs from the current orientation. Black-side
@@ -3791,6 +3840,30 @@ export function CoachTeachPage(): JSX.Element {
     // Pre-move FEN (before we overwrite liveFenRef below) — the slip faucet
     // needs the position the student moved FROM.
     const fenBefore = liveFenRef.current;
+    // GUIDED FIND-THE-MOVE answer attempt (P2 — David 2026-07-11: the coach
+    // asks, the student answers ON THE BOARD). Found → confirm + the move
+    // stands and play continues. Wrong → the move is taken back and the
+    // student looks again (the doctrine's takeback-retry). Stale board
+    // (reset/jump since the ask) → silently clear and treat as a normal move.
+    const guidedChallenge = guidedFindRef.current;
+    if (guidedChallenge) {
+      const verdict = judgeGuidedFindAttempt(guidedChallenge, { san: move.san, from: move.from, to: move.to, fenBefore });
+      if (verdict === 'stale') {
+        clearGuidedFind();
+      } else if (verdict === 'found') {
+        captureEvent('guided_find_result', { surface: 'coach-teach', outcome: 'found', attempts: guidedFindAttemptsRef.current + 1, answer: guidedChallenge.answerSan });
+        setMessages((prev) => [...prev, { id: uid('guided-found'), role: 'assistant', content: guidedChallenge.confirm, timestamp: Date.now() }]);
+        void voiceService.speakForced(guidedChallenge.confirm).catch(() => undefined);
+        clearGuidedFind();
+        // fall through — the found move stands; the opponent replies normally.
+      } else {
+        guidedFindAttemptsRef.current += 1;
+        captureEvent('guided_find_result', { surface: 'coach-teach', outcome: 'retry', attempts: guidedFindAttemptsRef.current, answer: guidedChallenge.answerSan });
+        gameRef.current.undoMove();
+        void voiceService.speakForced(guidedChallenge.retry).catch(() => undefined);
+        return; // consumed — the board is back where it was; no opponent reply
+      }
+    }
     // Update liveFenRef SYNCHRONOUSLY with the post-move FEN that the
     // MoveResult already carries. This is what every brain trip's
     // getLiveFen will read, so trip 1 sees the post-student-move
@@ -3885,7 +3958,28 @@ export function CoachTeachPage(): JSX.Element {
                 try {
                   const studentBest = await stockfishEngine.analyzeWithBudget(probe.fen(), 12, 1200);
                   const recUci = studentBest?.bestMove;
-                  if (recUci && recUci.length >= 4) {
+                  // GUIDED FIND-THE-MOVE (P2): student clearly winning + the
+                  // engine's move is notable → ASK instead of telling. The
+                  // narration is handed ONLY the square-free question — never
+                  // the answer — so it cannot leak it (honesty by construction).
+                  const studentPovEval = typeof studentBest?.evaluation === 'number'
+                    ? (playerColor === 'white' ? studentBest.evaluation : -studentBest.evaluation)
+                    : null;
+                  const plyNow = (move.moveNumber ?? 1) * 2;
+                  const mayAsk =
+                    !guidedFindRef.current &&
+                    !activeDrillRef.current &&
+                    plyNow - guidedFindLastAskPlyRef.current >= GUIDED_FIND_MIN_PLY_GAP &&
+                    shouldOfferGuidedFind({ fen: probe.fen(), bestUci: recUci, evalCpStudentPov: studentPovEval });
+                  const challenge = mayAsk && recUci ? buildGuidedFindChallenge(probe.fen(), recUci) : null;
+                  if (challenge) {
+                    guidedFindRef.current = challenge;
+                    guidedFindAttemptsRef.current = 0;
+                    guidedFindLastAskPlyRef.current = plyNow;
+                    setGuidedFind(challenge);
+                    captureEvent('guided_find_asked', { surface: 'coach-teach', answer: challenge.answerSan, eval_cp: studentPovEval });
+                    facts.push(`Do NOT recommend, name, or hint at ANY move for the student in this reply. End your reply with exactly this question to the student, then stop: "${challenge.question}"`);
+                  } else if (recUci && recUci.length >= 4) {
                     const recProbe = new Chess(probe.fen());
                     const recMove = recProbe.move({ from: recUci.slice(0, 2), to: recUci.slice(2, 4), promotion: recUci.slice(4, 5) || undefined });
                     if (recMove) {
@@ -3922,7 +4016,7 @@ export function CoachTeachPage(): JSX.Element {
         setOpponentThinking(false);
       }
     })();
-  }, [handleSubmit, discussion, walkthrough.tree?.openingName, playerColor, resolveCoachReplyMove, handlePlayMove, setOpponentThinking, activeProfile?.puzzleRating, activeProfile?.currentRating, positionNarration]);
+  }, [handleSubmit, discussion, walkthrough.tree?.openingName, playerColor, resolveCoachReplyMove, handlePlayMove, setOpponentThinking, activeProfile?.puzzleRating, activeProfile?.currentRating, positionNarration, clearGuidedFind]);
 
   // ─── Guided-opening-play kickoff ─────────────────────────────────────────
   // On mount, pull the student's last 5 games + weakness profile so the
@@ -4487,6 +4581,34 @@ export function CoachTeachPage(): JSX.Element {
             isActive={!busy}
           />
         </div>
+
+        {/* Guided find-the-move (P2 — the coach ASKS; the student answers on
+            the board). Persistent card so the question survives after the
+            voice line; Hint reveals the square, Skip dismisses. */}
+        {guidedFind && (
+          <div data-testid="guided-find-card" className="mx-4 my-1 rounded-xl border-2 border-purple-500/40 bg-purple-500/10 px-3 py-2">
+            <div className="text-sm text-purple-100">{guidedFind.question}</div>
+            <div className="mt-1.5 flex items-center gap-2">
+              <span className="text-xs text-purple-300/70">Play your answer on the board.</span>
+              <button
+                type="button"
+                data-testid="guided-find-hint"
+                onClick={handleGuidedFindHint}
+                className="ml-auto rounded-lg border border-purple-400/50 px-2.5 py-1 text-xs font-semibold text-purple-200 hover:bg-purple-500/20"
+              >
+                Hint
+              </button>
+              <button
+                type="button"
+                data-testid="guided-find-skip"
+                onClick={handleGuidedFindSkip}
+                className="rounded-lg border border-slate-500/50 px-2.5 py-1 text-xs text-slate-300 hover:bg-slate-500/20"
+              >
+                Skip
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Coach "why did you play that?" question on a real slip — the same
             faucet Play uses, now surfaced in Learn (David 2026-06-04). The
