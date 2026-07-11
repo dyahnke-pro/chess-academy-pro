@@ -50,12 +50,16 @@ const config: CapacitorConfig = {
       version: process.env.OTA_BUNDLE_VERSION || undefined,
       // Our self-hosted manifest endpoint (Capgo self-hosted protocol).
       updateUrl: 'https://chess-academy-pro.vercel.app/api/ota/manifest',
-      // Apply the downloaded update as soon as it's fetched (David 2026-07-10:
-      // "flip to auto") — the new bundle goes live on the launch it's detected
-      // instead of waiting for the next background→foreground, so testers don't
-      // have to fully quit + reopen to pick up a web/content change. The
-      // appReadyTimeout revert below still protects against a bad bundle.
-      directUpdate: true,
+      // Apply the downloaded update on the NEXT background→foreground (cold
+      // start), NOT mid-session. directUpdate:true (the 2026-07-10 "flip to
+      // auto") reloaded the webview the instant a new bundle was detected on
+      // launch — and with many pushes/day the app saw a fresh bundle almost
+      // every open, so a reload kept colliding with the ACTIVE native mic /
+      // AVAudioSession and CRASHED the app on iOS (David 2026-07-11: mic
+      // crashing on build 119; worked on 117 which had this false). Reverted:
+      // testers still get every OTA fix, just applied on the next launch
+      // instead of yanking the webview out from under a live session.
+      directUpdate: false,
       // If the new bundle doesn't signal ready within this window, revert.
       appReadyTimeout: 10000,
       responseTimeout: 20,
