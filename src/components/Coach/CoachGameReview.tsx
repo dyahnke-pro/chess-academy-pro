@@ -17,7 +17,8 @@ import { calculateAccuracy, getClassificationCounts, detectMisses } from '../../
 import { getPhaseBreakdown, classifyPhase } from '../../services/gamePhaseService';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
-import { buildGuidedFindChallenge, judgeGuidedFindAttempt, GUIDED_FIND_MIN_EVAL_CP, type GuidedFindChallenge } from '../../services/guidedFindTheMove';
+import { buildGuidedFindChallenge, buildHoldChallenge, judgeGuidedFindAttempt, GUIDED_FIND_MIN_EVAL_CP, type GuidedFindChallenge } from '../../services/guidedFindTheMove';
+import { findRewindTarget, type RewindTarget } from '../../services/blunderRewind';
 import { buildTurningPointQuestion, judgeTurningPointPick, type TurningPointQuestion } from '../../services/reviewTurningPoint';
 import { captureEvent } from '../../services/analytics';
 import { detectMissedTactics } from '../../services/missedTacticService';
@@ -497,6 +498,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
    *  snaps back to the challenge position (the takeback). */
   const [shotBoardEpoch, setShotBoardEpoch] = useState(0);
 
+  // BLUNDER REWIND (David 2026-07-11: "return to the last moment you had a
+  // choice"). After a blunder's question resolves, offer to jump the board
+  // back to the last student-to-move ply where the eval was still holdable
+  // (computed from the eval trace) and pose the HOLD challenge there.
+  const [rewindOffer, setRewindOffer] = useState<RewindTarget | null>(null);
+  const rewindOfferedPliesRef = useRef<Set<number>>(new Set());
+
   // TURNING-POINT question — asked ONCE per game when the walk reaches the
   // end: "where do you think this game turned?" Candidates + answer are
   // computed from the eval record (reviewTurningPoint.ts).
@@ -509,6 +517,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setShotState(null);
     setShotReveal(null);
     shotAttemptsRef.current = 0;
+    setRewindOffer(null);
+    rewindOfferedPliesRef.current = new Set();
     setTurningQ(null);
     setTurningReveal(null);
     turningAskedRef.current = false;
@@ -517,7 +527,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const handleWalkForward = useCallback((): void => {
     if (readingGate) return;             // a legacy gate is open (defensive)
     if (faucetPhase !== 'idle') return;  // faucet is mid-question
-    if (shotState || shotReveal || turningQ) return; // a review question is open
+    if (shotState || shotReveal || turningQ || rewindOffer) return; // a review question is open
     if (readingQuizOn) {
       const nextPly = walkPlayback.currentPly + 1;
       const seg = walkNarration?.segments.find((s) => s.ply === nextPly) ?? null;
@@ -566,15 +576,55 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
   // Advance the walk once the faucet is done (answered + reveal dismissed, or
   // skipped) — the "resume" side of the pause above.
+  // ── Blunder rewind: offer after a blunder's question resolves ────────────
+  const maybeOfferRewind = useCallback((): boolean => {
+    const ply = walkPlayback.currentPly + 1; // the move the walk paused on
+    const seg = walkNarration?.segments.find((s) => s.ply === ply);
+    if (!seg || seg.classification !== 'blunder' || seg.playerColor !== playerColor) return false;
+    if (rewindOfferedPliesRef.current.has(ply)) return false;
+    rewindOfferedPliesRef.current.add(ply); // one offer per blunder, ever
+    const target = findRewindTarget(walkNarration?.segments ?? [], ply, playerColor);
+    if (!target) return false;
+    setRewindOffer(target);
+    captureEvent('review_rewind_offered', { blunder_ply: ply, rewind_ply: target.ply });
+    void voiceService.speakForced('Before we move on — want to go back to the last moment this was still holdable?').catch(() => undefined);
+    return true;
+  }, [walkPlayback, walkNarration, playerColor]);
+
+  const handleRewindAccept = useCallback((): void => {
+    const t = rewindOffer;
+    if (!t) return;
+    setRewindOffer(null);
+    const ch = buildHoldChallenge(t.fenBefore, t.bestUci);
+    walkPlayback.jumpToPly(t.ply - 1); // board shows the position the student faced
+    captureEvent('review_rewind_result', { outcome: 'accepted', rewind_ply: t.ply, challenge: ch?.answerSan ?? null });
+    if (ch) {
+      shotAttemptsRef.current = 0;
+      const segAt = walkNarration?.segments.find((s) => s.ply === t.ply);
+      setShotState({ challenge: ch, playedSan: segAt?.san ?? '', costPawns: null });
+      setShotReveal(null);
+      void voiceService.speakForced(ch.question).catch(() => undefined);
+    }
+  }, [rewindOffer, walkPlayback, walkNarration]);
+
+  const handleRewindDecline = useCallback((): void => {
+    if (!rewindOffer) return;
+    captureEvent('review_rewind_result', { outcome: 'declined', rewind_ply: rewindOffer.ply });
+    setRewindOffer(null);
+    walkPlayback.goForward();
+  }, [rewindOffer, walkPlayback]);
+
   const resumeAfterFaucet = useCallback((): void => {
     resetFaucet();
+    if (maybeOfferRewind()) return; // the rewind card takes over the advance
     walkPlayback.goForward();
-  }, [resetFaucet, walkPlayback]);
+  }, [resetFaucet, walkPlayback, maybeOfferRewind]);
 
   // ── Find-the-shot handlers ────────────────────────────────────────────────
   /** The computed cost line appended to every shot reveal — what the game
    *  move actually gave up, in pawns. */
   const shotCostLine = useCallback((s: { playedSan: string; costPawns: number | null }): string => {
+    if (!s.playedSan) return ''; // rewind hold-challenges have no single "game move" to cite
     return s.costPawns !== null && s.costPawns >= 0.5
       ? ` In the game you played ${s.playedSan} — that cost about ${s.costPawns.toFixed(1)} pawns.`
       : ` In the game you played ${s.playedSan}.`;
@@ -599,8 +649,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
   const handleShotContinue = useCallback((): void => {
     setShotReveal(null);
+    if (maybeOfferRewind()) return; // a blunder's shot resolved → offer the rewind
     walkPlayback.goForward();
-  }, [walkPlayback]);
+  }, [walkPlayback, maybeOfferRewind]);
 
   // ── Turning-point ask — fires once, when the walk reaches the last ply ────
   useEffect(() => {
@@ -1768,6 +1819,26 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   className="mt-1.5 rounded-lg border border-emerald-400/50 px-2.5 py-1 text-xs font-semibold text-emerald-200 hover:bg-emerald-500/20">
                   Continue
                 </button>
+              </div>
+            )}
+
+            {/* BLUNDER REWIND — offered once per blunder after its question
+                resolves: jump back to the last holdable moment and hold it. */}
+            {rewindOffer && (
+              <div data-testid="review-rewind-card" className="mx-3 my-1 rounded-xl border-2 border-cyan-500/40 bg-cyan-500/10 px-3 py-2">
+                <div className="text-sm text-cyan-100">
+                  Want to go back to the last moment this game was still in your hands?
+                </div>
+                <div className="mt-1.5 flex items-center gap-2">
+                  <button type="button" data-testid="review-rewind-accept" onClick={handleRewindAccept}
+                    className="rounded-lg border border-cyan-400/50 px-2.5 py-1 text-xs font-semibold text-cyan-200 hover:bg-cyan-500/20">
+                    Rewind
+                  </button>
+                  <button type="button" data-testid="review-rewind-decline" onClick={handleRewindDecline}
+                    className="rounded-lg border border-slate-500/50 px-2.5 py-1 text-xs text-slate-300 hover:bg-slate-500/20">
+                    Keep walking
+                  </button>
+                </div>
               </div>
             )}
 

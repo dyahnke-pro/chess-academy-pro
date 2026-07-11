@@ -157,6 +157,32 @@ export function buildGuidedFindChallenge(fen: string, bestUci: string): GuidedFi
 }
 
 /**
+ * The HOLD variant — the blunder-rewind question (David 2026-07-11: "return
+ * to the last moment you had a choice"). No notability gate: the holding move
+ * is often quiet, and that IS the lesson. Same challenge shape, so it drops
+ * straight into the find-the-shot board machinery.
+ */
+export function buildHoldChallenge(fen: string, bestUci: string): GuidedFindChallenge | null {
+  const p = probeBest(fen, bestUci);
+  if (!p) return null;
+  let why: string | null = null;
+  try {
+    const mover: 'white' | 'black' = fen.split(' ')[1] === 'b' ? 'black' : 'white';
+    why = describeMoveGeometry(fen, p.san, mover);
+  } catch { /* geometry is a bonus */ }
+  return {
+    question: `This was the last moment the game was still in your hands. Your ${p.pieceName} keeps it together — where does it need to be?`,
+    answerSan: p.san,
+    from: p.from,
+    to: p.to,
+    fen,
+    hint: `The holding move is ${p.san}${why ? ` — it ${why}` : ''}.`,
+    confirm: `There it is — ${p.san}. That keeps the game.`,
+    retry: 'Not quite — the position can still be held. Look again.',
+  };
+}
+
+/**
  * Judge a board attempt against the challenge. 'found' when the student plays
  * the answer (SAN match, or same piece path from→to — covers promotion/check
  * suffix differences). 'stale' when the board has drifted from the challenge
