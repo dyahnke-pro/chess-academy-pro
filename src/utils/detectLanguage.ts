@@ -39,6 +39,17 @@ const MARKERS: Record<string, string[]> = {
   it: [' il ', ' la ', ' che ', ' è ', ' di ', ' quale ', ' come ', ' perché ', ' migliore ', ' mossa ', ' per ', ' mia ', ' metti ', ' disattiva ', ' attiva '],
 };
 
+/** English competes: a foreign language must OUTSCORE English, not merely hit
+ *  two markers. Without this, an English chess ask like "should I castle O-O
+ *  or take, as Black?" scored Portuguese (' o ' from the lowercased O-O +
+ *  ' as ') and forced a pointless phrasing/translation call — the 2026-07-11
+ *  fidelity-trip cluster on intent=alternatives. */
+const EN_MARKERS: string[] = [
+  ' the ', ' is ', ' what ', ' why ', ' how ', ' my ', ' this ', ' that ',
+  ' to ', ' of ', ' and ', ' should ', ' would ', ' move ', ' best ', ' better ',
+  ' i ', ' you ', ' it ', ' not ', ' about ', ' instead ', ' take ', ' play ',
+];
+
 /** Accented-letter fingerprints that strongly imply a Latin-script non-English
  *  language even in a short string with no clear function word. */
 const ACCENT_HINTS: Array<[RegExp, string]> = [
@@ -59,16 +70,22 @@ export function detectLanguage(text: string | undefined | null): DetectedLanguag
   if (/[぀-ヿ]/.test(raw)) return { code: 'ja', name: LANG_NAME.ja, nonEnglish: true };
   if (/[一-鿿]/.test(raw)) return { code: 'zh', name: LANG_NAME.zh, nonEnglish: true };
 
-  const pad = ` ${raw.toLowerCase().replace(/[.,!?¿¡;:()"'`]/g, ' ').replace(/\s+/g, ' ')} `;
+  // Chess notation is language-neutral — strip castling tokens before word
+  // matching so a lowercased "O-O" never reads as the Portuguese article 'o'.
+  const deChessed = raw.replace(/\bo-o(-o)?\b/gi, ' ');
+  const pad = ` ${deChessed.toLowerCase().replace(/[.,!?¿¡;:()"'`]/g, ' ').replace(/\s+/g, ' ')} `;
   let best = 'en', bestScore = 0;
   for (const [code, words] of Object.entries(MARKERS)) {
     let score = 0;
     for (const w of words) if (pad.includes(w)) score++;
     if (score > bestScore) { bestScore = score; best = code; }
   }
-  // Need ≥2 marker hits to override English (one common word like "e" or "a"
-  // is too weak). Accented fingerprints can confirm with a single hit.
-  if (bestScore >= 2) return { code: best, name: LANG_NAME[best] ?? best, nonEnglish: best !== 'en' };
+  let enScore = 0;
+  for (const w of EN_MARKERS) if (pad.includes(w)) enScore++;
+  // Need ≥2 marker hits AND a win over English to override it (one common
+  // word like "a" is too weak, and an English sentence that trips two foreign
+  // articles must not translate). Accented fingerprints confirm with one hit.
+  if (bestScore >= 2 && bestScore > enScore) return { code: best, name: LANG_NAME[best] ?? best, nonEnglish: best !== 'en' };
   for (const [re, code] of ACCENT_HINTS) {
     if (re.test(raw)) return { code, name: LANG_NAME[code] ?? code, nonEnglish: true };
   }

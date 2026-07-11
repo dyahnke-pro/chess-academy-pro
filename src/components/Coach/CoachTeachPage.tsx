@@ -893,6 +893,20 @@ export function CoachTeachPage(): JSX.Element {
   /** Traps/gems already announced this game (openingFactChains dedup) — the
    *  same lurking line isn't re-announced on every ply it stays live. */
   const announcedTrapsRef = useRef(new Set<string>());
+  // SESSION BOOKENDS (David 2026-07-11): running tallies for the closing
+  // takeaway spoken on End Lesson — questions asked/found + slips stopped on.
+  // All computed; the closer is a deterministic line (no LLM needed).
+  const sessionStatsRef = useRef({ slips: 0, questions: 0, correct: 0 });
+  const lastPromptCountedRef = useRef(false);
+  useEffect(() => {
+    if (discussion.prompt && !lastPromptCountedRef.current) {
+      lastPromptCountedRef.current = true;
+      sessionStatsRef.current.slips += 1;
+    } else if (!discussion.prompt) {
+      lastPromptCountedRef.current = false;
+    }
+  }, [discussion.prompt]);
+
   /** The chain's lead-the-eye arrows/highlights for the CURRENT position
    *  (David 2026-07-11: "help the user visualize the moves the coach is
    *  talking about"). Painted the moment the reply lands and merged into the
@@ -910,6 +924,7 @@ export function CoachTeachPage(): JSX.Element {
     const q = threatCheckRef.current;
     if (!q) return;
     const correct = judgeThreatCheckPick(q, picked);
+    if (correct) sessionStatsRef.current.correct += 1;
     const text = `${correct ? "That's the one." : 'Not quite.'} ${q.reveal}`;
     captureEvent('threat_check_result', { surface: 'coach-teach', outcome: correct ? 'correct' : 'wrong', picked, answer: q.answer });
     clearThreatCheck();
@@ -3911,6 +3926,7 @@ export function CoachTeachPage(): JSX.Element {
       if (verdict === 'stale') {
         clearGuidedFind();
       } else if (verdict === 'found') {
+        sessionStatsRef.current.correct += 1;
         captureEvent('guided_find_result', { surface: 'coach-teach', outcome: 'found', attempts: guidedFindAttemptsRef.current + 1, answer: guidedChallenge.answerSan });
         setMessages((prev) => [...prev, { id: uid('guided-found'), role: 'assistant', content: guidedChallenge.confirm, timestamp: Date.now() }]);
         void voiceService.speakForced(guidedChallenge.confirm).catch(() => undefined);
@@ -4060,6 +4076,7 @@ export function CoachTeachPage(): JSX.Element {
                     guidedFindLastAskPlyRef.current = plyNow;
                     setGuidedFind(challenge);
                     questionArmed = true;
+                    sessionStatsRef.current.questions += 1;
                     captureEvent('guided_find_asked', { surface: 'coach-teach', answer: challenge.answerSan, eval_cp: studentPovEval });
                     facts.push(`Do NOT recommend, name, or hint at ANY move, threat, or tactic for the student in this reply. End your reply with exactly this question to the student, then stop: "${challenge.question}"`);
                   } else if (threatQ) {
@@ -4067,6 +4084,7 @@ export function CoachTeachPage(): JSX.Element {
                     threatCheckLastAskPlyRef.current = plyNow;
                     setThreatCheck(threatQ);
                     questionArmed = true;
+                    sessionStatsRef.current.questions += 1;
                     captureEvent('threat_check_asked', { surface: 'coach-teach', answer: threatQ.answer });
                     facts.push(`Do NOT name any threat, attacked piece, undefended piece, or tactic in this reply. End your reply with exactly this question to the student, then stop: "${threatQ.question}"`);
                   } else if (recUci && recUci.length >= 4) {
@@ -4227,6 +4245,17 @@ export function CoachTeachPage(): JSX.Element {
             const nudge = top ? weaknessNudgeFromItem(top.category, top.label) : null;
             if (nudge) {
               setCoachChoices([nudge, ...generic.filter((q) => q !== nudge)].slice(0, 4));
+            }
+            // SESSION OPENER (David 2026-07-11 bookends): a coach names the
+            // day's focus before the first move — computed from the stored
+            // weakness profile, spoken AFTER the greeting resolves (the
+            // speech chain serializes; never talks over the welcome line).
+            if (top) {
+              const planLine = `While we play today, keep one thing in the back of your mind — ${top.label.toLowerCase()}. That's the pattern that's been costing you the most, and I'll be watching for it.`;
+              setMessages((prev) => [...prev, { id: uid('session-opener'), role: 'assistant', content: planLine, timestamp: Date.now() }]);
+              speechChainRef.current = speechChainRef.current
+                .then(() => voiceService.speakForced(planLine))
+                .catch(() => undefined);
             }
           })
           .catch(() => { /* stored-profile read failed — generic chips stand */ });
@@ -4845,7 +4874,23 @@ export function CoachTeachPage(): JSX.Element {
               <span>Restart</span>
             </button>
             <button
-              onClick={() => void navigate('/coach/home')}
+              onClick={() => {
+                // SESSION CLOSER (David 2026-07-11 bookends): walk them out
+                // with the computed takeaway — questions asked/found + slips
+                // captured this session. Deterministic line, real numbers;
+                // silent when the session had nothing to summarize. Voice is
+                // a singleton, so it keeps speaking across the navigation.
+                const s = sessionStatsRef.current;
+                if (s.slips + s.questions > 0) {
+                  const parts: string[] = [];
+                  if (s.questions > 0) parts.push(`I asked you ${s.questions} question${s.questions === 1 ? '' : 's'} and you found ${s.correct}`);
+                  if (s.slips > 0) parts.push(`we stopped on ${s.slips} slip${s.slips === 1 ? '' : 's'} — those are in your weakness profile now and they'll come back as drills`);
+                  const closer = `Good session. ${parts.join(', and ')}.`;
+                  captureEvent('session_closer_spoken', { surface: 'coach-teach', ...s });
+                  void voiceService.speakForced(closer).catch(() => undefined);
+                }
+                void navigate('/coach/home');
+              }}
               disabled={busy}
               className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-red-500/30 text-sm font-medium text-red-400/80 hover:text-red-300 hover:bg-red-500/10 disabled:opacity-30 transition-all duration-200"
               style={{ boxShadow: '0 0 10px rgba(239, 68, 68, 0.2), 0 0 3px rgba(239, 68, 68, 0.1)' }}
