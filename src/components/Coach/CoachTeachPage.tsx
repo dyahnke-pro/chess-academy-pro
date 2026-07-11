@@ -4729,7 +4729,26 @@ export function CoachTeachPage(): JSX.Element {
         {/* Pinned input — first thing under the board. */}
         <div className="border-b border-theme-border">
           <ChatInput
-            onSend={(text) => void handleSubmit(text)}
+            onSend={(text, modality) => {
+              // VOICE ANSWER ROUTING (David 2026-07-11: "I would love for the
+              // coach to ask the user questions" + the turn-taking mic). When
+              // the "why did you play that?" picker is open, a SPOKEN
+              // utterance IS the answer — route it into the picker (the
+              // misconception classifier handles free text) instead of
+              // spawning a chat turn over the open question. Typed chat still
+              // goes to chat; the picker has its own typed input.
+              if (modality === 'voice' && discussion.prompt) {
+                void logAppAudit({
+                  kind: 'discussion-voice-answer',
+                  category: 'subsystem',
+                  source: 'CoachTeachPage.voiceAnswerRouting',
+                  summary: `spoken answer routed to open why-picker: "${text.slice(0, 60)}"`,
+                });
+                void discussion.submitReason(text);
+                return;
+              }
+              void handleSubmit(text);
+            }}
             disabled={busy}
             placeholder={busy ? 'Coach is typing…' : 'Ask your coach…'}
             coachChoices={coachChoices}

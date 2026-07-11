@@ -677,6 +677,11 @@ export type AuditKind =
   //   conversational). Was buried inside `coach-surface-migrated`
   //   before; standalone kind makes it queryable.
   | 'chip-tap-resolved'
+  // discussion-voice-answer: a SPOKEN utterance routed into an open
+  //   "why did you play that?" picker as the answer (turn-taking mic +
+  //   the coach-asks-questions faucet, 2026-07-11). Queryable so the
+  //   voice-vs-chip answer split is visible.
+  | 'discussion-voice-answer'
   // user-retry-detected: when the same user types two semantically
   //   similar inputs within a short window, the previous turn
   //   probably mis-resolved. Surfaces the "I wanted the danish
