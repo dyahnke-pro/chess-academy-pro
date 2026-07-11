@@ -78,6 +78,7 @@ import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { shouldOfferGuidedFind, buildGuidedFindChallenge, judgeGuidedFindAttempt, type GuidedFindChallenge } from '../../services/guidedFindTheMove';
 import { buildThreatCheckQuestion, judgeThreatCheckPick, type ThreatCheckQuestion } from '../../services/threatCheck';
 import { buildOpeningChainFacts } from '../../services/openingFactChains';
+import { parseSpokenMove } from '../../services/spokenMoveParser';
 import { captureEvent } from '../../services/analytics';
 
 /** Min plies between guided find-the-move questions — the coach quizzes at
@@ -4868,6 +4869,31 @@ export function CoachTeachPage(): JSX.Element {
                 });
                 void discussion.submitReason(text);
                 return;
+              }
+              // Spoken MOVE answer to an open guided find-the-move ("knight
+              // to d5"). Parsed against chess.js's legal moves for the
+              // challenge position (spokenMoveParser — never guesses). The
+              // right move is PLAYED on the board and flows through
+              // handleStudentMove's judge (confirm + play continues); a wrong
+              // move gets the retry nudge; unparseable speech falls through
+              // to a normal chat question.
+              if (modality === 'voice' && guidedFindRef.current) {
+                const ch = guidedFindRef.current;
+                const parsed = parseSpokenMove(text, ch.fen);
+                if (parsed) {
+                  if (parsed.san === ch.answerSan || (parsed.from === ch.from && parsed.to === ch.to)) {
+                    const result = game.makeMove(parsed.from, parsed.to);
+                    if (result) {
+                      handleStudentMove(result);
+                      return;
+                    }
+                  } else {
+                    guidedFindAttemptsRef.current += 1;
+                    captureEvent('guided_find_result', { surface: 'coach-teach', outcome: 'retry', attempts: guidedFindAttemptsRef.current, answer: ch.answerSan, modality: 'voice' });
+                    void voiceService.speakForced(ch.retry).catch(() => undefined);
+                    return;
+                  }
+                }
               }
               void handleSubmit(text);
             }}
