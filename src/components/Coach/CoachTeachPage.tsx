@@ -76,11 +76,15 @@ import type { WalkthroughSession } from '../../types/walkthrough';
 import { classifyPhase } from '../../services/gamePhaseService';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { shouldOfferGuidedFind, buildGuidedFindChallenge, judgeGuidedFindAttempt, type GuidedFindChallenge } from '../../services/guidedFindTheMove';
+import { buildThreatCheckQuestion, judgeThreatCheckPick, type ThreatCheckQuestion } from '../../services/threatCheck';
 import { captureEvent } from '../../services/analytics';
 
 /** Min plies between guided find-the-move questions — the coach quizzes at
  *  real moments, not every move of a won game. */
 const GUIDED_FIND_MIN_PLY_GAP = 6;
+/** Min plies between threat-check questions — the danger drill fires at
+ *  moments, not on every hanging pawn of a sloppy game. */
+const THREAT_CHECK_MIN_PLY_GAP = 8;
 import { getNeonColor, scaledShadow } from '../../utils/neonColors';
 import {
   getCompletedStages,
@@ -876,12 +880,47 @@ export function CoachTeachPage(): JSX.Element {
     clearGuidedFind();
   }, [clearGuidedFind]);
 
+  // THREAT-CHECK question (David 2026-07-11) — after the coach's reply, when
+  // one of the STUDENT's pieces is genuinely hanging, the coach asks WHICH
+  // piece is in danger before they move. Chips computed (threatCheck.ts);
+  // the tactics narration facts are suppressed while it's open so nothing
+  // leaks the answer.
+  const [threatCheck, setThreatCheck] = useState<ThreatCheckQuestion | null>(null);
+  const threatCheckRef = useRef<ThreatCheckQuestion | null>(null);
+  const threatCheckLastAskPlyRef = useRef(-999);
+
+  const clearThreatCheck = useCallback((): void => {
+    threatCheckRef.current = null;
+    setThreatCheck(null);
+  }, []);
+
+  const handleThreatCheckPick = useCallback((picked: string): void => {
+    const q = threatCheckRef.current;
+    if (!q) return;
+    const correct = judgeThreatCheckPick(q, picked);
+    const text = `${correct ? "That's the one." : 'Not quite.'} ${q.reveal}`;
+    captureEvent('threat_check_result', { surface: 'coach-teach', outcome: correct ? 'correct' : 'wrong', picked, answer: q.answer });
+    clearThreatCheck();
+    setMessages((prev) => [...prev, { id: uid('threat-reveal'), role: 'assistant', content: text, timestamp: Date.now() }]);
+    void voiceService.speakForced(text).catch(() => undefined);
+  }, [clearThreatCheck]);
+
+  const handleThreatCheckSkip = useCallback((): void => {
+    const q = threatCheckRef.current;
+    if (!q) return;
+    captureEvent('threat_check_result', { surface: 'coach-teach', outcome: 'skip', answer: q.answer });
+    clearThreatCheck();
+  }, [clearThreatCheck]);
+
   // A walkthrough taking over the board supersedes any open question — the
   // judge's stale-FEN check already refuses to score a drifted board; this
   // just removes the card so it never lingers over a lesson.
   useEffect(() => {
-    if (walkthrough.isActive) clearGuidedFind();
-  }, [walkthrough.isActive, clearGuidedFind]);
+    if (walkthrough.isActive) {
+      clearGuidedFind();
+      clearThreatCheck();
+    }
+  }, [walkthrough.isActive, clearGuidedFind, clearThreatCheck]);
 
   // Auto-flip the board when a walkthrough loads a tree whose
   // studentSide differs from the current orientation. Black-side
@@ -3840,6 +3879,12 @@ export function CoachTeachPage(): JSX.Element {
     // Pre-move FEN (before we overwrite liveFenRef below) — the slip faucet
     // needs the position the student moved FROM.
     const fenBefore = liveFenRef.current;
+    // An open THREAT-CHECK is answered by the move itself — the student chose
+    // to act rather than tap a chip. Log it and clear; never block the move.
+    if (threatCheckRef.current) {
+      captureEvent('threat_check_result', { surface: 'coach-teach', outcome: 'moved-through', answer: threatCheckRef.current.answer });
+      clearThreatCheck();
+    }
     // GUIDED FIND-THE-MOVE answer attempt (P2 — David 2026-07-11: the coach
     // asks, the student answers ON THE BOARD). Found → confirm + the move
     // stands and play continues. Wrong → the move is taken back and the
@@ -3945,8 +3990,14 @@ export function CoachTeachPage(): JSX.Element {
                 const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200;
                 const studentCC: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
                 const tctx = buildTacticsLiveContext(probe.fen(), null, studentCC, rating);
-                if (tctx.immediate.length > 0) facts.push(`Real tactics on the board now: ${tctx.immediate.map((t) => t.description).join('; ')}.`);
-                if (tctx.hanging.length > 0) facts.push(`Undefended/attacked: ${tctx.hanging.map((h) => `${NAME[h.piece] ?? h.piece} on ${h.square}`).join(', ')}.`);
+                // Tactics facts are held back until the question decision
+                // below — when a guided-find or threat-check question arms,
+                // narrating the live tactics would hand over the very answer
+                // the question withholds (honesty contract rule 1).
+                const tacticsFacts: string[] = [];
+                if (tctx.immediate.length > 0) tacticsFacts.push(`Real tactics on the board now: ${tctx.immediate.map((t) => t.description).join('; ')}.`);
+                if (tctx.hanging.length > 0) tacticsFacts.push(`Undefended/attacked: ${tctx.hanging.map((h) => `${NAME[h.piece] ?? h.piece} on ${h.square}`).join(', ')}.`);
+                let questionArmed = false;
                 // The STUDENT'S recommended next move — COMPUTED in code, never the
                 // LLM's pick (G0). The coach was telling the student to "develop the
                 // knight to f3" with a knight ALREADY on f3, because the move it
@@ -3968,17 +4019,39 @@ export function CoachTeachPage(): JSX.Element {
                   const plyNow = (move.moveNumber ?? 1) * 2;
                   const mayAsk =
                     !guidedFindRef.current &&
+                    !threatCheckRef.current &&
                     !activeDrillRef.current &&
                     plyNow - guidedFindLastAskPlyRef.current >= GUIDED_FIND_MIN_PLY_GAP &&
                     shouldOfferGuidedFind({ fen: probe.fen(), bestUci: recUci, evalCpStudentPov: studentPovEval });
                   const challenge = mayAsk && recUci ? buildGuidedFindChallenge(probe.fen(), recUci) : null;
+                  // THREAT-CHECK (David 2026-07-11): when one of the STUDENT's
+                  // pieces is genuinely hanging after the coach's reply, ask
+                  // WHICH piece is in danger before they move — the
+                  // check-what-changed discipline as a question. Guided-find
+                  // takes priority (a winning shot usually answers the threat
+                  // too); one question at a time, always.
+                  const threatQ = !challenge &&
+                    !threatCheckRef.current &&
+                    !guidedFindRef.current &&
+                    !activeDrillRef.current &&
+                    plyNow - threatCheckLastAskPlyRef.current >= THREAT_CHECK_MIN_PLY_GAP
+                    ? buildThreatCheckQuestion(probe.fen(), studentCC)
+                    : null;
                   if (challenge) {
                     guidedFindRef.current = challenge;
                     guidedFindAttemptsRef.current = 0;
                     guidedFindLastAskPlyRef.current = plyNow;
                     setGuidedFind(challenge);
+                    questionArmed = true;
                     captureEvent('guided_find_asked', { surface: 'coach-teach', answer: challenge.answerSan, eval_cp: studentPovEval });
-                    facts.push(`Do NOT recommend, name, or hint at ANY move for the student in this reply. End your reply with exactly this question to the student, then stop: "${challenge.question}"`);
+                    facts.push(`Do NOT recommend, name, or hint at ANY move, threat, or tactic for the student in this reply. End your reply with exactly this question to the student, then stop: "${challenge.question}"`);
+                  } else if (threatQ) {
+                    threatCheckRef.current = threatQ;
+                    threatCheckLastAskPlyRef.current = plyNow;
+                    setThreatCheck(threatQ);
+                    questionArmed = true;
+                    captureEvent('threat_check_asked', { surface: 'coach-teach', answer: threatQ.answer });
+                    facts.push(`Do NOT name any threat, attacked piece, undefended piece, or tactic in this reply. End your reply with exactly this question to the student, then stop: "${threatQ.question}"`);
                   } else if (recUci && recUci.length >= 4) {
                     const recProbe = new Chess(probe.fen());
                     const recMove = recProbe.move({ from: recUci.slice(0, 2), to: recUci.slice(2, 4), promotion: recUci.slice(4, 5) || undefined });
@@ -3987,6 +4060,9 @@ export function CoachTeachPage(): JSX.Element {
                     }
                   }
                 } catch { /* engine down → no move named; the prompt keeps the prompt-for-next-move general */ }
+                // Tactics facts reach the narration ONLY when no question is
+                // open — otherwise they leak the answer.
+                if (!questionArmed) facts.push(...tacticsFacts);
                 replyFact = `GROUNDED FACTS (voice ONLY these — never invent a capture, check, tactic, or threat not listed here): ${facts.join(' ')}`;
               }
             } catch {
@@ -4016,7 +4092,7 @@ export function CoachTeachPage(): JSX.Element {
         setOpponentThinking(false);
       }
     })();
-  }, [handleSubmit, discussion, walkthrough.tree?.openingName, playerColor, resolveCoachReplyMove, handlePlayMove, setOpponentThinking, activeProfile?.puzzleRating, activeProfile?.currentRating, positionNarration, clearGuidedFind]);
+  }, [handleSubmit, discussion, walkthrough.tree?.openingName, playerColor, resolveCoachReplyMove, handlePlayMove, setOpponentThinking, activeProfile?.puzzleRating, activeProfile?.currentRating, positionNarration, clearGuidedFind, clearThreatCheck]);
 
   // ─── Guided-opening-play kickoff ─────────────────────────────────────────
   // On mount, pull the student's last 5 games + weakness profile so the
@@ -4604,6 +4680,27 @@ export function CoachTeachPage(): JSX.Element {
                 onClick={handleGuidedFindSkip}
                 className="rounded-lg border border-slate-500/50 px-2.5 py-1 text-xs text-slate-300 hover:bg-slate-500/20"
               >
+                Skip
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Threat-check — "which of your pieces is in danger?" Chips computed;
+            a board move answers it implicitly (never blocks). */}
+        {threatCheck && (
+          <div data-testid="threat-check-card" className="mx-4 my-1 rounded-xl border-2 border-rose-500/40 bg-rose-500/10 px-3 py-2">
+            <div className="text-sm text-rose-100">{threatCheck.question}</div>
+            <div className="mt-2 flex flex-wrap items-center gap-2">
+              {threatCheck.options.map((opt) => (
+                <button key={opt} type="button" data-testid="threat-check-option"
+                  onClick={() => handleThreatCheckPick(opt)}
+                  className="rounded-lg border border-rose-400/50 px-2.5 py-1 text-xs font-semibold text-rose-200 hover:bg-rose-500/20">
+                  {opt}
+                </button>
+              ))}
+              <button type="button" data-testid="threat-check-skip" onClick={handleThreatCheckSkip}
+                className="ml-auto rounded-lg border border-slate-500/50 px-2.5 py-1 text-xs text-slate-300 hover:bg-slate-500/20">
                 Skip
               </button>
             </div>
