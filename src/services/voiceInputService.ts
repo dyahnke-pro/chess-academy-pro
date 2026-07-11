@@ -71,6 +71,13 @@ interface SpeechRecognitionConstructor {
  *  cap it so we don't brick the page. Reset on successful final. */
 const MAX_RESTART_ATTEMPTS = 3;
 
+/** Native end-of-utterance window: after the last partial with no new speech,
+ *  auto-stop the recognizer and submit. ~2s is a natural sentence-end pause —
+ *  long enough not to cut off a mid-thought pause, short enough to feel
+ *  responsive. iOS never auto-stops on silence, so this is what turns the
+ *  native mic into "tap, speak, done" instead of "tap, speak, tap again." */
+const NATIVE_SILENCE_MS = 2000;
+
 /** Minimum average confidence to accept a transcript. Web Speech
  *  reports 0-1; below this the audio was noisy or the speech wasn't
  *  clearly directed at the mic. 0.55 is a balance — catches most
@@ -200,6 +207,13 @@ class VoiceInputService {
   /** Latest partial transcript from the native recognizer within the current
    *  utterance — dispatched as final when the utterance stops. */
   private nativeLatest = '';
+  /** End-of-utterance silence timer for the NATIVE path. iOS SFSpeechRecognizer
+   *  never auto-stops on silence, so without this the user must tap the mic a
+   *  SECOND time to submit — undiscoverable, and it read as "the mic doesn't
+   *  work" (David 2026-07-11: it heard "Test" but never sent). Each partial
+   *  resets it; when it fires (no new speech for NATIVE_SILENCE_MS) we stop +
+   *  dispatch, so the flow is: tap → speak → pause → sends. */
+  private nativeSilenceTimer: ReturnType<typeof setTimeout> | null = null;
 
   /** Running inside the native app shell (Capacitor WKWebView), where the
    *  native speech plugin is available and Web Speech is not. */
@@ -368,6 +382,7 @@ class VoiceInputService {
 
   stopListening(): void {
     this.userStopped = true;
+    this.clearNativeSilenceTimer();
     if (this.nativeListening) {
       this.nativeListening = false;
       // Manual stop (user tapped the mic off): iOS won't deliver its own
@@ -392,6 +407,25 @@ class VoiceInputService {
     }
     this.listening = false;
     this.detachLifecycleListeners();
+  }
+
+  /** (Re)arm the end-of-utterance silence timer. Cleared+reset on every partial
+   *  so it only fires once speech has paused for NATIVE_SILENCE_MS. */
+  private armNativeSilenceTimer(): void {
+    this.clearNativeSilenceTimer();
+    this.nativeSilenceTimer = setTimeout(() => {
+      this.nativeSilenceTimer = null;
+      // Only auto-submit if we're still in a native session with something heard;
+      // stopListening dispatches the latest partial as the final transcript.
+      if (this.nativeListening) this.stopListening();
+    }, NATIVE_SILENCE_MS);
+  }
+
+  private clearNativeSilenceTimer(): void {
+    if (this.nativeSilenceTimer) {
+      clearTimeout(this.nativeSilenceTimer);
+      this.nativeSilenceTimer = null;
+    }
   }
 
   /** Native recognition (Capacitor) — used inside the app shell where Web
@@ -451,9 +485,15 @@ class VoiceInputService {
           this.audit('mic-heard-speech', `native partial heard: "${m.slice(0, 60)}"`);
         }
         this.interimHandler?.(m);
+        // End-of-utterance detection: reset the silence timer on every partial;
+        // when speech pauses for NATIVE_SILENCE_MS, stop + submit automatically
+        // (iOS never does this itself). Without it the utterance is captured but
+        // never sent unless the user taps the mic a second time.
+        this.armNativeSilenceTimer();
       });
       await SpeechRecognition.addListener('listeningState', (data: { status: 'started' | 'stopped' }) => {
         if (data.status !== 'stopped') return;
+        this.clearNativeSilenceTimer();
         this.audit(
           'mic-native-stopped',
           `native session stopped; pending="${this.nativeLatest.trim().slice(0, 60)}" listening=${this.nativeListening}`,
