@@ -99,12 +99,44 @@ PLIST="ios/App/App/Info.plist"
 # coach in the native app — David 2026-06-18 "mic doesn't work in the iOS app").
 # `cap add` regenerates Info.plist every build, so inject here (not in a
 # committed plist). Add-then-Set so it's idempotent across re-runs.
+#
+# 🔒 ROOT CAUSE of the build-118 mic CRASH (David 2026-07-11, confirmed from the
+# .ips): the crash was EXC_BREAKPOINT (brk 1) inside the plugin's
+# `AVAudioSession.requestRecordPermission` completion — iOS's documented trap
+# when a privacy API is called WITHOUT its Info.plist usage string. The old
+# injection ended every line with `|| true`, so a wrong plist path or a
+# PlistBuddy hiccup SILENTLY shipped a build with no usage string → guaranteed
+# crash on the first mic tap. Never silent again: locate the real plist, inject,
+# then VERIFY both keys are present and HARD-FAIL the build if either is missing.
 MIC_MSG="Chess Academy uses the microphone so you can talk to your coach by voice."
 SPEECH_MSG="Chess Academy uses speech recognition to turn what you say into messages for your coach."
+
+# The plist path can drift with Capacitor versions; if the expected one is
+# missing, find the real App Info.plist rather than inject into the void.
+if [ ! -f "$PLIST" ]; then
+  ALT_PLIST="$(find ios -name "Info.plist" -path "*App/App*" 2>/dev/null | head -1)"
+  echo "ci_post_clone: expected $PLIST missing; discovered '$ALT_PLIST'"
+  [ -n "$ALT_PLIST" ] && PLIST="$ALT_PLIST"
+fi
+
 /usr/libexec/PlistBuddy -c "Add :NSMicrophoneUsageDescription string \"$MIC_MSG\"" "$PLIST" 2>/dev/null \
   || /usr/libexec/PlistBuddy -c "Set :NSMicrophoneUsageDescription \"$MIC_MSG\"" "$PLIST" 2>/dev/null || true
 /usr/libexec/PlistBuddy -c "Add :NSSpeechRecognitionUsageDescription string \"$SPEECH_MSG\"" "$PLIST" 2>/dev/null \
   || /usr/libexec/PlistBuddy -c "Set :NSSpeechRecognitionUsageDescription \"$SPEECH_MSG\"" "$PLIST" 2>/dev/null || true
+
+# VERIFY — read the keys back. If either is absent the app WILL crash on mic use,
+# so make it a RED BUILD instead of a shipped crash.
+MIC_CHECK="$(/usr/libexec/PlistBuddy -c "Print :NSMicrophoneUsageDescription" "$PLIST" 2>/dev/null || echo "")"
+SPEECH_CHECK="$(/usr/libexec/PlistBuddy -c "Print :NSSpeechRecognitionUsageDescription" "$PLIST" 2>/dev/null || echo "")"
+if [ -z "$MIC_CHECK" ] || [ -z "$SPEECH_CHECK" ]; then
+  echo "ci_post_clone: FATAL — mic/speech usage strings NOT present in $PLIST"
+  echo "  NSMicrophoneUsageDescription='$MIC_CHECK'"
+  echo "  NSSpeechRecognitionUsageDescription='$SPEECH_CHECK'"
+  echo "  The app would EXC_BREAKPOINT on the first mic tap (build-118 crash). Aborting."
+  ls -la "$(dirname "$PLIST")" || true
+  exit 1
+fi
+echo "ci_post_clone: verified mic + speech usage strings present in $PLIST"
 
 # --- Swift Package resolution -------------------------------------------------
 # Xcode Cloud archives with "only use versions from Package.resolved" forced ON
