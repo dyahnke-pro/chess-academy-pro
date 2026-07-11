@@ -109,19 +109,26 @@ are (a) unique → guaranteed cache miss, and (b) out of every explorer's book �
 guaranteed empty result. A 40-move game ≈ 100+ wasted Lichess calls from one
 user; the 429s are self-inflicted fan-out, not load.
 
-**Root fix — out-of-book cutoff (data-driven, not a rate hack):**
-1. In the master-play lookup layer, when a position returns
-   `totalGames === 0`, record its FEN in a session-scoped `outOfBook` set and
-   **stop prefetching its children** — an empty parent proves the children are
-   empty (a position's games are a subset of its parent's). The chain
-   naturally re-arms on a new game / take-back into book.
+**Root fix — out-of-book PREFETCH cutoff (data-driven, not a rate hack):**
+⚠️ CORRECTNESS NUANCE (caught in plan review 2026-07-11): "empty parent ⇒
+empty children" is FALSE under transpositions — the explorer keys by
+POSITION, so a child position reachable via other move orders can carry
+games while this parent has none. Therefore the cutoff applies to
+PREFETCH ONLY, never to on-demand lookups:
+1. When the CURRENT position returns `totalGames === 0`, skip the
+   speculative child prefetch for that position (session-scoped; re-arms on
+   new game / take-back / a position that returns games again). On-demand
+   lookups (the user reaches a position, or asks a master-play question)
+   still always fire — a transposition re-entry loses only the prefetch
+   latency win, never the answer.
 2. Negative results are cached client-side (the existing lookup cache already
    holds results — ensure empties are cached too, not just hits).
 3. No new throttles, no cooldown tuning — the circuit breaker stays as the
-   backstop and should stop tripping because the call volume collapses to
-   the in-book prefix of each game (~10-15 plies).
+   backstop and should stop tripping because the speculative call volume
+   collapses to the in-book prefix of each game (~10-15 plies).
 
-**Verify:** unit test — parent-empty ⇒ no child prefetch; new-game re-arms.
+**Verify:** unit test — parent-empty ⇒ no child PREFETCH while an on-demand
+lookup for the same child still fires; new-game re-arms.
 Post-deploy: `lichess_error` rate-limit count during an active session → ~0.
 
 **Files:** `src/services/masterPlayWatcher.ts` /
