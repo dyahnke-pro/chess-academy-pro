@@ -17,6 +17,9 @@ import { calculateAccuracy, getClassificationCounts, detectMisses } from '../../
 import { getPhaseBreakdown, classifyPhase } from '../../services/gamePhaseService';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
+import { buildGuidedFindChallenge, judgeGuidedFindAttempt, GUIDED_FIND_MIN_EVAL_CP, type GuidedFindChallenge } from '../../services/guidedFindTheMove';
+import { buildTurningPointQuestion, judgeTurningPointPick, type TurningPointQuestion } from '../../services/reviewTurningPoint';
+import { captureEvent } from '../../services/analytics';
 import { detectMissedTactics } from '../../services/missedTacticService';
 import {
   generateNarrativeSummary,
@@ -480,9 +483,41 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // returns a fresh object each render). `phase` is the one live value.
   const { phase: faucetPhase, raiseSlipPrompt: raiseFaucet, reset: resetFaucet } = reviewFaucet;
 
+  // FIND-THE-SHOT (review questions, David 2026-07-11). When the mistake the
+  // walk is pausing on MISSED A WINNING SHOT (the student was clearly better
+  // and the engine's move was notable), the coach asks the student to FIND it
+  // on the review board instead of opening the why-picker — Danya's
+  // pause-and-guess format. The question is computed square-free
+  // (guidedFindTheMove.ts) and the better-move arrow is suppressed while the
+  // question is open, so nothing on screen leaks the answer.
+  const [shotState, setShotState] = useState<{ challenge: GuidedFindChallenge; playedSan: string; costPawns: number | null } | null>(null);
+  const [shotReveal, setShotReveal] = useState<string | null>(null);
+  const shotAttemptsRef = useRef(0);
+  /** Bumped on a wrong attempt — remounts the walk board so the wrong move
+   *  snaps back to the challenge position (the takeback). */
+  const [shotBoardEpoch, setShotBoardEpoch] = useState(0);
+
+  // TURNING-POINT question — asked ONCE per game when the walk reaches the
+  // end: "where do you think this game turned?" Candidates + answer are
+  // computed from the eval record (reviewTurningPoint.ts).
+  const [turningQ, setTurningQ] = useState<TurningPointQuestion | null>(null);
+  const [turningReveal, setTurningReveal] = useState<{ correct: boolean; text: string } | null>(null);
+  const turningAskedRef = useRef(false);
+
+  useEffect(() => {
+    // Fresh game → fresh question state.
+    setShotState(null);
+    setShotReveal(null);
+    shotAttemptsRef.current = 0;
+    setTurningQ(null);
+    setTurningReveal(null);
+    turningAskedRef.current = false;
+  }, [props.gameId]);
+
   const handleWalkForward = useCallback((): void => {
     if (readingGate) return;             // a legacy gate is open (defensive)
     if (faucetPhase !== 'idle') return;  // faucet is mid-question
+    if (shotState || shotReveal || turningQ) return; // a review question is open
     if (readingQuizOn) {
       const nextPly = walkPlayback.currentPly + 1;
       const seg = walkNarration?.segments.find((s) => s.ply === nextPly) ?? null;
@@ -495,6 +530,22 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         const sign = playerColor === 'white' ? 1 : -1;
         const cpLoss = seg.evalBefore != null && seg.evalAfter != null
           ? (seg.evalBefore - seg.evalAfter) * sign : 0;
+        // FIND-THE-SHOT first: the student was clearly winning and missed a
+        // notable move → ask them to FIND it (board answer) instead of asking
+        // why they played what they played. One question per moment, never
+        // stacked — the why-picker handles the rest.
+        const evalBeforeMoverCp = seg.evalBefore != null ? seg.evalBefore * sign : null;
+        const shot = seg.bestMoveUci && evalBeforeMoverCp !== null && evalBeforeMoverCp >= GUIDED_FIND_MIN_EVAL_CP
+          ? buildGuidedFindChallenge(seg.fenBefore, seg.bestMoveUci)
+          : null;
+        if (shot) {
+          shotAttemptsRef.current = 0;
+          setShotState({ challenge: shot, playedSan: seg.san, costPawns: cpLoss > 0 ? cpLoss / 100 : null });
+          setShotReveal(null);
+          captureEvent('review_find_shot_asked', { answer: shot.answerSan, played: seg.san, ply: nextPly });
+          void voiceService.speakForced(`Hold on — right here you had something. ${shot.question}`).catch(() => undefined);
+          return; // pause the walk; resumes from the shot card
+        }
         raiseFaucet({
           fenBefore: seg.fenBefore,
           fenAfter: seg.fenAfter,
@@ -511,7 +562,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       }
     }
     walkPlayback.goForward();
-  }, [readingGate, faucetPhase, raiseFaucet, readingQuizOn, walkPlayback, walkNarration, playerColor, openingName, playerRating]);
+  }, [readingGate, faucetPhase, raiseFaucet, readingQuizOn, walkPlayback, walkNarration, playerColor, openingName, playerRating, shotState, shotReveal, turningQ]);
 
   // Advance the walk once the faucet is done (answered + reveal dismissed, or
   // skipped) — the "resume" side of the pause above.
@@ -519,6 +570,60 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     resetFaucet();
     walkPlayback.goForward();
   }, [resetFaucet, walkPlayback]);
+
+  // ── Find-the-shot handlers ────────────────────────────────────────────────
+  /** The computed cost line appended to every shot reveal — what the game
+   *  move actually gave up, in pawns. */
+  const shotCostLine = useCallback((s: { playedSan: string; costPawns: number | null }): string => {
+    return s.costPawns !== null && s.costPawns >= 0.5
+      ? ` In the game you played ${s.playedSan} — that cost about ${s.costPawns.toFixed(1)} pawns.`
+      : ` In the game you played ${s.playedSan}.`;
+  }, []);
+
+  const handleShotHint = useCallback((): void => {
+    if (!shotState) return;
+    const text = `${shotState.challenge.hint}${shotCostLine(shotState)}`;
+    captureEvent('review_find_shot_result', { outcome: 'hint', attempts: shotAttemptsRef.current, answer: shotState.challenge.answerSan });
+    setShotState(null);
+    setShotReveal(text);
+    void voiceService.speakForced(text).catch(() => undefined);
+  }, [shotState, shotCostLine]);
+
+  const handleShotSkip = useCallback((): void => {
+    if (!shotState) return;
+    captureEvent('review_find_shot_result', { outcome: 'skip', attempts: shotAttemptsRef.current, answer: shotState.challenge.answerSan });
+    setShotState(null);
+    setShotReveal(null);
+    walkPlayback.goForward();
+  }, [shotState, walkPlayback]);
+
+  const handleShotContinue = useCallback((): void => {
+    setShotReveal(null);
+    walkPlayback.goForward();
+  }, [walkPlayback]);
+
+  // ── Turning-point ask — fires once, when the walk reaches the last ply ────
+  useEffect(() => {
+    if (turningAskedRef.current) return;
+    if (!walkNarration || moves.length === 0) return;
+    if (walkPlayback.currentPly !== moves.length) return;
+    turningAskedRef.current = true; // one ask per game, even when unanswerable
+    const q = buildTurningPointQuestion(walkNarration.segments);
+    if (!q) return; // clean game / single obvious moment — no question to ask
+    setTurningQ(q);
+    captureEvent('review_turning_point_asked', { candidates: q.candidates.length, answer_ply: q.answer.ply });
+    void voiceService.speakForced(q.question).catch(() => undefined);
+  }, [walkPlayback.currentPly, walkNarration, moves.length]);
+
+  const handleTurningPick = useCallback((ply: number): void => {
+    if (!turningQ) return;
+    const correct = judgeTurningPointPick(turningQ, ply);
+    const text = `${correct ? 'You called it.' : 'Not quite.'} ${turningQ.reveal}`;
+    captureEvent('review_turning_point_result', { correct, picked_ply: ply, answer_ply: turningQ.answer.ply });
+    setTurningQ(null);
+    setTurningReveal({ correct, text });
+    void voiceService.speakForced(text).catch(() => undefined);
+  }, [turningQ]);
 
   const resolveReadingGate = useCallback((): void => {
     setReadingGate((g) => { if (g) quizzedPliesRef.current.add(g.ply); return null; });
@@ -1038,6 +1143,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           ? moves[walkPlayback.currentPly - 1]?.fen ?? STARTING_FEN
           : STARTING_FEN;
       const walkArrows = (() => {
+        // NEVER paint the better-move arrow while a find-the-shot question is
+        // open — the arrow IS the answer (honesty contract rule 1).
+        if (shotState) return undefined;
         // Hide the arrow once the student has explored — they've seen
         // the suggestion, no need to clutter the post-exploration view.
         if (walkExplorationFen) return undefined;
@@ -1068,7 +1176,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       // otherwise flip this true via the second clause below).
       const walkBoardInteractive = walkShowMeActive
         ? false
-        : (walkExploreToggleOn && hasArrow && walkExplorationFen === null) ||
+        : shotState !== null || // find-the-shot: the board IS the answer input
+          (walkExploreToggleOn && hasArrow && walkExplorationFen === null) ||
           walkExplorationFen !== null;
       const walkDisplayFen = walkExplorationFen ?? displayFen;
       const badge = seg?.classification ?? null;
@@ -1308,7 +1417,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   // clean remount when entering/exiting exploration so
                   // any chess.js move history accumulated during
                   // exploration is wiped.
-                  key={`walk-board-${walkExplorationFen ? 'expl' : 'live'}`}
+                  key={`walk-board-${walkExplorationFen ? 'expl' : 'live'}-shot${shotBoardEpoch}`}
                   initialFen={walkDisplayFen}
                   orientation={playerColor}
                   interactive={walkBoardInteractive}
@@ -1339,7 +1448,31 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                       return null;
                     }
                   })()}
-                  onMove={walkBoardInteractive ? (moveResult) => {
+                  onMove={shotState ? (moveResult) => {
+                    // FIND-THE-SHOT answer attempt — the board move IS the
+                    // student's answer. Found → reveal + the shot stays on
+                    // the board. Wrong → remount snaps the move back
+                    // (takeback) and they look again. Stale → clear silently.
+                    const verdict = judgeGuidedFindAttempt(shotState.challenge, {
+                      san: moveResult.san, from: moveResult.from, to: moveResult.to,
+                      fenBefore: walkDisplayFen,
+                    });
+                    if (verdict === 'found') {
+                      playMoveSound(moveResult.san);
+                      const text = `${shotState.challenge.confirm}${shotCostLine(shotState)}`;
+                      captureEvent('review_find_shot_result', { outcome: 'found', attempts: shotAttemptsRef.current + 1, answer: shotState.challenge.answerSan });
+                      setShotState(null);
+                      setShotReveal(text);
+                      void voiceService.speakForced(text).catch(() => undefined);
+                    } else if (verdict === 'retry') {
+                      shotAttemptsRef.current += 1;
+                      captureEvent('review_find_shot_result', { outcome: 'retry', attempts: shotAttemptsRef.current, answer: shotState.challenge.answerSan });
+                      setShotBoardEpoch((e) => e + 1); // takeback: remount → initialFen
+                      void voiceService.speakForced(shotState.challenge.retry).catch(() => undefined);
+                    } else {
+                      setShotState(null); // board drifted — never judge the wrong position
+                    }
+                  } : walkBoardInteractive ? (moveResult) => {
                     // Student played a piece while a better-move arrow
                     // was showing → record their exploration. We capture
                     // the post-move FEN + SAN and surface a "Resume game"
@@ -1609,6 +1742,61 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
               onSkip={resumeAfterFaucet}
               onDismissTeach={resumeAfterFaucet}
             />
+
+            {/* FIND-THE-SHOT — "right here you had something; find it." The
+                student answers ON the board above; Hint reveals, Skip moves on. */}
+            {shotState && (
+              <div data-testid="review-find-shot-card" className="mx-3 my-1 rounded-xl border-2 border-purple-500/40 bg-purple-500/10 px-3 py-2">
+                <div className="text-sm text-purple-100">Right here you had something. {shotState.challenge.question}</div>
+                <div className="mt-1.5 flex items-center gap-2">
+                  <span className="text-xs text-purple-300/70">Play your answer on the board.</span>
+                  <button type="button" data-testid="review-find-shot-hint" onClick={handleShotHint}
+                    className="ml-auto rounded-lg border border-purple-400/50 px-2.5 py-1 text-xs font-semibold text-purple-200 hover:bg-purple-500/20">
+                    Hint
+                  </button>
+                  <button type="button" data-testid="review-find-shot-skip" onClick={handleShotSkip}
+                    className="rounded-lg border border-slate-500/50 px-2.5 py-1 text-xs text-slate-300 hover:bg-slate-500/20">
+                    Skip
+                  </button>
+                </div>
+              </div>
+            )}
+            {shotReveal && (
+              <div data-testid="review-find-shot-reveal" className="mx-3 my-1 rounded-xl border-2 border-emerald-500/40 bg-emerald-500/10 px-3 py-2">
+                <div className="text-sm text-emerald-100">{shotReveal}</div>
+                <button type="button" data-testid="review-find-shot-continue" onClick={handleShotContinue}
+                  className="mt-1.5 rounded-lg border border-emerald-400/50 px-2.5 py-1 text-xs font-semibold text-emerald-200 hover:bg-emerald-500/20">
+                  Continue
+                </button>
+              </div>
+            )}
+
+            {/* TURNING-POINT — asked once, at the end of the walk. Candidates
+                are the game's costed moments; the answer is the biggest swing. */}
+            {turningQ && (
+              <div data-testid="review-turning-point-card" className="mx-3 my-1 rounded-xl border-2 border-amber-500/40 bg-amber-500/10 px-3 py-2">
+                <div className="text-sm text-amber-100">{turningQ.question}</div>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {turningQ.candidates.map((c) => (
+                    <button key={c.ply} type="button" data-testid={`turning-point-pick-${c.ply}`}
+                      onClick={() => handleTurningPick(c.ply)}
+                      className="rounded-lg border border-amber-400/50 px-2.5 py-1 text-xs font-semibold text-amber-200 hover:bg-amber-500/20">
+                      {c.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+            {turningReveal && (
+              <div data-testid="review-turning-point-reveal"
+                className={`mx-3 my-1 rounded-xl border-2 px-3 py-2 ${turningReveal.correct ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-amber-500/40 bg-amber-500/10'}`}>
+                <div className={`text-sm ${turningReveal.correct ? 'text-emerald-100' : 'text-amber-100'}`}>{turningReveal.text}</div>
+                <button type="button" data-testid="review-turning-point-done" onClick={() => setTurningReveal(null)}
+                  className="mt-1.5 rounded-lg border border-slate-500/50 px-2.5 py-1 text-xs text-slate-300 hover:bg-slate-500/20">
+                  Done
+                </button>
+              </div>
+            )}
 
             {/* Engine lines panel (WO-REVIEW-02b) */}
             <div className="px-3 pt-2 pb-1" data-testid="review-engine-lines-section">
