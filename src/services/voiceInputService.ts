@@ -470,6 +470,20 @@ class VoiceInputService {
         if (final) this.dispatchFinal(final);
         this.endHandler?.();
       });
+      // iOS shared-AVAudioSession crash guard (David 2026-07-11). The audit
+      // proved it: starting the native recognizer's audio engine while Polly
+      // TTS is ACTIVELY playing on the same AVAudioSession throws an uncaught
+      // native exception → hard app crash (mic tap → "permission granted;
+      // starting" → app-boot, no `mic-started`). When no TTS was playing the
+      // start was clean. So STOP any in-flight narration and let iOS tear down
+      // the playback route before the recognizer reconfigures the session for
+      // record — starting in the same tick can still collide. Lazy import so
+      // voiceInputService keeps no hard dep on voiceService.
+      try {
+        const { voiceService } = await import('./voiceService');
+        voiceService.stop();
+      } catch { /* never block the mic on a TTS-stop failure */ }
+      await new Promise((resolve) => setTimeout(resolve, 150));
       await SpeechRecognition.start({ language: 'en-US', maxResults: 2, partialResults: true, popup: false });
       this.audit('mic-started', 'native speech recognition started');
     } catch (e) {
