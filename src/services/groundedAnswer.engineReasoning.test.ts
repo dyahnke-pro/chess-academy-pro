@@ -105,4 +105,38 @@ describe('assembleGameReviewAnswer — review rooted in the engine reasoning', (
     expect(a).not.toBeNull();
     expect(a!.facts).toMatch(/engine preferred g7g6/); // no board to compute SAN/geometry
   });
+
+  // COUNTERFACTUAL material for the review register (David 2026-07-11: reviews
+  // in the tape-review voice need the swing + turning point as computed facts).
+  it('carries the counterfactual swing — best-play eval + cost in pawns (mover POV)', () => {
+    const anns: MoveAnnotation[] = [
+      // Black blunder: best play kept +0.2 for White; after the move it's +9.0
+      // → cost to Black = 900 - 20 = 8.8 pawns.
+      { moveNumber: 3, color: 'black', san: 'Nf6', evaluation: 900, bestMove: 'g7g6', bestMoveEval: 20, classification: 'blunder', comment: null },
+    ];
+    const a = assembleGameReviewAnswer({ white: 'me', black: 'you', result: '1-0', moveCount: 3, annotations: anns });
+    expect(a!.facts).toMatch(/Best play here kept it at \+0\.2 for White/);
+    expect(a!.facts).toMatch(/swung about 8\.8 pawns/);
+  });
+
+  it('names the computed turning point when several costed moments exist', () => {
+    const anns: MoveAnnotation[] = [
+      // White mistake costing 1.5 pawns (white POV: best 100, got -50).
+      { moveNumber: 10, color: 'white', san: 'Qe2', evaluation: -50, bestMove: 'd2d4', bestMoveEval: 100, classification: 'mistake', comment: null },
+      // Black blunder costing 4.0 pawns (black POV: best -30, got +370) — the hinge.
+      { moveNumber: 18, color: 'black', san: 'Rd8', evaluation: 370, bestMove: 'f7f6', bestMoveEval: -30, classification: 'blunder', comment: null },
+    ];
+    const a = assembleGameReviewAnswer({ white: 'me', black: 'you', result: '1-0', moveCount: 30, annotations: anns });
+    expect(a!.facts).toMatch(/The turning point: move 18… Rd8 — the game's biggest single swing, about 4\.0 pawns\./);
+  });
+
+  it('adds no swing on a brilliant move or when bestMoveEval is missing (old annotations)', () => {
+    const anns: MoveAnnotation[] = [
+      { moveNumber: 12, color: 'white', san: 'Nxd5', evaluation: 250, bestMove: null, bestMoveEval: null, classification: 'brilliant', comment: null },
+      { moveNumber: 20, color: 'white', san: 'Qh4', evaluation: -200, bestMove: 'g2g3', bestMoveEval: null, classification: 'blunder', comment: null },
+    ];
+    const a = assembleGameReviewAnswer({ white: 'me', black: 'you', result: '0-1', moveCount: 30, annotations: anns });
+    expect(a!.facts).not.toMatch(/swung about/);
+    expect(a!.facts).not.toMatch(/The turning point: move/);
+  });
 });

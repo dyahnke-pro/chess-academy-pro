@@ -2605,6 +2605,18 @@ export function assembleGameReviewAnswer(opts: {
     }
   };
 
+  // COUNTERFACTUAL swing — what the move actually cost, in pawns, from the
+  // MOVER's perspective (bestMoveEval = the eval best play would have kept;
+  // evaluation = the eval after the move played; both White-POV centipawns).
+  // This is the raw material for the coach's "had you found X…" beat — the
+  // number IS the verdict, so the phrasing model never has to invent one.
+  const swingPawns = (m: MoveAnnotation): number | null => {
+    if (typeof m.evaluation !== 'number' || typeof m.bestMoveEval !== 'number') return null;
+    const raw = m.color === 'white' ? m.bestMoveEval - m.evaluation : m.evaluation - m.bestMoveEval;
+    return raw > 0 ? raw / 100 : null;
+  };
+  const fmtWhiteEval = (cp: number): string => `${cp > 0 ? '+' : ''}${(cp / 100).toFixed(1)} for White`;
+
   const blunders = anns.filter((a) => a.classification === 'blunder');
   const mistakes = anns.filter((a) => a.classification === 'mistake');
   const inaccuracies = anns.filter((a) => a.classification === 'inaccuracy');
@@ -2634,7 +2646,24 @@ export function assembleGameReviewAnswer(opts: {
         : m.bestMove
           ? `the engine preferred ${m.bestMove}`
           : '';
-      parts.push(`- Move ${m.moveNumber}${dot} ${m.san} — ${m.classification.toUpperCase()}${evalStr ? `, ${evalStr}` : ''}${bestStr ? `; ${bestStr}` : ''}.`);
+      // The counterfactual anchor: what best play would have kept + the cost of
+      // the move played, in real pawns. Only on genuine errors with both evals.
+      const swing = m.classification === 'brilliant' ? null : swingPawns(m);
+      const costStr = swing !== null && swing >= 0.5 && typeof m.bestMoveEval === 'number'
+        ? ` Best play here kept it at ${fmtWhiteEval(m.bestMoveEval)} — this one move swung about ${swing.toFixed(1)} pawn${swing >= 1.05 ? 's' : ''}.`
+        : '';
+      parts.push(`- Move ${m.moveNumber}${dot} ${m.san} — ${m.classification.toUpperCase()}${evalStr ? `, ${evalStr}` : ''}${bestStr ? `; ${bestStr}` : ''}.${costStr}`);
+    }
+    // Name THE turning point when the game had several costed moments — the
+    // biggest single swing is the story's hinge, computed, never chosen by the LLM.
+    const costed = critical
+      .map((m) => ({ m, swing: m.classification === 'brilliant' ? null : swingPawns(m) }))
+      .filter((x): x is { m: MoveAnnotation; swing: number } => x.swing !== null && x.swing >= 1.0)
+      .sort((a, b) => b.swing - a.swing);
+    if (costed.length >= 2) {
+      const top = costed[0];
+      const dot = top.m.color === 'black' ? '…' : '.';
+      parts.push(`The turning point: move ${top.m.moveNumber}${dot} ${top.m.san} — the game's biggest single swing, about ${top.swing.toFixed(1)} pawns.`);
     }
   }
 

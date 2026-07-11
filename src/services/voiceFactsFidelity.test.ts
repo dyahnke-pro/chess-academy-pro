@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { numericTokens, introducedNumbers, droppedTokens, voiceFacts } from './coachApi';
+import { numericTokens, introducedNumbers, droppedTokens, voiceFacts, resolveWarmRegister } from './coachApi';
 
 // The number-fidelity net behind voiceFacts (David 2026-07-04: "make sure the
 // CORRECT answer is getting to the user — no good if gates flag wrong answers
@@ -78,5 +78,24 @@ describe('voiceFacts preferRaw (David 2026-07-04: lean on raw for factual answer
   it('trims but never alters the facts under preferRaw', async () => {
     const out = await voiceFacts('  Your puzzle rating is 1523.  ', { preferRaw: true });
     expect(out).toBe('Your puzzle rating is 1523.');
+  });
+});
+
+describe('resolveWarmRegister — the Naroditsky register split (docs/naroditsky-voice-register.md)', () => {
+  it('routes review-shaped intents to the post-game tape-review register', () => {
+    expect(resolveWarmRegister('game-review')).toBe('review');
+    expect(resolveWarmRegister('review-recap:brief')).toBe('review');
+    expect(resolveWarmRegister('review-intro')).toBe('review');
+    expect(resolveWarmRegister('review-closing')).toBe('review');
+  });
+  it('routes every other warm intent to the live sitting-next-to-you register', () => {
+    expect(resolveWarmRegister('move-commentary')).toBe('live');
+    expect(resolveWarmRegister('move-purpose')).toBe('live');
+    expect(resolveWarmRegister('opening-section:overview')).toBe('live');
+    expect(resolveWarmRegister('game-reviewish-not-really')).toBe('live'); // prefix must match exactly
+    expect(resolveWarmRegister('middlegame-plan')).toBe('live');
+  });
+  it('returns null when warm is off (caller passes undefined)', () => {
+    expect(resolveWarmRegister(undefined)).toBeNull();
   });
 });
