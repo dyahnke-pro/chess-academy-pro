@@ -432,4 +432,77 @@ describe('voiceService', () => {
       expect(voiceService.getCurrentTier()).toBe('muted');
     });
   });
+
+  describe('narration de-flood guards (singleton dedup / no-overlap / throttle)', () => {
+    // David 2026-07-11: "the same line back to back to back in the same
+    // second is a separate issue." An OTA reload / route churn remounts
+    // the coach surface several times in ~1s; each fresh mount's
+    // per-component dedup (a useRef) starts EMPTY, so the same line
+    // re-fires. These guards live on the ONE voiceService singleton so
+    // they survive the remount and make the flood impossible.
+    //
+    // Observable: an ADMITTED speak reaches `this.stop()` (bumps
+    // `stopGeneration`); a DROPPED speak returns before it, so the
+    // generation counter is unchanged.
+
+    beforeEach(async () => {
+      // A profile with voice on so the path runs to the pipeline; no
+      // Polly so it resolves fast on the web-speech branch.
+      const profile = buildUserProfile({
+        id: 'main',
+        preferences: { voiceEnabled: true, pollyEnabled: false },
+      });
+      await db.profiles.put(profile);
+      voiceService.stop(); // settle any prior state
+    });
+
+    it('drops an identical line re-fired within the dedup window', async () => {
+      const before = voiceService.currentStopGeneration;
+      // The guard runs synchronously at the top of speakInternal, so
+      // firing the pair without awaiting between them reproduces the
+      // same-instant remount re-fire deterministically (no real-time
+      // dependence). First admitted (reaches stop → +1), second dropped.
+      const p1 = voiceService.speakForced('The knight forks the king and rook.');
+      const p2 = voiceService.speakForced('The knight forks the king and rook.');
+      await Promise.all([p1, p2]);
+      expect(voiceService.currentStopGeneration).toBe(before + 1);
+    });
+
+    it('throttles a DIFFERENT line fired back-to-back in the same instant', async () => {
+      const before = voiceService.currentStopGeneration;
+      const p1 = voiceService.speakForced('First idea.');
+      const p2 = voiceService.speakForced('Second idea, totally different text.');
+      await Promise.all([p1, p2]);
+      // First admitted (+1), second throttled by the rate cap (0).
+      expect(voiceService.currentStopGeneration).toBe(before + 1);
+    });
+
+    it('does NOT throttle/dedup explicit read-aloud taps (bypassVerbosity)', async () => {
+      const before = voiceService.currentStopGeneration;
+      // Two identical explicit taps — a deliberate user gesture, never a
+      // flood — must BOTH speak.
+      await voiceService.speakReadAloud('Read this to me.');
+      await voiceService.speakReadAloud('Read this to me.');
+      // Each admitted call bumps the generation once (via this.stop()).
+      expect(voiceService.currentStopGeneration).toBe(before + 2);
+    });
+
+    it('speaks the same line again once the dedup window has elapsed', async () => {
+      vi.useFakeTimers();
+      try {
+        const p1 = voiceService.speakForced('Repeat me later.');
+        await vi.runAllTimersAsync();
+        await p1;
+        const afterFirst = voiceService.currentStopGeneration;
+        // Advance past both the dedup (1.5s) and throttle (0.9s) windows.
+        vi.setSystemTime(Date.now() + 2000);
+        const p2 = voiceService.speakForced('Repeat me later.');
+        await vi.runAllTimersAsync();
+        await p2;
+        expect(voiceService.currentStopGeneration).toBeGreaterThan(afterFirst);
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+  });
 });

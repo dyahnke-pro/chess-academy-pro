@@ -508,6 +508,33 @@ class VoiceService {
   private gestureUnlockInstalled = false;
   private abortController: AbortController | null = null;
   private playing = false;
+  /** Singleton-level narration de-flood guard (David 2026-07-11: "the same
+   *  line back to back to back in the same second is a separate issue").
+   *  The per-component dedup in `useNarration` (a `useRef`) RESETS on
+   *  remount — and an OTA reload / route churn remounts the coach surface
+   *  several times in a couple seconds, so the same entry line re-fires
+   *  as each fresh mount runs its narration effect with an empty guard.
+   *  This guard lives on the ONE voiceService singleton, so it survives
+   *  every remount and makes "same line 3× in a second" structurally
+   *  impossible. Tracks the last text actually admitted to the speak
+   *  pipeline + its timestamp. Explicit read-aloud taps (bypassVerbosity)
+   *  skip it — those are deliberate user gestures, never a flood. */
+  private lastAdmittedSpeak: { text: string; ts: number } | null = null;
+  /** Window within which an IDENTICAL narration line is treated as a
+   *  re-fire and dropped. Deliberately TIGHTER than the 6s per-component
+   *  useNarration window: a real user replay (they listened, then tapped
+   *  replay) is always >1.5s later, so 1.5s never blocks a replay — but
+   *  the remount flood fires sub-second, so it's swallowed. The 6s
+   *  per-component guard still handles slower same-content re-renders. */
+  private static readonly DEDUP_WINDOW_MS = 1500;
+  /** Minimum spacing between DISTINCT narration lines. Caps the rate so a
+   *  burst of remounts / rapid tips can't stack clips faster than iOS
+   *  AVAudioSession can decode them (the build-119 mic-crash root:
+   *  narration fired faster than the shared audio session could keep up).
+   *  Kept small (600ms) so it only trips on a same-instant burst — real
+   *  sequential narration is spaced by playback duration, far beyond this.
+   *  Read-aloud taps (bypassVerbosity) are exempt. */
+  private static readonly THROTTLE_MS = 600;
   /** Monotonic counter incremented on every `stop()`. Speech chains
    *  can capture this when they queue an utterance and check it
    *  before actually playing — if it advanced, a stop() happened
@@ -804,6 +831,9 @@ class VoiceService {
   clearCache(): void {
     this.cachedPrefs = null;
     this.prefsCacheTime = 0;
+    // Reset the de-flood memory so a fresh start (or test isolation)
+    // doesn't drop the first line as a "re-fire" of a stale one.
+    this.lastAdmittedSpeak = null;
   }
 
   /** Fire-and-forget audit log of every speak invocation so the next
@@ -1047,6 +1077,76 @@ class VoiceService {
       }).catch(() => undefined);
       return;
     }
+
+    // ── Singleton narration de-flood (David 2026-07-11) ──────────────
+    // Three guards, all on the ONE voiceService instance so they survive
+    // the component remounts that defeat the per-component useNarration
+    // dedup (an OTA reload / route churn remounts the coach surface a few
+    // times in ~1s, re-running each fresh mount's narration effect with an
+    // empty guard → the same line fires back-to-back-to-back in one second).
+    // Explicit read-aloud taps (bypassVerbosity) are a deliberate user
+    // gesture — never a flood — so they skip all three.
+    if (!opts?.bypassVerbosity) {
+      const now = Date.now();
+      const last = this.lastAdmittedSpeak;
+      // (1) DEDUP — identical line within the tight window = a remount
+      // re-fire. Drop it. (A real replay is always >1.5s later.)
+      if (last && last.text === text && now - last.ts < VoiceService.DEDUP_WINDOW_MS) {
+        void import('./appAuditor').then(({ logAppAudit }) => {
+          void logAppAudit({
+            kind: 'voice-speak-invoked',
+            category: 'subsystem',
+            source: 'voiceService.speakInternal.dedup',
+            summary: `dropped duplicate line within ${VoiceService.DEDUP_WINDOW_MS}ms: "${text.slice(0, 40)}"`,
+            details: `sinceLastMs=${now - last.ts}`,
+          });
+        }).catch(() => undefined);
+        return;
+      }
+      // (2) NO-OVERLAP — never start a narration clip while one is still
+      // playing (let the current finish rather than cut it off and stack a
+      // second voice). This is NOT gated on `force`: `force` here only
+      // means "bypass the voiceEnabled master toggle" — it's the NORMAL
+      // opt-in narration path (streaming sentences, walkthroughs, mic
+      // replies), not a barge-in alert. Legitimate sequential narration
+      // awaits each promise, so `playing` is already false between beats —
+      // this only fires on a genuine overlap (the flood / a racing
+      // `void speak(A); void speak(B)` caller). Callers that truly want to
+      // interrupt (mic tap, route change, manual next) call stop() first,
+      // which clears `playing`.
+      if (this.playing) {
+        void import('./appAuditor').then(({ logAppAudit }) => {
+          void logAppAudit({
+            kind: 'voice-speak-invoked',
+            category: 'subsystem',
+            source: 'voiceService.speakInternal.noOverlap',
+            summary: `dropped overlapping line (already speaking): "${text.slice(0, 40)}"`,
+            details: `prevTier=${this.lastTier}`,
+          });
+        }).catch(() => undefined);
+        return;
+      }
+      // (3) THROTTLE — cap the rate of DISTINCT narration lines so a burst
+      // of remounts / rapid tips can't stack clips faster than the iOS
+      // AVAudioSession can decode them (the build-119 mic-crash root). Also
+      // not gated on `force` (same reasoning). Real narration is naturally
+      // spaced by playback duration, far beyond this small floor; only a
+      // same-instant burst is close enough to trip it.
+      if (last && now - last.ts < VoiceService.THROTTLE_MS) {
+        void import('./appAuditor').then(({ logAppAudit }) => {
+          void logAppAudit({
+            kind: 'voice-speak-invoked',
+            category: 'subsystem',
+            source: 'voiceService.speakInternal.throttle',
+            summary: `throttled line (<${VoiceService.THROTTLE_MS}ms since last): "${text.slice(0, 40)}"`,
+            details: `sinceLastMs=${now - last.ts}`,
+          });
+        }).catch(() => undefined);
+        return;
+      }
+      this.lastAdmittedSpeak = { text, ts: now };
+    }
+
     this.lastSpeakDiagnostic = {
       text: text.slice(0, 80),
       tier: 'muted',
