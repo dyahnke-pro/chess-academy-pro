@@ -214,6 +214,22 @@ class VoiceInputService {
    *  resets it; when it fires (no new speech for NATIVE_SILENCE_MS) we stop +
    *  dispatch, so the flow is: tap → speak → pause → sends. */
   private nativeSilenceTimer: ReturnType<typeof setTimeout> | null = null;
+  /** Continuous (hands-free) mode: the mic STAYS on across turns (David
+   *  2026-07-11: "I want it to stay on"). Each pause auto-submits the utterance
+   *  and the recognizer keeps listening for the next one — the user only taps
+   *  the mic to turn it OFF. Set true on a native start, false on user stop. */
+  private nativeContinuous = false;
+  /** The plugin handle, cached from the dynamic import so an auto-restart (iOS
+   *  caps a single SFSpeechRecognizer session at ~1 min) can re-`start()`
+   *  without re-importing or re-adding listeners. */
+  private nativeSR: { start: (opts: Record<string, unknown>) => Promise<void> } | null = null;
+  /** voiceService handle, cached so the hot partials path can synchronously
+   *  check `isPlaying()` — the echo guard that drops audio captured WHILE the
+   *  coach is speaking its reply, so continuous mode never talks to itself. */
+  private voiceServiceRef: { isPlaying: () => boolean; stop: () => void } | null = null;
+  /** True while an auto-restart is already scheduled/in-flight, so overlapping
+   *  triggers (silence + iOS session-cap 'stopped') don't double-start. */
+  private nativeRestarting = false;
 
   /** Running inside the native app shell (Capacitor WKWebView), where the
    *  native speech plugin is available and Web Speech is not. */
@@ -382,6 +398,7 @@ class VoiceInputService {
 
   stopListening(): void {
     this.userStopped = true;
+    this.nativeContinuous = false; // a user tap-off must NOT trigger an auto-restart
     this.clearNativeSilenceTimer();
     if (this.nativeListening) {
       this.nativeListening = false;
@@ -410,14 +427,23 @@ class VoiceInputService {
   }
 
   /** (Re)arm the end-of-utterance silence timer. Cleared+reset on every partial
-   *  so it only fires once speech has paused for NATIVE_SILENCE_MS. */
+   *  so it only fires once speech has paused for NATIVE_SILENCE_MS. On fire it
+   *  SUBMITS the utterance and, in continuous mode, KEEPS the mic on for the
+   *  next turn — the user only taps to turn it off. */
   private armNativeSilenceTimer(): void {
     this.clearNativeSilenceTimer();
     this.nativeSilenceTimer = setTimeout(() => {
       this.nativeSilenceTimer = null;
-      // Only auto-submit if we're still in a native session with something heard;
-      // stopListening dispatches the latest partial as the final transcript.
-      if (this.nativeListening) this.stopListening();
+      if (!this.nativeListening) return;
+      const pending = this.nativeLatest.trim();
+      this.nativeLatest = '';
+      this.speechStartFired = false; // let the next utterance re-fire mic-heard-speech
+      if (pending) {
+        this.audit('mic-final-dispatched', `end-of-utterance submit: "${pending.slice(0, 60)}"`);
+        this.dispatchFinal(pending);
+      }
+      // Continuous: DON'T stop — the recognizer keeps running for the next turn.
+      // (One-shot mode isn't used by the native path; the user taps to stop.)
     }, NATIVE_SILENCE_MS);
   }
 
@@ -425,6 +451,38 @@ class VoiceInputService {
     if (this.nativeSilenceTimer) {
       clearTimeout(this.nativeSilenceTimer);
       this.nativeSilenceTimer = null;
+    }
+  }
+
+  /** Auto-restart the native recognizer for continuous (hands-free) mode. iOS
+   *  caps a single SFSpeechRecognizer session (~1 min) and fires 'stopped'; to
+   *  keep the mic on we re-`start()`. CRITICAL: wait for any coach reply (TTS)
+   *  to finish first — restarting on top of live playback would re-trigger the
+   *  AVAudioSession crash AND immediately capture the coach's own voice.
+   *  Listeners were attached once in startNative and persist, so we only call
+   *  start() again (no re-import, no duplicate listeners). */
+  private async restartNativeSession(): Promise<void> {
+    if (this.nativeRestarting) return;
+    this.nativeRestarting = true;
+    try {
+      let waited = 0;
+      while (this.voiceServiceRef?.isPlaying() && waited < 20000) {
+        await new Promise((r) => setTimeout(r, 200));
+        waited += 200;
+        if (this.userStopped || !this.nativeContinuous) return;
+      }
+      if (this.userStopped || !this.nativeContinuous || !this.nativeSR) return;
+      await new Promise((r) => setTimeout(r, 150)); // let the audio route settle
+      await this.nativeSR.start({ language: 'en-US', maxResults: 2, partialResults: true, popup: false });
+      this.nativeListening = true;
+      this.audit('mic-started', 'native speech recognition auto-restarted (continuous)');
+    } catch (e) {
+      this.nativeListening = false;
+      this.nativeContinuous = false;
+      this.audit('mic-start-failed', `native auto-restart threw: ${(e as Error)?.message ?? e}`);
+      this.endHandler?.();
+    } finally {
+      this.nativeRestarting = false;
     }
   }
 
@@ -474,10 +532,27 @@ class VoiceInputService {
       catch (e) { availRaw = `threw:${(e as Error)?.message ?? e}`; }
       this.audit('mic-start-requested', 'native permission granted; starting', { available: availRaw, permState });
 
+      // Cache the plugin + voiceService handles so the silence timer's
+      // dispatch-and-continue and the iOS session-cap auto-restart can run
+      // without re-importing, and so the hot partials path can synchronously
+      // check whether the coach is speaking.
+      this.nativeSR = SpeechRecognition as unknown as { start: (o: Record<string, unknown>) => Promise<void> };
+      try { this.voiceServiceRef = (await import('./voiceService')).voiceService; } catch { /* echo guard degrades to off */ }
+
       await SpeechRecognition.removeAllListeners();
       await SpeechRecognition.addListener('partialResults', (data: { matches: string[] }) => {
         const m = data.matches?.[0]?.trim();
         if (!m) return;
+        // ECHO GUARD (continuous mode): the mic stays hot while the coach speaks
+        // its reply, so it would capture the coach's OWN voice and send it back
+        // → an infinite self-conversation. Drop anything heard while TTS is
+        // playing, and clear any half-captured tail, so only the user's speech
+        // (after the coach finishes) is ever submitted.
+        if (this.voiceServiceRef?.isPlaying()) {
+          this.nativeLatest = '';
+          this.clearNativeSilenceTimer();
+          return;
+        }
         this.nativeLatest = m;
         if (!this.speechStartFired) {
           this.speechStartFired = true;
@@ -498,16 +573,22 @@ class VoiceInputService {
           'mic-native-stopped',
           `native session stopped; pending="${this.nativeLatest.trim().slice(0, 60)}" listening=${this.nativeListening}`,
         );
-        // The recognizer stopped (user stop, silence timeout, or end of
-        // speech). Dispatch the latest partial as the final transcript and end
-        // the session — no auto-restart loop (the user taps again to keep
-        // talking). Predictable + loop-safe on a path we can't observe here.
-        if (!this.nativeListening && !this.nativeLatest) return;
+        // The recognizer stopped. In CONTINUOUS mode this is almost always iOS
+        // capping a single SFSpeechRecognizer session (~1 min), NOT the user —
+        // so dispatch whatever was pending and AUTO-RESTART to keep the mic on
+        // for the next turn. Only a real user stop (userStopped) ends it.
         const final = this.nativeLatest.trim();
         this.nativeLatest = '';
         this.speechStartFired = false;
+        if (final) {
+          this.audit('mic-final-dispatched', `session-stop submit: "${final.slice(0, 60)}"`);
+          this.dispatchFinal(final);
+        }
+        if (this.nativeContinuous && !this.userStopped) {
+          void this.restartNativeSession();
+          return;
+        }
         this.nativeListening = false;
-        if (final) this.dispatchFinal(final);
         this.endHandler?.();
       });
       // iOS shared-AVAudioSession crash guard (David 2026-07-11). The audit
@@ -519,12 +600,10 @@ class VoiceInputService {
       // the playback route before the recognizer reconfigures the session for
       // record — starting in the same tick can still collide. Lazy import so
       // voiceInputService keeps no hard dep on voiceService.
-      try {
-        const { voiceService } = await import('./voiceService');
-        voiceService.stop();
-      } catch { /* never block the mic on a TTS-stop failure */ }
+      try { this.voiceServiceRef?.stop(); } catch { /* never block the mic on a TTS-stop failure */ }
       await new Promise((resolve) => setTimeout(resolve, 150));
       await SpeechRecognition.start({ language: 'en-US', maxResults: 2, partialResults: true, popup: false });
+      this.nativeContinuous = true;
       this.audit('mic-started', 'native speech recognition started');
     } catch (e) {
       this.nativeListening = false;
