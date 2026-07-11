@@ -52,6 +52,7 @@ import { useChessClock } from '../../hooks/useChessClock';
 import { coachService } from '../../coach/coachService';
 import { withTimeout } from '../../coach/withTimeout';
 import { classifyPosition, scanUpcomingTactics } from '../../services/tacticClassifier';
+import { buildTacticVisuals } from '../../services/tacticVisuals';
 import { isCriticalThreat } from '../../services/tacticAlertService';
 import { buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
 import { stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
@@ -888,6 +889,11 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   const [annotationArrows, setAnnotationArrows] = useState<BoardArrow[]>([]);
   const [voiceArrows, setVoiceArrows] = useState<BoardArrow[]>([]);
   const [annotationHighlights, setAnnotationHighlights] = useState<BoardHighlight[]>([]);
+  // Tactic visuals (David 2026-07-11): when the coach points out a tactic, paint
+  // deterministic arrows + square highlights so the student can SEE it. Computed
+  // in code (buildTacticVisuals → chess.js + detectTactics), never the LLM.
+  const [tacticArrows, setTacticArrows] = useState<BoardArrow[]>([]);
+  const [tacticHighlights, setTacticHighlights] = useState<BoardHighlight[]>([]);
   const [temporaryFen, setTemporaryFen] = useState<string | null>(null);
   const [temporaryLabel, setTemporaryLabel] = useState<string | null>(null);
 
@@ -1382,6 +1388,16 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   const handleCoachTip = useCallback((tip: string, tacticLine?: TacticLineData) => {
     gameChatRef.current?.injectAssistantMessage(tip);
     showTipBubble(tip, tacticLine);
+    // Paint the tactic on the board so the student can SEE what the coach just
+    // described (David 2026-07-11). Deterministic squares from buildTacticVisuals.
+    if (tacticLine) {
+      const v = buildTacticVisuals(tacticLine.fen, tacticLine.uciMoves);
+      setTacticArrows(v.arrows);
+      setTacticHighlights(v.highlights);
+    } else {
+      setTacticArrows([]);
+      setTacticHighlights([]);
+    }
   }, [showTipBubble]);
 
   // Missed tactic alert — coach tells player they missed a tactic and suggests takeback
@@ -1413,6 +1429,8 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     setAnnotationArrows([]);
     setVoiceArrows([]);
     setAnnotationHighlights([]);
+    setTacticArrows([]);
+    setTacticHighlights([]);
     exitPractice();
   }, [exitPractice]);
 
@@ -2877,6 +2895,10 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     // current move's analysis window, which looked to the user like
     // their best move was being flagged red (WO-COACH-NARRATION-06).
     setMoveFlash(null);
+    // Clear the previous move's tactic arrows/highlights — they belonged to the
+    // prior position (David 2026-07-11 tactic-visuals).
+    setTacticArrows([]);
+    setTacticHighlights([]);
 
     // Capture pre-move FEN before making the move
     const preFen = game.fen;
@@ -4830,8 +4852,8 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
               showFlipButton={false}
               showVoiceMic={false}
               highlightSquares={coachLastMove}
-              arrows={(() => { const a = dedupeArrowsBySquarePair([...hintState.arrows, ...annotationArrows, ...voiceArrows]); return a.length > 0 ? a : undefined; })()}
-              annotationHighlights={annotationHighlights.length > 0 ? annotationHighlights : undefined}
+              arrows={(() => { const a = dedupeArrowsBySquarePair([...hintState.arrows, ...annotationArrows, ...voiceArrows, ...tacticArrows]); return a.length > 0 ? a : undefined; })()}
+              annotationHighlights={(() => { const h = [...annotationHighlights, ...tacticHighlights]; return h.length > 0 ? h : undefined; })()}
               ghostMove={hintState.ghostMove}
               pgnForChat={game.history.join(' ')}
               onOpeningRequest={handleOpeningRequest}
