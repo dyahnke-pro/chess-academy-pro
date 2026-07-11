@@ -77,10 +77,12 @@ cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
 # own it.
 # BUMP 2.8 → 3.0 (David 2026-07-08): 2.8 is RELEASED on the App Store, so Apple
 # rejects any new build uploaded under that version ("must be a higher version").
-# 3.0 is the next public release (all the anti-openings masterclass parity,
-# academy→library, and the iOS voice-drop root-cause fixes). New TestFlight builds
-# and the eventual App Store submission both ride 3.0.
-IOS_MARKETING_VERSION="3.0"
+# BUMP 3.0 → 3.1 (2026-07-11): 3.0 hit READY_FOR_SALE overnight (the nightly
+# auto-submit released it), so Xcode Cloud runs #121/#122 died at
+# PrepareBuildForAppStoreConnect — same released-version rejection as the 2.8
+# incident. 3.1 carries the mic usage-string fix + half-duplex voice builds.
+# (Nightly auto-submit is now disabled, so 3.1 won't self-release like 3.0 did.)
+IOS_MARKETING_VERSION="3.1"
 sed -i '' -e "s/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = ${IOS_MARKETING_VERSION};/g" \
   ios/App/App.xcodeproj/project.pbxproj
 echo "ci_post_clone: MARKETING_VERSION set to ${IOS_MARKETING_VERSION} (build ${CI_BUILD_NUMBER:-?})"
