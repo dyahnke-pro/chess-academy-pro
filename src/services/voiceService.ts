@@ -1215,6 +1215,16 @@ class VoiceService {
       });
     }
     this.stop();
+    // The generation THIS utterance runs under. Any later stop()/speak()
+    // bumps it — and every supersession check downstream (playViaElement,
+    // the stream gates, the cached-clip path) then resolves `false`. That
+    // `false` is INTENTIONAL ABANDONMENT, not a Polly failure — falling
+    // over to Web Speech on it RESURRECTS the abandoned text in the robot
+    // voice over the newer utterance. That was the live-prod fallover
+    // flood (90 iOS `voice_fallover`s in 3 days, 11 in ONE second on
+    // 2026-07-10 20:41:51 — a mass-superseded narration queue, each line
+    // re-spoken by Web Speech). Guard every fallover on this generation.
+    const genAtSpeak = this.stopGeneration;
 
     const prefs = await this.loadPrefs();
     if (!prefs) {
@@ -1293,6 +1303,19 @@ class VoiceService {
       if (success) {
         this.lastTier = 'polly';
         this.lastSpeakDiagnostic.tier = 'polly';
+        return;
+      }
+      // SUPERSEDED ≠ FAILED: a stop()/newer speak() bumped the generation
+      // while this utterance was fetching/playing. It was intentionally
+      // abandoned — do NOT fall over to Web Speech (that re-speaks stale
+      // text in the robot voice over the new utterance) and do NOT emit a
+      // voice-fallover (it isn't one; it was polluting the telemetry).
+      if (this.stopGeneration !== genAtSpeak) {
+        this.lastTier = 'muted';
+        this.lastSpeakDiagnostic.tier = 'muted';
+        if (!this.lastSpeakDiagnostic.error) {
+          this.lastSpeakDiagnostic.error = 'superseded mid-speak — abandoned, no fallover';
+        }
         return;
       }
     }

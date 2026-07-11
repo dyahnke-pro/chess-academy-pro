@@ -506,3 +506,69 @@ describe('voiceService', () => {
     });
   });
 });
+
+describe('superseded speak ≠ Polly failure (the phantom voice_fallover flood, 2026-07-11)', () => {
+  // Live prod: 90 iOS voice_fallovers in 3 days — 11 in ONE second on
+  // 2026-07-10 20:41:51 — were ABANDONED utterances (a stop()/newer speak
+  // bumped the generation mid-flight), not Polly failures. speakInternal
+  // treated speakPolly's `false` as a failure and "fell over" for text
+  // nobody should hear anymore. The guard: a generation bump after Tier 1
+  // returns MUTED — no fallover, no web-speech tier, no phantom telemetry.
+  beforeEach(async () => {
+    await db.delete();
+    await db.open();
+    vi.restoreAllMocks();
+    vi.spyOn(speechService, 'speak').mockImplementation(() => undefined);
+    vi.spyOn(speechService, 'stop').mockImplementation(() => undefined);
+    vi.spyOn(speechService, 'setVoice').mockImplementation(() => undefined);
+    const mod = await import('./voiceService');
+    voiceService = mod.voiceService;
+    voiceService.clearCache();
+  });
+
+  it('a generation bump during speakPolly ends muted, never web-speech', async () => {
+    const profile = buildUserProfile({ id: 'main' });
+    profile.preferences.voiceEnabled = true;
+    profile.preferences.pollyEnabled = true;
+    await db.profiles.put(profile);
+
+    const vs = voiceService as unknown as {
+      pollyAvailable: boolean;
+      speakPolly: (...a: unknown[]) => Promise<boolean>;
+    };
+    vs.pollyAvailable = true; // make isPollyLive() true so Tier 1 runs
+    // Simulate a mid-speak supersession: a newer stop() bumps the
+    // generation while THIS utterance is in flight, then Polly's
+    // playback gates resolve false (intentional abandonment).
+    vi.spyOn(vs, 'speakPolly').mockImplementation(async () => {
+      voiceService.stop();
+      return false;
+    });
+
+    await voiceService.speak('This narration was superseded mid-flight');
+
+    expect(voiceService.getCurrentTier()).toBe('muted');
+    const diag = voiceService.getLastSpeakDiagnostic();
+    expect(diag.error).toMatch(/superseded/i);
+    // The abandoned utterance must NOT reach web speech.
+    expect(speechService.speak).not.toHaveBeenCalled();
+  });
+
+  it('a GENUINE Polly failure (no generation bump) still falls over to the web-speech tier', async () => {
+    const profile = buildUserProfile({ id: 'main' });
+    profile.preferences.voiceEnabled = true;
+    profile.preferences.pollyEnabled = true;
+    await db.profiles.put(profile);
+
+    const vs = voiceService as unknown as {
+      pollyAvailable: boolean;
+      speakPolly: (...a: unknown[]) => Promise<boolean>;
+    };
+    vs.pollyAvailable = true;
+    vi.spyOn(vs, 'speakPolly').mockResolvedValue(false); // real failure, same generation
+
+    await voiceService.speak('This narration genuinely failed');
+
+    expect(voiceService.getCurrentTier()).toBe('web-speech');
+  });
+});
