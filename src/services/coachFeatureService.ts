@@ -687,11 +687,11 @@ function buildDeterministicNarration(params: {
 
   if (classification === 'brilliant') {
     if (isStudentMove) {
-      if (playedMerit) return `Brilliant — it ${playedMerit}.`;
+      if (playedMerit) return `And there it is — it ${playedMerit}.`;
       const stems = [
-        'Brilliant — that was the move.',
-        'Brilliant find.',
-        'Brilliant. The engine agrees.',
+        'And there it is — that was the move.',
+        'Brilliant find. This was the game.',
+        'There it is. The position asked for exactly this.',
       ];
       return stems[variant];
     }
@@ -704,16 +704,16 @@ function buildDeterministicNarration(params: {
     // A sacrifice pairs with the eval so the student sees it's sound.
     if (playedMerit) {
       const isSac = playedMerit.startsWith('sacrifices');
-      return isSac && studentEvalWord ? `It ${playedMerit} — and ${studentEvalWord}.` : `It ${playedMerit}.`;
+      return isSac && studentEvalWord ? `It ${playedMerit} — and ${studentEvalWord}. Clean.` : `It ${playedMerit}. Clean.`;
     }
     // No nameable geometry — anchor on the eval so the student still learns why
     // it held up, instead of empty praise.
-    return studentEvalWord ? `Accurate — ${studentEvalWord}.` : null;
+    return studentEvalWord ? `Accurate — ${studentEvalWord}. Simple chess.` : null;
   }
 
   if (classification === 'miss') {
     if (bestMoveSan) {
-      return `Missed chance — ${bestMoveSan} was the move.`;
+      return `You had something here — ${bestMoveSan} was sitting right there.`;
     }
     return 'Missed chance here — the engine had a stronger continuation.';
   }
@@ -722,13 +722,13 @@ function buildDeterministicNarration(params: {
     if (isStudentMove) {
       if (bestMoveSan) {
         const stems = [
-          `Inaccuracy. ${bestMoveSan} was sharper.`,
-          `Slightly off — ${bestMoveSan} kept the edge.`,
-          `${bestMoveSan} was the more accurate move.`,
+          `Slightly off — ${bestMoveSan} was sharper.`,
+          `${bestMoveSan} keeps the edge; this lets a little of it slip.`,
+          `The precise move was ${bestMoveSan}. Small thing, but it adds up.`,
         ];
         return stems[variant];
       }
-      return 'Inaccuracy — there was a more precise move available.';
+      return 'A small inaccuracy — there was a more precise move available.';
     }
     if (bestMoveSan) {
       return `Your opponent slipped — ${bestMoveSan} was stronger.`;
@@ -740,13 +740,13 @@ function buildDeterministicNarration(params: {
     if (isStudentMove) {
       if (bestMoveSan) {
         const stems = [
-          `Mistake. The best move was ${bestMoveSan}.${swingPhrase}`,
-          `${bestMoveSan} was the move — this one gave back real ground.${swingPhrase}`,
-          `Mistake here. ${bestMoveSan} held the position.${swingPhrase}`,
+          `This one gives back real ground — ${bestMoveSan} held the position.${swingPhrase}`,
+          `${bestMoveSan} was the move; this hands the initiative back.${swingPhrase}`,
+          `A real concession. ${bestMoveSan} kept everything together.${swingPhrase}`,
         ];
         return stems[variant];
       }
-      return `Mistake — the engine had a stronger continuation.${swingPhrase}`;
+      return `A real mistake — the engine had a stronger continuation.${swingPhrase}`;
     }
     if (bestMoveSan) {
       return `Your opponent erred — ${bestMoveSan} was much better.${swingPhrase}`;
@@ -758,13 +758,13 @@ function buildDeterministicNarration(params: {
     if (isStudentMove) {
       if (bestMoveSan) {
         const stems = [
-          `Blunder. ${bestMoveSan} was the move.${swingPhrase}`,
-          `Costly. ${bestMoveSan} held everything together.${swingPhrase}`,
-          `Blunder — ${bestMoveSan} kept you in the game.${swingPhrase}`,
+          `This is the moment — ${bestMoveSan} keeps you right in it.${swingPhrase}`,
+          `Costly. Find ${bestMoveSan} here and the game holds.${swingPhrase}`,
+          `${bestMoveSan} was sitting right there — this one changes the game.${swingPhrase}`,
         ];
         return stems[variant];
       }
-      return `Blunder — the engine had a much stronger continuation.${swingPhrase}`;
+      return `A genuine blunder — the engine had a much stronger continuation.${swingPhrase}`;
     }
     if (bestMoveSan) {
       return `Your opponent blundered — ${bestMoveSan} would have held.${swingPhrase}`;

@@ -29,6 +29,7 @@ import { stockfishEngine } from '../services/stockfishEngine';
 import { detectSlip, slipWarrantsInterjection, isNearBest, slipSeverityLabel, type SlipSeverity } from '../services/slipDetector';
 import { detectTactics } from '../services/tacticsDetector';
 import { buildWhyPrompt, buildGroundedReveal, buildSlipReveal, captureMisconception } from '../services/discussionPractice';
+import { buildMisconceptionCallback } from '../services/misconceptionCallbacks';
 import { buildMoveReasonOptions } from '../services/moveReasonOptions';
 import { voiceService } from '../services/voiceService';
 import { captureEvent } from '../services/analytics';
@@ -355,7 +356,7 @@ export function useDiscussionPractice(
     // best move to be told, along with the why"). We still run the classifier
     // to LOG the misconception to the weakness bucket, but the LLM prose is not
     // shown — G0: the coach voices the computed facts, not a free-composed note.
-    const note = ctx.reveal;
+    let note = ctx.reveal;
     let loggedTag: string | undefined;
     if (ctx.kind === 'slip') {
       try {
@@ -381,6 +382,14 @@ export function useDiscussionPractice(
           },
         });
         loggedTag = res.record?.tag;
+        // CALLBACK (David 2026-07-11: "we've talked about this"). When this
+        // slip's tag already lives in the weakness buckets, the reveal says
+        // so with computed history — count + recency from Dexie, never the
+        // model. First occurrences stay silent.
+        if (loggedTag) {
+          const callback = await buildMisconceptionCallback(loggedTag);
+          if (callback) note = `${note} ${callback}`;
+        }
       } catch {
         /* logging failed — the grounded reveal is already correct */
       }
