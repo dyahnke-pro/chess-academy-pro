@@ -78,6 +78,24 @@ const MAX_RESTART_ATTEMPTS = 3;
  *  native mic into "tap, speak, done" instead of "tap, speak, tap again." */
 const NATIVE_SILENCE_MS = 2000;
 
+/** TURN-TAKING (David 2026-07-11: "I want it to stay on so I can have a back
+ *  and forth with the coach — a natural conversation"). After an utterance
+ *  auto-submits, the recognizer TEARS DOWN (half-duplex holds — record and
+ *  playback must NEVER overlap on the shared iOS AVAudioSession, the proven
+ *  crash) and re-arms only when the coach's spoken reply has FINISHED.
+ *  Two-phase wait constants:
+ *  - REPLY_START_WAIT_MS: how long to wait for the reply's TTS to START
+ *    (covers the LLM round-trip). Restarting before the reply begins was the
+ *    original continuous-mode crash: the mic came back instantly during the
+ *    LLM gap, then playback started on top of the live recognizer.
+ *  - PLAYBACK_IDLE_CONFIRM_MS: sentence-chained TTS goes briefly idle BETWEEN
+ *    sentences; require this much continuous silence before declaring the
+ *    reply finished.
+ *  - REPLY_FINISH_MAX_MS: hard ceiling on waiting for a reply to finish. */
+const REPLY_START_WAIT_MS = 15_000;
+const PLAYBACK_IDLE_CONFIRM_MS = 900;
+const REPLY_FINISH_MAX_MS = 120_000;
+
 /** Minimum average confidence to accept a transcript. Web Speech
  *  reports 0-1; below this the audio was noisy or the speech wasn't
  *  clearly directed at the mic. 0.55 is a balance — catches most
@@ -428,29 +446,55 @@ class VoiceInputService {
 
   /** (Re)arm the end-of-utterance silence timer. Cleared+reset on every partial
    *  so it only fires once speech has paused for NATIVE_SILENCE_MS. On fire it
-   *  SUBMITS the utterance and STOPS the recognizer.
+   *  SUBMITS the utterance and executes a TURN-SUBMIT stop.
    *
-   *  🔒 HALF-DUPLEX — the mic must be OFF while the coach speaks its reply
-   *  (David 2026-07-11, "stop guessing, root cause fix"). The crash is a shared
-   *  iOS AVAudioSession running RECORD and PLAYBACK at once: confirmed data —
-   *  mic-start WHILE Polly played crashed; mic-start with no playback was clean.
-   *  The earlier "continuous / stays on" build kept the recognizer running while
-   *  the coach's TTS reply played → the same overlap in reverse → the crash.
-   *  So we tear the recognizer down on submit; the reply plays with no live
-   *  recognizer; the user taps once more for the next turn. Always-on turn-
-   *  taking requires native coordination and will only ship once verified on a
-   *  real device — never blind again. */
+   *  🔒 HALF-DUPLEX HOLDS — record and playback must NEVER overlap on the
+   *  shared iOS AVAudioSession (proven crash, David 2026-07-11). The recognizer
+   *  is torn down before the coach's reply plays. What changed for TURN-TAKING
+   *  (David 2026-07-11 evening: "I want it to stay on… a natural conversation"):
+   *  the stop keeps `nativeContinuous` armed and keeps the plugin listeners
+   *  attached, so the 'stopped' event routes into restartNativeSession — which
+   *  waits for the reply's TTS to START (the LLM gap — restarting inside it was
+   *  the original continuous-mode crash) and then to FINISH, and only then
+   *  re-arms the mic. Strictly serialized: mic OR voice, never both. */
   private armNativeSilenceTimer(): void {
     this.clearNativeSilenceTimer();
     this.nativeSilenceTimer = setTimeout(() => {
       this.nativeSilenceTimer = null;
       if (!this.nativeListening) return;
-      // stopListening dispatches the pending partial as the final transcript,
-      // tears down the native audio engine, and fires endHandler so the UI
-      // flips the mic button off. No recognizer runs during the coach reply →
-      // no record+playback overlap → no crash.
-      this.stopListening();
+      // Dispatch the utterance NOW (the manual-stop lesson: iOS may not
+      // deliver a final 'stopped' payload), then tear the engine down while
+      // KEEPING listeners + the continuous flag — the 'stopped' event drives
+      // the wait-for-reply → re-arm cycle. endHandler does NOT fire here: the
+      // conversation is still live, so the mic button stays on.
+      const pending = this.nativeLatest.trim();
+      this.nativeLatest = '';
+      this.speechStartFired = false;
+      if (pending) {
+        this.audit('mic-final-dispatched', `end-of-utterance submit: "${pending.slice(0, 60)}"`);
+        this.dispatchFinal(pending);
+      }
+      this.nativeListening = false;
+      void this.turnSubmitStopNative();
     }, NATIVE_SILENCE_MS);
+  }
+
+  /** Tear down the recognizer for a TURN-SUBMIT (conversation continues):
+   *  stops the native session but KEEPS the plugin listeners attached, so the
+   *  'listeningState: stopped' event fires and routes into the re-arm cycle.
+   *  A safety timer covers the plugin variant where 'stopped' never arrives
+   *  after an explicit stop() — without it the conversation would die silently
+   *  with the button still on. */
+  private async turnSubmitStopNative(): Promise<void> {
+    try {
+      const { SpeechRecognition } = await import('@capacitor-community/speech-recognition');
+      await SpeechRecognition.stop().catch(() => { /* already stopped */ });
+    } catch { /* plugin unavailable — the safety timer below still runs */ }
+    setTimeout(() => {
+      if (this.nativeContinuous && !this.userStopped && !this.nativeListening) {
+        void this.restartNativeSession();
+      }
+    }, 3000);
   }
 
   private clearNativeSilenceTimer(): void {
@@ -460,32 +504,56 @@ class VoiceInputService {
     }
   }
 
-  /** Auto-restart the native recognizer for continuous (hands-free) mode. iOS
-   *  caps a single SFSpeechRecognizer session (~1 min) and fires 'stopped'; to
-   *  keep the mic on we re-`start()`. CRITICAL: wait for any coach reply (TTS)
-   *  to finish first — restarting on top of live playback would re-trigger the
-   *  AVAudioSession crash AND immediately capture the coach's own voice.
-   *  Listeners were attached once in startNative and persist, so we only call
-   *  start() again (no re-import, no duplicate listeners). */
+  /** Re-arm the native recognizer for TURN-TAKING conversation mode. Runs
+   *  after every recognizer teardown (turn-submit, iOS ~1-min session cap)
+   *  while `nativeContinuous` is armed. THE crash constraint drives the shape:
+   *  record and playback must never overlap, so the restart is TWO-PHASE:
+   *  Phase A — wait for the coach's reply TTS to START (up to
+   *    REPLY_START_WAIT_MS: the LLM round-trip means playback is silent for
+   *    seconds after submit; restarting inside that gap put the mic under the
+   *    incoming reply — the original continuous-mode crash). If no reply ever
+   *    speaks (voice off / silent verbosity), fall through and re-arm.
+   *  Phase B — wait for playback to FINISH, requiring
+   *    PLAYBACK_IDLE_CONFIRM_MS of continuous silence (sentence-chained TTS
+   *    goes briefly idle between sentences).
+   *  Then settle the audio route and start the recognizer. Listeners persist
+   *  from startNative — only start() is called again. */
   private async restartNativeSession(): Promise<void> {
     if (this.nativeRestarting) return;
     this.nativeRestarting = true;
     try {
-      let waited = 0;
-      while (this.voiceServiceRef?.isPlaying() && waited < 20000) {
+      const aborted = (): boolean => this.userStopped || !this.nativeContinuous;
+      // Phase A — give the reply time to start speaking.
+      let waitedForStart = 0;
+      while (!this.voiceServiceRef?.isPlaying() && waitedForStart < REPLY_START_WAIT_MS) {
         await new Promise((r) => setTimeout(r, 200));
-        waited += 200;
-        if (this.userStopped || !this.nativeContinuous) return;
+        waitedForStart += 200;
+        if (aborted()) return;
       }
-      if (this.userStopped || !this.nativeContinuous || !this.nativeSR) return;
-      await new Promise((r) => setTimeout(r, 150)); // let the audio route settle
+      // Phase B — wait until playback has been idle for the confirm window.
+      let idleMs = 0;
+      let waitedTotal = 0;
+      while (idleMs < PLAYBACK_IDLE_CONFIRM_MS && waitedTotal < REPLY_FINISH_MAX_MS) {
+        await new Promise((r) => setTimeout(r, 150));
+        waitedTotal += 150;
+        idleMs = this.voiceServiceRef?.isPlaying() ? 0 : idleMs + 150;
+        if (aborted()) return;
+      }
+      if (aborted() || !this.nativeSR || this.nativeListening) return;
+      await new Promise((r) => setTimeout(r, 300)); // let the playback route release
+      if (aborted() || this.voiceServiceRef?.isPlaying()) {
+        // A late narration grabbed the session — run the cycle again.
+        this.nativeRestarting = false;
+        void this.restartNativeSession();
+        return;
+      }
       await this.nativeSR.start({ language: 'en-US', maxResults: 2, partialResults: true, popup: false });
       this.nativeListening = true;
-      this.audit('mic-started', 'native speech recognition auto-restarted (continuous)');
+      this.audit('mic-started', 'native mic re-armed (turn-taking: reply finished)');
     } catch (e) {
       this.nativeListening = false;
       this.nativeContinuous = false;
-      this.audit('mic-start-failed', `native auto-restart threw: ${(e as Error)?.message ?? e}`);
+      this.audit('mic-start-failed', `native re-arm threw: ${(e as Error)?.message ?? e}`);
       this.endHandler?.();
     } finally {
       this.nativeRestarting = false;
@@ -586,6 +654,9 @@ class VoiceInputService {
         const final = this.nativeLatest.trim();
         this.nativeLatest = '';
         this.speechStartFired = false;
+        // The recognizer is down either way; isListening() must say so while
+        // the re-arm cycle waits out the coach's reply.
+        this.nativeListening = false;
         if (final) {
           this.audit('mic-final-dispatched', `session-stop submit: "${final.slice(0, 60)}"`);
           this.dispatchFinal(final);
@@ -594,7 +665,6 @@ class VoiceInputService {
           void this.restartNativeSession();
           return;
         }
-        this.nativeListening = false;
         this.endHandler?.();
       });
       // iOS shared-AVAudioSession crash guard (David 2026-07-11). The audit
@@ -609,12 +679,13 @@ class VoiceInputService {
       try { this.voiceServiceRef?.stop(); } catch { /* never block the mic on a TTS-stop failure */ }
       await new Promise((resolve) => setTimeout(resolve, 150));
       await SpeechRecognition.start({ language: 'en-US', maxResults: 2, partialResults: true, popup: false });
-      // NOTE: half-duplex, one utterance per tap (see armNativeSilenceTimer).
-      // `nativeContinuous` stays false so the 'stopped' handler NEVER auto-
-      // restarts on top of a coach reply — the record+playback overlap that
-      // crashed the app. Always-on turn-taking is a native, device-verified
-      // follow-up, not a blind restart loop.
-      this.audit('mic-started', 'native speech recognition started');
+      // CONVERSATION MODE (turn-taking, David 2026-07-11): one tap arms a
+      // whole back-and-forth. Each pause auto-submits and tears the
+      // recognizer down (half-duplex — record and playback never overlap);
+      // restartNativeSession re-arms it only after the coach's reply has
+      // finished speaking. Only a tap-off (or backgrounding/error) ends it.
+      this.nativeContinuous = true;
+      this.audit('mic-started', 'native speech recognition started (conversation mode)');
     } catch (e) {
       this.nativeListening = false;
       this.audit('mic-start-failed', `native start threw: ${(e as Error)?.message ?? e}`, this.capabilitySnapshot());
@@ -640,6 +711,37 @@ class VoiceInputService {
    * are mounted. Previously this was a single-slot setter and the
    * last caller silenced the others.
    */
+  /** PLAYBACK-SIDE GATE (turn-taking, 2026-07-11): called by voiceService
+   *  right before it starts ANY audio. If the native recognizer is live
+   *  (e.g. the mic re-armed during a quiet gap and a late narration then
+   *  fires), tear it down FIRST — playback starting over a live recognizer
+   *  is the same AVAudioSession overlap that crashed the app, just in the
+   *  other order. The captured tail is dropped (it would be echo anyway);
+   *  the conversation re-arm cycle brings the mic back after this playback
+   *  finishes. No-op on web / when the mic is off. */
+  async yieldForPlayback(): Promise<void> {
+    if (!this.nativeListening) return;
+    this.audit('mic-native-stopped', 'yielding mic for incoming playback (turn-taking gate)');
+    this.clearNativeSilenceTimer();
+    this.nativeLatest = '';
+    this.speechStartFired = false;
+    this.nativeListening = false;
+    try {
+      const { SpeechRecognition } = await import('@capacitor-community/speech-recognition');
+      await SpeechRecognition.stop().catch(() => { /* already stopped */ });
+    } catch { /* plugin unavailable */ }
+    // Give iOS a beat to release the record route before playback claims it.
+    await new Promise((r) => setTimeout(r, 250));
+  }
+
+  /** True while conversation mode is armed (the tap-on…tap-off window),
+   *  even during the phases where the recognizer itself is torn down
+   *  (reply playing / waiting to re-arm). UI uses this to keep the mic
+   *  button lit across the whole back-and-forth. */
+  isConversationActive(): boolean {
+    return this.nativeContinuous;
+  }
+
   onResult(handler: ResultHandler): () => void {
     this.resultHandlers.push(handler);
     return () => {

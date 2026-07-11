@@ -658,7 +658,10 @@ export function VoiceChatMic({ fen, turn, playerColor = 'white', onOpeningReques
       onSpeechStart: () => voiceService.stop(),
       // Half-duplex: the mic auto-submits on a pause and STOPS (off while the
       // coach speaks its reply — never record + play at once, the iOS crash).
-      // Sync the button back off so the user taps again for the next turn.
+      // TURN-TAKING (2026-07-11): onEnd now fires only on TERMINAL ends
+      // (tap-off / error / failed re-arm) — between turns the service re-arms
+      // itself after the reply finishes, so the button stays on through the
+      // whole conversation.
       onEnd: () => {
         listeningRef.current = false;
         setListening(false);

@@ -1226,6 +1226,18 @@ class VoiceService {
     // re-spoken by Web Speech). Guard every fallover on this generation.
     const genAtSpeak = this.stopGeneration;
 
+    // TURN-TAKING GATE (2026-07-11): if the native mic recognizer is live,
+    // tear it down BEFORE any audio starts — playback over a live recognizer
+    // is the shared-AVAudioSession overlap that hard-crashed the iOS app
+    // (proven both directions). The mic's conversation cycle re-arms itself
+    // after this utterance finishes. Lazy import (mirror of the mic side's
+    // lazy voiceService import) keeps the modules cycle-free; a failure here
+    // must never block speech.
+    try {
+      const { voiceInputService } = await import('./voiceInputService');
+      await voiceInputService.yieldForPlayback();
+    } catch { /* mic module unavailable — nothing to yield */ }
+
     const prefs = await this.loadPrefs();
     if (!prefs) {
       this.speed = 0.95;
