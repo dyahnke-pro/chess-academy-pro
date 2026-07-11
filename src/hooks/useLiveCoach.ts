@@ -133,6 +133,20 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
     ): Promise<void> => {
       if (inFlightRef.current) return;
       if (lastSpokenPlyRef.current === ctx.ply) return;
+      // Store-backed dedup that SURVIVES a remount (David 2026-07-11: the
+      // narration re-fire was also spiking DeepSeek). The two refs above are
+      // per-component `useRef`s — they RESET when CoachGamePage remounts (an
+      // OTA reload / route churn remounts it several times in ~1s), so the
+      // same ply's trigger would re-fire `groundedMoveFeedback` → a duplicate
+      // `grounded_voice` DeepSeek call. The Zustand conversation history is a
+      // module singleton (survives remounts), so a prior live-coach utterance
+      // on this exact gameId+ply proves we already spoke here — skip the call.
+      const spokeThisPly = useCoachMemoryStore
+        .getState()
+        .conversationHistory.some(
+          (m) => m.surface === 'live-coach' && m.gameId === gameId && m.ply === ctx.ply,
+        );
+      if (spokeThisPly) return;
       inFlightRef.current = true;
       lastSpokenPlyRef.current = ctx.ply;
 
