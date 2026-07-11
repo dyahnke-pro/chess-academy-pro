@@ -59,7 +59,7 @@ function deepseekCacheSplit(usage: unknown): { hit: number | null; miss: number 
   };
 }
 import { lookupMasterPlay } from './masterPlayLookup';
-import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleEngineReasoning, explainBestMoveGrounded } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer } from './groundedAnswer';
 import { matchRouteByTopic } from './navigationRouter';
 import { APP_ROUTES_MANIFEST } from '../data/appRoutesManifest';
 import { lookupTablebase } from './lichessTablebaseService';
@@ -1235,6 +1235,17 @@ export interface MasterGroundingOptions {
    *  same computed walk is the root of the per-move "why" button + review
    *  narration. */
   whyBestMoveQuestion?: boolean;
+  /** ALTERNATIVES comparison — "why are the natural alternatives worse / what
+   *  else could I play / what are my other options" (David 2026-07-11: the
+   *  live-prod compound ask got the same generic PV recitation on every
+   *  retry). `alternativesLines` carries the MultiPV top lines (first-move
+   *  SAN + engine reply SAN + WHITE-perspective eval) from
+   *  `buildAlternativesContext`; the dispatch feeds them to
+   *  `assembleAlternativesAnswer` — best + each alternative's cp-gap + the
+   *  concrete punishing reply, all computed (G0). Dispatched BEFORE
+   *  whyBestMove/bestMove so the comparative ask wins. */
+  alternativesQuestion?: boolean;
+  alternativesLines?: ReadonlyArray<{ san: string; replySan: string | null; evalCp: number | null; mateIn: number | null }>;
   /** NAMED-CANDIDATE evaluation — "is Qf3 ok / can I play Qf3 / what about Nf3"
    *  (David 2026-07-10: "evaluate the OTHER moves against database and
    *  stockfish"). The student named a specific move; the answer must EVALUATE
@@ -1418,6 +1429,15 @@ export interface MasterGroundingOptions {
   /** Force the grounding pipeline ON regardless of intent detection.
    *  Used by integration tests; production surfaces leave undefined. */
   forceEngage?: boolean;
+  /** TRUE when the ask text was authored IN CODE (hint taps, phase
+   *  narration, pings, move-selector prompts) rather than typed/spoken by
+   *  the user. The grounded-intent interception must NOT run on these
+   *  turns: the ~35 user-intent detectors pattern-match the composed
+   *  prompt itself and misroute it (live prod 2026-07-10: EVERY hint tap
+   *  matched TRAINING_REQUEST_RE via "Do not…"+"…tactics context" and
+   *  served the weakness-drill upsell instead of the hint). Claim
+   *  validation and the surface's own runtime gates still apply. */
+  internalAsk?: boolean;
   /** Canonical opening ID the user is studying (e.g. 'italian-game',
    *  'pro-naroditsky-caro-kann'). When set, the grounding pipeline injects
    *  pre-baked best-counter stats + a representative master game from
@@ -2377,7 +2397,7 @@ export async function getCoachChatResponse(
   // without the user seeing a half-bad answer first.
   let masterPlayContext: MasterPlayContext | undefined;
   let groundingEngaged = false;
-  if (grounding) {
+  if (grounding && grounding.internalAsk !== true) {
     const intentFired =
       grounding.forceEngage === true ||
       detectMoveQuestionIntent(messages) ||
@@ -2393,6 +2413,7 @@ export async function getCoachChatResponse(
       // falls through to the legacy path, so this can only ADD grounding.
       grounding.bestMoveQuestion === true ||
       grounding.whyBestMoveQuestion === true ||
+      grounding.alternativesQuestion === true ||
       grounding.candidateMoveQuestion === true ||
       grounding.masterPlayQuestion === true ||
       grounding.planQuestion === true ||
@@ -3311,6 +3332,30 @@ export async function getCoachChatResponse(
         // only (G0). Dispatched BEFORE the thin best-move branch so a "why" gets
         // the full walk. Degrades to the single-move geometry when only the best
         // move UCI is known; falls through to best-move / legacy on any miss.
+        // ── ALTERNATIVES COMPARISON (2026-07-11) — "why are the natural
+        // alternatives worse / what else could I play". The MultiPV top lines
+        // (threaded by coachService via buildAlternativesContext) carry the
+        // best move + each alternative's eval + the engine's punishing reply;
+        // assembleAlternativesAnswer computes the graded comparison (G0 — the
+        // LLM only phrases). Dispatched BEFORE whyBestMove/bestMove so the
+        // comparative ask stops degrading to the generic PV recitation (the
+        // thrice-retried live-prod ask, 2026-07-10 23:19). Falls through on
+        // any miss (fewer than 2 lines / no fen).
+        if (grounding.alternativesQuestion && grounding.currentFen && grounding.alternativesLines && grounding.alternativesLines.length >= 2) {
+          const answer = assembleAlternativesAnswer({
+            fen: grounding.currentFen,
+            lines: grounding.alternativesLines,
+          });
+          if (answer) {
+            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'alternatives', preferRaw: true, mustPreserve: answer.bestMoveSan ? [answer.bestMoveSan] : undefined });
+            if (voiced) {
+              return answer.bestMoveFromTo
+                ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
+                : voiced;
+            }
+          }
+        }
+
         if (grounding.whyBestMoveQuestion) {
           const fen = grounding.currentFen ?? null;
           const plan = grounding.enginePlan;

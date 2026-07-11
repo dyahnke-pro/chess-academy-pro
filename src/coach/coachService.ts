@@ -28,7 +28,7 @@
  */
 import { Chess } from 'chess.js';
 import { logAppAudit } from '../services/appAuditor';
-import { buildEnginePlan, buildCandidateEval } from '../services/enginePlanContext';
+import { buildEnginePlan, buildCandidateEval, buildAlternativesContext } from '../services/enginePlanContext';
 import { scanPositionForTrap } from '../services/positionTrapScan';
 import { applyCandidateArrows } from '../services/coachAnswerGates';
 import { assembleEnvelope } from './envelope';
@@ -56,6 +56,20 @@ import type {
   ProviderResponse,
   ToolExecutionContext,
 } from './types';
+
+/** Surfaces whose `ask` text is authored IN CODE (a composed instruction to
+ *  the LLM), never typed or spoken by the user. The ~35 user-intent
+ *  detectors and the grounded-intent interception must NOT run on these —
+ *  pattern-matching a composed prompt misroutes the turn (live prod
+ *  2026-07-10: every hint tap matched TRAINING_REQUEST_RE inside
+ *  HINT_TIER_3_ADDITION and served the weakness-drill upsell). Claim
+ *  validation and each surface's own runtime gates still apply. */
+const INTERNAL_ASK_SURFACES: ReadonlySet<CoachAskInput['liveState']['surface']> = new Set([
+  'hint',
+  'phase-narration',
+  'ping',
+  'move-selector',
+] as const);
 
 /** Read provider name from `import.meta.env.COACH_PROVIDER`, falling
  *  back to `process.env.COACH_PROVIDER` (Node test envs), default
@@ -188,7 +202,7 @@ import {
   isRepertoireGapQuestion, repertoireGapKind,
   isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion,
   isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, trainingRequestKind, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
-  isWhyBestMoveQuestion, isCandidateMoveQuestion, extractCandidateSan,
+  isWhyBestMoveQuestion, isCandidateMoveQuestion, extractCandidateSan, isAlternativesQuestion,
 } from './questionIntents';
 export {
   isPlanQuestion, isBestMoveQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
@@ -200,7 +214,7 @@ export {
   isRepertoireGapQuestion, repertoireGapKind,
   isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion,
   isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, trainingRequestKind, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
-  isWhyBestMoveQuestion, isCandidateMoveQuestion, extractCandidateSan,
+  isWhyBestMoveQuestion, isCandidateMoveQuestion, extractCandidateSan, isAlternativesQuestion,
 };
 export type { TrainingKind } from './questionIntents';
 
@@ -972,38 +986,51 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
         ? [...(input.liveState.gameSans ?? []), ...playerSans]
         : input.liveState.gameSans;
     const groundedPlayers = playerNames.size > 0 ? [...playerNames] : undefined;
+    // INTERNAL COMPOSED PROMPTS NEVER RUN THE USER-INTENT DETECTORS (live
+    // prod 2026-07-10 23:19, root-caused 2026-07-11): the hint / phase-
+    // narration / ping / move-selector asks are authored IN CODE — they are
+    // instructions to the LLM, not user utterances. Running the ~35
+    // pattern-matchers on them misroutes the turn: EVERY hint tap for 3
+    // days matched TRAINING_REQUEST_RE ("Do not…" + "…tactics context")
+    // and served the 118-char weakness-drill upsell instead of the hint.
+    // Detectors get `undefined` (each one no-ops on it); the grounding
+    // OBJECT below still builds (fen / gameSans / engine data) so claim
+    // validation is unchanged, and `internalAsk: true` tells coachApi to
+    // skip the grounded-intent interception outright.
+    const isInternalAsk = INTERNAL_ASK_SURFACES.has(input.liveState.surface);
+    const askForIntents = isInternalAsk ? undefined : input.ask;
     // Progress ("am I improving?") and concept ("what's a fork?") questions are
     // answered from the student's history / the book corpus — NO board needed —
     // so engage grounding even with no FEN. Other grounded intents need a live
     // position.
-    const progressQuestion = isProgressQuestion(input.ask);
-    const trendQuestionEngage = isImprovementTrendQuestion(input.ask);
-    const conceptQuestionEngage = isConceptQuestion(input.ask);
-    const openingProfileQuestionEngage = isOpeningProfileQuestion(input.ask);
-    const statsQuestionEngage = isStatsQuestion(input.ask);
-    const strengthsQuestionEngage = isStrengthsQuestion(input.ask);
-    const openingAccuracyQuestionEngage = isOpeningAccuracyQuestion(input.ask);
-    const openingTrapsQuestionEngage = isOpeningTrapsQuestion(input.ask);
-    const reviewDueQuestionEngage = isReviewDueQuestion(input.ask);
-    const mistakesQuestionEngage = isMistakesQuestion(input.ask);
-    const tacticsProfileQuestionEngage = isTacticsProfileQuestion(input.ask);
-    const phaseQuestionEngage = isPhaseQuestion(input.ask);
-    const repertoireGapQuestionEngage = isRepertoireGapQuestion(input.ask);
-    const accuracyQuestionEngage = isAccuracyQuestion(input.ask);
-    const consistencyQuestionEngage = isConsistencyQuestion(input.ask);
-    const convertingQuestionEngage = isConvertingQuestion(input.ask);
-    const colorQuestionEngage = isColorQuestion(input.ask);
-    const recordsQuestionEngage = isRecordsQuestion(input.ask);
-    const recordVsTargetEngage = recordVsTarget(input.ask);
-    const trainingRequestEngage = trainingRequestKind(input.ask);
-    const puzzleStatsQuestionEngage = isPuzzleStatsQuestion(input.ask);
-    const transferGapQuestionEngage = isTransferGapQuestion(input.ask);
-    const skillRadarQuestionEngage = isSkillRadarQuestion(input.ask);
+    const progressQuestion = isProgressQuestion(askForIntents);
+    const trendQuestionEngage = isImprovementTrendQuestion(askForIntents);
+    const conceptQuestionEngage = isConceptQuestion(askForIntents);
+    const openingProfileQuestionEngage = isOpeningProfileQuestion(askForIntents);
+    const statsQuestionEngage = isStatsQuestion(askForIntents);
+    const strengthsQuestionEngage = isStrengthsQuestion(askForIntents);
+    const openingAccuracyQuestionEngage = isOpeningAccuracyQuestion(askForIntents);
+    const openingTrapsQuestionEngage = isOpeningTrapsQuestion(askForIntents);
+    const reviewDueQuestionEngage = isReviewDueQuestion(askForIntents);
+    const mistakesQuestionEngage = isMistakesQuestion(askForIntents);
+    const tacticsProfileQuestionEngage = isTacticsProfileQuestion(askForIntents);
+    const phaseQuestionEngage = isPhaseQuestion(askForIntents);
+    const repertoireGapQuestionEngage = isRepertoireGapQuestion(askForIntents);
+    const accuracyQuestionEngage = isAccuracyQuestion(askForIntents);
+    const consistencyQuestionEngage = isConsistencyQuestion(askForIntents);
+    const convertingQuestionEngage = isConvertingQuestion(askForIntents);
+    const colorQuestionEngage = isColorQuestion(askForIntents);
+    const recordsQuestionEngage = isRecordsQuestion(askForIntents);
+    const recordVsTargetEngage = recordVsTarget(askForIntents);
+    const trainingRequestEngage = trainingRequestKind(askForIntents);
+    const puzzleStatsQuestionEngage = isPuzzleStatsQuestion(askForIntents);
+    const transferGapQuestionEngage = isTransferGapQuestion(askForIntents);
+    const skillRadarQuestionEngage = isSkillRadarQuestion(askForIntents);
     // "WHY does the engine like this move" needs the engine PV to walk. CENTRALIZE
     // it here (David 2026-07-10: "coach is master of all now, no isolated tabs")
     // so EVERY surface gets the reasoning walk — not just the ones that pre-inject
     // a plan. Build it on demand when the surface didn't; best-effort + null-safe.
-    const whyBestMoveEngage = isWhyBestMoveQuestion(input.ask);
+    const whyBestMoveEngage = isWhyBestMoveQuestion(askForIntents);
     let resolvedEnginePlan = input.liveState.enginePlan;
     if (!resolvedEnginePlan && whyBestMoveEngage && input.liveState.fen) {
       const sideToMove: 'white' | 'black' = (input.liveState.fen.split(' ')[1] ?? 'w') === 'b' ? 'black' : 'white';
@@ -1014,8 +1041,17 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     // AFTER the named move so the dispatch can grade its cp-loss vs the best
     // move. Best-effort + null-safe; illegal / no-engine → the assembler still
     // answers honestly from the SAN alone.
-    const candidateMoveEngage = isCandidateMoveQuestion(input.ask);
-    const candidateMoveSan = candidateMoveEngage ? (extractCandidateSan(input.ask) ?? undefined) : undefined;
+    // ALTERNATIVES comparison — "why are the natural alternatives worse /
+    // what else could I play" (David 2026-07-11). Pull the MultiPV top lines
+    // so the interception can COMPUTE the comparison (assembleAlternativesAnswer).
+    // Cache-first; ~1-2s fresh search worst case, only when the intent fired.
+    const alternativesEngage = isAlternativesQuestion(askForIntents);
+    let alternativesLines: Awaited<ReturnType<typeof buildAlternativesContext>> = null;
+    if (alternativesEngage && input.liveState.fen) {
+      alternativesLines = await buildAlternativesContext(input.liveState.fen);
+    }
+    const candidateMoveEngage = isCandidateMoveQuestion(askForIntents);
+    const candidateMoveSan = candidateMoveEngage ? (extractCandidateSan(askForIntents) ?? undefined) : undefined;
     let candidateEvalCp: number | null = null;
     let candidateMateIn: number | null = null;
     if (candidateMoveSan && input.liveState.fen) {
@@ -1027,7 +1063,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     }
     const autoGrounding =
       options.grounding ??
-      (input.liveState.fen || progressQuestion || trendQuestionEngage || conceptQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage || whyBestMoveEngage || candidateMoveEngage
+      (input.liveState.fen || progressQuestion || trendQuestionEngage || conceptQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage || whyBestMoveEngage || candidateMoveEngage || alternativesEngage
         ? {
             currentFen: input.liveState.fen,
             // DB-grounding: thread the move history through so the
@@ -1055,7 +1091,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // names forward moves several plies ahead, not "masters play
             // X"). Detected from the user's ask. The stat / count / player /
             // comparative guards still apply. (Response-loop audit 2026-06-05.)
-            planQuestion: isPlanQuestion(input.ask),
+            planQuestion: isPlanQuestion(askForIntents),
             // BEST-MOVE / SOUNDNESS questions exempt the bare-SAN gate too:
             // the honest answer names the engine's best move + the short
             // line that proves it (forward moves not legal now). The
@@ -1065,8 +1101,12 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // A NAMED-candidate ask ("is Qf3 ok") EVALUATES that move — it must
             // take precedence over the best-move branch (which would just recite
             // the best move). Guard best-move off when a candidate fired.
-            bestMoveQuestion: isBestMoveQuestion(input.ask) && !candidateMoveEngage,
+            bestMoveQuestion: isBestMoveQuestion(askForIntents) && !candidateMoveEngage,
             whyBestMoveQuestion: whyBestMoveEngage,
+            // Comparative ask — dispatched BEFORE whyBestMove/bestMove so the
+            // alternatives comparison wins over the generic reasoning walk.
+            alternativesQuestion: alternativesEngage,
+            alternativesLines: alternativesLines ?? undefined,
             candidateMoveQuestion: candidateMoveEngage,
             candidateMoveSan,
             candidateEvalCp,
@@ -1096,7 +1136,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // COMPUTE the answer (engine tactics / the student's bad-habit
             // profile) and voice it via voiceFacts. Studentcolor lets the
             // tactics answer warn about the STUDENT's hanging pieces.
-            tacticsQuestion: isTacticsQuestion(input.ask),
+            tacticsQuestion: isTacticsQuestion(askForIntents),
             progressQuestion,
             // "am I improving?" → the TEMPORAL trend (assembleTrendAnswer),
             // routed before progress so it stops getting a weakness dump.
@@ -1106,18 +1146,18 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // assembleOpeningProfileAnswer (David 2026-07-04: wire in the
             // deterministic data the coach used to punt on).
             openingProfileQuestion: openingProfileQuestionEngage,
-            openingProfileKind: openingProfileKind(input.ask),
+            openingProfileKind: openingProfileKind(askForIntents),
             statsQuestion: statsQuestionEngage,
             strengthsQuestion: strengthsQuestionEngage,
             openingAccuracyQuestion: openingAccuracyQuestionEngage,
             openingTrapsQuestion: openingTrapsQuestionEngage,
-            openingTrapsSystemAsk: opensTrapsSystemAsk(input.ask),
+            openingTrapsSystemAsk: opensTrapsSystemAsk(askForIntents),
             reviewDueQuestion: reviewDueQuestionEngage,
             mistakesQuestion: mistakesQuestionEngage,
             tacticsProfileQuestion: tacticsProfileQuestionEngage,
             phaseQuestion: phaseQuestionEngage,
             repertoireGapQuestion: repertoireGapQuestionEngage,
-            repertoireGapKind: repertoireGapKind(input.ask),
+            repertoireGapKind: repertoireGapKind(askForIntents),
             accuracyQuestion: accuracyQuestionEngage,
             consistencyQuestion: consistencyQuestionEngage,
             convertingQuestion: convertingQuestionEngage,
@@ -1127,7 +1167,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // "was that a good move?" — board-dependent; rides the fen gate.
             // A "why is that the BEST move" ask wants the reasoning walk, not a
             // played-move grade — the why-form wins (live audit 2026-07-10).
-            moveRatingQuestion: isMoveRatingQuestion(input.ask) && !isWhyBestMoveQuestion(input.ask),
+            moveRatingQuestion: isMoveRatingQuestion(askForIntents) && !isWhyBestMoveQuestion(askForIntents),
             // "set up calculation training" — direct request to start a mode.
             trainingRequestKind: trainingRequestEngage ?? undefined,
             puzzleStatsQuestion: puzzleStatsQuestionEngage,
@@ -1135,24 +1175,27 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             skillRadarQuestion: skillRadarQuestionEngage,
             // STEP D Phase 4 — "how do masters play this?" voices the master-play
             // lookup's real top moves + frequencies (assembleMasterPlayAnswer).
-            masterPlayQuestion: isMasterPlayQuestion(input.ask),
+            masterPlayQuestion: isMasterPlayQuestion(askForIntents),
             // STEP D Phase 5 — "what's a fork?" voices the book corpus
             // (assembleConceptAnswer); the interception confirms a real concept.
-            conceptQuestion: isConceptQuestion(input.ask),
+            conceptQuestion: isConceptQuestion(askForIntents),
             // STEP D Phase 4 (cont) — "how does <pro> play this?" voices the
             // player's REAL games (assemblePlayerGamesAnswer); gated on the
             // playerGames context being present.
-            playerGamesQuestion: isPlayerGamesQuestion(input.ask),
+            playerGamesQuestion: isPlayerGamesQuestion(askForIntents),
             playerGames: input.liveState.playerGames ?? undefined,
             // STEP D Phase 5 — "can I win this endgame?" → the syzygy tablebase
             // (assembleEndgameAnswer); the interception does the ≤7-piece lookup.
-            endgameQuestion: isEndgameQuestion(input.ask),
+            endgameQuestion: isEndgameQuestion(askForIntents),
             // Phase 1 cont — "who's winning / how do I stand?" → eval + top
             // tactic (assemblePositionAssessment); grounds the biggest slice of
             // the free-reasoning chat fallback.
-            positionAssessmentQuestion: isPositionAssessmentQuestion(input.ask),
+            positionAssessmentQuestion: isPositionAssessmentQuestion(askForIntents),
             studentColor: input.liveState.studentColor,
             surface: coachSurfaceToRoute(input.liveState.surface),
+            // Composed-prompt surfaces: coachApi skips the grounded-intent
+            // interception outright (see INTERNAL_ASK_SURFACES).
+            internalAsk: isInternalAsk || undefined,
           }
         : undefined);
     const providerCallOptions =

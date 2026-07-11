@@ -341,3 +341,61 @@ describe('coachService.ask', () => {
     vi.restoreAllMocks();
   });
 });
+
+// ─── INTERNAL_ASK_SURFACES — composed prompts skip the intent detectors ─────
+// Live prod regression 2026-07-10/11: EVERY hint tap for 3 days served the
+// 118-char weakness-drill upsell because TRAINING_REQUEST_RE matched the
+// composed HINT_TIER_3_ADDITION text ("Do not add a sentence…" + "…tactics
+// context"). Internal surfaces must (a) not set any intent flags and
+// (b) carry internalAsk:true so coachApi skips the grounded interception.
+describe('internal composed-prompt surfaces skip user-intent detection', () => {
+  // A miniature of the real hint prompt — contains the exact detector bait:
+  // a TRAIN_VERB ("Do") followed later by "tactics".
+  const HINT_LIKE_ASK =
+    'You are the coach. The student tapped for the answer mid-game. ' +
+    'Do not add a sentence about the plan. If the live tactics context ' +
+    'names a tactic, NAME it. Best move: Qe3.';
+  const FEN = 'r1bqk2r/pp2bppp/2n5/2ppP3/3P4/2P2N2/P1P1Q1PP/R1B1KB1R w KQkq - 1 9';
+
+  function captureProvider(): { provider: Provider; getGrounding: () => Record<string, unknown> | undefined } {
+    let captured: Record<string, unknown> | undefined;
+    const provider: Provider = {
+      name: 'deepseek',
+      call: vi.fn((_env: unknown, opts?: { grounding?: Record<string, unknown> }) => {
+        captured = opts?.grounding;
+        return Promise.resolve({ text: 'Queen to e3 is the move.', toolCalls: [] });
+      }) as unknown as Provider['call'],
+    };
+    return { provider, getGrounding: () => captured };
+  }
+
+  it('hint surface: no intent flags fire, internalAsk is set', async () => {
+    const { provider, getGrounding } = captureProvider();
+    const answer = await coachService.ask(
+      { surface: 'hint', ask: HINT_LIKE_ASK, liveState: { surface: 'hint', fen: FEN } },
+      { providerOverride: provider },
+    );
+    // The LLM's phrased hint comes back — NOT an intercepted upsell.
+    expect(answer.text).toBe('Queen to e3 is the move.');
+    const g = getGrounding();
+    expect(g).toBeDefined();
+    expect(g?.internalAsk).toBe(true);
+    // The detector bait must NOT have set the training-request intent.
+    expect(g?.trainingRequestKind).toBeUndefined();
+    expect(g?.bestMoveQuestion).toBe(false);
+    expect(g?.tacticsQuestion).toBe(false);
+  });
+
+  it('game-chat surface: the SAME text still trips the detectors (user-authored path unchanged)', async () => {
+    const { provider, getGrounding } = captureProvider();
+    await coachService.ask(
+      { surface: 'game-chat', ask: HINT_LIKE_ASK, liveState: { surface: 'game-chat', fen: FEN } },
+      { providerOverride: provider },
+    );
+    const g = getGrounding();
+    expect(g).toBeDefined();
+    expect(g?.internalAsk).toBeUndefined();
+    // Proves the detectors still run for user surfaces — the bait matches.
+    expect(g?.trainingRequestKind).toBe('tactics');
+  });
+});
