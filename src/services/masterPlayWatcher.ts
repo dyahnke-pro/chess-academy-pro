@@ -45,6 +45,32 @@ export const LOOKAHEAD_CANDIDATES = 3;
 /** Plies of look-ahead. 1 = the position one move after current. */
 export const LOOKAHEAD_DEPTH = 1;
 
+/** OUT-OF-BOOK LIVE-FETCH CUTOFF (2026-07-11, PostHog: 13 `lichess_error`
+ *  rate-limit cooldowns in ONE session). Once a game leaves master-play
+ *  book, every subsequent position is novel (memory/Dexie miss) AND
+ *  guaranteed empty — yet the watcher fired a LIVE explorer call per move,
+ *  all game long. That speculative fan-out is what tripped the Lichess
+ *  rate limit and blacked out master-play grounding for 30s stretches.
+ *
+ *  After this many CONSECUTIVE empty top-level prefetches, the watcher
+ *  passes `localOnly: true` — subsequent prefetches still serve the free
+ *  tiers (memory cache, local masters DB, Dexie-persisted) but make NO
+ *  live edge call. Any free-tier hit with games resets the streak, so a
+ *  transposition back into locally-known book re-arms live prefetching,
+ *  and a new game (whose opening positions hit the local masters DB)
+ *  resets it naturally. ON-DEMAND lookups (Layer B injection, the
+ *  lookup tool, chat questions) do NOT route through the watcher and are
+ *  untouched — per the transposition-safety rule in
+ *  docs/plans/2026-07-11-error-sweep-root-fixes.md Phase 3, the cutoff
+ *  applies to speculative PREFETCH only, never to answers. */
+export const OUT_OF_BOOK_STREAK_LIMIT = 2;
+let outOfBookStreak = 0;
+
+/** Test-only — reset the module-level out-of-book streak. */
+export function __resetOutOfBookStreakForTests(): void {
+  outOfBookStreak = 0;
+}
+
 export interface PrefetchOptions {
   /** Route the watcher is mounted on (e.g. `/coach/chat`). Used for
    *  audit attribution AND to gate kid-route exclusion. */
@@ -123,18 +149,38 @@ export async function prefetchMasterPlay(
   const cacheState: 'hit' | 'miss-fresh' = masterPlayCache.has(key) ? 'hit' : 'miss-fresh';
   const startedAt = Date.now();
 
+  // The streak gate applies to the game-following prefetches (current +
+  // their look-ahead), NOT the walkthrough preload (curated book lines —
+  // always worth warming live).
+  const isGameFollowing = opts.trigger !== 'watcher-walkthrough-preload';
+  const liveSuppressed = isGameFollowing && outOfBookStreak >= OUT_OF_BOOK_STREAK_LIMIT;
+
   let result: MasterPlayResult;
   try {
     result = await lookupMasterPlay(key, {
       triggeredBy: trigger,
       surface: opts.surface,
       sessionId: opts.sessionId,
+      // Out-of-book: free tiers only (memory / local DB / Dexie) — no
+      // live edge call for a position that is all but guaranteed empty.
+      localOnly: liveSuppressed || undefined,
     });
   } catch {
     // lookupMasterPlay shouldn't throw — it returns source:none on
     // failure. Defensive catch keeps the watcher from leaking
     // promise rejections.
     return;
+  }
+
+  // Track book-ness off the TOP-LEVEL (current-position) prefetches only:
+  // look-ahead children of an in-book parent shouldn't advance the streak
+  // (a book position often has out-of-book siblings among its top moves).
+  if (isGameFollowing && !opts.skipLookahead) {
+    if (result.totalGames === 0) {
+      outOfBookStreak += 1;
+    } else {
+      outOfBookStreak = 0;
+    }
   }
 
   const triggerLabel: 'move' | 'lookahead' | 'walkthrough-preload' =

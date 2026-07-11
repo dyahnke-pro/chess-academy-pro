@@ -3,7 +3,9 @@ import {
   prefetchMasterPlay,
   prefetchWalkthroughSequence,
   __isKidSurfaceForTests,
+  __resetOutOfBookStreakForTests,
   LOOKAHEAD_CANDIDATES,
+  OUT_OF_BOOK_STREAK_LIMIT,
 } from './masterPlayWatcher';
 import {
   __resetMasterPlayLookupForTests,
@@ -62,6 +64,7 @@ const STARTING_FEN_EXPLORER_PAYLOAD = {
 };
 
 beforeEach(async () => {
+  __resetOutOfBookStreakForTests();
   __resetMasterPlayLookupForTests();
   __resetMasterPlayPersistenceForTests();
   _resetLichessCircuitBreaker();
@@ -207,5 +210,61 @@ describe('prefetchWalkthroughSequence', () => {
     });
     // Walkthrough preload sets skipLookahead, so only the spine entry caches.
     expect(masterPlayCache.size()).toBe(1);
+  });
+});
+
+
+describe('out-of-book live-fetch cutoff (2026-07-11 rate-limit root fix)', () => {
+  // Two distinct legal positions that are far out of any book. FENs differ
+  // so each is a genuine cache miss.
+  const OOB_FEN_1 = '8/5pkp/4p1p1/3r4/p4P2/2Pp4/3R2PP/2B4K b - - 0 40';
+  const OOB_FEN_2 = '8/5pkp/4p1p1/8/p4P2/2Pr4/3R2PP/2B4K w - - 0 41';
+  const OOB_FEN_3 = '8/5pkp/4p1p1/8/p4P2/2PR4/6PP/2B4K b - - 0 41';
+  const EMPTY_PAYLOAD = { white: 0, draws: 0, black: 0, moves: [], topGames: [], opening: null };
+
+  it(`suppresses LIVE fetches after ${OUT_OF_BOOK_STREAK_LIMIT} consecutive empty current-position prefetches`, async () => {
+    const fetchFn = stubFetch(EMPTY_PAYLOAD);
+    await prefetchMasterPlay(OOB_FEN_1, { surface: '/coach/play' });
+    await prefetchMasterPlay(OOB_FEN_2, { surface: '/coach/play' });
+    const callsAfterStreak = fetchFn.mock.calls.length;
+    expect(callsAfterStreak).toBeGreaterThan(0); // the first two DID go live
+    // Streak reached — the third prefetch must make NO live call.
+    await prefetchMasterPlay(OOB_FEN_3, { surface: '/coach/play' });
+    expect(fetchFn.mock.calls.length).toBe(callsAfterStreak);
+  });
+
+  it('a non-empty current-position result resets the streak (transposition back into book re-arms)', async () => {
+    const fetchFn = stubFetch(EMPTY_PAYLOAD);
+    await prefetchMasterPlay(OOB_FEN_1, { surface: '/coach/play' });
+    await prefetchMasterPlay(OOB_FEN_2, { surface: '/coach/play' });
+    // In-book position: payload with games resets the streak…
+    stubFetch(STARTING_FEN_EXPLORER_PAYLOAD);
+    // …but live is suppressed right now, so warm it via the cache-free
+    // path a REAL re-entry would use: the local masters DB / persisted
+    // tiers. Simulate by seeding the memory cache directly (the free tier
+    // the suppressed lookup still reads).
+    masterPlayCache.set(STARTING_FEN, {
+      fen: STARTING_FEN.split(' ').slice(0, 4).join(' '),
+      totalGames: 100,
+      moves: [{ san: 'e4', uci: 'e2e4', games: 60, whitePct: 50, drawPct: 30, blackPct: 20 }],
+      source: 'lichess-live',
+    } as never);
+    await prefetchMasterPlay(STARTING_FEN, { surface: '/coach/play' });
+    // Streak is reset — the NEXT novel position goes live again.
+    const before = (globalThis.fetch as ReturnType<typeof vi.fn>).mock.calls.length;
+    await prefetchMasterPlay(OOB_FEN_3, { surface: '/coach/play' });
+    expect((globalThis.fetch as ReturnType<typeof vi.fn>).mock.calls.length).toBeGreaterThan(before);
+  });
+
+  it('walkthrough preloads are exempt from the cutoff (curated book lines)', async () => {
+    const fetchFn = stubFetch(EMPTY_PAYLOAD);
+    await prefetchMasterPlay(OOB_FEN_1, { surface: '/coach/play' });
+    await prefetchMasterPlay(OOB_FEN_2, { surface: '/coach/play' });
+    const callsAfterStreak = fetchFn.mock.calls.length;
+    stubFetch(STARTING_FEN_EXPLORER_PAYLOAD);
+    await prefetchWalkthroughSequence([STARTING_FEN], { surface: '/openings/italian-game' });
+    expect((globalThis.fetch as ReturnType<typeof vi.fn>).mock.calls.length + callsAfterStreak)
+      .toBeGreaterThan(callsAfterStreak); // the preload still went live
+    expect(masterPlayCache.has(STARTING_FEN)).toBe(true);
   });
 });
