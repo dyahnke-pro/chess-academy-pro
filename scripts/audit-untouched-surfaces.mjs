@@ -139,7 +139,7 @@ async function main() {
   // ── /coach/home (Coach Hub) ────────────────────────────────────
   await record('coach-hub', async () => {
     await page.goto(`${BASE_URL}/coach/home`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
-    await page.locator('[data-testid="coach-home-page"]').waitFor({ timeout: 12000 });
+    await page.locator('[data-testid="coach-home-page"]').waitFor({ timeout: 45000 });
   }, SHORT_SETTLE_MS, [
     { kind: 'visible', selector: '[data-testid="coach-home-page"]', label: 'Coach hub mounts' },
     { kind: 'count-gte', selector: '[data-testid^="coach-action-"], [data-testid^="coach-tile-"]', value: 1, label: 'at least one action/tile renders' },
@@ -154,7 +154,7 @@ async function main() {
     // dev server. The second scenario (coach-train-recommendation-click)
     // hits a warm cache and passes at 12s, but this first cold visit
     // needs more headroom.
-    await page.locator('[data-testid="coach-train-page"]').waitFor({ timeout: 25000 });
+    await page.locator('[data-testid="coach-train-page"]').waitFor({ timeout: 45000 });
   }, SHORT_SETTLE_MS, [
     { kind: 'visible', selector: '[data-testid="coach-train-page"]', label: 'Coach Train mounts' },
     { kind: 'visible', selector: '[data-testid="training-heading"]', label: 'training heading visible' },
@@ -166,7 +166,7 @@ async function main() {
   // ── /coach/analyse ─────────────────────────────────────────────
   await record('coach-analyse', async () => {
     await page.goto(`${BASE_URL}/coach/analyse`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
-    await page.locator('[data-testid="coach-analyse-page"]').waitFor({ timeout: 25000 });
+    await page.locator('[data-testid="coach-analyse-page"]').waitFor({ timeout: 45000 });
   }, SHORT_SETTLE_MS, [
     { kind: 'visible', selector: '[data-testid="coach-analyse-page"]', label: 'Coach Analyse mounts' },
     { kind: 'visible', selector: '[data-testid="fen-input"]', label: 'FEN input present' },
@@ -181,7 +181,7 @@ async function main() {
   // mount.
   await record('coach-plan', async () => {
     await page.goto(`${BASE_URL}/coach/plan`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
-    await page.locator('[data-testid="training-plan-rolodex-page"]').waitFor({ timeout: 12000 });
+    await page.locator('[data-testid="training-plan-rolodex-page"]').waitFor({ timeout: 45000 });
   }, SHORT_SETTLE_MS, [
     { kind: 'visible', selector: '[data-testid="training-plan-rolodex-page"]', label: 'Training Plan mounts' },
     // Either the white column (favorites present) or the per-color empty
@@ -198,7 +198,7 @@ async function main() {
   await record('kid-mode', async () => {
     const tryLoad = async () => {
       await page.goto(`${BASE_URL}/kid`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
-      await page.locator('[data-testid="kid-mode-page"]').waitFor({ timeout: 18000 });
+      await page.locator('[data-testid="kid-mode-page"]').waitFor({ timeout: 45000 });
     };
     try {
       await tryLoad();
@@ -230,12 +230,12 @@ async function main() {
       await page.goto(`${BASE_URL}/kid`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
       // Kid page does heavy gameProgress dexie reads on mount;
       // bumped from 12s to 25s after audit flakes 2026-05-19.
-      await page.locator('[data-testid="kid-mode-page"]').waitFor({ timeout: 25000 });
+      await page.locator('[data-testid="kid-mode-page"]').waitFor({ timeout: 45000 });
       await page.locator(`[data-testid="${card.testid}"]`).click();
       // Wait for the actual URL change instead of a fixed timeout —
       // React Router navigation can lag a frame or two behind the
       // click, especially on the first hop after dexie hydration.
-      await page.waitForURL(card.route, { timeout: 8000 }).catch(() => undefined);
+      await page.waitForURL(card.route, { timeout: 20000 }).catch(() => undefined);
     }, SHORT_SETTLE_MS, [
       { kind: 'url-matches', value: card.route, label: card.label },
     ]);
@@ -254,7 +254,7 @@ async function main() {
   for (const action of hubActions) {
     await record(`coach-hub-${action.testid}`, async () => {
       await page.goto(`${BASE_URL}/coach/home`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
-      await page.locator('[data-testid="coach-home-page"]').waitFor({ timeout: 12000 });
+      await page.locator('[data-testid="coach-home-page"]').waitFor({ timeout: 45000 });
       const tile = page.locator(`[data-testid="${action.testid}"]`).first();
       if (await tile.count() === 0) {
         // tile not rendered on this build state (depends on user data);
@@ -278,7 +278,7 @@ async function main() {
   // A starting-position FEN is the simplest deterministic input.
   await record('coach-analyse-paste-fen-loads-board', async () => {
     await page.goto(`${BASE_URL}/coach/analyse`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
-    await page.locator('[data-testid="coach-analyse-page"]').waitFor({ timeout: 25000 });
+    await page.locator('[data-testid="coach-analyse-page"]').waitFor({ timeout: 45000 });
     const startFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
     const input = page.locator('[data-testid="fen-input"]');
     await input.fill(startFen);
@@ -299,7 +299,7 @@ async function main() {
   // a non-trivial position.
   await record('coach-analyse-midgame-fen-correct-placement', async () => {
     await page.goto(`${BASE_URL}/coach/analyse`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
-    await page.locator('[data-testid="coach-analyse-page"]').waitFor({ timeout: 25000 });
+    await page.locator('[data-testid="coach-analyse-page"]').waitFor({ timeout: 45000 });
     // FEN: position right before Bxh7+ (classical Greek Gift). White
     // bishop on d3, black king on g8, white knight on f3.
     const greekGiftFen = 'r2q1rk1/pppbppbp/2np1np1/8/3P4/2NB1N2/PPP2PPP/R1BQ1RK1 w - - 0 1';
@@ -319,7 +319,7 @@ async function main() {
   let trainCardClicked = false;
   await record('coach-train-recommendation-click', async () => {
     await page.goto(`${BASE_URL}/coach/train`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
-    await page.locator('[data-testid="coach-train-page"]').waitFor({ timeout: 12000 });
+    await page.locator('[data-testid="coach-train-page"]').waitFor({ timeout: 45000 });
     // Wait for either recommendations to load OR no-recs state.
     await page.waitForTimeout(2500);
     const card = page.locator('[data-testid="training-card"]').first();

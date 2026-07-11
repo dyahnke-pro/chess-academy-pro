@@ -86,6 +86,7 @@ jobs:
           # Gap audits (play/review) pull the live audit-stream delta to prove
           # phase-narration / ask-routed events fired — needs the G2 secret.
           AUDIT_STREAM_SECRET: ${{ secrets.AUDIT_STREAM_SECRET }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
           set +e
           SCRIPTS="$INPUT_SCRIPTS"
@@ -117,6 +118,11 @@ jobs:
         if: always()
         env:
           AUDIT_STREAM_SECRET: ${{ secrets.AUDIT_STREAM_SECRET }}
+          # Fallback read credential: the endpoint verifies this token against
+          # the Vercel project server-side (GET-only). Already a repo secret
+          # (deploys need it), so G2 needs no new secret and can't silently
+          # rot — see api/audit-stream.ts (2026-07-11).
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           OUT_FILE: audit-reports/audit-stream-pull.json
         run: node scripts/pull-audit-stream.mjs
 

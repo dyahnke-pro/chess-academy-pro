@@ -220,6 +220,11 @@ async function main() {
   );
 
   const report = { base: BASE_URL, startedAt: stamp, scenarios: [] };
+  // Union of every event observed across scenario attributions — the global
+  // end-of-run assertions read THIS + the final dump, so a late navigation
+  // that blanks the final read can't erase events the run already saw (the
+  // pre-2026-07-11 leak-audit false negative).
+  const seenEvents = [];
 
   /** Drain async audit-stream POSTs after the body resolves so events
    *  from this scenario fully land before the next one starts.
@@ -242,6 +247,7 @@ async function main() {
     // captured.slice(before) only if __AUDIT__ isn't available.
     const fresh = await attributeScenarioEvents(page, auditTracker, { t0 });
     const events = fresh.length > 0 ? fresh : captured.slice(before);
+    for (const e of events) seenEvents.push(e);
     const byKind = events.reduce((acc, e) => {
       const k = String(e.kind ?? 'unknown');
       acc[k] = (acc[k] ?? 0) + 1;
@@ -355,31 +361,6 @@ async function main() {
     }, STARTING_FEN);
   });
 
-  // Assert claim-validator-trip and master-play-enforcement-fallback fired
-  // somewhere in the run. Read from the in-page Dexie log directly so
-  // we catch events whose audit-stream POSTs haven't hit the wire yet —
-  // same fix as attributeScenarioEvents but for global assertions.
-  const allAudits = await readAllPageAudits(page);
-  const tripEvents = allAudits.filter((e) => e.kind === 'claim-validator-trip');
-  const llmCallEvents = allAudits.filter((e) => e.kind === 'coach-llm-call');
-  // STEP C contract: NO regen loop. A grounded turn fires the validator at most
-  // ONCE (≥2 in a single turn would mean the retry loop came back). Against prod
-  // the real provider returns grounded prose, so 0 trips is the common case;
-  // either way ≤1 is correct and ≥2 is the regression signal.
-  report.scenarios.push(
-    tripEvents.length <= 1
-      ? { name: 'assert.no-regen-loop (≤1 claim-validator-trip)', ok: true, count: tripEvents.length }
-      : { name: 'assert.no-regen-loop (≤1 claim-validator-trip)', error: `STEP C killed the regen loop — expected ≤1 claim-validator-trip, got ${tripEvents.length} (the retry loop is back)` },
-  );
-  // The leak-audit gate: every coach LLM call is tagged coach-llm-call by the
-  // primitive (grounded vs ungrounded). Its presence proves the chokepoint
-  // instrumentation is live in prod.
-  report.scenarios.push(
-    llmCallEvents.length >= 1
-      ? { name: 'assert.leak-audit-fires (coach-llm-call tagged at the primitive)', ok: true, count: llmCallEvents.length }
-      : { name: 'assert.leak-audit-fires (coach-llm-call tagged at the primitive)', error: 'expected coach-llm-call events — the primitive leak-audit gate did not fire' },
-  );
-
   // ── Scenario 5: Kid isolation — watcher does NOT prefetch on /kid/* ─
   await scenario('kid.watcher-short-circuits', async () => {
     const before = captured.length;
@@ -472,6 +453,39 @@ async function main() {
 
   // ── Summary ───────────────────────────────────────────────────────
   const failed = report.scenarios.filter((s) => s.error);
+  // GLOBAL end-of-run assertions — MUST run after ALL scenarios (pre-2026-07-11
+  // this block sat before scenarios 5-7, i.e. before the only scenarios that
+  // make coach LLM calls, so assert.leak-audit-fires could NEVER pass).
+  // Assert claim-validator-trip and master-play-enforcement-fallback fired
+  // somewhere in the run. Read from the in-page Dexie log directly so
+  // we catch events whose audit-stream POSTs haven't hit the wire yet —
+  // same fix as attributeScenarioEvents but for global assertions.
+  const finalDump = await readAllPageAudits(page);
+  // Union with per-scenario observations (dedup by timestamp+kind) — see
+  // seenEvents note above.
+  const seenKeys = new Set(finalDump.map((e) => `${e.timestamp}|${e.kind}`));
+  const allAudits = [...finalDump, ...seenEvents.filter((e) => !seenKeys.has(`${e.timestamp}|${e.kind}`))];
+  const tripEvents = allAudits.filter((e) => e.kind === 'claim-validator-trip');
+  const llmCallEvents = allAudits.filter((e) => e.kind === 'coach-llm-call');
+  // STEP C contract: NO regen loop. A grounded turn fires the validator at most
+  // ONCE (≥2 in a single turn would mean the retry loop came back). Against prod
+  // the real provider returns grounded prose, so 0 trips is the common case;
+  // either way ≤1 is correct and ≥2 is the regression signal.
+  report.scenarios.push(
+    tripEvents.length <= 1
+      ? { name: 'assert.no-regen-loop (≤1 claim-validator-trip)', ok: true, count: tripEvents.length }
+      : { name: 'assert.no-regen-loop (≤1 claim-validator-trip)', error: `STEP C killed the regen loop — expected ≤1 claim-validator-trip, got ${tripEvents.length} (the retry loop is back)` },
+  );
+  // The leak-audit gate: every coach LLM call is tagged coach-llm-call by the
+  // primitive (grounded vs ungrounded). Its presence proves the chokepoint
+  // instrumentation is live in prod.
+  report.scenarios.push(
+    llmCallEvents.length >= 1
+      ? { name: 'assert.leak-audit-fires (coach-llm-call tagged at the primitive)', ok: true, count: llmCallEvents.length }
+      : { name: 'assert.leak-audit-fires (coach-llm-call tagged at the primitive)', error: 'expected coach-llm-call events — the primitive leak-audit gate did not fire' },
+  );
+
+
   console.log('\n[master-integration] ────── summary ──────');
   console.log(`  scenarios: ${report.scenarios.length}, failed: ${failed.length}`);
   for (const s of failed) console.log(`    ✗ ${s.name}: ${s.error}`);

@@ -120,7 +120,7 @@ export default async function handler(
   // OPTIONS requests don't carry the custom header.
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'content-type, x-audit-secret');
+  res.setHeader('Access-Control-Allow-Headers', 'content-type, x-audit-secret, x-vercel-token');
   res.setHeader('Access-Control-Max-Age', '86400');
   if (req.method === 'OPTIONS') {
     res.status(204).end();
@@ -135,8 +135,35 @@ export default async function handler(
     return;
   }
   if (secret !== expected) {
-    res.status(401).json({ error: 'unauthorized' });
-    return;
+    // ALTERNATE READ CREDENTIAL — a Vercel token verified against THIS
+    // project (David 2026-07-11: CI's G2 pull needs the stream, but the
+    // GitHub Actions secrets API is org-policy-blocked from sessions and
+    // AUDIT_STREAM_SECRET is a sensitive-type Vercel var no API returns.
+    // CI already holds VERCEL_TOKEN — the deploy credential, which can
+    // never silently rot because deploys die loudly without it). GET-only:
+    // the token proves read access to the project via one Vercel API call;
+    // writes still require the shared secret. This keeps the audit secret
+    // homed in Vercel per the 2026-06-30 watcher doctrine — no GH-secret
+    // copy to drift.
+    const vercelToken = req.headers['x-vercel-token'];
+    const projectId = process.env.VERCEL_PROJECT_ID ?? 'prj_qYJMwF1apaxdp6sIZzcvZMz9BcZN';
+    const teamId = process.env.VERCEL_ORG_ID ?? 'team_EG9m215w9cQHWilBOPnOtIFS';
+    let tokenOk = false;
+    if (req.method === 'GET' && typeof vercelToken === 'string' && vercelToken.length >= 20) {
+      try {
+        const probe = await fetch(
+          `https://api.vercel.com/v9/projects/${projectId}?teamId=${teamId}`,
+          { headers: { Authorization: `Bearer ${vercelToken}` } },
+        );
+        tokenOk = probe.status === 200;
+      } catch {
+        tokenOk = false;
+      }
+    }
+    if (!tokenOk) {
+      res.status(401).json({ error: 'unauthorized' });
+      return;
+    }
   }
 
   if (req.method === 'POST') {

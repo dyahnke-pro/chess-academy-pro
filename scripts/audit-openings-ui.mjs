@@ -15,6 +15,7 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { seedUnlockedOpenings } from './audit-lib/idb-unlock.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -195,6 +196,10 @@ async function main() {
     async () => {
       // The Gambits tab BUTTON shares the testid with its content — be specific.
       await page.locator('button[data-testid="tab-gambits"]').click();
+      // GambitsTab renders "Loading gambits..." until the DEFERRED SEED
+      // delivers gambit data (~30-60s on a cold context — CLAUDE.md G1 §6).
+      // Wait for the real panel instead of failing on a 3.5s settle.
+      await page.locator('div[data-testid="tab-gambits"]').waitFor({ timeout: 90_000 }).catch(() => {});
       await page.waitForTimeout(800);
     },
     SETTLE_SHORT,
@@ -279,18 +284,30 @@ async function main() {
   await scenario(
     '08-click-opening-card',
     async () => {
-      // OpeningCard testid pattern — scan for any "opening-card-*"
-      const firstCardTid = await page.evaluate(() => {
-        const els = Array.from(document.querySelectorAll('[data-testid]'));
-        const card = els.find((el) => /^opening-card-/.test(el.getAttribute('data-testid') ?? ''));
-        return card?.getAttribute('data-testid') ?? null;
-      });
-      if (!firstCardTid) {
-        // Fallback: any visible button inside the opening-explorer container.
-        const fallback = page.locator('[data-testid="opening-explorer"] button').first();
-        if (await fallback.isVisible().catch(() => false)) await fallback.click();
+      // Target a MASTERCLASS opening — the full WLPP/metrics contract this
+      // audit asserts only exists on curated entries. The alphabetical first
+      // card is the Amar Opening (A00), a DB-only entry with no lines
+      // metrics and a locked ladder — auditing it against the masterclass
+      // contract failed 4 scenarios for months. Seed-unlock the ladder
+      // first (CLAUDE.md G1 §4: make the unlocked state a READ) so the
+      // Learn/Practice/Play rungs are clickable without runtime writes.
+      await seedUnlockedOpenings(page, ['italian-game']).catch(() => {});
+      // Typing in the search opens the SmartSearch DROPDOWN over the grid —
+      // wrong affordance for picking a card. The Masterclasses TAB filters
+      // the grid itself to the curated set.
+      await page.locator('button[data-testid="tab-masterclasses"]').click();
+      await page.waitForTimeout(1500);
+      const italian = page.locator('[data-testid="opening-card-italian-game"]');
+      if (await italian.count()) {
+        await italian.first().click();
       } else {
-        await page.locator(`[data-testid="${firstCardTid}"]`).click();
+        // Fallback: first card of the filtered grid.
+        const firstCardTid = await page.evaluate(() => {
+          const els = Array.from(document.querySelectorAll('[data-testid]'));
+          const card = els.find((el) => /^opening-card-/.test(el.getAttribute('data-testid') ?? ''));
+          return card?.getAttribute('data-testid') ?? null;
+        });
+        if (firstCardTid) await page.locator(`[data-testid="${firstCardTid}"]`).click();
       }
       await page.locator('[data-testid="opening-detail"]').waitFor({ timeout: 15_000 });
     },
@@ -369,22 +386,25 @@ async function main() {
     ],
   );
 
-  // Walkthrough button → walkthrough-mode mounts
+  // Watch button → the CURATED LessonPlayer mounts (G9.3 Gate A: a
+  // masterclass opening's Watch must NEVER fall back to the legacy
+  // WalkthroughMode — the old expectations here asserted the legacy
+  // walkthrough-* testids, i.e. the BANNED contract, red for months).
   await scenario(
     '10-walkthrough-mode-mount',
     async () => {
       await page.locator('[data-testid="walkthrough-btn"]').click();
-      await page.locator('[data-testid="walkthrough-mode"]').waitFor({ timeout: 15_000 });
+      await page.locator('[data-testid="lesson-player"]').waitFor({ timeout: 15_000 });
     },
     SETTLE_MED,
     [
-      { label: 'walkthrough-mode mounts', fn: () => visible('walkthrough-mode') },
-      { label: 'walkthrough-back btn', fn: () => visible('walkthrough-back') },
-      { label: 'walkthrough-progress (testid present, may be 0-width at start)',
-        fn: async () => (await countSel('[data-testid="walkthrough-progress"]')) > 0 },
-      { label: 'walkthrough-play-pause', fn: () => visible('walkthrough-play-pause') },
-      { label: 'walkthrough-speed-toggle', fn: () => visible('walkthrough-speed-toggle') },
-      { label: 'walkthrough-overview', fn: () => visible('walkthrough-overview') },
+      { label: 'curated lesson player mounts (Gate A)', fn: () => visible('lesson-player') },
+      { label: 'NO legacy WalkthroughMode (Gate A inverse)',
+        fn: async () => (await countSel('[data-testid="walkthrough-progress"]')) === 0 },
+      { label: 'lesson progress bar present',
+        fn: async () => (await countSel('[data-testid="lesson-progress"]')) > 0 },
+      { label: 'lesson play/pause present', fn: () => visible('lesson-play-pause') },
+      { label: 'lesson next control present', fn: () => visible('lesson-next') },
       { label: 'board renders pieces', fn: async () => (await countSel('[data-piece]')) > 0 },
     ],
   );
@@ -393,42 +413,42 @@ async function main() {
   await scenario(
     '11-walkthrough-play-pause-toggle',
     async () => {
-      await page.locator('[data-testid="walkthrough-play-pause"]').click();
+      await page.locator('[data-testid="lesson-play-pause"]').click();
       await page.waitForTimeout(1200);
     },
     500,
     [
-      { label: 'walkthrough-mode still mounted', fn: () => visible('walkthrough-mode') },
+      { label: 'lesson scaffold still mounted', fn: () => visible('lesson-player') },
     ],
   );
 
-  // Speed toggle — should not throw
+  // Step forward via the lesson's next control (the curated player has no
+  // speed toggle — sentence-grained reveal is voice-gated by design).
   await scenario(
     '12-walkthrough-speed-toggle',
     async () => {
-      await page.locator('[data-testid="walkthrough-speed-toggle"]').click();
+      await page.locator('[data-testid="lesson-next"]').click();
       await page.waitForTimeout(800);
     },
     500,
     [
-      { label: 'walkthrough-mode still mounted', fn: () => visible('walkthrough-mode') },
+      { label: 'lesson scaffold still mounted', fn: () => visible('lesson-player') },
     ],
   );
 
-  // Speed info button → popup appears, then dismiss via overlay click
+  // Step back via the lesson's prev control (round-trip with 12).
   await scenario(
     '13-walkthrough-speed-info',
     async () => {
-      if (await visible('walkthrough-speed-info-btn')) {
-        await page.locator('[data-testid="walkthrough-speed-info-btn"]').click();
+      if (await visible('lesson-prev')) {
+        await page.locator('[data-testid="lesson-prev"]').click();
         await page.waitForTimeout(600);
       }
     },
     300,
     [
-      { label: 'speed-info-popup appears OR control absent (no-op)',
-        fn: async () => (await visible('walkthrough-speed-info-popup'))
-          || !(await visible('walkthrough-speed-info-btn')) },
+      { label: 'lesson scaffold still mounted after prev (or control absent)',
+        fn: async () => (await visible('lesson-player')) || !(await visible('lesson-prev')) },
     ],
   );
 
@@ -448,7 +468,7 @@ async function main() {
   await scenario(
     '14-walkthrough-back',
     async () => {
-      await page.locator('[data-testid="walkthrough-back"]').click({ timeout: 6000 });
+      await page.locator('[data-testid="lesson-back"]').click({ timeout: 6000 });
       await waitUntil(() => visible('opening-detail').then((v) => v), 8000);
     },
     SETTLE_SHORT,

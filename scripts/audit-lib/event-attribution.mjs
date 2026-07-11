@@ -93,17 +93,34 @@ async function waitForAuditDrain(page, tracker, { quietMs = 1500, maxMs = 8000 }
  * @param {number} [opts.quietMs] - drain quiet window (default 1500)
  * @param {number} [opts.maxMs]   - drain hard cap (default 8000)
  */
+/** Dump the in-page Dexie audit log, retrying once when a scenario-triggered
+ *  navigation destroys the execution context mid-evaluate (the exact race that
+ *  crashed audit-coach-master-integration with "Execution context was
+ *  destroyed" on 2026-07-11 — a hard exit 2 instead of a soft empty read).
+ *  Never throws; a genuinely unreadable page returns []. */
+async function dumpInPageAudits(page) {
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      return await page.evaluate(async () => {
+        const a = (window).__AUDIT__;
+        if (!a || typeof a.dump !== 'function') return [];
+        try { return await a.dump(); } catch { return []; }
+      });
+    } catch {
+      // Context destroyed by an in-flight navigation — settle and retry once.
+      await page.waitForTimeout(750).catch(() => {});
+    }
+  }
+  return [];
+}
+
 export async function attributeScenarioEvents(page, tracker, opts) {
   await waitForAuditDrain(page, tracker, {
     quietMs: opts.quietMs ?? 1500,
     maxMs: opts.maxMs ?? 8000,
   });
   const t1 = opts.t1 ?? Date.now();
-  const entries = await page.evaluate(async () => {
-    const a = (window).__AUDIT__;
-    if (!a || typeof a.dump !== 'function') return [];
-    try { return await a.dump(); } catch { return []; }
-  });
+  const entries = await dumpInPageAudits(page);
   return entries.filter((e) => {
     const ts = typeof e?.timestamp === 'number' ? e.timestamp : null;
     return ts != null && ts >= opts.t0 && ts <= t1;
@@ -116,9 +133,5 @@ export async function attributeScenarioEvents(page, tracker, opts) {
  * fire at least twice anywhere in the run".
  */
 export async function readAllPageAudits(page) {
-  return page.evaluate(async () => {
-    const a = (window).__AUDIT__;
-    if (!a || typeof a.dump !== 'function') return [];
-    try { return await a.dump(); } catch { return []; }
-  });
+  return dumpInPageAudits(page);
 }
