@@ -23,42 +23,14 @@
  * proxies. KV-backed rate limiting + a global daily $ kill-switch live in
  * api/_lib/usageGuard.ts (no-op until a Vercel KV store is provisioned).
  */
-import { checkUsageGuard, LLM_CALL_COST_USD } from './_lib/usageGuard';
+import { checkUsageGuard, LLM_CALL_COST_USD } from './_lib/usageGuard.js';
+import { isAllowedOrigin, originAllowed } from './_lib/allowedOrigin.js';
 
 export const config = { runtime: 'edge' };
 
-const ALLOWED_ORIGINS = [
-  // Native iOS WKWebView serves the app over BOTH schemes depending on the
-  // Capacitor `server.hostname` config: the legacy `capacitor://` and, once
-  // `server.hostname` is set, `https://app.chessacademy.pro`. The latter was
-  // missing, so the coach's /api/llm POSTs from device 403'd at the origin gate
-  // even after the client correctly routed them here (David 2026-06-14: coach
-  // dead on iOS, fine on web). Allow both.
-  'capacitor://app.chessacademy.pro',
-  'https://app.chessacademy.pro',
-  'https://chess-academy-pro.vercel.app',
-];
-const LOCAL_DEV_ORIGINS = [
-  'http://localhost:5173',
-  'http://localhost:4173',
-  'http://127.0.0.1:5173',
-  'http://127.0.0.1:4173',
-];
-const PREVIEW_ORIGIN_RE = /^https:\/\/chess-academy-pro[a-z0-9-]*\.vercel\.app$/;
-
-function isAllowedOrigin(origin: string): boolean {
-  return (
-    ALLOWED_ORIGINS.includes(origin) ||
-    LOCAL_DEV_ORIGINS.includes(origin) ||
-    PREVIEW_ORIGIN_RE.test(origin)
-  );
-}
-
-/** Missing Origin (server-to-server / same-origin GET) is allowed; a
- *  present Origin must be on the allowlist. */
-function originAllowed(origin: string | null): boolean {
-  return !origin || isAllowedOrigin(origin);
-}
+// Origin allowlist: shared module (api/_lib/allowedOrigin.ts) — the single
+// source of truth for every api/* gate. See that file for the 2026-07-09
+// deployment-URL 403 root cause.
 
 function corsHeaders(origin: string | null, requestedHeaders?: string | null): Record<string, string> {
   // Reflect whatever headers the CORS preflight asks for. The OpenAI SDK

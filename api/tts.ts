@@ -1,53 +1,13 @@
 export const config = { runtime: 'edge' };
 
-import { checkUsageGuard, POLLY_USD_PER_CHAR } from './_lib/usageGuard';
-import { detectVoiceForText } from './_lib/ttsLang';
+import { checkUsageGuard, POLLY_USD_PER_CHAR } from './_lib/usageGuard.js';
+import { detectVoiceForText } from './_lib/ttsLang.js';
+import { isAllowedOrigin } from './_lib/allowedOrigin.js';
 
-const ALLOWED_ORIGINS = [
-  // Native iOS WKWebView serves over `https://app.chessacademy.pro` once
-  // `server.hostname` is set (in addition to the legacy `capacitor://`). The
-  // https origin was missing, so on-device voice 403'd at the gate. Allow both.
-  'capacitor://app.chessacademy.pro',
-  'https://app.chessacademy.pro',
-  'https://chess-academy-pro.vercel.app',
-];
-
-/** Local-dev origins. Always allowed on every environment, even
- *  prod — because `vite dev` proxies `/api/*` to the deployed
- *  prod endpoint, and the request arrives at prod with an
- *  `Origin: http://localhost:5173` header. If the prod allowlist
- *  doesn't include localhost, every dev session 403s its way
- *  through Polly and voice is dead in dev (and interactive
- *  audits can't verify TTS fires).
- *
- *  Risk: a malicious page could spoof `Origin: http://localhost…`
- *  to consume Polly tokens. Bounded by the per-IP rate limit
- *  (600 req/hr at `isRateLimited`) which caps cost-amplification
- *  to an acceptable ceiling. David's call (2026-05-19): trade
- *  this tiny security ceiling for working dev voice. */
-const LOCAL_DEV_ORIGINS = [
-  'http://localhost:5173',
-  'http://localhost:4173',
-  'http://127.0.0.1:5173',
-  'http://127.0.0.1:4173',
-];
-
-/** Vercel preview deployments use auto-generated subdomains under
- *  the project's vercel.app namespace. Allowlist them so the voice
- *  service can reach Polly during PR-preview testing — without this
- *  every preview build silently rapid-fires through narrations
- *  because the browser blocks the /api/tts response by CORS, voice
- *  packs aren't cached in Incognito, and Web Speech fallback is
- *  disabled. The rest of the project keeps the wildcard-rejection
- *  behaviour intact for real production. */
-const PREVIEW_ORIGIN_RE = /^https:\/\/chess-academy-pro(?:-git-[a-z0-9-]+)?-dyahnke-pros-projects\.vercel\.app$/;
-
-function isAllowedOrigin(origin: string): boolean {
-  if (ALLOWED_ORIGINS.includes(origin)) return true;
-  if (LOCAL_DEV_ORIGINS.includes(origin)) return true;
-  if (PREVIEW_ORIGIN_RE.test(origin)) return true;
-  return false;
-}
+// Origin allowlist: shared module (api/_lib/allowedOrigin.ts) — the single
+// source of truth for every api/* gate (kills the copy-drift that left the
+// two endpoints with DIFFERENT preview regexes, neither matching deployment
+// URLs — the 2026-07-09 403s).
 
 /**
  * Build CORS headers — reject unrecognised origins instead of

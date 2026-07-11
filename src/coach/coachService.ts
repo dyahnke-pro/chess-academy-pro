@@ -461,6 +461,14 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
   // distinguishable from legacy /coach/play LLM calls (which fire
   // 'coach-llm-model-selected' instead) by the presence of these
   // fields.
+  // Internal composed prompts (hint / phase-narration / ping / move-selector)
+  // are code-authored instructions, not user questions — logging their full
+  // body as askText polluted `coach_question_asked` in PostHog (a hint tap
+  // showed up as a 1,500-char "question"). Emit a synthetic label instead so
+  // the Q&A telemetry carries only what the user actually typed/spoke.
+  const askTextForAudit = INTERNAL_ASK_SURFACES.has(input.liveState.surface)
+    ? `[internal:${input.surface}] ${input.ask.slice(0, 60)}`
+    : input.ask;
   void logAppAudit({
     kind: 'coach-brain-ask-received',
     category: 'subsystem',
@@ -468,8 +476,8 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     summary: `surface=${input.surface} task=${options.task ?? 'chat_response'} maxTokens=${options.maxTokens ?? 'default'} ask="${input.ask.slice(0, 60)}"`,
     // Full ask text (David 2026-07-10: "full access to the conversations") so
     // `coach_question_asked` in PostHog carries the whole question, not the
-    // 60-char summary preview.
-    askText: input.ask,
+    // 60-char summary preview — for USER-authored surfaces only.
+    askText: askTextForAudit,
     details: JSON.stringify({
       surface: input.surface,
       askLen: input.ask.length,
