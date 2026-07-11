@@ -122,6 +122,10 @@ export function ChatInput({ onSend, disabled, placeholder, coachChoices, onPickC
         // Student starts talking → coach stops mid-sentence. Trainer
         // feel: never talked over.
         onSpeechStart: () => voiceService.stop(),
+        // The mic auto-submits on an end-of-utterance pause and then STOPS
+        // (half-duplex — off while the coach speaks its reply). Sync the button
+        // back to off so the user knows to tap again for the next question.
+        onEnd: () => setListening(false),
         // Surface hard errors instead of leaving a dead mic with no
         // explanation. Matches the red-chip pattern already in
         // VoiceChatMic — here we use a transient banner.

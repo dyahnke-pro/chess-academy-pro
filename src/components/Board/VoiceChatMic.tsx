@@ -656,6 +656,14 @@ export function VoiceChatMic({ fen, turn, playerColor = 'white', onOpeningReques
       // coach stops talking. Matches how a person-to-person lesson
       // actually works — never talked over. Fires once per utterance.
       onSpeechStart: () => voiceService.stop(),
+      // Half-duplex: the mic auto-submits on a pause and STOPS (off while the
+      // coach speaks its reply — never record + play at once, the iOS crash).
+      // Sync the button back off so the user taps again for the next turn.
+      onEnd: () => {
+        listeningRef.current = false;
+        setListening(false);
+        setInterimTranscript('');
+      },
       onError: (reason) => {
         listeningRef.current = false;
         setListening(false);

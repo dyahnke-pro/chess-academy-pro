@@ -428,22 +428,28 @@ class VoiceInputService {
 
   /** (Re)arm the end-of-utterance silence timer. Cleared+reset on every partial
    *  so it only fires once speech has paused for NATIVE_SILENCE_MS. On fire it
-   *  SUBMITS the utterance and, in continuous mode, KEEPS the mic on for the
-   *  next turn — the user only taps to turn it off. */
+   *  SUBMITS the utterance and STOPS the recognizer.
+   *
+   *  🔒 HALF-DUPLEX — the mic must be OFF while the coach speaks its reply
+   *  (David 2026-07-11, "stop guessing, root cause fix"). The crash is a shared
+   *  iOS AVAudioSession running RECORD and PLAYBACK at once: confirmed data —
+   *  mic-start WHILE Polly played crashed; mic-start with no playback was clean.
+   *  The earlier "continuous / stays on" build kept the recognizer running while
+   *  the coach's TTS reply played → the same overlap in reverse → the crash.
+   *  So we tear the recognizer down on submit; the reply plays with no live
+   *  recognizer; the user taps once more for the next turn. Always-on turn-
+   *  taking requires native coordination and will only ship once verified on a
+   *  real device — never blind again. */
   private armNativeSilenceTimer(): void {
     this.clearNativeSilenceTimer();
     this.nativeSilenceTimer = setTimeout(() => {
       this.nativeSilenceTimer = null;
       if (!this.nativeListening) return;
-      const pending = this.nativeLatest.trim();
-      this.nativeLatest = '';
-      this.speechStartFired = false; // let the next utterance re-fire mic-heard-speech
-      if (pending) {
-        this.audit('mic-final-dispatched', `end-of-utterance submit: "${pending.slice(0, 60)}"`);
-        this.dispatchFinal(pending);
-      }
-      // Continuous: DON'T stop — the recognizer keeps running for the next turn.
-      // (One-shot mode isn't used by the native path; the user taps to stop.)
+      // stopListening dispatches the pending partial as the final transcript,
+      // tears down the native audio engine, and fires endHandler so the UI
+      // flips the mic button off. No recognizer runs during the coach reply →
+      // no record+playback overlap → no crash.
+      this.stopListening();
     }, NATIVE_SILENCE_MS);
   }
 
@@ -603,7 +609,11 @@ class VoiceInputService {
       try { this.voiceServiceRef?.stop(); } catch { /* never block the mic on a TTS-stop failure */ }
       await new Promise((resolve) => setTimeout(resolve, 150));
       await SpeechRecognition.start({ language: 'en-US', maxResults: 2, partialResults: true, popup: false });
-      this.nativeContinuous = true;
+      // NOTE: half-duplex, one utterance per tap (see armNativeSilenceTimer).
+      // `nativeContinuous` stays false so the 'stopped' handler NEVER auto-
+      // restarts on top of a coach reply — the record+playback overlap that
+      // crashed the app. Always-on turn-taking is a native, device-verified
+      // follow-up, not a blind restart loop.
       this.audit('mic-started', 'native speech recognition started');
     } catch (e) {
       this.nativeListening = false;
