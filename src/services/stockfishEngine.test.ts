@@ -295,7 +295,7 @@ describe('StockfishEngine', () => {
       scheduleAnalysisResponse();
       await stockfishEngine.analyzePosition(STARTING_FEN, 20);
 
-      expect(mockWorker.postMessageCalls).toContain('go depth 20');
+      expect(mockWorker.postMessageCalls).toContain('go depth 20 movetime 8000');
     });
 
     it('uses default depth 18 when not specified', async () => {
@@ -305,7 +305,36 @@ describe('StockfishEngine', () => {
       scheduleAnalysisResponse();
       await stockfishEngine.analyzePosition(STARTING_FEN);
 
+      expect(mockWorker.postMessageCalls).toContain('go depth 18 movetime 8000');
+    });
+
+    // SEARCH_BUDGET_MS (2026-07-11 stall root-fix): slow single-threaded
+    // variants get a movetime bound alongside depth (the search runs inside
+    // the worker's event loop, so `stop` can never interrupt it — movetime is
+    // enforced inside the engine and bounds latency by construction); fast
+    // variants keep pure depth. Empirically verified on the shipped asm build:
+    // `go depth 99 movetime 1500` → bestmove in 1537ms.
+    it('asm variant gets the 5s movetime budget', async () => {
+      const { stockfishEngine } = await getEngine();
+      await initEngine(stockfishEngine);
+      (stockfishEngine as unknown as { workerVariant: string }).workerVariant = 'asm';
+
+      scheduleAnalysisResponse();
+      await stockfishEngine.analyzePosition(STARTING_FEN, 18);
+
+      expect(mockWorker.postMessageCalls).toContain('go depth 18 movetime 5000');
+    });
+
+    it('fast variants (multi / ios-native) keep an unbounded pure-depth search', async () => {
+      const { stockfishEngine } = await getEngine();
+      await initEngine(stockfishEngine);
+      (stockfishEngine as unknown as { workerVariant: string }).workerVariant = 'multi';
+
+      scheduleAnalysisResponse();
+      await stockfishEngine.analyzePosition(STARTING_FEN, 18);
+
       expect(mockWorker.postMessageCalls).toContain('go depth 18');
+      expect(mockWorker.postMessageCalls.some((c) => c.includes('movetime'))).toBe(false);
     });
 
     it('parses multipv info lines into topLines array', async () => {
@@ -507,7 +536,7 @@ describe('StockfishEngine', () => {
       const expectation = expect(p).rejects.toThrow(/analysis aborted/);
       // Settle the readyok handshake + the `go` dispatch.
       await vi.advanceTimersByTimeAsync(0);
-      expect(mockWorker.postMessageCalls).toContain('go depth 18');
+      expect(mockWorker.postMessageCalls).toContain('go depth 18 movetime 8000');
       // No bestmove ever comes; advance past the 30s hard timeout.
       await vi.advanceTimersByTimeAsync(31_000);
       await expectation;

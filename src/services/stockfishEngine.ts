@@ -188,6 +188,30 @@ const WORKER_ERROR_DEDUP_WINDOW_MS = 500;
  *  a truly stuck engine never returns at all. Audit-only — does not alter
  *  the resolve/reject flow (callers own their own timeouts). */
 const ANALYSIS_STALL_MS = 12_000;
+/** Per-variant SEARCH TIME BUDGET appended to every depth search as
+ *  `go depth N movetime B` — UCI runs both limits and stops at whichever is
+ *  reached first (empirically verified on the exact shipped asm build,
+ *  2026-07-11: `go depth 99 movetime 1500` → bestmove in 1537ms at depth 13).
+ *
+ *  ROOT CAUSE this exists (PostHog 2026-07-06→11, ~35 stall events): on the
+ *  single-threaded variants the search runs synchronously inside the
+ *  worker's event loop, so an unbounded `go depth 18` can run 30s+ AND the
+ *  `stop` command sits unprocessed in the message queue — that is the
+ *  literal "budget grace exceeded (engine not responding to stop)" event.
+ *  `movetime` is enforced INSIDE the engine's search loop (no event loop
+ *  needed), so it bounds latency where `stop` cannot. A budget'd search
+ *  returns the best line found so far — bounded-shallow beats timeout-
+ *  nothing; the result's `depth` field reports the depth actually reached
+ *  (the info-line parser already tracks it).
+ *
+ *  Fast variants keep pure depth (undefined budget): they honor `stop`,
+ *  finish depth 18 in well under a second, and capping them would only
+ *  cost analysis quality. The stall watchdog + hard-timeout recovery stay
+ *  untouched as the safety net — with the budget they should ~never fire. */
+const SEARCH_BUDGET_MS: Partial<Record<StockfishVariant, number>> = {
+  asm: 5_000,
+  single: 8_000,
+};
 /** Hard recovery timeout for a single analysis. The 12s stall above is
  *  audit-ONLY (it logs a dead eval bar but never settles the promise),
  *  which is exactly how the coach froze: `analyzeWithBudget`'s 300ms
@@ -1101,7 +1125,11 @@ class StockfishEngine {
             }
           }
           this.send(`position fen ${fen}`);
-          this.send(`go depth ${depth}`);
+          // Variant-aware bounded search (see SEARCH_BUDGET_MS): slow
+          // single-threaded variants get `movetime` alongside `depth` so the
+          // search can NEVER outlive the budget; fast variants keep pure depth.
+          const budgetMs = this.workerVariant ? SEARCH_BUDGET_MS[this.workerVariant] : undefined;
+          this.send(budgetMs ? `go depth ${depth} movetime ${budgetMs}` : `go depth ${depth}`);
           this._analysisStarted = true;
           // Stall watchdog: if THIS analysis is still pending after the
           // window (no bestmove came back), screen the dead engine to the
