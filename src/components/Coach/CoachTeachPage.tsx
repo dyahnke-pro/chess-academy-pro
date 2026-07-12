@@ -83,6 +83,11 @@ import { parseSpokenMove } from '../../services/spokenMoveParser';
 import { parseCoachMoveCommand } from '../../services/coachMoveCommand';
 import { sanToSpeech } from '../../utils/sanToSpeech';
 import { noteAtPosition } from '../../services/danyaTeachingService';
+import { buildThinkAloud } from '../../services/thinkAloud';
+
+/** Min plies between think-aloud deliberations — a coach who deliberates on
+ *  every move stops being listened to (same cadence family as the questions). */
+const THINK_ALOUD_MIN_PLY_GAP = 6;
 
 /** Fork-in-the-road deliberations per game (David 2026-07-11: "3 total"). */
 const FORK_TALK_MAX_PER_GAME = 3;
@@ -913,6 +918,8 @@ export function CoachTeachPage(): JSX.Element {
   // coach's next reply is exactly the dictated move (validated legal at
   // consume time; silently dropped with an audit if the position moved on).
   const pendingCoachMoveRef = useRef<string | null>(null);
+  /** Last ply a think-aloud deliberation fired (#20 throttle). */
+  const thinkAloudLastPlyRef = useRef(-999);
   // SESSION BOOKENDS (David 2026-07-11): running tallies for the closing
   // takeaway spoken on End Lesson — questions asked/found + slips stopped on.
   // All computed; the closer is a deterministic line (no LLM needed).
@@ -4274,11 +4281,53 @@ export function CoachTeachPage(): JSX.Element {
                       // blue), surviving the narration's own arrow pass.
                       chainArrowsRef.current = [...chainArrowsRef.current, ...fork.arrows];
                       setArrows((prev) => uniqueArrows([...prev, ...fork.arrows]));
-                    } else if (recUci && recUci.length >= 4) {
-                      const recProbe = new Chess(probe.fen());
-                      const recMove = recProbe.move({ from: recUci.slice(0, 2), to: recUci.slice(2, 4), promotion: recUci.slice(4, 5) || undefined });
-                      if (recMove) {
-                        facts.push(`The student's strongest reply in THIS position is ${recMove.san} (engine). If you point them toward a move, name ONLY ${recMove.san} — never suggest any other move, and never tell them to move a piece to a square it already occupies.`);
+                    } else {
+                      // THINK ALOUD (#20, David 2026-07-11 "the user should be
+                      // playing"): at a genuine decision moment in the
+                      // MIDDLEGAME (one move clearly best — the fork covers
+                      // near-equal), the coach deliberates what the position
+                      // wants WITHOUT naming the move (the fact block is
+                      // built without the best-move SAN — it cannot leak).
+                      // The fork and the questions own their moments; the
+                      // plain recommendation is the fallback.
+                      let thinkMoment = null;
+                      const thinkEligible =
+                        plyNow - thinkAloudLastPlyRef.current >= THINK_ALOUD_MIN_PLY_GAP &&
+                        classifyPhase(probe.fen(), historyAfterReply.length) === 'middlegame';
+                      if (thinkEligible) {
+                        try {
+                          const thinkLines = (studentBest?.topLines ?? [])
+                            .slice(0, 2)
+                            .filter((l) => typeof l.moves?.[0] === 'string' && typeof l.evaluation === 'number')
+                            .map((l) => {
+                              const lp = new Chess(probe.fen());
+                              const first = lp.move({ from: l.moves[0].slice(0, 2), to: l.moves[0].slice(2, 4), promotion: l.moves[0].slice(4, 5) || undefined });
+                              let replySan: string | undefined;
+                              if (first && typeof l.moves[1] === 'string') {
+                                const second = lp.move({ from: l.moves[1].slice(0, 2), to: l.moves[1].slice(2, 4), promotion: l.moves[1].slice(4, 5) || undefined });
+                                replySan = second?.san;
+                              }
+                              return first ? { san: first.san, evalCp: playerColor === 'white' ? l.evaluation : -l.evaluation, replySan } : null;
+                            })
+                            .filter((l): l is NonNullable<typeof l> => l !== null);
+                          thinkMoment = buildThinkAloud({
+                            fen: probe.fen(),
+                            historySans: historyAfterReply,
+                            studentColor: playerColor,
+                            lines: thinkLines,
+                          });
+                        } catch { /* deliberation is a bonus, never a blocker */ }
+                      }
+                      if (thinkMoment) {
+                        thinkAloudLastPlyRef.current = plyNow;
+                        captureEvent('think_aloud_offered', { surface: 'coach-teach', withheld: thinkMoment.withheldSan });
+                        facts.push(thinkMoment.facts);
+                      } else if (recUci && recUci.length >= 4) {
+                        const recProbe = new Chess(probe.fen());
+                        const recMove = recProbe.move({ from: recUci.slice(0, 2), to: recUci.slice(2, 4), promotion: recUci.slice(4, 5) || undefined });
+                        if (recMove) {
+                          facts.push(`The student's strongest reply in THIS position is ${recMove.san} (engine). If you point them toward a move, name ONLY ${recMove.san} — never suggest any other move, and never tell them to move a piece to a square it already occupies.`);
+                        }
                       }
                     }
                   }
