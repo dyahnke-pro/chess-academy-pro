@@ -41,7 +41,10 @@ export function DiscussionPracticePanel({
   // accent; the wrapper lets clicks pass through everywhere except the card.
   const Shell = ({ children }: { children: ReactNode }): JSX.Element => (
     <div className="fixed inset-x-0 bottom-[calc(4.75rem+env(safe-area-inset-bottom,0px))] z-50 px-4 pointer-events-none">
-      <div className="pointer-events-auto mx-auto w-full max-w-lg rounded-2xl border-2 border-amber-500/60 bg-theme-surface px-4 py-3 shadow-2xl shadow-amber-500/20">
+      {/* Calm card, not an alarm (David 2026-07-11: "the red pop ups are
+          annoying… something feels off") — the coach SPEAKS the question now;
+          this is just where the chips live. Board stays fully playable. */}
+      <div className="pointer-events-auto mx-auto w-full max-w-lg rounded-2xl border border-amber-500/40 bg-theme-surface px-4 py-3 shadow-lg">
         {children}
       </div>
     </div>

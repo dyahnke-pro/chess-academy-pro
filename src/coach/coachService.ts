@@ -454,6 +454,17 @@ function previewToolResult(
 // ─────────────────────────────────────────────────────────────────────────
 // THE QUESTION-INTENT THESAURUS (David 2026-06-14: "throw the thesaurus at
 
+/** Strip surface-appended instruction blocks (`\n\n[STEP-BY-STEP NARRATION —
+ *  …]` and kin) from an ask, leaving only the STUDENT's words. Intent
+ *  detectors and language detection must never see injected blocks: the
+ *  2026-07-11 session had "I played f4" hijacked by the training-request
+ *  vertical (the block's wording tripped it) and the language misread from
+ *  block text. Exported for tests. */
+export function stripInjectedBlocks(ask: string): string {
+  const idx = ask.search(/\n\n\[[A-Z]/);
+  return idx >= 0 ? ask.slice(0, idx).trim() : ask;
+}
+
 async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}): Promise<CoachAnswer> {
   // WO-COACH-UNIFY-01 visibility: include task + maxTokens in the
   // ask-received audit so paste-back audit logs show which surface
@@ -500,11 +511,27 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
   // turn's language into later turns (the polyglot audit caught an English
   // question answered in Portuguese, 2026-07-10). Answers phrase back in-language
   // via voiceFacts' per-call studentMessage detection (explicit-thread follow-up).
+  // LANGUAGE IS COMPUTED, NEVER MODEL-GUESSED (David 2026-07-11: the coach
+  // replied in Portuguese, then French, to plain English move reports). The
+  // system prompt used to tell the LLM to "match the student's language" — the
+  // model then GUESSED from terse chess notation ("I played fxe5") and picked a
+  // romance language at random. G0 in language form: the app detects the
+  // language deterministically (on the STUDENT's words only — injected
+  // instruction blocks stripped) and the prompt is TOLD, never asked.
   {
-    const askLang = detectLanguage(input.ask);
+    const studentWords = stripInjectedBlocks(input.ask);
+    const askLang = detectLanguage(studentWords);
     if (askLang.nonEnglish) {
       input = { ...input, ask: await translateToEnglish(input.ask) };
     }
+    const languageLine =
+      `STUDENT LANGUAGE (computed by the app): ${askLang.name}. Write your ENTIRE reply in ` +
+      `${askLang.name}. Chess notation (e4, fxe5, Nf3, O-O) is notation, not a language ` +
+      `signal — NEVER infer the language from moves or guess it yourself.`;
+    options = {
+      ...options,
+      systemPromptAddition: [options.systemPromptAddition, languageLine].filter(Boolean).join('\n\n'),
+    };
   }
 
   // NOTE on hallucinated tactics (David 2026-06-16, false "knight fork"):
@@ -1006,7 +1033,9 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     // validation is unchanged, and `internalAsk: true` tells coachApi to
     // skip the grounded-intent interception outright.
     const isInternalAsk = INTERNAL_ASK_SURFACES.has(input.liveState.surface);
-    const askForIntents = isInternalAsk ? undefined : input.ask;
+    // Detectors see the STUDENT's words only — never surface-injected
+    // instruction blocks (the "I played f4" → training-pitch hijack).
+    const askForIntents = isInternalAsk ? undefined : stripInjectedBlocks(input.ask);
     // Progress ("am I improving?") and concept ("what's a fork?") questions are
     // answered from the student's history / the book corpus — NO board needed —
     // so engage grounding even with no FEN. Other grounded intents need a live

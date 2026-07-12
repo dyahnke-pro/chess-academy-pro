@@ -117,6 +117,8 @@ export interface UseDiscussionPracticeResult {
   raiseSlipPrompt: (args: RaiseSlipPromptArgs) => void;
   submitReason: (reason: string) => Promise<void>;
   skip: () => Promise<void>;
+  /** The student played through the open question — capture silently + clear. */
+  dismissOnMove: () => void;
   dismissTeach: () => void;
   reset: () => void;
 }
@@ -319,6 +321,10 @@ export function useDiscussionPractice(
       setGoodMove(null);
       busyRef.current = true;
       ctxRef.current = { args, bestSan, cpLoss, kind: 'slip', shouldCount: slip.shouldCount, reveal, moverChar, options };
+      // The coach ASKS OUT LOUD (David 2026-07-11: "have the coach vocalize" —
+      // a guy next to you says "why'd you go there?", he doesn't slide a card).
+      // The probe is the clean neutral question, so speaking it leaks nothing.
+      void voiceService.speakForced(buildWhyPrompt(slip)).catch(() => undefined);
       setPrompt({
         question: buildWhyPrompt(slip),
         options,
@@ -485,6 +491,53 @@ export function useDiscussionPractice(
 
   const skip = useCallback((): Promise<void> => { reset(); return Promise.resolve(); }, [reset]);
 
+  // The student PLAYED THROUGH the open question — a real coach lets it go
+  // ("we'll come back to that one") instead of leaving a stale card (David
+  // 2026-07-11 pop-up redesign). The slip still gets captured to the weakness
+  // bucket with an honest no-answer reason (it resurfaces in review/drills);
+  // nothing is spoken — the board moved on, so does the coach.
+  const dismissOnMove = useCallback((): void => {
+    const ctx = ctxRef.current;
+    if (!ctx || ctx.kind !== 'slip') { reset(); return; }
+    ctxRef.current = null;
+    captureEvent('discussion_response', {
+      surface: opts.surface ?? 'unknown',
+      kind: ctx.kind,
+      response: '(played on)',
+      response_mode: 'moved-on',
+      was_hint: false,
+      move: ctx.args.playedSan,
+      game_phase: ctx.args.gamePhase,
+      cp_loss: Math.round(ctx.cpLoss),
+      should_count: ctx.shouldCount,
+      student_rating: ctx.args.studentRating ?? null,
+      logged_tag: null,
+      bucket: null,
+    });
+    void captureMisconception({
+      classifyInput: {
+        fen: ctx.args.fenBefore,
+        playedSan: ctx.args.playedSan,
+        bestSan: ctx.bestSan,
+        gamePhase: ctx.args.gamePhase,
+        userReason: '(played on without answering)',
+      },
+      source: opts.source ?? 'discussion-practice',
+      shouldCount: ctx.shouldCount,
+      context: {
+        fen: ctx.args.fenBefore,
+        playedSan: ctx.args.playedSan,
+        bestSan: ctx.bestSan,
+        cpLoss: ctx.cpLoss,
+        gamePhase: ctx.args.gamePhase,
+        moveNumber: ctx.args.moveNumber,
+        openingId: ctx.args.openingId,
+        openingName: ctx.args.openingName,
+      },
+    }).catch(() => undefined);
+    reset();
+  }, [opts.surface, opts.source, reset]);
+
   const dismissTeach = useCallback((): void => { reset(); }, [reset]);
 
   return {
@@ -496,6 +549,7 @@ export function useDiscussionPractice(
     raiseSlipPrompt,
     submitReason,
     skip,
+    dismissOnMove,
     dismissTeach,
     reset,
   };

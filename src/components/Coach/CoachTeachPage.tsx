@@ -78,7 +78,11 @@ import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { shouldOfferGuidedFind, buildGuidedFindChallenge, judgeGuidedFindAttempt, type GuidedFindChallenge } from '../../services/guidedFindTheMove';
 import { buildThreatCheckQuestion, judgeThreatCheckPick, type ThreatCheckQuestion } from '../../services/threatCheck';
 import { buildOpeningChainFacts } from '../../services/openingFactChains';
+import { buildForkTalk, type ForkTalk } from '../../services/forkTalk';
 import { parseSpokenMove } from '../../services/spokenMoveParser';
+
+/** Fork-in-the-road deliberations per game (David 2026-07-11: "3 total"). */
+const FORK_TALK_MAX_PER_GAME = 3;
 import { captureEvent } from '../../services/analytics';
 
 /** Min plies between guided find-the-move questions — the coach quizzes at
@@ -893,6 +897,13 @@ export function CoachTeachPage(): JSX.Element {
   /** Traps/gems already announced this game (openingFactChains dedup) — the
    *  same lurking line isn't re-announced on every ply it stays live. */
   const announcedTrapsRef = useRef(new Set<string>());
+  // FORK IN THE ROAD (David 2026-07-11: "when there is a fork in the road the
+  // coach could talk about both options… advantages and disadvantages of
+  // both"). Near-equal, different-character options get deliberated — the
+  // student answers BY PLAYING (never a card). Max 3 per game; after the pick,
+  // ONE road-affirming clause, then quiet ("less waste, more impact").
+  const forkTalkCountRef = useRef(0);
+  const pendingForkRef = useRef<ForkTalk | null>(null);
   // SESSION BOOKENDS (David 2026-07-11): running tallies for the closing
   // takeaway spoken on End Lesson — questions asked/found + slips stopped on.
   // All computed; the closer is a deterministic line (no LLM needed).
@@ -3909,6 +3920,12 @@ export function CoachTeachPage(): JSX.Element {
     // Pre-move FEN (before we overwrite liveFenRef below) — the slip faucet
     // needs the position the student moved FROM.
     const fenBefore = liveFenRef.current;
+    // An open "why did you play that?" is closed by playing on — the coach
+    // lets it go and the slip is captured silently for review/drills (David
+    // 2026-07-11: never a stale card over a live board).
+    if (discussion.prompt) {
+      discussion.dismissOnMove();
+    }
     // An open THREAT-CHECK is answered by the move itself — the student chose
     // to act rather than tap a chip. Log it and clear; never block the move.
     if (threatCheckRef.current) {
@@ -4031,6 +4048,19 @@ export function CoachTeachPage(): JSX.Element {
                 if (tctx.immediate.length > 0) tacticsFacts.push(`Real tactics on the board now: ${tctx.immediate.map((t) => t.description).join('; ')}.`);
                 if (tctx.hanging.length > 0) tacticsFacts.push(`Undefended/attacked: ${tctx.hanging.map((h) => `${NAME[h.piece] ?? h.piece} on ${h.square}`).join(', ')}.`);
                 let questionArmed = false;
+                const historyAfterReply = [...move.history, m.san];
+                // ROAD CHOSEN — the student just answered an open fork by
+                // playing. One computed affirming clause, then quiet (David:
+                // "less waste more impact"). Any move closes the fork moment.
+                const openFork = pendingForkRef.current;
+                if (openFork) {
+                  pendingForkRef.current = null;
+                  const affirm = openFork.affirmBySan[move.san];
+                  if (affirm) {
+                    captureEvent('fork_talk_road_chosen', { surface: 'coach-teach', road: move.san });
+                    facts.push(`ROAD CHOSEN: the student took the ${move.san} road at the fork. Affirm it in ONE short clause — "${affirm}" — then narrate normally. Do not re-open or mention the other road.`);
+                  }
+                }
                 // The STUDENT'S recommended next move — COMPUTED in code, never the
                 // LLM's pick (G0). The coach was telling the student to "develop the
                 // knight to f3" with a knight ALREADY on f3, because the move it
@@ -4087,11 +4117,33 @@ export function CoachTeachPage(): JSX.Element {
                     sessionStatsRef.current.questions += 1;
                     captureEvent('threat_check_asked', { surface: 'coach-teach', answer: threatQ.answer });
                     facts.push(`Do NOT name any threat, attacked piece, undefended piece, or tactic in this reply. End your reply with exactly this question to the student, then stop: "${threatQ.question}"`);
-                  } else if (recUci && recUci.length >= 4) {
-                    const recProbe = new Chess(probe.fen());
-                    const recMove = recProbe.move({ from: recUci.slice(0, 2), to: recUci.slice(2, 4), promotion: recUci.slice(4, 5) || undefined });
-                    if (recMove) {
-                      facts.push(`The student's strongest reply in THIS position is ${recMove.san} (engine). If you point them toward a move, name ONLY ${recMove.san} — never suggest any other move, and never tell them to move a piece to a square it already occupies.`);
+                  } else {
+                    // FORK IN THE ROAD — near-equal options with different
+                    // characters get deliberated as two lives, not a readout.
+                    // Fires INSTEAD of the plain best-move recommendation; the
+                    // student answers by playing. Max 3 per game.
+                    const forkLines = (studentBest?.topLines ?? [])
+                      .slice(0, 3)
+                      .filter((l) => typeof l.moves?.[0] === 'string' && typeof l.evaluation === 'number')
+                      .map((l) => ({ uci: l.moves[0], evalCp: playerColor === 'white' ? l.evaluation : -l.evaluation }));
+                    const fork = forkTalkCountRef.current < FORK_TALK_MAX_PER_GAME && forkLines.length >= 2
+                      ? buildForkTalk({ fen: probe.fen(), historySans: historyAfterReply, options: forkLines })
+                      : null;
+                    if (fork) {
+                      forkTalkCountRef.current += 1;
+                      pendingForkRef.current = fork;
+                      captureEvent('fork_talk_offered', { surface: 'coach-teach', roads: fork.options.map((o) => o.san).join('|'), count: forkTalkCountRef.current });
+                      facts.push(fork.facts);
+                      // Both roads on the board as the words land (green /
+                      // blue), surviving the narration's own arrow pass.
+                      chainArrowsRef.current = [...chainArrowsRef.current, ...fork.arrows];
+                      setArrows((prev) => uniqueArrows([...prev, ...fork.arrows]));
+                    } else if (recUci && recUci.length >= 4) {
+                      const recProbe = new Chess(probe.fen());
+                      const recMove = recProbe.move({ from: recUci.slice(0, 2), to: recUci.slice(2, 4), promotion: recUci.slice(4, 5) || undefined });
+                      if (recMove) {
+                        facts.push(`The student's strongest reply in THIS position is ${recMove.san} (engine). If you point them toward a move, name ONLY ${recMove.san} — never suggest any other move, and never tell them to move a piece to a square it already occupies.`);
+                      }
                     }
                   }
                 } catch { /* engine down → no move named; the prompt keeps the prompt-for-next-move general */ }
@@ -4106,8 +4158,12 @@ export function CoachTeachPage(): JSX.Element {
                 // and each lurking line is announced once per game.
                 if (!questionArmed) {
                   try {
-                    const chainHistory = [...move.history, m.san];
-                    if (chainHistory.length <= 2) announcedTrapsRef.current.clear(); // fresh game
+                    const chainHistory = historyAfterReply;
+                    if (chainHistory.length <= 2) {
+                      announcedTrapsRef.current.clear(); // fresh game
+                      forkTalkCountRef.current = 0;
+                      pendingForkRef.current = null;
+                    }
                     if (classifyPhase(probe.fen(), chainHistory.length) === 'opening') {
                       const chain = buildOpeningChainFacts({
                         historySans: chainHistory,
