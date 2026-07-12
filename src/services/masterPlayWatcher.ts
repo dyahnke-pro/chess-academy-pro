@@ -34,6 +34,7 @@
 
 import { Chess } from 'chess.js';
 import { masterPlayCache, positionFen } from './masterPlayCache';
+import { warmAmateurPlay } from './amateurPlayCache';
 import { lookupMasterPlay, type LookupTrigger } from './masterPlayLookup';
 import type { MasterPlayResult } from './masterPlayTypes';
 import { logAppAudit } from './appAuditor';
@@ -84,6 +85,11 @@ export interface PrefetchOptions {
   /** Custom trigger label. The walkthrough preload path passes
    *  `'watcher-walkthrough-preload'`. */
   trigger?: LookupTrigger;
+  /** Student rating — when present, the TOP-LEVEL game-following prefetch
+   *  also warms the amateur-band cache for rating-banded reality (#23).
+   *  One extra call riding the SAME out-of-book cutoff; narration reads
+   *  that cache only, never the network. */
+  studentRating?: number;
 }
 
 function emitPrefetchAudit(
@@ -154,6 +160,14 @@ export async function prefetchMasterPlay(
   // always worth warming live).
   const isGameFollowing = opts.trigger !== 'watcher-walkthrough-preload';
   const liveSuppressed = isGameFollowing && outOfBookStreak >= OUT_OF_BOOK_STREAK_LIMIT;
+
+  // Rating-banded reality (#23): warm the amateur band alongside the
+  // masters lookup — top-level game-following prefetches only, and never
+  // while the out-of-book cutoff has live calls suppressed. Fire-and-forget;
+  // all rate-limit/circuit machinery rides in fetchLichessExplorer.
+  if (typeof opts.studentRating === 'number' && isGameFollowing && !opts.skipLookahead && !liveSuppressed) {
+    void warmAmateurPlay(key, opts.studentRating, opts.surface);
+  }
 
   let result: MasterPlayResult;
   try {

@@ -251,6 +251,9 @@ function recordLichessRateLimit(response: Response, source: string): void {
 export async function fetchLichessExplorer(
   fen: string,
   source: ExplorerSource = 'lichess',
+  /** Optional overrides. `ratings` narrows the amateur buckets (e.g.
+   *  "1400,1600" for rating-banded reality) — lichess source only. */
+  opts?: { ratings?: string },
 ): Promise<LichessExplorerResult> {
   // Shared rate-limit cooldown — see fetchCloudEval.
   if (isLichessRateLimited()) {
@@ -290,7 +293,7 @@ export async function fetchLichessExplorer(
   const params = new URLSearchParams({ fen, source });
   if (source === 'lichess') {
     params.set('speeds', 'blitz,rapid,classical');
-    params.set('ratings', '1600,1800,2000,2200,2500');
+    params.set('ratings', opts?.ratings ?? '1600,1800,2000,2200,2500');
   }
   const url = withApiBase(`${EXPLORER_PROXY_PATH}?${params.toString()}`);
   let response: Response;

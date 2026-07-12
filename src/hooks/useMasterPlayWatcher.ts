@@ -31,9 +31,12 @@ export function useMasterPlayWatcher(
   surface: string,
   fen: string | null | undefined,
   sessionId?: string,
+  /** Student rating — enables the amateur-band warm for rating-banded
+   *  reality (#23). Optional; surfaces without a profile omit it. */
+  studentRating?: number,
 ): void {
   useEffect(() => {
     if (!fen) return;
-    void prefetchMasterPlay(fen, { surface, sessionId });
-  }, [surface, fen, sessionId]);
+    void prefetchMasterPlay(fen, { surface, sessionId, studentRating });
+  }, [surface, fen, sessionId, studentRating]);
 }

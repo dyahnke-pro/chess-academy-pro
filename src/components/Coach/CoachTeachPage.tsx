@@ -84,6 +84,8 @@ import { parseCoachMoveCommand } from '../../services/coachMoveCommand';
 import { sanToSpeech } from '../../utils/sanToSpeech';
 import { noteAtPosition } from '../../services/danyaTeachingService';
 import { buildThinkAloud } from '../../services/thinkAloud';
+import { warmAmateurPlay, buildRatingRealityFact } from '../../services/amateurPlayCache';
+import { masterPlayCache } from '../../services/masterPlayCache';
 
 /** Min plies between think-aloud deliberations — a coach who deliberates on
  *  every move stops being listened to (same cadence family as the questions). */
@@ -4192,6 +4194,14 @@ export function CoachTeachPage(): JSX.Element {
                 if (tctx.hanging.length > 0) tacticsFacts.push(`Undefended/attacked: ${tctx.hanging.map((h) => `${NAME[h.piece] ?? h.piece} on ${h.square}`).join(', ')}.`);
                 let questionArmed = false;
                 const historyAfterReply = [...move.history, m.san];
+                // Rating-banded reality (#23): warm the amateur-band cache for
+                // this opening position NOW — the engine analysis below gives
+                // it ~1s to land, and opening positions repeat heavily across
+                // games so the session cache compounds. Narration reads the
+                // cache ONLY (the rate-limit contract).
+                if (classifyPhase(probe.fen(), historyAfterReply.length) === 'opening') {
+                  void warmAmateurPlay(probe.fen(), rating, 'coach-teach');
+                }
                 // ROAD CHOSEN — the student just answered an open fork by
                 // playing. One computed affirming clause, then quiet (David:
                 // "less waste more impact"). Any move closes the fork moment.
@@ -4356,6 +4366,21 @@ export function CoachTeachPage(): JSX.Element {
                         announcedTraps: announcedTrapsRef.current,
                       });
                       for (const n of chain.trapNames) announcedTrapsRef.current.add(n);
+                      // Rating-banded reality (#23) — CACHE-ONLY reads: when
+                      // both the amateur band and the masters data are warm
+                      // for THIS position, the split becomes a fact ("at your
+                      // level X is most common; masters prefer Y"). Cold
+                      // caches → no fact (empty > generic).
+                      try {
+                        const masters = masterPlayCache.get(probe.fen());
+                        const mTop = masters && masters.totalGames > 0 ? masters.moves[0] : null;
+                        const banded = buildRatingRealityFact(probe.fen(), mTop && masters ? {
+                          san: mTop.san,
+                          pct: Math.round((mTop.games / masters.totalGames) * 100),
+                          totalGames: masters.totalGames,
+                        } : null);
+                        if (banded) facts.push(banded);
+                      } catch { /* the split is a bonus */ }
                       facts.push(...chain.facts);
                       // Lead the eye NOW — the arrows land with the words
                       // (green = named continuation, amber/red = lurking

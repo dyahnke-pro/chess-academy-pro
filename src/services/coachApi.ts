@@ -75,6 +75,7 @@ import { getDueCount, getEnrolledOpenings, getSrsDueOpenings, getTotalEnrolled }
 import { criticalMomentsAccuracy, streaks, timeControlPerformance, comebackWins, winShapeStats, colorProficiencyMismatch, personalRecords, tacticTransferGap, recordVsOpening, recordVsOpponent, phaseStrengthOverTime } from './analyticsService';
 import { getPuzzleStats } from './puzzleService';
 import { detectConceptsInText, getConcept, resolveOpeningIdFromName } from './chessConceptService';
+import { getCachedAmateurPlay } from './amateurPlayCache';
 // claimValidator import removed — the grounded path no longer free-composes,
 // so there are no claims to validate (David 2026-07-09).
 import { logAppAudit } from './appAuditor';
@@ -1664,6 +1665,16 @@ function renderMasterPlayContextBlock(ctx: MasterPlayContext): string {
         const event = g.event ? ` (${g.event})` : '';
         const result = g.result ?? '*';
         lines.push(`  • ${white} vs ${black}, ${year}${event} — ${result}`);
+      }
+    }
+    // Rating-banded reality (#23) — CACHE-ONLY read of the amateur band
+    // warmed by the watcher/teach flows. When present, move-question answers
+    // can name the amateur-vs-master split honestly.
+    const amateur = getCachedAmateurPlay(c.fen);
+    if (amateur && amateur.totalGames >= 50 && amateur.moves.length > 0) {
+      lines.push(`At amateur level (${amateur.bandLabel}, ${amateur.totalGames} games), the most common moves here:`);
+      for (const m of amateur.moves.slice(0, 3)) {
+        lines.push(`  • ${m.san} — ${m.pct}% (${m.games} games)`);
       }
     }
     if (ctx.lookahead.length > 0) {
