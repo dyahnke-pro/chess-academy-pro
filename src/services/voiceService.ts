@@ -172,7 +172,7 @@ function detectNativeApp(): boolean {
 }
 const isCapacitor = detectNativeApp();
 
-export function getTtsUrl(text: string, voice: string, useSsml = true, style?: string): string {
+export function getTtsUrl(text: string, voice: string, useSsml = true, style?: string, prosody?: 'spike'): string {
   const base = isCapacitor ? VERCEL_ORIGIN : '';
   // SSML default-on so Polly gets engine-aware structure (paragraph
   // on generative voices, prosody slowdown on neural). Short clips
@@ -182,7 +182,12 @@ export function getTtsUrl(text: string, voice: string, useSsml = true, style?: s
   // faster + louder, soft ⇒ gentler. Generative voices ignore it.
   const ssmlParam = useSsml ? '&ssml=1' : '';
   const styleParam = style ? `&style=${encodeURIComponent(style)}` : '';
-  return `${base}/api/tts?text=${encodeURIComponent(text)}&voice=${encodeURIComponent(voice)}${ssmlParam}${styleParam}`;
+  // Decisive-beat prosody spike (#25) — additive param; server applies a
+  // slight rate/pitch lift on NEURAL voices only (generative voices ignore
+  // prosody tags by engine design). Changes the cache key, correctly: a
+  // spiked clip is a different clip.
+  const prosodyParam = prosody ? `&prosody=${prosody}` : '';
+  return `${base}/api/tts?text=${encodeURIComponent(text)}&voice=${encodeURIComponent(voice)}${ssmlParam}${styleParam}${prosodyParam}`;
 }
 
 /** Available Amazon Polly voices (served via /api/tts endpoint) */
@@ -913,9 +918,9 @@ class VoiceService {
    *  responses, and any callsite where the user has explicitly opted
    *  into the voice flow. Honors the Coach Narration = "silent" gate
    *  via speakInternal — silent always wins over force. */
-  async speakForced(text: string): Promise<void> {
+  async speakForced(text: string, opts?: { prosodySpike?: boolean }): Promise<void> {
     this.logSpeakInvoked('speakForced', text);
-    return this.speakInternal(sanitizeForTTS(text), true);
+    return this.speakInternal(sanitizeForTTS(text), true, opts?.prosodySpike ? { prosodySpike: true } : undefined);
   }
 
   /**
@@ -986,7 +991,7 @@ class VoiceService {
   private async speakInternal(
     text: string,
     force: boolean,
-    opts?: { useSecondary?: boolean; noFallback?: boolean; bypassBriefCap?: boolean; bypassVerbosity?: boolean },
+    opts?: { useSecondary?: boolean; noFallback?: boolean; bypassBriefCap?: boolean; bypassVerbosity?: boolean; prosodySpike?: boolean },
   ): Promise<void> {
     // Coach Narration = "silent" is the highest-priority gate: when
     // the user has explicitly set Settings → Coach → Coach Narration
@@ -1311,7 +1316,7 @@ class VoiceService {
         : prefs.coachPersonality && prefs.coachPersonality !== 'default'
           ? prefs.coachPersonality
           : undefined;
-      const success = await this.speakPolly(text, voiceForSpeak, personalityStyle);
+      const success = await this.speakPolly(text, voiceForSpeak, personalityStyle, opts?.prosodySpike ? 'spike' : undefined);
       if (success) {
         this.lastTier = 'polly';
         this.lastSpeakDiagnostic.tier = 'polly';
@@ -1984,12 +1989,12 @@ audio.playbackRate = this.speed;
     return true;
   }
 
-  private async speakPolly(text: string, voice: string, style?: string): Promise<boolean> {
+  private async speakPolly(text: string, voice: string, style?: string, prosody?: 'spike'): Promise<boolean> {
     this.lastSpeakDiagnostic.pollyAttempted = true;
     try {
       // Cache key includes style so a style change doesn't return
       // a stale audio buffer from an earlier prosody setting.
-      const key = this.pollyKey(text, voice) + (style ? `|${style}` : '');
+      const key = this.pollyKey(text, voice) + (style ? `|${style}` : '') + (prosody ? `|${prosody}` : '');
       const cachedBuffer = this.touchAudioCacheEntry(key);
 
       // Cache hit → play the buffered audio directly (no fetch). On iOS
@@ -2021,11 +2026,11 @@ audio.playbackRate = this.speed;
         this.audioCache.delete(key);
         this.lastSpeakDiagnostic.error = 'cached audio playback failed — refetching';
         if (this.isIosPlatform()) {
-          return await this.playBufferedPollyFallback(getTtsUrl(text, voice, true, style), key);
+          return await this.playBufferedPollyFallback(getTtsUrl(text, voice, true, style, prosody), key);
         }
       }
 
-      const url = getTtsUrl(text, voice, true, style);
+      const url = getTtsUrl(text, voice, true, style, prosody);
 
       // iOS plays straight from the /api/tts URL via the primed <audio>
       // element. Native progressive streaming — playback starts as bytes

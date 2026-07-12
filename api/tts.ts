@@ -178,24 +178,35 @@ const NEURAL_PROSODY_BY_STYLE: Record<PersonalityStyle, { rate: string; pitch?: 
   'drill-sergeant': { rate: '108%', volume: 'x-loud' },
 };
 
-function buildSsmlForEngine(text: string, engine: string, style?: string): string {
+export function buildSsmlForEngine(text: string, engine: string, style?: string, prosodyMode?: string): string {
   const escaped = escapeForSsml(text);
   if (engine === 'generative') {
     // Generative engines don't honor prosody — paragraph wrap is the
     // only safe enrichment. Engine handles emotion / pacing on its own.
+    // (The #25 spike is therefore a documented no-op here.)
     return `<speak><p>${escaped}</p></speak>`;
   }
   const personality = (style ?? 'default') as PersonalityStyle;
   const prosody = NEURAL_PROSODY_BY_STYLE[personality] ?? NEURAL_PROSODY_BY_STYLE.default;
+  // Decisive-beat SPIKE (#25, David 2026-07-11 approval): a slight lift on
+  // the payoff lines ("You called it", the brilliancy stems). Composed OVER
+  // the personality base — rate +8 points, pitch +6% — never a new register.
+  let rate = prosody.rate;
+  let pitch = prosody.pitch;
+  if (prosodyMode === 'spike') {
+    const baseRate = Number.parseInt(prosody.rate, 10);
+    rate = `${Number.isFinite(baseRate) ? Math.min(baseRate + 8, 130) : 103}%`;
+    pitch = '+6%';
+  }
   const attrs = [
-    `rate="${prosody.rate}"`,
-    prosody.pitch ? `pitch="${prosody.pitch}"` : '',
+    `rate="${rate}"`,
+    pitch ? `pitch="${pitch}"` : '',
     prosody.volume ? `volume="${prosody.volume}"` : '',
   ].filter(Boolean).join(' ');
   return `<speak><prosody ${attrs}><p>${escaped}</p></prosody></speak>`;
 }
 
-async function synthesize(text: string, voice: string, req: Request, useSsml: boolean, style?: string): Promise<Response> {
+async function synthesize(text: string, voice: string, req: Request, useSsml: boolean, style?: string, prosodyMode?: string): Promise<Response> {
   const cors = getCorsHeaders(req);
   const accessKeyId = process.env.AWS_ACCESS_KEY_ID_POLLY;
   const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY_POLLY;
@@ -259,7 +270,7 @@ async function synthesize(text: string, voice: string, req: Request, useSsml: bo
     const buildCommand = (asSsml: boolean, vc: { voiceId: string; engine: string; languageCode?: string }) =>
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic import loses type info
       new SynthesizeSpeechCommand({
-        Text: asSsml ? buildSsmlForEngine(text, vc.engine, style) : text,
+        Text: asSsml ? buildSsmlForEngine(text, vc.engine, style, prosodyMode) : text,
         TextType: asSsml ? 'ssml' : 'text',
         OutputFormat: 'mp3',
         VoiceId: vc.voiceId,
@@ -424,6 +435,8 @@ export default async function handler(req: Request): Promise<Response> {
       // Generative voices ignore prosody; we still pass it through
       // for consistency.
       const style = url.searchParams.get('style') ?? undefined;
+      // Decisive-beat prosody spike (#25) — additive; Neural voices only.
+      const prosodyMode = url.searchParams.get('prosody') ?? undefined;
 
       // Diagnostic mode: /api/tts?diag=1 returns env var status without calling Polly
       if (url.searchParams.get('diag') === '1') {
@@ -436,20 +449,20 @@ export default async function handler(req: Request): Promise<Response> {
         );
       }
 
-      return synthesize(text, voice, req, useSsml, style);
+      return synthesize(text, voice, req, useSsml, style, prosodyMode);
     }
 
     if (req.method === 'POST') {
-      let body: { text?: string; voice?: string; ssml?: boolean; style?: string };
+      let body: { text?: string; voice?: string; ssml?: boolean; style?: string; prosody?: string };
       try {
-        body = await req.json() as { text?: string; voice?: string; ssml?: boolean; style?: string };
+        body = await req.json() as { text?: string; voice?: string; ssml?: boolean; style?: string; prosody?: string };
       } catch {
         return new Response('Invalid JSON', { status: 400, headers: cors });
       }
       const text = body.text?.trim() ?? '';
       const voice = body.voice ?? 'ruth';
       const useSsml = body.ssml === true;
-      return synthesize(text, voice, req, useSsml, body.style);
+      return synthesize(text, voice, req, useSsml, body.style, body.prosody);
     }
 
     return new Response('Method not allowed', { status: 405, headers: cors });

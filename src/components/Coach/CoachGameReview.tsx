@@ -673,7 +673,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     captureEvent('review_turning_point_result', { correct, picked_ply: ply, answer_ply: turningQ.answer.ply });
     setTurningQ(null);
     setTurningReveal({ correct, text });
-    void voiceService.speakForced(text).catch(() => undefined);
+    // Decisive-beat prosody spike (#25): the payoff line lifts only when
+    // the student CALLED it — a wrong pick keeps the flat register.
+    void voiceService.speakForced(text, correct ? { prosodySpike: true } : undefined).catch(() => undefined);
   }, [turningQ]);
 
   const resolveReadingGate = useCallback((): void => {
@@ -1514,7 +1516,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                       captureEvent('review_find_shot_result', { outcome: 'found', attempts: shotAttemptsRef.current + 1, answer: shotState.challenge.answerSan });
                       setShotState(null);
                       setShotReveal(text);
-                      void voiceService.speakForced(text).catch(() => undefined);
+                      // Decisive-beat prosody spike (#25) — the found shot is THE payoff.
+                      void voiceService.speakForced(text, { prosodySpike: true }).catch(() => undefined);
                     } else if (verdict === 'retry') {
                       shotAttemptsRef.current += 1;
                       captureEvent('review_find_shot_result', { outcome: 'retry', attempts: shotAttemptsRef.current, answer: shotState.challenge.answerSan });

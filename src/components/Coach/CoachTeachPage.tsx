@@ -4091,7 +4091,7 @@ export function CoachTeachPage(): JSX.Element {
         sessionStatsRef.current.correct += 1;
         captureEvent('guided_find_result', { surface: 'coach-teach', outcome: 'found', attempts: guidedFindAttemptsRef.current + 1, answer: guidedChallenge.answerSan });
         setMessages((prev) => [...prev, { id: uid('guided-found'), role: 'assistant', content: guidedChallenge.confirm, timestamp: Date.now() }]);
-        void voiceService.speakForced(guidedChallenge.confirm).catch(() => undefined);
+        void voiceService.speakForced(guidedChallenge.confirm, { prosodySpike: true }).catch(() => undefined);
         clearGuidedFind();
         // fall through — the found move stands; the opponent replies normally.
       } else {
