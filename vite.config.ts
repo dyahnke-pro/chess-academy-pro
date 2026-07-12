@@ -188,6 +188,11 @@ export default defineConfig(({ mode }) => {
             // guards against, retriggered when the new subline data was added
             // without a matching chunk rule.
             if (id.includes('course-sublines.json')) return 'appdata-sublines';
+            // The Danya teaching corpus (~3 MB source, grows with every
+            // distillation wave) — same regression class: without a chunk
+            // rule it inlined into `index`, pushed it to 9.9 MB, and broke
+            // every deploy after 2026-07-12 wave 6.
+            if (id.includes('danya-teachings.json')) return 'appdata-danya';
             if (id.includes('/lessons/sublineNarration')) return 'appdata-subline-narration';
             if (id.includes('model-games.json')) return 'appdata-modelgames';
           }
