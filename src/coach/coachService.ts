@@ -1124,6 +1124,10 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // not claiming "masters play X"). The G6 arrow validator + the
             // stat/player/comparative guards still apply. (David 2026-06-04.)
             moveNarration: input.liveState.moveNarration,
+            // The surface's COMPUTED narration facts for the step-by-step turn.
+            // When present, coachApi voices them directly (voiceFacts) — no
+            // detectors, no assemblers, no stock fall-through (2026-07-12).
+            moveNarrationFacts: input.liveState.moveNarrationFacts,
             // PLAN / STRATEGY questions exempt the bare-SAN gate (a plan
             // names forward moves several plies ahead, not "masters play
             // X"). Detected from the user's ask. The stat / count / player /

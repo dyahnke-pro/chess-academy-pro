@@ -80,6 +80,8 @@ import { buildThreatCheckQuestion, judgeThreatCheckPick, type ThreatCheckQuestio
 import { buildOpeningChainFacts } from '../../services/openingFactChains';
 import { buildForkTalk, type ForkTalk } from '../../services/forkTalk';
 import { parseSpokenMove } from '../../services/spokenMoveParser';
+import { parseCoachMoveCommand } from '../../services/coachMoveCommand';
+import { sanToSpeech } from '../../utils/sanToSpeech';
 
 /** Fork-in-the-road deliberations per game (David 2026-07-11: "3 total"). */
 const FORK_TALK_MAX_PER_GAME = 3;
@@ -904,6 +906,12 @@ export function CoachTeachPage(): JSX.Element {
   // ONE road-affirming clause, then quiet ("less waste, more impact").
   const forkTalkCountRef = useRef(0);
   const pendingForkRef = useRef<ForkTalk | null>(null);
+  // DICTATED COACH MOVE (David 2026-07-12: "It needs to play every move I
+  // tell it to"). A move the student commanded while it wasn't the coach's
+  // turn — armed here and consumed FIRST by resolveCoachReplyMove, so the
+  // coach's next reply is exactly the dictated move (validated legal at
+  // consume time; silently dropped with an audit if the position moved on).
+  const pendingCoachMoveRef = useRef<string | null>(null);
   // SESSION BOOKENDS (David 2026-07-11): running tallies for the closing
   // takeaway spoken on End Lesson — questions asked/found + slips stopped on.
   // All computed; the closer is a deterministic line (no LLM needed).
@@ -1083,6 +1091,26 @@ export function CoachTeachPage(): JSX.Element {
       return finish({ ok: false, reason: err instanceof Error ? err.message : String(err) });
     }
   }, [playerColor]);
+
+  // Play a move the STUDENT explicitly dictated for the coach ("play d4").
+  // Bypasses handlePlayMove's user-sovereignty guard on purpose: the guard
+  // exists so the BRAIN can't move the student's pieces uninvited; a move the
+  // student commanded is the student's own sovereignty exercised. Also avoids
+  // the stale `playerColor` closure during a game-start side swap. chess.js
+  // validates; an illegal SAN is a no-op.
+  const playDictatedMove = useCallback((san: string): boolean => {
+    try {
+      const probe = new Chess(liveFenRef.current);
+      const match = probe.moves({ verbose: true }).find((m) => m.san === san);
+      if (!match) return false;
+      const result = gameRef.current.makeMove(match.from, match.to, match.promotion);
+      if (!result) return false;
+      liveFenRef.current = result.fen;
+      return true;
+    } catch {
+      return false;
+    }
+  }, []);
 
   const handleTakeBack = useCallback((count: number): { ok: boolean; reason?: string } => {
     const finish = (result: { ok: boolean; reason?: string }): { ok: boolean; reason?: string } => {
@@ -1648,6 +1676,76 @@ export function CoachTeachPage(): JSX.Element {
         });
         walkthrough.resume();
         return;
+      }
+    }
+
+    // ─── Dictated coach move (deterministic — BYPASS the brain) ───
+    // David 2026-07-12: "Coach can't play d4 when I told it to. It needs to
+    // play every move I tell it to." "Play d4" / "you play Nf3" / "castle
+    // kingside" is a COMMAND: parsed against chess.js's own legal-move list
+    // (never invented — G0/G3 by construction) and executed in code. Three
+    // shapes: (a) it's the coach's turn → play it now; (b) game start on the
+    // student's side-to-move (the Benko case: student flipped to Black, told
+    // the coach to open d4) → the coach TAKES that side, the board flips, the
+    // move plays; (c) mid-game on the student's turn → armed as the coach's
+    // next reply (resolveCoachReplyMove consumes it first).
+    if (
+      !opts?.kickoff &&
+      opts?.coachReplyPlayed === undefined &&
+      !walkthrough.isActive
+    ) {
+      const cmd = parseCoachMoveCommand(trimmedText, liveFenRef.current);
+      if (cmd) {
+        const cmdTurnId = freshTurnId('coach-move-command');
+        const appendTurn = (ack: string): void => {
+          setMessages((prev) => [
+            ...prev,
+            { id: `${cmdTurnId}-u`, role: 'user', content: text, timestamp: Date.now() },
+            { id: `${cmdTurnId}-c`, role: 'assistant', content: ack, timestamp: Date.now() },
+          ]);
+          const mem = useCoachMemoryStore.getState();
+          mem.appendConversationMessage({ surface: 'chat-teach', role: 'user', text, fen: liveFenRef.current, trigger: null });
+          mem.appendConversationMessage({ surface: 'chat-teach', role: 'coach', text: ack, fen: liveFenRef.current, trigger: null });
+          voiceService.stop();
+          void voiceService.speakForced(ack).catch(() => undefined);
+        };
+        const fenSide: 'white' | 'black' = liveFenRef.current.split(' ')[1] === 'w' ? 'white' : 'black';
+        const atStart = gameRef.current.history.length === 0;
+        if (cmd.playableNow && fenSide !== playerColor) {
+          // (a) The coach's turn — play the dictated move immediately.
+          if (playDictatedMove(cmd.san)) {
+            captureEvent('coach_move_command', { surface: 'coach-teach', mode: 'played-now', san: cmd.san });
+            appendTurn(`${sanToSpeech(cmd.san)} — done. Your move.`);
+            return;
+          }
+        } else if (cmd.playableNow && fenSide === playerColor && atStart) {
+          // (b) Game start, move belongs to the student's current side — the
+          // student is handing that side to the coach ("you play d4" → the
+          // coach takes White, the student plays Black). Flip, then play.
+          const newStudentColor: 'white' | 'black' = fenSide === 'white' ? 'black' : 'white';
+          if (playDictatedMove(cmd.san)) {
+            setPlayerColor(newStudentColor);
+            gameRef.current.setOrientation(newStudentColor);
+            captureEvent('coach_move_command', { surface: 'coach-teach', mode: 'side-swap-open', san: cmd.san });
+            appendTurn(`I'll take ${fenSide}. ${sanToSpeech(cmd.san)} — your move.`);
+            return;
+          }
+        } else {
+          // (c) The student's turn mid-game (or a coach-side move parsed on
+          // the flipped board) — arm it as the coach's next reply.
+          pendingCoachMoveRef.current = cmd.san;
+          captureEvent('coach_move_command', { surface: 'coach-teach', mode: 'armed-pending', san: cmd.san });
+          appendTurn(`Got it — after your move, I'll play ${sanToSpeech(cmd.san)} if it's still legal.`);
+          return;
+        }
+        // Legal-parse succeeded but the board refused (shouldn't happen —
+        // both read the same FEN). Fall through to normal routing.
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'CoachTeachPage.handleSubmit.coachMoveCommand',
+          summary: `dictated move ${cmd.san} parsed but failed to play — fell through to normal routing`,
+        });
       }
     }
 
@@ -3094,6 +3192,20 @@ export function CoachTeachPage(): JSX.Element {
         !walkthrough.isActive &&
         (opts?.coachReplyPlayed !== undefined ||
           /\bi\s+(?:just\s+)?played\b[\s\S]*\byour\s+(?:move|turn)\b/i.test(text)),
+      // The COMPUTED narration bundle for the engine-driven step turn. When
+      // present, coachApi voices it straight through voiceFacts — no intent
+      // detection, no assemblers, no "I can't verify" stock-out (2026-07-12:
+      // every coach reply spoke the stock line after the injected-block strip
+      // left this turn matching no assembler). Everything in it is computed:
+      // the played reply, capture truth, why-strong, live tactics, question /
+      // fork / chain directives.
+      moveNarrationFacts:
+        !walkthrough.isActive && opts?.coachReplyPlayed && opts.coachReplyPlayed.length > 0
+          ? `The student played ${text.replace(/^i\s+played\s+/i, '').replace(/\.$/, '')}. ` +
+            `The coach replied ${opts.coachReplyPlayed} — it is already on the board; never suggest playing it. ` +
+            `${opts?.coachReplyFact ?? ''} ` +
+            `Narrate the coach's reply and its idea in one or two sentences, then prompt the student's move.`
+          : undefined,
       ...(evalForAsk ?? {}),
       ...(lichessForAsk ?? {}),
     };
@@ -3797,7 +3909,7 @@ export function CoachTeachPage(): JSX.Element {
       setCurrentTurnId(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- tracked for dedicated audit; current deps cover the live callers.
-  }, [busy, activeProfile, handlePlayMove, handleTakeBack, handleSetBoardPosition, handleResetBoard, navigate, kickoffStatus, walkthrough]);
+  }, [busy, activeProfile, handlePlayMove, handleTakeBack, handleSetBoardPosition, handleResetBoard, navigate, kickoffStatus, walkthrough, playerColor, playDictatedMove]);
 
   // Student-driven moves go through ControlledChessBoard's onMove
   // callback (below). useChessGame already handles the click-to-move
@@ -3809,6 +3921,29 @@ export function CoachTeachPage(): JSX.Element {
   // getAdaptiveMove (the SAME engine the WLPP Play rung uses) once they
   // deviate / leave book; random legal as the never-freeze floor.
   const resolveCoachReplyMove = useCallback(async (fen: string): Promise<string | null> => {
+    // 0) A move the student DICTATED ("after your move, I'll play Nc3") wins
+    //    over book and engine — the coach plays every move it's told to
+    //    (David 2026-07-12). Validated legal on the live FEN; dropped with an
+    //    audit if the position moved past it.
+    const dictated = pendingCoachMoveRef.current;
+    if (dictated) {
+      pendingCoachMoveRef.current = null;
+      try {
+        const probe = new Chess(fen);
+        const m = probe.move(dictated);
+        if (m) {
+          captureEvent('coach_move_command', { surface: 'coach-teach', mode: 'pending-played', san: m.san });
+          return m.san;
+        }
+      } catch { /* fall through */ }
+      captureEvent('coach_move_command', { surface: 'coach-teach', mode: 'pending-illegal', san: dictated });
+      void logAppAudit({
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'CoachTeachPage.resolveCoachReplyMove',
+        summary: `dictated reply ${dictated} no longer legal from ${fen} — falling back to book/engine`,
+      });
+    }
     // Half-moves already played, derived from the FEN (= index of the NEXT
     // move in the book line). Robust against any gameRef render lag.
     const parts = fen.split(' ');
@@ -4563,7 +4698,32 @@ export function CoachTeachPage(): JSX.Element {
                   <div className="w-3.5 h-3.5 md:w-4 md:h-4 rounded-full bg-white border border-neutral-300" />
                 </button>
                 <button
-                  onClick={() => { setPlayerColor('black'); game.setOrientation('black'); }}
+                  onClick={() => {
+                    setPlayerColor('black');
+                    game.setOrientation('black');
+                    // The student took Black on a fresh board — the coach has
+                    // White and MUST open, or the game just sits there (David
+                    // 2026-07-12: he flipped to Black for the Benko and had to
+                    // push the coach's d4 himself). Book/engine pick the move
+                    // (or a dictated pending move); a deterministic ack speaks.
+                    if (gameRef.current.history.length === 0 && liveFenRef.current.split(' ')[1] === 'w') {
+                      void (async () => {
+                        const opening = await resolveCoachReplyMove(liveFenRef.current);
+                        if (
+                          opening &&
+                          gameRef.current.history.length === 0 &&
+                          liveFenRef.current.split(' ')[1] === 'w' &&
+                          playDictatedMove(opening)
+                        ) {
+                          captureEvent('coach_move_command', { surface: 'coach-teach', mode: 'auto-open-black', san: opening });
+                          const ack = `I'll open with ${sanToSpeech(opening)}. Your move.`;
+                          setMessages((prev) => [...prev, { id: freshTurnId('coach-open'), role: 'assistant', content: ack, timestamp: Date.now() }]);
+                          voiceService.stop();
+                          void voiceService.speakForced(ack).catch(() => undefined);
+                        }
+                      })();
+                    }
+                  }}
                   disabled={game.history.length > 0}
                   className={`w-6 h-6 md:w-7 md:h-7 rounded-md flex items-center justify-center transition-colors disabled:opacity-40 ${
                     playerColor === 'black' ? 'ring-2 ring-theme-accent ring-inset' : ''

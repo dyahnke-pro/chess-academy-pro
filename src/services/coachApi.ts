@@ -1210,6 +1210,14 @@ export interface MasterGroundingOptions {
    *  deep Learn games stocked out ~half their turns on real recaptures the
    *  explorer's top-N for the exact FEN didn't carry.) */
   moveNarration?: boolean;
+  /** The COMPUTED fact bundle for a step-by-step narration turn — the played
+   *  reply, capture truth, why-strong, live tactics, question/fork/chain
+   *  directives, all assembled by the surface in code. When present with
+   *  `moveNarration`, this turn is voiced STRAIGHT through `voiceFacts` — no
+   *  intent detection, no assemblers, no stock fall-through (2026-07-12: the
+   *  injected-block strip left "I played X." matching no assembler, so every
+   *  coach reply spoke the stock "I can't verify that precisely" line). */
+  moveNarrationFacts?: string;
   /** PLAN / STRATEGY question turn ("give me a plan for the next three
    *  moves", "what are my main ideas here?"). A plan answer names forward
    *  moves 2-3 plies ahead that aren't legal in the current position nor in
@@ -2435,6 +2443,44 @@ export async function getCoachChatResponse(
   // adult personality leaks in — see comment on the parameter above.
   const personalityAddition = skipPersonality ? '' : await loadPersonalityAddition();
   const responseLengthAddition = skipPersonality ? '' : await loadResponseLengthAddition();
+
+  // ── STEP-BY-STEP MOVE NARRATION — computed facts, voiced directly ──
+  // The engine-driven Learn turn is INTERNAL: the surface already played the
+  // coach's reply in code and computed EVERYTHING to say about it (capture
+  // truth, why-strong, live tactics, question/fork/chain directives) into
+  // `moveNarrationFacts`. This turn must never ride intent detection or the
+  // pipeline's fall-throughs: after the injected-block strip (2026-07-11),
+  // the bare "I played X." matched no assembler, the grounded default's
+  // engine cache was one ply stale, and EVERY coach reply spoke the stock
+  // "I can't verify that precisely" line (David 2026-07-12, live Benko
+  // session). voiceFacts phrases the computed facts; the LLM decides
+  // nothing (G0). Falls through to the normal pipeline only on a miss.
+  if (grounding?.moveNarration && grounding.moveNarrationFacts?.trim()) {
+    const studentMsg = (() => {
+      for (let i = messages.length - 1; i >= 0; i -= 1) {
+        // Student words only — the surface-injected [STEP-BY-STEP…] block is
+        // instruction text, not the student's message (language detection etc.
+        // must never see it).
+        if (messages[i].role === 'user') {
+          const raw = messages[i].content;
+          const idx = raw.search(/\n\n\[[A-Z]/);
+          return idx >= 0 ? raw.slice(0, idx).trim() : raw;
+        }
+      }
+      return undefined;
+    })();
+    const voiced = await voiceFacts(grounding.moveNarrationFacts, {
+      studentMessage: studentMsg,
+      providerConfig: config,
+      intent: 'move-narration',
+      warm: true,
+    });
+    if (voiced) {
+      emitGroundingCoverage('move-narration', grounding.surface ?? 'unknown', grounding.sessionId);
+      if (onStream) onStream(voiced);
+      return voiced;
+    }
+  }
 
   // ── Layer B: master-play pre-injection ────────────────────────────
   // Only engages when: grounding options were passed (a surface opted

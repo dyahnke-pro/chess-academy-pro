@@ -262,6 +262,12 @@ export interface LiveState {
    *  and the student heard "I can't verify which moves are sound" instead of
    *  the lesson (prod, David's iPhone + deep audit, 2026-06-04). */
   moveNarration?: boolean;
+  /** The COMPUTED fact bundle for a step-by-step narration turn — the coach's
+   *  played reply, capture truth, why-strong, live tactics, and any question /
+   *  fork / chain directives, all assembled by the surface in code. Routed
+   *  straight through `voiceFacts` (the LLM only phrases); see the matching
+   *  field on `MasterGroundingOptions`. */
+  moveNarrationFacts?: string;
   /** Engine-computed principal variation, pre-injected when the student
    *  asks for a PLAN ("what's my plan?", "next three moves?"). David
    *  2026-06-05: "use stockfish for the next three moves — more reliable."
