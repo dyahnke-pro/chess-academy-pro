@@ -7,7 +7,8 @@ import { db } from '../db/schema';
 import { getCachedStockfish, setCachedStockfish } from './stockfishFenCache';
 import { isSpokenSentenceGrounded } from '../services/coachAnswerGates';
 import { buildFedTacticsContext } from '../services/liveTacticsContext';
-import { planNoteForPath } from '../services/danyaTeachingService';
+import { transitionTeachingForGame } from '../services/danyaTeachingService';
+import { detectOpening } from '../services/openingDetectionService';
 import type { PhaseNarrationVerbosity, StockfishAnalysis } from '../types';
 import type { PhaseTransitionEvent } from '../services/phaseTransitionDetector';
 
@@ -236,7 +237,6 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       // moment. Kept as a param for API compatibility.
       void verbosity;
       void transitionLabel;
-      void getOpeningName;
       // GROUNDED framing (David 2026-07-09 + the 2026-07-06 voice law):
       // in-game narration VOICES facts computed in code and DECIDES nothing.
       // The transition label is the ONLY authored framing; the eval + tactics
@@ -248,17 +248,25 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       let transitionSentence = event.kind === 'opening-to-middlegame'
         ? "The opening's set — we're into the middlegame now."
         : 'This is heading into an endgame.';
-      // TEACHING PLAN at the transition (David 2026-07-12: "the future plans…
-      // combined with the phase transitions"): when the teaching corpus covers
-      // this exact opening path, the opening→middlegame moment carries the
-      // PLAN taught from this structure. Curated note, code-selected — the
-      // model still only phrases (G0).
+      // TEACHING at the transition (David 2026-07-12: "make the phase
+      // transitions match more closely to danya's teachings"): his
+      // opening→middlegame ritual is structure → idea → plan, so the whole
+      // teaching note rides in — chosen by tightening circles (exact
+      // position → recent path → the opening FAMILY's middlegame teaching,
+      // since most real games have left book by the transition). Curated
+      // note, code-selected; the model still only phrases (G0), and the
+      // per-sentence board gate drops any family-level specific that isn't
+      // true on this exact board.
       if (event.kind === 'opening-to-middlegame') {
         try {
           const sans = (getPgn() ?? '').split(/\s+/).filter((t) => t && !/^\d+\.$/.test(t));
-          const planNote = planNoteForPath(sans, event.fen);
-          if (planNote?.plans) {
-            transitionSentence += ` The plan from this structure: ${planNote.plans}`;
+          const openingName = getOpeningName?.() ?? detectOpening(sans)?.name ?? null;
+          const note = transitionTeachingForGame({ historySans: sans, fen: event.fen, openingName });
+          if (note) {
+            const ritual = [note.explains, note.teaches, note.plans ? `The plan: ${note.plans}` : '']
+              .filter((s) => s && s.trim())
+              .join(' ');
+            transitionSentence += ` ${ritual}`;
           }
         } catch { /* corpus is a bonus, never a blocker */ }
       }

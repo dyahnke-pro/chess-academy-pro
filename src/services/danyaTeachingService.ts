@@ -160,6 +160,36 @@ export function planNoteForPath(historySans: string[], fen?: string): DanyaNote 
   return notes.find((n) => n.plans && n.plans.trim().length > 0) ?? null;
 }
 
+/** The TRANSITION teaching for the current game — Danya's opening→middlegame
+ *  ritual is structure → idea → plan, so this returns the whole note, chosen
+ *  by tightening circles (David 2026-07-12 "make the phase transitions match
+ *  more closely to his teachings"):
+ *    1. exact position (FEN, transposition-safe),
+ *    2. recent path prefix (≤12 plies back),
+ *    3. the OPENING FAMILY's middlegame teaching — most real games have left
+ *       book by the transition, but his middlegame notes for the family still
+ *       apply (the structure family is what he teaches from).
+ *  Board-false specifics in a family-level note are dropped downstream by the
+ *  per-sentence spoken gate; the structural teaching survives. */
+export function transitionTeachingForGame(args: {
+  historySans: string[];
+  fen?: string;
+  openingName?: string | null;
+}): DanyaNote | null {
+  const exact = args.fen ? notesForFen(args.fen, 6).find((n) => n.plans?.trim()) : undefined;
+  if (exact) return exact;
+  const recent = notesForPrefix(args.historySans, 6, 12).find((n) => n.plans?.trim());
+  if (recent) return recent;
+  if (args.openingName) {
+    const family = notesForOpening(args.openingName, 8)
+      .filter((n) => n.phase === 'middlegame' && n.plans?.trim());
+    // Deepest-keyed first — the most specific middlegame teaching for the family.
+    family.sort((a, b) => b.lineSan.length - a.lineSan.length);
+    if (family[0]) return family[0];
+  }
+  return null;
+}
+
 /** Render notes as a compact system-prompt grounding block (the slot the
  *  book-passage block used to fill). Returns '' when nothing matches. */
 export function buildDanyaTeachingBlock(args: {
