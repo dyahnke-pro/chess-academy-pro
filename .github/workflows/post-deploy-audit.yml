@@ -135,15 +135,25 @@ jobs:
           if-no-files-found: warn
           retention-days: 14
 
-  # The LOOP AUDIT (David 2026-06-01: "audit" = the punish-gems loop 3-pass
-  # contract). It CANNOT run in the Claude Code sandbox — its gem-unlock step
-  # WRITES to the openings IndexedDB store, which stalls in the sandbox
-  # Chromium (CLAUDE.md G1 #4). A GitHub runner uses real Chromium with no
-  # write-stall, so the 3-pass contract can actually complete here. Separate
-  # job + longer timeout so the multi-tier sweep doesn't crowd the core set.
+  # The LOOP AUDIT (David 2026-06-01: "audit" = the punish-gems loop
+  # contract — 8 consecutive clean passes since 2026-06-10). It CANNOT run in
+  # the Claude Code sandbox — its gem-unlock step WRITES to the openings
+  # IndexedDB store, which stalls in the sandbox Chromium (CLAUDE.md G1 #4).
+  # A GitHub runner uses real Chromium with no write-stall, so the contract
+  # can actually complete here.
+  #
+  # SHARDED (2026-07-12): one runner cannot finish the full sweep — the
+  # unsharded job hit its 75-min timeout still inside Pass 1 of 8 over 68
+  # weapon openings. AUDIT_SHARD=i/n splits the opening set deterministically
+  # across parallel jobs; together the shards still cover every opening ×
+  # every pass, so the contract semantics are unchanged.
   loop-audit:
     runs-on: ubuntu-latest
-    timeout-minutes: 75
+    timeout-minutes: 150
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7]
     env:
       PROD_URL: https://chess-academy-pro.vercel.app
     steps:
@@ -170,18 +180,22 @@ jobs:
           TIMEOUT_MS: '900000'
           INTERVAL_MS: '15000'
         run: node scripts/wait-for-prod-build.mjs
-      - name: Run the punish-gems loop audit (3-pass contract) against prod
+      - name: Run the punish-gems loop audit (8-pass contract) against prod
         env:
           AUDIT_SMOKE_URL: https://chess-academy-pro.vercel.app
-          # Scope to one player/opening set via workflow_dispatch when needed;
-          # blank = the full masterclass + pro-rep sweep.
+          # Scope to one opening (or comma list) via workflow_dispatch when
+          # needed; blank = this shard's slice of the full sweep.
           AUDIT_OPENING: ${{ github.event.inputs.audit_opening }}
+          # Sharding composes with AUDIT_OPENING: the shard filter runs after
+          # the scope filter, so a dispatched single-opening run lands on
+          # exactly one shard and the rest exit fast on an empty slice.
+          AUDIT_SHARD: ${{ format('{0}/8', matrix.shard) }}
         run: node scripts/audit-punish-gems-loop.mjs
       - name: Upload loop-audit reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: loop-audit-${{ steps.sha.outputs.short }}
+          name: loop-audit-${{ steps.sha.outputs.short }}-shard${{ matrix.shard }}
           path: audit-reports/
           if-no-files-found: warn
           retention-days: 14

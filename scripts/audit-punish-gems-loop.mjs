@@ -114,7 +114,34 @@ const ONLY = (process.env.AUDIT_OPENING || '').trim();
 const MANIFESTS = JSON.parse(await readFile('src/data/opening-manifests.json', 'utf-8'));
 let MASTERCLASS = Object.keys(MANIFESTS).filter((k) => !k.startsWith('_'));
 let GEM_OPENINGS = [...new Set(GEMS.filter((g) => WEAPON.has(g.tier)).map((g) => g.openingId))];
-if (ONLY) { MASTERCLASS = MASTERCLASS.filter((o) => o === ONLY); GEM_OPENINGS = GEM_OPENINGS.filter((o) => o === ONLY); }
+if (ONLY) {
+  // Accepts a single id OR a comma-separated list (CI shards pass lists).
+  const only = new Set(ONLY.split(',').map((s) => s.trim()).filter(Boolean));
+  MASTERCLASS = MASTERCLASS.filter((o) => only.has(o));
+  GEM_OPENINGS = GEM_OPENINGS.filter((o) => only.has(o));
+}
+// AUDIT_SHARD="i/n" splits the opening set deterministically across n
+// parallel CI jobs (sorted union, index-modulo) — the 2026-07-12 prod run
+// proved the full sweep (68 weapon openings × 8 passes) cannot fit one
+// runner window: the job hit its 75-min timeout still inside Pass 1.
+const SHARD = (process.env.AUDIT_SHARD || '').trim();
+if (SHARD) {
+  const m = SHARD.match(/^(\d+)\/(\d+)$/);
+  if (!m || Number(m[1]) >= Number(m[2])) {
+    console.error(`[loop] bad AUDIT_SHARD "${SHARD}" — want i/n with i < n`);
+    process.exit(1);
+  }
+  const [i, n] = [Number(m[1]), Number(m[2])];
+  const all = [...new Set([...MASTERCLASS, ...GEM_OPENINGS])].sort();
+  const mine = new Set(all.filter((_, idx) => idx % n === i));
+  MASTERCLASS = MASTERCLASS.filter((o) => mine.has(o));
+  GEM_OPENINGS = GEM_OPENINGS.filter((o) => mine.has(o));
+  console.log(`[loop] shard ${i}/${n}: ${MASTERCLASS.length} masterclass + ${GEM_OPENINGS.length} weapon openings of ${all.length} total`);
+  if (MASTERCLASS.length === 0 && GEM_OPENINGS.length === 0) {
+    console.log('[loop] shard slice is empty (scope filter left nothing here) — nothing to do, exiting clean.');
+    process.exit(0);
+  }
+}
 const PRIMARY = GEM_OPENINGS[0]; // opening used for the deep voice/WLPP probes
 
 // Console noise that is NOT a bug in the sandbox (firewalled prod + the dev
@@ -340,7 +367,9 @@ async function runPass(browser, level) {
     // ── card render + 4 WLPP buttons + CORRECT gem data — every pass ──
     // The main tab shows ALL of an opening's weapon gems; assert each tile
     // names its REAL inaccuracy + punish (not just "a card rendered").
+    let gemIdx = 0;
     for (const id of GEM_OPENINGS) {
+      console.log(`[loop]   · gems ${id} (${++gemIdx}/${GEM_OPENINGS.length})`);
       const st = await ensureWeapons(page, id);
       if (st === 'locked') { skip(`${id}: weapons locked + unlock write stalled (sandbox) — gem checks are device/prod-only`); continue; }
       if (st !== 'card') { fail(`${id}: gems card did not render (${st})`); continue; }
@@ -361,7 +390,9 @@ async function runPass(browser, level) {
     //    tab: the WLPP buttons are wired (every pass); deeper passes actually
     //    MOUNT the variation Learn (≥2) and Watch (≥3) lessons. This is what
     //    proves the WHOLE masterclass surface is integrated, not just gems. ──
+    let mcIdx = 0;
     for (const id of MASTERCLASS) {
+      console.log(`[loop]   · masterclass ${id} (${++mcIdx}/${MASTERCLASS.length})`);
       const st = await openDetail(page, id);
       if (st === 'notfound' || st === 'timeout') { fail(`${id}: masterclass detail did not load (${st})`); continue; }
       const tabN = await page.locator('[data-testid^="variation-tab-"]').count();
@@ -412,8 +443,11 @@ async function runPass(browser, level) {
 
     // The deep Watch/Learn/Practice/Play checks run on PRIMARY every pass, and
     // widen to EVERY weapon opening on the deepest pass.
-    const deepOpenings = level >= 3 ? GEM_OPENINGS : [PRIMARY];
+    // filter(Boolean): PRIMARY is undefined on a masterclass-only shard slice.
+    const deepOpenings = (level >= 3 ? GEM_OPENINGS : [PRIMARY]).filter(Boolean);
+    let deepIdx = 0;
     for (const id of deepOpenings) {
+      console.log(`[loop]   · deep ${id} (${++deepIdx}/${deepOpenings.length})`);
       // Unlock weapons first (gems are ladder-locked until Play). If the unlock
       // write stalls (sandbox), skip this opening's deep gem probes.
       const ws = await ensureWeapons(page, id);
@@ -687,7 +721,11 @@ async function continuityPreflight() {
     process.exit(1);
   }
   console.log('[loop] continuity preflight: clean ✓ (every played line is gap-free + branches correctly)');
-  if (!PRIMARY) {
+  if (!PRIMARY && SHARD && MASTERCLASS.length > 0) {
+    // A shard slice can be masterclass-only — that's a valid slice, not a
+    // missing-gems condition. Run the masterclass checks; gem loops no-op.
+    console.log('[loop] shard slice carries no weapon gems — running masterclass-integration checks only.');
+  } else if (!PRIMARY) {
     console.log('\n[loop] CONTRACT DEFERRED — no engine-graded weapon gems present. Run the mine-punish-gems Action (Stockfish) to populate, then re-run.');
     process.exit(2);
   }
@@ -728,7 +766,8 @@ async function continuityPreflight() {
     await listener.stop().catch(() => {});
   }
   await mkdir('audit-reports', { recursive: true }).catch(() => {});
-  await writeFile(`audit-reports/punish-gems-loop-${ONLY || 'all'}-${report.ts.replace(/[:.]/g, '-')}.json`, JSON.stringify(report, null, 2));
+  const scopeTag = (SHARD ? `shard-${SHARD.replace('/', '-of-')}` : ONLY || 'all').replace(/[^a-zA-Z0-9_-]+/g, '+');
+  await writeFile(`audit-reports/punish-gems-loop-${scopeTag}-${report.ts.replace(/[:.]/g, '-')}.json`, JSON.stringify(report, null, 2));
   const allClean = clean === REQUIRED_PASSES;
   // FULL-PLAY contract (David 2026-06-01): a skip is NOT a pass. If the gem play
   // was never actually exercised (sandbox write-stall locked the weapons), the
