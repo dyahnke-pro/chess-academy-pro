@@ -135,7 +135,31 @@ async function distillOne(videoId, meta) {
   const body = await res.json();
   const raw = body.choices?.[0]?.message?.content ?? '';
   let parsed;
-  try { parsed = JSON.parse(raw); } catch { throw new Error('non-JSON distillation'); }
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    // Note-dense videos overflow max_tokens and the JSON truncates. Retry
+    // ONCE with a hard note cap so the reply fits — fewer, best notes beat
+    // a dead video.
+    const retry = await fetch('https://api.deepseek.com/chat/completions', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', authorization: `Bearer ${KEY}` },
+      body: JSON.stringify({
+        model: 'deepseek-chat',
+        temperature: 0.3,
+        max_tokens: 8000,
+        response_format: { type: 'json_object' },
+        messages: [
+          { role: 'system', content: `${SYSTEM}\n\nHARD LIMIT: extract AT MOST the 12 most valuable teaching moments. Keep every prose field under 60 words.` },
+          { role: 'user', content: `Video title (context only, do not quote): ${meta.title}\n\nTRANSCRIPT (auto-captions, unpunctuated):\n${clipped}` },
+        ],
+      }),
+    });
+    if (!retry.ok) throw new Error(`deepseek retry ${retry.status}`);
+    const retryBody = await retry.json();
+    const retryRaw = retryBody.choices?.[0]?.message?.content ?? '';
+    try { parsed = JSON.parse(retryRaw); } catch { throw new Error('non-JSON distillation (after capped retry)'); }
+  }
   const candidates = Array.isArray(parsed.notes) ? parsed.notes : [];
 
   const overlaps = makeOverlapGate(text);
