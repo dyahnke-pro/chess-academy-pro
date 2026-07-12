@@ -225,6 +225,13 @@ const GATE_TESTS = [
 ];
 
 runStep('typecheck   ', 'npm', ['run', 'typecheck']);
+// PRODUCTION BUILD (2026-07-12, the corpus-bundle incident): typecheck+lint
+// can be green while `npm run build` FAILS — a data JSON inlined into the
+// entry chunk pushed index.js past the Workbox precache cap and every Vercel
+// deploy silently errored for hours (prod stale at an old commit while
+// ship-check kept saying READY TO PUSH). The vite build IS the deploy gate;
+// run it here so a broken production build can never ship silently again.
+runStep('prod build  ', 'npm', ['run', 'build']);
 // Lint with NO warning cap — ship-check blocks on ERRORS only (warnings are
 // pre-existing rot that drifts up and down at a different cadence than the
 // gate set). `npm run lint` enforces a project-wide warning cap (currently
