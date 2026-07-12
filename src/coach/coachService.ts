@@ -828,6 +828,8 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
       const block = buildDanyaTeachingBlock({
         historySans: input.liveState.moveHistory ?? [],
         openingName: input.liveState.lichessSnapshot?.name ?? null,
+        // Live board FEN — transposition-safe exact-position notes.
+        fen: input.liveState.fen ?? null,
       });
       if (block) {
         const sourceCount = (block.match(/^•/gm)?.length ?? 0);

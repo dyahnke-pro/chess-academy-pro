@@ -4327,7 +4327,7 @@ export function CoachTeachPage(): JSX.Element {
                 // prefix; suppressed while a question is open (leak guard).
                 if (!questionArmed) {
                   try {
-                    const note = noteAtPosition(historyAfterReply);
+                    const note = noteAtPosition(historyAfterReply, probe.fen());
                     if (note) {
                       facts.push(`Coaching note for THIS position: ${note.explains} ${note.teaches}${note.plans ? ` Plan: ${note.plans}` : ''}`);
                     }

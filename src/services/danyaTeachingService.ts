@@ -15,6 +15,7 @@
 // were. Code selects which notes match the live position/opening; the model
 // phrases teaching from them and decides nothing else.
 
+import { Chess } from 'chess.js';
 import teachingsData from '../data/danya-teachings.json';
 
 export interface DanyaNote {
@@ -61,12 +62,50 @@ for (const n of DATA.notes) {
   }
 }
 
+// ── TRANSPOSITION index (David 2026-07-12: "can we include transpositions?").
+// Notes are authored as move sequences, but the POSITION is what he's
+// teaching — so every position-keyed note is also indexed by the normalized
+// FEN its moves produce (placement + side + castling + en-passant; the move
+// counters are path-dependent and dropped). A game reaching the same position
+// through a different move order now finds the note. Built lazily: ~replaying
+// every note once on first lookup, then cached.
+const byFen = new Map<string, DanyaNote[]>();
+let fenIndexBuilt = false;
+
+const normFen = (fen: string): string => fen.split(' ').slice(0, 4).join(' ');
+
+function ensureFenIndex(): void {
+  if (fenIndexBuilt) return;
+  fenIndexBuilt = true;
+  for (const n of DATA.notes) {
+    if (n.lineSan.length === 0) continue;
+    try {
+      const c = new Chess();
+      for (const san of n.lineSan) c.move(san);
+      const key = normFen(c.fen());
+      const bucket = byFen.get(key) ?? [];
+      bucket.push(n);
+      byFen.set(key, bucket);
+    } catch { /* gate guarantees legality; belt-and-suspenders */ }
+  }
+}
+
+/** Notes whose taught position IS this position — regardless of the move
+ *  order that reached it (transposition-safe). */
+export function notesForFen(fen: string, maxNotes = 3): DanyaNote[] {
+  ensureFenIndex();
+  return (byFen.get(normFen(fen)) ?? []).slice(0, maxNotes);
+}
+
 /** Notes keyed at or before the current position: walks every prefix of the
  *  played SANs, longest first, so the most position-specific teaching wins.
- *  `maxNotes` bounds the injection size. */
-export function notesForPrefix(historySans: string[], maxNotes = 3): DanyaNote[] {
+ *  `withinPlies` bounds ancestor staleness — a note anchored more than that
+ *  many plies behind the current position is skipped (its moment has passed;
+ *  the plan may already be resolved). `maxNotes` bounds the injection size. */
+export function notesForPrefix(historySans: string[], maxNotes = 3, withinPlies = Infinity): DanyaNote[] {
   const out: DanyaNote[] = [];
-  for (let len = historySans.length; len >= 1 && out.length < maxNotes; len -= 1) {
+  const minLen = Number.isFinite(withinPlies) ? Math.max(1, historySans.length - withinPlies) : 1;
+  for (let len = historySans.length; len >= minLen && out.length < maxNotes; len -= 1) {
     const key = historySans.slice(0, len).join(' ');
     for (const n of byPrefix.get(key) ?? []) {
       if (out.length >= maxNotes) break;
@@ -78,10 +117,13 @@ export function notesForPrefix(historySans: string[], maxNotes = 3): DanyaNote[]
 
 /** The single most position-specific note EXACTLY at the current position
  *  (not an ancestor) — for step narration, where an ancestor note would
- *  narrate a move that already happened. */
-export function noteAtPosition(historySans: string[]): DanyaNote | null {
+ *  narrate a move that already happened. Pass `fen` (the live board) to also
+ *  catch transpositions into a taught position. */
+export function noteAtPosition(historySans: string[], fen?: string): DanyaNote | null {
   const bucket = byPrefix.get(historySans.join(' ')) ?? [];
-  return bucket[0] ?? null;
+  if (bucket[0]) return bucket[0];
+  if (fen) return notesForFen(fen, 1)[0] ?? null;
+  return null;
 }
 
 /** Opening-keyed notes by (fuzzy-tokenized) opening name. "Caro-Kann Defense:
@@ -105,9 +147,16 @@ export function notesForOpening(openingName: string, maxNotes = 4): DanyaNote[] 
 }
 
 /** A plans-bearing note for the current path — the phase-transition hook
- *  ("the opening's set; here's the plan he teaches from this structure"). */
-export function planNoteForPath(historySans: string[]): DanyaNote | null {
-  const notes = notesForPrefix(historySans, 6);
+ *  ("the opening's set; here's the plan he teaches from this structure").
+ *  FEN-first (transposition-safe, exactly this structure), then recent
+ *  ancestors only (within 12 plies — a plan taught at move 5 is stale by
+ *  move 14; David 2026-07-12 "improve the other limitations"). */
+export function planNoteForPath(historySans: string[], fen?: string): DanyaNote | null {
+  if (fen) {
+    const exact = notesForFen(fen, 6).find((n) => n.plans && n.plans.trim().length > 0);
+    if (exact) return exact;
+  }
+  const notes = notesForPrefix(historySans, 6, 12);
   return notes.find((n) => n.plans && n.plans.trim().length > 0) ?? null;
 }
 
@@ -116,13 +165,20 @@ export function planNoteForPath(historySans: string[]): DanyaNote | null {
 export function buildDanyaTeachingBlock(args: {
   historySans?: string[];
   openingName?: string | null;
+  /** Live board FEN — adds transposition-safe exact-position notes. */
+  fen?: string | null;
   maxNotes?: number;
 }): string {
   const max = args.maxNotes ?? 3;
   const picked: DanyaNote[] = [];
   const seen = new Set<string>();
-  if (args.historySans && args.historySans.length > 0) {
-    for (const n of notesForPrefix(args.historySans, max)) {
+  if (args.fen) {
+    for (const n of notesForFen(args.fen, max)) {
+      if (!seen.has(n.id)) { picked.push(n); seen.add(n.id); }
+    }
+  }
+  if (args.historySans && args.historySans.length > 0 && picked.length < max) {
+    for (const n of notesForPrefix(args.historySans, max - picked.length)) {
       if (!seen.has(n.id)) { picked.push(n); seen.add(n.id); }
     }
   }

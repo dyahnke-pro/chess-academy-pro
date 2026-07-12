@@ -52,12 +52,12 @@ export interface ForkTalk {
 export const FORK_MAX_GAP_CP = 40;
 const ROAD_COLORS = ['#22c55e', '#3b82f6'];
 
-function probe(fen: string, uci: string): { san: string; from: string; to: string; isCapture: boolean; isCheck: boolean; piece: string } | null {
+function probe(fen: string, uci: string): { san: string; from: string; to: string; isCapture: boolean; isCheck: boolean; piece: string; fenAfter: string } | null {
   if (!uci || uci.length < 4) return null;
   try {
     const c = new Chess(fen);
     const mv = c.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.length > 4 ? uci[4] : undefined });
-    return { san: mv.san, from: mv.from, to: mv.to, isCapture: !!mv.captured, isCheck: c.isCheck(), piece: mv.piece };
+    return { san: mv.san, from: mv.from, to: mv.to, isCapture: !!mv.captured, isCheck: c.isCheck(), piece: mv.piece, fenAfter: c.fen() };
   } catch {
     return null;
   }
@@ -104,7 +104,7 @@ export function buildForkTalk(opts: {
     // carry what he TEACHES about each continuation when the corpus covers it).
     let teachingNote: string | null = null;
     try {
-      const note = noteAtPosition([...historySans, p.san]);
+      const note = noteAtPosition([...historySans, p.san], p.fenAfter);
       if (note) teachingNote = `${note.teaches}${note.plans ? ` ${note.plans}` : ''}`.trim();
     } catch { /* corpus is a bonus, never a blocker */ }
     built.push({ san: p.san, from: p.from, to: p.to, headsInto, character, does, teachingNote });

@@ -2197,7 +2197,12 @@ export async function voiceFacts(
   // more room than the terse plain/kid readout — bump the cap in warm mode.
   // The review register walks up to 8 critical moments as a story and needs the
   // most room of all.
-  const voiceMaxTokens = register === 'review' ? 700 : opts.warm ? 420 : 240;
+  // Warm live budget 420→560 (David 2026-07-12): the teaching-corpus notes
+  // (explanation + idea + plan) ride the live fact bundle now, and 420 clipped
+  // the phrased teaching mid-thought. Quality is the metric (2026-07-06 voice
+  // law); the G5 verbosity contracts are untouched — brief users still get the
+  // 2-sentence spoken cap via applyBriefVoiceCap, silent stays silent.
+  const voiceMaxTokens = register === 'review' ? 700 : opts.warm ? 560 : 240;
   try {
     const out = cfg.provider === 'anthropic'
       ? await callAnthropic(cfg.apiKey, ANTHROPIC_MODEL_MAP.move_commentary, system, [{ role: 'user', content: user }], voiceMaxTokens, 'grounded_voice')

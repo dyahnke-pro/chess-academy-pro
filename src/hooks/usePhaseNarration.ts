@@ -256,7 +256,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       if (event.kind === 'opening-to-middlegame') {
         try {
           const sans = (getPgn() ?? '').split(/\s+/).filter((t) => t && !/^\d+\.$/.test(t));
-          const planNote = planNoteForPath(sans);
+          const planNote = planNoteForPath(sans, event.fen);
           if (planNote?.plans) {
             transitionSentence += ` The plan from this structure: ${planNote.plans}`;
           }
