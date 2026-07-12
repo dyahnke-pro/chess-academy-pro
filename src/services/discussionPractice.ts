@@ -8,6 +8,7 @@
 // (or skips) -> classifyMisconception maps it to a closed-set tag -> we
 // log it to the shared bucket (gated by the learned/count-against rule).
 
+import { Chess, type Square } from 'chess.js';
 import { detectSlip, slipSeverityLabel, type SlipInput, type SlipResult } from './slipDetector';
 import { detectTactics } from './tacticsDetector';
 import { assembleEngineReasoning } from './groundedAnswer';
@@ -50,9 +51,23 @@ export function buildGroundedReveal(args: {
 }): string {
   const det = detectTactics(args.fenAfter);
   if (args.kind === 'good') {
-    const named = det.tactics.find((t) => t.type !== 'none');
+    // Only credit a tactic the MOVER owns — its source piece must be theirs.
+    // detectTactics scans the whole board, so without this filter an OPPONENT
+    // tactic (or one that predates the move) earns the student an atta-boy
+    // (David 2026-07-11: "did you spot it?" fired on nearly every move of his
+    // game — per-move praise noise that tunes out).
+    const named = findMoverTactic(args.fenAfter, args.moverColor, det.tactics);
     if (named) {
-      return `That sets up a ${named.type.replace(/_/g, ' ')} — did you spot it?`;
+      const tactic = named.type.replace(/_/g, ' ');
+      // Rotate stems (narration voice rule 9) — deterministic off the board so
+      // back-to-back recognitions don't parrot the same line.
+      const variant = args.fenAfter.length % 3;
+      const stems = [
+        `That sets up a ${tactic} — did you spot it?`,
+        `There's a ${tactic} in that move.`,
+        `Quietly strong — it carries a ${tactic}.`,
+      ];
+      return stems[variant];
     }
     return 'Solid — that keeps your position humming.';
   }
@@ -67,6 +82,31 @@ export function buildGroundedReveal(args: {
 const PIECE_LABEL: Record<string, string> = {
   p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
 };
+
+/** The first detected tactic whose SOURCE piece belongs to `moverColor`, or
+ *  null. The tactic's involvedSquares[0] is its acting piece (fork source,
+ *  pinning piece, …) — checking its owner is what makes "you set up a fork"
+ *  a claim about THE STUDENT'S move instead of anything on the board.
+ *  Exported for the good-move gate in useDiscussionPractice. */
+export function findMoverTactic(
+  fenAfter: string,
+  moverColor: 'w' | 'b',
+  tactics?: ReturnType<typeof detectTactics>['tactics'],
+): { type: string } | null {
+  try {
+    const list = tactics ?? detectTactics(fenAfter).tactics;
+    const board = new Chess(fenAfter);
+    return (
+      list.find((t) => {
+        if (t.type === 'none' || t.involvedSquares.length === 0) return false;
+        const src = board.get(t.involvedSquares[0] as Square);
+        return !!src && src.color === moverColor;
+      }) ?? null
+    );
+  } catch {
+    return null;
+  }
+}
 
 /**
  * buildSlipReveal — the FULL grounded teach shown after the "why did you play

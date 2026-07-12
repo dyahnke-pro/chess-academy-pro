@@ -12,7 +12,10 @@ vi.mock('../services/voiceService', () => ({
 }));
 vi.mock('../services/analytics', () => ({ captureEvent: vi.fn() }));
 vi.mock('../services/tacticsDetector', () => ({
-  detectTactics: vi.fn(() => ({ tactics: [{ type: 'fork' }], hangingPieces: [] })),
+  // The good-move gate now verifies the tactic's SOURCE piece belongs to the
+  // mover (findMoverTactic) — the mocked fork anchors on e4, which holds the
+  // student's pawn after 1.e4 in FEN_AFTER below.
+  detectTactics: vi.fn(() => ({ tactics: [{ type: 'fork', involvedSquares: ['e4', 'd5', 'f5'], description: 'mock fork' }], hangingPieces: [] })),
 }));
 vi.mock('../services/discussionPractice', async (importActual) => {
   const actual = await importActual<typeof import('../services/discussionPractice')>();

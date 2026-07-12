@@ -125,6 +125,17 @@ const AUDIT_EVENT_MAP: Partial<Record<AuditKind, string>> = {
   // itself surfaces separately as stockfish-error ($exception).
   'stockfish-variant-resolved': 'stockfish_variant',
   'stockfish-variant-fallback': 'stockfish_variant_fallback',
+  // Coach OPPONENT move sourcing (David 2026-07-11: "the computer's moves are
+  // total garbage" on iPhone — Learn/Play replies). The layered picker
+  // (masters → lichess games → skill-limited Stockfish → random floor) logs
+  // WHICH layer produced every reply move, but none of it was mirrored, so a
+  // device where the theory layers silently fail (and every reply degrades to
+  // weak-engine/random) was undiagnosable from durable analytics. summary
+  // carries source= + san= + elo; the masters-miss/error kinds show WHY the
+  // theory layer fell through.
+  'coach-opponent-move-source': 'coach_opponent_move_source',
+  'coach-opponent-masters-miss': 'coach_opponent_masters_miss',
+  'coach-opponent-masters-error': 'coach_opponent_masters_error',
   // Coach LLM health (David 2026-06-15 gap audit). When the brain call
   // fails/times out the coach can't answer — currently invisible. Mirror as
   // events (queryable, not $exception) so we can see failure RATE without

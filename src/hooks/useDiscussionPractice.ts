@@ -27,8 +27,7 @@ import { useCallback, useRef, useState } from 'react';
 import { Chess } from 'chess.js';
 import { stockfishEngine } from '../services/stockfishEngine';
 import { detectSlip, slipWarrantsInterjection, isNearBest, slipSeverityLabel, type SlipSeverity } from '../services/slipDetector';
-import { detectTactics } from '../services/tacticsDetector';
-import { buildWhyPrompt, buildGroundedReveal, buildSlipReveal, captureMisconception } from '../services/discussionPractice';
+import { buildWhyPrompt, buildGroundedReveal, buildSlipReveal, captureMisconception, findMoverTactic } from '../services/discussionPractice';
 import { buildMisconceptionCallback } from '../services/misconceptionCallbacks';
 import { buildMoveReasonOptions } from '../services/moveReasonOptions';
 import { voiceService } from '../services/voiceService';
@@ -184,14 +183,16 @@ function uciSeqToSan(fen: string, seq: string[] | undefined, max = 5): string[] 
   return out;
 }
 
-/** The near-best move set up a real tactic on the board (the good-move gate). */
-function createdTactic(fenAfter: string): boolean {
-  try {
-    return detectTactics(fenAfter).tactics.some((t) => t.type !== 'none');
-  } catch {
-    return false;
-  }
+/** The near-best move set up a real tactic OWNED BY THE MOVER (the good-move
+ *  gate). Any-tactic-anywhere fired an atta-boy on nearly every move of a real
+ *  game (David 2026-07-11) — the tactic's acting piece must be the student's. */
+function createdTactic(fenAfter: string, moverColor: 'w' | 'b'): boolean {
+  return findMoverTactic(fenAfter, moverColor) !== null;
 }
+
+/** Min plies between good-move recognitions — recognition is a moment, not a
+ *  metronome (per-move praise tunes out; narration voice rules). */
+const GOOD_MOVE_MIN_PLY_GAP = 8;
 
 export function useDiscussionPractice(
   enabled: boolean,
@@ -203,6 +204,8 @@ export function useDiscussionPractice(
   const [goodMove, setGoodMove] = useState<GoodMoveRecognition | null>(null);
   const ctxRef = useRef<MoveContext | null>(null);
   const busyRef = useRef(false);
+  /** Ply of the last good-move recognition — the atta-boy cooldown. */
+  const goodMoveLastPlyRef = useRef(-999);
 
   const active = enabled && !!opts.interruptive;
 
@@ -266,7 +269,9 @@ export function useDiscussionPractice(
       // beginner→blunders, intermediate→mistakes, advanced→inaccuracies. The
       // coach interrupts a slip at the level it matters for THIS player.
       const isSlip = slip.isSlip && slipWarrantsInterjection(cpLoss, args.studentRating);
-      const isGood = !isSlip && isNearBest(cpLoss) && createdTactic(args.fenAfter);
+      const plyNow = (args.moveNumber ?? 0) * 2;
+      const goodMoveOffCooldown = plyNow === 0 || plyNow - goodMoveLastPlyRef.current >= GOOD_MOVE_MIN_PLY_GAP;
+      const isGood = !isSlip && goodMoveOffCooldown && isNearBest(cpLoss) && createdTactic(args.fenAfter, moverChar);
       if (!isSlip && !isGood) {
         setGoodMove(null); // an unremarkable move clears any lingering atta-boy
         return;
@@ -279,6 +284,7 @@ export function useDiscussionPractice(
       // speakForced, so it honors the verbosity gate). We log that it fired so
       // the good/slip ratio is visible. The blocking picker is slips only.
       if (isGood) {
+        goodMoveLastPlyRef.current = plyNow;
         const line = buildGroundedReveal({ kind: 'good', fenAfter: args.fenAfter, moverColor: moverChar, bestSan });
         setGoodMove({ line, playedSan: args.playedSan });
         void voiceService.speakForced(line).catch(() => undefined);
