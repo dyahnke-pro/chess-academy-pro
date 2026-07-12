@@ -583,7 +583,13 @@ async function main() {
     SETTLE_SHORT,
     [
       { label: 'back returns to /openings', fn: () => page.url().endsWith('/openings') },
-      { label: 'opening-explorer remounted', fn: () => visible('opening-explorer') },
+      // OpeningExplorerPage remounts on back-nav and shows a "Loading
+      // openings..." early-return (no testid) until its Dexie toArray over
+      // ~3,650 rows resolves — on a shared GitHub runner that outlasts the
+      // 2.5s settle (2026-07-12 prod-runner failure: URL check passed,
+      // one-shot visibility check fired mid-load). Retry until the real
+      // container mounts instead of sampling once.
+      { label: 'opening-explorer remounted', fn: () => waitUntil(() => visible('opening-explorer'), 15_000) },
     ],
   );
 
