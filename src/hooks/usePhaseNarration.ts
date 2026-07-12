@@ -7,6 +7,7 @@ import { db } from '../db/schema';
 import { getCachedStockfish, setCachedStockfish } from './stockfishFenCache';
 import { isSpokenSentenceGrounded } from '../services/coachAnswerGates';
 import { buildFedTacticsContext } from '../services/liveTacticsContext';
+import { planNoteForPath } from '../services/danyaTeachingService';
 import type { PhaseNarrationVerbosity, StockfishAnalysis } from '../types';
 import type { PhaseTransitionEvent } from '../services/phaseTransitionDetector';
 
@@ -235,7 +236,6 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       // moment. Kept as a param for API compatibility.
       void verbosity;
       void transitionLabel;
-      void getPgn;
       void getOpeningName;
       // GROUNDED framing (David 2026-07-09 + the 2026-07-06 voice law):
       // in-game narration VOICES facts computed in code and DECIDES nothing.
@@ -245,9 +245,23 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       // fires right after the student's move — and serveGroundedPositionDefault
       // handles the perspective flip + the student-relative assessment).
       const bestUci = stockfishAnalysis?.bestMove || stockfishAnalysis?.topLines?.[0]?.moves?.[0];
-      const transitionSentence = event.kind === 'opening-to-middlegame'
+      let transitionSentence = event.kind === 'opening-to-middlegame'
         ? "The opening's set — we're into the middlegame now."
         : 'This is heading into an endgame.';
+      // TEACHING PLAN at the transition (David 2026-07-12: "the future plans…
+      // combined with the phase transitions"): when the teaching corpus covers
+      // this exact opening path, the opening→middlegame moment carries the
+      // PLAN taught from this structure. Curated note, code-selected — the
+      // model still only phrases (G0).
+      if (event.kind === 'opening-to-middlegame') {
+        try {
+          const sans = (getPgn() ?? '').split(/\s+/).filter((t) => t && !/^\d+\.$/.test(t));
+          const planNote = planNoteForPath(sans);
+          if (planNote?.plans) {
+            transitionSentence += ` The plan from this structure: ${planNote.plans}`;
+          }
+        } catch { /* corpus is a bonus, never a blocker */ }
+      }
 
       // Sentence-buffered streaming TTS. Every sentence chains through
       // speakForced so each Polly call awaits the previous one's

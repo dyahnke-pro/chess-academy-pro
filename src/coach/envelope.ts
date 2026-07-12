@@ -982,7 +982,7 @@ export function formatBookGroundingSubBlock(
     .split('\n')
     .map((l) => `    ${l}`)
     .join('\n');
-  return `- Classical chess-book grounding (PRE-LOADED, ${grounding.sourceCount} passage${grounding.sourceCount === 1 ? '' : 's'} from Capablanca / Lasker / Staunton / Young / Edge / Bird):\n${indented}\n    USE these passages to shape your prose. DO NOT quote verbatim, DO NOT contradict the ideas, DO NOT cite an author the block doesn't include. When the topic is outside the book corpus, fall back to your own knowledge — but if the block IS present, anchor your reply in it.`;
+  return `- Coaching-notes grounding (PRE-LOADED, ${grounding.sourceCount} teaching note${grounding.sourceCount === 1 ? '' : 's'} for this opening/position):\n${indented}\n    ANCHOR your teaching in these notes when they fit the student's question or position. Never contradict the board, never invent moves the notes don't carry, never name any author, book, or video — the ideas speak as the coach's own teaching.`;
 }
 
 function formatToolbeltBlock(toolbelt: ToolDefinition[]): string {

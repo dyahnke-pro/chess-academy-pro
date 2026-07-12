@@ -14,6 +14,7 @@
 import { Chess } from 'chess.js';
 import { describeMoveGeometry } from './groundedAnswer';
 import { detectOpening, findContinuationsAtPly } from './openingDetectionService';
+import { noteAtPosition } from './danyaTeachingService';
 
 export interface ForkOptionInput {
   /** UCI of the candidate ("g1f3"). */
@@ -32,6 +33,9 @@ export interface ForkOption {
   character: 'sharp' | 'solid';
   /** What the move does (geometry), when nameable. */
   does: string | null;
+  /** Curated teaching note for this exact continuation, when the corpus
+   *  covers it — the idea + plan taught for this road. */
+  teachingNote: string | null;
 }
 
 export interface ForkTalk {
@@ -96,7 +100,14 @@ export function buildForkTalk(opts: {
       p.isCapture || p.isCheck || (does !== null && /fork|pin|skewer|wins|mate/i.test(does))
         ? 'sharp'
         : 'solid';
-    built.push({ san: p.san, from: p.from, to: p.to, headsInto, character, does });
+    // TEACHING note for this exact road (David 2026-07-12: fork deliberations
+    // carry what he TEACHES about each continuation when the corpus covers it).
+    let teachingNote: string | null = null;
+    try {
+      const note = noteAtPosition([...historySans, p.san]);
+      if (note) teachingNote = `${note.teaches}${note.plans ? ` ${note.plans}` : ''}`.trim();
+    } catch { /* corpus is a bonus, never a blocker */ }
+    built.push({ san: p.san, from: p.from, to: p.to, headsInto, character, does, teachingNote });
   }
 
   // A genuine fork needs DIFFERENT lives: a different mover piece, or a
@@ -115,6 +126,7 @@ export function buildForkTalk(opts: {
     if (o.does) bits.push(`it ${o.does}`);
     if (o.headsInto) bits.push(`it heads into the ${o.headsInto}`);
     bits.push(o.character === 'sharp' ? 'the game turns sharp and forcing' : 'a solid, patient game — develop and keep the tension');
+    if (o.teachingNote) bits.push(`coaching note for this road: ${o.teachingNote}`);
     return `${o.san}: ${bits.join('; ')}`;
   };
   const facts =

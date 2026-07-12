@@ -33,7 +33,7 @@ import { scanPositionForTrap } from '../services/positionTrapScan';
 import { applyCandidateArrows } from '../services/coachAnswerGates';
 import { assembleEnvelope } from './envelope';
 import { loadAnnotationContextForLive } from './sources/annotationContext';
-import { loadBookGroundingForLive } from './sources/bookGrounding';
+import { buildDanyaTeachingBlock } from '../services/danyaTeachingService';
 import { loadMiddlegamePlanForLive } from './sources/middlegamePlan';
 import { loadModelGamesForLive } from './sources/modelGames';
 import { loadPlayerGamesForLive, resolvePlayerIdFromAsk } from './sources/playerGames';
@@ -815,47 +815,41 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     }
   }
 
-  // Book grounding from chess-concepts.json (Capablanca/Lasker/etc).
-  // Same shape as annotation context — pre-loaded grounding into the
-  // envelope, gated on something to match against. Uses the user's
-  // ask text PLUS the opening name (when available) to drive concept
-  // detection and opening-passage lookup. Skipped silently when no
-  // concept matched. Independent of annotationContext: a position
-  // can have either, both, or neither depending on what corpus
-  // covers it.
+  // TEACHING grounding — the Danya teaching corpus (David 2026-07-12: "what
+  // he teaches in every position… make sure to unwire the books, I don't want
+  // them intruding on danya"). This slot used to carry the pre-1930 book
+  // passages (loadBookGroundingForLive); the coach's SPEECH now grounds on
+  // the position-keyed teaching notes instead. Same envelope slot, same
+  // never-block contract. Keyed on the live move history (position notes,
+  // longest prefix wins) + the opening name (opening-level notes). The books
+  // remain a READING feature on the opening pages only.
   if (!input.liveState.bookGrounding) {
     try {
-      const grounding = loadBookGroundingForLive({
-        askText: input.ask,
+      const block = buildDanyaTeachingBlock({
+        historySans: input.liveState.moveHistory ?? [],
         openingName: input.liveState.lichessSnapshot?.name ?? null,
       });
-      if (grounding) {
+      if (block) {
+        const sourceCount = (block.match(/^•/gm)?.length ?? 0);
         input = {
           ...input,
-          liveState: { ...input.liveState, bookGrounding: grounding },
+          liveState: { ...input.liveState, bookGrounding: { block, sourceCount } },
         };
         void logAppAudit({
           kind: 'book-grounding-injected',
           category: 'subsystem',
-          source: 'coachService.ask.bookGrounding',
-          summary: `loaded ${grounding.sourceCount} classical passage(s) (${grounding.block.length} chars) for ask="${input.ask.slice(0, 60)}"`,
-        });
-      } else {
-        void logAppAudit({
-          kind: 'coach-surface-migrated',
-          category: 'subsystem',
-          source: 'coachService.ask.bookGrounding',
-          summary: `no-match: askLen=${input.ask.length} openingName="${input.liveState.lichessSnapshot?.name ?? '?'}"`,
+          source: 'coachService.ask.danyaTeaching',
+          summary: `loaded ${sourceCount} teaching note(s) (${block.length} chars) for ask="${input.ask.slice(0, 60)}"`,
         });
       }
     } catch (err) {
-      // Book lookup failures must NEVER block the call. Existing
+      // Teaching lookup failures must NEVER block the call. Existing
       // grounding (annotations, lichess, tactics) carries the brain.
       void logAppAudit({
         kind: 'coach-surface-migrated',
         category: 'subsystem',
-        source: 'coachService.ask.bookGrounding',
-        summary: `book grounding load failed: ${(err as Error)?.message?.slice(0, 120) ?? 'unknown'}`,
+        source: 'coachService.ask.danyaTeaching',
+        summary: `teaching grounding load failed: ${(err as Error)?.message?.slice(0, 120) ?? 'unknown'}`,
       });
     }
   }

@@ -82,6 +82,7 @@ import { buildForkTalk, type ForkTalk } from '../../services/forkTalk';
 import { parseSpokenMove } from '../../services/spokenMoveParser';
 import { parseCoachMoveCommand } from '../../services/coachMoveCommand';
 import { sanToSpeech } from '../../utils/sanToSpeech';
+import { noteAtPosition } from '../../services/danyaTeachingService';
 
 /** Fork-in-the-road deliberations per game (David 2026-07-11: "3 total"). */
 const FORK_TALK_MAX_PER_GAME = 3;
@@ -4319,6 +4320,18 @@ export function CoachTeachPage(): JSX.Element {
                       }
                     }
                   } catch { /* the chain is a bonus, never a blocker */ }
+                }
+                // TEACHING NOTE at this exact position (David 2026-07-12:
+                // "what he teaches in every position… his explanation… and
+                // the future plans"). Curated corpus, code-selected by move
+                // prefix; suppressed while a question is open (leak guard).
+                if (!questionArmed) {
+                  try {
+                    const note = noteAtPosition(historyAfterReply);
+                    if (note) {
+                      facts.push(`Coaching note for THIS position: ${note.explains} ${note.teaches}${note.plans ? ` Plan: ${note.plans}` : ''}`);
+                    }
+                  } catch { /* corpus is a bonus, never a blocker */ }
                 }
                 replyFact = `GROUNDED FACTS (voice ONLY these — never invent a capture, check, tactic, or threat not listed here): ${facts.join(' ')}`;
               }

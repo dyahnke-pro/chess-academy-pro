@@ -44,7 +44,7 @@ import {
 import { db, type CachedOpening } from '../db/schema';
 import { gradeNarrationText } from './coachAnswerGates';
 import { logAppAudit } from './appAuditor';
-import { buildOpeningNarrationContext } from './chessConceptService';
+import { buildDanyaTeachingBlock } from './danyaTeachingService';
 import type {
   WalkthroughTree,
   WalkthroughTreeNode,
@@ -1277,13 +1277,21 @@ ${branches.length > 0 ? `- branchIdeas: ONE sentence (max 20 words) for EACH bra
   Example: for "English Attack" with extension "Ng4 Bg5 Qa5+", emit 3 idea objects narrating those three plies.` : ''}
 
 ${(() => {
-  const block = buildOpeningNarrationContext(entry.canonicalName);
+  // TEACHING grounding (David 2026-07-12): Tier-3 narration grounds on the
+  // Danya teaching corpus — his explanation of the positions, the ideas, the
+  // plans — instead of the pre-1930 book passages ("unwire the books"). The
+  // spine SANs key position-specific notes; the name keys opening-level ones.
+  const block = buildDanyaTeachingBlock({
+    historySans: positions.map((p) => p.san),
+    openingName: entry.canonicalName,
+    maxNotes: 6,
+  });
   if (block) {
     void logAppAudit({
       kind: 'book-grounding-injected',
       category: 'subsystem',
-      source: 'openingGenerator.bookGrounding',
-      summary: `narration grounded with book passages for "${entry.canonicalName}" (${block.length} chars)`,
+      source: 'openingGenerator.danyaTeaching',
+      summary: `narration grounded with teaching notes for "${entry.canonicalName}" (${block.length} chars)`,
     });
   }
   return block;
