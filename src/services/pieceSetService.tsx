@@ -55,6 +55,15 @@ export const LICHESS_CDN =
 export const LICHESS_CDN_FALLBACK =
   'https://raw.githack.com/lichess-org/lila/master/public/piece';
 
+/** Bundled last-resort pieces (cburnett, CC0) served from our own
+ *  origin. When BOTH CDNs fail — restrictive corporate/school
+ *  networks, regional outages, captive portals — the board still
+ *  renders real pieces instead of alt-text ("bR", "wP"). The
+ *  2026-07-12 loop audit surfaced 145 asset-load-error events with
+ *  no final tier; the piece SET falls back to cburnett but the
+ *  board never goes blank. 12 SVGs, ~7.5 KB total. */
+export const LOCAL_PIECE_PATH = '/pieces/cburnett';
+
 export interface PieceFilterOptions {
   whitePieceFilter?: string;
   blackPieceFilter?: string;
@@ -116,14 +125,25 @@ export function buildPieceRenderer(
             img.src = `${LICHESS_CDN_FALLBACK}/${setName}/${file}.svg`;
             return;
           }
-          if (loggedAssetFailures.has(url)) return;
-          loggedAssetFailures.add(url);
-          void logAppAudit({
-            kind: 'asset-load-error',
-            category: 'subsystem',
-            source: 'pieceSetService',
-            summary: `piece=${key} set=${setName} url=${url} (retry exhausted, fallback CDN also failed)`,
-          });
+          if (img.dataset.retried === '1') {
+            // Both CDNs failed — serve the bundled cburnett piece from
+            // our own origin so the board never degrades to alt-text.
+            // One audit row records that the CDNs were unreachable.
+            img.dataset.retried = '2';
+            img.src = `${LOCAL_PIECE_PATH}/${file}.svg`;
+            if (loggedAssetFailures.has(url)) return;
+            loggedAssetFailures.add(url);
+            void logAppAudit({
+              kind: 'asset-load-error',
+              category: 'subsystem',
+              source: 'pieceSetService',
+              summary: `piece=${key} set=${setName} url=${url} (both CDNs failed; serving bundled cburnett)`,
+            });
+            return;
+          }
+          // Local bundled asset also failed — nothing left to try;
+          // the alt-text fallback renders. Should be unreachable in
+          // practice (same-origin static file).
         }}
         style={{
           width: '100%',

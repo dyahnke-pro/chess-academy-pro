@@ -40,13 +40,20 @@ describe('buildPieceRenderer', () => {
     expect(img!.dataset.retried).toBe('1');
     expect(img!.src).toContain('raw.githack.com');
     expect(img!.src).toContain('alpha/bB.svg');
-    // Second error: now we audit + give up to alt text.
+    // Second error: audit once + fall back to the BUNDLED local piece
+    // (2026-07-12: both CDNs failing must never leave alt-text on the
+    // board — restrictive networks get real pieces from our origin).
     fireEvent.error(img!);
-    expect(auditor.logAppAudit).toHaveBeenCalled();
+    expect(auditor.logAppAudit).toHaveBeenCalledTimes(1);
     const call = (auditor.logAppAudit as ReturnType<typeof vi.fn>).mock.calls[0][0];
     expect(call.kind).toBe('asset-load-error');
     expect(call.summary).toContain('bB');
     expect(call.summary).toContain('alpha');
-    expect(call.summary).toContain('retry exhausted');
+    expect(call.summary).toContain('bundled cburnett');
+    expect(img!.dataset.retried).toBe('2');
+    expect(img!.src).toContain('/pieces/cburnett/bB.svg');
+    // Third error (local somehow failed): no further retry, no extra audit.
+    fireEvent.error(img!);
+    expect(auditor.logAppAudit).toHaveBeenCalledTimes(1);
   });
 });
