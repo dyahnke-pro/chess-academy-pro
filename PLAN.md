@@ -1,3 +1,48 @@
+# PLAN — LOOP AUDIT: full-game coach standard (2026-07-13, active)
+
+**Instrument:** `scripts/audit-coach-full-games.mjs` via
+`.github/workflows/full-game-audit.yml` (workflow_dispatch + nightly cron;
+own concurrency group `full-game-audit` — never trigger a parallel run, it
+cancels the in-flight one). The FULL-GAME AUDIT STANDARD (CLAUDE.md, locked
+2026-07-13): ≥10 full games on `/coach/play`, all distinct openings, blunder
+interceptions counted, post-game review driven per game, persistence verified
+from IndexedDB; ANY pageerror / non-NOISE console error is a hard fail.
+
+## State
+- **Root cause of the last 3 dispatch failures = ONE break, not many.** Report
+  from run 29232631772 (report.json inspected): games 2–10 were pristine (0
+  pageerrors, 9 distinct families: Nimzo-Indian, English, Zukertort, Bird,
+  Sicilian, Caro-Kann, French, Modern, Scandinavian). ONLY game-1 (italian-shape)
+  died — 1,188 pageerrors, 2 plies, opening never detected → which ALSO caused
+  the secondary "10 games → 9 families" distinctness fail (the missing 10th was
+  italian-shape itself). Both failures, one cause.
+- **Fix (Fable, commit 985729f):** warm the Stockfish variant probe on a
+  throwaway `/coach/play` load before game 1, wait for the
+  `stockfish-variant-resolved`/`-fallback` audit event, drop warm-up-only errors.
+  Real devices pay this probe once per install; the audit now measures gameplay.
+- **Validating run: 29249281899** (scheduled, on 985729f) — in flight at resume.
+  Expectation: green (game 1 now plays → Italian/King's-Pawn = distinct 10th
+  family). If green, the current loop break is CLOSED.
+
+## Tracked follow-up (was Fable's session-local "task #32" — now durable here)
+- **Cold-boot JS bug `t.startsWith is not a function`** — the FIRST error in the
+  game-1 crashloop (minified `t`; no stack captured; only fires on the
+  **multi-thread WASM build** = crossOriginIsolated + SharedArrayBuffer, non-iOS,
+  i.e. CI runner + desktop Chrome first-ever load). iOS beta testers use the asm
+  build and NEVER hit this path; desktop-web first-load DOES. The warm-up scopes
+  it out of the audit but does not fix it. Real fix needs a source-mapped repro
+  of the multi-thread variant probe to locate `t` (something calls `.startsWith`
+  on a non-string worker message before any analysis is pending). Not yet fixed.
+
+## Next-session pickup
+Confirm run 29249281899 green → loop break closed. If a NEW break surfaces,
+diagnose from its report.json artifact (download via the artifact API, inspect
+per-game pageErrors + the `failures[]` array), fix the CODE, re-run (respect the
+concurrency group). The audit is the deliverable; a green run + report is the
+proof.
+
+---
+
 # PLAN — Pro-Rep Build: MAGNUS CARLSEN repertoire (2026-06-01)
 
 **Player:** `carlsen` (Magnus Carlsen) · chess.com `magnuscarlsen` · 9,336
