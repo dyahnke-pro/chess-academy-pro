@@ -958,12 +958,15 @@ let truncationMarkerEmitted = false;
  *  `auditStreamUrl` + `auditStreamSecret` in localStorage. Stream
  *  failures are silent; the local Dexie log is still written. */
 export async function logAppAudit(
-  entry: Omit<AuditEntry, 'timestamp' | 'route' | 'buildId'>,
+  // `route` is normally auto-derived from window.location, but a caller MAY
+  // pass an explicit route (e.g. QuickFeedback capturing the route the user was
+  // ON when they opened the panel, which can differ from the current location).
+  entry: Omit<AuditEntry, 'timestamp' | 'buildId'>,
 ): Promise<void> {
   const filled: AuditEntry = {
     ...entry,
     timestamp: Date.now(),
-    route: typeof window !== 'undefined' ? window.location?.pathname : undefined,
+    route: entry.route ?? (typeof window !== 'undefined' ? window.location?.pathname : undefined),
     buildId: getBuildId(),
     // sessionId is auto-stamped here — callers never pass it. Stays
     // stable for the lifetime of the JS module (per-tab session).

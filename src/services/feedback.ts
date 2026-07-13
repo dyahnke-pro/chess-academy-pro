@@ -55,7 +55,8 @@ export async function submitFeedback(input: FeedbackInput): Promise<boolean> {
       // The category + message lead the summary so the audit-stream / PostHog
       // one-liner + the alert read cleanly ("[praise] love the coach voice").
       summary: `[${input.category}] ${message || '(no message)'}`.slice(0, 200),
-      // route surfaces in PostHog props (buildEventProps ships `route`).
+      // Explicit route: the route the user was ON when they opened QuickFeedback
+      // (logAppAudit now accepts an override, else auto-derives from location).
       route: input.route,
       details: [
         `CATEGORY: ${input.category}`,
