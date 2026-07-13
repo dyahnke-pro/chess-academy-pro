@@ -219,9 +219,12 @@ async function buildOverviewBlock(): Promise<string | null> {
     const o = await withTimeout(getOverviewInsights(), FETCH_TIMEOUT_MS);
     if (!o || o.totalGames === 0) return null;
     const lines: string[] = [
-      `Games imported (complete): ${o.totalGames} (${o.wins}W / ${o.losses}L / ${o.draws}D, ${Math.round(o.winRate * 100)}% overall)`,
-      `By colour: ${Math.round(o.winRateWhite * 100)}% as White, ${Math.round(o.winRateBlack * 100)}% as Black`,
-      `Accuracy: ${o.avgAccuracy.toFixed(1)}% overall (${o.accuracyWhite.toFixed(1)}% W, ${o.accuracyBlack.toFixed(1)}% B); best-move agreement ${(o.bestMoveAgreement * 100).toFixed(0)}%`,
+      // winRate / winRateWhite / winRateBlack / bestMoveAgreement are ALREADY
+      // 0-100 percentages from getOverviewInsights — do NOT multiply by 100
+      // (that injected ~5500% / 10000% into the coach context; David 2026-07-13).
+      `Games imported (complete): ${o.totalGames} (${o.wins}W / ${o.losses}L / ${o.draws}D, ${o.winRate}% overall)`,
+      `By colour: ${o.winRateWhite}% as White, ${o.winRateBlack}% as Black`,
+      `Accuracy: ${o.avgAccuracy.toFixed(1)}% overall (${o.accuracyWhite.toFixed(1)}% W, ${o.accuracyBlack.toFixed(1)}% B); best-move agreement ${o.bestMoveAgreement}%`,
       `Per-game averages: ${o.avgBlundersPerGame.toFixed(1)} blunders, ${o.avgMistakesPerGame.toFixed(1)} mistakes, ${o.avgInaccuraciesPerGame.toFixed(1)} inaccuracies, ${o.avgBrilliantsPerGame.toFixed(2)} brilliants`,
       `Avg rating ~${o.avgElo} ELO; ${o.analyzedGameCount}/${o.totalGames} games fully Stockfish-analyzed (${o.gamesNeedingAnalysis} still need it)`,
     ];
@@ -294,7 +297,9 @@ function formatOpeningStats(s: {
   avgAccuracy: number;
 }): string {
   const ecoTag = s.eco ? ` (${s.eco})` : '';
-  const winPct = Math.round(s.winRate * 100);
+  // s.winRate is ALREADY a 0-100 percentage (getOpeningInsights rounds
+  // wins/games*100) — no second *100 (David 2026-07-13 sweep).
+  const winPct = Math.round(s.winRate);
   return `  - ${s.name}${ecoTag} — ${s.games} games, ${s.wins}/${s.losses}/${s.draws} W/L/D, ${winPct}% score, ${s.avgAccuracy.toFixed(1)}% accuracy`;
 }
 
