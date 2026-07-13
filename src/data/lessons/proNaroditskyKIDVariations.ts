@@ -176,8 +176,8 @@ const FIANCHETTO: LessonScript = {
     b({
       id: 'fia-rook-lift', moves: 'd4 Nf6 c4 g6 g3 Bg7 Bg2 O-O Nc3 d6 Nf3 Nbd7 O-O e5 e4 c6 h3 Qa5 Be3 exd4 Nxd4 Re8',
       highlights: [{ square: 'e8', color: KEY }, { square: 'e4', color: SOFT }],
-      say: "Nxd4 …Re8 — the rook lift hits the e4-pawn. We've reached the Yugoslav middlegame position: queen active on a5, knights coordinated on d7/f6, rook loaded on e8, bishop pair preserved. From here our queenside plan converts in the R+min+P endgame 29.4% of decisive games.",
-      sayShort: '…Re8 — Yugoslav middlegame set.',
+      say: "Nxd4 …Re8 — the rook lift hits the e4-pawn. We've reached the Fianchetto middlegame: queen active on a5, knights on d7/f6, rook on e8. Be straight about the verdict — White's extra central space gives a real pull and the engine has Black clearly worse here, so this is the fighting KID, taken for its winning chances, not an equaliser; the queenside plan is what converts, cashing out in the R+min+P endgame in 29.4% of decisive games.",
+      sayShort: '…Re8 — fighting KID, clearly worse but sharp.',
     }),
   ],
 };
@@ -490,8 +490,8 @@ const FOUR_PAWNS: LessonScript = {
     b({
       id: 'fp-be3-nd7', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f4 O-O Nf3 e5 fxe5 dxe5 d5 c5 Bd3 Ne8 O-O Nd6 Be3 Nd7',
       highlights: [{ square: 'd7', color: KEY }],
-      say: "Be3 …Nd7 — the second knight develops from b8 to d7. The Bg7 / Nd6 / Nd7 trio coordinates against the c4-d5 pawns and prepares more queenside pressure. The Four Pawns position has fully reversed — Black has the better pieces and the better plan.",
-      sayShort: '…Nd7 — coordinate the pieces.',
+      say: "Be3 …Nd7 — the second knight develops from b8 to d7. The Bg7 / Nd6 / Nd7 trio coordinates against the c4-d5 pawns and readies queenside pressure. Be honest about the balance — the Four Pawns is White's most testing try and its huge centre still gives a real pull, so the engine keeps Black clearly worse here; this is a sharp, double-edged fight you take for the practical chances, not an equaliser.",
+      sayShort: '…Nd7 — coordinate; sharp but worse.',
     }),
   ],
 };
