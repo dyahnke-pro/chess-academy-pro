@@ -8195,22 +8195,18 @@
           "Bc5",
           "Bg2",
           "Nc6",
-          "Na4",
-          "Be7",
-          "Nc3",
-          "Bc5",
           "Nge2",
-          "d6",
+          "a5",
+          "d3",
+          "a4",
           "h3",
-          "h5",
-          "Nd5",
-          "h4",
-          "g4",
-          "Nxd5",
-          "exd5",
+          "d6",
+          "O-O",
           "Nd4",
-          "Ng1",
-          "Qf6"
+          "Nxd4",
+          "Bxd4",
+          "Ne2",
+          "Bb6"
         ],
         "reachesMiddlegame": true
       },
@@ -10004,7 +10000,7 @@
         "atPly": 8,
         "games": 38681,
         "pct": 7,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -10038,7 +10034,7 @@
         "atPly": 10,
         "games": 23952,
         "pct": 11,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -10072,7 +10068,7 @@
         "atPly": 10,
         "games": 15724,
         "pct": 7,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -10106,7 +10102,7 @@
         "atPly": 8,
         "games": 14140,
         "pct": 3,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -10140,7 +10136,7 @@
         "atPly": 8,
         "games": 12787,
         "pct": 2,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -10174,7 +10170,7 @@
         "atPly": 10,
         "games": 12100,
         "pct": 6,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -10208,7 +10204,7 @@
         "atPly": 14,
         "games": 10286,
         "pct": 25,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -10242,7 +10238,7 @@
         "atPly": 10,
         "games": 10176,
         "pct": 5,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -10276,7 +10272,7 @@
         "atPly": 12,
         "games": 8336,
         "pct": 13,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -10310,7 +10306,7 @@
         "atPly": 14,
         "games": 7499,
         "pct": 18,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -14891,7 +14887,7 @@
         "atPly": 13,
         "games": 19466,
         "pct": 30,
-        "name": "Scotch Game: Göring Gambit, Main Line",
+        "name": "Scotch Game: G\u00f6ring Gambit, Main Line",
         "moves": [
           "e4",
           "e5",
@@ -14925,7 +14921,7 @@
         "atPly": 13,
         "games": 15168,
         "pct": 23,
-        "name": "Scotch Game: Göring Gambit, Main Line",
+        "name": "Scotch Game: G\u00f6ring Gambit, Main Line",
         "moves": [
           "e4",
           "e5",
@@ -14959,7 +14955,7 @@
         "atPly": 15,
         "games": 9440,
         "pct": 24,
-        "name": "Scotch Game: Göring Gambit, Main Line",
+        "name": "Scotch Game: G\u00f6ring Gambit, Main Line",
         "moves": [
           "e4",
           "e5",
@@ -14993,7 +14989,7 @@
         "atPly": 15,
         "games": 4978,
         "pct": 13,
-        "name": "Scotch Game: Göring Gambit, Main Line",
+        "name": "Scotch Game: G\u00f6ring Gambit, Main Line",
         "moves": [
           "e4",
           "e5",
@@ -15027,7 +15023,7 @@
         "atPly": 13,
         "games": 4170,
         "pct": 6,
-        "name": "Scotch Game: Göring Gambit, Main Line",
+        "name": "Scotch Game: G\u00f6ring Gambit, Main Line",
         "moves": [
           "e4",
           "e5",
@@ -15061,7 +15057,7 @@
         "atPly": 13,
         "games": 3582,
         "pct": 6,
-        "name": "Scotch Game: Göring Gambit, Main Line",
+        "name": "Scotch Game: G\u00f6ring Gambit, Main Line",
         "moves": [
           "e4",
           "e5",
@@ -15095,7 +15091,7 @@
         "atPly": 13,
         "games": 3346,
         "pct": 5,
-        "name": "Scotch Game: Göring Gambit, Main Line",
+        "name": "Scotch Game: G\u00f6ring Gambit, Main Line",
         "moves": [
           "e4",
           "e5",
@@ -15129,7 +15125,7 @@
         "atPly": 15,
         "games": 3250,
         "pct": 8,
-        "name": "Scotch Game: Göring Gambit, Main Line",
+        "name": "Scotch Game: G\u00f6ring Gambit, Main Line",
         "moves": [
           "e4",
           "e5",
@@ -16213,12 +16209,14 @@
           "Nc6",
           "Bb5",
           "Bd7",
+          "Bxc6",
+          "Bxc6",
+          "Bd2",
+          "Qf6",
           "hxg5",
           "hxg5",
           "Rxh8",
-          "Bxh8",
-          "e5",
-          "Kf8"
+          "Bxh8"
         ],
         "reachesMiddlegame": true
       },
@@ -19077,9 +19075,15 @@
           "hxg4",
           "h5",
           "Nxh5",
-          "Bh6",
-          "e6",
-          "Rdg1"
+          "Nd5",
+          "Re8",
+          "Bg5",
+          "Rc5",
+          "Kb1",
+          "Rxd5",
+          "Bxd5",
+          "Qb6",
+          "c3"
         ],
         "reachesMiddlegame": true
       },
@@ -20702,7 +20706,7 @@
         "atPly": 18,
         "games": 57632,
         "pct": 23,
-        "name": "Sicilian Defense: Accelerated Dragon, Maróczy Bind",
+        "name": "Sicilian Defense: Accelerated Dragon, Mar\u00f3czy Bind",
         "moves": [
           "e4",
           "c5",
@@ -20737,7 +20741,7 @@
         "atPly": 18,
         "games": 56829,
         "pct": 23,
-        "name": "Sicilian Defense: Accelerated Dragon, Maróczy Bind",
+        "name": "Sicilian Defense: Accelerated Dragon, Mar\u00f3czy Bind",
         "moves": [
           "e4",
           "c5",
@@ -20772,7 +20776,7 @@
         "atPly": 14,
         "games": 55680,
         "pct": 13,
-        "name": "Sicilian Defense: Accelerated Dragon, Maróczy Bind",
+        "name": "Sicilian Defense: Accelerated Dragon, Mar\u00f3czy Bind",
         "moves": [
           "e4",
           "c5",
@@ -20806,7 +20810,7 @@
         "atPly": 16,
         "games": 51390,
         "pct": 9,
-        "name": "Sicilian Defense: Accelerated Dragon, Maróczy Bind",
+        "name": "Sicilian Defense: Accelerated Dragon, Mar\u00f3czy Bind",
         "moves": [
           "e4",
           "c5",
@@ -20840,7 +20844,7 @@
         "atPly": 12,
         "games": 49047,
         "pct": 7,
-        "name": "Sicilian Defense: Accelerated Dragon, Maróczy Bind",
+        "name": "Sicilian Defense: Accelerated Dragon, Mar\u00f3czy Bind",
         "moves": [
           "e4",
           "c5",
@@ -20874,7 +20878,7 @@
         "atPly": 16,
         "games": 46255,
         "pct": 8,
-        "name": "Sicilian Defense: Accelerated Dragon, Maróczy Bind",
+        "name": "Sicilian Defense: Accelerated Dragon, Mar\u00f3czy Bind",
         "moves": [
           "e4",
           "c5",
@@ -20942,7 +20946,7 @@
         "atPly": 18,
         "games": 21260,
         "pct": 9,
-        "name": "Sicilian Defense: Accelerated Dragon, Maróczy Bind",
+        "name": "Sicilian Defense: Accelerated Dragon, Mar\u00f3czy Bind",
         "moves": [
           "e4",
           "c5",
@@ -20977,7 +20981,7 @@
         "atPly": 18,
         "games": 20495,
         "pct": 8,
-        "name": "Sicilian Defense: Accelerated Dragon, Maróczy Bind",
+        "name": "Sicilian Defense: Accelerated Dragon, Mar\u00f3czy Bind",
         "moves": [
           "e4",
           "c5",
@@ -26847,7 +26851,7 @@
         "atPly": 8,
         "games": 3922089,
         "pct": 35,
-        "name": "Sicilian Defense: Löwenthal Variation",
+        "name": "Sicilian Defense: L\u00f6wenthal Variation",
         "moves": [
           "e4",
           "c5",
@@ -26915,7 +26919,7 @@
         "atPly": 8,
         "games": 1396115,
         "pct": 13,
-        "name": "Sicilian Defense: Löwenthal Variation",
+        "name": "Sicilian Defense: L\u00f6wenthal Variation",
         "moves": [
           "e4",
           "c5",
@@ -26949,7 +26953,7 @@
         "atPly": 8,
         "games": 1214530,
         "pct": 11,
-        "name": "Sicilian Defense: Löwenthal Variation",
+        "name": "Sicilian Defense: L\u00f6wenthal Variation",
         "moves": [
           "e4",
           "c5",
@@ -26983,7 +26987,7 @@
         "atPly": 8,
         "games": 560813,
         "pct": 5,
-        "name": "Sicilian Defense: Löwenthal Variation",
+        "name": "Sicilian Defense: L\u00f6wenthal Variation",
         "moves": [
           "e4",
           "c5",
@@ -39078,7 +39082,7 @@
         "atPly": 13,
         "games": 55944,
         "pct": 13,
-        "name": "Réti Opening",
+        "name": "R\u00e9ti Opening",
         "moves": [
           "Nf3",
           "d5",
@@ -39112,7 +39116,7 @@
         "atPly": 13,
         "games": 55318,
         "pct": 13,
-        "name": "Réti Opening",
+        "name": "R\u00e9ti Opening",
         "moves": [
           "Nf3",
           "d5",
@@ -39146,7 +39150,7 @@
         "atPly": 13,
         "games": 26438,
         "pct": 6,
-        "name": "Réti Opening",
+        "name": "R\u00e9ti Opening",
         "moves": [
           "Nf3",
           "d5",
@@ -39180,7 +39184,7 @@
         "atPly": 9,
         "games": 19636,
         "pct": 8,
-        "name": "Réti Opening",
+        "name": "R\u00e9ti Opening",
         "moves": [
           "Nf3",
           "d5",
@@ -39214,7 +39218,7 @@
         "atPly": 13,
         "games": 18503,
         "pct": 4,
-        "name": "Réti Opening",
+        "name": "R\u00e9ti Opening",
         "moves": [
           "Nf3",
           "d5",
@@ -39248,7 +39252,7 @@
         "atPly": 19,
         "games": 17018,
         "pct": 47,
-        "name": "Réti Opening",
+        "name": "R\u00e9ti Opening",
         "moves": [
           "Nf3",
           "d5",
@@ -39284,7 +39288,7 @@
         "atPly": 13,
         "games": 15248,
         "pct": 4,
-        "name": "Réti Opening",
+        "name": "R\u00e9ti Opening",
         "moves": [
           "Nf3",
           "d5",
@@ -39318,7 +39322,7 @@
         "atPly": 11,
         "games": 14343,
         "pct": 68,
-        "name": "Réti Opening",
+        "name": "R\u00e9ti Opening",
         "moves": [
           "Nf3",
           "d5",
@@ -39352,7 +39356,7 @@
         "atPly": 13,
         "games": 10564,
         "pct": 3,
-        "name": "Réti Opening",
+        "name": "R\u00e9ti Opening",
         "moves": [
           "Nf3",
           "d5",
@@ -39386,7 +39390,7 @@
         "atPly": 9,
         "games": 9430,
         "pct": 4,
-        "name": "Réti Opening",
+        "name": "R\u00e9ti Opening",
         "moves": [
           "Nf3",
           "d5",
@@ -39422,7 +39426,7 @@
         "atPly": 9,
         "games": 18528,
         "pct": 35,
-        "name": "Réti Opening: Réti Accepted",
+        "name": "R\u00e9ti Opening: R\u00e9ti Accepted",
         "moves": [
           "Nf3",
           "d5",
@@ -39456,7 +39460,7 @@
         "atPly": 9,
         "games": 12793,
         "pct": 24,
-        "name": "Réti Opening: Réti Accepted",
+        "name": "R\u00e9ti Opening: R\u00e9ti Accepted",
         "moves": [
           "Nf3",
           "d5",
@@ -39490,7 +39494,7 @@
         "atPly": 9,
         "games": 5455,
         "pct": 10,
-        "name": "Réti Opening: Réti Accepted",
+        "name": "R\u00e9ti Opening: R\u00e9ti Accepted",
         "moves": [
           "Nf3",
           "d5",
@@ -39524,7 +39528,7 @@
         "atPly": 9,
         "games": 3392,
         "pct": 6,
-        "name": "Réti Opening: Réti Accepted",
+        "name": "R\u00e9ti Opening: R\u00e9ti Accepted",
         "moves": [
           "Nf3",
           "d5",
@@ -39558,7 +39562,7 @@
         "atPly": 9,
         "games": 3094,
         "pct": 6,
-        "name": "Réti Opening: Réti Accepted",
+        "name": "R\u00e9ti Opening: R\u00e9ti Accepted",
         "moves": [
           "Nf3",
           "d5",
@@ -39592,7 +39596,7 @@
         "atPly": 9,
         "games": 2568,
         "pct": 5,
-        "name": "Réti Opening: Réti Accepted",
+        "name": "R\u00e9ti Opening: R\u00e9ti Accepted",
         "moves": [
           "Nf3",
           "d5",
@@ -39626,7 +39630,7 @@
         "atPly": 9,
         "games": 1657,
         "pct": 3,
-        "name": "Réti Opening: Réti Accepted",
+        "name": "R\u00e9ti Opening: R\u00e9ti Accepted",
         "moves": [
           "Nf3",
           "d5",
@@ -39660,7 +39664,7 @@
         "atPly": 13,
         "games": 1162,
         "pct": 49,
-        "name": "Réti Opening: Réti Accepted",
+        "name": "R\u00e9ti Opening: R\u00e9ti Accepted",
         "moves": [
           "Nf3",
           "d5",
@@ -39694,7 +39698,7 @@
         "atPly": 11,
         "games": 1081,
         "pct": 13,
-        "name": "Réti Opening: Réti Accepted",
+        "name": "R\u00e9ti Opening: R\u00e9ti Accepted",
         "moves": [
           "Nf3",
           "d5",
@@ -39728,7 +39732,7 @@
         "atPly": 15,
         "games": 290,
         "pct": 41,
-        "name": "Réti Opening: Réti Accepted",
+        "name": "R\u00e9ti Opening: R\u00e9ti Accepted",
         "moves": [
           "Nf3",
           "d5",
@@ -40110,7 +40114,7 @@
         "atPly": 9,
         "games": 19636,
         "pct": 8,
-        "name": "Réti Opening",
+        "name": "R\u00e9ti Opening",
         "moves": [
           "Nf3",
           "d5",
@@ -40144,7 +40148,7 @@
         "atPly": 9,
         "games": 9430,
         "pct": 4,
-        "name": "Réti Opening",
+        "name": "R\u00e9ti Opening",
         "moves": [
           "Nf3",
           "d5",
@@ -40178,7 +40182,7 @@
         "atPly": 7,
         "games": 5301,
         "pct": 28,
-        "name": "Réti Opening",
+        "name": "R\u00e9ti Opening",
         "moves": [
           "Nf3",
           "d5",
@@ -40212,7 +40216,7 @@
         "atPly": 7,
         "games": 1823,
         "pct": 10,
-        "name": "Réti Opening",
+        "name": "R\u00e9ti Opening",
         "moves": [
           "Nf3",
           "d5",
@@ -40246,7 +40250,7 @@
         "atPly": 11,
         "games": 1667,
         "pct": 30,
-        "name": "Réti Opening",
+        "name": "R\u00e9ti Opening",
         "moves": [
           "Nf3",
           "d5",
@@ -40280,7 +40284,7 @@
         "atPly": 5,
         "games": 1191,
         "pct": 19,
-        "name": "Réti Opening",
+        "name": "R\u00e9ti Opening",
         "moves": [
           "Nf3",
           "d5",
@@ -40314,7 +40318,7 @@
         "atPly": 19,
         "games": 853,
         "pct": 23,
-        "name": "Réti Opening",
+        "name": "R\u00e9ti Opening",
         "moves": [
           "Nf3",
           "d5",
@@ -40348,7 +40352,7 @@
         "atPly": 7,
         "games": 758,
         "pct": 4,
-        "name": "Réti Opening",
+        "name": "R\u00e9ti Opening",
         "moves": [
           "Nf3",
           "d5",
@@ -40382,7 +40386,7 @@
         "atPly": 19,
         "games": 754,
         "pct": 20,
-        "name": "Réti Opening",
+        "name": "R\u00e9ti Opening",
         "moves": [
           "Nf3",
           "d5",
@@ -40416,7 +40420,7 @@
         "atPly": 11,
         "games": 721,
         "pct": 13,
-        "name": "Réti Opening",
+        "name": "R\u00e9ti Opening",
         "moves": [
           "Nf3",
           "d5",
@@ -40452,7 +40456,7 @@
         "atPly": 11,
         "games": 2636,
         "pct": 30,
-        "name": "Réti Opening: Advance Variation",
+        "name": "R\u00e9ti Opening: Advance Variation",
         "moves": [
           "Nf3",
           "d5",
@@ -40486,7 +40490,7 @@
         "atPly": 11,
         "games": 1042,
         "pct": 12,
-        "name": "Réti Opening: Advance Variation",
+        "name": "R\u00e9ti Opening: Advance Variation",
         "moves": [
           "Nf3",
           "d5",
@@ -40520,7 +40524,7 @@
         "atPly": 11,
         "games": 854,
         "pct": 10,
-        "name": "Réti Opening: Advance Variation",
+        "name": "R\u00e9ti Opening: Advance Variation",
         "moves": [
           "Nf3",
           "d5",
@@ -40554,7 +40558,7 @@
         "atPly": 13,
         "games": 825,
         "pct": 32,
-        "name": "Réti Opening: Advance Variation",
+        "name": "R\u00e9ti Opening: Advance Variation",
         "moves": [
           "Nf3",
           "d5",
@@ -40588,7 +40592,7 @@
         "atPly": 11,
         "games": 740,
         "pct": 8,
-        "name": "Réti Opening: Advance Variation",
+        "name": "R\u00e9ti Opening: Advance Variation",
         "moves": [
           "Nf3",
           "d5",
@@ -40622,7 +40626,7 @@
         "atPly": 13,
         "games": 610,
         "pct": 24,
-        "name": "Réti Opening: Advance Variation",
+        "name": "R\u00e9ti Opening: Advance Variation",
         "moves": [
           "Nf3",
           "d5",
@@ -40656,7 +40660,7 @@
         "atPly": 7,
         "games": 594,
         "pct": 2,
-        "name": "Réti Opening: Advance Variation",
+        "name": "R\u00e9ti Opening: Advance Variation",
         "moves": [
           "Nf3",
           "d5",
@@ -40690,7 +40694,7 @@
         "atPly": 11,
         "games": 498,
         "pct": 6,
-        "name": "Réti Opening: Advance Variation",
+        "name": "R\u00e9ti Opening: Advance Variation",
         "moves": [
           "Nf3",
           "d5",
@@ -40724,7 +40728,7 @@
         "atPly": 11,
         "games": 276,
         "pct": 3,
-        "name": "Réti Opening: Advance Variation",
+        "name": "R\u00e9ti Opening: Advance Variation",
         "moves": [
           "Nf3",
           "d5",
@@ -40758,7 +40762,7 @@
         "atPly": 11,
         "games": 233,
         "pct": 3,
-        "name": "Réti Opening: Advance Variation",
+        "name": "R\u00e9ti Opening: Advance Variation",
         "moves": [
           "Nf3",
           "d5",
@@ -40794,7 +40798,7 @@
         "atPly": 13,
         "games": 5408,
         "pct": 26,
-        "name": "Réti Opening",
+        "name": "R\u00e9ti Opening",
         "moves": [
           "Nf3",
           "d5",
@@ -40828,7 +40832,7 @@
         "atPly": 17,
         "games": 3839,
         "pct": 19,
-        "name": "Réti Opening",
+        "name": "R\u00e9ti Opening",
         "moves": [
           "Nf3",
           "d5",
@@ -40862,7 +40866,7 @@
         "atPly": 13,
         "games": 2714,
         "pct": 13,
-        "name": "Réti Opening",
+        "name": "R\u00e9ti Opening",
         "moves": [
           "Nf3",
           "d5",
@@ -40896,7 +40900,7 @@
         "atPly": 15,
         "games": 2616,
         "pct": 18,
-        "name": "Réti Opening",
+        "name": "R\u00e9ti Opening",
         "moves": [
           "Nf3",
           "d5",
@@ -40930,7 +40934,7 @@
         "atPly": 19,
         "games": 2213,
         "pct": 33,
-        "name": "Réti Opening",
+        "name": "R\u00e9ti Opening",
         "moves": [
           "Nf3",
           "d5",
@@ -40964,7 +40968,7 @@
         "atPly": 17,
         "games": 2206,
         "pct": 11,
-        "name": "Réti Opening",
+        "name": "R\u00e9ti Opening",
         "moves": [
           "Nf3",
           "d5",
@@ -40998,7 +41002,7 @@
         "atPly": 17,
         "games": 2164,
         "pct": 11,
-        "name": "Réti Opening",
+        "name": "R\u00e9ti Opening",
         "moves": [
           "Nf3",
           "d5",
@@ -41032,7 +41036,7 @@
         "atPly": 7,
         "games": 1970,
         "pct": 37,
-        "name": "Réti Opening",
+        "name": "R\u00e9ti Opening",
         "moves": [
           "Nf3",
           "d5",
@@ -41066,7 +41070,7 @@
         "atPly": 19,
         "games": 1733,
         "pct": 26,
-        "name": "Réti Opening",
+        "name": "R\u00e9ti Opening",
         "moves": [
           "Nf3",
           "d5",
@@ -41102,7 +41106,7 @@
         "atPly": 17,
         "games": 1559,
         "pct": 8,
-        "name": "Réti Opening",
+        "name": "R\u00e9ti Opening",
         "moves": [
           "Nf3",
           "d5",
@@ -41138,7 +41142,7 @@
         "atPly": 5,
         "games": 649,
         "pct": 35,
-        "name": "Réti Opening: Advance Variation, Michel Gambit",
+        "name": "R\u00e9ti Opening: Advance Variation, Michel Gambit",
         "moves": [
           "Nf3",
           "d5",
@@ -41172,7 +41176,7 @@
         "atPly": 5,
         "games": 486,
         "pct": 27,
-        "name": "Réti Opening: Advance Variation",
+        "name": "R\u00e9ti Opening: Advance Variation",
         "moves": [
           "Nf3",
           "d5",
@@ -41206,7 +41210,7 @@
         "atPly": 15,
         "games": 230,
         "pct": 28,
-        "name": "Réti Opening: Advance Variation",
+        "name": "R\u00e9ti Opening: Advance Variation",
         "moves": [
           "Nf3",
           "d5",
@@ -41240,7 +41244,7 @@
         "atPly": 5,
         "games": 204,
         "pct": 11,
-        "name": "Réti Opening: Advance Variation",
+        "name": "R\u00e9ti Opening: Advance Variation",
         "moves": [
           "Nf3",
           "d5",
@@ -41274,7 +41278,7 @@
         "atPly": 11,
         "games": 169,
         "pct": 10,
-        "name": "Réti Opening: Advance Variation",
+        "name": "R\u00e9ti Opening: Advance Variation",
         "moves": [
           "Nf3",
           "d5",
@@ -41308,7 +41312,7 @@
         "atPly": 5,
         "games": 150,
         "pct": 8,
-        "name": "Réti Opening: Advance Variation, Navara Gambit",
+        "name": "R\u00e9ti Opening: Advance Variation, Navara Gambit",
         "moves": [
           "Nf3",
           "d5",
@@ -41342,7 +41346,7 @@
         "atPly": 15,
         "games": 118,
         "pct": 14,
-        "name": "Réti Opening: Advance Variation",
+        "name": "R\u00e9ti Opening: Advance Variation",
         "moves": [
           "Nf3",
           "d5",
@@ -41376,7 +41380,7 @@
         "atPly": 5,
         "games": 104,
         "pct": 6,
-        "name": "Réti Opening: Advance Variation",
+        "name": "R\u00e9ti Opening: Advance Variation",
         "moves": [
           "Nf3",
           "d5",
@@ -41410,7 +41414,7 @@
         "atPly": 11,
         "games": 101,
         "pct": 6,
-        "name": "Réti Opening: Advance Variation",
+        "name": "R\u00e9ti Opening: Advance Variation",
         "moves": [
           "Nf3",
           "d5",
@@ -41444,7 +41448,7 @@
         "atPly": 9,
         "games": 100,
         "pct": 5,
-        "name": "Réti Opening: Advance Variation",
+        "name": "R\u00e9ti Opening: Advance Variation",
         "moves": [
           "Nf3",
           "d5",
@@ -54694,7 +54698,7 @@
         "atPly": 6,
         "games": 2412,
         "pct": 8,
-        "name": "French Defense: Winawer Variation, Alekhine-Maróczy Gambit",
+        "name": "French Defense: Winawer Variation, Alekhine-Mar\u00f3czy Gambit",
         "moves": [
           "e4",
           "e6",
@@ -57862,7 +57866,7 @@
         "atPly": 4,
         "games": 702,
         "pct": 4,
-        "name": "Alekhine Defense: Sämisch Attack",
+        "name": "Alekhine Defense: S\u00e4misch Attack",
         "moves": [
           "e4",
           "Nf6",
@@ -59436,7 +59440,7 @@
         "atPly": 4,
         "games": 702,
         "pct": 4,
-        "name": "Alekhine Defense: Sämisch Attack",
+        "name": "Alekhine Defense: S\u00e4misch Attack",
         "moves": [
           "e4",
           "Nf6",
@@ -59690,16 +59694,15 @@
           "Kxf7",
           "Qh5+",
           "Ke6",
-          "g3",
-          "N7f6",
-          "Bh3+",
-          "Kd6",
-          "Qe5+",
-          "Kc6",
-          "Bg2",
-          "e6",
           "c4",
-          "Kd7"
+          "Nb4",
+          "Bd2",
+          "g6",
+          "Qf3",
+          "Nc2+",
+          "Kd1",
+          "Nxa1",
+          "d5+"
         ],
         "reachesMiddlegame": true
       }
@@ -59812,7 +59815,7 @@
         "atPly": 4,
         "games": 702,
         "pct": 4,
-        "name": "Alekhine Defense: Sämisch Attack",
+        "name": "Alekhine Defense: S\u00e4misch Attack",
         "moves": [
           "e4",
           "Nf6",
@@ -62657,7 +62660,7 @@
         "atPly": 6,
         "games": 8047,
         "pct": 9,
-        "name": "Nimzo-Indian Defense: Sämisch Variation",
+        "name": "Nimzo-Indian Defense: S\u00e4misch Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -62897,7 +62900,7 @@
         "atPly": 6,
         "games": 8047,
         "pct": 9,
-        "name": "Nimzo-Indian Defense: Sämisch Variation",
+        "name": "Nimzo-Indian Defense: S\u00e4misch Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -63101,7 +63104,7 @@
         "atPly": 6,
         "games": 1882,
         "pct": 2,
-        "name": "Nimzo-Indian Defense: Sämisch Variation",
+        "name": "Nimzo-Indian Defense: S\u00e4misch Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -63239,7 +63242,7 @@
         "atPly": 6,
         "games": 8047,
         "pct": 9,
-        "name": "Nimzo-Indian Defense: Sämisch Variation",
+        "name": "Nimzo-Indian Defense: S\u00e4misch Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -63409,7 +63412,7 @@
         "atPly": 6,
         "games": 1882,
         "pct": 2,
-        "name": "Nimzo-Indian Defense: Sämisch Variation",
+        "name": "Nimzo-Indian Defense: S\u00e4misch Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -63683,7 +63686,7 @@
         "atPly": 6,
         "games": 8047,
         "pct": 9,
-        "name": "Nimzo-Indian Defense: Sämisch Variation",
+        "name": "Nimzo-Indian Defense: S\u00e4misch Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -63785,7 +63788,7 @@
         "atPly": 6,
         "games": 1882,
         "pct": 2,
-        "name": "Nimzo-Indian Defense: Sämisch Variation",
+        "name": "Nimzo-Indian Defense: S\u00e4misch Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -63957,7 +63960,7 @@
         "atPly": 6,
         "games": 8047,
         "pct": 9,
-        "name": "Nimzo-Indian Defense: Sämisch Variation",
+        "name": "Nimzo-Indian Defense: S\u00e4misch Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -64059,7 +64062,7 @@
         "atPly": 6,
         "games": 1882,
         "pct": 2,
-        "name": "Nimzo-Indian Defense: Sämisch Variation",
+        "name": "Nimzo-Indian Defense: S\u00e4misch Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -64299,7 +64302,7 @@
         "atPly": 6,
         "games": 8047,
         "pct": 9,
-        "name": "Nimzo-Indian Defense: Sämisch Variation",
+        "name": "Nimzo-Indian Defense: S\u00e4misch Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -64435,7 +64438,7 @@
         "atPly": 10,
         "games": 385,
         "pct": 42,
-        "name": "Nimzo-Indian Defense: Sämisch Variation",
+        "name": "Nimzo-Indian Defense: S\u00e4misch Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -64469,7 +64472,7 @@
         "atPly": 16,
         "games": 122,
         "pct": 26,
-        "name": "Nimzo-Indian Defense: Sämisch Variation",
+        "name": "Nimzo-Indian Defense: S\u00e4misch Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -64949,7 +64952,7 @@
         "atPly": 6,
         "games": 8047,
         "pct": 9,
-        "name": "Nimzo-Indian Defense: Sämisch Variation",
+        "name": "Nimzo-Indian Defense: S\u00e4misch Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -65119,7 +65122,7 @@
         "atPly": 6,
         "games": 1882,
         "pct": 2,
-        "name": "Nimzo-Indian Defense: Sämisch Variation",
+        "name": "Nimzo-Indian Defense: S\u00e4misch Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -69109,21 +69112,18 @@
           "Nc3",
           "fxe4",
           "Ng5",
-          "e3",
-          "a3",
-          "e2",
-          "b3",
-          "e4",
-          "Bxe2",
           "d5",
-          "f3",
-          "Be7",
+          "dxe5",
+          "Bb4",
+          "Be2",
+          "Nc6",
           "O-O",
-          "Bxg5",
+          "Nge7",
+          "f3",
+          "O-O",
           "fxe4",
-          "Bxc1",
-          "Bb5+",
-          "Nc6"
+          "Rxf1+",
+          "Bxf1"
         ],
         "reachesMiddlegame": true
       },
@@ -79606,7 +79606,7 @@
         "atPly": 8,
         "games": 14305,
         "pct": 19,
-        "name": "King's Indian Defense: Sämisch Variation, Normal Defense",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Normal Defense",
         "moves": [
           "d4",
           "Nf6",
@@ -79948,7 +79948,7 @@
         "atPly": 8,
         "games": 14305,
         "pct": 19,
-        "name": "King's Indian Defense: Sämisch Variation, Normal Defense",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Normal Defense",
         "moves": [
           "d4",
           "Nf6",
@@ -80460,7 +80460,7 @@
         "atPly": 4,
         "games": 4232,
         "pct": 3,
-        "name": "Indian Defense: Anti-Grünfeld, Alekhine Variation",
+        "name": "Indian Defense: Anti-Gr\u00fcnfeld, Alekhine Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -80802,7 +80802,7 @@
         "atPly": 8,
         "games": 14305,
         "pct": 19,
-        "name": "King's Indian Defense: Sämisch Variation, Normal Defense",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Normal Defense",
         "moves": [
           "d4",
           "Nf6",
@@ -81115,7 +81115,7 @@
         "atPly": 4,
         "games": 4232,
         "pct": 3,
-        "name": "Indian Defense: Anti-Grünfeld, Alekhine Variation",
+        "name": "Indian Defense: Anti-Gr\u00fcnfeld, Alekhine Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -81355,7 +81355,7 @@
         "atPly": 8,
         "games": 14305,
         "pct": 19,
-        "name": "King's Indian Defense: Sämisch Variation, Normal Defense",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Normal Defense",
         "moves": [
           "d4",
           "Nf6",
@@ -81593,7 +81593,7 @@
         "atPly": 4,
         "games": 4232,
         "pct": 3,
-        "name": "Indian Defense: Anti-Grünfeld, Alekhine Variation",
+        "name": "Indian Defense: Anti-Gr\u00fcnfeld, Alekhine Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -81663,7 +81663,7 @@
         "atPly": 8,
         "games": 14305,
         "pct": 19,
-        "name": "King's Indian Defense: Sämisch Variation, Normal Defense",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Normal Defense",
         "moves": [
           "d4",
           "Nf6",
@@ -81867,7 +81867,7 @@
         "atPly": 4,
         "games": 4232,
         "pct": 3,
-        "name": "Indian Defense: Anti-Grünfeld, Alekhine Variation",
+        "name": "Indian Defense: Anti-Gr\u00fcnfeld, Alekhine Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -82107,7 +82107,7 @@
         "atPly": 8,
         "games": 14305,
         "pct": 19,
-        "name": "King's Indian Defense: Sämisch Variation, Normal Defense",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Normal Defense",
         "moves": [
           "d4",
           "Nf6",
@@ -82349,7 +82349,7 @@
         "atPly": 6,
         "games": 12624,
         "pct": 30,
-        "name": "Grünfeld Defense: Three Knights Variation",
+        "name": "Gr\u00fcnfeld Defense: Three Knights Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -82417,7 +82417,7 @@
         "atPly": 12,
         "games": 7089,
         "pct": 39,
-        "name": "Grünfeld Defense: Exchange Variation, Classical Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation, Classical Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -82451,7 +82451,7 @@
         "atPly": 14,
         "games": 5391,
         "pct": 54,
-        "name": "Grünfeld Defense: Exchange Variation, Modern Exchange Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation, Modern Exchange Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -82485,7 +82485,7 @@
         "atPly": 18,
         "games": 4383,
         "pct": 31,
-        "name": "Grünfeld Defense: Exchange Variation, Modern Exchange Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation, Modern Exchange Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -82519,7 +82519,7 @@
         "atPly": 4,
         "games": 4232,
         "pct": 3,
-        "name": "Indian Defense: Anti-Grünfeld, Alekhine Variation",
+        "name": "Indian Defense: Anti-Gr\u00fcnfeld, Alekhine Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -82553,7 +82553,7 @@
         "atPly": 6,
         "games": 3075,
         "pct": 7,
-        "name": "Grünfeld Defense: Brinckmann Attack",
+        "name": "Gr\u00fcnfeld Defense: Brinckmann Attack",
         "moves": [
           "d4",
           "Nf6",
@@ -82587,7 +82587,7 @@
         "atPly": 8,
         "games": 2653,
         "pct": 12,
-        "name": "Grünfeld Defense: Exchange Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -82621,7 +82621,7 @@
         "atPly": 6,
         "games": 2549,
         "pct": 6,
-        "name": "Grünfeld Defense: Stockholm Variation",
+        "name": "Gr\u00fcnfeld Defense: Stockholm Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -82691,7 +82691,7 @@
         "atPly": 6,
         "games": 12624,
         "pct": 30,
-        "name": "Grünfeld Defense: Three Knights Variation",
+        "name": "Gr\u00fcnfeld Defense: Three Knights Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -82759,7 +82759,7 @@
         "atPly": 12,
         "games": 7089,
         "pct": 39,
-        "name": "Grünfeld Defense: Exchange Variation, Classical Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation, Classical Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -82793,7 +82793,7 @@
         "atPly": 14,
         "games": 5391,
         "pct": 54,
-        "name": "Grünfeld Defense: Exchange Variation, Modern Exchange Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation, Modern Exchange Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -82827,7 +82827,7 @@
         "atPly": 4,
         "games": 4232,
         "pct": 3,
-        "name": "Indian Defense: Anti-Grünfeld, Alekhine Variation",
+        "name": "Indian Defense: Anti-Gr\u00fcnfeld, Alekhine Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -82861,7 +82861,7 @@
         "atPly": 18,
         "games": 4040,
         "pct": 23,
-        "name": "Grünfeld Defense: Exchange Variation, Modern Exchange Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation, Modern Exchange Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -82895,7 +82895,7 @@
         "atPly": 6,
         "games": 3075,
         "pct": 7,
-        "name": "Grünfeld Defense: Brinckmann Attack",
+        "name": "Gr\u00fcnfeld Defense: Brinckmann Attack",
         "moves": [
           "d4",
           "Nf6",
@@ -82929,7 +82929,7 @@
         "atPly": 8,
         "games": 2653,
         "pct": 12,
-        "name": "Grünfeld Defense: Exchange Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -82963,7 +82963,7 @@
         "atPly": 6,
         "games": 2549,
         "pct": 6,
-        "name": "Grünfeld Defense: Stockholm Variation",
+        "name": "Gr\u00fcnfeld Defense: Stockholm Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -82999,7 +82999,7 @@
         "atPly": 6,
         "games": 22602,
         "pct": 53,
-        "name": "Grünfeld Defense: Exchange Variation, Classical Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation, Classical Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -83101,7 +83101,7 @@
         "atPly": 8,
         "games": 4932,
         "pct": 26,
-        "name": "Grünfeld Defense: Three Knights Variation",
+        "name": "Gr\u00fcnfeld Defense: Three Knights Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -83135,7 +83135,7 @@
         "atPly": 4,
         "games": 4232,
         "pct": 3,
-        "name": "Indian Defense: Anti-Grünfeld, Alekhine Variation",
+        "name": "Indian Defense: Anti-Gr\u00fcnfeld, Alekhine Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -83169,7 +83169,7 @@
         "atPly": 8,
         "games": 3800,
         "pct": 20,
-        "name": "Grünfeld Defense: Three Knights Variation, Petrosian System",
+        "name": "Gr\u00fcnfeld Defense: Three Knights Variation, Petrosian System",
         "moves": [
           "d4",
           "Nf6",
@@ -83203,7 +83203,7 @@
         "atPly": 6,
         "games": 3075,
         "pct": 7,
-        "name": "Grünfeld Defense: Brinckmann Attack",
+        "name": "Gr\u00fcnfeld Defense: Brinckmann Attack",
         "moves": [
           "d4",
           "Nf6",
@@ -83237,7 +83237,7 @@
         "atPly": 6,
         "games": 2549,
         "pct": 6,
-        "name": "Grünfeld Defense: Stockholm Variation",
+        "name": "Gr\u00fcnfeld Defense: Stockholm Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -83271,7 +83271,7 @@
         "atPly": 8,
         "games": 2058,
         "pct": 11,
-        "name": "Grünfeld Defense: Three Knights Variation, Burille Variation",
+        "name": "Gr\u00fcnfeld Defense: Three Knights Variation, Burille Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -83305,7 +83305,7 @@
         "atPly": 8,
         "games": 1752,
         "pct": 9,
-        "name": "Grünfeld Defense: Three Knights Variation, Hungarian Attack",
+        "name": "Gr\u00fcnfeld Defense: Three Knights Variation, Hungarian Attack",
         "moves": [
           "d4",
           "Nf6",
@@ -83443,7 +83443,7 @@
         "atPly": 4,
         "games": 4232,
         "pct": 3,
-        "name": "Indian Defense: Anti-Grünfeld, Alekhine Variation",
+        "name": "Indian Defense: Anti-Gr\u00fcnfeld, Alekhine Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -83683,7 +83683,7 @@
         "atPly": 14,
         "games": 65595,
         "pct": 18,
-        "name": "Grünfeld Defense: Exchange Variation, Classical Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation, Classical Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -83717,7 +83717,7 @@
         "atPly": 14,
         "games": 22895,
         "pct": 6,
-        "name": "Grünfeld Defense: Exchange Variation, Classical Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation, Classical Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -83785,7 +83785,7 @@
         "atPly": 6,
         "games": 12624,
         "pct": 30,
-        "name": "Grünfeld Defense: Three Knights Variation",
+        "name": "Gr\u00fcnfeld Defense: Three Knights Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -83853,7 +83853,7 @@
         "atPly": 12,
         "games": 6558,
         "pct": 36,
-        "name": "Grünfeld Defense: Exchange Variation, Modern Exchange Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation, Modern Exchange Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -83887,7 +83887,7 @@
         "atPly": 26,
         "games": 4864,
         "pct": 44,
-        "name": "Grünfeld Defense: Exchange Variation, Spassky Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation, Spassky Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -83928,7 +83928,7 @@
         "atPly": 4,
         "games": 4232,
         "pct": 3,
-        "name": "Indian Defense: Anti-Grünfeld, Alekhine Variation",
+        "name": "Indian Defense: Anti-Gr\u00fcnfeld, Alekhine Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -83962,7 +83962,7 @@
         "atPly": 18,
         "games": 3639,
         "pct": 4,
-        "name": "Grünfeld Defense: Exchange Variation, Spassky Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation, Spassky Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -83996,7 +83996,7 @@
         "atPly": 6,
         "games": 3075,
         "pct": 7,
-        "name": "Grünfeld Defense: Brinckmann Attack",
+        "name": "Gr\u00fcnfeld Defense: Brinckmann Attack",
         "moves": [
           "d4",
           "Nf6",
@@ -84100,7 +84100,7 @@
         "atPly": 4,
         "games": 4232,
         "pct": 3,
-        "name": "Indian Defense: Anti-Grünfeld, Alekhine Variation",
+        "name": "Indian Defense: Anti-Gr\u00fcnfeld, Alekhine Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -84134,7 +84134,7 @@
         "atPly": 8,
         "games": 2280,
         "pct": 90,
-        "name": "Neo-Grünfeld Defense: with g3",
+        "name": "Neo-Gr\u00fcnfeld Defense: with g3",
         "moves": [
           "d4",
           "Nf6",
@@ -84168,7 +84168,7 @@
         "atPly": 10,
         "games": 1806,
         "pct": 69,
-        "name": "Neo-Grünfeld Defense: with g3",
+        "name": "Neo-Gr\u00fcnfeld Defense: with g3",
         "moves": [
           "d4",
           "Nf6",
@@ -84202,7 +84202,7 @@
         "atPly": 16,
         "games": 739,
         "pct": 23,
-        "name": "Neo-Grünfeld Defense: with g3",
+        "name": "Neo-Gr\u00fcnfeld Defense: with g3",
         "moves": [
           "d4",
           "Nf6",
@@ -84236,7 +84236,7 @@
         "atPly": 16,
         "games": 608,
         "pct": 19,
-        "name": "Neo-Grünfeld Defense: with g3",
+        "name": "Neo-Gr\u00fcnfeld Defense: with g3",
         "moves": [
           "d4",
           "Nf6",
@@ -84270,7 +84270,7 @@
         "atPly": 16,
         "games": 430,
         "pct": 13,
-        "name": "Neo-Grünfeld Defense: with g3",
+        "name": "Neo-Gr\u00fcnfeld Defense: with g3",
         "moves": [
           "d4",
           "Nf6",
@@ -84304,7 +84304,7 @@
         "atPly": 16,
         "games": 309,
         "pct": 10,
-        "name": "Neo-Grünfeld Defense: with g3",
+        "name": "Neo-Gr\u00fcnfeld Defense: with g3",
         "moves": [
           "d4",
           "Nf6",
@@ -84338,7 +84338,7 @@
         "atPly": 16,
         "games": 288,
         "pct": 9,
-        "name": "Neo-Grünfeld Defense: with g3",
+        "name": "Neo-Gr\u00fcnfeld Defense: with g3",
         "moves": [
           "d4",
           "Nf6",
@@ -84408,7 +84408,7 @@
         "atPly": 6,
         "games": 12624,
         "pct": 30,
-        "name": "Grünfeld Defense: Three Knights Variation",
+        "name": "Gr\u00fcnfeld Defense: Three Knights Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -84476,7 +84476,7 @@
         "atPly": 12,
         "games": 7089,
         "pct": 39,
-        "name": "Grünfeld Defense: Exchange Variation, Classical Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation, Classical Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -84510,7 +84510,7 @@
         "atPly": 16,
         "games": 6163,
         "pct": 10,
-        "name": "Grünfeld Defense: Exchange Variation, Modern Exchange Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation, Modern Exchange Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -84544,7 +84544,7 @@
         "atPly": 4,
         "games": 4232,
         "pct": 3,
-        "name": "Indian Defense: Anti-Grünfeld, Alekhine Variation",
+        "name": "Indian Defense: Anti-Gr\u00fcnfeld, Alekhine Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -84578,7 +84578,7 @@
         "atPly": 20,
         "games": 3960,
         "pct": 40,
-        "name": "Grünfeld Defense: Exchange Variation, Modern Exchange Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation, Modern Exchange Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -84615,7 +84615,7 @@
         "atPly": 6,
         "games": 3075,
         "pct": 7,
-        "name": "Grünfeld Defense: Brinckmann Attack",
+        "name": "Gr\u00fcnfeld Defense: Brinckmann Attack",
         "moves": [
           "d4",
           "Nf6",
@@ -84649,7 +84649,7 @@
         "atPly": 16,
         "games": 2852,
         "pct": 5,
-        "name": "Grünfeld Defense: Exchange Variation, Modern Exchange Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation, Modern Exchange Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -84683,7 +84683,7 @@
         "atPly": 14,
         "games": 2830,
         "pct": 28,
-        "name": "Grünfeld Defense: Exchange Variation, Modern Exchange Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation, Modern Exchange Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -84719,7 +84719,7 @@
         "atPly": 14,
         "games": 65595,
         "pct": 18,
-        "name": "Grünfeld Defense: Exchange Variation, Classical Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation, Classical Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -84753,7 +84753,7 @@
         "atPly": 14,
         "games": 22895,
         "pct": 6,
-        "name": "Grünfeld Defense: Exchange Variation, Classical Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation, Classical Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -84821,7 +84821,7 @@
         "atPly": 6,
         "games": 12624,
         "pct": 30,
-        "name": "Grünfeld Defense: Three Knights Variation",
+        "name": "Gr\u00fcnfeld Defense: Three Knights Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -84889,7 +84889,7 @@
         "atPly": 16,
         "games": 7079,
         "pct": 7,
-        "name": "Grünfeld Defense: Exchange Variation, Classical Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation, Classical Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -84923,7 +84923,7 @@
         "atPly": 12,
         "games": 6558,
         "pct": 36,
-        "name": "Grünfeld Defense: Exchange Variation, Modern Exchange Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation, Modern Exchange Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -84957,7 +84957,7 @@
         "atPly": 4,
         "games": 4232,
         "pct": 3,
-        "name": "Indian Defense: Anti-Grünfeld, Alekhine Variation",
+        "name": "Indian Defense: Anti-Gr\u00fcnfeld, Alekhine Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -84991,7 +84991,7 @@
         "atPly": 16,
         "games": 3799,
         "pct": 4,
-        "name": "Grünfeld Defense: Exchange Variation, Classical Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation, Classical Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -85025,7 +85025,7 @@
         "atPly": 6,
         "games": 3075,
         "pct": 7,
-        "name": "Grünfeld Defense: Brinckmann Attack",
+        "name": "Gr\u00fcnfeld Defense: Brinckmann Attack",
         "moves": [
           "d4",
           "Nf6",
@@ -92288,7 +92288,7 @@
         "atPly": 10,
         "games": 230512,
         "pct": 17,
-        "name": "Scotch Game: Scotch Gambit, Dubois Réti Defense",
+        "name": "Scotch Game: Scotch Gambit, Dubois R\u00e9ti Defense",
         "moves": [
           "e4",
           "e5",
@@ -92356,7 +92356,7 @@
         "atPly": 10,
         "games": 131827,
         "pct": 10,
-        "name": "Scotch Game: Scotch Gambit, Dubois Réti Defense",
+        "name": "Scotch Game: Scotch Gambit, Dubois R\u00e9ti Defense",
         "moves": [
           "e4",
           "e5",
@@ -92492,7 +92492,7 @@
         "atPly": 10,
         "games": 50639,
         "pct": 4,
-        "name": "Scotch Game: Scotch Gambit, Dubois Réti Defense",
+        "name": "Scotch Game: Scotch Gambit, Dubois R\u00e9ti Defense",
         "moves": [
           "e4",
           "e5",
@@ -93553,7 +93553,7 @@
         "atPly": 8,
         "games": 2675,
         "pct": 70,
-        "name": "Scotch Game: Scotch Gambit, Dubois Réti Defense",
+        "name": "Scotch Game: Scotch Gambit, Dubois R\u00e9ti Defense",
         "moves": [
           "e4",
           "e5",
@@ -97503,15 +97503,18 @@
           "O-O",
           "O-O-O",
           "Qa4",
-          "h5",
-          "Nbd2",
+          "Bh3",
+          "e6",
+          "Bxe6",
+          "Ng5",
           "Kb8",
-          "h4",
-          "Be7",
-          "b4",
-          "Nxe5",
-          "b5",
-          "Bxf3"
+          "Nd2",
+          "Nf6",
+          "Rd1",
+          "Re8",
+          "Nxe6",
+          "Qxe6",
+          "b4"
         ],
         "reachesMiddlegame": true
       },
@@ -97571,15 +97574,18 @@
           "O-O",
           "O-O-O",
           "Bg5",
-          "Nge7",
-          "b4",
-          "h6",
-          "Bxe7",
-          "Qxe7",
-          "Nbd2",
-          "Qxb4",
-          "Rb1",
-          "Qa3"
+          "f6",
+          "exf6",
+          "gxf6",
+          "Bh4",
+          "Bh3",
+          "e3",
+          "dxe3",
+          "Qxd7+",
+          "Bxd7",
+          "fxe3",
+          "Nb4",
+          "Ne1"
         ],
         "reachesMiddlegame": true
       },
@@ -98567,20 +98573,16 @@
           "dxc6",
           "Nc3",
           "Nf6",
-          "a3",
-          "f4",
-          "b3",
-          "c5",
-          "Nxe5",
+          "exf5",
           "Bd6",
-          "Nc4",
-          "Ng4",
-          "Nxd6+",
-          "cxd6",
-          "h4",
           "O-O",
-          "f3",
-          "Nf6"
+          "Bxf5",
+          "Re1",
+          "O-O",
+          "Nxe5",
+          "Nd7",
+          "d4",
+          "Qh4"
         ],
         "reachesMiddlegame": true
       },
@@ -98589,7 +98591,7 @@
         "atPly": 8,
         "games": 50,
         "pct": 30,
-        "name": "Ruy Lopez: Schliemann Defense, Schönemann Attack",
+        "name": "Ruy Lopez: Schliemann Defense, Sch\u00f6nemann Attack",
         "moves": [
           "e4",
           "e5",
@@ -98601,20 +98603,17 @@
           "fxe4",
           "Bxc6",
           "dxc6",
-          "a3",
-          "e3",
-          "b3",
-          "e2",
-          "Qxe2",
-          "Ne7",
-          "dxe5",
-          "Ng6",
+          "Nxe5",
+          "Nf6",
           "O-O",
-          "Bg4",
-          "Re1",
-          "Be7",
-          "h3",
-          "Bxf3"
+          "Bd6",
+          "Nc3",
+          "Bf5",
+          "Bg5",
+          "O-O",
+          "Qe2",
+          "Qe7",
+          "g4"
         ],
         "reachesMiddlegame": true
       }
@@ -98882,20 +98881,16 @@
           "dxc6",
           "Nc3",
           "Nf6",
-          "a3",
-          "f4",
-          "b3",
-          "c5",
-          "Nxe5",
+          "exf5",
           "Bd6",
-          "Nc4",
-          "Ng4",
-          "Nxd6+",
-          "cxd6",
-          "h4",
           "O-O",
-          "f3",
-          "Nf6"
+          "Bxf5",
+          "Re1",
+          "O-O",
+          "Nxe5",
+          "Nd7",
+          "d4",
+          "Qh4"
         ],
         "reachesMiddlegame": true
       },
@@ -98904,7 +98899,7 @@
         "atPly": 6,
         "games": 174,
         "pct": 4,
-        "name": "Ruy Lopez: Schliemann Defense, Schönemann Attack",
+        "name": "Ruy Lopez: Schliemann Defense, Sch\u00f6nemann Attack",
         "moves": [
           "e4",
           "e5",
@@ -98916,20 +98911,16 @@
           "fxe4",
           "Nxe5",
           "Nxe5",
-          "a3",
-          "e3",
-          "b3",
-          "e2",
-          "Qxe2",
-          "c6",
-          "Bd3",
-          "d5",
-          "O-O",
-          "Be6",
           "dxe5",
-          "Ne7",
-          "Nd2",
-          "Nf5"
+          "c6",
+          "Nc3",
+          "cxb5",
+          "Nxe4",
+          "d5",
+          "exd6",
+          "Nf6",
+          "O-O",
+          "Nxe4"
         ],
         "reachesMiddlegame": true
       },
@@ -98950,20 +98941,17 @@
           "e4",
           "Bxc6",
           "dxc6",
-          "a3",
-          "e3",
-          "b3",
-          "e2",
-          "Qxe2+",
+          "Qe2",
+          "Bxf5",
+          "d3",
           "Qe7",
-          "Bb2",
-          "Nf6",
-          "Bxf6",
-          "gxf6",
-          "Nh4",
-          "Bh6",
-          "g4",
-          "b6"
+          "dxe4",
+          "Qxe4",
+          "Qxe4+",
+          "Bxe4",
+          "O-O",
+          "Bxf3",
+          "gxf3"
         ],
         "reachesMiddlegame": true
       }
@@ -99122,20 +99110,16 @@
           "dxc6",
           "Nc3",
           "Nf6",
-          "a3",
-          "f4",
-          "b3",
-          "c5",
-          "Nxe5",
+          "exf5",
           "Bd6",
-          "Nc4",
-          "Ng4",
-          "Nxd6+",
-          "cxd6",
-          "h4",
           "O-O",
-          "f3",
-          "Nf6"
+          "Bxf5",
+          "Re1",
+          "O-O",
+          "Nxe5",
+          "Nd7",
+          "d4",
+          "Qh4"
         ],
         "reachesMiddlegame": true
       },
@@ -99144,7 +99128,7 @@
         "atPly": 6,
         "games": 174,
         "pct": 4,
-        "name": "Ruy Lopez: Schliemann Defense, Schönemann Attack",
+        "name": "Ruy Lopez: Schliemann Defense, Sch\u00f6nemann Attack",
         "moves": [
           "e4",
           "e5",
@@ -99156,20 +99140,16 @@
           "fxe4",
           "Nxe5",
           "Nxe5",
-          "a3",
-          "e3",
-          "b3",
-          "e2",
-          "Qxe2",
-          "c6",
-          "Bd3",
-          "d5",
-          "O-O",
-          "Be6",
           "dxe5",
-          "Ne7",
-          "Nd2",
-          "Nf5"
+          "c6",
+          "Nc3",
+          "cxb5",
+          "Nxe4",
+          "d5",
+          "exd6",
+          "Nf6",
+          "O-O",
+          "Nxe4"
         ],
         "reachesMiddlegame": true
       }
@@ -106722,7 +106702,7 @@
         "atPly": 9,
         "games": 2837,
         "pct": 28,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -106756,7 +106736,7 @@
         "atPly": 9,
         "games": 2592,
         "pct": 26,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -106790,7 +106770,7 @@
         "atPly": 9,
         "games": 1561,
         "pct": 15,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -106824,7 +106804,7 @@
         "atPly": 9,
         "games": 1302,
         "pct": 13,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -106858,7 +106838,7 @@
         "atPly": 9,
         "games": 658,
         "pct": 7,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -106892,7 +106872,7 @@
         "atPly": 5,
         "games": 484,
         "pct": 19,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -106926,7 +106906,7 @@
         "atPly": 9,
         "games": 387,
         "pct": 4,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -106960,7 +106940,7 @@
         "atPly": 5,
         "games": 381,
         "pct": 15,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -106994,7 +106974,7 @@
         "atPly": 5,
         "games": 333,
         "pct": 13,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -107028,7 +107008,7 @@
         "atPly": 9,
         "games": 300,
         "pct": 3,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -107064,7 +107044,7 @@
         "atPly": 7,
         "games": 467177,
         "pct": 37,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -107098,7 +107078,7 @@
         "atPly": 7,
         "games": 108420,
         "pct": 9,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -107132,7 +107112,7 @@
         "atPly": 7,
         "games": 42665,
         "pct": 3,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -107166,7 +107146,7 @@
         "atPly": 7,
         "games": 28946,
         "pct": 2,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -107200,7 +107180,7 @@
         "atPly": 5,
         "games": 1210,
         "pct": 48,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -107234,7 +107214,7 @@
         "atPly": 5,
         "games": 381,
         "pct": 15,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -107268,7 +107248,7 @@
         "atPly": 5,
         "games": 333,
         "pct": 13,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -107302,7 +107282,7 @@
         "atPly": 9,
         "games": 107,
         "pct": 23,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -107336,7 +107316,7 @@
         "atPly": 9,
         "games": 68,
         "pct": 14,
-        "name": "Caro-Kann Defense: Maróczy Variation, Maróczy Gambit",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation, Mar\u00f3czy Gambit",
         "moves": [
           "e4",
           "c6",
@@ -107370,7 +107350,7 @@
         "atPly": 5,
         "games": 59,
         "pct": 2,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -107406,7 +107386,7 @@
         "atPly": 7,
         "games": 3847,
         "pct": 5,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -107440,7 +107420,7 @@
         "atPly": 7,
         "games": 1987,
         "pct": 3,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -107474,7 +107454,7 @@
         "atPly": 5,
         "games": 1210,
         "pct": 48,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -107508,7 +107488,7 @@
         "atPly": 5,
         "games": 484,
         "pct": 19,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -107542,7 +107522,7 @@
         "atPly": 5,
         "games": 333,
         "pct": 13,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -107576,7 +107556,7 @@
         "atPly": 9,
         "games": 151,
         "pct": 33,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -107610,7 +107590,7 @@
         "atPly": 11,
         "games": 143,
         "pct": 37,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -107644,7 +107624,7 @@
         "atPly": 11,
         "games": 122,
         "pct": 32,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -107678,7 +107658,7 @@
         "atPly": 5,
         "games": 59,
         "pct": 2,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -107712,7 +107692,7 @@
         "atPly": 9,
         "games": 50,
         "pct": 11,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -107748,7 +107728,7 @@
         "atPly": 9,
         "games": 21012,
         "pct": 83,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -107782,7 +107762,7 @@
         "atPly": 9,
         "games": 3057,
         "pct": 12,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -107816,7 +107796,7 @@
         "atPly": 5,
         "games": 1210,
         "pct": 48,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -107850,7 +107830,7 @@
         "atPly": 5,
         "games": 484,
         "pct": 19,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -107884,7 +107864,7 @@
         "atPly": 5,
         "games": 381,
         "pct": 15,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -107918,7 +107898,7 @@
         "atPly": 5,
         "games": 59,
         "pct": 2,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -107952,7 +107932,7 @@
         "atPly": 7,
         "games": 54,
         "pct": 20,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -107986,7 +107966,7 @@
         "atPly": 7,
         "games": 12,
         "pct": 5,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -112492,7 +112472,7 @@
         "atPly": 5,
         "games": 1600,
         "pct": 5,
-        "name": "Benoni Defense: Hromádka System",
+        "name": "Benoni Defense: Hrom\u00e1dka System",
         "moves": [
           "d4",
           "Nf6",
@@ -113040,7 +113020,7 @@
         "atPly": 5,
         "games": 1600,
         "pct": 5,
-        "name": "Benoni Defense: Hromádka System",
+        "name": "Benoni Defense: Hrom\u00e1dka System",
         "moves": [
           "d4",
           "Nf6",
@@ -113188,20 +113168,18 @@
           "Bg7",
           "a3",
           "e6",
-          "d6",
-          "b6",
-          "e4",
-          "Bb7",
-          "Bd3",
+          "dxe6",
+          "fxe6",
+          "Bg5",
+          "Qa5",
+          "Qd2",
           "Nc6",
-          "f4",
+          "e4",
           "O-O",
-          "e5",
-          "Nh5",
           "Nf3",
-          "f6",
-          "Be4",
-          "fxe5"
+          "Nd4",
+          "Rb1",
+          "b6"
         ],
         "reachesMiddlegame": true
       },
@@ -113450,7 +113428,7 @@
         "atPly": 5,
         "games": 1600,
         "pct": 5,
-        "name": "Benoni Defense: Hromádka System",
+        "name": "Benoni Defense: Hrom\u00e1dka System",
         "moves": [
           "d4",
           "Nf6",
@@ -114310,7 +114288,7 @@
         "atPly": 5,
         "games": 42409,
         "pct": 35,
-        "name": "Grünfeld Defense: Exchange Variation, Classical Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation, Classical Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -114378,7 +114356,7 @@
         "atPly": 11,
         "games": 2263,
         "pct": 22,
-        "name": "King's Indian Defense: Sämisch Variation, Yates Defense",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Yates Defense",
         "moves": [
           "d4",
           "Nf6",
@@ -114412,7 +114390,7 @@
         "atPly": 11,
         "games": 2168,
         "pct": 21,
-        "name": "King's Indian Defense: Sämisch Variation, Orthodox Variation",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Orthodox Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -114446,7 +114424,7 @@
         "atPly": 11,
         "games": 1096,
         "pct": 11,
-        "name": "King's Indian Defense: Sämisch Variation, Normal Defense",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Normal Defense",
         "moves": [
           "d4",
           "Nf6",
@@ -114480,7 +114458,7 @@
         "atPly": 11,
         "games": 812,
         "pct": 8,
-        "name": "King's Indian Defense: Sämisch Variation, Normal Defense",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Normal Defense",
         "moves": [
           "d4",
           "Nf6",
@@ -114514,7 +114492,7 @@
         "atPly": 11,
         "games": 507,
         "pct": 5,
-        "name": "King's Indian Defense: Sämisch Variation, Double Fianchetto",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Double Fianchetto",
         "moves": [
           "d4",
           "Nf6",
@@ -114548,7 +114526,7 @@
         "atPly": 11,
         "games": 386,
         "pct": 4,
-        "name": "King's Indian Defense: Sämisch Variation, Normal Defense",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Normal Defense",
         "moves": [
           "d4",
           "Nf6",
@@ -114582,7 +114560,7 @@
         "atPly": 9,
         "games": 380,
         "pct": 2,
-        "name": "King's Indian Defense: Sämisch Variation",
+        "name": "King's Indian Defense: S\u00e4misch Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -114616,7 +114594,7 @@
         "atPly": 9,
         "games": 364,
         "pct": 2,
-        "name": "King's Indian Defense: Sämisch Variation",
+        "name": "King's Indian Defense: S\u00e4misch Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -114652,7 +114630,7 @@
         "atPly": 5,
         "games": 42409,
         "pct": 35,
-        "name": "Grünfeld Defense: Exchange Variation, Classical Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation, Classical Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -114720,7 +114698,7 @@
         "atPly": 11,
         "games": 2995,
         "pct": 29,
-        "name": "King's Indian Defense: Sämisch Variation, Sämisch Gambit",
+        "name": "King's Indian Defense: S\u00e4misch Variation, S\u00e4misch Gambit",
         "moves": [
           "d4",
           "Nf6",
@@ -114754,7 +114732,7 @@
         "atPly": 11,
         "games": 2168,
         "pct": 21,
-        "name": "King's Indian Defense: Sämisch Variation, Orthodox Variation",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Orthodox Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -114788,7 +114766,7 @@
         "atPly": 11,
         "games": 1096,
         "pct": 11,
-        "name": "King's Indian Defense: Sämisch Variation, Normal Defense",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Normal Defense",
         "moves": [
           "d4",
           "Nf6",
@@ -114822,7 +114800,7 @@
         "atPly": 11,
         "games": 812,
         "pct": 8,
-        "name": "King's Indian Defense: Sämisch Variation, Normal Defense",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Normal Defense",
         "moves": [
           "d4",
           "Nf6",
@@ -114856,7 +114834,7 @@
         "atPly": 11,
         "games": 507,
         "pct": 5,
-        "name": "King's Indian Defense: Sämisch Variation, Double Fianchetto",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Double Fianchetto",
         "moves": [
           "d4",
           "Nf6",
@@ -114890,7 +114868,7 @@
         "atPly": 11,
         "games": 386,
         "pct": 4,
-        "name": "King's Indian Defense: Sämisch Variation, Normal Defense",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Normal Defense",
         "moves": [
           "d4",
           "Nf6",
@@ -114924,7 +114902,7 @@
         "atPly": 9,
         "games": 380,
         "pct": 2,
-        "name": "King's Indian Defense: Sämisch Variation",
+        "name": "King's Indian Defense: S\u00e4misch Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -114958,7 +114936,7 @@
         "atPly": 9,
         "games": 364,
         "pct": 2,
-        "name": "King's Indian Defense: Sämisch Variation",
+        "name": "King's Indian Defense: S\u00e4misch Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -114994,7 +114972,7 @@
         "atPly": 5,
         "games": 42409,
         "pct": 35,
-        "name": "Grünfeld Defense: Exchange Variation, Classical Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation, Classical Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -115062,7 +115040,7 @@
         "atPly": 11,
         "games": 2995,
         "pct": 29,
-        "name": "King's Indian Defense: Sämisch Variation, Sämisch Gambit",
+        "name": "King's Indian Defense: S\u00e4misch Variation, S\u00e4misch Gambit",
         "moves": [
           "d4",
           "Nf6",
@@ -115096,7 +115074,7 @@
         "atPly": 11,
         "games": 2263,
         "pct": 22,
-        "name": "King's Indian Defense: Sämisch Variation, Yates Defense",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Yates Defense",
         "moves": [
           "d4",
           "Nf6",
@@ -115130,7 +115108,7 @@
         "atPly": 11,
         "games": 1096,
         "pct": 11,
-        "name": "King's Indian Defense: Sämisch Variation, Normal Defense",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Normal Defense",
         "moves": [
           "d4",
           "Nf6",
@@ -115164,7 +115142,7 @@
         "atPly": 11,
         "games": 812,
         "pct": 8,
-        "name": "King's Indian Defense: Sämisch Variation, Normal Defense",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Normal Defense",
         "moves": [
           "d4",
           "Nf6",
@@ -115198,7 +115176,7 @@
         "atPly": 11,
         "games": 507,
         "pct": 5,
-        "name": "King's Indian Defense: Sämisch Variation, Double Fianchetto",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Double Fianchetto",
         "moves": [
           "d4",
           "Nf6",
@@ -115232,7 +115210,7 @@
         "atPly": 11,
         "games": 386,
         "pct": 4,
-        "name": "King's Indian Defense: Sämisch Variation, Normal Defense",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Normal Defense",
         "moves": [
           "d4",
           "Nf6",
@@ -115266,7 +115244,7 @@
         "atPly": 9,
         "games": 380,
         "pct": 2,
-        "name": "King's Indian Defense: Sämisch Variation",
+        "name": "King's Indian Defense: S\u00e4misch Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -115300,7 +115278,7 @@
         "atPly": 9,
         "games": 364,
         "pct": 2,
-        "name": "King's Indian Defense: Sämisch Variation",
+        "name": "King's Indian Defense: S\u00e4misch Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -115336,7 +115314,7 @@
         "atPly": 5,
         "games": 42409,
         "pct": 35,
-        "name": "Grünfeld Defense: Exchange Variation, Classical Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation, Classical Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -115404,7 +115382,7 @@
         "atPly": 11,
         "games": 2995,
         "pct": 29,
-        "name": "King's Indian Defense: Sämisch Variation, Sämisch Gambit",
+        "name": "King's Indian Defense: S\u00e4misch Variation, S\u00e4misch Gambit",
         "moves": [
           "d4",
           "Nf6",
@@ -115438,7 +115416,7 @@
         "atPly": 11,
         "games": 2263,
         "pct": 22,
-        "name": "King's Indian Defense: Sämisch Variation, Yates Defense",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Yates Defense",
         "moves": [
           "d4",
           "Nf6",
@@ -115472,7 +115450,7 @@
         "atPly": 11,
         "games": 2168,
         "pct": 21,
-        "name": "King's Indian Defense: Sämisch Variation, Orthodox Variation",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Orthodox Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -115506,7 +115484,7 @@
         "atPly": 11,
         "games": 812,
         "pct": 8,
-        "name": "King's Indian Defense: Sämisch Variation, Normal Defense",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Normal Defense",
         "moves": [
           "d4",
           "Nf6",
@@ -115540,7 +115518,7 @@
         "atPly": 11,
         "games": 507,
         "pct": 5,
-        "name": "King's Indian Defense: Sämisch Variation, Double Fianchetto",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Double Fianchetto",
         "moves": [
           "d4",
           "Nf6",
@@ -115574,7 +115552,7 @@
         "atPly": 11,
         "games": 386,
         "pct": 4,
-        "name": "King's Indian Defense: Sämisch Variation, Normal Defense",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Normal Defense",
         "moves": [
           "d4",
           "Nf6",
@@ -115608,7 +115586,7 @@
         "atPly": 9,
         "games": 380,
         "pct": 2,
-        "name": "King's Indian Defense: Sämisch Variation",
+        "name": "King's Indian Defense: S\u00e4misch Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -115642,7 +115620,7 @@
         "atPly": 9,
         "games": 364,
         "pct": 2,
-        "name": "King's Indian Defense: Sämisch Variation",
+        "name": "King's Indian Defense: S\u00e4misch Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -115678,7 +115656,7 @@
         "atPly": 5,
         "games": 42409,
         "pct": 35,
-        "name": "Grünfeld Defense: Exchange Variation, Classical Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation, Classical Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -115746,7 +115724,7 @@
         "atPly": 11,
         "games": 2995,
         "pct": 29,
-        "name": "King's Indian Defense: Sämisch Variation, Sämisch Gambit",
+        "name": "King's Indian Defense: S\u00e4misch Variation, S\u00e4misch Gambit",
         "moves": [
           "d4",
           "Nf6",
@@ -115780,7 +115758,7 @@
         "atPly": 11,
         "games": 2263,
         "pct": 22,
-        "name": "King's Indian Defense: Sämisch Variation, Yates Defense",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Yates Defense",
         "moves": [
           "d4",
           "Nf6",
@@ -115814,7 +115792,7 @@
         "atPly": 11,
         "games": 2168,
         "pct": 21,
-        "name": "King's Indian Defense: Sämisch Variation, Orthodox Variation",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Orthodox Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -115848,7 +115826,7 @@
         "atPly": 11,
         "games": 1096,
         "pct": 11,
-        "name": "King's Indian Defense: Sämisch Variation, Normal Defense",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Normal Defense",
         "moves": [
           "d4",
           "Nf6",
@@ -115882,7 +115860,7 @@
         "atPly": 11,
         "games": 507,
         "pct": 5,
-        "name": "King's Indian Defense: Sämisch Variation, Double Fianchetto",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Double Fianchetto",
         "moves": [
           "d4",
           "Nf6",
@@ -115916,7 +115894,7 @@
         "atPly": 11,
         "games": 386,
         "pct": 4,
-        "name": "King's Indian Defense: Sämisch Variation, Normal Defense",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Normal Defense",
         "moves": [
           "d4",
           "Nf6",
@@ -115950,7 +115928,7 @@
         "atPly": 9,
         "games": 380,
         "pct": 2,
-        "name": "King's Indian Defense: Sämisch Variation",
+        "name": "King's Indian Defense: S\u00e4misch Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -115984,7 +115962,7 @@
         "atPly": 9,
         "games": 364,
         "pct": 2,
-        "name": "King's Indian Defense: Sämisch Variation",
+        "name": "King's Indian Defense: S\u00e4misch Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -116056,7 +116034,7 @@
         "atPly": 13,
         "games": 1500,
         "pct": 21,
-        "name": "Grünfeld Defense: Exchange Variation, Classical Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation, Classical Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -116090,7 +116068,7 @@
         "atPly": 11,
         "games": 496,
         "pct": 3,
-        "name": "Grünfeld Defense: Exchange Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -116160,7 +116138,7 @@
         "atPly": 13,
         "games": 5510,
         "pct": 78,
-        "name": "Grünfeld Defense: Exchange Variation, Classical Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation, Classical Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -116194,7 +116172,7 @@
         "atPly": 11,
         "games": 496,
         "pct": 3,
-        "name": "Grünfeld Defense: Exchange Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -126196,22 +126174,18 @@
           "exf4",
           "e5",
           "Qe7",
-          "a3",
-          "f3",
-          "b3",
-          "f2+",
-          "Ke2",
-          "a6",
-          "Kxf2",
-          "Qc5+",
-          "Ke1",
-          "Qxe5+",
           "Qe2",
+          "Ng8",
+          "d4",
           "Nc6",
-          "Bb2",
-          "Be7",
-          "Qxe5",
-          "Nxe5"
+          "Nf3",
+          "d5",
+          "Nxd5",
+          "Qd8",
+          "Qe4",
+          "Nh6",
+          "Bc4",
+          "Be6"
         ],
         "reachesMiddlegame": true
       },
@@ -128483,23 +128457,19 @@
           "Nxe5",
           "Nc6",
           "d4",
-          "a6",
-          "a3",
-          "a5",
-          "b3",
-          "a4",
-          "c3",
-          "b6",
-          "Bc4",
           "Qe7",
+          "Nc3",
+          "Nxe5",
+          "dxe5",
+          "Qxe5",
           "f4",
-          "Bb7",
-          "O-O",
-          "Nd8",
-          "b4",
-          "Nxe4",
-          "f5",
-          "d5"
+          "Qe6",
+          "e5",
+          "Bb4",
+          "Qd4",
+          "c5",
+          "Qe3",
+          "Nd5"
         ],
         "reachesMiddlegame": true
       },
@@ -128519,21 +128489,18 @@
           "Nxc6",
           "dxc6",
           "Bc4",
-          "c5",
-          "a3",
-          "a6",
-          "b3",
-          "a5",
-          "Bb2",
-          "a4",
-          "bxa4",
+          "Nxe4",
+          "O-O",
           "Be7",
+          "Re1",
+          "Nd6",
+          "Bb3",
           "O-O",
-          "O-O",
-          "Qf3",
-          "Nd7",
-          "Qg3",
-          "Bf6"
+          "d4",
+          "Nf5",
+          "c3",
+          "c5",
+          "dxc5"
         ],
         "reachesMiddlegame": true
       },
@@ -128791,23 +128758,19 @@
           "Nxe5",
           "Nc6",
           "d4",
-          "a6",
-          "a3",
-          "a5",
-          "b3",
-          "a4",
-          "c3",
-          "b6",
-          "Bc4",
           "Qe7",
+          "Nc3",
+          "Nxe5",
+          "dxe5",
+          "Qxe5",
           "f4",
-          "Bb7",
-          "O-O",
-          "Nd8",
-          "b4",
-          "Nxe4",
-          "f5",
-          "d5"
+          "Qe6",
+          "e5",
+          "Bb4",
+          "Qd4",
+          "c5",
+          "Qe3",
+          "Nd5"
         ],
         "reachesMiddlegame": true
       },
@@ -128895,21 +128858,18 @@
           "Nxc6",
           "dxc6",
           "Bc4",
-          "c5",
-          "a3",
-          "a6",
-          "b3",
-          "a5",
-          "Bb2",
-          "a4",
-          "bxa4",
+          "Nxe4",
+          "O-O",
           "Be7",
+          "Re1",
+          "Nd6",
+          "Bb3",
           "O-O",
-          "O-O",
-          "Qf3",
-          "Nd7",
-          "Qg3",
-          "Bf6"
+          "d4",
+          "Nf5",
+          "c3",
+          "c5",
+          "dxc5"
         ],
         "reachesMiddlegame": true
       },
@@ -132439,28 +132399,24 @@
           "Nc3",
           "e5",
           "d4",
-          "Nc6",
-          "dxe5",
-          "Nxe5",
-          "f4",
-          "Nc6",
-          "e5",
-          "Ng8",
-          "Nf3",
-          "d6"
-        ],
-        "reachesMiddlegame": true,
-        "evalCp": -175,
-        "dubious": true,
-        "engineBest": "exd4",
-        "engineBestLine": [
           "exd4",
           "Qxd4",
           "Nc6",
           "Qd3",
           "Bc5",
-          "Bf4"
-        ]
+          "Bf4",
+          "O-O",
+          "O-O-O",
+          "Re8",
+          "f3",
+          "d6",
+          "Qd2",
+          "a6",
+          "h4",
+          "Ne5"
+        ],
+        "reachesMiddlegame": true,
+        "evalCp": -175
       },
       {
         "triggerMove": "Bc4",
@@ -134166,7 +134122,7 @@
           "losses": 28
         },
         "pct": 30,
-        "name": "King's Indian Defense: Sämisch Variation, Bobotsov-Korchnoi-Petrosian Variation",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Bobotsov-Korchnoi-Petrosian Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -134194,7 +134150,7 @@
           "losses": 4
         },
         "pct": 27,
-        "name": "King's Indian Defense: Sämisch Variation, Normal Defense",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Normal Defense",
         "moves": [
           "d4",
           "Nf6",
@@ -134224,7 +134180,7 @@
           "losses": 9
         },
         "pct": 27,
-        "name": "King's Indian Defense: Sämisch Variation, Normal Defense",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Normal Defense",
         "moves": [
           "d4",
           "Nf6",
@@ -134282,7 +134238,7 @@
           "losses": 1
         },
         "pct": 36,
-        "name": "King's Indian Defense: Sämisch Variation, Normal Defense",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Normal Defense",
         "moves": [
           "d4",
           "Nf6",
@@ -134314,7 +134270,7 @@
           "losses": 0
         },
         "pct": 41,
-        "name": "King's Indian Defense: Sämisch Variation, Normal Defense",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Normal Defense",
         "moves": [
           "d4",
           "Nf6",
@@ -136322,7 +136278,7 @@
           "losses": 2
         },
         "pct": 21,
-        "name": "Caro-Kann Defense: Maróczy Variation, Maróczy Gambit",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation, Mar\u00f3czy Gambit",
         "moves": [
           "e4",
           "c6",
@@ -136352,7 +136308,7 @@
           "losses": 1
         },
         "pct": 14,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -136381,7 +136337,7 @@
           "losses": 0
         },
         "pct": 11,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -136411,7 +136367,7 @@
           "losses": 3
         },
         "pct": 6,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -136444,7 +136400,7 @@
           "losses": 3
         },
         "pct": 69,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -136477,7 +136433,7 @@
           "losses": 5
         },
         "pct": 39,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -136506,7 +136462,7 @@
           "losses": 2
         },
         "pct": 13,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -139205,7 +139161,7 @@
           "losses": 28
         },
         "pct": 7,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -139580,17 +139536,22 @@
           "e5",
           "c5",
           "Nf3",
-          "Nc6",
-          "c4",
           "cxd4",
           "Nxd4",
           "e6",
-          "Nc3",
-          "Nge7"
+          "Nd2",
+          "Ne7",
+          "Bd3",
+          "Ng6",
+          "N2f3",
+          "Nc6",
+          "Nxc6",
+          "bxc6",
+          "Qe2",
+          "Qc7"
         ],
         "reachesMiddlegame": true,
-        "evalCp": -36,
-        "dubious": false
+        "evalCp": -36
       },
       {
         "triggerMove": "c3",
@@ -139932,7 +139893,7 @@
           "losses": 3
         },
         "pct": 40,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -140688,7 +140649,7 @@
           "losses": 10
         },
         "pct": 36,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -140719,7 +140680,7 @@
           "losses": 7
         },
         "pct": 19,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -140750,7 +140711,7 @@
           "losses": 5
         },
         "pct": 18,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -140781,7 +140742,7 @@
           "losses": 2
         },
         "pct": 67,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -140813,7 +140774,7 @@
           "losses": 3
         },
         "pct": 100,
-        "name": "Caro-Kann Defense: Maróczy Variation",
+        "name": "Caro-Kann Defense: Mar\u00f3czy Variation",
         "moves": [
           "e4",
           "c6",
@@ -147187,7 +147148,7 @@
         "atPly": 5,
         "games": 316,
         "pct": 11,
-        "name": "Réti Opening: Anglo-Slav Variation, Bled Variation",
+        "name": "R\u00e9ti Opening: Anglo-Slav Variation, Bled Variation",
         "moves": [
           "Nf3",
           "d5",
@@ -151098,7 +151059,7 @@
         "atPly": 8,
         "games": 3403,
         "pct": 10,
-        "name": "Sicilian Defense: Taimanov Variation, Szén Variation",
+        "name": "Sicilian Defense: Taimanov Variation, Sz\u00e9n Variation",
         "moves": [
           "e4",
           "c5",
@@ -154010,7 +153971,7 @@
         "atPly": 14,
         "games": 562,
         "pct": 53,
-        "name": "Nimzo-Indian Defense: Rubinstein System, Hübner Variation",
+        "name": "Nimzo-Indian Defense: Rubinstein System, H\u00fcbner Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -154107,7 +154068,7 @@
         "atPly": 16,
         "games": 101,
         "pct": 25,
-        "name": "Nimzo-Indian Defense: Rubinstein System, Hübner Variation",
+        "name": "Nimzo-Indian Defense: Rubinstein System, H\u00fcbner Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -154136,7 +154097,7 @@
         "atPly": 14,
         "games": 72,
         "pct": 7,
-        "name": "Nimzo-Indian Defense: Rubinstein System, Hübner Variation",
+        "name": "Nimzo-Indian Defense: Rubinstein System, H\u00fcbner Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -154163,7 +154124,7 @@
         "atPly": 18,
         "games": 60,
         "pct": 21,
-        "name": "Nimzo-Indian Defense: Rubinstein System, Hübner Variation",
+        "name": "Nimzo-Indian Defense: Rubinstein System, H\u00fcbner Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -154194,7 +154155,7 @@
         "atPly": 18,
         "games": 27,
         "pct": 10,
-        "name": "Nimzo-Indian Defense: Rubinstein System, Hübner Variation",
+        "name": "Nimzo-Indian Defense: Rubinstein System, H\u00fcbner Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -154638,7 +154599,7 @@
         "atPly": 7,
         "games": 11992,
         "pct": 15,
-        "name": "Sicilian Defense: Accelerated Dragon, Maróczy Bind",
+        "name": "Sicilian Defense: Accelerated Dragon, Mar\u00f3czy Bind",
         "moves": [
           "e4",
           "c5",
@@ -156887,7 +156848,7 @@
         "atPly": 6,
         "games": 736,
         "pct": 3,
-        "name": "Scotch Game: Scotch Gambit, Göring Gambit Declined",
+        "name": "Scotch Game: Scotch Gambit, G\u00f6ring Gambit Declined",
         "moves": [
           "e4",
           "e5",
@@ -159273,7 +159234,7 @@
         "atPly": 6,
         "games": 2412,
         "pct": 8,
-        "name": "French Defense: Winawer Variation, Alekhine-Maróczy Gambit",
+        "name": "French Defense: Winawer Variation, Alekhine-Mar\u00f3czy Gambit",
         "moves": [
           "e4",
           "e6",
@@ -160200,7 +160161,7 @@
         "atPly": 8,
         "games": 14305,
         "pct": 19,
-        "name": "King's Indian Defense: Sämisch Variation, Normal Defense",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Normal Defense",
         "moves": [
           "d4",
           "Nf6",
@@ -162035,7 +161996,7 @@
         "atPly": 5,
         "games": 42409,
         "pct": 35,
-        "name": "Grünfeld Defense: Exchange Variation, Classical Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation, Classical Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -162680,7 +162641,7 @@
         "atPly": 7,
         "games": 3453,
         "pct": 38,
-        "name": "Bogo-Indian Defense: Grünfeld Variation",
+        "name": "Bogo-Indian Defense: Gr\u00fcnfeld Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -162700,7 +162661,7 @@
         "atPly": 7,
         "games": 1206,
         "pct": 13,
-        "name": "Bogo-Indian Defense: Grünfeld Variation",
+        "name": "Bogo-Indian Defense: Gr\u00fcnfeld Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -162720,7 +162681,7 @@
         "atPly": 7,
         "games": 273,
         "pct": 3,
-        "name": "Bogo-Indian Defense: Grünfeld Variation",
+        "name": "Bogo-Indian Defense: Gr\u00fcnfeld Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -162740,7 +162701,7 @@
         "atPly": 11,
         "games": 90,
         "pct": 10,
-        "name": "Bogo-Indian Defense: Grünfeld Variation",
+        "name": "Bogo-Indian Defense: Gr\u00fcnfeld Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -162766,7 +162727,7 @@
         "atPly": 11,
         "games": 31,
         "pct": 4,
-        "name": "Bogo-Indian Defense: Grünfeld Variation",
+        "name": "Bogo-Indian Defense: Gr\u00fcnfeld Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -162792,7 +162753,7 @@
         "atPly": 13,
         "games": 31,
         "pct": 30,
-        "name": "Bogo-Indian Defense: Grünfeld Variation",
+        "name": "Bogo-Indian Defense: Gr\u00fcnfeld Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -162818,7 +162779,7 @@
         "atPly": 13,
         "games": 10,
         "pct": 10,
-        "name": "Bogo-Indian Defense: Grünfeld Variation",
+        "name": "Bogo-Indian Defense: Gr\u00fcnfeld Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -162844,7 +162805,7 @@
         "atPly": 13,
         "games": 7,
         "pct": 7,
-        "name": "Bogo-Indian Defense: Grünfeld Variation",
+        "name": "Bogo-Indian Defense: Gr\u00fcnfeld Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -162870,7 +162831,7 @@
         "atPly": 13,
         "games": 6,
         "pct": 6,
-        "name": "Bogo-Indian Defense: Grünfeld Variation",
+        "name": "Bogo-Indian Defense: Gr\u00fcnfeld Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -163241,7 +163202,7 @@
         "atPly": 8,
         "games": 4192,
         "pct": 13,
-        "name": "Sicilian Defense: Kan Variation, Maróczy Bind, Réti Variation",
+        "name": "Sicilian Defense: Kan Variation, Mar\u00f3czy Bind, R\u00e9ti Variation",
         "moves": [
           "e4",
           "c5",
@@ -164300,7 +164261,7 @@
         "atPly": 6,
         "games": 736,
         "pct": 3,
-        "name": "Scotch Game: Scotch Gambit, Göring Gambit Declined",
+        "name": "Scotch Game: Scotch Gambit, G\u00f6ring Gambit Declined",
         "moves": [
           "e4",
           "e5",
@@ -164504,7 +164465,7 @@
         "atPly": 6,
         "games": 8047,
         "pct": 9,
-        "name": "Nimzo-Indian Defense: Sämisch Variation",
+        "name": "Nimzo-Indian Defense: S\u00e4misch Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -165074,7 +165035,7 @@
         "atPly": 8,
         "games": 287,
         "pct": 8,
-        "name": "Bogo-Indian Defense: Grünfeld Variation",
+        "name": "Bogo-Indian Defense: Gr\u00fcnfeld Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -165095,7 +165056,7 @@
         "atPly": 8,
         "games": 273,
         "pct": 8,
-        "name": "Bogo-Indian Defense: Grünfeld Variation",
+        "name": "Bogo-Indian Defense: Gr\u00fcnfeld Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -165116,7 +165077,7 @@
         "atPly": 12,
         "games": 250,
         "pct": 27,
-        "name": "Bogo-Indian Defense: Grünfeld Variation",
+        "name": "Bogo-Indian Defense: Gr\u00fcnfeld Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -165141,7 +165102,7 @@
         "atPly": 10,
         "games": 237,
         "pct": 11,
-        "name": "Bogo-Indian Defense: Grünfeld Variation",
+        "name": "Bogo-Indian Defense: Gr\u00fcnfeld Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -165164,7 +165125,7 @@
         "atPly": 10,
         "games": 149,
         "pct": 7,
-        "name": "Bogo-Indian Defense: Grünfeld Variation",
+        "name": "Bogo-Indian Defense: Gr\u00fcnfeld Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -165187,7 +165148,7 @@
         "atPly": 12,
         "games": 62,
         "pct": 7,
-        "name": "Bogo-Indian Defense: Grünfeld Variation",
+        "name": "Bogo-Indian Defense: Gr\u00fcnfeld Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -165457,7 +165418,7 @@
         "atPly": 6,
         "games": 12624,
         "pct": 30,
-        "name": "Grünfeld Defense: Three Knights Variation",
+        "name": "Gr\u00fcnfeld Defense: Three Knights Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -165477,7 +165438,7 @@
         "atPly": 12,
         "games": 6558,
         "pct": 36,
-        "name": "Grünfeld Defense: Exchange Variation, Modern Exchange Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation, Modern Exchange Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -165503,7 +165464,7 @@
         "atPly": 6,
         "games": 3075,
         "pct": 7,
-        "name": "Grünfeld Defense: Brinckmann Attack",
+        "name": "Gr\u00fcnfeld Defense: Brinckmann Attack",
         "moves": [
           "d4",
           "Nf6",
@@ -165523,7 +165484,7 @@
         "atPly": 8,
         "games": 2653,
         "pct": 12,
-        "name": "Grünfeld Defense: Exchange Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -165545,7 +165506,7 @@
         "atPly": 6,
         "games": 2549,
         "pct": 6,
-        "name": "Grünfeld Defense: Stockholm Variation",
+        "name": "Gr\u00fcnfeld Defense: Stockholm Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -165571,7 +165532,7 @@
         "atPly": 12,
         "games": 2278,
         "pct": 12,
-        "name": "Grünfeld Defense: Exchange Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -165597,7 +165558,7 @@
         "atPly": 12,
         "games": 991,
         "pct": 5,
-        "name": "Grünfeld Defense: Exchange Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -165623,7 +165584,7 @@
         "atPly": 12,
         "games": 959,
         "pct": 5,
-        "name": "Grünfeld Defense: Exchange Variation",
+        "name": "Gr\u00fcnfeld Defense: Exchange Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -165722,7 +165683,7 @@
         "atPly": 10,
         "games": 2130,
         "pct": 15,
-        "name": "King's Indian Defense: Sämisch Variation, Bobotsov-Korchnoi-Petrosian Variation",
+        "name": "King's Indian Defense: S\u00e4misch Variation, Bobotsov-Korchnoi-Petrosian Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -165745,7 +165706,7 @@
         "atPly": 12,
         "games": 750,
         "pct": 25,
-        "name": "King's Indian Defense: Sämisch Variation, Sämisch Gambit",
+        "name": "King's Indian Defense: S\u00e4misch Variation, S\u00e4misch Gambit",
         "moves": [
           "d4",
           "Nf6",
@@ -165770,7 +165731,7 @@
         "atPly": 12,
         "games": 343,
         "pct": 11,
-        "name": "King's Indian Defense: Sämisch Variation, Sämisch Gambit",
+        "name": "King's Indian Defense: S\u00e4misch Variation, S\u00e4misch Gambit",
         "moves": [
           "d4",
           "Nf6",
@@ -165795,7 +165756,7 @@
         "atPly": 14,
         "games": 286,
         "pct": 17,
-        "name": "King's Indian Defense: Sämisch Variation, Sämisch Gambit",
+        "name": "King's Indian Defense: S\u00e4misch Variation, S\u00e4misch Gambit",
         "moves": [
           "d4",
           "Nf6",
@@ -166172,7 +166133,7 @@
         "atPly": 6,
         "games": 2412,
         "pct": 8,
-        "name": "French Defense: Winawer Variation, Alekhine-Maróczy Gambit",
+        "name": "French Defense: Winawer Variation, Alekhine-Mar\u00f3czy Gambit",
         "moves": [
           "e4",
           "e6",
@@ -166419,7 +166380,7 @@
         "atPly": 8,
         "games": 4192,
         "pct": 13,
-        "name": "Sicilian Defense: Kan Variation, Maróczy Bind, Réti Variation",
+        "name": "Sicilian Defense: Kan Variation, Mar\u00f3czy Bind, R\u00e9ti Variation",
         "moves": [
           "e4",
           "c5",
@@ -166621,7 +166582,7 @@
         "atPly": 8,
         "games": 3403,
         "pct": 10,
-        "name": "Sicilian Defense: Taimanov Variation, Szén Variation",
+        "name": "Sicilian Defense: Taimanov Variation, Sz\u00e9n Variation",
         "moves": [
           "e4",
           "c5",
@@ -166805,7 +166766,7 @@
         "atPly": 12,
         "games": 1323,
         "pct": 51,
-        "name": "Sicilian Defense: Kan Variation, Maróczy Bind, Réti Variation",
+        "name": "Sicilian Defense: Kan Variation, Mar\u00f3czy Bind, R\u00e9ti Variation",
         "moves": [
           "e4",
           "c5",
@@ -166831,7 +166792,7 @@
         "atPly": 12,
         "games": 201,
         "pct": 8,
-        "name": "Sicilian Defense: Kan Variation, Maróczy Bind, Réti Variation",
+        "name": "Sicilian Defense: Kan Variation, Mar\u00f3czy Bind, R\u00e9ti Variation",
         "moves": [
           "e4",
           "c5",
@@ -166857,7 +166818,7 @@
         "atPly": 12,
         "games": 135,
         "pct": 5,
-        "name": "Sicilian Defense: Kan Variation, Maróczy Bind, Réti Variation",
+        "name": "Sicilian Defense: Kan Variation, Mar\u00f3czy Bind, R\u00e9ti Variation",
         "moves": [
           "e4",
           "c5",
@@ -166883,7 +166844,7 @@
         "atPly": 14,
         "games": 44,
         "pct": 29,
-        "name": "Sicilian Defense: Kan Variation, Maróczy Bind, Réti Variation",
+        "name": "Sicilian Defense: Kan Variation, Mar\u00f3czy Bind, R\u00e9ti Variation",
         "moves": [
           "e4",
           "c5",
@@ -166910,7 +166871,7 @@
         "atPly": 10,
         "games": 41,
         "pct": 13,
-        "name": "Sicilian Defense: Kan Variation, Maróczy Bind, Réti Variation",
+        "name": "Sicilian Defense: Kan Variation, Mar\u00f3czy Bind, R\u00e9ti Variation",
         "moves": [
           "e4",
           "c5",
@@ -166936,7 +166897,7 @@
         "atPly": 20,
         "games": 28,
         "pct": 35,
-        "name": "Sicilian Defense: Kan Variation, Maróczy Bind, Réti Variation",
+        "name": "Sicilian Defense: Kan Variation, Mar\u00f3czy Bind, R\u00e9ti Variation",
         "moves": [
           "e4",
           "c5",
@@ -166969,7 +166930,7 @@
         "atPly": 10,
         "games": 20,
         "pct": 6,
-        "name": "Sicilian Defense: Kan Variation, Maróczy Bind, Réti Variation",
+        "name": "Sicilian Defense: Kan Variation, Mar\u00f3czy Bind, R\u00e9ti Variation",
         "moves": [
           "e4",
           "c5",
@@ -166994,7 +166955,7 @@
         "atPly": 20,
         "games": 15,
         "pct": 19,
-        "name": "Sicilian Defense: Kan Variation, Maróczy Bind, Réti Variation",
+        "name": "Sicilian Defense: Kan Variation, Mar\u00f3czy Bind, R\u00e9ti Variation",
         "moves": [
           "e4",
           "c5",
@@ -167027,7 +166988,7 @@
         "atPly": 10,
         "games": 12,
         "pct": 4,
-        "name": "Sicilian Defense: Kan Variation, Maróczy Bind, Réti Variation",
+        "name": "Sicilian Defense: Kan Variation, Mar\u00f3czy Bind, R\u00e9ti Variation",
         "moves": [
           "e4",
           "c5",
@@ -167053,7 +167014,7 @@
         "atPly": 16,
         "games": 7,
         "pct": 13,
-        "name": "Sicilian Defense: Kan Variation, Maróczy Bind, Réti Variation",
+        "name": "Sicilian Defense: Kan Variation, Mar\u00f3czy Bind, R\u00e9ti Variation",
         "moves": [
           "e4",
           "c5",
@@ -167424,7 +167385,7 @@
         "atPly": 6,
         "games": 8047,
         "pct": 9,
-        "name": "Nimzo-Indian Defense: Sämisch Variation",
+        "name": "Nimzo-Indian Defense: S\u00e4misch Variation",
         "moves": [
           "d4",
           "Nf6",
@@ -167582,7 +167543,7 @@
         "atPly": 6,
         "games": 8980,
         "pct": 39,
-        "name": "Bogo-Indian Defense: Grünfeld Variation",
+        "name": "Bogo-Indian Defense: Gr\u00fcnfeld Variation",
         "moves": [
           "d4",
           "Nf6",
