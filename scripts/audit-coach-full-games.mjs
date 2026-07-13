@@ -62,6 +62,12 @@ const NOISE = [
   /\/api\/tts/i, /\/api\/audit-stream/i, /Polly/i, /tts-failure/i,
   /AudioContext/i, /play\(\) failed/i, /NotAllowedError/i,
   /\[Stockfish\]/i, /RuntimeError: unreachable/i, /worker\.onerror/i,
+  // Cold-boot handshake race, root-caused 2026-07-13: a `uci` sent before
+  // the Emscripten module installs its real handler is eaten by the boot
+  // glue, which prints these two lines once. stockfishEngine now re-sends
+  // `uci` until uciok (the functional fix); the one-time glue print on a
+  // slow load is understood noise, still visible via stockfish-* audits.
+  /received unknown command/i, /^uci$/,
   /\[CoachAPI\]/i, /APIConnectionError/i, /Connection error/i,
 ];
 const isNoise = (t) => NOISE.some((re) => re.test(t));

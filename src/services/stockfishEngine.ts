@@ -490,6 +490,7 @@ class StockfishEngine {
         // exactly where (import / instantiate / runtime) so we can fix the
         // real hang point instead of guessing.
         const msg = `Stockfish initialization timed out after 45s (last stage: ${this._lastInitStage ?? 'none — worker never signaled'})`;
+        clearUciRetry();
         console.error('[Stockfish]', msg);
         this.setStatus('error', msg);
         reject(new Error(msg));
@@ -502,6 +503,22 @@ class StockfishEngine {
       // Track the early-failure timer for the multi-thread variant so
       // we can clear it once uciok is received OR when fallback runs.
       let earlyFailureTimer: ReturnType<typeof setTimeout> | null = null;
+
+      // COLD-BOOT HANDSHAKE RACE (2026-07-13, caught by the full-game prod
+      // audit): on a slow first load the Emscripten worker's boot-time glue
+      // handler is installed before the engine module's real UCI handler.
+      // A `uci` sent into that window is EATEN by the glue ("worker.js
+      // received unknown command undefined") — no uciok ever comes, init
+      // times out, and the coach never makes its first move. `uci` is
+      // idempotent, so re-send it every few seconds until uciok lands;
+      // a re-send after WASM-ready always reaches the real handler.
+      let uciRetryTimer: ReturnType<typeof setInterval> | null = null;
+      const clearUciRetry = (): void => {
+        if (uciRetryTimer !== null) {
+          clearInterval(uciRetryTimer);
+          uciRetryTimer = null;
+        }
+      };
 
       const tryStart = (forceSingle: boolean): void => {
         let resolved: ResolvedWorker;
@@ -562,6 +579,7 @@ class StockfishEngine {
           if (this.workerVariant !== 'multi') return;
           if (this._runtimeFallbackAttempted) return;
           this._runtimeFallbackAttempted = true;
+          clearUciRetry();
           // Persist so a fresh page load on this device doesn't
           // re-probe the known-broken multi-thread bundle.
           writePersistedMultiFallback();
@@ -746,6 +764,7 @@ class StockfishEngine {
 
           const initHandler = (event: MessageEvent<string>): void => {
             if (event.data === 'uciok') {
+              clearUciRetry();
               // uciok received — multi is past the danger zone.
               if (earlyFailureTimer !== null) {
                 clearTimeout(earlyFailureTimer);
@@ -794,6 +813,16 @@ class StockfishEngine {
 
           this.worker.addEventListener('message', initHandler);
           this.send('uci');
+          // Re-send until the handshake answers (cleared on uciok /
+          // fallback / timeout) — see the cold-boot race note above.
+          clearUciRetry();
+          uciRetryTimer = setInterval(() => {
+            if (this.isReady || !this.worker) {
+              clearUciRetry();
+              return;
+            }
+            this.send('uci');
+          }, 3_000);
         } catch (error) {
           // Synchronous throw during worker construction (rare, e.g.
           // the worker URL itself is malformed). Multi-thread gets
