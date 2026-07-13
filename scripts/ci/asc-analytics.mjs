@@ -37,10 +37,21 @@ const BUNDLE_ID = process.env.APP_BUNDLE_ID || 'com.chessacademy.pro';
 const ACCESS_TYPE = (process.env.ANALYTICS_ACCESS_TYPE || 'ONGOING').toUpperCase();
 const GRANULARITY = (process.env.ANALYTICS_GRANULARITY || 'DAILY').toUpperCase();
 const OUT_DIR = process.env.OUT_DIR || 'analytics-reports';
-// Which reports to actually download (there are dozens; these carry the
-// numbers David asked about). Empty REPORT_FILTER pulls everything.
-const REPORT_FILTER = (process.env.REPORT_FILTER ?? 'engagement,download,discovery,purchase,install')
-  .split(',').map((s) => s.trim().toLowerCase()).filter(Boolean);
+// Which reports to actually download. Apple exposes ~156 report types; these
+// specific names carry what matters — store funnel (impressions/page views),
+// downloads, and the subscription trial/paid/churn feed. Precise substrings so
+// loose words ("install", "engagement") don't drag in AirPlay/Widget noise.
+// Empty REPORT_FILTER pulls everything.
+const DEFAULT_REPORTS = [
+  'app store discovery and engagement', // impressions + product page views (the funnel top)
+  'app downloads',                      // first-time downloads / redownloads / total
+  'app store purchases',                // units + proceeds
+  'app store subscription',             // Event + State reports: trials, paid conversions, churn
+  'app store installation and deletion',
+  'app store web preview engagement',
+];
+const REPORT_FILTER = (process.env.REPORT_FILTER ?? DEFAULT_REPORTS.join('|'))
+  .split('|').map((s) => s.trim().toLowerCase()).filter(Boolean);
 
 function req(n) { const v = process.env[n]; if (!v) throw new Error(`Missing env ${n}`); return v; }
 function loadKey() { let p = req('ASC_KEY_P8'); if (!p.includes('BEGIN')) p = Buffer.from(p, 'base64').toString('utf8'); return createPrivateKey({ key: p, format: 'pem' }); }
