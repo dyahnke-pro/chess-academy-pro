@@ -484,6 +484,30 @@ class StockfishEngine {
     console.log('[Stockfish] Initializing worker...');
 
     this.initPromise = new Promise((resolve, reject) => {
+      // COLD-BOOT FLOOD GUARD (2026-07-13, full-game prod audit root-cause).
+      // The multi-thread build spawns Emscripten PTHREAD sub-workers. When the
+      // multi-thread wasm fails to load on a constrained host (the CI runner's
+      // slow/interrupted 7MB CDN fetch — a real desktop with a normal
+      // connection boots it clean), a pthread sub-worker throws UNCAUGHT. Those
+      // escape `this.worker.onerror` (which only covers the MAIN worker), so
+      // nothing preventDefault()s them: they hit window.onerror /
+      // installGlobalErrorHooks (one IndexedDB write + main-thread block each)
+      // and FLOOD — run 29232631772 logged 1,188 `t.startsWith is not a
+      // function` page errors before the 5s early-failure timer finally fell
+      // back. This capture-phase listener catches the FIRST stockfish-sourced
+      // page error, suppresses the flood, and trips the fallback immediately —
+      // capping the damage at ~1 error + a fast, clean switch to single-thread.
+      let mtFloodGuard: ((event: ErrorEvent) => void) | null = null;
+      const removeMtFloodGuard = (): void => {
+        if (
+          mtFloodGuard !== null &&
+          typeof window !== 'undefined' &&
+          typeof window.removeEventListener === 'function'
+        ) {
+          window.removeEventListener('error', mtFloodGuard, true);
+        }
+        mtFloodGuard = null;
+      };
       const overallTimeoutId = setTimeout(() => {
         // Fold in the last init stage the worker reported (David 2026-06-15):
         // the iOS lila init HANGS, and the last `__sfstage__` marker names
@@ -491,6 +515,7 @@ class StockfishEngine {
         // real hang point instead of guessing.
         const msg = `Stockfish initialization timed out after 45s (last stage: ${this._lastInitStage ?? 'none — worker never signaled'})`;
         clearUciRetry();
+        removeMtFloodGuard();
         console.error('[Stockfish]', msg);
         this.setStatus('error', msg);
         reject(new Error(msg));
@@ -580,6 +605,7 @@ class StockfishEngine {
           if (this._runtimeFallbackAttempted) return;
           this._runtimeFallbackAttempted = true;
           clearUciRetry();
+          removeMtFloodGuard();
           // Persist so a fresh page load on this device doesn't
           // re-probe the known-broken multi-thread bundle.
           writePersistedMultiFallback();
@@ -624,6 +650,34 @@ class StockfishEngine {
           // Fresh worker → reset liveness clock so a stale timestamp from a
           // prior worker can't make this one look alive before it speaks.
           this._lastMessageAt = Date.now();
+
+          // Arm the cold-boot flood guard for multi ONLY: catch the first
+          // pthread sub-worker error (which escapes this.worker.onerror),
+          // suppress the flood, and fall back immediately. Scoped tightly to
+          // errors sourced from the /stockfish/ worker script so it never
+          // swallows unrelated app errors, and torn down the moment init
+          // settles (uciok / fallback / timeout).
+          if (
+            resolved.variant === 'multi' &&
+            typeof window !== 'undefined' &&
+            typeof window.addEventListener === 'function'
+          ) {
+            mtFloodGuard = (event: ErrorEvent): void => {
+              if (this.workerVariant !== 'multi' || this._runtimeFallbackAttempted) return;
+              const src = typeof event.filename === 'string' ? event.filename : '';
+              if (!src.includes('/stockfish/')) return;
+              // Emscripten pthread sub-worker crashed uncaught during multi
+              // boot (wasm load failure on a constrained host). Kill the flood
+              // and switch to single-thread now — don't wait out the 5s timer
+              // while ~1000 more errors pile into installGlobalErrorHooks.
+              event.preventDefault();
+              event.stopImmediatePropagation();
+              handleEarlyMultiFailure(
+                `pthread sub-worker crashed during multi boot: ${(event.message ?? '').slice(0, 120)}`,
+              );
+            };
+            window.addEventListener('error', mtFloodGuard, true);
+          }
 
           this.worker.onmessage = (event: MessageEvent<string>) => {
             // Liveness heartbeat — ANY message means the worker is running.
@@ -765,6 +819,7 @@ class StockfishEngine {
           const initHandler = (event: MessageEvent<string>): void => {
             if (event.data === 'uciok') {
               clearUciRetry();
+              removeMtFloodGuard();
               // uciok received — multi is past the danger zone.
               if (earlyFailureTimer !== null) {
                 clearTimeout(earlyFailureTimer);

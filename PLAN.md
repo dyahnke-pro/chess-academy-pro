@@ -1,3 +1,132 @@
+# PLAN — LEARN + POST-GAME REVIEW behavior map & full-behavior audit (2026-07-13, active)
+
+**David's ask:** map the EXACT coaching behavior of the entire Learn (`/coach/teach`)
+AND Post-Game Review sections, then run an audit against ALL behaviors.
+
+## Approach (adversarial-audit doctrine, G7 + 2026-06-12)
+1. **MAP** — exhaustive per-behavior inventory (ID · trigger · file:line · expected ·
+   testid · audit assertion). Fan-out mappers:
+   - Learn intent-routing layer (handleSubmit branches, resolution tiers, Q&A classes).
+   - Learn walkthrough runtime + voice/narration + "why did you play that?" faucet +
+     guided-find-the-move.
+   - Post-Game Review (summary card, walk, find-the-shot / blunder-rewind / turning-
+     point cards, mistake-puzzle+weakness pipeline, persistence).
+2. **COVERAGE GRID** — every mapped behavior → reached? (which assertion) → pass/fail.
+   A silent no-op is a FAIL, not a pass (2026-06-12). Untested = ❌ NOT TESTED.
+3. **AUDIT** — functional click-through (drive real affordances) + adversarial loop
+   (messy human input, escalate, break it). Capture every break with exact input +
+   React key/stack. Real-bug → fix code + sweep + confirm; artifact → prove + pace.
+   MET only on 3 consecutive break-free passes, each harder.
+
+## Status
+- [~] MAP — 3 mappers dispatched (Learn-routing, Learn-runtime/faucet, Review).
+- [ ] Synthesize map → `docs/plans/2026-07-13-learn-review-behavior-map.md`.
+- [ ] Build/extend audit scripts (extend audit-coach-teach-functional/loop +
+      audit-coach-full-games review leg; add review-specific coverage).
+- [ ] Run localhost (Chromium can't reach prod here — ERR_CONNECTION_RESET), fix
+      breaks, then the CI leg against prod.
+
+---
+
+# PLAN — LOOP AUDIT: full-game coach standard (2026-07-13) — ✅ CLOSED (GREEN ON PROD)
+
+**Run 29264437648 (commit 4f54c50) PASSED on prod** — 10 full games, 10 distinct
+openings, reviews driven per game, persistence, blunder interceptions, 0 errors
+(~51 min; wider game-1 budget stretched runtime but it's green). All three breaks
+fixed: (1) engine cold-boot crash → warmup [Fable]; (2) Italian→French + Scandinavian→
+Zukertort collisions → subject-steer every coach-dependent plan; (3) cold game-1
+stall → wider game-1 reply budget. NOTE: if the ~51-min runtime is a concern, tune
+game-1 budget down (75s→~50s) or warm the brain path too — the length is the
+wider-budget tradeoff, not a failure.
+
+---
+# PLAN — LOOP AUDIT: full-game coach standard (2026-07-13, archived detail)
+
+**Instrument:** `scripts/audit-coach-full-games.mjs` via
+`.github/workflows/full-game-audit.yml` (workflow_dispatch + nightly cron;
+own concurrency group `full-game-audit` — never trigger a parallel run, it
+cancels the in-flight one). The FULL-GAME AUDIT STANDARD (CLAUDE.md, locked
+2026-07-13): ≥10 full games on `/coach/play`, all distinct openings, blunder
+interceptions counted, post-game review driven per game, persistence verified
+from IndexedDB; ANY pageerror / non-NOISE console error is a hard fail.
+
+## State
+- **Root cause of the last 3 dispatch failures = ONE break, not many.** Report
+  from run 29232631772 (report.json inspected): games 2–10 were pristine (0
+  pageerrors, 9 distinct families: Nimzo-Indian, English, Zukertort, Bird,
+  Sicilian, Caro-Kann, French, Modern, Scandinavian). ONLY game-1 (italian-shape)
+  died — 1,188 pageerrors, 2 plies, opening never detected → which ALSO caused
+  the secondary "10 games → 9 families" distinctness fail (the missing 10th was
+  italian-shape itself). Both failures, one cause.
+- **Fix 1 (Fable, commit 985729f):** warm the Stockfish variant probe on a
+  throwaway `/coach/play` load before game 1. **CONFIRMED WORKING** — run
+  29249281899: all 10 games played to natural ends, `errs=0/0`, zero pageerrors.
+  The cold-boot crashloop is dead. Real devices pay this probe once per install.
+- **Second break (exposed once game 1 actually played):** the audit still failed
+  "openings not all distinct" — a GENUINE collision, not the crash cascade. The
+  `italian-shape` White plan scripts only WHITE's moves; the coach owns Black, so
+  when it answered 1.e4 with ...e6 the game was (correctly) detected as "French
+  Defense: Knight Variation" → collided with the Black `french` plan's "French
+  Defense" root (9 families, not 10).
+- **Fix (David's steer — "ask the coach to play the Italian as black"):** a plan
+  whose family depends on the coach's replies must TELL the coach which opening
+  to play via `?subject=`. Gave `italian-shape` `subject: 'Italian Game'` and
+  pass it on the /coach/play URL, so the coach follows the Italian's book side
+  and the game is a real, distinct "Italian Game". (The earlier b3 swap was a
+  workaround; reverted in favour of this.) The White-SYSTEM plans (d4/c4/Nf3/f4)
+  need no subject — their family is named by White's own structure.
+- **LIVE-VERIFIED the coach plays the Italian SOUNDLY on both sides** (localhost,
+  prod bundle code; Chromium can't reach prod in this container — ERR_CONNECTION_
+  RESET egress quirk, curl 200):
+  - student BLACK + subject=Italian → coach (White) played the mainline Giuoco
+    Pianissimo `e4 Nf3 Bc4 O-O d3 c3 h3 Re1 Bb3 Nbd2 Nf1`, detected "Italian Game:
+    Giuoco Piano", 0 pageerrors.
+  - student WHITE + subject=Italian → coach (Black) played `e5 Nc6 Bc5 Nf6 d6 O-O
+    a6 h6 Be6 Bxb3`, detected "Italian Game: Classical Variation, Giuoco
+    Pianissimo" (C54), 0 pageerrors.
+  → The Italian itself is NOT defective; the red was the audit failing to STEER
+  the coach. If a different opening is defective, it needs to be named + repro'd.
+- **Run 29260208403 (subject=Italian only):** Italian fix WORKED (game 1 =
+  "Italian Game" ✓, French collision gone). But surfaced TWO more issues, both
+  the SAME nondeterminism class + a cold-timing one:
+  1. `scandinavian → "Zukertort Opening: Tennison Gambit"` collided with `reti →
+     "Zukertort Opening"` — the coach opened 1.Nf3 (not 1.e4), so 1.Nf3 d5 2.e4 =
+     Tennison. The Black defenses depend on the coach's OPENING move; `queens-pawn`
+     (1.d4) is the same trap (a Black ...g6 reply → "Modern Defense" collision).
+  2. game-1-italian stall-resigned at ply 12 → review never mounted + not
+     persisted. Cold first game's mid-game Stockfish searches spiked past the 30s
+     reply budget (only reply #1 got 90s); games 2-10 clean on 30s.
+- **Fixes (commit pending):**
+  - subject-steer ALL coach-dependent plans: queens-pawn="Queen's Gambit",
+    sicilian/caro-kann/french/modern/scandinavian = their own defense. Verified
+    LIVE the coach opens deterministically (Scandinavian→e4, Modern→d4, Queen's
+    Gambit→coach ...d5→"Slav Defense" root). The 3 flank White systems
+    (c4/Nf3/f4) need no subject (root fixed by White's move). 10 deterministic
+    distinct roots: Italian, Slav, English, Zukertort, Bird, Sicilian, Caro-Kann,
+    French, Modern, Scandinavian.
+  - game-1 (g===0) per-reply budget → 75s + one extra stall of grace; warm games
+    keep the tight 30s. Prevents the cold-first-game stall-resign.
+- **Validating run: PENDING** — trigger full-game-audit on this branch after push.
+
+## Tracked follow-up (was Fable's session-local "task #32" — now durable here)
+- **Cold-boot JS bug `t.startsWith is not a function`** — the FIRST error in the
+  game-1 crashloop (minified `t`; no stack captured; only fires on the
+  **multi-thread WASM build** = crossOriginIsolated + SharedArrayBuffer, non-iOS,
+  i.e. CI runner + desktop Chrome first-ever load). iOS beta testers use the asm
+  build and NEVER hit this path; desktop-web first-load DOES. The warm-up scopes
+  it out of the audit but does not fix it. Real fix needs a source-mapped repro
+  of the multi-thread variant probe to locate `t` (something calls `.startsWith`
+  on a non-string worker message before any analysis is pending). Not yet fixed.
+
+## Next-session pickup
+Confirm run 29249281899 green → loop break closed. If a NEW break surfaces,
+diagnose from its report.json artifact (download via the artifact API, inspect
+per-game pageErrors + the `failures[]` array), fix the CODE, re-run (respect the
+concurrency group). The audit is the deliverable; a green run + report is the
+proof.
+
+---
+
 # PLAN — Pro-Rep Build: MAGNUS CARLSEN repertoire (2026-06-01)
 
 **Player:** `carlsen` (Magnus Carlsen) · chess.com `magnuscarlsen` · 9,336

@@ -8,8 +8,10 @@
  * Per game:
  *   1. Fresh SPA load of /coach/play?side=<white|black>.
  *   2. A scripted opening PREFIX steers the student's side into a distinct
- *      opening family (10 plans: e4/d4/c4/Nf3/f4 systems as White; Sicilian/
- *      Caro-Kann/French/Modern/Scandinavian replies as Black).
+ *      opening family (10 plans: Italian/d4/c4/Nf3/f4 systems as White; Sicilian/
+ *      Caro-Kann/French/Modern/Scandinavian replies as Black). A plan whose
+ *      family depends on the coach's replies (Italian) also passes `?subject=`
+ *      so the coach follows that opening's book side.
  *   3. After the prefix, a deterministic greedy policy (mate > best capture >
  *      check > development) plays the student's moves until chess.js says the
  *      game is over (checkmate/stalemate/draw). No move is ever invented —
@@ -76,17 +78,42 @@ const isNoise = (t) => NOISE.some((re) => re.test(t));
 // script the student's first moves outright; Black plans pick the first
 // LEGAL preference each ply (the coach owns move 1), which still forces a
 // distinct family (Sicilian vs Caro vs French vs Modern vs Scandinavian).
+//
+// A plan whose family identity depends on the COACH's cooperation must ASK the
+// coach to play that opening via `?subject=` — scripting only the student's
+// side is not enough. Run 29249281899 proved it: the `italian-shape` plan
+// played 1.e4 with no subject, the coach (owning Black) answered ...e6, and the
+// game was (correctly) detected as "French Defense: Knight Variation" —
+// colliding with the Black `french` plan's "French Defense" root → 9 families,
+// not 10. The Italian (1.e4 e5 → Italian) is exactly this case: its family is
+// decided by the coach's replies. Fix = tell the coach to play it
+// (`subject: 'Italian Game'`), so the coach follows the Italian's Black side
+// (e5/Nc6/Bc5 — verified live 2026-07-13) and the game is a real, distinct
+// "Italian Game". `subject` is passed on the /coach/play URL; the White-system
+// plans below need no subject (their family is named by White's own structure,
+// robust to any Black reply), so they stay free-play.
+// Every plan whose detected family could be moved by the COACH's choice carries
+// a `subject` so the coach follows THAT opening's book (deterministic family):
+//   - the Italian (1.e4 e5) — the coach owns Black's reply;
+//   - the 5 Black defenses — the coach owns White's OPENING move, so without a
+//     subject it can open 1.Nf3 and turn a "Scandinavian" (1...d5) into a
+//     Zukertort/Tennison (run 29260208403 collided scandinavian↔reti this way);
+//   - the d4 White plan — 1.d4 + a Black ...g6 reply reads as "Modern Defense"
+//     and would collide with the modern plan, so it asks for a Queen's Gambit
+//     (coach answers 1...d5).
+// The three flank White systems (1.c4/1.Nf3/1.f4) need no subject: their family
+// root (English / Zukertort / Bird) is fixed by WHITE's own first move.
 const PLANS = [
-  { name: 'italian-shape',   side: 'white', prefs: [['e4'], ['Nf3'], ['Bc4'], ['Nc3'], ['O-O']] },
-  { name: 'queens-pawn',     side: 'white', prefs: [['d4'], ['c4', 'Nf3'], ['Nc3', 'Nf3'], ['e3', 'Bf4'], ['Nf3', 'Be2']] },
+  { name: 'italian-shape',   side: 'white', subject: 'Italian Game',        prefs: [['e4'], ['Nf3'], ['Bc4'], ['c3'], ['d3']] },
+  { name: 'queens-pawn',     side: 'white', subject: "Queen's Gambit",      prefs: [['d4'], ['c4', 'Nf3'], ['Nc3', 'Nf3'], ['e3', 'Bf4'], ['Nf3', 'Be2']] },
   { name: 'english',         side: 'white', prefs: [['c4'], ['Nc3'], ['g3'], ['Bg2'], ['Nf3']] },
   { name: 'reti',            side: 'white', prefs: [['Nf3'], ['g3'], ['Bg2'], ['O-O'], ['d3']] },
   { name: 'birds',           side: 'white', prefs: [['f4'], ['Nf3'], ['e3'], ['Be2'], ['O-O']] },
-  { name: 'sicilian',        side: 'black', prefs: [['c5'], ['d6', 'Nc6'], ['Nc6', 'd6'], ['Nf6', 'g6'], ['g6', 'e6']] },
-  { name: 'caro-kann',       side: 'black', prefs: [['c6'], ['d5'], ['Nf6', 'dxe4', 'e6'], ['e6', 'Bf5', 'Nbd7'], ['Be7', 'Bd6', 'Nbd7']] },
-  { name: 'french',          side: 'black', prefs: [['e6'], ['d5'], ['Nf6', 'c5', 'dxe4'], ['Be7', 'c5', 'Nbd7'], ['O-O', 'c5', 'Nbd7']] },
-  { name: 'modern',          side: 'black', prefs: [['g6'], ['Bg7'], ['d6', 'c5'], ['Nf6', 'Nc6'], ['O-O', 'c5']] },
-  { name: 'scandinavian',    side: 'black', prefs: [['d5'], ['Qxd5', 'Nf6', 'c6'], ['Qa5', 'Qd6', 'Nf6'], ['Nf6', 'c6', 'e6'], ['c6', 'Bf5', 'e6']] },
+  { name: 'sicilian',        side: 'black', subject: 'Sicilian Defense',    prefs: [['c5'], ['d6', 'Nc6'], ['Nc6', 'd6'], ['Nf6', 'g6'], ['g6', 'e6']] },
+  { name: 'caro-kann',       side: 'black', subject: 'Caro-Kann Defense',   prefs: [['c6'], ['d5'], ['Nf6', 'dxe4', 'e6'], ['e6', 'Bf5', 'Nbd7'], ['Be7', 'Bd6', 'Nbd7']] },
+  { name: 'french',          side: 'black', subject: 'French Defense',      prefs: [['e6'], ['d5'], ['Nf6', 'c5', 'dxe4'], ['Be7', 'c5', 'Nbd7'], ['O-O', 'c5', 'Nbd7']] },
+  { name: 'modern',          side: 'black', subject: 'Modern Defense',      prefs: [['g6'], ['Bg7'], ['d6', 'c5'], ['Nf6', 'Nc6'], ['O-O', 'c5']] },
+  { name: 'scandinavian',    side: 'black', subject: 'Scandinavian Defense', prefs: [['d5'], ['Qxd5', 'Nf6', 'c6'], ['Qa5', 'Qd6', 'Nf6'], ['Nf6', 'c6', 'e6'], ['c6', 'Bf5', 'e6']] },
 ];
 
 const PIECE_VALUE = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
@@ -382,7 +409,10 @@ async function main() {
     // (the 2026-07-13 prod run failed all 5 black games exactly this way).
     const gameStartTs = Date.now();
 
-    await page.goto(`${BASE_URL}/coach/play?side=${plan.side}`, { waitUntil: 'domcontentloaded', timeout: 60_000 });
+    // `subject` tells the coach which opening to play (its book side), for
+    // plans whose family identity depends on the coach's cooperation (Italian).
+    const subjectQ = plan.subject ? `&subject=${encodeURIComponent(plan.subject)}` : '';
+    await page.goto(`${BASE_URL}/coach/play?side=${plan.side}${subjectQ}`, { waitUntil: 'domcontentloaded', timeout: 60_000 });
     await page.waitForTimeout(4000);
     await clearFirstRunOverlays();
     const boardUp = await page.locator('[data-square="e4"]').first()
@@ -424,15 +454,20 @@ async function main() {
 
       if (chess.isGameOver()) { terminal = 'natural'; break; }
 
-      // First reply of a game gets the long budget — the run's first game
-      // pays Stockfish WASM boot/compile on a cold runner (2026-07-13 prod:
-      // game 1 stall-resigned at ply 2 because two 30s waits blew past it).
-      const reply = await waitCoachReply(lastTs, studentPly <= 1 ? 90_000 : COACH_REPLY_TIMEOUT_MS);
+      // Budget the coach's reply. The FIRST reply of any game gets the long
+      // budget. The ENTIRE first game (g === 0) also runs on a wider per-reply
+      // budget + one extra stall of grace: even with the engine warm-up, the
+      // cold runner's first real Stockfish SEARCHES (not just the WASM boot)
+      // spike past 30s mid-game under contention — run 29260208403 stall-
+      // resigned game 1 at ply 12 that way, which then failed review+persist.
+      // Warm games (g > 0) completed cleanly on the tight 30s budget.
+      const replyBudget = studentPly <= 1 ? 90_000 : (g === 0 ? 75_000 : COACH_REPLY_TIMEOUT_MS);
+      const reply = await waitCoachReply(lastTs, replyBudget);
       if (!reply?.san) {
         stalled++;
-        // undo the mirror move if the board never actually took it? Verify
-        // via checkpoint FEN next round; after 2 stalls, resign to finish.
-        if (stalled >= 2) break;
+        // Verify via checkpoint FEN next round; after N stalls, resign to
+        // finish (one extra stall of grace on the cold first game).
+        if (stalled >= (g === 0 ? 3 : 2)) break;
         continue;
       }
       stalled = 0;
