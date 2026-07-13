@@ -1574,6 +1574,104 @@ describe('runtime fallback (multi → single)', () => {
     );
   });
 
+  // Cold-boot flood guard (2026-07-13): a multi-thread pthread SUB-worker
+  // throws uncaught (wasm load failure on a constrained host) — that escapes
+  // this.worker.onerror and surfaces as a window 'error'. The guard catches
+  // the FIRST stockfish-sourced one, suppresses the flood, and trips the
+  // fallback immediately instead of waiting out the 5s early-failure timer
+  // while ~1000 more errors pile up. Enrich the window stub with the listener
+  // API the real browser has (installMultiCapableEnv omits it).
+  function installMultiWithWindowListeners(): {
+    workerUrls: string[];
+    errorListeners: Array<(e: unknown) => void>;
+  } {
+    const { workerUrls } = installMultiCapableEnv();
+    const errorListeners: Array<(e: unknown) => void> = [];
+    vi.stubGlobal('window', {
+      crossOriginIsolated: true,
+      location: { pathname: '/' },
+      addEventListener: (type: string, cb: (e: unknown) => void) => {
+        if (type === 'error') errorListeners.push(cb);
+      },
+      removeEventListener: (type: string, cb: (e: unknown) => void) => {
+        if (type !== 'error') return;
+        const i = errorListeners.indexOf(cb);
+        if (i >= 0) errorListeners.splice(i, 1);
+      },
+    });
+    return { workerUrls, errorListeners };
+  }
+
+  it('cold-boot flood guard: a stockfish-sourced page error during multi boot trips a FAST fallback + suppresses the flood', async () => {
+    const { workerUrls, errorListeners } = installMultiWithWindowListeners();
+    const { stockfishEngine } = await getEngine();
+
+    const initPromise = stockfishEngine.initialize();
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(workerUrls).toEqual(['/stockfish/stockfish-18-lite.js']);
+    // Guard armed on the multi spawn.
+    expect(errorListeners.length).toBe(1);
+
+    // A pthread sub-worker throws uncaught → window 'error' with the
+    // /stockfish/ filename (the exact 2026-07-13 crash signature).
+    const preventDefault = vi.fn();
+    const stopImmediatePropagation = vi.fn();
+    vi.useFakeTimers();
+    errorListeners[0]({
+      filename: '/stockfish/stockfish-18-lite.js',
+      message: 't.startsWith is not a function',
+      preventDefault,
+      stopImmediatePropagation,
+    });
+    vi.advanceTimersByTime(150);
+    vi.useRealTimers();
+    await Promise.resolve();
+    await Promise.resolve();
+
+    // Flood suppressed AND a fast fallback to single-thread — no 5s wait.
+    expect(preventDefault).toHaveBeenCalled();
+    expect(stopImmediatePropagation).toHaveBeenCalled();
+    expect(workerUrls).toEqual([
+      '/stockfish/stockfish-18-lite.js',
+      '/stockfish/stockfish-18-lite-single.js',
+    ]);
+    // Guard torn down after the fallback fired.
+    expect(errorListeners.length).toBe(0);
+
+    queueMicrotask(() => {
+      mockWorker.emit('uciok');
+      queueMicrotask(() => mockWorker.emit('readyok'));
+    });
+    await initPromise;
+    expect(stockfishEngine.status).toBe('ready');
+  });
+
+  it('cold-boot flood guard: IGNORES non-stockfish page errors (never swallows app errors)', async () => {
+    const { workerUrls, errorListeners } = installMultiWithWindowListeners();
+    const { stockfishEngine } = await getEngine();
+
+    void stockfishEngine.initialize();
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(errorListeners.length).toBe(1);
+
+    // An UNRELATED app error must pass straight through — not suppressed,
+    // no engine fallback.
+    const preventDefault = vi.fn();
+    errorListeners[0]({
+      filename: 'https://chess-academy-pro.vercel.app/assets/index-abc.js',
+      message: 'some unrelated app TypeError',
+      preventDefault,
+      stopImmediatePropagation: vi.fn(),
+    });
+    await Promise.resolve();
+
+    expect(preventDefault).not.toHaveBeenCalled();
+    // Still only the multi worker — no fallback was triggered.
+    expect(workerUrls).toEqual(['/stockfish/stockfish-18-lite.js']);
+  });
+
   it('does not retry the multi bundle on subsequent initialize() calls (sticky fallback)', async () => {
     const { workerUrls } = installMultiCapableEnv();
     const { stockfishEngine } = await getEngine();
