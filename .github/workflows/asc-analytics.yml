@@ -1,0 +1,49 @@
+name: ASC App Analytics (impressions / downloads / page views)
+
+# Pulls App Store Connect App Analytics via Apple's async Analytics Reports API.
+# First run registers the ONGOING report request; data lands within ~24-48h, so
+# the weekly cron keeps it fresh and the summary + raw CSVs land in the job log
+# and an artifact for a session to read.
+
+on:
+  workflow_dispatch:
+    inputs:
+      access_type:
+        description: ONGOING (daily feed) or ONE_TIME_SNAPSHOT (one-off backfill)
+        type: choice
+        default: ONGOING
+        options: [ONGOING, ONE_TIME_SNAPSHOT]
+      granularity:
+        description: report granularity
+        type: choice
+        default: DAILY
+        options: [DAILY, WEEKLY, MONTHLY]
+  schedule:
+    - cron: '0 14 * * 1' # Mondays 14:00 UTC
+
+jobs:
+  analytics:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Pull App Analytics
+        env:
+          ASC_KEY_P8: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          APP_BUNDLE_ID: com.chessacademy.pro
+          ANALYTICS_ACCESS_TYPE: ${{ inputs.access_type || 'ONGOING' }}
+          ANALYTICS_GRANULARITY: ${{ inputs.granularity || 'DAILY' }}
+          OUT_DIR: analytics-reports
+        run: node scripts/ci/asc-analytics.mjs
+      - name: Upload report CSVs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-analytics-reports
+          path: analytics-reports/
+          if-no-files-found: ignore
+          retention-days: 30
