@@ -170,10 +170,24 @@ async function main() {
     } catch { return []; }
   }
 
+  /** The slip-detector's blocking "Blunder Detected" card (Continue /
+   *  Take Back / Try best) pauses the game until answered — the coach
+   *  won't move while it's open. A real user picks one; the audit picks
+   *  Continue (own the blunder, play on) and counts the interception. */
+  let blunderCards = 0;
+  async function answerBlunderCard() {
+    if (!(await visible('blunder-interception'))) return false;
+    blunderCards++;
+    await page.locator('[data-testid="blunder-continue"]').click({ timeout: 2500 }).catch(() => {});
+    await page.waitForTimeout(400);
+    return true;
+  }
+
   /** Wait for a NEW coach move-committed checkpoint after `sinceTs`. */
   async function waitCoachReply(sinceTs) {
     const t0 = Date.now();
     while (Date.now() - t0 < COACH_REPLY_TIMEOUT_MS) {
+      await answerBlunderCard(); // card blocks the coach's reply until answered
       const entries = await dumpAudit();
       const hits = entries.filter((e) =>
         e.kind === 'coach-turn-checkpoint' &&
@@ -236,9 +250,23 @@ async function main() {
 
   /** Drive the post-game review walk, interacting with every card. */
   async function driveReview(gameTag, pliesPlayed) {
-    const review = { mounted: false, steps: 0, cards: { findShot: 0, rewind: 0, turningPoint: 0 }, badgeSeen: false, stalls: 0 };
+    const review = { mounted: false, summarySeen: false, steps: 0, cards: { findShot: 0, rewind: 0, turningPoint: 0 }, badgeSeen: false, stalls: 0 };
+    // Post-game lands on the SUMMARY card first (accuracy / chips / eval
+    // graph) with a big green start-walk-btn that reads "Preparing…" while
+    // the walk narration preps (5–60s), then "Start". Tap it when ready.
+    review.summarySeen = await page.locator('[data-testid="coach-game-review"]')
+      .waitFor({ state: 'visible', timeout: 20_000 }).then(() => true).catch(() => false);
+    if (review.summarySeen) await shot(`${gameTag}-summary`);
+    const startBtn = page.locator('[data-testid="start-walk-btn"]');
+    const prepDeadline = Date.now() + 120_000;
+    while (Date.now() < prepDeadline) {
+      if (await page.locator('[data-testid="coach-game-review-walk"]').isVisible().catch(() => false)) break;
+      const label = (await startBtn.innerText().catch(() => '')).trim();
+      if (label === 'Start') { await startBtn.click({ timeout: 3000 }).catch(() => {}); break; }
+      await page.waitForTimeout(1500);
+    }
     const walkMounted = await page.locator('[data-testid="coach-game-review-walk"]')
-      .waitFor({ state: 'visible', timeout: 25_000 }).then(() => true).catch(() => false);
+      .waitFor({ state: 'visible', timeout: 15_000 }).then(() => true).catch(() => false);
     review.mounted = walkMounted;
     if (!walkMounted) return review;
     await shot(`${gameTag}-review-start`);
@@ -322,6 +350,7 @@ async function main() {
 
     const chess = new Chess();
     const gameStartTs = Date.now();
+    const blundersBefore = blunderCards;
     let lastTs = gameStartTs;
     let studentPly = 0;
     let terminal = null; // 'natural' | 'capResign' | error string
@@ -338,6 +367,7 @@ async function main() {
     }
 
     while (!chess.isGameOver() && chess.history().length < PLY_CAP) {
+      await answerBlunderCard(); // never click through an open interception
       const m = chooseMove(chess, plan, studentPly);
       if (!m) break;
       await clickMove(m);
@@ -372,16 +402,19 @@ async function main() {
     if (!terminal) {
       // Ply cap or stall — resign so the game still ENDS and reviews.
       console.log(`[full-games] ${tag}: resigning at ply ${plies} (${stalled >= 2 ? 'stall' : 'ply cap'})`);
+      await answerBlunderCard(); // an open card intercepts the resign click
       await page.locator('[data-testid="resign-btn"]').click({ timeout: 4000 }).catch(() => {});
-      await page.waitForTimeout(300);
+      await page.locator('[data-testid="resign-yes"]').waitFor({ state: 'visible', timeout: 4000 }).catch(() => {});
       await page.locator('[data-testid="resign-yes"]').click({ timeout: 4000 }).catch(() => {});
       terminal = stalled >= 2 ? `stallResign@${plies}` : `capResign@${plies}`;
     }
 
-    // Game-over overlay → Review Game (skip the 3.5s auto-transition).
-    await page.waitForTimeout(1500);
-    if (await visible('skip-to-review-btn')) {
-      await page.locator('[data-testid="skip-to-review-btn"]').click({ timeout: 4000 }).catch(() => {});
+    // Game-over overlay → Review Game. The button fades in ~1.5s after the
+    // overlay; auto-transition to postgame fires at 3.5s regardless — wait
+    // for either affordance instead of sampling once.
+    const skipBtn = page.locator('[data-testid="skip-to-review-btn"]');
+    if (await skipBtn.waitFor({ state: 'visible', timeout: 6000 }).then(() => true).catch(() => false)) {
+      await skipBtn.click({ timeout: 3000 }).catch(() => {});
     }
     await shot(`${tag}-end`);
 
@@ -417,11 +450,12 @@ async function main() {
     const rec = {
       tag, plan: plan.name, side: plan.side, plies, terminal,
       opening: openingName, review, coachGamesInDb: persisted,
+      blunderInterceptions: blunderCards - blundersBefore,
       voiceEventsSoFar: voiceEvents,
       pageErrors: gameErrors, consoleErrors: gameConsole,
     };
     results.push(rec);
-    console.log(`[full-games] ${tag}: ${plies} plies, end=${terminal}, opening="${openingName}", review: mounted=${review.mounted} steps=${review.steps} cards=${JSON.stringify(review.cards)}, coachGamesInDb=${persisted}, errs=${gameErrors.length}/${gameConsole.length}`);
+    console.log(`[full-games] ${tag}: ${plies} plies, end=${terminal}, opening="${openingName}", review: mounted=${review.mounted} steps=${review.steps} cards=${JSON.stringify(review.cards)}, blunderCards=${rec.blunderInterceptions}, coachGamesInDb=${persisted}, errs=${gameErrors.length}/${gameConsole.length}`);
   }
 
   // ── Verdict ─────────────────────────────────────────────────────────
