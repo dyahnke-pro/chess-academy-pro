@@ -1159,3 +1159,58 @@ describe('assembleAlternativesAnswer — grounded "why are the alternatives wors
     expect(a?.facts).toMatch(/d4/);
   });
 });
+
+describe('weakness-tab coverage extensions (David 2026-07-13)', () => {
+  it('phase answer voices per-phase centipawn loss for the weakest phase', () => {
+    const a = assemblePhaseProfileAnswer({
+      phaseAccuracy: [
+        { phase: 'opening', accuracy: 85, mistakes: 2, moveCount: 100 },
+        { phase: 'endgame', accuracy: 55, mistakes: 9, moveCount: 80 },
+      ],
+      criticalByPhase: [],
+      cpLossByPhase: [{ phase: 'opening', avgCpLoss: 20 }, { phase: 'endgame', avgCpLoss: 140 }],
+    });
+    expect(a!.facts).toMatch(/bleed about 140 centipawns a game there/);
+  });
+  it('accuracy answer voices the full move-quality distribution', () => {
+    const a = assembleAccuracyAnswer({
+      totalGames: 40, avgAccuracy: 78, accuracyWhite: 80, accuracyBlack: 76,
+      bestMoveAgreement: 50, brilliant: 3, great: 12, blunders: 40,
+      good: 900, book: 100, inaccuracies: 60, mistakes: 50,
+    });
+    expect(a!.facts).toMatch(/Your move mix: 3 brilliant, 12 great, 1000 solid, 60 inaccuracies, 50 mistakes, 40 blunders/);
+  });
+  it('consistency answer voices first-try solve streak + activity', () => {
+    const a = assembleConsistencyAnswer({
+      currentWinStreak: 0, longestWinStreak: 5,
+      timeControls: [{ bucket: 'blitz', winRatePct: 55, games: 100, avgAccuracyPct: 70 }],
+      longestSolveStreak: 12, activity: { totalGames: 300, activeDays: 90 },
+    });
+    expect(a!.facts).toMatch(/best puzzle run is 12 solved first-try in a row/);
+    expect(a!.facts).toMatch(/played 300 games across 90 active days/);
+  });
+  it('puzzle-stats answer voices mistake-puzzle progress from your own games', () => {
+    const a = assemblePuzzleStatsAnswer({
+      puzzleRating: 1500, totalAttempted: 200, totalCorrect: 150, overallAccuracy: 75, duePuzzles: 4,
+      mistakePuzzles: { mastered: 8, solved: 5, unsolved: 12 },
+    });
+    expect(a!.facts).toMatch(/8 mistake puzzles mastered, 12 still to crack/);
+  });
+  it('tactics answer voices tactic breadth when supplied', () => {
+    const a = assembleTacticsProfileAnswer({
+      totalGames: 40, awarenessRate: 62, found: 18, missed: 11,
+      missedByType: [{ type: 'fork', count: 6 }], worstPhase: null,
+      breadthDistinct: 9, brillianceShape: 'clustered',
+    });
+    expect(a!.facts).toMatch(/9 distinct tactic types — a broad tactical vocabulary/);
+    expect(a!.facts).toMatch(/brilliancies bunch into a few games/);
+  });
+  it('repertoire-gap out-of-book answer voices the best matchup flip side', () => {
+    const a = assembleRepertoireGapAnswer({
+      kind: 'out-of-book', offBookPct: 30, totalGames: 200,
+      worstAgainst: [{ name: 'the Sicilian', winRate: 35, games: 40 }],
+      bestAgainst: [{ name: 'the Caro-Kann', winRate: 72, games: 25 }],
+    });
+    expect(a!.facts).toMatch(/strongest against the Caro-Kann \(72% over 25 games\)/);
+  });
+});

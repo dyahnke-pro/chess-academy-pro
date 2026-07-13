@@ -1749,6 +1749,8 @@ export interface StatsLike {
   winRateBlack: number;   // 0-100
   currentRating?: number | null;
   highestBeaten?: { name: string; rating: number } | null;
+  /** Average moves per game (getOverviewInsights.avgMovesPerGame). */
+  avgMovesPerGame?: number;
 }
 
 /**
@@ -1769,10 +1771,13 @@ export function assembleStatsAnswer(s: StatsLike): GroundedAnswer | null {
   const beat = s.highestBeaten && s.highestBeaten.name
     ? ` Your best scalp: ${s.highestBeaten.name} (${s.highestBeaten.rating}).`
     : '';
+  const moves = typeof s.avgMovesPerGame === 'number' && s.avgMovesPerGame > 0
+    ? ` Your games run about ${s.avgMovesPerGame} moves on average.`
+    : '';
   const facts =
     `Across ${s.totalGames} game${s.totalGames === 1 ? '' : 's'} your record is ` +
     `${s.wins}-${s.losses}-${s.draws} (wins-losses-draws), a ${s.winRate}% win rate.` +
-    perColor + rating + beat;
+    perColor + rating + beat + moves;
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
 
@@ -2120,6 +2125,10 @@ export interface TacticsProfileLike {
   worstMiss?: { san: string; opponentName: string } | null;
   /** The student's sharpest found combination on record (bestSequences[0]). */
   bestSequence?: { san: string; opponentName: string } | null;
+  /** Distinct tactic types found across games (tacticTypeBreadth). */
+  breadthDistinct?: number;
+  /** Whether brilliancies spread across games or cluster (brilliantConcentration). */
+  brillianceShape?: 'spread' | 'clustered' | 'insufficient';
 }
 
 /**
@@ -2142,11 +2151,17 @@ export function assembleTacticsProfileAnswer(t: TacticsProfileLike): GroundedAns
   const best = t.bestSequence && t.bestSequence.san
     ? ` Your sharpest shot on record: ${t.bestSequence.san}${t.bestSequence.opponentName ? ` against ${t.bestSequence.opponentName}` : ''}.`
     : '';
+  const breadth = typeof t.breadthDistinct === 'number' && t.breadthDistinct > 0
+    ? ` You've found ${t.breadthDistinct} distinct tactic type${t.breadthDistinct === 1 ? '' : 's'} — ${t.breadthDistinct >= 8 ? 'a broad tactical vocabulary' : 'room to widen your pattern range'}.`
+    : '';
+  const brill = t.brillianceShape === 'clustered'
+    ? ' Your brilliancies bunch into a few games rather than spreading across many.'
+    : '';
 
   if (t.missed === 0) {
     const lead = `In your analyzed games I don't see a missed tactical shot — and ${t.found} sharp tactical move${t.found === 1 ? '' : 's'} you did find.`;
     const suggest = ' Keep drilling mixed tactics — step up the difficulty to keep finding them under pressure.';
-    return { facts: lead + best + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+    return { facts: lead + best + breadth + brill + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
   }
 
   const lead = `Your tactical awareness is ${t.awarenessRate}% — you spot ${t.found} tactic${t.found === 1 ? '' : 's'} and miss ${t.missed}.`;
@@ -2165,13 +2180,15 @@ export function assembleTacticsProfileAnswer(t: TacticsProfileLike): GroundedAns
   const suggest = top
     ? ` Drill ${top.type} puzzles to close that gap.`
     : ' Keep drilling mixed tactics to lift your awareness rate.';
-  return { facts: lead + byType + cost + phase + worst + best + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+  return { facts: lead + byType + cost + phase + worst + best + breadth + brill + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
 
 /** The student's per-phase profile — phaseAccuracy + critical-moment accuracy. */
 export interface PhaseProfileLike {
   phaseAccuracy: ReadonlyArray<{ phase: string; accuracy: number; mistakes: number; moveCount: number }>;
   criticalByPhase: ReadonlyArray<{ phase: string; accuracyPct: number; total: number }>;
+  /** Per-phase average centipawn loss (getMistakeInsights.errorsByPhase). */
+  cpLossByPhase?: ReadonlyArray<{ phase: string; avgCpLoss: number }>;
 }
 
 /**
@@ -2189,13 +2206,17 @@ export function assemblePhaseProfileAnswer(p: PhaseProfileLike): GroundedAnswer 
   const readout = sorted.map((x) => `${phaseWord(x.phase)} ${x.accuracy}%`).join(', ');
   const worst = [...played].sort((a, b) => a.accuracy - b.accuracy)[0];
   const worstLine = ` Your weakest is the ${phaseWord(worst.phase)} at ${worst.accuracy}%${worst.mistakes > 0 ? `, where you also make the most mistakes` : ''}.`;
+  const worstCp = p.cpLossByPhase?.find((x) => x.phase === worst.phase);
+  const cpLine = worstCp && worstCp.avgCpLoss > 0
+    ? ` You bleed about ${worstCp.avgCpLoss} centipawns a game there.`
+    : '';
   const crit = p.criticalByPhase.filter((x) => x.total > 0);
   const critWorst = crit.length ? [...crit].sort((a, b) => a.accuracyPct - b.accuracyPct)[0] : null;
   const critLine = critWorst
     ? ` On the game's critical moments, the ${phaseWord(critWorst.phase)} is softest — you find the best move ${critWorst.accuracyPct}% of the time there.`
     : '';
   const suggest = ` Put your training into the ${phaseWord(worst.phase)}.`;
-  return { facts: `Your accuracy by phase: ${readout}.` + worstLine + critLine + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+  return { facts: `Your accuracy by phase: ${readout}.` + worstLine + cpLine + critLine + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
 
 // ═══ IMPROVEMENT TREND (David 2026-07-04 misroute fix) — "am I improving?" ═══
@@ -2282,6 +2303,8 @@ export interface RepertoireGapLike {
   totalGames: number;
   /** Openings the student scores worst against, richest signal first. */
   worstAgainst: ReadonlyArray<{ name: string; winRate: number; games: number }>;
+  /** Openings the student scores BEST against (getOpeningInsights.bestResults). */
+  bestAgainst?: ReadonlyArray<{ name: string; winRate: number; games: number }>;
 }
 
 /**
@@ -2305,10 +2328,14 @@ export function assembleRepertoireGapAnswer(g: RepertoireGapLike): GroundedAnswe
     const where = top
       ? ` Where it costs you most: you score only ${top.winRate}% against ${top.name} over ${top.games} games.`
       : '';
+    const bestTop = g.bestAgainst?.find((b) => b.name && b.games > 0) ?? null;
+    const flip = bestTop && (!top || bestTop.name !== top.name)
+      ? ` On the flip side, you're strongest against ${bestTop.name} (${bestTop.winRate}% over ${bestTop.games} games).`
+      : '';
     const suggest = top
       ? ` Extend your prep against ${top.name} first — that's where leaving book hurts most.`
       : ` Pin down your lines a few moves deeper so you're not improvising early.`;
-    return { facts: lead + where + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+    return { facts: lead + where + flip + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
   }
 
   if (g.kind === 'learn-next') {
@@ -2347,6 +2374,11 @@ export interface AccuracyLike {
   brilliant: number;
   great: number;
   blunders: number;
+  /** Full move-quality distribution (classificationCounts) — optional. */
+  good?: number;
+  book?: number;
+  inaccuracies?: number;
+  mistakes?: number;
 }
 
 /**
@@ -2363,9 +2395,17 @@ export function assembleAccuracyAnswer(a: AccuracyLike): GroundedAnswer | null {
   const agree = a.bestMoveAgreement > 0
     ? ` You match the engine's top move ${a.bestMoveAgreement}% of the time.`
     : '';
-  const quality = (a.brilliant > 0 || a.great > 0 || a.blunders > 0)
-    ? ` Across your games: ${a.brilliant} brilliant and ${a.great} great moves, against ${a.blunders} blunders.`
-    : '';
+  // Full move-quality distribution when the counts are supplied (Overview →
+  // Move Quality); falls back to the brilliant/great/blunder highlights.
+  const dist: string[] = [];
+  if (a.brilliant > 0) dist.push(`${a.brilliant} brilliant`);
+  if (a.great > 0) dist.push(`${a.great} great`);
+  const solid = (a.good ?? 0) + (a.book ?? 0);
+  if (solid > 0) dist.push(`${solid} solid`);
+  if ((a.inaccuracies ?? 0) > 0) dist.push(`${a.inaccuracies} inaccuracies`);
+  if ((a.mistakes ?? 0) > 0) dist.push(`${a.mistakes} mistakes`);
+  if (a.blunders > 0) dist.push(`${a.blunders} blunders`);
+  const quality = dist.length ? ` Your move mix: ${dist.join(', ')}.` : '';
   // Suggestion — the biggest lever.
   const colorGap = Math.abs(a.accuracyWhite - a.accuracyBlack);
   const suggest = colorGap >= 8 && (a.accuracyWhite > 0 && a.accuracyBlack > 0)
@@ -2381,6 +2421,10 @@ export interface ConsistencyLike {
   currentWinStreak: number;
   longestWinStreak: number;
   timeControls: ReadonlyArray<{ bucket: string; winRatePct: number; games: number; avgAccuracyPct: number | null }>;
+  /** Best run of first-try puzzle solves (StreakStats.longestSolveStreak). */
+  longestSolveStreak?: number;
+  /** Activity in the last year (activityHeatmap): games + distinct active days. */
+  activity?: { totalGames: number; activeDays: number };
 }
 
 /**
@@ -2397,6 +2441,12 @@ export function assembleConsistencyAnswer(c: ConsistencyLike): GroundedAnswer | 
       ? `You're on a ${c.currentWinStreak}-game win streak (your best is ${c.longestWinStreak}).`
       : `Your longest win streak is ${c.longestWinStreak} games.`
     : `You're building your first win streak.`;
+  const solve = c.longestSolveStreak && c.longestSolveStreak > 0
+    ? ` Your best puzzle run is ${c.longestSolveStreak} solved first-try in a row.`
+    : '';
+  const act = c.activity && c.activity.totalGames > 0
+    ? ` Over the last year you've played ${c.activity.totalGames} game${c.activity.totalGames === 1 ? '' : 's'} across ${c.activity.activeDays} active day${c.activity.activeDays === 1 ? '' : 's'}.`
+    : '';
   const best = tc[0] ?? null;
   const worst = tc.length > 1 ? tc[tc.length - 1] : null;
   const tcLine = best
@@ -2405,7 +2455,7 @@ export function assembleConsistencyAnswer(c: ConsistencyLike): GroundedAnswer | 
   const suggest = worst
     ? ` If you want a steadier rating, slow down in your ${worst.bucket} games — that's where results dip.`
     : ' Keep a regular cadence and I\'ll track your consistency over time.';
-  return { facts: streak + tcLine + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+  return { facts: streak + solve + act + tcLine + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
 
 /** Converting / winning-shape profile. */
@@ -2610,15 +2660,24 @@ export interface PuzzleStatsLike {
   totalCorrect: number;
   overallAccuracy: number;
   duePuzzles: number;
+  /** Mistake-puzzle progress from the student's own games (MistakeInsights). */
+  mistakePuzzles?: { mastered: number; solved: number; unsolved: number };
 }
 /** assemblePuzzleStatsAnswer — "my puzzle rating / how many solved". G0. */
 export function assemblePuzzleStatsAnswer(p: PuzzleStatsLike): GroundedAnswer | null {
-  if (p.totalAttempted <= 0 && !(p.puzzleRating && p.puzzleRating > 0)) return null;
+  const mp = p.mistakePuzzles;
+  const mpTotal = mp ? mp.mastered + mp.solved + mp.unsolved : 0;
+  if (p.totalAttempted <= 0 && !(p.puzzleRating && p.puzzleRating > 0) && mpTotal <= 0) return null;
   const rating = p.puzzleRating && p.puzzleRating > 0 ? `Your puzzle rating is ${Math.round(p.puzzleRating)}.` : '';
   const solved = p.totalAttempted > 0 ? ` You've solved ${p.totalCorrect} of ${p.totalAttempted} (${p.overallAccuracy}%).` : '';
   const due = p.duePuzzles > 0 ? ` ${p.duePuzzles} are due to retry.` : '';
-  const suggest = p.duePuzzles > 0 ? ' Clear your due puzzles to lock the patterns in.' : ' Keep the daily streak going to push your rating up.';
-  return { facts: (rating + solved + due).trim() + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+  const mistakeLine = mp && mpTotal > 0
+    ? ` From your own games: ${mp.mastered} mistake puzzle${mp.mastered === 1 ? '' : 's'} mastered${mp.unsolved > 0 ? `, ${mp.unsolved} still to crack` : ''}.`
+    : '';
+  const suggest = p.duePuzzles > 0 || (mp?.unsolved ?? 0) > 0
+    ? ' Clear your due and unsolved puzzles to lock the patterns in.'
+    : ' Keep the daily streak going to push your rating up.';
+  return { facts: (rating + solved + due + mistakeLine).trim() + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
 
 /** Tactic transfer gap (puzzle-strong / game-weak per motif). */

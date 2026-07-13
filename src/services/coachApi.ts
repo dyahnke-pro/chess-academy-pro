@@ -73,7 +73,7 @@ import { getMisconceptionProfile } from './misconceptionService';
 import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleErrorsBySituationAnswer, assembleMisconceptionsAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleTrendAnswer, assembleTimeTroubleAnswer, assembleLastGameAnswer } from './groundedAnswer';
 import { computeLastMoveRating } from './moveRating';
 import { getDueCount, getEnrolledOpenings, getSrsDueOpenings, getTotalEnrolled } from './srsOpeningService';
-import { criticalMomentsAccuracy, streaks, timeControlPerformance, comebackWins, winShapeStats, colorProficiencyMismatch, personalRecords, tacticTransferGap, recordVsOpening, recordVsOpponent, phaseStrengthOverTime } from './analyticsService';
+import { criticalMomentsAccuracy, streaks, timeControlPerformance, comebackWins, winShapeStats, colorProficiencyMismatch, personalRecords, tacticTransferGap, recordVsOpening, recordVsOpponent, phaseStrengthOverTime, activityHeatmap, tacticTypeBreadth, brilliantConcentration } from './analyticsService';
 import { getPuzzleStats } from './puzzleService';
 import { detectConceptsInText, getConcept, resolveOpeningIdFromName } from './chessConceptService';
 import { getCachedAmateurPlay } from './amateurPlayCache';
@@ -2728,6 +2728,7 @@ export async function getCoachChatResponse(
               highestBeaten: ov.highestBeaten
                 ? { name: ov.highestBeaten.name, rating: ov.highestBeaten.elo }
                 : null,
+              avgMovesPerGame: ov.avgMovesPerGame,
             });
             if (answer) {
               const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'stats', preferRaw: true });
@@ -2984,7 +2985,7 @@ export async function getCoachChatResponse(
         // Voiced from getTacticInsights. Distinct from the live-board tactic scan.
         if (grounding.tacticsProfileQuestion) {
           try {
-            const ti = await getTacticInsights();
+            const [ti, breadth, brill] = await Promise.all([getTacticInsights(), tacticTypeBreadth(), brilliantConcentration()]);
             const worstPhase = [...ti.missedByPhase].sort((a, b) => b.count - a.count)[0] ?? null;
             const answer = assembleTacticsProfileAnswer({
               totalGames: ti.totalGames,
@@ -2996,6 +2997,8 @@ export async function getCoachChatResponse(
               topMissAvgCost: ti.missedByType[0]?.avgCost,
               worstMiss: ti.worstMisses[0] ? { san: ti.worstMisses[0].san, opponentName: ti.worstMisses[0].opponentName } : null,
               bestSequence: ti.bestSequences[0] ? { san: ti.bestSequences[0].san, opponentName: ti.bestSequences[0].opponentName } : null,
+              breadthDistinct: breadth.distinctTypes,
+              brillianceShape: brill.shape,
             });
             if (answer) {
               const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'tactics-profile', preferRaw: true });
@@ -3016,10 +3019,11 @@ export async function getCoachChatResponse(
         // lose?" Voiced from getOverviewInsights.phaseAccuracy + criticalMoments.
         if (grounding.phaseQuestion) {
           try {
-            const [ov, crit] = await Promise.all([getOverviewInsights(), criticalMomentsAccuracy()]);
+            const [ov, crit, miPhase] = await Promise.all([getOverviewInsights(), criticalMomentsAccuracy(), getMistakeInsights()]);
             const answer = assemblePhaseProfileAnswer({
               phaseAccuracy: ov.phaseAccuracy.map((x) => ({ phase: x.phase, accuracy: x.accuracy, mistakes: x.mistakes, moveCount: x.moveCount })),
               criticalByPhase: crit.byPhase.map((x) => ({ phase: x.phase, accuracyPct: x.accuracyPct, total: x.total })),
+              cpLossByPhase: miPhase.errorsByPhase.map((x) => ({ phase: x.phase, avgCpLoss: x.avgCpLoss })),
             });
             if (answer) {
               const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'phase-profile', preferRaw: true });
@@ -3051,11 +3055,15 @@ export async function getCoachChatResponse(
             const worstAgainst = oi.worstResults
               .filter((o) => o.name && o.games > 0)
               .map((o) => ({ name: o.name, winRate: o.winRate, games: o.games }));
+            const bestAgainst = oi.bestResults
+              .filter((o) => o.name && o.games > 0)
+              .map((o) => ({ name: o.name, winRate: o.winRate, games: o.games }));
             const answer = assembleRepertoireGapAnswer({
               kind: grounding.repertoireGapKind ?? 'hole',
               offBookPct,
               totalGames: totalBook,
               worstAgainst,
+              bestAgainst,
             });
             if (answer) {
               const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'repertoire-gap', preferRaw: true });
@@ -3083,6 +3091,8 @@ export async function getCoachChatResponse(
               bestMoveAgreement: ov.bestMoveAgreement,
               brilliant: ov.classificationCounts.brilliant, great: ov.classificationCounts.great,
               blunders: ov.classificationCounts.blunder,
+              good: ov.classificationCounts.good, book: ov.classificationCounts.book,
+              inaccuracies: ov.classificationCounts.inaccuracy, mistakes: ov.classificationCounts.mistake,
             });
             if (answer) {
               const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'accuracy', preferRaw: true });
@@ -3104,10 +3114,12 @@ export async function getCoachChatResponse(
         // control am I best at?" Voiced from streaks + timeControlPerformance.
         if (grounding.consistencyQuestion) {
           try {
-            const [st, tcs] = await Promise.all([streaks(), timeControlPerformance()]);
+            const [st, tcs, act] = await Promise.all([streaks(), timeControlPerformance(), activityHeatmap()]);
             const answer = assembleConsistencyAnswer({
               currentWinStreak: st.currentWinStreak, longestWinStreak: st.longestWinStreak,
               timeControls: tcs.map((t) => ({ bucket: t.bucket, winRatePct: t.winRatePct, games: t.games, avgAccuracyPct: t.avgAccuracyPct })),
+              longestSolveStreak: st.longestSolveStreak,
+              activity: { totalGames: act.totalGames, activeDays: act.activeDays },
             });
             if (answer) {
               const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'consistency', preferRaw: true });
@@ -3215,11 +3227,12 @@ export async function getCoachChatResponse(
         // ── PUZZLE STATS (Wave 4) — "my puzzle rating / how many solved?" ──
         if (grounding.puzzleStatsQuestion) {
           try {
-            const [ps, profile] = await Promise.all([getPuzzleStats(), db.profiles.get('main')]);
+            const [ps, profile, miPz] = await Promise.all([getPuzzleStats(), db.profiles.get('main'), getMistakeInsights()]);
             const answer = assemblePuzzleStatsAnswer({
               puzzleRating: profile?.puzzleRating ?? null,
               totalAttempted: ps.totalAttempted, totalCorrect: ps.totalCorrect,
               overallAccuracy: ps.overallAccuracy, duePuzzles: ps.duePuzzles,
+              mistakePuzzles: { mastered: miPz.puzzleProgress.mastered, solved: miPz.puzzleProgress.solved, unsolved: miPz.puzzleProgress.unsolved },
             });
             if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'puzzle-stats', preferRaw: true }); if (v) { lastCoachActionOffer = [{ type: 'puzzle_theme', id: 'adaptive' }]; return v; } }
             const nd = await voiceFacts("You haven't solved enough puzzles yet for me to track your puzzle rating. Solve a few and I'll show you your rating and accuracy.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'puzzle-stats', preferRaw: true });
