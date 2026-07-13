@@ -78,6 +78,13 @@ export type AuditKind =
   // a tester taps "Report a problem" — carries their note + recent defect
   // context. Streams to the audit-stream AND PostHog (user_report event).
   | 'user-report'
+  // In-app general feedback (David 2026-07-13). Emitted by the header
+  // "Feedback" pill (QuickFeedbackButton) + Settings → About "Send feedback"
+  // (FeedbackForm) when a user submits a note/praise/feature-request. Was
+  // pure mailto/share (uncaptured, unalertable); now rides the audit-stream +
+  // PostHog (feedback_submitted event) so it's durable and a session can
+  // alert on it. Carries category + rating + message + reply-to.
+  | 'feedback-submitted'
   // First-run / retroactive strength calibration (imports or skill picker)
   | 'strength-calibrated'
   // AI data-sharing consent decision (Apple 5.1.1(i) — AiConsentModal).

@@ -99,6 +99,10 @@ const AUDIT_EVENT_MAP: Partial<Record<AuditKind, string>> = {
   // In-app user bug report (build 1) — also flows here so reports land in
   // PostHog alongside the audit-stream copy.
   'user-report': 'user_report',
+  // In-app general feedback (David 2026-07-13) — header pill + Settings
+  // "Send feedback". Lands in PostHog as `feedback_submitted` alongside the
+  // audit-stream copy so it's queryable and a session can alert on it.
+  'feedback-submitted': 'feedback_submitted',
   // Voice / narration (David 2026-06-04). The `summary` carries the
   // diagnostic — e.g. voice-speak-invoked from voiceService.speakInternal
   // reads "brief-cap applied: 200→0 chars" / "silenced by Coach Narration =

@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef } from 'react';
 import { MessageSquarePlus, X, Send, Loader2, Check } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
+import { submitFeedback } from '../../services/feedback';
 
 /**
  * QuickFeedbackButton — always-on feedback pill in the header bar.
@@ -59,6 +60,20 @@ export function QuickFeedbackButton(): JSX.Element {
       : 'unknown');
     const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown';
     const displayName = activeProfile?.name ?? 'Anonymous';
+
+    // Capture FIRST, on the reliable rail — this reaches us (audit-stream +
+    // PostHog) regardless of whether the mail/share step below succeeds. The
+    // mailto/share that follows is a convenience for users who want a reply
+    // thread, not the load-bearing delivery.
+    void submitFeedback({
+      message: message.trim(),
+      category: 'quick',
+      source: 'QuickFeedbackButton',
+      contactEmail: email,
+      route,
+      profileName: displayName,
+    });
+
     const subject = 'Quick feedback — Chess Academy Pro';
     const bodyLines = [
       message.trim(),
@@ -254,7 +269,8 @@ export function QuickFeedbackButton(): JSX.Element {
                 </button>
 
                 <p className="text-[11px] text-center" style={{ color: 'var(--color-text-muted)' }}>
-                  Opens your mail or share sheet. Nothing is sent anywhere else.
+                  Sent securely to the Chess Academy Pro team, and opens your
+                  mail or share sheet so you can add anything else.
                 </p>
               </div>
             )}

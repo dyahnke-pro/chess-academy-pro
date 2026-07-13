@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { MessageSquare, X, Check } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
+import { submitFeedback } from '../../services/feedback';
 
 /**
  * FeedbackForm — in-app feedback surface, mailto-based submission.
@@ -43,6 +44,17 @@ export function FeedbackForm({ onClose }: FeedbackFormProps): JSX.Element {
       : 'unknown');
     const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown';
     const displayName = activeProfile?.name ?? 'Anonymous';
+
+    // Capture FIRST on the reliable rail (audit-stream + PostHog) so the note
+    // reaches us regardless of whether the mail draft below is actually sent.
+    void submitFeedback({
+      message,
+      category,
+      source: 'FeedbackForm',
+      rating,
+      contactEmail,
+      profileName: displayName,
+    });
 
     const subjectMap: Record<FeedbackCategory, string> = {
       bug: 'Bug report',
@@ -222,8 +234,9 @@ export function FeedbackForm({ onClose }: FeedbackFormProps): JSX.Element {
       </button>
 
       <p className="text-[11px] text-center" style={{ color: 'var(--color-text-muted)' }}>
-        Your feedback opens in your mail app, addressed to {SUPPORT_EMAIL}. No
-        data is sent anywhere else.
+        Your feedback is sent securely to the Chess Academy Pro team, and also
+        opens in your mail app (addressed to {SUPPORT_EMAIL}) so you can add
+        anything else.
       </p>
     </div>
   );
