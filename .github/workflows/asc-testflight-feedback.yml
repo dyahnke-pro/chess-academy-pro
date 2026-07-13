@@ -1,0 +1,32 @@
+name: TestFlight feedback poll
+
+# Polls App Store Connect for new TestFlight beta feedback (tester notes +
+# crash feedback). Runs on a schedule and on demand; a session reads the log
+# to alert David. The in-app "Feedback" button is captured separately via the
+# app's audit-stream.
+
+on:
+  workflow_dispatch:
+    inputs:
+      since:
+        description: 'ISO timestamp — only report feedback newer than this (default 24h ago)'
+        type: string
+        required: false
+  schedule:
+    - cron: '0 */6 * * *' # every 6 hours
+
+jobs:
+  feedback:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Poll TestFlight feedback
+        env:
+          ASC_KEY_P8: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          SINCE: ${{ inputs.since }}
+        run: node scripts/ci/asc-testflight-feedback.mjs
