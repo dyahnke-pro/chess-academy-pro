@@ -182,10 +182,15 @@ async function rankCandidatesAtFen(fen: string): Promise<RankedCandidate[]> {
  *  `[BOARD: arrow:from-to:color]` markers. The LLM never picks an
  *  arrow. Fen-bearing surfaces call this after `groundCoachReply`.
  *  Never throws — on any fault returns the text unchanged. */
-export async function applyCandidateArrows(text: string, fen: string | null | undefined, source: string): Promise<string> {
+export async function applyCandidateArrows(
+  text: string,
+  fen: string | null | undefined,
+  source: string,
+  opts?: { excludeSan?: string; spokenText?: string },
+): Promise<string> {
   if (!text.trim() || !fen) return text;
   try {
-    const { text: out, injected } = await injectCandidateArrows(text, fen, rankCandidatesAtFen);
+    const { text: out, injected } = await injectCandidateArrows(text, fen, rankCandidatesAtFen, opts);
     if (injected.length > 0) {
       void logAppAudit({
         kind: 'coach-narration-spoken',

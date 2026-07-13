@@ -218,6 +218,7 @@ export async function injectCandidateArrows(
   text: string,
   fen: string,
   analyze: MultipvAnalyzer,
+  opts?: { excludeSan?: string; spokenText?: string },
 ): Promise<{ text: string; injected: { san: string; color: ArrowColor }[] }> {
   // Strip any pre-existing markers (we re-derive every arrow) but
   // preserve newlines — only collapse the double-spaces a stripped
@@ -225,6 +226,13 @@ export async function injectCandidateArrows(
   const base = stripBoardMarkers(text).replace(/ {2,}/g, ' ').trim();
   const sans = Array.from(new Set(extractMentionedSans(text)));
   if (sans.length === 0) return { text: base, injected: [] };
+
+  // The just-played move is ALREADY on the board — don't arrow it (David
+  // 2026-07-13: "we don't need to arrow a move that was already played"). We
+  // exclude by RESOLVED GEOMETRY, not the SAN string, so a differently-spelled
+  // but same-squares mention is still dropped.
+  const excludeArrow = opts?.excludeSan ? resolveSanToArrow(opts.excludeSan, [fen]) : null;
+  const excludeKey = excludeArrow ? `${excludeArrow.from}-${excludeArrow.to}` : null;
 
   let ranked: RankedCandidate[] = [];
   try {
@@ -243,6 +251,7 @@ export async function injectCandidateArrows(
     const arrow = resolveSanToArrow(san, [fen]);
     if (!arrow) continue;
     const key = `${arrow.from}-${arrow.to}`;
+    if (key === excludeKey) continue; // the move already on the board — skip
     if (seen.has(key)) continue;
     seen.add(key);
     resolved.push({ san, from: arrow.from, to: arrow.to, rank: rankOf(arrow) });
@@ -261,9 +270,37 @@ export async function injectCandidateArrows(
     .map((r) => ({ ...r, color: colorForRank(r.rank) }))
     .filter((r): r is typeof r & { color: ArrowColor } => r.color !== null);
   const capped = drawable.slice(0, MAX_CANDIDATE_ARROWS);
+
+  // THREAT arrows (David 2026-07-13): a move the coach CALLS OUT LOUD (present
+  // in `spokenText`) that is NOT one of its own top-3 suggestions is a THREAT —
+  // the opponent's danger, not a move for the student to play. Draw it RED so
+  // it reads as a warning, never a recommendation (this is the one sanctioned
+  // exception to the green/yellow-only rule: red on a THREAT ≠ red on the
+  // student's own mistake-move). Sourced ONLY from the spoken text, so a threat
+  // merely written in the chat bubble — not said aloud — gets no arrow.
+  const drawnKeys = new Set(capped.map((r) => `${r.from}-${r.to}`));
+  const threats: { san: string; from: string; to: string; color: ArrowColor }[] = [];
+  if (opts?.spokenText) {
+    for (const san of Array.from(new Set(extractMentionedSans(opts.spokenText)))) {
+      const arrow = resolveSanToArrow(san, [fen]);
+      if (!arrow) continue;
+      const key = `${arrow.from}-${arrow.to}`;
+      if (key === excludeKey || drawnKeys.has(key)) continue; // played move / already drawn
+      const rank = rankOf(arrow);
+      if (rank === 1 || rank === 2 || rank === 3) continue; // a suggestion, not a threat
+      drawnKeys.add(key);
+      threats.push({ san, from: arrow.from, to: arrow.to, color: 'red' });
+    }
+  }
+
+  // Suggestions first (they're the point), then spoken threats fill the rest.
+  const finalArrows = [
+    ...capped.map((r) => ({ san: r.san, from: r.from, to: r.to, color: r.color })),
+    ...threats,
+  ].slice(0, MAX_CANDIDATE_ARROWS);
   const markers: string[] = [];
   const injected: { san: string; color: ArrowColor }[] = [];
-  for (const { san, from, to, color } of capped) {
+  for (const { san, from, to, color } of finalArrows) {
     markers.push(`[BOARD: arrow:${from}-${to}:${color}]`);
     injected.push({ san, color });
   }

@@ -3812,30 +3812,31 @@ export function CoachTeachPage(): JSX.Element {
         if (dt.dropped.length > 0) displayText = dt.clean.trim() || finalText;
       } catch { /* never block the reply */ }
       if (finalText) {
-        // Arrow-claim validator (Phase D of streaming-TTS standardization,
-        // 2026-05-18). Scans the response for SAN-shaped move
-        // mentions that don't have a matching [BOARD: arrow:from-to:color]
-        // marker. The TEACH_MODE_ADDITION block has a NON-NEGOTIABLE
-        // rule requiring arrows on every step-by-step move; this is
-        // the observability layer that catches violations the prompt
-        // missed (David's audit caught the brain shipping 5 coach
-        // moves without arrows in a Vienna walkthrough).
-        //
-        // ENFORCEMENT (Bug E, 2026-05-19): when violations exist,
-        // synthesize the missing arrows by replaying the SANs through
-        // chess.js at the current FEN and emit `[BOARD: arrow:from-to:color]`
-        // markers. The synthesized markers are re-parsed below so the
-        // board renders the arrows the LLM forgot — closes the G6
-        // loop without an extra LLM round-trip.
-        // Annotation standard (G0): the LLM no longer emits arrow OR
-        // highlight markers. Code resolves every NAMED move's geometry
-        // (colored by Stockfish rank, capped so the board never floods)
-        // and every NAMED square's highlight — the ONE shared path via
-        // arrowEngine. This is the SOLE board source; the LLM's own markup
-        // was already cleared above and is ignored. Display text
-        // (`finalText`) stays as the LLM wrote it; we only extract the
-        // code-derived markers onto the board.
-        const arrowed = await applyCandidateArrows(finalText, fen, 'CoachTeachPage');
+        // Board annotations are CODE-DERIVED (G0): the LLM never draws arrows;
+        // it just NAMES moves in prose. `arrowEngine` (via applyCandidateArrows)
+        // is the SOLE board source — it strips any LLM markup, resolves each
+        // named move's geometry in code, colors by Stockfish rank (GREEN=#1 /
+        // YELLOW=#2-3; off-top-3 SUGGESTIONS draw nothing — we never point at a
+        // bad move, David 2026-07-06), caps the count so the board never floods,
+        // and EXCLUDES the just-played move (David 2026-07-13, below). This
+        // SUPERSEDES the 2026-05-19 "synthesize an arrow for every named SAN"
+        // enforcement (the old validateArrowClaims / arrowClaimValidator, now
+        // deleted) — arrows are guaranteed by construction for real suggestions,
+        // not detected-after-the-fact. Display text (`finalText`) stays as the
+        // LLM wrote it; only the code-derived markers reach the board.
+        // NOTE (David 2026-07-13): threats named ONLY in prose (not spoken) get
+        // no arrow; "arrow threats only when the coach calls them out loud" is a
+        // pending refinement (needs the spoken-text source + a threat color).
+        // Arrows (David 2026-07-13): (1) NEVER arrow the move the coach just
+        // played — it's already on the board (`replyPlayed` is the step-by-step
+        // engine reply; undefined elsewhere). (2) A THREAT gets a red arrow only
+        // when the coach CALLS IT OUT LOUD, so pass the spoken text — a threat
+        // written only in the bubble stays un-arrowed.
+        const spokenForArrows = spokenForTurn.join(' ').trim();
+        const arrowed = await applyCandidateArrows(finalText, fen, 'CoachTeachPage', {
+          excludeSan: replyPlayed,
+          spokenText: spokenForArrows || undefined,
+        });
         const highlightMarkers = candidateHighlightMarkers(finalText, 'CoachTeachPage');
         const annotated = highlightMarkers.length > 0
           ? `${arrowed} ${highlightMarkers.join(' ')}`

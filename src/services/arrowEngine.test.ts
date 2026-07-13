@@ -131,6 +131,46 @@ describe('injectCandidateArrows', () => {
     expect(text).toContain('[BOARD: arrow:g1-f3:green]');
   });
 
+  it('does NOT arrow the just-played move — excludeSan drops it by geometry (David 2026-07-13)', async () => {
+    // The coach just played Nf3 (already on the board) and also names Nc3.
+    // Only Nc3 should get an arrow; Nf3 (the played move) is excluded.
+    const analyze = async (): Promise<RankedCandidate[]> => [
+      { from: 'g1', to: 'f3', rank: 1 },
+      { from: 'b1', to: 'c3', rank: 2 },
+    ];
+    const { text, injected } = await injectCandidateArrows(
+      'I played Nf3; you could answer Nc3.',
+      start,
+      analyze,
+      { excludeSan: 'Nf3' },
+    );
+    expect(text).not.toContain('g1-f3'); // the already-played move — no arrow
+    expect(injected.some((i) => i.san === 'Nf3')).toBe(false);
+    expect(text).toContain('[BOARD: arrow:b1-c3:yellow]'); // the other move still arrowed
+    expect(injected.some((i) => i.san === 'Nc3')).toBe(true);
+  });
+
+  it('RED-arrows a threat the coach says OUT LOUD (spoken, off-top-3) — David 2026-07-13', async () => {
+    // Nh3 is off-top-3 (a non-suggestion). Named in prose only → no arrow.
+    // Named in the SPOKEN text → a red "danger" threat arrow.
+    const analyze = async (): Promise<RankedCandidate[]> => [{ from: 'e2', to: 'e4', rank: 1 }];
+    const both = await injectCandidateArrows('Careful, Nh3 is coming.', start, analyze, {
+      spokenText: 'Careful, Nh3 is coming.',
+    });
+    expect(both.text).toContain('[BOARD: arrow:g1-h3:red]');
+    expect(both.injected).toContainEqual({ san: 'Nh3', color: 'red' });
+  });
+
+  it('does NOT arrow a threat that is only WRITTEN, not spoken', async () => {
+    const analyze = async (): Promise<RankedCandidate[]> => [{ from: 'e2', to: 'e4', rank: 1 }];
+    // Threat in the display text, but NOT in the spoken text → no arrow.
+    const res = await injectCandidateArrows('Careful, Nh3 is coming.', start, analyze, {
+      spokenText: 'Nice and solid.',
+    });
+    expect(res.text).not.toContain('g1-h3');
+    expect(res.injected.some((i) => i.san === 'Nh3')).toBe(false);
+  });
+
   it('no-ops (no markers) when the prose mentions no moves', async () => {
     const analyze = async (): Promise<RankedCandidate[]> => [];
     const { text, injected } = await injectCandidateArrows('A quiet, solid position.', start, analyze);
