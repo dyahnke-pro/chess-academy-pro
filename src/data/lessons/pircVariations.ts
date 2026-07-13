@@ -48,10 +48,10 @@ const AUSTRIAN: LessonScript = {
       say: "White declines the capture and clamps the centre shut with d5, gaining space. But the locked centre hands Black a clear plan: the knight swings to c7, ready to prepare b5, prying open the queenside where Black will play. A closed centre means the action shifts to the wings.",
       sayShort: "d5 locks it; …Nc7 preps …b5.",
       highlights: [H('d5', KEY), H('c7', KEY), H('b5', SOFT)] }),
-    b({ id: 'a5', moves: 'e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 O-O Bd3 Na6 O-O c5 d5 Nc7 a4 Rb8 Qe1 b6 Qh4',
-      say: "Now the two attacks declare themselves. White lifts the queen — Qe1 to h4 — aiming the heavy pieces at Black's king. Black answers with cold-blooded preparation: a4 is met by Rb8 and b6, readying b5 and the bishop to b7. This is the Austrian's essence: a pure race, White at the king, Black on the queenside. Know your plan and play it fast.",
-      sayShort: "A race: White's Qh4 vs Black's …Rb8-b6-b5.",
-      highlights: [H('h4', SOFT), H('b6', KEY), H('b5', SOFT)] }),
+    b({ id: 'a5', moves: 'e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 O-O Bd3 Na6 O-O c5 d5 Nc7 a4 Rb8 Qe1 a6 a5 b5',
+      say: "White clamps the queenside with a4 and lifts the queen with Qe1, heading for the kingside; Black lines up the break — …Rb8, …a6, and …b5 to prise open the b-file. Be clear-eyed, though: this is not an even race. White's big centre and kingside attack come faster, and the engine rates Black clearly worse here, closer to a pawn down than to equality. Play the …Na6 Austrian only as a sharp practical try you know cold; for a sound, comfortable Pirc, prefer the Classical System, where Black is genuinely equal.",
+      sayShort: "…b5 opens the b-file — but clearly worse.",
+      highlights: [H('b5', KEY), H('b8', SOFT), H('a6', SOFT)] }),
   ],
 };
 
@@ -225,8 +225,8 @@ const CZECH: LessonScript = {
       sayShort: "…e5, …Bg4 — challenge d4, pin its defender.",
       highlights: [H('e5', ATK), H('g4', SOFT)] }),
     b({ id: 'z4', moves: 'e4 d6 d4 Nf6 Nc3 c6 f4 Qa5 Bd3 e5 Nf3 Bg4 Be3 Nbd7 O-O Be7 h3 Bxf3 Qxf3 O-O Ne2 c5 dxe5 dxe5',
-      say: "Black finishes development — Nbd7, Be7, castle — trades the bishop for the knight to loosen White's grip, then strikes again with c5. When the centre finally resolves with dxe5 dxe5, Black has a sound, harmonious position with no weaknesses. The Czech delivers exactly what it promises: a solid, principled game on Black's terms.",
-      sayShort: "…c5, …dxe5 — solid and harmonious; promise kept.",
+      say: "Black finishes development — Nbd7, Be7, castle — trades the bishop for the knight to loosen White's grip, then strikes with c5, and the centre resolves with dxe5 dxe5. Be honest about the result: this is a solid, low-theory structure, but White's central space still gives a small, lasting pull — Black is a touch worse here, comfortable and hard to break rather than fully equal. The Czech's promise is safety and simplicity, not equality.",
+      sayShort: "…c5, …dxe5 — solid but a touch worse.",
       highlights: [H('e5', KEY), H('c5', SOFT)] }),
   ],
 };
