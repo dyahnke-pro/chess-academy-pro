@@ -8,8 +8,10 @@
  * Per game:
  *   1. Fresh SPA load of /coach/play?side=<white|black>.
  *   2. A scripted opening PREFIX steers the student's side into a distinct
- *      opening family (10 plans: b3/d4/c4/Nf3/f4 systems as White; Sicilian/
- *      Caro-Kann/French/Modern/Scandinavian replies as Black).
+ *      opening family (10 plans: Italian/d4/c4/Nf3/f4 systems as White; Sicilian/
+ *      Caro-Kann/French/Modern/Scandinavian replies as Black). A plan whose
+ *      family depends on the coach's replies (Italian) also passes `?subject=`
+ *      so the coach follows that opening's book side.
  *   3. After the prefix, a deterministic greedy policy (mate > best capture >
  *      check > development) plays the student's moves until chess.js says the
  *      game is over (checkmate/stalemate/draw). No move is ever invented —
@@ -77,17 +79,21 @@ const isNoise = (t) => NOISE.some((re) => re.test(t));
 // LEGAL preference each ply (the coach owns move 1), which still forces a
 // distinct family (Sicilian vs Caro vs French vs Modern vs Scandinavian).
 //
-// A WHITE plan can only be trusted to hit a distinct family if that family is
-// named by WHITE's own structure — the coach owns Black's replies, so a plan
-// whose identity needs Black to cooperate (e.g. 1.e4 e5 → Italian) collapses
-// into whatever defense the coach picks. Run 29249281899 proved it: the old
-// `italian-shape` plan played 1.e4, the coach answered ...e6, and the game was
-// (correctly) detected as "French Defense: Knight Variation" — colliding with
-// the Black `french` plan's "French Defense" root → 9 families, not 10. So the
-// White slot is a queen-side SYSTEM (1.b3 Nimzo-Larsen): its root name stays
-// "Nimzo-Larsen Attack" for every Black reply and collides with nothing.
+// A plan whose family identity depends on the COACH's cooperation must ASK the
+// coach to play that opening via `?subject=` — scripting only the student's
+// side is not enough. Run 29249281899 proved it: the `italian-shape` plan
+// played 1.e4 with no subject, the coach (owning Black) answered ...e6, and the
+// game was (correctly) detected as "French Defense: Knight Variation" —
+// colliding with the Black `french` plan's "French Defense" root → 9 families,
+// not 10. The Italian (1.e4 e5 → Italian) is exactly this case: its family is
+// decided by the coach's replies. Fix = tell the coach to play it
+// (`subject: 'Italian Game'`), so the coach follows the Italian's Black side
+// (e5/Nc6/Bc5 — verified live 2026-07-13) and the game is a real, distinct
+// "Italian Game". `subject` is passed on the /coach/play URL; the White-system
+// plans below need no subject (their family is named by White's own structure,
+// robust to any Black reply), so they stay free-play.
 const PLANS = [
-  { name: 'nimzo-larsen',    side: 'white', prefs: [['b3'], ['Bb2'], ['e3'], ['Nf3', 'Ne2'], ['Be2', 'O-O', 'd3']] },
+  { name: 'italian-shape',   side: 'white', subject: 'Italian Game', prefs: [['e4'], ['Nf3'], ['Bc4'], ['c3'], ['d3']] },
   { name: 'queens-pawn',     side: 'white', prefs: [['d4'], ['c4', 'Nf3'], ['Nc3', 'Nf3'], ['e3', 'Bf4'], ['Nf3', 'Be2']] },
   { name: 'english',         side: 'white', prefs: [['c4'], ['Nc3'], ['g3'], ['Bg2'], ['Nf3']] },
   { name: 'reti',            side: 'white', prefs: [['Nf3'], ['g3'], ['Bg2'], ['O-O'], ['d3']] },
@@ -392,7 +398,10 @@ async function main() {
     // (the 2026-07-13 prod run failed all 5 black games exactly this way).
     const gameStartTs = Date.now();
 
-    await page.goto(`${BASE_URL}/coach/play?side=${plan.side}`, { waitUntil: 'domcontentloaded', timeout: 60_000 });
+    // `subject` tells the coach which opening to play (its book side), for
+    // plans whose family identity depends on the coach's cooperation (Italian).
+    const subjectQ = plan.subject ? `&subject=${encodeURIComponent(plan.subject)}` : '';
+    await page.goto(`${BASE_URL}/coach/play?side=${plan.side}${subjectQ}`, { waitUntil: 'domcontentloaded', timeout: 60_000 });
     await page.waitForTimeout(4000);
     await clearFirstRunOverlays();
     const boardUp = await page.locator('[data-square="e4"]').first()

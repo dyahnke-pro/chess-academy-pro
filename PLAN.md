@@ -20,18 +20,33 @@ from IndexedDB; ANY pageerror / non-NOISE console error is a hard fail.
   throwaway `/coach/play` load before game 1. **CONFIRMED WORKING** — run
   29249281899: all 10 games played to natural ends, `errs=0/0`, zero pageerrors.
   The cold-boot crashloop is dead. Real devices pay this probe once per install.
-- **Second break (exposed once game 1 actually played), commit d7131db:** the
-  audit still failed "openings not all distinct" — but now a GENUINE collision,
-  not the crash cascade. The old `italian-shape` White plan scripts only WHITE's
-  moves; the coach owns Black, so when it answered 1.e4 with ...e6 the game was
-  (correctly) detected as "French Defense: Knight Variation" → collided with the
-  Black `french` plan's "French Defense" root (9 families, not 10). A White plan
-  is only reliably distinct when named by WHITE's own structure. **Fix:** swap
-  the e4-e5 Italian for a 1.b3 Nimzo-Larsen system — root stays "Nimzo-Larsen
-  Attack" for every Black reply, collides with nothing. Legality verified across
-  e5/d5/c5 Black setups.
+- **Second break (exposed once game 1 actually played):** the audit still failed
+  "openings not all distinct" — a GENUINE collision, not the crash cascade. The
+  `italian-shape` White plan scripts only WHITE's moves; the coach owns Black, so
+  when it answered 1.e4 with ...e6 the game was (correctly) detected as "French
+  Defense: Knight Variation" → collided with the Black `french` plan's "French
+  Defense" root (9 families, not 10).
+- **Fix (David's steer — "ask the coach to play the Italian as black"):** a plan
+  whose family depends on the coach's replies must TELL the coach which opening
+  to play via `?subject=`. Gave `italian-shape` `subject: 'Italian Game'` and
+  pass it on the /coach/play URL, so the coach follows the Italian's book side
+  and the game is a real, distinct "Italian Game". (The earlier b3 swap was a
+  workaround; reverted in favour of this.) The White-SYSTEM plans (d4/c4/Nf3/f4)
+  need no subject — their family is named by White's own structure.
+- **LIVE-VERIFIED the coach plays the Italian SOUNDLY on both sides** (localhost,
+  prod bundle code; Chromium can't reach prod in this container — ERR_CONNECTION_
+  RESET egress quirk, curl 200):
+  - student BLACK + subject=Italian → coach (White) played the mainline Giuoco
+    Pianissimo `e4 Nf3 Bc4 O-O d3 c3 h3 Re1 Bb3 Nbd2 Nf1`, detected "Italian Game:
+    Giuoco Piano", 0 pageerrors.
+  - student WHITE + subject=Italian → coach (Black) played `e5 Nc6 Bc5 Nf6 d6 O-O
+    a6 h6 Be6 Bxb3`, detected "Italian Game: Classical Variation, Giuoco
+    Pianissimo" (C54), 0 pageerrors.
+  → The Italian itself is NOT defective; the red was the audit failing to STEER
+  the coach. If a different opening is defective, it needs to be named + repro'd.
 - **Validating run: PENDING** — trigger full-game-audit on this branch after the
-  push lands. Expectation: 10 distinct families → green → loop break CLOSED.
+  push lands. Expectation: 10 distinct families (Italian Game + Indian + English
+  + KIA + Bird + Sicilian + Caro-Kann + French + Modern + Scandinavian) → green.
 
 ## Tracked follow-up (was Fable's session-local "task #32" — now durable here)
 - **Cold-boot JS bug `t.startsWith is not a function`** — the FIRST error in the
