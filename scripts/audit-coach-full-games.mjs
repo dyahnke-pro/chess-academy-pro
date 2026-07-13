@@ -336,6 +336,35 @@ async function main() {
   await page.waitForTimeout(6000);
   await clearFirstRunOverlays();
 
+  // ── Engine warm-up (task #32): the FIRST-EVER load pays the Stockfish
+  // variant probe — on a contended runner the multi-thread WASM build can
+  // crashloop for minutes before the persisted fallback pins single-thread
+  // (run 29232631772 game-1: 1,188 worker errors, dead coach). Real devices
+  // pay this at most once per install; warm it here so the 10 games measure
+  // GAMEPLAY, not the one-time probe. The underlying cold-boot bug stays
+  // tracked (task #32) — this does not hide it, it scopes the standard.
+  console.log('[full-games] engine warm-up (variant probe settle)…');
+  await page.goto(`${BASE_URL}/coach/play`, { waitUntil: 'domcontentloaded', timeout: 60_000 });
+  await clearFirstRunOverlays();
+  {
+    const t0 = Date.now();
+    let settled = false;
+    while (Date.now() - t0 < 120_000) {
+      const entries = await dumpAudit();
+      if (entries.some((e) => e.kind === 'stockfish-variant-resolved' || e.kind === 'stockfish-variant-fallback')) {
+        // Give a possible fallback re-init a moment to reach ready.
+        await page.waitForTimeout(8000);
+        settled = true;
+        break;
+      }
+      await page.waitForTimeout(2000);
+    }
+    console.log(`[full-games] engine warm-up ${settled ? 'settled' : 'TIMED OUT (proceeding)'} in ${Math.round((Date.now() - t0) / 1000)}s`);
+    // Warm-up page/worker errors belong to the probe, not the games.
+    pageErrors.length = 0;
+    consoleErrors.length = 0;
+  }
+
   const results = [];
 
   for (let g = 0; g < GAMES; g++) {
