@@ -44,9 +44,27 @@ from IndexedDB; ANY pageerror / non-NOISE console error is a hard fail.
     Pianissimo" (C54), 0 pageerrors.
   → The Italian itself is NOT defective; the red was the audit failing to STEER
   the coach. If a different opening is defective, it needs to be named + repro'd.
-- **Validating run: PENDING** — trigger full-game-audit on this branch after the
-  push lands. Expectation: 10 distinct families (Italian Game + Indian + English
-  + KIA + Bird + Sicilian + Caro-Kann + French + Modern + Scandinavian) → green.
+- **Run 29260208403 (subject=Italian only):** Italian fix WORKED (game 1 =
+  "Italian Game" ✓, French collision gone). But surfaced TWO more issues, both
+  the SAME nondeterminism class + a cold-timing one:
+  1. `scandinavian → "Zukertort Opening: Tennison Gambit"` collided with `reti →
+     "Zukertort Opening"` — the coach opened 1.Nf3 (not 1.e4), so 1.Nf3 d5 2.e4 =
+     Tennison. The Black defenses depend on the coach's OPENING move; `queens-pawn`
+     (1.d4) is the same trap (a Black ...g6 reply → "Modern Defense" collision).
+  2. game-1-italian stall-resigned at ply 12 → review never mounted + not
+     persisted. Cold first game's mid-game Stockfish searches spiked past the 30s
+     reply budget (only reply #1 got 90s); games 2-10 clean on 30s.
+- **Fixes (commit pending):**
+  - subject-steer ALL coach-dependent plans: queens-pawn="Queen's Gambit",
+    sicilian/caro-kann/french/modern/scandinavian = their own defense. Verified
+    LIVE the coach opens deterministically (Scandinavian→e4, Modern→d4, Queen's
+    Gambit→coach ...d5→"Slav Defense" root). The 3 flank White systems
+    (c4/Nf3/f4) need no subject (root fixed by White's move). 10 deterministic
+    distinct roots: Italian, Slav, English, Zukertort, Bird, Sicilian, Caro-Kann,
+    French, Modern, Scandinavian.
+  - game-1 (g===0) per-reply budget → 75s + one extra stall of grace; warm games
+    keep the tight 30s. Prevents the cold-first-game stall-resign.
+- **Validating run: PENDING** — trigger full-game-audit on this branch after push.
 
 ## Tracked follow-up (was Fable's session-local "task #32" — now durable here)
 - **Cold-boot JS bug `t.startsWith is not a function`** — the FIRST error in the
