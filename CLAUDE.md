@@ -3644,7 +3644,8 @@ After every `git push origin main`:
    | If you changed… | Run |
    |---|---|
    | `/coach/review/*` | `scripts/audit-coach-review.mjs` + `scripts/audit-back-from-review.mjs` |
-   | `/coach/play` | `scripts/audit-coach-play.mjs` |
+   | `/coach/play` | `scripts/audit-coach-play.mjs` (event-contract smoke) **+ the FULL-GAME STANDARD below for any substantive coach/play/review change** |
+   | `/coach/play` + `/coach` review — full games | `scripts/audit-coach-full-games.mjs` via the `full-game-audit.yml` workflow (🔒 THE FULL-GAME AUDIT STANDARD — see locked section below the matrix) |
    | `/coach/chat` | `scripts/audit-coach-chat.mjs` |
    | `/coach/teach` (Learn) | `scripts/audit-coach-teach-unknown-line.mjs` (unknown / sub-line resolution + middlegame spine depth + leaf play-out prompt) |
    | coach surfaces (any) — master-play grounding | `scripts/audit-coach-master-integration.mjs` |
@@ -3671,6 +3672,63 @@ After every `git push origin main`:
 
    Every script in `scripts/audit-*.mjs` targets the live prod URL
    by default (override with `AUDIT_SMOKE_URL` for local).
+
+### 🔒🔒 THE FULL-GAME AUDIT STANDARD (David 2026-07-13, LOCKED: "Save this audit format plz. This is the new standard.")
+
+When David says verify the coach / verify the build works "as it SHOULD",
+this is the format — REAL USE from production, not mount checks:
+
+**Instrument: `scripts/audit-coach-full-games.mjs`, run on GitHub runners via
+`.github/workflows/full-game-audit.yml`** (workflow_dispatch + nightly cron;
+its OWN concurrency group `full-game-audit`, deliberately separate from
+`post-deploy-audit` so the two never cancel each other — remember: any run in
+a shared group cancels the in-flight one, which killed a 73-min loop run on
+2026-07-12).
+
+The contract, per run:
+1. **≥ 10 FULL GAMES on `/coach/play`, played to a natural end** (checkmate /
+   draw — a ply-cap resign completes the game but is called out in the
+   report). Node-side chess.js mirror picks only legal moves (G3); coach
+   replies are read back from the app's own `coach-turn-checkpoint` audit
+   entries (san + fen) and cross-checked against the mirror.
+2. **ALL GAMES IN DIFFERENT OPENINGS** — scripted student prefixes (5 White
+   systems: Italian shape / Queen's Pawn / English / Réti / Bird's; 5 Black
+   defenses: Sicilian / Caro-Kann / French / Modern / Scandinavian, via
+   `/coach/play?side=black`). Distinctness is asserted on the app's own
+   `coach-opening-auto-detected` names — not on the plan labels.
+3. **REAL MID-GAME FLOWS ANSWERED, not dodged**: the slip-detector's blocking
+   "Blunder Detected" card (testid `blunder-interception`) pauses the coach
+   until answered — the audit clicks Continue and COUNTS the interceptions
+   (proof the detector fires E2E). Any new blocking card added to the play
+   surface MUST be handled + counted here the same way.
+4. **POST-GAME REVIEW DRIVEN FOR EVERY GAME**: game-over overlay →
+   `skip-to-review-btn` → `coach-game-review-walk` stepped ply-by-ply,
+   answering every diagnostic card that surfaces — find-the-shot (hint →
+   reveal → continue), blunder rewind (decline — accept hijacks the walk into
+   practice), turning point (pick → done).
+5. **PERSISTENCE VERIFIED FROM IndexedDB**: every finished game (≥
+   MIN_PERSIST_PLIES) must land in `games` with source='coach' — the
+   mistake-puzzle / weakness pipeline hangs off that write.
+6. **HARD FAILURES** (exit 1): any game not reaching review, openings not all
+   distinct, a finished game not persisted, ANY pageerror, ANY non-NOISE
+   console error.
+
+**Companions in the same standard** (the "triple check" together):
+- the sharded punish-gems loop (`post-deploy-audit.yml` matrix — 8×
+  `AUDIT_SHARD=i/8`) for masterclass/WLPP/gems integrity;
+- `scripts/soundness-sweep.mjs` (engine-evals every lesson terminus from the
+  student's side — NOT covered by the functional battery; run it whenever
+  opening content changes and in any "is the app sound" sweep);
+- the core script battery (dashboard / openings-ui / coach-play events /
+  master-integration / untouched surfaces) on every main push.
+
+**Known coverage gaps to close INTO this standard** (2026-07-13 assessment):
+`/coach/teach` brain flows on prod runners (pull `DEEPSEEK_KEY` from Vercel
+env via the runner's `VERCEL_TOKEN` at runtime — never a committed secret),
+`audit-settings-behavior` (G5 verbosity contract) in the battery, tactics +
+weaknesses + calibration in the nightly, the import→mistake-puzzles→drill
+learning-loop chain, kid deep-play (actually solving puzzles). Device-only
+(route to David): mic turn-taking, real iOS TTS decode, billing/restore.
 
 5. **All scenarios must be green.** If any fail:
    - Dig into the failure FIRST. Don't dismiss as flake without
