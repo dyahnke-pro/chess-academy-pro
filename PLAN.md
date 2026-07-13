@@ -28,7 +28,19 @@ AND Post-Game Review sections, then run an audit against ALL behaviors.
 
 ---
 
-# PLAN — LOOP AUDIT: full-game coach standard (2026-07-13, active)
+# PLAN — LOOP AUDIT: full-game coach standard (2026-07-13) — ✅ CLOSED (GREEN ON PROD)
+
+**Run 29264437648 (commit 4f54c50) PASSED on prod** — 10 full games, 10 distinct
+openings, reviews driven per game, persistence, blunder interceptions, 0 errors
+(~51 min; wider game-1 budget stretched runtime but it's green). All three breaks
+fixed: (1) engine cold-boot crash → warmup [Fable]; (2) Italian→French + Scandinavian→
+Zukertort collisions → subject-steer every coach-dependent plan; (3) cold game-1
+stall → wider game-1 reply budget. NOTE: if the ~51-min runtime is a concern, tune
+game-1 budget down (75s→~50s) or warm the brain path too — the length is the
+wider-budget tradeoff, not a failure.
+
+---
+# PLAN — LOOP AUDIT: full-game coach standard (2026-07-13, archived detail)
 
 **Instrument:** `scripts/audit-coach-full-games.mjs` via
 `.github/workflows/full-game-audit.yml` (workflow_dispatch + nightly cron;
