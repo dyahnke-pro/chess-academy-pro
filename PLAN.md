@@ -16,13 +16,22 @@ from IndexedDB; ANY pageerror / non-NOISE console error is a hard fail.
   died — 1,188 pageerrors, 2 plies, opening never detected → which ALSO caused
   the secondary "10 games → 9 families" distinctness fail (the missing 10th was
   italian-shape itself). Both failures, one cause.
-- **Fix (Fable, commit 985729f):** warm the Stockfish variant probe on a
-  throwaway `/coach/play` load before game 1, wait for the
-  `stockfish-variant-resolved`/`-fallback` audit event, drop warm-up-only errors.
-  Real devices pay this probe once per install; the audit now measures gameplay.
-- **Validating run: 29249281899** (scheduled, on 985729f) — in flight at resume.
-  Expectation: green (game 1 now plays → Italian/King's-Pawn = distinct 10th
-  family). If green, the current loop break is CLOSED.
+- **Fix 1 (Fable, commit 985729f):** warm the Stockfish variant probe on a
+  throwaway `/coach/play` load before game 1. **CONFIRMED WORKING** — run
+  29249281899: all 10 games played to natural ends, `errs=0/0`, zero pageerrors.
+  The cold-boot crashloop is dead. Real devices pay this probe once per install.
+- **Second break (exposed once game 1 actually played), commit d7131db:** the
+  audit still failed "openings not all distinct" — but now a GENUINE collision,
+  not the crash cascade. The old `italian-shape` White plan scripts only WHITE's
+  moves; the coach owns Black, so when it answered 1.e4 with ...e6 the game was
+  (correctly) detected as "French Defense: Knight Variation" → collided with the
+  Black `french` plan's "French Defense" root (9 families, not 10). A White plan
+  is only reliably distinct when named by WHITE's own structure. **Fix:** swap
+  the e4-e5 Italian for a 1.b3 Nimzo-Larsen system — root stays "Nimzo-Larsen
+  Attack" for every Black reply, collides with nothing. Legality verified across
+  e5/d5/c5 Black setups.
+- **Validating run: PENDING** — trigger full-game-audit on this branch after the
+  push lands. Expectation: 10 distinct families → green → loop break CLOSED.
 
 ## Tracked follow-up (was Fable's session-local "task #32" — now durable here)
 - **Cold-boot JS bug `t.startsWith is not a function`** — the FIRST error in the

@@ -8,7 +8,7 @@
  * Per game:
  *   1. Fresh SPA load of /coach/play?side=<white|black>.
  *   2. A scripted opening PREFIX steers the student's side into a distinct
- *      opening family (10 plans: e4/d4/c4/Nf3/f4 systems as White; Sicilian/
+ *      opening family (10 plans: b3/d4/c4/Nf3/f4 systems as White; Sicilian/
  *      Caro-Kann/French/Modern/Scandinavian replies as Black).
  *   3. After the prefix, a deterministic greedy policy (mate > best capture >
  *      check > development) plays the student's moves until chess.js says the
@@ -76,8 +76,18 @@ const isNoise = (t) => NOISE.some((re) => re.test(t));
 // script the student's first moves outright; Black plans pick the first
 // LEGAL preference each ply (the coach owns move 1), which still forces a
 // distinct family (Sicilian vs Caro vs French vs Modern vs Scandinavian).
+//
+// A WHITE plan can only be trusted to hit a distinct family if that family is
+// named by WHITE's own structure — the coach owns Black's replies, so a plan
+// whose identity needs Black to cooperate (e.g. 1.e4 e5 → Italian) collapses
+// into whatever defense the coach picks. Run 29249281899 proved it: the old
+// `italian-shape` plan played 1.e4, the coach answered ...e6, and the game was
+// (correctly) detected as "French Defense: Knight Variation" — colliding with
+// the Black `french` plan's "French Defense" root → 9 families, not 10. So the
+// White slot is a queen-side SYSTEM (1.b3 Nimzo-Larsen): its root name stays
+// "Nimzo-Larsen Attack" for every Black reply and collides with nothing.
 const PLANS = [
-  { name: 'italian-shape',   side: 'white', prefs: [['e4'], ['Nf3'], ['Bc4'], ['Nc3'], ['O-O']] },
+  { name: 'nimzo-larsen',    side: 'white', prefs: [['b3'], ['Bb2'], ['e3'], ['Nf3', 'Ne2'], ['Be2', 'O-O', 'd3']] },
   { name: 'queens-pawn',     side: 'white', prefs: [['d4'], ['c4', 'Nf3'], ['Nc3', 'Nf3'], ['e3', 'Bf4'], ['Nf3', 'Be2']] },
   { name: 'english',         side: 'white', prefs: [['c4'], ['Nc3'], ['g3'], ['Bg2'], ['Nf3']] },
   { name: 'reti',            side: 'white', prefs: [['Nf3'], ['g3'], ['Bg2'], ['O-O'], ['d3']] },
