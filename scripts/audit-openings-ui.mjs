@@ -197,15 +197,17 @@ async function main() {
       // The Gambits tab BUTTON shares the testid with its content — be specific.
       await page.locator('button[data-testid="tab-gambits"]').click();
       // GambitsTab renders "Loading gambits..." until the DEFERRED SEED
-      // delivers gambit data (~30-60s on a cold context — CLAUDE.md G1 §6).
-      // Wait for the real panel instead of failing on a 3.5s settle.
-      await page.locator('div[data-testid="tab-gambits"]').waitFor({ timeout: 90_000 }).catch(() => {});
+      // delivers gambit data (~30-60s on a cold context — CLAUDE.md G1 §6;
+      // a loaded shared CI runner blew a 90s budget on 2026-07-13 while
+      // every other scenario passed — the seed chain delivers gambits
+      // mid-sequence, so give it the same order of headroom as the seed).
+      await page.locator('div[data-testid="tab-gambits"]').waitFor({ timeout: 180_000 }).catch(() => {});
       await page.waitForTimeout(800);
     },
     SETTLE_SHORT,
     [
       { label: 'gambits panel mounts (div tab-gambits)',
-        fn: async () => (await countSel('div[data-testid="tab-gambits"]')) > 0 },
+        fn: () => waitUntil(async () => (await countSel('div[data-testid="tab-gambits"]')) > 0, 30_000) },
     ],
   );
 
