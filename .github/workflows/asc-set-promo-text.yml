@@ -1,0 +1,30 @@
+name: Set App Store promotional text
+
+# Sets the App Store "Promotional Text" (the developer note atop the
+# description) via the ASC API. Editable anytime, no new build, no review —
+# live within minutes. Dispatch with the text; a default is provided.
+
+on:
+  workflow_dispatch:
+    inputs:
+      promo_text:
+        description: 'Promotional text (<=170 chars)'
+        type: string
+        required: true
+        default: "A note from the solo developer: I've packed in as much value as I possibly could. Found an issue? Tap Feedback in the app, and I'll aim to resolve it within a week."
+
+jobs:
+  promo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Set promotional text
+        env:
+          ASC_KEY_P8: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          PROMO_TEXT: ${{ inputs.promo_text }}
+        run: node scripts/ci/asc-set-promo-text.mjs
