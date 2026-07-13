@@ -49,6 +49,8 @@ const SECRET = process.env.AUDIT_STREAM_SECRET ?? '';
 const STREAM_URL = `${BASE_URL}/api/audit-stream`;
 const HEADED = process.env.AUDIT_SMOKE_HEADED === '1';
 const GAMES = Math.max(1, Number(process.env.GAMES) || 10);
+// PLAN_FILTER=sicilian,caro-kann scopes the run to named plans (debug aid).
+const PLAN_FILTER = (process.env.PLAN_FILTER || '').split(',').map((s) => s.trim()).filter(Boolean);
 const PLY_CAP = Math.max(40, Number(process.env.PLY_CAP) || 220);
 const COACH_REPLY_TIMEOUT_MS = 30_000;
 const stamp = new Date().toISOString().replace(/[:.]/g, '-');
@@ -184,9 +186,9 @@ async function main() {
   }
 
   /** Wait for a NEW coach move-committed checkpoint after `sinceTs`. */
-  async function waitCoachReply(sinceTs) {
+  async function waitCoachReply(sinceTs, timeoutMs = COACH_REPLY_TIMEOUT_MS) {
     const t0 = Date.now();
-    while (Date.now() - t0 < COACH_REPLY_TIMEOUT_MS) {
+    while (Date.now() - t0 < timeoutMs) {
       await answerBlunderCard(); // card blocks the coach's reply until answered
       const entries = await dumpAudit();
       const hits = entries.filter((e) =>
@@ -331,11 +333,19 @@ async function main() {
   const results = [];
 
   for (let g = 0; g < GAMES; g++) {
-    const plan = PLANS[g % PLANS.length];
+    const activePlans = PLAN_FILTER.length ? PLANS.filter((p) => PLAN_FILTER.includes(p.name)) : PLANS;
+    const plan = activePlans[g % activePlans.length];
     const tag = `game-${g + 1}-${plan.name}`;
     console.log(`\n[full-games] ── ${tag} (side=${plan.side}) ──`);
     const errsBefore = pageErrors.length;
     const consBefore = consoleErrors.length;
+
+    // Capture the game's epoch BEFORE navigating: as Black the coach plays
+    // its first move within ~1-2s of mount (fastpath), long before the
+    // overlay-clearing + board-wait settle — capturing the epoch after the
+    // settle filtered that checkpoint out and read as "coach never moved"
+    // (the 2026-07-13 prod run failed all 5 black games exactly this way).
+    const gameStartTs = Date.now();
 
     await page.goto(`${BASE_URL}/coach/play?side=${plan.side}`, { waitUntil: 'domcontentloaded', timeout: 60_000 });
     await page.waitForTimeout(4000);
@@ -349,18 +359,18 @@ async function main() {
     }
 
     const chess = new Chess();
-    const gameStartTs = Date.now();
     const blundersBefore = blunderCards;
     let lastTs = gameStartTs;
     let studentPly = 0;
     let terminal = null; // 'natural' | 'capResign' | error string
     let stalled = 0;
 
-    // As Black the coach moves first — pick up its opening move.
+    // As Black the coach moves first — pick up its opening move. sinceTs =
+    // the PRE-NAVIGATION epoch (older entries belong to previous games; the
+    // coach's ~1-2s fastpath first move lands after it). 90s budget: the
+    // run's first game pays Stockfish WASM boot on a cold shared runner.
     if (plan.side === 'black') {
-      // sinceTs = game start — the Dexie audit log persists across games,
-      // so 0 here would match a PREVIOUS game's checkpoints.
-      const first = await waitCoachReply(gameStartTs);
+      const first = await waitCoachReply(gameStartTs, 90_000);
       if (first?.san) { try { chess.move(first.san); lastTs = first.ts; } catch { /* fen fallback below */ } }
       if (first?.fen && chess.fen() !== first.fen) { try { chess.load(first.fen); } catch { /* keep mirror */ } }
       if (!first) { results.push({ tag, plan: plan.name, side: plan.side, error: 'coach never made the first move' }); continue; }
@@ -379,7 +389,10 @@ async function main() {
 
       if (chess.isGameOver()) { terminal = 'natural'; break; }
 
-      const reply = await waitCoachReply(lastTs);
+      // First reply of a game gets the long budget — the run's first game
+      // pays Stockfish WASM boot/compile on a cold runner (2026-07-13 prod:
+      // game 1 stall-resigned at ply 2 because two 30s waits blew past it).
+      const reply = await waitCoachReply(lastTs, studentPly <= 1 ? 90_000 : COACH_REPLY_TIMEOUT_MS);
       if (!reply?.san) {
         stalled++;
         // undo the mirror move if the board never actually took it? Verify
@@ -463,7 +476,10 @@ async function main() {
   const completed = results.filter((r) => !r.error);
   if (completed.length < GAMES) failures.push(`${GAMES - completed.length} game(s) never completed: ${results.filter((r) => r.error).map((r) => `${r.tag}(${r.error})`).join(', ')}`);
   for (const r of completed) {
-    if (!r.review?.mounted) failures.push(`${r.tag}: review walk never mounted`);
+    // A sub-persist-floor stall game (< 6 plies) has no analysis to walk —
+    // its walk prep never produces segments, so only require the walk for
+    // games with a real move history.
+    if (!r.review?.mounted && (r.plies ?? 0) >= 6) failures.push(`${r.tag}: review walk never mounted`);
     if ((r.plies ?? 0) >= 6 && r.coachGamesInDb === 0) failures.push(`${r.tag}: finished game not persisted to Dexie`);
     for (const e of r.pageErrors ?? []) failures.push(`${r.tag}: pageerror: ${e}`);
     for (const e of r.consoleErrors ?? []) failures.push(`${r.tag}: console.error: ${e}`);

@@ -196,9 +196,15 @@ async function main() {
   // surfaced within the budget — this aligns the audit with how a
   // real user would experience a slow chunk (browser refresh).
   await record('kid-mode', async () => {
+    // Anchor on CONTENT (journey-card), not just the page shell: the
+    // 2026-07-13 prod-runner run saw the shell mount and the cards still
+    // absent at check time (all 5 "not-visible"), while the very next
+    // scenario's fresh nav clicked those exact cards fine — a slow-chunk /
+    // slow-render window a real user survives with a refresh.
     const tryLoad = async () => {
       await page.goto(`${BASE_URL}/kid`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
       await page.locator('[data-testid="kid-mode-page"]').waitFor({ timeout: 45000 });
+      await page.locator('[data-testid="journey-card"]').waitFor({ timeout: 30000 });
     };
     try {
       await tryLoad();
