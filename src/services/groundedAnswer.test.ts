@@ -400,6 +400,18 @@ describe('assembleTacticsProfileAnswer — Wave 1 (+ drill suggestion)', () => {
     expect(assembleTacticsProfileAnswer({ ...base, found: 0, missed: 0 })).toBeNull();
     expect(assembleTacticsProfileAnswer({ ...base, totalGames: 0 })).toBeNull();
   });
+  it('does NOT claim "100% awareness" or contradict itself when nothing was missed (David 2026-07-13)', () => {
+    // missed === 0 ⟹ awarenessRate degenerates to 100. The old copy read
+    // "tactical awareness is 100% … you miss 0. Keep drilling to lift your
+    // awareness rate" — a fake stat + self-contradiction. Assert the new copy.
+    const a = assembleTacticsProfileAnswer({
+      ...base, awarenessRate: 100, found: 1722, missed: 0, missedByType: [], worstPhase: null,
+    });
+    expect(a!.facts).not.toMatch(/100%/);
+    expect(a!.facts).not.toMatch(/lift your awareness rate/);
+    expect(a!.facts).toMatch(/don't see a missed tactical shot/);
+    expect(a!.facts).toMatch(/1722 sharp tactical moves/);
+  });
 });
 
 describe('assemblePhaseProfileAnswer — Wave 1 (+ focus suggestion)', () => {

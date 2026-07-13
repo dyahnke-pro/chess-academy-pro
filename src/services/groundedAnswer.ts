@@ -2034,6 +2034,19 @@ export interface TacticsProfileLike {
 export function assembleTacticsProfileAnswer(t: TacticsProfileLike): GroundedAnswer | null {
   if (t.totalGames <= 0 || (t.found + t.missed) <= 0) return null;
   const top = t.missedByType.find((x) => x.type && x.count > 0) ?? null;
+
+  // No missed tactics in the analyzed games. The awareness-RATE framing is
+  // degenerate here: missed === 0 ⟹ rate is a vacuous 100%, and "lift your
+  // awareness rate" contradicts itself (there is no gap to lift). "found" also
+  // counts every brilliant/great move, so trumpeting "100% tactical awareness"
+  // for a club player reads as a fake stat (David's screenshot, 2026-07-13).
+  // Report the clean sheet honestly WITHOUT the 100% claim, and point forward.
+  if (t.missed === 0) {
+    const lead = `In your analyzed games I don't see a missed tactical shot — and ${t.found} sharp tactical move${t.found === 1 ? '' : 's'} you did find.`;
+    const suggest = ' Keep drilling mixed tactics — step up the difficulty to keep finding them under pressure.';
+    return { facts: lead + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+  }
+
   const lead = `Your tactical awareness is ${t.awarenessRate}% — you spot ${t.found} tactic${t.found === 1 ? '' : 's'} and miss ${t.missed}.`;
   const byType = top
     ? ` The motif you miss most is the ${top.type} (${top.count} time${top.count === 1 ? '' : 's'}).`

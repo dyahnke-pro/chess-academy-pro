@@ -418,7 +418,10 @@ async function buildTacticsBlock(): Promise<string | null> {
     const t = await withTimeout(getTacticInsights(), FETCH_TIMEOUT_MS);
     if (!t || t.totalGames === 0) return null;
     const lines: string[] = [
-      `Awareness rate (found vs missed tactics): ${Math.round(t.awarenessRate * 100)}% (${t.foundVsMissed.found} found / ${t.foundVsMissed.missed} missed)`,
+      // awarenessRate is ALREADY a 0-100 percentage (getTacticInsights rounds
+      // found/(found+missed)*100) — do NOT multiply by 100 again (that shipped
+      // "10000%" into the coach context; David's screenshot, 2026-07-13).
+      `Awareness rate (found vs missed tactics): ${t.awarenessRate}% (${t.foundVsMissed.found} found / ${t.foundVsMissed.missed} missed)`,
       `Per-game averages: ${t.avgBrilliantsPerGame.toFixed(2)} brilliants, ${t.avgGreatPerGame.toFixed(2)} great moves`,
     ];
     if (t.tacticsByType.length > 0) {
