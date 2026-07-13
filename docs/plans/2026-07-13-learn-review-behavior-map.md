@@ -294,3 +294,43 @@ instruments: `audit-coach-teach-functional.mjs`, `audit-coach-teach-loop.mjs`,
 picker → reveal → bucket), find-the-shot / rewind / turning-point cards, explore/show-me,
 engine-lines, stage quiz/drill/punish, line-picker & fuzzy pickers, dictated coach-move.
 Run localhost (Chromium can't reach prod here) → fix breaks → CI leg vs prod.
+
+---
+
+## AUDIT RESULTS (2026-07-13, localhost — Chromium can't reach prod here)
+
+### Learn — functional coverage grid (`audit-coach-teach-functional.mjs`)
+**32/32 behaviors reached + passed, 0 console/page errors.** Covers: picker mount +
+action chips; teach-verb routing; returning-visitor chooser; walkthrough
+start/narrate/skip/fork/leaf; leaf→continue-learning→stage-menu; quiz (+answer),
+drill (+board move), punish, findMove, play→/coach/play; fork-auto-advance;
+bare-name routing; fuzzy ambiguous-picker / autoaccept / nomatch→brain;
+qa-positional (brain); player-game lookup; middlegame-plan intent; control
+new/stop/resume; auto-pause-on-question; forget-intent; line-picker surface +
+variation click; FACE-mode toggle; /clearcache.
+
+### Learn — "why did you play that?" faucet (`audit-coach-teach-faucet.mjs`) — NEW
+**PASS.** Drove a live slip (Ba6 hanging the bishop, reconstructed from the DOM FEN):
+- probe = exactly **"Why'd you play that?"** (clean neutral, zero board facts)
+- deterministic reason picker (develop / defend / saw-a-tactic / natural / Type / Hint)
+- severity chip **BLUNDER**; grounded reveal; `misconception-captured` bucket write; 0 errors.
+Confirms the Danya diagnostic contract (G0 + the 2026-07-06 voice law) works E2E.
+
+### Post-Game Review — covered by `audit-coach-full-games.mjs` (CI, vs prod)
+The 10-game full-game standard drives review per game: skip-to-review, summary card,
+start-walk, ply-by-ply walk, find-the-shot (hint→reveal→continue), blunder rewind
+(decline), turning-point (pick→done), persistence to Dexie. Blunder-interception
+count proves the slip detector fires E2E.
+
+### Coverage gaps still to drive (next passes)
+- Review EXTRAS not in the full-game walk: explore/show-me, engine-lines toggle,
+  Ask panel (board-tools-locked), narration toggle, missed-tactics list, practice-in-chat.
+- Learn behaviors not yet in the functional grid: dictated coach-move ("play d4"),
+  settings-as-action ("set narration to brief"), training-aid routing ("drill tactics"),
+  more Q&A classes (traps/mistakes/stats), guided-find-the-move, threat-check.
+- The ADVERSARIAL loop (`audit-coach-teach-loop.mjs`) — messy input, escalate, break it.
+
+### DOM-FEN helper
+The faucet audit reconstructs the live board FEN from `[data-square] > [data-piece]`
+(react-chessboard renders wP/bN/… data-piece attrs) — reusable for any audit that
+needs the exact board to compute a specific move (slip, tactic, best-move).
