@@ -1,3 +1,33 @@
+# PLAN — LEARN + POST-GAME REVIEW behavior map & full-behavior audit (2026-07-13, active)
+
+**David's ask:** map the EXACT coaching behavior of the entire Learn (`/coach/teach`)
+AND Post-Game Review sections, then run an audit against ALL behaviors.
+
+## Approach (adversarial-audit doctrine, G7 + 2026-06-12)
+1. **MAP** — exhaustive per-behavior inventory (ID · trigger · file:line · expected ·
+   testid · audit assertion). Fan-out mappers:
+   - Learn intent-routing layer (handleSubmit branches, resolution tiers, Q&A classes).
+   - Learn walkthrough runtime + voice/narration + "why did you play that?" faucet +
+     guided-find-the-move.
+   - Post-Game Review (summary card, walk, find-the-shot / blunder-rewind / turning-
+     point cards, mistake-puzzle+weakness pipeline, persistence).
+2. **COVERAGE GRID** — every mapped behavior → reached? (which assertion) → pass/fail.
+   A silent no-op is a FAIL, not a pass (2026-06-12). Untested = ❌ NOT TESTED.
+3. **AUDIT** — functional click-through (drive real affordances) + adversarial loop
+   (messy human input, escalate, break it). Capture every break with exact input +
+   React key/stack. Real-bug → fix code + sweep + confirm; artifact → prove + pace.
+   MET only on 3 consecutive break-free passes, each harder.
+
+## Status
+- [~] MAP — 3 mappers dispatched (Learn-routing, Learn-runtime/faucet, Review).
+- [ ] Synthesize map → `docs/plans/2026-07-13-learn-review-behavior-map.md`.
+- [ ] Build/extend audit scripts (extend audit-coach-teach-functional/loop +
+      audit-coach-full-games review leg; add review-specific coverage).
+- [ ] Run localhost (Chromium can't reach prod here — ERR_CONNECTION_RESET), fix
+      breaks, then the CI leg against prod.
+
+---
+
 # PLAN — LOOP AUDIT: full-game coach standard (2026-07-13, active)
 
 **Instrument:** `scripts/audit-coach-full-games.mjs` via
