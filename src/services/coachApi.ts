@@ -69,7 +69,8 @@ import { getStrongestOpenings, getMostPlayedOpenings, getWeakestOpenings, getOpe
 import { getWeakSpotsForOpening } from './weakSpotService';
 import type { OpeningRecord } from '../types';
 import { getOverviewInsights, getMistakeInsights, getTacticInsights, getOpeningInsights, getTimeTroubleProfile, getLastGameResult } from './gameInsightsService';
-import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleTrendAnswer, assembleTimeTroubleAnswer, assembleLastGameAnswer } from './groundedAnswer';
+import { getMisconceptionProfile } from './misconceptionService';
+import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleErrorsBySituationAnswer, assembleMisconceptionsAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleTrendAnswer, assembleTimeTroubleAnswer, assembleLastGameAnswer } from './groundedAnswer';
 import { computeLastMoveRating } from './moveRating';
 import { getDueCount, getEnrolledOpenings, getSrsDueOpenings, getTotalEnrolled } from './srsOpeningService';
 import { criticalMomentsAccuracy, streaks, timeControlPerformance, comebackWins, winShapeStats, colorProficiencyMismatch, personalRecords, tacticTransferGap, recordVsOpening, recordVsOpponent, phaseStrengthOverTime } from './analyticsService';
@@ -1348,6 +1349,8 @@ export interface MasterGroundingOptions {
   /** Wave 3 — accuracy/move-quality, consistency/time-control, converting. No board. */
   accuracyQuestion?: boolean;     // getOverviewInsights → assembleAccuracyAnswer
   consistencyQuestion?: boolean;  // streaks + timeControlPerformance → assembleConsistencyAnswer
+  errorsBySituationQuestion?: boolean; // getMistakeInsights.errorsBySituation → assembleErrorsBySituationAnswer
+  misconceptionsQuestion?: boolean;    // getMisconceptionProfile → assembleMisconceptionsAnswer
   convertingQuestion?: boolean;   // thrownWins + comebackWins + winShape → assembleConvertingAnswer
   /** Wave 4 — colour, records, puzzle stats, tactic transfer gap. No board. */
   colorQuestion?: boolean;        // getOverviewInsights + colorProficiencyMismatch → assembleColorAnswer
@@ -2543,6 +2546,8 @@ export async function getCoachChatResponse(
       grounding.repertoireGapQuestion === true ||
       grounding.accuracyQuestion === true ||
       grounding.consistencyQuestion === true ||
+      grounding.errorsBySituationQuestion === true ||
+      grounding.misconceptionsQuestion === true ||
       grounding.convertingQuestion === true ||
       grounding.colorQuestion === true ||
       grounding.recordsQuestion === true ||
@@ -2906,6 +2911,8 @@ export async function getCoachChatResponse(
               avgCpLoss: mi.avgCpLoss,
               worstPhase: worstPhase ? { phase: worstPhase.phase, errors: worstPhase.errors } : null,
               thrownWins: mi.thrownWins,
+              missedWins: mi.missedWins,
+              lateGameCollapses: mi.lateGameCollapses,
               costliest: top ? { san: top.san, cpLoss: top.cpLoss, opponentName: top.opponentName, openingName: top.openingName } : null,
             });
             if (answer) {
@@ -2923,6 +2930,56 @@ export async function getCoachChatResponse(
           } catch { /* fall through */ }
         }
 
+        // ── ERRORS BY SITUATION — "do I blunder more when winning / losing?"
+        // Voiced from getMistakeInsights.errorsBySituation (Weakness tab →
+        // Mistakes → Errors by Situation). Runs before the generic progress
+        // path so the specific split gets voiced (David 2026-07-13).
+        if (grounding.errorsBySituationQuestion) {
+          try {
+            const mi = await getMistakeInsights();
+            const answer = assembleErrorsBySituationAnswer(mi.errorsBySituation);
+            if (answer) {
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'errors-by-situation', preferRaw: true });
+              if (voiced) {
+                lastCoachActionOffer = [{ type: 'puzzle_theme', id: 'adaptive' }];
+                return voiced;
+              }
+            }
+          } catch { /* fall through */ }
+        }
+
+        // ── MISCONCEPTIONS — "what thinking errors do I make, am I still making
+        // them?" Voiced from getMisconceptionProfile (Weakness tab →
+        // Misconceptions): the most-persistent tagged misconception + recency +
+        // active/resting (David's "old error vs still making it"). Runs before
+        // the generic progress path so the misconception detail wins.
+        if (grounding.misconceptionsQuestion) {
+          try {
+            const profile = await getMisconceptionProfile();
+            const top = profile[0] ?? null;
+            const now = Date.now();
+            const answer = assembleMisconceptionsAnswer({
+              top: top
+                ? {
+                    label: top.label,
+                    bucket: top.bucket,
+                    total: top.total,
+                    openCount: top.openCount,
+                    lastSeenDaysAgo: top.lastSeenAt ? Math.floor((now - top.lastSeenAt) / 86_400_000) : null,
+                  }
+                : null,
+              distinctTags: profile.length,
+            });
+            if (answer) {
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'misconceptions', preferRaw: true });
+              if (voiced) {
+                lastCoachActionOffer = [{ type: 'route', id: '/weaknesses' }];
+                return voiced;
+              }
+            }
+          } catch { /* fall through */ }
+        }
+
         // ── TACTICS PROFILE (Wave 1) — "how are my tactics / what do I miss?"
         // Voiced from getTacticInsights. Distinct from the live-board tactic scan.
         if (grounding.tacticsProfileQuestion) {
@@ -2936,6 +2993,9 @@ export async function getCoachChatResponse(
               missed: ti.foundVsMissed.missed,
               missedByType: ti.missedByType.map((x) => ({ type: x.type, count: x.count })),
               worstPhase: worstPhase ? { phase: worstPhase.phase, count: worstPhase.count } : null,
+              topMissAvgCost: ti.missedByType[0]?.avgCost,
+              worstMiss: ti.worstMisses[0] ? { san: ti.worstMisses[0].san, opponentName: ti.worstMisses[0].opponentName } : null,
+              bestSequence: ti.bestSequences[0] ? { san: ti.bestSequences[0].san, opponentName: ti.bestSequences[0].opponentName } : null,
             });
             if (answer) {
               const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'tactics-profile', preferRaw: true });

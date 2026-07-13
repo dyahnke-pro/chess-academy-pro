@@ -1371,6 +1371,40 @@ export function isConsistencyQuestion(ask: string | undefined): boolean {
   return !!ask && CONSISTENCY_QUESTION_RE.test(ask);
 }
 
+/** "do I blunder more when winning / losing?" → assembleErrorsBySituationAnswer.
+ *  Voices the winning/equal/losing split of the student's serious errors
+ *  (Weakness tab → Mistakes → Errors by Situation), which had no voice before
+ *  (David 2026-07-13). Requires an error verb tied to a game-state word so it
+ *  doesn't swallow generic "when do I play" asks. */
+const ERRORS_BY_SITUATION_RE = anyOf([
+  String.raw`\b(?:do|when\s+do)\s+i\s+(?:blunder|choke|collapse|crack|mess\s+up|fall\s+apart|go\s+wrong|make\s+(?:more\s+)?(?:mistakes?|errors?|blunders?))\b[^?]*\b(?:winning|ahead|in\s+front|equal|even|level|losing|behind|worse|when\s+i'?m\s+up|under\s+pressure)\b`,
+  String.raw`\b(?:blunders?|mistakes?|errors?)\s+(?:more\s+)?(?:when|while)\s+(?:i'?m\s+|i\s+am\s+)?(?:winning|ahead|equal|even|level|losing|behind|worse|up|down)\b`,
+  String.raw`\b(?:when|while)\s+(?:i'?m\s+|i\s+am\s+)?(?:winning|ahead|losing|behind|worse|equal)\b[^?]*\b(?:blunder|mistakes?|errors?|go\s+wrong|fall\s+apart|throw)\b`,
+  String.raw`\bdo\s+i\s+(?:blunder|choke|collapse|crack)\s+(?:more\s+)?(?:when|while|under)\b`,
+]);
+export function isErrorsBySituationQuestion(ask: string | undefined): boolean {
+  return !!ask && ERRORS_BY_SITUATION_RE.test(ask);
+}
+
+/** "what thinking errors / misconceptions do I make — am I still making them?"
+ *  → assembleMisconceptionsAnswer (Weakness tab → Misconceptions). Voices the
+ *  most-persistent tagged misconception + recency + active/resting, which the
+ *  generic weakness path only partially overlapped (David 2026-07-13). Kept
+ *  tight to conceptual/"still making"/"stuck on" phrasing so it doesn't steal
+ *  the generic "my weaknesses" or "my mistakes" asks. */
+const MISCONCEPTIONS_RE = anyOf([
+  String.raw`\bmisconceptions?\b`,
+  String.raw`\b(?:thinking|mental|conceptual)\s+(?:errors?|mistakes?|flaws?|blind\s+spots?|gaps?)\b`,
+  String.raw`\bwhat\s+do\s+i\s+(?:keep\s+)?(?:get|getting)\s+wrong\s+(?:conceptually|in\s+my\s+(?:head|thinking))\b`,
+  String.raw`\b(?:am\s+i|do\s+i)\s+still\s+(?:making|make|getting\s+wrong|struggling\s+with|fall(?:ing)?\s+for|repeating|doing)\b`,
+  String.raw`\bwhat\s+(?:am\s+i|do\s+i\s+stay)\s+(?:still\s+)?stuck\s+on\b`,
+  String.raw`\bwhat\s+(?:mistakes?|errors?)\s+do\s+i\s+keep\s+(?:repeating|remaking|making\s+over)\b`,
+  String.raw`\b(?:is\s+that|are\s+those)\s+(?:an?\s+)?old\s+(?:error|mistake|habit)s?\b`,
+]);
+export function isMisconceptionsQuestion(ask: string | undefined): boolean {
+  return !!ask && MISCONCEPTIONS_RE.test(ask);
+}
+
 /** "do I convert winning positions / do I come back / how do I win?" →
  *  assembleConvertingAnswer (thrownWins + comebackWins + winShape). */
 const CONVERTING_QUESTION_RE = anyOf([
@@ -1817,13 +1851,19 @@ export function buildQuestionGrounding(
     openingTrapsQuestion: isOpeningTrapsQuestion(a),
     openingTrapsSystemAsk: opensTrapsSystemAsk(a),
     reviewDueQuestion: isReviewDueQuestion(a),
-    mistakesQuestion: isMistakesQuestion(a),
+    // The generic mistakes answer yields to the two more-specific weakness
+    // asks — "when do I blunder (winning/losing)" and "what thinking errors do
+    // I keep making" — so those reach their own blocks instead of the generic
+    // error breakdown (David 2026-07-13).
+    mistakesQuestion: isMistakesQuestion(a) && !isErrorsBySituationQuestion(a) && !isMisconceptionsQuestion(a),
     tacticsProfileQuestion: isTacticsProfileQuestion(a),
     phaseQuestion: isPhaseQuestion(a),
     repertoireGapQuestion: isRepertoireGapQuestion(a),
     repertoireGapKind: repertoireGapKind(a),
     accuracyQuestion: isAccuracyQuestion(a),
     consistencyQuestion: isConsistencyQuestion(a),
+    errorsBySituationQuestion: isErrorsBySituationQuestion(a),
+    misconceptionsQuestion: isMisconceptionsQuestion(a),
     convertingQuestion: isConvertingQuestion(a),
     colorQuestion: isColorQuestion(a),
     recordsQuestion: isRecordsQuestion(a),

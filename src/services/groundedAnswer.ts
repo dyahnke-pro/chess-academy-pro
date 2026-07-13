@@ -1983,6 +1983,10 @@ export interface MistakesLike {
   avgCpLoss: number;                 // centipawns lost per game
   worstPhase: { phase: string; errors: number } | null;
   thrownWins: number;
+  /** Winning tactics/moves that were on the board but not played. */
+  missedWins: number;
+  /** Games that fell apart late (multiple errors bunched in the final moves). */
+  lateGameCollapses: number;
   costliest: { san: string; cpLoss: number; opponentName: string; openingName: string | null } | null;
 }
 
@@ -2002,6 +2006,12 @@ export function assembleMistakesAnswer(m: MistakesLike): GroundedAnswer | null {
   const thrown = m.thrownWins > 0
     ? ` You've let ${m.thrownWins} winning position${m.thrownWins === 1 ? '' : 's'} slip.`
     : '';
+  const missed = m.missedWins > 0
+    ? ` And ${m.missedWins} winning shot${m.missedWins === 1 ? '' : 's'} sat on the board that you didn't take.`
+    : '';
+  const collapse = m.lateGameCollapses > 0
+    ? ` ${m.lateGameCollapses} game${m.lateGameCollapses === 1 ? ' collapsed' : 's collapsed'} late — errors bunched in the final moves, which usually means clock or fatigue.`
+    : '';
   const costly = m.costliest && m.costliest.san
     ? ` Your costliest slip was ${m.costliest.san} against ${m.costliest.opponentName || 'an opponent'}, dropping ${pawns(m.costliest.cpLoss)} pawns${m.costliest.openingName ? ` in the ${m.costliest.openingName}` : ''}.`
     : '';
@@ -2011,7 +2021,89 @@ export function assembleMistakesAnswer(m: MistakesLike): GroundedAnswer | null {
     : m.worstPhase && m.worstPhase.errors > 0
       ? ` Focus your training on the ${phaseWord(m.worstPhase.phase)}, and drill your saved mistake puzzles from there.`
       : ' Drill your saved mistake puzzles to turn these into second nature.';
-  return { facts: rate + phase + thrown + costly + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+  return { facts: rate + phase + thrown + missed + collapse + costly + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+}
+
+/** Errors split by how the game stood when they happened. */
+export interface ErrorsBySituationLike {
+  winning: number;
+  equal: number;
+  losing: number;
+}
+
+/**
+ * assembleErrorsBySituationAnswer — "do I blunder more when I'm winning /
+ * losing?" Voices where the student's serious errors concentrate (winning vs
+ * equal vs losing) and coaches to the dominant leak. Computed
+ * (getMistakeInsights.errorsBySituation). Returns null with no errors. G0.
+ */
+export function assembleErrorsBySituationAnswer(e: ErrorsBySituationLike): GroundedAnswer | null {
+  const total = e.winning + e.equal + e.losing;
+  if (total <= 0) return null;
+  const buckets: Array<{ key: 'winning' | 'equal' | 'losing'; n: number }> = [
+    { key: 'winning', n: e.winning },
+    { key: 'equal', n: e.equal },
+    { key: 'losing', n: e.losing },
+  ];
+  buckets.sort((a, b) => b.n - a.n);
+  const top = buckets[0];
+  const pct = Math.round((top.n / total) * 100);
+  const where = top.key === 'winning'
+    ? "when you're already winning"
+    : top.key === 'equal'
+      ? 'in equal, balanced positions'
+      : "when you're already worse";
+  const lead = `Of your ${total} serious error${total === 1 ? '' : 's'}, ${pct}% (${top.n}) come ${where}.`;
+  const coaching = top.key === 'winning'
+    ? " The pattern is relaxing once you're ahead — keep calculating your opponent's tricks when you're winning, because that's where you leak the most points."
+    : top.key === 'equal'
+      ? " The errors cluster in tense, level positions — slow down at the critical moment and check every opponent threat before you commit."
+      : " You crack most when already under pressure — practice defending worse positions patiently instead of lashing out.";
+  return { facts: lead + coaching, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+}
+
+/** The student's most persistent misconception, from the tagged bucket. */
+export interface MisconceptionsLike {
+  top: {
+    label: string;
+    bucket: string;
+    total: number;
+    openCount: number;
+    /** Whole days since the last instance; null if unknown. */
+    lastSeenDaysAgo: number | null;
+  } | null;
+  distinctTags: number;
+}
+
+/**
+ * assembleMisconceptionsAnswer — "what thinking errors / misconceptions do I
+ * make — am I still making them?" Voices the most-logged misconception, its
+ * bucket, how recently it last surfaced, and whether it's still an active
+ * pattern (due to resurface) or resting (spaced out) — David's "old error vs
+ * still making it" (2026-06-19). Computed (getMisconceptionProfile). Returns
+ * null with no logged misconceptions. G0.
+ */
+export function assembleMisconceptionsAnswer(m: MisconceptionsLike): GroundedAnswer | null {
+  if (!m.top || m.top.total <= 0) return null;
+  const t = m.top;
+  const recency = t.lastSeenDaysAgo === null
+    ? ''
+    : t.lastSeenDaysAgo <= 1
+      ? 'You made it as recently as today'
+      : t.lastSeenDaysAgo <= 7
+        ? `You last made it ${t.lastSeenDaysAgo} day${t.lastSeenDaysAgo === 1 ? '' : 's'} ago`
+        : t.lastSeenDaysAgo <= 45
+          ? `You last made it about ${Math.max(1, Math.round(t.lastSeenDaysAgo / 7))} week${Math.round(t.lastSeenDaysAgo / 7) === 1 ? '' : 's'} ago`
+          : `You last made it about ${Math.round(t.lastSeenDaysAgo / 30)} month${Math.round(t.lastSeenDaysAgo / 30) === 1 ? '' : 's'} ago`;
+  const active = t.openCount > 0
+    ? `${recency ? recency + ', and it is' : 'It is'} still an active pattern — due to resurface in your training now.`
+    : `${recency ? recency + '. ' : ''}It is resting for now — you have been spacing it out well.`;
+  const bucket = t.bucket && t.bucket !== 'uncategorized' ? ` It is a ${t.bucket} misconception.` : '';
+  const lead = `Your most persistent thinking error is "${t.label}" — logged ${t.total} time${t.total === 1 ? '' : 's'}.`;
+  const more = m.distinctTags > 1
+    ? ` You have ${m.distinctTags} distinct misconception patterns tracked; this is the one to fix first.`
+    : '';
+  return { facts: `${lead}${bucket} ${active}${more}`, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
 
 /** The student's tactical profile — a subset of getTacticInsights. */
@@ -2022,6 +2114,12 @@ export interface TacticsProfileLike {
   missed: number;
   missedByType: ReadonlyArray<{ type: string; count: number }>;   // desc by count
   worstPhase: { phase: string; count: number } | null;
+  /** Avg centipawn cost of the most-missed motif (missedByType[0].avgCost). */
+  topMissAvgCost?: number;
+  /** The single costliest missed tactic (worstMisses[0]). */
+  worstMiss?: { san: string; opponentName: string } | null;
+  /** The student's sharpest found combination on record (bestSequences[0]). */
+  bestSequence?: { san: string; opponentName: string } | null;
 }
 
 /**
@@ -2041,23 +2139,33 @@ export function assembleTacticsProfileAnswer(t: TacticsProfileLike): GroundedAns
   // counts every brilliant/great move, so trumpeting "100% tactical awareness"
   // for a club player reads as a fake stat (David's screenshot, 2026-07-13).
   // Report the clean sheet honestly WITHOUT the 100% claim, and point forward.
+  const best = t.bestSequence && t.bestSequence.san
+    ? ` Your sharpest shot on record: ${t.bestSequence.san}${t.bestSequence.opponentName ? ` against ${t.bestSequence.opponentName}` : ''}.`
+    : '';
+
   if (t.missed === 0) {
     const lead = `In your analyzed games I don't see a missed tactical shot — and ${t.found} sharp tactical move${t.found === 1 ? '' : 's'} you did find.`;
     const suggest = ' Keep drilling mixed tactics — step up the difficulty to keep finding them under pressure.';
-    return { facts: lead + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+    return { facts: lead + best + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
   }
 
   const lead = `Your tactical awareness is ${t.awarenessRate}% — you spot ${t.found} tactic${t.found === 1 ? '' : 's'} and miss ${t.missed}.`;
   const byType = top
     ? ` The motif you miss most is the ${top.type} (${top.count} time${top.count === 1 ? '' : 's'}).`
     : '';
+  const cost = top && typeof t.topMissAvgCost === 'number' && t.topMissAvgCost > 0
+    ? ` Those cost about ${pawns(t.topMissAvgCost)} pawns each.`
+    : '';
   const phase = t.worstPhase && t.worstPhase.count > 0
     ? ` Most of those misses come in the ${phaseWord(t.worstPhase.phase)}.`
+    : '';
+  const worst = t.worstMiss && t.worstMiss.san
+    ? ` Your costliest miss was ${t.worstMiss.san}${t.worstMiss.opponentName ? ` against ${t.worstMiss.opponentName}` : ''}.`
     : '';
   const suggest = top
     ? ` Drill ${top.type} puzzles to close that gap.`
     : ' Keep drilling mixed tactics to lift your awareness rate.';
-  return { facts: lead + byType + phase + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+  return { facts: lead + byType + cost + phase + worst + best + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
 
 /** The student's per-phase profile — phaseAccuracy + critical-moment accuracy. */

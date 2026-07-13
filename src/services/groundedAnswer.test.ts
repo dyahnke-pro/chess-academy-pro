@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleTrendAnswer, assembleAppHelpAnswer, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry, assembleAlternativesAnswer } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleErrorsBySituationAnswer, assembleMisconceptionsAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleTrendAnswer, assembleAppHelpAnswer, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry, assembleAlternativesAnswer } from './groundedAnswer';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -396,9 +396,30 @@ describe('assembleTacticsProfileAnswer — Wave 1 (+ drill suggestion)', () => {
     expect(a!.facts).toMatch(/misses come in the middlegame/);
     expect(a!.facts).toMatch(/Drill fork puzzles to close that gap/);
   });
+  it('voices the miss cost, the single worst miss, and the best sequence when provided (David 2026-07-13)', () => {
+    const a = assembleTacticsProfileAnswer({
+      ...base,
+      topMissAvgCost: 180,
+      worstMiss: { san: 'Nxe5', opponentName: 'Rival' },
+      bestSequence: { san: 'Qxh7+', opponentName: 'Victim' },
+    });
+    expect(a!.facts).toMatch(/cost about 1\.8 pawns each/);
+    expect(a!.facts).toMatch(/costliest miss was Nxe5 against Rival/);
+    expect(a!.facts).toMatch(/sharpest shot on record: Qxh7\+ against Victim/);
+  });
   it('returns null when there is no found/missed data', () => {
     expect(assembleTacticsProfileAnswer({ ...base, found: 0, missed: 0 })).toBeNull();
     expect(assembleTacticsProfileAnswer({ ...base, totalGames: 0 })).toBeNull();
+  });
+  it('voices missed wins and late-game collapses when present (David 2026-07-13)', () => {
+    const a = assembleMistakesAnswer({
+      totalGames: 40, blundersPerGame: 1.2, mistakesPerGame: 2.1, avgCpLoss: 90,
+      worstPhase: { phase: 'middlegame', errors: 30 }, thrownWins: 3,
+      missedWins: 5, lateGameCollapses: 4,
+      costliest: { san: 'Qxh7', cpLoss: 620, opponentName: 'Rival', openingName: 'the Sicilian' },
+    });
+    expect(a!.facts).toMatch(/5 winning shots? sat on the board/);
+    expect(a!.facts).toMatch(/4 games collapsed late/);
   });
   it('does NOT claim "100% awareness" or contradict itself when nothing was missed (David 2026-07-13)', () => {
     // missed === 0 ⟹ awarenessRate degenerates to 100. The old copy read
@@ -411,6 +432,49 @@ describe('assembleTacticsProfileAnswer — Wave 1 (+ drill suggestion)', () => {
     expect(a!.facts).not.toMatch(/lift your awareness rate/);
     expect(a!.facts).toMatch(/don't see a missed tactical shot/);
     expect(a!.facts).toMatch(/1722 sharp tactical moves/);
+  });
+});
+
+describe('assembleErrorsBySituationAnswer (David 2026-07-13)', () => {
+  it('names where errors concentrate and coaches the winning-relaxation leak', () => {
+    const a = assembleErrorsBySituationAnswer({ winning: 12, equal: 5, losing: 3 });
+    expect(a!.facts).toMatch(/20 serious errors/);
+    expect(a!.facts).toMatch(/60% \(12\) come when you're already winning/);
+    expect(a!.facts).toMatch(/relaxing once you're ahead/);
+  });
+  it('coaches the losing case differently', () => {
+    const a = assembleErrorsBySituationAnswer({ winning: 1, equal: 2, losing: 9 });
+    expect(a!.facts).toMatch(/when you're already worse/);
+    expect(a!.facts).toMatch(/under pressure/);
+  });
+  it('returns null with no errors', () => {
+    expect(assembleErrorsBySituationAnswer({ winning: 0, equal: 0, losing: 0 })).toBeNull();
+  });
+});
+
+describe('assembleMisconceptionsAnswer (David 2026-07-13)', () => {
+  it('voices the top misconception + bucket + still-active + recency', () => {
+    const a = assembleMisconceptionsAnswer({
+      top: { label: 'hangs a piece to a fork', bucket: 'tactical', total: 14, openCount: 3, lastSeenDaysAgo: 2 },
+      distinctTags: 4,
+    });
+    expect(a!.facts).toMatch(/hangs a piece to a fork/);
+    expect(a!.facts).toMatch(/logged 14 times/);
+    expect(a!.facts).toMatch(/tactical misconception/);
+    expect(a!.facts).toMatch(/last made it 2 days ago/);
+    expect(a!.facts).toMatch(/still an active pattern/);
+    expect(a!.facts).toMatch(/4 distinct misconception patterns/);
+  });
+  it('says resting when nothing is due (old error, not still making it)', () => {
+    const a = assembleMisconceptionsAnswer({
+      top: { label: 'pushes pawns in front of the king', bucket: 'positional', total: 6, openCount: 0, lastSeenDaysAgo: 60 },
+      distinctTags: 1,
+    });
+    expect(a!.facts).toMatch(/about 2 months ago/);
+    expect(a!.facts).toMatch(/resting for now/);
+  });
+  it('returns null with no logged misconceptions', () => {
+    expect(assembleMisconceptionsAnswer({ top: null, distinctTags: 0 })).toBeNull();
   });
 });
 

@@ -27,6 +27,8 @@ import {
   repertoireGapKind,
   isAccuracyQuestion,
   isConsistencyQuestion,
+  isErrorsBySituationQuestion,
+  isMisconceptionsQuestion,
   isConvertingQuestion,
   recordVsTarget,
   isRecordVsQuestion,
@@ -413,6 +415,35 @@ describe('Wave 1 — where-do-I-go-wrong cluster (David 2026-07-04)', () => {
     ])('matches "%s"', (q) => expect(isMistakesQuestion(q)).toBe(true));
     it.each(["what's my rating", 'teach me the Sicilian', 'is there a tactic here', 'what is a fork', 'hi coach'])(
       'does NOT match: %s', (q) => expect(isMistakesQuestion(q)).toBe(false));
+  });
+
+  describe('isErrorsBySituationQuestion (David 2026-07-13)', () => {
+    it.each([
+      "do I blunder more when I'm winning",
+      'do I make more mistakes when ahead',
+      'do I blunder when losing',
+      'when I am winning do I go wrong',
+      'do I choke when under pressure',
+      'do I collapse when winning',
+      'do I make errors while ahead',
+    ])('matches "%s"', (q) => expect(isErrorsBySituationQuestion(q)).toBe(true));
+    it.each(["what's my rating", 'how often do I play', 'teach me the Sicilian', 'hi coach'])(
+      'does NOT match: %s', (q) => expect(isErrorsBySituationQuestion(q)).toBe(false));
+  });
+
+  describe('isMisconceptionsQuestion (David 2026-07-13)', () => {
+    it.each([
+      'what misconceptions do I have',
+      'what thinking errors do I make',
+      'what are my mental mistakes',
+      'am I still making that mistake',
+      'do I still fall for the same trap',
+      'what am I stuck on',
+      'what mistakes do I keep repeating',
+      'is that an old error',
+    ])('matches "%s"', (q) => expect(isMisconceptionsQuestion(q)).toBe(true));
+    it.each(["what's my rating", 'teach me the Sicilian', 'what is a fork', 'hi coach'])(
+      'does NOT match: %s', (q) => expect(isMisconceptionsQuestion(q)).toBe(false));
   });
 
   describe('isTacticsProfileQuestion (guarded vs live-board tactics)', () => {
