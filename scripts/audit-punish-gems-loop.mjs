@@ -739,7 +739,17 @@ async function continuityPreflight() {
     } catch (e) { console.log(`[loop] listener sidecar unavailable: ${String(e).slice(0, 80)}`); }
   }
   const exe = await resolveChromiumExecutable();
-  const browser = await chromium.launch({ executablePath: exe, headless: true, args: sandboxLaunchArgs() });
+  const browser = await chromium.launch({
+    executablePath: exe,
+    headless: true,
+    args: [
+      ...sandboxLaunchArgs(),
+      // Allow the prod-origin page to POST narration events to the local
+      // listener sidecar (Chrome Private Network Access otherwise blocks
+      // public→127.0.0.1 and logs a CORS error every pass — 2026-07-13).
+      '--disable-features=BlockInsecurePrivateNetworkRequests,PrivateNetworkAccessSendPreflights,PrivateNetworkAccessRespectPreflightResults',
+    ],
+  });
   const report = { url: URL, ts: new Date().toISOString(), passes: [] };
   let clean = 0;
   let playSkipped = false; // any pass that SKIPPED the actual gem play (write-stall)

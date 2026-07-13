@@ -1,0 +1,79 @@
+name: Punish-gems loop audit (prod, sharded)
+
+# The LOOP AUDIT (David 2026-06-01: "audit" = the punish-gems loop contract —
+# 8 consecutive clean passes since 2026-06-10). It CANNOT run in the Claude
+# Code sandbox (openings-store IndexedDB write-stall, CLAUDE.md G1 #4); a
+# GitHub runner has real Chromium with no write-stall.
+#
+# OWN WORKFLOW + OWN CONCURRENCY GROUP on purpose: the contract is a
+# multi-hour sweep. Real pace data (2026-07-13 run 29213347166): ~4.3 min
+# per opening per pass at shallow depth, more at deep passes — living in the
+# push-triggered post-deploy workflow meant every main push cancelled it
+# (three runs died that way on 2026-07-12/13). Here it runs nightly + on
+# dispatch and nothing cancels it but a newer loop dispatch.
+#
+# SHARDING: AUDIT_SHARD=i/n slices the sorted opening union deterministically
+# across parallel jobs; together the shards cover every opening × every pass,
+# contract semantics unchanged. 24 shards ≈ 4 openings each ≈ ~2.5-3.5 h per
+# shard at the measured pace (timeout 300 for headroom). GitHub runs ~20
+# jobs concurrently; the rest queue.
+
+on:
+  workflow_dispatch:
+    inputs:
+      audit_opening:
+        description: 'Scope to one opening id or comma list (blank = full sweep; lands on its shard, others exit clean).'
+        required: false
+        default: ''
+  schedule:
+    # Nightly at 07:31 UTC (~2:31am Chicago) — finishes before the workday.
+    - cron: '31 7 * * *'
+
+concurrency:
+  group: loop-audit
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  loop-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+    env:
+      PROD_URL: https://chess-academy-pro.vercel.app
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund --prefer-offline
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Resolve short SHA
+        id: sha
+        run: echo "short=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+      - name: Run the punish-gems loop audit (8-pass contract) against prod
+        env:
+          AUDIT_SMOKE_URL: https://chess-academy-pro.vercel.app
+          AUDIT_OPENING: ${{ github.event.inputs.audit_opening }}
+          # Shard filter runs after the scope filter — a dispatched
+          # single-opening run lands on exactly one shard, the rest exit clean.
+          AUDIT_SHARD: ${{ format('{0}/24', matrix.shard) }}
+        run: node scripts/audit-punish-gems-loop.mjs
+      - name: Upload loop-audit reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: loop-audit-${{ steps.sha.outputs.short }}-shard${{ matrix.shard }}
+          path: audit-reports/
+          if-no-files-found: warn
+          retention-days: 14

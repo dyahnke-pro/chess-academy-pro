@@ -43,6 +43,12 @@ export async function startAuditListener({ port = 0 } = {}) {
       res.setHeader('Access-Control-Allow-Origin', '*');
       res.setHeader('Access-Control-Allow-Headers', 'Content-Type,x-audit-secret');
       res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+      // Chrome Private Network Access: a page served from a PUBLIC origin
+      // (the prod URL) posting to 127.0.0.1 sends a PNA preflight and
+      // blocks without this header (2026-07-13 shard run: every pass
+      // logged a listener CORS console error, poisoning the clean streak).
+      // Belt-and-suspenders with the --disable-features PNA launch flag.
+      res.setHeader('Access-Control-Allow-Private-Network', 'true');
 
       if (req.method === 'OPTIONS') {
         res.writeHead(204);
