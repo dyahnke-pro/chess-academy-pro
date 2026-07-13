@@ -1,0 +1,61 @@
+name: Full-game coach audit (prod)
+
+# Plays FULL games on /coach/play against live prod — each steered into a
+# DIFFERENT opening — to a natural end, then drives the post-game review
+# walk (turning point / blunder rewind / find-the-shot) for every game and
+# verifies persistence + zero errors (David 2026-07-13: "It needs to play
+# at least 10 games, all with different openings").
+#
+# Separate workflow file ON PURPOSE: it has its own concurrency group, so
+# dispatching it never cancels an in-flight post-deploy-audit run (the
+# sharded punish-gems loop), and vice versa.
+
+on:
+  workflow_dispatch:
+    inputs:
+      games:
+        description: 'Number of full games to play (default 10)'
+        required: false
+        default: '10'
+  schedule:
+    # Nightly at 09:17 UTC (~4:17am Chicago) — off-peak full-game sweep.
+    - cron: '17 9 * * *'
+
+concurrency:
+  group: full-game-audit
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  full-games:
+    runs-on: ubuntu-latest
+    timeout-minutes: 170
+    env:
+      PROD_URL: https://chess-academy-pro.vercel.app
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund --prefer-offline
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Play full games + post-game reviews against prod
+        env:
+          AUDIT_SMOKE_URL: https://chess-academy-pro.vercel.app
+          GAMES: ${{ github.event.inputs.games || '10' }}
+        run: node scripts/audit-coach-full-games.mjs
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: full-game-audit-${{ github.run_id }}
+          path: audit-reports/
+          if-no-files-found: warn
+          retention-days: 14
