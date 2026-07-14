@@ -93,7 +93,7 @@ export function WeaknessTagDrillPage(): JSX.Element {
 
   if (phase === 'empty') {
     return (
-      <div className="p-4 max-w-xl mx-auto space-y-4" data-testid="weakness-tag-drill-empty">
+      <div className="p-4 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 max-w-xl mx-auto w-full space-y-4 flex-1 overflow-y-auto overscroll-contain min-h-0" data-testid="weakness-tag-drill-empty">
         <button onClick={() => void navigate(-1)} className="flex items-center gap-1 text-sm text-theme-text-muted hover:text-theme-text">
           <ArrowLeft size={16} /> Back
         </button>
@@ -115,7 +115,7 @@ export function WeaknessTagDrillPage(): JSX.Element {
     const total = puzzles.length;
     const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
     return (
-      <div className="p-4 max-w-xl mx-auto space-y-4" data-testid="weakness-tag-drill-summary">
+      <div className="p-4 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 max-w-xl mx-auto w-full space-y-4 flex-1 overflow-y-auto overscroll-contain min-h-0" data-testid="weakness-tag-drill-summary">
         <div className="flex flex-col items-center justify-center py-10 text-center">
           <Trophy size={40} className="text-amber-400 mb-3" />
           <h2 className="text-xl font-bold text-theme-text">{label}</h2>
@@ -145,7 +145,7 @@ export function WeaknessTagDrillPage(): JSX.Element {
   // Solving — identical shell to the My Mistakes solve view.
   const puzzle = puzzles[index];
   return (
-    <div className="p-4 max-w-xl mx-auto space-y-4" data-testid="weakness-tag-drill-solving">
+    <div className="p-4 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 max-w-xl mx-auto w-full space-y-4 flex-1 overflow-y-auto overscroll-contain min-h-0" data-testid="weakness-tag-drill-solving">
       <div className="flex items-center justify-between">
         <button onClick={() => void navigate(-1)} className="flex items-center gap-1 text-sm text-theme-text-muted hover:text-theme-text">
           <ArrowLeft size={16} /> Back

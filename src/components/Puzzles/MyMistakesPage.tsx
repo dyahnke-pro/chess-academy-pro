@@ -246,7 +246,7 @@ export function MyMistakesPage(): JSX.Element {
   // Solving mode
   if (activePuzzle) {
     return (
-      <div className="p-4 max-w-xl mx-auto space-y-4" data-testid="solving-mode">
+      <div className="p-4 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 max-w-xl mx-auto w-full space-y-4 flex-1 overflow-y-auto overscroll-contain min-h-0" data-testid="solving-mode">
         <button
           onClick={() => setActivePuzzle(null)}
           className="flex items-center gap-1 text-sm text-theme-text-muted hover:text-theme-text"
@@ -263,7 +263,7 @@ export function MyMistakesPage(): JSX.Element {
   }
 
   return (
-    <div className="flex flex-col flex-1 p-4 md:p-6 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 overflow-y-auto" data-testid="my-mistakes-page">
+    <div className="flex flex-col flex-1 p-4 md:p-6 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 overflow-y-auto overscroll-contain min-h-0" data-testid="my-mistakes-page">
       {/* Header */}
       <div className="flex items-center gap-3 mb-4">
         <button
