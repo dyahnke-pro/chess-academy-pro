@@ -234,7 +234,7 @@ const N23: SublineNarration = {
   beats: [
     { atMove: 19, say: "…Nb8 reroutes the knight to redeploy via d7, regrouping flexibly.", sayShort: "…Nb8 — regroup the knight.", highlights: [H('b8')] },
     { atMove: 21, say: "…Bd7 repositions the bishop, your pieces coordinating for the middlegame.", sayShort: "…Bd7 — reposition the bishop.", highlights: [H('d7')] },
-    { atMove: 23, say: "…a5 gains queenside space, supporting your pieces in the balanced game.", sayShort: "…a5 — gain space.", highlights: [H('a5')] },
+    { atMove: 23, say: "…a5 gains queenside space; you're a shade worse but solidly placed to blockade the d5-pawn.", sayShort: "…a5 — gain space.", highlights: [H('a5')] },
   ],
   sources: ['https://en.wikipedia.org/wiki/Alekhine_Defence', 'concept:pos-outpost', 'concept:pawn-backward'],
 };

@@ -207,7 +207,7 @@ export const SUBLINE_NARRATION_PRO_SAMAY_B: Record<string, SublineNarration> = {
     intro: { say: "O-O — White castles short in the Mieses main line. Match him: …e6, …Nbd7 and …Bd6, then …O-O, and only now contest the centre with …Ne4 or a timely …Bg4. Your bishop sits actively on f5 and the structure is rock-solid; complete development and play for the balanced middlegame.", sayShort: 'O-O — …e6, …Nbd7, …Bd6, then castle.' }, sources: SC,
   },
   'pro-samayraina-scandi::1::Bxf7+@12': {
-    intro: { say: "Bxf7+ — White sacrifices the bishop, hoping Ne5+ then forks your king and the g4-bishop. Do not panic: recapture …Kxf7, and meet Ne5+ with the cool …Ke8 (or the engine's …Ke6), when the fork wins nothing and you keep the extra material. The sac is objectively unsound — defend precisely and Black stands clearly better.", sayShort: 'Bxf7+ — …Kxf7, then …Ke8 stays better.' }, sources: SC,
+    intro: { say: "Bxf7+ — a desperate, unsound sacrifice. Because your bishop sits on f5, not g4, there is no Ne5+ fork to follow it: simply recapture …Kxf7, tuck the king to g8, and you are a clean piece up. Punish the overreach and convert the extra material.", sayShort: 'Bxf7+ — …Kxf7, up a clean piece.' }, sources: SC,
   },
   'pro-samayraina-scandi::1::O-O@12': {
     intro: { say: "O-O — White castles and lets the …Bg4 pin stand. Develop naturally: …e6, …Nbd7 and …Bd6, then …O-O. With the pin in place you always have …Bxf3 to damage White's kingside if the f3-knight becomes important, or …Ne4 to contest the centre. A solid, flexible Valencian.", sayShort: 'O-O — …e6, …Nbd7, …Bd6, then castle.' }, sources: SC,
@@ -216,7 +216,7 @@ export const SUBLINE_NARRATION_PRO_SAMAY_B: Record<string, SublineNarration> = {
     intro: { say: "Be3 — White quietly supports d4. Continue your smooth setup: …e6, …Nbd7, …Bd6 or …Be7, and castle. Keep the …Bg4 pin as a resource — …Bxf3 doubling White's pawns is available whenever it helps. Nothing changes the plan; develop, castle, and the position is comfortably level.", sayShort: 'Be3 — …e6 and …Nbd7, then castle.' }, sources: SC,
   },
   'pro-samayraina-scandi::1::Ne5@12': {
-    intro: { say: "Ne5 — the bishop on g4 and the White queen on d1 share a diagonal, so grabbing with …Bxd1 is tempting but invites Bxf7+ and a fierce attack for the queen. The accurate, engine-approved course is the cool retreat …Be6, when White has merely traded the pin for a loose knight on e5 and Black is comfortably better.", sayShort: 'Ne5 — …Be6 is accurate, not …Bxd1.' }, sources: SC,
+    intro: { say: "Ne5 — White jumps to a central outpost, and it hides a sting: the natural …Nbd7 walks into Bxf7 mate. Play …e6 first to shore up f7 and the light squares, then …Bd6 to challenge the knight head-on and finish developing; trade it off and your solid Scandinavian is comfortably level.", sayShort: 'Ne5 — …e6 first, then …Bd6.' }, sources: SC,
   },
   'pro-samayraina-scandi::1::Bg5@12': {
     intro: { say: "Bg5 — White pins your f6-knight. Break it calmly: …e6, then …Be7 and …Nbd7, and castle, and if the pin nags play …h6 to question the bishop. You keep the …Bg4 pin in reserve too; both sides are developed and the position is balanced and solid for Black.", sayShort: 'Bg5 — …e6 and …Be7, then castle.' }, sources: SC,

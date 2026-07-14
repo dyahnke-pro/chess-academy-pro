@@ -7939,7 +7939,7 @@ const DU_V1_NBD2_10: SublineNarration = {
   sources: ['concept:pos-outpost', 'concept:pos-initiative', 'https://lichess.org/opening/Dutch-Defense'],
 };
 const DU_V1_NF3_4: SublineNarration = {
-  intro: { say: "White develops Nf3. Steer into the Leningrad with …g6, expand with …a5, and grab the exchange when White's queenside cracks — a sharp, balanced fight.", sayShort: "Leningrad with …a5-a4" },
+  intro: { say: "White develops Nf3. Steer into the Leningrad with …g6, expand with …a5, and grab the exchange when White's queenside cracks — a sharp, double-edged fight.", sayShort: "Leningrad with …a5-a4" },
   beats: [
     { atMove: 5, say: "Fianchetto with …g6, the Leningrad — your bishop rakes the long diagonal.", sayShort: "…g6, the Leningrad", highlights: [_H('g6')] },
     { atMove: 7, say: "Expand with …a5, gaining queenside space and preparing …a4.", sayShort: "…a5, queenside space", highlights: [_H('a5')] },
@@ -8010,7 +8010,7 @@ const DU_V2_B3_10: SublineNarration = {
   sources: ['concept:pos-outpost', 'concept:pawn-fianchetto', 'https://lichess.org/opening/Dutch-Defense'],
 };
 const DU_V2_NF3_4: SublineNarration = {
-  intro: { say: "White develops Nf3. Steer into the Leningrad with …g6, expand with …a5, and grab the exchange when White's queenside cracks — a sharp, balanced fight.", sayShort: "Leningrad with …a5-a4" },
+  intro: { say: "White develops Nf3. Steer into the Leningrad with …g6, expand with …a5, and grab the exchange when White's queenside cracks — a sharp, double-edged fight.", sayShort: "Leningrad with …a5-a4" },
   beats: [
     { atMove: 5, say: "Fianchetto with …g6, the Leningrad — your bishop rakes the long diagonal.", sayShort: "…g6, the Leningrad", highlights: [_H('g6')] },
     { atMove: 7, say: "Expand with …a5, gaining queenside space and preparing …a4.", sayShort: "…a5, queenside space", highlights: [_H('a5')] },
@@ -8190,7 +8190,7 @@ const DU_V3_E4_6: SublineNarration = {
 };
 
 const DU_V4_NF3_4: SublineNarration = {
-  intro: { say: "White develops Nf3. Steer into the Leningrad with …g6, expand with …a5, and grab the exchange when White's queenside cracks — a sharp, balanced fight.", sayShort: "Leningrad with …a5-a4" },
+  intro: { say: "White develops Nf3. Steer into the Leningrad with …g6, expand with …a5, and grab the exchange when White's queenside cracks — a sharp, double-edged fight.", sayShort: "Leningrad with …a5-a4" },
   beats: [
     { atMove: 5, say: "Fianchetto with …g6, the Leningrad — your bishop rakes the long diagonal.", sayShort: "…g6, the Leningrad", highlights: [_H('g6')] },
     { atMove: 7, say: "Expand with …a5, gaining queenside space and preparing …a4.", sayShort: "…a5, queenside space", highlights: [_H('a5')] },
@@ -8220,12 +8220,12 @@ const DU_V4_B3_10: SublineNarration = {
   sources: ['concept:pos-outpost', 'concept:pawn-fianchetto', 'https://lichess.org/opening/Dutch-Defense'],
 };
 const DU_V4_C4_6: SublineNarration = {
-  intro: { say: "White plays c4. Complete the Leningrad fianchetto, lift your queen to e8 to prepare …e5, and meet the e4 break by trading to open the long diagonal.", sayShort: "…Bg7, …Qe8, meet e4" },
+  intro: { say: "White plays c4. Complete the Leningrad fianchetto, castle, then break with …e5 to fight for the centre — the whole point of the Leningrad Dutch.", sayShort: "…Bg7, castle, break …e5" },
   beats: [
-    { atMove: 7, say: "Fianchetto with …Bg7, the bishop eyeing the long diagonal.", sayShort: "…Bg7, the fianchetto", highlights: [_H('g7')] },
-    { atMove: 13, say: "Lift …Qe8, the Leningrad maneuver preparing …e5 and a kingside attack.", sayShort: "…Qe8, prepare …e5", highlights: [_H('e8')] },
-    { atMove: 17, say: "When White breaks e4, trade …Nxe4 to open the long diagonal for your bishop.", sayShort: "…Nxe4, open the diagonal", highlights: [_H('e4')] },
-    { atMove: 21, say: "Develop …Nc6, pressuring White's centre; balanced with active play.", sayShort: "…Nc6, pressure the centre", highlights: [_H('d4')] },
+    { atMove: 7, say: "…Bg7 — completing the Leningrad fianchetto; the bishop settles on g7, aimed down the long diagonal at White's centre.", sayShort: "…Bg7, the fianchetto", highlights: [_H('g7')] },
+    { atMove: 15, say: "…e5 — the thematic Leningrad break, striking at the d4-pawn and claiming your share of the centre.", sayShort: "…e5, the central break", highlights: [_H('e5'), _H('d4', SOFT)] },
+    { atMove: 17, say: "…dxe5 — recapture in the centre; you stand comfortably, ready to meet White's e4 by trading queens on d1.", sayShort: "…dxe5, recapture centrally", highlights: [_H('e5')] },
+    { atMove: 19, say: "…Qxd1 — trade the queens into a balanced, comfortable middlegame with no weaknesses and easy piece play.", sayShort: "…Qxd1, trade into comfort", highlights: [_H('d1')] },
   ],
   sources: ['concept:pawn-fianchetto', 'concept:pos-development', 'https://lichess.org/opening/Dutch-Defense'],
 };
@@ -8310,7 +8310,7 @@ const DU_V5_B3_10: SublineNarration = {
   sources: ['concept:pos-outpost', 'concept:pawn-fianchetto', 'https://lichess.org/opening/Dutch-Defense'],
 };
 const DU_V5_NF3_4: SublineNarration = {
-  intro: { say: "White develops Nf3. Steer into the Leningrad with …g6, expand with …a5, and grab the exchange when White's queenside cracks — a sharp, balanced fight.", sayShort: "Leningrad with …a5-a4" },
+  intro: { say: "White develops Nf3. Steer into the Leningrad with …g6, expand with …a5, and grab the exchange when White's queenside cracks — a sharp, double-edged fight.", sayShort: "Leningrad with …a5-a4" },
   beats: [
     { atMove: 5, say: "Fianchetto with …g6, the Leningrad — your bishop rakes the long diagonal.", sayShort: "…g6, the Leningrad", highlights: [_H('g6')] },
     { atMove: 7, say: "Expand with …a5, gaining queenside space and preparing …a4.", sayShort: "…a5, queenside space", highlights: [_H('a5')] },
@@ -9424,12 +9424,12 @@ const OI_14: SublineNarration = {
   sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
 };
 const OI_15: SublineNarration = {
-  intro: { say: "White develops Nge2. Develop …Be7, reroute …Nb6 to pressure c4, and expand …a5 on the queenside — balanced.", sayShort: "…Be7, …Nb6, …a5" },
+  intro: { say: "White develops Nge2. Develop …Be7, reroute …Nb6 to pressure c4, and expand …a5 on the queenside — solid, if a shade passive, with White holding a small space pull.", sayShort: "…Be7, …Nb6, …a5" },
   beats: [
     { atMove: 11, say: "Develop …Be7.", sayShort: "…Be7, develop", highlights: [_H('e7')] },
     { atMove: 15, say: "Reroute …Nb6, pressuring c4 and the queenside.", sayShort: "…Nb6, pressure c4", highlights: [_H('b6')] },
     { atMove: 19, say: "Expand …a5, gaining queenside space.", sayShort: "…a5, queenside space", highlights: [_H('a5')] },
-    { atMove: 23, say: "Develop …Na6, heading for the dark squares; balanced.", sayShort: "…Na6, develop", highlights: [_H('a6')] },
+    { atMove: 23, say: "Develop …Na6, heading for the dark squares; solid, though White stays a shade better.", sayShort: "…Na6, develop", highlights: [_H('a6')] },
   ],
   sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
 };
@@ -11612,12 +11612,12 @@ const BNR_56: SublineNarration = {
   sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
 };
 const BNR_57: SublineNarration = {
-  intro: { say: "A Sämisch-style Czech with f3. Route …Na6, castle, and offer the dark-square trade with …Bg5 to relieve the cramp — a patient, balanced maneuvering battle.", sayShort: "Czech Sämisch: …Bg5 trade" },
+  intro: { say: "A Sämisch-style Czech with f3. Route …Na6, castle, and offer the dark-square trade with …Bg5 to relieve the cramp — a patient maneuvering battle where White holds a space pull.", sayShort: "Czech Sämisch: …Bg5 trade" },
   beats: [
     { atMove: 11, say: "Develop …Na6, the knight heading for c7.", sayShort: "…Na6, head for c7", highlights: [_H('a6')] },
     { atMove: 13, say: "Castle …O-O, getting the king safe in the closed position.", sayShort: "…O-O, get safe", highlights: [_H('g8')] },
     { atMove: 17, say: "Offer …Bg5, trading off White's dark-squared bishop to ease your game.", sayShort: "…Bg5, trade dark bishops", highlights: [_H('g5')] },
-    { atMove: 23, say: "Reroute …Nac7, eyeing b5 and e6; balanced.", sayShort: "…Nac7, eye b5", highlights: [_H('c7')] },
+    { atMove: 23, say: "Reroute …Nac7, eyeing b5 and e6; solid, though White keeps the space edge.", sayShort: "…Nac7, eye b5", highlights: [_H('c7')] },
   ],
   sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
 };
