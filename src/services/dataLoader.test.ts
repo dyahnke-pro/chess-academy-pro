@@ -170,10 +170,10 @@ describe('loadRepertoireData', () => {
     expect(repertoire.length).toBe(all.length);
   }, 30000);
 
-  it('loads exactly 42 repertoire openings', async () => {
+  it('loads exactly 43 repertoire openings', async () => {
     await loadRepertoireData();
     const count = await db.openings.count();
-    expect(count).toBe(42);
+    expect(count).toBe(43);
   }, 30000);
 
   it('each repertoire opening has overview and keyIdeas', async () => {
@@ -189,7 +189,7 @@ describe('loadRepertoireData', () => {
     await loadRepertoireData();
     const whites = await db.openings.where('color').equals('white').toArray();
     const blacks = await db.openings.where('color').equals('black').toArray();
-    expect(whites.length).toBe(15);
+    expect(whites.length).toBe(16);
     expect(blacks.length).toBe(27);
   }, 30000);
 
