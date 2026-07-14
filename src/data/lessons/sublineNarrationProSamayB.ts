@@ -236,7 +236,7 @@ export const SUBLINE_NARRATION_PRO_SAMAY_B: Record<string, SublineNarration> = {
     intro: { say: "Be6 — Black offers to trade off your strong c4-bishop. Keep it working with Bb3, or take with Bxe6 fxe6, damaging Black's structure and opening the f-file. Then O-O, Nc3 and d3, and consider fxe5 to blast open the file; the bishop on the a2-g8 diagonal is your attacking asset.", sayShort: 'Be6 — Bb3 keeps it, or Bxe6 damages.' }, sources: KG,
   },
   'pro-samayraina-kings-gambit::0::h6@7': {
-    intro: { say: "h6 — a slow move that spends a tempo on nothing. Resist the urge to lash out; the accurate course is the calm O-O, banking your lead in development while Black dawdles. Follow with Nc3, d3 and the fxe5 or f5 break; the wasted …h6 leaves White simply better with an easy initiative.", sayShort: 'h6 — O-O is accurate, bank the lead.' }, sources: KG,
+    intro: { say: "h6 — a slow move that spends a tempo on nothing. Resist the urge to lash out; the accurate course is the calm O-O, banking your lead in development while Black dawdles. Follow with Nc3, d3 and the fxe5 or f5 break; the wasted …h6 hands White an easy initiative and a clear lead in development for the gambit pawn.", sayShort: 'h6 — O-O is accurate, bank the lead.' }, sources: KG,
   },
   'pro-samayraina-kings-gambit::0::exf4@7': {
     intro: { say: "exf4 — Black grabs the pawn and braces with …g5 to hold it. Do not rush h4; the accurate move is d4, seizing a big centre, then O-O so every piece is ready before you strike. Only then break with h4 and Ne5; the premature lunge over-reaches, but the prepared assault crashes through.", sayShort: 'exf4 — d4 and O-O before h4.' }, sources: KG,

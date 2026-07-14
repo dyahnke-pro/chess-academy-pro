@@ -116,7 +116,7 @@ export const SUBLINE_NARRATION_PRO_ROSEN: Record<string, SublineNarration> = {
     intro: { say: "d3 — White plays solidly after the fianchetto. Continue …O-O, …Nc6 and …Bg4 or …e5, pressuring the centre; your fianchetto bishop and easy development give a sound, active Scandinavian.", sayShort: 'd3 — …O-O and …Nc6, press.' }, sources: SC,
   },
   'pro-ericrosen-scandinavian::1::h3@8': {
-    intro: { say: "h3 — White questions your bishop in the …Nf6 Scandinavian. The natural retreat drifts; the accurate move is …Bxf3, trading before White gains time, then …e6, …Bd6 and …O-O for a comfortable game. Trade first, then develop.", sayShort: 'h3 — …Bxf3, then develop.' }, sources: SC,
+    intro: { say: "h3 — White questions your bishop in the …Nf6 Scandinavian. The natural retreat drifts; the accurate move is …Bxf3, trading before White gains time, then …e6, …Be7 and …O-O for a comfortable game. Trade first, then develop.", sayShort: 'h3 — …Bxf3, then develop.' }, sources: SC,
   },
   // ===== French (Black) =====
   'pro-ericrosen-french::1::c3@8': {
