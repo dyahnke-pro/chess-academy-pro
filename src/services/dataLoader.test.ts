@@ -88,6 +88,37 @@ describe('loadMiddlegamePlansData — prune', () => {
     expect(pirc).toHaveLength(8);
     expect(pirc.some((p) => /bayonet|kholmov/.test(p.id))).toBe(false);
   });
+
+  it('swallows an IndexedDB abort during the prune instead of rejecting', async () => {
+    // Prod bug (PostHog 2026-07): the every-boot orphan sweep aborts mid-write
+    // on a low-storage / busy device ("Transaction aborted" / "Attempt to
+    // delete range from database without an in-progress transaction") and
+    // escapes as an unhandled rejection. The shared guard must catch it so the
+    // loader resolves cleanly — the next boot re-runs the load.
+    const stale = {
+      id: 'mp-pircdefence-bayonet',
+      openingId: 'pirc-defence',
+      criticalPositionFen: '8/8/8/8/8/8/8/8 w - - 0 1',
+      title: 'stale', overview: '',
+      pawnBreaks: [], pieceManeuvers: [], strategicThemes: [], endgameTransitions: [],
+    } as never;
+    await db.middlegamePlans.put(stale);
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const bulkDelete = vi
+      .spyOn(db.middlegamePlans, 'bulkDelete')
+      .mockRejectedValueOnce(new Error('Transaction aborted'));
+
+    // Must NOT reject even though the prune's bulkDelete throws.
+    await expect(loadMiddlegamePlansData()).resolves.toBeUndefined();
+    expect(bulkDelete).toHaveBeenCalled();
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining('middlegamePlans seed hiccup'),
+      expect.any(Error),
+    );
+
+    bulkDelete.mockRestore();
+    warn.mockRestore();
+  });
 });
 
 describe('computePosition', () => {

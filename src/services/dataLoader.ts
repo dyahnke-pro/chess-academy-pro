@@ -15,7 +15,7 @@ import middlegamePlansData from '../data/middlegame-plans.json';
 // keyed by gambit-tab openingIds (gambit-*) so they never collide.
 import gambitPlansData from '../data/gambit-plans.json';
 import { CURATED_NARRATIONS } from '../data/opening-narrations';
-import type { OpeningRecord, FlashcardRecord, ModelGame, MiddlegamePlan } from '../types';
+import type { OpeningRecord, FlashcardRecord, ModelGame, MiddlegamePlan, ProGameReference } from '../types';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -169,6 +169,52 @@ async function buildAndBulkPutChunked<S, R>(
     if (end < source.length) await yieldToEventLoop();
   }
   return built;
+}
+
+/**
+ * Seed a curated-content table from a JSON source: chunked bulkPut upsert +
+ * orphan prune (G8), the WHOLE thing guarded so an IndexedDB abort on a
+ * low-storage / busy device degrades gracefully instead of escaping as an
+ * unhandled rejection. On prod (PostHog 2026-07) these surfaced as
+ * "Transaction aborted" and "Attempt to delete range from database without an
+ * in-progress transaction" — the every-boot orphan sweep aborting mid-write.
+ * The next boot re-runs the load, so a swallowed hiccup self-heals.
+ *
+ * `validIds` derives from the SOURCE array (not the bulkPut's return), so a
+ * partially-failed put never widens the prune into deleting live rows. Curated
+ * rows carry no user progress, so deleting a Dexie row absent from the source
+ * is safe. (David 2026-07-14: swept modelGames + middlegamePlans onto the same
+ * guard proGameReferences already had — the sweep the f97ccb8 spot-fix missed.)
+ */
+/** Minimal structural view of a curated-content table — the three ops the
+ *  seed needs. Dexie's `EntityTable<T,'id'>` satisfies this, and typing to it
+ *  (rather than `Table<R>`) keeps the generic from fighting Dexie's
+ *  InsertType/IDType machinery. */
+interface CuratedTable<R> {
+  bulkPut(items: R[]): Promise<unknown>;
+  toArray(): Promise<R[]>;
+  bulkDelete(keys: string[]): Promise<unknown>;
+}
+
+async function seedCuratedTable<R extends { id: string }>(
+  table: CuratedTable<R>,
+  source: readonly R[],
+  label: string,
+): Promise<void> {
+  try {
+    // Chunked + yielding — every-boot write, must not starve interactive work
+    // (mirrors buildAndBulkPutChunked; inlined here so the guard wraps it).
+    for (let i = 0; i < source.length; i += 200) {
+      await table.bulkPut(source.slice(i, i + 200).map((entry) => ({ ...entry })));
+      if (i + 200 < source.length) await yieldToEventLoop();
+    }
+    const validIds = new Set(source.map((r) => r.id));
+    const all = await table.toArray();
+    const stale = all.filter((r) => !validIds.has(r.id)).map((r) => r.id);
+    if (stale.length > 0) await table.bulkDelete(stale);
+  } catch (err) {
+    console.warn(`[dataLoader] ${label} seed hiccup — retries next boot:`, err);
+  }
 }
 
 // ─── ECO Loader ───────────────────────────────────────────────────────────────
@@ -604,22 +650,14 @@ export async function loadAntiOpenings(): Promise<void> {
 
 export async function loadModelGamesData(): Promise<void> {
   // Chunked + yielding — runs on EVERY boot for already-seeded users, so it
-  // must never starve interactive writes (the freeze fix).
-  const records = await buildAndBulkPutChunked(
-    db.modelGames, modelGamesData as ModelGame[], (entry) => ({ ...entry }),
-  );
-  // PRUNE orphans (G8). bulkPut only upserts, so a game DELETED from the
-  // JSON (e.g. a draw/loss replaced per the wins-only model-game rule)
-  // would otherwise linger in Dexie and keep surfacing in ModelGamesSection
-  // + coach grounding. Model games carry NO user progress (pure curated
-  // content keyed by id), so deleting any Dexie row no longer in the JSON
-  // is safe. (David 2026-06-01 — model games previously lacked this sweep.)
-  const validIds = new Set(records.map((r) => r.id));
-  const all = await db.modelGames.toArray();
-  const stale = all.filter((g) => !validIds.has(g.id)).map((g) => g.id);
-  if (stale.length > 0) {
-    await db.modelGames.bulkDelete(stale);
-  }
+  // must never starve interactive writes (the freeze fix). Guarded seed +
+  // orphan prune (G8): a game DELETED from the JSON (e.g. a draw/loss replaced
+  // per the wins-only model-game rule) would otherwise linger in Dexie and keep
+  // surfacing in ModelGamesSection + coach grounding. Model games carry NO user
+  // progress (pure curated content keyed by id), so pruning is safe.
+  // (David 2026-06-01 added the sweep; 2026-07-14 wrapped it in the shared
+  // guard so an IndexedDB abort can't escape as an unhandled rejection.)
+  await seedCuratedTable<ModelGame>(db.modelGames, modelGamesData as ModelGame[], 'modelGames');
 }
 
 // ─── Pro Game References Loader ──────────────────────────────────────────────
@@ -639,47 +677,31 @@ export async function loadProGameReferences(): Promise<void> {
   // even if the Dexie persistence below hiccups, the coach still has the games
   // in memory for this session.
   const records = await loadProGameReferenceData();
-  // Every-boot best-effort persistence. On a low-storage / busy device the
-  // IndexedDB transaction can abort mid-write (seen in prod: "Transaction
-  // aborted" and "Attempt to delete range from database without an in-progress
-  // transaction", 165/200 puts failing). That MUST degrade gracefully, not
-  // escape as an unhandled rejection — the next boot re-runs this whole load,
-  // and the in-memory cache above already primed the coach for this session.
-  try {
-    // Chunked + yielding — every-boot write, must not starve interactive work.
-    await buildAndBulkPutChunked(db.proGameReferences, records, (r) => r);
-    // PRUNE stale rows (G8), guarded so a prune hiccup never undoes the puts.
-    const validIds = new Set(records.map((r) => r.id));
-    const all = await db.proGameReferences.toArray();
-    const stale = all.filter((g) => !validIds.has(g.id)).map((g) => g.id);
-    if (stale.length > 0) {
-      await db.proGameReferences.bulkDelete(stale);
-    }
-  } catch (err) {
-    console.warn('[dataLoader] proGameReferences persistence hiccup — retries next boot:', err);
-  }
+  // Every-boot best-effort persistence via the shared guarded seed. On a
+  // low-storage / busy device the IndexedDB transaction can abort mid-write
+  // (seen in prod: "Transaction aborted" / "Attempt to delete range from
+  // database without an in-progress transaction", 165/200 puts failing). The
+  // guard degrades gracefully rather than escaping as an unhandled rejection —
+  // the next boot re-runs this whole load, and the in-memory cache primed above
+  // already gave the coach these games for this session.
+  await seedCuratedTable<ProGameReference>(db.proGameReferences, records, 'proGameReferences');
 }
 
 // ─── Middlegame Plans Loader ─────────────────────────────────────────────────
 
 export async function loadMiddlegamePlansData(): Promise<void> {
   // Chunked + yielding — every-boot write, must not starve interactive work.
-  const records = await buildAndBulkPutChunked(
+  // Guarded seed + orphan prune (G8): a plan DELETED from the JSON (e.g. the
+  // Pirc Bayonet/Kholmov plans) would otherwise linger in Dexie forever on
+  // already-seeded devices and keep rendering. Middlegame plans carry NO user
+  // progress (pure curated content keyed by id), so pruning is safe.
+  // (2026-07-14 wrapped in the shared guard so an IndexedDB abort can't escape
+  // as an unhandled rejection.)
+  await seedCuratedTable<MiddlegamePlan>(
     db.middlegamePlans,
     [...(middlegamePlansData as MiddlegamePlan[]), ...(gambitPlansData as MiddlegamePlan[])],
-    (entry) => ({ ...entry }),
+    'middlegamePlans',
   );
-  // PRUNE stale plans. bulkPut only upserts, so a plan DELETED from the
-  // JSON (e.g. the Pirc Bayonet/Kholmov plans) would otherwise linger in
-  // Dexie forever on already-seeded devices and keep rendering. Middlegame
-  // plans carry NO user progress (they're pure curated content keyed by id),
-  // so it's safe to delete any Dexie row whose id is no longer in the JSON.
-  const validIds = new Set(records.map((r) => r.id));
-  const all = await db.middlegamePlans.toArray();
-  const stale = all.filter((p) => !validIds.has(p.id)).map((p) => p.id);
-  if (stale.length > 0) {
-    await db.middlegamePlans.bulkDelete(stale);
-  }
 }
 
 // ─── Flashcard Seeder ─────────────────────────────────────────────────────────
