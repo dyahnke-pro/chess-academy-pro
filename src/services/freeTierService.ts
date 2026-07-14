@@ -17,7 +17,7 @@
  * The LLM decides nothing here (G0) — this is pure product-rule bookkeeping.
  */
 import { db, type FreeTierRecord } from '../db/schema';
-import repertoire from '../data/repertoire.json';
+import openingManifests from '../data/opening-manifests.json';
 
 /** Lifetime free puzzle allowance (one-time bucket, not per-day). */
 export const FREE_PUZZLE_LIMIT = 20;
@@ -28,25 +28,21 @@ export const KID_FREE_MS = 7 * 24 * 60 * 60 * 1000;
 const SINGLETON_ID = 'singleton';
 
 /**
- * The pool of masterclass openings eligible for the ONE free opening pick:
- * the "main 40" — every `repertoire.json` opening EXCEPT the sacrificial
- * gambits/countergambits. Pro-reps (`/openings/pro/*`) and gambit-tab lessons
- * (`gambits.json`) are never in `repertoire.json`, so they're excluded by
- * construction. (David 2026-07-14: "main 40. No pro reps, gambits, or counter
- * openings.") Result: 37 mainstream principled openings.
+ * The pool of openings eligible for the ONE free opening pick = EXACTLY what
+ * the app's MAIN opening tab (Masterclasses) shows. David 2026-07-14:
+ * "Anything in the main opening tab is ok. If not in the main opening tab,
+ * don't include it." The main tab's list is `getMasterclassOpeningIds()` =
+ * every `opening-manifests.json` key (minus the `_comment`/`_schema` meta
+ * keys) — so we derive the pool from the SAME source, and it auto-tracks the
+ * tab as manifests are added/removed. Deliberately INCLUDES the masterclass
+ * gambits that live in the main tab (King's/Evans/Benko/Budapest/Albin/
+ * Schliemann); EXCLUDES the separate Gambits tab (`gambits.json`), the Elite/
+ * pro-rep tab (`/openings/pro/*`), the Counter-Weapons tab, and the raw ECO
+ * "All" tab.
  */
-export const FREE_OPENING_POOL: ReadonlySet<string> = (() => {
-  // King's Gambit's style string omits the word "Gambit" — exclude it by id.
-  const explicitExclude = new Set(['kings-gambit']);
-  const pool = new Set<string>();
-  for (const o of repertoire as Array<{ id: string; style?: string }>) {
-    const style = o.style ?? '';
-    if (style.includes('Gambit')) continue; // evans/benko/budapest/albin/schliemann
-    if (explicitExclude.has(o.id)) continue;
-    pool.add(o.id);
-  }
-  return pool;
-})();
+export const FREE_OPENING_POOL: ReadonlySet<string> = new Set(
+  Object.keys(openingManifests).filter((k) => !k.startsWith('_')),
+);
 
 /** True when `openingId` is one of the eligible free-pick openings. */
 export function isEligibleFreeOpening(openingId: string): boolean {

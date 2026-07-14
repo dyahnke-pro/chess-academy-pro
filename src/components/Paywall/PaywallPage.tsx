@@ -34,6 +34,18 @@ const FEATURES: readonly string[] = [
   'Voice coaching, endgames, and middlegame plans',
 ];
 
+/** The free plan — what a non-Pro user gets without paying. Mirrors the
+ *  metered soft gate (accessPolicy / freeTierService): unlimited game upload,
+ *  weakness analysis, a 20-puzzle bucket, one main-tab opening, a week of Kids.
+ *  Shown at the top of the paywall so a walled user always sees what they
+ *  still have for free. */
+const FREE_TIER: readonly string[] = [
+  '20 free tactics puzzles',
+  'One full opening — Watch, Learn, Practice, Play',
+  'Upload your games + see your weaknesses',
+  'Kids mode free for a week',
+];
+
 /** Which premium surface bounced the user here — drives the contextual line
  *  at the top of the paywall (soft-gate upsell). Mirrors accessPolicy's
  *  GatedFeature. */
@@ -137,6 +149,21 @@ export function PaywallPage({ feature }: { feature?: PaywallFeature } = {}): JSX
           </div>
         )}
 
+        {/* Free plan — what they keep without paying. Sits at the top so a
+            walled user always sees the free tier before the Pro pitch. */}
+        <div className="mb-5 rounded-2xl border border-zinc-700 bg-zinc-800/40 px-4 py-3">
+          <p className="mb-2 text-xs font-bold uppercase tracking-wider text-zinc-400">Free plan includes</p>
+          <ul className="space-y-1.5">
+            {FREE_TIER.map((f) => (
+              <li key={f} className="flex items-start gap-2 text-sm text-zinc-300">
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" />
+                <span>{f}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <p className="mb-2 text-xs font-bold uppercase tracking-wider text-[#c9a84c]">Go Pro to unlock</p>
         <ul className="mb-6 space-y-2">
           {FEATURES.map((f) => (
             <li key={f} className="flex items-start gap-2 text-sm text-zinc-300">

@@ -42,4 +42,10 @@ describe('PaywallPage — contextual copy', () => {
     expect(screen.queryByText(/used all 20 free puzzles/i)).toBeNull();
     expect(screen.getByTestId('paywall-back-free')).toBeTruthy();
   });
+  it('describes the free plan at the top', () => {
+    renderPaywall('app');
+    expect(screen.getByText(/free plan includes/i)).toBeTruthy();
+    expect(screen.getByText(/20 free tactics puzzles/i)).toBeTruthy();
+    expect(screen.getByText(/Kids mode free for a week/i)).toBeTruthy();
+  });
 });

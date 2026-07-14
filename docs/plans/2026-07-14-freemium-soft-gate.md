@@ -32,19 +32,19 @@ Everything else is **walled** (Pro only): all of `/coach/*`, `/academy/*`, the
 other 36 openings + all pro-reps + all gambits + `/openings/srs`, puzzle-solving
 once the 20-bucket is spent, and `/kid/*` after the 7-day window.
 
-### Free-opening eligible pool (the "main 40")
+### Free-opening eligible pool = the MAIN opening tab (David 2026-07-14 final)
 
-Source: `repertoire.json` (43 masterclass openings). EXCLUDE the sacrificial
-gambits/countergambits (style tagged `"Gambit"`, plus King's Gambit whose style
-string omits the word): `kings-gambit`, `evans-gambit`, `benko-gambit`,
-`budapest-gambit`, `albin-countergambit`, `schliemann-defence`. Also exclude
-everything in `gambits.json` (7 gambit-tab lessons) and every `pro-*` id.
-→ **37 mainstream principled openings** eligible for the free pick.
-
-> Judgment call (flagged for David): kept the Najdorf / Grünfeld / QGA — they're
-> pillar main-line openings that merely *play* counter-attackingly; "counter
-> openings" is read as countergambits + the Schliemann, not these. Say the word
-> to drop them too.
+"Anything in the main opening tab is ok. If not in the main opening tab, don't
+include it." The main tab = the **Masterclasses** tab, whose list is
+`getMasterclassOpeningIds()` = every `opening-manifests.json` key (minus
+`_comment`/`_schema`). So `FREE_OPENING_POOL` is derived from that SAME source
+and auto-tracks the tab → **43 openings**. This INCLUDES the masterclass gambits
+that live in the main tab (King's/Evans/Benko/Budapest/Albin/Schliemann) and
+EXCLUDES the separate **Gambits** tab (`gambits.json`: smith-morra, scotch-
+gambit, …), the **Elite**/pro-rep tab (`/openings/pro/*`), the **Counter**-
+Weapons tab, and the raw ECO **All** tab. Supersedes the earlier "37 / minus-6-
+gambits" heuristic (the Najdorf/Grünfeld/QGA question is moot — the whole main
+tab is in).
 
 ## Architecture
 
@@ -137,9 +137,14 @@ sandbox account. The web audit only proves the safe no-op.
 - 2026-07-14: free opening = user-picked, first-opened, main-40 only (no
   pro-reps/gambits/counters). — David
 - 2026-07-14: weakness tab free to view; drilling spends the puzzle bucket. — David
-- 2026-07-14: keep Najdorf/Grünfeld/QGA in free pool → 37 eligible. — David
+- 2026-07-14: free-opening pool = the MAIN opening tab (Masterclasses) exactly
+  = `getMasterclassOpeningIds()` = 43 manifest openings (incl. main-tab gambits;
+  excl. Gambits/Elite/Counter/All tabs). Supersedes the 37/minus-gambits rule. — David
 - 2026-07-14: kid section free for ONE WEEK (7 days from first kid access),
   then walled. — David
+- 2026-07-14: free-tier description shown (2) at the top of the PaywallPage
+  ("Free plan includes") and (3) in the App Store description copy
+  (`docs/store-listing-copy.md`, apply-on-freemium-ship). — David
 
 ## Next-session pickup
 Backbone = `freeTierService` + `accessPolicy` + `AccessGate`. The flag

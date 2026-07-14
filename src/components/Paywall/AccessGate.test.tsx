@@ -78,8 +78,8 @@ describe('AccessGate — walled', () => {
     renderAt('/openings/caro-kann');
     expect(wallShown()).toBe(true);
   });
-  it('walls a gambit opening', () => {
-    renderAt('/openings/kings-gambit');
+  it('walls a Gambits-tab course (not in the main tab)', () => {
+    renderAt('/openings/smith-morra-gambit');
     expect(wallShown()).toBe(true);
   });
   it('walls tactics once the bucket is spent', () => {

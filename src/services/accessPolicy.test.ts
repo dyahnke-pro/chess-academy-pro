@@ -39,9 +39,13 @@ describe('accessPolicy — openings', () => {
     const d = decide('/openings/caro-kann', { freeTier: { ...FRESH, freeOpeningId: 'italian-game' } });
     expect(d).toEqual({ decision: 'wall', feature: 'opening' });
   });
-  it('walls a gambit / non-eligible opening even when nothing claimed', () => {
-    expect(decide('/openings/kings-gambit')).toEqual({ decision: 'wall', feature: 'opening' });
-    expect(decide('/openings/evans-gambit')).toEqual({ decision: 'wall', feature: 'opening' });
+  it('allows a masterclass gambit that lives in the main tab (unclaimed)', () => {
+    // kings-gambit / evans-gambit are IN the main opening tab → eligible.
+    expect(decide('/openings/kings-gambit').decision).toBe('allow');
+  });
+  it('walls a Gambits-tab course (not in the main tab)', () => {
+    expect(decide('/openings/smith-morra-gambit')).toEqual({ decision: 'wall', feature: 'opening' });
+    expect(decide('/openings/scotch-gambit')).toEqual({ decision: 'wall', feature: 'opening' });
   });
   it('walls pro-reps and SRS', () => {
     expect(decide('/openings/pro/naroditsky/caro-kann')).toEqual({ decision: 'wall', feature: 'opening' });

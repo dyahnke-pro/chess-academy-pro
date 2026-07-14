@@ -22,22 +22,24 @@ beforeEach(async () => {
 });
 
 describe('FREE_OPENING_POOL', () => {
-  it('is the 37 main-40 masterclass openings', () => {
-    expect(FREE_OPENING_POOL.size).toBe(37);
+  it('is the full main opening tab (43 masterclass manifest openings)', () => {
+    expect(FREE_OPENING_POOL.size).toBe(43);
   });
-  it('includes mainstream openings', () => {
-    for (const id of ['italian-game', 'ruy-lopez', 'caro-kann', 'sicilian-najdorf', 'grunfeld-defence', 'qga', 'queens-gambit']) {
+  it('includes every opening shown in the main tab — incl. the masterclass gambits', () => {
+    for (const id of [
+      'italian-game', 'ruy-lopez', 'caro-kann', 'sicilian-najdorf', 'grunfeld-defence', 'qga', 'queens-gambit',
+      // gambits that live IN the main opening tab are eligible
+      'kings-gambit', 'evans-gambit', 'benko-gambit', 'budapest-gambit', 'albin-countergambit', 'schliemann-defence',
+    ]) {
       expect(isEligibleFreeOpening(id)).toBe(true);
     }
   });
-  it('excludes the sac gambits / countergambits', () => {
-    for (const id of ['kings-gambit', 'evans-gambit', 'benko-gambit', 'budapest-gambit', 'albin-countergambit', 'schliemann-defence']) {
+  it('excludes pro-reps and the separate Gambits-tab courses', () => {
+    expect(isEligibleFreeOpening('pro-naroditsky-caro-kann')).toBe(false);
+    // gambits.json courses live in the Gambits TAB, not the main tab
+    for (const id of ['scotch-gambit', 'smith-morra-gambit', 'danish-gambit', 'englund-gambit']) {
       expect(isEligibleFreeOpening(id)).toBe(false);
     }
-  });
-  it('excludes pro-reps and gambit-tab ids', () => {
-    expect(isEligibleFreeOpening('pro-naroditsky-caro-kann')).toBe(false);
-    expect(isEligibleFreeOpening('scotch-gambit')).toBe(false);
   });
 });
 
@@ -73,8 +75,8 @@ describe('free opening claim', () => {
 
     expect(canViewOpening('caro-kann', { freeOpeningId: 'italian-game' })).toBe(false);
   });
-  it('refuses to claim a non-eligible opening', async () => {
-    const r = await claimFreeOpening('kings-gambit');
+  it('refuses to claim a non-eligible opening (a Gambits-tab course)', async () => {
+    const r = await claimFreeOpening('smith-morra-gambit');
     expect(r.result).toBe('not-eligible');
     expect(r.row.freeOpeningId).toBeNull();
   });
