@@ -69,6 +69,7 @@ import {
 } from '../../services/coachPlayPersistence';
 import { fetchLichessExplorer } from '../../services/lichessExplorerService';
 import { addAddressedConversion } from '../../services/conversionProgress';
+import { recordPositiveMoment } from '../../services/reviewPromptService';
 import { formatTrapForPrompt } from '../../services/openingTrapDetector';
 import { scanPositionForTrap } from '../../services/positionTrapScan';
 import { buildFastMoveLine } from '../../utils/fastMoveNarration';
@@ -1906,6 +1907,15 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     // position and the student won it, that conversion is addressed.
     if (result === 'win' && convDrill && initialGameFen) {
       void addAddressedConversion(initialGameFen);
+    }
+
+    // Rating harvest (David 2026-07-14): beating the coach in a real game (past
+    // the trivial-game ply floor) is a genuine "win" moment — arm the review
+    // prompt so the native 5-star dialog gets requested at peak delight. Wins
+    // only; losses/draws are never counted (the happiness gate + these positive-
+    // only triggers keep the public rating honest).
+    if (result === 'win' && shouldPersistFinishedGame(gameState.moves.length)) {
+      void recordPositiveMoment('coach-game-won');
     }
 
     const keyMoments = findKeyMoments(gameState.moves);

@@ -58,6 +58,7 @@ import {
 } from '../../services/srsOpeningService';
 import { getOpeningById } from '../../services/openingService';
 import { logAppAudit } from '../../services/appAuditor';
+import { recordPositiveMoment } from '../../services/reviewPromptService';
 import type { OpeningRecord, SrsOpeningCard } from '../../types';
 
 type Mode = 'card' | 'line';
@@ -293,6 +294,9 @@ export function SrsTrainerPage(): JSX.Element {
         source: 'SrsTrainerPage.advanceCard',
         summary: `card-mode complete — ${cardCorrect} / ${cardWrong}`,
       });
+      // Rating harvest (David 2026-07-14): finishing a spaced-repetition review
+      // session is a genuine accomplishment — arm the review prompt.
+      void recordPositiveMoment('srs-session-complete');
       return;
     }
     setCardIndex((i) => i + 1);
