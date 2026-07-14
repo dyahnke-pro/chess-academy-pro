@@ -14,6 +14,10 @@ import { MiddlegamePlansSection, type MiddlegameAction } from './MiddlegamePlans
 import { EndgamePlansSection } from './EndgamePlansSection';
 import { ModelGamesSection } from './ModelGamesSection';
 import { ModelGameViewer } from './ModelGameViewer';
+import { useEntitlement } from '../../hooks/useEntitlement';
+import { useFreeTierStore } from '../../stores/freeTierStore';
+import { canViewOpening, isEligibleFreeOpening } from '../../services/freeTierService';
+import { PaywallPage } from '../Paywall/PaywallPage';
 import { MiddlegamePlanStudy } from './MiddlegamePlanStudy';
 import { MiddlegamePractice } from './MiddlegamePractice';
 import { PlayableLinePlayer } from './PlayableLinePlayer';
@@ -327,6 +331,13 @@ export function OpeningDetailPage(): JSX.Element {
   const [activeMiddlegamePlan, setActiveMiddlegamePlan] = useState<MiddlegamePlan | null>(null);
   const [activeMistake, setActiveMistake] = useState<CommonMistake | null>(null);
   const [activeModelGame, setActiveModelGame] = useState<ModelGame | null>(null);
+  // Freemium free-tier gate (David 2026-07-14): the ONE free opening is claimed
+  // on the first WLPP DEEP DIVE, not on page open — browse + model games stay
+  // free. A deep dive into a SECOND masterclass opening walls in-page below.
+  const { isPro, gateEnabled } = useEntitlement();
+  const freeTierRow = useFreeTierStore((s) => s.row);
+  const freeTierHydrated = useFreeTierStore((s) => s.hydrated);
+  const claimFreeOpening = useFreeTierStore((s) => s.claimFreeOpening);
   // Two-tap guard for the expert-pass unlock: spending a 1-of-1 lifetime pass
   // shouldn't die to a misclick, so the first tap arms, the second commits.
   const [confirmingUnlock, setConfirmingUnlock] = useState(false);
@@ -694,6 +705,21 @@ export function OpeningDetailPage(): JSX.Element {
     return opening.warningLines.map((v) => computeFenFromPgn(v.pgn, v.setupFen));
   }, [opening?.warningLines]);
 
+  // A "deep dive" = any WLPP / study mode past the free browse + model-games
+  // view. Watching model games ('model-game') and browsing ('detail') are free
+  // and never spend the free-opening pick.
+  const isDeepDive = viewMode !== 'detail' && viewMode !== 'model-game';
+
+  // Claim the ONE free opening on the first deep dive into an eligible
+  // masterclass opening (idempotent; only when nothing is claimed yet).
+  useEffect(() => {
+    if (!gateEnabled || isPro || !freeTierHydrated) return;
+    if (!isDeepDive) return;
+    if (!id || !isEligibleFreeOpening(id)) return;
+    if (freeTierRow.freeOpeningId != null) return; // one pick already claimed
+    void claimFreeOpening(id);
+  }, [gateEnabled, isPro, freeTierHydrated, isDeepDive, id, freeTierRow.freeOpeningId, claimFreeOpening]);
+
   if (loading) {
     return (
       <div className="flex flex-1 items-center justify-center">
@@ -708,6 +734,14 @@ export function OpeningDetailPage(): JSX.Element {
         <p className="text-theme-text-muted">Opening not found.</p>
       </div>
     );
+  }
+
+  // Freemium deep-dive wall: a non-Pro user gets ONE opening's full WLPP (all
+  // its variations, gems, traps, plans). A deep dive into a DIFFERENT
+  // masterclass opening (a second pick) shows the paywall here; the browse page
+  // + model games above stayed open. Dormant unless the gate is live + non-Pro.
+  if (isDeepDive && gateEnabled && !isPro && freeTierHydrated && id && !canViewOpening(id, freeTierRow)) {
+    return <PaywallPage feature="opening" />;
   }
 
   // Walkthrough mode (main line or variation)

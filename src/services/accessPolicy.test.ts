@@ -35,9 +35,13 @@ describe('accessPolicy — openings', () => {
   it('allows the already-claimed opening again', () => {
     expect(decide('/openings/italian-game', { freeTier: { ...FRESH, freeOpeningId: 'italian-game' } }).decision).toBe('allow');
   });
-  it('walls a SECOND, different opening once one is claimed', () => {
+  it('allows BROWSING a second masterclass opening page even after one is claimed', () => {
+    // The page (browse + model games) stays free for every main-tab opening;
+    // the one-free-opening limit is enforced in-page at the WLPP deep-dive tap
+    // (OpeningDetailPage), not at the route (David 2026-07-14). So a second
+    // opening's PAGE is `allow`, not `wall`.
     const d = decide('/openings/caro-kann', { freeTier: { ...FRESH, freeOpeningId: 'italian-game' } });
-    expect(d).toEqual({ decision: 'wall', feature: 'opening' });
+    expect(d.decision).toBe('allow');
   });
   it('allows a masterclass gambit that lives in the main tab (unclaimed)', () => {
     // kings-gambit / evans-gambit are IN the main opening tab → eligible.

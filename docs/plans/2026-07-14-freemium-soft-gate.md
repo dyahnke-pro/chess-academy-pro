@@ -151,3 +151,32 @@ Backbone = `freeTierService` + `accessPolicy` + `AccessGate`. The flag
 (`VITE_PAYWALL_ENABLED`) and RevenueCat wiring are UNCHANGED — this only changes
 WHAT the gate walls, from "everything" to "everything except the free tier."
 Nothing ships to prod/App Store until David approves P7.
+
+## Amendment — claim on WLPP DEEP DIVE, model games free (David 2026-07-14, evening)
+
+Refinement of the free-opening rule (spec item 4). The claim no longer happens
+when the opening PAGE is opened — it happens on the first **WLPP deep dive**.
+
+- **Browse any main-tab masterclass opening page → FREE, no claim.**
+  `accessPolicy` now returns `allow` for every eligible `/openings/:id`
+  (previously walled a second opening at the route). Non-eligible pages
+  (pro-rep / SRS / Gambits-tab / raw ECO) still wall at the route.
+- **Watch model games → FREE, no claim.** The `model-game` view mode is exempt
+  (alongside `detail`).
+- **First WLPP deep dive claims the pick.** In `OpeningDetailPage`,
+  `isDeepDive = viewMode !== 'detail' && viewMode !== 'model-game'`. Entering any
+  deep-dive mode on an eligible opening (with none claimed) claims it via
+  `claimFreeOpening(id)` (idempotent effect).
+- **The claimed opening includes ALL its variations** (+ gems, traps, plans,
+  sublines) — they're tabs under the same opening id, so one claim opens the
+  whole masterclass.
+- **A deep dive into a SECOND opening walls in-page** — `OpeningDetailPage`
+  returns `<PaywallPage feature="opening" />` when `isDeepDive && !isPro &&
+  gateEnabled && !canViewOpening(id, row)`. The browse page + model games above
+  stayed open.
+
+Files: `accessPolicy.ts` (eligible page → allow), `AccessGate.tsx` (drop the
+page-open claim effect; simplify), `OpeningDetailPage.tsx` (deep-dive claim
+effect + second-opening wall). Tests updated: `accessPolicy.test.ts`,
+`AccessGate.test.tsx` (the "walls a second opening" route assertion → "browses
+a second opening page; wall moved in-page").

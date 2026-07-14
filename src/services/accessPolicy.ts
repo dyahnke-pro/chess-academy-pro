@@ -11,7 +11,7 @@
  * whole app, so today's behavior is unchanged until the flag flips.
  */
 import type { FreeTierRecord } from '../db/schema';
-import { canViewOpening, hasPuzzlesLeft, kidWindowActive } from './freeTierService';
+import { isEligibleFreeOpening, hasPuzzlesLeft, kidWindowActive } from './freeTierService';
 
 /** Which premium surface a wall/meter is for — drives the paywall's contextual
  *  copy and analytics. */
@@ -90,8 +90,13 @@ export function resolveAccess(input: AccessInput): AccessDecision {
     // Explorer list is browsable free.
     if (pathname === '/openings') return { decision: 'allow' };
     const openingId = masterclassOpeningId(pathname);
-    if (openingId && canViewOpening(openingId, freeTier)) return { decision: 'allow' };
-    // pro-rep, SRS, gambit, or a SECOND opening → walled.
+    // Any MAIN-TAB masterclass opening page is browsable free (browse + watch
+    // model games), regardless of which opening the user has claimed. The
+    // one-free-opening limit is enforced IN-PAGE at the first WLPP deep-dive
+    // tap (David 2026-07-14: claim on deep dive, not on page open) — see
+    // OpeningDetailPage. Non-eligible pages (pro-rep, SRS, Gambits-tab, raw
+    // ECO) stay walled at the route.
+    if (openingId && isEligibleFreeOpening(openingId)) return { decision: 'allow' };
     return { decision: 'wall', feature: 'opening' };
   }
 

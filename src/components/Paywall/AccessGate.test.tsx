@@ -73,11 +73,6 @@ describe('AccessGate — walled', () => {
     expect(wallShown()).toBe(true);
     expect(appShown()).toBe(false);
   });
-  it('walls a second, different opening', () => {
-    setRow({ freeOpeningId: 'italian-game' });
-    renderAt('/openings/caro-kann');
-    expect(wallShown()).toBe(true);
-  });
   it('walls a Gambits-tab course (not in the main tab)', () => {
     renderAt('/openings/smith-morra-gambit');
     expect(wallShown()).toBe(true);
@@ -96,6 +91,13 @@ describe('AccessGate — allowed free tier', () => {
   });
   it('shows the already-claimed opening', () => {
     setRow({ freeOpeningId: 'caro-kann' });
+    renderAt('/openings/caro-kann');
+    expect(appShown()).toBe(true);
+  });
+  it('BROWSES a second masterclass opening page even after one is claimed (wall moved in-page)', () => {
+    // Page + model games stay free for every main-tab opening; the one-pick
+    // limit is enforced on the WLPP deep-dive tap in OpeningDetailPage, not here.
+    setRow({ freeOpeningId: 'italian-game' });
     renderAt('/openings/caro-kann');
     expect(appShown()).toBe(true);
   });
