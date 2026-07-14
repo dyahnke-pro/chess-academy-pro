@@ -135,9 +135,16 @@ const main = async () => {
     } else {
       console.log(`no legacy appStoreVersionSubmission (state=${version.attributes.appStoreState}); relying on reviewSubmission cancel/DELETE_ITEM to unlock`);
     }
-    // Re-read the state so the guard below reflects the pull-back.
-    const re = await api('GET', `/v1/appStoreVersions/${version.id}?fields[appStoreVersions]=appStoreState`);
-    version.attributes.appStoreState = re.j?.data?.attributes?.appStoreState ?? version.attributes.appStoreState;
+    // ASC is eventually-consistent: the version does NOT flip out of
+    // WAITING_FOR_REVIEW the instant its submission is deleted, so the attach
+    // races ahead and 409s (INVALID_STATE) if we read too fast. Poll briefly
+    // (up to ~30s) until it's editable before attaching.
+    for (let i = 0; i < 6; i++) {
+      const re = await api('GET', `/v1/appStoreVersions/${version.id}?fields[appStoreVersions]=appStoreState`);
+      version.attributes.appStoreState = re.j?.data?.attributes?.appStoreState ?? version.attributes.appStoreState;
+      if (!['WAITING_FOR_REVIEW', 'IN_REVIEW'].includes(version.attributes.appStoreState)) break;
+      await new Promise((r) => setTimeout(r, 5000));
+    }
     console.log(`version state after pull-back: ${version.attributes.appStoreState}`);
   }
 

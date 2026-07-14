@@ -635,15 +635,28 @@ export async function loadModelGamesData(): Promise<void> {
  */
 export async function loadProGameReferences(): Promise<void> {
   // Fetched from public/data (not bundled) — also primes the in-memory
-  // cache the coach envelope source reads synchronously.
+  // cache the coach envelope source reads synchronously. This runs FIRST, so
+  // even if the Dexie persistence below hiccups, the coach still has the games
+  // in memory for this session.
   const records = await loadProGameReferenceData();
-  // Chunked + yielding — every-boot write, must not starve interactive work.
-  await buildAndBulkPutChunked(db.proGameReferences, records, (r) => r);
-  const validIds = new Set(records.map((r) => r.id));
-  const all = await db.proGameReferences.toArray();
-  const stale = all.filter((g) => !validIds.has(g.id)).map((g) => g.id);
-  if (stale.length > 0) {
-    await db.proGameReferences.bulkDelete(stale);
+  // Every-boot best-effort persistence. On a low-storage / busy device the
+  // IndexedDB transaction can abort mid-write (seen in prod: "Transaction
+  // aborted" and "Attempt to delete range from database without an in-progress
+  // transaction", 165/200 puts failing). That MUST degrade gracefully, not
+  // escape as an unhandled rejection — the next boot re-runs this whole load,
+  // and the in-memory cache above already primed the coach for this session.
+  try {
+    // Chunked + yielding — every-boot write, must not starve interactive work.
+    await buildAndBulkPutChunked(db.proGameReferences, records, (r) => r);
+    // PRUNE stale rows (G8), guarded so a prune hiccup never undoes the puts.
+    const validIds = new Set(records.map((r) => r.id));
+    const all = await db.proGameReferences.toArray();
+    const stale = all.filter((g) => !validIds.has(g.id)).map((g) => g.id);
+    if (stale.length > 0) {
+      await db.proGameReferences.bulkDelete(stale);
+    }
+  } catch (err) {
+    console.warn('[dataLoader] proGameReferences persistence hiccup — retries next boot:', err);
   }
 }
 
