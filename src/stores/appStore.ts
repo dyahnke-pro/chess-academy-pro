@@ -120,6 +120,10 @@ interface AppState {
 
   // Global coach drawer
   coachDrawerOpen: boolean;
+  /** When the drawer is opened by a "Talk to Coach" affordance, start the mic
+   *  immediately so it's one tap to talk. Consumed (reset to false) by the
+   *  chat input once it kicks off listening. */
+  coachDrawerAutoListen: boolean;
   coachDrawerInitialMessage: string | null;
   /** Modality of the pending initial message — tells the drawer's
    *  chat panel whether to render the first exchange as a spoken
@@ -185,6 +189,7 @@ interface AppActions {
   setPuzzleClockTargetSec: (sec: number) => void;
   setBackgroundAnalysis: (running: boolean, progress?: string | null) => void;
   setCoachDrawerOpen: (open: boolean) => void;
+  setCoachDrawerAutoListen: (autoListen: boolean) => void;
   setCoachDrawerInitialMessage: (msg: string | null, modality?: 'voice' | 'text') => void;
   setCoachEdgeTabPercent: (percent: number) => void;
   setGlobalBoardContext: (ctx: AppState['globalBoardContext']) => void;
@@ -221,6 +226,7 @@ const DEFAULT_STATE: AppState = {
   backgroundAnalysisRunning: false,
   backgroundAnalysisProgress: null,
   coachDrawerOpen: false,
+  coachDrawerAutoListen: false,
   coachDrawerInitialMessage: null,
   coachDrawerInitialMessageModality: 'text',
   coachEdgeTabPercent: 50,
@@ -351,6 +357,7 @@ export const useAppStore = create<AppState & AppActions>()(
       set({ backgroundAnalysisRunning: running, backgroundAnalysisProgress: progress ?? null }),
 
     setCoachDrawerOpen: (open) => set({ coachDrawerOpen: open }),
+    setCoachDrawerAutoListen: (autoListen) => set({ coachDrawerAutoListen: autoListen }),
 
     setCoachDrawerInitialMessage: (msg, modality = 'text') =>
       set({ coachDrawerInitialMessage: msg, coachDrawerInitialMessageModality: modality }),

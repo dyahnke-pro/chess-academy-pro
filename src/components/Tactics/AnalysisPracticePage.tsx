@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback, type CSSProperties } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Lightbulb, ArrowRight, RefreshCw, Check, X, Minus, HelpCircle, Play } from 'lucide-react';
+import { Lightbulb, ArrowRight, RefreshCw, Check, X, Minus, HelpCircle, Play, Mic } from 'lucide-react';
 import { Chess } from 'chess.js';
 import type { Square } from 'chess.js';
 import { db } from '../../db/schema';
@@ -132,6 +132,9 @@ export function AnalysisPracticePage(): JSX.Element {
   const navigate = useNavigate();
   const activeProfile = useAppStore((s) => s.activeProfile);
   const rating = activeProfile?.currentRating ?? 1200;
+  const setCoachDrawerOpen = useAppStore((s) => s.setCoachDrawerOpen);
+  const setCoachDrawerAutoListen = useAppStore((s) => s.setCoachDrawerAutoListen);
+  const setGlobalBoardContext = useAppStore((s) => s.setGlobalBoardContext);
   const usernames: Usernames = {
     chesscom: activeProfile?.preferences?.chessComUsername,
     lichess: activeProfile?.preferences?.lichessUsername,
@@ -205,6 +208,29 @@ export function AnalysisPracticePage(): JSX.Element {
     setQIndex((i) => i + 1);
     resetForQuestion();
   }, [position, qIndex, loadNext, source, resetForQuestion]);
+
+  // "Talk to Coach" — seed the current position as the coach's board context
+  // and open the drawer with the mic already listening, so you can ask "why is
+  // this best?" out loud and hear the reply. Same path as the Coach-hub Talk
+  // button, kept consistent (David 2026-07-14). Native recognizer in the App
+  // Store build; Web Speech in a browser.
+  const handleTalkToCoach = useCallback(() => {
+    if (!position) return;
+    let turn = 'w';
+    try { turn = new Chess(position.fen).turn(); } catch { /* default white */ }
+    setGlobalBoardContext({
+      fen: position.fen,
+      pgn: '',
+      moveNumber: 1,
+      playerColor: position.orientation,
+      turn,
+      lastMove: null,
+      history: [],
+      timestamp: Date.now(),
+    });
+    setCoachDrawerAutoListen(true);
+    setCoachDrawerOpen(true);
+  }, [position, setGlobalBoardContext, setCoachDrawerAutoListen, setCoachDrawerOpen]);
 
   // Play the grounded demo line out on the board (tell AND show the why).
   const playDemo = useCallback(async (line?: string[]) => {
@@ -382,6 +408,15 @@ export function AnalysisPracticePage(): JSX.Element {
             <p className="text-xs text-center" style={{ color: 'var(--color-text-muted)' }}>
               Answer by typing, clicking a square, or playing the move on the board.
             </p>
+            <button
+              type="button"
+              onClick={handleTalkToCoach}
+              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border-2 bg-rose-500/10 border-rose-500/30 text-rose-400 font-semibold hover:opacity-80 transition-all text-sm"
+              data-testid="analysis-practice-talk-btn"
+              aria-label="Talk to Coach about this position"
+            >
+              <Mic size={18} /> Talk to Coach
+            </button>
           </div>
 
           {/* Right column — discussion / answer panel */}

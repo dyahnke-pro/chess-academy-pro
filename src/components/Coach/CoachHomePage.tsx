@@ -1,8 +1,9 @@
 import { useNavigate } from 'react-router-dom';
-import { Swords, BarChart3, Calendar, Search, GraduationCap, History, Info, X, Crown, Library } from 'lucide-react';
+import { Swords, BarChart3, Calendar, Search, GraduationCap, History, Info, X, Crown, Library, Mic } from 'lucide-react';
 import { useState } from 'react';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { PageHelp } from '../Layout/PageHelp';
+import { useAppStore } from '../../stores/appStore';
 import { useSettings } from '../../hooks/useSettings';
 import { scaledShadow } from '../../utils/neonColors';
 import { logAppAudit } from '../../services/appAuditor';
@@ -40,6 +41,24 @@ export function CoachHomePage(): JSX.Element {
   const { settings } = useSettings();
   const gB = settings.glowBrightness;
   const gS = gB / 100;
+  const setCoachDrawerOpen = useAppStore((s) => s.setCoachDrawerOpen);
+  const setCoachDrawerAutoListen = useAppStore((s) => s.setCoachDrawerAutoListen);
+
+  // "Talk to Coach" — opens the global coach drawer (a spoken conversation, on
+  // this page, no navigation) and starts the mic in one tap. Same voice path as
+  // the coach chat's mic, kept consistent (David 2026-07-14). Voice input runs
+  // through the native recognizer in the App Store build; in a browser it falls
+  // back to Web Speech (absent on iOS Safari — surfaced as a mic banner).
+  const handleTalk = (): void => {
+    void logAppAudit({
+      kind: 'coach-hub-tile-clicked',
+      category: 'subsystem',
+      source: 'CoachHomePage',
+      summary: 'tile=talk → coach drawer (autolisten)',
+    });
+    setCoachDrawerAutoListen(true);
+    setCoachDrawerOpen(true);
+  };
 
   // Audit-driven (WO-COACH-UNIFY-01 #15): tile taps were silent. A
   // "user went to Coach hub but ended up on Tactics" report now has
@@ -81,6 +100,20 @@ export function CoachHomePage(): JSX.Element {
       {/* Search */}
       <div className="max-w-lg mx-auto w-full">
         <SmartSearchBar placeholder="Ask your coach or say what you want to do..." />
+      </div>
+
+      {/* Talk to Coach — spoken conversation without leaving the page */}
+      <div className="max-w-lg mx-auto w-full">
+        <button
+          type="button"
+          onClick={handleTalk}
+          className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl border-2 bg-rose-500/10 border-rose-500/30 text-rose-400 font-semibold hover:opacity-80 transition-all duration-200"
+          data-testid="coach-talk-btn"
+          aria-label="Talk to Coach"
+        >
+          <Mic size={20} />
+          Talk to Coach
+        </button>
       </div>
 
       {/* Tile grid. Primary tiles are Learn (lessons), Play (real

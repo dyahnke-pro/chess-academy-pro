@@ -105,4 +105,16 @@ describe('CoachHomePage', () => {
     fireEvent.click(screen.getByTestId('coach-action-endgame'));
     expect(mockNavigate).toHaveBeenCalledWith('/coach/endgame');
   });
+
+  it('"Talk to Coach" opens the coach drawer with the mic auto-listening', async () => {
+    const { useAppStore } = await import('../../stores/appStore');
+    useAppStore.getState().setCoachDrawerOpen(false);
+    useAppStore.getState().setCoachDrawerAutoListen(false);
+
+    render(<CoachHomePage />);
+    fireEvent.click(screen.getByTestId('coach-talk-btn'));
+
+    expect(useAppStore.getState().coachDrawerOpen).toBe(true);
+    expect(useAppStore.getState().coachDrawerAutoListen).toBe(true);
+  });
 });

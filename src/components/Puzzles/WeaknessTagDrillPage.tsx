@@ -11,7 +11,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Brain, Trophy } from 'lucide-react';
 import { MistakePuzzleBoard } from './MistakePuzzleBoard';
-import { getMisconceptionDrillPuzzles } from '../../services/mistakePuzzleService';
+import { getMisconceptionDrillPuzzles, ensureSequenceSolution } from '../../services/mistakePuzzleService';
 import { recordTagDrillResult } from '../../services/misconceptionService';
 import { logAppAudit } from '../../services/appAuditor';
 import type { MistakePuzzle } from '../../types';
@@ -82,6 +82,35 @@ export function WeaknessTagDrillPage(): JSX.Element {
     setCorrect(0);
     setPhase(puzzles.length > 0 ? 'solving' : 'empty');
   }, [puzzles.length]);
+
+  // A quiet "opening slip" (e.g. c3 → b4) is a single move with no crisp
+  // tactic, so the board felt arbitrary and the coach's "why" had nothing
+  // concrete to walk (David 2026-07-14: "I don't think this is accurate …
+  // couldn't tell me why b4"). Extend it into the engine's forcing line (same
+  // path as the Tactical-Sequences drill) so the student plays the PLAN out and
+  // the "Why?" walks the real continuation instead of restating the move.
+  const current = puzzles[index];
+  const [seqAttempted, setSeqAttempted] = useState<Set<string>>(() => new Set());
+  const isOneMove = (moves: string): boolean =>
+    moves.trim().split(/\s+/).filter(Boolean).length === 1;
+  const preparingSequence = !!current
+    && current.tacticType === 'tactical_sequence'
+    && isOneMove(current.moves)
+    && !seqAttempted.has(current.id);
+
+  useEffect(() => {
+    if (phase !== 'solving' || !preparingSequence || !current) return;
+    const mp = current;
+    let cancelled = false;
+    void ensureSequenceSolution(mp).then((upgraded) => {
+      if (cancelled) return;
+      setSeqAttempted((prev) => new Set(prev).add(mp.id));
+      if (upgraded.moves !== mp.moves) {
+        setPuzzles((prev) => prev.map((p) => (p.id === mp.id ? upgraded : p)));
+      }
+    });
+    return () => { cancelled = true; };
+  }, [phase, preparingSequence, current]);
 
   if (phase === 'loading') {
     return (
@@ -154,11 +183,17 @@ export function WeaknessTagDrillPage(): JSX.Element {
           {label} · {index + 1} / {puzzles.length}
         </span>
       </div>
-      <MistakePuzzleBoard
-        key={puzzle.id}
-        puzzle={puzzle}
-        onComplete={(wasCorrect) => handleComplete(wasCorrect)}
-      />
+      {preparingSequence ? (
+        <div className="flex items-center justify-center py-16" data-testid="tag-drill-preparing-sequence">
+          <p className="text-sm text-theme-text-muted">Building the sequence…</p>
+        </div>
+      ) : (
+        <MistakePuzzleBoard
+          key={puzzle.id}
+          puzzle={puzzle}
+          onComplete={(wasCorrect) => handleComplete(wasCorrect)}
+        />
+      )}
     </div>
   );
 }

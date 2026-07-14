@@ -155,6 +155,18 @@ export function ChatInput({ onSend, disabled, placeholder, coachChoices, onPickC
     }
   }, [listening]);
 
+  // One-tap "Talk to Coach" — when a Talk affordance opens the drawer it sets
+  // coachDrawerAutoListen; kick off the mic immediately, then consume the flag
+  // so it fires exactly once. Same voice path the mic button uses, kept
+  // consistent across surfaces (David 2026-07-14).
+  const autoListen = useAppStore((s) => s.coachDrawerAutoListen);
+  useEffect(() => {
+    if (autoListen && !listening) {
+      useAppStore.getState().setCoachDrawerAutoListen(false);
+      handleVoice();
+    }
+  }, [autoListen, listening, handleVoice]);
+
   // Auto-resize textarea
   const handleInput = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.target.value);
