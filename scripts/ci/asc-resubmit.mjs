@@ -120,9 +120,32 @@ const main = async () => {
   console.log('\n=== SUBMIT MODE ===');
   if (!targetBuild) { console.error('::error::no build to attach'); process.exit(1); }
 
+  // 0) PULL BACK if locked in review. Apple rejects any build change while a
+  //    version is WAITING_FOR_REVIEW / IN_REVIEW, so to swap the build we first
+  //    delete the version's submission, returning it to an editable state.
+  //    Legacy-submitted versions (empty reviewSubmissions list) are held by an
+  //    appStoreVersionSubmission; modern ones by a reviewSubmissionItem — handle
+  //    both. Reversible: we re-attach + resubmit immediately below.
+  if (['WAITING_FOR_REVIEW', 'IN_REVIEW'].includes(version.attributes.appStoreState)) {
+    const avs = await api('GET', `/v1/appStoreVersions/${version.id}/appStoreVersionSubmission`);
+    const avsId = avs.j?.data?.id;
+    if (avsId) {
+      const del = await api('DELETE', `/v1/appStoreVersionSubmissions/${avsId}`);
+      console.log(`pull back (delete appStoreVersionSubmission ${avsId}): ${del.status === 204 ? 'OK' : del.status + ' ' + JSON.stringify(del.j).slice(0, 300)}`);
+    } else {
+      console.log(`no legacy appStoreVersionSubmission (state=${version.attributes.appStoreState}); relying on reviewSubmission cancel/DELETE_ITEM to unlock`);
+    }
+    // Re-read the state so the guard below reflects the pull-back.
+    const re = await api('GET', `/v1/appStoreVersions/${version.id}?fields[appStoreVersions]=appStoreState`);
+    version.attributes.appStoreState = re.j?.data?.attributes?.appStoreState ?? version.attributes.appStoreState;
+    console.log(`version state after pull-back: ${version.attributes.appStoreState}`);
+  }
+
   // 1) Attach the build to the version
   const attach = await api('PATCH', `/v1/appStoreVersions/${version.id}/relationships/build`, { data: { type: 'builds', id: targetBuild.id } });
   console.log(`attach build: ${attach.status === 204 ? 'OK' : attach.status + ' ' + JSON.stringify(attach.j).slice(0, 200)}`);
+  // NEVER resubmit on a failed attach — that would re-review the OLD build.
+  if (attach.status !== 204) { console.error('::error::build attach failed; aborting before submit so the old build is not resubmitted'); process.exit(1); }
 
   // 2) Reviewer notes
   const notes = process.env.REVIEWER_NOTES;
