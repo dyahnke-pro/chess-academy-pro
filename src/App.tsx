@@ -104,8 +104,9 @@ import { useAndroidBackButton } from './hooks/useAndroidBackButton';
 import { PrivacyPolicyPage } from './components/Legal/PrivacyPolicyPage';
 import { TermsOfServicePage } from './components/Legal/TermsOfServicePage';
 import { SupportPage } from './components/Legal/SupportPage';
-import { PaywallGate } from './components/Paywall/PaywallGate';
+import { AccessGate } from './components/Paywall/AccessGate';
 import { initBilling } from './services/billingService';
+import { useFreeTierStore } from './stores/freeTierStore';
 import { ReviewPrompt } from './components/Feedback/ReviewPrompt';
 
 /**
@@ -224,6 +225,11 @@ export function App(): JSX.Element {
         // fully usable, source='unconfigured' → isPro). The hard paywall only
         // engages when VITE_PAYWALL_ENABLED=true AND the user isn't Pro.
         void initBilling();
+
+        // Hydrate the free-tier ledger (puzzle bucket / free opening / kid
+        // window) into its runtime mirror so the soft paywall gate can read
+        // spend synchronously. Dormant unless the gate is live + non-Pro.
+        void useFreeTierStore.getState().hydrate();
 
         // Establish baseline strength so difficulty is adaptive from the
         // first session. Imported games are the source of truth; with no
@@ -344,7 +350,7 @@ export function App(): JSX.Element {
             store reviewer) can always reach them. */}
         <Route path="/terms" element={<TermsOfServicePage />} />
         <Route path="/support" element={<SupportPage />} />
-        <Route element={<PaywallGate><AppLayout /></PaywallGate>}>
+        <Route element={<AccessGate><AppLayout /></AccessGate>}>
           <Route path="/" element={<ErrorBoundary><DashboardPage /></ErrorBoundary>} />
           <Route path="/academy" element={<ErrorBoundary><AcademyPage /></ErrorBoundary>} />
           <Route path="/academy/course/:id" element={<ErrorBoundary><CourseSyllabusPage /></ErrorBoundary>} />
@@ -438,7 +444,7 @@ export function App(): JSX.Element {
           <Route path="/debug/opening-blunders" element={<Navigate to="/tactics/opening-traps" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
-        <Route element={<KidLayout />}>
+        <Route element={<AccessGate><KidLayout /></AccessGate>}>
           <Route path="/kid" element={<ErrorBoundary><KidModePage /></ErrorBoundary>} />
           <Route path="/kid/journey" element={<ErrorBoundary><JourneyMapPage /></ErrorBoundary>} />
           <Route path="/kid/queen-games" element={<ErrorBoundary><QueenGamesHub /></ErrorBoundary>} />

@@ -65,6 +65,27 @@ export interface MasterPlayCacheRecord {
   v: number;
 }
 
+/** Free-tier usage ledger for the metered soft paywall (freeTierService).
+ *  A SINGLE row keyed 'singleton' tracks what a non-Pro user has spent of
+ *  their free allowance: the lifetime 20-puzzle bucket, the one free opening
+ *  they claimed, and when they first entered the kid section (for the 7-day
+ *  kid window). Dormant unless the paywall gate is live AND the user is not
+ *  Pro — see freeTierService / accessPolicy. */
+export interface FreeTierRecord {
+  /** Always 'singleton' — only ever one row. */
+  id: string;
+  /** Count of puzzles solved against the free lifetime bucket. */
+  puzzlesSolved: number;
+  /** The masterclass opening id the user claimed as their one free opening,
+   *  or null before they've opened any eligible opening. */
+  freeOpeningId: string | null;
+  /** Unix ms of the FIRST kid-section access, or null if never entered.
+   *  Starts the 7-day free kid window. */
+  kidFirstAccessAt: number | null;
+  /** Unix ms of the last write — for debugging / future pruning. */
+  updatedAt: number;
+}
+
 class ChessAcademyDB extends Dexie {
   puzzles!: EntityTable<PuzzleRecord, 'id'>;
   openings!: EntityTable<OpeningRecord, 'id'>;
@@ -88,6 +109,7 @@ class ChessAcademyDB extends Dexie {
   findSquareAttempts!: EntityTable<FindSquareAttempt, 'id'>;
   misconceptionTags!: EntityTable<MisconceptionTagRecord, 'id'>;
   masterPlayCache!: EntityTable<MasterPlayCacheRecord, 'fen'>;
+  freeTier!: EntityTable<FreeTierRecord, 'id'>;
 
   constructor() {
     super('ChessAcademyDB');
@@ -779,6 +801,35 @@ class ChessAcademyDB extends Dexie {
       findSquareAttempts: 'id, timestamp, target, correct, color',
       misconceptionTags: 'id, tag, source, status, createdAt, openingId, sourceGameId',
       masterPlayCache: 'fen, cachedAt',
+    });
+
+    // v32 — freeTier usage ledger for the metered soft paywall (freemium
+    // free tier: 20-puzzle lifetime bucket + one free opening + 7-day kid
+    // window). Additive: a single-row store, no migration of existing data.
+    this.version(32).stores({
+      puzzles: 'id, rating, *themes, srsDueDate, userRating',
+      openings: 'id, eco, name, color, isRepertoire, isFavorite',
+      games: 'id, source, eco, date, isMasterGame, openingId',
+      flashcards: 'id, openingId, type, srsDueDate',
+      profiles: 'id',
+      sessions: 'id, date, profileId',
+      meta: 'key',
+      mistakePuzzles: 'id, sourceGameId, classification, srsDueDate, status, sourceMode, gamePhase',
+      modelGames: 'id, openingId',
+      proGameReferences: 'id, playerId, openingId, proOpeningId, variation',
+      middlegamePlans: 'id, openingId',
+      generatedContent: 'id, openingId, type, generatedAt',
+      openingWeakSpots: 'id, openingId, failCount, lastFailedAt',
+      classifiedTactics: 'id, sourceGameId, tacticType, playerColor, createdAt',
+      setupPuzzles: 'id, tacticType, difficulty, srsDueDate, status, sourceGameId',
+      openingNarrations: 'id, openingName, variation, moveSan, fen, approved',
+      cachedOpenings: 'normalizedName, eco, generatedAt',
+      endgameProgress: 'id, lessonId, lastPlayedAt',
+      srsOpeningCards: 'id, openingId, nextReviewAt, [openingId+nextReviewAt]',
+      findSquareAttempts: 'id, timestamp, target, correct, color',
+      misconceptionTags: 'id, tag, source, status, createdAt, openingId, sourceGameId',
+      masterPlayCache: 'fen, cachedAt',
+      freeTier: 'id',
     });
   }
 }

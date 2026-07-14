@@ -34,8 +34,35 @@ const FEATURES: readonly string[] = [
   'Voice coaching, endgames, and middlegame plans',
 ];
 
-export function PaywallPage(): JSX.Element {
+/** The free plan — what a non-Pro user gets without paying. Mirrors the
+ *  metered soft gate (accessPolicy / freeTierService): unlimited game upload,
+ *  weakness analysis, a 20-puzzle bucket, one main-tab opening, a week of Kids.
+ *  Shown at the top of the paywall so a walled user always sees what they
+ *  still have for free. */
+const FREE_TIER: readonly string[] = [
+  '20 free tactics puzzles',
+  'One full opening — Watch, Learn, Practice, Play',
+  'Upload your games + see your weaknesses',
+  'Kids mode free for a week',
+];
+
+/** Which premium surface bounced the user here — drives the contextual line
+ *  at the top of the paywall (soft-gate upsell). Mirrors accessPolicy's
+ *  GatedFeature. */
+export type PaywallFeature = 'opening' | 'puzzles' | 'coach' | 'academy' | 'kid' | 'app';
+
+const FEATURE_PROMPT: Record<PaywallFeature, string | null> = {
+  puzzles: 'You’ve used all 20 free puzzles. Go Pro for unlimited tactics tuned to your level.',
+  opening: 'You’ve opened your one free masterclass. Go Pro to unlock all 42 openings.',
+  coach: 'The AI coach is a Pro feature — go Pro to learn, play, and drill with it.',
+  academy: 'The Academy is a Pro feature — go Pro for the full guided course path.',
+  kid: 'Your free week of Kids mode is up. Go Pro to keep playing.',
+  app: null,
+};
+
+export function PaywallPage({ feature }: { feature?: PaywallFeature } = {}): JSX.Element {
   const { isResolving } = useEntitlement();
+  const featurePrompt = feature ? FEATURE_PROMPT[feature] : null;
   const [packages, setPackages] = useState<BillingPackage[] | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -104,6 +131,12 @@ export function PaywallPage(): JSX.Element {
           </p>
         </header>
 
+        {featurePrompt && (
+          <div className="mb-6 rounded-2xl border-2 border-[#c9a84c]/40 bg-[#c9a84c]/10 px-4 py-3 text-center">
+            <p className="text-sm font-semibold text-[#e5c874]">{featurePrompt}</p>
+          </div>
+        )}
+
         {PAYWALL_TEST_MODE && (
           <div className="mb-6 rounded-2xl border-2 border-amber-400/40 bg-amber-400/10 px-4 py-3 text-center">
             <p className="text-sm font-bold text-amber-300">🧪 Beta test — not a real charge</p>
@@ -116,6 +149,21 @@ export function PaywallPage(): JSX.Element {
           </div>
         )}
 
+        {/* Free plan — what they keep without paying. Sits at the top so a
+            walled user always sees the free tier before the Pro pitch. */}
+        <div className="mb-5 rounded-2xl border border-zinc-700 bg-zinc-800/40 px-4 py-3">
+          <p className="mb-2 text-xs font-bold uppercase tracking-wider text-zinc-400">Free plan includes</p>
+          <ul className="space-y-1.5">
+            {FREE_TIER.map((f) => (
+              <li key={f} className="flex items-start gap-2 text-sm text-zinc-300">
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" />
+                <span>{f}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <p className="mb-2 text-xs font-bold uppercase tracking-wider text-[#c9a84c]">Go Pro to unlock</p>
         <ul className="mb-6 space-y-2">
           {FEATURES.map((f) => (
             <li key={f} className="flex items-start gap-2 text-sm text-zinc-300">
@@ -232,6 +280,14 @@ export function PaywallPage(): JSX.Element {
           <span className="mx-2">·</span>
           <Link to="/privacy" className="underline">
             Privacy Policy
+          </Link>
+        </p>
+
+        {/* Soft gate: this wall sits in front of ONE premium surface, not the
+            whole app — always give a way back to the free features. */}
+        <p className="mt-4 text-center text-xs">
+          <Link to="/" className="text-zinc-400 underline" data-testid="paywall-back-free">
+            Not now — back to free features
           </Link>
         </p>
       </div>

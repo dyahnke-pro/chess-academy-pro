@@ -13,6 +13,7 @@ import { useBoardContext } from '../../hooks/useBoardContext';
 import { voiceService } from '../../services/voiceService';
 import { getWrongMoveHint } from '../../utils/puzzleHints';
 import { recordTacticOutcome } from '../../services/tacticAlertService';
+import { usePuzzleMeter } from '../../hooks/usePuzzleMeter';
 import { getTacticTypeFromThemes, getPrimaryThemeLabel } from '../../services/tacticClassifierService';
 import { describeMoveGeometry } from '../../services/groundedAnswer';
 import { useAppStore } from '../../stores/appStore';
@@ -56,6 +57,8 @@ export function PuzzleBoard({
   disabled = false,
   maxWrongAttempts = 2,
 }: PuzzleBoardProps): JSX.Element {
+  const meter = usePuzzleMeter();
+  const consumedIdRef = useRef<string | null>(null);
   const [state, setState] = useState<PuzzleState>('loading');
   const [moveIndex, setMoveIndex] = useState(0);
   const [lastMoveHighlight, setLastMoveHighlight] = useState<{ from: string; to: string } | null>(null);
@@ -233,6 +236,12 @@ export function PuzzleBoard({
         context: 'drill',
       });
     }
+    // Free-tier meter: count this puzzle against the 20-bucket once (guarded by
+    // id so a double terminal can't double-decrement). No-op for Pro / gate-off.
+    if (consumedIdRef.current !== puzzle.id) {
+      consumedIdRef.current = puzzle.id;
+      meter.consume();
+    }
     onComplete({
       correct,
       usedHint: hintUsedRef.current,
@@ -240,7 +249,7 @@ export function PuzzleBoard({
       showedSolution: showedSolutionRef.current,
       solveTimeMs: Date.now() - solveStartRef.current,
     });
-  }, [onComplete, tacticType, subtitle]);
+  }, [onComplete, tacticType, subtitle, puzzle.id, meter]);
 
   const handleMove = useCallback((move: MoveResult): void => {
     if (state !== 'playing' || disabled) return;

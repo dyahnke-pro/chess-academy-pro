@@ -203,6 +203,13 @@ Pick ONE. They're ranked by how directly they sell:
 
 ### Description (front-loaded hook first — optimized to CONVERT, since iOS doesn't index the body for search)
 
+> 🔒 FREEMIUM TIMING (David 2026-07-14): the `— START FREE —` block below
+> describes the metered free tier from the soft-gate build (PR #790). Apply this
+> to the live App Store listing ONLY WHEN THAT BUILD SHIPS. The in-review build
+> 137 still hard-walls, so publishing the free-tier copy before the freemium
+> build is live would describe a free plan the shipped app doesn't have. Until
+> then, the pre-freemium close ("Try it free for 7 days") is the accurate copy.
+
 ```
 A chess coach that actually watches your games — and tells you exactly what to fix.
 
@@ -248,7 +255,13 @@ ENDGAMES
 A KIDS MODE
 • A dedicated, friendly mode with encouraging lessons for young players
 
-Try it free for 7 days. Then $7.99/month or $79.99/year — less than a single hour with a human coach. Cancel anytime.
+— START FREE, NO CARD NEEDED —
+• 20 tactics puzzles to solve
+• One full opening masterclass — Watch, Learn, Practice, Play
+• Import your games and see your personal Weaknesses page
+• A full week of Kids mode
+
+Go Pro anytime to unlock the unlimited AI coach, all 42 opening masterclasses, the full 15,000-puzzle bank, and complete game analysis — 7-day free trial, then $7.99/month or $79.99/year. Cancel anytime.
 
 Engine analysis runs on your device; the coach's voice and chat are powered by secure cloud services.
 
