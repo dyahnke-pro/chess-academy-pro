@@ -13,6 +13,7 @@ import { CheckCircle, XCircle, AlertTriangle, Volume2, Clock, User, BookOpen, Pl
 import { ShowMeButton } from '../Coach/ShowMeButton';
 import { useStruggleDetection } from '../../hooks/useStruggleDetection';
 import { detectTacticType } from '../../services/missedTacticService';
+import { usePuzzleMeter } from '../../hooks/usePuzzleMeter';
 import { getCoachingMessage, recordTacticOutcome, tacticTypeLabel } from '../../services/tacticAlertService';
 import type { CoachingTier } from '../../services/tacticAlertService';
 import type { MoveResult } from '../../hooks/useChessGame';
@@ -132,6 +133,8 @@ function parseUciMoves(uci: string): { from: string; to: string; promotion?: str
 }
 
 export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = false }: MistakePuzzleBoardProps): JSX.Element {
+  const meter = usePuzzleMeter();
+  const consumedIdRef = useRef<string | null>(null);
   const [state, setState] = useState<PuzzleState>('loading');
   const [moveIndex, setMoveIndex] = useState(0);
   const [fen, setFen] = useState(puzzle.fen);
@@ -143,6 +146,16 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
   const hasMadeMistakeRef = useRef(false);
   const wrongAttemptsRef = useRef(0);
   const chessRef = useRef(new Chess(puzzle.fen));
+
+  // Free-tier meter: count this puzzle against the 20-bucket once when it
+  // reaches a terminal state (solved or revealed). Guarded by id so it fires
+  // exactly once per puzzle. No-op for Pro / gate-off.
+  useEffect(() => {
+    if ((state === 'correct' || state === 'incorrect') && consumedIdRef.current !== puzzle.id) {
+      consumedIdRef.current = puzzle.id;
+      meter.consume();
+    }
+  }, [state, puzzle.id, meter]);
   const movesRef = useRef(parseUciMoves(puzzle.moves));
   const playerMoveCountRef = useRef(0);
   const { playMoveSound, playCelebration, playEncouragement } = usePieceSound();
