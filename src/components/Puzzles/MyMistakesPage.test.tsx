@@ -142,6 +142,29 @@ describe('MyMistakesPage', () => {
     expect(screen.getByText('Move 3 — d4')).toBeInTheDocument();
   });
 
+  it('only offers classification filters that exist in the data', async () => {
+    // All puzzles are blunders/mistakes — Inaccuracies + Misses can never
+    // match, so those options must not be offered (David 2026-07-14).
+    setMockData([
+      buildMistakePuzzle({ id: 'p1', classification: 'blunder', moveNumber: 3 }),
+      buildMistakePuzzle({ id: 'p2', classification: 'mistake', moveNumber: 7 }),
+    ]);
+
+    render(<MyMistakesPage />);
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('puzzle-card')).toHaveLength(2);
+    });
+
+    const select = screen.getByTestId('classification-filter');
+    const optionValues = Array.from(select.querySelectorAll('option')).map((o) => o.getAttribute('value'));
+    expect(optionValues).toContain('all');
+    expect(optionValues).toContain('blunder');
+    expect(optionValues).toContain('mistake');
+    expect(optionValues).not.toContain('inaccuracy');
+    expect(optionValues).not.toContain('miss');
+  });
+
   it('filters by source', async () => {
     setMockData([
       buildMistakePuzzle({ id: 'p1', sourceMode: 'coach', moveNumber: 3 }),

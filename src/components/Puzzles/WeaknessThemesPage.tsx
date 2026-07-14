@@ -8,7 +8,7 @@ import {
   generatePersonalizedDrill,
 } from '../../services/weaknessAnalyzer';
 import { getAllMistakePuzzles } from '../../services/mistakePuzzleService';
-import { gradeMistakePuzzle } from '../../services/mistakePuzzleService';
+import { gradeMistakePuzzle, ensureSequenceSolution } from '../../services/mistakePuzzleService';
 import { MistakePuzzleBoard } from './MistakePuzzleBoard';
 import { logAppAudit } from '../../services/appAuditor';
 import type { WeaknessTheme, WeaknessDrillItem } from '../../types';
@@ -90,22 +90,6 @@ export function WeaknessThemesPage(): JSX.Element {
     }
   }, [completedSet]);
 
-  const handleComplete = useCallback(async (correct: boolean, solveTimeMs?: number): Promise<void> => {
-    const item = drillItems.at(currentIndex);
-    if (!item) return;
-    if (completedSet.has(currentIndex)) return;
-    completedSet.add(currentIndex);
-
-    if (correct) {
-      setSolved((s) => s + 1);
-    } else {
-      setFailed((f) => f + 1);
-    }
-
-    const grade = correct ? 'good' : 'again';
-    await gradeMistakePuzzle(item.mistakePuzzle.id, grade, correct, solveTimeMs);
-  }, [drillItems, currentIndex, completedSet]);
-
   const goNext = useCallback((): void => {
     const nextIdx = currentIndex + 1;
     if (nextIdx >= drillItems.length) {
@@ -115,12 +99,66 @@ export function WeaknessThemesPage(): JSX.Element {
     }
   }, [currentIndex, drillItems.length]);
 
+  const handleComplete = useCallback(async (correct: boolean, solveTimeMs?: number): Promise<void> => {
+    const item = drillItems.at(currentIndex);
+    if (!item) return;
+    if (!completedSet.has(currentIndex)) {
+      completedSet.add(currentIndex);
+
+      if (correct) {
+        setSolved((s) => s + 1);
+      } else {
+        setFailed((f) => f + 1);
+      }
+
+      const grade = correct ? 'good' : 'again';
+      await gradeMistakePuzzle(item.mistakePuzzle.id, grade, correct, solveTimeMs);
+    }
+
+    // The board's own "Next puzzle" CTA (shown after a solve) routes here.
+    // Grade once, then advance so the drill actually moves on — otherwise the
+    // student is stranded on the solved board with no visible way forward.
+    goNext();
+  }, [drillItems, currentIndex, completedSet, goNext]);
+
   const currentItem = drillItems.at(currentIndex);
   const total = solved + failed;
 
+  // A "Tactical Sequences" drill should teach a SEQUENCE, not a one-move
+  // blunder-fix (David 2026-07-14). Captured `tactical_sequence` puzzles are
+  // stored as a single ply; extend the current one into the engine's forcing
+  // line (persisted, one-time) before the board mounts, so it plays out
+  // move-by-move. `attemptedIds` tracks the ones already handled so a puzzle
+  // the engine couldn't extend still renders (as its single move) instead of
+  // spinning forever.
+  const [attemptedIds, setAttemptedIds] = useState<Set<string>>(() => new Set());
+  const isSingleMove = (moves: string): boolean =>
+    moves.trim().split(/\s+/).filter(Boolean).length === 1;
+  const preparingSequence = !!currentItem
+    && currentItem.mistakePuzzle.tacticType === 'tactical_sequence'
+    && isSingleMove(currentItem.mistakePuzzle.moves)
+    && !attemptedIds.has(currentItem.mistakePuzzle.id);
+
+  useEffect(() => {
+    if (phase !== 'drilling' || !preparingSequence || !currentItem) return;
+    const mp = currentItem.mistakePuzzle;
+    let cancelled = false;
+    void ensureSequenceSolution(mp).then((upgraded) => {
+      if (cancelled) return;
+      setAttemptedIds((prev) => new Set(prev).add(mp.id));
+      if (upgraded.moves !== mp.moves) {
+        setDrillItems((prev) =>
+          prev.map((d) => (d.mistakePuzzle.id === mp.id ? { ...d, mistakePuzzle: upgraded } : d)));
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [phase, preparingSequence, currentItem]);
+
   return (
     <div
-      className="max-w-2xl mx-auto w-full p-4 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 flex flex-col gap-4 min-h-[80vh]"
+      className="max-w-2xl mx-auto w-full p-4 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 flex flex-col gap-4 flex-1 overflow-y-auto min-h-0"
       data-testid="weakness-themes-page"
     >
       {/* Header */}
@@ -303,12 +341,24 @@ export function WeaknessThemesPage(): JSX.Element {
             )}
           </div>
 
-          {/* Board */}
-          <MistakePuzzleBoard
-            key={currentItem.mistakePuzzle.id}
-            puzzle={currentItem.mistakePuzzle}
-            onComplete={(correct, solveTimeMs) => void handleComplete(correct, solveTimeMs)}
-          />
+          {/* Board — hold the mount until the tactical sequence is built so it
+              plays the full line rather than flashing the single move first. */}
+          {preparingSequence ? (
+            <div
+              className="flex items-center justify-center py-16"
+              data-testid="preparing-sequence"
+            >
+              <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+                Building the tactical sequence…
+              </p>
+            </div>
+          ) : (
+            <MistakePuzzleBoard
+              key={currentItem.mistakePuzzle.id}
+              puzzle={currentItem.mistakePuzzle}
+              onComplete={(correct, solveTimeMs) => void handleComplete(correct, solveTimeMs)}
+            />
+          )}
 
           {/* Next button */}
           <div className="flex justify-center">

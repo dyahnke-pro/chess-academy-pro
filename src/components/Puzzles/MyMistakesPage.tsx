@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { MistakePuzzleBoard } from './MistakePuzzleBoard';
 import {
@@ -148,6 +148,18 @@ export function MyMistakesPage(): JSX.Element {
   // match, defeating the whole point.
   const norm = (s: string): string => s.toLowerCase().replace(/'/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
   const searchQ = norm(searchQuery);
+
+  // Which classification options can actually match in the current phase tab.
+  // Only inaccuracy/mistake/blunder/miss that EXIST in the data are offered —
+  // the generation threshold means inaccuracy/miss are usually absent, and a
+  // filter that can never match reads as "missing data" (David 2026-07-14).
+  const availableClassifications = useMemo(() => {
+    const set = new Set<MistakeClassification>();
+    for (const p of puzzles) {
+      if (phaseTab === 'all' || p.gamePhase === phaseTab) set.add(p.classification);
+    }
+    return set;
+  }, [puzzles, phaseTab]);
   const filtered = puzzles.filter((p) => {
     if (phaseTab !== 'all' && p.gamePhase !== phaseTab) return false;
     if (classFilter !== 'all' && p.classification !== classFilter) return false;
@@ -403,10 +415,18 @@ export function MyMistakesPage(): JSX.Element {
           data-testid="classification-filter"
         >
           <option value="all">All Types</option>
-          <option value="inaccuracy">Inaccuracies</option>
-          <option value="mistake">Mistakes</option>
-          <option value="blunder">Blunders</option>
-          <option value="miss">Misses</option>
+          {([
+            ['inaccuracy', 'Inaccuracies'],
+            ['mistake', 'Mistakes'],
+            ['blunder', 'Blunders'],
+            ['miss', 'Misses'],
+          ] as [MistakeClassification, string][])
+            // Show a type only if it exists in the current tab — or if it's the
+            // active selection (so a deep-linked filter never blanks the control).
+            .filter(([value]) => availableClassifications.has(value) || classFilter === value)
+            .map(([value, label]) => (
+              <option key={value} value={value}>{label}</option>
+            ))}
         </select>
 
         <select

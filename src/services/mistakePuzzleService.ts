@@ -923,6 +923,57 @@ export async function addMistakePuzzleFromCapture(
   return puzzle;
 }
 
+/** Depth + ply budget for turning a captured single-move `tactical_sequence`
+ *  puzzle into a real forcing SEQUENCE. 5 plies ≈ 3 student moves to calculate. */
+const SEQUENCE_SOLUTION_DEPTH = 16;
+const SEQUENCE_MAX_PLIES = 5;
+
+/** Upgrade a single-move `tactical_sequence` mistake puzzle into the real
+ *  multi-move forcing line so the "Tactical Sequences" drill teaches a
+ *  SEQUENCE, not a one-move blunder-fix (David 2026-07-14: "I want tactical
+ *  sequences tho, just one move solves"). The line is Stockfish's principal
+ *  variation from the mistake position — G3-safe: the ENGINE computes every
+ *  move, never the LLM. Only touches puzzles that are `tactical_sequence` AND
+ *  stored as a single ply; everything else returns unchanged. The extension is
+ *  PERSISTED so it's a one-time cost per puzzle. Returns the possibly-updated
+ *  puzzle (never throws — on any failure the original single-move puzzle is
+ *  returned so the drill still works). */
+export async function ensureSequenceSolution(puzzle: MistakePuzzle): Promise<MistakePuzzle> {
+  if (puzzle.tacticType !== 'tactical_sequence') return puzzle;
+  const plies = puzzle.moves.trim().split(/\s+/).filter(Boolean);
+  if (plies.length !== 1) return puzzle; // already a sequence (or malformed)
+
+  try {
+    await stockfishEngine.initialize();
+    const analysis = await stockfishEngine.analyzePosition(puzzle.fen, SEQUENCE_SOLUTION_DEPTH);
+    const pv = analysis.topLines[0]?.moves ?? [];
+    // The PV must OPEN with this puzzle's own best move — otherwise a re-eval
+    // has picked a different solution and extending would teach a line the
+    // puzzle wasn't built around. Keep the single move in that case.
+    if (pv.length < 2 || pv[0] !== puzzle.bestMove) return puzzle;
+
+    // Verify the whole line is legal from the mistake FEN before trusting it
+    // (chess.js is the truth; never persist a corrupt line — CLAUDE.md G3).
+    const line = pv.slice(0, SEQUENCE_MAX_PLIES);
+    const chess = new Chess(puzzle.fen);
+    for (const uci of line) {
+      const m = chess.move({
+        from: uci.slice(0, 2),
+        to: uci.slice(2, 4),
+        promotion: uci.length > 4 ? uci[4] : undefined,
+      });
+      if (!m) return puzzle;
+    }
+
+    const moves = line.join(' ');
+    if (moves === puzzle.moves) return puzzle;
+    await db.mistakePuzzles.update(puzzle.id, { moves }).catch(() => undefined);
+    return { ...puzzle, moves };
+  } catch {
+    return puzzle;
+  }
+}
+
 /** Pure builder: turn a captured slip (fen + playedSan + bestSan) into a fully-
  *  formed MistakePuzzle WITHOUT touching Dexie — so it can seed an in-memory
  *  drill queue (the per-misconception "drill this exact moment" surface) using

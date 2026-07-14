@@ -16,6 +16,9 @@ const mockGeneratePersonalizedDrill = vi.fn<(theme?: string, max?: number) => Pr
 vi.mock('../../services/mistakePuzzleService', () => ({
   getAllMistakePuzzles: (...args: unknown[]) => mockGetAllMistakePuzzles(...args as []),
   gradeMistakePuzzle: (...args: unknown[]) => mockGradeMistakePuzzle(...args as []),
+  // Sequence-extend is engine-backed; in tests it's a pass-through (no
+  // tactical_sequence single-move puzzles are used, so it never fires).
+  ensureSequenceSolution: (puzzle: MistakePuzzle) => Promise.resolve(puzzle),
 }));
 
 vi.mock('../../services/weaknessAnalyzer', () => ({
@@ -188,11 +191,9 @@ describe('WeaknessThemesPage', () => {
       expect(screen.getByTestId('drill-view')).toBeInTheDocument();
     });
 
-    // Solve the puzzle
+    // Solving the last puzzle (the board's "Next puzzle" CTA routes through
+    // onComplete) grades it AND advances — with one item that lands on summary.
     await user.click(screen.getByTestId('solve-correct'));
-
-    // Click next/finish
-    await user.click(screen.getByTestId('next-btn'));
 
     await waitFor(() => {
       expect(screen.getByTestId('session-summary')).toBeInTheDocument();
