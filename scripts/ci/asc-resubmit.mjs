@@ -12,6 +12,7 @@
 //   REVIEWER_NOTES         App Review notes text
 //   SUBMIT=1               actually attach build + submit (default: read-only)
 import crypto from 'node:crypto';
+import { readFileSync } from 'node:fs';
 
 const APP = '6776418777';
 const KEY_ID = need('APP_STORE_CONNECT_API_KEY_ID');
@@ -153,6 +154,26 @@ const main = async () => {
   console.log(`attach build: ${attach.status === 204 ? 'OK' : attach.status + ' ' + JSON.stringify(attach.j).slice(0, 200)}`);
   // NEVER resubmit on a failed attach — that would re-review the OLD build.
   if (attach.status !== 204) { console.error('::error::build attach failed; aborting before submit so the old build is not resubmitted'); process.exit(1); }
+
+  // 1.5) Update the App Store DESCRIPTION from the canonical fastlane metadata
+  //      (UPDATE_DESCRIPTION=1). Done HERE — after pull-back made the version
+  //      editable and before the resubmit re-locks it — so the freemium
+  //      free-tier copy ships WITH the freemium build (never on the old
+  //      hard-wall build, which would be a Guideline 2.3.1 metadata mismatch).
+  //      Source of truth = the repo file, so no fragile string surgery.
+  if (process.env.UPDATE_DESCRIPTION === '1') {
+    const desc = readFileSync(new URL('../../fastlane/metadata/en-US/description.txt', import.meta.url), 'utf8').trim();
+    const locs = await api('GET', `/v1/appStoreVersions/${version.id}/appStoreVersionLocalizations?limit=50`);
+    const enUS = (locs.j.data || []).find((l) => l.attributes?.locale === 'en-US') || (locs.j.data || [])[0];
+    if (!enUS) {
+      console.log('::warning::UPDATE_DESCRIPTION set but no en-US localization found — skipping description update');
+    } else if (desc.length > 4000) {
+      console.log(`::warning::description is ${desc.length} chars (>4000) — skipping to avoid an API reject`);
+    } else {
+      const u = await api('PATCH', `/v1/appStoreVersionLocalizations/${enUS.id}`, { data: { type: 'appStoreVersionLocalizations', id: enUS.id, attributes: { description: desc } } });
+      console.log(`description update (${desc.length} chars): ${u.status === 200 ? 'OK — freemium free-tier copy applied' : u.status + ' ' + JSON.stringify(u.j).slice(0, 300)}`);
+    }
+  }
 
   // 2) Reviewer notes
   const notes = process.env.REVIEWER_NOTES;

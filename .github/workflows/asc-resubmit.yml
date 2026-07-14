@@ -37,6 +37,10 @@ on:
         description: 'build id to set export compliance on'
         type: string
         default: ''
+      update_description:
+        description: 'Also patch the App Store description from fastlane/metadata/en-US/description.txt (freemium free-tier copy)'
+        type: boolean
+        default: false
 
 jobs:
   resubmit:
@@ -59,4 +63,5 @@ jobs:
           CANCEL_SUB: ${{ inputs.cancel_sub }}
           RESUBMIT_SUB: ${{ inputs.resubmit_sub }}
           COMPLIANCE_BUILD: ${{ inputs.compliance_build }}
+          UPDATE_DESCRIPTION: ${{ inputs.update_description && '1' || '' }}
         run: node scripts/ci/asc-resubmit.mjs
