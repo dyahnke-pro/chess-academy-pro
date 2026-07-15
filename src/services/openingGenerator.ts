@@ -182,6 +182,40 @@ export function normalizeOpeningName(name: string): string {
  *  the window before tree-legality validation existed. Re-checking
  *  on retrieval means broken trees from old caches get evicted +
  *  re-generated automatically; users don't have to clear storage. */
+/** Sanitize a cached/shared walkthrough tree's post-walkthrough STAGE
+ *  arrays (concepts / findMove / drill / punish) by running the SAME
+ *  per-entry repairs the fresh-gen path applies (drops illegal /
+ *  malformed entries). This is the SOURCE fix for the "trap line / quiz
+ *  won't start" crash class (David 2026-07-15): a tree persisted before
+ *  a repair shipped — or pulled from the shared cache — can carry a
+ *  malformed stage entry (missing `distractors`/`choices`/`candidates`/
+ *  `moves`) that throws in a downstream picker/render. `getCachedOpening`
+ *  only re-checks tree MOVE legality, not stage-array shape, so sanitize
+ *  the stages here at the boundary — every consumer then gets clean
+ *  data, and the per-consumer validity guards become defense-in-depth.
+ *  Returns the same tree object mutated in place (arrays replaced with
+ *  their repaired subsets). */
+export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
+  try {
+    if (Array.isArray(tree.concepts) && tree.concepts.length > 0) {
+      tree.concepts = repairConceptsStage(tree.concepts).kept;
+    }
+    if (Array.isArray(tree.findMove) && tree.findMove.length > 0) {
+      tree.findMove = repairFindMoveStage(tree.findMove).kept;
+    }
+    if (Array.isArray(tree.drill) && tree.drill.length > 0) {
+      tree.drill = repairDrillStage(tree.drill).kept;
+    }
+    if (Array.isArray(tree.punish) && tree.punish.length > 0) {
+      tree.punish = repairPunishStage(tree.punish).kept;
+    }
+  } catch {
+    // A repair throwing on wildly-malformed data must not break the read
+    // — the per-consumer validity guards still protect the UI.
+  }
+  return tree;
+}
+
 export async function getCachedOpening(
   name: string,
 ): Promise<WalkthroughTree | null> {
@@ -225,6 +259,10 @@ export async function getCachedOpening(
       await db.cachedOpenings.delete(normalized);
       return null;
     }
+    // Repair the stage arrays at the boundary (see sanitizeTreeStages) —
+    // a legacy cached tree can carry a malformed concepts/findMove/drill/
+    // punish entry that would crash a downstream picker/render.
+    sanitizeTreeStages(cached.tree);
     void logAppAudit({
       kind: 'opening-cache-hit',
       category: 'subsystem',

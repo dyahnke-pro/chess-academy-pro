@@ -34,6 +34,7 @@ import {
   generateOpening,
   getCachedOpening,
   cacheOpening,
+  sanitizeTreeStages,
   generateMissingStagesInBackground,
 } from '../../services/openingGenerator';
 import {
@@ -2755,7 +2756,12 @@ export function CoachTeachPage(): JSX.Element {
         // spending an LLM call. Validates structurally + legally before
         // returning so a broken row from another user doesn't poison
         // this one. Skips silently when Supabase isn't configured.
-        const sharedTree = await readSharedCache(cacheKey ?? requestedName);
+        const sharedTreeRaw = await readSharedCache(cacheKey ?? requestedName);
+        // Sanitize a FOREIGN tree's stage arrays at the boundary — the
+        // shared cache skips repairPunishStage etc., so a malformed
+        // entry from another user's device would otherwise crash a
+        // downstream picker (David 2026-07-15 source fix).
+        const sharedTree = sharedTreeRaw ? sanitizeTreeStages(sharedTreeRaw) : null;
         if (sharedTree) {
           // Persist into local Dexie too so future visits are instant
           // without the Supabase round-trip.
