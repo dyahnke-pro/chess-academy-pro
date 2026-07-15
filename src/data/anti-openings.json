@@ -212,6 +212,49 @@
   ]
  },
  {
+  "id": "anti-philidor",
+  "eco": "C41",
+  "name": "Anti-Philidor: the Bc4 System",
+  "pgn": "e4 e5 Nf3 d6 Bc4 Be7 Nc3 Nf6 d4 exd4 Nxd4 O-O O-O Nxe4 Nxe4 d5 Bd3 dxe4 Bxe4 Nd7 Re1 Nf6 Bf3 c6 Bf4",
+  "uci": "e2e4 e7e5 g1f3 d7d6 f1c4 f8e7 b1c3 g8f6 d2d4 e5d4 f3d4 e8g8 e1g1 f6e4 c3e4 d6d5 c4d3 d5e4 d3e4 b8d7 f1e1 d7f6 e4f3 c7c6 c1f4",
+  "fen": "r1bq1rk1/pp2bppp/2p2n2/8/3N1B2/5B2/PPP2PPP/R2QR1K1 b - - 1 13",
+  "color": "white",
+  "style": "aggressive",
+  "isRepertoire": true,
+  "overview": "The tricky answer to the Philidor: bishop to c4 BEFORE the expected d4, echoing a famous world-championship-era game. The bishop clamps f7, the Legal's-mate trap is live from move three, and White transposes into the favorable open structure whenever convenient. One trick to know (the center fork trick — answered by Bd3), one trap to set, and a permanently more comfortable game pressing the d6 hole.",
+  "keyIdeas": [
+   "Bc4 before d4 — Philidor players are prepared for the other move order.",
+   "The Legal's-mate trap is live immediately: a pinned knight can still take e5.",
+   "Play d4 in a timely fashion — the exact move order barely matters.",
+   "Know the center fork trick answer: Bd3 keeps everything and keeps the pull."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "The Legal's Mate Trap",
+    "pgn": "e4 e5 Nf3 d6 Bc4 Bg4 Nc3 g6 Nxe5 Bxd1 Bxf7+ Ke7 Nd5",
+    "explanation": "The trap the Bc4 move order sets from move three: when Black pins the knight and drifts, the knight takes e5 anyway — offering the whole queen. Take it and it's checkmate in two: the bishop check drags the king to e7 and the knight delivers mate on d5. A verified forced mate. And if Black declines the queen and just recaptures the pawn, the g4-bishop falls and White is simply a clean pawn up."
+   },
+   {
+    "name": "The Center Fork Trick (defused)",
+    "pgn": "e4 e5 Nf3 d6 Bc4 Be7 Nc3 Nf6 d4 exd4 Nxd4 O-O O-O Nxe4 Nxe4 d5 Bd3 dxe4 Bxe4",
+    "explanation": "The universal equalizing attempt in this piece arrangement: knight takes e4, then the d-pawn forks bishop and knight to regain the piece. The answer to memorize is bishop to d3 — sidestep, keep the e4-knight covered, and recapture on your terms. Material comes out level and the engine keeps White about a quarter-pawn better with the safer structure. Not a refutation of White's setup — a resource you simply have to know."
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:tac-discovered",
+   "concept:pos-development"
+  ]
+ },
+ {
   "id": "anti-scandinavian",
   "eco": "B01",
   "name": "Anti-Scandinavian: Main Line",

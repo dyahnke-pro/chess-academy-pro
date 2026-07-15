@@ -46,6 +46,7 @@ import { ANTI_MODERN_150_LESSON } from './antiModern150';
 import { ANTI_PIRC_BATTERY_LESSON } from './antiPircBattery';
 import { BELGRADE_GAMBIT_LESSON } from './belgradeGambit';
 import { ANTI_FRENCH_TARRASCH_LESSON } from './antiFrenchTarrasch';
+import { ANTI_PHILIDOR_LESSON } from './antiPhilidor';
 import { ANTI_PIRC_AUSTRIAN_LESSON } from './antiPircAustrian';
 import { ANTI_ENGLUND_LESSON } from './antiEnglund';
 import { ANTI_BENONI_PUSH_LESSON } from './antiBenoniPush';
@@ -427,6 +428,7 @@ const LESSONS: Record<string, LessonScript> = {
   [ANTI_PIRC_BATTERY_LESSON.openingId]: ANTI_PIRC_BATTERY_LESSON,
   [BELGRADE_GAMBIT_LESSON.openingId]: BELGRADE_GAMBIT_LESSON,
   [ANTI_FRENCH_TARRASCH_LESSON.openingId]: ANTI_FRENCH_TARRASCH_LESSON,
+  [ANTI_PHILIDOR_LESSON.openingId]: ANTI_PHILIDOR_LESSON,
   [ANTI_PIRC_AUSTRIAN_LESSON.openingId]: ANTI_PIRC_AUSTRIAN_LESSON,
   [ANTI_ENGLUND_LESSON.openingId]: ANTI_ENGLUND_LESSON,
   [ANTI_BENONI_PUSH_LESSON.openingId]: ANTI_BENONI_PUSH_LESSON,

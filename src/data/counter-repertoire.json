@@ -199,8 +199,7 @@
         "double king pawn",
         "1...e5",
         "petroff",
-        "petrov",
-        "philidor"
+        "petrov"
       ],
       "recommendations": [
         {
@@ -621,6 +620,24 @@
           "name": "the …d5 Modern counter",
           "styleTags": [
             "solid",
+            "tactical"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "philidor",
+      "displayName": "the Philidor Defense",
+      "studentSide": "white",
+      "aliases": [
+        "philidor"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-philidor",
+          "name": "the Bc4 System",
+          "styleTags": [
+            "aggressive",
             "tactical"
           ]
         }
