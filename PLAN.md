@@ -604,3 +604,62 @@ All gates green. Next: ship-check → PR → loop audit on prod (3 instruments).
       (no choppy cut-off); square highlight kept. CLAUDE.md contract updated.
 - [ ] TestFlight upload (Mac-only — David's machine). Push to main pending
       David's "we push at the end" signal.
+
+---
+
+# PLAN — FULL-CATALOG MASTERCLASS SWEEP (David 2026-07-15: "sweep every opening… all the things") — ACTIVE
+
+David's order: sweep EVERY opening (not just the new ones): gems, middlegame +
+endgame plans, opening stops at the middlegame, middlegame plans start where the
+opening left off, all lines sound (no losing positions), sublines + variations,
+"watch out for" warnings, From-the-Books + Classic Wisdom present and NOT
+redundant with each other.
+
+## Instruments
+- `audit-reports/masterclass-sweep/matrix.json` — 167-opening inventory
+  (42 masterclass + 7 gambit-tab + 82 pro + 35 anti + 1 repertoire-only).
+- `audit-reports/masterclass-sweep/gatec2.json` — pawn-skeleton continuity.
+- `.soundness-all.mjs` → `soundness.json` — full-catalog engine sweep (every
+  lesson terminus + every data pgn main/variation, FEN-deduped, depth 18).
+
+## CLEAN (verified 2026-07-15)
+- **Gate A 100%** — all 167 openings resolve a curated lesson.
+- **Classic Wisdom vs From-the-Books: ZERO text redundancy** (different
+  sources; no overlap found on any opening).
+- Zero un-narrated model games, zero none-surfaceable gem sets, zero openings
+  without middlegame plans.
+
+## BACKLOG (priority order)
+1. **P0 soundness** — engine sweep IN FLIGHT (background). Every quiet-line
+   terminus < −1.0 for the student = fix; honest gambit showcases exempt.
+2. **P1 Gate C breaks: 128 plans** (pawn diff ≥4 from every line of their
+   opening — the Watch→plan handoff is incoherent). 5 masterclass
+   (kingsindianattack-kid, nimzoindian-rubinstein, queensgambit-slav,
+   catalanopening-slav, alekhinedefence-scandtrans) + ~123 pro-rep (gotham +
+   naroditsky + caruana heavy). Re-anchor at true termini + re-derive playable
+   lines. 52 close continuations + 31 drifted = verify-only.
+3. **P2 Gate B shorts** — 6 masterclass variations un-baselined (scotch
+   Steinitz 12p, alapin 2…d5 13p, alekhine scandi-trans 13p, old-indian
+   Janowski 12p, birds Swiss Gambit 10p, schliemann ×2 12p); 12 pro in the
+   sealed shrinking baseline; anti trap/mate showcase lines exempt by nature;
+   gambit-tab 0p rows are a matrix artifact (no repertoire pgn — check spines).
+4. **P3 zero-gem openings: 57** (25 masterclass first). Hand-curated per the
+   traps-by-hand doctrine: explorer slips → engine refutation (tiered) →
+   theory check → both-register narration + sources.
+5. **P4 zero-endgame-plan openings: 62** — data-gated, not auto-defects: run
+   endgame-structure classification per opening (masters explorer / corpus);
+   build only where ≥~15% of games reach the ending; record "data says none".
+6. **P5 variation-lesson gaps: 42 openings** (worst: sicilian-alapin 2/8,
+   london-system 2/8, old-indian 4/7, qga 4/6).
+7. **P6 small holes** — model games: sicilian-alapin, pro-samayraina-kings-
+   gambit. Pitfalls: schliemann, pro-caruana-{nimzo,french,kid},
+   pro-carlsen-{caro-kann,reti}.
+
+## Sequencing logic
+Soundness (worst defect class) → continuity (incoherent handoffs) → depth →
+content presence (gems → endgames → variation lessons; weeks of hand-curation,
+per-opening to the locked doctrines).
+
+## Next-session pickup
+Read the three sweep JSONs, work the backlog top-down, ship per the standard
+loop (gates → ship-check → main → prod audit).
