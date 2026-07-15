@@ -61,6 +61,7 @@ import { getProNaroditskyAlapinTabPlanIds } from '../../services/proNaroditskyAl
 import { getProNaroditskyKIDTabPlanIds } from '../../services/proNaroditskyKIDTabPlans';
 import { getProNaroditskyRemainingTabPlanIds } from '../../services/proNaroditskyRemainingTabPlans';
 import { getProNaroditskyCaroTabPlanIds } from '../../services/proNaroditskyCaroTabPlans';
+import { getProCaruanaNajdorfTabPlanIds } from '../../services/proCaruanaNajdorfTabPlans';
 import { getProEricRosenStaffordTabPlanIds } from '../../services/proEricRosenStaffordTabPlans';
 import { getProEricRosenLondonTabPlanIds } from '../../services/proEricRosenLondonTabPlans';
 import { getProEricRosenSicilianTabPlanIds } from '../../services/proEricRosenSicilianTabPlans';
@@ -1526,6 +1527,7 @@ export function OpeningDetailPage(): JSX.Element {
     getProNaroditskyKIDTabPlanIds(opening.id, pircTabKey) ??
     getProNaroditskyRemainingTabPlanIds(opening.id, pircTabKey) ??
     getProNaroditskyCaroTabPlanIds(opening.id, pircTabKey) ??
+    getProCaruanaNajdorfTabPlanIds(opening.id, pircTabKey) ??
     getProGothamchessCaroTabPlanIds(opening.id, pircTabKey) ??
     getProGothamchessTrompowskyTabPlanIds(opening.id, pircTabKey) ??
     getProGothamchessEnglishTabPlanIds(opening.id, pircTabKey) ??

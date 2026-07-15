@@ -19,6 +19,7 @@ import { getProNaroditskyAlapinTabPlanIds } from '../services/proNaroditskyAlapi
 import { getProNaroditskyKIDTabPlanIds } from '../services/proNaroditskyKIDTabPlans';
 import { getProNaroditskyRemainingTabPlanIds } from '../services/proNaroditskyRemainingTabPlans';
 import { getProNaroditskyCaroTabPlanIds } from '../services/proNaroditskyCaroTabPlans';
+import { getProCaruanaNajdorfTabPlanIds } from '../services/proCaruanaNajdorfTabPlans';
 import { getProEricRosenStaffordTabPlanIds } from '../services/proEricRosenStaffordTabPlans';
 import { getProEricRosenLondonTabPlanIds } from '../services/proEricRosenLondonTabPlans';
 import { getProEricRosenSicilianTabPlanIds } from '../services/proEricRosenSicilianTabPlans';
@@ -53,6 +54,7 @@ const RESOLVERS: Array<(openingId: string, tabKey: string) => string[] | null> =
   getProNaroditskyKIDTabPlanIds,
   getProNaroditskyRemainingTabPlanIds,
   getProNaroditskyCaroTabPlanIds,
+  getProCaruanaNajdorfTabPlanIds,
   getProEricRosenStaffordTabPlanIds,
   getProEricRosenLondonTabPlanIds,
   getProEricRosenSicilianTabPlanIds,

@@ -7,10 +7,10 @@
 
 const TAB_PLANS: Record<string, Record<string, string[]>> = {
   'pro-naroditsky-kia': {
-    'main': [],
-    'g6 modern setup': ['mp-pronaroKIA-symmetric-attack', 'mp-pronaroKIA-symmetric-e5push'],
-    'd5 kia mainline': ['mp-pronaroKIA-reti-attack', 'mp-pronaroKIA-reti-nc4'],
-    'd4 kid transposition': ['mp-pronaroKIA-kid-transposition', 'mp-pronaroKIA-pirc-nh4'],
+    'main': ['mp-pronaroKIA-symmetric-attack'],
+    'g6 modern setup': ['mp-pronaroKIA-symmetric-e5push'],
+    'd5 kia mainline': ['mp-pronaroKIA-reti-attack'],
+    'd4 kid transposition': ['mp-pronaroKIA-kid-transposition'],
     'vs ...e5 (reti gambit)': ['mp-pronaroKIA-vs-e5-conversion', 'mp-pronaroKIA-vs-e5-endgame'],
     'vs ...c6 (slav-like)': ['mp-pronaroKIA-vs-c6-attack', 'mp-pronaroKIA-vs-c6-endgame'],
     'vs ...b6 (owen)': ['mp-pronaroKIA-vs-b6-expand', 'mp-pronaroKIA-vs-b6-endgame'],
@@ -18,9 +18,9 @@ const TAB_PLANS: Record<string, Record<string, string[]>> = {
   },
   'pro-naroditsky-rossolimo': {
     'main': [],
-    'nc6 rossolimo proper': ['mp-pronaroRoss-nc6-maroczy', 'mp-pronaroRoss-nc6-b4push'],
-    'e6 open avoidance': ['mp-pronaroRoss-e6-taimanov', 'mp-pronaroRoss-e6-ne5'],
-    'bxd7+ trade': ['mp-pronaroRoss-bd7-conversion', 'mp-pronaroRoss-bd7-attack'],
+    'nc6 rossolimo proper': ['mp-pronaroRoss-nc6-maroczy'],
+    'e6 open avoidance': ['mp-pronaroRoss-e6-taimanov'],
+    'bxd7+ trade': ['mp-pronaroRoss-bd7-conversion'],
     'c3 sideline': ['mp-pronaroRoss-c3-spanish', 'mp-pronaroRoss-c3-endgame'],
     'bc4 vs ...d6': ['mp-pronaroRoss-bc4-italian', 'mp-pronaroRoss-bc4-endgame'],
     'vs ...g6 (hyper dragon)': ['mp-pronaroRoss-g6-maroczy', 'mp-pronaroRoss-g6-endgame'],
@@ -38,7 +38,7 @@ const TAB_PLANS: Record<string, Record<string, string[]>> = {
   },
   'pro-naroditsky-alekhine': {
     'main': [],
-    'nc3 two knights': ['mp-pronaroAlek-twoknights-equality', 'mp-pronaroAlek-twoknights-trade'],
+    'nc3 two knights': ['mp-pronaroAlek-twoknights-equality'],
     'c4 modern main': ['mp-pronaroAlek-modern-development', 'mp-pronaroAlek-modern-nb4'],
     'nf3 / modern quiet': ['mp-pronaroAlek-modernquiet-conversion', 'mp-pronaroAlek-quiet-d5break'],
   },
@@ -48,11 +48,17 @@ const TAB_PLANS: Record<string, Record<string, string[]>> = {
     'closed with d3': ['mp-pronaroRuy-d3-positional', 'mp-pronaroRuy-d3-flank'],
     'steinitz defense': ['mp-pronaroRuy-steinitz-d4', 'mp-pronaroRuy-steinitz-e5push'],
   },
+  'pro-naroditsky-dragodorf': {
+    'main': ['mp-pronardragodorf-main-cfile'],
+    'english attack (be3)': ['mp-pronardragodorf-english-queenside'],
+    'classical (be2)': ['mp-pronardragodorf-classical-e5'],
+    'h3 adams attack': [],
+  },
   'pro-naroditsky-jobava-london': {
     'main': [],
-    'e6 french setup': ['mp-pronaroJob-french-attack', 'mp-pronaroJob-french-qg4'],
-    'c6 slav-style': ['mp-pronaroJob-slav-trade', 'mp-pronaroJob-slav-rad1'],
-    'a6 with ...c5': ['mp-pronaroJob-a6c5-bd3', 'mp-pronaroJob-a6c5-rad1'],
+    'e6 french setup': ['mp-pronaroJob-french-attack'],
+    'c6 slav-style': ['mp-pronaroJob-slav-trade'],
+    'a6 with ...c5': ['mp-pronaroJob-a6c5-bd3'],
   },
 };
 
