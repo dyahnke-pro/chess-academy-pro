@@ -79,7 +79,7 @@ describe('Gate C — middlegame plans anchor on (or directly continue) their ope
       if (d != null && d > MAX_PAWN_DIFF && !baseline.has(p.id)) offenders.push(`${p.openingId} :: ${p.id} (pawn-diff ${d})`);
     }
     expect(offenders, `New plans must anchor on their opening's lines (pawn-diff <= ${MAX_PAWN_DIFF}); never add to the baseline:\n${offenders.join('\n')}`).toEqual([]);
-  });
+  }, 120000); // 450+ plans x every line of their opening — a real board walk, not a 5s unit test
 
   it('baseline contains no stale (now-anchored) entries — it only shrinks', () => {
     const planById = new Map(plans.map((p) => [p.id, p]));
@@ -91,5 +91,5 @@ describe('Gate C — middlegame plans anchor on (or directly continue) their ope
       if (d != null && d <= MAX_PAWN_DIFF) stale.push(`${id} (now pawn-diff ${d})`);
     }
     expect(stale, `These baseline entries are fixed — remove them from middlegamePlanContinuity.baseline.json:\n${stale.join('\n')}`).toEqual([]);
-  });
+  }, 120000);
 });
