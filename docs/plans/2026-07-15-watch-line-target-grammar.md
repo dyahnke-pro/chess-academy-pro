@@ -76,6 +76,20 @@ explicitly acknowledged it "goes against how we make the WATCH currently"):
   actual teaching density). sayShort/Learn cue rules unchanged.
 - **All original prose** (plagiarism guard: his ideas, never his sentences),
   all board-verified (narrationAccuracy), all painted (target grammar above).
+- **🔒 USE THE ENGINE FREELY WHEN BUILDING (David 2026-07-15: "Naroditsky uses
+  the engine in his post game reviews. Don't be afraid to use it when building
+  the walkthrough and the opening lines.").** Stockfish is a first-class
+  BUILD instrument for these walkthroughs — verify every taught line, eval the
+  what-if excursions, find the refutation the video gestures at, extend a line
+  the video leaves hanging. The engine PROVES; the video TEACHES; the LLM only
+  phrases (G3/G0 unchanged — the engine is the sanctioned verification tool,
+  not a banned bot).
+- **🔒 THE WALKTHROUGH STRUCTURE (David 2026-07-15):** the build covers ALL the
+  lines he points out in the video. The MAIN LINE he recommends = the primary
+  Watch/Learn lesson (the Learn tab's line); every other line he shows becomes
+  a VARIATION tab or SUBLINE beneath it, each with its own beats. Nothing he
+  teaches in the video gets dropped — if he shows it, we teach it (engine-
+  verified, original prose).
 
 Related: `docs/plans/2026-07-15-naroditsky-openings-and-coach-recommender.md`
 (new openings must author to THIS grammar from day one) and

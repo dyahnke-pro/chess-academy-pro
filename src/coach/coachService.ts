@@ -1049,6 +1049,11 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     const tacticsProfileQuestionEngage = isTacticsProfileQuestion(askForIntents);
     const phaseQuestionEngage = isPhaseQuestion(askForIntents);
     const repertoireGapQuestionEngage = isRepertoireGapQuestion(askForIntents);
+    // Counter-repertoire recommendation — a no-board ask ("what should I play
+    // against the Pirc?"); must ENGAGE the grounded path even with no FEN or
+    // the standalone chat answers it with an ungrounded LLM invention
+    // (the 2026-07-15 localhost audit caught exactly that: "Bayonet Attack").
+    const counterRepertoireQuestionEngage = isCounterRepertoireQuestion(askForIntents);
     const accuracyQuestionEngage = isAccuracyQuestion(askForIntents);
     const consistencyQuestionEngage = isConsistencyQuestion(askForIntents);
     const convertingQuestionEngage = isConvertingQuestion(askForIntents);
@@ -1096,7 +1101,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     }
     const autoGrounding =
       options.grounding ??
-      (input.liveState.fen || progressQuestion || trendQuestionEngage || conceptQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage || whyBestMoveEngage || candidateMoveEngage || alternativesEngage
+      (input.liveState.fen || progressQuestion || trendQuestionEngage || conceptQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || counterRepertoireQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage || whyBestMoveEngage || candidateMoveEngage || alternativesEngage
         ? {
             currentFen: input.liveState.fen,
             // DB-grounding: thread the move history through so the
@@ -1142,8 +1147,8 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // Pirc") is a RECOMMENDATION — never a position eval. Suppress
             // the best-move branch and set the flag so coachApi dispatches
             // the curated recommendation (David 2026-07-15 live screenshot).
-            counterRepertoireQuestion: isCounterRepertoireQuestion(askForIntents),
-            bestMoveQuestion: isBestMoveQuestion(askForIntents) && !candidateMoveEngage && !isCounterRepertoireQuestion(askForIntents),
+            counterRepertoireQuestion: counterRepertoireQuestionEngage,
+            bestMoveQuestion: isBestMoveQuestion(askForIntents) && !candidateMoveEngage && !counterRepertoireQuestionEngage,
             whyBestMoveQuestion: whyBestMoveEngage,
             // Comparative ask — dispatched BEFORE whyBestMove/bestMove so the
             // alternatives comparison wins over the generic reasoning walk.

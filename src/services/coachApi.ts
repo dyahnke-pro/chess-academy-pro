@@ -3089,11 +3089,12 @@ export async function getCoachChatResponse(
                   return voiced;
                 }
               }
-            } else if (!grounding.repertoireGapQuestion) {
+            } else {
               // The ask names an opponent opening we have NO curated answer
               // for — say so honestly (a true capability fact), never invent
-              // a line (G0). When the gap flag also fired, fall through to
-              // the repertoire-gap answer instead.
+              // a line (G0). This wins even when the repertoire-gap flag also
+              // fired: an explicit against-ask deserves the no-prep answer,
+              // not "play more games" (grob probe, 2026-07-15).
               const noPrepFact = "I don't have a prepared recommendation against that opening yet. Ask me about the ones I do teach — the Sicilian, Caro-Kann, French, Pirc, King's Indian, London and more — or tell me what your opponent plays and I'll point you at the closest line I cover.";
               const voicedNoPrep = await voiceFacts(noPrepFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'counter-repertoire', preferRaw: true });
               if (voicedNoPrep) return voicedNoPrep;

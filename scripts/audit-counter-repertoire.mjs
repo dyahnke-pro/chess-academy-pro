@@ -32,7 +32,11 @@ const stamp = new Date().toISOString().replace(/[:.]/g, '-');
 const OUT_DIR = `audit-reports/counter-repertoire-${stamp}`;
 
 // A brain round-trip (DeepSeek voiceFacts rephrase) can take a while cold.
-const REPLY_TIMEOUT_MS = 90_000;
+// Generous: on a COLD localhost context the deferred seed + every-boot
+// reconcile loaders hammer IndexedDB for ~60s and grounded reads queue behind
+// them (the in-sequence stalls of 2026-07-15). Prod/warm devices answer in
+// seconds; the timeout just rides out cold-seed contention.
+const REPLY_TIMEOUT_MS = 150_000;
 
 const SCENARIOS = [
   {
@@ -82,31 +86,48 @@ async function lastAssistantText(page) {
 async function main() {
   await mkdir(OUT_DIR, { recursive: true });
   console.log(`[counter-rep] base = ${BASE_URL}`);
-  const browser = await chromium.launch({ executablePath: resolveChromiumExecutable(), args: sandboxLaunchArgs() });
-  const context = await browser.newContext(sandboxContextOptions());
-  const page = await context.newPage();
+  const executablePath = await resolveChromiumExecutable(false);
+  const browser = await chromium.launch({ executablePath, args: sandboxLaunchArgs() });
   const results = [];
 
   try {
-    await page.goto(`${BASE_URL}/coach/chat`, { waitUntil: 'domcontentloaded', timeout: 45_000 });
-    await autoDismissCalibration(page);
-    await page.waitForTimeout(6_000); // store hydration (see audit-coach-chat)
-
     for (const s of SCENARIOS) {
-      const before = (await page.locator('[data-testid="chat-message-assistant"], [data-role="assistant"], .chat-message.assistant').count().catch(() => 0)) ?? 0;
+      // FRESH CONTEXT per scenario — shared-context runs proved positionally
+      // flaky (restored chat session + IndexedDB reseed swallowing sends)
+      // while every ask answers correctly in an isolated context. Full
+      // isolation is the only configuration that reproduced 100% (2026-07-15).
+      const context = await browser.newContext(sandboxContextOptions());
+      await context.addInitScript(autoDismissCalibration);
+      const page = await context.newPage();
+      await page.goto(`${BASE_URL}/coach/chat`, { waitUntil: 'domcontentloaded', timeout: 45_000 });
+      await page.waitForTimeout(6_000); // store hydration (see audit-coach-chat)
+      // FRESHNESS GUARD: a slow previous reply (or the typing-indicator node)
+      // can satisfy a count-based wait and get scraped as THIS scenario's
+      // answer (the 2026-07-15 first run's off-by-one). Track the last
+      // assistant TEXT before sending and wait for it to CHANGE.
+      const beforeText = (await lastAssistantText(page)).trim();
+      // The chat input DISABLES while a turn is busy; a send fired into a
+      // disabled input silently no-ops and reads as a false hang (audit
+      // doctrine: pace the harness, don't manufacture hangs). Wait for it.
+      await page.waitForFunction(() => {
+        const el = document.querySelector('textarea') ?? document.querySelector('input[type="text"]');
+        return !!el && !el.disabled;
+      }, { timeout: 60_000 }).catch(() => {});
       const input = page.locator('textarea, input[type="text"]').first();
       await input.fill(s.ask);
       await input.press('Enter');
 
-      // Wait for a NEW assistant message to land.
       let reply = '';
       const deadline = Date.now() + REPLY_TIMEOUT_MS;
       while (Date.now() < deadline) {
         await page.waitForTimeout(2_000);
-        const count = await page.locator('[data-testid="chat-message-assistant"], [data-role="assistant"], .chat-message.assistant').count().catch(() => 0);
-        if (count > before) {
-          reply = await lastAssistantText(page);
-          if (reply.trim().length > 20) break; // let streaming finish a beat
+        const nowText = (await lastAssistantText(page)).trim();
+        if (nowText.length > 20 && nowText !== beforeText) {
+          reply = nowText;
+          // let streaming settle, then take the final text
+          await page.waitForTimeout(1_500);
+          reply = (await lastAssistantText(page)).trim();
+          break;
         }
       }
 
@@ -119,7 +140,7 @@ async function main() {
       const pass = failures.length === 0;
       results.push({ id: s.id, ask: s.ask, pass, failures, reply: reply.slice(0, 500) });
       console.log(`[${pass ? 'PASS' : 'FAIL'}] ${s.id}${failures.length ? ' — ' + failures.join('; ') : ''}`);
-      await page.waitForTimeout(2_500); // pace brain-bound asks (no false hangs)
+      await context.close();
     }
   } finally {
     await writeFile(`${OUT_DIR}/report.json`, JSON.stringify({ baseUrl: BASE_URL, when: stamp, results }, null, 2));
