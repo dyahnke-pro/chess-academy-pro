@@ -630,8 +630,24 @@ redundant with each other.
   without middlegame plans.
 
 ## BACKLOG (priority order)
-1. **P0 soundness** — engine sweep IN FLIGHT (background). Every quiet-line
-   terminus < −1.0 for the student = fix; honest gambit showcases exempt.
+1. **P0 soundness — ✅ DONE 2026-07-15.** 1,598 lines / 994 unique termini
+   at depth 18, 0 illegal. 33 termini < −1.0: honest showcases exempt
+   (verified by say-tail scan — Muzio/Halloween/Stafford/Benko/Fajarowicz/
+   Chinese-Dragon/KID/naroditsky-KID/benoni-Taimanov/old-indian-Be2+Czech all
+   narrate "not an equaliser" honestly); 10 genuine defects REBUILT on
+   engine-verified tails + shipped (commit "fix(soundness): P0 sweep"):
+   pirc Austrian (−1.76→−0.76, lesson beats rewritten to the …c4!/b5 line in
+   Danya register), pirc 150, anti-colle Nbd2 (was auto-mined junk), vienna
+   vs 2…Nc6 (honest-gambit reframe), gotham english, old-indian ×2,
+   carlsen-modern, benoni b5-race, caro Advance, evans Anderssen
+   (dxe5??→Ba3!, false "engine says plus-one" narration corrected, +2.14).
+1b. **OPEN DEFECT — kid-mode /kid re-mount stall.** Reproduced 2/3 prod
+   audit runs: goto /kid → visit /kid/puzzles → goto /kid = kid-mode-page
+   not visible in 45s (mount times degrade per hop: 21s→15s→22s→46s+).
+   Route /kid/play-games registered fine — the stall is the re-mount.
+   Needs localhost repro with CPU profile. Audit-flake note: coach-analyse
+   FEN mount + openings-ui ECO groups + master-integration context-destroyed
+   each failed once and passed on rerun (cold-prod timing, not code).
 2. **P1 Gate C breaks: 128 plans** (pawn diff ≥4 from every line of their
    opening — the Watch→plan handoff is incoherent). 5 masterclass
    (kingsindianattack-kid, nimzoindian-rubinstein, queensgambit-slav,
