@@ -82,7 +82,11 @@ cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
 # PrepareBuildForAppStoreConnect — same released-version rejection as the 2.8
 # incident. 3.1 carries the mic usage-string fix + half-duplex voice builds.
 # (Nightly auto-submit is now disabled, so 3.1 won't self-release like 3.0 did.)
-IOS_MARKETING_VERSION="3.1"
+# BUMP 3.1 → 3.2 (David 2026-07-15): 3.1 is APPROVED on the App Store, so Apple
+# rejects any new build uploaded under 3.1 ("must be a higher version"). 3.2
+# carries the new openings + counter-repertoire recommender + freemium free-tier
+# (start free, no card; 7-DAY FREE TRIAL for Pro).
+IOS_MARKETING_VERSION="3.2"
 sed -i '' -e "s/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = ${IOS_MARKETING_VERSION};/g" \
   ios/App/App.xcodeproj/project.pbxproj
 echo "ci_post_clone: MARKETING_VERSION set to ${IOS_MARKETING_VERSION} (build ${CI_BUILD_NUMBER:-?})"

@@ -29,7 +29,7 @@ TEAM_ID = '7KATVL9274'
 # Marketing version (CFBundleShortVersionString). The committed repo carries no
 # xcodeproj (cap add regenerates it to Capacitor's "1.0" default each build), so
 # this is the source of truth — bump it for a new App Store version.
-APP_VERSION = '2.8'
+APP_VERSION = '3.2'
 
 platform :ios do
   desc 'Build a signed App Store IPA (upload handled by the workflow via altool)'
