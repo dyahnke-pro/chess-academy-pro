@@ -233,9 +233,18 @@ async function main() {
   ];
   for (const card of kidCards) {
     await record(`kid-mode-nav-${card.testid}`, async () => {
-      await page.goto(`${BASE_URL}/kid`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
-      // Kid page does heavy gameProgress dexie reads on mount;
-      // bumped from 12s to 25s after audit flakes 2026-05-19.
+      // Return to /kid via IN-APP back navigation, not a full page.goto —
+      // a real user taps back (SPA route change, ~300ms); a full reload
+      // re-pays the app's ~15s cold boot on EVERY hop, which is what made
+      // this scenario the flakiest in the battery (2026-07-15 repro:
+      // full-reload mount ≈14s flat on localhost, in-app back = 329ms).
+      if (!page.url().endsWith('/kid')) {
+        await page.goBack({ waitUntil: 'domcontentloaded' }).catch(() => undefined);
+      }
+      if (!page.url().endsWith('/kid')) {
+        // first card, or back-stack empty: one full boot is unavoidable
+        await page.goto(`${BASE_URL}/kid`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
+      }
       await page.locator('[data-testid="kid-mode-page"]').waitFor({ timeout: 45000 });
       await page.locator(`[data-testid="${card.testid}"]`).click();
       // Wait for the actual URL change instead of a fixed timeout —

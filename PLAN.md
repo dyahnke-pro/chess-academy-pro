@@ -641,7 +641,18 @@ redundant with each other.
    vs 2…Nc6 (honest-gambit reframe), gotham english, old-indian ×2,
    carlsen-modern, benoni b5-race, caro Advance, evans Anderssen
    (dxe5??→Ba3!, false "engine says plus-one" narration corrected, +2.14).
-1b. **OPEN DEFECT — kid-mode /kid re-mount stall.** Reproduced 2/3 prod
+1b. **✅ RESOLVED 2026-07-15 — kid "re-mount stall" was an audit artifact,
+   and it unmasked a real perf finding.** Local repro: a FULL page load of
+   ANY surface takes ~14-15s to first mount (dashboard 14.8s, /kid 14.4s,
+   /openings 29.7s — dev server; prod audit hops showed the same 15-21s),
+   while IN-APP navigation back to /kid is 329ms. The audit full-reloaded
+   /kid before every card hop, re-paying the cold boot 4x — prod variance
+   pushed hop 4 past the 45s wait. FIX: audit-untouched-surfaces kid loop
+   now navigates in-app (goBack) like a real user — hops dropped to ~2.7s.
+   NEW FINDING for a dedicated perf pass: **~15s cold boot to first paint**
+   (module eval + per-boot G8 reconcilers + seed) — that's what a beta
+   tester pays on every fresh open. Instrument:
+   scripts/catalog-sweep/repro-kid-stall.mjs. OLD note: Reproduced 2/3 prod
    audit runs: goto /kid → visit /kid/puzzles → goto /kid = kid-mode-page
    not visible in 45s (mount times degrade per hop: 21s→15s→22s→46s+).
    Route /kid/play-games registered fine — the stall is the re-mount.
