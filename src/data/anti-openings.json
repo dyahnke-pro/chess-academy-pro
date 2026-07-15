@@ -369,6 +369,38 @@
   ]
  },
  {
+  "id": "anti-owen",
+  "eco": "B00",
+  "name": "Anti-Owen's Defense",
+  "pgn": "e4 b6 d4 Bb7 Nc3 e6 Bd3 Bb4 Ne2 Nf6 O-O d5 e5 Nfd7 Nf4 g6 Qg4 Nc6 Nce2 Ncxe5 dxe5 Nxe5 Qh3 O-O Bb5 c6",
+  "uci": "e2e4 b7b6 d2d4 c8b7 b1c3 e7e6 f1d3 f8b4 g1e2 g8f6 e1g1 d7d5 e4e5 f6d7 e2f4 g7g6 d1g4 b8c6 c3e2 c6e5 d4e5 d7e5 g4h3 e8g8 d3b5 c7c6",
+  "fen": "r2q1rk1/pb3p1p/1pp1p1p1/1B1pn3/1b3N2/7Q/PPP1NPPP/R1B2RK1 w - - 0 14",
+  "color": "white",
+  "style": "aggressive",
+  "isRepertoire": true,
+  "overview": "Owen's Defense fianchettoes the queenside bishop and concedes the whole centre — so take it. Full pawns, the Bd3 attacking diagonal, the quiet Ne2 that breaks the pin's teeth, and the e5 advance that walls in the b7-bishop forever. Then the kingside attack the setup was always building toward: Nf4 and Qg4 against a king whose defenders never developed. 219 corpus games at 69.4 percent; the engine confirms nearly two pawns of pressure in the main line.",
+  "keyIdeas": [
+   "Take the full centre — the b7-bishop needs targets and you will deny them forever.",
+   "Ne2 sidesteps the Bb4 pin: the doubled-pawn threat simply evaporates.",
+   "e5 is the move Owen dreads: the prized bishop ends up staring at a wall.",
+   "Nf4 + Qg4 is the payoff — the kingside Black abandoned receives visitors."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-center",
+   "concept:pos-initiative"
+  ]
+ },
+ {
   "id": "anti-scandinavian",
   "eco": "B01",
   "name": "Anti-Scandinavian: Main Line",

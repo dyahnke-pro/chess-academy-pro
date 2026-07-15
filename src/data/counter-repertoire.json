@@ -699,6 +699,26 @@
           ]
         }
       ]
+    },
+    {
+      "key": "owen",
+      "displayName": "Owen's Defense",
+      "studentSide": "white",
+      "aliases": [
+        "owen's defense",
+        "owens defense",
+        "owen"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-owen",
+          "name": "the full-centre kingside attack",
+          "styleTags": [
+            "aggressive",
+            "sharp"
+          ]
+        }
+      ]
     }
   ]
 }
