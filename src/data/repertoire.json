@@ -39,7 +39,7 @@
    },
    {
     "name": "Giuoco Pianissimo: Closed Italian with a4/Ba2",
-    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 O-O d6 c3 O-O Re1 a5 Bb5 Ba7",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 O-O d6 c3 O-O Re1 a6 a4 Ba7 Nbd2",
     "explanation": "The Bb5/Ba4/Bc2 maneuver is a sophisticated regrouping — the bishop retreats to avoid ...Na5 while relocating to the b1-h7 diagonal where it eyes the kingside. After Ng3, White has a flexible setup that can attack on either wing. This line has become extremely popular at the super-GM level because it offers rich strategic play without forcing moves.",
     "frequency": "common",
     "deviationMove": 7
