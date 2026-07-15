@@ -113,7 +113,7 @@ jobs:
           AAB=$(ls "$DIR"/*.aab 2>/dev/null | head -1 || true)
           test -n "$AAB" || { echo "::error::no .aab produced in $DIR"; ls -la "$DIR" || true; exit 1; }
           echo "AAB present: $AAB ($(wc -c < "$AAB") bytes)"
-          [ "${UNSIGNED_BUILD:-0}" = "1" ] && echo "::warning::This AAB is UNSIGNED (validation build)."
+          if [ "${UNSIGNED_BUILD:-0}" = "1" ]; then echo "::warning::This AAB is UNSIGNED (validation build)."; fi
 
       - name: Upload .aab artifact
         uses: actions/upload-artifact@v4
