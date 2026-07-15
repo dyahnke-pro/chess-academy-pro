@@ -29,6 +29,34 @@ const OPENINGS = {
   },
   // Belgrade Gambit / Four Knights Scotch (David 2026-07-15 — video-grounded
   // buildout target #2; his most-taught white opening, 20 videos).
+  'anti-french-white': {
+    name: 'Anti-French (White)',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['e4', 'e6'],
+    maxDepth: 80,
+  },
+  'anti-philidor-white': {
+    name: 'Anti-Philidor (White)',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['e4', 'e5', 'Nf3', 'd6'],
+    maxDepth: 80,
+  },
+  'anti-morra-black': {
+    name: 'Anti-Smith-Morra (Black)',
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['e4', 'c5', 'd4'],
+    maxDepth: 80,
+  },
+  'anti-london-black-nf6': {
+    name: 'Anti-London via Nf6 (Black)',
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['d4', 'Nf6', 'Bf4'],
+    maxDepth: 80,
+  },
   'anti-scandi-white': {
     name: 'Anti-Scandinavian (White)',
     color: 'white',
