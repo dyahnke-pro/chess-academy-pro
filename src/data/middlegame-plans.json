@@ -35830,142 +35830,102 @@
  {
   "id": "mp-pronaroJob-french-attack",
   "openingId": "pro-naroditsky-jobava-london",
-  "criticalPositionFen": "r2q1rk1/1bp1bppp/1pn2n2/p2p4/4P3/2N2NB1/PPPQB1PP/2KR3R w - - 0 13",
-  "title": "e6 French Setup — Bd3 kingside attack",
-  "overview": "A real win from this repertoire: Nxd5 grabs the central pawn, Nxe7+ trades with check, and e5 gains space — White is a clean pawn up (~+1.6).",
-  "pawnBreaks": [
-   {
-    "move": "e4-e5 space",
-    "explanation": "e5 gains central space, a pawn up.",
-    "fen": ""
-   }
-  ],
+  "criticalPositionFen": "r1bq1rk1/pp3ppp/2nppn2/3p4/3P4/2NBPN2/PPP2PPP/R2QK2R w KQ - 2 8",
+  "title": "e6 French Setup — the Bxd6 trade and the level fight",
+  "overview": "Against the solid ...e6 setup the corpus is honest: trade on d6 the moment the bishop appears, accept the symmetric structure, and outplay from equal. His forty-plus games with Bd3 here show the shape — the c-file half-open for Black, the e5-square soft for White — and the engine calls it dead level. The plan is the knight reroute: Nd2 to b3, clamping c5 and a5, castling behind it, and meeting Black's ...e5 space with the e4 stop. No advantage to protect — just better middlegame moves.",
+  "pawnBreaks": [],
   "pieceManeuvers": [
    {
     "piece": "Knight",
-    "route": "Nxd5 then Nxe7+",
-    "explanation": "The knight grabs d5 and trades on e7 with check."
+    "route": "Nf3-d2-b3",
+    "explanation": "The reroute: from b3 the knight owns c5 and a5, and the f-file stays clear for the rook after f3 or f4 later."
    }
   ],
   "strategicThemes": [
-   "Grab the central pawn.",
-   "Roll e5 for space."
+   "An honestly level structure: play it for the middlegame, not the eval bar.",
+   "Clamp the dark squares (b3-knight, c5) while Black's counterplay needs ...e5 — then fix it with e4."
   ],
   "endgameTransitions": [
    "A pawn up, trades favour White."
   ],
   "playableLines": [
    {
-    "fen": "r2q1rk1/1bp1bppp/1pn2n2/p2p4/4P3/2N2NB1/PPPQB1PP/2KR3R w - - 0 13",
+    "fen": "r1bq1rk1/pp3ppp/2nppn2/3p4/3P4/2NBPN2/PPP2PPP/R2QK2R w KQ - 2 8",
     "moves": [
-     "Nxd5",
-     "Nb4",
-     "Nxe7+",
-     "Qxe7",
-     "a3",
-     "Nc6",
+     "Nd2",
      "e5",
-     "Ng4"
+     "Nb3",
+     "Re8",
+     "O-O",
+     "e4"
     ],
     "annotations": [
-     "Nxd5 — White grabs the central pawn.",
-     "…Nb4 — Black’s knight jumps in.",
-     "Nxe7+ — White grabs the bishop with check.",
-     "…Qxe7 — Black recaptures.",
-     "a3 — White kicks the b4-knight.",
-     "…Nc6 — the knight retreats.",
-     "e5 — White gains central space.",
-     "…Ng4 — Black seeks counterplay, but White is a clean pawn up."
-    ],
-    "learnCues": [
-     "Nxd5 — grab the pawn",
-     "Nb4 — jump in",
-     "Nxe7+ — trade with check",
-     "Qxe7 — recapture",
-     "a3 — kick the knight",
-     "Nc6 — retreat",
-     "e5 — gain space",
-     "Ng4 — White is up"
+     "The knight steps back to go forward — d2 first, untangling from the pin ideas and heading queenside.",
+     "Black takes the space the trade promised — the e-pawn advances with tempo on nothing, but with a clear plan.",
+     "And b3, the reroute's point: c5 belongs to the knight now, and Black's queenside pawns need permission to move.",
+     "The rook backs the e-pawn — Black is fully mobilised too. Equal means equal.",
+     "Castle. With the clamp in place there is no rush; the game is long.",
+     "When the pawn comes to e4 the position fixes: Black has space, White has the c5 square and the sounder pawns. His games grind exactly this — the player with the plan wins the level position."
     ],
     "arrows": [
+     [],
+     [],
      [
       {
-       "from": "c3",
-       "to": "d5",
+       "from": "b3",
+       "to": "c5",
        "color": "rgba(40,185,95,0.92)"
       }
      ],
      [],
      [],
-     [],
-     [],
-     [],
-     [
-      {
-       "from": "e4",
-       "to": "e5",
-       "color": "rgba(40,185,95,0.92)"
-      }
-     ],
      []
     ],
     "highlights": [
      [
       {
-       "square": "d5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "a3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "c6",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "d2",
+       "color": "rgba(80,140,255,0.32)"
       }
      ],
      [
       {
        "square": "e5",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "color": "rgba(255,214,0,0.88)"
       }
      ],
      [
       {
-       "square": "g4",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "c5",
+       "color": "rgba(255,214,0,0.88)"
+      }
+     ],
+     [],
+     [],
+     [
+      {
+       "square": "e4",
+       "color": "rgba(239,68,68,0.72)"
+      },
+      {
+       "square": "c5",
+       "color": "rgba(255,214,0,0.88)"
       }
      ]
     ],
-    "title": "Jobava London vs …e6: Grab the Centre",
-    "intro": "A real this repertoire win. White snaps the d5-pawn, trades with check, and rolls e5.",
+    "learnCues": [
+     "Nd2 — back to go forward.",
+     "Black takes the space.",
+     "Nb3 — c5 is clamped.",
+     "Equal means equal.",
+     "Castle — the game is long.",
+     "Fixed pawns, better squares."
+    ],
+    "title": "The level fight, played better",
+    "intro": "His honest treatment of the solid French shell: trade, clamp c5, and outplay from symmetry.",
     "sources": [
-     "book:chess-fundamentals",
-     "https://www.chess.com/openings/Jobava-London-System",
-     "https://en.wikipedia.org/wiki/London_System",
-     "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+     "concept:pos-outpost",
+     "https://www.chess.com/openings/Queens-Pawn-Opening-Jobava-London-System"
     ]
    }
   ]
@@ -35973,62 +35933,52 @@
  {
   "id": "mp-pronaroJob-slav-trade",
   "openingId": "pro-naroditsky-jobava-london",
-  "criticalPositionFen": "r1bqk2r/pp3ppp/1n2p3/2npP3/3N1P2/2N5/PPPQ2PP/R3KB1R w KQkq - 1 13",
-  "title": "Slav Style — Qd3 attack + Ne5 outpost",
-  "overview": "A real win from this repertoire: the bishop lines up toward h7, White castles and centralises, and f5 cracks the kingside — clearly better (~+2.3).",
+  "criticalPositionFen": "r2qkb1r/pp1npppp/2p2nb1/3p4/3P1B2/2NBPN2/PPP2PPP/R2QK2R w KQkq - 5 7",
+  "title": "Slav Style — the bishop question and the b4 gain",
+  "overview": "The Slav-style ...Bf5 meets Bd3 and retreats to g6 rather than trade — and that half-tempo is the plan. Castle, put the rook behind the e-pawn, and when the bishop check comes, walk it backward with a3 and b4: every step of the chase gains queenside space Black never recovers. His ten corpus games ride this quiet edge; the engine calls it a clean, riskless plus for White.",
   "pawnBreaks": [
    {
-    "move": "f4-f5 strike",
-    "explanation": "f5 cracks open the kingside.",
+    "move": "b4",
+    "explanation": "The gaining chase: a3 asks, b4 insists — the bishop retreats to c7 and White owns the queenside dark squares.",
     "fen": ""
    }
   ],
   "pieceManeuvers": [
    {
-    "piece": "Bishop",
-    "route": "Bf1-d3 to h7",
-    "explanation": "The bishop lines up on d3 toward h7."
+    "piece": "Rook",
+    "route": "Rf1-e1",
+    "explanation": "Behind the e-pawn before anything opens — the rook is placed for a break that Black must always watch."
    }
   ],
   "strategicThemes": [
-   "Aim the bishop at h7.",
-   "Strike the kingside with f5."
+   "Win the opening by half-tempi: the g6 retreat and the b4 chase are two free gains.",
+   "Keep the light-squared bishops on — Black's g6 bishop bites its own pawn chain."
   ],
   "endgameTransitions": [
    "The kingside initiative tells into the endgame."
   ],
   "playableLines": [
    {
-    "fen": "r1bqk2r/pp3ppp/1n2p3/2npP3/3N1P2/2N5/PPPQ2PP/R3KB1R w KQkq - 1 13",
+    "fen": "r2qkb1r/pp1npppp/2p2nb1/3p4/3P1B2/2NBPN2/PPP2PPP/R2QK2R w KQkq - 5 7",
     "moves": [
-     "Bd3",
-     "Bd7",
      "O-O",
-     "Bc6",
-     "Rae1",
-     "Qe7",
-     "f5",
-     "Nxd3"
+     "e6",
+     "Re1",
+     "Bb4",
+     "a3",
+     "Ba5",
+     "b4",
+     "Bc7"
     ],
     "annotations": [
-     "Bd3 — White lines the bishop up toward h7.",
-     "…Bd7 — Black develops.",
-     "O-O — White castles.",
-     "…Bc6 — Black redeploys the bishop.",
-     "Rae1 — White centralises.",
-     "…Qe7 — Black connects.",
-     "f5 — White strikes on the kingside.",
-     "…Nxd3 — Black trades, but White’s kingside initiative gives the edge."
-    ],
-    "learnCues": [
-     "Bd3 — aim at h7",
-     "Bd7 — develop",
-     "O-O — castle",
-     "Bc6 — redeploy",
-     "Rae1 — centralise",
-     "Qe7 — connect",
-     "f5 — strike",
-     "Nxd3 — White presses"
+     "Castle first — the position asks for nothing sharper yet.",
+     "Black completes the Slav triangle, solid as ever.",
+     "The rook slips behind the e-pawn. Nothing is threatened; everything is prepared.",
+     "The bishop comes out with its one idea — the check-shaped pin on the knight.",
+     "a3 puts the question politely.",
+     "The bishop keeps the diagonal from a5, declining the trade —",
+     "— so b4 insists, gaining a full tempo and a queenside bind in the same move.",
+     "From c7 the bishop watches nothing White cares about. Count the free moves: a3, b4, and the rook already placed. His corpus converts exactly these slow gains."
     ],
     "arrows": [
      [],
@@ -36037,72 +35987,64 @@
      [],
      [],
      [],
-     [
-      {
-       "from": "f4",
-       "to": "f5",
-       "color": "rgba(40,185,95,0.92)"
-      }
-     ],
+     [],
      []
     ],
     "highlights": [
-     [
-      {
-       "square": "d3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "g1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "c6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
+     [],
+     [],
      [
       {
        "square": "e1",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "color": "rgba(80,140,255,0.32)"
       }
      ],
      [
       {
-       "square": "e7",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "b4",
+       "color": "rgba(80,140,255,0.32)"
       }
      ],
      [
       {
-       "square": "f5",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "a3",
+       "color": "rgba(80,140,255,0.32)"
       }
      ],
      [
       {
-       "square": "d3",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "a5",
+       "color": "rgba(255,214,0,0.88)"
+      }
+     ],
+     [
+      {
+       "square": "b4",
+       "color": "rgba(255,214,0,0.88)"
+      }
+     ],
+     [
+      {
+       "square": "c7",
+       "color": "rgba(239,68,68,0.72)"
       }
      ]
     ],
-    "title": "Jobava London vs …c6: Kingside Strike",
-    "intro": "A real this repertoire win. White aims the bishop at h7 and strikes f5.",
+    "learnCues": [
+     "Castle — nothing sharper yet.",
+     "The solid triangle.",
+     "Re1 — prepared, not committed.",
+     "The one-idea bishop.",
+     "a3 — the polite question.",
+     "Declined from a5 —",
+     "b4! — tempo plus bind.",
+     "Free moves win slow games."
+    ],
+    "title": "The bishop chase",
+    "intro": "His riskless Slav-style edge: ask with a3, insist with b4, bank the tempi.",
     "sources": [
-     "book:chess-fundamentals",
-     "https://www.chess.com/openings/Jobava-London-System",
-     "https://en.wikipedia.org/wiki/London_System",
-     "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+     "concept:pos-space",
+     "https://www.chess.com/openings/Queens-Pawn-Opening-Jobava-London-System"
     ]
    }
   ]
@@ -36110,75 +36052,70 @@
  {
   "id": "mp-pronaroJob-a6c5-bd3",
   "openingId": "pro-naroditsky-jobava-london",
-  "criticalPositionFen": "r1b2rk1/1p1nqpp1/p3p2p/2b5/4BB2/2P2N2/PP3PPP/R2Q1RK1 w - - 1 13",
-  "title": "a6 with ...c5 — Bd3 kingside attack",
-  "overview": "A real win from this repertoire: the queen and bishop aim at the kingside, the rooks come to the central files, and White reaches a harmonious, balanced middlegame (~equal).",
+  "criticalPositionFen": "r1bq1rk1/1p3ppp/p1n1pn2/2bp4/5B2/2NBPN2/PPP2PPP/R2Q1RK1 w - - 2 9",
+  "title": "a6 with ...c5 — the e4 break",
+  "overview": "The ...a6/...c5 system trades on d4 and develops smoothly — and the corpus answer arrives on one move: e4, the central break his games play from exactly this position at seven wins to two. The break trades a pair of knights and the d5-pawn's pride, and what remains is the position White wanted all along: the raking d3-bishop, the freer game, and a target on e6 that never heals.",
   "pawnBreaks": [
    {
-    "move": "e3-e4 lever",
-    "explanation": "An eventual e4 frees the centre to feed the kingside.",
+    "move": "e4",
+    "explanation": "The break the whole setup exists for: e4 opens the centre while every White piece already points at it.",
     "fen": ""
    }
   ],
   "pieceManeuvers": [
    {
     "piece": "Bishop",
-    "route": "Be4-d3 diagonal",
-    "explanation": "The bishop drops to d3, eyeing the b1-h7 diagonal toward the king."
+    "route": "Bc1-f4 and Bd3xe4",
+    "explanation": "Both bishops end on their dream diagonals — f4 watching the queenside dark squares, the recapturing bishop on e4 staring at h7."
    }
   ],
   "strategicThemes": [
-   "Aim the bishop and queen at the kingside.",
-   "Centralise the rooks."
+   "Break while ahead in harmony: seven-to-two in his games because White's pieces are placed first.",
+   "After the trades, e6 is the permanent tender point."
   ],
   "endgameTransitions": [
    "The harmonious setup holds into the endgame."
   ],
   "playableLines": [
    {
-    "fen": "r1b2rk1/1p1nqpp1/p3p2p/2b5/4BB2/2P2N2/PP3PPP/R2Q1RK1 w - - 1 13",
+    "fen": "r1bq1rk1/1p3ppp/p1n1pn2/2bp4/5B2/2NBPN2/PPP2PPP/R2Q1RK1 w - - 2 9",
     "moves": [
-     "Qc2",
-     "Nf6",
-     "Bd3",
-     "b5",
-     "Rad1",
-     "Bb7",
-     "Rfe1",
-     "Bxf3"
+     "e4",
+     "Nxe4",
+     "Nxe4",
+     "dxe4",
+     "Bxe4",
+     "f6",
+     "Qe2",
+     "Qe7"
     ],
     "annotations": [
-     "Qc2 — White centralises the queen toward the kingside.",
-     "…Nf6 — Black develops.",
-     "Bd3 — White lines the bishop up toward h7.",
-     "…b5 — Black expands on the queenside.",
-     "Rad1 — White centralises a rook.",
-     "…Bb7 — Black fianchettoes.",
-     "Rfe1 — White completes development.",
-     "…Bxf3 — Black trades off a piece; roughly balanced."
-    ],
-    "learnCues": [
-     "Qc2 — eye the kingside",
-     "Nf6 — develop",
-     "Bd3 — aim at h7",
-     "b5 — expand",
-     "Rad1 — centralise",
-     "Bb7 — fianchetto",
-     "Rfe1 — complete development",
-     "Bxf3 — balanced"
+     "There it is — the break. Every White piece was developed toward this single pawn move.",
+     "Black must take; letting e4 to e5 would bury the f6-knight.",
+     "Knights come off first,",
+     "and the pawn recaptures the piece — an even trade in material,",
+     "but not in geometry: the bishop lands on e4, the board's best diagonal, hitting b7 and eyeing h7 in the same breath.",
+     "Black has to blunt it with f6, softening e6 forever — the concession the break was designed to extract.",
+     "The queen slides to e2, taking the e-file behind the bishop.",
+     "Black mirrors — but compare the bishops, compare the pawns around each king, and you have his seven-to-two score explained. A clean pull with zero risk."
     ],
     "arrows": [
+     [],
+     [],
      [],
      [],
      [
       {
        "from": "e4",
-       "to": "d3",
+       "to": "b7",
+       "color": "rgba(40,185,95,0.92)"
+      },
+      {
+       "from": "e4",
+       "to": "h7",
        "color": "rgba(40,185,95,0.92)"
       }
      ],
-     [],
-     [],
      [],
      [],
      []
@@ -36186,60 +36123,52 @@
     "highlights": [
      [
       {
-       "square": "c2",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "e4",
+       "color": "rgba(255,214,0,0.88)"
       }
      ],
-     [
-      {
-       "square": "f6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
+     [],
+     [],
+     [],
      [
       {
        "square": "b7",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "color": "rgba(239,68,68,0.72)"
+      },
+      {
+       "square": "h7",
+       "color": "rgba(239,68,68,0.72)"
       }
      ],
      [
       {
-       "square": "e1",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "e6",
+       "color": "rgba(239,68,68,0.72)"
       }
      ],
      [
       {
-       "square": "f3",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "e2",
+       "color": "rgba(80,140,255,0.32)"
       }
-     ]
+     ],
+     []
     ],
-    "title": "Jobava London: Harmonious Development",
-    "intro": "A real this repertoire win. White lines the bishop toward h7 and develops every piece smoothly.",
+    "learnCues": [
+     "e4 — the designed break.",
+     "Black must take.",
+     "Knights first,",
+     "pawn takes piece,",
+     "bishop takes the board.",
+     "f6 — e6 is soft forever.",
+     "Qe2 — the file is White's.",
+     "Seven to two, explained."
+    ],
+    "title": "The designed break",
+    "intro": "From his 7-2 tabiya: one pawn move cashes the whole setup's harmony.",
     "sources": [
-     "book:chess-fundamentals",
-     "https://www.chess.com/openings/Jobava-London-System",
-     "https://en.wikipedia.org/wiki/London_System",
-     "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+     "concept:pos-center",
+     "https://www.chess.com/openings/Queens-Pawn-Opening-Jobava-London-System"
     ]
    }
   ]
@@ -37484,417 +37413,6 @@
      "book:chess-fundamentals",
      "https://www.chess.com/openings/Ruy-Lopez",
      "https://en.wikipedia.org/wiki/Ruy_Lopez",
-     "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
-    ]
-   }
-  ]
- },
- {
-  "id": "mp-pronaroJob-french-qg4",
-  "openingId": "pro-naroditsky-jobava-london",
-  "criticalPositionFen": "r1b1r1k1/pp3pp1/2np1q1p/4p3/3P4/2PB1N2/PP3PPP/R2Q1RK1 w - - 0 13",
-  "title": "French Setup — Qg4 kingside attack",
-  "overview": "A real win from this repertoire: dxe5 opens the centre, the bishop centralises on e4, and White contests the d-file — a balanced, smoothly-developed game (~equal).",
-  "pawnBreaks": [
-   {
-    "move": "d4xe5 break",
-    "explanation": "dxe5 opens the centre.",
-    "fen": ""
-   }
-  ],
-  "pieceManeuvers": [
-   {
-    "piece": "Bishop",
-    "route": "to e4 centralise",
-    "explanation": "The bishop centralises on e4, offering a trade."
-   }
-  ],
-  "strategicThemes": [
-   "Open the centre with dxe5.",
-   "Contest the d-file."
-  ],
-  "endgameTransitions": [
-   "The balanced structure holds into the endgame."
-  ],
-  "playableLines": [
-   {
-    "fen": "r1b1r1k1/pp3pp1/2np1q1p/4p3/3P4/2PB1N2/PP3PPP/R2Q1RK1 w - - 0 13",
-    "moves": [
-     "dxe5",
-     "dxe5",
-     "Be4",
-     "Bf5",
-     "Qe2",
-     "Rad8",
-     "Rad1",
-     "Bxe4"
-    ],
-    "annotations": [
-     "dxe5 — opening the centre.",
-     "…dxe5 — Black recaptures.",
-     "Be4 — White centralises the bishop, offering a trade.",
-     "…Bf5 — Black challenges it.",
-     "Qe2 — White connects.",
-     "…Rad8 — Black takes the d-file.",
-     "Rad1 — White contests it.",
-     "…Bxe4 — Black trades the bishops; a balanced game."
-    ],
-    "learnCues": [
-     "dxe5 — open the centre",
-     "dxe5 — recapture",
-     "Be4 — centralise",
-     "Bf5 — challenge",
-     "Qe2 — connect",
-     "Rad8 — take the d-file",
-     "Rad1 — contest it",
-     "Bxe4 — balanced"
-    ],
-    "arrows": [
-     [],
-     [],
-     [
-      {
-       "from": "d3",
-       "to": "e4",
-       "color": "rgba(40,185,95,0.92)"
-      }
-     ],
-     [],
-     [],
-     [],
-     [],
-     []
-    ],
-    "highlights": [
-     [
-      {
-       "square": "e5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "f5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ]
-    ],
-    "title": "Jobava London: Open the Centre, Contest the d-file",
-    "intro": "A real this repertoire win. White opens the centre and develops harmoniously.",
-    "sources": [
-     "book:chess-fundamentals",
-     "https://www.chess.com/openings/Jobava-London-System",
-     "https://en.wikipedia.org/wiki/London_System",
-     "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
-    ]
-   }
-  ]
- },
- {
-  "id": "mp-pronaroJob-slav-rad1",
-  "openingId": "pro-naroditsky-jobava-london",
-  "criticalPositionFen": "r1b1kb1r/pp1n1qpp/2p2p2/3p4/3P3N/P1N3P1/1PP1BPP1/R2QK2R w KQkq - 3 13",
-  "title": "Slav Style — Rad1 + Ne5 stack",
-  "overview": "A real win from this repertoire: the knight raids g6, the rook grabs h7, and White emerges a pawn up with the safer king (~+1.9).",
-  "pawnBreaks": [
-   {
-    "move": "h-file grab",
-    "explanation": "Rxh7 grabs a pawn and the open file.",
-    "fen": ""
-   }
-  ],
-  "pieceManeuvers": [
-   {
-    "piece": "Knight",
-    "route": "to g6 raid",
-    "explanation": "The knight raids g6 to open the h-file."
-   }
-  ],
-  "strategicThemes": [
-   "Raid g6 with the knight.",
-   "Grab h7 and the open file."
-  ],
-  "endgameTransitions": [
-   "A pawn up with the safer king."
-  ],
-  "playableLines": [
-   {
-    "fen": "r1b1kb1r/pp1n1qpp/2p2p2/3p4/3P3N/P1N3P1/1PP1BPP1/R2QK2R w KQkq - 3 13",
-    "moves": [
-     "Qd3",
-     "Bd6",
-     "Ng6",
-     "Rg8",
-     "Rxh7",
-     "Nf8",
-     "Nxf8",
-     "Kxf8"
-    ],
-    "annotations": [
-     "Qd3 — White centralises the queen.",
-     "…Bd6 — Black develops.",
-     "Ng6 — White’s knight raids g6.",
-     "…Rg8 — Black defends.",
-     "Rxh7 — White grabs a pawn, the rook crashing in.",
-     "…Nf8 — Black defends.",
-     "Nxf8 — White trades.",
-     "…Kxf8 — Black recaptures; White is a pawn up with the safer king."
-    ],
-    "learnCues": [
-     "Qd3 — centralise",
-     "Bd6 — develop",
-     "Ng6 — raid g6",
-     "Rg8 — defend",
-     "Rxh7 — grab the pawn",
-     "Nf8 — defend",
-     "Nxf8 — trade",
-     "Kxf8 — White is up"
-    ],
-    "arrows": [
-     [],
-     [],
-     [
-      {
-       "from": "h4",
-       "to": "g6",
-       "color": "rgba(40,185,95,0.92)"
-      }
-     ],
-     [],
-     [],
-     [],
-     [],
-     []
-    ],
-    "highlights": [
-     [
-      {
-       "square": "d3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "g6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "g8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "h7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "f8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "f8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "f8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ]
-    ],
-    "title": "Jobava London vs …c6: the Ng6 Raid",
-    "intro": "A real this repertoire win. The knight raids g6 and the rook crashes into h7.",
-    "sources": [
-     "book:chess-fundamentals",
-     "https://www.chess.com/openings/Jobava-London-System",
-     "https://en.wikipedia.org/wiki/London_System",
-     "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
-    ]
-   }
-  ]
- },
- {
-  "id": "mp-pronaroJob-a6c5-rad1",
-  "openingId": "pro-naroditsky-jobava-london",
-  "criticalPositionFen": "r1b2rk1/1p4pp/p1n1pp2/2b5/4BB2/5N2/PPP2PPP/R2R2K1 w - - 0 13",
-  "title": "a6 with ...c5 — Rad1 central control",
-  "overview": "A real win from this repertoire: Bd6 cramps Black, and after the trade the rook lands on d6, dominating the sixth rank while the knight centralises — clearly better (~+1.4).",
-  "pawnBreaks": [
-   {
-    "move": "d-file pressure",
-    "explanation": "White owns the d-file and the d6 square.",
-    "fen": ""
-   }
-  ],
-  "pieceManeuvers": [
-   {
-    "piece": "Rook",
-    "route": "recapture on d6, dominate the sixth",
-    "explanation": "The rook recaptures on d6 and binds Black along the sixth rank."
-   }
-  ],
-  "strategicThemes": [
-   "Infiltrate d6.",
-   "Dominate the d-file."
-  ],
-  "endgameTransitions": [
-   "The bind on d6 tells into the endgame."
-  ],
-  "playableLines": [
-   {
-    "fen": "r1b2rk1/1p4pp/p1n1pp2/2b5/4BB2/5N2/PPP2PPP/R2R2K1 w - - 0 13",
-    "moves": [
-     "Bd6",
-     "Bxd6",
-     "Rxd6",
-     "Ne7",
-     "Nd4",
-     "Kf7",
-     "Rd1",
-     "Rb8"
-    ],
-    "annotations": [
-     "Bd6 — the bishop infiltrates d6, cramping Black.",
-     "…Bxd6 — Black trades it off.",
-     "Rxd6 — White recaptures; the rook dominates the sixth rank.",
-     "…Ne7 — Black develops.",
-     "Nd4 — White centralises the knight.",
-     "…Kf7 — Black’s king steps up.",
-     "Rd1 — White doubles on the d-file.",
-     "…Rb8 — Black regroups, but the rook on d6 binds him; clearly better."
-    ],
-    "learnCues": [
-     "Bd6 — infiltrate",
-     "Bxd6 — Black trades",
-     "Rxd6 — dominate the sixth",
-     "Ne7 — develop",
-     "Nd4 — centralise",
-     "Kf7 — king steps up",
-     "Rd1 — double up",
-     "Rb8 — White binds him"
-    ],
-    "arrows": [
-     [],
-     [],
-     [
-      {
-       "from": "d1",
-       "to": "d6",
-       "color": "rgba(40,185,95,0.92)"
-      }
-     ],
-     [],
-     [],
-     [],
-     [],
-     []
-    ],
-    "highlights": [
-     [
-      {
-       "square": "d6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "f7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ]
-    ],
-    "title": "Jobava London: Dominate d6 with the Rook",
-    "intro": "A real this repertoire win. The bishop infiltrates d6, and after the trade the rook binds Black from the sixth.",
-    "sources": [
-     "book:chess-fundamentals",
-     "https://www.chess.com/openings/Jobava-London-System",
-     "https://en.wikipedia.org/wiki/London_System",
      "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
     ]
    }
