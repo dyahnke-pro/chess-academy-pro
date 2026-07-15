@@ -64,6 +64,13 @@ const OPENINGS = {
     minPrefix: ['e4', 'd5'],
     maxDepth: 80,
   },
+  'glek': {
+    name: 'Glek System (Four Knights g3)',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['e4', 'e5', 'Nf3', 'Nc6', 'Nc3', 'Nf6', 'g3'],
+    maxDepth: 80,
+  },
   'belgrade': {
     name: 'Belgrade Gambit / Four Knights Scotch',
     color: 'white',
