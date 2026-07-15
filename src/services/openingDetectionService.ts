@@ -4,6 +4,19 @@ import repertoireData from '../data/repertoire.json';
 import type { DetectedOpening, OpeningVariation } from '../types';
 import { buildVariationTabs } from './variationTabs';
 import { MAX_SIBLING_BRANCHES } from '../utils/featureFlags';
+// @ts-expect-error — plain-JS shared metric, no type decls (also run by node)
+import { reachesMiddlegame as reachesMiddlegameRaw } from '../data/variationMiddlegameDepth.shared.mjs';
+
+/** Typed view over the shared plain-JS `reachesMiddlegame` metric so
+ *  type-aware lint rules don't treat its result as `any`. */
+const reachesMiddlegame = reachesMiddlegameRaw as (pgn: string) => {
+  pass: boolean;
+  plies: number;
+  wCastle: boolean;
+  bCastle: boolean;
+  wDev: number;
+  bDev: number;
+};
 
 /** Minimal shape of a curated repertoire opening (repertoire.json). The
  *  coach line picker + lesson generator read the SAME curated variations
@@ -430,7 +443,7 @@ const SPINE_EXTENSION_MAX_PLIES = 20;
  *  different (more-specific) names. Returns null when no entry
  *  extends the base, or when the extension cap is already at the
  *  threshold (same as the base, no real extension). */
-function findLongestPgnExtending(basePgn: string): string | null {
+export function findLongestPgnExtending(basePgn: string): string | null {
   const entries = openingsData;
   const basePrefix = basePgn + ' ';
   let best: { pgn: string; plies: number } | null = null;
@@ -854,6 +867,138 @@ export function findSiblingExtensionBranches(
   // Cap branch count: 6 by default, 3 when VITE_LEARN_SIMPLIFIED=true.
   // See src/utils/featureFlags.ts.
   return branches.slice(0, MAX_SIBLING_BRANCHES);
+}
+
+/** Resolve the walkthrough spine + fork branches for a teach lesson,
+ *  GUARANTEEING the main line the student watches reaches a middlegame
+ *  (David 2026-07-15 — "when I ask the coach to teach me an opening it
+ *  doesn't get me to the middle game").
+ *
+ *  `findShortestCanonicalPgn` deliberately returns the SHORTEST canonical
+ *  PGN when the opening has named sub-variations, so the fork picker can
+ *  surface them — on the assumption the walkthrough auto-advances the
+ *  most-popular branch (`branches[0]`) onward into the middlegame. But
+ *  when the terminal-short filter strips every fork candidate (`branches`
+ *  empty) OR the top branch carries no real extension, nothing takes the
+ *  line past the opening and the walkthrough leafs in book theory.
+ *
+ *  When `extendToMiddlegame` is set and the main line (spine + top
+ *  branch) does NOT reach the middlegame (per the shared
+ *  `reachesMiddlegame` metric — the same gate the pro-rep depth test
+ *  uses), extend the SPINE itself via the DB's longest same-prefix PGN
+ *  (bounded by `findLongestPgnExtending`) and re-derive branches from the
+ *  deeper terminus (usually none — that's fine, the main line now reaches
+ *  the middlegame on its own). Tour mode passes `extendToMiddlegame:false`
+ *  (a deliberate quick taste). */
+export function resolveTeachSpine(
+  canonicalName: string,
+  fallbackMoves: string[],
+  opts?: { extendToMiddlegame?: boolean },
+): { spineMoves: string[]; branches: ForkBranch[]; extendedToMiddlegame: boolean } {
+  const shortPgn = findShortestCanonicalPgn(canonicalName);
+  let spineMoves = shortPgn ? shortPgn.split(/\s+/).filter(Boolean) : fallbackMoves;
+  let branches = findSiblingExtensionBranches(canonicalName, spineMoves.join(' '));
+  let extendedToMiddlegame = false;
+
+  const mainLineReaches = (): boolean => {
+    const top = branches[0];
+    const pgn = top
+      ? [...spineMoves, top.san, ...top.extensionMoves].join(' ')
+      : spineMoves.join(' ');
+    return reachesMiddlegame(pgn).pass;
+  };
+
+  if (opts?.extendToMiddlegame && !mainLineReaches()) {
+    // Tier 1 — same-prefix extension. The DB sometimes carries the SAME
+    // line deeper under a more-specific name (e.g. Benoni's bare
+    // 12-ply spine continues to 20 plies under "Classical Variation,
+    // Argentine Counterattack"). Extend the spine along that prefix.
+    const extended = findLongestPgnExtending(spineMoves.join(' '));
+    if (extended) {
+      const extMoves = extended.split(/\s+/).filter(Boolean);
+      if (extMoves.length > spineMoves.length && reachesMiddlegame(extended).pass) {
+        spineMoves = extMoves;
+        branches = findSiblingExtensionBranches(canonicalName, spineMoves.join(' '));
+        extendedToMiddlegame = true;
+      }
+    }
+  }
+
+  if (opts?.extendToMiddlegame && !mainLineReaches()) {
+    // Tier 2 — family trunk. Some openings' bare canonical DB entry is a
+    // short SIDELINE (Scandinavian = "e4 d5 b3", Philidor's bare entry =
+    // a 7-ply Bc4 line) whose real depth lives under differently-named
+    // variations that DON'T share its prefix. Same-prefix extension
+    // can't reach those. Pick a representative mainline from the opening
+    // FAMILY instead: the shortest middlegame-reaching line on the most-
+    // popular trunk continuation (data-chosen, G3-safe — a real DB line,
+    // never invented). Yields e.g. the Scandinavian Classical, the Slav
+    // Schallopp, the Philidor Lion — real sound mainlines.
+    const famSpine = pickFamilyMiddlegameSpine(canonicalName);
+    if (famSpine && famSpine.length > spineMoves.length) {
+      spineMoves = famSpine;
+      branches = findSiblingExtensionBranches(canonicalName, spineMoves.join(' '));
+      extendedToMiddlegame = true;
+    }
+  }
+
+  return { spineMoves, branches, extendedToMiddlegame };
+}
+
+/** Pick a representative middlegame-reaching mainline for an opening
+ *  family (the canonical name + all its `:`/`,` sub-variations). Used as
+ *  the tier-2 fallback in `resolveTeachSpine` when the bare canonical
+ *  entry is a short sideline. Strategy: find the family's common leading
+ *  prefix, the most-popular continuation right after it (the trunk), then
+ *  the SHORTEST family line on that trunk that reaches the middlegame
+ *  (shortest = most canonical, least deep into a specific sideline).
+ *  Returns null when the family has no middlegame-reaching line (leave it
+ *  short — empty > invented). G3-safe: every move is a real DB line. */
+function pickFamilyMiddlegameSpine(canonicalName: string): string[] | null {
+  const fam = openingsData.filter(
+    (e) =>
+      e.name === canonicalName ||
+      e.name.startsWith(canonicalName + ':') ||
+      e.name.startsWith(canonicalName + ','),
+  );
+  if (fam.length === 0) return null;
+  const seqs = fam.map((e) => ({ e, moves: e.pgn.split(/\s+/).filter(Boolean) }));
+  // Common leading prefix across the whole family.
+  let commonLen = 0;
+  for (;;) {
+    const t = seqs[0].moves[commonLen];
+    if (t === undefined || !seqs.every((s) => s.moves[commonLen] === t)) break;
+    commonLen += 1;
+  }
+  // Most-popular trunk continuation right after the common prefix.
+  const nextCount = new Map<string, number>();
+  for (const s of seqs) {
+    const m = s.moves[commonLen];
+    if (m) nextCount.set(m, (nextCount.get(m) ?? 0) + 1);
+  }
+  let trunkNext: string | null = null;
+  let bestCount = 0;
+  for (const [m, cnt] of nextCount) {
+    if (cnt > bestCount) {
+      bestCount = cnt;
+      trunkNext = m;
+    }
+  }
+  const candidates = seqs
+    .filter(
+      (s) =>
+        (trunkNext === null || s.moves[commonLen] === trunkNext) &&
+        reachesMiddlegame(s.e.pgn).pass,
+    )
+    .sort(
+      (a, b) =>
+        a.moves.length - b.moves.length ||
+        a.e.name.split(',').length - b.e.name.split(',').length ||
+        a.e.name.length - b.e.name.length,
+    );
+  const chosen = candidates[0];
+  if (!chosen) return null;
+  return chosen.moves.slice(0, SPINE_EXTENSION_MAX_PLIES);
 }
 
 /** Find ALL Lichess-DB entries related to an opening name. Returns

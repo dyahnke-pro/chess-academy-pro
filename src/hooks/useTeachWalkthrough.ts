@@ -81,6 +81,49 @@ function sideAtIndex(plyIndex: number): 'white' | 'black' {
   return plyIndex % 2 === 0 ? 'white' : 'black';
 }
 
+/** Is this punish lesson safe to launch as a trap walkthrough?
+ *
+ *  The picker feeds EVERY punish lesson on the tree into
+ *  `buildPunishWalkthroughTree` + `start()`. Fresh gen paths
+ *  (`generatePunishFromDb` / `repairPunishStage`) guarantee the shape,
+ *  but a lesson that entered `tree.punish` via a LEGACY Dexie tree or
+ *  the SHARED Supabase cache never re-runs the repair pipeline —
+ *  `getCachedOpening` only re-checks the tree's move legality, not the
+ *  punish-stage field shapes. Such a lesson can be missing
+ *  `distractors` / `setupMoves`, or carry an illegal inaccuracy /
+ *  punishment. Launching it used to throw synchronously in the
+ *  picker's onClick (missing field) or freeze the board at the setup
+ *  position (illegal SAN) — the "trap line fails to start" bug (David
+ *  2026-07-15). Gate every lesson through this before surfacing it in
+ *  the picker OR counting it toward the stage-menu button, so a broken
+ *  lesson never reaches the student.
+ *
+ *  Requirements: a punishment + inaccuracy SAN, at least one distractor
+ *  (so the fork is a real choice, not a degenerate auto-answer), a
+ *  reachable start position (setupFen OR replayable setupMoves), and
+ *  legality of inaccuracy → punishment from that position. */
+export function isStartablePunishLesson(lesson: PunishLesson | null | undefined): boolean {
+  if (!lesson) return false;
+  const distractors = Array.isArray(lesson.distractors) ? lesson.distractors : [];
+  const setupMoves = Array.isArray(lesson.setupMoves) ? lesson.setupMoves : [];
+  if (distractors.length < 1) return false;
+  if (typeof lesson.inaccuracy !== 'string' || !lesson.inaccuracy.trim()) return false;
+  if (typeof lesson.punishment !== 'string' || !lesson.punishment.trim()) return false;
+  try {
+    const c = lesson.setupFen ? new Chess(lesson.setupFen) : new Chess();
+    if (!lesson.setupFen) {
+      for (const san of setupMoves) c.move(stripSanAnnotations(san));
+    }
+    // The opponent's inaccuracy, then the student's punishment, must
+    // both be legal from the resolved position.
+    if (!c.move(stripSanAnnotations(lesson.inaccuracy))) return false;
+    if (!c.move(stripSanAnnotations(lesson.punishment))) return false;
+  } catch {
+    return false;
+  }
+  return true;
+}
+
 /** Build a one-shot WalkthroughTree from a PunishLesson. Reuses the
  *  walkthrough engine to play the punish lesson with the same UI as
  *  the opening walkthrough — animated moves with narration, fork
@@ -95,13 +138,19 @@ function sideAtIndex(plyIndex: number): 'white' | 'black' {
  *      → FORK[ punishment, distractor1, distractor2, ... ]
  *           punishment → followup1 → ... → leaf (whyPunish outro)
  *           distractor → leaf (distractor explanation)
- */
+ *
+ *  Defensive: `distractors` / `setupMoves` are defaulted to `[]` so a
+ *  malformed cached lesson can never throw here (it's already been
+ *  gated out of the picker by `isStartablePunishLesson`, but the
+ *  builder must not be the thing that crashes if one slips through). */
 export function buildPunishWalkthroughTree(
   lesson: PunishLesson,
   parentOpening: WalkthroughTree,
 ): WalkthroughTree {
+  const lessonDistractors = Array.isArray(lesson.distractors) ? lesson.distractors : [];
+  const lessonSetupMoves = Array.isArray(lesson.setupMoves) ? lesson.setupMoves : [];
   // Build leaf nodes for each distractor (single node, dead-end).
-  const distractorChildren: WalkthroughTreeChild[] = lesson.distractors.map(
+  const distractorChildren: WalkthroughTreeChild[] = lessonDistractors.map(
     (d) => ({
       label: d.san,
       forkSubtitle: sanToFriendly(d.san),
@@ -183,7 +232,7 @@ export function buildPunishWalkthroughTree(
   // setupMoves.length.
   const inaccuracySide: 'white' | 'black' = lesson.setupFen
     ? (lesson.setupFen.split(' ')[1] === 'b' ? 'black' : 'white')
-    : sideAtIndex(lesson.setupMoves.length);
+    : sideAtIndex(lessonSetupMoves.length);
   const opponentLabel = inaccuracySide === 'white' ? 'White' : 'Black';
   const inaccuracyNode: WalkthroughTreeNode = {
     san: lesson.inaccuracy,
@@ -215,8 +264,8 @@ export function buildPunishWalkthroughTree(
   //       builds visibly from the standard start.
   let rootChild: WalkthroughTreeNode = inaccuracyNode;
   if (!lesson.setupFen) {
-    for (let i = lesson.setupMoves.length - 1; i >= 0; i -= 1) {
-      const san = lesson.setupMoves[i];
+    for (let i = lessonSetupMoves.length - 1; i >= 0; i -= 1) {
+      const san = lessonSetupMoves[i];
       const movedBy = sideAtIndex(i);
       rootChild = {
         san,
@@ -602,7 +651,15 @@ function stageHasEntries(
 ): boolean {
   if (!t) return false;
   const arr = t[stage];
-  return Array.isArray(arr) && arr.length > 0;
+  if (!Array.isArray(arr) || arr.length === 0) return false;
+  // Punish is the only stage whose entries can be individually
+  // unlaunchable (malformed cached lesson) — count only the ones that
+  // will actually start, so the stage-menu button + auto-jump never
+  // land the student on a dead "Trap lines" tile (David 2026-07-15).
+  if (stage === 'punish') {
+    return (arr as PunishLesson[]).some(isStartablePunishLesson);
+  }
+  return true;
 }
 
 export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
@@ -1659,6 +1716,18 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
       if (!tree?.punish) return;
       if (lessonIndex < 0 || lessonIndex >= tree.punish.length) return;
       const lesson = tree.punish[lessonIndex];
+      // Belt-and-suspenders: the picker only surfaces startable lessons,
+      // but never launch (and never crash the walkthrough engine) on a
+      // malformed one that slipped through (David 2026-07-15).
+      if (!isStartablePunishLesson(lesson)) {
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'useTeachWalkthrough.startPunishLesson',
+          summary: `skipped unstartable punish lesson [${lessonIndex}] "${lesson?.name ?? '?'}"`,
+        });
+        return;
+      }
       const punishTree = buildPunishWalkthroughTree(lesson, tree);
       // Stash the parent so we can return to it on exit.
       setParentOpeningTree(tree);
