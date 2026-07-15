@@ -1500,7 +1500,7 @@
    "variations": [
     {
      "name": "Nc6 Rossolimo proper",
-     "pgn": "e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 Re1 a6 Bf1 d5",
+     "pgn": "e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 Re1 a6 Bf1 d5 exd5 Nxd5 d4 Nf6",
      "explanation": "The Rossolimo proper (961 games, 66.2%). Black plays Nc6 immediately, we develop classically and reach a structure favoring our pieces.",
      "sources": [
       "book:sicilian-rossolimo",
@@ -1509,7 +1509,7 @@
     },
     {
      "name": "e6 Open avoidance",
-     "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Bd3",
+     "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Bd3 Bc5 Nb3",
      "explanation": "Black plays …e6 trying to transpose to Open Sicilian (793 games, 65.8%). We take with d4 — actually, here we DO play Open Sicilian, but reach the Taimanov where our prep is excellent.",
      "sources": [
       "book:sicilian-rossolimo",
@@ -1518,7 +1518,7 @@
     },
     {
      "name": "Bxd7+ Trade",
-     "pgn": "e4 c5 Nf3 d6 Bb5+ Bd7 Bxd7+ Qxd7 O-O Nf6 Re1",
+     "pgn": "e4 c5 Nf3 d6 Bb5+ Bd7 Bxd7+ Qxd7 O-O Nf6 Re1 Nc6 c3 e6 d4 cxd4 cxd4 d5 e5 Ne4 Nbd2 Nxd2 Bxd2",
      "explanation": "Black plays the easy Bd7 (401 games, 66.8%) — we trade immediately and play a quiet positional game with the bishop pair and centre advantage.",
      "sources": [
       "book:sicilian-rossolimo",
@@ -1536,7 +1536,7 @@
     },
     {
      "name": "Bc4 vs ...d6",
-     "pgn": "e4 c5 Nf3 d6 Bc4 Nf6 d3 Nc6 c3 e6 Bb3",
+     "pgn": "e4 c5 Nf3 d6 Bc4 Nf6 d3 Nc6 c3 e6 Bb3 Be7 O-O O-O",
      "explanation": "Italian-style Bc4 vs the ...d6 move order (152 games, 65.1%). The Bc4 aims at f7 directly, the Bb3 retreat keeps the diagonal alive. Named victim: MichaelRoiz (2721).",
      "sources": [
       "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation",
@@ -1545,7 +1545,7 @@
     },
     {
      "name": "vs ...g6 (Hyper Dragon)",
-     "pgn": "e4 c5 Nf3 g6 c3 d5 exd5 Qxd5 d4 Bg7",
+     "pgn": "e4 c5 Nf3 g6 c3 d5 exd5 Qxd5 d4 Bg7 Na3 cxd4 Nb5 Na6 Nbxd4 Nf6 Bb5+ Bd7",
      "explanation": "Black plays Dragon-style ...g6 early (130 games, 74.6%). We answer with the Smith-Morra-style c3+d4 setup reaching a Maroczy Bind with the extra tempo.",
      "sources": [
       "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation",

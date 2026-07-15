@@ -1,6 +1,6 @@
 {
  "_doc": "Middlegame plans whose criticalPositionFen's PAWN SKELETON departs (diff>=4) from every position on their opening's main/variation lines \u2014 the Gate C continuity backlog (David 2026-07-15 'handle gate C'). 35 of 36 worst offenders trace to the broken 'this repertoire' batch-authoring run. This list only SHRINKS: fix a plan by extending the line to its anchor (engine-screened) or re-anchoring the plan at the line terminus with a re-derived playable line. A NEW plan must anchor on-line or within 3 pawn-diff. Regenerate to REMOVE entries only: node scripts/catalog-sweep/gatec-pawn-continuity.mjs then prune.",
- "count": 109,
+ "count": 100,
  "ids": [
   "mp-benkogambit-halfaccepted",
   "mp-bird-classical-attack",
@@ -90,15 +90,6 @@
   "mp-pronaroNaj-adams-defense",
   "mp-pronaroNaj-english-bxh6",
   "mp-pronaroNajdorf-opposite-castle-race",
-  "mp-pronaroRoss-bc4-italian",
-  "mp-pronaroRoss-bd7-attack",
-  "mp-pronaroRoss-bd7-conversion",
-  "mp-pronaroRoss-c3-spanish",
-  "mp-pronaroRoss-e6-ne5",
-  "mp-pronaroRoss-e6-taimanov",
-  "mp-pronaroRoss-g6-maroczy",
-  "mp-pronaroRoss-nc6-maroczy",
-  "mp-pronaroRossolimo-bishop-reroute",
   "mp-pronaroRuy-berlin-bd2",
   "mp-pronaroRuy-d3-flank",
   "mp-pronaroRuy-steinitz-d4",

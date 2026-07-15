@@ -20772,136 +20772,122 @@
  {
   "id": "mp-pronaroRossolimo-bishop-reroute",
   "openingId": "pro-naroditsky-rossolimo",
-  "criticalPositionFen": "r4rk1/1bqnbppp/pp1ppn2/8/2PNP3/1PN5/P4PPP/R1BQRBK1 w - - 1 13",
-  "title": "Rossolimo — Bb5 → Bd3 → Bf1 bishop reroute + Maroczy bind",
-  "overview": "A real win from this repertoire: the bishop takes the long diagonal from b2, White grabs the c-file, and the rook lifts to e3 to swing into the attack — a pleasant edge (~+0.4).",
+  "criticalPositionFen": "r2qkb1r/1b1n1ppp/pp1ppn2/2p5/2P1P3/2N2N2/PP1P1PPP/R1BQRBK1 b kq - 2 9",
+  "title": "Main line — the c4 bind against the hedgehog",
+  "overview": "The check on b5 bought the tempi, the bishop tucked home through d3 to f1, and the pawn already stands on c4: the bind is built. His corpus rides this exact structure — thirteen games continue right here — and the plan is patient occupation: rebuild the centre with d4, recapture with the knight, reinforce with b3, and let Black's hedgehog run out of safe pawn moves.",
   "pawnBreaks": [
    {
-    "move": "c-file pressure",
-    "explanation": "White works the open c-file behind the fianchetto.",
+    "move": "d4",
+    "explanation": "The central rebuild: d4 converts the bind into space — after the trade the knight recaptures and sits on the best square in the position.",
+    "fen": ""
+   },
+   {
+    "move": "b3",
+    "explanation": "The quiet cement: b3 ties c4 and the long diagonal together so the bind can never be chipped by ...b5.",
     "fen": ""
    }
   ],
   "pieceManeuvers": [
    {
-    "piece": "Rook",
-    "route": "Re1-e3 lift",
-    "explanation": "The rook lifts to e3, ready to swing across."
+    "piece": "Knight",
+    "route": "Nf3xd4",
+    "explanation": "The d4-recapture is the bind's centrepiece — from d4 the knight watches b5, c6 and e6 while the c4/e4 pawns fence everything else."
    }
   ],
   "strategicThemes": [
-   "Fianchetto the bishop on b2.",
-   "Lift the rook to e3."
+   "The Maróczy squeeze: space without weaknesses — Black must create the first target.",
+   "His thirteen-game continuation: Be7, d4, O-O, b3 — every developing move also cements the bind."
   ],
   "endgameTransitions": [
    "The well-placed pieces hold the edge into the endgame."
   ],
   "playableLines": [
    {
-    "fen": "r4rk1/1bqnbppp/pp1ppn2/8/2PNP3/1PN5/P4PPP/R1BQRBK1 w - - 1 13",
+    "fen": "r2qkb1r/1b1n1ppp/pp1ppn2/2p5/2P1P3/2N2N2/PP1P1PPP/R1BQRBK1 b kq - 2 9",
     "moves": [
-     "Bb2",
-     "Rac8",
-     "Rc1",
-     "Qb8",
-     "Re3",
-     "Ne5",
-     "h3",
-     "Ng6"
+     "Be7",
+     "d4",
+     "cxd4",
+     "Nxd4",
+     "O-O",
+     "b3"
     ],
     "annotations": [
-     "Bb2 — the bishop takes the long diagonal.",
-     "…Rac8 — Black takes the c-file.",
-     "Rc1 — White contests it.",
-     "…Qb8 — Black regroups.",
-     "Re3 — the rook lifts, ready to swing across.",
-     "…Ne5 — Black centralises a knight.",
-     "h3 — White makes luft.",
-     "…Ng6 — Black reroutes; White holds a pleasant edge."
-    ],
-    "learnCues": [
-     "Bb2 — long diagonal",
-     "Rac8 — take the c-file",
-     "Rc1 — contest it",
-     "Qb8 — regroup",
-     "Re3 — lift the rook",
-     "Ne5 — centralise",
-     "h3 — luft",
-     "Ng6 — White is better"
+     "Black completes the kingside — the hedgehog shell of a6, b6, d6 and e6 is finished. Shells hold until the space runs out.",
+     "Now the centre rebuilds: d4 offers the trade on White's terms, because the recapture lands a piece, not a pawn, in the middle.",
+     "Black takes — declining just leaves White a full centre plus the file.",
+     "The knight recaptures and the bind is complete: pawns on c4 and e4, the knight on d4 watching b5, c6 and e6 at once.",
+     "Black castles into the shell. Nothing is wrong with Black's position except the future: every break needs White's permission.",
+     "And b3, the quiet star — c4 is cemented, the c1-bishop gets the long diagonal, and the squeeze plays itself. His games score this structure heavily."
     ],
     "arrows": [
      [],
      [],
      [],
-     [],
      [
       {
-       "from": "e1",
-       "to": "e3",
+       "from": "d4",
+       "to": "b5",
+       "color": "rgba(40,185,95,0.92)"
+      },
+      {
+       "from": "d4",
+       "to": "e6",
        "color": "rgba(40,185,95,0.92)"
       }
      ],
-     [],
      [],
      []
     ],
     "highlights": [
      [
       {
-       "square": "b2",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "e7",
+       "color": "rgba(80,140,255,0.32)"
       }
      ],
      [
       {
-       "square": "c8",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "d4",
+       "color": "rgba(255,214,0,0.88)"
       }
      ],
+     [],
      [
       {
-       "square": "c1",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "c4",
+       "color": "rgba(255,214,0,0.88)"
+      },
+      {
+       "square": "e4",
+       "color": "rgba(255,214,0,0.88)"
       }
      ],
+     [],
      [
       {
-       "square": "b8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
+       "square": "b3",
+       "color": "rgba(80,140,255,0.32)"
+      },
       {
-       "square": "e3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "h3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "g6",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "c4",
+       "color": "rgba(255,214,0,0.88)"
       }
      ]
     ],
-    "title": "Rossolimo: Fianchetto and Lift the Rook",
-    "intro": "A real this repertoire win. White fianchettoes the bishop and lifts a rook into play.",
+    "learnCues": [
+     "Shell complete — space decides.",
+     "d4 — rebuild on your terms.",
+     "The trade opens the door.",
+     "Nxd4 — the bind's centrepiece.",
+     "Castled, but cramped.",
+     "b3 — cement it, squeeze forever."
+    ],
+    "title": "Building the bind",
+    "intro": "From the main-line tabiya: the thirteen-game corpus continuation that turns the c4 clamp into a permanent squeeze.",
     "sources": [
-     "book:chess-fundamentals",
-     "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation",
-     "https://en.wikipedia.org/wiki/Sicilian_Defence,_Rossolimo_Variation",
-     "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+     "concept:pos-space",
+     "https://www.chess.com/openings/Sicilian-Defense-Moscow-Variation"
     ]
    }
   ]
@@ -34337,68 +34323,63 @@
  {
   "id": "mp-pronaroRoss-nc6-maroczy",
   "openingId": "pro-naroditsky-rossolimo",
-  "criticalPositionFen": "r1b1k2r/4ppbp/pqp4p/2p1P3/2PpN3/3P1N1P/PP3PP1/R2Q1RK1 w kq - 4 13",
-  "title": "Rossolimo proper — Maroczy bind conversion",
-  "overview": "A real win from this repertoire: the queen swings to b3 and trades on b6, and White presses the healthier structure with the rook on e1 — clearly better (~+3.5).",
+  "criticalPositionFen": "r1bqkb1r/1p3ppp/p1n1pn2/2p5/3P4/5N2/PPP2PPP/RNBQRBK1 w kq - 1 9",
+  "title": "Rossolimo proper — open the centre, then clamp with c4",
+  "overview": "Black solved the Rossolimo with ...d5, and the corpus answer is to let the trade happen and take the centre back with d4. From this position the engine confirms what the structure suggests: develop with Be3, recapture on d4, and then the real point — c4, fixing Black's queenside majority in place before it ever moves. The bind arrives one move at a time, and every move is a developing move.",
   "pawnBreaks": [
    {
-    "move": "b2-b3 solid",
-    "explanation": "b3 solidifies as White presses the better structure.",
+    "move": "c4",
+    "explanation": "The clamp: c4 freezes the c5-square complex and turns Black's extra queenside pawn into a bystander.",
     "fen": ""
    }
   ],
   "pieceManeuvers": [
    {
-    "piece": "Queen",
-    "route": "Qd1-b3 then trade",
-    "explanation": "The queen swings to b3 and trades on b6."
+    "piece": "Bishop",
+    "route": "Bc1-e3",
+    "explanation": "Be3 hits c5 immediately — the bishop develops by asking Black's most advanced pawn a question."
+   },
+   {
+    "piece": "Knight",
+    "route": "Nf3xd4 then Nb1-c3",
+    "explanation": "The knights take the central squares the pawn trade vacated — d4 first, then c3 backing the clamp."
    }
   ],
   "strategicThemes": [
-   "Trade queens via b3.",
-   "Press the healthier structure."
+   "Trade the d-pawns, keep the initiative: White's pieces arrive first to the open board.",
+   "The c4 clamp against the a6/b7 majority — space now, endgame pressure later."
   ],
   "endgameTransitions": [
    "The better structure tells into the endgame."
   ],
   "playableLines": [
    {
-    "fen": "r1b1k2r/4ppbp/pqp4p/2p1P3/2PpN3/3P1N1P/PP3PP1/R2Q1RK1 w kq - 4 13",
+    "fen": "r1bqkb1r/1p3ppp/p1n1pn2/2p5/3P4/5N2/PPP2PPP/RNBQRBK1 w kq - 1 9",
     "moves": [
-     "Qb3",
-     "Rb8",
-     "Qxb6",
-     "Rxb6",
-     "b3",
-     "Bf5",
-     "Rfe1",
-     "O-O"
+     "Be3",
+     "cxd4",
+     "Nxd4",
+     "Bd7",
+     "c4",
+     "Qc7",
+     "Nc3",
+     "Be7"
     ],
     "annotations": [
-     "Qb3 — White’s queen eyes b6 and f7.",
-     "…Rb8 — Black defends.",
-     "Qxb6 — White trades queens.",
-     "…Rxb6 — Black recaptures.",
-     "b3 — White solidifies.",
-     "…Bf5 — Black develops.",
-     "Rfe1 — White centralises.",
-     "…O-O — Black castles; White is clearly better."
-    ],
-    "learnCues": [
-     "Qb3 — eye b6/f7",
-     "Rb8 — defend",
-     "Qxb6 — trade queens",
-     "Rxb6 — recapture",
-     "b3 — solidify",
-     "Bf5 — develop",
-     "Rfe1 — centralise",
-     "O-O — White is better"
+     "The bishop develops with a threat — c5 is attacked, and Black's choice is trade or defend, both of which speed White's plan.",
+     "Black trades rather than defend a pawn that was always going to be a target.",
+     "The knight recaptures into the centre. Count the activity: knight on d4, bishop on e3, rook already on e1 — against three developed Black pieces and a queenside asleep.",
+     "The bishop finds d7 — modest, but everything else hangs a pawn or blocks the queen.",
+     "There it is: c4. The queenside is frozen, the d5-square belongs to White, and Black's game shrinks one file at a time.",
+     "The queen slides out, eyeing the kingside from c7 — Black's most active try.",
+     "Nc3 backs the clamp and covers d5 a second time. The bind is now a fact of the position, not a plan.",
+     "Black finishes developing into it. The engine gives White a steady plus — and the position plays itself from the White side."
     ],
     "arrows": [
      [
       {
-       "from": "d1",
-       "to": "b3",
+       "from": "e3",
+       "to": "c5",
        "color": "rgba(40,185,95,0.92)"
       }
      ],
@@ -34407,66 +34388,65 @@
      [],
      [],
      [],
-     [],
+     [
+      {
+       "from": "c3",
+       "to": "d5",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
      []
     ],
     "highlights": [
      [
       {
-       "square": "b3",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "c5",
+       "color": "rgba(239,68,68,0.72)"
+      }
+     ],
+     [],
+     [
+      {
+       "square": "d4",
+       "color": "rgba(255,214,0,0.88)"
       }
      ],
      [
       {
-       "square": "b8",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "d7",
+       "color": "rgba(80,140,255,0.32)"
       }
      ],
      [
       {
-       "square": "b6",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "c4",
+       "color": "rgba(255,214,0,0.88)"
       }
      ],
+     [],
      [
       {
-       "square": "b6",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "d5",
+       "color": "rgba(255,214,0,0.88)"
       }
      ],
-     [
-      {
-       "square": "b3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "f5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "g8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ]
+     []
     ],
-    "title": "Rossolimo …Nc6: Trade Queens, Keep the Pull",
-    "intro": "A real this repertoire win. White trades queens via b3 and presses the better structure.",
+    "learnCues": [
+     "Be3 — ask c5 the question.",
+     "The trade helps White.",
+     "Nxd4 — pieces before pawns.",
+     "Bd7 — the only tidy square.",
+     "c4! — freeze the majority.",
+     "Queen out — Black's best try.",
+     "Nc3 — d5 is yours.",
+     "Steady plus, easy plan."
+    ],
+    "title": "The c4 clamp from the open centre",
+    "intro": "From the true end of the ...d5 line: the engine-verified squeeze that fixes Black's queenside before it breathes.",
     "sources": [
-     "book:chess-fundamentals",
-     "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation",
-     "https://en.wikipedia.org/wiki/Sicilian_Defence,_Rossolimo_Variation",
-     "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+     "concept:pos-space",
+     "https://en.wikipedia.org/wiki/Sicilian_Defence#Rossolimo_Variation"
     ]
    }
   ]
@@ -34474,74 +34454,58 @@
  {
   "id": "mp-pronaroRoss-e6-taimanov",
   "openingId": "pro-naroditsky-rossolimo",
-  "criticalPositionFen": "r1bq1rk1/1p2npbp/p1n3p1/8/2PpN3/5N2/PP2BPPP/R1BQ1RK1 w - - 2 13",
-  "title": "Taimanov transposition — Maroczy bind via c4",
-  "overview": "A real win from this repertoire: Nd6 raids the outpost, and after the queen trade White opens the a-file with a small pull (~+0.5).",
-  "pawnBreaks": [
-   {
-    "move": "a-file opening",
-    "explanation": "axb3 opens the a-file after the queen trade.",
-    "fen": ""
-   }
-  ],
+  "criticalPositionFen": "rnbqk1nr/1p1p1ppp/p3p3/2b5/4P3/1N1B4/PPP2PPP/RNBQK2R b KQkq - 3 6",
+  "title": "Taimanov transposition — Nb3 and the dark-square trade",
+  "overview": "When Black ducks the Rossolimo with ...e6, the game opens like a Kan — and the corpus answer is direct: meet the bishop's arrival on c5 with Nb3, then trade it off on a7 and keep the better structure. Five games, five wins in his corpus from this hit. Without the dark-squared bishop, Black's whole ...a6/...e6 setup loses its teeth: the d6-square softens and White develops with the initiative.",
+  "pawnBreaks": [],
   "pieceManeuvers": [
    {
-    "piece": "Knight",
-    "route": "to d6 raid",
-    "explanation": "The knight raids the d6 outpost."
+    "piece": "Bishop",
+    "route": "Bc1-e3xa7",
+    "explanation": "Be3 offers the trade the position wants: after Bxa7 Rxa7, Black's rook stands offside and the dark squares belong to White."
    }
   ],
   "strategicThemes": [
-   "Raid d6 with the knight.",
-   "Open the a-file."
+   "Trade the dark-squared bishops and Black's Kan setup loses its best piece.",
+   "The a7-rook: winning the trade ON a7 drags the rook to a square it never wanted."
   ],
   "endgameTransitions": [
    "The small edge holds into the endgame."
   ],
   "playableLines": [
    {
-    "fen": "r1bq1rk1/1p2npbp/p1n3p1/8/2PpN3/5N2/PP2BPPP/R1BQ1RK1 w - - 2 13",
+    "fen": "rnbqk1nr/1p1p1ppp/p3p3/2b5/4P3/1N1B4/PPP2PPP/RNBQK2R b KQkq - 3 6",
     "moves": [
-     "Bf4",
-     "Bf5",
-     "Nd6",
-     "Qb6",
-     "Qb3",
-     "Qxb3",
-     "axb3",
-     "Bc2"
+     "Ba7",
+     "Qe2",
+     "Ne7",
+     "Be3",
+     "O-O",
+     "Bxa7",
+     "Rxa7",
+     "Nc3"
     ],
     "annotations": [
-     "Bf4 — White develops.",
-     "…Bf5 — Black develops.",
-     "Nd6 — White’s knight raids d6.",
-     "…Qb6 — Black counterattacks.",
-     "Qb3 — White offers a queen trade.",
-     "…Qxb3 — Black trades.",
-     "axb3 — White recaptures, opening the a-file.",
-     "…Bc2 — Black harasses; a balanced game."
-    ],
-    "learnCues": [
-     "Bf4 — develop",
-     "Bf5 — develop",
-     "Nd6 — raid d6",
-     "Qb6 — counter",
-     "Qb3 — offer the trade",
-     "Qxb3 — trade",
-     "axb3 — open the a-file",
-     "Bc2 — balanced"
+     "The bishop ducks to a7 to keep its diagonal — but watch what that costs the rook behind it.",
+     "The queen steps to e2, connecting the pieces and keeping d1 free for a rook.",
+     "The knight develops inside the shell — Black's setup is solid but slow.",
+     "Be3 offers the trade. Black cannot decline forever: the bishops stare at each other down the same diagonal.",
+     "Black castles first, hoping the question goes away.",
+     "It does not: the trade lands on a7, and the recapture is the point of the whole line —",
+     "— the rook is dragged to a7, one square off the board's edge, needing two moves to matter again.",
+     "Nc3 completes development. Same-colour everything else, but White holds the dark squares and the tempo. Five for five in the corpus."
     ],
     "arrows": [
      [],
      [],
+     [],
      [
       {
-       "from": "e4",
-       "to": "d6",
+       "from": "e3",
+       "to": "a7",
        "color": "rgba(40,185,95,0.92)"
       }
      ],
-     [],
      [],
      [],
      [],
@@ -34550,60 +34514,48 @@
     "highlights": [
      [
       {
-       "square": "f4",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "a7",
+       "color": "rgba(80,140,255,0.32)"
       }
      ],
      [
       {
-       "square": "f5",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "e2",
+       "color": "rgba(80,140,255,0.32)"
       }
      ],
+     [],
      [
       {
-       "square": "d6",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "a7",
+       "color": "rgba(239,68,68,0.72)"
       }
      ],
+     [],
+     [],
      [
       {
-       "square": "b6",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "a7",
+       "color": "rgba(239,68,68,0.72)"
       }
      ],
-     [
-      {
-       "square": "b3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "c2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ]
+     []
     ],
-    "title": "Rossolimo …e6: the d6 Knight Raid",
-    "intro": "A real this repertoire win. The knight raids d6 and White trades into a balanced edge.",
+    "learnCues": [
+     "Ba7 — the rook pays later.",
+     "Qe2 — connect, keep d1.",
+     "Slow shell, no bite.",
+     "Be3 — the forced question.",
+     "Castling changes nothing.",
+     "Trade lands on a7.",
+     "The rook is stranded.",
+     "Dark squares and tempo — White's."
+    ],
+    "title": "The dark-square trade",
+    "intro": "His five-for-five treatment of the ...e6 duck: hit the bishop, trade it on a7, keep the squares.",
     "sources": [
-     "book:chess-fundamentals",
-     "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation",
-     "https://en.wikipedia.org/wiki/Sicilian_Defence,_Rossolimo_Variation",
-     "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+     "concept:pos-development",
+     "https://en.wikipedia.org/wiki/Sicilian_Defence,_Taimanov_Variation"
     ]
    }
   ]
@@ -34611,136 +34563,108 @@
  {
   "id": "mp-pronaroRoss-bd7-conversion",
   "openingId": "pro-naroditsky-rossolimo",
-  "criticalPositionFen": "r1bq1rk1/1p2ppbp/p2p1np1/4n3/2PNP3/2N5/PP1QBPPP/R1B2RK1 w - - 9 13",
-  "title": "Bxd7+ Trade — slow bishop pair conversion",
-  "overview": "A real win from this repertoire: the bishop takes the long diagonal from b2, White centralises the rooks and reroutes the light bishop — a pleasant pull (~+0.9).",
+  "criticalPositionFen": "r3kb1r/pp1q1ppp/2n1p3/3pP3/3P4/5N2/PP1B1PPP/R2QR1K1 b kq - 0 12",
+  "title": "Bxd7+ Trade — the e5 wedge and the Rc1–c3 lift",
+  "overview": "Trade the bishops early and the position tells you the rest: his games walk this exact French-style structure — e5 wedge, open c-file — over twenty times, scoring nearly three to one. The plan is the rook lift you would never find by accident: Rc1, then Rc3, where the rook watches the c-file and stands one slide from the kingside. Space plus the more flexible rook is the whole story.",
   "pawnBreaks": [
    {
-    "move": "e-file pressure",
-    "explanation": "White works the centre behind the fianchetto.",
+    "move": "a3",
+    "explanation": "A quiet clamp — a3 takes b4 from Black's knight and rook before the queenside opens.",
     "fen": ""
    }
   ],
   "pieceManeuvers": [
    {
-    "piece": "Bishop",
-    "route": "Bc1-b2 long diagonal",
-    "explanation": "The bishop fianchettoes to b2 on the long diagonal."
+    "piece": "Rook",
+    "route": "Ra1-c1-c3",
+    "explanation": "The corpus lift: the rook takes the open file, then the third rank — pressing c6 today, ready to swing kingside tomorrow."
    }
   ],
   "strategicThemes": [
-   "Fianchetto on b2.",
-   "Press the small edge."
+   "The e5 wedge cramps the kingside knight-less French structure — Black's pieces queue behind three pawns.",
+   "Play on both sides: the c-file rook converts to a kingside attacker in one move."
   ],
   "endgameTransitions": [
    "The pull persists into the endgame."
   ],
   "playableLines": [
    {
-    "fen": "r1bq1rk1/1p2ppbp/p2p1np1/4n3/2PNP3/2N5/PP1QBPPP/R1B2RK1 w - - 9 13",
+    "fen": "r3kb1r/pp1q1ppp/2n1p3/3pP3/3P4/5N2/PP1B1PPP/R2QR1K1 b kq - 0 12",
     "moves": [
-     "b3",
-     "Bd7",
-     "Bb2",
-     "Rc8",
-     "Rfe1",
-     "Re8",
-     "Bf1",
-     "Qa5"
+     "Be7",
+     "Rc1",
+     "O-O",
+     "Rc3",
+     "Rfc8",
+     "a3"
     ],
     "annotations": [
-     "b3 — White prepares to fianchetto.",
-     "…Bd7 — Black develops.",
-     "Bb2 — White takes the long diagonal.",
-     "…Rc8 — Black takes the c-file.",
-     "Rfe1 — White centralises.",
-     "…Re8 — Black contests.",
-     "Bf1 — White reroutes the bishop.",
-     "…Qa5 — Black eyes the queenside; White holds a small edge."
-    ],
-    "learnCues": [
-     "b3 — prep fianchetto",
-     "Bd7 — develop",
-     "Bb2 — long diagonal",
-     "Rc8 — take the c-file",
-     "Rfe1 — centralise",
-     "Re8 — contest",
-     "Bf1 — reroute",
-     "Qa5 — White is better"
+     "Black develops and prepares to castle — the structure is a French without light-squared bishops, which suits White's space.",
+     "The rook claims the only open file before Black's rooks are ready to argue about it.",
+     "Black tucks the king away. Nothing is loose yet — but nothing is active either.",
+     "The lift: Rc3. On the third rank the rook does two jobs — it leans on the file, and it stands one move from g3 or h3 if the king ever invites it.",
+     "Black contests the file, exactly as the position demands.",
+     "And a3 — the little clamp his games play here. The b4-square is gone, the queenside is sealed, and White keeps both plans alive while Black has only the wait. Fourteen wins to five in his corpus from this structure."
     ],
     "arrows": [
      [],
      [],
+     [],
      [
       {
-       "from": "c1",
-       "to": "b2",
+       "from": "c3",
+       "to": "g3",
        "color": "rgba(40,185,95,0.92)"
       }
      ],
-     [],
-     [],
-     [],
      [],
      []
     ],
     "highlights": [
      [
       {
-       "square": "b3",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "e7",
+       "color": "rgba(80,140,255,0.32)"
       }
      ],
      [
       {
-       "square": "d7",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "c1",
+       "color": "rgba(255,214,0,0.88)"
       }
      ],
+     [],
      [
       {
-       "square": "b2",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "c3",
+       "color": "rgba(255,214,0,0.88)"
       }
      ],
+     [],
      [
       {
-       "square": "c8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
+       "square": "a3",
+       "color": "rgba(80,140,255,0.32)"
+      },
       {
-       "square": "e1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "f1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "a5",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "b4",
+       "color": "rgba(255,214,0,0.88)"
       }
      ]
     ],
-    "title": "Rossolimo: Fianchetto and Press",
-    "intro": "A real this repertoire win. White fianchettoes the bishop and presses a small edge.",
+    "learnCues": [
+     "French shape, no bishops.",
+     "Rc1 — file first.",
+     "Black castles, still passive.",
+     "Rc3 — the two-job lift.",
+     "The file gets contested.",
+     "a3 — seal it, keep both plans."
+    ],
+    "title": "The rook-lift conversion",
+    "intro": "His twenty-two-game continuation from the Bxd7+ terminus: wedge, file, lift, clamp.",
     "sources": [
-     "book:chess-fundamentals",
-     "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation",
-     "https://en.wikipedia.org/wiki/Sicilian_Defence,_Rossolimo_Variation",
-     "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+     "concept:pos-space",
+     "https://www.chess.com/openings/Sicilian-Defense-Moscow-Variation"
     ]
    }
   ]
@@ -36452,280 +36376,6 @@
      "book:chess-fundamentals",
      "https://www.chess.com/openings/Kings-Indian-Attack",
      "https://en.wikipedia.org/wiki/King%27s_Indian_Attack",
-     "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
-    ]
-   }
-  ]
- },
- {
-  "id": "mp-pronaroRoss-e6-ne5",
-  "openingId": "pro-naroditsky-rossolimo",
-  "criticalPositionFen": "r1b1kb1r/p5p1/2p1ppp1/2pp4/4PP2/2NP4/PPP3PP/R1B2RK1 w kq - 0 13",
-  "title": "Taimanov — Ne5 central outpost",
-  "overview": "A real win from this repertoire: White prepares the fianchetto, the centre opens, and the rook takes the d-file — a pleasant edge (~+1.1).",
-  "pawnBreaks": [
-   {
-    "move": "d4xc4 trade",
-    "explanation": "dxc4 resolves the centre on White’s terms.",
-    "fen": ""
-   }
-  ],
-  "pieceManeuvers": [
-   {
-    "piece": "Rook",
-    "route": "Rf1-d1 file",
-    "explanation": "The rook takes the open d-file."
-   }
-  ],
-  "strategicThemes": [
-   "Fianchetto and open the centre.",
-   "Take the d-file."
-  ],
-  "endgameTransitions": [
-   "The d-file pressure tells into the endgame."
-  ],
-  "playableLines": [
-   {
-    "fen": "r1b1kb1r/p5p1/2p1ppp1/2pp4/4PP2/2NP4/PPP3PP/R1B2RK1 w kq - 0 13",
-    "moves": [
-     "b3",
-     "c4",
-     "dxc4",
-     "dxc4",
-     "Be3",
-     "Ba6",
-     "Rfd1",
-     "Rd8"
-    ],
-    "annotations": [
-     "b3 — White prepares to fianchetto.",
-     "…c4 — Black strikes on the queenside.",
-     "dxc4 — White captures.",
-     "…dxc4 — Black recaptures.",
-     "Be3 — White develops.",
-     "…Ba6 — Black develops, eyeing c4.",
-     "Rfd1 — White takes the d-file.",
-     "…Rd8 — Black contests; White holds a small edge."
-    ],
-    "learnCues": [
-     "b3 — prep fianchetto",
-     "c4 — strike",
-     "dxc4 — capture",
-     "dxc4 — recapture",
-     "Be3 — develop",
-     "Ba6 — eye c4",
-     "Rfd1 — take the d-file",
-     "Rd8 — White is better"
-    ],
-    "arrows": [
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [
-      {
-       "from": "f1",
-       "to": "d1",
-       "color": "rgba(40,185,95,0.92)"
-      }
-     ],
-     []
-    ],
-    "highlights": [
-     [
-      {
-       "square": "b3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "c4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "c4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "c4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "a6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ]
-    ],
-    "title": "Rossolimo …e6: Fianchetto and Take the d-file",
-    "intro": "A real this repertoire win. White fianchettoes and grabs the d-file for a small pull.",
-    "sources": [
-     "book:chess-fundamentals",
-     "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation",
-     "https://en.wikipedia.org/wiki/Sicilian_Defence,_Rossolimo_Variation",
-     "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
-    ]
-   }
-  ]
- },
- {
-  "id": "mp-pronaroRoss-bd7-attack",
-  "openingId": "pro-naroditsky-rossolimo",
-  "criticalPositionFen": "r2q1rk1/1b2bppp/pp1p1n2/2n1p3/2P1P3/1PN1QN2/P3BPPP/R1BR2K1 w - - 3 13",
-  "title": "Bxd7+ Trade — Bf4 + Ne5 attack",
-  "overview": "A real win from this repertoire: when Black pushes …b5, White captures and the bishop grabs the pawn, emerging a clean pawn up (~+0.8).",
-  "pawnBreaks": [
-   {
-    "move": "c4xb5 grab",
-    "explanation": "cxb5 and Bxb5 win the queenside pawn.",
-    "fen": ""
-   }
-  ],
-  "pieceManeuvers": [
-   {
-    "piece": "Knight",
-    "route": "Nf3-d2 reroute",
-    "explanation": "The knight reroutes via d2 to support the centre."
-   }
-  ],
-  "strategicThemes": [
-   "Meet …b5 head-on.",
-   "Win the queenside pawn."
-  ],
-  "endgameTransitions": [
-   "A pawn up, trades favour White."
-  ],
-  "playableLines": [
-   {
-    "fen": "r2q1rk1/1b2bppp/pp1p1n2/2n1p3/2P1P3/1PN1QN2/P3BPPP/R1BR2K1 w - - 3 13",
-    "moves": [
-     "Nd2",
-     "b5",
-     "cxb5",
-     "axb5",
-     "Bxb5",
-     "d5",
-     "exd5",
-     "Nxd5"
-    ],
-    "annotations": [
-     "Nd2 — White reroutes the knight.",
-     "…b5 — Black strikes on the queenside.",
-     "cxb5 — White captures.",
-     "…axb5 — Black recaptures, opening the a-file.",
-     "Bxb5 — White grabs the pawn.",
-     "…d5 — Black strikes the centre.",
-     "exd5 — White captures.",
-     "…Nxd5 — Black recaptures; White is a pawn up."
-    ],
-    "learnCues": [
-     "Nd2 — reroute",
-     "b5 — Black strikes",
-     "cxb5 — capture",
-     "axb5 — recapture",
-     "Bxb5 — win the pawn",
-     "d5 — strike",
-     "exd5 — capture",
-     "Nxd5 — White is up"
-    ],
-    "arrows": [
-     [],
-     [],
-     [],
-     [],
-     [
-      {
-       "from": "e2",
-       "to": "b5",
-       "color": "rgba(40,185,95,0.92)"
-      }
-     ],
-     [],
-     [],
-     []
-    ],
-    "highlights": [
-     [
-      {
-       "square": "d2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ]
-    ],
-    "title": "Rossolimo: Punish the …b5 Push",
-    "intro": "A real this repertoire win. Black’s …b5 is met head-on and White wins a pawn.",
-    "sources": [
-     "book:chess-fundamentals",
-     "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation",
-     "https://en.wikipedia.org/wiki/Sicilian_Defence,_Rossolimo_Variation",
      "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
     ]
    }
@@ -39647,74 +39297,69 @@
  {
   "id": "mp-pronaroRoss-c3-spanish",
   "openingId": "pro-naroditsky-rossolimo",
-  "criticalPositionFen": "2rq1rk1/pp2bpp1/2nppnbp/2p5/4P3/2PP1NNP/PPB2PP1/R1BQR1K1 w - - 2 13",
-  "title": "Rossolimo c3 sideline — Spanish-style squeeze",
-  "overview": "A real win from this repertoire: Bf4 develops, exd5 opens the centre, and the knight centralises on e4 — a balanced, well-placed game (~equal).",
-  "pawnBreaks": [
-   {
-    "move": "e4xd5 break",
-    "explanation": "exd5 opens the centre.",
-    "fen": ""
-   }
-  ],
+  "criticalPositionFen": "r2qk2r/pp2bppp/2nppn2/2p5/4P1b1/2PP1N2/PPB2PPP/RNBQ1RK1 w kq - 2 8",
+  "title": "c3 sideline — the Spanish shuffle",
+  "overview": "The c3 sideline reaches a closed Spanish in all but name: the bishop lives on c2, the centre stays fluid, and the game is won by whoever repositions better. The plan is pure Lopez craft — Bf4 probing, sliding to g5 when e5 comes, retreating to c1 to keep the pair, then Bb3 onto the fresh diagonal while Black's knight does the long f8 walk. Nobody commits; White just stands a little better on every move.",
+  "pawnBreaks": [],
   "pieceManeuvers": [
    {
-    "piece": "Knight",
-    "route": "to e4 centralise",
-    "explanation": "The knight centralises on e4."
+    "piece": "Bishop",
+    "route": "Bc1-f4-g5-c1",
+    "explanation": "The probing bishop: f4 asks about e5, g5 pins when it comes, and the retreat keeps the pair once the questions are answered."
+   },
+   {
+    "piece": "Bishop",
+    "route": "Bc2-b3",
+    "explanation": "When ...e5 closes the centre, b3 is the diagonal that matters — straight through to f7."
    }
   ],
   "strategicThemes": [
-   "Open the centre with exd5.",
-   "Centralise the knight on e4."
+   "Spanish patience: improve, provoke, never release the tension first.",
+   "The two-bishop shuffle keeps every option while Black's knight spends three moves reaching e6."
   ],
   "endgameTransitions": [
    "The well-placed pieces hold into the endgame."
   ],
   "playableLines": [
    {
-    "fen": "2rq1rk1/pp2bpp1/2nppnbp/2p5/4P3/2PP1NNP/PPB2PP1/R1BQR1K1 w - - 2 13",
+    "fen": "r2qk2r/pp2bppp/2nppn2/2p5/4P1b1/2PP1N2/PPB2PPP/RNBQ1RK1 w kq - 2 8",
     "moves": [
      "Bf4",
-     "d5",
-     "exd5",
-     "Qxd5",
-     "Qe2",
-     "Rfd8",
-     "Ne4",
-     "b6"
+     "e5",
+     "Bg5",
+     "Nd7",
+     "Bc1",
+     "Nf8",
+     "Bb3",
+     "Ne6"
     ],
     "annotations": [
-     "Bf4 — White develops the bishop.",
-     "…d5 — Black strikes the centre.",
-     "exd5 — White opens the centre.",
-     "…Qxd5 — Black recaptures.",
-     "Qe2 — White connects.",
-     "…Rfd8 — Black centralises a rook.",
-     "Ne4 — White centralises the knight.",
-     "…b6 — Black develops; a balanced game."
-    ],
-    "learnCues": [
-     "Bf4 — develop",
-     "d5 — Black strikes",
-     "exd5 — open the centre",
-     "Qxd5 — recapture",
-     "Qe2 — connect",
-     "Rfd8 — centralise",
-     "Ne4 — centralise the knight",
-     "b6 — balanced"
+     "The bishop comes out with a question: is e5 coming or not?",
+     "It is — and the centre closes on White's terms, because a closed centre is what the c2-bishop was built for.",
+     "The slide to g5, pressing the knight now that e5 blocked the queen's defence of it.",
+     "Black breaks the pin the standard way, rerouting the knight toward the kingside.",
+     "And the bishop goes home. Three moves to provoke ...e5 and ...Nd7 — both concessions — and the pair is intact. This retreat is the move club players never consider.",
+     "The knight continues its Lopez walk: f8, heading for e6 or g6.",
+     "Now the other bishop takes its diagonal: b3, staring at f7 for the rest of the game.",
+     "The knight lands on e6 and the position is a true Spanish middlegame — where the engine and his corpus agree White's pieces simply stand better."
     ],
     "arrows": [
      [],
      [],
-     [],
+     [
+      {
+       "from": "g5",
+       "to": "f6",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
      [],
      [],
      [],
      [
       {
-       "from": "g3",
-       "to": "e4",
+       "from": "b3",
+       "to": "f7",
        "color": "rgba(40,185,95,0.92)"
       }
      ],
@@ -39724,59 +39369,57 @@
      [
       {
        "square": "f4",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "color": "rgba(80,140,255,0.32)"
       }
      ],
      [
       {
-       "square": "d5",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "e5",
+       "color": "rgba(255,214,0,0.88)"
       }
      ],
      [
       {
-       "square": "d5",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "f6",
+       "color": "rgba(239,68,68,0.72)"
+      }
+     ],
+     [],
+     [
+      {
+       "square": "c1",
+       "color": "rgba(80,140,255,0.32)"
+      }
+     ],
+     [],
+     [
+      {
+       "square": "f7",
+       "color": "rgba(239,68,68,0.72)"
       }
      ],
      [
       {
-       "square": "d5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b6",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "e6",
+       "color": "rgba(80,140,255,0.32)"
       }
      ]
     ],
-    "title": "Rossolimo: Open the Centre, Centralise the Knight",
-    "intro": "A real this repertoire win. White opens the centre and lands a knight on e4.",
+    "learnCues": [
+     "Bf4 — ask about e5.",
+     "Closed centre, White's terms.",
+     "Bg5 — press the pin.",
+     "The standard unpin.",
+     "Bc1 — keep the pair.",
+     "The long knight walk.",
+     "Bb3 — f7 forever.",
+     "A true Spanish — White stands better."
+    ],
+    "title": "The Spanish shuffle",
+    "intro": "From the c3-sideline tabiya: provoke, reposition, and keep both bishops for the long game.",
     "sources": [
-     "book:chess-fundamentals",
-     "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation",
-     "https://en.wikipedia.org/wiki/Sicilian_Defence,_Rossolimo_Variation",
-     "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+     "concept:pos-development",
+     "https://en.wikipedia.org/wiki/Ruy_Lopez"
     ]
    }
   ]
@@ -39784,136 +39427,133 @@
  {
   "id": "mp-pronaroRoss-bc4-italian",
   "openingId": "pro-naroditsky-rossolimo",
-  "criticalPositionFen": "r2q1rk1/1b1nbppp/2npp3/1pp5/p3P3/2PP1NN1/PPB2PPP/R1BQR1K1 w - - 2 13",
-  "title": "Rossolimo Bc4 vs ...d6 — Italian-style attack",
-  "overview": "A real win from this repertoire: after the trade on f3 the queen recaptures actively, and d4 strikes the centre to open the position for White’s pieces — a balanced, pleasant game (~equal).",
+  "criticalPositionFen": "r1bq1rk1/pp2bppp/2nppn2/2p5/4P3/1BPP1N2/PP3PPP/RNBQ1RK1 w - - 4 8",
+  "title": "Bc4 vs ...d6 — the Italian slow build",
+  "overview": "Against ...d6 the bishop takes the Italian diagonal early and tucks to b3 before ...Na5 can ask. What follows is the Giuoco Pianissimo playbook applied to a Sicilian shell: a4 for space and the bishop's air, h3 to keep pieces out of g4, Bg5 when the moment is right, and the queen's knight through d2. No contact, no trades, just three small improvements before Black finds one.",
   "pawnBreaks": [
    {
-    "move": "d4 central break",
-    "explanation": "d4 strikes the centre and opens lines.",
+    "move": "a4",
+    "explanation": "Space and prophylaxis in one: a4 restrains ...b5 and gives the b3-bishop a retreat that never blocks anything.",
     "fen": ""
    }
   ],
   "pieceManeuvers": [
    {
-    "piece": "Queen",
-    "route": "Qxf3 active recapture",
-    "explanation": "The queen recaptures on f3, eyeing the centre and kingside."
+    "piece": "Knight",
+    "route": "Nb1-d2",
+    "explanation": "The Italian tour begins: d2 first, with f1 and g3 (or c4 and e3) to follow as the position asks."
+   },
+   {
+    "piece": "Bishop",
+    "route": "Bc1-g5",
+    "explanation": "Bg5 arrives only after h3 secures the kingside — pressure without permission for counterplay."
    }
   ],
   "strategicThemes": [
-   "Recapture actively on f3.",
-   "Open the centre with d4."
+   "Pianissimo logic in a Sicilian: the side with more space improves pieces and never hurries.",
+   "Restrain first (a4, h3), press second (Bg5), break last."
   ],
   "endgameTransitions": [
    "The open position holds into the endgame."
   ],
   "playableLines": [
    {
-    "fen": "r2q1rk1/1b1nbppp/2npp3/1pp5/p3P3/2PP1NN1/PPB2PPP/R1BQR1K1 w - - 2 13",
+    "fen": "r1bq1rk1/pp2bppp/2nppn2/2p5/4P3/1BPP1N2/PP3PPP/RNBQ1RK1 w - - 4 8",
     "moves": [
-     "a3",
-     "Nde5",
-     "Be3",
-     "Nxf3+",
-     "Qxf3",
-     "d5",
-     "d4",
-     "cxd4"
+     "a4",
+     "e5",
+     "h3",
+     "Be6",
+     "Bg5",
+     "Qc7",
+     "Nbd2",
+     "Rad8"
     ],
     "annotations": [
-     "a3 — a useful restraining move.",
-     "…Nde5 — Black centralises a knight.",
-     "Be3 — White develops.",
-     "…Nxf3+ — Black trades on f3.",
-     "Qxf3 — White recaptures, the queen active.",
-     "…d5 — Black strikes the centre.",
-     "d4 — White strikes back, opening the centre.",
-     "…cxd4 — Black captures; a balanced, open game."
-    ],
-    "learnCues": [
-     "a3 — restrain",
-     "Nde5 — centralise",
-     "Be3 — develop",
-     "Nxf3+ — trade",
-     "Qxf3 — active queen",
-     "d5 — Black strikes",
-     "d4 — open the centre",
-     "cxd4 — balanced"
+     "The little rook-pawn does three jobs: restrains ...b5, gifts the bishop a2, and gains a half-tempo of space.",
+     "Black stakes the centre — the natural reply, and it fixes the structure White wanted fixed.",
+     "h3 before anything sharp: no ...Bg4, no ...Ng4, no surprises. The Pianissimo rhythm.",
+     "The bishops meet on the diagonal — Black offers the trade White is happy to think about later.",
+     "First the press: Bg5, leaning on the knight that guards d5.",
+     "The queen steps off the pin's shadow to c7.",
+     "The knight begins the famous tour — d2 now, f1 or c4 next, the kingside eventually.",
+     "Black centralises rooks and the position is a pure Italian middlegame: level on the engine, but every plan on the board is White's to start. His corpus treats these as slow wins."
     ],
     "arrows": [
      [],
      [],
      [],
      [],
-     [],
-     [],
      [
       {
-       "from": "d3",
-       "to": "d4",
+       "from": "g5",
+       "to": "f6",
        "color": "rgba(40,185,95,0.92)"
       }
      ],
+     [],
+     [],
      []
     ],
     "highlights": [
      [
       {
-       "square": "a3",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "a4",
+       "color": "rgba(80,140,255,0.32)"
+      },
+      {
+       "square": "b5",
+       "color": "rgba(255,214,0,0.88)"
       }
      ],
      [
       {
        "square": "e5",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "color": "rgba(255,214,0,0.88)"
       }
      ],
      [
       {
-       "square": "e3",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "g4",
+       "color": "rgba(255,214,0,0.88)"
       }
      ],
      [
       {
-       "square": "f3",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "e6",
+       "color": "rgba(80,140,255,0.32)"
       }
      ],
      [
       {
-       "square": "f3",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "f6",
+       "color": "rgba(239,68,68,0.72)"
       }
      ],
+     [],
      [
       {
-       "square": "d5",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "d2",
+       "color": "rgba(80,140,255,0.32)"
       }
      ],
-     [
-      {
-       "square": "d4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ]
+     []
     ],
-    "title": "Rossolimo: Open the Centre with d4",
-    "intro": "A real this repertoire win. White recaptures actively and breaks with d4.",
+    "learnCues": [
+     "a4 — three jobs, one move.",
+     "Black fixes the centre.",
+     "h3 — no visitors.",
+     "Bishops meet — no hurry.",
+     "Bg5 — lean on d5's guard.",
+     "Queen steps aside.",
+     "The knight tour begins.",
+     "Italian middlegame — White starts every plan."
+    ],
+    "title": "The slow build",
+    "intro": "Pianissimo craft from the Bc4 tabiya: restrain, secure, press — in that order.",
     "sources": [
-     "book:chess-fundamentals",
-     "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation",
-     "https://en.wikipedia.org/wiki/Sicilian_Defence,_Rossolimo_Variation",
-     "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+     "concept:pos-development",
+     "https://en.wikipedia.org/wiki/Italian_Game"
     ]
    }
   ]
@@ -39921,136 +39561,122 @@
  {
   "id": "mp-pronaroRoss-g6-maroczy",
   "openingId": "pro-naroditsky-rossolimo",
-  "criticalPositionFen": "r1b2rk1/3pppbp/p1n3p1/qp2P3/2BP4/1QP2N2/P4PPP/R1B2RK1 w - - 0 13",
-  "title": "Rossolimo vs ...g6 — Maroczy Bind conversion",
-  "overview": "A real win from this repertoire: the bishop sits on d5, the knight probes g5, and after the central trades White presses a small pull (~+1).",
-  "pawnBreaks": [
-   {
-    "move": "e5xd6 break",
-    "explanation": "exd6 opens the centre in White’s favour.",
-    "fen": ""
-   }
-  ],
+  "criticalPositionFen": "r3k2r/pp1bppbp/n4np1/1B1q4/3N4/2P2N2/PP3PPP/R1BQK2R w KQkq - 3 10",
+  "title": "vs ...g6 — the Na3–b5 tour and the wrecked queenside",
+  "overview": "Against the hyper-accelerated ...g6, his corpus plays the move-order trick that looks eccentric and scores perfectly: Na3, inviting the c-pawn forward, then Nb5 hitting c7 so hard the knight must be met by ...Na6, and only then the recapture on d4. Five games, five wins. The payoff comes now: trade on a6, wreck the queenside pawns, castle, and press the e-file against the doubled a-pawns for the rest of the game.",
+  "pawnBreaks": [],
   "pieceManeuvers": [
    {
     "piece": "Bishop",
-    "route": "to d5 dominate",
-    "explanation": "The bishop dominates the central d5 square."
+    "route": "Bb5xa6",
+    "explanation": "The trade that defines the game: bishop takes a6, and Black's queenside becomes two pawn islands with a doubled a-pawn."
+   },
+   {
+    "piece": "Knight",
+    "route": "Nf3-e5",
+    "explanation": "The e5 hop turns the open e-file into pressure — the knight sits where no pawn can ever ask it to leave."
    }
   ],
   "strategicThemes": [
-   "Dominate d5 with the bishop.",
-   "Press the small edge."
+   "Structure over material: the a6 trade wins no pawn today and wins the endgame tomorrow.",
+   "The five-for-five corpus tour: Na3–b5 forces the concession before Black finishes developing."
   ],
   "endgameTransitions": [
    "The central edge persists into the endgame."
   ],
   "playableLines": [
    {
-    "fen": "r1b2rk1/3pppbp/p1n3p1/qp2P3/2BP4/1QP2N2/P4PPP/R1B2RK1 w - - 0 13",
+    "fen": "r3k2r/pp1bppbp/n4np1/1B1q4/3N4/2P2N2/PP3PPP/R1BQK2R w KQkq - 3 10",
     "moves": [
-     "Bd5",
-     "Bb7",
-     "Ng5",
-     "e6",
-     "Bf3",
-     "d5",
-     "exd6",
-     "Qd8"
+     "Bxa6",
+     "bxa6",
+     "O-O",
+     "O-O",
+     "Re1",
+     "Rfe8",
+     "Ne5",
+     "Rac8"
     ],
     "annotations": [
-     "Bd5 — White’s bishop dominates the centre.",
-     "…Bb7 — Black challenges it.",
-     "Ng5 — White’s knight probes g5.",
-     "…e6 — Black kicks the bishop.",
-     "Bf3 — White retreats.",
-     "…d5 — Black strikes the centre.",
-     "exd6 — White captures en passant.",
-     "…Qd8 — Black regroups; White holds a small edge."
-    ],
-    "learnCues": [
-     "Bd5 — dominate d5",
-     "Bb7 — challenge",
-     "Ng5 — probe",
-     "e6 — kick the bishop",
-     "Bf3 — retreat",
-     "d5 — strike",
-     "exd6 — en passant",
-     "Qd8 — White is better"
+     "Take the knight. It looks like giving up the good bishop — but look at what recaptures:",
+     "the b-pawn, and Black's queenside is now a6 and a7 stacked on one file, with c-file air where a pawn chain used to be.",
+     "Castle. The structural damage is permanent; there is no hurry of any kind.",
+     "Black castles too, and the game's shape is set: pieces versus structure.",
+     "The rook takes the open file — the file that exists because of the wreck.",
+     "Black contests it, as Black must.",
+     "Knight to e5: the permanent square. Supported, central, staring at d7, f7 and c6 — and no pawn will ever touch it.",
+     "Black organises, but the count is already in: doubled pawns, a fixed weakness on a6, and White's pieces on their best squares. His five corpus games here never let it back."
     ],
     "arrows": [
+     [],
+     [],
+     [],
+     [],
+     [],
+     [],
      [
       {
-       "from": "c4",
-       "to": "d5",
+       "from": "e5",
+       "to": "d7",
+       "color": "rgba(40,185,95,0.92)"
+      },
+      {
+       "from": "e5",
+       "to": "f7",
        "color": "rgba(40,185,95,0.92)"
       }
      ],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
      []
     ],
     "highlights": [
      [
       {
-       "square": "d5",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "a6",
+       "color": "rgba(239,68,68,0.72)"
       }
      ],
      [
       {
-       "square": "b7",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "a6",
+       "color": "rgba(239,68,68,0.72)"
+      },
+      {
+       "square": "a7",
+       "color": "rgba(239,68,68,0.72)"
       }
      ],
+     [],
+     [],
      [
       {
-       "square": "g5",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "e1",
+       "color": "rgba(80,140,255,0.32)"
       }
      ],
+     [],
      [
       {
-       "square": "e6",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "e5",
+       "color": "rgba(255,214,0,0.88)"
       }
      ],
-     [
-      {
-       "square": "f3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ]
+     []
     ],
-    "title": "Rossolimo …g6: Dominate the Centre",
-    "intro": "A real this repertoire win. The bishop dominates d5 and White keeps a small edge.",
+    "learnCues": [
+     "Bxa6 — structure over bishop.",
+     "Doubled, islanded, permanent.",
+     "Castle — no hurry ever.",
+     "Pieces versus structure.",
+     "The file the wreck opened.",
+     "Black must contest.",
+     "Ne5 — the forever square.",
+     "The count is already in."
+    ],
+    "title": "The wrecked queenside",
+    "intro": "His five-for-five continuation: the knight tour forced ...Na6 — now cash it into a permanent structural win.",
     "sources": [
-     "book:chess-fundamentals",
-     "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation",
-     "https://en.wikipedia.org/wiki/Sicilian_Defence,_Rossolimo_Variation",
-     "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+     "concept:pos-space",
+     "https://en.wikipedia.org/wiki/Sicilian_Defence,_Accelerated_Dragon"
     ]
    }
   ]
