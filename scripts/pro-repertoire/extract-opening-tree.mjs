@@ -64,6 +64,13 @@ const OPENINGS = {
     minPrefix: ['e4', 'd5'],
     maxDepth: 80,
   },
+  'anti-latvian': {
+    name: 'Anti-Latvian Gambit (White)',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['e4', 'e5', 'Nf3', 'f5'],
+    maxDepth: 80,
+  },
   'anti-danish-black': {
     name: 'Anti-Danish Gambit (Black)',
     color: 'black',

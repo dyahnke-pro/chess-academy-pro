@@ -331,6 +331,44 @@
   ]
  },
  {
+  "id": "anti-latvian",
+  "eco": "C40",
+  "name": "Anti-Latvian Gambit",
+  "pgn": "e4 e5 Nf3 f5 d4 exd4 e5 d6 Bc4 d5 Bb3 Bc5 Nxd4 Qh4 Be3 Bxd4 Qxd4 Qxd4 Bxd4",
+  "uci": "e2e4 e7e5 g1f3 f7f5 d2d4 e5d4 e4e5 d7d6 f1c4 d6d5 c4b3 f8c5 f3d4 d8h4 c1e3 c5d4 d1d4 h4d4 e3d4",
+  "fen": "rnb1k1nr/ppp3pp/8/3pPp2/3B4/1B6/PPP2PPP/RN2K2R b KQkq - 0 10",
+  "color": "white",
+  "style": "solid",
+  "isRepertoire": true,
+  "overview": "The Latvian is a King's Gambit a tempo down, and the refutation is pure principle: answer the flank lunge with the immediate d4 central strike, plant the e5 wedge when Black trades, and develop onto the diagonal Black personally opened with the f-pawn. Engine-verified a full pawn's worth better in the main line with material still equal. A taught line — grounded on the dedicated video, theory, and the engine.",
+  "keyIdeas": [
+   "Answer f5 with d4 instantly — a flank lunge is punished in the centre.",
+   "The e5 wedge is the refutation: it takes f6 from the knight forever.",
+   "Bc4 aims through the hole Black opened on move two.",
+   "In the …fxe4 branch, take the e5-pawn and never chase e4 into the d5 wedge."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "The …fxe4 Grab",
+    "pgn": "e4 e5 Nf3 f5 d4 fxe4 Nxe5 Nf6 Be2 d6 Nc4 d5 Ne3 c6 O-O Bd6",
+    "explanation": "When Black grabs the e-pawn instead, take the e5-pawn — with the knight, and don't rush to regain e4: chasing it immediately lets Black build the d5 wedge and turn your knights into targets. Develop calmly, reroute the knight via c4 and e3 against the d5-pawn, castle, and the engine keeps White half a pawn better with the safer king. The gambit's compensation never materializes."
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-center",
+   "concept:pos-development"
+  ]
+ },
+ {
   "id": "anti-scandinavian",
   "eco": "B01",
   "name": "Anti-Scandinavian: Main Line",

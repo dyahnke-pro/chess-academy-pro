@@ -680,6 +680,25 @@
           ]
         }
       ]
+    },
+    {
+      "key": "latvian",
+      "displayName": "the Latvian Gambit",
+      "studentSide": "white",
+      "aliases": [
+        "latvian gambit",
+        "latvian"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-latvian",
+          "name": "the d4 central refutation",
+          "styleTags": [
+            "solid",
+            "positional"
+          ]
+        }
+      ]
     }
   ]
 }
