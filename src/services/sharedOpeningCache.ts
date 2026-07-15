@@ -157,6 +157,18 @@ export async function readSharedCache(
       });
       return null;
     }
+    // Self-defend the boundary: a FOREIGN tree skips the stage repairs
+    // (isTreeShapeValid only checks tree MOVE shape/legality, not the
+    // concepts/findMove/drill/punish array shapes), so sanitize the
+    // stages here — otherwise every reader must remember to (David
+    // 2026-07-15 sweep). Lazy import mirrors this file's cryptoService
+    // pattern and avoids a heavy static dep on openingGenerator.
+    try {
+      const { sanitizeTreeStages } = await import('./openingGenerator');
+      sanitizeTreeStages(tree);
+    } catch {
+      /* sanitize best-effort; per-consumer guards still protect the UI */
+    }
     void logAppAudit({
       kind: 'coach-surface-migrated',
       category: 'subsystem',

@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MotionConfig } from 'framer-motion';
+import { MemoryRouter } from 'react-router-dom';
 import { ModelGameViewer } from './ModelGameViewer';
 import { buildModelGame } from '../../test/factories';
 
@@ -58,14 +59,18 @@ function renderViewer(
   });
 
   return render(
-    <MotionConfig transition={{ duration: 0 }}>
-      <ModelGameViewer
-        game={game}
-        boardOrientation="white"
-        onExit={vi.fn()}
-        {...overrides}
-      />
-    </MotionConfig>,
+    // MemoryRouter: the viewer's inline coach affordances (VoiceChatMic)
+    // call useNavigate, which needs a Router context in the test.
+    <MemoryRouter>
+      <MotionConfig transition={{ duration: 0 }}>
+        <ModelGameViewer
+          game={game}
+          boardOrientation="white"
+          onExit={vi.fn()}
+          {...overrides}
+        />
+      </MotionConfig>
+    </MemoryRouter>,
   );
 }
 

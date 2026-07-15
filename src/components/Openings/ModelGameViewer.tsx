@@ -59,14 +59,20 @@ function parseGameMoves(pgn: string): ParsedMove[] {
   return moves;
 }
 
-function getCriticalMomentForMove(
-  moments: ModelGameCriticalMoment[],
+export function getCriticalMomentForMove(
+  moments: ModelGameCriticalMoment[] | undefined,
   moveNumber: number,
   isWhite: boolean,
 ): ModelGameCriticalMoment | null {
-  return moments.find(
-    (m) => m.moveNumber === moveNumber && m.color === (isWhite ? 'white' : 'black'),
-  ) ?? null;
+  // `criticalMoments` is typed required, but 373/646 model-games.json
+  // entries ship without it — a raw Dexie ModelGame therefore lands it
+  // `undefined`, and `undefined.find(...)` white-screened the viewer on
+  // the first Next click (David 2026-07-15 sweep). Tolerate the gap.
+  return (
+    moments?.find(
+      (m) => m.moveNumber === moveNumber && m.color === (isWhite ? 'white' : 'black'),
+    ) ?? null
+  );
 }
 
 function annotationArrowsToBoard(arrows: AnnotationArrow[] | undefined): Array<{ startSquare: string; endSquare: string; color: string }> {
