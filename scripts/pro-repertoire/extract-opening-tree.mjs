@@ -27,6 +27,15 @@ const OPENINGS = {
     minPrefix: ['e4', 'c6'],
     maxDepth: 80,
   },
+  // Belgrade Gambit / Four Knights Scotch (David 2026-07-15 — video-grounded
+  // buildout target #2; his most-taught white opening, 20 videos).
+  'belgrade': {
+    name: 'Belgrade Gambit / Four Knights Scotch',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['e4', 'e5', 'Nf3', 'Nc6', 'Nc3', 'Nf6', 'd4'],
+    maxDepth: 80,
+  },
   // Anti-Pirc / Anti-Modern from the WHITE side (David 2026-07-15 — the
   // video-grounded Watch build; his real games vs ...d6 / ...g6 systems).
   'anti-pirc-white': {
