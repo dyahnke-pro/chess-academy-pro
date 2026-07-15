@@ -1186,8 +1186,8 @@
    },
    {
     "name": "Colle System (Nbd2)",
-    "pgn": "d4 d5 Nf3 Nf6 e3 c5 Nbd2 cxd4 a3 d3 b3 d4 c3 a6",
-    "explanation": ""
+    "pgn": "d4 d5 Nf3 Nf6 e3 c5 Nbd2 cxd4 exd4 Nc6 Bb5 Bd7 O-O a6 Bxc6 Bxc6 Ne5 e6",
+    "explanation": "When the queen’s knight goes to d2 first, trade in the centre and develop naturally: after exd4 the position is a Colle where Black’s pieces flow — Nc6, the bishop answers Bb5 with Bd7, and once the trade lands on c6 the bishop pair points at the whole board. The engine calls it level; the freer game is Black’s."
    },
    {
     "name": "Colle System (b3)",
