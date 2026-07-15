@@ -642,6 +642,25 @@
           ]
         }
       ]
+    },
+    {
+      "key": "elephant",
+      "displayName": "the Elephant Gambit",
+      "studentSide": "white",
+      "aliases": [
+        "elephant gambit",
+        "elephant"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-elephant",
+          "name": "the knight-capture demolition (3.Nxe5)",
+          "styleTags": [
+            "solid",
+            "tactical"
+          ]
+        }
+      ]
     }
   ]
 }

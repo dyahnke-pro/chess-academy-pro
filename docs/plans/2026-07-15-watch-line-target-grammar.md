@@ -117,14 +117,20 @@ G1: post-deploy-audit.yml fired on GH runners vs prod @ 0bb52fa (run
 29391505031) — this container's Chromium can't reach prod (proxy resets);
 runners can.
 
-## REMAINING QUEUE (task #8) — same per-opening cadence
-Check-existing-first (the Scandi lesson taught us), then increment:
-- Tier 2: Vienna (pro-gothamchess-vienna exists — ground/increment), Four
-  Knights/Glek (8 vids, net-new candidate), Accelerated Dragon/Maróczy (both
-  sides), QGD (black), Hippo (anti), Grand Prix (anti-grand-prix-black exists),
-  English, Grünfeld (anti-grunfeld-exchange exists), King's Gambit
-  (anti-kings-gambit-black DONE by prior video-grounding), Italian, Owen (anti),
-  Nimzo-Larsen. Trees to extract per target; transcripts re-pullable via yt-dlp.
+## REMAINING QUEUE (task #8) — HONEST after the existence sweep (2026-07-15)
+The sweep found most Tier-2 items ALREADY covered (Glek's existing lesson
+matches his exact fxe3/Nh4 system — no build needed; Vienna/QGD/Grand Prix/
+English/Grünfeld/King's Gambit/Italian/Nimzo-Larsen all exist). SIX genuine
+holes remain, each with a dedicated video:
+1. Elephant Gambit (anti) — "Taming the Elephant Gambit" (HIGH VALUE: the
+   recommender's own worst-matchup exemplar) — IN PROGRESS
+2. Accelerated Dragon / Maróczy Bind — theory + endgame videos, both sides
+3. Hippo (anti) — 2 dedicated videos
+4. Owen's Defense (anti) — dedicated video
+5. Danish Gambit (anti) — "DEMOLISH with 3 Moves" Opening Lab
+6. Latvian Gambit (anti) — dedicated video
+Existing-content passes (narration refresh to red-target grammar + corpus
+stats) fold into task #6.
 - Task #6: red-target sweep of pre-2026-07-15 lessons (incremental, per-opening).
 - Coach theme note: the d5 space-punch is HIS signature across Pirc/Belgrade/
   Scandi — candidate for a cross-opening concept the coach cites.

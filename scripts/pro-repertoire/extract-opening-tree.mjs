@@ -64,6 +64,13 @@ const OPENINGS = {
     minPrefix: ['e4', 'd5'],
     maxDepth: 80,
   },
+  'anti-elephant': {
+    name: 'Anti-Elephant Gambit (White)',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['e4', 'e5', 'Nf3', 'd5'],
+    maxDepth: 80,
+  },
   'glek': {
     name: 'Glek System (Four Knights g3)',
     color: 'white',

@@ -255,6 +255,44 @@
   ]
  },
  {
+  "id": "anti-elephant",
+  "eco": "C40",
+  "name": "Anti-Elephant Gambit",
+  "pgn": "e4 e5 Nf3 d5 Nxe5 Bd6 d4 dxe4 Bc4 Bxe5 Qh5 Qe7 Qxe5 Qxe5 dxe5 Nc6 Nc3 Nxe5 Bb3 Ne7 Bf4 N7g6 Bg3",
+  "uci": "e2e4 e7e5 g1f3 d7d5 f3e5 f8d6 d2d4 d5e4 f1c4 d6e5 d1h5 d8e7 h5e5 e7e5 d4e5 b8c6 b1c3 c6e5 c4b3 g8e7 c1f4 e7g6 f4g3",
+  "fen": "r1b1k2r/ppp2ppp/6n1/4n3/4p3/1BN3B1/PPP2PPP/R3K2R b KQkq - 5 12",
+  "color": "white",
+  "style": "solid",
+  "isRepertoire": true,
+  "overview": "The calm demolition of the Elephant Gambit: capture with the KNIGHT (the corpus data is blunt — the pawn capture scores barely a third, the knight capture 72.2 percent across 63 games), develop while the gambit flails, and land the Qh5 double-hit on f7 and the loose bishop. Queens come off, the tricks run out, and order beats chaos for the rest of the game.",
+  "keyIdeas": [
+   "Take with the KNIGHT: Nxe5 scores 72 percent; the pawn grab hands Black the game he wants.",
+   "Refute by developing, not by grabbing — d4 and Bc4 before anything clever.",
+   "Qh5 is the payoff: mate on f7 and the loose e5-bishop, both at once.",
+   "Trade queens into the pleasant grind — the gambit dies without chaos."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "The Greedy …Qg5 Refuted",
+    "pgn": "e4 e5 Nf3 d5 Nxe5 dxe4 Bc4 Qg5 Bxf7+ Ke7 d4 Qxg2 Rf1",
+    "explanation": "The Elephant player's pet trick: grab the e-pawn, then lunge the queen at g5 hitting knight and g2 at once. The refutation starts with a thunderbolt — bishop takes f7 check, dragging the king to e7 — then d4 shields everything, and when the queen grabs g2 anyway the rook simply steps aside. The engine gives White better than a pawn and a third with the safer king and a raging attack. Let them play the trick; know the punishment."
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:tac-fork",
+   "concept:pos-center"
+  ]
+ },
+ {
   "id": "anti-scandinavian",
   "eco": "B01",
   "name": "Anti-Scandinavian: Main Line",
