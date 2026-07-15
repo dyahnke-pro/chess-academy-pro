@@ -195,6 +195,7 @@ const GATE_TESTS = [
   'src/data/lessons/openingWiring.test.ts',
   'src/services/middlegamePlanner.test.ts',
   'src/data/middlegamePlanThemes.test.ts',
+  'src/data/middlegamePlanContinuity.test.ts',
   'src/data/lessons/lessonSources.test.ts',
   'src/components/Openings/MiddlegamePlansSection.test.tsx',
   'src/components/Openings/EndgamePlansSection.test.tsx',
