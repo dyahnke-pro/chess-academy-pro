@@ -1,1092 +1,1140 @@
 [
-  {
-    "id": "anti-caro-fantasy",
-    "eco": "B12",
-    "name": "Anti-Caro: Fantasy Variation",
-    "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 c3 Nd7 Bd3 Ngf6 O-O Bd6 a4 O-O Nbd2 Re8 Qc2 Bc7",
-    "uci": "e2e4 c7c6 d2d4 d7d5 f2f3 e7e6 b1c3 f8b4 c1f4 c6c5 a2a3 c5c4 b2b3 e6e5",
-    "fen": "rnbqk1nr/pp3ppp/8/3pp3/1bpPPB2/PPN2P2/2P3PP/R2QKBNR w KQkq - 0 8",
-    "color": "white",
-    "style": "aggressive",
-    "isRepertoire": true,
-    "overview": "The Fantasy Variation, 3.f3, is a surprise weapon against the Caro-Kann. Be honest: it is not a refutation — with best play it is roughly equal. Its value is practical: f3 props up e4 and builds a broad d4+e4 pawn centre, dragging the well-booked Caro player off theory and into a rich middlegame where they, not you, must find the moves. Club opponents stumble in it constantly.",
-    "keyIdeas": [
-      "After ...dxe4 recapture with fxe4 — the broad d4+e4 centre and the half-open f-file are the whole point.",
-      "Bolt down d4 with c3 and Nf3 so Black's ...e5 break never wins the centre.",
-      "Develop the Bd3+Qc2 battery on the b1-h7 diagonal, poised to fire at the king once the e4-pawn advances.",
-      "It is a practical weapon, not a refutation — play for the small pull and Black's unfamiliarity, and mine the amateur blunders (…c5, …c4) as tactics."
-    ],
-    "traps": null,
-    "warnings": null,
-    "variations": [
-      {
-        "name": "Maróczy Variation (e6)",
-        "pgn": "e4 c6 d4 d5 f3 e6 Nc3 Bb4 Bf4 Ne7 Qd3 O-O a3 Ba5 h4 b5 h5 h6 Ne2 Nd7 O-O-O b4",
-        "explanation": ""
-      },
-      {
-        "name": "Maróczy Variation (g6)",
-        "pgn": "e4 c6 d4 d5 f3 g6 Nc3 Bg7 Be3 Qb6 Na4 Qa5+ c3 e5 dxe5 Ne7 Nc5 Bxe5 f4 Bg7 e5 f6",
-        "explanation": ""
-      },
-      {
-        "name": "Maróczy Variation (Qb6)",
-        "pgn": "e4 c6 d4 d5 f3 Qb6 Nc3 dxe4 fxe4 e5 Nf3 exd4 Qxd4 Qxd4 Nxd4 Bc5 Be3 Nd7 O-O-O Ngf6 Na4 Nxe4",
-        "explanation": ""
-      }
-    ],
-    "drillAccuracy": 0,
-    "drillAttempts": 0,
-    "lastStudied": null,
-    "woodpeckerReps": 0,
-    "woodpeckerSpeed": null,
-    "woodpeckerLastDate": null,
-    "isFavorite": false,
-    "sources": [
-      "concept:pos-center",
-      "concept:pos-initiative",
-      "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence,_Fantasy_Variation"
-    ]
-  },
-  {
-    "id": "anti-french-advance",
-    "eco": "C02",
-    "name": "Anti-French: Advance Variation",
-    "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Be2 cxd4 cxd4 Nh6 Bd3 Bd7 Bc2 Nf5 Bxf5 exf5 O-O Be6",
-    "uci": "e2e4 e7e6 d2d4 d7d5 e4e5 c7c5 c2c3 b8c6 g1f3 c8d7 f1e2",
-    "fen": "r2qkbnr/pp1b1ppp/2n1p3/2ppP3/3P4/2P2N2/PP2BPPP/RNBQK2R b KQkq - 4 6",
-    "color": "white",
-    "style": "positional",
-    "isRepertoire": true,
-    "overview": "The Advance Variation, 3.e5, is White's most principled counter to the French. You grab space with the e5 wedge and lock in Black's light-squared bishop behind its own e6-pawn — the bad piece that plagues the whole French complex. Your plan is simple and enduring: defend the d4 base of the pawn chain (c3, Nf3, Be2), keep your good light bishop, and squeeze the extra space. A clean, thematic edge with well-charted plans.",
-    "keyIdeas": [
-      "The e5 wedge grabs space and buries Black's light-squared bishop behind the e6-pawn — the French's eternal problem.",
-      "Hold the d4 base of the chain with c3, Nf3 and Be2 against the ...c5/...Nc6/...Qb6 pressure.",
-      "Keep your good bishop: reposition Bd3-c2 onto the b1-h7 diagonal instead of trading it cheaply.",
-      "When Black blockades with ...Nf5, trade it with Bxf5 — the recapture ...exf5 hands Black doubled f-pawns."
-    ],
-    "traps": null,
-    "warnings": null,
-    "variations": [
-      {
-        "name": "Advance Variation",
-        "pgn": "e4 e6 d4 d5 e5 c5 c3 Qb6 Nf3 Nc6 a3 c4 Nbd2 Na5 Be2 Bd7 Rb1 Ne7 h4 O-O-O h5 h6",
-        "explanation": ""
-      }
-    ],
-    "drillAccuracy": 0,
-    "drillAttempts": 0,
-    "lastStudied": null,
-    "woodpeckerReps": 0,
-    "woodpeckerSpeed": null,
-    "woodpeckerLastDate": null,
-    "isFavorite": false,
-    "sources": [
-      "concept:pos-center",
-      "concept:pos-space",
-      "https://en.wikipedia.org/wiki/French_Defence,_Advance_Variation"
-    ]
-  },
-  {
-    "id": "anti-pirc-austrian",
-    "eco": "B09",
-    "name": "Anti-Pirc: Austrian Attack",
-    "pgn": "e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 O-O Bd3 Na6 O-O c5 d5 c4 Bxc4 b5 Nxb5 Nxe4 Qe1 Nac5",
-    "uci": "e2e4 d7d6 d2d4 g8f6 b1c3 g7g6 f2f4 f8g7 g1f3",
-    "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PPP2/2N2N2/PPP3PP/R1BQKB1R b KQkq - 2 5",
-    "color": "white",
-    "style": "aggressive",
-    "isRepertoire": true,
-    "overview": "The Austrian Attack is the sharpest weapon against the Pirc: a towering e4-d4-f4 pawn front backing a direct kingside attack. Develop the pieces toward Black's king (Nf3, Bd3), and when Black counters in the centre with ...c5/...c4/...b5, accurate grabs (Bxc4, Nxb5) turn his charging pawns into targets and leave you a clean pawn up.",
-    "keyIdeas": [
-      "Grab space and attacking potential with the big e4-d4-f4 pawn front.",
-      "Aim the pieces kingside — Nf3 toward e5/g5, Bd3 on the b1-h7 diagonal.",
-      "Meet ...c5 with d5, keeping the front intact and gaining more space.",
-      "Answer the ...c4/...b5 counter accurately — Bxc4 and Nxb5 win pawns; Qe1 parries ...Nxe4."
-    ],
-    "traps": null,
-    "warnings": null,
-    "variations": [
-      {
-        "name": "Austrian Attack, Dragon Formation",
-        "pgn": "e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 c5 Bb5+ Bd7 e5 Ng4 Bxd7+ Qxd7 h3 cxd4 Qxd4 Nc6 Qe4 Nh6",
-        "explanation": ""
-      }
-    ],
-    "drillAccuracy": 0,
-    "drillAttempts": 0,
-    "lastStudied": null,
-    "woodpeckerReps": 0,
-    "woodpeckerSpeed": null,
-    "woodpeckerLastDate": null,
-    "isFavorite": false,
-    "sources": [
-      "concept:pos-center",
-      "concept:pos-initiative"
-    ]
-  },
-  {
-    "id": "anti-scandinavian",
-    "eco": "B01",
-    "name": "Anti-Scandinavian: Main Line",
-    "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 c6 Bc4 Bf5 Bd2 e6 Ne4 Qd8 Ng3 Bg4 c3 Nbd7 h3 Bxf3",
-    "uci": "e2e4 d7d5 e4d5 d8d5 b1c3 d5a5 d2d4 g8f6 g1f3 c7c6 f1c4 c8f5",
-    "fen": "rn2kb1r/pp2pppp/2p2n2/q4b2/2BP4/2N2N2/PPP2PPP/R1BQK2R w KQkq - 2 7",
-    "color": "white",
-    "style": "classical",
-    "isRepertoire": true,
-    "overview": "Against the Scandinavian (1.e4 d5 2.exd5 Qxd5), White's edge is time. Because Black recaptures with the queen so early, every developing move you make comes with a threat to it: Nc3, then Ne4 and Ng3 harry Black's forces while you build a big centre and finish development for free. You emerge with the bishop pair, more space, and a clear lead in development — a clean, low-maintenance plus.",
-    "keyIdeas": [
-      "Develop with tempo — Nc3 hits the queen; every queen move Black makes is a move you spend building.",
-      "Stake out the centre with d4 and post the bishop actively on c4, eyeing f7.",
-      "Harry the pieces with Ne4 and Ng3, driving the knight and bishop to worse squares while gaining time.",
-      "Bank the bishop pair and the development lead — a comfortable, risk-free edge to convert."
-    ],
-    "traps": null,
-    "warnings": null,
-    "variations": [
-      {
-        "name": "Bronstein Variation",
-        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd6 d4 Nf6 Nf3 a6 g3 Bg4 Bg2 Nc6 Be3 e6 h3 Bh5 O-O Be7 Bf4 Qd8",
-        "explanation": ""
-      },
-      {
-        "name": "Valencian Variation, Main Line",
-        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd8 d4 Nf6 Nf3 Bg4 h3 Bxf3 Qxf3 c6 Be3 e6 a3 Nd5 Nxd5 Qxd5 Qg3",
-        "explanation": ""
-      }
-    ],
-    "drillAccuracy": 0,
-    "drillAttempts": 0,
-    "lastStudied": null,
-    "woodpeckerReps": 0,
-    "woodpeckerSpeed": null,
-    "woodpeckerLastDate": null,
-    "isFavorite": false,
-    "sources": [
-      "concept:pos-center",
-      "concept:pos-initiative",
-      "https://en.wikipedia.org/wiki/Scandinavian_Defense"
-    ],
-    "trapLines": [
-      {
-        "name": "Scandinavian Bishop Trap (…Qh5?)",
-        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bg4 h3 Qh5 hxg4 Qxg4 Rh4",
-        "explanation": "In the main-line Scandinavian, after 6.h3 attacks the g4-bishop, Black's natural-looking …Qh5 tries to keep the pin by defending the bishop with the queen. It's a blunder played in tens of thousands of amateur games: hxg4 simply wins the bishop, and after …Qxg4 the rook lift Rh4 hunts the queen while White stays up a clean piece. Engine-verified crushing (about +5.8). Punish the greedy queen."
-      }
-    ]
-  },
-  {
-    "id": "anti-alekhine-modern",
-    "eco": "B04",
-    "name": "Anti-Alekhine: Modern Variation",
-    "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 Bg4 Be2 e6 O-O Be7 h3 Bh5 c4 Nb6 exd6 cxd6 Nc3 O-O Re1 d5",
-    "uci": "e2e4 g8f6 e4e5 f6d5 d2d4 d7d6 g1f3 c8g4 f1e2",
-    "fen": "rn1qkb1r/ppp1pppp/3p4/3nP3/3P2b1/5N2/PPP1BPPP/RNBQK2R b KQkq - 3 5",
-    "color": "white",
-    "style": "classical",
-    "isRepertoire": true,
-    "overview": "Against the Alekhine, the Modern/Exchange approach takes the space Black offers: e5 and d4 build a broad centre, c4 gains more and chases the knight to the rim, and calm development banks the space plus a lead in development. Low theory, a lasting pull.",
-    "keyIdeas": [
-      "Grab the big e5+d4 centre the Alekhine dares you to build, then support it.",
-      "c4 gains space and kicks the d5-knight back to the passive b6.",
-      "Develop calmly (Nf3, Be2, O-O) — the Modern line is a slow squeeze, not a shootout.",
-      "Bank the space and development lead against Black's backward d6-pawn."
-    ],
-    "traps": null,
-    "warnings": null,
-    "variations": [
-      {
-        "name": "Modern Variation, Larsen Variation",
-        "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 dxe5 Nxe5 c6 Be2 Bf5 O-O Nd7 Nf3 e6 c4 N5f6 Bf4 Nh5 Be3 Bd6",
-        "explanation": ""
-      },
-      {
-        "name": "Modern Variation, Alburt Variation",
-        "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 g6 Bc4 Nb6 Bb3 Bg7 Ng5 e6 Qf3 Qe7 Ne4 h6 exd6 cxd6 Bf4 d5",
-        "explanation": ""
-      },
-      {
-        "name": "Modern Variation, Schmid Variation",
-        "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 Nb6 a4 a5 Bb5+ c6 Bd3 Bg4 exd6 Qxd6 O-O e6 Nbd2 Qc7 Ne4 N8d7",
-        "explanation": ""
-      }
-    ],
-    "drillAccuracy": 0,
-    "drillAttempts": 0,
-    "lastStudied": null,
-    "woodpeckerReps": 0,
-    "woodpeckerSpeed": null,
-    "woodpeckerLastDate": null,
-    "isFavorite": false,
-    "sources": [
-      "concept:pos-center",
-      "concept:pos-space"
-    ]
-  },
-  {
-    "id": "anti-modern-150",
-    "eco": "B06",
-    "name": "Anti-Modern: 150 Attack",
-    "pgn": "e4 g6 d4 Bg7 Nc3 d6 Be3 a6 Qd2 Nf6 f3 O-O O-O-O Nc6 Nd5 a5 Nxf6+ exf6 h4 f5 h5 fxe4",
-    "uci": "e2e4 g7g6 d2d4 f8g7 b1c3 d7d6 c1e3 a7a6 d1d2 b7b5 a2a3 b5b4 b2b3 a6a5",
-    "fen": "rnbqk1nr/2p1ppbp/3p2p1/p7/1p1PP3/PPN1B3/2PQ1PPP/R3KBNR w KQkq - 0 8",
-    "color": "white",
-    "style": "aggressive",
-    "isRepertoire": true,
-    "overview": "The 150 Attack is the classic anti-fianchetto recipe against the Modern and Pirc: build the Be3/Qd2 battery, play f3 to make the centre granite, castle queenside, and storm the kingside with h4-h5 while trading off Black's dark-squared bishop. Direct, thematic, and brutally effective against passive play.",
-    "keyIdeas": [
-      "Build the Be3 + Qd2 battery, aiming Bh6 to trade Black's fianchettoed bishop.",
-      "Play f3 to bolt down e4 and free the g- and h-pawns to storm.",
-      "Castle queenside and roll h4-h5 into the fianchetto while Black's counterplay lags.",
-      "Use the Nd5 outpost and Nxf6+ to shatter Black's kingside pawns and open lines."
-    ],
-    "traps": null,
-    "warnings": null,
-    "variations": [
-      {
-        "name": "Standard Defense (a6)",
-        "pgn": "e4 g6 d4 Bg7 Nc3 d6 Be3 a6 Qd2 b5 a3 b4 b3 a5",
-        "explanation": ""
-      },
-      {
-        "name": "Standard Defense (c6)",
-        "pgn": "e4 g6 d4 Bg7 Nc3 d6 Be3 c6 Qd2 b5 a3 b4 b3 c5",
-        "explanation": ""
-      },
-      {
-        "name": "Standard Defense (Nf6)",
-        "pgn": "e4 g6 d4 Bg7 Nc3 d6 Be3 Nf6",
-        "explanation": ""
-      }
-    ],
-    "drillAccuracy": 0,
-    "drillAttempts": 0,
-    "lastStudied": null,
-    "woodpeckerReps": 0,
-    "woodpeckerSpeed": null,
-    "woodpeckerLastDate": null,
-    "isFavorite": false,
-    "sources": [
-      "concept:pos-center",
-      "concept:pos-initiative"
-    ]
-  },
-  {
-    "id": "anti-sicilian-rossolimo",
-    "eco": "B30",
-    "name": "Anti-Sicilian: Rossolimo",
+ {
+  "id": "anti-caro-fantasy",
+  "eco": "B12",
+  "name": "Anti-Caro: Fantasy Variation",
+  "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 c3 Nd7 Bd3 Ngf6 O-O Bd6 a4 O-O Nbd2 Re8 Qc2 Bc7",
+  "uci": "e2e4 c7c6 d2d4 d7d5 f2f3 e7e6 b1c3 f8b4 c1f4 c6c5 a2a3 c5c4 b2b3 e6e5",
+  "fen": "rnbqk1nr/pp3ppp/8/3pp3/1bpPPB2/PPN2P2/2P3PP/R2QKBNR w KQkq - 0 8",
+  "color": "white",
+  "style": "aggressive",
+  "isRepertoire": true,
+  "overview": "The Fantasy Variation, 3.f3, is a surprise weapon against the Caro-Kann. Be honest: it is not a refutation — with best play it is roughly equal. Its value is practical: f3 props up e4 and builds a broad d4+e4 pawn centre, dragging the well-booked Caro player off theory and into a rich middlegame where they, not you, must find the moves. Club opponents stumble in it constantly.",
+  "keyIdeas": [
+   "After ...dxe4 recapture with fxe4 — the broad d4+e4 centre and the half-open f-file are the whole point.",
+   "Bolt down d4 with c3 and Nf3 so Black's ...e5 break never wins the centre.",
+   "Develop the Bd3+Qc2 battery on the b1-h7 diagonal, poised to fire at the king once the e4-pawn advances.",
+   "It is a practical weapon, not a refutation — play for the small pull and Black's unfamiliarity, and mine the amateur blunders (…c5, …c4) as tactics."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "Maróczy Variation (e6)",
+    "pgn": "e4 c6 d4 d5 f3 e6 Nc3 Bb4 Bf4 Ne7 Qd3 O-O a3 Ba5 h4 b5 h5 h6 Ne2 Nd7 O-O-O b4",
+    "explanation": ""
+   },
+   {
+    "name": "Maróczy Variation (g6)",
+    "pgn": "e4 c6 d4 d5 f3 g6 Nc3 Bg7 Be3 Qb6 Na4 Qa5+ c3 e5 dxe5 Ne7 Nc5 Bxe5 f4 Bg7 e5 f6",
+    "explanation": ""
+   },
+   {
+    "name": "Maróczy Variation (Qb6)",
+    "pgn": "e4 c6 d4 d5 f3 Qb6 Nc3 dxe4 fxe4 e5 Nf3 exd4 Qxd4 Qxd4 Nxd4 Bc5 Be3 Nd7 O-O-O Ngf6 Na4 Nxe4",
+    "explanation": ""
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-center",
+   "concept:pos-initiative",
+   "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence,_Fantasy_Variation"
+  ]
+ },
+ {
+  "id": "anti-french-advance",
+  "eco": "C02",
+  "name": "Anti-French: Advance Variation",
+  "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Be2 cxd4 cxd4 Nh6 Bd3 Bd7 Bc2 Nf5 Bxf5 exf5 O-O Be6",
+  "uci": "e2e4 e7e6 d2d4 d7d5 e4e5 c7c5 c2c3 b8c6 g1f3 c8d7 f1e2",
+  "fen": "r2qkbnr/pp1b1ppp/2n1p3/2ppP3/3P4/2P2N2/PP2BPPP/RNBQK2R b KQkq - 4 6",
+  "color": "white",
+  "style": "positional",
+  "isRepertoire": true,
+  "overview": "The Advance Variation, 3.e5, is White's most principled counter to the French. You grab space with the e5 wedge and lock in Black's light-squared bishop behind its own e6-pawn — the bad piece that plagues the whole French complex. Your plan is simple and enduring: defend the d4 base of the pawn chain (c3, Nf3, Be2), keep your good light bishop, and squeeze the extra space. A clean, thematic edge with well-charted plans.",
+  "keyIdeas": [
+   "The e5 wedge grabs space and buries Black's light-squared bishop behind the e6-pawn — the French's eternal problem.",
+   "Hold the d4 base of the chain with c3, Nf3 and Be2 against the ...c5/...Nc6/...Qb6 pressure.",
+   "Keep your good bishop: reposition Bd3-c2 onto the b1-h7 diagonal instead of trading it cheaply.",
+   "When Black blockades with ...Nf5, trade it with Bxf5 — the recapture ...exf5 hands Black doubled f-pawns."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "Advance Variation",
+    "pgn": "e4 e6 d4 d5 e5 c5 c3 Qb6 Nf3 Nc6 a3 c4 Nbd2 Na5 Be2 Bd7 Rb1 Ne7 h4 O-O-O h5 h6",
+    "explanation": ""
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-center",
+   "concept:pos-space",
+   "https://en.wikipedia.org/wiki/French_Defence,_Advance_Variation"
+  ]
+ },
+ {
+  "id": "anti-pirc-austrian",
+  "eco": "B09",
+  "name": "Anti-Pirc: Austrian Attack",
+  "pgn": "e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 O-O Bd3 Na6 O-O c5 d5 c4 Bxc4 b5 Nxb5 Nxe4 Qe1 Nac5",
+  "uci": "e2e4 d7d6 d2d4 g8f6 b1c3 g7g6 f2f4 f8g7 g1f3",
+  "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PPP2/2N2N2/PPP3PP/R1BQKB1R b KQkq - 2 5",
+  "color": "white",
+  "style": "aggressive",
+  "isRepertoire": true,
+  "overview": "The Austrian Attack is the sharpest weapon against the Pirc: a towering e4-d4-f4 pawn front backing a direct kingside attack. Develop the pieces toward Black's king (Nf3, Bd3), and when Black counters in the centre with ...c5/...c4/...b5, accurate grabs (Bxc4, Nxb5) turn his charging pawns into targets and leave you a clean pawn up.",
+  "keyIdeas": [
+   "Grab space and attacking potential with the big e4-d4-f4 pawn front.",
+   "Aim the pieces kingside — Nf3 toward e5/g5, Bd3 on the b1-h7 diagonal.",
+   "Meet ...c5 with d5, keeping the front intact and gaining more space.",
+   "Answer the ...c4/...b5 counter accurately — Bxc4 and Nxb5 win pawns; Qe1 parries ...Nxe4."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "Austrian Attack, Dragon Formation",
+    "pgn": "e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 c5 Bb5+ Bd7 e5 Ng4 Bxd7+ Qxd7 h3 cxd4 Qxd4 Nc6 Qe4 Nh6",
+    "explanation": ""
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-center",
+   "concept:pos-initiative"
+  ]
+ },
+ {
+  "id": "anti-pirc-battery",
+  "eco": "B07",
+  "name": "Anti-Pirc: 150 Battery & d5 Squeeze",
+  "pgn": "e4 d6 d4 Nf6 Nc3 g6 Nf3 Bg7 Be3 O-O Qd2 Nc6 d5 Nb8 Bh6 c6 Bxg7 Kxg7 a3 Nbd7 O-O-O cxd5 exd5 Nb6 Re1 Bd7 Ng5 Rc8",
+  "uci": "e2e4 d7d6 d2d4 g8f6 b1c3 g7g6 g1f3 f8g7 c1e3 e8g8 d1d2 b8c6 d4d5 c6b8 e3h6 c7c6 h6g7 g8g7 a2a3 b8d7 e1c1 c6d5 e4d5 d7b6 d1e1 c8d7 f3g5 a8c8",
+  "fen": "2rq1r2/pp1bppkp/1n1p1np1/3P2N1/8/P1N5/1PPQ1PPP/2K1RB1R w - - 5 15",
+  "color": "white",
+  "style": "aggressive",
+  "isRepertoire": true,
+  "overview": "The professional recipe against the Pirc and Modern: take the full centre, stack the Be3+Qd2 dark-square battery with the knight on f3, and the moment Black castles and commits a knight to c6, punch d5 — gaining space and sending the knight all the way home. Then Bh6 trades off the fianchetto bishop, a quiet a3 takes b4 away forever, and White castles long into a comfortable, engine-approved squeeze. Positional pressure with an attacker's payoff.",
+  "keyIdeas": [
+   "Stack the Be3 + Qd2 battery early — Bh6 hangs over every Black plan.",
+   "The moment Black castles and plays the knight to c6, punch d5 and gain space.",
+   "Trade the g7 bishop with Bh6 — the dark squares around the king never recover.",
+   "Prophylactic a3 before castling long: deny b4, then squeeze on the open e-file."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "Punishing …Ng4",
+    "pgn": "e4 d6 d4 Nf6 Nc3 g6 Nf3 Bg7 Be3 O-O Qd2 Ng4 Bg5 h6 Bh4 g5 Bg3 e5 dxe5 dxe5 h4",
+    "explanation": "The knight hop to g4 looks annoying but wins nothing: meet it with Bg5, and after …h6 and …g5 the bishop slides to g3 while Black has permanently loosened g5 and h6. Later h4 rips those weaknesses open — the engine already gives White better than a pawn's worth of pressure."
+   },
+   {
+    "name": "The …e5 Endgame Grind",
+    "pgn": "e4 d6 d4 Nf6 Nc3 e5 dxe5 dxe5 Qxd8+ Kxd8 f4 Bb4 Bd2 exf4 O-O-O Bg4 Nf3 Nbd7 Bxf4 Bxc3 bxc3",
+    "explanation": "When Black meets the centre with …e5 instead of the fianchetto, trade into the queenless middlegame: the king is stuck in the centre with castling rights gone, and f4 pries the position open. Objectively balanced — but across 141 corpus games this grind scores 66 percent for White, because every practical problem belongs to Black."
+   },
+   {
+    "name": "Modern Order: the Gurgenidze …c6+…d5",
+    "pgn": "e4 g6 d4 Bg7 Nc3 c6 Be3 d5 f3 dxe4 fxe4 e5 dxe5 Qxd1+ Rxd1 Bxe5 Nf3 Bg7",
+    "explanation": "Via the Modern move order Black sometimes strikes with …c6 and …d5. Hold the centre with f3, and when the tension resolves the engine gives White nearly two pawns of advantage in the resulting queenless position — the lead in development and the open d-file do the scoring. 274 corpus games in this structure back it up."
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-center",
+   "concept:pos-initiative"
+  ]
+ },
+ {
+  "id": "anti-scandinavian",
+  "eco": "B01",
+  "name": "Anti-Scandinavian: Main Line",
+  "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 c6 Bc4 Bf5 Bd2 e6 Ne4 Qd8 Ng3 Bg4 c3 Nbd7 h3 Bxf3",
+  "uci": "e2e4 d7d5 e4d5 d8d5 b1c3 d5a5 d2d4 g8f6 g1f3 c7c6 f1c4 c8f5",
+  "fen": "rn2kb1r/pp2pppp/2p2n2/q4b2/2BP4/2N2N2/PPP2PPP/R1BQK2R w KQkq - 2 7",
+  "color": "white",
+  "style": "classical",
+  "isRepertoire": true,
+  "overview": "Against the Scandinavian (1.e4 d5 2.exd5 Qxd5), White's edge is time. Because Black recaptures with the queen so early, every developing move you make comes with a threat to it: Nc3, then Ne4 and Ng3 harry Black's forces while you build a big centre and finish development for free. You emerge with the bishop pair, more space, and a clear lead in development — a clean, low-maintenance plus.",
+  "keyIdeas": [
+   "Develop with tempo — Nc3 hits the queen; every queen move Black makes is a move you spend building.",
+   "Stake out the centre with d4 and post the bishop actively on c4, eyeing f7.",
+   "Harry the pieces with Ne4 and Ng3, driving the knight and bishop to worse squares while gaining time.",
+   "Bank the bishop pair and the development lead — a comfortable, risk-free edge to convert."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "Bronstein Variation",
+    "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd6 d4 Nf6 Nf3 a6 g3 Bg4 Bg2 Nc6 Be3 e6 h3 Bh5 O-O Be7 Bf4 Qd8",
+    "explanation": ""
+   },
+   {
+    "name": "Valencian Variation, Main Line",
+    "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd8 d4 Nf6 Nf3 Bg4 h3 Bxf3 Qxf3 c6 Be3 e6 a3 Nd5 Nxd5 Qxd5 Qg3",
+    "explanation": ""
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-center",
+   "concept:pos-initiative",
+   "https://en.wikipedia.org/wiki/Scandinavian_Defense"
+  ],
+  "trapLines": [
+   {
+    "name": "Scandinavian Bishop Trap (…Qh5?)",
+    "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bg4 h3 Qh5 hxg4 Qxg4 Rh4",
+    "explanation": "In the main-line Scandinavian, after 6.h3 attacks the g4-bishop, Black's natural-looking …Qh5 tries to keep the pin by defending the bishop with the queen. It's a blunder played in tens of thousands of amateur games: hxg4 simply wins the bishop, and after …Qxg4 the rook lift Rh4 hunts the queen while White stays up a clean piece. Engine-verified crushing (about +5.8). Punish the greedy queen."
+   }
+  ]
+ },
+ {
+  "id": "anti-alekhine-modern",
+  "eco": "B04",
+  "name": "Anti-Alekhine: Modern Variation",
+  "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 Bg4 Be2 e6 O-O Be7 h3 Bh5 c4 Nb6 exd6 cxd6 Nc3 O-O Re1 d5",
+  "uci": "e2e4 g8f6 e4e5 f6d5 d2d4 d7d6 g1f3 c8g4 f1e2",
+  "fen": "rn1qkb1r/ppp1pppp/3p4/3nP3/3P2b1/5N2/PPP1BPPP/RNBQK2R b KQkq - 3 5",
+  "color": "white",
+  "style": "classical",
+  "isRepertoire": true,
+  "overview": "Against the Alekhine, the Modern/Exchange approach takes the space Black offers: e5 and d4 build a broad centre, c4 gains more and chases the knight to the rim, and calm development banks the space plus a lead in development. Low theory, a lasting pull.",
+  "keyIdeas": [
+   "Grab the big e5+d4 centre the Alekhine dares you to build, then support it.",
+   "c4 gains space and kicks the d5-knight back to the passive b6.",
+   "Develop calmly (Nf3, Be2, O-O) — the Modern line is a slow squeeze, not a shootout.",
+   "Bank the space and development lead against Black's backward d6-pawn."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "Modern Variation, Larsen Variation",
+    "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 dxe5 Nxe5 c6 Be2 Bf5 O-O Nd7 Nf3 e6 c4 N5f6 Bf4 Nh5 Be3 Bd6",
+    "explanation": ""
+   },
+   {
+    "name": "Modern Variation, Alburt Variation",
+    "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 g6 Bc4 Nb6 Bb3 Bg7 Ng5 e6 Qf3 Qe7 Ne4 h6 exd6 cxd6 Bf4 d5",
+    "explanation": ""
+   },
+   {
+    "name": "Modern Variation, Schmid Variation",
+    "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 Nb6 a4 a5 Bb5+ c6 Bd3 Bg4 exd6 Qxd6 O-O e6 Nbd2 Qc7 Ne4 N8d7",
+    "explanation": ""
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-center",
+   "concept:pos-space"
+  ]
+ },
+ {
+  "id": "anti-modern-150",
+  "eco": "B06",
+  "name": "Anti-Modern: 150 Attack",
+  "pgn": "e4 g6 d4 Bg7 Nc3 d6 Be3 a6 Qd2 Nf6 f3 O-O O-O-O Nc6 Nd5 a5 Nxf6+ exf6 h4 f5 h5 fxe4",
+  "uci": "e2e4 g7g6 d2d4 f8g7 b1c3 d7d6 c1e3 a7a6 d1d2 b7b5 a2a3 b5b4 b2b3 a6a5",
+  "fen": "rnbqk1nr/2p1ppbp/3p2p1/p7/1p1PP3/PPN1B3/2PQ1PPP/R3KBNR w KQkq - 0 8",
+  "color": "white",
+  "style": "aggressive",
+  "isRepertoire": true,
+  "overview": "The 150 Attack is the classic anti-fianchetto recipe against the Modern and Pirc: build the Be3/Qd2 battery, play f3 to make the centre granite, castle queenside, and storm the kingside with h4-h5 while trading off Black's dark-squared bishop. Direct, thematic, and brutally effective against passive play.",
+  "keyIdeas": [
+   "Build the Be3 + Qd2 battery, aiming Bh6 to trade Black's fianchettoed bishop.",
+   "Play f3 to bolt down e4 and free the g- and h-pawns to storm.",
+   "Castle queenside and roll h4-h5 into the fianchetto while Black's counterplay lags.",
+   "Use the Nd5 outpost and Nxf6+ to shatter Black's kingside pawns and open lines."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "Standard Defense (a6)",
+    "pgn": "e4 g6 d4 Bg7 Nc3 d6 Be3 a6 Qd2 b5 a3 b4 b3 a5",
+    "explanation": ""
+   },
+   {
+    "name": "Standard Defense (c6)",
+    "pgn": "e4 g6 d4 Bg7 Nc3 d6 Be3 c6 Qd2 b5 a3 b4 b3 c5",
+    "explanation": ""
+   },
+   {
+    "name": "Standard Defense (Nf6)",
+    "pgn": "e4 g6 d4 Bg7 Nc3 d6 Be3 Nf6",
+    "explanation": ""
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-center",
+   "concept:pos-initiative"
+  ]
+ },
+ {
+  "id": "anti-sicilian-rossolimo",
+  "eco": "B30",
+  "name": "Anti-Sicilian: Rossolimo",
+  "pgn": "e4 c5 Nf3 Nc6 Bb5 g6 O-O Bg7 Re1 Nf6 e5 Nd5 Nc3 Nc7 Bxc6 dxc6 Ne4 Ne6 d3 O-O Be3 b6 Qd2 Nd4 Nxd4 cxd4 Bh6 c5",
+  "uci": "e2e4 c7c5 g1f3 b8c6 f1b5 g7g6 e1g1",
+  "fen": "r1bqkbnr/pp1ppp1p/2n3p1/1Bp5/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 1 4",
+  "color": "white",
+  "style": "positional",
+  "isRepertoire": true,
+  "overview": "The Rossolimo, 3.Bb5, is White's low-theory antidote to the Sicilian's ...Nc6 lines. Rather than memorise Najdorf mainlines, White trades the light bishop for the c6-knight, saddles Black with doubled c-pawns or a cramped structure, and plays a clean positional game for the bishop pair, central space, and the better pawns. It scores heavily at club level because it sidesteps Black's preparation and steers into positions of pure understanding.",
+  "keyIdeas": [
+   "Bxc6 at the right moment doubles Black's pawns on the c-file — the permanent structural target the whole middlegame is built on against the ...g6 fianchetto.",
+   "Against ...e6 and ...d6, retreat the bishop to f1 instead of trading — keep the bishop pair and build a d4/c4 space clamp.",
+   "The e4-e5 space grab and the knight outpost on e4 cramp Black and rob the ...g6 lines of counterplay.",
+   "Trade off Black's fianchettoed dark-squared bishop with Be3-h6 to leave holes around the king; you play for two results with no risk."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation",
     "pgn": "e4 c5 Nf3 Nc6 Bb5 g6 O-O Bg7 Re1 Nf6 e5 Nd5 Nc3 Nc7 Bxc6 dxc6 Ne4 Ne6 d3 O-O Be3 b6 Qd2 Nd4 Nxd4 cxd4 Bh6 c5",
-    "uci": "e2e4 c7c5 g1f3 b8c6 f1b5 g7g6 e1g1",
-    "fen": "r1bqkbnr/pp1ppp1p/2n3p1/1Bp5/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 1 4",
-    "color": "white",
-    "style": "positional",
-    "isRepertoire": true,
-    "overview": "The Rossolimo, 3.Bb5, is White's low-theory antidote to the Sicilian's ...Nc6 lines. Rather than memorise Najdorf mainlines, White trades the light bishop for the c6-knight, saddles Black with doubled c-pawns or a cramped structure, and plays a clean positional game for the bishop pair, central space, and the better pawns. It scores heavily at club level because it sidesteps Black's preparation and steers into positions of pure understanding.",
-    "keyIdeas": [
-      "Bxc6 at the right moment doubles Black's pawns on the c-file — the permanent structural target the whole middlegame is built on against the ...g6 fianchetto.",
-      "Against ...e6 and ...d6, retreat the bishop to f1 instead of trading — keep the bishop pair and build a d4/c4 space clamp.",
-      "The e4-e5 space grab and the knight outpost on e4 cramp Black and rob the ...g6 lines of counterplay.",
-      "Trade off Black's fianchettoed dark-squared bishop with Be3-h6 to leave holes around the king; you play for two results with no risk."
-    ],
-    "traps": null,
-    "warnings": null,
-    "variations": [
-      {
-        "name": "Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation",
-        "pgn": "e4 c5 Nf3 Nc6 Bb5 g6 O-O Bg7 Re1 Nf6 e5 Nd5 Nc3 Nc7 Bxc6 dxc6 Ne4 Ne6 d3 O-O Be3 b6 Qd2 Nd4 Nxd4 cxd4 Bh6 c5",
-        "explanation": ""
-      },
-      {
-        "name": "Nyezhmetdinov-Rossolimo Attack (e6)",
-        "pgn": "e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 Re1 a6 Bf1 d5 exd5 Nxd5 d4 Nf6 Be3 Be7 c4 O-O Nc3 cxd4 Nxd4",
-        "explanation": ""
-      },
-      {
-        "name": "Nyezhmetdinov-Rossolimo Attack (d6)",
-        "pgn": "e4 c5 Nf3 Nc6 Bb5 d6 O-O Bd7 Re1 Nf6 c3 a6 Bf1 Bg4 h3 Bxf3 Qxf3 g6 d3 Bg7 Be3 Nd7 Nd2 O-O",
-        "explanation": ""
-      },
-      {
-        "name": "Nyezhmetdinov-Rossolimo Attack (Nf6)",
-        "pgn": "e4 c5 Nf3 Nc6 Bb5 Nf6 Nc3 Qc7 O-O Nd4 Re1 a6 Bf1 Ng4 g3 Nxf3+ Qxf3 Ne5 Qe2 e6 b3",
-        "explanation": ""
-      }
-    ],
-    "drillAccuracy": 0,
-    "drillAttempts": 0,
-    "lastStudied": null,
-    "woodpeckerReps": 0,
-    "woodpeckerSpeed": null,
-    "woodpeckerLastDate": null,
-    "isFavorite": false,
-    "sources": [
-      "concept:pos-center",
-      "concept:pos-initiative",
-      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Rossolimo_Variation"
-    ]
-  },
-  {
-    "id": "anti-benoni-push",
-    "eco": "A56",
-    "name": "Anti-Benoni/Benko: The d5 Push",
-    "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 Nf3 g6 e4 Bxf1 Kxf1 Bg7 g3 O-O Kg2 Nbd7",
-    "uci": "d2d4 g8f6 c2c4 c7c5 d4d5 b7b5 c4b5 a7a6 b5a6 c8a6 b1c3 d7d6 g1f3 g7g6 e2e4 a6f1 e1f1 f8g7 g2g3 e8g8 f1g2 b8d7",
-    "fen": "r2q1rk1/3nppbp/3p1np1/2pP4/4P3/2N2NP1/PP3PKP/R1BQ3R w - - 3 12",
-    "color": "white",
-    "style": "positional",
-    "isRepertoire": true,
-    "overview": "Against the Benoni push Black offers the Benko/Volga pawn with ...b5, sacrificing for slow queenside pressure on the a- and b-files. The soundest answer is the most direct: take it cleanly with cxb5 and give the square back with bxa6 so Black recaptures with the bishop. Then build a big e4 centre, trade the light bishops, and walk the king to g2 by hand. Engine-verified a healthy pawn up (+0.93) with the Benko's counterplay defused.",
-    "keyIdeas": [
-      "Accept the gambit: cxb5, then bxa6 so Black recaptures with the bishop, not a rook-file.",
-      "Raise a broad e4/d5 pawn front to wall off Black's queenside counterplay.",
-      "Trade the light bishops (Bxf1 Kxf1) and finish the king by hand with g3 and Kg2.",
-      "Keep the extra pawn and convert patiently — the Benko pressure never crashes through."
-    ],
-    "traps": null,
-    "warnings": null,
-    "variations": [
-      {
-        "name": "Fully Accepted Variation",
-        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 g6 Nc3 Bxa6 e4 Bxf1",
-        "explanation": ""
-      },
-      {
-        "name": "Pawn Storm Variation",
-        "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 e4 g6 f4 Bg7 Bb5+ Nfd7 a4 O-O Nf3 Na6 O-O Nb4",
-        "explanation": ""
-      },
-      {
-        "name": "Benoni Defense",
-        "pgn": "d4 Nf6 c4 c5 d5 g6 Nc3 Bg7 a3 g5 b3 g4 e3 g3",
-        "explanation": ""
-      },
-      {
-        "name": "Czech Benoni Defense",
-        "pgn": "d4 Nf6 c4 c5 d5 e5 Nc3 d6 e4 Be7 Nf3 Na6 h3 O-O Bd3 Nc7 Bd2 Kh8 Qe2 g6 Bh6 Re8",
-        "explanation": ""
-      }
-    ],
-    "drillAccuracy": 0,
-    "drillAttempts": 0,
-    "lastStudied": null,
-    "woodpeckerReps": 0,
-    "woodpeckerSpeed": null,
-    "woodpeckerLastDate": null,
-    "isFavorite": false,
-    "sources": [
-      "concept:pos-center",
-      "concept:pos-initiative",
-      "https://en.wikipedia.org/wiki/Benko_Gambit"
-    ]
-  },
-  {
-    "id": "anti-englund",
-    "eco": "A40",
-    "name": "Anti-Englund Gambit",
-    "pgn": "d4 e5 dxe5 Nc6 Nf3 Qe7 Bf4 Qb4+ Bd2 Qxb2 Nc3 Bb4 Rb1 Qa3 Nd5 Ba5 Rb5 Bxd2+ Qxd2 Rb8 c3 a6",
-    "uci": "d2d4 e7e5 d4e5 b8c6 g1f3 d8e7 c1f4 e7b4 f4d2 b4b2 b1c3 f8b4 a1b1 b2a3 c3d5 b4a5 b1b5 a5d2 d1d2 a8b8 c2c3 a7a6",
-    "fen": "1rb1k1nr/1ppp1ppp/p1n5/1R1NP3/8/q1P2N2/P2QPPPP/4KB1R w Kk - 0 12",
-    "color": "white",
-    "style": "classical",
-    "isRepertoire": true,
-    "overview": "The Englund Gambit (1.d4 e5) throws a pawn away for cheap tricks and is simply unsound. You take the pawn, guard it with Nf3 and Bf4, and when Black lashes out with ...Qb4+ and grabs a second pawn on b2, you spring the trap: Nc3, Rb1 and Nd5/Rb5 hunt the greedy queen down on the rim. Engine-verified winning for White (+1.97) — greed punished by a clean queen hunt.",
-    "keyIdeas": [
-      "Take the e5-pawn and hold it simply — Nf3 guards, Bf4 develops and defends.",
-      "Let Black overreach: ...Qb4+ and ...Qxb2 sends the queen pawn-hunting into your camp.",
-      "Spring the net with Nc3 and Rb1 — every developing move also chases the queen.",
-      "Finish with Nd5 and Rb5, boxing the queen on the edge — winning material by force."
-    ],
-    "traps": null,
-    "warnings": null,
-    "variations": [
-      {
-        "name": "Main Line",
-        "pgn": "d4 e5 dxe5 Nc6 Nf3 Qe7 Nc3 Nxe5 e4 c6 a3 c5 b3 c4",
-        "explanation": ""
-      },
-      {
-        "name": "Englund Gambit",
-        "pgn": "d4 e5 dxe5 Nc6 Nf3 d6 Bg5 Qd7 exd6 Bxd6 Nc3 h6 Bh4 Nge7 Nb5 Nf5 Nxd6+ Nxd6 Bg3 Ne4 Qxd7+ Bxd7",
-        "explanation": ""
-      },
-      {
-        "name": "Zilbermints Gambit",
-        "pgn": "d4 e5 dxe5 Nc6 Nf3 Nge7 Bf4 h6 e4 Ng6 Bg3 Bb4+ c3 Be7 Nbd2 O-O Bb5 d6 exd6 Bxd6 O-O Bf4",
-        "explanation": ""
-      }
-    ],
-    "drillAccuracy": 0,
-    "drillAttempts": 0,
-    "lastStudied": null,
-    "woodpeckerReps": 0,
-    "woodpeckerSpeed": null,
-    "woodpeckerLastDate": null,
-    "isFavorite": false,
-    "sources": [
-      "concept:pos-initiative",
-      "concept:tac-trap",
-      "https://en.wikipedia.org/wiki/Englund_Gambit"
-    ],
-    "trapLines": [
-      {
-        "name": "Englund Queen Trap (…Qxb2)",
-        "pgn": "d4 e5 dxe5 Nc6 Nf3 Qe7 Bf4 Qb4+ Bd2 Qxb2 Nc3 Bb4 Rb1 Qa3 Nd5 Ba5 Rb5",
-        "explanation": "The Englund's main try is the greedy queen raid …Qb4+ and …Qxb2, snatching a second pawn. Punish it: Nc3 develops with tempo, Rb1 swings onto the b-file to cut off the queen's retreat, and Nd5 (threatening Nc7+) with Rb5 boxes the queen on the rim while hitting the bishop. White emerges winning by a wide margin — engine-verified about +2.2. Greed punished by a clean hunt."
-      }
-    ]
-  },
-  {
-    "id": "anti-kid-saemisch",
-    "eco": "E80",
-    "name": "Anti-KID: Sämisch",
-    "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 e5 d5 c6 Bd3 cxd5 cxd5 Na6 Nge2 Nc5 Bc2 a5",
-    "uci": "d2d4 g8f6 c2c4 g7g6 b1c3 f8g7 e2e4 d7d6 f2f3 e8g8 c1e3",
-    "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N1BP2/PP4PP/R2QKBNR b KQ - 2 6",
-    "color": "white",
-    "style": "aggressive",
-    "isRepertoire": true,
-    "overview": "The Sämisch is the King's Indian's toughest test: f3 bolts down e4 so White can build a huge c4-d4-e4 centre, clamp with d5, and storm the kingside with Qd2 and g4-h4 while Black is cramped. A space bind with real attacking chances.",
-    "keyIdeas": [
-      "f3 supports e4 and lets you build the biggest centre in chess — c4, d4 and e4.",
-      "Meet ...e5 with d5, the Sämisch clamp that cramps Black on both wings.",
-      "Keep the good bishop (Bd3-c2) and grab the half-open c-file after ...c6 cxd5.",
-      "Play for Qd2 and a g4-h4 kingside pawn storm behind the space bind."
-    ],
-    "traps": null,
-    "warnings": null,
-    "variations": [
-      {
-        "name": "Sämisch Variation, Sämisch Gambit",
-        "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 c5",
-        "explanation": ""
-      },
-      {
-        "name": "Sämisch Variation, Yates Defense",
-        "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 Nc6 Nge2 a6 Qd2 Rb8 Rc1 Bd7 Nd1 e5 d5 Ne7",
-        "explanation": ""
-      },
-      {
-        "name": "Sämisch Variation, Normal Defense (a6)",
-        "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 a6 Qd2 c5 dxc5 dxc5 Qxd8 Rxd8 Bxc5 Nc6 Bb6 Rd6",
-        "explanation": ""
-      },
-      {
-        "name": "Sämisch Variation, Normal Defense (Nbd7)",
-        "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 Nbd7 Qd2 a6 O-O-O Rb8 e5 Ne8 h4 c5 dxc5 Nxe5 h5",
-        "explanation": ""
-      }
-    ],
-    "drillAccuracy": 0,
-    "drillAttempts": 0,
-    "lastStudied": null,
-    "woodpeckerReps": 0,
-    "woodpeckerSpeed": null,
-    "woodpeckerLastDate": null,
-    "isFavorite": false,
-    "sources": [
-      "concept:pos-center",
-      "concept:pos-space"
-    ]
-  },
-  {
-    "id": "anti-grunfeld-exchange",
-    "eco": "D85",
-    "name": "Anti-Grünfeld: Exchange",
-    "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Bc4 c5 Ne2 Nc6 Be3 O-O O-O Bg4 f3 Na5",
-    "uci": "d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 c4d5 f6d5 e2e4 d5c3 b2c3 f8g7 f1c4 c7c5",
-    "fen": "rnbqk2r/pp2ppbp/6p1/2p5/2BPP3/2P5/P4PPP/R1BQK1NR w KQkq - 0 8",
-    "color": "white",
-    "style": "classical",
-    "isRepertoire": true,
-    "overview": "The Exchange Grünfeld is the principled reply: you accept the classical big centre (c3, d4, e4) that Black invites, then defend it against the ...c5 lever and the g7-bishop. Every attacker is met by a defender, and the phalanx becomes a rolling asset.",
-    "keyIdeas": [
-      "Build the classical c3-d4-e4 phalanx after bxc3 — the Grünfeld's challenge to meet head-on.",
-      "Develop Ne2 (not Nf3) so the g7-bishop can't pin it, keeping d4 defended.",
-      "Over-defend the centre with Be3 and castle; it is defended as often as it is hit.",
-      "Answer ...Bg4 and ...Na5 with f3 — one move that kicks the bishop and cements e4."
-    ],
-    "traps": null,
-    "warnings": null,
-    "variations": [
-      {
-        "name": "Exchange Variation, Classical Variation (O-O)",
-        "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Bc4 O-O Ne2 c5 O-O Nc6 Be3 Bg4 f3 Na5",
-        "explanation": ""
-      }
-    ],
-    "drillAccuracy": 0,
-    "drillAttempts": 0,
-    "lastStudied": null,
-    "woodpeckerReps": 0,
-    "woodpeckerSpeed": null,
-    "woodpeckerLastDate": null,
-    "isFavorite": false,
-    "sources": [
-      "concept:pos-center",
-      "concept:pos-space"
-    ]
-  },
-  {
-    "id": "anti-nimzo-qc2",
-    "eco": "E32",
-    "name": "Anti-Nimzo-Indian: Classical 4.Qc2",
-    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 b6 Bg5 Bb7 f3 h6 Bh4 d5 cxd5 exd5 e3 Re8",
-    "uci": "d2d4 g8f6 c2c4 e7e6 b1c3 f8b4 d1c2 e8g8",
-    "fen": "rnbq1rk1/pppp1ppp/4pn2/8/1bPP4/2N5/PPQ1PPPP/R1B1KBNR w KQ - 4 5",
-    "color": "white",
-    "style": "classical",
-    "isRepertoire": true,
-    "overview": "The Classical 4.Qc2 is White's principled answer to the Nimzo-Indian: by defending c3 in advance, you recapture on c3 with the queen after ...Bxc3+, sidestepping the doubled pawns the Nimzo is designed to inflict and banking the bishop pair. Be honest — the Nimzo is a top defence and this is roughly level; the two bishops are your small, lasting edge.",
-    "keyIdeas": [
-      "Qc2 defends c3 so ...Bxc3+ is met by Qxc3 — no doubled pawns, and you win the bishop pair.",
-      "Prod with a3 to invite the trade on your terms.",
-      "Clamp e4 with f3 and Bg5, preparing the broad centre your bishops crave.",
-      "It is roughly equal — play the two bishops for a riskless, long-game pull."
-    ],
-    "traps": null,
-    "warnings": null,
-    "variations": [
-      {
-        "name": "Classical Variation, Noa Variation",
-        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 d5 cxd5 exd5 Bg5 h6 Bh4 Nc6 e3 g5 Bg3 h5 Bb5 h4 Be5 O-O",
-        "explanation": ""
-      },
-      {
-        "name": "Classical Variation, Berlin Variation, Pirc Variation",
-        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 c5 dxc5 O-O a3 Bxc5 Nf3 b6 Bf4 Bb7 Rd1 Nc6 b4 Be7 e4 Nh5",
-        "explanation": ""
-      }
-    ],
-    "drillAccuracy": 0,
-    "drillAttempts": 0,
-    "lastStudied": null,
-    "woodpeckerReps": 0,
-    "woodpeckerSpeed": null,
-    "woodpeckerLastDate": null,
-    "isFavorite": false,
-    "sources": [
-      "concept:pos-center",
-      "concept:pos-initiative"
-    ]
-  },
-  {
-    "id": "anti-qid-fianchetto",
-    "eco": "E15",
-    "name": "Anti-Queen’s Indian: Fianchetto",
-    "pgn": "d4 Nf6 c4 e6 Nf3 b6 g3 Ba6 b3 Bb4+ Bd2 Be7 Bg2 c6 Bc3 d5 Nbd2 Nbd7 e4 Nxe4 Nxe4 dxe4",
-    "uci": "d2d4 g8f6 c2c4 e7e6 g1f3 b7b6 g2g3 c8a6 b2b3 f8b4 c1d2",
-    "fen": "rn1qk2r/p1pp1ppp/bp2pn2/8/1bPP4/1P3NP1/P2BPP1P/RN1QKB1R b KQkq - 2 6",
-    "color": "white",
-    "style": "positional",
-    "isRepertoire": true,
-    "overview": "Against the Queen's Indian, the g3 fianchetto meets Black on the long light diagonal his whole setup fights for. b3 shores up c4, Bg2 and later Bc3 put both bishops on their long diagonals, and the e4 break opens the game for them. A small, classical pull.",
-    "keyIdeas": [
-      "Answer the ...b6/...Ba6 setup with the mirror fianchetto g3 and Bg2, contesting the long light diagonal.",
-      "Defend c4 with b3 so the a6-bishop bites on granite.",
-      "Place both bishops on their long diagonals (Bg2 light, Bc3 dark) for a harmonious build.",
-      "Break with e4 to open the position for your bishops when Black plays ...d5."
-    ],
-    "traps": null,
-    "warnings": null,
-    "variations": [
-      {
-        "name": "Fianchetto Variation, Traditional Line",
-        "pgn": "d4 Nf6 c4 e6 Nf3 b6 g3 Bb7 Bg2 Be7 O-O O-O Nc3 Ne4 Bd2 f5 Ne5 Nxc3 Bxc3 Bxg2 Kxg2 a5",
-        "explanation": ""
-      }
-    ],
-    "drillAccuracy": 0,
-    "drillAttempts": 0,
-    "lastStudied": null,
-    "woodpeckerReps": 0,
-    "woodpeckerSpeed": null,
-    "woodpeckerLastDate": null,
-    "isFavorite": false,
-    "sources": [
-      "concept:pos-center",
-      "concept:pos-initiative"
-    ]
-  },
-  {
-    "id": "anti-dutch-staunton",
-    "eco": "A82",
-    "name": "Anti-Dutch: Staunton Gambit",
-    "pgn": "d4 f5 e4 fxe4 Nc3 Nf6 Bg5 c6 f3 d5 fxe4 Nxe4 Nxe4 dxe4 Bc4 Qd6 c3 Qg6 Qd2 Bf5 Ne2 Nd7",
-    "uci": "d2d4 f7f5 e2e4 f5e4 b1c3 g8f6 c1g5 c7c6 f2f3 d7d5 f3e4 f6e4 c3e4 d5e4 f1c4 d8d6 c2c3 d6g6 d1d2 c8f5 g1e2 b8d7",
-    "fen": "r3kb1r/pp1np1pp/2p3q1/5bB1/2BPp3/2P5/PP1QN1PP/R3K2R w KQkq - 5 12",
-    "color": "white",
-    "style": "aggressive",
-    "isRepertoire": true,
-    "overview": "The Staunton Gambit meets the Dutch with 2.e4, sacrificing a pawn to blow the position open before Black is developed. Bg5 hits the f6-knight and threatens to wreck the kingside; f3 undermines the extra e4-pawn at its base; Bc4 rakes the diagonal at Black's airy king. Objectively about level, but a dangerous practical surprise weapon — engine-verified with active, pleasant compensation (+0.25) and a fragile black e4-pawn to round up.",
-    "keyIdeas": [
-      "Gambit e4 to rip open lines against the loosened Dutch king.",
-      "Bg5 hits f6 and threatens Bxf6 to shatter Black's kingside pawns.",
-      "Undermine the extra e4-pawn with f3 — it is weak and destined to fall.",
-      "Rake the a2-g8 diagonal with Bc4 and regroup Qd2/Ne2 to win the pawn back with the initiative."
-    ],
-    "traps": null,
-    "warnings": null,
-    "variations": [
-      {
-        "name": "Staunton Gambit",
-        "pgn": "d4 f5 e4 fxe4 Nc3 Nf6 Bg5 Nc6 d5 Ne5 Qe2 Nf7 Bxf6 exf6 Nxe4 Qe7 d6 Nxd6 Nxd6+ cxd6 g3 d5",
-        "explanation": ""
-      },
-      {
-        "name": "Staunton Gambit, Lasker Variation",
-        "pgn": "d4 f5 e4 fxe4 Nc3 Nf6 Bg5 g6 f3 d5 fxe4 Nxe4 Nxe4 a6",
-        "explanation": ""
-      },
-      {
-        "name": "Staunton Gambit, Chigorin Variation",
-        "pgn": "d4 f5 e4 fxe4 Nc3 Nf6 Bg5 c6 f3 Qa5 Qd2 e5 a3 e3",
-        "explanation": ""
-      }
-    ],
-    "drillAccuracy": 0,
-    "drillAttempts": 0,
-    "lastStudied": null,
-    "woodpeckerReps": 0,
-    "woodpeckerSpeed": null,
-    "woodpeckerLastDate": null,
-    "isFavorite": false,
-    "sources": [
-      "concept:pos-initiative",
-      "concept:pos-center",
-      "https://en.wikipedia.org/wiki/Dutch_Defence,_Staunton_Gambit"
-    ]
-  },
-  {
-    "id": "anti-qgd-exchange",
-    "eco": "D35",
-    "name": "Anti-QGD: Exchange + Minority Attack",
-    "pgn": "d4 d5 c4 e6 cxd5 exd5 Nc3 Nf6 Bg5 c6 e3 Be7 Bd3 O-O Nf3 Nbd7 O-O Ne4 Bf4 Ndf6 Ne5 Bd6",
-    "uci": "d2d4 d7d5 c2c4 e7e6 c4d5 e6d5 b1c3 g8f6 c1g5 c7c6 e2e3 f8e7",
-    "fen": "rnbqk2r/pp2bppp/2p2n2/3p2B1/3P4/2N1P3/PP3PPP/R2QKBNR w KQkq - 1 7",
-    "color": "white",
-    "style": "positional",
-    "isRepertoire": true,
-    "overview": "The Exchange Variation gives the Queen's Gambit Declined a clear, classical plan: the Carlsbad structure and the minority attack. You trade on d5, develop with Bg5 and Bd3, and push b4-b5 to fix a weak, backward pawn on c6 that you besiege for the rest of the game. Low-risk, high-clarity.",
-    "keyIdeas": [
-      "Take on d5 for the Carlsbad structure and the famous minority-attack plan (b4-b5).",
-      "Pin with Bg5 and pressure d5; Black's ...c6 becomes your target.",
-      "Post the bishop on d3 aiming at the king and plant a knight on e5.",
-      "Choose your squeeze: the queenside minority attack or a kingside build behind the e5-knight."
-    ],
-    "traps": null,
-    "warnings": null,
-    "variations": [
-      {
-        "name": "Queen's Gambit Declined (Be7)",
-        "pgn": "d4 d5 c4 e6 cxd5 exd5 Nc3 Nf6 Bg5 Be7 e3 O-O Bd3 Nbd7 Nge2 c6 Qc2 Re8 O-O a5 Bh4 h6",
-        "explanation": ""
-      }
-    ],
-    "drillAccuracy": 0,
-    "drillAttempts": 0,
-    "lastStudied": null,
-    "woodpeckerReps": 0,
-    "woodpeckerSpeed": null,
-    "woodpeckerLastDate": null,
-    "isFavorite": false,
-    "sources": [
-      "concept:pos-center",
-      "concept:pos-initiative"
-    ]
-  },
-  {
-    "id": "anti-budapest",
-    "eco": "A52",
-    "name": "Anti-Budapest: 4.Bf4",
-    "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Bf4 Nc6 Nf3 Bb4+ Nbd2 Qe7 e3 Ngxe5 Nxe5 Nxe5 a3 Bxd2+ Qxd2 d6 Be2 O-O",
-    "uci": "d2d4 g8f6 c2c4 e7e5 d4e5 f6g4 c1f4 b8c6 g1f3 f8b4 b1d2 d8e7 e2e3 g4e5 f3e5 c6e5 a2a3 b4d2 d1d2 d7d6 f1e2 e8g8",
-    "fen": "r1b2rk1/ppp1qppp/3p4/4n3/2P2B2/P3P3/1P1QBPPP/R3K2R w KQ - 2 12",
-    "color": "white",
-    "style": "classical",
-    "isRepertoire": true,
-    "overview": "The Budapest Gambit sacrifices the e5-pawn and chases it with ...Ng4. The critical, greed-free reply is 4.Bf4: it defends the extra pawn a second time AND develops — no h3/Nf3 tangles. Black regains the pawn by force, but a well-timed a3 wins the two bishops, and you emerge with the bishop pair, a healthy central pawn and the freer game. Engine-verified a small, durable edge (+0.35).",
-    "keyIdeas": [
-      "Meet ...Ng4 with the clean Bf4 — defend e5 and develop, never cling greedily.",
-      "Answer ...Bb4+ with Nbd2, developing rather than retreating, and shore up with e3.",
-      "Win the bishop pair with a3 once Black regains the pawn (Bxd2+ Qxd2).",
-      "Nurse the two bishops and the c4-pawn for a small, lasting pull."
-    ],
-    "traps": null,
-    "warnings": null,
-    "variations": [
-      {
-        "name": "Budapest Defense, Rubinstein Variation (g5)",
-        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Bf4 g5 Bg3 Bg7 Nf3 Nc6 h4 Ngxe5 Nxe5 Nxe5 Nc3 h6 Qc2 d6 e3 Be6",
-        "explanation": ""
-      }
-    ],
-    "drillAccuracy": 0,
-    "drillAttempts": 0,
-    "lastStudied": null,
-    "woodpeckerReps": 0,
-    "woodpeckerSpeed": null,
-    "woodpeckerLastDate": null,
-    "isFavorite": false,
-    "sources": [
-      "concept:pos-initiative",
-      "concept:pos-center",
-      "https://en.wikipedia.org/wiki/Budapest_Gambit"
-    ]
-  },
-  {
-    "id": "anti-london-black",
-    "eco": "D02",
-    "name": "Anti-London (Black)",
-    "pgn": "d4 d5 Bf4 Nf6 e3 Bf5 c4 e6 Nd2 Nbd7 Ngf3 a5 Be2 c6 Qb3 Ra7 c5 Be7 O-O Nh5 Be5 Nhf6",
-    "uci": "d2d4 d7d5 c1f4 c7c5 e2e3 b8c6 c2c3 c5c4 a2a3 a7a6 b2b3 a6a5 f2f3 a5a4",
-    "fen": "r1bqkbnr/1p2pppp/2n5/3p4/p1pP1B2/PPP1PP2/6PP/RN1QKBNR w KQkq - 0 8",
-    "color": "black",
-    "style": "aggressive",
-    "isRepertoire": true,
-    "overview": "The London System's whole edge is its good bishop on f4, developed outside the pawn chain. You neutralise it at the root by mirroring: ...Nf6 and ...Bf5 to get your own light-squared bishop out BEFORE ...e6 shuts it in — the same principle that makes the Caro-Kann rock-solid. From a healthy setup the ...c5 break gives full equality. Be honest: the London is sound, so this is level, but Black has no problems and the freer minor pieces.",
-    "keyIdeas": [
-      "Develop ...Bf5 before ...e6 — copy the London's idea and take away its one trump, the good bishop.",
-      "Only then play ...e6: your light bishop is already active outside the chain.",
-      "Grab space with ...a5 and prepare the freeing ...c5 break — play actively, not passively.",
-      "Reach a level game with both bishops good, no weaknesses, and the ...c5/...b6 breaks in hand."
-    ],
-    "traps": null,
-    "warnings": null,
-    "variations": [
-      {
-        "name": "Accelerated London System, Steinitz Countergambit (c3)",
-        "pgn": "d4 d5 Bf4 c5 e3 Nc6 c3 Bf5 Qb3 Qd7 Nf3 e6 dxc5 Bxc5 Ne5 Qc8 Nd2 Nf6 Qa4 O-O Nxc6 bxc6",
-        "explanation": ""
-      },
-      {
-        "name": "Accelerated London System, Steinitz Countergambit (Nf3)",
-        "pgn": "d4 d5 Bf4 c5 e3 Nc6 Nf3 Nf6 Bb5 Qa5+ Nc3 Ne4 Bxc6+ bxc6 O-O Nxc3 bxc3 Qxc3 Ne5 cxd4 exd4 Bf5",
-        "explanation": ""
-      }
-    ],
-    "drillAccuracy": 0,
-    "drillAttempts": 0,
-    "lastStudied": null,
-    "woodpeckerReps": 0,
-    "woodpeckerSpeed": null,
-    "woodpeckerLastDate": null,
-    "isFavorite": false,
-    "sources": [
-      "concept:pos-center",
-      "concept:pos-initiative"
-    ]
-  },
-  {
-    "id": "anti-catalan-black",
-    "eco": "E04",
-    "name": "Anti-Catalan: Open (Black)",
-    "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 a6 O-O Nc6 e3 Bd7 Qe2 Bd6 Qxc4 O-O Rd1 Qe7 Nc3 h6",
-    "uci": "d2d4 g8f6 c2c4 e7e6 g2g3 d7d5 f1g2 d5c4 g1f3 a7a6 e1g1",
-    "fen": "rnbqkb1r/1pp2ppp/p3pn2/8/2pP4/5NP1/PP2PPBP/RNBQ1RK1 b kq - 1 6",
-    "color": "black",
-    "style": "positional",
-    "isRepertoire": true,
-    "overview": "Against the Catalan, the Open with ...dxc4 is Black's soundest, most reliable equaliser. You take the c4-pawn, hold it a moment with ...a6, and use the tempo White spends recovering it to develop every piece to a natural square. The result is a comfortable, level game with nothing for the fianchettoed bishop to squeeze.",
-    "keyIdeas": [
-      "Take on c4 — grabbing the pawn clears the tension and buys you time.",
-      "Play ...a6 to threaten ...b5 so White must work to regain the pawn.",
-      "Develop naturally (...Nc6, ...Bd7, ...Bd6) while White fusses over c4.",
-      "Reach full equality with no weaknesses and the Catalan bishop neutralised."
-    ],
-    "traps": null,
-    "warnings": null,
-    "variations": [
-      {
-        "name": "Open Defense, Alekhine Variation",
-        "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Qa4+ Nbd7 Qxc4 a6 Qc2 c5 Nf3 b6 dxc5 Bxc5 Ne5 Nd5 Nd3 Bb7",
-        "explanation": ""
-      }
-    ],
-    "drillAccuracy": 0,
-    "drillAttempts": 0,
-    "lastStudied": null,
-    "woodpeckerReps": 0,
-    "woodpeckerSpeed": null,
-    "woodpeckerLastDate": null,
-    "isFavorite": false,
-    "sources": [
-      "concept:pos-center",
-      "concept:pos-initiative"
-    ]
-  },
-  {
-    "id": "anti-trompowsky-black",
-    "eco": "A45",
-    "name": "Anti-Trompowsky: 2…Ne4 (Black)",
-    "pgn": "d4 Nf6 Bg5 Ne4 Bf4 d5 e3 c5 Nd2 Nxd2 Qxd2 Nc6 Nf3 cxd4 exd4 Bf5 Bd3 Bxd3 Qxd3 e6 O-O Bd6",
-    "uci": "d2d4 g8f6 c1g5 f6e4 g5f4 d7d5 e2e3 c7c5 b1d2 e4d2 d1d2 b8c6 g1f3 c5d4 e3d4 c8f5 f1d3 f5d3 d2d3 e7e6 e1g1 f8d6",
-    "fen": "r2qk2r/pp3ppp/2nbp3/3p4/3P1B2/3Q1N2/PPP2PPP/R4RK1 w kq - 2 12",
-    "color": "black",
-    "style": "classical",
-    "isRepertoire": true,
-    "overview": "The Trompowsky's Bg5 wants to trade for your f6-knight and hand you doubled pawns. You refuse at the root with 2...Ne4 — the knight leaps to the centre, hits the bishop and dodges the pin. From there ...d5/...c5 stake a big centre, an active ...Bf5 frees your light bishop OUTSIDE the pawn chain before ...e6, and ...Bd6 challenges the last active enemy piece. Engine-verified dead level (-0.18) — the surprise met by pure principle.",
-    "keyIdeas": [
-      "Refuse the pin with 2...Ne4 — jump to the centre and hit the bishop.",
-      "Stake a big centre with ...d5 and ...c5; after ...cxd4 exd4 White has a lone d-pawn to mind.",
-      "Free the good bishop with ...Bf5 before ...e6 ever locks it in — the Caro-Kann principle.",
-      "Challenge the dark-squared bishop with ...Bd6 and reach a symmetrical, equal game."
-    ],
-    "traps": null,
-    "warnings": null,
-    "variations": [
-      {
-        "name": "Solid Line (2...e6)",
-        "pgn": "d4 Nf6 Bg5 e6 e4 h6 Bxf6 Qxf6 Nc3 d6 Qd2 g5 O-O-O Bg7 g3",
-        "explanation": "Black declines with ...e6, takes the bishop pair after Bxf6, and clamps the kingside with ...g5 — a rock-solid, fully equal setup."
-      },
-      {
-        "name": "Vaganian Gambit (2...c5)",
-        "pgn": "d4 Nf6 Bg5 c5 Bxf6 gxf6 d5 Qb6 Qc1 f5 c4 Bg7 Nc3 d6 e3 Nd7 Qc2 Nf6",
-        "explanation": "The sharp Vaganian: ...c5 strikes d4 and invites Bxf6, trading structure for the two bishops and a half-open g-file — objectively a shade worse but rich in practical chances."
-      }
-    ],
-    "drillAccuracy": 0,
-    "drillAttempts": 0,
-    "lastStudied": null,
-    "woodpeckerReps": 0,
-    "woodpeckerSpeed": null,
-    "woodpeckerLastDate": null,
-    "isFavorite": false,
-    "sources": [
-      "concept:pos-center",
-      "concept:pos-initiative",
-      "https://en.wikipedia.org/wiki/Trompowsky_Attack"
-    ]
-  },
-  {
-    "id": "anti-colle-black",
-    "eco": "D04",
-    "name": "Anti-Colle/Stonewall (Black)",
-    "pgn": "d4 d5 Nf3 Nf6 e3 c5 c4 e6 Nc3 Nc6 a3 a6 dxc5 Bxc5 b4 Bd6 cxd5 exd5 Bb2 Be6 Be2 O-O",
-    "uci": "d2d4 d7d5 g1f3 g8f6 e2e3 c7c5 c2c4 c5d4 e3d4 g7g6 b1c3 f8g7",
-    "fen": "rnbqk2r/pp2ppbp/5np1/3p4/2PP4/2N2N2/PP3PPP/R1BQKB1R w KQkq - 2 7",
-    "color": "black",
-    "style": "classical",
-    "isRepertoire": true,
-    "overview": "The Colle System hopes to cramp you and attack; you refuse to cooperate. An early ...c5 strikes at d4 before White walls in his own bishop, opening the game into a healthy, active position where the Colle's slow plan never gets going. Easy equality with the freer pieces.",
-    "keyIdeas": [
-      "Strike with ...c5 at once — deny the Colle its cosy e3/Bd3/c3 bind.",
-      "Develop actively (...e6, ...Nc6, ...Bd6) into an open Queen's-Gambit-style game.",
-      "Welcome trades — every exchange frees your position against a cramping system.",
-      "Reach an equal middlegame with the freer, easier side to play."
-    ],
-    "traps": null,
-    "warnings": null,
-    "variations": [
-      {
-        "name": "Colle System (c4)",
-        "pgn": "d4 d5 Nf3 Nf6 e3 c5 c4 cxd4 exd4 g6 Nc3 Bg7",
-        "explanation": ""
-      },
-      {
-        "name": "Colle System (c3)",
-        "pgn": "d4 d5 Nf3 Nf6 e3 c5 c3 e6 Bd3 Nc6 Nbd2 Bd6 O-O O-O dxc5 Bxc5 b4 Bd6 Bb2 Ne5 Nxe5 Bxe5",
-        "explanation": ""
-      },
-      {
-        "name": "Colle System (dxc5)",
-        "pgn": "d4 d5 Nf3 Nf6 e3 c5 dxc5 e6 b4 a5 c3 axb4 cxb4 b6 a4 bxc5 bxc5 Bxc5 Nbd2 Ba6 Bxa6 Nxa6",
-        "explanation": ""
-      },
-      {
-        "name": "Colle System (Nbd2)",
-        "pgn": "d4 d5 Nf3 Nf6 e3 c5 Nbd2 cxd4 a3 d3 b3 d4 c3 a6",
-        "explanation": ""
-      },
-      {
-        "name": "Colle System (b3)",
-        "pgn": "d4 d5 Nf3 Nf6 e3 c5 b3 Nc6 dxc5 Bg4 Be2 e6 Ba3 Ne4 O-O Bxc5 Bxc5 Nxc5 Nbd2 O-O c4 dxc4 bxc4",
-        "explanation": ""
-      },
-      {
-        "name": "Colle System (Be2)",
-        "pgn": "d4 d5 Nf3 Nf6 e3 c5 Be2 Nc6",
-        "explanation": ""
-      }
-    ],
-    "drillAccuracy": 0,
-    "drillAttempts": 0,
-    "lastStudied": null,
-    "woodpeckerReps": 0,
-    "woodpeckerSpeed": null,
-    "woodpeckerLastDate": null,
-    "isFavorite": false,
-    "sources": [
-      "concept:pos-center",
-      "concept:pos-initiative"
-    ]
-  },
-  {
-    "id": "anti-smith-morra-black",
-    "eco": "B21",
-    "name": "Anti-Smith-Morra: Accepted (Black)",
-    "pgn": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 e6 Bc4 a6 O-O Nge7 Bg5 f6 Be3 b5 Be2 Bb7 Rc1 Nc8",
-    "uci": "e2e4 c7c5 d2d4 c5d4 c2c3 d4c3 b1c3 b8c6 g1f3 e7e6 f1c4 a7a6 e1g1 g8e7",
-    "fen": "r1bqkb1r/1p1pnppp/p1n1p3/8/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 w kq - 2 8",
-    "color": "black",
-    "style": "classical",
-    "isRepertoire": true,
-    "overview": "The soundest way to meet the Smith-Morra Gambit is to accept the pawn and consolidate. The ...a6/...e6/...Nge7 wall blunts White's development lead move by move: ...e6 shuts the c4-bishop, ...a6 and ...b5 gain queenside space, and ...Nge7 keeps the knight unpinned. Be honest — White has real compensation and it is roughly level, but with careful play the extra pawn tells.",
-    "keyIdeas": [
-      "Accept the pawn — it is real, and White's compensation is manageable with a plan.",
-      "Build the ...e6/...a6/...Nge7 wall that defuses White's attack piece by piece.",
-      "Answer Bg5 with ...f6 and keep the dark squares solid.",
-      "Expand with ...b5 and ...Bb7, absorb the initiative, and let the extra pawn count."
-    ],
-    "traps": null,
-    "warnings": null,
-    "variations": [
-      {
-        "name": "Smith-Morra Gambit Accepted, Paulsen Formation (Qe2)",
-        "pgn": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 e6 Bc4 a6 O-O Nge7 Qe2 b5 Bd3 Ng6 Be3 Bd6 Rfd1 Nf4",
-        "explanation": ""
-      }
-    ],
-    "drillAccuracy": 0,
-    "drillAttempts": 0,
-    "lastStudied": null,
-    "woodpeckerReps": 0,
-    "woodpeckerSpeed": null,
-    "woodpeckerLastDate": null,
-    "isFavorite": false,
-    "sources": [
-      "concept:pos-center",
-      "concept:pos-initiative"
-    ]
-  },
-  {
-    "id": "anti-alapin-black",
-    "eco": "B22",
-    "name": "Anti-Alapin: 2…Nf6 (Black)",
-    "pgn": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 Nf3 Nc6 cxd4 d6 Bc4 Nb6 Bb5 dxe5 Nxe5 Bd7 Nxd7 Qxd7 O-O e6",
-    "uci": "e2e4 c7c5 c2c3 g8f6 e4e5 f6d5 d2d4 c5d4 g1f3 b8c6 c3d4 d7d6 a2a3 a7a6",
-    "fen": "r1bqkb1r/1p2pppp/p1np4/3nP3/3P4/P4N2/1P3PPP/RNBQKB1R w KQkq - 0 8",
-    "color": "black",
-    "style": "classical",
-    "isRepertoire": true,
-    "overview": "Against the Alapin (2.c3), ...Nf6 is the most testing reply: it hits e4 immediately and forces White to commit before completing his big-centre setup. After e5 the knight sits proudly on d5, you chip at the centre with ...cxd4 and ...Nc6, and the freeing ...d6 dissolves White's space edge into a comfortable, equal game.",
-    "keyIdeas": [
-      "Meet 2.c3 with ...Nf6, attacking e4 and dictating the tempo.",
-      "After e5 Nd5, strike the centre with ...cxd4 and develop ...Nc6.",
-      "Play ...d6 to challenge the cramping e5-pawn and free your position.",
-      "Trade into equality with the isolated d4-pawn as a long-term target."
-    ],
-    "traps": null,
-    "warnings": null,
-    "variations": [
-      {
-        "name": "Alapin Variation, Smith-Morra Declined",
-        "pgn": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 Nf3 Nc6 cxd4 d6 a3 dxe5 dxe5 Be6 Bd2 g6 Bb5 Bg7 Bxc6+ bxc6",
-        "explanation": ""
-      },
-      {
-        "name": "Alapin Variation",
-        "pgn": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4",
-        "explanation": ""
-      }
-    ],
-    "drillAccuracy": 0,
-    "drillAttempts": 0,
-    "lastStudied": null,
-    "woodpeckerReps": 0,
-    "woodpeckerSpeed": null,
-    "woodpeckerLastDate": null,
-    "isFavorite": false,
-    "sources": [
-      "concept:pos-center",
-      "concept:pos-initiative"
-    ]
-  },
-  {
-    "id": "anti-grand-prix-black",
-    "eco": "B23",
-    "name": "Anti-Grand-Prix: …g6 (Black)",
-    "pgn": "e4 c5 Nc3 Nc6 f4 g6 Nf3 Bg7 Bc4 e6 f5 Nge7 fxe6 dxe6 d3 O-O O-O h6 a4 b6 Ne2 Na5",
-    "uci": "e2e4 c7c5 b1c3 b8c6 f2f4 g7g6 g1f3 f8g7",
-    "fen": "r1bqk1nr/pp1pppbp/2n3p1/2p5/4PP2/2N2N2/PPPP2PP/R1BQKB1R w KQkq - 2 5",
-    "color": "black",
-    "style": "positional",
-    "isRepertoire": true,
-    "overview": "The Grand Prix Attack (f4) aims for a kingside mating attack, but the fianchetto defence takes all the sting out of it. ...g6 and ...Bg7 shield your king, ...e6 blunts the c4-bishop and the f5 break, and ...Na5 trades off White's most dangerous piece. Handled this way, Black is not just safe — Black is better.",
-    "keyIdeas": [
-      "Fianchetto with ...g6/...Bg7 to guard the dark squares around your king.",
-      "Play ...e6 to shut the c4-bishop's diagonal and control f5.",
-      "Meet the f5 thrust calmly with ...Nge7 and recapture toward the centre.",
-      "Hit the c4-bishop with ...Na5 and take over — the attack has spent itself."
-    ],
-    "traps": null,
-    "warnings": null,
-    "variations": [
-      {
-        "name": "Grand Prix Attack (Bb5)",
-        "pgn": "e4 c5 Nc3 Nc6 f4 g6 Nf3 Bg7 Bb5 Nd4 O-O Nxb5 Nxb5 d5 d3 a6 Nc3 Bxc3 bxc3 dxe4 dxe4 Qxd1 Rxd1",
-        "explanation": ""
-      },
-      {
-        "name": "Grand Prix Attack (Bc4)",
-        "pgn": "e4 c5 Nc3 Nc6 f4 g6 Nf3 Bg7 Bc4",
-        "explanation": ""
-      }
-    ],
-    "drillAccuracy": 0,
-    "drillAttempts": 0,
-    "lastStudied": null,
-    "woodpeckerReps": 0,
-    "woodpeckerSpeed": null,
-    "woodpeckerLastDate": null,
-    "isFavorite": false,
-    "sources": [
-      "concept:pos-center",
-      "concept:pos-initiative"
-    ]
-  },
-  {
-    "id": "anti-kings-gambit-black",
-    "eco": "C30",
-    "name": "Refuting the King’s Gambit (Black)",
-    "pgn": "e4 e5 f4 exf4 Nf3 d5 exd5 Nf6 Bc4 Nxd5 O-O Be6 Qe2 Nc6 d4 Qd6 Nc3 O-O-O Nxd5 Bxd5 Bxd5 Qxd5",
-    "uci": "e2e4 e7e5 f2f4 e5f4 g1f3 g7g5 h2h4 g5g4 f3e5 g8f6 f1c4 d7d5 e4d5 f8d6",
-    "fen": "rnbqk2r/ppp2p1p/3b1n2/3PN3/2B2ppP/8/PPPP2P1/RNBQK2R w KQkq - 1 8",
-    "color": "black",
-    "style": "aggressive",
-    "isRepertoire": true,
-    "overview": "The Modern Defence is the clean, reliable way to meet the King's Gambit. You take the f4-pawn, then strike back with ...d5 — handing the pawn back for a raking lead in development. Instead of clinging to material and getting mated, you turn White's own open lines against him and emerge with the safer king and the better game.",
-    "keyIdeas": [
-      "Answer the gambit with ...d5 — counter-attack the centre, don't hoard the f4-pawn.",
-      "Develop before recapturing: ...Nf6 first, then ...Nxd5.",
-      "Bring every piece out with tempo (...Be6, ...Nc6) and castle queenside to safety.",
-      "Trade into a middlegame where you are better developed, safer, and often still up the pawn."
-    ],
-    "traps": null,
-    "warnings": null,
-    "variations": [
-      {
-        "name": "Kieseritzky Gambit, Anderssen Defense",
-        "pgn": "e4 e5 f4 exf4 Nf3 g5 h4 g4 Ne5 Nf6 Bc4 d5 exd5 Bd6",
-        "explanation": ""
-      },
-      {
-        "name": "Bishop's Gambit, Bogoljubow Defense",
-        "pgn": "e4 e5 f4 exf4 Bc4 Nf6 Nc3 c6 Bb3 d5 exd5 f3 a3 f2+",
-        "explanation": ""
-      }
-    ],
-    "drillAccuracy": 0,
-    "drillAttempts": 0,
-    "lastStudied": null,
-    "woodpeckerReps": 0,
-    "woodpeckerSpeed": null,
-    "woodpeckerLastDate": null,
-    "isFavorite": false,
-    "sources": [
-      "concept:pos-center",
-      "concept:pos-initiative"
-    ]
-  }
+    "explanation": ""
+   },
+   {
+    "name": "Nyezhmetdinov-Rossolimo Attack (e6)",
+    "pgn": "e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 Re1 a6 Bf1 d5 exd5 Nxd5 d4 Nf6 Be3 Be7 c4 O-O Nc3 cxd4 Nxd4",
+    "explanation": ""
+   },
+   {
+    "name": "Nyezhmetdinov-Rossolimo Attack (d6)",
+    "pgn": "e4 c5 Nf3 Nc6 Bb5 d6 O-O Bd7 Re1 Nf6 c3 a6 Bf1 Bg4 h3 Bxf3 Qxf3 g6 d3 Bg7 Be3 Nd7 Nd2 O-O",
+    "explanation": ""
+   },
+   {
+    "name": "Nyezhmetdinov-Rossolimo Attack (Nf6)",
+    "pgn": "e4 c5 Nf3 Nc6 Bb5 Nf6 Nc3 Qc7 O-O Nd4 Re1 a6 Bf1 Ng4 g3 Nxf3+ Qxf3 Ne5 Qe2 e6 b3",
+    "explanation": ""
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-center",
+   "concept:pos-initiative",
+   "https://en.wikipedia.org/wiki/Sicilian_Defence,_Rossolimo_Variation"
+  ]
+ },
+ {
+  "id": "anti-benoni-push",
+  "eco": "A56",
+  "name": "Anti-Benoni/Benko: The d5 Push",
+  "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 Nf3 g6 e4 Bxf1 Kxf1 Bg7 g3 O-O Kg2 Nbd7",
+  "uci": "d2d4 g8f6 c2c4 c7c5 d4d5 b7b5 c4b5 a7a6 b5a6 c8a6 b1c3 d7d6 g1f3 g7g6 e2e4 a6f1 e1f1 f8g7 g2g3 e8g8 f1g2 b8d7",
+  "fen": "r2q1rk1/3nppbp/3p1np1/2pP4/4P3/2N2NP1/PP3PKP/R1BQ3R w - - 3 12",
+  "color": "white",
+  "style": "positional",
+  "isRepertoire": true,
+  "overview": "Against the Benoni push Black offers the Benko/Volga pawn with ...b5, sacrificing for slow queenside pressure on the a- and b-files. The soundest answer is the most direct: take it cleanly with cxb5 and give the square back with bxa6 so Black recaptures with the bishop. Then build a big e4 centre, trade the light bishops, and walk the king to g2 by hand. Engine-verified a healthy pawn up (+0.93) with the Benko's counterplay defused.",
+  "keyIdeas": [
+   "Accept the gambit: cxb5, then bxa6 so Black recaptures with the bishop, not a rook-file.",
+   "Raise a broad e4/d5 pawn front to wall off Black's queenside counterplay.",
+   "Trade the light bishops (Bxf1 Kxf1) and finish the king by hand with g3 and Kg2.",
+   "Keep the extra pawn and convert patiently — the Benko pressure never crashes through."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "Fully Accepted Variation",
+    "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 g6 Nc3 Bxa6 e4 Bxf1",
+    "explanation": ""
+   },
+   {
+    "name": "Pawn Storm Variation",
+    "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 e4 g6 f4 Bg7 Bb5+ Nfd7 a4 O-O Nf3 Na6 O-O Nb4",
+    "explanation": ""
+   },
+   {
+    "name": "Benoni Defense",
+    "pgn": "d4 Nf6 c4 c5 d5 g6 Nc3 Bg7 a3 g5 b3 g4 e3 g3",
+    "explanation": ""
+   },
+   {
+    "name": "Czech Benoni Defense",
+    "pgn": "d4 Nf6 c4 c5 d5 e5 Nc3 d6 e4 Be7 Nf3 Na6 h3 O-O Bd3 Nc7 Bd2 Kh8 Qe2 g6 Bh6 Re8",
+    "explanation": ""
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-center",
+   "concept:pos-initiative",
+   "https://en.wikipedia.org/wiki/Benko_Gambit"
+  ]
+ },
+ {
+  "id": "anti-englund",
+  "eco": "A40",
+  "name": "Anti-Englund Gambit",
+  "pgn": "d4 e5 dxe5 Nc6 Nf3 Qe7 Bf4 Qb4+ Bd2 Qxb2 Nc3 Bb4 Rb1 Qa3 Nd5 Ba5 Rb5 Bxd2+ Qxd2 Rb8 c3 a6",
+  "uci": "d2d4 e7e5 d4e5 b8c6 g1f3 d8e7 c1f4 e7b4 f4d2 b4b2 b1c3 f8b4 a1b1 b2a3 c3d5 b4a5 b1b5 a5d2 d1d2 a8b8 c2c3 a7a6",
+  "fen": "1rb1k1nr/1ppp1ppp/p1n5/1R1NP3/8/q1P2N2/P2QPPPP/4KB1R w Kk - 0 12",
+  "color": "white",
+  "style": "classical",
+  "isRepertoire": true,
+  "overview": "The Englund Gambit (1.d4 e5) throws a pawn away for cheap tricks and is simply unsound. You take the pawn, guard it with Nf3 and Bf4, and when Black lashes out with ...Qb4+ and grabs a second pawn on b2, you spring the trap: Nc3, Rb1 and Nd5/Rb5 hunt the greedy queen down on the rim. Engine-verified winning for White (+1.97) — greed punished by a clean queen hunt.",
+  "keyIdeas": [
+   "Take the e5-pawn and hold it simply — Nf3 guards, Bf4 develops and defends.",
+   "Let Black overreach: ...Qb4+ and ...Qxb2 sends the queen pawn-hunting into your camp.",
+   "Spring the net with Nc3 and Rb1 — every developing move also chases the queen.",
+   "Finish with Nd5 and Rb5, boxing the queen on the edge — winning material by force."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "Main Line",
+    "pgn": "d4 e5 dxe5 Nc6 Nf3 Qe7 Nc3 Nxe5 e4 c6 a3 c5 b3 c4",
+    "explanation": ""
+   },
+   {
+    "name": "Englund Gambit",
+    "pgn": "d4 e5 dxe5 Nc6 Nf3 d6 Bg5 Qd7 exd6 Bxd6 Nc3 h6 Bh4 Nge7 Nb5 Nf5 Nxd6+ Nxd6 Bg3 Ne4 Qxd7+ Bxd7",
+    "explanation": ""
+   },
+   {
+    "name": "Zilbermints Gambit",
+    "pgn": "d4 e5 dxe5 Nc6 Nf3 Nge7 Bf4 h6 e4 Ng6 Bg3 Bb4+ c3 Be7 Nbd2 O-O Bb5 d6 exd6 Bxd6 O-O Bf4",
+    "explanation": ""
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-initiative",
+   "concept:tac-trap",
+   "https://en.wikipedia.org/wiki/Englund_Gambit"
+  ],
+  "trapLines": [
+   {
+    "name": "Englund Queen Trap (…Qxb2)",
+    "pgn": "d4 e5 dxe5 Nc6 Nf3 Qe7 Bf4 Qb4+ Bd2 Qxb2 Nc3 Bb4 Rb1 Qa3 Nd5 Ba5 Rb5",
+    "explanation": "The Englund's main try is the greedy queen raid …Qb4+ and …Qxb2, snatching a second pawn. Punish it: Nc3 develops with tempo, Rb1 swings onto the b-file to cut off the queen's retreat, and Nd5 (threatening Nc7+) with Rb5 boxes the queen on the rim while hitting the bishop. White emerges winning by a wide margin — engine-verified about +2.2. Greed punished by a clean hunt."
+   }
+  ]
+ },
+ {
+  "id": "anti-kid-saemisch",
+  "eco": "E80",
+  "name": "Anti-KID: Sämisch",
+  "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 e5 d5 c6 Bd3 cxd5 cxd5 Na6 Nge2 Nc5 Bc2 a5",
+  "uci": "d2d4 g8f6 c2c4 g7g6 b1c3 f8g7 e2e4 d7d6 f2f3 e8g8 c1e3",
+  "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N1BP2/PP4PP/R2QKBNR b KQ - 2 6",
+  "color": "white",
+  "style": "aggressive",
+  "isRepertoire": true,
+  "overview": "The Sämisch is the King's Indian's toughest test: f3 bolts down e4 so White can build a huge c4-d4-e4 centre, clamp with d5, and storm the kingside with Qd2 and g4-h4 while Black is cramped. A space bind with real attacking chances.",
+  "keyIdeas": [
+   "f3 supports e4 and lets you build the biggest centre in chess — c4, d4 and e4.",
+   "Meet ...e5 with d5, the Sämisch clamp that cramps Black on both wings.",
+   "Keep the good bishop (Bd3-c2) and grab the half-open c-file after ...c6 cxd5.",
+   "Play for Qd2 and a g4-h4 kingside pawn storm behind the space bind."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "Sämisch Variation, Sämisch Gambit",
+    "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 c5",
+    "explanation": ""
+   },
+   {
+    "name": "Sämisch Variation, Yates Defense",
+    "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 Nc6 Nge2 a6 Qd2 Rb8 Rc1 Bd7 Nd1 e5 d5 Ne7",
+    "explanation": ""
+   },
+   {
+    "name": "Sämisch Variation, Normal Defense (a6)",
+    "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 a6 Qd2 c5 dxc5 dxc5 Qxd8 Rxd8 Bxc5 Nc6 Bb6 Rd6",
+    "explanation": ""
+   },
+   {
+    "name": "Sämisch Variation, Normal Defense (Nbd7)",
+    "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 Nbd7 Qd2 a6 O-O-O Rb8 e5 Ne8 h4 c5 dxc5 Nxe5 h5",
+    "explanation": ""
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-center",
+   "concept:pos-space"
+  ]
+ },
+ {
+  "id": "anti-grunfeld-exchange",
+  "eco": "D85",
+  "name": "Anti-Grünfeld: Exchange",
+  "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Bc4 c5 Ne2 Nc6 Be3 O-O O-O Bg4 f3 Na5",
+  "uci": "d2d4 g8f6 c2c4 g7g6 b1c3 d7d5 c4d5 f6d5 e2e4 d5c3 b2c3 f8g7 f1c4 c7c5",
+  "fen": "rnbqk2r/pp2ppbp/6p1/2p5/2BPP3/2P5/P4PPP/R1BQK1NR w KQkq - 0 8",
+  "color": "white",
+  "style": "classical",
+  "isRepertoire": true,
+  "overview": "The Exchange Grünfeld is the principled reply: you accept the classical big centre (c3, d4, e4) that Black invites, then defend it against the ...c5 lever and the g7-bishop. Every attacker is met by a defender, and the phalanx becomes a rolling asset.",
+  "keyIdeas": [
+   "Build the classical c3-d4-e4 phalanx after bxc3 — the Grünfeld's challenge to meet head-on.",
+   "Develop Ne2 (not Nf3) so the g7-bishop can't pin it, keeping d4 defended.",
+   "Over-defend the centre with Be3 and castle; it is defended as often as it is hit.",
+   "Answer ...Bg4 and ...Na5 with f3 — one move that kicks the bishop and cements e4."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "Exchange Variation, Classical Variation (O-O)",
+    "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Bc4 O-O Ne2 c5 O-O Nc6 Be3 Bg4 f3 Na5",
+    "explanation": ""
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-center",
+   "concept:pos-space"
+  ]
+ },
+ {
+  "id": "anti-nimzo-qc2",
+  "eco": "E32",
+  "name": "Anti-Nimzo-Indian: Classical 4.Qc2",
+  "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 b6 Bg5 Bb7 f3 h6 Bh4 d5 cxd5 exd5 e3 Re8",
+  "uci": "d2d4 g8f6 c2c4 e7e6 b1c3 f8b4 d1c2 e8g8",
+  "fen": "rnbq1rk1/pppp1ppp/4pn2/8/1bPP4/2N5/PPQ1PPPP/R1B1KBNR w KQ - 4 5",
+  "color": "white",
+  "style": "classical",
+  "isRepertoire": true,
+  "overview": "The Classical 4.Qc2 is White's principled answer to the Nimzo-Indian: by defending c3 in advance, you recapture on c3 with the queen after ...Bxc3+, sidestepping the doubled pawns the Nimzo is designed to inflict and banking the bishop pair. Be honest — the Nimzo is a top defence and this is roughly level; the two bishops are your small, lasting edge.",
+  "keyIdeas": [
+   "Qc2 defends c3 so ...Bxc3+ is met by Qxc3 — no doubled pawns, and you win the bishop pair.",
+   "Prod with a3 to invite the trade on your terms.",
+   "Clamp e4 with f3 and Bg5, preparing the broad centre your bishops crave.",
+   "It is roughly equal — play the two bishops for a riskless, long-game pull."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "Classical Variation, Noa Variation",
+    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 d5 cxd5 exd5 Bg5 h6 Bh4 Nc6 e3 g5 Bg3 h5 Bb5 h4 Be5 O-O",
+    "explanation": ""
+   },
+   {
+    "name": "Classical Variation, Berlin Variation, Pirc Variation",
+    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 c5 dxc5 O-O a3 Bxc5 Nf3 b6 Bf4 Bb7 Rd1 Nc6 b4 Be7 e4 Nh5",
+    "explanation": ""
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-center",
+   "concept:pos-initiative"
+  ]
+ },
+ {
+  "id": "anti-qid-fianchetto",
+  "eco": "E15",
+  "name": "Anti-Queen’s Indian: Fianchetto",
+  "pgn": "d4 Nf6 c4 e6 Nf3 b6 g3 Ba6 b3 Bb4+ Bd2 Be7 Bg2 c6 Bc3 d5 Nbd2 Nbd7 e4 Nxe4 Nxe4 dxe4",
+  "uci": "d2d4 g8f6 c2c4 e7e6 g1f3 b7b6 g2g3 c8a6 b2b3 f8b4 c1d2",
+  "fen": "rn1qk2r/p1pp1ppp/bp2pn2/8/1bPP4/1P3NP1/P2BPP1P/RN1QKB1R b KQkq - 2 6",
+  "color": "white",
+  "style": "positional",
+  "isRepertoire": true,
+  "overview": "Against the Queen's Indian, the g3 fianchetto meets Black on the long light diagonal his whole setup fights for. b3 shores up c4, Bg2 and later Bc3 put both bishops on their long diagonals, and the e4 break opens the game for them. A small, classical pull.",
+  "keyIdeas": [
+   "Answer the ...b6/...Ba6 setup with the mirror fianchetto g3 and Bg2, contesting the long light diagonal.",
+   "Defend c4 with b3 so the a6-bishop bites on granite.",
+   "Place both bishops on their long diagonals (Bg2 light, Bc3 dark) for a harmonious build.",
+   "Break with e4 to open the position for your bishops when Black plays ...d5."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "Fianchetto Variation, Traditional Line",
+    "pgn": "d4 Nf6 c4 e6 Nf3 b6 g3 Bb7 Bg2 Be7 O-O O-O Nc3 Ne4 Bd2 f5 Ne5 Nxc3 Bxc3 Bxg2 Kxg2 a5",
+    "explanation": ""
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-center",
+   "concept:pos-initiative"
+  ]
+ },
+ {
+  "id": "anti-dutch-staunton",
+  "eco": "A82",
+  "name": "Anti-Dutch: Staunton Gambit",
+  "pgn": "d4 f5 e4 fxe4 Nc3 Nf6 Bg5 c6 f3 d5 fxe4 Nxe4 Nxe4 dxe4 Bc4 Qd6 c3 Qg6 Qd2 Bf5 Ne2 Nd7",
+  "uci": "d2d4 f7f5 e2e4 f5e4 b1c3 g8f6 c1g5 c7c6 f2f3 d7d5 f3e4 f6e4 c3e4 d5e4 f1c4 d8d6 c2c3 d6g6 d1d2 c8f5 g1e2 b8d7",
+  "fen": "r3kb1r/pp1np1pp/2p3q1/5bB1/2BPp3/2P5/PP1QN1PP/R3K2R w KQkq - 5 12",
+  "color": "white",
+  "style": "aggressive",
+  "isRepertoire": true,
+  "overview": "The Staunton Gambit meets the Dutch with 2.e4, sacrificing a pawn to blow the position open before Black is developed. Bg5 hits the f6-knight and threatens to wreck the kingside; f3 undermines the extra e4-pawn at its base; Bc4 rakes the diagonal at Black's airy king. Objectively about level, but a dangerous practical surprise weapon — engine-verified with active, pleasant compensation (+0.25) and a fragile black e4-pawn to round up.",
+  "keyIdeas": [
+   "Gambit e4 to rip open lines against the loosened Dutch king.",
+   "Bg5 hits f6 and threatens Bxf6 to shatter Black's kingside pawns.",
+   "Undermine the extra e4-pawn with f3 — it is weak and destined to fall.",
+   "Rake the a2-g8 diagonal with Bc4 and regroup Qd2/Ne2 to win the pawn back with the initiative."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "Staunton Gambit",
+    "pgn": "d4 f5 e4 fxe4 Nc3 Nf6 Bg5 Nc6 d5 Ne5 Qe2 Nf7 Bxf6 exf6 Nxe4 Qe7 d6 Nxd6 Nxd6+ cxd6 g3 d5",
+    "explanation": ""
+   },
+   {
+    "name": "Staunton Gambit, Lasker Variation",
+    "pgn": "d4 f5 e4 fxe4 Nc3 Nf6 Bg5 g6 f3 d5 fxe4 Nxe4 Nxe4 a6",
+    "explanation": ""
+   },
+   {
+    "name": "Staunton Gambit, Chigorin Variation",
+    "pgn": "d4 f5 e4 fxe4 Nc3 Nf6 Bg5 c6 f3 Qa5 Qd2 e5 a3 e3",
+    "explanation": ""
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-initiative",
+   "concept:pos-center",
+   "https://en.wikipedia.org/wiki/Dutch_Defence,_Staunton_Gambit"
+  ]
+ },
+ {
+  "id": "anti-qgd-exchange",
+  "eco": "D35",
+  "name": "Anti-QGD: Exchange + Minority Attack",
+  "pgn": "d4 d5 c4 e6 cxd5 exd5 Nc3 Nf6 Bg5 c6 e3 Be7 Bd3 O-O Nf3 Nbd7 O-O Ne4 Bf4 Ndf6 Ne5 Bd6",
+  "uci": "d2d4 d7d5 c2c4 e7e6 c4d5 e6d5 b1c3 g8f6 c1g5 c7c6 e2e3 f8e7",
+  "fen": "rnbqk2r/pp2bppp/2p2n2/3p2B1/3P4/2N1P3/PP3PPP/R2QKBNR w KQkq - 1 7",
+  "color": "white",
+  "style": "positional",
+  "isRepertoire": true,
+  "overview": "The Exchange Variation gives the Queen's Gambit Declined a clear, classical plan: the Carlsbad structure and the minority attack. You trade on d5, develop with Bg5 and Bd3, and push b4-b5 to fix a weak, backward pawn on c6 that you besiege for the rest of the game. Low-risk, high-clarity.",
+  "keyIdeas": [
+   "Take on d5 for the Carlsbad structure and the famous minority-attack plan (b4-b5).",
+   "Pin with Bg5 and pressure d5; Black's ...c6 becomes your target.",
+   "Post the bishop on d3 aiming at the king and plant a knight on e5.",
+   "Choose your squeeze: the queenside minority attack or a kingside build behind the e5-knight."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "Queen's Gambit Declined (Be7)",
+    "pgn": "d4 d5 c4 e6 cxd5 exd5 Nc3 Nf6 Bg5 Be7 e3 O-O Bd3 Nbd7 Nge2 c6 Qc2 Re8 O-O a5 Bh4 h6",
+    "explanation": ""
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-center",
+   "concept:pos-initiative"
+  ]
+ },
+ {
+  "id": "anti-budapest",
+  "eco": "A52",
+  "name": "Anti-Budapest: 4.Bf4",
+  "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Bf4 Nc6 Nf3 Bb4+ Nbd2 Qe7 e3 Ngxe5 Nxe5 Nxe5 a3 Bxd2+ Qxd2 d6 Be2 O-O",
+  "uci": "d2d4 g8f6 c2c4 e7e5 d4e5 f6g4 c1f4 b8c6 g1f3 f8b4 b1d2 d8e7 e2e3 g4e5 f3e5 c6e5 a2a3 b4d2 d1d2 d7d6 f1e2 e8g8",
+  "fen": "r1b2rk1/ppp1qppp/3p4/4n3/2P2B2/P3P3/1P1QBPPP/R3K2R w KQ - 2 12",
+  "color": "white",
+  "style": "classical",
+  "isRepertoire": true,
+  "overview": "The Budapest Gambit sacrifices the e5-pawn and chases it with ...Ng4. The critical, greed-free reply is 4.Bf4: it defends the extra pawn a second time AND develops — no h3/Nf3 tangles. Black regains the pawn by force, but a well-timed a3 wins the two bishops, and you emerge with the bishop pair, a healthy central pawn and the freer game. Engine-verified a small, durable edge (+0.35).",
+  "keyIdeas": [
+   "Meet ...Ng4 with the clean Bf4 — defend e5 and develop, never cling greedily.",
+   "Answer ...Bb4+ with Nbd2, developing rather than retreating, and shore up with e3.",
+   "Win the bishop pair with a3 once Black regains the pawn (Bxd2+ Qxd2).",
+   "Nurse the two bishops and the c4-pawn for a small, lasting pull."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "Budapest Defense, Rubinstein Variation (g5)",
+    "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Bf4 g5 Bg3 Bg7 Nf3 Nc6 h4 Ngxe5 Nxe5 Nxe5 Nc3 h6 Qc2 d6 e3 Be6",
+    "explanation": ""
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-initiative",
+   "concept:pos-center",
+   "https://en.wikipedia.org/wiki/Budapest_Gambit"
+  ]
+ },
+ {
+  "id": "anti-london-black",
+  "eco": "D02",
+  "name": "Anti-London (Black)",
+  "pgn": "d4 d5 Bf4 Nf6 e3 Bf5 c4 e6 Nd2 Nbd7 Ngf3 a5 Be2 c6 Qb3 Ra7 c5 Be7 O-O Nh5 Be5 Nhf6",
+  "uci": "d2d4 d7d5 c1f4 c7c5 e2e3 b8c6 c2c3 c5c4 a2a3 a7a6 b2b3 a6a5 f2f3 a5a4",
+  "fen": "r1bqkbnr/1p2pppp/2n5/3p4/p1pP1B2/PPP1PP2/6PP/RN1QKBNR w KQkq - 0 8",
+  "color": "black",
+  "style": "aggressive",
+  "isRepertoire": true,
+  "overview": "The London System's whole edge is its good bishop on f4, developed outside the pawn chain. You neutralise it at the root by mirroring: ...Nf6 and ...Bf5 to get your own light-squared bishop out BEFORE ...e6 shuts it in — the same principle that makes the Caro-Kann rock-solid. From a healthy setup the ...c5 break gives full equality. Be honest: the London is sound, so this is level, but Black has no problems and the freer minor pieces.",
+  "keyIdeas": [
+   "Develop ...Bf5 before ...e6 — copy the London's idea and take away its one trump, the good bishop.",
+   "Only then play ...e6: your light bishop is already active outside the chain.",
+   "Grab space with ...a5 and prepare the freeing ...c5 break — play actively, not passively.",
+   "Reach a level game with both bishops good, no weaknesses, and the ...c5/...b6 breaks in hand."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "Accelerated London System, Steinitz Countergambit (c3)",
+    "pgn": "d4 d5 Bf4 c5 e3 Nc6 c3 Bf5 Qb3 Qd7 Nf3 e6 dxc5 Bxc5 Ne5 Qc8 Nd2 Nf6 Qa4 O-O Nxc6 bxc6",
+    "explanation": ""
+   },
+   {
+    "name": "Accelerated London System, Steinitz Countergambit (Nf3)",
+    "pgn": "d4 d5 Bf4 c5 e3 Nc6 Nf3 Nf6 Bb5 Qa5+ Nc3 Ne4 Bxc6+ bxc6 O-O Nxc3 bxc3 Qxc3 Ne5 cxd4 exd4 Bf5",
+    "explanation": ""
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-center",
+   "concept:pos-initiative"
+  ]
+ },
+ {
+  "id": "anti-catalan-black",
+  "eco": "E04",
+  "name": "Anti-Catalan: Open (Black)",
+  "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 a6 O-O Nc6 e3 Bd7 Qe2 Bd6 Qxc4 O-O Rd1 Qe7 Nc3 h6",
+  "uci": "d2d4 g8f6 c2c4 e7e6 g2g3 d7d5 f1g2 d5c4 g1f3 a7a6 e1g1",
+  "fen": "rnbqkb1r/1pp2ppp/p3pn2/8/2pP4/5NP1/PP2PPBP/RNBQ1RK1 b kq - 1 6",
+  "color": "black",
+  "style": "positional",
+  "isRepertoire": true,
+  "overview": "Against the Catalan, the Open with ...dxc4 is Black's soundest, most reliable equaliser. You take the c4-pawn, hold it a moment with ...a6, and use the tempo White spends recovering it to develop every piece to a natural square. The result is a comfortable, level game with nothing for the fianchettoed bishop to squeeze.",
+  "keyIdeas": [
+   "Take on c4 — grabbing the pawn clears the tension and buys you time.",
+   "Play ...a6 to threaten ...b5 so White must work to regain the pawn.",
+   "Develop naturally (...Nc6, ...Bd7, ...Bd6) while White fusses over c4.",
+   "Reach full equality with no weaknesses and the Catalan bishop neutralised."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "Open Defense, Alekhine Variation",
+    "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Qa4+ Nbd7 Qxc4 a6 Qc2 c5 Nf3 b6 dxc5 Bxc5 Ne5 Nd5 Nd3 Bb7",
+    "explanation": ""
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-center",
+   "concept:pos-initiative"
+  ]
+ },
+ {
+  "id": "anti-trompowsky-black",
+  "eco": "A45",
+  "name": "Anti-Trompowsky: 2…Ne4 (Black)",
+  "pgn": "d4 Nf6 Bg5 Ne4 Bf4 d5 e3 c5 Nd2 Nxd2 Qxd2 Nc6 Nf3 cxd4 exd4 Bf5 Bd3 Bxd3 Qxd3 e6 O-O Bd6",
+  "uci": "d2d4 g8f6 c1g5 f6e4 g5f4 d7d5 e2e3 c7c5 b1d2 e4d2 d1d2 b8c6 g1f3 c5d4 e3d4 c8f5 f1d3 f5d3 d2d3 e7e6 e1g1 f8d6",
+  "fen": "r2qk2r/pp3ppp/2nbp3/3p4/3P1B2/3Q1N2/PPP2PPP/R4RK1 w kq - 2 12",
+  "color": "black",
+  "style": "classical",
+  "isRepertoire": true,
+  "overview": "The Trompowsky's Bg5 wants to trade for your f6-knight and hand you doubled pawns. You refuse at the root with 2...Ne4 — the knight leaps to the centre, hits the bishop and dodges the pin. From there ...d5/...c5 stake a big centre, an active ...Bf5 frees your light bishop OUTSIDE the pawn chain before ...e6, and ...Bd6 challenges the last active enemy piece. Engine-verified dead level (-0.18) — the surprise met by pure principle.",
+  "keyIdeas": [
+   "Refuse the pin with 2...Ne4 — jump to the centre and hit the bishop.",
+   "Stake a big centre with ...d5 and ...c5; after ...cxd4 exd4 White has a lone d-pawn to mind.",
+   "Free the good bishop with ...Bf5 before ...e6 ever locks it in — the Caro-Kann principle.",
+   "Challenge the dark-squared bishop with ...Bd6 and reach a symmetrical, equal game."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "Solid Line (2...e6)",
+    "pgn": "d4 Nf6 Bg5 e6 e4 h6 Bxf6 Qxf6 Nc3 d6 Qd2 g5 O-O-O Bg7 g3",
+    "explanation": "Black declines with ...e6, takes the bishop pair after Bxf6, and clamps the kingside with ...g5 — a rock-solid, fully equal setup."
+   },
+   {
+    "name": "Vaganian Gambit (2...c5)",
+    "pgn": "d4 Nf6 Bg5 c5 Bxf6 gxf6 d5 Qb6 Qc1 f5 c4 Bg7 Nc3 d6 e3 Nd7 Qc2 Nf6",
+    "explanation": "The sharp Vaganian: ...c5 strikes d4 and invites Bxf6, trading structure for the two bishops and a half-open g-file — objectively a shade worse but rich in practical chances."
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-center",
+   "concept:pos-initiative",
+   "https://en.wikipedia.org/wiki/Trompowsky_Attack"
+  ]
+ },
+ {
+  "id": "anti-colle-black",
+  "eco": "D04",
+  "name": "Anti-Colle/Stonewall (Black)",
+  "pgn": "d4 d5 Nf3 Nf6 e3 c5 c4 e6 Nc3 Nc6 a3 a6 dxc5 Bxc5 b4 Bd6 cxd5 exd5 Bb2 Be6 Be2 O-O",
+  "uci": "d2d4 d7d5 g1f3 g8f6 e2e3 c7c5 c2c4 c5d4 e3d4 g7g6 b1c3 f8g7",
+  "fen": "rnbqk2r/pp2ppbp/5np1/3p4/2PP4/2N2N2/PP3PPP/R1BQKB1R w KQkq - 2 7",
+  "color": "black",
+  "style": "classical",
+  "isRepertoire": true,
+  "overview": "The Colle System hopes to cramp you and attack; you refuse to cooperate. An early ...c5 strikes at d4 before White walls in his own bishop, opening the game into a healthy, active position where the Colle's slow plan never gets going. Easy equality with the freer pieces.",
+  "keyIdeas": [
+   "Strike with ...c5 at once — deny the Colle its cosy e3/Bd3/c3 bind.",
+   "Develop actively (...e6, ...Nc6, ...Bd6) into an open Queen's-Gambit-style game.",
+   "Welcome trades — every exchange frees your position against a cramping system.",
+   "Reach an equal middlegame with the freer, easier side to play."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "Colle System (c4)",
+    "pgn": "d4 d5 Nf3 Nf6 e3 c5 c4 cxd4 exd4 g6 Nc3 Bg7",
+    "explanation": ""
+   },
+   {
+    "name": "Colle System (c3)",
+    "pgn": "d4 d5 Nf3 Nf6 e3 c5 c3 e6 Bd3 Nc6 Nbd2 Bd6 O-O O-O dxc5 Bxc5 b4 Bd6 Bb2 Ne5 Nxe5 Bxe5",
+    "explanation": ""
+   },
+   {
+    "name": "Colle System (dxc5)",
+    "pgn": "d4 d5 Nf3 Nf6 e3 c5 dxc5 e6 b4 a5 c3 axb4 cxb4 b6 a4 bxc5 bxc5 Bxc5 Nbd2 Ba6 Bxa6 Nxa6",
+    "explanation": ""
+   },
+   {
+    "name": "Colle System (Nbd2)",
+    "pgn": "d4 d5 Nf3 Nf6 e3 c5 Nbd2 cxd4 a3 d3 b3 d4 c3 a6",
+    "explanation": ""
+   },
+   {
+    "name": "Colle System (b3)",
+    "pgn": "d4 d5 Nf3 Nf6 e3 c5 b3 Nc6 dxc5 Bg4 Be2 e6 Ba3 Ne4 O-O Bxc5 Bxc5 Nxc5 Nbd2 O-O c4 dxc4 bxc4",
+    "explanation": ""
+   },
+   {
+    "name": "Colle System (Be2)",
+    "pgn": "d4 d5 Nf3 Nf6 e3 c5 Be2 Nc6",
+    "explanation": ""
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-center",
+   "concept:pos-initiative"
+  ]
+ },
+ {
+  "id": "anti-smith-morra-black",
+  "eco": "B21",
+  "name": "Anti-Smith-Morra: Accepted (Black)",
+  "pgn": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 e6 Bc4 a6 O-O Nge7 Bg5 f6 Be3 b5 Be2 Bb7 Rc1 Nc8",
+  "uci": "e2e4 c7c5 d2d4 c5d4 c2c3 d4c3 b1c3 b8c6 g1f3 e7e6 f1c4 a7a6 e1g1 g8e7",
+  "fen": "r1bqkb1r/1p1pnppp/p1n1p3/8/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 w kq - 2 8",
+  "color": "black",
+  "style": "classical",
+  "isRepertoire": true,
+  "overview": "The soundest way to meet the Smith-Morra Gambit is to accept the pawn and consolidate. The ...a6/...e6/...Nge7 wall blunts White's development lead move by move: ...e6 shuts the c4-bishop, ...a6 and ...b5 gain queenside space, and ...Nge7 keeps the knight unpinned. Be honest — White has real compensation and it is roughly level, but with careful play the extra pawn tells.",
+  "keyIdeas": [
+   "Accept the pawn — it is real, and White's compensation is manageable with a plan.",
+   "Build the ...e6/...a6/...Nge7 wall that defuses White's attack piece by piece.",
+   "Answer Bg5 with ...f6 and keep the dark squares solid.",
+   "Expand with ...b5 and ...Bb7, absorb the initiative, and let the extra pawn count."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "Smith-Morra Gambit Accepted, Paulsen Formation (Qe2)",
+    "pgn": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 e6 Bc4 a6 O-O Nge7 Qe2 b5 Bd3 Ng6 Be3 Bd6 Rfd1 Nf4",
+    "explanation": ""
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-center",
+   "concept:pos-initiative"
+  ]
+ },
+ {
+  "id": "anti-alapin-black",
+  "eco": "B22",
+  "name": "Anti-Alapin: 2…Nf6 (Black)",
+  "pgn": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 Nf3 Nc6 cxd4 d6 Bc4 Nb6 Bb5 dxe5 Nxe5 Bd7 Nxd7 Qxd7 O-O e6",
+  "uci": "e2e4 c7c5 c2c3 g8f6 e4e5 f6d5 d2d4 c5d4 g1f3 b8c6 c3d4 d7d6 a2a3 a7a6",
+  "fen": "r1bqkb1r/1p2pppp/p1np4/3nP3/3P4/P4N2/1P3PPP/RNBQKB1R w KQkq - 0 8",
+  "color": "black",
+  "style": "classical",
+  "isRepertoire": true,
+  "overview": "Against the Alapin (2.c3), ...Nf6 is the most testing reply: it hits e4 immediately and forces White to commit before completing his big-centre setup. After e5 the knight sits proudly on d5, you chip at the centre with ...cxd4 and ...Nc6, and the freeing ...d6 dissolves White's space edge into a comfortable, equal game.",
+  "keyIdeas": [
+   "Meet 2.c3 with ...Nf6, attacking e4 and dictating the tempo.",
+   "After e5 Nd5, strike the centre with ...cxd4 and develop ...Nc6.",
+   "Play ...d6 to challenge the cramping e5-pawn and free your position.",
+   "Trade into equality with the isolated d4-pawn as a long-term target."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "Alapin Variation, Smith-Morra Declined",
+    "pgn": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 Nf3 Nc6 cxd4 d6 a3 dxe5 dxe5 Be6 Bd2 g6 Bb5 Bg7 Bxc6+ bxc6",
+    "explanation": ""
+   },
+   {
+    "name": "Alapin Variation",
+    "pgn": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4",
+    "explanation": ""
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-center",
+   "concept:pos-initiative"
+  ]
+ },
+ {
+  "id": "anti-grand-prix-black",
+  "eco": "B23",
+  "name": "Anti-Grand-Prix: …g6 (Black)",
+  "pgn": "e4 c5 Nc3 Nc6 f4 g6 Nf3 Bg7 Bc4 e6 f5 Nge7 fxe6 dxe6 d3 O-O O-O h6 a4 b6 Ne2 Na5",
+  "uci": "e2e4 c7c5 b1c3 b8c6 f2f4 g7g6 g1f3 f8g7",
+  "fen": "r1bqk1nr/pp1pppbp/2n3p1/2p5/4PP2/2N2N2/PPPP2PP/R1BQKB1R w KQkq - 2 5",
+  "color": "black",
+  "style": "positional",
+  "isRepertoire": true,
+  "overview": "The Grand Prix Attack (f4) aims for a kingside mating attack, but the fianchetto defence takes all the sting out of it. ...g6 and ...Bg7 shield your king, ...e6 blunts the c4-bishop and the f5 break, and ...Na5 trades off White's most dangerous piece. Handled this way, Black is not just safe — Black is better.",
+  "keyIdeas": [
+   "Fianchetto with ...g6/...Bg7 to guard the dark squares around your king.",
+   "Play ...e6 to shut the c4-bishop's diagonal and control f5.",
+   "Meet the f5 thrust calmly with ...Nge7 and recapture toward the centre.",
+   "Hit the c4-bishop with ...Na5 and take over — the attack has spent itself."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "Grand Prix Attack (Bb5)",
+    "pgn": "e4 c5 Nc3 Nc6 f4 g6 Nf3 Bg7 Bb5 Nd4 O-O Nxb5 Nxb5 d5 d3 a6 Nc3 Bxc3 bxc3 dxe4 dxe4 Qxd1 Rxd1",
+    "explanation": ""
+   },
+   {
+    "name": "Grand Prix Attack (Bc4)",
+    "pgn": "e4 c5 Nc3 Nc6 f4 g6 Nf3 Bg7 Bc4",
+    "explanation": ""
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-center",
+   "concept:pos-initiative"
+  ]
+ },
+ {
+  "id": "anti-kings-gambit-black",
+  "eco": "C30",
+  "name": "Refuting the King’s Gambit (Black)",
+  "pgn": "e4 e5 f4 exf4 Nf3 d5 exd5 Nf6 Bc4 Nxd5 O-O Be6 Qe2 Nc6 d4 Qd6 Nc3 O-O-O Nxd5 Bxd5 Bxd5 Qxd5",
+  "uci": "e2e4 e7e5 f2f4 e5f4 g1f3 g7g5 h2h4 g5g4 f3e5 g8f6 f1c4 d7d5 e4d5 f8d6",
+  "fen": "rnbqk2r/ppp2p1p/3b1n2/3PN3/2B2ppP/8/PPPP2P1/RNBQK2R w KQkq - 1 8",
+  "color": "black",
+  "style": "aggressive",
+  "isRepertoire": true,
+  "overview": "The Modern Defence is the clean, reliable way to meet the King's Gambit. You take the f4-pawn, then strike back with ...d5 — handing the pawn back for a raking lead in development. Instead of clinging to material and getting mated, you turn White's own open lines against him and emerge with the safer king and the better game.",
+  "keyIdeas": [
+   "Answer the gambit with ...d5 — counter-attack the centre, don't hoard the f4-pawn.",
+   "Develop before recapturing: ...Nf6 first, then ...Nxd5.",
+   "Bring every piece out with tempo (...Be6, ...Nc6) and castle queenside to safety.",
+   "Trade into a middlegame where you are better developed, safer, and often still up the pawn."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "Kieseritzky Gambit, Anderssen Defense",
+    "pgn": "e4 e5 f4 exf4 Nf3 g5 h4 g4 Ne5 Nf6 Bc4 d5 exd5 Bd6",
+    "explanation": ""
+   },
+   {
+    "name": "Bishop's Gambit, Bogoljubow Defense",
+    "pgn": "e4 e5 f4 exf4 Bc4 Nf6 Nc3 c6 Bb3 d5 exd5 f3 a3 f2+",
+    "explanation": ""
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-center",
+   "concept:pos-initiative"
+  ]
+ }
 ]
