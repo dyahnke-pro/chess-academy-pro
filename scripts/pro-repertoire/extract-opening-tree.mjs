@@ -27,6 +27,22 @@ const OPENINGS = {
     minPrefix: ['e4', 'c6'],
     maxDepth: 80,
   },
+  // Anti-Pirc / Anti-Modern from the WHITE side (David 2026-07-15 — the
+  // video-grounded Watch build; his real games vs ...d6 / ...g6 systems).
+  'anti-pirc-white': {
+    name: 'Anti-Pirc (White)',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['e4', 'd6'],
+    maxDepth: 80,
+  },
+  'anti-modern-white': {
+    name: 'Anti-Modern (White)',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['e4', 'g6'],
+    maxDepth: 80,
+  },
   'alapin-sicilian': {
     name: 'Alapin Sicilian',
     color: 'white',
