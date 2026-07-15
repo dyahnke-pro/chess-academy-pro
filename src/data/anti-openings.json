@@ -854,6 +854,11 @@
     "name": "Accelerated London System, Steinitz Countergambit (Nf3)",
     "pgn": "d4 d5 Bf4 c5 e3 Nc6 Nf3 Nf6 Bb5 Qa5+ Nc3 Ne4 Bxc6+ bxc6 O-O Nxc3 bxc3 Qxc3 Ne5 cxd4 exd4 Bf5",
     "explanation": ""
+   },
+   {
+    "name": "The …c5 + …Qb6 Poison",
+    "pgn": "d4 Nf6 Bf4 c5 e3 cxd4 exd4 Qb6 Nc3 a6 a3 d5 Nf3 Bd7 Bd3 e6 Rb1 Nc6 Ne2 Nh5 Be3 Bd6",
+    "explanation": "The sharpest way to make London players uncomfortable: strike with the c-pawn immediately, trade, and send the queen to b6 — hitting the b2-pawn the London bishop left behind the moment it went to f4. White has to contort (the rook to b1, or awkward pawn moves) while you develop naturally and press the queenside. Across 555 corpus games this treatment scores 68.4 percent for Black, and the pressure on b2 is the entire reason."
    }
   ],
   "drillAccuracy": 0,
@@ -1037,6 +1042,11 @@
     "name": "Smith-Morra Gambit Accepted, Paulsen Formation (Qe2)",
     "pgn": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 e6 Bc4 a6 O-O Nge7 Qe2 b5 Bd3 Ng6 Be3 Bd6 Rfd1 Nf4",
     "explanation": ""
+   },
+   {
+    "name": "The …Nf6 Decline (highest-scoring)",
+    "pgn": "e4 c5 d4 cxd4 c3 Nf6 e5 Nd5 Nf3 e6 cxd4 b6 Nc3 Nxc3 bxc3 Qc7 Bd2 Be7 Bd3 Ba6 Bxa6 Nxa6",
+    "explanation": "You don't have to take the second pawn at all: meet the gambit with the knight to f6, steering into an Alapin structure where White's early c3 is more commitment than convenience. Chase-and-trade on d5 and c3, fianchetto-trade the light-squared bishops via a6, and White's initiative never arrives. Across 650 corpus games this decline scores 72.5 percent for Black — the highest-scoring anti-Morra treatment in the data."
    }
   ],
   "drillAccuracy": 0,
