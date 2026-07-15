@@ -29,6 +29,13 @@ const OPENINGS = {
   },
   // Belgrade Gambit / Four Knights Scotch (David 2026-07-15 — video-grounded
   // buildout target #2; his most-taught white opening, 20 videos).
+  'anti-scandi-white': {
+    name: 'Anti-Scandinavian (White)',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['e4', 'd5'],
+    maxDepth: 80,
+  },
   'belgrade': {
     name: 'Belgrade Gambit / Four Knights Scotch',
     color: 'white',
