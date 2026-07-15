@@ -71,6 +71,27 @@ const OPENINGS = {
     minPrefix: ['e4', 'b6'],
     maxDepth: 80,
   },
+  'anti-hippo-e3': {
+    name: 'Anti-Hippo / passive 1.e3 (Black)',
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['e3'],
+    maxDepth: 80,
+  },
+  'anti-hippo-d3': {
+    name: 'Anti-Hippo / passive 1.d3 (Black)',
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['d3'],
+    maxDepth: 80,
+  },
+  'anti-hippo-b3-e5': {
+    name: 'Anti-Hippo / 1.b3 e5 full centre (Black)',
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['b3', 'e5'],
+    maxDepth: 80,
+  },
   'anti-latvian': {
     name: 'Anti-Latvian Gambit (White)',
     color: 'white',

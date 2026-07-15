@@ -1431,5 +1431,96 @@
    "concept:pos-center",
    "concept:pos-initiative"
   ]
+ },
+ {
+  "id": "anti-hippo",
+  "eco": "A00",
+  "name": "Anti-Hippo System",
+  "pgn": "e3 e5 d3 d5 b3 Bd6 Bb2 Ne7 g3 O-O Bg2 c6 h3 Nd7 Ne2 Re8 Nd2 Nf8 a3 a5 c3 Nfg6 O-O h5 c4 h4 g4 Be6",
+  "uci": "e2e3 e7e5 d2d3 d7d5 b2b3 f8d6 c1b2 g8e7 g2g3 e8g8 f1g2 c7c6 h2h3 b8d7 g1e2 f8e8 b1d2 d7f8 a2a3 a7a5 c2c3 f8g6 e1g1 h7h5 c3c4 h5h4 g3g4 c8e6",
+  "fen": "r2qr1k1/1p2npp1/2pbb1n1/p2pp3/2P3Pp/PP1PP2P/1B1NNPB1/R2Q1RK1 w - - 1 15",
+  "color": "black",
+  "style": "positional",
+  "isRepertoire": true,
+  "overview": "Hippo and passive-shuffle setups decline the centre — so take all of it, then win with patience. The c6 plus Bd6 triangle guards both centre pawns, the light-squared bishop deliberately stays home, and the queenside knight tours d7–f8–g6 in classical Lopez style. a5 handcuffs White's king to the short side; once it castles there, the h5–h4 storm pries at g3 — and if White ever captures, the knights pour into the light squares. Roughly 1,500 corpus games against 1.e3 and 1.d3 score 66 to 67 percent; the engine confirms the squeeze in every branch.",
+  "keyIdeas": [
+   "They decline the centre — take the whole thing, then be patient: passive setups can't be punished in the opening.",
+   "The c6 triangle: Bd6 guards e5, c6 guards d5, Ne7 covers d5 again while heading kingside.",
+   "Leave the c8-bishop home — its target (often the h3-pawn) hasn't been decided yet.",
+   "a5 forbids long castling; once White castles short, h5–h4 pries the king's cover open."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "The a-file opener",
+    "pgn": "e3 e5 d3 d5 b3 Bd6 Bb2 Ne7 g3 O-O Bg2 c6 h3 Nd7 Ne2 Re8 Nd2 Nf8 a3 a5 c3 Nfg6 Qc2 a4 O-O axb3 Qxb3 Be6 c4 b5",
+    "explanation": "When White keeps shuffling instead of meeting a5, the pawn walks on: a4 pries at b3, the trade hands Black the only open file on the board, and b5 fixes the queenside targets. The engine gives Black nearly a full pawn of pressure with every piece better placed."
+   },
+   {
+    "name": "gxh4?? — the storm breaks through",
+    "pgn": "e3 e5 d3 d5 b3 Bd6 Bb2 Ne7 g3 O-O Bg2 c6 h3 Nd7 Ne2 Re8 Nd2 Nf8 a3 a5 c3 Nfg6 O-O h5 Qc2 h4 gxh4 Nxh4 Kh1 Nxg2 Kxg2 Nf5 Rg1 Nh4+ Kh1 Qf6",
+    "explanation": "The capture on h4 is the natural move and the losing one: the g6-knight recaptures, removes the g2-bishop, and its partner lands on f5 then h4 with the queen arriving on f6. The engine calls it over four pawns for Black — the file White opened is the file White dies on."
+   },
+   {
+    "name": "The d4 break — close it with …e4",
+    "pgn": "e3 e5 d3 d5 b3 Bd6 Bb2 Ne7 g3 O-O Bg2 c6 h3 Nd7 Ne2 Re8 Nd2 Nf8 a3 a5 c3 Nfg6 O-O h5 d4 e4",
+    "explanation": "If White finally stirs with the d4 break, slam the door: …e4 closes the centre with the kingside attack undisturbed — the exact wing-attack rule. White's pieces are sealed behind their own pawns while h4 comes anyway; the engine puts Black two pawns ahead positionally."
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-center",
+   "concept:pos-development"
+  ]
+ },
+ {
+  "id": "anti-hippo-white",
+  "eco": "B06",
+  "name": "Anti-Hippo (White)",
+  "pgn": "e4 g6 d4 Bg7 Nc3 b6 f4 Bb7 Nf3 e6 Bd3 d6 O-O Ne7 Qe1 Nd7 e5 d5 Ne2 c5 c3 Nf5 g4 Ne7 f5 gxf5 gxf5 Nxf5 Bxf5 exf5 Ng3",
+  "uci": "e2e4 g7g6 d2d4 f8g7 b1c3 b7b6 f2f4 c8b7 g1f3 e7e6 f1d3 d7d6 e1g1 g8e7 d1e1 b8d7 e4e5 d6d5 c3e2 c7c5 c2c3 e7f5 g2g4 f5e7 f4f5 g6f5 g4f5 e7f5 d3f5 e6f5 e2g3",
+  "fen": "r2qk2r/pb1n1pbp/1p6/2ppPp2/3P4/2P2NN1/PP5P/R1B1QRK1 b kq - 1 16",
+  "color": "white",
+  "style": "aggressive",
+  "isRepertoire": true,
+  "overview": "The Hippo hides on the back two ranks and bets your big centre becomes a target. Prove it's a weapon instead: take the whole centre plus the Austrian f4, post the bishop on d3, castle, and play the flexible Qe1 eyeing the h4 swing. Then e5 — the wedge that entombs the g7-bishop — and when the shell finally moves a piece, the g4 and f5 crash rips the kingside open. The engine calls the main line four pawns better for White; the adjacent 1.e4 g6 corpus runs 1,483 games at 64.8 percent.",
+  "keyIdeas": [
+   "Take everything the Hippo declines: full centre plus f4, maximum space, zero hurry.",
+   "Qe1 is the signature — uncommitted, flexible, always eyeing the h4 swing.",
+   "e5 is the sentence: the g7-bishop stares at a wall for the rest of the game.",
+   "Pawns in front of your own king are free when Black has zero attackers — g4, then f5 crashes through."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "The dxe5 trade — Qh4 arrives",
+    "pgn": "e4 g6 d4 Bg7 Nc3 b6 f4 Bb7 Nf3 e6 Bd3 d6 O-O Ne7 Qe1 Nd7 e5 dxe5 fxe5 O-O Qh4 c5 Bg5",
+    "explanation": "If Black trades on e5 instead of closing, the f-file opens for the rook and the queen completes her promised swing to h4 with Bg5 piling onto the pinned e7-knight. The engine keeps White a clean pawn's worth better with every attacking piece placed."
+   },
+   {
+    "name": "The h5 stopper — rewind and re-aim",
+    "pgn": "e4 g6 d4 Bg7 Nc3 b6 f4 Bb7 Nf3 e6 Bd3 d6 O-O Ne7 Qe1 Nd7 e5 d5 Ne2 c5 c3 h5 Ng3 h4 Nh1 Nf5 Nf2",
+    "explanation": "Black can throw the h-pawn forward to fence the g3-square, but the knight simply rewinds through h1 to f2, headed for g4 with the h4-pawn as a fresh target. Patience is the system: the space advantage doesn't expire, and the engine keeps White clearly on top."
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-center",
+   "concept:pos-space"
+  ]
  }
 ]
