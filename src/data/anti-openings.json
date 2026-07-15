@@ -1095,6 +1095,59 @@
   ]
  },
  {
+  "id": "belgrade-gambit",
+  "eco": "C47",
+  "name": "Belgrade Gambit (vs 1…e5)",
+  "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 d4 exd4 Nd5 Be7 Bd3 O-O O-O d6 h3 Nxd5 exd5 Ne5 Nxd4 Nxd3 Qxd3 Bf6 c4 b6 Re1 Re8 Bd2",
+  "uci": "e2e4 e7e5 g1f3 b8c6 b1c3 g8f6 d2d4 e5d4 c3d5 f8e7 f1d3 e8g8 e1g1 d7d6 h2h3 f6d5 e4d5 c6e5 f3d4 e5d3 d1d3 e7f6 c2c4 b7b6 f1e1 f8e8 c1d2",
+  "fen": "r1bqr1k1/p1p2ppp/1p1p1b2/3P4/2PN4/3Q3P/PP1B1PP1/R3R1K1 b - - 3 14",
+  "color": "white",
+  "style": "aggressive",
+  "isRepertoire": true,
+  "overview": "A surprise weapon against 1…e5 that most opponents will meet for the first time at the board: the Four Knights Scotch with the knight leap to d5 instead of the recapture. The old treatments deserved their bad reputation — the modern, engine-checked handling (the quiet Bd3, the calm regain, the d5 wedge) is fully sound, and the practical sting is real: 70.9 percent across 158 corpus games, with wins over elite opposition. Objectively level; practically venomous.",
+  "keyIdeas": [
+   "Nd5 poses six different problems at once — most opponents have never seen one of them.",
+   "The modern move is the quiet Bd3: develop, castle, and regain d4 on your terms.",
+   "Every trade on d5 is met by exd5, kicking the c6-knight and gaining space.",
+   "The d5 wedge plus c4 plus the open e-file is the winning middlegame plan."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "The Greedy …Ne5 Refuted",
+    "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 d4 exd4 Nd5 Nxd5 exd5 Ne5 Nxe5 Bb4+ Bd2 Qe7 Qe2 Bxd2+ Kxd2 Qg5+ Kd1 O-O",
+    "explanation": "After the early simplification on d5, hopping the knight to e5 to hold the extra pawn is the natural move — and it loses a piece. Take on e5, absorb the bishop check with the bishop, and the e-file check-and-fork machinery leaves White simply up material: the engine calls it nearly four pawns. This is the trap the whole gambit fishes for."
+   },
+   {
+    "name": "The …Nxe4 Grab",
+    "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 d4 exd4 Nd5 Nxe4 Bd3 Nc5 O-O Ne6 Re1 h6 Bf4 d6 Bg3 Ne7 Nf4 Nxf4",
+    "explanation": "Grabbing a second pawn with the knight is the critical test — and the most dangerous thing Black can do to himself at human speed. Develop with tempo against the wandering knight, castle, and take the open lines: the engine calls the position balanced, but every practical problem for the next ten moves belongs to Black."
+   },
+   {
+    "name": "The …Nb4 Book Move",
+    "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 d4 exd4 Nd5 Nb4 Nxf6+ Qxf6 a3 Nc6 Bd3 d6 Bb5 Qg6 O-O Bh3 Ne1 Be7 f4 Bd7 f5",
+    "explanation": "The awkward knight jab to b4 is what the books recommend — and almost nobody finds it over the board. Trade on f6 first, put the question with the a-pawn, and after the knight retreats the light-squared bishop swings via d3 to b5, winning back the pawn on your terms. In the corpus this line appears 42 times and scores 69 percent."
+   },
+   {
+    "name": "The …h6 Prophylaxis",
+    "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 d4 exd4 Nd5 h6 Bf4 Nxd5 exd5 Bb4+ Bd2 Qe7+ Qe2 Bxd2+ Kxd2 Qxe2+ Bxe2",
+    "explanation": "The quiet pawn move stops any bishop pin on g5 — sensible, and slow. The engine settles the reply: develop the bishop to f4, and when Black simplifies, the endgame after the queen trade is simply more comfortable for White — better development, the d5 space wedge, and a king already active in the centre."
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-initiative",
+   "concept:pos-center"
+  ]
+ },
+ {
   "id": "anti-kings-gambit-black",
   "eco": "C30",
   "name": "Refuting the King’s Gambit (Black)",

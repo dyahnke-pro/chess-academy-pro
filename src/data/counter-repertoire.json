@@ -214,6 +214,18 @@
             "games": 2922,
             "scorePct": 62.5
           }
+        },
+        {
+          "openingId": "belgrade-gambit",
+          "name": "the Belgrade Gambit",
+          "styleTags": [
+            "sharp",
+            "aggressive"
+          ],
+          "stat": {
+            "games": 158,
+            "scorePct": 70.9
+          }
         }
       ]
     },
