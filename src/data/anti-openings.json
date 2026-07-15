@@ -88,6 +88,44 @@
   ]
  },
  {
+  "id": "anti-french-tarrasch",
+  "eco": "C03",
+  "name": "Anti-French: Tarrasch (3.Nd2)",
+  "pgn": "e4 e6 d4 d5 Nd2 c5 Ngf3 cxd4 Nxd4 Nc6 Bb5 Bd7 Nxc6 bxc6 Bd3 Bd6 O-O Qc7 h3 Nf6 c4 O-O Qc2 dxe4",
+  "uci": "e2e4 e7e6 d2d4 d7d5 b1d2 c7c5 g1f3 c5d4 f3d4 b8c6 f1b5 c8d7 d4c6 b7c6 b5d3 f8d6 e1g1 d8c7 h2h3 g8f6 c2c4 e8g8 d1c2 d5e4",
+  "fen": "r4rk1/p1qb1ppp/2pbpn2/8/2P1p3/3B3P/PPQN1PP1/R1B2RK1 w - - 0 13",
+  "color": "white",
+  "style": "positional",
+  "isRepertoire": true,
+  "overview": "The lifetime answer to the French: knight to d2 instead of c3, sidestepping the Winawer pin and the whole theoretical jungle while keeping every idea White wants. Against the modern …c5 you develop calmly, recapture on d4 with the knight, put the b5-pin question to Black, and convert the queenside damage into a permanent target on c6. Objectively level, practically venomous: 65.6 percent across 2,361 corpus games — the biggest single-opening corpus in this repertoire.",
+  "keyIdeas": [
+   "Nd2 controls the same squares as Nc3 with no …Bb4 pin — the theory jungle never happens.",
+   "Meet …c5 with calm development; recapture on d4 with the KNIGHT.",
+   "Bb5 pins the question to the c6-knight; the trade leaves c6 a target for life.",
+   "Same pawn structures as the Advance, different piece configurations — know the plans, not the notes."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "Traditional …Nf6 (closed centre)",
+    "pgn": "e4 e6 d4 d5 Nd2 Nf6 e5 Nfd7 Bd3 c5 c3 Nc6 Ne2 cxd4 cxd4 f6 exf6 Nxf6 O-O Bd6 Nf3 O-O Bg5 Qb6 Nc3",
+    "explanation": "The traditional French reply keeps the centre closed: push e5, drop the bishop to d3, and when the c-pawn strikes, support with c3 — the Advance pawn structure, but with completely different piece placement, which is the whole point. When Black breaks with the f-pawn, trade and develop against the loosened king: the engine gives White a stable plus around four-tenths of a pawn, and every plan is thematic rather than memorized."
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-center",
+   "concept:pos-development"
+  ]
+ },
+ {
   "id": "anti-pirc-austrian",
   "eco": "B09",
   "name": "Anti-Pirc: Austrian Attack",

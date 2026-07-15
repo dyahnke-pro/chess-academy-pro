@@ -73,11 +73,11 @@
       ],
       "recommendations": [
         {
-          "openingId": "anti-french-advance",
-          "name": "the Advance Variation",
+          "openingId": "anti-french-tarrasch",
+          "name": "the Tarrasch (3.Nd2)",
           "styleTags": [
-            "positional",
-            "solid"
+            "solid",
+            "positional"
           ]
         },
         {
