@@ -40,6 +40,18 @@ The LLM decides nothing; it voices facts computed in code, through `voiceFacts`.
    - **User matchup stat** = the student's own score vs the opponent opening (the
      SAME source as the Elephant-Gambit bubble) — "plugs your 13% hole".
    - Sources: `data:pro-game-references` + `data:your-games`. No invented content.
+   - **🔒 MULTI-RECOMMENDATION + STYLE-MATCH (David 2026-07-15):** when the map
+     carries MORE THAN ONE recommendation for an opponent opening (e.g. a sharp
+     attacking line AND a solid positional line), the computer returns BOTH, each
+     tagged with a `styleTag` ('aggressive'|'sharp'|'solid'|'positional'|
+     'tactical'). The student's own style profile is computed by AGGREGATING
+     `gameStyleClassifier.classifyGameStyle` across their analyzed games (an
+     existing Stockfish-grounded engine — eval swings + mistake ratios per game;
+     aggregate = modal style + counts). The answer then names both lines but
+     RECOMMENDS the style-matched one, citing the style stat: "Both work: X
+     (sharp) and Y (solid). Your games skew sharp (14 of 20), so start with X."
+     Style-agnostic when the profile has too few analyzed games (< ~5) — then
+     present both neutrally. All selection logic is code; the LLM only phrases.
 4. **Wire** into `coachService`/`dispatchCoachTurn` so the intent routes to the
    computer → `voiceFacts` phrases it. Add a `Review my games` / `Learn this line`
    affordance routing to the recommended opening's WLPP page.
@@ -76,8 +88,16 @@ Structural, not best-effort — every line is:
 - Run through the full G9 gate roster (`proRepLessonCoverage` Gate A,
   `variationMiddlegameDepth` Gate B, continuity Gate C, orientation, sources,
   `proRepNarrationVoice`) + `ship-check`.
-- **When a line/idea isn't fully verifiable → leave blank / skip / flag, never
-  guess** (empty > generic > invented).
+- **When a line/idea isn't fully verifiable from his games/theory → STOCKFISH
+  is the verification rung BEFORE leaving it blank (David 2026-07-15: "Use
+  stockfish to help if this happens").** The ladder: (1) ground in his real
+  games + theory DB; (2) if thin, engine-verify the line with Stockfish (the
+  sanctioned verification tool, expressly not a banned "bot") — best-play
+  playout, quiet-end eval from the student's side, same tiering as the gem
+  doctrine; ship it labeled by what the engine PROVED (sound / positional edge),
+  never claiming game-derived depth that isn't there; (3) only if the engine
+  can't confirm soundness either → blank / skip / flag. Empty > generic >
+  invented still holds — Stockfish just adds a real rung above "empty."
 
 ## Sequencing
 - **Phase 1 — the recommender (highest leverage, fixes the visible bug NOW):**
