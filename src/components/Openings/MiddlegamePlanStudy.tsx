@@ -82,12 +82,12 @@ function getSectionText(
       return `${m.piece}, route ${m.route}. ${m.explanation}`;
     }
     case 'themes':
-      return plan.strategicThemes.length > 0
-        ? `Strategic themes. ${plan.strategicThemes.join('. ')}.`
+      return (plan.strategicThemes ?? []).length > 0
+        ? `Strategic themes. ${(plan.strategicThemes ?? []).join('. ')}.`
         : 'No strategic themes documented.';
     case 'endgames':
-      return plan.endgameTransitions.length > 0
-        ? `Favorable endgame transitions. ${plan.endgameTransitions.join('. ')}.`
+      return (plan.endgameTransitions ?? []).length > 0
+        ? `Favorable endgame transitions. ${(plan.endgameTransitions ?? []).join('. ')}.`
         : 'No endgame transitions documented.';
   }
 }
@@ -379,7 +379,7 @@ export function MiddlegamePlanStudy({
                 Strategic Themes
               </p>
               <ul className="space-y-2">
-                {plan.strategicThemes.map((theme, i) => (
+                {(plan.strategicThemes ?? []).map((theme, i) => (
                   <li key={i} className="text-sm text-theme-text flex gap-2">
                     <span className="text-theme-accent mt-0.5 shrink-0">-</span>
                     <span>{theme}</span>
@@ -401,9 +401,9 @@ export function MiddlegamePlanStudy({
               <p className="text-xs font-semibold text-theme-text-muted uppercase tracking-wide mb-2">
                 Favorable Endgame Transitions
               </p>
-              {plan.endgameTransitions.length > 0 ? (
+              {(plan.endgameTransitions ?? []).length > 0 ? (
                 <ul className="space-y-2">
-                  {plan.endgameTransitions.map((transition, i) => (
+                  {(plan.endgameTransitions ?? []).map((transition, i) => (
                     <li key={i} className="text-sm text-theme-text flex gap-2">
                       <span className="text-theme-accent mt-0.5 shrink-0">-</span>
                       <span>{transition}</span>

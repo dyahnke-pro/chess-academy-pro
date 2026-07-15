@@ -190,7 +190,7 @@ export function PlayableLinePlayer({
     // Intro beat: the plan's idea arrows (breaks + future-open lines) on the
     // static critical position, before any move.
     if (demoMoveIndex < 0) return arrowsToBoard(line.intro?.arrows);
-    if (demoMoveIndex >= line.arrows.length) return [];
+    if (demoMoveIndex >= (line.arrows ?? []).length) return [];
     return arrowsToBoard(line.arrows[demoMoveIndex]);
   }, [demoMoveIndex, line.arrows, line.intro]);
 
@@ -221,7 +221,7 @@ export function PlayableLinePlayer({
   const currentAnnotation = useMemo((): string => {
     if (phase === 'demo') {
       if (demoMoveIndex < 0) return line.intro?.say ?? '';
-      if (demoMoveIndex >= line.annotations.length) return '';
+      if (demoMoveIndex >= (line.annotations ?? []).length) return '';
       return line.annotations[demoMoveIndex];
     }
     return '';
@@ -234,7 +234,7 @@ export function PlayableLinePlayer({
   useEffect(() => {
     void voiceService.warmup();
     if (mode === 'watch') {
-      const prose = [line.intro?.say, ...line.annotations].filter((s): s is string => Boolean(s));
+      const prose = [line.intro?.say, ...(line.annotations ?? [])].filter((s): s is string => Boolean(s));
       if (prose.length > 0) void voiceService.prefetchAudio(prose);
     } else if (mode === 'learn') {
       void voiceService.prefetchAudio(line.moves.map((m) => sanToSpeech(m)));
@@ -284,7 +284,7 @@ export function PlayableLinePlayer({
     }
     if (demoMoveIndex >= line.moves.length) return;
 
-    const annotation = demoMoveIndex < line.annotations.length
+    const annotation = demoMoveIndex < (line.annotations ?? []).length
       ? (line.annotations[demoMoveIndex] ?? '')
       : '';
     const spoken = annotation
@@ -618,7 +618,7 @@ export function PlayableLinePlayer({
   // nothing until the student taps Hint, which reveals just the move arrow.
   const memoryHintArrows = useMemo((): Array<{ startSquare: string; endSquare: string; color: string }> => {
     if (phase !== 'memory' || memoryComplete) return [];
-    if (guided && memoryMoveIndex < line.arrows.length) {
+    if (guided && memoryMoveIndex < (line.arrows ?? []).length) {
       return arrowsToBoard(line.arrows[memoryMoveIndex]);
     }
     if (showHint && memoryMoveIndex < expectedMoves.length) {
