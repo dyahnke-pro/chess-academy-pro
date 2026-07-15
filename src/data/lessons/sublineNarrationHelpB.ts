@@ -146,13 +146,6 @@ const ANTI_BENONI: SN = {
 
 // ── anti-London (student BLACK) — hit the loose b2, seize the initiative.
 //    Every line shares …c5@3. ──
-const ANTI_LONDON: SN = {
-  intro: { say: "Bf4 — the London System, solid but a shade passive. Punish that passivity: …c5 hits d4 at once, and because the Bf4 has left the b2-pawn loose, …Qb6 jabs straight at it. Add …Nc6 and …Bf5 and you've grabbed the initiative the London is built to avoid — active, comfortable, and full of bite.", sayShort: '…c5 — hit d4 and the loose b2.' },
-  beats: [
-    { atMove: 3, say: "…c5 — striking at d4 immediately. The London's Bf4 abandoned the b2-pawn, so you'll follow with …Qb6 hitting b2 and …Nc6, …Bf5 developing with tempo. The system that wants a quiet life suddenly has problems to solve.", highlights: [H('d4', ATK), H('b2', SOFT)] },
-  ],
-  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/London_System'],
-};
 // ── anti-QGD Exchange (student WHITE) — Carlsbad + minority attack.
 //    Every line shares cxd5@4. ──
 const ANTI_QGD_X: SN = {
@@ -349,8 +342,6 @@ export const SUBLINE_NARRATION_HELP_B: Record<string, SN> = {
   'anti-catalan-black::0::Nf3@4': ANTI_CAT_NF3, 'anti-catalan-black::1::Nf3@4': ANTI_CAT_NF3,
   'anti-catalan-black::0::Nc3@4': ANTI_CAT_NC3, 'anti-catalan-black::1::Nc3@4': ANTI_CAT_NC3,
   // anti-London (all share …c5@3)
-  'anti-london-black::0::Nf3@8': ANTI_LONDON, 'anti-london-black::0::Nd2@8': ANTI_LONDON, 'anti-london-black::0::b3@8': ANTI_LONDON, 'anti-london-black::0::Be2@8': ANTI_LONDON, 'anti-london-black::0::h3@8': ANTI_LONDON, 'anti-london-black::0::a4@8': ANTI_LONDON, 'anti-london-black::0::Nf3@6': ANTI_LONDON, 'anti-london-black::0::e4@4': ANTI_LONDON, 'anti-london-black::0::Nc3@6': ANTI_LONDON, 'anti-london-black::0::c3@4': ANTI_LONDON,
-  'anti-london-black::1::c3@8': ANTI_LONDON, 'anti-london-black::1::b3@8': ANTI_LONDON, 'anti-london-black::1::Nc3@8': ANTI_LONDON, 'anti-london-black::1::Be2@8': ANTI_LONDON, 'anti-london-black::1::Nbd2@8': ANTI_LONDON, 'anti-london-black::1::c3@6': ANTI_LONDON, 'anti-london-black::1::e4@4': ANTI_LONDON, 'anti-london-black::1::Nc3@6': ANTI_LONDON, 'anti-london-black::1::c3@4': ANTI_LONDON, 'anti-london-black::1::Nc3@4': ANTI_LONDON,
   // anti-QGD Exchange (all share cxd5@4)
   'anti-qgd-exchange::0::c6@7': ANTI_QGD_X, 'anti-qgd-exchange::0::Qxd5@5': ANTI_QGD_X, 'anti-qgd-exchange::0::Bb4@7': ANTI_QGD_X, 'anti-qgd-exchange::0::c5@7': ANTI_QGD_X, 'anti-qgd-exchange::0::Be6@7': ANTI_QGD_X, 'anti-qgd-exchange::0::Nf6@5': ANTI_QGD_X, 'anti-qgd-exchange::0::Nc6@7': ANTI_QGD_X, 'anti-qgd-exchange::0::Be7@9': ANTI_QGD_X, 'anti-qgd-exchange::0::h6@11': ANTI_QGD_X, 'anti-qgd-exchange::0::Bf5@11': ANTI_QGD_X,
   'anti-qgd-exchange::1::c6@7': ANTI_QGD_X, 'anti-qgd-exchange::1::Qxd5@5': ANTI_QGD_X, 'anti-qgd-exchange::1::Bb4@7': ANTI_QGD_X, 'anti-qgd-exchange::1::c5@7': ANTI_QGD_X, 'anti-qgd-exchange::1::Be6@7': ANTI_QGD_X, 'anti-qgd-exchange::1::Nf6@5': ANTI_QGD_X, 'anti-qgd-exchange::1::Nc6@7': ANTI_QGD_X, 'anti-qgd-exchange::1::c6@9': ANTI_QGD_X, 'anti-qgd-exchange::1::Bb4@9': ANTI_QGD_X, 'anti-qgd-exchange::1::Nbd7@9': ANTI_QGD_X,
@@ -358,7 +349,6 @@ export const SUBLINE_NARRATION_HELP_B: Record<string, SN> = {
   'anti-benoni-push::0::d6@13': ANTI_BENONI, 'anti-benoni-push::0::e6@5': ANTI_BENONI, 'anti-benoni-push::0::Bg7@13': ANTI_BENONI, 'anti-benoni-push::0::g6@5': ANTI_BENONI, 'anti-benoni-push::0::e5@5': ANTI_BENONI, 'anti-benoni-push::0::Bxa6@9': ANTI_BENONI, 'anti-benoni-push::0::d6@5': ANTI_BENONI, 'anti-benoni-push::0::Bg7@11': ANTI_BENONI, 'anti-benoni-push::0::e6@9': ANTI_BENONI,
   'anti-benoni-push::1::Be7@11': ANTI_BENONI, 'anti-benoni-push::1::d6@7': ANTI_BENONI, 'anti-benoni-push::1::a6@11': ANTI_BENONI, 'anti-benoni-push::1::Nbd7@11': ANTI_BENONI, 'anti-benoni-push::1::a6@7': ANTI_BENONI, 'anti-benoni-push::1::Bg4@11': ANTI_BENONI, 'anti-benoni-push::1::Be7@7': ANTI_BENONI, 'anti-benoni-push::1::Qa5@11': ANTI_BENONI, 'anti-benoni-push::1::b5@5': ANTI_BENONI, 'anti-benoni-push::1::g6@5': ANTI_BENONI,
   'anti-benoni-push::2::b5@5': ANTI_BENONI, 'anti-benoni-push::2::e6@5': ANTI_BENONI, 'anti-benoni-push::2::e5@5': ANTI_BENONI, 'anti-benoni-push::2::d6@5': ANTI_BENONI, 'anti-benoni-push::2::d6@7': ANTI_BENONI, 'anti-benoni-push::2::O-O@9': ANTI_BENONI, 'anti-benoni-push::2::d6@9': ANTI_BENONI, 'anti-benoni-push::2::e6@9': ANTI_BENONI, 'anti-benoni-push::2::a6@9': ANTI_BENONI, 'anti-benoni-push::2::Qa5@9': ANTI_BENONI,
-  'anti-benoni-push::3::b5@5': ANTI_BENONI, 'anti-benoni-push::3::e6@5': ANTI_BENONI, 'anti-benoni-push::3::Bd6@7': ANTI_BENONI, 'anti-benoni-push::3::a6@7': ANTI_BENONI, 'anti-benoni-push::3::g6@5': ANTI_BENONI, 'anti-benoni-push::3::d6@5': ANTI_BENONI, 'anti-benoni-push::3::O-O@11': ANTI_BENONI, 'anti-benoni-push::3::Nbd7@9': ANTI_BENONI, 'anti-benoni-push::3::g6@9': ANTI_BENONI, 'anti-benoni-push::3::Nbd7@11': ANTI_BENONI,
   // anti-Englund (var-0 e4-centre cluster)
   'anti-englund::0::Nxf3+@9': ANTI_ENGLUND,
   'anti-englund::0::Nf6@9': ANTI_ENGLUND,

@@ -295,7 +295,7 @@
    },
    {
     "name": "Scotch: 4...Qh4 (Steinitz Variation)",
-    "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Qh4 Nb5 Bb4+ c3 Ba5",
+    "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Qh4 Nb5 Bb4+ c3 Ba5 Nd2 a6 Na3 Bb6 g3 Qf6",
     "explanation": "The aggressive 4...Qh4 is a favorite surprise weapon online, immediately hitting the unprotected e4 pawn. After 5.Nb5, White threatens Nc7+ forking king and rook. The critical line continues with Bb4+ c3 Ba5 and Black grabs the e4 pawn. Black loses castling rights but gains material. White must play energetically with O-O and Re1 to exploit the exposed king on d8. The position is double-edged: White has development and open lines, Black has an extra pawn and the bishop pair.",
     "frequency": 0.08
    },
@@ -906,7 +906,7 @@
    },
    {
     "name": "Alapin: 2...d5 3.exd5 Qxd5 4.d4 Nc6 (with ...e5)",
-    "pgn": "e4 c5 c3 d5 exd5 Qxd5 d4 Nc6 Nf3 e5 dxe5 Qxd1+ Kxd1",
+    "pgn": "e4 c5 c3 d5 exd5 Qxd5 d4 Nc6 Nf3 e5 dxe5 Qxd1+ Kxd1 Nge7 Bd3 Be6 Na3 O-O-O",
     "explanation": "After 2...d5 3.exd5 Qxd5, Black plays 4...Nc6 preparing the dynamic ...e5 break to open the center before White consolidates. After dxe5 Qxd1+ Kxd1 Nxe5, the king is displaced on d1 and the bishop check on d6 forces Ke1. The pin with ...Bg4 wins the bishop pair, giving Black a clear advantage with active pieces against White's awkwardly placed king."
    },
    {
@@ -1337,7 +1337,7 @@
    },
    {
     "name": "Scandinavian Transposition",
-    "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 dxe5 Nxe5 Nd7 Nxd7 Bxd7 c4",
+    "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 dxe5 Nxe5 Nd7 Nxd7 Bxd7 c4 Nf6 Nc3 e6 Be3 Bd6",
     "explanation": "Black transposes into a Scandinavian-flavored structure by exchanging on e5 early. The ...Nd7-Bxd7 simplifies the position with reduced tension. White's c4 expands but the structure is balanced, and Black's bishops have clear development paths via ...Nc6 and ...g6-Bg7. The trade-heavy approach suits players who want a quieter Alekhine middlegame.",
     "shortExplanation": "Exchange on e5 early via ...dxe5 Nxe5 Nd7 — Scandinavian-flavored simplification with balanced piece play."
    },
@@ -2637,7 +2637,7 @@
    },
    {
     "name": "Old Indian: Janowski Variation",
-    "pgn": "d4 Nf6 c4 d6 Nc3 Bf5 f3 e5 e4 Bg6 d5 Be7",
+    "pgn": "d4 Nf6 c4 d6 Nc3 Bf5 f3 e5 e4 Bg6 d5 Be7 Be3 h6 Nh3 Nbd7 Bd3 O-O",
     "explanation": "An unusual setup where Black develops the bishop to f5 before playing ...e5, avoiding standard Old Indian theory entirely. The bishop retreats to g6 where it watches the center from a safe square and cannot be easily challenged. Black's plan involves rerouting pieces to active squares while maintaining the solid pawn structure. This sideline is particularly effective against opponents who rely on main line preparation."
    },
    {
@@ -2921,7 +2921,7 @@
    },
    {
     "name": "Bird's: Swiss Gambit",
-    "pgn": "f4 f5 e4 fxe4 d3 exd3 Bxd3 Nf6 Nf3 d5",
+    "pgn": "f4 f5 e4 fxe4 d3 exd3 Bxd3 Nf6 Nf3 d5 O-O Nc6 h3 e6 Be3 Nb4",
     "explanation": "An aggressive gambit arising from the rare symmetrical 1.f4 f5. White sacrifices a pawn with 2.e4 to blow open lines and achieve rapid development with Bxd3, Nf3, and O-O. The piece on d3 and the semi-open e-file create immediate threats against Black's lagging development. Black must defend accurately or face a withering attack, and the Nc3-Nxd5 break is a recurring tactical theme that disrupts Black's coordination."
    },
    {
@@ -3154,12 +3154,12 @@
   "variations": [
    {
     "name": "Schönemann Attack",
-    "pgn": "e4 e5 Nf3 Nc6 Bb5 f5 d4 fxe4 Nxe5 Nxe5 dxe5 c6",
+    "pgn": "e4 e5 Nf3 Nc6 Bb5 f5 d4 fxe4 Nxe5 Nxe5 dxe5 c6 Nc3 cxb5 Nxe4 d5 exd6 Nf6",
     "explanation": "White meets 3...f5 with the central 4.d4, opening lines fast. After 4...fxe4 5.Nxe5 Nxe5 6.dxe5 c6 Black returns the bishop to a safe square and challenges the e5-pawn, reaching a sharp, roughly balanced middlegame with the bishop pair."
    },
    {
     "name": "Jänisch Gambit Accepted",
-    "pgn": "e4 e5 Nf3 Nc6 Bb5 f5 exf5 e4 Qe2 Qe7 Bxc6 dxc6",
+    "pgn": "e4 e5 Nf3 Nc6 Bb5 f5 exf5 e4 Qe2 Qe7 Bxc6 dxc6 Nd4 Nh6 g4 g6 Nc3 gxf5",
     "explanation": "White grabs the gambit pawn with 4.exf5, but after 4...e4! Black gains space and time, kicking the f3-knight and opening the position for the pieces. Black regains the pawn with active play and the initiative for the temporary material."
    },
    {

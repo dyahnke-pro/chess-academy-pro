@@ -106,9 +106,6 @@ export const SUBLINE_NARRATION_PRO_ROSEN_X1: Record<string, SublineNarration> = 
   'pro-ericrosen-closed-sicilian::0::a6@7': {
     intro: { say: "a6 — Black rules out Bb5 and prepares a slow build. Switch into the true Closed Sicilian setup: d3, g3 and Bg2, then O-O; from there the classic f4-f5 kingside expansion, backed by the fianchettoed bishop, gives you a natural attacking plan against Black's king.", sayShort: 'a6 — d3, g3, Bg2, then O-O.' }, sources: CSIC,
   },
-  'pro-ericrosen-closed-sicilian::0::Qxd7@11': {
-    intro: { say: "Qxd7 — Black recaptures after the bishop trade. Seize the initiative with Ne5, hitting the queen and grabbing a powerful central outpost; once you follow with O-O and d3, the dominant knight and the f4-pawn point your whole army at the kingside, where you press for the attack.", sayShort: 'Qxd7 — Ne5 outpost, O-O, attack kingside.' }, sources: CSIC,
-  },
   'pro-ericrosen-closed-sicilian::0::Nc6@9': {
     intro: { say: "Nc6 — Black blocks the check with the knight. Castle and settle with d3, keeping the bishop's pressure on c6; you retain the easier development, and the f4-pawn lets you expand with f5 later, opening the kingside toward Black's king while your structure stays sound.", sayShort: 'Nc6 — O-O and d3, expand kingside.' }, sources: CSIC,
   },

@@ -308,17 +308,6 @@ const STAF_NXF7: SN = {
 };
 
 // ════ SCANDINAVIAN — student BLACK ══════════════════════════════════════════
-const SCAN_OO: SN = {
-  intro: {
-    say: "With the …Qa5 Scandinavian, White's quiet O-O lets you complete a harmonious setup: …Qb6 pressures b2 and d4, …Be7 and …Nbd7 develop, and the …Bxh3 sacrifice on a careless Nh4 wins the d4-pawn. Black is comfortably equal with active pieces.",
-    sayShort: '…Qb6, …Nbd7, even game.',
-  },
-  beats: [
-    { atMove: 15, say: "…Qb6 eyes b2 and d4, keeping White's centre under pressure.", highlights: [H('b6', KEY), H('d4', SOFT)] },
-    { atMove: 21, say: "…Bxh3 punishes Nh4: the light-squared bishop crashes through, and …Qxd4 recovers the centre pawn.", highlights: [H('h3', ATK)] },
-  ],
-  sources: ['concept:pos-development', 'concept:pos-initiative', SCANDI_WIKI],
-};
 const SCAN_NC3: SN = {
   intro: {
     say: "In the …Nf6/…e6 Scandinavian, after White's Nc3 you strike with …Ne4 and …Bxc4, grabbing the bishop pair and a pawn while pinning along the e-file. The tactics flow in Black's favour to a pleasant game.",
@@ -555,28 +544,6 @@ const AE_NGE7_7: SN = {
   ],
   sources: ['concept:pos-center', 'concept:pos-development', ENGLUND_WIKI],
 };
-const AE_H6_9: SN = {
-  intro: {
-    say: "Against the …Qd7/…h6 setup, hold the e5-pawn with Bf4-g3, return it only on your terms with exd6, and develop the knights. White consolidates the extra material into a clearly superior position.",
-    sayShort: 'Bg3, exd6, consolidate.',
-  },
-  beats: [
-    { atMove: 10, say: "Bf4 holds the e5-pawn and keeps the extra material that refutes the gambit.", highlights: [H('f4', KEY)] },
-    { atMove: 20, say: "Nc4 redeploys actively, eyeing the dark squares and Black's loose setup.", highlights: [H('c4', KEY)] },
-  ],
-  sources: ['concept:pos-initiative', 'concept:pos-development', ENGLUND_WIKI],
-};
-const AE_DXE5_9: SN = {
-  intro: {
-    say: "When Black recaptures …dxe5, trade queens with Qxd7+ — without queens the gambiteer has zero attacking chances. Develop e4, Bd2-e3 and Bb5; White's sound structure and active pieces hold a comfortable edge.",
-    sayShort: 'Qxd7+, trade into a clean game.',
-  },
-  beats: [
-    { atMove: 10, say: "Qxd7+ trades queens, snuffing out every shred of Black's gambit initiative.", highlights: [H('d7', KEY)] },
-    { atMove: 22, say: "Bb5 develops with tempo into a pleasant, queenless middlegame.", highlights: [H('b5', KEY)] },
-  ],
-  sources: ['concept:pos-development', 'concept:pos-king-safety', ENGLUND_WIKI],
-};
 const AE_NGE7_5: SN = {
   intro: {
     say: "Hold the pawn with Bf4 and return it with exd6 to reach a clean position. Trade the dark bishops, castle long, and develop with Qd2 and Na4; White keeps the structural and developmental advantage throughout.",
@@ -598,28 +565,6 @@ const AE_F6_5: SN = {
     { atMove: 16, say: "Qd5+ forks into Black's position, collecting material as the king is hunted.", highlights: [H('d5', ATK)] },
   ],
   sources: ['concept:pos-king-safety', 'concept:tac-fork', ENGLUND_WIKI],
-};
-const AE_QF5_9: SN = {
-  intro: {
-    say: "Against …Qf5, return the pawn with exd6 and develop naturally. The bishop on g3 and the b4-h3 pawn nudges chase Black's queen around, and White consolidates a clear, comfortable advantage.",
-    sayShort: 'exd6, harass the queen.',
-  },
-  beats: [
-    { atMove: 10, say: "exd6 returns the pawn to complete development with a healthy structure.", highlights: [H('d6', KEY)] },
-    { atMove: 18, say: "b4 gains queenside space and chases Black's wandering queen, keeping the initiative.", highlights: [H('b4', KEY)] },
-  ],
-  sources: ['concept:pos-development', 'concept:pos-initiative', ENGLUND_WIKI],
-};
-const AE_NXE5_9: SN = {
-  intro: {
-    say: "When Black grabs back on e5, trade the dark bishops and the queens via Qd2 and Qxg5, then knight to b5 hits the weak dark squares. White retains the cleaner structure and a stable edge.",
-    sayShort: 'Qd2, Nb5, cleaner game.',
-  },
-  beats: [
-    { atMove: 14, say: "Qxg5 keeps the position simple and the structure sound after the bishop trade.", highlights: [H('g5', KEY)] },
-    { atMove: 18, say: "Nb5 probes the weak dark squares in Black's camp, keeping White on top.", highlights: [H('b5', KEY)] },
-  ],
-  sources: ['concept:pos-development', 'concept:pos-weak-squares', ENGLUND_WIKI],
 };
 
 // ════ ANTI-DUTCH STAUNTON GAMBIT — student WHITE ════════════════════════════
@@ -787,7 +732,6 @@ export const SUBLINE_NARRATION_HELP_F: Record<string, SN> = {
   // Stafford Gambit — student BLACK
   'stafford-gambit::0::Nxf7@6': STAF_NXF7, 'stafford-gambit::1::Nxf7@6': STAF_NXF7,
   // Scandinavian — student BLACK
-  'scandinavian-defence::0::O-O@14': SCAN_OO, 'scandinavian-defence::6::O-O@14': SCAN_OO,
   'scandinavian-defence::2::Nc3@10': SCAN_NC3,
   // Pirc — student BLACK
   'pirc-defence::3::h4@12': PIRC_H4,
@@ -816,12 +760,8 @@ export const SUBLINE_NARRATION_HELP_F: Record<string, SN> = {
   'anti-englund::1::f6@7': AE_F6_7,
   'anti-englund::1::Be7@7': AE_BE7_7,
   'anti-englund::1::Nge7@7': AE_NGE7_7,
-  'anti-englund::1::h6@9': AE_H6_9,
-  'anti-englund::1::dxe5@9': AE_DXE5_9,
   'anti-englund::1::Nge7@5': AE_NGE7_5,
   'anti-englund::1::f6@5': AE_F6_5,
-  'anti-englund::1::Qf5@9': AE_QF5_9,
-  'anti-englund::1::Nxe5@9': AE_NXE5_9,
   // anti-Dutch Staunton — student WHITE
   'anti-dutch-staunton::1::exf3@9': AD_EXF3_9,
   'anti-dutch-staunton::1::e3@9': AD_E3_9,

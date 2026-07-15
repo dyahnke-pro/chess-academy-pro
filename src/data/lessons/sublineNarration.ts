@@ -250,18 +250,6 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
   // Caro-Kann, Two Knights with …Bg4 (var 2) — White grabs space with e5. Line
   // (engine-sound, +0.34 Black): …Nfd7 first, THEN the …c5 break.
   // e4 c6 Nf3 d5 Nc3 Bg4 h3 Bxf3 Qxf3 e6 d4 Nf6 e5 Nfd7 Bf4 a6 O-O-O c5 dxc5 Nc6 h4 Bxc5
-  'caro-kann::2::e5@12': {
-    intro: {
-      say: "e5 — White grabs the centre and shifts into an Advance-style structure, by far the most common path here. Don't strike with …c5 immediately — that walks into Nb5 and the Nc7+ fork on your rook. Retreat the knight first with …Nfd7, tuck it behind the chain, and only THEN play …c5 to hit the base on d4. You've already traded your bad light bishop, so once the break comes you're fully equal with an easy game.",
-      sayShort: 'e5 — …Nfd7 first, then break …c5.',
-    },
-    beats: [
-      { atMove: 13, say: "…Nfd7 — the careful retreat. The space-grabbing e5-pawn kicks your knight, and the right square is d7, not f5 or a premature …c5. From d7 the knight eyes the c5- and e5-breaks and sidesteps the Nb5-Nc7+ fork that would have skewered your rook. Patience first.", arrows: [A('d7', 'c5')], highlights: [H('d4', KEY)] },
-      { atMove: 17, say: "…c5 — NOW the Caro break lands, hammering d4 at the foot of White's chain with your pieces already in order. Undermine the base rather than sit and defend; with no bad bishop and no weaknesses, the broad centre gives White nothing.", arrows: [A('c5', 'd4')], highlights: [H('d4', KEY), H('c5', ATK)] },
-      { atMove: 21, say: "…Bxc5 — you regain the pawn cleanly, the dark bishop landing on an active diagonal aimed back at White's king. Equal material, the better minor piece, and a comfortable Caro middlegame.", highlights: [H('c5', ATK)] },
-    ],
-    sources: ['book:caro-kann', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
-  },
 
   // Caro-Kann, Exchange Variation (var 5) — White develops Nf3. Line:
   // e4 c6 d4 d5 exd5 cxd5 Bd3 Nc6 Nf3 Bg4
@@ -494,13 +482,6 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
     sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
   },
   'scandinavian-defence::0::O-O@14': {
-    intro: {
-      say: "O-O — the classical …Qa5 Scandinavian tabiya. Count your comforts: the light bishop is already out and active on f5, your structure is rock-solid Caro-like, and with castling settled you head for a sound, double-edged middlegame with no weaknesses to defend. Exactly the safe, sturdy game the Scandinavian promises.",
-      sayShort: 'O-O — solid …Qa5 setup; press on.',
-    },
-    sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
-  },
-  'scandinavian-defence::6::O-O@14': {
     intro: {
       say: "O-O — the classical …Qa5 Scandinavian tabiya. Count your comforts: the light bishop is already out and active on f5, your structure is rock-solid Caro-like, and with castling settled you head for a sound, double-edged middlegame with no weaknesses to defend. Exactly the safe, sturdy game the Scandinavian promises.",
       sayShort: 'O-O — solid …Qa5 setup; press on.',

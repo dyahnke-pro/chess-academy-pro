@@ -249,65 +249,11 @@ const N24: SublineNarration = {
   sources: ['https://en.wikipedia.org/wiki/Alekhine_Defence', 'concept:pos-space', 'concept:pos-development'],
 };
 
-const N25: SublineNarration = {
-  intro: { say: "Be3 — a calm Exchange where White develops the bishop and supports d4 as both sides start castling. Continue …Nc6 and …Bf5 or …Bg4 to lean on d4, and contest the open e-file with …Re8. The symmetrical structure has no weaknesses, and your natural development plus the …d5 break ensure full equality.", sayShort: "Be3 supports d4 — answer …Nc6" },
-  beats: [
-    { atMove: 15, say: "…Bf5 develops the bishop actively, eyeing the light squares.", sayShort: "…Bf5 — active bishop.", highlights: [H('f5')] },
-    { atMove: 17, say: "…c5 strikes at White's centre, gaining space and freeing your game.", sayShort: "…c5 — strike the centre.", highlights: [H('c5')] },
-    { atMove: 21, say: "…Ne5 centralises the knight on a strong square, eyeing key points.", sayShort: "…Ne5 — central knight.", highlights: [H('e5')] },
-  ],
-  sources: ['https://en.wikipedia.org/wiki/Alekhine_Defence', 'concept:pos-development', 'concept:pos-open-file'],
-};
 
-const N26: SublineNarration = {
-  intro: { say: "Nc3 — reaching the Exchange by a c4-first order, White bolsters the centre as both sides begin castling. Your plan is unchanged: …Nc6 and …Bf5 develop with pressure on d4, and the open e-file invites …Re8. The balanced structure and harmonious development give you an easy, weakness-free game.", sayShort: "Exchange — easy, balanced development" },
-  beats: [
-    { atMove: 15, say: "…Bf5 develops the bishop actively, eyeing the light squares.", sayShort: "…Bf5 — active bishop.", highlights: [H('f5')] },
-    { atMove: 17, say: "…Re8 contests the e-file, your rook joining the central play.", sayShort: "…Re8 — contest the e-file.", highlights: [H('e8')] },
-    { atMove: 19, say: "…c6 braces the centre, your solid setup complete.", sayShort: "…c6 — brace the centre.", highlights: [H('c6')] },
-  ],
-  sources: ['https://en.wikipedia.org/wiki/Alekhine_Defence', 'concept:pos-development', 'concept:pos-open-file'],
-};
 
-const N27: SublineNarration = {
-  intro: { say: "Re1 — White claims the open e-file, the natural battleground in this structure. You've matched his development with …Bf5, …Nc6 and …Be7, so contest the file with …Re8 and challenge d4. The position is symmetrical and equal — your active pieces and the …d5 break keep the middlegame comfortable.", sayShort: "Re1 grabs e-file — answer …Re8" },
-  beats: [
-    { atMove: 19, say: "…Nb4 jumps to a strong square, hitting c2 and White's pieces with tempo.", sayShort: "…Nb4 — strong, with tempo.", highlights: [H('b4')] },
-    { atMove: 21, say: "…Nc2 forks into White's camp, your knight raiding the back rank.", sayShort: "…Nc2 — fork the camp.", highlights: [H('c2')] },
-    { atMove: 23, say: "…Nb4 repositions the knight flexibly, keeping the pressure on White.", sayShort: "…Nb4 — keep the pressure.", highlights: [H('b4')] },
-  ],
-  sources: ['https://en.wikipedia.org/wiki/Alekhine_Defence', 'concept:pos-open-file', 'concept:pos-development'],
-};
 
-const N28: SublineNarration = {
-  intro: { say: "a3 — by a different order you reach the same fully developed Exchange, White grabbing queenside space. Your pieces are ideally placed — …Bf5 on the active diagonal, …Nc6 leaning on d4, the king safely castled — and the open e-file invites rook play. Keep the …d5 break or pressure on d4 in hand; you're fully equal with no structural concerns.", sayShort: "Exchange — harmonious, open e-file" },
-  beats: [
-    { atMove: 19, say: "…Bf6 develops the bishop toward the long diagonal and the centre.", sayShort: "…Bf6 — toward the diagonal.", highlights: [H('f6')] },
-    { atMove: 21, say: "…h6 makes luft, your solid setup holding firm.", sayShort: "…h6 — make luft.", highlights: [H('h6')] },
-    { atMove: 23, say: "…a5 gains queenside space, supporting your pieces.", sayShort: "…a5 — gain space.", highlights: [H('a5')] },
-  ],
-  sources: ['https://en.wikipedia.org/wiki/Alekhine_Defence', 'concept:pos-development', 'concept:pos-open-file'],
-};
 
-const N29: SublineNarration = {
-  intro: { say: "b3 — a fully developed Exchange where White prepares a bishop on b2 to bolster d4 along the long diagonal. You're comfortably equal with …Bf5, …Nc6 and …Be7 active and the e-file open for your rooks. Aim for the …d5 break or pressure against d4 — his fianchetto setup changes nothing about your sound, weakness-free game.", sayShort: "b3 fianchetto — Black fully equal" },
-  beats: [
-    { atMove: 19, say: "…Bf6 develops the bishop toward the long diagonal.", sayShort: "…Bf6 — toward the diagonal.", highlights: [H('f6')] },
-    { atMove: 21, say: "…a5 gains queenside space, supporting your pieces.", sayShort: "…a5 — gain space.", highlights: [H('a5')] },
-    { atMove: 23, say: "…h6 makes luft, your solid structure holding firm.", sayShort: "…h6 — make luft.", highlights: [H('h6')] },
-  ],
-  sources: ['https://en.wikipedia.org/wiki/Alekhine_Defence', 'concept:pawn-fianchetto', 'concept:pos-open-file'],
-};
 
-const N30: SublineNarration = {
-  intro: { say: "d5 — reaching this structure by a different order, White pushes past to attack your c6-knight and grab space. Reroute the knight to a fine square with …Ne5 or …Nb4, and treat the advanced d5-pawn as a long-term weakness to blockade and besiege. The freed e5-square is an ideal outpost for your pieces.", sayShort: "d5 grab — blockade and besiege" },
-  beats: [
-    { atMove: 19, say: "…Ne5 centralises the knight on a strong square, eyeing key points.", sayShort: "…Ne5 — central knight.", highlights: [H('e5')] },
-    { atMove: 21, say: "…Bc8 repositions the bishop to regroup, your structure flexible.", sayShort: "…Bc8 — regroup the bishop.", highlights: [H('c8')] },
-    { atMove: 23, say: "…c5 strikes at the centre, gaining space and freeing your game.", sayShort: "…c5 — strike the centre.", highlights: [H('c5')] },
-  ],
-  sources: ['https://en.wikipedia.org/wiki/Alekhine_Defence', 'concept:pos-outpost', 'concept:pawn-backward'],
-};
 
 const N31: SublineNarration = {
   intro: { say: "f4 — reaching the Four Pawns Attack by a different move order, you again meet the e5-d4-c4-f4 wall with …dxe5, …Nc6 and …Bf5. Your bishop on f5 eyes the b1-h7 diagonal and supports the coming …e6, while your knight on c6 leans on d4. His space looks imposing, but every advanced pawn is a target for your pieces.", sayShort: "Four Pawns — target the pawn chain" },
@@ -319,15 +265,6 @@ const N31: SublineNarration = {
   sources: ['https://en.wikipedia.org/wiki/Alekhine_Defence', 'concept:pos-space', 'concept:pos-center'],
 };
 
-const N32: SublineNarration = {
-  intro: { say: "h3 — a quiet Exchange where White simply makes luft and prevents …Bg4, both sides having begun castling. Develop naturally with …Nc6 and …Bf5 to press d4, and contest the open e-file with …Re8. The symmetrical structure and your harmonious pieces leave you fully equal with no weaknesses to worry about.", sayShort: "h3 luft — develop …Nc6, …Bf5" },
-  beats: [
-    { atMove: 15, say: "…c5 strikes at White's centre, gaining space and freeing your game.", sayShort: "…c5 — strike the centre.", highlights: [H('c5')] },
-    { atMove: 17, say: "…Bf5 develops the bishop actively, eyeing the light squares.", sayShort: "…Bf5 — active bishop.", highlights: [H('f5')] },
-    { atMove: 19, say: "…Re8 contests the e-file, your rook joining the central play.", sayShort: "…Re8 — contest the e-file.", highlights: [H('e8')] },
-  ],
-  sources: ['https://en.wikipedia.org/wiki/Alekhine_Defence', 'concept:pos-development', 'concept:pos-open-file'],
-};
 
 const N33: SublineNarration = {
   intro: { say: "Bc4 — in this Chase line White jabs at your d5-knight, but answer …a6 to deny his pieces the b5-square and prepare …a5 to cramp his queenside. The c5-pawn is over-extended and becomes a target once you break with …dxc5 or …e6. Your d5-knight is secure for now, and the queenside expansion gains useful space.", sayShort: "…a6 and …a5 — queenside space" },
@@ -1432,24 +1369,6 @@ const N96: SublineNarration = {
   sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
 };
 
-const N97: SublineNarration = {
-  intro: { say: "…Qxb2 — the greedy grab, and it's a losing one. That b2-pawn was poisoned: the queen strolls into your camp and there's a trap waiting. You'll spring Na4, and the queen has nowhere good to go — she'll have to take your a1-rook and get snapped up in return, leaving you a clean material edge and a huge lead in development. This is the whole point of the Fantasy against a careless opponent.", sayShort: "…Qxb2 — poisoned; the queen is trapped" },
-  beats: [
-    { atMove: 12, say: "Na4 — the trap springs shut. The knight attacks the b2-queen, and every safe retreat is covered — her only way to grab anything is to take your a1-rook, which is exactly what you want.", sayShort: "Na4 — spring the trap.", arrows: [A('a4', 'b2')], highlights: [H('b2')] },
-    { atMove: 13, say: "…Qxa1 — forced, really: the queen takes the rook rather than be lost for nothing. But now she's cornered on a1 with no escape.", sayShort: "…Qxa1 — the queen is cornered.", highlights: [H('a1', SOFT)] },
-    { atMove: 14, say: "Qxa1 — and you scoop her up. Tally the trade: you gave a rook and the b2-pawn, you won the queen. That's a clean material plus worth a whole piece — and Black hasn't developed a thing.", sayShort: "Qxa1 — win the queen.", highlights: [H('a1')] },
-    { atMove: 15, say: "…b5 — Black lunges at the a4-knight, desperate to get some activity going for the lost queen.", sayShort: "…b5 — hit the knight.", highlights: [H('b5', SOFT)] },
-    { atMove: 16, say: "Nc3 — the knight retreats to a fine central post, keeping everything solid. No need for heroics when you're up material.", sayShort: "Nc3 — retreat, stay solid.", highlights: [H('c3')] },
-    { atMove: 17, say: "…dxe4 — Black opens the centre, hoping activity can make up for the material.", sayShort: "…dxe4 — open the centre.", highlights: [H('e4', SOFT)] },
-    { atMove: 18, say: "fxe4 — recapture, rebuilding your broad d4-e4 pawn centre. Solid and dominant.", sayShort: "fxe4 — rebuild the centre.", highlights: [H('e4'), H('d4', SOFT)] },
-    { atMove: 19, say: "…Nf6 — Black develops at last, trying to drum up play against your centre.", sayShort: "…Nf6 — develop.", highlights: [H('f6', SOFT)] },
-    { atMove: 20, say: "Nf3 — calm development, defending e5-ideas and connecting toward castling. Convert with clean, simple moves.", sayShort: "Nf3 — develop.", highlights: [H('f3')] },
-    { atMove: 21, say: "…Bb7 — the fianchettoed bishop points down the long diagonal toward e4 — Black's best shot at compensation, though his own c6-pawn blocks the view for now.", sayShort: "…Bb7 — aim at the diagonal.", highlights: [H('b7', SOFT)] },
-    { atMove: 22, say: "e5 — push and kick the f6-knight, grabbing more space and cramping Black further. Your extra material plus the space edge is decisive.", sayShort: "e5 — gain space, kick the knight.", highlights: [H('e5')] },
-    { atMove: 23, say: "…Nfd7 — the knight retreats and Black shuffles for scraps. You're winning: up the queen for a rook and a pawn, a big centre, and a safe position. Trade pieces, keep it simple, and bring the material home.", sayShort: "…Nfd7 — you're winning; simplify.", highlights: [H('d7', SOFT)] },
-  ],
-  sources: ['concept:pos-development', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
-};
 
 const N98: SublineNarration = {
   intro: { say: "…dxe4 — Black trades and fianchettoes. Recapture to build the broad centre, develop smoothly and castle, then roll forward with e5 and plant a knight on the dominant e4-square. Your central space and the active pieces leave Black cramped — a clear, pleasant edge.", sayShort: "…dxe4 — big centre, dominate e4" },
@@ -1495,24 +1414,6 @@ const N99: SublineNarration = {
   sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
 };
 
-const N100: SublineNarration = {
-  intro: { say: "…e5 — with …Qb6 already eyeing b2, Black strikes at the centre. He'll even snatch the b2-pawn, but be honest about this one: with best play it's level. You get the pawn back and a fine central pawn front, but Black holds. Develop soundly, regain the material, and play a balanced game — no advantage to force.", sayShort: "…e5 — sharp but level" },
-  beats: [
-    { atMove: 12, say: "Nge2 — develop the knight toward the centre, flexible for d4 or f4 and reinforcing your pawn front.", sayShort: "Nge2 — flexible development.", highlights: [H('e2')] },
-    { atMove: 13, say: "…Ne7 — Black develops, preparing to castle and support the centre.", sayShort: "…Ne7 — develop.", highlights: [H('e7', SOFT)] },
-    { atMove: 14, say: "Qd2 — develop the queen, connect the rooks, and keep an eye on the dark squares.", sayShort: "Qd2 — develop, connect.", highlights: [H('d2')] },
-    { atMove: 15, say: "…Qxb2 — Black grabs the b2-pawn, but the queen strays from the action to do it.", sayShort: "…Qxb2 — grabs the pawn.", highlights: [H('b2', SOFT)] },
-    { atMove: 16, say: "Ra2 — the rook defends the second rank and harasses the raider, forcing her to retreat and lose time.", sayShort: "Ra2 — hit the queen.", arrows: [A('a2', 'b2')], highlights: [H('b2')] },
-    { atMove: 17, say: "…Qb6 — the queen retreats with her extra pawn, but she's spent tempo you'll use.", sayShort: "…Qb6 — the queen retreats.", highlights: [H('b6', SOFT)] },
-    { atMove: 18, say: "dxe5 — take in the centre, opening lines and regaining your investment as the position clarifies.", sayShort: "dxe5 — take back in the centre.", highlights: [H('e5')] },
-    { atMove: 19, say: "…Qa5 — the queen sidesteps to a safer diagonal, eyeing your position.", sayShort: "…Qa5 — sidestep.", highlights: [H('a5', SOFT)] },
-    { atMove: 20, say: "f4 — build a broad pawn front, clamping down on e5 and gaining kingside space.", sayShort: "f4 — build the pawn front.", highlights: [H('f4')] },
-    { atMove: 21, say: "…O-O — Black tucks the king away at last.", sayShort: "…O-O — Black castles.", highlights: [H('g8', SOFT)] },
-    { atMove: 22, say: "Nd4 — plant the knight on the strong central outpost, eyeing c6, e6 and f5. Fully compensated for the pawn.", sayShort: "Nd4 — central outpost.", highlights: [H('d4')] },
-    { atMove: 23, say: "…Rd8 — Black contests the d-file. It's level: Black's extra b2-pawn is balanced by your big centre, the d4-knight and the initiative. A fair fight — play it on the merits.", sayShort: "…Rd8 — it's balanced.", highlights: [H('d8', SOFT)] },
-  ],
-  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
-};
 
 const N101: SublineNarration = {
   intro: { say: "…e6 — Black mixes a fianchetto with a French wall. Develop, sidestep the …Qb6 pressure with Rb1, and roll out the e5-f4 space clamp. When Black strikes with …c5 you trade cleanly through the centre and keep the extra room. Your broad centre and better development give a clear, pleasant edge.", sayShort: "…e6 — clamp with e5/f4, big space" },
@@ -3473,95 +3374,14 @@ const N218: SublineNarration = {
   sources: ['concept:pos-space', 'concept:pawn-chain'],
 };
 
-const N219: SublineNarration = {
-  intro: { say: "Be2 — White tucks the bishop away with the queen already on f3, so slam the door with …d4: it grabs space and shuts the knight out of d5 and c4. You've traded the light bishop for the f3-knight, handing White the bishop pair, but in this closed structure that d4-pawn cramps him and hands you a clear queenside and central plan, neutralising the bishops on blocked terrain.", sayShort: "Two Knights — …d4 cramps White" },
-  beats: [
-    { atMove: 11, say: "…Bc5 develops the bishop actively, eyeing f2 and the centre.", sayShort: "…Bc5 — active bishop.", arrows: [A('c5', 'f2')], highlights: [H('f2')] },
-    { atMove: 13, say: "…Bd4 centralises the bishop on a dominant square, cramping White.", sayShort: "…Bd4 — dominant bishop.", highlights: [H('d4')] },
-    { atMove: 19, say: "…Qb6 sorties the queen, pressuring b2 and the queenside.", sayShort: "…Qb6 — pressure b2.", arrows: [A('b6', 'b2')], highlights: [H('b2')] },
-  ],
-  sources: ['concept:pos-space', 'concept:pos-bishop-pair'],
-};
 
-const N220: SublineNarration = {
-  intro: { say: "Be3 — White supports d4, so strike with …c5 to fight for the centre. You've traded the light bishop for the f3-knight, so open the position on your own terms: …c5 challenges d4 and frees your game. This dynamic break gives you active pieces and a sound structure, and keeping the position fluid stops his bishop pair from ever clamping down.", sayShort: "Two Knights — …c5 strikes the centre" },
-  beats: [
-    { atMove: 13, say: "…Qb6 sorties the queen, hitting b2 and the centre with tempo.", sayShort: "…Qb6 — hit b2.", arrows: [A('b6', 'b2')], highlights: [H('b2')] },
-    { atMove: 15, say: "…Bb4 pins and develops, gaining tempo against White's setup.", sayShort: "…Bb4 — pin and develop.", highlights: [H('b4')] },
-    { atMove: 23, say: "…Qxa2 grabs the loose pawn, your queen active and a pawn to the good.", sayShort: "…Qxa2 — grab the pawn.", highlights: [H('a2')] },
-  ],
-  sources: ['concept:pos-center', 'concept:pos-initiative'],
-};
 
-const N221: SublineNarration = {
-  intro: { say: "Bg5 — White pins your f6-knight, so hit back with …c5 against d4. Having given up the bishop for the f3-knight, only open the position on your own terms: …c5 challenges the centre and frees you. That pin isn't dangerous — meet it with …Be7 or …cxd4 — and the central tension favours you as the side with the sounder structure.", sayShort: "Two Knights — …c5 strikes the centre" },
-  beats: [
-    { atMove: 13, say: "…h6 questions the g5-bishop, gaining the bishop pair or a tempo.", sayShort: "…h6 — question the bishop.", arrows: [A('h6', 'g5')], highlights: [H('g5')] },
-    { atMove: 17, say: "…dxe4 opens the centre, your pieces active in the clarified position.", sayShort: "…dxe4 — open the centre.", highlights: [H('e4')] },
-    { atMove: 23, say: "…Qd5 centralises the queen, controlling key squares in the balanced game.", sayShort: "…Qd5 — centralise the queen.", highlights: [H('d5')] },
-  ],
-  sources: ['concept:pos-center', 'concept:tac-pin'],
-};
 
-const N222: SublineNarration = {
-  intro: { say: "d3 — White keeps the centre modest, so grab space with the …d4 wedge. You've traded the light bishop for the f3-knight, so neutralise his bishop pair by closing the position; that d4-pawn kicks the c3-knight and cramps White. Reroute your d7-knight toward the kingside or c5, and play comfortably for the queenside and the central clamp.", sayShort: "Two Knights — …d4 space clamp" },
-  beats: [
-    { atMove: 11, say: "…Nd7 develops toward the centre, building your solid Caro structure.", sayShort: "…Nd7 — develop the knight.", highlights: [H('d7')] },
-    { atMove: 13, say: "…Bd6 develops the dark bishop actively toward the kingside.", sayShort: "…Bd6 — active bishop.", highlights: [H('d6')] },
-    { atMove: 23, say: "…e5 strikes the centre, freeing your game with active pieces.", sayShort: "…e5 — strike the centre.", highlights: [H('e5')] },
-  ],
-  sources: ['concept:pos-space', 'concept:pawn-chain'],
-};
 
-const N223: SublineNarration = {
-  intro: { say: "d3 — this quiet King's-Indian-Attack treatment trades the queens off on d1 and leaves White's king stuck there after recapturing. You're fine: develop …Nf6 hitting e4, send the bishop to g7 on the long diagonal, and grab central space and a queenside majority with …c5. With no queens on, his king on d1 is more a liability than an asset — play for the better structure and smooth development.", sayShort: "Queenless — …c5 and …g7 bishop" },
-  beats: [
-    { atMove: 5, say: "…dxe4 wins the centre pawn when White plays the meek d3.", sayShort: "…dxe4 — grab the centre.", highlights: [H('e4')] },
-    { atMove: 9, say: "…Nf6 develops, the knight eyeing e4 and the centre in the endgame.", sayShort: "…Nf6 — develop, eye e4.", highlights: [H('f6')] },
-    { atMove: 11, say: "…g6 prepares the fianchetto, your bishop heading for the long diagonal.", sayShort: "…g6 — prep the fianchetto.", highlights: [H('g6')] },
-  ],
-  sources: ['concept:pawn-majority', 'concept:pos-development'],
-};
 
-const N224: SublineNarration = {
-  intro: { say: "exd5 — White releases the tension, so hit back at once with …c5 rather than recapture passively. Having traded the light bishop for the f3-knight, use …c5 to open lines and free the position on your own terms. The dynamic …c5 challenges d4 and d5, generating active pieces and keeping you from getting cramped against his bishop pair.", sayShort: "Two Knights — …c5 fights the centre" },
-  beats: [
-    { atMove: 13, say: "…cxd5 recaptures into the Panov structure, your pieces ready to pressure the centre.", sayShort: "…cxd5 — Panov structure.", highlights: [H('d5')] },
-    { atMove: 15, say: "…Nc6 develops with pressure on the centre, your pieces flowing out.", sayShort: "…Nc6 — develop with pressure.", highlights: [H('c6')] },
-    { atMove: 21, say: "…Bd6 develops the dark bishop, coordinating for the middlegame.", sayShort: "…Bd6 — develop, coordinate.", highlights: [H('d6')] },
-  ],
-  sources: ['concept:pos-center', 'concept:pos-initiative'],
-};
 
-const N225: SublineNarration = {
-  intro: { say: "exd5 — White swaps in the centre, then posts the knight aggressively with Ne5 and pins with Bb5, but you're solidly placed in the lone d-pawn structure. Your knight on c6 and pawn on e6 support the centre; play …Bd7 to calmly unpin and offer to trade his active pieces. The structure is sound and symmetric — swap off the e5-knight and b5-bishop, finish developing, and reach a comfortable balanced middlegame.", sayShort: "Exchange — …Bd7 unpins, trades off" },
-  beats: [
-    { atMove: 5, say: "…cxd5 recaptures into a solid Exchange structure with free development.", sayShort: "…cxd5 — solid structure.", highlights: [H('d5')] },
-    { atMove: 11, say: "…Bd6 develops the dark bishop to an active post eyeing the kingside.", sayShort: "…Bd6 — active bishop.", highlights: [H('d6')] },
-    { atMove: 21, say: "…dxc4 wins a pawn when White overextends, your pieces well-placed.", sayShort: "…dxc4 — win the pawn.", highlights: [H('c4')] },
-  ],
-  sources: ['concept:tac-pin', 'concept:pos-development'],
-};
 
-const N226: SublineNarration = {
-  intro: { say: "g3 — White fianchettoes to activate the light-squared bishop, so answer with the …d4 space-grab. Having traded off the light bishop, blunt his bishop pair by closing the centre; that d4-pawn evicts the c3-knight and seizes territory. Play for the queenside and the central clamp, leaving his fianchettoed bishop biting on the granite of your pawn chain.", sayShort: "Two Knights — …d4 against the fianchetto" },
-  beats: [
-    { atMove: 11, say: "…Nd7 develops toward the centre, building your solid setup.", sayShort: "…Nd7 — develop the knight.", highlights: [H('d7')] },
-    { atMove: 13, say: "…Bc5 develops the bishop actively, eyeing f2.", sayShort: "…Bc5 — active bishop.", arrows: [A('c5', 'f2')], highlights: [H('f2')] },
-    { atMove: 19, say: "…b5 expands on the queenside, gaining space in the comfortable middlegame.", sayShort: "…b5 — queenside space.", highlights: [H('b5')] },
-  ],
-  sources: ['concept:pos-space', 'concept:pawn-fianchetto'],
-};
 
-const N227: SublineNarration = {
-  intro: { say: "gxf3 — White recaptures with the g-pawn, accepting doubled f-pawns and an open g-file for the bishop pair. Exploit that structural concession: your …e6, …Nf6 and …c5 break challenge the centre and hit his damaged kingside. With his king cover compromised, play for the better structure and target those weak f-pawns and the half-open files in the long game.", sayShort: "Two Knights — …c5, target doubled f-pawns" },
-  beats: [
-    { atMove: 9, say: "…d4 jams White's centre, gaining space when he recaptures the gambit pawn on f3.", sayShort: "…d4 — jam the centre.", highlights: [H('d4')] },
-    { atMove: 13, say: "…c5 supports the d4-spearhead, your pawns cramping White's position.", sayShort: "…c5 — support the spearhead.", highlights: [H('c5')] },
-    { atMove: 17, say: "…Nc6 develops with pressure, your space advantage telling.", sayShort: "…Nc6 — develop with pressure.", highlights: [H('c6')] },
-  ],
-  sources: ['concept:pawn-doubled', 'concept:pos-center'],
-};
 
 const N228: SublineNarration = {
   intro: { say: "Bb5 — a true isolated-queen's-pawn battle where the d-file and the d5/e5 squares decide everything. You've got the standard play: your bishop pinned the c3-knight, …Nxd5 centralised, and the knight on c6 blockades d4. White's Bb5 adds pressure and eyes your structure, so play …Be7 and castle, treating White's isolated d-pawn as your long-term target.", sayShort: "Panov — blockade the isolated d-pawn" },
@@ -4638,15 +4458,6 @@ const N336: SublineNarration = {
   sources: ['concept:pos-bishop-pair', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
 };
 
-const N337: SublineNarration = {
-  intro: { say: "Qe1 — White lifts the queen toward h4 for a kingside attack after your …Na6 and …c5 met d5 and the knight rerouted to c7 to support …b5. With the centre fixed, play on the queenside: …b5 with the c7-knight backing it pries open lines, while …Rb8 and …a6 fuel the advance. Race the wings — push …b5-b4 to hit the c3-knight before White's queen swings over.", sayShort: "Qe1 swings kingside — strike …b5" },
-  beats: [
-    { atMove: 17, say: "…b5 launches the queenside expansion, gaining space against White's slow Qe1 regroup.", sayShort: "…b5 — queenside expansion.", highlights: [H('b5')] },
-    { atMove: 19, say: "…Nxe4 snaps the centre pawn, exploiting White's loosened setup for a clean grab.", sayShort: "…Nxe4 — snap the pawn.", highlights: [H('e4')] },
-    { atMove: 21, say: "…Bxc3 wins the knight and damages White's queenside, banking the material edge.", sayShort: "…Bxc3 — win the knight.", highlights: [H('c3')] },
-  ],
-  sources: ['concept:att-queenside-attack', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
-};
 
 const N338: SublineNarration = {
   intro: { say: "dxc5 — White opens the centre and offers the pawn back for development after your …c5 struck d4. Your a6-knight is perfectly placed to recapture with …Nxc5, hitting the d3-bishop and the e4-pawn from an active post, or …dxc5 keeps the structure with an open d-file. Recapture with the knight to gain a tempo on the bishop, when your g7-bishop and the open position give you a comfortable, active game.", sayShort: "dxc5 — recapture …Nxc5 with tempo" },
@@ -4678,15 +4489,6 @@ const N340: SublineNarration = {
   sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
 };
 
-const N341: SublineNarration = {
-  intro: { say: "h3 — White keeps your c8-bishop off g4 and readies a kingside expansion after your …Na6 and …c5 met d5 and the knight rerouted to c7 for …b5. With the centre fixed by d5, your play is on the queenside: …b5 with the c7-knight behind it pries open lines, while …Rb8 and …a6 build the advance. Push …b5-b4 to challenge the c3-knight and open the b-file before White's f4-f5 storm gathers pace.", sayShort: "Fixed centre — expand with …b5" },
-  beats: [
-    { atMove: 17, say: "…b5 expands on the queenside, gaining space as White marks time with h3.", sayShort: "…b5 — queenside space.", highlights: [H('b5')] },
-    { atMove: 19, say: "…dxe5 wins the centre pawn back, opening lines for your active pieces.", sayShort: "…dxe5 — win it back.", highlights: [H('e5')] },
-    { atMove: 23, say: "…Bb7 completes the fianchetto, the bishop raking e4 in a comfortable middlegame.", sayShort: "…Bb7 — rake e4.", arrows: [A('b7', 'e4')], highlights: [H('e4')] },
-  ],
-  sources: ['concept:att-queenside-attack', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
-};
 
 const N342: SublineNarration = {
   intro: { say: "Bc4 — White redeploys the bishop to the active a2-g8 diagonal aiming at f7, the centre having clarified after dxe5 dxe5 with the d-file open. With queens still on, equalize by completing development: …Qe7 or …Qc7 connects your rooks, …Nb6 hits the c4-bishop with tempo, and your g7-bishop and e5-pawn control the centre. Piece activity decides in this symmetrical structure — contest the open d-file with …Rd8 and keep the e5-pawn defended.", sayShort: "Bc4 redeploys — …Nb6 with tempo" },
@@ -4788,15 +4590,6 @@ const N351: SublineNarration = {
   sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
 };
 
-const N352: SublineNarration = {
-  intro: { say: "Be2 — White plays modestly instead of pushing for the Bh6 trade, keeping the Be3-Qd2 setup flexible. Play …c6 and …b5 for queenside space, or …Nc6 and …e5 to strike the centre, judging by where White's king goes. Your g7-bishop eyes d4 and b2 — develop …Nbd7, prepare the …b5 or …e5 break, and stay alert to a later Bh6 by meeting it with …Bxh6 and queenside counterplay.", sayShort: "Be2 flexible — prepare …c6, …b5" },
-  beats: [
-    { atMove: 11, say: "…c6 braces the centre, the solid Pirc setup preparing …b5 and …e5.", sayShort: "…c6 — brace, prep breaks.", highlights: [H('c6')] },
-    { atMove: 13, say: "…b5 expands on the queenside, gaining space against White's quiet setup.", sayShort: "…b5 — queenside space.", highlights: [H('b5')] },
-    { atMove: 15, say: "…e5 strikes the centre, your pawns and pieces seizing the initiative.", sayShort: "…e5 — strike the centre.", highlights: [H('e5')] },
-  ],
-  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
-};
 
 const N353: SublineNarration = {
   intro: { say: "Bg5 — White's Byrne Variation pins your f6-knight to the queen and pressures the centre, often heading for Qd2 and queenside castling. Complete the fianchetto with …Bg7, then play …O-O and …c6, preparing the …b5 queenside storm that opposite-side castling invites. Ease the pin with …h6 or with …c6 and …Qc7 unpinning — develop normally and aim your pawns at wherever White's king lands.", sayShort: "Byrne Bg5 — castle, ready …c6, …b5" },
@@ -4808,25 +4601,7 @@ const N353: SublineNarration = {
   sources: ['concept:tac-pin', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
 };
 
-const N354: SublineNarration = {
-  intro: { say: "Bh6 — White's Be3-Qd2 battery strikes, offering to trade the dark-squared bishops before you can use your g7-bishop on the long diagonal. Allowing …Bxh6 Qxh6 hands White a target on the dark squares around your king, so react with …Bxh6 followed by …c6 and queenside play, answering with …b5 once White commits the king. If you want to keep the bishop, …c5 hitting d4 changes the central tension before the trade resolves.", sayShort: "Bh6 trades — answer …c6 then …b5" },
-  beats: [
-    { atMove: 11, say: "…e5 strikes the centre when White trades dark bishops, claiming central space.", sayShort: "…e5 — strike the centre.", highlights: [H('e5')] },
-    { atMove: 13, say: "…Kxg7 recaptures; your king is fine and you've traded off White's attacking bishop.", sayShort: "…Kxg7 — recapture, king safe.", highlights: [H('g7')] },
-    { atMove: 21, say: "…Nxd4 grabs the central pawn, your pieces active in the opened position.", sayShort: "…Nxd4 — grab the centre.", highlights: [H('d4')] },
-  ],
-  sources: ['concept:pos-bishop-pair', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
-};
 
-const N355: SublineNarration = {
-  intro: { say: "Nf3 — White develops naturally and supports d4 instead of an immediate Bh6 trade or pawn storm, the Be3-Qd2 battery already in place. Play …c6 to prepare …b5, anticipating that White may castle long, and …Nbd7 to ready the central break. Your g7-bishop is poised on the long diagonal — play …c6 and …b5 to grab queenside space, and if White castles queenside accelerate the …b5-b4 storm against the king.", sayShort: "Nf3 develops — ready …c6 and …b5" },
-  beats: [
-    { atMove: 11, say: "…c5 strikes the centre, undermining White's pawns for an easy game.", sayShort: "…c5 — strike the centre.", highlights: [H('c5')] },
-    { atMove: 17, say: "…Nc6 develops with pressure, exploiting the simplified position.", sayShort: "…Nc6 — develop with pressure.", highlights: [H('c6')] },
-    { atMove: 21, say: "…Nb6 reroutes to eye c4 and round up White's loose pawns.", sayShort: "…Nb6 — eye c4.", highlights: [H('b6')] },
-  ],
-  sources: ['concept:pos-development', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
-};
 
 const N356: SublineNarration = {
   intro: { say: "Nf3 — White develops naturally rather than the aggressive f4, the Classical Variation tabiya leading to a slow positional struggle. With your kingside fianchetto complete, play the small-centre break — …O-O, …c6, and then …e5 or …b5 to claim space, contesting the centre at the right moment. Your g7-bishop eyes d4 and b2 down the long diagonal — develop solidly and choose your central break once White shows whether the bishop goes to e2, c4, or e3.", sayShort: "Classical setup — prepare …c6 and …e5" },
@@ -4838,15 +4613,6 @@ const N356: SublineNarration = {
   sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
 };
 
-const N357: SublineNarration = {
-  intro: { say: "O-O-O — White commits the king to the queenside, the Be3 and Qd2 battery eyeing h6 for a bishop trade. That tells you exactly where to attack: the …c6 and …b5-b4 pawn storm rolls straight at White's king on c1. Race plans — open the b-file with …b5-b4, keep your g7-bishop on the long diagonal, and prioritize speed because both sides are pawn-storming opposite wings.", sayShort: "Opposite castling — …b5-b4 storm" },
-  beats: [
-    { atMove: 11, say: "…Ng4 pokes White's setup, gaining tempo as both sides head for opposite-wing play.", sayShort: "…Ng4 — poke, gain tempo.", highlights: [H('g4')] },
-    { atMove: 13, say: "…c5 strikes the centre and opens the c-file at White's queenside-castled king.", sayShort: "…c5 — strike, open the c-file.", highlights: [H('c5')] },
-    { atMove: 19, say: "…Bxc3 — the exchange that cracks open White's king, trading the bishop for the defender.", sayShort: "…Bxc3 — crack the king open.", highlights: [H('c3')] },
-  ],
-  sources: ['concept:att-queenside-attack', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
-};
 
 const N358: SublineNarration = {
   intro: { say: "f3 — White's early f3 invited …e5, the centre liquidated with dxe5 dxe5, and the queens came off via Qxd8+ Kxd8 into an endgame with your king on d8. The structure is symmetrical with e5 facing e4, so expand on the queenside with …a6-a5 to fix targets and gain space. Centralize the king toward e7, develop with …Be6 and …Nc6 hitting central squares, and use the …a5-a4 lever to pry open White's b3-pawn.", sayShort: "Queens off — …a5 expands, king to e7" },
@@ -4868,25 +4634,7 @@ const N359: SublineNarration = {
   sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
 };
 
-const N360: SublineNarration = {
-  intro: { say: "h3 — White denies your …Ng4 hit on the e3-bishop and prepares a kingside pawn advance. Hit back in the centre and on the queenside: your …c6 readies …b5, while …e5 or …c5 challenges d4 to undercut any wing attack before it rolls. With his Be3-Qd2 battery aiming at h6, expect Bh6 — answer it with …Bxh6 and …b5, and meet the slow setup with an active central or queenside break.", sayShort: "h3 stops …Ng4 — break …c6, …b5" },
-  beats: [
-    { atMove: 11, say: "…c6 braces the centre, preparing the …e5 break against White's h3 waiting move.", sayShort: "…c6 — brace, prep …e5.", highlights: [H('c6')] },
-    { atMove: 13, say: "…Nbd7 develops toward the …e5 break, building your central counterplay.", sayShort: "…Nbd7 — prep …e5.", highlights: [H('d7')] },
-    { atMove: 15, say: "…e5 strikes the centre, the classic Pirc break opening lines for your pieces.", sayShort: "…e5 — strike the centre.", highlights: [H('e5')] },
-  ],
-  sources: ['concept:pos-prophylaxis', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
-};
 
-const N361: SublineNarration = {
-  intro: { say: "h4 — White starts the kingside pawn storm before castling, intending h5 to crack open the g6-pawn and your king cover. Answer with central counterplay: …c5 hitting d4 or …e5 opens the position so the wing attack loses its footing, and …Nc6 adds pressure on the centre. Meet a flank lunge with a central strike — break with …c5, and if the centre opens White's advanced h-pawn and uncastled king become liabilities.", sayShort: "h4 storm — counter in centre …c5" },
-  beats: [
-    { atMove: 11, say: "…c5 strikes the centre, the Pirc counter as White flings the h-pawn forward.", sayShort: "…c5 — strike the centre.", highlights: [H('c5')] },
-    { atMove: 15, say: "…Nc6 develops with pressure on the centre, racing White's kingside push.", sayShort: "…Nc6 — develop, race.", highlights: [H('c6')] },
-    { atMove: 23, say: "…Rc8 loads the c-file at White's position, your counterplay rolling.", sayShort: "…Rc8 — load the c-file.", highlights: [H('c8')] },
-  ],
-  sources: ['concept:att-kingside-storm', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
-};
 
 const N362: SublineNarration = {
   intro: { say: "Bd3 — White builds a kingside attack of his own while your …c6 and …b5 are rolling at his king on c1. With the bishop on d3, play …b4 to chase the c3-knight and rip open the b-file and the a8-h1 diagonal toward White's king. Keep pushing — …b4, …a5-a4, and …Qa5 add fuel; in opposite-castling positions the side that opens lines first usually mates first.", sayShort: "…b4 next — open b-file at the king" },
@@ -5578,55 +5326,10 @@ const N430: SublineNarration = {
   sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
 };
 
-const N431: SublineNarration = {
-  intro: { say: "Be3 — White reinforces d4 in the …Qd6 system. Your setup is already harmonious: the queen safe on d6, …a6 covering b5, the bishop active on f5 outside the pawn chain. Continue …e6, …Be7, …Nbd7 and …O-O, then break with …c5 in the center. With every piece working and no weaknesses to attack, you're fully comfortable against White's small space edge.", sayShort: "Be3 props d4 — …Qd6 stays solid" },
-  beats: [
-    { atMove: 13, say: "…Nc6 develops with pressure on the centre, your pieces active.", sayShort: "…Nc6 — develop with pressure.", highlights: [H('c6')] },
-    { atMove: 15, say: "…g6 prepares the fianchetto, your bishop heading for the long diagonal.", sayShort: "…g6 — prep the fianchetto.", highlights: [H('g6')] },
-    { atMove: 19, say: "…Bg7 takes the long diagonal, your bishop raking the centre.", sayShort: "…Bg7 — the long diagonal.", arrows: [A('g7', 'b2')], highlights: [H('b2')] },
-  ],
-  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
-};
 
-const N432: SublineNarration = {
-  intro: { say: "Be3 — White completes development, reinforcing d4. Your …Qd6 setup is fully in place: queen safe on d6, …a6 ruling out Nb5, the bishop active on f5, and …e6 securing the center. Continue …Be7 or …Bb4, …Nbd7 and …O-O, then the freeing …c5 break. With every piece harmoniously placed and no weaknesses, you've comfortably solved the opening.", sayShort: "Be3 supports d4 — you stay harmonious" },
-  beats: [
-    { atMove: 15, say: "…Nc6 develops with pressure on the centre, your pieces active.", sayShort: "…Nc6 — develop with pressure.", highlights: [H('c6')] },
-    { atMove: 17, say: "…Be7 completes development, your solid setup ready to castle.", sayShort: "…Be7 — finish developing.", highlights: [H('e7')] },
-    { atMove: 23, say: "…Bxc5 recaptures with an active bishop, the position comfortable and equal.", sayShort: "…Bxc5 — active bishop.", highlights: [H('c5')] },
-  ],
-  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
-};
 
-const N433: SublineNarration = {
-  intro: { say: "Bg5 — White pins your f6-knight before castling. In the …Qd6 system you're well placed: the queen safe on d6, …a6 stopping Nb5, the bishop active on f5. Break the pin with …Nbd7 or …e6 and …Be7, then …O-O. The mirrored development leaves no weaknesses — aim for the freeing …c5 or …e5 break for a comfortable, classical game.", sayShort: "Bg5 pin — untie it with …Be7" },
-  beats: [
-    { atMove: 13, say: "…Nc6 develops with pressure, your pieces eyeing the centre.", sayShort: "…Nc6 — develop with pressure.", highlights: [H('c6')] },
-    { atMove: 15, say: "…g6 prepares the fianchetto, your bishop heading for the long diagonal.", sayShort: "…g6 — prep the fianchetto.", highlights: [H('g6')] },
-    { atMove: 19, say: "…Ne5 centralises the knight on a strong square, eyeing key points.", sayShort: "…Ne5 — central knight.", highlights: [H('e5')] },
-  ],
-  sources: ['concept:tac-pin', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
-};
 
-const N434: SublineNarration = {
-  intro: { say: "Bg5 — in the …Qd6 system White pins your f6-knight and eyes the kingside. You're comfortably set: the queen rests safely on d6, …a6 covers b5, the f5-bishop is outside the pawn chain, and …e6 has solidified the center. Break the pin with …Be7, then …Nbd7 and …O-O — your harmonious structure leaves White nothing concrete to attack.", sayShort: "Bg5 pin met by …Be7 setup" },
-  beats: [
-    { atMove: 15, say: "…Nc6 develops with pressure, your pieces eyeing the centre.", sayShort: "…Nc6 — develop with pressure.", highlights: [H('c6')] },
-    { atMove: 17, say: "…Bg4 develops with a pin, pressuring White's setup.", sayShort: "…Bg4 — pin the knight.", highlights: [H('g4')] },
-    { atMove: 21, say: "…Nxe4 snaps a loose central pawn, your pieces dominant.", sayShort: "…Nxe4 — snap the pawn.", highlights: [H('e4')] },
-  ],
-  sources: ['concept:tac-pin', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
-};
 
-const N435: SublineNarration = {
-  intro: { say: "Re1 — White centralizes the rook, supporting a future d4-d5 or e-file pressure. Your …Qd6 setup is fully harmonious: the queen safe on d6, …a6 stopping Nb5, the bishop on f5 outside the pawn chain, and …e6 solidifying. Continue …Be7, …Nbd7 and …O-O, then look to the …c5 break to free the position — there's nothing for White to target.", sayShort: "Re1 centralizes — you complete your setup" },
-  beats: [
-    { atMove: 15, say: "…Nc6 develops with pressure, your pieces eyeing the centre.", sayShort: "…Nc6 — develop with pressure.", highlights: [H('c6')] },
-    { atMove: 17, say: "…Bxd3 trades off White's good bishop, easing your game.", sayShort: "…Bxd3 — trade the good bishop.", highlights: [H('d3')] },
-    { atMove: 23, say: "…O-O tucks the king to safety, your solid setup ready for play.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
-  ],
-  sources: ['concept:pos-open-file', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
-};
 
 const N436: SublineNarration = {
   intro: { say: "d4 — White grabs the center and develops Nf3 and Be2; you've already hit the d4-pawn with …Nc6 and now pin the f3-knight with …Bg4. Because White never played Nc3 to kick your queen, keep the active queen on d5 and your lead in piece activity. Head for …O-O-O, …e6 and pile onto d4 with …Bxf3 and …e5 or by doubling on the d-file — your harmonious development fully offsets White's central space.", sayShort: "…Bg4 pins f3 — pressure on d4" },
@@ -5638,25 +5341,7 @@ const N436: SublineNarration = {
   sources: ['concept:tac-pin', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
 };
 
-const N437: SublineNarration = {
-  intro: { say: "h3 — White gives the king luft and forestalls your …Bg4 ideas. Your …Qd6 setup is already harmonious: queen on d6, …a6 ruling out Nb5, the bishop developed to f5 outside the pawn chain. Continue …e6, …Be7, …Nbd7 and …O-O, then the central …c5 break. The slow h3 just lets you finish developing in comfort with a sound, weakness-free structure.", sayShort: "h3 luft — you develop smoothly" },
-  beats: [
-    { atMove: 13, say: "…Nc6 develops with pressure, eyeing the centre and d4.", sayShort: "…Nc6 — develop with pressure.", highlights: [H('c6')] },
-    { atMove: 15, say: "…e6 braces the centre, your solid structure complete.", sayShort: "…e6 — brace the centre.", highlights: [H('e6')] },
-    { atMove: 19, say: "…Bxd3 trades off White's good bishop, easing your game.", sayShort: "…Bxd3 — trade the good bishop.", highlights: [H('d3')] },
-  ],
-  sources: ['concept:pos-king-safety', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
-};
 
-const N438: SublineNarration = {
-  intro: { say: "h3 — White gives the king luft and prevents any …Bg4 pin. Your …Qd6 structure is rock-solid: queen on d6, …a6 stopping Nb5, the f5-bishop developed outside the chain, …e6 anchoring the center. Continue …Be7, …Nbd7 and …O-O, with the …c5 break to come. The h3 is a small slow move — use it to complete development at leisure with a sound position.", sayShort: "h3 gives luft — you finish development" },
-  beats: [
-    { atMove: 15, say: "…Nc6 develops with pressure on the centre, your pieces active.", sayShort: "…Nc6 — develop with pressure.", highlights: [H('c6')] },
-    { atMove: 19, say: "…Bxd3 trades off White's good bishop, easing your game toward equality.", sayShort: "…Bxd3 — trade the good bishop.", highlights: [H('d3')] },
-    { atMove: 23, say: "…O-O tucks the king to safety, your solid setup complete.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
-  ],
-  sources: ['concept:pos-king-safety', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
-};
 
 const N439: SublineNarration = {
   intro: { say: "Be3 — with the light-squared bishops traded on e2 and your queen recapturing d5, White guards d4. As he shuffles with a3, take queenside space: …a6 and …a5-a4 cramp his b-pawn and prepare to open the a-file. You have no bad piece and an active centralized queen; play …Nc6, …e6, …Be7 and …O-O for a comfortable game with queenside initiative.", sayShort: "…a5-a4 seizes queenside space" },
@@ -5828,85 +5513,13 @@ const N455: SublineNarration = {
   sources: ['concept:pos-king-safety', 'concept:pos-weak-squares', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
 };
 
-const N456: SublineNarration = {
-  intro: { say: "Bb3 — via the Bd2-first order White retreats the bishop, keeping its eye on f7 and avoiding any …b5 or …Nd5 tempo on c4. Your …Qa5 structure is rock-solid: the c6-pawn screens your queen, the f5-bishop is active, and …e6 holds the center. Pin the c3-knight with …Bb4, then …Nbd7, castle, and break with …c5 — you have no weaknesses and equalize comfortably.", sayShort: "Bb3 retreat — you play …Bb4, …c5" },
-  beats: [
-    { atMove: 15, say: "…Bb4 pins the c3-knight, pressuring the defender of White's centre.", sayShort: "…Bb4 — pin the knight.", highlights: [H('b4')] },
-    { atMove: 17, say: "…Bxc3 trades to shatter White's queenside pawns, lasting targets.", sayShort: "…Bxc3 — wreck the pawns.", highlights: [H('c3')] },
-    { atMove: 19, say: "…Qc7 repositions the queen safely, connecting your pieces.", sayShort: "…Qc7 — reposition, connect.", highlights: [H('c7')] },
-  ],
-  sources: ['concept:pos-development', 'concept:tac-pin', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
-};
 
-const N457: SublineNarration = {
-  intro: { say: "Nd5 — the sortie again, this time via the Bd2-first order, and again your c6-pawn answers it: …cxd5 simply wins the knight or forces a favorable trade on f6. Your …Qa5 setup with the c6-pawn shielding your queen and the f5-bishop outside the chain is built to meet exactly this. After …cxd5 or …Nxd5 you're solid, with the half-open c-file and pressure on d4 to come.", sayShort: "Nd5 met by …cxd5, you stay solid" },
-  beats: [
-    { atMove: 15, say: "…Qd8 retreats the queen to safety, sidestepping White's knight while keeping your structure.", sayShort: "…Qd8 — retreat to safety.", highlights: [H('d8')] },
-    { atMove: 17, say: "…Qxf6 recaptures with an active queen, your position solid and comfortable.", sayShort: "…Qxf6 — recapture actively.", highlights: [H('f6')] },
-    { atMove: 21, say: "…Nb6 reroutes the knight toward c4 and d5, your pieces harmonious.", sayShort: "…Nb6 — reroute toward c4.", highlights: [H('b6')] },
-  ],
-  sources: ['concept:pos-center', 'concept:tac-trap', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
-};
 
-const N458: SublineNarration = {
-  intro: { say: "Ne4 — via the Bd2-first order White centralizes, offering to swap your f6-knight while breaking your a5-queen's pressure on c3. Answer …Nxe4 or …Bxe4 and keep a solid setup: c6 guarding your queen, the bishop active, the center intact. After the exchange develop …Nd7, …Be7 and …O-O comfortably — the e4-knight had no real threat behind it.", sayShort: "Ne4 swap — you stay untroubled" },
-  beats: [
-    { atMove: 15, say: "…Qd8 steps the queen back to safety, dodging the knight's leap.", sayShort: "…Qd8 — step back safely.", highlights: [H('d8')] },
-    { atMove: 17, say: "…Qxf6 recaptures, your queen active and the position sound.", sayShort: "…Qxf6 — recapture actively.", highlights: [H('f6')] },
-    { atMove: 21, say: "…Nb6 reroutes the knight toward the c4-outpost, your pieces coordinated.", sayShort: "…Nb6 — eye c4.", highlights: [H('b6')] },
-  ],
-  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
-};
 
-const N459: SublineNarration = {
-  intro: { say: "Ne5 — White jumps the knight in aiming at f7, via the Bd2-first move order. Meet it head-on with …Nbd7 or …Bd6, trading or chasing the intruder while the rest of your position stays solid: the c6-pawn screens your a5-queen and the f5-bishop guards the light squares. Once the e5-knight is dealt with, complete development with …Be7 and …O-O for a balanced game.", sayShort: "Ne5 met by …Nbd7, you stay solid" },
-  beats: [
-    { atMove: 15, say: "…Nbd7 develops to challenge White's centralised e5-knight, holding firm.", sayShort: "…Nbd7 — challenge e5.", highlights: [H('d7')] },
-    { atMove: 17, say: "…Nxe5 trades off the strong knight, simplifying comfortably.", sayShort: "…Nxe5 — trade the knight.", highlights: [H('e5')] },
-    { atMove: 23, say: "…Bg6 tucks the good light bishop safe, keeping it active.", sayShort: "…Bg6 — keep the good bishop.", highlights: [H('g6')] },
-  ],
-  sources: ['concept:pos-outpost', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
-};
 
-const N460: SublineNarration = {
-  intro: { say: "O-O — by the Bd2-first move order White castles short, declining the opposite-castling fight. Your b4-bishop keeps the c3-knight pinned while you build the standard …Qa5 setup: c6-pawn screening your queen, bishop active on f5, …Nbd7 and …O-O to come. With kings on the same side it becomes a maneuvering battle — you have the typical resources of …c5 or …Bxc3 followed by play on the queenside.", sayShort: "Both castle short — a maneuvering game" },
-  beats: [
-    { atMove: 17, say: "…Qd8 steps the queen back to safety, keeping your structure flexible.", sayShort: "…Qd8 — step back safely.", highlights: [H('d8')] },
-    { atMove: 19, say: "…Bxc3 trades to shatter White's queenside, a lasting structural plus.", sayShort: "…Bxc3 — wreck the pawns.", highlights: [H('c3')] },
-    { atMove: 23, say: "…Qc7 repositions the queen, connecting your pieces against the weak structure.", sayShort: "…Qc7 — reposition, connect.", highlights: [H('c7')] },
-  ],
-  sources: ['concept:pos-king-safety', 'concept:tac-pin', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
-};
 
-const N461: SublineNarration = {
-  intro: { say: "a3 — reached via the Bd2-first order, it's the same central tension: White hits your b4-bishop that pins the c3-knight. Your structure — queen on a5, c6-pawn guarding it, bishop active on f5 — is the classic …Qa5 main line, and capturing on c3 doubles White's pawns. Whether you trade or retreat, head for …Nbd7, …O-O-O or …O-O, and pressure the long-term weakness of White's queenside.", sayShort: "a3 prods …Bb4 in …Qa5 main line" },
-  beats: [
-    { atMove: 17, say: "…Nbd7 develops toward the centre, completing your solid setup.", sayShort: "…Nbd7 — develop the knight.", highlights: [H('d7')] },
-    { atMove: 19, say: "…Bxc3 trades to shatter White's queenside pawns, lasting targets.", sayShort: "…Bxc3 — wreck the pawns.", highlights: [H('c3')] },
-    { atMove: 23, say: "…b5 expands on the queenside, gaining space in the comfortable game.", sayShort: "…b5 — queenside space.", highlights: [H('b5')] },
-  ],
-  sources: ['concept:tac-pin', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
-};
 
-const N462: SublineNarration = {
-  intro: { say: "a3 — the same opposite-castling battle by a different move order, with Bd2 played before Bc4. White prods your b4-bishop that pins the c3-knight; capturing on c3 shatters the pawns sheltering his king on c1. You're set up to storm with …b5-b4 while …Nbd7, the c6-pawn and the f5-bishop hold the center and queenside together. The race favors whoever lands first — and your structure points straight at the white king.", sayShort: "…Bxc3 doubles pawns, …b5 storm coming" },
-  beats: [
-    { atMove: 19, say: "…Bxc3 trades to damage White's structure, the doubled pawns a weakness.", sayShort: "…Bxc3 — damage the structure.", highlights: [H('c3')] },
-    { atMove: 21, say: "…Qc7 repositions the queen safely, connecting your pieces.", sayShort: "…Qc7 — reposition the queen.", highlights: [H('c7')] },
-    { atMove: 23, say: "…Nxe5 wins the central pawn, your pieces active with the better game.", sayShort: "…Nxe5 — win the pawn.", highlights: [H('e5')] },
-  ],
-  sources: ['concept:att-queenside-attack', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
-};
 
-const N463: SublineNarration = {
-  intro: { say: "h3 — reached via the Bd2-first order, White inserts it prophylactically to give the king luft and prevent any …Bg4 pin before castling. Your …Qa5 structure is rock-solid: the c6-pawn screens your queen, the f5-bishop is active outside the chain, and …e6 secures the center. Pin the c3-knight with …Bb4, then …Nbd7, castle, and break with …c5 — the slow h3 just lets you complete development in comfort.", sayShort: "h3 luft — you play …Bb4, …c5" },
-  beats: [
-    { atMove: 15, say: "…Nbd7 develops toward the centre, building your solid setup.", sayShort: "…Nbd7 — develop the knight.", highlights: [H('d7')] },
-    { atMove: 17, say: "…Bg6 tucks the bishop safe, keeping the good light bishop active.", sayShort: "…Bg6 — keep the good bishop.", highlights: [H('g6')] },
-    { atMove: 19, say: "…Bb4 pins the c3-knight, pressuring White's structure.", sayShort: "…Bb4 — pin the knight.", highlights: [H('b4')] },
-  ],
-  sources: ['concept:pos-king-safety', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
-};
 
 const N464: SublineNarration = {
   intro: { say: "Bb5 — White pins your c6-knight, the piece that backs up your …d6 lever against the e5-pawn. Break it with …Bd7, or just play …dxe5 and dissolve his centre into the lone isolated d4-pawn. With the b6 or d5 outpost waiting for your knights, fear nothing — you've got a clear structural target.", sayShort: "Break the pin, dissolve into the isolani" },
@@ -7554,19 +7167,7 @@ export const SUBLINE_NARRATION_E4OTHER: Record<string, SublineNarration> = {
   'alekhine-defence::2::d5@16': N22,
   'alekhine-defence::2::d5@18': N23,
   'alekhine-defence::2::f4@8': N24,
-  'alekhine-defence::3::Be3@14': N25,
-  'alekhine-defence::3::Nc3@10': { ...N8, beats: [
-    { atMove: 13, say: "…Bf6 develops the bishop toward the long diagonal and the centre.", sayShort: "…Bf6 — toward the diagonal.", highlights: [H('f6')] },
-    { atMove: 15, say: "…Nc6 develops with pressure, your pieces flowing out.", sayShort: "…Nc6 — develop with pressure.", highlights: [H('c6')] },
-    { atMove: 23, say: "…O-O tucks the king safe, your solid setup ready for play.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
-  ] },
-  'alekhine-defence::3::Nc3@14': N26,
-  'alekhine-defence::3::Re1@18': N27,
-  'alekhine-defence::3::a3@18': N28,
-  'alekhine-defence::3::b3@18': N29,
-  'alekhine-defence::3::d5@18': N30,
   'alekhine-defence::3::f4@8': N31,
-  'alekhine-defence::3::h3@14': N32,
   'alekhine-defence::4::Bc4@10': N33,
   'alekhine-defence::4::Bc4@12': N34,
   'alekhine-defence::4::Nc3@10': N35,
@@ -7692,11 +7293,9 @@ export const SUBLINE_NARRATION_E4OTHER: Record<string, SublineNarration> = {
   'anti-caro-fantasy::1::g6@7': N95,
   'anti-caro-fantasy::2::Nf6@9': N96,
   'anti-caro-fantasy::2::Qb6@5': N83,
-  'anti-caro-fantasy::2::Qxb2@11': N97,
   'anti-caro-fantasy::2::dxe4@5': N85,
   'anti-caro-fantasy::2::dxe4@7': N98,
   'anti-caro-fantasy::2::dxe4@9': N99,
-  'anti-caro-fantasy::2::e5@11': N100,
   'anti-caro-fantasy::2::e5@5': N91,
   'anti-caro-fantasy::2::e6@5': N92,
   'anti-caro-fantasy::2::e6@7': N101,
@@ -7871,15 +7470,6 @@ export const SUBLINE_NARRATION_E4OTHER: Record<string, SublineNarration> = {
   'caro-kann::1::c4@8': N216,
   'caro-kann::1::h3@8': N217,
   'caro-kann::1::h4@6': N218,
-  'caro-kann::2::Be2@10': N219,
-  'caro-kann::2::Be3@12': N220,
-  'caro-kann::2::Bg5@12': N221,
-  'caro-kann::2::d3@10': N222,
-  'caro-kann::2::d3@4': N223,
-  'caro-kann::2::exd5@12': N224,
-  'caro-kann::2::exd5@4': N225,
-  'caro-kann::2::g3@10': N226,
-  'caro-kann::2::gxf3@8': N227,
   'caro-kann::3::Bb5@16': N228,
   'caro-kann::3::Bc4@16': N229,
   'caro-kann::3::Bd3@6': N230,
@@ -8043,11 +7633,9 @@ export const SUBLINE_NARRATION_E4OTHER: Record<string, SublineNarration> = {
   'pirc-defence::0::Be3@10': N334,
   'pirc-defence::0::Be3@14': N335,
   'pirc-defence::0::Bxa6@14': N336,
-  'pirc-defence::0::Qe1@16': N337,
   'pirc-defence::0::dxc5@14': N338,
   'pirc-defence::0::e5@10': N339,
   'pirc-defence::0::e5@14': N340,
-  'pirc-defence::0::h3@16': N341,
   'pirc-defence::1::Bc4@18': N342,
   'pirc-defence::1::Bc4@8': N343,
   'pirc-defence::1::Be3@16': N344,
@@ -8058,16 +7646,10 @@ export const SUBLINE_NARRATION_E4OTHER: Record<string, SublineNarration> = {
   'pirc-defence::1::Re1@16': N349,
   'pirc-defence::1::h3@12': N350,
   'pirc-defence::1::h3@8': N351,
-  'pirc-defence::2::Be2@10': N352,
   'pirc-defence::2::Bg5@6': N353,
-  'pirc-defence::2::Bh6@10': N354,
-  'pirc-defence::2::Nf3@10': N355,
   'pirc-defence::2::Nf3@6': N356,
-  'pirc-defence::2::O-O-O@10': N357,
   'pirc-defence::2::f3@4': N358,
   'pirc-defence::2::f4@6': N359,
-  'pirc-defence::2::h3@10': N360,
-  'pirc-defence::2::h4@10': N361,
   'pirc-defence::3::Bd3@14': N362,
   'pirc-defence::3::Be2@12': N363,
   'pirc-defence::3::Bh6@12': N364,
@@ -8144,20 +7726,13 @@ export const SUBLINE_NARRATION_E4OTHER: Record<string, SublineNarration> = {
   'scandinavian-defence::2::a3@12': N428,
   'scandinavian-defence::2::d4@4': N429,
   'scandinavian-defence::2::d5@12': N430,
-  'scandinavian-defence::3::Be3@12': N431,
-  'scandinavian-defence::3::Be3@14': N432,
-  'scandinavian-defence::3::Bg5@12': N433,
-  'scandinavian-defence::3::Bg5@14': N434,
   'scandinavian-defence::3::Nf3@4': N408,
-  'scandinavian-defence::3::Re1@14': N435,
   'scandinavian-defence::3::d4@4': N436,
   'scandinavian-defence::3::g3@10': { ...N168, beats: [
     { atMove: 11, say: "…Bg4 develops with a pin on f3, the active setup against White's fianchetto.", sayShort: "…Bg4 — pin the knight.", highlights: [H('g4')] },
     { atMove: 15, say: "…c6 braces the centre, your solid Scandinavian structure complete.", sayShort: "…c6 — brace the centre.", highlights: [H('c6')] },
     { atMove: 19, say: "…Nd5 centralises the knight on a dominant square, eyeing key points.", sayShort: "…Nd5 — central knight.", highlights: [H('d5')] },
   ] },
-  'scandinavian-defence::3::h3@12': N437,
-  'scandinavian-defence::3::h3@14': N438,
   'scandinavian-defence::4::Bb5+@4': N413,
   'scandinavian-defence::4::Be3@10': N439,
   'scandinavian-defence::4::Nc3@10': N440,
@@ -8178,15 +7753,7 @@ export const SUBLINE_NARRATION_E4OTHER: Record<string, SublineNarration> = {
   'scandinavian-defence::5::Qd3@18': N453,
   'scandinavian-defence::5::Re1@16': N454,
   'scandinavian-defence::5::g4@14': N455,
-  'scandinavian-defence::6::Bb3@14': N456,
-  'scandinavian-defence::6::Nd5@14': N457,
-  'scandinavian-defence::6::Ne4@14': N458,
-  'scandinavian-defence::6::Ne5@14': N459,
   'scandinavian-defence::6::Nf3@4': N408,
-  'scandinavian-defence::6::O-O@16': N460,
-  'scandinavian-defence::6::a3@16': N461,
-  'scandinavian-defence::6::a3@18': N462,
-  'scandinavian-defence::6::h3@14': N463,
   'sicilian-alapin::0::Bb5@12': N464,
   'sicilian-alapin::0::Bb5@14': N465,
   'sicilian-alapin::0::Bd3@4': N54,

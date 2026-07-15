@@ -689,6 +689,24 @@ Soundness (worst defect class) → continuity (incoherent handoffs) → depth �
 content presence (gems → endgames → variation lessons; weeks of hand-curation,
 per-opening to the locked doctrines).
 
+### Gate D retro-sweep (David 2026-07-15 "D next" + "check sublines and variations") — IN PROGRESS
+- Instrument: `scripts/catalog-sweep/gated-skeleton-scan.mjs` → 84 rows
+  (lesson-vs-data skeleton divergences + shallow-lesson gaps).
+- **Triage verdict:** every lesson terminus is engine-cleared by the P0
+  soundness sweep, so DIVERGES rows are overwhelmingly the deliberate
+  curated-lesson vs drill-line architecture (lesson spines are data-chosen
+  independently of repertoire pgns). Real defects = lessons left on
+  P0-refuted lines: pirc Austrian (FIXED — beats rewritten); pirc 150 and
+  caro Advance lessons teach their own SOUND alternative sub-lines (cleared,
+  left); vienna vs 2…Nc6 lesson is an honest 11p gambit hub (left).
+- **Gate B masterclass shorts: ALL 7 EXTENDED** (scotch Steinitz, alapin
+  2…d5, alekhine scandi-trans, old-indian Janowski, birds Swiss Gambit,
+  schliemann ×2) — engine best-play to 16-18 plies, termini screened
+  (worst −0.89 Old-Indian-nature; Schliemann lines Black-POSITIVE).
+- **Sublines: course-sublines.json REGENERATED** against the moved pgns
+  (build-course-sublines.mjs, masters DB + explorer + engine fallback);
+  42k-test sublineNarration gate run for orphans.
+
 ## Next-session pickup
 Read the three sweep JSONs, work the backlog top-down, ship per the standard
 loop (gates → ship-check → main → prod audit).

@@ -26,9 +26,6 @@ export const SUBLINE_NARRATION_PRO_GOTHAM_W2: Record<string, SublineNarration> =
   'pro-gothamchess-stafford-refute::1::Nd5@9': {
     intro: { say: "Nd5 — Black jumps the knight in the 5.e5 line. Kick it with d4 and c4, gaining a huge centre and space; the knight gets shoved to the rim while you dominate. The Stafford's activity evaporates against the space grab.", sayShort: 'Nd5 — d4 and c4, seize the centre.' }, sources: ST,
   },
-  'pro-gothamchess-stafford-refute::1::Bc5@11': {
-    intro: { say: "Bc5 — Black's last shot at the f2-trick. But you met …Ne4 with d4, not d3, so the knight never hung and f2 is easily covered. Play c3 to buttress d4, finish your development, and the extra pawn simply tells. The Stafford's tricks are spent.", sayShort: 'Bc5 — c3 holds the extra pawn.' }, sources: ST,
-  },
   // ===== Scandinavian (Black) =====
   'pro-gothamchess-scandinavian::0::Nf3@4': {
     intro: { say: "Nf3 — natural development in the Qa5 main line. Reply …Bg4 pinning, then …Nc6 and …e6 or …O-O-O; get your pieces active before …e6 shuts the light bishop in. A solid, comfortable Scandinavian.", sayShort: 'Nf3 — pin with Bg4, develop actively.' }, sources: SC,
