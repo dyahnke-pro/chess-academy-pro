@@ -661,6 +661,25 @@
           ]
         }
       ]
+    },
+    {
+      "key": "danish",
+      "displayName": "the Danish Gambit",
+      "studentSide": "black",
+      "aliases": [
+        "danish gambit",
+        "danish"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-danish",
+          "name": "taking everything (the Bb4+/d5 demolition)",
+          "styleTags": [
+            "tactical",
+            "sharp"
+          ]
+        }
+      ]
     }
   ]
 }

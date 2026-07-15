@@ -48,6 +48,7 @@ import { BELGRADE_GAMBIT_LESSON } from './belgradeGambit';
 import { ANTI_FRENCH_TARRASCH_LESSON } from './antiFrenchTarrasch';
 import { ANTI_PHILIDOR_LESSON } from './antiPhilidor';
 import { ANTI_ELEPHANT_LESSON } from './antiElephant';
+import { ANTI_DANISH_LESSON } from './antiDanish';
 import { ANTI_PIRC_AUSTRIAN_LESSON } from './antiPircAustrian';
 import { ANTI_ENGLUND_LESSON } from './antiEnglund';
 import { ANTI_BENONI_PUSH_LESSON } from './antiBenoniPush';
@@ -431,6 +432,7 @@ const LESSONS: Record<string, LessonScript> = {
   [ANTI_FRENCH_TARRASCH_LESSON.openingId]: ANTI_FRENCH_TARRASCH_LESSON,
   [ANTI_PHILIDOR_LESSON.openingId]: ANTI_PHILIDOR_LESSON,
   [ANTI_ELEPHANT_LESSON.openingId]: ANTI_ELEPHANT_LESSON,
+  [ANTI_DANISH_LESSON.openingId]: ANTI_DANISH_LESSON,
   [ANTI_PIRC_AUSTRIAN_LESSON.openingId]: ANTI_PIRC_AUSTRIAN_LESSON,
   [ANTI_ENGLUND_LESSON.openingId]: ANTI_ENGLUND_LESSON,
   [ANTI_BENONI_PUSH_LESSON.openingId]: ANTI_BENONI_PUSH_LESSON,

@@ -293,6 +293,44 @@
   ]
  },
  {
+  "id": "anti-danish",
+  "eco": "C21",
+  "name": "Anti-Danish Gambit (Black)",
+  "pgn": "e4 e5 d4 exd4 c3 dxc3 Bc4 cxb2 Bxb2 Bb4+ Nc3 Nf6 e5 d5 exf6 Qxf6 Bb5+ c6 Ne2 cxb5 Qb3 Nc6 O-O Qh6",
+  "uci": "e2e4 e7e5 d2d4 e5d4 c2c3 d4c3 f1c4 c3b2 c1b2 f8b4 b1c3 g8f6 e4e5 d7d5 e5f6 d8f6 c4b5 c7c6 g1e2 c6b5 d1b3 b8c6 e1g1 f6h6",
+  "fen": "r1b1k2r/pp3ppp/2n4q/1p1p4/1b6/1QN5/PB2NPPP/R4RK1 w kq - 4 13",
+  "color": "black",
+  "style": "tactical",
+  "isRepertoire": true,
+  "overview": "The Danish Gambit has scared e4-e5 players for a hundred and fifty years — pawn after pawn for raging bishops. The answer: take EVERYTHING and get away with it. Two moves carry the whole defense — the developing check on b4, and the central counter-strike d5 that blunts both bishops in one stroke. The engine gives Black a full pawn's advantage in the main acceptance; a practical d5 takeout line forces a dead-level endgame for players who'd rather skip the theory.",
+  "keyIdeas": [
+   "Accept both pawns — the refutation of greed is not playing scared, it is knowing two moves.",
+   "Bb4 check develops with tempo: every check refunds part of White’s investment.",
+   "The …d5 counter-strike hits c4 while White’s own e5 push plugs the long diagonal.",
+   "Prefer trades of pieces, never pawns — the extra material is the whole story."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "The Practical …d5 Takeout",
+    "pgn": "e4 e5 d4 exd4 c3 d5 exd5 Qxd5 cxd4 Nc6 Nf3 Bg4 Be2 Bb4+ Nc3 Bxf3 Bxf3 Qc4",
+    "explanation": "Don't want to memorize the acceptance theory? Strike the centre immediately with d5 instead of taking a second pawn. The two moves to remember: the bishop check on b4 first, then the counter-intuitive bishop takes f3 — sinking your teeth into the c4-square and virtually forcing White to liquidate into a queenless endgame that is dead level on the engine and far easier for Black to play. The low-effort, high-comfort answer."
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-development",
+   "concept:tac-pin"
+  ]
+ },
+ {
   "id": "anti-scandinavian",
   "eco": "B01",
   "name": "Anti-Scandinavian: Main Line",
