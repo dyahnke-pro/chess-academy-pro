@@ -862,3 +862,46 @@ function terminationPhrase(t: string | undefined): string | null {
   if (/abandon|aborted/.test(s)) return null;
   return null;
 }
+
+// ─── Player style profile ─────────────────────────────────────────────────────
+
+import { classifyGameStyle, type GameStyle } from './gameStyleClassifier';
+
+export interface PlayerStyleProfile {
+  /** Modal style across the player's ANALYZED games. */
+  style: Exclude<GameStyle, 'unanalyzed'>;
+  /** Games carrying that style. */
+  count: number;
+  /** Analyzed games considered. */
+  total: number;
+  breakdown: Partial<Record<GameStyle, number>>;
+}
+
+/** Fewer analyzed games than this → no profile (style-neutral answers). */
+const STYLE_PROFILE_MIN_GAMES = 5;
+
+/**
+ * getPlayerStyleProfile — aggregate `classifyGameStyle` (Stockfish-grounded:
+ * eval swings + mistake ratios per game) across the player's analyzed games
+ * into a modal style profile. Returns null below the minimum sample so the
+ * coach never style-matches on noise (David 2026-07-15: style-matched
+ * counter-repertoire recommendations). Pure aggregation — G0.
+ */
+export async function getPlayerStyleProfile(): Promise<PlayerStyleProfile | null> {
+  const games = await getPlayerGames();
+  const breakdown: Partial<Record<GameStyle, number>> = {};
+  let total = 0;
+  for (const { game } of games) {
+    const { style } = classifyGameStyle(game);
+    if (style === 'unanalyzed') continue;
+    breakdown[style] = (breakdown[style] ?? 0) + 1;
+    total += 1;
+  }
+  if (total < STYLE_PROFILE_MIN_GAMES) return null;
+  let best: { style: Exclude<GameStyle, 'unanalyzed'>; count: number } | null = null;
+  for (const [style, count] of Object.entries(breakdown) as Array<[Exclude<GameStyle, 'unanalyzed'>, number]>) {
+    if (!best || count > best.count) best = { style, count };
+  }
+  if (!best) return null;
+  return { style: best.style, count: best.count, total, breakdown };
+}
