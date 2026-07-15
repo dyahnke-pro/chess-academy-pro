@@ -49,6 +49,15 @@ The LLM decides nothing; it voices facts computed in code, through `voiceFacts`.
      carries a real-name display map into the coach — flagged to David whether to
      sweep that surface too (it's a deliberate earlier feature; do not silently
      change it in this build).
+   - **THE PHRASING CONTRACT (David 2026-07-15: "Speak to other stats! Or say
+     something like 'based off of my teaching behaviors I recommend this…'").**
+     The coach recommends FIRST-PERSON as the coach, backed by anonymous stats:
+     "Based on how I teach this structure, I recommend the Austrian Attack
+     against the Pirc — it scores 78% across 45 grandmaster-level games in my
+     database, and it plugs the hole where you're scoring 13%." Stats the
+     computer may cite: the user's own matchup score, the anonymous GM-corpus
+     win-rate + game count, engine soundness, and the user's style profile.
+     Never a pro's name, never "X plays this".
    - **🔒 MULTI-RECOMMENDATION + STYLE-MATCH (David 2026-07-15):** when the map
      carries MORE THAN ONE recommendation for an opponent opening (e.g. a sharp
      attacking line AND a solid positional line), the computer returns BOTH, each
