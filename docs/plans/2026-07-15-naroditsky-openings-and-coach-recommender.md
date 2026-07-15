@@ -40,6 +40,15 @@ The LLM decides nothing; it voices facts computed in code, through `voiceFacts`.
    - **User matchup stat** = the student's own score vs the opponent opening (the
      SAME source as the Elephant-Gambit bubble) — "plugs your 13% hole".
    - Sources: `data:pro-game-references` + `data:your-games`. No invented content.
+   - **🔒🔒 NO PRO NAMES IN THE COACH'S MOUTH (David 2026-07-15, emphatic:
+     "CANT USE NARADITSKI'S NAME!!!").** The recommendation NEVER attributes to a
+     named pro. The stat phrasing is anonymous: "this line scores 78% across 45
+     games at grandmaster level" — never "Naroditsky scores 78%". This extends
+     the depersonalization doctrine (house voice = style, not attribution) to the
+     recommender's stats. NOTE: the existing `playerGames.ts` envelope (line ~29)
+     carries a real-name display map into the coach — flagged to David whether to
+     sweep that surface too (it's a deliberate earlier feature; do not silently
+     change it in this build).
    - **🔒 MULTI-RECOMMENDATION + STYLE-MATCH (David 2026-07-15):** when the map
      carries MORE THAN ONE recommendation for an opponent opening (e.g. a sharp
      attacking line AND a solid positional line), the computer returns BOTH, each
