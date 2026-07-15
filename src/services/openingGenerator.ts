@@ -38,6 +38,7 @@ import {
   resolveCuratedVariation,
   findSiblingExtensionBranches,
   findShortestCanonicalPgn,
+  resolveTeachSpine,
   findContinuationsAtPly,
   type ForkBranch,
 } from './openingDetectionService';
@@ -1146,10 +1147,26 @@ async function generateOpeningFromDbNarration(
   // and leaves the most room for fork branches at the end. The
   // longer-depth rows ARE valid lines but they're better surfaced
   // as DB-grounded deep-dive targets, not the default walkthrough.
-  const shortPgn = findShortestCanonicalPgn(entry.canonicalName);
-  const spineMoves = shortPgn
-    ? shortPgn.split(/\s+/).filter(Boolean)
-    : entry.moves;
+  // Resolve the spine + deep-dive fork branches, GUARANTEEING the main
+  // line reaches a middlegame in full pace (David 2026-07-15 — "doesn't
+  // get me to the middle game"). See `resolveTeachSpine`: when the
+  // shortest-canonical spine's forks don't carry the line past the
+  // opening, it extends the spine itself to a middlegame terminus. The
+  // extended plies are narrated by the same single Danya-voiced,
+  // teaching-grounded LLM call below. Tour mode stays a quick taste.
+  const spineResolution = resolveTeachSpine(entry.canonicalName, entry.moves, {
+    extendToMiddlegame: pace !== 'tour',
+  });
+  const spineMoves = spineResolution.spineMoves;
+  const rawBranches: ForkBranch[] = spineResolution.branches;
+  if (spineResolution.extendedToMiddlegame) {
+    void logAppAudit({
+      kind: 'coach-surface-migrated',
+      category: 'subsystem',
+      source: 'openingGenerator.generateOpeningFromDbNarration',
+      summary: `spine extended to middlegame for "${entry.canonicalName}" (${spineMoves.length} plies) — forks did not carry the main line past the opening`,
+    });
+  }
 
   // 1. Replay the PGN, collect each move's SAN + post-move FEN.
   type Position = { san: string; fen: string; ply: number; movedBy: 'white' | 'black'; from: string; to: string };
@@ -1182,15 +1199,6 @@ async function generateOpeningFromDbNarration(
     })),
   );
 
-  // 1b. Find sibling extensions to inject as deep-dive fork branches
-  //     at the end of the spine. For Najdorf this surfaces English
-  //     Attack, Adams Attack, Bg5 Main Line, Opocensky / Scheveningen
-  //     under Be2, etc. — the actual deep-dive choices a student
-  //     would expect.
-  const rawBranches: ForkBranch[] = findSiblingExtensionBranches(
-    entry.canonicalName,
-    spineMoves.join(' '),
-  );
   // Tour mode caps branch extensions tighter so the lesson stays
   // snappy. Full mode runs each branch to the END of the Lichess DB
   // entry (no truncation — `findSiblingExtensionBranches` returns

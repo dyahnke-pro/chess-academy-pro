@@ -20,7 +20,7 @@ import { NarrationArrowOverlay } from './NarrationArrowOverlay';
 import { AnalysisToggles } from '../Board/AnalysisToggles';
 import { useChessGame, type MoveResult } from '../../hooks/useChessGame';
 import { usePositionNarration } from '../../hooks/usePositionNarration';
-import { useTeachWalkthrough } from '../../hooks/useTeachWalkthrough';
+import { useTeachWalkthrough, isStartablePunishLesson } from '../../hooks/useTeachWalkthrough';
 import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
@@ -128,7 +128,7 @@ import { useAppStore } from '../../stores/appStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { useSettings } from '../../hooks/useSettings';
 import { getFavoriteOpenings } from '../../services/openingService';
-import type { OpeningRecord } from '../../types';
+import type { OpeningRecord, OpeningVariation } from '../../types';
 import type { LiveState, TacticsLiveContext } from '../../coach/types';
 import type { ChatMessage as ChatMessageType, BoardArrow, BoardHighlight } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
@@ -523,6 +523,22 @@ export function CoachTeachPage(): JSX.Element {
       summary: `in-page play-out started from plan position ("${session.title}")`,
     });
   }, []);
+
+  // "Play this line out yourself" at the walkthrough LEAF — the student
+  // has just watched the taught line into the middlegame; now they play
+  // it out. We mount OpeningPlayMode IN-PAGE, LOCKED to the taught line
+  // via `customLine` (it plays the exact watched moves move-for-move
+  // through the opening, then hands to ADAPTIVE STOCKFISH in the
+  // middlegame — David 2026-07-15: "then stockfish gets used to the
+  // middlegame"). This replaces the old `navigate('/coach/play?opening=…')`
+  // handoff, which left the page AND started the generic play room from
+  // scratch — losing the taught line + the middlegame position, and
+  // violating the WLPP Play-lock (never hand a taught line to the generic
+  // /coach/play room). `null` = not playing out a line.
+  const [leafPlayOut, setLeafPlayOut] = useState<{
+    opening: OpeningRecord;
+    customLine: OpeningVariation;
+  } | null>(null);
 
   // Game state via the canonical hook — same primitive Play uses. Gives
   // us click-to-move + legal dots + drag, plus loadFen/resetGame/undoMove
@@ -4693,6 +4709,18 @@ export function CoachTeachPage(): JSX.Element {
           />
         </div>
       )}
+      {/* Leaf "Play this line out yourself" — LOCKED to the taught line
+          via customLine; plays it move-for-move then adaptive Stockfish
+          in the middlegame. Kept in-page (no generic /coach/play). */}
+      {leafPlayOut && (
+        <div className="absolute inset-0 z-40 bg-theme-bg overflow-y-auto" data-testid="coach-teach-leaf-playout">
+          <OpeningPlayMode
+            opening={leafPlayOut.opening}
+            customLine={leafPlayOut.customLine}
+            onExit={() => setLeafPlayOut(null)}
+          />
+        </div>
+      )}
       {/* Plan picker — shown when the opening carries more than one
           authored plan (the Pirc has 8). Tap a chip to start that
           variation's plan in-page. */}
@@ -5110,6 +5138,7 @@ export function CoachTeachPage(): JSX.Element {
             walkthrough={walkthrough}
             navigate={navigate}
             onDeepDive={(query) => void handleSubmit(query)}
+            onPlayOutLine={(opening, customLine) => setLeafPlayOut({ opening, customLine })}
           />
         ) : (
           // Control buttons styled to MATCH Play's row exactly (David
@@ -5962,6 +5991,7 @@ function WalkthroughControls({
   walkthrough,
   navigate,
   onDeepDive,
+  onPlayOutLine,
 }: {
   walkthrough: ReturnType<typeof useTeachWalkthrough>;
   navigate: ReturnType<typeof useNavigate>;
@@ -5970,6 +6000,12 @@ function WalkthroughControls({
    *  surface routing that handles chat input, so existing typo
    *  tolerance + broad-vs-specific depth logic kicks in. */
   onDeepDive: (query: string) => void;
+  /** Fired by the leaf "Play this line out yourself" button — the parent
+   *  mounts OpeningPlayMode in-page, LOCKED to the taught line via
+   *  customLine (plays it move-for-move, then adaptive Stockfish in the
+   *  middlegame). Kept in the parent so the play-out overlay lives at the
+   *  page root, not inside these controls. */
+  onPlayOutLine: (opening: OpeningRecord, customLine: OpeningVariation) => void;
 }): JSX.Element {
   const { phase, forkOptions, canBacktrack, leafOutro, tree } = walkthrough;
 
@@ -6331,7 +6367,7 @@ function WalkthroughControls({
       (tree?.concepts && tree.concepts.length > 0) ||
       (tree?.findMove && tree.findMove.length > 0) ||
       (tree?.drill && tree.drill.length > 0) ||
-      (tree?.punish && tree.punish.length > 0);
+      (tree?.punish ?? []).some(isStartablePunishLesson);
     return (
       <div className="px-3 pb-3 space-y-2" data-testid="walkthrough-leaf-panel">
         {leafOutro && (
@@ -6351,11 +6387,53 @@ function WalkthroughControls({
               Continue learning
             </button>
           )}
-          {tree && (
+          {tree && walkthrough.pathSans.length > 0 && (
             <button
               onClick={() => {
+                // Play the taught line out IN-PAGE, LOCKED to it via
+                // customLine: OpeningPlayMode replays the exact watched
+                // moves through the opening, then adaptive Stockfish takes
+                // over in the middlegame (David 2026-07-15). No navigate,
+                // no generic /coach/play room, no wandering off the line.
+                const side =
+                  tree.studentSide ?? inferStudentSide(tree.openingName);
+                const linePgn = walkthrough.pathSans.join(' ');
+                const opening: OpeningRecord = {
+                  id: `teach-playout-${tree.eco || tree.openingName}`,
+                  eco: tree.eco ?? '',
+                  name: tree.openingName,
+                  pgn: linePgn,
+                  uci: '',
+                  fen: STARTING_FEN,
+                  color: side,
+                  style: '',
+                  isRepertoire: false,
+                  overview: null,
+                  keyIdeas: null,
+                  traps: null,
+                  warnings: null,
+                  variations: null,
+                  drillAccuracy: 0,
+                  drillAttempts: 0,
+                  lastStudied: null,
+                  woodpeckerReps: 0,
+                  woodpeckerSpeed: null,
+                  woodpeckerLastDate: null,
+                  isFavorite: false,
+                };
+                const customLine: OpeningVariation = {
+                  name: 'the line you just learned',
+                  pgn: linePgn,
+                  explanation: '',
+                };
+                void logAppAudit({
+                  kind: 'coach-surface-migrated',
+                  category: 'subsystem',
+                  source: 'CoachTeachPage.leafPlayOut',
+                  summary: `in-page play-out (locked to taught line, ${walkthrough.pathSans.length} plies) → adaptive Stockfish middlegame for "${tree.openingName}"`,
+                });
                 walkthrough.stop();
-                void navigate(`/coach/play?opening=${encodeURIComponent(tree.openingName)}`);
+                onPlayOutLine(opening, customLine);
               }}
               className="w-full flex items-center justify-center gap-2 px-3 py-3 rounded-lg bg-theme-accent text-theme-bg text-sm font-semibold min-h-[48px] transition-colors"
               style={goldGlowStrongStyle}
@@ -6431,7 +6509,10 @@ function WalkthroughControls({
     const conceptsCount = tree?.concepts?.length ?? 0;
     const findMoveCount = tree?.findMove?.length ?? 0;
     const drillCount = tree?.drill?.length ?? 0;
-    const punishCount = tree?.punish?.length ?? 0;
+    // Only count trap lessons that will actually START — a malformed
+    // cached lesson must not show a dead "Trap lines" tile (David
+    // 2026-07-15).
+    const punishCount = (tree?.punish ?? []).filter(isStartablePunishLesson).length;
     const pendingJump = walkthrough.pendingStageJump;
     const pendingLabel: Record<string, string> = {
       punish: 'trap lines',
@@ -6742,7 +6823,7 @@ function QuizPanel({
   // Hoisted BELOW the useEffect above to satisfy rules-of-hooks —
   // both are kept inside the component but always run in the same
   // order on every render.
-  if (activeStage === 'punish' && tree?.punish && tree.punish.length > 0) {
+  if (activeStage === 'punish' && (tree?.punish ?? []).some(isStartablePunishLesson)) {
     return <PunishLessonPicker walkthrough={walkthrough} />;
   }
 
@@ -6934,7 +7015,14 @@ function PunishLessonPicker({
   walkthrough: ReturnType<typeof useTeachWalkthrough>;
 }): JSX.Element {
   const { tree } = walkthrough;
-  if (!tree?.punish || tree.punish.length === 0) {
+  // Keep the ORIGINAL index — startPunishLesson(idx) indexes into
+  // tree.punish — but only surface lessons that will actually start
+  // (a malformed cached lesson must never appear as a clickable tile
+  // that does nothing; David 2026-07-15).
+  const startable = (tree?.punish ?? [])
+    .map((lesson, idx) => ({ lesson, idx }))
+    .filter(({ lesson }) => isStartablePunishLesson(lesson));
+  if (startable.length === 0) {
     return <div data-testid="walkthrough-punish-empty" />;
   }
   return (
@@ -6944,7 +7032,7 @@ function PunishLessonPicker({
         Plays out as a walkthrough on the board.
       </div>
       <div className="flex flex-col gap-2">
-        {tree.punish.map((lesson, idx) => {
+        {startable.map(({ lesson, idx }) => {
           // Per-lesson kind: 'trap' (forced tactical refutation),
           // 'mistake' (counting/structural blunder, default), 'theme'
           // (positional plan). Drives the colored chip on the tile so
