@@ -59,7 +59,7 @@ function deepseekCacheSplit(usage: unknown): { hit: number | null; miss: number 
   };
 }
 import { lookupMasterPlay } from './masterPlayLookup';
-import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation } from './groundedAnswer';
 import { matchRouteByTopic } from './navigationRouter';
 import { APP_ROUTES_MANIFEST } from '../data/appRoutesManifest';
 import { lookupTablebase } from './lichessTablebaseService';
@@ -68,7 +68,8 @@ import { getUnifiedWeaknessProfile } from './weaknessSpine';
 import { getStrongestOpenings, getMostPlayedOpenings, getWeakestOpenings, getOpeningById } from './openingService';
 import { getWeakSpotsForOpening } from './weakSpotService';
 import type { OpeningRecord } from '../types';
-import { getOverviewInsights, getMistakeInsights, getTacticInsights, getOpeningInsights, getTimeTroubleProfile, getLastGameResult } from './gameInsightsService';
+import { getOverviewInsights, getMistakeInsights, getTacticInsights, getOpeningInsights, getTimeTroubleProfile, getLastGameResult, getPlayerStyleProfile } from './gameInsightsService';
+import { matchOpponentOpening } from './counterRepertoireService';
 import { getMisconceptionProfile } from './misconceptionService';
 import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleErrorsBySituationAnswer, assembleMisconceptionsAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleTrendAnswer, assembleTimeTroubleAnswer, assembleLastGameAnswer } from './groundedAnswer';
 import { computeLastMoveRating } from './moveRating';
@@ -1346,6 +1347,10 @@ export interface MasterGroundingOptions {
    *  what to learn next" → getOpeningInsights → assembleRepertoireGapAnswer. */
   repertoireGapQuestion?: boolean;
   repertoireGapKind?: 'out-of-book' | 'hole' | 'learn-next';
+  /** Counter-repertoire recommendation (David 2026-07-15) — "what should I
+   *  play against the Pirc?" → counter-repertoire.json + style profile →
+   *  assembleCounterRepertoireAnswer. Suppresses bestMoveQuestion upstream. */
+  counterRepertoireQuestion?: boolean;
   /** Wave 3 — accuracy/move-quality, consistency/time-control, converting. No board. */
   accuracyQuestion?: boolean;     // getOverviewInsights → assembleAccuracyAnswer
   consistencyQuestion?: boolean;  // streaks + timeControlPerformance → assembleConsistencyAnswer
@@ -2544,6 +2549,7 @@ export async function getCoachChatResponse(
       grounding.tacticsProfileQuestion === true ||
       grounding.phaseQuestion === true ||
       grounding.repertoireGapQuestion === true ||
+      grounding.counterRepertoireQuestion === true ||
       grounding.accuracyQuestion === true ||
       grounding.consistencyQuestion === true ||
       grounding.errorsBySituationQuestion === true ||
@@ -3040,6 +3046,58 @@ export async function getCoachChatResponse(
             const noDataFact = "You haven't analyzed enough games yet for me to break down your play by phase. Analyze a few games and I'll show you whether your opening, middlegame, or endgame needs the most work.";
             const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'phase-profile', preferRaw: true });
             if (voicedNoData) return voicedNoData;
+          } catch { /* fall through */ }
+        }
+
+        // ── COUNTER-REPERTOIRE RECOMMENDATION (David 2026-07-15) — "what
+        // should I play against the Pirc?" answered from the curated
+        // counter-repertoire map + the student's Stockfish-classified style
+        // profile + their real matchup score. Dispatched BEFORE repertoire-gap
+        // (a family-matched against-ask is more specific) and the best-move
+        // branch (which is suppressed upstream for these asks). Anonymous
+        // stats only — never a pro's name (the phrasing contract).
+        if (grounding.counterRepertoireQuestion) {
+          try {
+            const family = matchOpponentOpening(lastUserMessage());
+            if (family) {
+              // The student's own score vs this opening family, when their
+              // game insights carry a row whose name matches an alias.
+              let userMatchup: { winRate: number; games: number } | null = null;
+              try {
+                const oi = await getOpeningInsights();
+                const rows = [...oi.worstResults, ...oi.bestResults].filter((o) => o.name && o.games > 0);
+                const hit = rows.find((o) => {
+                  const n = o.name.toLowerCase();
+                  return family.aliases.some((al) => n.includes(al) || al.includes(n));
+                });
+                if (hit) userMatchup = { winRate: hit.winRate, games: hit.games };
+              } catch { /* no user stats — the answer stays honest without them */ }
+              let styleProfile: Awaited<ReturnType<typeof getPlayerStyleProfile>> = null;
+              try { styleProfile = await getPlayerStyleProfile(); } catch { /* neutral */ }
+              const answer = assembleCounterRepertoireAnswer({
+                opponentDisplayName: family.displayName,
+                studentSide: family.studentSide,
+                recommendations: family.recommendations,
+                userMatchup,
+                styleProfile,
+              });
+              if (answer) {
+                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'counter-repertoire', preferRaw: true });
+                if (voiced) {
+                  const pick = pickCounterRecommendation(family.recommendations, styleProfile);
+                  lastCoachActionOffer = pick ? [{ type: 'drill_opening', id: pick.openingId }] : null;
+                  return voiced;
+                }
+              }
+            } else if (!grounding.repertoireGapQuestion) {
+              // The ask names an opponent opening we have NO curated answer
+              // for — say so honestly (a true capability fact), never invent
+              // a line (G0). When the gap flag also fired, fall through to
+              // the repertoire-gap answer instead.
+              const noPrepFact = "I don't have a prepared recommendation against that opening yet. Ask me about the ones I do teach — the Sicilian, Caro-Kann, French, Pirc, King's Indian, London and more — or tell me what your opponent plays and I'll point you at the closest line I cover.";
+              const voicedNoPrep = await voiceFacts(noPrepFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'counter-repertoire', preferRaw: true });
+              if (voicedNoPrep) return voicedNoPrep;
+            }
           } catch { /* fall through */ }
         }
 

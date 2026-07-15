@@ -1306,6 +1306,40 @@ export function repertoireGapKind(ask: string | undefined): 'out-of-book' | 'hol
   return 'hole';
 }
 
+/** COUNTER-REPERTOIRE (David 2026-07-15) — "what should I play against the
+ *  Pirc?" / "which opening do you suggest vs the KID and why?" asks for a
+ *  REPERTOIRE RECOMMENDATION, not a best move in the current position (the
+ *  live coach answered the Pirc ask with a bare "e4, +0.6" — the best-move
+ *  interception hijacking a recommendation question). Requires an
+ *  against-object so "what should I play here / in this position" stays a
+ *  best-move ask. Resolved against `counter-repertoire.json` in coachApi;
+ *  suppresses isBestMoveQuestion in buildQuestionGrounding. */
+const COUNTER_REPERTOIRE_RE = anyOf([
+  String.raw`\bwhat\s+(?:should|do|can|would|to)\s+(?:i|you)\s*(?:play|use|go\s+with)?\s*(?:against|vs\.?|versus)\b`,
+  String.raw`\bwhat\s+to\s+play\s+(?:against|vs\.?|versus)\b`,
+  String.raw`\bwhat\s+(?:do|would)\s+you\s+(?:recommend|suggest)\s+(?:i\s+play\s+)?(?:against|vs\.?|versus|for\s+meeting)\b`,
+  String.raw`\bwhich\s+(?:opening|line|defen[cs]e|system|weapon)\s+.{0,40}\b(?:against|vs\.?|versus)\b`,
+  String.raw`\bhow\s+(?:do|should|can)\s+i\s+(?:meet|face|counter|beat|handle|punish|deal\s+with|respond\s+to|answer)\s+(?:the\s+|a\s+)?[a-z]`,
+  String.raw`\b(?:best|good|solid|sharp)\s+(?:opening|line|defen[cs]e|system|weapon|answer|response|reply)\s+(?:against|vs\.?|versus|to)\b`,
+  String.raw`\b(?:an?\s+)?(?:line|answer|weapon|antidote)\s+against\s+(?:the\s+)?[a-z]`,
+  String.raw`\brecommend\s+(?:me\s+)?(?:an?\s+)?(?:opening|line|defen[cs]e|system|weapon)\b`,
+  // "which opening do you suggest (I play)?" is inherently a recommendation
+  // ask even without an against-object — the family resolution in coachApi
+  // reads the opening name from the rest of the message ("I struggle against
+  // the KID. Which opening do you suggest I play against it and why?").
+  String.raw`\bwhich\s+(?:opening|line|defen[cs]e|system)\s+(?:do\s+you|would\s+you)\s+(?:suggest|recommend)\b`,
+]);
+export function isCounterRepertoireQuestion(ask: string | undefined): boolean {
+  if (!ask) return false;
+  // Deictic against-objects ("against it / this / here / the position") are
+  // board asks, not repertoire asks — STRIP them, then classify what's left,
+  // so "I struggle against the KID… which opening do you suggest I play
+  // against it?" still fires on the real object while a bare "what should I
+  // play against this position" does not (David 2026-07-15 screenshots).
+  const stripped = ask.replace(/\b(?:against|vs\.?|versus)\s+(?:this(?:\s+position)?|that|it|him|her|them|the\s+position|here|now)\b/gi, ' ');
+  return COUNTER_REPERTOIRE_RE.test(stripped);
+}
+
 /** WAVE 3 — accuracy/move-quality, consistency/time-control, converting/winning.
  *  Each is about the STUDENT'S OWN play (no board), voiced from the analytics. */
 
@@ -1838,7 +1872,11 @@ export function buildQuestionGrounding(
     // (David 2026-07-10). whyBestMove still wins for "why is X best".
     candidateMoveQuestion: isCandidateMoveQuestion(a),
     candidateMoveSan: extractCandidateSan(a) ?? undefined,
-    bestMoveQuestion: isBestMoveQuestion(a) && !isCandidateMoveQuestion(a),
+    // A counter-repertoire ask ("what should I play against the Pirc") is a
+    // RECOMMENDATION question — it must never be hijacked into a best-move
+    // position eval (David 2026-07-15, live screenshot: "e4, +0.6").
+    counterRepertoireQuestion: isCounterRepertoireQuestion(a),
+    bestMoveQuestion: isBestMoveQuestion(a) && !isCandidateMoveQuestion(a) && !isCounterRepertoireQuestion(a),
     whyBestMoveQuestion: isWhyBestMoveQuestion(a),
     tacticsQuestion: isTacticsQuestion(a),
     progressQuestion: isProgressQuestion(a),

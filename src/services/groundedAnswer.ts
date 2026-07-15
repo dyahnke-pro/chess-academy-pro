@@ -2997,3 +2997,117 @@ export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'b
   const b = bad.length ? `Poorly-placed: your ${bad.join(', ')}.` : '';
   return { facts: [g, b].filter(Boolean).join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: src };
 }
+
+// ═══ COUNTER-REPERTOIRE RECOMMENDATION (David 2026-07-15) — "what should I
+// play against the Pirc?" answered with the app's curated counter-repertoire,
+// style-matched to the student's own Stockfish-classified game profile, and
+// backed by honest anonymous stats. NEVER a pro's name in the phrasing. ═══
+
+/** One curated recommendation, a structural subset of CounterRecommendation. */
+export interface CounterRecLike {
+  openingId: string;
+  name: string;
+  styleTags: ReadonlyArray<string>;
+  stat?: { games: number; scorePct: number } | null;
+}
+
+/** The student's aggregated style profile (getPlayerStyleProfile). */
+export interface StyleProfileLike {
+  style: string;
+  count: number;
+  total: number;
+}
+
+/** Style clusters for matching a player profile to a recommendation's tags:
+ *  the attacking cluster and the quiet cluster. Same vocabulary as
+ *  gameStyleClassifier. */
+const ATTACKING_STYLES = new Set(['tactical', 'aggressive', 'sharp']);
+const QUIET_STYLES = new Set(['positional', 'solid']);
+
+function styleMatches(profileStyle: string, tags: ReadonlyArray<string>): boolean {
+  const attacking = ATTACKING_STYLES.has(profileStyle);
+  const quiet = QUIET_STYLES.has(profileStyle);
+  return tags.some((t) => (attacking && ATTACKING_STYLES.has(t)) || (quiet && QUIET_STYLES.has(t)));
+}
+
+const STYLE_WORD: Record<string, string> = {
+  tactical: 'tactical', aggressive: 'aggressive', sharp: 'sharp',
+  positional: 'positional', solid: 'solid',
+};
+
+/**
+ * pickCounterRecommendation — the ONE selection rule shared by the answer
+ * prose and the action chip (they must never disagree): exactly one
+ * style-matched line → that line; otherwise the first (curated order).
+ * Null only when the list is empty.
+ */
+export function pickCounterRecommendation(
+  recs: ReadonlyArray<CounterRecLike>,
+  profile: StyleProfileLike | null | undefined,
+): CounterRecLike | null {
+  const pool = recs.filter((r) => r.name && r.openingId);
+  if (pool.length === 0) return null;
+  if (pool.length === 1 || !profile) return pool[0];
+  const matched = pool.filter((r) => styleMatches(profile.style, r.styleTags));
+  if (matched.length === 1) return matched[0];
+  return pool[0];
+}
+
+/** Anonymous corpus stat — the phrasing contract bans pro names. */
+function statClause(stat: { games: number; scorePct: number } | null | undefined): string {
+  if (!stat || stat.games <= 0) return '';
+  return ` — it scores ${stat.scorePct}% across ${stat.games.toLocaleString()} games at grandmaster level`;
+}
+
+/**
+ * assembleCounterRepertoireAnswer — the grounded "what should I play against
+ * X?" answer (David 2026-07-15, after the live coach answered the Pirc ask
+ * with a bare "e4, +0.6" position eval). Selection logic is ALL here in code:
+ * one recommendation → recommend it; two → name BOTH and pick the one whose
+ * styleTags match the student's own Stockfish-classified style profile (or
+ * the first, style-neutral, when no profile / no match). Stats are the honest
+ * curated corpus numbers + the student's own matchup score. First-person coach
+ * voice, anonymous stats, never a pro's name (the phrasing contract). The LLM
+ * only rephrases downstream (G0).
+ */
+export function assembleCounterRepertoireAnswer(opts: {
+  opponentDisplayName: string;
+  studentSide: 'white' | 'black';
+  recommendations: ReadonlyArray<CounterRecLike>;
+  userMatchup?: { winRate: number; games: number } | null;
+  styleProfile?: StyleProfileLike | null;
+}): GroundedAnswer | null {
+  const recs = opts.recommendations.filter((r) => r.name && r.openingId);
+  if (recs.length === 0) return null;
+
+  const matchup = opts.userMatchup && opts.userMatchup.games > 0
+    ? ` In your own games you score ${opts.userMatchup.winRate}% against it over ${opts.userMatchup.games} game${opts.userMatchup.games === 1 ? '' : 's'} — that's the gap this plugs.`
+    : '';
+
+  if (recs.length === 1) {
+    const r = recs[0];
+    const facts =
+      `Against ${opts.opponentDisplayName}, based on how I teach it, I recommend ${r.name}${statClause(r.stat)}.${matchup}` +
+      ` Want to learn it? I have the full line ready for you.`;
+    return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:counter-repertoire'] };
+  }
+
+  // Two (or more — present the top two) recommendations.
+  const [a, b] = recs;
+  const styleWordFor = (r: CounterRecLike): string => STYLE_WORD[r.styleTags[0]] ?? r.styleTags[0] ?? '';
+  const profile = opts.styleProfile ?? null;
+  const aMatch = profile ? styleMatches(profile.style, a.styleTags) : false;
+  const bMatch = profile ? styleMatches(profile.style, b.styleTags) : false;
+  // Exactly one style-matched line → it's the pick, and the style is the
+  // stated reason. Otherwise default to the first (curated order) neutrally.
+  const pick = pickCounterRecommendation(recs, profile) ?? a;
+  const styleReason = profile && (aMatch !== bMatch)
+    ? ` Your own games lean ${STYLE_WORD[profile.style] ?? profile.style} (${profile.count} of your last ${profile.total} analyzed), so I'd start with ${pick.name}`
+    : ` I'd start with ${pick.name}`;
+
+  const facts =
+    `I teach two answers to ${opts.opponentDisplayName}: ${a.name} (${styleWordFor(a)}) and ${b.name} (${styleWordFor(b)}).` +
+    `${styleReason}${statClause(pick.stat)}.${matchup}` +
+    ` Want to learn it? I have the full line ready for you.`;
+  return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:counter-repertoire'] };
+}

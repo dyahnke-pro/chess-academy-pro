@@ -193,7 +193,7 @@ function pickProvider(name: ProviderName): Provider {
 // here and re-exported for back-compat with existing callers.
 import {
   coachSurfaceToRoute,
-  isPlanQuestion, isBestMoveQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
+  isPlanQuestion, isBestMoveQuestion, isCounterRepertoireQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
   isMasterPlayQuestion, isEndgameQuestion, isPlayerGamesQuestion, isConceptQuestion,
   isProgressQuestion, isImprovementTrendQuestion, isOpeningProfileQuestion, openingProfileKind, buildQuestionGrounding,
   isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion,
@@ -205,7 +205,7 @@ import {
   isWhyBestMoveQuestion, isCandidateMoveQuestion, extractCandidateSan, isAlternativesQuestion,
 } from './questionIntents';
 export {
-  isPlanQuestion, isBestMoveQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
+  isPlanQuestion, isBestMoveQuestion, isCounterRepertoireQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
   isMasterPlayQuestion, isEndgameQuestion, isPlayerGamesQuestion, isConceptQuestion,
   isProgressQuestion, isImprovementTrendQuestion, isOpeningProfileQuestion, openingProfileKind, buildQuestionGrounding,
   isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion,
@@ -1138,7 +1138,12 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // A NAMED-candidate ask ("is Qf3 ok") EVALUATES that move — it must
             // take precedence over the best-move branch (which would just recite
             // the best move). Guard best-move off when a candidate fired.
-            bestMoveQuestion: isBestMoveQuestion(askForIntents) && !candidateMoveEngage,
+            // A counter-repertoire ask ("what should I play against the
+            // Pirc") is a RECOMMENDATION — never a position eval. Suppress
+            // the best-move branch and set the flag so coachApi dispatches
+            // the curated recommendation (David 2026-07-15 live screenshot).
+            counterRepertoireQuestion: isCounterRepertoireQuestion(askForIntents),
+            bestMoveQuestion: isBestMoveQuestion(askForIntents) && !candidateMoveEngage && !isCounterRepertoireQuestion(askForIntents),
             whyBestMoveQuestion: whyBestMoveEngage,
             // Comparative ask — dispatched BEFORE whyBestMove/bestMove so the
             // alternatives comparison wins over the generic reasoning walk.
