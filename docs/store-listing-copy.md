@@ -47,10 +47,10 @@ plan is:
 | Opening lines in the database | **3,654** | flat array `.length` | `src/data/openings-lichess.json` |
 | Guided opening masterclasses (curated WLPP repertoires) | **42** (we say "dozens") | array `.length`; also = 42 `main:` entries in the masterclass gate registry `OPENINGS[]` | `src/data/repertoire.json` + `src/data/lessons/registry.ts` |
 | Curated lessons registered (main + variation) | **130 main**, 129 variation-lesson sets | `.openingId]:` registrations + `..._VARIATION_LESSONS` spreads in the LESSONS map | `src/data/lessons/index.ts` |
-| Pro-player repertoires | 15 players / 81 openings | `pro-repertoires.json` `players.length`=15, `openings.length`=81 | `src/data/pro-repertoires.json` |
-| Model games (student-side wins) | **570** | array `.length` | `src/data/model-games.json` |
-| Middlegame plans | **520** | array `.length` | `src/data/middlegame-plans.json` |
-| Opening pitfalls / common mistakes | 125 openings covered | object keys `.length` | `src/data/common-mistakes.json` |
+| Pro-player repertoires | 15 players / 82 openings | `pro-repertoires.json` `players.length`=15, `openings.length`=82 | `src/data/pro-repertoires.json` |
+| Model games (student-side wins) | **644** | array `.length` | `src/data/model-games.json` |
+| Middlegame plans | **550** | array `.length` | `src/data/middlegame-plans.json` |
+| Opening pitfalls / common mistakes | 127 openings covered | object keys `.length` | `src/data/common-mistakes.json` |
 | Punish-gems (tactical traps in lines) | 296 | array `.length` | `src/data/punish-gems.json` |
 | Pro game references (coach breadth corpus) | 2,209 | array `.length` | `public/data/pro-game-references.json` |
 | Mating patterns | 37 | array `.length` | `src/data/mating-patterns.json` |

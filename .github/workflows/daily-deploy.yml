@@ -5,7 +5,7 @@ name: Daily deploy + TestFlight external (21:00 America/Chicago)
 #   1. Deploys the web app to Vercel production (git auto-deploy is disabled at
 #      the Vercel side — project Ignored Build Step = `exit 0` — so this job is
 #      the ONLY thing that promotes main to production).
-#   2. Sends the latest VALID iOS build (marketing version pinned to 2.8 in
+#   2. Sends the latest VALID iOS build (marketing version pinned to 3.2 in
 #      ios/App/ci_scripts/ci_post_clone.sh) to the external "Beta Test" group
 #      (+ internal), and submits it for Beta App Review.
 #

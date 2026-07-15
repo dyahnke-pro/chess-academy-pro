@@ -1,1 +1,12 @@
-First release — your AI chess coach: openings, tactics from your own games, full Stockfish review, and a coach you can talk to.
+What's new in 3.2
+
+NEW OPENINGS
+• More guided openings and counter-repertoires — including sharp anti-gambit lines (Elephant, Danish, Latvian, Smith-Morra) and answers to the Pirc, Modern, Scandinavian, French, and London — every move played out and explained by your AI coach.
+• Ask the coach "what should I play against this?" and get a style-matched, engine-verified recommendation.
+• Hundreds more annotated model games and middlegame plans that grow out of your openings.
+
+START FREE
+• Try it with no card — 20 tactics puzzles, a full opening masterclass (Watch → Learn → Practice → Play), your personal Weaknesses page, and a week of Kids mode.
+• Go Pro anytime with a 7-DAY FREE TRIAL, then $7.99/month or $79.99/year. Cancel anytime.
+
+Plus the usual round of fixes and polish. Thanks for playing — pick an opening and start improving.
