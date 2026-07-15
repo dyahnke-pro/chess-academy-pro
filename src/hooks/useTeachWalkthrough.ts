@@ -43,6 +43,9 @@ import type {
   WalkthroughTreeNode,
   WalkthroughTreeChild,
   PunishLesson,
+  ConceptCheckQuestion,
+  FindMoveQuestion,
+  DrillLine,
   NarrationArrow,
   NarrationHighlight,
 } from '../types/walkthroughTree';
@@ -122,6 +125,44 @@ export function isStartablePunishLesson(lesson: PunishLesson | null | undefined)
     return false;
   }
   return true;
+}
+
+/** Shape-guards for the OTHER post-walkthrough stages (David 2026-07-15
+ *  — the "did you sweep for similar failures?" pass). Same failure class
+ *  as `isStartablePunishLesson`: `concepts` / `findMove` / `drill` are
+ *  loaded from the SAME cache paths as `punish`, and a legacy Dexie tree
+ *  or shared Supabase cache entry never re-runs its `repair*Stage`. A
+ *  malformed one (missing `choices` / `candidates` / `moves`) makes the
+ *  QuizPanel's `q.choices.map(...)` / `q.candidates.map(...)` throw at
+ *  RENDER time (worse than punish's onClick throw) or the drill runtime
+ *  crash on `line.moves.length`. Gate the stage counts + the pickers on
+ *  these so a stage composed only of malformed entries never shows a
+ *  dead tile, and defend the renders/handlers so one that slips through
+ *  degrades to empty instead of crashing. */
+export function isValidConceptsQuestion(q: ConceptCheckQuestion | null | undefined): boolean {
+  return (
+    !!q &&
+    typeof q.prompt === 'string' &&
+    q.prompt.trim().length > 0 &&
+    Array.isArray(q.choices) &&
+    q.choices.length >= 2 &&
+    q.choices.some((c) => !!c && c.correct)
+  );
+}
+
+export function isValidFindMoveQuestion(q: FindMoveQuestion | null | undefined): boolean {
+  return (
+    !!q &&
+    typeof q.prompt === 'string' &&
+    q.prompt.trim().length > 0 &&
+    Array.isArray(q.candidates) &&
+    q.candidates.length >= 2 &&
+    q.candidates.some((c) => !!c && c.correct)
+  );
+}
+
+export function isValidDrillLine(line: DrillLine | null | undefined): boolean {
+  return !!line && Array.isArray(line.moves) && line.moves.length > 0;
 }
 
 /** Build a one-shot WalkthroughTree from a PunishLesson. Reuses the
@@ -652,14 +693,23 @@ function stageHasEntries(
   if (!t) return false;
   const arr = t[stage];
   if (!Array.isArray(arr) || arr.length === 0) return false;
-  // Punish is the only stage whose entries can be individually
-  // unlaunchable (malformed cached lesson) — count only the ones that
-  // will actually start, so the stage-menu button + auto-jump never
-  // land the student on a dead "Trap lines" tile (David 2026-07-15).
-  if (stage === 'punish') {
-    return (arr as PunishLesson[]).some(isStartablePunishLesson);
+  // Every stage's entries can be individually malformed when they come
+  // from a legacy/shared cache that skipped `repair*Stage` — count only
+  // the ones that will actually work, so the stage-menu button + auto-
+  // jump never land the student on a dead tile or a crashing render
+  // (David 2026-07-15, the "sweep the siblings" pass).
+  switch (stage) {
+    case 'punish':
+      return (arr as PunishLesson[]).some(isStartablePunishLesson);
+    case 'concepts':
+      return (arr as ConceptCheckQuestion[]).some(isValidConceptsQuestion);
+    case 'findMove':
+      return (arr as FindMoveQuestion[]).some(isValidFindMoveQuestion);
+    case 'drill':
+      return (arr as DrillLine[]).some(isValidDrillLine);
+    default:
+      return true;
   }
-  return true;
 }
 
 export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
@@ -1560,6 +1610,9 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
       if (!tree?.drill || lineIndex < 0 || lineIndex >= tree.drill.length) {
         return;
       }
+      // Never enter a malformed cached line (no `moves`) — same guard as
+      // the picker + attemptDrillMove (David 2026-07-15 sibling sweep).
+      if (!isValidDrillLine(tree.drill[lineIndex])) return;
       setStageIndex(lineIndex);
       setDrillMoveIndex(0);
       setDrillFen(STARTING_FEN);
@@ -1637,6 +1690,9 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
         return { ok: false };
       }
       const line = tree.drill[stageIndex];
+      // Defend against a malformed cached drill line (no `moves` array) —
+      // same failure class as the punish/quiz sweep (David 2026-07-15).
+      if (!isValidDrillLine(line)) return { ok: false };
       const studentSide = line.studentSide ?? 'white';
       // Determine which moves in the line are the student's.
       // Even-indexed moves (0, 2, 4...) are white's; odd are black's.

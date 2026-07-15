@@ -1,6 +1,18 @@
 import { describe, it, expect } from 'vitest';
-import { buildPunishWalkthroughTree, isStartablePunishLesson } from './useTeachWalkthrough';
-import type { WalkthroughTree, PunishLesson } from '../types/walkthroughTree';
+import {
+  buildPunishWalkthroughTree,
+  isStartablePunishLesson,
+  isValidConceptsQuestion,
+  isValidFindMoveQuestion,
+  isValidDrillLine,
+} from './useTeachWalkthrough';
+import type {
+  WalkthroughTree,
+  PunishLesson,
+  ConceptCheckQuestion,
+  FindMoveQuestion,
+  DrillLine,
+} from '../types/walkthroughTree';
 
 /**
  * Regression guard for the "keep learning → trap line fails to start"
@@ -99,5 +111,56 @@ describe('isStartablePunishLesson — the picker/surface gate', () => {
       distractors: [{ san: 'Nc3', label: 'slower', explanation: 'Also fine but less direct.' }],
     };
     expect(isStartablePunishLesson(fenLesson)).toBe(true);
+  });
+});
+
+// Sibling sweep (David 2026-07-15 — "did you test for similar points of
+// failure?"). concepts/findMove/drill are loaded from the same cache
+// paths as punish and skip their repair on legacy/shared-cache reads, so
+// a malformed one would throw the same way (a render throw for the
+// quizzes). These guard the count/picker gates.
+describe('sibling stage validity gates', () => {
+  const goodConcepts: ConceptCheckQuestion = {
+    prompt: 'What does Nc3 do?',
+    choices: [
+      { text: 'Defends e4', correct: true, explanation: 'Braces the center.' },
+      { text: 'Attacks h7', correct: false, explanation: 'No.' },
+    ],
+  };
+  const goodFindMove: FindMoveQuestion = {
+    path: ['e4', 'e5', 'Nf3'],
+    prompt: 'Best move?',
+    candidates: [
+      { label: 'Nxe5', correct: true, explanation: 'Wins a pawn.' },
+      { label: 'Bc4', correct: false, explanation: 'Too slow.' },
+    ],
+  };
+  const goodDrill: DrillLine = { name: 'Main line', moves: ['e4', 'e5', 'Nf3', 'Nc6'] };
+
+  it('accepts well-formed sibling entries', () => {
+    expect(isValidConceptsQuestion(goodConcepts)).toBe(true);
+    expect(isValidFindMoveQuestion(goodFindMove)).toBe(true);
+    expect(isValidDrillLine(goodDrill)).toBe(true);
+  });
+
+  it('rejects malformed concepts (missing/short choices, no correct, no prompt)', () => {
+    expect(isValidConceptsQuestion(null)).toBe(false);
+    expect(isValidConceptsQuestion({ ...goodConcepts, choices: undefined } as unknown as ConceptCheckQuestion)).toBe(false);
+    expect(isValidConceptsQuestion({ ...goodConcepts, choices: [goodConcepts.choices[0]] })).toBe(false); // only 1 choice
+    expect(isValidConceptsQuestion({ ...goodConcepts, choices: goodConcepts.choices.map((c) => ({ ...c, correct: false })) })).toBe(false); // none correct
+    expect(isValidConceptsQuestion({ ...goodConcepts, prompt: '' })).toBe(false);
+  });
+
+  it('rejects malformed findMove (missing/short candidates, none correct)', () => {
+    expect(isValidFindMoveQuestion(null)).toBe(false);
+    expect(isValidFindMoveQuestion({ ...goodFindMove, candidates: undefined } as unknown as FindMoveQuestion)).toBe(false);
+    expect(isValidFindMoveQuestion({ ...goodFindMove, candidates: [goodFindMove.candidates[0]] })).toBe(false);
+    expect(isValidFindMoveQuestion({ ...goodFindMove, candidates: goodFindMove.candidates.map((c) => ({ ...c, correct: false })) })).toBe(false);
+  });
+
+  it('rejects malformed drill (missing/empty moves)', () => {
+    expect(isValidDrillLine(null)).toBe(false);
+    expect(isValidDrillLine({ ...goodDrill, moves: undefined } as unknown as DrillLine)).toBe(false);
+    expect(isValidDrillLine({ ...goodDrill, moves: [] })).toBe(false);
   });
 });

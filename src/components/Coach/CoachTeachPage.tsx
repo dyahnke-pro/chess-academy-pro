@@ -20,7 +20,7 @@ import { NarrationArrowOverlay } from './NarrationArrowOverlay';
 import { AnalysisToggles } from '../Board/AnalysisToggles';
 import { useChessGame, type MoveResult } from '../../hooks/useChessGame';
 import { usePositionNarration } from '../../hooks/usePositionNarration';
-import { useTeachWalkthrough, isStartablePunishLesson } from '../../hooks/useTeachWalkthrough';
+import { useTeachWalkthrough, isStartablePunishLesson, isValidConceptsQuestion, isValidFindMoveQuestion, isValidDrillLine } from '../../hooks/useTeachWalkthrough';
 import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
@@ -6364,9 +6364,9 @@ function WalkthroughControls({
     // Show "Continue to learning stages" only if any stage data
     // exists on the tree; otherwise the menu would be empty.
     const hasStages =
-      (tree?.concepts && tree.concepts.length > 0) ||
-      (tree?.findMove && tree.findMove.length > 0) ||
-      (tree?.drill && tree.drill.length > 0) ||
+      (tree?.concepts ?? []).some(isValidConceptsQuestion) ||
+      (tree?.findMove ?? []).some(isValidFindMoveQuestion) ||
+      (tree?.drill ?? []).some(isValidDrillLine) ||
       (tree?.punish ?? []).some(isStartablePunishLesson);
     return (
       <div className="px-3 pb-3 space-y-2" data-testid="walkthrough-leaf-panel">
@@ -6506,12 +6506,12 @@ function WalkthroughControls({
 
   // Stage-menu hub: pick one of the 4 stages or play it for real.
   if (phase === 'stage-menu') {
-    const conceptsCount = tree?.concepts?.length ?? 0;
-    const findMoveCount = tree?.findMove?.length ?? 0;
-    const drillCount = tree?.drill?.length ?? 0;
-    // Only count trap lessons that will actually START — a malformed
-    // cached lesson must not show a dead "Trap lines" tile (David
-    // 2026-07-15).
+    // Only count entries that will actually work — a malformed cached
+    // stage entry must not show a dead tile or crash the panel on tap
+    // (David 2026-07-15; the punish fix + its sibling sweep).
+    const conceptsCount = (tree?.concepts ?? []).filter(isValidConceptsQuestion).length;
+    const findMoveCount = (tree?.findMove ?? []).filter(isValidFindMoveQuestion).length;
+    const drillCount = (tree?.drill ?? []).filter(isValidDrillLine).length;
     const punishCount = (tree?.punish ?? []).filter(isStartablePunishLesson).length;
     const pendingJump = walkthrough.pendingStageJump;
     const pendingLabel: Record<string, string> = {
@@ -6838,10 +6838,14 @@ function QuizPanel({
   let questions: AnyQuizQ[] = [];
   let stageLabel = '';
   if (activeStage === 'concepts') {
+    // Defend `q.choices` — a malformed cached concepts entry (no choices
+    // array) must not throw at render (David 2026-07-15 sibling sweep);
+    // it degrades to an empty question instead. The count gate already
+    // keeps an all-malformed stage from surfacing a button.
     questions = (tree.concepts ?? []).map((q) => ({
-      prompt: q.prompt,
+      prompt: q.prompt ?? '',
       multiSelect: q.multiSelect,
-      choices: q.choices.map((c) => ({
+      choices: (q.choices ?? []).map((c) => ({
         text: c.text,
         correct: c.correct,
         explanation: c.explanation,
@@ -6850,8 +6854,8 @@ function QuizPanel({
     stageLabel = 'Concept check';
   } else if (activeStage === 'findMove') {
     questions = (tree.findMove ?? []).map((q) => ({
-      prompt: q.prompt,
-      choices: q.candidates.map((c) => ({
+      prompt: q.prompt ?? '',
+      choices: (q.candidates ?? []).map((c) => ({
         text: c.label,
         correct: c.correct,
         explanation: c.explanation,
@@ -7111,9 +7115,16 @@ function DrillPanel({
 
   const drillLines = tree?.drill ?? [];
   const currentLine = drillLines[stageIndex];
+  // Only offer drill lines that will actually play — a malformed cached
+  // line (no `moves`) must not show a dead tile or crash on
+  // `line.moves.length` (David 2026-07-15 sibling sweep). Keep the
+  // ORIGINAL index — selectDrillLine(idx) indexes into tree.drill.
+  const startableDrill = drillLines
+    .map((line, idx) => ({ line, idx }))
+    .filter(({ line }) => isValidDrillLine(line));
 
-  // No drill array at all — defensive fallback.
-  if (drillLines.length === 0) {
+  // No valid drill lines — defensive fallback.
+  if (startableDrill.length === 0) {
     return (
       <div className="px-3 pb-3" data-testid="walkthrough-drill-empty">
         <button
@@ -7143,7 +7154,7 @@ function DrillPanel({
           Pick a line to drill — play it on the board, opponent auto-replies, wrong moves reset.
         </div>
         <div className="flex flex-col gap-2">
-          {drillLines.map((line, idx) => (
+          {startableDrill.map(({ line, idx }) => (
             <button
               key={idx}
               onClick={() => walkthrough.selectDrillLine(idx)}
