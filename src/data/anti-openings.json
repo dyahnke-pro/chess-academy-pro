@@ -202,6 +202,11 @@
     "name": "Valencian Variation, Main Line",
     "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd8 d4 Nf6 Nf3 Bg4 h3 Bxf3 Qxf3 c6 Be3 e6 a3 Nd5 Nxd5 Qxd5 Qg3",
     "explanation": ""
+   },
+   {
+    "name": "Modern 2…Nf6 (Bb5+!)",
+    "pgn": "e4 d5 exd5 Nf6 Bb5+ Bd7 Be2 Nxd5 d4 Bf5 Nf3 e6 O-O Nb4 Na3 Be7 c3 Nd5 Qb3 Nd7 Nc4",
+    "explanation": "The Modern Scandinavian delays the recapture — so throw in the bishop check first. After the bishop blocks, retreat and let Black spend two tempi collecting the pawn. White develops smoothly, meets the active bishop with c3 and the queenside prod, and keeps a comfortable engine-confirmed pull. Across 171 corpus games this treatment scores 66.7 percent."
    }
   ],
   "drillAccuracy": 0,

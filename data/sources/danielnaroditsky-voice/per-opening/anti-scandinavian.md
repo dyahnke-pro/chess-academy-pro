@@ -41,8 +41,10 @@ cross-opening THEME: Pirc …Nc6→d5, Belgrade …trades→exd5 hits c6, Scandi
 
 ## Build notes
 
-- Target: give the EXISTING `anti-scandinavian` entry its curated LessonScript
-  (it has none today — Watch falls to legacy) + refresh entry variations from
-  this real data. Main line = the …Qd8/…Qa5 d4 system per the tree spine;
-  variations: …Qa5, …Qd6 Tiviakov, 2…Nf6 Modern (Bb5+), the …Nc6→d5 punish
-  gem. All engine-verified, red-target grammar, anonymous stats.
+- CORRECTION (same session): the entry ALREADY has a sound curated LessonScript
+  (Qa5 mainline) + Qd6/Qd8 variation lessons from a prior sound-spine build —
+  the video mining CONFIRMS its system. Shipped increment: the missing Modern
+  2…Nf6 variation (verified +0.46). Remaining increments for later passes:
+  the …Nc6→d5 punish gem (verified +1.42) into the weapons layer, the
+  taxonomy beat (three queen retreats), red-target repaint (task #6 sweep),
+  and the …Qd6 line's Be3 fix (+0.35; the tree's h3 order drops d4 at -0.23).
