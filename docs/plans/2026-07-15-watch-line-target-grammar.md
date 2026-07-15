@@ -95,3 +95,36 @@ Related: `docs/plans/2026-07-15-naroditsky-openings-and-coach-recommender.md`
 (new openings must author to THIS grammar from day one) and
 `docs/plans/naroditsky-video-grounding.md` (the transcript pipeline + per-video
 map — this doctrine is that pipeline's Watch-side output standard).
+
+## BUILDOUT SCOREBOARD (updated 2026-07-15 ~05:35 UTC — the video-grounded loop)
+
+Shipped to main/prod (each: corpus tree + video mining + engine verification on
+every line + red-target grammar + gates green):
+1. ✅ `anti-pirc-battery` — 150 Battery & d5 Squeeze (new entry + 8-beat lesson,
+   3 variations + Ng4 gem). counter-rep: pirc/modern two-rec families.
+2. ✅ `belgrade-gambit` — new entry + 8-beat lesson, 4 variations (…Ne5 refuted
+   +3.68 gem; h6→Bf4 engine-settled). counter-rep: open-e5 two-rec.
+3. ✅ anti-scandinavian: Modern 2…Nf6 variation (+0.46; prior sound build kept).
+4. ✅ `anti-french-tarrasch` — his lifetime line (2,361g corpus) + 6-beat lesson.
+   counter-rep french: Tarrasch + KIA.
+5. ✅ anti-smith-morra-black: …Nf6 decline variation (650g @ 72.5%).
+6. ✅ anti-london-black: …c5+…Qb6 poison variation (555g @ 68.4%).
+7. 🚚 `anti-philidor` — Bc4 System + Legal's-mate trap (verified checkmate) +
+   center-fork-trick defusal; FIXES the counter-rep bug where "philidor"
+   recommended the Ruy. (pushing)
+
+G1: post-deploy-audit.yml fired on GH runners vs prod @ 0bb52fa (run
+29391505031) — this container's Chromium can't reach prod (proxy resets);
+runners can.
+
+## REMAINING QUEUE (task #8) — same per-opening cadence
+Check-existing-first (the Scandi lesson taught us), then increment:
+- Tier 2: Vienna (pro-gothamchess-vienna exists — ground/increment), Four
+  Knights/Glek (8 vids, net-new candidate), Accelerated Dragon/Maróczy (both
+  sides), QGD (black), Hippo (anti), Grand Prix (anti-grand-prix-black exists),
+  English, Grünfeld (anti-grunfeld-exchange exists), King's Gambit
+  (anti-kings-gambit-black DONE by prior video-grounding), Italian, Owen (anti),
+  Nimzo-Larsen. Trees to extract per target; transcripts re-pullable via yt-dlp.
+- Task #6: red-target sweep of pre-2026-07-15 lessons (incremental, per-opening).
+- Coach theme note: the d5 space-punch is HIS signature across Pirc/Belgrade/
+  Scandi — candidate for a cross-opening concept the coach cites.
