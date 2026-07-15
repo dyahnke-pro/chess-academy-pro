@@ -793,7 +793,7 @@
     },
     {
      "name": "King's Indian Attack (Nf3)",
-     "pgn": "e4 c6 Nf3 d5 d3 Qc7 Nc3 dxe4 dxe4 e5 Bc4",
+     "pgn": "e4 c6 Nf3 d5 d3 Qc7 Nc3 dxe4 dxe4 e5 Bc4 b5 Bb3 h6 a4 b4 Ne2 Nf6 Ng3 c5 Bc4 Nc6 O-O Be7",
      "explanation": "Against the KIA-style Nf3 + d3 setup, the trick is recognising what White is doing: they're not playing a real opening, they're playing a system. So we don't have to fear sharp theoretical lines — what we have to fear is letting them build slow comfort. Our answer: …d5, then …Qc7 to discourage e5, and when White trades on d5 we recapture with the e-pawn or open the centre with …e5 ourselves. Result: piece-for-piece development, no structural mess, a comfortable middle-game with the bishop pair often becoming ours. We score 62% here in real play. Don't overextend — the win comes from playing accurate, principled moves while White wanders.",
      "sources": [
       "book:caro-kann",
@@ -833,7 +833,7 @@
     },
     {
      "name": "Modern Defense Transposition (d4 g6)",
-     "pgn": "e4 c6 d4 g6 Nc3 Bg7 Nf3 d5",
+     "pgn": "e4 c6 d4 g6 Nc3 Bg7 Nf3 d5 h3 dxe4 Nxe4 Nf6 Nxf6+ exf6 Be2 O-O O-O Be6 c4 Na6 Be3 Re8 Qd2 Nc7",
      "explanation": "Sometimes when we hit the Caro move-order against a d4 player who wasn't expecting it, the cleanest game is to transpose — fianchetto the dark-squared bishop, get a Pirc/Modern structure with the c-pawn already on c6 (which is FINE, not bad — it supports …d5 perfectly). After …Bg7 and …d5 we have a hybrid setup that's familiar to Modern players but with one extra useful tempo. White's pieces aim at a wall: the Bg7, the c6-d5 pawn chain, the well-defended king. 68% score in the data — White rarely plays this critically because they expected a Caro and got a Modern.",
      "sources": [
       "book:caro-kann",
@@ -933,7 +933,7 @@
    "playerId": "naroditsky",
    "eco": "B22",
    "name": "Alapin Sicilian",
-   "pgn": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6 Qxd6 O-O",
+   "pgn": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6 Qxd6 O-O Be6 Bxe6 Qxe6 a4 Qd7 a5 Nd5 a6 b6 d4 e6 Ne5 Nxe5 dxe5 Be7 Qg4 g6",
    "color": "white",
    "style": "Positional, Anti-Sicilian",
    "overview": "The c3 anti-Sicilian — This repertoire's most-played weapon vs c5 (2,752 games, 73.8% score). The whole point is move three: d4, supported by the c3-pawn, building a classical centre instead of letting Black drag us into Sicilian theory. We score 73.8% across nearly 3,000 games here for one reason — opponents prepared for the Open Sicilian get a structural game instead, and they're outclassed positionally before they realize they're not in a sharp fight.",
@@ -974,7 +974,7 @@
     },
     {
      "name": "2…d6 Mainline",
-     "pgn": "e4 c5 c3 d6 d4 cxd4 cxd4 Nf6 Nc3 g6 h3 Bg7 Nf3 O-O Bd3 Nc6 O-O",
+     "pgn": "e4 c5 c3 d6 d4 cxd4 cxd4 Nf6 Nc3 g6 h3 Bg7 Nf3 O-O Bd3 Nc6 O-O e5 d5 Ne7 Be3 Nd7 Rc1 a6",
      "explanation": "Black's quiet 2…d6 reply (173 games, the BEST-scoring variation at 80.6% — the highest Alapin sub-line). Black avoids commitment, we claim the centre immediately, transpose into a KID-reversed where WE have the extra tempo. Slow positional pressure with h3 + Bd3 + O-O setup; we win via the eventual e4-e5 or d4-d5 break.",
      "sources": [
       "https://www.chess.com/openings/Alapin-Sicilian-Defense",
@@ -1001,7 +1001,7 @@
     },
     {
      "name": "Spine 4…d6 Bc4 Gambit",
-     "pgn": "e4 c5 c3 Nf6 e5 Nd5 Nf3 d6 Bc4 Nb6 e6 Nxc4 Qa4+ Nc6 exf7+ Kxf7 Qxc4+ d5 Qf4+ Kg8 d4",
+     "pgn": "e4 c5 c3 Nf6 e5 Nd5 Nf3 d6 Bc4 Nb6 e6 Nxc4 Qa4+ Nc6 exf7+ Kxf7 Qxc4+ d5 Qf4+ Kg8 d4 h6 O-O g5 Qg3 Bg7 dxc5 e5 Rd1 Be6 c4",
      "explanation": "Inside the main 2…Nf6 spine — Black's 4…d6 challenge to e5 (394 games, 70.3%). Per Gordima's distillation, this is this repertoire's distinguishing Alapin treatment: the Bb5+ → Bc4 transposition. We ignore the e5-pawn, sacrifice with e6 + exf7+ to break the king cover, recover material via Qa4+ → Qxc4+, end up with no material loss + Black's king on g8 without a pawn shield.",
      "sources": [
       "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
@@ -1828,7 +1828,7 @@
    "playerId": "gothamchess",
    "eco": "A45",
    "name": "Trompowsky Attack",
-   "pgn": "d4 Nf6 Bg5 e6 Nd2 h6 Bh4 d5 e3 Be7 Bd3 b6 c3 O-O",
+   "pgn": "d4 Nf6 Bg5 e6 Nd2 h6 Bh4 d5 e3 Be7 Bd3 b6 c3 O-O Bxf6 Bxf6 f4 Ba6 Qe2 Bxd3 Qxd3 c5 Ngf3 Nc6",
    "color": "white",
    "style": "Aggressive, Pinning",
    "overview": "This repertoire's TOP opening — 1,823 games at 61.5% score, more than any other system here. The Trompowsky attack with 2.Bg5 pins Black's f6-knight immediately, asking Black to commit to a defence before learning where the rest of White's pieces are going. This is this repertoire's content engine: every Trompowsky tactical melee, every 'why this opening is GENIUS' video, every speedrun grind happens here. The trade-off: Black has many equalising paths if they know them; the strength is depth in middlegame play that Black usually doesn't have. At amateur level, this means 60%+ win rates by knowing one extra plan in the structures it produces. This is an attacking, middlegame-decisive repertoire — built to win in the opening and the middlegame, not grind long endings — so it is deepest on the opening and middlegame plans, with endgame theory shown only where the games reach a decisive ending.",
@@ -1858,7 +1858,7 @@
     },
     {
      "name": "Vaganian Attack (…Ne4)",
-     "pgn": "d4 Nf6 Bg5 Ne4 h4 c5 d5 Qb6 Nd2 Nxg5 hxg5 Qxb2 g6 fxg6 Ngf3 d6 e4",
+     "pgn": "d4 Nf6 Bg5 Ne4 h4 c5 d5 Qb6 Nd2 Nxg5 hxg5 Qxb2 g6 fxg6 Ngf3 d6 e4 Qf6 Rb1 g5 e5 dxe5 Ne4 Qf4",
      "explanation": "Black's sharpest reply — the Vaganian Attack chases the bishop with …Ne4 to capture and trade. The h4 reply opens the h-file for the rook; the d5 push grabs space; even after the exchange on g5 the doubled g-pawn is a kingside attacking weapon. Sharp positions favouring the side with the initiative — This repertoire's territory.",
      "sources": [
       "concept:pos-development",
@@ -1868,7 +1868,7 @@
     },
     {
      "name": "…d5 system",
-     "pgn": "d4 Nf6 Bg5 d5 e3 c5 c3 Nc6 Nd2 Qb6 Qb3",
+     "pgn": "d4 Nf6 Bg5 d5 e3 c5 c3 Nc6 Nd2 Qb6 Qb3 c4 Qc2 Bg4 Bxf6 gxf6 e4 e6 Be2 Rg8 Bxg4 Rxg4 g3 dxe4",
      "explanation": "Black's solid …d5 + …c5 reply forming a Slav-like structure. The Qb3 swing meets Black's …Qb6 pin attempt, often offering a queen trade that simplifies into a slight White edge. Patient positional play favouring whoever knows the typical pawn structure.",
      "sources": [
       "concept:pos-development",
@@ -1878,7 +1878,7 @@
     },
     {
      "name": "…g6 fianchetto",
-     "pgn": "d4 Nf6 Bg5 g6 Bxf6 exf6 e3 Bg7 g3 O-O Bg2",
+     "pgn": "d4 Nf6 Bg5 g6 Bxf6 exf6 e3 Bg7 g3 O-O Bg2 f5 Ne2 Nc6 O-O d6 c4 Ne7 Nbc3 c6 b4 Rb8 a4 Be6",
      "explanation": "When Black fianchettoes with …g6, White trades on f6 doubling Black's pawns. The …gxf6 recapture is more common than …exf6 because it keeps the Bg7 on the long diagonal. White's plan is g3 + Bg2 mirroring Black's fianchetto and gradually outplaying in a quiet middlegame.",
      "sources": [
       "concept:pos-development",
@@ -1941,7 +1941,7 @@
     },
     {
      "name": "Anti-French (…e6)",
-     "pgn": "c4 e6 Nc3 d5 e3 Nf6 Nf3 Be7 b3",
+     "pgn": "c4 e6 Nc3 d5 e3 Nf6 Nf3 Be7 b3 O-O Bb2 c5 cxd5 exd5 d4 Nc6 Be2 Re8 h3 cxd4 Nxd4 Bd6 Nf3 a6",
      "explanation": "When Black plays …e6 + …d5, the English transposes into a Queen's Indian-style middlegame. White's b3 + Bb2 fianchetto + Nf3 gives a long-term pressure setup against Black's …d5 pawn.",
      "sources": [
       "concept:pos-development",
@@ -1974,7 +1974,7 @@
    "playerId": "gothamchess",
    "eco": "C28",
    "name": "Vienna Game",
-   "pgn": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 Nxc3 bxc3 c5 Qg3 Nc6 Nf3 Be6 Rb1",
+   "pgn": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 Nxc3 bxc3 c5 Qg3 Nc6 Nf3 Be6 Rb1 Qd7 Bb5 O-O-O O-O Be7 d4 c4",
    "color": "white",
    "style": "Aggressive, Tactical",
    "overview": "This repertoire's Vienna at 649 games / 67.8% — one of the highest score rates. The 2.Nc3 + 3.f4 (Vienna Gambit) is the sharpest 1.e4 system here. After Black's …d5 reply and the fxe5 / Nxe4 / Qf3 forcing sequence, White trades pieces and ends up with doubled c-pawns but excellent piece activity and an open f-file aimed at f7. This is an attacking, middlegame-decisive repertoire — built to win in the opening and the middlegame, not grind long endings — so it is deepest on the opening and middlegame plans, with endgame theory shown only where the games reach a decisive ending.",
@@ -2116,7 +2116,7 @@
     },
     {
      "name": "vs …c5 (Botvinnik-Carls)",
-     "pgn": "e4 c6 d4 d5 e5 c5 dxc5 e6 a3 Bxc5 Nf3 Nc6 Bd3",
+     "pgn": "e4 c6 d4 d5 e5 c5 dxc5 e6 a3 Bxc5 Nf3 Nc6 Bd3 Nge7 b4 Bb6 Bb2 Ng6 O-O Nf4 c4 O-O Nc3 Nxd3",
      "explanation": "When Black plays …c5 instead of …Bf5, the Botvinnik-Carls structure arises. The c-pawn trade simplifies; the …Bxc5 recapture by Black coordinates with development. White's plan is rapid Bd3 + O-O + active piece play.",
      "sources": [
       "concept:pos-development",
@@ -2139,7 +2139,7 @@
    "playerId": "gothamchess",
    "eco": "B23",
    "name": "Closed Sicilian",
-   "pgn": "e4 c5 Nc3 Nc6 Bb5 Nd4 Nf3 Nxb5 Nxb5 a6 Nc3 d6 d4 cxd4 Qxd4",
+   "pgn": "e4 c5 Nc3 Nc6 Bb5 Nd4 Nf3 Nxb5 Nxb5 a6 Nc3 d6 d4 cxd4 Qxd4 Nf6 Bg5 e5 Qd3 Be6 O-O-O Be7 Bxf6 gxf6",
    "color": "white",
    "style": "Anti-Theoretical, Solid",
    "overview": "This repertoire's Closed Sicilian — 333 games at 68.0%. The 2.Nc3 sidestep avoids 90% of Sicilian theory, taking Black out of their preparation. After Bb5 the typical exchange sequence simplifies into a quiet middlegame where White's better pawn structure usually decides. This is an attacking, middlegame-decisive repertoire — built to win in the opening and the middlegame, not grind long endings — so it is deepest on the opening and middlegame plans, with endgame theory shown only where the games reach a decisive ending.",
@@ -2197,7 +2197,7 @@
    "variations": [
     {
      "name": "Rubinstein Main Line",
-     "pgn": "e4 e6 d4 d5 Nc3 dxe4 Nxe4 Nf6 Nxf6+ gxf6 Nf3 Nc6 g3 e5 Bg2 Bg4 h3 Bxf3",
+     "pgn": "e4 e6 d4 d5 Nc3 dxe4 Nxe4 Nf6 Nxf6+ gxf6 Nf3 Nc6 g3 e5 Bg2 Bg4 h3 Bxf3 Bxf3 Qxd4 Qe2 O-O-O O-O Rg8 Be3 Qd7 Rad1 Bd6 Bg2 Kb8 b4 Ne7 b5 f5 c4 f4",
      "explanation": "The textbook Rubinstein. After …gxf6 + …Nc6 + …e5 + …Bg4, Black has active piece play and the bishop pair. The …Bxf3 trade removes White's best defender. 62.7% score across 1,596 games.",
      "sources": [
       "concept:pos-development",
@@ -2207,7 +2207,7 @@
     },
     {
      "name": "Tarrasch (Nd2)",
-     "pgn": "e4 e6 d4 d5 Nd2 dxe4 Nxe4 Nf6 Nxf6+ gxf6 Nf3 Nc6 g3 e5 d5 Nb4 c4 Bf5",
+     "pgn": "e4 e6 d4 d5 Nd2 dxe4 Nxe4 Nf6 Nxf6+ gxf6 Nf3 Nc6 g3 e5 d5 Nb4 c4 Bf5 Qa4+ b5 cxb5 Qxd5 b6+ c6",
      "explanation": "Against the Tarrasch 3.Nd2 instead of 3.Nc3, Black follows the same Rubinstein recipe. After the d5 push by White, the …Nb4 manoeuvre eyes the c2 square and the …Bf5 development pressures the centre.",
      "sources": [
       "concept:pos-development",
@@ -2217,7 +2217,7 @@
     },
     {
      "name": "Exchange (exd5 lines)",
-     "pgn": "e4 e6 d4 d5 exd5 exd5 Nf3 Bd6 Bd3 Bg4",
+     "pgn": "e4 e6 d4 d5 exd5 exd5 Nf3 Bd6 Bd3 Bg4 O-O Ne7 Re1 Nc6 Bg5 f6 Bh4 Qd7 c3 O-O-O Nbd2 g5 Bg3 h5",
      "explanation": "Against the Exchange variation 3.exd5, Black recaptures with …exd5 reaching a symmetric IQP-style structure. The …Bd6 + …Bg4 development pressures the f3-knight and prepares …Nc6.",
      "sources": [
       "concept:pos-development",
@@ -2268,7 +2268,7 @@
     },
     {
      "name": "Classical (Nf3 setup)",
-     "pgn": "e4 d6 d4 Nf6 Nc3 g6 Nf3 Bg7 Be2 O-O O-O Nc6",
+     "pgn": "e4 d6 d4 Nf6 Nc3 g6 Nf3 Bg7 Be2 O-O O-O Nc6 d5 Nb8 Bg5 e5 dxe6 Bxe6 Re1 Nc6 Nd5 Bxd5 exd5 Ne7",
      "explanation": "Against the classical setup with Nf3 + Be2, Black completes development with …O-O + …Nc6. The position is balanced; play centres on whoever creates the first weakness in their opponent's position.",
      "sources": [
       "concept:pos-development",

@@ -1,12 +1,10 @@
 {
-  "_doc": "Pro-rep variations whose PGN does not yet walk into the middlegame (uncastled, under-developed, short). Gate: variationMiddlegameDepth.test.ts. David 2026-05-29: every opening AND variation must reach the middlegame. This is the shrinking backlog \u2014 the list only SHRINKS; a NEW variation MUST reach the middlegame (extend its PGN to his data-derived spine), never be added here. Lower the count as you deepen these. Regenerate ONLY to remove entries: node scripts/pro-repertoire/gen-mg-depth-baseline.mjs",
-  "count": 12,
+  "_doc": "Pro-rep variations whose PGN does not yet walk into the middlegame (uncastled, under-developed, short). Gate: variationMiddlegameDepth.test.ts. David 2026-05-29: every opening AND variation must reach the middlegame. This is the shrinking backlog — the list only SHRINKS; a NEW variation MUST reach the middlegame (extend its PGN to his data-derived spine), never be added here. Lower the count as you deepen these. Regenerate ONLY to remove entries: node scripts/pro-repertoire/gen-mg-depth-baseline.mjs",
+  "count": 9,
   "keys": [
     "pro-naroditsky-caro-kann::Advance Variation (3.e5 Bf5)",
     "pro-naroditsky-caro-kann::Exchange Variation (exd5)",
     "pro-naroditsky-caro-kann::Fantasy Variation (f3)",
-    "pro-naroditsky-caro-kann::King's Indian Attack (Nf3)",
-    "pro-naroditsky-caro-kann::Modern Defense Transposition (d4 g6)",
     "pro-naroditsky-fantasy-caro::<main>",
     "pro-naroditsky-fantasy-caro::Modern setup with g6",
     "pro-naroditsky-fantasy-caro::Qb6 pressure sideline",

@@ -648,7 +648,20 @@ redundant with each other.
    Needs localhost repro with CPU profile. Audit-flake note: coach-analyse
    FEN mount + openings-ui ECO groups + master-integration context-destroyed
    each failed once and passed on rerun (cold-prod timing, not code).
-2. **P1 Gate C breaks: 128 plans** (pawn diff ≥4 from every line of their
+2. **P1 Gate C breaks — IN PROGRESS 2026-07-15 (128 → 112).** The anchors
+   turned out to live on REAL CORPUS-GAME paths in the STEP-4 deep files
+   (data/sources/<player>-deep/*.json topModelGames) — 58 of 110 found there.
+   17 prefix-compatible extensions engine-screened (student ≥ −1.0 at the new
+   terminus) and APPLIED: the variation pgn now walks to the plan's anchor
+   (Gate D order — skeleton only, narration untouched). Gate B baseline
+   shrank 12→9 as a side effect. Instruments:
+   scripts/catalog-sweep/gatec-{reconnect,deep-hunt,extend,masters-bfs}.mjs.
+   REMAINING: ~40 transposition cases (game path found but diverges from the
+   entry's move order) + masterclass 16 — the masters-DB BFS pass connects
+   from the entry's own lines; its connectors get the same engine screen.
+   1 unsound extension rejected (naroditsky-KID four-pawns, −1.65 — matches
+   the honest-worse lesson; needs a plan-side re-anchor instead).
+   OLD scope note: 128 plans** (pawn diff ≥4 from every line of their
    opening — the Watch→plan handoff is incoherent). 5 masterclass
    (kingsindianattack-kid, nimzoindian-rubinstein, queensgambit-slav,
    catalanopening-slav, alekhinedefence-scandtrans) + ~123 pro-rep (gotham +
