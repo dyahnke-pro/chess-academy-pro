@@ -278,6 +278,11 @@
     "name": "The Greedy …Qg5 Refuted",
     "pgn": "e4 e5 Nf3 d5 Nxe5 dxe4 Bc4 Qg5 Bxf7+ Ke7 d4 Qxg2 Rf1",
     "explanation": "The Elephant player's pet trick: grab the e-pawn, then lunge the queen at g5 hitting knight and g2 at once. The refutation starts with a thunderbolt — bishop takes f7 check, dragging the king to e7 — then d4 shields everything, and when the queen grabs g2 anyway the rook simply steps aside. The engine gives White better than a pawn and a third with the safer king and a raging attack. Let them play the trick; know the punishment."
+   },
+   {
+    "name": "…Qe7 and f6 — dodge the Qh5 trap with Nd3",
+    "pgn": "e4 e5 Nf3 d5 Nxe5 Qe7 d4 f6 Nd3 dxe4 Nf4",
+    "explanation": "When Black props the queen on e7 and kicks with f6, the tempting Qh5+ is a TRAP: after g6, capturing on g6 loses a piece to Qxe4+ — the check forks the king and the g6-knight, and the engine reads better than two pawns for Black. The secret is the quiet retreat to d3, not f3: nothing tactical, purely strategic. If Black grabs on e4, the knight simply steps to f4 — no more kicks, a hole-riddled Black kingside, and the engine keeps White almost a pawn and a half better."
    }
   ],
   "drillAccuracy": 0,
@@ -1521,6 +1526,59 @@
   "sources": [
    "concept:pos-center",
    "concept:pos-space"
+  ]
+ },
+ {
+  "id": "accel-dragon",
+  "eco": "B35",
+  "name": "Accelerated Dragon",
+  "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 Nc3 Bg7 Be3 Nf6 f3 O-O Qd2 d5 exd5 Nxd5 Nxd5 Qxd5 Nxc6 Qxc6 Bd4 Bxd4 Qxd4 Be6",
+  "uci": "e2e4 c7c5 g1f3 b8c6 d2d4 c5d4 f3d4 g7g6 b1c3 f8g7 c1e3 g8f6 f2f3 e8g8 d1d2 d7d5 e4d5 f6d5 c3d5 d8d5 d4c6 d5c6 e3d4 g7d4 d2d4 c8e6",
+  "fen": "r4rk1/pp2pp1p/2q1b1p1/8/3Q4/5P2/PPP3PP/R3KB1R w KQ - 1 14",
+  "color": "black",
+  "style": "tactical",
+  "isRepertoire": true,
+  "overview": "The Dragon fianchetto without the theory war: play g6 immediately and keep the d-pawn home until it can jump to d5 in ONE move. White's feared f3-plus-Qd2 setup gets refuted on the spot by the single-move break; the queen recaptures on d5 and the g7-bishop breathes fire down an empty diagonal. Two standing rules carry the opening: never play an early d6, and whenever White's queen leaves d1, the Ng4 trade for the dark-squared bishop is in the air. 857 corpus games across both move orders; the engine confirms Black's pull in the main line and a four-figure crush against the careless queen sortie.",
+  "keyIdeas": [
+   "The saved d6 tempo IS the opening — guard it until d5 comes in one move.",
+   "Never an early d6: it hands White a free transposition into the mainline Dragon with f3.",
+   "Queen off d1? Ng4 is in the air — trade the knight for the dark-squared bishop.",
+   "Against the Maróczy bind: Nf6 first sets a trap, then the Qb6 poke and the a5 clamp fight the space."
+  ],
+  "traps": null,
+  "warnings": null,
+  "variations": [
+   {
+    "name": "Qd2 too early — the Ng4 crush",
+    "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 Nc3 Bg7 Be3 Nf6 Qd2 O-O O-O-O Ng4 Nxc6 bxc6 Bd4 Bh6 f4 e5",
+    "explanation": "The queen left d1 with the king behind it, so Ng4 comes with teeth: after the trades on c6 and the bishop's slide to d4, Bh6 pins the queen to the king — and when White blocks with f4, the quiet e5 is a double attack on the pinned pawn and the d4-bishop. A piece falls; the engine reads better than three pawns for Black."
+   },
+   {
+    "name": "The Nxc6 punish attempt — Ng8 holds",
+    "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 Nc3 Bg7 Be3 Nf6 Nxc6 bxc6 e5 Ng8 f4 Nh6",
+    "explanation": "White tries to punish the withheld d-pawn by trading and lunging e5 — and the answer is the move you simply have to know: the knight goes home to g8, then re-routes through h6 toward f5. Black's structure is so healthy that the lost tempi cost nothing; the engine calls it dead level, and the e5-pawn becomes the long-term target."
+   },
+   {
+    "name": "Maróczy bind — Nf6 first and the e5 trap",
+    "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 c4 Nf6 Nxc6 bxc6 e5 Qa5+ Nc3 Qxe5+",
+    "explanation": "Against the bind, develop the king's knight BEFORE the bishop — it sets a trap: if White grabs the tempo with the trade and e5, the queen check on a5 forks the king and the brand-new e5-pawn. A clean extra pawn, verified by the engine. If White declines the bait, you simply continue into the main bind setup having lost nothing."
+   },
+   {
+    "name": "Maróczy bind proper — the Qb6 poke and a5",
+    "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 c4 Bg7 Be3 Qb6 Nb3 Qd8 Qd2 Nf6 f3 d6 Nc3 O-O Be2 a5",
+    "explanation": "The honest truth about the bind: White gets the space, and no line changes that. What you get is the setup the corpus rode to a plus score across 756 games — the Qb6 poke that provokes the knight to the passive b3-square, then d6, castle, and the a5 clamp that fixes queenside targets. The engine gives White a modest pull; the structure gives Black the longer game and every break to play for."
+   }
+  ],
+  "drillAccuracy": 0,
+  "drillAttempts": 0,
+  "lastStudied": null,
+  "woodpeckerReps": 0,
+  "woodpeckerSpeed": null,
+  "woodpeckerLastDate": null,
+  "isFavorite": false,
+  "sources": [
+   "concept:pos-center",
+   "concept:pos-initiative"
   ]
  }
 ]

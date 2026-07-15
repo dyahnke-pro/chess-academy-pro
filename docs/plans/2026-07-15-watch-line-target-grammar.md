@@ -96,7 +96,35 @@ Related: `docs/plans/2026-07-15-naroditsky-openings-and-coach-recommender.md`
 `docs/plans/naroditsky-video-grounding.md` (the transcript pipeline + per-video
 map — this doctrine is that pipeline's Watch-side output standard).
 
-## BUILDOUT SCOREBOARD (updated 2026-07-15 ~05:35 UTC — the video-grounded loop)
+## BUILDOUT SCOREBOARD (updated 2026-07-15 ~13:35 UTC — QUEUE COMPLETE)
+
+**The six genuine holes are ALL BUILT.** Builds #8–14 shipped after the
+earlier scoreboard below:
+8. ✅ `anti-elephant` (61cf49f) — +0.37 main, Bxf7+ refutation of …Qg5 +1.35;
+   PLUS the …Qe7/f6 Qh5-trap variation (Nd3 secret, +1.37; the Qh5+?? fork
+   −2.33 named in the explanation) added in build #14's commit.
+9. ✅ `anti-danish` (e8785e4) — Black side; full acceptance +1.01 for Black.
+10. ✅ `anti-latvian` (3a19a12) — taught line (5 corpus games, video+engine
+    carry it); …exd4/e5 wedge +1.00.
+11. ✅ `anti-owen` (a3cb4c2) — 219g @ 69.4%; +1.70 at 26 plies.
+12. ✅ `anti-hippo` (98a4a59) — BLACK vs 1.e3/1.d3 shuffles; c6+Bd6 triangle,
+    Nd7–f8–g6 tour, a5 clamp, h5–h4 storm (+0.52 main; gxh4?? +4.5; d4 →
+    …e4 +2.06). Corpus 1,501g @ 66.4%. counter-rep family `passive-white`.
+13. ✅ `anti-hippo-white` (98a4a59) — WHITE vs the Black Hippo; Austrian
+    centre + Qe1→h4, e5 wedge, g4/f5 crash (+4.04 main). counter-rep family
+    `hippo` rewired to this (studentSide white — the common ask).
+14. ✅ `accel-dragon` — the tempo-saving …d5 doctrine (+0.42 main at 26
+    plies); Qd2?! Ng4/Bh6 crush +3.31; Ng8! retreat 0.07; Maróczy Nf6-first
+    e5?? Qa5+ trap +1.04; Maróczy proper = HIS corpus Qb6-poke line, narrated
+    honestly at −0.42 (never claimed equal; 756g @ 53.2%). counter-rep
+    family `maroczy`.
+
+Remaining follow-ups: task #6 (red-target sweep of pre-2026-07-15 lessons)
+and per-opening narration refreshes fold into normal passes. Transcripts
+pulled this round (gitignored): hippo-annoying-try-this, maroczy-mastering,
+maroczy-endgame, accel-dragon-understanding, accel-dragon-trap.
+
+## OLD SCOREBOARD (2026-07-15 ~05:35 UTC — the video-grounded loop)
 
 Shipped to main/prod (each: corpus tree + video mining + engine verification on
 every line + red-target grammar + gates green):

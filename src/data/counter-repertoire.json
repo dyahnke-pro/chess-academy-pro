@@ -778,6 +778,31 @@
      }
     }
    ]
+  },
+  {
+   "key": "maroczy",
+   "displayName": "the Maróczy Bind",
+   "studentSide": "black",
+   "aliases": [
+    "maroczy",
+    "maroczy bind",
+    "marotzy",
+    "maróczy"
+   ],
+   "recommendations": [
+    {
+     "openingId": "accel-dragon",
+     "name": "the Accelerated Dragon with the Qb6 poke and a5 clamp",
+     "styleTags": [
+      "positional",
+      "solid"
+     ],
+     "stat": {
+      "games": 756,
+      "scorePct": 53.2
+     }
+    }
+   ]
   }
  ]
 }

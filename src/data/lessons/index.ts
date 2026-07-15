@@ -53,6 +53,7 @@ import { ANTI_LATVIAN_LESSON } from './antiLatvian';
 import { ANTI_OWEN_LESSON } from './antiOwen';
 import { ANTI_HIPPO_LESSON } from './antiHippo';
 import { ANTI_HIPPO_WHITE_LESSON } from './antiHippoWhite';
+import { ACCEL_DRAGON_LESSON } from './accelDragon';
 import { ANTI_PIRC_AUSTRIAN_LESSON } from './antiPircAustrian';
 import { ANTI_ENGLUND_LESSON } from './antiEnglund';
 import { ANTI_BENONI_PUSH_LESSON } from './antiBenoniPush';
@@ -441,6 +442,7 @@ const LESSONS: Record<string, LessonScript> = {
   [ANTI_OWEN_LESSON.openingId]: ANTI_OWEN_LESSON,
   [ANTI_HIPPO_LESSON.openingId]: ANTI_HIPPO_LESSON,
   [ANTI_HIPPO_WHITE_LESSON.openingId]: ANTI_HIPPO_WHITE_LESSON,
+  [ACCEL_DRAGON_LESSON.openingId]: ACCEL_DRAGON_LESSON,
   [ANTI_PIRC_AUSTRIAN_LESSON.openingId]: ANTI_PIRC_AUSTRIAN_LESSON,
   [ANTI_ENGLUND_LESSON.openingId]: ANTI_ENGLUND_LESSON,
   [ANTI_BENONI_PUSH_LESSON.openingId]: ANTI_BENONI_PUSH_LESSON,

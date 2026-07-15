@@ -71,6 +71,20 @@ const OPENINGS = {
     minPrefix: ['e4', 'b6'],
     maxDepth: 80,
   },
+  'accel-dragon': {
+    name: 'Accelerated Dragon (Black)',
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['e4', 'c5', 'Nf3', 'Nc6', 'd4', 'cxd4', 'Nxd4', 'g6'],
+    maxDepth: 80,
+  },
+  'hyper-accel-dragon': {
+    name: 'Hyper-Accelerated Dragon (Black)',
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['e4', 'c5', 'Nf3', 'g6'],
+    maxDepth: 80,
+  },
   'anti-hippo-e3': {
     name: 'Anti-Hippo / passive 1.e3 (Black)',
     color: 'black',
