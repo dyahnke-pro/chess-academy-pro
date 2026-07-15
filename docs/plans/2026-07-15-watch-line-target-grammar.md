@@ -42,12 +42,15 @@ because of X" is PAINTED, not just spoken:**
   (narrationAccuracy). A red highlight on a square the narration doesn't name,
   or a "target" that isn't actually attacked, is a defect.
 - **Rollout**: (1) NEW lessons/beats author to this grammar from now on
-  (masterclass + pro-rep + anti-openings); (2) sweep EXISTING Watch lessons'
-  attack/threat/weakness sentences to add the missing ray+red-target paint —
-  incremental, per-opening passes (don't rip up working content in one sweep);
-  (3) extend `lessonIntegrity` with a heuristic gate: a beat whose `say`
-  matches /attack|threaten|weak|hangs|hitting|target/ must carry ≥1 arrow or
-  non-orange highlight (audit-first, then hard-fail once the backlog clears).
+  (masterclass + pro-rep + anti-openings); (2) ✅ DONE 2026-07-15 — swept the
+  whole registered corpus (getAllLessonScripts walk): only 3 genuine unpainted
+  claim-beats existed (Berlin b4 bishop diagonals, QG close bad-bishop/c-file,
+  Trompowsky d5-e3 bishop opening) — all painted + board-verified; 4 flags were
+  negation/meta prose ("no attack, no fireworks") left correctly unpainted;
+  (3) ✅ DONE 2026-07-15 — `lessonIntegrity.test.ts` now carries the hard
+  red-target gate ("claim-beats carry paint") over EVERY registered lesson
+  (masterclass + pro-rep + anti), with the 4 meta beats as a SEALED baseline
+  that may only shrink. A new claim-beat with zero paint fails the build.
 
 ## 🔒🔒 THE VIDEO-GROUNDED WATCH — full teaching arc, not just move-beats (David 2026-07-15, emphatic: "Really use these videos to get an amazing opening walkthrough for my users please!! It kinda goes against how we make the WATCH portion currently, but I really want the full explanation in there. He gives us gems even!!")
 

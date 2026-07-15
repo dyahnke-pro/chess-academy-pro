@@ -119,8 +119,12 @@ export const QUEENS_GAMBIT_LESSON: LessonScript = {
     {
       id: 'close',
       moves: M,
-      say: "That is the Queen's Gambit. Not a real sacrifice — a question. Offer the c-pawn, and either Black gives up the centre and you seize space, or he declines and you out-develop him toward a structural edge: the half-open c-file, the central majority, the bad bishop he can never quite free. There are no cheap traps here and no need for them. You win the Queen's Gambit the way Capablanca did — by understanding the pawns better than your opponent and squeezing until the position falls apart on its own. The tabs that follow teach each road: the Exchange and its minority attack, the Tartakower, the Accepted, the Slav and Semi-Slav, the Catalan, and the quick Bf4 set-up. Learn them, and you have a weapon for a lifetime.",
+      say: "That is the Queen's Gambit. Not a real sacrifice — a question. Offer the c-pawn, and either Black gives up the centre and you seize space, or he declines and you out-develop him toward a structural edge: the half-open c-file your rook already patrols from c3, the central majority, the bad bishop rotting on c8 that he can never quite free. There are no cheap traps here and no need for them. You win the Queen's Gambit the way Capablanca did — by understanding the pawns better than your opponent and squeezing until the position falls apart on its own. The tabs that follow teach each road: the Exchange and its minority attack, the Tartakower, the Accepted, the Slav and Semi-Slav, the Catalan, and the quick Bf4 set-up. Learn them, and you have a weapon for a lifetime.",
       sayShort: 'A question, not a sacrifice — squeeze and win.',
+      highlights: [
+        { square: 'c3', color: SOFT },
+        { square: 'c8', color: 'rgba(239,68,68,0.72)' },
+      ],
     },
   ],
 };

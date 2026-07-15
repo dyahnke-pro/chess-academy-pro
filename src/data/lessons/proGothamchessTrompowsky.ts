@@ -58,6 +58,8 @@ export const PRO_GOTHAMCHESS_TROMPOWSKY_LESSON: LessonScript = {
       say:
         "Black builds the centre with d5 and breaks the pin by developing the bishop to e7; we play the modest e3, solidifying d4 and opening the light-squared bishop. Classic Trompowsky: small, solid moves, no weaknesses.",
       sayShort: 'd5, e3, Be7 — the centre sets.',
+      arrows: [{ from: 'f1', to: 'a6', color: VIS }],
+      highlights: [{ square: 'd4', color: KEY }],
     }),
     b({
       id: 'bd3-c3',

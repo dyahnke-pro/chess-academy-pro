@@ -178,3 +178,33 @@ describe('db-anchor helper sanity', () => {
     expect(longestAnchorPly(['a3', 'h6', 'a4', 'h5'])).toBeLessThan(MIN_DB_ANCHOR_PLY);
   });
 });
+
+// ── Red-target grammar gate (David 2026-07-15, audit-first → hard-fail) ──
+// Every beat whose narration makes an attack/threat/weakness/pin/fork claim
+// must lead the eye: at least one arrow or highlight. The baseline below is
+// SEALED (meta/negation beats — "no attack, no fireworks" summary prose that
+// the claim regex matches but that names nothing paintable). It may only
+// shrink; a new claim-beat with zero paint is a build failure.
+describe('red-target grammar — claim-beats carry paint', () => {
+  const CLAIM = /\battack(?:s|ing|ed)?\b|threaten|hangs|hanging\b|target(?:s|ing)?\b|\bpins?\b|pinned|pinning|\bforks?\b|forking|eyes\b|eyeing|pressur/i;
+  const SEALED_META_BASELINE = new Set([
+    'italian-game::castle',
+    'ruy-lopez::Berlin Defense::b5',
+    'ruy-lopez::Berlin Defense::b7',
+    'ruy-lopez::Exchange Variation::x4',
+  ]);
+  it('every claim-beat has >=1 arrow or highlight (sealed baseline only shrinks)', async () => {
+    const { getAllLessonScripts } = await import('./index');
+    const offenders: string[] = [];
+    for (const { key, lesson } of getAllLessonScripts()) {
+      for (const beat of lesson.beats) {
+        if (!CLAIM.test(beat.say)) continue;
+        const arrows = beat.arrows?.length ?? 0;
+        const hls = beat.highlights?.length ?? 0;
+        const id = `${key}::${beat.id}`;
+        if (arrows === 0 && hls === 0 && !SEALED_META_BASELINE.has(id)) offenders.push(id);
+      }
+    }
+    expect(offenders, `claim-beats with zero paint (add arrows/highlights, never baseline): ${offenders.join(', ')}`).toEqual([]);
+  });
+});
