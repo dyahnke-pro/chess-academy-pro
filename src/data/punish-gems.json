@@ -7406,5 +7406,31 @@
   "engineCp": 378,
   "tier": "confirmed",
   "why": "h4 launches the storm a move too soon — the c4-bishop is loose against the c8-rook. Punish with Nxd4: the desperado check changes nothing, and Black emerges a piece for a pawn up (+3.8)."
+ },
+ {
+  "openingId": "trompowsky-attack",
+  "lineMoves": "d4 Nf6 Bg5 Ne4 Bf4 d5 e3 c5 Bd3",
+  "inaccuracy": "Bf5",
+  "freqPct": 11,
+  "games": 1083,
+  "practicalScore": 64,
+  "mainMove": "Nc6",
+  "punish": "f3",
+  "punishSeq": [
+   "f3",
+   "Qa5+",
+   "c3",
+   "Nd6",
+   "b4",
+   "cxb4",
+   "Bxd6",
+   "bxc3",
+   "Kf2",
+   "Bxd3"
+  ],
+  "playLine": "d4 Nf6 Bg5 Ne4 Bf4 d5 e3 c5 Bd3 Bf5 f3 Qa5+ c3 Nd6 b4 cxb4 Bxd6 bxc3 Kf2 Bxd3",
+  "engineCp": 131,
+  "tier": "confirmed",
+  "why": "Bf5 offers a bishop trade that nothing actually supports — the e4-knight doesn't cover f5. Punish with f3: the knight is undermined, the tactics run in White's favour throughout, and the engine has White clearly better (+1.3)."
  }
 ]

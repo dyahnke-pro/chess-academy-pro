@@ -23,6 +23,56 @@ export interface GemNarration {
 }
 
 export const GEM_NARRATION: Record<string, GemNarration> = {
+  // Trompowsky — the Bd3 development node (hand-curated 2026-07-16). Bf5?
+  // offers a trade nothing defends; f3! undermines the e4-knight and the
+  // tactics run White's way. Engine-verified +1.31 at the quiet end.
+  'trompowsky-attack:d4_Nf6_Bg5_Ne4_Bf4_d5_e3_c5_Bd3:Bf5': {
+    sources: ['concept:tac-overloaded', 'concept:tac-zwischen', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
+    watch: [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Bd3 \u2014 White develops with a quiet question: the d3-bishop stares across at Black's kingside, and Black must pick a setup.",
+      "\u2026Bf5? \u2014 the trade offer that isn't: look closely and nothing defends the f5-bishop \u2014 the e4-knight covers d6 and g5, not f5.",
+      "f3! \u2014 the punish starts by undermining the e4-knight, the piece holding Black's whole position together.",
+      "\u2026Qa5+ \u2014 Black throws in the check, hunting counterplay.",
+      "c3 \u2014 White blocks calmly; the threats against e4 and f5 both stand.",
+      "\u2026Nd6 \u2014 the knight retreats, bumping into the f4-bishop's diagonal.",
+      "b4! \u2014 the zwischenzug: the queen is hit, the c5-pawn is levered, and Black's coordination collapses.",
+      "\u2026cxb4 \u2014 Black grabs what he can.",
+      "Bxd6 \u2014 White collects the d6-knight; the b4/c3 pawn tangle is noise next to a piece.",
+      "\u2026bxc3 \u2014 another pawn, another distraction.",
+      "Kf2 \u2014 the king simply steps aside; the c3-pawn goes nowhere.",
+      "\u2026Bxd3 \u2014 Black finally wins the d3-bishop back, but count the wreckage: White emerges clearly better (+1.3) with the extra material about to consolidate.",
+    ],
+    learn: [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Bd3 \u2014 the quiet question",
+      "",
+      "f3 \u2014 undermine the knight",
+      "",
+      "c3 \u2014 block calmly",
+      "",
+      "b4 \u2014 the zwischenzug",
+      "",
+      "Bxd6 \u2014 collect the piece",
+      "",
+      "Kf2 \u2014 step aside",
+      "",
+    ],
+  },
   // Sicilian Dragon — the Rc8 x-ray node (hand-curated 2026-07-16). All three
   // slips skip the mandatory Bb3 and lose material to the same …Nxd4! removal
   // shot; engine-verified at movetime 8000, quiet-end graded.

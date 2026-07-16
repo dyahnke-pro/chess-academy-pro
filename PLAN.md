@@ -859,6 +859,14 @@ Current zero-gem masterclass count: 26 → 25 (Evans shipped 3 gems).
 - Schliemann: Schönemann Bc4?!/Be2?! retreats land +0.58 Black — but the
   baseline after the taught …c6 is ALREADY +0.46 (jump 0.12): the edge is
   the opening's, not the slip's. Jump-from-baseline is part of the bar.
+- Trompowsky: Bf5?? → f3! SHIPPED (+1.31 confirmed, W64%; the trade offer
+  nothing defends). g5?! verified +0.89/jump 0.67 (positional) but
+  GATE-BLOCKED: the slip is at ply 6, so lineMoves is only 5 plies — under
+  MIN_DB_ANCHOR_PLY=6. A real finding with no gem slot; candidate for
+  warning/lesson content instead.
+- KIA + Bird scanned: no candidate cleared the practical-plus-plausible
+  screen (biggest: KIA Bxf3 W49%, Bird d4 W40% — that one's a WARNING
+  candidate against White, not a gem).
 
 ## Next-session pickup
 (1) Continue the zero-gem stream (25 masterclass openings left — sharp ones
