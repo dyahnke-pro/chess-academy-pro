@@ -867,6 +867,10 @@ Current zero-gem masterclass count: 26 → 25 (Evans shipped 3 gems).
 - KIA + Bird scanned: no candidate cleared the practical-plus-plausible
   screen (biggest: KIA Bxf3 W49%, Bird d4 W40% — that one's a WARNING
   candidate against White, not a gem).
+- London: Nh5?! → Bh2! SHIPPED (+0.68 positional, jump 0.53; 12.9k games —
+  the bishop hunt h3 already refuted; rim knight costs the d5-outpost).
+- QG early dxc4 (jump 0.29) + Catalan Nc6?! (jump 0.34) verified and
+  DROPPED — the volume was tempting, the objective jump wasn't there.
 
 ## Next-session pickup
 (1) Continue the zero-gem stream (25 masterclass openings left — sharp ones

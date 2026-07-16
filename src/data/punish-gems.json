@@ -7432,5 +7432,31 @@
   "engineCp": 131,
   "tier": "confirmed",
   "why": "Bf5 offers a bishop trade that nothing actually supports — the e4-knight doesn't cover f5. Punish with f3: the knight is undermined, the tactics run in White's favour throughout, and the engine has White clearly better (+1.3)."
+ },
+ {
+  "openingId": "london-system",
+  "lineMoves": "d4 Nf6 Nf3 g6 Bf4 Bg7 e3 d6 Be2 O-O O-O Nbd7 h3",
+  "inaccuracy": "Nh5",
+  "freqPct": 5,
+  "games": 12900,
+  "practicalScore": 57,
+  "mainMove": "b6",
+  "punish": "Bh2",
+  "punishSeq": [
+   "Bh2",
+   "e5",
+   "dxe5",
+   "dxe5",
+   "Nc3",
+   "Qe7",
+   "Nd5",
+   "Qd8",
+   "c4",
+   "c6"
+  ],
+  "playLine": "d4 Nf6 Nf3 g6 Bf4 Bg7 e3 d6 Be2 O-O O-O Nbd7 h3 Nh5 Bh2 e5 dxe5 dxe5 Nc3 Qe7 Nd5 Qd8 c4 c6",
+  "engineCp": 68,
+  "tier": "positional",
+  "why": "Nh5 hunts your London bishop — the h3 prep means it simply ducks to h2 and lives. Punish with Bh2: the knight is stranded on the rim, and while it walks home White plants a knight on d5. The engine gives White a clear pull (+0.7)."
  }
 ]

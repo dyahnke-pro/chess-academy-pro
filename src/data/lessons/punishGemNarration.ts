@@ -23,6 +23,64 @@ export interface GemNarration {
 }
 
 export const GEM_NARRATION: Record<string, GemNarration> = {
+  // London System — the h3 bolt-hole node (hand-curated 2026-07-16). Nh5?
+  // hunts the bishop after h3 already prepared Bh2; the stranded rim knight
+  // costs Black the d5-outpost. Engine-verified +0.68 at the quiet end.
+  'london-system:d4_Nf6_Nf3_g6_Bf4_Bg7_e3_d6_Be2_O-O_O-O_Nbd7_h3:Nh5': {
+    sources: ['concept:pos-outpost', 'concept:pos-tempo', 'https://en.wikipedia.org/wiki/London_System'],
+    watch: [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "h3 \u2014 the little London insurance move: the c8-bishop is denied g4, and the f4-bishop gets its h2 bolt-hole ready.",
+      "\u2026Nh5? \u2014 the classic bishop hunt, one move too late: h3 already prepared the escape.",
+      "Bh2 \u2014 the bishop ducks and lives. Now count what Black paid: a knight on the rim doing nothing.",
+      "\u2026e5 \u2014 Black tries to justify the knight with the central break.",
+      "dxe5 \u2014 White trades on his terms.",
+      "\u2026dxe5 \u2014 the recapture leaves the e5-pawn needing babysitters.",
+      "Nc3 \u2014 the queenside knight develops toward the hole Black just created.",
+      "\u2026Qe7 \u2014 Black props up e5.",
+      "Nd5! \u2014 the knight lands on the dream square: the rim knight on h5 watches from the wrong side of the board.",
+      "\u2026Qd8 \u2014 the queen retreats; the tempo count keeps growing.",
+      "c4 \u2014 White cements the d5-knight.",
+      "\u2026c6 \u2014 Black finally challenges it, two tempi and one outpost too late. A clear London pull (+0.7).",
+    ],
+    learn: [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "h3 \u2014 bolt-hole ready",
+      "",
+      "Bh2 \u2014 duck and live",
+      "",
+      "dxe5 \u2014 trade on your terms",
+      "",
+      "Nc3 \u2014 toward the hole",
+      "",
+      "Nd5 \u2014 the dream square",
+      "",
+      "c4 \u2014 cement it",
+      "",
+    ],
+  },
   // Trompowsky — the Bd3 development node (hand-curated 2026-07-16). Bf5?
   // offers a trade nothing defends; f3! undermines the e4-knight and the
   // tactics run White's way. Engine-verified +1.31 at the quiet end.
