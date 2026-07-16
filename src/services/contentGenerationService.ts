@@ -124,9 +124,9 @@ export async function generateMiddlegamePlanAnalysis(
   const facts = [
     `Middlegame plan for the ${opening.name}: "${plan.title}".`,
     plan.overview ? plan.overview : '',
-    ...plan.pawnBreaks.map((b) => `Pawn break ${b.move}: ${b.explanation}`),
-    ...plan.pieceManeuvers.map((m) => `Maneuver — the ${m.piece} via ${m.route}: ${m.explanation}`),
-    ...plan.strategicThemes.map((t) => `Theme: ${t}`),
+    ...(plan.pawnBreaks ?? []).map((b) => `Pawn break ${b.move}: ${b.explanation}`),
+    ...(plan.pieceManeuvers ?? []).map((m) => `Maneuver — the ${m.piece} via ${m.route}: ${m.explanation}`),
+    ...(plan.strategicThemes ?? []).map((t) => `Theme: ${t}`),
     grounding.topMoves ? `Most-played continuations from this position:\n${grounding.topMoves}` : '',
   ].filter(Boolean).join('\n');
 

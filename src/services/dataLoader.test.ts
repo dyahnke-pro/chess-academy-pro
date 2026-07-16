@@ -7,6 +7,7 @@ import {
   loadEcoData,
   loadRepertoireData,
   loadMiddlegamePlansData,
+  loadModelGamesData,
   computePosition,
   reconcileProRepertoires,
 } from './dataLoader';
@@ -54,6 +55,35 @@ beforeEach(async () => {
   await whenFullySeeded().catch(() => undefined);
   await db.delete();
   await db.open();
+});
+
+describe('seed-boundary normalize (curated-data crash cure)', () => {
+  // The content JSON omits fields the TS type declares required (373/646
+  // model games lack criticalMoments; some plans lack strategicThemes /
+  // endgameTransitions). The seed normalize must default them to [] so a
+  // raw Dexie record can never surprise a downstream .map/.length (David
+  // 2026-07-15 sweep).
+  it('every seeded model game has criticalMoments as an array', async () => {
+    await loadModelGamesData();
+    const all = await db.modelGames.toArray();
+    expect(all.length).toBeGreaterThan(0);
+    expect(all.every((g) => Array.isArray(g.criticalMoments))).toBe(true);
+  });
+
+  it('every seeded middlegame plan has its required arrays defined', async () => {
+    await loadMiddlegamePlansData();
+    const all = await db.middlegamePlans.toArray();
+    expect(all.length).toBeGreaterThan(0);
+    expect(
+      all.every(
+        (p) =>
+          Array.isArray(p.strategicThemes) &&
+          Array.isArray(p.endgameTransitions) &&
+          Array.isArray(p.pawnBreaks) &&
+          Array.isArray(p.pieceManeuvers),
+      ),
+    ).toBe(true);
+  });
 });
 
 describe('loadMiddlegamePlansData — prune', () => {
