@@ -908,6 +908,34 @@ Current zero-gem masterclass count: 26 → 25 (Evans shipped 3 gems).
 QGA 1). Session total: 17 gems. Remaining unscanned tab territory:
 sveshnikov/najdorf tabs 6+, glek/reti/dutch deeper tabs, gambit set.**
 
+**Tab-pass wave 2 (2026-07-16 late): 5 more gems shipped.**
+- King's Gambit Fischer-Defense node `e4 e5 f4 exf4 Nf3 d6 d4 g5 h4`:
+  Bg4?! → hxg5! (+1.87 confirmed, 4.6k games). (An earlier Muzio Bd6→d4
+  +2.10 also in this batch's working tree.)
+- Najdorf 6.Be3 …Ng4 tab: Bf4?! → e5! forking d4+f4, then Nxf2! forking
+  Q+R (+1.22 confirmed, jump 1.58, 13,219 games — already committed by
+  the earlier main-pass, kept); f3?? → Ne3! octopus fork, Bxd4 wins a
+  piece (+4.64 confirmed, jump 4.74, 212 games).
+- Najdorf Fischer-Sozin tab: e5?! → Bb7! through the vacated diagonal;
+  exd6 zwischenzug killed by Bxd6 (+0.62 positional, jump 0.68, 536g).
+- Sveshnikov Kalashnikov tab: Nxb4?? → Qa5! traps the knight, Nxc2+
+  (+4.00 confirmed, jump 4.44, 207g); Qa4?! → Bd7! then Nxe4 snaps the
+  centre pawn (+1.13 confirmed, jump 1.50, 314g).
+- GATE-BLOCKED (logged, do not re-scan): Réti Accepted `Nf3 d5 c4 dxc4
+  e3` node — b5?! (127,559 games, 24%!! the hold-the-pawn classic) and
+  Bg4?! (42k) sit at a 5-ply node; the deeper `…Nf6 Bxc4 Bg4` (32k)
+  node's move order also only anchors 5 plies in openings-lichess.
+  All three fail MIN_DB_ANCHOR_PLY=6 structurally. Candidates for the
+  future early-slip surface alongside Réti dxc4/Alapin d4/Tromp g5.
+- Scanned clean (nothing above the bar): Benko tabs (4), Najdorf
+  Adams/Anti-Najdorf tabs, Sveshnikov 11.c4/…Rb8 tabs, Glek all 3 tabs,
+  Dutch all 7 tabs, Réti KIA/Advance/LSB/Nimzo-English/Gambit/Anti-Slav/
+  Reversed-Benoni tabs.
+
+**Tab-pass running total: 12 gems. Session total: 22 gems (318 in the
+DB). Remaining unscanned tab territory: the gambit set (kings-gambit
+deeper tabs done; evans/budapest/albin/benko done or clean).**
+
 **MASTERCLASS SWEEP COMPLETE (2026-07-16): 10 gems shipped across 6
 openings** (Evans 3, Dragon 3, Tromp 1, London 1, anti-Alapin 1,
 Semi-Slav 1); ~20 openings honestly yield zero from their taught mains
