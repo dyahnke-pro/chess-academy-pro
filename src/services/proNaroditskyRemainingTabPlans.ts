@@ -30,7 +30,7 @@ const TAB_PLANS: Record<string, Record<string, string[]>> = {
     'black accepts with dxe4': ['mp-pronaroFantasy-kingside-attack'],
   },
   'pro-naroditsky-najdorf': {
-    'main': [],
+    'main': ['mp-pronaroNajdorf-opposite-castle-race'],
     'be3 english attack': ['mp-pronaroNaj-english-race', 'mp-pronaroNaj-english-bxh6'],
     'be2 classical': ['mp-pronaroNaj-classical-development', 'mp-pronaroNaj-classical-nb6'],
     'h3 adams attack': ['mp-pronaroNaj-adams-defense', 'mp-pronaroNaj-adams-counter'],

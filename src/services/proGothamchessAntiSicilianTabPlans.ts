@@ -9,7 +9,7 @@ const TAB_PLANS: Record<string, string[]> = {
   ],
   'rossolimo 3.bb5 e6': ['mp-progothamchess-antisic-e6-open'],
   'rossolimo 3.bb5 g6': ['mp-progothamchess-antisic-g6-d4break'],
-  'accelerated pawn storm (carlsen-inspired)': ['mp-progothamchess-antisic-accel-storm'],
+  'accelerated pawn storm (positional squeeze)': ['mp-progothamchess-antisic-accel-storm'],
 };
 
 export function getProGothamchessAntiSicilianTabPlanIds(

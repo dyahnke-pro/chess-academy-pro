@@ -718,6 +718,38 @@ per-opening to the locked doctrines).
   (build-course-sublines.mjs, masters DB + explorer + engine fallback);
   42k-test sublineNarration gate run for orphans.
 
+### Gate C baseline grind (David 2026-07-15 "handle gate C") — IN PROGRESS, 109 → 40
+- Gate sealed as `middlegamePlanContinuity.test.ts` (pawn-skeleton diff ≤3 vs
+  the opening's lines; shrink-only baseline). The backlog was the alien
+  batch-authoring run: plans anchored on positions in ZERO corpus games with
+  fabricated "real win from this repertoire" claims.
+- **The proven loop (per cluster):** tree-continue the corpus from each
+  declared line → reroute/extend variation pgns where the corpus disagrees →
+  engine-screen every terminus (student ≥ −1.0) → 8-ply engine tails →
+  rebuild plans with hand-written Danya-register narration citing measured
+  junction stats → author Gate-A Watch lessons for every new variation →
+  full gate suite → main.
+- **Shipped:** Rossolimo (109→100), Jobava (→94), KIA (→86), Gotham English
+  (→80, +c6 variation), Fantasy/London/Vienna (→65, +3 variations incl. the
+  16-1 Vienna Gambit Accepted; 2 fabricated plans deleted), Alekhine (→60,
+  2 variations REROUTED onto his real corpus — the Rubinstein …Nd4 103/132),
+  Caro-Kann+Ruy (→52, d3-Closed rerouted, Berlin queen-trade plan),
+  Scandi+ClosedSic+Ponziani (→40, +7 variations, Ponziani honestly priced
+  at −0.3, its −5.7 Nc3 candidate discarded).
+- **In flight:** Najdorf/Anti-Sicilian/Italian (3 each; tails deriving) —
+  →~31. Then: caro-advance-white (2), stafford-refute (2), naro-fantasy (1),
+  gotham french/qgd (2) pro-rep singles; masterclass leftovers (caro-kann 2,
+  birds 2, french/nimzo/reti/benko/trompowsky 1s) need the same loop against
+  repertoire.json lines instead of pro-repertoires.
+- **Side finds fixed en route:** 9 dangling resolver ids pruned; caruana-najdorf
+  + dragodorf wired (parallel build had left them unresolved); orphaned
+  vienna-gambit-main rebuilt instead of deleted; stale ruy d6@13 subline dropped.
+- **Known debt:** proRepTabPlanCoverage's RESOLVERS list omits all Gotham
+  resolvers ("keep in sync" comment violated) — sync would surface more
+  unresolved pairs; separate hygiene task.
+
 ## Next-session pickup
-Read the three sweep JSONs, work the backlog top-down, ship per the standard
-loop (gates → ship-check → main → prod audit).
+Finish the Gate C grind per the loop above (baseline → 0 or an honest
+irreducible core), then read the three sweep JSONs and work the backlog
+top-down, shipping per the standard loop (gates → ship-check → main →
+prod audit).

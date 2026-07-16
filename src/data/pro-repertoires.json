@@ -189,6 +189,16 @@
       "concept:pos-center",
       "https://www.chess.com/openings/Italian-Game"
      ]
+    },
+    {
+     "name": "Two Knights (…Nf6)",
+     "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 O-O Bc5 d4 Bxd4 Nxd4 Nxd4 Bg5 d6 f4",
+     "explanation": "The …Nf6 order, handled his corpus way (7 games on this exact path): castle, offer the d4 trades, then Bg5 fixing the f6-knight and f4 levering at e5 with the rook already behind the file. Level by the engine; the initiative and the open f-file wear white.",
+     "sources": [
+      "concept:pos-development",
+      "https://www.chess.com/openings/Italian-Game",
+      "https://api.chess.com/pub/player/gothamchess/games/archives"
+     ]
     }
    ],
    "trapLines": [],

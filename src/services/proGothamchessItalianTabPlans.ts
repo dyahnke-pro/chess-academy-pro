@@ -7,16 +7,11 @@
 // big-centre plan homes on the Evans tab.
 
 const TAB_PLANS: Record<string, string[]> = {
-  main: [
-    'mp-progothamchess-italian-evans-style',
-    'mp-progothamchess-italian-twoknights-kside',
-  ],
-  'giuoco piano c3-d4': [
-    'mp-progothamchess-italian-evans-style',
-    'mp-progothamchess-italian-twoknights-kside',
-  ],
-  'slow italian d3': ['mp-progothamchess-italian-twoknights-kside'],
+  main: ['mp-progothamchess-italian-evans-style'],
+  'giuoco piano c3-d4': ['mp-progothamchess-italian-evans-style'],
+  'slow italian d3': [],
   'evans gambit': ['mp-progothamchess-italian-evans-bigcenter'],
+  'two knights (…nf6)': ['mp-progothamchess-italian-twoknights-kside'],
 };
 
 export function getProGothamchessItalianTabPlanIds(

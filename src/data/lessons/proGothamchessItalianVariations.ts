@@ -167,8 +167,42 @@ const EVANS: LessonScript = {
   ],
 };
 
+// ── Two Knights (…Nf6) — castle, trade, Bg5 + f4 ──
+const TWO_KNIGHTS: LessonScript = {
+  openingId: 'pro-gothamchess-italian', title: 'Italian — Two Knights (…Nf6)',
+  minutes: 8, orientation: 'white', kind: 'variation', sources: SRC,
+  beats: [
+    b({
+      id: 'castle',
+      moves: 'e4 e5 Nf3 Nc6 Bc4 Nf6 O-O Bc5',
+      highlights: [{ square: 'g1', color: KEY }, { square: 'f6', color: SOFT }],
+      say:
+        "The Two Knights order — Black develops the king's knight before the bishop, daring us into sharp theory. His corpus answer declines the dare: castle first, and let Black transpose back into Italian shapes. Seven of his games run this exact path, and the calm move keeps every option warm.",
+      sayShort: 'O-O — decline the dare.',
+    }),
+    b({
+      id: 'trades',
+      moves: 'e4 e5 Nf3 Nc6 Bc4 Nf6 O-O Bc5 d4 Bxd4 Nxd4 Nxd4',
+      highlights: [{ square: 'd4', color: KEY }],
+      say:
+        "d4 anyway — the centre strike arrives with the king already safe. The trades run bishop, knight, knight, and Black's remaining knight ends up parked on d4: centralized, yes, but without a single pawn to prop it. A guest, not a tenant.",
+      sayShort: 'd4 — trade to the guest knight.',
+    }),
+    b({
+      id: 'bg5-f4',
+      moves: 'e4 e5 Nf3 Nc6 Bc4 Nf6 O-O Bc5 d4 Bxd4 Nxd4 Nxd4 Bg5 d6 f4',
+      arrows: [{ from: 'g5', to: 'd8', color: VIS }],
+      highlights: [{ square: 'f4', color: KEY }, { square: 'g5', color: SOFT }],
+      say:
+        "Now the point of the whole sequence: Bg5 stares through f6 at the queen, and f4 levers at e5 with our rook already waiting behind the file. Black's extra central knight watches while our initiative arrives first. Dead level by the engine — and every forcing option in the position wears white. The middlegame plan opens the file from here.",
+      sayShort: 'Bg5 and f4 — the initiative arrives.',
+    }),
+  ],
+};
+
 export const PRO_GOTHAMCHESS_ITALIAN_VARIATION_LESSONS: Record<string, LessonScript> = {
   'pro-gothamchess-italian::Giuoco Piano c3-d4': GIUOCO,
   'pro-gothamchess-italian::Slow Italian d3': SLOW,
   'pro-gothamchess-italian::Evans Gambit': EVANS,
+  'pro-gothamchess-italian::Two Knights (…Nf6)': TWO_KNIGHTS,
 };
