@@ -202,6 +202,28 @@ tab — its pgn never plays Nh4 (it's the Nd2-order Ne5/Nxc6 line). Joins
 slav "Winawer CG" (Botvinnik moves) and english "Hedgehog" (Symmetrical)
 on the tab-rename list for David.
 
+### NAME/LINE MISMATCH RESOLUTION — David's "do what is best" call (2026-07-16 late)
+
+All three flagged tabs resolved per the standards:
+1. **slav "Winawer Countergambit (...e5!?)" — LINE REBUILT to match the name.**
+   The old pgn was Botvinnik Semi-Slav moves (duplicate of semi-slav content);
+   the tab's own explanation text already described the real countergambit —
+   the pgn had simply been pasted wrong. New spine = the actual WCG main line,
+   100% masters-sourced 24 plies (`d4 d5 c4 c6 Nc3 e5 dxe5 d4 Ne4 Qa5+ ...
+   O-O-O O-O e3 dxe3 fxe3 Qc7`), terminus +0.24 FOR BLACK. Lesson authored.
+2. **english "Hedgehog System" — LINE REBUILT to the real Hedgehog.** Old pgn
+   was the Symmetrical four-knights (no hedgehog shell). New spine anchors the
+   DB's `Symmetrical, Hedgehog, Flexible Formation` entry (19 plies!) extended
+   to 26 on masters moves, terminus +0.40 White. Explanation rewritten; the
+   interim symmetrical-b4 lesson replaced with a true Hedgehog-bind lesson.
+3. **london "Nh4-f5 Knight Maneuver" — TAB RENAMED** to "London: Ne5 Trade
+   Plan (Nd2 Order)" (no mainstream London line justifies Nh4-f5; inventing
+   one would violate G3). Renamed in repertoire.json + lesson key +
+   ENGINE_EXTENDED_LESSONS. The KIA Nh4-f5 references elsewhere are real KIA
+   content, untouched.
+**Variation-tab lesson coverage: 316/316 — COMPLETE.** No gems/plans keyed to
+any of the three tabs (verified before touching).
+
 ## Next-session pickup
 Confirm run 29249281899 green → loop break closed. If a NEW break surfaces,
 diagnose from its report.json artifact (download via the artifact API, inspect

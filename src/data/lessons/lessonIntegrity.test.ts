@@ -109,7 +109,7 @@ const ENGINE_EXTENDED_LESSONS = new Set<string>([
   'london-system::London vs Grunfeld Setup',
   'london-system::London vs Dutch',
   'london-system::London vs Bf5 Mirror',
-  'london-system::London: Nh4-f5 Knight Maneuver',
+  'london-system::London: Ne5 Trade Plan (Nd2 Order)',
   'london-system::London vs Early c5 Challenge',
   'dutch-defence::Anti-Dutch 2.Bg5 Response',
   'reti-opening::Reti: Accepted dxc4 Bxc4',

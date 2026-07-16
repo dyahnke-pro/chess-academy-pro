@@ -99,7 +99,7 @@ export const LONDON_SYSTEM_VARIATION_LESSONS: Record<string, LessonScript> = {
     ],
   },
 
-  "london-system::London: Nh4-f5 Knight Maneuver": {
+  "london-system::London: Ne5 Trade Plan (Nd2 Order)": {
     openingId: "london-system", title: "London — the Ne5 trade grip (Nd2 move order)", minutes: 8, orientation: "white",
     sources: ["concept:pos-outpost", "concept:pawn-doubled", "https://en.wikipedia.org/wiki/London_System"],
     beats: [

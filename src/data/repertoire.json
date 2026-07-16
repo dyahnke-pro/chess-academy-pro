@@ -1621,7 +1621,7 @@
     "explanation": "When Black mirrors with ...Bf5, White should not shy away from the bishop trade. Instead, play c4 and Nc3 to build a big center, then exchange bishops on d3 and d6. The resulting position after e4 gives White a powerful central pawn majority and open lines. White's superior center and active rooks on the e- and d-files provide a clear positional advantage."
    },
    {
-    "name": "London: Nh4-f5 Knight Maneuver",
+    "name": "London: Ne5 Trade Plan (Nd2 Order)",
     "pgn": "d4 d5 Bf4 Nf6 e3 e6 Nd2 Bd6 Bg3 O-O Bd3 c5 c3 Nc6 Ngf3 Qe7 Ne5 Nd7 Nxc6 bxc6 Nf3",
     "explanation": "This sophisticated regrouping maneuver sends the knight to h4 and then f5, where it becomes a dominating piece pressuring e7, d6, and g7. The idea works especially well when Black has committed to ...e6, since the f5 square is permanently weakened. Combined with the battery of Qc2 and Bd3 aimed at the kingside, this creates serious attacking prospects."
    },
@@ -1949,7 +1949,7 @@
    },
    {
     "name": "Winawer Countergambit (...e5!?)",
-    "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 Bg5 h6 Bh4 dxc4 e4 g5",
+    "pgn": "d4 d5 c4 c6 Nc3 e5 dxe5 d4 Ne4 Qa5+ Bd2 Qxe5 Ng3 Nf6 Nf3 Qd6 Qc2 Be7 O-O-O O-O e3 dxe3 fxe3 Qc7",
     "explanation": "The Winawer Countergambit with ...e5!? is a sharp and provocative choice that immediately challenges White's center. Black sacrifices a pawn to open lines and seize the initiative before White can consolidate. After dxe5 d4, the advanced pawn disrupts White's coordination and creates tactical complications. The resulting positions are unbalanced with Black relying on active piece play and central control to compensate for the material deficit."
    },
    {
@@ -2714,8 +2714,8 @@
    },
    {
     "name": "English: Hedgehog System",
-    "pgn": "c4 c5 Nc3 Nc6 g3 g6 Bg2 Bg7 Nf3 Nf6 O-O O-O d3 d6 a3 a6",
-    "explanation": "Against the Hedgehog setup, White builds a solid position with natural development. The a3 move prevents ...Nb4 and prepares b4 expansion. White slowly builds up before breaking through."
+    "pgn": "c4 e6 Nf3 c5 Nc3 Nf6 g3 b6 Bg2 Bb7 O-O Be7 d4 cxd4 Qxd4 d6 Rd1 a6 b3 Nbd7 e4 Qc8 Bb2 O-O Qe3 Qc7",
+    "explanation": "The true Hedgehog: Black curls up behind the a6/b6/d6/e6 pawn shell with the bishops on b7 and e7, conceding space and waiting for one loose move. White answers with the classical bind — the double fianchetto, the e4/c4 pawn duo, and the Qe3/Rd1 setup — keeping every break (...b5, ...d5) permanently under guard while probing for the endgame squeeze."
    },
    {
     "name": "Mikenas Attack",
