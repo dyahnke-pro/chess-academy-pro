@@ -53,6 +53,24 @@ built — e.g. "Scandinavian Defense: Panov Transfer"). What must go is the
       (`teach-it-option`) that routes to the same handoff. Test: "offers a
       coach-teach CTA when a scoped opening search finds nothing".
 
+### Phase 1.5 — the coach can actually teach short non-built lines (option B)  ·  status: DONE
+David's test (2026-07-16) exposed that the coach **couldn't teach the Scandi
+Panov at all** — `resolveOpeningEntry` + the fuzzy matcher both filter out
+terminal-short lines (≤8-ply namesakes), returning null even for the exact
+name, so the handoff hit "did you mean" instead of a lesson.
+- [x] `generateOpening`/`generateOpeningFromDbNarration`/`buildFallbackTreeFromDb`
+      accept an `entryOverride: { canonicalName, eco, moves }` that skips name
+      resolution and builds the walkthrough straight from the given moves
+      (G3-safe — moves are the DB record's).
+- [x] `OpeningDetailPage` already passes `oid`; the coach auto-teach now loads
+      the record via `getOpeningById` (UNFILTERED) and calls `generateOpening`
+      with the override, bypassing both filters. Search-CTA path (no oid) still
+      falls back to name-based resolution.
+- [x] Test: `generateOpening entryOverride` — name resolution fails for the
+      Scandi Panov (`ok:false`) but the override builds a tree (`ok:true`).
+- Analytics (`unbuilt_opening_lesson`) fires regardless, so demand is tracked
+  even when the name-based fallback can't resolve.
+
 ### Phase 2 — polish  ·  status: partial
 - [x] Keep the Accelerated Panov → Caro Panov-tab transposition redirect
       (`masterclassRedirect.ts`) — it opens a REAL course, better than a

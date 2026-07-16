@@ -127,7 +127,7 @@ import { translateToEnglish } from '../../services/coachApi';
 import { useAppStore } from '../../stores/appStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { useSettings } from '../../hooks/useSettings';
-import { getFavoriteOpenings } from '../../services/openingService';
+import { getFavoriteOpenings, getOpeningById } from '../../services/openingService';
 import type { OpeningRecord, OpeningVariation } from '../../types';
 import type { LiveState, TacticsLiveContext } from '../../coach/types';
 import type { ChatMessage as ChatMessageType, BoardArrow, BoardHighlight } from '../../types';
@@ -4525,10 +4525,43 @@ export function CoachTeachPage(): JSX.Element {
         voiceService.stop();
         speechChainRef.current = Promise.resolve(voiceService.speakForced(intro))
           .catch(() => undefined);
-        // Launch the walkthrough — handleSubmit resolves the opening from the
-        // DB and starts the walkthrough runtime. The intro voice is already
-        // queued on the speech chain, so it plays before the lesson narration.
-        void handleSubmit(autoTeach);
+        // Launch the lesson. When we came from the openings page we have the
+        // exact opening id, so load its record (getOpeningById is UNFILTERED)
+        // and build the walkthrough straight from its PGN via generateOpening's
+        // entryOverride — bypassing the name-resolution filters that hide
+        // terminal-short lines (short namesakes like the Scandi Panov), which
+        // otherwise make the coach unable to teach them at all (option B, David
+        // 2026-07-16). G3-safe: the moves are the DB record's, not the LLM's.
+        // No id (the search-CTA path) → fall back to name-based resolution.
+        const teachOid = searchParams.get('oid');
+        if (teachOid) {
+          void (async (): Promise<void> => {
+            try {
+              const rec = await getOpeningById(teachOid);
+              const moves = rec?.pgn?.trim().split(/\s+/).filter(Boolean) ?? [];
+              if (rec && moves.length > 0) {
+                setGenerationStatus({ openingName: rec.name, startedAt: Date.now() });
+                const result = await generateOpening(rec.name, {
+                  mode: 'learn',
+                  entryOverride: { canonicalName: rec.name, eco: rec.eco, moves },
+                });
+                setGenerationStatus(null);
+                if (result.ok && result.tree) {
+                  await cacheOpening(rec.name, result.tree);
+                  voiceService.stop();
+                  walkthrough.start(result.tree);
+                  return;
+                }
+              }
+            } catch {
+              setGenerationStatus(null);
+            }
+            // Record missing / generation failed → best-effort name resolution.
+            void handleSubmit(autoTeach);
+          })();
+        } else {
+          void handleSubmit(autoTeach);
+        }
         return;
       }
 
