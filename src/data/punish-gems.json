@@ -7614,5 +7614,57 @@
   "engineCp": 512,
   "tier": "confirmed",
   "why": "Guarding f7 with the knight walks into Bxh6 — recapturing opens g7 and the queen forks e5 and the h8-rook, so Black must simply stay a piece down. The engine confirms it (+5.1)."
+ },
+ {
+  "openingId": "sicilian-sveshnikov",
+  "lineMoves": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Nf3 Bb4 Bd3 d5",
+  "inaccuracy": "a3",
+  "freqPct": 4,
+  "games": 4197,
+  "practicalScore": 83,
+  "mainMove": "exd5",
+  "punish": "Bxc3+",
+  "punishSeq": [
+   "Bxc3+",
+   "bxc3",
+   "dxe4",
+   "Nxe5",
+   "Nxe5",
+   "Bb5+",
+   "Bd7",
+   "Qd6",
+   "Qe7",
+   "Qxe7+"
+  ],
+  "playLine": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Nf3 Bb4 Bd3 d5 a3 Bxc3+ bxc3 dxe4 Nxe5 Nxe5 Bb5+ Bd7 Qd6 Qe7 Qxe7+",
+  "engineCp": 496,
+  "tier": "confirmed",
+  "why": "a3 pokes the bishop while your d5-break hangs over the centre. Punish with Bxc3+ first — the recapture removes the knight — then dxe4 forks the d3-bishop and f3-knight. White's desperado tricks change nothing; the engine has Black completely winning (+5)."
+ },
+ {
+  "openingId": "sicilian-sveshnikov",
+  "lineMoves": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Nf3 Bb4 Bd3 d5",
+  "inaccuracy": "Bd2",
+  "freqPct": 8,
+  "games": 8040,
+  "practicalScore": 76,
+  "mainMove": "exd5",
+  "punish": "Bxc3",
+  "punishSeq": [
+   "Bxc3",
+   "Bxc3",
+   "dxe4",
+   "Nxe5",
+   "exd3",
+   "Qxd3",
+   "Qxd3",
+   "Nxd3",
+   "O-O",
+   "O-O-O"
+  ],
+  "playLine": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Nf3 Bb4 Bd3 d5 Bd2 Bxc3 Bxc3 dxe4 Nxe5 exd3 Qxd3 Qxd3 Nxd3 O-O O-O-O",
+  "engineCp": 406,
+  "tier": "confirmed",
+  "why": "Bd2 defends the pin and forgets the centre. Punish with Bxc3 then dxe4 — the pawn forks the d3-bishop and f3-knight, and after the desperado dust settles Black is a clean piece up with the queens off (+4.1)."
  }
 ]

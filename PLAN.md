@@ -893,8 +893,11 @@ Current zero-gem masterclass count: 26 → 25 (Evans shipped 3 gems).
   → cxd4! (+0.50 positional, 389k games) SHIPPED.
 - Italian Hungarian Qh5 node: Be6?? → Bxe6! (+4.53) + Nh6?? → Bxh6!
   (+5.12) SHIPPED — the two wrong f7-defences.
+- Anti-Sveshnikov …d5 node: a3?? → Bxc3+!/dxe4! fork (+4.96, B83%) and
+  Bd2?? → same collapse (+4.06, B76%) SHIPPED. O-O dropped (+0.28).
 - Dropped: Giuoco Nxc3?! (+0.04 quiet-end — the W62% mirage), Caro tab
-  candidates under floor, Ruy tabs nothing above noise.
+  candidates under floor, Ruy tabs nothing above noise, Najdorf/Dutch
+  tabs nothing above B60% worth verifying.
 
 **MASTERCLASS SWEEP COMPLETE (2026-07-16): 10 gems shipped across 6
 openings** (Evans 3, Dragon 3, Tromp 1, London 1, anti-Alapin 1,
