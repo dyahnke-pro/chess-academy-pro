@@ -2936,7 +2936,7 @@
  {
   "id": "mp-carokann-main",
   "openingId": "caro-kann",
-  "criticalPositionFen": "rn1qkbnr/pp3pp1/2p1p1bp/8/3P1P1P/6N1/PPP3P1/R1BQKBNR w KQkq - 0 8",
+  "criticalPositionFen": "rn1qkbnr/pp2ppp1/2p3bp/8/3P3P/6N1/PPP2PP1/R1BQKBNR w KQkq - 0 7",
   "title": "Caro Classical: The …c5 Counter-Race",
   "overview": "Black has traded the problem light-bishop and built the c6-d5-e6 wall with no weak pieces. White castles long for a kingside storm; Black's answer is the …c5 break, prising open the c-file and the b-file at White's king while the rock-solid structure shrugs off the attack the other way.",
   "pawnBreaks": [
@@ -2968,7 +2968,7 @@
   ],
   "playableLines": [
    {
-    "fen": "rn1qkbnr/pp3pp1/2p1p1bp/8/3P1P1P/6N1/PPP3P1/R1BQKBNR w KQkq - 0 8",
+    "fen": "rn1qkbnr/pp2ppp1/2p3bp/8/3P3P/6N1/PPP2PP1/R1BQKBNR w KQkq - 0 7",
     "moves": [
      "Nf3",
      "Nd7",
