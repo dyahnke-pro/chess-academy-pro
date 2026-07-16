@@ -4490,6 +4490,22 @@ export function CoachTeachPage(): JSX.Element {
       const autoTeach =
         searchParams.get('auto') === '1' ? searchParams.get('teach')?.trim() : null;
       if (autoTeach) {
+        // Demand signal (David 2026-07-16): count every time the coach teaches
+        // an opening we haven't hand-built, so a PostHog group-by on the name
+        // ranks which openings most need a masterclass. Fires once (kickoff is
+        // ref-guarded). `entry` distinguishes an opening-page tap from the
+        // empty-search CTA (no eco/oid there).
+        void logAppAudit({
+          kind: 'unbuilt-opening-lesson',
+          category: 'app',
+          source: 'CoachTeachPage.autoTeachKickoff',
+          summary: autoTeach,
+          context: JSON.stringify({
+            eco: searchParams.get('eco') ?? null,
+            oid: searchParams.get('oid') ?? null,
+            entry: searchParams.get('oid') ? 'opening-detail' : 'search-cta',
+          }),
+        });
         const intro = `We don't have a hand-built masterclass for the ${autoTeach} yet — so I'll teach it to you myself. Let's walk through it.`;
         const turnId = freshTurnId('autoteach');
         setKickoffStatus(null);

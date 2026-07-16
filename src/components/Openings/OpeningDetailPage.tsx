@@ -396,7 +396,12 @@ export function OpeningDetailPage(): JSX.Element {
       // lesson … I don't want the user to ask a second time."
       if (!hasLessonScript(result.id)) {
         const name = result.name?.trim() || id;
-        void navigate(`/coach/teach?teach=${encodeURIComponent(name)}&auto=1`, { replace: true });
+        // Carry the eco + id so the coach's unbuilt-opening-lesson analytics
+        // event (which ranks masterclass demand) is richer than name-only.
+        const params = new URLSearchParams({ teach: name, auto: '1' });
+        if (result.eco) params.set('eco', result.eco);
+        params.set('oid', result.id);
+        void navigate(`/coach/teach?${params.toString()}`, { replace: true });
         return;
       }
     }

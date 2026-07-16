@@ -72,6 +72,12 @@ const AUDIT_EVENT_MAP: Partial<Record<AuditKind, string>> = {
   'app-boot': 'app_opened',
   'route-changed': 'page_viewed',
   'lesson-started': 'lesson_started',
+  // Coach auto-taught an opening with NO hand-built masterclass (David
+  // 2026-07-16: "how many times coach made a lesson we do not have built —
+  // clues me in to which openings need masterclasses"). `summary` = the
+  // opening name; group-by it in PostHog to rank which openings testers most
+  // want a masterclass for. `context` carries { eco, oid, entry }.
+  'unbuilt-opening-lesson': 'unbuilt_opening_lesson',
   'lesson-completed': 'lesson_completed',
   'lesson-abandoned': 'lesson_abandoned',
   'srs-session-start': 'srs_session_started',
