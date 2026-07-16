@@ -227,4 +227,15 @@ export const TROMPOWSKY_ATTACK_VARIATION_LESSONS: Record<string, LessonScript> =
       },
     ],
   },
+
+  "trompowsky-attack::2...Ne4 3.Bf4 c5 4.f3 Sideline": {
+    openingId: "trompowsky-attack", title: "Trompowsky — 4.f3 and the full centre", minutes: 8, orientation: "white",
+    sources: ["concept:pos-center", "concept:pos-space", "https://en.wikipedia.org/wiki/Trompowsky_Attack"],
+    beats: [
+      { id: "tf1", moves: ["d4", "Nf6", "Bg5", "Ne4", "Bf4", "c5", "f3", "Nf6"], say: "…Ne4 is Black's principled try against the Trompowsky; Bf4 keeps the bishop, and f3! asks the knight what it's actually doing there. Nothing — back to f6 it goes, and White has banked a free tempo and the e4-square's future.", sayShort: "f3 — send the knight home with interest.", highlights: [{ square: "e4", color: "rgba(80,140,255,0.32)" }, { square: "f3", color: "rgba(255,214,0,0.88)" }] },
+      { id: "tf2", moves: ["d4", "Nf6", "Bg5", "Ne4", "Bf4", "c5", "f3", "Nf6", "d5", "Qb6", "Bc1"], say: "d5 clamps the centre, and …Qb6 hits b2 — meet it with the coolest move on the board: Bc1!, calmly un-developing the bishop to keep b2 whole. It feels wrong and it is completely right: Black's queen is the piece burning moves, not White's bishop.", sayShort: "Bc1 — the retreat that wins the argument.", highlights: [{ square: "b2", color: "rgba(255,214,0,0.88)" }, { square: "c1", color: "rgba(80,140,255,0.32)" }] },
+      { id: "tf3", moves: ["d4", "Nf6", "Bg5", "Ne4", "Bf4", "c5", "f3", "Nf6", "d5", "Qb6", "Bc1", "d6", "e4", "g6", "Na3"], say: "e4 — the full pawn centre stands, the exact structure the …Ne4 line hoped to prevent. Na3 develops toward c4, where it will arrive with a direct hit on the b6-queen. Every White move gains time or space; Black is still untangling.", sayShort: "e4 — the full centre, as promised.", highlights: [{ square: "e4", color: "rgba(255,214,0,0.88)" }, { square: "c4", color: "rgba(80,140,255,0.32)" }] },
+      { id: "tf4", moves: ["d4", "Nf6", "Bg5", "Ne4", "Bf4", "c5", "f3", "Nf6", "d5", "Qb6", "Bc1", "d6", "e4", "g6", "Na3", "Bg7", "Nc4", "Qc7", "a4", "O-O", "Ne2"], say: "Nc4 lands with tempo — the queen retreats a second time — and a4 nails the knight to its outpost by stopping …b5 cold. Ne2 completes development behind the pawn wall. The engine gives White a clear pull: space everywhere, every piece with a future, and Black's queen three moves deep into going nowhere.", sayShort: "a4 — the outpost is permanent.", arrows: [{ from: "c4", to: "b6", color: "rgba(40,185,95,0.92)" }], highlights: [{ square: "c4", color: "rgba(255,214,0,0.88)" }, { square: "a4", color: "rgba(80,140,255,0.32)" }] },
+    ],
+  },
 };

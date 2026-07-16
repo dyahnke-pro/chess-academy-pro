@@ -103,4 +103,15 @@ export const ENGLISH_OPENING_VARIATION_LESSONS: Record<string, LessonScript> = {
     b({ id: "mi5", moves: "c4 e6 Nc3 Nf6 e4 d5 e5 d4 exf6 dxc3 bxc3 Qxf6 Nf3 e5 Bd3 Na6 O-O Bd6 Bc2 Bg4 d4 Bxf3", say: "Bg4 d4 Bxf3 — White builds the big pawn centre with d4. We reach the Mikenas tabiya: White has the central pawn mass, the bishop trained on h7, and the more active position. Next to that initiative, the doubled c-pawns are an irrelevance — exactly how Caruana beat So.", sayShort: "d4 — the central pawn mass rolls.", highlights: [H("d4", KEY)] }),
   ],
 },
+
+  "english-opening::English: Hedgehog System": {
+    openingId: "english-opening", title: "English Symmetrical — break the mirror with b4", minutes: 8, orientation: "white",
+    sources: ["concept:pos-space", "concept:pos-open-file", "https://en.wikipedia.org/wiki/English_Opening"],
+    beats: [
+      { id: "eh1", moves: ["c4", "c5", "Nc3", "Nc6", "g3", "g6", "Bg2", "Bg7", "Nf3", "Nf6", "O-O", "O-O"], say: "Pure symmetry — five identical developing moves each, both kings castled. In a mirror position the mover's advantage is the whole game: White will break the symmetry first, and on the wing of his choosing.", sayShort: "O-O — symmetry; the mover breaks it.", highlights: [{ square: "g2", color: "rgba(80,140,255,0.32)" }, { square: "g7", color: "rgba(80,140,255,0.32)" }] },
+      { id: "eh2", moves: ["c4", "c5", "Nc3", "Nc6", "g3", "g6", "Bg2", "Bg7", "Nf3", "Nf6", "O-O", "O-O", "d3", "d6", "a3", "a6"], say: "a3 tips White's hand: the b4-break is coming. Black mirrors once more with …a6 for …b5 — but a race where one runner started first tends to stay won. The board is about to stop being symmetrical.", sayShort: "a3 — the b4 break is coming.", highlights: [{ square: "b4", color: "rgba(80,140,255,0.32)" }, { square: "a3", color: "rgba(255,214,0,0.88)" }] },
+      { id: "eh3", moves: ["c4", "c5", "Nc3", "Nc6", "g3", "g6", "Bg2", "Bg7", "Nf3", "Nf6", "O-O", "O-O", "d3", "d6", "a3", "a6", "Rb1", "Rb8", "b4", "cxb4", "axb4"], say: "Rb1 backs the push, and b4! lands first. After …cxb4 axb4 study the recapture: the a-pawn took toward the centre, and the half-open b-file appeared exactly where White's rook already stood waiting. That is what moving first buys in a symmetrical position.", sayShort: "b4 — first break, file pre-occupied.", highlights: [{ square: "b4", color: "rgba(255,214,0,0.88)" }, { square: "b1", color: "rgba(80,140,255,0.32)" }] },
+      { id: "eh4", moves: ["c4", "c5", "Nc3", "Nc6", "g3", "g6", "Bg2", "Bg7", "Nf3", "Nf6", "O-O", "O-O", "d3", "d6", "a3", "a6", "Rb1", "Rb8", "b4", "cxb4", "axb4", "b5"], say: "…b5 tries to shut the queenside, and White's structure keeps pressing anyway — the b4-pawn, the ready rook, the g2-bishop watching the long diagonal behind it all. The engine calls it near-level with White nudging: the English promise in one picture, a risk-free initiative on the only wing where anything happened.", sayShort: "b5 — hold the line; White still presses.", highlights: [{ square: "b5", color: "rgba(255,214,0,0.88)" }, { square: "b4", color: "rgba(80,140,255,0.32)" }] },
+    ],
+  },
 };
