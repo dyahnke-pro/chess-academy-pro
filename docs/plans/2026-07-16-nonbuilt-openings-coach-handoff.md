@@ -71,6 +71,22 @@ name, so the handoff hit "did you mean" instead of a lesson.
 - Analytics (`unbuilt_opening_lesson`) fires regardless, so demand is tracked
   even when the name-based fallback can't resolve.
 
+### Phase 1.6 — TYPING an opening name into the coach teaches it (teach-rescue)  ·  status: DONE
+David tested by typing "Scandi panov" into the coach chat → got the brain's
+"can't verify from grounded data" refusal. Two root causes: (1) the filtered
+resolver `getOpeningMoves` hides terminal-short lines (returns null even for
+the exact name), and (2) "Scandi" is an abbreviation no matcher recognizes.
+- [x] Tier 2.5 teach-rescue: when `getOpeningMoves` returns null, before
+      dropping to the brain, expand abbreviations + run the UNFILTERED
+      `searchOpenings`, and if it resolves, teach that exact line from its DB
+      PGN via the entryOverride path (option B). Q&A intents already excluded
+      upstream, so no Q&A hijack. Applies to opening-tap handoff AND typed chat.
+- [x] `expandOpeningAbbrev` — whole-word abbrev map (scandi→scandinavian,
+      caro→caro-kann, kid, qgd, qga, nimzo, najdorff→najdorf). Extend as
+      testers surface more.
+- [x] Test `CoachTeachPage.teachRescue.test.ts` — "Scandi panov" → abbrev
+      expand → unfiltered search → Panov Transfer → override builds a tree.
+
 ### Phase 2 — polish  ·  status: partial
 - [x] Keep the Accelerated Panov → Caro Panov-tab transposition redirect
       (`masterclassRedirect.ts`) — it opens a REAL course, better than a

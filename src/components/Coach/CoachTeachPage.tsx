@@ -127,7 +127,7 @@ import { translateToEnglish } from '../../services/coachApi';
 import { useAppStore } from '../../stores/appStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { useSettings } from '../../hooks/useSettings';
-import { getFavoriteOpenings, getOpeningById } from '../../services/openingService';
+import { getFavoriteOpenings, getOpeningById, searchOpenings } from '../../services/openingService';
 import type { OpeningRecord, OpeningVariation } from '../../types';
 import type { LiveState, TacticsLiveContext } from '../../coach/types';
 import type { ChatMessage as ChatMessageType, BoardArrow, BoardHighlight } from '../../types';
@@ -330,6 +330,24 @@ function gameResultWord(result: string, side: 'white' | 'black'): string {
 /** Title-case a free-text span ("catalan opening" → "Catalan Opening"). */
 function titleCase(s: string): string {
   return s.replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+/** Expand common opening-name abbreviations so the unfiltered teach-rescue
+ *  search can resolve casual input ("Scandi panov" → "Scandinavian panov").
+ *  The fuzzy matcher / search key on whole tokens, so a shorthand like
+ *  "scandi" scores nothing against "Scandinavian Defense". Whole-word only,
+ *  case-insensitive. Extend as testers surface more shorthand. */
+const OPENING_ABBREV: Record<string, string> = {
+  scandi: 'scandinavian',
+  najdorff: 'najdorf',
+  kid: "king's indian",
+  qgd: "queen's gambit declined",
+  qga: "queen's gambit accepted",
+  caro: 'caro-kann',
+  nimzo: 'nimzo-indian',
+};
+export function expandOpeningAbbrev(query: string): string {
+  return query.replace(/[a-z']+/gi, (w) => OPENING_ABBREV[w.toLowerCase()] ?? w);
 }
 
 /** Walk every fork in the tree and emit one DeepDiveOption per
@@ -2732,6 +2750,45 @@ export function CoachTeachPage(): JSX.Element {
         // null, refuse politely and route the input back to chat.
         const dbHit = getOpeningMoves(requestedName);
         if (!dbHit) {
+          // RESCUE (David 2026-07-16): getOpeningMoves filters out
+          // terminal-short lines (short namesakes like the Scandi Panov) and
+          // returns null even for real openings the student explicitly named,
+          // so typing "Scandi panov" fell to the brain's "can't verify from
+          // grounded data" refusal instead of a lesson. Before giving up, try
+          // the UNFILTERED openings search (the same matcher the openings page
+          // uses; abbreviations expanded), and if it resolves, teach that exact
+          // line straight from its DB PGN via the entryOverride path (option B).
+          // Q&A intents were already excluded upstream (the isProgress/isConcept/
+          // … guards at Tier 0), so this only rescues inputs already committed to
+          // teaching. G3-safe: the moves are the DB record's, not the LLM's.
+          const rescueQuery = expandOpeningAbbrev(requestedName);
+          const rescued = await searchOpenings(rescueQuery);
+          const rescueHit = rescued[0];
+          const rescueMoves = rescueHit?.pgn?.trim().split(/\s+/).filter(Boolean) ?? [];
+          if (rescueHit && rescueMoves.length > 0) {
+            void logAppAudit({
+              kind: 'coach-surface-migrated',
+              category: 'subsystem',
+              source: 'CoachTeachPage.handleSubmit.teachRescue',
+              summary: `teach rescue: "${requestedName}" → "${rescueHit.name}" via unfiltered search (option B)`,
+            });
+            try {
+              setGenerationStatus({ openingName: rescueHit.name, startedAt: Date.now() });
+              const result = await generateOpening(rescueHit.name, {
+                mode: 'learn',
+                entryOverride: { canonicalName: rescueHit.name, eco: rescueHit.eco, moves: rescueMoves },
+              });
+              setGenerationStatus(null);
+              if (result.ok && result.tree) {
+                await cacheOpening(rescueHit.name, result.tree);
+                voiceService.stop();
+                walkthrough.start(result.tree);
+                return;
+              }
+            } catch {
+              setGenerationStatus(null);
+            }
+          }
           void logAppAudit({
             kind: 'coach-surface-migrated',
             category: 'subsystem',
