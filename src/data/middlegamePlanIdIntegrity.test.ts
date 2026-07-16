@@ -29,15 +29,12 @@ const SERVICES_DIR = join(__dirname, '..', 'services');
 // Never-authored masterclass variation plans (the authoring backlog).
 // Shrink-only: remove an id when its plan lands in middlegame-plans.json.
 const BASELINE_MISSING = new Set<string>([
-  // The 3 survivors are BLOCKED on unsound variation lines, not laziness
-  // (2026-07-16 deep-verify @25s, student side): albin-fianchetto -1.62,
-  // oldindian-czech -1.20, oldindian-be2 -1.40 — all over the quiet-line
-  // bar. Authoring plans over them would teach losing positions (soundness
-  // doctrine). Fix the VARIATION lines first (rebuild on sounder data
-  // spines or demote honestly), then author the plans and shrink this.
-  'mp-albincountergambit-fianchetto',
-  'mp-oldindiandefence-be2',
-  'mp-oldindiandefence-czech',
+  // EMPTY (2026-07-16): all 34 originally-missing plans authored. The last 3
+  // (albin-fianchetto, oldindian-czech, oldindian-be2) required rebuilding
+  // their VARIATION lines first — the old lines evaluated -1.2 to -1.62 for
+  // the student (over the soundness bar); the data-spine rebuilds
+  // (build-opening-spine walks) all screen sound (-0.22 to -0.51 @25s).
+  // Keep this baseline at ZERO: a new dangling id is a build failure.
 ]);
 
 interface PlanRecord {

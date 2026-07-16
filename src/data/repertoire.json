@@ -2632,7 +2632,7 @@
   "variations": [
    {
     "name": "Old Indian: Czech Variation",
-    "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 Re1 Qc7 Bf1 Re8 d5 c5",
+    "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 Re1 a6 Bf1 b5 a3 Bb7 Bg5 h6",
     "explanation": "The Czech Variation features Black playing ...c6 and ...Qc7 to build a compact defensive structure before committing to a plan. The queen on c7 supports both central and kingside ideas while keeping the position flexible. After d5 c5, the center locks and Black reroutes the knight via f8-g6 to pressure the kingside. The position is rock-solid and difficult for White to crack, making it ideal for patient defenders."
    },
    {
@@ -2662,7 +2662,7 @@
    },
    {
     "name": "Old Indian: Be2 Development",
-    "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 Qc2 Re8 Rd1 Bf8 d5 c5",
+    "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 Qc2 a6 Rd1 Qc7 Bg5 Re8 Rac1 h6",
     "explanation": "White's Be2 development is the most classical approach to the Old Indian. Black responds with a patient setup, fianchettoing the dark bishop via f8-g7 after the center closes. The queen on c2 supports e4 and prepares queenside expansion while the rook goes to d1 for central pressure. Black must time the f5 break carefully while keeping the queenside stable. This line leads to a deep strategic battle where understanding plans matters more than memorization."
    }
   ],
@@ -3117,7 +3117,7 @@
   "variations": [
    {
     "name": "Fianchetto Variation",
-    "pgn": "d4 d5 c4 e5 dxe5 d4 Nf3 Nc6 g3 Bg4 Bg2 Qd7 O-O O-O-O Qb3 Nge7 Rd1",
+    "pgn": "d4 d5 c4 e5 dxe5 d4 Nf3 Nc6 g3 Nge7 Bg2 Ng6 O-O Ngxe5 Nxe5 Nxe5 b3 c5 Bb2 Be7 e3 Nc6 Bxc6+ bxc6 exd4 cxd4 Qxd4 Qxd4 Bxd4 O-O Re1",
     "explanation": "White's modern main line, fianchettoing with g3 to undermine the d4-pawn from the long diagonal. Black develops ...Nc6 and ...Bg4, pinning the f3-knight, then ...Qd7 and ...O-O-O to castle long for an opposite-side race. With Qb3, ...Nge7 and Rd1 the middlegame arrives: White chips at the d4-wedge while Black storms the kingside with ...h5-h4."
    },
    {
