@@ -49,9 +49,11 @@ async function servedSha() {
     } catch {
       continue;
     }
-    // Build id is "<sha>+<ms>" — match the sha immediately followed by '+'
-    // to avoid coincidental hex collisions with asset hashes.
-    if (js.includes(`${EXPECTED_SHA}+`)) return { found: true, assetCount: assetPaths.length, path };
+    // Build id is "<sha>+<ms>". git's --short length varies by environment
+    // (7 chars on the runner vs 8 in Vercel's build env when disambiguation
+    // kicks in — the 2026-07-16 false "never went live" timeout), so accept
+    // the expected sha followed by extra hex digits before the '+'.
+    if (new RegExp(`${EXPECTED_SHA}[a-f0-9]*\\+`).test(js)) return { found: true, assetCount: assetPaths.length, path };
   }
   return { found: false, assetCount: assetPaths.length };
 }

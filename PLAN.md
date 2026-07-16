@@ -118,6 +118,59 @@ from IndexedDB; ANY pageerror / non-NOISE console error is a hard fail.
   of the multi-thread variant probe to locate `t` (something calls `.startsWith`
   on a non-string worker message before any analysis is pending). Not yet fixed.
 
+### P5 VARIATION-LESSON STREAM — CLOSED (2026-07-16 late session)
+
+True coverage map (built from the real lessons index, not grep): 316
+variation tabs total → **299 lessoned, 16 G3-blocked, 1 data defect.**
+The "42 openings" framing overstated it — the workable gap was 19 lessons.
+
+Shipped this stream (19 authored): sicilian-alapin 4 (2...Nf6 endgame /
+alt-order — corrected mid-authoring: Bxd1 exists via c2, "king must take"
+was false; d5-Nc6-e5 honest-framed at -0.74; knight-recapture), old-indian 3
+(Janowski/Main-d5/Seirawan), qga 2 (both teach the d5-break defusal), slav
+quiet-e3, two-knights 2 (quiet-Italian, Fritz cxd4? punish +3.5), then the
+10-opening closure batch: italian closed-a4, sveshnikov 11.c4, catalan
+Qa4-regain, tromp 4.f3, qgd Cambridge Springs trap (+3.5), neo-grunfeld,
+leningrad dutch, benoni b5-race (-0.73 honest), english b4-break, KIA
+vs-the-e5-stake (-0.58 honest: "system, not refutation"). Method per lesson:
+replay w/ captures/checks → extend <20p lines on masters-explorer (engine
+fallback) → engine-screen terminus from student side → author with
+board-verified claims → 7-file gate battery. Never claim equality on a
+worse line.
+
+**G3-BLOCKED (16) — openings-lichess simply lacks these lines (DO NOT
+author lessons; DB is the canon):** london-system all 6 missing tabs (DB
+London canon = Nf3-first 11p + Jobava 6p + Steinitz-CG 6p only),
+reti-opening 3, sicilian-alapin 2 (no 2...e6/2...g6 in DB), KIA 2,
+philidor 1, dutch 1, birds 1.
+
+**DATA DEFECTS flagged for David:**
+1. slav-defence "Winawer Countergambit (...e5!?)" tab: pgn is a Botvinnik
+   Semi-Slav line (`...e6 Bg5 h6 Bh4 dxc4 e4 g5`) — ...e5 never played.
+   Name/line mismatch; lesson deliberately NOT authored over it.
+2. english-opening "Hedgehog System" tab is actually the Symmetrical
+   (...g6/...d6/...a6, no ...e6/b6 hedgehog) — name stretch, lesson authored
+   truthfully as the symmetrical b4-break.
+
+**REGISTRY LESSON (hard-won):** a new variation-lesson map spread into
+index.ts VARIATION_LESSONS but NOT reachable from registry.ts OPENINGS is
+INVISIBLE to every content gate (test count doesn't grow = the tell). The
+10-lesson batch was first authored as a side file and silently escaped all
+gates; redistributed into the per-opening registered maps, 5 real gate
+catches surfaced immediately (2 arrows from vacated squares, 1 blocked
+arrow, 1 premature piece-square claim, 1 over-long cue). Always verify the
+gate test count GROWS when adding lessons.
+
+**Post-deploy audit infra fix:** `wait-for-prod-build.mjs` now tolerates
+short-sha length drift (runner computes 7 chars, Vercel build env stamped
+8 — `f455271+` never matched `f4552716+`, causing a false 900s "never went
+live" timeout on the f455271 re-run). The f455271 audit failures themselves
+were double-deploy churn: push triggered the git-integration Vercel build
+AND the immediately-fired daily-deploy CLI deploy overwrote it mid-audit
+(16:45:51, audits ran to 16:56) — cached HTML referencing purged assets
+half-boots the app (no watcher events, no auto-detect). Lesson: don't fire
+daily-deploy right after a push; let the audit finish first.
+
 ## Next-session pickup
 Confirm run 29249281899 green → loop break closed. If a NEW break surfaces,
 diagnose from its report.json artifact (download via the artifact API, inspect
@@ -946,8 +999,9 @@ only mains were swept) are the natural second pass if David wants more
 weapon density.
 
 ## Next-session pickup
-(1) Continue the zero-gem stream (25 masterclass openings left — sharp ones
-first: sicilian-dragon, budapest-gambit, schliemann-defence, birds-opening;
-solid ones may honestly yield zero); (2) 62 zero-endgame openings
-(data-gated); (3) 42 variation-lesson gaps. Plus David's pending call on
-mp-pronaroKID-fourpawns-reroute (−1.1 line vs his 4-2 record).
+(1) 62 zero-endgame openings (data-gated endgame plans — the last big
+content stream); (2) David's calls: slav Winawer-CG tab name/line mismatch,
+mp-pronaroKID-fourpawns-reroute (−1.1 line vs his 4-2 record); (3) verify
+the nightly external Beta App Review submission cleared (armed check
+2026-07-17 02:20 UTC); (4) gem + variation-lesson streams are CLOSED
+(tab territory exhausted; P5 at 299/316 with the rest G3-blocked).
