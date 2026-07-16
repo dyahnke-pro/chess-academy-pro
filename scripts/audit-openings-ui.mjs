@@ -220,10 +220,13 @@ async function main() {
       await page.locator('[data-testid="tab-all"]').click();
       // Wait on the `all-tab-ready` sentinel — only renders when
       // `allLoading` flips to false (all 5 ECO letter queries against
-      // the 3000+ entry openings IndexedDB completed). 30s budget
-      // accommodates a cold cross-origin-isolated load on prod;
-      // anything past that is a genuine stall worth failing.
-      await waitUntil(() => visible('all-tab-ready').then((v) => v), 30_000);
+      // the 3000+ entry openings IndexedDB completed). Budget bumped
+      // 30s → 75s (2026-07-16): the deferred seed payload has grown
+      // (plans/gems/narrations), and CI runs went intermittently red
+      // at 30s on cold runners while identical checks passed minutes
+      // apart — CLAUDE.md's own cold-seed guidance is 45-60s. Past
+      // 75s is a genuine stall worth failing.
+      await waitUntil(() => visible('all-tab-ready').then((v) => v), 75_000);
     },
     SETTLE_SHORT,
     [
