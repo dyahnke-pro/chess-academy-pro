@@ -75,4 +75,14 @@ export const PHILIDOR_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = 
     ],
   },
 
+  "philidor-defence::Modern d3 Hybrid": {
+    openingId: "philidor-defence", title: "Philidor — meeting the quiet d3 setup", minutes: 8, orientation: "black",
+    sources: ["concept:pawn-doubled", "concept:pos-outpost", "https://en.wikipedia.org/wiki/Philidor_Defence"],
+    beats: [
+      { id: "pd1", moves: ["e4", "e5", "Nf3", "d6", "d3", "Nf6", "g3", "Be7", "Bg2", "O-O", "O-O"], say: "White declines the theory duel: d3 and a kingside fianchetto against the Philidor's solid …d6 wall. Black develops on classical squares and castles — in a quiet mirror, the better plan wins, not the sharper memory.", sayShort: "O-O — quiet game, plans decide.", highlights: [{ square: "d6", color: "rgba(80,140,255,0.32)" }] },
+      { id: "pd2", moves: ["e4", "e5", "Nf3", "d6", "d3", "Nf6", "g3", "Be7", "Bg2", "O-O", "O-O", "Nc6", "Nbd2", "Be6", "Re1", "Qd7"], say: "…Nc6, …Be6 and …Qd7 — the pieces form the classic battery: the bishop watches the queenside light squares and the queen connects everything behind it, keeping …Bh3 ideas in the bag against White's fianchetto.", sayShort: "…Qd7 — the battery forms.", highlights: [{ square: "e6", color: "rgba(255,214,0,0.88)" }, { square: "d7", color: "rgba(80,140,255,0.32)" }] },
+      { id: "pd3", moves: ["e4", "e5", "Nf3", "d6", "d3", "Nf6", "g3", "Be7", "Bg2", "O-O", "O-O", "Nc6", "Nbd2", "Be6", "Re1", "Qd7", "a4", "a5", "Nc4", "Bxc4", "dxc4"], say: "a4 grabs space, …a5 freezes it, and when the knight lands on c4, Black makes a professional decision: …Bxc4!, giving the bishop pair to double White's c-pawns — dxc4 leaves pawns stacked on c2 and c4, a structural scar that lasts the whole game.", sayShort: "…Bxc4 — trade for the doubled pawns.", highlights: [{ square: "c4", color: "rgba(255,214,0,0.88)" }, { square: "c2", color: "rgba(80,140,255,0.32)" }] },
+      { id: "pd4", moves: ["e4", "e5", "Nf3", "d6", "d3", "Nf6", "g3", "Be7", "Bg2", "O-O", "O-O", "Nc6", "Nbd2", "Be6", "Re1", "Qd7", "a4", "a5", "Nc4", "Bxc4", "dxc4", "Nb4", "b3", "Na6"], say: "Now the knight goes to work: …Nb4 raids c2's neighbourhood, forcing b3 to babysit the c4-weakness, and …Na6 re-routes — c5 is the destination, the outpost the doubled pawns can never contest. The engine calls White's space a small edge; Black owns the only long-term target on the board. Structure beats space when the game goes long.", sayShort: "…Na6 — destination c5, forever.", highlights: [{ square: "c5", color: "rgba(255,214,0,0.88)" }, { square: "c4", color: "rgba(80,140,255,0.32)" }] },
+    ],
+  },
 };

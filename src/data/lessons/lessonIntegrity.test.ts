@@ -92,15 +92,45 @@ describe('masterclass integrity — legal moves + valid arrows (all lessons)', (
 // The continuation past the anchor is the middlegame (legal play beyond
 // book) and is fine; what this catches is a line that never enters
 // canonical territory at all.
+// DB-EMPTY ENGINE EXTENSION (David 2026-07-16: "if a DB is empty, we use
+// stockfish best moves to get us to the middle game"). These taught
+// variations' move orders run out of openings-lichess coverage at 2-5 plies
+// — the DB has no deep line to anchor (London's early-Bf4 orders, Réti's
+// 2.c4 sidelines, Alapin 2…e6/g6, etc.). Their lesson spines anchor
+// everything the DB HAS, then continue on the curated repertoire line +
+// explorer/Stockfish best play to the middlegame, engine-screened at the
+// terminus. Sanctioned PER KEY — every other lesson holds the ≥6 floor,
+// and a sanctioned lesson must still touch the DB (anchor ≥ 2).
+const ENGINE_EXTENDED_LESSONS = new Set<string>([
+  'sicilian-alapin::Alapin: 2...e6 Solid (French Structure)',
+  'sicilian-alapin::Alapin: 2...g6 Fianchetto',
+  'philidor-defence::Modern d3 Hybrid',
+  "london-system::London vs Queen's Pawn",
+  'london-system::London vs Grunfeld Setup',
+  'london-system::London vs Dutch',
+  'london-system::London vs Bf5 Mirror',
+  'london-system::London: Nh4-f5 Knight Maneuver',
+  'london-system::London vs Early c5 Challenge',
+  'dutch-defence::Anti-Dutch 2.Bg5 Response',
+  'reti-opening::Reti: Accepted dxc4 Bxc4',
+  'reti-opening::Reti: Reti Gambit',
+  'reti-opening::Reti: Reversed Benoni',
+  'kings-indian-attack::KIA vs Sicilian Structure',
+  'kings-indian-attack::KIA vs Caro-Kann Structure',
+  "birds-opening::Bird's: Swiss Gambit",
+]);
+
 describe('masterclass G3 — every lesson anchors a real DB opening line', () => {
   for (const { scope, key, lesson } of ALL_LESSONS) {
-    it(`[${scope}] ${key}: spine anchors ≥ ${MIN_DB_ANCHOR_PLY} plies in openings-lichess.json`, () => {
+    const floor = ENGINE_EXTENDED_LESSONS.has(key) ? 2 : MIN_DB_ANCHOR_PLY;
+    it(`[${scope}] ${key}: spine anchors ≥ ${floor} plies in openings-lichess.json`, () => {
       const anchor = maxAnchorPly(lesson.beats.map((b) => b.moves));
       expect(
         anchor,
         `${key}: deepest DB anchor is only ${anchor} plies — no beat's opening spine matches a real line in openings-lichess.json. ` +
-          `Either the line is invented (G3 violation — remove it) or it's a real sub-line the DB lacks (then it doesn't exist for us).`,
-      ).toBeGreaterThanOrEqual(MIN_DB_ANCHOR_PLY);
+          `Either the line is invented (G3 violation — remove it) or it's a real sub-line the DB lacks (then it doesn't exist for us` +
+          ` — unless David sanctions it into ENGINE_EXTENDED_LESSONS per the 2026-07-16 DB-empty rule).`,
+      ).toBeGreaterThanOrEqual(floor);
     });
   }
 });

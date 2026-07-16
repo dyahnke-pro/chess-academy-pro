@@ -192,4 +192,15 @@ export const BIRDS_OPENING_VARIATION_LESSONS: Record<string, LessonScript> = {
       },
     ],
   },
+
+  "birds-opening::Bird's: Swiss Gambit": {
+    openingId: "birds-opening", title: "Bird's Swiss Gambit — open lines over material", minutes: 8, orientation: "white",
+    sources: ["concept:pos-initiative", "concept:pos-development", "https://en.wikipedia.org/wiki/Bird%27s_Opening"],
+    beats: [
+      { id: "bs1", moves: ["f4", "f5", "e4", "fxe4", "d3", "exd3", "Bxd3"], say: "1.f4 f5 mirrors — and 2.e4!? shatters the mirror on the spot: the Swiss Gambit. After …fxe4 and d3 …exd3 Bxd3, material is level again and White has bought open lines straight at the kingside Black loosened with …f5.", sayShort: "e4 — shatter the mirror.", highlights: [{ square: "d3", color: "rgba(255,214,0,0.88)" }, { square: "f5", color: "rgba(80,140,255,0.32)" }] },
+      { id: "bs2", moves: ["f4", "f5", "e4", "fxe4", "d3", "exd3", "Bxd3", "Nf6", "Nf3", "d5", "O-O", "Nc6"], say: "Development with intent: Nf3, castle, and the d3-bishop already aims at h7 down the diagonal …f5 opened and never closed. Black's …d5 and …Nc6 are sound — but every natural White move comes with an edge in urgency.", sayShort: "O-O — urgency is the currency.", arrows: [{ from: "d3", to: "h7", color: "rgba(40,185,95,0.92)" }], highlights: [{ square: "h7", color: "rgba(80,140,255,0.32)" }] },
+      { id: "bs3", moves: ["f4", "f5", "e4", "fxe4", "d3", "exd3", "Bxd3", "Nf6", "Nf3", "d5", "O-O", "Nc6", "h3", "e6", "Be3", "Nb4"], say: "…Nb4 finally forces the question, hitting the d3-bishop. h3 and Be3 came first — every piece out before answering threats. This is gambit-style chess with level material: activity now, questions later.", sayShort: "…Nb4 — the question arrives.", arrows: [{ from: "b4", to: "d3", color: "rgba(40,185,95,0.92)" }], highlights: [{ square: "d3", color: "rgba(255,214,0,0.88)" }] },
+      { id: "bs4", moves: ["f4", "f5", "e4", "fxe4", "d3", "exd3", "Bxd3", "Nf6", "Nf3", "d5", "O-O", "Nc6", "h3", "e6", "Be3", "Nb4", "Bb5+", "c6", "Be2", "c5", "Ne5", "Nc6"], say: "Bb5+! — the zwischenzug: check first, and …c6 must block before the knight's threat matters; only then Be2. …c5 grabs space and Ne5! plants the knight on the f4-supported outpost — the Bird's signature square. Honest ledger: the engine shades this line a whisker toward Black; what White owns is permanent — the half-open f-file, the e5-knight, and a position most opponents have never studied. A practical weapon, priced accordingly.", sayShort: "Ne5 — the Bird's square, occupied.", highlights: [{ square: "e5", color: "rgba(255,214,0,0.88)" }] },
+    ],
+  },
 };

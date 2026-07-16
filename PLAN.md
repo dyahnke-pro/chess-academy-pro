@@ -171,6 +171,37 @@ AND the immediately-fired daily-deploy CLI deploy overwrote it mid-audit
 half-boots the app (no watcher events, no auto-detect). Lesson: don't fire
 daily-deploy right after a push; let the audit finish first.
 
+### DB-EMPTY ENGINE-EXTENSION WAVE — the 16 blocked lessons BUILT (2026-07-16, David's rule)
+
+David (verbatim): "if a DB is empty, we use stockfish best moves to get us
+to the middle game." Locked as the ENGINE_EXTENDED_LESSONS sanctioned set in
+lessonIntegrity.test.ts — those 16 keys anchor whatever the DB has (floor
+≥2) and continue on explorer/engine best play; every OTHER lesson keeps the
+≥6 anchor floor. All 16 built same-session, per-lesson replay + extension +
+terminus screen + full battery (incl. narrationGrounding — ~20 gate catches
+fixed across the wave):
+- london-system 6/6: vs-QP (Ne5/f4 grip +0.34), vs-Grünfeld (Qb3/Qa3 punish
+  +0.18), vs-Dutch (knight-stack, +1.04!), Bf5-mirror (+0.16), Nh4-f5 tab
+  (authored truthfully as the Ne5-trade grip — pgn has NO Nh4; name/line
+  mismatch flagged below), early-c5 gambit (Bxc5/Bd4 +0.23).
+- reti-opening 3/3: Accepted (e4-e5 plan +0.31), Réti Gambit (tempo-hunt
+  −0.09 level), Reversed Benoni (b4 "Benko a tempo up" +0.41).
+- sicilian-alapin 2/2: 2…e6 French-structure (−0.30), 2…g6 fianchetto
+  (+0.29 for Black).
+- kings-indian-attack 2/2: vs-Sicilian (a4→Nc4, 0.00), vs-Caro (−0.20).
+- philidor 1/1: Modern d3 Hybrid (…Bxc4 doubled-pawns plan, −0.46).
+- dutch 1/1: Anti-Dutch 2.Bg5 (honest-framed −0.74: "know the storm";
+  the h4-h5 attack shown, …Ne4 resource taught).
+- birds 1/1: Swiss Gambit (honest −0.29: "practical weapon, priced
+  accordingly").
+Variation-tab lesson coverage: **315/316** — the only gap is the
+slav-Winawer name/line data defect (David's call).
+
+**THIRD name/line mismatch found:** london-system "Nh4-f5 Knight Maneuver"
+tab — its pgn never plays Nh4 (it's the Nd2-order Ne5/Nxc6 line). Joins
+slav "Winawer CG" (Botvinnik moves) and english "Hedgehog" (Symmetrical)
+on the tab-rename list for David.
+
 ## Next-session pickup
 Confirm run 29249281899 green → loop break closed. If a NEW break surfaces,
 diagnose from its report.json artifact (download via the artifact API, inspect
