@@ -893,8 +893,8 @@
     },
     {
      "name": "Fantasy Variation (f3)",
-     "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5",
-     "explanation": "The Fantasy is White's attempt to build a massive centre and just shove us off the board. The refutation: don't let the centre stand. After f3 we play …dxe4 (open the file), fxe4 …e5 (challenge it back), and immediately White has a decision — push d5 and lock the position with an awkward pawn chain, or trade on e5 and accept that their f3 was just a wasted tempo. Either way we equalise comfortably. Our score in the data is 75% — the highest of any Caro variation here — because White's whole premise (intimidation) collapses the moment we play forcing chess. Don't overthink this one: …dxe4, …e5, develop, win.",
+     "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 exd4 Bc4 Nd7 O-O Ngf6 Qe1 Nb6",
+     "explanation": "The Fantasy is White's attempt to build a massive centre and just shove us off the board. The refutation: don't let the centre stand. After f3 we play …dxe4 (open the file), fxe4 …e5 (challenge it back), and immediately White has a decision — push d5 and lock the position with an awkward pawn chain, or trade on e5 and accept that their f3 was just a wasted tempo. Either way we equalise comfortably. Our score in the data is 75% — the highest of any Caro variation here — because White's whole premise (intimidation) collapses the moment we play forcing chess. Don't overthink this one: …dxe4, …e5, develop, win. Extended to the 16-ply tabiya: bank the d4-pawn, develop through the Bc4/O-O pressure, and hit the bishop with …Nb6 — the survival map for the Fantasy's hardest line (engine leans White ~0.9; known and navigable).",
      "sources": [
       "book:caro-kann",
       "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
