@@ -895,9 +895,18 @@ Current zero-gem masterclass count: 26 → 25 (Evans shipped 3 gems).
   (+5.12) SHIPPED — the two wrong f7-defences.
 - Anti-Sveshnikov …d5 node: a3?? → Bxc3+!/dxe4! fork (+4.96, B83%) and
   Bd2?? → same collapse (+4.06, B76%) SHIPPED. O-O dropped (+0.28).
+- QGA: Nc6?! → Bxc4/e4! SHIPPED (+0.86 positional, 43k games — the
+  c-pawn block; big centre unopposed). The famous b5?! greed verified
+  and DROPPED (+0.44 — best play holds it; the Qf3 trap needs follow-up
+  errors).
 - Dropped: Giuoco Nxc3?! (+0.04 quiet-end — the W62% mirage), Caro tab
   candidates under floor, Ruy tabs nothing above noise, Najdorf/Dutch
-  tabs nothing above B60% worth verifying.
+  tabs nothing above B60% worth verifying, KID/Grünfeld/Benoni tabs
+  nothing new (Grünfeld Qc2 already dropped at +0.38).
+
+**Tab-pass running total: 7 gems (French 2, Hungarian 2, Anti-Svesh 2,
+QGA 1). Session total: 17 gems. Remaining unscanned tab territory:
+sveshnikov/najdorf tabs 6+, glek/reti/dutch deeper tabs, gambit set.**
 
 **MASTERCLASS SWEEP COMPLETE (2026-07-16): 10 gems shipped across 6
 openings** (Evans 3, Dragon 3, Tromp 1, London 1, anti-Alapin 1,

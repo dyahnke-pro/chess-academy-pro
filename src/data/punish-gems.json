@@ -7666,5 +7666,31 @@
   "engineCp": 406,
   "tier": "confirmed",
   "why": "Bd2 defends the pin and forgets the centre. Punish with Bxc3 then dxe4 — the pawn forks the d3-bishop and f3-knight, and after the desperado dust settles Black is a clean piece up with the queens off (+4.1)."
+ },
+ {
+  "openingId": "qga",
+  "lineMoves": "d4 d5 c4 dxc4 Nf3 Nf6 e3",
+  "inaccuracy": "Nc6",
+  "freqPct": 7,
+  "games": 42972,
+  "practicalScore": 62,
+  "mainMove": "e6",
+  "punish": "Bxc4",
+  "punishSeq": [
+   "Bxc4",
+   "a6",
+   "Nc3",
+   "b5",
+   "Bb3",
+   "e6",
+   "e4",
+   "Be7",
+   "O-O",
+   "Bb7"
+  ],
+  "playLine": "d4 d5 c4 dxc4 Nf3 Nf6 e3 Nc6 Bxc4 a6 Nc3 b5 Bb3 e6 e4 Be7 O-O Bb7",
+  "engineCp": 86,
+  "tier": "positional",
+  "why": "Nc6 blocks the c7-pawn — the QGA's entire counterplay runs through …c5, and the knight just parked on its launch square. Punish by simply recapturing and building the big centre with e4: with no …c5 break coming, the engine gives White a clear pull (+0.9)."
  }
 ]

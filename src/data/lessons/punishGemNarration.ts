@@ -23,6 +23,51 @@ export interface GemNarration {
 }
 
 export const GEM_NARRATION: Record<string, GemNarration> = {
+  // QGA — the …Nc6 c-pawn block (hand-curated 2026-07-16). The knight parks
+  // on the …c5 break's square; e4 builds the unopposed big centre. +0.86.
+  'qga:d4_d5_c4_dxc4_Nf3_Nf6_e3:Nc6': {
+    sources: ['concept:pos-center', 'concept:pawn-majority', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted'],
+    watch: [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "e3 \u2014 the calm recapture plan: the bishop will take on c4 and the centre question comes later.",
+      "\u2026Nc6? \u2014 development that blocks the c7-pawn, and with it the \u2026c5 break the whole QGA is built on. The knight just parked on its own counterplay.",
+      "Bxc4 \u2014 no refutation needed, just the recapture: White's edge is that Black's plan is gone.",
+      "\u2026a6 \u2014 Black gestures at queenside play.",
+      "Nc3 \u2014 White develops toward the centre he will soon own.",
+      "\u2026b5 \u2014 the pawns advance where the pieces should.",
+      "Bb3 \u2014 the bishop keeps the a2-g8 diagonal, unbothered.",
+      "\u2026e6 \u2014 Black finally opens the f8-bishop.",
+      "e4! \u2014 the point of everything: the big centre lands, and with c5 blocked there is no counter-strike against it.",
+      "\u2026Be7 \u2014 quiet development in a cramped house.",
+      "White castles. Count the position: the full centre, the better bishop, and Black's knight still standing on the c-pawn's square (+0.9).",
+      "\u2026Bb7 \u2014 the bishop stares at a centre it cannot bite.",
+    ],
+    learn: [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "e3 \u2014 calm recapture plan",
+      "",
+      "Bxc4 \u2014 just recapture",
+      "",
+      "Nc3 \u2014 toward the centre",
+      "",
+      "Bb3 \u2014 keep the diagonal",
+      "",
+      "e4 \u2014 the big centre, unopposed",
+      "",
+      "O-O \u2014 full centre, better game",
+      "",
+    ],
+  },
   // Anti-Sveshnikov 6.Nf3 — the …d5 break node (hand-curated 2026-07-16):
   // two of White's three common replies lose a piece to …Bxc3/…dxe4.
   'sicilian-sveshnikov:e4_c5_Nf3_Nc6_d4_cxd4_Nxd4_Nf6_Nc3_e5_Nf3_Bb4_Bd3_d5:a3': {
