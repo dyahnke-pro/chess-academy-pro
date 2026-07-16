@@ -871,6 +871,15 @@ Current zero-gem masterclass count: 26 → 25 (Evans shipped 3 gems).
   the bishop hunt h3 already refuted; rim knight costs the d5-outpost).
 - QG early dxc4 (jump 0.29) + Catalan Nc6?! (jump 0.34) verified and
   DROPPED — the volume was tempting, the objective jump wasn't there.
+- Anti-Alapin: Bxh7+?? → Kxh7! SHIPPED (+4.36 confirmed — the failed
+  Greek gift, no follow-up exists; B70%). d4?! at ply 5 verified +0.77/
+  jump 0.98 (positional, 109k games!) but GATE-BLOCKED (4-ply setup <
+  MIN_DB_ANCHOR_PLY=6) — same class as Tromp g5; both are candidates for
+  a future early-slip surface that can anchor shorter.
+- Grünfeld main verified-and-dropped: Qc2?! (jump -0.67 but quiet-end
+  only +0.38 Black — under the absolute bar), early Nxd5 (+0.03).
+- Slav/KID/Dutch/Benoni/QGA mains scanned: no candidate cleared the
+  practical-plus-plausible screen.
 
 ## Next-session pickup
 (1) Continue the zero-gem stream (25 masterclass openings left — sharp ones
