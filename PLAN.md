@@ -842,9 +842,23 @@ Current zero-gem masterclass count: 26 → 25 (Evans shipped 3 gems).
    punish/punishSeq/playLine/engineCp/tier/freq fields) + BOTH-register
    GEM_NARRATION entry (watch/learn arrays EXACTLY playLine length) +
    sources[]. Gate: punishGems.test.ts.
-**Evans Gambit shipped (Compromised Defence Qb3 battery node, 3 gems):**
-Qf6?! → Bg5! (+0.54 positional, 30.5k games), Nf6?? → Bxf7+! (+2.43
-confirmed), d5?? → exd5! (+4.95 confirmed).
+**Shipped so far (26 → 24 zero-gem):**
+- Evans Gambit (Compromised Qb3 battery node, 3 gems): Qf6?! → Bg5!
+  (+0.54 positional, 30.5k games), Nf6?? → Bxf7+! (+2.43 confirmed),
+  d5?? → exd5! (+4.95 confirmed).
+- Sicilian Dragon (the Rc8 x-ray node, 3 CONFIRMED — all skip the
+  mandatory Bb3 and lose to the same …Nxd4! removal shot): Kb1?? →
+  Nxd4/Ng4!! queen-win discovery (+3.4, 7.6k games), g4?? (+4.1, 4.2k),
+  h4?? (+3.8, 3.9k).
+**Honestly ZERO (verified drops recorded, do not re-scan):**
+- Budapest: the one crush (axb4?? Nd3#, B100%, 37.8k games) is already
+  the named Kieninger trapLine; h3?! (jump 0.10) and Adler Qd5?! (0.41)
+  under the bar.
+- Sveshnikov main: Nf5?! → …d5! only EQUALIZES (−0.11); Nf3?! +0.12.
+  Sharp-but-well-trodden — White's slips concede equality, not material.
+- Schliemann: Schönemann Bc4?!/Be2?! retreats land +0.58 Black — but the
+  baseline after the taught …c6 is ALREADY +0.46 (jump 0.12): the edge is
+  the opening's, not the slip's. Jump-from-baseline is part of the bar.
 
 ## Next-session pickup
 (1) Continue the zero-gem stream (25 masterclass openings left — sharp ones
