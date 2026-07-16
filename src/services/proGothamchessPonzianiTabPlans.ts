@@ -5,13 +5,13 @@
 const TAB_PLANS: Record<string, string[]> = {
   main: [
     'mp-progothamchess-ponziani-main-qb3',
-    'mp-progothamchess-ponziani-nxe4-gambit',
+    'mp-progothamchess-ponziani-d4-thrust',
   ],
   'main line 3...nf6 4.d4': [
     'mp-progothamchess-ponziani-main-qb3',
     'mp-progothamchess-ponziani-d4-thrust',
-    'mp-progothamchess-ponziani-nxe4-gambit',
   ],
+  '4…nxe4 (dxc6)': ['mp-progothamchess-ponziani-nxe4-gambit'],
   '3...d5 central counter': ['mp-progothamchess-ponziani-d5-qa4'],
 };
 

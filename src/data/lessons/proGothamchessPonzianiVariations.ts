@@ -93,7 +93,41 @@ const D5_COUNTER: LessonScript = {
   ],
 };
 
+// ── 4…Nxe4 — the dxc6 forcing sequence, mapped ──
+const NXE4: LessonScript = {
+  openingId: 'pro-gothamchess-ponziani', title: 'Ponziani — 4…Nxe4 (dxc6)',
+  minutes: 9, orientation: 'white', kind: 'variation', sources: SRC,
+  beats: [
+    b({
+      id: 'dxc6',
+      moves: 'e4 e5 Nf3 Nc6 c3 Nf6 d4 Nxe4 d5',
+      arrows: [{ from: 'd5', to: 'c6', color: VIS }],
+      highlights: [{ square: 'd5', color: KEY }, { square: 'e4', color: SOFT }],
+      say:
+        "Black grabs the e4-pawn — the greedy try, and thirteen of his corpus games punish it the same way: d5, ignoring the knight entirely and hitting c6. The pawn cannot be saved AND the knight kept; Black must pick which piece of the position to lose.",
+      sayShort: 'd5 — ignore the grab, hit c6.',
+    }),
+    b({
+      id: 'bxf2',
+      moves: 'e4 e5 Nf3 Nc6 c3 Nf6 d4 Nxe4 d5 Bc5 dxc6 Bxf2+ Ke2',
+      highlights: [{ square: 'e2', color: KEY }, { square: 'f2', color: SOFT }],
+      say:
+        "Black throws the desperado: bishop takes f2 with check, and our king steps to e2 — yes, forward, on move seven, on purpose. This is the moment that decides who knows the line: the king is fine, the c6-pawn is monstrous, and every check Black owns has already been spent.",
+      sayShort: 'Ke2 — forward, on purpose.',
+    }),
+    b({
+      id: 'qxb7',
+      moves: 'e4 e5 Nf3 Nc6 c3 Nf6 d4 Nxe4 d5 Bc5 dxc6 Bxf2+ Ke2 Bb6 Qd5 Nf2 Rg1 O-O cxb7 Bxb7 Qxb7',
+      highlights: [{ square: 'b7', color: KEY }, { square: 'f2', color: SOFT }],
+      say:
+        "The map unrolls: Qd5 forks knight and board, the rook slides to g1 keeping the trapped f2-knight sealed, the c6-pawn eats b7, and the queen finishes the tour by taking the bishop that recaptured. Count the wreckage — material level, our king walked, Black's knight stranded on f2. The engine calls it dead even; the corpus says the prepared side collects. The middlegame plan continues from this exact madness.",
+      sayShort: 'Qxb7 — the map complete.',
+    }),
+  ],
+};
+
 export const PRO_GOTHAMCHESS_PONZIANI_VARIATION_LESSONS: Record<string, LessonScript> = {
   'pro-gothamchess-ponziani::Main Line 3...Nf6 4.d4': MAIN,
   'pro-gothamchess-ponziani::3...d5 Central Counter': D5_COUNTER,
+  'pro-gothamchess-ponziani::4…Nxe4 (dxc6)': NXE4,
 };

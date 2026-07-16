@@ -482,6 +482,36 @@
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Scandinavian_Defense"
      ]
+    },
+    {
+     "name": "Portuguese …Bg4",
+     "pgn": "e4 d5 exd5 Nf6 d4 Bg4 Be2 Bxe2 Qxe2 Qxd5 Nf3 Nc6 Be3 O-O-O",
+     "explanation": "The Portuguese: 206 of his corpus games run through the …Bg4 junction. Trade the light bishops on e2, recapture the pawn with the queen, and castle long by move seven — every piece out while White is still arranging furniture.",
+     "sources": [
+      "concept:pos-development",
+      "https://www.chess.com/openings/Scandinavian-Defense",
+      "https://api.chess.com/pub/player/gothamchess/games/archives"
+     ]
+    },
+    {
+     "name": "vs Nc3 (Nxd5)",
+     "pgn": "e4 d5 exd5 Nf6 Nc3 Nxd5 Bc4 c6 Qf3 Nf6 Nge2 Nbd7 d4 Nb6",
+     "explanation": "White's Nc3 sideline hands the pawn back at once. Black recaptures, props with …c6, and starts the nagging: …Nb6 hits the bishop, …Bg4 comes for the queen next. Cramped but threat-rich — the harassment IS the compensation.",
+     "sources": [
+      "concept:pos-development",
+      "https://www.chess.com/openings/Scandinavian-Defense",
+      "https://api.chess.com/pub/player/gothamchess/games/archives"
+     ]
+    },
+    {
+     "name": "vs Bb5+",
+     "pgn": "e4 d5 exd5 Nf6 Bb5+ Nbd7 Nc3 a6 Be2 b5 a3 Bb7",
+     "explanation": "The tidy check, met the corpus way — five wins in five games: block with the knight, expand with …a6 and …b5, and park the bishop on b7 where the long diagonal waits for the rest of the game.",
+     "sources": [
+      "concept:pos-development",
+      "https://www.chess.com/openings/Scandinavian-Defense",
+      "https://api.chess.com/pub/player/gothamchess/games/archives"
+     ]
     }
    ],
    "trapLines": [],
@@ -580,6 +610,16 @@
       "book:chess-fundamentals",
       "https://www.chess.com/openings/Ponziani-Opening",
       "https://en.wikipedia.org/wiki/Ponziani_Opening"
+     ]
+    },
+    {
+     "name": "4…Nxe4 (dxc6)",
+     "pgn": "e4 e5 Nf3 Nc6 c3 Nf6 d4 Nxe4 d5 Bc5 dxc6 Bxf2+ Ke2 Bb6 Qd5 Nf2 Rg1 O-O cxb7 Bxb7 Qxb7",
+     "explanation": "The greedy 4…Nxe4 walks into the dxc6 forcing sequence — 13 corpus games ride it. The king steps to e2, the queen eats b7 and the bishop behind it, and the engine calls the wreckage dead level: a map through mayhem that punishes anyone who improvises.",
+     "sources": [
+      "concept:pos-development",
+      "https://www.chess.com/openings/Ponziani-Opening",
+      "https://api.chess.com/pub/player/gothamchess/games/archives"
      ]
     }
    ],
@@ -2198,6 +2238,36 @@
      "name": "Closed Sicilian Main",
      "pgn": "e4 c5 Nc3 Nc6 Bb5 Nd4 Nf3 Nxb5 Nxb5 a6 Nc3 d6 d4 cxd4 Qxd4",
      "explanation": "Our 2.Nc3 spine, steering into a positional middlegame. We trade on c6 with Bb5 and then break with d4; after Qxd4 we sit on an open, comfortable position where our lead in development and central grip do the talking. Black has to keep his pieces busy — or get slowly squeezed.",
+     "sources": [
+      "concept:pos-development",
+      "https://www.chess.com/openings/Closed-Sicilian-Defense",
+      "https://api.chess.com/pub/player/gothamchess/games/archives"
+     ]
+    },
+    {
+     "name": "vs …d6",
+     "pgn": "e4 c5 Nc3 d6 d4 cxd4 Qxd4 Nc6 Qd2 g6 b3 Bh6 f4 Nf6 Bb2 O-O O-O-O e5 g3 Re8 Kb1",
+     "explanation": "The …d6 order — 73 of his corpus games. The system answer in full: Qxd4 and the Qd2 retreat, b3 and Bb2, f4 before Black stirs, the long castle and the Kb1 tuck. Opposite-side kings and a race White starts a tempo up.",
+     "sources": [
+      "concept:pos-development",
+      "https://www.chess.com/openings/Closed-Sicilian-Defense",
+      "https://api.chess.com/pub/player/gothamchess/games/archives"
+     ]
+    },
+    {
+     "name": "vs …e6",
+     "pgn": "e4 c5 Nc3 e6 d4 cxd4 Qxd4 Nc6 Qd3 Nf6 Bf4 Bb4 O-O-O",
+     "explanation": "Against …e6 the queen recaptures and slides to d3 (58 corpus games at the junction), the bishop takes f4, and the king goes long by move seven — the whole system in five White moves.",
+     "sources": [
+      "concept:pos-development",
+      "https://www.chess.com/openings/Closed-Sicilian-Defense",
+      "https://api.chess.com/pub/player/gothamchess/games/archives"
+     ]
+    },
+    {
+     "name": "vs …g6 (Bxc6)",
+     "pgn": "e4 c5 Nc3 Nc6 Bb5 g6 Bxc6 dxc6 d3 Bg7 Be3 c4 h3 cxd3 cxd3",
+     "explanation": "The …g6 fianchetto is met by trading on c6 at once — doubled pawns before the g7-bishop clears its diagonal. Then d3, Be3 against the c5 twins, and the small structural edge that lasts all game.",
      "sources": [
       "concept:pos-development",
       "https://www.chess.com/openings/Closed-Sicilian-Defense",

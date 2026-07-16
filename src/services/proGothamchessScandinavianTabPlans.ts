@@ -2,19 +2,15 @@
 // Student = BLACK. Maps each variation tab to its plan IDs (STEP 12.5).
 
 const TAB_PLANS: Record<string, string[]> = {
-  main: [
-    'mp-progothamchess-scand-qa5-bxc3',
-    'mp-progothamchess-scand-nf6bg4-oooattack',
-  ],
-  'main line qa5': [
-    'mp-progothamchess-scand-qa5-bxc3',
+  main: ['mp-progothamchess-scand-qa5-bxc3'],
+  'main line qa5': ['mp-progothamchess-scand-qa5-bxc3'],
+  '2...nf6 scandinavian': [],
+  'portuguese …bg4': [
     'mp-progothamchess-scandi-portuguese',
-  ],
-  '2...nf6 scandinavian': [
     'mp-progothamchess-scand-nf6bg4-oooattack',
-    'mp-progothamchess-scand-nf6nc3-bg4pin',
-    'mp-progothamchess-scand-bb5-ne5',
   ],
+  'vs nc3 (nxd5)': ['mp-progothamchess-scand-nf6nc3-bg4pin'],
+  'vs bb5+': ['mp-progothamchess-scand-bb5-ne5'],
 };
 
 export function getProGothamchessScandinavianTabPlanIds(
