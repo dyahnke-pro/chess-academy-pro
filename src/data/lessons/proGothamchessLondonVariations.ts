@@ -170,8 +170,46 @@ const JOBAVA: LessonScript = {
   ],
 };
 
+// ── vs …c6 (via 2.Bf4) — the Slav-solid reply, met with the c4 break ──
+const C6_BF4: LessonScript = {
+  openingId: 'pro-gothamchess-london',
+  title: 'London — vs …c6 (via 2.Bf4)',
+  minutes: 9,
+  orientation: 'white',
+  kind: 'variation',
+  sources: SRC,
+  beats: [
+    b({
+      id: 'order',
+      moves: 'd4 d5 Bf4 c6 e3 Nf6 Nf3',
+      highlights: [{ square: 'f4', color: KEY }, { square: 'c6', color: SOFT }],
+      say:
+        "The direct London order — bishop to f4 before the knight — and Black answers Slav-style with c6, propping d5 and keeping everything solid. Thirty-nine of his corpus games start this way. We complete the triangle with e3 and bring the knight out: no confrontation yet, just the setup we know.",
+      sayShort: 'Bf4 first — c6 props d5.',
+    }),
+    b({
+      id: 'c4',
+      moves: 'd4 d5 Bf4 c6 e3 Nf6 Nf3 Bf5 c4 Nbd7 Nc3 dxc4 Bxc4',
+      arrows: [{ from: 'c4', to: 'f7', color: VIS }],
+      highlights: [{ square: 'c4', color: KEY }, { square: 'f5', color: SOFT }],
+      say:
+        "Black mirrors us — his bishop escapes to f5 before the pawn chain closes. So we change the structure: c4 challenges d5, and when Black releases with the capture, our f1-bishop recaptures and lands on the diagonal that looks at f7. Both sides have their bishops outside the chains; ours has the better view.",
+      sayShort: 'c4 — challenge, recapture, eye f7.',
+    }),
+    b({
+      id: 'settle',
+      moves: 'd4 d5 Bf4 c6 e3 Nf6 Nf3 Bf5 c4 Nbd7 Nc3 dxc4 Bxc4 e6 O-O',
+      highlights: [{ square: 'g1', color: KEY }, { square: 'e6', color: SOFT }],
+      say:
+        "Black closes the door with e6 and we castle. Take stock: our whole army is out or one move from it, the centre is ours to expand, and Black's f5-bishop — pretty as it looks — left the b7-pawn and the queenside light squares to fend for themselves. The middlegame plan picks up right here, where Black starts asking our bishops questions they're happy to answer.",
+      sayShort: 'Castle — the setup is complete.',
+    }),
+  ],
+};
+
 export const PRO_GOTHAMCHESS_LONDON_VARIATION_LESSONS: Record<string, LessonScript> = {
   'pro-gothamchess-london::Standard Setup vs d5': STANDARD,
   'pro-gothamchess-london::vs King\'s Indian (Bh6 + Opposite-Side Castle Attack)': VS_KID,
   'pro-gothamchess-london::Aggressive Jobava-London Hybrid': JOBAVA,
+  'pro-gothamchess-london::vs …c6 (via 2.Bf4)': C6_BF4,
 };

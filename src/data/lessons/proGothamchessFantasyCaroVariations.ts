@@ -132,8 +132,54 @@ const G6: LessonScript = {
   ],
 };
 
+// ── Counter 3…Qb6 — develop through the noise ──
+const QB6: LessonScript = {
+  openingId: 'pro-gothamchess-fantasy-caro',
+  title: 'Fantasy Caro — Counter 3…Qb6',
+  minutes: 9,
+  orientation: 'white',
+  kind: 'variation',
+  sources: SRC,
+  beats: [
+    b({
+      id: 'greed',
+      moves: 'e4 c6 d4 d5 f3 Qb6',
+      highlights: [{ square: 'b6', color: KEY }, { square: 'd4', color: SOFT }, { square: 'b2', color: SOFT }],
+      say:
+        "The greedy counter: queen to b6 on move three, hitting our d4-pawn and glaring at b2 behind it. Seventeen of his corpus games meet this, ten wins. The rule for early queens is always the same — develop with threats and make the queen prove it was worth the trip.",
+      sayShort: 'Qb6 — early queen. Develop through it.',
+    }),
+    b({
+      id: 'through',
+      moves: 'e4 c6 d4 d5 f3 Qb6 Nc3 dxe4 fxe4 e5 Nf3',
+      highlights: [{ square: 'c3', color: KEY }, { square: 'f3', color: KEY }, { square: 'e5', color: SOFT }],
+      say:
+        "Straight through the noise: Nc3 develops and ignores the b2 stare, we recapture on e4 with the f-pawn as always, and when Black stakes e5, the king's knight comes out to f3. Three of our pieces are working; Black's queen is still his only developed piece.",
+      sayShort: 'Nc3, fxe4, Nf3 — just develop.',
+    }),
+    b({
+      id: 'nxd4',
+      moves: 'e4 c6 d4 d5 f3 Qb6 Nc3 dxe4 fxe4 e5 Nf3 exd4 Nxd4',
+      arrows: [{ from: 'c3', to: 'a4', color: VIS }],
+      highlights: [{ square: 'd4', color: KEY }, { square: 'a4', color: SOFT }],
+      say:
+        "Black wins the d4-pawn back and our knight recaptures, landing in the centre where the b6-queen must keep watching it. Here is the tabiya's secret, marked in green: if the bishop ever joins the attack from c5, the c3-knight jumps to a4 — hitting queen and bishop in one move.",
+      sayShort: 'Nxd4 — and Na4 is loaded.',
+    }),
+    b({
+      id: 'na4',
+      moves: 'e4 c6 d4 d5 f3 Qb6 Nc3 dxe4 fxe4 e5 Nf3 exd4 Nxd4 Bc5 Na4 Qa5+ c3',
+      highlights: [{ square: 'a4', color: KEY }, { square: 'c3', color: KEY }, { square: 'b4', color: SOFT }],
+      say:
+        "And there it is on the board: the bishop piles onto d4 from c5, and Na4 answers — queen and bishop hit in one jump. Black's queen escapes with a check, and c3 blocks it while covering b4 in the same motion. Two attackers repelled with two moves, and every one of ours carried a threat. The middlegame plan starts from exactly this position.",
+      sayShort: 'Na4 — both attackers, one jump.',
+    }),
+  ],
+};
+
 export const PRO_GOTHAMCHESS_FANTASY_CARO_VARIATION_LESSONS: Record<string, LessonScript> = {
   'pro-gothamchess-fantasy-caro::Main Line 3...dxe4 4.fxe4': MAIN,
   'pro-gothamchess-fantasy-caro::Solid 3...e6': SOLID_E6,
   'pro-gothamchess-fantasy-caro::Aggressive 3...g6': G6,
+  'pro-gothamchess-fantasy-caro::Counter 3...Qb6': QB6,
 };

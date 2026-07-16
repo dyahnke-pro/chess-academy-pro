@@ -152,8 +152,47 @@ const CLASSICAL_SETUP: LessonScript = {
   ],
 };
 
+// ── Vienna Gambit Accepted — e5 sends the knight home ──
+const ACCEPTED: LessonScript = {
+  openingId: 'pro-gothamchess-vienna',
+  title: 'Vienna Gambit — Accepted',
+  minutes: 9,
+  orientation: 'white',
+  kind: 'variation',
+  sources: SRC,
+  beats: [
+    b({
+      id: 'grab',
+      moves: 'e4 e5 Nc3 Nf6 f4 exf4',
+      highlights: [{ square: 'f4', color: KEY }],
+      say:
+        "Black takes the gambit pawn — and his corpus verdict on this decision is brutal: seventeen games, sixteen wins for White. Accepting looks natural, plays like the King's Gambit lines Black half-remembers, and loses for a reason the next move makes obvious.",
+      sayShort: 'exf4 — sixteen wins, one loss.',
+    }),
+    b({
+      id: 'e5',
+      moves: 'e4 e5 Nc3 Nf6 f4 exf4 e5 Ng8 Nf3 d6',
+      arrows: [{ from: 'e4', to: 'e5', color: VIS }],
+      highlights: [{ square: 'e5', color: KEY }, { square: 'g8', color: SOFT }],
+      say:
+        "There is the reason: e5 hits the f6-knight, and every square it might want is covered or poisoned — the corpus answer is all the way home to g8. One pawn push undeveloped Black's only developed piece. We bring the knight to f3, Black tries to dissolve the cramping pawn with d6, and the count already reads: our development or his pawn.",
+      sayShort: 'e5 — the knight goes home.',
+    }),
+    b({
+      id: 'bc4',
+      moves: 'e4 e5 Nc3 Nf6 f4 exf4 e5 Ng8 Nf3 d6 d4 dxe5 Bb5+ c6 Bc4',
+      arrows: [{ from: 'c4', to: 'f7', color: VIS }],
+      highlights: [{ square: 'c4', color: KEY }, { square: 'f7', color: KEY }],
+      say:
+        "We build the full centre with d4; Black grabs again on e5 — that's two extra pawns and still nothing developed. Bishop b5 comes with check, and after the block we re-aim at c4, staring straight at f7 — the square only the king defends. Every white piece points the same direction. The middlegame plan takes it from here, and it starts with a knight landing on e5.",
+      sayShort: 'Bb5 check, then Bc4 — f7 marked.',
+    }),
+  ],
+};
+
 export const PRO_GOTHAMCHESS_VIENNA_VARIATION_LESSONS: Record<string, LessonScript> = {
   'pro-gothamchess-vienna::Vienna Gambit Main Line': GAMBIT,
   'pro-gothamchess-vienna::Vienna Quiet (Bc4 + d3)': QUIET,
   'pro-gothamchess-vienna::Vienna with …Nc6 + …Bc5': CLASSICAL_SETUP,
+  'pro-gothamchess-vienna::Vienna Gambit Accepted': ACCEPTED,
 };

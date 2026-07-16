@@ -251,6 +251,16 @@
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/London_System"
      ]
+    },
+    {
+     "name": "vs …c6 (via 2.Bf4)",
+     "pgn": "d4 d5 Bf4 c6 e3 Nf6 Nf3 Bf5 c4 Nbd7 Nc3 dxc4 Bxc4 e6 O-O",
+     "explanation": "The Slav-solid …c6, met in his corpus via the direct 2.Bf4 order (39 games). Both bishops develop outside the pawn chains; the c4 break challenges d5 and White recaptures cleanly with the bishop, castles, and keeps the healthier development.",
+     "sources": [
+      "concept:pos-development",
+      "https://www.chess.com/openings/London-System",
+      "https://api.chess.com/pub/player/gothamchess/games/archives"
+     ]
     }
    ],
    "trapLines": [],
@@ -627,6 +637,16 @@
       "book:caro-kann",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+     ]
+    },
+    {
+     "name": "Counter 3...Qb6",
+     "pgn": "e4 c6 d4 d5 f3 Qb6 Nc3 dxe4 fxe4 e5 Nf3 exd4 Nxd4 Bc5 Na4 Qa5+ c3",
+     "explanation": "The greedy counter — queen out on move three against d4 and b2. Seventeen of his corpus games face it (ten wins). White develops straight through the noise: Nc3, the e4 recapture, and Nxd4, ready to meet …Bc5 with the Na4 fork of queen and bishop.",
+     "sources": [
+      "concept:pos-development",
+      "https://www.chess.com/openings/Caro-Kann-Defense",
+      "https://api.chess.com/pub/player/gothamchess/games/archives"
      ]
     }
    ],
@@ -2026,6 +2046,16 @@
      "name": "Vienna with …Nc6 + …Bc5",
      "pgn": "e4 e5 Nc3 Nf6 Bc4 Nc6 d3 Bc5 f4 d6 Nf3",
      "explanation": "When Black plays the classical …Nc6 + …Bc5 setup instead of …d5, White transposes to a quieter Bc4 + d3 + f4 structure. The Nf3 development with Nf3 + king-side castling sets up a positional middlegame where White's space advantage and bishop pair gradually convert.",
+     "sources": [
+      "concept:pos-development",
+      "https://www.chess.com/openings/Vienna-Game",
+      "https://api.chess.com/pub/player/gothamchess/games/archives"
+     ]
+    },
+    {
+     "name": "Vienna Gambit Accepted",
+     "pgn": "e4 e5 Nc3 Nf6 f4 exf4 e5 Ng8 Nf3 d6 d4 dxe5 Bb5+ c6 Bc4",
+     "explanation": "Taking the gambit pawn is the move his corpus punishes hardest: seventeen games, sixteen wins. The point is e5 — the f6-knight has no good square and goes all the way home to g8, after which White develops the whole army while Black grabs pawns. Bb5+ then Bc4 aims the bishop at f7 for the coming knight raid.",
      "sources": [
       "concept:pos-development",
       "https://www.chess.com/openings/Vienna-Game",

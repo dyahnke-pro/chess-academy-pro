@@ -13,8 +13,8 @@ const TAB_PLANS: Record<string, string[]> = {
   'standard setup vs d5': [
     'mp-progothamchess-london-standard-ne5',
     'mp-progothamchess-london-e6-classical',
-    'mp-progothamchess-london-c6-c4break',
   ],
+  'vs …c6 (via 2.bf4)': ['mp-progothamchess-london-c6-c4break'],
   "vs king's indian (bh6 + opposite-side castle attack)": [
     'mp-progothamchess-london-kid-rooksac',
   ],

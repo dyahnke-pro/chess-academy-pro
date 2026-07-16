@@ -10,16 +10,15 @@
 const TAB_PLANS: Record<string, string[]> = {
   main: [
     'mp-progothamchess-vie-gambit-main-attack',
-    'mp-progothamchess-vie-nc6-forcing',
+    'mp-progothamchess-vienna-gambit-main',
   ],
   'vienna gambit main line': [
     'mp-progothamchess-vie-gambit-main-attack',
-    'mp-progothamchess-vie-nc6-forcing',
-    'mp-progothamchess-vie-f5-buildup',
-    'mp-progothamchess-vie-accepted-space',
+    'mp-progothamchess-vienna-gambit-main',
   ],
   'vienna quiet (bc4 + d3)': ['mp-progothamchess-vie-quiet-bc4-na4'],
-  'vienna with …nc6 + …bc5': ['mp-progothamchess-vie-quiet-bc4-na4'],
+  'vienna with …nc6 + …bc5': ['mp-progothamchess-vie-nc6-forcing'],
+  'vienna gambit accepted': ['mp-progothamchess-vie-accepted-space'],
 };
 
 export function getProGothamchessViennaTabPlanIds(
