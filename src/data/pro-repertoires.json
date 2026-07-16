@@ -1958,6 +1958,16 @@
       "https://www.chess.com/openings/English-Opening",
       "https://api.chess.com/pub/player/gothamchess/games/archives"
      ]
+    },
+    {
+     "name": "vs …c6 (Slav-style)",
+     "pgn": "c4 c6 Nc3 d5 e3 Nf6 Nf3 e6 b3 Nbd7 Bb2 e5 Qc2 a6 h3",
+     "explanation": "The Slav-style …c6 is the second-most-common reply in his corpus (145 games, 80 wins). White answers with the b3/Bb2 wall and quiet development, keeps d4 covered, and stands ready to liquidate Black's …e5-e4 space push the moment it lands.",
+     "sources": [
+      "concept:pos-development",
+      "https://www.chess.com/openings/English-Opening",
+      "https://api.chess.com/pub/player/gothamchess/games/archives"
+     ]
     }
    ],
    "trapLines": [],

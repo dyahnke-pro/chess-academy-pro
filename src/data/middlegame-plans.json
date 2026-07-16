@@ -14842,131 +14842,161 @@
  {
   "id": "mp-progothamchess-english-botvinnik-main",
   "openingId": "pro-gothamchess-english",
-  "criticalPositionFen": "r1b1qrk1/1ppn2bp/3p2p1/p1nPppB1/2P1P1PP/2N2P2/PP1QB3/R3K1NR w KQ - 2 13",
-  "title": "English Botvinnik — d5 closed-centre + flank attack",
-  "overview": "A real win from this repertoire: h5 jabs at g6, the h-file opens, and Bh6 trades off the fianchetto bishop — roughly balanced, but White has the easier play (~equal).",
+  "criticalPositionFen": "r1bq1rk1/1pp2pbp/n2p1np1/p2Pp3/2P1P1P1/2N1B3/PP2BP1P/R2QK1NR w KQ - 1 9",
+  "title": "English Botvinnik — the f3 wall and the h-file lever",
+  "overview": "The Botvinnik clamp in full: pawns on c4, d5, e4 and g4, the centre closed on White's terms. From this exact tabiya the system plan is structural — complete the wall with f3, then lever the kingside open with h4-h5. The engine grades the plan a half-pawn better for White; in a closed centre, the side with the space picks the battlefield.",
   "pawnBreaks": [
    {
-    "move": "h4-h5 lever",
-    "explanation": "h5 then hxg6 prises open the h-file.",
+    "move": "f3 — complete the wall",
+    "explanation": "f3 props both g4 and e4; the light-square chain from c4 to g4 becomes one piece of architecture.",
+    "fen": ""
+   },
+   {
+    "move": "h4 then h5 — the lever",
+    "explanation": "With the centre sealed, the h-pawn is the crowbar: h5 pries at g6 and opens the file White's rook already owns.",
     "fen": ""
    }
   ],
   "pieceManeuvers": [
    {
     "piece": "Bishop",
-    "route": "Bc1-h6 trade",
-    "explanation": "The bishop targets and trades the fianchettoed g7-bishop."
+    "route": "e3 → f2 — keep the diagonal",
+    "explanation": "When ...f4 closes the door, the bishop slides to f2 and keeps living on the g1-a7 diagonal."
    }
   ],
   "strategicThemes": [
-   "Open the h-file against the fianchetto.",
-   "Trade the g7-bishop with Bh6."
+   "A closed centre is a licence to attack on the wing — space decides who may play there.",
+   "Every pawn move in the wall serves two neighbours: f3 props g4 and e4 at once.",
+   "Black's ...f5 break is expected — meet it with h5, not with fear."
   ],
   "endgameTransitions": [
-   "The open file gives easier play into the endgame."
+   "If the position ever fully locks, the space edge means White's king walks to the action first."
   ],
   "playableLines": [
    {
-    "fen": "r1b1qrk1/1ppn2bp/3p2p1/p1nPppB1/2P1P1PP/2N2P2/PP1QB3/R3K1NR w KQ - 2 13",
+    "fen": "r1bq1rk1/1pp2pbp/n2p1np1/p2Pp3/2P1P1P1/2N1B3/PP2BP1P/R2QK1NR w KQ - 1 9",
     "moves": [
+     "f3",
+     "Nd7",
+     "h4",
+     "f5",
      "h5",
      "f4",
-     "hxg6",
-     "hxg6",
-     "Bh6",
-     "Rf7",
-     "Bxg7",
-     "Rxg7"
+     "Bf2",
+     "Bf6"
     ],
     "annotations": [
-     "h5 — gaining kingside space, jabbing at g6.",
-     "…f4 — Black counters in the centre.",
-     "hxg6 — opening the h-file.",
-     "…hxg6 — recapturing.",
-     "Bh6 — the bishop targets the fianchetto.",
-     "…Rf7 — defending g7.",
-     "Bxg7 — trading off the fianchetto bishop.",
-     "…Rxg7 — recapturing; roughly balanced, but White has the easier play."
+     "f3 — the wall is finished. One pawn move props both g4 and e4, and the light-square chain from c4 to g4 stands as a single piece of architecture.",
+     "…Nd7 — the f6-knight steps back, freeing the f-pawn for the only break Black has.",
+     "h4 — the lever arrives. With the centre sealed shut, the h-pawn is the crowbar.",
+     "…f5 — there is the break: the pawn hits g4 and asks White to blink.",
+     "h5 — no blink. The counter-lever hits g6 — Black's break and White's arrive together, but White's is aimed at the king.",
+     "…f4 — Black closes the door on the e3-bishop and hopes the kingside stays shut.",
+     "Bf2 — the bishop simply slides back and keeps the g1-a7 diagonal.",
+     "…Bf6 — the g7-bishop reroutes toward g5 now the kingside is locked. A half-pawn better for White — the h-file lever and the space say who is playing for the win."
     ],
     "learnCues": [
-     "h5 — jab at g6",
-     "f4 — Black counters",
-     "hxg6 — open the h-file",
-     "hxg6 — recapture",
-     "Bh6 — target the fianchetto",
-     "Rf7 — defend g7",
-     "Bxg7 — trade it off",
-     "Rxg7 — White plays easier"
+     "f3 — the wall completed",
+     "Nd7 — the f-pawn freed",
+     "h4 — the lever",
+     "f5 — the break",
+     "h5 — hit g6 back",
+     "f4 — door closed",
+     "Bf2 — diagonal kept",
+     "Bf6 — White's game"
     ],
     "arrows": [
+     [],
+     [],
+     [],
+     [],
+     [],
+     [],
      [
       {
-       "from": "h4",
-       "to": "h5",
+       "from": "f2",
+       "to": "a7",
        "color": "rgba(40,185,95,0.92)"
       }
      ],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
      []
     ],
     "highlights": [
      [
       {
+       "square": "f3",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "g4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      },
+      {
+       "square": "e4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "d7",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "h4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "f5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "g4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
        "square": "h5",
        "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "g6",
+       "color": "rgba(250, 204, 21, 0.5)"
       }
      ],
      [
       {
        "square": "f4",
        "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "e3",
+       "color": "rgba(250, 204, 21, 0.5)"
       }
      ],
      [
       {
-       "square": "g6",
+       "square": "f2",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ],
      [
       {
-       "square": "g6",
+       "square": "f6",
        "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
+      },
       {
-       "square": "h6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "f7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "g7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "g7",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "square": "g5",
+       "color": "rgba(250, 204, 21, 0.5)"
       }
      ]
     ],
-    "title": "English Botvinnik: Open the h-file",
-    "intro": "A real this repertoire win. White prises open the h-file and trades the fianchetto bishop.",
+    "title": "The f3 Wall and the h-file Lever",
+    "intro": "Complete the Botvinnik wall, then pry the kingside open with the h-pawn — the system's structural plan.",
     "sources": [
      "book:chess-fundamentals",
      "https://www.chess.com/openings/English-Opening",
@@ -14979,101 +15009,115 @@
  {
   "id": "mp-progothamchess-english-flank-attack",
   "openingId": "pro-gothamchess-english",
-  "criticalPositionFen": "r1bqnrk1/1p1n1p1p/p2p1b2/2pPp1pP/P1P1P1P1/2N1B3/1P1QBP2/R3K1NR w KQ - 0 13",
-  "title": "English — Botvinnik setup + kingside attack",
-  "overview": "A real win from this repertoire: the h6-pawn wedges into Black’s kingside, and White calmly reroutes the knight (Nf3-h2-f1) toward a strong square. Clearly better (~+2.2).",
+  "criticalPositionFen": "r1bq1rk1/1pp2pbp/n2p1np1/p2Pp3/2P1P1P1/2N1B3/PP2BP1P/R2QK1NR w KQ - 1 9",
+  "title": "English Botvinnik — the g5 clamp and the storm",
+  "overview": "The sharper handling of the same tabiya: instead of building slowly, White boots the f6-knight with g5 immediately and races the h-pawn up the board. The engine grades the storm at +1.1 — when Black lashes back with ...f5, the en-passant capture rips the king's cover off and the h-file opens with White's rook already sitting on it.",
   "pawnBreaks": [
    {
-    "move": "h5-h6 wedge",
-    "explanation": "The h-pawn wedges to h6 and cramps the kingside.",
+    "move": "g5 — the clamp",
+    "explanation": "The pawn boots the f6-knight and stakes the kingside dark squares.",
+    "fen": ""
+   },
+   {
+    "move": "h4-h5 — the storm",
+    "explanation": "The h-pawn runs at g6; every capture Black makes opens a file onto his own king.",
     "fen": ""
    }
   ],
-  "pieceManeuvers": [
-   {
-    "piece": "Knight",
-    "route": "Nf3-h2-f1 reroute",
-    "explanation": "The knight reroutes via h2 and f1 toward g3 or e3."
-   }
-  ],
+  "pieceManeuvers": [],
   "strategicThemes": [
-   "Cramp the kingside with the h6-wedge.",
-   "Reroute the knight to a strong post."
+   "Kick the defender first: with the f6-knight gone, the kingside belongs to White's pawns.",
+   "The en-passant capture is the point — ...f5 looks active but hands White the g-file.",
+   "Storm with pawns, cash with pieces: the rook on h1 never had to move."
   ],
   "endgameTransitions": [
-   "The space edge carries into the endgame."
+   "There is no endgame plan here — the storm either crashes through or the closed centre keeps the game in one piece; the eval says it crashes through."
   ],
   "playableLines": [
    {
-    "fen": "r1bqnrk1/1p1n1p1p/p2p1b2/2pPp1pP/P1P1P1P1/2N1B3/1P1QBP2/R3K1NR w KQ - 0 13",
+    "fen": "r1bq1rk1/1pp2pbp/n2p1np1/p2Pp3/2P1P1P1/2N1B3/PP2BP1P/R2QK1NR w KQ - 1 9",
     "moves": [
-     "h6",
-     "Be7",
-     "Nf3",
-     "f6",
-     "Nh2",
-     "Kh8",
-     "Nf1",
-     "Rg8"
+     "g5",
+     "Ne8",
+     "h4",
+     "f5",
+     "gxf6",
+     "Nxf6",
+     "h5",
+     "gxh5"
     ],
     "annotations": [
-     "h6 — a space-gaining wedge that cramps Black’s kingside.",
-     "…Be7 — the bishop retreats.",
-     "Nf3 — developing the knight.",
-     "…f6 — Black braces the centre.",
-     "Nh2 — rerouting the knight toward g4 and f1.",
-     "…Kh8 — Black tucks the king.",
-     "Nf1 — the knight reroutes toward e3 or g3.",
-     "…Rg8 — Black regroups, but White is clearly better with more space."
+     "g5 — the clamp. The f6-knight is booted before it can dream of d4 or h5, and the kingside dark squares change owners.",
+     "…Ne8 — back to base; the knight waits for the position to reopen.",
+     "h4 — the storm begins. The rook on h1 has not moved, and it will never need to.",
+     "…f5 — Black lashes out at the e4-pawn, the only active try in the position.",
+     "gxf6 — taken en passant! The g-file cracks open, and Black's king cover goes with it.",
+     "…Nxf6 — the knight recaptures, back on the square it was just kicked from — two tempi gone.",
+     "h5 — the second wave lands on g6.",
+     "…gxh5 — every capture opens another line. Plus one point one on the engine: the h-file is half-open, the rook already stares down it, and Black's king feels every draught."
     ],
     "learnCues": [
-     "h6 — cramping wedge",
-     "Be7 — retreat",
-     "Nf3 — develop",
-     "f6 — brace",
-     "Nh2 — reroute",
-     "Kh8 — tuck the king",
-     "Nf1 — reroute on",
-     "Rg8 — White is better"
+     "g5 — kick the knight",
+     "Ne8 — back to base",
+     "h4 — the storm",
+     "f5 — the lash-out",
+     "gxf6 — en passant!",
+     "Nxf6 — two tempi gone",
+     "h5 — second wave",
+     "gxh5 — the file opens"
     ],
     "arrows": [
      [],
      [],
      [],
      [],
-     [
-      {
-       "from": "f3",
-       "to": "h2",
-       "color": "rgba(40,185,95,0.92)"
-      }
-     ],
+     [],
+     [],
      [],
      [
       {
-       "from": "h2",
-       "to": "f1",
+       "from": "h1",
+       "to": "h5",
        "color": "rgba(40,185,95,0.92)"
       }
-     ],
-     []
+     ]
     ],
     "highlights": [
      [
       {
-       "square": "h6",
+       "square": "g5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "f6",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "e8",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ],
      [
       {
-       "square": "e7",
+       "square": "h4",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ],
      [
       {
-       "square": "f3",
+       "square": "f5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "e4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "f6",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ],
@@ -15085,31 +15129,23 @@
      ],
      [
       {
-       "square": "h2",
+       "square": "h5",
        "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "g6",
+       "color": "rgba(250, 204, 21, 0.5)"
       }
      ],
      [
       {
-       "square": "h8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "f1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "g8",
+       "square": "h5",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ]
     ],
-    "title": "English: Cramp with h6 and Reroute",
-    "intro": "A real this repertoire win. The h6-wedge cramps the kingside while White reroutes a knight.",
+    "title": "The g5 Clamp and the Storm",
+    "intro": "Boot the knight, run the h-pawn, and let ...f5 open the very files Black's king hides behind.",
     "sources": [
      "book:chess-fundamentals",
      "https://www.chess.com/openings/English-Opening",
@@ -44613,83 +44649,101 @@
  {
   "id": "mp-progothamchess-eng-e5-reversedsicilian",
   "openingId": "pro-gothamchess-english",
-  "criticalPositionFen": "r3r1k1/1pp1qppp/2np1n2/p3p2b/2PP4/1PQ1PN1P/PB2BPP1/R4RK1 w - - 1 13",
-  "title": "English vs …e5: the Reversed Sicilian Bishop-Pair",
-  "overview": "A real win from this repertoire: dxe5 opens the centre, the rook grabs the e-file, and when Black overpushes with …e4 the pawn becomes a target. Clearly better (~+1.1).",
+  "criticalPositionFen": "r3k2r/ppp1qppp/8/3pP3/2P1n1b1/1P2P3/P1Q2PPP/R1B1KB1R b KQkq - 2 11",
+  "title": "English vs …e5 — the bishop pair holds",
+  "overview": "The reversed-Sicilian line ends with the tension resolved and the truth on the table: Black gave up the dark-squared bishop back on move five, and everything White does from here is built on owning the pair. The engine calls the finish dead level — but level with two bishops against bishop and knight is the kind of level this repertoire is happy to grind.",
   "pawnBreaks": [
    {
-    "move": "d4xe5 break",
-    "explanation": "dxe5 opens the centre and the e-file.",
+    "move": "c5 — advance at the long-castled king",
+    "explanation": "The queenside pawn steps toward Black's new king address the move after ...O-O-O.",
     "fen": ""
    }
   ],
   "pieceManeuvers": [
    {
-    "piece": "Rook",
-    "route": "Rf1-e1 file",
-    "explanation": "The rook takes the open e-file after the central trade."
+    "piece": "Bishop",
+    "route": "c1 → b2 — the long diagonal, with tempo",
+    "explanation": "The bishop develops hitting the e5-queen — development Black must answer."
+   },
+   {
+    "piece": "Bishop",
+    "route": "f1 → c4 — the second bishop bites at f7",
+    "explanation": "Both bishops point at the kingside Black's king just left."
    }
   ],
   "strategicThemes": [
-   "Open the centre and grab the e-file.",
-   "Target Black’s overextended e-pawn."
+   "The ...Bxc3 trade from move five echoes all game — the dark squares answer to White alone.",
+   "Develop with tempo: Bb2 hits the queen, Bc4 hits f7.",
+   "Opposite-side kings after ...O-O-O: the c5 advance is an attack, not a positional nicety."
   ],
   "endgameTransitions": [
-   "The weak e-pawn is a target into the endgame."
+   "Two bishops in an open endgame outrun bishop-and-knight — trades of rooks favour White here."
   ],
   "playableLines": [
    {
-    "fen": "r3r1k1/1pp1qppp/2np1n2/p3p2b/2PP4/1PQ1PN1P/PB2BPP1/R4RK1 w - - 1 13",
+    "fen": "r3k2r/ppp1qppp/8/3pP3/2P1n1b1/1P2P3/P1Q2PPP/R1B1KB1R b KQkq - 2 11",
     "moves": [
-     "dxe5",
-     "dxe5",
-     "Rfe1",
-     "Bxf3",
-     "Bxf3",
-     "e4",
-     "Be2",
-     "Nb4"
+     "O-O-O",
+     "c5",
+     "Qxe5",
+     "Bb2",
+     "d4",
+     "Bc4",
+     "Rhe8",
+     "O-O"
     ],
     "annotations": [
-     "dxe5 — opening the centre.",
-     "…dxe5 — recapturing.",
-     "Rfe1 — the rook takes the open e-file.",
-     "…Bxf3 — Black trades a piece.",
-     "Bxf3 — recapturing; the bishop eyes the long diagonal.",
-     "…e4 — Black pushes the pawn forward.",
-     "Be2 — retreating; the advanced pawn becomes a target.",
-     "…Nb4 — Black seeks activity, but White is better."
+     "…O-O-O — Black castles long, and the whole board changes meaning: the queenside pawns are now an attacking army.",
+     "c5 — so the first one advances at the king immediately.",
+     "…Qxe5 — Black regains the pawn and levels the material.",
+     "Bb2 — development with tempo: the bishop lands on the long diagonal hitting the e5-queen.",
+     "…d4 — Black interposes, blocking the diagonal and gaining ground.",
+     "Bc4 — the second bishop bites, straight at f7.",
+     "…Rhe8 — the rook slides behind the queen on the e-file.",
+     "O-O — and White tucks the king away from the coming pawn fight. Dead level says the engine — but the two bishops rake the board, and that is the pull that outlasts the evaluation."
     ],
     "learnCues": [
-     "dxe5 — open the centre",
-     "dxe5 — recapture",
-     "Rfe1 — take the e-file",
-     "Bxf3 — Black trades",
-     "Bxf3 — long diagonal",
-     "e4 — overpush",
-     "Be2 — target the pawn",
-     "Nb4 — White is better"
+     "O-O-O — king to the queenside",
+     "c5 — advance at the king",
+     "Qxe5 — material level",
+     "Bb2 — tempo on the queen",
+     "d4 — the block",
+     "Bc4 — f7 in the sights",
+     "Rhe8 — queen backed",
+     "O-O — the pair plays on"
     ],
     "arrows": [
      [],
      [],
+     [],
      [
       {
-       "from": "f1",
-       "to": "e1",
+       "from": "b2",
+       "to": "e5",
        "color": "rgba(40,185,95,0.92)"
       }
      ],
      [],
-     [],
-     [],
+     [
+      {
+       "from": "c4",
+       "to": "f7",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
      [],
      []
     ],
     "highlights": [
      [
       {
-       "square": "e5",
+       "square": "c8",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "c5",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ],
@@ -44701,43 +44755,45 @@
      ],
      [
       {
-       "square": "e1",
+       "square": "b2",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "e5",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "d4",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ],
      [
       {
-       "square": "f3",
+       "square": "c4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "f7",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "e8",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ],
      [
       {
-       "square": "f3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b4",
+       "square": "g1",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ]
     ],
-    "title": "Reversed Sicilian: Open the e-file",
-    "intro": "A real this repertoire win. White opens the centre and seizes the e-file.",
+    "title": "The Bishop Pair Holds",
+    "intro": "Black regains the pawn but concedes the pair — both White bishops develop with threats.",
     "sources": [
      "book:chess-fundamentals",
      "https://www.chess.com/openings/English-Opening",
@@ -44750,89 +44806,95 @@
  {
   "id": "mp-progothamchess-eng-c5-maroczy",
   "openingId": "pro-gothamchess-english",
-  "criticalPositionFen": "2r2rk1/pp1bppb1/1qnp1np1/6Bp/2PN3P/1PN1P3/P3BPP1/2RQ1RK1 w - - 3 13",
-  "title": "English vs …c5: the d4 Break into a Maroczy Bind",
-  "overview": "A real win from this repertoire (vs flamingo8118): Bxf6 clears the way, the knight seizes d5, and Nxf6+ shatters Black’s kingside pawns. The structural damage gives a clear edge (~+1.4).",
+  "criticalPositionFen": "r1bq1rk1/pp2ppbp/2np1np1/2p5/2P5/2NP1NP1/PP2PPBP/R1BQ1RK1 w - - 0 8",
+  "title": "English Symmetric — Rb1 and the half-open b-file",
+  "overview": "Pure symmetry — both sides fianchetto, both castle, the pawns mirror. The way to play these is to bank tiny asymmetries before the position resolves: the rook steps to b1 off the g7-bishop's diagonal, b3 props c4, and when Black releases the tension with ...dxc4 the b-file opens with White's rook already standing on it. The engine says equal; the file says whose equal.",
   "pawnBreaks": [
    {
-    "move": "c4 Maroczy bind",
-    "explanation": "The c4-pawn clamps d5 and b5, the Maroczy grip.",
+    "move": "b3 — prop the point",
+    "explanation": "c4 is the one pawn under pressure; b3 holds it and readies the file-opening recapture.",
     "fen": ""
    }
   ],
   "pieceManeuvers": [
    {
-    "piece": "Knight",
-    "route": "Nc3-d5 outpost",
-    "explanation": "The knight occupies the d5 hole, the Maroczy dream square."
+    "piece": "Rook",
+    "route": "a1 → b1 — off the diagonal, onto the file",
+    "explanation": "One move, two jobs: the rook leaves the g7-bishop's x-ray and pre-claims the b-file."
+   },
+   {
+    "piece": "Bishop",
+    "route": "c1 → g5 — lean on the tension-carrier",
+    "explanation": "The f6-knight holds Black's d5-tension together; Bg5 makes holding it uncomfortable."
    }
   ],
   "strategicThemes": [
-   "Trade to clear and occupy d5.",
-   "Damage Black’s kingside pawns."
+   "In symmetric positions, bank the small asymmetries before the structure resolves.",
+   "Pre-place the rook on the file that will open — never chase the file after the capture.",
+   "Pressure the piece that carries the opponent's pawn tension."
   ],
   "endgameTransitions": [
-   "The structural damage favours White into the endgame."
+   "The half-open b-file is the endgame plan too — rook to b1, pawn to b5, and the queenside minority tells."
   ],
   "playableLines": [
    {
-    "fen": "2r2rk1/pp1bppb1/1qnp1np1/6Bp/2PN3P/1PN1P3/P3BPP1/2RQ1RK1 w - - 3 13",
+    "fen": "r1bq1rk1/pp2ppbp/2np1np1/2p5/2P5/2NP1NP1/PP2PPBP/R1BQ1RK1 w - - 0 8",
     "moves": [
-     "Bxf6",
-     "Bxf6",
-     "Nd5",
-     "Qd8",
-     "Nxf6+",
-     "exf6",
-     "Nf3",
-     "Kg7"
+     "Rb1",
+     "d5",
+     "b3",
+     "b6",
+     "Bg5",
+     "dxc4",
+     "bxc4",
+     "Bb7"
     ],
     "annotations": [
-     "Bxf6 — trading to damage Black’s structure and clear the d5-square.",
-     "…Bxf6 — recapturing.",
-     "Nd5 — the knight seizes the d5 outpost, the Maroczy dream square.",
-     "…Qd8 — the queen sidesteps.",
-     "Nxf6+ — grabbing the bishop with check, shattering Black’s kingside.",
-     "…exf6 — recapturing with broken pawns.",
-     "Nf3 — developing, eyeing the weak squares.",
-     "…Kg7 — Black tucks the king, but the damaged pawns favour White."
+     "Rb1 — one move, two jobs: the rook steps off the g7-bishop's long diagonal and pre-claims the b-file that is about to matter.",
+     "…d5 — Black breaks first, hitting c4.",
+     "b3 — c4 is propped. No drama, and the recapture toward the file is prepared.",
+     "…b6 — Black mirrors once more.",
+     "Bg5 — the poke with a purpose: the f6-knight is what holds Black's d5-tension together, and the bishop leans on exactly that piece.",
+     "…dxc4 — the release.",
+     "bxc4 — recaptured toward the centre — and the b-file opens with the rook already posted on b1. That was the whole idea, three moves early.",
+     "…Bb7 — Black's bishop takes the long diagonal. Equal, says the engine — but the only open file on the board is half White's, and that is the asymmetry the symmetric English is played for."
     ],
     "learnCues": [
-     "Bxf6 — clear d5",
-     "Bxf6 — recapture",
-     "Nd5 — seize the outpost",
-     "Qd8 — sidestep",
-     "Nxf6+ — shatter the kingside",
-     "exf6 — broken pawns",
-     "Nf3 — develop",
-     "Kg7 — White is better"
+     "Rb1 — off the diagonal",
+     "d5 — Black breaks",
+     "b3 — the point propped",
+     "b6 — mirrored again",
+     "Bg5 — lean on f6",
+     "dxc4 — the release",
+     "bxc4 — file pre-claimed",
+     "Bb7 — White's asymmetry"
     ],
     "arrows": [
      [],
      [],
+     [],
+     [],
      [
       {
-       "from": "c3",
-       "to": "d5",
+       "from": "g5",
+       "to": "f6",
        "color": "rgba(40,185,95,0.92)"
       }
      ],
      [],
-     [],
-     [],
-     [],
+     [
+      {
+       "from": "b1",
+       "to": "b6",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
      []
     ],
     "highlights": [
      [
       {
-       "square": "f6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "f6",
+       "square": "b1",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ],
@@ -44840,41 +44902,63 @@
       {
        "square": "d5",
        "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "c4",
+       "color": "rgba(250, 204, 21, 0.5)"
       }
      ],
      [
       {
-       "square": "d8",
+       "square": "b3",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "c4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "b6",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ],
      [
+      {
+       "square": "g5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
       {
        "square": "f6",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "c4",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ],
      [
       {
-       "square": "f6",
+       "square": "c4",
        "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "b1",
+       "color": "rgba(250, 204, 21, 0.5)"
       }
      ],
      [
       {
-       "square": "f3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "g7",
+       "square": "b7",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ]
     ],
-    "title": "English Maroczy: the d5 Outpost",
-    "intro": "A real this repertoire win vs flamingo8118. White trades to clear d5 and dominates the hole.",
+    "title": "Rb1 and the Half-Open File",
+    "intro": "Bank the asymmetry before the structure resolves — the rook claims the b-file three moves before it opens.",
     "sources": [
      "book:chess-fundamentals",
      "https://www.chess.com/openings/English-Opening",
@@ -44887,75 +44971,76 @@
  {
   "id": "mp-progothamchess-eng-c6-slav-g4",
   "openingId": "pro-gothamchess-english",
-  "criticalPositionFen": "r1bq1rk1/pp1n1ppp/2pb4/3n2P1/3Np3/1PN1P3/1BQP1P1P/R3KBR1 w Q - 1 13",
-  "title": "English vs …c6: Double-Fianchetto then the g4 Thrust",
-  "overview": "A real win from this repertoire (vs rabbiteUK): Nxe4 grabs the centre, f4 clamps, and the knight leaps into f5 eyeing g7 and e7 — clearly better (~+2.4).",
+  "criticalPositionFen": "r1bqkb1r/1p1n1ppp/p1p2n2/3pp3/2P5/1PN1PN1P/PBQP1PP1/R3KB1R b KQkq - 0 8",
+  "title": "English vs …c6 — the b3 wall meets …e4",
+  "overview": "The Slav-style ...c6 is the second-most-common reply he faces — 145 games in the corpus, 80 wins against 53 — met with the b3/Bb2 wall and quiet development. The critical moment comes when Black stakes everything on the ...e5-e4 space push: the knight drops into d4, the wedge gets liquidated on d3, and White emerges a shade better with the queen actively placed. Calm system chess against an ambitious lunge.",
   "pawnBreaks": [
    {
-    "move": "f4 clamp",
-    "explanation": "f4 clamps e5 and gains kingside space.",
+    "move": "d3 — meet the wedge head-on",
+    "explanation": "When the e4-pawn plants itself, d3 challenges it at once — liquidate the space grab before it becomes a bind.",
     "fen": ""
    }
   ],
   "pieceManeuvers": [
    {
     "piece": "Knight",
-    "route": "Ne4-f5 leap",
-    "explanation": "The knight leaps to f5, eyeing g7 and e7."
+    "route": "f3 → d4 — into the hole the push made",
+    "explanation": "The moment ...e4 passes d4, that square loses its pawn cover forever — the knight moves in."
    }
   ],
   "strategicThemes": [
-   "Grab the centre and clamp with f4.",
-   "Land a knight on f5."
+   "A pawn that advances stops guarding the squares behind it — ...e4 donates d4.",
+   "Liquidate a space wedge before it calcifies into a bind.",
+   "System openings win by keeping the position honest: develop, castle, punish the lunge."
   ],
   "endgameTransitions": [
-   "The space and active knight carry into the endgame."
+   "After the d3 liquidation the structure is symmetric with the more active queen — trade into it without fear."
   ],
   "playableLines": [
    {
-    "fen": "r1bq1rk1/pp1n1ppp/2pb4/3n2P1/3Np3/1PN1P3/1BQP1P1P/R3KBR1 w Q - 1 13",
+    "fen": "r1bqkb1r/1p1n1ppp/p1p2n2/3pp3/2P5/1PN1PN1P/PBQP1PP1/R3KB1R b KQkq - 0 8",
     "moves": [
-     "Nxe4",
-     "Bc7",
-     "f4",
-     "Re8",
-     "Nf5",
-     "Nb4",
-     "Qb1",
-     "g6"
+     "e4",
+     "Nd4",
+     "Nc5",
+     "d3",
+     "Nxd3+",
+     "Bxd3",
+     "exd3",
+     "Qxd3"
     ],
     "annotations": [
-     "Nxe4 — grabbing the centre pawn.",
-     "…Bc7 — Black redeploys the bishop.",
-     "f4 — gaining space and clamping e5.",
-     "…Re8 — Black centralises a rook.",
-     "Nf5 — the knight leaps to f5, eyeing g7 and e7.",
-     "…Nb4 — Black’s knight jumps in.",
-     "Qb1 — sidestepping, keeping the kingside diagonal.",
-     "…g6 — Black challenges the knight, but White is clearly better."
+     "…e4 — Black pushes past, kicking the f3-knight and grabbing space.",
+     "Nd4 — straight into the hole the push just made: with the e-pawn gone by, nothing Black owns can ever cover d4 with a pawn again.",
+     "…Nc5 — the d7-knight joins the ambition, eyeing d3 with the wedge behind it.",
+     "d3 — met head-on: the e4-wedge is challenged the move after it lands.",
+     "…Nxd3+ — in it goes, with check — Black is committed now.",
+     "Bxd3 — taken.",
+     "…exd3 — the pawn recaptures and the wedge is gone from the board.",
+     "Qxd3 — the dust settles: a knight traded for a bishop, the space grab liquidated, and White's queen lands on the active d3 square — a small, honest pull."
     ],
     "learnCues": [
-     "Nxe4 — grab the centre",
-     "Bc7 — redeploy",
-     "f4 — clamp e5",
-     "Re8 — centralise",
-     "Nf5 — leap to f5",
-     "Nb4 — Black jumps",
-     "Qb1 — keep the diagonal",
-     "g6 — White is better"
+     "e4 — the lunge",
+     "Nd4 — into the hole",
+     "Nc5 — the follow-up",
+     "d3 — head-on",
+     "Nxd3+ — committed",
+     "Bxd3 — taken",
+     "exd3 — wedge gone",
+     "Qxd3 — the pull stays"
     ],
     "arrows": [
      [],
      [],
-     [],
-     [],
      [
       {
-       "from": "d4",
-       "to": "f5",
+       "from": "c5",
+       "to": "d3",
        "color": "rgba(40,185,95,0.92)"
       }
      ],
+     [],
+     [],
      [],
      [],
      []
@@ -44965,190 +45050,65 @@
       {
        "square": "e4",
        "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "f3",
+       "color": "rgba(250, 204, 21, 0.5)"
       }
      ],
      [
       {
-       "square": "c7",
+       "square": "d4",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ],
      [
       {
-       "square": "f4",
+       "square": "c5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "d3",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "d3",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "e4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "d3",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ],
      [
       {
-       "square": "e8",
+       "square": "d3",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ],
      [
       {
-       "square": "f5",
+       "square": "d3",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ],
      [
       {
-       "square": "b4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "g6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ]
-    ],
-    "title": "English: Leap to f5",
-    "intro": "A real this repertoire win vs rabbiteUK. White grabs the centre and lands a knight on f5.",
-    "sources": [
-     "book:chess-fundamentals",
-     "https://www.chess.com/openings/English-Opening",
-     "https://en.wikipedia.org/wiki/English_Opening",
-     "https://api.chess.com/pub/player/gothamchess/games/archives"
-    ]
-   }
-  ]
- },
- {
-  "id": "mp-progothamchess-eng-g6-botvinnik-storm",
-  "openingId": "pro-gothamchess-english",
-  "criticalPositionFen": "r1bqr1k1/pp3pb1/2p2npp/2nPp1B1/2P1P3/2N2N2/PPB3PP/R2Q1RK1 w - - 0 13",
-  "title": "English vs …g6: the Botvinnik f4 Kingside Storm",
-  "overview": "A real win from this repertoire: d6 wedges deep into Black’s camp, and after the trades on e3 the cramping pawn gives White a clear edge (~+1).",
-  "pawnBreaks": [
-   {
-    "move": "d5-d6 wedge",
-    "explanation": "The d-pawn rams to d6 and cramps Black.",
-    "fen": ""
-   }
-  ],
-  "pieceManeuvers": [
-   {
-    "piece": "Queen",
-    "route": "Qd1-d2 support",
-    "explanation": "The queen supports the d6-wedge and the dark squares."
-   }
-  ],
-  "strategicThemes": [
-   "Wedge a pawn into d6.",
-   "Use the cramp to press."
-  ],
-  "endgameTransitions": [
-   "The advanced pawn is an asset into the endgame."
-  ],
-  "playableLines": [
-   {
-    "fen": "r1bqr1k1/pp3pb1/2p2npp/2nPp1B1/2P1P3/2N2N2/PPB3PP/R2Q1RK1 w - - 0 13",
-    "moves": [
-     "Be3",
-     "Ncd7",
-     "d6",
-     "Ng4",
-     "Qd2",
-     "Nxe3",
-     "Qxe3",
-     "Nb6"
-    ],
-    "annotations": [
-     "Be3 — developing toward the kingside.",
-     "…Ncd7 — Black redeploys a knight.",
-     "d6 — the pawn wedges deep, splitting Black’s camp.",
-     "…Ng4 — Black’s knight hits the bishop.",
-     "Qd2 — defending and connecting.",
-     "…Nxe3 — Black trades.",
-     "Qxe3 — recapturing; the d6-wedge cramps Black.",
-     "…Nb6 — Black regroups, but the wedge gives White the edge."
-    ],
-    "learnCues": [
-     "Be3 — develop",
-     "Ncd7 — redeploy",
-     "d6 — wedge in deep",
-     "Ng4 — hit the bishop",
-     "Qd2 — defend",
-     "Nxe3 — trade",
-     "Qxe3 — cramp Black",
-     "Nb6 — White is better"
-    ],
-    "arrows": [
-     [],
-     [],
-     [
-      {
-       "from": "d5",
-       "to": "d6",
-       "color": "rgba(40,185,95,0.92)"
-      }
-     ],
-     [],
-     [],
-     [],
-     [],
-     []
-    ],
-    "highlights": [
-     [
-      {
-       "square": "e3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "g4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b6",
+       "square": "d3",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ]
     ],
-    "title": "English: the d6 Wedge",
-    "intro": "A real this repertoire win. White rams a pawn to d6, splitting Black’s position.",
+    "title": "The b3 Wall Meets the Wedge",
+    "intro": "Black lunges with ...e4; the knight takes d4, the wedge gets liquidated, and the queen ends up the active piece.",
     "sources": [
      "book:chess-fundamentals",
      "https://www.chess.com/openings/English-Opening",

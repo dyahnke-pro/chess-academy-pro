@@ -171,9 +171,47 @@ const SYM_C5: LessonScript = {
   ],
 };
 
+// ── vs …c6 (Slav-style) — the b3/Bb2 wall against the c6-d5 block ──
+const C6_SLAV: LessonScript = {
+  openingId: 'pro-gothamchess-english',
+  title: 'English — vs …c6 (Slav-style)',
+  minutes: 10,
+  orientation: 'white',
+  kind: 'variation',
+  sources: SRC,
+  beats: [
+    b({
+      id: 'wall',
+      moves: 'c4 c6 Nc3 d5 e3 Nf6',
+      highlights: [{ square: 'c6', color: KEY }, { square: 'd5', color: KEY }],
+      say:
+        "The Slav-style …c6 — his second-most-common English reply, 145 corpus games and 80 wins against it. Black props d5 with c6 and waits for us to over-extend. We don't oblige: e3, knight to c3, and the position stays calm while we choose our structure at leisure.",
+      sayShort: 'c6-d5 — the Slav wall. Stay calm.',
+    }),
+    b({
+      id: 'b3-wall',
+      moves: 'c4 c6 Nc3 d5 e3 Nf6 Nf3 e6 b3 Nbd7 Bb2',
+      highlights: [{ square: 'b2', color: KEY }, { square: 'e6', color: SOFT }, { square: 'd7', color: SOFT }],
+      say:
+        "Both knights out, then the quiet heart of the setup: b3 and bishop to b2. The bishop sits behind its own knight for now — that's fine; this wall is about flexibility, not fireworks. Black completes the triangle with e6 and puts the second knight on d7. Notice what we have NOT played: no d4. The centre stays fluid, and Black must commit first.",
+      sayShort: 'b3 and Bb2 — the flexible wall.',
+    }),
+    b({
+      id: 'e5-met',
+      moves: 'c4 c6 Nc3 d5 e3 Nf6 Nf3 e6 b3 Nbd7 Bb2 e5 Qc2 a6 h3',
+      arrows: [{ from: 'f3', to: 'd4', color: VIS }],
+      highlights: [{ square: 'e5', color: KEY }, { square: 'd4', color: KEY }, { square: 'g4', color: SOFT }],
+      say:
+        "Black commits: the e-pawn marches on to e5, claiming the centre he was offered, and a6 keeps his queenside flexible. Our answers are quiet moves with teeth — the queen steps to c2, off the d-file and watching the e4-square, and h3 takes g4 away from Black's pieces before any pin lands. Now study that proud e5-pawn: the moment it pushes to e4, it stops guarding d4 — and our knight jumps straight into the hole. The middlegame plan picks up from exactly this position.",
+      sayShort: 'e5 met calmly — watch the d4 hole.',
+    }),
+  ],
+};
+
 export const PRO_GOTHAMCHESS_ENGLISH_VARIATION_LESSONS: Record<string, LessonScript> = {
   'pro-gothamchess-english::Botvinnik System vs KID-setup': BOTVINNIK,
   'pro-gothamchess-english::Symmetric (…e5)': SYM_E5,
   'pro-gothamchess-english::Anti-French (…e6)': ANTI_FRENCH,
   'pro-gothamchess-english::Symmetric (…c5)': SYM_C5,
+  'pro-gothamchess-english::vs …c6 (Slav-style)': C6_SLAV,
 };
