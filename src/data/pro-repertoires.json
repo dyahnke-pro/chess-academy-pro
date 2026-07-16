@@ -1324,24 +1324,24 @@
    "variations": [
     {
      "name": "Nc3 Two Knights",
-     "pgn": "e4 Nf6 Nc3 e5 Nf3 Nc6 Bb5 Bb4 O-O O-O",
-     "explanation": "White declines the chase with Nc3 (839 games, 68.9%). We get a Petroff-style game with a tempo for the …Nc6 / …Bb4 development. Solid, equal, and Black's score is excellent.",
+     "pgn": "e4 Nf6 Nc3 e5 Nf3 Nc6 Bb5 Nd4 Bc4 Bc5 d3 d6 h3 O-O",
+     "explanation": "White declines the chase with Nc3 and we transpose to an open game. Against the Spanish pin his corpus answer is the Rubinstein …Nd4 — 103 of his 132 games at the Bb5 position — after which the bishop retreats to c4, we develop classically with …Bc5 and …d6, and castle into a position his games score heavily from.",
      "sources": [
       "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
      ]
     },
     {
      "name": "c4 Modern Main",
-     "pgn": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 exd6 exd6 Nc3 Be7 Bd3 Nc6 Nge2",
-     "explanation": "The Modern Mainline with c4 (290 games, 72.1%). We retreat Nb6, recapture with e-pawn, and reach a healthy structure with the open e-file.",
+     "pgn": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 exd6 exd6 Nc3 Be7 Bd3 O-O Nge2 c6 O-O Na6 b3 Nc7",
+     "explanation": "The most ambitious try — the c4-d4-e5 pawn front — answered with the …exd6 recapture and quick castling (60 of his 61 corpus games castle here). The queenside knight then walks a6 to c7, covering d5 and e6, and from the resulting tabiya his record is five wins in five games. The bigger the centre, the more it must defend.",
      "sources": [
       "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
      ]
     },
     {
      "name": "Nf3 / Modern Quiet",
-     "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 Nb6 Be2 Bf5",
-     "explanation": "White plays Nf3 instead of c4 (291 games, 70.3%). We get our pieces out: Nb6, Bf5, Nc6 etc. Classical development with the better pawn structure.",
+     "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 Nb6 Be2 Bf5 c4 e6 exd6 cxd6",
+     "explanation": "White develops calmly and we get the light-squared bishop OUT to f5 before …e6 — the Alekhine's signature comfort. When c4 and the e5 exchange come, the …cxd6 recapture keeps the wall compact. The engine leans White in this sideline; his 17-8 corpus record is why it stays in the repertoire — a fighting, known-toll line.",
      "sources": [
       "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
      ]

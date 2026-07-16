@@ -34993,80 +34993,275 @@
  {
   "id": "mp-pronaroAlek-twoknights-equality",
   "openingId": "pro-naroditsky-alekhine",
-  "criticalPositionFen": "r3kb1r/pppq3p/2npp1p1/4p1N1/8/2P2Q2/PPP2PPP/R1B2RK1 w kq - 0 13",
-  "title": "Two Knights — equal Four Knights game",
-  "overview": "A real win from this repertoire: Black reroutes the knight, fianchettoes, castles, and when White strikes f4 opens the f-file — comfortably better (~+1.2).",
+  "criticalPositionFen": "r1bq1rk1/ppp2ppp/3p1n2/2b1p3/2BnP3/2NP1N1P/PPP2PP1/R1BQK2R w KQ - 1 8",
+  "title": "Two Knights — the Rubinstein …Nd4",
+  "overview": "When White declines the Alekhine with Nc3 and reaches for the Spanish pin, his corpus answer is emphatic: at the Bb5 position he plays the Rubinstein …Nd4 in 103 of 132 games. The plan from the tabiya is a chain of clean trades — knights on d4, bishops on e6 — and the punchline recapture …fxe6, opening the f-file for the castled rook. The engine puts Black a fifth of a pawn AHEAD at the end of the line.",
   "pawnBreaks": [
    {
-    "move": "...exf4 file-opening",
-    "explanation": "…exf4 opens the f-file for Black.",
+    "move": "…fxe6 — the point of everything",
+    "explanation": "Recapturing toward the centre opens the f-file for the rook that castled onto it, and the e6-d6 pawns rule the central light squares.",
     "fen": ""
    }
   ],
   "pieceManeuvers": [
    {
     "piece": "Bishop",
-    "route": "...Bg7 fianchetto",
-    "explanation": "The bishop fianchettoes to g7 on the long diagonal."
+    "route": "c5 × d4 → b6 — never off the diagonal",
+    "explanation": "The bishop recaptures in the centre and, when challenged, slides to b6 still staring at f2."
    }
   ],
   "strategicThemes": [
-   "Fianchetto and castle.",
-   "Meet f4 with …exf4."
+   "The Rubinstein …Nd4 turns White's Spanish pin into a target.",
+   "Trade into the structure you want: the …fxe6 recapture is a gain, not a concession.",
+   "A bishop that never leaves its diagonal loses nothing by stepping back."
   ],
   "endgameTransitions": [
-   "The active pieces hold the edge."
+   "The half-open f-file and the f2 target carry straight into any ending — rook activity decides these."
   ],
   "playableLines": [
    {
-    "fen": "r3kb1r/pppq3p/2npp1p1/4p1N1/8/2P2Q2/PPP2PPP/R1B2RK1 w kq - 0 13",
+    "fen": "r1bq1rk1/ppp2ppp/3p1n2/2b1p3/2BnP3/2NP1N1P/PPP2PP1/R1BQK2R w KQ - 1 8",
     "moves": [
-     "Qh3",
-     "Nd8",
-     "Ne4",
-     "Bg7",
-     "Bh6",
+     "Nxd4",
+     "Bxd4",
      "O-O",
-     "f4",
-     "exf4"
+     "Be6",
+     "Bxe6",
+     "fxe6",
+     "Ne2",
+     "Bb6"
     ],
     "annotations": [
-     "Qh3 — White’s queen eyes the kingside.",
-     "…Nd8 — Black reroutes the knight.",
-     "Ne4 — White centralises.",
-     "…Bg7 — Black fianchettoes.",
-     "Bh6 — White targets the fianchetto.",
-     "…O-O — Black castles.",
-     "f4 — White strikes.",
-     "…exf4 — Black opens the f-file, comfortably better."
+     "Nxd4 — White finally removes the centralized knight.",
+     "…Bxd4 — recapture with the bishop, which now sits beautifully in the centre of the board.",
+     "O-O — White tucks the king away.",
+     "…Be6 — develop and offer the c4-bishop a trade on our terms.",
+     "Bxe6 — White takes —",
+     "…fxe6 — and THIS recapture is the point: the f-file opens in front of our castled rook, and the e6-d6 pawn pair rules the central light squares.",
+     "Ne2 — the knight challenges our proud d4-bishop.",
+     "…Bb6 — keep it. The bishop steps back but never leaves the a7-g1 diagonal — still staring at f2. A fifth of a pawn better for BLACK out of the opening: the Rubinstein, delivered."
     ],
     "learnCues": [
-     "Qh3 — eye the kingside",
-     "Nd8 — reroute",
-     "Ne4 — centralise",
-     "Bg7 — fianchetto",
-     "Bh6 — target it",
-     "O-O — castle",
-     "f4 — strike",
-     "exf4 — Black is better"
+     "Nxd4 — the trade comes",
+     "Bxd4 — centre bishop",
+     "O-O — White castles",
+     "Be6 — offer the trade",
+     "Bxe6 — taken",
+     "fxe6 — the f-file opens",
+     "Ne2 — the challenge",
+     "Bb6 — never off the diagonal"
     ],
     "arrows": [
      [],
      [],
      [],
+     [],
+     [],
+     [],
+     [],
      [
       {
-       "from": "f8",
-       "to": "g7",
+       "from": "b6",
+       "to": "f2",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ]
+    ],
+    "highlights": [
+     [
+      {
+       "square": "d4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "d4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "g1",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "e6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "c4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "e6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "e6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "f8",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "e2",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "d4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "b6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "f2",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ]
+    ],
+    "title": "The Rubinstein …Nd4",
+    "intro": "His 103-of-132 answer to the Spanish pin — clean trades into the …fxe6 structure, and Black comes out ahead.",
+    "sources": [
+     "book:chess-fundamentals",
+     "https://www.chess.com/openings/Alekhines-Defense",
+     "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mp-pronaroAlek-modern-development",
+  "openingId": "pro-naroditsky-alekhine",
+  "criticalPositionFen": "r1bq1rk1/ppn1bppp/1npp4/8/2PP4/1PNB4/P3NPPP/R1BQ1RK1 w - - 1 11",
+  "title": "c4 Modern — the solid wall vs the space",
+  "overview": "The corpus route through the c4 Modern castles early and regroups the queenside knight via a6 to c7 — five games reached this exact tabiya, five wins for Black. White's extra space is real: the engine leans just over half a pawn his way. The plan is what makes the line playable anyway — the b6-knight re-routes through d7 to f6, the rook takes the open e-file, and the position offers White nothing to bite on. Space against solidity; his score says solidity.",
+  "pawnBreaks": [],
+  "pieceManeuvers": [
+   {
+    "piece": "Knight",
+    "route": "b6 → d7 → f6 — the kingside re-route",
+    "explanation": "The queenside knight walks across to f6, covering the king and watching the e4-square White's pawns left behind."
+   },
+   {
+    "piece": "Rook",
+    "route": "f8 → e8 — the open file",
+    "explanation": "Both e-pawns are gone; the rook takes the fully open file before White's do."
+   }
+  ],
+  "strategicThemes": [
+   "Space is only an advantage if there is something to attack — give White nothing.",
+   "The e-file is fully open; claiming it first is worth more than a pawn-storm gesture.",
+   "Trust the record: engine says White leans, his five-for-five score says the setup holds."
+  ],
+  "endgameTransitions": [
+   "In the ending White's extra space becomes extra squares to defend — the d4-c4 pawns want constant babysitting."
+  ],
+  "playableLines": [
+   {
+    "fen": "r1bq1rk1/ppn1bppp/1npp4/8/2PP4/1PNB4/P3NPPP/R1BQ1RK1 w - - 1 11",
+    "moves": [
+     "Qc2",
+     "h6",
+     "Bf4",
+     "Re8",
+     "h3",
+     "Nd7",
+     "Bh2",
+     "Nf6"
+    ],
+    "annotations": [
+     "Qc2 — White connects the rooks and backs the d3-bishop.",
+     "…h6 — a useful hedge: g5 is denied to the c1-bishop before it ever asks.",
+     "Bf4 — the bishop takes the h2-b8 diagonal, leaning on our d6-pawn.",
+     "…Re8 — the rook claims the fully open e-file. Both e-pawns left the board long ago; the file belongs to whoever moves first, and that is us.",
+     "h3 — White matches our hedge.",
+     "…Nd7 — the b6-knight begins its walk: d7 now, f6 next, kingside forever.",
+     "Bh2 — White tucks the bishop but keeps the same diagonal.",
+     "…Nf6 — the knight lands, covering the king and watching the e4-square White's own pawns abandoned. The engine leans White by half a pawn on space — and his corpus from this exact position reads five wins, zero losses. The most testing line, met with the most solid answer."
+    ],
+    "learnCues": [
+     "Qc2 — rooks connected",
+     "h6 — g5 denied",
+     "Bf4 — lean on d6",
+     "Re8 — the open file",
+     "h3 — the mirror hedge",
+     "Nd7 — the walk begins",
+     "Bh2 — tucked, same job",
+     "Nf6 — solid, five for five"
+    ],
+    "arrows": [
+     [],
+     [],
+     [],
+     [],
+     [],
+     [
+      {
+       "from": "d7",
+       "to": "f6",
        "color": "rgba(40,185,95,0.92)"
       }
      ],
      [],
-     [],
-     [],
-     []
+     [
+      {
+       "from": "f6",
+       "to": "e4",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ]
     ],
     "highlights": [
+     [
+      {
+       "square": "c2",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "d3",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "h6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "g5",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "f4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "d6",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "e8",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
      [
       {
        "square": "h3",
@@ -35075,25 +35270,128 @@
      ],
      [
       {
-       "square": "d8",
+       "square": "d7",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "f6",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "h2",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ],
      [
+      {
+       "square": "f6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
       {
        "square": "e4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ]
+    ],
+    "title": "The Solid Wall vs the Space",
+    "intro": "White gets the space; Black gets the open e-file, the f6 re-route, and a five-for-five corpus score.",
+    "sources": [
+     "book:chess-fundamentals",
+     "https://www.chess.com/openings/Alekhines-Defense",
+     "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mp-pronaroAlek-modernquiet-conversion",
+  "openingId": "pro-naroditsky-alekhine",
+  "criticalPositionFen": "rn1qkb1r/pp3ppp/1n1pp3/5b2/2PP4/5N2/PP2BPPP/RNBQK2R w KQkq - 0 8",
+  "title": "Nf3 Quiet — the c-pawn recapture and the long hold",
+  "overview": "Honesty first: in the Quiet line the engine leans White by most of a pawn after best play — that is this sideline's toll, and the narration won't pretend otherwise. What the number doesn't show is why he plays it anyway: seventeen wins to eight in the corpus. The …cxd6 recapture keeps the structure compact, everything castles, and …a5-a4 generates real queenside counterplay against the b3-queen. A defensible fighting line you must know — not a free lunch.",
+  "pawnBreaks": [
+   {
+    "move": "…a5, then …a4 — the counterplay",
+    "explanation": "The pawn march harasses the b3-queen and fixes White's queenside before it expands.",
+    "fen": ""
+   }
+  ],
+  "pieceManeuvers": [],
+  "strategicThemes": [
+   "Recapture toward the centre: …cxd6 keeps the pawn wall compact and the c-file half-open.",
+   "When the engine leans against you, play the structures your results support.",
+   "Counterplay is a duty, not a luxury — …a5 starts it before White consolidates."
+  ],
+  "endgameTransitions": [
+   "The compact d6-e6 structure survives simplification well — trades relieve the space toll."
+  ],
+  "playableLines": [
+   {
+    "fen": "rn1qkb1r/pp3ppp/1n1pp3/5b2/2PP4/5N2/PP2BPPP/RNBQK2R w KQkq - 0 8",
+    "moves": [
+     "Nc3",
+     "Be7",
+     "O-O",
+     "O-O",
+     "Bf4",
+     "h6",
+     "Qb3",
+     "a5"
+    ],
+    "annotations": [
+     "Nc3 — White develops behind the c4-d4 pair.",
+     "…Be7 — quiet and ready to castle.",
+     "O-O — White's king tucks in.",
+     "…O-O — ours follows. Both sides settled; now the arguments begin.",
+     "Bf4 — leaning on d6, the pawn White's whole setup is pointed at.",
+     "…h6 — the hedge; g5 is denied before it's asked.",
+     "Qb3 — the queen props the c4-pawn and clears the back rank.",
+     "…a5 — and Black's counterplay starts on schedule: a4 comes next, harassing that queen. The engine leans White by most of a pawn here — the Quiet line's honest toll — but the structure holds together, the counterplay is real, and his corpus in this variation reads seventeen wins to eight."
+    ],
+    "learnCues": [
+     "Nc3 — behind the pair",
+     "Be7 — ready to castle",
+     "O-O — White settles",
+     "O-O — so do we",
+     "Bf4 — the d6 lean",
+     "h6 — the hedge",
+     "Qb3 — c4 propped",
+     "a5 — counterplay on schedule"
+    ],
+    "arrows": [
+     [],
+     [],
+     [],
+     [],
+     [],
+     [],
+     [],
+     [
+      {
+       "from": "a5",
+       "to": "a4",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ]
+    ],
+    "highlights": [
+     [
+      {
+       "square": "c3",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ],
      [
       {
-       "square": "g7",
+       "square": "e7",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ],
      [
       {
-       "square": "h6",
+       "square": "g1",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ],
@@ -35107,295 +35405,48 @@
       {
        "square": "f4",
        "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "d6",
+       "color": "rgba(250, 204, 21, 0.5)"
       }
      ],
      [
       {
-       "square": "f4",
+       "square": "h6",
        "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ]
-    ],
-    "title": "Alekhine Two Knights: Fianchetto and Equalise",
-    "intro": "A real this repertoire win. Black fianchettoes, castles, and meets White’s f4 with active play.",
-    "sources": [
-     "book:chess-fundamentals",
-     "https://www.chess.com/openings/Alekhines-Defense",
-     "https://en.wikipedia.org/wiki/Alekhine%27s_Defence",
-     "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
-    ]
-   }
-  ]
- },
- {
-  "id": "mp-pronaroAlek-modern-development",
-  "openingId": "pro-naroditsky-alekhine",
-  "criticalPositionFen": "r2q1rk1/ppp2ppp/1nn2b2/2p4b/3P4/2NBBN1P/PP3PP1/R2Q1RK1 w - - 0 13",
-  "title": "Modern Main — IQP positional game",
-  "overview": "A real win from this repertoire: Black redeploys the knights to e5, trades queens onto the open d-file, and the active bishop is poised to regain the pawn — comfortable equality.",
-  "pawnBreaks": [
-   {
-    "move": "...c5 freeing break",
-    "explanation": "The …c5 break frees Black’s Alekhine.",
-    "fen": ""
-   }
-  ],
-  "pieceManeuvers": [
-   {
-    "piece": "Knight",
-    "route": "...Nd7-e5 + ...Rd8",
-    "explanation": "The knight centralises on e5 and the rook takes the open d-file."
-   }
-  ],
-  "strategicThemes": [
-   "Centralise the knights on e5.",
-   "Trade queens and regain the pawn."
-  ],
-  "endgameTransitions": [
-   "The active pieces equalise into the endgame."
-  ],
-  "playableLines": [
-   {
-    "fen": "r2q1rk1/ppp2ppp/1nn2b2/2p4b/3P4/2NBBN1P/PP3PP1/R2Q1RK1 w - - 0 13",
-    "moves": [
-     "dxc5",
-     "Nd7",
-     "Be4",
-     "Nde5",
-     "Qxd8",
-     "Raxd8",
-     "Nxe5",
-     "Bxe5"
-    ],
-    "annotations": [
-     "dxc5 — White grabs a pawn.",
-     "…Nd7 — Black redeploys, eyeing e5 and c5.",
-     "Be4 — White centralises the bishop.",
-     "…Nde5 — Black centralises the knight.",
-     "Qxd8 — White trades queens.",
-     "…Raxd8 — Black recaptures, the rook on the open d-file.",
-     "Nxe5 — White trades.",
-     "…Bxe5 — Black recaptures; the active bishop and loose White pawn leave an equal game."
-    ],
-    "learnCues": [
-     "dxc5 — White grabs a pawn",
-     "Nd7 — redeploy",
-     "Be4 — centralise",
-     "Nde5 — centralise",
-     "Qxd8 — trade queens",
-     "Raxd8 — open d-file",
-     "Nxe5 — trade",
-     "Bxe5 — regain the pawn"
-    ],
-    "arrows": [
-     [],
-     [],
-     [],
-     [
-      {
-       "from": "d7",
-       "to": "e5",
-       "color": "rgba(40,185,95,0.92)"
-      }
-     ],
-     [],
-     [],
-     [],
-     []
-    ],
-    "highlights": [
-     [
-      {
-       "square": "c5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ]
-    ],
-    "title": "Alekhine Modern: Trade into Easy Equality",
-    "intro": "A real this repertoire win. Black trades queens and activates the pieces to regain the pawn.",
-    "sources": [
-     "book:chess-fundamentals",
-     "https://www.chess.com/openings/Alekhines-Defense",
-     "https://en.wikipedia.org/wiki/Alekhine%27s_Defence",
-     "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
-    ]
-   }
-  ]
- },
- {
-  "id": "mp-pronaroAlek-modernquiet-conversion",
-  "openingId": "pro-naroditsky-alekhine",
-  "criticalPositionFen": "rn1k1b1r/ppq1p1pN/2ppP1Q1/3n4/3P4/8/PPP2PPP/R1B1K2R w KQ - 3 13",
-  "title": "Modern Quiet — classical Bf5 + ...Nc6 conversion",
-  "overview": "A real win from this repertoire: Black tucks the king, redevelops the knight, activates the rook and checks with …Qa5+ for a balanced, active game (~level).",
-  "pawnBreaks": [
-   {
-    "move": "...c5 freeing break",
-    "explanation": "An eventual …c5 frees Black’s game.",
-    "fen": ""
-   }
-  ],
-  "pieceManeuvers": [
-   {
-    "piece": "Knight",
-    "route": "...Nd5-f6 redeploy",
-    "explanation": "The knight redeploys to f6, eyeing the centre."
-   }
-  ],
-  "strategicThemes": [
-   "Tuck the king and defend actively.",
-   "Gain tempo with …Qa5+."
-  ],
-  "endgameTransitions": [
-   "The active pieces hold the balance."
-  ],
-  "playableLines": [
-   {
-    "fen": "rn1k1b1r/ppq1p1pN/2ppP1Q1/3n4/3P4/8/PPP2PPP/R1B1K2R w KQ - 3 13",
-    "moves": [
-     "Ng5",
-     "Kc8",
-     "c4",
-     "Nf6",
-     "Nf7",
-     "Rh4",
-     "Be3",
-     "Qa5+"
-    ],
-    "annotations": [
-     "Ng5 — White’s knight probes g5.",
-     "…Kc8 — Black tucks the king.",
-     "c4 — White grabs space.",
-     "…Nf6 — Black redevelops the knight.",
-     "Nf7 — the knight raids f7.",
-     "…Rh4 — Black activates the rook.",
-     "Be3 — White develops.",
-     "…Qa5+ — Black checks, gaining a tempo; a balanced game."
-    ],
-    "learnCues": [
-     "Ng5 — probe",
-     "Kc8 — tuck the king",
-     "c4 — grab space",
-     "Nf6 — redeploy",
-     "Nf7 — raid f7",
-     "Rh4 — activate",
-     "Be3 — develop",
-     "Qa5+ — gain a tempo"
-    ],
-    "arrows": [
-     [],
-     [],
-     [],
-     [],
-     [
-      {
-       "from": "g5",
-       "to": "f7",
-       "color": "rgba(40,185,95,0.92)"
-      }
-     ],
-     [],
-     [],
-     []
-    ],
-    "highlights": [
-     [
+      },
       {
        "square": "g5",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "color": "rgba(250, 204, 21, 0.5)"
       }
      ],
      [
       {
-       "square": "c8",
+       "square": "b3",
        "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
+      },
       {
        "square": "c4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "f6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "f7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "h4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e3",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "color": "rgba(250, 204, 21, 0.5)"
       }
      ],
      [
       {
        "square": "a5",
        "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "a4",
+       "color": "rgba(250, 204, 21, 0.5)"
       }
      ]
     ],
-    "title": "Alekhine Modern: Active Defence",
-    "intro": "A real this repertoire win. Black tucks the king and meets White’s probes with active pieces.",
+    "title": "The c-Pawn Recapture and the Long Hold",
+    "intro": "The Quiet line's honest toll and the fighting plan that pays it — compact structure, then …a5-a4.",
     "sources": [
      "book:chess-fundamentals",
      "https://www.chess.com/openings/Alekhines-Defense",
-     "https://en.wikipedia.org/wiki/Alekhine%27s_Defence",
      "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
     ]
    }
@@ -36702,69 +36753,70 @@
  {
   "id": "mp-pronaroAlek-modern-nb4",
   "openingId": "pro-naroditsky-alekhine",
-  "criticalPositionFen": "r1b1k2r/pppnbppp/1q2p3/1N2P3/8/1B6/PPP1QPPP/R1B2RK1 w kq - 4 13",
-  "title": "Modern Main — ...Nb4 active piece play",
-  "overview": "A real win from this repertoire: …Bc5 develops with a pin, Black castles, and the dark bishops and queens trade off leaving Black clearly better (~+1.7).",
+  "criticalPositionFen": "r1bq1rk1/ppn1bppp/1npp4/8/2PP4/1PNB4/P3NPPP/R1BQ1RK1 w - - 1 11",
+  "title": "c4 Modern — the …Ne6 poke and the …d5 break",
+  "overview": "The active handling of the same tabiya: when White's bishop reaches for f4, the c7-knight pokes it back with …Ne6 before it settles, and the moment it shuffles, …d5 strikes the centre. White must push past with c5 and prop with b4 — space again — but every Black piece breathes and the engine gap narrows to a third of a pawn. The classic Alekhine trade: give them rope in the centre, then chop at the posts holding it up.",
   "pawnBreaks": [
    {
-    "move": "...c5 break",
-    "explanation": "The …c5 break frees Black’s position.",
+    "move": "…d5 — the break",
+    "explanation": "The strike lands while White's dark-square bishop is mid-shuffle — one tempo is all the break needs.",
     "fen": ""
    }
   ],
   "pieceManeuvers": [
    {
-    "piece": "Bishop",
-    "route": "...Bf8-c5 pin",
-    "explanation": "The bishop develops to c5 with a pin on the e3-bishop."
+    "piece": "Knight",
+    "route": "c7 → e6 — the instant poke",
+    "explanation": "The regrouped knight's first job: bother the f4-bishop before it settles."
    }
   ],
   "strategicThemes": [
-   "Pin with …Bc5.",
-   "Trade the dark bishops and queens."
+   "Meet piece development with piece questions — …Ne6 costs White a tempo on the spot.",
+   "Time the …d5 break to the opponent's least coordinated moment.",
+   "Advanced pawns on c5 and b4 are commitments; every one needs a defender forever."
   ],
   "endgameTransitions": [
-   "The better game persists into the endgame."
+   "The fixed c5-b4 chain gives Black's knights permanent dark-square holes to aim at in the ending."
   ],
   "playableLines": [
    {
-    "fen": "r1b1k2r/pppnbppp/1q2p3/1N2P3/8/1B6/PPP1QPPP/R1B2RK1 w kq - 4 13",
+    "fen": "r1bq1rk1/ppn1bppp/1npp4/8/2PP4/1PNB4/P3NPPP/R1BQ1RK1 w - - 1 11",
     "moves": [
+     "Bf4",
+     "Ne6",
      "Be3",
-     "Bc5",
-     "Rad1",
-     "O-O",
-     "Nc3",
-     "Bxe3",
-     "Qxe3",
-     "Qxe3"
+     "d5",
+     "c5",
+     "Nd7",
+     "b4",
+     "Nf6"
     ],
     "annotations": [
-     "Be3 — White develops.",
-     "…Bc5 — Black develops with tempo, pinning.",
-     "Rad1 — White centralises.",
-     "…O-O — Black castles.",
-     "Nc3 — White develops.",
-     "…Bxe3 — Black trades the bishops.",
-     "Qxe3 — White recaptures.",
-     "…Qxe3 — Black trades queens, with the better game."
+     "Bf4 — White grabs the h2-b8 diagonal, hitting d6.",
+     "…Ne6 — poked back instantly: the c7-knight hits the bishop before it settles.",
+     "Be3 — the shuffle.",
+     "…d5 — and NOW the break, landing while the bishop is mid-move. The centre is challenged the one tempo White can't answer cleanly.",
+     "c5 — White pushes past, evicting our b6-knight.",
+     "…Nd7 — it drops back, spring-loaded.",
+     "b4 — White props the advanced pawn; the whole queenside is now a commitment.",
+     "…Nf6 — and the knight springs to f6, eyeing the e4-square the pawns left behind. A third of a pawn to White on space — but every Black piece breathes, the break landed, and the c5-b4 chain needs babysitting for the rest of the game."
     ],
     "learnCues": [
-     "Be3 — develop",
-     "Bc5 — pin",
-     "Rad1 — centralise",
-     "O-O — castle",
-     "Nc3 — develop",
-     "Bxe3 — trade bishops",
-     "Qxe3 — recapture",
-     "Qxe3 — Black is better"
+     "Bf4 — the diagonal grab",
+     "Ne6 — poke it back",
+     "Be3 — the shuffle",
+     "d5 — the break lands",
+     "c5 — pushed past",
+     "Nd7 — spring-loaded",
+     "b4 — more commitments",
+     "Nf6 — pieces breathe"
     ],
     "arrows": [
      [],
      [
       {
-       "from": "e7",
-       "to": "c5",
+       "from": "e6",
+       "to": "f4",
        "color": "rgba(40,185,95,0.92)"
       }
      ],
@@ -36773,201 +36825,93 @@
      [],
      [],
      [],
-     []
-    ],
-    "highlights": [
      [
       {
-       "square": "e3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "c5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "g8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "c3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e3",
-       "color": "rgba(255, 165, 0, 0.55)"
+       "from": "f6",
+       "to": "e4",
+       "color": "rgba(40,185,95,0.92)"
       }
      ]
     ],
-    "title": "Alekhine Modern: Pin and Trade",
-    "intro": "A real this repertoire win vs the centre. Black pins with …Bc5 and trades into a better game.",
-    "sources": [
-     "book:chess-fundamentals",
-     "https://www.chess.com/openings/Alekhines-Defense",
-     "https://en.wikipedia.org/wiki/Alekhine%27s_Defence",
-     "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
-    ]
-   }
-  ]
- },
- {
-  "id": "mp-pronaroAlek-quiet-d5break",
-  "openingId": "pro-naroditsky-alekhine",
-  "criticalPositionFen": "r2q1rk1/pppn1pbp/1n2p1p1/3pP3/3P1B2/1BN1Q2P/PPP2PP1/R4RK1 w - - 2 13",
-  "title": "Modern Quiet — ...d5 central break",
-  "overview": "A real win from this repertoire: the dark bishops come off, Black takes the c-file, and …c5-c4 storms the queenside for a clear edge (~+3.6).",
-  "pawnBreaks": [
-   {
-    "move": "...c5-c4 queenside",
-    "explanation": "…c5 then …c4 storm the queenside.",
-    "fen": ""
-   }
-  ],
-  "pieceManeuvers": [
-   {
-    "piece": "Rook",
-    "route": "...Ra8-c8 file",
-    "explanation": "The rook takes the c-file ahead of the queenside push."
-   }
-  ],
-  "strategicThemes": [
-   "Trade the fianchetto bishops.",
-   "Storm the queenside with …c5-c4."
-  ],
-  "endgameTransitions": [
-   "The queenside pawns tell into the endgame."
-  ],
-  "playableLines": [
-   {
-    "fen": "r2q1rk1/pppn1pbp/1n2p1p1/3pP3/3P1B2/1BN1Q2P/PPP2PP1/R4RK1 w - - 2 13",
-    "moves": [
-     "Bh6",
-     "Rc8",
-     "Bxg7",
-     "Kxg7",
-     "Rad1",
-     "c5",
-     "Na4",
-     "c4"
-    ],
-    "annotations": [
-     "Bh6 — White offers a trade of dark bishops.",
-     "…Rc8 — Black takes the c-file.",
-     "Bxg7 — White trades.",
-     "…Kxg7 — Black recaptures.",
-     "Rad1 — White centralises.",
-     "…c5 — Black strikes on the queenside.",
-     "Na4 — White’s knight probes.",
-     "…c4 — Black gains queenside space, clearly better."
-    ],
-    "learnCues": [
-     "Bh6 — offer a trade",
-     "Rc8 — take the c-file",
-     "Bxg7 — trade",
-     "Kxg7 — recapture",
-     "Rad1 — centralise",
-     "c5 — strike",
-     "Na4 — probe",
-     "c4 — Black is better"
-    ],
-    "arrows": [
-     [],
-     [],
-     [],
-     [],
-     [],
-     [
-      {
-       "from": "c7",
-       "to": "c5",
-       "color": "rgba(40,185,95,0.92)"
-      }
-     ],
-     [],
-     []
-    ],
     "highlights": [
      [
       {
-       "square": "h6",
+       "square": "f4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "d6",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "e6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "f4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "e3",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ],
      [
       {
-       "square": "c8",
+       "square": "d5",
        "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "g7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "g7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "c5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "a4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
+      },
       {
        "square": "c4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "c5",
        "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "b6",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "d7",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "b4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "c5",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "f6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "e4",
+       "color": "rgba(250, 204, 21, 0.5)"
       }
      ]
     ],
-    "title": "Alekhine Quiet: Queenside Counterplay",
-    "intro": "A real this repertoire win. Black trades the fianchetto and storms the queenside.",
+    "title": "The …Ne6 Poke, the …d5 Break",
+    "intro": "Bother the bishop, then strike the centre while it shuffles — the active answer to the big pawn front.",
     "sources": [
      "book:chess-fundamentals",
      "https://www.chess.com/openings/Alekhines-Defense",
-     "https://en.wikipedia.org/wiki/Alekhine%27s_Defence",
      "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
     ]
    }

@@ -40,7 +40,7 @@ const TAB_PLANS: Record<string, Record<string, string[]>> = {
     'main': [],
     'nc3 two knights': ['mp-pronaroAlek-twoknights-equality'],
     'c4 modern main': ['mp-pronaroAlek-modern-development', 'mp-pronaroAlek-modern-nb4'],
-    'nf3 / modern quiet': ['mp-pronaroAlek-modernquiet-conversion', 'mp-pronaroAlek-quiet-d5break'],
+    'nf3 / modern quiet': ['mp-pronaroAlek-modernquiet-conversion'],
   },
   'pro-naroditsky-ruy-lopez': {
     'main': [],
