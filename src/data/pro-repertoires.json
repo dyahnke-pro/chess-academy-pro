@@ -1720,8 +1720,8 @@
     },
     {
      "name": "Closed with d3",
-     "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 d3 b5 Bb3 Bc5",
-     "explanation": "The d3 / quiet Closed line (181 games, 67.1%). White plays a smaller-centre game with no d4 push — usually transposes to Italian Game-style positions.",
+     "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 d3 b5 Bb3 d6 a3 O-O Nc3 Bg4 Be3 Nd4 Bxd4 exd4 Nd5",
+     "explanation": "The Anti-Marshall d3, followed down his corpus's main road: at the ...b5 tabiya his opponents choose ...d6 in 74 of 104 games, and the line runs through a3, Nc3-e3 development and the ...Nd4 trade to the knight's arrival on d5 — the octopus square the whole system aims at.",
      "sources": [
       "book:ruy-lopez",
       "https://api.chess.com/pub/player/danielnaroditsky/games/archives"

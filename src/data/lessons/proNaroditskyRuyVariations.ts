@@ -102,10 +102,22 @@ const CLOSED_D3: LessonScript = {
       sayShort: 'Bb3 — the bishop on its diagonal.',
     }),
     b({
-      id: 'bc5', moves: `${RUY} a6 Ba4 Nf6 O-O Be7 d3 b5 Bb3 Bc5`,
-      highlights: [{ square: 'c5', color: KEY }],
-      say: "Black repositions the bishop actively to c5. We have reached a healthy Anti-Marshall middlegame where the engine gives White a pleasant edge. Our plan is textbook: Nbd2 and Nf1-g3 to reroute the knight to the kingside, c3 to secure the centre, and a slow build toward a kingside initiative. A comfortable, one-sided game to play.",
-      sayShort: 'Bc5 — pleasant edge, slow build.',
+      id: 'd6-a3', moves: `${RUY} a6 Ba4 Nf6 O-O Be7 d3 b5 Bb3 d6 a3 O-O`,
+      highlights: [{ square: 'd6', color: KEY }, { square: 'a3', color: SOFT }],
+      say: "Black completes the Closed setup with d6 — his corpus overwhelmingly rides this road: seventy-four of a hundred and four games at the b5 tabiya. We answer a3, a small move with a long memory: it takes b4 from Black's pieces forever and gives our own bishop a quiet a2 retreat if ever asked. Both sides castle and settle in.",
+      sayShort: 'd6 — his corpus road. a3 answers.',
+    }),
+    b({
+      id: 'nc3-nd4', moves: `${RUY} a6 Ba4 Nf6 O-O Be7 d3 b5 Bb3 d6 a3 O-O Nc3 Bg4 Be3 Nd4`,
+      highlights: [{ square: 'd4', color: KEY }, { square: 'e3', color: SOFT }],
+      say: "Nc3 develops toward the square this whole system dreams about — d5. Black pins with Bg4 and plants his knight on d4, the standard bid for relief. We meet it calmly with Be3: the intruder will be traded on our terms, not chased on his.",
+      sayShort: 'Nc3 — d5 is the dream square.',
+    }),
+    b({
+      id: 'nd5', moves: `${RUY} a6 Ba4 Nf6 O-O Be7 d3 b5 Bb3 d6 a3 O-O Nc3 Bg4 Be3 Nd4 Bxd4 exd4 Nd5`,
+      highlights: [{ square: 'd5', color: KEY }],
+      say: "Bishop takes on d4, the pawn recaptures — and there it is: knight to d5, the octopus, landing on the square Black's own pawn moves surrendered. The engine gives White a clear pull here, and the plan flows from the light squares: if Black trades on d5 our Spanish bishop inherits the post, steps to c6, and the queenside squeeze begins. The middlegame plan picks up from this exact position.",
+      sayShort: 'Nd5 — the octopus lands.',
     }),
   ],
 };

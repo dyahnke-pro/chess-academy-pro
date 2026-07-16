@@ -76,9 +76,6 @@ export const SUBLINE_NARRATION_PRO_NAR_NAJ_ALEK_RUY: Record<string, SublineNarra
   'pro-naroditsky-ruy-lopez::0::Bc5@7': {
     intro: { say: "Bc5 — Black avoids the Berlin endgame with an active bishop. Play c3 and d4 to challenge it and grab the centre, or the calm Nc3; you keep the Ruy's trademark long-term pressure with more space and the healthier structure.", sayShort: 'Bc5 — c3 and d4, grab the centre.' }, sources: RUY,
   },
-  'pro-naroditsky-ruy-lopez::1::d6@13': {
-    intro: { say: "d6 — Black completes the Anti-Marshall Closed setup. Play the mature plan: Nbd2, then Nf1-g3 rerouting the knight to the kingside, c3, and a slow build toward a kingside initiative. A comfortable, one-sided manoeuvring game.", sayShort: 'd6 — Nbd2 and Nf1-g3, build slowly.' }, sources: RUY,
-  },
   'pro-naroditsky-ruy-lopez::1::O-O@13': {
     intro: { say: "O-O — Black castles in the d3 Anti-Marshall. Roll out your plan: Nbd2, c3, Nf1-g3 and a kingside build; with the Marshall denied, you outplay Black in a rich manoeuvring middlegame with the extra space.", sayShort: 'O-O — Nbd2 and Nf1-g3, press.' }, sources: RUY,
   },

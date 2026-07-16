@@ -129072,37 +129072,6 @@
   ],
   "1": [
    {
-    "triggerMove": "d6",
-    "atPly": 13,
-    "games": 74,
-    "record": {
-     "wins": 42,
-     "draws": 11,
-     "losses": 21
-    },
-    "pct": 71,
-    "name": "Ruy Lopez: Closed, Martinez Variation",
-    "moves": [
-     "e4",
-     "e5",
-     "Nf3",
-     "Nc6",
-     "Bb5",
-     "a6",
-     "Ba4",
-     "Nf6",
-     "O-O",
-     "Be7",
-     "d3",
-     "b5",
-     "Bb3",
-     "d6"
-    ],
-    "reachesMiddlegame": true,
-    "evalCp": 34,
-    "dubious": false
-   },
-   {
     "triggerMove": "O-O",
     "atPly": 13,
     "games": 30,
