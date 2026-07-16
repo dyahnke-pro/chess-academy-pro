@@ -4,7 +4,7 @@ import { loadEcoData } from '../../services/dataLoader';
 import { searchOpenings } from '../../services/openingService';
 import { generateOpening } from '../../services/openingGenerator';
 import { getOpeningMoves } from '../../services/openingDetectionService';
-import { expandOpeningAbbrev } from './CoachTeachPage';
+import { expandOpeningAbbrev } from '../../utils/openingAbbrev';
 
 // Regression for the "Scandi panov" → "I can't verify from grounded data"
 // bug (David 2026-07-16). Typing a terminal-short opening name into the coach
@@ -33,13 +33,16 @@ describe('coach teach-rescue for terminal-short openings', () => {
     expect(getOpeningMoves('Scandi panov')).toBeNull();
   });
 
-  it('rescue resolves "Scandi panov" via abbrev-expansion + unfiltered search', async () => {
-    const rescued = await searchOpenings(expandOpeningAbbrev('Scandi panov'));
+  it('searchOpenings self-expands the "Scandi" abbreviation (dashboard + openings + rescue)', async () => {
+    // Raw "Scandi panov" scores nothing (abbreviation); searchOpenings retries
+    // with the expansion and resolves it — so the dashboard/openings search AND
+    // the coach teach-rescue all surface the line.
+    const rescued = await searchOpenings('Scandi panov');
     expect(rescued[0]?.name).toBe('Scandinavian Defense: Panov Transfer');
   });
 
   it('teaches the rescued line from its PGN via entryOverride (option B)', async () => {
-    const hit = (await searchOpenings(expandOpeningAbbrev('Scandi panov')))[0];
+    const hit = (await searchOpenings('Scandi panov'))[0];
     expect(hit?.pgn).toBeTruthy();
     const result = await generateOpening(hit.name, {
       mode: 'learn',

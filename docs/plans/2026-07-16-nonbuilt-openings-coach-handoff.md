@@ -83,7 +83,12 @@ the exact name), and (2) "Scandi" is an abbreviation no matcher recognizes.
       upstream, so no Q&A hijack. Applies to opening-tap handoff AND typed chat.
 - [x] `expandOpeningAbbrev` — whole-word abbrev map (scandi→scandinavian,
       caro→caro-kann, kid, qgd, qga, nimzo, najdorff→najdorf). Extend as
-      testers surface more.
+      testers surface more. Moved to shared `src/utils/openingAbbrev.ts`.
+- [x] `searchOpenings` self-expands abbreviations (retry-on-empty), so the
+      DASHBOARD global search + the openings-page search ALSO surface casual
+      input ("Scandi panov" → Scandinavian Panov). David tested the dashboard
+      search and it "didn't find it" — this is that fix. The coach rescue now
+      just calls searchOpenings (no pre-expand needed).
 - [x] Test `CoachTeachPage.teachRescue.test.ts` — "Scandi panov" → abbrev
       expand → unfiltered search → Panov Transfer → override builds a tree.
 

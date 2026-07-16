@@ -332,23 +332,6 @@ function titleCase(s: string): string {
   return s.replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
-/** Expand common opening-name abbreviations so the unfiltered teach-rescue
- *  search can resolve casual input ("Scandi panov" → "Scandinavian panov").
- *  The fuzzy matcher / search key on whole tokens, so a shorthand like
- *  "scandi" scores nothing against "Scandinavian Defense". Whole-word only,
- *  case-insensitive. Extend as testers surface more shorthand. */
-const OPENING_ABBREV: Record<string, string> = {
-  scandi: 'scandinavian',
-  najdorff: 'najdorf',
-  kid: "king's indian",
-  qgd: "queen's gambit declined",
-  qga: "queen's gambit accepted",
-  caro: 'caro-kann',
-  nimzo: 'nimzo-indian',
-};
-export function expandOpeningAbbrev(query: string): string {
-  return query.replace(/[a-z']+/gi, (w) => OPENING_ABBREV[w.toLowerCase()] ?? w);
-}
 
 /** Walk every fork in the tree and emit one DeepDiveOption per
  *  child. Limited to the FIRST fork's children for surface clarity —
@@ -2761,8 +2744,9 @@ export function CoachTeachPage(): JSX.Element {
           // Q&A intents were already excluded upstream (the isProgress/isConcept/
           // … guards at Tier 0), so this only rescues inputs already committed to
           // teaching. G3-safe: the moves are the DB record's, not the LLM's.
-          const rescueQuery = expandOpeningAbbrev(requestedName);
-          const rescued = await searchOpenings(rescueQuery);
+          // searchOpenings self-expands abbreviations on an empty raw match,
+          // so a casual "Scandi panov" still resolves here.
+          const rescued = await searchOpenings(requestedName);
           const rescueHit = rescued[0];
           const rescueMoves = rescueHit?.pgn?.trim().split(/\s+/).filter(Boolean) ?? [];
           if (rescueHit && rescueMoves.length > 0) {
