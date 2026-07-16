@@ -23,6 +23,66 @@ export interface GemNarration {
 }
 
 export const GEM_NARRATION: Record<string, GemNarration> = {
+  // Semi-Slav (Anti-Moscow structure) — the Nxg5 piece grab refuted
+  // (hand-curated 2026-07-16). The pin dissolves with …Be7; a knight for
+  // two pawns stays Black's. Engine-verified +2.48 at the quiet end.
+  'semi-slav:d4_d5_c4_c6_Nf3_Nf6_Nc3_e6_Bg5_h6_Bh4_dxc4_e4_g5:Nxg5': {
+    sources: ['concept:tac-pin', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Semi-Slav_Defense'],
+    watch: [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "\u2026g5 \u2014 the Botvinnik lunge: the pawn kicks the h4-bishop and stakes Black's claim to the whole kingside. It also dangles a bait.",
+      "Nxg5? \u2014 and White bites: the knight grabs the pawn, counting on the pin against the f6-knight to hold everything together.",
+      "\u2026hxg5 \u2014 take at once. The h-file opens for Black's rook, and now the pin has to prove itself.",
+      "Bxg5 \u2014 White regains one pawn, still betting on the pin.",
+      "\u2026Be7! \u2014 the whole refutation in one quiet move: the bishop unpins, and the maths is fixed \u2014 a knight for two pawns, Black's way.",
+      "Bxc4 \u2014 White cashes the other pawn and hopes for activity.",
+      "\u2026b5 \u2014 the extra piece plays with tempo: the bishop is kicked.",
+      "Bb3 \u2014 the retreat.",
+      "\u2026b4 \u2014 and the other knight is kicked next; the pawns do the chasing while the pieces aim.",
+      "Na4 \u2014 the knight goes to the rim.",
+      "\u2026Nxe4 \u2014 and the once-pinned knight collects a pawn itself. A clean piece for two pawns (+2.5), the open h-file, and every threat \u2014 the grab refuted in full.",
+      "Be3 \u2014 White regroups into a lost middlegame.",
+    ],
+    learn: [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "g5 \u2014 the lunge and the bait",
+      "",
+      "hxg5 \u2014 take at once",
+      "",
+      "Be7 \u2014 unpin, keep the piece",
+      "",
+      "b5 \u2014 kick with tempo",
+      "",
+      "b4 \u2014 kick the knight too",
+      "",
+      "Nxe4 \u2014 the pinned knight collects",
+      "",
+    ],
+  },
   // Anti-Alapin — the failed Greek gift (hand-curated 2026-07-16). Bxh7+?
   // has no Ng5/Qh5 follow-up in this structure; one calm Kxh7 wins a piece.
   // Engine-verified +4.36 at the quiet end.

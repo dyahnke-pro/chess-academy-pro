@@ -880,6 +880,22 @@ Current zero-gem masterclass count: 26 → 25 (Evans shipped 3 gems).
   only +0.38 Black — under the absolute bar), early Nxd5 (+0.03).
 - Slav/KID/Dutch/Benoni/QGA mains scanned: no candidate cleared the
   practical-plus-plausible screen.
+- Semi-Slav: Nxg5?? → hxg5!/…Be7! SHIPPED (+2.48 confirmed — the
+  Botvinnik piece grab; the pin dissolves; 4.2k games, B61%).
+- English: e4?! +0.45 (hair under the bar, dropped); d6?! +0.63 clears
+  numerically but the "punish" is plain development — no pointed idea to
+  teach, hand-judgment SKIP. Réti's monster dxc4 (1.3M games, +?) and
+  the ply-5 slips are all GATE-BLOCKED (≤5-ply setups).
+- Queens-Indian / Old-Indian / Glek mains: nothing above noise floors.
+
+**MASTERCLASS SWEEP COMPLETE (2026-07-16): 10 gems shipped across 6
+openings** (Evans 3, Dragon 3, Tromp 1, London 1, anti-Alapin 1,
+Semi-Slav 1); ~20 openings honestly yield zero from their taught mains
+(solid systems — slips concede equality, not material; every verified
+drop recorded above so nothing gets re-scanned). Remaining zero-gem
+count 26 → 20. Deeper VARIATION-line scans (each opening has 4-8 tabs;
+only mains were swept) are the natural second pass if David wants more
+weapon density.
 
 ## Next-session pickup
 (1) Continue the zero-gem stream (25 masterclass openings left — sharp ones

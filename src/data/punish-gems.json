@@ -7484,5 +7484,31 @@
   "engineCp": 436,
   "tier": "confirmed",
   "why": "The Greek gift sacrifice — and here it simply doesn't work: no knight reaches g5 with effect and your pieces already cover the escape squares. Punish by taking the bishop with Kxh7 — White has no follow-up, and the engine has Black up a clean piece (+4.4)."
+ },
+ {
+  "openingId": "semi-slav",
+  "lineMoves": "d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 Bg5 h6 Bh4 dxc4 e4 g5",
+  "inaccuracy": "Nxg5",
+  "freqPct": 13,
+  "games": 4175,
+  "practicalScore": 61,
+  "mainMove": "Bg3",
+  "punish": "hxg5",
+  "punishSeq": [
+   "hxg5",
+   "Bxg5",
+   "Be7",
+   "Bxc4",
+   "b5",
+   "Bb3",
+   "b4",
+   "Na4",
+   "Nxe4",
+   "Be3"
+  ],
+  "playLine": "d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 Bg5 h6 Bh4 dxc4 e4 g5 Nxg5 hxg5 Bxg5 Be7 Bxc4 b5 Bb3 b4 Na4 Nxe4 Be3",
+  "engineCp": 248,
+  "tier": "confirmed",
+  "why": "The piece grab on g5 — it looks like it wins a pawn with the f6-knight pinned, but the pin dissolves: hxg5, and after Bxg5 the calm …Be7 unpins everything. Black keeps the extra piece for two pawns and the engine agrees (+2.5)."
  }
 ]
