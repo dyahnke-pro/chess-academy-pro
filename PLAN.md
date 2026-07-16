@@ -888,6 +888,14 @@ Current zero-gem masterclass count: 26 → 25 (Evans shipped 3 gems).
   the ply-5 slips are all GATE-BLOCKED (≤5-ply setups).
 - Queens-Indian / Old-Indian / Glek mains: nothing above noise floors.
 
+**Variation-tab pass (second pass, in progress):**
+- French: Winawer cxd4?? → Qc3+!! (+4.16 confirmed, B88%) + Advance b3?!
+  → cxd4! (+0.50 positional, 389k games) SHIPPED.
+- Italian Hungarian Qh5 node: Be6?? → Bxe6! (+4.53) + Nh6?? → Bxh6!
+  (+5.12) SHIPPED — the two wrong f7-defences.
+- Dropped: Giuoco Nxc3?! (+0.04 quiet-end — the W62% mirage), Caro tab
+  candidates under floor, Ruy tabs nothing above noise.
+
 **MASTERCLASS SWEEP COMPLETE (2026-07-16): 10 gems shipped across 6
 openings** (Evans 3, Dragon 3, Tromp 1, London 1, anti-Alapin 1,
 Semi-Slav 1); ~20 openings honestly yield zero from their taught mains

@@ -7562,5 +7562,57 @@
   "engineCp": 50,
   "tier": "positional",
   "why": "b3 answers your queen's pressure by weakening the very pawn chain it defends. Punish with cxd4 — White can't even recapture (cxd4 drops d4 to the knight), so the pawn sits on d4 until you cash it with dxc3. The engine gives Black a clear pull (+0.5)."
+ },
+ {
+  "openingId": "italian-game",
+  "lineMoves": "e4 e5 Nf3 Nc6 Bc4 Be7 d4 d6 dxe5 Nxe5 Nxe5 dxe5 Qh5",
+  "inaccuracy": "Be6",
+  "freqPct": 9,
+  "games": 2309,
+  "practicalScore": 85,
+  "mainMove": "g6",
+  "punish": "Bxe6",
+  "punishSeq": [
+   "Bxe6",
+   "g6",
+   "Qxe5",
+   "Bf6",
+   "Qb5+",
+   "c6",
+   "Bxf7+",
+   "Kxf7",
+   "Qxb7+",
+   "Ne7"
+  ],
+  "playLine": "e4 e5 Nf3 Nc6 Bc4 Be7 d4 d6 dxe5 Nxe5 Nxe5 dxe5 Qh5 Be6 Bxe6 g6 Qxe5 Bf6 Qb5+ c6 Bxf7+ Kxf7 Qxb7+ Ne7",
+  "engineCp": 453,
+  "tier": "confirmed",
+  "why": "Blocking the f7 threat with Be6 fails to the simplest reply: Bxe6 removes the blocker, and every recapture or decline runs into the queen's double duty on e5 and f7. The engine has White completely winning (+4.5)."
+ },
+ {
+  "openingId": "italian-game",
+  "lineMoves": "e4 e5 Nf3 Nc6 Bc4 Be7 d4 d6 dxe5 Nxe5 Nxe5 dxe5 Qh5",
+  "inaccuracy": "Nh6",
+  "freqPct": 2,
+  "games": 547,
+  "practicalScore": 88,
+  "mainMove": "g6",
+  "punish": "Bxh6",
+  "punishSeq": [
+   "Bxh6",
+   "O-O",
+   "Be3",
+   "b5",
+   "Bd5",
+   "Rb8",
+   "O-O",
+   "a5",
+   "a3",
+   "c6"
+  ],
+  "playLine": "e4 e5 Nf3 Nc6 Bc4 Be7 d4 d6 dxe5 Nxe5 Nxe5 dxe5 Qh5 Nh6 Bxh6 O-O Be3 b5 Bd5 Rb8 O-O a5 a3 c6",
+  "engineCp": 512,
+  "tier": "confirmed",
+  "why": "Guarding f7 with the knight walks into Bxh6 — recapturing opens g7 and the queen forks e5 and the h8-rook, so Black must simply stay a piece down. The engine confirms it (+5.1)."
  }
 ]
