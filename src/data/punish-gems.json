@@ -7510,5 +7510,57 @@
   "engineCp": 248,
   "tier": "confirmed",
   "why": "The piece grab on g5 — it looks like it wins a pawn with the f6-knight pinned, but the pin dissolves: hxg5, and after Bxg5 the calm …Be7 unpins everything. Black keeps the extra piece for two pawns and the engine agrees (+2.5)."
+ },
+ {
+  "openingId": "french-defence",
+  "lineMoves": "e4 e6 d4 d5 Nc3 Bb4 e5 c5 a3 Bxc3+ bxc3 Ne7 Qg4 Qc7 Qxg7 Rg8 Qxh7 cxd4",
+  "inaccuracy": "cxd4",
+  "freqPct": 3,
+  "games": 2612,
+  "practicalScore": 88,
+  "mainMove": "Ne2",
+  "punish": "Qc3+",
+  "punishSeq": [
+   "Qc3+",
+   "Kd1",
+   "Qxd4+",
+   "Bd3",
+   "Qxa1",
+   "Nf3",
+   "Nbc6",
+   "Qh6",
+   "Bd7",
+   "h4"
+  ],
+  "playLine": "e4 e6 d4 d5 Nc3 Bb4 e5 c5 a3 Bxc3+ bxc3 Ne7 Qg4 Qc7 Qxg7 Rg8 Qxh7 cxd4 cxd4 Qc3+ Kd1 Qxd4+ Bd3 Qxa1 Nf3 Nbc6 Qh6 Bd7 h4",
+  "engineCp": 416,
+  "tier": "confirmed",
+  "why": "Recapturing on d4 with the pawn walks into the Winawer's oldest trap. Punish with Qc3+! — the fork hits the king and the d4-pawn at once; the king must walk, the queen eats d4 with another check, then the a1-rook. The engine has Black completely winning (+4.2)."
+ },
+ {
+  "openingId": "french-defence",
+  "lineMoves": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6",
+  "inaccuracy": "b3",
+  "freqPct": 6,
+  "games": 389127,
+  "practicalScore": 59,
+  "mainMove": "a3",
+  "punish": "cxd4",
+  "punishSeq": [
+   "cxd4",
+   "Bd3",
+   "Bd7",
+   "O-O",
+   "Nge7",
+   "Re1",
+   "dxc3",
+   "Nxc3",
+   "Ng6",
+   "a3"
+  ],
+  "playLine": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 b3 cxd4 Bd3 Bd7 O-O Nge7 Re1 dxc3 Nxc3 Ng6 a3",
+  "engineCp": 50,
+  "tier": "positional",
+  "why": "b3 answers your queen's pressure by weakening the very pawn chain it defends. Punish with cxd4 — White can't even recapture (cxd4 drops d4 to the knight), so the pawn sits on d4 until you cash it with dxc3. The engine gives Black a clear pull (+0.5)."
  }
 ]
