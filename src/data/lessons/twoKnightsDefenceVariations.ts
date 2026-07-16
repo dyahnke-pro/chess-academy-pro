@@ -67,4 +67,25 @@ export const TWO_KNIGHTS_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript>
       b({ id: 'ml4', moves: 'e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 O-O Nxe4 Re1 d5 Bxd5 Qxd5 Nc3 Qd8 Rxe4+ Be7 Nxd4 f5 Rf4 O-O', say: "White cashes in — Rxe4+ …Be7 Nxd4 regains the pawn and material is level — then Black finishes cleanly: …f5 kicks the rook to f4 and …O-O tucks the king away. There is the Max Lange tabiya: not a memorised tightrope but a dead-level middlegame, the dangerous attack completely defused with simple forcing moves and not a weakness in sight.", sayShort: '…f5, …O-O — equal, attack defused.', highlights: [H('f5'), H('f4', SOFT)] }),
     ],
   },
+  'two-knights-defence::Two Knights: Quiet Italian d3 with ...Be7': {
+    openingId: 'two-knights-defence', title: 'Two Knights — the quiet d3 Italian (nothing to fear)', minutes: 9, orientation: 'black',
+    sources: SRC,
+    beats: [
+      b({ id: 'qi1', moves: 'e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Be7', say: "White ducks every forcing line of the Two Knights with modest d3, and …Be7 answers in kind. Nothing to memorise here — this is a pure maneuvering battle, and Black's setup has no holes for White to work with.", sayShort: '…Be7 — answer quiet with solid.', highlights: [H('e7', SOFT)] }),
+      b({ id: 'qi2', moves: 'e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Be7 O-O O-O Re1 d6 a4 Na5 Ba2 c5', say: "…Na5! begins the classic Italian question: the knight offers to remove White's proudest piece, the c4-bishop. Ba2 flees to preserve it, and …c5 claims queenside space behind the knight while fixing the dark squares. Every tempo the bishop spends running is a tempo Black spends building.", sayShort: '…Na5 — ask the Italian bishop the question.', arrows: [A('a5', 'c4')], highlights: [H('c5', SOFT)] }),
+      b({ id: 'qi3', moves: 'e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Be7 O-O O-O Re1 d6 a4 Na5 Ba2 c5 c3 Nc6 Nbd2 Be6', say: "The knight strolls back to c6 with the space banked, and …Be6 repeats the offer one bishop over: trade on e6, or concede the a2-g8 diagonal to a contest. Against the quiet Italian, Black wins small edges by asking questions White must keep answering.", sayShort: '…Be6 — the same question, other bishop.', highlights: [H('e6'), H('a2', SOFT)] }),
+      b({ id: 'qi4', moves: 'e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Be7 O-O O-O Re1 d6 a4 Na5 Ba2 c5 c3 Nc6 Nbd2 Be6 Bxe6 fxe6 Nf1', say: "Bxe6 …fxe6 — and the recapture points TOWARD the centre: the f-file opens for Black's rook and the e6/e5/d6 pawns grip every central square. Nf1 begins White's long knight walk to g3. The engine says dead equal — and Black's plans, the …d5 break and the f-file, are at least as easy to play. The quiet Italian holds no fear for the prepared.", sayShort: '…fxe6 — the f-file and the centre.', highlights: [H('f8', SOFT), H('e6')] }),
+    ],
+  },
+
+  'two-knights-defence::Two Knights: Fritz Variation 5...Nd4': {
+    openingId: 'two-knights-defence', title: 'Two Knights — the Fritz (…Nd4!, greed gets punished)', minutes: 8, orientation: 'black',
+    sources: SRC,
+    beats: [
+      b({ id: 'fz1', moves: 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nd4', say: "Against the Ng5 attack, …Nd4!? is the Fritz: instead of recapturing on d5, the knight leaps into the centre and dares White to keep taking. It is one of the oldest nets in opening theory, and club players walk into it constantly.", sayShort: '…Nd4 — set the net.', highlights: [H('d4')] }),
+      b({ id: 'fz2', moves: 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nd4 c3 b5', say: "c3 attacks the knight, and …b5! counter-attacks the bishop — two Black pieces hang at once, and that is exactly the point: White cannot profitably take either. The single cold-blooded test is the retreat Bf1, and almost nobody finds it over the board.", sayShort: '…b5 — two pieces hang; neither can fall.', highlights: [H('b5'), H('d4', SOFT)] }),
+      b({ id: 'fz3', moves: 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nd4 c3 b5 cxd4 bxc4 dxe5 Qxd5 exf6 Qxg5', say: "White grabs everything in sight — the d4-knight, the e5-pawn, the f6-knight — and Black collects back with tempo every time: …bxc4 took the bishop, …Qxd5 scooped the pawn while centralising, and …Qxg5 removes the stranded knight. Stop counting captures and look at the board: Black's queen commands the whole kingside and White hasn't developed a piece.", sayShort: '…Qxg5 — collect the strays.', highlights: [H('g5'), H('d1', SOFT)] }),
+      b({ id: 'fz4', moves: 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nd4 c3 b5 cxd4 bxc4 dxe5 Qxd5 exf6 Qxg5 fxg7 Bxg7 O-O Bb7', say: "The last greedy grab, fxg7, meets …Bxg7 — Black recaptures and the bishop lands on the long diagonal White just cleared for it. …Bb7 aims the second bishop at g2, and the engine's verdict on the whole grab-fest is decisive: Black is winning, up clean material with both bishops raking the kingside. That is the Fritz — one quiet knight hop on move five that turns natural-looking greed into a lost position.", sayShort: '…Bb7 — both bishops rake; Black is winning.', arrows: [A('b7', 'g2'), A('g7', 'b2')], highlights: [H('g2', SOFT)] }),
+    ],
+  },
 };

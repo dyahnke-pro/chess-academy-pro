@@ -65,4 +65,14 @@ export const SLAV_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
       b({ id: 's4', moves: 'd4 d5 c4 c6 Nf3 Nf6 Nc3 g6 e3 Bg7 Bd3 O-O O-O Bg4 h3 Bxf3 Qxf3 e6 Qe2 Nbd7', say: "…e6 seals the structure and …Nbd7 completes development, the knight ready to reroute to b6 or f6–d5. There is the Schlechter tabiya: the solid Slav wall, the fianchettoed bishop raking the long diagonal, the bad bishop already traded — a flexible, weakness-free position Black can play for a win.", sayShort: '…Nbd7 — solid, flexible, the bad bishop gone.', highlights: [H('e6'), H('d7')] }),
     ],
   },
+  'slav-defence::Quiet Variation (4.e3)': {
+    openingId: 'slav-defence', title: 'Slav — the Quiet 4.e3 (bishop out, rock solid)', minutes: 8, orientation: 'black',
+    sources: SRC,
+    beats: [
+      b({ id: 'q1', moves: 'd4 d5 c4 c6 Nf3 Nf6 e3 Bf5', say: "The Slav's whole promise in one picture: …c6 holds d5 without shutting in the c8-bishop, and …Bf5 walks it out to its best diagonal before …e6 would close the door. Against the quiet e3, Black simply completes the plan the opening was built around.", sayShort: '…Bf5 — out before the door closes.', highlights: [H('f5')] }),
+      b({ id: 'q2', moves: 'd4 d5 c4 c6 Nf3 Nf6 e3 Bf5 Nc3 e6 Nh4 Bg6', say: "Nh4 — White spends two tempi hunting the free bishop, the standard reaction to Black's comfortable setup. …Bg6 stands its ground calmly and says: take it if you must.", sayShort: '…Bg6 — stand firm, let him take.', highlights: [H('g6'), H('h4', SOFT)] }),
+      b({ id: 'q3', moves: 'd4 d5 c4 c6 Nf3 Nf6 e3 Bf5 Nc3 e6 Nh4 Bg6 Nxg6 hxg6', say: "Nxg6 hxg6 — now count what each side bought. White owns the bishop pair. Black owns a half-open h-file aimed at White's future king, a recapture toward the centre, and a structure without a single weakness. Two tempi plus the file for the bishops: many strong players prefer Black's side of that trade.", sayShort: 'hxg6 — the h-file for the bishops.', highlights: [H('h8', SOFT), H('g6')] }),
+      b({ id: 'q4', moves: 'd4 d5 c4 c6 Nf3 Nf6 e3 Bf5 Nc3 e6 Nh4 Bg6 Nxg6 hxg6 Bd3 Nbd7 O-O Bd6 h3 O-O Qc2 dxc4', say: "Both sides finish: …Bd6 takes the strong diagonal, …O-O tucks the king, and then …dxc4 — Black resolves the centre at the moment of his choosing, forcing the d3-bishop to spend a move recapturing. The engine calls it level, and Black's plans — …e5 or …c5 at the right moment, pressure down the h-file in any kingside race — are the easier ones to play. Quiet lines reward the player who knows what the structure wants.", sayShort: '…dxc4 — resolve on your own clock.', highlights: [H('c4'), H('e5', SOFT)] }),
+    ],
+  },
 };

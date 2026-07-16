@@ -52,4 +52,25 @@ export const QGA_VARIATION_LESSONS: Record<string, LessonScript> = {
       b({ id: 'j4', moves: 'd4 d5 c4 dxc4 Nf3 Nf6 e3 e6 Bxc4 c5 O-O a6 dxc5 Bxc5 Qe2 Nc6 Nc3 b5 Bb3 Bb7 Rd1 Qe7 e4', say: "White grabs the centre with e4; Black meets it with fully-mobilised pieces, the b7-bishop and active minor pieces ready to answer any e4–e5 thrust with piece play. There is the Janowski tabiya: a clean, equal middlegame where Black's harmonious development balances White's central pawns.", sayShort: '…e4 met — equal, harmonious pieces.', highlights: [H('e4')] }),
     ],
   },
+  'qga::Classical e3 Bxc4 c5 Main Line': {
+    openingId: 'qga', title: 'QGA — the Classical main line (meet d5 with exchanges)', minutes: 9, orientation: 'black',
+    sources: SRC,
+    beats: [
+      b({ id: 'cl1', moves: 'd4 d5 c4 dxc4 Nf3 Nf6 e3 e6 Bxc4 c5', say: "The QGA's honest bargain: take the c4-pawn, hand it back on schedule, and strike d4 with …c5 before White's centre settles. No cramped defence, no locked bishop — just clean development and a fixed target.", sayShort: '…c5 — the bargain: pawn back, target gained.', highlights: [H('c5'), H('d4', SOFT)] }),
+      b({ id: 'cl2', moves: 'd4 d5 c4 dxc4 Nf3 Nf6 e3 e6 Bxc4 c5 O-O a6 Qe2 b5 Bb3 Bb7', say: "…a6 and …b5 expand with tempo on the c4-bishop, and …Bb7 posts the bishop on the long diagonal the early …dxc4 opened for it. White's Qe2 telegraphs the plan: build up for a central push. Black is three moves from full mobilisation and knows exactly what's coming.", sayShort: '…Bb7 — the long diagonal, earned by dxc4.', highlights: [H('b7'), H('e2', SOFT)] }),
+      b({ id: 'cl3', moves: 'd4 d5 c4 dxc4 Nf3 Nf6 e3 e6 Bxc4 c5 O-O a6 Qe2 b5 Bb3 Bb7 Rd1 Nbd7 Nc3 Qb6', say: "Rd1 loads the rook behind the d-pawn — the push is coming. Black answers with prophylaxis: …Nbd7 covers the central squares and …Qb6 props the c5-pawn while stepping off the d-file before it opens. When you know the break is coming, the best preparation is to make it toothless.", sayShort: '…Qb6 — off the file before it opens.', highlights: [H('b6'), H('d1', SOFT)] }),
+      b({ id: 'cl4', moves: 'd4 d5 c4 dxc4 Nf3 Nf6 e3 e6 Bxc4 c5 O-O a6 Qe2 b5 Bb3 Bb7 Rd1 Nbd7 Nc3 Qb6 d5 Nxd5 Nxd5 Bxd5', say: "d5 — the thematic break, right on cue. Black meets it head-on: …Nxd5 removes the pawn, and when White's knight recaptures, …Bxd5 — the long-diagonal bishop replaces it on the outpost. The engine calls the settled position dead level, and Black's pieces stand free. The whole variation in one sentence: give the pawn back, develop with bites, and meet the break with exchanges.", sayShort: '…Bxd5 — the break defused by trades.', highlights: [H('d5')] }),
+    ],
+  },
+
+  'qga::Modern Tabiya with Rd1': {
+    openingId: 'qga', title: 'QGA — the modern IQP tabiya (defuse the d5 break)', minutes: 9, orientation: 'black',
+    sources: SRC,
+    beats: [
+      b({ id: 'mt1', moves: 'd4 d5 c4 dxc4 Nf3 Nf6 e3 e6 Bxc4 c5 O-O a6', say: "The same clean QGA start: the extra pawn goes back, …c5 bites on d4, …a6 keeps b5 in reserve. From here the modern main road runs through a structure every strong player must know — the isolated queen's pawn.", sayShort: '…a6 — the modern road to the IQP.', highlights: [H('c5', SOFT)] }),
+      b({ id: 'mt2', moves: 'd4 d5 c4 dxc4 Nf3 Nf6 e3 e6 Bxc4 c5 O-O a6 Bb3 Nc6 Nc3 cxd4 exd4', say: "…cxd4 exd4, and there it stands: White's d-pawn, alone. The IQP bargain is fair — White gets open lines and piece activity now, Black gets the permanent target and the d5-square forever. Both sides know the terms; the game is about who executes.", sayShort: '…cxd4 — the isolated pawn appears.', highlights: [H('d4'), H('d5', SOFT)] }),
+      b({ id: 'mt3', moves: 'd4 d5 c4 dxc4 Nf3 Nf6 e3 e6 Bxc4 c5 O-O a6 Bb3 Nc6 Nc3 cxd4 exd4 Be7 Re1 O-O Bg5 b5', say: "…Be7 and …O-O build the wall; Re1 and Bg5 build the pressure. Then …b5 — Black grabs queenside space and prepares …Bb7, adding the last piece to the fight over d5, the square in front of the isolated pawn. Control d5 and the pawn can never advance; a pawn that can't advance is just a weakness.", sayShort: '…b5 — win d5, freeze the pawn.', highlights: [H('d5'), H('b5', SOFT)] }),
+      b({ id: 'mt4', moves: 'd4 d5 c4 dxc4 Nf3 Nf6 e3 e6 Bxc4 c5 O-O a6 Bb3 Nc6 Nc3 cxd4 exd4 Be7 Re1 O-O Bg5 b5 d5 Nxd5 Bxd5 exd5', say: "White fires the IQP's one trump anyway: d5. Black answers with the sequence that defuses it — …Nxd5 takes the pawn, and when the b3-bishop recaptures, …exd5 takes the bishop, and the new d5-pawn belongs to Black. The engine reads the final position dead equal. Learn this three-move answer and the whole modern tabiya loses its teeth.", sayShort: '…exd5 — the break answered, the tabiya defused.', highlights: [H('d5')] }),
+    ],
+  },
 };
