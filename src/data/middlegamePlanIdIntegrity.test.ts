@@ -29,25 +29,15 @@ const SERVICES_DIR = join(__dirname, '..', 'services');
 // Never-authored masterclass variation plans (the authoring backlog).
 // Shrink-only: remove an id when its plan lands in middlegame-plans.json.
 const BASELINE_MISSING = new Set<string>([
+  // The 3 survivors are BLOCKED on unsound variation lines, not laziness
+  // (2026-07-16 deep-verify @25s, student side): albin-fianchetto -1.62,
+  // oldindian-czech -1.20, oldindian-be2 -1.40 — all over the quiet-line
+  // bar. Authoring plans over them would teach losing positions (soundness
+  // doctrine). Fix the VARIATION lines first (rebuild on sounder data
+  // spines or demote honestly), then author the plans and shrink this.
   'mp-albincountergambit-fianchetto',
-  'mp-albincountergambit-lasker',
-  'mp-albincountergambit-spassky',
-  'mp-benonidefence-fourpawns',
-  'mp-budapestgambit-adler',
-  'mp-budapestgambit-fajarowicz',
-  'mp-kingsindiandefence-bayonet',
-  'mp-kingsindiandefence-fourpawns',
   'mp-oldindiandefence-be2',
   'mp-oldindiandefence-czech',
-  'mp-qga-janowski',
-  'mp-qga-sadler',
-  'mp-queensindian-bb4',
-  'mp-queensindian-petrosian',
-  'mp-schliemanndefence-dyckhoff',
-  'mp-schliemanndefence-exf5',
-  'mp-schliemanndefence-schonemann',
-  'mp-twoknightsdefence-d4',
-  'mp-twoknightsdefence-maxlange',
 ]);
 
 interface PlanRecord {

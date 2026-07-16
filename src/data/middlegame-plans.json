@@ -80660,5 +80660,2541 @@
     ]
    }
   ]
+ },
+ {
+  "id": "mp-kingsindiandefence-bayonet",
+  "openingId": "kings-indian-defence",
+  "criticalPositionFen": "r1bq1rk1/ppp1n1bp/3p1np1/3Pp1N1/1PP1Pp2/2N2P2/P3B1PP/R1BQR1K1 w - - 0 13",
+  "title": "Bayonet: Hold the Queenside, Cock the Kingside",
+  "overview": "The Bayonet is White's most testing anti-KID weapon — b4 races the queenside while Black's …f4 clamp is already in place. The plan is two-handed: slow White down with …a5, drop the knight to e8 so d6 is covered before c5 lands, and tuck the king. The engine leans White by most of a pawn — that's the Bayonet's reputation, and it's honest — but Black's attack plays on the board where the kings actually live.",
+  "pawnBreaks": [
+   {
+    "move": "...a5 brake",
+    "explanation": "…a5 makes White's b4-pawn declare itself and slows the queenside race by a full tempo.",
+    "fen": ""
+   },
+   {
+    "move": "...dxc5 concession",
+    "explanation": "Taking on c5 concedes the queenside file but frees d6 — the price of keeping the kingside attack alive.",
+    "fen": ""
+   }
+  ],
+  "pieceManeuvers": [
+   {
+    "piece": "Knight",
+    "route": "...Nf6-e8 anchor",
+    "explanation": "The knight drops to e8, covering d6 before c5 arrives and clearing the f6-square for the g7-bishop."
+   },
+   {
+    "piece": "King",
+    "route": "...Kg8-h8 tuck",
+    "explanation": "Standard KID housekeeping — the king sidesteps the g-file before the pawns roll."
+   }
+  ],
+  "strategicThemes": [
+   "Two races, one board: White queens-side, Black kings-side — every tempo is a move in both races.",
+   "…f4 is banked; the kingside storm is Black's trump whenever the queenside holds."
+  ],
+  "endgameTransitions": [
+   "Avoid endgames — White's queenside space converts cleanly there. The middlegame attack is the equalizer."
+  ],
+  "playableLines": [
+   {
+    "fen": "r1bq1rk1/ppp1n1bp/3p1np1/3Pp1N1/1PP1Pp2/2N2P2/P3B1PP/R1BQR1K1 w - - 0 13",
+    "moves": [
+     "Bb2",
+     "a5",
+     "b5",
+     "Ne8",
+     "c5",
+     "dxc5",
+     "Qb3",
+     "Kh8"
+    ],
+    "annotations": [
+     "Bb2 — White's bishop settles on the long diagonal, backing the queenside push.",
+     "…a5 — the brake: White's b4-pawn must declare itself before the race continues.",
+     "b5 — White pushes past, keeping the pawns rolling toward c6.",
+     "…Ne8 — the key regroup: the knight covers d6 before c5 lands, and f6 clears for the dark-squared bishop.",
+     "c5 — the Bayonet's point: White breaks through on the queenside.",
+     "…dxc5 — Black concedes the file and keeps the structure closed where it matters — in front of the king.",
+     "Qb3 — White's queen joins the queenside file work.",
+     "…Kh8 — housekeeping done: the king off the g-file, d6 covered, the …f4 clamp banked. The engine leans White — the Bayonet always does — and both attacks are now live."
+    ],
+    "learnCues": [
+     "Bb2 — long diagonal",
+     "a5 — brake the race",
+     "b5 — White pushes past",
+     "Ne8 — cover d6 first",
+     "c5 — the breakthrough",
+     "dxc5 — concede, stay closed",
+     "Qb3 — file work",
+     "Kh8 — both attacks live"
+    ],
+    "arrows": [
+     [],
+     [],
+     [],
+     [
+      {
+       "from": "e8",
+       "to": "d6",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     [],
+     [],
+     [],
+     []
+    ],
+    "highlights": [
+     [
+      {
+       "square": "b2",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "a5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "b4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "b5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "e8",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "d6",
+       "color": "rgba(250, 204, 21, 0.5)"
+      },
+      {
+       "square": "f6",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "c5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "c5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "b3",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "h8",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "f4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ]
+    ],
+    "title": "Bayonet: …a5, …Ne8, Hold and Storm",
+    "intro": "The two-handed defense: brake the queenside, anchor d6, and keep the …f4 storm cocked.",
+    "sources": [
+     "concept:att-kingside-storm",
+     "concept:pos-prophylaxis",
+     "https://en.wikipedia.org/wiki/King%27s_Indian_Defence"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mp-kingsindiandefence-fourpawns",
+  "openingId": "kings-indian-defence",
+  "criticalPositionFen": "rnb1r1k1/pp3pbp/1q4p1/2pP4/5B2/2N5/PP2B1PP/R2Q1RK1 w - - 2 16",
+  "title": "Four Pawns: Cash the Counterattack",
+  "overview": "White's four-pawn avalanche has been met the classical way — …c5, …exd5, …Re8 and the …Ng4 counter — and the storm is over: Black stands a clean pawn up with the better structure. The engine agrees (about a third of a pawn for Black and climbing). The plan now is consolidation with active pieces: bishop to f5, knight around to f6, rooks to the middle. No heroics needed — the opening already won the argument.",
+  "pawnBreaks": [],
+  "pieceManeuvers": [
+   {
+    "piece": "Bishop",
+    "route": "...Bc8-f5 activation",
+    "explanation": "The bishop takes the long light diagonal, watching e4 and d3 on the way to c2."
+   },
+   {
+    "piece": "Knight",
+    "route": "...Nb8-d7-f6 blockade",
+    "explanation": "The knight takes the long road to f6, where it leans on the d5-pawn — White's last asset."
+   },
+   {
+    "piece": "Rook",
+    "route": "...Ra8-d8 centralisation",
+    "explanation": "The last rook joins the game; every Black piece stands active."
+   }
+  ],
+  "strategicThemes": [
+   "A pawn up with the safer king: trade pieces, not pawns.",
+   "The d5-pawn is White's only trump — blockade it, then besiege it."
+  ],
+  "endgameTransitions": [
+   "Every simplification helps: the extra queenside pawn decides most endgames from here."
+  ],
+  "playableLines": [
+   {
+    "fen": "rnb1r1k1/pp3pbp/1q4p1/2pP4/5B2/2N5/PP2B1PP/R2Q1RK1 w - - 2 16",
+    "moves": [
+     "Qd2",
+     "Bf5",
+     "Rad1",
+     "Nd7",
+     "Kh1",
+     "Rad8",
+     "Bg5",
+     "Nf6"
+    ],
+    "annotations": [
+     "Qd2 — White regroups, connecting the rooks behind the d5-pawn.",
+     "…Bf5 — the bishop lands on its dream diagonal, watching e4 and d3 all the way down to c2.",
+     "Rad1 — White stacks behind the d5-pawn, its one real asset.",
+     "…Nd7 — the knight begins the standard tour: d7 now, f6 next.",
+     "Kh1 — White sidesteps the g1-a7 diagonal where Black's queen stares.",
+     "…Rad8 — the last piece joins. Every Black piece is developed; the extra pawn is banked.",
+     "Bg5 — White prods, hunting trades on his own terms.",
+     "…Nf6 — the knight arrives, hitting the d5-pawn. A clean pawn up, the better bishop, the safer structure — the Four Pawns Attack has been answered in full."
+    ],
+    "learnCues": [
+     "Qd2 — White regroups",
+     "Bf5 — dream diagonal",
+     "Rad1 — behind the d-pawn",
+     "Nd7 — the tour begins",
+     "Kh1 — sidestep",
+     "Rad8 — everyone works",
+     "Bg5 — White prods",
+     "Nf6 — pawn up, better game"
+    ],
+    "arrows": [
+     [],
+     [
+      {
+       "from": "f5",
+       "to": "d3",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     [],
+     [],
+     [],
+     [],
+     [],
+     [
+      {
+       "from": "f6",
+       "to": "d5",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ]
+    ],
+    "highlights": [
+     [
+      {
+       "square": "d2",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "f5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "e4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      },
+      {
+       "square": "d3",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "d1",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "d5",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "d7",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "h1",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "d8",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "g5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "f6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "d5",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ]
+    ],
+    "title": "Four Pawns: Consolidate a Pawn Up",
+    "intro": "The storm is over and Black won it: bishop out, knight to f6, rooks to the middle.",
+    "sources": [
+     "concept:pos-development",
+     "concept:pawn-majority",
+     "https://en.wikipedia.org/wiki/King%27s_Indian_Defence,_Four_Pawns_Attack"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mp-benonidefence-fourpawns",
+  "openingId": "benoni-defence",
+  "criticalPositionFen": "rnb1r1k1/pp3pbp/1q4p1/2pP4/5B2/2N5/PP2B1PP/R2Q1RK1 w - - 2 16",
+  "title": "Four Pawns: the …Ng4 Counter Has Landed",
+  "overview": "The Benoni's answer to the Four Pawns Attack is pure counterattack — …Re8 against the e-pawn, …Ng4 and …Qb6 against everything else — and by this position it has already worked: the e5-pawn is gone, Black is a pawn up, and White's centre is a memory. The engine gives Black a third of a pawn and improving. The job left is a Benoni player's favourite kind: active consolidation while the g7-bishop keeps cutting the board in half.",
+  "pawnBreaks": [],
+  "pieceManeuvers": [
+   {
+    "piece": "Bishop",
+    "route": "...Bc8-f5 tempo",
+    "explanation": "The bishop develops with eyes on e4 and d3 — the squares White's centre used to own."
+   },
+   {
+    "piece": "Knight",
+    "route": "...Nb8-d7-f6 pressure",
+    "explanation": "The knight reroutes to f6 where it attacks d5 — the last survivor of the four pawns."
+   },
+   {
+    "piece": "Rook",
+    "route": "...Ra8-d8 file",
+    "explanation": "Rooks belong behind the enemy passer: d8 stares at d5's future."
+   }
+  ],
+  "strategicThemes": [
+   "The Benoni counterattack already cashed — now activity IS the consolidation.",
+   "The g7-bishop is the position's long-term boss; never trade it carelessly."
+  ],
+  "endgameTransitions": [
+   "A pawn up with the g7-bishop against the shattered centre — simplify toward it without fear."
+  ],
+  "playableLines": [
+   {
+    "fen": "rnb1r1k1/pp3pbp/1q4p1/2pP4/5B2/2N5/PP2B1PP/R2Q1RK1 w - - 2 16",
+    "moves": [
+     "Qd2",
+     "Bf5",
+     "Rad1",
+     "Nd7",
+     "Kh1",
+     "Rad8",
+     "Bg5",
+     "Nf6"
+    ],
+    "annotations": [
+     "Qd2 — White reorganises around the one pawn still standing, d5.",
+     "…Bf5 — out with tempo-taking effect: the bishop owns e4 and d3, the graveyard of White's pawn centre.",
+     "Rad1 — White gets behind the d5-pawn, hoping it becomes a passer story.",
+     "…Nd7 — the queenside knight finally moves, and it already knows its destination.",
+     "Kh1 — White ducks off the diagonal where the b6-queen has stared since move twelve.",
+     "…Rad8 — full mobilisation. Count the position: extra pawn, better bishop, safer king.",
+     "Bg5 — White pokes, looking for any trade that eases the defense.",
+     "…Nf6 — the knight completes the tour and attacks d5. The Four Pawns threw everything forward and Black's counterpunch took it all — a pawn up with the initiative."
+    ],
+    "learnCues": [
+     "Qd2 — around the d-pawn",
+     "Bf5 — own the graveyard",
+     "Rad1 — passer hopes",
+     "Nd7 — destination known",
+     "Kh1 — duck the stare",
+     "Rad8 — full mobilisation",
+     "Bg5 — White pokes",
+     "Nf6 — counterpunch complete"
+    ],
+    "arrows": [
+     [],
+     [
+      {
+       "from": "f5",
+       "to": "d3",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     [],
+     [],
+     [],
+     [],
+     [],
+     [
+      {
+       "from": "f6",
+       "to": "d5",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ]
+    ],
+    "highlights": [
+     [
+      {
+       "square": "d2",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "d5",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "f5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "e4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      },
+      {
+       "square": "d3",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "d1",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "d5",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "d7",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "h1",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "d8",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "g5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "f6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "d5",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ]
+    ],
+    "title": "Benoni Four Pawns: Consolidate the Counterpunch",
+    "intro": "The counterattack cashed a pawn; now the pieces flow to their best squares around it.",
+    "sources": [
+     "concept:pos-initiative",
+     "concept:pawn-fianchetto",
+     "https://en.wikipedia.org/wiki/Benoni_Defense"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mp-qga-sadler",
+  "openingId": "qga",
+  "criticalPositionFen": "r2qkb1r/pppn1ppp/4p3/8/2BPn1PN/4P2P/PP3P2/R1BQK2R w KQkq - 0 11",
+  "title": "Sadler: Pry Open What White Stretched",
+  "overview": "In the Sadler QGA White chased the g4-bishop with pawns — h3, g4 — and won the bishop pair at the cost of a stretched kingside. The plan writes itself: …h5 hits the overextended g4-pawn, the trade opens the h-file for the untouched h8-rook, and the queen slides to f6 where she leans on d4. The engine calls it level — White's extra bishop against a kingside that can never fully castle into safety.",
+  "pawnBreaks": [
+   {
+    "move": "...h5 lever",
+    "explanation": "…h5 attacks the g4-pawn — the one pawn White cannot comfortably defend or advance.",
+    "fen": ""
+   },
+   {
+    "move": "...hxg4 opening",
+    "explanation": "The trade opens the h-file, and Black's rook is already sitting on it.",
+    "fen": ""
+   }
+  ],
+  "pieceManeuvers": [
+   {
+    "piece": "Queen",
+    "route": "...Qd8-f6 pressure",
+    "explanation": "The queen takes the long diagonal squares, hitting the d4-pawn and eyeing White's airy kingside."
+   },
+   {
+    "piece": "Knight",
+    "route": "...Ne4-g5 hop",
+    "explanation": "The e4-knight resets to g5, probing the light squares the pawn moves left behind."
+   }
+  ],
+  "strategicThemes": [
+   "Pawn moves in front of the king are forever — …h5 collects the interest.",
+   "The h8-rook never has to move to join the attack; the file comes to it."
+  ],
+  "endgameTransitions": [
+   "If queens trade early, White's bishop pair matters more — keep queens on while the king question is unanswered."
+  ],
+  "playableLines": [
+   {
+    "fen": "r2qkb1r/pppn1ppp/4p3/8/2BPn1PN/4P2P/PP3P2/R1BQK2R w KQkq - 0 11",
+    "moves": [
+     "Nf3",
+     "h5",
+     "Rg1",
+     "hxg4",
+     "hxg4",
+     "Qf6",
+     "Bd3",
+     "Ng5"
+    ],
+    "annotations": [
+     "Nf3 — the knight comes back from the rim, admitting the g4-grab needs support.",
+     "…h5 — the lever lands on the g4-pawn, the one White can least afford to move or lose.",
+     "Rg1 — White commits the rook to babysitting duty; castling kingside is off the menu for good.",
+     "…hxg4 — Black trades, and the h-file swings open.",
+     "hxg4 — White recaptures. Look at h8: the rook stands on an open file without having moved.",
+     "…Qf6 — the queen takes the central diagonal, leaning on the d4-pawn while the kingside stays loose.",
+     "Bd3 — White challenges the e4-knight at last.",
+     "…Ng5 — the knight resets with tempo toward the holes the pawn advances left. Level, says the engine — but only one king has a home."
+    ],
+    "learnCues": [
+     "Nf3 — back from the rim",
+     "h5 — the lever lands",
+     "Rg1 — no castling now",
+     "hxg4 — file swings open",
+     "hxg4 — rook already there",
+     "Qf6 — lean on d4",
+     "Bd3 — the challenge",
+     "Ng5 — probe the holes"
+    ],
+    "arrows": [
+     [],
+     [],
+     [],
+     [],
+     [],
+     [
+      {
+       "from": "f6",
+       "to": "d4",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     [],
+     []
+    ],
+    "highlights": [
+     [
+      {
+       "square": "f3",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "g4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "h5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "g4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "g1",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "g4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "g4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "h8",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "f6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "d4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "d3",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "e4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "g5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ]
+    ],
+    "title": "Sadler: …h5 and the Free h-file",
+    "intro": "The stretched kingside pays: lever with …h5, open the file, and let the h8-rook work from home.",
+    "sources": [
+     "concept:pos-king-safety",
+     "concept:pos-open-file",
+     "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mp-qga-janowski",
+  "openingId": "qga",
+  "criticalPositionFen": "r3k2r/1b2qppp/p1n1pn2/1pb5/4P3/1BN2N2/PP2QPPP/R1BR2K1 b kq - 0 12",
+  "title": "Janowski: Two Batteries Against f2",
+  "overview": "The Janowski QGA reaches a position where every Black piece points the same direction: the c5-bishop stares at f2, the b7-bishop rakes the long diagonal, and White's e4-push left dark squares behind. The plan is direct — …Ng4 raids, the queen shuffles to b6 to stack behind the c5-bishop, and White spends move after move on defense. The engine has Black up most of a pawn's worth of pressure.",
+  "pawnBreaks": [],
+  "pieceManeuvers": [
+   {
+    "piece": "Knight",
+    "route": "...Nf6-g4 raid",
+    "explanation": "The knight hits f2 and h2 at once — White must answer immediately."
+   },
+   {
+    "piece": "Queen",
+    "route": "...Qe7-c7-b6 battery",
+    "explanation": "Via c7 (eyeing h2) to b6 (stacking behind the c5-bishop on f2) — two batteries built in three moves."
+   }
+  ],
+  "strategicThemes": [
+   "f2 is the target the whole setup chose — pile on it until something gives.",
+   "White's defensive moves are Black's free tempi: every g3 and Rf1 is a concession banked."
+  ],
+  "endgameTransitions": [
+   "The pressure usually wins a pawn, not a king — convert into an endgame a clean pawn up without regret."
+  ],
+  "playableLines": [
+   {
+    "fen": "r3k2r/1b2qppp/p1n1pn2/1pb5/4P3/1BN2N2/PP2QPPP/R1BR2K1 b kq - 0 12",
+    "moves": [
+     "Ng4",
+     "Rf1",
+     "Qc7",
+     "g3",
+     "Qb6",
+     "Bf4",
+     "O-O",
+     "Bc2"
+    ],
+    "annotations": [
+     "…Ng4 — the raid begins: the knight hits f2 and h2 in one jump.",
+     "Rf1 — White's rook reports for guard duty on f2.",
+     "…Qc7 — the queen slides out, taking aim down the diagonal at h2.",
+     "g3 — the second concession: White weakens the light squares to block the diagonal.",
+     "…Qb6 — the queen re-aims, stacking behind the c5-bishop against f2. Two batteries, three moves.",
+     "Bf4 — White develops at last, a full opening behind schedule.",
+     "…O-O — with White fully occupied, Black calmly castles. The attack didn't need the king in the centre.",
+     "Bc2 — White reorganises. Count the ledger: Black up the initiative and the better structure (~+0.7), with every piece aimed and the king safe."
+    ],
+    "learnCues": [
+     "Ng4 — hit f2 and h2",
+     "Rf1 — guard duty",
+     "Qc7 — aim at h2",
+     "g3 — concession two",
+     "Qb6 — battery on f2",
+     "Bf4 — late to work",
+     "O-O — calm castle",
+     "Bc2 — ledger favours Black"
+    ],
+    "arrows": [
+     [
+      {
+       "from": "g4",
+       "to": "f2",
+       "color": "rgba(40,185,95,0.92)"
+      },
+      {
+       "from": "g4",
+       "to": "h2",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     [],
+     [
+      {
+       "from": "c7",
+       "to": "h2",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     [],
+     [],
+     [],
+     [],
+     []
+    ],
+    "highlights": [
+     [
+      {
+       "square": "g4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "f2",
+       "color": "rgba(250, 204, 21, 0.5)"
+      },
+      {
+       "square": "h2",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "f1",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "f2",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "c7",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "h2",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "g3",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "b6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "c5",
+       "color": "rgba(250, 204, 21, 0.5)"
+      },
+      {
+       "square": "f2",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "f4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "g8",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "c2",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ]
+    ],
+    "title": "Janowski: Raid, Stack, Castle",
+    "intro": "Every piece at f2: the knight raid, the queen shuffle, and a calm castle to finish.",
+    "sources": [
+     "concept:tac-double-attack",
+     "concept:pos-initiative",
+     "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mp-queensindian-petrosian",
+  "openingId": "queens-indian",
+  "criticalPositionFen": "r4rk1/pbq1bppp/1pn1p3/2p5/3PP3/P1PB1N2/4QPPP/R1BR2K1 b - - 5 13",
+  "title": "Petrosian: Squeeze the Big Centre's Edges",
+  "overview": "The Petrosian Variation hands White the big pawn centre; the Queen's Indian answer is to besiege its edges. The plan from the taught position: knight to a5 where it eyes the c4-hole, both rooks to c8 and d8 behind the pressure points, and quiet luft while White decides which pawn to defend first. The engine calls it dead level — the centre is big, and every inch of it needs a guard.",
+  "pawnBreaks": [],
+  "pieceManeuvers": [
+   {
+    "piece": "Knight",
+    "route": "...Nc6-a5 edge-bite",
+    "explanation": "From a5 the knight eyes the c4-hole and the b3-square — the two soft spots the pawn centre left behind."
+   },
+   {
+    "piece": "Rook",
+    "route": "...Ra8-c8 pressure",
+    "explanation": "Behind the c5-pawn, the rook makes every d4-c5 exchange favour Black."
+   },
+   {
+    "piece": "Rook",
+    "route": "...Rf8-d8 pressure",
+    "explanation": "The second rook stares at d4 — the centre's load-bearing pawn."
+   }
+  ],
+  "strategicThemes": [
+   "A big centre is a big responsibility — make White garrison it, square by square.",
+   "c4 is the hole the a3/c3 structure can never re-cover; the a5-knight lives off it."
+  ],
+  "endgameTransitions": [
+   "Fixed central pawns become endgame targets — trades favour Black the longer the pressure holds."
+  ],
+  "playableLines": [
+   {
+    "fen": "r4rk1/pbq1bppp/1pn1p3/2p5/3PP3/P1PB1N2/4QPPP/R1BR2K1 b - - 5 13",
+    "moves": [
+     "Na5",
+     "Be3",
+     "Rac8",
+     "h4",
+     "Rfd8",
+     "Rac1",
+     "h6",
+     "a4"
+    ],
+    "annotations": [
+     "…Na5 — the knight heads for the edge on purpose: from a5 it eyes the c4-hole that White's structure can never patch.",
+     "Be3 — White shores up d4, the first garrison posting.",
+     "…Rac8 — the rook slots behind the c5-pawn; every future exchange on that file now favours Black.",
+     "h4 — White gestures at the kingside, but nothing is coming without the centre resolved.",
+     "…Rfd8 — the second rook takes d8, staring at the load-bearing d4-pawn.",
+     "Rac1 — White mirrors, matching guards to attackers.",
+     "…h6 — quiet luft; there is no rush when every piece already stands right.",
+     "a4 — White commits another pawn to the queenside. The squeeze is set: dead level says the engine, with White doing all the garrisoning."
+    ],
+    "learnCues": [
+     "Na5 — eye the c4-hole",
+     "Be3 — first garrison",
+     "Rac8 — behind the c-pawn",
+     "h4 — a gesture",
+     "Rfd8 — stare at d4",
+     "Rac1 — White mirrors",
+     "h6 — quiet luft",
+     "a4 — the squeeze is set"
+    ],
+    "arrows": [
+     [
+      {
+       "from": "a5",
+       "to": "c4",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     [],
+     [],
+     [],
+     [
+      {
+       "from": "d8",
+       "to": "d4",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     [],
+     [],
+     []
+    ],
+    "highlights": [
+     [
+      {
+       "square": "a5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "c4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "e3",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "d4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "c8",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "c5",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "h4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "d8",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "d4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "c1",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "h6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "a4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ]
+    ],
+    "title": "Petrosian: Na5, Rooks In, Squeeze",
+    "intro": "Besiege the big centre at its edges: the c4-hole, the c-file, and the d4 stare.",
+    "sources": [
+     "concept:pos-weak-squares",
+     "concept:pos-prophylaxis",
+     "https://en.wikipedia.org/wiki/Queen%27s_Indian_Defense"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mp-queensindian-bb4",
+  "openingId": "queens-indian",
+  "criticalPositionFen": "r2q1rk1/pbpn1ppp/1p1pp3/8/2PP4/5NP1/PPQ1PPBP/R4RK1 b - - 3 12",
+  "title": "…Bb4+: the Simplified Squeeze with …f5",
+  "overview": "The …Bb4+ Queen's Indian trades the dark-squared bishops early and aims for a position with one plan and no weaknesses: clamp e4 with …f5, trade the light-squared bishops on g2, and let the queen work the kingside light squares. The engine calls the taught sequence dead level — a position where Black's simple moves are easier to find than White's.",
+  "pawnBreaks": [
+   {
+    "move": "...f5 clamp",
+    "explanation": "…f5 takes e4 away from White for the rest of the game — the position's single most important square.",
+    "fen": ""
+   }
+  ],
+  "pieceManeuvers": [
+   {
+    "piece": "Bishop",
+    "route": "...Bb7xg2 trade",
+    "explanation": "Trading the light-squared bishops leaves White's king slightly airier and Black with nothing left to attack."
+   },
+   {
+    "piece": "Queen",
+    "route": "...Qd8-f6-f7 shuffle",
+    "explanation": "Via f6 (hitting d4) to f7, where the queen backs the f5-clamp and watches the light squares."
+   }
+  ],
+  "strategicThemes": [
+   "No dark-squared bishops = no dark-square problems; the game is all about e4.",
+   "Simplification is a weapon when your structure is the cleaner one."
+  ],
+  "endgameTransitions": [
+   "Knight endgames with the e4-clamp are comfortable — the fixed g3/h2 pawns give Black the late targets."
+  ],
+  "playableLines": [
+   {
+    "fen": "r2q1rk1/pbpn1ppp/1p1pp3/8/2PP4/5NP1/PPQ1PPBP/R4RK1 b - - 3 12",
+    "moves": [
+     "f5",
+     "Ne1",
+     "Bxg2",
+     "Nxg2",
+     "Qf6",
+     "Rad1",
+     "Qf7",
+     "Nf4"
+    ],
+    "annotations": [
+     "…f5 — the clamp: e4 belongs to Black for the rest of the game.",
+     "Ne1 — White reroutes, heading for the d3/f4 squares.",
+     "…Bxg2 — Black cashes the long-diagonal trade; White's king cover thins by one bishop.",
+     "Nxg2 — the recapture leaves the knight a spectator for a move.",
+     "…Qf6 — the queen steps out, leaning on the d4-pawn.",
+     "Rad1 — White defends d4 the solid way.",
+     "…Qf7 — the queen settles behind the f5-clamp, guarding it and watching the light squares around White's king.",
+     "Nf4 — White finds the knight's best square. Dead level, says the engine — and Black's next ten moves play themselves while White's need finding."
+    ],
+    "learnCues": [
+     "f5 — clamp e4 forever",
+     "Ne1 — the reroute",
+     "Bxg2 — cash the trade",
+     "Nxg2 — spectator knight",
+     "Qf6 — lean on d4",
+     "Rad1 — solid defense",
+     "Qf7 — back the clamp",
+     "Nf4 — level, but easier for Black"
+    ],
+    "arrows": [
+     [],
+     [],
+     [],
+     [],
+     [
+      {
+       "from": "f6",
+       "to": "d4",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     [],
+     [
+      {
+       "from": "f7",
+       "to": "f5",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     []
+    ],
+    "highlights": [
+     [
+      {
+       "square": "f5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "e4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "e1",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "g2",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "g2",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "f6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "d4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "d1",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "d4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "f7",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "f5",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "f4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ]
+    ],
+    "title": "…Bb4+: Clamp, Trade, Shuffle",
+    "intro": "One plan, no weaknesses: …f5 takes e4, the bishops trade, the queen finds f7.",
+    "sources": [
+     "concept:pos-weak-squares",
+     "concept:pos-center",
+     "https://en.wikipedia.org/wiki/Queen%27s_Indian_Defense"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mp-twoknightsdefence-d4",
+  "openingId": "two-knights-defence",
+  "criticalPositionFen": "r2qr1k1/p1pb1ppp/2p5/2bpP3/3N1P2/4B3/PPPQ2PP/4RRK1 b - - 2 15",
+  "title": "4.d4 Italian: Blunt the e5-Wedge",
+  "overview": "The 4.d4 Italian Two Knights reaches a structure defined by White's e5-wedge and f4 support against Black's bishop pair and central pawn. The plan is patient re-grouping: …a5 for space, the dark-squared bishop back to f8 where it's safest, the light-squared bishop out to f5, and the queen to b8 eyeing the open b-file. The engine gives White half a pawn for the space — the bishops are Black's long game.",
+  "pawnBreaks": [
+   {
+    "move": "...a5 space",
+    "explanation": "…a5 stakes the queenside before White thinks about b4, and gives the a8-rook a job.",
+    "fen": ""
+   }
+  ],
+  "pieceManeuvers": [
+   {
+    "piece": "Bishop",
+    "route": "...Bc5-f8 reset",
+    "explanation": "The bishop drops all the way home — the safest post while knights hunt it, keeping the a3-f8 diagonal."
+   },
+   {
+    "piece": "Bishop",
+    "route": "...Bd7-f5 activation",
+    "explanation": "The light-squared bishop finds its diagonal, watching e4 and d3."
+   },
+   {
+    "piece": "Queen",
+    "route": "...Qd8-b8 file",
+    "explanation": "The queen slides to b8, pressing down the open b-file at the b2-pawn."
+   }
+  ],
+  "strategicThemes": [
+   "The bishop pair is a savings account — keep both alive and the endgame pays out.",
+   "White's e5/f4 space needs constant upkeep; every pawn move creates a square."
+  ],
+  "endgameTransitions": [
+   "Endgames favour the bishops: trade the heavy pieces, keep the pair, and work both wings."
+  ],
+  "playableLines": [
+   {
+    "fen": "r2qr1k1/p1pb1ppp/2p5/2bpP3/3N1P2/4B3/PPPQ2PP/4RRK1 b - - 2 15",
+    "moves": [
+     "a5",
+     "Nb3",
+     "Bf8",
+     "Nc5",
+     "Bf5",
+     "Bd4",
+     "Qb8",
+     "g4"
+    ],
+    "annotations": [
+     "…a5 — Black stakes queenside space and rules out b4 ideas for good.",
+     "Nb3 — White's knight gains a tempo on the c5-bishop.",
+     "…Bf8 — all the way home, and rightly so: from f8 the bishop is unhittable and still watches the a3-f8 diagonal.",
+     "Nc5 — the knight claims the outpost Black's bishop just vacated.",
+     "…Bf5 — the other bishop finds its best diagonal, watching e4 and d3.",
+     "Bd4 — White centralises, propping the e5-wedge.",
+     "…Qb8 — the queen takes the open b-file, pressing at the b2-pawn from long range.",
+     "g4 — White lashes at the f5-bishop, spending another pawn move for space. The engine's half-pawn holds — and Black's bishop pair is still on the books."
+    ],
+    "learnCues": [
+     "a5 — stake the wing",
+     "Nb3 — tempo on the bishop",
+     "Bf8 — safest post",
+     "Nc5 — the outpost claimed",
+     "Bf5 — best diagonal",
+     "Bd4 — prop the wedge",
+     "Qb8 — press the b-file",
+     "g4 — more space, more squares"
+    ],
+    "arrows": [
+     [],
+     [],
+     [],
+     [],
+     [
+      {
+       "from": "f5",
+       "to": "d3",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     [],
+     [
+      {
+       "from": "b8",
+       "to": "b2",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     []
+    ],
+    "highlights": [
+     [
+      {
+       "square": "a5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "b3",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "c5",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "f8",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "c5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "f5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "e4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      },
+      {
+       "square": "d3",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "d4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "e5",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "b8",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "b2",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "g4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "f5",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ]
+    ],
+    "title": "4.d4: Regroup Behind the Bishops",
+    "intro": "Patience with the pair: …a5, bishop home to f8, the other to f5, queen to the open file.",
+    "sources": [
+     "concept:pos-bishop-pair",
+     "concept:pos-space",
+     "https://en.wikipedia.org/wiki/Two_Knights_Defense"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mp-twoknightsdefence-maxlange",
+  "openingId": "two-knights-defence",
+  "criticalPositionFen": "r1bq1rk1/ppp1b1pp/2n5/5p2/3N1R2/2N5/PPP2PPP/R1BQ2K1 w - - 2 12",
+  "title": "Max Lange: Defuse Into a Clean Ending",
+  "overview": "The Max Lange Attack burns bright and short: by this position Black has castled, played …f5, and White's initiative is running on fumes. The plan is the defuser's checklist — meet Nxc6 with the …Qxd1 zwischenzug (trade queens WITH check, then recapture), activate the rook to e8, and develop the last bishop. The engine calls the ending level; Black's structure does the rest of the arguing.",
+  "pawnBreaks": [],
+  "pieceManeuvers": [
+   {
+    "piece": "Queen",
+    "route": "...Qd8xd1 zwischenzug",
+    "explanation": "The queen trade comes WITH check — White must recapture first, and only then does Black take on c6. Move order is everything."
+   },
+   {
+    "piece": "Rook",
+    "route": "...Rf8-e8 file",
+    "explanation": "The rook takes the open e-file, the Max Lange's old highway, now Black's."
+   },
+   {
+    "piece": "Bishop",
+    "route": "...Bc8-d7 completion",
+    "explanation": "The last piece develops; the defuse is complete."
+   }
+  ],
+  "strategicThemes": [
+   "Sharp gambits die to accurate move orders — the …Qxd1 check IS the refutation's spine.",
+   "Once queens are off, Black's healthy kingside majority is the long-term story."
+  ],
+  "endgameTransitions": [
+   "This IS the endgame plan: level rook-and-minor ending, Black's pawns the healthier — play it out with confidence."
+  ],
+  "playableLines": [
+   {
+    "fen": "r1bq1rk1/ppp1b1pp/2n5/5p2/3N1R2/2N5/PPP2PPP/R1BQ2K1 w - - 2 12",
+    "moves": [
+     "Nxc6",
+     "Qxd1+",
+     "Nxd1",
+     "bxc6",
+     "Ra4",
+     "Re8",
+     "Bd2",
+     "Bd7"
+    ],
+    "annotations": [
+     "Nxc6 — White grabs the knight, expecting a routine recapture.",
+     "…Qxd1+ — the zwischenzug: the queen trade comes with CHECK, so White has no time for tricks.",
+     "Nxd1 — forced; the c3-knight must come all the way back to block.",
+     "…bxc6 — now Black recaptures, and the accounting is clean: level material, better structure ahead.",
+     "Ra4 — White lifts the rook, hunting activity to justify the burned-out attack.",
+     "…Re8 — the rook comes to e8, backing the e7-bishop and claiming the e-file for the long run.",
+     "Bd2 — White completes development a whole opening late.",
+     "…Bd7 — and so does Black, with nothing to fear. The Max Lange has been defused into a level ending where only Black's pawn majority has a future."
+    ],
+    "learnCues": [
+     "Nxc6 — the expected grab",
+     "Qxd1 — check first!",
+     "Nxd1 — forced retreat",
+     "bxc6 — clean accounting",
+     "Ra4 — hunting relevance",
+     "Re8 — the old highway, yours",
+     "Bd2 — a whole opening late",
+     "Bd7 — defuse complete"
+    ],
+    "arrows": [
+     [],
+     [],
+     [],
+     [],
+     [],
+     [],
+     [],
+     []
+    ],
+    "highlights": [
+     [
+      {
+       "square": "c6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "d1",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "d1",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "c6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "a4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "e8",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "e7",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "d2",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "d7",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ]
+    ],
+    "title": "Max Lange: the …Qxd1+ Defuse",
+    "intro": "The zwischenzug checklist: trade with check, recapture second, take the e-file.",
+    "sources": [
+     "concept:tac-zwischen",
+     "concept:pawn-majority",
+     "https://en.wikipedia.org/wiki/Two_Knights_Defense"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mp-budapestgambit-adler",
+  "openingId": "budapest-gambit",
+  "criticalPositionFen": "r1bq1rk1/pppp1ppp/8/2b1n3/2P5/1P2P3/P3BPPP/RNBQ1RK1 b - - 0 9",
+  "title": "Adler: the Pawn Is Back — Now Clamp",
+  "overview": "In the Adler Budapest the gambit pawn always comes home: …Ngxe5 recouped it, and the position is a normal-looking middlegame where Black's pieces got there first. The plan is the classic Budapest clamp — …a5 to freeze White's queenside majority, …d6 to solidify the e5-knight, the bishop out to f5 and the rook to e8. The engine gives White a third of a pawn for the bishop pair; the clamp keeps it academic.",
+  "pawnBreaks": [
+   {
+    "move": "...a5 clamp",
+    "explanation": "…a5 freezes White's b-pawn and secures the c5-bishop's home for good.",
+    "fen": ""
+   },
+   {
+    "move": "...d6 anchor",
+    "explanation": "…d6 gives the e5-knight a permanent anchor and frees the c8-bishop.",
+    "fen": ""
+   }
+  ],
+  "pieceManeuvers": [
+   {
+    "piece": "Bishop",
+    "route": "...Bc8-f5 activation",
+    "explanation": "The bishop develops to its best diagonal, watching e4 and d3."
+   },
+   {
+    "piece": "Rook",
+    "route": "...Rf8-e8 file",
+    "explanation": "The rook backs the e5-knight and takes the half-open file."
+   }
+  ],
+  "strategicThemes": [
+   "…a5 is the Budapest's signature clamp — White's queenside majority never gets moving.",
+   "The e5-knight is the position's anchor tenant; everything develops around it."
+  ],
+  "endgameTransitions": [
+   "With the majority frozen, endgames are comfortable — White's extra queenside pawn never becomes a passer."
+  ],
+  "playableLines": [
+   {
+    "fen": "r1bq1rk1/pppp1ppp/8/2b1n3/2P5/1P2P3/P3BPPP/RNBQ1RK1 b - - 0 9",
+    "moves": [
+     "a5",
+     "Nc3",
+     "d6",
+     "Bb2",
+     "Bf5",
+     "Na4",
+     "Re8",
+     "Qd5"
+    ],
+    "annotations": [
+     "…a5 — the signature clamp: White's b3-pawn is frozen and the c5-bishop's post is secured forever.",
+     "Nc3 — White develops toward the centre.",
+     "…d6 — the e5-knight gets its permanent anchor, and the c8-bishop's door opens.",
+     "Bb2 — White fianchettoes against the anchored knight.",
+     "…Bf5 — the bishop takes the open diagonal, watching e4 and d3.",
+     "Na4 — White spends a tempo to nudge the c5-bishop.",
+     "…Re8 — the rook slots onto the e-file, backing the e5-knight that owns the position's best square.",
+     "Qd5 — White centralises with a prod. The clamp holds: the engine's third of a pawn is the bishop pair, and it stays theoretical while a5 and e5 stand."
+    ],
+    "learnCues": [
+     "a5 — signature clamp",
+     "Nc3 — development",
+     "d6 — anchor the knight",
+     "Bb2 — the fianchetto",
+     "Bf5 — best diagonal",
+     "Na4 — a nudge",
+     "Re8 — back the tenant",
+     "Qd5 — the clamp holds"
+    ],
+    "arrows": [
+     [],
+     [],
+     [],
+     [],
+     [
+      {
+       "from": "f5",
+       "to": "d3",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     [],
+     [],
+     []
+    ],
+    "highlights": [
+     [
+      {
+       "square": "a5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "b3",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "c3",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "d6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "e5",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "b2",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "f5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "e4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      },
+      {
+       "square": "d3",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "a4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "c5",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "e8",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "e5",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "d5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ]
+    ],
+    "title": "Adler: …a5, …d6, Everything Around e5",
+    "intro": "The recouped-pawn plan: clamp the majority, anchor the knight, develop around it.",
+    "sources": [
+     "concept:pos-outpost",
+     "concept:pawn-majority",
+     "https://en.wikipedia.org/wiki/Budapest_Gambit"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mp-budapestgambit-fajarowicz",
+  "openingId": "budapest-gambit",
+  "criticalPositionFen": "2kr3r/pbppqppp/1pn5/4P3/2P5/P1Q1PN2/1P2BPPP/R3K2R w KQ - 3 12",
+  "title": "Fajarowicz: the Surprise Weapon, Priced Honestly",
+  "overview": "Let's be honest about the Fajarowicz: the engine charges a full pawn for it — that IS the price of a surprise weapon, and pretending otherwise would be a lie. What Black gets: opposite-side castling out of a 2…e5 gambit nobody studies, the b7-bishop on the long diagonal, and rooks that connect by move eleven. The plan from here is to regain the e5-pawn at the right moment and keep the initiative that made the gambit worth playing.",
+  "pawnBreaks": [
+   {
+    "move": "...cxb6 recapture",
+    "explanation": "When White trades on b6, recapturing with the c-pawn keeps the structure compact and half-opens the c-file toward White's pawn.",
+    "fen": ""
+   }
+  ],
+  "pieceManeuvers": [
+   {
+    "piece": "Rook",
+    "route": "...Rh8-e8 pressure",
+    "explanation": "Both rooks centralise early — the Faj's one structural gift is how fast they connect."
+   },
+   {
+    "piece": "Knight",
+    "route": "...Nc6xe5 regain",
+    "explanation": "The knight finally collects the gambit pawn back when White's pieces look away."
+   },
+   {
+    "piece": "King",
+    "route": "...Kc8-b8 tuck",
+    "explanation": "Standard long-castle housekeeping before any file opens."
+   }
+  ],
+  "strategicThemes": [
+   "A surprise weapon's dividends are practical: unfamiliar problems, fast development, opposite-side tension.",
+   "Know the honest ledger — a pawn's worth of engine skepticism — and play for the initiative that offsets it."
+  ],
+  "endgameTransitions": [
+   "Avoid simplification while material is down; endgames only open up once the e5-pawn is regained."
+  ],
+  "playableLines": [
+   {
+    "fen": "2kr3r/pbppqppp/1pn5/4P3/2P5/P1Q1PN2/1P2BPPP/R3K2R w KQ - 3 12",
+    "moves": [
+     "c5",
+     "Rhe8",
+     "cxb6",
+     "cxb6",
+     "O-O",
+     "Kb8",
+     "Rfd1",
+     "Nxe5"
+    ],
+    "annotations": [
+     "c5 — White returns space, trying to crack the queenside where Black's king lives.",
+     "…Rhe8 — Black ignores the flank noise and centralises: both rooks working by move twelve is the Faj's whole pitch.",
+     "cxb6 — White trades pawns, opening lines near the king.",
+     "…cxb6 — the compact recapture: the structure stays whole and the c-file half-opens toward White's camp too.",
+     "O-O — White's king leaves the centre at last.",
+     "…Kb8 — and Black's tucks one square deeper. Housekeeping before the files open.",
+     "Rfd1 — White takes the d-file.",
+     "…Nxe5 — the moment arrives: the knight collects the gambit pawn back. The engine still prefers White by a pawn's worth of structure — the honest price of the surprise — but Black's game is connected, active, and full of the problems nobody prepares for."
+    ],
+    "learnCues": [
+     "c5 — flank noise",
+     "Rhe8 — both rooks work",
+     "cxb6 — lines open",
+     "cxb6 — stay compact",
+     "O-O — White's king leaves",
+     "Kb8 — tuck deeper",
+     "Rfd1 — the d-file",
+     "Nxe5 — pawn regained"
+    ],
+    "arrows": [
+     [],
+     [],
+     [],
+     [],
+     [],
+     [],
+     [],
+     []
+    ],
+    "highlights": [
+     [
+      {
+       "square": "c5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "e8",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "b6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "b6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "g1",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "b8",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "d1",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "e5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ]
+    ],
+    "title": "Fajarowicz: Centralise, Tuck, Regain",
+    "intro": "The surprise weapon's honest plan: rooks first, king safe, pawn back on cue.",
+    "sources": [
+     "concept:pos-initiative",
+     "concept:pos-development",
+     "https://en.wikipedia.org/wiki/Budapest_Gambit,_Fajarowicz_Variation"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mp-albincountergambit-lasker",
+  "openingId": "albin-countergambit",
+  "criticalPositionFen": "rnbqk1nr/ppp2ppp/8/4P3/1BP5/8/PP2K1PP/RN1Q1BnR w kq - 0 8",
+  "title": "Lasker Trap: Convert the Underpromotion",
+  "overview": "The Lasker Trap has just detonated: …fxg1 became a KNIGHT with check, and White's position is rubble — king on e2, rook trapped behind the new g1-knight, development frozen. The engine says nearly six pawns' worth of winning. The conversion plan is calm and forcing: check on h4, develop the knight with a hit on the loose b4-bishop, trade queens on YOUR terms, and collect. Winning a won position is a skill — this line is the drill.",
+  "pawnBreaks": [],
+  "pieceManeuvers": [
+   {
+    "piece": "Queen",
+    "route": "...Qd8-h4 check",
+    "explanation": "The check drives White's king further into the open before any consolidation."
+   },
+   {
+    "piece": "Knight",
+    "route": "...Nb8-c6 double duty",
+    "explanation": "Development WITH a threat: the knight hits the loose b4-bishop."
+   },
+   {
+    "piece": "Knight",
+    "route": "...Nc6xb4 collection",
+    "explanation": "After the queen trade, the knight collects the bishop — the trap's final dividend."
+   }
+  ],
+  "strategicThemes": [
+   "Convert with forcing moves: check, threat, trade, collect — never give a broken position time to heal.",
+   "Trading queens up material is not cowardice; it is the fastest road home."
+  ],
+  "endgameTransitions": [
+   "The line ends in a trivially won endgame — a piece up with the safer king. Technique from here is just care."
+  ],
+  "playableLines": [
+   {
+    "fen": "rnbqk1nr/ppp2ppp/8/4P3/1BP5/8/PP2K1PP/RN1Q1BnR w kq - 0 8",
+    "moves": [
+     "Ke1",
+     "Qh4+",
+     "Kd2",
+     "Nc6",
+     "Qe1",
+     "Qxe1+",
+     "Kxe1",
+     "Nxb4"
+    ],
+    "annotations": [
+     "Ke1 — White's king shuffles back, hoping to untangle. There is no untangling.",
+     "…Qh4+ — the check keeps the king running; White's pieces watch from their starting squares.",
+     "Kd2 — the king walks to d2 — the third king move in five turns.",
+     "…Nc6 — development with a bite: the knight hits the b4-bishop, which has no good square.",
+     "Qe1 — White begs for the queen trade to stop the bleeding.",
+     "…Qxe1+ — granted, on Black's terms: material stays won and the attack converts to simple accounting.",
+     "Kxe1 — the king recaptures — its fourth move of the opening.",
+     "…Nxb4 — the knight collects the bishop. A full piece up (~+5.8) with the g1-knight still lodged in White's camp — the Lasker Trap, converted with four forcing moves."
+    ],
+    "learnCues": [
+     "Ke1 — no untangling",
+     "Qh4 — keep it running",
+     "Kd2 — third king move",
+     "Nc6 — develop with a bite",
+     "Qe1 — begging for the trade",
+     "Qxe1 — granted, your terms",
+     "Kxe1 — fourth king move",
+     "Nxb4 — collect the piece"
+    ],
+    "arrows": [
+     [],
+     [],
+     [],
+     [
+      {
+       "from": "c6",
+       "to": "b4",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     [],
+     [],
+     [],
+     []
+    ],
+    "highlights": [
+     [
+      {
+       "square": "e1",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "h4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "d2",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "c6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "b4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "e1",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "e1",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "e1",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "b4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "g1",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ]
+    ],
+    "title": "Lasker Trap: Check, Hit, Trade, Collect",
+    "intro": "The conversion drill: four forcing moves turn the underpromotion into a clean piece.",
+    "sources": [
+     "concept:tac-trap",
+     "https://en.wikipedia.org/wiki/Lasker_Trap",
+     "https://www.chess.com/openings/Albin-Countergambit"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mp-albincountergambit-spassky",
+  "openingId": "albin-countergambit",
+  "criticalPositionFen": "r1bqk2r/ppp3pp/2n2n2/8/1bPpPP2/3B4/PP4PP/RNBQK1NR w KQkq - 2 8",
+  "title": "Spassky 4.e4: the …Rxf4 Counterblow",
+  "overview": "Against the Spassky 4.e4, the Albin's d4-wedge holds and Black's pieces come out shooting — the b4-check forces concessions, castling comes fast, and then the thematic blow: …Nh5 and the exchange sac …Rxf4, shredding the pawns in front of White's uncastled centre. The engine calls the whole sequence dead level — knight and pawn and permanent activity for the rook. This is the Albin playing exactly as designed.",
+  "pawnBreaks": [],
+  "pieceManeuvers": [
+   {
+    "piece": "Knight",
+    "route": "...Nf6-h5-f4 dive",
+    "explanation": "The knight hops to h5 eyeing the f4-pawn, and after the sac it lands there for keeps."
+   },
+   {
+    "piece": "Rook",
+    "route": "...Rf8xf4 exchange sac",
+    "explanation": "The rook takes the f4-pawn — an exchange for a pawn and White's dark squares, gladly paid."
+   }
+  ],
+  "strategicThemes": [
+   "The d4-wedge cramps White's whole queenside — every tactic works better because of it.",
+   "Activity over material: the f4-knight plus the wedge outworks a rook in the corner."
+  ],
+  "endgameTransitions": [
+   "Don't rush to endgames after the sac — the compensation is middlegame activity; keep queens on."
+  ],
+  "playableLines": [
+   {
+    "fen": "r1bqk2r/ppp3pp/2n2n2/8/1bPpPP2/3B4/PP4PP/RNBQK1NR w KQkq - 2 8",
+    "moves": [
+     "Nd2",
+     "O-O",
+     "Nf3",
+     "Nh5",
+     "g3",
+     "Rxf4",
+     "gxf4",
+     "Nxf4"
+    ],
+    "annotations": [
+     "Nd2 — White blocks the check the modest way; the b1-knight takes the queen's bishop's square.",
+     "…O-O — Black castles in a position where White's king still has no plans.",
+     "Nf3 — the king's knight develops; its partner on d2 is pinned to the king by the b4-bishop.",
+     "…Nh5 — the dive begins: the knight eyes the f4-pawn and the g3-square behind it.",
+     "g3 — White guards f4 and weakens every light square around the future king.",
+     "…Rxf4! — the counterblow: the rook takes the pawn, and White's kingside cover goes with it.",
+     "gxf4 — White must accept.",
+     "…Nxf4 — the knight lands on f4, hitting the d3-bishop, with the d4-wedge still cramping everything. Knight, pawn and permanent pressure for the exchange — the engine calls it dead level, and Black has all the fun."
+    ],
+    "learnCues": [
+     "Nd2 — the modest block",
+     "O-O — castle first",
+     "Nf3 — the other one's pinned",
+     "Nh5 — the dive begins",
+     "g3 — light squares go soft",
+     "Rxf4 — the counterblow",
+     "gxf4 — accepted",
+     "Nxf4 — knight for keeps"
+    ],
+    "arrows": [
+     [],
+     [],
+     [],
+     [
+      {
+       "from": "h5",
+       "to": "f4",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     [],
+     [],
+     [],
+     [
+      {
+       "from": "f4",
+       "to": "d3",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ]
+    ],
+    "highlights": [
+     [
+      {
+       "square": "d2",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "g8",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "f3",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "h5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "f4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "g3",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "f4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "f4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "f4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "f4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "d3",
+       "color": "rgba(250, 204, 21, 0.5)"
+      },
+      {
+       "square": "d4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ]
+    ],
+    "title": "Spassky: Castle, Dive, Sacrifice",
+    "intro": "The Albin's designed blow: …Nh5, …Rxf4, and a knight that never leaves.",
+    "sources": [
+     "concept:att-exchange-sac",
+     "concept:pos-weak-squares",
+     "https://www.chess.com/openings/Albin-Countergambit"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mp-schliemanndefence-schonemann",
+  "openingId": "schliemann-defence",
+  "criticalPositionFen": "r1bqkb1r/pp4pp/3P1n2/1p6/4N3/8/PPP2PPP/R1BQK2R w KQkq - 1 10",
+  "title": "Schönemann 4.d4: Entomb the Greedy Queen",
+  "overview": "The Schönemann's forcing sequence looks scary for Black — until you know the punchline. White's raid wins material by force: the queen checks, grabs the h8-rook… and never comes home. …Nxe4 starts it, …g6 and …Kf7 walk the king to safety while the queen commits, and …Nf6 slams the tomb shut on h8. The engine already prefers Black despite the material — the entombed queen is dead weight that Black collects at leisure.",
+  "pawnBreaks": [
+   {
+    "move": "...g6 block",
+    "explanation": "…g6 blocks the h5-check square and opens the g7-escape — one move, two jobs.",
+    "fen": ""
+   }
+  ],
+  "pieceManeuvers": [
+   {
+    "piece": "Knight",
+    "route": "...Nf6xe4 grab",
+    "explanation": "The knight takes White's centralised knight — the material race starts on Black's terms."
+   },
+   {
+    "piece": "King",
+    "route": "...Ke8-f7 walk",
+    "explanation": "The king steps up calmly, letting the h8-rook go — it's bait, not a blunder."
+   },
+   {
+    "piece": "Knight",
+    "route": "...Ne4-f6 tomb",
+    "explanation": "Back to f6: the knight seals g8, and the h8-queen has no move that isn't a funeral."
+   }
+  ],
+  "strategicThemes": [
+   "Material ledgers lie when a queen is entombed — count the pieces that can actually move.",
+   "Every Black move develops or seals; every White move after Qxh8 is a wasted wish."
+  ],
+  "endgameTransitions": [
+   "The trapped queen falls eventually — the game converts to an endgame where Black is effectively up material."
+  ],
+  "playableLines": [
+   {
+    "fen": "r1bqkb1r/pp4pp/3P1n2/1p6/4N3/8/PPP2PPP/R1BQK2R w KQkq - 1 10",
+    "moves": [
+     "O-O",
+     "Nxe4",
+     "Qh5+",
+     "g6",
+     "Qe5+",
+     "Kf7",
+     "Qxh8",
+     "Nf6"
+    ],
+    "annotations": [
+     "White castles, banking on the raid to justify the position.",
+     "…Nxe4 — Black takes the centralised knight; the forcing sequence begins.",
+     "Qh5+ — the check that looks crushing — this is the move White played for.",
+     "…g6 — one pawn move, two jobs: the check is blocked and g7 opens for the king's cover.",
+     "Qe5+ — the fork: king and h8-rook at once. Black has seen further.",
+     "…Kf7 — the king steps up and gives the rook away. It is bait.",
+     "Qxh8 — White collects — and the queen will never make another useful move.",
+     "…Nf6 — the tomb seals: g8 is covered, g7 is watched by the king, and the h8-queen is a spectator. The engine already prefers Black (+0.4) with the rook GONE — that is how dead the queen is. Develop, then collect."
+    ],
+    "learnCues": [
+     "O-O — the raid banks",
+     "Nxe4 — take the knight",
+     "Qh5 — the scary check",
+     "g6 — block and open",
+     "Qe5 — the fork lands",
+     "Kf7 — the rook is bait",
+     "Qxh8 — the last grab",
+     "Nf6 — tomb sealed"
+    ],
+    "arrows": [
+     [],
+     [],
+     [],
+     [],
+     [],
+     [],
+     [],
+     [
+      {
+       "from": "f6",
+       "to": "g8",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ]
+    ],
+    "highlights": [
+     [
+      {
+       "square": "g1",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "e4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "h5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "g6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "g7",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "e5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "h8",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "f7",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "h8",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "f6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "g8",
+       "color": "rgba(250, 204, 21, 0.5)"
+      },
+      {
+       "square": "h8",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ]
+    ],
+    "title": "Schönemann: g6, Kf7, and the Sealed Tomb",
+    "intro": "Let the queen grab the rook — then seal it in the corner and collect at leisure.",
+    "sources": [
+     "concept:tac-trap",
+     "concept:pos-development",
+     "https://en.wikipedia.org/wiki/Ruy_Lopez#Schliemann_Defence"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mp-schliemanndefence-exf5",
+  "openingId": "schliemann-defence",
+  "criticalPositionFen": "r1b1kb1r/ppp1q2p/2p4n/5p2/3Np1P1/2N5/PPPPQP1P/R1B1K2R w KQkq - 0 10",
+  "title": "4.exf5 Accepted: Punish the Pawn Hunt",
+  "overview": "When White accepts the Jänisch pawn and then goes hunting with g4, the position turns into exactly the fight Black wanted: White's king is stuck in the centre, and every Black developing move carries a threat. The plan: fianchetto against the d4-knight, meet the e6-fork trick with the calm …Bxe6, castle long, and collect the e6-pawn with the queen. The engine likes Black by nearly half a pawn — with the safer king and all the play.",
+  "pawnBreaks": [],
+  "pieceManeuvers": [
+   {
+    "piece": "Bishop",
+    "route": "...Bf8-g7 counter-fianchetto",
+    "explanation": "The bishop targets the d4-knight through the long diagonal — development with a direct threat."
+   },
+   {
+    "piece": "Bishop",
+    "route": "...Bc8xe6 defuse",
+    "explanation": "White's e6 knight-poke meets a shrug: the bishop simply takes it."
+   },
+   {
+    "piece": "Queen",
+    "route": "...Qe7xe6 collection",
+    "explanation": "The queen collects the loose e6-pawn, ending White's material adventure at exactly zero profit."
+   }
+  ],
+  "strategicThemes": [
+   "A pawn hunt with the king at home is a loan at punitive interest — Black is the collector.",
+   "Castling long turns the half-open files into Black's attacking lanes."
+  ],
+  "endgameTransitions": [
+   "Level material, safer king, better structure — any ending from here is played for two results, both Black's."
+  ],
+  "playableLines": [
+   {
+    "fen": "r1b1kb1r/ppp1q2p/2p4n/5p2/3Np1P1/2N5/PPPPQP1P/R1B1K2R w KQkq - 0 10",
+    "moves": [
+     "gxf5",
+     "Bg7",
+     "Ne6",
+     "Bxe6",
+     "fxe6",
+     "O-O-O",
+     "Nxe4",
+     "Qxe6"
+    ],
+    "annotations": [
+     "gxf5 — White completes the pawn hunt, three pawn moves deep with the king still on e1.",
+     "…Bg7 — the counter-fianchetto: the bishop stares straight at the d4-knight, and development comes with threats attached.",
+     "Ne6 — White's trick: the knight lodges on e6, poking at the g7-bishop and hoping for panic.",
+     "…Bxe6 — the shrug. The bishop takes the knight, and the trick dissolves.",
+     "fxe6 — White recaptures, leaving a lonely pawn deep in Black's camp.",
+     "…O-O-O — Black castles long into complete safety, rooks connected, while White's king still hasn't moved.",
+     "Nxe4 — White grabs the e4-pawn, the last item on the shopping list.",
+     "…Qxe6 — and Black collects the e6-pawn back. The hunt netted White nothing; the engine gives Black the pull (+0.4) with the safer king and every open lane."
+    ],
+    "learnCues": [
+     "gxf5 — three pawn moves deep",
+     "Bg7 — threats attached",
+     "Ne6 — the poke",
+     "Bxe6 — the shrug",
+     "fxe6 — a lonely pawn",
+     "O-O-O — complete safety",
+     "Nxe4 — the shopping list",
+     "Qxe6 — nothing gained"
+    ],
+    "arrows": [
+     [],
+     [
+      {
+       "from": "g7",
+       "to": "d4",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     [],
+     [],
+     [],
+     [],
+     [],
+     []
+    ],
+    "highlights": [
+     [
+      {
+       "square": "f5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "g7",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "d4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "e6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "e6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "e6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "c8",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "e4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "e6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ]
+    ],
+    "title": "4.exf5: Fianchetto, Shrug, Castle, Collect",
+    "intro": "The pawn hunt punished in four steps — ending dead even on material with all the play.",
+    "sources": [
+     "concept:pos-king-safety",
+     "concept:pos-development",
+     "https://en.wikipedia.org/wiki/Ruy_Lopez#Schliemann_Defence"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mp-schliemanndefence-dyckhoff",
+  "openingId": "schliemann-defence",
+  "criticalPositionFen": "r1bqkb1r/pppp2pp/2n2n2/1B2p3/4P3/5N2/PPP2PPP/RNBQK2R w KQkq - 1 6",
+  "title": "Dyckhoff 4.d3: Gambit Spirit vs the Quiet Answer",
+  "overview": "The Dyckhoff is White's most annoying reply to the Schliemann — decline the fun, trade on c6, take the e5-pawn, keep things dry. Honesty first: the engine gives White the pawn's worth (~0.7). Black's compensation is concrete: the c5-bishop's clean diagonal at f2, the half-open f-file that …f5 bought, and a development lead White must spend moves neutralising. The plan keeps maximum pressure while the pawn debt stands.",
+  "pawnBreaks": [
+   {
+    "move": "...bxc6 structure",
+    "explanation": "Recapturing toward the centre opens the b-file and keeps the central pawn duo flexible.",
+    "fen": ""
+   }
+  ],
+  "pieceManeuvers": [
+   {
+    "piece": "Bishop",
+    "route": "...Bf8-c5-b6 pressure",
+    "explanation": "The bishop takes the f2-diagonal and keeps it even when kicked — the position's one permanent threat."
+   }
+  ],
+  "strategicThemes": [
+   "A quiet decline still owes the gambit rent: the f-file and the f2-diagonal are paid-for assets.",
+   "Keep the pressure pieces on — every trade eases White's defence of the extra pawn."
+  ],
+  "endgameTransitions": [
+   "Endgames a clean pawn down are the one losing plan — the middlegame pressure IS the compensation; spend it there."
+  ],
+  "playableLines": [
+   {
+    "fen": "r1bqkb1r/pppp2pp/2n2n2/1B2p3/4P3/5N2/PPP2PPP/RNBQK2R w KQkq - 1 6",
+    "moves": [
+     "O-O",
+     "Bc5",
+     "Bxc6",
+     "bxc6",
+     "Nxe5",
+     "O-O",
+     "Nc3",
+     "Bb6"
+    ],
+    "annotations": [
+     "White castles, sticking to the quiet script.",
+     "…Bc5 — the bishop takes the diagonal at f2 before White can arrange f-pawn cover.",
+     "Bxc6 — White cashes the Ruy bishop to win the e5-pawn cleanly.",
+     "…bxc6 — toward the centre: the b-file opens for the rook and the pawn duo stays flexible.",
+     "Nxe5 — White pockets the pawn. This is the Dyckhoff's whole idea, and the engine approves (~0.7).",
+     "…O-O — Black castles onto the half-open f-file — the file …f5 bought and paid for.",
+     "Nc3 — White develops, still untangling.",
+     "…Bb6 — the bishop keeps its f2-diagonal through the kick. The honest ledger: White has the pawn, Black has the f-file, the diagonal, and the lead — the Schliemann's fight, discounted but alive."
+    ],
+    "learnCues": [
+     "O-O — the quiet script",
+     "Bc5 — diagonal at f2",
+     "Bxc6 — the cash-in",
+     "bxc6 — toward the centre",
+     "Nxe5 — pawn pocketed",
+     "O-O — the paid-for file",
+     "Nc3 — untangling",
+     "Bb6 — pressure kept"
+    ],
+    "arrows": [
+     [],
+     [
+      {
+       "from": "c5",
+       "to": "f2",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     [],
+     [],
+     [],
+     [],
+     [],
+     [
+      {
+       "from": "b6",
+       "to": "f2",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ]
+    ],
+    "highlights": [
+     [
+      {
+       "square": "g1",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "c5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "f2",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "c6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "c6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "e5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "g8",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "c3",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "b6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "f2",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ]
+    ],
+    "title": "Dyckhoff: Keep the Pressure Assets",
+    "intro": "The quiet decline priced honestly: a pawn for the f-file, the f2-diagonal, and the lead.",
+    "sources": [
+     "concept:pos-initiative",
+     "concept:pos-open-file",
+     "https://en.wikipedia.org/wiki/Ruy_Lopez#Schliemann_Defence"
+    ]
+   }
+  ]
  }
 ]

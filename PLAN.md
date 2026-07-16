@@ -787,11 +787,29 @@ per-opening to the locked doctrines).
   twoknights ×2, benoni/najdorf-6f3/slav-schlechter ×1). That baseline IS the
   masterclass variation-plan authoring backlog.
 
+## Masterclass variation-plan backlog (2026-07-16 — 31/34 done)
+31 of the 34 baselined plans authored in three batches (QGD×3, Semi-Slav×4,
+Petrov×3, Philidor×3, Najdorf-6f3, Slav-Schlechter, KID×2, Benoni, QGA×2,
+Queen's Indian×2, Two Knights×2, Budapest×2, Albin×2, Schliemann×3) — each
+anchored at the taught variation terminus (Gate C), engine tail at movetime
+6000 (25s deep-verify on borderline anchors), hand-written two-register
+narration, all plan gates green. Highlights: Meran …h6! refutes the Ng5 raid
+(+1.5 Black), Petrov 5.Bd3 avalanche wins a piece (+3.3), Schliemann
+Schönemann entombs White's queen on h8, Albin Lasker Trap conversion (+5.8).
+Honest pricing kept throughout (Bayonet ~−0.8, Dyckhoff −0.7, Fajarowicz −1.1
+gambit toll stated plainly).
+
+**3 BLOCKED on unsound variation lines (deep-verify @25s, student side):**
+`mp-albincountergambit-fianchetto` (−1.62 and deteriorating — engine refutes
+Black's own line), `mp-oldindiandefence-czech` (−1.20),
+`mp-oldindiandefence-be2` (−1.40). All over the quiet-line soundness bar —
+authoring plans over them would teach losing positions. FIX THE VARIATIONS
+FIRST (rebuild on sounder data spines via build-opening-spine, or demote/
+relabel honestly), then author the plans and shrink the baseline to 0.
+
 ## Next-session pickup
-Work the content-presence backlog top-down, shipping per the standard loop
-(gates → ship-check → main → prod audit): (1) the 34 baselined masterclass
-variation plans (middlegamePlanIdIntegrity BASELINE_MISSING — author per the
-Gate C grind recipe: corpus/data spine → engine tail → hand narration);
+(1) Rebuild the 3 unsound variation lines above (albin-fianchetto,
+oldindian-czech, oldindian-be2) and author their plans — baseline → 0;
 (2) 57 zero-gem openings (hand-curated, no bots); (3) 62 zero-endgame
 openings (data-gated); (4) 42 variation-lesson gaps. Plus David's pending
 call on mp-pronaroKID-fourpawns-reroute (−1.1 line vs his 4-2 record).
