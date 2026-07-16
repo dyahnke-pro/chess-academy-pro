@@ -1,0 +1,76 @@
+# PLAN — Non-built openings route to the coach (search cleanup)
+
+**Owner:** David · **Started:** 2026-07-16 · **Deploy:** push to `main`
+
+## The problem (David, from the Panov search screenshots)
+
+Searching an opening (e.g. "Panov") returns a pile of results, and almost
+all of them open a **half-built "course"** — a 2–4-move auto-walkthrough
+(`WalkthroughMode`) over a raw Lichess ECO entry, with locked
+Learn/Practice/Play. Only the handful we actually authored open a real
+course. The half-built pages look broken and embarrass the app.
+
+### Why they exist (the data model)
+
+The app seeds **3,654 opening NAMES** from `openings-lichess.json`. Each
+name carries a move sequence of whatever depth Lichess recorded (2–25
+plies). **Depth is not "built."** "Built" = a hand-authored course
+(masterclass / pro / anti / gambit) with a registered `LessonScript`.
+There are **167** of those (43 masterclass + 82 pro + 35 anti + 7 gambit),
+and `hasLessonScript(id)` is a verified-complete signal for them (0 gaps).
+Everything else (~3,500) is a raw name with no course → the half-built
+page.
+
+## The decision (David 2026-07-16)
+
+Search should still **show** real opening names (incl. ones we haven't
+built — e.g. "Scandinavian Defense: Panov Transfer"). What must go is the
+**half-built experience**, not the name. So:
+
+- **Non-built line tapped → open the coach and AUTO-START the lesson.**
+  No second ask. The coach opens with: *"We don't have a hand-built
+  masterclass for <X> yet, so I'm going to teach it to you myself,"* then
+  launches the DB-anchored walkthrough (`generateOpeningFromDbNarration`,
+  G3-safe — moves from the DB, LLM writes prose only).
+- **Built course tapped → opens normally** (unchanged).
+- **Empty search results → coach CTA:** "No course for '<q>' yet — want
+  the coach to teach it?" (same auto-start handoff).
+- **Scandi Panov stays a Scandinavian line** — no cross-redirect to Caro.
+
+## Phased plan
+
+### Phase 1 — routing spine  ·  status: DONE (tests green, ship-check green)
+- [x] `OpeningDetailPage.loadOpening`: after the existing masterclass
+      redirect, if `!hasLessonScript(id)` → `navigate('/coach/teach?teach=<name>&auto=1', {replace:true})`.
+      Single chokepoint — covers search taps, deep links, related tiles.
+      Test: "reroutes a NON-built opening … to the coach auto-teach".
+- [x] `CoachTeachPage`: on `?auto=1` + `?teach=<name>`, emit the
+      "no masterclass, I'll teach it" line and auto-launch the walkthrough
+      (reuse `handleSubmit(<name>)`). Distinct from the `?opening=` greeting
+      path (opt-in "Ready to start?"). Test: "auto-teaches a NON-built
+      opening arriving via ?teach=<name>&auto=1".
+- [x] Empty-search state in the openings search dropdown → coach CTA
+      (`teach-it-option`) that routes to the same handoff. Test: "offers a
+      coach-teach CTA when a scoped opening search finds nothing".
+
+### Phase 2 — polish  ·  status: partial
+- [x] Keep the Accelerated Panov → Caro Panov-tab transposition redirect
+      (`masterclassRedirect.ts`) — it opens a REAL course, better than a
+      redundant coach lesson. Excludes the …e5 Open Variation.
+- [ ] Optional: collapse exact-duplicate-name rows in search results
+      (deferred — not blocking; non-built dups now all hand off to coach).
+
+## Decisions log
+- 2026-07-16 — Non-built → coach auto-teach (not "hide from search", not
+  "keep bare page"). David: "open the coach tab and cue the coach to start
+  making the lesson … we do not have a hand built masterclass for x
+  opening so I am going to teach it to you."
+- 2026-07-16 — Reverted the first attempt (hide terminal-short stubs from
+  `searchOpenings`) — non-built names should SHOW now, not be filtered.
+
+## Blast radius / next-session note
+The detail-page reroute applies to **every** non-built opening (~3,500),
+at every entry point — not just search. Tapping any raw ECO opening now
+bounces to the coach auto-teach instead of the bare-reference page (this
+also drops that page's Wikipedia "Understand" zone for those openings —
+intended per David's call). Verify with the coach-teach + openings audits.

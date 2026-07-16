@@ -271,6 +271,22 @@ describe('SmartSearchBar', () => {
       expect(state.coachDrawerInitialMessage).toBeFalsy();
     });
 
+    it('offers a coach-teach CTA when a scoped opening search finds nothing', async () => {
+      // David 2026-07-16: "if no results are found at all, suggest asking the
+      // coach to teach it." The DB is empty in this test, so any query yields
+      // zero opening matches → the teach-it CTA replaces the bare "No results".
+      const user = userEvent.setup();
+      renderWithRouter(<SmartSearchBar scope="opening" />);
+
+      const input = screen.getByTestId('smart-search-input');
+      await user.type(input, 'zzzznotarealopening');
+
+      await waitFor(() => {
+        expect(screen.getByTestId('teach-it-option')).toBeInTheDocument();
+      }, { timeout: 3000 });
+      expect(screen.getByText(/have the coach teach it/i)).toBeInTheDocument();
+    });
+
     it('still emits filtered results to onResultsChange when scoped', async () => {
       await db.openings.add(
         buildOpeningRecord({ id: 'scoped-test', name: 'Sicilian Defense', eco: 'B20' }),

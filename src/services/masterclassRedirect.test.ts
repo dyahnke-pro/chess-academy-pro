@@ -48,6 +48,43 @@ describe('masterclass redirect resolver', () => {
     }
   });
 
+  it('routes the Accelerated Panov (2.c4 transposition) to the Caro Panov tab', () => {
+    // `e4 c6 c4…` shares only 2 plies with the taught Panov spine
+    // (`e4 c6 d4 d5 exd5 cxd5 c4…`) so the prefix matcher can't see it — the
+    // curated transposition alias carries it to the Panov tab instead of a
+    // half-built 2-move stub.
+    const accel = eco.filter(
+      (e) => /Accelerated Panov/i.test(e.name) && /^e4 c6 c4 d5/.test((e.pgn ?? '').trim()),
+    );
+    expect(accel.length, 'no Accelerated Panov …d5 entries in ECO data').toBeGreaterThan(0);
+    for (const e of accel) {
+      const r = resolveMasterclassRedirect(rec(e));
+      expect(r?.to, `${e.name} did not route to caro-kann`).toBe('caro-kann');
+      expect(r?.line).toBe('Panov');
+    }
+  });
+
+  it('routes the bare `e4 c6 c4` Accelerated parent to the Caro Panov tab', () => {
+    const r = resolveMasterclassRedirect({ id: 'x', pgn: 'e4 c6 c4', isRepertoire: false });
+    expect(r).toEqual({ to: 'caro-kann', line: 'Panov' });
+  });
+
+  it('does NOT route the Accelerated Panov Open Variation (…e5 is a different structure)', () => {
+    // `e4 c6 c4 e5` is NOT the Panov — it must not land on the Panov tab.
+    const r = resolveMasterclassRedirect({ id: 'x', pgn: 'e4 c6 c4 e5', isRepertoire: false });
+    expect(r?.to === 'caro-kann' && r?.line === 'Panov').toBe(false);
+  });
+
+  it('still routes the standard Panov Attack (2.d4) to the Caro Panov tab', () => {
+    const std = eco.find(
+      (e) => /Panov Attack/i.test(e.name) && /^e4 c6 d4 d5 exd5 cxd5 c4/.test((e.pgn ?? '').trim()),
+    );
+    expect(std, 'standard Panov entry not found').toBeTruthy();
+    const r = resolveMasterclassRedirect(rec(std!));
+    expect(r?.to).toBe('caro-kann');
+    expect(r?.line).toBe('Panov');
+  });
+
   it('[report] coverage + samples per masterclass (hand-check the mappings)', () => {
     const byTarget = new Map<string, string[]>();
     let total = 0;

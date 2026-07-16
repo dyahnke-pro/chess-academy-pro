@@ -679,9 +679,36 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
             </div>
           )}
           {!loading && results.length === 0 && !showAskCoach && !showAgentAction && query.trim() && (
-            <div className="p-4 text-center text-xs" style={{ color: 'var(--color-text-muted)' }}>
-              No results found
-            </div>
+            scope === 'opening' ? (
+              // No opening name matched — offer the coach as the fallback: it
+              // auto-launches a DB-anchored walkthrough for whatever the student
+              // typed (David 2026-07-16: "if no results are found at all, we
+              // should suggest asking the coach to teach it to them").
+              <button
+                onClick={() => { void navigate(`/coach/teach?teach=${encodeURIComponent(query.trim())}&auto=1`); }}
+                className="w-full px-3 py-3 flex items-center gap-3 text-left transition-colors"
+                data-testid="teach-it-option"
+              >
+                <div className="p-1.5 rounded-lg shrink-0" style={{ background: 'var(--color-accent)', color: 'white' }}>
+                  <MessageCircle size={14} />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="text-sm font-medium" style={{ color: 'var(--color-accent)' }}>
+                    Have the coach teach it
+                  </div>
+                  <div className="text-xs truncate" style={{ color: 'var(--color-text-muted)' }}>
+                    No course for &ldquo;{query.trim()}&rdquo; yet — I&rsquo;ll teach it to you
+                  </div>
+                </div>
+                <span className="text-[10px] px-1.5 py-0.5 rounded-full shrink-0" style={{ background: 'var(--color-accent)', color: 'white' }}>
+                  Teach
+                </span>
+              </button>
+            ) : (
+              <div className="p-4 text-center text-xs" style={{ color: 'var(--color-text-muted)' }}>
+                No results found
+              </div>
+            )
           )}
           {/* Agent action suggestion — takes priority when detected */}
           {showAgentAction && (

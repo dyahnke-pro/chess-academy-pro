@@ -40,6 +40,35 @@ function commonPrefix(a: string[], b: string[]): number {
 const MIN_IDENT_PLIES = 3; // a match on <3 plies is too generic to trust
 const MIN_MAIN_PLIES = 5; // a main-line redirect needs a deep shared prefix
 
+// Curated TRANSPOSITION aliases — lines that reach a taught masterclass
+// variation by a DIFFERENT move order. The prefix matcher below can't see
+// these: they diverge from the taught spine early, then transpose back, so
+// they share too few leading plies to match. Each rule is deliberately tight —
+// it names the exact move-order family and the tab it feeds — because a wrong
+// redirect is worse than the bare page.
+const TRANSPOSITION_ALIASES: Array<{
+  match: (moves: string[]) => boolean;
+  to: string;
+  line: string | null;
+}> = [
+  {
+    // Accelerated Panov Attack (`e4 c6 c4…`, i.e. 2.c4 instead of 2.d4) → the
+    // Caro-Kann masterclass Panov tab. The …d5 lines transpose into the exact
+    // same IQP Panov structures the tab teaches, and the bare `e4 c6 c4`
+    // parent defaults to …d5. It shares only `e4 c6` (2 plies) with the taught
+    // Panov spine, so it otherwise fell through to a half-built 2-move stub
+    // (David 2026-07-16). Excludes the Open Variation (`e4 c6 c4 e5` — a
+    // genuinely different …e5 structure that is NOT the Panov).
+    match: (m): boolean =>
+      m[0] === 'e4' &&
+      m[1] === 'c6' &&
+      m[2] === 'c4' &&
+      (m.length === 3 || m[3] === 'd5'),
+    to: 'caro-kann',
+    line: 'Panov',
+  },
+];
+
 export interface MasterclassRedirect {
   to: string;
   line: string | null;
@@ -59,6 +88,12 @@ export function resolveMasterclassRedirect(
 
   const E = toMoves(opening.pgn);
   if (E.length < 2) return null;
+
+  // Curated transposition aliases win first — they exist precisely for the
+  // move orders the prefix matcher can't see.
+  for (const a of TRANSPOSITION_ALIASES) {
+    if (a.match(E)) return { to: a.to, line: a.line };
+  }
 
   const candidates: Array<{ to: string; line: string | null; spec: number }> = [];
 

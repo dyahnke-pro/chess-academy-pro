@@ -4479,6 +4479,43 @@ export function CoachTeachPage(): JSX.Element {
     if (!activeProfile) return;
     kickoffFiredRef.current = true;
     (() => {
+      // Non-built-opening hand-off (David 2026-07-16). The student tapped an
+      // opening on the openings page that has NO hand-built masterclass (a raw
+      // Lichess ECO name), so OpeningDetailPage routed here with
+      // `?teach=<name>&auto=1`. Tell them we don't have a masterclass for it
+      // and AUTO-LAUNCH the walkthrough — no second ask. The walkthrough moves
+      // come from the DB (`generateOpeningFromDbNarration`); the LLM writes
+      // only the prose (G3). This is distinct from the `?opening=` rolodex
+      // path below, which is an opt-in "Ready to start?" prompt.
+      const autoTeach =
+        searchParams.get('auto') === '1' ? searchParams.get('teach')?.trim() : null;
+      if (autoTeach) {
+        const intro = `We don't have a hand-built masterclass for the ${autoTeach} yet — so I'll teach it to you myself. Let's walk through it.`;
+        const turnId = freshTurnId('autoteach');
+        setKickoffStatus(null);
+        setMessages((prev) => [...prev, {
+          id: `${turnId}-c`,
+          role: 'assistant',
+          content: intro,
+          timestamp: Date.now(),
+        }]);
+        useCoachMemoryStore.getState().appendConversationMessage({
+          surface: 'chat-teach',
+          role: 'coach',
+          text: intro,
+          fen: gameRef.current.fen,
+          trigger: null,
+        });
+        voiceService.stop();
+        speechChainRef.current = Promise.resolve(voiceService.speakForced(intro))
+          .catch(() => undefined);
+        // Launch the walkthrough — handleSubmit resolves the opening from the
+        // DB and starts the walkthrough runtime. The intro voice is already
+        // queued on the speech chain, so it plays before the lesson narration.
+        void handleSubmit(autoTeach);
+        return;
+      }
+
       // 5-game Stockfish kickoff analysis REMOVED (David 2026-06-15):
       // entering Learn with Coach must NOT block on analyzing the
       // student's recent games — it stalled the lesson behind a
