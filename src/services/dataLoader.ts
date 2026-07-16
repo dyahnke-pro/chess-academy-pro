@@ -200,12 +200,24 @@ async function seedCuratedTable<R extends { id: string }>(
   table: CuratedTable<R>,
   source: readonly R[],
   label: string,
+  normalize?: (entry: R) => R,
 ): Promise<void> {
   try {
     // Chunked + yielding — every-boot write, must not starve interactive work
     // (mirrors buildAndBulkPutChunked; inlined here so the guard wraps it).
+    //
+    // `normalize` is the SEED-BOUNDARY cure for the curated-data crash class
+    // (David 2026-07-15): content JSON routinely omits fields the TS type
+    // declares REQUIRED (373/646 model games lack `criticalMoments`, some
+    // plans lack `strategicThemes`/`endgameTransitions`), so a bare `{...entry}`
+    // wrote records that LIE about their type — a downstream `.map`/`.length`
+    // on the missing array then white-screens. Callers pass a normalize that
+    // defaults those required-but-JSON-optional ARRAYS to `[]`, making the
+    // persisted record match its type and no reader surprise-able. Symmetry
+    // with `sanitizeTreeStages` on the cache-read boundary.
+    const prep = normalize ?? ((entry: R): R => ({ ...entry }));
     for (let i = 0; i < source.length; i += 200) {
-      await table.bulkPut(source.slice(i, i + 200).map((entry) => ({ ...entry })));
+      await table.bulkPut(source.slice(i, i + 200).map((entry) => prep(entry)));
       if (i + 200 < source.length) await yieldToEventLoop();
     }
     const validIds = new Set(source.map((r) => r.id));
@@ -657,7 +669,13 @@ export async function loadModelGamesData(): Promise<void> {
   // progress (pure curated content keyed by id), so pruning is safe.
   // (David 2026-06-01 added the sweep; 2026-07-14 wrapped it in the shared
   // guard so an IndexedDB abort can't escape as an unhandled rejection.)
-  await seedCuratedTable<ModelGame>(db.modelGames, modelGamesData as ModelGame[], 'modelGames');
+  await seedCuratedTable<ModelGame>(
+    db.modelGames,
+    modelGamesData as ModelGame[],
+    'modelGames',
+    // `criticalMoments` is typed required but absent on 373/646 entries.
+    (g) => ({ ...g, criticalMoments: g.criticalMoments ?? [] }),
+  );
 }
 
 // ─── Pro Game References Loader ──────────────────────────────────────────────
@@ -701,6 +719,14 @@ export async function loadMiddlegamePlansData(): Promise<void> {
     db.middlegamePlans,
     [...(middlegamePlansData as MiddlegamePlan[]), ...(gambitPlansData as MiddlegamePlan[])],
     'middlegamePlans',
+    // These four are typed required arrays but some plans omit them.
+    (p) => ({
+      ...p,
+      pawnBreaks: p.pawnBreaks ?? [],
+      pieceManeuvers: p.pieceManeuvers ?? [],
+      strategicThemes: p.strategicThemes ?? [],
+      endgameTransitions: p.endgameTransitions ?? [],
+    }),
   );
 }
 
