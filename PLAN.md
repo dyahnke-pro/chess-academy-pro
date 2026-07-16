@@ -824,8 +824,31 @@ prod plans chunk live with the new content; localhost Playwright deep-link
 spot-check 4/4 green (Chromium cannot reach prod in this container — curl
 can; deploy verified at content level).
 
+## Zero-gem hand-curation stream (2026-07-16 — STARTED, Evans done)
+Current zero-gem masterclass count: 26 → 25 (Evans shipped 3 gems).
+**The proven per-opening pipeline (scan → judge → verify → author):**
+1. SCAN: throwaway helper walks the taught lines; at each OPPONENT-to-move
+   position, print amateur-explorer (ratings=1600,1800,2000) alternatives
+   ≥2%/30g with W%. (A data print, not a bot — the judgment stays by hand.)
+2. JUDGE by hand which alternatives are plausibly refutable (greed, battery
+   ignores, premature releases) — practical W% is NOT evidence (QGD c5?! ran
+   57% practical but only +0.47 objective → DROPPED).
+3. VERIFY: engine baseline BEFORE the slip (12s) + 10-ply best-play playout
+   after it; grade at the quiet end (≥+1.0 confirmed / +0.5..1.0 positional /
+   below → DROP). Verified drops this pass: QGD c5?! (+0.47), Evans Nxb4
+   (+0.32), Evans 5...Bc5 (+0.39) — famous "punishes" that don't clear the
+   objective bar. Empty > marginal.
+4. AUTHOR: gem object in punish-gems.json (schema: lineMoves/inaccuracy/
+   punish/punishSeq/playLine/engineCp/tier/freq fields) + BOTH-register
+   GEM_NARRATION entry (watch/learn arrays EXACTLY playLine length) +
+   sources[]. Gate: punishGems.test.ts.
+**Evans Gambit shipped (Compromised Defence Qb3 battery node, 3 gems):**
+Qf6?! → Bg5! (+0.54 positional, 30.5k games), Nf6?? → Bxf7+! (+2.43
+confirmed), d5?? → exd5! (+4.95 confirmed).
+
 ## Next-session pickup
-(1) 57 zero-gem openings (hand-curated per "traps by hand, no bots" —
-25 masterclass first); (2) 62 zero-endgame openings (data-gated);
-(3) 42 variation-lesson gaps. Plus David's pending call on
+(1) Continue the zero-gem stream (25 masterclass openings left — sharp ones
+first: sicilian-dragon, budapest-gambit, schliemann-defence, birds-opening;
+solid ones may honestly yield zero); (2) 62 zero-endgame openings
+(data-gated); (3) 42 variation-lesson gaps. Plus David's pending call on
 mp-pronaroKID-fourpawns-reroute (−1.1 line vs his 4-2 record).
