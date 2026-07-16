@@ -807,9 +807,25 @@ authoring plans over them would teach losing positions. FIX THE VARIATIONS
 FIRST (rebuild on sounder data spines via build-opening-spine, or demote/
 relabel honestly), then author the plans and shrink the baseline to 0.
 
+## Variation rebuilds + baseline ZERO (2026-07-16 — done, b16f650 on main)
+The 3 unsound variation lines rebuilt on masters-data spines
+(build-opening-spine walks), all engine-sound at 25s:
+- OI Czech: …c5 lock (−1.20) → …a6/…b5 expansion (−0.51). Lesson re-authored.
+- OI Be2: …c5 lock (−1.40) → …a6/…Qc7 flexible setup (−0.43).
+- Albin Fianchetto: …Bg4/…O-O-O storm (−1.62) → the modern …Nge7 REGAIN
+  (−0.22): knight tours to g6, collects the gambit pawn, queens trade,
+  Black castles with the bishop pair. Lesson re-authored as the regain plan.
+All 3 plans authored at the new termini → **middlegamePlanIdIntegrity
+BASELINE_MISSING = ZERO** (all 34 originally-dangling ids resolved).
+Bonus catch: the grounding-evals regen flagged the SHIPPED mp-carokann-main
+plan teaching an immediate …c5 that loses by force (−1.5); rewritten as the
+"wall first" move-order lesson (…e6 before …c5, −0.32). Deploy verified:
+prod plans chunk live with the new content; localhost Playwright deep-link
+spot-check 4/4 green (Chromium cannot reach prod in this container — curl
+can; deploy verified at content level).
+
 ## Next-session pickup
-(1) Rebuild the 3 unsound variation lines above (albin-fianchetto,
-oldindian-czech, oldindian-be2) and author their plans — baseline → 0;
-(2) 57 zero-gem openings (hand-curated, no bots); (3) 62 zero-endgame
-openings (data-gated); (4) 42 variation-lesson gaps. Plus David's pending
-call on mp-pronaroKID-fourpawns-reroute (−1.1 line vs his 4-2 record).
+(1) 57 zero-gem openings (hand-curated per "traps by hand, no bots" —
+25 masterclass first); (2) 62 zero-endgame openings (data-gated);
+(3) 42 variation-lesson gaps. Plus David's pending call on
+mp-pronaroKID-fourpawns-reroute (−1.1 line vs his 4-2 record).
