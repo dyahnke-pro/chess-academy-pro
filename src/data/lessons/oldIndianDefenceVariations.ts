@@ -2,10 +2,13 @@ import type { LessonScript, LessonBeat, AnnotationArrow, AnnotationHighlight } f
 
 // Black-oriented variation lessons for the Old Indian Defence. Lead-the-eye §5a.
 // Moves from repertoire.json variation pgn lines (DB-anchored, G3); prose only.
-// Deepest beat ≥20 plies. Janowski/Tartakower/Ukrainian/Seirawan/Main-d5 anchor
-// <20p in the curated pgn, so they fold into the main rather than ship thin.
+// Deepest beat ≥20 plies. Full 7/7 tab coverage as of 2026-07-16 — Janowski
+// extended to 22p on the data/engine continuation (O-O c6 Qe2 cxd5); termini
+// engine-screened (-0.69..-0.99, honest-framed as White's space pull).
 const KEY = 'rgba(255,214,0,0.88)';
+const ATK = 'rgba(40,185,95,0.92)';
 const SOFT = 'rgba(80,140,255,0.32)';
+const A = (from: string, to: string, color: string): AnnotationArrow => ({ from, to, color });
 const H = (square: string, color = KEY): AnnotationHighlight => ({ square, color });
 interface BeatInit { id: string; moves: string; say: string; sayShort?: string; arrows?: AnnotationArrow[]; highlights?: AnnotationHighlight[]; }
 function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return { ...rest, moves: moves.trim().split(/\s+/) }; }
@@ -46,6 +49,36 @@ export const OLD_INDIAN_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> 
       b({ id: 'e2', moves: 'd4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 Qc2 a6', say: "…c6 restrains the d5-advance and …a6 follows the modern recipe — the same flexible expansion shape the Czech uses. White's Qc2 eyes the queenside and supports e4; Black commits to nothing and prepares everything.", sayShort: '…a6 — the modern recipe.', highlights: [H('c6'), H('a6')] }),
       b({ id: 'e3', moves: 'd4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 Qc2 a6 Rd1 Qc7 Bg5 Re8', say: "Rd1 takes the d-file, so …Qc7 steps off it at once, keeping the e5-pawn covered from the side. Bg5 develops with a nudge at the f6-knight; …Re8 backs the e-file. Every Black piece takes a square it will not regret.", sayShort: '…Re8 — off the file, back the e-pawn.', highlights: [H('c7'), H('e8'), H('g5', SOFT)] }),
       b({ id: 'e4', moves: 'd4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 Qc2 a6 Rd1 Qc7 Bg5 Re8 Rac1 h6', say: "Rac1 completes White's setup and …h6 puts the question to the g5-bishop. The honest ledger: White's space advantage is a steady pull that grows toward a full pawn if Black merely waits — so the plan matters. The …exd4 trade at the right moment, the e-file rook, and the …Nc5 hop are where Black's counterplay lives; play them actively and the Be2 system stays a fight, not a squeeze.", sayShort: '…h6 — question, then counterplay.', highlights: [H('h6'), H('g5'), H('c5', SOFT)] }),
+    ],
+  },
+  'old-indian-defence::Old Indian: Janowski Variation': {
+    openingId: 'old-indian-defence', title: 'Old Indian — the Janowski …Bf5 (free the bishop first)', minutes: 8, orientation: 'black',
+    sources: SRC,
+    beats: [
+      b({ id: 'j1', moves: 'd4 Nf6 c4 d6 Nc3 Bf5', say: "The Janowski move: …Bf5 walks the light-squared bishop OUT before …e5 walls it in. In every other Old Indian the c8-bishop is the problem child, staring at its own pawns for thirty moves — this line spends one early tempo to solve the problem permanently.", sayShort: '…Bf5 — free the problem bishop first.', highlights: [H('f5')] }),
+      b({ id: 'j2', moves: 'd4 Nf6 c4 d6 Nc3 Bf5 f3 e5 e4 Bg6 d5 Be7', say: "White answers with f3 and e4, gaining a tempo on the bishop — but …Bg6 tucks it away still OUTSIDE the pawn chain, mission accomplished. When d5 closes the centre, note the cost White paid: the f3-pawn sits on his king's knight's best square. Black quietly completes with …Be7.", sayShort: '…Bg6 — outside the chain for good.', highlights: [H('g6'), H('f3', SOFT)] }),
+      b({ id: 'j3', moves: 'd4 Nf6 c4 d6 Nc3 Bf5 f3 e5 e4 Bg6 d5 Be7 Be3 h6 Nh3 Nbd7 Bd3 O-O', say: "…h6 takes the g5-square away from White's pieces before castling. Watch White's king's knight: with f3 occupied by its own pawn, it develops to the rim on h3. Bd3 props up e4 and offers to trade off Black's freed bishop — the compliment tells you the …Bf5 idea worked.", sayShort: '…O-O — castle; the rim knight tells the story.', highlights: [H('h3'), H('g5', SOFT)] }),
+      b({ id: 'j4', moves: 'd4 Nf6 c4 d6 Nc3 Bf5 f3 e5 e4 Bg6 d5 Be7 Be3 h6 Nh3 Nbd7 Bd3 O-O O-O c6 Qe2 cxd5', say: "Both sides castle and Black strikes at the head of the chain: …c6, then …cxd5, and however White recaptures, a file opens for Black's heavy pieces. Honest ledger: the engine gives White a real space pull here — this is the Old Indian's nature. What Black owns is a position with no weaknesses, the bishop that usually rots on c8 breathing on g6, and clear plans: the open c-file and the eventual …f5 break.", sayShort: '…cxd5 — open a file, trust the structure.', highlights: [H('d5'), H('c6', SOFT)] }),
+    ],
+  },
+
+  'old-indian-defence::Old Indian: Main Line with d5': {
+    openingId: 'old-indian-defence', title: 'Old Indian — the Main Line liquidation (…Nh5!)', minutes: 8, orientation: 'black',
+    sources: SRC,
+    beats: [
+      b({ id: 'm1', moves: 'd4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 d5', say: "The classical tabiya: Black's modest …d6/…e5 centre, knights on f6 and d7, everything castled — and White clamps the centre shut with d5. The position looks cramped for Black, and it is. The next three moves show why that's not the end of the story.", sayShort: 'd5 — White clamps; Black has a plan.', highlights: [H('d5'), H('e5', SOFT)] }),
+      b({ id: 'm2', moves: 'd4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 d5 a5 a3 Nh5', say: "…a5 stakes out queenside space and stops any b4 expansion cold. Then the key move: …Nh5 — the f6-knight heads for the f4-hole in front of White's king, and suddenly White has a concrete problem to solve instead of a free hand.", sayShort: '…Nh5 — aim at the f4-hole.', arrows: [], highlights: [H('f4'), H('a5', SOFT)] }),
+      b({ id: 'm3', moves: 'd4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 d5 a5 a3 Nh5 Nxe5 Nxe5 Bxh5 Nxc4', say: "White grabs the e5-pawn, Black recaptures with the d7-knight, White snaps the h5-knight — and …Nxc4! squares the ledger, the knight collecting the c4-pawn and poking at b2 on arrival. Two pairs of minor pieces have left the board and the cramp went with them. The engine keeps a modest White pull — space is space — but Black traded a passive position for an active knight and full freedom. That liquidation trick is the whole reason to know this move order.", sayShort: '…Nxc4 — the ledger squared, the cramp gone.', arrows: [A('c4', 'b2', ATK)], highlights: [H('c4')] }),
+    ],
+  },
+
+  'old-indian-defence::Old Indian: Seirawan System': {
+    openingId: 'old-indian-defence', title: 'Old Indian — the Seirawan piece dance', minutes: 8, orientation: 'black',
+    sources: SRC,
+    beats: [
+      b({ id: 's1', moves: 'd4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 d5 a5', say: "The same closed tabiya as the main line: d5 clamps the centre, …a5 answers on the queenside. Here White declines the direct plans and plays a slower hand — and Black's pieces show what maneuvering chess looks like.", sayShort: '…a5 — space first, dance second.', highlights: [H('a5'), H('d5', SOFT)] }),
+      b({ id: 's2', moves: 'd4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 d5 a5 Qc2 Qc7', say: "Qc2 and …Qc7 — the queens mirror each other into the c-file's shadow. Black's queen slot does triple duty from c7: it covers e5, backs any future …c-file opening, and clears d8 for a rook. Waiting moves that improve are not really waiting moves.", sayShort: '…Qc7 — triple duty from one square.', highlights: [H('c7')] }),
+      b({ id: 's3', moves: 'd4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 d5 a5 Qc2 Qc7 Be3 Ng4 Bd2 Nc5', say: "Now the dance: Be3 develops, …Ng4 immediately hits it, and the bishop backs down to d2 rather than concede the dark squares. Then …Nc5 — the d7-knight lands on the queenside's best square, biting on e4. Two knight hops and White's bishop pair is shuffling while Black's cavalry sets the agenda. The engine keeps White's space pull modest; Black has zero weaknesses and every piece on an improving square — the Old Indian played the way its believers play it.", sayShort: '…Nc5 — the cavalry sets the agenda.', arrows: [A('c5', 'e4', ATK), A('g4', 'e3', ATK)], highlights: [H('c5'), H('g4')] }),
     ],
   },
 };
