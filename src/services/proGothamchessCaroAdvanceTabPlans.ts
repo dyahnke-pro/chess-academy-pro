@@ -5,11 +5,9 @@
 
 const TAB_PLANS: Record<string, string[]> = {
   main: [
-    'mp-progothamchess-caroadv-bf5-c4break',
     'mp-progothamchess-caroadv-qxd4-punish',
   ],
   'main line (vs …bf5)': [
-    'mp-progothamchess-caroadv-bf5-c4break',
     'mp-progothamchess-caro-advance-h4-pin',
     'mp-progothamchess-caroadv-h6-g4space',
     'mp-progothamchess-caroadv-qxd4-punish',

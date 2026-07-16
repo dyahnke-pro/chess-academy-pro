@@ -753,10 +753,45 @@ per-opening to the locked doctrines).
   vienna-gambit-main rebuilt instead of deleted; stale ruy d6@13 subline dropped.
 - **Known debt:** proRepTabPlanCoverage's RESOLVERS list omits all Gotham
   resolvers ("keep in sync" comment violated) — sync would surface more
-  unresolved pairs; separate hygiene task.
+  unresolved pairs; separate hygiene task. → **PAID 2026-07-16** (below).
+
+## Claims truth-audit + resolver sync (2026-07-16 — done)
+- **"Real win from this repertoire" claims audited across all plan prose.**
+  All 43 claims naming an opponent VERIFIED against the corpus (opponent
+  present in that opening's tree/deep/model-games/archive data; two traced
+  move-by-move to the actual game — Samay's Italian endgame = his win over
+  Sankalp_Pathak 2025-04; Naroditsky's Sämisch-KID endgame = his win over
+  abhijeetgupta1016 2017-12). 18 generic no-game claims were engine-tail
+  model lines wearing a fabricated "real win" label → reworded to honest
+  model-line framing (overviews + intros, varied stems). One fabricated
+  rating claim stripped (Rosen Stafford "beat a 3165" — max real Stafford
+  opponent is 2982). Per David's "we teach his teachings": teaching-derived
+  lines are framed as what he TEACHES, never as games that didn't happen.
+- **Resolver sync done:** all 18 Gotham resolvers wired into
+  proRepTabPlanCoverage's RESOLVERS chain — every Gotham (opening, variation)
+  pair resolves; 18 openings dropped from BASELINE_UNRESOLVED (shrink).
+- **Dangling-plan-id class found + sealed:** 39 'mp-*' ids referenced by tab
+  resolvers that never existed in middlegame-plans.json (silently empty plan
+  zones — invisible to the coverage gate because the resolver returns
+  non-null). Fixed: grunfeld 'modern rb1' repointed to the real
+  mp-grunfelddefence-modernrb1; 2 live-empty pro tabs got their plans
+  AUTHORED (Gotham French Tarrasch …b5-gambit refutation, engine +4.7 tail
+  w/ the Nc2+ fork + Bh3+ + Nd4-deflection mate motif; Gotham QGD Exchange
+  Carlsbad …Nf8/…g6/…Be6 hold, honest −0.5 pricing); 2 stale ids pruned
+  (naroKID classical-c5, caroadv bf5-c4break — tabs keep their real plans).
+  **New gate: `src/data/middlegamePlanIdIntegrity.test.ts`** — every mp-*
+  literal in a resolver file must exist in middlegame-plans.json; shrink-only
+  BASELINE_MISSING carries the remaining 34 never-authored masterclass
+  variation plans (albin ×3, semislav ×4, qgd ×3, petrov ×3, philidor ×3,
+  schliemann ×3, budapest ×2, qga ×2, queensindian ×2, oldindian ×2, KID ×2,
+  twoknights ×2, benoni/najdorf-6f3/slav-schlechter ×1). That baseline IS the
+  masterclass variation-plan authoring backlog.
 
 ## Next-session pickup
-Finish the Gate C grind per the loop above (baseline → 0 or an honest
-irreducible core), then read the three sweep JSONs and work the backlog
-top-down, shipping per the standard loop (gates → ship-check → main →
-prod audit).
+Work the content-presence backlog top-down, shipping per the standard loop
+(gates → ship-check → main → prod audit): (1) the 34 baselined masterclass
+variation plans (middlegamePlanIdIntegrity BASELINE_MISSING — author per the
+Gate C grind recipe: corpus/data spine → engine tail → hand narration);
+(2) 57 zero-gem openings (hand-curated, no bots); (3) 62 zero-endgame
+openings (data-gated); (4) 42 variation-lesson gaps. Plus David's pending
+call on mp-pronaroKID-fourpawns-reroute (−1.1 line vs his 4-2 record).

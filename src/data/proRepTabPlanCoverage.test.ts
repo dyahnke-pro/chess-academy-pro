@@ -38,6 +38,24 @@ import { getProSamayRainaOpenE5TabPlanIds } from '../services/proSamayRainaOpenE
 import { getProSamayRainaSicilianBlackTabPlanIds } from '../services/proSamayRainaSicilianBlackTabPlans';
 import { getProSamayRainaScandiTabPlanIds } from '../services/proSamayRainaScandiTabPlans';
 import { getProSamayRainaKingsGambitTabPlanIds } from '../services/proSamayRainaKingsGambitTabPlans';
+import { getProGothamchessCaroTabPlanIds } from '../services/proGothamchessCaroTabPlans';
+import { getProGothamchessTrompowskyTabPlanIds } from '../services/proGothamchessTrompowskyTabPlans';
+import { getProGothamchessEnglishTabPlanIds } from '../services/proGothamchessEnglishTabPlans';
+import { getProGothamchessViennaTabPlanIds } from '../services/proGothamchessViennaTabPlans';
+import { getProGothamchessItalianTabPlanIds } from '../services/proGothamchessItalianTabPlans';
+import { getProGothamchessLondonTabPlanIds } from '../services/proGothamchessLondonTabPlans';
+import { getProGothamchessPonzianiTabPlanIds } from '../services/proGothamchessPonzianiTabPlans';
+import { getProGothamchessAntiSicilianTabPlanIds } from '../services/proGothamchessAntiSicilianTabPlans';
+import { getProGothamchessMilnerBarryTabPlanIds } from '../services/proGothamchessMilnerBarryTabPlans';
+import { getProGothamchessFantasyTabPlanIds } from '../services/proGothamchessFantasyTabPlans';
+import { getProGothamchessStaffordTabPlanIds } from '../services/proGothamchessStaffordTabPlans';
+import { getProGothamchessCaroAdvanceTabPlanIds } from '../services/proGothamchessCaroAdvanceTabPlans';
+import { getProGothamchessKiaTabPlanIds } from '../services/proGothamchessKiaTabPlans';
+import { getProGothamchessClosedSicilianTabPlanIds } from '../services/proGothamchessClosedSicilianTabPlans';
+import { getProGothamchessScandinavianTabPlanIds } from '../services/proGothamchessScandinavianTabPlans';
+import { getProGothamchessQgdTabPlanIds } from '../services/proGothamchessQgdTabPlans';
+import { getProGothamchessFrenchTabPlanIds } from '../services/proGothamchessFrenchTabPlans';
+import { getProGothamchessPircTabPlanIds } from '../services/proGothamchessPircTabPlans';
 
 interface ProRepEntry {
   id: string;
@@ -73,6 +91,24 @@ const RESOLVERS: Array<(openingId: string, tabKey: string) => string[] | null> =
   getProSamayRainaSicilianBlackTabPlanIds,
   getProSamayRainaScandiTabPlanIds,
   getProSamayRainaKingsGambitTabPlanIds,
+  getProGothamchessCaroTabPlanIds,
+  getProGothamchessTrompowskyTabPlanIds,
+  getProGothamchessEnglishTabPlanIds,
+  getProGothamchessViennaTabPlanIds,
+  getProGothamchessItalianTabPlanIds,
+  getProGothamchessLondonTabPlanIds,
+  getProGothamchessPonzianiTabPlanIds,
+  getProGothamchessAntiSicilianTabPlanIds,
+  getProGothamchessMilnerBarryTabPlanIds,
+  getProGothamchessFantasyTabPlanIds,
+  getProGothamchessStaffordTabPlanIds,
+  getProGothamchessCaroAdvanceTabPlanIds,
+  getProGothamchessKiaTabPlanIds,
+  getProGothamchessClosedSicilianTabPlanIds,
+  getProGothamchessScandinavianTabPlanIds,
+  getProGothamchessQgdTabPlanIds,
+  getProGothamchessFrenchTabPlanIds,
+  getProGothamchessPircTabPlanIds,
 ];
 
 function resolve(openingId: string, variationName: string): string[] | null {
@@ -95,26 +131,8 @@ describe('tab-plan resolver coverage gate — every Naroditsky variation has a r
     'pro-aman-anti-caro', 'pro-aman-caro-kann', 'pro-aman-french-white',
     'pro-aman-nimzo-indian', 'pro-aman-open-sicilian', 'pro-aman-reti',
     'pro-aman-rossolimo', 'pro-aman-ruy-lopez', 'pro-aman-sicilian-kan',
-    // Gothamchess pro-rep is a partial build — variations declared but
-    // tab-plan resolvers not yet authored.
-    'pro-gothamchess-anti-sicilian',
-    'pro-gothamchess-caro-advance-white',
-    'pro-gothamchess-caro-kann',
-    'pro-gothamchess-closed-sicilian',
-    'pro-gothamchess-english',
-    'pro-gothamchess-fantasy-caro',
-    'pro-gothamchess-french-defense',
-    'pro-gothamchess-italian',
-    'pro-gothamchess-kia',
-    'pro-gothamchess-london',
-    'pro-gothamchess-milner-barry',
-    'pro-gothamchess-pirc-defense',
-    'pro-gothamchess-ponziani',
-    'pro-gothamchess-qgd',
-    'pro-gothamchess-scandinavian',
-    'pro-gothamchess-stafford-refute',
-    'pro-gothamchess-trompowsky',
-    'pro-gothamchess-vienna',
+    // Gothamchess pro-rep: resolvers authored + wired (2026-07-16) —
+    // every variation resolves; all 18 openings dropped from this baseline.
     // Fantasy Caro standalone — variations declared but no resolver
     // (one variation 'Black accepts with dxe4' IS routed via the
     // Remaining resolver to a Fantasy plan; the other 2 variations

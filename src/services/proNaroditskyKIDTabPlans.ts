@@ -6,7 +6,7 @@
 
 export const PRO_NARODITSKY_KID_TAB_PLAN_IDS: Record<string, string[]> = {
   main: [],
-  'classical mar del plata (be2)': ['mp-pronaroKID-classical-kingside', 'mp-pronaroKID-classical-c5'],
+  'classical mar del plata (be2)': ['mp-pronaroKID-classical-kingside'],
   'fianchetto variation (g3)': ['mp-pronaroKID-fianchetto-queenside', 'mp-pronaroKID-fianchetto-simplify'],
   'anti-kid with nf3 first': ['mp-pronaroKID-antikidnf3-yugoslav', 'mp-pronaroKID-antikidnf3-rooklift'],
   'makogonov (h3)': ['mp-pronaroKID-makogonov-kingside', 'mp-pronaroKID-makogonov-nc5'],
