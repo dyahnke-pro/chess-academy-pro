@@ -7328,5 +7328,83 @@
   "engineCp": 495,
   "tier": "confirmed",
   "why": "Blocking the battery with d5 fails on the spot. Punish with exd5 — the pawn recaptures with tempo on the c6-knight, the position rips open with Black's king stuck in the middle, and the engine has White winning (+5)."
+ },
+ {
+  "openingId": "sicilian-dragon",
+  "lineMoves": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 O-O Qd2 Nc6 Bc4 Bd7 O-O-O Rc8",
+  "inaccuracy": "Kb1",
+  "freqPct": 4,
+  "games": 7601,
+  "practicalScore": 69,
+  "mainMove": "Bb3",
+  "punish": "Nxd4",
+  "punishSeq": [
+   "Nxd4",
+   "Qxd4",
+   "Ng4",
+   "fxg4",
+   "Bxd4",
+   "Rxd4",
+   "b5",
+   "Bb3",
+   "a5",
+   "a3"
+  ],
+  "playLine": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 O-O Qd2 Nc6 Bc4 Bd7 O-O-O Rc8 Kb1 Nxd4 Qxd4 Ng4 fxg4 Bxd4 Rxd4 b5 Bb3 a5 a3",
+  "engineCp": 344,
+  "tier": "confirmed",
+  "why": "Kb1 skips the mandatory Bb3 retreat. Punish with Nxd4 — if the queen recaptures, Ng4! discovers the g7-bishop onto her and wins queen for knight and bishop. The engine has Black clearly winning (+3.4)."
+ },
+ {
+  "openingId": "sicilian-dragon",
+  "lineMoves": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 O-O Qd2 Nc6 Bc4 Bd7 O-O-O Rc8",
+  "inaccuracy": "g4",
+  "freqPct": 2,
+  "games": 4189,
+  "practicalScore": 71,
+  "mainMove": "Bb3",
+  "punish": "Nxd4",
+  "punishSeq": [
+   "Nxd4",
+   "Bxf7+",
+   "Rxf7",
+   "Bxd4",
+   "b5",
+   "g5",
+   "Nh5",
+   "Bxg7",
+   "Nxg7",
+   "h4"
+  ],
+  "playLine": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 O-O Qd2 Nc6 Bc4 Bd7 O-O-O Rc8 g4 Nxd4 Bxf7+ Rxf7 Bxd4 b5 g5 Nh5 Bxg7 Nxg7 h4",
+  "engineCp": 412,
+  "tier": "confirmed",
+  "why": "g4 storms ahead with the c4-bishop still loose against your loaded c8-rook. Punish with Nxd4 — even the desperado on f7 leaves Black a clean piece up (+4.1)."
+ },
+ {
+  "openingId": "sicilian-dragon",
+  "lineMoves": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 O-O Qd2 Nc6 Bc4 Bd7 O-O-O Rc8",
+  "inaccuracy": "h4",
+  "freqPct": 2,
+  "games": 3928,
+  "practicalScore": 66,
+  "mainMove": "Bb3",
+  "punish": "Nxd4",
+  "punishSeq": [
+   "Nxd4",
+   "Bxf7+",
+   "Rxf7",
+   "Bxd4",
+   "Qa5",
+   "a3",
+   "Be6",
+   "Qe3",
+   "Bc4",
+   "h5"
+  ],
+  "playLine": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 O-O Qd2 Nc6 Bc4 Bd7 O-O-O Rc8 h4 Nxd4 Bxf7+ Rxf7 Bxd4 Qa5 a3 Be6 Qe3 Bc4 h5",
+  "engineCp": 378,
+  "tier": "confirmed",
+  "why": "h4 launches the storm a move too soon — the c4-bishop is loose against the c8-rook. Punish with Nxd4: the desperado check changes nothing, and Black emerges a piece for a pawn up (+3.8)."
  }
 ]
