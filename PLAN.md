@@ -736,11 +736,18 @@ per-opening to the locked doctrines).
   Caro-Kann+Ruy (→52, d3-Closed rerouted, Berlin queen-trade plan),
   Scandi+ClosedSic+Ponziani (→40, +7 variations, Ponziani honestly priced
   at −0.3, its −5.7 Nc3 candidate discarded).
-- **In flight:** Najdorf/Anti-Sicilian/Italian (3 each; tails deriving) —
-  →~31. Then: caro-advance-white (2), stafford-refute (2), naro-fantasy (1),
-  gotham french/qgd (2) pro-rep singles; masterclass leftovers (caro-kann 2,
-  birds 2, french/nimzo/reti/benko/trompowsky 1s) need the same loop against
-  repertoire.json lines instead of pro-repertoires.
+- **COMPLETE (2026-07-16): baseline 109 → 1.** Final waves: Najdorf/AntiSic/
+  Italian (→31, +Two Knights variation), all pro-rep singles (→16 — the
+  Trompowsky b2-trap at +5.5, both Stafford refutations, the honest Milner
+  −0.9 and Advance …Qb6 0.00 poisoned-pawn pricing), all masterclass
+  leftovers (→1, 15 plans incl. the Alapin rewritten from the BLACK side it
+  actually teaches, 21 lead-the-eye violations caught by middlegamePlanner
+  and fixed — two arrows were drawn through blocking pawns, i.e. false claims).
+- **THE IRREDUCIBLE CORE (1): mp-pronaroKID-fourpawns-reroute** — Danya's own
+  …c5/Nd6 Four-Pawns line evals −1.1 for Black at 25s depth at his own 4-2
+  corpus terminus. Teaching it as fine would lie (soundness doctrine); the
+  fix is a content decision: re-teach via the e5!? sideline his videos also
+  cover. DAVID CALL.
 - **Side finds fixed en route:** 9 dangling resolver ids pruned; caruana-najdorf
   + dragodorf wired (parallel build had left them unresolved); orphaned
   vienna-gambit-main rebuilt instead of deleted; stale ruy d6@13 subline dropped.
