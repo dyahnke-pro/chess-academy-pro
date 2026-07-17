@@ -34,8 +34,13 @@ on:
         default: false
         type: boolean
       version_code:
-        description: 'Override the Android versionCode (monotonic integer). Blank = build.gradle default.'
+        description: 'Android versionCode (monotonic integer, must exceed the last Play upload). Blank = build.gradle default.'
         required: false
+        type: string
+      version_name:
+        description: 'Android versionName (user-facing, e.g. 3.2 to match iOS). Blank = 3.2.'
+        required: false
+        default: '3.2'
         type: string
 
 concurrency:
@@ -98,7 +103,7 @@ jobs:
 
       - name: Build signed release bundle (.aab)
         env:
-          APP_VERSION: '2.8'
+          APP_VERSION: ${{ inputs.version_name || '3.2' }}
           ANDROID_VERSION_CODE: ${{ inputs.version_code }}
         run: |
           cd android
