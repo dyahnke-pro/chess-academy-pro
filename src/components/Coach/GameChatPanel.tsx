@@ -28,6 +28,17 @@ import { ChatInput } from './ChatInput';
 import type { ChatMessage as ChatMessageType, BoardAnnotationCommand } from '../../types';
 import { uid } from '../../utils/uid';
 
+/** Pull the inner items out of a `[CHOICES: A | B | C]` marker in a raw coach
+ *  reply (mirrors the CoachTeachPage extractor). The marker itself is stripped
+ *  from the displayed bubble + TTS by sanitizeCoachText/stripCoachMarkup, so
+ *  this only reads it to surface the tappable picker. Returns null when there's
+ *  no marker or no non-empty items. */
+function extractCoachChoices(raw: string): string[] | null {
+  const m = /\[CHOICES:\s*([\s\S]*?)\]/.exec(raw);
+  if (!m) return null;
+  const items = m[1].split('|').map((s) => s.trim()).filter((s) => s.length > 0).slice(0, 6);
+  return items.length > 0 ? items : null;
+}
 
 /** Strip [BOARD: ...] tags so they don't flash during streaming.
  *  Action tags ([[ACTION:...]] and [ACTION:...]) are stripped via a
@@ -190,6 +201,25 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
     const [isStreaming, setIsStreaming] = useState(false);
     const initialPromptSentRef = useRef(false);
     const [streamingContent, setStreamingContent] = useState('');
+    // Tappable answer chips parsed from a `[CHOICES: A | B | C]` marker in a
+    // coach reply — the home-drawer equivalent of the /coach/teach picker
+    // (David 2026-07-17: "any suggestion from coach should also populate a
+    // picker prompt"). Populated by the dead-end opening-suggestion rescue
+    // (coachApi.buildOpeningSuggestionReply) or any brain-offered [CHOICES:].
+    const [coachChoices, setCoachChoices] = useState<string[] | null>(null);
+    // Tap a chip → open that opening's lesson. Home-chat has no in-place
+    // walkthrough, so route to /coach/teach (auto-start) rather than re-asking
+    // the coach (which would just offer the same picker again).
+    const onPickCoachChoice = useCallback((choice: string): void => {
+      setCoachChoices(null);
+      void logAppAudit({
+        kind: 'coach-voice-marker-extracted',
+        category: 'subsystem',
+        source: 'GameChatPanel.onPickCoachChoice',
+        summary: `home-chat choice tapped → teach "${choice.slice(0, 40)}"`,
+      });
+      void navigate(`/coach/teach?teach=${encodeURIComponent(choice)}&auto=1`);
+    }, [navigate]);
     const speechBufferRef = useRef('');
     // Sequential TTS chain — sentence-by-sentence streaming used to fire
     // `if (!speechAbortedRef.current) void voiceService.speak(sentence)` as parallel calls. Each speak
@@ -333,6 +363,9 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
 
     const handleSend = useCallback(async (text: string) => {
       if (!activeProfile || isStreaming) return;
+
+      // A new turn invalidates any outstanding [CHOICES:] picker.
+      setCoachChoices(null);
 
       // Mirror every assistant turn (acks, error stubs, timeouts) into
       // the spine's conversation memory so the brain's next envelope
@@ -1047,6 +1080,8 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
               fen: fen || undefined,
             });
           }
+          // Surface any [CHOICES:] chips as a tappable picker above the input.
+          setCoachChoices(extractCoachChoices(answer.text));
           const assistantMsg: ChatMessageType = {
             id: uid('gmsg-resp'),
             role: 'assistant',
@@ -1322,6 +1357,9 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         }
         // WO-COACH-TTS-STRIP-01: sanitize before bubble + memory.
         const drawerAssistantText = sanitizeCoachText(drawerCleanText);
+        // Surface any [CHOICES:] chips (dead-end opening picker / brain-offered
+        // choices) as a tappable picker above the input.
+        setCoachChoices(extractCoachChoices(answer.text));
         const assistantMsg: ChatMessageType = {
           id: uid('gmsg-resp'),
           role: 'assistant',
@@ -1400,6 +1438,8 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         <ChatInput
           onSend={(text) => void handleSend(text)}
           disabled={isStreaming}
+          coachChoices={coachChoices}
+          onPickCoachChoice={onPickCoachChoice}
           placeholder={isStreaming ? 'Coach is typing…' : 'Ask your coach…'}
           // The Game Chat always sits under a board — never grab focus on mount
           // (that scrolled the page past the board on mobile). David 2026-06-19:
