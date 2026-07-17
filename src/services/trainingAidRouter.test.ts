@@ -158,6 +158,33 @@ describe('matchTrainingAidRoute — puzzle STATS questions fall through to the g
   });
 });
 
+describe('matchTrainingAidRoute — "teach me / learn" framing (David 2026-07-16)', () => {
+  // "teach me tactics" / "teach me endgames" / "learn tactics" are training
+  // requests, not board questions. They used to slip past every matcher
+  // (`teach`/`learn` weren't framing verbs) and dead-end on the grounded
+  // coach's "I can't verify that precisely" stock line. Now they drill.
+  it.each([
+    ['teach me tactics', '/coach/teach?drill=puzzle'],
+    ['teach me endgames', '/coach/teach?drill=endgame'],
+    ['teach me forks', '/coach/teach?drill=puzzle%3Afork'],
+    ['learn tactics', '/coach/teach?drill=puzzle'],
+    ['learn endgames', '/coach/teach?drill=endgame'],
+  ])('routes "%s" → %s', (q, path) => {
+    expect(matchTrainingAidRoute(q)?.path).toBe(path);
+  });
+
+  // An OPENING name carries no aid noun, so "teach me the X" still falls
+  // through to the opening router (the primary Learn-tab flow) — unchanged.
+  it.each([
+    'teach me the Najdorf',
+    'teach me the Caro-Kann',
+    'teach me the Vienna',
+    'learn the London System',
+  ])('does NOT hijack the opening-teach flow: %s', (q) => {
+    expect(matchTrainingAidRoute(q)).toBeNull();
+  });
+});
+
 describe('matchTrainingAidRoute — non-matches (fall through to brain / opening router)', () => {
   it('does NOT match an opening drill "drill the Vienna"', () => {
     expect(matchTrainingAidRoute('drill the Vienna')).toBeNull();

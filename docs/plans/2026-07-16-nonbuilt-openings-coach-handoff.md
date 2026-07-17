@@ -92,6 +92,33 @@ the exact name), and (2) "Scandi" is an abbreviation no matcher recognizes.
 - [x] Test `CoachTeachPage.teachRescue.test.ts` — "Scandi panov" → abbrev
       expand → unfiltered search → Panov Transfer → override builds a tree.
 
+### Phase 3 — coach "I can't verify" fallback: what ACTUALLY hits it (PostHog-grounded)  ·  status: DONE
+David asked to fix the coach routing so intents dead-end less on the
+`STOCK_GROUNDING_FALLBACK` ("I can't verify that precisely from grounded
+data"). Rather than fix hypotheticals, pulled the REAL hitters from PostHog
+`coach_answer` (answer_text ILIKE the fallback, last 45d):
+- **move-narration turns on `/coach/teach`** (12 hits, 1 user, 2026-07-12
+  13:41–14:05) — the Learn walkthrough spoke the stock line for a whole
+  session. ALREADY FIXED by the `moveNarrationFacts` → `voiceFacts`
+  short-circuit (`coachApi.ts:2482`, landed 2026-07-12) + build 143. **Zero
+  recurrence after 2026-07-12** — verified, not a live regression.
+- **"Scandi panov" / "Panov" searches** (4 hits, Yorkville) — the non-built
+  openings work above (Phases 1–1.6, build 143). Fixed.
+- one-offs: "Against the Cato khan what should I play?" (`/coach/home`, 1×,
+  open-ended strategy Q&A — honest fallback), "Can you hear me" (`/coach/play`,
+  1×, mic test). Not worth special routing at 1 occurrence each.
+- **"Teach me tactics" / "Teach me endgames" / "Turn on hints" did NOT appear
+  in the real fallback data** — those were session hypotheses. "Turn on hints"
+  is already handled by `applyCoachSetting` on every real surface. But the
+  `teach`/`learn` framing gap in `trainingAidRouter` was REAL in code (they
+  weren't framing verbs), so closed it proactively:
+- [x] `trainingAidRouter.FRAMING_RE` += `teach(?:\s+me)?|learn` → "teach me
+      tactics" → tactics board drill, "teach me endgames" → endgame drill,
+      "learn tactics" → tactics drill. Opening names ("teach me the Najdorf")
+      carry no aid noun → still fall through to the opening router. Shared by
+      every coach surface (Learn/Play/chat/mic). Test: `trainingAidRouter.test.ts`
+      "teach me / learn framing".
+
 ### Phase 2 — polish  ·  status: partial
 - [x] Keep the Accelerated Panov → Caro Panov-tab transposition redirect
       (`masterclassRedirect.ts`) — it opens a REAL course, better than a

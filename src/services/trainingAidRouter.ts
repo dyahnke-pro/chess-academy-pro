@@ -43,9 +43,16 @@ export interface TrainingAidRoute {
 }
 
 /** Practice / drill framing — the verbs that turn an aid noun into a
- *  request to TRAIN it (vs merely mention it in a question). */
+ *  request to TRAIN it (vs merely mention it in a question). `teach`/`learn`
+ *  are framing verbs too (David 2026-07-16): "teach me tactics" / "teach me
+ *  endgames" / "learn tactics" are training requests, not board questions —
+ *  they used to slip past every matcher and dead-end on the grounded coach's
+ *  "I can't verify that precisely" stock line. An opening name ("teach me the
+ *  Najdorf") carries no aid noun, so it still falls through to the opening
+ *  router — this only routes the tactics/endgame/calculation/mate/puzzle
+ *  aid nouns. */
 const FRAMING_RE =
-  /\b(?:drill|drills|practi[cs]e|practi[cs]ing|train(?:ing)?|work\s+on|sharpen|improve|quiz(?:\s+me)?|give\s+me|show\s+me|let'?s\s+(?:do|try|practi[cs]e|work\s+on)|i\s+(?:want|need)|start)\b/i;
+  /\b(?:drill|drills|practi[cs]e|practi[cs]ing|train(?:ing)?|work\s+on|sharpen|improve|quiz(?:\s+me)?|give\s+me|show\s+me|teach(?:\s+me)?|learn|let'?s\s+(?:do|try|practi[cs]e|work\s+on)|i\s+(?:want|need)|start)\b/i;
 
 /** A weakness-DIAGNOSIS / recommendation QUESTION ("what tactics am I weak
  *  in?", "where am I losing?", "what should I train?") is NOT a drill
