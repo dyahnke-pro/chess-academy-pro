@@ -41,18 +41,16 @@ const config: CapacitorConfig = {
     // `appReadyTimeout` (see src/main.tsx) — a bad OTA bundle can't brick a
     // tester; worst case they stay on the last good bundle.
     CapacitorUpdater: {
-      // 🔒 OTA DISABLED (David 2026-07-11: "I don't want OTA anymore").
-      // autoUpdate:false → the plugin no longer polls the manifest or downloads
-      // web bundles at all; the app runs ONLY the bundle baked into the native
-      // build it shipped with. Every change now reaches testers through a real
-      // TestFlight build, nothing hot-patched underneath them. (OTA never
-      // touched the App Store — that was the nightly daily-deploy pipeline — but
-      // David wants the hot-update path gone regardless.) The manifest endpoint
-      // is also emptied server-side so already-installed builds stop pulling,
-      // and the CI publish step is removed. Leaving the plugin present-but-inert
-      // avoids a native API change; flip back to true only if OTA is ever wanted
-      // again.
-      autoUpdate: false,
+      // 🔓 OTA RE-ENABLED (David 2026-07-17: "put it back on"). Reverses the
+      // 2026-07-11 disable. autoUpdate:true → the plugin polls the manifest on
+      // launch and applies a newer published web bundle, so content / JS / coach
+      // fixes reach testers on next open WITHOUT a TestFlight round-trip. The CI
+      // publish step (daily-deploy.yml → publish-ota-bundle.mjs) repopulates the
+      // manifest pointer. NB: this flag is compiled into the native build, so it
+      // only takes effect once testers install a build cut AFTER this change —
+      // the currently-installed autoUpdate:false apps cannot be turned back on
+      // server-side. The notifyAppReady auto-revert safety above still applies.
+      autoUpdate: true,
       version: process.env.OTA_BUNDLE_VERSION || undefined,
       updateUrl: 'https://chess-academy-pro.vercel.app/api/ota/manifest',
       directUpdate: false,
