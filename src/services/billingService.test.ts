@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { initBilling, isBillingConfigured, getBillingPackages, purchasePackage, restorePurchases, clearBillingError } from './billingService';
+import { initBilling, isBillingConfigured, getBillingPackages, purchasePackage, restorePurchases, clearBillingError, getStableAnalyticsId } from './billingService';
 import { useEntitlementStore } from '../stores/entitlementStore';
 
 // The audit sink is a fire-and-forget side effect — stub it so the test stays
@@ -30,6 +30,13 @@ describe('billingService — keyless (graceful degradation)', () => {
     await expect(getBillingPackages()).resolves.toEqual([]);
     await expect(purchasePackage('monthly')).resolves.toBe(false);
     await expect(restorePurchases()).resolves.toBe(false);
+  });
+
+  it('getStableAnalyticsId returns null when billing is unconfigured (web/keyless → PostHog cookie id stays)', async () => {
+    // No RevenueCat key in jsdom, so there is no durable Keychain id to hand
+    // PostHog — identify() must be skipped, leaving PostHog's own stable id.
+    await initBilling();
+    await expect(getStableAnalyticsId()).resolves.toBeNull();
   });
 
   it('clearBillingError wipes a stored error so the paywall banner cannot linger', () => {
