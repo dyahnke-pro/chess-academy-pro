@@ -5,7 +5,7 @@ Most chess apps hand you puzzles in one corner and opening videos in another, th
 A private coach in your pocket, for less than the price of one lesson.
 
 ★ FREE OPENING MASTERCLASS ★
-Start with a full opening masterclass, completely free — every move played out on the board and explained out loud by a live AI coach. Watch the line, learn it move by move, practice it, then play it against a coach locked to that opening. No card needed.
+Start with a full opening masterclass, completely free — every move played out on the board and explained out loud by a live AI coach. Watch the line, learn it move by move, practice it, quiz yourself to lock it in, then play it against a coach locked to that opening. No card needed.
 
 ONE CONNECTED LOOP — THE PART NO OTHER APP DOES
 Your games are reviewed by a full-strength Stockfish engine. Your mistakes are sorted into the patterns you keep missing. Those weaknesses flow straight into your next puzzles and lessons, and spaced repetition brings the hard ones back until they stick. Stop guessing what to study — the app always knows what's next.
@@ -18,7 +18,7 @@ YOUR AI COACH
 • Tells you WHY a move was wrong and what to play instead — never cryptic engine numbers
 
 OPENINGS — PLAYED OUT AND EXPLAINED
-• 42 guided masterclasses using the Watch → Learn → Practice → Play method — every line engine-verified, no memorizing
+• 42 guided masterclasses using the Watch → Learn → Practice → Play method, with checkpoint quizzes to lock in every idea — every line engine-verified, no memorizing
 • Over 3,600 opening lines to explore
 • 15 pro-player repertoires across 82 openings — study the exact lines top players use
 • 644 annotated model games
@@ -45,8 +45,8 @@ A KIDS MODE
 • A dedicated, friendly mode with encouraging lessons for young players
 
 — START FREE, NO CARD NEEDED —
+• A complete opening masterclass, free — Watch, Learn, Practice, Play, plus checkpoint quizzes
 • 20 tactics puzzles to solve
-• A complete opening masterclass, free — Watch, Learn, Practice, Play
 • Import your games and see your personal Weaknesses page
 • A full week of Kids mode
 
