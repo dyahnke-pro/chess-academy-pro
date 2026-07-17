@@ -1068,6 +1068,21 @@ export interface GenerateOpeningOptions {
    *  post-walkthrough stage gens. User: "Add a quick walk through
    *  mode from coach." Default 'full'. */
   pace?: 'full' | 'tour';
+  /** When the caller ALREADY has the exact opening (e.g. the openings page
+   *  handing a NON-built line to the coach), pass its identity here to build
+   *  the walkthrough straight from these moves — bypassing name resolution,
+   *  which filters out terminal-short lines (short namesakes like the Scandi
+   *  Panov Transfer) and returns null for them. G3-safe: the moves come from
+   *  the DB record, not the LLM. (David 2026-07-16.) */
+  entryOverride?: TeachEntryOverride;
+}
+
+/** Minimal opening identity a caller can hand to `generateOpening` to skip
+ *  name resolution — same shape `resolveOpeningEntry` returns. */
+export interface TeachEntryOverride {
+  canonicalName: string;
+  eco: string;
+  moves: string[];
 }
 
 /** Schema for the narration-only LLM call. Inverts the gen
@@ -1172,11 +1187,14 @@ async function generateOpeningFromDbNarration(
    *  Caller passes the original opening's display name so the prose
    *  can frame the lesson as a counter to that opening. */
   faceContext?: { originalDisplayName: string },
+  /** Skip name resolution when the caller already has the opening (option B —
+   *  lets the coach teach terminal-short non-built lines the resolver hides). */
+  entryOverride?: TeachEntryOverride,
 ): Promise<WalkthroughTree | null> {
-  // Prefer the curated repertoire line (the exact PGN the opening detail
-  // tab teaches) so a picker-chosen variation matches the opening tab; fall
-  // back to the ECO DB for anything not in the curated repertoire.
-  const entry = resolveCuratedVariation(name) ?? resolveOpeningEntry(name);
+  // Prefer the caller-supplied entry (the openings page already knows the exact
+  // line); else the curated repertoire line (so a picker-chosen variation
+  // matches the opening tab); else the ECO DB.
+  const entry = entryOverride ?? resolveCuratedVariation(name) ?? resolveOpeningEntry(name);
   if (!entry || entry.moves.length === 0) return null;
 
   // Use the SHORTEST canonical PGN as the spine. The DB carries
@@ -1565,8 +1583,9 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
  *  normal tree so subsequent loads are instant. */
 function buildFallbackTreeFromDb(
   name: string,
+  entryOverride?: TeachEntryOverride,
 ): WalkthroughTree | null {
-  const entry = resolveCuratedVariation(name) ?? resolveOpeningEntry(name);
+  const entry = entryOverride ?? resolveCuratedVariation(name) ?? resolveOpeningEntry(name);
   if (!entry || entry.moves.length === 0) return null;
   // Replay the PGN to validate moves before building. If the DB
   // entry's PGN is malformed (extremely rare — the DB is curated),
@@ -1883,7 +1902,7 @@ export async function generateOpening(
   }
   if (mode === 'learn') {
     try {
-      const fromDb = await generateOpeningFromDbNarration(name, pace);
+      const fromDb = await generateOpeningFromDbNarration(name, pace, undefined, options?.entryOverride);
       if (fromDb) {
         void logAppAudit({
           kind: 'coach-surface-migrated',
@@ -1915,7 +1934,7 @@ export async function generateOpening(
   // (chess.js-replayed moves, template prose — no LLM move choice). If
   // neither produces a tree the opening simply isn't in our data, and we
   // fail honestly rather than invent one (empty > invented).
-  const fallbackTree = buildFallbackTreeFromDb(name);
+  const fallbackTree = buildFallbackTreeFromDb(name, options?.entryOverride);
   if (fallbackTree) {
     void logAppAudit({
       kind: 'coach-surface-migrated',

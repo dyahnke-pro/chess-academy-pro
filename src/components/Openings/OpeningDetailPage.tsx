@@ -117,7 +117,7 @@ import { getQueensGambitTabPlanIds } from '../../services/queensGambitMasterclas
 import { getTrompowskyAttackTabPlanIds } from '../../services/trompowskyAttackMasterclassTabs';
 import { getBirdsOpeningTabPlanIds } from '../../services/birdsOpeningMasterclassTabs';
 import { LessonPlayer } from './LessonPlayer';
-import { getLessonScript, getVariationLessonScript, lessonToPlayableLine } from '../../data/lessons';
+import { getLessonScript, getVariationLessonScript, lessonToPlayableLine, hasLessonScript } from '../../data/lessons';
 import {
   RUY_TRAP_LESSONS,
   getRuyTrapsForTab,
@@ -383,6 +383,25 @@ export function OpeningDetailPage(): JSX.Element {
       if (redirect && redirect.to !== id) {
         const qs = redirect.line ? `?line=${encodeURIComponent(redirect.line.toLowerCase())}` : '';
         void navigate(`/openings/${redirect.to}${qs}`, { replace: true });
+        return;
+      }
+      // Non-built opening — a raw Lichess ECO NAME with no hand-authored course
+      // (no LessonScript; masterclass / pro / anti / gambit courses all carry
+      // one). Rather than render the half-built bare-reference page (a 2–4-move
+      // auto-walkthrough with locked Learn/Practice/Play), hand off to the coach
+      // to teach it live. The coach opens with a "we don't have a masterclass
+      // for X, so I'll teach it myself" line and auto-launches the DB-anchored
+      // walkthrough — moves from the DB, LLM writes prose only (G3). David
+      // 2026-07-16: "open the coach tab and cue the coach to start making the
+      // lesson … I don't want the user to ask a second time."
+      if (!hasLessonScript(result.id)) {
+        const name = result.name?.trim() || id;
+        // Carry the eco + id so the coach's unbuilt-opening-lesson analytics
+        // event (which ranks masterclass demand) is richer than name-only.
+        const params = new URLSearchParams({ teach: name, auto: '1' });
+        if (result.eco) params.set('eco', result.eco);
+        params.set('oid', result.id);
+        void navigate(`/coach/teach?${params.toString()}`, { replace: true });
         return;
       }
     }

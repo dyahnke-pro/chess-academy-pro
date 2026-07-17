@@ -1,6 +1,7 @@
 import repertoireData from '../data/repertoire.json';
 import openingManifests from '../data/opening-manifests.json';
 import { buildVariationTabs } from './variationTabs';
+import { isTeachable } from './openingDetectionService';
 import type { OpeningRecord, OpeningVariation } from '../types';
 
 // Route a raw Lichess ECO entry that is a VARIATION / SUBLINE of a curated
@@ -40,6 +41,35 @@ function commonPrefix(a: string[], b: string[]): number {
 const MIN_IDENT_PLIES = 3; // a match on <3 plies is too generic to trust
 const MIN_MAIN_PLIES = 5; // a main-line redirect needs a deep shared prefix
 
+// Curated TRANSPOSITION aliases — lines that reach a taught masterclass
+// variation by a DIFFERENT move order. The prefix matcher below can't see
+// these: they diverge from the taught spine early, then transpose back, so
+// they share too few leading plies to match. Each rule is deliberately tight —
+// it names the exact move-order family and the tab it feeds — because a wrong
+// redirect is worse than the bare page.
+const TRANSPOSITION_ALIASES: Array<{
+  match: (moves: string[]) => boolean;
+  to: string;
+  line: string | null;
+}> = [
+  {
+    // Accelerated Panov Attack (`e4 c6 c4…`, i.e. 2.c4 instead of 2.d4) → the
+    // Caro-Kann masterclass Panov tab. The …d5 lines transpose into the exact
+    // same IQP Panov structures the tab teaches, and the bare `e4 c6 c4`
+    // parent defaults to …d5. It shares only `e4 c6` (2 plies) with the taught
+    // Panov spine, so it otherwise fell through to a half-built 2-move stub
+    // (David 2026-07-16). Excludes the Open Variation (`e4 c6 c4 e5` — a
+    // genuinely different …e5 structure that is NOT the Panov).
+    match: (m): boolean =>
+      m[0] === 'e4' &&
+      m[1] === 'c6' &&
+      m[2] === 'c4' &&
+      (m.length === 3 || m[3] === 'd5'),
+    to: 'caro-kann',
+    line: 'Panov',
+  },
+];
+
 export interface MasterclassRedirect {
   to: string;
   line: string | null;
@@ -59,6 +89,21 @@ export function resolveMasterclassRedirect(
 
   const E = toMoves(opening.pgn);
   if (E.length < 2) return null;
+
+  // Curated transposition aliases win first — they exist precisely for the
+  // move orders the prefix matcher can't see.
+  for (const a of TRANSPOSITION_ALIASES) {
+    if (a.match(E)) return { to: a.to, line: a.line };
+  }
+
+  // Is this a terminal-short namesake stub (≤8 plies, no DB continuation)? Those
+  // must not loosely match a DEEP variation they merely share a branch move with
+  // — the classic bug is the 6-ply Scandinavian Panov Transfer
+  // (…exd5 Nf6 c4 c6) landing on the Icelandic Gambit tab (…exd5 Nf6 c4 e6),
+  // which it shares 5 plies with then diverges. A short stub only redirects to a
+  // tab it genuinely lies ON (prefix either way); otherwise it falls to the
+  // coach, which teaches its real line via the PGN override (David 2026-07-16).
+  const eIsShort = !isTeachable({ eco: '', name: '', pgn: opening.pgn });
 
   const candidates: Array<{ to: string; line: string | null; spec: number }> = [];
 
@@ -81,9 +126,17 @@ export function resolveMasterclassRedirect(
       const identPly = commonPrefix(v, main); // first ply V diverges from main
       const need = identPly + 1; // include the variation-defining move
       if (need < MIN_IDENT_PLIES || need > v.length) continue;
-      if (E.length >= need && commonPrefix(E, v) >= need) {
+      const cE = commonPrefix(E, v);
+      if (E.length >= need && cE >= need) {
+        // A terminal-short stub must genuinely lie ON V's line (one is a prefix
+        // of the other); a loose match that shares the branch then diverges into
+        // a different line (Panov Transfer …c6 vs Icelandic …e6) is rejected so
+        // it falls to the coach. Longer entries keep the looser transposition
+        // match unchanged.
+        const isPrefixMatch = cE === v.length || cE === E.length;
+        if (eIsShort && !isPrefixMatch) continue;
         // Deeper agreement with V's actual line = more specific.
-        candidates.push({ to: M.id, line: t.label, spec: 1000 + commonPrefix(E, v) });
+        candidates.push({ to: M.id, line: t.label, spec: 1000 + cE });
       }
     }
   }

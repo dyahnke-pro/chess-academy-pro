@@ -74,6 +74,12 @@ export type AuditKind =
   // A surface rendered an empty / failed-to-load state where content was
   // expected (a played line with zero moves, a lesson that built no steps).
   | 'surface-empty-state'
+  // The coach auto-taught an opening we have NO hand-built masterclass for —
+  // fired once when the non-built handoff launches its walkthrough (David
+  // 2026-07-16). `summary` = the opening name, `context` = { eco, oid, entry }.
+  // Mirrored to PostHog as `unbuilt_opening_lesson` so a group-by on the name
+  // ranks which openings testers most want a masterclass for.
+  | 'unbuilt-opening-lesson'
   // In-app user bug report (David 2026-06-02). Emitted by BugReportPanel when
   // a tester taps "Report a problem" — carries their note + recent defect
   // context. Streams to the audit-stream AND PostHog (user_report event).

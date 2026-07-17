@@ -17,6 +17,7 @@ import {
   assertTreeShape,
   repairNarrationArrows,
   stripMoveRecitationLeadIn,
+  generateOpening,
 } from './openingGenerator';
 import type {
   WalkthroughTree,
@@ -900,4 +901,26 @@ describe('repairNarrationArrows on DB-narration shaped trees', () => {
     const kept = tree.root.children[0].node.narration?.[0].arrows ?? [];
     expect(kept).toEqual([{ from: 'e4', to: 'd5' }]);
   });
+});
+
+describe('generateOpening entryOverride (option B — teach non-built short lines)', () => {
+  // The Scandi Panov Transfer is terminal-short, so name resolution filters it
+  // and the coach can't teach it (David 2026-07-16). Passing the opening's own
+  // moves via entryOverride bypasses resolution and builds the walkthrough
+  // straight from the DB record's PGN (G3-safe — the moves aren't the LLM's).
+  it('builds a tree from the override when name resolution returns nothing', async () => {
+    const viaName = await generateOpening('Scandinavian Defense: Panov Transfer', { mode: 'learn' });
+    expect(viaName.ok, 'name resolution should fail for the terminal-short line').toBe(false);
+
+    const viaOverride = await generateOpening('Scandinavian Defense: Panov Transfer', {
+      mode: 'learn',
+      entryOverride: {
+        canonicalName: 'Scandinavian Defense: Panov Transfer',
+        eco: 'B01',
+        moves: ['e4', 'd5', 'exd5', 'Nf6', 'c4', 'c6'],
+      },
+    });
+    expect(viaOverride.ok).toBe(true);
+    expect(viaOverride.tree?.openingName).toBe('Scandinavian Defense: Panov Transfer');
+  }, 60000);
 });

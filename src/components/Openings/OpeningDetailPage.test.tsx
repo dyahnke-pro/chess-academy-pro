@@ -13,6 +13,8 @@ const mockGetOpeningById = vi.fn();
 
 const mockToggleFavorite = vi.fn();
 
+const mockHasLessonScript = vi.fn((): boolean => true);
+
 vi.mock('../../services/openingService', () => ({
   getOpeningById: (...args: unknown[]): unknown => mockGetOpeningById(...args),
   getMasteryPercent: (o: OpeningRecord) => Math.round(o.drillAccuracy * 100),
@@ -27,6 +29,16 @@ vi.mock('../../services/openingService', () => ({
   updateVariationProgress: vi.fn().mockResolvedValue(undefined),
   markLineDiscovered: vi.fn().mockResolvedValue(undefined),
   markLinePerfected: vi.fn().mockResolvedValue(undefined),
+}));
+
+// These tests render the BUILT opening detail page. Since 2026-07-16 the page
+// reroutes a NON-built opening (no LessonScript) to the coach, so treat the
+// mock `test-opening` as built by forcing hasLessonScript true; the rest of the
+// lessons module stays real (getLessonScript still returns null for the mock,
+// so the Watch view falls to WalkthroughMode exactly as before).
+vi.mock('../../data/lessons', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('../../data/lessons')>()),
+  hasLessonScript: (): boolean => mockHasLessonScript(),
 }));
 
 vi.mock('../Board/ChessBoard', () => ({
@@ -94,6 +106,7 @@ function renderWithRoute(openingId: string = 'test-opening'): void {
         <Routes>
           <Route path="/openings/:id" element={<OpeningDetailPage />} />
           <Route path="/openings" element={<div data-testid="explorer-page">Explorer</div>} />
+          <Route path="/coach/teach" element={<div data-testid="coach-teach-page">Coach Teach</div>} />
         </Routes>
       </MotionConfig>
     </MemoryRouter>,
@@ -107,6 +120,22 @@ describe('OpeningDetailPage', () => {
     vi.clearAllMocks();
     mockGetOpeningById.mockResolvedValue(testOpening);
     mockToggleFavorite.mockResolvedValue(true);
+    mockHasLessonScript.mockReturnValue(true);
+  });
+
+  it('reroutes a NON-built opening (no lesson script) to the coach auto-teach', async () => {
+    // A raw Lichess ECO name with no hand-built course must not render the
+    // half-built bare page — it hands off to the coach with ?teach=&auto=1
+    // (David 2026-07-16). Grob (`g4`) is non-built and matches no masterclass
+    // line, so it neither redirects nor renders — it reroutes.
+    mockHasLessonScript.mockReturnValue(false);
+    mockGetOpeningById.mockResolvedValue(
+      buildOpeningRecord({ id: 'grob', name: 'Grob Opening', pgn: 'g4' }),
+    );
+    renderWithRoute('grob');
+    await waitFor(() => {
+      expect(screen.getByTestId('coach-teach-page')).toBeInTheDocument();
+    });
   });
 
   it('renders loading state initially', () => {

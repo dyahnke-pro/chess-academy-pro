@@ -1,6 +1,7 @@
 import { db } from '../db/schema';
 import type { OpeningRecord, DrillAttempt } from '../types';
 import { fuzzyScore } from '../utils/fuzzySearch';
+import { expandOpeningAbbrev } from '../utils/openingAbbrev';
 import { MAIN_LINE_INDEX } from '../utils/wlppLadder';
 import { enrollOpeningLine } from './srsOpeningService';
 import openingManifests from '../data/opening-manifests.json';
@@ -139,6 +140,16 @@ export async function searchOpenings(query: string): Promise<OpeningRecord[]> {
       const startsBonus = normQuery && norm(o.name).startsWith(normQuery) ? -100 : 0;
       scored.push({ opening: o, score: s + startsBonus });
     }
+  }
+
+  // Casual-shorthand fallback: nothing matched the raw query, but it may carry
+  // an abbreviation the token matchers can't score ("Scandi panov"). Expand
+  // whole-word abbreviations and retry once so search (dashboard + openings
+  // page) resolves casual input (David 2026-07-16). Guarded on `expanded !==
+  // query` so it never loops.
+  if (scored.length === 0) {
+    const expanded = expandOpeningAbbrev(query);
+    if (expanded !== query) return searchOpenings(expanded);
   }
 
   // Sort by score (lower = better), then alphabetically

@@ -18,6 +18,9 @@
  * invoked once they reply.
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render as rtlRender } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+import { MotionConfig } from 'framer-motion';
 import { render, waitFor, fireEvent, screen } from '../../test/utils';
 import { CoachTeachPage } from './CoachTeachPage';
 import { stockfishEngine } from '../../services/stockfishEngine';
@@ -266,6 +269,30 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
       const opts = call[1] as { providerOverride?: { name: string } } | undefined;
       expect(opts?.providerOverride).toBeUndefined();
     }
+  });
+
+  it('auto-teaches a NON-built opening arriving via ?teach=<name>&auto=1 (no second ask)', async () => {
+    // OpeningDetailPage routes a non-built opening here so the coach teaches it
+    // live (David 2026-07-16). The kickoff must announce it will teach the line
+    // itself and auto-launch — NOT show the opt-in "Ready to start?" prompt.
+    vi.mocked(coachService.ask).mockResolvedValue({ text: '', toolCallIds: [], dispatchedToolNames: [], provider: 'anthropic' });
+    rtlRender(
+      <MemoryRouter initialEntries={['/coach/teach?teach=Grob%20Opening&auto=1']}>
+        <MotionConfig transition={{ duration: 0 }}>
+          <CoachTeachPage />
+        </MotionConfig>
+      </MemoryRouter>,
+    );
+
+    // The "we don't have a masterclass, I'll teach it myself" line renders in
+    // the transcript AND is spoken through Polly.
+    expect(
+      await screen.findByText(/don't have a hand-built masterclass for the Grob Opening/i),
+    ).toBeInTheDocument();
+    await waitFor(() => {
+      const spoken = mockSpeakForced.mock.calls.map((c) => c[0] as string);
+      expect(spoken.some((s) => /teach it to you myself/i.test(s))).toBe(true);
+    }, { timeout: 4000 });
   });
 
   it('Hint button grounds on Stockfish (best move), not the LLM', async () => {

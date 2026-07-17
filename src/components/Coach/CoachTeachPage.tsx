@@ -127,7 +127,7 @@ import { translateToEnglish } from '../../services/coachApi';
 import { useAppStore } from '../../stores/appStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { useSettings } from '../../hooks/useSettings';
-import { getFavoriteOpenings } from '../../services/openingService';
+import { getFavoriteOpenings, getOpeningById, searchOpenings } from '../../services/openingService';
 import type { OpeningRecord, OpeningVariation } from '../../types';
 import type { LiveState, TacticsLiveContext } from '../../coach/types';
 import type { ChatMessage as ChatMessageType, BoardArrow, BoardHighlight } from '../../types';
@@ -331,6 +331,7 @@ function gameResultWord(result: string, side: 'white' | 'black'): string {
 function titleCase(s: string): string {
   return s.replace(/\b\w/g, (c) => c.toUpperCase());
 }
+
 
 /** Walk every fork in the tree and emit one DeepDiveOption per
  *  child. Limited to the FIRST fork's children for surface clarity —
@@ -2732,6 +2733,46 @@ export function CoachTeachPage(): JSX.Element {
         // null, refuse politely and route the input back to chat.
         const dbHit = getOpeningMoves(requestedName);
         if (!dbHit) {
+          // RESCUE (David 2026-07-16): getOpeningMoves filters out
+          // terminal-short lines (short namesakes like the Scandi Panov) and
+          // returns null even for real openings the student explicitly named,
+          // so typing "Scandi panov" fell to the brain's "can't verify from
+          // grounded data" refusal instead of a lesson. Before giving up, try
+          // the UNFILTERED openings search (the same matcher the openings page
+          // uses; abbreviations expanded), and if it resolves, teach that exact
+          // line straight from its DB PGN via the entryOverride path (option B).
+          // Q&A intents were already excluded upstream (the isProgress/isConcept/
+          // … guards at Tier 0), so this only rescues inputs already committed to
+          // teaching. G3-safe: the moves are the DB record's, not the LLM's.
+          // searchOpenings self-expands abbreviations on an empty raw match,
+          // so a casual "Scandi panov" still resolves here.
+          const rescued = await searchOpenings(requestedName);
+          const rescueHit = rescued[0];
+          const rescueMoves = rescueHit?.pgn?.trim().split(/\s+/).filter(Boolean) ?? [];
+          if (rescueHit && rescueMoves.length > 0) {
+            void logAppAudit({
+              kind: 'coach-surface-migrated',
+              category: 'subsystem',
+              source: 'CoachTeachPage.handleSubmit.teachRescue',
+              summary: `teach rescue: "${requestedName}" → "${rescueHit.name}" via unfiltered search (option B)`,
+            });
+            try {
+              setGenerationStatus({ openingName: rescueHit.name, startedAt: Date.now() });
+              const result = await generateOpening(rescueHit.name, {
+                mode: 'learn',
+                entryOverride: { canonicalName: rescueHit.name, eco: rescueHit.eco, moves: rescueMoves },
+              });
+              setGenerationStatus(null);
+              if (result.ok && result.tree) {
+                await cacheOpening(rescueHit.name, result.tree);
+                voiceService.stop();
+                walkthrough.start(result.tree);
+                return;
+              }
+            } catch {
+              setGenerationStatus(null);
+            }
+          }
           void logAppAudit({
             kind: 'coach-surface-migrated',
             category: 'subsystem',
@@ -4479,6 +4520,92 @@ export function CoachTeachPage(): JSX.Element {
     if (!activeProfile) return;
     kickoffFiredRef.current = true;
     (() => {
+      // Non-built-opening hand-off (David 2026-07-16). The student tapped an
+      // opening on the openings page that has NO hand-built masterclass (a raw
+      // Lichess ECO name), so OpeningDetailPage routed here with
+      // `?teach=<name>&auto=1`. Tell them we don't have a masterclass for it
+      // and AUTO-LAUNCH the walkthrough — no second ask. The walkthrough moves
+      // come from the DB (`generateOpeningFromDbNarration`); the LLM writes
+      // only the prose (G3). This is distinct from the `?opening=` rolodex
+      // path below, which is an opt-in "Ready to start?" prompt.
+      const autoTeach =
+        searchParams.get('auto') === '1' ? searchParams.get('teach')?.trim() : null;
+      if (autoTeach) {
+        // Demand signal (David 2026-07-16): count every time the coach teaches
+        // an opening we haven't hand-built, so a PostHog group-by on the name
+        // ranks which openings most need a masterclass. Fires once (kickoff is
+        // ref-guarded). `entry` distinguishes an opening-page tap from the
+        // empty-search CTA (no eco/oid there).
+        void logAppAudit({
+          kind: 'unbuilt-opening-lesson',
+          category: 'app',
+          source: 'CoachTeachPage.autoTeachKickoff',
+          summary: autoTeach,
+          context: JSON.stringify({
+            eco: searchParams.get('eco') ?? null,
+            oid: searchParams.get('oid') ?? null,
+            entry: searchParams.get('oid') ? 'opening-detail' : 'search-cta',
+          }),
+        });
+        const intro = `We don't have a hand-built masterclass for the ${autoTeach} yet — so I'll teach it to you myself. Let's walk through it.`;
+        const turnId = freshTurnId('autoteach');
+        setKickoffStatus(null);
+        setMessages((prev) => [...prev, {
+          id: `${turnId}-c`,
+          role: 'assistant',
+          content: intro,
+          timestamp: Date.now(),
+        }]);
+        useCoachMemoryStore.getState().appendConversationMessage({
+          surface: 'chat-teach',
+          role: 'coach',
+          text: intro,
+          fen: gameRef.current.fen,
+          trigger: null,
+        });
+        voiceService.stop();
+        speechChainRef.current = Promise.resolve(voiceService.speakForced(intro))
+          .catch(() => undefined);
+        // Launch the lesson. When we came from the openings page we have the
+        // exact opening id, so load its record (getOpeningById is UNFILTERED)
+        // and build the walkthrough straight from its PGN via generateOpening's
+        // entryOverride — bypassing the name-resolution filters that hide
+        // terminal-short lines (short namesakes like the Scandi Panov), which
+        // otherwise make the coach unable to teach them at all (option B, David
+        // 2026-07-16). G3-safe: the moves are the DB record's, not the LLM's.
+        // No id (the search-CTA path) → fall back to name-based resolution.
+        const teachOid = searchParams.get('oid');
+        if (teachOid) {
+          void (async (): Promise<void> => {
+            try {
+              const rec = await getOpeningById(teachOid);
+              const moves = rec?.pgn?.trim().split(/\s+/).filter(Boolean) ?? [];
+              if (rec && moves.length > 0) {
+                setGenerationStatus({ openingName: rec.name, startedAt: Date.now() });
+                const result = await generateOpening(rec.name, {
+                  mode: 'learn',
+                  entryOverride: { canonicalName: rec.name, eco: rec.eco, moves },
+                });
+                setGenerationStatus(null);
+                if (result.ok && result.tree) {
+                  await cacheOpening(rec.name, result.tree);
+                  voiceService.stop();
+                  walkthrough.start(result.tree);
+                  return;
+                }
+              }
+            } catch {
+              setGenerationStatus(null);
+            }
+            // Record missing / generation failed → best-effort name resolution.
+            void handleSubmit(autoTeach);
+          })();
+        } else {
+          void handleSubmit(autoTeach);
+        }
+        return;
+      }
+
       // 5-game Stockfish kickoff analysis REMOVED (David 2026-06-15):
       // entering Learn with Coach must NOT block on analyzing the
       // student's recent games — it stalled the lesson behind a
