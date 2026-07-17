@@ -2,6 +2,34 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { db } from '../db/schema';
 import { buildUserProfile } from '../test/factories';
 import { speechService } from './speechService';
+import { describePollyFalloverReason } from './voiceService';
+
+describe('describePollyFalloverReason', () => {
+  it('returns an explicit diagnostic error verbatim', () => {
+    expect(
+      describePollyFalloverReason({ error: 'stream playback error: code=3', pollyStatus: 200 }),
+    ).toBe('stream playback error: code=3');
+  });
+
+  it('names the CLIENT layer when the server succeeded (2xx) with no error — never "http 200"', () => {
+    // The KIA fallover bug (2026-07-17): a server-OK-but-iOS-couldnt-play beat
+    // was mislabeled "http 200", masquerading a client failure as a server one.
+    const reason = describePollyFalloverReason({ error: null, pollyStatus: 200 });
+    expect(reason).toBe('client playback failed (server ok, http 200)');
+    expect(reason).not.toBe('http 200');
+  });
+
+  it('reports an http cause only for a real server-error status (>=400)', () => {
+    expect(describePollyFalloverReason({ error: null, pollyStatus: 500 })).toBe('http 500');
+    expect(describePollyFalloverReason({ error: null, pollyStatus: 429 })).toBe('http 429');
+  });
+
+  it('falls back cleanly when there is no status and no error', () => {
+    expect(describePollyFalloverReason({ error: null, pollyStatus: null })).toBe(
+      'client playback failed (no server error)',
+    );
+  });
+});
 
 // We need a fresh instance for each test since voiceService is a singleton.
 // Re-import the module to get the singleton.

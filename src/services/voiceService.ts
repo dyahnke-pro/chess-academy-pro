@@ -235,6 +235,27 @@ const POLLY_COOLDOWN_MAX_MS = 120_000;
  *  fallback". */
 export type VoiceTier = 'polly' | 'web-speech' | 'muted';
 
+/** Human-readable cause for a Polly→Web-Speech fallover, for the
+ *  `voice-fallover` audit SUMMARY (PostHog stores the summary, not details —
+ *  David 2026-07-06). The summary is the ONLY place the cause survives, so it
+ *  must name the real failing layer.
+ *
+ *  A 2xx `pollyStatus` means Polly's SERVER succeeded — so falling over on it
+ *  is categorically a CLIENT-side playback failure (iOS `<audio>` decode wedge /
+ *  AudioContext refusal), NOT an HTTP error. The prior logic printed
+ *  `http ${status}` for ANY status, so a server-OK-but-iOS-couldn't-play beat
+ *  was mislabeled "http 200" — masquerading a client failure as a server
+ *  response (David 2026-07-17, the King's Indian Attack narration fallover). An
+ *  explicit `error` always wins; otherwise only >=400 is a real HTTP cause. */
+export function describePollyFalloverReason(
+  diag: { error: string | null; pollyStatus: number | null },
+): string {
+  if (diag.error) return diag.error;
+  if (diag.pollyStatus && diag.pollyStatus >= 400) return `http ${diag.pollyStatus}`;
+  if (diag.pollyStatus) return `client playback failed (server ok, http ${diag.pollyStatus})`;
+  return 'client playback failed (no server error)';
+}
+
 /** Map piece letters to spoken names. Applied right before TTS so
  *  nothing reaches the speech engine as "P" / "N" / "B" / "R" / "Q" /
  *  "K" — those sound wrong when read aloud. Upstream prompts and
@@ -1371,11 +1392,7 @@ class VoiceService {
     // cause recorded). The reason distinguishes a server error (status/AWS
     // code) from a client-side iOS playback failure (element/stream), which is
     // the difference between "Polly is down" and "iOS WKWebView can't play it".
-    const pollyReason =
-      this.lastSpeakDiagnostic.error ??
-      (this.lastSpeakDiagnostic.pollyStatus
-        ? `http ${this.lastSpeakDiagnostic.pollyStatus}`
-        : 'client playback failed (no server error)');
+    const pollyReason = describePollyFalloverReason(this.lastSpeakDiagnostic);
     void import('./appAuditor').then(({ logAppAudit }) => {
       void logAppAudit({
         kind: 'voice-fallover',

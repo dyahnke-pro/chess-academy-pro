@@ -1,5 +1,43 @@
 import { describe, it, expect } from 'vitest';
-import { hasChessContentSignal, stripChessyStraySentences } from './coachApi';
+import { hasChessContentSignal, stripChessyStraySentences, buildOpeningSuggestionReply } from './coachApi';
+
+// Dead-end rescue (David 2026-07-17): when a coach turn would serve the honest
+// stock fallback because the student just NAMED an opening the surface never
+// resolved, offer the DB-grounded candidates as a tappable [CHOICES:] picker
+// instead of the brick wall. G0-safe: candidates come from the opening DB.
+describe('buildOpeningSuggestionReply', () => {
+  it('offers a single-candidate teach for an autoAccept name (the home-chat "Panov" wall)', () => {
+    const reply = buildOpeningSuggestionReply('panov');
+    expect(reply).not.toBeNull();
+    expect(reply).toContain('[CHOICES:');
+    expect(reply).toMatch(/Panov/);
+    expect(reply).toMatch(/walk you through/i);
+  });
+
+  it('offers a "did you mean" picker for a misspelling with multiple candidates', () => {
+    const reply = buildOpeningSuggestionReply('Najdorff');
+    expect(reply).not.toBeNull();
+    expect(reply).toMatch(/did you mean/i);
+    // The marker carries >1 pipe-separated DB candidate, all Najdorf lines.
+    const inner = /\[CHOICES:\s*([\s\S]*?)\]/.exec(reply ?? '')?.[1] ?? '';
+    expect(inner.split('|').length).toBeGreaterThan(1);
+    expect(inner).toMatch(/Najdorf/);
+  });
+
+  it('returns null for a genuine non-opening question (keeps the honest stock line)', () => {
+    expect(buildOpeningSuggestionReply('what are my weaknesses')).toBeNull();
+    expect(buildOpeningSuggestionReply('who is winning here')).toBeNull();
+  });
+
+  it('is empty-safe and does not fire on a long sentence that merely mentions an opening', () => {
+    expect(buildOpeningSuggestionReply('')).toBeNull();
+    expect(buildOpeningSuggestionReply('   ')).toBeNull();
+    // >5 words → a real question, not a name lookup; no teach picker.
+    expect(
+      buildOpeningSuggestionReply('can you please tell me all about the sicilian dragon today'),
+    ).toBeNull();
+  });
+});
 
 // Phase 1 of the coach grounding build (RIP #2): the fall-through no longer
 // calls a free LLM for chess. These two deterministic guards decide the lane —

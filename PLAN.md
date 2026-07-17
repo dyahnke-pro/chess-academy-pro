@@ -1,3 +1,57 @@
+# PLAN — Coach dead-end → picker + voice fallover telemetry fix (2026-07-17, active)
+
+Origin: PostHog review (2026-07-17). Two real user-facing dents in last-24h data:
+1. Home-chat coach bricks with *"I can't verify that precisely from grounded data
+   right now"* when the user names an opening it can't map ("Panov"). David: **fix
+   the dead end; any coach suggestion should also populate a picker prompt.**
+2. iOS voice fallover logged `Polly failed (http 200) → Web Speech` — a
+   client-playback failure mislabeled as an HTTP-200 (server-success) cause.
+
+## Findings (grounded, file:line)
+- `STOCK_GROUNDING_FALLBACK` = `coachApi.ts:1735`. Served in `getCoachChatResponse`
+  at `:4093` (chess-signal / no assembler — the home-chat unknown-opening case),
+  `:4108`, `:4138`. All have `originalQuery` in hand.
+- `fuzzyMatchOpening(query)` `openingFuzzyMatcher.ts:256` → DB-grounded
+  `.candidates[]` + `.autoAccept`. VERIFIED: "Najdorff"→Najdorf ×4, "Caro Cann"→
+  Caro-Kann ×4, "panov"/"KID"/"dragon" autoAccept, "what are my weaknesses"→EMPTY.
+  Whole-query only — **per-token REJECTED** (probe: "move"/"the"/"endgame"
+  autoAccept to junk openings → would wreck normal questions).
+- Picker = the `[CHOICES: A | B | C]` text marker → `coachChoices` chips.
+  Extractor `CoachTeachPage.tsx:3021-3052`; chips via `ChatInput.tsx:209-216`;
+  tap `onPickCoachChoice` `CoachTeachPage.tsx:5432`. Home-chat `GameChatPanel.tsx`
+  uses `ChatInput` but renders NO chips today.
+- G0-safe: candidates from the DB via the trusted matcher; reply built in CODE,
+  LLM decides nothing (strictly more grounded than the stock line).
+
+## Plan (one batched deploy)
+- [x] P0 — voice: pure `describePollyFalloverReason()` in `voiceService.ts`; a 2xx
+      status w/ no explicit error → `"client playback failed (server ok, http 200)"`.
+- [x] P1 — coachApi: `buildOpeningSuggestionReply(query)` (≤5-word guard →
+      `fuzzyMatchOpening` → null / single-offer / did-you-mean + `[CHOICES:]`);
+      wired at ALL THREE dead-ends — chess-signal, conversational (top, before the
+      LLM call), grounded fall-through; coverage tag `opening-suggestion-picker`.
+      Never preempts a grounded engine answer (only replaces the stock line / the
+      non-chess lane).
+- [x] P2 — home-chat picker: `GameChatPanel.tsx` extracts `[CHOICES:]`, strips from
+      display (sanitizeCoachText), holds `coachChoices`, passes to `ChatInput`; tap
+      → `void navigate('/coach/teach?teach=<name>&auto=1')`.
+- [x] P3 — teach: unchanged — existing `[CHOICES:]` extractor + `stripCoachMarkup`
+      handle the marker; `coach-choice-chips` render/tap already audited.
+- [x] P4 — tests: `voiceService.test.ts` (4 label cases) + coachApi
+      `buildOpeningSuggestionReply` (4 cases) green. Living-audit: existing
+      `audit-learn-comprehensive` / `audit-coach-teach-interactive` /
+      `audit-coach-discovery-prod` already assert `[CHOICES:]` chips + home
+      `coach-choice-chip-0`; none assert the old wall → no de-staling needed.
+- [ ] P5 — ship-check → main → post-deploy audit → PostHog double-check the voice
+      label (David asked to double-check the voice fix).
+
+## Decisions log
+- 2026-07-17: per-token fuzzy REJECTED (noisy); whole-query only.
+- 2026-07-17: dead-end fix lives in `coachApi.ts` (both surfaces bottom out there),
+  pure-code reply → G0-safe.
+
+---
+
 # PLAN — LEARN + POST-GAME REVIEW behavior map & full-behavior audit (2026-07-13, active)
 
 **David's ask:** map the EXACT coaching behavior of the entire Learn (`/coach/teach`)

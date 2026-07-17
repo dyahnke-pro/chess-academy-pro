@@ -66,6 +66,7 @@ import { lookupTablebase } from './lichessTablebaseService';
 import { detectBadHabits } from './badHabitDetector';
 import { getUnifiedWeaknessProfile } from './weaknessSpine';
 import { getStrongestOpenings, getMostPlayedOpenings, getWeakestOpenings, getOpeningById } from './openingService';
+import { fuzzyMatchOpening } from './openingFuzzyMatcher';
 import { getWeakSpotsForOpening } from './weakSpotService';
 import type { OpeningRecord } from '../types';
 import { getOverviewInsights, getMistakeInsights, getTacticInsights, getOpeningInsights, getTimeTroubleProfile, getLastGameResult, getPlayerStyleProfile } from './gameInsightsService';
@@ -1735,6 +1736,43 @@ function renderMasterPlayContextBlock(ctx: MasterPlayContext): string {
 const STOCK_GROUNDING_FALLBACK =
   "I can't verify that precisely from grounded data right now. " +
   "Ask me for the best move, the plan, or what's hanging, and I'll ground the answer for you.";
+
+/** Dead-end rescue (David 2026-07-17): when a coach turn is about to serve the
+ *  honest stock fallback because no assembler caught it, first check whether the
+ *  student simply NAMED an opening we can teach but the surface never resolved —
+ *  the home-chat brick-wall ("Panov", "Najdorff", "Caro Cann"). If so, offer the
+ *  DB-grounded candidate(s) as a tappable [CHOICES:] picker instead of the wall,
+ *  so the suggestion is one tap from a lesson rather than a re-type.
+ *
+ *  G0-safe: the candidates come from the opening DB via the trusted fuzzy matcher
+ *  (`fuzzyMatchOpening`, the same one the /coach/teach ambiguous picker uses); the
+ *  reply is assembled in CODE. The LLM decides nothing — this is strictly more
+ *  grounded than the stock line it replaces.
+ *
+ *  Returns null when the query isn't a short opening-name ask (a full-sentence
+ *  question like "what are my weaknesses" matches nothing → caller serves the
+ *  stock line unchanged). The `[CHOICES:]` marker is the app's existing chip
+ *  mechanism (CoachTeachPage extracts it today; GameChatPanel now does too). */
+export function buildOpeningSuggestionReply(query: string): string | null {
+  const q = (query ?? '').trim();
+  if (!q) return null;
+  // Opening names are short phrases. A longer sentence is a real question, not a
+  // name lookup — never spawn a teach picker from mid-sentence opening mentions.
+  if (q.split(/\s+/).length > 5) return null;
+  const names = fuzzyMatchOpening(q).candidates.slice(0, 4).map((c) => c.canonicalName);
+  if (names.length === 0) return null;
+  const choices = `[CHOICES: ${names.join(' | ')}]`;
+  if (names.length === 1) {
+    return (
+      `I don't have that mapped as a built lesson, but I can walk you through ` +
+      `the ${names[0]}. Want to start there?\n${choices}`
+    );
+  }
+  return (
+    `I don't have that exact opening mapped — did you mean one of these? ` +
+    `Tap one and I'll teach it.\n${choices}`
+  );
+}
 
 // emitClaimValidatorTrips / emitEnforcementFallback / stripUngroundedSentences —
 // DELETED (David 2026-07-09: "root cause fixes only"). They were the claim
@@ -4089,9 +4127,27 @@ export async function getCoachChatResponse(
         if (onStream) onStream(grounded);
         return grounded;
       }
+      const openingPicker = buildOpeningSuggestionReply(originalQuery);
+      if (openingPicker) {
+        emitGroundingCoverage('opening-suggestion-picker', surface, sessionId, { question: originalQuery.slice(0, 100) });
+        if (onStream) onStream(openingPicker);
+        return openingPicker;
+      }
       emitGroundingCoverage('safe-default-stock', surface, sessionId, { reason: 'chess-signal-no-assembler', question: originalQuery.slice(0, 100) });
       if (onStream) onStream(STOCK_GROUNDING_FALLBACK);
       return STOCK_GROUNDING_FALLBACK;
+    }
+
+    // A bare opening NAME can miss the chess-vocab signal above and land here,
+    // but it is definitionally not conversational — it's a misrouted opening
+    // intent. Offer the DB-grounded picker before spending an LLM turn on a
+    // "not sure I follow" reply. Nothing grounded is preempted (this lane is the
+    // non-chess lane; there is no engine answer to serve here).
+    const namedOpeningPicker = buildOpeningSuggestionReply(originalQuery);
+    if (namedOpeningPicker) {
+      emitGroundingCoverage('opening-suggestion-picker', surface, sessionId, { question: originalQuery.slice(0, 100), path: 'conversational' });
+      if (onStream) onStream(namedOpeningPicker);
+      return namedOpeningPicker;
     }
 
     // Non-chess conversational turn — phrasing is fine (no chess fact to fake),
@@ -4103,7 +4159,6 @@ export async function getCoachChatResponse(
       if (onStream) onStream(cleaned);
       return cleaned;
     }
-    // The reply was entirely chess content that got swept — serve the honest line.
     emitGroundingCoverage('safe-default-stock', surface, sessionId, { reason: 'conversational-fully-stripped', question: originalQuery.slice(0, 100) });
     if (onStream) onStream(STOCK_GROUNDING_FALLBACK);
     return STOCK_GROUNDING_FALLBACK;
@@ -4133,6 +4188,12 @@ export async function getCoachChatResponse(
     emitGroundingCoverage('safe-default-position', surface, sessionId, { question: originalQuery.slice(0, 100), path: 'grounded-fallthrough' });
     if (onStream) onStream(grounded);
     return grounded;
+  }
+  const openingPicker = buildOpeningSuggestionReply(originalQuery);
+  if (openingPicker) {
+    emitGroundingCoverage('opening-suggestion-picker', surface, sessionId, { question: originalQuery.slice(0, 100), path: 'grounded-fallthrough' });
+    if (onStream) onStream(openingPicker);
+    return openingPicker;
   }
   emitGroundingCoverage('safe-default-stock', surface, sessionId, { question: originalQuery.slice(0, 100), path: 'grounded-fallthrough' });
   if (onStream) onStream(STOCK_GROUNDING_FALLBACK);
