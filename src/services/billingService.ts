@@ -82,6 +82,34 @@ export function clearBillingError(): void {
 }
 
 /**
+ * The stable, durable per-install analytics id: RevenueCat's app-user id.
+ * RevenueCat persists it in the iOS Keychain, so it survives the localStorage /
+ * IndexedDB evictions that make PostHog's anonymous id churn a new "person" on
+ * almost every iOS session — and even survives an app reinstall. Tying PostHog
+ * identity to this makes every install ONE tracked user (open frequency,
+ * retention, session cadence), instead of the inflated anonymous-id count
+ * (David 2026-07-17). Subscribers already carry this same id in RevenueCat, so
+ * payment ↔ usage links for free.
+ *
+ * Returns null on web / keyless builds (billing unconfigured) — there PostHog's
+ * own persisted cookie id is already stable, so no identify is needed.
+ */
+export async function getStableAnalyticsId(): Promise<string | null> {
+  if (!configured) return null;
+  try {
+    const { Purchases } = await import('@revenuecat/purchases-capacitor');
+    const res: unknown = await Purchases.getAppUserID();
+    const id =
+      typeof res === 'string'
+        ? res
+        : (res as { appUserID?: string } | null)?.appUserID;
+    return id && id.length > 0 ? id : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Initialize billing at app boot and resolve entitlement into the store.
  * Safe to call unconditionally — no key ⇒ marks `unconfigured`/Pro and returns.
  */

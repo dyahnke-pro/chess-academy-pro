@@ -18,7 +18,7 @@ import { voiceService } from './services/voiceService';
 import { stockfishEngine } from './services/stockfishEngine';
 import { db } from './db/schema';
 import { installGlobalErrorHooks, installConsoleBackdoor, logAppAudit, loadAuditStreamConfig } from './services/appAuditor';
-import { initAnalytics } from './services/analytics';
+import { initAnalytics, identifyUser } from './services/analytics';
 import { emitAppBootAudit } from './services/appBootAudit';
 import { AppLayout } from './components/ui/AppLayout';
 import { LoadingScreen } from './components/ui/LoadingScreen';
@@ -105,7 +105,7 @@ import { PrivacyPolicyPage } from './components/Legal/PrivacyPolicyPage';
 import { TermsOfServicePage } from './components/Legal/TermsOfServicePage';
 import { SupportPage } from './components/Legal/SupportPage';
 import { AccessGate } from './components/Paywall/AccessGate';
-import { initBilling } from './services/billingService';
+import { initBilling, getStableAnalyticsId } from './services/billingService';
 import { useFreeTierStore } from './stores/freeTierStore';
 import { ReviewPrompt } from './components/Feedback/ReviewPrompt';
 
@@ -224,7 +224,17 @@ export function App(): JSX.Element {
         // RevenueCat. No-op without a platform SDK key (keyless build stays
         // fully usable, source='unconfigured' → isPro). The hard paywall only
         // engages when VITE_PAYWALL_ENABLED=true AND the user isn't Pro.
-        void initBilling();
+        //
+        // Then tie PostHog identity to RevenueCat's durable app-user id (David
+        // 2026-07-17). On native, RevenueCat persists that id in the iOS
+        // Keychain, so it survives the storage evictions that otherwise mint a
+        // fresh anonymous "person" every session — the reason user counts
+        // inflate and per-install retention is invisible. identify() makes each
+        // install ONE tracked user; no-op on web/keyless (stable cookie id).
+        void initBilling().then(async () => {
+          const stableId = await getStableAnalyticsId();
+          if (stableId) identifyUser(stableId);
+        });
 
         // Hydrate the free-tier ledger (puzzle bucket / free opening / kid
         // window) into its runtime mirror so the soft paywall gate can read
