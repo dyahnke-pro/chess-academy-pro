@@ -85,6 +85,30 @@ describe('masterclass redirect resolver', () => {
     expect(r?.line).toBe('Panov');
   });
 
+  it('does NOT mis-redirect the Scandi Panov Transfer to the Icelandic Gambit tab', () => {
+    // The 6-ply Panov Transfer (…exd5 Nf6 c4 c6) shares 5 plies with the
+    // Icelandic Gambit (…exd5 Nf6 c4 e6) then diverges (c6 vs e6). It's a
+    // terminal-short stub, so it must NOT loosely grab the Icelandic tab — it
+    // falls to the coach, which teaches its real line (David 2026-07-16).
+    const r = resolveMasterclassRedirect({
+      id: 'x', pgn: 'e4 d5 exd5 Nf6 c4 c6', isRepertoire: false,
+    });
+    expect(r).toBeNull();
+  });
+
+  it('STILL redirects the real Icelandic Gambit + deep Panov sub-lines', () => {
+    // Regression guard: the terminal-short rule must not break legit matches.
+    const ice = resolveMasterclassRedirect({
+      id: 'x', pgn: 'e4 d5 exd5 Nf6 c4 e6', isRepertoire: false,
+    });
+    expect(ice?.to).toBe('scandinavian-defence');
+    const carlsbad = resolveMasterclassRedirect({
+      id: 'x', pgn: 'e4 c6 d4 d5 exd5 cxd5 c4 Nf6 Nc3 Nc6 Bg5 e6', isRepertoire: false,
+    });
+    expect(carlsbad?.to).toBe('caro-kann');
+    expect(carlsbad?.line).toBe('Panov');
+  });
+
   it('[report] coverage + samples per masterclass (hand-check the mappings)', () => {
     const byTarget = new Map<string, string[]>();
     let total = 0;

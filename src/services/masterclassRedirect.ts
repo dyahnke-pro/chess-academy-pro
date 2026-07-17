@@ -1,6 +1,7 @@
 import repertoireData from '../data/repertoire.json';
 import openingManifests from '../data/opening-manifests.json';
 import { buildVariationTabs } from './variationTabs';
+import { isTeachable } from './openingDetectionService';
 import type { OpeningRecord, OpeningVariation } from '../types';
 
 // Route a raw Lichess ECO entry that is a VARIATION / SUBLINE of a curated
@@ -95,6 +96,15 @@ export function resolveMasterclassRedirect(
     if (a.match(E)) return { to: a.to, line: a.line };
   }
 
+  // Is this a terminal-short namesake stub (≤8 plies, no DB continuation)? Those
+  // must not loosely match a DEEP variation they merely share a branch move with
+  // — the classic bug is the 6-ply Scandinavian Panov Transfer
+  // (…exd5 Nf6 c4 c6) landing on the Icelandic Gambit tab (…exd5 Nf6 c4 e6),
+  // which it shares 5 plies with then diverges. A short stub only redirects to a
+  // tab it genuinely lies ON (prefix either way); otherwise it falls to the
+  // coach, which teaches its real line via the PGN override (David 2026-07-16).
+  const eIsShort = !isTeachable({ eco: '', name: '', pgn: opening.pgn });
+
   const candidates: Array<{ to: string; line: string | null; spec: number }> = [];
 
   for (const M of MASTERCLASSES) {
@@ -116,9 +126,17 @@ export function resolveMasterclassRedirect(
       const identPly = commonPrefix(v, main); // first ply V diverges from main
       const need = identPly + 1; // include the variation-defining move
       if (need < MIN_IDENT_PLIES || need > v.length) continue;
-      if (E.length >= need && commonPrefix(E, v) >= need) {
+      const cE = commonPrefix(E, v);
+      if (E.length >= need && cE >= need) {
+        // A terminal-short stub must genuinely lie ON V's line (one is a prefix
+        // of the other); a loose match that shares the branch then diverges into
+        // a different line (Panov Transfer …c6 vs Icelandic …e6) is rejected so
+        // it falls to the coach. Longer entries keep the looser transposition
+        // match unchanged.
+        const isPrefixMatch = cE === v.length || cE === E.length;
+        if (eIsShort && !isPrefixMatch) continue;
         // Deeper agreement with V's actual line = more specific.
-        candidates.push({ to: M.id, line: t.label, spec: 1000 + commonPrefix(E, v) });
+        candidates.push({ to: M.id, line: t.label, spec: 1000 + cE });
       }
     }
   }
