@@ -5419,6 +5419,57 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       "dxe5 — win material, stay up",
       "","",""],
   },
+  // ── English Opening — hand-authored 2026-07-18 (5 engine-verified gems from
+  // the amateur-explorer mine: premature …d5 in the King's English, the …h6
+  // overextension, the Symmetrical …e5 loosener, the Mikenas …Bd6). ──
+  'english-opening:c4_e5_Nc3_Nf6_Nf3_Nc6_g3_Bb4_Bg2:d5': {
+    sources: ["concept:pos-center", "concept:tac-fork", "concept:pos-bishop-pair", "https://en.wikipedia.org/wiki/English_Opening"],
+    watch: ['', '', '', '', '', '', '', '', '', '…d5? — Black strikes in the centre a move too early. The bishop on b4 is out on a limb, and that loose piece is what makes the break fail.', 'cxd5! — capture. The pawn isn\'t the point yet; it\'s that every recapture now walks into a tactic.', '…Nxd5 — the knight recaptures, but the e5-pawn is left undefended.', 'Nxe5! — grabbing the pawn and forking the c6-knight.', '…Nxc3 — Black lashes out with a trade.', 'bxc3 — and the recapture attacks the marooned b4-bishop.', '…Nxe5 — Black snatches the knight back—', 'cxb4! — but c3-takes-b4 pockets the bishop. White is a clean pawn up with the two bishops and the sounder pawns.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', 'cxd5 — every recapture drops something.', '', 'Nxe5 — take the pawn with tempo.', '', 'bxc3 — now hit the b4-bishop.', '', 'cxb4 — collect the bishop, a pawn up.', ''],
+  },
+  'english-opening:c4_e5_Nc3_Nf6_Nf3_Nc6_g3_Bb4_Bg2_O-O_O-O:d5': {
+    sources: ["concept:pos-center", "concept:tac-fork", "concept:pos-bishop-pair", "https://en.wikipedia.org/wiki/English_Opening"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '…d5? — the same central lunge, and castling first hasn\'t fixed the flaw: the b4-bishop still hangs.', 'cxd5! — take, and the recapture tactics run exactly the same way.', '…Nxd5', 'Nxe5! — the e5-pawn falls with a fork on c6.', '…Nxc3', 'bxc3 — reopening the road to the b4-bishop.', '…Nxe5', 'cxb4 — the bishop drops. A clean pawn and the bishop pair — textbook punishment of a premature …d5.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', 'cxd5 — punish the early break.', '', 'Nxe5 — win e5 with a fork.', '', 'bxc3 — aim at the b4-bishop.', '', 'cxb4 — take it, a pawn up.', ''],
+  },
+  'english-opening:c4_e5_Nc3_Nf6_Nf3_Nc6_g3_Bb4_Bg2_O-O_O-O_e4_Ng5:h6': {
+    sources: ["concept:pos-center", "concept:pos-space", "concept:pos-bishop-pair", "https://en.wikipedia.org/wiki/English_Opening"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '…h6? — kicking the g5-knight, but the e4-pawn Black just pushed is overextended and underdefended. The kick is too slow.', 'Ngxe4! — the knight takes e4 anyway, ignoring the kick.', '…Nxe4 — Black recaptures—', 'Nxe4 — and the c3-knight takes back. White is simply a pawn up; …h6 only weakened g6.', '…f5 — trying to trap the knight.', 'Nc3 — it retreats calmly, keeping the extra pawn.', '…Bxc3', 'dxc3 — recapture, a healthy pawn to the good with the bishop pair.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Ngxe4 — take e4, ignore the kick.', '', 'Nxe4 — recapture, a pawn up.', '', 'Nc3 — retreat, keep the pawn.', '', 'dxc3 — bishop pair, a pawn up.', ''],
+  },
+  'english-opening:c4_c5_Nc3_Nc6_g3_g6_Bg2_Bg7_Nf3_Nf6_O-O_O-O_d3_d6_a3_a6_Rb1:e5': {
+    sources: ["concept:pos-weak-squares", "concept:pos-space", "https://en.wikipedia.org/wiki/English_Opening"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…e5? — grabbing the centre, but it hands White the d5-square and leaves the f6-knight without its pawn cover.', 'Bg5 — pinning the f6-knight and preparing to trade off Black\'s best guard of d5.', '…h6 — questioning the bishop.', 'Bxf6 — taking it; that knight held d5 together.', '…Qxf6', 'b4! — with the dark-squared knight gone, White rolls on the queenside where …a6/…d6 is loosest.', '…cxb4', 'axb4 — a mobile queenside majority and the d5-hole to aim at. White is clearly better.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Bg5 — pin the f6-knight.', '', 'Bxf6 — trade off d5\'s guard.', '', 'b4 — expand where Black is loose.', '', 'axb4 — majority plus the d5-hole.', ''],
+  },
+  'english-opening:c4_e6_Nc3_Nf6_e4_d5_e5_d4_exf6_dxc3_bxc3_Qxf6_Nf3:Bd6': {
+    sources: ["concept:pos-center", "concept:pos-space", "concept:pos-bishop-pair", "https://en.wikipedia.org/wiki/English_Opening"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '…Bd6? — natural, but it does nothing about White\'s real plan. The move to fear was d4, and Black just allowed it.', 'd4! — the pawn centre rolls out. With c3, c4 and d4 White owns the middle and the c1-bishop comes alive.', '…Bf4 — trying to trade the passive bishop.', 'Bd3 — declining, eyeing the kingside light squares.', '…c5', 'O-O — finishing up; the centre and the bishop pair give White a lasting pull.', '…O-O', 'Re1 — the rook backs the centre. White is clearly on top: more space, more active pieces.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'd4 — seize the big centre.', '', 'Bd3 — keep the bishop, eye the king.', '', 'O-O — finish developing, keep the pull.', '', 'Re1 — back the centre.', ''],
+  },
+  // ── Grünfeld / King's Indian Defence / Modern Benoni — hand-authored 2026-07-18
+  // (engine-verified: the fianchetto-Grünfeld …b6 undermining, the Sämisch
+  // Bd3?→…Ng4! shot, two Benoni punishes of White's slow moves). ──
+  'grunfeld-defence:d4_Nf6_c4_g6_g3_d5_Bg2_Bg7:c5': {
+    sources: ["concept:pawn-chain", "concept:pos-open-file", "https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence"],
+    watch: ['', '', '', '', '', '', '', '', 'c5? — White clamps the queenside a tempo too early, and the wedge on c5 has nothing supporting it.', '…b6! — striking the base of the wedge at once; c5 cannot be held.', 'Qa4+ — a check to muddy the water before recapturing.', '…Qd7 — offering the trade; Black is happy to simplify into the better structure.', 'Qxd7+', '…Nbxd7 — recapturing toward the centre.', 'cxb6', '…axb6 — Black emerges with the open a-file and the freer game. White\'s early c5 left only weaknesses.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '…b6 — hit the base of the c5-wedge.', '', '…Qd7 — trade into the better structure.', '', '…Nbxd7 — recapture toward the centre.', '', '…axb6 — open a-file, the freer game.', ''],
+  },
+  'kings-indian-defence:d4_Nf6_c4_g6_Nc3_Bg7_e4_d6_f3_O-O_Be3_e5:Bd3': {
+    sources: ["concept:pos-outpost", "concept:pos-weak-squares", "https://en.wikipedia.org/wiki/King%27s_Indian_Defence"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', 'Bd3? — natural-looking, but it walks into the standard Sämisch tactic: the e3-bishop is loose and the e5/d4 tension is about to snap.', '…Ng4! — hitting the e3-bishop and eyeing the e5-outpost. White\'s whole set-up creaks.', 'Bc1 — the bishop is chased all the way home, a full retreat.', '…exd4 — the centre opens on Black\'s terms.', 'Nd5 — White jumps in, but it\'s a lunge, not a threat.', '…Ne5 — the knight lands on the great outpost, hitting the d3-bishop and dominating.', 'Ne2 — scrambling to cover.', '…c6 — kicking the d5-knight back. Black is a clean pawn up with a monster on e5 and White tangled.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '…Ng4 — hit the loose e3-bishop.', '', '…exd4 — open the centre now.', '', '…Ne5 — the outpost, hit d3.', '', '…c6 — kick it, a pawn up.', ''],
+  },
+  'benoni-defence:d4_Nf6_c4_c5_d5_e6_Nc3_exd5_cxd5_d6_Nf3_g6_Bf4_Bg7_e3_O-O:Nd2': {
+    sources: ["concept:pos-bishop-pair", "concept:pawn-doubled", "https://en.wikipedia.org/wiki/Modern_Benoni"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Nd2? — rerouting the knight, but it drops the guard of the f4-bishop for a moment.', '…Nh5! — pouncing on the f4-bishop and forcing the trade that hands Black the bishop pair.', 'Bg3 — the only way to keep the bishop.', '…Nxg3 — taking it—', 'hxg3 — and White\'s kingside is shattered into doubled, isolated g-pawns.', '…Nd7 — rerouting toward the great e5-square.', 'a4', '…Ne5 — the outpost is Black\'s; with the bishop pair and White\'s ragged kingside, Black is clearly better.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…Nh5 — win the bishop pair off f4.', '', '…Nxg3 — take it.', '', '…Nd7 — reroute toward e5.', '', '…Ne5 — the outpost, clearly better.', ''],
+  },
+  'benoni-defence:d4_Nf6_c4_c5_d5_e6_Nc3_exd5_cxd5_d6_e4_g6_f4_Bg7_Nf3_O-O:h3': {
+    sources: ["concept:pos-center", "concept:pawn-passed", "https://en.wikipedia.org/wiki/Benoni_Defense"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'h3? — a slow luft that ignores the centre. In the Four Pawns Benoni every tempo counts, and the e4-pawn now lacks a defender it will need.', '…Re8! — piling on e4 and daring White to push.', 'e5 — the thrust Black was inviting.', '…Nbd7 — hitting the e5-spearhead.', 'Bc4 — trying to stay active.', '…dxe5 — opening the centre against the uncastled king.', 'O-O', '…e4! — the passed pawn splits White\'s position and the f3-knight has no good square. Black wins material and keeps the initiative.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…Re8 — pile on e4.', '', '…Nbd7 — hit the e5-pawn.', '', '…dxe5 — open it on the king.', '', '…e4 — the passer, win material.', ''],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {

@@ -3,6 +3,7 @@ import type { OpeningRecord, DrillAttempt } from '../types';
 import { fuzzyScore } from '../utils/fuzzySearch';
 import { expandOpeningAbbrev } from '../utils/openingAbbrev';
 import { MAIN_LINE_INDEX } from '../utils/wlppLadder';
+import { buildVariationTabs } from './variationTabs';
 import { enrollOpeningLine } from './srsOpeningService';
 import openingManifests from '../data/opening-manifests.json';
 import antiOpeningsData from '../data/anti-openings.json';
@@ -532,9 +533,16 @@ export function getLinesPerfected(opening: OpeningRecord): number {
   return opening.linesPerfected?.length ?? 0;
 }
 
-/** Returns total number of lines (variations) for an opening. */
+/** Returns the total number of REACHABLE variation lines for an opening —
+ *  i.e. the tabs the detail page actually renders, not the raw variation
+ *  count. A variation that folds into the main-line pill or a twin tab has
+ *  no tab and can't be discovered, so counting it would make the "X/N lines"
+ *  badge over-promise (the 2026-07-18 hidden-tabs fix: KIA showed "0/9" while
+ *  rendering 2 tabs). buildVariationTabs is the single source of truth for
+ *  which lines are reachable, keeping this badge in lockstep with the tabs. */
 export function getTotalLines(opening: OpeningRecord): number {
-  return opening.variations?.length ?? 0;
+  if (!opening.variations?.length) return 0;
+  return buildVariationTabs(opening.id, opening.variations).length;
 }
 
 /**
