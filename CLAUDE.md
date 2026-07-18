@@ -1650,16 +1650,24 @@ answer historical/usage/event-history questions from the audit-stream.
 
 **When David asks to "check the audit data," "what happened in my game,"
 usage, engagement, errors over time, or any after-the-fact telemetry → query
-PostHog**, the durable analytics store: `node scripts/posthog-query.mjs
-"<HogQL>"` (events table, ClickHouse-flavored SQL). The app sends events via
+PostHog**, the durable analytics store. The app sends events via
 `src/services/analytics.ts` (write key `VITE_POSTHOG_KEY`). The audit-stream
 is ONLY for a LIVE watch during an active session (G1/G2 post-deploy audit) —
 never for history. STOP treating the Vercel audit buffer as the analytics
 backend; it isn't, and saying "the buffer was wiped, the data's gone" when
 the real data is sitting in PostHog is the mistake this rule exists to kill.
-(Read key: `Read_key_PostHog` / `POSTHOG_API_KEY` — refresh it in the env-var
-config if `posthog-query.mjs` returns 401; do NOT fall back to the
-audit-stream for history.)
+
+**🔒 POSTHOG ACCESS = THE POSTHOG MCP SERVER, NOT THE API KEY (David
+2026-07-18: "PostHog access is granted through a different manner … don't
+use the api key").** The session has the PostHog MCP server connected
+(org "Chess Academy Pro", project 390808, us.posthog.com) — query through
+its tools (`mcp__PostHog__exec`: `read-data-schema`, `query-trends`,
+`execute-sql`, error-tracking, etc.). Verified working 2026-07-18 with no
+key. The old path — `scripts/posthog-query.mjs` + the `POSTHOG_API_KEY`
+`phx_` personal key — is DEPRECATED for sessions: the env key is stale
+(401s) and David has said not to use it. Do NOT ask him for a fresh key;
+use the MCP. (`posthog-query.mjs` remains only for non-MCP contexts like
+CI scripts, and only if the key is ever refreshed.)
 
 **Secrets — durable storage (stop re-pasting keys).** This container
 is ephemeral and re-cloned every web session, and `.env*` / `.claude/`
@@ -1674,27 +1682,17 @@ for every command, and the code already reads them:
   `profile.preferences.auditStreamSecret`, or you get 401. **It is ALREADY
   in Vercel** (project env, below) — that's the source of truth; never
   hardcode it (see the AUDIT-STREAM SECRET + WATCHER lesson below).
-- `POSTHOG_API_KEY` — **PostHog product-analytics read access (David
-  2026-06-02: "make sure claude code can always have access to posthog
-  data, don't ask every time").** A PostHog PERSONAL API key (`phx_…`,
-  read scopes: query:read / insight:read / project:read) set ONCE in the
-  env-var config. When present, query analytics with
-  `node scripts/posthog-query.mjs ["<HogQL>"]` (default = top events,
-  last 7 days) — DO NOT ask David for a key; it lives in the env config.
-  **The PostHog project is on US cloud (`https://us.posthog.com`, project
-  390808) — the working `phx_` read key is also stored in Vercel env as
-  `POSTHOG_API_KEY` (David 2026-06-21: "that was on vercel"). ⚠️ Vercel's
-  API returns SENSITIVE env vars as an ENCRYPTED `{"v":"v2","c":…}` envelope,
-  NOT plaintext — so DON'T test that ciphertext and conclude the key is dead
-  (the 2026-06-21 mistake). Get the plaintext from the Vercel dashboard, or
-  use the value in the Claude env config. Auth-probe a candidate first:
-  `curl -s -o /dev/null -w "%{http_code}" -H "Authorization: Bearer <key>"
-  https://us.posthog.com/api/projects/` → 200 = good, 401 = wrong/encrypted.**
-  NB: this is the READ key. The app's WRITE key is the public `phc_…`
-  PostHog **project** key, which lives in Vercel as `VITE_POSTHOG_KEY`
+- `POSTHOG_API_KEY` — **DEPRECATED for sessions (David 2026-07-18: "don't
+  use the api key"). PostHog reads go through the PostHog MCP server** (see
+  the POSTHOG ACCESS rule above). The `phx_` personal key in the env config
+  is stale (401s) — don't refresh it, don't ask for it, don't fall back to
+  `posthog-query.mjs` in a session. The script + key survive only for
+  non-MCP contexts (CI) if ever revived.
+  NB: the app's WRITE key is separate and unaffected — the public `phc_…`
+  PostHog **project** key lives in Vercel as `VITE_POSTHOG_KEY`
   (+ `VITE_POSTHOG_HOST=https://us.i.posthog.com`) and bakes into the
   client bundle (`src/services/analytics.ts`, no-op when unset).
-  `VITE_POSTHOG_KEY` is safe to expose; `POSTHOG_API_KEY`/`phx_` is a
+  `VITE_POSTHOG_KEY` is safe to expose; any `phx_` personal key is a
   SECRET — never put it in a `VITE_*` var or commit it.
 
 `scripts/session-secrets.mjs` runs as a **SessionStart hook**
