@@ -157,6 +157,35 @@ The pattern (battle-tested 2026-05-16 + 2026-05-28):
    Listener can still attach (override `auditStreamUrl` in
    localStorage on first load).
 
+   **🔒 ALSO SET `AUDIT_PROXY=$HTTPS_PROXY` FOR PROD AUDITS FROM THE
+   SANDBOX (David 2026-07-18, LOCKED — the fix that unblocks prod
+   Playwright).** Without it, Chromium can't reach prod at all — every
+   `page.goto('https://chess-academy-pro.vercel.app/…')` dies with
+   `net::ERR_CONNECTION_RESET` while `curl` gets 200, and sessions
+   wrongly conclude "prod is Chromium-unreachable, fall back to
+   localhost." It is reachable. Two root causes (diagnosed via
+   `--log-net-log`: `ssl_error:1` handshake reset AFTER the proxy
+   `CONNECT` returned 200), both fixed in `scripts/audit-lib/chromium.mjs`
+   and both gated on `AUDIT_PROXY` being set:
+   - The agent egress proxy re-terminates TLS with a MITM endpoint that
+     only speaks **TLS 1.2**; Chromium's default TLS 1.3 ClientHello (with
+     the post-quantum X25519MLKEM key share) makes it RST the tunnel →
+     `sandboxLaunchArgs()` adds `--ssl-version-max=tls1.2`.
+   - The lightweight `headless_shell` binary **ignores** `--ssl-version-max`
+     and still resets; the full `chrome` binary honors it →
+     `resolveChromiumExecutable()` prefers the full chrome whenever
+     `AUDIT_PROXY` is set.
+   So the canonical prod-audit incantation from the sandbox is:
+   `AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app node scripts/audit-<surface>.mjs`
+   Verified 2026-07-18: `audit-hidden-tabs-prod.mjs` 6/6 and
+   `audit-coach-kia-teach-prod.mjs` PASS against LIVE prod. **Coach-surface
+   audits must ALSO dismiss the `ai-consent-modal` gate** (click
+   `[data-testid="ai-consent-allow"]`) before the chat input is
+   interactive, and **type via `pressSequentially`, not `fill`** — the
+   React textarea needs real key events or the send stays disabled and the
+   message never submits. `audit-coach-kia-teach-prod.mjs` is the reference
+   for the coach-chat audit pattern.
+
 3. **Fall back to localhost** ONLY if prod is unreachable from this
    container (curl test returns `host_not_allowed`). In that case
    run `npm run dev > /tmp/vite.log 2>&1 &` first; intercept audit
