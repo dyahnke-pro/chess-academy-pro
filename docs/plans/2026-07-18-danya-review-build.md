@@ -118,8 +118,10 @@ ONE chokepoint, so every current vertical (the tactical-strengths answer
 that tangented) AND the future review playback inherit it. The
 `voiceFactsBatch` wrapper then applies all three nets PER LINE.
 
-NOTE: this fixes a LIVE bug, not just the future build — it can ship
-standalone ahead of Phase 1 if David wants it sooner.
+NOTE: this fixes a LIVE bug as well as hardening the future playback.
+DECISION (David 2026-07-18: "Fold the bug fix into the build"): it ships
+AS PART OF the build — Phase 0a is the first thing the build session
+lands, not a standalone pre-release.
 
 ### Phase 0 — preflight probes (before ANY authoring)
 0.1 PV probe: confirm `stockfishEngine` can yield a FULL PV line (not just
