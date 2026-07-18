@@ -95,6 +95,14 @@ export const MISCONCEPTION_TAGS = [
     drill: { kind: 'tactic', puzzleThemes: ['fork', 'pin', 'skewer', 'discoveredAttack', 'doubleCheck'] },
   },
   {
+    id: 'calculation-depth',
+    label: 'Long tactical sequences',
+    bucket: 'tactical',
+    blurb: 'You find the first move but lose the thread deeper into a forcing line.',
+    coachCue: 'Asked to calculate a multi-move winning sequence (review spot-the-sequence), the student found the start but fell off before the end, or could not begin it. The reached/total depth is recorded in the coach note.',
+    drill: { kind: 'tactic', puzzleThemes: ['long', 'veryLong', 'crushing'] },
+  },
+  {
     id: 'missed-opponents-threat',
     label: "Missed the opponent's threat",
     bucket: 'tactical',
