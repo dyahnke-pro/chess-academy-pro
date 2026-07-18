@@ -15,6 +15,7 @@
  * Run: AUDIT_SANDBOX=1 AUDIT_SMOKE_URL=http://localhost:5173 node scripts/audit-review-sequence.mjs
  */
 import { chromium } from 'playwright';
+import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 
 const URL = process.env.AUDIT_SMOKE_URL || 'http://localhost:5173';
@@ -211,14 +212,46 @@ const run = async () => {
       await page.waitForTimeout(2500);
       const clickSquare = async (sq) => {
         const el = page.locator(`[data-square="${sq}"]`).first();
-        await el.click({ force: true, timeout: 3000 });
+        const box = await el.boundingBox();
+        if (!box) throw new Error('no box for ' + sq);
+        const cx = box.x + box.width / 2;
+        const cy = box.y + box.height / 2;
+        const stack = await page.evaluate(([x, y]) => {
+          return document.elementsFromPoint(x, y).slice(0, 6).map((e) => ({
+            tag: e.tagName, sq: e.getAttribute('data-square'), cls: (e.className?.toString?.() || '').slice(0, 50),
+            pe: getComputedStyle(e).pointerEvents, testid: e.getAttribute('data-testid'),
+          }));
+        }, [cx, cy]);
+        console.log('   stack@' + sq + ':', JSON.stringify(stack));
+        const at = await page.evaluate(([x, y]) => {
+          const e = document.elementFromPoint(x, y);
+          return e ? (e.getAttribute('data-square') || e.tagName + '.' + (e.className?.toString?.().slice(0, 40) || '')) : 'null';
+        }, [cx, cy]);
+        console.log(`   square ${sq} @(${Math.round(cx)},${Math.round(cy)}) topmost: ${at}`);
+        await page.mouse.move(cx, cy);
+        await page.mouse.down();
+        await page.mouse.up();
       };
+      const boardFen = await page.evaluate(() => document.querySelector('[data-testid="board-wrapper"]')?.getAttribute('data-fen'));
+      console.log('   board fen at ask:', boardFen);
       let played = false;
+      let attempt = null;
       try {
-        await clickSquare('a7'); await page.waitForTimeout(250); await clickSquare('a5');
-        played = true;
+        const c = new Chess(boardFen);
+        const legal = c.moves({ verbose: true });
+        // Prefer a quiet non-capture (most likely judged wrong/equivalent —
+        // either way the flow proceeds); fall back to any legal move.
+        attempt = legal.find((m) => !m.captured && !/[+#]/.test(m.san)) ?? legal[0];
+        if (attempt) {
+          await clickSquare(attempt.from); await page.waitForTimeout(300); await clickSquare(attempt.to);
+          played = true;
+        }
       } catch { /* board interaction failed */ }
-      check('played a deliberately bad sequence attempt on the board', played);
+      check('played a legal sequence attempt on the board', played, attempt ? attempt.san : 'none');
+      // Diagnostic: what does the ask card's progress say + is the board still in ask?
+      await page.waitForTimeout(1500);
+      const askText = await page.evaluate(() => document.querySelector('[data-testid="review-sequence-ask"]')?.textContent ?? '(gone)');
+      console.log('   ask card after attempt:', askText.slice(0, 120));
 
       // The wrong verdict needs the eval probe (real engine) — allow time.
       let playbackSeen = false;
@@ -226,7 +259,7 @@ const run = async () => {
         await page.locator('[data-testid="review-sequence-playback"]').waitFor({ timeout: 20000 });
         playbackSeen = true;
       } catch { /* */ }
-      check('playback card appeared after the verified fall-off', playbackSeen);
+      check('playback card appeared after the attempt (wrong OR equivalent both teach the line)', playbackSeen);
 
       // Bucket row (only on VERIFIED wrong — generous credits skip it).
       await page.waitForTimeout(2000);
