@@ -1,3 +1,40 @@
+# PLAN — Vienna Gambit Declined restructure: Qf3 primary tab + Nf3 deep tab (2026-07-17, active)
+
+David: the …d5 declined line should teach **Qf3 as the primary/main tab** (most-common online + engine +0.6), **Nf3 as a deep tab right after** (level). Extend both to a middlegame via Stockfish. "Quality not haste; one step at a time." Ships with the next TestFlight build (per the OTA-on staging).
+
+## Locked, engine-verified spines (Stockfish 16 + Lichess DB, G3-legal)
+- **Qf3 (main, White +0.58→+0.72 throughout):**
+  `e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 Nxc3 dxc3 Be6 Bf4 Be7 O-O-O c6 Qg3 g6 Nf3 Qa5 Kb1 Nd7 Nd4 O-O-O Be2 Qc7 Bg4 Nc5` (move 14, both castled). Extension plies 11-14 = Stockfish best; first 4 (Kb1 Nd7 Nd4 O-O-O) ALSO the online most-played → double-grounded.
+- **Nf3 (secondary, ~0.00 level):**
+  `e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Be7 Qe2 Nxc3 dxc3 c5 Bf4 Nc6 O-O-O Be6 h4 h6 g3 Qa5 a3 O-O-O Bh3 Kb8 Kb1 Rhf8` (move 14).
+- Frequency: Qf3 online 42% vs Nf3 26%; masters Nf3 52% vs Qf3 29%. Audience plays online → Qf3 main; masters-vs-online nuance framed HONESTLY in narration (not a silent doctrine break).
+
+## Source content (already authored — reuse + extend, don't rewrite)
+- `viennaGambitVariations.ts` `Qf3 Setup (vs …d5)` — 4 beats to move 10 → +2 beats to move 14.
+- `viennaGambit.ts` `VIENNA_GAMBIT_LESSON` (Nf3) — 7 beats to move 11 → +1 beat to move 14.
+- Both keyed openingId `vienna-gambit` = ORPHAN (not in repertoire.json/registry → unreachable). Fold into `vienna-game`.
+
+## Build steps (one at a time, gate after each)
+1. [x] PLAN + commit (this).
+2. [ ] Extend the Qf3 lesson beats (moves 11-14) — board-verified, sources.
+3. [ ] Extend the Nf3 lesson beat (moves 12-14).
+4. [ ] repertoire.json: rename tab[0] → `Vienna Gambit: Qf3 (Declined)` (pgn = Qf3 spine, explanation, keyIdeas); ADD `Vienna Gambit: Nf3 (Declined)` tab right after; keep `Vienna Gambit Accepted`.
+5. [ ] viennaVariations.ts: register `vienna-game::Vienna Gambit: Qf3 (Declined)` + `::Nf3 (Declined)` (re-keyed from the orphan).
+6. [ ] Retire orphan `vienna-gambit` (registration + `vienna-gambit::0::/::1::` sublineNarration) OR keep dormant — decide to avoid a dangling openingId.
+7. [ ] index.ts alias map: point the `vienna gambit` search terms at the Qf3 tab.
+8. [ ] Rebuild `course-sublines.json` (build-course-sublines.mjs) for vienna-game's new tab indices.
+9. [ ] Gate battery (narrationAccuracy, lessonIntegrity, wlppNarration, lessonDepth, variationMiddlegameDepth, middlegamePlanThemes, OpeningDetailPage.wiring) + `ship-check`.
+10. [ ] Stage on `main` (branch→PR→merge) + post-deploy audit.
+
+## Decisions
+- Qf3-main is audience-driven (online), not masters-doctrine — flagged in narration, not silent.
+- Nf3 = separate deep tab, NOT a subline (the engine models sublines as OPPONENT deviations only, so a White alternative can't be a subline — confirmed w/ David).
+
+## Next-session pickup
+Spines above are locked + engine-verified. Resume at first unchecked step. Orphan source = viennaGambit.ts + viennaGambitVariations.ts.
+
+---
+
 # PLAN — Coach dead-end → picker + voice fallover telemetry fix (2026-07-17, active)
 
 Origin: PostHog review (2026-07-17). Two real user-facing dents in last-24h data:
