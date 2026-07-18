@@ -156,6 +156,60 @@ const VS_NC6: LessonScript = {
 // exchange, Black gets compensation in piece activity. Famous for a
 // reason. Note: the calmer Be7 sub-line absorbs into a branch beat
 // (David's Falkbeer-merge call, 2026-05-21).
+// Vienna Gambit — the Qf3 treatment of the declined main (3…d5). Made the
+// PRIMARY declined tab per David 2026-07-17: online it is the most-played 5th
+// move (Lichess 42% vs Nf3 26%), and unlike the LEVEL Nf3 line it keeps White a
+// genuine pull — Stockfish 16 holds +0.58→+0.72 from move 10 into the move-14
+// middlegame (both sides castled queenside). Masters still prefer Nf3 (52%), so
+// the framing is HONEST: Qf3 is the modern online main + the sharper edge, Nf3
+// the classical main on its own (existing) tab. Spine engine+DB-grounded
+// (G3-legal); every board claim verified with chess.js against the live board.
+const GAMBIT_QF3: LessonScript = {
+  openingId: 'vienna-game',
+  sources: ['book:vienna-game', 'concept:pos-initiative', 'concept:pos-space', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Vienna_Game'],
+  title: 'Vienna Game — The Gambit: Qf3',
+  minutes: 9,
+  orientation: 'white',
+  beats: [
+    b({ id: 'qf1', moves: 'e4 e5 Nc3 Nf6 f4',
+      say: "The Vienna Gambit — f4, hurling the f-pawn at e5 to drag it off the centre, with the knight already developed on c3 and ready for the fight.",
+      sayShort: "f4 — the gambit thrust.",
+      highlights: [H('f4', KEY), H('e5', KEY)] }),
+    b({ id: 'qf2', moves: 'e4 e5 Nc3 Nf6 f4 d5',
+      say: "…d5! is the principled decline — Black refuses the pawn and counter-strikes in the centre, hitting e4 right back. This is the main declined line, and the reply you will meet most.",
+      sayShort: "…d5 — the declined counter-strike.",
+      highlights: [H('d5', KEY), H('e4', KEY), H('f4', SOFT)] }),
+    b({ id: 'qf3', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4',
+      say: "fxe5 …Nxe4 — both sides snatch a central pawn. White owns the cramping e5-wedge; Black's knight sits deep on e4. Now the fork in the road: the classical Nf3, or the move most players reach for online today — Qf3.",
+      sayShort: "fxe5 …Nxe4 — mutual central grabs.",
+      highlights: [H('e5', KEY), H('e4', KEY)] }),
+    b({ id: 'qf4', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3',
+      say: "Qf3! The queen leaps straight out to hit the e4-knight and eye f7 — by far the most-played try in online play these days, and the sharper one. Where the classical Nf3 settles into a level game, Qf3 keeps White a genuine pull.",
+      sayShort: "Qf3 — hit the knight, eye f7.",
+      arrows: [A('f3', 'e4', INTENT)], highlights: [H('f3', KEY), H('e4', KEY), H('f7', SOFT)] }),
+    b({ id: 'qf5', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 Nxc3 dxc3',
+      say: "…Nxc3 dxc3 — Black trades the knight off, and White recaptures toward the centre. The c-pawns are doubled, but the d-file swings half-open for a rook on d1 and the e5-pawn stays as a cramping wedge.",
+      sayShort: "dxc3 — half-open the d-file, keep e5.",
+      highlights: [H('e5', KEY), H('d1', SOFT)] }),
+    b({ id: 'qf6', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 Nxc3 dxc3 Be6 Bf4 Be7 O-O-O',
+      say: "Bf4 supports the e5-wedge, and O-O-O! — White castles queenside, the rook landing on the d-file with the king tucked safely to the wing. Every piece points toward Black.",
+      sayShort: "O-O-O — castle onto the d-file.",
+      highlights: [H('c1', KEY), H('e5', SOFT)] }),
+    b({ id: 'qf7', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 Nxc3 dxc3 Be6 Bf4 Be7 O-O-O c6 Qg3 g6 Nf3 Qa5',
+      say: "Qg3 swings the queen toward the kingside and Nf3 completes the development behind the e5-pawn. Black plays …c6 and …Qa5 to fuss at White's king — but the engine already reads White the better: the e5-wedge, the d-file, and the freer pieces outweigh the gambit pawn.",
+      sayShort: "Qg3, Nf3 — develop with the pull.",
+      highlights: [H('e5', KEY), H('g3', SOFT)] }),
+    b({ id: 'qf8', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 Nxc3 dxc3 Be6 Bf4 Be7 O-O-O c6 Qg3 g6 Nf3 Qa5 Kb1 Nd7 Nd4 O-O-O',
+      say: "Kb1 first — tucking the king off the c-file, out of the way of …Qa5, before pressing. …Nd7 develops, and Nd4! centralises the knight, hitting c6 and leaning on the e6-bishop. Black castles queenside too, so both kings sit on the same wing and it becomes a maneuvering fight where White's space and the e5-wedge do the talking.",
+      sayShort: "Nd4 — centralise, press e6.",
+      arrows: [A('d4', 'e6', ATK)], highlights: [H('e5', KEY), H('d4', KEY)] }),
+    b({ id: 'qf9', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 Nxc3 dxc3 Be6 Bf4 Be7 O-O-O c6 Qg3 g6 Nf3 Qa5 Kb1 Nd7 Nd4 O-O-O Be2 Qc7 Bg4 Nc5',
+      say: "Be2, and then Bg4! — the bishop swings across to join the d4-knight in pressuring the e6-bishop, two pieces bearing down on it. Black tucks the queen to c7 and jumps …Nc5, but White has finished developing with the e5-wedge and the pressure intact. Stockfish reads a steady plus — a comfortable, pleasant edge for White, and exactly why Qf3 is the line to reach for.",
+      sayShort: "Bg4 — double up on e6.",
+      arrows: [A('g4', 'e6', ATK)], highlights: [H('e6', KEY), H('e5', SOFT)] }),
+  ],
+};
+
 const FRANKENSTEIN_DRACULA: LessonScript = {
   openingId: 'vienna-game',
   sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
@@ -318,6 +372,7 @@ export const VIENNA_VARIATION_LESSONS: Record<string, LessonScript> = {
   'vienna-game::Stanley Variation': STANLEY,
   'vienna-game::Vienna Gambit Accepted': VGA,
   'vienna-game::Copycat Variation': COPYCAT,
+  'vienna-game::Vienna Gambit: Qf3': GAMBIT_QF3,
   'vienna-game::Vienna Gambit': GAMBIT,
   'vienna-game::Vienna vs 2...Nc6': VS_NC6,
   // Frankenstein-Dracula tab (the wild Nxa8 main line). The mislabeled
