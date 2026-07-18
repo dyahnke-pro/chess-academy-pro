@@ -1,45 +1,62 @@
-# Opening Matchup — "teach X vs Y" (David 2026-07-18)
+# Opening Matchup + Continue-the-Game (David 2026-07-18)
 
-David: *"Coach couldn't show the two openings vs each other that I asked
-for … Make sure the coach can show or teach any two different openings
-against each other. Coach should use the DBs and stockfish."*
+Two linked asks from David:
 
-The earlier fuzzy fix only made the picker OFFER both sides as separate
-"pick one" chips — tapping one taught a single opening in isolation, NOT
-the two colliding on one board. This builds the real thing.
+1. **Teach any two openings against each other — even ones that don't
+   normally meet.** *"When they can't meet the coach should say that but
+   then use stockfish to still make the request happen … no reason we can't
+   show what happens and teach the best lines."* And the "it played a
+   French" bug: asking for **KIA vs Sicilian Dragon** taught the DB's
+   `King's Indian Attack: Sicilian Variation` entry, whose move order is
+   `e4 e6 d3 d5…` — French-looking, NOT the Dragon setup he named.
 
-## Grounding (G3 — no invented lines)
+2. **Continue the lesson into a full game.** *"I want the coach to be able
+   to play and narrate a full game. Once the opening teaching has been
+   completed the coach should ask the user if they want the game/teaching
+   to continue so they can see a middle and endgame."* And: *"I want the
+   coach to contour the lesson if desired on ALL opening or teaching
+   requests, not just opening vs opening"* — e.g. after "teach me the
+   Vienna," ask if they want to see the rest of the game.
 
-An opening's identity often depends on the opponent's moves ("Italian
-Game" REQUIRES 1…e5), so you cannot merge two arbitrary opening PGNs
-without either mislabeling the result or inventing moves. So:
+## Feature A — matchup by CONSTRUCTION (not a coincidental named entry)
 
-- **Tier 1 — named DB matchup entry (the grounded spine).** The Lichess
-  DB already encodes real matchups as single entries: `King's Indian
-  Attack: Sicilian Variation` (KIA vs the Sicilian), `Caro-Kann Defense:
-  Panov-Botvinnik…`, `Indian Defense: London System` (London vs the KID),
-  `English Opening: Anglo-Indian … King's Indian Formation` (English vs
-  KID). We find the deepest entry whose name carries a distinctive token
-  of BOTH sides and teach THAT. Every move is the DB's (G3-clean).
-- **Stockfish extension.** If the named spine is short (< ~12 plies), we
-  extend it toward a middlegame with `stockfishEngine.getBestMove`
-  (best-play both sides) — real, legal engine moves, honoring David's
-  "use the DBs and stockfish." Best-effort: engine unavailable → ship the
-  DB spine as-is.
-- **Honest failure (no invented hybrid).** If the two openings can't meet
-  (both the same colour → can't face each other; or no book matchup exists
-  — Italian vs Sicilian, Ruy vs French), we say so plainly and offer to
-  teach either one on its own (tappable chips). Empty > invented.
+Show the two setups the user actually named. For "X vs Y":
 
-## Files
+- **Setup source = the opening's own DB line.** The deepest DB entry that
+  is a genuine child of the opening (normalized name === the opening or
+  starts with it), White's plies for the White opening, Black's plies for
+  the Black opening. This gives KIA → `e4 d3 Nd2 Ngf3 g3 Bg2 O-O Re1` and
+  the Dragon → `c5 d6 Nc6 g6 Bg7 Nf6 O-O Be6`.
+- **Merge:** play each side's setup moves in order, skipping any illegal in
+  the current position (the opponent deviated), producing the real
+  collision: `e4 c5 d3 d6 Nd2 Nc6 Ngf3 g6 g3 Bg7 Bg2 Nf6 O-O O-O Re1 Be6`
+  — KIA vs the **Dragon**, exactly as asked. Every move is the DB's (G3).
+- **Stockfish bridges + extends.** When a setup clashes (no legal setup
+  move) or after both are established, `stockfishEngine.getBestMove`
+  continues toward a middlegame — real, legal engine moves. Best-effort:
+  engine unavailable → the chess.js merge (~16–20 real setup plies) stands.
+- **Honest note when they don't normally meet.** They "meet" if a strict
+  named DB matchup entry exists (both openings' family tokens present as
+  whole tokens). If not (QG vs Sicilian, Italian vs French), prepend: *"The
+  Queen's Gambit and the Sicilian don't normally meet … but here's what it
+  looks like when White sets up the Queen's Gambit and Black the
+  Sicilian,"* then teach it anyway.
+- **Same-colour pairs** (two Black defenses) genuinely can't share a board
+  → honest message + each side as a chip. No construction.
 
-- `src/services/openingMatchup.ts` — `resolveOpeningMatchup(query)` (sync,
-  DB-grounded) + `extendMatchupToMiddlegame(moves)` (async Stockfish).
-- `src/services/openingMatchup.test.ts` — coverage for named lines,
-  colour ordering, same-colour + no-entry incompatibility.
-- `src/components/Coach/CoachTeachPage.tsx` — detect a matchup in
-  `handleSubmit` BEFORE the single-opening fuzzy picker; a `line` teaches
-  the matchup via `generateOpening` `entryOverride`; an `incompatible`
-  posts the honest message + per-side chips.
+Files: `src/services/openingMatchup.ts` (`planOpeningMatchup` sync +
+`buildMatchupLine` async Stockfish), wired in `CoachTeachPage.handleSubmit`.
 
-## Status: shipped
+## Feature B — continue into the middlegame + endgame (ALL lessons)
+
+After ANY opening walkthrough completes (single opening OR matchup), the
+coach asks: *"Want to keep going and watch the middlegame and endgame?"*
+On yes, the coach plays out both sides with Stockfish best-play from the
+final opening position and narrates the phases (grounded commentary: eval
+swings, captures, tactics, phase transitions) to a natural conclusion.
+
+Files: a `continueGame` runtime that extends the board from the lesson's
+terminal FEN with `stockfishEngine.getBestMove` + grounded narration; a
+completion hook in the walkthrough that surfaces the prompt.
+
+## Status: shipped — Feature A (construction + honest note) + Feature B (narrated continuation), both verified on localhost (Stockfish WASM plays both sides, grounded phase/material narration, no errors).
