@@ -72,6 +72,15 @@ export function sandboxLaunchArgs() {
       ...SANDBOX_CHROMIUM_ARGS,
       `--proxy-server=${proxy}`,
       '--proxy-bypass-list=127.0.0.1;localhost;<-loopback>',
+      // The agent egress proxy re-terminates TLS with a MITM endpoint that only
+      // speaks TLS 1.2. Chromium's default TLS 1.3 ClientHello (incl. the
+      // post-quantum X25519MLKEM key share) makes that endpoint RST the tunnel
+      // AFTER the CONNECT 200 — surfacing as net::ERR_CONNECTION_RESET on every
+      // prod navigation while curl (TLS 1.2-compatible) sails through. Capping
+      // Chromium at TLS 1.2 through the proxy fixes it (diagnosed 2026-07-18 via
+      // --log-net-log: ssl_error:1 handshake reset). Only applied on the proxied
+      // sandbox path; runner/localhost audits are untouched.
+      '--ssl-version-max=tls1.2',
     ];
   }
   return SANDBOX_CHROMIUM_ARGS;
@@ -102,7 +111,13 @@ export async function resolveChromiumExecutable(headed = false) {
       // Fall through to the candidate list.
     }
   }
-  const candidates = headed ? HEADED_CANDIDATES : HEADLESS_CANDIDATES;
+  // Through the agent MITM proxy, the lightweight `headless_shell` binary
+  // ignores --ssl-version-max=tls1.2 and RSTs the TLS-1.3 handshake (the full
+  // `chrome` binary honors the cap and connects). So when we're routing prod
+  // audits through AUDIT_PROXY, prefer the full chrome even in headless mode
+  // (diagnosed 2026-07-18: full+arglib OK 200, headless_shell+arglib RESET).
+  const candidates =
+    headed || process.env.AUDIT_PROXY ? HEADED_CANDIDATES : HEADLESS_CANDIDATES;
   for (const p of candidates) {
     try {
       await access(p);
