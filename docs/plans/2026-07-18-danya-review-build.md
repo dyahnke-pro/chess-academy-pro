@@ -81,6 +81,46 @@ discipline that took the Vienna Qf3 and Hikaru builds gate-green first try.
 Nothing is authored from assumption; every integration point was read in
 code before this plan was written.
 
+### Phase 0a — CONTAINMENT NET on voiceFacts (David 2026-07-18: "how do
+we get the llm to not say what we want instead of other random things? …
+it had a tangent about what a knight fork was")
+
+DIAGNOSIS (verified in coachApi.ts): voiceFacts's existing nets catch
+INVENTED NUMBERS (`introducedNumbers` → trip → serve computed prose) and
+DROPPED critical tokens (`mustPreserve`). A conceptual tangent — a
+knight-fork definition, generic advice — adds no number and drops no
+token, so it passes BOTH nets; the only thing standing against it is the
+prompt's "add NOTHING" line, which is prompt-begging, not a gate. That is
+the hole the tangent went through, and it's live TODAY on every
+voiceFacts vertical.
+
+THE FIX — the symmetric third net, same shape as introducedNumbers (pure,
+zero extra LLM calls, fallback = the computed prose, never a regen):
+1. `introducedChessTerms(facts, out)` — closed-vocabulary scan of the
+   OUTPUT for chess content absent from the FACTS: SAN-shaped tokens,
+   square names (a1-h8), piece words, and the concept lexicon (fork,
+   pin, skewer, discovered attack, outpost, zwischenzug, … — reuse the
+   tactics/misconception term lists already in the codebase). Any hit →
+   trip → serve the computed facts + `claim-validator-trip`
+   (source=voiceFacts.containment) audit for observability.
+2. SENTENCE BUDGET — output sentences ≤ facts sentences + 1. A 3-fact
+   bundle phrased into 8 sentences is padding/tangent even when the
+   vocabulary passes (motivational rambling has no chess terms at all).
+   Deterministic, cheap.
+3. (Sharpening, optional) definition-shape stripper — sentences matching
+   didactic-definition patterns ("A knight fork is…", "In chess, X
+   means…") whose subject isn't defined in the facts get stripped at
+   sentence granularity (the stripChessyStraySentences pattern) before
+   the whole-reject check, preserving the good sentences.
+
+WHERE: inside voiceFacts core, right after the existing fidelity check —
+ONE chokepoint, so every current vertical (the tactical-strengths answer
+that tangented) AND the future review playback inherit it. The
+`voiceFactsBatch` wrapper then applies all three nets PER LINE.
+
+NOTE: this fixes a LIVE bug, not just the future build — it can ship
+standalone ahead of Phase 1 if David wants it sooner.
+
 ### Phase 0 — preflight probes (before ANY authoring)
 0.1 PV probe: confirm `stockfishEngine` can yield a FULL PV line (not just
     bestmove) — the UCI `pv` field. If `analyzePosition` doesn't expose it,
