@@ -379,5 +379,102 @@ MITIGATION: already structural — one phase = one main landing, severable;
 Phase 5 explicitly droppable (R2); order is value-ranked so a stop after
 any phase still shipped the most important remaining thing.
 
+## FUNCTION-LEVEL DESIGN + DATA AUDIT (David 2026-07-18: "plan how
+specifically each function will be coded and wired… Do we already capture
+all the required data? Do we need to add anything?" — every claim below
+was VERIFIED against the code/data this session, not assumed.)
+
+### Verified foundations (exist today, no changes needed)
+- **Full PV**: `stockfishEngine.analyzePosition()` already returns
+  `topLines: AnalysisLine[]` with `moves: string[]` (the UCI `pv` line,
+  MultiPV-parsed) + eval + mate. Phase 1 needs ZERO engine changes.
+- **voiceFacts chokepoint**: `voiceFacts(facts, opts)` exists with the
+  `mustPreserve` fidelity net (SAN tokens verified verbatim or the
+  computed prose is served), `warm` voicing, and — already — a dedicated
+  `'review'` register via `resolveWarmRegister()` ("the post-game
+  tape-review register"). R1's phrasing layer is this, unchanged.
+- **Per-ply data**: live coach games store `evaluation / preMoveEval /
+  bestMove / classification` per `CoachGameMove`; stored/imported games
+  get the same via `analyzeSingleGame` (bestMove on flagged plies).
+- **Misconception pipeline**: closed 17-tag taxonomy in
+  `src/data/misconceptionTags.ts` (each tag carries label + drill
+  mapping), `logMisconception` + `getMisconceptionProfile` aggregation +
+  `mapTagToDrills`. Additive tag = one array entry.
+- **Model-game pool**: 646 entries with `white/black/whiteElo/blackElo/
+  year/event/openingId/middlegameTheme/lessonSummary`; 92 carry
+  `criticalMoments[{moveNumber,color,fen,annotation,concept}]`.
+- **Masters DB is POSITION-KEYED**: `public/data/openings-masters-db.json`
+  = 131,895 positions keyed by truncated FEN (no move counters) → SAN
+  frequency lists. Phase 4's position-based book matching is direct —
+  no precompute, just truncate the FEN the same way.
+- **Explorer games at ANY level** (David 2026-07-18: "not always GM…
+  he searches the db for any game that fits the structure; GM preferred,
+  else 2100-2300"): the proxy passes ALL query params through — VERIFIED
+  live: `source=masters` → 15 named topGames (Carlsen–Caruana w/ year +
+  game id); `source=lichess&ratings=2200,2500&topGames=4` → real 2700+
+  lichess games per position. Full PGNs via the existing
+  `api/lichess-game-export` proxy. Add `speeds=blitz,rapid,classical`
+  to filter out ultraBullet junk. NO proxy changes needed.
+
+### The gaps — what we do NOT have (David: "I want to know first")
+1. **A structural-motif extractor (the one genuinely NEW fact-computer).**
+   We compute tactics (`detectTactics`), phase/material
+   (`gamePhaseService`), move geometry (`describeMoveGeometry`) — but
+   NOTHING computes board STRUCTURE: pawn islands/chains, open/half-open
+   files, outpost squares (protected, unassailable by pawns), passed
+   pawns, castling wings + pawn-storm state, color complexes, endgame
+   type. This is load-bearing for Phase 2 matching ("fits the structure
+   on the board"), Phase 5 themes, and R1's rich fact bundles. NEW
+   `src/services/boardStructure.ts` — pure chess.js, fully computable,
+   unit-testable. Biggest single new component; write + test FIRST in
+   Phase 0/1 since three phases lean on it.
+2. **voiceFactsBatch wrapper (small).** `voiceFacts` phrases ONE facts
+   string → one string. Playback needs N per-ply lines from one call: a
+   thin wrapper formats N bundles into one numbered prompt, splits the
+   result, validates each line against ITS bundle (mustPreserve per
+   line), falls back per-ply on any miss. Rides the existing chokepoint —
+   no new G0 surface.
+3. **`calculation` misconception tag (planned, additive).** Not in the
+   17; add id `calculation-depth`, label "Long tactical sequences",
+   drill mapping → lichess puzzle themes `long`/`veryLong` (+ crushing),
+   metadata `{reachedPlies,totalPlies,fen,pvSan}` on the log entry.
+4. **Model-game FEN index (tiny, build-time).** To match "same structure"
+   fast at review time, precompute a signature per model-game
+   criticalMoment (from boardStructure) into a small generated JSON —
+   or compute lazily per review (92 entries × cheap chess.js — fine).
+   Decision: lazy first, index only if slow.
+5. **Nothing new needs CAPTURING at game time.** All five phases run on
+   data we already store (evals/classifications/FENs/PGN) + review-time
+   computation (PV, structure) + existing DBs/proxies. No schema
+   changes, no new telemetry, no migration.
+
+### Wiring map (function → caller)
+- `boardStructure.describeStructure(fen)` → used by pvPlayback facts,
+  modelGameMatcher, gameThemeClassifier, and (bonus) available to the
+  coach's grounded Q&A later.
+- `pvPlayback.computePvLine(fen, firstUci?, maxPlies)` → engine
+  `analyzePosition` (prefetch priority) → per-ply facts via chess.js +
+  detectTactics + boardStructure → spoken lines via `voiceFactsBatch`
+  (register 'review', mustPreserve = SANs/squares per line) →
+  `CoachGameReview` playback queue.
+- `sequenceChallenge.judgeAttempt(pv, attempt, engineProbe)` →
+  called from the walk board's onMove during sequence mode; fall-off →
+  `logMisconception({tag:'calculation-depth', …})`.
+- `modelGameMatcher.findCameo(fen, openingId)` → boardStructure
+  signature vs (1) model-games criticalMoments, (2) masters explorer
+  topGames at the position family, (3) amateur explorer
+  `ratings=2000,2200&topGames=4&speeds=blitz,rapid,classical` — GM
+  preferred, high-amateur fallback (David's rule) → full PGN via
+  game-export proxy → playback queue + tie-back line citing the shared
+  structural feature verified on both boards.
+- `principles.ts` (curated map tag→principle) → why-picker/shot reveals;
+  application quiz candidates from engine top moves + the principle's
+  predicate.
+- `theoryDeparture.findDeparture(fens[])` → masters-DB position lookup
+  per ply (truncated-FEN match) → first ply whose position is absent →
+  card (guidedFind ask → book playback via explorer continuation).
+- `gameThemeClassifier.classify(segments)` → eval trace + citations +
+  boardStructure at key plies → {theme, peakPly} | null.
+
 ## Status: PLAN LOCKED (David 2026-07-18: "Plan only. Lock it in. Will
 build once usage resets."). No build started. Phase 0 begins on go-signal.
