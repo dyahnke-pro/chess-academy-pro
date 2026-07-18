@@ -305,14 +305,34 @@ async function main() {
     await scenario('B6-mistakes-tab-restored', async () => {
       // The fix wires state.tab through to GameInsightsPage on
       // mount, so Mistakes should still be the active tab — not
-      // Overview (the default).
+      // Overview (the default). The mistakes tab BODY
+      // ([data-testid="mistakes-tab"]) is gated on game analysis
+      // `loading`, so on a cold context it can legitimately show
+      // insights-loading for a while — assert restoration on the
+      // tab BUTTON's active styling (inline accent background),
+      // and treat the body as best-effort confirmation.
       await page.waitForTimeout(800);
-      const mistakesTab = page.locator('[data-testid="mistakes-tab"]');
-      const isMistakesActive = (await mistakesTab.count()) > 0;
-      if (!isMistakesActive) {
+      const buttonState = await page.evaluate(() => {
+        const btn = document.querySelector('[data-testid="tab-mistakes"]');
+        if (!btn) return { found: false, active: false, loading: false };
+        const style = btn.getAttribute('style') ?? '';
+        return {
+          found: true,
+          // active buttons get an accent border + tinted background;
+          // inactive ones are `transparent` + border-color token.
+          active: !/background:\s*transparent/.test(style) && /--color-accent/.test(style),
+          loading: !!document.querySelector('[data-testid="insights-loading"]'),
+        };
+      });
+      console.log('    [debug] tab-mistakes button =', JSON.stringify(buttonState));
+      if (!buttonState.found) {
+        throw new Error('tab-mistakes button missing after back-nav');
+      }
+      if (!buttonState.active) {
         throw new Error('mistakes tab not active after back-nav (state.tab restoration broken)');
       }
-      return 'mistakes tab restored';
+      const bodyMounted = (await page.locator('[data-testid="mistakes-tab"]').count()) > 0;
+      return `mistakes tab restored (body ${bodyMounted ? 'mounted' : buttonState.loading ? 'still loading — acceptable' : 'not mounted'})`;
     });
   }
 
