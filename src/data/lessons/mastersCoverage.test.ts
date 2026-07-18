@@ -128,6 +128,25 @@ const SUSPECT_BASELINE = new Set<string>([
   'stafford-gambit::Bg5 — the Stafford Mate::11:Bg5',
   'Englund Gambit — The Trap::11:Bc3',
   'englund-gambit::The Englund Mate (Qc1#)::11:Bc3',
+  // 2026-07-18 masters-drift sweep: the live explorer sample shifted so these
+  // past-book plies fell out of its current top replies. Each is ENGINE-SOUND
+  // — the same run's 6b Stockfish soundness pass did NOT flag any of them (only
+  // the Dutch/QGD-Cambridge/Fritz lines tripped 6b, handled separately). Each is
+  // a deep quiet regrouping/expansion move in a sparse-masters line or the
+  // deliberately-taught gambit/attacking line masters avoid — reviewed, the move
+  // IS the lesson's point. Baselined so the live-data 6a gate is green.
+  'vienna-game::Vienna Gambit: Qf3::14:Be7',
+  'vienna-game::Vienna Gambit: Qf3::16:c6',
+  'benko-gambit::Modern 5.f3 System::13:f3',
+  'sicilian-dragon::Anti-Dragon: Bg5 Line::20:a6',
+  'reti-opening::Reti: Reti Gambit::17:Ne4',
+  'sicilian-najdorf::Najdorf: Fischer-Sozin Attack (6.Bc4)::20:b4',
+  'sicilian-alapin::Alapin: 2...d5 3.exd5 Qxd5 4.d4 Nc6 (with ...e5)::14:Nge7',
+  'petrov-defence::Three Knights Game::23:Bxf6',
+  'petrov-defence::Italian Variation::21:Bd3',
+  'petrov-defence::5.Bd3 Line::23:Bxd2',
+  'philidor-defence::Modern d3 Hybrid::6:Nf6',
+  'old-indian-defence::Old Indian: Main Line with d5::17:a3',
 ]);
 
 interface MasterMove { san: string; games: number }
@@ -312,6 +331,18 @@ const SOUNDNESS_BASELINE = new Set<string>([
   'englund-gambit::The Englund Mate (Qc1#)::11:Bc3',
   'englund-gambit::The Englund Mate (Qc1#)::13:Qd2',
   'englund-gambit::The Englund Mate (Qc1#)::15:Qxc3',
+  // 2026-07-18 masters-drift sweep: two OPPONENT-mistake trap showcases the live
+  // 6b pass flagged. In both the flagged move is the side-to-punish's defining
+  // blunder the line exists to teach — engine-confirmed the student ends winning,
+  // and 6a confirms the setup is master-played (real theory, not invention).
+  //  • Cambridge Springs: White's natural-looking Bd3 walks into …dxc4! and drops
+  //    the g5-bishop — best was Be2 (+37); after Bd3 the student (Black) is +346
+  //    (verified depth 20). The classic Cambridge Springs trap the lesson teaches.
+  'qgd::Cambridge Springs::17:Bd3',
+  //  • Fritz (…Nd4!?) gambit: by ply 21 White is already lost (−147) from the
+  //    grab-fest; O-O plays on down material and the student (Black) is +357 with
+  //    both bishops raking — the whole point of the Fritz. Same class as Traxler.
+  'two-knights-defence::Two Knights: Fritz Variation 5...Nd4::21:O-O',
 ]);
 
 // ── Hole 6b — Stockfish SOUNDNESS (all lessons, incl. traps) ────────────
@@ -444,6 +475,20 @@ const PLAN_SUSPECT_BASELINE = new Set<string>([
   'mp-siciliannajdorf-6g3::2:b6',         // masters: b5 — sound
   'mp-siciliannajdorf-6g3::4:Bb7',        // masters: Qxb6/Nxb6 — sound
   'mp-siciliannajdorf-classical::6:Nb6',  // masters: Qc7/Nc5/b6/Ne8 — sound
+  // 2026-07-18 masters-drift sweep: the live explorer sample shifted so these
+  // long-standing plan moves fell out of its current top continuations. Each
+  // was re-verified engine-SOUND at depth 18 (≤4cp vs best; several BETTER than
+  // the shallow best) and none tripped the 7b soundness check — sound-but-
+  // master-divergent, not defects. Baselined so the live-data 7a gate is green.
+  'mp-ruylopez-d4::6:a5',                 // masters: Qf8 — …a5 queenside expansion, sound (best −13cp)
+  'mp-carokann-main::15:g3',              // masters: Ne5/Kb1 — g3 king-safety prep, sound (best −10cp)
+  'mp-philidordefence-nimzowitsch::1:h6', // masters: Ne5/g6/Qa5/Nc5 — …h6 luft/questions the bishop, sound (0cp)
+  'mp-qgd-tartakower::6:Qb6',             // masters: Nc6 — …Qb6 pressures d4/b2, sound (2cp)
+  'mp-kingsindiandefence-bayonet::1:Bb2', // masters: c5 — Bb2 onto the long diagonal, sound (best −3cp)
+  'mp-twoknightsdefence-maxlange::5:Ra4', // masters: Rc4/Be3 — Ra4 rook lift, sound (best −9cp)
+  'mp-budapestgambit-adler::5:Bf5',       // masters: Re8/Qh4/Bd7/f5 — …Bf5 develops with tempo, sound (4cp)
+  'mp-budapestgambit-fajarowicz::1:c5',   // masters: Rd1/O-O-O/O-O/Rc1 — c5 grabs space, sound (best −1cp)
+  'mp-schliemanndefence-dyckhoff::8:Bb6', // masters: d6/Ba6/Qe8/Re8 — …Bb6 repositions the bishop, sound (4cp)
 ]);
 
 // Soundness baseline for plan lines (7b) — same rationale as SOUNDNESS_BASELINE
