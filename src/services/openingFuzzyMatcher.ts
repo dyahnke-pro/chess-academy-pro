@@ -99,6 +99,31 @@ function americanize(s: string): string {
   return out;
 }
 
+/** Strip natural-language intent filler and side qualifiers so a bare opening
+ *  name / acronym survives to the alias resolver. "Teach me the KIA with white
+ *  pieces" and "KIA with white pieces" both need to reduce to "KIA" — the
+ *  NAME_ALIASES lookup is a whole-string exact match, so the trailing "with
+ *  white pieces" was making "KIA" (King's Indian ATTACK) fail to resolve and
+ *  the fuzzy scan then mis-grabbed "King's Indian" (the Defence). Fixes the
+ *  2026-07-18 report: "coach can't teach the KIA with the white pieces."
+ *  Returns the stripped string (may equal the input if nothing matched). */
+function stripOpeningQualifiers(q: string): string {
+  return q
+    // leading intent verbs: "teach me the", "show me", "learn about", "let's play"
+    .replace(
+      /^(?:(?:can\s+you\s+|please\s+|i\s+want\s+to\s+|let'?s\s+|help\s+me\s+)?(?:teach|show|learn|study|practi[cs]e|play|cover|explain|go\s+over)(?:\s+me)?(?:\s+(?:about|how\s+to\s+play|the|a|an))*)\s+/i,
+      '',
+    )
+    // trailing side qualifier: "with (the) white pieces", "as black", "for
+    // white", "playing white", "from white's side" — keep the opening name.
+    .replace(
+      /\s+(?:with|as|for|playing|from|on)\s+(?:the\s+)?(?:white|black)(?:'s)?(?:\s+(?:pieces|side))?\.?$/i,
+      '',
+    )
+    .replace(/^(?:the|a|an)\s+/i, '')
+    .trim();
+}
+
 /** Normalize for distance comparison. Same shape as
  *  openingDetectionService.normalizeNameForMatch (case + diacritic +
  *  apostrophe + hyphen) PLUS British→American spelling rewrite. */
@@ -295,7 +320,14 @@ export function fuzzyMatchOpening(rawQuery: string): FuzzyMatchResult {
   // and don't need fuzzy scoring at all. Try the query as-typed, then
   // with a leading article stripped — "the KIA" / "the Vienna" are
   // common, and an acronym alias ("kia") only matches the bare token.
-  const direct = resolveOpeningEntry(query) ?? resolveOpeningEntry(query.replace(/^(?:the|a|an)\s+/i, ''));
+  // Try as-typed, then with a leading article stripped, then with intent
+  // filler + side qualifiers stripped ("KIA with white pieces" → "KIA"), so an
+  // acronym alias that only matches the bare token still resolves.
+  const stripped = stripOpeningQualifiers(query);
+  const direct =
+    resolveOpeningEntry(query) ??
+    resolveOpeningEntry(query.replace(/^(?:the|a|an)\s+/i, '')) ??
+    (stripped && stripped !== query ? resolveOpeningEntry(stripped) : null);
   if (direct) {
     return {
       candidates: [

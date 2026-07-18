@@ -9,6 +9,28 @@ describe('fuzzyMatchOpening', () => {
     expect(r.candidates[0].source).toBe('resolveOpeningEntry');
   });
 
+  // Regression (David 2026-07-18): "coach can't teach the KIA with the white
+  // pieces." The NAME_ALIASES lookup is a whole-string exact match, so trailing
+  // "with white pieces" / leading "teach me the" made the "KIA" acronym fail to
+  // resolve and the fuzzy scan mis-grabbed "King's Indian" (the Defence).
+  it.each([
+    'KIA with white pieces',
+    'Teach me the KIA with white pieces',
+    'the KIA with white pieces',
+    "King's Indian Attack with white",
+  ])('intent filler + side qualifier stripped: "%s" → King\'s Indian Attack', (q) => {
+    const r = fuzzyMatchOpening(q);
+    expect(r.autoAccept).toBe(true);
+    expect(r.candidates[0].canonicalName).toBe("King's Indian Attack");
+  });
+
+  it('side qualifier does not derail a normal Defence name', () => {
+    // "King's Indian Defense" must stay the Defence, not get stripped oddly.
+    expect(fuzzyMatchOpening("King's Indian Defense").candidates[0].canonicalName).toMatch(
+      /King's Indian Defense/,
+    );
+  });
+
   it("British spelling ('Defence') → autoAccept via british-normalized rewrite", () => {
     const r = fuzzyMatchOpening('Philidor Defence');
     expect(r.autoAccept).toBe(true);
