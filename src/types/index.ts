@@ -1153,6 +1153,15 @@ export interface ChatMessage {
    * the reply honours the same modality.
    */
   modality?: 'voice' | 'text';
+  /**
+   * Tappable answer chips the coach offered ON THIS message — a "did you
+   * mean one of these?" picker. Rendered INLINE beneath the bubble so they
+   * persist with the question in the transcript. Previously the picker only
+   * lived in the transient input-bar `coachChoices` state, so typing the
+   * next message stranded the question with no chips (David 2026-07-18
+   * screenshot: three "Did you mean one of these?" prompts, zero chips).
+   */
+  choices?: string[];
   metadata?: {
     actions?: { type: string; id: string }[];
     annotations?: BoardAnnotationCommand[];

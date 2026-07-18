@@ -252,6 +252,14 @@ function dedupe(cands: FuzzyCandidate[]): FuzzyCandidate[] {
   return Array.from(byName.values()).sort((a, b) => b.score - a.score);
 }
 
+/** Matchup separators — "KIA vs Sicilian dragon", "London against the
+ *  King's Indian", "Italian versus the Petroff". The user is naming TWO
+ *  openings (what they play + what they face), not one; the whole-string
+ *  fuzzy scan mangles it (the "KIA" token drowns under the opponent's
+ *  name, surfacing four Sicilian Dragon rows and never the KIA — David
+ *  2026-07-18). Split and match each side. */
+const MATCHUP_SPLIT_RE = /\s+(?:vs\.?|versus|against)\s+/i;
+
 /** Main entry point. */
 export function fuzzyMatchOpening(rawQuery: string): FuzzyMatchResult {
   const query = rawQuery.trim();
@@ -259,9 +267,35 @@ export function fuzzyMatchOpening(rawQuery: string): FuzzyMatchResult {
     return { candidates: [], autoAccept: false, query: '' };
   }
 
+  // Matchup ("X vs Y"): resolve BOTH sides and offer both as candidates —
+  // the side the student PLAYS first (left of the separator), the side
+  // they FACE second. Never auto-accept a matchup: it's inherently a
+  // "which of these did you mean?" pick. Only fires when the whole string
+  // doesn't resolve directly (so "Sicilian Defense" — no separator — is
+  // untouched, and a rare opening literally containing "vs" still gets a
+  // direct hit first via the tiers below).
+  const matchupSides = query.split(MATCHUP_SPLIT_RE);
+  if (matchupSides.length === 2 && !resolveOpeningEntry(query)) {
+    const [left, right] = matchupSides.map((s) => s.replace(/^the\s+/i, '').trim());
+    const merged: FuzzyCandidate[] = [];
+    for (const side of [left, right]) {
+      if (!side) continue;
+      // Recurse per side (single opening name → the normal tiers apply,
+      // including alias resolution so "KIA" → King's Indian Attack).
+      merged.push(...fuzzyMatchOpening(side).candidates);
+    }
+    const top = dedupe(merged).slice(0, MAX_CANDIDATES);
+    if (top.length > 0) {
+      return { candidates: top, autoAccept: false, query };
+    }
+    // Both sides blank → fall through to the whole-string tiers.
+  }
+
   // Tier 1: existing resolver. Hits cover ≥99% of canonical inputs
-  // and don't need fuzzy scoring at all.
-  const direct = resolveOpeningEntry(query);
+  // and don't need fuzzy scoring at all. Try the query as-typed, then
+  // with a leading article stripped — "the KIA" / "the Vienna" are
+  // common, and an acronym alias ("kia") only matches the bare token.
+  const direct = resolveOpeningEntry(query) ?? resolveOpeningEntry(query.replace(/^(?:the|a|an)\s+/i, ''));
   if (direct) {
     return {
       candidates: [

@@ -680,6 +680,13 @@ export function CoachTeachPage(): JSX.Element {
   // the "I wanted the danish gambit" → re-tap pattern from the live
   // audit log. Capped at the last 3 entries to bound memory.
   const recentUserInputsRef = useRef<Array<{ text: string; at: number }>>([]);
+  // True once the student has submitted ANYTHING (typed, chip-tapped, or
+  // played a board move). Used to suppress the deferred kickoff greeting +
+  // weakness-nudge session-opener when they fire LATE (activeProfile loads
+  // after the user already started a conversation) — otherwise the opener
+  // dumps "keep one thing in mind — recurring mistakes in vienna game" on
+  // top of an active KIA-vs-Dragon exchange (David 2026-07-18 screenshot).
+  const userInteractedRef = useRef(false);
   // Rolling response-length tracking per verbosity tier — when the
   // brain's responses at `brief` average > prompt budget, that's the
   // signal we need to tighten the rules. Capped at 20 entries per
@@ -1497,6 +1504,9 @@ export function CoachTeachPage(): JSX.Element {
     // the id, so the audit log is pivotable by turn.
     const turnAuditId = mintTurnId('teach');
     setCurrentTurnId(turnAuditId);
+    // Mark the session active so a late-firing kickoff greeting/opener
+    // won't interrupt (see userInteractedRef).
+    if (!opts?.kickoff) userInteractedRef.current = true;
 
     // Audit-instrumentation phase-3: user-retry detection. Compare
     // this input against the previous user input. When the two share
@@ -2472,18 +2482,20 @@ export function CoachTeachPage(): JSX.Element {
             trigger: null,
           });
           const topNames = fuzzy.candidates.map((c) => c.canonicalName);
-          // Inline [CHOICES:] marker — the choices extractor on the
-          // next user turn won't see this (it scans the brain
-          // stream, not chat history), so we set the picker state
-          // directly here.
+          // Attach the picker chips to THIS message (message.choices), so
+          // they render inline under the bubble and PERSIST in the
+          // transcript. The old input-bar `coachChoices` was transient —
+          // typing the next message cleared it (line ~1614), stranding the
+          // "did you mean?" prompt with no chips (David 2026-07-18 report).
           const prose = topNames.length === 1
-            ? `I don't have an exact match for "${fuzzy.query}". Did you mean ${topNames[0]}?`
-            : `I don't have an exact match for "${fuzzy.query}". Did you mean one of these?`;
+            ? `I don't have an exact match for "${fuzzy.query}". Did you mean ${topNames[0]}? Tap it to start.`
+            : `I don't have an exact match for "${fuzzy.query}". Did you mean one of these? Tap one to start.`;
           setMessages((prev) => [...prev, {
             id: `${ambiguousTurnId}-c`,
             role: 'assistant',
             content: prose,
             timestamp: Date.now(),
+            choices: topNames,
           }]);
           useCoachMemoryStore.getState().appendConversationMessage({
             surface: 'chat-teach',
@@ -2492,7 +2504,6 @@ export function CoachTeachPage(): JSX.Element {
             fen: opts?.fenOverride ?? gameRef.current.fen,
             trigger: null,
           });
-          setCoachChoices(topNames);
           void logAppAudit({
             kind: 'coach-surface-migrated',
             category: 'subsystem',
@@ -3013,6 +3024,10 @@ export function CoachTeachPage(): JSX.Element {
     // feel like a second LLM call wrote the chat text — it never was).
     let spokenDisplayText = '';
     let choicesExtractedForTurn = false;
+    // Chips the brain offered via a `[CHOICES:]` marker this turn. Captured
+    // here so they attach INLINE to the finalized coach message (persist in
+    // the transcript), not just to the transient input-bar picker.
+    let extractedChoices: string[] = [];
     /** `[VOICE: summary]` — captures inner content lazily so the
      *  marker closes on the first `]` rather than greedily consuming
      *  past it. Multi-line content allowed because the summary itself
@@ -3041,7 +3056,7 @@ export function CoachTeachPage(): JSX.Element {
         .filter((s) => s.length > 0)
         .slice(0, 6); // hard cap so a runaway brain can't overflow
       if (items.length === 0) return;
-      setCoachChoices(items);
+      extractedChoices = items;
       void logAppAudit({
         kind: 'coach-voice-marker-extracted',
         category: 'subsystem',
@@ -3918,6 +3933,11 @@ export function CoachTeachPage(): JSX.Element {
           role: 'assistant',
           content: displayText,
           timestamp: Date.now(),
+          // Inline "did you mean…" chips the brain offered via a
+          // `[CHOICES:]` marker — attached to the message so they persist
+          // with the question instead of vanishing from the input bar on
+          // the next turn (David 2026-07-18).
+          ...(extractedChoices.length > 0 ? { choices: extractedChoices } : {}),
           // Opt-in follow-up picker the grounded answer attached
           // (David 2026-07-04) — tappable chip, never auto-launched.
           ...(result.actionOffer && result.actionOffer.length > 0
@@ -4633,6 +4653,13 @@ export function CoachTeachPage(): JSX.Element {
       // Per WO spec: do NOT auto-launch the walkthrough. The student
       // confirms by typing "yes" / "start" / tapping a Start button.
       const rolodexOpening = searchParams.get('opening');
+      // Don't dump a greeting onto an active conversation. This kickoff is
+      // gated on `activeProfile`, which can resolve AFTER the student has
+      // already started typing — in which case the greeting + weakness
+      // session-opener would append at the bottom as a non-sequitur (David
+      // 2026-07-18: "recurring mistakes in vienna game" landed under a
+      // KIA-vs-Dragon exchange). If the student has interacted, skip it.
+      if (userInteractedRef.current) return;
       // Rotate the greeting + suggested-question chips per visit (David
       // 2026-07-04: "instead of always saying welcome to my classroom … it
       // should rotate through and give some pickers to choose"). Minute-
@@ -4675,8 +4702,15 @@ export function CoachTeachPage(): JSX.Element {
             // day's focus before the first move — computed from the stored
             // weakness profile, spoken AFTER the greeting resolves (the
             // speech chain serializes; never talks over the welcome line).
-            if (top) {
-              const planLine = `While we play today, keep one thing in the back of your mind — ${top.label.toLowerCase()}. That's the pattern that's been costing you the most, and I'll be watching for it.`;
+            // The profile read is async — the student may have started a
+            // conversation while it resolved. Don't append the opener onto
+            // an active transcript (the non-sequitur David caught).
+            if (top && !userInteractedRef.current) {
+              // Use the label VERBATIM (a colon, not a lowercased em-dash
+              // splice): the label is a proper noun phrase — "Recurring
+              // mistakes in the Vienna Game" — and `.toLowerCase()` mangled
+              // it into "recurring mistakes in vienna game" (David 2026-07-18).
+              const planLine = `One thing to keep in the back of your mind today: ${top.label}. That's the pattern that's been costing you the most, and I'll be watching for it.`;
               setMessages((prev) => [...prev, { id: uid('session-opener'), role: 'assistant', content: planLine, timestamp: Date.now() }]);
               speechChainRef.current = speechChainRef.current
                 .then(() => voiceService.speakForced(planLine))
@@ -4799,6 +4833,28 @@ export function CoachTeachPage(): JSX.Element {
       setHintBusy(false);
     }
   }, [hintBusy]);
+
+  // Shared tap handler for coach answer chips — both the inline
+  // `message.choices` picker (ChatMessage) and the input-bar picker
+  // (ChatInput) route through this: clear any transient input-bar picker,
+  // then submit the chosen text through the normal resolution pipeline.
+  const pickCoachChoice = useCallback((choice: string): void => {
+    void logAppAudit({
+      kind: 'chip-tap-resolved',
+      category: 'subsystem',
+      source: 'CoachTeachPage.coachChoiceChip',
+      summary: `chip tap: "${choice.slice(0, 60)}" → routed through handleSubmit`,
+      details: JSON.stringify({
+        chipText: choice,
+        source: 'coach-choice-chip',
+        contextFen: gameRef.current.fen,
+        walkthroughOpening: walkthrough.tree?.openingName ?? null,
+      }),
+      fen: gameRef.current.fen,
+    });
+    setCoachChoices(null);
+    void handleSubmit(choice);
+  }, [handleSubmit, walkthrough.tree]);
 
   return (
     <div
@@ -5430,32 +5486,7 @@ export function CoachTeachPage(): JSX.Element {
             disabled={busy}
             placeholder={busy ? 'Coach is typing…' : 'Ask your coach…'}
             coachChoices={coachChoices}
-            onPickCoachChoice={(choice) => {
-              // Audit-instrumentation phase-1: log every chip tap as
-              // its own event kind so the audit log can answer "what
-              // did the user actually tap, and where did it route?"
-              // without spelunking through coach-surface-migrated
-              // events for the resolution outcome.
-              void logAppAudit({
-                kind: 'chip-tap-resolved',
-                category: 'subsystem',
-                source: 'CoachTeachPage.coachChoiceChip',
-                summary: `chip tap: "${choice.slice(0, 60)}" → routed through handleSubmit`,
-                details: JSON.stringify({
-                  chipText: choice,
-                  source: 'coach-choice-chip',
-                  // Context the resolver will see when handleSubmit
-                  // runs: current FEN, walkthrough's opening, intended
-                  // opening. Lets us replay the resolution if the
-                  // outcome surprises us.
-                  contextFen: gameRef.current.fen,
-                  walkthroughOpening: walkthrough.tree?.openingName ?? null,
-                }),
-                fen: gameRef.current.fen,
-              });
-              setCoachChoices(null);
-              void handleSubmit(choice);
-            }}
+            onPickCoachChoice={pickCoachChoice}
           />
         </div>
 
@@ -5703,7 +5734,7 @@ export function CoachTeachPage(): JSX.Element {
                   : { opacity: 0.7 }
               }
             >
-              <ChatMessage message={msg} />
+              <ChatMessage message={msg} onPickChoice={pickCoachChoice} />
             </div>
           ))}
 

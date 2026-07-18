@@ -88,3 +88,44 @@ describe('ChatMessage — grounded action picker', () => {
     expect(navigateMock).toHaveBeenCalledWith('/coach/analyse');
   });
 });
+
+describe('ChatMessage — inline "did you mean" choice chips (David 2026-07-18)', () => {
+  it('renders a chip per message.choices entry and calls onPickChoice with the tapped text', () => {
+    const onPick = vi.fn();
+    render(
+      <MemoryRouter>
+        <ChatMessage
+          message={baseMessage({
+            content: 'Did you mean one of these? Tap one to start.',
+            choices: ["King's Indian Attack", 'Sicilian Defense: Dragon Variation'],
+          })}
+          onPickChoice={onPick}
+        />
+      </MemoryRouter>,
+    );
+    expect(screen.getByTestId('message-choice-chips')).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('message-choice-chip-0'));
+    expect(onPick).toHaveBeenCalledWith("King's Indian Attack");
+    fireEvent.click(screen.getByTestId('message-choice-chip-1'));
+    expect(onPick).toHaveBeenCalledWith('Sicilian Defense: Dragon Variation');
+  });
+
+  it('renders no chips when onPickChoice is absent (streaming placeholder)', () => {
+    render(
+      <MemoryRouter>
+        <ChatMessage message={baseMessage({ choices: ['A', 'B'] })} />
+      </MemoryRouter>,
+    );
+    expect(screen.queryByTestId('message-choice-chips')).not.toBeInTheDocument();
+  });
+
+  it('never renders choice chips on a user message', () => {
+    const onPick = vi.fn();
+    render(
+      <MemoryRouter>
+        <ChatMessage message={baseMessage({ role: 'user', choices: ['A', 'B'] })} onPickChoice={onPick} />
+      </MemoryRouter>,
+    );
+    expect(screen.queryByTestId('message-choice-chips')).not.toBeInTheDocument();
+  });
+});
