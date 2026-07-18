@@ -1759,6 +1759,14 @@ export function buildOpeningSuggestionReply(query: string): string | null {
   // Opening names are short phrases. A longer sentence is a real question, not a
   // name lookup — never spawn a teach picker from mid-sentence opening mentions.
   if (q.split(/\s+/).length > 5) return null;
+  // A QUESTION ("what is the Sicilian?", "what about the Caro-Kann?", "how do I
+  // play the London?") wants an ANSWER, not a "did you mean? tap to teach"
+  // deflection — let it fall through to the grounded/books answer. The picker is
+  // a dead-end rescue for a bare NAME the surface couldn't resolve ("Panov",
+  // "Najdorff", "Caro Cann"), which never starts with an interrogative word.
+  if (/^(?:what|how|why|which|when|where|who|is|are|do|does|can|could|should|would|explain|describe|tell)\b/i.test(q)) {
+    return null;
+  }
   const names = fuzzyMatchOpening(q).candidates.slice(0, 4).map((c) => c.canonicalName);
   if (names.length === 0) return null;
   const choices = `[CHOICES: ${names.join(' | ')}]`;

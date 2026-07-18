@@ -43,6 +43,10 @@ function renderFormattedText(rawText: string): React.ReactNode[] {
 interface ChatMessageProps {
   message: ChatMessageType;
   isStreaming?: boolean;
+  /** Tap handler for the inline "did you mean…" answer chips
+   *  (`message.choices`). When absent, chips don't render (e.g. the
+   *  streaming placeholder bubble). */
+  onPickChoice?: (choice: string) => void;
 }
 
 function ActionButton({ action, onClick }: {
@@ -75,10 +79,11 @@ function ActionButton({ action, onClick }: {
   );
 }
 
-export function ChatMessage({ message, isStreaming }: ChatMessageProps): JSX.Element {
+export function ChatMessage({ message, isStreaming, onPickChoice }: ChatMessageProps): JSX.Element {
   const navigate = useNavigate();
   const isUser = message.role === 'user';
   const actions = message.metadata?.actions ?? [];
+  const choices = (!isUser && message.choices) || [];
   // Voice-mode assistant replies render as a compact "Speaking…"
   // chip instead of the full text bubble — user asked by voice, so
   // TTS is the primary output and a transcript on screen would
@@ -209,6 +214,28 @@ export function ChatMessage({ message, isStreaming }: ChatMessageProps): JSX.Ele
                 action={action}
                 onClick={() => handleAction(action)}
               />
+            ))}
+          </div>
+        )}
+
+        {choices.length > 0 && onPickChoice && !isVoiceAssistant && (
+          <div
+            className="flex flex-wrap gap-2 mt-2"
+            data-testid="message-choice-chips"
+            role="group"
+            aria-label="Coach is asking — tap an answer"
+          >
+            {choices.map((choice, i) => (
+              <button
+                key={`mchoice-${i}-${choice}`}
+                type="button"
+                onClick={() => onPickChoice(choice)}
+                className="px-3 py-1.5 rounded-full border-2 border-theme-accent/40 bg-theme-accent/10 text-sm text-theme-text hover:bg-theme-accent/20 hover:border-theme-accent transition-colors min-h-[36px]"
+                data-testid={`message-choice-chip-${i}`}
+                data-choice={choice}
+              >
+                {choice}
+              </button>
             ))}
           </div>
         )}

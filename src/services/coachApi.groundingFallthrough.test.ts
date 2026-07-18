@@ -37,6 +37,18 @@ describe('buildOpeningSuggestionReply', () => {
       buildOpeningSuggestionReply('can you please tell me all about the sicilian dragon today'),
     ).toBeNull();
   });
+
+  it('does NOT hijack a conceptual QUESTION into a teach picker (David 2026-07-18)', () => {
+    // "what is the Sicilian?" wants an ANSWER, not a "did you mean? tap to
+    // teach" deflection — the picker over-reached onto interrogatives and
+    // stole the books/grounded answer. A short opening-name QUESTION now
+    // falls through to the honest answer path.
+    expect(buildOpeningSuggestionReply('what is the Sicilian?')).toBeNull();
+    expect(buildOpeningSuggestionReply('what about the Caro-Kann?')).toBeNull();
+    expect(buildOpeningSuggestionReply('how do I play the London?')).toBeNull();
+    // …but a bare unresolved NAME still gets the rescue picker.
+    expect(buildOpeningSuggestionReply('Caro Cann')).not.toBeNull();
+  });
 });
 
 // Phase 1 of the coach grounding build (RIP #2): the fall-through no longer

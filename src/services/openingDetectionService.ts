@@ -289,6 +289,11 @@ const RESOLVER_MIN_FUZZY_LEN = 4;
  *  attempting match against the DB. */
 const NAME_ALIASES: Record<string, string> = {
   kid: "King's Indian Defense",
+  // "KIA" — King's Indian Attack (White's g3/Nf2/e4 setup). A common
+  // acronym that resolved to nothing, so "teach me the KIA" dead-ended
+  // to the brain (David 2026-07-18 screenshot). The DB carries the bare
+  // "King's Indian Attack" as a teachable row.
+  kia: "King's Indian Attack",
   nid: 'Nimzo-Indian Defense',
   qid: "Queen's Indian Defense",
   qga: "Queen's Gambit Accepted",

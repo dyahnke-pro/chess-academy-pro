@@ -128,4 +128,43 @@ describe('fuzzyMatchOpening', () => {
       expect(jaeniscIdx).toBe(-1);
     });
   });
+
+  describe('matchup + acronym (David 2026-07-18 screenshot)', () => {
+    it('"KIA" resolves to King\'s Indian Attack (acronym alias)', () => {
+      const r = fuzzyMatchOpening('KIA');
+      expect(r.autoAccept).toBe(true);
+      expect(r.candidates[0]?.canonicalName).toBe("King's Indian Attack");
+    });
+
+    it('"the KIA" resolves too (leading article stripped)', () => {
+      const r = fuzzyMatchOpening('the KIA');
+      expect(r.candidates[0]?.canonicalName).toBe("King's Indian Attack");
+    });
+
+    it('"KIA vs Sicilian dragon" offers BOTH sides — student\'s system first', () => {
+      // The bug: the whole-string scan drowned the "KIA" token and
+      // surfaced four Sicilian Dragon rows, never the King's Indian
+      // Attack. Now the matchup splits and offers both, KIA first.
+      const r = fuzzyMatchOpening('KIA vs Sicilian dragon');
+      const names = r.candidates.map((c) => c.canonicalName);
+      expect(names).toContain("King's Indian Attack");
+      expect(names.some((n) => /Dragon/i.test(n))).toBe(true);
+      expect(names[0]).toBe("King's Indian Attack");
+      // A matchup is inherently a "which did you mean?" — never auto-accept.
+      expect(r.autoAccept).toBe(false);
+    });
+
+    it('handles "versus" and "against" separators', () => {
+      expect(fuzzyMatchOpening('Italian versus Petroff').candidates.map((c) => c.canonicalName))
+        .toEqual(expect.arrayContaining(['Italian Game', "Petrov's Defense"]));
+      expect(fuzzyMatchOpening('London against the KID').candidates.map((c) => c.canonicalName))
+        .toEqual(expect.arrayContaining(['London System', "King's Indian Defense"]));
+    });
+
+    it('a plain opening name (no separator) is untouched', () => {
+      const r = fuzzyMatchOpening('Sicilian Defense');
+      expect(r.autoAccept).toBe(true);
+      expect(r.candidates[0]?.canonicalName).toBe('Sicilian Defense');
+    });
+  });
 });
