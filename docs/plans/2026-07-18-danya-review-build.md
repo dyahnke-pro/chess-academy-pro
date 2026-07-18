@@ -169,5 +169,132 @@ code before this plan was written.
   mash-tap during playback, cancel mid-sequence, cold-cache stored game,
   game with no flagged moves (cards must self-hide), engine unavailable.
 
+## RISK REGISTER — points of failure + mitigations (David 2026-07-18:
+"identify points of failure … tell me your plans on how to mitigate them")
+
+### R1 — Coach narration style/wording (David-flagged, HIGH)
+FAILURE MODE: deterministic fact-templates drift robotic — every playback
+ply announcing "captures the knight", bare-SAN TTS reads, filler on quiet
+plies, the same stem 6 times in a row. Computed-correct but dead-voiced —
+the exact thing the Narration Voice Rules ban and the thing that makes a
+review feel machine-generated instead of Danya.
+MITIGATIONS (structural, not vigilance):
+- FACTS→PHRASE SEAM: `pvPlayback` emits STRUCTURED facts only; a separate
+  hand-authored PHRASEBOOK (Danya register, curated per fact-class with
+  3-5 rotated stem variants each — voice rule 9) renders them. Wording
+  changes are then data edits, reviewable in one file.
+- SILENCE DEFAULT: only keystone plies speak (capture/check/mate/landed
+  tactic/eval jump). Hard cap ≤4 spoken lines per 8-ply playback; quiet
+  plies animate silently (voice rules 4/8).
+- GATES, not intentions: unit gate on every phrasebook literal — no
+  move-number prefixes, no bare-SAN chains, word caps, stem-rotation
+  asserted (no two consecutive spoken plies share a stem) — the
+  proRepNarrationVoice pattern applied to this surface.
+- BOARD-TRUTH GATE: every square/piece a phrase names is verified against
+  the FEN at that ply (narrationAccuracy discipline extended to the
+  dynamic path; corpus-driven unit test, runs in ship-check).
+- GOLDEN TRANSCRIPTS: 5 fixed PVs → snapshot the rendered lines → one
+  hand-review (David can read them) → locked. Any wording change is a
+  visible diff, never silent drift.
+- All speech routes through voiceService.speakInternal — G5 verbosity
+  contract (brief caps / silent honors) applies automatically.
+
+### R2 — The theme (David-flagged, HIGH; Phase 5)
+FAILURE MODE: the theme is the review's FIRST claim and its closing
+callback. A wrong theme ("this game was about d5" on a mutual blunderfest)
+poisons the entire review's credibility; a vapid forced theme reads fake.
+Highest blast-radius claim in the build.
+MITIGATIONS:
+- CLOSED THEME SET with computable predicates, each requiring MULTIPLE
+  independent evidence points (e.g. "conversion collapse" = student held
+  ≥ +2.0 for ≥10 plies then lost; "one-square story" = ≥2 flagged moves
+  geometrically tied to the same square via chess.js; "opening disaster" =
+  eval ≤ −1.5 by ply 12 attributable to student moves). No LLM choice.
+- HARD CONFIDENCE FLOOR: below floor → NO theme; the review opens with
+  today's factual intro. Empty > generic > wrong — the house doctrine.
+- GEOMETRY-VERIFIED WORDING: the theme line may only name squares/pieces
+  the evidence actually touched (checked, not vibed).
+- PROBE BEFORE SHIP: run the classifier over the David-games fixture
+  corpus; hand-agree ≥80% of assigned themes or Phase 5 DOESN'T SHIP.
+  It is deliberately last and severable.
+
+### R3 — PV wrongness / inconsistency (HIGH; Phase 1 core)
+FAILURE MODE: review-time PV computed shallow is refutable a ply later —
+the coach teaches a "winning line" that isn't; or the live PV's first move
+contradicts the STORED bestMove the shot question just used.
+MITIGATIONS: seed the PV from the stored bestMove (consistency by
+construction); depth floor (≥14) + node budget; VERIFY THE LINE DELIVERS —
+terminal eval of the PV must hold ≥ the initial advantage (soundness-sweep
+doctrine per line), else truncate to the last verified ply or skip the
+sequence question entirely. A line we can't verify is a line we don't ask.
+
+### R4 — Sequence-judging false negatives (HIGH; the trust-killer)
+FAILURE MODE: student plays an eval-EQUIVALENT move (or a transposition)
+that isn't the literal PV move; naive SAN-matching marks them WRONG. One
+"I was right and it said I wasn't" destroys trust in the whole feature —
+and mis-tags the calculation bucket with false data.
+MITIGATIONS: per-ply equivalence probe (engine eval of their move within
+~30cp of the PV move → CREDIT, and the line re-seeds from their move);
+transposition check (same resulting FEN after 2 plies → credit); when the
+equivalence probe can't run (engine busy/timeout) → ACCEPT generously and
+log for audit — never punish on missing data. The `calculation-depth`
+bucket is tagged ONLY on eval-verified fall-off, never on ambiguity.
+
+### R5 — Engine contention on device (MED-HIGH)
+FAILURE MODE: review already runs whole-game analysis, engine lines, and
+the exploration reply engine; adding PV compute + equivalence probes on
+a phone's WASM Stockfish → stalls, "the coach froze".
+MITIGATIONS: all new engine work goes through stockfishEngine's existing
+priority queue at prefetch priority (never cancels user-facing analysis);
+PV precomputed 1-2 plies BEFORE the card shows (prefetch during the walk);
+hard time budget per call with graceful degradation — no PV in budget →
+no sequence question this moment (plain reveal, as today). The walk UI is
+never blocked on the engine.
+
+### R6 — Card state-machine collisions (MED-HIGH)
+FAILURE MODE: the review already juggles faucet/shot/rewind/turning-point/
+reading-quiz cards as independent useStates; adding sequence + model-game
++ theory cards multiplies overlap bugs (two cards open, walk advancing mid
+playback, playback running after navigation) — the class the 2026-06-12
+adversarial audit exists for.
+MITIGATIONS: REFACTOR FIRST — one `activeCard` discriminated-union owner
+with an explicit priority order replaces the scattered booleans BEFORE any
+new card lands (small, mechanical, test-covered). Playback holds a
+cancellation token — any user turn/nav kills it. The per-phase adversarial
+pass (mash-tap, cancel mid-sequence, out-of-order) is the enforcement.
+
+### R7 — Model-game mismatch (MED; Phase 2)
+FAILURE MODE: a tenuous GM cameo ("this is just like Fischer" when it
+isn't) reads fake-deep — worse than no cameo.
+MITIGATIONS: hard match floor on the motif signature; the cameo must cite
+CONCRETE shared features verified on both boards (same outpost square /
+same structure), else self-hide; probe corpus hand-checked before ship;
+default is NO cameo.
+
+### R8 — Theory-departure false confidence (MED; Phase 4)
+FAILURE MODE: move-prefix matching against openings-lichess mislabels
+transpositions — "book ended at move 6" when the position re-enters book
+a move later.
+MITIGATIONS: match by POSITION (FEN-set derived from DB lines), not move
+order; claim departure only when the position leaves the known-FEN set
+for good; show the masters-DB game count as the evidence; ambiguous →
+self-hide.
+
+### R9 — Stored-game data gaps (MED; the "previous games" promise)
+FAILURE MODE: imported/old games lack bestMove on unflagged plies, may
+carry stale pawn-unit evals, missing openingName — features silently
+degrade exactly where David asked for parity.
+MITIGATIONS: per-phase BOTH-ENTRY-POINTS acceptance gate (fresh + stored
+via /coach/review/:gameId) with the David-games fixture as corpus;
+`gameNeedsAnalysis` already flags stale records for re-analysis; every
+card self-hides cleanly when its data precondition is absent (no broken
+half-cards).
+
+### R10 — Scope/latency of the build itself (MED)
+FAILURE MODE: big-bang landing where phase 3's bug blocks phase 1's value.
+MITIGATION: already structural — one phase = one main landing, severable;
+Phase 5 explicitly droppable (R2); order is value-ranked so a stop after
+any phase still shipped the most important remaining thing.
+
 ## Status: PLAN LOCKED (David 2026-07-18: "Plan only. Lock it in. Will
 build once usage resets."). No build started. Phase 0 begins on go-signal.
