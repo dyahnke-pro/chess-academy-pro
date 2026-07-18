@@ -353,14 +353,25 @@
   ],
   "variations": [
    {
+    "name": "Vienna Gambit: Qf3",
+    "pgn": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 Nxc3 dxc3 Be6 Bf4 Be7 O-O-O c6 Qg3 g6 Nf3 Qa5 Kb1 Nd7 Nd4 O-O-O Be2 Qc7 Bg4 Nc5",
+    "explanation": "The modern main line of the declined Vienna Gambit, and the move most players meet online today: after 3…d5 fxe5 Nxe4, 5.Qf3! throws the queen out to hit the e4-knight and eye f7. Unlike the level Nf3 line, Qf3 keeps White a genuine, lasting pull — Stockfish holds White around +0.6 into the middlegame after both sides castle queenside, with the e5-wedge, the half-open d-file, and pressure on Black's e6-bishop.",
+    "keyIdeas": [
+     "Meet 3…d5 with 4.fxe5 Nxe4 5.Qf3! — the queen hits the e4-knight at once and eyes f7 down the open f-file. It is the most-played try online, about 42% versus Nf3's 26%.",
+     "After …Nxc3 dxc3, recapture toward the centre: the d-file swings half-open for a rook on d1 and the e5-pawn stays as a cramping wedge.",
+     "Castle queenside and press: Qg3 and Nf3 develop, then Nd4 and Bg4 gang up on Black's e6-bishop while e5 cramps him.",
+     "This is a real edge, not just a surprise — Stockfish reads White clearly better (about +0.6) where the classical Nf3 line is only equal."
+    ]
+   },
+   {
     "name": "Vienna Gambit",
     "pgn": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Be7 Qe2 Nxc3 dxc3 c5",
-    "explanation": "Our most aggressive try — 3.f4, straight at e5. Don't be thrown when Black answers with the soundest reply, …d5, meeting fire with fire. After fxe5 Nxe4 the knights come off with …Nxc3, and dxc3 leaves us doubled c-pawns but the two bishops and a lead in development. It's roughly level — but it's our kind of open, two-bishop game.",
+    "explanation": "The classical treatment of the declined gambit, and still the masters' main line (about 52%). After 3…d5 fxe5 Nxe4, 5.Nf3 develops calmly; …Be7 Qe2 …Nxc3 dxc3 leaves White doubled c-pawns but the half-open d- and f-files, the e5-wedge, and easy development. It's roughly level — a solid, open game — where the sharper Qf3 tab goes for a genuine pull.",
     "keyIdeas": [
      "Use Lasker's f4 lever — pull Black's e5-pawn away with a thrust from the side, exactly the principle from Chess Strategy.",
-     "After 3…d5 (the principled reply) accept with 4.fxe5 Nxe4 and play 5.Qf3! — the modern Bardeleben main line that attacks the e4-knight AND threatens Qxd5 with tempo.",
-     "Black is forced to play 5…f5 to defend both — accept the structural weakness Black has just created on the light squares (f6, e6) and the f5-pawn itself.",
-     "After 6.d3 Nxc3 7.bxc3, the open b-file + bishop pair + Qf3 + Nh3-f4 set up a coherent positional grip. The older 5.Nf3 line stays as a calmer alternative."
+     "Meet the principled 3…d5 with 4.fxe5 Nxe4 5.Nf3 — the calm classical main, developing with pressure on the e4-knight before Qe2.",
+     "After …Nxc3 dxc3, the doubled c-pawns buy the half-open d-file for a rook on d1 and the e5-pawn as a central wedge.",
+     "It's roughly level — a comfortable open game. For a sharper try that keeps White a genuine pull, see the Qf3 tab."
     ]
    },
    {
