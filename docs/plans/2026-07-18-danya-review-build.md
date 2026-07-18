@@ -520,3 +520,10 @@ was VERIFIED against the code/data this session, not assumed.)
 
 ## Status: PLAN LOCKED (David 2026-07-18: "Plan only. Lock it in. Will
 build once usage resets."). No build started. Phase 0 begins on go-signal.
+
+## FUTURE TODO (David 2026-07-18): data-fen on ALL coach boards
+The `data-fen` live-FEN attribute added to `Board/ChessBoard`'s wrapper for
+Phase 1 ("stop guessing — instrument") proved itself immediately (caught the
+in-check repro bug in one run). Extend the same attribute to
+ConsistentChessboard / ControlledChessBoard so every coach-surface audit can
+assert board state directly. Not scheduled — David: "possible future todo."

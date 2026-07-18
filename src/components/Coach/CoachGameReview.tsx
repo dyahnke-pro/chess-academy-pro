@@ -4,6 +4,7 @@ import { ChessBoard } from '../Board/ChessBoard';
 import { voiceService } from '../../services/voiceService';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { getCoachMove, resolveConfig } from '../../services/coachPlaySession';
+import { stockfishEngine } from '../../services/stockfishEngine';
 import { MoveListPanel } from './MoveListPanel';
 import { ReviewSummaryCard } from './ReviewSummaryCard';
 import { GameReviewWeaknessCapture } from './GameReviewWeaknessCapture';
@@ -18,6 +19,10 @@ import { getPhaseBreakdown, classifyPhase } from '../../services/gamePhaseServic
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
 import { buildGuidedFindChallenge, buildHoldChallenge, judgeGuidedFindAttempt, GUIDED_FIND_MIN_EVAL_CP, type GuidedFindChallenge } from '../../services/guidedFindTheMove';
+import { computePvLine, renderPlyFactLine, plyFactsString, type PvLine } from '../../services/pvPlayback';
+import { judgeSequenceAttempt, moverPlies, type SequenceVerdict } from '../../services/sequenceChallenge';
+import { voiceFacts } from '../../services/coachApi';
+import { logMisconception } from '../../services/misconceptionService';
 import { findRewindTarget, type RewindTarget } from '../../services/blunderRewind';
 import { buildTurningPointQuestion, judgeTurningPointPick, type TurningPointQuestion } from '../../services/reviewTurningPoint';
 import { captureEvent } from '../../services/analytics';
@@ -497,6 +502,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   /** Bumped on a wrong attempt — remounts the walk board so the wrong move
    *  snaps back to the challenge position (the takeback). */
   const [shotBoardEpoch, setShotBoardEpoch] = useState(0);
+  /** Late-bound handle to tryStartSequence (defined below with the sequence
+   *  block) so handleShotContinue, declared earlier, can call it without a
+   *  forward reference. */
+  const tryStartSequenceRef = useRef<(() => boolean) | null>(null);
 
   // BLUNDER REWIND (David 2026-07-11: "return to the last moment you had a
   // choice"). After a blunder's question resolves, offer to jump the board
@@ -528,6 +537,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (readingGate) return;             // a legacy gate is open (defensive)
     if (faucetPhase !== 'idle') return;  // faucet is mid-question
     if (shotState || shotReveal || turningQ || rewindOffer) return; // a review question is open
+    if (seqStateRef.current) return;     // spot-the-sequence / playback in flight
     if (readingQuizOn) {
       const nextPly = walkPlayback.currentPly + 1;
       const seg = walkNarration?.segments.find((s) => s.ply === nextPly) ?? null;
@@ -553,6 +563,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           setShotState({ challenge: shot, playedSan: seg.san, costPawns: cpLoss > 0 ? cpLoss / 100 : null });
           setShotReveal(null);
           captureEvent('review_find_shot_asked', { answer: shot.answerSan, played: seg.san, ply: nextPly });
+          // Prefetch the follow-up PV in the background so the
+          // spot-the-sequence ask is ready the moment the shot resolves
+          // (Phase 1; budget-capped, never blocks the card).
+          if (seg.bestMoveUci) prefetchPvForShot(nextPly, seg.fenBefore, seg.bestMoveUci);
           void voiceService.speakForced(`Hold on — right here you had something. ${shot.question}`).catch(() => undefined);
           return; // pause the walk; resumes from the shot card
         }
@@ -649,6 +663,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
   const handleShotContinue = useCallback((): void => {
     setShotReveal(null);
+    // Spot-the-sequence (Phase 1): before moving on, ask whether the student
+    // can SEE THE FOLLOW-UP of the shot they just found/saw.
+    if (tryStartSequenceRef.current?.()) return;
     if (maybeOfferRewind()) return; // a blunder's shot resolved → offer the rewind
     walkPlayback.goForward();
   }, [walkPlayback, maybeOfferRewind]);
@@ -678,6 +695,266 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     void voiceService.speakForced(text, correct ? { prosodySpike: true } : undefined).catch(() => undefined);
   }, [turningQ]);
 
+  // Move-sound hook — called here (above the sequence block) because the
+  // sequence handlers below chime on auto-played defender/playback plies.
+  const { playMoveSound } = usePieceSound();
+
+  // ── SPOT-THE-SEQUENCE + PV PLAYBACK (Phase 1, David 2026-07-18) ──────────
+  // After a find-the-shot resolves, the coach asks whether the student can
+  // SEE THE FOLLOW-UP — they play their calculation for the mover's side on
+  // the board, the defender's PV reply auto-plays, and each ply is judged
+  // (R4 trust contract: eval-equivalent counts; unverifiable is credited
+  // generously; only a VERIFIED fall-off feeds the calculation-depth
+  // bucket). Then the coach PLAYS THE FULL LINE OUT with per-ply grounded
+  // narration (facts computed in pvPlayback; phrasing via voiceFacts, the
+  // deterministic renderPlyFactLine as fallback — G0 throughout).
+  //
+  // R6 note: this is a STAGE of the existing shot flow (shot → sequence →
+  // playback are sequential, never concurrent with shotState), not a new
+  // independent card — the collision surface stays the shot card's.
+  interface SeqState {
+    line: PvLine;
+    /** Prefetched spoken line per ply (null = quiet ply / phrasing failed →
+     *  deterministic fallback at speak time). */
+    voice: (string | null)[];
+    stage: 'ask' | 'playback';
+    /** Index into line.plies of the NEXT expected ply. */
+    ptr: number;
+    /** Mover plies the student got through in the ask stage. */
+    reached: number;
+    /** Mover plies the ask stage asks for (plies from ptr0, mover's side). */
+    totalAsk: number;
+    /** The walk ply the parent shot fired on (bucket metadata). */
+    atPly: number;
+  }
+  const [seqState, setSeqState] = useState<SeqState | null>(null);
+  const seqStateRef = useRef<SeqState | null>(null);
+  useEffect(() => { seqStateRef.current = seqState; }, [seqState]);
+  /** Cancellation token for the playback loop — bumped to cancel. */
+  const seqRunTokenRef = useRef(0);
+  /** PV prefetch per shot ply (computed in background when the shot fires). */
+  const pvPrefetchRef = useRef<Map<number, PvLine | null>>(new Map());
+  /** The ply of the most recent shot (sequence eligibility is checked when
+   *  the shot resolves, after shotState is already cleared). */
+  const lastShotPlyRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    // Fresh game → nothing carried over.
+    setSeqState(null);
+    seqRunTokenRef.current += 1;
+    pvPrefetchRef.current = new Map();
+    lastShotPlyRef.current = null;
+  }, [props.gameId]);
+
+  const cancelSequence = useCallback((): void => {
+    seqRunTokenRef.current += 1;
+    if (seqStateRef.current) {
+      setSeqState(null);
+      setWalkExplorationFen(null);
+      setWalkExplorationSan(null);
+    }
+  }, []);
+
+  /** Background PV prefetch when a shot fires (R5: ready by resolution;
+   *  budget-capped so it never stalls anything). */
+  const prefetchPvForShot = useCallback((ply: number, fenBefore: string, bestUci: string): void => {
+    lastShotPlyRef.current = ply;
+    if (pvPrefetchRef.current.has(ply)) return;
+    pvPrefetchRef.current.set(ply, null); // reserve — single flight
+    void computePvLine(fenBefore, {
+      firstUci: bestUci,
+      maxPlies: 8,
+      depth: 12,
+      engine: { analyzePosition: (f, d) => stockfishEngine.analyzeWithBudget(f, d, 4000) },
+    }).then((line) => {
+      pvPrefetchRef.current.set(ply, line);
+      if (!line) return;
+      // Prefetch the spoken lines too (per-ply voiceFacts; quiet plies stay
+      // null → silent). Fire-and-forget — playback falls back per ply.
+      void Promise.all(line.plies.map(async (p) => {
+        const facts = plyFactsString(p);
+        if (!facts) return null;
+        try {
+          const phrased = await voiceFacts(facts, { intent: 'review-pv-playback', warm: true });
+          return phrased ?? null;
+        } catch { return null; }
+      })).then((voice) => {
+        const cur = pvPrefetchRef.current.get(ply);
+        if (cur === line) {
+          (line as PvLine & { __voice?: (string | null)[] }).__voice = voice;
+        }
+      });
+    });
+  }, []);
+
+  /** The playback leg: the coach plays the line out on the exploration
+   *  board, narrating keystones. Cancellable; resumes the walk at the end. */
+  const runSequencePlayback = useCallback(async (state: SeqState, fromIdx: number): Promise<void> => {
+    const token = ++seqRunTokenRef.current;
+    setSeqState({ ...state, stage: 'playback', ptr: fromIdx });
+    const { line } = state;
+    captureEvent('review_sequence_playback', { plies: line.plies.length, from: fromIdx });
+    for (let i = fromIdx; i < line.plies.length; i++) {
+      if (seqRunTokenRef.current !== token || !walkMountedRef.current) return;
+      const ply = line.plies[i];
+      setWalkExplorationFen(ply.fenAfter);
+      setWalkExplorationSan(ply.san);
+      playMoveSound(ply.san);
+      const spoken = state.voice[i] ?? renderPlyFactLine(ply);
+      if (spoken) {
+        try { await voiceService.speakForced(spoken); } catch { /* voice off */ }
+        if (seqRunTokenRef.current !== token || !walkMountedRef.current) return;
+        await new Promise((r) => setTimeout(r, 350));
+      } else {
+        await new Promise((r) => setTimeout(r, 900));
+      }
+    }
+    if (seqRunTokenRef.current !== token || !walkMountedRef.current) return;
+    // Land the verdict the line's computed facts give.
+    const last = line.plies[line.plies.length - 1];
+    const moverIsWhite = line.plies[0].moverColor === 'white';
+    const povCp = (moverIsWhite ? 1 : -1) * (line.terminalEvalCp ?? line.rootEvalCp);
+    const closing = last.facts.isMate
+      ? "That's the line — all the way to mate."
+      : `That's the line — about ${(Math.abs(povCp) / 100).toFixed(1)} pawns better at the end.`;
+    try { await voiceService.speakForced(closing); } catch { /* voice off */ }
+    setSeqState(null);
+    setWalkExplorationFen(null);
+    setWalkExplorationSan(null);
+    if (!maybeOfferRewind()) walkPlayback.goForward();
+  }, [maybeOfferRewind, walkPlayback, playMoveSound]);
+
+  /** Called when a shot resolves (found or hint). Starts the sequence ask
+   *  when the prefetched PV delivers and is deep enough; false = caller
+   *  proceeds as before (rewind offer / walk forward). */
+  const tryStartSequence = useCallback((): boolean => {
+    const ply = lastShotPlyRef.current;
+    if (ply === null) return false;
+    const line = pvPrefetchRef.current.get(ply);
+    if (!line || !line.delivers || line.plies.length < 4) return false;
+    // The student just found/saw plies[0]; the defender's reply auto-plays;
+    // the ask covers the MOVER plies from index 2 on.
+    const totalAsk = moverPlies(line.plies.slice(2)).length;
+    if (totalAsk === 0) return false;
+    const voice = (line as PvLine & { __voice?: (string | null)[] }).__voice
+      ?? line.plies.map(() => null);
+    const state: SeqState = { line, voice, stage: 'ask', ptr: 2, reached: 0, totalAsk, atPly: ply };
+    setSeqState(state);
+    captureEvent('review_sequence_asked', { plies: line.plies.length, total_ask: totalAsk });
+    // Show move 1 landing, then the defender's reply, then ask.
+    setWalkExplorationFen(line.plies[0].fenAfter);
+    setWalkExplorationSan(line.plies[0].san);
+    const token = ++seqRunTokenRef.current;
+    void (async () => {
+      await new Promise((r) => setTimeout(r, 700));
+      if (seqRunTokenRef.current !== token || !walkMountedRef.current) return;
+      if (line.plies[1]) {
+        setWalkExplorationFen(line.plies[1].fenAfter);
+        setWalkExplorationSan(line.plies[1].san);
+        playMoveSound(line.plies[1].san);
+      }
+      const ask = `${line.plies[1] ? `He answers ${line.plies[1].san}. ` : ''}Can you see the follow-up? Play your next move.`;
+      try { await voiceService.speakForced(ask); } catch { /* voice off */ }
+    })();
+    return true;
+  }, [playMoveSound]);
+  tryStartSequenceRef.current = tryStartSequence;
+
+  /** Judge a board move played during the ask stage. */
+  const handleSequenceMove = useCallback((moveResult: { san: string; from: string; to: string; fen: string }): void => {
+    const state = seqStateRef.current;
+    if (!state || state.stage !== 'ask') return;
+    const expected = state.line.plies[state.ptr];
+    if (!expected) return;
+    void (async () => {
+      let verdict: SequenceVerdict;
+      try {
+        verdict = await judgeSequenceAttempt({
+          expected,
+          attempt: { san: moveResult.san, from: moveResult.from, to: moveResult.to },
+          pvLineEvalCp: state.line.rootEvalCp,
+          evalProbe: async (fen, uciMove) => {
+            const probe = new Chess(fen);
+            const applied = probe.move({
+              from: uciMove.slice(0, 2),
+              to: uciMove.slice(2, 4),
+              promotion: uciMove.length > 4 ? uciMove.slice(4) : undefined,
+            });
+            if (!applied) throw new Error('illegal probe move');
+            const a = await stockfishEngine.analyzeWithBudget(probe.fen(), 12, 2500);
+            return a.evaluation;
+          },
+        });
+      } catch {
+        verdict = 'unverified';
+      }
+      if (!walkMountedRef.current || seqStateRef.current !== state) return;
+      captureEvent('review_sequence_ply', { verdict, ptr: state.ptr, expected: expected.san, played: moveResult.san });
+      if (verdict === 'wrong') {
+        // VERIFIED fall-off → this is the calculation-depth data point
+        // (David: "that's a bucket we can tag") — then teach the line.
+        const seg = walkNarration?.segments.find((s) => s.ply === state.atPly);
+        void logMisconception({
+          tag: 'calculation-depth',
+          source: 'game-review',
+          fen: expected.fenBefore,
+          playedSan: moveResult.san,
+          bestSan: expected.san,
+          gamePhase: classifyPhase(expected.fenBefore, state.atPly),
+          moveNumber: Math.ceil(state.atPly / 2),
+          openingId: openingName ? resolveOpeningIdFromName(openingName) ?? undefined : undefined,
+          openingName: openingName ?? undefined,
+          coachNote: `Spot-the-sequence: reached ${state.reached} of ${state.totalAsk} follow-up moves (line: ${state.line.plies.map((p) => p.san).join(' ')})`,
+          sourceGameId: props.gameId,
+        });
+        captureEvent('review_sequence_falloff', { reached: state.reached, total: state.totalAsk, at_ply: state.atPly, opening: seg ? openingName : openingName });
+        setShotBoardEpoch((e) => e + 1); // snap their move back
+        void voiceService.speakForced(`Not quite — ${moveResult.san} lets it slip. Watch the full line.`).catch(() => undefined);
+        void runSequencePlayback({ ...state }, state.ptr);
+        return;
+      }
+      // Credit (exact / equivalent / unverified-generous).
+      const reached = state.reached + 1;
+      if (verdict !== 'exact') {
+        // Their equally-good move diverges from the PV — credit it, then
+        // show the engine's line from here so the teaching stays coherent.
+        void voiceService.speakForced(`${moveResult.san} works just as well — you're seeing it. Here's the engine's own line.`).catch(() => undefined);
+        void runSequencePlayback({ ...state, reached }, state.ptr);
+        return;
+      }
+      // Exact: land their move, auto-play the defender's reply, continue.
+      setWalkExplorationFen(expected.fenAfter);
+      setWalkExplorationSan(expected.san);
+      const next = state.ptr + 1;
+      const defender = state.line.plies[next];
+      const afterDefender = next + 1;
+      const done = afterDefender >= state.line.plies.length;
+      const token = ++seqRunTokenRef.current;
+      void (async () => {
+        await new Promise((r) => setTimeout(r, 650));
+        if (seqRunTokenRef.current !== token || !walkMountedRef.current) return;
+        if (defender) {
+          setWalkExplorationFen(defender.fenAfter);
+          setWalkExplorationSan(defender.san);
+          playMoveSound(defender.san);
+        }
+        if (done) {
+          captureEvent('review_sequence_completed', { reached, total: state.totalAsk, at_ply: state.atPly });
+          const bravo = 'You saw the whole thing — that was the line, move for move.';
+          try { await voiceService.speakForced(bravo, { prosodySpike: true }); } catch { /* voice off */ }
+          if (seqRunTokenRef.current !== token || !walkMountedRef.current) return;
+          setSeqState(null);
+          setWalkExplorationFen(null);
+          setWalkExplorationSan(null);
+          if (!maybeOfferRewind()) walkPlayback.goForward();
+        } else {
+          setSeqState({ ...state, ptr: afterDefender, reached });
+          void voiceService.speakForced(defender ? `${defender.san}. And now?` : 'And now?').catch(() => undefined);
+        }
+      })();
+    })();
+  }, [walkNarration, openingName, props.gameId, runSequencePlayback, maybeOfferRewind, walkPlayback, playMoveSound]);
+
   const resolveReadingGate = useCallback((): void => {
     setReadingGate((g) => { if (g) quizzedPliesRef.current.add(g.ply); return null; });
     walkPlayback.goForward();
@@ -687,8 +964,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // great pedagogy but the silent piece transition makes it hard to
   // pick out which piece moved. usePieceSound matches the chime the
   // Learn-with-Coach board plays on student moves (per David's
-  // 2026-05 review audit feedback).
-  const { playMoveSound } = usePieceSound();
+  // 2026-05 review audit feedback). (The hook CALL moved above the
+  // sequence block — Phase 1 — which needs playMoveSound earlier.)
   const lastSoundPlyRef = useRef<number>(walkPlayback.currentPly);
   useEffect(() => {
     if (walkPlayback.currentPly === lastSoundPlyRef.current) return;
@@ -1197,8 +1474,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           : STARTING_FEN;
       const walkArrows = (() => {
         // NEVER paint the better-move arrow while a find-the-shot question is
-        // open — the arrow IS the answer (honesty contract rule 1).
-        if (shotState) return undefined;
+        // open — the arrow IS the answer (honesty contract rule 1). Same for
+        // the spot-the-sequence ask: an arrow would leak the next ply.
+        if (shotState || seqState) return undefined;
         // Hide the arrow once the student has explored — they've seen
         // the suggestion, no need to clutter the post-exploration view.
         if (walkExplorationFen) return undefined;
@@ -1227,9 +1505,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       // We gate explicitly off `walkShowMeActive` even though it
       // sets `walkExplorationFen` on the first tick (which would
       // otherwise flip this true via the second clause below).
-      const walkBoardInteractive = walkShowMeActive
-        ? false
-        : shotState !== null || // find-the-shot: the board IS the answer input
+      const walkBoardInteractive = walkShowMeActive || seqState?.stage === 'playback'
+        ? false // playback drives the board — no mid-animation drags
+        : seqState?.stage === 'ask' || // sequence: the board IS the answer input
+          shotState !== null || // find-the-shot: the board IS the answer input
           (walkExploreToggleOn && hasArrow && walkExplorationFen === null) ||
           walkExplorationFen !== null;
       const walkDisplayFen = walkExplorationFen ?? displayFen;
@@ -1501,7 +1780,17 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                       return null;
                     }
                   })()}
-                  onMove={shotState ? (moveResult) => {
+                  onMove={seqState?.stage === 'ask' ? (moveResult) => {
+                    // SPOT-THE-SEQUENCE attempt — the board move is the
+                    // student's calculation ply (Phase 1). Judged async
+                    // (eval-equivalence probe); wrong verified moves snap
+                    // back via the epoch remount inside the handler.
+                    playMoveSound(moveResult.san);
+                    handleSequenceMove({
+                      san: moveResult.san, from: moveResult.from,
+                      to: moveResult.to, fen: moveResult.fen,
+                    });
+                  } : shotState ? (moveResult) => {
                     // FIND-THE-SHOT answer attempt — the board move IS the
                     // student's answer. Found → reveal + the shot stays on
                     // the board. Wrong → remount snaps the move back
@@ -1825,6 +2114,33 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
               </div>
             )}
 
+            {/* SPOT-THE-SEQUENCE (Phase 1) — after the shot, calculate the
+                follow-up ON the board; the defender's replies auto-play.
+                Playback stage: the coach plays the full line out. */}
+            {seqState?.stage === 'ask' && (
+              <div data-testid="review-sequence-ask" className="mx-3 my-1 rounded-xl border-2 border-cyan-500/40 bg-cyan-500/10 px-3 py-2">
+                <div className="text-sm text-cyan-100">
+                  Can you see the follow-up? Play your next move on the board.
+                  <span className="ml-1 text-cyan-300/70">({seqState.reached} of {seqState.totalAsk} found)</span>
+                </div>
+                <button type="button" data-testid="review-sequence-show"
+                  onClick={() => { if (seqStateRef.current) void runSequencePlayback({ ...seqStateRef.current }, seqStateRef.current.ptr); }}
+                  className="mt-1.5 rounded-lg border border-cyan-400/50 px-2.5 py-1 text-xs font-semibold text-cyan-200 hover:bg-cyan-500/20">
+                  Show me the line
+                </button>
+              </div>
+            )}
+            {seqState?.stage === 'playback' && (
+              <div data-testid="review-sequence-playback" className="mx-3 my-1 rounded-xl border-2 border-cyan-500/40 bg-cyan-500/10 px-3 py-2">
+                <div className="text-sm text-cyan-100">Watch the line play out…</div>
+                <button type="button" data-testid="review-sequence-skip"
+                  onClick={() => { cancelSequence(); if (!maybeOfferRewind()) walkPlayback.goForward(); }}
+                  className="mt-1.5 rounded-lg border border-slate-500/50 px-2.5 py-1 text-xs text-slate-300 hover:bg-slate-500/20">
+                  Skip
+                </button>
+              </div>
+            )}
+
             {/* BLUNDER REWIND — offered once per blunder after its question
                 resolves: jump back to the last holdable moment and hold it. */}
             {rewindOffer && (
@@ -2039,7 +2355,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 <KeyMomentNav
                   moves={moves}
                   currentIndex={walkMoveIndex}
-                  onNavigate={(idx: number) => walkPlayback.jumpToPly(idx + 1)}
+                  onNavigate={(idx: number) => { cancelSequence(); walkPlayback.jumpToPly(idx + 1); }}
                   className=""
                   extraIndices={walkPlayback.hintPlies.map((ply) => ply - 1)}
                 />
@@ -2049,7 +2365,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   moves={moves}
                   openingName={openingName}
                   currentMoveIndex={walkMoveIndex >= 0 ? walkMoveIndex : null}
-                  onMoveClick={(idx: number) => walkPlayback.jumpToPly(idx + 1)}
+                  onMoveClick={(idx: number) => { cancelSequence(); walkPlayback.jumpToPly(idx + 1); }}
                   className="h-full"
                 />
               </div>
@@ -2061,7 +2377,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 tapping jumps the main board to that ply. */}
             <ReviewCitationPreviews
               citations={reviewCitations}
-              onJumpToPly={(ply: number) => walkPlayback.jumpToPly(ply)}
+              onJumpToPly={(ply: number) => { cancelSequence(); walkPlayback.jumpToPly(ply); }}
             />
 
             {/* Missed tactics — ship-1 made this non-empty for every

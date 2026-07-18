@@ -67,6 +67,7 @@ import { detectBadHabits } from './badHabitDetector';
 import { getUnifiedWeaknessProfile } from './weaknessSpine';
 import { getStrongestOpenings, getMostPlayedOpenings, getWeakestOpenings, getOpeningById } from './openingService';
 import { fuzzyMatchOpening } from './openingFuzzyMatcher';
+import { containmentCheck } from './voiceContainment';
 import { getWeakSpotsForOpening } from './weakSpotService';
 import type { OpeningRecord } from '../types';
 import { getOverviewInsights, getMistakeInsights, getTacticInsights, getOpeningInsights, getTimeTroubleProfile, getLastGameResult, getPlayerStyleProfile } from './gameInsightsService';
@@ -2305,6 +2306,31 @@ export async function voiceFacts(
           details: JSON.stringify({ intent: opts.intent ?? null, introduced, dropped, facts: facts.slice(0, 200), out: out.slice(0, 200) }),
         });
         return facts.trim();
+      }
+      // CONTAINMENT NET (Phase 0a, David 2026-07-18: the knight-fork-definition
+      // tangent). The nets above catch invented NUMBERS and dropped tokens — but
+      // ADDED conceptual content (a glossary definition, a square the facts
+      // never mention, a padding ramble) passed both; only the prompt's "add
+      // NOTHING" line stood against it, and a prompt is begging, not a gate.
+      // containmentCheck strips ungrounded definition sentences surgically,
+      // then rejects on any remaining introduced chess term or sentence
+      // overrun — fallback is the computed prose, never a regen.
+      // Skipped when translating: the closed lexicon is English, and a
+      // translated output legitimately shares few literal tokens with the
+      // English facts (the number net above remains language-agnostic).
+      if (!translating) {
+        const contained = containmentCheck(facts, out);
+        if (contained.text === null) {
+          void logAppAudit({
+            kind: 'claim-validator-trip',
+            category: 'subsystem',
+            source: 'voiceFacts.containment',
+            summary: `phrasing containment trip (intent=${opts.intent ?? 'n/a'}): added [${contained.violations.join(', ')}] → served computed prose`,
+            details: JSON.stringify({ intent: opts.intent ?? null, violations: contained.violations, facts: facts.slice(0, 200), out: out.slice(0, 200) }),
+          });
+          return facts.trim();
+        }
+        return contained.text;
       }
       return out;
     }

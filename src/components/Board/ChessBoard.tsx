@@ -334,6 +334,9 @@ export function ChessBoard({
         <div
           className="relative flex-1 select-none"
           data-testid="board-wrapper"
+          // Live FEN exposed for audits/tests — the audit scripts assert board
+          // state without reaching into React internals (Danya-review Phase 1).
+          data-fen={game.fen}
           // Touch hardening for interactive boards on iOS/WKWebView (David
           // 2026-06-19: on the kid pawn game a tap wouldn't even SELECT a
           // pawn, and a drag wouldn't move it):
