@@ -5508,6 +5508,59 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     watch: ['', '', '', '', '', '', '', '', '', '', '', '', 'Bg5? — pinning the f6-knight, but the pin is an illusion: the d5-pawn hangs and the knight can just take it.', '…Nxd5! — grabbing the pawn. If cxd5 then …Bxg5 wins the bishop, so the knight is untouchable.', 'Bxe7 — trading the pinning bishop instead.', '…Nxe7 — recapturing, a clean pawn up.', 'h4 — lashing out for kingside play.', '…h6 — calmly taking the sting out of h5.', 'Qd2', '…f5 — striking back in the centre, a healthy pawn ahead with the initiative.', 'O-O-O'],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '…Nxd5 — take it, the pin is fake.', '', '…Nxe7 — recapture, a pawn up.', '', '…h6 — defuse h5.', '', '…f5 — hit back, a pawn up.', ''],
   },
+  // ── Bird's / QGD / Réti — hand-authored 2026-07-18. Highlights: the From's
+  // Gambit refutation (…f6?→Nc4!), the QGD Cambridge Springs trap (Qb3??→
+  // …dxc4!…Qxg5 wins a piece), the Réti …Qd7? Ne5! fork. ──
+  'birds-opening:f4_d5_Nf3_g6_g3_Bg7_Bg2_Nf6_O-O_O-O_d3_c5_c3:b6': {
+    sources: ["concept:pos-center", "concept:pos-space", "https://en.wikipedia.org/wiki/Bird%27s_Opening"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '…b6? — a slow fianchetto that ignores the centre, and against the Bird\'s the centre is exactly where White strikes.', 'e4! — the thematic break, blasting the position open while Black is still arranging pieces.', '…Nc6', 'e5 — gaining space and kicking the f6-knight; the Leningrad Bird\'s is in its element.', '…Ng4', 'Re1 — backing the wedge.', '…Nh6', 'h3 — White has the space, the kingside initiative, and the freer game.', '…d4'],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'e4 — hit the centre.', '', 'e5 — gain space, kick the knight.', '', 'Re1 — back the wedge.', '', 'h3 — the freer game.', ''],
+  },
+  'birds-opening:f4_e5_fxe5_d6_exd6_Bxd6_Nf3_g5_d4_g4_Ne5:f6': {
+    sources: ["concept:pos-center", "concept:pos-king-safety", "https://en.wikipedia.org/wiki/Bird%27s_Opening"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '…f6? — kicking the e5-knight, the natural try in From\'s Gambit — but it walks into a knockout.', 'Nc4! — the knight leaps out with tempo, hitting the d6-bishop and refuting the gambit.', '…Nc6', 'e4 — building the big centre while Black\'s king is stuck in the middle.', '…Nxd4', 'Nxd6+ — removing the bishop with check.', '…Qxd6', 'Be3 — hitting the d4-knight and completing development; White is winning.', '…Nc6'],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', 'Nc4 — leap out, hit the bishop.', '', 'e4 — the big centre.', '', 'Nxd6+ — take it, check.', '', 'Be3 — develop, winning.', ''],
+  },
+  'qgd:d4_d5_c4_e6_Nc3_Nf6_Nf3_Bb4_Bg5_dxc4_e4_c5:a3': {
+    sources: ["concept:pawn-doubled", "concept:pos-bishop-pair", "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', 'a3? — questioning the b4-bishop, but with the centre already loose this just hands Black a favourable trade.', '…Bxc3+ — taking the knight and wrecking White\'s queenside.', 'bxc3', '…Qa5 — hitting the c3-pawn and the g5-bishop\'s support.', 'Bxf6', '…Qxc3+ — collecting the pawn with check; Black is up a pawn with the sounder structure.', 'Nd2', '…gxf6 — the doubled f-pawns are a small price for a clean extra pawn and White\'s ruined queenside.', 'dxc5'],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '…Bxc3+ — wreck the queenside.', '', '…Qa5 — hit c3 and g5.', '', '…Qxc3+ — grab the pawn, check.', '', '…gxf6 — a pawn up, sounder.', ''],
+  },
+  'qgd:d4_d5_c4_e6_Nc3_Nf6_Nf3_Bb4_Bg5_dxc4_e4_c5_Bxc4_cxd4:Qxd4': {
+    sources: ["concept:pos-center", "concept:pawn-doubled", "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Qxd4? — recapturing with the queen, but trading queens leaves the e4-pawn hanging.', '…Qxd4 — forcing the trade.', 'Nxd4', '…Nxe4! — now the e4-pawn falls; queens are off and the fork on c3 is in the air.', 'Be3', '…Nxc3 — snapping off the knight—', 'a3', '…Ba5 — keeping the bishop; Black is a clean pawn up with the better structure into the endgame.', 'Bd2'],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…Qxd4 — trade, leave e4 loose.', '', '…Nxe4 — win the pawn.', '', '…Nxc3 — snap it off.', '', '…Ba5 — a clean pawn up.', ''],
+  },
+  'qgd:d4_d5_c4_e6_Nc3_Nf6_Bg5_Nbd7_Nf3_c6_e3_Qa5_Nd2_Bb4:Qb3': {
+    sources: ["concept:tac-trap", "concept:tac-deflection", "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined,_Cambridge_Springs_Defense"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Qb3?? — the Cambridge Springs trap springs shut: the queen abandons the c3-knight and the g5-bishop at the worst moment.', '…dxc4! — opening the c-file and deflecting; the point is coming.', 'Nxc4', '…Bxc3+ — first the knight goes, with check—', 'Qxc3', '…Qxg5! — and the g5-bishop drops. Black has won a clean piece.', 'Nd6+ — a spite check.', '…Ke7 — the king steps up; the extra piece decides.', 'Qa3'],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…dxc4 — open lines, deflect.', '', '…Bxc3+ — remove the guard, check.', '', '…Qxg5 — win the bishop, a piece up.', '', '…Ke7 — a piece up, winning.', ''],
+  },
+  'reti-opening:Nf3_d5_g3_c6_Bg2_Bg4_O-O:Qd7': {
+    sources: ["concept:tac-fork", "concept:pos-bishop-pair", "https://en.wikipedia.org/wiki/R%C3%A9ti_Opening"],
+    watch: ['', '', '', '', '', '', '', '…Qd7? — connecting the pieces, but it leaves the g4-bishop loose with the queen on the knight\'s fork square.', 'Ne5! — leaping in to hit the d7-queen and the g4-bishop at once.', '…Qc8', 'Nxg4 — winning the bishop pair.', '…Qxg4', 'd4 — staking the centre; White has the two bishops and a free hand.', '…Qd7', 'Nd2 — the reversed-KID hums along; White is clearly better with the bishop pair and more space.', '…Nf6'],
+    learn: ['', '', '', '', '', '', '', '', 'Ne5 — fork the queen and bishop.', '', 'Nxg4 — win the bishop pair.', '', 'd4 — stake the centre.', '', 'Nd2 — two bishops, better.', ''],
+  },
+  'reti-opening:Nf3_d5_g3_c6_Bg2_Bg4_O-O_Nd7_d3_Ngf6_Nbd2_e5_e4:d4': {
+    sources: ["concept:pos-center", "concept:pawn-backward", "https://en.wikipedia.org/wiki/R%C3%A9ti_Opening"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '…d4? — clamping the centre, but the wedge is over-extended and White undermines it at once.', 'c3! — striking the base of the d4-pawn before Black can support it.', '…c5', 'h3 — questioning the g4-bishop first.', '…Bxf3', 'Nxf3 — recapturing toward the centre and the d4-pawn.', '…Bd6', 'Nh4 — heading for f5; White has the pressure and the freer game.', '…g6'],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'c3 — undermine the d4-wedge.', '', 'h3 — question the bishop.', '', 'Nxf3 — recapture toward d4.', '', 'Nh4 — head for f5, better.', ''],
+  },
+  'reti-opening:Nf3_d5_c4_e6_g3_Nf6_Bg2_Be7_O-O_O-O_d4_c6_Nc3_Nbd7_Qc2_b6_e4:Bb7': {
+    sources: ["concept:pos-space", "concept:pos-center", "https://en.wikipedia.org/wiki/R%C3%A9ti_Opening"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…Bb7? — completing development, but it ignores White\'s central steamroller a move too long.', 'e5! — the wedge crashes in, kicking the f6-knight to the rim and seizing the kingside.', '…Ne8', 'cxd5 — opening the centre while Black\'s pieces are tangled.', '…exd5', 'h4 — the kingside pawns roll behind the e5-wedge.', '…Nc7', 'Be3 — piling up; White has a big space edge and a clear attacking plan.', '…c5'],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'e5 — crash the wedge in.', '', 'cxd5 — open it, Black tangled.', '', 'h4 — roll the kingside.', '', 'Be3 — pile up, big space.', ''],
+  },
+  'reti-opening:Nf3_d5_g3_Nf6_Bg2_e6_O-O_Be7_d3_O-O_Nbd2_c5_e4:d4': {
+    sources: ["concept:pos-space", "concept:pos-center", "https://en.wikipedia.org/wiki/R%C3%A9ti_Opening"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '…d4? — grabbing space, but the wedge is loose and White simply plays around it.', 'a4 — gaining queenside room and clamping …b5 before it starts.', '…b6', 'h4 — and space on the other wing too; the d4-pawn is a target, not a strength.', '…Bb7', 'Ng5 — jumping toward the weakened light squares.', '…Nfd7', 'f4 — White expands on both wings around the frozen centre; a pleasant, clearly-better squeeze.', '…a6'],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'a4 — clamp the queenside.', '', 'h4 — space on both wings.', '', 'Ng5 — hit the light squares.', '', 'f4 — the two-wing squeeze.', ''],
+  },
+  'reti-opening:Nf3_d5_c4_e6_g3_Nf6_Bg2_Be7_O-O_O-O_b3_c5_Bb2_Nc6_e3_b6_d4:dxc4': {
+    sources: ["concept:pos-outpost", "concept:pos-bishop-pair", "https://en.wikipedia.org/wiki/R%C3%A9ti_Opening"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…dxc4? — releasing the centre too early; it opens the long diagonal straight at Black\'s own king.', 'Ne5! — the knight seizes the outpost, hitting c6 and eyeing f7.', '…Nxe5', 'dxe5 — the e5-wedge cramps Black and the b2-bishop\'s diagonal blazes open.', '…c3', 'Nxc3 — collecting the pawn.', '…Nd5', 'Nxd5 — trading into a clear plus.', '…exd5 — White has the e5-wedge, the bishop pair and the safer king; a near-winning bind.'],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Ne5 — seize the outpost.', '', 'dxe5 — the wedge, open the bishop.', '', 'Nxc3 — collect the pawn.', '', 'Nxd5 — trade into a plus.', ''],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {
