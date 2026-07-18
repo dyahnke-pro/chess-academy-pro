@@ -128,11 +128,21 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /anti-slav/i, label: 'Anti-Slav' },
   ],
   // King's Indian Attack — the universal d3/Nd2/g3/Bg2/e4 system. Main-line
-  // pill = the vs-French treatment (the e5-wedge + Nf1-h2-g4 kingside storm,
-  // the KIA archetype, exempt). The one DB-anchored distinct tab is the ...g6
-  // KID-style response, where White pivots to the centre and queenside.
+  // pill = the e5-wedge + Nf1-h2-g4 kingside storm (the KIA archetype). Every
+  // authored variation is a structurally-distinct, DB-legal reversed-KID
+  // treatment against a different Black setup, so all nine earn a tab (the
+  // 2026-07-18 hidden-tabs fix: the prior single-tab curation stranded 8 of 9
+  // authored lessons while the counter still advertised "0/9 lines").
   'kings-indian-attack': [
+    { test: /vs french/i, label: 'vs French' },
+    { test: /fischer/i, label: 'Fischer' },
+    { test: /e5 wedge/i, label: 'e5 Wedge' },
+    { test: /caro/i, label: 'vs Caro' },
+    { test: /sicilian/i, label: 'vs Sicilian' },
+    { test: /botvinnik/i, label: 'Botvinnik' },
+    { test: /qgd/i, label: 'vs QGD' },
     { test: /kid-style/i, label: 'KID-style' },
+    { test: /keres/i, label: 'Keres' },
   ],
   // Evans Gambit — the romantic 4.b4 attacking gambit. Main-line pill = the
   // Accepted main (...Bxb4 c3 Ba5 d4, the f7 attack, exempt). Three DB-anchored
