@@ -3,7 +3,12 @@
 // build the SAME variation list the opening detail tab shows — keeping every
 // picker in lockstep with the opening tab (David 2026-05-22).
 
-import type { OpeningVariation } from '../types';
+import type { LessonScript, OpeningVariation } from '../types';
+import { getLessonScript, getVariationLessonScript } from '../data/lessons';
+// @ts-expect-error — plain-JS shared metric, no type decls (also run by node)
+import { reachesMiddlegame as reachesMiddlegameRaw } from '../data/variationMiddlegameDepth.shared.mjs';
+
+const reachesMiddlegame = reachesMiddlegameRaw as (pgn: string) => { pass: boolean };
 
 export interface VariationTab {
   /** Index into opening.variations. */
@@ -203,8 +208,19 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
   // Main-line pill = the 2...Nf6 mainline. Only 2...d5 is a distinct, canonical
   // DB-anchored second mainline; 2...e6 (French structure) and 2...g6 are not in
   // the canonical DB in the 2.c3 order, so they are deferred (G3), not shipped.
+  // Sicilian Alapin — the student meets White's 2.c3. Every variation is a
+  // completed, middlegame-reaching lesson, so all earn a tab. Hand-labelled
+  // here (rather than left to auto-append) because the raw names are verbose
+  // move-strings that would collide when truncated.
   'sicilian-alapin': [
-    { test: /central counter/i, label: '2...d5' },
+    { test: /2\.\.\.Nf6 Main Line/i, label: '2...Nf6 Main' },
+    { test: /central counter/i, label: '2...d5 IQP' },
+    { test: /2\.\.\.e6 Solid/i, label: '2...e6' },
+    { test: /2\.\.\.g6 Fianchetto/i, label: '2...g6' },
+    { test: /5\.Nf3 \(Alt Move Order\)/i, label: '2...Nf6 5.Nf3' },
+    { test: /Qxd5/i, label: '2...d5 Qxd5' },
+    { test: /5\.cxd4 d6 \(IQP Accepted\)/i, label: '2...Nf6 IQP' },
+    { test: /3\.exd5 Nf6/i, label: '2...d5 Nf6' },
   ],
   // Italian Game — hand-picked tabs, ordered by reasoned amateur prevalence
   // (the explorer freq query was unavailable when this was built; ordering is
@@ -478,6 +494,45 @@ export function shortLabel(name: string): string {
   return name;
 }
 
+/** Compact label for an AUTO-APPENDED tab (a completed variation not hand-listed
+ *  in CURATED). Prefers a short parenthetical, else strips the "Opening: " prefix
+ *  and generic filler words, capping length so the tab strip stays tidy. */
+function autoLabel(name: string): string {
+  let s = name
+    // Drop parentheticals — usually a sub-detail, not the label ("(Endgame)").
+    .replace(/\s*\([^)]*\)\s*/g, ' ')
+    // Strip a leading "Qualifier: " prefix ("Reti: Advance" → "Advance").
+    .replace(/^[^:]{2,}:\s*/, '')
+    .trim()
+    // Collapse a redundant "<Word> vs " opener ("London vs Dutch" → "vs Dutch").
+    .replace(/^\S+\s+vs\s+/i, 'vs ')
+    // Drop generic filler words that add no distinguishing value.
+    .replace(/\b(Variation|System|Defense|Defence|Line|Setup)\b/gi, '')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+  if (!s) s = name.trim();
+  return s.length > 20 ? s.slice(0, 20).trim() : s;
+}
+
+/** Longest move-list among a lesson's beats = the full line it teaches. */
+function lessonSpine(lesson: LessonScript | null): string[] {
+  if (!lesson || !lesson.beats.length) return [];
+  let best: string[] = [];
+  for (const beat of lesson.beats) {
+    if (beat.moves.length > best.length) best = beat.moves;
+  }
+  return best;
+}
+
+/** True when one spine is a prefix of the other over a ≥6-ply overlap — i.e.
+ *  the two lessons teach the same line, so the second is a duplicate tab. */
+function isSameLine(a: string[], b: string[]): boolean {
+  const n = Math.min(a.length, b.length);
+  if (n < 6) return false;
+  for (let i = 0; i < n; i++) if (a[i] !== b[i]) return false;
+  return true;
+}
+
 /** Build the variation tabs for an opening. Curated openings (Ruy) show
  *  their first-class set; every other opening shows ALL its variations,
  *  so removing the old bottom Variations zone never strands them.
@@ -490,11 +545,41 @@ export function buildVariationTabs(
   const curated = CURATED[openingId];
   if (curated) {
     const tabs: VariationTab[] = [];
+    const used = new Set<number>();
     for (const m of curated) {
-      const index = variations.findIndex((v) => m.test.test(v.name));
-      if (index >= 0) tabs.push({ index, label: m.label });
+      const index = variations.findIndex((v, i) => !used.has(i) && m.test.test(v.name));
+      if (index >= 0) {
+        tabs.push({ index, label: m.label });
+        used.add(index);
+      }
     }
-    if (tabs.length > 0) return tabs;
+    if (tabs.length > 0) {
+      // Auto-append every remaining variation that carries its OWN completed,
+      // middlegame-reaching lesson but wasn't hand-listed above — so a finished
+      // lesson can never be stranded behind a stale curated list (the 2026-07-18
+      // hidden-tabs class, where the KIA advertised "0/9 lines" while showing 1
+      // tab). Fold variations whose taught line merely duplicates the main-line
+      // pill or an already-shown tab; skip lessonless variations (they'd fall
+      // through to the legacy WalkthroughMode) and shallow lines that never
+      // reach a middlegame.
+      const mainSpine = lessonSpine(getLessonScript(openingId));
+      const shownSpines = tabs.map((t) =>
+        lessonSpine(getVariationLessonScript(openingId, variations[t.index].name)),
+      );
+      for (let i = 0; i < variations.length; i++) {
+        if (used.has(i)) continue;
+        const lesson = getVariationLessonScript(openingId, variations[i].name);
+        if (!lesson) continue;
+        const spine = lessonSpine(lesson);
+        if (isSameLine(spine, mainSpine)) continue;
+        if (shownSpines.some((s) => isSameLine(spine, s))) continue;
+        if (!reachesMiddlegame(spine.join(' ')).pass) continue;
+        tabs.push({ index: i, label: autoLabel(variations[i].name) });
+        shownSpines.push(spine);
+        used.add(i);
+      }
+      return tabs;
+    }
   }
   return variations.map((v, index) => ({ index, label: shortLabel(v.name) }));
 }
