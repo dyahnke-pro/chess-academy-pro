@@ -98,9 +98,14 @@ code before this plan was written.
 ### Phase 1 — PV playback + spot-the-sequence + calculation bucket
 1.1 `src/services/pvPlayback.ts` (pure service, no UI):
     `computePvLine(fen, firstUci?, maxPlies=8)` → `{ moves: san[],
-    facts: per-ply grounded facts (capture/check/mate/threat/material
-    delta via chess.js) }`. Engine-absent → null (empty > invented).
-    TESTS: legality of every ply; facts board-true; graceful null.
+    facts: RICH per-ply fact bundles (see R1: candidates+evals incl.
+    near-miss tension, plans+preconditions, king safety, structure,
+    scope/outposts, threats made/parried, opponent's idea, named
+    patterns — all chess.js/engine-computed) }`. Engine-absent → null
+    (empty > invented). Spoken lines come from ONE batched voiceFacts
+    call over the bundles (R1), validated per line, deterministic
+    fallback per ply. TESTS: legality of every ply; facts board-true;
+    graceful null; fallback rendering exists for every fact class.
 1.2 `src/services/sequenceChallenge.ts` (pure): judge the student's
     attempted continuation vs the PV — exact SAN match OR eval-equivalent
     (engine probe within ~30cp) counts; returns per-ply verdicts +
@@ -173,31 +178,64 @@ code before this plan was written.
 "identify points of failure … tell me your plans on how to mitigate them")
 
 ### R1 — Coach narration style/wording (David-flagged, HIGH)
-FAILURE MODE: deterministic fact-templates drift robotic — every playback
-ply announcing "captures the knight", bare-SAN TTS reads, filler on quiet
-plies, the same stem 6 times in a row. Computed-correct but dead-voiced —
-the exact thing the Narration Voice Rules ban and the thing that makes a
-review feel machine-generated instead of Danya.
-MITIGATIONS (structural, not vigilance):
-- FACTS→PHRASE SEAM: `pvPlayback` emits STRUCTURED facts only; a separate
-  hand-authored PHRASEBOOK (Danya register, curated per fact-class with
-  3-5 rotated stem variants each — voice rule 9) renders them. Wording
-  changes are then data edits, reviewable in one file.
-- SILENCE DEFAULT: only keystone plies speak (capture/check/mate/landed
-  tactic/eval jump). Hard cap ≤4 spoken lines per 8-ply playback; quiet
-  plies animate silently (voice rules 4/8).
-- GATES, not intentions: unit gate on every phrasebook literal — no
-  move-number prefixes, no bare-SAN chains, word caps, stem-rotation
-  asserted (no two consecutive spoken plies share a stem) — the
-  proRepNarrationVoice pattern applied to this surface.
-- BOARD-TRUTH GATE: every square/piece a phrase names is verified against
-  the FEN at that ply (narrationAccuracy discipline extended to the
-  dynamic path; corpus-driven unit test, runs in ship-check).
-- GOLDEN TRANSCRIPTS: 5 fixed PVs → snapshot the rendered lines → one
-  hand-review (David can read them) → locked. Any wording change is a
-  visible diff, never silent drift.
-- All speech routes through voiceService.speakInternal — G5 verbosity
-  contract (brief caps / silent honors) applies automatically.
+🔄 REDESIGNED (David 2026-07-18: "R1 seems wrong to me. Review the video
+transcripts again. He doesn't have too many moves that are silent.
+Prebuilt phrases become repetitive." — VERIFIED against the transcripts:
+across 3 videos, ZERO near-silent minutes, ~27-30 caption lines/min,
+continuous think-aloud. And his variety comes from CONTENT diversity, not
+phrasing: one routine stretch covers candidate calculation ("F5
+technically wins the piece — wait, let's calculate"), conditional plans
+("we might castle queenside IF black hurts himself kingside"), a named
+pattern ("the Pillsbury Knight"), assessment, and decision tension
+("it's actually really hard to decide"). The earlier silence-default +
+stem-rotation phrasebook contradicted both measurements and is DEAD.)
+
+FAILURE MODE (as corrected): two ways to be un-Danya — (a) canned
+template phrases going repetitive across reviews (templates around a few
+fact classes CANNOT produce his content diversity; they stale in ~10
+reviews), and (b) under-narrating (his register is continuous; a mostly
+silent playback is not the standard).
+
+MITIGATIONS (redesigned):
+- VARIETY BY CONTENT, NOT SYNONYMS — a RICH FACT EXTRACTOR computes many
+  DISTINCT fact classes per position: candidate moves + evals (including
+  the near-miss the engine also liked — his "it's hard to decide"
+  tension is a computable fact: two candidates within ~40cp), plans and
+  their preconditions, king-safety state, structure changes, piece
+  scope/stability/outposts, threats made and parried, the opponent's
+  idea (what their last move enabled), named patterns where real. With
+  8-12 fact classes, consecutive plies genuinely have DIFFERENT things
+  to say — the same reason Danya never repeats: the content differs.
+- PHRASING = voiceFacts, NOT canned templates. The app's own G0
+  architecture is the anti-repetition machine: code computes the fact
+  bundle per ply; the LLM's only job is to phrase those facts in the
+  Danya register (the sanctioned chokepoint — "its ONLY job, on EVERY
+  path, is to phrase those facts"). Natural phrasing over varied fact
+  bundles doesn't stale like templates. Quality over cost per David's
+  2026-07-06 lock ("I don't care about cost, I care about quality").
+- ONE CALL PER PLAYBACK, not per ply: batch the whole line's fact
+  bundles into a single voiceFacts call returning per-ply lines before
+  playback starts (no per-ply LLM latency mid-animation). Validate the
+  returned lines against the fact bundles (board-truth gate below);
+  any line that fails validation falls back to its deterministic
+  rendering for THAT ply only.
+- TALK DENSITY MATCHED TO DANYA: every ply with a computed fact speaks
+  (with rich extraction that is nearly every ply). The Narration Voice
+  Rules' "silence is acceptable" governs FILLER — Danya never fills, he
+  always has content; so the rule here is "no fact → no line", not
+  "cap the lines".
+- BOARD-TRUTH GATE stays: every square/piece/claim in a spoken line is
+  verified against the FEN at that ply + the computed facts
+  (narrationAccuracy discipline on the dynamic path). A line that names
+  anything outside its fact bundle is rejected → deterministic fallback.
+- DETERMINISTIC FALLBACK LAYER: a minimal template rendering per fact
+  class exists ONLY as the offline/LLM-failure fallback — never the
+  primary voice.
+- GOLDEN-TRANSCRIPT CHECK adapts: snapshot the FACT BUNDLES (stable,
+  deterministic) not the phrasing; plus a repetition audit across a
+  10-review corpus (n-gram overlap between reviews) asserting the
+  phrasing doesn't converge template-like. All speech still routes
+  through voiceService (G5 contract).
 
 ### R2 — The theme (David-flagged, HIGH; Phase 5)
 FAILURE MODE: the theme is the review's FIRST claim and its closing
