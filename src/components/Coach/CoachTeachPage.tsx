@@ -47,7 +47,12 @@ import {
   type LinePickerOption,
 } from '../../services/openingDetectionService';
 import { fuzzyMatchOpening } from '../../services/openingFuzzyMatcher';
-import { resolveOpeningMatchup, extendMatchupToMiddlegame } from '../../services/openingMatchup';
+import { planOpeningMatchup, buildMatchupLine, inferMatchupColor } from '../../services/openingMatchup';
+import {
+  initialContinuationState,
+  continuationNarration,
+  continuationResult,
+} from '../../services/narratedContinuation';
 import { parseCoachIntent } from '../../services/coachAgent';
 import { matchTrainingAidRoute } from '../../services/trainingAidRouter';
 import {
@@ -148,6 +153,13 @@ const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 /** Cheap gate: does the request look like a "X vs Y" matchup? Only then do
  *  we run the (fuzzy-per-side) matchup resolver. */
 const MATCHUP_HINT_RE = /\b(?:vs\.?|versus|against)\b/i;
+
+/** The exact chip label that starts the narrated middle+endgame continuation
+ *  after a lesson (David 2026-07-18). Kept as a constant so the leaf offer
+ *  and the handleSubmit intercept can't drift apart. */
+const CONTINUE_GAME_CHIP = 'Watch the middlegame and endgame';
+/** Also match a user who TYPES the intent, not just taps the chip. */
+const CONTINUE_GAME_RE = /\b(?:watch|see|show|play|continue|finish|keep going).{0,30}\b(?:middlegame|endgame|rest of (?:the )?game|whole game|full game|entire game)\b/i;
 
 // Monotonic suffix for chat-message id bases. `Date.now()` alone collides
 // when two ids are minted in the SAME millisecond — which happens under
@@ -665,6 +677,14 @@ export function CoachTeachPage(): JSX.Element {
   // a fresh one — orphan chain links observe `aborted=true` and skip,
   // current chain links observe `aborted=false` and proceed.
   const turnAbortRefRef = useRef<{ aborted: boolean } | null>(null);
+  // Late-bound handle to startNarratedContinuation (defined far below, near
+  // the other chip handlers). handleSubmit calls through this ref so it
+  // doesn't need the callback in its dependency array (which would TDZ on a
+  // const declared later). Assigned once the real callback exists.
+  const startContinuationRef = useRef<() => Promise<void>>(async () => {});
+  // Guard for the narrated middle+endgame continuation (see
+  // startNarratedContinuation). Declared early so handleSubmit can cancel it.
+  const continuationRef = useRef(false);
   // gameRef is the closure-staleness escape hatch. React state updates
   // are batched per render, so when ControlledChessBoard's `onMove`
   // fires (synchronously inside the click/drag handler) and we call
@@ -1444,11 +1464,21 @@ export function CoachTeachPage(): JSX.Element {
     if (walkthrough.tree?.derived) return;
     if (playOutPromptedFor.current.has(openingName)) return;
     playOutPromptedFor.current.add(openingName);
-    const msg = `That's the canonical line into the middlegame for the ${openingName}. Want to play it out yourself against me? Tap "Play this line out yourself" — or keep learning with quizzes and drills if you'd rather lock it in first.`;
+    // Offer to CONTINUE into a full narrated game (David 2026-07-18: "once
+    // the opening teaching has been completed the coach should ask the user
+    // if they want the game/teaching to continue so they can see a middle
+    // and endgame") — via a tappable chip, alongside playing it out yourself.
+    const msg = `That's the ${openingName} through the opening. Want to keep going and watch the middlegame and endgame play out? Tap below — or use the Play button to play the line out yourself against me.`;
     const id = `play-out-prompt-${Date.now()}`;
     setMessages((prev) => [
       ...prev,
-      { id, role: 'assistant', content: msg, timestamp: Date.now() },
+      {
+        id,
+        role: 'assistant',
+        content: msg,
+        timestamp: Date.now(),
+        choices: [CONTINUE_GAME_CHIP],
+      },
     ]);
     useCoachMemoryStore.getState().appendConversationMessage({
       surface: 'chat-teach',
@@ -1462,7 +1492,7 @@ export function CoachTeachPage(): JSX.Element {
     // acknowledgment (per CLAUDE.md narration rules); voice carries
     // only the ask itself.
     void voiceService
-      .speakForced(`Want to play this line out yourself? Or keep learning?`)
+      .speakForced(`Want to watch the middlegame and endgame play out? Or play the line out yourself?`)
       .catch(() => undefined);
     void logAppAudit({
       kind: 'coach-surface-migrated',
@@ -1512,6 +1542,22 @@ export function CoachTeachPage(): JSX.Element {
     // Mark the session active so a late-firing kickoff greeting/opener
     // won't interrupt (see userInteractedRef).
     if (!opts?.kickoff) userInteractedRef.current = true;
+
+    // Any new user turn cancels a running narrated continuation.
+    continuationRef.current = false;
+    // CONTINUE-THE-GAME intent (David 2026-07-18): the leaf "Watch the
+    // middlegame and endgame" chip, or a typed equivalent, kicks off the
+    // coach playing + narrating the rest of the game. Intercept BEFORE any
+    // opening/matchup routing so it isn't parsed as an opening name.
+    {
+      const t = text.trim();
+      if (t === CONTINUE_GAME_CHIP || CONTINUE_GAME_RE.test(t)) {
+        setCoachChoices(null);
+        setMessages((prev) => [...prev, { id: uid('cont-u'), role: 'user', content: text, timestamp: Date.now() }]);
+        void startContinuationRef.current();
+        return;
+      }
+    }
 
     // Audit-instrumentation phase-3: user-retry detection. Compare
     // this input against the previous user input. When the two share
@@ -2398,18 +2444,17 @@ export function CoachTeachPage(): JSX.Element {
         // verb, > 60 chars, or end with ?/.).
         requestedName = workingInput;
       }
-      // MATCHUP: "teach X vs Y" — show the two openings COLLIDING on one
-      // board, not a "pick one" picker (David 2026-07-18: "Make sure the
-      // coach can show or teach any two different openings against each
-      // other. Coach should use the DBs and stockfish."). Resolve to the
-      // real named DB line (e.g. "King's Indian Attack: Sicilian Variation"
-      // for KIA vs the Sicilian), extend toward a middlegame with Stockfish,
-      // and teach it. If the two can't meet (same colour / no book line) we
-      // say so honestly and offer each side. Cheap regex gate first so we
-      // only run the resolver on actual "X vs Y" phrasings.
+      // MATCHUP: "teach X vs Y" — CONSTRUCT the two openings colliding on one
+      // board from each opening's own DB setup + Stockfish (David 2026-07-18:
+      // "show or teach any two different openings against each other … use the
+      // DBs and stockfish", and "when they can't meet the coach should say
+      // that but then use stockfish to still make the request happen"). White
+      // plays the White opening's setup, Black the Black opening's — so "KIA
+      // vs Sicilian Dragon" shows the actual Dragon (…g6 …Bg7), not a French
+      // move order. Same-colour pairs can't share a board → honest chips.
       if (requestedName && MATCHUP_HINT_RE.test(requestedName)) {
-        const matchup = resolveOpeningMatchup(requestedName);
-        if (matchup) {
+        const plan = planOpeningMatchup(requestedName);
+        if (plan) {
           const mTurnId = freshTurnId('matchup');
           setMessages((prev) => [...prev, {
             id: `${mTurnId}-u`, role: 'user', content: text, timestamp: Date.now(),
@@ -2422,67 +2467,76 @@ export function CoachTeachPage(): JSX.Element {
             kind: 'coach-surface-migrated',
             category: 'subsystem',
             source: 'CoachTeachPage.handleSubmit.matchup',
-            summary: `matchup "${matchup.query}" → ${matchup.kind}` +
-              (matchup.canonicalName ? ` (${matchup.canonicalName}, ${matchup.moves?.length ?? 0} plies)` : ''),
+            summary: `matchup "${plan.query}" → ${plan.sameColor ? 'same-colour' : (plan.meets ? 'meets' : 'constructed')} (${plan.whiteName} vs ${plan.blackName})`,
           });
-          if (matchup.kind === 'line') {
-            const intro =
-              `Here's the ${matchup.whiteName} against the ${matchup.blackName} — ` +
-              `the ${matchup.canonicalName} line. White plays the ${matchup.whiteName} setup, ` +
-              `Black answers with the ${matchup.blackName}. Watch how they meet.`;
+          if (plan.sameColor) {
+            // Two same-colour openings physically can't face each other.
+            const colorWord = inferMatchupColor(plan.whiteName) === 'white' ? 'White' : 'Black';
+            const xProse =
+              `${plan.whiteName} and ${plan.blackName} are both ${colorWord} openings, ` +
+              `so they can't face each other on one board. Want to learn either one on its own?`;
             setMessages((prev) => [...prev, {
-              id: `${mTurnId}-c`, role: 'assistant', content: intro, timestamp: Date.now(),
+              id: `${mTurnId}-c`, role: 'assistant', content: xProse,
+              timestamp: Date.now(), choices: [plan.whiteName, plan.blackName],
             }]);
             useCoachMemoryStore.getState().appendConversationMessage({
-              surface: 'chat-teach', role: 'coach', text: intro,
+              surface: 'chat-teach', role: 'coach', text: xProse,
               fen: opts?.fenOverride ?? gameRef.current.fen, trigger: null,
             });
-            setGenerationStatus({ openingName: matchup.canonicalName ?? 'matchup', startedAt: Date.now() });
-            void (async (): Promise<void> => {
-              try {
-                // DB spine → Stockfish-extend toward a middlegame (best-effort).
-                const moves = await extendMatchupToMiddlegame(matchup.moves ?? []);
-                const result = await generateOpening(matchup.canonicalName ?? matchup.query, {
-                  mode: 'learn',
-                  entryOverride: {
-                    canonicalName: matchup.canonicalName ?? matchup.query,
-                    eco: matchup.eco ?? '',
-                    moves,
-                  },
-                });
-                setGenerationStatus(null);
-                if (result.ok && result.tree) {
-                  await cacheOpening(matchup.canonicalName ?? matchup.query, result.tree);
-                  voiceService.stop();
-                  walkthrough.start(result.tree);
-                  return;
-                }
-                setMessages((prev) => [...prev, {
-                  id: `${mTurnId}-err`, role: 'assistant',
-                  content: `I couldn't build the ${matchup.canonicalName} walkthrough this time. Try again in a moment.`,
-                  timestamp: Date.now(),
-                }]);
-              } catch {
+            return;
+          }
+          // Construct + teach. The note (when they don't normally meet) IS the
+          // intro; otherwise a plain "here's how they meet" line.
+          const canonicalName = `${plan.whiteName} vs ${plan.blackName}`;
+          const intro = plan.note
+            ?? `Here's the ${plan.whiteName} against the ${plan.blackName}. ` +
+               `White plays the ${plan.whiteName} setup, Black answers with the ${plan.blackName}. Watch how they meet.`;
+          setMessages((prev) => [...prev, {
+            id: `${mTurnId}-c`, role: 'assistant', content: intro, timestamp: Date.now(),
+          }]);
+          useCoachMemoryStore.getState().appendConversationMessage({
+            surface: 'chat-teach', role: 'coach', text: intro,
+            fen: opts?.fenOverride ?? gameRef.current.fen, trigger: null,
+          });
+          setGenerationStatus({ openingName: canonicalName, startedAt: Date.now() });
+          void (async (): Promise<void> => {
+            try {
+              // Merge both DB setups + Stockfish bridge/extend toward a middlegame.
+              const moves = await buildMatchupLine(plan, 20);
+              if (moves.length < 4) {
                 setGenerationStatus(null);
                 setMessages((prev) => [...prev, {
                   id: `${mTurnId}-err`, role: 'assistant',
                   content: `I couldn't build that matchup this time. Try again in a moment.`,
                   timestamp: Date.now(),
                 }]);
+                return;
               }
-            })();
-            return;
-          }
-          // incompatible — honest, plus each side as tappable chips.
-          const xProse = `${matchup.reason} Want to learn either one on its own?`;
-          setMessages((prev) => [...prev, {
-            id: `${mTurnId}-c`, role: 'assistant', content: xProse,
-            timestamp: Date.now(), choices: [matchup.whiteName, matchup.blackName],
-          }]);
-          useCoachMemoryStore.getState().appendConversationMessage({
-            surface: 'chat-teach', role: 'coach', text: xProse,
-            fen: opts?.fenOverride ?? gameRef.current.fen, trigger: null,
-          });
+              const result = await generateOpening(canonicalName, {
+                mode: 'learn',
+                entryOverride: { canonicalName, eco: plan.eco, moves },
+              });
+              setGenerationStatus(null);
+              if (result.ok && result.tree) {
+                await cacheOpening(canonicalName, result.tree);
+                voiceService.stop();
+                walkthrough.start(result.tree);
+                return;
+              }
+              setMessages((prev) => [...prev, {
+                id: `${mTurnId}-err`, role: 'assistant',
+                content: `I couldn't build the ${canonicalName} walkthrough this time. Try again in a moment.`,
+                timestamp: Date.now(),
+              }]);
+            } catch {
+              setGenerationStatus(null);
+              setMessages((prev) => [...prev, {
+                id: `${mTurnId}-err`, role: 'assistant',
+                content: `I couldn't build that matchup this time. Try again in a moment.`,
+                timestamp: Date.now(),
+              }]);
+            }
+          })();
           return;
         }
       }
@@ -4926,6 +4980,82 @@ export function CoachTeachPage(): JSX.Element {
       setHintBusy(false);
     }
   }, [hintBusy]);
+
+  // NARRATED CONTINUATION (David 2026-07-18): after a lesson, the coach can
+  // play out both sides with Stockfish from where the opening ended and
+  // narrate the middlegame + endgame to a conclusion. Grounded (G0): moves
+  // are the engine's, narration is COMPUTED from the board
+  // (narratedContinuation helpers) — the LLM decides nothing. A local Chess
+  // mirror owns the logic; `gameRef.current.makeMove` drives the visible
+  // board. Cancellable — any new user turn (or End) flips the guard.
+  const startNarratedContinuation = useCallback(async function startNarratedContinuation(): Promise<void> {
+    if (continuationRef.current) return;
+    continuationRef.current = true;
+    try {
+      // The leaf position lives on the walkthrough (the board renders
+      // walkthrough.fen while it's active); game.fen is still the start. So
+      // capture it BEFORE stopping, then seed `game` with it so both the
+      // visible board and the continuation begin from where the lesson ended.
+      const startFen = walkthrough.fen || gameRef.current.fen;
+      walkthrough.stop(); // release the board from the walkthrough state machine
+      gameRef.current.loadFen(startFen);
+      const intro = "Let's watch it play out. I'll take both sides and call out the turning points.";
+      setMessages((prev) => [...prev, { id: uid('cont-intro'), role: 'assistant', content: intro, timestamp: Date.now() }]);
+      speechChainRef.current = speechChainRef.current.then(() => voiceService.speakForced(intro)).catch(() => undefined);
+      void logAppAudit({
+        kind: 'coach-surface-migrated', category: 'subsystem',
+        source: 'CoachTeachPage.narratedContinuation',
+        summary: `started narrated continuation from ${startFen}`,
+      });
+
+      const local = new Chess(startFen);
+      // Ply count from the FEN's fullmove clock (game.history is the free
+      // board's, not the walkthrough's).
+      const parts = startFen.split(' ');
+      const fullmove = Number.parseInt(parts[5] ?? '1', 10) || 1;
+      let ply = (fullmove - 1) * 2 + (parts[1] === 'b' ? 1 : 0);
+      let state = initialContinuationState(local.fen(), ply);
+      const MAX_PLIES = 80;
+
+      for (let i = 0; i < MAX_PLIES; i += 1) {
+        if (!continuationRef.current) return; // cancelled
+        if (local.isGameOver()) break;
+        const uci = await stockfishEngine.getBestMove(local.fen(), 400).catch(() => '');
+        if (!continuationRef.current) return;
+        if (!uci || uci.length < 4) break;
+        const from = uci.slice(0, 2);
+        const to = uci.slice(2, 4);
+        const promotion = uci.length > 4 ? uci.slice(4) : undefined;
+        let landed;
+        try {
+          landed = local.move({ from, to, promotion });
+        } catch {
+          landed = null;
+        }
+        if (!landed) break;
+        // Drive the visible board with the same move.
+        gameRef.current.makeMove(from, to, promotion);
+        ply += 1;
+        const { text, state: next } = continuationNarration(local.fen(), ply, state);
+        state = next;
+        if (text) {
+          setMessages((prev) => [...prev, { id: uid('cont-move'), role: 'assistant', content: text, timestamp: Date.now() }]);
+          speechChainRef.current = speechChainRef.current.then(() => voiceService.speakForced(text)).catch(() => undefined);
+        }
+        // Pace it so the student can watch — a bit longer when we narrated.
+        await new Promise((r) => setTimeout(r, text ? 1500 : 750));
+      }
+
+      if (!continuationRef.current) return;
+      const resultLine = continuationResult(local.isCheckmate(), local.isDraw(), local.turn());
+      setMessages((prev) => [...prev, { id: uid('cont-result'), role: 'assistant', content: resultLine, timestamp: Date.now() }]);
+      speechChainRef.current = speechChainRef.current.then(() => voiceService.speakForced(resultLine)).catch(() => undefined);
+    } finally {
+      continuationRef.current = false;
+    }
+  }, [walkthrough]);
+  // Bind the late ref so handleSubmit (defined earlier) can trigger it.
+  startContinuationRef.current = startNarratedContinuation;
 
   // Shared tap handler for coach answer chips — both the inline
   // `message.choices` picker (ChatMessage) and the input-bar picker
