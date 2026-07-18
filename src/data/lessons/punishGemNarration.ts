@@ -5447,6 +5447,29 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '…Bd6? — natural, but it does nothing about White\'s real plan. The move to fear was d4, and Black just allowed it.', 'd4! — the pawn centre rolls out. With c3, c4 and d4 White owns the middle and the c1-bishop comes alive.', '…Bf4 — trying to trade the passive bishop.', 'Bd3 — declining, eyeing the kingside light squares.', '…c5', 'O-O — finishing up; the centre and the bishop pair give White a lasting pull.', '…O-O', 'Re1 — the rook backs the centre. White is clearly on top: more space, more active pieces.', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'd4 — seize the big centre.', '', 'Bd3 — keep the bishop, eye the king.', '', 'O-O — finish developing, keep the pull.', '', 'Re1 — back the centre.', ''],
   },
+  // ── Grünfeld / King's Indian Defence / Modern Benoni — hand-authored 2026-07-18
+  // (engine-verified: the fianchetto-Grünfeld …b6 undermining, the Sämisch
+  // Bd3?→…Ng4! shot, two Benoni punishes of White's slow moves). ──
+  'grunfeld-defence:d4_Nf6_c4_g6_g3_d5_Bg2_Bg7:c5': {
+    sources: ["concept:pawn-chain", "concept:pos-open-file", "https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence"],
+    watch: ['', '', '', '', '', '', '', '', 'c5? — White clamps the queenside a tempo too early, and the wedge on c5 has nothing supporting it.', '…b6! — striking the base of the wedge at once; c5 cannot be held.', 'Qa4+ — a check to muddy the water before recapturing.', '…Qd7 — offering the trade; Black is happy to simplify into the better structure.', 'Qxd7+', '…Nbxd7 — recapturing toward the centre.', 'cxb6', '…axb6 — Black emerges with the open a-file and the freer game. White\'s early c5 left only weaknesses.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '…b6 — hit the base of the c5-wedge.', '', '…Qd7 — trade into the better structure.', '', '…Nbxd7 — recapture toward the centre.', '', '…axb6 — open a-file, the freer game.', ''],
+  },
+  'kings-indian-defence:d4_Nf6_c4_g6_Nc3_Bg7_e4_d6_f3_O-O_Be3_e5:Bd3': {
+    sources: ["concept:pos-outpost", "concept:pos-weak-squares", "https://en.wikipedia.org/wiki/King%27s_Indian_Defence"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', 'Bd3? — natural-looking, but it walks into the standard Sämisch tactic: the e3-bishop is loose and the e5/d4 tension is about to snap.', '…Ng4! — hitting the e3-bishop and eyeing the e5-outpost. White\'s whole set-up creaks.', 'Bc1 — the bishop is chased all the way home, a full retreat.', '…exd4 — the centre opens on Black\'s terms.', 'Nd5 — White jumps in, but it\'s a lunge, not a threat.', '…Ne5 — the knight lands on the great outpost, hitting the d3-bishop and dominating.', 'Ne2 — scrambling to cover.', '…c6 — kicking the d5-knight back. Black is a clean pawn up with a monster on e5 and White tangled.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '…Ng4 — hit the loose e3-bishop.', '', '…exd4 — open the centre now.', '', '…Ne5 — the outpost, hit d3.', '', '…c6 — kick it, a pawn up.', ''],
+  },
+  'benoni-defence:d4_Nf6_c4_c5_d5_e6_Nc3_exd5_cxd5_d6_Nf3_g6_Bf4_Bg7_e3_O-O:Nd2': {
+    sources: ["concept:pos-bishop-pair", "concept:pawn-doubled", "https://en.wikipedia.org/wiki/Modern_Benoni"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Nd2? — rerouting the knight, but it drops the guard of the f4-bishop for a moment.', '…Nh5! — pouncing on the f4-bishop and forcing the trade that hands Black the bishop pair.', 'Bg3 — the only way to keep the bishop.', '…Nxg3 — taking it—', 'hxg3 — and White\'s kingside is shattered into doubled, isolated g-pawns.', '…Nd7 — rerouting toward the great e5-square.', 'a4', '…Ne5 — the outpost is Black\'s; with the bishop pair and White\'s ragged kingside, Black is clearly better.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…Nh5 — win the bishop pair off f4.', '', '…Nxg3 — take it.', '', '…Nd7 — reroute toward e5.', '', '…Ne5 — the outpost, clearly better.', ''],
+  },
+  'benoni-defence:d4_Nf6_c4_c5_d5_e6_Nc3_exd5_cxd5_d6_e4_g6_f4_Bg7_Nf3_O-O:h3': {
+    sources: ["concept:pos-center", "concept:pawn-passed", "https://en.wikipedia.org/wiki/Benoni_Defense"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'h3? — a slow luft that ignores the centre. In the Four Pawns Benoni every tempo counts, and the e4-pawn now lacks a defender it will need.', '…Re8! — piling on e4 and daring White to push.', 'e5 — the thrust Black was inviting.', '…Nbd7 — hitting the e5-spearhead.', 'Bc4 — trying to stay active.', '…dxe5 — opening the centre against the uncastled king.', 'O-O', '…e4! — the passed pawn splits White\'s position and the f3-knight has no good square. Black wins material and keeps the initiative.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…Re8 — pile on e4.', '', '…Nbd7 — hit the e5-pawn.', '', '…dxe5 — open it on the king.', '', '…e4 — the passer, win material.', ''],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {
