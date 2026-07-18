@@ -47,6 +47,7 @@ import {
   type LinePickerOption,
 } from '../../services/openingDetectionService';
 import { fuzzyMatchOpening } from '../../services/openingFuzzyMatcher';
+import { resolveOpeningMatchup, extendMatchupToMiddlegame } from '../../services/openingMatchup';
 import { parseCoachIntent } from '../../services/coachAgent';
 import { matchTrainingAidRoute } from '../../services/trainingAidRouter';
 import {
@@ -143,6 +144,10 @@ import { getAdaptiveMove, getRandomLegalMove, getTargetStrength } from '../../se
 import { withTimeout } from '../../coach/withTimeout';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
+/** Cheap gate: does the request look like a "X vs Y" matchup? Only then do
+ *  we run the (fuzzy-per-side) matchup resolver. */
+const MATCHUP_HINT_RE = /\b(?:vs\.?|versus|against)\b/i;
 
 // Monotonic suffix for chat-message id bases. `Date.now()` alone collides
 // when two ids are minted in the SAME millisecond — which happens under
@@ -2392,6 +2397,94 @@ export function CoachTeachPage(): JSX.Element {
         // letting full sentences through (sentences usually have a
         // verb, > 60 chars, or end with ?/.).
         requestedName = workingInput;
+      }
+      // MATCHUP: "teach X vs Y" — show the two openings COLLIDING on one
+      // board, not a "pick one" picker (David 2026-07-18: "Make sure the
+      // coach can show or teach any two different openings against each
+      // other. Coach should use the DBs and stockfish."). Resolve to the
+      // real named DB line (e.g. "King's Indian Attack: Sicilian Variation"
+      // for KIA vs the Sicilian), extend toward a middlegame with Stockfish,
+      // and teach it. If the two can't meet (same colour / no book line) we
+      // say so honestly and offer each side. Cheap regex gate first so we
+      // only run the resolver on actual "X vs Y" phrasings.
+      if (requestedName && MATCHUP_HINT_RE.test(requestedName)) {
+        const matchup = resolveOpeningMatchup(requestedName);
+        if (matchup) {
+          const mTurnId = freshTurnId('matchup');
+          setMessages((prev) => [...prev, {
+            id: `${mTurnId}-u`, role: 'user', content: text, timestamp: Date.now(),
+          }]);
+          useCoachMemoryStore.getState().appendConversationMessage({
+            surface: 'chat-teach', role: 'user', text,
+            fen: opts?.fenOverride ?? gameRef.current.fen, trigger: null,
+          });
+          void logAppAudit({
+            kind: 'coach-surface-migrated',
+            category: 'subsystem',
+            source: 'CoachTeachPage.handleSubmit.matchup',
+            summary: `matchup "${matchup.query}" → ${matchup.kind}` +
+              (matchup.canonicalName ? ` (${matchup.canonicalName}, ${matchup.moves?.length ?? 0} plies)` : ''),
+          });
+          if (matchup.kind === 'line') {
+            const intro =
+              `Here's the ${matchup.whiteName} against the ${matchup.blackName} — ` +
+              `the ${matchup.canonicalName} line. White plays the ${matchup.whiteName} setup, ` +
+              `Black answers with the ${matchup.blackName}. Watch how they meet.`;
+            setMessages((prev) => [...prev, {
+              id: `${mTurnId}-c`, role: 'assistant', content: intro, timestamp: Date.now(),
+            }]);
+            useCoachMemoryStore.getState().appendConversationMessage({
+              surface: 'chat-teach', role: 'coach', text: intro,
+              fen: opts?.fenOverride ?? gameRef.current.fen, trigger: null,
+            });
+            setGenerationStatus({ openingName: matchup.canonicalName ?? 'matchup', startedAt: Date.now() });
+            void (async (): Promise<void> => {
+              try {
+                // DB spine → Stockfish-extend toward a middlegame (best-effort).
+                const moves = await extendMatchupToMiddlegame(matchup.moves ?? []);
+                const result = await generateOpening(matchup.canonicalName ?? matchup.query, {
+                  mode: 'learn',
+                  entryOverride: {
+                    canonicalName: matchup.canonicalName ?? matchup.query,
+                    eco: matchup.eco ?? '',
+                    moves,
+                  },
+                });
+                setGenerationStatus(null);
+                if (result.ok && result.tree) {
+                  await cacheOpening(matchup.canonicalName ?? matchup.query, result.tree);
+                  voiceService.stop();
+                  walkthrough.start(result.tree);
+                  return;
+                }
+                setMessages((prev) => [...prev, {
+                  id: `${mTurnId}-err`, role: 'assistant',
+                  content: `I couldn't build the ${matchup.canonicalName} walkthrough this time. Try again in a moment.`,
+                  timestamp: Date.now(),
+                }]);
+              } catch {
+                setGenerationStatus(null);
+                setMessages((prev) => [...prev, {
+                  id: `${mTurnId}-err`, role: 'assistant',
+                  content: `I couldn't build that matchup this time. Try again in a moment.`,
+                  timestamp: Date.now(),
+                }]);
+              }
+            })();
+            return;
+          }
+          // incompatible — honest, plus each side as tappable chips.
+          const xProse = `${matchup.reason} Want to learn either one on its own?`;
+          setMessages((prev) => [...prev, {
+            id: `${mTurnId}-c`, role: 'assistant', content: xProse,
+            timestamp: Date.now(), choices: [matchup.whiteName, matchup.blackName],
+          }]);
+          useCoachMemoryStore.getState().appendConversationMessage({
+            surface: 'chat-teach', role: 'coach', text: xProse,
+            fen: opts?.fenOverride ?? gameRef.current.fen, trigger: null,
+          });
+          return;
+        }
       }
       // Tier 0: fuzzy-match the user's request against the Lichess
       // DB BEFORE any routing tiers run. Three outcomes:
