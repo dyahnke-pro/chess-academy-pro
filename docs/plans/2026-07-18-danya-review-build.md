@@ -125,6 +125,12 @@ code before this plan was written.
     card; any user turn cancels; arrows suppressed while the question is
     open (no answer leaks — same honesty contract as find-the-shot).
     TESTS: component test for card state machine.
+1.4b STRETCH (tape-observed, cut freely if scope presses): after the PV
+    playback, one "what if he defends differently?" branch — the
+    defender's best ALTERNATIVE at the critical ply (engine's #2 defense)
+    played out briefly, exactly his "if he doesn't take — that was the
+    lesser evil — then I lift my rook" move. Computable; adds the
+    both-lines dimension. Not a Phase-1 blocker.
 1.5 Repro script (`scripts/audit-review-sequence.mjs`): drives BOTH entry
     points (fresh coach-game review + stored game via /coach/review/:id,
     fixture-loader seeded), asserts: card appears on a flagged moment,
@@ -133,36 +139,73 @@ code before this plan was written.
 1.6 ship-check → main → post-deploy audit battery for /coach/review.
 
 ### Phase 2 — model-game injection
+🔄 TAPE-CALIBRATED (2026-07-18 second pass): his cameo is RARE (~1 per
+video, never more), NAMED ("Bobby Fischer, White, 1971, candidates match
+vs Petrosian — one of the most famous games of all time"), enters at the
+THEMATIC MOMENT (he fast-forwards non-relevant stretches), makes the
+comparison VISUAL and explicit ("look at this beautiful outpost… look at
+this pathetic bishop — much like in our game"), and ties back at the end.
 2.1 Probe: motif signature of a review position (reuse detectTactics +
     structure facts) vs `model-games.json` (646) `criticalMoments` +
     opening family. Print top-3 matches for 5 test positions; hand-check
     they're genuinely thematic. NO SHIP until the probe convinces.
 2.2 `modelGameMatcher.ts` (pure, scored match with a hard floor — below
-    floor = NO cameo; empty > tenuous). TESTS on the probe corpus.
-2.3 UI: "watch how a GM handled this idea" card → plays the matched
-    stretch (same 0.2 queue) → returns to the review. Voice ties it back.
+    floor = NO cameo; empty > tenuous). HARD CAP: ONE cameo per review
+    (the best match, if any). TESTS on the probe corpus.
+2.3 UI: cameo card NAMES players/year/event (all in model-games.json
+    metadata), jumps STRAIGHT to the thematic stretch (never replays from
+    move 1), plays it (0.2 queue), and the tie-back line must cite the
+    SHARED feature verified on BOTH boards (same outpost square / same
+    structure — geometric check, not vibes).
 2.4 Repro + ship (same both-entry-points gate).
 
 ### Phase 3 — principle distillation
+🔄 TAPE-CALIBRATED: he doesn't just STATE the principle — he immediately
+DRILLS it ("would Bishop d3 be acceptable according to the application of
+our device? … why not? Qxd3 and he's opened the d-file"). The principle
+is a tool the student applies on the spot, not a poster on the wall.
 3.1 Hand-author one principle line per misconception tag (curated map in
     src/data — G0: tag computed, text curated, never LLM-invented).
 3.2 Wire into the why-picker/shot reveals + "Nth time this month" from
     bucket counts. TESTS: every tag has a principle; counts accurate.
-3.3 Repro + ship.
+3.3 APPLICATION MINI-QUIZ (the "device" pattern): after stating the
+    principle, offer 2-3 candidate moves from the SAME position and ask
+    which complies — candidates and the verdict computed (engine eval +
+    the principle's predicate), the reveal explains the failing
+    candidate concretely. One per principle moment, skippable.
+3.4 Repro + ship.
 
 ### Phase 4 — theory-departure moment
-4.1 Divergence ply via `findOpeningByPgnPrefix` walk (openings-lichess) +
-    masters-DB counts at the divergence node.
-4.2 "Book ended here" card + book-line playback (0.2 queue). Self-hides
-    when the game never left known book or DB has no continuation.
+🔄 TAPE-CALIBRATED: he QUIZZES theory ("what's the main move here?")
+before telling, and speaks to what's common at the student's LEVEL, not
+only master practice.
+4.1 Divergence ply via POSITION matching against openings-lichess (+ the
+    masters DB counts at the divergence node, + the AMATEUR explorer's
+    rating-band popularity — both proxies exist).
+4.2 "Book ended here" card: first ASK "what's the main move here?"
+    (reuse the guidedFind machinery — board answer, hint, reveal), THEN
+    the book-line playback (0.2 queue) with both master and your-level
+    stats. Self-hides when the game never left known book or the DB has
+    no continuation.
 4.3 Repro + ship.
 
 ### Phase 5 — theme of the game
-5.1 `gameThemeClassifier.ts`: dominant motif from eval trace + mistake
-    clusters + structure (closed set of themes, each with a computable
-    predicate — no LLM choice). TESTS per theme predicate.
-5.2 Intro/closing lines reference the theme; turning-point reveal ties
-    back to it. Repro + ship.
+🔄 REDESIGNED (2026-07-18 second pass): he NEVER opens with the theme —
+zero "this game is about X" openers on tape. The theme EMERGES: it gets
+named at the MOMENT the evidence peaks ("transformation of the
+advantage", spoken as it happens on the board, reprised after the model
+game and at the wrap). Front-loading was both anti-tape and the maximum
+blast-radius spot for a wrong theme (R2). New shape:
+5.1 `gameThemeClassifier.ts` unchanged mechanics: closed theme set,
+    multi-evidence predicates, hard confidence floor, no-theme fallback.
+    PLUS: the classifier returns the PEAK-EVIDENCE PLY (where the theme
+    became undeniable).
+5.2 The theme is NAMED at the peak-evidence moment during the walk
+    ("this is the thread of the game — …"), reprised in the
+    turning-point reveal and the closing line. The INTRO stays factual
+    (today's opening line) — no theme promise up front, so a
+    borderline theme can still be dropped mid-review with nothing
+    dangling. Repro + ship.
 
 ### Standing rules for every phase
 - Services + tests land BEFORE any UI wiring (a red service test never
@@ -238,10 +281,12 @@ MITIGATIONS (redesigned):
   through voiceService (G5 contract).
 
 ### R2 — The theme (David-flagged, HIGH; Phase 5)
-FAILURE MODE: the theme is the review's FIRST claim and its closing
-callback. A wrong theme ("this game was about d5" on a mutual blunderfest)
-poisons the entire review's credibility; a vapid forced theme reads fake.
-Highest blast-radius claim in the build.
+FAILURE MODE: a wrong theme ("this game was about d5" on a mutual
+blunderfest) poisons the review's credibility; a vapid forced theme reads
+fake. BLAST RADIUS REDUCED by the 2026-07-18 second-pass redesign: the
+theme is no longer the review's FIRST claim — per tape, it's named at the
+peak-evidence moment mid-walk (never promised up front), so a borderline
+theme drops silently with nothing dangling.
 MITIGATIONS:
 - CLOSED THEME SET with computable predicates, each requiring MULTIPLE
   independent evidence points (e.g. "conversion collapse" = student held
