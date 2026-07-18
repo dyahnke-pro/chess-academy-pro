@@ -5470,6 +5470,44 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'h3? — a slow luft that ignores the centre. In the Four Pawns Benoni every tempo counts, and the e4-pawn now lacks a defender it will need.', '…Re8! — piling on e4 and daring White to push.', 'e5 — the thrust Black was inviting.', '…Nbd7 — hitting the e5-spearhead.', 'Bc4 — trying to stay active.', '…dxe5 — opening the centre against the uncastled king.', 'O-O', '…e4! — the passed pawn splits White\'s position and the f3-knight has no good square. Black wins material and keeps the initiative.', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…Re8 — pile on e4.', '', '…Nbd7 — hit the e5-pawn.', '', '…dxe5 — open it on the king.', '', '…e4 — the passer, win material.', ''],
   },
+  // ── Catalan / Slav / Queen's Indian / Old Indian — hand-authored 2026-07-18.
+  // Highlight: the Slav Winawer Countergambit (…e5!) traps — Qd2?? drops the
+  // queen to …Bb4, Qc2?/e3? collapse to …Bf5/…dxe3. Dutch mined 0 (legit). ──
+  'catalan-opening:d4_Nf6_c4_e6_g3_d5_Bg2_dxc4_Nf3_Bd7_Ne5:c6': {
+    sources: ["concept:pos-space", "concept:pos-bishop-pair", "https://en.wikipedia.org/wiki/Catalan_Opening"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '…c6? — Black clings to the extra c4-pawn with …b5 ideas, but it\'s too slow and gives White a free tempo.', 'O-O — no rush; the c4-pawn isn\'t going anywhere with the knight on e5 eyeing it.', '…Be7', 'Nxc4 — the pawn comes back and the Catalan bind snaps shut.', '…O-O', 'Nc3 — White has the pawn back, the long-diagonal bishop, and a lasting squeeze.', '…Bc8', 'b3 — cementing the queenside. Black is passive with no counterplay; White has a near-winning bind.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', 'O-O — castle, the pawn can\'t run.', '', 'Nxc4 — regain it, clamp down.', '', 'Nc3 — develop, keep the bind.', '', 'b3 — cement it, near-winning.', ''],
+  },
+  'slav-defence:d4_d5_c4_c6_Nc3_e5_dxe5_d4_Ne4_Qa5+:Qd2': {
+    sources: ["concept:tac-pin", "concept:tac-trap", "https://en.wikipedia.org/wiki/Slav_Defense"],
+    watch: ['', '', '', '', '', '', '', '', '', '', 'Qd2?? — blocking the check with the queen — but this loses on the spot: d2 shares a diagonal with White\'s own king.', '…Bb4! — pinning the queen to the king. It\'s attacked and it cannot move: the queen is lost.', 'Nf3 — developing and praying, but nothing saves it.', '…Ne7 — calmly, no hurry.', 'a3 — trying to break the pin—', '…Bxd2+ — Black cashes in, queen for bishop.', 'Bxd2', '…Qb6 — the smoke clears: Black is up a queen for a bishop, completely winning.', 'Nd6+'],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '…Bb4 — pin the queen to the king.', '', '…Ne7 — no hurry, add a piece.', '', '…Bxd2+ — take the queen.', '', '…Qb6 — up a queen, winning.', ''],
+  },
+  'slav-defence:d4_d5_c4_c6_Nc3_e5_dxe5_d4_Ne4_Qa5+_Bd2_Qxe5:Qc2': {
+    sources: ["concept:tac-pin", "concept:pos-center", "https://en.wikipedia.org/wiki/Slav_Defense"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', 'Qc2? — defending the e4-knight, but it steps onto the diagonal a bishop is about to seize.', '…Bf5! — pinning and hitting the e4-knight and the c2-queen at once. White\'s centre buckles.', 'f3 — propping the knight.', '…Na6 — heading for the weak dark squares, b4 and c5.', 'O-O-O', '…Nf6 — piling on the pinned knight.', 'e3', '…Nxe4 — removing White\'s best piece—', 'fxe4'],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '…Bf5 — pin, hit e4 and c2.', '', '…Na6 — head for the dark squares.', '', '…Nf6 — pile on e4.', '', '…Nxe4 — the d4-wedge decides.', ''],
+  },
+  'slav-defence:d4_d5_c4_c6_Nc3_e5_dxe5_d4_Ne4_Qa5+_Bd2_Qxe5_Ng3_Nf6:e3': {
+    sources: ["concept:pos-initiative", "concept:pos-open-file", "https://en.wikipedia.org/wiki/Slav_Defense"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'e3? — challenging the d4-pawn, but it rips open lines straight at White\'s uncastled king.', '…dxe3! — tearing the position open.', 'fxe3', '…Qxb2 — the b2-pawn falls with tempo, the a1-rook now hanging.', 'Rb1', '…Qa3 — the queen slips away a pawn up with a raging initiative.', 'Nf3', '…Na6 — piling in with …Nb4 and …Bb4 ideas. White is a pawn down and busted.', 'Qc2'],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…dxe3 — rip it open.', '', '…Qxb2 — grab b2 with tempo.', '', '…Qa3 — slip away, keep the fire.', '', '…Na6 — pile in, a pawn up.', ''],
+  },
+  'slav-defence:d4_d5_c4_c6_cxd5_cxd5_Bf4_Nc6_e3_Nf6_Bd3_Bg4_Nf3_e6_Nbd2_Bd6:O-O': {
+    sources: ["concept:pawn-doubled", "concept:pos-open-file", "https://en.wikipedia.org/wiki/Slav_Defense"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'O-O — castling, but it lets Black damage the structure for free.', '…Bxf4 — trading the good bishop to inflict doubled pawns.', 'exf4 — White\'s kingside is doubled on the f-file.', '…Qb6 — probing b2 and the weakened dark squares.', 'h3', '…Bxf3 — removing the defender of d4—', 'Nxf3', '…O-O — Black is comfortably better: the sounder structure and the half-open c-file.', 'Qa4'],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…Bxf4 — inflict the doubled pawns.', '', '…Qb6 — probe b2 and d4.', '', '…Bxf3 — take d4\'s defender.', '', '…O-O — the better structure.', ''],
+  },
+  'queens-indian:d4_Nf6_c4_e6_Nf3_b6_g3_Bb7_Bg2_Be7_O-O_O-O_Nc3_d5_cxd5_Nxd5:e4': {
+    sources: ["concept:pawn-fianchetto", "concept:pos-center", "https://en.wikipedia.org/wiki/Queen%27s_Indian_Defense"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'e4? — gaining the centre with tempo on the d5-knight, but it walks into the fianchettoed bishop\'s fire.', '…Nxc3 — the knight trades itself off first—', 'bxc3', '…Bxe4 — and the b7-bishop collects the e4-pawn it was aimed at all along.', 'Re1', '…Bd5 — retreating to safety, a clean pawn to the good.', 'Qd3', '…Nc6 — developing; White has a little bishop-pair pressure, but Black is up material and better.', 'c4'],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…Nxc3 — trade first.', '', '…Bxe4 — collect the pawn.', '', '…Bd5 — retreat, a pawn up.', '', '…Nc6 — develop, stay better.', ''],
+  },
+  'old-indian-defence:d4_Nf6_c4_d6_Nc3_Bf5_f3_e5_e4_Bg6_d5_Be7:Bg5': {
+    sources: ["concept:tac-trap", "concept:pos-center", "https://en.wikipedia.org/wiki/Old_Indian_Defense"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', 'Bg5? — pinning the f6-knight, but the pin is an illusion: the d5-pawn hangs and the knight can just take it.', '…Nxd5! — grabbing the pawn. If cxd5 then …Bxg5 wins the bishop, so the knight is untouchable.', 'Bxe7 — trading the pinning bishop instead.', '…Nxe7 — recapturing, a clean pawn up.', 'h4 — lashing out for kingside play.', '…h6 — calmly taking the sting out of h5.', 'Qd2', '…f5 — striking back in the centre, a healthy pawn ahead with the initiative.', 'O-O-O'],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '…Nxd5 — take it, the pin is fake.', '', '…Nxe7 — recapture, a pawn up.', '', '…h6 — defuse h5.', '', '…f5 — hit back, a pawn up.', ''],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {
