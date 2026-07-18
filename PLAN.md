@@ -30,8 +30,18 @@ David: the …d5 declined line should teach **Qf3 as the primary/main tab** (mos
 - Qf3-main is audience-driven (online), not masters-doctrine — flagged in narration, not silent.
 - Nf3 = separate deep tab, NOT a subline (the engine models sublines as OPPONENT deviations only, so a White alternative can't be a subline — confirmed w/ David).
 
-## Next-session pickup
-Spines above are locked + engine-verified. Resume at first unchecked step. Orphan source = viennaGambit.ts + viennaGambitVariations.ts.
+## Status: COMPLETE — gate-green, staging on main (2026-07-17)
+- Qf3 lesson (9 beats → move-14 middlegame) authored + registered; every board claim chess.js-verified.
+- "Vienna Gambit: Qf3" is the primary (first) tab; "Vienna Gambit" (Nf3) kept intact as the classical tab (all links preserved), stale metadata cleaned.
+- Nf3 tab was ALREADY the deep line (move 11, GAMBIT const) — no extension needed (revised the earlier assumption it was short).
+- Orphan `vienna-gambit` left dormant (has gems/sublines/annotations; retiring it is unrelated risk — flagged for a later cleanup pass, NOT needed for this).
+- course-sublines.json: SURGICAL merge of vienna-game only (a full local rebuild drops 70 openings the local env can't build — would've been destructive; diff confirmed vienna-game-only).
+- Aliases repointed; ship-check READY TO PUSH (typecheck/build/lint/content gates green: narrationAccuracy, narrationGrounding, lessonIntegrity, wlppNarration, lessonSources, variationMiddlegameDepth).
+- Ships with the next TestFlight build (OTA-on staging).
+
+### Flagged for later (not blocking)
+- Orphan `vienna-gambit` opening is unreachable dead content (duplicate Qf3 Setup + gems + sublines). Clean it up when convenient.
+- The `build-course-sublines.mjs` full rebuild can't run completely in the web sandbox (70 openings need the live explorer) — scope with `OPENINGS=<id>` + surgical merge, or run in CI.
 
 ---
 
