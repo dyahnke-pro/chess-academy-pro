@@ -77,6 +77,26 @@ function list(sqs: string[]): string {
   return `${sqs.slice(0, -1).join(', ')}, and ${sqs[sqs.length - 1]}`;
 }
 
+type Struct = NonNullable<ReturnType<typeof describeStructure>>;
+
+/**
+ * §1 TARGET clause — a named OPPONENT weakness the move CREATED, computed from
+ * the before→after structure delta (G0; only weaknesses the detector actually
+ * finds, never guessed). Returns the "because" tail (no leading punctuation),
+ * or null. The mover is always the student here (buildReviewSegments only calls
+ * this on student moves), so the enemy is always the opponent.
+ */
+function createdEnemyWeakness(before: Struct, after: Struct, mover: 'w' | 'b'): string | null {
+  const enemy: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
+  // A NEW isolated enemy pawn = a lasting, board-true target.
+  const newIso = after.pawns.isolatedPawns[enemy].filter((s) => !before.pawns.isolatedPawns[enemy].includes(s));
+  if (newIso.length) return `the opponent's ${newIso[0][0]}-pawn is isolated now — a target with no neighbor to defend it`;
+  // NEW doubled enemy pawns on a file.
+  const newDbl = after.pawns.doubledFiles[enemy].filter((f) => !before.pawns.doubledFiles[enemy].includes(f));
+  if (newDbl.length) return `the opponent is left with doubled pawns on the ${newDbl[0]}-file`;
+  return null;
+}
+
 /**
  * Build a grounded review note for ONE move. `fenBefore` is the position
  * before the move; `san` is the move played. Returns a concrete, board-true
@@ -129,17 +149,28 @@ export function buildReviewMoveTeaching(
     const after = describeStructure(chess.fen());
     if (before && after) {
       const moverKey = mv.color; // 'w' | 'b'
+      // §1: a created enemy weakness is the strongest "because" — name it first.
+      const target = createdEnemyWeakness(before, after, moverKey);
       const gainedHalfOpen = after.pawns.halfOpenFiles[moverKey].filter(
         (f) => !before.pawns.halfOpenFiles[moverKey].includes(f),
       );
       if (gainedHalfOpen.length) {
-        return `Opens the ${gainedHalfOpen[0]}-file for the rooks.`;
+        return target
+          ? `Opens the ${gainedHalfOpen[0]}-file for the rooks — and ${target}.`
+          : `Opens the ${gainedHalfOpen[0]}-file for the rooks.`;
       }
       const newOutpost = after.outposts.find(
         (o) => o.color === moverKey && !before.outposts.some((b) => b.square === o.square && b.color === o.color),
       );
       if (newOutpost) {
-        return `Secures an outpost on ${newOutpost.square}.`;
+        // The outpost's defining property IS the "because": no enemy pawn can
+        // ever challenge it (that's what the detector guarantees).
+        return `Secures an outpost on ${newOutpost.square} — no enemy pawn can ever challenge it.`;
+      }
+      if (target) {
+        // A pawn move that created a weakness without opening a file / outpost
+        // (e.g. a capture that isolates an enemy pawn) — the target IS the point.
+        return `${mv.captured ? 'The capture means' : 'Now'} ${target}.`;
       }
     }
     // Quiet central push (not a capture) — stake the center / gain space.
@@ -155,4 +186,113 @@ export function buildReviewMoveTeaching(
   // Queen / rook / king moves in the opening rarely carry a teachable idea on
   // their own — stay silent rather than invent one.
   return null;
+}
+
+/**
+ * §7 ENDGAME PHASE — name the endgame when the position IS one and BOTH sides
+ * share the same heaviest major piece (the clean "rook endgame" / "queen
+ * endgame" Danya names). Mixed major material ("Q vs R") stays null — the phase
+ * is muddier and naming it risks overstatement (empty > generic). Board-true
+ * from chess.js + boardStructure. Returns a phrase (no leading "We've reached")
+ * or null. Announced ONCE by the caller via a one-shot flag.
+ */
+export function nameEndgamePhase(fen: string): string | null {
+  const s = describeStructure(fen);
+  if (!s || s.material.endgameType === null) return null;
+  let wq = 0, bq = 0, wr = 0, br = 0, wm = 0, bm = 0;
+  try {
+    for (const row of new Chess(fen).board()) {
+      for (const cell of row) {
+        if (!cell) continue;
+        const w = cell.color === 'w';
+        if (cell.type === 'q') { if (w) wq++; else bq++; }
+        else if (cell.type === 'r') { if (w) wr++; else br++; }
+        else if (cell.type === 'n' || cell.type === 'b') { if (w) wm++; else bm++; }
+      }
+    }
+  } catch { return null; }
+  if (wq > 0 && bq > 0) return 'a queen endgame — king safety and precision decide it';
+  if (wq === 0 && bq === 0 && wr > 0 && br > 0) return 'a rook endgame — activity over material, rooks belong behind passed pawns';
+  if (wq + bq + wr + br === 0) {
+    return wm + bm > 0 ? 'a minor-piece endgame — the better piece and the outside pawn win it' : 'a king-and-pawn endgame — every tempo counts';
+  }
+  return null; // mixed major pieces → skip
+}
+
+/** Name a mate PATTERN when the move is checkmate and the geometry is
+ *  unambiguous (back-rank / smothered). Returns null otherwise — the board
+ *  shows the mate; we only add the NAME when we're certain (G0). */
+function nameMatePattern(chessAfterMate: Chess, mv: Move): string | null {
+  if (!chessAfterMate.isCheckmate()) return null;
+  const mated: 'w' | 'b' = chessAfterMate.turn(); // side to move is the mated side
+  // Locate the mated king.
+  let kingSq: string | null = null;
+  for (const row of chessAfterMate.board()) {
+    for (const cell of row) if (cell && cell.type === 'k' && cell.color === mated) kingSq = cell.square;
+  }
+  if (!kingSq) return null;
+  const kf = kingSq.charCodeAt(0) - 97;
+  const kr = Number(kingSq[1]) - 1;
+
+  // Smothered: a KNIGHT delivered it and every square around the king is
+  // occupied by the mated side's OWN pieces (no empty flight, no enemy blocker).
+  if (mv.piece === 'n') {
+    let allOwn = true;
+    let any = false;
+    for (let df = -1; df <= 1; df++) {
+      for (let dr = -1; dr <= 1; dr++) {
+        if (df === 0 && dr === 0) continue;
+        const nf = kf + df;
+        const nr = kr + dr;
+        if (nf < 0 || nf > 7 || nr < 0 || nr > 7) continue;
+        any = true;
+        const occ = chessAfterMate.get(`${String.fromCharCode(97 + nf)}${nr + 1}` as Sq);
+        if (!occ || occ.color !== mated) { allOwn = false; break; }
+      }
+      if (!allOwn) break;
+    }
+    if (any && allOwn) return "Smothered mate — the king boxed in by its own pieces.";
+  }
+
+  // Back-rank: the mated king sits on its own back rank, and its three forward
+  // squares are all blocked by its OWN pawns (the classic "luft never made").
+  const backRank = mated === 'w' ? 0 : 7;
+  if (kr === backRank && (mv.piece === 'r' || mv.piece === 'q')) {
+    const fwd = mated === 'w' ? 1 : -1;
+    let blocked = 0;
+    let flight = 0;
+    for (let df = -1; df <= 1; df++) {
+      const nf = kf + df;
+      const nr = kr + fwd;
+      if (nf < 0 || nf > 7 || nr < 0 || nr > 7) continue;
+      flight++;
+      const occ = chessAfterMate.get(`${String.fromCharCode(97 + nf)}${nr + 1}` as Sq);
+      if (occ && occ.type === 'p' && occ.color === mated) blocked++;
+    }
+    if (flight > 0 && blocked === flight) return 'Back-rank mate — the king trapped behind its own pawns.';
+  }
+  return null;
+}
+
+/**
+ * §7 CONVERSION teaching — the MATE PATTERN when a student move is a detectable
+ * back-rank / smothered mate; else null. (Endgame-phase naming is a one-shot,
+ * handled by the caller via `nameEndgamePhase` + a flag, so it fires exactly
+ * once per game rather than on every endgame ply.) SILENCE otherwise — no
+ * per-move filler in the middlegame. All computed (chess.js); nothing invented.
+ */
+export function buildReviewConversionTeaching(
+  fenBefore: string,
+  san: string,
+): string | null {
+  const chess = new Chess(fenBefore);
+  let mv: Move;
+  try {
+    const applied = chess.move(san);
+    if (!applied) return null;
+    mv = applied;
+  } catch {
+    return null;
+  }
+  return nameMatePattern(chess, mv);
 }

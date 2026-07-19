@@ -1,6 +1,6 @@
 import { Chess } from 'chess.js';
 import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice } from './groundedAnswer';
-import { buildReviewMoveTeaching } from './reviewMoveTeaching';
+import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
 import { detectBadHabits } from './badHabitDetector';
 import { db } from '../db/schema';
 import { voiceFacts } from './coachApi';
@@ -809,6 +809,9 @@ export function buildReviewSegments(
   const fenChain = buildFenChain(moves);
   const usable = fenChain.length;
   const segments: ReviewMoveSegment[] = [];
+  // §7: the endgame phase is announced once per game (the first quiet student
+  // move that's in a readable endgame), not on every endgame ply.
+  let endgameAnnounced = false;
   for (let i = 0; i < usable; i++) {
     const m = moves[i];
     const fenPair = fenChain[i];
@@ -855,6 +858,25 @@ export function buildReviewSegments(
       && (m.classification === null || m.classification === 'book' || m.classification === 'good')
     ) {
       narration = buildReviewMoveTeaching(fenPair.fenBefore, m.san);
+    }
+    // §7 CONVERSION / ENDGAME: past the opening cap the walk was "badges only".
+    // Name the mate PATTERN (back-rank / smothered) on the move that delivers
+    // it, and announce the ENDGAME PHASE exactly ONCE (the first quiet student
+    // move that's in a readable endgame). Else stay silent — no middlegame
+    // filler. Student's own non-flagged moves only; flagged moves narrate above.
+    if (
+      narration === null
+      && playerColor !== undefined
+      && !m.isCoachMove
+      && moverColor === playerColor
+      && m.ply > OPENING_TEACH_MAX_PLY
+      && (m.classification === null || m.classification === 'book' || m.classification === 'good')
+    ) {
+      narration = buildReviewConversionTeaching(fenPair.fenBefore, m.san);
+      if (narration === null && !endgameAnnounced) {
+        const phase = nameEndgamePhase(fenPair.fenAfter);
+        if (phase) { narration = `We've reached ${phase}.`; endgameAnnounced = true; }
+      }
     }
     segments.push({
       ply: m.ply,
