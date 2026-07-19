@@ -22,6 +22,7 @@ import { Chess } from 'chess.js';
 import { CoachGameReview } from './CoachGameReview';
 import { db } from '../../db/schema';
 import { gameNeedsAnalysis, analyzeSingleGame } from '../../services/gameAnalysisService';
+import { detectOpening } from '../../services/openingDetectionService';
 import { useAppStore } from '../../stores/appStore';
 import { logAppAudit } from '../../services/appAuditor';
 import type {
@@ -173,12 +174,17 @@ function adaptGameRecord(
       };
     });
 
+  // A REAL opening name, not the bare ECO code (David 2026-07-19: the walk
+  // never named his opening — "B06" was being passed as the name, which
+  // Polly reads as "B zero six"). detectOpening walks the canonical DB trie
+  // over the game's actual SANs; ECO stays as the last-resort fallback.
+  const detected = detectOpening(moves.map((m) => m.san));
   return {
     moves,
     keyMoments,
     playerColor,
     result: game.result,
-    openingName: game.eco ? game.eco : null,
+    openingName: detected?.name ?? (game.eco ? game.eco : null),
     playerName: playerColor === 'white' ? game.white : game.black,
     playerRating: playerColor === 'white' ? game.whiteElo ?? 1500 : game.blackElo ?? 1500,
     opponentRating: playerColor === 'white' ? game.blackElo ?? 1500 : game.whiteElo ?? 1500,

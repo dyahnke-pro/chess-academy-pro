@@ -28,6 +28,7 @@ import { buildMisconceptionCallback } from '../../services/misconceptionCallback
 import { principleFor } from '../../data/principles';
 import { buildPrincipleQuiz, quizVerdictLine, type PrincipleQuiz } from '../../services/principleQuiz';
 import { findTheoryDeparture, walkBookLine, type TheoryDeparture, type BookLinePly } from '../../services/theoryDeparture';
+import { pauseBatchAnalysis, resumeBatchAnalysis } from '../../services/gameAnalysisService';
 import { classifyGameTheme, type GameThemeResult } from '../../services/gameThemeClassifier';
 import { findRewindTarget, type RewindTarget } from '../../services/blunderRewind';
 import { buildTurningPointQuestion, judgeTurningPointPick, type TurningPointQuestion } from '../../services/reviewTurningPoint';
@@ -164,6 +165,18 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       walkMountedRef.current = false;
     };
   }, []);
+
+  // The bulk analyzer stays PAUSED for the whole review session, not just
+  // the pre-walk analysis (David 2026-07-19: the 694-game batch resumed
+  // mid-walk on his phone's single asm.js engine and starved the walk's
+  // own engine moments — PV prefetch, quiz build, shot probes).
+  useEffect(() => {
+    pauseBatchAnalysis();
+    return () => {
+      resumeBatchAnalysis();
+    };
+  }, []);
+
 
   // Auto-enroll THIS game's mistakes into the My Mistakes drill set on
   // review — the student should never have to tap "add my mistakes to
@@ -1156,10 +1169,14 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     const family = openingName ? openingName.toLowerCase().replace(/[^a-z0-9]+/g, '-') : null;
     const t = window.setTimeout(() => {
       const anchor = pickCameoAnchor(fens, { openingFamily: family });
-      if (!anchor) return;
-      const playback = buildCameoPlayback(anchor.cameo);
-      if (!playback) return; // matcher already verified, but stay defensive
-      cameoAnchorRef.current = { anchor, playback };
+      const playback = anchor ? buildCameoPlayback(anchor.cameo) : null;
+      if (anchor && playback) cameoAnchorRef.current = { anchor, playback };
+      void logAppAudit({
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'CoachGameReview.cameoScan',
+        summary: `cameo scan: ${anchor ? (playback ? `found ${anchor.cameo.white} vs ${anchor.cameo.black} @ ply ${anchor.plyIndex}` : 'found-but-unplayable') : 'no-match-above-floor'}`,
+      });
     }, 250);
     return () => window.clearTimeout(t);
   }, [reviewFens, openingName]);
@@ -1266,14 +1283,36 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     const fens = reviewFens;
     const sans = moves.map((m) => m.san);
     const t = window.setTimeout(() => {
-      void findTheoryDeparture(fens, sans, { studentRating: playerRating ?? null })
+      const diag: { reason?: string } = {};
+      void findTheoryDeparture(fens, sans, { studentRating: playerRating ?? null, diag })
         .then(async (dep) => {
-          if (!dep) return;
-          const bookLine = await walkBookLine(dep.bookFen);
-          if (bookLine.length === 0) return; // nothing to show — self-hide
-          theoryFoundRef.current = { dep, bookLine };
+          let outcome = diag.reason ?? 'unknown';
+          if (dep) {
+            const bookLine = await walkBookLine(dep.bookFen);
+            if (bookLine.length === 0) {
+              outcome = 'found-but-no-book-line';
+            } else {
+              theoryFoundRef.current = { dep, bookLine };
+            }
+          }
+          // Observability (David 2026-07-19: the departure moment failed
+          // SILENTLY on his real game) — every scan outcome is auditable.
+          void logAppAudit({
+            kind: 'coach-surface-migrated',
+            category: 'subsystem',
+            source: 'CoachGameReview.theoryScan',
+            summary: `theory-departure scan: ${outcome}`,
+            details: JSON.stringify({ outcome, plies: fens.length }),
+          });
         })
-        .catch(() => undefined);
+        .catch((err: unknown) => {
+          void logAppAudit({
+            kind: 'coach-surface-migrated',
+            category: 'subsystem',
+            source: 'CoachGameReview.theoryScan',
+            summary: `theory-departure scan THREW: ${err instanceof Error ? err.message : String(err)}`,
+          });
+        });
     }, 400);
     return () => window.clearTimeout(t);
   }, [reviewFens, moves, playerRating]);
@@ -1400,6 +1439,14 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         confidence: themeRef.current.confidence,
       });
     }
+    void logAppAudit({
+      kind: 'coach-surface-migrated',
+      category: 'subsystem',
+      source: 'CoachGameReview.themeScan',
+      summary: themeRef.current
+        ? `theme: ${themeRef.current.theme} @ peak ply ${themeRef.current.peakPly} (conf ${themeRef.current.confidence.toFixed(2)})`
+        : 'theme: none (below floor or ambiguous)',
+    });
   }, [walkNarration, playerColor]);
 
   useEffect(() => {
@@ -1413,6 +1460,37 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     captureEvent('review_theme_named', { theme: theme.theme, at_ply: walkPlayback.currentPly });
     void voiceService.speakForced(theme.line).catch(() => undefined);
   }, [walkPlayback.currentPly, shotState, shotReveal, turningQ, rewindOffer]);
+
+  // A blocking card the user can't SEE is indistinguishable from a hang
+  // (David 2026-07-19: the why-picker opened below the fold on his phone
+  // and the walk "froze"). Whenever any question/playback card opens,
+  // scroll the first present one into view.
+  const anyCardOpen = Boolean(
+    shotState || shotReveal || turningQ || rewindOffer || seqState || cameoState || theoryState || principleQuizState || faucetPhase !== 'idle',
+  );
+  useEffect(() => {
+    if (!anyCardOpen) return;
+    const t = window.setTimeout(() => {
+      const card = document.querySelector(
+        [
+          '[data-testid="review-find-shot-card"]',
+          '[data-testid="review-find-shot-reveal"]',
+          '[data-testid="review-sequence-ask"]',
+          '[data-testid="review-sequence-playback"]',
+          '[data-testid="review-cameo-ask"]',
+          '[data-testid="review-cameo-playback"]',
+          '[data-testid="review-theory-ask"]',
+          '[data-testid="review-theory-playback"]',
+          '[data-testid="review-principle-quiz"]',
+          '[data-testid="review-turning-card"]',
+          '[data-testid="review-rewind-card"]',
+          '[data-testid="discussion-practice-panel"]',
+        ].join(', '),
+      );
+      card?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    }, 150); // after the card's mount/layout settles
+    return () => window.clearTimeout(t);
+  }, [anyCardOpen]);
 
   // ship-4: `currentMove` removed — only the deleted analysis-phase
   // board read it. Walk render uses `walkPlayback.currentSegment` and
@@ -2438,7 +2516,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 data-testid="review-narration-banner"
               >
                 <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text)' }}>
-                  {walkPlayback.currentText ?? '(this move passes silently — tap forward to continue)'}
+                  {/* No apology placeholder on quiet plies (David 2026-07-19:
+                      "(passes silently)" printed itself all game — an empty
+                      teaching layer narrating its own absence). Show the move. */}
+                  {walkPlayback.currentText ?? walkPlayback.currentSegment?.san ?? ''}
                 </p>
               </div>
             </div>
