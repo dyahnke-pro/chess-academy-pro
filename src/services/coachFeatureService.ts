@@ -1,6 +1,7 @@
 import { Chess } from 'chess.js';
 import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice } from './groundedAnswer';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
+import { buildMiddlegameOrientation } from './reviewStrategicOrientation';
 import { detectBadHabits } from './badHabitDetector';
 import { db } from '../db/schema';
 import { voiceFacts } from './coachApi';
@@ -798,6 +799,10 @@ function buildDeterministicNarration(params: {
  *  badges it. Beyond it we honor R8 (silence in conversion) and only narrate
  *  flagged moments. ~move 12 covers the opening + early middlegame. */
 const OPENING_TEACH_MAX_PLY = 24;
+/** §1/§2: the one-shot middlegame orientation (structure anchor + both sides'
+ *  plans) fires no earlier than ~move 8, once the pawn structure has taken
+ *  shape enough for the majorities to be real. */
+const MIDDLEGAME_ORIENTATION_MIN_PLY = 16;
 
 export function buildReviewSegments(
   moves: ReviewMoveInput[],
@@ -812,6 +817,10 @@ export function buildReviewSegments(
   // §7: the endgame phase is announced once per game (the first quiet student
   // move that's in a readable endgame), not on every endgame ply.
   let endgameAnnounced = false;
+  // §1 anchor + §2 both-sides plans: a single middlegame-orientation beat,
+  // fired once on the first eligible student move.
+  let orientationShown = false;
+  const studentColorWB: 'w' | 'b' | null = playerColor === 'white' ? 'w' : playerColor === 'black' ? 'b' : null;
   for (let i = 0; i < usable; i++) {
     const m = moves[i];
     const fenPair = fenChain[i];
@@ -849,6 +858,22 @@ export function buildReviewSegments(
     // student's own side; only board-true notes (null → stays silent, better
     // than generic filler). This is what makes the walk a coach, not a badge-
     // labeler (David 2026-07-19: "there is no coach narration").
+    // §1 anchor + §2 both-sides plans — a one-shot middlegame orientation on the
+    // first eligible student move at/after the middlegame threshold. Takes
+    // priority over the per-move opening note in that zone (it's the richer
+    // beat); stays silent when no clear structural plan is computable.
+    if (
+      narration === null
+      && studentColorWB !== null
+      && !orientationShown
+      && !m.isCoachMove
+      && moverColor === playerColor
+      && m.ply >= MIDDLEGAME_ORIENTATION_MIN_PLY
+      && (m.classification === null || m.classification === 'book' || m.classification === 'good')
+    ) {
+      const orientation = buildMiddlegameOrientation(fenPair.fenBefore, studentColorWB);
+      if (orientation) { narration = orientation; orientationShown = true; }
+    }
     if (
       narration === null
       && playerColor !== undefined

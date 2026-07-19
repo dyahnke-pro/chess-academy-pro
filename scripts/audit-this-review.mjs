@@ -102,10 +102,13 @@ const run = async () => {
   // 7. Step EVERY ply, capture narration text + badge per move.
   log('\n===== PLY-BY-PLY WALK (narration content) =====');
   const CARD_TESTIDS = [
-    'discussion-prompt', 'discussion-reason-picker', 'review-find-shot-card', 'review-find-shot-reveal',
-    'review-rewind-card', 'review-turning-point-card', 'review-cameo-card',
-    'review-theory-card', 'review-principle-quiz', 'review-sequence-ask', 'review-sequence-playback',
-    'review-capture-card',
+    'discussion-prompt', 'discussion-reason-picker',
+    'review-find-shot-card', 'review-find-shot-reveal',
+    'review-rewind-card', 'review-turning-point-card', 'review-turning-point-reveal',
+    'review-cameo-ask', 'review-cameo-playback',
+    'review-theory-ask', 'review-theory-playback',
+    'review-principle-quiz', 'review-sequence-ask', 'review-sequence-playback',
+    'review-capture-teach', 'review-capture-continue',
   ];
   const visibleCards = async () => {
     const found = [];
@@ -190,14 +193,20 @@ const run = async () => {
         await page.locator('[data-testid="review-sequence-skip"]').first().click({ timeout: 1500 }).catch(() => {});
         await page.waitForTimeout(400);
       }
-      // Every other blocking card gets its skip/done/continue so the walk never
-      // stalls (turning-point, cameo, theory, sequence, capture, rewind).
+      // CAMEO (famous-game echo): skip (ask) or stop (playback).
+      for (const sel of ['[data-testid="review-cameo-skip"]', '[data-testid="review-cameo-stop"]']) {
+        if (await has(page, sel)) { await page.locator(sel).first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(400); }
+      }
+      // THEORY-DEPARTURE: skip (ask) or stop (playback).
+      for (const sel of ['[data-testid="review-theory-skip"]', '[data-testid="review-theory-stop"]']) {
+        if (await has(page, sel)) { await page.locator(sel).first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(400); }
+      }
+      // TURNING-POINT / CAPTURE / REWIND — done/continue/decline (never accept:
+      // accept hijacks the walk into practice, per the full-game standard).
       for (const sel of [
-        '[data-testid="review-turning-point-done"]', '[data-testid="review-cameo-skip"]',
-        '[data-testid="review-theory-skip"]', '[data-testid="review-sequence-skip"]',
+        '[data-testid="review-turning-point-done"]',
         '[data-testid="review-capture-continue"]', '[data-testid="review-capture-skip"]',
-        '[data-testid="review-blunder-rewind-decline"]', '[data-testid="review-rewind-decline"]',
-        '[data-testid="review-card-continue"]', '[data-testid="review-card-dismiss"]', '[data-testid="explanation-action"]',
+        '[data-testid="review-rewind-decline"]',
       ]) {
         if (await has(page, sel)) { await page.locator(sel).first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(400); }
       }
