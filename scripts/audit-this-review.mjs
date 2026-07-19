@@ -101,19 +101,58 @@ const run = async () => {
 
   // 7. Step EVERY ply, capture narration text + badge per move.
   log('\n===== PLY-BY-PLY WALK (narration content) =====');
+  const CARD_TESTIDS = [
+    'discussion-practice-panel', 'review-why-picker', 'review-shot-card', 'review-find-shot',
+    'blunder-interception', 'review-blunder-rewind', 'review-turning-point', 'review-cameo-card',
+    'review-theory-card', 'review-principle-quiz', 'review-sequence-card',
+  ];
+  const visibleCards = async () => {
+    const found = [];
+    for (const t of CARD_TESTIDS) if (await has(page, `[data-testid="${t}"]`)) found.push(t);
+    return found;
+  };
   const fwd = page.locator('[data-testid="review-forward-btn"]').first();
+  // Progress = the "Ply N/31" counter in the panel text (the move-indicator
+  // testid doesn't exist). Walk until it reaches the end or stops advancing.
+  const plyNow = async () => {
+    const t = await page.locator('[data-testid="coach-game-review-walk"]').innerText({ timeout: 2000 }).catch(() => '');
+    const m = t.match(/Ply\s+(\d+)\s*\/\s*(\d+)/i);
+    return m ? { n: Number(m[1]), total: Number(m[2]) } : { n: 0, total: 0 };
+  };
   const plies = [];
-  let last = '';
-  for (let ply = 1; ply <= 40; ply++) {
-    await fwd.click().catch(() => {});
-    await page.waitForTimeout(700);
+  let stuck = 0;
+  for (let step = 1; step <= 60; step++) {
+    const before = (await plyNow()).n;
+    const cardsBefore = await visibleCards();
+    // If a blocking card is up, RESOLVE it like a human (per the real-game
+    // standard) so the walk can continue — and RECORD which card fired on
+    // which ply + whose move it is (the #8 check).
+    if (cardsBefore.length) {
+      const p = await plyNow();
+      const isStudentMove = p.n % 2 === 1; // student = White → odd plies
+      log(`  >> CARD at Ply ${p.n}/${p.total} (${isStudentMove ? 'YOUR move' : "OPPONENT'S move"}): ${cardsBefore.join(',')}`);
+      // Try to dismiss: Hint/reveal → continue, or a generic close.
+      for (const sel of ['[data-testid="review-shot-hint"]', '[data-testid="review-why-hint"]', '[data-testid="discussion-hint"]']) {
+        if (await has(page, sel)) { await page.locator(sel).first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(400); }
+      }
+      for (const sel of ['[data-testid="review-shot-continue"]', '[data-testid="review-card-continue"]', '[data-testid="discussion-practice-close"]', '[data-testid="review-card-dismiss"]']) {
+        if (await has(page, sel)) { await page.locator(sel).first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(400); }
+      }
+    }
+    await fwd.click({ timeout: 2000, force: true }).catch(() => {});
+    await page.waitForTimeout(650);
+    const p = await plyNow();
     const badge = await txt(page, '[data-testid="review-classification-badge"]');
     const narr = await txt(page, '[data-testid="review-narration-banner"]');
-    const moveTxt = await txt(page, '[data-testid="review-move-indicator"]');
-    plies.push({ ply, move: moveTxt, badge, narr, changed: narr !== last });
-    log(`  ply ${String(ply).padStart(2)} ${moveTxt.padEnd(14)} [${(badge || '-').padEnd(10)}] ${narr || '(no narration banner)'}`);
-    last = narr;
-    if ((await fwd.getAttribute('disabled')) !== null) { log(`  (forward disabled — end of walk at ply ${ply})`); break; }
+    plies.push({ ply: p.n, badge, narr });
+    log(`  Ply ${String(p.n).padStart(2)}/${p.total} [${(badge || '-').padEnd(10)}] ${narr || '(silent)'}`);
+    if (p.n >= p.total && p.total > 0) { log(`  (reached end: Ply ${p.n}/${p.total})`); break; }
+    stuck = p.n === before ? stuck + 1 : 0;
+    if (stuck > 5) {
+      const cardHtml = await page.locator('[data-testid="coach-game-review-walk"]').innerText({ timeout: 2000 }).catch(() => '');
+      log(`  ⟳ genuinely stuck at Ply ${p.n} — cards=${JSON.stringify(await visibleCards())} — panel: ${cardHtml.replace(/\s+/g, ' ').slice(0, 300)}`);
+      break;
+    }
   }
 
   const withNarr = plies.filter((p) => p.narr && p.narr.length > 3).length;
