@@ -1,5 +1,6 @@
 import { Chess } from 'chess.js';
 import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice } from './groundedAnswer';
+import { buildReviewMoveTeaching } from './reviewMoveTeaching';
 import { detectBadHabits } from './badHabitDetector';
 import { db } from '../db/schema';
 import { voiceFacts } from './coachApi';
@@ -792,8 +793,18 @@ function buildDeterministicNarration(params: {
 // explainBestMoveGrounded + its piece constants moved to ./groundedAnswer (the
 // pure leaf) 2026-06-10 to break the coachApi import cycle. Imported above.
 
+/** Through this ply, the STUDENT's silent (good/book) moves get a grounded
+ *  teaching note so the walk actually teaches the opening (R2), not just
+ *  badges it. Beyond it we honor R8 (silence in conversion) and only narrate
+ *  flagged moments. ~move 12 covers the opening + early middlegame. */
+const OPENING_TEACH_MAX_PLY = 24;
+
 export function buildReviewSegments(
   moves: ReviewMoveInput[],
+  /** The student's color — when provided, their silent opening moves are
+   *  filled with a grounded per-move "why" (R2). Omitted in unit tests that
+   *  only exercise the flag narration → behaves exactly as before. */
+  playerColor?: 'white' | 'black',
 ): ReviewMoveSegment[] {
   const fenChain = buildFenChain(moves);
   const usable = fenChain.length;
@@ -829,6 +840,21 @@ export function buildReviewSegments(
     if (narration && bestMoveSan && !m.isCoachMove && (m.classification === 'mistake' || m.classification === 'blunder' || m.classification === 'inaccuracy' || m.classification === 'miss')) {
       const why = explainBestMoveGrounded(fenPair.fenBefore, m.san, m.bestMove, moverColor);
       if (why) narration = `${narration} ${why}`;
+    }
+    // Teach the STUDENT's silent opening moves (R2). Only good/book moves in
+    // the opening phase (flagged moves already narrate above); only the
+    // student's own side; only board-true notes (null → stays silent, better
+    // than generic filler). This is what makes the walk a coach, not a badge-
+    // labeler (David 2026-07-19: "there is no coach narration").
+    if (
+      narration === null
+      && playerColor !== undefined
+      && !m.isCoachMove
+      && moverColor === playerColor
+      && m.ply <= OPENING_TEACH_MAX_PLY
+      && (m.classification === null || m.classification === 'book' || m.classification === 'good')
+    ) {
+      narration = buildReviewMoveTeaching(fenPair.fenBefore, m.san);
     }
     segments.push({
       ply: m.ply,
@@ -948,7 +974,7 @@ export async function generateReviewNarration(params: {
     ? introTrimmed
     : defaultIntroText({ playerColor, result, openingName, mistakeCount });
 
-  const segments = buildReviewSegments(moves.slice(0, usableCount));
+  const segments = buildReviewSegments(moves.slice(0, usableCount), playerColor);
 
   const narratedCount = segments.filter((s) => s.narration !== null).length;
   void logAppAudit({
