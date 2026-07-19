@@ -27,6 +27,7 @@ import { logMisconception } from '../../services/misconceptionService';
 import { buildMisconceptionCallback } from '../../services/misconceptionCallbacks';
 import { principleFor } from '../../data/principles';
 import { buildPrincipleQuiz, quizVerdictLine, type PrincipleQuiz } from '../../services/principleQuiz';
+import { findTheoryDeparture, walkBookLine, type TheoryDeparture, type BookLinePly } from '../../services/theoryDeparture';
 import { findRewindTarget, type RewindTarget } from '../../services/blunderRewind';
 import { buildTurningPointQuestion, judgeTurningPointPick, type TurningPointQuestion } from '../../services/reviewTurningPoint';
 import { captureEvent } from '../../services/analytics';
@@ -537,6 +538,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   /** Mirror of the cameo card state (declared with the cameo block below);
    *  early handlers read it through this ref, same pattern as seqStateRef. */
   const cameoStateRef = useRef<{ stage: 'ask' | 'playback' } | null>(null);
+  /** Mirror of the theory-departure card state (Phase 4 block below). */
+  const theoryStateRef = useRef<{ stage: 'ask' | 'playback' } | null>(null);
 
   // BLUNDER REWIND (David 2026-07-11: "return to the last moment you had a
   // choice"). After a blunder's question resolves, offer to jump the board
@@ -571,6 +574,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (seqStateRef.current) return;     // spot-the-sequence / playback in flight
     if (cameoStateRef.current) return;   // model-game cameo card / playback open
     if (principleQuizStateRef.current) return; // device quiz open
+    if (theoryStateRef.current) return;  // theory-departure card / playback open
     if (readingQuizOn) {
       const nextPly = walkPlayback.currentPly + 1;
       const seg = walkNarration?.segments.find((s) => s.ply === nextPly) ?? null;
@@ -1219,6 +1223,154 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     });
   }, [walkPlayback.currentPly, shotState, shotReveal, turningQ, rewindOffer, moves.length]);
 
+  // ── THEORY DEPARTURE (Phase 4, David 2026-07-18) ─────────────────────────
+  // Danya quizzes theory before telling: at the ply where the game left
+  // known master practice, the card first ASKS "what's the main move
+  // here?" (board answer, Hint reveals), THEN plays the book line with
+  // masters + your-level stats. Everything is a database aggregate
+  // (theoryDeparture service — G0/G3); self-hides when the game never
+  // left book or the data is thin.
+  interface TheoryState {
+    dep: TheoryDeparture;
+    bookLine: BookLinePly[];
+    stage: 'ask' | 'playback';
+  }
+  const [theoryState, setTheoryState] = useState<TheoryState | null>(null);
+  useEffect(() => { theoryStateRef.current = theoryState; }, [theoryState]);
+  const theoryFoundRef = useRef<{ dep: TheoryDeparture; bookLine: BookLinePly[] } | null>(null);
+  const theoryScanDoneRef = useRef(false);
+  const theoryShownRef = useRef(false);
+  const theoryRunTokenRef = useRef(0);
+  const theoryAttemptsRef = useRef(0);
+
+  useEffect(() => {
+    setTheoryState(null);
+    theoryFoundRef.current = null;
+    theoryScanDoneRef.current = false;
+    theoryShownRef.current = false;
+    theoryRunTokenRef.current += 1;
+    theoryAttemptsRef.current = 0;
+  }, [props.gameId]);
+
+  // One departure scan per game, deferred; the book-line playback is
+  // prefetched with it so Watch never waits on the network.
+  useEffect(() => {
+    if (theoryScanDoneRef.current || !reviewFens || reviewFens.length < 2) return;
+    theoryScanDoneRef.current = true;
+    const fens = reviewFens;
+    const sans = moves.map((m) => m.san);
+    const t = window.setTimeout(() => {
+      void findTheoryDeparture(fens, sans, { studentRating: playerRating ?? null })
+        .then(async (dep) => {
+          if (!dep) return;
+          const bookLine = await walkBookLine(dep.bookFen);
+          if (bookLine.length === 0) return; // nothing to show — self-hide
+          theoryFoundRef.current = { dep, bookLine };
+        })
+        .catch(() => undefined);
+    }, 400);
+    return () => window.clearTimeout(t);
+  }, [reviewFens, moves, playerRating]);
+
+  const cancelTheory = useCallback((): void => {
+    theoryRunTokenRef.current += 1;
+    if (theoryStateRef.current) {
+      setTheoryState(null);
+      setWalkExplorationFen(null);
+      setWalkExplorationSan(null);
+    }
+  }, []);
+
+  /** The computed stats line — masters share + your-level share. */
+  const theoryStatsLine = useCallback((dep: TheoryDeparture): string => {
+    const pct = Math.round(dep.mainMove.pct * 100);
+    let line = `Masters play ${dep.mainMove.san} here — ${pct} percent of ${dep.totalGames} games.`;
+    if (dep.yourLevel && dep.yourLevel.san !== dep.mainMove.san) {
+      line += ` At your level ${dep.yourLevel.san} is the popular pick, ${Math.round(dep.yourLevel.pct * 100)} percent.`;
+    } else if (dep.yourLevel) {
+      line += ` Your level agrees — ${Math.round(dep.yourLevel.pct * 100)} percent play it too.`;
+    }
+    return line;
+  }, []);
+
+  /** Book-line playback: board jumps to the book position and the masters'
+   *  main line plays out silently (the board is the lesson), stats spoken
+   *  at the start, a short hand-back at the end. */
+  const runTheoryPlayback = useCallback(async (state: TheoryState): Promise<void> => {
+    const token = ++theoryRunTokenRef.current;
+    setTheoryState({ ...state, stage: 'playback' });
+    setWalkExplorationFen(state.dep.bookFen);
+    setWalkExplorationSan(null);
+    try {
+      await voiceService.speakForced(`${theoryStatsLine(state.dep)} Watch the book line.`);
+    } catch { /* voice off */ }
+    if (theoryRunTokenRef.current !== token || !walkMountedRef.current) return;
+    for (const p of state.bookLine) {
+      await new Promise((r) => setTimeout(r, 1100));
+      if (theoryRunTokenRef.current !== token || !walkMountedRef.current) return;
+      setWalkExplorationFen(p.fenAfter);
+      setWalkExplorationSan(p.san);
+      playMoveSound(p.san);
+    }
+    await new Promise((r) => setTimeout(r, 900));
+    if (theoryRunTokenRef.current !== token || !walkMountedRef.current) return;
+    try {
+      await voiceService.speakForced('That is where the book goes — back to your game.');
+    } catch { /* ignore */ }
+    if (theoryRunTokenRef.current !== token || !walkMountedRef.current) return;
+    setTheoryState(null);
+    setWalkExplorationFen(null);
+    setWalkExplorationSan(null);
+    captureEvent('review_theory_playback_done', { plies: state.bookLine.length });
+  }, [playMoveSound, theoryStatsLine]);
+
+  /** Board answer during the ask — judged against the masters' book. */
+  const handleTheoryMove = useCallback((san: string): void => {
+    const state = theoryStateRef.current as TheoryState | null;
+    if (!state || state.stage !== 'ask') return;
+    const dep = state.dep;
+    if (san === dep.mainMove.san) {
+      captureEvent('review_theory_result', { outcome: 'main', attempts: theoryAttemptsRef.current + 1 });
+      void voiceService.speakForced(`${san} — you know the book.`, { prosodySpike: true }).catch(() => undefined);
+      void runTheoryPlayback(state);
+      return;
+    }
+    if (dep.topMoves.some((m) => m.san === san)) {
+      captureEvent('review_theory_result', { outcome: 'book-alt', attempts: theoryAttemptsRef.current + 1 });
+      void voiceService.speakForced(`${san} is book too — the main move is ${dep.mainMove.san}.`).catch(() => undefined);
+      void runTheoryPlayback(state);
+      return;
+    }
+    theoryAttemptsRef.current += 1;
+    setShotBoardEpoch((e) => e + 1); // snap the guess back
+    if (theoryAttemptsRef.current >= 2) {
+      captureEvent('review_theory_result', { outcome: 'revealed', attempts: theoryAttemptsRef.current });
+      void runTheoryPlayback(state);
+      return;
+    }
+    captureEvent('review_theory_result', { outcome: 'retry', attempts: theoryAttemptsRef.current });
+    void voiceService.speakForced('Not that one — look again.').catch(() => undefined);
+  }, [runTheoryPlayback]);
+
+  // Fire ONCE, when the walk reaches the departure ply and no other card
+  // is open.
+  useEffect(() => {
+    if (theoryShownRef.current) return;
+    const found = theoryFoundRef.current;
+    if (!found) return;
+    if (walkPlayback.currentPly < found.dep.departurePly) return;
+    if (walkPlayback.currentPly >= moves.length) return;
+    if (shotState || shotReveal || turningQ || rewindOffer || seqStateRef.current || cameoStateRef.current || principleQuizStateRef.current) return;
+    theoryShownRef.current = true;
+    setTheoryState({ dep: found.dep, bookLine: found.bookLine, stage: 'ask' });
+    setWalkExplorationFen(found.dep.bookFen); // the ask happens AT the book position
+    setWalkExplorationSan(null);
+    captureEvent('review_theory_offered', { ply: found.dep.departurePly, total_games: found.dep.totalGames });
+    void voiceService
+      .speakForced(`Book ended here — ${found.dep.departedSan} left known practice. What's the main move in this position?`)
+      .catch(() => undefined);
+  }, [walkPlayback.currentPly, shotState, shotReveal, turningQ, rewindOffer, moves.length]);
+
   // ship-4: `currentMove` removed — only the deleted analysis-phase
   // board read it. Walk render uses `walkPlayback.currentSegment` and
   // computes its own per-ply derivations.
@@ -1659,7 +1811,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         // NEVER paint the better-move arrow while a find-the-shot question is
         // open — the arrow IS the answer (honesty contract rule 1). Same for
         // the spot-the-sequence ask: an arrow would leak the next ply.
-        if (shotState || seqState || cameoState) return undefined;
+        if (shotState || seqState || cameoState || theoryState) return undefined;
         // Hide the arrow once the student has explored — they've seen
         // the suggestion, no need to clutter the post-exploration view.
         if (walkExplorationFen) return undefined;
@@ -1688,9 +1840,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       // We gate explicitly off `walkShowMeActive` even though it
       // sets `walkExplorationFen` on the first tick (which would
       // otherwise flip this true via the second clause below).
-      const walkBoardInteractive = walkShowMeActive || seqState?.stage === 'playback' || cameoState !== null
+      const walkBoardInteractive = walkShowMeActive || seqState?.stage === 'playback' || cameoState !== null || theoryState?.stage === 'playback'
         ? false // playback (and the cameo) drives the board — no mid-animation drags
-        : seqState?.stage === 'ask' || // sequence: the board IS the answer input
+        : theoryState?.stage === 'ask' || // theory quiz: the board IS the answer input
+          seqState?.stage === 'ask' || // sequence: the board IS the answer input
           shotState !== null || // find-the-shot: the board IS the answer input
           (walkExploreToggleOn && hasArrow && walkExplorationFen === null) ||
           walkExplorationFen !== null;
@@ -1963,7 +2116,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                       return null;
                     }
                   })()}
-                  onMove={seqState?.stage === 'ask' ? (moveResult) => {
+                  onMove={theoryState?.stage === 'ask' ? (moveResult) => {
+                    // THEORY QUIZ answer (Phase 4) — the board move is the
+                    // student's "main move" guess at the book position.
+                    playMoveSound(moveResult.san);
+                    handleTheoryMove(moveResult.san);
+                  } : seqState?.stage === 'ask' ? (moveResult) => {
                     // SPOT-THE-SEQUENCE attempt — the board move is the
                     // student's calculation ply (Phase 1). Judged async
                     // (eval-equivalence probe); wrong verified moves snap
@@ -2361,6 +2519,40 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
               </div>
             )}
 
+            {/* THEORY DEPARTURE (Phase 4) — book ended here: quiz the main
+                move on the board, then play the book line with stats. */}
+            {theoryState?.stage === 'ask' && (
+              <div data-testid="review-theory-ask" className="mx-3 my-1 rounded-xl border-2 border-sky-500/40 bg-sky-500/10 px-3 py-2">
+                <div className="text-sm text-sky-100">
+                  Book ended here — {theoryState.dep.departedSan} left known practice
+                  ({theoryState.dep.totalGames} master games reached this position).
+                  What's the main move? Play it on the board.
+                </div>
+                <div className="mt-1.5 flex gap-2">
+                  <button type="button" data-testid="review-theory-hint"
+                    onClick={() => { const s = theoryStateRef.current as TheoryState | null; if (s) { captureEvent('review_theory_result', { outcome: 'hint', attempts: theoryAttemptsRef.current }); void runTheoryPlayback(s); } }}
+                    className="rounded-lg border border-sky-400/50 px-2.5 py-1 text-xs font-semibold text-sky-200 hover:bg-sky-500/20">
+                    Show me
+                  </button>
+                  <button type="button" data-testid="review-theory-skip"
+                    onClick={() => { cancelTheory(); }}
+                    className="rounded-lg border border-slate-500/50 px-2.5 py-1 text-xs text-slate-300 hover:bg-slate-500/20">
+                    Skip
+                  </button>
+                </div>
+              </div>
+            )}
+            {theoryState?.stage === 'playback' && (
+              <div data-testid="review-theory-playback" className="mx-3 my-1 rounded-xl border-2 border-sky-500/40 bg-sky-500/10 px-3 py-2">
+                <div className="text-sm text-sky-100">The book line — {theoryState.dep.mainMove.san} and on…</div>
+                <button type="button" data-testid="review-theory-stop"
+                  onClick={() => { cancelTheory(); }}
+                  className="mt-1.5 rounded-lg border border-slate-500/50 px-2.5 py-1 text-xs text-slate-300 hover:bg-slate-500/20">
+                  Back to my game
+                </button>
+              </div>
+            )}
+
             {/* THE DEVICE QUIZ (Phase 3.3) — apply the principle on the spot:
                 which of these candidate moves passes the device? */}
             {principleQuizState && (
@@ -2597,7 +2789,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 <KeyMomentNav
                   moves={moves}
                   currentIndex={walkMoveIndex}
-                  onNavigate={(idx: number) => { cancelSequence(); cancelCameo(); setPrincipleQuizState(null); walkPlayback.jumpToPly(idx + 1); }}
+                  onNavigate={(idx: number) => { cancelSequence(); cancelCameo(); cancelTheory(); setPrincipleQuizState(null); walkPlayback.jumpToPly(idx + 1); }}
                   className=""
                   extraIndices={walkPlayback.hintPlies.map((ply) => ply - 1)}
                 />
@@ -2607,7 +2799,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   moves={moves}
                   openingName={openingName}
                   currentMoveIndex={walkMoveIndex >= 0 ? walkMoveIndex : null}
-                  onMoveClick={(idx: number) => { cancelSequence(); cancelCameo(); setPrincipleQuizState(null); walkPlayback.jumpToPly(idx + 1); }}
+                  onMoveClick={(idx: number) => { cancelSequence(); cancelCameo(); cancelTheory(); setPrincipleQuizState(null); walkPlayback.jumpToPly(idx + 1); }}
                   className="h-full"
                 />
               </div>
@@ -2619,7 +2811,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 tapping jumps the main board to that ply. */}
             <ReviewCitationPreviews
               citations={reviewCitations}
-              onJumpToPly={(ply: number) => { cancelSequence(); cancelCameo(); setPrincipleQuizState(null); walkPlayback.jumpToPly(ply); }}
+              onJumpToPly={(ply: number) => { cancelSequence(); cancelCameo(); cancelTheory(); setPrincipleQuizState(null); walkPlayback.jumpToPly(ply); }}
             />
 
             {/* Missed tactics — ship-1 made this non-empty for every
