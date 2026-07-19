@@ -35,6 +35,37 @@ So the toggle deepens the *lesson*, not the *test*. Default (`auto`) ties concep
 the adaptive level; the moment the user picks a band, that pick drives narration depth
 while questions stay pinned to demonstrated skill.
 
+## 🔒 QUESTION DIFFICULTY = A PER-CONCEPT ADAPTIVE TEST (David 2026-07-19)
+
+The "difficulty" dial is NOT one number for the player — it's a **per-concept adaptive
+test** (computerized-adaptive-testing style). "Answerable, but some harder than we think
+they can answer" — we deliberately probe ABOVE the estimate to find the real ceiling and
+keep it a genuine test, then let the outcome move it:
+
+- **A per-concept ability estimate**, stored on the profile (Dexie), one per concept
+  DIMENSION — e.g. `calculation-depth`, `piece-safety`, `threat-awareness`,
+  `pawn-structure`, `king-safety`, `endgame-technique`, `opening-principles`,
+  `eval-judgment`. Each is a small rating (seeded from the player's game rating, then it
+  diverges as evidence comes in).
+- **Difficulty selection = estimate + a probe delta** (aim a notch ABOVE current ability,
+  so the question is a real stretch — the "desirable difficulty" of learning science),
+  clamped so it's reachable, never impossible.
+- **Update from the outcome, per concept:** correct → raise THAT concept's estimate (and
+  next question on it steps up — for a wizard the estimates climb until the questions are
+  genuinely hard); wrong (or needed the full hint) → lower it / dial back on that concept
+  and re-ask an easier version of the same idea. Only the concept that was tested moves —
+  a blown endgame question doesn't touch their tactics estimate.
+- **Result:** a live per-concept skill map. Wizard-at-tactics + shaky-positionally is
+  represented honestly, and each concept converges on its own true ceiling.
+- **This IS the demonstrated-skill signal** for decision 1 (the adaptive level) AND the
+  targeting signal for decision 3 (a low, high-miss concept = a weakness to drill more).
+- **Difficulty axes are computable per concept:** calculation → combo depth (1→2→3→4+
+  ply from `computePvLine`); eval-judgment → the tolerance band (better/equal/worse →
+  ±1.0 → ±0.5); piece-safety → obvious hang → deeper/defended-looking hang; threat →
+  1-move threat → a quiet setup; etc. So "harder" is a concrete, gradable knob, not a vibe.
+- **G0:** the CONTENT of every question is still computed (the fork/eval/line is real);
+  the adaptive test only picks WHICH difficulty rung of a real, computed question to pose.
+
 ## The core principle
 
 The **fact is computed once; the level chooses the register + the question.** A
