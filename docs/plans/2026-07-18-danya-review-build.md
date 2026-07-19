@@ -518,8 +518,19 @@ was VERIFIED against the code/data this session, not assumed.)
 - `gameThemeClassifier.classify(segments)` → eval trace + citations +
   boardStructure at key plies → {theme, peakPly} | null.
 
-## Status: PLAN LOCKED (David 2026-07-18: "Plan only. Lock it in. Will
-build once usage resets."). No build started. Phase 0 begins on go-signal.
+## Status: BUILT (2026-07-19). All phases shipped to main:
+- Phase 0a containment net + Phase 0 boardStructure + Phase 1
+  spot-the-sequence/calculation-bucket/PV-playback → #815 (prod repro 10/10)
+- Phase 2 model-game cameos (probe-calibrated, 4 rounds) → #817 (prod 12/12)
+- Phase 3 principle devices + application quiz (+ containment tripwire on
+  the ungrounded legacy lane) → #818 (prod sequence re-run 10/10)
+- Phase 4 theory-departure (quiz-first, book-line playback, masters +
+  your-level stats) → #819 (localhost repro 11/11; prod run after deploy)
+- Phase 5 theme-of-the-game (closed set, peak-evidence ply naming,
+  turning-point reprise; fixture corpus 10/10 = 100% hand-agreement)
+Post-game review for stored games (chess.com/lichess imports + past coach
+games) inherits everything via CoachReviewSessionPage (verified in code +
+every repro drives the stored-game entry point).
 
 ## FUTURE TODO (David 2026-07-18): data-fen on ALL coach boards
 The `data-fen` live-FEN attribute added to `Board/ChessBoard`'s wrapper for

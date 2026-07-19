@@ -28,6 +28,7 @@ import { buildMisconceptionCallback } from '../../services/misconceptionCallback
 import { principleFor } from '../../data/principles';
 import { buildPrincipleQuiz, quizVerdictLine, type PrincipleQuiz } from '../../services/principleQuiz';
 import { findTheoryDeparture, walkBookLine, type TheoryDeparture, type BookLinePly } from '../../services/theoryDeparture';
+import { classifyGameTheme, type GameThemeResult } from '../../services/gameThemeClassifier';
 import { findRewindTarget, type RewindTarget } from '../../services/blunderRewind';
 import { buildTurningPointQuestion, judgeTurningPointPick, type TurningPointQuestion } from '../../services/reviewTurningPoint';
 import { captureEvent } from '../../services/analytics';
@@ -750,7 +751,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const handleTurningPick = useCallback((ply: number): void => {
     if (!turningQ) return;
     const correct = judgeTurningPointPick(turningQ, ply);
-    const text = `${correct ? 'You called it.' : 'Not quite.'} ${turningQ.reveal}`;
+    // Phase 5: the theme's reprise closes the reveal — but only when it
+    // was actually NAMED during the walk (never introduce it cold here).
+    const reprise = themeSpokenRef.current && themeRef.current
+      ? ` It fits the thread of the game — ${themeRef.current.reprise}.`
+      : '';
+    const text = `${correct ? 'You called it.' : 'Not quite.'} ${turningQ.reveal}${reprise}`;
     captureEvent('review_turning_point_result', { correct, picked_ply: ply, answer_ply: turningQ.answer.ply });
     setTurningQ(null);
     setTurningReveal({ correct, text });
@@ -1370,6 +1376,43 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       .speakForced(`Book ended here — ${found.dep.departedSan} left known practice. What's the main move in this position?`)
       .catch(() => undefined);
   }, [walkPlayback.currentPly, shotState, shotReveal, turningQ, rewindOffer, moves.length]);
+
+  // ── THEME OF THE GAME (Phase 5, David 2026-07-18) ────────────────────────
+  // The theme EMERGES — never promised up front. Classified once from the
+  // computed eval trace + classifications + structure (closed set, hard
+  // confidence floor, honest null); NAMED by voice at the peak-evidence
+  // ply; reprised in the turning-point reveal. No card — it's a thread,
+  // not an interruption.
+  const themeRef = useRef<GameThemeResult | null>(null);
+  const themeSpokenRef = useRef(false);
+  useEffect(() => {
+    themeRef.current = null;
+    themeSpokenRef.current = false;
+  }, [props.gameId]);
+
+  useEffect(() => {
+    if (themeRef.current || !walkNarration || walkNarration.segments.length === 0) return;
+    themeRef.current = classifyGameTheme(walkNarration.segments, playerColor);
+    if (themeRef.current) {
+      captureEvent('review_theme_classified', {
+        theme: themeRef.current.theme,
+        peak_ply: themeRef.current.peakPly,
+        confidence: themeRef.current.confidence,
+      });
+    }
+  }, [walkNarration, playerColor]);
+
+  useEffect(() => {
+    if (themeSpokenRef.current) return;
+    const theme = themeRef.current;
+    if (!theme) return;
+    if (walkPlayback.currentPly < theme.peakPly) return;
+    // Non-blocking, but never talk over an open question or playback.
+    if (shotState || shotReveal || turningQ || rewindOffer || seqStateRef.current || cameoStateRef.current || theoryStateRef.current || principleQuizStateRef.current) return;
+    themeSpokenRef.current = true;
+    captureEvent('review_theme_named', { theme: theme.theme, at_ply: walkPlayback.currentPly });
+    void voiceService.speakForced(theme.line).catch(() => undefined);
+  }, [walkPlayback.currentPly, shotState, shotReveal, turningQ, rewindOffer]);
 
   // ship-4: `currentMove` removed — only the deleted analysis-phase
   // board read it. Walk render uses `walkPlayback.currentSegment` and
