@@ -19,6 +19,22 @@ explicitly: core idea for all, then "for the advanced players…").
 `level = bandFor(playerRating)` — a pure function off the profile rating the review
 already has. Everything below keys off `level`.
 
+## 🔒 TWO DIALS, NOT ONE (David 2026-07-19: "I'm intermediate but I want deeper concepts too!!")
+
+Concept DEPTH and question DIFFICULTY are **separate dials** — the 4-way button is how
+the user controls the first without touching the second:
+
+- **Concept depth (narration)** = the USER'S CHOICE via the toggle. An intermediate
+  player who wants prophylaxis, move-order nuance, and the counter-rule sets it to Pro and
+  gets them — appetite for teaching is not capped by rating.
+- **Question difficulty (what we ask them to FIND)** = their ACTUAL demonstrated skill
+  (the adaptive level from decision 1). This keeps questions ANSWERABLE — cranking the
+  voice to Pro must NOT start asking an intermediate to find a 5-move quiet combination.
+
+So the toggle deepens the *lesson*, not the *test*. Default (`auto`) ties concept depth to
+the adaptive level; the moment the user picks a band, that pick drives narration depth
+while questions stay pinned to demonstrated skill.
+
 ## The core principle
 
 The **fact is computed once; the level chooses the register + the question.** A
@@ -170,13 +186,70 @@ Same "read the opponent" instinct Danya uses on every move, tiered:
    emits SAN/jargon, advanced emits the counter-rule, the question type matches the
    band. Plus the existing content gates.
 
-## Open questions for David (decide before building)
+## DECISIONS (David 2026-07-19)
 
-1. **Band source:** use the single `currentRating`, or split — puzzle rating for
-   question difficulty vs game rating for concept depth? (Default: one rating.)
-2. **Manual override:** a review-settings toggle to force a level (e.g. an advanced
-   player who wants the basics spelled out), or always auto from rating?
-3. **Newcomer questions:** do we ever interrupt a 600 with a question, or keep it
-   pure voice + only the gentlest "which piece is hanging?" on a blunder?
-4. **Advanced "second layer":** always append the deeper point, or only when a real
-   subtlety is computed (empty > generic)? (Default: only when computed.)
+**1. Level is ADAPTIVE, not a fixed rating band.** No hard-and-fast "your rating = your
+level" rule. Start from the profile rating, then ADJUST from live performance signals:
+if the player is clearly advancing (recent-game accuracy implies a higher level than
+their set band) or under-handicapped (mis-calibrated low), bump the effective level up;
+if they're struggling below their band (hanging pieces often, low accuracy, missing the
+questions), ease it down. The level tracks the PLAYER, not a static number.
+- **Signal sources (all already in the app):** recent-game accuracy vs band
+  (`accuracyService` over stored `games`), the weakness report severity
+  (`weaknessSpine`/`misconceptionService`), puzzle-rating vs game-rating divergence, and
+  live question outcomes in the review (got it / needed a hint / missed).
+- **`effectiveLevel = adjust(bandFor(rating), performanceSignal)`** — clamped to ±1 band
+  from the rating so a hot streak can't rocket a 900 to "pro". Manual toggle overrides.
+
+**2. A 4-WAY MANUAL TOGGLE — the user decides how much they hear.** Upper-corner control
+on the review surface: **Beginner · Intermediate · Advanced · Pro.** Overrides the
+auto-detected level (an advanced player can force "spell out the basics"; an improver can
+force "talk to me like a pro"). Internal mapping: newcomer+beginner→**Beginner**,
+intermediate→**Intermediate**, advanced→**Advanced**, plus a new top tier **Pro** (the
+"advanced viewers" register — deepest calculation, move-order nuance, prophylaxis, the
+counter-rule, minimal hand-holding). Persist the choice in the profile
+(`reviewNarrationLevel: 'auto'|'beginner'|'intermediate'|'advanced'|'pro'`, default
+`auto`). Standing-order checklist: new UI surface → loading/empty/error states; new
+profile flag → Dexie version bump + retroactive default `auto`; new setting → PostHog
+event `review_level_changed {from,to,wasAuto}`.
+
+**3. QUESTIONS FOR EVERYONE — targeted at what they're WEAK at (needs more refinement).**
+Questions are how people learn, so every band gets them (even newcomers) — the rule is
+"give them questions they CAN answer." Two dials:
+- **Difficulty** — calibrated to the level so the question sits in reach (newcomer:
+  recognise a hanging piece; pro: find the 4-move quiet combination). Zone-of-proximal-
+  development: never trivial, never impossible.
+- **Topic targeting** — use the player's OWN game data + weakness report to pick WHICH
+  question to ask at a flagged moment. If their weakness bucket says "hangs pieces" →
+  spot-the-hanging-piece; "misses forks" → find-the-fork / type-not-move; "bad pawn
+  structure" → a structural choice question; "weak endgames" → a conversion question. The
+  review's flagged moments become PERSONALISED drills on their real weaknesses.
+  - **G0 wiring:** `misconceptionService` / `weaknessSpine` already bucket the player's
+    recurring mistakes (fed by exactly this review's slip capture — the loop closes on
+    itself). `questionForSlip(level, slipFacts, weaknessProfile)` picks the card type by
+    (a) what the position affords (`detectTactics`/`boardStructure`), (b) the level's
+    difficulty ceiling, (c) the player's top open weakness — preferring a card that
+    trains a weakness the position happens to expose.
+  - **🚧 STILL TO REFINE WITH DAVID:** the exact weakness→question-type map; how hard to
+    bias toward weaknesses vs teaching what the position most wants; whether a wrong
+    answer re-asks an easier version (hint ladder) or just reveals; how the "answerable"
+    floor is computed per level; and whether question cadence itself adapts (more when
+    they're learning a weak area, fewer when solid).
+
+**4. TEACH the advanced players — but never "always" (David 2026-07-19).** No forced
+second layer on every move (that's the generic filler we ban — "always" is out). BUT
+advanced/pro players must keep LEARNING, not just be told they played well: whenever a
+genuine deeper point IS computed (a real subtlety — prophylaxis, a move-order nuance, the
+counter-rule, a hidden imbalance), SURFACE it for them; never withhold the lesson. The
+rule is: teach when there's something real to teach, and at the top bands lean toward
+surfacing the deeper computed point rather than staying quiet — but if nothing deeper is
+computed, stay quiet (empty > generic > invented). So the difference between Advanced and
+Pro isn't "Pro always gets an extra sentence" — it's "Pro gets the deepest layer we can
+actually compute, every time we can compute one."
+
+## Superseded / no longer open
+- ~~Band source: one rating or split?~~ → decision 1 (adaptive, not a fixed band).
+- ~~Manual override?~~ → yes, decision 2 (4-way toggle).
+- ~~Newcomer questions?~~ → YES, everyone gets questions (decision 3).
+- ~~Advanced second layer always vs computed?~~ → decision 4 (teach when computed, never
+  "always").
