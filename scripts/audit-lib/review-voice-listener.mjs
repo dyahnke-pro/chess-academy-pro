@@ -16,6 +16,15 @@
  */
 import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-listener.mjs';
 
+/** Chromium launch args the listener NEEDS when the page runs on a
+ *  public HTTPS origin (prod): without these, Private Network Access
+ *  preflight-blocks every POST from the page to http://127.0.0.1, the
+ *  app's failure streak latches streaming off, and the listener
+ *  captures nothing (the 2026-07-13 shard runs hit the same wall). */
+export const LISTENER_LAUNCH_ARGS = [
+  '--disable-features=BlockInsecurePrivateNetworkRequests,PrivateNetworkAccessSendPreflights,PrivateNetworkAccessRespectPreflightResults',
+];
+
 export async function attachVoiceListener(ctx) {
   const listener = await startAuditListener();
   await ctx.addInitScript(
