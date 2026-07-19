@@ -216,6 +216,26 @@ const run = async () => {
     const p = await plyNow();
     const badge = await txt(page, '[data-testid="review-classification-badge"]');
     const narr = await txt(page, '[data-testid="review-narration-banner"]');
+    // Plan-idea beats SHOW the plan with arrows, not by moving pieces — capture
+    // the arrow colours rendered on the board (#3b82f6 = student plan, #f59e0b =
+    // opponent plan). When a plan-idea narration is up, we expect plan arrows.
+    const arrowColors = await page.evaluate(() => {
+      const c = document.querySelector('[data-testid="chess-board-container"]');
+      if (!c) return [];
+      const set = new Set();
+      c.querySelectorAll('svg *').forEach((e) => {
+        for (const attr of ['fill', 'stroke']) {
+          const v = e.getAttribute(attr);
+          if (v && v.startsWith('#')) set.add(v.toLowerCase());
+        }
+      });
+      return [...set];
+    }).catch(() => []);
+    const isPlanBeat = /\bplan\b|majorit|opposite wings|race|develop|castle|rakes/i.test(narr || '');
+    if (isPlanBeat) {
+      const planArrows = arrowColors.filter((c) => c === '#3b82f6' || c === '#f59e0b');
+      log(`     ↳ PLAN BEAT — arrows on board: ${planArrows.length ? planArrows.join(',') : 'NONE'} (all: ${arrowColors.join(',') || '—'})`);
+    }
     plies.push({ ply: p.n, badge, narr });
     log(`  Ply ${String(p.n).padStart(2)}/${p.total} [${(badge || '-').padEnd(10)}] ${narr || '(silent)'}`);
     if (p.n >= p.total && p.total > 0) { log(`  (reached end: Ply ${p.n}/${p.total})`); break; }

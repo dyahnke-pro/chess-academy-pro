@@ -80,6 +80,21 @@ iankane21 review (+ code reading). Status: ✅ works · ⚠️ partial · ❌ mi
 
 ---
 
+## ✅ PROGRESS THIS SESSION (2026-07-19) — before → now
+
+| Gap | Was | Now | How (all G0-grounded) |
+|---|---|---|---|
+| **§5 Walk the better line** (the #1 gap) | ❌ named the move only | ✅ **plays the engine PV out on the board, per-move why + closing eval verdict** | `computePvLine` + `PlyFacts`; pieces move (it's a concrete line). Verified firing live (×2/game). |
+| **§1 Structural TARGET ("because")** | ⚠️ said "gains space" | ✅ names the created enemy weakness — isolated/doubled pawn, or the outpost's "no pawn can ever challenge it" | `boardStructure` before→after delta |
+| **§1 Anchor + §2 both-sides plans** | ❌ missing | ✅ **TWO plan beats — opening developing plan (when the opening's identified) + middlegame orientation (pawn majorities / opposite-castling race), shown with ARROWS not by moving pieces** | pawn-majority + development from chess.js; blue=your plan, amber=opponent |
+| **§7 Conversion / pattern naming** | ⚠️ badges only past move 12 | ✅ names back-rank / smothered mate + the endgame phase (rook/queen/minor) | mate geometry + `endgameType`, else silent |
+| **Result / move-count bug** | ❌ "Draw · 30 moves" on a 16-move win | ✅ correct ("Victory · 16 moves") | reads the raw score + color |
+| **Picker fired on OPPONENT's move** (reviewed games) | ❌ | ✅ gates on COLOR (isCoachMove is unreliable for imported games) | side-to-move === student color |
+| **"can land a null" leak** | ❌ | ✅ silent when no real tactic | guided-find returns null |
+
+Every item above ships with unit tests + is verified firing in the live localhost
+review of the Knight_Mare_01 Pirc (audit-this-review.mjs, full walk 31/31, 0 errors).
+
 ## The biggest gaps, ranked (should-be minus is)
 
 1. **WALKING LINES (§5).** The #1 thing on the tape and the #1 thing missing — he constantly

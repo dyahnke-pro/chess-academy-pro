@@ -1,7 +1,7 @@
 import { Chess } from 'chess.js';
 import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice } from './groundedAnswer';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
-import { buildMiddlegameOrientation } from './reviewStrategicOrientation';
+import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan } from './reviewStrategicOrientation';
 import { detectBadHabits } from './badHabitDetector';
 import { db } from '../db/schema';
 import { voiceFacts } from './coachApi';
@@ -438,6 +438,11 @@ export interface ReviewMoveSegment {
   bestMoveSan: string | null;
   bestMoveUci: string | null;
   narration: string | null;
+  /** PLAN-IDEA arrows to lead the eye when this segment's narration is a plan
+   *  beat (opening-development / middlegame orientation). The board stays put —
+   *  these arrows SHOW the plan instead of moving pieces (David 2026-07-19).
+   *  Undefined on ordinary moves. */
+  planArrows?: Array<{ startSquare: string; endSquare: string; color: string }>;
 }
 
 export interface ReviewNarration {
@@ -799,6 +804,11 @@ function buildDeterministicNarration(params: {
  *  badges it. Beyond it we honor R8 (silence in conversion) and only narrate
  *  flagged moments. ~move 12 covers the opening + early middlegame. */
 const OPENING_TEACH_MAX_PLY = 24;
+/** The opening DEVELOPING-plan beat fires early — once the opening is identified
+ *  and enough pieces are out to describe a plan (~move 3), but before the
+ *  middlegame orientation takes over. */
+const OPENING_PLAN_MIN_PLY = 6;
+const OPENING_PLAN_MAX_PLY = 14;
 /** §1/§2: the one-shot middlegame orientation (structure anchor + both sides'
  *  plans) fires no earlier than ~move 8, once the pawn structure has taken
  *  shape enough for the majorities to be real. */
@@ -817,8 +827,10 @@ export function buildReviewSegments(
   // §7: the endgame phase is announced once per game (the first quiet student
   // move that's in a readable endgame), not on every endgame ply.
   let endgameAnnounced = false;
-  // §1 anchor + §2 both-sides plans: a single middlegame-orientation beat,
-  // fired once on the first eligible student move.
+  // Plan-idea beats, each fired once on an eligible student move: the opening
+  // developing plan (when the opening is identified) and the middlegame
+  // orientation (structure anchor + both-sides plans).
+  let openingPlanShown = false;
   let orientationShown = false;
   const studentColorWB: 'w' | 'b' | null = playerColor === 'white' ? 'w' : playerColor === 'black' ? 'b' : null;
   for (let i = 0; i < usable; i++) {
@@ -858,10 +870,26 @@ export function buildReviewSegments(
     // student's own side; only board-true notes (null → stays silent, better
     // than generic filler). This is what makes the walk a coach, not a badge-
     // labeler (David 2026-07-19: "there is no coach narration").
-    // §1 anchor + §2 both-sides plans — a one-shot middlegame orientation on the
-    // first eligible student move at/after the middlegame threshold. Takes
-    // priority over the per-move opening note in that zone (it's the richer
-    // beat); stays silent when no clear structural plan is computable.
+    // PLAN-IDEA beats — shown with ARROWS, not by moving pieces (David
+    // 2026-07-19). Two one-shots on the student's own quiet moves:
+    let planArrows: ReviewMoveSegment['planArrows'];
+    // (a) Opening DEVELOPING plan, fired once when the opening is identified.
+    if (
+      narration === null
+      && studentColorWB !== null
+      && !openingPlanShown
+      && !m.isCoachMove
+      && moverColor === playerColor
+      && m.ply >= OPENING_PLAN_MIN_PLY
+      && m.ply <= OPENING_PLAN_MAX_PLY
+      && (m.classification === null || m.classification === 'book' || m.classification === 'good')
+    ) {
+      const dev = buildOpeningDevelopmentPlan(fenPair.fenBefore, studentColorWB);
+      if (dev) { narration = dev.text; planArrows = dev.arrows; openingPlanShown = true; }
+    }
+    // (b) Middlegame orientation (structure anchor + both-sides plans), fired
+    // once at/after the middlegame threshold. Takes priority over the per-move
+    // opening note in that zone; silent when no clear structural plan exists.
     if (
       narration === null
       && studentColorWB !== null
@@ -872,7 +900,7 @@ export function buildReviewSegments(
       && (m.classification === null || m.classification === 'book' || m.classification === 'good')
     ) {
       const orientation = buildMiddlegameOrientation(fenPair.fenBefore, studentColorWB);
-      if (orientation) { narration = orientation; orientationShown = true; }
+      if (orientation) { narration = orientation.text; planArrows = orientation.arrows; orientationShown = true; }
     }
     if (
       narration === null
@@ -916,6 +944,7 @@ export function buildReviewSegments(
       bestMoveSan,
       bestMoveUci: m.bestMove,
       narration,
+      ...(planArrows && planArrows.length ? { planArrows } : {}),
     });
   }
   return segments;

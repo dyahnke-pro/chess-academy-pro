@@ -2043,6 +2043,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         // Hide the arrow once the student has explored — they've seen
         // the suggestion, no need to clutter the post-exploration view.
         if (walkExplorationFen) return undefined;
+        // PLAN-IDEA arrows (opening development / middlegame orientation): the
+        // board stays put and these arrows SHOW the plan instead of moving
+        // pieces (David 2026-07-19). They live on the segment itself.
+        if (seg?.planArrows && seg.planArrows.length) return seg.planArrows;
         if (!seg || !hasArrow) return undefined;
         const uci = seg.bestMoveUci;
         if (!uci) return undefined;
