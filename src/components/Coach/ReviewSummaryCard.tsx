@@ -54,11 +54,22 @@ export function ReviewSummaryCard({
 }: ReviewSummaryCardProps): JSX.Element {
   const playerAccuracy = playerColor === 'white' ? accuracy.white : accuracy.black;
 
-  const resultLabel = result === 'win' ? 'Victory' : result === 'loss' ? 'Defeat' : 'Draw';
+  // The result may arrive student-relative ('win'/'loss'/'draw') OR as the raw
+  // PGN score ('1-0'/'0-1'/'1/2-1/2'). Derive the student-relative outcome from
+  // the raw score + the student's color so a WIN never renders as "Draw"
+  // (David 2026-07-19: "Draw · 30 moves" on a 16-move win — the card checked
+  // `=== 'win'` while it was fed the raw '1-0').
+  const relResult: 'win' | 'loss' | 'draw' =
+    result === 'win' || result === 'loss' || result === 'draw'
+      ? result
+      : result === '1-0' || result === '0-1'
+        ? ((result === '1-0') === (playerColor === 'white') ? 'win' : 'loss')
+        : 'draw';
+  const resultLabel = relResult === 'win' ? 'Victory' : relResult === 'loss' ? 'Defeat' : 'Draw';
   const resultColor =
-    result === 'win'
+    relResult === 'win'
       ? 'var(--color-success)'
-      : result === 'loss'
+      : relResult === 'loss'
         ? 'var(--color-error)'
         : 'var(--color-warning)';
 

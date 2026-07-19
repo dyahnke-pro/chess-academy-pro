@@ -630,6 +630,14 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           void voiceService.speakForced(`Hold on — right here you had something. ${shot.question}`).catch(() => undefined);
           return; // pause the walk; resumes from the shot card
         }
+        // §5 WALK-THE-BETTER-LINE: after you answer the picker, the coach plays
+        // the engine's better line OUT on the board with the why per move
+        // (Danya's #1 habit). The line is the real engine PV (computePvLine,
+        // G0) — captured here, played out in resumeAfterFaucet. Only when a
+        // genuine distinct best move exists.
+        pendingBetterLineRef.current = seg.bestMoveUci
+          ? { fenBefore: seg.fenBefore, bestUci: seg.bestMoveUci, playedSan: seg.san, bestSan: seg.bestMoveSan ?? null }
+          : null;
         raiseFaucet({
           fenBefore: seg.fenBefore,
           fenAfter: seg.fenAfter,
@@ -692,24 +700,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     walkPlayback.goForward();
   }, [rewindOffer, walkPlayback]);
 
-  const resumeAfterFaucet = useCallback((): void => {
-    resetFaucet();
-    // Phase 3.3: an armed device quiz takes the slot right after the reveal —
-    // the student applies the principle on the exact position it was broken
-    // on. ONE per review, and only when the engine build finished in time
-    // (a slow build never blocks the walk).
-    const quiz = principleQuizRef.current;
-    if (quiz && !principleQuizShownRef.current) {
-      principleQuizShownRef.current = true;
-      principleQuizRef.current = null;
-      setPrincipleQuizState(quiz);
-      captureEvent('review_principle_quiz_offered', { tag: quiz.tag, candidates: quiz.candidates.length });
-      void voiceService.speakForced(quiz.ask).catch(() => undefined);
-      return;
-    }
-    if (maybeOfferRewind()) return; // the rewind card takes over the advance
-    walkPlayback.goForward();
-  }, [resetFaucet, walkPlayback, maybeOfferRewind]);
+  // NOTE: the faucet-resume + §5 better-line-playout callbacks live BELOW,
+  // right above runSequencePlayback — they depend on playMoveSound / the
+  // exploration-board setters / the better-line refs, all defined further down.
 
   const handlePrincipleQuizPick = useCallback((san: string | null): void => {
     const quiz = principleQuizStateRef.current;
@@ -836,6 +829,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   /** The ply of the most recent shot (sequence eligibility is checked when
    *  the shot resolves, after shotState is already cleared). */
   const lastShotPlyRef = useRef<number | null>(null);
+  /** §5: the flagged move's better-line seed, captured when the why-picker
+   *  fires and consumed in resumeAfterFaucet to play the engine's PV out. */
+  const pendingBetterLineRef = useRef<{ fenBefore: string; bestUci: string; playedSan: string; bestSan: string | null } | null>(null);
+  /** Cancellation token for the better-line playback loop. */
+  const betterLineTokenRef = useRef(0);
 
   useEffect(() => {
     // Fresh game → nothing carried over.
@@ -885,6 +883,87 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       });
     });
   }, []);
+
+  // The resume TAIL after the faucet (+ better-line playout) finishes: an armed
+  // device quiz, else the rewind offer, else advance. Extracted so both the
+  // plain path and the better-line path end the same way.
+  const finishFaucetResume = useCallback((): void => {
+    const quiz = principleQuizRef.current;
+    if (quiz && !principleQuizShownRef.current) {
+      principleQuizShownRef.current = true;
+      principleQuizRef.current = null;
+      setPrincipleQuizState(quiz);
+      captureEvent('review_principle_quiz_offered', { tag: quiz.tag, candidates: quiz.candidates.length });
+      void voiceService.speakForced(quiz.ask).catch(() => undefined);
+      return;
+    }
+    if (maybeOfferRewind()) return; // the rewind card takes over the advance
+    walkPlayback.goForward();
+  }, [walkPlayback, maybeOfferRewind]);
+
+  // §5 WALK-THE-BETTER-LINE: after a flagged-move reveal, play the engine's
+  // better line OUT on the exploration board with the why per move — Danya's
+  // #1 habit. FULLY G0: the line is the real engine PV (computePvLine); the
+  // per-move why is computed from PlyFacts (plyFactsString → voiceFacts, with
+  // renderPlyFactLine as the deterministic fallback); the closing verdict is
+  // the line's terminal eval. Nothing is invented — a quiet ply stays silent.
+  const playBetterLineOut = useCallback(async (
+    seed: { fenBefore: string; bestUci: string; bestSan: string | null },
+    onDone: () => void,
+  ): Promise<void> => {
+    const token = ++betterLineTokenRef.current;
+    let line: PvLine | null = null;
+    try {
+      line = await computePvLine(seed.fenBefore, {
+        firstUci: seed.bestUci,
+        maxPlies: 6,
+        depth: 12,
+        engine: { analyzePosition: (f, d) => stockfishEngine.analyzeWithBudget(f, d, 3500) },
+      });
+    } catch { line = null; }
+    if (betterLineTokenRef.current !== token || !walkMountedRef.current) { onDone(); return; }
+    if (!line || line.plies.length === 0) { onDone(); return; }
+    const intro = seed.bestSan ? `Here's the stronger line — ${seed.bestSan}.` : "Here's the stronger line.";
+    try { await voiceService.speakForced(intro); } catch { /* voice off */ }
+    for (let i = 0; i < line.plies.length; i++) {
+      if (betterLineTokenRef.current !== token || !walkMountedRef.current) { onDone(); return; }
+      const ply = line.plies[i];
+      setWalkExplorationFen(ply.fenAfter);
+      setWalkExplorationSan(ply.san);
+      playMoveSound(ply.san);
+      const facts = plyFactsString(ply);
+      let spoken: string | null = renderPlyFactLine(ply);
+      if (facts) {
+        try { spoken = (await voiceFacts(facts, { intent: 'review-better-line', warm: true })) ?? spoken; } catch { /* fallback */ }
+      }
+      if (betterLineTokenRef.current !== token || !walkMountedRef.current) { onDone(); return; }
+      if (spoken) { try { await voiceService.speakForced(spoken); } catch { /* voice off */ } }
+      await new Promise((r) => setTimeout(r, spoken ? 350 : 700));
+    }
+    if (betterLineTokenRef.current !== token || !walkMountedRef.current) { onDone(); return; }
+    const moverIsWhite = line.plies[0].moverColor === 'white';
+    const povCp = (moverIsWhite ? 1 : -1) * (line.terminalEvalCp ?? line.rootEvalCp);
+    const closing = line.plies[line.plies.length - 1].facts.isMate
+      ? 'That line goes all the way to mate.'
+      : `That line is about ${(Math.abs(povCp) / 100).toFixed(1)} pawns better.`;
+    try { await voiceService.speakForced(closing); } catch { /* voice off */ }
+    setWalkExplorationFen(null);
+    setWalkExplorationSan(null);
+    onDone();
+  }, [playMoveSound]);
+
+  const resumeAfterFaucet = useCallback((): void => {
+    resetFaucet();
+    const better = pendingBetterLineRef.current;
+    pendingBetterLineRef.current = null;
+    // §5: play the engine's better line out first (if the flagged move had a
+    // distinct best move), THEN run the resume tail. Otherwise resume directly.
+    if (better) {
+      void playBetterLineOut(better, finishFaucetResume);
+      return;
+    }
+    finishFaucetResume();
+  }, [resetFaucet, playBetterLineOut, finishFaucetResume]);
 
   /** The playback leg: the coach plays the line out on the exploration
    *  board, narrating keystones. Cancellable; resumes the walk at the end. */
@@ -3073,7 +3152,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           classificationCounts={classificationCounts}
           phaseBreakdown={phaseBreakdown}
           openingName={openingName}
-          moveCount={accuracy.moveCount}
+          moveCount={Math.max(1, Math.ceil(moves.length / 2))}
           moves={moves}
           narrativeSummary={isLoadingNarrative ? (narrativeSummary ?? undefined) : (narrativeSummary ?? undefined)}
           missedOpportunities={missCount}
