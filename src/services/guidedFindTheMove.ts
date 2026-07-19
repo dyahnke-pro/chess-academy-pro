@@ -130,9 +130,14 @@ export function buildGuidedFindChallenge(fen: string, bestUci: string): GuidedFi
     question = `There's material to be won, and your ${p.pieceName} does the taking. Where does it strike?`;
   } else if (p.isCheck) {
     question = `Your ${p.pieceName} has a forcing check. Find the square.`;
-  } else {
-    // tactic !== null (pin/skewer/other) — gate guarantees one of these paths.
+  } else if (tactic) {
     question = `Your ${p.pieceName} can land a ${tactic}. What's the square?`;
+  } else {
+    // No notable feature (not mate/capture/check/tactic) — there is no honest
+    // "find the shot" question to pose, so DON'T. Callers that skip
+    // shouldOfferGuidedFind must not get a fabricated prompt ("can land a
+    // null"). empty > generic > invented (G0). Falls through to the why-picker.
+    return null;
   }
 
   // The reveal names the move + WHY (computed geometry) — only ever shown on

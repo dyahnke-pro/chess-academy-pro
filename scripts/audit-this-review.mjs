@@ -102,9 +102,10 @@ const run = async () => {
   // 7. Step EVERY ply, capture narration text + badge per move.
   log('\n===== PLY-BY-PLY WALK (narration content) =====');
   const CARD_TESTIDS = [
-    'discussion-practice-panel', 'review-why-picker', 'review-shot-card', 'review-find-shot',
-    'blunder-interception', 'review-blunder-rewind', 'review-turning-point', 'review-cameo-card',
-    'review-theory-card', 'review-principle-quiz', 'review-sequence-card',
+    'discussion-prompt', 'discussion-reason-picker', 'review-find-shot-card', 'review-find-shot-reveal',
+    'review-rewind-card', 'review-turning-point-card', 'review-cameo-card',
+    'review-theory-card', 'review-principle-quiz', 'review-sequence-ask', 'review-sequence-playback',
+    'review-capture-card',
   ];
   const visibleCards = async () => {
     const found = [];
@@ -131,11 +132,73 @@ const run = async () => {
       const p = await plyNow();
       const isStudentMove = p.n % 2 === 1; // student = White → odd plies
       log(`  >> CARD at Ply ${p.n}/${p.total} (${isStudentMove ? 'YOUR move' : "OPPONENT'S move"}): ${cardsBefore.join(',')}`);
-      // Try to dismiss: Hint/reveal → continue, or a generic close.
-      for (const sel of ['[data-testid="review-shot-hint"]', '[data-testid="review-why-hint"]', '[data-testid="discussion-hint"]']) {
-        if (await has(page, sel)) { await page.locator(sel).first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(400); }
+      const voiceBeforeCard = voice ? voiceLines(voice).length : 0;
+      // WHY-PICKER (discussion-practice-panel): answer it like a human — commit
+      // a reason (click an option), then dismiss the grounded reveal. The reveal
+      // dismiss (explanation-action) fires resumeAfterFaucet → the §5 better-line
+      // playout. Capture the voice delta so we can PROVE the playout narrated.
+      if (await has(page, '[data-testid="discussion-reason-picker"]')) {
+        await page.locator('[data-testid="discussion-reason-option"]').first().click({ timeout: 2000 }).catch(() => {});
+        // The grounded reveal (ExplanationCard) is VOICED, then shows with an X
+        // dismiss button (aria-label="Dismiss") — NOT an explanation-action
+        // (that only renders with an actionLabel this path doesn't pass).
+        // Clicking X → onDismissTeach → resumeAfterFaucet → the §5 playout.
+        let dismissed = false;
+        for (let d = 0; d < 24; d++) {
+          const x = page.locator('[data-testid="explanation-card"] button[aria-label="Dismiss"]').first();
+          if (await x.count()) {
+            await x.click({ timeout: 2000 }).catch(() => {});
+            dismissed = true;
+            break;
+          }
+          await page.waitForTimeout(750);
+        }
+        log(`  reveal dismissed=${dismissed}`);
+        // §5 playout runs async (computePvLine ~depth 12 + per-ply voice). Give
+        // it room, then report what the coach SPOKE during the playout.
+        await page.waitForTimeout(9000);
+        if (voice) {
+          const after = voiceLines(voice);
+          const playoutLines = after.slice(voiceBeforeCard);
+          const strongerIdx = playoutLines.findIndex((l) => /stronger line/i.test(l));
+          log(`  §5 BETTER-LINE PLAYOUT: ${strongerIdx >= 0 ? 'FIRED' : 'not detected'} — ${playoutLines.length} lines spoken after the reveal`);
+          log('    ' + JSON.stringify(playoutLines.slice(0, 10)));
+        }
       }
-      for (const sel of ['[data-testid="review-shot-continue"]', '[data-testid="review-card-continue"]', '[data-testid="discussion-practice-close"]', '[data-testid="review-card-dismiss"]']) {
+      // FIND-THE-SHOT card: Hint → reveal → Continue (like a human who peeks).
+      if (await has(page, '[data-testid="review-find-shot-card"]')) {
+        await page.locator('[data-testid="review-find-shot-hint"]').first().click({ timeout: 1500 }).catch(() => {});
+        await page.waitForTimeout(600);
+        for (const sel of ['[data-testid="review-find-shot-continue"]', '[data-testid="review-find-shot-skip"]']) {
+          if (await has(page, sel)) { await page.locator(sel).first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(400); break; }
+        }
+      }
+      // SPOT-THE-SEQUENCE: "Show me the line" (ask) → then Skip (playback) so
+      // the walk advances without solving the 3-move sequence by hand.
+      if (await has(page, '[data-testid="review-sequence-ask"]')) {
+        await page.locator('[data-testid="review-sequence-show"]').first().click({ timeout: 1500 }).catch(() => {});
+        for (let s = 0; s < 8; s++) {
+          if (await has(page, '[data-testid="review-sequence-skip"]')) {
+            await page.locator('[data-testid="review-sequence-skip"]').first().click({ timeout: 1500 }).catch(() => {});
+            break;
+          }
+          await page.waitForTimeout(500);
+        }
+        await page.waitForTimeout(400);
+      }
+      if (await has(page, '[data-testid="review-sequence-playback"]')) {
+        await page.locator('[data-testid="review-sequence-skip"]').first().click({ timeout: 1500 }).catch(() => {});
+        await page.waitForTimeout(400);
+      }
+      // Every other blocking card gets its skip/done/continue so the walk never
+      // stalls (turning-point, cameo, theory, sequence, capture, rewind).
+      for (const sel of [
+        '[data-testid="review-turning-point-done"]', '[data-testid="review-cameo-skip"]',
+        '[data-testid="review-theory-skip"]', '[data-testid="review-sequence-skip"]',
+        '[data-testid="review-capture-continue"]', '[data-testid="review-capture-skip"]',
+        '[data-testid="review-blunder-rewind-decline"]', '[data-testid="review-rewind-decline"]',
+        '[data-testid="review-card-continue"]', '[data-testid="review-card-dismiss"]', '[data-testid="explanation-action"]',
+      ]) {
         if (await has(page, sel)) { await page.locator(sel).first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(400); }
       }
     }

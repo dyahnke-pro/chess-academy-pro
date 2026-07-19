@@ -487,6 +487,19 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // Inline + skippable; NEVER a modal (the retired blunder-capture's mistake).
   const readingQuizOn = settings.readingChallengesInReview;
   const studentColorWB: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
+  // AUTHORITATIVE "is this the student's move?" — the side-to-move in the
+  // position BEFORE the move must equal the student's color. `isCoachMove` is
+  // NOT reliable for a REVIEWED/imported game (no coach played it → it's false
+  // for BOTH sides; see coachFeatureService: "the opponent isn't isCoachMove,
+  // so filter by color"), so `!isCoachMove` alone let find-the-shot / the
+  // why-picker / the rewind fire on the OPPONENT's move (David 2026-07-19
+  // audit: a shot card on ply 18 while the narration said "your opponent
+  // slipped"). Color is the belt the narration side already wears — wear it in
+  // the walk gates too.
+  const moverIsStudent = useCallback((fenBefore: string | undefined): boolean => {
+    if (!fenBefore) return false;
+    try { return new Chess(fenBefore).turn() === studentColorWB; } catch { return false; }
+  }, [studentColorWB]);
   const [readingGate, setReadingGate] = useState<{ ply: number; fen: string } | null>(null);
   const quizzedPliesRef = useRef<Set<number>>(new Set());
   useEffect(() => {
@@ -603,6 +616,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       const isStudentMistake = !!seg
         && !!nextMove
         && !nextMove.isCoachMove
+        && moverIsStudent(seg.fenBefore) // color is authoritative for reviewed games
         && (seg.classification === 'inaccuracy' || seg.classification === 'mistake' || seg.classification === 'blunder');
       if (seg && isStudentMistake && !quizzedPliesRef.current.has(nextPly)) {
         quizzedPliesRef.current.add(nextPly);
@@ -635,7 +649,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         // (Danya's #1 habit). The line is the real engine PV (computePvLine,
         // G0) — captured here, played out in resumeAfterFaucet. Only when a
         // genuine distinct best move exists.
-        pendingBetterLineRef.current = seg.bestMoveUci
+        pendingBetterLineRef.current = seg.bestMoveUci && seg.bestMoveSan !== seg.san
           ? { fenBefore: seg.fenBefore, bestUci: seg.bestMoveUci, playedSan: seg.san, bestSan: seg.bestMoveSan ?? null }
           : null;
         raiseFaucet({
@@ -654,7 +668,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       }
     }
     walkPlayback.goForward();
-  }, [readingGate, faucetPhase, raiseFaucet, readingQuizOn, walkPlayback, walkNarration, playerColor, openingName, playerRating, shotState, shotReveal, turningQ, moves]);
+  }, [readingGate, faucetPhase, raiseFaucet, readingQuizOn, walkPlayback, walkNarration, playerColor, openingName, playerRating, shotState, shotReveal, turningQ, moves, moverIsStudent]);
 
   // Advance the walk once the faucet is done (answered + reveal dismissed, or
   // skipped) — the "resume" side of the pause above.
@@ -663,10 +677,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     const ply = walkPlayback.currentPly + 1; // the move the walk paused on
     const seg = walkNarration?.segments.find((s) => s.ply === ply);
     const move = moves[ply - 1] ?? null;
-    // Only offer the rewind on the STUDENT's own blunder — isCoachMove is the
-    // authoritative side signal (matches the picker fix + the narration), not
-    // the parity-derived seg.playerColor (David 2026-07-19).
-    if (!seg || !move || move.isCoachMove || seg.classification !== 'blunder') return false;
+    // Only offer the rewind on the STUDENT's own blunder — color (side-to-move
+    // before the move) is the authoritative side signal for a REVIEWED game;
+    // isCoachMove is false for both sides there, so keep it as the belt but let
+    // color be the suspenders (matches the picker fix + the narration).
+    if (!seg || !move || move.isCoachMove || !moverIsStudent(seg.fenBefore) || seg.classification !== 'blunder') return false;
     if (rewindOfferedPliesRef.current.has(ply)) return false;
     rewindOfferedPliesRef.current.add(ply); // one offer per blunder, ever
     const target = findRewindTarget(walkNarration?.segments ?? [], ply, playerColor);
@@ -675,7 +690,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     captureEvent('review_rewind_offered', { blunder_ply: ply, rewind_ply: target.ply });
     void voiceService.speakForced('Before we move on — want to go back to the last moment this was still holdable?').catch(() => undefined);
     return true;
-  }, [walkPlayback, walkNarration, playerColor, moves]);
+  }, [walkPlayback, walkNarration, playerColor, moves, moverIsStudent]);
 
   const handleRewindAccept = useCallback((): void => {
     const t = rewindOffer;

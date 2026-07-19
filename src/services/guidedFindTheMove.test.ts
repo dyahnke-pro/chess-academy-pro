@@ -77,6 +77,15 @@ describe('buildGuidedFindChallenge — piece + goal, NEVER the square', () => {
     expect(buildGuidedFindChallenge(WINNING_FEN, 'zz99')).toBeNull();
     expect(buildGuidedFindChallenge(WINNING_FEN, 'a1a8')).toBeNull();
   });
+
+  it('returns null when the best move lands NOTHING notable — never "can land a null"', () => {
+    // Ke1-f1: no mate, no capture, no check, no tactic. A caller that skips
+    // shouldOfferGuidedFind must NOT get a prompt with a null tactic interpolated
+    // (David 2026-07-19 audit: "Your pawn can land a null. What's the square?").
+    const quiet = '4k3/8/8/8/8/8/3Q4/4K3 w - - 0 1';
+    const ch = buildGuidedFindChallenge(quiet, 'e1f1');
+    expect(ch).toBeNull();
+  });
 });
 
 describe('judgeGuidedFindAttempt — found / retry / stale', () => {
