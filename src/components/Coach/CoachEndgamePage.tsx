@@ -319,7 +319,7 @@ function PatternPicker({ onPick, onBack, activeTab, onTabChange }: PickerProps):
       <div className="flex flex-col gap-0 max-w-lg mx-auto w-full">
         <div
           ref={tabStripRef}
-          className="flex gap-1 w-full overflow-x-auto"
+          className="flex gap-1 w-full overflow-x-auto shrink-0"
         >
           {TAB_OPTIONS.map((opt) => (
             <button

@@ -320,7 +320,7 @@ export function GameInsightsPage(): JSX.Element {
             fixed-width flex-1 row and cut "Tactics" off). Buttons size to
             their label and the row scrolls left/right. */}
         <div
-          className="flex gap-2 py-2 overflow-x-auto"
+          className="flex gap-2 py-2 overflow-x-auto shrink-0"
           style={{ scrollbarWidth: 'none' }}
           data-testid="insights-tab-row"
         >
