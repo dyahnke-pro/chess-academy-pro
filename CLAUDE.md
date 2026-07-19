@@ -2247,6 +2247,40 @@ Spoken text comes from `pickNarrationText(annotation, length)` (`src/services/wa
 
 ### Narration Voice Rules (IMPORTANT)
 
+### 🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").
+
+The Naroditsky house voice (below) is ONE style, but it speaks in TWO registers
+depending on the surface, and they must not be blurred:
+
+- **POST-GAME REVIEW register** (`/coach/review`, CoachGameReview) — RETROSPECTIVE,
+  about the USER'S OWN game, mistake-aware, hindsight: "you played X, the best
+  move was Y", "your opponent slipped", "the turning point was…", "your plan vs
+  the opponent's plan." This is what the 2026-07-18 Danya review build + the
+  Opening Ideas Layer produce. It is CORRECT for review and ONLY review.
+
+- **IN-GAME / WATCH / LEARN register** (`/coach/teach` walkthrough, the matchup
+  "Watch a full game", model-game playback, WLPP Watch/Learn) — PRESENT-TENSE
+  LIVE TEACHING as a DEMO game unfolds: "White develops the knight, eyeing the
+  centre; Black answers with …, and the tension builds." It is NOT the user's
+  game, so: NO mistake-recap ("you/opponent slipped"), NO "the best move was"
+  (nobody blundered — it's a teaching line), NO "YOUR plan" framing (it's
+  "White's plan / Black's plan"). It teaches the ideas AS THEY HAPPEN.
+
+**The SHARED spine both registers use** (this is what you MAY carry across):
+opening naming, the ideas/plans of both sides, structural beats
+(anchor→plan-as-itinerary→target), the per-move WHY (multi-reason but each
+clause board-verified via chess.js, NEVER padded — David 2026-07-19: "be
+careful not to overstate the why, I don't want non-applicable reasons
+stated"), and PLAYING LINES OUT on the board with the why spoken per move
+(David 2026-07-19: "he talks about different lines and plays them out… the
+lines come from stockfish best moves… we need the why stated behind the best
+moves as user watches"). When building Watch/Learn narration, build it to the
+IN-GAME register from the transcripts — do NOT copy the review's retrospective
+lines. The review path (buildReviewSegments + openingIdeasNarrator) and the
+walkthrough path (generateOpeningFromDbNarration) are SEPARATE engines; share
+the grounded fact-computers (openingIdeasNarrator ideas, explainBestMoveGrounded,
+computePvLine PlyFacts), not the review's phrasing.
+
 ### 🔒🔒 THE NARODITSKY HOUSE VOICE + PLAYED-OUT / EVERY-STEP STANDARD — the ENTIRE repertoire (David 2026-07-02, LOCKED. "I want the entire repertoire to be in Naroditsky's teaching/language style. It's beautiful.")
 
 David watched a Naroditsky Dragodorf teaching video and locked three things
@@ -3368,6 +3402,49 @@ The other `scripts/audit-*-loop.mjs` (mistakes-quality, money, openings-
 interactive, weaknesses, training-loop) are surface-specific loops — use them
 when the change is on THAT surface, but the unqualified word "audit" defaults
 to the punish-gems loop above.
+
+### 🔒🔒 THE REAL-GAME EXPERIENCE AUDIT — THE PLAYWRIGHT AUDIT STANDARD (David 2026-07-19, LOCKED, emphatic: "Lock this audit format into memory. This IS THE STANDARD!! This is the playwright audit!!"). The reference is `scripts/audit-review-real-game.mjs` (18/18); clone it per surface.
+
+For any surface that produces an EXPERIENCE (post-game review, Watch/matchup,
+a taught walkthrough, a lesson), a green feature-wire smoke is NOT an audit.
+David spent four months getting an audit that actually exercises the app the
+way he does. The five principles, locked:
+
+1. **SEED A REAL, UNPROCESSED ARTIFACT — never a pre-wired fixture.** The audit
+   seeds an actual game (real PGN, e.g. Buljubasic–Mesic Caro-Kann) into Dexie
+   UNANALYZED, then makes the app do the real work. Do NOT hand the surface a
+   pre-baked result object and assert it renders — that tests the renderer, not
+   the experience. (For a matchup: type the real "X vs Y" request; don't inject
+   the constructed line.)
+
+2. **RUN THE GENUINE PIPELINE — real Stockfish, real generation, visible
+   progress.** Let the actual analysis / buildMatchupLine / generateOpening run
+   (it's slow — allow 45–120s cold; that IS the user's wait). Watch the real
+   progress banner, not a mock. If the pipeline is stubbed, the audit is theatre.
+
+3. **WALK EVERY PLY / EVERY STEP LIKE A HUMAN — resolve every card by CLICKING,
+   not by injecting commands.** Step the whole review ply-by-ply; tap every
+   diagnostic card (find-the-shot: hint→reveal→continue; blunder rewind: decline;
+   turning point: pick→done). Drive REAL affordances (`walkthrough-skip`, board
+   `[data-square]`/`[data-piece]`, choice chips) — never `fill()` a command string.
+
+4. **ASSERT EXPERIENCE CONTRACTS AGAINST THE TAPE RUBRIC — not feature-wires.**
+   The bar is the Naroditsky video (the tape is the benchmark — "it needs to
+   mirror!"). Assert what the STUDENT experiences: the opening is NAMED early
+   (R1), ≥80% of opening plies get a WHY (R2), structural beats anchor→plan→
+   target (R3), the coach SPOKE (narration listener), the board PLAYED OUT, no
+   silent-scan / below-the-fold freeze. "The element exists" is not a contract;
+   "the student heard the plan as the move played" is.
+
+5. **THREE INSTRUMENTS TOGETHER (per G1): Playwright drives + audit-stream
+   captures emitted events + the narration listener confirms the voice fired.**
+   A green Playwright pass alone is not the audit — silence where a keystone
+   should speak is a bug only the stream + listener catch.
+
+This standard is DISTINCT from (and complementary to) the ADVERSARIAL FUNCTIONAL
+AUDIT below: that one tries to BREAK the surface with messy/hostile input; this
+one proves the HAPPY, real-user EXPERIENCE mirrors the tape. A surface that
+produces teaching/review content owes BOTH.
 
 ### 🚨 THE ADVERSARIAL FUNCTIONAL AUDIT — BREAK IT, THEN FIX THE BREAK (David 2026-06-12, LOCKED. This is HOW you audit any interactive surface — supersedes "click the happy path and call it green").
 
