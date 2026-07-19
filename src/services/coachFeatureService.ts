@@ -5,7 +5,7 @@ import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan } from './revie
 import { buildOpponentMoveTeaching } from './reviewOpponentCommentary';
 import { detectBadHabits } from './badHabitDetector';
 import { db } from '../db/schema';
-import { voiceFacts } from './coachApi';
+import { voiceFacts, voiceReviewLines } from './coachApi';
 // Post-game review narration is now GROUNDED (David 2026-07-09): the intro,
 // closing, and recap are COMPUTED from the engine annotations and phrased by
 // `voiceFacts` — no coachService.ask / free-LLM prose, no per-move segment
@@ -1101,6 +1101,28 @@ export async function generateReviewNarration(params: {
     : defaultIntroText({ playerColor, result, openingName, mistakeCount });
 
   const segments = buildReviewSegments(moves.slice(0, usableCount), playerColor);
+
+  // HOUSE-VOICE PASS (David 2026-07-19: "does NOT sound like Danya"). The
+  // per-move narration above is computed deterministically (the FACTS, G0) but
+  // reads like templated labels spoken raw. Rephrase EVERY line through the one
+  // grounding chokepoint in a SINGLE batched call — the model voices each fact in
+  // the teaching register (concept-first, causal, varied, never restating the
+  // move), adding zero chess content (guarded per line; a trip keeps the
+  // template). Best-effort at prep; skipped on silent. Never a regression.
+  if (coachNarration !== 'silent') {
+    try {
+      const toVoice = segments
+        .filter((s) => s.narration && s.narration.trim().length > 0)
+        .map((s) => ({ id: s.ply, fact: s.narration as string, kind: s.narrationSource ?? undefined }));
+      if (toVoice.length > 0) {
+        const warmed = await voiceReviewLines(toVoice);
+        for (const s of segments) {
+          const w = warmed.get(s.ply);
+          if (w) s.narration = w;
+        }
+      }
+    } catch { /* keep the deterministic templates */ }
+  }
 
   const narratedCount = segments.filter((s) => s.narration !== null).length;
   void logAppAudit({

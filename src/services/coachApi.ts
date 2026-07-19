@@ -2348,6 +2348,112 @@ export async function voiceFacts(
   }
 }
 
+/**
+ * voiceReviewLines — BATCHED house-voice pass for the post-game review walk.
+ *
+ * The walk's per-move narration is computed deterministically (the FACTS, G0),
+ * but spoken raw it reads like a machine labelling moves ("Stakes a claim in the
+ * center", "It develops the knight to c3") — templated, repetitive, restating the
+ * move (David 2026-07-19: "does NOT sound like Danya. BOO!!"). This rephrases
+ * EVERY line through the ONE grounding chokepoint in a SINGLE call at review prep:
+ * the model voices each computed fact in the house teaching register — concept-
+ * first, causal, varied, never restating the move — and adds ZERO chess content
+ * (every SAN/square/eval is still only what the fact says; the same fidelity nets
+ * that guard voiceFacts guard each line here, and a trip keeps the template).
+ *
+ * Returns a Map keyed by the caller's `id` (the ply). A missing id = keep the
+ * deterministic template (best-effort; no provider / parse miss / fidelity trip
+ * all degrade to the computed prose — never a regression, only upside).
+ */
+export async function voiceReviewLines(
+  items: Array<{ id: number; fact: string; kind?: string }>,
+  opts: { providerConfig?: ProviderConfig | null } = {},
+): Promise<Map<number, string>> {
+  const result = new Map<number, string>();
+  const usable = items.filter((it) => it.fact && it.fact.trim().length > 0);
+  if (usable.length === 0) return result;
+  const cfg = opts.providerConfig ?? (await getProviderConfig());
+  if (!cfg) return result; // no provider → caller keeps the computed templates
+
+  const system =
+    'You are the single teaching VOICE of a chess game-review — the warm, concept-FIRST ' +
+    'register of a great instructor. You will be given a NUMBERED list of computed facts ' +
+    'about ONE player\'s finished game (one fact per move or moment, already true and ' +
+    'verified). Rephrase EACH numbered fact into ONE short spoken line in that voice, and ' +
+    'return them as the SAME numbered list — exactly one rephrasing per number, same ' +
+    'numbers, never merge, split, drop, reorder, or add a line.\n\n' +
+    'HOW THE VOICE SOUNDS:\n' +
+    '- Concept-FIRST: teach the IDEA behind the move; NEVER restate the move\'s name. If a ' +
+    'fact is about a knight going to c3, do NOT say "knight to c3" or "develops the knight" ' +
+    '— the student already sees the move; say what it is FOR.\n' +
+    '- Causal: chain the why with "because", and go one step deeper when the fact supports it.\n' +
+    '- Graded, human verdicts: a strong quiet move is "classy" / "high-class", a winning one ' +
+    '"crushing", a slip is named warmly and flatly. A natural aside where it lands ("clean", ' +
+    '"nothing wrong with that", "simple chess").\n' +
+    '- A dominant piece or square can have character (a "monster" knight, an outpost "nothing ' +
+    'can touch") — but ONLY a piece/square the fact itself names.\n' +
+    '- VARY every line: no two may share the same opening words or shape. Never reuse a stem. ' +
+    'One or two short sentences each, spoken cadence, not a report.\n\n' +
+    'THE ONE RULE YOU CANNOT BREAK: add NO chess content that is not in the fact — no move, ' +
+    'square, piece, eval number, opening, threat, or claim of your own. If the fact does not ' +
+    'say it, you do not know it. Never hedge, never mention an engine or analysis — speak the ' +
+    'finding as your own read. No praise beyond the verdict the fact supports.\n\n' +
+    // STYLE MAP — original exemplars distilled from real teaching (in the STYLE,
+    // never the words — plagiarism guard). They show the transform: a flat
+    // computed fact → one line in the voice. Same squares, richer teaching.
+    'STYLE — turn a flat fact into the voice (these are the target; notice: no move ever restated, ' +
+    'a "because", a human verdict, and every line a different shape):\n' +
+    'FACT: "Stakes a claim in the center and opens lines for the pieces." → "You grab the center here, ' +
+    'and that\'s really the whole point — every piece you bring out now has somewhere to go."\n' +
+    'FACT: "It develops the knight to c3, eyeing d5 and e4." → "The knight settles in eyeing d5 and e4 — ' +
+    'those are exactly the squares you want a grip on before the position opens."\n' +
+    'FACT: "Gains space and cramps the opponent." → "This is a real land-grab; suddenly the other side ' +
+    'is tripping over its own pieces for room."\n' +
+    'FACT: "Secures an outpost on d5 — no enemy pawn can ever challenge it." → "Now d5 is yours for good ' +
+    '— no pawn will ever kick that piece, and a square like that wins games quietly."\n' +
+    'FACT: "Your opponent erred — Ng4 was much better. Drops about 1.8 pawns." → "Your opponent lets it ' +
+    'slip — Ng4 was the real try, and this hands almost two pawns straight back."\n' +
+    'FACT: "It forks the pawn on f7 and the pawn on c6." → "And there it is — one move, two targets, f7 ' +
+    'and c6 can\'t both be saved. Clean."';
+  const user =
+    `Rephrase each of these ${usable.length} lines. Return exactly ${usable.length} numbered ` +
+    `lines (1 to ${usable.length}), one rephrasing each:\n\n` +
+    usable.map((it, i) => `${i + 1}. ${it.fact}`).join('\n');
+  const maxTokens = Math.min(3000, 120 + usable.length * 70);
+
+  try {
+    const out = cfg.provider === 'anthropic'
+      ? await callAnthropic(cfg.apiKey, ANTHROPIC_MODEL_MAP.move_commentary, system, [{ role: 'user', content: user }], maxTokens, 'grounded_voice')
+      : await callDeepSeek(cfg.apiKey, DEEPSEEK_MODEL_MAP.move_commentary, [{ role: 'system', content: system }, { role: 'user', content: user }], maxTokens, 'grounded_voice');
+    if (typeof out !== 'string' || !out.trim()) return result;
+    // Parse "N. text" lines, joining any wrapped continuation onto the current
+    // number until the next "N." marker.
+    const parsed = new Map<number, string>();
+    let curN = -1;
+    let buf = '';
+    const flush = (): void => { if (curN >= 1 && buf.trim()) parsed.set(curN, buf.trim()); };
+    for (const raw of out.split('\n')) {
+      const mm = raw.match(/^\s*(\d{1,3})[.)]\s+(.*)$/);
+      if (mm) { flush(); curN = Number(mm[1]); buf = mm[2]; }
+      else if (curN >= 1) buf += ` ${raw.trim()}`;
+    }
+    flush();
+    // Map back by 1-based index → the caller's id; apply the SAME fidelity nets
+    // as voiceFacts per line (introduced numbers / added chess terms) — a trip
+    // keeps the computed template for that ply.
+    for (let i = 0; i < usable.length; i++) {
+      const warmed = parsed.get(i + 1);
+      if (!warmed) continue;
+      const fact = usable[i].fact;
+      if (introducedNumbers(fact, warmed).length > 0) continue;
+      const contained = containmentCheck(fact, warmed);
+      if (contained.text === null) continue;
+      result.set(usable[i].id, contained.text.trim());
+    }
+  } catch { return result; }
+  return result;
+}
+
 /** Normalized numeric tokens in a string — every run of digits (with an
  *  optional decimal), value-normalized so "2.50" and "2.5" compare equal and
  *  "6W-4D-10L" yields 6, 4, 10. */
