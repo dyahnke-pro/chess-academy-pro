@@ -2414,7 +2414,15 @@ export async function voiceReviewLines(
     'FACT: "Your opponent erred — Ng4 was much better. Drops about 1.8 pawns." → "Your opponent lets it ' +
     'slip — Ng4 was the real try, and this hands almost two pawns straight back."\n' +
     'FACT: "It forks the pawn on f7 and the pawn on c6." → "And there it is — one move, two targets, f7 ' +
-    'and c6 can\'t both be saved. Clean."';
+    'and c6 can\'t both be saved. Clean."\n' +
+    'FACT: "Secures an outpost on e5 — no enemy pawn can ever challenge it." → "That knight on e5 is a ' +
+    'monster now — no pawn will ever touch it, and a piece parked like that just quietly runs the game."\n' +
+    'FACT: "Your opponent erred — Nd7 was much better. And once your opponent started slipping, the ' +
+    'mistakes are snowballing." → "Another one slips by — Nd7 was the move, and you can feel it: once the ' +
+    'errors start, they tend to come in bunches."\n\n' +
+    'FALLBACK-SAFETY: you may FREELY restate any square, file, rank, or piece the fact already names — ' +
+    'that is never a violation. The rule is ONLY against introducing a square/move/piece/number the fact ' +
+    'does not contain. When in doubt, lean on the exact squares the fact gives you.';
   const user =
     `Rephrase each of these ${usable.length} lines. Return exactly ${usable.length} numbered ` +
     `lines (1 to ${usable.length}), one rephrasing each:\n\n` +

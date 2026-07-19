@@ -840,6 +840,10 @@ export function buildReviewSegments(
   let orientationShown = false;
   // Opponent-commentary dedup — name each target square at most once.
   const oppTargetsSeen = new Set<string>();
+  // Opponent-psychology read state — was the opponent's LAST move an error, and
+  // have we already noted the snowball once?
+  let lastOpponentWasError = false;
+  let psychologyReadDone = false;
   const studentColorWB: 'w' | 'b' | null = playerColor === 'white' ? 'w' : playerColor === 'black' ? 'b' : null;
   for (let i = 0; i < usable; i++) {
     const m = moves[i];
@@ -875,6 +879,18 @@ export function buildReviewSegments(
     }
     // Track WHICH builder produced the narration (surfaced to PostHog per ply).
     let narrationSource: ReviewMoveSegment['narrationSource'] = narration ? 'flag' : null;
+    // OPPONENT-PSYCHOLOGY read (Danya register #14: "once one side starts to
+    // decline, more mistakes appear"). When the opponent errs on CONSECUTIVE
+    // moves, note the unravelling ONCE — a real pattern from the classification
+    // sequence (G0), which the house voice then phrases. Only the opponent's own
+    // flagged moves; the flag narration already exists to append to.
+    const thisIsOppError = moverColor !== playerColor
+      && (m.classification === 'inaccuracy' || m.classification === 'mistake' || m.classification === 'blunder');
+    if (narration && narrationSource === 'flag' && thisIsOppError && lastOpponentWasError && !psychologyReadDone) {
+      narration = `${narration} And once your opponent started slipping, the mistakes are snowballing.`;
+      psychologyReadDone = true;
+    }
+    if (moverColor !== playerColor) lastOpponentWasError = thisIsOppError;
     // Teach the STUDENT's silent opening moves (R2). Only good/book moves in
     // the opening phase (flagged moves already narrate above); only the
     // student's own side; only board-true notes (null → stays silent, better
