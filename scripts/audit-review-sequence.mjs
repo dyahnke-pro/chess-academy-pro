@@ -17,6 +17,7 @@
 import { chromium } from 'playwright';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { attachVoiceListener, voiceLines } from './audit-lib/review-voice-listener.mjs';
 
 const URL = process.env.AUDIT_SMOKE_URL || 'http://localhost:5173';
 const GAME_ID = 'audit-seq-blackburne';
@@ -32,6 +33,7 @@ const run = async () => {
   const browser = await chromium.launch({ headless: true, executablePath, args: sandboxLaunchArgs() });
   const ctx = await browser.newContext(sandboxContextOptions());
   const page = await ctx.newPage();
+  const voice = process.env.AUDIT_LISTENER === '1' ? await attachVoiceListener(ctx) : null;
   const errs = [];
   page.on('pageerror', (e) => errs.push('PAGEERROR: ' + e.message.slice(0, 160)));
   page.on('console', (m) => {
@@ -293,6 +295,14 @@ const run = async () => {
         check('playback completed and the walk resumed', resumed);
       }
     }
+  }
+
+  if (voice) {
+    const spoken = voiceLines(voice);
+    console.log('\n   VOICE (' + spoken.length + ' lines):', JSON.stringify(spoken.slice(0, 24)));
+    check('listener: sequence playback narration actually SPOKE', spoken.some((l) => /That's the line|Not quite|works just as well/.test(l)));
+    check('listener: the game theme was NAMED by voice (Phase 5)', spoken.some((l) => /This is the thread of the game/.test(l)));
+    await voice.stop();
   }
 
   console.log('\nERRORS:', errs.length ? JSON.stringify(errs) : 'none');

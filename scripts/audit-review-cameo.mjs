@@ -16,6 +16,7 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { attachVoiceListener, voiceLines } from './audit-lib/review-voice-listener.mjs';
 
 const URL = process.env.AUDIT_SMOKE_URL || 'http://localhost:5173';
 const GAME_ID = 'audit-cameo-panov';
@@ -31,6 +32,7 @@ const run = async () => {
   const browser = await chromium.launch({ headless: true, executablePath, args: sandboxLaunchArgs() });
   const ctx = await browser.newContext(sandboxContextOptions());
   const page = await ctx.newPage();
+  const voice = process.env.AUDIT_LISTENER === '1' ? await attachVoiceListener(ctx) : null;
   const errs = [];
   page.on('pageerror', (e) => errs.push('PAGEERROR: ' + e.message.slice(0, 160)));
   page.on('console', (m) => {
@@ -228,6 +230,14 @@ const run = async () => {
       try { await fwd.click({ timeout: 2500 }); advanced = true; } catch { /* */ }
     }
     check('walk advances normally after Skip', advanced, `walkMounted=${plyBefore}`);
+  }
+
+  if (voice) {
+    const spoken = voiceLines(voice);
+    console.log('\n   VOICE (' + spoken.length + ' lines):', JSON.stringify(spoken.slice(0, 24)));
+    check('listener: cameo intro NAMED the classic by voice', spoken.some((l) => /Same fabric as your game|against/.test(l)));
+    check("listener: cameo tie-back returned to the student's board", spoken.some((l) => /Back to your board/.test(l)));
+    await voice.stop();
   }
 
   console.log('\nERRORS:', errs.length ? JSON.stringify(errs) : 'none');

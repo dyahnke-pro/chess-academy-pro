@@ -17,6 +17,7 @@
 import { chromium } from 'playwright';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { attachVoiceListener, voiceLines } from './audit-lib/review-voice-listener.mjs';
 
 const URL = process.env.AUDIT_SMOKE_URL || 'http://localhost:5173';
 const GAME_ID = 'audit-theory-na3';
@@ -32,6 +33,7 @@ const run = async () => {
   const browser = await chromium.launch({ headless: true, executablePath, args: sandboxLaunchArgs() });
   const ctx = await browser.newContext(sandboxContextOptions());
   const page = await ctx.newPage();
+  const voice = process.env.AUDIT_LISTENER === '1' ? await attachVoiceListener(ctx) : null;
   const errs = [];
   page.on('pageerror', (e) => errs.push('PAGEERROR: ' + e.message.slice(0, 160)));
   page.on('console', (m) => {
@@ -245,6 +247,14 @@ const run = async () => {
     } catch { /* */ }
     check('Show me reaches the book-line playback', playback2);
     if (playback2) await waitPlaybackDone();
+  }
+
+  if (voice) {
+    const spoken = voiceLines(voice);
+    console.log('\n   VOICE (' + spoken.length + ' lines):', JSON.stringify(spoken.slice(0, 24)));
+    check('listener: theory ask was SPOKEN without leaking the answer', spoken.some((l) => /Book ended here/.test(l)));
+    check('listener: the stats line spoke masters practice', spoken.some((l) => /Masters play/.test(l)));
+    await voice.stop();
   }
 
   console.log('\nERRORS:', errs.length ? JSON.stringify(errs) : 'none');
