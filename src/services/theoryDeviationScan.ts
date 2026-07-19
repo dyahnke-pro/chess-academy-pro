@@ -117,6 +117,17 @@ async function enrichScore(
   return translateMasterMove(top, totalGames, perspective);
 }
 
+/** A position needs at least this many master games for "you left ESTABLISHED
+ *  theory" to be an honest claim. Backing the claim with a single master game
+ *  (David 2026-07-19: "…from a single master game") is not established theory —
+ *  below this, defer to the amateur DB or stay silent. */
+const MIN_MASTER_GAMES = 8;
+/** Never flag a theory departure on move 1 — every mainstream first move
+ *  (1.e4 / 1.d4 / 1.Nf3 / 1.c4 …) is book by definition, so a "you left
+ *  theory at move 1" claim is a sparse-DB artifact, never real teaching
+ *  (David 2026-07-19: the review claimed "at move 1 you left theory. e4…"). */
+const MIN_DEVIATION_MOVE = 2;
+
 /** Scan for the first point the player left masters theory. Returns null
  *  when the player stayed in book for as long as the masters DB covers
  *  the line (no deviation while data existed) — that's a GOOD result. */
@@ -145,23 +156,29 @@ export async function scanTheoryDeviation(
         masters = null;
       }
 
-      if (masters && masters.source !== 'none' && masters.moves.length > 0) {
+      const moveNumber = Math.floor(ply / 2) + 1;
+      // Only claim "you left ESTABLISHED theory" when the masters book here is
+      // genuinely well-sampled. A thin position (a handful of games) is NOT
+      // established theory — fall through to the deeper amateur DB rather than
+      // assert a departure the data can't support.
+      if (masters && masters.source !== 'none' && masters.moves.length > 0
+          && masters.totalGames >= MIN_MASTER_GAMES) {
         const inBook = playedMoveIsInBook(fenBefore, san, masters.moves.map((m) => m.san));
-        if (!inBook) {
+        if (!inBook && moveNumber >= MIN_DEVIATION_MOVE) {
           // Left established theory. Enrich the headline move's W/D/L
           // from amateur when the sparse local masters file only has a
           // game count (no result split → "untested").
           const top = await enrichScore(fenBefore, masters.moves[0], masters.totalGames, playerColor);
           return {
             ply,
-            moveNumber: Math.floor(ply / 2) + 1,
+            moveNumber,
             playedSan: san,
             fen: fenBefore,
             mastersTop: top,
             source: 'masters',
           };
         }
-        // In masters book — keep scanning.
+        // In masters book (or too early to flag) — keep scanning.
       } else {
         // Masters coverage ran out. Strengthen the scan with the amateur
         // DB (deeper, full W/D/L) instead of stopping blind here.
@@ -177,10 +194,10 @@ export async function scanTheoryDeviation(
           return null;
         }
         const inAmateurBook = playedMoveIsInBook(fenBefore, san, amateur.moves.map((m) => m.san));
-        if (!inAmateurBook) {
+        if (!inAmateurBook && moveNumber >= MIN_DEVIATION_MOVE) {
           return {
             ply,
-            moveNumber: Math.floor(ply / 2) + 1,
+            moveNumber,
             playedSan: san,
             fen: fenBefore,
             mastersTop: translateMasterMove(amateur.moves[0], amateur.totalGames, playerColor),

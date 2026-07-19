@@ -238,7 +238,12 @@ export async function generateNarrativeSummary(
   // serves a one-line position-default, NOT a game recap), so the facts are
   // assembled here and voiced. The LLM only chooses words; every number,
   // move, and classification below is code-computed.
-  const coachColor: 'White' | 'Black' = playerColor === 'white' ? 'Black' : 'White';
+  // The STUDENT's own color — the recap counts THEIR errors, not the
+  // opponent's (David 2026-07-19: the recap said "played cleanly" over a
+  // "3 Inaccuracy" chip because this used to compare against the OPPONENT's
+  // color — an inversion that counted the opponent's mistakes as the
+  // student's, so the student's real inaccuracies were never tallied).
+  const studentColorWB: 'White' | 'Black' = playerColor === 'white' ? 'White' : 'Black';
 
   // Count errors across ALL student (non-coach) moves + collect the flagged
   // moments (with the engine's preferred move + the eval swing) in ply order.
@@ -249,7 +254,7 @@ export async function generateNarrativeSummary(
   let prevEvalCp: number | null = 0;
   for (const m of moveData) {
     const moverColor: 'White' | 'Black' = m.moveNumber % 2 === 1 ? 'White' : 'Black';
-    const isStudent = !m.isCoachMove && moverColor === coachColor;
+    const isStudent = !m.isCoachMove && moverColor === studentColorWB;
     if (isStudent && m.classification === 'blunder') blunderCount++;
     else if (isStudent && m.classification === 'mistake') mistakeCount++;
     else if (isStudent && m.classification === 'inaccuracy') inaccuracyCount++;
@@ -331,7 +336,7 @@ export async function generateReviewNarrationSegments(
   // student-relative outcome, the error counts, and the flagged key moments;
   // voiceFacts phrases them warmly. The `_pgn` is unused — moveData carries
   // every fact the narration needs (G0: nothing is re-derived from the PGN).
-  const coachColor: 'White' | 'Black' = playerColor === 'white' ? 'Black' : 'White';
+  const studentColorWB: 'White' | 'Black' = playerColor === 'white' ? 'White' : 'Black';
   let blunders = 0;
   let mistakes = 0;
   let inaccuracies = 0;
@@ -339,8 +344,10 @@ export async function generateReviewNarrationSegments(
   for (const m of moveData ?? []) {
     const moverColor: 'White' | 'Black' = m.moveNumber % 2 === 1 ? 'White' : 'Black';
     // Only the STUDENT's own errors are the review's subject (a coach/opponent
-    // slip isn't the student's lesson).
-    if (m.isCoachMove || moverColor !== coachColor) continue;
+    // slip isn't the student's lesson). Compare against the STUDENT's color —
+    // NOT the opponent's (the old `coachColor` inversion counted the wrong
+    // side; David 2026-07-19).
+    if (m.isCoachMove || moverColor !== studentColorWB) continue;
     if (m.classification === 'blunder') {
       blunders += 1;
       keyMoments.push(`move ${Math.ceil(m.moveNumber / 2)} ${m.san} (a blunder${m.bestMove ? `; the engine preferred ${m.bestMove}` : ''})`);
