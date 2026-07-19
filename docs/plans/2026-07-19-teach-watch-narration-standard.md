@@ -80,13 +80,28 @@ faucet surface, not passive Watch), theory-source-honesty asides (nice-to-have, 
       confirm the why is applicable + the opening is named early. 3 instruments.
 - [ ] Ship batched to `main`; post-deploy audit; pull audit-stream (narration events).
 
-## Task #5 (separate, review-path): play out BOTH lines on the board
+## Task #5 (separate, review-path): play out lines on the board
 
 David: "he talks about different lines and plays them out… the lines come from Stockfish
-best moves… state the why behind the best moves as the user watches." This is the
-review/analysis "show both lines" habit (the practical line + the engine-best alternative),
-distinct from the Watch walkthrough which already plays its spine out. Tracked separately;
-needs the review PV-playback surface, not the walkthrough engine.
+best moves… state the why behind the best moves as the user watches" (multi-reason OK, but
+don't overstate).
+
+**Assessment 2026-07-19 — the CORE is already built and verified.** `pvPlayback.ts`
+(Phase 1 of the Danya review build) already computes the full engine PV line from a review
+position, validates every move via chess.js replay (G3), attaches per-ply BOARD-TRUTH facts
+(`PlyFacts`: captured / check / mate / tactic-landed / material / open-files / passed-pawns /
+outpost / shield-lost), and narrates the WHY per ply via `voiceFactsBatch` (deterministic
+fallback `renderPlyFactLine`). Because the why is computed from board facts, it is
+inherently non-padded — it can only state what actually happened (David's anti-overstatement
+caveat is satisfied by construction). Verified 18/18 by `audit-review-real-game.mjs`.
+
+**What actually REMAINS = a design fork for David (playbook §0.5 stop-and-ask):** David said
+"different lines" (plural). The engine PV is one line; a SECOND played-out line (the masters-DB
+typical continuation, or the practical human line alongside the engine-best) is a NEW surface
+decision — WHERE it renders in the review, WHEN to show two lines vs one, how the toggle reads.
+That UX was built interactively with David; it should not be invented unsupervised overnight
+(exactly the "don't overstate / non-applicable" risk). Left for David to steer. NOT a code gap
+in the per-move-why engine — that engine is done.
 
 ## Next-session pickup
 
