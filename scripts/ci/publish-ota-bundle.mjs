@@ -57,7 +57,25 @@ console.log(`[ota] uploaded → ${url}`);
 //    checksum can be added once the round-trip is verified on-device.)
 const { Redis } = await import('@upstash/redis');
 const redis = new Redis({ url: redisUrl, token: redisToken });
-await redis.set('ota:latest', { version, url });
+try {
+  await redis.set('ota:latest', { version, url });
+  console.log('[ota] Redis pointer set');
+} catch (err) {
+  console.warn(`[ota] Redis pointer FAILED (${err instanceof Error ? err.message : err}) — Blob mirror still updates`);
+}
+
+// Static Blob mirror of the pointer — the manifest's quota-proof fallback
+// (2026-07-19: the Upstash free tier hit its monthly command cap and ~60% of
+// device update checks silently no-opped; a public-URL GET has no quota).
+const pointer = await put('ota/latest.json', JSON.stringify({ version, url }), {
+  access: 'public',
+  token: blobToken,
+  contentType: 'application/json',
+  addRandomSuffix: false,
+  allowOverwrite: true,
+  cacheControlMaxAge: 60,
+});
+console.log(`[ota] pointer mirror → ${pointer.url}`);
 
 // Clean up the local zip so it can't leak into an artifact.
 try { rmSync(ZIP, { force: true }); } catch { /* ignore */ }

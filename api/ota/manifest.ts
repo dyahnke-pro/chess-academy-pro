@@ -35,7 +35,23 @@ function getRedisConfig(): { url: string; token: string } | null {
   return { url, token };
 }
 
-async function readLatest(): Promise<OtaLatest | null> {
+/** Static mirror of the pointer, written by publish-ota-bundle.mjs alongside
+ *  the Redis key. Blob GETs are plain public-URL fetches — no command quota —
+ *  so the manifest survives Redis being down or rate-capped (2026-07-19: the
+ *  Upstash free tier hit its 500k/month command limit and ~60% of update
+ *  checks silently told devices "you're current"; David's phone never got
+ *  the OTA). Overridable for a store migration. */
+const BLOB_POINTER_URL =
+  process.env.OTA_POINTER_URL ??
+  'https://a0td9pnugiojdmfu.public.blob.vercel-storage.com/ota/latest.json';
+
+function parsePointer(raw: unknown): OtaLatest | null {
+  const parsed = typeof raw === 'string' ? (JSON.parse(raw) as OtaLatest) : (raw as OtaLatest);
+  if (!parsed || typeof parsed.version !== 'string' || typeof parsed.url !== 'string') return null;
+  return parsed;
+}
+
+async function readLatestFromRedis(): Promise<OtaLatest | null> {
   const cfg = getRedisConfig();
   if (!cfg) return null;
   try {
@@ -43,14 +59,24 @@ async function readLatest(): Promise<OtaLatest | null> {
     const redis = new Redis(cfg);
     const raw = await redis.get<OtaLatest | string>(REDIS_KEY);
     if (!raw) return null;
-    // Upstash may return the parsed object or a JSON string depending on how it
-    // was written — handle both.
-    const parsed = typeof raw === 'string' ? (JSON.parse(raw) as OtaLatest) : raw;
-    if (!parsed || typeof parsed.version !== 'string' || typeof parsed.url !== 'string') return null;
-    return parsed;
+    return parsePointer(raw);
   } catch {
     return null;
   }
+}
+
+async function readLatestFromBlob(): Promise<OtaLatest | null> {
+  try {
+    const res = await fetch(`${BLOB_POINTER_URL}?cb=${Date.now()}`, { cache: 'no-store' });
+    if (!res.ok) return null;
+    return parsePointer(await res.text());
+  } catch {
+    return null;
+  }
+}
+
+async function readLatest(): Promise<OtaLatest | null> {
+  return (await readLatestFromRedis()) ?? (await readLatestFromBlob());
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse): Promise<void> {
