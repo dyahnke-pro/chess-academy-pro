@@ -652,7 +652,19 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         pendingBetterLineRef.current = seg.bestMoveUci && seg.bestMoveSan !== seg.san
           ? { fenBefore: seg.fenBefore, bestUci: seg.bestMoveUci, playedSan: seg.san, bestSan: seg.bestMoveSan ?? null }
           : null;
-        raiseFaucet({
+        // SHOW THE MOVE FIRST, let it land, THEN ask "why'd you play that?" — the
+        // board was paused at fenBefore (before the flagged move), so the student
+        // was asked about a move they hadn't been shown yet (David 2026-07-19:
+        // "the card appears before I make my move… I haven't seen it yet"), and
+        // it slammed up with no time to absorb ("give the student time to absorb
+        // the move"). So: push the played move onto the board (no spoiler),
+        // speak a NEUTRAL orienting beat (reveals nothing about quality — the
+        // grounded diagnosis stays post-commit, honesty contract), give a beat to
+        // absorb, THEN raise the picker. resumeAfterFaucet clears the FEN.
+        setWalkExplorationFen(seg.fenAfter);
+        setWalkExplorationSan(seg.san);
+        playMoveSound(seg.san);
+        const faucetArgs = {
           fenBefore: seg.fenBefore,
           fenAfter: seg.fenAfter,
           playedSan: seg.san,
@@ -663,7 +675,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           moveNumber: seg.moveNumber,
           openingName: openingName ?? undefined,
           studentRating: playerRating ?? undefined,
-        });
+        };
+        void (async () => {
+          try { await voiceService.speakForced('Here’s the move you played. Take a look.'); } catch { /* voice off */ }
+          await new Promise((r) => setTimeout(r, 900)); // a beat to absorb the move
+          if (!walkMountedRef.current) return;
+          raiseFaucet(faucetArgs);
+        })();
         return; // pause the walk; resumes when the student answers + dismisses
       }
     }
@@ -768,6 +786,41 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (maybeOfferRewind()) return; // a blunder's shot resolved → offer the rewind
     walkPlayback.goForward();
   }, [walkPlayback, maybeOfferRewind]);
+
+  // ── PostHog instrumentation — make a review session queryable (David
+  // 2026-07-19: "if post game review doesn't send to posthog, fix it"). Emits
+  // review_started once, review_narration per narrated ply (WHAT is played +
+  // which beat produced it, independent of whether TTS vocalises), and
+  // review_completed at the leaf. This is how we can SEE what the coach said
+  // without the ephemeral audit-stream.
+  const reviewStartedRef = useRef(false);
+  const reviewCompletedRef = useRef(false);
+  const narratedPliesRef = useRef<Set<number>>(new Set());
+  useEffect(() => {
+    if (!walkNarration) return;
+    const ply = walkPlayback.currentPly;
+    if (!reviewStartedRef.current && ply >= 1) {
+      reviewStartedRef.current = true;
+      captureEvent('review_started', {
+        game_id: props.gameId, opening: openingName ?? null, result,
+        player_color: playerColor, plies: moves.length, rating: playerRating ?? null,
+      });
+    }
+    const seg = walkNarration.segments.find((s) => s.ply === ply);
+    if (seg && seg.narration && !narratedPliesRef.current.has(ply)) {
+      narratedPliesRef.current.add(ply);
+      captureEvent('review_narration', {
+        game_id: props.gameId, ply, move: seg.san,
+        source: seg.narrationSource ?? 'unknown',
+        classification: seg.classification, chars: seg.narration.length,
+        text: seg.narration.slice(0, 280),
+      });
+    }
+    if (!reviewCompletedRef.current && moves.length > 0 && ply >= moves.length) {
+      reviewCompletedRef.current = true;
+      captureEvent('review_completed', { game_id: props.gameId, plies: moves.length });
+    }
+  }, [walkPlayback.currentPly, walkNarration, props.gameId, openingName, result, playerColor, moves.length, playerRating]);
 
   // ── Turning-point ask — fires once, when the walk reaches the last ply ────
   useEffect(() => {
@@ -903,6 +956,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // device quiz, else the rewind offer, else advance. Extracted so both the
   // plain path and the better-line path end the same way.
   const finishFaucetResume = useCallback((): void => {
+    // Clear the "show the played move" exploration FEN set when the why-picker
+    // was raised, so the board doesn't stick on the flagged move as we resume.
+    setWalkExplorationFen(null);
+    setWalkExplorationSan(null);
     const quiz = principleQuizRef.current;
     if (quiz && !principleQuizShownRef.current) {
       principleQuizShownRef.current = true;

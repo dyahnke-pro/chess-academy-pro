@@ -2,6 +2,7 @@ import { Chess } from 'chess.js';
 import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice } from './groundedAnswer';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
 import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan } from './reviewStrategicOrientation';
+import { buildOpponentMoveTeaching } from './reviewOpponentCommentary';
 import { detectBadHabits } from './badHabitDetector';
 import { db } from '../db/schema';
 import { voiceFacts } from './coachApi';
@@ -438,6 +439,11 @@ export interface ReviewMoveSegment {
   bestMoveSan: string | null;
   bestMoveUci: string | null;
   narration: string | null;
+  /** Which builder produced `narration` — 'flag' | 'opening-plan' |
+   *  'orientation' | 'per-move' | 'conversion' | 'endgame' | 'opponent'. Null
+   *  when silent. Surfaced to PostHog per ply so a review session is queryable
+   *  (David 2026-07-19: "if post game review doesn't send to posthog, fix it"). */
+  narrationSource?: 'flag' | 'opening-plan' | 'orientation' | 'per-move' | 'conversion' | 'endgame' | 'opponent' | null;
   /** PLAN-IDEA arrows to lead the eye when this segment's narration is a plan
    *  beat (opening-development / middlegame orientation). The board stays put —
    *  these arrows SHOW the plan instead of moving pieces (David 2026-07-19).
@@ -832,6 +838,8 @@ export function buildReviewSegments(
   // orientation (structure anchor + both-sides plans).
   let openingPlanShown = false;
   let orientationShown = false;
+  // Opponent-commentary dedup — name each target square at most once.
+  const oppTargetsSeen = new Set<string>();
   const studentColorWB: 'w' | 'b' | null = playerColor === 'white' ? 'w' : playerColor === 'black' ? 'b' : null;
   for (let i = 0; i < usable; i++) {
     const m = moves[i];
@@ -865,6 +873,8 @@ export function buildReviewSegments(
       const why = explainBestMoveGrounded(fenPair.fenBefore, m.san, m.bestMove, moverColor);
       if (why) narration = `${narration} ${why}`;
     }
+    // Track WHICH builder produced the narration (surfaced to PostHog per ply).
+    let narrationSource: ReviewMoveSegment['narrationSource'] = narration ? 'flag' : null;
     // Teach the STUDENT's silent opening moves (R2). Only good/book moves in
     // the opening phase (flagged moves already narrate above); only the
     // student's own side; only board-true notes (null → stays silent, better
@@ -885,7 +895,7 @@ export function buildReviewSegments(
       && (m.classification === null || m.classification === 'book' || m.classification === 'good')
     ) {
       const dev = buildOpeningDevelopmentPlan(fenPair.fenBefore, studentColorWB);
-      if (dev) { narration = dev.text; planArrows = dev.arrows; openingPlanShown = true; }
+      if (dev) { narration = dev.text; planArrows = dev.arrows; openingPlanShown = true; narrationSource = 'opening-plan'; }
     }
     // (b) Middlegame orientation (structure anchor + both-sides plans), fired
     // once at/after the middlegame threshold. Takes priority over the per-move
@@ -900,7 +910,7 @@ export function buildReviewSegments(
       && (m.classification === null || m.classification === 'book' || m.classification === 'good')
     ) {
       const orientation = buildMiddlegameOrientation(fenPair.fenBefore, studentColorWB);
-      if (orientation) { narration = orientation.text; planArrows = orientation.arrows; orientationShown = true; }
+      if (orientation) { narration = orientation.text; planArrows = orientation.arrows; orientationShown = true; narrationSource = 'orientation'; }
     }
     if (
       narration === null
@@ -911,6 +921,7 @@ export function buildReviewSegments(
       && (m.classification === null || m.classification === 'book' || m.classification === 'good')
     ) {
       narration = buildReviewMoveTeaching(fenPair.fenBefore, m.san);
+      if (narration) narrationSource = 'per-move';
     }
     // §7 CONVERSION / ENDGAME: past the opening cap the walk was "badges only".
     // Name the mate PATTERN (back-rank / smothered) on the move that delivers
@@ -926,9 +937,31 @@ export function buildReviewSegments(
       && (m.classification === null || m.classification === 'book' || m.classification === 'good')
     ) {
       narration = buildReviewConversionTeaching(fenPair.fenBefore, m.san);
+      if (narration) narrationSource = 'conversion';
       if (narration === null && !endgameAnnounced) {
         const phase = nameEndgamePhase(fenPair.fenAfter);
-        if (phase) { narration = `We've reached ${phase}.`; endgameAnnounced = true; }
+        if (phase) { narration = `We've reached ${phase}.`; endgameAnnounced = true; narrationSource = 'endgame'; }
+      }
+    }
+    // OPPONENT-MOVE commentary — what the opponent's move TARGETS in the
+    // student's position (a loose piece, a weak pawn, an outpost). Two people
+    // play the game; the student needs to see the opponent's intentions (David
+    // 2026-07-19). Opponent's own quiet moves only (flagged opp moves already
+    // say "opponent slipped"); each distinct target named once, else silent.
+    if (
+      narration === null
+      && studentColorWB !== null
+      && moverColor !== playerColor
+      && playerColor !== undefined
+      && (m.classification === null || m.classification === 'book' || m.classification === 'good')
+    ) {
+      const opp = buildOpponentMoveTeaching(fenPair.fenBefore, m.san, studentColorWB);
+      const target = opp?.arrows[0]?.endSquare;
+      if (opp && !(target && oppTargetsSeen.has(target))) {
+        narration = opp.text;
+        planArrows = opp.arrows;
+        narrationSource = 'opponent';
+        if (target) oppTargetsSeen.add(target);
       }
     }
     segments.push({
@@ -944,6 +977,7 @@ export function buildReviewSegments(
       bestMoveSan,
       bestMoveUci: m.bestMove,
       narration,
+      narrationSource,
       ...(planArrows && planArrows.length ? { planArrows } : {}),
     });
   }
@@ -959,12 +993,23 @@ function defaultIntroText(params: {
   mistakeCount: number;
 }): string {
   const colorWord = params.playerColor === 'white' ? 'White' : 'Black';
-  const resultWord = params.result === 'win' ? 'a win' : params.result === 'loss' ? 'a loss' : 'a draw';
-  const openingBit = params.openingName ? ` — ${params.openingName}.` : '.';
+  // Derive the student-relative outcome from the raw score + colour. `result`
+  // arrives as the raw PGN score ('1-0'/'0-1'/'1/2-1/2') OR already as
+  // 'win'/'loss'/'draw'. The old ternary only checked the latter, so a raw
+  // '1-0' fell through to "a draw" — the coach opened a WIN by calling it a draw
+  // (David 2026-07-19). Grounded certainty: we computed the result, so state it.
+  const outcome: 'win' | 'loss' | 'draw' =
+    params.result === 'win' || params.result === 'loss' || params.result === 'draw'
+      ? params.result
+      : params.result === '1-0' || params.result === '0-1'
+        ? ((params.result === '1-0') === (params.playerColor === 'white') ? 'win' : 'loss')
+        : 'draw';
+  const resultPhrase = outcome === 'win' ? 'a win' : outcome === 'loss' ? 'a loss' : 'a draw';
+  const openingBit = params.openingName ? ` in the ${params.openingName}` : '';
   const momentBit = params.mistakeCount > 0
-    ? ` A few moments to review along the way.`
-    : ` Mostly clean play — we'll flag what stood out.`;
-  return `Let's walk through this game. You played ${colorWord} and finished with ${resultWord}${openingBit}${momentBit}`;
+    ? ` You had ${params.mistakeCount === 1 ? 'one moment' : `${params.mistakeCount} moments`} worth a second look — let's walk through them together.`
+    : ` Clean play throughout — let's walk it and pull out what worked.`;
+  return `Let's review your game${openingBit} — you had ${colorWord} and it ended in ${resultPhrase}.${momentBit}`;
 }
 
 /**
@@ -1010,10 +1055,15 @@ export async function generateReviewNarration(params: {
   const fenChain = buildFenChain(moves);
   const usableCount = fenChain.length;
 
-  // Count student mistakes for the intro tone.
+  // Count the STUDENT's own mistakes for the intro tone. isCoachMove is
+  // unreliable for a reviewed/imported game (false for both sides), so key on
+  // COLOR — same fix as the recap (#9) and the walk gates. Without it the intro
+  // counted the OPPONENT's errors too and mis-set the tone.
+  const introStudentWB: 'white' | 'black' = playerColor;
   let mistakeCount = 0;
   for (const m of moves.slice(0, usableCount)) {
-    if (m.isCoachMove) continue;
+    const moverColor: 'white' | 'black' = m.ply % 2 === 1 ? 'white' : 'black';
+    if (m.isCoachMove || moverColor !== introStudentWB) continue;
     if (m.classification === 'blunder' || m.classification === 'mistake' || m.classification === 'inaccuracy') {
       mistakeCount += 1;
     }
