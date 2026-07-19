@@ -33,6 +33,7 @@ import { buildMoveReasonOptions } from '../services/moveReasonOptions';
 import { voiceService } from '../services/voiceService';
 import { captureEvent } from '../services/analytics';
 import { getMisconceptionTag } from '../data/misconceptionTags';
+import { principleFor } from '../data/principles';
 import type { MisconceptionSource } from '../types';
 
 /** Sentinel the panel's Hint button submits — the hook treats it as an honest
@@ -139,6 +140,9 @@ export interface UseDiscussionPracticeOptions {
    *  reveal into the chat. Without it, the reveal shows in the transient
    *  teaching card (legacy behavior). */
   onReveal?: (text: string) => void;
+  /** Fires when a slip is classified + logged to the weakness bucket, with
+   *  the position it happened in. Phase 3 (the device quiz) arms off this. */
+  onSlipLogged?: (tag: string, ctx: { fen: string; playedSan: string; bestSan: string }) => void;
 }
 
 const ANALYSIS_DEPTH = 14;
@@ -401,6 +405,18 @@ export function useDiscussionPractice(
         if (loggedTag) {
           const callback = await buildMisconceptionCallback(loggedTag);
           if (callback) note = `${note} ${callback}`;
+          // THE DEVICE (Phase 3, David 2026-07-18) — the curated principle
+          // for the tag, spoken last so the student leaves with the TOOL,
+          // not just the verdict. Curated text, computed tag (G0).
+          const device = principleFor(loggedTag);
+          if (device) note = `${note} ${device}`;
+          if (ctx.bestSan) {
+            opts.onSlipLogged?.(loggedTag, {
+              fen: ctx.args.fenBefore,
+              playedSan: ctx.args.playedSan,
+              bestSan: ctx.bestSan,
+            });
+          }
         }
       } catch {
         /* logging failed — the grounded reveal is already correct */
@@ -441,7 +457,7 @@ export function useDiscussionPractice(
       setTeach(note);
       setPhase('teaching');
     }
-  }, [opts.surface, opts.source, opts.onReveal, reset]);
+  }, [opts.surface, opts.source, opts.onReveal, opts.onSlipLogged, reset]);
 
   // raiseSlipPrompt opens the SLIP picker from KNOWN mistake data (no Stockfish
   // re-eval) — the post-game REVIEW entry point (David 2026-07-06: "I want that

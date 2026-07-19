@@ -24,6 +24,9 @@ import { judgeSequenceAttempt, moverPlies, type SequenceVerdict } from '../../se
 import { pickCameoAnchor, buildCameoPlayback, type CameoAnchor, type CameoPlayback } from '../../services/modelGameMatcher';
 import { voiceFacts } from '../../services/coachApi';
 import { logMisconception } from '../../services/misconceptionService';
+import { buildMisconceptionCallback } from '../../services/misconceptionCallbacks';
+import { principleFor } from '../../data/principles';
+import { buildPrincipleQuiz, quizVerdictLine, type PrincipleQuiz } from '../../services/principleQuiz';
 import { findRewindTarget, type RewindTarget } from '../../services/blunderRewind';
 import { buildTurningPointQuestion, judgeTurningPointPick, type TurningPointQuestion } from '../../services/reviewTurningPoint';
 import { captureEvent } from '../../services/analytics';
@@ -482,8 +485,32 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // bucket, tagged to THIS game (source game-review). It REPLACES the reading
   // challenge on mistakes (same trigger point + the readingChallengesInReview
   // toggle) so the student never gets two prompts on one move.
+  // THE DEVICE QUIZ (Phase 3.3, David 2026-07-18) — after a slip's reveal
+  // states the principle, the student immediately APPLIES it: 2-3 candidate
+  // moves from the SAME position, which passes the device? Candidates +
+  // verdicts are engine-computed (principleQuiz service, G0). Armed here
+  // when the faucet logs a slip; shown ONCE per review after the reveal.
+  const principleQuizRef = useRef<PrincipleQuiz | null>(null);
+  const principleQuizShownRef = useRef(false);
+  const [principleQuizState, setPrincipleQuizState] = useState<PrincipleQuiz | null>(null);
+  const principleQuizStateRef = useRef<PrincipleQuiz | null>(null);
+  useEffect(() => { principleQuizStateRef.current = principleQuizState; }, [principleQuizState]);
+  const armPrincipleQuiz = useCallback((tag: string, ctx: { fen: string; playedSan: string; bestSan: string }): void => {
+    if (principleQuizShownRef.current || principleQuizRef.current) return;
+    void buildPrincipleQuiz({
+      tag,
+      fen: ctx.fen,
+      playedSan: ctx.playedSan,
+      engine: { analyzePosition: (f, d) => stockfishEngine.analyzeWithBudget(f, d, 4000) },
+      depth: 12,
+    }).then((quiz) => {
+      if (quiz && !principleQuizShownRef.current) principleQuizRef.current = quiz;
+    }).catch(() => undefined);
+  }, []);
+
   const reviewFaucet = useDiscussionPractice(true, {
     surface: 'coach-review', interruptive: true, source: 'game-review',
+    onSlipLogged: armPrincipleQuiz,
   });
   // The hook's callbacks are stable (memoized); destructure them so the
   // walk-forward + resume callbacks don't churn on every render (the hook
@@ -543,6 +570,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (shotState || shotReveal || turningQ || rewindOffer) return; // a review question is open
     if (seqStateRef.current) return;     // spot-the-sequence / playback in flight
     if (cameoStateRef.current) return;   // model-game cameo card / playback open
+    if (principleQuizStateRef.current) return; // device quiz open
     if (readingQuizOn) {
       const nextPly = walkPlayback.currentPly + 1;
       const seg = walkNarration?.segments.find((s) => s.ply === nextPly) ?? null;
@@ -635,9 +663,36 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
   const resumeAfterFaucet = useCallback((): void => {
     resetFaucet();
+    // Phase 3.3: an armed device quiz takes the slot right after the reveal —
+    // the student applies the principle on the exact position it was broken
+    // on. ONE per review, and only when the engine build finished in time
+    // (a slow build never blocks the walk).
+    const quiz = principleQuizRef.current;
+    if (quiz && !principleQuizShownRef.current) {
+      principleQuizShownRef.current = true;
+      principleQuizRef.current = null;
+      setPrincipleQuizState(quiz);
+      captureEvent('review_principle_quiz_offered', { tag: quiz.tag, candidates: quiz.candidates.length });
+      void voiceService.speakForced(quiz.ask).catch(() => undefined);
+      return;
+    }
     if (maybeOfferRewind()) return; // the rewind card takes over the advance
     walkPlayback.goForward();
   }, [resetFaucet, walkPlayback, maybeOfferRewind]);
+
+  const handlePrincipleQuizPick = useCallback((san: string | null): void => {
+    const quiz = principleQuizStateRef.current;
+    if (!quiz) return;
+    setPrincipleQuizState(null);
+    if (san !== null) {
+      const line = quizVerdictLine(quiz, san);
+      captureEvent('review_principle_quiz_result', { tag: quiz.tag, picked: san, correct: san === quiz.correctSan });
+      void voiceService.speakForced(line).catch(() => undefined);
+    } else {
+      captureEvent('review_principle_quiz_result', { tag: quiz.tag, picked: null, correct: false });
+    }
+    if (!maybeOfferRewind()) walkPlayback.goForward();
+  }, [maybeOfferRewind, walkPlayback]);
 
   // ── Find-the-shot handlers ────────────────────────────────────────────────
   /** The computed cost line appended to every shot reveal — what the game
@@ -731,6 +786,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     totalAsk: number;
     /** The walk ply the parent shot fired on (bucket metadata). */
     atPly: number;
+    /** Set when the playback follows a VERIFIED fall-off — the closing
+     *  line then teaches the calculation-depth device (Phase 3). */
+    fellOff?: boolean;
   }
   const [seqState, setSeqState] = useState<SeqState | null>(null);
   const seqStateRef = useRef<SeqState | null>(null);
@@ -819,9 +877,19 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     const last = line.plies[line.plies.length - 1];
     const moverIsWhite = line.plies[0].moverColor === 'white';
     const povCp = (moverIsWhite ? 1 : -1) * (line.terminalEvalCp ?? line.rootEvalCp);
-    const closing = last.facts.isMate
+    let closing = last.facts.isMate
       ? "That's the line — all the way to mate."
       : `That's the line — about ${(Math.abs(povCp) / 100).toFixed(1)} pawns better at the end.`;
+    if (state.fellOff) {
+      // THE DEVICE (Phase 3) — a verified fall-off closes with the
+      // calculation-depth tool + the computed "seen this before" history.
+      const device = principleFor('calculation-depth');
+      if (device) closing = `${closing} ${device}`;
+      try {
+        const callback = await buildMisconceptionCallback('calculation-depth');
+        if (callback) closing = `${closing} ${callback}`;
+      } catch { /* history is a bonus, never a blocker */ }
+    }
     try { await voiceService.speakForced(closing); } catch { /* voice off */ }
     setSeqState(null);
     setWalkExplorationFen(null);
@@ -915,7 +983,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         captureEvent('review_sequence_falloff', { reached: state.reached, total: state.totalAsk, at_ply: state.atPly, opening: seg ? openingName : openingName });
         setShotBoardEpoch((e) => e + 1); // snap their move back
         void voiceService.speakForced(`Not quite — ${moveResult.san} lets it slip. Watch the full line.`).catch(() => undefined);
-        void runSequencePlayback({ ...state }, state.ptr);
+        void runSequencePlayback({ ...state, fellOff: true }, state.ptr);
         return;
       }
       // Credit (exact / equivalent / unverified-generous).
@@ -1065,6 +1133,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     cameoScanDoneRef.current = false;
     cameoShownRef.current = false;
     cameoRunTokenRef.current += 1;
+    setPrincipleQuizState(null);
+    principleQuizRef.current = null;
+    principleQuizShownRef.current = false;
   }, [props.gameId]);
 
   // One corpus scan per game, deferred off the mount path.
@@ -2290,6 +2361,28 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
               </div>
             )}
 
+            {/* THE DEVICE QUIZ (Phase 3.3) — apply the principle on the spot:
+                which of these candidate moves passes the device? */}
+            {principleQuizState && (
+              <div data-testid="review-principle-quiz" className="mx-3 my-1 rounded-xl border-2 border-violet-500/40 bg-violet-500/10 px-3 py-2">
+                <div className="text-sm text-violet-100">{principleQuizState.ask}</div>
+                <div className="mt-1.5 flex flex-wrap gap-2">
+                  {principleQuizState.candidates.map((c) => (
+                    <button key={c.san} type="button" data-testid={`principle-quiz-pick-${c.san}`}
+                      onClick={() => { handlePrincipleQuizPick(c.san); }}
+                      className="rounded-lg border border-violet-400/50 px-2.5 py-1 text-xs font-semibold text-violet-200 hover:bg-violet-500/20">
+                      {c.san}
+                    </button>
+                  ))}
+                  <button type="button" data-testid="principle-quiz-skip"
+                    onClick={() => { handlePrincipleQuizPick(null); }}
+                    className="rounded-lg border border-slate-500/50 px-2.5 py-1 text-xs text-slate-300 hover:bg-slate-500/20">
+                    Skip
+                  </button>
+                </div>
+              </div>
+            )}
+
             {/* BLUNDER REWIND — offered once per blunder after its question
                 resolves: jump back to the last holdable moment and hold it. */}
             {rewindOffer && (
@@ -2504,7 +2597,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 <KeyMomentNav
                   moves={moves}
                   currentIndex={walkMoveIndex}
-                  onNavigate={(idx: number) => { cancelSequence(); cancelCameo(); walkPlayback.jumpToPly(idx + 1); }}
+                  onNavigate={(idx: number) => { cancelSequence(); cancelCameo(); setPrincipleQuizState(null); walkPlayback.jumpToPly(idx + 1); }}
                   className=""
                   extraIndices={walkPlayback.hintPlies.map((ply) => ply - 1)}
                 />
@@ -2514,7 +2607,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   moves={moves}
                   openingName={openingName}
                   currentMoveIndex={walkMoveIndex >= 0 ? walkMoveIndex : null}
-                  onMoveClick={(idx: number) => { cancelSequence(); cancelCameo(); walkPlayback.jumpToPly(idx + 1); }}
+                  onMoveClick={(idx: number) => { cancelSequence(); cancelCameo(); setPrincipleQuizState(null); walkPlayback.jumpToPly(idx + 1); }}
                   className="h-full"
                 />
               </div>
@@ -2526,7 +2619,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 tapping jumps the main board to that ply. */}
             <ReviewCitationPreviews
               citations={reviewCitations}
-              onJumpToPly={(ply: number) => { cancelSequence(); cancelCameo(); walkPlayback.jumpToPly(ply); }}
+              onJumpToPly={(ply: number) => { cancelSequence(); cancelCameo(); setPrincipleQuizState(null); walkPlayback.jumpToPly(ply); }}
             />
 
             {/* Missed tactics — ship-1 made this non-empty for every
