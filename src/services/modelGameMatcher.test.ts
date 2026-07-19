@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { matchModelGameCameo, sharedFeatureLines } from './modelGameMatcher';
+import { Chess } from 'chess.js';
+import {
+  matchModelGameCameo,
+  sharedFeatureLines,
+  buildCameoPlayback,
+  pickCameoAnchor,
+} from './modelGameMatcher';
 import { structureSignature } from './boardStructure';
 
 /**
@@ -74,6 +80,56 @@ describe('modelGameMatcher — the ONE cameo, or none (Phase 2)', () => {
     expect(cameo.black.length).toBeGreaterThan(0);
     expect(cameo.momentMoveNumber).toBeGreaterThan(1);
     expect(cameo.pgn.length).toBeGreaterThan(0);
+  });
+
+  it('every matched cameo has a verified PLAYABLE stretch (moment reached in pgn, real tail)', () => {
+    const cameo = matchModelGameCameo(
+      'r1bq1rk1/pp1n1ppp/2pb1n2/3p4/3P4/2N1PN2/PPQ1BPPP/R1B2RK1 w - - 6 9',
+      { openingFamily: 'queens-gambit-declined' },
+    )!;
+    const playback = buildCameoPlayback(cameo);
+    expect(playback).not.toBeNull();
+    expect(playback!.plies.length).toBeGreaterThanOrEqual(4);
+    // Every played ply is legal from the moment position (chess.js truth).
+    const chess = new Chess(playback!.startFen);
+    for (const p of playback!.plies) {
+      expect(() => chess.move(p.san)).not.toThrow();
+      expect(chess.fen()).toBe(p.fenAfter);
+    }
+  });
+
+  it('buildCameoPlayback returns null when the moment is not in the pgn', () => {
+    expect(
+      buildCameoPlayback({
+        pgn: 'e4 e5 Nf3 Nc6 Bb5 a6',
+        momentFen: '5rk1/1b3ppp/4p3/8/P7/4BP2/5P1P/3R2K1 w - - 0 28',
+      }),
+    ).toBeNull();
+  });
+
+  it('pickCameoAnchor finds ONE thematic ply in a game reaching an IQP middlegame', () => {
+    // Walk a plausible student game into the IQP shape and hand the fens over.
+    const chess = new Chess();
+    const sans = ['e4', 'c6', 'd4', 'd5', 'exd5', 'cxd5', 'c4', 'Nf6', 'Nc3', 'e6', 'Nf3', 'Be7', 'cxd5', 'Nxd5', 'Bd3', 'Nc6', 'O-O', 'O-O'];
+    const fens = [chess.fen()];
+    for (const s of sans) {
+      chess.move(s);
+      fens.push(chess.fen());
+    }
+    const anchor = pickCameoAnchor(fens, { openingFamily: 'caro-kann' });
+    expect(anchor).not.toBeNull();
+    expect(anchor!.plyIndex).toBeGreaterThanOrEqual(10);
+    expect(anchor!.cameo.sharedFeatures.length).toBeGreaterThan(0);
+  });
+
+  it('pickCameoAnchor returns null for a short game that never forms a structure', () => {
+    const chess = new Chess();
+    const fens = [chess.fen()];
+    for (const s of ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Ba4', 'Nf6']) {
+      chess.move(s);
+      fens.push(chess.fen());
+    }
+    expect(pickCameoAnchor(fens)).toBeNull();
   });
 
   it('sharedFeatureLines states only features true on BOTH signatures', () => {
