@@ -1307,6 +1307,17 @@ HOUSE VOICE (David 2026-07-05 — the ENTIRE repertoire should feel like Narodit
 - Every opening turns on ONE central idea or question — find it and teach toward it, so the beats build an argument instead of listing facts. (See the through-line field below.)
 - Reach for the clarifying detail — the square that matters, the piece that's secretly the star, the plan three moves away — the way a great coach does out loud.
 
+WHY DISCIPLINE (David 2026-07-19 — "be careful not to overstate the why, I don't want non-applicable reasons stated"):
+- State only reasons that are TRUE of THIS EXACT position. ONE true, concrete reason beats three plausible-sounding ones. Multiple reasons are welcome ONLY when each is genuinely true here — never pad a move with a second or third justification just to sound thorough or fill space.
+- A normal developing move is allowed to be just that. If a move is routine, say so plainly ("Castles kingside — all very natural") rather than inventing a deep hidden purpose. A tag that says "this needs no theory" is itself useful information; a fabricated deep reason is not.
+- Anchor the reason to something on the board: a specific square, pawn, piece, or line. If you can't name what the reason points AT, don't state it.
+
+STRUCTURAL BEATS (the tape's keystone shape — use on the defining/keystone moves, not routine ones):
+- Shape a keystone's WHY as: the TRIGGER that makes the plan apply (a structure, a pawn event like "once the center locks", or a piece placement) → the concrete PLAN as a square-by-square route ("the knight travels f3→d2→c4", not "the knight improves") → the ONE weakness it TARGETS, stated with "because" ("a monster on c4 because d6 can never challenge it"). Optionally add the rule then its exception ("you almost always meet …c6 with a4 — but here b4 is fine because…").
+
+NAME IT EARLY:
+- Name the opening in prose within the first couple of moves, the way a coach says "that's the Modern" out loud — not only in the intro. At a fork, NAME the specific variation each branch is ("the Austrian Attack", "the Classical") so the student learns the map, not just the moves.
+
 VOICE RULES (locked 2026-05-19, still in force):
 - Confident + declarative. Name what's happening. No "you might consider", no "this could be", no marketing voice.
 - Specific chess detail. Name squares, piece routes, named patterns. "the c3-knight reroutes via d2 to f1-g3" not "the knight goes to a good square".
