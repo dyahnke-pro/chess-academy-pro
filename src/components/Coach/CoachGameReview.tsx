@@ -592,8 +592,17 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (readingQuizOn) {
       const nextPly = walkPlayback.currentPly + 1;
       const seg = walkNarration?.segments.find((s) => s.ply === nextPly) ?? null;
+      // The AUTHORITATIVE "is this the student's move?" signal is isCoachMove
+      // (the adapter sets it = color !== playerColor, and the NARRATION uses
+      // it) — NOT the parity-derived seg.playerColor, which disagreed and let
+      // the "Why'd you play that?" picker fire on the OPPONENT's move while the
+      // narration on the SAME ply said "your opponent slipped" (David
+      // 2026-07-19: "set the picker to iscoach move"). moves[nextPly-1] is the
+      // move being questioned; it's the student's iff it isn't a coach move.
+      const nextMove = moves[nextPly - 1] ?? null;
       const isStudentMistake = !!seg
-        && seg.playerColor === playerColor
+        && !!nextMove
+        && !nextMove.isCoachMove
         && (seg.classification === 'inaccuracy' || seg.classification === 'mistake' || seg.classification === 'blunder');
       if (seg && isStudentMistake && !quizzedPliesRef.current.has(nextPly)) {
         quizzedPliesRef.current.add(nextPly);
@@ -637,7 +646,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       }
     }
     walkPlayback.goForward();
-  }, [readingGate, faucetPhase, raiseFaucet, readingQuizOn, walkPlayback, walkNarration, playerColor, openingName, playerRating, shotState, shotReveal, turningQ]);
+  }, [readingGate, faucetPhase, raiseFaucet, readingQuizOn, walkPlayback, walkNarration, playerColor, openingName, playerRating, shotState, shotReveal, turningQ, moves]);
 
   // Advance the walk once the faucet is done (answered + reveal dismissed, or
   // skipped) — the "resume" side of the pause above.
@@ -645,7 +654,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const maybeOfferRewind = useCallback((): boolean => {
     const ply = walkPlayback.currentPly + 1; // the move the walk paused on
     const seg = walkNarration?.segments.find((s) => s.ply === ply);
-    if (!seg || seg.classification !== 'blunder' || seg.playerColor !== playerColor) return false;
+    const move = moves[ply - 1] ?? null;
+    // Only offer the rewind on the STUDENT's own blunder — isCoachMove is the
+    // authoritative side signal (matches the picker fix + the narration), not
+    // the parity-derived seg.playerColor (David 2026-07-19).
+    if (!seg || !move || move.isCoachMove || seg.classification !== 'blunder') return false;
     if (rewindOfferedPliesRef.current.has(ply)) return false;
     rewindOfferedPliesRef.current.add(ply); // one offer per blunder, ever
     const target = findRewindTarget(walkNarration?.segments ?? [], ply, playerColor);
@@ -654,7 +667,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     captureEvent('review_rewind_offered', { blunder_ply: ply, rewind_ply: target.ply });
     void voiceService.speakForced('Before we move on — want to go back to the last moment this was still holdable?').catch(() => undefined);
     return true;
-  }, [walkPlayback, walkNarration, playerColor]);
+  }, [walkPlayback, walkNarration, playerColor, moves]);
 
   const handleRewindAccept = useCallback((): void => {
     const t = rewindOffer;
