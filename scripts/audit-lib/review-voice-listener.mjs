@@ -36,7 +36,7 @@ export async function attachVoiceListener(ctx) {
         /* storage unavailable — the repro's stream checks degrade */
       }
     },
-    { url: `${listener.url}/api/audit-stream`, secret: LOCAL_LISTENER_SECRET },
+    { url: listener.url, secret: LOCAL_LISTENER_SECRET },
   );
   return listener;
 }
