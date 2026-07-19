@@ -33,6 +33,18 @@ const run = async () => {
   const ctx = await browser.newContext(sandboxContextOptions());
   const page = await ctx.newPage();
   const voice = process.env.AUDIT_LISTENER === '1' ? await attachVoiceListener(ctx) : null;
+  const ttsSpoken = [];
+  if (process.env.AUDIT_TTS_LOG === '1') {
+    page.on('request', (r) => {
+      if (/\/api\/tts\?/.test(r.url())) {
+        try {
+          const t = new URL(r.url()).searchParams.get('text');
+          if (t && t !== '.') ttsSpoken.push(t);
+        } catch { /* ignore */ }
+      }
+    });
+  }
+
   const errs = [];
   page.on('pageerror', (e) => errs.push('PAGEERROR: ' + e.message.slice(0, 160)));
   page.on('console', (m) => {
@@ -240,6 +252,10 @@ const run = async () => {
     await voice.stop();
   }
 
+  if (process.env.AUDIT_TTS_LOG === '1') {
+    console.log('\n   FULL TTS TRANSCRIPT (' + ttsSpoken.length + '):');
+    for (const t of ttsSpoken) console.log('   ▸ ' + t);
+  }
   console.log('\nERRORS:', errs.length ? JSON.stringify(errs) : 'none');
   check('zero pageerrors / React key errors', errs.length === 0);
   const failed = results.filter((r) => !r.ok);
