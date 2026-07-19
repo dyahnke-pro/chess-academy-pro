@@ -838,8 +838,12 @@ export function buildReviewSegments(
   // orientation (structure anchor + both-sides plans).
   let openingPlanShown = false;
   let orientationShown = false;
-  // Opponent-commentary dedup — name each target square at most once.
+  // Opponent-commentary dedup — name each target square at most once, and cap
+  // the total so the lighter developing reads never spam (Danya comments the
+  // opponent ~50-60% of moves, not every one).
   const oppTargetsSeen = new Set<string>();
+  let oppCommentCount = 0;
+  const MAX_OPP_COMMENTS = 4;
   // Opponent-psychology read state — was the opponent's LAST move an error, and
   // have we already noted the snowball once?
   let lastOpponentWasError = false;
@@ -971,12 +975,15 @@ export function buildReviewSegments(
       && playerColor !== undefined
       && (m.classification === null || m.classification === 'book' || m.classification === 'good')
     ) {
-      const opp = buildOpponentMoveTeaching(fenPair.fenBefore, m.san, studentColorWB);
+      const opp = oppCommentCount < MAX_OPP_COMMENTS
+        ? buildOpponentMoveTeaching(fenPair.fenBefore, m.san, studentColorWB)
+        : null;
       const target = opp?.arrows[0]?.endSquare;
       if (opp && !(target && oppTargetsSeen.has(target))) {
         narration = opp.text;
         planArrows = opp.arrows;
         narrationSource = 'opponent';
+        oppCommentCount += 1;
         if (target) oppTargetsSeen.add(target);
       }
     }

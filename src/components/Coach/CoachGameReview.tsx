@@ -20,9 +20,10 @@ import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
 import { buildGuidedFindChallenge, buildHoldChallenge, judgeGuidedFindAttempt, GUIDED_FIND_MIN_EVAL_CP, type GuidedFindChallenge } from '../../services/guidedFindTheMove';
 import { computePvLine, renderPlyFactLine, plyFactsString, type PvLine } from '../../services/pvPlayback';
+import { buildReviewMoveTeaching } from '../../services/reviewMoveTeaching';
 import { judgeSequenceAttempt, moverPlies, type SequenceVerdict } from '../../services/sequenceChallenge';
 import { pickCameoAnchor, buildCameoPlayback, type CameoAnchor, type CameoPlayback } from '../../services/modelGameMatcher';
-import { voiceFacts } from '../../services/coachApi';
+import { voiceFacts, voiceReviewLines } from '../../services/coachApi';
 import { logMisconception } from '../../services/misconceptionService';
 import { buildMisconceptionCallback } from '../../services/misconceptionCallbacks';
 import { principleFor } from '../../data/principles';
@@ -995,6 +996,19 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     } catch { line = null; }
     if (betterLineTokenRef.current !== token || !walkMountedRef.current) { onDone(); return; }
     if (!line || line.plies.length === 0) { onDone(); return; }
+    // EVERY move in the shown line gets a why — not just the tactical ones
+    // (David 2026-07-19: "no per move why… quickly moves from move to move, then
+    // states the verdict"). plyFactsString is null on a quiet ply, so fall back
+    // to the positional teaching note. BATCH-WARM the whole line's whys through
+    // the ONE house-voice call (same as the walk) so each is in the register,
+    // not a raw template — one call, no per-ply racing.
+    const rawWhys = line.plies.map((ply, i) => ({
+      id: i,
+      fact: plyFactsString(ply) ?? renderPlyFactLine(ply) ?? buildReviewMoveTeaching(ply.fenBefore, ply.san) ?? '',
+    }));
+    let warmed = new Map<number, string>();
+    try { warmed = await voiceReviewLines(rawWhys.filter((w) => w.fact.length > 0)); } catch { /* raw fallback */ }
+    if (betterLineTokenRef.current !== token || !walkMountedRef.current) { onDone(); return; }
     const intro = seed.bestSan ? `Here's the stronger line — ${seed.bestSan}.` : "Here's the stronger line.";
     try { await voiceService.speakForced(intro); } catch { /* voice off */ }
     for (let i = 0; i < line.plies.length; i++) {
@@ -1003,14 +1017,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       setWalkExplorationFen(ply.fenAfter);
       setWalkExplorationSan(ply.san);
       playMoveSound(ply.san);
-      const facts = plyFactsString(ply);
-      let spoken: string | null = renderPlyFactLine(ply);
-      if (facts) {
-        try { spoken = (await voiceFacts(facts, { intent: 'review-better-line', warm: true })) ?? spoken; } catch { /* fallback */ }
-      }
+      const spoken = warmed.get(i) ?? (rawWhys[i].fact.length > 0 ? rawWhys[i].fact : null);
       if (betterLineTokenRef.current !== token || !walkMountedRef.current) { onDone(); return; }
+      // speakForced resolves on audio-END (voice-promise) on a real device, so
+      // the await paces the board to the ear — one move per spoken why.
       if (spoken) { try { await voiceService.speakForced(spoken); } catch { /* voice off */ } }
-      await new Promise((r) => setTimeout(r, spoken ? 350 : 700));
+      await new Promise((r) => setTimeout(r, spoken ? 400 : 650));
     }
     if (betterLineTokenRef.current !== token || !walkMountedRef.current) { onDone(); return; }
     const moverIsWhite = line.plies[0].moverColor === 'white';

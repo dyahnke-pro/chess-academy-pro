@@ -36,11 +36,21 @@ describe('buildOpponentMoveTeaching (read the opponent — targets in your posit
     expect(beat!.text).toMatch(/d4/);
   });
 
-  it('stays silent on a nothing opponent move (no target)', () => {
-    // A quiet symmetric developing move that targets nothing.
+  it('gives a development read when a minor piece contests the centre', () => {
+    // 3...Nf6 eyes e4 — no loose piece / weak pawn, but it contests the centre,
+    // so the broadened read fires (Danya reads the opponent, not just targets).
     const { fen, san } = beforeLast(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6']);
-    // 3...Nf6 targets e4 (a pawn, defended) — not a weak pawn, no loose piece → silent.
-    expect(buildOpponentMoveTeaching(fen, san, 'w')).toBeNull();
+    const beat = buildOpponentMoveTeaching(fen, san, 'w');
+    expect(beat).not.toBeNull();
+    expect(beat!.text).toMatch(/contest|centre|center|eyeing/i);
+    expect(beat!.text).toMatch(/e4/);
+  });
+
+  it('stays silent on a move that touches nothing central and no target', () => {
+    // A rook lift to a back-rank square — no central squares eyed, no target.
+    const fen = '4k3/8/8/8/8/8/8/R3K3 b - - 0 1';
+    // Black to move; a king shuffle contests nothing.
+    expect(buildOpponentMoveTeaching(fen, 'Kd8', 'w')).toBeNull();
   });
 
   it('returns null when handed the STUDENT\'s own move (only comments the opponent)', () => {

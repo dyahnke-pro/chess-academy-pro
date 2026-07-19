@@ -31,16 +31,20 @@ describe('buildReviewMoveTeaching (grounded per-move review why)', () => {
     expect(t).toMatch(/e5/); // the enemy pawn it hits
   });
 
-  it('stays SILENT on a bishop whose diagonals are blocked by its own pawns (no overstatement)', () => {
-    // 1.e4 d6 2.d4 g6 3.f4 e6 4.Be3 — the e3-bishop is blocked by its own
-    // d4 + f4 pawns; there is no central square it controls → silence.
+  it('gives a light DEVELOPING tag on a blocked bishop — without overstating a diagonal it cannot use (R2)', () => {
+    // 1.e4 d6 2.d4 g6 3.f4 e6 4.Be3 — the e3-bishop is blocked by its own d4/f4
+    // pawns, so it must NOT claim a central diagonal; but R2 wants a why on
+    // opening moves, so it gets the light developing tag (no false specifics).
     const { fen, san } = beforeLast(['e4', 'd6', 'd4', 'g6', 'f4', 'e6', 'Be3']);
-    expect(buildReviewMoveTeaching(fen, san)).toBeNull();
+    const t = buildReviewMoveTeaching(fen, san);
+    expect(t).toMatch(/develop/i);
+    expect(t).not.toMatch(/rakes toward|bears down/i); // no invented central claim
   });
 
-  it('does not invent a reason for a quiet queen move', () => {
+  it('gives a light developing tag on a quiet queen move — no invented specifics (R2)', () => {
     const { fen, san } = beforeLast(['e4', 'd6', 'd4', 'g6', 'f4', 'e6', 'Be3', 'b6', 'c4', 'Bg7', 'Qd2']);
-    expect(buildReviewMoveTeaching(fen, san)).toBeNull();
+    const t = buildReviewMoveTeaching(fen, san);
+    expect(t).toMatch(/develop|comes into the game/i);
   });
 
   it('names the created enemy weakness — a capture that isolates a pawn is a TARGET (§1)', () => {

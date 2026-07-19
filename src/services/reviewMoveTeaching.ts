@@ -130,13 +130,13 @@ export function buildReviewMoveTeaching(
   if (mv.piece === 'n') {
     const targets = knightCentralTargets(chess, mv.to, mv.color);
     if (targets.length) return `The knight bears down on ${list(targets)}, fighting for the center.`;
-    return null;
+    // no central target → fall through to the light developing tag
   }
   if (mv.piece === 'b') {
     if (FIANCHETTO.has(mv.to)) return 'The bishop takes aim along the long diagonal.';
     const targets = bishopCentralTargets(chess, mv.to, mv.color);
     if (targets.length) return `The bishop rakes toward ${list(targets)}.`;
-    return null;
+    // no central target → fall through to the light developing tag
   }
 
   // Pawn moves — structural change (applies to pushes AND captures), then
@@ -183,8 +183,16 @@ export function buildReviewMoveTeaching(
     return null;
   }
 
-  // Queen / rook / king moves in the opening rarely carry a teachable idea on
-  // their own — stay silent rather than invent one.
+  // Any other DEVELOPING move in the opening (a minor with no central target, or
+  // a queen/rook stepping into play) gets a light developing TAG — R2 (Danya):
+  // even a "nothing" move carries a tag ("standard development"), and the tag is
+  // information; ≥80% of opening moves should say SOMETHING. The house-voice pass
+  // varies the phrasing so it never reads as filler. King shuffles and quiet pawn
+  // moves (handled above) stay silent — those aren't development.
+  const DEV_WORD: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
+  if (DEV_WORD[mv.piece]) {
+    return `The ${DEV_WORD[mv.piece]} comes into the game — quiet development, getting the pieces coordinated.`;
+  }
   return null;
 }
 

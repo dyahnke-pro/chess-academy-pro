@@ -115,5 +115,27 @@ export function buildOpponentMoveTeaching(
     }
   } catch { /* fall through */ }
 
+  // 4. Development read — a minor piece stepping in to contest the centre. A
+  //    lighter "read the opponent" note so their moves aren't silent (the caller
+  //    caps how many of these fire, so it never spams). Board-true: only central
+  //    squares the moved piece genuinely attacks (empty or the student's) count.
+  if (movedPiece === 'n' || movedPiece === 'b') {
+    try {
+      const eyed = CENTER_SQUARES.filter((sq) => {
+        const occ = chess.get(sq as Square);
+        if (occ && occ.color === enemy) return false; // its own piece sits there
+        return chess.attackers(sq as Square, enemy).includes(to as Square);
+      });
+      if (eyed.length > 0) {
+        return {
+          text: `Your opponent's ${movedLabel} steps in eyeing ${eyed.join(' and ')} — contesting the centre.`,
+          arrows: eyed.slice(0, 2).map((sq) => ({ startSquare: to, endSquare: sq, color: OPP_AMBER })),
+        };
+      }
+    } catch { /* fall through */ }
+  }
+
   return null;
 }
+
+const CENTER_SQUARES = ['d4', 'd5', 'e4', 'e5'];
