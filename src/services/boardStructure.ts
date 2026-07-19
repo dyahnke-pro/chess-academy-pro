@@ -241,9 +241,15 @@ function computeMaterialFacts(all: Located[]): MaterialFacts {
     counts[p.color][p.type] += 1;
   }
 
-  // Endgame classification only when heavy material is low.
+  // Endgame classification when each side's non-pawn material is down to
+  // roughly two pieces (R+B=8, Q=9, R+R=10). The old both-sides-combined
+  // threshold (<=13) missed plain R+B-vs-R+B and Q+P endings entirely.
   let endgameType: string | null = null;
-  if (nonPawnTotal <= 13) {
+  const nonPawnBySide: Record<Color, number> = {
+    w: counts.w.n * 3 + counts.w.b * 3 + counts.w.r * 5 + counts.w.q * 9,
+    b: counts.b.n * 3 + counts.b.b * 3 + counts.b.r * 5 + counts.b.q * 9,
+  };
+  if (nonPawnBySide.w <= 10 && nonPawnBySide.b <= 10) {
     const label = (c: Color): string => {
       const parts: string[] = [];
       if (counts[c].q) parts.push('Q');
@@ -289,11 +295,67 @@ export interface StructureSignature {
   passedPawnCount: number;
   endgameType: string | null;
   queensOn: boolean;
+  /** Either side has an isolated pawn on the d- or e-file (the isolani
+   *  teaching structure — "play against/with the IQP"). */
+  iqp: boolean;
+  /** Any doubled-pawn file on either side. */
+  doubled: boolean;
+  /** ≥2 central files (c–f) where pawns stand head-to-head blocked —
+   *  the locked-chain shape (French/KID centres). */
+  lockedCenter: boolean;
+  /** Split pawn majorities: the side holding the QUEENSIDE (a–d)
+   *  majority while the other holds the kingside one — the Carlsbad /
+   *  minority-attack / majority-race shape. Null when not split. */
+  queensideMajority: Color | null;
 }
 
 export function structureSignature(fen: string): StructureSignature | null {
   const s = describeStructure(fen);
   if (!s) return null;
+  const iso = [...s.pawns.isolatedPawns.w, ...s.pawns.isolatedPawns.b];
+  const iqp = iso.some((sq) => sq[0] === 'd' || sq[0] === 'e');
+
+  let chess: Chess | null = null;
+  try {
+    chess = new Chess(fen);
+  } catch {
+    chess = null;
+  }
+
+  // Locked centre: central files where a pawn of each colour stands
+  // directly blocked head-to-head.
+  let lockedCenter = false;
+  // Split majorities (strict counts, queenside = files a–d).
+  let queensideMajority: Color | null = null;
+  if (chess) {
+    const allPawns = pieces(chess).filter((p) => p.type === 'p');
+    const pawnAt = (f: string, r: number, c: Color): boolean =>
+      allPawns.some((p) => p.color === c && p.square === `${f}${r}`);
+    let lockedFiles = 0;
+    for (const f of ['c', 'd', 'e', 'f']) {
+      for (let r = 2; r <= 6; r++) {
+        if (pawnAt(f, r, 'w') && pawnAt(f, r + 1, 'b')) {
+          lockedFiles++;
+          break;
+        }
+      }
+    }
+    lockedCenter = lockedFiles >= 2;
+
+    const countWing = (c: Color, wing: 'q' | 'k'): number =>
+      allPawns.filter(
+        (p) =>
+          p.color === c &&
+          (wing === 'q' ? fileIndex(fileOf(p.square)) <= 3 : fileIndex(fileOf(p.square)) >= 4),
+      ).length;
+    const wq = countWing('w', 'q');
+    const bq = countWing('b', 'q');
+    const wk = countWing('w', 'k');
+    const bk = countWing('b', 'k');
+    if (wq > bq && bk > wk) queensideMajority = 'w';
+    else if (bq > wq && wk > bk) queensideMajority = 'b';
+  }
+
   return {
     outpostSquares: s.outposts.map((o) => o.square).sort(),
     oppositeWings: s.kings.oppositeWings,
@@ -301,13 +363,28 @@ export function structureSignature(fen: string): StructureSignature | null {
     passedPawnCount: s.pawns.passedPawns.w.length + s.pawns.passedPawns.b.length,
     endgameType: s.material.endgameType,
     queensOn: s.material.queensOn,
+    iqp,
+    doubled: s.pawns.doubledFiles.w.length > 0 || s.pawns.doubledFiles.b.length > 0,
+    lockedCenter,
+    queensideMajority,
   };
 }
 
-/** Shared-feature overlap score between two positions, 0..1 — the Phase 2
- *  match metric. Weights favor the features Danya cites when comparing
- *  ("same outpost", "same race shape", "same ending"). */
-export function structureMatchScore(a: StructureSignature, b: StructureSignature): number {
+/** Detailed shared-feature overlap between two positions — the Phase 2
+ *  match metric. `score/weight` is the 0..1 ratio; `weight` is how much
+ *  structural evidence PARTICIPATED. A high ratio on a tiny weight is a
+ *  vacuous match (two featureless middlegames) — the matcher must floor
+ *  on BOTH. Weights favor the features Danya cites when comparing
+ *  ("same outpost", "same race shape", "same ending", "the isolani"). */
+export interface StructureMatchDetail {
+  score: number;
+  weight: number;
+}
+
+export function structureMatchDetail(
+  a: StructureSignature,
+  b: StructureSignature,
+): StructureMatchDetail {
   let score = 0;
   let max = 0;
   // Only feature classes PRESENT on at least one side participate — matching
@@ -325,24 +402,67 @@ export function structureMatchScore(a: StructureSignature, b: StructureSignature
     max += 3;
     if (a.oppositeWings && b.oppositeWings) score += 3;
   }
+  // The isolani — a named teaching structure.
+  if (a.iqp || b.iqp) {
+    max += 3;
+    if (a.iqp && b.iqp) score += 3;
+  }
+  // Locked central chains — a named structure class (French/KID centres);
+  // weighted like the isolani so a chain-vs-chain match can carry a cameo.
+  if (a.lockedCenter || b.lockedCenter) {
+    max += 3;
+    if (a.lockedCenter && b.lockedCenter) score += 3;
+  }
+  // Split majorities with the SAME orientation (whose queenside it is
+  // matters — the minority attack runs at a specific side). Same
+  // orientation is a named structure class (Carlsbad) — isolani-class
+  // weight; opposite-orientation splits share only the race idea.
+  if (a.queensideMajority !== null || b.queensideMajority !== null) {
+    max += 3;
+    if (a.queensideMajority !== null && a.queensideMajority === b.queensideMajority) score += 3;
+    else if (a.queensideMajority !== null && b.queensideMajority !== null) score += 1;
+  }
   // Open files.
   if (a.openFiles.length > 0 || b.openFiles.length > 0) {
     max += 2;
     if (a.openFiles.some((f) => b.openFiles.includes(f))) score += 2;
     else if (a.openFiles.length > 0 && b.openFiles.length > 0) score += 1;
   }
+  // Doubled pawns.
+  if (a.doubled || b.doubled) {
+    max += 1;
+    if (a.doubled && b.doubled) score += 1;
+  }
   // Passed pawns.
   if (a.passedPawnCount > 0 || b.passedPawnCount > 0) {
     max += 1;
     if (a.passedPawnCount > 0 && b.passedPawnCount > 0) score += 1;
   }
-  // Endgame type.
+  // Endgame type — exact 3; sharing one side's exact label ("R+minor+P"
+  // vs "R+minor+P vs R+P") 2; both endgames of different types 1.
   if (a.endgameType !== null || b.endgameType !== null) {
     max += 3;
-    if (a.endgameType !== null && a.endgameType === b.endgameType) score += 3;
+    if (a.endgameType !== null && b.endgameType !== null) {
+      if (a.endgameType === b.endgameType) score += 3;
+      else {
+        const sidesA = a.endgameType.split(' vs ');
+        const sidesB = b.endgameType.split(' vs ');
+        score += sidesA.some((s) => sidesB.includes(s)) ? 2 : 1;
+      }
+    }
   }
-  // Queens on/off — always defined, always participates.
-  max += 1;
-  if (a.queensOn === b.queensOn) score += 1;
-  return max > 0 ? score / max : 0;
+  // Queens on/off is a TIEBREAK only — it participates only when real
+  // structural evidence already did, so it can never carry a match alone.
+  if (max > 0) {
+    max += 1;
+    if (a.queensOn === b.queensOn) score += 1;
+  }
+  return { score, weight: max };
+}
+
+/** Ratio form of structureMatchDetail, 0..1. Two positions with no
+ *  participating features score 0. */
+export function structureMatchScore(a: StructureSignature, b: StructureSignature): number {
+  const d = structureMatchDetail(a, b);
+  return d.weight > 0 ? d.score / d.weight : 0;
 }
