@@ -538,3 +538,65 @@ Phase 1 ("stop guessing — instrument") proved itself immediately (caught the
 in-check repro bug in one run). Extend the same attribute to
 ConsistentChessboard / ControlledChessBoard so every coach-surface audit can
 assert board state directly. Not scheduled — David: "possible future todo."
+
+## PHASE 6 — THE OPENING IDEAS LAYER (drafted 2026-07-19 after David's live
+## test; AWAITING DAVID'S SIGN-OFF — do not build unprompted)
+
+David's verdict on the shipped review, testing real imported games: "I heard
+no narration or explanation about my opening moves. No name of the opening,
+no you-left-book, no this-is-why-this-works." And: "I want to hear about the
+main ideas of my opening — what black or white typically do in such
+structures." The moments (Phases 1-5) fire on games engineered to trigger
+them; the ambient teaching layer between the moments does not exist.
+
+### The bar: the tape rubric (data/sources/naroditsky-voice/review-register-rubric.md)
+Extracted 2026-07-19 from 10 transcripts (Pirc Sensei, Pirc Classical deep
+dive, Modern masterclass, Austrian/Hippo, KID masterclass, Scotch, Catalan,
+Accelerated Dragon, Grand Prix, famous-game analysis). Ten auditable gates
+R1-R10; the load-bearing ones for this phase:
+- R1: opening named within 3 plies; variations named as they arise.
+- R2: ≥80% of own-side opening plies (1-16) get a spoken WHY (a ≤5-word
+  "standard development" tag counts; silence is a CONVERSION-phase register).
+- R3: every structure-defining pawn move fires a STRUCTURAL BEAT with the
+  fixed skeleton: ANCHOR (name the structure) → PLAN (square-by-square
+  itinerary) → TARGET (one named square/pawn); optional WARNING + TRANSFER.
+- R4: first off-book move: status + main move + one reason + practical
+  verdict (Phase 4's card covers the quiz form; the SPOKEN line must fire
+  even when the card declines).
+
+### Design (G0-clean — every fact computed, voiceFacts phrases)
+Per-ply fact assembly at walk-prep time (deterministic, no LLM decisions):
+1. BOOK STATUS per ply — masterPlayLookup (already cached/persisted): in
+   book (games count, main-move share) / left book / opponent left book.
+2. OPENING IDENTITY — detectOpening trie walk per ply prefix → name the
+   opening at first stable match (R1), re-name on variation refinement.
+3. STRUCTURAL BEATS — trigger on structure-defining pawn moves (boardStructure
+   signature DELTA: chain formed/locked, majority created, iqp appears, files
+   open). Content sources, in priority order: middlegame-plans.json for the
+   detected opening (pawnBreaks / pieceManeuvers / strategicThemes — already
+   hand-authored + gated), repertoire.json explanation, chess-concepts.json
+   principle passages. Assemble ANCHOR/PLAN/TARGET from those fields; the
+   PLAN is spoken as an itinerary (R3). No plan data for the structure →
+   honest fallback to the principle passage; nothing → silence (empty >
+   generic > invented).
+4. DEVELOPMENT TAGS — quiet own-side developing moves get the ≤5-word tag
+   (computed from the move's mechanics: develops/castles/connects/claims
+   center), satisfying R2 without prose inflation.
+5. All spoken lines assembled as facts → voiceFacts('review-opening-idea',
+   warm) → containment-netted. Segments carry the new narration in
+   ReviewMoveSegment.narration so the existing walk playback speaks it with
+   zero runtime changes.
+
+### The audit (extends the real-game review audit)
+Runs on REAL imported PGNs (David's fixture where present): asserts R1
+(name within 3 plies), R2 (≥80% opening-ply coverage, counted from the
+narration segments), R3 (a structural beat fired for each detected
+signature delta), R4 (departure line spoken or scan-outcome audit says
+why), zero "(passes silently)" strings, and the register checks (no SAN-
+number prefixes, targets named). Tape thresholds are the pass bar — not
+feature-wire assertions.
+
+### Estimate
+Services + tests ~1 day, wiring + audit ~1/2 day. No new data authoring
+required to start (rides existing masterclass plan data); coverage grows
+as openings gain plans.

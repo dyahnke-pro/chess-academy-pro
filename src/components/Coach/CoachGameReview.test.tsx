@@ -472,15 +472,18 @@ describe('CoachGameReview', () => {
     expect(banner).toHaveTextContent('Let us walk this game.');
   });
 
-  it('shows the per-ply narration after stepping forward into a flagged move', async () => {
-    // mockMoves[0] is classification 'good' (silent); step 1 lands
-    // there. makeSegments emits null narration for good moves, so the
-    // banner falls back to the "passes silently" copy.
+  it('shows the played move (never an apology placeholder) on a quiet ply', async () => {
+    // mockMoves[0] is classification 'good' (null narration); step 1 lands
+    // there. The banner shows the SAN — the old "(passes silently)" copy
+    // is banned (David 2026-07-19: an empty teaching layer must not
+    // narrate its own absence).
     await renderWalk();
     fireEvent.click(screen.getByTestId('review-forward-btn'));
 
     await waitFor(() => {
-      expect(screen.getByTestId('review-narration-banner')).toHaveTextContent(/passes silently/);
+      const banner = screen.getByTestId('review-narration-banner');
+      expect(banner).not.toHaveTextContent(/passes silently/);
+      expect(banner).toHaveTextContent(/e4/);
     });
   });
 

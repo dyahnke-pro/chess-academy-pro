@@ -78,10 +78,14 @@ export async function findTheoryDeparture(
     studentRating?: number | null;
     /** Injectable amateur fetch for tests. */
     amateurFetch?: (fen: string, ratings: string) => Promise<{ moves: Array<{ san: string; white: number; draws: number; black: number }> } | null>;
+    /** Outcome diagnosis for observability — set on every return path so a
+     *  silent null is never undiagnosable (David 2026-07-19). */
+    diag?: { reason?: string };
   } = {},
 ): Promise<TheoryDeparture | null> {
   const lookup = opts.lookup ?? defaultLookup;
-  if (fens.length < 2 || sans.length !== fens.length - 1) return null;
+  const diag = opts.diag ?? {};
+  if (fens.length < 2 || sans.length !== fens.length - 1) { diag.reason = 'input-shape'; return null; }
 
   const limit = Math.min(fens.length, MAX_SCAN_PLIES + 1);
   let prev: MasterPlayResult | null = null;
@@ -90,14 +94,15 @@ export async function findTheoryDeparture(
     try {
       result = await lookup(fens[i]);
     } catch {
+      diag.reason = `lookup-error at ply ${i}`;
       return null; // lookup layer down — no honest claim possible
     }
     if (i > 0 && result.totalGames === 0) {
       // fens[i] is the first unknown position → sans[i-1] left book.
-      if (!prev || prev.totalGames < MIN_BOOK_GAMES || prev.moves.length === 0) return null;
+      if (!prev || prev.totalGames < MIN_BOOK_GAMES || prev.moves.length === 0) { diag.reason = `thin-book at ply ${i - 1} (${prev?.totalGames ?? 0} games)`; return null; }
       const departedSan = sans[i - 1];
       const main = prev.moves[0];
-      if (main.san === departedSan) return null; // data artifact — nothing to teach
+      if (main.san === departedSan) { diag.reason = 'transposition-artifact'; return null; } // data artifact — nothing to teach
       const mainMove: DepartureMainMove = {
         san: main.san,
         uci: main.uci ?? uciFor(fens[i - 1], main.san),
@@ -122,6 +127,7 @@ export async function findTheoryDeparture(
       } catch {
         yourLevel = null; // your-level stats are a bonus, never a blocker
       }
+      diag.reason = `found at ply ${i}`;
       return {
         departurePly: i,
         bookFen: fens[i - 1],
@@ -134,6 +140,7 @@ export async function findTheoryDeparture(
     }
     prev = result;
   }
+  diag.reason = 'never-left-book';
   return null; // never left book in the window — nothing to show
 }
 
