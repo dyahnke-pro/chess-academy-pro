@@ -166,3 +166,21 @@ export function containmentCheck(facts: string, out: string): ContainmentVerdict
   }
   return { text: stripped, violations: [] };
 }
+
+/**
+ * AUDIT-ONLY tripwire for the not-yet-inverted LLM lanes (David 2026-07-19:
+ * "Sure add that in. But we need to ground the llm"). Measures — never
+ * mutates: chess terms the output introduces that appear NOWHERE in the
+ * prompt context (invented squares/concepts are the hallucination signal),
+ * so the inversion migration can prioritize the loudest surfaces. The
+ * sentence budget deliberately does not apply (free prose has no facts
+ * baseline to budget against).
+ */
+export interface ContainmentAudit {
+  /** Squares/concepts in `out` absent from the entire prompt context. */
+  introduced: string[];
+}
+
+export function containmentAudit(context: string, out: string): ContainmentAudit {
+  return { introduced: introducedChessTerms(context, out) };
+}

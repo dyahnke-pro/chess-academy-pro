@@ -341,3 +341,20 @@ decision moved to code = an LLM call avoided or shrunk: validator regens gone
 board + "don't hallucinate"), and some surfaces go to ZERO LLM (the review path
 already does — `buildDeterministicNarration` calls the model not once). That is
 what stops the Anthropic-drain scare from being possible. Ship it.
+
+### CONTAINMENT TRIPWIRE — prioritize the remaining conversions by measured trip-rate (David 2026-07-19: "Sure add that in. But we need to ground the llm")
+
+The #815 containment net (voiceContainment) guards every voiceFacts caller
+automatically — the chokepoint pays out on every inverted surface for free.
+For the lanes NOT yet inverted, an AUDIT-ONLY tripwire now measures instead:
+`containmentAudit(context, out)` runs on the no-grounding legacy lane in
+`getCoachChatResponse` (kid lane, game commentary, opt-out callers) and emits
+`claim-validator-trip` with `source=voiceFacts.containmentTripwire` whenever a
+reply introduces a square/concept that appears NOWHERE in its prompt context —
+the invented-content signal. It never alters the reply (a validator on a
+deciding LLM is the disease, per G0; this is a thermometer, not a cure).
+
+USE THE DATA: the trip-rate per `task` (audit-stream live; PostHog for
+history) ranks which remaining tasks hallucinate loudest → convert those
+first. When the inversion completes and the legacy lane dies, delete the
+tripwire with it.

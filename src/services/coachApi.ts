@@ -67,7 +67,7 @@ import { detectBadHabits } from './badHabitDetector';
 import { getUnifiedWeaknessProfile } from './weaknessSpine';
 import { getStrongestOpenings, getMostPlayedOpenings, getWeakestOpenings, getOpeningById } from './openingService';
 import { fuzzyMatchOpening } from './openingFuzzyMatcher';
-import { containmentCheck } from './voiceContainment';
+import { containmentCheck, containmentAudit } from './voiceContainment';
 import { getWeakSpotsForOpening } from './weakSpotService';
 import type { OpeningRecord } from '../types';
 import { getOverviewInsights, getMistakeInsights, getTacticInsights, getOpeningInsights, getTimeTroubleProfile, getLastGameResult, getPlayerStyleProfile } from './gameInsightsService';
@@ -4131,7 +4131,27 @@ export async function getCoachChatResponse(
     // The seal below applies to GROUNDED coach surfaces (chat/teach/mic) whose
     // turn matched no assembler — the actual hallucination hole.
     if (!grounding) {
-      return callOnce(buildSystemPromptFor(), true);
+      // CONTAINMENT TRIPWIRE (David 2026-07-19) — audit-only measurement on
+      // the not-yet-inverted callers (kid lane, commentary, opt-outs): any
+      // square/concept the reply introduces that appears NOWHERE in the
+      // prompt context is the invented-content signal. Never alters the
+      // reply; the trip-rate per task prioritizes the remaining inversion.
+      const legacySystemPrompt = buildSystemPromptFor();
+      const legacyReply = await callOnce(legacySystemPrompt, true);
+      try {
+        const contextText = `${legacySystemPrompt}\n${messages.map((m) => m.content).join('\n')}`;
+        const audit = containmentAudit(contextText, legacyReply);
+        if (audit.introduced.length > 0) {
+          void logAppAudit({
+            kind: 'claim-validator-trip',
+            category: 'subsystem',
+            source: 'voiceFacts.containmentTripwire',
+            summary: `ungrounded lane introduced ${audit.introduced.length} chess term(s) [task=${task}]`,
+            details: JSON.stringify({ task, introduced: audit.introduced.slice(0, 12) }),
+          });
+        }
+      } catch { /* measurement never breaks the reply */ }
+      return legacyReply;
     }
     const surface = grounding.surface ?? 'unknown';
     const sessionId = grounding.sessionId;

@@ -5,6 +5,7 @@ import {
   sentenceBudgetExceeded,
   stripUngroundedDefinitions,
   containmentCheck,
+  containmentAudit,
   squaresIn,
   conceptsIn,
 } from './voiceContainment';
@@ -117,5 +118,27 @@ describe('voiceContainment — the "nothing added" net (Phase 0a)', () => {
       expect(conceptsIn('a back-rank weakness').has('back rank')).toBe(true);
       expect(conceptsIn('the x-ray defense').has('x-ray')).toBe(true);
     });
+  });
+});
+
+describe('containmentAudit — the audit-only tripwire for ungrounded lanes', () => {
+  it('flags squares and concepts absent from the whole prompt context', () => {
+    const context = 'You are a chess coach. The student is working on the knight on c3.';
+    const out = 'Look at f7 — a classic fork target, and think about zugzwang.';
+    const audit = containmentAudit(context, out);
+    expect(audit.introduced).toContain('f7');
+    expect(audit.introduced).toContain('fork');
+    expect(audit.introduced).toContain('zugzwang');
+  });
+
+  it('stays silent when every term the reply uses came from the context', () => {
+    const context = 'The knight on c3 eyes the d5 outpost. A fork on d5 is possible.';
+    const out = 'The knight heads for d5 — the outpost — and the fork idea follows.';
+    expect(containmentAudit(context, out).introduced).toEqual([]);
+  });
+
+  it('never throws on empty inputs', () => {
+    expect(containmentAudit('', '').introduced).toEqual([]);
+    expect(containmentAudit('', 'e4 is strong').introduced.length).toBeGreaterThan(0);
   });
 });
