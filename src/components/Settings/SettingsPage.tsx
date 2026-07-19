@@ -66,7 +66,7 @@ export function SettingsPage(): JSX.Element {
       <div>
         <div
           ref={tabStripRef}
-          className="flex gap-1 rounded-lg p-1 overflow-x-auto"
+          className="flex gap-1 rounded-lg p-1 overflow-x-auto shrink-0"
           style={{ background: 'var(--color-bg-secondary)' }}
         >
           {TABS.map(({ id, label }) => (

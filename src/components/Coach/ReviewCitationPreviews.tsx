@@ -63,7 +63,7 @@ export function ReviewCitationPreviews({ citations, onJumpToPly, limit }: Review
           Key moments ({shown.length})
         </span>
       </div>
-      <div className="flex gap-3 overflow-x-auto pb-1 -mx-1 px-1">
+      <div className="flex gap-3 overflow-x-auto pb-1 -mx-1 px-1 shrink-0">
         {shown.map((c) => (
           <button
             key={c.ply}

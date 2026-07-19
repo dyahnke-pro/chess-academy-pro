@@ -101,7 +101,11 @@ export function CoachReviewListPage(): JSX.Element {
       </p>
 
       {/* Source filter row */}
-      <div className="flex items-center gap-2 max-w-lg mx-auto w-full overflow-x-auto pb-1">
+      {/* shrink-0 is load-bearing: overflow-x-auto zeroes the row's
+          implicit min-height, so without it the column flex crushes
+          the chips to a sliver on short viewports (David's 2026-07-19
+          iPhone screenshot — "hidden tabs"). */}
+      <div className="flex items-center gap-2 max-w-lg mx-auto w-full overflow-x-auto pb-1 shrink-0">
         <Filter size={14} className="text-theme-text-muted shrink-0" />
         {FILTER_BUTTONS.map((b) => {
           const active = filter === b.id;
