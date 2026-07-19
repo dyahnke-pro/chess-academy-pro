@@ -71,7 +71,12 @@ export function sandboxLaunchArgs() {
     return [
       ...SANDBOX_CHROMIUM_ARGS,
       `--proxy-server=${proxy}`,
-      '--proxy-bypass-list=127.0.0.1;localhost;<-loopback>',
+      // NB: never add `<-loopback>` here — that token REMOVES the implicit
+      // loopback bypass (it FORCES 127.0.0.1 through the proxy; the egress
+      // proxy answers those with its own 405, which silently killed the
+      // narration-listener sidecar on 2026-07-19). Explicit entries + the
+      // implicit rule keep loopback direct.
+      '--proxy-bypass-list=127.0.0.1;localhost',
       // The agent egress proxy re-terminates TLS with a MITM endpoint that only
       // speaks TLS 1.2. Chromium's default TLS 1.3 ClientHello (incl. the
       // post-quantum X25519MLKEM key share) makes that endpoint RST the tunnel
