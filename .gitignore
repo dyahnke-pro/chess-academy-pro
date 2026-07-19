@@ -96,3 +96,4 @@ src/data/spine-report-plans.json
 # tsc/vite build in CI); it must be tracked despite the global `dist` rule above.
 !native-plugins/capacitor-stockfish-native/dist/
 !native-plugins/capacitor-stockfish-native/dist/**
+.env*
