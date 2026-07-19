@@ -61,7 +61,7 @@ iankane21 review (+ code reading). Status: ✅ works · ⚠️ partial · ❌ mi
 | Warmth brief/dry/milestone-only [R9] | ✅ (no per-move cheerleading) |
 | Meta-cognitive narration of his own search | ❌ missing |
 | Discipline mantras in conversion ("simple chess, no adventures") [R8] | ❌ missing (conversion phase is silent-but-empty) |
-| Story-as-evidence (famous game / live DB search / personal loss) | ❌ missing |
+| Story-as-evidence (famous game / live DB search / a GM's own loss) | ❌ missing — 🔒 SOURCING GUARD (David 2026-07-19): draw anecdotes/illustrative games from ANY GM with a CITED example, spread across many players — NEVER exclusively Danya's own stories (legal), NEVER verbatim; original prose teaching the public-domain idea, sourced. Emulate the self-deprecating-loss STYLE, don't lift his specific stories. |
 | Psychology-of-opponent reads ("one blunder follows another") | ❌ missing |
 | Dry humor at positions, never the student | ❌ missing |
 
@@ -99,6 +99,45 @@ iankane21 review (+ code reading). Status: ✅ works · ⚠️ partial · ❌ mi
    story-as-evidence, opponent-psychology, dry humor — none present; this is what makes it feel
    like *him* vs a badge-labeler.
 7. **RESULT/MOVE-COUNT BUG.** "Draw · 30 moves" on a 16-move win — a plain correctness bug.
+
+## 🔒 G0 GROUNDING PLAN — the computed source of truth for EVERY item (NO hallucinations)
+
+David 2026-07-19, emphatic: "WE ARE NOT CODING IN HALLUCINATIONS." G0 = the LLM VOICES
+facts computed in code; it invents ZERO chess content. Every feature below names the
+CODE that computes the fact; the model only phrases it (via `voiceFacts`). If a fact
+can't be computed, the feature stays SILENT — never guessed.
+
+| Feature | G0 source of the FACT (computed in code) | LLM's only job |
+|---|---|---|
+| Structural ANCHOR (trigger) | `boardStructure.describeStructure` (center lock / chain / fianchetto / open file) + chess.js piece placement | phrase the named trigger |
+| Structural PLAN (piece route) | the REAL continuation — the game's own moves OR the masters-DB typical maneuver (`lookupMasterPlay` walked), chess.js-validated. **NEVER invent "f3→d2→c4"** | phrase the real route |
+| Structural TARGET ("because X") | `boardStructure` weak-square/pawn detection (backward/isolated pawn, hole, outpost square). Name ONLY a weakness the detector actually finds | phrase the found weakness |
+| WARNING / counter-rule | only when Stockfish confirms the refutation exists (engine eval of the "lazy" move) | phrase the engine-confirmed caveat |
+| TRANSFER / cross-reference | only when a real shared `concept-id` recurs (`chess-concepts.json`); else silent | phrase the recurrence |
+| Opening / variation naming | `detectOpening` + `openingDetectionService` per branch (the DB trie) | say the DB name |
+| Both sides' PLANS | student plan = the game's own continuation + masters typical plan for the structure; opponent plan = same from their side (`lookupMasterPlay`/`boardStructure`) | phrase the computed plans |
+| Book-departure (why-main + verdict) | `scanTheoryDeviation` + masters DB frequency/eval (`lookupMasterPlay`) — main move, game count, win% ARE the DB's | phrase the DB facts |
+| Find-the-move / crusher | `computePvLine` first move = Stockfish best (already G0) | pose the question |
+| Type-not-move | `detectTactics` classifies the move TYPE (check/capture/fork/desperado) | phrase the type |
+| Choice-between-two | Stockfish evals of the two candidate moves | phrase which + why |
+| Goal-first (withhold square) | engine best move; name piece+goal, hide the destination square (code withholds it) | pose the guided question |
+| Hint ladder | properties of the engine best move (piece type, from-square) revealed in stages | phrase each rung |
+| Guess-the-eval | Stockfish eval of the position | pose + reveal the number |
+| Reveal restates LOGIC | `explainBestMoveGrounded` + `pvPlayback` PlyFacts (the concrete mechanism) | phrase the causal chain |
+| **Walk the better line** | `computePvLine(fenBefore, {firstUci: bestMove})` → real engine PV; per-ply why from `PlyFacts`/`renderPlyFactLine` | phrase per-ply |
+| **Walk the main theory line** | `lookupMasterPlay` walked from the departure FEN (the DB's most-played continuation) | phrase per-ply |
+| **Show BOTH lines** | line A = the game's actual moves; line B = the engine PV — both real | phrase the contrast |
+| Model-game cameo | a REAL master game with a matching `structureSignature` (`boardStructure` + masters/`model-games.json`); cite id/players/event | phrase the parallel |
+| Conversion pattern name | `detectTactics` / mate-pattern detector / `boardStructure.endgameType` — name ONLY a detected pattern | say the pattern name |
+| Register texture (metaphor / mini-concept / rule+counter-rule / humor) | **decoration on a TRUE computed fact** — the move/weakness/pattern is computed; the metaphor never adds a chess claim. A mini-concept label applies only when the concept is DETECTED | phrase the true fact in-register |
+| Story-as-evidence | a REAL cited game/anecdote (masters DB / documented game), ANY GM, spread — never invented, never verbatim, never all-Danya (legal) | phrase the sourced story |
+| Opponent-psychology read | computed from the eval curve (a real swing after their prior error → "one slip follows another") | phrase the observed pattern |
+| Result + move count | read straight from the `GameRecord` (result tag + `history.length`) | display the true values |
+
+**The rule for every build:** compute the fact → if computable, `voiceFacts` phrases it → if
+NOT computable, SILENCE. No feature ever asks the LLM for a move, an eval, a line, a plan,
+a weakness, a pattern name, or a "story" it makes up. Audit each with the harness: replay to
+the ply and assert every spoken claim is TRUE on the board (the `narrationAccuracy` contract).
 
 ## Already fixed this session (was broken, now green)
 - Recap counted the OPPONENT's errors → now counts yours (#9).
