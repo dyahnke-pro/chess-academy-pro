@@ -219,6 +219,7 @@ export function CoachReviewSessionPage(): JSX.Element {
   const [game, setGame] = useState<GameRecord | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [analyzing, setAnalyzing] = useState(false);
+  const [analyzeProgress, setAnalyzeProgress] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -251,7 +252,9 @@ export function CoachReviewSessionPage(): JSX.Element {
         if (gameNeedsAnalysis(rec)) {
           setAnalyzing(true);
           try {
-            await analyzeSingleGame(rec.id);
+            await analyzeSingleGame(rec.id, (phase) => {
+              if (!cancelled) setAnalyzeProgress(phase);
+            });
             if (cancelled) return;
             const refreshed = await db.games.get(rec.id);
             if (cancelled) return;
@@ -341,9 +344,9 @@ export function CoachReviewSessionPage(): JSX.Element {
 
   if (!game || !adapted) {
     return (
-      <div className="flex items-center justify-center p-6 flex-1 gap-2 text-theme-text-muted text-sm">
+      <div className="flex items-center justify-center p-6 flex-1 gap-2 text-theme-text-muted text-sm" data-testid="review-analyze-spinner">
         <Loader2 size={16} className="animate-spin" />
-        {analyzing ? 'Preparing your review…' : 'Loading game…'}
+        {analyzing ? (analyzeProgress ?? 'Preparing your review…') : 'Loading game…'}
       </div>
     );
   }

@@ -61,6 +61,27 @@ const INIT_TIMEOUT_MS = 45_000;
 // Abort signal for background suspension
 let _abortAnalysis = false;
 
+// Review-priority pause (David 2026-07-19: opening a review sat on
+// "Preparing your review…" forever behind a 707-game bulk analysis — the
+// single user-blocking game must own the CPU). While paused, the batch
+// loops finish their in-flight game, then idle between games; the flag
+// clears in analyzeSingleGame's finally.
+let _pausedForReview = false;
+
+export function pauseBatchAnalysis(): void {
+  _pausedForReview = true;
+}
+
+export function resumeBatchAnalysis(): void {
+  _pausedForReview = false;
+}
+
+async function waitWhilePaused(): Promise<void> {
+  while (_pausedForReview && !_abortAnalysis) {
+    await new Promise((r) => setTimeout(r, 500));
+  }
+}
+
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
 // MATE_EVAL_THRESHOLD is now exported from engineConstants so all
@@ -347,7 +368,10 @@ async function analyzeGameOnWorker(
 /**
  * Fallback: analyze a single game with the singleton engine (no pool).
  */
-async function analyzeGamePositions(game: GameRecord): Promise<MoveAnnotation[] | null> {
+async function analyzeGamePositions(
+  game: GameRecord,
+  onPosition?: (current: number, total: number) => void,
+): Promise<MoveAnnotation[] | null> {
   const { fens, moves } = replayPgnToFens(game.pgn);
   if (fens.length < 2) return null;
 
@@ -359,6 +383,7 @@ async function analyzeGamePositions(game: GameRecord): Promise<MoveAnnotation[] 
 
   const evals: (number | null)[] = [];
   for (const fen of fens) {
+    onPosition?.(evals.length + 1, fens.length);
     try {
       const analysis: StockfishAnalysis = await stockfishEngine.analyzePosition(fen, ANALYSIS_DEPTH);
       evals.push(analysis.evaluation);
@@ -440,14 +465,24 @@ export async function analyzeSingleGame(
     return game.annotations ?? null;
   }
 
-  onProgress?.('Analyzing positions with Stockfish…');
-  const annotations = await analyzeGamePositions(game);
-  if (!annotations) return null;
+  // The review is BLOCKED on this one game — pause the bulk batch so it
+  // stops competing for the engine/CPU, and surface real per-move progress
+  // (a minutes-long spinner with no counter reads as a hang).
+  pauseBatchAnalysis();
+  try {
+    onProgress?.('Analyzing positions with Stockfish…');
+    const annotations = await analyzeGamePositions(game, (current, total) => {
+      onProgress?.(`Analyzing move ${current} of ${total}…`);
+    });
+    if (!annotations) return null;
 
-  // Store back to DB
-  await db.games.update(gameId, { annotations, fullyAnalyzed: true, analysisDepth: ANALYSIS_DEPTH });
+    // Store back to DB
+    await db.games.update(gameId, { annotations, fullyAnalyzed: true, analysisDepth: ANALYSIS_DEPTH });
 
-  return annotations;
+    return annotations;
+  } finally {
+    resumeBatchAnalysis();
+  }
 }
 
 /**
@@ -658,6 +693,8 @@ export async function analyzeAllGames(
 
       const processNextGame = async (worker: DedicatedWorker): Promise<void> => {
         while (nextGameIdx < games.length && !_abortAnalysis) {
+          await waitWhilePaused(); // a review's single-game analysis owns the CPU
+          if (_abortAnalysis) break;
           const idx = nextGameIdx++;
           const game = games[idx];
 
@@ -686,6 +723,8 @@ export async function analyzeAllGames(
       // Fallback: single engine, sequential
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- mutated by visibilitychange handler
       for (let i = 0; i < games.length && !_abortAnalysis; i++) {
+        await waitWhilePaused(); // a review's single-game analysis owns the CPU
+        if (_abortAnalysis) break;
         const game = games[i];
         onProgress?.({
           currentGame: i + 1,
