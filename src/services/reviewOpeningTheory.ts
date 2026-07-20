@@ -15,6 +15,7 @@
 import { Chess } from 'chess.js';
 import type { MasterPlayResult, MasterPlayMove } from './masterPlayTypes';
 import { lookupMasterPlay } from './masterPlayLookup';
+import { detectOpening } from './openingDetectionService';
 
 /** A candidate move at a branch point, with its master-DB frequency + score. */
 export interface TheoryMove {
@@ -45,6 +46,12 @@ export interface TheoryBranch {
   isSideline: boolean;
   /** The played move isn't in the master DB at this position. */
   leftBook: boolean;
+  /** The named opening/variation the GAME'S line reaches at this ply (DB trie),
+   *  or null — Danya re-names the variation at every branch. */
+  variationName: string | null;
+  /** The named variation the MAINLINE move would reach (for "the main line is
+   *  the Austrian Attack"), or null. */
+  mainlineName: string | null;
 }
 
 export interface OpeningTheoryLecture {
@@ -126,6 +133,8 @@ export async function buildOpeningTheoryLecture(
     // Record a branch when there's genuine choice (2+ known moves) OR the game
     // deviated (a sideline / a departure) — skip forced single-reply positions.
     if (res.moves.length >= 2 || !isMainline) {
+      const variationName = detectOpening(sans.slice(0, i + 1))?.name ?? null;
+      const mainlineName = detectOpening([...sans.slice(0, i), mainlineRaw.san])?.name ?? null;
       branches.push({
         ply: i + 1,
         moveNumber: Math.ceil((i + 1) / 2),
@@ -138,6 +147,8 @@ export async function buildOpeningTheoryLecture(
         isMainline,
         isSideline: playedMove !== null && !isMainline,
         leftBook,
+        variationName,
+        mainlineName,
       });
     }
 
@@ -212,6 +223,17 @@ export function buildTheoryLectureBeats(
     fact: `This is the theory behind the ${lecture.openingName}, the backbone of ${lecture.startGames.toLocaleString()} master games.${ideaClause}`,
   });
 
+  // Only announce a variation NAME when it's new (Danya re-names at each branch,
+  // but doesn't repeat the same name twice in a row).
+  let lastNamed = lecture.openingName;
+  const nameClause = (name: string | null): string => {
+    if (!name || name === lastNamed) return '';
+    lastNamed = name;
+    return ` This is the ${name}.`;
+  };
+  const mainlineNameClause = (name: string | null): string =>
+    !name || name === lastNamed ? '' : ` — the ${name}`;
+
   for (const b of lecture.branches) {
     const side = b.moverColor === 'white' ? 'White' : 'Black';
     if (b.leftBook) {
@@ -222,7 +244,9 @@ export function buildTheoryLectureBeats(
         moveNumber: b.moveNumber,
         moverColor: b.moverColor,
         kind: 'departure',
-        fact: `At move ${b.moveNumber}, this is where the game leaves mainstream theory. The book move for ${side} is ${b.mainline.san} — ${pct(b.mainline.pct)} of master games, scoring ${pct(b.mainline.scoreForMover)}.${sidelineClause(b.sidelines)} Past here you are on your own path.`,
+        // Danya's departure shape: name where book is, what it is, then the
+        // anti-sideline recipe ("when in doubt, keep developing").
+        fact: `At move ${b.moveNumber}, this is where the game leaves mainstream theory. The book move for ${side} is ${b.mainline.san}${mainlineNameClause(b.mainlineName)} — ${pct(b.mainline.pct)} of master games, scoring ${pct(b.mainline.scoreForMover)}.${sidelineClause(b.sidelines)} Past here you're on your own; the guide is simple — keep developing and fight for the centre.`,
       });
     } else if (b.isSideline && b.played) {
       beats.push({
@@ -232,7 +256,7 @@ export function buildTheoryLectureBeats(
         moveNumber: b.moveNumber,
         moverColor: b.moverColor,
         kind: 'sideline',
-        fact: `At move ${b.moveNumber}, the main line is ${b.mainline.san} (${pct(b.mainline.pct)}, scoring ${pct(b.mainline.scoreForMover)}). This game took the sideline ${b.played.san} (${pct(b.played.pct)}, scoring ${pct(b.played.scoreForMover)}) — a known, respectable choice.`,
+        fact: `At move ${b.moveNumber}, the main line is ${b.mainline.san} (${pct(b.mainline.pct)}, scoring ${pct(b.mainline.scoreForMover)}). This game took ${b.played.san} (${pct(b.played.pct)}, scoring ${pct(b.played.scoreForMover)}) — a known, respectable sideline, though the main line presses a touch harder.${nameClause(b.variationName)}`,
       });
     } else {
       beats.push({
@@ -242,7 +266,7 @@ export function buildTheoryLectureBeats(
         moveNumber: b.moveNumber,
         moverColor: b.moverColor,
         kind: 'mainline',
-        fact: `At move ${b.moveNumber}, ${b.mainline.san} is the main line for ${side} — ${pct(b.mainline.pct)} of games, scoring ${pct(b.mainline.scoreForMover)}.${sidelineClause(b.sidelines)}`,
+        fact: `At move ${b.moveNumber}, ${b.mainline.san} is the main line for ${side} — ${pct(b.mainline.pct)} of games, scoring ${pct(b.mainline.scoreForMover)}, the principled choice.${sidelineClause(b.sidelines)}${nameClause(b.variationName)}`,
       });
     }
   }
