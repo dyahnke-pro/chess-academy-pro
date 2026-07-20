@@ -13,6 +13,10 @@ export interface TurningPointSegmentLike {
   evalBefore: number | null;
   evalAfter: number | null;
   classification: string | null;
+  /** The position the mover FACED (before the move) — so the card can preview
+   *  the board at a candidate before the student commits (David 2026-07-19:
+   *  "give board context, step the board to each candidate"). */
+  fenBefore?: string;
 }
 
 export interface TurningPointCandidate {
@@ -21,6 +25,8 @@ export interface TurningPointCandidate {
   label: string;
   /** The move's cost to its mover, in pawns (always > 0 for candidates). */
   swingPawns: number;
+  /** The position to preview when this chip is tapped (before commit). */
+  fenBefore?: string;
 }
 
 export interface TurningPointQuestion {
@@ -63,7 +69,7 @@ export function buildTurningPointQuestion(
   for (const s of segments) {
     const swing = swingPawns(s);
     if (swing !== null && swing >= TURNING_POINT_MIN_SWING_PAWNS) {
-      costed.push({ ply: s.ply, label: moveLabel(s), swingPawns: swing });
+      costed.push({ ply: s.ply, label: moveLabel(s), swingPawns: swing, fenBefore: s.fenBefore });
     }
   }
   if (costed.length < TURNING_POINT_MIN_CANDIDATES) return null;

@@ -602,6 +602,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const [turningQ, setTurningQ] = useState<TurningPointQuestion | null>(null);
   const [turningReveal, setTurningReveal] = useState<{ correct: boolean; text: string } | null>(null);
   const turningAskedRef = useRef(false);
+  // Preview-then-commit for the turning-point chips (David 2026-07-19: "chips
+  // are bare SAN, I can't recall the position"). First tap on a chip STEPS THE
+  // BOARD to that candidate; a second tap (or Confirm) commits it.
+  const [turningPreviewPly, setTurningPreviewPly] = useState<number | null>(null);
 
   // §4 TYPE-NOT-MOVE — "what KIND of move does this call for — a check, a
   // capture, or a quiet move?" Fires ONCE per game at a student position whose
@@ -629,6 +633,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setTurningQ(null);
     setTurningReveal(null);
     turningAskedRef.current = false;
+    setTurningPreviewPly(null);
     setTypeQ(null);
     setTypeReveal(null);
     typeAskedRef.current = false;
@@ -655,6 +660,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     }
     if (turningQ) {
       setTurningQ(null);
+      setTurningPreviewPly(null);
+      setWalkExplorationFen(null);
       walkPlayback.goForward();
       return;
     }
@@ -933,6 +940,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
   const handleTurningPick = useCallback((ply: number): void => {
     if (!turningQ) return;
+    setTurningPreviewPly(null);
+    setWalkExplorationFen(null);
     const correct = judgeTurningPointPick(turningQ, ply);
     // Phase 5: the theme's reprise closes the reveal — but only when it
     // was actually NAMED during the walk (never introduce it cold here).
@@ -947,6 +956,18 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // the student CALLED it — a wrong pick keeps the flat register.
     void voiceService.speakForced(text, correct ? { prosodySpike: true } : undefined).catch(() => undefined);
   }, [turningQ]);
+
+  // First tap PREVIEWS the candidate on the board; a second tap on the SAME chip
+  // commits it (David 2026-07-19: "give board context, step to each candidate").
+  const handleTurningChip = useCallback((cand: { ply: number; fenBefore?: string }): void => {
+    if (turningPreviewPly === cand.ply) { handleTurningPick(cand.ply); return; }
+    setTurningPreviewPly(cand.ply);
+    if (cand.fenBefore) {
+      setWalkExplorationFen(cand.fenBefore);
+      setWalkExplorationSan(null);
+      setWalkExplorationArrows(null);
+    }
+  }, [turningPreviewPly, handleTurningPick]);
 
   // ── TYPE-NOT-MOVE ask — fires once at a student position whose best move is a
   // forcing check/capture. "What KIND of move does this call for?" ───────────
@@ -3208,12 +3229,24 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 <div className="mt-2 flex flex-wrap gap-2">
                   {turningQ.candidates.map((c) => (
                     <button key={c.ply} type="button" data-testid={`turning-point-pick-${c.ply}`}
-                      onClick={() => handleTurningPick(c.ply)}
-                      className="rounded-lg border border-amber-400/50 px-2.5 py-1 text-xs font-semibold text-amber-200 hover:bg-amber-500/20">
+                      onClick={() => handleTurningChip(c)}
+                      className={`rounded-lg border px-2.5 py-1 text-xs font-semibold ${turningPreviewPly === c.ply ? 'border-amber-300 bg-amber-500/30 text-amber-50 ring-1 ring-amber-300' : 'border-amber-400/50 text-amber-200 hover:bg-amber-500/20'}`}>
                       {c.label}
                     </button>
                   ))}
                 </div>
+                <div className="mt-1.5 text-[11px] text-amber-200/70">
+                  {turningPreviewPly !== null
+                    ? 'Board stepped to that moment — tap it again (or Confirm) to lock it in.'
+                    : 'Tap a move to see the position, then confirm your pick.'}
+                </div>
+                {turningPreviewPly !== null && (
+                  <button type="button" data-testid="review-turning-point-confirm"
+                    onClick={() => handleTurningPick(turningPreviewPly)}
+                    className="mt-1.5 rounded-lg border border-amber-400/50 bg-amber-500/20 px-2.5 py-1 text-xs font-semibold text-amber-100 hover:bg-amber-500/30">
+                    Confirm this turning point
+                  </button>
+                )}
               </div>
             )}
             {turningReveal && (

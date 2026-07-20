@@ -43,6 +43,16 @@ describe('buildTurningPointQuestion', () => {
     expect(q!.reveal).toContain('4.0 pawns');
   });
 
+  it('carries each candidate fenBefore so the card can preview the board (David 2026-07-19)', () => {
+    const segments = [
+      seg({ ply: 9, san: 'Qe2', playerColor: 'white', evalBefore: 100, evalAfter: -50, fenBefore: 'FEN-AT-9' }),
+      seg({ ply: 18, san: 'Rd8', playerColor: 'black', evalBefore: -30, evalAfter: 370, fenBefore: 'FEN-AT-18' }),
+    ];
+    const q = buildTurningPointQuestion(segments);
+    expect(q!.candidates.find((c) => c.ply === 9)?.fenBefore).toBe('FEN-AT-9');
+    expect(q!.candidates.find((c) => c.ply === 18)?.fenBefore).toBe('FEN-AT-18');
+  });
+
   it('returns null with fewer than two costed moments (a one-blunder game answers itself)', () => {
     const one = [seg({ ply: 18, san: 'Rd8', playerColor: 'black', evalBefore: -30, evalAfter: 370 })];
     expect(buildTurningPointQuestion(one)).toBeNull();
