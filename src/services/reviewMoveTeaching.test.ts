@@ -102,3 +102,32 @@ describe('nameEndgamePhase (§7 endgame naming)', () => {
     expect(nameEndgamePhase('r2q1rk1/ppp2ppp/2np1n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 8')).toBeNull();
   });
 });
+
+describe('new grounded coverage — luft + king centralization (§2)', () => {
+  it('names luft when a pawn beside the castled king makes air (h3)', () => {
+    // White castled kingside (Kg1), plays h3 — a breathing hole.
+    const fen = 'r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 7';
+    const t = buildReviewMoveTeaching(fen, 'h3');
+    expect(t).toMatch(/luft|breathing hole|back-rank/i);
+  });
+
+  it('does NOT call luft before the king has castled (Kh3-air is not luft on e1)', () => {
+    // King still on e1; h3 is just a pawn move, not luft.
+    const fen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+    const t = buildReviewMoveTeaching(fen, 'h3');
+    expect(t == null || !/luft/i.test(t)).toBe(true);
+  });
+
+  it('names king centralization in an endgame (Ke1-e2 toward the center)', () => {
+    // K+P endgame; White king steps toward the center (e2 is empty).
+    const fen = '8/5k2/8/4p3/8/8/3P4/4K3 w - - 0 1';
+    const t = buildReviewConversionTeaching(fen, 'Ke2');
+    expect(t).toMatch(/center|fighting piece|active king/i);
+  });
+
+  it('does NOT call king centralization with queens still on (not an endgame)', () => {
+    const fen = '3qk3/8/8/8/8/8/3Q4/4K3 w - - 0 1';
+    const t = buildReviewConversionTeaching(fen, 'Ke2');
+    expect(t == null || !/fighting piece/i.test(t)).toBe(true);
+  });
+});

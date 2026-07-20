@@ -180,6 +180,24 @@ export function buildReviewMoveTeaching(
     if (!mv.captured && BROAD_CENTER.has(mv.to) && (toRank === 4 || toRank === 5)) {
       return 'Gains space and cramps the opponent.';
     }
+    // LUFT — a pawn beside the CASTLED king making an escape square. Board-true:
+    // the king sits on its castled back-rank square and this pawn just advanced
+    // one rank on an adjacent file. That's back-rank insurance, a real teaching
+    // point currently spoken as silence.
+    if (!mv.captured) {
+      const king = chess.board().flat().find((c) => c && c.type === 'k' && c.color === mv.color);
+      const backRank = mv.color === 'w' ? '1' : '8';
+      const luftRank = mv.color === 'w' ? '3' : '6';
+      if (
+        king
+        && king.square[1] === backRank
+        && (king.square[0] === 'g' || king.square[0] === 'b' || king.square[0] === 'c') // a castled king
+        && Math.abs(mv.to.charCodeAt(0) - king.square.charCodeAt(0)) <= 1
+        && mv.to[1] === luftRank
+      ) {
+        return 'Makes luft — a breathing hole for the king, so a back-rank check can never turn into mate.';
+      }
+    }
     return null;
   }
 
@@ -302,5 +320,28 @@ export function buildReviewConversionTeaching(
   } catch {
     return null;
   }
-  return nameMatePattern(chess, mv);
+  const mate = nameMatePattern(chess, mv);
+  if (mate) return mate;
+
+  // KING CENTRALIZATION — the king is a fighting piece in the endgame. When the
+  // heavy pieces are off and the king steps toward the center, that's a real
+  // technique worth naming (currently silent). Board-true: no queens, light
+  // material, and the king's move reduces its distance to the center.
+  if (mv.piece === 'k' && !mv.san.startsWith('O-O')) {
+    let pieces = 0;
+    let queen = false;
+    for (const row of chess.board()) {
+      for (const c of row) {
+        if (!c || c.type === 'k') continue;
+        pieces++;
+        if (c.type === 'q') queen = true;
+      }
+    }
+    const centerDist = (sq: string): number =>
+      Math.max(Math.abs((sq.charCodeAt(0) - 97) - 3.5), Math.abs((Number(sq[1]) - 1) - 3.5));
+    if (!queen && pieces <= 8 && centerDist(mv.to) < centerDist(mv.from)) {
+      return "The king marches toward the center — in the endgame it's a fighting piece, and an active king often decides the game.";
+    }
+  }
+  return null;
 }
