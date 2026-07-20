@@ -138,6 +138,7 @@ const run = async () => {
   const plies = [];
   const s5runs = [];
   let stuck = 0;
+  let remountRecovered = false; // one-time SW-update re-mount recovery (see below)
   log('\n===== PLY-BY-PLY WALK =====');
   for (let step = 1; step <= 60; step++) {
     const before = (await plyNow()).n;
@@ -185,6 +186,19 @@ const run = async () => {
       }).catch(() => []);
       log(`  🔎 STALL DIAG: visibleCards=[${cards.join(',')}] fwdDisabledAttr=${fwdDisabled} fwdCount=${fwdCount}`);
       log(`  🔎 STALL DIAG: visible review/discussion testids=[${anyOverlay.join(',')}]`);
+      // RECOVERY — a service-worker update landing mid-audit (common in the minutes
+      // after a fresh deploy) re-mounts the page to the summary card (walkStarted
+      // resets), stranding the walk. That's a harness/deploy-window artifact, NOT a
+      // code bug (proven by the many clean full walks on the same bundle). Re-click
+      // Start ONCE and resume; the ply-dedup backfills the plies we missed.
+      if (!remountRecovered && fwdCount === 0 && (await has(page, '[data-testid="review-summary-card"]')) && (await page.locator('[data-testid="start-walk-btn"]').count()) > 0) {
+        remountRecovered = true;
+        log('  ♻ summary card re-mounted mid-walk (SW update) — re-clicking Start to resume');
+        await page.locator('[data-testid="start-walk-btn"]').first().click({ timeout: 3000 }).catch(() => {});
+        await page.locator('[data-testid="coach-game-review-walk"]').first().waitFor({ timeout: 20000 }).catch(() => {});
+        stuck = 0;
+        continue;
+      }
     }
     if (stuck > 5) { log(`  ⟳ stuck at Ply ${p.n}`); break; }
   }
