@@ -535,6 +535,25 @@ describe('coachFeatureService', () => {
       // The forced finish is FRAMED at its first move (forcing-move concept).
       expect(at(29)).toMatch(/forced|ends in mate|watch it land/i);
     });
+
+    it('delivers the ENUMERATED positional verdict — "you\'re better, here\'s why: 1, 2" (David 2026-07-20 teaching messages)', () => {
+      // Sicilian → Black gets an isolated d5 pawn and White owns the open e-file:
+      // two concrete, board-true assets. With a winning eval, the review gives the
+      // itemized verdict rather than a bare "you're better".
+      const SANS = ['e4', 'c5', 'Nf3', 'e6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'd5', 'exd5', 'exd5', 'Be2', 'Be7', 'O-O', 'O-O', 'Bg5', 'Be6', 'Re1', 'Nc6', 'Nxc6', 'bxc6', 'Bf3', 'Qd6'];
+      const segments = buildReviewSegments(
+        SANS.map((san, i) => move({ ply: i + 1, san, classification: 'good', evaluation: i >= 16 ? 150 : 15 })),
+        'white', 'Sicilian Defense',
+      );
+      const assess = segments.find((s) => s.narrationSource === 'assessment');
+      expect(assess).toBeDefined();
+      expect(assess?.narration).toMatch(/better here/i);
+      // Itemized, board-true assets — the open file AND the isolated pawn.
+      expect(assess?.narration).toMatch(/open e-file/i);
+      expect(assess?.narration).toMatch(/d5 is isolated/i);
+      // Fires at most once.
+      expect(segments.filter((s) => s.narrationSource === 'assessment')).toHaveLength(1);
+    });
   });
 
   describe('buildReviewCitations (Phase 1c — grounded recap/preview spine)', () => {

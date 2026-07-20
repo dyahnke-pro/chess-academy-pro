@@ -12,6 +12,7 @@ import { detectPieceItineraries } from './reviewPieceItinerary';
 import { pickStoryGame } from './reviewStoryGame';
 import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShield } from './reviewSacrifice';
 import { detectForcedMatingSequence, explainMatingSacMechanism } from './reviewForcedSequence';
+import { assessPositionalEdge } from './reviewPositionalAssessment';
 import { detectBadHabits } from './badHabitDetector';
 import { db } from '../db/schema';
 import { voiceFacts, voiceReviewLines } from './coachApi';
@@ -452,7 +453,7 @@ export interface ReviewMoveSegment {
    *  'orientation' | 'per-move' | 'conversion' | 'endgame' | 'opponent'. Null
    *  when silent. Surfaced to PostHog per ply so a review session is queryable
    *  (David 2026-07-19: "if post game review doesn't send to posthog, fix it"). */
-  narrationSource?: 'flag' | 'opening-plan' | 'orientation' | 'per-move' | 'conversion' | 'endgame' | 'opponent' | null;
+  narrationSource?: 'flag' | 'opening-plan' | 'orientation' | 'assessment' | 'per-move' | 'conversion' | 'endgame' | 'opponent' | null;
   /** PLAN-IDEA arrows to lead the eye when this segment's narration is a plan
    *  beat (opening-development / middlegame orientation). The board stays put —
    *  these arrows SHOW the plan instead of moving pieces (David 2026-07-19).
@@ -880,6 +881,11 @@ export function buildReviewSegments(
   // orientation (structure anchor + both-sides plans).
   let openingPlanShown = false;
   let orientationShown = false;
+  // The enumerated POSITIONAL VERDICT ("you're better here, and here's why:
+  // bishop pair, the open file, his weak pawn") — Danya's signature teaching
+  // message (David 2026-07-20). Fired ONCE, when there's a real edge with ≥2
+  // concrete board-true assets to name.
+  let assessmentShown = false;
   // Opponent-commentary dedup — name each target square at most once, and cap
   // the total so the lighter developing reads never spam (Danya comments the
   // opponent ~50-60% of moves, not every one).
@@ -1140,6 +1146,31 @@ export function buildReviewSegments(
     ) {
       const orientation = buildMiddlegameOrientation(fenPair.fenBefore, studentColorWB);
       if (orientation) { narration = orientation.text; planArrows = orientation.arrows; orientationShown = true; narrationSource = 'orientation'; }
+    }
+    // (b2) ENUMERATED POSITIONAL VERDICT — the "you're better here, and here's
+    // WHY: bishop pair, the open file, his weak pawn" message (David 2026-07-20:
+    // "focus on his teaching messages"). Danya never says "White is better" and
+    // stops; he itemizes the concrete assets. Fires once, on the student's own
+    // quiet good move past the middlegame threshold, when there's a genuine edge
+    // (verdict better/worse, not balanced) AND ≥2 board-true assets to name — so
+    // it never fabricates a verdict on a level position (empty > generic).
+    if (
+      narration === null
+      && !isConcreteMove
+      && studentColorWB !== null
+      && !assessmentShown
+      && !m.isCoachMove
+      && moverColor === playerColor
+      && m.ply >= MIDDLEGAME_ORIENTATION_MIN_PLY
+      && (m.classification === null || m.classification === 'book' || m.classification === 'good')
+    ) {
+      const studentPovCp = m.evaluation != null ? (studentColorWB === 'w' ? m.evaluation : -m.evaluation) : null;
+      const assess = assessPositionalEdge(fenPair.fenAfter, studentColorWB, studentPovCp);
+      if (assess.reasons.length >= 2 && assess.verdict && assess.verdict !== 'balanced') {
+        narration = `Step back and take stock — you're ${assess.verdict} here, and it's worth knowing exactly why: ${joinClauses(assess.reasons.slice(0, 3))}.`;
+        assessmentShown = true;
+        narrationSource = 'assessment';
+      }
     }
     // (c) KING-STUCK-IN-THE-CENTRE — the keystone attacking concept, taught as a
     // TEACHING beat (not just inside a sacrifice). Once per game, on the student's

@@ -376,6 +376,25 @@ const run = async () => {
     add('TEACHWHY mechanism-taught', whyTaught, whyTaught ? 'the keystone sac teaches its mechanism (the why)' : 'a mating sac was named but its mechanism/why was never explained');
   }
 
+  // TEACHASSESS — the ENUMERATED positional verdict (David 2026-07-20 teaching
+  // messages: Danya never says "White is better" and stops — he itemizes the
+  // assets). When the assessment beat fires (src='assessment'), it MUST carry a
+  // verdict word AND an itemized asset list (≥2 concrete board-true assets joined
+  // by "and"). It correctly does NOT fire on a sharp attacking game (no quiet
+  // positional edge to enumerate), so SKIP rather than fail when absent — like S5.
+  const assessPly = plies.find((p) => p.src === 'assessment');
+  if (assessPly) {
+    const t = assessPly.narr || '';
+    const hasVerdict = /better here|worse here|in trouble/i.test(t);
+    // Itemized = names ≥2 concrete assets (open file / outpost / isolated pawn /
+    // passed pawn / bishop pair / development lead) joined into a list.
+    const assetHits = (t.match(/open \w-file|outpost on [a-h][1-8]|[a-h][1-8] is isolated|doubled pawns|passed pawn on [a-h][1-8]|bishop pair|further developed/gi) || []).length;
+    const itemized = hasVerdict && assetHits >= 2 && /\band\b/i.test(t);
+    add('TEACHASSESS enumerated-verdict', itemized, itemized ? `verdict + ${assetHits} itemized assets` : `assessment beat malformed: "${t.slice(0, 90)}"`);
+  } else {
+    log('  ⏭  TEACHASSESS skipped — no quiet positional edge to enumerate in this game (sharp/attacking), correct.');
+  }
+
   // ERR — zero page/console errors.
   add('ERR no-errors', errs.length === 0, errs.length ? errs.slice(0, 3).join(' | ') : 'none');
 
