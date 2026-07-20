@@ -6,6 +6,7 @@ import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan } from './revie
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
 import { detectOpening } from './openingDetectionService';
 import { resolveCuratedOpeningIdeas } from './reviewOpeningTheory';
+import { detectPieceItineraries } from './reviewPieceItinerary';
 import { detectBadHabits } from './badHabitDetector';
 import { db } from '../db/schema';
 import { voiceFacts, voiceReviewLines } from './coachApi';
@@ -847,6 +848,11 @@ export function buildReviewSegments(
 ): ReviewMoveSegment[] {
   // Curated, opening-specific ideas for the dev-plan beat (null → uncurated).
   const curatedOpeningIdeas = resolveCuratedOpeningIdeas(openingName ?? null);
+  // §1 piece-route itineraries — the student's REAL reroutes in this game
+  // ("f3–d2–c4"), keyed by the ply the maneuver completes (G3, from the moves).
+  const pieceItineraries = playerColor
+    ? detectPieceItineraries(moves.map((m) => m.san), playerColor, { budget: 2 })
+    : new Map<number, { text: string }>();
   const fenChain = buildFenChain(moves);
   const usable = fenChain.length;
   const segments: ReviewMoveSegment[] = [];
@@ -985,6 +991,17 @@ export function buildReviewSegments(
         narration = first ? `You're playing into the ${named}.` : `This has become the ${named}.`;
         narrationSource = 'opening-plan';
       }
+    }
+    // §1 PIECE ITINERARY — narrate the student's real reroute as a journey
+    // ("f3–d2–c4") on the ply it completes. Grounded in their own moves (G3);
+    // fires on a quiet student move so it doesn't clobber a flag/plan beat.
+    if (
+      narration === null
+      && moverColor === playerColor
+      && (m.classification === null || m.classification === 'book' || m.classification === 'good')
+    ) {
+      const itin = pieceItineraries.get(m.ply);
+      if (itin) { narration = itin.text; narrationSource = 'per-move'; }
     }
     if (
       narration === null
