@@ -295,6 +295,20 @@ function sidelineClause(sidelines: TheoryMove[]): string {
   return ` The other main tries are ${named[0].san} (${pct(named[0].pct)}) and ${named[1].san} (${pct(named[1].pct)}).`;
 }
 
+/** WHY the main line is the main line — grounded in the DATA (§3 gap). The main
+ *  move is always the most-PLAYED (that's how it's picked); the extra insight is
+ *  whether it ALSO scores best. Both → that's why it's main; if a sideline scores
+ *  higher, say so honestly (popularity ≠ always the top score). */
+function whyMainClause(mainline: TheoryMove, sidelines: TheoryMove[]): string {
+  const named = sidelines.filter((s) => s.games > 0);
+  if (named.length === 0) return '';
+  const bestSide = Math.max(...named.map((s) => s.scoreForMover));
+  if (mainline.scoreForMover >= bestSide) {
+    return ' It leads the pack on BOTH counts — most-played and best-scoring — which is exactly why it earns the "main line" label.';
+  }
+  return ' Interestingly it\'s the most POPULAR without being the top-scorer here — a practical, well-trodden choice more than a proven edge.';
+}
+
 /**
  * Turn a lecture into playable, grounded beats. `ideas` (optional) are the
  * opening's known key ideas (from repertoire.json / the concept corpus) — when
@@ -367,7 +381,7 @@ export function buildTheoryLectureBeats(
         moveNumber: b.moveNumber,
         moverColor: b.moverColor,
         kind: 'mainline',
-        fact: `At move ${b.moveNumber}, ${b.mainline.san} is the main line for ${side} — ${pct(b.mainline.pct)} of games, scoring ${pct(b.mainline.scoreForMover)}, the principled choice.${whySentence}${sidelineClause(b.sidelines)}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ' Let me show you where it leads.' : ''}`,
+        fact: `At move ${b.moveNumber}, ${b.mainline.san} is the main line for ${side} — ${pct(b.mainline.pct)} of games, scoring ${pct(b.mainline.scoreForMover)}, the principled choice.${whySentence}${whyMainClause(b.mainline, b.sidelines)}${sidelineClause(b.sidelines)}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ' Let me show you where it leads.' : ''}`,
         diveFromFen: b.diveFromFen ?? undefined,
         dive: b.mainlineDive.length >= 2 ? b.mainlineDive : undefined,
       });

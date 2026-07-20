@@ -156,4 +156,21 @@ describe('buildTheoryLectureBeats — grounded playable beats', () => {
     const outro = beats.find((b) => b.kind === 'outro');
     expect(outro?.fact).toMatch(/takeaway/i);
   });
+
+  it('explains WHY the main line is main — grounded in the data (§3)', async () => {
+    // A mainline that is both most-played AND best-scoring → "both counts".
+    const { fens, sans } = chain(['e4', 'e5', 'Nf3']); // 2.Nf3 IS the main line (played)
+    const lookup = async (fen: string): Promise<MasterPlayResult> => {
+      if (fen.startsWith('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')) return res(fen, [mv('e4', 600, 0.55), mv('d4', 400, 0.5)]);
+      if (fen.startsWith('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b')) return res(fen, [mv('e5', 500, 0.4, 0.3, 0.3), mv('c5', 500, 0.42, 0.28, 0.3)]);
+      // after 1...e5: Nf3 most-played AND best white score, Bc4 a lower-scoring sideline
+      if (fen.startsWith('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w')) return res(fen, [mv('Nf3', 800, 0.56), mv('Bc4', 150, 0.5), mv('Nc3', 100, 0.48)]);
+      return res(fen, []);
+    };
+    const lec = await buildOpeningTheoryLecture(fens, sans, "King's Pawn", { lookup });
+    const beats = buildTheoryLectureBeats(lec!, ['fight for the centre']);
+    const mainBeats = beats.filter((b) => b.kind === 'mainline' || b.kind === 'departure');
+    // At least one mainline beat explains the "why it's main" from the data.
+    expect(mainBeats.some((b) => /most-played and best-scoring|both counts|popular without being the top/i.test(b.fact))).toBe(true);
+  });
 });
