@@ -220,7 +220,10 @@ NEVER BUILD (deliberate inversion — in-game habits we reject):
 STAYS ON REVIEW (retrospective register — the next build targets here):
 - Type-not-move question (B3) — detectTactics classifies the move TYPE. ❌
 - Trap question / most-popular-wrong-answer (B7) — Stockfish 2nd line. ❌
-- Hint LADDER on the find-shot (B6, currently single reveal). 🟡
+- Hint LADDER on the find-shot (B6). ✅ shipped (dfd4e3e) — piece→from→move.
+- Opening theory tour: per-move WHY on best lines + depth to move 12. ✅
+  shipped (13a5e33 / 8068e51) — David's "A / theory 1-12 locked in."
+- Opponent structure + development read (the loud live-test miss). ❌ NEXT.
 - Structural pawn beat anchor→plan→target per pawn event (R3). 🟡
 - Variation re-naming inside the move-walk (A2). 🟡
 - Cameo variety / transfer beat (C13/R10). 🟡

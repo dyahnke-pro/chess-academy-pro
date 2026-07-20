@@ -139,3 +139,65 @@ export function buildOpponentMoveTeaching(
 }
 
 const CENTER_SQUARES = ['d4', 'd5', 'e4', 'e5'];
+
+/**
+ * The opponent STRUCTURE + DEVELOPMENT read — the loud miss from David's live
+ * test (2026-07-19: "I did not hear what structure my opponent was using… I
+ * think my opponent made too many pawn moves in the opening which sacrificed
+ * development"). A once-per-game observation, fired in the opening, that names
+ * the opponent's pawn-heavy setup and the development lag it created.
+ *
+ * Fully grounded (G0): counts the opponent's OWN pawn pushes vs their minor-
+ * piece development from the SANs actually played, and reads how many of their
+ * knights/bishops still sit on the home rank in the CURRENT position. Returns a
+ * read only when the lag is REAL — pawn-heavy AND ≥2 minors still home — else
+ * null (no read, no words; empty > invented). No arrows: the observation is
+ * about the whole setup, not one square, and a fabricated "point here" arrow
+ * would violate the lead-the-eye contract.
+ *
+ * @param oppSansSoFar the opponent's own moves in order (student's excluded)
+ * @param fenNow the position at the beat (the opponent's home rank is read here)
+ * @param studentColorWB the student's colour (opponent is the other side)
+ */
+export function buildOpponentDevelopmentRead(
+  oppSansSoFar: string[],
+  fenNow: string,
+  studentColorWB: 'w' | 'b',
+): PlanBeat | null {
+  if (oppSansSoFar.length < 5) return null; // too early to judge development
+  const enemy: 'w' | 'b' = studentColorWB === 'w' ? 'b' : 'w';
+
+  let pawnMoves = 0;
+  let devMoves = 0; // minor-piece development + castling
+  for (const san of oppSansSoFar) {
+    if (san.startsWith('O-O')) { devMoves++; continue; }
+    const first = san[0];
+    if (first >= 'a' && first <= 'h') pawnMoves++;          // pawn move / capture
+    else if (first === 'N' || first === 'B') devMoves++;    // knight/bishop move
+    // R/Q/K moves count as neither — an early rook lift or queen sortie is not
+    // development, and shouldn't excuse a pawn-heavy opening.
+  }
+
+  // How many minor pieces still sit on the opponent's home rank RIGHT NOW.
+  let undevMinors = 0;
+  try {
+    const chess = new Chess(fenNow);
+    const rankIdx = enemy === 'w' ? 7 : 0; // board()[0] = rank 8, [7] = rank 1
+    for (const cell of chess.board()[rankIdx]) {
+      if (cell && cell.color === enemy && (cell.type === 'n' || cell.type === 'b')) undevMinors++;
+    }
+  } catch {
+    return null;
+  }
+
+  // The read only fires on a REAL lag: several pawn moves, more pawns than
+  // pieces, and ≥2 minors still home. Anything softer stays silent.
+  if (pawnMoves >= 4 && pawnMoves > devMoves && undevMinors >= 2) {
+    const minorWord = undevMinors >= 3 ? 'three minor pieces' : 'two minor pieces';
+    return {
+      text: `Look at your opponent's setup — ${pawnMoves} pawn moves already, and ${minorWord} still sitting on the back rank. All those pawn pushes came at the cost of development. That's your cue to take over: get your pieces active and open the position before they ever catch up.`,
+      arrows: [],
+    };
+  }
+  return null;
+}

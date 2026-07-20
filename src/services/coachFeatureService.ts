@@ -3,7 +3,7 @@ import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeS
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
 import { plyFactsForMove } from './pvPlayback';
 import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan } from './reviewStrategicOrientation';
-import { buildOpponentMoveTeaching } from './reviewOpponentCommentary';
+import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
 import { detectBadHabits } from './badHabitDetector';
 import { db } from '../db/schema';
 import { voiceFacts, voiceReviewLines } from './coachApi';
@@ -860,12 +860,18 @@ export function buildReviewSegments(
   // have we already noted the snowball once?
   let lastOpponentWasError = false;
   let psychologyReadDone = false;
+  // Opponent structure + development read — a once-per-game observation (David
+  // 2026-07-19 live test). Accumulate the opponent's own SANs as we walk.
+  const opponentSans: string[] = [];
+  let opponentDevReadShown = false;
   const studentColorWB: 'w' | 'b' | null = playerColor === 'white' ? 'w' : playerColor === 'black' ? 'b' : null;
   for (let i = 0; i < usable; i++) {
     const m = moves[i];
     const fenPair = fenChain[i];
     const fullMove = Math.ceil(m.ply / 2);
     const moverColor: 'white' | 'black' = m.ply % 2 === 1 ? 'white' : 'black';
+    // Track the opponent's own moves for the development read below.
+    if (moverColor !== playerColor) opponentSans.push(m.san);
     const rawBestSan = uciToSanAt(m.bestMove, fenPair.fenBefore);
     // Defense-in-depth for games analysed BEFORE the source fix: never name the
     // move that was actually played as the "better" move. If the stored best
@@ -987,6 +993,27 @@ export function buildReviewSegments(
       if (narration === null) {
         const rich = plyFactsForMove(fenPair.fenBefore, m.san);
         if (rich) { narration = rich; narrationSource = 'per-move'; }
+      }
+    }
+    // OPPONENT STRUCTURE + DEVELOPMENT read — once per game, on an opponent's
+    // quiet move in the opening, when they're provably pawn-heavy and lagging in
+    // development (David 2026-07-19 live test). Fires BEFORE the per-move target
+    // commentary so this rarer, structural observation wins its one slot.
+    if (
+      narration === null
+      && studentColorWB !== null
+      && moverColor !== playerColor
+      && playerColor !== undefined
+      && !opponentDevReadShown
+      && m.ply >= 10
+      && m.ply <= OPENING_TEACH_MAX_PLY
+      && (m.classification === null || m.classification === 'book' || m.classification === 'good')
+    ) {
+      const devRead = buildOpponentDevelopmentRead(opponentSans, fenPair.fenAfter, studentColorWB);
+      if (devRead) {
+        narration = devRead.text;
+        narrationSource = 'opponent';
+        opponentDevReadShown = true;
       }
     }
     // OPPONENT-MOVE commentary — what the opponent's move TARGETS in the

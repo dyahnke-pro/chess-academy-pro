@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { buildOpponentMoveTeaching } from './reviewOpponentCommentary';
+import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
 
 /** Play a SAN list; return the FEN before the LAST move + that move. */
 function beforeLast(sans: string[]): { fen: string; san: string } {
@@ -58,5 +58,51 @@ describe('buildOpponentMoveTeaching (read the opponent — targets in your posit
     // student's, not the opponent's → null.
     const fen = new Chess().fen();
     expect(buildOpponentMoveTeaching(fen, 'e4', 'w')).toBeNull();
+  });
+});
+
+/** Play a game; return the FINAL fen + the list of BLACK's SANs (the opponent
+ *  when the student is White). */
+function blackSans(sans: string[]): { fen: string; opp: string[] } {
+  const c = new Chess();
+  const opp: string[] = [];
+  sans.forEach((s, i) => { c.move(s); if (i % 2 === 1) opp.push(s); });
+  return { fen: c.fen(), opp };
+}
+
+describe('buildOpponentDevelopmentRead (structure + development lag — David 2026-07-19)', () => {
+  it('fires when the opponent is pawn-heavy with minors still home', () => {
+    // Student = White develops; Black shoves six pawns, never a piece.
+    const { fen, opp } = blackSans(['e4', 'a6', 'd4', 'b6', 'Nf3', 'c6', 'Bc4', 'd6', 'Nc3', 'e6', 'O-O', 'g6']);
+    const beat = buildOpponentDevelopmentRead(opp, fen, 'w');
+    expect(beat).not.toBeNull();
+    // grounded pawn-move count + the development-lag point.
+    expect(beat!.text).toMatch(/6 pawn moves/);
+    expect(beat!.text).toMatch(/minor pieces|back rank|development/i);
+    // no fabricated arrow (the observation is about the whole setup).
+    expect(beat!.arrows).toHaveLength(0);
+  });
+
+  it('stays silent when the opponent develops normally', () => {
+    // Black develops pieces (e5, Nc6, Nf6, Bc5, O-O) — no lag, no read.
+    const { fen, opp } = blackSans(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'Nc3', 'Bc5', 'd3', 'O-O']);
+    expect(buildOpponentDevelopmentRead(opp, fen, 'w')).toBeNull();
+  });
+
+  it('stays silent too early to judge (fewer than 5 opponent moves)', () => {
+    const { fen, opp } = blackSans(['e4', 'a6', 'd4', 'b6']);
+    expect(buildOpponentDevelopmentRead(opp, fen, 'w')).toBeNull();
+  });
+
+  it('works for a Black student — reads a pawn-heavy WHITE opponent', () => {
+    // Student = Black; opponent = White pushes pawns, leaves minors home.
+    const c = new Chess();
+    const white: string[] = [];
+    ['a3', 'd6', 'b3', 'Nf6', 'c3', 'g6', 'd3', 'Bg7', 'e3', 'O-O', 'g3', 'c5'].forEach((s, i) => {
+      c.move(s); if (i % 2 === 0) white.push(s);
+    });
+    const beat = buildOpponentDevelopmentRead(white, c.fen(), 'b');
+    expect(beat).not.toBeNull();
+    expect(beat!.text).toMatch(/pawn moves/);
   });
 });
