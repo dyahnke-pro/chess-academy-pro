@@ -189,13 +189,20 @@ export function buildHoldChallenge(fen: string, bestUci: string): GuidedFindChal
     const mover: 'white' | 'black' = fen.split(' ')[1] === 'b' ? 'black' : 'white';
     why = describeMoveGeometry(fen, p.san, mover);
   } catch { /* geometry is a bonus */ }
+  const hint = `The holding move is ${p.san}${why ? ` — it ${why}` : ''}.`;
   return {
     question: `This was the last moment the game was still in your hands. Your ${p.pieceName} keeps it together — where does it need to be?`,
     answerSan: p.san,
     from: p.from,
     to: p.to,
     fen,
-    hint: `The holding move is ${p.san}${why ? ` — it ${why}` : ''}.`,
+    hint,
+    // Same escalating ladder as the find-the-shot: piece → from-square → move.
+    hintLadder: [
+      `It's a ${p.pieceName} move.`,
+      `The ${p.pieceName} you want comes from ${p.from}.`,
+      hint,
+    ],
     confirm: `There it is — ${p.san}. That keeps the game.`,
     retry: 'Not quite — the position can still be held. Look again.',
   };

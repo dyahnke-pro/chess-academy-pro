@@ -147,7 +147,7 @@ export async function buildOpeningTheoryLecture(
 ): Promise<OpeningTheoryLecture | null> {
   if (fens.length < 2 || sans.length < 1) return null;
   const lookup =
-    opts.lookup ?? ((fen: string) => lookupMasterPlay(fen, { trigger: 'manual', surface: 'game-review' }));
+    opts.lookup ?? ((fen: string) => lookupMasterPlay(fen, { triggeredBy: 'manual', surface: 'game-review' }));
 
   const branches: TheoryBranch[] = [];
   let departurePly: number | null = null;
