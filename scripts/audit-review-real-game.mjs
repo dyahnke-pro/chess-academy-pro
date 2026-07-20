@@ -305,6 +305,32 @@ const run = async () => {
   }
   add('NOWINDFALL recapture-not-a-win', windfalls.length === 0, windfalls.length ? windfalls.slice(0, 3).join(' | ') : 'no recapture claimed a material windfall');
 
+  // TEACHSAC — a sacrifice must TEACH its compensation, not just be named (David
+  // 2026-07-20, narrating->teaching). If any line names a sacrifice, some line in
+  // the walk must give the board-true payoff (king exposure / development lead /
+  // winning verdict). This is the narrating-vs-teaching contract for the sac.
+  const anySac = plies.some((p) => /\bsacrifice\b|\bsacrifices\b/i.test(p.narr || ''));
+  if (anySac) {
+    const taught = plies.some((p) => /stuck in the cent|ahead in development|already on top|holds up completely/i.test(p.narr || ''));
+    add('TEACHSAC compensation-taught', taught, taught ? 'the sacrifice teaches its compensation' : 'a sacrifice was named but its compensation was never taught');
+  }
+
+  // TEACHFORCED — a game that ends in a forced checking run must FRAME the finish
+  // (the forcing-move / calculate-to-the-end concept), then the walk plays it out.
+  // Re-derive the run here (chess.js) so the audit checks the concept, not text.
+  if (gameEndsInMate) {
+    const chk = new Chess();
+    const inCheck = []; const gives = [];
+    let legal = true;
+    for (const s of SANS) { try { inCheck.push(chk.inCheck()); if (!chk.move(s)) { legal = false; break; } gives.push(/[+#]$/.test(s)); } catch { legal = false; break; } }
+    let runLen = 0;
+    if (legal) { let start = SANS.length - 1; for (let i = SANS.length - 1; i >= 0; i--) { if (gives[i] || inCheck[i]) start = i; else break; } runLen = SANS.length - start; }
+    if (runLen >= 3) {
+      const framed = plies.some((p) => /forced|ends in mate|watch it land|every move is a check/i.test(p.narr || ''));
+      add('TEACHFORCED forced-finish-framed', framed, framed ? 'the forced finish is framed for the student' : 'the forced mating run was never framed as forced');
+    }
+  }
+
   // ERR — zero page/console errors.
   add('ERR no-errors', errs.length === 0, errs.length ? errs.slice(0, 3).join(' | ') : 'none');
 
