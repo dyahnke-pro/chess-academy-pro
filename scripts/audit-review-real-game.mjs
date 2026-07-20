@@ -228,12 +228,16 @@ const run = async () => {
   add('R2 why-density>=80%', density >= 0.8, `${withWhy.length}/${studentOpening.length} = ${(density * 100).toFixed(0)}%`);
 
   // PLAN — both plan beats fired (opening developing + middlegame majority/race).
-  const openingPlan = plies.some((p) => /out of the opening|develop behind|claim the (centre|center)|develop.*castle/i.test(p.narr || ''));
-  // The middlegame PLAN is whatever the position calls for — a pawn-majority /
-  // opposite-wing race in a quiet game, OR the king-hunt in an attacking game
-  // (David 2026-07-20: don't fire a bogus majority plan while the enemy king is
-  // exposed; the attack IS the plan). Accept either register as a valid mid plan.
-  const midPlan = plies.some((p) => /majority|opposite wings|pawn(s)? forward|push those|storm|stuck in the (centre|center|middle)|marooned in the (centre|center)|pile (on|up)|punish the lag|throw your pieces|open lines|before they (ever )?(castle|scurry|wriggle)/i.test(p.narr || ''));
+  // Check the DETERMINISTIC beat source tag, not the WARMED prose — the house-
+  // voice pass rewords each beat non-deterministically, so a regex over the
+  // spoken text is brittle (it passed one run, missed the next). The beat's
+  // data-narration-source is stable: 'opening-plan' for the developing plan,
+  // 'orientation' for the middlegame plan (majority race OR king-hunt — both
+  // carry 'orientation'). That's the real "did the plan beat fire" signal.
+  const openingPlan = plies.some((p) => p.src === 'opening-plan')
+    || plies.some((p) => /out of the opening|develop behind|claim the (centre|center)|develop.*castle/i.test(p.narr || ''));
+  const midPlan = plies.some((p) => p.src === 'orientation')
+    || plies.some((p) => /majority|opposite wings|pawn(s)? forward|push those|storm|stuck in the (centre|center|middle)|marooned in the (centre|center)|pile (on|up)|punish the lag|throw your pieces|open lines|before they (ever )?(castle|scurry|wriggle)/i.test(p.narr || ''));
   add('PLAN both-beats', openingPlan && midPlan, `opening=${openingPlan} middlegame=${midPlan}`);
 
   // S5 — the better-line playout FIRED with a why on nearly every ply. A real
