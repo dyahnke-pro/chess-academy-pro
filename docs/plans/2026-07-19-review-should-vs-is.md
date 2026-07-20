@@ -1,5 +1,16 @@
 # Post-game review: SHOULD (from the 10 Naroditsky transcripts) vs IS
 
+> **⏱️ STATUS UPDATE 2026-07-20** — the per-row IS column below is the 2026-07-19
+> snapshot and is now STALE. Closed since then: variation re-naming (§2),
+> opponent development-lag read (§2), the 📖 Opening Theory lecture with per-move
+> WHY + line-dives + depth-to-move-12 (§3), the diagnostic question set
+> restructured to a ranked 2-mid-game+turning-point BUDGET with trap + hint-ladder
+> (§4), opening-SPECIFIC dev plans (§1), graded register verdicts (§6),
+> conversion pattern naming (§7). CUT: guess-eval + type-not-move. HIDDEN (code
+> kept): principle-quiz + theory-departure card. Biggest still-open cluster: §6
+> register texture (named mini-concepts, discipline mantras, story-as-evidence).
+> See the QUESTION-PLACEMENT STRUCTURE + DONE sections lower in this doc.
+
 **Source of "should":** `data/sources/naroditsky-voice/review-register-rubric.md` — the
 distillation of the 10 post-game-review transcripts analyzed this session (§1 structural
 pattern, §2 density, §3 theory callouts, §4 question-before-answer, §5 register
