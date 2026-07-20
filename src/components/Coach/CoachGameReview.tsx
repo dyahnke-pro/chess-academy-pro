@@ -99,6 +99,13 @@ interface CoachGameReviewProps {
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
+// The principle "device" quiz is hidden from the UI for now (David 2026-07-20);
+// the arming/build/show code + service stay intact behind this flag.
+const PRINCIPLE_QUIZ_ENABLED: boolean = false;
+// The in-walk theory-departure CARD is hidden (redundant with the 📖 Opening
+// Theory button, which stays). Code kept behind the flag.
+const THEORY_DEPARTURE_CARD_ENABLED: boolean = false;
+
 // ship-4: PLAYED_MOVE_ARROW_COLORS + sanToSquares + AUTO_REVIEW_* pacing
 // + CLASSIFICATION_BORDER_COLORS removed alongside the analysis-phase
 // board they served. The walk-phase board derives its own arrow/badge
@@ -551,6 +558,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const principleQuizStateRef = useRef<PrincipleQuiz | null>(null);
   useEffect(() => { principleQuizStateRef.current = principleQuizState; }, [principleQuizState]);
   const armPrincipleQuiz = useCallback((tag: string, ctx: { fen: string; playedSan: string; bestSan: string }): void => {
+    // Hidden from the UI (David 2026-07-20: "remove the principle quiz from the
+    // UI, keep the code for now"). The arm/build/show + service stay intact so
+    // it can be re-enabled by flipping PRINCIPLE_QUIZ_ENABLED.
+    if (!PRINCIPLE_QUIZ_ENABLED) return;
     if (principleQuizShownRef.current || principleQuizRef.current) return;
     void buildPrincipleQuiz({
       tag,
@@ -1824,8 +1835,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   }, [runTheoryPlayback]);
 
   // Fire ONCE, when the walk reaches the departure ply and no other card
-  // is open.
+  // is open. Hidden from the UI (David 2026-07-20: "remove 3 and 4" — the
+  // in-walk theory-departure CARD is redundant with the 📖 Opening Theory
+  // button, which stays). Code kept behind the flag; the button is separate.
   useEffect(() => {
+    if (!THEORY_DEPARTURE_CARD_ENABLED) return;
     if (theoryShownRef.current) return;
     const found = theoryFoundRef.current;
     if (!found) return;
