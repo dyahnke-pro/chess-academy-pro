@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { computePvLine, renderPlyFactLine, pvFactsForVoice, plyFactsForMove, type PvEngine } from './pvPlayback';
+import { computePvLine, renderPlyFactLine, pvFactsForVoice, plyFactsForMove, plyFactsClause, type PvEngine } from './pvPlayback';
 import type { StockfishAnalysis } from '../types';
 
 /** Canned engine: maps fen → analysis. Unknown fen → throws (like a dead worker). */
@@ -183,5 +183,45 @@ describe('deterministic fallback voice + batch facts', () => {
     const facts = pvFactsForVoice(line);
     expect(facts).toMatch(/^1\) The move Qxf7#/);
     expect(facts.split('\n')).toHaveLength(1);
+  });
+});
+
+describe('material truth + tactic agent (David 2026-07-20 Opera nitpick)', () => {
+  // fenBefore for the Opera move under test, from the game's SAN prefix.
+  const fenBefore = (sans: string[]): string => {
+    const c = new Chess();
+    for (const s of sans) c.move(s);
+    return c.fen();
+  };
+  const OPERA = ['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5', 'Bxf3', 'Qxf3', 'dxe5', 'Bc4', 'Nf6', 'Qb3', 'Qe7', 'Nc3', 'c6', 'Bg5', 'b5', 'Nxb5', 'cxb5', 'Bxb5+', 'Nbd7', 'O-O-O', 'Rd8', 'Rxd7', 'Rxd7', 'Rd1', 'Qe6', 'Bxd7+', 'Nxd7', 'Qb8+', 'Nxb8', 'Rd8#'];
+
+  it('a RECAPTURE claims no material windfall (even trade nets 0)', () => {
+    // After 4...Bxf3, White recaptures 5.Qxf3 — an even knight-for-bishop trade.
+    const fb = fenBefore(OPERA.slice(0, 8)); // up to ...Bxf3
+    const prev = { square: 'f3', capturedValue: 3 }; // Black just took the knight on f3
+    const line = plyFactsForMove(fb, 'Qxf3', prev) ?? '';
+    expect(line).toMatch(/captures the bishop/i);
+    expect(line).not.toMatch(/wins \d+ point/i);
+  });
+
+  it('a real hanging capture DOES win material', () => {
+    // White knight on e5 hangs; Black's d6 pawn takes it for free.
+    const fb = 'rnbqkbnr/ppp2ppp/3p4/4N3/8/8/PPPPPPPP/RNBQKB1R b KQkq - 0 1';
+    const line = plyFactsForMove(fb, 'dxe5') ?? '';
+    expect(line).toMatch(/wins 3 point/i);
+  });
+
+  it('does NOT credit the mover for the OPPONENT\'s pin (backstop move)', () => {
+    // 11...Rd8 lands BEHIND White\'s pinned-knight setup — it is White\'s Rd1
+    // pin, not Black\'s. The mover must not be credited with "lands a pin".
+    const fb = fenBefore(OPERA.slice(0, 23)); // up to O-O-O, Black to play Rd8
+    const clause = plyFactsClause(fb, 'Rd8') ?? '';
+    expect(clause).not.toMatch(/pin/i);
+  });
+
+  it('keeps a REAL pin the moved slider makes (Bg5 pins the f6 knight)', () => {
+    const fb = fenBefore(OPERA.slice(0, 16)); // up to ...c6, White to play Bg5
+    const line = plyFactsForMove(fb, 'Bg5') ?? '';
+    expect(line).toMatch(/pin/i);
   });
 });

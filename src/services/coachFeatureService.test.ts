@@ -466,7 +466,30 @@ describe('coachFeatureService', () => {
       ], 'white');
       const oppSeg = segments.find((s) => s.ply === 6);
       expect(oppSeg?.narration).toBeTruthy();
-      expect(oppSeg?.narrationSource).toBe('opponent');
+      // Framed as the opponent (via the opponent target-read/fallback OR the
+      // sacrifice beat — both say "Your opponent"); never left silent.
+      expect(oppSeg?.narration).toMatch(/your opponent/i);
+    });
+
+    it('teaches the Opera Game showcase moves — sac named, mate named, no windfall (David 2026-07-20)', () => {
+      const OPERA = ['e4','e5','Nf3','d6','d4','Bg4','dxe5','Bxf3','Qxf3','dxe5','Bc4','Nf6','Qb3','Qe7','Nc3','c6','Bg5','b5','Nxb5','cxb5','Bxb5+','Nbd7','O-O-O','Rd8','Rxd7','Rxd7','Rd1','Qe6','Bxd7+','Nxd7','Qb8+','Nxb8','Rd8#'];
+      const cls = (ply: number): string => (ply === 31 ? 'brilliant' : ply === 19 ? 'great' : 'good');
+      const segments = buildReviewSegments(
+        OPERA.map((san, i) => move({ ply: i + 1, san, classification: cls(i + 1) })),
+        'white', 'Philidor Defense',
+      );
+      const at = (ply: number): string => segments.find((s) => s.ply === ply)?.narration ?? '';
+      // Qxf3 recaptures the bishop (even trade) → NO "wins N points" windfall.
+      expect(at(9)).not.toMatch(/wins \d+ point/i);
+      // Nxb5 is the knight sacrifice — named as a sacrifice, not a "reroute".
+      expect(at(19)).toMatch(/sacrifice/i);
+      expect(at(19)).not.toMatch(/reroute|journey/i);
+      // O-O-O is king safety + rook activation, never a "queenside majority endgame".
+      expect(at(23)).not.toMatch(/majority|endgame/i);
+      // Qb8+ is THE queen sacrifice (peak register on brilliant).
+      expect(at(31)).toMatch(/queen sacrifice/i);
+      // The finish names checkmate.
+      expect(at(33)).toMatch(/checkmate/i);
     });
   });
 

@@ -1,4 +1,6 @@
 import { Chess } from 'chess.js';
+import type { Square } from 'chess.js';
+import { seeGain } from './positionReadingService';
 import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice } from './groundedAnswer';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
 import { plyFactsForMove, plyFactsClause } from './pvPlayback';
@@ -897,6 +899,11 @@ export function buildReviewSegments(
   const storyGame = openingName ? pickStoryGame(openingName) : null;
   let storyShown = false;
   const studentColorWB: 'w' | 'b' | null = playerColor === 'white' ? 'w' : playerColor === 'black' ? 'b' : null;
+  // Prev-capture context so the PlyFacts material calc can tell a RECAPTURE
+  // (even trade → 0) from a genuine win (David 2026-07-20 Opera nitpick). Holds
+  // the PREVIOUS move's capture; updated at the end of each iteration.
+  const PIECE_PTS: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+  let prevCap: { square: string | null; capturedValue: number } = { square: null, capturedValue: 0 };
   for (let i = 0; i < usable; i++) {
     const m = moves[i];
     const fenPair = fenChain[i];
@@ -940,8 +947,67 @@ export function buildReviewSegments(
       const why = explainBestMoveGrounded(fenPair.fenBefore, m.san, m.bestMove, moverColor);
       if (why) narration = `${narration} ${why}`;
     }
+    // Don't scold a near-FORCED recapture the engine only dings as an inaccuracy/
+    // mistake (David 2026-07-20 Opera nitpick: the loser's forced takes-back got
+    // "Qb4+ was the try" nags). If this move recaptures on the square the opponent
+    // just captured, and it's not an outright blunder, drop the "X was stronger"
+    // scold — they had to take back. A neutral fact beat may still fill below.
+    if (narration && (m.classification === 'inaccuracy' || m.classification === 'mistake')) {
+      try {
+        const rc = new Chess(fenPair.fenBefore).move(m.san);
+        if (rc && prevCap.square === rc.to) narration = null;
+      } catch { /* keep the narration */ }
+    }
     // Track WHICH builder produced the narration (surfaced to PostHog per ply).
     let narrationSource: ReviewMoveSegment['narrationSource'] = narration ? 'flag' : null;
+    // 🎯 SOUND SACRIFICE — the single most important thing to say about the move,
+    // so it OVERRIDES the generic merit / itinerary / plan beats (David 2026-07-20
+    // Opera nitpick: the knight sac was narrated as "a reroute", the queen sac as
+    // "just a check"). A move that hands over NET material (describeSacrifice, pure
+    // SEE board-truth) AND the engine did NOT flag as an error (null/book/good/
+    // great/brilliant) is a real, sound sacrifice — name it as one, at a register
+    // that scales with the classification. The queen sac is the peak beat.
+    const isSoundNonError = m.classification === null || m.classification === 'book'
+      || m.classification === 'good' || m.classification === 'great' || m.classification === 'brilliant';
+    // A move is a SACRIFICE when the opponent wins back MORE than the mover just
+    // captured — net material handed over ≥ 1 pawn (a knight-for-two-pawns like
+    // Nxb5 nets −1; describeSacrifice's ≥2 threshold misses it). A move that WINS
+    // material (Bxd7+ nets +2) is not a sac. Pure SEE board-truth (G0).
+    let sacInfo: { piece: string; sq: string } | null = null;
+    if (isSoundNonError && !m.isCoachMove) {
+      try {
+        const sb = new Chess(fenPair.fenBefore);
+        const smv = sb.move(m.san);
+        if (smv) {
+          const capVal = smv.captured ? (PIECE_PTS[smv.captured] ?? 0) : 0;
+          const oppWins = seeGain(sb, smv.to as Square);
+          if (oppWins - capVal >= 1) {
+            sacInfo = { piece: ({ p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' } as const)[smv.piece] ?? 'piece', sq: smv.to };
+          }
+        }
+      } catch { sacInfo = null; }
+    }
+    if (sacInfo) {
+      const sq = sacInfo.sq;
+      const piece = sacInfo.piece;
+      const isStudentSac = moverColor === playerColor;
+      const subjCap = isStudentSac ? 'You' : 'Your opponent';
+      const s = isStudentSac ? '' : 's'; // verb suffix ("you give" vs "your opponent gives")
+      const withCheck = /\+$/.test(m.san) ? ', and it lands with check' : '';
+      const top = m.classification === 'brilliant' || m.classification === 'great';
+      if (piece === 'queen') {
+        // The peak. A queen sacrifice the engine rates top is the point of the
+        // whole attack — say so, don't call it "a check".
+        narration = top
+          ? `There it is — the queen sacrifice on ${sq}${withCheck}. The boldest move on the board, and it is ice-cold: this is the point the whole attack was building toward.`
+          : `${subjCap} offer${s} the queen on ${sq}${withCheck} — a stunning sacrifice.`;
+      } else {
+        narration = top
+          ? `${subjCap} sacrifice${s} the ${piece} on ${sq}${withCheck} — and it is completely sound: the attack is worth far more than the material.`
+          : `${subjCap} give${s} up the ${piece} on ${sq}${withCheck} — a real sacrifice for the initiative.`;
+      }
+      narrationSource = 'flag';
+    }
     // OPPONENT-PSYCHOLOGY read (Danya register #14: "once one side starts to
     // decline, more mistakes appear"). When the opponent errs on CONSECUTIVE
     // moves, note the unravelling ONCE — a real pattern from the classification
@@ -960,11 +1026,17 @@ export function buildReviewSegments(
     // than generic filler). This is what makes the walk a coach, not a badge-
     // labeler (David 2026-07-19: "there is no coach narration").
     // PLAN-IDEA beats — shown with ARROWS, not by moving pieces (David
-    // 2026-07-19). Two one-shots on the student's own quiet moves:
+    // 2026-07-19). Two one-shots on the student's own quiet moves.
+    // A "concrete" move (capture / check / castle) is NOT a quiet positional
+    // move — it has its own board content, and a generic plan beat there is
+    // wrong (David 2026-07-20 Opera nitpick: O-O-O got a "queenside majority
+    // endgame" plan; Bxb5+ too). Let those fall through to the per-move teaching.
+    const isConcreteMove = /[x+#]/.test(m.san) || m.san.startsWith('O-O');
     let planArrows: ReviewMoveSegment['planArrows'];
     // (a) Opening DEVELOPING plan, fired once when the opening is identified.
     if (
       narration === null
+      && !isConcreteMove
       && studentColorWB !== null
       && !openingPlanShown
       && !m.isCoachMove
@@ -981,6 +1053,7 @@ export function buildReviewSegments(
     // opening note in that zone; silent when no clear structural plan exists.
     if (
       narration === null
+      && !isConcreteMove
       && studentColorWB !== null
       && !orientationShown
       && !m.isCoachMove
@@ -1016,6 +1089,7 @@ export function buildReviewSegments(
     // fires on a quiet student move so it doesn't clobber a flag/plan beat.
     if (
       narration === null
+      && !isConcreteMove
       && moverColor === playerColor
       && (m.classification === null || m.classification === 'book' || m.classification === 'good')
     ) {
@@ -1050,7 +1124,7 @@ export function buildReviewSegments(
       // David 2026-07-20 "the best move lines have way better narration"), then
       // the thinner teaching note. Both are grounded; the rich one just fires on
       // far more moves so the walk stops going silent on eventful ones.
-      narration = plyFactsForMove(fenPair.fenBefore, m.san) ?? buildReviewMoveTeaching(fenPair.fenBefore, m.san);
+      narration = plyFactsForMove(fenPair.fenBefore, m.san, prevCap) ?? buildReviewMoveTeaching(fenPair.fenBefore, m.san);
       if (narration) narrationSource = 'per-move';
     }
     // §7 CONVERSION / ENDGAME: past the opening cap the walk was "badges only".
@@ -1079,7 +1153,7 @@ export function buildReviewSegments(
       // outposts/passed pawns/files/material), null → still silent for a truly
       // uneventful move.
       if (narration === null) {
-        const rich = plyFactsForMove(fenPair.fenBefore, m.san);
+        const rich = plyFactsForMove(fenPair.fenBefore, m.san, prevCap);
         if (rich) { narration = rich; narrationSource = 'per-move'; }
       }
     }
@@ -1143,7 +1217,7 @@ export function buildReviewSegments(
       && playerColor !== undefined
       && (m.classification === null || m.classification === 'book' || m.classification === 'good')
     ) {
-      const clause = plyFactsClause(fenPair.fenBefore, m.san);
+      const clause = plyFactsClause(fenPair.fenBefore, m.san, prevCap);
       if (clause) {
         narration = `Your opponent ${clause}.`;
         narrationSource = 'opponent';
@@ -1165,6 +1239,16 @@ export function buildReviewSegments(
       narrationSource,
       ...(planArrows && planArrows.length ? { planArrows } : {}),
     });
+    // Carry this move's capture forward so the NEXT ply's material calc can
+    // recognize a recapture (even trade → 0, no "wins material" windfall).
+    try {
+      const pc = new Chess(fenPair.fenBefore).move(m.san);
+      prevCap = pc
+        ? { square: pc.to, capturedValue: pc.captured ? (PIECE_PTS[pc.captured] ?? 0) : 0 }
+        : { square: null, capturedValue: 0 };
+    } catch {
+      prevCap = { square: null, capturedValue: 0 };
+    }
   }
   return segments;
 }
@@ -1317,12 +1401,15 @@ export async function generateReviewNarration(params: {
   if (coachNarration !== 'silent') {
     try {
       const toVoice = segments
-        // Exempt the mating move (SAN ends with '#') from the house-voice pass:
-        // its deterministic text NAMES the checkmate, and the paraphrase would
-        // drop the word "mate" (a removal containment allows — "Checkmate, game
-        // over" → "Game over, clean as can be"). The finish is the one beat that
-        // must say "mate" verbatim (audit 2026-07-20 MATE gate). One line per game.
-        .filter((s) => s.narration && s.narration.trim().length > 0 && !s.san.includes('#'))
+        // Exempt the SHOWCASE beats from the house-voice pass so their key words
+        // ship verbatim (they're already in-register): the mating move (SAN ends
+        // with '#') must keep "checkmate", and a SACRIFICE beat must keep the word
+        // "sacrifice" — a paraphrase would drop them (a removal containment allows:
+        // "Checkmate, game over" → "Game over, clean"; "the queen sacrifice" →
+        // "one more check"). These are the moments that must not be flattened
+        // (audit 2026-07-20 Opera nitpick — the queen sac was narrated as a check).
+        .filter((s) => s.narration && s.narration.trim().length > 0
+          && !s.san.includes('#') && !/sacrifice/i.test(s.narration))
         .map((s) => ({ id: s.ply, fact: s.narration as string, kind: s.narrationSource ?? undefined }));
       if (toVoice.length > 0) {
         const warmed = await raceTimeout(

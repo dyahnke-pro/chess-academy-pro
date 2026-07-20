@@ -269,6 +269,42 @@ const run = async () => {
   }
   add('ACC board-accuracy', accFails.length === 0, accFails.length ? accFails.slice(0, 3).join(' | ') : 'no false piece-on-square claims');
 
+  // SAC — the queen-sacrifice CANARY (David 2026-07-20 Opera nitpick: the
+  // immortal queen sac was narrated as "one more check, nothing fancy"). A
+  // student move that OFFERS the queen — the opponent captures it on the very
+  // next ply — MUST be narrated as a sacrifice, never flattened to a check.
+  // Board-truth, game-agnostic: detect it from the move list.
+  let queenSacPly = null;
+  for (let i = 0; i < SANS.length - 1; i++) {
+    if (i % 2 !== 0) continue;                 // student = White = even index (odd ply)
+    if (!/^Q/.test(SANS[i])) continue;         // a student queen move
+    const toSq = SANS[i].replace(/[+#]/g, '').slice(-2);
+    const next = SANS[i + 1].replace(/[+#]/g, '');
+    if (next.includes('x') && next.endsWith(toSq)) { queenSacPly = i + 1; break; } // opponent takes the queen there
+  }
+  if (queenSacPly !== null) {
+    const p = plies.find((x) => x.ply === queenSacPly);
+    const saysSac = /sacrifice|sac\b|offer/i.test(p?.narr || '');
+    add('SAC queen-sac-named', saysSac, saysSac ? `queen sac at ply ${queenSacPly} named a sacrifice` : `queen sac at ply ${queenSacPly} NOT named a sacrifice: "${(p?.narr || '(silent)').slice(0, 60)}"`);
+  }
+
+  // NOWINDFALL — a RECAPTURE (capturing on the square the previous ply captured
+  // on) must NOT claim a material windfall. An even recapture nets ~0 (David
+  // 2026-07-20: "Qxf3 nets three points" on an even trade). Board-truth from the
+  // move list; the SEE-gated material calc should make this hold.
+  const windfalls = [];
+  for (let i = 1; i < SANS.length; i++) {
+    if (!SANS[i - 1].includes('x') || !SANS[i].includes('x')) continue;
+    const prevTo = SANS[i - 1].replace(/[+#]/g, '').slice(-2);
+    const curTo = SANS[i].replace(/[+#]/g, '').slice(-2);
+    if (prevTo !== curTo) continue;            // not a recapture on the same square
+    const p = plies.find((x) => x.ply === i + 1);
+    if (p && /wins?\s+\d+\s+point|nets?\s+\d+\s+point|\d+\s+points?\s+of\s+material|point\s+richer|grabs?\s+\d/i.test(p.narr || '')) {
+      windfalls.push(`ply ${i + 1} ${SANS[i]}: "${(p.narr || '').slice(0, 50)}"`);
+    }
+  }
+  add('NOWINDFALL recapture-not-a-win', windfalls.length === 0, windfalls.length ? windfalls.slice(0, 3).join(' | ') : 'no recapture claimed a material windfall');
+
   // ERR — zero page/console errors.
   add('ERR no-errors', errs.length === 0, errs.length ? errs.slice(0, 3).join(' | ') : 'none');
 

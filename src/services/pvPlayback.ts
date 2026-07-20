@@ -17,10 +17,26 @@
  * verify is a line we don't teach.
  */
 import { Chess } from 'chess.js';
+import type { Square } from 'chess.js';
 import { stockfishEngine } from './stockfishEngine';
 import { detectTactics } from './tacticsDetector';
 import { describeStructure } from './boardStructure';
+import { seeGain } from './positionReadingService';
 import type { StockfishAnalysis } from '../types';
+
+/** Face values for the recapture-net calc (mirrors positionReadingService). */
+const PIECE_POINTS: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+
+/** Context the material calc needs about the PREVIOUS ply: if the opponent just
+ *  captured on the square we're now capturing on, this move is a RECAPTURE and
+ *  its honest material figure is the NET of the two-ply swap, not the face value
+ *  (David 2026-07-20: "Qxf3 nets three points" was an even recapture). */
+export interface PrevCaptureContext {
+  /** The square the previous ply captured on (its destination), or null. */
+  square: string | null;
+  /** The value of the piece the previous ply captured (0 if it wasn't a capture). */
+  capturedValue: number;
+}
 
 /** Minimal engine surface pvPlayback needs — injectable for tests. */
 export interface PvEngine {
@@ -78,11 +94,14 @@ const PIECE_WORD: Record<string, string> = {
 
 function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
   captured?: string; san: string; color: 'w' | 'b'; promotion?: string;
-}): PlyFacts {
+}, prev?: PrevCaptureContext): PlyFacts {
   const before = describeStructure(fenBefore);
   const after = describeStructure(fenAfter);
   const mover = mv.color;
   const defender: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
+  // The square this move lands on (SAN's last coordinate) — used by both the
+  // tactic-agent check and the material calc below.
+  const toSquare = mv.san.replace(/[+#!?]+$/, '').match(/([a-h][1-8])(?!.*[a-h][1-8])/)?.[1] ?? null;
 
   // A tactic only "landed" if THIS move CREATED it — not one that was already
   // on the board (David 2026-07-20: every PV move narrated "lands a pin"
@@ -95,28 +114,53 @@ function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
   try {
     const sig = (t: { type: string; involvedSquares: string[] }): string =>
       `${t.type}:${[...t.involvedSquares].sort().join(',')}`;
-    const toSquare = mv.san.replace(/[+#!?]+$/, '').match(/([a-h][1-8])(?!.*[a-h][1-8])/)?.[1] ?? null;
     const beforeSigs = new Set(detectTactics(fenBefore).tactics.filter((x) => x.type !== 'none').map(sig));
     // Only the MOVED piece can be the tactic's agent. A pin or skewer is made
     // by a SLIDER (bishop/rook/queen) — a knight/pawn/king move that merely
     // touches a pin's involved squares did NOT "land a pin" (David 2026-07-20:
     // "the knight lands on c3 and suddenly it's pinning" — knights can't pin).
     const isSlider = /^[BRQ]/.test(mv.san); // bishop/rook/queen — the only pinning pieces
+    const afterBoard = new Chess(fenAfter);
     const landed = detectTactics(fenAfter).tactics
       .filter((x) => x.type !== 'none')
       .filter((x) => !beforeSigs.has(sig(x)))
       .filter((x) => !((x.type === 'pin' || x.type === 'skewer') && !isSlider))
-      .find((x) => toSquare === null || x.involvedSquares.includes(toSquare));
+      // The MOVED piece must be the tactic's AGENT (the maker of the fork/pin/
+      // skewer) — not merely a square it involves. detectTactics puts the agent
+      // square FIRST, so require involvedSquares[0] === the landing square. Without
+      // this the mover was credited for the OPPONENT's pin whenever its move just
+      // landed BEHIND the pinned piece (David 2026-07-20 Opera nitpick: Black's
+      // "Rd8 lands a pin" was really White's Rd1 pinning Black's own knight).
+      .filter((x) => toSquare !== null && x.involvedSquares[0] === toSquare)
+      // Drop a shallow pin whose pinned piece is a mere PAWN (e.g. Qf3 "pinning"
+      // the f7 pawn to the bishop) — technically true, not worth a tactic call.
+      .filter((x) => !(x.type === 'pin' && afterBoard.get(x.involvedSquares[1] as Square)?.type === 'p'))
+      .find(() => true);
     tacticLanded = landed ? landed.type : null;
   } catch { /* facts stay null */ }
 
   const isCheck = /[+#]$/.test(mv.san);
   const isMate = mv.san.endsWith('#');
 
+  // Material this move HONESTLY wins — never the captured piece's face value,
+  // which reads a recapture (even trade) or a sacrifice as a windfall (David
+  // 2026-07-20 Opera-game nitpick: "Qxf3 nets three points" on an even trade;
+  // "Rxd7 grabs three points" on an exchange sac). Two board-true cases:
+  //   • RECAPTURE (opponent just captured on this same square) → the NET of the
+  //     two-ply swap (face value taken − value the opponent took last ply). An
+  //     even trade → 0, so no "wins material" claim fires.
+  //   • fresh capture → static exchange (SEE) on the target: a defended even
+  //     trade nets ~0, a hanging piece nets its value, a SACRIFICE nets NEGATIVE
+  //     (so it never reads as "wins material" — the sacrifice register handles it).
   let materialGained = 0;
-  if (before && after) {
-    const delta = after.material.balance - before.material.balance;
-    materialGained = mover === 'w' ? delta : -delta;
+  if (mv.captured && toSquare) {
+    const capturedVal = PIECE_POINTS[mv.captured] ?? 0;
+    if (prev && prev.square === toSquare) {
+      materialGained = capturedVal - prev.capturedValue;
+    } else {
+      try { materialGained = seeGain(new Chess(fenBefore), toSquare as Square); }
+      catch { materialGained = 0; }
+    }
   }
 
   const newOpenFiles = before && after
@@ -211,6 +255,7 @@ export async function computePvLine(
   // (defensive: a PV should always replay, but never trust unreplayed moves).
   const chess = new Chess(fen);
   const plies: PvPly[] = [];
+  let prevCap: PrevCaptureContext = { square: null, capturedValue: 0 };
   for (const uci of uciMoves) {
     if (!uci || uci.length < 4) break;
     const fenBefore = chess.fen();
@@ -232,8 +277,10 @@ export async function computePvLine(
       moverColor: mv.color === 'w' ? 'white' : 'black',
       fenBefore,
       fenAfter,
-      facts: computePlyFacts(fenBefore, fenAfter, mv),
+      facts: computePlyFacts(fenBefore, fenAfter, mv, prevCap),
     });
+    // Carry this ply's capture forward so the NEXT ply can detect a recapture.
+    prevCap = { square: mv.to, capturedValue: mv.captured ? (PIECE_POINTS[mv.captured] ?? 0) : 0 };
   }
   if (plies.length === 0) return null;
 
@@ -324,14 +371,14 @@ export function plyFactsString(ply: PvPly): string | null {
  *  the student, "Your opponent …" for the other side (David 2026-07-20: "always
  *  narrate both sides"). Returns e.g. "captures the knight, lands a fork, wins 3
  *  points of material", or null on a genuinely quiet move. Board-true (G0). */
-export function plyFactsClause(fenBefore: string, san: string): string | null {
+export function plyFactsClause(fenBefore: string, san: string, prev?: PrevCaptureContext): string | null {
   try {
     const c = new Chess(fenBefore);
     const mv = c.move(san);
     if (!mv) return null;
     const f = computePlyFacts(fenBefore, c.fen(), {
       captured: mv.captured, san: mv.san, color: mv.color, promotion: mv.promotion,
-    });
+    }, prev);
     const parts: string[] = [];
     if (f.captured) parts.push(`captures the ${f.captured}`);
     if (f.isMate) parts.push('delivers checkmate');
@@ -359,14 +406,14 @@ export function plyFactsClause(fenBefore: string, san: string): string | null {
  * unifies the quality. Null on a genuinely quiet move (no concrete fact) →
  * silence, per the Narration Voice Rules. Pure — chess.js validates the SAN.
  */
-export function plyFactsForMove(fenBefore: string, san: string): string | null {
+export function plyFactsForMove(fenBefore: string, san: string, prev?: PrevCaptureContext): string | null {
   try {
     const c = new Chess(fenBefore);
     const mv = c.move(san);
     if (!mv) return null;
     const facts = computePlyFacts(fenBefore, c.fen(), {
       captured: mv.captured, san: mv.san, color: mv.color, promotion: mv.promotion,
-    });
+    }, prev);
     return plyFactsString({
       san: mv.san,
       uci: `${mv.from}${mv.to}${mv.promotion ?? ''}`,
