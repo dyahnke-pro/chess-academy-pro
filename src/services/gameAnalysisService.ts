@@ -148,8 +148,21 @@ function classifyCpLoss(
     return 'good'; // Mate was already on the board
   }
 
-  if (cpLoss >= BLUNDER_CP) return 'blunder';
-  if (cpLoss >= MISTAKE_CP) return 'mistake';
+  // A move that leaves the player STILL CLEARLY WINNING is never a blunder, and
+  // at worst a mistake — you gave back some edge, but the game's result category
+  // didn't change (this is how chess.com grades; a winning move isn't a
+  // "blunder"). Kills the "your winning combination was a genuine blunder"
+  // mislabel when a shallow eval dips on a move that in fact forces the win
+  // (audit 2026-07-20: Bxd7+ in a forced mate flagged a blunder because the
+  // post-move eval dropped from +8 to +3 — still completely winning).
+  const STILL_WINNING_CP = 250; // +2.5 pawns from the player's perspective
+  const playerPovAfter = evalAfter !== undefined && evalAfter !== null
+    ? (isPlayerWhiteMove ? evalAfter : -evalAfter)
+    : null;
+  const stillWinning = playerPovAfter !== null && playerPovAfter >= STILL_WINNING_CP;
+
+  if (cpLoss >= BLUNDER_CP) return stillWinning ? 'inaccuracy' : 'blunder';
+  if (cpLoss >= MISTAKE_CP) return stillWinning ? 'inaccuracy' : 'mistake';
   if (cpLoss >= INACCURACY_CP) return 'inaccuracy';
   if (cpLoss <= -150) return 'brilliant';
   if (cpLoss <= -10) return 'great';

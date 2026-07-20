@@ -162,6 +162,18 @@ const run = async () => {
     log(`  Ply ${String(p.n).padStart(2)}/${p.total} [${(badge || '-').padEnd(10)}] ${narr || '(silent)'}`);
     if (p.n >= p.total && p.total > 0) { log(`  (reached end)`); break; }
     stuck = p.n === before ? stuck + 1 : 0;
+    if (stuck === 3) {
+      // DIAGNOSTIC (2026-07-20): dump what's blocking forward at the stall.
+      const cards = await visibleCards();
+      const fwdDisabled = await fwd.getAttribute('disabled').catch(() => null);
+      const fwdCount = await page.locator('[data-testid="review-forward-btn"]').count();
+      const anyOverlay = await page.evaluate(() => {
+        const els = [...document.querySelectorAll('[data-testid^="review-"],[data-testid^="discussion-"]')];
+        return els.filter((e) => e.offsetParent !== null).map((e) => e.getAttribute('data-testid'));
+      }).catch(() => []);
+      log(`  🔎 STALL DIAG: visibleCards=[${cards.join(',')}] fwdDisabledAttr=${fwdDisabled} fwdCount=${fwdCount}`);
+      log(`  🔎 STALL DIAG: visible review/discussion testids=[${anyOverlay.join(',')}]`);
+    }
     if (stuck > 5) { log(`  ⟳ stuck at Ply ${p.n}`); break; }
   }
 
