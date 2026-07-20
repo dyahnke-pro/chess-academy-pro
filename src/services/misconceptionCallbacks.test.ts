@@ -55,4 +55,13 @@ describe('composeCallbackLine', () => {
       composeCallbackLine('not-a-real-tag', [{ createdAt: NOW - DAY, counted: true }, { createdAt: NOW, counted: true }], NOW),
     ).toBeNull();
   });
+
+  it('never calls back on the "other"/uncategorized holding pen (David 2026-07-19)', () => {
+    // Two distinct opening slips both land in `other`; counting them as one
+    // recurring "pattern" and voicing the internal label "uncategorized" is a
+    // bug. The catch-all is a review queue, not a real misconception.
+    expect(
+      composeCallbackLine('other', [{ createdAt: NOW - DAY, counted: true }, { createdAt: NOW, counted: true }], NOW),
+    ).toBeNull();
+  });
 });

@@ -36,6 +36,13 @@ export function composeCallbackLine(
 ): string | null {
   const def = getMisconceptionTag(tag);
   if (!def) return null;
+  // NEVER call back on the catch-all holding pen (David 2026-07-19: the reveal
+  // said "We've seen this before — uncategorized" and counted unrelated opening
+  // slips as one "pattern"). `other`/uncategorized is a review queue, not a real
+  // recurring misconception — distinct errors land here with different
+  // customLabels, so a shared count is meaningless AND it voices an internal
+  // label. Skip the callback entirely; it only fires for a genuine named tag.
+  if (def.id === 'other' || def.bucket === 'uncategorized') return null;
   const counted = records
     .filter((r) => r.counted !== false)
     .map((r) => r.createdAt)

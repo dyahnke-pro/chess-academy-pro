@@ -2387,11 +2387,24 @@ export async function voiceReviewLines(
     'fact is about a knight going to c3, do NOT say "knight to c3" or "develops the knight" ' +
     '— the student already sees the move; say what it is FOR.\n' +
     '- Causal: chain the why with "because", and go one step deeper when the fact supports it.\n' +
-    '- Graded, human verdicts: a strong quiet move is "classy" / "high-class", a winning one ' +
-    '"crushing", a slip is named warmly and flatly. A natural aside where it lands ("clean", ' +
-    '"nothing wrong with that", "simple chess").\n' +
+    '- Graded verdicts, matched to the fact and NEVER inflated. A quiet good move is ' +
+    '"classy" / "high-class" / "clean" — NOT "crushing". Only a fact that names WINNING ' +
+    'material or a decisive edge earns "crushing" / "winning". A slip the fact calls an ' +
+    'inaccuracy is "a touch loose" / "not quite"; a mistake is "that\'s a real slip"; a ' +
+    'blunder (the fact names a big drop) is "ouch — that one hurts", said flatly, never ' +
+    'mocking. Read the STRENGTH of the fact and pick the word that fits it — under-claim ' +
+    'before you over-claim.\n' +
+    '- Rule-with-boundary: when the fact carries a principle, you may state the principle AND ' +
+    'its edge — but ONLY the edge the fact itself contains (e.g. a fact about an outpost that ' +
+    '"no pawn can challenge" → "a square like that is yours for keeps"). Never invent the ' +
+    'exception; if the fact gives one rule, give one rule.\n' +
     '- A dominant piece or square can have character (a "monster" knight, an outpost "nothing ' +
-    'can touch") — but ONLY a piece/square the fact itself names.\n' +
+    'can touch", a pawn that "just keeps marching") — but ONLY a piece/square the fact itself ' +
+    'names, and only the trait the fact supports.\n' +
+    '- Dry, warm humor is welcome WHEN it rides on a fact already stated — an aside at the ' +
+    'POSITION, never at the student ("two things attacked, and they don\'t both walk away from ' +
+    'that", "the other side is just out of room"). Humor adds ZERO new chess content: it ' +
+    're-colors a fact, it never introduces a square, move, or claim.\n' +
     '- VARY every line: no two may share the same opening words or shape. Never reuse a stem. ' +
     'One or two short sentences each, spoken cadence, not a report.\n\n' +
     'THE ONE RULE YOU CANNOT BREAK: add NO chess content that is not in the fact — no move, ' +
@@ -2419,7 +2432,17 @@ export async function voiceReviewLines(
     'monster now — no pawn will ever touch it, and a piece parked like that just quietly runs the game."\n' +
     'FACT: "Your opponent erred — Nd7 was much better. And once your opponent started slipping, the ' +
     'mistakes are snowballing." → "Another one slips by — Nd7 was the move, and you can feel it: once the ' +
-    'errors start, they tend to come in bunches."\n\n' +
+    'errors start, they tend to come in bunches."\n' +
+    // Rule-with-boundary: state the principle AND the edge the fact itself gives — no invented exception.
+    'FACT: "Trades the light-squared bishops, easing the cramped position." → "Off come the light bishops, ' +
+    'and that\'s the right instinct when you\'re cramped — the side with less room wants fewer pieces, so ' +
+    'every trade breathes."\n' +
+    // Dry humor riding on the fact — an aside at the position, never the student, no new chess content.
+    'FACT: "The knight and the rook are both attacked and cannot both be saved." → "Both the knight and the ' +
+    'rook are under the gun at once — and last I checked, you only get one move. One of them is going home."\n' +
+    // Under-claimed verdict: a quiet good move is "clean", NOT "crushing".
+    'FACT: "A solid developing move that keeps everything defended." → "Nothing flashy, just clean — ' +
+    'everything stays defended and you keep building. That\'s perfectly good chess."\n\n' +
     'FALLBACK-SAFETY: you may FREELY restate any square, file, rank, or piece the fact already names — ' +
     'that is never a violation. The rule is ONLY against introducing a square/move/piece/number the fact ' +
     'does not contain. When in doubt, lean on the exact squares the fact gives you.';

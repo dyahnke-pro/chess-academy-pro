@@ -159,3 +159,40 @@ the ply and assert every spoken claim is TRUE on the board (the `narrationAccura
 - Book-departure flagged move 1 / a single master game → honest now (#10).
 - The walk taught NOTHING on your moves → now ~77% grounded coverage (#11).
 - "Why'd you play that?" fired on the opponent's move → now your side only (#8).
+
+## Live-test fixes (David's on-device audit log, 2026-07-19 → 07-20)
+Fixed this pass (from the 300-entry audit log + his notes):
+- **§6 register texture DONE** — graded verdicts scale to the fact ("Ouch — that
+  one hurts" on a 3-pawn drop, "a little loose" on an inaccuracy, "clean" not
+  "crushing" on a quiet move), persona, dry humor, rule-with-boundary added to
+  `voiceReviewLines`. Verified: real-game audit R10 no-repetition green.
+- **Better-line playout dropped every per-move why** — the flagged ply's ~5s
+  clip was still playing when the playout fired; the no-overlap guard (not gated
+  on `force`) killed each why (log: "dropped overlapping line" ×N). Now paced on
+  `voiceService.isPlaying()` (wait-idle before+after each line) so one why speaks
+  per move, in order. + green lead-the-eye arrows on each played move
+  (`walkExplorationArrows`) — the line had none.
+- **`uncategorized`** — reveal voiced the internal bucket label and counted
+  unrelated opening slips as one "pattern." `composeCallbackLine` now returns
+  null for `other`/uncategorized (the holding pen is a review queue, not a
+  pattern). Test added.
+- **Board froze behind the card** — `handleWalkForward` no-op'd while the faucet
+  / turning-point card was open. Forward now dismisses the card + advances (the
+  escape hatch), which also fixes "went back to answer, couldn't go forward."
+- **OPP audit robustness** — assert on `data-narration-source="opponent"`, not
+  brittle post-rephrase keywords.
+
+## Still OPEN from the live test (next passes)
+- **Opponent structure + development read** — narrate the opponent's opening/
+  structure and the "too many pawn moves → development suffered" observation.
+  Currently opponent moves ONLY speak when they're errors. Compute from
+  `boardStructure` + a pawn-move-count vs piece-development heuristic; G0.
+- **Cameo** — make it a pop-up card (like the mistake card) + coach ANNOUNCES it
+  + pick a game sharing a TACTIC/structure more relevant than pawn-majority +
+  arrows over the cameo moves.
+- **Turning-point question** — chips are bare SAN ("15…Nd7"); David can't recall
+  positions. Give board context (step the board to each candidate, or thumbnail).
+- **PostHog review telemetry** — `review_started/narration/completed` wired
+  (captureEvent) but added today; re-verify ingestion after next test.
+- **§4 diagnostic question family** — type-not-move / choice-between-two /
+  guess-the-eval / hint ladders (speced above).

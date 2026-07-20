@@ -149,7 +149,8 @@ const run = async () => {
     const p = await plyNow();
     const badge = await txt(page, '[data-testid="review-classification-badge"]');
     const narr = await txt(page, '[data-testid="review-narration-banner"]');
-    if (!plies.some((x) => x.ply === p.n)) plies.push({ ply: p.n, badge, narr });
+    const src = await page.locator('[data-testid="review-narration-banner"]').first().getAttribute('data-narration-source').catch(() => '') || '';
+    if (!plies.some((x) => x.ply === p.n)) plies.push({ ply: p.n, badge, narr, src });
     log(`  Ply ${String(p.n).padStart(2)}/${p.total} [${(badge || '-').padEnd(10)}] ${narr || '(silent)'}`);
     if (p.n >= p.total && p.total > 0) { log(`  (reached end)`); break; }
     stuck = p.n === before ? stuck + 1 : 0;
@@ -191,8 +192,13 @@ const run = async () => {
   const s5best = s5.reduce((a, r) => Math.max(a, r.lineCount), 0);
   add('S5 playout-per-move-why', s5.length > 0 && s5best >= 4, `runs=${s5runs.length} fired=${s5.length} maxLines=${s5best} (need >=4)`);
 
-  // OPP — opponent commentary fired at least once (targets OR developing reads).
-  const oppFired = plies.some((p) => /contest|steps in eyeing|trains on|leaves your .* loose|plants a .* on|outpost no/i.test(p.narr || ''));
+  // OPP — opponent commentary fired at least once. Key on the SEGMENT SOURCE
+  // (data-narration-source="opponent"), not phrasing: the house-voice pass
+  // rephrases freely (R10), so a keyword match against post-rephrase text is
+  // brittle. The source tag proves buildOpponentMoveTeaching produced a segment
+  // regardless of how the voice worded it. (Keyword fallback kept for safety.)
+  const oppFired = plies.some((p) => p.src === 'opponent')
+    || plies.some((p) => /contest|steps in eyeing|trains on|leaves your .* loose|plants a .* on|outpost no|opponent'?s .* (eyes|steps in|slides)/i.test(p.narr || ''));
   add('OPP commentary-fired', oppFired, oppFired ? 'an opponent read appeared' : 'no opponent commentary in the whole walk');
 
   // R10 — no verbatim-duplicate narration line (the repetition failure).

@@ -228,6 +228,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // point we clear it and the board returns to the actual game line.
   const [walkExplorationFen, setWalkExplorationFen] = useState<string | null>(null);
   const [walkExplorationSan, setWalkExplorationSan] = useState<string | null>(null);
+  // Lead-the-eye arrows painted DURING the better-line playout (David 2026-07-19:
+  // the stronger line "has no arrows"). Each played ply of the shown line paints
+  // a green arrow on the move it's narrating, so the eye lands where the voice is.
+  const [walkExplorationArrows, setWalkExplorationArrows] =
+    useState<Array<{ startSquare: string; endSquare: string; color: string }> | null>(null);
   const walkExplorationPlyRef = useRef<number | null>(null);
   // Opt-in toggle: when on at an arrow-bearing ply, the board
   // displays `seg.fenBefore` (so the missed move is playable)
@@ -597,8 +602,26 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
   const handleWalkForward = useCallback((): void => {
     if (readingGate) return;             // a legacy gate is open (defensive)
-    if (faucetPhase !== 'idle') return;  // faucet is mid-question
-    if (shotState || shotReveal || turningQ || rewindOffer) return; // a review question is open
+    // FORWARD IS AN ESCAPE HATCH — never a frozen board (David 2026-07-19: "a
+    // card popped up… i want to click forward to ignore it but the board is
+    // frozen"). When the why-picker faucet or the end-of-game turning-point card
+    // is open, forward DISMISSES it and advances rather than no-op'ing. (The
+    // turning-point one also fixes his "hit back to answer, couldn't go forward
+    // again" glitch — the card stayed open and froze forward.)
+    if (faucetPhase !== 'idle') {
+      resetFaucet();
+      setWalkExplorationFen(null);
+      setWalkExplorationSan(null);
+      setWalkExplorationArrows(null);
+      walkPlayback.goForward();
+      return;
+    }
+    if (turningQ) {
+      setTurningQ(null);
+      walkPlayback.goForward();
+      return;
+    }
+    if (shotState || shotReveal || rewindOffer) return; // a review question is open
     if (seqStateRef.current) return;     // spot-the-sequence / playback in flight
     if (cameoStateRef.current) return;   // model-game cameo card / playback open
     if (principleQuizStateRef.current) return; // device quiz open
@@ -687,7 +710,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       }
     }
     walkPlayback.goForward();
-  }, [readingGate, faucetPhase, raiseFaucet, readingQuizOn, walkPlayback, walkNarration, playerColor, openingName, playerRating, shotState, shotReveal, turningQ, moves, moverIsStudent]);
+  }, [readingGate, faucetPhase, resetFaucet, raiseFaucet, readingQuizOn, walkPlayback, walkNarration, playerColor, openingName, playerRating, shotState, shotReveal, turningQ, moves, moverIsStudent]);
 
   // Advance the walk once the faucet is done (answered + reveal dismissed, or
   // skipped) — the "resume" side of the pause above.
@@ -918,6 +941,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       setSeqState(null);
       setWalkExplorationFen(null);
       setWalkExplorationSan(null);
+      setWalkExplorationArrows(null);
     }
   }, []);
 
@@ -961,6 +985,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // was raised, so the board doesn't stick on the flagged move as we resume.
     setWalkExplorationFen(null);
     setWalkExplorationSan(null);
+    setWalkExplorationArrows(null);
     const quiz = principleQuizRef.current;
     if (quiz && !principleQuizShownRef.current) {
       principleQuizShownRef.current = true;
@@ -1009,20 +1034,40 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     let warmed = new Map<number, string>();
     try { warmed = await voiceReviewLines(rawWhys.filter((w) => w.fact.length > 0)); } catch { /* raw fallback */ }
     if (betterLineTokenRef.current !== token || !walkMountedRef.current) { onDone(); return; }
+    // PACE ON REAL AUDIO (David 2026-07-19: "no per move why… quickly moves from
+    // move to move then states the verdict"). The bug: the flagged ply's own
+    // narration is a ~5s clip still PLAYING when the playout starts, and
+    // voiceService's no-overlap guard DROPS any forced line fired while a clip
+    // plays (it isn't gated on force) — so every per-move why was dropped and
+    // only the verdict survived. speakForced can also resolve before audio-END.
+    // So we gate on isPlaying(): wait for the voice to be free before AND after
+    // each line, so exactly one why plays per board move, in order, none dropped.
+    const waitVoiceIdle = async (maxMs = 9000): Promise<void> => {
+      const start = performance.now();
+      while (voiceService.isPlaying() && performance.now() - start < maxMs) {
+        if (betterLineTokenRef.current !== token || !walkMountedRef.current) return;
+        await new Promise((r) => setTimeout(r, 120));
+      }
+    };
+    const speakPaced = async (t: string): Promise<void> => {
+      await waitVoiceIdle();              // let whatever is playing finish → guard passes
+      if (betterLineTokenRef.current !== token || !walkMountedRef.current) return;
+      try { await voiceService.speakForced(t); } catch { /* voice off */ }
+      await waitVoiceIdle();              // hold the board until THIS why finishes
+    };
     const intro = seed.bestSan ? `Here's the stronger line — ${seed.bestSan}.` : "Here's the stronger line.";
-    try { await voiceService.speakForced(intro); } catch { /* voice off */ }
+    await speakPaced(intro);
     for (let i = 0; i < line.plies.length; i++) {
       if (betterLineTokenRef.current !== token || !walkMountedRef.current) { onDone(); return; }
       const ply = line.plies[i];
       setWalkExplorationFen(ply.fenAfter);
       setWalkExplorationSan(ply.san);
+      setWalkExplorationArrows([{ startSquare: ply.uci.slice(0, 2), endSquare: ply.uci.slice(2, 4), color: '#22c55e' }]);
       playMoveSound(ply.san);
       const spoken = warmed.get(i) ?? (rawWhys[i].fact.length > 0 ? rawWhys[i].fact : null);
       if (betterLineTokenRef.current !== token || !walkMountedRef.current) { onDone(); return; }
-      // speakForced resolves on audio-END (voice-promise) on a real device, so
-      // the await paces the board to the ear — one move per spoken why.
-      if (spoken) { try { await voiceService.speakForced(spoken); } catch { /* voice off */ } }
-      await new Promise((r) => setTimeout(r, spoken ? 400 : 650));
+      if (spoken) await speakPaced(spoken);
+      else await new Promise((r) => setTimeout(r, 500));
     }
     if (betterLineTokenRef.current !== token || !walkMountedRef.current) { onDone(); return; }
     const moverIsWhite = line.plies[0].moverColor === 'white';
@@ -1030,9 +1075,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     const closing = line.plies[line.plies.length - 1].facts.isMate
       ? 'That line goes all the way to mate.'
       : `That line is about ${(Math.abs(povCp) / 100).toFixed(1)} pawns better.`;
-    try { await voiceService.speakForced(closing); } catch { /* voice off */ }
+    await speakPaced(closing);
     setWalkExplorationFen(null);
     setWalkExplorationSan(null);
+    setWalkExplorationArrows(null);
     onDone();
   }, [playMoveSound]);
 
@@ -2109,6 +2155,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         // open — the arrow IS the answer (honesty contract rule 1). Same for
         // the spot-the-sequence ask: an arrow would leak the next ply.
         if (shotState || seqState || cameoState || theoryState) return undefined;
+        // Better-line PLAYOUT arrows: the board is on the exploration FEN and each
+        // played ply paints a green lead-the-eye arrow on the move being narrated
+        // (David 2026-07-19: the stronger line "has no arrows"). Take precedence
+        // over the "hide after exploration" rule below.
+        if (walkExplorationArrows && walkExplorationArrows.length) return walkExplorationArrows;
         // Hide the arrow once the student has explored — they've seen
         // the suggestion, no need to clutter the post-exploration view.
         if (walkExplorationFen) return undefined;
@@ -2694,6 +2745,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 className="rounded-xl backdrop-blur-md border border-emerald-500/30 px-3 py-2 max-h-[4.5rem] overflow-y-auto"
                 style={{ background: 'color-mix(in srgb, var(--color-bg) 85%, rgba(16,185,129,0.3))' }}
                 data-testid="review-narration-banner"
+                data-narration-source={walkPlayback.currentSegment?.narrationSource ?? ''}
               >
                 <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text)' }}>
                   {/* No apology placeholder on quiet plies (David 2026-07-19:
