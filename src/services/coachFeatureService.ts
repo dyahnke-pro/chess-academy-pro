@@ -7,6 +7,7 @@ import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './revie
 import { detectOpening } from './openingDetectionService';
 import { resolveCuratedOpeningIdeas } from './reviewOpeningTheory';
 import { detectPieceItineraries } from './reviewPieceItinerary';
+import { pickStoryGame } from './reviewStoryGame';
 import { detectBadHabits } from './badHabitDetector';
 import { db } from '../db/schema';
 import { voiceFacts, voiceReviewLines } from './coachApi';
@@ -884,6 +885,10 @@ export function buildReviewSegments(
   const allSans: string[] = [];
   const announcedOpeningNames = new Set<string>();
   let lastAnnouncedOpeningName: string | null = null;
+  // §6 story-as-evidence — a cited illustrative game from the VERIFIED corpus,
+  // spoken once per game (never invented). Null when the opening has no model game.
+  const storyGame = openingName ? pickStoryGame(openingName) : null;
+  let storyShown = false;
   const studentColorWB: 'w' | 'b' | null = playerColor === 'white' ? 'w' : playerColor === 'black' ? 'b' : null;
   for (let i = 0; i < usable; i++) {
     const m = moves[i];
@@ -1002,6 +1007,22 @@ export function buildReviewSegments(
     ) {
       const itin = pieceItineraries.get(m.ply);
       if (itin) { narration = itin.text; narrationSource = 'per-move'; }
+    }
+    // §6 STORY-AS-EVIDENCE — once per game, name a cited master game for this
+    // opening (from the verified corpus). Fires in the early middlegame on a
+    // quiet student move, so it lands as the position takes shape.
+    if (
+      narration === null
+      && storyGame
+      && !storyShown
+      && moverColor === playerColor
+      && m.ply >= 12
+      && m.ply <= 26
+      && (m.classification === null || m.classification === 'book' || m.classification === 'good')
+    ) {
+      narration = storyGame.text;
+      narrationSource = 'opening-plan';
+      storyShown = true;
     }
     if (
       narration === null
