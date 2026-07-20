@@ -322,6 +322,20 @@ describe('coachFeatureService', () => {
       expect(segments.every((s) => s.narration === null)).toBe(true);
     });
 
+    it('names the variation as it takes shape (A2 — grounded via detectOpening)', () => {
+      // A Najdorf: the walk should announce the line once it's identifiable.
+      const sans = ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6'];
+      const segments = buildReviewSegments(
+        sans.map((san, i) => move({ ply: i + 1, san, classification: 'book', isCoachMove: i % 2 === 1 })),
+        'white',
+      );
+      const named = segments.filter((s) => s.narration && /Sicilian|Najdorf/i.test(s.narration));
+      expect(named.length).toBeGreaterThan(0);
+      // announced at most once per distinct name — no spamming the same line.
+      const texts = named.map((s) => s.narration);
+      expect(new Set(texts).size).toBe(texts.length);
+    });
+
     it('returns templated prose for student mistakes with the best move SAN', () => {
       // Pre-move position: classical Italian. White just played a
       // blunder ("Qh5??"); engine wanted Nf3 instead.

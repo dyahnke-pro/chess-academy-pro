@@ -4,6 +4,7 @@ import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhas
 import { plyFactsForMove } from './pvPlayback';
 import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan } from './reviewStrategicOrientation';
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
+import { detectOpening } from './openingDetectionService';
 import { detectBadHabits } from './badHabitDetector';
 import { db } from '../db/schema';
 import { voiceFacts, voiceReviewLines } from './coachApi';
@@ -864,6 +865,12 @@ export function buildReviewSegments(
   // 2026-07-19 live test). Accumulate the opponent's own SANs as we walk.
   const opponentSans: string[] = [];
   let opponentDevReadShown = false;
+  // Variation re-naming inside the walk (A2 — Danya names the line as it takes
+  // shape). Accumulate ALL sans; announce each new, more-specific opening name
+  // once, in order, on a quiet opening move (grounded via detectOpening).
+  const allSans: string[] = [];
+  const announcedOpeningNames = new Set<string>();
+  let lastAnnouncedOpeningName: string | null = null;
   const studentColorWB: 'w' | 'b' | null = playerColor === 'white' ? 'w' : playerColor === 'black' ? 'b' : null;
   for (let i = 0; i < usable; i++) {
     const m = moves[i];
@@ -872,6 +879,8 @@ export function buildReviewSegments(
     const moverColor: 'white' | 'black' = m.ply % 2 === 1 ? 'white' : 'black';
     // Track the opponent's own moves for the development read below.
     if (moverColor !== playerColor) opponentSans.push(m.san);
+    // Track every SAN for the live variation-naming beat below.
+    allSans.push(m.san);
     const rawBestSan = uciToSanAt(m.bestMove, fenPair.fenBefore);
     // Defense-in-depth for games analysed BEFORE the source fix: never name the
     // move that was actually played as the "better" move. If the stored best
@@ -949,6 +958,26 @@ export function buildReviewSegments(
     ) {
       const orientation = buildMiddlegameOrientation(fenPair.fenBefore, studentColorWB);
       if (orientation) { narration = orientation.text; planArrows = orientation.arrows; orientationShown = true; narrationSource = 'orientation'; }
+    }
+    // VARIATION RE-NAMING (A2) — name the line as it takes shape (Danya: "now
+    // we're in the Najdorf"). Announce each newly-reached named opening once, in
+    // order, on a quiet opening move. Grounded via detectOpening on the sans so
+    // far (the DB trie, never invented). Fires on EITHER side's move — the name
+    // is a property of the position, not who's to move.
+    if (
+      narration === null
+      && m.ply >= 4
+      && m.ply <= OPENING_TEACH_MAX_PLY
+      && (m.classification === null || m.classification === 'book' || m.classification === 'good')
+    ) {
+      const named = detectOpening(allSans)?.name ?? null;
+      if (named && named !== lastAnnouncedOpeningName && !announcedOpeningNames.has(named)) {
+        const first = announcedOpeningNames.size === 0;
+        announcedOpeningNames.add(named);
+        lastAnnouncedOpeningName = named;
+        narration = first ? `You're playing into the ${named}.` : `This has become the ${named}.`;
+        narrationSource = 'opening-plan';
+      }
     }
     if (
       narration === null
