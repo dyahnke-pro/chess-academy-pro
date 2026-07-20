@@ -323,6 +323,17 @@ export function buildReviewConversionTeaching(
   const mate = nameMatePattern(chess, mv);
   if (mate) return mate;
 
+  // GENERIC CHECKMATE — the move delivers mate but the geometry isn't a named
+  // pattern (back-rank / smothered). We still NAME it as checkmate: it IS mate
+  // (board truth, G0 — chess.js confirms it), and the finish is the single most
+  // important beat of the game. Without this the mating move fell through to the
+  // plyFacts fallback ("the rook gives check, the fork is extra sauce") and never
+  // said "mate" — the audit's MATE gate caught it (2026-07-20, Rd8# Opera game).
+  if (chess.isCheckmate()) {
+    const pieceLabel = ({ p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' } as const)[mv.piece] ?? 'piece';
+    return `Checkmate — the ${pieceLabel} finishes it, and the king has no legal reply. Game over.`;
+  }
+
   // KING CENTRALIZATION — the king is a fighting piece in the endgame. When the
   // heavy pieces are off and the king steps toward the center, that's a real
   // technique worth naming (currently silent). Board-true: no queens, light

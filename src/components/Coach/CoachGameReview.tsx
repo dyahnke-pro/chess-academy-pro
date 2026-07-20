@@ -277,6 +277,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // to the ReviewSummaryCard's paragraph view if generation fails.
   const [walkNarration, setWalkNarration] = useState<ReviewNarration | null>(null);
   const [isLoadingWalk, setIsLoadingWalk] = useState(false);
+  // The scrollable middle (cards live here). We scroll cards into view WITHIN
+  // this container only — never element.scrollIntoView, which on iOS recurses
+  // past the review frame's overflow-hidden to the app-level scroller and drags
+  // the fixed board up under the header, stranding it (David 2026-07-20: "the
+  // board shifted down and wouldn't let me scroll back up").
+  const scrollMiddleRef = useRef<HTMLDivElement | null>(null);
   // Summary page persists until the user explicitly taps the big
   // green "Start" button on the summary card. Default false so the
   // walk-phase never auto-renders — David's call (2026-05-14): "i
@@ -1937,7 +1943,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   useEffect(() => {
     if (!anyCardOpen) return;
     const t = window.setTimeout(() => {
-      const card = document.querySelector(
+      const container = scrollMiddleRef.current;
+      if (!container) return;
+      const card = container.querySelector(
         [
           '[data-testid="review-find-shot-card"]',
           '[data-testid="review-find-shot-reveal"]',
@@ -1953,8 +1961,17 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           '[data-testid="review-rewind-card"]',
           '[data-testid="discussion-practice-panel"]',
         ].join(', '),
-      );
-      card?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      ) as HTMLElement | null;
+      if (!card) return;
+      // Scroll the card into view WITHIN the middle container only — compute the
+      // delta from bounding rects and adjust the container's own scrollTop. This
+      // never calls element.scrollIntoView (which recurses to ancestor scrollers,
+      // incl. the app route container on iOS, and drags the fixed board off-
+      // screen — David 2026-07-20). The board stays put; only the middle moves.
+      const cRect = container.getBoundingClientRect();
+      const kRect = card.getBoundingClientRect();
+      const delta = (kRect.top - cRect.top) - 8;
+      container.scrollTo({ top: container.scrollTop + delta, behavior: 'smooth' });
     }, 150); // after the card's mount/layout settles
     return () => window.clearTimeout(t);
   }, [anyCardOpen]);
@@ -2664,12 +2681,17 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   board + header + nav + pinned narration + bottom bar must
                   still leave the middle usable for the Ask panel. Desktop keeps
                   the original 420px (height is not the constraint there).
-                  David 2026-07-20 (IMG_4559): 32vh was HEIGHT-bound on tall
-                  phones → a small board with big side margins. Now
-                  min(92vw,42vh): fills up to 92% width (the "fit to screen" he
-                  asked for) but still capped at 42vh tall so the nav + pinned
-                  narration + Ask panel below stay usable. */}
-              <div className="w-full max-w-[min(92vw,42vh)] mx-auto md:max-w-[420px] relative">
+                  David 2026-07-20 (IMG_4565): "board still not the same size as
+                  learn and play." The 42vh cap was still HEIGHT-binding on a
+                  tall phone (42vh≈391 < the ~414 Learn/Play get from w-full).
+                  MATCH them: w-full (identical to CoachTeachPage's board
+                  wrapper) so the review board is exactly the Learn/Play size on
+                  every portrait phone; the 68vh max-width only guards landscape/
+                  very-short viewports from a board that would starve the middle.
+                  Narration is PINNED above the scroll middle, so a full-width
+                  board no longer hides the coach's why (the old 2026-06-27/07-10
+                  complaint the vh cap was solving). */}
+              <div className="w-full max-w-[68vh] mx-auto md:max-w-[420px] relative">
                 <ChessBoard
                   // Re-key on exploration toggle so the underlying chess
                   // instance resets cleanly when the user enters or
@@ -3025,7 +3047,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           </div>
 
           {/* ── Scrollable middle: move list, tactics, ask ── */}
-          <div className="flex-1 min-h-0 overflow-y-auto" data-testid="review-scroll-middle">
+          <div ref={scrollMiddleRef} className="flex-1 min-h-0 overflow-y-auto" data-testid="review-scroll-middle">
             {/* Surface A: reading gate — paused before the student's next
                 mistake, asks them to read the (clean) position before the move
                 is revealed. The board already shows readingGate.fen. */}

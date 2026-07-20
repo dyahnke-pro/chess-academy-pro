@@ -876,7 +876,12 @@ export function buildReviewSegments(
   // opponent ~50-60% of moves, not every one).
   const oppTargetsSeen = new Set<string>();
   let oppCommentCount = 0;
-  const MAX_OPP_COMMENTS = 4;
+  // David 2026-07-20 (live iPhone test): "need more opponent narrations." Raised
+  // 4→10. Every opponent read is board-true (loose piece / weak-pawn pressure /
+  // outpost / central development) and deduped per target square, so a higher cap
+  // only surfaces MORE genuine reads — it can never manufacture filler. Flagged
+  // opponent slips ("your opponent slipped") are already uncapped above.
+  const MAX_OPP_COMMENTS = 10;
   // Opponent-psychology read state — was the opponent's LAST move an error, and
   // have we already noted the snowball once?
   let lastOpponentWasError = false;
@@ -915,7 +920,14 @@ export function buildReviewSegments(
     const bestMoveSan = rawBestSan && stripGlyphs(rawBestSan) !== stripGlyphs(m.san) ? rawBestSan : null;
     let narration = buildDeterministicNarration({
       ply: m.ply,
-      isStudentMove: !m.isCoachMove,
+      // Key student-vs-opponent framing on COLOR when the student's color is
+      // known — isCoachMove is false for BOTH sides in an imported/reviewed game
+      // (documented gotcha), so `!m.isCoachMove` marked every opponent move as the
+      // student's and gave the opponent's forced recapture the student-blunder
+      // voice ("Ouch — that one hurts" on Black's Nxd7; audit 2026-07-20). When
+      // playerColor is omitted (flag-only unit tests), fall back to the old
+      // isCoachMove signal so the mover is treated as the student.
+      isStudentMove: playerColor ? moverColor === playerColor : !m.isCoachMove,
       classification: m.classification,
       bestMoveSan,
       preMoveEval: m.preMoveEval,
@@ -1288,7 +1300,12 @@ export async function generateReviewNarration(params: {
   if (coachNarration !== 'silent') {
     try {
       const toVoice = segments
-        .filter((s) => s.narration && s.narration.trim().length > 0)
+        // Exempt the mating move (SAN ends with '#') from the house-voice pass:
+        // its deterministic text NAMES the checkmate, and the paraphrase would
+        // drop the word "mate" (a removal containment allows — "Checkmate, game
+        // over" → "Game over, clean as can be"). The finish is the one beat that
+        // must say "mate" verbatim (audit 2026-07-20 MATE gate). One line per game.
+        .filter((s) => s.narration && s.narration.trim().length > 0 && !s.san.includes('#'))
         .map((s) => ({ id: s.ply, fact: s.narration as string, kind: s.narrationSource ?? undefined }));
       if (toVoice.length > 0) {
         const warmed = await raceTimeout(
