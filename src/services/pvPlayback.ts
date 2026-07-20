@@ -84,10 +84,24 @@ function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
   const mover = mv.color;
   const defender: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
 
+  // A tactic only "landed" if THIS move CREATED it — not one that was already
+  // on the board (David 2026-07-20: every PV move narrated "lands a pin"
+  // because a full middlegame board almost always has some pre-existing pin;
+  // "O-O lands a pin" was the nonsense that resulted). Compare the tactic
+  // signatures before vs after and keep only a newly-appeared one whose
+  // involved squares include the square the mover just moved to (so it's the
+  // move's own doing, not the opponent's standing threat). G0: board-true.
   let tacticLanded: string | null = null;
   try {
-    const t = detectTactics(fenAfter).tactics.find((x) => x.type !== 'none');
-    tacticLanded = t ? t.type : null;
+    const sig = (t: { type: string; involvedSquares: string[] }): string =>
+      `${t.type}:${[...t.involvedSquares].sort().join(',')}`;
+    const toSquare = mv.san.replace(/[+#!?]+$/, '').match(/([a-h][1-8])(?!.*[a-h][1-8])/)?.[1] ?? null;
+    const beforeSigs = new Set(detectTactics(fenBefore).tactics.filter((x) => x.type !== 'none').map(sig));
+    const landed = detectTactics(fenAfter).tactics
+      .filter((x) => x.type !== 'none')
+      .filter((x) => !beforeSigs.has(sig(x)))
+      .find((x) => toSquare === null || x.involvedSquares.includes(toSquare));
+    tacticLanded = landed ? landed.type : null;
   } catch { /* facts stay null */ }
 
   const isCheck = /[+#]$/.test(mv.san);

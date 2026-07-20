@@ -639,7 +639,15 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       walkPlayback.goForward();
       return;
     }
-    if (shotState || shotReveal || rewindOffer) return; // a review question is open
+    // Forward SKIPS the find-the-shot too (David 2026-07-20: "arrow forward
+    // should skip this… we talked about this"). Dismiss the card + advance.
+    if (shotState || shotReveal) {
+      setShotState(null);
+      setShotReveal(null);
+      walkPlayback.goForward();
+      return;
+    }
+    if (rewindOffer) return; // a review question is open
     if (seqStateRef.current) return;     // spot-the-sequence / playback in flight
     if (cameoStateRef.current) return;   // model-game cameo card / playback open
     if (principleQuizStateRef.current) return; // device quiz open
@@ -1087,9 +1095,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       id: i,
       fact: plyFactsString(ply) ?? renderPlyFactLine(ply) ?? buildReviewMoveTeaching(ply.fenBefore, ply.san) ?? '',
     }));
-    let warmed = new Map<number, string>();
-    try { warmed = await voiceReviewLines(rawWhys.filter((w) => w.fact.length > 0)); } catch { /* raw fallback */ }
-    if (betterLineTokenRef.current !== token || !walkMountedRef.current) { onDone(); return; }
     // PACE ON REAL AUDIO (David 2026-07-19: "no per move why… quickly moves from
     // move to move then states the verdict"). The bug: the flagged ply's own
     // narration is a ~5s clip still PLAYING when the playout starts, and
@@ -1111,8 +1116,14 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       try { await voiceService.speakForced(t); } catch { /* voice off */ }
       await waitVoiceIdle();              // hold the board until THIS why finishes
     };
+    // Speak the intro FIRST — masks the ~2s grounding warm below so the walk
+    // doesn't feel like a dead pause after the card (David 2026-07-20: "decrease
+    // the time from card to best line walk"). The warm runs while it plays.
     const intro = seed.bestSan ? `Here's the stronger line — ${seed.bestSan}.` : "Here's the stronger line.";
     await speakPaced(intro);
+    let warmed = new Map<number, string>();
+    try { warmed = await voiceReviewLines(rawWhys.filter((w) => w.fact.length > 0)); } catch { /* raw fallback */ }
+    if (betterLineTokenRef.current !== token || !walkMountedRef.current) { onDone(); return; }
     for (let i = 0; i < line.plies.length; i++) {
       if (betterLineTokenRef.current !== token || !walkMountedRef.current) { onDone(); return; }
       const ply = line.plies[i];
@@ -2256,7 +2267,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           shotState !== null || // find-the-shot: the board IS the answer input
           (walkExploreToggleOn && hasArrow && walkExplorationFen === null) ||
           walkExplorationFen !== null;
-      const walkDisplayFen = walkExplorationFen ?? displayFen;
+      // During a find-the-shot the board MUST sit on the shot's own position
+      // (the pre-move FEN where the better move is legal) — otherwise it shows
+      // the position AFTER the played move and the answer can't be played at
+      // all (David 2026-07-20: "unable to click on the square to answer").
+      const walkDisplayFen = shotState ? shotState.challenge.fen : (walkExplorationFen ?? displayFen);
       const badge = seg?.classification ?? null;
       // Authoritative nav ceiling = the full game length, not the
       // segments' trailing ply. The LLM frequently truncates segment
@@ -2494,7 +2509,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   // clean remount when entering/exiting exploration so
                   // any chess.js move history accumulated during
                   // exploration is wiped.
-                  key={`walk-board-${walkExplorationFen ? 'expl' : 'live'}-shot${shotBoardEpoch}`}
+                  key={`walk-board-${walkExplorationFen ? 'expl' : 'live'}-${shotState ? 'shot' : 'nshot'}${shotBoardEpoch}`}
                   initialFen={walkDisplayFen}
                   orientation={playerColor}
                   interactive={walkBoardInteractive}
