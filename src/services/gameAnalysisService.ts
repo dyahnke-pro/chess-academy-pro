@@ -125,7 +125,18 @@ function classifyCpLoss(
   evalBefore?: number | null,
   evalAfter?: number | null,
   isPlayerWhiteMove?: boolean,
+  deliveredMate?: boolean,
 ): MoveClassification {
+  // A move that DELIVERS checkmate is the best possible outcome — NEVER a
+  // mistake, no matter what the post-mate eval reads. The engine returns 0 for
+  // a terminal (checkmated) position, so the eval-swing math below would call
+  // the mating move a "blunder" (evalBefore +winning → 0). Board-truth from the
+  // SAN's '#' short-circuits that (audit 2026-07-20: "Rd8# was a blunder").
+  if (deliveredMate) {
+    return evalBefore !== undefined && evalBefore !== null && Math.abs(evalBefore) < MATE_EVAL_THRESHOLD
+      ? 'brilliant'   // found a mate that wasn't already a mate score
+      : 'good';       // converting an already-decisive position
+  }
   // Handle mate evals: if the player delivered/found checkmate, it's brilliant
   if (evalAfter !== undefined && evalAfter !== null && Math.abs(evalAfter) >= MATE_EVAL_THRESHOLD) {
     const goodForPlayer = isPlayerWhiteMove ? evalAfter > 0 : evalAfter < 0;
@@ -316,7 +327,7 @@ async function analyzeGameOnWorker(
       const cpLoss = isWhiteMove
         ? evalBefore - evalAfter
         : evalAfter - evalBefore;
-      classification = classifyCpLoss(cpLoss, evalBefore, evalAfter, isWhiteMove);
+      classification = classifyCpLoss(cpLoss, evalBefore, evalAfter, isWhiteMove, moves[moveIdx]?.includes('#'));
       if (cpLoss >= INACCURACY_CP && classification !== 'brilliant' && classification !== 'great' && classification !== 'good') {
         mistakeIndices.push(moveIdx);
       }
@@ -413,7 +424,7 @@ async function analyzeGamePositions(
         ? evalBefore - evalAfter
         : evalAfter - evalBefore;
 
-      classification = classifyCpLoss(cpLoss, evalBefore, evalAfter, isWhiteMove);
+      classification = classifyCpLoss(cpLoss, evalBefore, evalAfter, isWhiteMove, moves[moveIdx]?.includes('#'));
 
       if (cpLoss >= INACCURACY_CP && classification !== 'brilliant' && classification !== 'great' && classification !== 'good') {
         try {

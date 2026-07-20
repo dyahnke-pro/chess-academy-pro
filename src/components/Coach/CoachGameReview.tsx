@@ -610,6 +610,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const cameoStateRef = useRef<{ stage: 'ask' | 'playback' } | null>(null);
   /** Mirror of the theory-departure card state (Phase 4 block below). */
   const theoryStateRef = useRef<{ stage: 'ask' | 'playback' } | null>(null);
+  /** Late-bound canceller for the cards declared BELOW handleWalkForward
+   *  (sequence / cameo / theory). Populated by an effect once those cancel
+   *  helpers exist, so forward can DISMISS them (escape-hatch) instead of
+   *  no-op'ing — the "board frozen behind the card" bug (David 2026-07-19),
+   *  which the real-game audit caught still live for the cameo (stall at
+   *  ply 21, 2026-07-20). */
+  const dismissLateCardsRef = useRef<(() => void) | null>(null);
 
   // BLUNDER REWIND (David 2026-07-11: "return to the last moment you had a
   // choice"). After a blunder's question resolves, offer to jump the board
@@ -686,11 +693,18 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       walkPlayback.goForward();
       return;
     }
-    if (rewindOffer) return; // a review question is open
-    if (seqStateRef.current) return;     // spot-the-sequence / playback in flight
-    if (cameoStateRef.current) return;   // model-game cameo card / playback open
-    if (principleQuizStateRef.current) return; // device quiz open
-    if (theoryStateRef.current) return;  // theory-departure card / playback open
+    // FORWARD IS ALWAYS AN ESCAPE HATCH — dismiss any open card + advance, never
+    // freeze the board (David 2026-07-19). These cards are declared BELOW, so
+    // rewind uses its in-scope setter and seq/cameo/theory go through the
+    // late-bound canceller ref. (The real-game audit caught the cameo still
+    // freezing forward at ply 21, 2026-07-20.)
+    if (rewindOffer) { setRewindOffer(null); walkPlayback.goForward(); return; }
+    if (seqStateRef.current || cameoStateRef.current || theoryStateRef.current) {
+      dismissLateCardsRef.current?.();
+      walkPlayback.goForward();
+      return;
+    }
+    if (principleQuizStateRef.current) return; // device quiz (hidden) — never opens
     if (readingQuizOn) {
       const nextPly = walkPlayback.currentPly + 1;
       const seg = walkNarration?.segments.find((s) => s.ply === nextPly) ?? null;
@@ -793,7 +807,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       }
     }
     walkPlayback.goForward();
-  }, [readingGate, faucetPhase, resetFaucet, raiseFaucet, readingQuizOn, walkPlayback, walkNarration, playerColor, openingName, playerRating, shotState, shotReveal, turningQ, trapQ, questionPlan, moves, moverIsStudent]);
+  }, [readingGate, faucetPhase, resetFaucet, raiseFaucet, readingQuizOn, walkPlayback, walkNarration, playerColor, openingName, playerRating, shotState, shotReveal, turningQ, trapQ, rewindOffer, questionPlan, moves, moverIsStudent]);
 
   // Advance the walk once the faucet is done (answered + reveal dismissed, or
   // skipped) — the "resume" side of the pause above.
@@ -1744,6 +1758,18 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       setWalkExplorationSan(null);
     }
   }, []);
+
+  // Wire the late-bound canceller so handleWalkForward (declared ABOVE these
+  // cards) can DISMISS the sequence / cameo / theory cards + advance, instead of
+  // freezing the board behind them (the ply-21 stall the audit caught).
+  useEffect(() => {
+    dismissLateCardsRef.current = (): void => {
+      cancelSequence();
+      cancelCameo();
+      cancelTheory();
+    };
+    return () => { dismissLateCardsRef.current = null; };
+  }, [cancelSequence, cancelCameo, cancelTheory]);
 
   // Build the opening-theory lecture once per game (masters-DB tour of the
   // mainline / sidelines / best moves / departure), deferred off the mount path.
