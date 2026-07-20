@@ -97,9 +97,15 @@ function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
       `${t.type}:${[...t.involvedSquares].sort().join(',')}`;
     const toSquare = mv.san.replace(/[+#!?]+$/, '').match(/([a-h][1-8])(?!.*[a-h][1-8])/)?.[1] ?? null;
     const beforeSigs = new Set(detectTactics(fenBefore).tactics.filter((x) => x.type !== 'none').map(sig));
+    // Only the MOVED piece can be the tactic's agent. A pin or skewer is made
+    // by a SLIDER (bishop/rook/queen) — a knight/pawn/king move that merely
+    // touches a pin's involved squares did NOT "land a pin" (David 2026-07-20:
+    // "the knight lands on c3 and suddenly it's pinning" — knights can't pin).
+    const isSlider = /^[BRQ]/.test(mv.san); // bishop/rook/queen — the only pinning pieces
     const landed = detectTactics(fenAfter).tactics
       .filter((x) => x.type !== 'none')
       .filter((x) => !beforeSigs.has(sig(x)))
+      .filter((x) => !((x.type === 'pin' || x.type === 'skewer') && !isSlider))
       .find((x) => toSquare === null || x.involvedSquares.includes(toSquare));
     tacticLanded = landed ? landed.type : null;
   } catch { /* facts stay null */ }

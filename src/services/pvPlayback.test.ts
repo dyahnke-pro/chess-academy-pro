@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { computePvLine, renderPlyFactLine, pvFactsForVoice, type PvEngine } from './pvPlayback';
+import { computePvLine, renderPlyFactLine, pvFactsForVoice, plyFactsForMove, type PvEngine } from './pvPlayback';
 import type { StockfishAnalysis } from '../types';
 
 /** Canned engine: maps fen → analysis. Unknown fen → throws (like a dead worker). */
@@ -129,6 +129,23 @@ describe('pvPlayback — computePvLine (Phase 1)', () => {
   it('engine dead → null, never throws', async () => {
     const engine: PvEngine = { analyzePosition: () => Promise.reject(new Error('worker dead')) };
     expect(await computePvLine(MATE_FEN, { engine })).toBeNull();
+  });
+});
+
+describe('plyFactsForMove — no phantom tactics (David 2026-07-20)', () => {
+  it('a KNIGHT move never claims a pin (knights cannot pin)', () => {
+    // The real Pirc game position before 12.Nc3 — the walk narrated "the knight
+    // lands on c3 and suddenly it's pinning", which is board-false.
+    const c = new Chess();
+    for (const m of ['e4', 'd6', 'd4', 'g6', 'f4', 'e6', 'Be3', 'b6', 'c4', 'Bg7', 'Qd2', 'Nf6', 'Bd3', 'Na6', 'Nf3', 'c6', 'O-O', 'Nc7', 'e5', 'Nd7', 'exd6', 'Na6']) c.move(m);
+    const out = plyFactsForMove(c.fen(), 'Nc3');
+    if (out) expect(out).not.toMatch(/pin/i);
+  });
+
+  it('returns a grounded fact string or null (never throws on a legal move)', () => {
+    const out = plyFactsForMove(new Chess().fen(), 'e4');
+    // 1.e4 is a quiet developing push — no concrete tactic/capture → silence.
+    expect(out === null || typeof out === 'string').toBe(true);
   });
 });
 
