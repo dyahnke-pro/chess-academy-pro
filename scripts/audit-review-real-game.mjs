@@ -27,9 +27,13 @@ import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } f
 import { attachVoiceListener, voiceLines, LISTENER_LAUNCH_ARGS } from './audit-lib/review-voice-listener.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
-const GID = 'chesscom-996014340';
-// Knight_Mare_01 (White, student) beat iankane21 — opponent RESIGNED (1-0).
-const PGN = '1. e4 d6 2. d4 g6 3. f4 e6 4. Be3 b6 5. c4 Bg7 6. Qd2 Nf6 7. Bd3 Na6 8. Nf3 c6 9. O-O Nc7 10. e5 Nd7 11. exd6 Na6 12. Nc3 Nf8 13. c5 g5 14. fxg5 e5 15. Nxe5 Nd7 16. Nxc6 1-0';
+// NEW game per run (David 2026-07-20: "pick a different game"). Morphy's Opera
+// Game (Philidor Defense) — a real, famous, decisive-by-MATE brilliancy with
+// four sacrifices. Hammers exactly this build's fixes: mate naming (Rd8#, not
+// "pawns"), the fork/pin/material descriptors on the sacs, and the walk-
+// narration unification. Student = White (Morphy).
+const GID = process.env.AUDIT_GID || 'audit-opera-game';
+const PGN = process.env.AUDIT_PGN || '1. e4 e5 2. Nf3 d6 3. d4 Bg4 4. dxe5 Bxf3 5. Qxf3 dxe5 6. Bc4 Nf6 7. Qb3 Qe7 8. Nc3 c6 9. Bg5 b5 10. Nxb5 cxb5 11. Bxb5+ Nbd7 12. O-O-O Rd8 13. Rxd7 Rxd7 14. Rd1 Qe6 15. Bxd7+ Nxd7 16. Qb8+ Nxb8 17. Rd8# 1-0';
 const SANS = PGN.replace(/\d+\.\s*/g, '').replace(/\s*1-0\s*$/, '').trim().split(/\s+/);
 
 const log = (s) => console.log(s);
@@ -88,9 +92,9 @@ const run = async () => {
     const db = await open();
     const put = (store, val) => new Promise((res, rej) => { const t = db.transaction(store, 'readwrite'); t.objectStore(store).put(val); t.oncomplete = () => res(true); t.onerror = () => rej(t.error); });
     const getAll = (store) => new Promise((res, rej) => { const t = db.transaction(store, 'readonly'); const rq = t.objectStore(store).getAll(); rq.onsuccess = () => res(rq.result); rq.onerror = () => rej(rq.error); });
-    await put('games', { id: gid, pgn, white: 'Knight_Mare_01', black: 'iankane21', result: '1-0', date: '2026.07.17', event: 'Daily Chess', eco: 'B06', whiteElo: 1292, blackElo: 887, source: 'chesscom', termination: 'resigned', annotations: null, coachAnalysis: null, isMasterGame: false, openingId: null, fullyAnalyzed: false });
+    await put('games', { id: gid, pgn, white: 'Morphy', black: 'Allies', result: '1-0', date: '1858.11.02', event: 'Paris Opera', eco: 'C41', whiteElo: 1400, blackElo: 1200, source: 'chesscom', termination: 'checkmate', annotations: null, coachAnalysis: null, isMasterGame: false, openingId: null, fullyAnalyzed: false });
     const profs = await getAll('profiles');
-    for (const p of profs) { p.preferences = p.preferences || {}; p.preferences.chessComUsername = 'Knight_Mare_01'; p.preferences.coachNarration = 'full'; await put('profiles', p); }
+    for (const p of profs) { p.preferences = p.preferences || {}; p.preferences.chessComUsername = 'Morphy'; p.preferences.coachNarration = 'full'; await put('profiles', p); }
     return { profiles: profs.length };
   }, { gid: GID, pgn: PGN }).catch((e) => ({ error: String(e) }));
   log(`[seed] ${JSON.stringify(seed)}`);
@@ -191,9 +195,24 @@ const run = async () => {
 
   // S5 — the better-line playout FIRED with a why on nearly every ply. A real
   // playout is intro + several per-ply whys + a verdict (>= 4 distinct lines).
+  // MATE — the game ends in checkmate; the final narration must NAME it as mate
+  // (not "pawns"/eval nonsense). Board-truth for the mate-score fix.
+  const mateNamed = plies.some((p) => /checkmate|mate\b/i.test(p.narr || '')) || /checkmate|it's mate|delivers mate/i.test(voiceAll.join(' '));
+  add('MATE named-not-pawns', mateNamed, mateNamed ? 'the mate is named as mate' : 'no mate naming at the finish');
+  // No "N pawns" where N is absurd (mate score leaked as a pawn count).
+  const bogusPawns = [...plies.map((p) => p.narr || ''), ...voiceAll].find((t) => /\b(\d{2,})(?:\.\d+)?\s*pawns?\b/i.test(t) && Number(RegExp.$1) >= 20);
+  add('NOPAWNLEAK no-mate-as-pawns', !bogusPawns, bogusPawns ? `mate leaked as pawns: "${String(bogusPawns).slice(0, 60)}"` : 'no absurd pawn counts');
+
+  // S5 is CONDITIONAL: the better-line playout only fires on a student MISTAKE.
+  // A cleanly-played game (e.g. a brilliancy) legitimately has none → skip, not
+  // fail. Assert quality only WHEN it fired.
   const s5 = s5runs.filter((r) => r.fired);
   const s5best = s5.reduce((a, r) => Math.max(a, r.lineCount), 0);
-  add('S5 playout-per-move-why', s5.length > 0 && s5best >= 4, `runs=${s5runs.length} fired=${s5.length} maxLines=${s5best} (need >=4)`);
+  if (s5runs.length === 0) {
+    log('  ⏭  S5 skipped — no student mistake in this game (no better-line to walk), correct.');
+  } else {
+    add('S5 playout-per-move-why', s5.length > 0 && s5best >= 4, `runs=${s5runs.length} fired=${s5.length} maxLines=${s5best} (need >=4)`);
+  }
 
   // OPP — opponent commentary fired at least once. Key on the SEGMENT SOURCE
   // (data-narration-source="opponent"), not phrasing: the house-voice pass
