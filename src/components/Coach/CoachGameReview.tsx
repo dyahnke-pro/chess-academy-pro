@@ -33,6 +33,7 @@ import { pauseBatchAnalysis, resumeBatchAnalysis } from '../../services/gameAnal
 import { classifyGameTheme, type GameThemeResult } from '../../services/gameThemeClassifier';
 import { findRewindTarget, type RewindTarget } from '../../services/blunderRewind';
 import { buildTurningPointQuestion, judgeTurningPointPick, type TurningPointQuestion } from '../../services/reviewTurningPoint';
+import { buildEvalQuestion, judgeEvalAnswer, type EvalQuestion, type EvalBucketId } from '../../services/reviewEvalQuestion';
 import { captureEvent } from '../../services/analytics';
 import { detectMissedTactics } from '../../services/missedTacticService';
 import {
@@ -588,6 +589,15 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const [turningReveal, setTurningReveal] = useState<{ correct: boolean; text: string } | null>(null);
   const turningAskedRef = useRef(false);
 
+  // §4 GUESS-THE-EVAL — Danya's "who's better, and by how much?" Fires ONCE per
+  // game at a quiet position out of the opening: the student commits to a read,
+  // then the board tells the truth (G0 — the eval is the engine number already
+  // on the segment; reviewEvalQuestion.ts). Trains evaluation, the most
+  // transferable skill.
+  const [evalQ, setEvalQ] = useState<EvalQuestion | null>(null);
+  const [evalReveal, setEvalReveal] = useState<{ correct: boolean; text: string } | null>(null);
+  const evalAskedRef = useRef(false);
+
   useEffect(() => {
     // Fresh game → fresh question state.
     setShotState(null);
@@ -598,6 +608,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setTurningQ(null);
     setTurningReveal(null);
     turningAskedRef.current = false;
+    setEvalQ(null);
+    setEvalReveal(null);
+    evalAskedRef.current = false;
   }, [props.gameId]);
 
   const handleWalkForward = useCallback((): void => {
@@ -618,6 +631,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     }
     if (turningQ) {
       setTurningQ(null);
+      walkPlayback.goForward();
+      return;
+    }
+    if (evalQ) {
+      setEvalQ(null);
       walkPlayback.goForward();
       return;
     }
@@ -710,7 +728,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       }
     }
     walkPlayback.goForward();
-  }, [readingGate, faucetPhase, resetFaucet, raiseFaucet, readingQuizOn, walkPlayback, walkNarration, playerColor, openingName, playerRating, shotState, shotReveal, turningQ, moves, moverIsStudent]);
+  }, [readingGate, faucetPhase, resetFaucet, raiseFaucet, readingQuizOn, walkPlayback, walkNarration, playerColor, openingName, playerRating, shotState, shotReveal, turningQ, evalQ, moves, moverIsStudent]);
 
   // Advance the walk once the faucet is done (answered + reveal dismissed, or
   // skipped) — the "resume" side of the pause above.
@@ -875,6 +893,44 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // the student CALLED it — a wrong pick keeps the flat register.
     void voiceService.speakForced(text, correct ? { prosodySpike: true } : undefined).catch(() => undefined);
   }, [turningQ]);
+
+  // ── Guess-the-eval ask — fires ONCE at a quiet middlegame position ────────
+  // "How would you assess this position?" The student commits, then the board
+  // (the engine number already on the segment) tells the truth. Gated to a
+  // middlegame window and to a moment when NO other card is open, so it never
+  // collides with the faucet / find-shot / turning-point.
+  useEffect(() => {
+    if (evalAskedRef.current) return;
+    if (!walkNarration || moves.length === 0) return;
+    const ply = walkPlayback.currentPly;
+    const lo = Math.min(16, Math.max(8, Math.floor(moves.length * 0.35)));
+    const hi = Math.max(lo, Math.floor(moves.length * 0.7));
+    if (ply < lo || ply > hi) return;
+    // Never stack on another open card / question.
+    if (
+      faucetPhase !== 'idle' || shotState || shotReveal || turningQ || turningReveal ||
+      rewindOffer || evalReveal || seqStateRef.current || cameoStateRef.current ||
+      theoryStateRef.current || principleQuizStateRef.current
+    ) return;
+    const seg = walkNarration.segments.find((s) => s.ply === ply);
+    if (!seg || seg.evalAfter === null) return;
+    const q = buildEvalQuestion({ fen: seg.fenAfter, evalCp: seg.evalAfter, studentColor: playerColor });
+    if (!q) return;
+    evalAskedRef.current = true; // one ask per game
+    setEvalQ(q);
+    captureEvent('review_eval_asked', { answer: q.answerId, eval_cp: q.evalCp, ply });
+    void voiceService.speakForced(q.prompt).catch(() => undefined);
+  }, [walkPlayback.currentPly, walkNarration, moves.length, playerColor, faucetPhase, shotState, shotReveal, turningQ, turningReveal, rewindOffer, evalReveal]);
+
+  const handleEvalPick = useCallback((id: EvalBucketId): void => {
+    if (!evalQ) return;
+    const correct = judgeEvalAnswer(evalQ, id);
+    const text = `${correct ? 'Exactly right.' : 'Not quite.'} ${evalQ.reveal}`;
+    captureEvent('review_eval_result', { correct, picked: id, answer: evalQ.answerId, eval_cp: evalQ.evalCp });
+    setEvalQ(null);
+    setEvalReveal({ correct, text });
+    void voiceService.speakForced(text, correct ? { prosodySpike: true } : undefined).catch(() => undefined);
+  }, [evalQ]);
 
   // Move-sound hook — called here (above the sequence block) because the
   // sequence handlers below chime on auto-played defender/playback plies.
@@ -1688,7 +1744,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // and the walk "froze"). Whenever any question/playback card opens,
   // scroll the first present one into view.
   const anyCardOpen = Boolean(
-    shotState || shotReveal || turningQ || rewindOffer || seqState || cameoState || theoryState || principleQuizState || faucetPhase !== 'idle',
+    shotState || shotReveal || turningQ || evalQ || evalReveal || rewindOffer || seqState || cameoState || theoryState || principleQuizState || faucetPhase !== 'idle',
   );
   useEffect(() => {
     if (!anyCardOpen) return;
@@ -1705,6 +1761,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           '[data-testid="review-theory-playback"]',
           '[data-testid="review-principle-quiz"]',
           '[data-testid="review-turning-card"]',
+          '[data-testid="review-eval-card"]',
           '[data-testid="review-rewind-card"]',
           '[data-testid="discussion-practice-panel"]',
         ].join(', '),
@@ -2972,6 +3029,33 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 className={`mx-3 my-1 rounded-xl border-2 px-3 py-2 ${turningReveal.correct ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-amber-500/40 bg-amber-500/10'}`}>
                 <div className={`text-sm ${turningReveal.correct ? 'text-emerald-100' : 'text-amber-100'}`}>{turningReveal.text}</div>
                 <button type="button" data-testid="review-turning-point-done" onClick={() => setTurningReveal(null)}
+                  className="mt-1.5 rounded-lg border border-slate-500/50 px-2.5 py-1 text-xs text-slate-300 hover:bg-slate-500/20">
+                  Done
+                </button>
+              </div>
+            )}
+            {/* §4 GUESS-THE-EVAL card — the student commits a read, then the
+                board tells the truth. The five buckets are always the same,
+                in the same order, so the options never leak the answer. */}
+            {evalQ && (
+              <div data-testid="review-eval-card" className="mx-3 my-1 rounded-xl border-2 border-sky-500/40 bg-sky-500/10 px-3 py-2">
+                <div className="text-sm text-sky-100">{evalQ.prompt}</div>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {evalQ.choices.map((c) => (
+                    <button key={c.id} type="button" data-testid={`review-eval-pick-${c.id}`}
+                      onClick={() => handleEvalPick(c.id)}
+                      className="rounded-lg border border-sky-400/50 px-2.5 py-1 text-xs font-semibold text-sky-200 hover:bg-sky-500/20">
+                      {c.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+            {evalReveal && (
+              <div data-testid="review-eval-reveal"
+                className={`mx-3 my-1 rounded-xl border-2 px-3 py-2 ${evalReveal.correct ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-sky-500/40 bg-sky-500/10'}`}>
+                <div className={`text-sm ${evalReveal.correct ? 'text-emerald-100' : 'text-sky-100'}`}>{evalReveal.text}</div>
+                <button type="button" data-testid="review-eval-done" onClick={() => setEvalReveal(null)}
                   className="mt-1.5 rounded-lg border border-slate-500/50 px-2.5 py-1 text-xs text-slate-300 hover:bg-slate-500/20">
                   Done
                 </button>
