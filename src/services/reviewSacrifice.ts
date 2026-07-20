@@ -77,6 +77,37 @@ export function enemyKingStuckInCenter(fen: string, moverColorWB: 'w' | 'b'): bo
   return fullmove >= 8 && central && openCentral;
 }
 
+const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+
+/**
+ * WHY a positional / exchange sacrifice works when it isn't a direct mating sac
+ * (David 2026-07-20 — Rxd7 in the Opera "still sounds generic; where's the why?"):
+ * the sac RIPS A DEFENDER off the enemy king. True when the captured piece sat
+ * ADJACENT to the enemy king (a piece shielding it). Pure board-truth: replay the
+ * move, read the captured square + the enemy king square (chess.js). Returns a
+ * why-clause, or null when the sac isn't a king-shield removal. Phrased to avoid
+ * the "<piece> on <square>" pattern so it never trips narrationBoardAccurate on a
+ * square the capture just vacated.
+ */
+export function describeSacBreaksKingShield(fenBefore: string, san: string): string | null {
+  let board: Chess;
+  try { board = new Chess(fenBefore); } catch { return null; }
+  const mv = board.move(san);
+  if (!mv || !mv.captured) return null;
+  const enemy: 'w' | 'b' = mv.color === 'w' ? 'b' : 'w';
+  const kingSq = findKing(board, enemy); // AFTER the move — king hasn't moved on a capture
+  if (!kingSq) return null;
+  const df = Math.abs(mv.to.charCodeAt(0) - kingSq.charCodeAt(0));
+  const dr = Math.abs(Number(mv.to[1]) - Number(kingSq[1]));
+  if (df > 1 || dr > 1 || (df === 0 && dr === 0)) return null; // must be adjacent to the king
+  const capName = PIECE_NOUN[mv.captured] ?? 'piece';
+  const isExchange = mv.piece === 'r' && (mv.captured === 'n' || mv.captured === 'b');
+  const give = isExchange
+    ? 'You give up the exchange — a rook for a minor piece'
+    : `You give up the ${PIECE_NOUN[mv.piece] ?? 'piece'}`;
+  return `${give}, but you tear the ${capName} away from beside their king and the attack rolls straight on`;
+}
+
 /** Squares of the king of `color`, or null. */
 function findKing(board: Chess, color: 'w' | 'b'): string | null {
   for (const row of board.board()) {

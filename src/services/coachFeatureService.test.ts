@@ -522,8 +522,14 @@ describe('coachFeatureService', () => {
       expect(at(19)).toMatch(/stuck in the cent|ahead in development/i);
       // O-O-O is king safety + rook activation, never a "queenside majority endgame".
       expect(at(23)).not.toMatch(/majority|endgame/i);
-      // Qb8+ is THE queen sacrifice (peak register on brilliant).
+      // Qb8+ is THE queen sacrifice (peak register on brilliant), and it now
+      // TEACHES the mechanism — the WHY (David 2026-07-20): the recapture drags
+      // the knight off d7, clearing the d-file for Rd8# (multi-sentence).
       expect(at(31)).toMatch(/queen sacrifice/i);
+      expect(at(31)).toMatch(/why it works/i);
+      expect(at(31)).toMatch(/knight off d7/i);
+      expect(at(31)).toMatch(/d-file/i);
+      expect(at(31)).toMatch(/crashes down to d8/i);
       // The finish names checkmate.
       expect(at(33)).toMatch(/checkmate/i);
       // The forced finish is FRAMED at its first move (forcing-move concept).

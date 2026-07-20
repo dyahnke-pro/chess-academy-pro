@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { sacrificeCompensation } from './reviewSacrifice';
+import { sacrificeCompensation, describeSacBreaksKingShield } from './reviewSacrifice';
 
 /** FEN after playing the SAN prefix (the position the sac lands in). */
 function fenAfter(sans: string[]): string {
@@ -36,5 +36,30 @@ describe('sacrificeCompensation (David 2026-07-20 — teach the sac, don\'t asse
       expect(c).not.toMatch(/\bengine\b/i);
       expect(c).not.toMatch(/\b[NBRQK][a-h]?x?[a-h][1-8]\b/); // no SAN tokens
     }
+  });
+});
+
+describe('describeSacBreaksKingShield (David 2026-07-20 — the exchange-sac WHY)', () => {
+  // Opera up to 13.Rxd7 (White rook takes the d7 knight beside the e8 king).
+  const PRE_RXD7 = ['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5', 'Bxf3', 'Qxf3', 'dxe5', 'Bc4', 'Nf6', 'Qb3', 'Qe7', 'Nc3', 'c6', 'Bg5', 'b5', 'Nxb5', 'cxb5', 'Bxb5+', 'Nbd7', 'O-O-O', 'Rd8'];
+
+  it('names the exchange give + the king-shield removal for Rxd7', () => {
+    const clause = describeSacBreaksKingShield(fenAfter(PRE_RXD7), 'Rxd7');
+    expect(clause).not.toBeNull();
+    expect(clause).toMatch(/exchange/i);
+    expect(clause).toMatch(/knight/i);
+    expect(clause).toMatch(/king/i);
+    // Never trips the "<piece> on <square>" board-accuracy pattern.
+    expect(clause).not.toMatch(/\b(knight|bishop|rook|queen|pawn|king)\s+on\s+[a-h][1-8]\b/i);
+  });
+
+  it('returns null for a capture nowhere near the enemy king', () => {
+    // 7.dxe5 grabs a pawn far from Black\'s e8 king — not a shield removal.
+    const early = ['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5'];
+    expect(describeSacBreaksKingShield(fenAfter(early.slice(0, -1)), 'dxe5')).toBeNull();
+  });
+
+  it('returns null for a non-capture', () => {
+    expect(describeSacBreaksKingShield(new Chess().fen(), 'e4')).toBeNull();
   });
 });

@@ -10,8 +10,8 @@ import { detectOpening } from './openingDetectionService';
 import { resolveCuratedOpeningIdeas } from './reviewOpeningTheory';
 import { detectPieceItineraries } from './reviewPieceItinerary';
 import { pickStoryGame } from './reviewStoryGame';
-import { sacrificeCompensation, enemyKingStuckInCenter } from './reviewSacrifice';
-import { detectForcedMatingSequence } from './reviewForcedSequence';
+import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShield } from './reviewSacrifice';
+import { detectForcedMatingSequence, explainMatingSacMechanism } from './reviewForcedSequence';
 import { detectBadHabits } from './badHabitDetector';
 import { db } from '../db/schema';
 import { voiceFacts, voiceReviewLines } from './coachApi';
@@ -915,7 +915,8 @@ export function buildReviewSegments(
   // FORCED-SEQUENCE framing (the forcing-move / "calculate to the end" concept):
   // if the game ends in a forced checking run, frame it at its first move so the
   // student learns to SEE a forced finish, then the walk plays it out. Board-true.
-  const forcedRun = detectForcedMatingSequence(moves.slice(0, usable).map((mm) => mm.san));
+  const sansForRun = moves.slice(0, usable).map((mm) => mm.san);
+  const forcedRun = detectForcedMatingSequence(sansForRun);
   const studentColorWB: 'w' | 'b' | null = playerColor === 'white' ? 'w' : playerColor === 'black' ? 'b' : null;
   // Prev-capture context so the PlyFacts material calc can tell a RECAPTURE
   // (even trade → 0) from a genuine win (David 2026-07-20 Opera nitpick). Holds
@@ -1032,14 +1033,36 @@ export function buildReviewSegments(
       if (comp.length > 0) sacCompShown = true;
       if (comp.some((c) => /stuck in the cent/i.test(c))) kingCenterTaught = true;
       const payoff = comp.length > 0 ? ` Look what you get for it: ${joinClauses(comp)}.` : '';
+      // THE MECHANISM — the deepest "why" (David 2026-07-20: "where is the
+      // teaching moment, the WHY? … one sentence per move doesn't cover it").
+      // When this sac is a mating sac whose forced recapture DEFLECTS/CLEARS a
+      // defender off the mating line, explain that line-clearance in a full
+      // sentence. Board-true (chess.js replay). Only the student's own sac.
+      const mechanismClause = isStudentSac
+        ? explainMatingSacMechanism(sansForRun, m.ply - 1)
+        : null;
+      const mechanism = mechanismClause ? ` Here's why it works: ${mechanismClause}.` : '';
+      // A positional / exchange sacrifice that isn't a DIRECT mating sac still has
+      // a concrete point: it rips a defender off the enemy king. When the mating
+      // mechanism doesn't apply, teach THAT instead of the generic "for the
+      // initiative" (David 2026-07-20 Opera: Rxd7 "still sounds generic"). This
+      // clause NAMES the material give + the point, so it's the base sentence.
+      const kingShieldClause = isStudentSac && !mechanismClause
+        ? describeSacBreaksKingShield(fenPair.fenBefore, m.san)
+        : null;
       if (piece === 'queen') {
         // The peak. A queen sacrifice the engine rates top is the point of the
-        // whole attack — say so, don't call it "a check".
+        // whole attack — say so, don't call it "a check". Compose the full
+        // teaching passage: name → mechanism (why) → compensation payoff.
         narration = top
-          ? `There it is — the queen sacrifice on ${sq}${withCheck}. The boldest move on the board, and this is the point the whole attack was building toward.${payoff}`
-          : `${subjCap} offer${s} the queen on ${sq}${withCheck} — a stunning sacrifice.${payoff}`;
-      } else if (payoff) {
-        narration = `${subjCap} sacrifice${s} the ${piece} on ${sq}${withCheck}.${payoff}`;
+          ? `There it is — the queen sacrifice on ${sq}${withCheck}. The boldest move on the board, and this is the point the whole attack was building toward.${mechanism}${payoff}`
+          : `${subjCap} offer${s} the queen on ${sq}${withCheck} — a stunning sacrifice.${mechanism}${payoff}`;
+      } else if (kingShieldClause) {
+        // Exchange/positional sac that tears a shield off the king — the clause
+        // names both the give and the point; append any fresh compensation.
+        narration = `${kingShieldClause}${withCheck}.${payoff}`;
+      } else if (mechanism || payoff) {
+        narration = `${subjCap} sacrifice${s} the ${piece} on ${sq}${withCheck}.${mechanism}${payoff}`;
       } else {
         narration = top
           ? `${subjCap} sacrifice${s} the ${piece} on ${sq}${withCheck} — a real sacrifice for the initiative.`
@@ -1109,6 +1132,11 @@ export function buildReviewSegments(
       && moverColor === playerColor
       && m.ply >= MIDDLEGAME_ORIENTATION_MIN_PLY
       && (m.classification === null || m.classification === 'book' || m.classification === 'good')
+      // A slow "advance your pawn majority" plan is a NON-APPLICABLE reason while
+      // the enemy king is exposed in the centre — that's a king-hunt, not a
+      // majority grind (David 2026-07-20: "don't overstate the why … Rd1 got a
+      // queenside-majority-endgame plan mid-mating-attack"). Board-true gate.
+      && !enemyKingStuckInCenter(fenPair.fenBefore, studentColorWB)
     ) {
       const orientation = buildMiddlegameOrientation(fenPair.fenBefore, studentColorWB);
       if (orientation) { narration = orientation.text; planArrows = orientation.arrows; orientationShown = true; narrationSource = 'orientation'; }

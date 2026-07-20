@@ -57,3 +57,69 @@ export function detectForcedMatingSequence(sans: string[]): ForcedMatingRun | nu
   if (length < 3) return null;
   return { startPly: start + 1, length };
 }
+
+const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+
+/**
+ * Explain the MECHANISM of a mating sacrifice — WHY giving the piece works: the
+ * forced recapture DEFLECTS/CLEARS a defender off a line, and a friendly piece
+ * crashes down that line to mate (David 2026-07-20: "where is the teaching moment,
+ * the WHY?"). Pure board-truth: we replay the game, and for the sac at `sacIdx`
+ * check whether the recapturing piece VACATES a square that lies on the mating
+ * move's path. Returns a clause like "drags the knight off d7, and the d-file
+ * swings open for your rook to crash down to d8", or null when it isn't that motif.
+ *
+ * @param sans full game SAN
+ * @param sacIdx 0-based index of the sacrifice move
+ */
+export function explainMatingSacMechanism(sans: string[], sacIdx: number): string | null {
+  try {
+    // The mate must come within a few plies of the sac (a forced finish).
+    let mateIdx = -1;
+    for (let i = sacIdx + 1; i < sans.length && i <= sacIdx + 4; i += 1) {
+      if (sans[i].trimEnd().endsWith('#')) { mateIdx = i; break; }
+    }
+    if (mateIdx < 0) return null;
+    const recapIdx = sacIdx + 1;
+    if (recapIdx >= mateIdx) return null; // need a recapture between sac and mate
+
+    // Replay to read each move's from/to (chess.js verbs).
+    const chess = new Chess();
+    const mv: ReturnType<Chess['move']>[] = [];
+    for (const san of sans) { const m = chess.move(san); if (!m) return null; mv.push(m); }
+
+    const recap = mv[recapIdx];
+    const mate = mv[mateIdx];
+    // The mating move must be a SLIDER along a file/rank/diagonal; its path is the
+    // squares strictly between from and to.
+    const path = squaresBetween(mate.from, mate.to);
+    if (path.length === 0) return null;
+    // Clearance: the recapturing piece VACATED a square on the mating line.
+    if (!path.includes(recap.from)) return null;
+
+    const file = mate.from[0] === mate.to[0] ? `${mate.to[0]}-file` : mate.from[1] === mate.to[1] ? `${mate.to[1]}th rank` : 'diagonal';
+    const recapName = PIECE_NAME[recap.piece] ?? 'piece';
+    const mateName = PIECE_NAME[mate.piece] ?? 'piece';
+    return `it drags the ${recapName} off ${recap.from}, and the ${file} swings wide open — your ${mateName} crashes down to ${mate.to} and it's mate`;
+  } catch {
+    return null;
+  }
+}
+
+/** Squares strictly between two squares along a file/rank/diagonal, else []. */
+function squaresBetween(from: string, to: string): string[] {
+  const f0 = from.charCodeAt(0) - 97; const r0 = Number(from[1]) - 1;
+  const f1 = to.charCodeAt(0) - 97; const r1 = Number(to[1]) - 1;
+  const df = Math.sign(f1 - f0); const dr = Math.sign(r1 - r0);
+  const straight = f0 === f1 || r0 === r1;
+  const diagonal = Math.abs(f1 - f0) === Math.abs(r1 - r0);
+  if (!straight && !diagonal) return [];
+  const out: string[] = [];
+  let f = f0 + df; let r = r0 + dr;
+  while (f !== f1 || r !== r1) {
+    if (f < 0 || f > 7 || r < 0 || r > 7) return [];
+    out.push(`${String.fromCharCode(97 + f)}${r + 1}`);
+    f += df; r += dr;
+  }
+  return out;
+}
