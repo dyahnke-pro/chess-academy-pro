@@ -9,6 +9,7 @@
 // lesson, not a one-move development).
 
 import { Chess } from 'chess.js';
+import type { PieceSymbol } from 'chess.js';
 
 const PIECE_LABEL: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
 
@@ -23,7 +24,7 @@ export interface PieceItinerary {
 }
 
 interface ActiveRoute {
-  pieceType: string;
+  pieceType: PieceSymbol;
   color: 'w' | 'b';
   squares: string[];
 }
@@ -75,16 +76,18 @@ export function detectPieceItineraries(
 
     // Continue an existing route if this piece stepped off its last square.
     const prior = bySquare.get(mv.from);
+    let route: ActiveRoute;
     if (prior && prior.pieceType === mv.piece && prior.color === mv.color) {
       bySquare.delete(mv.from);
       prior.squares.push(mv.to);
       bySquare.set(mv.to, prior);
+      route = prior;
     } else {
-      bySquare.set(mv.to, { pieceType: mv.piece, color: mv.color, squares: [mv.from, mv.to] });
+      route = { pieceType: mv.piece, color: mv.color, squares: [mv.from, mv.to] };
+      bySquare.set(mv.to, route);
     }
 
     // A real reroute = a minor piece, ≥3 squares (2+ hops), landing advanced.
-    const route = bySquare.get(mv.to)!;
     const key = `${route.pieceType}:${route.squares[0]}`;
     if (
       (route.pieceType === 'n' || route.pieceType === 'b')
@@ -98,7 +101,7 @@ export function detectPieceItineraries(
       const label = PIECE_LABEL[route.pieceType];
       found.push({
         ply,
-        pieceType: route.pieceType as 'n' | 'b',
+        pieceType: route.pieceType,
         route: route.squares.slice(),
         text: `Follow the ${label}'s journey — ${shown.join('–')}. It reroutes to ${mv.to} instead of settling for its first square, and that patience is the whole idea.`,
       });

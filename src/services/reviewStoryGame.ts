@@ -79,8 +79,8 @@ export function pickStoryGame(openingName: string | null): StoryGame | null {
     .sort((a, b) => topElo(b) - topElo(a) || Number(b.year) - Number(a.year))[0];
 
   const year = String(pick.year);
-  const white = cleanName(pick.white!);
-  const black = cleanName(pick.black!);
+  const white = cleanName(pick.white ?? '');
+  const black = cleanName(pick.black ?? '');
   const event = cleanEvent(pick.event, year);
   const citation = `${white} – ${black}${event ? `, ${event}` : ''} (${year})`;
   const ideaRaw = (pick.middlegameTheme ?? pick.lessonSummary ?? '').trim();

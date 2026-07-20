@@ -7,7 +7,7 @@ function mv(san: string, games: number, w = 0.4, d = 0.3, b = 0.3): MasterPlayMo
   return { san, uci: '', games, white: Math.round(games * w), draws: Math.round(games * d), black: Math.round(games * b), whitePct: w, drawPct: d, blackPct: b, averageRating: 2400 };
 }
 function res(fen: string, moves: MasterPlayMove[]): MasterPlayResult {
-  return { fen, totalGames: moves.reduce((s, m) => s + m.games, 0), moves, source: 'local' };
+  return { fen, totalGames: moves.reduce<number>((s, m) => s + Number(m.games), 0), moves, source: 'local' };
 }
 
 /** Play SANs and return the fen chain (fens[0]=start, fens[i]=after ply i). */

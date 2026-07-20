@@ -19,7 +19,6 @@
 // exchange (seeGain). Nothing here is invented.
 
 import { Chess } from 'chess.js';
-import type { Square } from 'chess.js';
 import { seeGain } from './positionReadingService';
 import { GUIDED_FIND_MIN_EVAL_CP } from './guidedFindTheMove';
 
@@ -56,7 +55,7 @@ export function playedCaptureIsPoisoned(fenBefore: string, san: string): boolean
     if (!mv || !mv.captured) return false;
     const before = new Chess(fenBefore);
     // seeGain returns the net for the side capturing on that square (the student).
-    return seeGain(before, mv.to as Square) <= -1;
+    return seeGain(before, mv.to) <= -1;
   } catch {
     return false;
   }

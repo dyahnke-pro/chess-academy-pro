@@ -11,7 +11,7 @@ describe('pickStoryGame — cited illustrative game from the VERIFIED corpus (§
 
   it('cites a real game for an opening that has model games', () => {
     // Find an openingId that actually has a model game with white/black/year.
-    const games = modelGamesRaw as Array<{ openingId?: string; white?: string; black?: string; year?: unknown }>;
+    const games = modelGamesRaw as Array<{ openingId?: string; white?: string; black?: string; year?: number | string }>;
     const sample = games.find((g) => g.openingId && g.white && g.black && g.year !== undefined && String(g.year).trim() !== '');
     expect(sample).toBeTruthy();
     // Reverse a name that resolves to that id is hard; instead assert via any
