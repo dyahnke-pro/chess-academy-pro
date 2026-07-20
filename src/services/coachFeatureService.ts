@@ -746,8 +746,13 @@ function buildDeterministicNarration(params: {
       const isSac = playedMerit.startsWith('sacrifices');
       return isSac && studentEvalWord ? `It ${playedMerit} — and ${studentEvalWord}. Clean.` : `It ${playedMerit}. Clean.`;
     }
-    // No nameable geometry — anchor on the eval so the student still learns why
-    // it held up, instead of empty praise.
+    // No nameable tactic — but a quiet keystone (a castle, a developing move) still
+    // has a CONCRETE lesson. Prefer it over generic praise so a strong castling
+    // move keeps "king to safety, rook to the open centre" instead of falling to
+    // "Accurate — you're winning" (audit 2026-07-20: O-O-O graded GREAT lost its
+    // teaching). Only fall back to the eval line when there's no concrete note.
+    const concrete = buildReviewMoveTeaching(fenBefore, playedSan);
+    if (concrete) return concrete;
     return studentEvalWord ? `Accurate — ${studentEvalWord}. Simple chess.` : null;
   }
 
