@@ -10,7 +10,7 @@ import { detectOpening } from './openingDetectionService';
 import { resolveCuratedOpeningIdeas } from './reviewOpeningTheory';
 import { detectPieceItineraries } from './reviewPieceItinerary';
 import { pickStoryGame } from './reviewStoryGame';
-import { sacrificeCompensation } from './reviewSacrifice';
+import { sacrificeCompensation, enemyKingStuckInCenter } from './reviewSacrifice';
 import { detectBadHabits } from './badHabitDetector';
 import { db } from '../db/schema';
 import { voiceFacts, voiceReviewLines } from './coachApi';
@@ -903,6 +903,9 @@ export function buildReviewSegments(
   // fires ONCE per game — a combination of several sacs shares one compensation,
   // so re-listing it verbatim on each is robotic. Later sacs are still NAMED.
   let sacCompShown = false;
+  // The "their king is stuck in the centre" keystone is taught at most ONCE per
+  // game — whether by the sacrifice compensation or the standalone beat below.
+  let kingCenterTaught = false;
   const studentColorWB: 'w' | 'b' | null = playerColor === 'white' ? 'w' : playerColor === 'black' ? 'b' : null;
   // Prev-capture context so the PlyFacts material calc can tell a RECAPTURE
   // (even trade → 0) from a genuine win (David 2026-07-20 Opera nitpick). Holds
@@ -1006,14 +1009,18 @@ export function buildReviewSegments(
       // from the position AFTER the sac + the eval. Only for the STUDENT's sac
       // (the "you get X for it" framing is the student's payoff); the opponent's
       // sac keeps the plain naming.
-      const comp = isStudentSac && !sacCompShown
+      let comp = isStudentSac && !sacCompShown
         ? sacrificeCompensation(
             fenPair.fenAfter,
             moverColor === 'white' ? 'w' : 'b',
             m.evaluation != null ? (moverColor === 'white' ? m.evaluation : -m.evaluation) : null,
           )
         : [];
+      // If a standalone beat already taught "king stuck in the centre", drop that
+      // clause here so the keystone is never stated twice.
+      if (kingCenterTaught) comp = comp.filter((c) => !/stuck in the cent/i.test(c));
       if (comp.length > 0) sacCompShown = true;
+      if (comp.some((c) => /stuck in the cent/i.test(c))) kingCenterTaught = true;
       const payoff = comp.length > 0 ? ` Look what you get for it: ${joinClauses(comp)}.` : '';
       if (piece === 'queen') {
         // The peak. A queen sacrifice the engine rates top is the point of the
@@ -1085,6 +1092,26 @@ export function buildReviewSegments(
     ) {
       const orientation = buildMiddlegameOrientation(fenPair.fenBefore, studentColorWB);
       if (orientation) { narration = orientation.text; planArrows = orientation.arrows; orientationShown = true; narrationSource = 'orientation'; }
+    }
+    // (c) KING-STUCK-IN-THE-CENTRE — the keystone attacking concept, taught as a
+    // TEACHING beat (not just inside a sacrifice). Once per game, on the student's
+    // own move, when the enemy king is genuinely exposed in the centre (past the
+    // opening, central king, open central file — board-true predicate). Skipped if
+    // a sacrifice already taught it. This is the "read the position, know when to
+    // attack" lesson the coach was missing (David 2026-07-20, narrating→teaching).
+    if (
+      narration === null
+      && !kingCenterTaught
+      && studentColorWB !== null
+      && !m.isCoachMove
+      && moverColor === playerColor
+      && m.ply >= 12
+      && (m.classification === null || m.classification === 'book' || m.classification === 'good')
+      && enemyKingStuckInCenter(fenPair.fenAfter, studentColorWB)
+    ) {
+      narration = 'Look at their king — still in the centre, no castling in sight, and the files are opening around it. That is your cue: this is the moment to throw your pieces at it, before they ever wriggle to safety.';
+      narrationSource = 'orientation';
+      kingCenterTaught = true;
     }
     // VARIATION RE-NAMING (A2) — name the line as it takes shape (Danya: "now
     // we're in the Najdorf"). Announce each newly-reached named opening once, in

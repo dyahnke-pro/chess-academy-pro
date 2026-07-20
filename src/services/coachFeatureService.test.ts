@@ -472,6 +472,26 @@ describe('coachFeatureService', () => {
       expect(oppSeg?.narration).toMatch(/your opponent/i);
     });
 
+    it('teaches king-stuck-in-the-centre as a standalone keystone beat (David 2026-07-20)', () => {
+      // e-file opens, Black never castles → the attacker's cue to open fire.
+      const sans = ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'Nf6', 'O-O', 'Nxe4', 'Re1', 'Nd6', 'Nxe5', 'Nxe5', 'Rxe5+', 'Be7', 'Nc3', 'a6'];
+      const segments = buildReviewSegments(sans.map((san, i) => move({ ply: i + 1, san })), 'white', null);
+      const taught = segments.some((s) => /king.*(centre|center)/i.test(s.narration || '') && /cue|throw your pieces|attack/i.test(s.narration || ''));
+      expect(taught).toBe(true);
+    });
+
+    it('does NOT double-teach king-in-centre when a sacrifice already taught it', () => {
+      // The Opera Game: the knight sac at ply 19 teaches the king-in-centre; the
+      // standalone beat must stay suppressed (no verbatim repeat of the keystone).
+      const OPERA = ['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5', 'Bxf3', 'Qxf3', 'dxe5', 'Bc4', 'Nf6', 'Qb3', 'Qe7', 'Nc3', 'c6', 'Bg5', 'b5', 'Nxb5', 'cxb5', 'Bxb5+', 'Nbd7', 'O-O-O'];
+      const segments = buildReviewSegments(
+        OPERA.map((san, i) => move({ ply: i + 1, san, classification: i + 1 === 19 ? 'great' : 'good' })),
+        'white', 'Philidor Defense',
+      );
+      const kingBeats = segments.filter((s) => /king.*(centre|center)/i.test(s.narration || '') && /cue|throw your pieces|stuck/i.test(s.narration || ''));
+      expect(kingBeats.length).toBe(1); // taught once, inside the sac
+    });
+
     it('narrationBoardAccurate rejects a stale piece-on-square claim, keeps a true one', () => {
       const c = new Chess();
       for (const m of ['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5', 'Bxf3', 'Qxf3', 'dxe5', 'Bc4', 'Nf6', 'Qb3', 'Qe7', 'Nc3', 'c6', 'Bg5', 'b5', 'Nxb5', 'cxb5', 'Bxb5+']) c.move(m);
