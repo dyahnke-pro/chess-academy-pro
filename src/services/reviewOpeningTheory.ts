@@ -89,14 +89,23 @@ const UNIVERSAL_OPENING_IDEAS: string[] = [
  *  opening is in the corpus (classical set), else the universal principles.
  *  Never invents opening-specific theory (G3). Exported for tests. */
 export function resolveOpeningIdeas(openingName: string | null): string[] {
-  if (openingName) {
-    const norm = openingName.toLowerCase();
-    const entry = (repertoire as Array<{ name?: string; keyIdeas?: string[]; shortOverview?: string }>)
-      .find((r) => typeof r.name === 'string' && (norm.includes(r.name.toLowerCase()) || r.name.toLowerCase().includes(norm)));
-    if (entry?.keyIdeas && entry.keyIdeas.length > 0) return entry.keyIdeas.slice(0, 3);
-    if (entry?.shortOverview) return [entry.shortOverview];
-  }
-  return UNIVERSAL_OPENING_IDEAS;
+  return resolveCuratedOpeningIdeas(openingName) ?? UNIVERSAL_OPENING_IDEAS;
+}
+
+/** The CURATED, opening-SPECIFIC key ideas — repertoire keyIdeas ONLY, never the
+ *  generic universal fallback. Returns null when the opening isn't in the corpus,
+ *  so callers can distinguish "I have a specific plan for this opening" from
+ *  "only universal principles apply" (David 2026-07-20: the dev-plan beat must
+ *  be SPECIFIC to the opening played, not the same 'develop the knights' every
+ *  game). G3 — never invents theory. */
+export function resolveCuratedOpeningIdeas(openingName: string | null): string[] | null {
+  if (!openingName) return null;
+  const norm = openingName.toLowerCase();
+  const entry = (repertoire as Array<{ name?: string; keyIdeas?: string[]; shortOverview?: string }>)
+    .find((r) => typeof r.name === 'string' && (norm.includes(r.name.toLowerCase()) || r.name.toLowerCase().includes(norm)));
+  if (entry?.keyIdeas && entry.keyIdeas.length > 0) return entry.keyIdeas.slice(0, 3);
+  if (entry?.shortOverview) return [entry.shortOverview];
+  return null;
 }
 
 /** A position needs at least this many master games to be a real branch. */

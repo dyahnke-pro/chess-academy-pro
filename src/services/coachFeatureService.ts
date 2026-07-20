@@ -5,6 +5,7 @@ import { plyFactsForMove } from './pvPlayback';
 import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan } from './reviewStrategicOrientation';
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
 import { detectOpening } from './openingDetectionService';
+import { resolveCuratedOpeningIdeas } from './reviewOpeningTheory';
 import { detectBadHabits } from './badHabitDetector';
 import { db } from '../db/schema';
 import { voiceFacts, voiceReviewLines } from './coachApi';
@@ -839,7 +840,13 @@ export function buildReviewSegments(
    *  filled with a grounded per-move "why" (R2). Omitted in unit tests that
    *  only exercise the flag narration → behaves exactly as before. */
   playerColor?: 'white' | 'black',
+  /** The game's opening name — feeds the OPENING-SPECIFIC development plan
+   *  (David 2026-07-20). When it's a curated opening, the plan beat leads with
+   *  that opening's own key idea instead of the generic "develop the minors". */
+  openingName?: string | null,
 ): ReviewMoveSegment[] {
+  // Curated, opening-specific ideas for the dev-plan beat (null → uncurated).
+  const curatedOpeningIdeas = resolveCuratedOpeningIdeas(openingName ?? null);
   const fenChain = buildFenChain(moves);
   const usable = fenChain.length;
   const segments: ReviewMoveSegment[] = [];
@@ -941,7 +948,7 @@ export function buildReviewSegments(
       && m.ply <= OPENING_PLAN_MAX_PLY
       && (m.classification === null || m.classification === 'book' || m.classification === 'good')
     ) {
-      const dev = buildOpeningDevelopmentPlan(fenPair.fenBefore, studentColorWB);
+      const dev = buildOpeningDevelopmentPlan(fenPair.fenBefore, studentColorWB, { openingName: openingName ?? null, curatedIdeas: curatedOpeningIdeas });
       if (dev) { narration = dev.text; planArrows = dev.arrows; openingPlanShown = true; narrationSource = 'opening-plan'; }
     }
     // (b) Middlegame orientation (structure anchor + both-sides plans), fired
@@ -1205,7 +1212,7 @@ export async function generateReviewNarration(params: {
     ? introTrimmed
     : defaultIntroText({ playerColor, result, openingName, mistakeCount });
 
-  const segments = buildReviewSegments(moves.slice(0, usableCount), playerColor);
+  const segments = buildReviewSegments(moves.slice(0, usableCount), playerColor, openingName);
 
   // HOUSE-VOICE PASS (David 2026-07-19: "does NOT sound like Danya"). The
   // per-move narration above is computed deterministically (the FACTS, G0) but

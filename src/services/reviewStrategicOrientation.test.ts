@@ -53,6 +53,28 @@ describe('buildOpeningDevelopmentPlan (opening developing plan + arrows)', () =>
     expect(beat!.arrows.some((a) => a.startSquare === 'g7')).toBe(true);
   });
 
+  it('leads with the opening\'s CURATED key idea when given (David 2026-07-20)', () => {
+    // The Italian's real keyIdeas → an opening-SPECIFIC plan, not "develop the knights".
+    const fen = 'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/2P2N2/PP1P1PPP/RNBQK2R b KQkq - 0 4';
+    const beat = buildOpeningDevelopmentPlan(fen, 'w', {
+      openingName: 'Italian Game',
+      curatedIdeas: ['Build a strong pawn center with c3 and d4', 'The bishop on c4 targets the f7 weakness'],
+    });
+    expect(beat).not.toBeNull();
+    expect(beat!.text).toMatch(/Italian Game/);
+    expect(beat!.text).toMatch(/c3 and d4|f7/); // the specific idea, not generic
+    expect(beat!.text).not.toMatch(/both sides have the exact same/i);
+  });
+
+  it('names the opening in the uncurated fallback (never the symmetric collapse)', () => {
+    const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3';
+    const beat = buildOpeningDevelopmentPlan(fen, 'w', { openingName: "Queen's Pawn: Zukertort", curatedIdeas: null });
+    expect(beat).not.toBeNull();
+    expect(beat!.text).toMatch(/Zukertort/);
+    // states one side's plan, not "both sides ... the same".
+    expect(beat!.text).not.toMatch(/opponent/i);
+  });
+
   it('is silent once both sides are fully developed + castled (nothing to teach)', () => {
     // Both castled, knights + bishops out, no fianchetto, no central pawn stuck
     // home — the opening plan has nothing left to say.

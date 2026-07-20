@@ -127,32 +127,57 @@ function devArrows(dev: SideDev, arrowColor: string): PlanArrow[] {
 }
 
 /**
- * The opening DEVELOPING-plan beat, fired when the opening is identified. Names
- * both sides' developing ideas and draws arrows to the minors' natural squares +
- * the fianchetto diagonals. Null when neither side has a nameable developing idea.
+ * The opening DEVELOPING-plan beat, fired when the opening is identified.
+ *
+ * David 2026-07-20 (IMG_4560): this used to read "both sides have the exact same
+ * plan — develop and castle" on EVERY game, because it only ever spoke the
+ * generic board-computed developing clause. Now, when we have the opening's
+ * CURATED key ideas (repertoire.json — the classical set), it leads with the
+ * opening's OWN defining idea (specific + grounded, G3), and only falls back to
+ * the board-computed developing plan (named by opening) for uncurated lines.
+ * Arrows still lead the eye to the minors' natural squares + the fianchetto.
  */
-export function buildOpeningDevelopmentPlan(fen: string, studentColorWB: 'w' | 'b'): PlanBeat | null {
+export function buildOpeningDevelopmentPlan(
+  fen: string,
+  studentColorWB: 'w' | 'b',
+  opts?: { openingName?: string | null; curatedIdeas?: string[] | null },
+): PlanBeat | null {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
   const all = pieces(chess);
   const enemyWB: 'w' | 'b' = studentColorWB === 'w' ? 'b' : 'w';
   const mine = assessDevelopment(all, studentColorWB);
   const theirs = assessDevelopment(all, enemyWB);
-
-  const myClause = devClause(mine, 'you');
-  const theirClause = devClause(theirs, 'your opponent');
-  const parts: string[] = [];
-  if (myClause) parts.push(`Your plan out of the opening: ${myClause.charAt(0).toLowerCase() + myClause.slice(1)}`);
-  if (theirClause) parts.push(`your opponent's: ${theirClause.charAt(0).toLowerCase() + theirClause.slice(1)}`);
-  if (parts.length === 0) return null;
-
   const arrows = [
     ...devArrows(mine, PLAN_BLUE),
     ...devArrows(theirs, PLAN_AMBER),
   ];
-  const first = parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
-  const text = parts.length > 1 ? `${first}; ${parts.slice(1).join('; ')}.` : `${first}.`;
-  return { text, arrows };
+  const openingLabel = opts?.openingName ?? null;
+
+  // OPENING-SPECIFIC path: lead with the opening's own key idea (a THEME of the
+  // opening, true regardless of which side the student is). Grounded in the
+  // curated repertoire keyIdeas — never the generic "develop the minors".
+  const curated = opts?.curatedIdeas;
+  if (curated && curated.length > 0) {
+    const idea = curated[0].trim().replace(/\.$/, '');
+    const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
+    const lead = openingLabel
+      ? `The heart of the ${openingLabel}: ${idea}.`
+      : `The key idea here: ${idea}.`;
+    const second = curated[1] ? ` ${cap(curated[1].trim().replace(/\.$/, ''))}.` : '';
+    return { text: `${lead}${second}`, arrows };
+  }
+
+  // FALLBACK: the board-computed developing plan for an uncurated opening. State
+  // the STUDENT's plan only, named by the opening (the arrows show both sides'
+  // development) — never the symmetric "both sides have the exact same plan"
+  // that read the same every game (David 2026-07-20). Empty > generic.
+  const myClause = devClause(mine, 'you');
+  if (!myClause) return null;
+  const myLower = myClause.charAt(0).toLowerCase() + myClause.slice(1);
+  const prefix = openingLabel ? `In the ${openingLabel}, ` : 'Out of the opening, ';
+  const text = `${prefix}${myLower}.`;
+  return { text: text.charAt(0).toUpperCase() + text.slice(1), arrows };
 }
 
 // ─── MIDDLEGAME ORIENTATION (pawn majorities) ────────────────────────────────
