@@ -1492,16 +1492,14 @@ export async function generateReviewNarration(params: {
   // template). Best-effort at prep; skipped on silent. Never a regression.
   if (coachNarration !== 'silent') {
     try {
+      // Warm EVERY narrated segment — including the sacrifice, mate, and the new
+      // teaching beats — so the teaching speaks in the SAME Danya voice as the
+      // rest of the walk, not as bolted-on inserts (David 2026-07-20: "the new
+      // teachings need to tie into and complement the narration build, not stand
+      // alone"). The load-bearing words are protected below (revert if dropped),
+      // so we no longer exempt the showcase beats up front.
       const toVoice = segments
-        // Exempt the SHOWCASE beats from the house-voice pass so their key words
-        // ship verbatim (they're already in-register): the mating move (SAN ends
-        // with '#') must keep "checkmate", and a SACRIFICE beat must keep the word
-        // "sacrifice" — a paraphrase would drop them (a removal containment allows:
-        // "Checkmate, game over" → "Game over, clean"; "the queen sacrifice" →
-        // "one more check"). These are the moments that must not be flattened
-        // (audit 2026-07-20 Opera nitpick — the queen sac was narrated as a check).
-        .filter((s) => s.narration && s.narration.trim().length > 0
-          && !s.san.includes('#') && !/sacrifice/i.test(s.narration))
+        .filter((s) => s.narration && s.narration.trim().length > 0)
         .map((s) => ({ id: s.ply, fact: s.narration as string, kind: s.narrationSource ?? undefined }));
       if (toVoice.length > 0) {
         const warmed = await raceTimeout(
@@ -1511,13 +1509,18 @@ export async function generateReviewNarration(params: {
         );
         for (const s of segments) {
           const w = warmed.get(s.ply);
-          // Accept the warmed line ONLY if it's board-accurate — reject a
-          // house-voice rephrase that attaches a piece to a square it doesn't
-          // occupy on the resulting board ("the pawn on b5 gets taken" after a
-          // bishop landed on b5; audit 2026-07-20). Runtime analog of the
-          // narrationAccuracy gate; on a false claim we keep the deterministic
-          // (board-true) template.
-          if (w && narrationBoardAccurate(w, s.fenAfter)) s.narration = w;
+          if (!w || !s.narration) continue;
+          const det = s.narration;
+          // Accept the warmed (Danya-voiced) line ONLY if it (a) is board-accurate
+          // — no piece attached to a square it doesn't occupy ("the pawn on b5 gets
+          // taken" after a bishop landed there) — AND (b) KEEPS the load-bearing
+          // word the fact carried: a mate line must still say "mate/checkmate", a
+          // sacrifice must still say "sacrifice". Otherwise the deterministic
+          // template ships verbatim so the canary words can never be flattened
+          // away (audit 2026-07-20: the queen sac was once narrated as "a check").
+          const keepsMate = !/\bcheckmate\b/i.test(det) || /\b(checkmate|mate)\b/i.test(w);
+          const keepsSac = !/\bsacrific/i.test(det) || /\bsacrific/i.test(w);
+          if (keepsMate && keepsSac && narrationBoardAccurate(w, s.fenAfter)) s.narration = w;
         }
       }
     } catch { /* keep the deterministic templates */ }

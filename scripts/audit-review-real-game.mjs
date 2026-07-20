@@ -311,7 +311,9 @@ const run = async () => {
   // winning verdict). This is the narrating-vs-teaching contract for the sac.
   const anySac = plies.some((p) => /\bsacrifice\b|\bsacrifices\b/i.test(p.narr || ''));
   if (anySac) {
-    const taught = plies.some((p) => /stuck in the cent|ahead in development|already on top|holds up completely/i.test(p.narr || ''));
+    // The compensation CONCEPT must appear somewhere — king exposure / development
+    // lead / winning verdict — worded any way Danya's voice phrases it (warmed).
+    const taught = plies.some((p) => /in development|develop\w* (lead|ahead|edge)|stuck in the (centre|center|middle)|on top|holds up|worth .*(more|material)|more than enough/i.test(p.narr || ''));
     add('TEACHSAC compensation-taught', taught, taught ? 'the sacrifice teaches its compensation' : 'a sacrifice was named but its compensation was never taught');
   }
 
