@@ -1178,7 +1178,7 @@ export async function generateReviewNarration(params: {
    *  undefined, defaults to full-length behavior (legacy). */
   coachNarration?: 'silent' | 'brief' | 'full';
 }): Promise<ReviewNarration> {
-  const { moves, playerColor, openingName, result, coachNarration } = params;
+  const { moves, playerColor, openingName, result, coachNarration, playerRating } = params;
 
   // Reconstruct FENs via chess.js so the UI can rewind cleanly.
   const fenChain = buildFenChain(moves);
@@ -1244,7 +1244,7 @@ export async function generateReviewNarration(params: {
         .filter((s) => s.narration && s.narration.trim().length > 0)
         .map((s) => ({ id: s.ply, fact: s.narration as string, kind: s.narrationSource ?? undefined }));
       if (toVoice.length > 0) {
-        const warmed = await voiceReviewLines(toVoice);
+        const warmed = await voiceReviewLines(toVoice, { studentRating: playerRating });
         for (const s of segments) {
           const w = warmed.get(s.ply);
           if (w) s.narration = w;

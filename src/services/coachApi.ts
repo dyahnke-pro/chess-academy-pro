@@ -2367,7 +2367,7 @@ export async function voiceFacts(
  */
 export async function voiceReviewLines(
   items: Array<{ id: number; fact: string; kind?: string }>,
-  opts: { providerConfig?: ProviderConfig | null } = {},
+  opts: { providerConfig?: ProviderConfig | null; studentRating?: number | null } = {},
 ): Promise<Map<number, string>> {
   const result = new Map<number, string>();
   const usable = items.filter((it) => it.fact && it.fact.trim().length > 0);
@@ -2375,7 +2375,7 @@ export async function voiceReviewLines(
   const cfg = opts.providerConfig ?? (await getProviderConfig());
   if (!cfg) return result; // no provider → caller keeps the computed templates
 
-  const system =
+  const systemBase =
     'You are the single teaching VOICE of a chess game-review — the warm, concept-FIRST ' +
     'register of a great instructor. You will be given a NUMBERED list of computed facts ' +
     'about ONE player\'s finished game (one fact per move or moment, already true and ' +
@@ -2450,6 +2450,20 @@ export async function voiceReviewLines(
     'FALLBACK-SAFETY: you may FREELY restate any square, file, rank, or piece the fact already names — ' +
     'that is never a violation. The rule is ONLY against introducing a square/move/piece/number the fact ' +
     'does not contain. When in doubt, lean on the exact squares the fact gives you.';
+
+  // LEVEL-TARGETED register (David's §2 "for 1750 I talk to 1750s"). Calibrates
+  // only the DEPTH/vocabulary of the phrasing to the student's rating — the
+  // FACTS are unchanged (G0). Bands: beginner spells it out, advanced is terse.
+  const rating = typeof opts.studentRating === 'number' && Number.isFinite(opts.studentRating) ? opts.studentRating : null;
+  const ratingClause = rating === null
+    ? ''
+    : rating < 1000
+      ? `\n\nAUDIENCE: a developing player (~${Math.round(rating)}). Spell the idea out in plain, everyday words — name the concept simply, assume NO jargon, one clear reason per line. Warm and encouraging in tone.`
+      : rating > 1900
+        ? `\n\nAUDIENCE: a strong player (~${Math.round(rating)}). Be terse and assume fluency — skip the basics, name the idea and trust they know the rest; a few sharp words carry more than a full explanation.`
+        : `\n\nAUDIENCE: a club player (~${Math.round(rating)}). Teach the idea clearly without over-explaining — they know the basics; give the reason, not a lecture.`;
+  const system = systemBase + ratingClause;
+
   const user =
     `Rephrase each of these ${usable.length} lines. Return exactly ${usable.length} numbered ` +
     `lines (1 to ${usable.length}), one rephrasing each:\n\n` +
