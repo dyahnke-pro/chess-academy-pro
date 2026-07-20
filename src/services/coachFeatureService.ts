@@ -10,6 +10,7 @@ import { detectOpening } from './openingDetectionService';
 import { resolveCuratedOpeningIdeas } from './reviewOpeningTheory';
 import { detectPieceItineraries } from './reviewPieceItinerary';
 import { pickStoryGame } from './reviewStoryGame';
+import { sacrificeCompensation } from './reviewSacrifice';
 import { detectBadHabits } from './badHabitDetector';
 import { db } from '../db/schema';
 import { voiceFacts, voiceReviewLines } from './coachApi';
@@ -898,6 +899,10 @@ export function buildReviewSegments(
   // spoken once per game (never invented). Null when the opening has no model game.
   const storyGame = openingName ? pickStoryGame(openingName) : null;
   let storyShown = false;
+  // The full sacrifice-compensation profile (king-stuck / dev-lead / verdict)
+  // fires ONCE per game — a combination of several sacs shares one compensation,
+  // so re-listing it verbatim on each is robotic. Later sacs are still NAMED.
+  let sacCompShown = false;
   const studentColorWB: 'w' | 'b' | null = playerColor === 'white' ? 'w' : playerColor === 'black' ? 'b' : null;
   // Prev-capture context so the PlyFacts material calc can tell a RECAPTURE
   // (even trade → 0) from a genuine win (David 2026-07-20 Opera nitpick). Holds
@@ -995,15 +1000,32 @@ export function buildReviewSegments(
       const s = isStudentSac ? '' : 's'; // verb suffix ("you give" vs "your opponent gives")
       const withCheck = /\+$/.test(m.san) ? ', and it lands with check' : '';
       const top = m.classification === 'brilliant' || m.classification === 'great';
+      // TEACH the compensation, don't ASSERT it (David 2026-07-20: narrating vs
+      // teaching). Name the board-true reasons the piece is worth giving —
+      // king-stuck-in-centre / development lead / the winning verdict — computed
+      // from the position AFTER the sac + the eval. Only for the STUDENT's sac
+      // (the "you get X for it" framing is the student's payoff); the opponent's
+      // sac keeps the plain naming.
+      const comp = isStudentSac && !sacCompShown
+        ? sacrificeCompensation(
+            fenPair.fenAfter,
+            moverColor === 'white' ? 'w' : 'b',
+            m.evaluation != null ? (moverColor === 'white' ? m.evaluation : -m.evaluation) : null,
+          )
+        : [];
+      if (comp.length > 0) sacCompShown = true;
+      const payoff = comp.length > 0 ? ` Look what you get for it: ${joinClauses(comp)}.` : '';
       if (piece === 'queen') {
         // The peak. A queen sacrifice the engine rates top is the point of the
         // whole attack — say so, don't call it "a check".
         narration = top
-          ? `There it is — the queen sacrifice on ${sq}${withCheck}. The boldest move on the board, and it is ice-cold: this is the point the whole attack was building toward.`
-          : `${subjCap} offer${s} the queen on ${sq}${withCheck} — a stunning sacrifice.`;
+          ? `There it is — the queen sacrifice on ${sq}${withCheck}. The boldest move on the board, and this is the point the whole attack was building toward.${payoff}`
+          : `${subjCap} offer${s} the queen on ${sq}${withCheck} — a stunning sacrifice.${payoff}`;
+      } else if (payoff) {
+        narration = `${subjCap} sacrifice${s} the ${piece} on ${sq}${withCheck}.${payoff}`;
       } else {
         narration = top
-          ? `${subjCap} sacrifice${s} the ${piece} on ${sq}${withCheck} — and it is completely sound: the attack is worth far more than the material.`
+          ? `${subjCap} sacrifice${s} the ${piece} on ${sq}${withCheck} — a real sacrifice for the initiative.`
           : `${subjCap} give${s} up the ${piece} on ${sq}${withCheck} — a real sacrifice for the initiative.`;
       }
       narrationSource = 'flag';
@@ -1314,6 +1336,13 @@ function defaultIntroText(params: {
  * ship the deterministic templates, which are still fully grounded (G0). This
  * guarantees the walk becomes ready within a bounded window, every time.
  */
+/** Oxford-comma join for a short clause list ("a", "b", "c" → "a, b, and c"). */
+function joinClauses(parts: string[]): string {
+  if (parts.length <= 1) return parts[0] ?? '';
+  if (parts.length === 2) return `${parts[0]} and ${parts[1]}`;
+  return `${parts.slice(0, -1).join(', ')}, and ${parts[parts.length - 1]}`;
+}
+
 function raceTimeout<T>(p: Promise<T>, ms: number, fallback: T): Promise<T> {
   return Promise.race([
     p,

@@ -494,9 +494,12 @@ describe('coachFeatureService', () => {
       const at = (ply: number): string => segments.find((s) => s.ply === ply)?.narration ?? '';
       // Qxf3 recaptures the bishop (even trade) → NO "wins N points" windfall.
       expect(at(9)).not.toMatch(/wins \d+ point/i);
-      // Nxb5 is the knight sacrifice — named as a sacrifice, not a "reroute".
+      // Nxb5 is the knight sacrifice — named a sacrifice, not a "reroute", AND it
+      // TEACHES the compensation (king stuck in the centre / development lead),
+      // rather than asserting "worth far more than the material".
       expect(at(19)).toMatch(/sacrifice/i);
       expect(at(19)).not.toMatch(/reroute|journey/i);
+      expect(at(19)).toMatch(/stuck in the cent|ahead in development/i);
       // O-O-O is king safety + rook activation, never a "queenside majority endgame".
       expect(at(23)).not.toMatch(/majority|endgame/i);
       // Qb8+ is THE queen sacrifice (peak register on brilliant).
