@@ -235,7 +235,32 @@ STAYS ON REVIEW (retrospective register — the next build targets here):
 - Variation re-naming inside the move-walk (A2). 🟡
 - Cameo variety / transfer beat (C13/R10). 🟡
 
+## 🔒 QUESTION-PLACEMENT STRUCTURE — locked (David 2026-07-20)
+
+David: "I don't want the user overwhelmed with questions. Insert them ONLY when
+relevant — like find-the-shot before a miss." The structure:
+
+- **Narration** (spoken, never a stop): per-move why, opening-dev plan,
+  middlegame orientation, opponent reads, variation naming, conversion. Flows.
+- **Mid-game STOPS — budget 2, ranked by severity (`reviewQuestionPlan.ts`):**
+  a question fires ONLY at a planned ply, tied to the student's ACTUAL move:
+  - find-shot — you were winning + missed a notable move (+ sequence stage +
+    better-line playout, all inside this one stop)
+  - trap — your flagged move GRABBED poisoned material (SEE loss)
+  - why-picker — any other slip (+ rewind as a FOLLOW-ON, not a new stop)
+- **End STOP (1):** turning-point (board-preview chips).
+- **Total stops ≤ 3** (2 mid-game + turning-point). Rewind rides its blunder
+  stop; cameo is a rare skippable OFFER, not a forced stop.
+- **On-demand button (not a stop):** 📖 Opening Theory.
+- **REMOVED:** guess-eval (abstract), type-not-move (cut — David),
+  theory-departure CARD (redundant with the Opening Theory button — David
+  "remove 3 and 4"), principle-quiz (extra quiz — David). Cameo KEPT.
+
 DEFERRED (David 2026-07-20, "later fix — post game review done first"):
+- **Board sizing** — review board must fit the screen (IMG_4559).
+- **Opening-specific plans** — the dev-plan beat says "develop the knights"
+  every game (IMG_4560); it must use the SPECIFIC opening's plans
+  (resolveOpeningIdeas / masters continuation), not the generic template.
 - Move-accuracy % doesn't match chess.com. Likely needs DEEPER Stockfish
   analysis (higher depth/nodes per ply) so the per-move eval + accuracy formula
   line up with chess.com's. Not a review-narration bug — an analysis-depth job.

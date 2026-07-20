@@ -19,8 +19,8 @@ import { getPhaseBreakdown, classifyPhase } from '../../services/gamePhaseServic
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
 import { buildGuidedFindChallenge, buildHoldChallenge, judgeGuidedFindAttempt, GUIDED_FIND_MIN_EVAL_CP, type GuidedFindChallenge } from '../../services/guidedFindTheMove';
-import { buildMoveTypeQuestion, judgeMoveTypeAnswer, type MoveTypeQuestion, type MoveTypeId } from '../../services/reviewTypeQuestion';
 import { buildTrapQuestion, judgeTrapAnswer, type TrapQuestion, type TrapChoiceId } from '../../services/reviewTrapQuestion';
+import { selectReviewQuestions, type ReviewQuestionMoment } from '../../services/reviewQuestionPlan';
 import { computePvLine, renderPlyFactLine, plyFactsString, type PvLine } from '../../services/pvPlayback';
 import { buildReviewMoveTeaching } from '../../services/reviewMoveTeaching';
 import { judgeSequenceAttempt, moverPlies, type SequenceVerdict } from '../../services/sequenceChallenge';
@@ -516,6 +516,17 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (!fenBefore) return false;
     try { return new Chess(fenBefore).turn() === studentColorWB; } catch { return false; }
   }, [studentColorWB]);
+  // The QUESTION PLAN (David 2026-07-20: "insert questions ONLY when relevant…
+  // don't overwhelm"). The ranked, budget-capped set of plies where the walk
+  // STOPS to ask — at most 2 mid-game stops, each tied to the student's ACTUAL
+  // move (find-shot on a miss, trap on a greedy capture, why on any other slip);
+  // the turning-point is the 3rd and final stop. Computed once from the
+  // segments, so a question never fires at an irrelevant moment.
+  const questionPlan = useMemo<Map<number, ReviewQuestionMoment>>(() => {
+    if (!walkNarration || !playerColor) return new Map();
+    return selectReviewQuestions(walkNarration.segments, playerColor, { budget: 2 });
+  }, [walkNarration, playerColor]);
+
   const [readingGate, setReadingGate] = useState<{ ply: number; fen: string } | null>(null);
   const quizzedPliesRef = useRef<Set<number>>(new Set());
   useEffect(() => {
@@ -607,21 +618,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // BOARD to that candidate; a second tap (or Confirm) commits it.
   const [turningPreviewPly, setTurningPreviewPly] = useState<number | null>(null);
 
-  // §4 TYPE-NOT-MOVE — "what KIND of move does this call for — a check, a
-  // capture, or a quiet move?" Fires ONCE per game at a student position whose
-  // best move is a forcing check/capture. Trains "forcing moves first"
-  // (reviewTypeQuestion.ts). Answer computed, never leaked.
-  const [typeQ, setTypeQ] = useState<MoveTypeQuestion | null>(null);
-  const [typeReveal, setTypeReveal] = useState<{ correct: boolean; text: string } | null>(null);
-  const typeAskedRef = useRef(false);
-
-  // §4 TRAP — "this piece looks free — take it or leave it?" Fires ONCE per game
-  // when the student faced a poisoned capture (a grab that loses by force). The
-  // reveal plays out the real losing swap (reviewTrapQuestion.ts). Trains the
-  // greedy-capture blunder class.
+  // §4 TRAP — "this piece looks free — take it or leave it?" Fires only when the
+  // student's flagged move GRABBED poisoned material (the question plan tags the
+  // ply). The reveal plays out the real losing swap (reviewTrapQuestion.ts).
   const [trapQ, setTrapQ] = useState<TrapQuestion | null>(null);
   const [trapReveal, setTrapReveal] = useState<{ correct: boolean; text: string } | null>(null);
-  const trapAskedRef = useRef(false);
 
   useEffect(() => {
     // Fresh game → fresh question state.
@@ -634,12 +635,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setTurningReveal(null);
     turningAskedRef.current = false;
     setTurningPreviewPly(null);
-    setTypeQ(null);
-    setTypeReveal(null);
-    typeAskedRef.current = false;
     setTrapQ(null);
     setTrapReveal(null);
-    trapAskedRef.current = false;
   }, [props.gameId]);
 
   const handleWalkForward = useCallback((): void => {
@@ -662,11 +659,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       setTurningQ(null);
       setTurningPreviewPly(null);
       setWalkExplorationFen(null);
-      walkPlayback.goForward();
-      return;
-    }
-    if (typeQ) {
-      setTypeQ(null);
       walkPlayback.goForward();
       return;
     }
@@ -704,18 +696,34 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         && !nextMove.isCoachMove
         && moverIsStudent(seg.fenBefore) // color is authoritative for reviewed games
         && (seg.classification === 'inaccuracy' || seg.classification === 'mistake' || seg.classification === 'blunder');
-      if (seg && isStudentMistake && !quizzedPliesRef.current.has(nextPly)) {
+      // THE QUESTION PLAN gates every mid-game stop: fire ONLY at a planned ply
+      // (≤2 per game, the biggest moments), and use the KIND the plan chose for
+      // that moment. Everything else stays narration — no overwhelm (David
+      // 2026-07-20). quizzedPliesRef stops a re-fire on the same ply.
+      const planned = questionPlan.get(nextPly);
+      if (seg && isStudentMistake && planned && !quizzedPliesRef.current.has(nextPly)) {
         quizzedPliesRef.current.add(nextPly);
         // The board already shows seg.fenBefore (the position before the move).
         const sign = playerColor === 'white' ? 1 : -1;
         const cpLoss = seg.evalBefore != null && seg.evalAfter != null
           ? (seg.evalBefore - seg.evalAfter) * sign : 0;
-        // FIND-THE-SHOT first: the student was clearly winning and missed a
-        // notable move → ask them to FIND it (board answer) instead of asking
-        // why they played what they played. One question per moment, never
-        // stacked — the why-picker handles the rest.
+        // TRAP: your flagged move GRABBED poisoned material. Ask the re-decision
+        // at the position BEFORE the capture ("do you take it?"); the reveal
+        // plays out the losing swap. Board stays at fenBefore.
+        if (planned.kind === 'trap') {
+          const trap = buildTrapQuestion({ fen: seg.fenBefore, studentColor: playerColor });
+          if (trap) {
+            setTrapQ(trap);
+            captureEvent('review_trap_asked', { target: trap.targetSquare, tempting: trap.temptingSan, ply: nextPly });
+            void voiceService.speakForced(trap.prompt).catch(() => undefined);
+            return; // pause the walk; resumes when the student answers + dismisses
+          }
+          // couldn't build (edge) → fall through to the why-picker below.
+        }
+        // FIND-THE-SHOT: the plan tagged a missed winning shot → ask them to
+        // FIND it on the board instead of "why'd you play that?".
         const evalBeforeMoverCp = seg.evalBefore != null ? seg.evalBefore * sign : null;
-        const shot = seg.bestMoveUci && evalBeforeMoverCp !== null && evalBeforeMoverCp >= GUIDED_FIND_MIN_EVAL_CP
+        const shot = planned.kind === 'find-shot' && seg.bestMoveUci && evalBeforeMoverCp !== null && evalBeforeMoverCp >= GUIDED_FIND_MIN_EVAL_CP
           ? buildGuidedFindChallenge(seg.fenBefore, seg.bestMoveUci)
           : null;
         if (shot) {
@@ -774,7 +782,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       }
     }
     walkPlayback.goForward();
-  }, [readingGate, faucetPhase, resetFaucet, raiseFaucet, readingQuizOn, walkPlayback, walkNarration, playerColor, openingName, playerRating, shotState, shotReveal, turningQ, typeQ, trapQ, moves, moverIsStudent]);
+  }, [readingGate, faucetPhase, resetFaucet, raiseFaucet, readingQuizOn, walkPlayback, walkNarration, playerColor, openingName, playerRating, shotState, shotReveal, turningQ, trapQ, questionPlan, moves, moverIsStudent]);
 
   // Advance the walk once the faucet is done (answered + reveal dismissed, or
   // skipped) — the "resume" side of the pause above.
@@ -971,58 +979,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
   // ── TYPE-NOT-MOVE ask — fires once at a student position whose best move is a
   // forcing check/capture. "What KIND of move does this call for?" ───────────
-  useEffect(() => {
-    if (typeAskedRef.current) return;
-    if (!walkNarration || moves.length === 0) return;
-    const ply = walkPlayback.currentPly;
-    if (ply < 12) return; // give the game shape first
-    if (
-      faucetPhase !== 'idle' || shotState || shotReveal || turningQ || turningReveal ||
-      rewindOffer || typeQ || typeReveal || trapQ || trapReveal ||
-      seqStateRef.current || cameoStateRef.current || theoryStateRef.current || principleQuizStateRef.current
-    ) return;
-    const seg = walkNarration.segments.find((s) => s.ply === ply);
-    if (!seg || seg.playerColor !== playerColor || !seg.bestMoveUci) return;
-    const q = buildMoveTypeQuestion({ fen: seg.fenBefore, bestUci: seg.bestMoveUci });
-    // Only quiz the FORCING types — a "quiet" answer isn't worth a card.
-    if (!q || q.answerId === 'quiet') return;
-    typeAskedRef.current = true; // one ask per game
-    setTypeQ(q);
-    captureEvent('review_type_asked', { answer: q.answerId, ply });
-    void voiceService.speakForced(q.prompt).catch(() => undefined);
-  }, [walkPlayback.currentPly, walkNarration, moves.length, playerColor, faucetPhase, shotState, shotReveal, turningQ, turningReveal, rewindOffer, typeQ, typeReveal, trapQ, trapReveal]);
-
-  const handleTypePick = useCallback((id: MoveTypeId): void => {
-    if (!typeQ) return;
-    const correct = judgeMoveTypeAnswer(typeQ, id);
-    const text = `${correct ? 'Right.' : 'Not this time.'} ${typeQ.reveal}`;
-    captureEvent('review_type_result', { correct, picked: id, answer: typeQ.answerId });
-    setTypeQ(null);
-    setTypeReveal({ correct, text });
-    void voiceService.speakForced(text, correct ? { prosodySpike: true } : undefined).catch(() => undefined);
-  }, [typeQ]);
-
-  // ── TRAP ask — fires once when the student faced a poisoned capture ────────
-  useEffect(() => {
-    if (trapAskedRef.current) return;
-    if (!walkNarration || moves.length === 0) return;
-    const ply = walkPlayback.currentPly;
-    if (ply < 8) return;
-    if (
-      faucetPhase !== 'idle' || shotState || shotReveal || turningQ || turningReveal ||
-      rewindOffer || typeQ || typeReveal || trapQ || trapReveal ||
-      seqStateRef.current || cameoStateRef.current || theoryStateRef.current || principleQuizStateRef.current
-    ) return;
-    const seg = walkNarration.segments.find((s) => s.ply === ply);
-    if (!seg || seg.playerColor !== playerColor) return;
-    const q = buildTrapQuestion({ fen: seg.fenBefore, studentColor: playerColor });
-    if (!q) return;
-    trapAskedRef.current = true; // one ask per game
-    setTrapQ(q);
-    captureEvent('review_trap_asked', { target: q.targetSquare, tempting: q.temptingSan, ply });
-    void voiceService.speakForced(q.prompt).catch(() => undefined);
-  }, [walkPlayback.currentPly, walkNarration, moves.length, playerColor, faucetPhase, shotState, shotReveal, turningQ, turningReveal, rewindOffer, typeQ, typeReveal, trapQ, trapReveal]);
-
   const handleTrapPick = useCallback((id: TrapChoiceId): void => {
     if (!trapQ) return;
     const correct = judgeTrapAnswer(trapQ, id);
@@ -1936,7 +1892,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // and the walk "froze"). Whenever any question/playback card opens,
   // scroll the first present one into view.
   const anyCardOpen = Boolean(
-    shotState || shotReveal || turningQ || typeQ || typeReveal || trapQ || trapReveal || rewindOffer || seqState || cameoState || theoryState || principleQuizState || faucetPhase !== 'idle',
+    shotState || shotReveal || turningQ || trapQ || trapReveal || rewindOffer || seqState || cameoState || theoryState || principleQuizState || faucetPhase !== 'idle',
   );
   useEffect(() => {
     if (!anyCardOpen) return;
@@ -1953,7 +1909,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           '[data-testid="review-theory-playback"]',
           '[data-testid="review-principle-quiz"]',
           '[data-testid="review-turning-card"]',
-          '[data-testid="review-type-card"]',
           '[data-testid="review-trap-card"]',
           '[data-testid="review-rewind-card"]',
           '[data-testid="discussion-practice-panel"]',
@@ -3254,33 +3209,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 className={`mx-3 my-1 rounded-xl border-2 px-3 py-2 ${turningReveal.correct ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-amber-500/40 bg-amber-500/10'}`}>
                 <div className={`text-sm ${turningReveal.correct ? 'text-emerald-100' : 'text-amber-100'}`}>{turningReveal.text}</div>
                 <button type="button" data-testid="review-turning-point-done" onClick={() => setTurningReveal(null)}
-                  className="mt-1.5 rounded-lg border border-slate-500/50 px-2.5 py-1 text-xs text-slate-300 hover:bg-slate-500/20">
-                  Done
-                </button>
-              </div>
-            )}
-            {/* §4 TYPE-NOT-MOVE — "what kind of move does this call for?" The
-                three types are always the same, in the same order, so the
-                options never leak the answer. */}
-            {typeQ && (
-              <div data-testid="review-type-card" className="mx-3 my-1 rounded-xl border-2 border-violet-500/40 bg-violet-500/10 px-3 py-2">
-                <div className="text-sm text-violet-100">{typeQ.prompt}</div>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {typeQ.choices.map((c) => (
-                    <button key={c.id} type="button" data-testid={`review-type-pick-${c.id}`}
-                      onClick={() => handleTypePick(c.id)}
-                      className="rounded-lg border border-violet-400/50 px-2.5 py-1 text-xs font-semibold text-violet-200 hover:bg-violet-500/20">
-                      {c.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-            {typeReveal && (
-              <div data-testid="review-type-reveal"
-                className={`mx-3 my-1 rounded-xl border-2 px-3 py-2 ${typeReveal.correct ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-violet-500/40 bg-violet-500/10'}`}>
-                <div className={`text-sm ${typeReveal.correct ? 'text-emerald-100' : 'text-violet-100'}`}>{typeReveal.text}</div>
-                <button type="button" data-testid="review-type-done" onClick={() => setTypeReveal(null)}
                   className="mt-1.5 rounded-lg border border-slate-500/50 px-2.5 py-1 text-xs text-slate-300 hover:bg-slate-500/20">
                   Done
                 </button>
