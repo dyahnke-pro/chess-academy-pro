@@ -196,3 +196,31 @@ Fixed this pass (from the 300-entry audit log + his notes):
   (captureEvent) but added today; re-verify ingestion after next test.
 - **§4 diagnostic question family** — type-not-move / choice-between-two /
   guess-the-eval / hint ladders (speced above).
+
+## Register split — decision log (David 2026-07-20)
+David: divide the transcript behaviors by LIVE game-play (in-game/Watch register)
+vs POST-GAME review register (the two-register rule, 2026-07-19). Outcome:
+
+DEFERRED TO THE WATCH BUILD (in-game register — belongs on /coach/teach
+walkthrough + matchup "Watch a full game" + model games, NOT on /coach/review):
+- Ambition scale / setup options ("most ambitious is f4; also Bb3, Bc4") — l65FZlRkWcM
+- Sister-opening analogy ("the Pirc is the KID minus the c4 pawn") — TIpUDMzQVmU
+- Two-axis grading while CHOOSING a move (objective vs practical) — CnODsrMCQQg
+- Transposition awareness as it arises ("move-ordered into a line you don't play") — fABTn305-Eg
+These are present-tense, as-it-happens teaching — build them into the Watch
+narrator when we build out the Watch section. David: "save for when we build
+out the watch section."
+
+NEVER BUILD (deliberate inversion — in-game habits we reject):
+- Honesty/hedging markers ("as far as I know… we'll check after") — we're the
+  computer, we KNOW we're right (David locked).
+- Meta-cognitive fake-search narration ("scratch that, he played Rh5") — we
+  compute deterministically.
+
+STAYS ON REVIEW (retrospective register — the next build targets here):
+- Type-not-move question (B3) — detectTactics classifies the move TYPE. ❌
+- Trap question / most-popular-wrong-answer (B7) — Stockfish 2nd line. ❌
+- Hint LADDER on the find-shot (B6, currently single reveal). 🟡
+- Structural pawn beat anchor→plan→target per pawn event (R3). 🟡
+- Variation re-naming inside the move-walk (A2). 🟡
+- Cameo variety / transfer beat (C13/R10). 🟡

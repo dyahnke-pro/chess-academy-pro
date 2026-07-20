@@ -78,6 +78,19 @@ describe('buildGuidedFindChallenge — piece + goal, NEVER the square', () => {
     expect(buildGuidedFindChallenge(WINNING_FEN, 'a1a8')).toBeNull();
   });
 
+  it('builds an escalating hint LADDER: piece → from-square → move, no early leak (David 2026-07-20)', () => {
+    const ch = buildGuidedFindChallenge(WINNING_FEN, 'd2d7')!;
+    expect(ch.hintLadder).toHaveLength(3);
+    // Rung 0: the piece only — no square, no SAN.
+    expect(ch.hintLadder[0]).toMatch(/queen/i);
+    expect(ch.hintLadder[0]).not.toMatch(/d7|Qxd7/);
+    // Rung 1: the from-square — narrows it, still not the destination.
+    expect(ch.hintLadder[1]).toMatch(/d2/);
+    expect(ch.hintLadder[1]).not.toMatch(/d7|Qxd7/);
+    // Rung 2 (final): the full move.
+    expect(ch.hintLadder[2]).toContain('Qxd7+');
+  });
+
   it('returns null when the best move lands NOTHING notable — never "can land a null"', () => {
     // Ke1-f1: no mate, no capture, no check, no tactic. A caller that skips
     // shouldOfferGuidedFind must NOT get a prompt with a null tactic interpolated

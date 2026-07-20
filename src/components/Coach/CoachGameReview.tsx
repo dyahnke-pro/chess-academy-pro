@@ -568,6 +568,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // (guidedFindTheMove.ts) and the better-move arrow is suppressed while the
   // question is open, so nothing on screen leaks the answer.
   const [shotState, setShotState] = useState<{ challenge: GuidedFindChallenge; playedSan: string; costPawns: number | null } | null>(null);
+  // Hint LADDER (David 2026-07-20): each Hint tap reveals the next rung (piece →
+  // from-square → move) instead of dumping the answer. The rung index + the
+  // last-shown rung text; both reset when a new shot opens.
+  const shotHintRungRef = useRef(0);
+  const [shotHintText, setShotHintText] = useState<string | null>(null);
   const [shotReveal, setShotReveal] = useState<string | null>(null);
   const shotAttemptsRef = useRef(0);
   /** Bumped on a wrong attempt — remounts the walk board so the wrong move
@@ -692,6 +697,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           : null;
         if (shot) {
           shotAttemptsRef.current = 0;
+      shotHintRungRef.current = 0;
+      setShotHintText(null);
           setShotState({ challenge: shot, playedSan: seg.san, costPawns: cpLoss > 0 ? cpLoss / 100 : null });
           setShotReveal(null);
           captureEvent('review_find_shot_asked', { answer: shot.answerSan, played: seg.san, ply: nextPly });
@@ -777,6 +784,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     captureEvent('review_rewind_result', { outcome: 'accepted', rewind_ply: t.ply, challenge: ch?.answerSan ?? null });
     if (ch) {
       shotAttemptsRef.current = 0;
+      shotHintRungRef.current = 0;
+      setShotHintText(null);
       const segAt = walkNarration?.segments.find((s) => s.ply === t.ply);
       setShotState({ challenge: ch, playedSan: segAt?.san ?? '', costPawns: null });
       setShotReveal(null);
@@ -821,9 +830,22 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
   const handleShotHint = useCallback((): void => {
     if (!shotState) return;
-    const text = `${shotState.challenge.hint}${shotCostLine(shotState)}`;
+    const ladder = shotState.challenge.hintLadder?.length ? shotState.challenge.hintLadder : [shotState.challenge.hint];
+    const rung = shotHintRungRef.current;
+    if (rung < ladder.length - 1) {
+      // Intermediate rung — leak a little (piece, then from-square), KEEP the
+      // shot open so the student can still play it after the nudge.
+      shotHintRungRef.current = rung + 1;
+      setShotHintText(ladder[rung]);
+      captureEvent('review_find_shot_result', { outcome: `hint-${rung}`, attempts: shotAttemptsRef.current, answer: shotState.challenge.answerSan });
+      void voiceService.speakForced(ladder[rung]).catch(() => undefined);
+      return;
+    }
+    // Final rung — the full answer; end the shot.
+    const text = `${ladder[ladder.length - 1]}${shotCostLine(shotState)}`;
     captureEvent('review_find_shot_result', { outcome: 'hint', attempts: shotAttemptsRef.current, answer: shotState.challenge.answerSan });
     setShotState(null);
+    setShotHintText(null);
     setShotReveal(text);
     void voiceService.speakForced(text).catch(() => undefined);
   }, [shotState, shotCostLine]);
@@ -2968,6 +2990,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
             {shotState && (
               <div data-testid="review-find-shot-card" className="mx-3 my-1 rounded-xl border-2 border-purple-500/40 bg-purple-500/10 px-3 py-2">
                 <div className="text-sm text-purple-100">Right here you had something. {shotState.challenge.question}</div>
+                {shotHintText && (
+                  <div className="mt-1 text-xs text-amber-200" data-testid="review-find-shot-hint-text">{shotHintText}</div>
+                )}
                 <div className="mt-1.5 flex items-center gap-2">
                   <span className="text-xs text-purple-300/70">Play your answer on the board.</span>
                   <button type="button" data-testid="review-find-shot-hint" onClick={handleShotHint}

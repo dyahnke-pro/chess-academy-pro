@@ -37,6 +37,12 @@ export interface GuidedFindChallenge {
   fen: string;
   /** The reveal spoken on Hint — names the move + why. */
   hint: string;
+  /** Escalating hint LADDER (David 2026-07-20, Danya's "it's a knight move —
+   *  that's the hint I'll give", then more if you stall). Each tap of Hint
+   *  reveals the next rung; the LAST rung is the full answer. Rung 0 gives the
+   *  piece, rung 1 the from-square, rung 2 the move — grounded, no leak until
+   *  the student asks. */
+  hintLadder: string[];
   /** Spoken when the student finds it. */
   confirm: string;
   /** Spoken on a wrong attempt (the move is taken back). */
@@ -148,6 +154,13 @@ export function buildGuidedFindChallenge(fen: string, bestUci: string): GuidedFi
     why = describeMoveGeometry(fen, p.san, mover);
   } catch { /* geometry is a bonus */ }
   const hint = `The move is ${p.san}${why ? ` — it ${why}` : ''}.`;
+  // Escalating ladder: piece → from-square → the move. Each rung leaks a little
+  // more, only when the student taps Hint (Danya's staged hints).
+  const hintLadder = [
+    `It's a ${p.pieceName} move.`,
+    `The ${p.pieceName} you want comes from ${p.from}.`,
+    hint,
+  ];
 
   return {
     question,
@@ -156,6 +169,7 @@ export function buildGuidedFindChallenge(fen: string, bestUci: string): GuidedFi
     to: p.to,
     fen,
     hint,
+    hintLadder,
     confirm: `There it is — ${p.san}.`,
     retry: 'Not quite — take another look. Same piece, better square.',
   };
