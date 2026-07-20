@@ -836,6 +836,12 @@ const OPENING_PLAN_MAX_PLY = 14;
  *  shape enough for the majorities to be real. */
 const MIDDLEGAME_ORIENTATION_MIN_PLY = 16;
 
+/** Best-effort budgets for the review's two LLM warming passes (see
+ *  `raceTimeout`). On timeout the walk ships the deterministic, still-grounded
+ *  templates rather than hanging "Preparing…". Worst case ≈ 55s to ready. */
+const REVIEW_INTRO_VOICE_TIMEOUT_MS = 18000;
+const REVIEW_HOUSE_VOICE_TIMEOUT_MS = 38000;
+
 export function buildReviewSegments(
   moves: ReviewMoveInput[],
   /** The student's color — when provided, their silent opening moves are
@@ -1186,6 +1192,22 @@ function defaultIntroText(params: {
  * warmed by `voiceFacts` (never free-composed); if the warming pass
  * misses, the deterministic text is spoken verbatim.
  */
+/**
+ * Bound a best-effort promise so a slow/cold provider can never stall the
+ * review. The OpenAI/Anthropic SDKs default to a 10-minute timeout, so a cold
+ * prod DeepSeek call to the house-voice pass would hang "Preparing…" for
+ * minutes (audit 2026-07-20: the walk never became ready in 165s). The
+ * house-voice + intro-warm passes are explicitly best-effort — on timeout we
+ * ship the deterministic templates, which are still fully grounded (G0). This
+ * guarantees the walk becomes ready within a bounded window, every time.
+ */
+function raceTimeout<T>(p: Promise<T>, ms: number, fallback: T): Promise<T> {
+  return Promise.race([
+    p,
+    new Promise<T>((resolve) => setTimeout(() => resolve(fallback), ms)),
+  ]);
+}
+
 export async function generateReviewNarration(params: {
   moves: ReviewMoveInput[];
   playerColor: 'white' | 'black';
@@ -1241,7 +1263,11 @@ export async function generateReviewNarration(params: {
   const skipIntroLlm = coachNarration === 'silent';
   const introRaw = skipIntroLlm
     ? ''
-    : (await voiceFacts(groundedIntro, { intent: 'review-intro', warm: true }).catch(() => '')) ?? '';
+    : (await raceTimeout(
+        voiceFacts(groundedIntro, { intent: 'review-intro', warm: true }).catch(() => ''),
+        REVIEW_INTRO_VOICE_TIMEOUT_MS,
+        '',
+      )) ?? '';
 
   // Intro: use LLM response if non-empty and not the ⚠️ error placeholder;
   // else fall back to a grounded default.
@@ -1265,7 +1291,11 @@ export async function generateReviewNarration(params: {
         .filter((s) => s.narration && s.narration.trim().length > 0)
         .map((s) => ({ id: s.ply, fact: s.narration as string, kind: s.narrationSource ?? undefined }));
       if (toVoice.length > 0) {
-        const warmed = await voiceReviewLines(toVoice, { studentRating: playerRating });
+        const warmed = await raceTimeout(
+          voiceReviewLines(toVoice, { studentRating: playerRating }),
+          REVIEW_HOUSE_VOICE_TIMEOUT_MS,
+          new Map<number, string>(),
+        );
         for (const s of segments) {
           const w = warmed.get(s.ply);
           if (w) s.narration = w;
