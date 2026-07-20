@@ -357,6 +357,15 @@ const run = async () => {
       const framed = plies.some((p) => /forced|ends in mate|watch it land|every move is a check/i.test(p.narr || ''));
       add('TEACHFORCED forced-finish-framed', framed, framed ? 'the forced finish is framed for the student' : 'the forced mating run was never framed as forced');
     }
+    // TEACHWHY — the marquee keystone must teach the MECHANISM (the WHY it works),
+    // not just name the sac + its compensation (David 2026-07-20: "where is the
+    // teaching moment, the why? one sentence per move doesn't cover it"). On a game
+    // that finishes with a mating sacrifice, some line must explain the concrete
+    // mechanism: a line-clearance/deflection ("drags the ... off / swings open /
+    // crashes down") or a king-shield removal ("tear ... away from beside their
+    // king"). Multi-sentence, board-true.
+    const whyTaught = plies.some((p) => /why it works|drags the .*off|swings (wide )?open|crashes down to|tear the .*away from beside|the \w+-file swings/i.test(p.narr || ''));
+    add('TEACHWHY mechanism-taught', whyTaught, whyTaught ? 'the keystone sac teaches its mechanism (the why)' : 'a mating sac was named but its mechanism/why was never explained');
   }
 
   // ERR — zero page/console errors.
