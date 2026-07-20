@@ -2637,8 +2637,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   banner is PINNED in the fixed region above the middle — the
                   board + header + nav + pinned narration + bottom bar must
                   still leave the middle usable for the Ask panel. Desktop keeps
-                  the original 420px (height is not the constraint there). */}
-              <div className="w-full max-w-[32vh] mx-auto md:max-w-[420px] relative">
+                  the original 420px (height is not the constraint there).
+                  David 2026-07-20 (IMG_4559): 32vh was HEIGHT-bound on tall
+                  phones → a small board with big side margins. Now
+                  min(92vw,42vh): fills up to 92% width (the "fit to screen" he
+                  asked for) but still capped at 42vh tall so the nav + pinned
+                  narration + Ask panel below stay usable. */}
+              <div className="w-full max-w-[min(92vw,42vh)] mx-auto md:max-w-[420px] relative">
                 <ChessBoard
                   // Re-key on exploration toggle so the underlying chess
                   // instance resets cleanly when the user enters or
