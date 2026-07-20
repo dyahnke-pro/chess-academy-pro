@@ -283,10 +283,16 @@ Closed this pass, in gap order:
   + `autoAnalyzeGameMisconceptions` capture EVERY mistake from the whole game
   independent of the (budget-capped) live questions. No regression.
 
+Also closed (2nd wave):
+- **§3 why-main-is-main** ✅ `whyMainClause` — the theory lecture now explains WHY
+  the main line is main FROM THE DATA (most-played + best-scoring, or honest
+  "popular not top-scoring").
+- **§6 story-as-evidence** ✅ `reviewStoryGame.ts` — cites a REAL master game from
+  the app's VERIFIED model-games corpus (646 real games, Capablanca–Marshall,
+  Giri–Carlsen, …) for the opening. Never invented, taught in our words, once per
+  game. (Built the SAFE way — reusing verified data, not a from-memory corpus.)
+
 Not built — with reasons (not laziness):
-- **§6 story-as-evidence** — needs a SOURCED anecdote corpus (opening/structure →
-  a cited GM game teaching that idea), per the SOURCING GUARD. Real content job;
-  flag to David before building. NEVER fabricate a game/anecdote.
 - **§6 named mini-concepts (coin+define+reuse)** — the LLM coining/defining a
   term drifts toward inventing content + needs cross-line state; G0-risky.
 - **§2 transposition flags** — low value, hard to ground reliably.
