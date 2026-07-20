@@ -195,10 +195,14 @@ const run = async () => {
 
   // S5 — the better-line playout FIRED with a why on nearly every ply. A real
   // playout is intro + several per-ply whys + a verdict (>= 4 distinct lines).
-  // MATE — the game ends in checkmate; the final narration must NAME it as mate
-  // (not "pawns"/eval nonsense). Board-truth for the mate-score fix.
-  const mateNamed = plies.some((p) => /checkmate|mate\b/i.test(p.narr || '')) || /checkmate|it's mate|delivers mate/i.test(voiceAll.join(' '));
-  add('MATE named-not-pawns', mateNamed, mateNamed ? 'the mate is named as mate' : 'no mate naming at the finish');
+  // MATE — only when the game actually ENDS in checkmate: the final narration
+  // must NAME it as mate (not "pawns"/eval nonsense). Board-truth for the
+  // mate-score fix. Skipped for a resignation/draw game.
+  const gameEndsInMate = /#\s*(1-0|0-1)?\s*$/.test(PGN);
+  if (gameEndsInMate) {
+    const mateNamed = plies.some((p) => /checkmate|mate\b/i.test(p.narr || '')) || /checkmate|it's mate|delivers mate/i.test(voiceAll.join(' '));
+    add('MATE named-not-pawns', mateNamed, mateNamed ? 'the mate is named as mate' : 'no mate naming at the finish');
+  }
   // No "N pawns" where N is absurd (mate score leaked as a pawn count).
   const bogusPawns = [...plies.map((p) => p.narr || ''), ...voiceAll].find((t) => /\b(\d{2,})(?:\.\d+)?\s*pawns?\b/i.test(t) && Number(RegExp.$1) >= 20);
   add('NOPAWNLEAK no-mate-as-pawns', !bogusPawns, bogusPawns ? `mate leaked as pawns: "${String(bogusPawns).slice(0, 60)}"` : 'no absurd pawn counts');
