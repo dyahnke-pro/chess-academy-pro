@@ -17,6 +17,7 @@ import type { MasterPlayResult, MasterPlayMove } from './masterPlayTypes';
 import { lookupMasterPlay } from './masterPlayLookup';
 import { walkBookLine } from './theoryDeparture';
 import { detectOpening } from './openingDetectionService';
+import { buildReviewMoveTeaching } from './reviewMoveTeaching';
 import repertoire from '../data/repertoire.json';
 
 /** A candidate move at a branch point, with its master-DB frequency + score. */
@@ -246,6 +247,24 @@ function pct(x: number): string {
   return `${Math.round(x * 100)}%`;
 }
 
+/** The grounded WHY of a move — what it DOES on the board (bears on a centre
+ *  square, opens a file, tucks the king away, lands a tactic). Board-computed
+ *  via buildReviewMoveTeaching (G3); null on a move with no concrete point.
+ *  Returns a complete, capitalised sentence (its OWN sentence — Danya states
+ *  the move, then the reason) so callers append it as trailing prose, never as
+ *  an "— it …" clause (buildReviewMoveTeaching sentences lead with a subject
+ *  like "The knight …", which an "it" prefix would garble). */
+function moveWhy(fenBefore: string, san: string): string | null {
+  const raw = buildReviewMoveTeaching(fenBefore, san);
+  if (!raw) return null;
+  // Take just the first sentence — the theory beat wants a tight one-line
+  // reason, not the full multi-sentence teaching paragraph.
+  const first = raw.split(/(?<=[.!?])\s/)[0].trim();
+  if (first.length < 6) return null;
+  // Ensure it ends in a period so it slots cleanly as a trailing sentence.
+  return /[.!?]$/.test(first) ? first : `${first}.`;
+}
+
 function uciFor(fen: string, san: string): string | null {
   try {
     const c = new Chess(fen);
@@ -298,6 +317,11 @@ export function buildTheoryLectureBeats(
 
   for (const b of lecture.branches) {
     const side = b.moverColor === 'white' ? 'White' : 'Black';
+    // The grounded WHY of the mainline move — Danya states the move, THEN the
+    // reason as its own sentence ("Nf3. The knight bears down on d4 and e5.").
+    // Board-computed (buildReviewMoveTeaching, G3); may be null.
+    const why = moveWhy(b.fenBefore, b.mainline.san);
+    const whySentence = why ? ` ${why}` : '';
     if (b.leftBook) {
       beats.push({
         fenBefore: b.fenBefore,
@@ -308,7 +332,7 @@ export function buildTheoryLectureBeats(
         kind: 'departure',
         // Danya's departure shape: name where book is, what it is, then the
         // anti-sideline recipe ("when in doubt, keep developing").
-        fact: `At move ${b.moveNumber}, this is where the game leaves mainstream theory. The book move for ${side} is ${b.mainline.san}${mainlineNameClause(b.mainlineName)} — ${pct(b.mainline.pct)} of master games, scoring ${pct(b.mainline.scoreForMover)}.${sidelineClause(b.sidelines)}${b.mainlineDive.length >= 2 ? ' Let me show you how the main line runs from here.' : ' Past here you\'re on your own; keep developing and fight for the centre.'}`,
+        fact: `At move ${b.moveNumber}, this is where the game leaves mainstream theory. The book move for ${side} is ${b.mainline.san}${mainlineNameClause(b.mainlineName)} — ${pct(b.mainline.pct)} of master games, scoring ${pct(b.mainline.scoreForMover)}.${whySentence}${sidelineClause(b.sidelines)}${b.mainlineDive.length >= 2 ? ' Let me show you how the main line runs from here.' : ' Past here you\'re on your own; keep developing and fight for the centre.'}`,
         diveFromFen: b.diveFromFen ?? undefined,
         dive: b.mainlineDive.length >= 2 ? b.mainlineDive : undefined,
       });
@@ -320,7 +344,7 @@ export function buildTheoryLectureBeats(
         moveNumber: b.moveNumber,
         moverColor: b.moverColor,
         kind: 'sideline',
-        fact: `At move ${b.moveNumber}, the main line is ${b.mainline.san} (${pct(b.mainline.pct)}, scoring ${pct(b.mainline.scoreForMover)}). This game took ${b.played.san} (${pct(b.played.pct)}, scoring ${pct(b.played.scoreForMover)}) — a known, respectable sideline, though the main line presses a touch harder.${nameClause(b.variationName)}`,
+        fact: `At move ${b.moveNumber}, the main line is ${b.mainline.san} (${pct(b.mainline.pct)}, scoring ${pct(b.mainline.scoreForMover)}).${whySentence} This game took ${b.played.san} (${pct(b.played.pct)}, scoring ${pct(b.played.scoreForMover)}) — a known, respectable sideline, though the main line presses a touch harder.${nameClause(b.variationName)}`,
       });
     } else {
       beats.push({
@@ -330,7 +354,7 @@ export function buildTheoryLectureBeats(
         moveNumber: b.moveNumber,
         moverColor: b.moverColor,
         kind: 'mainline',
-        fact: `At move ${b.moveNumber}, ${b.mainline.san} is the main line for ${side} — ${pct(b.mainline.pct)} of games, scoring ${pct(b.mainline.scoreForMover)}, the principled choice.${sidelineClause(b.sidelines)}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ' Let me show you where it leads.' : ''}`,
+        fact: `At move ${b.moveNumber}, ${b.mainline.san} is the main line for ${side} — ${pct(b.mainline.pct)} of games, scoring ${pct(b.mainline.scoreForMover)}, the principled choice.${whySentence}${sidelineClause(b.sidelines)}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ' Let me show you where it leads.' : ''}`,
         diveFromFen: b.diveFromFen ?? undefined,
         dive: b.mainlineDive.length >= 2 ? b.mainlineDive : undefined,
       });
