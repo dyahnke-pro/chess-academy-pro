@@ -165,6 +165,37 @@ export function buildSlipReveal(args: {
   return parts.join(' ').trim();
 }
 
+/**
+ * A warm, reason-AWARE lead-in for the slip reveal (David's §4 "post-answer
+ * grading — wrong answers get a reasoned burial"). It ACKNOWLEDGES the student's
+ * stated intent, then the grounded reveal delivers the precise truth. Purely a
+ * TONE that echoes the student's own category — it adds NO chess claim (the
+ * reveal owns every board fact, G0). Deterministic off the reason string.
+ */
+export function gradeReasonLead(reason: string, mode: 'chip' | 'typed' | 'hint'): string {
+  if (mode === 'hint') return "No worries — let's look at it together. ";
+  const r = reason.toLowerCase();
+  if (/win material|trade pieces/.test(r)) return 'I see the grab — ';
+  if (/attack the king/.test(r)) return 'Going for the king — ';
+  if (/king safe|keep my king/.test(r)) return 'Playing it safe — ';
+  if (/develop/.test(r)) return 'Natural development — ';
+  if (/space|open a line/.test(r)) return 'Fair bid for space — ';
+  if (/to safety|to defend/.test(r)) return 'Trying to shore it up — ';
+  return 'I hear the idea — ';
+}
+
+/** Prepend the reason-graded lead to a reveal, lower-casing the reveal's first
+ *  word so "I see the grab — that was a blunder…" reads as one sentence. When
+ *  the lead ends in sentence punctuation (the Hint case), the reveal keeps its
+ *  capital. Empty reveal → just the lead. */
+export function withReasonLead(reveal: string, reason: string, mode: 'chip' | 'typed' | 'hint'): string {
+  const lead = gradeReasonLead(reason, mode);
+  if (!reveal.trim()) return lead.trim();
+  const endsSentence = /[.!?]\s*$/.test(lead);
+  const body = endsSentence ? reveal : reveal.charAt(0).toLowerCase() + reveal.slice(1);
+  return `${lead}${body}`;
+}
+
 export interface CaptureMisconceptionArgs {
   classifyInput: ClassifyMisconceptionInput;
   source: MisconceptionSource;

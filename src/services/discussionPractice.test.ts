@@ -129,3 +129,28 @@ describe('buildSlipReveal — classification + best move + engine why (David 202
     expect(reveal).toMatch(/best move was Nf3/i);
   });
 });
+
+describe('post-answer grading — the reason-aware lead-in (§4)', () => {
+  it('acknowledges a material-grab reason, then delivers the truth as one sentence', async () => {
+    const { withReasonLead } = await import('./discussionPractice');
+    const out = withReasonLead('That was a blunder. The best move was Nf3.', 'To win material', 'chip');
+    expect(out).toMatch(/^I see the grab —/);
+    // the reveal's first word is lower-cased so it reads continuously.
+    expect(out).toMatch(/grab — that was a blunder/i);
+  });
+
+  it('is honest + gentle on a Hint (they could not say), keeping the reveal capitalized', async () => {
+    const { withReasonLead } = await import('./discussionPractice');
+    const out = withReasonLead('That was a mistake.', '(could not say)', 'hint');
+    expect(out).toMatch(/no worries/i);
+    expect(out).toContain('That was a mistake.'); // capital kept — lead ends a sentence
+  });
+
+  it('maps each reason category to its own warm lead', async () => {
+    const { gradeReasonLead } = await import('./discussionPractice');
+    expect(gradeReasonLead('To attack the king', 'chip')).toMatch(/king/i);
+    expect(gradeReasonLead('To develop a piece', 'chip')).toMatch(/development/i);
+    expect(gradeReasonLead('To keep my king safe', 'chip')).toMatch(/safe/i);
+    expect(gradeReasonLead('some typed nonsense', 'typed')).toMatch(/hear the idea/i);
+  });
+});
