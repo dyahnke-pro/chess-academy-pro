@@ -58,6 +58,13 @@ describe('selectReviewQuestions — relevance + budget (David 2026-07-20)', () =
     expect(plan.get(13)?.kind).toBe('trap');
   });
 
+  it('does NOT stop the student on a still-WINNING move (audit 2026-07-20)', () => {
+    // A flagged move (big cpLoss) that still leaves White at +4 → no question.
+    const s = seg({ ply: 15, playerColor: 'white', classification: 'blunder', evalBefore: 830, evalAfter: 400, san: 'Bxd7+', bestMoveUci: 'x', bestMoveSan: 'y' });
+    const plan = selectReviewQuestions([s], 'white', { budget: 2 });
+    expect(plan.size).toBe(0);
+  });
+
   it('falls back to why for a plain positional slip', () => {
     const s = seg({ ply: 7, classification: 'inaccuracy', evalBefore: 10, evalAfter: -60, san: 'h3', bestMoveUci: null });
     const plan = selectReviewQuestions([s], 'white', { budget: 2 });

@@ -81,6 +81,13 @@ export function selectReviewQuestions(
     if (seg.playerColor !== playerColor) continue;
     const flagged = seg.classification === 'inaccuracy' || seg.classification === 'mistake' || seg.classification === 'blunder';
     if (!flagged) continue;
+    // Don't STOP the student on a move that leaves them clearly WINNING — you
+    // never interrogate "why'd you play that?" on a winning move, and it kills
+    // the audit's spurious better-line walkout on a mating combination whose
+    // shallow eval merely dipped (Bxd7+ in the Opera game; audit 2026-07-20).
+    // Such moves still show in the recap/badge; they just aren't a question stop.
+    const evalAfterMover = seg.evalAfter != null ? seg.evalAfter * sign : null;
+    if (evalAfterMover !== null && evalAfterMover >= 250) continue;
 
     const cpLoss = seg.evalBefore != null && seg.evalAfter != null
       ? (seg.evalBefore - seg.evalAfter) * sign
