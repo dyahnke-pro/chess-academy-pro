@@ -76,6 +76,37 @@ describe('buildOpeningTheoryLecture — grounded masters tour (David 2026-07-20)
   });
 });
 
+describe('the variation DIVE (Danya plays out the line)', () => {
+  it('populates the departure mainlineDive with the masters continuation', async () => {
+    // Game: 1.e4 e5 2.Bc4 (offbeat). Mainline at move 2 is Nf3; the DB has a
+    // continuation after 2.Nf3, so the departure beat dives down it.
+    const { fens, sans } = chain(['e4', 'e5', 'Bc4']);
+    const cont = new Chess();
+    cont.move('e4'); cont.move('e5'); cont.move('Nf3');
+    const afterNf3 = cont.fen();
+    cont.move('Nc6');
+    const afterNc6 = cont.fen();
+    const lookup = async (fen: string): Promise<MasterPlayResult> => {
+      if (fen.startsWith('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')) return res(fen, [mv('e4', 600), mv('d4', 400)]);
+      if (fen.startsWith('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b')) return res(fen, [mv('e5', 500), mv('c5', 500)]);
+      if (fen.startsWith('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w')) return res(fen, [mv('Nf3', 900)]); // Bc4 absent → 2.Bc4 leaves book
+      if (fen.startsWith(afterNf3.split(' ').slice(0, 1).join(' '))) return res(fen, [mv('Nc6', 700), mv('Nf6', 300)]);
+      if (fen.startsWith(afterNc6.split(' ').slice(0, 1).join(' '))) return res(fen, [mv('Bb5', 400), mv('Bc4', 300)]);
+      return res(fen, []);
+    };
+    const lec = await buildOpeningTheoryLecture(fens, sans, "King's Pawn", { lookup });
+    const dep = lec!.branches.find((b) => b.leftBook);
+    expect(dep).toBeTruthy();
+    expect(dep!.mainlineDive.length).toBeGreaterThanOrEqual(2); // Nc6, Bb5…
+    expect(dep!.diveFromFen).toBeTruthy();
+    // and the beat carries the dive for the player to play out.
+    const beats = buildTheoryLectureBeats(lec!);
+    const depBeat = beats.find((b) => b.kind === 'departure');
+    expect(depBeat!.dive?.length).toBeGreaterThanOrEqual(2);
+    expect(depBeat!.fact).toMatch(/how the main line runs/i);
+  });
+});
+
 describe('buildTheoryLectureBeats — grounded playable beats', () => {
   it('emits an intro + a beat per branch, with a playable UCI + grounded facts', async () => {
     const { fens, sans } = chain(['e4', 'e5', 'Qh5']);

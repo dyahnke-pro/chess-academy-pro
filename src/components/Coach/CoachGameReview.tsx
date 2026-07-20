@@ -1189,12 +1189,33 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       const line = warmed.get(i) ?? b.fact;
       try { await voiceService.speakForced(line); } catch { /* voice off */ }
       await waitIdle();
+      // DIVE DOWN the line (Danya's "let's see the next couple of moves"): play
+      // out the masters continuation on the board, arrowing each move.
+      if (b.dive && b.diveFromFen && b.dive.length > 0) {
+        let prevFen = b.diveFromFen;
+        setWalkExplorationFen(prevFen);
+        setWalkExplorationArrows(null);
+        await new Promise((r) => setTimeout(r, 500));
+        for (const step of b.dive) {
+          if (theoryLectureTokenRef.current !== token || !walkMountedRef.current) break;
+          try {
+            const cc = new Chess(prevFen);
+            const m = cc.move(step.san);
+            if (m) setWalkExplorationArrows([{ startSquare: m.from, endSquare: m.to, color: '#3b82f6' }]);
+          } catch { /* arrow is a bonus */ }
+          setWalkExplorationFen(step.fenAfter);
+          playMoveSound(step.san);
+          prevFen = step.fenAfter;
+          await new Promise((r) => setTimeout(r, 850));
+        }
+        await new Promise((r) => setTimeout(r, 400));
+      }
     }
     setWalkExplorationFen(null);
     setWalkExplorationSan(null);
     setWalkExplorationArrows(null);
     setTheoryLecturePlaying(false);
-  }, [theoryBeats, theoryLecturePlaying]);
+  }, [theoryBeats, theoryLecturePlaying, playMoveSound]);
 
   const stopOpeningTheory = useCallback((): void => {
     theoryLectureTokenRef.current += 1;

@@ -15,6 +15,7 @@
 import { Chess } from 'chess.js';
 import type { MasterPlayResult, MasterPlayMove } from './masterPlayTypes';
 import { lookupMasterPlay } from './masterPlayLookup';
+import { walkBookLine } from './theoryDeparture';
 import { detectOpening } from './openingDetectionService';
 
 /** A candidate move at a branch point, with its master-DB frequency + score. */
@@ -52,6 +53,12 @@ export interface TheoryBranch {
   /** The named variation the MAINLINE move would reach (for "the main line is
    *  the Austrian Attack"), or null. */
   mainlineName: string | null;
+  /** The masters most-played continuation AFTER the mainline move — the "let's
+   *  see the next couple of moves" dive Danya does (FpYf1Wrzi2M). Each step is
+   *  the top master move at its node, chess.js-replayed. Empty when not dived. */
+  mainlineDive: Array<{ san: string; fenAfter: string }>;
+  /** The position after the mainline move — the FEN the dive starts from. */
+  diveFromFen: string | null;
 }
 
 export interface OpeningTheoryLecture {
@@ -149,10 +156,34 @@ export async function buildOpeningTheoryLecture(
         leftBook,
         variationName,
         mainlineName,
+        mainlineDive: [],
+        diveFromFen: null,
       });
     }
 
     if (leftBook) break; // once off-book, the theory tour is over
+  }
+
+  // DIVE DOWN the mainline at the most instructive branches — Danya's "let's see
+  // the next couple of moves" (FpYf1Wrzi2M). The departure point (what the book
+  // line you left actually looks like) and the deepest mainline branch.
+  const diveTargets = new Set<TheoryBranch>();
+  const depBranch = branches.find((b) => b.leftBook);
+  if (depBranch) diveTargets.add(depBranch);
+  const lastMain = [...branches].reverse().find((b) => !b.leftBook);
+  if (lastMain) diveTargets.add(lastMain);
+  for (const b of diveTargets) {
+    try {
+      const c = new Chess(b.fenBefore);
+      const mv = c.move(b.mainline.san);
+      if (!mv) continue;
+      const fromFen = c.fen();
+      const line = await walkBookLine(fromFen, { maxPlies: 5, minGames: 5, lookup: opts.lookup });
+      if (line.length >= 2) {
+        b.diveFromFen = fromFen;
+        b.mainlineDive = line.map((p) => ({ san: p.san, fenAfter: p.fenAfter }));
+      }
+    } catch { /* a dive is a bonus, never a blocker */ }
   }
 
   if (branches.length === 0) return null;
@@ -178,6 +209,10 @@ export interface TheoryLectureBeat {
   kind: 'intro' | 'mainline' | 'sideline' | 'departure' | 'outro';
   /** The grounded fact for the house voice to phrase. */
   fact: string;
+  /** When present, the player PLAYS OUT this masters continuation on the board
+   *  after the fact is spoken — Danya's "let's see the next couple of moves". */
+  diveFromFen?: string;
+  dive?: Array<{ san: string; fenAfter: string }>;
 }
 
 function pct(x: number): string {
@@ -246,7 +281,9 @@ export function buildTheoryLectureBeats(
         kind: 'departure',
         // Danya's departure shape: name where book is, what it is, then the
         // anti-sideline recipe ("when in doubt, keep developing").
-        fact: `At move ${b.moveNumber}, this is where the game leaves mainstream theory. The book move for ${side} is ${b.mainline.san}${mainlineNameClause(b.mainlineName)} — ${pct(b.mainline.pct)} of master games, scoring ${pct(b.mainline.scoreForMover)}.${sidelineClause(b.sidelines)} Past here you're on your own; the guide is simple — keep developing and fight for the centre.`,
+        fact: `At move ${b.moveNumber}, this is where the game leaves mainstream theory. The book move for ${side} is ${b.mainline.san}${mainlineNameClause(b.mainlineName)} — ${pct(b.mainline.pct)} of master games, scoring ${pct(b.mainline.scoreForMover)}.${sidelineClause(b.sidelines)}${b.mainlineDive.length >= 2 ? ' Let me show you how the main line runs from here.' : ' Past here you\'re on your own; keep developing and fight for the centre.'}`,
+        diveFromFen: b.diveFromFen ?? undefined,
+        dive: b.mainlineDive.length >= 2 ? b.mainlineDive : undefined,
       });
     } else if (b.isSideline && b.played) {
       beats.push({
@@ -266,7 +303,9 @@ export function buildTheoryLectureBeats(
         moveNumber: b.moveNumber,
         moverColor: b.moverColor,
         kind: 'mainline',
-        fact: `At move ${b.moveNumber}, ${b.mainline.san} is the main line for ${side} — ${pct(b.mainline.pct)} of games, scoring ${pct(b.mainline.scoreForMover)}, the principled choice.${sidelineClause(b.sidelines)}${nameClause(b.variationName)}`,
+        fact: `At move ${b.moveNumber}, ${b.mainline.san} is the main line for ${side} — ${pct(b.mainline.pct)} of games, scoring ${pct(b.mainline.scoreForMover)}, the principled choice.${sidelineClause(b.sidelines)}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ' Let me show you where it leads.' : ''}`,
+        diveFromFen: b.diveFromFen ?? undefined,
+        dive: b.mainlineDive.length >= 2 ? b.mainlineDive : undefined,
       });
     }
   }
