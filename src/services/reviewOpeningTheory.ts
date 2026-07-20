@@ -13,7 +13,7 @@
 // lecture; the LLM only phrases these computed facts.
 
 import { Chess } from 'chess.js';
-import type { MasterPlayResult, MasterPlayMove } from '../types';
+import type { MasterPlayResult, MasterPlayMove } from './masterPlayTypes';
 import { lookupMasterPlay } from './masterPlayLookup';
 
 /** A candidate move at a branch point, with its master-DB frequency + score. */

@@ -34,6 +34,7 @@ import { classifyGameTheme, type GameThemeResult } from '../../services/gameThem
 import { findRewindTarget, type RewindTarget } from '../../services/blunderRewind';
 import { buildTurningPointQuestion, judgeTurningPointPick, type TurningPointQuestion } from '../../services/reviewTurningPoint';
 import { buildEvalQuestion, judgeEvalAnswer, type EvalQuestion, type EvalBucketId } from '../../services/reviewEvalQuestion';
+import { buildOpeningTheoryLecture, buildTheoryLectureBeats, type TheoryLectureBeat } from '../../services/reviewOpeningTheory';
 import { captureEvent } from '../../services/analytics';
 import { detectMissedTactics } from '../../services/missedTacticService';
 import {
@@ -49,7 +50,7 @@ import type {
 import { ReviewCitationPreviews } from './ReviewCitationPreviews';
 import { useReviewPlayback } from '../../hooks/useReviewPlayback';
 import { useReviewEngineLines } from '../../hooks/useReviewEngineLines';
-import { SkipBack, SkipForward, ChevronLeft, ChevronRight, Cpu } from 'lucide-react';
+import { SkipBack, SkipForward, ChevronLeft, ChevronRight, Cpu, BookOpen } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { tryCaptureForgetIntent } from '../../services/openingIntentCapture';
 import { coachService } from '../../coach/coachService';
@@ -275,6 +276,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // The button itself is gated on `walkNarration` being ready so the
   // transition is instant when tapped.
   const [walkStarted, setWalkStarted] = useState(false);
+
+  // OPENING THEORY LECTURE (David 2026-07-20: "a solid 5 minutes explaining the
+  // theory behind the opening and the variation played"). Built once per game
+  // from the masters DB; played on demand from the walk view.
+  const [theoryBeats, setTheoryBeats] = useState<TheoryLectureBeat[] | null>(null);
+  const [theoryLecturePlaying, setTheoryLecturePlaying] = useState(false);
+  const theoryLectureTokenRef = useRef(0);
 
   // Pre-compute accuracy + classification counts
   const accuracy = useMemo<GameAccuracy>(() => calculateAccuracy(moves), [moves]);
@@ -1149,6 +1157,54 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     onDone();
   }, [playMoveSound]);
 
+  // Play the OPENING THEORY LECTURE — the masters-DB tour of the mainline,
+  // sidelines, best moves, and where the game left theory. Each beat sits the
+  // board on the game's position, arrows the theory move, and speaks the
+  // grounded fact through the house voice (batch-warmed, paced on real audio).
+  const playOpeningTheory = useCallback(async (): Promise<void> => {
+    const beats = theoryBeats;
+    if (!beats || beats.length === 0 || theoryLecturePlaying) return;
+    const token = ++theoryLectureTokenRef.current;
+    setTheoryLecturePlaying(true);
+    const waitIdle = async (maxMs = 12000): Promise<void> => {
+      const start = performance.now();
+      while (voiceService.isPlaying() && performance.now() - start < maxMs) {
+        if (theoryLectureTokenRef.current !== token || !walkMountedRef.current) return;
+        await new Promise((r) => setTimeout(r, 120));
+      }
+    };
+    let warmed = new Map<number, string>();
+    try { warmed = await voiceReviewLines(beats.map((b, i) => ({ id: i, fact: b.fact }))); } catch { /* raw */ }
+    for (let i = 0; i < beats.length; i++) {
+      if (theoryLectureTokenRef.current !== token || !walkMountedRef.current) break;
+      const b = beats[i];
+      setWalkExplorationFen(b.fenBefore);
+      if (b.showUci) {
+        setWalkExplorationArrows([{ startSquare: b.showUci.slice(0, 2), endSquare: b.showUci.slice(2, 4), color: '#3b82f6' }]);
+      } else {
+        setWalkExplorationArrows(null);
+      }
+      await waitIdle();
+      if (theoryLectureTokenRef.current !== token || !walkMountedRef.current) break;
+      const line = warmed.get(i) ?? b.fact;
+      try { await voiceService.speakForced(line); } catch { /* voice off */ }
+      await waitIdle();
+    }
+    setWalkExplorationFen(null);
+    setWalkExplorationSan(null);
+    setWalkExplorationArrows(null);
+    setTheoryLecturePlaying(false);
+  }, [theoryBeats, theoryLecturePlaying]);
+
+  const stopOpeningTheory = useCallback((): void => {
+    theoryLectureTokenRef.current += 1;
+    setTheoryLecturePlaying(false);
+    setWalkExplorationFen(null);
+    setWalkExplorationSan(null);
+    setWalkExplorationArrows(null);
+    voiceService.stop();
+  }, []);
+
   const resumeAfterFaucet = useCallback((): void => {
     resetFaucet();
     const better = pendingBetterLineRef.current;
@@ -1614,6 +1670,24 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       setWalkExplorationSan(null);
     }
   }, []);
+
+  // Build the opening-theory lecture once per game (masters-DB tour of the
+  // mainline / sidelines / best moves / departure), deferred off the mount path.
+  useEffect(() => {
+    setTheoryBeats(null);
+    if (!reviewFens || reviewFens.length < 2) return;
+    const sans = moves.map((m) => m.san);
+    let cancelled = false;
+    const t = window.setTimeout(() => {
+      void buildOpeningTheoryLecture(reviewFens, sans, openingName ?? 'this opening')
+        .then((lec) => {
+          if (cancelled || !lec) return;
+          setTheoryBeats(buildTheoryLectureBeats(lec));
+        })
+        .catch(() => { /* DB down — no lecture, no crash */ });
+    }, 500);
+    return () => { cancelled = true; window.clearTimeout(t); };
+  }, [reviewFens, moves, openingName]);
 
   /** The computed stats line — masters share + your-level share. */
   const theoryStatsLine = useCallback((dep: TheoryDeparture): string => {
@@ -2802,6 +2876,19 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 <MessageCircle size={12} />
                 Ask
               </button>
+              {/* OPENING THEORY LECTURE — the masters-DB tour of the mainline,
+                  sidelines, and where the game left theory (David 2026-07-20). */}
+              {theoryBeats && theoryBeats.length > 0 && (
+                <button
+                  onClick={() => { if (theoryLecturePlaying) stopOpeningTheory(); else void playOpeningTheory(); }}
+                  className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-lg border border-sky-500/40 bg-sky-500/10 hover:bg-sky-500/20"
+                  style={{ color: 'var(--color-text)' }}
+                  data-testid="walk-theory-btn"
+                >
+                  <BookOpen size={12} />
+                  {theoryLecturePlaying ? 'Stop theory' : 'Opening theory'}
+                </button>
+              )}
             </div>
 
             {/* Current-move narration banner — PINNED in the fixed region so
