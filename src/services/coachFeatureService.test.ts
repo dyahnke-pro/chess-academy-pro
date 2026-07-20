@@ -526,6 +526,8 @@ describe('coachFeatureService', () => {
       expect(at(31)).toMatch(/queen sacrifice/i);
       // The finish names checkmate.
       expect(at(33)).toMatch(/checkmate/i);
+      // The forced finish is FRAMED at its first move (forcing-move concept).
+      expect(at(29)).toMatch(/forced|ends in mate|watch it land/i);
     });
   });
 

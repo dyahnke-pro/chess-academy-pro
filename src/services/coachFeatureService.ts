@@ -11,6 +11,7 @@ import { resolveCuratedOpeningIdeas } from './reviewOpeningTheory';
 import { detectPieceItineraries } from './reviewPieceItinerary';
 import { pickStoryGame } from './reviewStoryGame';
 import { sacrificeCompensation, enemyKingStuckInCenter } from './reviewSacrifice';
+import { detectForcedMatingSequence } from './reviewForcedSequence';
 import { detectBadHabits } from './badHabitDetector';
 import { db } from '../db/schema';
 import { voiceFacts, voiceReviewLines } from './coachApi';
@@ -906,6 +907,10 @@ export function buildReviewSegments(
   // The "their king is stuck in the centre" keystone is taught at most ONCE per
   // game — whether by the sacrifice compensation or the standalone beat below.
   let kingCenterTaught = false;
+  // FORCED-SEQUENCE framing (the forcing-move / "calculate to the end" concept):
+  // if the game ends in a forced checking run, frame it at its first move so the
+  // student learns to SEE a forced finish, then the walk plays it out. Board-true.
+  const forcedRun = detectForcedMatingSequence(moves.slice(0, usable).map((mm) => mm.san));
   const studentColorWB: 'w' | 'b' | null = playerColor === 'white' ? 'w' : playerColor === 'black' ? 'b' : null;
   // Prev-capture context so the PlyFacts material calc can tell a RECAPTURE
   // (even trade → 0) from a genuine win (David 2026-07-20 Opera nitpick). Holds
@@ -1036,6 +1041,16 @@ export function buildReviewSegments(
           : `${subjCap} give${s} up the ${piece} on ${sq}${withCheck} — a real sacrifice for the initiative.`;
       }
       narrationSource = 'flag';
+    }
+    // FORCED-FINISH framing — at the first move of a forced checking run to mate,
+    // teach the "it's forced, calculate to the end" concept, then let the walk
+    // play it out. Prepends to a sac/flag line, else sets it. Board-true (the run
+    // is detected from inCheck() + the check markers). The mate move itself is
+    // still named by the conversion beat at the end.
+    if (forcedRun && m.ply === forcedRun.startPly) {
+      const framing = "Here's the finish — from this move on it's forced. Every move is a check, the king has no square to run to, and it ends in mate. Watch it land.";
+      narration = narration ? `${framing} ${narration}` : framing;
+      narrationSource = narrationSource ?? 'flag';
     }
     // OPPONENT-PSYCHOLOGY read (Danya register #14: "once one side starts to
     // decline, more mistakes appear"). When the opponent errs on CONSECUTIVE
