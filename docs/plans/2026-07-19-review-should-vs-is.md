@@ -267,6 +267,36 @@ relevant — like find-the-shot before a miss." The structure:
   theory-departure CARD (redundant with the Opening Theory button — David
   "remove 3 and 4"), principle-quiz (extra quiz — David). Cameo KEPT.
 
+## 🔽 TOP-TO-BOTTOM PASS (David 2026-07-20 "work top to bottom")
+
+Closed this pass, in gap order:
+- **§1 piece routes as itineraries** ✅ `reviewPieceItinerary.ts` — narrates the
+  student's REAL reroute ("f3–d2–c4") from their own moves (G3), quiet-move beat.
+- **§1/§6 rule + counter-rule** ✅ (fact-BOUNDED) — the voiceReviewLines
+  "rule-with-boundary" directive. A FREE counter-rule stays unbuilt on purpose:
+  the LLM deciding an exception applies = G0 violation; only the edge the fact
+  itself carries is spoken.
+- **§6 conversion discipline-mantra (R8)** ✅ — phase-tagged calm register.
+- **§2 level-targeted commentary** ✅ — voiceReviewLines calibrates phrasing
+  DEPTH to the student rating (facts unchanged, G0).
+- **§8 mistakes→drills loop** ✅ VERIFIED intact — `generateMistakePuzzlesFromGame`
+  + `autoAnalyzeGameMisconceptions` capture EVERY mistake from the whole game
+  independent of the (budget-capped) live questions. No regression.
+
+Not built — with reasons (not laziness):
+- **§6 story-as-evidence** — needs a SOURCED anecdote corpus (opening/structure →
+  a cited GM game teaching that idea), per the SOURCING GUARD. Real content job;
+  flag to David before building. NEVER fabricate a game/anecdote.
+- **§6 named mini-concepts (coin+define+reuse)** — the LLM coining/defining a
+  term drifts toward inventing content + needs cross-line state; G0-risky.
+- **§2 transposition flags** — low value, hard to ground reliably.
+- **§4 choice-between-two** — deliberately NOT built: adding another question
+  type contradicts the "don't overwhelm / 3-stop budget" decision.
+- **§5 reverse-engineer / meta-cognitive search** — NEVER-build (we compute
+  deterministically; we don't narrate a fake search).
+- **§5 cameo firing** / **§3 live-DB check** — verification / live-network,
+  not a build.
+
 DONE (David 2026-07-20):
 - **Opening-specific plans** (IMG_4560). ✅ The dev-plan beat now leads with the
   opening's CURATED key idea (resolveCuratedOpeningIdeas → repertoire.json) for
