@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { buildOpeningTheoryLecture, buildTheoryLectureBeats } from './reviewOpeningTheory';
+import { buildOpeningTheoryLecture, buildTheoryLectureBeats, resolveOpeningIdeas } from './reviewOpeningTheory';
 import type { MasterPlayResult, MasterPlayMove } from '../types';
 
 function mv(san: string, games: number, w = 0.4, d = 0.3, b = 0.3): MasterPlayMove {
@@ -76,6 +76,26 @@ describe('buildOpeningTheoryLecture — grounded masters tour (David 2026-07-20)
   });
 });
 
+describe('resolveOpeningIdeas — grounded, never invented', () => {
+  it('returns the curated keyIdeas for an opening in the repertoire (classical)', () => {
+    const ideas = resolveOpeningIdeas('Italian Game');
+    expect(ideas.length).toBeGreaterThan(0);
+    // real repertoire ideas mention concrete Italian themes.
+    expect(ideas.join(' ').toLowerCase()).toMatch(/f7|center|centre|d4|develop|bishop/);
+  });
+
+  it('falls back to universal principles for a modern opening not in the corpus (Pirc)', () => {
+    const ideas = resolveOpeningIdeas('Pirc Defense');
+    expect(ideas.length).toBeGreaterThan(0);
+    expect(ideas.join(' ').toLowerCase()).toMatch(/centre|center|develop|king/);
+  });
+
+  it('never returns empty (a lecture always has a plan to land on)', () => {
+    expect(resolveOpeningIdeas(null).length).toBeGreaterThan(0);
+    expect(resolveOpeningIdeas('Totally Made Up Opening XYZ').length).toBeGreaterThan(0);
+  });
+});
+
 describe('the variation DIVE (Danya plays out the line)', () => {
   it('populates the departure mainlineDive with the masters continuation', async () => {
     // Game: 1.e4 e5 2.Bc4 (offbeat). Mainline at move 2 is Nf3; the DB has a
@@ -127,9 +147,13 @@ describe('buildTheoryLectureBeats — grounded playable beats', () => {
     expect(dep!.fact).toMatch(/leaves mainstream theory/i);
     expect(dep!.fact).toMatch(/Nf3/);
     expect(dep!.showUci).toBe('g1f3'); // the mainline move is playable on the board
-    // every non-intro beat carries a real percentage (grounded).
-    for (const b of beats.filter((x) => x.kind !== 'intro')) {
+    // every branch beat carries a real percentage (grounded); intro + the
+    // closing plan beat are prose.
+    for (const b of beats.filter((x) => x.kind !== 'intro' && x.kind !== 'outro')) {
       expect(b.fact).toMatch(/\d+%/);
     }
+    // the lecture ends on the PLAN (Danya always lands on the middlegame idea).
+    const outro = beats.find((b) => b.kind === 'outro');
+    expect(outro?.fact).toMatch(/takeaway/i);
   });
 });

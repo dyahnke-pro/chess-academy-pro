@@ -34,7 +34,7 @@ import { classifyGameTheme, type GameThemeResult } from '../../services/gameThem
 import { findRewindTarget, type RewindTarget } from '../../services/blunderRewind';
 import { buildTurningPointQuestion, judgeTurningPointPick, type TurningPointQuestion } from '../../services/reviewTurningPoint';
 import { buildEvalQuestion, judgeEvalAnswer, type EvalQuestion, type EvalBucketId } from '../../services/reviewEvalQuestion';
-import { buildOpeningTheoryLecture, buildTheoryLectureBeats, type TheoryLectureBeat } from '../../services/reviewOpeningTheory';
+import { buildOpeningTheoryLecture, buildTheoryLectureBeats, resolveOpeningIdeas, type TheoryLectureBeat } from '../../services/reviewOpeningTheory';
 import { captureEvent } from '../../services/analytics';
 import { detectMissedTactics } from '../../services/missedTacticService';
 import {
@@ -1703,7 +1703,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       void buildOpeningTheoryLecture(reviewFens, sans, openingName ?? 'this opening')
         .then((lec) => {
           if (cancelled || !lec) return;
-          setTheoryBeats(buildTheoryLectureBeats(lec));
+          setTheoryBeats(buildTheoryLectureBeats(lec, resolveOpeningIdeas(openingName)));
         })
         .catch(() => { /* DB down — no lecture, no crash */ });
     }, 500);

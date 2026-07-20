@@ -17,6 +17,7 @@ import type { MasterPlayResult, MasterPlayMove } from './masterPlayTypes';
 import { lookupMasterPlay } from './masterPlayLookup';
 import { walkBookLine } from './theoryDeparture';
 import { detectOpening } from './openingDetectionService';
+import repertoire from '../data/repertoire.json';
 
 /** A candidate move at a branch point, with its master-DB frequency + score. */
 export interface TheoryMove {
@@ -69,6 +70,32 @@ export interface OpeningTheoryLecture {
   departurePly: number | null;
   /** Master games at the root — the size of the theory the opening rests on. */
   startGames: number;
+}
+
+/** Universal opening principles — the grounded floor for openings NOT in the
+ *  curated repertoire (modern lines like the Pirc/Modern/KID that postdate the
+ *  classical corpus). These are the public-domain principles Naroditsky reduces
+ *  theory to for intermediate players ("keep developing, fight for the centre").
+ *  Not opening-specific theory — the honest general layer, per CLAUDE.md's
+ *  "verify universal principles" rule for modern openings. */
+const UNIVERSAL_OPENING_IDEAS: string[] = [
+  'control the centre and develop your pieces toward it',
+  'get your king safe early, then look for your pawn break',
+  "don't move the same piece twice in the opening without a concrete reason",
+];
+
+/** The opening's grounded key ideas — the curated repertoire keyIdeas when the
+ *  opening is in the corpus (classical set), else the universal principles.
+ *  Never invents opening-specific theory (G3). Exported for tests. */
+export function resolveOpeningIdeas(openingName: string | null): string[] {
+  if (openingName) {
+    const norm = openingName.toLowerCase();
+    const entry = (repertoire as Array<{ name?: string; keyIdeas?: string[]; shortOverview?: string }>)
+      .find((r) => typeof r.name === 'string' && (norm.includes(r.name.toLowerCase()) || r.name.toLowerCase().includes(norm)));
+    if (entry?.keyIdeas && entry.keyIdeas.length > 0) return entry.keyIdeas.slice(0, 3);
+    if (entry?.shortOverview) return [entry.shortOverview];
+  }
+  return UNIVERSAL_OPENING_IDEAS;
 }
 
 /** A position needs at least this many master games to be a real branch. */
@@ -308,6 +335,23 @@ export function buildTheoryLectureBeats(
         dive: b.mainlineDive.length >= 2 ? b.mainlineDive : undefined,
       });
     }
+  }
+
+  // Closing PLAN beat — Danya always lands on the middlegame idea ("march the
+  // queenside pawns, 2v1" / "e5 vs c5 breaks"). Use a second key idea if there
+  // is one distinct from the intro's, so the lecture ends on the plan, not stats.
+  const planIdea = ideas.find((x) => x !== ideas[0]) ?? ideas[0];
+  if (planIdea) {
+    const last = lecture.branches[lecture.branches.length - 1];
+    beats.push({
+      fenBefore: last.fenBefore,
+      showUci: null,
+      showSan: null,
+      moveNumber: last.moveNumber,
+      moverColor: last.moverColor,
+      kind: 'outro',
+      fact: `The takeaway for this opening: ${planIdea}`,
+    });
   }
 
   return beats;
