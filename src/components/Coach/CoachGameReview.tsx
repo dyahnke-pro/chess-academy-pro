@@ -19,6 +19,8 @@ import { getPhaseBreakdown, classifyPhase } from '../../services/gamePhaseServic
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
 import { buildGuidedFindChallenge, buildHoldChallenge, judgeGuidedFindAttempt, GUIDED_FIND_MIN_EVAL_CP, type GuidedFindChallenge } from '../../services/guidedFindTheMove';
+import { buildMoveTypeQuestion, judgeMoveTypeAnswer, type MoveTypeQuestion, type MoveTypeId } from '../../services/reviewTypeQuestion';
+import { buildTrapQuestion, judgeTrapAnswer, type TrapQuestion, type TrapChoiceId } from '../../services/reviewTrapQuestion';
 import { computePvLine, renderPlyFactLine, plyFactsString, type PvLine } from '../../services/pvPlayback';
 import { buildReviewMoveTeaching } from '../../services/reviewMoveTeaching';
 import { judgeSequenceAttempt, moverPlies, type SequenceVerdict } from '../../services/sequenceChallenge';
@@ -601,6 +603,22 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const [turningReveal, setTurningReveal] = useState<{ correct: boolean; text: string } | null>(null);
   const turningAskedRef = useRef(false);
 
+  // §4 TYPE-NOT-MOVE — "what KIND of move does this call for — a check, a
+  // capture, or a quiet move?" Fires ONCE per game at a student position whose
+  // best move is a forcing check/capture. Trains "forcing moves first"
+  // (reviewTypeQuestion.ts). Answer computed, never leaked.
+  const [typeQ, setTypeQ] = useState<MoveTypeQuestion | null>(null);
+  const [typeReveal, setTypeReveal] = useState<{ correct: boolean; text: string } | null>(null);
+  const typeAskedRef = useRef(false);
+
+  // §4 TRAP — "this piece looks free — take it or leave it?" Fires ONCE per game
+  // when the student faced a poisoned capture (a grab that loses by force). The
+  // reveal plays out the real losing swap (reviewTrapQuestion.ts). Trains the
+  // greedy-capture blunder class.
+  const [trapQ, setTrapQ] = useState<TrapQuestion | null>(null);
+  const [trapReveal, setTrapReveal] = useState<{ correct: boolean; text: string } | null>(null);
+  const trapAskedRef = useRef(false);
+
   useEffect(() => {
     // Fresh game → fresh question state.
     setShotState(null);
@@ -611,6 +629,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setTurningQ(null);
     setTurningReveal(null);
     turningAskedRef.current = false;
+    setTypeQ(null);
+    setTypeReveal(null);
+    typeAskedRef.current = false;
+    setTrapQ(null);
+    setTrapReveal(null);
+    trapAskedRef.current = false;
   }, [props.gameId]);
 
   const handleWalkForward = useCallback((): void => {
@@ -631,6 +655,16 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     }
     if (turningQ) {
       setTurningQ(null);
+      walkPlayback.goForward();
+      return;
+    }
+    if (typeQ) {
+      setTypeQ(null);
+      walkPlayback.goForward();
+      return;
+    }
+    if (trapQ) {
+      setTrapQ(null);
       walkPlayback.goForward();
       return;
     }
@@ -733,7 +767,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       }
     }
     walkPlayback.goForward();
-  }, [readingGate, faucetPhase, resetFaucet, raiseFaucet, readingQuizOn, walkPlayback, walkNarration, playerColor, openingName, playerRating, shotState, shotReveal, turningQ, moves, moverIsStudent]);
+  }, [readingGate, faucetPhase, resetFaucet, raiseFaucet, readingQuizOn, walkPlayback, walkNarration, playerColor, openingName, playerRating, shotState, shotReveal, turningQ, typeQ, trapQ, moves, moverIsStudent]);
 
   // Advance the walk once the faucet is done (answered + reveal dismissed, or
   // skipped) — the "resume" side of the pause above.
@@ -913,6 +947,70 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // the student CALLED it — a wrong pick keeps the flat register.
     void voiceService.speakForced(text, correct ? { prosodySpike: true } : undefined).catch(() => undefined);
   }, [turningQ]);
+
+  // ── TYPE-NOT-MOVE ask — fires once at a student position whose best move is a
+  // forcing check/capture. "What KIND of move does this call for?" ───────────
+  useEffect(() => {
+    if (typeAskedRef.current) return;
+    if (!walkNarration || moves.length === 0) return;
+    const ply = walkPlayback.currentPly;
+    if (ply < 12) return; // give the game shape first
+    if (
+      faucetPhase !== 'idle' || shotState || shotReveal || turningQ || turningReveal ||
+      rewindOffer || typeQ || typeReveal || trapQ || trapReveal ||
+      seqStateRef.current || cameoStateRef.current || theoryStateRef.current || principleQuizStateRef.current
+    ) return;
+    const seg = walkNarration.segments.find((s) => s.ply === ply);
+    if (!seg || seg.playerColor !== playerColor || !seg.bestMoveUci) return;
+    const q = buildMoveTypeQuestion({ fen: seg.fenBefore, bestUci: seg.bestMoveUci });
+    // Only quiz the FORCING types — a "quiet" answer isn't worth a card.
+    if (!q || q.answerId === 'quiet') return;
+    typeAskedRef.current = true; // one ask per game
+    setTypeQ(q);
+    captureEvent('review_type_asked', { answer: q.answerId, ply });
+    void voiceService.speakForced(q.prompt).catch(() => undefined);
+  }, [walkPlayback.currentPly, walkNarration, moves.length, playerColor, faucetPhase, shotState, shotReveal, turningQ, turningReveal, rewindOffer, typeQ, typeReveal, trapQ, trapReveal]);
+
+  const handleTypePick = useCallback((id: MoveTypeId): void => {
+    if (!typeQ) return;
+    const correct = judgeMoveTypeAnswer(typeQ, id);
+    const text = `${correct ? 'Right.' : 'Not this time.'} ${typeQ.reveal}`;
+    captureEvent('review_type_result', { correct, picked: id, answer: typeQ.answerId });
+    setTypeQ(null);
+    setTypeReveal({ correct, text });
+    void voiceService.speakForced(text, correct ? { prosodySpike: true } : undefined).catch(() => undefined);
+  }, [typeQ]);
+
+  // ── TRAP ask — fires once when the student faced a poisoned capture ────────
+  useEffect(() => {
+    if (trapAskedRef.current) return;
+    if (!walkNarration || moves.length === 0) return;
+    const ply = walkPlayback.currentPly;
+    if (ply < 8) return;
+    if (
+      faucetPhase !== 'idle' || shotState || shotReveal || turningQ || turningReveal ||
+      rewindOffer || typeQ || typeReveal || trapQ || trapReveal ||
+      seqStateRef.current || cameoStateRef.current || theoryStateRef.current || principleQuizStateRef.current
+    ) return;
+    const seg = walkNarration.segments.find((s) => s.ply === ply);
+    if (!seg || seg.playerColor !== playerColor) return;
+    const q = buildTrapQuestion({ fen: seg.fenBefore, studentColor: playerColor });
+    if (!q) return;
+    trapAskedRef.current = true; // one ask per game
+    setTrapQ(q);
+    captureEvent('review_trap_asked', { target: q.targetSquare, tempting: q.temptingSan, ply });
+    void voiceService.speakForced(q.prompt).catch(() => undefined);
+  }, [walkPlayback.currentPly, walkNarration, moves.length, playerColor, faucetPhase, shotState, shotReveal, turningQ, turningReveal, rewindOffer, typeQ, typeReveal, trapQ, trapReveal]);
+
+  const handleTrapPick = useCallback((id: TrapChoiceId): void => {
+    if (!trapQ) return;
+    const correct = judgeTrapAnswer(trapQ, id);
+    const text = `${correct ? 'Good discipline.' : 'That\'s the trap.'} ${trapQ.reveal}`;
+    captureEvent('review_trap_result', { correct, picked: id, answer: trapQ.answerId });
+    setTrapQ(null);
+    setTrapReveal({ correct, text });
+    void voiceService.speakForced(text, correct ? { prosodySpike: true } : undefined).catch(() => undefined);
+  }, [trapQ]);
 
 
   // Move-sound hook — called here (above the sequence block) because the
@@ -1817,7 +1915,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // and the walk "froze"). Whenever any question/playback card opens,
   // scroll the first present one into view.
   const anyCardOpen = Boolean(
-    shotState || shotReveal || turningQ || rewindOffer || seqState || cameoState || theoryState || principleQuizState || faucetPhase !== 'idle',
+    shotState || shotReveal || turningQ || typeQ || typeReveal || trapQ || trapReveal || rewindOffer || seqState || cameoState || theoryState || principleQuizState || faucetPhase !== 'idle',
   );
   useEffect(() => {
     if (!anyCardOpen) return;
@@ -1834,6 +1932,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           '[data-testid="review-theory-playback"]',
           '[data-testid="review-principle-quiz"]',
           '[data-testid="review-turning-card"]',
+          '[data-testid="review-type-card"]',
+          '[data-testid="review-trap-card"]',
           '[data-testid="review-rewind-card"]',
           '[data-testid="discussion-practice-panel"]',
         ].join(', '),
@@ -3121,6 +3221,59 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 className={`mx-3 my-1 rounded-xl border-2 px-3 py-2 ${turningReveal.correct ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-amber-500/40 bg-amber-500/10'}`}>
                 <div className={`text-sm ${turningReveal.correct ? 'text-emerald-100' : 'text-amber-100'}`}>{turningReveal.text}</div>
                 <button type="button" data-testid="review-turning-point-done" onClick={() => setTurningReveal(null)}
+                  className="mt-1.5 rounded-lg border border-slate-500/50 px-2.5 py-1 text-xs text-slate-300 hover:bg-slate-500/20">
+                  Done
+                </button>
+              </div>
+            )}
+            {/* §4 TYPE-NOT-MOVE — "what kind of move does this call for?" The
+                three types are always the same, in the same order, so the
+                options never leak the answer. */}
+            {typeQ && (
+              <div data-testid="review-type-card" className="mx-3 my-1 rounded-xl border-2 border-violet-500/40 bg-violet-500/10 px-3 py-2">
+                <div className="text-sm text-violet-100">{typeQ.prompt}</div>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {typeQ.choices.map((c) => (
+                    <button key={c.id} type="button" data-testid={`review-type-pick-${c.id}`}
+                      onClick={() => handleTypePick(c.id)}
+                      className="rounded-lg border border-violet-400/50 px-2.5 py-1 text-xs font-semibold text-violet-200 hover:bg-violet-500/20">
+                      {c.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+            {typeReveal && (
+              <div data-testid="review-type-reveal"
+                className={`mx-3 my-1 rounded-xl border-2 px-3 py-2 ${typeReveal.correct ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-violet-500/40 bg-violet-500/10'}`}>
+                <div className={`text-sm ${typeReveal.correct ? 'text-emerald-100' : 'text-violet-100'}`}>{typeReveal.text}</div>
+                <button type="button" data-testid="review-type-done" onClick={() => setTypeReveal(null)}
+                  className="mt-1.5 rounded-lg border border-slate-500/50 px-2.5 py-1 text-xs text-slate-300 hover:bg-slate-500/20">
+                  Done
+                </button>
+              </div>
+            )}
+            {/* §4 TRAP — "take it or leave it?" The answer is computed by static
+                exchange; the reveal plays out the real losing swap. */}
+            {trapQ && (
+              <div data-testid="review-trap-card" className="mx-3 my-1 rounded-xl border-2 border-rose-500/40 bg-rose-500/10 px-3 py-2">
+                <div className="text-sm text-rose-100">{trapQ.prompt}</div>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {trapQ.choices.map((c) => (
+                    <button key={c.id} type="button" data-testid={`review-trap-pick-${c.id}`}
+                      onClick={() => handleTrapPick(c.id)}
+                      className="rounded-lg border border-rose-400/50 px-2.5 py-1 text-xs font-semibold text-rose-200 hover:bg-rose-500/20">
+                      {c.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+            {trapReveal && (
+              <div data-testid="review-trap-reveal"
+                className={`mx-3 my-1 rounded-xl border-2 px-3 py-2 ${trapReveal.correct ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-rose-500/40 bg-rose-500/10'}`}>
+                <div className={`text-sm ${trapReveal.correct ? 'text-emerald-100' : 'text-rose-100'}`}>{trapReveal.text}</div>
+                <button type="button" data-testid="review-trap-done" onClick={() => setTrapReveal(null)}
                   className="mt-1.5 rounded-lg border border-slate-500/50 px-2.5 py-1 text-xs text-slate-300 hover:bg-slate-500/20">
                   Done
                 </button>

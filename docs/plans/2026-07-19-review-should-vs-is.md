@@ -218,12 +218,24 @@ NEVER BUILD (deliberate inversion — in-game habits we reject):
   compute deterministically.
 
 STAYS ON REVIEW (retrospective register — the next build targets here):
-- Type-not-move question (B3) — detectTactics classifies the move TYPE. ❌
-- Trap question / most-popular-wrong-answer (B7) — Stockfish 2nd line. ❌
+- Type-not-move question (B3). ✅ built + WIRED (reviewTypeQuestion.ts) — "what
+  KIND of move — check/capture/quiet?", computed from the engine best move,
+  fires once per game on a forcing best move. David: "add both!"
+- Trap question / poisoned-capture (B7). ✅ built + WIRED (reviewTrapQuestion.ts)
+  — "take it or leave it?", answer by static exchange, reveal plays out the
+  losing swap. Fires once when the student faced a poisoned capture.
+- Guess-the-eval question. ❌ REMOVED (David 2026-07-20: "we dont need guess the
+  eval questions" — abstract, not tied to a decision). Service+wiring deleted.
 - Hint LADDER on the find-shot (B6). ✅ shipped (dfd4e3e) — piece→from→move.
 - Opening theory tour: per-move WHY on best lines + depth to move 12. ✅
   shipped (13a5e33 / 8068e51) — David's "A / theory 1-12 locked in."
-- Opponent structure + development read (the loud live-test miss). ❌ NEXT.
+- Opponent structure + development read (the loud live-test miss). ✅ shipped
+  (d7aa4cd) — pawn-heavy + minors-home read, once per game, grounded.
 - Structural pawn beat anchor→plan→target per pawn event (R3). 🟡
 - Variation re-naming inside the move-walk (A2). 🟡
 - Cameo variety / transfer beat (C13/R10). 🟡
+
+DEFERRED (David 2026-07-20, "later fix — post game review done first"):
+- Move-accuracy % doesn't match chess.com. Likely needs DEEPER Stockfish
+  analysis (higher depth/nodes per ply) so the per-move eval + accuracy formula
+  line up with chess.com's. Not a review-narration bug — an analysis-depth job.
