@@ -1,7 +1,7 @@
 import { Chess } from 'chess.js';
 import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice } from './groundedAnswer';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
-import { plyFactsForMove } from './pvPlayback';
+import { plyFactsForMove, plyFactsClause } from './pvPlayback';
 import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan } from './reviewStrategicOrientation';
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
 import { detectOpening } from './openingDetectionService';
@@ -874,14 +874,10 @@ export function buildReviewSegments(
   // Opponent-commentary dedup — name each target square at most once, and cap
   // the total so the lighter developing reads never spam (Danya comments the
   // opponent ~50-60% of moves, not every one).
+  // Opponent target-read dedup — name each target square at most once (David
+  // 2026-07-20: "always narrate both sides" — no count cap; the dedup is the only
+  // throttle, and the PlyFacts fallback narrates every other eventful opp move).
   const oppTargetsSeen = new Set<string>();
-  let oppCommentCount = 0;
-  // David 2026-07-20 (live iPhone test): "need more opponent narrations." Raised
-  // 4→10. Every opponent read is board-true (loose piece / weak-pawn pressure /
-  // outpost / central development) and deduped per target square, so a higher cap
-  // only surfaces MORE genuine reads — it can never manufacture filler. Flagged
-  // opponent slips ("your opponent slipped") are already uncapped above.
-  const MAX_OPP_COMMENTS = 10;
   // Opponent-psychology read state — was the opponent's LAST move an error, and
   // have we already noted the snowball once?
   let lastOpponentWasError = false;
@@ -1120,16 +1116,37 @@ export function buildReviewSegments(
       && playerColor !== undefined
       && (m.classification === null || m.classification === 'book' || m.classification === 'good')
     ) {
-      const opp = oppCommentCount < MAX_OPP_COMMENTS
-        ? buildOpponentMoveTeaching(fenPair.fenBefore, m.san, studentColorWB)
-        : null;
+      // No count cap (David 2026-07-20: "always narrate both sides") — the
+      // per-target dedup already stops the same idea repeating; this richer
+      // "what they're targeting" read fires whenever there's a NEW target, and
+      // the PlyFacts fallback below covers every other eventful opponent move.
+      const opp = buildOpponentMoveTeaching(fenPair.fenBefore, m.san, studentColorWB);
       const target = opp?.arrows[0]?.endSquare;
       if (opp && !(target && oppTargetsSeen.has(target))) {
         narration = opp.text;
         planArrows = opp.arrows;
         narrationSource = 'opponent';
-        oppCommentCount += 1;
         if (target) oppTargetsSeen.add(target);
+      }
+    }
+    // OPPONENT PER-MOVE FALLBACK — narrate BOTH SIDES on every eventful move
+    // (David 2026-07-20: "always narrate both sides"). When the opponent's own
+    // quiet move still has no narration but DID something concrete (capture,
+    // tactic, outpost, passed pawn, opened file, material, king-shield), voice it
+    // in the SAME rich PlyFacts register the student side gets — framed "Your
+    // opponent …" so the side is never ambiguous. Board-true (G0); a truly quiet
+    // opponent move stays silent, exactly as a truly quiet student move does, so
+    // the two sides get symmetric coverage.
+    if (
+      narration === null
+      && moverColor !== playerColor
+      && playerColor !== undefined
+      && (m.classification === null || m.classification === 'book' || m.classification === 'good')
+    ) {
+      const clause = plyFactsClause(fenPair.fenBefore, m.san);
+      if (clause) {
+        narration = `Your opponent ${clause}.`;
+        narrationSource = 'opponent';
       }
     }
     segments.push({

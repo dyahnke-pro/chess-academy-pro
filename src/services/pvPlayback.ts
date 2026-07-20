@@ -319,6 +319,36 @@ export function plyFactsString(ply: PvPly): string | null {
   return `The move ${ply.san} ${parts.join(', ')}.`;
 }
 
+/** The SAME per-move facts as `plyFactsString`, but as a SUBJECT-LESS clause
+ *  (no "The move X" prefix) so the caller can frame the subject — "You …" for
+ *  the student, "Your opponent …" for the other side (David 2026-07-20: "always
+ *  narrate both sides"). Returns e.g. "captures the knight, lands a fork, wins 3
+ *  points of material", or null on a genuinely quiet move. Board-true (G0). */
+export function plyFactsClause(fenBefore: string, san: string): string | null {
+  try {
+    const c = new Chess(fenBefore);
+    const mv = c.move(san);
+    if (!mv) return null;
+    const f = computePlyFacts(fenBefore, c.fen(), {
+      captured: mv.captured, san: mv.san, color: mv.color, promotion: mv.promotion,
+    });
+    const parts: string[] = [];
+    if (f.captured) parts.push(`captures the ${f.captured}`);
+    if (f.isMate) parts.push('delivers checkmate');
+    else if (f.isCheck) parts.push('gives check');
+    if (f.promotion) parts.push(`promotes to a ${f.promotion}`);
+    if (f.tacticLanded) parts.push(`lands a ${f.tacticLanded}`);
+    if (f.outpostGained) parts.push(`plants an outpost on ${f.outpostGained}`);
+    if (f.newPassedPawns.length > 0) parts.push(`creates a passed pawn on ${f.newPassedPawns.join(', ')}`);
+    if (f.newOpenFiles.length > 0) parts.push(`opens the ${f.newOpenFiles.join(' and ')}-file`);
+    if (f.shieldLost > 0) parts.push(`strips ${f.shieldLost} pawn${f.shieldLost > 1 ? 's' : ''} from the king's cover`);
+    if (f.materialGained >= 1) parts.push(`wins ${f.materialGained} point${f.materialGained > 1 ? 's' : ''} of material`);
+    return parts.length === 0 ? null : parts.join(', ');
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Rich per-move facts for a REAL game move (fenBefore + SAN) — the SAME deep
  * PlyFacts computer the PV playout narrates (captures, newly-created tactics,

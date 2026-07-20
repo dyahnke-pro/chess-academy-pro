@@ -451,6 +451,23 @@ describe('coachFeatureService', () => {
       expect(segments).toHaveLength(1);
       expect(segments[0].san).toBe('e4');
     });
+
+    it('narrates BOTH sides — an eventful opponent move gets a framed read (David 2026-07-20)', () => {
+      // Student = White; Black (opponent) recaptures on d5. The opponent's own
+      // eventful quiet move must be narrated, framed "Your opponent …", not left
+      // silent (the both-sides fallback). Board-true via PlyFacts.
+      const segments = buildReviewSegments([
+        move({ ply: 1, san: 'e4', classification: 'book' }),
+        move({ ply: 2, san: 'd5', classification: 'good' }),
+        move({ ply: 3, san: 'exd5', classification: 'good' }),
+        move({ ply: 4, san: 'Qxd5', classification: 'good' }),  // opening named here
+        move({ ply: 5, san: 'Nc3', classification: 'good' }),
+        move({ ply: 6, san: 'Qxg2', classification: 'good' }),  // opponent grabs a pawn
+      ], 'white');
+      const oppSeg = segments.find((s) => s.ply === 6);
+      expect(oppSeg?.narration).toBeTruthy();
+      expect(oppSeg?.narrationSource).toBe('opponent');
+    });
   });
 
   describe('buildReviewCitations (Phase 1c — grounded recap/preview spine)', () => {
