@@ -256,11 +256,18 @@ relevant — like find-the-shot before a miss." The structure:
   theory-departure CARD (redundant with the Opening Theory button — David
   "remove 3 and 4"), principle-quiz (extra quiz — David). Cameo KEPT.
 
-DEFERRED (David 2026-07-20, "later fix — post game review done first"):
+DONE (David 2026-07-20):
+- **Opening-specific plans** (IMG_4560). ✅ The dev-plan beat now leads with the
+  opening's CURATED key idea (resolveCuratedOpeningIdeas → repertoire.json) for
+  the classical set, and NAMES the opening + states one side's plan for
+  uncurated lines — never the "both sides have the exact same plan" collapse.
+  Follow-up option: for UNCURATED openings, derive a specific plan from the
+  masters CONTINUATION (async lookupMasterPlay) — would give the Zukertort etc.
+  a data-grounded plan instead of the board-computed developing clause.
+
+DEFERRED (David 2026-07-20, "later fix"):
 - **Board sizing** — review board must fit the screen (IMG_4559).
-- **Opening-specific plans** — the dev-plan beat says "develop the knights"
-  every game (IMG_4560); it must use the SPECIFIC opening's plans
-  (resolveOpeningIdeas / masters continuation), not the generic template.
+- **Move-accuracy %** mismatch vs chess.com — needs deeper Stockfish depth.
 - Move-accuracy % doesn't match chess.com. Likely needs DEEPER Stockfish
   analysis (higher depth/nodes per ply) so the per-move eval + accuracy formula
   line up with chess.com's. Not a review-narration bug — an analysis-depth job.
