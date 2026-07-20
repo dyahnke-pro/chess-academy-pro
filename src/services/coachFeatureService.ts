@@ -1321,6 +1321,27 @@ function raceTimeout<T>(p: Promise<T>, ms: number, fallback: T): Promise<T> {
   ]);
 }
 
+/** True when every "<piece> on <square>" claim in `text` is TRUE on `fen` (the
+ *  board the student sees at that ply). Guards the review walk against a house-
+ *  voice rephrase that attaches a piece to a square it doesn't occupy — e.g.
+ *  "the pawn on b5 gets taken" after a bishop has landed on b5 (audit
+ *  2026-07-20). Runtime analog of the build-time narrationAccuracy contract. */
+export function narrationBoardAccurate(text: string, fen: string): boolean {
+  const WANT: Record<string, string> = { knight: 'n', bishop: 'b', rook: 'r', queen: 'q', pawn: 'p', king: 'k' };
+  try {
+    const board = new Chess(fen);
+    const re = /\b(knight|bishop|rook|queen|pawn|king)\s+on\s+([a-h][1-8])\b/gi;
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(text)) !== null) {
+      const cell = board.get(m[2].toLowerCase() as Square);
+      if (!cell || cell.type !== WANT[m[1].toLowerCase()]) return false;
+    }
+    return true;
+  } catch {
+    return true; // never block narration on a parse error
+  }
+}
+
 export async function generateReviewNarration(params: {
   moves: ReviewMoveInput[];
   playerColor: 'white' | 'black';
@@ -1419,7 +1440,13 @@ export async function generateReviewNarration(params: {
         );
         for (const s of segments) {
           const w = warmed.get(s.ply);
-          if (w) s.narration = w;
+          // Accept the warmed line ONLY if it's board-accurate — reject a
+          // house-voice rephrase that attaches a piece to a square it doesn't
+          // occupy on the resulting board ("the pawn on b5 gets taken" after a
+          // bishop landed on b5; audit 2026-07-20). Runtime analog of the
+          // narrationAccuracy gate; on a false claim we keep the deterministic
+          // (board-true) template.
+          if (w && narrationBoardAccurate(w, s.fenAfter)) s.narration = w;
         }
       }
     } catch { /* keep the deterministic templates */ }

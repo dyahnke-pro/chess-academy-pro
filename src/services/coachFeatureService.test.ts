@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { Chess } from 'chess.js';
 import { db } from '../db/schema';
-import { detectBadHabits, detectBadHabitsFromGame, buildProfileContext, buildReviewSegments, buildReviewCitations } from './coachFeatureService';
+import { detectBadHabits, detectBadHabitsFromGame, buildProfileContext, buildReviewSegments, buildReviewCitations, narrationBoardAccurate } from './coachFeatureService';
 import { explainBestMoveGrounded, describeSacrifice } from './groundedAnswer';
 import type { ReviewMoveInput } from './coachFeatureService';
 import { buildUserProfile, buildBadHabit } from '../test/factories';
@@ -469,6 +470,18 @@ describe('coachFeatureService', () => {
       // Framed as the opponent (via the opponent target-read/fallback OR the
       // sacrifice beat — both say "Your opponent"); never left silent.
       expect(oppSeg?.narration).toMatch(/your opponent/i);
+    });
+
+    it('narrationBoardAccurate rejects a stale piece-on-square claim, keeps a true one', () => {
+      const c = new Chess();
+      for (const m of ['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5', 'Bxf3', 'Qxf3', 'dxe5', 'Bc4', 'Nf6', 'Qb3', 'Qe7', 'Nc3', 'c6', 'Bg5', 'b5', 'Nxb5', 'cxb5', 'Bxb5+']) c.move(m);
+      const fenAfterBxb5 = c.fen(); // a BISHOP sits on b5 now
+      // The house-voice hallucination the audit caught (2026-07-20).
+      expect(narrationBoardAccurate('The pawn on b5 gets taken with check.', fenAfterBxb5)).toBe(false);
+      // A true claim about the same board passes (a bishop IS on b5).
+      expect(narrationBoardAccurate('The bishop on b5 gives check.', fenAfterBxb5)).toBe(true);
+      // Prose with no piece-on-square claim always passes.
+      expect(narrationBoardAccurate('A stunning sacrifice for the initiative.', fenAfterBxb5)).toBe(true);
     });
 
     it('teaches the Opera Game showcase moves — sac named, mate named, no windfall (David 2026-07-20)', () => {
