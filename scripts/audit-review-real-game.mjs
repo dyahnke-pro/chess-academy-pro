@@ -117,7 +117,9 @@ const run = async () => {
   await page.locator('[data-testid="start-walk-btn"]').first().click().catch(() => {});
   await page.locator('[data-testid="coach-game-review-walk"]').first().waitFor({ timeout: 20000 }).catch(() => {});
 
-  const CARD_TESTIDS = ['discussion-prompt', 'discussion-reason-picker', 'review-find-shot-card', 'review-find-shot-reveal', 'review-rewind-card', 'review-turning-point-card', 'review-turning-point-reveal', 'review-cameo-ask', 'review-cameo-playback', 'review-theory-ask', 'review-theory-playback', 'review-principle-quiz', 'review-sequence-ask', 'review-sequence-playback', 'review-capture-teach', 'review-capture-continue'];
+  const CARD_TESTIDS = ['discussion-prompt', 'discussion-reason-picker', 'review-find-shot-card', 'review-find-shot-reveal', 'review-rewind-card', 'review-turning-point-card', 'review-turning-point-reveal', 'review-type-card', 'review-type-reveal', 'review-trap-card', 'review-trap-reveal', 'review-cameo-ask', 'review-cameo-playback', 'review-theory-ask', 'review-theory-playback', 'review-principle-quiz', 'review-sequence-ask', 'review-sequence-playback', 'review-capture-teach', 'review-capture-continue'];
+  let typeCardFired = false;
+  let trapCardFired = false;
   const visibleCards = async () => { const f = []; for (const t of CARD_TESTIDS) if (await has(page, `[data-testid="${t}"]`)) f.push(t); return f; };
   const fwd = page.locator('[data-testid="review-forward-btn"]').first();
   const plyNow = async () => { const t = await page.locator('[data-testid="coach-game-review-walk"]').innerText({ timeout: 2000 }).catch(() => ''); const m = t.match(/Ply\s+(\d+)\s*\/\s*(\d+)/i); return m ? { n: Number(m[1]), total: Number(m[2]) } : { n: 0, total: 0 }; };
@@ -144,6 +146,10 @@ const run = async () => {
         }
       }
       if (await has(page, '[data-testid="review-find-shot-card"]')) { await page.locator('[data-testid="review-find-shot-hint"]').first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(600); for (const sel of ['[data-testid="review-find-shot-continue"]', '[data-testid="review-find-shot-skip"]']) { if (await has(page, sel)) { await page.locator(sel).first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(400); break; } } }
+      // §4 type-not-move: pick a type, dismiss the reveal (like a human).
+      if (await has(page, '[data-testid="review-type-card"]')) { typeCardFired = true; await page.locator('[data-testid^="review-type-pick-"]').first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(700); if (await has(page, '[data-testid="review-type-done"]')) { await page.locator('[data-testid="review-type-done"]').first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(300); } }
+      // §4 trap: commit the right call ("leave it"), dismiss the reveal.
+      if (await has(page, '[data-testid="review-trap-card"]')) { trapCardFired = true; await page.locator('[data-testid="review-trap-pick-leave"]').first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(700); if (await has(page, '[data-testid="review-trap-done"]')) { await page.locator('[data-testid="review-trap-done"]').first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(300); } }
       if (await has(page, '[data-testid="review-sequence-ask"]')) { await page.locator('[data-testid="review-sequence-show"]').first().click({ timeout: 1500 }).catch(() => {}); for (let s = 0; s < 8; s++) { if (await has(page, '[data-testid="review-sequence-skip"]')) { await page.locator('[data-testid="review-sequence-skip"]').first().click({ timeout: 1500 }).catch(() => {}); break; } await page.waitForTimeout(500); } await page.waitForTimeout(400); }
       if (await has(page, '[data-testid="review-sequence-playback"]')) { await page.locator('[data-testid="review-sequence-skip"]').first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(400); }
       for (const sel of ['[data-testid="review-cameo-skip"]', '[data-testid="review-cameo-stop"]', '[data-testid="review-theory-skip"]', '[data-testid="review-theory-stop"]', '[data-testid="review-turning-point-done"]', '[data-testid="review-capture-continue"]', '[data-testid="review-capture-skip"]', '[data-testid="review-rewind-decline"]']) { if (await has(page, sel)) { await page.locator(sel).first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(400); } }
@@ -223,6 +229,12 @@ const run = async () => {
   const oppFired = plies.some((p) => p.src === 'opponent')
     || plies.some((p) => /contest|steps in eyeing|trains on|leaves your .* loose|plants a .* on|outpost no|opponent'?s .* (eyes|steps in|slides)/i.test(p.narr || ''));
   add('OPP commentary-fired', oppFired, oppFired ? 'an opponent read appeared' : 'no opponent commentary in the whole walk');
+
+  // §4 diagnostic cards (type-not-move + trap) — INFORMATIONAL, not pass/fail:
+  // they're gated one-shots that only fire when the game HAS a forcing best move
+  // / a poisoned capture, so a given game legitimately may not trigger them.
+  log(`  [info] §4 type-not-move card fired this game: ${typeCardFired}`);
+  log(`  [info] §4 trap card fired this game: ${trapCardFired}`);
 
   // R10 — no verbatim-duplicate narration line (the repetition failure).
   const seen = new Map();
