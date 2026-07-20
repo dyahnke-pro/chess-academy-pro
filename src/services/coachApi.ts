@@ -2415,6 +2415,10 @@ export async function voiceReviewLines(
     'square, piece, eval number, opening, threat, or claim of your own. If the fact does not ' +
     'say it, you do not know it. Never hedge, never mention an engine or analysis — speak the ' +
     'finding as your own read. No praise beyond the verdict the fact supports.\n\n' +
+    'KEEP THE SUBJECT: if the fact names "you"/"your" or "your opponent", the rephrasing MUST ' +
+    'keep that same side — never reattribute a move from the opponent to the student or vice ' +
+    'versa. A fact that says "your opponent blundered" must still read as the OPPONENT\'s error, ' +
+    'not an "ouch, that hurts" aimed at the student.\n\n' +
     // STYLE MAP — original exemplars distilled from real teaching (in the STYLE,
     // never the words — plagiarism guard). They show the transform: a flat
     // computed fact → one line in the voice. Same squares, richer teaching.
