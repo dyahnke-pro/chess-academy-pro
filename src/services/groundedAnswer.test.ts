@@ -920,6 +920,15 @@ describe('describeMoveGeometry — grounded one-phrase "what the move does" (Dav
     expect(out).toBe('pins the knight on f6 to the queen on d8');
   });
 
+  it('does NOT call a hanging queen-trade-with-check a fork or pin (David 2026-07-20)', () => {
+    // Qxd8+ captures the queen with check, but the queen is recaptured by the
+    // king (Kxd8) — it neither forks the king+bishop nor pins anything, because
+    // the forking piece simply hangs. Board truth: it just gives check.
+    const out = describeMoveGeometry('r1bqk1nr/ppp2ppp/2n5/4P3/4p3/2P5/PP3PPP/R1BQKBNR w KQkq - 0 8', 'Qxd8+', 'white');
+    expect(out).not.toMatch(/fork|pin/i);
+    expect(out).toBe('gives check');
+  });
+
   it('names a MATERIAL win', () => {
     const out = describeMoveGeometry('4k3/8/8/3p4/2B5/8/8/4K3 w - - 0 1', 'Bxd5', 'white');
     expect(out).toBe('wins the pawn on d5');

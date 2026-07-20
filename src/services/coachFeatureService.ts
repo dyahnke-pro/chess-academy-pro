@@ -1,6 +1,7 @@
 import { Chess } from 'chess.js';
 import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice } from './groundedAnswer';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
+import { plyFactsForMove } from './pvPlayback';
 import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan } from './reviewStrategicOrientation';
 import { buildOpponentMoveTeaching } from './reviewOpponentCommentary';
 import { detectBadHabits } from './badHabitDetector';
@@ -691,10 +692,21 @@ function buildDeterministicNarration(params: {
     preMoveEval !== null && evaluation !== null
       ? Math.abs((preMoveEval - evaluation) / 100)
       : null;
+  // A mate score is stored as a huge sentinel cp; dividing it by 100 printed
+  // nonsense like "Drops about 299.5 pawns" (David 2026-07-20, F9). Anything
+  // past ~20 pawns is beyond any real material swing → it's a decisive /
+  // mating turn, so say THAT instead of a bogus pawn count. Board truth.
+  const MATE_MAGNITUDE_CP = 5000;
+  const swingIsDecisive =
+    (preMoveEval !== null && Math.abs(preMoveEval) >= MATE_MAGNITUDE_CP) ||
+    (evaluation !== null && Math.abs(evaluation) >= MATE_MAGNITUDE_CP) ||
+    (swingPawns !== null && swingPawns >= 20);
   const swingPhrase =
-    swingPawns !== null && swingPawns >= 0.1
-      ? ` Drops about ${swingPawns.toFixed(1)} pawns.`
-      : '';
+    swingIsDecisive
+      ? ' A game-deciding swing.'
+      : swingPawns !== null && swingPawns >= 0.1
+        ? ` Drops about ${swingPawns.toFixed(1)} pawns.`
+        : '';
 
   // WHY a strong move was strong — the concrete thing it DID on the board,
   // computed from chess.js (G3), never generic praise (David 2026-07-10). The
@@ -940,7 +952,11 @@ export function buildReviewSegments(
       && m.ply <= OPENING_TEACH_MAX_PLY
       && (m.classification === null || m.classification === 'book' || m.classification === 'good')
     ) {
-      narration = buildReviewMoveTeaching(fenPair.fenBefore, m.san);
+      // Rich PlyFacts FIRST (the same deep computer the best-move lines use —
+      // David 2026-07-20 "the best move lines have way better narration"), then
+      // the thinner teaching note. Both are grounded; the rich one just fires on
+      // far more moves so the walk stops going silent on eventful ones.
+      narration = plyFactsForMove(fenPair.fenBefore, m.san) ?? buildReviewMoveTeaching(fenPair.fenBefore, m.san);
       if (narration) narrationSource = 'per-move';
     }
     // §7 CONVERSION / ENDGAME: past the opening cap the walk was "badges only".
@@ -961,6 +977,16 @@ export function buildReviewSegments(
       if (narration === null && !endgameAnnounced) {
         const phase = nameEndgamePhase(fenPair.fenAfter);
         if (phase) { narration = `We've reached ${phase}.`; endgameAnnounced = true; narrationSource = 'endgame'; }
+      }
+      // MIDDLEGAME silence gap (David 2026-07-20: "narration was missing on a
+      // lot of moves"). Past the opening, a quiet student move that isn't a
+      // mate/endgame beat got NOTHING — the biggest coverage hole. Fill it with
+      // the same rich PlyFacts the best-move lines use (captures/tactics/
+      // outposts/passed pawns/files/material), null → still silent for a truly
+      // uneventful move.
+      if (narration === null) {
+        const rich = plyFactsForMove(fenPair.fenBefore, m.san);
+        if (rich) { narration = rich; narrationSource = 'per-move'; }
       }
     }
     // OPPONENT-MOVE commentary — what the opponent's move TARGETS in the

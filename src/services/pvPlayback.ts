@@ -313,6 +313,37 @@ export function plyFactsString(ply: PvPly): string | null {
   return `The move ${ply.san} ${parts.join(', ')}.`;
 }
 
+/**
+ * Rich per-move facts for a REAL game move (fenBefore + SAN) — the SAME deep
+ * PlyFacts computer the PV playout narrates (captures, newly-created tactics,
+ * outposts, passed pawns, opened files, material, king-shield). The basic walk
+ * used only the thinner `buildReviewMoveTeaching`, so quiet-but-eventful moves
+ * went silent and read worse than the best-move lines (David 2026-07-20: "the
+ * best move lines have way better narration"). Routing the walk through this
+ * unifies the quality. Null on a genuinely quiet move (no concrete fact) →
+ * silence, per the Narration Voice Rules. Pure — chess.js validates the SAN.
+ */
+export function plyFactsForMove(fenBefore: string, san: string): string | null {
+  try {
+    const c = new Chess(fenBefore);
+    const mv = c.move(san);
+    if (!mv) return null;
+    const facts = computePlyFacts(fenBefore, c.fen(), {
+      captured: mv.captured, san: mv.san, color: mv.color, promotion: mv.promotion,
+    });
+    return plyFactsString({
+      san: mv.san,
+      uci: `${mv.from}${mv.to}${mv.promotion ?? ''}`,
+      moverColor: mv.color === 'w' ? 'white' : 'black',
+      fenBefore,
+      fenAfter: c.fen(),
+      facts,
+    });
+  } catch {
+    return null;
+  }
+}
+
 /** The whole line's facts, one numbered bundle per ply (audit/debug view). */
 export function pvFactsForVoice(line: PvLine): string {
   return line.plies

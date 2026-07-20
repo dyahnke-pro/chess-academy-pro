@@ -783,15 +783,22 @@ export function describeMoveGeometry(
     if (c.attackers(sq.square, mc).includes(to)) targets.push({ square: sq.square, piece: sq.type });
   }
 
+  // LANDING SAFETY — a fork or a pin only "counts" if the opponent can't just
+  // CAPTURE the piece that made it (David 2026-07-20: "Qxd8+ … not technically a
+  // fork, the bishop was defended" — the queen simply gets recaptured, so it
+  // neither forks nor pins). Static-exchange: if grabbing the piece on `to` wins
+  // material for the opponent, the tactic is illusory. Board truth over label.
+  const landingSafe = seeGain(c, to) <= 0;
+
   // FORK — the moved piece hits two enemy pieces at once (royal fork when the
-  // king is one of them).
-  if (targets.length >= 2) {
+  // king is one of them), AND survives on its square.
+  if (targets.length >= 2 && landingSafe) {
     const sorted = [...targets].sort((a, b) => (REVIEW_PIECE_VALUE[b.piece] ?? 0) - (REVIEW_PIECE_VALUE[a.piece] ?? 0));
     return `forks the ${REVIEW_PIECE_NAME[sorted[0].piece]} on ${sorted[0].square} and the ${REVIEW_PIECE_NAME[sorted[1].piece]} on ${sorted[1].square}`;
   }
 
-  // PIN.
-  if (mv.piece === 'b' || mv.piece === 'r' || mv.piece === 'q') {
+  // PIN — a real pin held by a piece that isn't itself hanging.
+  if (landingSafe && (mv.piece === 'b' || mv.piece === 'r' || mv.piece === 'q')) {
     const pin = findPinFrom(c, to, mv.piece, moverColor);
     if (pin) return `pins the ${REVIEW_PIECE_NAME[pin.pinnedPiece]} on ${pin.pinned} to the ${REVIEW_PIECE_NAME[pin.rearPiece]} on ${pin.rear}`;
   }
