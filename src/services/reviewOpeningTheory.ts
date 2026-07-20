@@ -101,8 +101,12 @@ export function resolveOpeningIdeas(openingName: string | null): string[] {
 
 /** A position needs at least this many master games to be a real branch. */
 const MIN_BRANCH_GAMES = 10;
-/** Only the opening phase gets the theory tour. */
-const MAX_PLIES = 16;
+/** The theory tour covers the whole opening phase — moves 1-12 (24 plies)
+ *  where master coverage supports it (David 2026-07-20: "opening phase / theory
+ *  1-12 need to be locked in"). The walk stops early on book departure or when a
+ *  position drops below MIN_BRANCH_GAMES, so deep-theory lines get the full run
+ *  and offbeat ones stop honestly where the book does. */
+const MAX_PLIES = 24;
 
 function scoreForMover(m: MasterPlayMove, mover: 'white' | 'black'): number {
   // white/draw/black are win-shares of the games with this move.
