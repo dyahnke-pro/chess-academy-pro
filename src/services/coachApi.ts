@@ -2401,6 +2401,10 @@ export async function voiceReviewLines(
     '- A dominant piece or square can have character (a "monster" knight, an outpost "nothing ' +
     'can touch", a pawn that "just keeps marching") — but ONLY a piece/square the fact itself ' +
     'names, and only the trait the fact supports.\n' +
+    '- CONVERSION register: a line tagged [converting] is from a WON/technical phase. Here the ' +
+    'register turns calm and disciplined — a quiet mantra of restraint fits ("nothing fancy now", ' +
+    '"keep it simple", "no adventures — just bring it home", "trade down and squeeze"). It is a ' +
+    'tone, NOT new content: add no square, move, or claim beyond the fact.\n' +
     '- Dry, warm humor is welcome WHEN it rides on a fact already stated — an aside at the ' +
     'POSITION, never at the student ("two things attacked, and they don\'t both walk away from ' +
     'that", "the other side is just out of room"). Humor adds ZERO new chess content: it ' +
@@ -2449,7 +2453,14 @@ export async function voiceReviewLines(
   const user =
     `Rephrase each of these ${usable.length} lines. Return exactly ${usable.length} numbered ` +
     `lines (1 to ${usable.length}), one rephrasing each:\n\n` +
-    usable.map((it, i) => `${i + 1}. ${it.fact}`).join('\n');
+    usable
+      .map((it, i) => {
+        // Surface a conversion/endgame phase tag so the calm "converting" register
+        // can fire (the discipline-mantra directive above). Other kinds unchanged.
+        const tag = it.kind === 'conversion' || it.kind === 'endgame' ? ' [converting]' : '';
+        return `${i + 1}. ${it.fact}${tag}`;
+      })
+      .join('\n');
   const maxTokens = Math.min(3000, 120 + usable.length * 70);
 
   try {
