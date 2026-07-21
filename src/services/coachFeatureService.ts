@@ -1733,6 +1733,19 @@ export async function generateReviewNarration(params: {
     } catch { /* keep the deterministic templates */ }
   }
 
+  // UNCAPPED: any line whose warming was REJECTED (a heavy sac/projection bundle
+  // where the rephrase dropped the "sacrifice" canary or tripped board-accuracy)
+  // still holds the diagnostic [tag] prefixes, which read badly aloud. Strip the
+  // tags so every spoken line is clean prose that still carries all the data
+  // (David 2026-07-20: the 3 heaviest moves showed raw brackets).
+  if (uncapped) {
+    for (const s of segments) {
+      if (s.narration && s.narration.includes('[')) {
+        s.narration = s.narration.replace(/\[[a-z-]+\]\s*/g, '').replace(/\s{2,}/g, ' ').trim();
+      }
+    }
+  }
+
   const narratedCount = segments.filter((s) => s.narration !== null).length;
   void logAppAudit({
     kind: 'review-segments-generated',
