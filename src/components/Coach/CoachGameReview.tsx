@@ -847,11 +847,23 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // before the move) is the authoritative side signal for a REVIEWED game;
     // isCoachMove is false for both sides there, so keep it as the belt but let
     // color be the suspenders (matches the picker fix + the narration).
-    if (!seg || !move || move.isCoachMove || !moverIsStudent(seg.fenBefore) || seg.classification !== 'blunder') return false;
-    if (rewindOfferedPliesRef.current.has(ply)) return false;
+    // UNCAPPED-MODE DIAGNOSTIC (David 2026-07-21: rewind never fired in the
+    // audit even on a purpose-built slide game whose conditions all LOOK
+    // satisfied from outside). Dump exactly which gate said no, with the raw
+    // per-ply qualification data findRewindTarget walks. Silent in production.
+    const rewindDiag = (why: string, extra?: Record<string, unknown>): void => {
+      if (!isReviewUncapped()) return;
+      const rows = (walkNarration?.segments ?? []).filter((s) => s.ply < ply).map((s) => ({ p: s.ply, col: s.playerColor, eb: s.evalBefore, bm: typeof s.bestMoveUci === 'string' ? s.bestMoveUci.length : null }));
+      console.info(`[rewind-diag] ply=${ply} why=${why} cls=${seg?.classification ?? 'none'} ${JSON.stringify({ ...extra, rows: rows.slice(-8) })}`);
+    };
+    if (!seg || !move || move.isCoachMove || !moverIsStudent(seg.fenBefore) || seg.classification !== 'blunder') {
+      rewindDiag('precondition', { seg: !!seg, move: !!move, coach: move?.isCoachMove, moverStudent: seg ? moverIsStudent(seg.fenBefore) : null });
+      return false;
+    }
+    if (rewindOfferedPliesRef.current.has(ply)) { rewindDiag('memo'); return false; }
     rewindOfferedPliesRef.current.add(ply); // one offer per blunder, ever
     const target = findRewindTarget(walkNarration?.segments ?? [], ply, playerColor);
-    if (!target) return false;
+    if (!target) { rewindDiag('no-target'); return false; }
     setRewindOffer(target);
     captureEvent('review_rewind_offered', { blunder_ply: ply, rewind_ply: target.ply });
     void voiceService.speakForced('Before we move on — want to go back to the last moment this was still holdable?').catch(() => undefined);

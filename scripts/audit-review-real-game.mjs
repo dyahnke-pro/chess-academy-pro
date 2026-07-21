@@ -87,6 +87,8 @@ const run = async () => {
   });
   page.on('pageerror', (e) => errs.push('PAGEERROR: ' + e.message.slice(0, 160)));
   page.on('console', (m) => {
+    // Surface the app's uncapped-mode diagnostics (e.g. [rewind-diag]).
+    if (m.type() === 'info' && /^\[rewind-diag\]/.test(m.text())) { log('  🔬 ' + m.text().slice(0, 700)); return; }
     if (m.type() !== 'error') return;
     const t = m.text();
     // Excluded NOISE: dev-tools chatter, and — per the audit doctrine — a
@@ -204,6 +206,12 @@ const run = async () => {
         }
       }
       if (await has(page, '[data-testid="review-find-shot-card"]')) {
+        // HUMAN THINK-DWELL: a real student stares at "find the shot" for
+        // 10-20s. The spot-the-sequence chain needs that time too — the PV
+        // prefetch (in-browser Stockfish, ~10-30s) launches when the card opens,
+        // and Continue reads it; answering in 3s races the prefetch and the
+        // sequence ask can never fire (David 2026-07-20: exercise the chain).
+        await page.waitForTimeout(14000);
         // Tap Hint up the ladder until the REVEAL (with its Continue button) shows,
         // then click CONTINUE — handleShotContinue is what chains into the
         // spot-the-sequence card (handleShotSkip does NOT). David 2026-07-20:
@@ -218,9 +226,36 @@ const run = async () => {
       // §4 type-not-move: pick a type, dismiss the reveal (like a human).
       // §4 trap: commit the right call ("leave it"), dismiss the reveal.
       if (await has(page, '[data-testid="review-trap-card"]')) { trapCardFired = true; await page.locator('[data-testid="review-trap-pick-leave"]').first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(700); if (await has(page, '[data-testid="review-trap-done"]')) { await page.locator('[data-testid="review-trap-done"]').first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(300); } }
-      if (await has(page, '[data-testid="review-sequence-ask"]')) { await page.locator('[data-testid="review-sequence-show"]').first().click({ timeout: 1500 }).catch(() => {}); for (let s = 0; s < 8; s++) { if (await has(page, '[data-testid="review-sequence-skip"]')) { await page.locator('[data-testid="review-sequence-skip"]').first().click({ timeout: 1500 }).catch(() => {}); break; } await page.waitForTimeout(500); } await page.waitForTimeout(400); }
+      if (await has(page, '[data-testid="review-sequence-ask"]')) {
+        // Self-record: the sequence-ask mounts MID-iteration (after the find-shot
+        // continue), so the top-of-loop card scan never sees it — log it here or
+        // the coverage grid under-reports a card that actually fired.
+        const pSeq = await plyNow();
+        cardsFired.add('review-sequence-ask'); cardLog.push({ ply: pSeq.n, cards: ['review-sequence-ask'] });
+        log(`  📋 CARD/POPUP at Ply ${pSeq.n}: [review-sequence-ask] (chained from find-shot continue)`);
+        await page.locator('[data-testid="review-sequence-show"]').first().click({ timeout: 1500 }).catch(() => {}); for (let s = 0; s < 8; s++) { if (await has(page, '[data-testid="review-sequence-skip"]')) { await page.locator('[data-testid="review-sequence-skip"]').first().click({ timeout: 1500 }).catch(() => {}); break; } await page.waitForTimeout(500); } await page.waitForTimeout(400); }
       if (await has(page, '[data-testid="review-sequence-playback"]')) { await page.locator('[data-testid="review-sequence-skip"]').first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(400); }
-      for (const sel of ['[data-testid="review-cameo-skip"]', '[data-testid="review-cameo-stop"]', '[data-testid="review-theory-skip"]', '[data-testid="review-theory-stop"]', '[data-testid="review-turning-point-done"]', '[data-testid="review-capture-continue"]', '[data-testid="review-capture-skip"]', '[data-testid="review-rewind-decline"]']) { if (await has(page, sel)) { await page.locator(sel).first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(400); } }
+      // SELF-RECORD every card this sweep dismisses (David 2026-07-21 rewind
+      // miss): the rewind offer mounts MID-iteration — §5 finishes during the
+      // picker block's poll, finishFaucetResume raises the card — and this sweep
+      // then clicked decline WITHOUT logging, so a card that genuinely fired
+      // could be reported as "never fired". Record the card before dismissing.
+      for (const [cardSel, sel] of [
+        ['review-cameo-ask', '[data-testid="review-cameo-skip"]'],
+        ['review-cameo-playback', '[data-testid="review-cameo-stop"]'],
+        ['review-theory-ask', '[data-testid="review-theory-skip"]'],
+        ['review-theory-playback', '[data-testid="review-theory-stop"]'],
+        ['review-turning-point-reveal', '[data-testid="review-turning-point-done"]'],
+        ['review-capture-teach', '[data-testid="review-capture-continue"]'],
+        ['review-blunder-capture', '[data-testid="review-capture-skip"]'],
+        ['review-rewind-card', '[data-testid="review-rewind-decline"]'],
+      ]) {
+        if (await has(page, sel)) {
+          if (!cardsFired.has(cardSel)) { const pC = await plyNow(); cardsFired.add(cardSel); cardLog.push({ ply: pC.n, cards: [cardSel] }); log(`  📋 CARD/POPUP at Ply ${pC.n}: [${cardSel}] (dismissed by sweep)`); }
+          await page.locator(sel).first().click({ timeout: 1500 }).catch(() => {});
+          await page.waitForTimeout(400);
+        }
+      }
     }
     await fwd.click({ timeout: 2000, force: true }).catch(() => {});
     await page.waitForTimeout(650);
