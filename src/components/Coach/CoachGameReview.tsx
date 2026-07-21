@@ -43,6 +43,7 @@ import {
   generateNarrativeSummary,
   generateReviewNarration,
   buildReviewCitations,
+  frameOpeningForStudent,
 } from '../../services/coachFeatureService';
 import type {
   NarrativeMoveData,
@@ -3817,7 +3818,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           accuracy={accuracy}
           classificationCounts={classificationCounts}
           phaseBreakdown={phaseBreakdown}
-          openingName={openingName}
+          openingName={openingName ? frameOpeningForStudent(openingName, playerColor).label : openingName}
           moveCount={Math.max(1, Math.ceil(moves.length / 2))}
           moves={moves}
           narrativeSummary={isLoadingNarrative ? (narrativeSummary ?? undefined) : (narrativeSummary ?? undefined)}

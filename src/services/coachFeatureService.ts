@@ -296,7 +296,10 @@ export async function generateNarrativeSummary(
       : result === '1/2-1/2' || result === '½-½'
         ? 'The game was a draw.'
         : `The game ended ${result}.`;
-  const openingClause = openingName ? `the ${openingName}` : 'this game';
+  const framedOpening = openingName ? frameOpeningForStudent(openingName, playerColor === 'black' ? 'black' : 'white') : null;
+  const openingClause = framedOpening
+    ? (framedOpening.owned ? `the ${framedOpening.label}` : `the game against the ${framedOpening.label}`)
+    : 'this game';
 
   // Verbosity caps the number of moments named (brief = 1) — the SAME hard
   // contract the old prompt tried to hint at, now enforced in code (G5).
@@ -374,7 +377,10 @@ export async function generateReviewNarrationSegments(
     }
   }
   const total = blunders + mistakes + inaccuracies;
-  const openingClause = openingName ? `the ${openingName}` : 'this game';
+  const framedOpening = openingName ? frameOpeningForStudent(openingName, playerColor === 'black' ? 'black' : 'white') : null;
+  const openingClause = framedOpening
+    ? (framedOpening.owned ? `the ${framedOpening.label}` : `the game against the ${framedOpening.label}`)
+    : 'this game';
   const outcomeClause =
     result === '1-0' || result === '0-1'
       ? (result === '1-0') === (playerColor === 'white')
@@ -1296,7 +1302,13 @@ export function buildReviewSegments(
         const first = announcedOpeningNames.size === 0;
         announcedOpeningNames.add(named);
         lastAnnouncedOpeningName = named;
-        narration = first ? `You're playing into the ${named}.` : `This has become the ${named}.`;
+        // Seat-framed (IMG_4572): a White student facing the Pirc hears
+        // "the Austrian Attack vs the Pirc" / "your opponent steers into…",
+        // never "you're playing into the Pirc Defense".
+        const framedName = playerColor ? frameOpeningForStudent(named, playerColor) : { label: named, owned: true };
+        narration = framedName.owned
+          ? (first ? `You're playing into the ${framedName.label}.` : `This has become the ${framedName.label}.`)
+          : (first ? `Your opponent steers into the ${framedName.label} — their choice of battleground, so know its ideas.` : `This has become the ${framedName.label} — their opening, your counters.`);
         narrationSource = 'opening-plan';
       }
     }
@@ -1527,7 +1539,10 @@ function defaultIntroText(params: {
         ? ((params.result === '1-0') === (params.playerColor === 'white') ? 'win' : 'loss')
         : 'draw';
   const resultPhrase = outcome === 'win' ? 'a win' : outcome === 'loss' ? 'a loss' : 'a draw';
-  const openingBit = params.openingName ? ` in the ${params.openingName}` : '';
+  const framedIntro = params.openingName ? frameOpeningForStudent(params.openingName, params.playerColor) : null;
+  const openingBit = framedIntro
+    ? (framedIntro.owned ? ` in the ${framedIntro.label}` : ` against the ${framedIntro.label}`)
+    : '';
   const momentBit = params.mistakeCount > 0
     ? ` You had ${params.mistakeCount === 1 ? 'one moment' : `${params.mistakeCount} moments`} worth a second look — let's walk through them together.`
     : ` Clean play throughout — let's walk it and pull out what worked.`;
@@ -1761,6 +1776,38 @@ async function groundOpeningPlanInBook(segments: ReviewMoveSegment[]): Promise<v
       ? `${seg.narration ?? ''} In this exact structure the book's scheme: ${spoken} — that's the path the master games follow here.`.trim()
       : `${seg.narration ?? ''} We're past the master book here, so trust the engine's scheme: ${spoken}.`.trim();
   }
+}
+
+
+/**
+ * SEAT-FRAME an opening name for the student (David 2026-07-21, IMG_4572:
+ * "Opening says Pirc Defense but I am white and played the Austrian Attack…
+ * Should read Austrian Attack Vs the Pirc"). Pure string transform over the
+ * DB's canonical name (no chess invented):
+ *  • a name whose FAMILY carries "Defense/Defence" belongs to Black; anything
+ *    else to White (Italian Game, Ruy Lopez, London System, Queen's Gambit…);
+ *  • the student OWNS the name → keep it as-is;
+ *  • the student faces an enemy Defense whose sub-line is an "…Attack" — that
+ *    attack is the STUDENT's system → reframe as "{Attack} vs the {Family}"
+ *    ("Austrian Attack vs the Pirc") and treat it as owned;
+ *  • otherwise the student merely FACES the name → owned:false, callers say
+ *    "against the …" instead of "in the …".
+ */
+export function frameOpeningForStudent(
+  name: string,
+  studentColor: 'white' | 'black',
+): { label: string; owned: boolean } {
+  const [familyRaw, ...rest] = name.split(':');
+  const family = (familyRaw ?? name).trim();
+  const sub = rest.join(':').trim() || null;
+  const blackOwned = /defen[cs]e/i.test(family);
+  const studentOwns = blackOwned ? studentColor === 'black' : studentColor === 'white';
+  if (studentOwns) return { label: name, owned: true };
+  if (blackOwned && sub && /attack/i.test(sub)) {
+    const familyShort = family.replace(/\s+defen[cs]e\s*$/i, '');
+    return { label: `${sub} vs the ${familyShort}`, owned: true };
+  }
+  return { label: name, owned: false };
 }
 
 /** True when every "<piece> on <square>" claim in `text` is TRUE on `fen` (the

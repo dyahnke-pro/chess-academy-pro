@@ -625,3 +625,27 @@ describe('coachFeatureService', () => {
     });
   });
 });
+
+describe('frameOpeningForStudent (David 2026-07-21 — "Austrian Attack vs the Pirc")', () => {
+  it('reframes an enemy Defense with an Attack sub-line as the student\'s system', async () => {
+    const { frameOpeningForStudent } = await import('./coachFeatureService');
+    const f = frameOpeningForStudent('Pirc Defense: Austrian Attack', 'white');
+    expect(f.label).toBe('Austrian Attack vs the Pirc');
+    expect(f.owned).toBe(true);
+  });
+
+  it('keeps the name for the side that owns it', async () => {
+    const { frameOpeningForStudent } = await import('./coachFeatureService');
+    expect(frameOpeningForStudent('Pirc Defense: Austrian Attack', 'black')).toEqual({ label: 'Pirc Defense: Austrian Attack', owned: true });
+    expect(frameOpeningForStudent('Italian Game', 'white')).toEqual({ label: 'Italian Game', owned: true });
+    expect(frameOpeningForStudent('Sicilian Defense: Najdorf Variation', 'black').owned).toBe(true);
+  });
+
+  it('marks a faced opening as not owned (callers say "against")', async () => {
+    const { frameOpeningForStudent } = await import('./coachFeatureService');
+    expect(frameOpeningForStudent('Pirc Defense', 'white')).toEqual({ label: 'Pirc Defense', owned: false });
+    expect(frameOpeningForStudent('Italian Game', 'black')).toEqual({ label: 'Italian Game', owned: false });
+    // Najdorf is BLACK's sub-choice, not an Attack — a White student merely faces it.
+    expect(frameOpeningForStudent('Sicilian Defense: Najdorf Variation', 'white').owned).toBe(false);
+  });
+});
