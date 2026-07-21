@@ -3,7 +3,7 @@ import type { Square } from 'chess.js';
 import { seeGain } from './positionReadingService';
 import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice } from './groundedAnswer';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
-import { plyFactsForMove, plyFactsClause, computePvLine, type PvLine } from './pvPlayback';
+import { plyFactsForMove, plyFactsClause, computePvLine, type PvLine, type PrevCaptureContext } from './pvPlayback';
 import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan } from './reviewStrategicOrientation';
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
 import { detectOpening } from './openingDetectionService';
@@ -1644,9 +1644,20 @@ async function augmentWithProjections(
     // line and explain the why behind each move. The user needs just as much
     // detail here as every other move, if not more, because this is where the
     // teaching happens!"). Each ply gets its computed clause — capture, check,
-    // tactic landed, outpost — not a bare SAN chain.
+    // tactic landed, outpost — not a bare SAN chain. The recapture context
+    // threads through so an even queen trade never reads as two nine-point
+    // windfalls (scrutiny 2026-07-21: "Qxd6 captures the queen… then Bxd6
+    // captures the queen for nine points").
+    const PV_PTS: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+    let prev: PrevCaptureContext = { square: null, capturedValue: 0 };
     const steps = line.plies.map((p) => {
-      const w = plyFactsClause(p.fenBefore, p.san);
+      const w = plyFactsClause(p.fenBefore, p.san, prev);
+      try {
+        const mv = new Chess(p.fenBefore).move(p.san);
+        prev = mv?.captured
+          ? { square: mv.to, capturedValue: PV_PTS[mv.captured] ?? 0 }
+          : { square: null, capturedValue: 0 };
+      } catch { prev = { square: null, capturedValue: 0 }; }
       return w ? `${p.san} (${w})` : p.san;
     });
     const whiteCp = line.terminalEvalCp ?? line.rootEvalCp;
@@ -1871,6 +1882,63 @@ export function narrationBoardAccurate(text: string, fen: string): boolean {
   }
 }
 
+/** SEAT fidelity for the house-voice pass, checked against the BOARD: the
+ *  rephrase must not claim the wrong owner for a piece on a square. Caught
+ *  twice in the 2026-07-21 scrutiny — "your queen on e6" for the opponent's
+ *  queen (Opera ply 28), and both pins flipped ("your bishop on c5 … your
+ *  opponent's bishop on c4", inverted; trap ply 9). The deterministic facts
+ *  often carry NO possessive ("Bishop on c5 pins pawn on f2"), so the model
+ *  INVENTS one — only the board can arbitrate. Every "your/their <piece> on
+ *  <square>" must match the color of the piece actually standing there. */
+export function narrationSeatFaithful(
+  warmed: string,
+  fen: string,
+  studentColorWB: 'w' | 'b',
+): boolean {
+  try {
+    const board = new Chess(fen);
+    const WANT: Record<string, string> = { knight: 'n', bishop: 'b', rook: 'r', queen: 'q', pawn: 'p', king: 'k' };
+    const re = /\b(your opponent's|your|their)\s+(?:own\s+)?(knight|bishop|rook|queen|pawn|king)\s+on\s+([a-h][1-8])\b/gi;
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(warmed)) !== null) {
+      const cell = board.get(m[3].toLowerCase() as Square);
+      if (!cell || cell.type !== WANT[m[2].toLowerCase()]) continue; // board-accuracy guard's job
+      const claimedYours = m[1].toLowerCase() === 'your';
+      const actuallyYours = cell.color === studentColorWB;
+      if (claimedYours !== actuallyYours) return false;
+    }
+    return true;
+  } catch {
+    return true; // never block narration on a parse error
+  }
+}
+
+const SPELLED_NUM: Record<string, string> = {
+  zero: '0', one: '1', two: '2', three: '3', four: '4', five: '5', six: '6',
+  seven: '7', eight: '8', nine: '9', ten: '10', eleven: '11', twelve: '12',
+};
+
+/** NUMBER fidelity for the house-voice pass: a fact-bearing number the warm
+ *  text speaks (points of material, eval swings, attacker/defender counts)
+ *  must exist in the deterministic fact — the model must not turn a 3-point
+ *  knight into "two more" (scrutiny 2026-07-21; same class the voiceFacts
+ *  numberFidelity net catches on the Q&A path). Meta-counts ("three pins
+ *  now") are aggregation, not chess facts, and stay unguarded. */
+export function narrationNumbersFaithful(det: string, warmed: string): boolean {
+  const numRe = /\b(\d+(?:\.\d+)?|zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\b/gi;
+  const canon = (s: string): string => SPELLED_NUM[s.toLowerCase()] ?? s;
+  const detNums = new Set<string>();
+  let m: RegExpExecArray | null;
+  while ((m = numRe.exec(det)) !== null) detNums.add(canon(m[1]));
+  const FACT_CONTEXT = /point|material|eval|swing|swung|attacker|defender/i;
+  numRe.lastIndex = 0;
+  while ((m = numRe.exec(warmed)) !== null) {
+    const around = warmed.slice(Math.max(0, m.index - 30), m.index + m[0].length + 30);
+    if (FACT_CONTEXT.test(around) && !detNums.has(canon(m[1]))) return false;
+  }
+  return true;
+}
+
 export async function generateReviewNarration(params: {
   moves: ReviewMoveInput[];
   playerColor: 'white' | 'black';
@@ -2008,7 +2076,18 @@ export async function generateReviewNarration(params: {
           // away (audit 2026-07-20: the queen sac was once narrated as "a check").
           const keepsMate = !/\bcheckmate\b/i.test(det) || /\b(checkmate|mate)\b/i.test(w);
           const keepsSac = !/\bsacrific/i.test(det) || /\bsacrific/i.test(w);
-          if (!isRepeat && keepsMate && keepsSac && narrationBoardAccurate(w, s.fenAfter)) s.narration = w;
+          // The projection FRAME is a seat fact: the student's own slip reads
+          // "how it gets punished", the opponent's "how you take advantage".
+          // The warm pass once flipped a student mistake into "here's how you
+          // can still punish" (scrutiny 2026-07-21) — board-accurate, seat-wrong.
+          const keepsPunishFrame = !/how it gets punished/i.test(det)
+            || !/you (can still |could |)(punish|take advantage)/i.test(w);
+          const keepsAdvantageFrame = !/how you take advantage/i.test(det)
+            || !/(gets|you get) punished/i.test(w);
+          if (!isRepeat && keepsMate && keepsSac && keepsPunishFrame && keepsAdvantageFrame
+            && narrationBoardAccurate(w, s.fenAfter)
+            && narrationSeatFaithful(w, s.fenAfter, playerColor === 'white' ? 'w' : 'b')
+            && narrationNumbersFaithful(det, w)) s.narration = w;
           spokenLines.add(s.narration.trim().toLowerCase());
         }
       }

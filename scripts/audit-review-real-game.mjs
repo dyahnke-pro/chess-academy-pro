@@ -540,7 +540,15 @@ const run = async () => {
   // 2026-07-20, narrating->teaching). If any line names a sacrifice, some line in
   // the walk must give the board-true payoff (king exposure / development lead /
   // winning verdict). This is the narrating-vs-teaching contract for the sac.
-  const anySac = plies.some((p) => /\bsacrifice\b|\bsacrifices\b/i.test(p.narr || ''));
+  // Only a CONCRETE sacrifice claim ("it's a sacrifice", "you sacrifice the
+  // rook") owes compensation teaching — the king-attack plan's ADVISORY wording
+  // ("hunt for / keep an eye out for a sacrifice on d7 or f7") is a plan
+  // suggestion, not a sacrifice on the board (draw-fixture false trip,
+  // 2026-07-21). Strip advisory phrasings before detecting.
+  const anySac = plies.some((p) => {
+    const t = (p.narr || '').replace(/(hunt|look|watch|eye|keep an eye)[^.]*sacrifice[^.]*\./gi, '');
+    return /\bsacrifice\b|\bsacrifices\b/i.test(t);
+  });
   if (anySac) {
     // The compensation CONCEPT must appear somewhere — king exposure / development
     // lead / winning verdict — worded any way Danya's voice phrases it (warmed).

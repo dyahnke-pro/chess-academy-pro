@@ -76,7 +76,11 @@ export function royalDefenderTarget(fen: string, studentColorWB: Color): string 
     if (defenders.length === 0) continue; // that's just hanging — a different lesson
     const allRoyal = defenders.every((d) => { const t = chess.get(d)?.type; return t === 'k' || t === 'q'; });
     if (allRoyal) {
-      const guard = chess.get(defenders[0])?.type === 'q' ? 'queen' : 'king';
+      // Name EVERY royal guard — the Opera d8 rook was guarded by king AND
+      // queen, and "guarded only by the king" was a false board claim
+      // (scrutiny 2026-07-21). One royal → name it; both → name both.
+      const types = new Set(defenders.map((d) => chess.get(d)?.type));
+      const guard = types.size === 2 ? 'king and queen' : types.has('q') ? 'queen' : 'king';
       return `their ${PIECE_NOUN[c.type]} on ${sq} is guarded only by the ${guard} — and the king and queen are the worst defenders, because the moment you hit the guard the piece drops`;
     }
   }
