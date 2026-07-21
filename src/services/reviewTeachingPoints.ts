@@ -17,6 +17,7 @@
  */
 import { Chess, type Color, type Square } from 'chess.js';
 import { describeStructure } from './boardStructure';
+import { seeGain } from './positionReadingService';
 
 const PIECE_VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -263,4 +264,77 @@ function mobilityMap(chess: Chess, color: Color): Map<string, number> {
     }
   } catch { /* leave empty */ }
   return out;
+}
+
+/**
+ * THE "WHY NOT JUST TAKE?" TEACHER (David 2026-07-21, locked as the best-line
+ * explanation standard: "The bishop on g5 is guarded by the h4-pawn. That's the
+ * whole story… This needs to be the explanation on the best line moves!!").
+ * When the line's chosen move IGNORES a tempting capture, explain concretely why
+ * the grab fails — the student is staring at that capture, and the line makes no
+ * sense to them until someone says why it's wrong. Fully computed (G0):
+ *  • find the most tempting capture the mover DIDN'T play (victim worth >= 3);
+ *  • SEE the exchange: a net loss >= 1 → "X falls to Y — you'd trade A for B";
+ *  • an EVEN trade whose pawn-recapture rips open a file toward the mover's own
+ *    king (the hxg5 pattern: recapturing pawn leaves file F, recapturer has a
+ *    heavy piece on F, mover's king within a file of F) → say THAT.
+ * Silence otherwise (empty > generic > invented) — a capture that simply wins is
+ * not a temptation to warn about, and an even trade with no consequence is not
+ * worth a clause.
+ */
+export function explainTemptingCapture(fen: string, chosenSan: string): string | null {
+  try {
+    const c = new Chess(fen);
+    const mover = c.turn();
+    const caps = c.moves({ verbose: true }).filter((m) => m.captured && PIECE_VAL[m.captured] >= 3);
+    if (caps.length === 0) return null;
+    // The most tempting = highest victim value; prefer the queen grabbing (the
+    // student's eye goes to the biggest piece that looks takable).
+    caps.sort((a, b) => PIECE_VAL[b.captured as string] - PIECE_VAL[a.captured as string]);
+    const t = caps[0];
+    const chosen = new Chess(fen).move(chosenSan);
+    if (!chosen) return null;
+    if (chosen.from === t.from && chosen.to === t.to) return null; // the line TAKES it — nothing to explain
+    const victimVal = PIECE_VAL[t.captured as string];
+    const after = new Chess(fen);
+    after.move(t.san);
+    // Opponent's best exchange net on the landing square (their POV).
+    const oppNet = seeGain(after, t.to as Square);
+    const capturerNoun = PIECE_NOUN[t.piece];
+    const victimNoun = PIECE_NOUN[t.captured as string];
+    // Identify the cheapest recapturer for the prose ("the h-pawn takes back").
+    const enemy: Color = mover === 'w' ? 'b' : 'w';
+    const recapSquares = after.attackers(t.to as Square, enemy);
+    let recapNoun: string | null = null;
+    let recapFrom: string | null = null;
+    let best = Infinity;
+    for (const s of recapSquares) {
+      const p = after.get(s as Square);
+      if (p && PIECE_VAL[p.type] < best) { best = PIECE_VAL[p.type]; recapNoun = PIECE_NOUN[p.type]; recapFrom = s as string; }
+    }
+    if (oppNet - victimVal >= 1 && recapNoun && recapFrom) {
+      // The grab LOSES material: guarded piece, bad trade.
+      return `Notice the ${victimNoun} on ${t.to} is NOT free — it's guarded by the ${recapNoun} on ${recapFrom}, so ${t.san} just trades your ${capturerNoun} for a ${victimNoun}${PIECE_VAL[t.piece] > victimVal ? ` — giving up ${PIECE_VAL[t.piece]} points for ${victimVal}` : ''}. That's why the line leaves it alone.`;
+    }
+    if (oppNet - victimVal === 0 && recapNoun === 'pawn' && recapFrom) {
+      // EVEN trade — but does the pawn-recapture open a file at the mover's king?
+      const sim = new Chess(after.fen());
+      const recapMove = sim.moves({ verbose: true }).find((m) => m.from === recapFrom && m.to === t.to);
+      if (recapMove) {
+        sim.move(recapMove.san);
+        const file = recapFrom[0];
+        const board = sim.board().flat().filter((p): p is NonNullable<typeof p> => p !== null);
+        const fileHasEnemyPawn = board.some((p) => p.type === 'p' && p.color === enemy && p.square[0] === file);
+        const enemyHeavyOnFile = board.some((p) => (p.type === 'r' || p.type === 'q') && p.color === enemy && p.square[0] === file);
+        const myKing = board.find((p) => p.type === 'k' && p.color === mover);
+        const kingNear = myKing ? Math.abs(myKing.square.charCodeAt(0) - file.charCodeAt(0)) <= 1 : false;
+        if (!fileHasEnemyPawn && enemyHeavyOnFile && kingNear) {
+          return `The trade ${t.san} looks natural, but after the ${recapNoun} takes back, the ${file}-file rips open — straight at your king, with their heavy piece already sitting on it. The line keeps the tension instead.`;
+        }
+      }
+    }
+    return null;
+  } catch {
+    return null;
+  }
 }

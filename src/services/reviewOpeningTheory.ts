@@ -18,6 +18,7 @@ import { lookupMasterPlay } from './masterPlayLookup';
 import { walkBookLine } from './theoryDeparture';
 import { detectOpening } from './openingDetectionService';
 import { buildReviewMoveTeaching } from './reviewMoveTeaching';
+import { explainTemptingCapture } from './reviewTeachingPoints';
 import repertoire from '../data/repertoire.json';
 
 /** A candidate move at a branch point, with its master-DB frequency + score. */
@@ -57,8 +58,12 @@ export interface TheoryBranch {
   mainlineName: string | null;
   /** The masters most-played continuation AFTER the mainline move — the "let's
    *  see the next couple of moves" dive Danya does (FpYf1Wrzi2M). Each step is
-   *  the top master move at its node, chess.js-replayed. Empty when not dived. */
-  mainlineDive: Array<{ san: string; fenAfter: string }>;
+   *  the top master move at its node, chess.js-replayed, with a COMPUTED per-move
+   *  why (mechanics + the "why not just take?" refutation when one applies) so
+   *  the walk teaches every step instead of flashing moves (David 2026-07-21:
+   *  "played out too quickly with no narration… explain each move with the same
+   *  level of detail"). Empty when not dived. */
+  mainlineDive: Array<{ san: string; fenAfter: string; why: string | null }>;
   /** The position after the mainline move — the FEN the dive starts from. */
   diveFromFen: string | null;
 }
@@ -205,15 +210,21 @@ export async function buildOpeningTheoryLecture(
     if (leftBook) break; // once off-book, the theory tour is over
   }
 
-  // DIVE DOWN the mainline at the most instructive branches — Danya's "let's see
-  // the next couple of moves" (FpYf1Wrzi2M). The departure point (what the book
-  // line you left actually looks like) and the deepest mainline branch.
-  const diveTargets = new Set<TheoryBranch>();
+  // DIVE DOWN the mainline at the instructive branches — Danya's "let's see the
+  // next couple of moves" (FpYf1Wrzi2M). EVERY SIDELINE gets a dive (David
+  // 2026-07-21: "It said the main line is more aggressive. Well, what was the
+  // main line? Show me those moves") plus the departure point and the deepest
+  // mainline branch — capped so the lecture stays a lecture, not an hour.
+  const MAX_DIVES = 4;
+  const diveTargets: TheoryBranch[] = [];
   const depBranch = branches.find((b) => b.leftBook);
-  if (depBranch) diveTargets.add(depBranch);
+  if (depBranch) diveTargets.push(depBranch);
+  for (const b of branches) {
+    if (b.isSideline && !diveTargets.includes(b)) diveTargets.push(b);
+  }
   const lastMain = [...branches].reverse().find((b) => !b.leftBook);
-  if (lastMain) diveTargets.add(lastMain);
-  for (const b of diveTargets) {
+  if (lastMain && !diveTargets.includes(lastMain)) diveTargets.push(lastMain);
+  for (const b of diveTargets.slice(0, MAX_DIVES)) {
     try {
       const c = new Chess(b.fenBefore);
       const mv = c.move(b.mainline.san);
@@ -222,7 +233,19 @@ export async function buildOpeningTheoryLecture(
       const line = await walkBookLine(fromFen, { maxPlies: 5, minGames: 5, lookup: opts.lookup });
       if (line.length >= 2) {
         b.diveFromFen = fromFen;
-        b.mainlineDive = line.map((p) => ({ san: p.san, fenAfter: p.fenAfter }));
+        // Per-step WHY, computed at build time: what the move does on the board
+        // (mechanics) + the "why not just take?" refutation when a tempting
+        // capture is being ignored (the Bg5/h4 register, David 2026-07-21).
+        let prevFen = fromFen;
+        b.mainlineDive = line.map((p) => {
+          const parts: string[] = [];
+          const w = moveWhy(prevFen, p.san);
+          if (w) parts.push(w);
+          const tempt = explainTemptingCapture(prevFen, p.san);
+          if (tempt) parts.push(tempt);
+          prevFen = p.fenAfter;
+          return { san: p.san, fenAfter: p.fenAfter, why: parts.length ? parts.join(' ') : null };
+        });
       }
     } catch { /* a dive is a bonus, never a blocker */ }
   }
@@ -251,9 +274,38 @@ export interface TheoryLectureBeat {
   /** The grounded fact for the house voice to phrase. */
   fact: string;
   /** When present, the player PLAYS OUT this masters continuation on the board
-   *  after the fact is spoken — Danya's "let's see the next couple of moves". */
+   *  after the fact is spoken — Danya's "let's see the next couple of moves".
+   *  Each step carries its computed why, spoken as the move lands. */
   diveFromFen?: string;
-  dive?: Array<{ san: string; fenAfter: string }>;
+  dive?: Array<{ san: string; fenAfter: string; why: string | null }>;
+}
+
+/** PROS AND CONS of main line vs the played sideline — ALL computed (David
+ *  2026-07-21: "What are the pros and cons of each line?" / "Why is it more
+ *  aggressive?"). Score comparison from the master DB; "aggressive" grounded in
+ *  the FORCING count of the mainline dive (captures + checks in the next few
+ *  moves) — never a vibe. */
+function lineCompareClause(
+  mainline: TheoryMove,
+  played: TheoryMove,
+  dive: Array<{ san: string }>,
+): string {
+  const parts: string[] = [];
+  const diff = mainline.scoreForMover - played.scoreForMover;
+  if (diff >= 0.03) {
+    parts.push(`In master play the main line scores ${pct(mainline.scoreForMover)} to your line's ${pct(played.scoreForMover)} — that's its pro; your line's pro is that opponents prepare for it less.`);
+  } else if (diff <= -0.03) {
+    parts.push(`Interestingly, your sideline actually scores a touch BETTER in master play (${pct(played.scoreForMover)} to ${pct(mainline.scoreForMover)}) — it's less common, not worse.`);
+  } else {
+    parts.push(`The two score about the same in master play (${pct(mainline.scoreForMover)} vs ${pct(played.scoreForMover)}) — the choice is a matter of style.`);
+  }
+  const forcing = dive.filter((d) => d.san.includes('x') || d.san.includes('+')).length;
+  if (forcing >= 2) {
+    parts.push(`The main line is the sharper, more forcing of the two — ${forcing} captures or checks inside the next few moves.`);
+  } else if (dive.length >= 2 && forcing === 0) {
+    parts.push('Both are quiet, maneuvering lines — no forced tactics either way.');
+  }
+  return parts.length ? ` ${parts.join(' ')}` : '';
 }
 
 function pct(x: number): string {
@@ -371,7 +423,13 @@ export function buildTheoryLectureBeats(
         moveNumber: b.moveNumber,
         moverColor: b.moverColor,
         kind: 'sideline',
-        fact: `At move ${b.moveNumber}, the main line is ${b.mainline.san} (${pct(b.mainline.pct)}, scoring ${pct(b.mainline.scoreForMover)}).${whySentence} This game took ${b.played.san} (${pct(b.played.pct)}, scoring ${pct(b.played.scoreForMover)}) — a known, respectable sideline, though the main line presses a touch harder.${nameClause(b.variationName)}`,
+        // The comparison is COMPUTED (score + forcing count) — the old hardcoded
+        // "the main line presses a touch harder" was flavor, not data. And when a
+        // dive exists, the beat WALKS the main line so the student SEES the moves
+        // being compared (David 2026-07-21: "what was the main line? Show me").
+        fact: `At move ${b.moveNumber}, the main line is ${b.mainline.san} (${pct(b.mainline.pct)}, scoring ${pct(b.mainline.scoreForMover)}).${whySentence} This game took ${b.played.san} (${pct(b.played.pct)}) — a known sideline.${lineCompareClause(b.mainline, b.played, b.mainlineDive)}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ` Let me walk you down the main line ${b.mainline.san} so you can compare.` : ''}`,
+        diveFromFen: b.diveFromFen ?? undefined,
+        dive: b.mainlineDive.length >= 2 ? b.mainlineDive : undefined,
       });
     } else {
       beats.push({

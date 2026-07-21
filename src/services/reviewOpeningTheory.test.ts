@@ -174,3 +174,47 @@ describe('buildTheoryLectureBeats — grounded playable beats', () => {
     expect(mainBeats.some((b) => /most-played and best-scoring|both counts|popular without being the top/i.test(b.fact))).toBe(true);
   });
 });
+
+describe('tabiya walk — sidelines get NARRATED dives + computed pros/cons (David 2026-07-21)', () => {
+  function mkLookup(byPrefix: Record<string, MasterPlayMove[]>) {
+    return async (fen: string): Promise<MasterPlayResult> => {
+      const key = Object.keys(byPrefix).find((p) => fen.startsWith(p));
+      return res(fen, key ? byPrefix[key] : []);
+    };
+  }
+
+  it('a sideline branch carries a mainline dive with a per-step why, and the beat compares the lines from data', async () => {
+    // Game plays 2.Nc3 (a sideline); the mainline is 2.Nf3. The dive must WALK
+    // the Nf3 line with computed whys, and the sideline beat must state the
+    // computed score comparison — never the old hardcoded "presses harder".
+    const { fens, sans } = chain(['e4', 'c5', 'Nc3']);
+    const byPrefix: Record<string, MasterPlayMove[]> = {
+      'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w': [mv('e4', 600), mv('d4', 350)],
+      'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b': [mv('c5', 500), mv('e5', 400)],
+      // Branch: mainline Nf3 (scores 0.55 for White), played sideline Nc3 (0.45).
+      'rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w': [mv('Nf3', 700, 0.4, 0.3, 0.3), mv('Nc3', 200, 0.3, 0.3, 0.4)],
+      // Dive nodes after 2.Nf3: …d6 then 3.d4 (enough for a 2-step dive).
+      'rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b': [mv('d6', 400), mv('Nc6', 300)],
+      'rnbqkbnr/pp2pppp/3p4/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w': [mv('d4', 350), mv('Bb5+', 100)],
+    };
+    const lec = await buildOpeningTheoryLecture(fens, sans, 'Sicilian Defense', { lookup: mkLookup(byPrefix) });
+    expect(lec).not.toBeNull();
+    const side = lec!.branches.find((b) => b.isSideline);
+    expect(side).toBeDefined();
+    expect(side!.mainline.san).toBe('Nf3');
+    expect(side!.mainlineDive.length).toBeGreaterThanOrEqual(2);
+    // Every dive step has the computed-why FIELD (null allowed on a truly quiet
+    // move, but the shape must be there for the narrated walk).
+    for (const step of side!.mainlineDive) expect('why' in step).toBe(true);
+
+    const beats = buildTheoryLectureBeats(lec!);
+    const sideBeat = beats.find((b) => b.kind === 'sideline');
+    expect(sideBeat).toBeDefined();
+    expect(sideBeat!.dive?.length).toBeGreaterThanOrEqual(2);
+    // Computed comparison, not flavor: the score numbers appear in the fact.
+    expect(sideBeat!.fact).toMatch(/scores|score about the same/i);
+    expect(sideBeat!.fact).not.toMatch(/presses a touch harder/);
+    // The walk is announced so the student knows the main line is being SHOWN.
+    expect(sideBeat!.fact).toMatch(/walk you down the main line/i);
+  });
+});

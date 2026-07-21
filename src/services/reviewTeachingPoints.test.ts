@@ -111,3 +111,46 @@ describe('deriveNextPlan — speak to FUTURE PLANS (David 2026-07-20)', () => {
     expect(plans.every((p) => /here's how|here's exactly how/i.test(p))).toBe(true);
   });
 });
+
+describe('explainTemptingCapture (David 2026-07-21 — the Bg5/h4 "why not take" standard)', () => {
+  // David's own game (IMG_4567): Black to move, White Bg5 attacked by Qf6 but
+  // guarded by the h4-pawn. The engine plays ...e5 and leaves the bishop alone.
+  const DAVID_FEN = 'r1b1r1k1/1ppn1ppp/p2npq2/3p2B1/3P2PP/2PBPP2/P1P1N1Q1/2KR3R b - - 0 13';
+
+  it("explains that the 'trapped' g5 bishop is guarded — taking loses the queen", async () => {
+    const { explainTemptingCapture } = await import('./reviewTeachingPoints');
+    const why = explainTemptingCapture(DAVID_FEN, 'e5');
+    expect(why).not.toBeNull();
+    expect(why).toMatch(/guarded by the pawn on h4/i);
+    expect(why).toMatch(/trades your queen for a bishop/i);
+    expect(why).toMatch(/leaves it alone/i);
+  });
+
+  it('explains the even trade that rips open a file toward your own king', async () => {
+    const { explainTemptingCapture } = await import('./reviewTeachingPoints');
+    // Black Bf6 can take White Bg5 (even trade — only the h4-pawn guards it),
+    // but hxg5 opens the h-file where White's h1-rook stares at the g8 king.
+    // The line should warn, not trade.
+    const fen = 'r5k1/ppp2ppp/3p1b2/4p1B1/3P3P/4P3/PPP2PP1/R3K2R b KQ - 0 12';
+    const c = new (await import('chess.js')).Chess(fen);
+    expect(c.moves()).toContain('Bxg5'); // the temptation is real
+    const why = explainTemptingCapture(fen, 'a6');
+    expect(why).not.toBeNull();
+    expect(why).toMatch(/h-file rips open/i);
+    expect(why).toMatch(/straight at your king/i);
+  });
+
+  it('stays silent when the tempting capture is simply good (free piece)', async () => {
+    const { explainTemptingCapture } = await import('./reviewTeachingPoints');
+    // White Bg5 is genuinely UNGUARDED here (no h4 pawn, and the white queen is
+    // OFF the g-file — the first draft left Qg2 guarding g5 through the file and
+    // the function correctly kept warning). Ignoring a free piece needs no clause.
+    const fen = 'r1b1r1k1/1ppn1ppp/p2npq2/3p2B1/3P4/2PBPP2/P1PQN3/2KR3R b - - 0 13';
+    expect(explainTemptingCapture(fen, 'e5')).toBeNull();
+  });
+
+  it('stays silent when the chosen move IS the capture', async () => {
+    const { explainTemptingCapture } = await import('./reviewTeachingPoints');
+    expect(explainTemptingCapture(DAVID_FEN, 'Qxg5')).toBeNull();
+  });
+});

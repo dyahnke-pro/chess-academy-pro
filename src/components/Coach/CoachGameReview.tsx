@@ -23,6 +23,7 @@ import { buildTrapQuestion, judgeTrapAnswer, type TrapQuestion, type TrapChoiceI
 import { selectReviewQuestions, type ReviewQuestionMoment } from '../../services/reviewQuestionPlan';
 import { computePvLine, renderPlyFactLine, plyFactsString, type PvLine } from '../../services/pvPlayback';
 import { buildReviewMoveTeaching } from '../../services/reviewMoveTeaching';
+import { explainTemptingCapture } from '../../services/reviewTeachingPoints';
 import { judgeSequenceAttempt, moverPlies, type SequenceVerdict } from '../../services/sequenceChallenge';
 import { pickCameoAnchor, buildCameoPlayback, type CameoAnchor, type CameoPlayback } from '../../services/modelGameMatcher';
 import { voiceFacts, voiceReviewLines } from '../../services/coachApi';
@@ -1220,10 +1221,17 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // to the positional teaching note. BATCH-WARM the whole line's whys through
     // the ONE house-voice call (same as the walk) so each is in the register,
     // not a raw template — one call, no per-ply racing.
-    const rawWhys = line.plies.map((ply, i) => ({
-      id: i,
-      fact: plyFactsString(ply) ?? renderPlyFactLine(ply) ?? buildReviewMoveTeaching(ply.fenBefore, ply.san) ?? '',
-    }));
+    // THE "WHY NOT JUST TAKE?" clause rides on every best-line move (David
+    // 2026-07-21, after the Bg5/h4 explanation: "This needs to be the
+    // explanation on the best line moves!!"). When the line ignores a tempting
+    // capture, explainTemptingCapture computes the concrete refutation — the
+    // guarded piece, the losing trade, the file that rips open — so the line
+    // finally makes sense to the student staring at the grab.
+    const rawWhys = line.plies.map((ply, i) => {
+      const base = plyFactsString(ply) ?? renderPlyFactLine(ply) ?? buildReviewMoveTeaching(ply.fenBefore, ply.san) ?? '';
+      const tempt = explainTemptingCapture(ply.fenBefore, ply.san);
+      return { id: i, fact: [base, tempt].filter(Boolean).join(' ') };
+    });
     // PACE ON REAL AUDIO (David 2026-07-19: "no per move why… quickly moves from
     // move to move then states the verdict"). The bug: the flagged ply's own
     // narration is a ~5s clip still PLAYING when the playout starts, and
@@ -1309,8 +1317,19 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       setWalkExplorationArrows(null);
       setTheoryCaption(beats[0].fact);
     }
+    // Warm the beat facts AND every dive step's why in ONE house-voice batch —
+    // dive whys are keyed 1000*(beatIdx+1)+stepIdx so both registers come back
+    // from a single call (no per-step LLM racing during playback).
     let warmed = new Map<number, string>();
-    try { warmed = await voiceReviewLines(beats.map((b, i) => ({ id: i, fact: b.fact }))); } catch { /* raw */ }
+    try {
+      const warmInput: Array<{ id: number; fact: string }> = beats.map((b, i) => ({ id: i, fact: b.fact }));
+      beats.forEach((b, i) => {
+        (b.dive ?? []).forEach((step, j) => {
+          if (step.why) warmInput.push({ id: 1000 * (i + 1) + j, fact: step.why });
+        });
+      });
+      warmed = await voiceReviewLines(warmInput);
+    } catch { /* raw */ }
     for (let i = 0; i < beats.length; i++) {
       if (theoryLectureTokenRef.current !== token || !walkMountedRef.current) break;
       const b = beats[i];
@@ -1338,13 +1357,17 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         if (theoryLectureTokenRef.current !== token || !walkMountedRef.current) break;
       }
       // DIVE DOWN the line (Danya's "let's see the next couple of moves"): play
-      // out the masters continuation on the board, arrowing each move.
+      // out the masters continuation on the board — arrow the move, SPEAK its
+      // computed why, and hold until the words land (David 2026-07-21: "the
+      // lines are played out too quickly with no narration, so my brain has no
+      // time to absorb the moves"). Voice-gated per step, never a fixed rush.
       if (b.dive && b.diveFromFen && b.dive.length > 0) {
         let prevFen = b.diveFromFen;
         setWalkExplorationFen(prevFen);
         setWalkExplorationArrows(null);
-        await new Promise((r) => setTimeout(r, 500));
-        for (const step of b.dive) {
+        await new Promise((r) => setTimeout(r, 700));
+        for (let j = 0; j < b.dive.length; j++) {
+          const step = b.dive[j];
           if (theoryLectureTokenRef.current !== token || !walkMountedRef.current) break;
           try {
             const cc = new Chess(prevFen);
@@ -1354,7 +1377,20 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           setWalkExplorationFen(step.fenAfter);
           playMoveSound(step.san);
           prevFen = step.fenAfter;
-          await new Promise((r) => setTimeout(r, 850));
+          const stepWhy = warmed.get(1000 * (i + 1) + j) ?? step.why;
+          if (stepWhy) {
+            setTheoryCaption(`${step.san} — ${stepWhy}`);
+            const stepStart = performance.now();
+            try { await voiceService.speakForced(stepWhy); } catch { /* voice off */ }
+            await waitIdle();
+            const stepElapsed = performance.now() - stepStart;
+            const stepDwell = Math.min(4000, 1000 + stepWhy.length * 22);
+            if (stepElapsed < stepDwell) await new Promise((r) => setTimeout(r, stepDwell - stepElapsed));
+          } else {
+            // A quiet step with no computed point still needs absorb time.
+            setTheoryCaption(step.san);
+            await new Promise((r) => setTimeout(r, 1400));
+          }
         }
         await new Promise((r) => setTimeout(r, 400));
       }
