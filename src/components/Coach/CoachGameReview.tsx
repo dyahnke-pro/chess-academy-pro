@@ -307,6 +307,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // from the masters DB; played on demand from the walk view.
   const [theoryBeats, setTheoryBeats] = useState<TheoryLectureBeat[] | null>(null);
   const [theoryLecturePlaying, setTheoryLecturePlaying] = useState(false);
+  // The theory lecture is voice + board moves; on a muted device (or the old
+  // buried-board layout) it looked DEAD (David 2026-07-21: "Opening theory button
+  // didn't work"). Surface each beat's text as an on-screen caption so it visibly
+  // plays without depending on audio.
+  const [theoryCaption, setTheoryCaption] = useState<string | null>(null);
   const theoryLectureTokenRef = useRef(0);
 
   // Pre-compute accuracy + classification counts
@@ -1281,6 +1286,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       await waitIdle();
       if (theoryLectureTokenRef.current !== token || !walkMountedRef.current) break;
       const line = warmed.get(i) ?? b.fact;
+      setTheoryCaption(line); // visible even if voice is muted (David 2026-07-21)
       try { await voiceService.speakForced(line); } catch { /* voice off */ }
       await waitIdle();
       // DIVE DOWN the line (Danya's "let's see the next couple of moves"): play
@@ -1308,6 +1314,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setWalkExplorationFen(null);
     setWalkExplorationSan(null);
     setWalkExplorationArrows(null);
+    setTheoryCaption(null);
     setTheoryLecturePlaying(false);
   }, [theoryBeats, theoryLecturePlaying, playMoveSound]);
 
@@ -1317,6 +1324,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setWalkExplorationFen(null);
     setWalkExplorationSan(null);
     setWalkExplorationArrows(null);
+    setTheoryCaption(null);
     voiceService.stop();
   }, []);
 
@@ -1984,11 +1992,19 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         ].join(', '),
       ) as HTMLElement | null;
       if (!card) return;
-      // Scroll the card into view WITHIN the middle container only — compute the
-      // delta from bounding rects and adjust the container's own scrollTop. This
-      // never calls element.scrollIntoView (which recurses to ancestor scrollers,
-      // incl. the app route container on iOS, and drags the fixed board off-
-      // screen — David 2026-07-20). The board stays put; only the middle moves.
+      // MOBILE (whole-page scroll, David 2026-07-21): the surface is now ONE
+      // scrolling column, so the board is NOT fixed — scrollIntoView is the right
+      // tool and can't strand the board off-screen the way it did under the old
+      // fixed-board model (the 2026-07-20 caveat below applies to md+ only). Bring
+      // the card to CENTER so a blocking picker is unmistakably on-screen.
+      if (window.innerWidth < 768) {
+        card.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        return;
+      }
+      // DESKTOP: scroll the card into view WITHIN the middle container only —
+      // compute the delta from bounding rects and adjust the container's own
+      // scrollTop, never element.scrollIntoView (which would recurse to ancestor
+      // scrollers and drag the fixed board off-screen). The board stays put.
       const cRect = container.getBoundingClientRect();
       const kRect = card.getBoundingClientRect();
       const delta = (kRect.top - cRect.top) - 8;
@@ -2674,8 +2690,17 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         return (pawns >= 0 ? '+' : '') + pawns.toFixed(2);
       };
 
+      // MOBILE = ONE SCROLLING COLUMN (David 2026-07-21, IMG_4565: "pickers don't
+      // pop up … couldn't scroll down to see the rest of the buttons or the
+      // written narration"). The old fixed-top + flex-1 scroll-middle +
+      // fixed-bottom model STARVED the middle — with a w-full board the middle
+      // collapsed to ~0px on a phone, so the pickers rendered off-screen and
+      // unreachable. Match the WORKING Learn/Play shape (CoachTeachPage): the
+      // whole surface is overflow-y-auto on mobile so board + controls +
+      // narration + pickers + move list + bottom bar all stack and SCROLL as one
+      // column; md+ keeps the fixed-region layout (height isn't the constraint).
       return (
-        <div className="flex flex-col w-full h-full overflow-hidden" data-testid="coach-game-review-walk">
+        <div className="flex flex-col w-full h-full overflow-y-auto overflow-x-hidden md:overflow-hidden" data-testid="coach-game-review-walk">
           {/* ── Fixed top: header, board, badge, HERO nav ─────────────── */}
           <div className="shrink-0 border-b border-theme-border">
             <div className="flex items-center gap-2 w-full px-3 py-2">
@@ -3058,17 +3083,22 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 data-narration-source={walkPlayback.currentSegment?.narrationSource ?? ''}
               >
                 <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text)' }}>
-                  {/* No apology placeholder on quiet plies (David 2026-07-19:
-                      "(passes silently)" printed itself all game — an empty
-                      teaching layer narrating its own absence). Show the move. */}
-                  {walkPlayback.currentText ?? walkPlayback.currentSegment?.san ?? ''}
+                  {/* While the Opening-theory lecture plays, show its caption so
+                      it's visibly working even on a muted device (David
+                      2026-07-21). Otherwise show the move's narration — and no
+                      apology placeholder on quiet plies (David 2026-07-19:
+                      "(passes silently)" printed itself all game). */}
+                  {theoryCaption ?? walkPlayback.currentText ?? walkPlayback.currentSegment?.san ?? ''}
                 </p>
               </div>
             </div>
           </div>
 
           {/* ── Scrollable middle: move list, tactics, ask ── */}
-          <div ref={scrollMiddleRef} className="flex-1 min-h-0 overflow-y-auto" data-testid="review-scroll-middle">
+          {/* Mobile: flex-none so it takes its NATURAL height and the outer
+              column scrolls it into reach (no collapse-to-zero). Desktop: the
+              internal flex-1 scroller as before. */}
+          <div ref={scrollMiddleRef} className="flex-none md:flex-1 md:min-h-0 md:overflow-y-auto" data-testid="review-scroll-middle">
             {/* Surface A: reading gate — paused before the student's next
                 mistake, asks them to read the (clean) position before the move
                 is revealed. The board already shows readingGate.fen. */}
