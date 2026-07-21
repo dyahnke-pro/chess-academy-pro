@@ -1544,8 +1544,11 @@ async function augmentWithProjections(segments: ReviewMoveSegment[], studentColo
   let budget = 3;
   const PROJ_TIMEOUT_MS = 7000;
 
-  // #1 — plan realization from the plan's critical position.
-  const planSeg = segments.find((s) => s.narrationSource === 'assessment' || s.narrationSource === 'orientation');
+  // #1 — plan realization from the plan's critical position. In uncapped mode
+  // every segment's source is 'per-move', so find the plan ply by its FACET tag
+  // (the verdict/middlegame-plan fact appears in the bundle text).
+  const planSeg = segments.find((s) => s.narrationSource === 'assessment' || s.narrationSource === 'orientation')
+    ?? segments.find((s) => s.narration && (s.narration.includes('[verdict]') || s.narration.includes('[plan-middlegame]')));
   if (planSeg && budget > 0) {
     const line = await raceTimeout(computePvLine(planSeg.fenAfter, { maxPlies: 8 }), PROJ_TIMEOUT_MS, null);
     if (line && line.delivers && line.plies.length >= 2) {
