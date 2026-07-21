@@ -81,7 +81,7 @@ export function buildTrapQuestion(args: { fen: string; studentColor: 'white' | '
   for (const row of chess.board()) {
     for (const cell of row) {
       if (!cell || cell.color !== enemy) continue;
-      const square = cell.square as Square;
+      const square = cell.square;
       // The student must actually be able to capture here.
       if (chess.attackers(square, studentWB).length === 0) continue;
       const gain = seeGain(chess, square); // net for the capturing (student) side

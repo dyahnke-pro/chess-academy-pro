@@ -11,7 +11,7 @@
  * uncapped review speaks these verbatim (un-warmed) so no fact is compressed away
  * and the gaps are visible. Each facet is a labeled prose clause.
  */
-import { Chess, type Color, type Square } from 'chess.js';
+import { Chess, type Color } from 'chess.js';
 import { plyFactsForMove } from './pvPlayback';
 import { seeGain } from './positionReadingService';
 import { detectTactics } from './tacticsDetector';
@@ -198,7 +198,7 @@ export function computeMoveFacets(ctx: MoveFactContext): string[] {
     const smv = sb.move(san);
     if (smv) {
       const capVal = smv.captured ? (PIECE_PTS[smv.captured] ?? 0) : 0;
-      const oppWins = seeGain(sb, smv.to as Square);
+      const oppWins = seeGain(sb, smv.to);
       if (oppWins - capVal >= 1 && studentColorWB) {
         const comp = sacrificeCompensation(fenAfter, moverWB, studentPovCp);
         if (comp.length) facets.push(`[sac] It's a sacrifice — compensation: ${comp.join('; ')}.`);

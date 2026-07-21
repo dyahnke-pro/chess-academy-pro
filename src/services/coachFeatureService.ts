@@ -1105,7 +1105,7 @@ export function buildReviewSegments(
         const smv = sb.move(m.san);
         if (smv) {
           const capVal = smv.captured ? (PIECE_PTS[smv.captured] ?? 0) : 0;
-          const oppWins = seeGain(sb, smv.to as Square);
+          const oppWins = seeGain(sb, smv.to);
           if (oppWins - capVal >= 1) {
             sacInfo = { piece: ({ p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' } as const)[smv.piece] ?? 'piece', sq: smv.to };
           }

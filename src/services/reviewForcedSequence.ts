@@ -112,8 +112,8 @@ export function explainMatingSacMechanism(sans: string[], sacIdx: number): strin
     const before = new Chess();
     for (let i = 0; i < recapIdx; i += 1) before.move(sans[i]);
     const defenderColor = recap.color; // the side that recaptures = the defending side
-    const guards = before.attackers(mate.to as Parameters<Chess['attackers']>[0], defenderColor);
-    if (Array.isArray(guards) && guards.includes(recap.from as (typeof guards)[number])) {
+    const guards = before.attackers(mate.to, defenderColor);
+    if (Array.isArray(guards) && guards.includes(recap.from)) {
       return `it drags the ${recapName} off ${recap.from} — the piece that was guarding ${mate.to} — and with that guard gone your ${mateName} delivers mate there`;
     }
 

@@ -314,7 +314,7 @@ export function explainTemptingCapture(
     const after = new Chess(fen);
     after.move(t.san);
     // Opponent's best exchange net on the landing square (their POV).
-    const oppNet = seeGain(after, t.to as Square);
+    const oppNet = seeGain(after, t.to);
     const capturerNoun = PIECE_NOUN[t.piece];
     const victimNoun = PIECE_NOUN[t.captured as string];
     // THE TRAPPED-CAPTURER CASE (David 2026-07-21: "the trapped piece was the
@@ -332,12 +332,12 @@ export function explainTemptingCapture(
     }
     // Identify the cheapest recapturer for the prose ("the h-pawn takes back").
     const enemy: Color = mover === 'w' ? 'b' : 'w';
-    const recapSquares = after.attackers(t.to as Square, enemy);
+    const recapSquares = after.attackers(t.to, enemy);
     let recapNoun: string | null = null;
     let recapFrom: string | null = null;
     let best = Infinity;
     for (const s of recapSquares) {
-      const p = after.get(s as Square);
+      const p = after.get(s);
       if (p && PIECE_VAL[p.type] < best) { best = PIECE_VAL[p.type]; recapNoun = PIECE_NOUN[p.type]; recapFrom = s as string; }
     }
     // Seat-correct pronouns: the mover's possessive ("your"/"their"/"White's"),
@@ -533,7 +533,7 @@ export function findTrappedPiece(
       const val = PIECE_VAL[c.type];
       const attackers = chess.attackers(sq, enemy);
       if (attackers.length === 0) continue;
-      const cheapAtk = attackers.find((a) => (PIECE_VAL[chess.get(a as Square)?.type ?? 'k'] ?? 99) < val);
+      const cheapAtk = attackers.find((a) => (PIECE_VAL[chess.get(a)?.type ?? 'k'] ?? 99) < val);
       const defended = chess.attackers(sq, side).length > 0;
       if (!cheapAtk && defended) continue; // holdable where it stands → not trapped
       // Enumerate the piece's own moves — side-to-move flip so it can "move" now.
@@ -548,20 +548,20 @@ export function findTrappedPiece(
         after.move(m.san);
         if (m.captured) {
           // Capture-flight: unsafe when the recapture wins the exchange.
-          const oppNet = seeGain(after, m.to as Square);
+          const oppNet = seeGain(after, m.to);
           const gain = PIECE_VAL[m.captured] ?? 0;
           if (oppNet - gain < 1) { allLose = false; break; } // wins/even → escape
         } else {
-          const atk = after.attackers(m.to as Square, enemy);
+          const atk = after.attackers(m.to, enemy);
           if (atk.length === 0) { allLose = false; break; } // clean flight
-          const cheaper = atk.some((a) => (PIECE_VAL[after.get(a as Square)?.type ?? 'k'] ?? 99) < val);
-          const def = after.attackers(m.to as Square, side).length > 0;
+          const cheaper = atk.some((a) => (PIECE_VAL[after.get(a)?.type ?? 'k'] ?? 99) < val);
+          const def = after.attackers(m.to, side).length > 0;
           if (!cheaper && def) { allLose = false; break; } // defended vs equal → trade escape
         }
       }
       if (!allLose) continue;
       const atkSq = cheapAtk ?? attackers[0];
-      const atkPiece = chess.get(atkSq as Square);
+      const atkPiece = chess.get(atkSq);
       return { square: sq, piece: PIECE_NOUN[c.type], attackerSquare: atkSq as string, attackerPiece: PIECE_NOUN[atkPiece?.type ?? 'p'] };
     }
     return null;

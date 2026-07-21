@@ -2154,7 +2154,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           '[data-testid="review-rewind-card"]',
           '[data-testid="discussion-practice-panel"]',
         ].join(', '),
-      ) as HTMLElement | null;
+      );
       if (!card) return;
       // MOBILE (whole-page scroll, David 2026-07-21): the surface is now ONE
       // scrolling column, so the board is NOT fixed — scrollIntoView is the right

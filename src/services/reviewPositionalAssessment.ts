@@ -14,7 +14,7 @@
  * when it is true — never invented, never padded (David 2026-07-19: "don't
  * overstate the why, I don't want non-applicable reasons stated").
  */
-import { Chess, type Color, type Square } from 'chess.js';
+import { Chess, type Color } from 'chess.js';
 import { describeStructure } from './boardStructure';
 
 export interface PositionalAssessment {

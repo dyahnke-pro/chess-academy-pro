@@ -98,6 +98,8 @@ vi.mock('../../services/coachFeatureService', () => ({
   // Phase 1c — grounded citation spine. Empty here so the inline previews
   // render nothing in these mount tests (covered by their own unit test).
   buildReviewCitations: vi.fn().mockReturnValue([]),
+  // Seat-framed opening naming (its own unit tests live with the service).
+  frameOpeningForStudent: vi.fn((name: string) => ({ label: name, owned: true })),
 }));
 
 vi.mock('../../services/coachPrompts', () => ({
