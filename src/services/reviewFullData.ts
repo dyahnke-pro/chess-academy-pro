@@ -132,8 +132,7 @@ export function computeMoveFacets(ctx: MoveFactContext): string[] {
     if (badB) facets.push(`[badbishop] ${cap(badB)}.`);
     const worst = worstPlacedFriendlyPiece(fenAfter, studentColorWB);
     if (worst) facets.push(`[worst] ${cap(worst)}.`);
-    const structForPass = describeStructure(fenAfter);
-    const passer = structForPass?.pawns.passedPawns[studentColorWB][0] ?? null;
+    const passer = struct?.pawns.passedPawns[studentColorWB][0] ?? null; // reuse §5's struct
     const passNote = passedPawnPush(fenAfter, studentColorWB, passer);
     if (passNote) facets.push(`[passer] ${cap(passNote)}.`);
   }

@@ -104,14 +104,16 @@ export function badEnemyBishop(fen: string, studentColorWB: Color): string | nul
   const fullmove = Number(fen.split(' ')[5] ?? '0');
   if (fullmove < 12) return null;
   const enemy: Color = studentColorWB === 'w' ? 'b' : 'w';
-  for (const c of cells(chess)) {
+  const all = cells(chess);
+  const enemyMob = mobilityMap(chess, enemy); // ONE moves() enumeration
+  for (const c of all) {
     if (c.type !== 'b' || c.color !== enemy) continue;
     // A bishop still on its home square is undeveloped, not bad.
     if ((enemy === 'w' && (c.square === 'c1' || c.square === 'f1')) || (enemy === 'b' && (c.square === 'c8' || c.square === 'f8'))) continue;
     const light = isLight(c.square);
-    const ownPawnsSameColour = cells(chess).filter((p) => p.type === 'p' && p.color === enemy && isLight(p.square) === light).length;
+    const ownPawnsSameColour = all.filter((p) => p.type === 'p' && p.color === enemy && isLight(p.square) === light).length;
     if (ownPawnsSameColour < 4) continue;
-    if (mobility(chess, c.square as Square, enemy) > 2) continue;
+    if ((enemyMob.get(c.square) ?? 0) > 2) continue;
     return `their bishop on ${c.square} is a bad piece — hemmed in behind its own pawns on the same colour, with almost nowhere to go`;
   }
   return null;
@@ -127,11 +129,12 @@ export function worstPlacedFriendlyPiece(fen: string, studentColorWB: Color): st
   try { chess = new Chess(fen); } catch { return null; }
   const fullmove = Number(fen.split(' ')[5] ?? '0');
   if (fullmove < 10) return null;
+  const mob = mobilityMap(chess, studentColorWB); // ONE moves() enumeration
   let worst: { sq: string; type: string; m: number } | null = null;
   for (const c of cells(chess)) {
     if (c.color !== studentColorWB) continue;
     if (c.type !== 'n' && c.type !== 'b' && c.type !== 'r') continue;
-    const m = mobility(chess, c.square as Square, studentColorWB);
+    const m = mob.get(c.square) ?? 0;
     if (!worst || m < worst.m) worst = { sq: c.square, type: c.type, m };
   }
   if (worst && worst.m <= 1) {
@@ -155,9 +158,16 @@ export function passedPawnPush(fen: string, studentColorWB: Color, passedSquare:
   return `your passed pawn on ${passedSquare} wants to run — passed pawns are meant to be pushed${knightNote}`;
 }
 
-/** Legal-move count for the piece on `sq` as if it were `color`'s turn. */
-function mobility(chess: Chess, sq: Square, color: Color): number {
+/** Per-square legal-move counts for every piece of `color`, from ONE moves()
+ *  enumeration (one Chess build) — far cheaper than a fresh Chess per piece. */
+function mobilityMap(chess: Chess, color: Color): Map<string, number> {
+  const out = new Map<string, number>();
   const parts = chess.fen().split(' ');
   parts[1] = color; parts[3] = '-';
-  try { return new Chess(parts.join(' ')).moves({ square: sq, verbose: true }).length; } catch { return 99; }
+  try {
+    for (const mv of new Chess(parts.join(' ')).moves({ verbose: true })) {
+      out.set(mv.from, (out.get(mv.from) ?? 0) + 1);
+    }
+  } catch { /* leave empty */ }
+  return out;
 }

@@ -121,7 +121,11 @@ const run = async () => {
   await dismiss();
 
   let ready = false;
-  for (let i = 0; i < 110; i++) {
+  // Uncapped mode adds ~50s (3 Stockfish PV projections + the 8k-token cover-all
+  // voice pass) on top of the ~120s game analysis, so allow a longer settle when
+  // AUDIT_UNCAPPED is on (David 2026-07-20 diagnostic timed out at the old 165s).
+  const READY_ITERS = process.env.AUDIT_UNCAPPED !== '0' ? 240 : 110;
+  for (let i = 0; i < READY_ITERS; i++) {
     await page.waitForTimeout(1500);
     const btn = page.locator('[data-testid="start-walk-btn"]').first();
     if ((await btn.count()) && (await btn.getAttribute('disabled')) === null) { ready = true; break; }
