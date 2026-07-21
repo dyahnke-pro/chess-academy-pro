@@ -579,6 +579,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // moves from the SAME position, which passes the device? Candidates +
   // verdicts are engine-computed (principleQuiz service, G0). Armed here
   // when the faucet logs a slip; shown ONCE per review after the reveal.
+  /** The ply of the most recently RAISED mid-game question (why-picker / trap /
+   *  find-shot). The rewind offer anchors to this — never to the walk's live
+   *  position, which advances while the reveal/§5 walkout plays. */
+  const questionPlyRef = useRef<number | null>(null);
   const principleQuizRef = useRef<PrincipleQuiz | null>(null);
   const principleQuizShownRef = useRef(false);
   const [principleQuizState, setPrincipleQuizState] = useState<PrincipleQuiz | null>(null);
@@ -755,6 +759,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       const planned = questionPlan.get(nextPly);
       if (seg && isStudentMistake && planned && !quizzedPliesRef.current.has(nextPly)) {
         quizzedPliesRef.current.add(nextPly);
+        // ANCHOR the question's ply for the rewind offer (David 2026-07-21
+        // rewind-diag): by the time the faucet/shot resolves, the user has often
+        // tapped forward, so walkPlayback.currentPly+1 points PAST the flagged
+        // move (the diag showed maybeOfferRewind evaluating the opponent's NEXT
+        // move — cls=good, coach move — and the rewind never fired). The offer
+        // must judge THIS ply, wherever the walk sits at resume time.
+        questionPlyRef.current = nextPly;
         // The board already shows seg.fenBefore (the position before the move).
         const sign = playerColor === 'white' ? 1 : -1;
         const cpLoss = seg.evalBefore != null && seg.evalAfter != null
@@ -839,8 +850,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // Advance the walk once the faucet is done (answered + reveal dismissed, or
   // skipped) — the "resume" side of the pause above.
   // ── Blunder rewind: offer after a blunder's question resolves ────────────
-  const maybeOfferRewind = useCallback((): boolean => {
-    const ply = walkPlayback.currentPly + 1; // the move the walk paused on
+  const maybeOfferRewind = useCallback((atPly?: number): boolean => {
+    // Judge the ply the QUESTION was raised on when the caller knows it
+    // (questionPlyRef) — the walk's live position may already have advanced
+    // past the blunder while the reveal/§5 walkout played (rewind-diag,
+    // David 2026-07-21). Fall back to the walk position for direct callers.
+    const ply = atPly ?? walkPlayback.currentPly + 1;
     const seg = walkNarration?.segments.find((s) => s.ply === ply);
     const move = moves[ply - 1] ?? null;
     // Only offer the rewind on the STUDENT's own blunder — color (side-to-move
@@ -910,7 +925,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     } else {
       captureEvent('review_principle_quiz_result', { tag: quiz.tag, picked: null, correct: false });
     }
-    if (!maybeOfferRewind()) walkPlayback.goForward();
+    if (!maybeOfferRewind(questionPlyRef.current ?? undefined)) walkPlayback.goForward();
   }, [maybeOfferRewind, walkPlayback]);
 
   // ── Find-the-shot handlers ────────────────────────────────────────────────
@@ -958,7 +973,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // Spot-the-sequence (Phase 1): before moving on, ask whether the student
     // can SEE THE FOLLOW-UP of the shot they just found/saw.
     if (tryStartSequenceRef.current?.()) return;
-    if (maybeOfferRewind()) return; // a blunder's shot resolved → offer the rewind
+    if (maybeOfferRewind(questionPlyRef.current ?? undefined)) return; // a blunder's shot resolved → offer the rewind
     walkPlayback.goForward();
   }, [walkPlayback, maybeOfferRewind]);
 
@@ -1173,7 +1188,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       void voiceService.speakForced(quiz.ask).catch(() => undefined);
       return;
     }
-    if (maybeOfferRewind()) return; // the rewind card takes over the advance
+    if (maybeOfferRewind(questionPlyRef.current ?? undefined)) return; // the rewind card takes over the advance
     walkPlayback.goForward();
   }, [walkPlayback, maybeOfferRewind]);
 
@@ -1418,7 +1433,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setSeqState(null);
     setWalkExplorationFen(null);
     setWalkExplorationSan(null);
-    if (!maybeOfferRewind()) walkPlayback.goForward();
+    if (!maybeOfferRewind(questionPlyRef.current ?? undefined)) walkPlayback.goForward();
   }, [maybeOfferRewind, walkPlayback, playMoveSound]);
 
   /** Called when a shot resolves (found or hint). Starts the sequence ask
@@ -1543,7 +1558,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           setSeqState(null);
           setWalkExplorationFen(null);
           setWalkExplorationSan(null);
-          if (!maybeOfferRewind()) walkPlayback.goForward();
+          if (!maybeOfferRewind(questionPlyRef.current ?? undefined)) walkPlayback.goForward();
         } else {
           setSeqState({ ...state, ptr: afterDefender, reached });
           void voiceService.speakForced(defender ? `${defender.san}. And now?` : 'And now?').catch(() => undefined);
@@ -3207,7 +3222,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
               <div data-testid="review-sequence-playback" className="mx-3 my-1 rounded-xl border-2 border-cyan-500/40 bg-cyan-500/10 px-3 py-2">
                 <div className="text-sm text-cyan-100">Watch the line play out…</div>
                 <button type="button" data-testid="review-sequence-skip"
-                  onClick={() => { cancelSequence(); if (!maybeOfferRewind()) walkPlayback.goForward(); }}
+                  onClick={() => { cancelSequence(); if (!maybeOfferRewind(questionPlyRef.current ?? undefined)) walkPlayback.goForward(); }}
                   className="mt-1.5 rounded-lg border border-slate-500/50 px-2.5 py-1 text-xs text-slate-300 hover:bg-slate-500/20">
                   Skip
                 </button>
