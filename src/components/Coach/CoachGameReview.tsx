@@ -1229,7 +1229,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // finally makes sense to the student staring at the grab.
     const rawWhys = line.plies.map((ply, i) => {
       const base = plyFactsString(ply) ?? renderPlyFactLine(ply) ?? buildReviewMoveTeaching(ply.fenBefore, ply.san) ?? '';
-      const tempt = explainTemptingCapture(ply.fenBefore, ply.san);
+      // Seat-correct speech: the walked line's mover ALTERNATES every ply, so
+      // "your queen" is right only on the student's plies (David 2026-07-21:
+      // "You realize it was white in this game..?").
+      const tempt = explainTemptingCapture(ply.fenBefore, ply.san, ply.moverColor === playerColor ? 'you' : 'they');
       return { id: i, fact: [base, tempt].filter(Boolean).join(' ') };
     });
     // PACE ON REAL AUDIO (David 2026-07-19: "no per move why… quickly moves from

@@ -209,3 +209,27 @@ describe('describeConcessions (David 2026-07-21 — name the lasting damage)', (
     expect(describeConcessions(c.fen(), 'Nf3', true)).toBeNull();
   });
 });
+
+describe('explainTemptingCapture — seat-correct speech (David 2026-07-21: "it was white in this game")', () => {
+  const DAVID_FEN = 'r1b1r1k1/1ppn1ppp/p2npq2/3p2B1/3P2PP/2PBPP2/P1P1N1Q1/2KR3R b - - 0 13';
+
+  it("speaks from the OPPONENT's seat when the mover is the opponent ('they')", async () => {
+    const { explainTemptingCapture } = await import('./reviewTeachingPoints');
+    // David was WHITE; the line being explained is BLACK's. No "your queen".
+    const why = explainTemptingCapture(DAVID_FEN, 'e5', 'they');
+    expect(why).not.toBeNull();
+    expect(why).toMatch(/NOT free for them/i);
+    expect(why).toMatch(/trades their queen for a bishop/i);
+    expect(why).toMatch(/their line leaves it alone/i);
+    expect(why).not.toMatch(/your queen|your king/i);
+  });
+
+  it('uses side names in neutral perspective (theory dives)', async () => {
+    const { explainTemptingCapture } = await import('./reviewTeachingPoints');
+    const why = explainTemptingCapture(DAVID_FEN, 'e5', 'neutral');
+    expect(why).not.toBeNull();
+    expect(why).toMatch(/Black's queen/i);
+    expect(why).toMatch(/Black's line leaves it alone/i);
+    expect(why).not.toMatch(/\byour\b|\btheir\b/i);
+  });
+});

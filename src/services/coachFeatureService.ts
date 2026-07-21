@@ -1596,21 +1596,27 @@ async function augmentWithProjections(
   // Budget: 'full' (uncapped) needs room for punishment + plan + consequence;
   // 'mistakes' (capped production) caps at 2 punishment lines per game so the
   // review prep never stalls on Stockfish.
-  let budget = scope === 'full' ? 5 : 2;
+  let budget = scope === 'full' ? 5 : 3;
   const PROJ_TIMEOUT_MS = 7000;
 
-  // #3 — PUNISHMENT projection on the student's mistakes/blunders: the engine PV
-  // from the position AFTER the flagged move IS the ramification — the concrete
-  // "here's how it gets taken advantage of" line the badge never showed (David
-  // 2026-07-21). Runs in BOTH scopes; in 'mistakes' scope it's the only pass.
+  // #3 — PUNISHMENT projection on BOTH SIDES' mistakes/blunders: the engine PV
+  // from the position AFTER the flagged move IS the ramification (David
+  // 2026-07-21, IMG_4571 — and he was WHITE there: the mistake was his
+  // OPPONENT's, and the question was "how does white take advantage?"). Your
+  // own mistake → "here's how it gets punished"; the opponent's → "here's how
+  // you take advantage" — same computed line, correct seat. Runs in BOTH
+  // scopes; in 'mistakes' scope it's the only pass.
   const studentColorName = studentColorWB === 'w' ? 'white' : 'black';
   for (const s of segments) {
     if (budget <= 0) break;
-    if (s.playerColor !== studentColorName) continue;
     if (s.classification !== 'mistake' && s.classification !== 'blunder') continue;
+    const isStudentSlip = s.playerColor === studentColorName;
     const line = await raceTimeout(computePvLine(s.fenAfter, { maxPlies: 6 }), PROJ_TIMEOUT_MS, null);
     if (line && line.delivers && line.plies.length >= 2) {
-      s.narration = `${s.narration ?? ''} Here's how it gets punished from here: ${render(line)}.`.trim();
+      const frame = isStudentSlip
+        ? `Here's how it gets punished from here: ${render(line)}.`
+        : `Here's how you take advantage: ${render(line)}.`;
+      s.narration = `${s.narration ?? ''} ${frame}`.trim();
       budget -= 1;
     }
   }

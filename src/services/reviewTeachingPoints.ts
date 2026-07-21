@@ -282,7 +282,18 @@ function mobilityMap(chess: Chess, color: Color): Map<string, number> {
  * not a temptation to warn about, and an even trade with no consequence is not
  * worth a clause.
  */
-export function explainTemptingCapture(fen: string, chosenSan: string): string | null {
+export function explainTemptingCapture(
+  fen: string,
+  chosenSan: string,
+  /** WHO the mover is, for correct-seat speech (David 2026-07-21: "You realize
+   *  it was white in this game..?" — the first version always said "your queen /
+   *  your king", which reads from the WRONG SEAT whenever the line being walked
+   *  is the opponent's; a review line's mover alternates every ply).
+   *  'you' → the student is the mover (second person);
+   *  'they' → the opponent is the mover (the student watches their reasoning);
+   *  'neutral' → side names from the fen (theory dives — no seat at all). */
+  perspective: 'you' | 'they' | 'neutral' = 'you',
+): string | null {
   try {
     const c = new Chess(fen);
     const mover = c.turn();
@@ -312,9 +323,15 @@ export function explainTemptingCapture(fen: string, chosenSan: string): string |
       const p = after.get(s as Square);
       if (p && PIECE_VAL[p.type] < best) { best = PIECE_VAL[p.type]; recapNoun = PIECE_NOUN[p.type]; recapFrom = s as string; }
     }
+    // Seat-correct pronouns: the mover's possessive ("your"/"their"/"White's"),
+    // and who the line belongs to in the closing clause.
+    const moverName = mover === 'w' ? 'White' : 'Black';
+    const moverPoss = perspective === 'you' ? 'your' : perspective === 'they' ? 'their' : `${moverName}'s`;
+    const lineWhose = perspective === 'you' ? 'the line' : perspective === 'they' ? 'their line' : `${moverName}'s line`;
     if (oppNet - victimVal >= 1 && recapNoun && recapFrom) {
       // The grab LOSES material: guarded piece, bad trade.
-      return `Notice the ${victimNoun} on ${t.to} is NOT free — it's guarded by the ${recapNoun} on ${recapFrom}, so ${t.san} just trades your ${capturerNoun} for a ${victimNoun}${PIECE_VAL[t.piece] > victimVal ? ` — giving up ${PIECE_VAL[t.piece]} points for ${victimVal}` : ''}. That's why the line leaves it alone.`;
+      const notFree = perspective === 'they' ? 'is NOT free for them' : 'is NOT free';
+      return `Notice the ${victimNoun} on ${t.to} ${notFree} — it's guarded by the ${recapNoun} on ${recapFrom}, so ${t.san} just trades ${moverPoss} ${capturerNoun} for a ${victimNoun}${PIECE_VAL[t.piece] > victimVal ? ` — giving up ${PIECE_VAL[t.piece]} points for ${victimVal}` : ''}. That's why ${lineWhose} leaves it alone.`;
     }
     if (oppNet - victimVal === 0 && recapNoun === 'pawn' && recapFrom) {
       // EVEN trade — but does the pawn-recapture open a file at the mover's king?
@@ -329,7 +346,9 @@ export function explainTemptingCapture(fen: string, chosenSan: string): string |
         const myKing = board.find((p) => p.type === 'k' && p.color === mover);
         const kingNear = myKing ? Math.abs(myKing.square.charCodeAt(0) - file.charCodeAt(0)) <= 1 : false;
         if (!fileHasEnemyPawn && enemyHeavyOnFile && kingNear) {
-          return `The trade ${t.san} looks natural, but after the ${recapNoun} takes back, the ${file}-file rips open — straight at your king, with their heavy piece already sitting on it. The line keeps the tension instead.`;
+          const kingPoss = perspective === 'you' ? 'your king' : perspective === 'they' ? 'their own king' : `${moverName}'s own king`;
+          const opener = perspective === 'you' ? 'their heavy piece' : 'a heavy piece';
+          return `The trade ${t.san} looks natural, but after the ${recapNoun} takes back, the ${file}-file rips open — straight at ${kingPoss}, with ${opener} already sitting on it. ${lineWhose.charAt(0).toUpperCase()}${lineWhose.slice(1)} keeps the tension instead.`;
         }
       }
     }

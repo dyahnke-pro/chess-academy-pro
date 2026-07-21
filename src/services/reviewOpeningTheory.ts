@@ -241,7 +241,7 @@ export async function buildOpeningTheoryLecture(
           const parts: string[] = [];
           const w = moveWhy(prevFen, p.san);
           if (w) parts.push(w);
-          const tempt = explainTemptingCapture(prevFen, p.san);
+          const tempt = explainTemptingCapture(prevFen, p.san, 'neutral');
           if (tempt) parts.push(tempt);
           prevFen = p.fenAfter;
           return { san: p.san, fenAfter: p.fenAfter, why: parts.length ? parts.join(' ') : null };
