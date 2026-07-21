@@ -73,6 +73,18 @@ const run = async () => {
   const voice = process.env.AUDIT_LISTENER === '1' ? await attachVoiceListener(ctx) : null;
   const page = await ctx.newPage();
   const errs = [];
+  // FULL SPOKEN TEXT — intercept the /api/tts POST bodies (the EXACT words sent to
+  // the voice), so the transcript is the real spoken words, not a 40-char preview
+  // (David 2026-07-20: "physically read each spoken word").
+  const ttsSpoken = [];
+  page.on('request', (req) => {
+    try {
+      if (/\/api\/tts\b/.test(req.url()) && req.method() === 'POST') {
+        const b = req.postData();
+        if (b) { const j = JSON.parse(b); const t = (j.text ?? j.input ?? j.ssml ?? '').toString().trim(); if (t && t !== '.') ttsSpoken.push(t); }
+      }
+    } catch { /* non-JSON body */ }
+  });
   page.on('pageerror', (e) => errs.push('PAGEERROR: ' + e.message.slice(0, 160)));
   page.on('console', (m) => {
     if (m.type() !== 'error') return;
@@ -235,11 +247,12 @@ const run = async () => {
   // that should have fired did." Dump the COMPLETE spoken voice stream + a card /
   // pop-up firing log + a function-coverage grid, so the experience is READ, not
   // inferred from green gates.
+  log('\n===== FULL SPOKEN TRANSCRIPT (exact /api/tts text, every word, in order) =====');
+  ttsSpoken.forEach((t, i) => log(`  [${String(i + 1).padStart(3)}] ${t}`));
+  log(`  [${ttsSpoken.length} TTS utterances captured]`);
   if (voice) {
     const rawAll = voiceLines(voice);
-    log('\n===== FULL SPOKEN TRANSCRIPT (every voice line, in order) =====');
-    rawAll.forEach((l, i) => log(`  ${String(i + 1).padStart(3)}. ${l}`));
-    log(`  [${rawAll.length} spoken lines total; ${rawAll.filter((l) => /^dropped |^throttled /.test(l)).length} dropped/throttled]`);
+    log(`  [listener cross-check: ${rawAll.length} voice-speak events, ${rawAll.filter((l) => /^dropped |^throttled /.test(l)).length} dropped/throttled]`);
   }
   log('\n===== INTERACTIVE FUNCTIONS FIRED (pop-ups / cards / lines) =====');
   if (cardLog.length === 0) log('  (no cards/pop-ups fired this game)');
@@ -377,7 +390,10 @@ const run = async () => {
     // there (draw-game false positive: "Qb3 is a blunder" flagged as an un-named
     // sac). Skip when the ply is an engine error.
     const badge = (p?.badge || '').toUpperCase();
-    const isError = /BLUNDER|MISTAKE|INACCUR/.test(badge);
+    // Key on BOTH the badge AND the spoken narration — the badge testid isn't
+    // always captured at that step, but the review reliably says "blunder"/
+    // "mistake" in the prose when the queen merely hangs (draw-game Qb3).
+    const isError = /BLUNDER|MISTAKE|INACCUR/.test(badge) || /\b(blunder|a mistake|is a mistake|hangs? the queen)\b/i.test(p?.narr || '');
     if (isError) {
       log(`  ⏭  SAC skipped — the queen move at ply ${queenSacPly} is an engine error (${badge.trim()}), a blunder/trade not a sacrifice.`);
     } else {

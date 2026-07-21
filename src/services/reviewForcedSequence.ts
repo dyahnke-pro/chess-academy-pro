@@ -74,19 +74,22 @@ const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop'
  */
 export function explainMatingSacMechanism(sans: string[], sacIdx: number): string | null {
   try {
-    // The mate must come within a few plies of the sac (a forced finish).
-    let mateIdx = -1;
-    for (let i = sacIdx + 1; i < sans.length && i <= sacIdx + 4; i += 1) {
-      if (sans[i].trimEnd().endsWith('#')) { mateIdx = i; break; }
-    }
-    if (mateIdx < 0) return null;
-    const recapIdx = sacIdx + 1;
-    if (recapIdx >= mateIdx) return null; // need a recapture between sac and mate
-
-    // Replay to read each move's from/to (chess.js verbs).
+    // Replay the whole game ONCE, reading each move's from/to (chess.js verbs) and
+    // finding the checkmate ply by BOARD STATE (isCheckmate) — NOT the '#' glyph,
+    // which the analysis pipeline may strip from stored SANs (David 2026-07-20
+    // sweep: the Immortal/blackwin mates went unexplained because the glyph check
+    // failed on glyph-less SANs).
     const chess = new Chess();
     const mv: ReturnType<Chess['move']>[] = [];
-    for (const san of sans) { const m = chess.move(san); if (!m) return null; mv.push(m); }
+    let mateIdx = -1;
+    for (let i = 0; i < sans.length; i += 1) {
+      const m = chess.move(sans[i]); if (!m) return null; mv.push(m);
+      if (chess.isCheckmate()) { mateIdx = i; break; }
+    }
+    // The mate must land within a few plies AFTER the sac (a forced finish).
+    if (mateIdx < 0 || mateIdx <= sacIdx || mateIdx > sacIdx + 4) return null;
+    const recapIdx = sacIdx + 1;
+    if (recapIdx >= mateIdx) return null; // need a recapture between sac and mate
 
     const recap = mv[recapIdx];
     const mate = mv[mateIdx];
