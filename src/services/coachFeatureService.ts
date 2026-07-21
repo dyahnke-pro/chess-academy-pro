@@ -14,7 +14,7 @@ import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShi
 import { detectForcedMatingSequence, explainMatingSacMechanism } from './reviewForcedSequence';
 import { assessPositionalEdge } from './reviewPositionalAssessment';
 import { computeMoveFacets, computeThroughLine } from './reviewFullData';
-import { describeNotableMove, describeConcessions } from './reviewTeachingPoints';
+import { describeNotableMove, describeConcessions, findTrappedPiece } from './reviewTeachingPoints';
 import { walkBookLine } from './theoryDeparture';
 import { detectBadHabits } from './badHabitDetector';
 import { db } from '../db/schema';
@@ -892,6 +892,8 @@ export function buildReviewSegments(
   // developing plan (when the opening is identified) and the middlegame
   // orientation (structure anchor + both-sides plans).
   let openingPlanShown = false;
+  /** Trapped-piece beats announced, keyed side:square — once per trap, ever. */
+  const trappedAnnounced = new Set<string>();
   let orientationShown = false;
   // The enumerated POSITIONAL VERDICT ("you're better here, and here's why:
   // bishop pair, the open file, his weak pawn") — Danya's signature teaching
@@ -988,7 +990,7 @@ export function buildReviewSegments(
       // (opening / plan-opening / plan-middlegame / opp-dev); keep every dynamic
       // per-move fact.
       const kept = facets.filter((f) => {
-        if (!/^\[(opening|plan-opening|plan-middlegame|plan-now|opp-dev|passer|badbishop|worst)\]/.test(f)) return true;
+        if (!/^\[(opening|plan-opening|plan-middlegame|plan-now|opp-dev|passer|badbishop|worst|trapped)\]/.test(f)) return true;
         if (emittedStaticFacets.has(f)) return false;
         emittedStaticFacets.add(f);
         return true;
@@ -1350,6 +1352,24 @@ export function buildReviewSegments(
       const notable = describeNotableMove(fenPair.fenBefore, m.san, playerColor ? moverColor === playerColor : !m.isCoachMove);
       if (notable) { narration = notable; narrationSource = 'per-move'; }
     }
+    // TRAPPED PIECE — the story-level event (David 2026-07-21: "the trapped
+    // piece was the queen!!!" — his game's Black queen on f6 had every flight
+    // square covered and the review never said so). Fires ONCE per trapped
+    // square, for EITHER side's rook/queen: theirs → you've boxed it in; your
+    // own → the warning. Board-true (findTrappedPiece, conservative detector).
+    if (narration === null && studentColorWB !== null) {
+      const enemyOfStudent: 'w' | 'b' = studentColorWB === 'w' ? 'b' : 'w';
+      const theirsTrapped = findTrappedPiece(fenPair.fenAfter, enemyOfStudent);
+      const mineTrapped = theirsTrapped ? null : findTrappedPiece(fenPair.fenAfter, studentColorWB);
+      const hit = theirsTrapped ?? mineTrapped;
+      if (hit && !trappedAnnounced.has(`${theirsTrapped ? 'e' : 's'}:${hit.square}`)) {
+        trappedAnnounced.add(`${theirsTrapped ? 'e' : 's'}:${hit.square}`);
+        narration = theirsTrapped
+          ? `Stop and look at their ${hit.piece} on ${hit.square} — it's trapped. The ${hit.attackerPiece} on ${hit.attackerSquare} attacks it, and every square it could run to is covered. That piece is coming off the board; the only question is the price.`
+          : `Careful — your ${hit.piece} on ${hit.square} is trapped. The ${hit.attackerPiece} on ${hit.attackerSquare} attacks it, and every escape square is covered. Start looking for the cheapest way to give it up, or a counter-blow that changes the subject.`;
+        narrationSource = 'per-move';
+      }
+    }
     // §7 CONVERSION / ENDGAME: past the opening cap the walk was "badges only".
     // Name the mate PATTERN (back-rank / smothered) on the move that delivers
     // it, and announce the ENDGAME PHASE exactly ONCE (the first quiet student
@@ -1588,10 +1608,18 @@ async function augmentWithProjections(
     return "you're in trouble";
   };
   const render = (line: PvLine): string => {
-    const sans = line.plies.map((p) => p.san).join(' ');
+    // NARRATE EVERY MOVE of the projected line (David 2026-07-21: "narrate each
+    // line and explain the why behind each move. The user needs just as much
+    // detail here as every other move, if not more, because this is where the
+    // teaching happens!"). Each ply gets its computed clause — capture, check,
+    // tactic landed, outpost — not a bare SAN chain.
+    const steps = line.plies.map((p) => {
+      const w = plyFactsClause(p.fenBefore, p.san);
+      return w ? `${p.san} (${w})` : p.san;
+    });
     const whiteCp = line.terminalEvalCp ?? line.rootEvalCp;
     const studentPov = studentColorWB === 'w' ? whiteCp : -whiteCp;
-    return `${sans} — and ${verdictWord(studentPov)}`;
+    return `${steps.join(', then ')} — and ${verdictWord(studentPov)}`;
   };
   // Budget: 'full' (uncapped) needs room for punishment + plan + consequence;
   // 'mistakes' (capped production) caps at 2 punishment lines per game so the

@@ -23,7 +23,7 @@ import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan } from './revie
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
 import { nameEndgamePhase } from './reviewMoveTeaching';
 import { detectOpening } from './openingDetectionService';
-import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, deriveNextPlans } from './reviewTeachingPoints';
+import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, deriveNextPlans, findTrappedPiece } from './reviewTeachingPoints';
 
 interface Located { type: string; color: Color; square: string; }
 
@@ -155,6 +155,16 @@ export function computeMoveFacets(ctx: MoveFactContext): string[] {
   // ── 6. KING SAFETY (enemy king exposed in the centre) ──
   if (studentColorWB && enemyKingStuckInCenter(fenAfter, studentColorWB)) {
     facets.push('[king] Their king is stuck in the centre with a central file open on it.');
+  }
+
+  // ── 6a. TRAPPED PIECE — either side (David 2026-07-21: "the trapped piece
+  // was the queen!!!"). Story-level event: a rook/queen with no safe square.
+  if (studentColorWB) {
+    const enemyWB: Color = studentColorWB === 'w' ? 'b' : 'w';
+    const trapTheirs = findTrappedPiece(fenAfter, enemyWB);
+    if (trapTheirs) facets.push(`[trapped] Their ${trapTheirs.piece} on ${trapTheirs.square} is trapped — attacked by the ${trapTheirs.attackerPiece} on ${trapTheirs.attackerSquare}, and every escape square is covered; it's coming off the board.`);
+    const trapMine = findTrappedPiece(fenAfter, studentColorWB);
+    if (trapMine) facets.push(`[trapped] Careful — your ${trapMine.piece} on ${trapMine.square} is trapped: attacked by the ${trapMine.attackerPiece} on ${trapMine.attackerSquare} with no safe square. Look for the cheapest way out.`);
   }
 
   // ── 6b. THE MISSING TEACHING POINTS (Naroditsky message catalog) ──

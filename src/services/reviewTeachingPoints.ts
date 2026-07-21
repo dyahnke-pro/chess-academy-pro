@@ -313,6 +313,19 @@ export function explainTemptingCapture(
     const oppNet = seeGain(after, t.to as Square);
     const capturerNoun = PIECE_NOUN[t.piece];
     const victimNoun = PIECE_NOUN[t.captured as string];
+    // THE TRAPPED-CAPTURER CASE (David 2026-07-21: "the trapped piece was the
+    // queen!!!" — in his game Black's Qf6 was attacked by Bg5 with EVERY flight
+    // square covered). When the piece that could take is itself TRAPPED, "the
+    // line leaves it alone" is FALSE teaching: the exchange happens anyway, and
+    // the line is just picking the cheapest version of losing the piece. Tell
+    // the trapped-piece truth instead.
+    if (t.piece === 'q' || t.piece === 'r') {
+      const trapped = findTrappedPiece(fen, mover);
+      if (trapped && trapped.square === t.from) {
+        const trapPoss = perspective === 'you' ? 'your' : perspective === 'they' ? 'their' : `${mover === 'w' ? 'White' : 'Black'}'s`;
+        return `The real story: ${trapPoss} ${trapped.piece} on ${trapped.square} is trapped — attacked by the ${trapped.attackerPiece} on ${trapped.attackerSquare}, and every escape square is covered. The line isn't declining the ${victimNoun}; it's picking the cheapest way to let the ${trapped.piece} go.`;
+      }
+    }
     // Identify the cheapest recapturer for the prose ("the h-pawn takes back").
     const enemy: Color = mover === 'w' ? 'b' : 'w';
     const recapSquares = after.attackers(t.to as Square, enemy);
@@ -483,6 +496,71 @@ export function describeConcessions(fenBefore: string, san: string, moverIsStude
     }
     if (out.length === 0) return null;
     return `The lasting concession: ${out.join('; ')}.`;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * TRAPPED-PIECE DETECTOR (David 2026-07-21: "the trapped piece was the queen!!!"
+ * — his position had Black's queen on f6 attacked by Bg5 with EVERY flight
+ * square covered; the review talked about the bishop instead). Conservative,
+ * fully computed: a rook or queen of `side` is TRAPPED when it is attacked AND
+ * every legal move of that piece loses it:
+ *  • a non-capture flight is unsafe if the destination is attacked by a CHEAPER
+ *    enemy piece, or attacked at all while undefended;
+ *  • a capture-flight is unsafe if the exchange loses material (SEE);
+ * staying put must also lose (attacked by a cheaper piece, or attacked while
+ * undefended). Equal-trade escapes (queen takes queen on a defended square)
+ * count as ESCAPES — that's a trade, not a trap. Returns the trapped piece or
+ * null. Minors are skipped (a trapped minor is usually just "wins a piece" —
+ * the tactics layer covers it; R/Q traps are the story-level events).
+ */
+export function findTrappedPiece(
+  fen: string,
+  side: Color,
+): { square: string; piece: string; attackerSquare: string; attackerPiece: string } | null {
+  try {
+    const chess = new Chess(fen);
+    const enemy: Color = side === 'w' ? 'b' : 'w';
+    for (const c of cells(chess)) {
+      if (c.color !== side || (c.type !== 'q' && c.type !== 'r')) continue;
+      const sq = c.square as Square;
+      const val = PIECE_VAL[c.type];
+      const attackers = chess.attackers(sq, enemy);
+      if (attackers.length === 0) continue;
+      const cheapAtk = attackers.find((a) => (PIECE_VAL[chess.get(a as Square)?.type ?? 'k'] ?? 99) < val);
+      const defended = chess.attackers(sq, side).length > 0;
+      if (!cheapAtk && defended) continue; // holdable where it stands → not trapped
+      // Enumerate the piece's own moves — side-to-move flip so it can "move" now.
+      const parts = chess.fen().split(' ');
+      parts[1] = side; parts[3] = '-';
+      const probe = new Chess(parts.join(' '));
+      const moves = probe.moves({ verbose: true }).filter((m) => m.from === sq);
+      if (moves.length === 0) continue; // frozen ≠ trapped unless attacked-cheaper (covered below)
+      let allLose = true;
+      for (const m of moves) {
+        const after = new Chess(parts.join(' '));
+        after.move(m.san);
+        if (m.captured) {
+          // Capture-flight: unsafe when the recapture wins the exchange.
+          const oppNet = seeGain(after, m.to as Square);
+          const gain = PIECE_VAL[m.captured] ?? 0;
+          if (oppNet - gain < 1) { allLose = false; break; } // wins/even → escape
+        } else {
+          const atk = after.attackers(m.to as Square, enemy);
+          if (atk.length === 0) { allLose = false; break; } // clean flight
+          const cheaper = atk.some((a) => (PIECE_VAL[after.get(a as Square)?.type ?? 'k'] ?? 99) < val);
+          const def = after.attackers(m.to as Square, side).length > 0;
+          if (!cheaper && def) { allLose = false; break; } // defended vs equal → trade escape
+        }
+      }
+      if (!allLose) continue;
+      const atkSq = cheapAtk ?? attackers[0];
+      const atkPiece = chess.get(atkSq as Square);
+      return { square: sq, piece: PIECE_NOUN[c.type], attackerSquare: atkSq as string, attackerPiece: PIECE_NOUN[atkPiece?.type ?? 'p'] };
+    }
+    return null;
   } catch {
     return null;
   }

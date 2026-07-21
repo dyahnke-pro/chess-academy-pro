@@ -2383,7 +2383,7 @@ export async function voiceReviewLines(
   // whole point ("I want to hear ALL the computed data on every move").
   const coverAllClause = opts.coverAll
     ? 'EACH numbered item is a BUNDLE of several computed facts about ONE move, each tagged ' +
-      'in [brackets] ([move], [quality], [tactic], [loose], [count], [royal], [verdict], ' +
+      'in [brackets] ([move], [quality], [tactic], [loose], [count], [royal], [verdict], [trapped], ' +
       '[structure], [king], [rook7], [badbishop], [worst], [passer], [plan-now], [sac], ' +
       '[forced], [plan-opening], [plan-middlegame], [plan-line], [consequence], [opening], ' +
       '[opp-target], [endgame]). ' +
