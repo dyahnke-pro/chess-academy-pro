@@ -105,16 +105,24 @@ const run = async () => {
   await dismiss();
   await page.waitForTimeout(3000);
 
-  const seed = await page.evaluate(async ({ gid, pgn }) => {
+  // Multi-game sweep support (David 2026-07-20 "run this on at least 5 games"):
+  // the student is always the chessComUsername; put them on the side AUDIT_STUDENT
+  // names (default white), and seed the real AUDIT_RESULT so wins/losses/draws all
+  // score correctly.
+  const STUDENT_SIDE = (process.env.AUDIT_STUDENT || 'white').toLowerCase() === 'black' ? 'black' : 'white';
+  const RESULT = process.env.AUDIT_RESULT || '1-0';
+  const seed = await page.evaluate(async ({ gid, pgn, side, result }) => {
     const open = () => new Promise((res, rej) => { const r = indexedDB.open('ChessAcademyDB'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
     const db = await open();
     const put = (store, val) => new Promise((res, rej) => { const t = db.transaction(store, 'readwrite'); t.objectStore(store).put(val); t.oncomplete = () => res(true); t.onerror = () => rej(t.error); });
     const getAll = (store) => new Promise((res, rej) => { const t = db.transaction(store, 'readonly'); const rq = t.objectStore(store).getAll(); rq.onsuccess = () => res(rq.result); rq.onerror = () => rej(rq.error); });
-    await put('games', { id: gid, pgn, white: 'Morphy', black: 'Allies', result: '1-0', date: '1858.11.02', event: 'Paris Opera', eco: 'C41', whiteElo: 1400, blackElo: 1200, source: 'chesscom', termination: 'checkmate', annotations: null, coachAnalysis: null, isMasterGame: false, openingId: null, fullyAnalyzed: false });
+    const white = side === 'white' ? 'Student' : 'Opponent';
+    const black = side === 'white' ? 'Opponent' : 'Student';
+    await put('games', { id: gid, pgn, white, black, result, date: '2026.07.20', event: 'Audit Sweep', eco: 'C41', whiteElo: 1400, blackElo: 1400, source: 'chesscom', termination: 'normal', annotations: null, coachAnalysis: null, isMasterGame: false, openingId: null, fullyAnalyzed: false });
     const profs = await getAll('profiles');
-    for (const p of profs) { p.preferences = p.preferences || {}; p.preferences.chessComUsername = 'Morphy'; p.preferences.coachNarration = 'full'; await put('profiles', p); }
+    for (const p of profs) { p.preferences = p.preferences || {}; p.preferences.chessComUsername = 'Student'; p.preferences.coachNarration = 'full'; await put('profiles', p); }
     return { profiles: profs.length };
-  }, { gid: GID, pgn: PGN }).catch((e) => ({ error: String(e) }));
+  }, { gid: GID, pgn: PGN, side: STUDENT_SIDE, result: RESULT }).catch((e) => ({ error: String(e) }));
   log(`[seed] ${JSON.stringify(seed)}`);
 
   await page.goto(`${BASE}/coach/review/${GID}`, { waitUntil: 'domcontentloaded', timeout: 45000 });
@@ -224,12 +232,20 @@ const run = async () => {
   const openingNamed = /pirc|modern|caro|sicilian|french|defen[cs]e|opening|game\b/i.test(summaryBody);
   add('R1 opening-named', openingNamed, openingNamed ? 'summary names the opening' : 'no opening name in summary');
 
-  // RES — result stated correctly (a WIN, never "draw"). The intro is spoken +
-  // the recap is in the summary body.
+  // RES — the STUDENT's outcome stated correctly (win / loss / draw), derived from
+  // the seeded result + the student's side. The intro is spoken + the recap is in
+  // the summary body.
+  const expected = RESULT === '1/2-1/2' ? 'draw'
+    : (RESULT === '1-0') === (STUDENT_SIDE === 'white') ? 'win' : 'loss';
   const introLine = voiceAll.find((l) => /let's review your game|walk through this game/i.test(l)) || '';
-  const saysDraw = /\bdraw\b/i.test(introLine) || /ended in a draw|the game was a draw/i.test(summaryBody);
-  const saysWin = /a win|the student won|victory/i.test(introLine + ' ' + summaryBody);
-  add('RES result-correct', saysWin && !saysDraw, `intro="${introLine.slice(0, 80)}" saysWin=${saysWin} saysDraw=${saysDraw}`);
+  const blob = introLine + ' ' + summaryBody;
+  const saysDraw = /\bdraw\b/i.test(blob);
+  const saysWin = /a win|the student won|victory|you won/i.test(blob);
+  const saysLoss = /a loss|the student lost|you lost|defeat/i.test(blob);
+  const resOk = expected === 'draw' ? saysDraw
+    : expected === 'win' ? (saysWin && !saysDraw && !saysLoss)
+    : (saysLoss && !saysDraw && !saysWin);
+  add('RES result-correct', resOk, `expected=${expected} intro="${introLine.slice(0, 70)}" win=${saysWin} loss=${saysLoss} draw=${saysDraw}`);
 
   // R2 — own-side opening why-density >= 80% (student = White = ODD plies, 1..15).
   const studentOpening = plies.filter((p) => p.ply >= 1 && p.ply <= 15 && p.ply % 2 === 1);
