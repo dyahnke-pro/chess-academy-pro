@@ -155,13 +155,19 @@ const run = async () => {
 
   const plies = [];
   const s5runs = [];
+  const cardsFired = new Set();      // which interactive functions actually fired
+  const cardLog = [];                // per-encounter card firing record (for reading)
   let stuck = 0;
   let remountRecovered = false; // one-time SW-update re-mount recovery (see below)
   log('\n===== PLY-BY-PLY WALK =====');
   for (let step = 1; step <= 60; step++) {
     const before = (await plyNow()).n;
-    if ((await visibleCards()).length) {
+    const cardsHere = await visibleCards();
+    if (cardsHere.length) {
       const p = await plyNow();
+      cardsHere.forEach((c) => cardsFired.add(c));
+      cardLog.push({ ply: p.n, cards: cardsHere.slice() });
+      log(`  📋 CARD/POPUP at Ply ${p.n}: [${cardsHere.join(', ')}]`);
       const vBefore = voice ? voiceLines(voice).length : 0;
       if (await has(page, '[data-testid="discussion-reason-picker"]')) {
         await page.locator('[data-testid="discussion-reason-option"]').first().click({ timeout: 2000 }).catch(() => {});
@@ -223,6 +229,23 @@ const run = async () => {
 
   const voiceAll = voice ? voiceLines(voice).filter((l) => !/^dropped |^throttled /.test(l)) : [];
   const streamAfter = await pullAuditStream(Date.now() - 300000);
+
+  // ─── FULL SPOKEN TRANSCRIPT (read every word) ──────────────────────────────
+  // David 2026-07-20: "physically read each spoken word … make sure each function
+  // that should have fired did." Dump the COMPLETE spoken voice stream + a card /
+  // pop-up firing log + a function-coverage grid, so the experience is READ, not
+  // inferred from green gates.
+  if (voice) {
+    const rawAll = voiceLines(voice);
+    log('\n===== FULL SPOKEN TRANSCRIPT (every voice line, in order) =====');
+    rawAll.forEach((l, i) => log(`  ${String(i + 1).padStart(3)}. ${l}`));
+    log(`  [${rawAll.length} spoken lines total; ${rawAll.filter((l) => /^dropped |^throttled /.test(l)).length} dropped/throttled]`);
+  }
+  log('\n===== INTERACTIVE FUNCTIONS FIRED (pop-ups / cards / lines) =====');
+  if (cardLog.length === 0) log('  (no cards/pop-ups fired this game)');
+  cardLog.forEach((c) => log(`  Ply ${c.ply}: ${c.cards.join(', ')}`));
+  log(`  DISTINCT FUNCTIONS FIRED: [${[...cardsFired].sort().join(', ') || 'none'}]`);
+  s5runs.forEach((r) => log(`  §5 better-line playout @Ply ${r.ply}: fired=${r.fired}, ${r.lineCount} lines`));
 
   // ─── ASSERTIONS ────────────────────────────────────────────────────────────
   const results = [];
