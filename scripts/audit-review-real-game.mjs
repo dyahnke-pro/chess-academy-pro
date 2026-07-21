@@ -392,10 +392,15 @@ const run = async () => {
   // data-narration-source is stable: 'opening-plan' for the developing plan,
   // 'orientation' for the middlegame plan (majority race OR king-hunt — both
   // carry 'orientation'). That's the real "did the plan beat fire" signal.
+  // The plan beats can also ride the itinerary route (src='per-move') and the
+  // lead stems ROTATE per game seed ("Out of the opening…" / "Out of the King's
+  // Pawn Game…" / "…what the opening asks"), so match the register, not one stem.
   const openingPlan = plies.some((p) => p.src === 'opening-plan')
-    || plies.some((p) => /out of the opening|develop behind|claim the (centre|center)|develop.*castle/i.test(p.narr || ''));
+    || plies.some((p) => p.ply <= 14
+      && /out of the (opening|[A-Z][\w'’ -]+)|the opening asks|develop(ment)? behind|claim(ed)? the (centre|center)|natural plan|plan from here (runs|follows)|develop.*castle|castled?.*develop/i.test(p.narr || ''));
   const midPlan = plies.some((p) => p.src === 'orientation')
-    || plies.some((p) => /majority|opposite wings|pawn(s)? forward|push those|storm|stuck in the (centre|center|middle)|marooned in the (centre|center)|pile (on|up)|punish the lag|throw your pieces|open lines|before they (ever )?(castle|scurry|wriggle)/i.test(p.narr || ''));
+    || plies.some((p) => p.ply > 10
+      && /\b(the )?plan\b(?! from here runs)|majority|opposite wings|pawn(s)? forward|push those|storm|stuck in the (centre|center|middle)|marooned in the (centre|center)|pile (on|up)|punish the lag|throw your pieces|open lines|before they (ever )?(castle|scurry|wriggle)/i.test(p.narr || ''));
   add('PLAN both-beats', openingPlan && midPlan, `opening=${openingPlan} middlegame=${midPlan}`);
 
   // S5 — the better-line playout FIRED with a why on nearly every ply. A real

@@ -1956,10 +1956,16 @@ export async function generateReviewNarration(params: {
           REVIEW_HOUSE_VOICE_TIMEOUT_MS,
           new Map<number, string>(),
         );
+        // No spoken line may repeat verbatim across the walk (audit R10 — the
+        // model once shipped the identical quiet-ply line 10 plies apart despite
+        // the vary-every-line instruction). A duplicate keeps the deterministic
+        // template instead, which carries the ply's own move so it stays distinct.
+        const spokenLines = new Set<string>();
         for (const s of segments) {
           const w = warmed.get(s.ply);
-          if (!w || !s.narration) continue;
+          if (!w || !s.narration) { if (s.narration) spokenLines.add(s.narration.trim().toLowerCase()); continue; }
           const det = s.narration;
+          const isRepeat = spokenLines.has(w.trim().toLowerCase());
           // Accept the warmed (Danya-voiced) line ONLY if it (a) is board-accurate
           // — no piece attached to a square it doesn't occupy ("the pawn on b5 gets
           // taken" after a bishop landed there) — AND (b) KEEPS the load-bearing
@@ -1969,7 +1975,8 @@ export async function generateReviewNarration(params: {
           // away (audit 2026-07-20: the queen sac was once narrated as "a check").
           const keepsMate = !/\bcheckmate\b/i.test(det) || /\b(checkmate|mate)\b/i.test(w);
           const keepsSac = !/\bsacrific/i.test(det) || /\bsacrific/i.test(w);
-          if (keepsMate && keepsSac && narrationBoardAccurate(w, s.fenAfter)) s.narration = w;
+          if (!isRepeat && keepsMate && keepsSac && narrationBoardAccurate(w, s.fenAfter)) s.narration = w;
+          spokenLines.add(s.narration.trim().toLowerCase());
         }
       }
     } catch { /* keep the deterministic templates */ }

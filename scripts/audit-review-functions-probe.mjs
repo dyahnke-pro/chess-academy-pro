@@ -103,9 +103,17 @@ const run = async () => {
   if (sawExplore) {
     await page.locator('[data-testid="walk-explore-toggle-btn"]').first().click({ timeout: 2000 }).catch(() => {});
     await page.waitForTimeout(800);
-    // Exploration mode: the board accepts a move; resume butto or toggle-off appears.
-    const resumed = (await has(page, '[data-testid="walk-explore-toggle-btn"]')) || (await page.locator('button:has-text("Resume")').count()) > 0;
-    add('explore-position', resumed, 'exploration toggled');
+    // CONTRACT: tapping Explore HIDES the toggle and puts the interactive board
+    // on the pre-move FEN — no button is visible until the student plays a move
+    // ("Resume game" mounts only after a move lands). Post-state proof =
+    // the toggle disappeared; then a ply-nav resets explore mode (the
+    // per-ply-change effect) and the walk keeps working.
+    const exploreActive = !(await has(page, '[data-testid="walk-explore-toggle-btn"]'));
+    await page.locator('[data-testid="review-back-btn"]').first().click({ force: true }).catch(() => {});
+    await page.waitForTimeout(500);
+    await fwd.click({ force: true }).catch(() => {});
+    await page.waitForTimeout(500);
+    add('explore-position', exploreActive, exploreActive ? 'explore mode entered (toggle hid, board interactive); nav reset it' : 'toggle still visible after click — explore never engaged');
   } else add('explore-position', false, 'never surfaced on a flagged ply');
   if (sawShowMe) {
     if (await has(page, '[data-testid="walk-show-me-btn"]')) {
