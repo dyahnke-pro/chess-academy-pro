@@ -2497,7 +2497,12 @@ export async function voiceReviewLines(
         return `${i + 1}. ${it.fact}${tag}`;
       })
       .join('\n');
-  const maxTokens = Math.min(3000, 120 + usable.length * 70);
+  // Cover-all passages are multi-sentence (every fact in the bundle voiced), so
+  // they need far more room than the one-line default — a 2.4k cap truncated the
+  // batch and reverted the tail to raw bracket-facts (David 2026-07-20 diagnostic).
+  const maxTokens = opts.coverAll
+    ? Math.min(8000, 300 + usable.length * 230)
+    : Math.min(3000, 120 + usable.length * 70);
 
   try {
     const out = cfg.provider === 'anthropic'

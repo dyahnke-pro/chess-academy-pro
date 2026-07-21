@@ -892,6 +892,12 @@ export function buildReviewSegments(
   // message (David 2026-07-20). Fired ONCE, when there's a real edge with ≥2
   // concrete board-true assets to name.
   let assessmentShown = false;
+  // Uncapped-mode dedup: STATIC state facets (opening name, opening plan, the
+  // majority plan, the opponent-dev read) repeat identically move after move —
+  // pure noise. Emit each identical line ONCE; every DYNAMIC per-move facet
+  // (move/quality/tactic/loose/verdict/structure/king/sac/consequence) always
+  // fires (David 2026-07-20 diagnostic: "Philidor Defense" was said 33 times).
+  const emittedStaticFacets = new Set<string>();
   // Opponent-commentary dedup — name each target square at most once, and cap
   // the total so the lighter developing reads never spam (Danya comments the
   // opponent ~50-60% of moves, not every one).
@@ -972,6 +978,15 @@ export function buildReviewSegments(
         allSans: sansForRun,
         forcedRunStartPly: forcedRun ? forcedRun.startPly : null,
       });
+      // Drop an identical STATIC state facet already spoken on an earlier ply
+      // (opening / plan-opening / plan-middlegame / opp-dev); keep every dynamic
+      // per-move fact.
+      const kept = facets.filter((f) => {
+        if (!/^\[(opening|plan-opening|plan-middlegame|opp-dev)\]/.test(f)) return true;
+        if (emittedStaticFacets.has(f)) return false;
+        emittedStaticFacets.add(f);
+        return true;
+      });
       segments.push({
         ply: m.ply,
         moveNumber: fullMove,
@@ -984,8 +999,8 @@ export function buildReviewSegments(
         evalAfter: m.evaluation,
         bestMoveSan,
         bestMoveUci: m.bestMove,
-        narration: facets.length ? facets.join(' ') : null,
-        narrationSource: facets.length ? 'per-move' : null,
+        narration: kept.length ? kept.join(' ') : null,
+        narrationSource: kept.length ? 'per-move' : null,
       });
       try {
         const pc = new Chess(fenPair.fenBefore).move(m.san);

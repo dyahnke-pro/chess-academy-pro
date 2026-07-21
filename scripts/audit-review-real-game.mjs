@@ -332,18 +332,34 @@ const run = async () => {
   // on) must NOT claim a material windfall. An even recapture nets ~0 (David
   // 2026-07-20: "Qxf3 nets three points" on an even trade). Board-truth from the
   // move list; the SEE-gated material calc should make this hold.
+  // Only a GENUINE EVEN trade (recaptured piece == originally-captured piece in
+  // value) may not claim "wins N" — an UNEVEN recapture (a sac recapture that wins
+  // a bigger piece, or winning the exchange) legitimately nets material and MAY say
+  // so (David 2026-07-20 diagnostic: cxb5/Rxd7 win knight-for-pawn = a real +2, not
+  // a windfall). Replay to read each capture's victim value; flag only even trades.
+  const PIECE_VAL = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+  const victimVal = new Array(SANS.length).fill(null);
+  {
+    const rc = new Chess();
+    for (let i = 0; i < SANS.length; i++) {
+      const to = SANS[i].replace(/[+#]/g, '').slice(-2);
+      const occ = /[a-h][1-8]/.test(to) ? rc.get(to) : null;
+      try { const mv = rc.move(SANS[i]); if (mv && mv.captured) victimVal[i] = PIECE_VAL[mv.captured] ?? 0; else if (occ) victimVal[i] = PIECE_VAL[occ.type] ?? 0; } catch { break; }
+    }
+  }
   const windfalls = [];
   for (let i = 1; i < SANS.length; i++) {
     if (!SANS[i - 1].includes('x') || !SANS[i].includes('x')) continue;
     const prevTo = SANS[i - 1].replace(/[+#]/g, '').slice(-2);
     const curTo = SANS[i].replace(/[+#]/g, '').slice(-2);
     if (prevTo !== curTo) continue;            // not a recapture on the same square
+    if (victimVal[i] != null && victimVal[i - 1] != null && victimVal[i] !== victimVal[i - 1]) continue; // UNEVEN recapture — a legit material gain, not a windfall
     const p = plies.find((x) => x.ply === i + 1);
     if (p && /wins?\s+\d+\s+point|nets?\s+\d+\s+point|\d+\s+points?\s+of\s+material|point\s+richer|grabs?\s+\d/i.test(p.narr || '')) {
       windfalls.push(`ply ${i + 1} ${SANS[i]}: "${(p.narr || '').slice(0, 50)}"`);
     }
   }
-  add('NOWINDFALL recapture-not-a-win', windfalls.length === 0, windfalls.length ? windfalls.slice(0, 3).join(' | ') : 'no recapture claimed a material windfall');
+  add('NOWINDFALL recapture-not-a-win', windfalls.length === 0, windfalls.length ? windfalls.slice(0, 3).join(' | ') : 'no even-trade recapture claimed a material windfall');
 
   // TEACHSAC — a sacrifice must TEACH its compensation, not just be named (David
   // 2026-07-20, narrating->teaching). If any line names a sacrifice, some line in

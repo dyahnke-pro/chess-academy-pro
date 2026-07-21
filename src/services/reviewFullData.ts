@@ -89,7 +89,9 @@ export function computeMoveFacets(ctx: MoveFactContext): string[] {
   } catch { /* ignore */ }
 
   // ── 4. POSITIONAL VERDICT + THE FULL ASSET LIST (no cap) ──
-  if (studentColorWB) {
+  // Skip on a mating move — "checkmate" is the verdict, not "you're balanced"
+  // (the eval at the mated position reads 0/odd). The mate is named by [move].
+  if (studentColorWB && !san.includes('#')) {
     const assess = assessPositionalEdge(fenAfter, studentColorWB, studentPovCp);
     if (assess.verdict) {
       const why = assess.reasons.length ? `: ${assess.reasons.join('; ')}` : '';
@@ -144,8 +146,13 @@ export function computeMoveFacets(ctx: MoveFactContext): string[] {
   if (studentColorWB) {
     const dev = buildOpeningDevelopmentPlan(fenAfter, studentColorWB, {});
     if (dev) facets.push(`[plan-opening] ${dev.text}`);
-    const orient = buildMiddlegameOrientation(fenAfter, studentColorWB);
-    if (orient) facets.push(`[plan-middlegame] ${orient.text}`);
+    // A slow "advance your majority" plan is a NON-APPLICABLE reason while the
+    // enemy king is exposed in the centre — that's a king-hunt, not a majority
+    // grind (David 2026-07-20 diagnostic: it fired every move of a mating attack).
+    if (!enemyKingStuckInCenter(fenAfter, studentColorWB)) {
+      const orient = buildMiddlegameOrientation(fenAfter, studentColorWB);
+      if (orient) facets.push(`[plan-middlegame] ${orient.text}`);
+    }
   }
 
   // ── 10. OPENING IDENTITY (the named line so far) ──
