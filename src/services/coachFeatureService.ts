@@ -1660,21 +1660,39 @@ async function augmentWithProjections(
 async function groundOpeningPlanInBook(segments: ReviewMoveSegment[]): Promise<void> {
   const seg = segments.find((s) => s.narrationSource === 'opening-plan' && s.planArrows && s.planArrows.length > 0);
   if (!seg) return;
-  const line = await raceTimeout(walkBookLine(seg.fenBefore, { maxPlies: 8, minGames: 5 }), 6000, [] as Awaited<ReturnType<typeof walkBookLine>>);
-  if (!line || line.length < 2) return;
   const HOME = new Set(['b1', 'g1', 'b8', 'g8', 'c1', 'f1', 'c8', 'f8']);
-  const targets = new Map<string, { to: string; piece: string }>();
-  let fen = seg.fenBefore;
-  for (const p of line) {
-    try {
-      const c = new Chess(fen);
-      const mv = c.move(p.san);
-      if (!mv) break;
-      fen = p.fenAfter;
-      if (HOME.has(mv.from) && (mv.piece === 'n' || mv.piece === 'b') && !targets.has(mv.from)) {
-        targets.set(mv.from, { to: mv.to, piece: mv.piece === 'n' ? 'knight' : 'bishop' });
-      }
-    } catch { break; }
+  const collect = (steps: Array<{ san: string; fenAfter: string }>): Map<string, { to: string; piece: string }> => {
+    const targets = new Map<string, { to: string; piece: string }>();
+    let fen = seg.fenBefore;
+    for (const p of steps) {
+      try {
+        const c = new Chess(fen);
+        const mv = c.move(p.san);
+        if (!mv) break;
+        fen = p.fenAfter;
+        if (HOME.has(mv.from) && (mv.piece === 'n' || mv.piece === 'b') && !targets.has(mv.from)) {
+          targets.set(mv.from, { to: mv.to, piece: mv.piece === 'n' ? 'knight' : 'bishop' });
+        }
+      } catch { break; }
+    }
+    return targets;
+  };
+  // SOURCE 1 — the masters DB (the same aggregates the theory lecture reads).
+  const line = await raceTimeout(walkBookLine(seg.fenBefore, { maxPlies: 8, minGames: 5 }), 6000, [] as Awaited<ReturnType<typeof walkBookLine>>);
+  let targets = line && line.length >= 2 ? collect(line) : new Map<string, { to: string; piece: string }>();
+  let source: 'book' | 'engine' = 'book';
+  // SOURCE 2 — the ENGINE's PV from this exact position (David 2026-07-21:
+  // "What if we don't have a book?"). Master coverage runs thin past ~move 12
+  // and in offbeat lines; without this fallback the plan silently reverted to
+  // the hardcoded natural-squares template — the exact f3-vs-e2 contradiction
+  // machinery. The engine's line is position-true and always available; the
+  // spoken clause labels it honestly as the engine's scheme, never "the book".
+  if (targets.size === 0) {
+    const pv = await raceTimeout(computePvLine(seg.fenBefore, { maxPlies: 8 }), 7000, null);
+    if (pv && pv.plies.length >= 2) {
+      targets = collect(pv.plies.map((p) => ({ san: p.san, fenAfter: p.fenAfter })));
+      source = 'engine';
+    }
   }
   if (targets.size === 0) return;
   const corrected: string[] = [];
@@ -1683,13 +1701,15 @@ async function groundOpeningPlanInBook(segments: ReviewMoveSegment[]): Promise<v
     if (t && t.to !== a.endSquare) { corrected.push(a.startSquare); return { ...a, endSquare: t.to }; }
     return a;
   });
-  // SPEAK the book's scheme — position-specific, agrees with the theory lecture,
-  // and varies per game (another nail in the "same response every time" coffin).
+  // SPEAK the scheme — position-specific, agrees with the theory lecture where
+  // the book covers it, and varies per game.
   const spoken = [...targets.entries()].slice(0, 2)
     .map(([from, t]) => `the ${from}-${t.piece} to ${t.to}`)
     .join(' and ');
   if (spoken) {
-    seg.narration = `${seg.narration ?? ''} In this exact structure the book develops ${spoken} — that's the scheme the master games follow here.`.trim();
+    seg.narration = source === 'book'
+      ? `${seg.narration ?? ''} In this exact structure the book develops ${spoken} — that's the scheme the master games follow here.`.trim()
+      : `${seg.narration ?? ''} We're past the master book here, so trust the engine's scheme: from this exact position it develops ${spoken}.`.trim();
   }
 }
 
