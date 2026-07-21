@@ -184,16 +184,37 @@ const run = async () => {
       if (await has(page, '[data-testid="discussion-reason-picker"]')) {
         await page.locator('[data-testid="discussion-reason-option"]').first().click({ timeout: 2000 }).catch(() => {});
         for (let d = 0; d < 24; d++) { const x = page.locator('[data-testid="explanation-card"] button[aria-label="Dismiss"]').first(); if (await x.count()) { await x.click({ timeout: 2000 }).catch(() => {}); break; } await page.waitForTimeout(750); }
-        await page.waitForTimeout(11000); // §5 playout: computePvLine + batch-warm + per-ply voice
+        // §5 playout = computePvLine (Stockfish PV) + batch-warm (LLM voicing) +
+        // per-ply voice. Under UNCAPPED audit load the provider is saturated, so a
+        // fixed 11s window measured the walk before its lines landed (David
+        // 2026-07-20: "an audit is not passed by hand waving" — but nor failed by a
+        // too-tight window). POLL up to ~34s for the "stronger line" walk to
+        // deliver its ≥4 lines instead of a blind wait; stop early once it fires.
         if (voice) {
-          const playout = voiceLines(voice).slice(vBefore);
+          let playout = [];
+          for (let w = 0; w < 34; w++) {
+            playout = voiceLines(voice).slice(vBefore);
+            if (playout.some((l) => /stronger line/i.test(l)) && playout.length >= 4) break;
+            await page.waitForTimeout(1000);
+          }
           const fired = playout.some((l) => /stronger line/i.test(l));
           s5runs.push({ ply: p.n, fired, lineCount: playout.length, lines: playout });
           log(`  >> §5 PLAYOUT at Ply ${p.n}: fired=${fired}, ${playout.length} lines`);
           playout.forEach((l) => log(`       · ${l}`));
         }
       }
-      if (await has(page, '[data-testid="review-find-shot-card"]')) { await page.locator('[data-testid="review-find-shot-hint"]').first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(600); for (const sel of ['[data-testid="review-find-shot-continue"]', '[data-testid="review-find-shot-skip"]']) { if (await has(page, sel)) { await page.locator(sel).first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(400); break; } } }
+      if (await has(page, '[data-testid="review-find-shot-card"]')) {
+        // Tap Hint up the ladder until the REVEAL (with its Continue button) shows,
+        // then click CONTINUE — handleShotContinue is what chains into the
+        // spot-the-sequence card (handleShotSkip does NOT). David 2026-07-20:
+        // "different lines" — drive find-shot → sequence, don't just skip it.
+        for (let h = 0; h < 4 && !(await has(page, '[data-testid="review-find-shot-continue"]')); h++) {
+          if (await has(page, '[data-testid="review-find-shot-hint"]')) { await page.locator('[data-testid="review-find-shot-hint"]').first().click({ timeout: 1500 }).catch(() => {}); }
+          await page.waitForTimeout(700);
+        }
+        if (await has(page, '[data-testid="review-find-shot-continue"]')) { await page.locator('[data-testid="review-find-shot-continue"]').first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(1200); }
+        else if (await has(page, '[data-testid="review-find-shot-skip"]')) { await page.locator('[data-testid="review-find-shot-skip"]').first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(400); }
+      }
       // §4 type-not-move: pick a type, dismiss the reveal (like a human).
       // §4 trap: commit the right call ("leave it"), dismiss the reveal.
       if (await has(page, '[data-testid="review-trap-card"]')) { trapCardFired = true; await page.locator('[data-testid="review-trap-pick-leave"]').first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(700); if (await has(page, '[data-testid="review-trap-done"]')) { await page.locator('[data-testid="review-trap-done"]').first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(300); } }
@@ -209,7 +230,22 @@ const run = async () => {
     const src = await page.locator('[data-testid="review-narration-banner"]').first().getAttribute('data-narration-source').catch(() => '') || '';
     if (!plies.some((x) => x.ply === p.n)) plies.push({ ply: p.n, badge, narr, src });
     log(`  Ply ${String(p.n).padStart(2)}/${p.total} [${(badge || '-').padEnd(10)}] ${narr || '(silent)'}`);
-    if (p.n >= p.total && p.total > 0) { log(`  (reached end)`); break; }
+    if (p.n >= p.total && p.total > 0) {
+      // END-OF-WALK CARDS — the turning-point question fires AT the last ply, so it
+      // appears only AFTER the final advance; the loop used to break here before
+      // ever checking for it (David 2026-07-20: "each function that should have
+      // fired"). Give it a beat to mount, then DRIVE it (pick a candidate → reveal
+      // → done) so the pop-up is actually exercised, not skipped.
+      await page.waitForTimeout(1500);
+      const endCards = await visibleCards();
+      if (endCards.length) { endCards.forEach((c) => cardsFired.add(c)); cardLog.push({ ply: p.n, cards: endCards.slice() }); log(`  📋 END CARD/POPUP: [${endCards.join(', ')}]`); }
+      if (await has(page, '[data-testid="review-turning-point-card"]')) {
+        await page.locator('[data-testid="review-turning-point-confirm"]').first().click({ timeout: 1500 }).catch(() => {});
+        await page.waitForTimeout(700);
+        if (await has(page, '[data-testid="review-turning-point-done"]')) { await page.locator('[data-testid="review-turning-point-done"]').first().click({ timeout: 1500 }).catch(() => {}); }
+      }
+      log(`  (reached end)`); break;
+    }
     stuck = p.n === before ? stuck + 1 : 0;
     if (stuck === 3) {
       // DIAGNOSTIC (2026-07-20): dump what's blocking forward at the stall.
@@ -463,13 +499,20 @@ const run = async () => {
     }
     // TEACHWHY — the marquee keystone must teach the MECHANISM (the WHY it works),
     // not just name the sac + its compensation (David 2026-07-20: "where is the
-    // teaching moment, the why? one sentence per move doesn't cover it"). On a game
-    // that finishes with a mating sacrifice, some line must explain the concrete
-    // mechanism: a line-clearance/deflection ("drags the ... off / swings open /
-    // crashes down") or a king-shield removal ("tear ... away from beside their
-    // king"). Multi-sentence, board-true.
-    const whyTaught = plies.some((p) => /why it works|drags the .*off|swings (wide )?open|crashes down to|tear the .*away from beside|the \w+-file swings/i.test(p.narr || ''));
-    add('TEACHWHY mechanism-taught', whyTaught, whyTaught ? 'the keystone sac teaches its mechanism (the why)' : 'a mating sac was named but its mechanism/why was never explained');
+    // teaching moment, the why? one sentence per move doesn't cover it"). The
+    // mechanism DEPENDS ON THE MATE TYPE, so accept whichever applies:
+    //  • line-clearance / deflection sac ("drags the … off / swings open / crashes
+    //    down") or king-shield removal ("tear … away from beside their king") — the
+    //    Opera / Immortal motif; OR
+    //  • the mating move's own named tactic when the mate is DIRECT, not a
+    //    deflection sac — a skewer / fork / pin / discovered / back-rank mate
+    //    (blackwin: Rh1# is a skewer, "the rook pins the king to the rook behind
+    //    it"). Demanding the deflection regex on a skewer mate is a false fail —
+    //    naming the skewer IS teaching that mate's why (David 2026-07-20 sweep).
+    // Either way it must be a concrete, board-true mechanism, never bare "it's mate".
+    const mechRe = /why it works|drags the .*off|swings (wide )?open|crashes down to|tear the .*away from beside|the \w+-file swings|skewer|a fork|forking|pins the king|back.?rank|discovered (check|attack)/i;
+    const whyTaught = plies.some((p) => mechRe.test(p.narr || ''));
+    add('TEACHWHY mechanism-taught', whyTaught, whyTaught ? 'the keystone mate teaches its mechanism (the why)' : 'a mate was reached but its mechanism/why was never explained');
   }
 
   // TEACHASSESS — the ENUMERATED positional verdict (David 2026-07-20 teaching

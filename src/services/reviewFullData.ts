@@ -49,6 +49,25 @@ export interface MoveFactContext {
 
 const PIECE_PTS: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 
+/** Board-truth: does the game end in checkmate delivered BY the student? Replays
+ *  the SANs (glyph-independent — uses isCheckmate, not '#') and checks whether the
+ *  side that made the final, mating move is the student's color. Used to suppress a
+ *  shallow "inaccuracy" grade on the student's own forced-mate moves. */
+function matingSideIsStudent(sans: string[], studentColorWB: Color | null): boolean {
+  if (!studentColorWB || sans.length === 0) return false;
+  try {
+    const c = new Chess();
+    for (const s of sans) c.move(s);
+    if (!c.isCheckmate()) return false;
+    // The side to move at a checkmate is the mated side; the mover was the other.
+    const matedSide = c.turn(); // 'w' | 'b'
+    const matingSide: Color = matedSide === 'w' ? 'b' : 'w';
+    return matingSide === studentColorWB;
+  } catch {
+    return false;
+  }
+}
+
 /**
  * Every computed facet for this move, ordered, each a prose clause. The uncapped
  * review joins them into the move's narration. This function IS the data inventory.
@@ -71,7 +90,20 @@ export function computeMoveFacets(ctx: MoveFactContext): string[] {
   const swing = ctx.evaluation != null && ctx.preMoveEval != null
     ? Math.abs(ctx.evaluation - ctx.preMoveEval)
     : null;
-  if (ctx.classification && ctx.classification !== 'good' && ctx.classification !== 'book') {
+  // SUPPRESS a NEGATIVE classification on the student's own move when that move is
+  // part of the forced mating run the STUDENT delivers (David 2026-07-20 opera
+  // ply-29 bug): 15.Bxd7+ starts a forced mate (…Nxd7 Qb8+ Nxb8 Rd8#) yet a
+  // shallow analysis grades it an "inaccuracy" (it sees the sacked bishop before
+  // the mate-in-3). Calling a mating move an inaccuracy is false teaching. A
+  // GREAT/BRILLIANT label inside the run is real and stays; only inaccuracy/
+  // mistake/blunder on the winning side's move is the depth artifact we drop.
+  const negativeClass = ctx.classification === 'inaccuracy' || ctx.classification === 'mistake' || ctx.classification === 'blunder';
+  const insideStudentForcedMate = isStudent
+    && negativeClass
+    && ctx.forcedRunStartPly != null
+    && ctx.ply >= ctx.forcedRunStartPly
+    && matingSideIsStudent(ctx.allSans, studentColorWB);
+  if (ctx.classification && ctx.classification !== 'good' && ctx.classification !== 'book' && !insideStudentForcedMate) {
     const swingBit = swing != null ? ` (eval swung ${(swing / 100).toFixed(1)})` : '';
     const betterBit = ctx.bestMoveSan ? ` — the stronger move was ${ctx.bestMoveSan}` : '';
     // CARRY THE MOVER'S SUBJECT (David 2026-07-20 opera-ply-14 bug): a quiet move

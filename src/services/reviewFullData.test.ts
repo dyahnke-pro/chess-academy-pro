@@ -70,6 +70,33 @@ describe('computeMoveFacets (David 2026-07-20 — uncapped full-data inventory)'
     expect(quality).toMatch(/^\[quality\] You:/);
   });
 
+  it('does NOT grade the student\'s forced-mate move an inaccuracy (opera ply-29 bug)', () => {
+    // 15.Bxd7+ starts the Opera forced mate (…Nxd7 Qb8+ Nxb8 Rd8#); a shallow
+    // analysis mis-grades it "inaccuracy". Inside the student's own forced mate,
+    // that negative [quality] must be suppressed — no [quality] facet at all.
+    const OPERA = ['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5', 'Bxf3', 'Qxf3', 'dxe5', 'Bc4', 'Nf6', 'Qb3', 'Qe7', 'Nc3', 'c6', 'Bg5', 'b5', 'Nxb5', 'cxb5', 'Bxb5+', 'Nbd7', 'O-O-O', 'Rd8', 'Rxd7', 'Rxd7', 'Rd1', 'Qe6', 'Bxd7+', 'Nxd7', 'Qb8+', 'Nxb8', 'Rd8#'];
+    const fens = fensAfter(OPERA);
+    const ply = 29; // 15.Bxd7+ (White, the student)
+    const facets = computeMoveFacets({
+      fenBefore: fens[ply - 2], fenAfter: fens[ply - 1], san: 'Bxd7+', ply,
+      moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
+      evaluation: 20, preMoveEval: 620, classification: 'inaccuracy', bestMoveSan: 'Qb8+',
+      prevCap: { square: null, capturedValue: 0 }, allSans: OPERA, forcedRunStartPly: 29,
+    });
+    expect(facets.find((f) => f.startsWith('[quality]'))).toBeUndefined();
+  });
+
+  it('STILL grades a losing student move outside a forced mate (guard is scoped)', () => {
+    const fens = fensAfter(SICILIAN_IQP);
+    const facets = computeMoveFacets({
+      fenBefore: fens[18], fenAfter: fens[19], san: 'Nc6', ply: 20,
+      moverColor: 'black', playerColor: 'black', studentColorWB: 'b',
+      evaluation: 20, preMoveEval: 300, classification: 'mistake', bestMoveSan: 'Nd7',
+      prevCap: { square: null, capturedValue: 0 }, allSans: SICILIAN_IQP, forcedRunStartPly: null,
+    });
+    expect(facets.find((f) => f.startsWith('[quality]'))).toBeDefined();
+  });
+
   it('every facet is bracket-tagged prose (the inventory shape)', () => {
     const fens = fensAfter(SICILIAN_IQP);
     const facets = computeMoveFacets({
