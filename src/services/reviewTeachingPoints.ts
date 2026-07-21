@@ -338,3 +338,133 @@ export function explainTemptingCapture(fen: string, chosenSan: string): string |
     return null;
   }
 }
+
+/**
+ * NOTABLE-MOVE TEACHER (David 2026-07-21, IMG_4570: "Still too many moves passing
+ * without narration, for both sides. I feel like Danya would have said something
+ * about this ambitious pawn push"). Fires on moves that CHANGE THE GAME'S SHAPE
+ * yet would otherwise pass silently — for EITHER side. Fully computed:
+ *  • an AMBITIOUS WING PUSH — a flank pawn crossing into rank 4+ (mover's POV):
+ *    names the space gained, the exact squares it no longer guards, and whether
+ *    it's committal (own king uncastled or on that wing) or a storm (enemy king
+ *    on that wing);
+ *  • a CENTRAL BREAK — a d/e-pawn move that creates direct pawn contact.
+ * Null on ordinary moves (empty > generic).
+ */
+export function describeNotableMove(fenBefore: string, san: string, moverIsStudent: boolean): string | null {
+  try {
+    const before = new Chess(fenBefore);
+    const mv = before.move(san);
+    if (!mv) return null;
+    const mover = mv.color;
+    const enemy: Color = mover === 'w' ? 'b' : 'w';
+    const subj = moverIsStudent ? 'you' : 'your opponent';
+    const poss = moverIsStudent ? 'your' : 'their';
+    if (mv.piece !== 'p' || mv.captured) return null;
+    const file = mv.to[0];
+    const toRank = Number(mv.to[1]);
+    const rankFromMoverPov = mover === 'w' ? toRank : 9 - toRank;
+    const after = new Chess(fenBefore); after.move(san);
+    const board = after.board().flat().filter((p): p is NonNullable<typeof p> => p !== null);
+
+    // CENTRAL BREAK: d/e-pawn move that lands in direct contact with an enemy pawn.
+    if ((file === 'd' || file === 'e') && rankFromMoverPov >= 4) {
+      const dir = mover === 'w' ? 1 : -1;
+      const contact = ['-1', '1'].some((df) => {
+        const f = String.fromCharCode(file.charCodeAt(0) + Number(df));
+        const sq = `${f}${toRank + dir}`;
+        const p = board.find((x) => x.square === sq);
+        return !!p && p.type === 'p' && p.color === enemy;
+      });
+      if (contact) {
+        return `${subj === 'you' ? 'You strike' : 'Your opponent strikes'} in the centre with ${san} — the pawns are touching now, and every exchange here opens lines. Breaks like this are how the position's character gets decided.`;
+      }
+      return null;
+    }
+
+    // AMBITIOUS WING PUSH: flank pawn (a-c or f-h) reaching rank 4+ from the
+    // mover's POV. Compute the squares the pawn used to guard and no longer does.
+    const isWing = 'abc'.includes(file) || 'fgh'.includes(file);
+    if (!isWing || rankFromMoverPov < 4) return null;
+    const travelled = Math.abs(Number(mv.to[1]) - Number(mv.from[1]));
+    if (travelled < 2 && rankFromMoverPov < 5) return null; // one quiet step, not yet ambitious
+    const dir = mover === 'w' ? 1 : -1;
+    const fromRank = Number(mv.from[1]);
+    const weakened: string[] = [];
+    for (const df of [-1, 1]) {
+      const f = String.fromCharCode(file.charCodeAt(0) + df);
+      if (f < 'a' || f > 'h') continue;
+      const sq = `${f}${fromRank + dir}`;
+      // Weakened if no other own pawn can still guard that square.
+      const stillGuarded = board.some((p) => p.type === 'p' && p.color === mover
+        && Math.abs(p.square.charCodeAt(0) - sq.charCodeAt(0)) === 1
+        && Number(p.square[1]) + dir === Number(sq[1]));
+      if (!stillGuarded) weakened.push(sq);
+    }
+    const wing = 'abc'.includes(file) ? 'queenside' : 'kingside';
+    const myKing = board.find((p) => p.type === 'k' && p.color === mover);
+    const theirKing = board.find((p) => p.type === 'k' && p.color === enemy);
+    const kingWingOf = (sq: string | undefined): string | null => !sq ? null : ('abc'.includes(sq[0]) ? 'queenside' : 'fgh'.includes(sq[0]) ? 'kingside' : 'centre');
+    const myWing = kingWingOf(myKing?.square);
+    const theirWing = kingWingOf(theirKing?.square);
+    const parts: string[] = [];
+    parts.push(`${subj === 'you' ? 'You throw' : 'Your opponent throws'} the ${file}-pawn forward — an ambitious ${wing} push that grabs space`);
+    if (theirWing === wing) parts.push(`and points a pawn storm at ${subj === 'you' ? 'their' : 'your'} king`);
+    if (weakened.length) parts.push(`. The price: ${weakened.join(' and ')} ${weakened.length === 1 ? 'is' : 'are'} no longer guarded by a pawn — ${poss} own camp is looser behind it`);
+    if (myWing === 'centre') parts.push(`, and ${poss} king is still in the middle, so it's a real commitment`);
+    else if (myWing === wing) parts.push(`, and it's the wing ${poss} own king lives on — pushing those pawns thins the king's cover`);
+    return `${parts.join('')}.`;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * CONCESSION TEACHER (David 2026-07-21, IMG_4571: "What serious positional
+ * concessions have been made? What are the ramifications of this move?"). For a
+ * flagged move, name the LASTING damage it caused — computed by diffing the
+ * position before/after from the mover's side:
+ *  • king-shield pawns lost or advanced (the king's cover thinned);
+ *  • a new enemy PASSED pawn granted;
+ *  • the mover's pawn islands increasing (structure splintered);
+ *  • squares the moved pawn used to guard, now permanently unguardable.
+ * Returns a compact clause or null when no structural concession shows.
+ */
+export function describeConcessions(fenBefore: string, san: string, moverIsStudent: boolean): string | null {
+  try {
+    const b = new Chess(fenBefore);
+    const mv = b.move(san);
+    if (!mv) return null;
+    const mover = mv.color;
+    const enemy: Color = mover === 'w' ? 'b' : 'w';
+    const poss = moverIsStudent ? 'your' : 'their';
+    const before = new Chess(fenBefore);
+    const after = new Chess(fenBefore); after.move(san);
+    const sB = describeStructure(fenBefore);
+    const sA = describeStructure(after.fen());
+    const out: string[] = [];
+    // King shield: pawns on the 3 files around the king, within 2 ranks in front.
+    const shield = (chess: Chess, color: Color): number => {
+      const all = chess.board().flat().filter((p): p is NonNullable<typeof p> => p !== null);
+      const king = all.find((p) => p.type === 'k' && p.color === color);
+      if (!king) return 0;
+      const kf = king.square.charCodeAt(0); const kr = Number(king.square[1]);
+      const dir = color === 'w' ? 1 : -1;
+      return all.filter((p) => p.type === 'p' && p.color === color
+        && Math.abs(p.square.charCodeAt(0) - kf) <= 1
+        && (Number(p.square[1]) - kr) * dir >= 1 && (Number(p.square[1]) - kr) * dir <= 2).length;
+    };
+    const shieldB = shield(before, mover); const shieldA = shield(after, mover);
+    if (shieldA < shieldB) out.push(`${poss} king's pawn cover thinned (${shieldB} shield pawns down to ${shieldA})`);
+    if (sB && sA) {
+      const passB = sB.pawns.passedPawns[enemy].length; const passA = sA.pawns.passedPawns[enemy].length;
+      if (passA > passB) out.push(`it hands the opponent a passed pawn on ${sA.pawns.passedPawns[enemy].find((p) => !sB.pawns.passedPawns[enemy].includes(p)) ?? sA.pawns.passedPawns[enemy][0]}`);
+      const isoB = sB.pawns.isolatedPawns[mover].length; const isoA = sA.pawns.isolatedPawns[mover].length;
+      if (isoA > isoB) out.push(`${poss} pawn structure splinters — a new isolated pawn on ${sA.pawns.isolatedPawns[mover].find((p) => !sB.pawns.isolatedPawns[mover].includes(p)) ?? sA.pawns.isolatedPawns[mover][0]}`);
+    }
+    if (out.length === 0) return null;
+    return `The lasting concession: ${out.join('; ')}.`;
+  } catch {
+    return null;
+  }
+}

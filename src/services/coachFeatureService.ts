@@ -14,6 +14,8 @@ import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShi
 import { detectForcedMatingSequence, explainMatingSacMechanism } from './reviewForcedSequence';
 import { assessPositionalEdge } from './reviewPositionalAssessment';
 import { computeMoveFacets, computeThroughLine } from './reviewFullData';
+import { describeNotableMove, describeConcessions } from './reviewTeachingPoints';
+import { walkBookLine } from './theoryDeparture';
 import { detectBadHabits } from './badHabitDetector';
 import { db } from '../db/schema';
 import { voiceFacts, voiceReviewLines } from './coachApi';
@@ -871,6 +873,10 @@ export function buildReviewSegments(
 ): ReviewMoveSegment[] {
   // Curated, opening-specific ideas for the dev-plan beat (null → uncurated).
   const curatedOpeningIdeas = resolveCuratedOpeningIdeas(openingName ?? null);
+  // Per-GAME seed (stable within a game, different across games) — rotates the
+  // dev-plan's lead idea + stem so the same opening never reads as the same
+  // recording every game (David 2026-07-21: "the same response every time").
+  const gameSeed = moves.reduce((a, m) => (a * 31 + m.san.charCodeAt(0)) >>> 0, moves.length >>> 0);
   // §1 piece-route itineraries — the student's REAL reroutes in this game
   // ("f3–d2–c4"), keyed by the ply the maneuver completes (G3, from the moves).
   const pieceItineraries = playerColor
@@ -1038,6 +1044,15 @@ export function buildReviewSegments(
       const why = explainBestMoveGrounded(fenPair.fenBefore, m.san, m.bestMove, moverColor);
       if (why) narration = `${narration} ${why}`;
     }
+    // THE LASTING CONCESSION (David 2026-07-21, IMG_4571: "What serious
+    // positional concessions have been made? What are the ramifications of this
+    // move?"). Name the structural damage the flagged move caused — computed
+    // diff (king shield thinned, passer granted, structure splintered). Both
+    // sides: your concession is the lesson, theirs is the target.
+    if (narration && (m.classification === 'mistake' || m.classification === 'blunder' || m.classification === 'inaccuracy')) {
+      const concession = describeConcessions(fenPair.fenBefore, m.san, playerColor ? moverColor === playerColor : !m.isCoachMove);
+      if (concession) narration = `${narration} ${concession}`;
+    }
     // Don't scold a near-FORCED recapture the engine only dings as an inaccuracy/
     // mistake (David 2026-07-20 Opera nitpick: the loser's forced takes-back got
     // "Qb4+ was the try" nags). If this move recaptures on the square the opponent
@@ -1189,7 +1204,7 @@ export function buildReviewSegments(
       && m.ply <= OPENING_PLAN_MAX_PLY
       && (m.classification === null || m.classification === 'book' || m.classification === 'good')
     ) {
-      const dev = buildOpeningDevelopmentPlan(fenPair.fenBefore, studentColorWB, { openingName: openingName ?? null, curatedIdeas: curatedOpeningIdeas });
+      const dev = buildOpeningDevelopmentPlan(fenPair.fenBefore, studentColorWB, { openingName: openingName ?? null, curatedIdeas: curatedOpeningIdeas, seed: gameSeed });
       if (dev) { narration = dev.text; planArrows = dev.arrows; openingPlanShown = true; narrationSource = 'opening-plan'; }
     }
     // (b) Middlegame orientation (structure anchor + both-sides plans), fired
@@ -1320,6 +1335,20 @@ export function buildReviewSegments(
       // far more moves so the walk stops going silent on eventful ones.
       narration = plyFactsForMove(fenPair.fenBefore, m.san, prevCap) ?? buildReviewMoveTeaching(fenPair.fenBefore, m.san);
       if (narration) narrationSource = 'per-move';
+    }
+    // NOTABLE MOVES — BOTH SIDES, ANY PHASE (David 2026-07-21, IMG_4570: "too
+    // many moves passing without narration, for both sides. I feel like Danya
+    // would have said something about this ambitious pawn push"). The per-move
+    // fallback above covers only the STUDENT's opening moves; an opponent's g4
+    // storm or a central break past the opening still passed silently. The
+    // detector is strict (wing pushes into rank 4+, central pawn contact), so
+    // this fires on shape-changing moves only, never as filler.
+    if (
+      narration === null
+      && (m.classification === null || m.classification === 'book' || m.classification === 'good')
+    ) {
+      const notable = describeNotableMove(fenPair.fenBefore, m.san, playerColor ? moverColor === playerColor : !m.isCoachMove);
+      if (notable) { narration = notable; narrationSource = 'per-move'; }
     }
     // §7 CONVERSION / ENDGAME: past the opening cap the walk was "badges only".
     // Name the mate PATTERN (back-rank / smothered) on the move that delivers
@@ -1541,7 +1570,15 @@ function raceTimeout<T>(p: Promise<T>, ms: number, fallback: T): Promise<T> {
  * flat); the projected facets are bracket-tagged so the cover-all voice pass
  * speaks them. Mutates the segments in place.
  */
-async function augmentWithProjections(segments: ReviewMoveSegment[], studentColorWB: 'w' | 'b'): Promise<void> {
+async function augmentWithProjections(
+  segments: ReviewMoveSegment[],
+  studentColorWB: 'w' | 'b',
+  /** 'full' (uncapped diagnostic) runs all three passes; 'mistakes' (capped
+   *  production) runs ONLY the punishment pass on the student's flagged moves
+   *  (David 2026-07-21, IMG_4571: "How does white take advantage of this
+   *  mistake?" — production reviews need the ramification, not just the badge). */
+  scope: 'full' | 'mistakes' = 'full',
+): Promise<void> {
   const verdictWord = (studentPovCp: number | null): string => {
     if (studentPovCp === null) return 'the position stays balanced';
     if (studentPovCp >= 150) return "you're winning";
@@ -1556,8 +1593,28 @@ async function augmentWithProjections(segments: ReviewMoveSegment[], studentColo
     const studentPov = studentColorWB === 'w' ? whiteCp : -whiteCp;
     return `${sans} — and ${verdictWord(studentPov)}`;
   };
-  let budget = 3;
+  // Budget: 'full' (uncapped) needs room for punishment + plan + consequence;
+  // 'mistakes' (capped production) caps at 2 punishment lines per game so the
+  // review prep never stalls on Stockfish.
+  let budget = scope === 'full' ? 5 : 2;
   const PROJ_TIMEOUT_MS = 7000;
+
+  // #3 — PUNISHMENT projection on the student's mistakes/blunders: the engine PV
+  // from the position AFTER the flagged move IS the ramification — the concrete
+  // "here's how it gets taken advantage of" line the badge never showed (David
+  // 2026-07-21). Runs in BOTH scopes; in 'mistakes' scope it's the only pass.
+  const studentColorName = studentColorWB === 'w' ? 'white' : 'black';
+  for (const s of segments) {
+    if (budget <= 0) break;
+    if (s.playerColor !== studentColorName) continue;
+    if (s.classification !== 'mistake' && s.classification !== 'blunder') continue;
+    const line = await raceTimeout(computePvLine(s.fenAfter, { maxPlies: 6 }), PROJ_TIMEOUT_MS, null);
+    if (line && line.delivers && line.plies.length >= 2) {
+      s.narration = `${s.narration ?? ''} Here's how it gets punished from here: ${render(line)}.`.trim();
+      budget -= 1;
+    }
+  }
+  if (scope === 'mistakes') return;
 
   // #1 — plan realization from the plan's critical position. In uncapped mode
   // every segment's source is 'per-move', so find the plan ply by its FACET tag
@@ -1582,6 +1639,51 @@ async function augmentWithProjections(segments: ReviewMoveSegment[], studentColo
       s.narration = `${s.narration ?? ''} [consequence] Follow it up and it goes ${render(line)}.`.trim();
       budget -= 1;
     }
+  }
+}
+
+/**
+ * Ground the opening-plan beat's development targets in the MASTERS BOOK (G0 —
+ * the same source the theory lecture reads, so the two can never contradict;
+ * David 2026-07-21 IMG_4569: "the opening theory said the knight goes to e2,
+ * but now it says f3??"). Walks the book from the plan beat's position; wherever
+ * a home minor's book destination differs from the template arrow, the arrow is
+ * rewritten and the book squares are SPOKEN. Silent no-op when the position is
+ * out of book — the universal-square template is then the only claim standing.
+ */
+async function groundOpeningPlanInBook(segments: ReviewMoveSegment[]): Promise<void> {
+  const seg = segments.find((s) => s.narrationSource === 'opening-plan' && s.planArrows && s.planArrows.length > 0);
+  if (!seg) return;
+  const line = await raceTimeout(walkBookLine(seg.fenBefore, { maxPlies: 8, minGames: 5 }), 6000, [] as Awaited<ReturnType<typeof walkBookLine>>);
+  if (!line || line.length < 2) return;
+  const HOME = new Set(['b1', 'g1', 'b8', 'g8', 'c1', 'f1', 'c8', 'f8']);
+  const targets = new Map<string, { to: string; piece: string }>();
+  let fen = seg.fenBefore;
+  for (const p of line) {
+    try {
+      const c = new Chess(fen);
+      const mv = c.move(p.san);
+      if (!mv) break;
+      fen = p.fenAfter;
+      if (HOME.has(mv.from) && (mv.piece === 'n' || mv.piece === 'b') && !targets.has(mv.from)) {
+        targets.set(mv.from, { to: mv.to, piece: mv.piece === 'n' ? 'knight' : 'bishop' });
+      }
+    } catch { break; }
+  }
+  if (targets.size === 0) return;
+  const corrected: string[] = [];
+  seg.planArrows = seg.planArrows!.map((a) => {
+    const t = targets.get(a.startSquare);
+    if (t && t.to !== a.endSquare) { corrected.push(a.startSquare); return { ...a, endSquare: t.to }; }
+    return a;
+  });
+  // SPEAK the book's scheme — position-specific, agrees with the theory lecture,
+  // and varies per game (another nail in the "same response every time" coffin).
+  const spoken = [...targets.entries()].slice(0, 2)
+    .map(([from, t]) => `the ${from}-${t.piece} to ${t.to}`)
+    .join(' and ');
+  if (spoken) {
+    seg.narration = `${seg.narration ?? ''} In this exact structure the book develops ${spoken} — that's the scheme the master games follow here.`.trim();
   }
 }
 
@@ -1684,11 +1786,21 @@ export async function generateReviewNarration(params: {
   // — Stockfish-projected teaching, uncapped-diagnostic only (bounded budget +
   // timeout so it never stalls the walk). Runs before the voice pass so the
   // projected facts get spoken in the same register.
-  if (uncapped) {
-    try {
-      await augmentWithProjections(segments, playerColor === 'white' ? 'w' : 'b');
-    } catch { /* projections are best-effort; the walk ships without them */ }
-  }
+  try {
+    // Uncapped: all three projection passes. Capped production: the punishment
+    // pass only — every review now answers "how does this mistake get taken
+    // advantage of?" with the concrete engine line (David 2026-07-21).
+    await augmentWithProjections(segments, playerColor === 'white' ? 'w' : 'b', uncapped ? 'full' : 'mistakes');
+  } catch { /* projections are best-effort; the walk ships without them */ }
+
+  // BOOK-GROUNDED DEV TARGETS (David 2026-07-21, IMG_4569: the plan arrow said
+  // g1→f3 while the theory lecture's masters data plays Ne2 — two "authorities"
+  // contradicting each other. The plan must read from the SAME masters book as
+  // the lecture (G0): rewrite any template arrow the book disagrees with and
+  // SAY the book's development squares.
+  try {
+    await groundOpeningPlanInBook(segments);
+  } catch { /* best-effort; the template arrows stand when the book is silent */ }
 
   // HOUSE-VOICE PASS (David 2026-07-19: "does NOT sound like Danya"). The
   // per-move narration above is computed deterministically (the FACTS, G0) but

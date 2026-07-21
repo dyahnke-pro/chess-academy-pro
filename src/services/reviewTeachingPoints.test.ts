@@ -154,3 +154,58 @@ describe('explainTemptingCapture (David 2026-07-21 — the Bg5/h4 "why not take"
     expect(explainTemptingCapture(DAVID_FEN, 'Qxg5')).toBeNull();
   });
 });
+
+describe('describeNotableMove (David 2026-07-21 — the silent ambitious pawn push)', () => {
+  it('narrates an ambitious wing push with the exact weakened squares (g2-g4, king uncastled)', async () => {
+    const { describeNotableMove } = await import('./reviewTeachingPoints');
+    const { Chess } = await import('chess.js');
+    // A London-ish shape: White throws g4 with the king still on e1.
+    const c = new Chess();
+    for (const s of ['d4', 'd5', 'Bf4', 'Nf6', 'e3', 'e6', 'Nc3', 'Nc6']) c.move(s);
+    const why = describeNotableMove(c.fen(), 'g4', false); // opponent's push, from Black student's seat
+    expect(why).not.toBeNull();
+    expect(why).toMatch(/opponent throws the g-pawn forward/i);
+    expect(why).toMatch(/kingside push/i);
+    expect(why).toMatch(/f3|h3/);
+    expect(why).toMatch(/king is still in the middle/i);
+  });
+
+  it('narrates a central break when the pawns touch (2.d4 against e5)', async () => {
+    const { describeNotableMove } = await import('./reviewTeachingPoints');
+    const { Chess } = await import('chess.js');
+    const c = new Chess();
+    c.move('e4'); c.move('e5');
+    // 2.d4 lands in direct contact with the e5 pawn — the classic central strike.
+    const why = describeNotableMove(c.fen(), 'd4', true);
+    expect(why).not.toBeNull();
+    expect(why).toMatch(/strike in the centre/i);
+    expect(why).toMatch(/pawns are touching/i);
+  });
+
+  it('stays silent on an ordinary developing move', async () => {
+    const { describeNotableMove } = await import('./reviewTeachingPoints');
+    const { Chess } = await import('chess.js');
+    const c = new Chess(); c.move('e4'); c.move('e5');
+    expect(describeNotableMove(c.fen(), 'Nf3', true)).toBeNull();
+  });
+});
+
+describe('describeConcessions (David 2026-07-21 — name the lasting damage)', () => {
+  it('names the thinned king shield when a castled king pushes its cover', async () => {
+    const { describeConcessions } = await import('./reviewTeachingPoints');
+    const { Chess } = await import('chess.js');
+    const c = new Chess();
+    for (const s of ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'O-O', 'Nf6', 'd3', 'd6']) c.move(s);
+    // White g1-king castled; g2-g4 rips its own shield.
+    const why = describeConcessions(c.fen(), 'g4', true);
+    expect(why).not.toBeNull();
+    expect(why).toMatch(/king's pawn cover thinned/i);
+  });
+
+  it('stays silent when the move concedes nothing structural', async () => {
+    const { describeConcessions } = await import('./reviewTeachingPoints');
+    const { Chess } = await import('chess.js');
+    const c = new Chess(); c.move('e4'); c.move('e5');
+    expect(describeConcessions(c.fen(), 'Nf3', true)).toBeNull();
+  });
+});

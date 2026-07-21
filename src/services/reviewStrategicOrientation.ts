@@ -140,7 +140,7 @@ function devArrows(dev: SideDev, arrowColor: string): PlanArrow[] {
 export function buildOpeningDevelopmentPlan(
   fen: string,
   studentColorWB: 'w' | 'b',
-  opts?: { openingName?: string | null; curatedIdeas?: string[] | null },
+  opts?: { openingName?: string | null; curatedIdeas?: string[] | null; seed?: number },
 ): PlanBeat | null {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
@@ -153,18 +153,31 @@ export function buildOpeningDevelopmentPlan(
     ...devArrows(theirs, PLAN_AMBER),
   ];
   const openingLabel = opts?.openingName ?? null;
+  const seed = opts?.seed ?? 0;
 
-  // OPENING-SPECIFIC path: lead with the opening's own key idea (a THEME of the
-  // opening, true regardless of which side the student is). Grounded in the
-  // curated repertoire keyIdeas — never the generic "develop the minors".
+  // OPENING-SPECIFIC path: lead with ONE of the opening's key ideas — ROTATED by
+  // the per-game seed (David 2026-07-21: "the opening narration line about taking
+  // space being the whole point is the same every time"). Same opening, different
+  // game → a different lead idea + a different stem, so the coach never reads as
+  // a recording. Grounded in the curated repertoire keyIdeas (G3).
   const curated = opts?.curatedIdeas;
   if (curated && curated.length > 0) {
-    const idea = curated[0].trim().replace(/\.$/, '');
+    const pick = curated[seed % curated.length].trim().replace(/\.$/, '');
     const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
-    const lead = openingLabel
-      ? `The heart of the ${openingLabel}: ${idea}.`
-      : `The key idea here: ${idea}.`;
-    const second = curated[1] ? ` ${cap(curated[1].trim().replace(/\.$/, ''))}.` : '';
+    const stems = openingLabel
+      ? [
+          (i: string) => `The heart of the ${openingLabel}: ${i}.`,
+          (i: string) => `Remember what the ${openingLabel} is really about — ${i}.`,
+          (i: string) => `Everything in the ${openingLabel} flows from one idea: ${i}.`,
+        ]
+      : [
+          (i: string) => `The key idea here: ${i}.`,
+          (i: string) => `Keep one idea in front of you: ${i}.`,
+          (i: string) => `The position keeps asking the same question — ${i}.`,
+        ];
+    const lead = stems[seed % stems.length](pick);
+    const next = curated.find((x) => x.trim().replace(/\.$/, '') !== pick);
+    const second = next ? ` ${cap(next.trim().replace(/\.$/, ''))}.` : '';
     return { text: `${lead}${second}`, arrows };
   }
 
