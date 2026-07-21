@@ -2367,7 +2367,7 @@ export async function voiceFacts(
  */
 export async function voiceReviewLines(
   items: Array<{ id: number; fact: string; kind?: string }>,
-  opts: { providerConfig?: ProviderConfig | null; studentRating?: number | null } = {},
+  opts: { providerConfig?: ProviderConfig | null; studentRating?: number | null; coverAll?: boolean } = {},
 ): Promise<Map<number, string>> {
   const result = new Map<number, string>();
   const usable = items.filter((it) => it.fact && it.fact.trim().length > 0);
@@ -2375,13 +2375,31 @@ export async function voiceReviewLines(
   const cfg = opts.providerConfig ?? (await getProviderConfig());
   if (!cfg) return result; // no provider → caller keeps the computed templates
 
+  // COVER-ALL (uncapped diagnostic, David 2026-07-20): each numbered item is a
+  // BUNDLE of several bracket-tagged facts about ONE move ([move]/[tactic]/
+  // [verdict]/[structure]/[plan]/…). The voice must speak to EVERY fact in the
+  // bundle — one flowing multi-sentence passage per move, dropping NONE — instead
+  // of compressing to a single line. Length is not capped here; coverage is the
+  // whole point ("I want to hear ALL the computed data on every move").
+  const coverAllClause = opts.coverAll
+    ? 'EACH numbered item is a BUNDLE of several computed facts about ONE move, each tagged ' +
+      'in [brackets] ([move], [quality], [tactic], [loose], [verdict], [structure], [king], ' +
+      '[sac], [forced], [plan-opening], [plan-middlegame], [plan-line], [consequence], ' +
+      '[opening], [opp-target], [endgame]). ' +
+      'Voice EVERY fact in the bundle into ONE flowing spoken passage for that move — a ' +
+      'sentence or clause per fact, in the teaching voice, in a natural order. DROP NOTHING: ' +
+      'every bracketed fact must be spoken. Do NOT print the bracket tags themselves. There ' +
+      'is NO length limit — several sentences per move is expected and wanted. Return the SAME ' +
+      'numbered list (one passage per number, same numbers, never merge/split/drop/reorder a number).\n\n'
+    : 'Rephrase EACH numbered fact into ONE short spoken line in that voice, and ' +
+      'return them as the SAME numbered list — exactly one rephrasing per number, same ' +
+      'numbers, never merge, split, drop, reorder, or add a line.\n\n';
+
   const systemBase =
     'You are the single teaching VOICE of a chess game-review — the warm, concept-FIRST ' +
     'register of a great instructor. You will be given a NUMBERED list of computed facts ' +
     'about ONE player\'s finished game (one fact per move or moment, already true and ' +
-    'verified). Rephrase EACH numbered fact into ONE short spoken line in that voice, and ' +
-    'return them as the SAME numbered list — exactly one rephrasing per number, same ' +
-    'numbers, never merge, split, drop, reorder, or add a line.\n\n' +
+    'verified). ' + coverAllClause +
     'HOW THE VOICE SOUNDS:\n' +
     '- Concept-FIRST: teach the IDEA behind the move; NEVER restate the move\'s name. If a ' +
     'fact is about a knight going to c3, do NOT say "knight to c3" or "develops the knight" ' +

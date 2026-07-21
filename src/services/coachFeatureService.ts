@@ -3,7 +3,7 @@ import type { Square } from 'chess.js';
 import { seeGain } from './positionReadingService';
 import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice } from './groundedAnswer';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
-import { plyFactsForMove, plyFactsClause } from './pvPlayback';
+import { plyFactsForMove, plyFactsClause, computePvLine, type PvLine } from './pvPlayback';
 import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan } from './reviewStrategicOrientation';
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
 import { detectOpening } from './openingDetectionService';
@@ -13,6 +13,7 @@ import { pickStoryGame } from './reviewStoryGame';
 import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShield } from './reviewSacrifice';
 import { detectForcedMatingSequence, explainMatingSacMechanism } from './reviewForcedSequence';
 import { assessPositionalEdge } from './reviewPositionalAssessment';
+import { computeMoveFacets, computeThroughLine } from './reviewFullData';
 import { detectBadHabits } from './badHabitDetector';
 import { db } from '../db/schema';
 import { voiceFacts, voiceReviewLines } from './coachApi';
@@ -862,6 +863,11 @@ export function buildReviewSegments(
    *  (David 2026-07-20). When it's a curated opening, the plan beat leads with
    *  that opening's own key idea instead of the generic "develop the minors". */
   openingName?: string | null,
+  /** UNCAPPED diagnostic mode (David 2026-07-20: "turn off all narration caps —
+   *  I want to hear ALL the computed data on every move"). Replaces the one-beat-
+   *  per-move cascade + one-shot flags with the full-data aggregator, which emits
+   *  EVERY computed facet on EVERY move. Off by default (production stays capped). */
+  uncapped?: boolean,
 ): ReviewMoveSegment[] {
   // Curated, opening-specific ideas for the dev-plan beat (null → uncurated).
   const curatedOpeningIdeas = resolveCuratedOpeningIdeas(openingName ?? null);
@@ -946,6 +952,51 @@ export function buildReviewSegments(
     // "<played move> was stronger" (David 2026-06-11).
     const stripGlyphs = (s: string): string => s.replace(/[+#!?]+$/, '');
     const bestMoveSan = rawBestSan && stripGlyphs(rawBestSan) !== stripGlyphs(m.san) ? rawBestSan : null;
+    // UNCAPPED diagnostic branch — emit EVERY computed facet on EVERY move (David
+    // 2026-07-20: "turn off all narration caps"). Skips the one-beat cascade + the
+    // one-shot flags entirely; the aggregator is the full data inventory.
+    if (uncapped) {
+      const facets = computeMoveFacets({
+        fenBefore: fenPair.fenBefore,
+        fenAfter: fenPair.fenAfter,
+        san: m.san,
+        ply: m.ply,
+        moverColor,
+        playerColor,
+        studentColorWB,
+        evaluation: m.evaluation ?? null,
+        preMoveEval: m.preMoveEval ?? null,
+        classification: m.classification ?? null,
+        bestMoveSan,
+        prevCap,
+        allSans: sansForRun,
+        forcedRunStartPly: forcedRun ? forcedRun.startPly : null,
+      });
+      segments.push({
+        ply: m.ply,
+        moveNumber: fullMove,
+        san: m.san,
+        playerColor: moverColor,
+        fenBefore: fenPair.fenBefore,
+        fenAfter: fenPair.fenAfter,
+        classification: m.classification,
+        evalBefore: m.preMoveEval,
+        evalAfter: m.evaluation,
+        bestMoveSan,
+        bestMoveUci: m.bestMove,
+        narration: facets.length ? facets.join(' ') : null,
+        narrationSource: facets.length ? 'per-move' : null,
+      });
+      try {
+        const pc = new Chess(fenPair.fenBefore).move(m.san);
+        prevCap = pc
+          ? { square: pc.to, capturedValue: pc.captured ? (PIECE_PTS[pc.captured] ?? 0) : 0 }
+          : { square: null, capturedValue: 0 };
+      } catch {
+        prevCap = { square: null, capturedValue: 0 };
+      }
+      continue;
+    }
     let narration = buildDeterministicNarration({
       ply: m.ply,
       // Key student-vs-opponent framing on COLOR when the student's color is
@@ -1456,6 +1507,66 @@ function raceTimeout<T>(p: Promise<T>, ms: number, fallback: T): Promise<T> {
   ]);
 }
 
+/**
+ * FUTURE-POSITION PROJECTION (David 2026-07-20, future-analysis teachings #1 + #2):
+ * "teaching means evaluating a FUTURE position." Two Stockfish-projected facts,
+ * grounded (G0 — the line is the engine's real PV via computePvLine, graded so a
+ * line that doesn't hold its promise is dropped; the LLM only voices it):
+ *
+ *   #1 PLAN REALIZATION — from the plan's critical position (the assessment /
+ *      orientation ply), play the engine's best line OUT and narrate where the
+ *      plan lands ("played out, it runs …b5, bxc6, and you're left with a
+ *      backward c-pawn to hit").
+ *   #2 CONSEQUENCE PROJECTION — on a strong student move (great/brilliant), play
+ *      the follow-up OUT so the student sees what the good move LEADS to.
+ *
+ * Async + Stockfish, so it runs in the prep path (not the sync segment builder).
+ * Bounded: a small per-game budget + a per-call timeout, so it can never stall
+ * the walk. Uncapped-diagnostic only for now (keeps production review latency
+ * flat); the projected facets are bracket-tagged so the cover-all voice pass
+ * speaks them. Mutates the segments in place.
+ */
+async function augmentWithProjections(segments: ReviewMoveSegment[], studentColorWB: 'w' | 'b'): Promise<void> {
+  const verdictWord = (studentPovCp: number | null): string => {
+    if (studentPovCp === null) return 'the position stays balanced';
+    if (studentPovCp >= 150) return "you're winning";
+    if (studentPovCp >= 50) return "you're clearly better";
+    if (studentPovCp > -50) return "it's about level";
+    if (studentPovCp > -150) return "you're a bit worse";
+    return "you're in trouble";
+  };
+  const render = (line: PvLine): string => {
+    const sans = line.plies.map((p) => p.san).join(' ');
+    const whiteCp = line.terminalEvalCp ?? line.rootEvalCp;
+    const studentPov = studentColorWB === 'w' ? whiteCp : -whiteCp;
+    return `${sans} — and ${verdictWord(studentPov)}`;
+  };
+  let budget = 3;
+  const PROJ_TIMEOUT_MS = 7000;
+
+  // #1 — plan realization from the plan's critical position.
+  const planSeg = segments.find((s) => s.narrationSource === 'assessment' || s.narrationSource === 'orientation');
+  if (planSeg && budget > 0) {
+    const line = await raceTimeout(computePvLine(planSeg.fenAfter, { maxPlies: 8 }), PROJ_TIMEOUT_MS, null);
+    if (line && line.delivers && line.plies.length >= 2) {
+      planSeg.narration = `${planSeg.narration ?? ''} [plan-line] Played out from here, the plan runs ${render(line)}.`.trim();
+      budget -= 1;
+    }
+  }
+
+  // #2 — consequence projection on the student's strongest moves.
+  for (const s of segments) {
+    if (budget <= 0) break;
+    if (s === planSeg) continue;
+    if (s.classification !== 'great' && s.classification !== 'brilliant') continue;
+    const line = await raceTimeout(computePvLine(s.fenAfter, { maxPlies: 6 }), PROJ_TIMEOUT_MS, null);
+    if (line && line.delivers && line.plies.length >= 2) {
+      s.narration = `${s.narration ?? ''} [consequence] Follow it up and it goes ${render(line)}.`.trim();
+      budget -= 1;
+    }
+  }
+}
+
 /** True when every "<piece> on <square>" claim in `text` is TRUE on `fen` (the
  *  board the student sees at that ply). Guards the review walk against a house-
  *  voice rephrase that attaches a piece to a square it doesn't occupy — e.g.
@@ -1489,8 +1600,12 @@ export async function generateReviewNarration(params: {
    *  silences playback anyway, but we save the token spend). When
    *  undefined, defaults to full-length behavior (legacy). */
   coachNarration?: 'silent' | 'brief' | 'full';
+  /** UNCAPPED diagnostic mode (David 2026-07-20). Speaks EVERY computed facet on
+   *  EVERY move (full-data aggregator), and skips the house-voice warming pass so
+   *  no fact is compressed away — you hear exactly what the position computes. */
+  uncapped?: boolean;
 }): Promise<ReviewNarration> {
-  const { moves, playerColor, openingName, result, coachNarration, playerRating } = params;
+  const { moves, playerColor, openingName, result, coachNarration, playerRating, uncapped } = params;
 
   // Reconstruct FENs via chess.js so the UI can rewind cleanly.
   const fenChain = buildFenChain(moves);
@@ -1545,7 +1660,17 @@ export async function generateReviewNarration(params: {
     ? introTrimmed
     : defaultIntroText({ playerColor, result, openingName, mistakeCount });
 
-  const segments = buildReviewSegments(moves.slice(0, usableCount), playerColor, openingName);
+  const segments = buildReviewSegments(moves.slice(0, usableCount), playerColor, openingName, uncapped);
+
+  // FUTURE-POSITION PROJECTIONS (#1 plan realization + #2 consequence projection)
+  // — Stockfish-projected teaching, uncapped-diagnostic only (bounded budget +
+  // timeout so it never stalls the walk). Runs before the voice pass so the
+  // projected facts get spoken in the same register.
+  if (uncapped) {
+    try {
+      await augmentWithProjections(segments, playerColor === 'white' ? 'w' : 'b');
+    } catch { /* projections are best-effort; the walk ships without them */ }
+  }
 
   // HOUSE-VOICE PASS (David 2026-07-19: "does NOT sound like Danya"). The
   // per-move narration above is computed deterministically (the FACTS, G0) but
@@ -1567,7 +1692,7 @@ export async function generateReviewNarration(params: {
         .map((s) => ({ id: s.ply, fact: s.narration as string, kind: s.narrationSource ?? undefined }));
       if (toVoice.length > 0) {
         const warmed = await raceTimeout(
-          voiceReviewLines(toVoice, { studentRating: playerRating }),
+          voiceReviewLines(toVoice, { studentRating: playerRating, coverAll: uncapped }),
           REVIEW_HOUSE_VOICE_TIMEOUT_MS,
           new Map<number, string>(),
         );
@@ -1599,5 +1724,10 @@ export async function generateReviewNarration(params: {
     details: JSON.stringify({ totalSegments: segments.length, narratedCount, source: 'deterministic-ship3' }),
   });
 
-  return { intro, segments, closing: null };
+  // THROUGH-LINE (future-analysis teaching #3) — the one theme that ran through
+  // the whole game, named as the closing. Board-true; null when nothing recurs.
+  const throughLineWB: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
+  const closing = computeThroughLine(fenChain.map((f) => f.fenAfter), throughLineWB);
+
+  return { intro, segments, closing };
 }

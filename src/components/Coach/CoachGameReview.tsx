@@ -69,6 +69,17 @@ import { CLASSIFICATION_STYLES } from './classificationStyles';
 import { Chess } from 'chess.js';
 import type { CoachGameMove, KeyMoment, ReviewState, GameAccuracy, MoveClassificationCounts, PhaseAccuracy, MissedTactic } from '../../types';
 
+/** UNCAPPED review diagnostic (David 2026-07-20): opt-in via `?uncapped=1` on the
+ *  URL or `window.__REVIEW_UNCAPPED__ = true` (the audit sets the latter via an
+ *  init script). No localStorage (project rule). Off → production-capped review. */
+function isReviewUncapped(): boolean {
+  try {
+    if (typeof window === 'undefined') return false;
+    if (new URLSearchParams(window.location.search).get('uncapped') === '1') return true;
+    return (window as unknown as { __REVIEW_UNCAPPED__?: boolean }).__REVIEW_UNCAPPED__ === true;
+  } catch { return false; }
+}
+
 interface CoachGameReviewProps {
   moves: CoachGameMove[];
   keyMoments: KeyMoment[];
@@ -429,6 +440,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       // fresh per mount so a Settings change between reviews takes
       // effect on the next open.
       coachNarration: resolveCoachNarration(useAppStore.getState().activeProfile?.preferences),
+      // UNCAPPED diagnostic mode (David 2026-07-20): speak EVERY computed facet on
+      // EVERY move + the future-position projections. Opt-in via ?uncapped=1 or
+      // localStorage reviewUncapped=1 (the audit + David toggle it) — production
+      // review stays capped.
+      uncapped: isReviewUncapped(),
     }).then((narration) => {
       // Audit-driven (review walk #4): bail if the component
       // unmounted mid-call (user navigated away). React-level
