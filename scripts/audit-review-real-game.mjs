@@ -279,6 +279,31 @@ const run = async () => {
         await page.waitForTimeout(700);
         if (await has(page, '[data-testid="review-turning-point-done"]')) { await page.locator('[data-testid="review-turning-point-done"]').first().click({ timeout: 1500 }).catch(() => {}); }
       }
+      // LATE-CARD SETTLE (David 2026-07-21 rewind miss #3): the LAST question's
+      // §5 walkout runs ~40-60s in uncapped mode, and its resume tail — which
+      // raises the blunder-rewind offer — lands AFTER the walk reaches the end.
+      // The harness used to dump its report and close the browser first, so a
+      // card the app genuinely raises was reported as "never fired". A human
+      // sits at the end while the coach finishes talking; do the same: linger up
+      // to 75s, recording + driving any late card (decline the rewind like the
+      // sweep does), and stop early once a rewind was handled.
+      let lingerMs = 0;
+      let lateRewind = false;
+      while (lingerMs < 75000) {
+        const late = await visibleCards();
+        for (const c of late) {
+          if (!cardsFired.has(c)) { cardsFired.add(c); cardLog.push({ ply: p.n, cards: [c] }); log(`  📋 LATE CARD/POPUP (post-end settle +${Math.round(lingerMs / 1000)}s): [${c}]`); }
+        }
+        if (await has(page, '[data-testid="review-rewind-card"]')) {
+          lateRewind = true;
+          await page.locator('[data-testid="review-rewind-decline"]').first().click({ timeout: 1500 }).catch(() => {});
+          await page.waitForTimeout(500);
+        }
+        if (await has(page, '[data-testid="review-turning-point-done"]')) { await page.locator('[data-testid="review-turning-point-done"]').first().click({ timeout: 1500 }).catch(() => {}); }
+        if (lateRewind) break;
+        await page.waitForTimeout(2500);
+        lingerMs += 2500;
+      }
       log(`  (reached end)`); break;
     }
     stuck = p.n === before ? stuck + 1 : 0;
