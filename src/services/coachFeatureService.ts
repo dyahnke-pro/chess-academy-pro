@@ -1680,6 +1680,39 @@ async function augmentWithProjections(
       budget -= 1;
     }
   }
+  // #4 — THE BETTER-LINE WHY (David 2026-07-21, IMG_4577: "Need to know why
+  // Bf2 was better. The better lines need the why narrations. A deeper
+  // understanding is critical."). On the student's flagged moves that name a
+  // distinct best move — INACCURACIES included, which the punishment pass
+  // skips — play the engine's line STARTING WITH the better move and narrate
+  // every ply's why, so "the stronger move was X" always carries the
+  // understanding, never just the name. Seeding firstUci reuses the stored
+  // analysis' own top line, so this is usually a cache hit, not fresh engine
+  // time. Biggest swings first so the budget lands on the moves that matter.
+  let whyBudget = scope === 'full' ? 5 : 3;
+  const flaggedStudent = segments
+    .filter((s) => s.playerColor === studentColorName
+      && (s.classification === 'inaccuracy' || s.classification === 'mistake' || s.classification === 'blunder')
+      && !!s.bestMoveUci)
+    .sort((a, b) => {
+      const swing = (x: ReviewMoveSegment): number =>
+        x.evalBefore !== null && x.evalAfter !== null ? Math.abs(x.evalBefore - x.evalAfter) : 0;
+      return swing(b) - swing(a);
+    });
+  for (const s of flaggedStudent) {
+    if (whyBudget <= 0) break;
+    const line = await raceTimeout(
+      computePvLine(s.fenBefore, { firstUci: s.bestMoveUci as string, maxPlies: 6 }),
+      PROJ_TIMEOUT_MS,
+      null,
+    );
+    if (line && line.plies.length >= 3) {
+      const bestName = line.plies[0].san;
+      s.narration = `${s.narration ?? ''} Why ${bestName} was better — the line runs ${render(line)}.`.trim();
+      whyBudget -= 1;
+    }
+  }
+
   if (scope === 'mistakes') return;
 
   // #1 — plan realization from the plan's critical position. In uncapped mode
