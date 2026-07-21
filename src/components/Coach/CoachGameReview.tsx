@@ -49,6 +49,7 @@ import type {
   NarrativeMoveData,
   ReviewNarration,
   ReviewMoveInput,
+  ReviewMoveSegment,
 } from '../../services/coachFeatureService';
 import { ReviewCitationPreviews } from './ReviewCitationPreviews';
 import { useReviewPlayback } from '../../hooks/useReviewPlayback';
@@ -1422,19 +1423,41 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
    *  move sound + arrow + a caption naming the citation and each move. Rides
    *  the theory-lecture token/state machinery, so Stop and every nav-cancel
    *  path that kills the theory lecture kills this too. */
-  const playStoryGame = useCallback(async (pgn: string, citation: string): Promise<void> => {
+  const playStoryGame = useCallback(async (story: NonNullable<ReviewMoveSegment['storyGame']>): Promise<void> => {
     if (theoryLecturePlaying) return;
     const token = ++theoryLectureTokenRef.current;
     setTheoryLecturePlaying(true);
+    const waitIdle = async (maxMs = 20000): Promise<void> => {
+      const start = performance.now();
+      while (voiceService.isPlaying() && performance.now() - start < maxMs) {
+        if (theoryLectureTokenRef.current !== token || !walkMountedRef.current) return;
+        await new Promise((r) => setTimeout(r, 120));
+      }
+    };
+    // Speak a landmark line (caption + voice, dwell so it reads even muted).
+    // caption may carry a move-number prefix; the SPOKEN text never does
+    // (G9.4 — Polly reads "14." as "fourteen").
+    const speak = async (text: string, caption?: string): Promise<void> => {
+      setTheoryCaption(caption ?? text);
+      const t0 = performance.now();
+      try { await voiceService.speakForced(text); } catch { /* voice off */ }
+      await waitIdle();
+      const dwell = Math.min(4500, 1000 + text.length * 22);
+      const elapsed = performance.now() - t0;
+      if (elapsed < dwell) await new Promise((r) => setTimeout(r, dwell - elapsed));
+    };
     try {
+      const { citation, pgn } = story;
       const sans = pgn
         .replace(/\{[^}]*\}/g, '')
         .replace(/\d+\.(\.\.)?/g, '')
         .replace(/\b(1-0|0-1|1\/2-1\/2|\*)\b/g, '')
         .trim().split(/\s+/).filter(Boolean);
       const c = new Chess();
-      setTheoryCaption(`${citation} — watch how the plan unfolds.`);
-      await new Promise((r) => setTimeout(r, 1800));
+      // THE GAME HAS NARRATION (David 2026-07-21: "Does the DB/example game
+      // have narrations?"): open with the corpus's hand-authored overview, then
+      // speak each hand-authored critical moment as the playback reaches it.
+      await speak(story.overview ? `${citation}. ${story.overview}` : `${citation} — watch how the plan unfolds.`);
       for (let i = 0; i < sans.length; i++) {
         if (theoryLectureTokenRef.current !== token || !walkMountedRef.current) return;
         let mv: ReturnType<Chess['move']> | null = null;
@@ -1444,8 +1467,19 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         setWalkExplorationSan(mv.san);
         setWalkExplorationArrows([{ startSquare: mv.from, endSquare: mv.to, color: '#f59e0b' }]);
         playMoveSound(mv.san);
-        setTheoryCaption(`${citation} · ${Math.ceil((i + 1) / 2)}${mv.color === 'w' ? '.' : '…'} ${mv.san}`);
-        await new Promise((r) => setTimeout(r, 1150));
+        const moveNo = Math.ceil((i + 1) / 2);
+        const moverName = mv.color === 'w' ? 'white' : 'black';
+        const moment = story.criticalMoments.find((m) => m.moveNumber === moveNo && m.color === moverName);
+        if (moment) {
+          // A hand-authored teaching moment — the board pauses while it lands.
+          await speak(
+            `${mv.san} — ${moment.annotation}`,
+            `${moveNo}${mv.color === 'w' ? '.' : '…'} ${mv.san} — ${moment.annotation}`,
+          );
+        } else {
+          setTheoryCaption(`${citation} · ${moveNo}${mv.color === 'w' ? '.' : '…'} ${mv.san}`);
+          await new Promise((r) => setTimeout(r, 1150));
+        }
       }
     } finally {
       if (theoryLectureTokenRef.current === token && walkMountedRef.current) {
@@ -3231,7 +3265,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   onClick={() => {
                     const sg = walkPlayback.currentSegment?.storyGame;
                     if (theoryLecturePlaying) stopOpeningTheory();
-                    else if (sg) void playStoryGame(sg.pgn, sg.citation);
+                    else if (sg) void playStoryGame(sg);
                   }}
                   className="mt-1.5 w-full flex items-center justify-center gap-1.5 rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-1.5 text-xs font-semibold text-amber-100 hover:bg-amber-500/20"
                 >

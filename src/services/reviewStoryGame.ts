@@ -24,7 +24,9 @@ interface ModelGameLike {
   result?: string;
   middlegameTheme?: string;
   lessonSummary?: string;
+  overview?: string;
   pgn?: string;
+  criticalMoments?: Array<{ moveNumber?: number; color?: string; annotation?: string }>;
 }
 
 const MODEL_GAMES = modelGamesRaw as ModelGameLike[];
@@ -38,6 +40,12 @@ export interface StoryGame {
    *  offer a "watch this game" playback (David 2026-07-21: "where is the tag
    *  to watch that game??"). */
   pgn: string;
+  /** The corpus's hand-authored game overview — spoken as the playback opens
+   *  (David 2026-07-21: "Does the DB/example game have narrations?"). */
+  overview: string | null;
+  /** Hand-authored per-moment annotations (92 of the 556 playable games),
+   *  spoken as the playback reaches each cited move. */
+  criticalMoments: Array<{ moveNumber: number; color: 'white' | 'black'; annotation: string }>;
 }
 
 function lowerFirst(s: string): string { return s.charAt(0).toLowerCase() + s.slice(1); }
@@ -92,9 +100,16 @@ export function pickStoryGame(openingName: string | null): StoryGame | null {
   const ideaRaw = (pick.middlegameTheme ?? pick.lessonSummary ?? '').trim();
   const idea = ideaRaw ? lowerFirst(stripPeriod(ideaRaw)) : '';
   const ideaClause = idea ? ` — the model there is ${idea}` : '';
+  const overview = (pick.overview ?? '').trim();
+  const criticalMoments = (pick.criticalMoments ?? [])
+    .filter((m): m is { moveNumber: number; color: 'white' | 'black'; annotation: string } =>
+      typeof m.moveNumber === 'number' && (m.color === 'white' || m.color === 'black')
+      && typeof m.annotation === 'string' && m.annotation.trim().length > 0);
   return {
     citation,
     text: `This is a well-trodden battleground: look up ${citation}${ideaClause}. Seeing the plan in a strong player's hands is worth more than any amount of theory.`,
     pgn: pick.pgn ?? '',
+    overview: overview.length >= 20 ? overview : null,
+    criticalMoments,
   };
 }

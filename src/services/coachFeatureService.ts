@@ -468,10 +468,17 @@ export interface ReviewMoveSegment {
    *  these arrows SHOW the plan instead of moving pieces (David 2026-07-19).
    *  Undefined on ordinary moves. */
   planArrows?: Array<{ startSquare: string; endSquare: string; color: string }>;
-  /** The cited master game for the §6 story-as-evidence beat, WITH its PGN so
-   *  the UI can offer a "watch this game" playback (David 2026-07-21 IMG_4576:
-   *  "where is the tag to watch that game??"). Undefined on other segments. */
-  storyGame?: { citation: string; pgn: string };
+  /** The cited master game for the §6 story-as-evidence beat, WITH its PGN +
+   *  narrations so the UI can offer a NARRATED "watch this game" playback
+   *  (David 2026-07-21: "Does the DB/example game have narrations?" — the
+   *  corpus overview is spoken at the start, per-moment annotations as the
+   *  playback reaches them). Undefined on other segments. */
+  storyGame?: {
+    citation: string;
+    pgn: string;
+    overview: string | null;
+    criticalMoments: Array<{ moveNumber: number; color: 'white' | 'black'; annotation: string }>;
+  };
 }
 
 export interface ReviewNarration {
@@ -1342,7 +1349,7 @@ export function buildReviewSegments(
       // Attach the cited game's PGN so the UI can offer "watch this game"
       // (David 2026-07-21, IMG_4576: the citation was spoken with no way to
       // actually SEE the game).
-      if (storyGame.pgn) segmentStoryGame = { citation: storyGame.citation, pgn: storyGame.pgn };
+      if (storyGame.pgn) segmentStoryGame = { citation: storyGame.citation, pgn: storyGame.pgn, overview: storyGame.overview, criticalMoments: storyGame.criticalMoments };
     }
     if (
       narration === null
