@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import {
   attackerDefenderCount, royalDefenderTarget, rookOnSeventh,
-  badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush,
+  badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, deriveNextPlan,
 } from './reviewTeachingPoints';
 
 function fenAfter(sans: string[]): string {
@@ -61,5 +61,33 @@ describe('reviewTeachingPoints — the missing Naroditsky messages (David 2026-0
 
   it('worstPlacedFriendlyPiece stays quiet in the opening', () => {
     expect(worstPlacedFriendlyPiece(fenAfter(['e4', 'e5', 'Nf3', 'Nc6']), 'w')).toBeNull();
+  });
+});
+
+describe('deriveNextPlan — speak to FUTURE PLANS (David 2026-07-20)', () => {
+  it('names attacking the exposed king as the plan when it is stuck in the centre', () => {
+    // Opera after 15.Nc3: Black king on e8, d-file open — the plan is the attack.
+    const opera = ['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5', 'Bxf3', 'Qxf3', 'dxe5', 'Bc4', 'Nf6', 'Qb3', 'Qe7', 'Nc3'];
+    const p = deriveNextPlan(fenAfter(opera), 'w');
+    expect(p).not.toBeNull();
+    expect(p).toMatch(/plan from here/i);
+    expect(p).toMatch(/king|centre|attack|prise/i);
+  });
+
+  it('always starts with the phrase "the plan from here"', () => {
+    const opera = ['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5', 'Bxf3', 'Qxf3', 'dxe5', 'Bc4', 'Nf6', 'Qb3', 'Qe7', 'Nc3'];
+    expect(deriveNextPlan(fenAfter(opera), 'w')).toMatch(/^the plan from here/i);
+  });
+
+  it('names besieging a weak isolated pawn when there is one and no bigger priority', () => {
+    // Sicilian IQP: Black has an isolated d5, White king safe → plan = pile on d5.
+    const iqp = ['e4', 'c5', 'Nf3', 'e6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'd5', 'exd5', 'exd5', 'Be2', 'Be7', 'O-O', 'O-O'];
+    const p = deriveNextPlan(fenAfter(iqp), 'w');
+    expect(p).toMatch(/plan from here/i);
+    expect(p).toMatch(/d5|weak pawn|open .*file/i);
+  });
+
+  it('returns null from the starting position (no concrete plan yet)', () => {
+    expect(deriveNextPlan(new Chess().fen(), 'w')).toBeNull();
   });
 });

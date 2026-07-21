@@ -23,7 +23,7 @@ import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan } from './revie
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
 import { nameEndgamePhase } from './reviewMoveTeaching';
 import { detectOpening } from './openingDetectionService';
-import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush } from './reviewTeachingPoints';
+import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, deriveNextPlan } from './reviewTeachingPoints';
 
 interface Located { type: string; color: Color; square: string; }
 
@@ -135,6 +135,10 @@ export function computeMoveFacets(ctx: MoveFactContext): string[] {
     const passer = struct?.pawns.passedPawns[studentColorWB][0] ?? null; // reuse §5's struct
     const passNote = passedPawnPush(fenAfter, studentColorWB, passer);
     if (passNote) facets.push(`[passer] ${cap(passNote)}.`);
+    // FORWARD PLAN — what to DO from here (David 2026-07-20: "speak more to future
+    // plans"). Deduped to first mention of each distinct plan (see the caller).
+    const plan = deriveNextPlan(fenAfter, studentColorWB);
+    if (plan) facets.push(`[plan-now] ${cap(plan)}.`);
   }
 
   // ── 7. SACRIFICE — compensation + mechanism + king-shield removal ──

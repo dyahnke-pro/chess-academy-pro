@@ -16,6 +16,7 @@
  * invented). Squares/pieces are always real, so the narration-accuracy gate holds.
  */
 import { Chess, type Color, type Square } from 'chess.js';
+import { describeStructure } from './boardStructure';
 
 const PIECE_VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -156,6 +157,74 @@ export function passedPawnPush(fen: string, studentColorWB: Color, passedSquare:
   const enemyHasKnight = cells(chess).some((c) => c.type === 'n' && c.color === enemy);
   const knightNote = enemyHasKnight ? ', and their knight is a poor blocker — knights are bad at stopping a runner' : '';
   return `your passed pawn on ${passedSquare} wants to run — passed pawns are meant to be pushed${knightNote}`;
+}
+
+/**
+ * "THE PLAN FROM HERE" — the single most salient FORWARD plan the student should
+ * pursue in this position (David 2026-07-20: "can it speak more to future plans?").
+ * A great review doesn't only describe the board — it tells you what to DO about
+ * it. Derived from the position's features (G0), in Danya priority order: a live
+ * king in the centre is the plan; then a passer to push, a weak pawn to besiege,
+ * an open file to seize, an outpost to occupy, a bad piece to reroute, extra
+ * material to convert, the bishop pair to open lines for. One plan, board-true,
+ * or null when nothing concrete stands out (empty > generic).
+ */
+export function deriveNextPlan(fen: string, studentColorWB: Color): string | null {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return null; }
+  const struct = describeStructure(fen);
+  if (!struct) return null;
+  const enemy: Color = studentColorWB === 'w' ? 'b' : 'w';
+  const all = cells(chess);
+  const fullmove = Number(fen.split(' ')[5] ?? '0');
+
+  // 1. Enemy king exposed in the centre → open lines and attack it NOW.
+  const enemyKing = all.find((c) => c.type === 'k' && c.color === enemy);
+  if (enemyKing && fullmove >= 8 && 'cdef'.includes(enemyKing.square[0])
+    && (enemy === 'w' ? '12'.includes(enemyKing.square[1]) : '78'.includes(enemyKing.square[1]))
+    && (struct.pawns.openFiles.includes('d') || struct.pawns.openFiles.includes('e'))) {
+    return `the plan from here is to prise open the centre and throw everything at their king on ${enemyKing.square} before it ever reaches safety`;
+  }
+
+  // 2. Your passed pawn → push it toward promotion.
+  const passer = struct.pawns.passedPawns[studentColorWB][0];
+  if (passer) return `the plan from here is to get that passed pawn on ${passer} rolling — a passed pawn's whole purpose is to advance, so push it and make them deal with it`;
+
+  // 3. An enemy weak (isolated) pawn on the c–f files → besiege it.
+  const weak = struct.pawns.isolatedPawns[enemy].find((sq) => 'cdef'.includes(sq[0])) ?? struct.pawns.isolatedPawns[enemy][0];
+  if (weak) return `the plan from here is to pile up on their weak pawn on ${weak} — fix it in place, gang up on it, and win it or tie their pieces to its defence`;
+
+  // 4. An open file you don't yet own with a heavy piece → seize it.
+  const myHeavyFiles = new Set(all.filter((c) => (c.type === 'r' || c.type === 'q') && c.color === studentColorWB).map((c) => c.square[0]));
+  const freeOpenFile = struct.pawns.openFiles.find((f) => !myHeavyFiles.has(f));
+  if (freeOpenFile) return `the plan from here is to swing a rook onto the open ${freeOpenFile}-file — grab it before they do, because whoever owns the open file owns the highway into the position`;
+
+  // 5. You already hold an outpost → keep dominating from it.
+  const myOutpost = struct.outposts.find((o) => o.color === studentColorWB);
+  if (myOutpost) return `the plan from here is to keep that ${myOutpost.piece === 'n' ? 'knight' : 'bishop'} anchored on its outpost at ${myOutpost.square} and build around it — a piece no pawn can chase runs the position`;
+
+  // 6. Your worst-placed piece (stuck) → reroute it.
+  if (fullmove >= 10) {
+    const mob = mobilityMap(chess, studentColorWB);
+    let worst: { sq: string; type: string; m: number } | null = null;
+    for (const c of all) {
+      if (c.color !== studentColorWB || (c.type !== 'n' && c.type !== 'b' && c.type !== 'r')) continue;
+      const m = mob.get(c.square) ?? 0;
+      if (!worst || m < worst.m) worst = { sq: c.square, type: c.type, m };
+    }
+    if (worst && worst.m <= 1) return `the plan from here is to bring your worst piece — the ${PIECE_NOUN[worst.type]} on ${worst.sq} — back into the game; find it a square where it actually does something`;
+  }
+
+  // 7. Up a clear amount of material → simplify and convert.
+  const bal = struct.material.balance * (studentColorWB === 'w' ? 1 : -1);
+  if (bal >= 2) return `the plan from here is to trade pieces, not pawns, and convert — when you're up material, every swap of pieces brings the win closer`;
+
+  // 8. Bishop pair → open the position for the two bishops.
+  const myB = all.filter((c) => c.type === 'b' && c.color === studentColorWB).length;
+  const enemyB = all.filter((c) => c.type === 'b' && c.color === enemy).length;
+  if (myB >= 2 && enemyB <= 1) return `the plan from here is to open the position for your two bishops — the more the board opens, the more your bishop pair outguns their pieces`;
+
+  return null;
 }
 
 /** Per-square legal-move counts for every piece of `color`, from ONE moves()
