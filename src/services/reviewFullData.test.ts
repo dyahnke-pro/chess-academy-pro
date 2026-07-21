@@ -41,6 +41,35 @@ describe('computeMoveFacets (David 2026-07-20 — uncapped full-data inventory)'
     expect(all).toMatch(/\[opening\]/);
   });
 
+  it('attributes a non-good OPPONENT move to the opponent, never the student (opera ply-14 bug)', () => {
+    // A quiet opponent move (…Qe7) yields no [move] mechanics facet, so [quality]
+    // is the only mover clue. It MUST carry "Your opponent:" — else the LLM credits
+    // Black's move to the White student ("a great move from you"). David 2026-07-20.
+    const fens = fensAfter(SICILIAN_IQP);
+    const facets = computeMoveFacets({
+      fenBefore: fens[16], fenAfter: fens[17], san: 'Be6', ply: 18,
+      moverColor: 'black', playerColor: 'white', studentColorWB: 'w',
+      evaluation: 150, preMoveEval: 150, classification: 'great', bestMoveSan: null,
+      prevCap: { square: null, capturedValue: 0 }, allSans: SICILIAN_IQP, forcedRunStartPly: null,
+    });
+    const quality = facets.find((f) => f.startsWith('[quality]'));
+    expect(quality).toBeDefined();
+    expect(quality).toMatch(/Your opponent:/);
+    expect(quality).not.toMatch(/^\[quality\] You:/);
+  });
+
+  it('attributes a non-good STUDENT move to the student', () => {
+    const fens = fensAfter(SICILIAN_IQP);
+    const facets = computeMoveFacets({
+      fenBefore: fens[18], fenAfter: fens[19], san: 'Nc6', ply: 20,
+      moverColor: 'black', playerColor: 'black', studentColorWB: 'b',
+      evaluation: 20, preMoveEval: 150, classification: 'inaccuracy', bestMoveSan: 'Nd7',
+      prevCap: { square: null, capturedValue: 0 }, allSans: SICILIAN_IQP, forcedRunStartPly: null,
+    });
+    const quality = facets.find((f) => f.startsWith('[quality]'));
+    expect(quality).toMatch(/^\[quality\] You:/);
+  });
+
   it('every facet is bracket-tagged prose (the inventory shape)', () => {
     const fens = fensAfter(SICILIAN_IQP);
     const facets = computeMoveFacets({

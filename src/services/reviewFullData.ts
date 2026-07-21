@@ -74,7 +74,12 @@ export function computeMoveFacets(ctx: MoveFactContext): string[] {
   if (ctx.classification && ctx.classification !== 'good' && ctx.classification !== 'book') {
     const swingBit = swing != null ? ` (eval swung ${(swing / 100).toFixed(1)})` : '';
     const betterBit = ctx.bestMoveSan ? ` — the stronger move was ${ctx.bestMoveSan}` : '';
-    facets.push(`[quality] ${cap(ctx.classification)}${swingBit}${betterBit}.`);
+    // CARRY THE MOVER'S SUBJECT (David 2026-07-20 opera-ply-14 bug): a quiet move
+    // (e.g. …Qe7) yields no [move] mechanics facet, so [quality] was the ONLY
+    // clue to whose move it was — and with it subject-less, the LLM voiced Black's
+    // great move as "a great move from you" (the White student). Mirror the [move]
+    // facet's "You:" / "Your opponent:" tag so attribution is never guessed.
+    facets.push(`[quality] ${subj}: ${lowerFirst(cap(ctx.classification))} move${swingBit}${betterBit}.`);
   }
 
   // ── 3. TACTICS ON THE RESULTING BOARD + LOOSE (undefended) PIECES ──
