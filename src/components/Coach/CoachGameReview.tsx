@@ -1272,6 +1272,16 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         await new Promise((r) => setTimeout(r, 120));
       }
     };
+    // IMMEDIATE feedback (David 2026-07-21: "the pieces never moved on the
+    // board"). The house-voice warm below is a blocking LLM call that can take
+    // 10-30s on a phone — during which the old code showed NOTHING: no board
+    // change, no text, a button that looked dead. Show the first beat's position
+    // + its raw (board-true) fact right away; the warm only rewords the register.
+    if (beats[0]) {
+      setWalkExplorationFen(beats[0].fenBefore);
+      setWalkExplorationArrows(null);
+      setTheoryCaption(beats[0].fact);
+    }
     let warmed = new Map<number, string>();
     try { warmed = await voiceReviewLines(beats.map((b, i) => ({ id: i, fact: b.fact }))); } catch { /* raw */ }
     for (let i = 0; i < beats.length; i++) {
@@ -1287,8 +1297,19 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       if (theoryLectureTokenRef.current !== token || !walkMountedRef.current) break;
       const line = warmed.get(i) ?? b.fact;
       setTheoryCaption(line); // visible even if voice is muted (David 2026-07-21)
+      const beatStart = performance.now();
       try { await voiceService.speakForced(line); } catch { /* voice off */ }
       await waitIdle();
+      // MUTED-DEVICE PACING: with voice off, speakForced resolves ~instantly and
+      // the whole lecture used to race by in a blink — board positions flashing
+      // too fast to register ("pieces never moved"). Hold each beat long enough
+      // to READ its caption and see the position before advancing.
+      const elapsed = performance.now() - beatStart;
+      const minDwell = Math.min(4500, 1200 + line.length * 22);
+      if (elapsed < minDwell) {
+        await new Promise((r) => setTimeout(r, minDwell - elapsed));
+        if (theoryLectureTokenRef.current !== token || !walkMountedRef.current) break;
+      }
       // DIVE DOWN the line (Danya's "let's see the next couple of moves"): play
       // out the masters continuation on the board, arrowing each move.
       if (b.dive && b.diveFromFen && b.dive.length > 0) {
