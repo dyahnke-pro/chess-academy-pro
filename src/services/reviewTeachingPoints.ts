@@ -160,50 +160,62 @@ export function passedPawnPush(fen: string, studentColorWB: Color, passedSquare:
 }
 
 /**
- * "THE PLAN FROM HERE" — the single most salient FORWARD plan the student should
- * pursue in this position (David 2026-07-20: "can it speak more to future plans?").
- * A great review doesn't only describe the board — it tells you what to DO about
- * it. Derived from the position's features (G0), in Danya priority order: a live
- * king in the centre is the plan; then a passer to push, a weak pawn to besiege,
- * an open file to seize, an outpost to occupy, a bad piece to reroute, extra
- * material to convert, the bishop pair to open lines for. One plan, board-true,
- * or null when nothing concrete stands out (empty > generic).
+ * "THE PLANS FROM HERE" — the FORWARD plans the student should pursue, each with
+ * the concrete HOW (David 2026-07-20: "add in more future plans … and exactly HOW
+ * to do those plans"). A great review doesn't only describe the board and name a
+ * plan — it spells out the method: which squares, which pieces, which breaks.
+ * Board-derived (G0), in Danya priority order; returns EVERY plan that genuinely
+ * applies (not just the top one), so the student hears the full agenda. Empty when
+ * nothing concrete stands out.
  */
-export function deriveNextPlan(fen: string, studentColorWB: Color): string | null {
+export function deriveNextPlans(fen: string, studentColorWB: Color): string[] {
   let chess: Chess;
-  try { chess = new Chess(fen); } catch { return null; }
+  try { chess = new Chess(fen); } catch { return []; }
   const struct = describeStructure(fen);
-  if (!struct) return null;
+  if (!struct) return [];
   const enemy: Color = studentColorWB === 'w' ? 'b' : 'w';
   const all = cells(chess);
   const fullmove = Number(fen.split(' ')[5] ?? '0');
+  const plans: string[] = [];
 
-  // 1. Enemy king exposed in the centre → open lines and attack it NOW.
+  // 1. Enemy king exposed in the centre → open lines and attack it, HOW spelled out.
   const enemyKing = all.find((c) => c.type === 'k' && c.color === enemy);
+  const openCentralFile = struct.pawns.openFiles.find((f) => f === 'd' || f === 'e') ?? null;
   if (enemyKing && fullmove >= 8 && 'cdef'.includes(enemyKing.square[0])
     && (enemy === 'w' ? '12'.includes(enemyKing.square[1]) : '78'.includes(enemyKing.square[1]))
-    && (struct.pawns.openFiles.includes('d') || struct.pawns.openFiles.includes('e'))) {
-    return `the plan from here is to prise open the centre and throw everything at their king on ${enemyKing.square} before it ever reaches safety`;
+    && openCentralFile) {
+    // The soft squares in front of a stuck king — where a sac usually lands.
+    const softSquares = enemy === 'w' ? 'd2 and f2' : 'd7 and f7';
+    plans.push(`the plan from here is to attack their king stuck on ${enemyKing.square} before it ever reaches safety. Here's exactly how: first make sure your OWN king is tucked away, then double both rooks onto the open ${openCentralFile}-file so they bear straight down on the king; bring every piece into the attack with tempo — a move that develops AND threatens is worth two; and hunt for a sacrifice on the soft squares ${softSquares} that rips the cover off, because once the king is bare it's checks all the way to mate`);
   }
 
-  // 2. Your passed pawn → push it toward promotion.
+  // 2. Your passed pawn → push it, HOW spelled out.
   const passer = struct.pawns.passedPawns[studentColorWB][0];
-  if (passer) return `the plan from here is to get that passed pawn on ${passer} rolling — a passed pawn's whole purpose is to advance, so push it and make them deal with it`;
+  if (passer) {
+    plans.push(`the plan from here is to get your passed pawn on ${passer} promoting. Here's how: clear the square in front of it so nothing blocks the road, escort it up with your king and pieces rather than pushing it alone into danger, and advance it one safe square at a time until they have to give up a piece to stop it — a passed pawn's whole job is to run`);
+  }
 
-  // 3. An enemy weak (isolated) pawn on the c–f files → besiege it.
+  // 3. An enemy weak (isolated) pawn on the c–f files → besiege it, HOW spelled out.
   const weak = struct.pawns.isolatedPawns[enemy].find((sq) => 'cdef'.includes(sq[0])) ?? struct.pawns.isolatedPawns[enemy][0];
-  if (weak) return `the plan from here is to pile up on their weak pawn on ${weak} — fix it in place, gang up on it, and win it or tie their pieces to its defence`;
+  if (weak) {
+    const block = `${weak[0]}${enemy === 'w' ? Number(weak[1]) + 1 : Number(weak[1]) - 1}`;
+    plans.push(`the plan from here is to win their weak pawn on ${weak}. Here's how: plant a knight on the square right in front of it, ${block}, so it can never advance to free itself; then stack your rooks and queen on the file to gang up on it, trade off the pieces that defend it one by one, and either win it outright or tie their whole army to babysitting it`);
+  }
 
-  // 4. An open file you don't yet own with a heavy piece → seize it.
+  // 4. An open file you don't yet own with a heavy piece → seize it, HOW spelled out.
   const myHeavyFiles = new Set(all.filter((c) => (c.type === 'r' || c.type === 'q') && c.color === studentColorWB).map((c) => c.square[0]));
   const freeOpenFile = struct.pawns.openFiles.find((f) => !myHeavyFiles.has(f));
-  if (freeOpenFile) return `the plan from here is to swing a rook onto the open ${freeOpenFile}-file — grab it before they do, because whoever owns the open file owns the highway into the position`;
+  if (freeOpenFile) {
+    plans.push(`the plan from here is to seize the open ${freeOpenFile}-file. Here's how: put a rook on it right away before they contest it, double the second rook behind the first so nothing can challenge you, and drive down to the seventh rank where a rook chews through pawns and pins the king back`);
+  }
 
-  // 5. You already hold an outpost → keep dominating from it.
+  // 5. You already hold an outpost → dominate from it, HOW spelled out.
   const myOutpost = struct.outposts.find((o) => o.color === studentColorWB);
-  if (myOutpost) return `the plan from here is to keep that ${myOutpost.piece === 'n' ? 'knight' : 'bishop'} anchored on its outpost at ${myOutpost.square} and build around it — a piece no pawn can chase runs the position`;
+  if (myOutpost) {
+    plans.push(`the plan from here is to make that ${myOutpost.piece === 'n' ? 'knight' : 'bishop'} on ${myOutpost.square} the boss of the board. Here's how: keep a pawn defending it so it can never be chased off, refuse any trade that gives it up cheaply, and use it as the anchor to pile your other pieces onto the weakness behind it`);
+  }
 
-  // 6. Your worst-placed piece (stuck) → reroute it.
+  // 6. Your worst-placed piece (stuck) → reroute it, HOW spelled out.
   if (fullmove >= 10) {
     const mob = mobilityMap(chess, studentColorWB);
     let worst: { sq: string; type: string; m: number } | null = null;
@@ -212,19 +224,31 @@ export function deriveNextPlan(fen: string, studentColorWB: Color): string | nul
       const m = mob.get(c.square) ?? 0;
       if (!worst || m < worst.m) worst = { sq: c.square, type: c.type, m };
     }
-    if (worst && worst.m <= 1) return `the plan from here is to bring your worst piece — the ${PIECE_NOUN[worst.type]} on ${worst.sq} — back into the game; find it a square where it actually does something`;
+    if (worst && worst.m <= 1) {
+      plans.push(`the plan from here is to rescue your worst piece, the ${PIECE_NOUN[worst.type]} on ${worst.sq}. Here's how: don't play a single attacking move until it's fixed — spend two or three tempi walking it to a square where it actually bites, because a piece doing nothing means you're effectively playing down a piece`);
+    }
   }
 
-  // 7. Up a clear amount of material → simplify and convert.
+  // 7. Up a clear amount of material → simplify and convert, HOW spelled out.
   const bal = struct.material.balance * (studentColorWB === 'w' ? 1 : -1);
-  if (bal >= 2) return `the plan from here is to trade pieces, not pawns, and convert — when you're up material, every swap of pieces brings the win closer`;
+  if (bal >= 2) {
+    plans.push(`the plan from here is to convert your extra material. Here's how: offer a trade of pieces at every chance but keep the pawns on, steer straight for an endgame where the extra piece is decisive, and don't get greedy or complicate — simplicity is what wins a won game`);
+  }
 
-  // 8. Bishop pair → open the position for the two bishops.
+  // 8. Bishop pair → open the position for the two bishops, HOW spelled out.
   const myB = all.filter((c) => c.type === 'b' && c.color === studentColorWB).length;
   const enemyB = all.filter((c) => c.type === 'b' && c.color === enemy).length;
-  if (myB >= 2 && enemyB <= 1) return `the plan from here is to open the position for your two bishops — the more the board opens, the more your bishop pair outguns their pieces`;
+  if (myB >= 2 && enemyB <= 1) {
+    plans.push(`the plan from here is to cash in your bishop pair. Here's how: trade pawns to rip the position open, guard both bishops from any swap, and point them at both wings at once — in an open board two bishops rake the whole thing and simply outgun a knight`);
+  }
 
-  return null;
+  return plans;
+}
+
+/** Back-compat single-plan helper (the top-priority plan), retained for callers
+ *  that want just one. */
+export function deriveNextPlan(fen: string, studentColorWB: Color): string | null {
+  return deriveNextPlans(fen, studentColorWB)[0] ?? null;
 }
 
 /** Per-square legal-move counts for every piece of `color`, from ONE moves()

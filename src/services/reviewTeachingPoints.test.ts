@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import {
   attackerDefenderCount, royalDefenderTarget, rookOnSeventh,
-  badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, deriveNextPlan,
+  badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, deriveNextPlan, deriveNextPlans,
 } from './reviewTeachingPoints';
 
 function fenAfter(sans: string[]): string {
@@ -89,5 +89,25 @@ describe('deriveNextPlan — speak to FUTURE PLANS (David 2026-07-20)', () => {
 
   it('returns null from the starting position (no concrete plan yet)', () => {
     expect(deriveNextPlan(new Chess().fen(), 'w')).toBeNull();
+  });
+
+  it('spells out the concrete HOW for the king-in-centre attack (ply 14 request)', () => {
+    const opera14 = ['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5', 'Bxf3', 'Qxf3', 'dxe5', 'Bc4', 'Nf6', 'Qb3', 'Qe7', 'Nc3'];
+    const plans = deriveNextPlans(fenAfter(opera14), 'w');
+    const kingPlan = plans.find((p) => /king/i.test(p));
+    expect(kingPlan).toBeDefined();
+    expect(kingPlan).toMatch(/here's exactly how/i);
+    // The method: own king safe, double rooks on the open file, tempo, sac on soft squares.
+    expect(kingPlan).toMatch(/double both rooks/i);
+    expect(kingPlan).toMatch(/tempo/i);
+    expect(kingPlan).toMatch(/sacrifice on the soft squares d7 and f7/i);
+  });
+
+  it('returns MULTIPLE plans when several apply (more future plans)', () => {
+    // Opera after 20...cxb5: White has a passed c2 pawn AND Black has a weak a7.
+    const opera = ['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5', 'Bxf3', 'Qxf3', 'dxe5', 'Bc4', 'Nf6', 'Qb3', 'Qe7', 'Nc3', 'c6', 'Bg5', 'b5', 'Nxb5', 'cxb5', 'Bxb5+'];
+    const plans = deriveNextPlans(fenAfter(opera), 'w');
+    expect(plans.length).toBeGreaterThanOrEqual(2);
+    expect(plans.every((p) => /here's how|here's exactly how/i.test(p))).toBe(true);
   });
 });
