@@ -24,6 +24,7 @@ interface ModelGameLike {
   result?: string;
   middlegameTheme?: string;
   lessonSummary?: string;
+  pgn?: string;
 }
 
 const MODEL_GAMES = modelGamesRaw as ModelGameLike[];
@@ -33,6 +34,10 @@ export interface StoryGame {
   citation: string;
   /** The spoken story line. */
   text: string;
+  /** The cited game's real PGN (from the verified corpus) so the review can
+   *  offer a "watch this game" playback (David 2026-07-21: "where is the tag
+   *  to watch that game??"). */
+  pgn: string;
 }
 
 function lowerFirst(s: string): string { return s.charAt(0).toLowerCase() + s.slice(1); }
@@ -70,7 +75,8 @@ export function pickStoryGame(openingName: string | null): StoryGame | null {
   const openingId = resolveOpeningIdFromName(openingName);
   if (!openingId) return null;
   const candidates = MODEL_GAMES.filter(
-    (g) => g.openingId === openingId && !!g.white && !!g.black && (g.year !== undefined && g.year !== null && String(g.year).trim() !== ''),
+    (g) => g.openingId === openingId && !!g.white && !!g.black && !!g.pgn
+      && (g.year !== undefined && g.year !== null && String(g.year).trim() !== ''),
   );
   if (candidates.length === 0) return null;
   // Highest-rated, then most-recent — a deterministic, reproducible pick.
@@ -89,5 +95,6 @@ export function pickStoryGame(openingName: string | null): StoryGame | null {
   return {
     citation,
     text: `This is a well-trodden battleground: look up ${citation}${ideaClause}. Seeing the plan in a strong player's hands is worth more than any amount of theory.`,
+    pgn: pick.pgn ?? '',
   };
 }

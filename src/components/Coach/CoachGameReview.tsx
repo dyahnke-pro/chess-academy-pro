@@ -1415,6 +1415,48 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     voiceService.stop();
   }, []);
 
+  /** WATCH THE CITED STORY GAME (David 2026-07-21, IMG_4576: "Coach said a
+   *  master game reached this position!! But where is the tag to watch that
+   *  game??"). Plays the cited game's real PGN out on the exploration board —
+   *  move sound + arrow + a caption naming the citation and each move. Rides
+   *  the theory-lecture token/state machinery, so Stop and every nav-cancel
+   *  path that kills the theory lecture kills this too. */
+  const playStoryGame = useCallback(async (pgn: string, citation: string): Promise<void> => {
+    if (theoryLecturePlaying) return;
+    const token = ++theoryLectureTokenRef.current;
+    setTheoryLecturePlaying(true);
+    try {
+      const sans = pgn
+        .replace(/\{[^}]*\}/g, '')
+        .replace(/\d+\.(\.\.)?/g, '')
+        .replace(/\b(1-0|0-1|1\/2-1\/2|\*)\b/g, '')
+        .trim().split(/\s+/).filter(Boolean);
+      const c = new Chess();
+      setTheoryCaption(`${citation} — watch how the plan unfolds.`);
+      await new Promise((r) => setTimeout(r, 1800));
+      for (let i = 0; i < sans.length; i++) {
+        if (theoryLectureTokenRef.current !== token || !walkMountedRef.current) return;
+        let mv: ReturnType<Chess['move']> | null = null;
+        try { mv = c.move(sans[i]); } catch { break; }
+        if (!mv) break;
+        setWalkExplorationFen(c.fen());
+        setWalkExplorationSan(mv.san);
+        setWalkExplorationArrows([{ startSquare: mv.from, endSquare: mv.to, color: '#f59e0b' }]);
+        playMoveSound(mv.san);
+        setTheoryCaption(`${citation} · ${Math.ceil((i + 1) / 2)}${mv.color === 'w' ? '.' : '…'} ${mv.san}`);
+        await new Promise((r) => setTimeout(r, 1150));
+      }
+    } finally {
+      if (theoryLectureTokenRef.current === token && walkMountedRef.current) {
+        setWalkExplorationFen(null);
+        setWalkExplorationSan(null);
+        setWalkExplorationArrows(null);
+        setTheoryCaption(null);
+        setTheoryLecturePlaying(false);
+      }
+    }
+  }, [theoryLecturePlaying, playMoveSound]);
+
   const resumeAfterFaucet = useCallback((): void => {
     resetFaucet();
     const better = pendingBetterLineRef.current;
@@ -3178,6 +3220,23 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   {theoryCaption ?? walkPlayback.currentText ?? walkPlayback.currentSegment?.san ?? ''}
                 </p>
               </div>
+              {/* WATCH-THE-GAME chip — appears on the story-as-evidence ply so
+                  the cited master game is one tap away (David 2026-07-21,
+                  IMG_4576: "where is the tag to watch that game??"). */}
+              {(walkPlayback.currentSegment?.storyGame || theoryLecturePlaying) && walkPlayback.currentSegment?.storyGame && (
+                <button
+                  type="button"
+                  data-testid="review-story-watch-btn"
+                  onClick={() => {
+                    const sg = walkPlayback.currentSegment?.storyGame;
+                    if (theoryLecturePlaying) stopOpeningTheory();
+                    else if (sg) void playStoryGame(sg.pgn, sg.citation);
+                  }}
+                  className="mt-1.5 w-full flex items-center justify-center gap-1.5 rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-1.5 text-xs font-semibold text-amber-100 hover:bg-amber-500/20"
+                >
+                  {theoryLecturePlaying ? '■ Stop the game' : `▶ Watch ${walkPlayback.currentSegment.storyGame.citation}`}
+                </button>
+              )}
             </div>
           </div>
 

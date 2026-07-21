@@ -462,6 +462,10 @@ export interface ReviewMoveSegment {
    *  these arrows SHOW the plan instead of moving pieces (David 2026-07-19).
    *  Undefined on ordinary moves. */
   planArrows?: Array<{ startSquare: string; endSquare: string; color: string }>;
+  /** The cited master game for the §6 story-as-evidence beat, WITH its PGN so
+   *  the UI can offer a "watch this game" playback (David 2026-07-21 IMG_4576:
+   *  "where is the tag to watch that game??"). Undefined on other segments. */
+  storyGame?: { citation: string; pgn: string };
 }
 
 export interface ReviewNarration {
@@ -1194,6 +1198,7 @@ export function buildReviewSegments(
     // endgame" plan; Bxb5+ too). Let those fall through to the per-move teaching.
     const isConcreteMove = /[x+#]/.test(m.san) || m.san.startsWith('O-O');
     let planArrows: ReviewMoveSegment['planArrows'];
+    let segmentStoryGame: ReviewMoveSegment['storyGame'];
     // (a) Opening DEVELOPING plan, fired once when the opening is identified.
     if (
       narration === null
@@ -1322,6 +1327,10 @@ export function buildReviewSegments(
       narration = storyGame.text;
       narrationSource = 'opening-plan';
       storyShown = true;
+      // Attach the cited game's PGN so the UI can offer "watch this game"
+      // (David 2026-07-21, IMG_4576: the citation was spoken with no way to
+      // actually SEE the game).
+      if (storyGame.pgn) segmentStoryGame = { citation: storyGame.citation, pgn: storyGame.pgn };
     }
     if (
       narration === null
@@ -1481,6 +1490,7 @@ export function buildReviewSegments(
       narration,
       narrationSource,
       ...(planArrows && planArrows.length ? { planArrows } : {}),
+      ...(segmentStoryGame ? { storyGame: segmentStoryGame } : {}),
     });
     // Carry this move's capture forward so the NEXT ply's material calc can
     // recognize a recapture (even trade → 0, no "wins material" windfall).
@@ -1723,21 +1733,33 @@ async function groundOpeningPlanInBook(segments: ReviewMoveSegment[]): Promise<v
     }
   }
   if (targets.size === 0) return;
-  const corrected: string[] = [];
-  seg.planArrows = seg.planArrows!.map((a) => {
-    const t = targets.get(a.startSquare);
-    if (t && t.to !== a.endSquare) { corrected.push(a.startSquare); return { ...a, endSquare: t.to }; }
-    return a;
-  });
-  // SPEAK the scheme — position-specific, agrees with the theory lecture where
-  // the book covers it, and varies per game.
-  const spoken = [...targets.entries()].slice(0, 2)
-    .map(([from, t]) => `the ${from}-${t.piece} to ${t.to}`)
-    .join(' and ');
+  // ONE SOURCE FOR WORDS AND ARROWS (David 2026-07-21, IMG_4575: the narration
+  // said "f1-bishop to d3 and g8-knight to e7" while the board still showed the
+  // TEMPLATE arrows b1→c3 / g1→f3). When data targets resolve, the arrows are
+  // REBUILT from the targets alone — stale template arrows the data didn't
+  // confirm are dropped (empty > wrong), and every spoken target gets its arrow.
+  // Blue = the student's pieces, amber = the opponent's (devArrows' scheme).
+  const studentIsWhite = seg.playerColor === 'white';
+  const sideOf = (home: string): 'student' | 'opponent' => ((home[1] === '1') === studentIsWhite ? 'student' : 'opponent');
+  seg.planArrows = [...targets.entries()].map(([from, t]) => ({
+    startSquare: from,
+    endSquare: t.to,
+    color: sideOf(from) === 'student' ? '#3b82f6' : '#f59e0b',
+  }));
+  // SPEAK the scheme SEAT-AWARE — "your f1-bishop to d3", "expect their knight
+  // to head for e7" — never a sideless mix of both armies in one clause.
+  const mineT = [...targets.entries()].filter(([f]) => sideOf(f) === 'student').slice(0, 2);
+  const theirsT = [...targets.entries()].filter(([f]) => sideOf(f) === 'opponent').slice(0, 2);
+  const list = (xs: Array<[string, { to: string; piece: string }]>, poss: string): string =>
+    xs.map(([from, t]) => `${poss} ${from}-${t.piece} to ${t.to}`).join(' and ');
+  const bits: string[] = [];
+  if (mineT.length) bits.push(`it develops ${list(mineT, 'your')}`);
+  if (theirsT.length) bits.push(`${mineT.length ? 'and expect' : 'expect'} ${list(theirsT, 'their')}`);
+  const spoken = bits.join(', ');
   if (spoken) {
     seg.narration = source === 'book'
-      ? `${seg.narration ?? ''} In this exact structure the book develops ${spoken} — that's the scheme the master games follow here.`.trim()
-      : `${seg.narration ?? ''} We're past the master book here, so trust the engine's scheme: from this exact position it develops ${spoken}.`.trim();
+      ? `${seg.narration ?? ''} In this exact structure the book's scheme: ${spoken} — that's the path the master games follow here.`.trim()
+      : `${seg.narration ?? ''} We're past the master book here, so trust the engine's scheme: ${spoken}.`.trim();
   }
 }
 
