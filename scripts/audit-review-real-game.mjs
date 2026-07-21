@@ -348,8 +348,19 @@ const run = async () => {
   }
   if (queenSacPly !== null) {
     const p = plies.find((x) => x.ply === queenSacPly);
-    const saysSac = /sacrifice|sac\b|offer/i.test(p?.narr || '');
-    add('SAC queen-sac-named', saysSac, saysSac ? `queen sac at ply ${queenSacPly} named a sacrifice` : `queen sac at ply ${queenSacPly} NOT named a sacrifice: "${(p?.narr || '(silent)').slice(0, 60)}"`);
+    // A genuine queen SACRIFICE is a SOUND move (the review names it "sacrifice").
+    // A queen that merely HANGS to a blunder — or a straight queen trade — is not a
+    // sac, and the review correctly calls it a blunder; don't demand "sacrifice"
+    // there (draw-game false positive: "Qb3 is a blunder" flagged as an un-named
+    // sac). Skip when the ply is an engine error.
+    const badge = (p?.badge || '').toUpperCase();
+    const isError = /BLUNDER|MISTAKE|INACCUR/.test(badge);
+    if (isError) {
+      log(`  ⏭  SAC skipped — the queen move at ply ${queenSacPly} is an engine error (${badge.trim()}), a blunder/trade not a sacrifice.`);
+    } else {
+      const saysSac = /sacrifice|sac\b|offer/i.test(p?.narr || '');
+      add('SAC queen-sac-named', saysSac, saysSac ? `queen sac at ply ${queenSacPly} named a sacrifice` : `queen sac at ply ${queenSacPly} NOT named a sacrifice: "${(p?.narr || '(silent)').slice(0, 60)}"`);
+    }
   }
 
   // NOWINDFALL — a RECAPTURE (capturing on the square the previous ply captured

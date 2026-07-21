@@ -90,17 +90,31 @@ export function explainMatingSacMechanism(sans: string[], sacIdx: number): strin
 
     const recap = mv[recapIdx];
     const mate = mv[mateIdx];
-    // The mating move must be a SLIDER along a file/rank/diagonal; its path is the
-    // squares strictly between from and to.
-    const path = squaresBetween(mate.from, mate.to);
-    if (path.length === 0) return null;
-    // Clearance: the recapturing piece VACATED a square on the mating line.
-    if (!path.includes(recap.from)) return null;
-
-    const file = mate.from[0] === mate.to[0] ? `${mate.to[0]}-file` : mate.from[1] === mate.to[1] ? `${mate.to[1]}th rank` : 'diagonal';
     const recapName = PIECE_NAME[recap.piece] ?? 'piece';
     const mateName = PIECE_NAME[mate.piece] ?? 'piece';
-    return `it drags the ${recapName} off ${recap.from}, and the ${file} swings wide open — your ${mateName} crashes down to ${mate.to} and it's mate`;
+
+    // (A) LINE-CLEARANCE: the mating move is a slider, and the forced recapture
+    // VACATED a square on the mating line (Opera: Qb8+ Nxb8 clears d-file for Rd8#).
+    const path = squaresBetween(mate.from, mate.to);
+    if (path.length > 0 && path.includes(recap.from)) {
+      const file = mate.from[0] === mate.to[0] ? `${mate.to[0]}-file` : mate.from[1] === mate.to[1] ? `${mate.to[1]}th rank` : 'diagonal';
+      return `it drags the ${recapName} off ${recap.from}, and the ${file} swings wide open — your ${mateName} crashes down to ${mate.to} and it's mate`;
+    }
+
+    // (B) DEFLECTION: the forced recapture drags a DEFENDER off the mating square —
+    // the recapturing piece was guarding the square the mate lands on (Immortal:
+    // Qf6+ decoys the g8 knight off guarding e7, then Be7#). Read the guard by
+    // replaying to the position just BEFORE the recapture and checking whether the
+    // piece on recap.from attacked mate.to.
+    const before = new Chess();
+    for (let i = 0; i < recapIdx; i += 1) before.move(sans[i]);
+    const defenderColor = recap.color; // the side that recaptures = the defending side
+    const guards = before.attackers(mate.to as Parameters<Chess['attackers']>[0], defenderColor);
+    if (Array.isArray(guards) && guards.includes(recap.from as (typeof guards)[number])) {
+      return `it drags the ${recapName} off ${recap.from} — the piece that was guarding ${mate.to} — and with that guard gone your ${mateName} delivers mate there`;
+    }
+
+    return null;
   } catch {
     return null;
   }

@@ -1200,7 +1200,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // only the verdict survived. speakForced can also resolve before audio-END.
     // So we gate on isPlaying(): wait for the voice to be free before AND after
     // each line, so exactly one why plays per board move, in order, none dropped.
-    const waitVoiceIdle = async (maxMs = 9000): Promise<void> => {
+    // In UNCAPPED mode the per-move narration is much longer (all facts voiced),
+    // so a 9s idle-wait timed out and the playout intro fired into still-playing
+    // voice and got DROPPED (David 2026-07-20 sweep: the IQP playout collided).
+    // Give it room to wait for the long narration to finish first.
+    const IDLE_MAX = isReviewUncapped() ? 22000 : 9000;
+    const waitVoiceIdle = async (maxMs = IDLE_MAX): Promise<void> => {
       const start = performance.now();
       while (voiceService.isPlaying() && performance.now() - start < maxMs) {
         if (betterLineTokenRef.current !== token || !walkMountedRef.current) return;
