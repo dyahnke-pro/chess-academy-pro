@@ -2383,9 +2383,10 @@ export async function voiceReviewLines(
   // whole point ("I want to hear ALL the computed data on every move").
   const coverAllClause = opts.coverAll
     ? 'EACH numbered item is a BUNDLE of several computed facts about ONE move, each tagged ' +
-      'in [brackets] ([move], [quality], [tactic], [loose], [verdict], [structure], [king], ' +
-      '[sac], [forced], [plan-opening], [plan-middlegame], [plan-line], [consequence], ' +
-      '[opening], [opp-target], [endgame]). ' +
+      'in [brackets] ([move], [quality], [tactic], [loose], [count], [royal], [verdict], ' +
+      '[structure], [king], [rook7], [badbishop], [worst], [passer], [sac], [forced], ' +
+      '[plan-opening], [plan-middlegame], [plan-line], [consequence], [opening], ' +
+      '[opp-target], [endgame]). ' +
       'Voice EVERY fact in the bundle into ONE flowing spoken passage for that move — a ' +
       'sentence or clause per fact, in the teaching voice, in a natural order. DROP NOTHING: ' +
       'every bracketed fact must be spoken. Do NOT print the bracket tags themselves. There ' +

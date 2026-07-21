@@ -23,6 +23,7 @@ import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan } from './revie
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
 import { nameEndgamePhase } from './reviewMoveTeaching';
 import { detectOpening } from './openingDetectionService';
+import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush } from './reviewTeachingPoints';
 
 interface Located { type: string; color: Color; square: string; }
 
@@ -117,6 +118,24 @@ export function computeMoveFacets(ctx: MoveFactContext): string[] {
   // ── 6. KING SAFETY (enemy king exposed in the centre) ──
   if (studentColorWB && enemyKingStuckInCenter(fenAfter, studentColorWB)) {
     facets.push('[king] Their king is stuck in the centre with a central file open on it.');
+  }
+
+  // ── 6b. THE MISSING TEACHING POINTS (Naroditsky message catalog) ──
+  if (studentColorWB) {
+    const count = attackerDefenderCount(fenAfter, studentColorWB);
+    if (count) facets.push(`[count] ${cap(count)}.`);
+    const royal = royalDefenderTarget(fenAfter, studentColorWB);
+    if (royal) facets.push(`[royal] ${cap(royal)}.`);
+    const rook7 = rookOnSeventh(fenAfter, studentColorWB);
+    if (rook7) facets.push(`[rook7] ${cap(rook7)}.`);
+    const badB = badEnemyBishop(fenAfter, studentColorWB);
+    if (badB) facets.push(`[badbishop] ${cap(badB)}.`);
+    const worst = worstPlacedFriendlyPiece(fenAfter, studentColorWB);
+    if (worst) facets.push(`[worst] ${cap(worst)}.`);
+    const structForPass = describeStructure(fenAfter);
+    const passer = structForPass?.pawns.passedPawns[studentColorWB][0] ?? null;
+    const passNote = passedPawnPush(fenAfter, studentColorWB, passer);
+    if (passNote) facets.push(`[passer] ${cap(passNote)}.`);
   }
 
   // ── 7. SACRIFICE — compensation + mechanism + king-shield removal ──

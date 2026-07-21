@@ -982,7 +982,7 @@ export function buildReviewSegments(
       // (opening / plan-opening / plan-middlegame / opp-dev); keep every dynamic
       // per-move fact.
       const kept = facets.filter((f) => {
-        if (!/^\[(opening|plan-opening|plan-middlegame|opp-dev)\]/.test(f)) return true;
+        if (!/^\[(opening|plan-opening|plan-middlegame|opp-dev|passer|badbishop|worst)\]/.test(f)) return true;
         if (emittedStaticFacets.has(f)) return false;
         emittedStaticFacets.add(f);
         return true;
