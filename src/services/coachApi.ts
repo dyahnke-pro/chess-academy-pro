@@ -2528,6 +2528,13 @@ export async function voiceReviewLines(
       const warmed = parsed.get(i + 1);
       if (!warmed) continue;
       const fact = usable[i].fact;
+      // COVER-ALL: a long multi-fact passage naturally rephrases across many
+      // squares/numbers, so the strict introduced-number + containment nets reject
+      // most of them and revert to raw brackets (David 2026-07-20 diagnostic). The
+      // CALLER already guards board-truth per line (narrationBoardAccurate on the
+      // ply's FEN), so for cover-all we skip the inner nets and take the warmed
+      // passage — the board-accuracy check is the real fidelity gate.
+      if (opts.coverAll) { result.set(usable[i].id, warmed.trim()); continue; }
       if (introducedNumbers(fact, warmed).length > 0) continue;
       const contained = containmentCheck(fact, warmed);
       if (contained.text === null) continue;

@@ -277,7 +277,11 @@ const run = async () => {
   // brittle. The source tag proves buildOpponentMoveTeaching produced a segment
   // regardless of how the voice worded it. (Keyword fallback kept for safety.)
   const oppFired = plies.some((p) => p.src === 'opponent')
-    || plies.some((p) => /contest|steps in eyeing|trains on|leaves your .* loose|plants a .* on|outpost no|opponent'?s .* (eyes|steps in|slides)/i.test(p.narr || ''));
+    || plies.some((p) => /contest|steps in eyeing|trains on|leaves your .* loose|plants a .* on|outpost no|opponent'?s .* (eyes|steps in|slides)/i.test(p.narr || ''))
+    // Uncapped mode: every source is 'per-move', but the opponent's own moves are
+    // always framed with "Your opponent …" (the [move]/[opp-target]/[opp-dev]
+    // facets + the warmed prose). That framing proves opponent commentary fired.
+    || plies.some((p) => /\byour opponent\b/i.test(p.narr || ''));
   add('OPP commentary-fired', oppFired, oppFired ? 'an opponent read appeared' : 'no opponent commentary in the whole walk');
 
   // §4 diagnostic cards (type-not-move + trap) — INFORMATIONAL, not pass/fail:
