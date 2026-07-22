@@ -863,8 +863,18 @@ export function describeMoveGeometry(
   // FORK — the moved piece hits two enemy pieces at once (royal fork when the
   // king is one of them), AND survives on its square.
   if (targets.length >= 2 && landingSafe) {
-    const sorted = [...targets].sort((a, b) => (REVIEW_PIECE_VALUE[b.piece] ?? 0) - (REVIEW_PIECE_VALUE[a.piece] ?? 0));
-    return `forks the ${REVIEW_PIECE_NAME[sorted[0].piece]} on ${sorted[0].square} and the ${REVIEW_PIECE_NAME[sorted[1].piece]} on ${sorted[1].square}`;
+    const enemyWB: 'w' | 'b' = mc === 'w' ? 'b' : 'w';
+    // A "fork" only wins when it forces a real concession: the king is one of
+    // the targets (a royal fork — the king MUST move, the other is threatened),
+    // OR at least one target is UNDEFENDED (falls next). Forking two defended
+    // pawns wins nothing — don't call it a fork (board-awareness sweep,
+    // 2026-07-22).
+    const realWin = targets.some((t) => t.piece === 'k'
+      || c.attackers(t.square, enemyWB).length === 0);
+    if (realWin) {
+      const sorted = [...targets].sort((a, b) => (REVIEW_PIECE_VALUE[b.piece] ?? 0) - (REVIEW_PIECE_VALUE[a.piece] ?? 0));
+      return `forks the ${REVIEW_PIECE_NAME[sorted[0].piece]} on ${sorted[0].square} and the ${REVIEW_PIECE_NAME[sorted[1].piece]} on ${sorted[1].square}`;
+    }
   }
 
   // PIN — a real pin held by a piece that isn't itself hanging.
@@ -876,8 +886,12 @@ export function describeMoveGeometry(
   // CHECK.
   if (c.inCheck()) return 'gives check';
 
-  // MATERIAL — a capture the opponent can't profitably recapture.
-  if (mv.captured && seeGain(c, to) <= 0) {
+  // MATERIAL — a capture the opponent can't profitably recapture AND can't
+  // refute with an immediate counter-tactic elsewhere (the Berlin "wins the
+  // pawn while the recapture forks" class — the same guard its sibling clauses
+  // at :677/:3336 already carry; board-awareness sweep 2026-07-22).
+  if (mv.captured && seeGain(c, to) <= 0
+    && !captureHasCounterTactic(fenBefore, mv.san, mc === 'w' ? 'b' : 'w', REVIEW_PIECE_VALUE[mv.captured] ?? 0)) {
     return `wins the ${REVIEW_PIECE_NAME[mv.captured]} on ${to}`;
   }
 
@@ -949,7 +963,7 @@ export function quietPurposePhrase(
       const rank = parseInt(mv.to[1], 10);
       const advanced = moverColor === 'white' ? rank >= 5 : rank <= 4;
       if (advanced) {
-        return `plants a ${REVIEW_PIECE_NAME[mv.piece]} on the ${mv.to} outpost, where no pawn can chase it off`;
+        return `plants a ${REVIEW_PIECE_NAME[mv.piece]} on the ${mv.to} outpost, where no enemy pawn covers it`;
       }
     }
     // Central pawn advance — real space; a wing pawn shuffle is not worth naming.
@@ -1096,7 +1110,13 @@ export function assembleMovePurpose(opts: {
   if (geo) {
     clauses.push(`The ${pieceName} ${geo}.`);
   } else if (mv.piece === 'p') {
-    clauses.push(`The pawn goes to ${mv.to}, staking out space in the center.`);
+    // "staking out space in the center" is FALSE for a wing pawn (h4, a3, g3…).
+    // Only a genuinely central destination earns the centre claim; otherwise
+    // speak the space-grab plainly (board-awareness sweep, 2026-07-22).
+    const central = CENTRAL_SQUARES.includes(mv.to) || 'cdef'.includes(mv.to[0]);
+    clauses.push(central
+      ? `The pawn goes to ${mv.to}, staking out space in the center.`
+      : `The pawn advances to ${mv.to}, grabbing space on the ${'abc'.includes(mv.to[0]) ? 'queenside' : 'kingside'}.`);
   } else {
     const mc = opts.moverColor === 'white' ? 'w' : 'b';
     const eyes = CENTRAL_SQUARES.filter((s) => {
@@ -1117,7 +1137,7 @@ export function assembleMovePurpose(opts: {
   if ((mv.piece === 'n' || mv.piece === 'b') && isOutpostSquare(afterBoard, mv.to, opts.moverColor)) {
     const rank = parseInt(mv.to[1], 10);
     const advanced = opts.moverColor === 'white' ? rank >= 5 : rank <= 4;
-    if (advanced) clauses.push(`It's an outpost — no pawn can ever chase it off ${mv.to}.`);
+    if (advanced) clauses.push(`It's an outpost on ${mv.to} — no enemy pawn covers the square, so it sits there unchallenged.`);
   }
 
   // 3) THE POINT — the threat/opportunity the move creates (computed tactics).
@@ -2815,6 +2835,12 @@ export function assembleSkillRadarAnswer(s: SkillRadarLike): GroundedAnswer | nu
 export function assembleGameReviewAnswer(opts: {
   white: string;
   black: string;
+  /** The STUDENT's colour, when known. The verdict grades the STUDENT — an
+   *  opponent's blunders must not inflate "significant issues to address" or an
+   *  opponent's clean play credit the student (board-awareness sweep,
+   *  2026-07-22). When absent, the verdict describes the GAME (both players),
+   *  never a misattributed personal grade. */
+  studentColor?: 'white' | 'black';
   result: string;
   moveCount: number;
   annotations: MoveAnnotation[] | null;
@@ -2881,7 +2907,7 @@ export function assembleGameReviewAnswer(opts: {
 
   const parts: string[] = [
     `Game: ${opts.white} (White) vs ${opts.black} (Black). Result: ${opts.result}. About ${opts.moveCount} moves.`,
-    `Engine analysis (Stockfish): ${blunders.length} blunder(s), ${mistakes.length} mistake(s), ${inaccuracies.length} inaccuracy/inaccuracies.`,
+    `Engine analysis (Stockfish), across both players: ${blunders.length} blunder(s), ${mistakes.length} mistake(s), ${inaccuracies.length} inaccuracy/inaccuracies.`,
   ];
 
   // Each critical moment is grounded: the move played, the eval AFTER it, and the
@@ -2924,13 +2950,28 @@ export function assembleGameReviewAnswer(opts: {
     }
   }
 
-  // Honest, computed calibration — never "well played" when the engine disagrees.
-  const verdict =
-    blunders.length >= 2 ? 'Multiple blunders — significant issues to address.'
-    : blunders.length === 1 ? 'One blunder was the main turning point.'
-    : mistakes.length >= 2 ? 'A few mistakes cost ground.'
-    : total <= 1 ? 'Cleanly played — very few engine-flagged errors.'
-    : 'A solid game with a few inaccuracies to tighten up.';
+  // Honest, computed calibration — never "well played" when the engine
+  // disagrees. The verdict grades the STUDENT: count only their errors when the
+  // colour is known, so an opponent's blunders can't be read as the student's
+  // (board-awareness sweep, 2026-07-22). When the colour is unknown, describe
+  // the GAME (both players) rather than misattribute a personal grade.
+  const sc = opts.studentColor;
+  const myB = sc ? blunders.filter((a) => a.color === sc).length : blunders.length;
+  const myM = sc ? mistakes.filter((a) => a.color === sc).length : mistakes.length;
+  const myTotal = sc
+    ? myB + myM + inaccuracies.filter((a) => a.color === sc).length
+    : total;
+  const verdict = sc
+    ? (myB >= 2 ? 'Multiple blunders on your side — significant issues to address.'
+      : myB === 1 ? 'One blunder was your main turning point.'
+      : myM >= 2 ? 'A few mistakes cost you ground.'
+      : myTotal <= 1 ? 'Cleanly played — very few engine-flagged errors from you.'
+      : 'A solid game from you, with a few inaccuracies to tighten up.')
+    : (myB >= 2 ? 'The game saw multiple blunders across both sides.'
+      : myB === 1 ? 'One blunder was the main turning point of the game.'
+      : myM >= 2 ? 'A few mistakes decided the balance.'
+      : myTotal <= 1 ? 'A clean game — very few engine-flagged errors either side.'
+      : 'A solid game with a few inaccuracies on the board.');
   parts.push(verdict);
 
   return { facts: parts.join('\n'), bestMoveSan: null, bestMoveFromTo: null, sources: ['engine:stockfish'] };
@@ -3210,19 +3251,30 @@ export function seatPieceReferences(
   try {
     const board = new Chess(fen);
     const WANT: Record<string, string> = { knight: 'n', bishop: 'b', rook: 'r', queen: 'q', pawn: 'p', king: 'k' };
+    // Structural adjectives the composed facets place BETWEEN a possessive and
+    // the piece noun ("your PASSED pawn", "their WEAK pawn"). Captured as part of
+    // the lead so a possessive already present isn't re-stamped into a
+    // double-possessive — "your passed YOUR pawn on c2" (preview line-read,
+    // 2026-07-22).
+    const ADJ = 'passed|weak|isolated|doubled|backward|extra|lone|bad|connected|protected|central|advanced|remaining|outside';
     return text.replace(
-      /(\b[Yy]our opponent's\s+|\b[Yy]our\s+|\b[Tt]heir\s+|\b[Tt]he\s+)?\b(Knight|Bishop|Rook|Queen|Pawn|King|knight|bishop|rook|queen|pawn|king)\s+on\s+([a-h][1-8])\b/g,
-      (whole, lead: string | undefined, piece: string, sq: string) => {
+      new RegExp(
+        `(\\b[Yy]our opponent's\\s+|\\b[Yy]our\\s+|\\b[Tt]heir\\s+|\\b[Tt]he\\s+)?((?:${ADJ})\\s+)?\\b(Knight|Bishop|Rook|Queen|Pawn|King|knight|bishop|rook|queen|pawn|king)\\s+on\\s+([a-h][1-8])\\b`,
+        'g',
+      ),
+      (whole, lead: string | undefined, adj: string | undefined, piece: string, sq: string) => {
         const leadLower = (lead ?? '').toLowerCase();
-        // Already seated — leave the author's possessive alone.
+        // Already seated — leave the author's possessive (and any adjective it
+        // introduced) alone.
         if (leadLower.startsWith('your') || leadLower.startsWith('their')) return whole;
         const cell = board.get(sq as Square);
         if (!cell || cell.type !== WANT[piece.toLowerCase()]) return whole;
         const owner = cell.color === studentColorWB ? 'your' : 'their';
-        const firstChar = (lead && lead.length > 0 ? lead : piece).charAt(0);
+        const firstChar = (lead && lead.length > 0 ? lead : (adj && adj.length > 0 ? adj : piece)).charAt(0);
         const sentenceStart = firstChar === firstChar.toUpperCase();
         const ownerWord = sentenceStart ? cap(owner) : owner;
-        return `${ownerWord} ${piece.toLowerCase()} on ${sq}`;
+        // Preserve a bare adjective (rare "the passed pawn" form) after the owner.
+        return `${ownerWord} ${adj ? adj.toLowerCase() : ''}${piece.toLowerCase()} on ${sq}`;
       },
     );
   } catch {
@@ -3293,7 +3345,7 @@ export function detectNewThreat(
         if (!played) continue;
         // Mate-in-one: the highest-ranked threat, always safe to name.
         if (sim.isCheckmate()) {
-          best = { san: mv.san, detail: 'checkmate', kind: 'mate', landing: played.to, targets: [], guards: guardsOf(sim, played.to), rank: 1000 };
+          best = { san: mv.san, detail: 'delivers checkmate', kind: 'mate', landing: played.to, targets: [], guards: guardsOf(sim, played.to), rank: 1000 };
           break;
         }
         // Safe royal fork from the landing square (king + major, or two majors),
@@ -3312,10 +3364,17 @@ export function detectNewThreat(
         if ((hitsKing && majors.length >= 1) || majors.length >= 2) {
           if (seeGain(sim, played.to) <= 0) {
             const capBit = played.captured ? `wins the ${REVIEW_PIECE_NAME[played.captured]} on ${played.to} and ` : '';
-            const forkTargets = hitsKing ? `their king and ${majors[0]}` : `their ${majors.join(' and ')}`;
+            // SEAT-NEUTRAL victims ("the king", "the queen on d1") — this
+            // detector is side-agnostic (called for BOTH the student's threats
+            // AND the opponent's). Baking "their king" made "their move
+            // threatens … forks THEIR king" read as the opponent's own king
+            // when it is in fact the STUDENT's (board-awareness sweep,
+            // 2026-07-22). The consumer's framing ("you're threatening" /
+            // "their move threatens") already carries whose move it is.
+            const forkTargets = hitsKing ? `the king and ${majors[0]}` : `the ${majors.join(' and ')}`;
             const rank = 500 + (played.captured ? PIECE_VALUE_LOCAL[played.captured] ?? 0 : 0);
             if (!best || rank > best.rank) {
-              best = { san: mv.san, detail: `${capBit}forks ${forkTargets}`, kind: 'fork', landing: played.to, targets: hitsKing ? ['their king', majors[0]] : majors, guards: guardsOf(sim, played.to), rank };
+              best = { san: mv.san, detail: `${capBit}forks ${forkTargets}`, kind: 'fork', landing: played.to, targets: hitsKing ? ['the king', majors[0]] : majors, guards: guardsOf(sim, played.to), rank };
             }
             continue;
           }
@@ -3383,14 +3442,34 @@ export function describeThreatRecognition(
         : threat.guards.length > 0
           ? `and ${threat.landing} is backed up by their piece on ${threat.guards[0]}`
           : `even though you cover ${threat.landing}`;
-      return `the pattern to spot: ${threat.targets.join(' and ')} sitting one knight's-hop from ${threat.landing}, ${guardBit} — that alignment IS the fork, a move before it lands`;
+      // The geometry depends on the FORKING PIECE — "one knight's-hop" is only
+      // true for a knight fork; detectNewThreat scans EVERY piece's moves, so a
+      // queen/rook/bishop fork was getting the knight's-hop lie (board-awareness
+      // sweep, 2026-07-22). Read the forker's type off the landing square.
+      const forker = c.get(threat.landing as Square);
+      const geom = forker?.type === 'n'
+        ? `sitting one knight's-hop from ${threat.landing}`
+        : forker?.type === 'p'
+          ? `both caught by a pawn on ${threat.landing}`
+          : `both in the ${forker ? REVIEW_PIECE_NAME[forker.type] : 'piece'}'s line from ${threat.landing}`;
+      return `the pattern to spot: ${threat.targets.join(' and ')} ${geom}, ${guardBit} — that alignment IS the fork, a move before it lands`;
     }
     if (threat.kind === 'capture') {
       const cell = c.get(threat.landing as Square);
       const noun = cell ? REVIEW_PIECE_NAME[cell.type] : 'piece';
-      return `the pattern to spot: the ${noun} on ${threat.landing} sits loose — an undefended piece is a standing invitation, and tactics find it`;
+      // The capture threat gates on SEE net ≥ 3 — which a DEFENDED high-value
+      // victim (NxQ, queen guarded by a pawn) satisfies. "sits loose /
+      // undefended" was then false on the very piece it teaches (board-awareness
+      // sweep, 2026-07-22). Check the actual defence and word it honestly.
+      const defended = c.attackers(threat.landing as Square, victimWB).length > 0;
+      return defended
+        ? `the pattern to spot: the ${noun} on ${threat.landing} is worth more than what attacks it — an under-defended high-value piece falls to a cheaper attacker`
+        : `the pattern to spot: the ${noun} on ${threat.landing} sits loose — an undefended piece is a standing invitation, and tactics find it`;
     }
-    return `the pattern to spot: the escape squares around the king were already gone — count the king's flight squares before the checks start`;
+    // Mate threat: don't assert the flight squares are ALREADY gone (a supported
+    // mate removes them only when it arrives) — teach the habit, not a false
+    // current-board claim (board-awareness sweep, 2026-07-22).
+    return `the pattern to spot: a mating net is forming around the king — count its flight squares before the checks start, because that's what runs out`;
   } catch {
     return null;
   }
@@ -3423,15 +3502,25 @@ export function describeThreatPrevention(
     if (!def) return null;
     const defenderWB: 'w' | 'b' = threatWB === 'w' ? 'b' : 'w';
     // (1) Undermine the guard: the defense attacks a guard of the landing sq.
+    // "holding the WHOLE combination together" is only true when there is a
+    // SINGLE guard — hitting one of two dismantles nothing (board-awareness
+    // sweep, 2026-07-22).
     for (const g of threat.guards) {
       const cell = c.get(g as Square);
       if (cell && cell.color === threatWB && c.attackers(g as Square, defenderWB).includes(def.to)) {
-        return `${defenseSan} meets it by striking the ${REVIEW_PIECE_NAME[cell.type]} on ${g} — the piece holding the whole combination together`;
+        const soleGuard = threat.guards.length === 1;
+        return soleGuard
+          ? `${defenseSan} meets it by hitting the ${REVIEW_PIECE_NAME[cell.type]} on ${g} — the piece holding the whole thing together`
+          : `${defenseSan} meets it by hitting the ${REVIEW_PIECE_NAME[cell.type]} on ${g}, one of the pieces backing it up`;
       }
     }
-    // (2) Cover the landing square: it gains a defender from the defense.
+    // (2) Cover the landing square: it gains a defender from the defense. Don't
+    // over-claim "no longer safe" (a knight winning a defended queen still
+    // wins even with an added defender) and don't call it "the fork square"
+    // when the threat was a capture/mate — describe what the move DID
+    // (board-awareness sweep, 2026-07-22).
     if (c.attackers(threat.landing as Square, defenderWB).includes(def.to)) {
-      return `${defenseSan} meets it by covering ${threat.landing} — the fork square is no longer safe to land on`;
+      return `${defenseSan} meets it by adding a defender to ${threat.landing}, the square the threat needed`;
     }
     // (3) Move the target: a forked piece stepped off the alignment.
     for (const t of threat.targets) {

@@ -80,10 +80,16 @@ function probeBest(fen: string, bestUci: string): ProbedBest | null {
   }
 }
 
-/** The tactic the best move lands, if any ('fork' | 'pin' | 'skewer' | …). */
-function landedTactic(fenAfter: string): string | null {
+/** The tactic THIS move lands, if any ('fork' | 'pin' | 'skewer' | …). MUST
+ *  involve the moved piece's destination square — otherwise a PRE-EXISTING
+ *  tactic (often the OPPONENT's) elsewhere on the board gets attributed to the
+ *  student's move ("your queen can land a fork" when the fork is the opponent's
+ *  knight; board-awareness sweep, 2026-07-22). Pass the moved piece's `to`
+ *  square so only a tactic the moved piece participates in counts. */
+function landedTactic(fenAfter: string, toSquare?: string): string | null {
   try {
-    const t = detectTactics(fenAfter).tactics.find((x) => x.type !== 'none');
+    const t = detectTactics(fenAfter).tactics.find((x) => x.type !== 'none'
+      && (!toSquare || x.involvedSquares.includes(toSquare)));
     return t ? t.type : null;
   } catch {
     return null;
@@ -112,7 +118,7 @@ export function shouldOfferGuidedFind(opts: {
   } catch {
     return false;
   }
-  return probed.isMate || probed.isCapture || probed.isCheck || landedTactic(probed.fenAfter) !== null;
+  return probed.isMate || probed.isCapture || probed.isCheck || landedTactic(probed.fenAfter, probed.to) !== null;
 }
 
 /**
@@ -124,7 +130,7 @@ export function buildGuidedFindChallenge(fen: string, bestUci: string): GuidedFi
   const p = probeBest(fen, bestUci);
   if (!p) return null;
 
-  const tactic = landedTactic(p.fenAfter);
+  const tactic = landedTactic(p.fenAfter, p.to);
   let question: string;
   if (p.isMate) {
     question = `You have a checkmate on the board — your ${p.pieceName} delivers it. Where?`;
@@ -133,7 +139,10 @@ export function buildGuidedFindChallenge(fen: string, bestUci: string): GuidedFi
   } else if (p.isCapture && p.isCheck) {
     question = `Your ${p.pieceName} has a capture that comes with check. Find it.`;
   } else if (p.isCapture) {
-    question = `There's material to be won, and your ${p.pieceName} does the taking. Where does it strike?`;
+    // "material to be won" overclaims — the engine's best capture in a winning
+    // position is often an equal trade or a clearance, not a material grab
+    // (board-awareness sweep, 2026-07-22). Name the capture, not a windfall.
+    question = `Your ${p.pieceName} has a capture here. Where does it strike?`;
   } else if (p.isCheck) {
     question = `Your ${p.pieceName} has a forcing check. Find the square.`;
   } else if (tactic) {

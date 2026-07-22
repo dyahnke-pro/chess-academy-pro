@@ -2014,7 +2014,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       void buildOpeningTheoryLecture(reviewFens, sans, openingName ?? 'this opening')
         .then((lec) => {
           if (cancelled || !lec) return;
-          setTheoryBeats(buildTheoryLectureBeats(lec, resolveOpeningIdeas(openingName)));
+          setTheoryBeats(buildTheoryLectureBeats(lec, resolveOpeningIdeas(openingName), playerColor));
         })
         .catch(() => { /* DB down — no lecture, no crash */ });
     }, 500);

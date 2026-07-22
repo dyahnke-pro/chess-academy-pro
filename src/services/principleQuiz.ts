@@ -68,7 +68,11 @@ async function evalCandidate(
     const first = line.moves[0];
     if (first && uciToSan(fen, first) === san) {
       return line.mate !== null
-        ? (line.mate > 0 ? 100_000 : -100_000)
+        // `line.mate` is WHITE-POV (stockfishEngine normalises it) — convert to
+        // MOVER-POV before reading its sign, or a Black mover's winning mate
+        // scores −100_000 and a forced mate gets called a catastrophic blunder
+        // (board-awareness sweep, 2026-07-22).
+        ? (moverPov(line.mate, moverIsWhite) > 0 ? 100_000 : -100_000)
         : moverPov(line.evaluation, moverIsWhite);
     }
   }
@@ -169,6 +173,12 @@ export function quizVerdictLine(quiz: PrincipleQuiz, pickedSan: string): string 
   if (!picked) return `The device points to ${quiz.correctSan}.`;
   if (picked.complies) {
     return `Right — ${picked.san} passes the device. That's the engine's own choice.`;
+  }
+  // A mate-sized delta (a mate sentinel on one side of the swing) is not a
+  // pawn count — "gives up about 998.0 pawns" is nonsense (board-awareness
+  // sweep, 2026-07-22). Speak it as walking into / missing a forced mate.
+  if (picked.deltaCp >= 10_000) {
+    return `${picked.san} fails the device — it throws away a forced mate. The move that passes is ${quiz.correctSan}.`;
   }
   const pawns = (picked.deltaCp / 100).toFixed(1);
   return `${picked.san} fails the device — it gives up about ${pawns} pawns. The move that passes is ${quiz.correctSan}.`;

@@ -103,6 +103,17 @@ export function buildTrapQuestion(args: { fen: string; studentColor: 'white' | '
   // takes — the natural first grab) + the real swap sequence.
   const sequence = seeSequence(fen, best.square);
   if (sequence.length === 0) return null;
+
+  // VERIFY the poisoned verdict against the LEGAL sequence (board-awareness
+  // sweep, 2026-07-22). seeGain counts pinned defenders, so a piece defended
+  // ONLY by an absolutely-pinned piece reads as poisoned — but seeSequence
+  // plays only LEGAL moves, so that defender can't recapture and the student
+  // actually WINS it. The reveal ("you come out behind") would then contradict
+  // the swap the board plays out. Replay the real sequence and require the
+  // student to genuinely lose material; otherwise it's not a trap — skip.
+  const netForStudent = replayMaterialDelta(fen, sequence, studentWB);
+  if (netForStudent === null || netForStudent > -TRAP_MIN_LOSS) return null;
+
   const temptingSan = sequence[0];
   const victimLabel = PIECE_LABEL[best.victimType] ?? 'piece';
   const lossPawns = best.loss >= 5 ? 'a decisive amount of' : best.loss >= 3 ? 'a piece\'s worth of' : `about ${best.loss.toFixed(0)} ${best.loss >= 2 ? 'pawns' : 'pawn'} of`;
@@ -125,4 +136,28 @@ export function buildTrapQuestion(args: { fen: string; studentColor: 'white' | '
 /** Did the student make the right call? 'leave' is always correct here. */
 export function judgeTrapAnswer(q: TrapQuestion, pickedId: TrapChoiceId): boolean {
   return pickedId === q.answerId;
+}
+
+/** Replay a legal capture sequence from `fen` and return the material swing
+ *  for `sideWB`, in pawns (negative = the side lost material). Null on any
+ *  illegal move. Pin-aware by construction — it plays only the moves the
+ *  sequence actually contains (all chess.js-legal), so a pinned defender that
+ *  cannot recapture never contributes a phantom recapture. */
+function replayMaterialDelta(fen: string, sequence: string[], sideWB: 'w' | 'b'): number | null {
+  try {
+    const c = new Chess(fen);
+    let delta = 0; // + = sideWB gains, in pawns
+    for (const san of sequence) {
+      const mv = c.move(san);
+      if (!mv) return null;
+      if (mv.captured) {
+        const v = PIECE_VALUE[mv.captured] ?? 0;
+        // The mover just captured: if the mover is our side, we gained; else we lost.
+        delta += mv.color === sideWB ? v : -v;
+      }
+    }
+    return delta;
+  } catch {
+    return null;
+  }
 }

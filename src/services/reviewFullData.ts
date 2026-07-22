@@ -150,7 +150,17 @@ export function computeMoveFacets(ctx: MoveFactContext): string[] {
   // (chess.js), and when no material moved, the facet points at the computed
   // changes that fired on THIS ply ([does]/[delta]/[tactic]) — the real,
   // board-verified candidates — never an invented cause.
-  if (studentPovCp !== null && ctx.preMoveEval != null && studentColorWB
+  // A CHECKMATE move is the story itself — "the eval bar dips 300.0 their way,
+  // positional" over a mate is nonsense (a mate-sentinel eval read as a
+  // 300-pawn positional drift; preview audit ply 33 Rd8#, 2026-07-22). Skip
+  // eval attribution on a mate, and on any ply whose evals straddle a
+  // mate-sentinel magnitude (the arithmetic there isn't a real pawn count).
+  const MATE_SENTINEL_CP = 15000;
+  const straddlesMate = studentPovCp !== null
+    && (Math.abs(studentPovCp) >= MATE_SENTINEL_CP
+      || (ctx.preMoveEval != null && Math.abs(ctx.preMoveEval) >= MATE_SENTINEL_CP));
+  if (!san.includes('#') && !straddlesMate
+    && studentPovCp !== null && ctx.preMoveEval != null && studentColorWB
     && (ctx.classification === 'good' || ctx.classification === 'book' || ctx.classification === null)) {
     const prevStudentPov = studentColorWB === 'w' ? ctx.preMoveEval : -ctx.preMoveEval;
     const d = studentPovCp - prevStudentPov;

@@ -167,8 +167,6 @@ export async function buildOpeningTheoryLecture(
     } catch {
       break; // DB down → stop; whatever we have is honest
     }
-    if (i === 0) startGames = res.totalGames;
-
     // Book ran thin here → this is where the game left mainstream theory.
     if (res.totalGames < MIN_BRANCH_GAMES || res.moves.length === 0) {
       if (departurePly === null) departurePly = i + 1;
@@ -251,6 +249,13 @@ export async function buildOpeningTheoryLecture(
   }
 
   if (branches.length === 0) return null;
+  // "The backbone of N master games" must be the count at THIS OPENING's
+  // position, not the whole masters DB. `fens[0]`'s total is the size of the
+  // entire database (the start position) — voicing it made every lecture
+  // claim millions of games (board-awareness sweep, 2026-07-22). Use the
+  // first recorded branch's total: the games that actually reached the
+  // opening's defining position.
+  startGames = branches[0].totalGames;
   return { openingName, branches, departurePly, startGames };
 }
 
@@ -289,21 +294,29 @@ function lineCompareClause(
   mainline: TheoryMove,
   played: TheoryMove,
   dive: Array<{ san: string }>,
+  /** Whose sideline this is — "your"/"your opponent's". A branch is recorded
+   *  for BOTH colours, so a sideline the OPPONENT chose must not be narrated
+   *  as "your line" (board-awareness sweep, 2026-07-22). */
+  poss: 'your' | "your opponent's" = 'your',
 ): string {
   const parts: string[] = [];
+  const lineWord = poss === 'your' ? 'your line' : "your opponent's line";
+  const sideWord = poss === 'your' ? 'your sideline' : "your opponent's sideline";
   const diff = mainline.scoreForMover - played.scoreForMover;
   if (diff >= 0.03) {
-    parts.push(`In master play the main line scores ${pct(mainline.scoreForMover)} to your line's ${pct(played.scoreForMover)} — that's its pro; your line's pro is that opponents prepare for it less.`);
+    parts.push(`In master play the main line scores ${pct(mainline.scoreForMover)} to ${lineWord}'s ${pct(played.scoreForMover)} — that's its pro; ${lineWord}'s pro is that opponents prepare for it less.`);
   } else if (diff <= -0.03) {
-    parts.push(`Interestingly, your sideline actually scores a touch BETTER in master play (${pct(played.scoreForMover)} to ${pct(mainline.scoreForMover)}) — it's less common, not worse.`);
+    parts.push(`Interestingly, ${sideWord} actually scores a touch BETTER in master play (${pct(played.scoreForMover)} to ${pct(mainline.scoreForMover)}) — it's less common, not worse.`);
   } else {
     parts.push(`The two score about the same in master play (${pct(mainline.scoreForMover)} vs ${pct(played.scoreForMover)}) — the choice is a matter of style.`);
   }
-  const forcing = dive.filter((d) => d.san.includes('x') || d.san.includes('+')).length;
+  // "Forcing" is measured on the MAINLINE dive only — we never dove the
+  // sideline, so a comparative "sharper of the two" / "both are quiet" claim
+  // has no data on one of the two (board-awareness sweep, 2026-07-22). Speak
+  // only about the mainline, which is what we actually computed.
+  const forcing = dive.filter((d) => d.san.includes('x') || d.san.includes('+') || d.san.includes('#')).length;
   if (forcing >= 2) {
-    parts.push(`The main line is the sharper, more forcing of the two — ${forcing} captures or checks inside the next few moves.`);
-  } else if (dive.length >= 2 && forcing === 0) {
-    parts.push('Both are quiet, maneuvering lines — no forced tactics either way.');
+    parts.push(`The main line runs sharp — ${forcing} captures or checks inside the next few moves.`);
   }
   return parts.length ? ` ${parts.join(' ')}` : '';
 }
@@ -369,6 +382,11 @@ function whyMainClause(mainline: TheoryMove, sidelines: TheoryMove[]): string {
 export function buildTheoryLectureBeats(
   lecture: OpeningTheoryLecture,
   ideas: string[] = [],
+  /** The student's colour — so a sideline the OPPONENT played is narrated as
+   *  "your opponent's line", never "your line" (board-awareness sweep,
+   *  2026-07-22). Absent → neutral "your" (back-compat for callers/tests that
+   *  don't thread it). */
+  studentColor?: 'white' | 'black',
 ): TheoryLectureBeat[] {
   const beats: TheoryLectureBeat[] = [];
   const first = lecture.branches[0];
@@ -427,7 +445,7 @@ export function buildTheoryLectureBeats(
         // "the main line presses a touch harder" was flavor, not data. And when a
         // dive exists, the beat WALKS the main line so the student SEES the moves
         // being compared (David 2026-07-21: "what was the main line? Show me").
-        fact: `At move ${b.moveNumber}, the main line is ${b.mainline.san} (${pct(b.mainline.pct)}, scoring ${pct(b.mainline.scoreForMover)}).${whySentence} This game took ${b.played.san} (${pct(b.played.pct)}) — a known sideline.${lineCompareClause(b.mainline, b.played, b.mainlineDive)}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ` Let me walk you down the main line ${b.mainline.san} so you can compare.` : ''}`,
+        fact: `At move ${b.moveNumber}, the main line is ${b.mainline.san} (${pct(b.mainline.pct)}, scoring ${pct(b.mainline.scoreForMover)}).${whySentence} This game took ${b.played.san} (${pct(b.played.pct)}) — a known sideline.${lineCompareClause(b.mainline, b.played, b.mainlineDive, studentColor && b.moverColor !== studentColor ? "your opponent's" : 'your')}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ` Let me walk you down the main line ${b.mainline.san} so you can compare.` : ''}`,
         diveFromFen: b.diveFromFen ?? undefined,
         dive: b.mainlineDive.length >= 2 ? b.mainlineDive : undefined,
       });

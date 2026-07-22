@@ -350,6 +350,24 @@ export function deriveNextPlan(fen: string, studentColorWB: Color): string | nul
   return deriveNextPlans(fen, studentColorWB)[0] ?? null;
 }
 
+/** Can the opponent still WIN the `side` piece sitting on `sq` (value `val`),
+ *  with the opponent to move? Pin-aware (uses legal captures, not raw
+ *  attackers()): the piece is winnable when the opponent has a legal capture
+ *  onto `sq` AND either a strictly CHEAPER attacker takes it (falls regardless
+ *  of defence) or it is undefended. Returns false (safe) when no legal capture
+ *  reaches it, or every capturer is ≥ its value and it is defended (equal trade
+ *  at worst). Used by the trapped-piece rescue scan. */
+function pieceStillWinnable(afterOppToMove: Chess, sq: string, side: Color, val: number): boolean {
+  const cell = afterOppToMove.get(sq as Square);
+  if (!cell || cell.color !== side) return false; // the piece left / was captured resolving the move
+  const legalCaps = afterOppToMove.moves({ verbose: true }).filter((m) => m.to === sq && m.captured);
+  if (legalCaps.length === 0) return false; // nothing can legally take it
+  const cheaper = legalCaps.some((m) => (PIECE_VAL[afterOppToMove.get(m.from)?.type ?? 'k'] ?? 99) < val);
+  if (cheaper) return true; // a cheaper piece takes it — it falls
+  const defended = afterOppToMove.attackers(sq as Square, side).length > 0;
+  return !defended; // undefended → free; defended vs equal-or-higher → holdable
+}
+
 /** Per-square legal-move counts for every piece of `color`, from ONE moves()
  *  enumeration (one Chess build) — far cheaper than a fresh Chess per piece. */
 function mobilityMap(chess: Chess, color: Color): Map<string, number> {
@@ -403,7 +421,12 @@ export function explainTemptingCapture(
     const t = caps[0];
     const chosen = new Chess(fen).move(chosenSan);
     if (!chosen) return null;
-    if (chosen.from === t.from && chosen.to === t.to) return null; // the line TAKES it — nothing to explain
+    // The line TAKES the tempting victim — nothing to explain. Bail whether it
+    // captures with the SAME piece OR a different one: "that's why the line
+    // leaves it alone" while the line grabs that very square (with another
+    // piece) was self-contradicting (board-awareness sweep, 2026-07-22).
+    if (chosen.to === t.to && chosen.captured) return null;
+    if (chosen.from === t.from && chosen.to === t.to) return null;
     const victimVal = PIECE_VAL[t.captured as string];
     const after = new Chess(fen);
     after.move(t.san);
@@ -654,6 +677,23 @@ export function findTrappedPiece(
         }
       }
       if (!allLose) continue;
+      // RESCUE SCAN (board-awareness sweep, 2026-07-22): the piece's own moves
+      // all lose, but the side may still SAVE it another way — capture the
+      // attacker (hxg5!), interpose against a slider, or add a defender. The old
+      // detector ignored every rescue that wasn't the piece moving itself, so it
+      // declared "every escape square is covered" while a pawn could just take
+      // the attacker. Scan the side's OTHER legal moves; if any leaves the piece
+      // no longer winnable by the opponent, it is NOT trapped (empty > invented).
+      let rescued = false;
+      for (const m of probe.moves({ verbose: true })) {
+        if (m.from === sq) continue; // the piece's own moves already scanned
+        const after = new Chess(parts.join(' '));
+        try { after.move(m.san); } catch { continue; }
+        if (pieceStillWinnable(after, sq, side, val)) continue;
+        rescued = true;
+        break;
+      }
+      if (rescued) continue;
       const atkSq = cheapAtk ?? attackers[0];
       const atkPiece = chess.get(atkSq);
       return { square: sq, piece: PIECE_NOUN[c.type], attackerSquare: atkSq as string, attackerPiece: PIECE_NOUN[atkPiece?.type ?? 'p'] };

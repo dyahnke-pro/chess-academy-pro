@@ -120,6 +120,11 @@ export function computeBoardDelta(fenBefore: string, san: string): string[] {
     const dutiesBefore = attackSet(before, from, moverColor);
     const abandoned: string[] = [];
     for (const sq of dutiesBefore) {
+      // The landing square is the MOVER itself after the move — "walks away
+      // from the knight on d5" when d5 is where it just arrived is incoherent
+      // (board-awareness sweep, 2026-07-22). The mover's own safety is the
+      // [loose]/hanging detector's job, not an abandonment.
+      if (sq === to) continue;
       const p = after.get(sq as Square);
       if (!p || p.color !== moverColor || p.type === 'k') continue;
       if (after.attackers(sq as Square, moverColor).length === 0) {
@@ -143,7 +148,12 @@ export function computeBoardDelta(fenBefore: string, san: string): string[] {
         gaveUp.push(`${FILES[f]}${r}`);
       }
       const zone = kingZone(after, moverColor);
-      const meaningful = gaveUp.filter((s) => zone.has(s) || CENTRAL.has(s));
+      // A square another OWN pawn still covers is not weakened — "needs piece
+      // cover" was false for 1.e4's d3/f3 while c2/g2 still guarded them
+      // (board-awareness sweep, 2026-07-22). Only squares with ZERO remaining
+      // own-pawn cover are genuinely given up to piece duty.
+      const meaningful = gaveUp.filter((s) => (zone.has(s) || CENTRAL.has(s))
+        && !after.attackers(s as Square, moverColor).some((att) => after.get(att)?.type === 'p'));
       if (meaningful.length) {
         clauses.push(`the pawn gives up ${meaningful.join(' and ')} for good — pawns don't move back, so ${meaningful.length > 1 ? 'those squares' : 'that square'} now need${meaningful.length > 1 ? '' : 's'} piece cover`);
       }

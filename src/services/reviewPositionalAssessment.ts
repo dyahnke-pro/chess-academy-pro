@@ -89,9 +89,14 @@ export function assessPositionalEdge(
     reasons.push(`your ${name} sits on a protected outpost on ${myOutpost.square} that can't be chased away`);
   }
 
-  // 3. Control of an open file — a rook or queen on a fully open file.
+  // 3. Control of an open file — a rook or queen on a fully open file the
+  // enemy does NOT contest with a heavy piece of their own. "You own the
+  // e-file" with an enemy rook staring back down it is a false claim — a
+  // contested file is a fight, not an asset (board-awareness sweep,
+  // 2026-07-22), so it is skipped rather than overclaimed.
   const myHeavyOnOpen = all.find((p) => (p.type === 'r' || p.type === 'q') && p.color === me
-    && struct.pawns.openFiles.includes(p.square[0]));
+    && struct.pawns.openFiles.includes(p.square[0])
+    && !all.some((q) => (q.type === 'r' || q.type === 'q') && q.color === enemy && q.square[0] === p.square[0]));
   if (myHeavyOnOpen) {
     reasons.push(`you own the open ${myHeavyOnOpen.square[0]}-file`);
   }
