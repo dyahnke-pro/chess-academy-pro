@@ -468,6 +468,15 @@ export interface ReviewMoveSegment {
    *  these arrows SHOW the plan instead of moving pieces (David 2026-07-19).
    *  Undefined on ordinary moves. */
   planArrows?: Array<{ startSquare: string; endSquare: string; color: string }>;
+  /** The STATIC threat call-out this ply's narration carries, tagged so the
+   *  engine pass can CONFIRM it (David 2026-07-21: "We need to find a way for
+   *  these two to work together. They need to compliment each other!!"). The
+   *  static layer proposes and explains; the engine decides — agree → the
+   *  claim stands and gains the engine's continuation; disagree → the static
+   *  sentence is replaced by the engine's own line, voiced through the same
+   *  fact-computers. `sentence` is the exact appended text (for replacement);
+   *  `nullFen` is the student-moves-again position the claim was scanned on. */
+  staticThreat?: { san: string; sentence: string; nullFen: string };
   /** The cited master game for the §6 story-as-evidence beat, WITH its PGN +
    *  narrations so the UI can offer a NARRATED "watch this game" playback
    *  (David 2026-07-21: "Does the DB/example game have narrations?" — the
@@ -1193,13 +1202,22 @@ export function buildReviewSegments(
     // Berlin case: after ...Bc5, "you're now threatening Nxf2 — wins the f2
     // pawn and forks their queen and rook" went unsaid. A threat is a
     // keystone: it speaks even on an otherwise-quiet ply.
+    let segmentStaticThreat: ReviewMoveSegment['staticThreat'];
     if (playerColor && moverColor === playerColor) {
       const threat = describeStudentThreat(fenPair.fenBefore, fenPair.fenAfter, playerColor === 'white' ? 'w' : 'b');
       if (threat) {
-        narration = narration
-          ? `${narration} And ${threat}.`
-          : `${threat.charAt(0).toUpperCase()}${threat.slice(1)}.`;
+        const sentence = narration ? ` And ${threat}.` : `${threat.charAt(0).toUpperCase()}${threat.slice(1)}.`;
+        narration = narration ? `${narration}${sentence}` : sentence;
         narrationSource = narrationSource ?? 'per-move';
+        // Tag the claim for the ENGINE-CONFIRMATION pass (statics propose +
+        // explain; the engine decides — David 2026-07-21).
+        const threatSan = threat.match(/threatening (\S+)/)?.[1] ?? null;
+        if (threatSan) {
+          const nullParts = fenPair.fenAfter.split(' ');
+          nullParts[1] = playerColor === 'white' ? 'w' : 'b';
+          nullParts[3] = '-';
+          segmentStaticThreat = { san: threatSan.replace(/[.,]$/, ''), sentence, nullFen: nullParts.join(' ') };
+        }
       }
     }
     // OPPONENT-PSYCHOLOGY read (Danya register #14: "once one side starts to
@@ -1526,6 +1544,7 @@ export function buildReviewSegments(
       narrationSource,
       ...(planArrows && planArrows.length ? { planArrows } : {}),
       ...(segmentStoryGame ? { storyGame: segmentStoryGame } : {}),
+      ...(segmentStaticThreat ? { staticThreat: segmentStaticThreat } : {}),
     });
     // Carry this move's capture forward so the NEXT ply's material calc can
     // recognize a recapture (even trade → 0, no "wins material" windfall).
@@ -1737,6 +1756,43 @@ async function augmentWithProjections(
       const bestName = line.plies[0].san;
       s.narration = `${s.narration ?? ''} Why ${bestName} was better — the line runs ${render(line)}.`.trim();
       whyBudget -= 1;
+    }
+  }
+
+  // #4b — ENGINE-CONFIRMATION of the static threat call-outs (David
+  // 2026-07-21: "We need to find a way for these two to work together. They
+  // need to compliment each other!!"). The static layer PROPOSED the threat
+  // and explained its mechanism; here the engine DECIDES: probe the same
+  // null-move position — if the engine's own first move matches the claimed
+  // threat, the claim stands and gains the engine's continuation (deeper
+  // teaching for free); if the engine finds something better or refutes the
+  // claim, the static sentence is REPLACED by the engine's line, voiced
+  // through the same per-ply fact-computers. Truth from the engine,
+  // mechanism from the statics — never a static story the engine disowns.
+  let confirmBudget = scope === 'full' ? 4 : 3;
+  for (const s of segments) {
+    if (confirmBudget <= 0) break;
+    if (!s.staticThreat) continue;
+    const line = await raceTimeout(computePvLine(s.staticThreat.nullFen, { maxPlies: 4 }), PROJ_TIMEOUT_MS, null);
+    confirmBudget -= 1;
+    if (!line || line.plies.length === 0) continue; // engine unavailable — the static-verified claim stands
+    const stripGl = (x: string): string => x.replace(/[+#!?]+$/, '');
+    if (stripGl(line.plies[0].san) === stripGl(s.staticThreat.san)) {
+      // AGREEMENT — extend the claim with the engine's continuation when it
+      // has real follow-up teaching (2+ further plies).
+      if (line.plies.length >= 3 && s.narration) {
+        const tail = line.plies.slice(1).map((p) => {
+          const w = plyFactsClause(p.fenBefore, p.san);
+          return w ? `${p.san} (${w})` : p.san;
+        }).join(', then ');
+        s.narration = `${s.narration} The engine confirms it — and if they try to run, it continues ${tail}.`;
+      }
+    } else if (s.narration) {
+      // DISAGREEMENT — the engine sees a stronger idea. Replace the static
+      // sentence with the engine's own line, explained by the same statics.
+      const engineWhy = plyFactsClause(line.plies[0].fenBefore, line.plies[0].san);
+      const replacement = ` And the real threat here, per the engine: ${line.plies[0].san}${engineWhy ? ` — it ${engineWhy}` : ''}.`;
+      s.narration = s.narration.replace(s.staticThreat.sentence, replacement);
     }
   }
 

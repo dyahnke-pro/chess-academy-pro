@@ -158,6 +158,28 @@ export function CoachHomePage(): JSX.Element {
           testId="coach-action-play"
         />
 
+        {/* Review with Coach — PROMOTED to the big slot directly under
+            Learn/Play (David 2026-07-21: "I want review with coach moved up
+            in the app and made larger so users know it's important. Large
+            rectangle under play and learn!"). The Danya-standard post-game
+            review is a headline surface now, not a secondary tile. */}
+        <PrimaryTile
+          icon={<History size={40} className="text-teal-400" />}
+          label="Review with Coach"
+          subtitle="Walk any game you've played, move by move — your threats named, every mistake taught, every better move played out."
+          info={
+            "Pick any of your past games (coach, Lichess imports, Chess.com imports) and walk through it move by move with the coach.\n\n• Every move gets a board-true read — tactics, structure, plans\n• Your threats are called out, including ones brewing 2-3 moves ahead\n• Every flagged move plays out WHY the better move was better\n• Find-the-shot, blunder rewind, turning points, and master-game stories along the way\n\nThis is where games become lessons."
+          }
+          rgb="45, 212, 191"
+          bgClass="bg-teal-500/10"
+          textColorClass="text-teal-400"
+          onClick={goTo('review', '/coach/review')}
+          gB={gB}
+          gS={gS}
+          testId="coach-action-review"
+          wide
+        />
+
         {/* The Coaches Library — opens straight to the books (David 2026-07-08:
             "change academy to just say library … open directly to the books").
             The old Academy hub was a redundant middle step now that the opening
@@ -231,20 +253,6 @@ export function CoachHomePage(): JSX.Element {
           gB={gB}
           gS={gS}
           testId="coach-action-analyse"
-        />
-        <SecondaryTile
-          icon={<History size={28} className="text-teal-400" />}
-          label="Review with Coach"
-          info={
-            "Pick any of your past games (coach, Lichess imports, Chess.com imports) and walk through it move by move with the coach. Each ply gets a per-position read: what was good, what was missed, what the engine preferred.\n\nGood for: post-game learning on a game that already happened."
-          }
-          rgb="45, 212, 191"
-          bgClass="bg-teal-500/10"
-          textColorClass="text-teal-400"
-          onClick={goTo('review', '/coach/review')}
-          gB={gB}
-          gS={gS}
-          testId="coach-action-review"
         />
       </div>
     </div>
