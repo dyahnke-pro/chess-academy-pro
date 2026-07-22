@@ -134,7 +134,11 @@ const run = async () => {
       await page.keyboard.press('Enter').catch(() => {});
       let replied = false;
       for (let i = 0; i < 40; i++) { await page.waitForTimeout(1500); const body = await txt(page, '[data-testid="coach-game-review-walk"]'); if (/isolated|weak|pawn on d5|d5-pawn|target/i.test(body.slice(-600))) { replied = true; break; } }
-      add('ask-chat-roundtrip', replied, replied ? 'grounded reply arrived' : 'no reply in 60s');
+      // 2026-07-22 unified-chat contract: the reply renders through the SAME
+      // ChatMessage component Learn/Play use — user + assistant bubbles.
+      const sharedRenderer = (await page.locator('[data-testid="walk-ask-panel"] [data-testid="chat-message-assistant"]').count()) > 0
+        && (await page.locator('[data-testid="walk-ask-panel"] [data-testid="chat-message-user"]').count()) > 0;
+      add('ask-chat-roundtrip', replied && sharedRenderer, replied ? (sharedRenderer ? 'grounded reply arrived via shared ChatMessage bubbles' : 'reply arrived but NOT through the shared ChatMessage renderer') : 'no reply in 60s');
     } else add('ask-chat-roundtrip', false, 'input not found');
   } else add('ask-chat-roundtrip', false, 'ask toggle not found');
 
