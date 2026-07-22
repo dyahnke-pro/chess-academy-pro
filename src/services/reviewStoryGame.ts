@@ -10,6 +10,7 @@
 // authored words (the curated middlegameTheme / lessonSummary), never lifting
 // anyone's prose. Deterministic pick (no Math.random) so a review is reproducible.
 
+import { Chess } from 'chess.js';
 import modelGamesRaw from '../data/model-games.json';
 import { resolveOpeningIdFromName } from './chessConceptService';
 
@@ -46,6 +47,60 @@ export interface StoryGame {
   /** Hand-authored per-moment annotations (92 of the 556 playable games),
    *  spoken as the playback reaches each cited move. */
   criticalMoments: Array<{ moveNumber: number; color: 'white' | 'black'; annotation: string }>;
+}
+
+/**
+ * momentVerifies — board-verify a hand-authored criticalMoment against the
+ * game's OWN pgn (the 2026-07-21 sweep found the Fischer "Game 6" moments
+ * describing a Najdorf that never happened, and Naroditsky moments anchored
+ * to the wrong move numbers). Two provable rules:
+ *   1. A leading "Move N <san>" claim must match the pgn EXACTLY at move N.
+ *   2. Every "<piece> on <square>" claim must be true at SOME ply of the
+ *      game — past ("traded the bishop on f3") and prospective ("the bishop
+ *      on g2 will rule the diagonal") phrasing passes; a piece the game
+ *      never put there fails.
+ * The story-game picker DROPS moments that fail — empty > wrong (G0).
+ */
+export function momentVerifies(
+  pgn: string,
+  m: { moveNumber: number; color: 'white' | 'black'; annotation: string },
+): boolean {
+  try {
+    const clean = pgn.replace(/\{[^}]*\}/g, '').replace(/\b(1-0|0-1|1\/2-1\/2|\*)\b/g, '');
+    const c = new Chess();
+    c.loadPgn(clean);
+    const hist = c.history();
+    // Rule 1 — "Move N <san>" prefix must match the game at move N.
+    const lead = m.annotation.match(/^Move (\d+) ([KQRBNOa-hx1-8+#=-]+)/);
+    if (lead) {
+      const n = Number(lead[1]);
+      const idx = (n - 1) * 2 + (m.color === 'black' ? 1 : 0);
+      const actual = hist[idx]?.replace(/[+#!?]+$/, '');
+      if (!actual || actual !== lead[2].replace(/[+#!?]+$/, '')) return false;
+    }
+    // Rule 2 — every piece-on-square claim must hold at SOME ply.
+    const claims: Array<{ piece: string; sq: string }> = [];
+    const re = /\b(knight|bishop|rook|queen|pawn|king)\s+(?:on|at)\s+([a-h][1-8])\b/gi;
+    let mt: RegExpExecArray | null;
+    while ((mt = re.exec(m.annotation)) !== null) claims.push({ piece: mt[1].toLowerCase(), sq: mt[2].toLowerCase() });
+    if (claims.length === 0) return true;
+    const WANT: Record<string, string> = { knight: 'n', bishop: 'b', rook: 'r', queen: 'q', pawn: 'p', king: 'k' };
+    const unmet = new Set(claims.map((cl) => `${cl.piece}@${cl.sq}`));
+    const walk = new Chess();
+    const check = (): void => {
+      for (const cl of claims) {
+        const key = `${cl.piece}@${cl.sq}`;
+        if (!unmet.has(key)) continue;
+        const cell = walk.get(cl.sq as never);
+        if (cell && cell.type === WANT[cl.piece]) unmet.delete(key);
+      }
+    };
+    check();
+    for (const san of hist) { walk.move(san); check(); if (unmet.size === 0) return true; }
+    return unmet.size === 0;
+  } catch {
+    return true; // never let a parse hiccup hide a story — the claims gate is best-effort
+  }
 }
 
 function lowerFirst(s: string): string { return s.charAt(0).toLowerCase() + s.slice(1); }
@@ -104,7 +159,10 @@ export function pickStoryGame(openingName: string | null): StoryGame | null {
   const criticalMoments = (pick.criticalMoments ?? [])
     .filter((m): m is { moveNumber: number; color: 'white' | 'black'; annotation: string } =>
       typeof m.moveNumber === 'number' && (m.color === 'white' || m.color === 'black')
-      && typeof m.annotation === 'string' && m.annotation.trim().length > 0);
+      && typeof m.annotation === 'string' && m.annotation.trim().length > 0)
+    // Board-verified only — a moment whose claims the pgn can't back is
+    // DROPPED, never spoken (the 2026-07-21 Najdorf-that-never-was sweep).
+    .filter((m) => momentVerifies(pick.pgn ?? '', m));
   return {
     citation,
     text: `This is a well-trodden battleground: look up ${citation}${ideaClause}. Seeing the plan in a strong player's hands is worth more than any amount of theory.`,
