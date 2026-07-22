@@ -1904,18 +1904,23 @@ async function augmentWithProjections(
       parts[1] = studentColorWB;
       parts[3] = '-';
       const nullFen = parts.join(' ');
-      // maxPlies 9 = FIVE of the student's moves out (plies 1,3,5,7,9) — the
-      // honest ceiling at depth-14 analysis, still terminal-re-verified. One
-      // move belongs to the static call-out; 2-5 moves belong here (David
-      // 2026-07-22: "threats called out 3+ moves in advance").
-      const line = await raceTimeout(computePvLine(nullFen, { maxPlies: 9 }), PROJ_TIMEOUT_MS, null);
+      // maxPlies 7 = FOUR of the student's moves out (plies 1,3,5,7) — inside
+      // depth-14's reliable window, never past it (David 2026-07-22: "don't
+      // push the engine past its natural limits!!! Solid and honest is
+      // paramount"). One move belongs to the static call-out; 2-4 moves
+      // belong here.
+      const line = await raceTimeout(computePvLine(nullFen, { maxPlies: 7 }), PROJ_TIMEOUT_MS, null);
       if (!line || line.plies.length < 3) continue; // one-movers belong to the static call-out
-      const terminal = line.terminalEvalCp ?? line.rootEvalCp;
-      const studentPovTerminal = studentColorWB === 'w' ? terminal : -terminal;
       const studentPovNow = s.evalAfter !== null ? (studentColorWB === 'w' ? s.evalAfter : -s.evalAfter) : null;
       const lastPly = line.plies[line.plies.length - 1];
-      const matesOut = lastPly.facts.isMate;
-      const decisiveJump = studentPovNow !== null && studentPovTerminal - studentPovNow >= 250;
+      const matesOut = lastPly.facts.isMate; // chess.js replay fact — exact
+      // The eval claim requires the VERIFIED terminal (re-analysis at the
+      // line's end) — never the unverified root promise.
+      const studentPovTerminal = line.terminalEvalCp !== null
+        ? (studentColorWB === 'w' ? line.terminalEvalCp : -line.terminalEvalCp)
+        : null;
+      const decisiveJump = studentPovNow !== null && studentPovTerminal !== null
+        && studentPovTerminal - studentPovNow >= 250;
       if (!matesOut && !decisiveJump) continue;
       s.narration = `${s.narration ?? ''} And there's a deeper threat brewing — if they sit still, it runs ${render(line)}.`.trim();
       deepBudget -= 1;
@@ -1950,18 +1955,22 @@ async function augmentWithProjections(
       parts[1] = oppWB;
       parts[3] = '-';
       const nullFen = parts.join(' ');
-      const line = await raceTimeout(computePvLine(nullFen, { maxPlies: 9 }), PROJ_TIMEOUT_MS, null);
+      // Same honest window as #5: 7 plies (4 opponent moves), and the eval
+      // claim requires the VERIFIED terminal — never the unverified root.
+      const line = await raceTimeout(computePvLine(nullFen, { maxPlies: 7 }), PROJ_TIMEOUT_MS, null);
       if (!line || line.plies.length < 3) continue; // one-movers belong to the static opponent call-out
       // Don't re-narrate the same move the one-move call-out already named.
       const stripGl = (x: string): string => x.replace(/[+#!?]+$/, '');
       const immediate = /threatens ([A-Za-z0-9+#=-]+):/.exec(s.narration ?? '')?.[1];
       if (immediate && stripGl(line.plies[0].san) === stripGl(immediate)) continue;
-      const terminal = line.terminalEvalCp ?? line.rootEvalCp;
-      const oppPovTerminal = oppWB === 'w' ? terminal : -terminal;
       const oppPovNow = s.evalAfter !== null ? (oppWB === 'w' ? s.evalAfter : -s.evalAfter) : null;
       const lastPly = line.plies[line.plies.length - 1];
-      const matesOut = lastPly.facts.isMate;
-      const decisiveJump = oppPovNow !== null && oppPovTerminal - oppPovNow >= 250;
+      const matesOut = lastPly.facts.isMate; // chess.js replay fact — exact
+      const oppPovTerminal = line.terminalEvalCp !== null
+        ? (oppWB === 'w' ? line.terminalEvalCp : -line.terminalEvalCp)
+        : null;
+      const decisiveJump = oppPovNow !== null && oppPovTerminal !== null
+        && oppPovTerminal - oppPovNow >= 250;
       if (!matesOut && !decisiveJump) continue;
       let callOut = `Watch what they're building — left alone, their idea runs ${render(line)}.`;
       const next = segments[i + 1];
