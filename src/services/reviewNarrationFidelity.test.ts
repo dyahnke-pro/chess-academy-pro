@@ -103,6 +103,45 @@ describe('seatPieceReferences — the deterministic mine/yours package', () => {
   });
 });
 
+describe('narrationCoversFacets — the LLM never chooses which facts to state (David 2026-07-22)', () => {
+  const det = "[move] You: the move Nf3 develops. [tactic] Their bishop on c5 pins your pawn on f2 against your king on g1. [does] The knight on f3 now fights for e5 and d4.";
+
+  it('rejects a warm that dropped the pin facet entirely', async () => {
+    const { narrationCoversFacets } = await import('./coachFeatureService');
+    const w = 'The knight comes to f3, fighting for e5 and d4 — natural development.';
+    expect(narrationCoversFacets(det, w)).toBe(false); // no c5/f2/g1 footprint — pin dropped
+  });
+
+  it('accepts a full reword that keeps a footprint of every facet', async () => {
+    const { narrationCoversFacets } = await import('./coachFeatureService');
+    const w = 'The knight lands on f3, staking a claim on e5 — but mind the bishop on c5: it has your f2 pawn nailed to the king on g1.';
+    expect(narrationCoversFacets(det, w)).toBe(true);
+  });
+});
+
+describe('describeMoveInfluence — every move gets its own computed beat (David 2026-07-22)', () => {
+  it('speaks what a QUIET developing move now does', async () => {
+    const { describeMoveInfluence } = await import('./reviewFullData');
+    const c = new Chess();
+    c.move('e4'); c.move('e5');
+    const before = c.fen();
+    c.move('Nf3');
+    const out = describeMoveInfluence(before, c.fen(), 'Nf3');
+    expect(out ?? '').toMatch(/knight on f3/);
+    expect(out ?? '').toMatch(/eyes the pawn on e5/);
+    expect(out ?? '').toMatch(/fights for d4/);
+  });
+
+  it('stays silent when the move creates no influence worth naming', async () => {
+    const { describeMoveInfluence } = await import('./reviewFullData');
+    const c = new Chess();
+    const before = c.fen();
+    c.move('a3');
+    // a3: the a-pawn attacks b4 (empty, non-central) — nothing to say.
+    expect(describeMoveInfluence(before, c.fen(), 'a3')).toBeNull();
+  });
+});
+
 describe('royalDefenderTarget names every royal guard', () => {
   it('says "king and queen" when both guard (Opera after 13.Rxd7)', () => {
     // White rook on d7 attacks the d8 rook; d8 is defended by Ke8 AND Qe7.

@@ -470,6 +470,20 @@ const run = async () => {
   for (const p of plies) { const n = (p.narr || '').trim().toLowerCase(); if (n.length < 8) continue; if (seen.has(n)) { dup = p.narr; break; } seen.set(n, p.ply); }
   add('R10 no-repetition', dup === null, dup ? `duplicate line: "${dup.slice(0, 60)}"` : 'every narration line distinct');
 
+  // Projected-line text describes HYPOTHETICAL future positions ("it runs
+  // Bxf4 (wins 3 points), then a3 (creates a passed pawn on a3)…") — board
+  // claims inside it are about the projected board, not the current one, so
+  // the present-tense checkers must not scan it (fleet run 1: every remaining
+  // ACC/NOWINDFALL flag was projection text). Projections are APPENDED by
+  // augmentWithProjections, so cutting from the first marker to the end is
+  // exact; parentheticals are the per-move whys inside rendered lines.
+  const PROJECTION_MARKERS = /(?:it runs|the line runs|the plan runs|it goes|it continues|their idea runs|Here's how it gets punished from here:|Here's how you take advantage:|Here's how:)/i;
+  const presentTense = (t) => {
+    const s = (t || '').replace(/\([^)]*\)/g, ' ');
+    const m0 = s.search(PROJECTION_MARKERS);
+    return m0 >= 0 ? s.slice(0, m0) : s;
+  };
+
   // ACC — board-accuracy: every "<piece> on <square>" claim is TRUE on the board
   // AFTER that ply (replay the PGN; the deterministic facts + containment guard
   // should make this hold, but the audit proves it independently).
@@ -478,8 +492,9 @@ const run = async () => {
     if (!p.narr) continue;
     const pos = posAfterPly(p.ply);
     const re = /\b(knight|bishop|rook|queen|pawn|king)\s+on\s+([a-h][1-8])\b/gi;
+    const scanText = presentTense(p.narr);
     let m;
-    while ((m = re.exec(p.narr)) !== null) {
+    while ((m = re.exec(scanText)) !== null) {
       const want = PIECE[m[1].toLowerCase()];
       const sq = m[2].toLowerCase();
       const cell = pos.get(sq);
@@ -548,7 +563,9 @@ const run = async () => {
     if (prevTo !== curTo) continue;            // not a recapture on the same square
     if (victimVal[i] != null && victimVal[i - 1] != null && victimVal[i] !== victimVal[i - 1]) continue; // UNEVEN recapture — a legit material gain, not a windfall
     const p = plies.find((x) => x.ply === i + 1);
-    if (p && /wins?\s+\d+\s+point|nets?\s+\d+\s+point|\d+\s+points?\s+of\s+material|point\s+richer|grabs?\s+\d/i.test(p.narr || '')) {
+    // Scan PRESENT-TENSE text only — a "wins 4 points" inside a projected
+    // engine line describes the hypothetical continuation, not this recapture.
+    if (p && /wins?\s+\d+\s+point|nets?\s+\d+\s+point|\d+\s+points?\s+of\s+material|point\s+richer|grabs?\s+\d/i.test(presentTense(p.narr))) {
       windfalls.push(`ply ${i + 1} ${SANS[i]}: "${(p.narr || '').slice(0, 50)}"`);
     }
   }

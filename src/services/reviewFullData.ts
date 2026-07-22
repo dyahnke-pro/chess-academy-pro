@@ -87,6 +87,20 @@ export function computeMoveFacets(ctx: MoveFactContext): string[] {
   const mech = plyFactsForMove(fenBefore, san, ctx.prevCap);
   if (mech) facets.push(`[move] ${subj}: ${lowerFirst(mech)}`);
 
+  // ── 1b. WHAT THE MOVE NOW DOES — the per-move influence delta (David
+  // 2026-07-22: "Each move changes the position and provides new threats and
+  // positional challenges. Why doesn't the coach state what those are?").
+  // The event computers above only speak on captures/checks/structure events,
+  // which left QUIET moves with no beat of their own. This clause computes,
+  // with chess.js attackers(), what the moved piece does from its NEW square:
+  // enemy pieces it eyes, central squares it fights for, own pieces it now
+  // guards. Every claim board-computed; emitted only when non-empty.
+  const influence0 = describeMoveInfluence(fenBefore, fenAfter, san);
+  const influence = influence0 && ctx.studentColorWB
+    ? seatPieceReferences(influence0, fenAfter, ctx.studentColorWB)
+    : influence0;
+  if (influence) facets.push(`[does] ${influence}`);
+
   // ── 2. MOVE QUALITY (classification + eval swing + the better move) ──
   const swing = ctx.evaluation != null && ctx.preMoveEval != null
     ? Math.abs(ctx.evaluation - ctx.preMoveEval)
@@ -337,4 +351,44 @@ function cap(s: string): string { return s.charAt(0).toUpperCase() + s.slice(1);
 function lowerFirst(s: string): string { return s.charAt(0).toLowerCase() + s.slice(1); }
 function pieceWord(p: string): string {
   return ({ p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' } as Record<string, string>)[p.toLowerCase()] ?? 'piece';
+}
+
+/** The moved piece's influence from its NEW square: enemy pieces it now eyes,
+ *  central squares it now fights for, own pieces it now guards. Pure chess.js
+ *  (attackers()) — the quiet-move beat that gives EVERY ply its own computed
+ *  content (David 2026-07-22). Null when the move creates none of the three. */
+export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: string): string | null {
+  try {
+    const b = new Chess(fenBefore);
+    const mv = b.move(san.replace(/[?!]+$/, ''));
+    if (!mv) return null;
+    const a = new Chess(fenAfter);
+    const to = mv.to;
+    const pc = a.get(to);
+    if (!pc) return null;
+    const enemyWB: Color = pc.color === 'w' ? 'b' : 'w';
+    const eyes: string[] = [];
+    const guards: string[] = [];
+    for (const row of a.board()) {
+      for (const cell of row) {
+        if (!cell || cell.square === to) continue;
+        if (!a.attackers(cell.square, pc.color).includes(to)) continue;
+        if (cell.color === enemyWB && cell.type !== 'k') eyes.push(`the ${pieceWord(cell.type)} on ${cell.square}`);
+        else if (cell.color === pc.color && cell.type !== 'k') guards.push(`the ${pieceWord(cell.type)} on ${cell.square}`);
+      }
+    }
+    const fights: string[] = [];
+    for (const sq of ['d4', 'e4', 'd5', 'e5'] as const) {
+      if (sq === to || a.get(sq)) continue;
+      if (a.attackers(sq, pc.color).includes(to)) fights.push(sq);
+    }
+    const bits: string[] = [];
+    if (eyes.length) bits.push(`eyes ${eyes.slice(0, 2).join(' and ')}`);
+    if (fights.length) bits.push(`fights for ${fights.join(' and ')}`);
+    if (guards.length) bits.push(`guards ${guards.slice(0, 2).join(' and ')}`);
+    if (!bits.length) return null;
+    return `The ${pieceWord(pc.type)} on ${to} now ${bits.join(', ')}.`;
+  } catch {
+    return null;
+  }
 }

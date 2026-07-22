@@ -936,6 +936,12 @@ export function buildReviewSegments(
   // (the new-games fleet caught "You're balanced." shipping verbatim on
   // repeated quiet plies, R10).
   let lastVerdictFacet: string | null = null;
+  // STANDING-STATE facets present on the PREVIOUS ply ([tactic]/[loose]) —
+  // a pin/hanging-piece is narrated when it APPEARS, not on every ply it
+  // persists (fleet run 1, Carlsen–Caruana: "Your bishop on a4 pins their
+  // knight on c6" shipped verbatim ply after ply). When the state facet
+  // drops off the board and later reappears, it is news again.
+  let prevStateFacets = new Set<string>();
   // Opponent-commentary dedup — name each target square at most once, and cap
   // the total so the lighter developing reads never spam (Danya comments the
   // opponent ~50-60% of moves, not every one).
@@ -1019,6 +1025,7 @@ export function buildReviewSegments(
       // Drop an identical STATIC state facet already spoken on an earlier ply
       // (opening / plan-opening / plan-middlegame / opp-dev); keep every dynamic
       // per-move fact.
+      const stateNow = new Set(facets.filter((f) => /^\[(tactic|loose)\]/.test(f)));
       const kept = facets.filter((f) => {
         // An UNCHANGED positional verdict is static state too — "You're
         // balanced." repeated on every quiet ply is the R10 repetition the
@@ -1030,11 +1037,15 @@ export function buildReviewSegments(
           lastVerdictFacet = f;
           return true;
         }
+        // A STANDING pin/hanging-piece is narrated when it APPEARS; while it
+        // persists unchanged from the previous ply it is not news.
+        if (/^\[(tactic|loose)\]/.test(f)) return !prevStateFacets.has(f);
         if (!/^\[(opening|plan-opening|plan-middlegame|plan-now|opp-dev|passer|badbishop|worst|trapped)\]/.test(f)) return true;
         if (emittedStaticFacets.has(f)) return false;
         emittedStaticFacets.add(f);
         return true;
       });
+      prevStateFacets = stateNow;
       segments.push({
         ply: m.ply,
         moveNumber: fullMove,
@@ -2142,6 +2153,35 @@ export function narrationNumbersFaithful(det: string, warmed: string): boolean {
   return true;
 }
 
+/** COVERAGE fidelity for the house-voice pass (David 2026-07-22: "Does the
+ *  LLM ever decide what facts it should or should not state?" — the answer
+ *  must be NO). The coverAll prompt MANDATES voicing every bracketed facet;
+ *  this net ENFORCES it: each facet in the deterministic bundle must leave a
+ *  footprint in the warmed prose — at least one of its square / SAN anchors
+ *  survives the rephrase. Rewording is fine; a DROPPED facet is not. A facet
+ *  with no board anchors (a bare verdict) can't be anchor-checked and is
+ *  skipped. On failure the deterministic template ships verbatim — full
+ *  content always wins over polish. */
+export function narrationCoversFacets(det: string, warmed: string): boolean {
+  const facets = det.split(/(?=\[[a-z0-9-]+\])/i).map((f) => f.trim()).filter(Boolean);
+  if (facets.length <= 1 && !/^\[/.test(det)) return true; // untagged text — nothing to anchor
+  const wLower = warmed.toLowerCase();
+  for (const f of facets) {
+    const sans = f.match(/\b(?:[NBRQK][a-h]?[1-8]?x?[a-h][1-8]|O-O(?:-O)?)\b/g) ?? [];
+    const anchors = new Set<string>([
+      ...(f.match(/\b[a-h][1-8]\b/g) ?? []),
+      ...sans,
+      // A reword may keep only the SAN's destination square ("Nf3" → "lands
+      // on f3") — that footprint still proves the facet survived.
+      ...sans.map((s) => s.replace(/[+#]/g, '').slice(-2)).filter((s) => /^[a-h][1-8]$/.test(s)),
+    ]);
+    if (anchors.size === 0) continue;
+    const hit = [...anchors].some((a) => wLower.includes(a.toLowerCase()));
+    if (!hit) return false;
+  }
+  return true;
+}
+
 export async function generateReviewNarration(params: {
   moves: ReviewMoveInput[];
   playerColor: 'white' | 'black';
@@ -2154,9 +2194,11 @@ export async function generateReviewNarration(params: {
    *  silences playback anyway, but we save the token spend). When
    *  undefined, defaults to full-length behavior (legacy). */
   coachNarration?: 'silent' | 'brief' | 'full';
-  /** UNCAPPED diagnostic mode (David 2026-07-20). Speaks EVERY computed facet on
-   *  EVERY move (full-data aggregator), and skips the house-voice warming pass so
-   *  no fact is compressed away — you hear exactly what the position computes. */
+  /** UNCAPPED full-detail mode (David 2026-07-20). Speaks EVERY computed facet
+   *  on EVERY move (full-data aggregator). The house-voice pass DOES run, in
+   *  coverAll mode ("voice every fact, drop nothing"), and the coverage /
+   *  accuracy / seat / number nets reject any warm that loses a facet — so no
+   *  fact is ever compressed away regardless of what the model does. */
   uncapped?: boolean;
 }): Promise<ReviewNarration> {
   const { moves, playerColor, openingName, result, coachNarration, playerRating, uncapped } = params;
@@ -2303,7 +2345,11 @@ export async function generateReviewNarration(params: {
           if (!isRepeat && keepsMate && keepsSac && keepsPunishFrame && keepsAdvantageFrame
             && narrationBoardAccurate(w, s.fenAfter)
             && narrationSeatFaithful(w, s.fenAfter, playerColor === 'white' ? 'w' : 'b')
-            && narrationNumbersFaithful(det, w)) s.narration = w;
+            && narrationNumbersFaithful(det, w)
+            // COVERAGE — the LLM never chooses which facts to state: a warm
+            // that dropped a facet (any bundle whose square/SAN anchors all
+            // vanished) is rejected and the full deterministic text ships.
+            && narrationCoversFacets(det, w)) s.narration = w;
           spokenLines.add(s.narration.trim().toLowerCase());
         }
       }
