@@ -733,14 +733,14 @@ function captureHasCounterTactic(
         for (const cell of row) {
           if (!cell || cell.color !== enemy) continue;
           if (cell.type !== 'k' && cell.type !== 'q' && cell.type !== 'r') continue;
-          const attackedByMoved = sim.attackers(cell.square as Square, moverColor).includes(mv.to as Square);
+          const attackedByMoved = sim.attackers(cell.square, moverColor).includes(mv.to);
           if (!attackedByMoved) continue;
           if (cell.type === 'k') hitsKing = true;
           else majors += 1;
         }
       }
       if ((hitsKing && majors >= 1) || majors >= 2) {
-        const punishNet = seeGain(sim, mv.to as Square); // opponent's best take-back on the fork square
+        const punishNet = seeGain(sim, mv.to); // opponent's best take-back on the fork square
         if (punishNet <= 0) return true;
       }
     }
@@ -3229,3 +3229,90 @@ export function seatPieceReferences(
     return text;
   }
 }
+
+/**
+ * describeStudentThreat — THE THREAT CALL-OUT (David 2026-07-21, emphatic:
+ * "The coach should identify my threat and call it out!!"). After the
+ * student's move, compute the biggest immediate threat the move CREATED —
+ * mate-in-one, a safe royal fork, or a capture that wins clean material —
+ * by giving the student a hypothetical second move in a row (null-move
+ * scan). Board-provable only (chess.js + SEE + the fork-safety check); the
+ * Berlin case this exists for: after ...Bc5, ...Nxf2 wins the f2 pawn and
+ * forks queen and rook, and the king cannot recapture because the c5
+ * bishop covers f2 — a threat the review walked straight past.
+ *
+ * Returns null when: the position is in check (the check IS the story),
+ * no qualifying threat exists, or the same threat already existed before
+ * the move (never re-narrate a standing threat every ply).
+ */
+export function describeStudentThreat(
+  fenBefore: string,
+  fenAfter: string,
+  studentWB: 'w' | 'b',
+): string | null {
+  try {
+    const after = new Chess(fenAfter);
+    if (after.inCheck()) return null; // the check is already the narration
+    const findBest = (fen: string): { san: string; detail: string; rank: number } | null => {
+      let c: Chess;
+      try { c = new Chess(fen); } catch { return null; }
+      if (c.turn() !== studentWB || c.inCheck() || c.isGameOver()) return null;
+      let best: { san: string; detail: string; rank: number } | null = null;
+      for (const mv of c.moves({ verbose: true })) {
+        const sim = new Chess(fen);
+        let played: ReturnType<Chess['move']> | null = null;
+        try { played = sim.move(mv.san); } catch { continue; }
+        if (!played) continue;
+        // Mate-in-one: the highest-ranked threat, always safe to name.
+        if (sim.isCheckmate()) { best = { san: mv.san, detail: 'checkmate', rank: 1000 }; break; }
+        // Safe royal fork from the landing square (king + major, or two majors),
+        // un-takeable with profit.
+        const enemy: 'w' | 'b' = studentWB === 'w' ? 'b' : 'w';
+        const majors: string[] = [];
+        let hitsKing = false;
+        for (const row of sim.board()) {
+          for (const cell of row) {
+            if (!cell || cell.color !== enemy) continue;
+            if (cell.type !== 'k' && cell.type !== 'q' && cell.type !== 'r') continue;
+            if (!sim.attackers(cell.square, studentWB).includes(played.to)) continue;
+            if (cell.type === 'k') hitsKing = true;
+            else majors.push(`${cell.type === 'q' ? 'queen' : 'rook'} on ${cell.square}`);
+          }
+        }
+        if ((hitsKing && majors.length >= 1) || majors.length >= 2) {
+          if (seeGain(sim, played.to) <= 0) {
+            const capBit = played.captured ? `wins the ${REVIEW_PIECE_NAME[played.captured]} on ${played.to} and ` : '';
+            const forkTargets = hitsKing ? `their king and ${majors[0]}` : `their ${majors.join(' and ')}`;
+            const rank = 500 + (played.captured ? PIECE_VALUE_LOCAL[played.captured] ?? 0 : 0);
+            if (!best || rank > best.rank) best = { san: mv.san, detail: `${capBit}forks ${forkTargets}`, rank };
+            continue;
+          }
+        }
+        // Clean material win: a capture whose static exchange nets a piece.
+        if (played.captured) {
+          const net = seeGain(c, mv.to);
+          if (net >= 3 && (!best || net > best.rank)) {
+            best = { san: mv.san, detail: `wins the ${REVIEW_PIECE_NAME[played.captured]} on ${mv.to}`, rank: net };
+          }
+        }
+      }
+      return best;
+    };
+    // Flip the side to move so the student "moves again" — the threat scan.
+    const parts = fenAfter.split(' ');
+    parts[1] = studentWB;
+    parts[3] = '-'; // clear en passant — not meaningful for a null-move scan
+    const threat = findBest(parts.join(' '));
+    if (!threat) return null;
+    // NEW threats only — a threat that already existed before the move was
+    // not created by it, and re-narrating a standing threat every ply is
+    // noise (the repetition class).
+    const prior = findBest(fenBefore);
+    if (prior && prior.san === threat.san) return null;
+    return `you're now threatening ${threat.san} — it ${threat.detail}`;
+  } catch {
+    return null;
+  }
+}
+
+const PIECE_VALUE_LOCAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };

@@ -1,7 +1,7 @@
 import { Chess } from 'chess.js';
 import type { Square } from 'chess.js';
 import { seeGain } from './positionReadingService';
-import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice, seatPieceReferences } from './groundedAnswer';
+import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice, seatPieceReferences, describeStudentThreat } from './groundedAnswer';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
 import { plyFactsForMove, plyFactsClause, computePvLine, type PvLine, type PrevCaptureContext } from './pvPlayback';
 import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan } from './reviewStrategicOrientation';
@@ -1185,6 +1185,22 @@ export function buildReviewSegments(
       const framing = "Here's the finish — from this move on it's forced. Every move is a check, the king has no square to run to, and it ends in mate. Watch it land.";
       narration = narration ? `${framing} ${narration}` : framing;
       narrationSource = narrationSource ?? 'flag';
+    }
+    // THE THREAT CALL-OUT (David 2026-07-21, emphatic: "The coach should
+    // identify my threat and call it out!!"). On EVERY student move, name the
+    // biggest NEW threat the move created — mate-in-one, a safe royal fork, a
+    // clean material win — from the null-move scan (board-provable). The
+    // Berlin case: after ...Bc5, "you're now threatening Nxf2 — wins the f2
+    // pawn and forks their queen and rook" went unsaid. A threat is a
+    // keystone: it speaks even on an otherwise-quiet ply.
+    if (playerColor && moverColor === playerColor) {
+      const threat = describeStudentThreat(fenPair.fenBefore, fenPair.fenAfter, playerColor === 'white' ? 'w' : 'b');
+      if (threat) {
+        narration = narration
+          ? `${narration} And ${threat}.`
+          : `${threat.charAt(0).toUpperCase()}${threat.slice(1)}.`;
+        narrationSource = narrationSource ?? 'per-move';
+      }
     }
     // OPPONENT-PSYCHOLOGY read (Danya register #14: "once one side starts to
     // decline, more mistakes appear"). When the opponent errs on CONSECUTIVE

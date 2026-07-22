@@ -15,7 +15,7 @@ import { Chess, type Color } from 'chess.js';
 import { plyFactsForMove } from './pvPlayback';
 import { seeGain } from './positionReadingService';
 import { detectTactics } from './tacticsDetector';
-import { seatPieceReferences } from './groundedAnswer';
+import { seatPieceReferences, describeStudentThreat } from './groundedAnswer';
 import { describeStructure } from './boardStructure';
 import { assessPositionalEdge } from './reviewPositionalAssessment';
 import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShield } from './reviewSacrifice';
@@ -133,6 +133,14 @@ export function computeMoveFacets(ctx: MoveFactContext): string[] {
       facets.push(`[loose] Undefended right now: ${seat(desc)}.`);
     }
   } catch { /* ignore */ }
+
+  // ── 3b. THE STUDENT'S NEW THREAT (David 2026-07-21: "The coach should
+  // identify my threat and call it out!!") — null-move scan for the biggest
+  // threat this move CREATED: mate-in-one / safe royal fork / clean win.
+  if (ctx.studentColorWB && ctx.moverColor === ctx.playerColor) {
+    const threat = describeStudentThreat(ctx.fenBefore, fenAfter, ctx.studentColorWB);
+    if (threat) facets.push(`[threat] ${threat.charAt(0).toUpperCase()}${threat.slice(1)}.`);
+  }
 
   // ── 4. POSITIONAL VERDICT + THE FULL ASSET LIST (no cap) ──
   // Skip on a mating move — "checkmate" is the verdict, not "you're balanced"

@@ -135,3 +135,30 @@ describe('explainBestMoveGrounded — SEE claims verified against counter-tactic
     expect(why ?? '').toContain('dxe5');
   });
 });
+
+describe('describeStudentThreat — the threat call-out (David 2026-07-21)', () => {
+  const fenBefore = 'rnbqkb1r/pp3ppp/2p5/3pp3/B3n3/2P2N2/PP1P1PPP/RNBQK2R b KQkq - 0 6';
+  const fenAfter = 'rnbqk2r/pp3ppp/2p5/2bpp3/B3n3/2P2N2/PP1P1PPP/RNBQK2R w KQkq - 0 7';
+
+  it('names the Nxf2 fork threat after the Berlin ...Bc5', async () => {
+    const { describeStudentThreat } = await import('./groundedAnswer');
+    const t = describeStudentThreat(fenBefore, fenAfter, 'b');
+    expect(t).toMatch(/threatening Nxf2/);
+    expect(t).toMatch(/forks their queen on d1 and rook on h1/);
+  });
+
+  it('stays silent on the starting position (no threat created)', async () => {
+    const { describeStudentThreat } = await import('./groundedAnswer');
+    const start = new Chess().fen();
+    const c = new Chess(); c.move('e4');
+    expect(describeStudentThreat(start, c.fen(), 'w')).toBeNull();
+  });
+
+  it('does not re-narrate a threat that already existed before the move', async () => {
+    const { describeStudentThreat } = await import('./groundedAnswer');
+    // When the pre-move position already carries the same Nxf2 threat, the
+    // move did not CREATE it — the detector stays silent (repetition guard).
+    const standing = fenAfter.replace(' w ', ' b ');
+    expect(describeStudentThreat(standing, standing, 'b')).toBeNull();
+  });
+});
