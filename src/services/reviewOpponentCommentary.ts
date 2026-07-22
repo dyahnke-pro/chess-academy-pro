@@ -93,7 +93,9 @@ export function buildOpponentMoveTeaching(
         const attackers = chess.attackers(sq as Square, enemy);
         if (attackers.includes(to as Square)) {
           return {
-            text: `Your opponent's ${movedLabel} trains on your weak pawn on ${sq} — a lasting target.`,
+            // Present tense, not "lasting" — durability is a future claim
+            // this read can't verify (board-awareness sweep, 2026-07-22).
+            text: `Your opponent's ${movedLabel} trains on your weak pawn on ${sq} — a target they can keep working on.`,
             arrows: [{ startSquare: to, endSquare: sq, color: OPP_AMBER }],
           };
         }

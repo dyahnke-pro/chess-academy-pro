@@ -91,9 +91,15 @@ interface SideDev {
   undevelopedKnights: string[];
   undevelopedBishops: string[];
   castled: boolean;
+  /** King actually sits on a SHORT-castled square (g-file). */
+  castledShort: boolean;
+  /** ANY castling right remains in the FEN for this side. */
+  canCastle: boolean;
+  /** The kingside right specifically (for shield-clause honesty). */
+  canCastleShort: boolean;
 }
 
-function assessDevelopment(all: Located[], color: 'w' | 'b'): SideDev {
+function assessDevelopment(all: Located[], color: 'w' | 'b', castlingField: string): SideDev {
   const mine = all.filter((p) => p.color === color);
   const centreRanks = color === 'w' ? [4, 5] : [4, 5];
   const hasCentre = mine.some((p) => p.type === 'p' && (fileOf(p.square) === 'd' || fileOf(p.square) === 'e') && centreRanks.includes(rankOf(p.square)));
@@ -102,7 +108,12 @@ function assessDevelopment(all: Located[], color: 'w' | 'b'): SideDev {
   const undevelopedBishops = mine.filter((p) => p.type === 'b' && BISHOP_HOMES.has(p.square)).map((p) => p.square);
   const king = mine.find((p) => p.type === 'k');
   const castled = king ? (fileOf(king.square) === 'g' || fileOf(king.square) === 'c') : false;
-  return { hasCentre, fianchettoSquare, undevelopedKnights, undevelopedBishops, castled };
+  const castledShort = king ? fileOf(king.square) === 'g' : false;
+  const short = color === 'w' ? 'K' : 'k';
+  const long = color === 'w' ? 'Q' : 'q';
+  const canCastleShort = castlingField.includes(short);
+  const canCastle = canCastleShort || castlingField.includes(long);
+  return { hasCentre, fianchettoSquare, undevelopedKnights, undevelopedBishops, castled, castledShort, canCastle, canCastleShort };
 }
 
 function devClause(dev: SideDev, subject: 'you' | 'your opponent'): string | null {
@@ -117,7 +128,14 @@ function devClause(dev: SideDev, subject: 'you' | 'your opponent'): string | nul
   // a home bishop is named without inventing its destination.
   const jobs = devJobs(dev);
   if (jobs) bits.push(jobs);
-  if (!dev.castled) bits.push('get the king castled');
+  // Castling advice only when castling is still POSSIBLE — a king that lost
+  // its rights gets honest king-safety advice instead of an illegal
+  // instruction (board-awareness sweep, David 2026-07-22).
+  if (!dev.castled) {
+    bits.push(dev.canCastle
+      ? 'get the king castled'
+      : 'the king has lost its castling rights — walk it to safety by hand and connect the rooks');
+  }
   if (bits.length === 0) return null;
   // Capitalise the joined clause for the leading subject.
   const joined = bits.join(', and ');
@@ -125,15 +143,28 @@ function devClause(dev: SideDev, subject: 'you' | 'your opponent'): string | nul
 }
 
 /** WHY a knight belongs on its natural square — the CENTRAL squares it fights
- *  for from there, computed from knight geometry, plus the king-shield role of
- *  the f-file squares (David 2026-07-22: "And WHY the knight belongs on
- *  f6!!!!"). Board truth, not lore: from f6 a knight attacks e4 and d5. */
-const KNIGHT_SQUARE_WHY: Record<string, string> = {
-  f3: 'from there it fights for e5 and d4 and stands guard over your castled king',
+ *  for from there, computed from knight geometry (David 2026-07-22: "And WHY
+ *  the knight belongs on f6!!!!"). Board truth, not lore: from f6 a knight
+ *  attacks e4 and d5. */
+const KNIGHT_SQUARE_FIGHTS: Record<string, string> = {
+  f3: 'from there it fights for e5 and d4',
   c3: 'from there it fights for d5 and e4',
-  f6: 'from there it fights for e4 and d5 and stands guard over your castled king',
+  f6: 'from there it fights for e4 and d5',
   c6: 'from there it fights for d4 and e5',
 };
+
+/** The f-file knight's king-shield clause — spoken ONLY when it's true of THIS
+ *  board: "your castled king" requires the king to actually be castled short;
+ *  with kingside rights intact it becomes future-tense; otherwise silence
+ *  (board-awareness sweep, David 2026-07-22 — the criminal was mine). */
+function knightWhy(to: string, dev: SideDev): string | null {
+  const fights = KNIGHT_SQUARE_FIGHTS[to];
+  if (!fights) return null;
+  if (to !== 'f3' && to !== 'f6') return fights;
+  if (dev.castledShort) return `${fights} and stands guard over your castled king`;
+  if (dev.canCastleShort) return `${fights} and will shield your king once you castle short`;
+  return fights;
+}
 
 /** The CONCRETE development to-do list, pieces named by square — each with
  *  its WHY, never a bare destination. */
@@ -142,7 +173,7 @@ function devJobs(dev: SideDev): string | null {
   for (const kn of dev.undevelopedKnights.slice(0, 2)) {
     const to = KNIGHT_HOME_TO_NATURAL[kn];
     if (to) {
-      const why = KNIGHT_SQUARE_WHY[to];
+      const why = knightWhy(to, dev);
       jobs.push(`the ${kn} knight belongs on ${to}${why ? ` — ${why}` : ''}`);
     } else {
       jobs.push(`the knight on ${kn} needs a square`);
@@ -187,8 +218,9 @@ export function buildOpeningDevelopmentPlan(
   try { chess = new Chess(fen); } catch { return null; }
   const all = pieces(chess);
   const enemyWB: 'w' | 'b' = studentColorWB === 'w' ? 'b' : 'w';
-  const mine = assessDevelopment(all, studentColorWB);
-  const theirs = assessDevelopment(all, enemyWB);
+  const castlingField = fen.split(' ')[2] ?? '-';
+  const mine = assessDevelopment(all, studentColorWB, castlingField);
+  const theirs = assessDevelopment(all, enemyWB, castlingField);
   const arrows = [
     ...devArrows(mine, PLAN_BLUE),
     ...devArrows(theirs, PLAN_AMBER),
@@ -223,7 +255,8 @@ export function buildOpeningDevelopmentPlan(
     // (the arrows point at them — the words must name them). David 2026-07-21
     // (IMG_4579): the curated lead alone still read as a generic recipe.
     const jobs = devJobs(mine);
-    const jobsClause = jobs ? ` Right now: ${jobs}${mine.castled ? '' : ', then castle'}.` : '';
+    const castleBit = mine.castled ? '' : mine.canCastle ? ', then castle' : ', then get the king to safety by hand — its castling rights are gone';
+    const jobsClause = jobs ? ` Right now: ${jobs}${castleBit}.` : '';
     return { text: `${lead}${second}${jobsClause}`, arrows };
   }
 

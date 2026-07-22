@@ -212,8 +212,16 @@ export function deriveNextPlans(fen: string, studentColorWB: Color): string[] {
     && (enemy === 'w' ? '12'.includes(enemyKing.square[1]) : '78'.includes(enemyKing.square[1]))
     && openCentralFile) {
     // The soft squares in front of a stuck king — where a sac usually lands.
+    // Rook clause scales to the rooks the student actually HAS (prescription
+    // gate, David 2026-07-22 — never prescribe a piece that isn't there).
     const softSquares = enemy === 'w' ? 'd2 and f2' : 'd7 and f7';
-    plans.push(`the plan from here is to attack their king stuck on ${enemyKing.square} before it ever reaches safety. Here's exactly how: first make sure your OWN king is tucked away, then double both rooks onto the open ${openCentralFile}-file so they bear straight down on the king; bring every piece into the attack with tempo — a move that develops AND threatens is worth two; and hunt for a sacrifice on the soft squares ${softSquares} that rips the cover off, because once the king is bare it's checks all the way to mate`);
+    const rookCount = all.filter((c) => c.type === 'r' && c.color === studentColorWB).length;
+    const fileClause = rookCount >= 2
+      ? `then double both rooks onto the open ${openCentralFile}-file so they bear straight down on the king; `
+      : rookCount === 1
+        ? `then swing your rook onto the open ${openCentralFile}-file so it bears straight down on the king; `
+        : '';
+    plans.push(`the plan from here is to attack their king stuck on ${enemyKing.square} before it ever reaches safety. Here's exactly how: first make sure your OWN king is tucked away, ${fileClause}bring every piece into the attack with tempo — a move that develops AND threatens is worth two; and hunt for a sacrifice on the soft squares ${softSquares} that rips the cover off, because once the king is bare it's checks all the way to mate`);
   }
 
   // 2. Your passed pawn → push it, HOW spelled out. The king joins the escort
@@ -289,7 +297,14 @@ export function deriveNextPlans(fen: string, studentColorWB: Color): string[] {
     // asset, which contradicts the very next clause about guarding both from a
     // swap (David 2026-07-22). The pair converts by DOMINATING an open board
     // while both bishops live; the trade comes last, at full price.
-    plans.push(`the plan from here is to make your bishop pair count. Here's how: trade pawns to rip the position open, guard both bishops from any swap, and point them at both wings at once — in an open board two bishops rake the whole thing and simply outgun a knight. The pair is only an advantage while both live; you trade one at the very end, when it wins something concrete`);
+    // The "outgun" comparison names what the enemy ACTUALLY has (prescription
+    // gate — never reference a piece that isn't on the board, even in an idiom).
+    const enemyN = all.some((c) => c.type === 'n' && c.color === enemy);
+    const rival = enemyN && enemyB === 1 ? 'their knight and bishop'
+      : enemyN ? 'their knights'
+      : enemyB === 1 ? 'their lone bishop'
+      : 'anything they have left';
+    plans.push(`the plan from here is to make your bishop pair count. Here's how: trade pawns to rip the position open, guard both bishops from any swap, and point them at both wings at once — in an open board two bishops rake the whole thing and simply outgun ${rival}. The pair is only an advantage while both live; you trade one at the very end, when it wins something concrete`);
   }
 
   return plans;

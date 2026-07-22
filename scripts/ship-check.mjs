@@ -172,6 +172,10 @@ const GATE_TESTS = [
   // proxy anywhere else, or adding an untagged primitive, makes ship-check RED.
   // Turns "what else are we missing?" into an enforced, closed question.
   'src/services/coachLlmChokepoint.gate.test.ts',
+  // 🔒 PRESCRIPTION GATE (David 2026-07-22) — plan templates may never
+  // prescribe a piece the student doesn't have or phase-blind technique.
+  // Locative claims were gated; prescriptive grammar is now gated too.
+  'src/services/planPrescriptions.test.ts',
   'src/data/lessons/lessonIntegrity.test.ts',
   'src/data/lessons/narrationAccuracy.test.ts',
   'src/data/lessons/narrationGrounding.test.ts',

@@ -96,11 +96,22 @@ export function assessPositionalEdge(
     reasons.push(`you own the open ${myHeavyOnOpen.square[0]}-file`);
   }
 
-  // 4. An enemy weak pawn to target — isolated or doubled, a lasting target.
+  // 4. An enemy weak pawn to target. DURABILITY HONESTY (board-awareness
+  // sweep, David 2026-07-22): "lasting" is a claim about the FUTURE this
+  // per-position read cannot verify — run 1 called mid-recapture d4/d7 pawns
+  // "a lasting weakness" one ply before the recapture undoubled them. A
+  // doubled pawn that is currently CAPTURABLE is a tactical object, not a
+  // structural read — skip it; and speak present tense, never "lasting".
   const enemyIso = struct.pawns.isolatedPawns[enemy][0];
   const enemyDoubledFile = struct.pawns.doubledFiles[enemy][0];
   if (enemyIso) reasons.push(`their pawn on ${enemyIso} is isolated — a target you can pile on`);
-  else if (enemyDoubledFile) reasons.push(`their doubled pawns on the ${enemyDoubledFile}-file are a lasting weakness`);
+  else if (enemyDoubledFile) {
+    const doubledStable = !all.some((p) => p.type === 'p' && p.color === enemy
+      && p.square[0] === enemyDoubledFile
+      && chess.attackers(p.square as Parameters<typeof chess.attackers>[0], me).length
+        > chess.attackers(p.square as Parameters<typeof chess.attackers>[0], enemy).length);
+    if (doubledStable) reasons.push(`their doubled pawns on the ${enemyDoubledFile}-file are a structural weakness to work against`);
+  }
 
   // 5. A passed pawn of your own.
   const myPassed = struct.pawns.passedPawns[me][0];
