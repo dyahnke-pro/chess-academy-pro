@@ -3245,36 +3245,66 @@ export function seatPieceReferences(
  * no qualifying threat exists, or the same threat already existed before
  * the move (never re-narrate a standing threat every ply).
  */
-export function describeStudentThreat(
+/** A detected NEW threat, as structured board truth — the PACKAGE the voice
+ *  is handed (David 2026-07-22: "delivered in the package! BEFORE THE
+ *  DECISION!"): kind, landing square, fork targets, and the squares that
+ *  GUARD the landing square, so prevention and recognition teaching are
+ *  computed, never improvised. */
+export interface DetectedThreat {
+  san: string;
+  detail: string;
+  kind: 'mate' | 'fork' | 'capture';
+  /** The threatening piece's landing square. */
+  landing: string;
+  /** Fork victims ("queen on d1"), empty for non-forks. */
+  targets: string[];
+  /** Squares of the mover's pieces that DEFEND the landing square — the
+   *  foundation a defender can undermine (the Berlin Bc5 guarding f2). */
+  guards: string[];
+  rank: number;
+}
+
+/** detectNewThreat — the structured core of the threat call-out: the biggest
+ *  NEW threat `moverWB`'s move created (mate-in-one / safe royal fork / clean
+ *  SEE-verified capture), via the null-move scan. Side-agnostic: pass the
+ *  student's color for "you're threatening", the opponent's for "their move
+ *  threatens" + the prevention teaching. Null when nothing qualifies, the
+ *  position is in check, or the same threat existed before the move. */
+export function detectNewThreat(
   fenBefore: string,
   fenAfter: string,
-  studentWB: 'w' | 'b',
-): string | null {
+  moverWB: 'w' | 'b',
+): DetectedThreat | null {
   try {
     const after = new Chess(fenAfter);
     if (after.inCheck()) return null; // the check is already the narration
-    const findBest = (fen: string): { san: string; detail: string; rank: number } | null => {
+    const findBest = (fen: string): DetectedThreat | null => {
       let c: Chess;
       try { c = new Chess(fen); } catch { return null; }
-      if (c.turn() !== studentWB || c.inCheck() || c.isGameOver()) return null;
-      let best: { san: string; detail: string; rank: number } | null = null;
+      if (c.turn() !== moverWB || c.inCheck() || c.isGameOver()) return null;
+      let best: DetectedThreat | null = null;
+      const enemy: 'w' | 'b' = moverWB === 'w' ? 'b' : 'w';
+      const guardsOf = (sim: Chess, sq: string): string[] =>
+        sim.attackers(sq as Square, moverWB).filter((g) => g !== sq);
       for (const mv of c.moves({ verbose: true })) {
         const sim = new Chess(fen);
         let played: ReturnType<Chess['move']> | null = null;
         try { played = sim.move(mv.san); } catch { continue; }
         if (!played) continue;
         // Mate-in-one: the highest-ranked threat, always safe to name.
-        if (sim.isCheckmate()) { best = { san: mv.san, detail: 'checkmate', rank: 1000 }; break; }
+        if (sim.isCheckmate()) {
+          best = { san: mv.san, detail: 'checkmate', kind: 'mate', landing: played.to, targets: [], guards: guardsOf(sim, played.to), rank: 1000 };
+          break;
+        }
         // Safe royal fork from the landing square (king + major, or two majors),
         // un-takeable with profit.
-        const enemy: 'w' | 'b' = studentWB === 'w' ? 'b' : 'w';
         const majors: string[] = [];
         let hitsKing = false;
         for (const row of sim.board()) {
           for (const cell of row) {
             if (!cell || cell.color !== enemy) continue;
             if (cell.type !== 'k' && cell.type !== 'q' && cell.type !== 'r') continue;
-            if (!sim.attackers(cell.square, studentWB).includes(played.to)) continue;
+            if (!sim.attackers(cell.square, moverWB).includes(played.to)) continue;
             if (cell.type === 'k') hitsKing = true;
             else majors.push(`${cell.type === 'q' ? 'queen' : 'rook'} on ${cell.square}`);
           }
@@ -3284,7 +3314,9 @@ export function describeStudentThreat(
             const capBit = played.captured ? `wins the ${REVIEW_PIECE_NAME[played.captured]} on ${played.to} and ` : '';
             const forkTargets = hitsKing ? `their king and ${majors[0]}` : `their ${majors.join(' and ')}`;
             const rank = 500 + (played.captured ? PIECE_VALUE_LOCAL[played.captured] ?? 0 : 0);
-            if (!best || rank > best.rank) best = { san: mv.san, detail: `${capBit}forks ${forkTargets}`, rank };
+            if (!best || rank > best.rank) {
+              best = { san: mv.san, detail: `${capBit}forks ${forkTargets}`, kind: 'fork', landing: played.to, targets: hitsKing ? ['their king', majors[0]] : majors, guards: guardsOf(sim, played.to), rank };
+            }
             continue;
           }
         }
@@ -3295,16 +3327,16 @@ export function describeStudentThreat(
         if (played.captured) {
           const net = seeGain(c, mv.to);
           if (net >= 3 && (!best || net > best.rank)
-            && !captureHasCounterTactic(fen, mv.san, studentWB === 'w' ? 'b' : 'w', net)) {
-            best = { san: mv.san, detail: `wins the ${REVIEW_PIECE_NAME[played.captured]} on ${mv.to}`, rank: net };
+            && !captureHasCounterTactic(fen, mv.san, moverWB === 'w' ? 'b' : 'w', net)) {
+            best = { san: mv.san, detail: `wins the ${REVIEW_PIECE_NAME[played.captured]} on ${mv.to}`, kind: 'capture', landing: mv.to, targets: [], guards: guardsOf(sim, mv.to), rank: net };
           }
         }
       }
       return best;
     };
-    // Flip the side to move so the student "moves again" — the threat scan.
+    // Flip the side to move so the mover "moves again" — the threat scan.
     const parts = fenAfter.split(' ');
-    parts[1] = studentWB;
+    parts[1] = moverWB;
     parts[3] = '-'; // clear en passant — not meaningful for a null-move scan
     const threat = findBest(parts.join(' '));
     if (!threat) return null;
@@ -3313,10 +3345,114 @@ export function describeStudentThreat(
     // noise (the repetition class).
     const prior = findBest(fenBefore);
     if (prior && prior.san === threat.san) return null;
-    return `you're now threatening ${threat.san} — it ${threat.detail}`;
+    return threat;
   } catch {
     return null;
   }
 }
 
+/** The student-voice phrasing of detectNewThreat (back-compat wrapper). */
+export function describeStudentThreat(
+  fenBefore: string,
+  fenAfter: string,
+  studentWB: 'w' | 'b',
+): string | null {
+  const t = detectNewThreat(fenBefore, fenAfter, studentWB);
+  return t ? `you're now threatening ${t.san} — it ${t.detail}` : null;
+}
+
 const PIECE_VALUE_LOCAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+
+/**
+ * describeThreatRecognition — TEACH THE PATTERN (David 2026-07-22: "TEACH the
+ * user how to identify and prevent it"). Names the board geometry that made
+ * the threat possible, computed from the DetectedThreat package — the
+ * precursor the student should learn to SEE before it lands.
+ */
+export function describeThreatRecognition(
+  threat: DetectedThreat,
+  fenAfter: string,
+  victimWB: 'w' | 'b',
+): string | null {
+  try {
+    const c = new Chess(fenAfter);
+    if (threat.kind === 'fork') {
+      const victimGuards = c.attackers(threat.landing as Square, victimWB).length;
+      const guardBit = victimGuards === 0
+        ? `and nothing of yours covers ${threat.landing}`
+        : threat.guards.length > 0
+          ? `and ${threat.landing} is backed up by their piece on ${threat.guards[0]}`
+          : `even though you cover ${threat.landing}`;
+      return `the pattern to spot: ${threat.targets.join(' and ')} sitting one knight's-hop from ${threat.landing}, ${guardBit} — that alignment IS the fork, a move before it lands`;
+    }
+    if (threat.kind === 'capture') {
+      const cell = c.get(threat.landing as Square);
+      const noun = cell ? REVIEW_PIECE_NAME[cell.type] : 'piece';
+      return `the pattern to spot: the ${noun} on ${threat.landing} sits loose — an undefended piece is a standing invitation, and tactics find it`;
+    }
+    return `the pattern to spot: the escape squares around the king were already gone — count the king's flight squares before the checks start`;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * describeThreatPrevention — TEACH THE DEFENSE. Given the DetectedThreat
+ * package and the engine's stored best reply (delivered in the package — the
+ * next ply's analysis, no fresh search), name HOW the defense meets the
+ * threat, computed from the board:
+ *   • undermines the guard — the defense attacks a piece that backs the
+ *     threat's landing square (the Berlin d4! hitting the c5 bishop that
+ *     guarded f2);
+ *   • covers the landing square — the square gains a defender and the tactic
+ *     no longer wins the exchange;
+ *   • moves the target — a forked piece steps off the alignment;
+ *   • else, verified relief — the threat simply no longer works after it.
+ * Null when the defense doesn't verifiably address the threat (never claim a
+ * defense the board can't prove).
+ */
+export function describeThreatPrevention(
+  fenAfter: string,
+  threat: DetectedThreat,
+  defenseSan: string,
+  threatWB: 'w' | 'b',
+): string | null {
+  try {
+    const c = new Chess(fenAfter);
+    const def = c.move(defenseSan);
+    if (!def) return null;
+    const defenderWB: 'w' | 'b' = threatWB === 'w' ? 'b' : 'w';
+    // (1) Undermine the guard: the defense attacks a guard of the landing sq.
+    for (const g of threat.guards) {
+      const cell = c.get(g as Square);
+      if (cell && cell.color === threatWB && c.attackers(g as Square, defenderWB).includes(def.to)) {
+        return `${defenseSan} meets it by striking the ${REVIEW_PIECE_NAME[cell.type]} on ${g} — the piece holding the whole combination together`;
+      }
+    }
+    // (2) Cover the landing square: it gains a defender from the defense.
+    if (c.attackers(threat.landing as Square, defenderWB).includes(def.to)) {
+      return `${defenseSan} meets it by covering ${threat.landing} — the fork square is no longer safe to land on`;
+    }
+    // (3) Move the target: a forked piece stepped off the alignment.
+    for (const t of threat.targets) {
+      const sq = t.match(/on ([a-h][1-8])/)?.[1];
+      if (sq && def.from === sq) {
+        return `${defenseSan} meets it by stepping the ${t.replace(/ on [a-h][1-8]/, '')} off the forking alignment`;
+      }
+    }
+    // (4) Verified relief: the threat move no longer works at all.
+    const flip = c.fen().split(' ');
+    flip[1] = threatWB;
+    flip[3] = '-';
+    try {
+      const probe = new Chess(flip.join(' '));
+      if (!probe.inCheck()) {
+        const still = probe.moves().some((m) => m.replace(/[+#!?]+$/, '') === threat.san.replace(/[+#!?]+$/, ''));
+        if (!still) return `${defenseSan} takes ${threat.san} off the board entirely`;
+      }
+    } catch { /* fall through */ }
+    return null; // the defense fights elsewhere — don't claim what the board can't prove
+  } catch {
+    return null;
+  }
+}

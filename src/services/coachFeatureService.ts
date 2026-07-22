@@ -1,7 +1,7 @@
 import { Chess } from 'chess.js';
 import type { Square } from 'chess.js';
 import { seeGain } from './positionReadingService';
-import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice, seatPieceReferences, describeStudentThreat } from './groundedAnswer';
+import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice, seatPieceReferences, describeStudentThreat, detectNewThreat, describeThreatRecognition, describeThreatPrevention } from './groundedAnswer';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
 import { plyFactsForMove, plyFactsClause, computePvLine, type PvLine, type PrevCaptureContext } from './pvPlayback';
 import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan } from './reviewStrategicOrientation';
@@ -1220,6 +1220,31 @@ export function buildReviewSegments(
         }
       }
     }
+    // THE OPPONENT'S THREAT — identified, TAUGHT, and DEFUSED (David
+    // 2026-07-22: "can the coach identify how to prevent this from happening
+    // and TEACH the user how to identify and prevent it??"). When the
+    // opponent's move creates a threat: (1) name it; (2) teach the PATTERN
+    // that made it possible (recognition — the geometry to spot a move
+    // early); (3) teach the DEFENSE — the engine's stored best reply for the
+    // NEXT ply (delivered in the package, no fresh search) explained by HOW
+    // it meets the threat: undermine the guard / cover the square / step off
+    // the alignment. All computed; nothing improvised.
+    if (playerColor && moverColor !== playerColor) {
+      const oppWB: 'w' | 'b' = moverColor === 'white' ? 'w' : 'b';
+      const oppThreat = detectNewThreat(fenPair.fenBefore, fenPair.fenAfter, oppWB);
+      if (oppThreat) {
+        let callOut = `Careful — their move threatens ${oppThreat.san}: it ${oppThreat.detail}.`;
+        const recog = describeThreatRecognition(oppThreat, fenPair.fenAfter, playerColor === 'white' ? 'w' : 'b');
+        if (recog) callOut += ` ${recog.charAt(0).toUpperCase()}${recog.slice(1)}.`;
+        const nextBest = i + 1 < usable ? uciToSanAt(moves[i + 1].bestMove, fenPair.fenAfter) : null;
+        if (nextBest) {
+          const prevention = describeThreatPrevention(fenPair.fenAfter, oppThreat, nextBest, oppWB);
+          if (prevention) callOut += ` The answer: ${prevention}.`;
+        }
+        narration = narration ? `${narration} ${callOut}` : callOut;
+        narrationSource = narrationSource ?? 'per-move';
+      }
+    }
     // OPPONENT-PSYCHOLOGY read (Danya register #14: "once one side starts to
     // decline, more mistakes appear"). When the opponent errs on CONSECUTIVE
     // moves, note the unravelling ONCE — a real pattern from the classification
@@ -1819,7 +1844,7 @@ async function augmentWithProjections(
       parts[1] = studentColorWB;
       parts[3] = '-';
       const nullFen = parts.join(' ');
-      const line = await raceTimeout(computePvLine(nullFen, { maxPlies: 5 }), PROJ_TIMEOUT_MS, null);
+      const line = await raceTimeout(computePvLine(nullFen, { maxPlies: 7 }), PROJ_TIMEOUT_MS, null);
       if (!line || line.plies.length < 3) continue; // one-movers belong to the static call-out
       const terminal = line.terminalEvalCp ?? line.rootEvalCp;
       const studentPovTerminal = studentColorWB === 'w' ? terminal : -terminal;

@@ -162,3 +162,37 @@ describe('describeStudentThreat — the threat call-out (David 2026-07-21)', () 
     expect(describeStudentThreat(standing, standing, 'b')).toBeNull();
   });
 });
+
+describe('opponent-threat teaching — identify, recognize, prevent (David 2026-07-22)', () => {
+  // The Berlin position mirrored: the STUDENT is White; the opponent (Black)
+  // just played ...Bc5, creating the Nxf2 fork threat. The coach must name
+  // it, teach the pattern, and explain how d4 — the engine's stored answer,
+  // which strikes the c5 bishop GUARDING f2 — defuses it.
+  const fenBefore = 'rnbqkb1r/pp3ppp/2p5/3pp3/B3n3/2P2N2/PP1P1PPP/RNBQK2R b KQkq - 0 6';
+  const fenAfter = 'rnbqk2r/pp3ppp/2p5/2bpp3/B3n3/2P2N2/PP1P1PPP/RNBQK2R w KQkq - 0 7';
+
+  it('detectNewThreat returns the structured package — kind, landing, targets, guards', async () => {
+    const { detectNewThreat } = await import('./groundedAnswer');
+    const t = detectNewThreat(fenBefore, fenAfter, 'b');
+    expect(t?.san).toBe('Nxf2');
+    expect(t?.kind).toBe('fork');
+    expect(t?.landing).toBe('f2');
+    expect(t?.guards).toContain('c5'); // the bishop holding the combination together
+  });
+
+  it('recognition names the geometry to spot', async () => {
+    const { detectNewThreat, describeThreatRecognition } = await import('./groundedAnswer');
+    const t = detectNewThreat(fenBefore, fenAfter, 'b');
+    const r = describeThreatRecognition(t!, fenAfter, 'w');
+    expect(r).toMatch(/knight's-hop from f2/);
+    expect(r).toMatch(/queen on d1 and rook on h1/);
+  });
+
+  it('prevention explains d4 as undermining the guard', async () => {
+    const { detectNewThreat, describeThreatPrevention } = await import('./groundedAnswer');
+    const t = detectNewThreat(fenBefore, fenAfter, 'b');
+    const p = describeThreatPrevention(fenAfter, t!, 'd4', 'b');
+    expect(p).toMatch(/striking the bishop on c5/);
+    expect(p).toMatch(/holding the whole combination together/);
+  });
+});
