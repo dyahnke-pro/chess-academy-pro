@@ -266,7 +266,11 @@ export function deriveNextPlans(fen: string, studentColorWB: Color): string[] {
   const myB = all.filter((c) => c.type === 'b' && c.color === studentColorWB).length;
   const enemyB = all.filter((c) => c.type === 'b' && c.color === enemy).length;
   if (myB >= 2 && enemyB <= 1) {
-    plans.push(`the plan from here is to cash in your bishop pair. Here's how: trade pawns to rip the position open, guard both bishops from any swap, and point them at both wings at once — in an open board two bishops rake the whole thing and simply outgun a knight`);
+    // "MAKE THE PAIR COUNT", never "cash in" — cashing-in reads as selling the
+    // asset, which contradicts the very next clause about guarding both from a
+    // swap (David 2026-07-22). The pair converts by DOMINATING an open board
+    // while both bishops live; the trade comes last, at full price.
+    plans.push(`the plan from here is to make your bishop pair count. Here's how: trade pawns to rip the position open, guard both bishops from any swap, and point them at both wings at once — in an open board two bishops rake the whole thing and simply outgun a knight. The pair is only an advantage while both live; you trade one at the very end, when it wins something concrete`);
   }
 
   return plans;
