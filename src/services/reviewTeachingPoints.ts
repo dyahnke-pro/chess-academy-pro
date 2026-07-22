@@ -216,24 +216,43 @@ export function deriveNextPlans(fen: string, studentColorWB: Color): string[] {
     plans.push(`the plan from here is to attack their king stuck on ${enemyKing.square} before it ever reaches safety. Here's exactly how: first make sure your OWN king is tucked away, then double both rooks onto the open ${openCentralFile}-file so they bear straight down on the king; bring every piece into the attack with tempo — a move that develops AND threatens is worth two; and hunt for a sacrifice on the soft squares ${softSquares} that rips the cover off, because once the king is bare it's checks all the way to mate`);
   }
 
-  // 2. Your passed pawn → push it, HOW spelled out.
+  // 2. Your passed pawn → push it, HOW spelled out. The king joins the escort
+  // ONLY once the queens are off — telling a student to march the king up a
+  // middlegame board is phase-blind advice (template-logic sweep, David
+  // 2026-07-22: read every authored line as a chess player).
   const passer = struct.pawns.passedPawns[studentColorWB][0];
   if (passer) {
-    plans.push(`the plan from here is to get your passed pawn on ${passer} promoting. Here's how: clear the square in front of it so nothing blocks the road, escort it up with your king and pieces rather than pushing it alone into danger, and advance it one safe square at a time until they have to give up a piece to stop it — a passed pawn's whole job is to run`);
+    const queensOn = all.some((c) => c.type === 'q');
+    const escort = queensOn
+      ? 'escort it with your pieces rather than pushing it alone into danger — the king joins the escort once the queens come off'
+      : 'escort it up with your king and pieces rather than pushing it alone into danger';
+    plans.push(`the plan from here is to get your passed pawn on ${passer} promoting. Here's how: clear the square in front of it so nothing blocks the road, ${escort}, and advance it one safe square at a time until they have to give up a piece to stop it — a passed pawn's whole job is to run`);
   }
 
-  // 3. An enemy weak (isolated) pawn on the c–f files → besiege it, HOW spelled out.
+  // 3. An enemy weak (isolated) pawn on the c–f files → besiege it, HOW spelled
+  // out. Only prescribe pieces the student actually HAS — "plant a knight"
+  // with no knight on the board is nonsense advice (template-logic sweep).
   const weak = struct.pawns.isolatedPawns[enemy].find((sq) => 'cdef'.includes(sq[0])) ?? struct.pawns.isolatedPawns[enemy][0];
   if (weak) {
     const block = `${weak[0]}${enemy === 'w' ? Number(weak[1]) + 1 : Number(weak[1]) - 1}`;
-    plans.push(`the plan from here is to win their weak pawn on ${weak}. Here's how: plant a knight on the square right in front of it, ${block}, so it can never advance to free itself; then stack your rooks and queen on the file to gang up on it, trade off the pieces that defend it one by one, and either win it outright or tie their whole army to babysitting it`);
+    const hasKnight = all.some((c) => c.type === 'n' && c.color === studentColorWB);
+    const hasMinor = hasKnight || all.some((c) => c.type === 'b' && c.color === studentColorWB);
+    const blockBit = hasKnight
+      ? `plant a knight on the square right in front of it, ${block}, so it can never advance to free itself`
+      : hasMinor
+        ? `blockade the square right in front of it, ${block}, so it can never advance to free itself`
+        : `control the square right in front of it, ${block}, so it can never advance to free itself`;
+    plans.push(`the plan from here is to win their weak pawn on ${weak}. Here's how: ${blockBit}; then stack your heavy pieces on the file to gang up on it, trade off the pieces that defend it one by one, and either win it outright or tie their whole army to babysitting it`);
   }
 
-  // 4. An open file you don't yet own with a heavy piece → seize it, HOW spelled out.
+  // 4. An open file you don't yet own with a heavy piece → seize it, HOW
+  // spelled out — only when the student still HAS a rook to put there.
+  const myRooks = all.filter((c) => c.type === 'r' && c.color === studentColorWB);
   const myHeavyFiles = new Set(all.filter((c) => (c.type === 'r' || c.type === 'q') && c.color === studentColorWB).map((c) => c.square[0]));
   const freeOpenFile = struct.pawns.openFiles.find((f) => !myHeavyFiles.has(f));
-  if (freeOpenFile) {
-    plans.push(`the plan from here is to seize the open ${freeOpenFile}-file. Here's how: put a rook on it right away before they contest it, double the second rook behind the first so nothing can challenge you, and drive down to the seventh rank where a rook chews through pawns and pins the king back`);
+  if (freeOpenFile && myRooks.length > 0) {
+    const doubleBit = myRooks.length >= 2 ? 'double the second rook behind the first so nothing can challenge you, and ' : '';
+    plans.push(`the plan from here is to seize the open ${freeOpenFile}-file. Here's how: put a rook on it right away before they contest it, ${doubleBit}drive down to the seventh rank where a rook chews through pawns and pins the king back`);
   }
 
   // 5. You already hold an outpost → dominate from it, HOW spelled out.
