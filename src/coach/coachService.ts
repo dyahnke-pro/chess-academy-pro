@@ -1070,9 +1070,16 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     // a plan. Build it on demand when the surface didn't; best-effort + null-safe.
     const whyBestMoveEngage = isWhyBestMoveQuestion(askForIntents);
     let resolvedEnginePlan = input.liveState.enginePlan;
-    if (!resolvedEnginePlan && whyBestMoveEngage && input.liveState.fen) {
+    // The review threads its STORED analysis (reviewFlaggedMove) — no fresh
+    // engine search needed, and on a stalling device engine (iOS ios-native,
+    // David 2026-07-21) that search left the Ask silent for 12s+. Time-box the
+    // on-demand build so a stuck engine can never hold the turn hostage.
+    if (!resolvedEnginePlan && whyBestMoveEngage && input.liveState.fen && !input.liveState.reviewFlaggedMove) {
       const sideToMove: 'white' | 'black' = (input.liveState.fen.split(' ')[1] ?? 'w') === 'b' ? 'black' : 'white';
-      resolvedEnginePlan = (await buildEnginePlan(input.liveState.fen, input.liveState.studentColor ?? sideToMove)) ?? undefined;
+      resolvedEnginePlan = (await Promise.race([
+        buildEnginePlan(input.liveState.fen, input.liveState.studentColor ?? sideToMove),
+        new Promise<null>((r) => setTimeout(() => r(null), 6000)),
+      ])) ?? undefined;
     }
     // NAMED-CANDIDATE eval — "is Qf3 ok" must be answered by EVALUATING Qf3
     // (David 2026-07-10). Compute the WHITE-perspective eval of the position
@@ -1150,6 +1157,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             counterRepertoireQuestion: counterRepertoireQuestionEngage,
             bestMoveQuestion: isBestMoveQuestion(askForIntents) && !candidateMoveEngage && !counterRepertoireQuestionEngage,
             whyBestMoveQuestion: whyBestMoveEngage,
+            reviewFlaggedMove: input.liveState.reviewFlaggedMove,
             // Comparative ask — dispatched BEFORE whyBestMove/bestMove so the
             // alternatives comparison wins over the generic reasoning walk.
             alternativesQuestion: alternativesEngage,

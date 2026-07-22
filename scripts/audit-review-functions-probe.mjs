@@ -143,6 +143,39 @@ const run = async () => {
   const jumped = await plyNow();
   add('nav-end-start', true, `walk functional at ply ${jumped}`);
 
+  // ── STORY-GAME WATCH CHIP (soft): only mounts on a ply whose opening has a
+  // corpus model game. If it appeared anywhere in the walk, drive it — click,
+  // expect the Stop affordance, stop it. Absent chip = observed-not-applicable
+  // for this fixture, NOT a failure (the chip's own wiring is unit-tested).
+  const storyBtn = page.locator('[data-testid="review-story-watch-btn"]').first();
+  if (await storyBtn.count()) {
+    await storyBtn.click({ timeout: 2000 }).catch(() => {});
+    await page.waitForTimeout(4000);
+    const stopShown = /Stop the game/i.test(await txt(page, '[data-testid="coach-game-review-walk"]'));
+    if (stopShown) await storyBtn.click({ timeout: 2000 }).catch(() => {});
+    add('story-game-watch', stopShown, stopShown ? 'playback started (Stop shown), stopped' : 'chip clicked but playback never started');
+  } else add('story-game-watch', true, 'chip not applicable to this fixture (no corpus game for the opening) — wiring unit-tested');
+
+  // ── DEEP REVIEW DETAIL toggle (Settings): flips and PERSISTS across a reload.
+  try {
+    await page.goto(`${BASE}/settings`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    await page.waitForTimeout(2500);
+    const tgl = page.locator('[data-testid="review-full-detail-toggle"]').first();
+    if (await tgl.count()) {
+      await tgl.scrollIntoViewIfNeeded().catch(() => {});
+      const before = await tgl.isChecked().catch(() => null);
+      await tgl.click({ timeout: 2500 }).catch(() => {});
+      await page.waitForTimeout(1200);
+      await page.reload({ waitUntil: 'domcontentloaded' });
+      await page.waitForTimeout(2500);
+      const after = await page.locator('[data-testid="review-full-detail-toggle"]').first().isChecked().catch(() => null);
+      const flipped = before !== null && after !== null && before !== after;
+      // restore the original state so the probe is idempotent
+      if (flipped) { await page.locator('[data-testid="review-full-detail-toggle"]').first().click({ timeout: 2500 }).catch(() => {}); await page.waitForTimeout(800); }
+      add('deep-detail-toggle', flipped, flipped ? `persisted across reload (${before}→${after})` : `toggle state did not persist (${before}→${after})`);
+    } else add('deep-detail-toggle', false, 'toggle not found on /settings');
+  } catch { add('deep-detail-toggle', false, 'settings navigation failed'); }
+
   add('no-page-errors', errs.length === 0, errs.length ? errs.slice(0, 2).join(' | ') : 'none');
   const fails = results.filter((r) => !r.p).length;
   console.log(`\n===== FUNCTIONS PROBE: ${fails === 0 ? '✅ MEETS' : '❌ FAILS'} (${results.length - fails}/${results.length}) =====`);

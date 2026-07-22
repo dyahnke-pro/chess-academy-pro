@@ -927,6 +927,13 @@ export interface UserPreferences {
    *  off in Settings. Routed through voiceService.speakLecture, so it
    *  still stays silent when coachNarration is 'silent'. */
   calcHintVoice?: boolean;
+  /** DEEP REVIEW DETAIL (David 2026-07-21: "we have a toggle switch — at
+   *  least we should"). When true, the post-game review walk narrates in
+   *  the full-data register — every computed facet on every move plus the
+   *  future-position projections — instead of the standard one-beat
+   *  cascade. The same mode the `?uncapped=1` diagnostic uses, now a
+   *  user-facing choice. Off by default. */
+  reviewFullDetail?: boolean;
   /** How much the coach says PER TURN when it does talk. Wired through
    *  to the brain's TEACH_MODE_ADDITION + OPERATOR_BASE_BODY teaching
    *  block to clamp response length. (Distinct from the older

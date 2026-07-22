@@ -15,6 +15,7 @@ import { Chess, type Color } from 'chess.js';
 import { plyFactsForMove } from './pvPlayback';
 import { seeGain } from './positionReadingService';
 import { detectTactics } from './tacticsDetector';
+import { seatPieceReferences } from './groundedAnswer';
 import { describeStructure } from './boardStructure';
 import { assessPositionalEdge } from './reviewPositionalAssessment';
 import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShield } from './reviewSacrifice';
@@ -115,14 +116,21 @@ export function computeMoveFacets(ctx: MoveFactContext): string[] {
   }
 
   // ── 3. TACTICS ON THE RESULTING BOARD + LOOSE (undefended) PIECES ──
+  // The detector's descriptions are seatless — stamp the deterministic
+  // MINE/YOURS onto every piece reference before it enters the package, so
+  // the house voice is HANDED the owner instead of inventing one (David
+  // 2026-07-21: "ship the correct answer to the LLM").
   try {
     const t = detectTactics(fenAfter);
+    const seat = (s: string): string => ctx.studentColorWB
+      ? seatPieceReferences(s, fenAfter, ctx.studentColorWB)
+      : s;
     for (const tac of t.tactics) {
-      if (tac.type !== 'none' && tac.description) facets.push(`[tactic] ${tac.description}.`);
+      if (tac.type !== 'none' && tac.description) facets.push(`[tactic] ${seat(tac.description)}.`);
     }
     if (t.hangingPieces.length > 0) {
       const desc = t.hangingPieces.map((h) => `${pieceWord(h.piece)} on ${h.square}`).join(', ');
-      facets.push(`[loose] Undefended right now: ${desc}.`);
+      facets.push(`[loose] Undefended right now: ${seat(desc)}.`);
     }
   } catch { /* ignore */ }
 

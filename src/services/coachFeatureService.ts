@@ -1,7 +1,7 @@
 import { Chess } from 'chess.js';
 import type { Square } from 'chess.js';
 import { seeGain } from './positionReadingService';
-import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice } from './groundedAnswer';
+import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice, seatPieceReferences } from './groundedAnswer';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
 import { plyFactsForMove, plyFactsClause, computePvLine, type PvLine, type PrevCaptureContext } from './pvPlayback';
 import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan } from './reviewStrategicOrientation';
@@ -2040,6 +2040,19 @@ export async function generateReviewNarration(params: {
   // the teaching register (concept-first, causal, varied, never restating the
   // move), adding zero chess content (guarded per line; a trip keeps the
   // template). Best-effort at prep; skipped on silent. Never a regression.
+  // DETERMINISTIC MINE/YOURS (David 2026-07-21: "ship the correct answer to
+  // the LLM"). Stamp the computed owner onto every seatless "<piece> on
+  // <square>" reference in every stored narration, checked against that ply's
+  // own board — the house voice is HANDED the possessive, it never invents
+  // one. Mismatched/vacated squares are left untouched, so future-line
+  // references in projections can't be mis-stamped.
+  {
+    const studentWB: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
+    for (const s of segments) {
+      if (s.narration) s.narration = seatPieceReferences(s.narration, s.fenAfter, studentWB);
+    }
+  }
+
   if (coachNarration !== 'silent') {
     try {
       // Warm EVERY narrated segment — including the sacrifice, mate, and the new

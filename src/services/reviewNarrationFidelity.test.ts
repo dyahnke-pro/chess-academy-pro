@@ -5,6 +5,7 @@
 import { describe, it, expect } from 'vitest';
 import { narrationSeatFaithful, narrationNumbersFaithful } from './coachFeatureService';
 import { royalDefenderTarget } from './reviewTeachingPoints';
+import { seatPieceReferences } from './groundedAnswer';
 import { Chess } from 'chess.js';
 
 describe('narrationSeatFaithful (board-truth possessives)', () => {
@@ -66,6 +67,39 @@ describe('narrationNumbersFaithful', () => {
     const det = 'Bishop pins d7 against the king. Bishop pins f6 against the queen. Rook pins d7 against the rook.';
     const ok = 'Three pins now — d7 held twice, f6 nailed to the queen.';
     expect(narrationNumbersFaithful(det, ok)).toBe(true);
+  });
+});
+
+describe('seatPieceReferences — the deterministic mine/yours package', () => {
+  // Trap after 5.O-O: Black bishop c5, White bishop c4 — the detector's
+  // seatless pin descriptions must come out SEATED so the model never
+  // invents the possessive (David 2026-07-21: "ship the correct answer").
+  const trapP9 = (() => {
+    const c = new Chess();
+    for (const s of ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'd3', 'd6', 'O-O']) c.move(s);
+    return c.fen();
+  })();
+
+  it('stamps computed owners onto seatless detector descriptions', () => {
+    const det = 'Bishop on c5 pins pawn on f2 against king on g1. Bishop on c4 pins pawn on f7 against knight on g8.';
+    const seated = seatPieceReferences(det, trapP9, 'w');
+    expect(seated).toContain('Their bishop on c5');
+    expect(seated).toContain('your pawn on f2');
+    expect(seated).toContain('your king on g1');
+    expect(seated).toContain('Your bishop on c4');
+    expect(seated).toContain('their pawn on f7');
+  });
+
+  it('leaves already-seated and mismatched references untouched', () => {
+    const det = 'Their bishop on c5 is active. Plant a knight on d6 to blockade.';
+    const seated = seatPieceReferences(det, trapP9, 'w');
+    expect(seated).toContain('Their bishop on c5'); // already seated — unchanged
+    expect(seated).toContain('a knight on d6');     // d6 is empty — untouched
+  });
+
+  it('absorbs a leading "the" instead of doubling articles', () => {
+    const seated = seatPieceReferences('the bishop on c5 eyes f2.', trapP9, 'w');
+    expect(seated).toBe('their bishop on c5 eyes f2.');
   });
 });
 

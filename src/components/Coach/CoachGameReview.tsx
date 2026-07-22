@@ -72,11 +72,14 @@ import { CLASSIFICATION_STYLES } from './classificationStyles';
 import { Chess } from 'chess.js';
 import type { CoachGameMove, KeyMoment, ReviewState, GameAccuracy, MoveClassificationCounts, PhaseAccuracy, MissedTactic } from '../../types';
 
-/** UNCAPPED review diagnostic (David 2026-07-20): opt-in via `?uncapped=1` on the
- *  URL or `window.__REVIEW_UNCAPPED__ = true` (the audit sets the latter via an
- *  init script). No localStorage (project rule). Off → production-capped review. */
+/** UNCAPPED / DEEP-DETAIL review: opt-in via the "Deep Review Detail" Settings
+ *  toggle (David 2026-07-21: "we have a toggle switch — at least we should"),
+ *  `?uncapped=1` on the URL, or `window.__REVIEW_UNCAPPED__ = true` (the audit
+ *  sets the latter via an init script). No localStorage (project rule). Off →
+ *  the standard one-beat review register. */
 function isReviewUncapped(): boolean {
   try {
+    if (useAppStore.getState().activeProfile?.preferences.reviewFullDetail === true) return true;
     if (typeof window === 'undefined') return false;
     if (new URLSearchParams(window.location.search).get('uncapped') === '1') return true;
     return (window as unknown as { __REVIEW_UNCAPPED__?: boolean }).__REVIEW_UNCAPPED__ === true;
@@ -2222,6 +2225,14 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     const moveIdx = reviewState.currentMoveIndex;
     const move = moveIdx >= 0 && moveIdx < moves.length ? moves[moveIdx] : null;
     const fenForQ = move?.fen ?? STARTING_FEN;
+    // Thread the game's STORED engine read for this ply — "why was h3 better"
+    // answers instantly from the analysis instead of racing a fresh on-device
+    // engine search, which stalled 12s+ on iOS and left the Ask silent
+    // (David 2026-07-21; his device log: stockfish-analysis-stalled ×2 here).
+    const fenBeforeQ = moveIdx > 0 ? moves[moveIdx - 1]?.fen ?? STARTING_FEN : STARTING_FEN;
+    const reviewFlaggedMove = move?.bestMove && move.bestMove.length >= 4
+      ? { fenBefore: fenBeforeQ, playedSan: move.san, bestMoveUci: move.bestMove }
+      : undefined;
 
     const abortSignal = askAbortRef.current.signal;
     // Tactical context for the review surface — the brain gets the
@@ -2277,6 +2288,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       userJustDid: question,
       currentRoute: '/coach/play',
       tactics: reviewTactics,
+      reviewFlaggedMove,
     };
     void logAppAudit({
       kind: 'coach-surface-migrated',
@@ -2418,6 +2430,21 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
             trigger: null,
           });
         }
+      })
+      .catch((err: unknown) => {
+        // A rejected turn used to die SILENTLY — spinner stops, bubble stays
+        // empty, nothing logged ("coach not responding", David 2026-07-21).
+        // Surface a visible fallback and audit the real error.
+        if (abortSignal.aborted) return;
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'CoachGameReview.handleAskSend.error',
+          summary: `review ask failed: ${err instanceof Error ? err.message : String(err)}`,
+          fen: fenForQ,
+        });
+        setAskResponse((prev: string | null) =>
+          prev && prev.trim().length > 0 ? prev : 'Hit a snag answering that one — ask me again.');
       })
       .finally(() => {
         if (!abortSignal.aborted) {

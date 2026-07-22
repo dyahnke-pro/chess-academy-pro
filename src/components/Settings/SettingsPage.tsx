@@ -948,7 +948,7 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
 // ─── Coach Gameplay Section ──────────────────────────────────────────────────
 
 function CoachGameplaySection({ profile, setProfile }: TabProps): JSX.Element {
-  const handleToggle = async (key: 'coachBlunderAlerts' | 'coachTacticAlerts' | 'coachPositionalTips' | 'coachMissedTacticTakeback' | 'coachReviewVoice' | 'coachInGameDiscussion' | 'coachedReview' | 'readingChallengesInReview' | 'calcHintVoice', value: boolean): Promise<void> => {
+  const handleToggle = async (key: 'coachBlunderAlerts' | 'coachTacticAlerts' | 'coachPositionalTips' | 'coachMissedTacticTakeback' | 'coachReviewVoice' | 'coachInGameDiscussion' | 'coachedReview' | 'readingChallengesInReview' | 'calcHintVoice' | 'reviewFullDetail', value: boolean): Promise<void> => {
     const updatedPrefs = { ...profile.preferences, [key]: value };
     await db.profiles.update(profile.id, { preferences: updatedPrefs });
     setProfile({ ...profile, preferences: updatedPrefs });
@@ -981,6 +981,13 @@ function CoachGameplaySection({ profile, setProfile }: TabProps): JSX.Element {
         checked={profile.preferences.calcHintVoice ?? true}
         onChange={(v) => void handleToggle('calcHintVoice', v)}
         testId="calc-hint-voice-toggle"
+      />
+      <ToggleRow
+        label="Deep Review Detail"
+        tooltip="Post-game reviews narrate every computed fact on every move — tactics, structure, plans, and played-out future lines — instead of the standard one-idea-per-move walk. Applies the next time a review opens."
+        checked={profile.preferences.reviewFullDetail ?? false}
+        onChange={(v) => void handleToggle('reviewFullDetail', v)}
+        testId="review-full-detail-toggle"
       />
       {/* Legacy coachVerbosity + coachCommentaryVerbosity UIs removed.
           The fields stay on UserPreferences and are read by

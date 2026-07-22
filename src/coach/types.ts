@@ -268,6 +268,14 @@ export interface LiveState {
    *  straight through `voiceFacts` (the LLM only phrases); see the matching
    *  field on `MasterGroundingOptions`. */
   moveNarrationFacts?: string;
+  /** The review walk's STORED engine read for the ply the student is asking
+   *  about — fenBefore + played SAN + the analysis' best-move UCI. Threaded by
+   *  the review Ask so a "why was h3 better" question answers INSTANTLY from
+   *  the game's own analysis (explainBestMoveGrounded, pure chess.js) instead
+   *  of racing a fresh on-device engine search — which stalled 12s+ on iOS
+   *  ios-native and left the Ask silent (David 2026-07-21, his device audit
+   *  log: stockfish-analysis-stalled ×2 on the review route). */
+  reviewFlaggedMove?: { fenBefore: string; playedSan: string; bestMoveUci: string };
   /** Engine-computed principal variation, pre-injected when the student
    *  asks for a PLAN ("what's my plan?", "next three moves?"). David
    *  2026-06-05: "use stockfish for the next three moves — more reliable."

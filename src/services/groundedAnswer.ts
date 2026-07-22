@@ -3118,3 +3118,44 @@ export function assembleCounterRepertoireAnswer(opts: {
     ` Want to learn it? I have the full line ready for you.`;
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:counter-repertoire'] };
 }
+
+/**
+ * seatPieceReferences — the deterministic MINE/YOURS layer (David 2026-07-21:
+ * "ship the correct answer to the LLM — build the deterministic mine/yours
+ * guard into the package"). Tactic descriptions come out of the detector
+ * seatless ("Bishop on c5 pins pawn on f2 against king on g1"), which left
+ * the house-voice model to INVENT the possessive — and it flipped seats
+ * (G0 violation: the LLM was deciding). This computes the owner of every
+ * "<piece> on <square>" reference from the BOARD and stamps your/their into
+ * the fact itself, so the model is handed the seat and never chooses one.
+ * References already carrying a possessive, and mismatched/vacated squares,
+ * are left untouched. Pure chess.js; on any parse problem the text ships
+ * unchanged.
+ */
+export function seatPieceReferences(
+  text: string,
+  fen: string,
+  studentColorWB: 'w' | 'b',
+): string {
+  try {
+    const board = new Chess(fen);
+    const WANT: Record<string, string> = { knight: 'n', bishop: 'b', rook: 'r', queen: 'q', pawn: 'p', king: 'k' };
+    return text.replace(
+      /(\b[Yy]our opponent's\s+|\b[Yy]our\s+|\b[Tt]heir\s+|\b[Tt]he\s+)?\b(Knight|Bishop|Rook|Queen|Pawn|King|knight|bishop|rook|queen|pawn|king)\s+on\s+([a-h][1-8])\b/g,
+      (whole, lead: string | undefined, piece: string, sq: string) => {
+        const leadLower = (lead ?? '').toLowerCase();
+        // Already seated — leave the author's possessive alone.
+        if (leadLower.startsWith('your') || leadLower.startsWith('their')) return whole;
+        const cell = board.get(sq as Square);
+        if (!cell || cell.type !== WANT[piece.toLowerCase()]) return whole;
+        const owner = cell.color === studentColorWB ? 'your' : 'their';
+        const firstChar = (lead && lead.length > 0 ? lead : piece).charAt(0);
+        const sentenceStart = firstChar === firstChar.toUpperCase();
+        const ownerWord = sentenceStart ? cap(owner) : owner;
+        return `${ownerWord} ${piece.toLowerCase()} on ${sq}`;
+      },
+    );
+  } catch {
+    return text;
+  }
+}

@@ -1248,6 +1248,13 @@ export interface MasterGroundingOptions {
    *  same computed walk is the root of the per-move "why" button + review
    *  narration. */
   whyBestMoveQuestion?: boolean;
+  /** The review walk's STORED engine read for the ply under discussion —
+   *  fenBefore + played SAN + best-move UCI from the game's own analysis.
+   *  When present, the why-best-move dispatch answers from THIS (pure
+   *  chess.js via explainBestMoveGrounded) instead of any live engine data —
+   *  instant, and immune to the on-device engine stalls that silenced the
+   *  review Ask (David 2026-07-21). */
+  reviewFlaggedMove?: { fenBefore: string; playedSan: string; bestMoveUci: string };
   /** ALTERNATIVES comparison — "why are the natural alternatives worse / what
    *  else could I play / what are my other options" (David 2026-07-11: the
    *  live-prod compound ask got the same generic PV recitation on every
@@ -2474,18 +2481,14 @@ export async function voiceReviewLines(
     'that is never a violation. The rule is ONLY against introducing a square/move/piece/number the fact ' +
     'does not contain. When in doubt, lean on the exact squares the fact gives you.';
 
-  // LEVEL-TARGETED register (David's §2 "for 1750 I talk to 1750s"). Calibrates
-  // only the DEPTH/vocabulary of the phrasing to the student's rating — the
-  // FACTS are unchanged (G0). Bands: beginner spells it out, advanced is terse.
-  const rating = typeof opts.studentRating === 'number' && Number.isFinite(opts.studentRating) ? opts.studentRating : null;
-  const ratingClause = rating === null
-    ? ''
-    : rating < 1000
-      ? `\n\nAUDIENCE: a developing player (~${Math.round(rating)}). Spell the idea out in plain, everyday words — name the concept simply, assume NO jargon, one clear reason per line. Warm and encouraging in tone.`
-      : rating > 1900
-        ? `\n\nAUDIENCE: a strong player (~${Math.round(rating)}). Be terse and assume fluency — skip the basics, name the idea and trust they know the rest; a few sharp words carry more than a full explanation.`
-        : `\n\nAUDIENCE: a club player (~${Math.round(rating)}). Teach the idea clearly without over-explaining — they know the basics; give the reason, not a lecture.`;
-  const system = systemBase + ratingClause;
+  // ONE register for every level (David 2026-07-21: "we really don't need to
+  // dumb down the narrations — they are understandable at all levels"). The
+  // old rating-banded AUDIENCE clause (spell-out under 1000 / terse over 1900)
+  // is retired: the Danya register is already plain-language, and detail
+  // volume is now the USER's choice via the Deep Review Detail toggle. The
+  // rating still gates the interrupt policy (slipDetector picker) — that is
+  // pedagogy, not phrasing, and is locked separately.
+  const system = systemBase;
 
   const user =
     `Rephrase each of these ${usable.length} lines. Return exactly ${usable.length} numbered ` +
@@ -3869,6 +3872,28 @@ export async function getCoachChatResponse(
         }
 
         if (grounding.whyBestMoveQuestion) {
+          // REVIEW: the game's own analysis already names the better move at
+          // this ply — answer from it with the pure board-fact computer, no
+          // live engine involved (the on-device engine stalling here is what
+          // silenced the Ask — David 2026-07-21, "why h3 was the better move").
+          if (grounding.reviewFlaggedMove) {
+            const rf = grounding.reviewFlaggedMove;
+            const rfMover: 'white' | 'black' = rf.fenBefore.split(' ')[1] === 'b' ? 'black' : 'white';
+            let rfBestSan: string | null = null;
+            try {
+              const c = new Chess(rf.fenBefore);
+              rfBestSan = c.move({ from: rf.bestMoveUci.slice(0, 2), to: rf.bestMoveUci.slice(2, 4), promotion: rf.bestMoveUci.length > 4 ? rf.bestMoveUci[4] : undefined })?.san ?? null;
+            } catch { rfBestSan = null; }
+            const rfWhy = explainBestMoveGrounded(rf.fenBefore, rf.playedSan, rf.bestMoveUci, rfMover);
+            if (rfBestSan && rfWhy) {
+              const rfFacts = `The engine preferred ${rfBestSan} over ${rf.playedSan} here. ${rfWhy}`;
+              const voiced = await voiceFacts(rfFacts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'best-move', preferRaw: true, mustPreserve: [rfBestSan] });
+              if (voiced) {
+                return `${voiced} [BOARD: arrow:${rf.bestMoveUci.slice(0, 2)}-${rf.bestMoveUci.slice(2, 4)}:green]`;
+              }
+              return `${rfFacts} [BOARD: arrow:${rf.bestMoveUci.slice(0, 2)}-${rf.bestMoveUci.slice(2, 4)}:green]`;
+            }
+          }
           const fen = grounding.currentFen ?? null;
           const plan = grounding.enginePlan;
           let answer = null;
