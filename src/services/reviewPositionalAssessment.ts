@@ -86,7 +86,7 @@ export function assessPositionalEdge(
   const myOutpost = struct.outposts.find((o) => o.color === me);
   if (myOutpost) {
     const name = myOutpost.piece === 'n' ? 'knight' : 'bishop';
-    reasons.push(`your ${name} sits on a protected outpost on ${myOutpost.square} that can't be chased away`);
+    reasons.push(`your ${name} sits on a protected outpost on ${myOutpost.square} where no enemy pawn attacks the square`);
   }
 
   // 3. Control of an open file — a rook or queen on a fully open file the
