@@ -21,7 +21,9 @@ import { sourcesAreValid } from './narrationSources';
 interface CriticalMoment {
   moveNumber: number;
   color: 'white' | 'black';
-  fen: string;
+  /** Optional since 2026-07-22 — stale embedded fens were stripped; PGN
+   *  replay is the single truth for the paused position. */
+  fen?: string;
   annotation?: string;
 }
 interface ModelGame {
@@ -72,6 +74,13 @@ describe('model-game integrity — legal PGN + grounded critical moments', () =>
         const actual = map.get(key);
         expect(actual, `${game.id}: criticalMoment at ${key} is past the end of the game`).toBeTruthy();
         if (!actual) continue;
+        // Embedded moment fens were STRIPPED 2026-07-22 (193 stale copies —
+        // replay of the PGN is the single truth; modelGameMoments.test.ts
+        // board-verifies every annotation against the replayed position).
+        // A moment MAY still carry a fen (none do today); if one ever does,
+        // it must match the replayed position — a mismatched copy is exactly
+        // the stale-data class the strip removed.
+        if (typeof m.fen !== 'string') continue;
         expect(
           placement(m.fen),
           `${game.id}: criticalMoment FEN at ${key} doesn't match the real position after that move ` +

@@ -276,6 +276,24 @@ export interface LiveState {
    *  ios-native and left the Ask silent (David 2026-07-21, his device audit
    *  log: stockfish-analysis-stalled ×2 on the review route). */
   reviewFlaggedMove?: { fenBefore: string; playedSan: string; bestMoveUci: string };
+  /** The review walk's COMPUTED narration package for the ply the student is
+   *  asking about — the exact spoken narration, the verified threat call-out,
+   *  and the stored best move. Threaded by the review Ask so the LLM can
+   *  answer, in writing, the questions the narrations raise (David
+   *  2026-07-22: "The LLM itself is grounded and can answer all of the
+   *  questions in written form that we ask it to answer within the
+   *  narrations"). Truth in the package BEFORE the decision — the model
+   *  elaborates on computed claims instead of re-deriving (or contradicting)
+   *  them. */
+  reviewNarrationContext?: {
+    ply: number;
+    san: string;
+    playerColor: 'white' | 'black';
+    classification: string | null;
+    narration: string | null;
+    staticThreat: string | null;
+    bestMoveSan: string | null;
+  };
   /** Engine-computed principal variation, pre-injected when the student
    *  asks for a PLAN ("what's my plan?", "next three moves?"). David
    *  2026-06-05: "use stockfish for the next three moves — more reliable."

@@ -108,6 +108,28 @@ vi.mock('../../services/coachPrompts', () => ({
   INTERACTIVE_REVIEW_ADDITION: 'Test interactive review prompt',
 }));
 
+// The Ask transport — mocked so the unified-chat test can assert the
+// grounded liveState (reviewNarrationContext + walk-ply FEN) without a
+// real LLM round-trip. Streams one chunk, then resolves.
+vi.mock('../../coach/coachService', () => ({
+  coachService: {
+    ask: vi.fn().mockImplementation(
+      async (_input: unknown, opts?: { onChunk?: (c: string) => void }) => {
+        opts?.onChunk?.('The knight was hanging.');
+        return { text: 'The knight was hanging.' };
+      },
+    ),
+  },
+}));
+
+// The test fixture uses placeholder FEN strings ('fen-after-e4'), which the
+// real tactics scanner would reject — stub it to the empty context shape.
+vi.mock('../../services/liveTacticsContext', () => ({
+  buildTacticsLiveContext: vi.fn().mockReturnValue({
+    immediate: [], hanging: [], threats: [], opportunities: [], lookaheadDepth: 2,
+  }),
+}));
+
 vi.mock('./ChatInput', () => ({
   ChatInput: ({ onSend, disabled, placeholder }: {
     onSend: (text: string) => void;
@@ -523,6 +545,34 @@ describe('CoachGameReview', () => {
     expect(screen.queryByTestId('walk-ask-panel')).not.toBeInTheDocument();
     fireEvent.click(screen.getByTestId('walk-ask-toggle-btn'));
     expect(screen.getByTestId('walk-ask-panel')).toBeInTheDocument();
+  });
+
+  it('ask renders through the shared ChatMessage transcript and grounds on the WALK ply (David 2026-07-22)', async () => {
+    await renderWalk();
+
+    // Step to ply 1 via the WALK nav — the Ask must ground on the walk's
+    // live ply, not the frozen legacy reviewState index.
+    fireEvent.click(screen.getByTestId('review-forward-btn'));
+    fireEvent.click(screen.getByTestId('walk-ask-toggle-btn'));
+    fireEvent.click(screen.getByTestId('mock-ask-send'));
+
+    // Same renderer as Learn/Play: user + assistant bubbles from ChatMessage.
+    await waitFor(() => {
+      expect(screen.getByTestId('chat-message-user')).toHaveTextContent('Why is this position bad?');
+      expect(screen.getByTestId('chat-message-assistant')).toHaveTextContent('The knight was hanging.');
+    });
+    expect(screen.getByTestId('walk-ask-response')).toBeInTheDocument();
+
+    // The grounded package reached the transport: walk-ply FEN + the
+    // computed narration context for that exact ply.
+    const { coachService } = await import('../../coach/coachService');
+    const askMock = coachService.ask as ReturnType<typeof vi.fn>;
+    expect(askMock).toHaveBeenCalledTimes(1);
+    const input = askMock.mock.calls[0][0] as {
+      liveState: { fen: string; reviewNarrationContext?: { ply: number; san: string } };
+    };
+    expect(input.liveState.fen).toBe('fen-after-e4');
+    expect(input.liveState.reviewNarrationContext).toMatchObject({ ply: 1, san: 'e4' });
   });
 
   it('walk Play Again callback fires', async () => {

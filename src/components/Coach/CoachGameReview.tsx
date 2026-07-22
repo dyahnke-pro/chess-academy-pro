@@ -10,6 +10,7 @@ import { ReviewSummaryCard } from './ReviewSummaryCard';
 import { GameReviewWeaknessCapture } from './GameReviewWeaknessCapture';
 import { KeyMomentNav } from './KeyMomentNav';
 import { ChatInput } from './ChatInput';
+import { ChatMessage } from './ChatMessage';
 import { ReviewReadingChallenge } from './ReviewReadingChallenge';
 import { useReviewBlunderCapture } from '../../hooks/useReviewBlunderCapture';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
@@ -70,7 +71,7 @@ import { autoAnalyzeGameMisconceptions } from '../../services/autoAnalyzeGame';
 import { db } from '../../db/schema';
 import { CLASSIFICATION_STYLES } from './classificationStyles';
 import { Chess } from 'chess.js';
-import type { CoachGameMove, KeyMoment, ReviewState, GameAccuracy, MoveClassificationCounts, PhaseAccuracy, MissedTactic } from '../../types';
+import type { CoachGameMove, KeyMoment, ReviewState, GameAccuracy, MoveClassificationCounts, PhaseAccuracy, MissedTactic, ChatMessage as ChatMessageType } from '../../types';
 
 /** UNCAPPED / DEEP-DETAIL review: opt-in via the "Deep Review Detail" Settings
  *  toggle (David 2026-07-21: "we have a toggle switch — at least we should"),
@@ -168,10 +169,18 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // owned by `walkExplorationFen` below.
 
   // ─── Ask About Position State ───────────────────────────────────────────────
+  // The Ask is a real chat transcript rendered through the SAME ChatMessage
+  // component Learn (/coach/teach) and Play (GameChatPanel) use — one renderer
+  // across all three surfaces (David 2026-07-21/22: "We need that identical" /
+  // "Chat window is the same as learn and play"). Messages persist across ply
+  // navigation like a real conversation; each answer is grounded on the ply it
+  // was asked at.
   const [askExpanded, setAskExpanded] = useState(false);
-  const [askResponse, setAskResponse] = useState<string | null>(null);
+  const [askMessages, setAskMessages] = useState<ChatMessageType[]>([]);
   const [isAskStreaming, setIsAskStreaming] = useState(false);
   const askAbortRef = useRef<AbortController | null>(null);
+  const askStreamMsgIdRef = useRef<string | null>(null);
+  const askScrollEndRef = useRef<HTMLDivElement | null>(null);
 
   // Audit-driven (review walk #4): tracks whether this component is
   // still mounted. The walk-prep effect's generateReviewNarration call
@@ -2219,15 +2228,54 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // until BRAIN-06 cleanup.
     tryCaptureForgetIntent(question, 'review-ask');
 
-    // Abort previous ask
-    if (askAbortRef.current) askAbortRef.current.abort();
+    // Abort previous ask. If its bubble is still empty, finalize it so an
+    // interrupted turn never leaves a blank assistant bubble in the transcript.
+    if (askAbortRef.current) {
+      askAbortRef.current.abort();
+      const prevId = askStreamMsgIdRef.current;
+      if (prevId) {
+        setAskMessages((prev) => prev.map((m) =>
+          m.id === prevId && m.content.trim() === '' ? { ...m, content: '(interrupted)' } : m));
+      }
+    }
     askAbortRef.current = new AbortController();
 
-    setAskResponse('');
+    const now = Date.now();
+    const assistantId = `ask-a-${now}`;
+    askStreamMsgIdRef.current = assistantId;
+    setAskMessages((prev) => [
+      ...prev,
+      { id: `ask-u-${now}`, role: 'user', content: question, timestamp: now },
+      { id: assistantId, role: 'assistant', content: '', timestamp: now },
+    ]);
+    const patchAssistant = (updater: (prevText: string) => string): void => {
+      setAskMessages((prev) => prev.map((m) =>
+        m.id === assistantId ? { ...m, content: updater(m.content) } : m));
+    };
     setIsAskStreaming(true);
 
-    const moveIdx = reviewState.currentMoveIndex;
+    // The walk phase is the ONLY review phase (ship-4) and it navigates via
+    // walkPlayback.currentPly — the legacy reviewState.currentMoveIndex sits
+    // frozen at the start index during a walk, so keying the Ask off it
+    // grounded every mid-walk question on the WRONG ply (stale FEN, stale
+    // best move). Key off the walk's live ply instead.
+    const moveIdx = walkPlayback.currentPly - 1;
     const move = moveIdx >= 0 && moveIdx < moves.length ? moves[moveIdx] : null;
+    // The COMPUTED narration package for this ply — threaded so the LLM can
+    // answer, in writing, the questions the narrations raise (David
+    // 2026-07-22). Truth in the package before the decision.
+    const segForAsk = move ? walkNarration?.segments.find((s) => s.ply === moveIdx + 1) ?? null : null;
+    const reviewNarrationContext = segForAsk
+      ? {
+          ply: segForAsk.ply,
+          san: segForAsk.san,
+          playerColor: segForAsk.playerColor,
+          classification: segForAsk.classification,
+          narration: segForAsk.narration,
+          staticThreat: segForAsk.staticThreat?.sentence ?? null,
+          bestMoveSan: segForAsk.bestMoveSan,
+        }
+      : undefined;
     const fenForQ = move?.fen ?? STARTING_FEN;
     // Thread the game's STORED engine read for this ply — "why was h3 better"
     // answers instantly from the analysis instead of racing a fresh on-device
@@ -2293,6 +2341,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       currentRoute: '/coach/play',
       tactics: reviewTactics,
       reviewFlaggedMove,
+      reviewNarrationContext,
     };
     void logAppAudit({
       kind: 'coach-surface-migrated',
@@ -2377,10 +2426,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
             // prose that streams after it. Until then, stream the live
             // prose so the bubble isn't blank.
             if (spokenDisplayText.trim()) {
-              setAskResponse(spokenDisplayText);
+              patchAssistant(() => spokenDisplayText);
             } else {
               const visible = chunk.replace(VOICE_MARKER_RE, '');
-              setAskResponse((prev: string | null) => (prev ?? '') + visible);
+              patchAssistant((prevText) => prevText + visible);
             }
           },
           onNavigate: (path: string) => {
@@ -2447,24 +2496,31 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           summary: `review ask failed: ${err instanceof Error ? err.message : String(err)}`,
           fen: fenForQ,
         });
-        setAskResponse((prev: string | null) =>
-          prev && prev.trim().length > 0 ? prev : 'Hit a snag answering that one — ask me again.');
+        patchAssistant((prevText) =>
+          prevText.trim().length > 0 ? prevText : 'Hit a snag answering that one — ask me again.');
       })
       .finally(() => {
         if (!abortSignal.aborted) {
           setIsAskStreaming(false);
         }
       });
-  }, [isAskStreaming, reviewState.currentMoveIndex, moves, navigate]);
+  }, [isAskStreaming, walkPlayback.currentPly, walkNarration, moves, navigate]);
 
-  // Reset Ask state when navigating to a different move so a stale
-  // response doesn't linger after the student clicks forward.
-  useEffect(() => {
-    setAskExpanded(false);
-    setAskResponse(null);
-    setIsAskStreaming(false);
+  // The transcript persists across ply navigation like Learn/Play's chat —
+  // each message stays anchored to the question it answered. An in-flight
+  // stream keeps going (it writes into its own bubble, so nothing goes
+  // stale); it is aborted only by a NEW question or unmount.
+  useEffect(() => () => {
     if (askAbortRef.current) askAbortRef.current.abort();
-  }, [reviewState.currentMoveIndex]);
+  }, []);
+
+  // Learn/Play chat behavior: keep the newest message in view as it streams.
+  useEffect(() => {
+    const el = askScrollEndRef.current;
+    if (askExpanded && askMessages.length > 0 && typeof el?.scrollIntoView === 'function') {
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }, [askExpanded, askMessages]);
 
   const navigateMove = useCallback((direction: 'first' | 'prev' | 'next' | 'last') => {
     voiceService.stop();
@@ -3702,22 +3758,26 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
               </div>
             )}
 
-            {/* Ask panel (expandable) */}
+            {/* Ask panel (expandable) — the SAME ChatMessage renderer Learn
+                (/coach/teach) and Play (GameChatPanel) use, so all three coach
+                surfaces speak through one component (David: "We need that
+                identical"). `walk-ask-response` stays on the transcript
+                container for the audit contract. */}
             {askExpanded && (
               <div className="px-3 py-2 border-t border-theme-border" data-testid="walk-ask-panel">
-                {askResponse !== null && (
-                  <div className="mb-2">
-                    <div className="flex items-center gap-1.5 mb-1">
-                      <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: 'var(--color-accent)' }}>
-                        Coach
-                      </span>
-                      {isAskStreaming && (
-                        <Loader2 size={10} className="animate-spin" style={{ color: 'var(--color-accent)' }} />
-                      )}
-                    </div>
-                    <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text)' }} data-testid="walk-ask-response">
-                      {askResponse || (isAskStreaming ? '' : 'No response')}
-                    </p>
+                {askMessages.length > 0 && (
+                  <div
+                    className="mb-2 max-h-[260px] overflow-y-auto flex flex-col gap-2 pr-1"
+                    data-testid="walk-ask-response"
+                  >
+                    {askMessages.map((m, i) => (
+                      <ChatMessage
+                        key={m.id}
+                        message={m}
+                        isStreaming={isAskStreaming && m.role === 'assistant' && i === askMessages.length - 1}
+                      />
+                    ))}
+                    <div ref={askScrollEndRef} />
                   </div>
                 )}
                 <ChatInput

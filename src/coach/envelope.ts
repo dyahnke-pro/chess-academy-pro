@@ -740,6 +740,20 @@ function formatLiveStateBlock(state: LiveState): string {
   if (state.tactics) {
     parts.push(formatTacticsSubBlock(state.tactics));
   }
+  if (state.reviewNarrationContext) {
+    const r = state.reviewNarrationContext;
+    const lines: string[] = [
+      `- Review narration context (COMPUTED — what the coach just SAID about this ply; the student's question is most likely ABOUT this):`,
+      `    Ply ${r.ply}: ${r.playerColor} played ${r.san}${r.classification ? ` (${r.classification})` : ''}.`,
+    ];
+    if (r.narration) lines.push(`    Coach's spoken narration: "${r.narration}"`);
+    if (r.staticThreat) lines.push(`    Verified threat call-out on this ply: "${r.staticThreat}"`);
+    if (r.bestMoveSan) lines.push(`    Stored engine best move here: ${r.bestMoveSan}.`);
+    lines.push(
+      `    When the question refers to something the narration raised (a threat, a plan, a better move, a claim), ELABORATE on these computed claims in writing — unpack the mechanism, answer the question the narration provoked. NEVER contradict the narration's computed claims, and never re-derive board facts from memory; every claim above was engine/chess.js-verified.`,
+    );
+    parts.push(lines.join('\n'));
+  }
   if (state.trapSignal) {
     // PRE-COMPUTED trap-mining result (G3 + G0): a popular-but-losing move in
     // THIS position with its refutation, decided by the engine in code. Voice
