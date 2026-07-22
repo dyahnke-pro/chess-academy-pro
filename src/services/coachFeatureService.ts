@@ -942,6 +942,34 @@ export function buildReviewSegments(
   // knight on c6" shipped verbatim ply after ply). When the state facet
   // drops off the board and later reappears, it is news again.
   let prevStateFacets = new Set<string>();
+  // TEACHING REFRAINS speak ONCE per review (David 2026-07-22: "Once a line
+  // like this has been said that's it"). The FACTS stay every time (the
+  // squares given up, the piece walked away from); the PRINCIPLE attached to
+  // them ("pawns don't move back…", "a standing invitation", "the worst
+  // defenders…") is taught on first occurrence and stripped after.
+  const REFRAINS: Array<{ re: RegExp; sub: string }> = [
+    { re: / — pawns don't move back, so (?:that square|those squares) now needs? piece cover/, sub: '' },
+    { re: /, and an undefended piece is a standing invitation/, sub: '' },
+    { re: / — and the king and queen are the worst defenders, because the moment you hit the guard the piece drops/, sub: '' },
+    { re: / — a piece that sees nothing defends nothing/, sub: '' },
+    { re: / more attackers than defenders, so/, sub: ' so' },
+    { re: / — hemmed in behind its own pawns on the same colour, with almost nowhere to go/, sub: '' },
+  ];
+  const spokenRefrains = new Set<number>();
+  const applyRefrainOnce = (text: string): string => {
+    let out = text;
+    REFRAINS.forEach((r, idx) => {
+      if (!r.re.test(out)) return;
+      if (spokenRefrains.has(idx)) out = out.replace(r.re, r.sub);
+      else spokenRefrains.add(idx);
+    });
+    return out;
+  };
+  // DEVELOPMENT NAGS fire once per review, period — "the user knows it needs
+  // developing after the first mention". One-shot by TAG, not by string (the
+  // set of undeveloped pieces shrinks, so exact-string dedup let each
+  // variant through).
+  const oneShotTags = new Set<string>();
   // Opponent-commentary dedup — name each target square at most once, and cap
   // the total so the lighter developing reads never spam (Danya comments the
   // opponent ~50-60% of moves, not every one).
@@ -1040,11 +1068,18 @@ export function buildReviewSegments(
         // A STANDING pin/hanging-piece is narrated when it APPEARS; while it
         // persists unchanged from the previous ply it is not news.
         if (/^\[(tactic|loose)\]/.test(f)) return !prevStateFacets.has(f);
-        if (!/^\[(opening|plan-opening|plan-middlegame|plan-now|opp-dev|passer|badbishop|worst|trapped)\]/.test(f)) return true;
+        // Development nags: once per review by TAG (David 2026-07-22).
+        const oneShot = /^\[(plan-opening|opp-dev)\]/.exec(f);
+        if (oneShot) {
+          if (oneShotTags.has(oneShot[1])) return false;
+          oneShotTags.add(oneShot[1]);
+          return true;
+        }
+        if (!/^\[(opening|plan-middlegame|plan-now|passer|badbishop|worst|trapped)\]/.test(f)) return true;
         if (emittedStaticFacets.has(f)) return false;
         emittedStaticFacets.add(f);
         return true;
-      });
+      }).map(applyRefrainOnce);
       prevStateFacets = stateNow;
       segments.push({
         ply: m.ply,

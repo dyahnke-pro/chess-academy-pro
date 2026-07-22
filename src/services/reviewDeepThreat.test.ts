@@ -43,6 +43,34 @@ describe('uncapped verdict facet — spoken only when it CHANGES (R10)', () => {
   });
 });
 
+describe('teaching refrains speak ONCE per review (David 2026-07-22)', () => {
+  it('facts repeat, principles do not — and the development nag fires once', async () => {
+    const sans = ['e4', 'e5', 'd4', 'd6', 'Nf3', 'Nc6'];
+    const c = new Chess();
+    const moves: ReviewMoveInput[] = sans.map((san, i) => {
+      c.move(san);
+      return {
+        ply: i + 1, san, isCoachMove: (i + 1) % 2 === 0,
+        classification: 'book', evaluation: -20, preMoveEval: -20,
+        bestMove: null, fenAfter: c.fen(),
+      } as unknown as ReviewMoveInput;
+    });
+    const n = await generateReviewNarration({
+      moves, playerColor: 'white', openingName: null, result: '1-0',
+      playerRating: 1500, coachNarration: 'silent', uncapped: true,
+    });
+    const texts = n.segments.map((s) => s.narration ?? '');
+    // Ply 1 (e4) teaches the principle with the fact…
+    expect(texts[0]).toMatch(/gives up d3 and f3 for good — pawns don't move back/);
+    // …ply 3 (d4) keeps the FACT but not the refrain.
+    expect(texts[2]).toMatch(/gives up c3 and e3 for good/);
+    expect(texts[2]).not.toMatch(/pawns don't move back/);
+    // The development nag ("boxed in at home") appears in exactly one segment.
+    const nagCount = texts.filter((t) => t.includes('boxed in at home')).length;
+    expect(nagCount).toBeLessThanOrEqual(1);
+  });
+});
+
 describe('deep threat AGAINST the student (#5c)', () => {
   it('narrates the opponent\'s multi-move idea and names the stored defense', async () => {
     const sans = ['e4', 'e5', 'Nc3', 'Bc5', 'a3', 'Qh4'];
