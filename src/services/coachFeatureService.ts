@@ -932,6 +932,10 @@ export function buildReviewSegments(
   // (move/quality/tactic/loose/verdict/structure/king/sac/consequence) always
   // fires (David 2026-07-20 diagnostic: "Philidor Defense" was said 33 times).
   const emittedStaticFacets = new Set<string>();
+  // The last SPOKEN positional verdict — an unchanged verdict is not news
+  // (the new-games fleet caught "You're balanced." shipping verbatim on
+  // repeated quiet plies, R10).
+  let lastVerdictFacet: string | null = null;
   // Opponent-commentary dedup — name each target square at most once, and cap
   // the total so the lighter developing reads never spam (Danya comments the
   // opponent ~50-60% of moves, not every one).
@@ -1016,6 +1020,16 @@ export function buildReviewSegments(
       // (opening / plan-opening / plan-middlegame / opp-dev); keep every dynamic
       // per-move fact.
       const kept = facets.filter((f) => {
+        // An UNCHANGED positional verdict is static state too — "You're
+        // balanced." repeated on every quiet ply is the R10 repetition the
+        // new-games fleet caught (Carlsen–Grischuk, 2026-07-22). Speak the
+        // verdict only when it CHANGED since it was last spoken; silence
+        // beats restating (Narration Voice Rules #3/#4).
+        if (/^\[verdict\]/.test(f)) {
+          if (f === lastVerdictFacet) return false;
+          lastVerdictFacet = f;
+          return true;
+        }
         if (!/^\[(opening|plan-opening|plan-middlegame|plan-now|opp-dev|passer|badbishop|worst|trapped)\]/.test(f)) return true;
         if (emittedStaticFacets.has(f)) return false;
         emittedStaticFacets.add(f);

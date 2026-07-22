@@ -34,7 +34,12 @@ const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.ap
 // narration unification. Student = White (Morphy).
 const GID = process.env.AUDIT_GID || 'audit-opera-game';
 const PGN = process.env.AUDIT_PGN || '1. e4 e5 2. Nf3 d6 3. d4 Bg4 4. dxe5 Bxf3 5. Qxf3 dxe5 6. Bc4 Nf6 7. Qb3 Qe7 8. Nc3 c6 9. Bg5 b5 10. Nxb5 cxb5 11. Bxb5+ Nbd7 12. O-O-O Rd8 13. Rxd7 Rxd7 14. Rd1 Qe6 15. Bxd7+ Nxd7 16. Qb8+ Nxb8 17. Rd8# 1-0';
-const SANS = PGN.replace(/\d+\.\s*/g, '').replace(/\s*(1-0|0-1|1\/2-1\/2|\*)\s*$/, '').trim().split(/\s+/);
+// Strip move numbers INCLUDING black-continuation forms ("3..." / "3. ...")
+// left behind by comment-stripped annotated exports — a stray ".." token
+// froze posAfterPly's replay and made every later board check compare
+// against a stale position (new-games fleet, Carlsen–Grischuk, 2026-07-22).
+const SANS = PGN.replace(/\d+\.(\.\.)?\s*/g, '').replace(/\s*(1-0|0-1|1\/2-1\/2|\*)\s*$/, '').trim()
+  .split(/\s+/).filter((t) => t && !/^\.+$/.test(t));
 
 const log = (s) => console.log(s);
 const txt = async (p, sel) => { try { const l = p.locator(sel).first(); return (await l.count()) ? (await l.innerText()).replace(/\s+/g, ' ').trim() : ''; } catch { return ''; } };

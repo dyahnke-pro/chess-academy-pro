@@ -62,14 +62,18 @@ function movetextOf(raw) {
   return clean;
 }
 
-/** Legality gate (G3): every SAN must replay; returns ply count or null. */
+/** Legality gate (G3): every SAN must replay. Returns the CANONICAL
+ *  chess.js-regenerated movetext (clean numbering, no annotation residue —
+ *  the same string the app AND the child audit both parse) + ply count,
+ *  or null on any illegal token. */
 function verifyLegal(movetext) {
-  const sans = movetext.replace(/\d+\.(\.\.)?\s*/g, '').replace(/\s*(1-0|0-1|1\/2-1\/2|\*)\s*$/, '').trim().split(/\s+/).filter(Boolean);
+  const sans = movetext.replace(/\d+\.(\.\.)?\s*/g, '').replace(/\s*(1-0|0-1|1\/2-1\/2|\*)\s*$/, '').trim()
+    .split(/\s+/).filter((t) => t && !/^\.+$/.test(t));
   const c = new Chess();
   for (const s of sans) {
     try { c.move(s.replace(/[?!]+$/, '')); } catch { return null; }
   }
-  return sans.length;
+  return { plyCount: sans.length, canonical: c.pgn() };
 }
 
 async function pickGame(seed) {
@@ -81,12 +85,11 @@ async function pickGame(seed) {
   for (const g of candidates) {
     try {
       const raw = await fetchText(`${BASE}/api/lichess-game-export?id=${g.id}`);
-      const movetext = movetextOf(raw);
-      const plyCount = verifyLegal(movetext);
-      if (!plyCount || plyCount < 16) continue; // too short / illegal — next candidate
+      const legal = verifyLegal(movetextOf(raw));
+      if (!legal || legal.plyCount < 16) continue; // too short / illegal — next candidate
       seen.add(g.id);
       const result = seed.want === 'draw' ? '1/2-1/2' : seed.want === 'white' ? '1-0' : '0-1';
-      return { id: g.id, players: `${g.white?.name ?? '?'} vs ${g.black?.name ?? '?'}`, movetext, plyCount, result };
+      return { id: g.id, players: `${g.white?.name ?? '?'} vs ${g.black?.name ?? '?'}`, movetext: legal.canonical, plyCount: legal.plyCount, result };
     } catch { /* next candidate */ }
   }
   return null;
@@ -142,6 +145,7 @@ for (let i = 0; i < SEEDS.length; i++) {
   if (!game) { console.log('  ✗ no legal candidate game — SKIPPED (reported honestly)'); results.push({ seed: seed.name, verdict: 'NO-GAME' }); continue; }
   console.log(`  ${game.players} (${game.id}, ${game.plyCount} plies, ${game.result})`);
   const logPath = `${outDir}/game-${i + 1}.log`;
+  writeFileSync(`${outDir}/game-${i + 1}.json`, JSON.stringify({ seed: seed.name, ...game }, null, 2));
   const { out } = await runChild({
     AUDIT_GID: `fleet-new-${iso}-${i + 1}`,
     AUDIT_PGN: `${game.movetext.replace(/\s*(1-0|0-1|1\/2-1\/2|\*)\s*$/, '')} ${game.result}`.trim(),

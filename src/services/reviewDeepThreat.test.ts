@@ -21,6 +21,28 @@ import { generateReviewNarration } from './coachFeatureService';
 import type { ReviewMoveInput } from './coachFeatureService';
 import { Chess } from 'chess.js';
 
+describe('uncapped verdict facet — spoken only when it CHANGES (R10)', () => {
+  it('never ships the identical bare verdict on two plies', async () => {
+    const sans = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'd3', 'd6', 'Nc3', 'Nf6'];
+    const c = new Chess();
+    const moves: ReviewMoveInput[] = sans.map((san, i) => {
+      c.move(san);
+      return {
+        ply: i + 1, san, isCoachMove: (i + 1) % 2 === 0,
+        classification: 'book', evaluation: -20, preMoveEval: -20,
+        bestMove: null, fenAfter: c.fen(),
+      } as unknown as ReviewMoveInput;
+    });
+    const n = await generateReviewNarration({
+      moves, playerColor: 'white', openingName: null, result: '1-0',
+      playerRating: 1500, coachNarration: 'silent', uncapped: true,
+    });
+    const spoken = n.segments.map((s) => (s.narration ?? '').trim().toLowerCase()).filter((t) => t.length >= 8);
+    const dupes = spoken.filter((t, i) => spoken.indexOf(t) !== i);
+    expect(dupes, `verbatim-duplicate narration lines: ${dupes.join(' || ')}`).toEqual([]);
+  });
+});
+
 describe('deep threat AGAINST the student (#5c)', () => {
   it('narrates the opponent\'s multi-move idea and names the stored defense', async () => {
     const sans = ['e4', 'e5', 'Nc3', 'Bc5', 'a3', 'Qh4'];
