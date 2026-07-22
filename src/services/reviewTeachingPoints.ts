@@ -18,6 +18,7 @@
 import { Chess, type Color, type Square } from 'chess.js';
 import { describeStructure } from './boardStructure';
 import { seeGain } from './positionReadingService';
+import { captureHasCounterTactic } from './groundedAnswer';
 
 const PIECE_VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -43,12 +44,33 @@ export function attackerDefenderCount(fen: string, studentColorWB: Color): strin
   // OFFENSIVE only — the M2 lesson is "more attackers than defenders → it falls".
   // We deliberately do NOT flag the student's own overloaded piece: it collides
   // with an intentional sacrifice (the sacked rook/queen is MEANT to be loose).
+  //
+  // "So it falls" is a strong claim — a raw HEAD-COUNT can't carry it (two
+  // attackers worth Q+P vs one defender can still LOSE the exchange), and even
+  // a SEE-positive capture can walk into a fork one move later (the e5
+  // hallucination class, David 2026-07-21). Verify with the flipped-board
+  // student-to-move scan: the capture must exist, net material by SEE, and
+  // survive the opponent's immediate counter-tactics — or the claim is dropped.
+  const flippedParts = fen.split(' ');
+  flippedParts[1] = studentColorWB;
+  flippedParts[3] = '-';
+  let flipped: Chess | null = null;
+  try {
+    flipped = new Chess(flippedParts.join(' '));
+    if (flipped.inCheck()) flipped = null; // illegal null-move state — no claim
+  } catch { flipped = null; }
   for (const c of cells(chess)) {
     if (c.color !== enemy || c.type === 'k' || c.type === 'p') continue;
     const sq = c.square as Square;
     const atk = chess.attackers(sq, studentColorWB).length;
     const def = chess.attackers(sq, enemy).length;
     if (atk === 0 || atk <= def) continue; // need a genuine numerical overload
+    if (!flipped) continue;
+    const cap = flipped.moves({ verbose: true }).find((m) => m.to === sq && m.captured);
+    if (!cap) continue; // no legal capture (pinned attackers) — it does not fall
+    const net = seeGain(flipped, sq);
+    if (net <= 0) continue; // the exchange sequence does not actually win material
+    if (captureHasCounterTactic(flipped.fen(), cap.san, enemy, net)) continue; // refuted one move later
     const cand = { value: PIECE_VAL[c.type] ?? 0,
       text: `count the attackers and defenders on their ${PIECE_NOUN[c.type]} on ${sq}: ${plural(atk, 'attacker')} to ${plural(def, 'defender')} — more attackers than defenders, so it falls` };
     if (!best || cand.value > best.value) best = cand;

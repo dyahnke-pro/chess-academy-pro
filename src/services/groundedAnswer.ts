@@ -703,7 +703,7 @@ export function explainBestMoveGrounded(
  * Used to keep SEE-based "wins the pawn" claims honest — SEE cannot see a
  * fork that lands on a DIFFERENT square one move later.
  */
-function captureHasCounterTactic(
+export function captureHasCounterTactic(
   fenAfterPlayed: string,
   captureSan: string,
   moverColor: 'w' | 'b',
@@ -3288,10 +3288,14 @@ export function describeStudentThreat(
             continue;
           }
         }
-        // Clean material win: a capture whose static exchange nets a piece.
+        // Clean material win: a capture whose static exchange nets a piece —
+        // AND survives the opponent's immediate counter-tactics (the same
+        // verification the cost clause gets; a poisoned Qxb2-style grab must
+        // never be narrated as a threat).
         if (played.captured) {
           const net = seeGain(c, mv.to);
-          if (net >= 3 && (!best || net > best.rank)) {
+          if (net >= 3 && (!best || net > best.rank)
+            && !captureHasCounterTactic(fen, mv.san, studentWB === 'w' ? 'b' : 'w', net)) {
             best = { san: mv.san, detail: `wins the ${REVIEW_PIECE_NAME[played.captured]} on ${mv.to}`, rank: net };
           }
         }
