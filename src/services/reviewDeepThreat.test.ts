@@ -77,6 +77,42 @@ describe('teaching refrains speak ONCE per review (David 2026-07-22)', () => {
   });
 });
 
+describe('uncapped narration never leaks a facet tag or a mate-sentinel eval (preview audit 2026-07-22)', () => {
+  it('strips DIGIT-bearing tags ([rook7]) and skips [eval] on the mating move', async () => {
+    // The Opera-style finish reaches a rook on the seventh (Rxd7) and ends on a
+    // checkmate (Rd8#) — the two plies where the preview audit caught "[rook7]"
+    // leaking and "[eval] dips 300.0 their way" over a mate.
+    const sans = ['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5', 'Bxf3', 'Qxf3', 'dxe5',
+      'Bc4', 'Nf6', 'Qb3', 'Qe7', 'Nc3', 'c6', 'Bg5', 'b5', 'Nxb5', 'cxb5',
+      'Bxb5+', 'Nbd7', 'O-O-O', 'Rd8', 'Rxd7', 'Rxd7', 'Rd1', 'Qe6', 'Bxd7+', 'Nxd7',
+      'Qb8+', 'Nxb8', 'Rd8#'];
+    const c = new Chess();
+    const moves: ReviewMoveInput[] = sans.map((san, i) => {
+      c.move(san);
+      const ply = i + 1;
+      // Give the final mate a mate-sentinel eval, as the engine would.
+      const isMate = san.includes('#');
+      return {
+        ply, san, isCoachMove: ply % 2 === 0,
+        classification: 'good',
+        evaluation: isMate ? 30000 : 40,
+        preMoveEval: isMate ? 900 : 20,
+        bestMove: null, fenAfter: c.fen(),
+      } as unknown as ReviewMoveInput;
+    });
+    const n = await generateReviewNarration({
+      moves, playerColor: 'white', openingName: null, result: '1-0',
+      playerRating: 1400, coachNarration: 'silent', uncapped: true,
+    });
+    const all = n.segments.map((s) => s.narration ?? '').join('\n');
+    // No facet tag of any shape (letters, hyphens, OR digits) survives.
+    expect(all).not.toMatch(/\[[a-z0-9-]+\]/i);
+    // The mating segment does not narrate a mate-sentinel as a pawn drift.
+    const mateSeg = n.segments.find((s) => s.san === 'Rd8#');
+    expect(mateSeg?.narration ?? '').not.toMatch(/eval bar.*\b\d{3}(\.\d)? /);
+  });
+});
+
 describe('deep threat AGAINST the student (#5c)', () => {
   it('narrates the opponent\'s multi-move idea and names the stored defense', async () => {
     const sans = ['e4', 'e5', 'Nc3', 'Bc5', 'a3', 'Qh4'];

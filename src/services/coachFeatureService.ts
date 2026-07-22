@@ -2408,7 +2408,9 @@ export async function generateReviewNarration(params: {
   if (uncapped) {
     for (const s of segments) {
       if (s.narration && s.narration.includes('[')) {
-        s.narration = s.narration.replace(/\[[a-z-]+\]\s*/g, '').replace(/\s{2,}/g, ' ').trim();
+        // Tags can carry DIGITS ([rook7]) — the old [a-z-]+ class missed those
+        // and leaked "[rook7]" into the spoken line (preview audit, 2026-07-22).
+        s.narration = s.narration.replace(/\[[a-z0-9-]+\]\s*/g, '').replace(/\s{2,}/g, ' ').trim();
       }
     }
   }
