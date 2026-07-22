@@ -17,12 +17,13 @@ name: Daily deploy + TestFlight external (21:00 America/Chicago)
 # the last built commit, so a no-work day = no build. concurrency + main-changed
 # dedup the two crons (the second sees the first build's commit == HEAD, skips).
 
-# 🔒 AUTO-SUBMIT DISABLED (David 2026-07-11: "stop the auto send"). The nightly
-# schedule crons are removed — builds NO LONGER go to TestFlight/Apple on their
-# own. This workflow now runs ONLY on an explicit manual dispatch, so nothing is
-# submitted to Apple unless David asks for it. (Build 120 was auto-submitted by
-# the old nightly cron and Apple rejected it — this stops that from recurring.)
-# Re-add a `schedule:` block only if David explicitly wants nightly builds back.
+# 🔒 AUTO-SUBMIT TO APPLE DISABLED (David 2026-07-11: "stop the auto send").
+# Build 120 was auto-submitted by the old nightly cron and Apple rejected it.
+# That order STANDS for Apple: scheduled runs force SKIP_IOS, so no build is
+# ever created for or submitted to Apple on a schedule. The nightly crons were
+# RESTORED for WEB + OTA only (David 2026-07-21: "the auto deploy has not been
+# working") — the Vercel deploy and the OTA JS bundle ship themselves nightly;
+# iOS/TestFlight remains manual-dispatch (or trigger-file) only.
 on:
   # Trigger-file build (David 2026-07-11 workaround): the agent proxy 403s the
   # Actions dispatch API AND tag pushes, but a normal branch push to main is
@@ -41,6 +42,14 @@ on:
         description: 'Also push to EXTERNAL beta testers (sends a tester email). Default OFF — internal-only, no tester email.'
         type: boolean
         default: false
+  # Nightly WEB + OTA ONLY (David 2026-07-21: "the auto deploy has not been
+  # working"). The 2026-07-11 "stop the auto send" order STANDS for Apple:
+  # scheduled runs force SKIP_IOS below, so nothing is built for or submitted
+  # to Apple on a schedule — only the Vercel web deploy + the OTA JS bundle
+  # ship nightly. iOS/TestFlight remains manual-dispatch or trigger-file only.
+  schedule:
+    - cron: '0 2 * * *'   # ~21:00 America/Chicago (delivery is best-effort)
+    - cron: '0 3 * * *'   # redundancy — main-changed dedups the second run
 
 concurrency:
   group: daily-deploy
@@ -157,6 +166,11 @@ jobs:
           APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
           APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
         run: |
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            echo "Scheduled run — web + OTA only. iOS/TestFlight stays manual (David 2026-07-11: no auto-send to Apple)."
+            echo "SKIP_IOS=1" >> "$GITHUB_ENV"
+            exit 0
+          fi
           if [ -z "$APP_STORE_CONNECT_API_KEY" ]; then
             echo "::warning::APP_STORE_CONNECT_API_* secrets not set — skipping iOS build + distribution."
             echo "SKIP_IOS=1" >> "$GITHUB_ENV"
