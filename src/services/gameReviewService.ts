@@ -9,6 +9,7 @@ import { db } from '../db/schema';
 import { voiceFacts } from './coachApi';
 import { assembleGameReviewAnswer } from './groundedAnswer';
 import { analyzeSingleGame } from './gameAnalysisService';
+import { resolvePlayerColor } from './conversionDetector';
 
 /**
  * Request a coach review for a stored game.
@@ -32,9 +33,18 @@ export async function requestGameReview(
   // them. Nothing is free-composed — the counts, evals, and preferred moves are
   // all the engine's; the LLM only phrases them (warmly).
   onProgress?.('Writing the review…');
+  // The STUDENT's colour so the verdict grades THEM, not the opponent's errors
+  // (board-awareness sweep, 2026-07-22). Coach games resolve from the bot seat;
+  // imported games from the profile's platform usernames.
+  const profile = await db.profiles.get('main');
+  const studentColor = resolvePlayerColor(game, {
+    lichessUsername: profile?.preferences.lichessUsername,
+    chessComUsername: profile?.preferences.chessComUsername,
+  }) ?? undefined;
   const grounded = assembleGameReviewAnswer({
     white: game.white,
     black: game.black,
+    studentColor,
     result: game.result,
     moveCount: estimateMoveCount(game.pgn),
     annotations,

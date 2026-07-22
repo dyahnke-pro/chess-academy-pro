@@ -45,7 +45,11 @@ describe('uncapped verdict facet — spoken only when it CHANGES (R10)', () => {
 
 describe('teaching refrains speak ONCE per review (David 2026-07-22)', () => {
   it('facts repeat, principles do not — and the development nag fires once', async () => {
-    const sans = ['e4', 'e5', 'd4', 'd6', 'Nf3', 'Nc6'];
+    // 2.c4 uncovers d3 (both its pawn guards, c2 and e2, have advanced) and
+    // 3.g4 uncovers f3 the same way — two HONEST weakenings (a square still
+    // covered by a neighbouring pawn, like d3/f3 after a bare 1.e4, no longer
+    // counts as weakened; board-awareness sweep 2026-07-22).
+    const sans = ['e4', 'e5', 'c4', 'd6', 'g4', 'Nc6'];
     const c = new Chess();
     const moves: ReviewMoveInput[] = sans.map((san, i) => {
       c.move(san);
@@ -60,11 +64,13 @@ describe('teaching refrains speak ONCE per review (David 2026-07-22)', () => {
       playerRating: 1500, coachNarration: 'silent', uncapped: true,
     });
     const texts = n.segments.map((s) => s.narration ?? '');
-    // Ply 1 (e4) teaches the principle with the fact…
-    expect(texts[0]).toMatch(/gives up d3 and f3 for good — pawns don't move back/);
-    // …ply 3 (d4) keeps the FACT but not the refrain.
-    expect(texts[2]).toMatch(/gives up c3 and e3 for good/);
-    expect(texts[2]).not.toMatch(/pawns don't move back/);
+    // A square its remaining pawns still cover is NOT called weakened (1.e4).
+    expect(texts[0]).not.toMatch(/gives up .* for good/);
+    // Ply 3 (c4) teaches the principle with the fact…
+    expect(texts[2]).toMatch(/gives up d3 for good — pawns don't move back/);
+    // …ply 5 (g4) keeps the FACT but not the refrain.
+    expect(texts[4]).toMatch(/gives up f3 for good/);
+    expect(texts[4]).not.toMatch(/pawns don't move back/);
     // The development nag ("boxed in at home") appears in exactly one segment.
     const nagCount = texts.filter((t) => t.includes('boxed in at home')).length;
     expect(nagCount).toBeLessThanOrEqual(1);

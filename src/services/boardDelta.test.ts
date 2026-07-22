@@ -116,6 +116,20 @@ describe('computeBoardDelta — every relevant change, computed', () => {
     expect(clauses.join(' | ')).toMatch(/gives up castling short/);
   });
 
+  it('ABANDONS never names the mover itself at its landing square', () => {
+    // Nf4-d5 lands on an undefended square: the mover is not "walked away
+    // from" — that read was incoherent (board-awareness sweep, 2026-07-22).
+    const clauses = computeBoardDelta('4k3/8/8/8/5N2/8/8/4K3 w - - 0 30', 'Nd5');
+    expect(clauses.join(' | ')).not.toMatch(/walks away from the knight on d5/);
+  });
+
+  it('WEAKENS skips squares a neighbouring pawn still covers (1.e4 is not a weakening)', () => {
+    // After 1.e4, c2 still covers d3 and g2 still covers f3 — neither square
+    // "needs piece cover", so the clause must stay silent.
+    const clauses = computeBoardDelta(new Chess().fen(), 'e4');
+    expect(clauses.join(' | ')).not.toMatch(/gives up .* for good/);
+  });
+
   it('stays quiet on a move that changes none of the tracked classes', () => {
     // 1.Nc3 from the start: no slider unblocked meaningfully (b1 vacated sits
     // on no slider's line), nothing abandoned, no pawn, rights intact.
