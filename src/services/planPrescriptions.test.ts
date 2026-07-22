@@ -93,6 +93,24 @@ describe('durability words only on verified-durable facts', () => {
   });
 });
 
+describe('composed nouns match the actual material surplus', () => {
+  it('two extra pawns are never called "the extra piece"', () => {
+    // White is up exactly two PAWNS — equal pieces both sides.
+    const fen = '4k3/5p2/8/8/8/8/PP3P2/4K3 w - - 0 30';
+    const plans = deriveNextPlans(fen, 'w');
+    const convert = plans.find((p) => p.includes('convert your extra material'));
+    expect(convert).toBeTruthy();
+    expect(convert).not.toMatch(/extra piece/);
+    expect(convert).toMatch(/extra pawns/);
+  });
+
+  it('a genuine extra piece is still called the extra piece', () => {
+    const fen = '4k3/5ppp/8/8/8/8/N4PPP/4K3 w - - 0 30';
+    const convert = deriveNextPlans(fen, 'w').find((p) => p.includes('convert your extra material'));
+    expect(convert).toMatch(/extra piece/);
+  });
+});
+
 describe('plan prescriptions never name a piece the student does not have', () => {
   for (const probe of PROBES) {
     it(probe.name, () => {

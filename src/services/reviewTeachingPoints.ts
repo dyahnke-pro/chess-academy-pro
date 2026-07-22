@@ -3,6 +3,22 @@
  * "add the missing teaching points"). Each is a reusable chess LESSON he leans on,
  * computed from the board (G0 — chess.js only; the LLM voices, never decides):
  *
+ * 🔒 THE COMPOSED-ADVICE DOCTRINE (David 2026-07-22, root-cause law — "CLEAN
+ * FIXES THAT PREVENT HALLUCINATIONS FROM EVEN BEING POSSIBLE"): advice text is
+ * COMPOSED FROM BOARD OBJECTS at runtime, never written ahead of the board.
+ * Concretely: (1) every piece/square/phase/rights NOUN in an output sentence is
+ * INTERPOLATED from a computed value (a piece found on the board, a counted
+ * array, a parsed FEN field) — a hand-typed "knight"/"rook"/"castled king" that
+ * assumes inventory or state is BANNED; (2) conditional phrases are keyed to
+ * exhaustively-computed state, so a fragment claiming X is only selectable when
+ * X was computed true; (3) fixed prose is allowed ONLY for pure principles that
+ * reference nothing on the board ("a passed pawn's whole job is to run");
+ * (4) durability adjectives ("lasting", "for good") attach only to fact classes
+ * where permanence is provable (pawn structure, castling rights). This is G0's
+ * inversion applied to AUTHORED templates: the template author decides nothing
+ * the board didn't deliver. planPrescriptions.test.ts is the regression net —
+ * the net is NOT the fix; this composition rule is.
+ *
  *   M2  attacker/defender COUNT on a contested piece ("more attackers than
  *       defenders — it falls").
  *   M6  the King & Queen are the WORST defenders (a piece leaning only on the
@@ -243,13 +259,17 @@ export function deriveNextPlans(fen: string, studentColorWB: Color): string[] {
   const weak = struct.pawns.isolatedPawns[enemy].find((sq) => 'cdef'.includes(sq[0])) ?? struct.pawns.isolatedPawns[enemy][0];
   if (weak) {
     const block = `${weak[0]}${enemy === 'w' ? Number(weak[1]) + 1 : Number(weak[1]) - 1}`;
-    const hasKnight = all.some((c) => c.type === 'n' && c.color === studentColorWB);
-    const hasMinor = hasKnight || all.some((c) => c.type === 'b' && c.color === studentColorWB);
-    const blockBit = hasKnight
-      ? `plant a knight on the square right in front of it, ${block}, so it can never advance to free itself`
-      : hasMinor
-        ? `blockade the square right in front of it, ${block}, so it can never advance to free itself`
-        : `control the square right in front of it, ${block}, so it can never advance to free itself`;
+    // The blockader is an ACTUAL board object — its noun is interpolated from
+    // the piece found, so prescribing an absent piece is unwritable (root-
+    // cause doctrine, David 2026-07-22). Knight preferred (the classic
+    // blockader), any minor otherwise, square-control phrasing when no minor
+    // exists at all.
+    const blockader = all.find((c) => c.type === 'n' && c.color === studentColorWB)
+      ?? all.find((c) => c.type === 'b' && c.color === studentColorWB)
+      ?? null;
+    const blockBit = blockader
+      ? `plant your ${blockader.type === 'n' ? 'knight' : 'bishop'} on the square right in front of it, ${block}, so it can never advance to free itself`
+      : `control the square right in front of it, ${block}, so it can never advance to free itself`;
     plans.push(`the plan from here is to win their weak pawn on ${weak}. Here's how: ${blockBit}; then stack your heavy pieces on the file to gang up on it, trade off the pieces that defend it one by one, and either win it outright or tie their whole army to babysitting it`);
   }
 
@@ -284,9 +304,23 @@ export function deriveNextPlans(fen: string, studentColorWB: Color): string[] {
   }
 
   // 7. Up a clear amount of material → simplify and convert, HOW spelled out.
+  // The surplus NOUN is COMPOSED from the actual material breakdown — "the
+  // extra piece" was hand-typed while bal >= 2 can be two pawns or the
+  // exchange (root-cause doctrine, David 2026-07-22: advice text is composed
+  // from board objects, never written ahead of the board).
   const bal = struct.material.balance * (studentColorWB === 'w' ? 1 : -1);
   if (bal >= 2) {
-    plans.push(`the plan from here is to convert your extra material. Here's how: offer a trade of pieces at every chance but keep the pawns on, steer straight for an endgame where the extra piece is decisive, and don't get greedy or complicate — simplicity is what wins a won game`);
+    const pts: Record<string, number> = { n: 3, b: 3, r: 5, q: 9 };
+    const nonPawn = (color: Color): number => all.filter((c) => c.color === color && c.type !== 'p' && c.type !== 'k')
+      .reduce((s, c) => s + (pts[c.type] ?? 0), 0);
+    const pawnDiff = all.filter((c) => c.color === studentColorWB && c.type === 'p').length
+      - all.filter((c) => c.color === enemy && c.type === 'p').length;
+    const nonPawnDiff = nonPawn(studentColorWB) - nonPawn(enemy);
+    const surplus = nonPawnDiff >= 3 ? 'the extra piece'
+      : nonPawnDiff >= 2 ? 'the exchange'
+      : pawnDiff >= 1 ? `your extra pawn${pawnDiff > 1 ? 's' : ''}`
+      : 'your material edge';
+    plans.push(`the plan from here is to convert your extra material. Here's how: offer a trade of pieces at every chance but keep the pawns on, steer straight for an endgame where ${surplus} ${surplus.endsWith('s') ? 'are' : 'is'} decisive, and don't get greedy or complicate — simplicity is what wins a won game`);
   }
 
   // 8. Bishop pair → open the position for the two bishops, HOW spelled out.
