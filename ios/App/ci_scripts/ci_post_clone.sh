@@ -86,7 +86,15 @@ cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
 # rejects any new build uploaded under 3.1 ("must be a higher version"). 3.2
 # carries the new openings + counter-repertoire recommender + freemium free-tier
 # (start free, no card; 7-DAY FREE TRIAL for Pro).
-IOS_MARKETING_VERSION="3.2"
+# BUMP 3.2 → 3.3 (2026-07-22): Xcode Cloud runs #149-151 all died at
+# "Preparing build for App Store Connect" with a clean archive — the exact
+# released-version rejection signature from the 3.0 and 3.1 incidents (3.2 has
+# since cleared the store). 3.3 carries the Danya-standard review rebuild:
+# threats both directions (2-4 moves, verified), every-move teaching beats
+# ([does]/[delta]/[eval]), the composed-advice doctrine (board-object-composed
+# plans — no inventory/phase-blind advice), Pattern Recognition school, and the
+# unified review chat.
+IOS_MARKETING_VERSION="3.3"
 sed -i '' -e "s/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = ${IOS_MARKETING_VERSION};/g" \
   ios/App/App.xcodeproj/project.pbxproj
 echo "ci_post_clone: MARKETING_VERSION set to ${IOS_MARKETING_VERSION} (build ${CI_BUILD_NUMBER:-?})"
