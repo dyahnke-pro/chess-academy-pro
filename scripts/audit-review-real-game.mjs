@@ -529,6 +529,14 @@ const run = async () => {
     if (i % 2 !== (STUDENT_SIDE === 'white' ? 0 : 1)) continue; // student moves by AUDIT_STUDENT parity
     if (!/^Q/.test(SANS[i])) continue;         // a student queen move
     if ((victimVal[i] ?? 0) >= 9) continue;    // QxQ then recapture = a queen TRADE, not a sac (run 3: 41.Qxe8+ Bxe8)
+    const sqOf = (s) => s.replace(/[+#]/g, '').slice(-2);
+    // A queen RECAPTURING in a capture chain (previous move captured on the
+    // same square), or a chain the student immediately recoups (the move
+    // after the queen falls captures back on the same square), is a TRADE
+    // SEQUENCE — not a sacrifice the narration owes the word for (run 4:
+    // Bxf6 Qxf6 then the chain continues, Carlsen–Kramnik ply 16).
+    if (i >= 1 && SANS[i - 1].includes('x') && sqOf(SANS[i - 1]) === sqOf(SANS[i])) continue;
+    if (i + 2 < SANS.length && SANS[i + 2].includes('x') && sqOf(SANS[i + 2]) === sqOf(SANS[i + 1])) continue;
     const toSq = SANS[i].replace(/[+#]/g, '').slice(-2);
     const next = SANS[i + 1].replace(/[+#]/g, '');
     if (next.includes('x') && next.endsWith(toSq)) { queenSacPly = i + 1; break; } // opponent takes the queen there
