@@ -142,6 +142,46 @@ export function computeMoveFacets(ctx: MoveFactContext): string[] {
     facets.push(`[quality] ${subj}: ${lowerFirst(cap(ctx.classification))} move${swingBit}${betterBit}.`);
   }
 
+  // ── 2b. EVAL ATTRIBUTION — when the bar visibly moves on an UNFLAGGED ply,
+  // say WHY (David 2026-07-22: "eval moves on every ply. So at the very least
+  // we need to state the facts that caused the eval bar to move"). Flagged
+  // plies already speak their swing in [quality]; this covers the quiet
+  // drifts. Attribution stays computed: the MATERIAL component is exact
+  // (chess.js), and when no material moved, the facet points at the computed
+  // changes that fired on THIS ply ([does]/[delta]/[tactic]) — the real,
+  // board-verified candidates — never an invented cause.
+  if (studentPovCp !== null && ctx.preMoveEval != null && studentColorWB
+    && (ctx.classification === 'good' || ctx.classification === 'book' || ctx.classification === null)) {
+    const prevStudentPov = studentColorWB === 'w' ? ctx.preMoveEval : -ctx.preMoveEval;
+    const d = studentPovCp - prevStudentPov;
+    if (Math.abs(d) >= 30) {
+      let materialStudentPov = 0;
+      try {
+        const c = new Chess(fenBefore);
+        const mvv = c.move(san.replace(/[?!]+$/, ''));
+        if (mvv?.captured) {
+          const pts = PIECE_PTS[mvv.captured] ?? 0;
+          materialStudentPov = (mvv.color === studentColorWB ? pts : -pts) * 100;
+        }
+      } catch { /* attribution stays positional */ }
+      const dir = d > 0 ? 'your way' : 'their way';
+      const mag = (Math.abs(d) / 100).toFixed(1);
+      const materialExplains = materialStudentPov !== 0 && Math.abs(d - materialStudentPov) < Math.abs(d) / 2;
+      if (materialExplains) {
+        facets.push(`[eval] The eval bar moves ${mag} ${dir} — material changed hands, and the count above is the reason.`);
+      } else {
+        const fired: string[] = [];
+        if (facets.some((f) => f.startsWith('[does]'))) fired.push('the new pressure the move creates');
+        if (facets.some((f) => f.startsWith('[delta]'))) fired.push('the lines it opened and what it gave up');
+        if (facets.some((f) => f.startsWith('[tactic]'))) fired.push('the tactic now sitting on the board');
+        const why = fired.length
+          ? `the shift is positional — ${fired.join(', and ')}`
+          : 'the shift is positional — the activity balance moved with no single tactical event';
+        facets.push(`[eval] The eval bar ${d > 0 ? 'ticks' : 'dips'} ${mag} ${dir} with no material story: ${why}.`);
+      }
+    }
+  }
+
   // ── 3. TACTICS ON THE RESULTING BOARD + LOOSE (undefended) PIECES ──
   // The detector's descriptions are seatless — stamp the deterministic
   // MINE/YOURS onto every piece reference before it enters the package, so

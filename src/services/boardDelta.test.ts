@@ -4,6 +4,73 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { computeBoardDelta } from './boardDelta';
+import { computeMoveFacets } from './reviewFullData';
+
+describe('[eval] attribution — the bar never moves unexplained (David 2026-07-22)', () => {
+  const base = (over: Partial<Parameters<typeof computeMoveFacets>[0]>): string[] => {
+    const c = new Chess();
+    c.move('e4');
+    return computeMoveFacets({
+      fenBefore: new Chess().fen(),
+      fenAfter: c.fen(),
+      san: 'e4',
+      ply: 1,
+      moverColor: 'white',
+      playerColor: 'white',
+      studentColorWB: 'w',
+      evaluation: 60,
+      preMoveEval: 20,
+      classification: 'good',
+      bestMoveSan: null,
+      prevCap: { square: null, capturedValue: 0 },
+      allSans: ['e4'],
+      forcedRunStartPly: null,
+      ...over,
+    });
+  };
+
+  it('attributes a quiet positional drift to the computed changes that fired', () => {
+    const facets = base({});
+    const evalFacet = facets.find((f) => f.startsWith('[eval]'));
+    expect(evalFacet).toBeTruthy();
+    expect(evalFacet).toMatch(/0\.4 your way/);
+    expect(evalFacet).toMatch(/no material story/);
+    expect(evalFacet).toMatch(/positional/);
+  });
+
+  it('stays quiet when the bar barely moves', () => {
+    const facets = base({ evaluation: 25 });
+    expect(facets.find((f) => f.startsWith('[eval]'))).toBeUndefined();
+  });
+
+  it('attributes a material swing to the material count', () => {
+    // Position where White wins a free queen: exchange on d5 nets a pawn?
+    // Simpler: black queen hanging on d4, White plays Qxd4 — +9 material,
+    // eval jumps ~900.
+    const fenBefore = 'k7/8/8/8/3q4/8/8/K2Q4 w - - 0 1';
+    const c = new Chess(fenBefore);
+    c.move('Qxd4');
+    const facets = computeMoveFacets({
+      fenBefore,
+      fenAfter: c.fen(),
+      san: 'Qxd4',
+      ply: 1,
+      moverColor: 'white',
+      playerColor: 'white',
+      studentColorWB: 'w',
+      evaluation: 900,
+      preMoveEval: 0,
+      classification: 'good',
+      bestMoveSan: null,
+      prevCap: { square: null, capturedValue: 0 },
+      allSans: ['Qxd4'],
+      forcedRunStartPly: null,
+    });
+    const evalFacet = facets.find((f) => f.startsWith('[eval]'));
+    expect(evalFacet).toBeTruthy();
+    expect(evalFacet).toMatch(/material changed hands/);
+  });
+});
 
 describe('computeBoardDelta — every relevant change, computed', () => {
   it('UNCOVERS: 1.d4 opens the c1 bishop\'s diagonal', () => {
