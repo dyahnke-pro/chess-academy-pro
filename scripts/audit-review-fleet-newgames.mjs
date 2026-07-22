@@ -73,7 +73,12 @@ function verifyLegal(movetext) {
   for (const s of sans) {
     try { c.move(s.replace(/[?!]+$/, '')); } catch { return null; }
   }
-  return { plyCount: sans.length, canonical: c.pgn() };
+  // MOVETEXT ONLY — chess.js pgn() prepends seven-tag headers and appends
+  // '*', which poisoned the child audit's SAN parse (run 2 game 1: replay
+  // froze on '[Event' and every board check compared against the start
+  // position). Strip headers + the result placeholder.
+  const canonical = c.pgn().replace(/^\[[^\]]*\]\s*$/gm, '').replace(/\s*\*\s*$/, '').replace(/\s+/g, ' ').trim();
+  return { plyCount: sans.length, canonical };
 }
 
 async function pickGame(seed) {
