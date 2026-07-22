@@ -35,7 +35,9 @@ const SEEDS = [
   { name: 'QGD (student=Black, LOSS)',         play: 'd2d4,d7d5,c2c4,e7e6,b1c3,g8f6', student: 'black', want: 'white' },
   { name: "King's Indian (student=White, LOSS)", play: 'd2d4,g8f6,c2c4,g7g6,b1c3,f8g7,e2e4,d7d6', student: 'white', want: 'black' },
   { name: 'Ruy Lopez (student=White, DRAW)',   play: 'e2e4,e7e5,g1f3,b8c6,f1b5,a7a6', student: 'white', want: 'draw' },
-  { name: 'English (student=Black, win)',      play: 'c2c4,e7e5,b1c3,g8f6', student: 'black', want: 'black' },
+  // (The English seed found no legal black-win candidate in runs 1-3 — the
+  // French position has a deep master-game pool with black wins.)
+  { name: 'French (student=Black, win)',       play: 'e2e4,e7e6,d2d4,d7d5', student: 'black', want: 'black' },
 ];
 
 const seen = new Set();

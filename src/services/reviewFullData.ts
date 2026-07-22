@@ -18,6 +18,7 @@ import { detectTactics } from './tacticsDetector';
 import { seatPieceReferences, describeStudentThreat } from './groundedAnswer';
 import { describeStructure } from './boardStructure';
 import { assessPositionalEdge } from './reviewPositionalAssessment';
+import { computeBoardDelta } from './boardDelta';
 import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShield } from './reviewSacrifice';
 import { explainMatingSacMechanism } from './reviewForcedSequence';
 import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan } from './reviewStrategicOrientation';
@@ -100,6 +101,18 @@ export function computeMoveFacets(ctx: MoveFactContext): string[] {
     ? seatPieceReferences(influence0, fenAfter, ctx.studentColorWB)
     : influence0;
   if (influence) facets.push(`[does] ${influence}`);
+
+  // ── 1c. THE FULL BOARD DELTA — every other relevant change the move caused
+  // (David 2026-07-22: "the package must contain every relevant change that
+  // took place on the board so there are no silent moves"): lines it opened
+  // behind it, own sliders it shut in, pieces it walked away from, squares a
+  // pawn gave up for good, castling rights surrendered. Each clause computed
+  // (boardDelta.ts, pure chess.js), seat-stamped, one [delta] facet per clause
+  // so the coverage net guards each independently.
+  for (const clause of computeBoardDelta(fenBefore, san)) {
+    const seated = ctx.studentColorWB ? seatPieceReferences(clause, fenAfter, ctx.studentColorWB) : clause;
+    facets.push(`[delta] ${seated.charAt(0).toUpperCase()}${seated.slice(1)}.`);
+  }
 
   // ── 2. MOVE QUALITY (classification + eval swing + the better move) ──
   const swing = ctx.evaluation != null && ctx.preMoveEval != null

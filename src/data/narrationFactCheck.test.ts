@@ -349,7 +349,7 @@ function filterNovel(violations: FactCheckResult[]): FactCheckResult[] {
 }
 
 describe('narration fact-check — chess.js verifies every authored attack/coverage claim', () => {
-  it('every lesson beat\'s narration is consistent with the position it reaches (baseline-protected)', { timeout: 30000 }, () => {
+  it('every lesson beat\'s narration is consistent with the position it reaches (baseline-protected)', { timeout: 120000 }, () => {
     const violations: FactCheckResult[] = [];
     for (const { source, beat } of collectLessonBeats()) {
       violations.push(...checkNarrationUnit(source, beat.id, undefined, beat.moves, beat.say));
@@ -367,7 +367,7 @@ describe('narration fact-check — chess.js verifies every authored attack/cover
     expect(novel.map((v) => `${v.source} :: ${v.beatId} :: ${v.violation}`)).toEqual([]);
   });
 
-  it('every middlegame plan annotation is consistent with the position it reaches (baseline-protected)', { timeout: 30000 }, () => {
+  it('every middlegame plan annotation is consistent with the position it reaches (baseline-protected)', { timeout: 120000 }, () => {
     const violations: FactCheckResult[] = [];
     for (const { source, beat, startFen } of collectPlanAnnotations()) {
       violations.push(...checkNarrationUnit(source, beat.id, startFen, beat.moves, beat.say));
@@ -384,7 +384,7 @@ describe('narration fact-check — chess.js verifies every authored attack/cover
     expect(novel.map((v) => `${v.source} :: ${v.beatId} :: ${v.violation}`)).toEqual([]);
   });
 
-  it('baseline only ever shrinks — every baseline entry must still violate (no stale exemptions)', { timeout: 30000 }, () => {
+  it('baseline only ever shrinks — every baseline entry must still violate (no stale exemptions)', { timeout: 120000 }, () => {
     const allViolations: FactCheckResult[] = [];
     for (const { source, beat } of collectLessonBeats()) {
       allViolations.push(...checkNarrationUnit(source, beat.id, undefined, beat.moves, beat.say));

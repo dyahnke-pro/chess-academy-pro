@@ -162,7 +162,12 @@ const run = async () => {
   // Uncapped mode adds ~50s (3 Stockfish PV projections + the 8k-token cover-all
   // voice pass) on top of the ~120s game analysis, so allow a longer settle when
   // AUDIT_UNCAPPED is on (David 2026-07-20 diagnostic timed out at the old 165s).
-  const READY_ITERS = process.env.AUDIT_UNCAPPED !== '0' ? 240 : 110;
+  // Readiness scales with game length — a ~90-ply game analyzed fine at 240
+  // iters on a quiet prod but overran under load (fleet run 3, games 3/5:
+  // "analysis never settled" on 93-ply games that walked fully in run 1).
+  // Patience is cheap; a false FATAL wastes the whole game run.
+  const READY_BASE = process.env.AUDIT_UNCAPPED !== '0' ? 240 : 110;
+  const READY_ITERS = READY_BASE + SANS.length * 3;
   for (let i = 0; i < READY_ITERS; i++) {
     await page.waitForTimeout(1500);
     const btn = page.locator('[data-testid="start-walk-btn"]').first();
@@ -508,10 +513,22 @@ const run = async () => {
   // student move that OFFERS the queen — the opponent captures it on the very
   // next ply — MUST be narrated as a sacrifice, never flattened to a check.
   // Board-truth, game-agnostic: detect it from the move list.
+  // Victim values (used by SAC + NOWINDFALL): what each capture actually took.
+  const PIECE_VAL = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+  const victimVal = new Array(SANS.length).fill(null);
+  {
+    const rc = new Chess();
+    for (let i = 0; i < SANS.length; i++) {
+      const to = SANS[i].replace(/[+#]/g, '').slice(-2);
+      const occ = /[a-h][1-8]/.test(to) ? rc.get(to) : null;
+      try { const mv = rc.move(SANS[i]); if (mv && mv.captured) victimVal[i] = PIECE_VAL[mv.captured] ?? 0; else if (occ) victimVal[i] = PIECE_VAL[occ.type] ?? 0; } catch { break; }
+    }
+  }
   let queenSacPly = null;
   for (let i = 0; i < SANS.length - 1; i++) {
     if (i % 2 !== (STUDENT_SIDE === 'white' ? 0 : 1)) continue; // student moves by AUDIT_STUDENT parity
     if (!/^Q/.test(SANS[i])) continue;         // a student queen move
+    if ((victimVal[i] ?? 0) >= 9) continue;    // QxQ then recapture = a queen TRADE, not a sac (run 3: 41.Qxe8+ Bxe8)
     const toSq = SANS[i].replace(/[+#]/g, '').slice(-2);
     const next = SANS[i + 1].replace(/[+#]/g, '');
     if (next.includes('x') && next.endsWith(toSq)) { queenSacPly = i + 1; break; } // opponent takes the queen there
@@ -545,16 +562,7 @@ const run = async () => {
   // a bigger piece, or winning the exchange) legitimately nets material and MAY say
   // so (David 2026-07-20 diagnostic: cxb5/Rxd7 win knight-for-pawn = a real +2, not
   // a windfall). Replay to read each capture's victim value; flag only even trades.
-  const PIECE_VAL = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
-  const victimVal = new Array(SANS.length).fill(null);
-  {
-    const rc = new Chess();
-    for (let i = 0; i < SANS.length; i++) {
-      const to = SANS[i].replace(/[+#]/g, '').slice(-2);
-      const occ = /[a-h][1-8]/.test(to) ? rc.get(to) : null;
-      try { const mv = rc.move(SANS[i]); if (mv && mv.captured) victimVal[i] = PIECE_VAL[mv.captured] ?? 0; else if (occ) victimVal[i] = PIECE_VAL[occ.type] ?? 0; } catch { break; }
-    }
-  }
+  // (victimVal computed above, before the SAC check.)
   const windfalls = [];
   for (let i = 1; i < SANS.length; i++) {
     if (!SANS[i - 1].includes('x') || !SANS[i].includes('x')) continue;
