@@ -740,6 +740,10 @@ export type AuditKind =
   //   fired" from "the stream is broken" when the live-watch feed
   //   goes quiet.
   | 'audit-stream-post-failed'
+  // audit-stream-secret-healed: a stored per-profile secret was rejected
+  //   (401/403) and the client adopted + persisted the build's baked
+  //   secret instead — the self-repair for post-rotation stale devices.
+  | 'audit-stream-secret-healed'
   // app-foreground / app-background: visibilitychange + pageshow/pagehide
   //   lifecycle events. Real-device audits need these to correlate
   //   "Bluetooth disconnect / ringer-switch wiped the speech queue"
@@ -1285,11 +1289,34 @@ async function streamAuditEntry(entry: AuditEntry): Promise<void> {
     if (!response.ok) {
       streamPostFailureCount += 1;
       // 401/403 = the configured `auditStreamSecret` doesn't match the
-      // server's AUDIT_STREAM_SECRET. This won't recover by retrying, so
-      // disable streaming for the session after one clear rollup instead
-      // of failing (and re-rolling-up) on every subsequent audit.
+      // server's AUDIT_STREAM_SECRET. AUTO-HEAL first (David 2026-07-21 —
+      // his device carried a pre-rotation secret and every boot logged
+      // "streaming disabled" for weeks): when the failing secret differs
+      // from the build's baked secret, adopt the baked one, persist it
+      // over the stale stored value, and let the next audit retry. Only
+      // when there is no different baked secret to adopt do we disable.
       if (response.status === 401 || response.status === 403) {
-        emitStreamAuthDisabledRollup(response.status);
+        const baked = typeof __AUDIT_STREAM_SECRET__ === 'string' ? __AUDIT_STREAM_SECRET__ : '';
+        if (baked && cachedStreamConfig && cachedStreamConfig.secret !== baked) {
+          cachedStreamConfig = { ...cachedStreamConfig, secret: baked };
+          void (async () => {
+            try {
+              const profile = await db.profiles.get('main');
+              if (profile) {
+                profile.preferences.auditStreamSecret = baked;
+                await db.profiles.put(profile);
+              }
+            } catch { /* heal stays in-memory for this session */ }
+          })();
+          void logAppAudit({
+            kind: 'audit-stream-secret-healed',
+            category: 'subsystem',
+            source: 'appAuditor.streamAuditEntry',
+            summary: 'stored audit secret rejected — adopted the build\'s baked secret and persisted it',
+          });
+        } else {
+          emitStreamAuthDisabledRollup(response.status);
+        }
       } else {
         maybeEmitStreamFailureRollup(response.status, null);
       }
