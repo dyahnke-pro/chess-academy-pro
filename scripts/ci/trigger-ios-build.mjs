@@ -141,7 +141,25 @@ const main = async () => {
       const a = run.j.data?.attributes || {};
       console.log(`run #${number}: ${a.executionProgress} ${a.completionStatus || ''}`);
       if (a.completionStatus) {
-        if (a.completionStatus !== 'SUCCEEDED') { console.error(`::error::build run #${number} ${a.completionStatus}`); process.exit(1); }
+        if (a.completionStatus !== 'SUCCEEDED') {
+          // DUMP THE ACTUAL XCODE ERRORS into the CI log — the GitHub side
+          // otherwise only sees "FAILED" while the compile/test issues live in
+          // Xcode Cloud (runs #149/#150, 2026-07-22: two blind failures).
+          try {
+            const actions = await api('GET', `/v1/ciBuildRuns/${runId}/actions?limit=10`);
+            for (const act of actions.j.data ?? []) {
+              const attrs = act.attributes || {};
+              console.error(`  action ${attrs.name ?? act.id}: ${attrs.executionProgress ?? ''} ${attrs.completionStatus ?? ''}`);
+              const issues = await api('GET', `/v1/ciBuildActions/${act.id}/issues?limit=25`);
+              for (const iss of issues.j.data ?? []) {
+                const ia = iss.attributes || {};
+                console.error(`    [${ia.issueType ?? 'issue'}] ${ia.message ?? ''}${ia.fileSource?.path ? ` (${ia.fileSource.path}:${ia.fileSource.lineNumber ?? '?'})` : ''}`);
+              }
+            }
+          } catch (e) { console.error(`  (could not fetch build issues: ${e})`); }
+          console.error(`::error::build run #${number} ${a.completionStatus}`);
+          process.exit(1);
+        }
         runDone = true;
       } else { await sleep(45000); continue; }
     }
