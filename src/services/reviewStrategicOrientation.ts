@@ -124,15 +124,32 @@ function devClause(dev: SideDev, subject: 'you' | 'your opponent'): string | nul
   return joined.charAt(0).toUpperCase() + joined.slice(1);
 }
 
-/** The CONCRETE development to-do list, pieces named by square. */
+/** WHY a knight belongs on its natural square — the CENTRAL squares it fights
+ *  for from there, computed from knight geometry, plus the king-shield role of
+ *  the f-file squares (David 2026-07-22: "And WHY the knight belongs on
+ *  f6!!!!"). Board truth, not lore: from f6 a knight attacks e4 and d5. */
+const KNIGHT_SQUARE_WHY: Record<string, string> = {
+  f3: 'from there it fights for e5 and d4 and stands guard over your castled king',
+  c3: 'from there it fights for d5 and e4',
+  f6: 'from there it fights for e4 and d5 and stands guard over your castled king',
+  c6: 'from there it fights for d4 and e5',
+};
+
+/** The CONCRETE development to-do list, pieces named by square — each with
+ *  its WHY, never a bare destination. */
 function devJobs(dev: SideDev): string | null {
   const jobs: string[] = [];
   for (const kn of dev.undevelopedKnights.slice(0, 2)) {
     const to = KNIGHT_HOME_TO_NATURAL[kn];
-    jobs.push(to ? `the ${kn} knight belongs on ${to}` : `the knight on ${kn} needs a square`);
+    if (to) {
+      const why = KNIGHT_SQUARE_WHY[to];
+      jobs.push(`the ${kn} knight belongs on ${to}${why ? ` — ${why}` : ''}`);
+    } else {
+      jobs.push(`the knight on ${kn} needs a square`);
+    }
   }
   for (const b of dev.undevelopedBishops.slice(0, 2)) {
-    jobs.push(`the ${b} bishop is still boxed in at home`);
+    jobs.push(`the ${b} bishop is still boxed in at home — a piece that sees nothing defends nothing`);
   }
   return jobs.length > 0 ? jobs.join(', ') : null;
 }

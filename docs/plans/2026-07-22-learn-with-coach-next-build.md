@@ -37,6 +37,23 @@ phrasing — never a copy of review sentences.
    ply-by-ply with computed whys (the review's pass #4, re-voiced for Learn:
    "here's why this one — watch"). The takeback offer stays.
 
+   **3b. THREAT-DIAGNOSIS on wrong answers (David 2026-07-22):** classify
+   WHICH threat the wrong answer was responding to, so the coach knows
+   whether the student SAW the right threat and mis-defended, or missed it
+   entirely. Computable from the DetectedThreat package: enumerate the
+   position's live threats; for each, test whether the student's move
+   addresses it (covers the landing square / moves a target / undermines a
+   guard — the describeThreatPrevention mechanism classes, run against the
+   WRONG move). Three verdicts, three teachings:
+   - addressed the RIGHT threat, wrong way → "you saw the fork — but Rd7
+     guards the knight with the piece that was holding f7, and now f7 hangs.
+     Guard it with the OTHER rook." (the key-defender-overload case David
+     named);
+   - addressed the WRONG threat → "that defends the bishop, but the bigger
+     problem was the fork on f2 — biggest threat first";
+   - addressed no threat → the miss is the lesson: teach the recognition
+     pattern (describeThreatRecognition) before showing the answer.
+
 4. **POSITION-ANCHORED PLANS, never templates** — `buildOpeningDevelopmentPlan`
    with the named-jobs upgrade ("the g8 knight belongs on f6, the c8 bishop is
    still boxed in — then castle") replaces any remaining generic plan prose in
