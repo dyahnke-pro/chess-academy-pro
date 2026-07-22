@@ -1740,6 +1740,43 @@ async function augmentWithProjections(
     }
   }
 
+  // #5 — THE DEEP THREAT, two-to-three moves out (David 2026-07-21: "What
+  // about calling out future threats? Two or three moves ahead?"). Static
+  // scanning honestly reaches one reply; deeper is the ENGINE's job (G0).
+  // From the position after the student's strong move, give the student the
+  // move again (null-move fen) and read the engine's line: if, with the
+  // opponent sitting still, the line MATES or wins decisively more than the
+  // real eval within ≤3 of the student's moves, that line IS the looming
+  // threat — narrated ply-by-ply through the same render machinery. Skipped
+  // when the position is in check (forcing lines are the punishment pass's
+  // job) and on one-move threats (the static call-out already owns those).
+  let deepBudget = scope === 'full' ? 3 : 2;
+  for (const s of segments) {
+    if (deepBudget <= 0) break;
+    if (s.playerColor !== studentColorName) continue;
+    if (s.classification !== 'good' && s.classification !== 'great' && s.classification !== 'brilliant') continue;
+    try {
+      const parts = s.fenAfter.split(' ');
+      if (parts[1] === (studentColorWB === 'w' ? 'w' : 'b')) continue; // already student's turn — not a threat read
+      const probe = new Chess(s.fenAfter);
+      if (probe.inCheck()) continue;
+      parts[1] = studentColorWB;
+      parts[3] = '-';
+      const nullFen = parts.join(' ');
+      const line = await raceTimeout(computePvLine(nullFen, { maxPlies: 5 }), PROJ_TIMEOUT_MS, null);
+      if (!line || line.plies.length < 3) continue; // one-movers belong to the static call-out
+      const terminal = line.terminalEvalCp ?? line.rootEvalCp;
+      const studentPovTerminal = studentColorWB === 'w' ? terminal : -terminal;
+      const studentPovNow = s.evalAfter !== null ? (studentColorWB === 'w' ? s.evalAfter : -s.evalAfter) : null;
+      const lastPly = line.plies[line.plies.length - 1];
+      const matesOut = lastPly.facts.isMate;
+      const decisiveJump = studentPovNow !== null && studentPovTerminal - studentPovNow >= 250;
+      if (!matesOut && !decisiveJump) continue;
+      s.narration = `${s.narration ?? ''} And there's a deeper threat brewing — if they sit still, it runs ${render(line)}.`.trim();
+      deepBudget -= 1;
+    } catch { /* skip this ply — never block the walk on a threat probe */ }
+  }
+
   if (scope === 'mistakes') return;
 
   // #1 — plan realization from the plan's critical position. In uncapped mode
