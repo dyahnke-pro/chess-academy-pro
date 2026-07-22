@@ -443,5 +443,13 @@ export function formatTacticsSubBlock(tactics: TacticsLiveContext): string {
   lines.push(
     `    NAME the pattern in prose (fork / pin / skewer / back rank / removal of guard / overloaded / discovered attack / etc.). For depth ≥ 2, walk the line: "if you play X, opponent has Y in N." NEVER invent a tactic that isn't in this block. NEVER claim a tactic at greater depth than ${tactics.lookaheadDepth}. The student is intermediate-or-stronger if lookahead ≥ 3 — push them to calculate the full sequence.`,
   );
+  // THE COACH'S DNA — identify → recognize → prevent (David 2026-07-22:
+  // "These three principles need to be at the heart of everything the coach
+  // says"). Every tactic/threat TAUGHT from this block follows the trio,
+  // and every clause stays inside the computed facts above — the trio is a
+  // teaching SHAPE, never a license to invent board content.
+  lines.push(
+    `    TEACHING SHAPE (the coach's spine — apply to every tactic/threat you teach from this block): (1) IDENTIFY — name the pattern and its squares, from this block only; (2) RECOGNIZE — teach the geometry that made it possible so the student can spot it a move early (the two targets a knight's-hop from one square; the loose piece inviting tactics; the king's flight-square count; the overloaded defender) — using ONLY pieces/squares listed in the facts above; (3) PREVENT — the concrete defense or exploiting move, ONLY when a grounded block supplies it (a listed threat line, the engine plan, the stored best move). If no grounded defense exists in the context, teach the recognition and stop — never invent the answer.`,
+  );
   return lines.join('\n');
 }

@@ -60,6 +60,7 @@ import { FindSquarePage } from './components/Tactics/FindSquarePage';
 import { AnalysisPracticePage } from './components/Tactics/AnalysisPracticePage';
 import { CalculationDrillPage } from './components/Tactics/CalculationDrillPage';
 import { TacticalProfilePage } from './components/Tactics/TacticalProfilePage';
+import { PatternSchoolPage } from './components/Tactics/PatternSchoolPage';
 import { TacticDrillPage } from './components/Tactics/TacticDrillPage';
 import { TacticSetupPage } from './components/Tactics/TacticSetupPage';
 import { TacticCreatePage } from './components/Tactics/TacticCreatePage';
@@ -402,6 +403,7 @@ export function App(): JSX.Element {
           {/* Tactics (absorbs former Puzzles tab) */}
           <Route path="/tactics" element={<ErrorBoundary><TacticsPage /></ErrorBoundary>} />
           <Route path="/tactics/profile" element={<ErrorBoundary><TacticalProfilePage /></ErrorBoundary>} />
+          <Route path="/tactics/patterns" element={<ErrorBoundary><PatternSchoolPage /></ErrorBoundary>} />
           <Route path="/tactics/drill" element={<ErrorBoundary><TacticDrillPage /></ErrorBoundary>} />
           <Route path="/tactics/setup" element={<ErrorBoundary><TacticSetupPage /></ErrorBoundary>} />
           <Route path="/tactics/create" element={<ErrorBoundary><TacticCreatePage /></ErrorBoundary>} />

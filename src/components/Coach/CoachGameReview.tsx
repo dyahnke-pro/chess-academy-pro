@@ -1014,11 +1014,32 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     const seg = walkNarration.segments.find((s) => s.ply === ply);
     if (seg && seg.narration && !narratedPliesRef.current.has(ply)) {
       narratedPliesRef.current.add(ply);
+      // Which computed narration PASSES fired on this ply — the durable
+      // statistical grounding for "engine lines are narrated as threats /
+      // plans / punishments" (David 2026-07-22: "Do we have grounding
+      // statistical data for this claim?"). Queryable in PostHog as
+      // review_narration.passes across all real reviews.
+      const PASS_MARKERS: Array<[string, RegExp]> = [
+        ['threat-static-student', /you're now threatening/],
+        ['threat-opp-identify', /their move threatens/],
+        ['threat-recognition', /knight's-hop|standing invitation|flight square/],
+        ['threat-prevention', /The answer:/],
+        ['engine-confirm', /The engine confirms it/],
+        ['engine-replace', /real threat here, per the engine/],
+        ['deep-threat-student', /deeper threat brewing/],
+        ['deep-threat-opp', /Watch what they're building/],
+        ['better-line-why', /was better — the line runs/],
+        ['punishment', /how it gets punished/],
+        ['plan-line', /the plan runs/],
+        ['consequence', /Follow it up and it goes/],
+      ];
+      const passes = PASS_MARKERS.filter(([, re]) => re.test(seg.narration ?? '')).map(([k]) => k);
       captureEvent('review_narration', {
         game_id: props.gameId, ply, move: seg.san,
         source: seg.narrationSource ?? 'unknown',
         classification: seg.classification, chars: seg.narration.length,
         text: seg.narration.slice(0, 280),
+        passes,
       });
     }
     if (!reviewCompletedRef.current && moves.length > 0 && ply >= moves.length) {

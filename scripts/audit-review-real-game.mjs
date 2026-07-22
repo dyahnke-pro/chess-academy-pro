@@ -34,7 +34,7 @@ const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.ap
 // narration unification. Student = White (Morphy).
 const GID = process.env.AUDIT_GID || 'audit-opera-game';
 const PGN = process.env.AUDIT_PGN || '1. e4 e5 2. Nf3 d6 3. d4 Bg4 4. dxe5 Bxf3 5. Qxf3 dxe5 6. Bc4 Nf6 7. Qb3 Qe7 8. Nc3 c6 9. Bg5 b5 10. Nxb5 cxb5 11. Bxb5+ Nbd7 12. O-O-O Rd8 13. Rxd7 Rxd7 14. Rd1 Qe6 15. Bxd7+ Nxd7 16. Qb8+ Nxb8 17. Rd8# 1-0';
-const SANS = PGN.replace(/\d+\.\s*/g, '').replace(/\s*1-0\s*$/, '').trim().split(/\s+/);
+const SANS = PGN.replace(/\d+\.\s*/g, '').replace(/\s*(1-0|0-1|1\/2-1\/2|\*)\s*$/, '').trim().split(/\s+/);
 
 const log = (s) => console.log(s);
 const txt = async (p, sel) => { try { const l = p.locator(sel).first(); return (await l.count()) ? (await l.innerText()).replace(/\s+/g, ' ').trim() : ''; } catch { return ''; } };
@@ -390,8 +390,10 @@ const run = async () => {
     : (saysLoss && !saysDraw && !saysWin);
   add('RES result-correct', resOk, `expected=${expected} intro="${introLine.slice(0, 70)}" win=${saysWin} loss=${saysLoss} draw=${saysDraw}`);
 
-  // R2 — own-side opening why-density >= 80% (student = White = ODD plies, 1..15).
-  const studentOpening = plies.filter((p) => p.ply >= 1 && p.ply <= 15 && p.ply % 2 === 1);
+  // R2 — own-side opening why-density >= 80% (student parity from AUDIT_STUDENT:
+  // white = odd plies, black = even plies, 1..15/16).
+  const studentParity = STUDENT_SIDE === 'white' ? 1 : 0;
+  const studentOpening = plies.filter((p) => p.ply >= 1 && p.ply <= 16 && p.ply % 2 === studentParity);
   const withWhy = studentOpening.filter((p) => p.narr && p.narr.length > 3);
   const density = studentOpening.length ? withWhy.length / studentOpening.length : 0;
   add('R2 why-density>=80%', density >= 0.8, `${withWhy.length}/${studentOpening.length} = ${(density * 100).toFixed(0)}%`);
@@ -488,7 +490,7 @@ const run = async () => {
   // Board-truth, game-agnostic: detect it from the move list.
   let queenSacPly = null;
   for (let i = 0; i < SANS.length - 1; i++) {
-    if (i % 2 !== 0) continue;                 // student = White = even index (odd ply)
+    if (i % 2 !== (STUDENT_SIDE === 'white' ? 0 : 1)) continue; // student moves by AUDIT_STUDENT parity
     if (!/^Q/.test(SANS[i])) continue;         // a student queen move
     const toSq = SANS[i].replace(/[+#]/g, '').slice(-2);
     const next = SANS[i + 1].replace(/[+#]/g, '');

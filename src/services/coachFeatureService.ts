@@ -1844,7 +1844,11 @@ async function augmentWithProjections(
       parts[1] = studentColorWB;
       parts[3] = '-';
       const nullFen = parts.join(' ');
-      const line = await raceTimeout(computePvLine(nullFen, { maxPlies: 7 }), PROJ_TIMEOUT_MS, null);
+      // maxPlies 9 = FIVE of the student's moves out (plies 1,3,5,7,9) — the
+      // honest ceiling at depth-14 analysis, still terminal-re-verified. One
+      // move belongs to the static call-out; 2-5 moves belong here (David
+      // 2026-07-22: "threats called out 3+ moves in advance").
+      const line = await raceTimeout(computePvLine(nullFen, { maxPlies: 9 }), PROJ_TIMEOUT_MS, null);
       if (!line || line.plies.length < 3) continue; // one-movers belong to the static call-out
       const terminal = line.terminalEvalCp ?? line.rootEvalCp;
       const studentPovTerminal = studentColorWB === 'w' ? terminal : -terminal;
@@ -1855,6 +1859,57 @@ async function augmentWithProjections(
       if (!matesOut && !decisiveJump) continue;
       s.narration = `${s.narration ?? ''} And there's a deeper threat brewing — if they sit still, it runs ${render(line)}.`.trim();
       deepBudget -= 1;
+    } catch { /* skip this ply — never block the walk on a threat probe */ }
+  }
+
+  // #5c — THE DEEP THREAT AGAINST THE STUDENT (David 2026-07-22: "threats
+  // are called out 3+ moves in advance. Both for and against the user").
+  // The one-move opponent call-out (identify→recognize→prevent) lives in
+  // the per-ply loop; here the ENGINE reads the opponent's DEEP idea: from
+  // the position after an opponent move, give the OPPONENT the move again
+  // and read the line — if, with the student sitting still, it mates or
+  // swings decisively toward the opponent (≥250cp) within ≤9 plies (2-5 of
+  // the opponent's moves), that is the brewing danger — narrated ply-by-ply
+  // through the same render machinery, closed with the DEFENSE from the
+  // stored analysis (the student's next best move — in the package, no
+  // fresh search, G0).
+  let deepOppBudget = scope === 'full' ? 3 : 2;
+  const oppWB: 'w' | 'b' = studentColorWB === 'w' ? 'b' : 'w';
+  for (let i = 0; i < segments.length; i++) {
+    const s = segments[i];
+    if (deepOppBudget <= 0) break;
+    if (s.playerColor === studentColorName) continue;
+    // Probe the opponent's STRONG moves — that's where a deep idea lives
+    // (mirrors #5's gate; also bounds the engine-probe count per review).
+    if (s.classification !== 'good' && s.classification !== 'great' && s.classification !== 'brilliant') continue;
+    try {
+      const parts = s.fenAfter.split(' ');
+      if (parts[1] === oppWB) continue; // already the opponent's turn — not a null read
+      const probe = new Chess(s.fenAfter);
+      if (probe.inCheck()) continue;
+      parts[1] = oppWB;
+      parts[3] = '-';
+      const nullFen = parts.join(' ');
+      const line = await raceTimeout(computePvLine(nullFen, { maxPlies: 9 }), PROJ_TIMEOUT_MS, null);
+      if (!line || line.plies.length < 3) continue; // one-movers belong to the static opponent call-out
+      // Don't re-narrate the same move the one-move call-out already named.
+      const stripGl = (x: string): string => x.replace(/[+#!?]+$/, '');
+      const immediate = /threatens ([A-Za-z0-9+#=-]+):/.exec(s.narration ?? '')?.[1];
+      if (immediate && stripGl(line.plies[0].san) === stripGl(immediate)) continue;
+      const terminal = line.terminalEvalCp ?? line.rootEvalCp;
+      const oppPovTerminal = oppWB === 'w' ? terminal : -terminal;
+      const oppPovNow = s.evalAfter !== null ? (oppWB === 'w' ? s.evalAfter : -s.evalAfter) : null;
+      const lastPly = line.plies[line.plies.length - 1];
+      const matesOut = lastPly.facts.isMate;
+      const decisiveJump = oppPovNow !== null && oppPovTerminal - oppPovNow >= 250;
+      if (!matesOut && !decisiveJump) continue;
+      let callOut = `Watch what they're building — left alone, their idea runs ${render(line)}.`;
+      const next = segments[i + 1];
+      if (next && next.playerColor === studentColorName && next.bestMoveSan) {
+        callOut += ` Your defense starts with ${next.bestMoveSan}.`;
+      }
+      s.narration = `${s.narration ?? ''} ${callOut}`.trim();
+      deepOppBudget -= 1;
     } catch { /* skip this ply — never block the walk on a threat probe */ }
   }
 
