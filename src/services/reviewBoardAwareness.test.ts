@@ -4,7 +4,7 @@
 // caught, on a constructed legal board — so the fix can't silently regress.
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { describeMoveGeometry, assembleMovePurpose } from './groundedAnswer';
+import { describeMoveGeometry, assembleMovePurpose, seatPieceReferences } from './groundedAnswer';
 import { buildTrapQuestion } from './reviewTrapQuestion';
 import { buildGuidedFindChallenge } from './guidedFindTheMove';
 
@@ -60,6 +60,22 @@ describe('buildTrapQuestion — a piece defended only by a PINNED piece is not p
     } else {
       expect(q).toBeNull();
     }
+  });
+});
+
+describe('seatPieceReferences — no double possessive on an adjective-carrying phrase (preview line-read)', () => {
+  // c2 white passed pawn, a7 black weak pawn, e4 a bare white pawn.
+  const fen = '4k3/p7/8/8/4P3/8/2P5/4K3 w - - 0 1';
+  it('leaves "your passed pawn on c2" alone (no "your passed your pawn")', () => {
+    expect(seatPieceReferences('your passed pawn on c2 is a trump', fen, 'w'))
+      .not.toMatch(/your passed your pawn/);
+  });
+  it('leaves "their weak pawn on a7" alone', () => {
+    expect(seatPieceReferences('win their weak pawn on a7', fen, 'w'))
+      .not.toMatch(/their weak their pawn/);
+  });
+  it('still stamps a bare "the pawn on e4"', () => {
+    expect(seatPieceReferences('the pawn on e4 is loose', fen, 'w')).toMatch(/your pawn on e4/);
   });
 });
 

@@ -3251,19 +3251,30 @@ export function seatPieceReferences(
   try {
     const board = new Chess(fen);
     const WANT: Record<string, string> = { knight: 'n', bishop: 'b', rook: 'r', queen: 'q', pawn: 'p', king: 'k' };
+    // Structural adjectives the composed facets place BETWEEN a possessive and
+    // the piece noun ("your PASSED pawn", "their WEAK pawn"). Captured as part of
+    // the lead so a possessive already present isn't re-stamped into a
+    // double-possessive — "your passed YOUR pawn on c2" (preview line-read,
+    // 2026-07-22).
+    const ADJ = 'passed|weak|isolated|doubled|backward|extra|lone|bad|connected|protected|central|advanced|remaining|outside';
     return text.replace(
-      /(\b[Yy]our opponent's\s+|\b[Yy]our\s+|\b[Tt]heir\s+|\b[Tt]he\s+)?\b(Knight|Bishop|Rook|Queen|Pawn|King|knight|bishop|rook|queen|pawn|king)\s+on\s+([a-h][1-8])\b/g,
-      (whole, lead: string | undefined, piece: string, sq: string) => {
+      new RegExp(
+        `(\\b[Yy]our opponent's\\s+|\\b[Yy]our\\s+|\\b[Tt]heir\\s+|\\b[Tt]he\\s+)?((?:${ADJ})\\s+)?\\b(Knight|Bishop|Rook|Queen|Pawn|King|knight|bishop|rook|queen|pawn|king)\\s+on\\s+([a-h][1-8])\\b`,
+        'g',
+      ),
+      (whole, lead: string | undefined, adj: string | undefined, piece: string, sq: string) => {
         const leadLower = (lead ?? '').toLowerCase();
-        // Already seated — leave the author's possessive alone.
+        // Already seated — leave the author's possessive (and any adjective it
+        // introduced) alone.
         if (leadLower.startsWith('your') || leadLower.startsWith('their')) return whole;
         const cell = board.get(sq as Square);
         if (!cell || cell.type !== WANT[piece.toLowerCase()]) return whole;
         const owner = cell.color === studentColorWB ? 'your' : 'their';
-        const firstChar = (lead && lead.length > 0 ? lead : piece).charAt(0);
+        const firstChar = (lead && lead.length > 0 ? lead : (adj && adj.length > 0 ? adj : piece)).charAt(0);
         const sentenceStart = firstChar === firstChar.toUpperCase();
         const ownerWord = sentenceStart ? cap(owner) : owner;
-        return `${ownerWord} ${piece.toLowerCase()} on ${sq}`;
+        // Preserve a bare adjective (rare "the passed pawn" form) after the owner.
+        return `${ownerWord} ${adj ? adj.toLowerCase() : ''}${piece.toLowerCase()} on ${sq}`;
       },
     );
   } catch {
@@ -3334,7 +3345,7 @@ export function detectNewThreat(
         if (!played) continue;
         // Mate-in-one: the highest-ranked threat, always safe to name.
         if (sim.isCheckmate()) {
-          best = { san: mv.san, detail: 'checkmate', kind: 'mate', landing: played.to, targets: [], guards: guardsOf(sim, played.to), rank: 1000 };
+          best = { san: mv.san, detail: 'delivers checkmate', kind: 'mate', landing: played.to, targets: [], guards: guardsOf(sim, played.to), rank: 1000 };
           break;
         }
         // Safe royal fork from the landing square (king + major, or two majors),
