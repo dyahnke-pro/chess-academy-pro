@@ -665,10 +665,22 @@ export function explainBestMoveGrounded(
           }
         }
         if (worst) {
-          const punisher = mc === 'w' ? 'Black' : 'White';
-          let givesCheck = false;
-          try { const after = new Chess(c.fen()); after.move(worst.san); givesCheck = after.inCheck(); } catch { /* keep false */ }
-          costClause = `your move let ${punisher} play ${worst.san}, winning the ${REVIEW_PIECE_NAME[worst.piece]}${givesCheck ? ' with check' : ''}`;
+          // SEE is BLIND past its own square — it cannot see a fork landing
+          // ELSEWHERE on the reply. David 2026-07-21 (Berlin, "let White take
+          // on e5 and pick up a pawn for nothing"): taking e5 walked into a
+          // king-rook fork, so the "wins the pawn" story was FALSE even though
+          // SEE-on-e5 was positive. Simulate the capture and scan the mover's
+          // replies for a refuting counter-tactic (a safe fork on two majors,
+          // or a capture regaining at least the lost material). If one exists,
+          // the capture is NOT a clean win — say nothing rather than a wrong
+          // story (empty > invented); the eval swing + best move still speak.
+          const refuted = captureHasCounterTactic(c.fen(), worst.san, mc, worst.gain);
+          if (!refuted) {
+            const punisher = mc === 'w' ? 'Black' : 'White';
+            let givesCheck = false;
+            try { const after = new Chess(c.fen()); after.move(worst.san); givesCheck = after.inCheck(); } catch { /* keep false */ }
+            costClause = `your move let ${punisher} play ${worst.san}, winning the ${REVIEW_PIECE_NAME[worst.piece]}${givesCheck ? ' with check' : ''}`;
+          }
         }
       }
     } catch { /* board fact unavailable — stay silent */ }
@@ -678,6 +690,64 @@ export function explainBestMoveGrounded(
   if (bestClause) return `${cap(bestClause)}.`;
   if (costClause) return `${cap(costClause)}.`;
   return null;
+}
+
+/**
+ * captureHasCounterTactic — does the side that just "lost" material to the
+ * given capture have an immediate tactical reply that refutes the win? Checks
+ * two board-provable resources after simulating the capture:
+ *   • a SAFE FORK: a reply attacking the enemy king plus a rook/queen (or any
+ *     two pieces worth ≥5) from a square the opponent cannot favorably take;
+ *   • a REGAIN: a reply capturing material whose static exchange nets at
+ *     least what was lost.
+ * Used to keep SEE-based "wins the pawn" claims honest — SEE cannot see a
+ * fork that lands on a DIFFERENT square one move later.
+ */
+function captureHasCounterTactic(
+  fenAfterPlayed: string,
+  captureSan: string,
+  moverColor: 'w' | 'b',
+  lostValue: number,
+): boolean {
+  try {
+    const c = new Chess(fenAfterPlayed);
+    if (!c.move(captureSan)) return false;
+    // It's now the original mover's turn — scan their replies.
+    const enemy: 'w' | 'b' = moverColor === 'w' ? 'b' : 'w';
+    for (const reply of c.moves({ verbose: true })) {
+      // REGAIN: a capture that nets back at least what was lost.
+      if (reply.captured) {
+        const net = seeGain(c, reply.to);
+        if (net >= lostValue) return true;
+      }
+      // SAFE FORK: after the reply, the moved piece attacks the enemy king
+      // AND a rook or queen (or two pieces worth ≥5), and cannot be taken
+      // with profit on its new square.
+      const sim = new Chess(c.fen());
+      let mv: ReturnType<Chess['move']> | null = null;
+      try { mv = sim.move(reply.san); } catch { continue; }
+      if (!mv) continue;
+      let majors = 0;
+      let hitsKing = false;
+      for (const row of sim.board()) {
+        for (const cell of row) {
+          if (!cell || cell.color !== enemy) continue;
+          if (cell.type !== 'k' && cell.type !== 'q' && cell.type !== 'r') continue;
+          const attackedByMoved = sim.attackers(cell.square as Square, moverColor).includes(mv.to as Square);
+          if (!attackedByMoved) continue;
+          if (cell.type === 'k') hitsKing = true;
+          else majors += 1;
+        }
+      }
+      if ((hitsKing && majors >= 1) || majors >= 2) {
+        const punishNet = seeGain(sim, mv.to as Square); // opponent's best take-back on the fork square
+        if (punishNet <= 0) return true;
+      }
+    }
+    return false;
+  } catch {
+    return false;
+  }
 }
 
 /** Ray-walk from a slider's square to find a PIN it creates: the first enemy

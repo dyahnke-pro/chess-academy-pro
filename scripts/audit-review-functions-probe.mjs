@@ -160,6 +160,11 @@ const run = async () => {
   try {
     await page.goto(`${BASE}/settings`, { waitUntil: 'domcontentloaded', timeout: 30000 });
     await page.waitForTimeout(2500);
+    // The toggle lives in Coach tab → "Gameplay Coaching" modal row.
+    await page.locator('button:has-text("Coach")').first().click({ timeout: 2500 }).catch(() => {});
+    await page.waitForTimeout(800);
+    await page.locator('[data-testid="gameplay-coaching-row"]').first().click({ timeout: 2500 }).catch(() => {});
+    await page.waitForTimeout(800);
     const tgl = page.locator('[data-testid="review-full-detail-toggle"]').first();
     if (await tgl.count()) {
       await tgl.scrollIntoViewIfNeeded().catch(() => {});
@@ -168,6 +173,10 @@ const run = async () => {
       await page.waitForTimeout(1200);
       await page.reload({ waitUntil: 'domcontentloaded' });
       await page.waitForTimeout(2500);
+      await page.locator('button:has-text("Coach")').first().click({ timeout: 2500 }).catch(() => {});
+      await page.waitForTimeout(800);
+      await page.locator('[data-testid="gameplay-coaching-row"]').first().click({ timeout: 2500 }).catch(() => {});
+      await page.waitForTimeout(800);
       const after = await page.locator('[data-testid="review-full-detail-toggle"]').first().isChecked().catch(() => null);
       const flipped = before !== null && after !== null && before !== after;
       // restore the original state so the probe is idempotent

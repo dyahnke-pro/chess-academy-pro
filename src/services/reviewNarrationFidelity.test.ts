@@ -112,3 +112,26 @@ describe('royalDefenderTarget names every royal guard', () => {
     expect(t).toMatch(/guarded only by the king and queen/);
   });
 });
+
+describe('explainBestMoveGrounded — SEE claims verified against counter-tactics', () => {
+  // David 2026-07-21 (Berlin review): "let White take on e5 and pick up a pawn
+  // for nothing" — but taking e5 walked into a king-rook fork. SEE-on-e5 is
+  // positive yet the win is refuted one move later; the claim must not ship.
+  // Position: Black plays quiet ...a6; White CAN take dxe5 (SEE +1), but then
+  // ...Nc2+ forks Ke1 and Ra1 from an untouchable square.
+  const FEN_FORK = '6k1/p6p/8/4p3/1n1P4/8/P6P/R3K3 b - - 0 1';
+  // Control: same position WITHOUT the b4 knight — dxe5 really is free.
+  const FEN_FREE = '6k1/p6p/8/4p3/3P4/8/P6P/R3K3 b - - 0 1';
+
+  it('suppresses the "wins the pawn" claim when the capture walks into a royal fork', async () => {
+    const { explainBestMoveGrounded } = await import('./groundedAnswer');
+    const why = explainBestMoveGrounded(FEN_FORK, 'a6', 'b4c2', 'black');
+    expect(why ?? '').not.toContain('dxe5');
+  });
+
+  it('still names a genuinely free capture when no counter-tactic exists', async () => {
+    const { explainBestMoveGrounded } = await import('./groundedAnswer');
+    const why = explainBestMoveGrounded(FEN_FREE, 'a6', 'a7a5', 'black');
+    expect(why ?? '').toContain('dxe5');
+  });
+});

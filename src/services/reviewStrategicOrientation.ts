@@ -82,10 +82,14 @@ function fianchettoDiagonalTarget(square: string): string | null {
   }
 }
 
+/** Home squares for the bishops — a bishop still standing here is undeveloped. */
+const BISHOP_HOMES = new Set(['c1', 'f1', 'c8', 'f8']);
+
 interface SideDev {
   hasCentre: boolean;
   fianchettoSquare: string | null;
   undevelopedKnights: string[];
+  undevelopedBishops: string[];
   castled: boolean;
 }
 
@@ -95,9 +99,10 @@ function assessDevelopment(all: Located[], color: 'w' | 'b'): SideDev {
   const hasCentre = mine.some((p) => p.type === 'p' && (fileOf(p.square) === 'd' || fileOf(p.square) === 'e') && centreRanks.includes(rankOf(p.square)));
   const fianchettoSquare = mine.find((p) => p.type === 'b' && fianchettoDiagonalTarget(p.square) !== null)?.square ?? null;
   const undevelopedKnights = mine.filter((p) => p.type === 'n' && KNIGHT_HOME_TO_NATURAL[p.square] !== undefined).map((p) => p.square);
+  const undevelopedBishops = mine.filter((p) => p.type === 'b' && BISHOP_HOMES.has(p.square)).map((p) => p.square);
   const king = mine.find((p) => p.type === 'k');
   const castled = king ? (fileOf(king.square) === 'g' || fileOf(king.square) === 'c') : false;
-  return { hasCentre, fianchettoSquare, undevelopedKnights, castled };
+  return { hasCentre, fianchettoSquare, undevelopedKnights, undevelopedBishops, castled };
 }
 
 function devClause(dev: SideDev, subject: 'you' | 'your opponent'): string | null {
@@ -105,12 +110,31 @@ function devClause(dev: SideDev, subject: 'you' | 'your opponent'): string | nul
   const bits: string[] = [];
   if (dev.hasCentre) bits.push(`${verb.have} claimed the centre — develop behind it`);
   if (dev.fianchettoSquare) bits.push(`${verb.poss} fianchettoed bishop rakes the long diagonal`);
+  // NAME the pieces that still need a job — the generic "develop and castle"
+  // recipe read the same every game (David 2026-07-21, IMG_4579: "still
+  // showing generic future plans"). The knight's natural square is universal
+  // board truth (the arrows already point there — the words must name them);
+  // a home bishop is named without inventing its destination.
+  const jobs = devJobs(dev);
+  if (jobs) bits.push(jobs);
   if (!dev.castled) bits.push('get the king castled');
-  else if (dev.undevelopedKnights.length) bits.push('finish developing the minor pieces');
   if (bits.length === 0) return null;
   // Capitalise the joined clause for the leading subject.
   const joined = bits.join(', and ');
   return joined.charAt(0).toUpperCase() + joined.slice(1);
+}
+
+/** The CONCRETE development to-do list, pieces named by square. */
+function devJobs(dev: SideDev): string | null {
+  const jobs: string[] = [];
+  for (const kn of dev.undevelopedKnights.slice(0, 2)) {
+    const to = KNIGHT_HOME_TO_NATURAL[kn];
+    jobs.push(to ? `the ${kn} knight belongs on ${to}` : `the knight on ${kn} needs a square`);
+  }
+  for (const b of dev.undevelopedBishops.slice(0, 2)) {
+    jobs.push(`the ${b} bishop is still boxed in at home`);
+  }
+  return jobs.length > 0 ? jobs.join(', ') : null;
 }
 
 function devArrows(dev: SideDev, arrowColor: string): PlanArrow[] {
@@ -178,7 +202,12 @@ export function buildOpeningDevelopmentPlan(
     const lead = stems[seed % stems.length](pick);
     const next = curated.find((x) => x.trim().replace(/\.$/, '') !== pick);
     const second = next ? ` ${cap(next.trim().replace(/\.$/, ''))}.` : '';
-    return { text: `${lead}${second}`, arrows };
+    // Ground the idea in THIS position: name the pieces that still need a job
+    // (the arrows point at them — the words must name them). David 2026-07-21
+    // (IMG_4579): the curated lead alone still read as a generic recipe.
+    const jobs = devJobs(mine);
+    const jobsClause = jobs ? ` Right now: ${jobs}${mine.castled ? '' : ', then castle'}.` : '';
+    return { text: `${lead}${second}${jobsClause}`, arrows };
   }
 
   // FALLBACK: the board-computed developing plan for an uncurated opening. State

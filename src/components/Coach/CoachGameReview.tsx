@@ -2178,7 +2178,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       container.scrollTo({ top: container.scrollTop + delta, behavior: 'smooth' });
     }, 150); // after the card's mount/layout settles
     return () => window.clearTimeout(t);
-  }, [anyCardOpen]);
+    // Re-fire on EVERY card-state change, not the aggregate boolean — when one
+    // card follows another, `anyCardOpen` never transitions, so the second card
+    // (the find-shot prompt) opened below the fold as a border-sliver (David
+    // 2026-07-21, IMG_4581: "that thin purple line below the board").
+  }, [anyCardOpen, shotState, shotReveal, turningQ, trapQ, trapReveal, rewindOffer, seqState, cameoState, theoryState, principleQuizState, faucetPhase]);
 
   // ship-4: `currentMove` removed — only the deleted analysis-phase
   // board read it. Walk render uses `walkPlayback.currentSegment` and
