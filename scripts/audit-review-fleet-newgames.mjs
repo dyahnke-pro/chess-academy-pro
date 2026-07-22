@@ -86,7 +86,10 @@ async function pickGame(seed) {
     try {
       const raw = await fetchText(`${BASE}/api/lichess-game-export?id=${g.id}`);
       const legal = verifyLegal(movetextOf(raw));
-      if (!legal || legal.plyCount < 16) continue; // too short / illegal — next candidate
+      // 16..100 plies: long enough to exercise every pass, short enough for
+      // the child audit's analysis-readiness budget (a 126-ply QGD grind
+      // overran it and aborted before the walk — fleet run 1, game 3).
+      if (!legal || legal.plyCount < 16 || legal.plyCount > 100) continue;
       seen.add(g.id);
       const result = seed.want === 'draw' ? '1/2-1/2' : seed.want === 'white' ? '1-0' : '0-1';
       return { id: g.id, players: `${g.white?.name ?? '?'} vs ${g.black?.name ?? '?'}`, movetext: legal.canonical, plyCount: legal.plyCount, result };
