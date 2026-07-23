@@ -77,6 +77,13 @@ describe('seatPieceReferences — no double possessive on an adjective-carrying 
   it('still stamps a bare "the pawn on e4"', () => {
     expect(seatPieceReferences('the pawn on e4 is loose', fen, 'w')).toMatch(/your pawn on e4/);
   });
+  it('never turns an indefinite "a passed pawn on c2" into "a your passed pawn" (prod line-read)', () => {
+    // c2 is a real white pawn; the phrase is already grammatical and must not
+    // gain a possessive after the article.
+    const out = seatPieceReferences('Bxb5+ creates a passed pawn on c2', fen, 'w');
+    expect(out).not.toMatch(/a your passed pawn/);
+    expect(out).toMatch(/a passed pawn on c2/);
+  });
 });
 
 describe('buildGuidedFindChallenge — a pre-existing OPPONENT tactic is not the student move (GF-1)', () => {

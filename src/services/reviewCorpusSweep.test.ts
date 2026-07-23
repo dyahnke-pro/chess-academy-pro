@@ -18,16 +18,37 @@ import { describe, it, expect, vi } from 'vitest';
 import { Chess } from 'chess.js';
 import type { Color } from 'chess.js';
 
-// Engine mock — the deep-threat passes degrade to nothing (empty analysis), so
-// this sweep centres on the eval-INDEPENDENT board claims (does/delta/structure/
-// plan/opening/opponent/trapped/pins/forks/material), which is where the
-// board-awareness criminals live. The live-threat lines were exercised with a
-// REAL engine by audit-review-real-game.mjs.
-vi.mock('./stockfishEngine', () => ({
-  stockfishEngine: {
-    analyzePosition: vi.fn().mockResolvedValue({ evaluation: 0, bestMove: null, topLines: [] }),
-  },
-}));
+// Engine mock — returns a LEGAL short line from each position so the eval /
+// PV-dependent facets (best-line walks, deep threats, "creates a passed pawn"…)
+// actually FIRE and get scanned. The earlier version returned empty analysis,
+// which suppressed those facets — the blind spot that let "a your passed pawn"
+// hide from the sweep (prod line-read, 2026-07-23). The moves are real board
+// moves (chess.js), not a real ENGINE's choice, which is fine: this sweep tests
+// board-truth of the PROSE, not move quality.
+vi.mock('./stockfishEngine', async () => {
+  const { Chess } = await import('chess.js');
+  const legalLine = (fen: string, plies: number): string[] => {
+    const uci: string[] = [];
+    let c: InstanceType<typeof Chess>;
+    try { c = new Chess(fen); } catch { return uci; }
+    for (let i = 0; i < plies; i++) {
+      const ms = c.moves({ verbose: true });
+      if (!ms.length) break;
+      const m = ms[i % ms.length]; // deterministic (no Math.random — banned)
+      uci.push(`${m.from}${m.to}${m.promotion ?? ''}`);
+      c.move(m.san);
+    }
+    return uci;
+  };
+  return {
+    stockfishEngine: {
+      analyzePosition: vi.fn(async (fen: string) => {
+        const line = legalLine(fen, 6);
+        return { evaluation: 0, bestMove: line[0] ?? null, topLines: line.length ? [{ moves: line, evaluation: 0 }] : [] };
+      }),
+    },
+  };
+});
 
 import { generateReviewNarration } from './coachFeatureService';
 import type { ReviewMoveInput } from './coachFeatureService';
@@ -73,6 +94,11 @@ function scanLine(line: string, fenAfter: string, studentWB: Color, ctx: Omit<Vi
   if (/\[[a-z0-9-]+\]/i.test(line)) add('tag-leak', (line.match(/\[[a-z0-9-]+\]/i) ?? [''])[0]);
   const dbl = new RegExp(`\\b(your|their)\\s+\\w+\\s+(your|their)\\s+(?:${PIECE_WORDS})\\b`, 'i').exec(line);
   if (dbl) add('double-possessive', dbl[0]);
+  // Article + possessive is also broken English ("a your passed pawn on c2") —
+  // the variant the seat-stamper produced after an indefinite article
+  // (prod line-read, 2026-07-23).
+  const artPoss = /\b(a|an|the)\s+(your|their)\b/i.exec(line);
+  if (artPoss) add('double-possessive', artPoss[0]);
   const mate = /eval bar[^.]*?\b(\d{3,})(\.\d)?\b/i.exec(line);
   if (mate) add('mate-as-pawns', mate[0]);
   // Durability overclaims — any absolute permanence claim the detectors can't
@@ -143,8 +169,11 @@ for (const g of games) {
 // A 24-game slice fits the test budget; SWEEP_SHARD walks other slices so the
 // whole corpus can be confirmed across a few runs (the committed gate is
 // shard 0; broader shards are a one-time breadth confirmation).
+// 8 games with the PV/best-line facets FIRING (the pvPlayback path where
+// "a your passed pawn" hid) fits the test budget; SWEEP_SHARD walks other
+// slices for a broader one-time pass.
 const SHARD = Number(process.env.SWEEP_SHARD ?? 0);
-const SIZE = 24;
+const SIZE = 8;
 const sample = candidates.slice(SHARD * SIZE, SHARD * SIZE + SIZE);
 
 function synthMoves(sans: string[]): ReviewMoveInput[] {
@@ -152,6 +181,20 @@ function synthMoves(sans: string[]): ReviewMoveInput[] {
   const out: ReviewMoveInput[] = [];
   let prevEval = 20;
   sans.forEach((san, i) => {
+    const fenBefore = c.fen();
+    // Every 4th ply is marked a synthetic mistake WITH a real legal best-move
+    // (≠ the played move), so the best-line facets — explainBestMoveGrounded /
+    // describeMoveGeometry(bestMove) / the "here's how you take advantage" walk
+    // and their seat-stamping — actually FIRE and get scanned across the corpus
+    // (the blind spot that let "a your passed pawn" hide; prod line-read 2026-07-23).
+    let bestMove: string | null = null;
+    let classification = 'good';
+    if (i % 4 === 3) {
+      try {
+        const alt = new Chess(fenBefore).moves({ verbose: true }).find((m) => m.san !== san);
+        if (alt) { bestMove = `${alt.from}${alt.to}${alt.promotion ?? ''}`; classification = 'mistake'; }
+      } catch { /* leave good */ }
+    }
     c.move(san);
     // White-POV material balance × 100 — a real, board-derived eval so the
     // [eval] attribution has an honest number to explain (no mate sentinels).
@@ -160,7 +203,7 @@ function synthMoves(sans: string[]): ReviewMoveInput[] {
     const evaluation = bal * 100;
     out.push({
       ply: i + 1, san, isCoachMove: (i + 1) % 2 === 0,
-      classification: 'good', evaluation, preMoveEval: prevEval, bestMove: null, fenAfter: c.fen(),
+      classification, evaluation, preMoveEval: prevEval, bestMove, fenAfter: c.fen(),
     } as unknown as ReviewMoveInput);
     prevEval = evaluation;
   });
@@ -169,7 +212,7 @@ function synthMoves(sans: string[]): ReviewMoveInput[] {
 
 describe('review corpus sweep — no board-untrue line hides in any path (David 2026-07-22)', () => {
   it('every emitted narration line is board-true across a diverse real-game corpus', async () => {
-    expect(sample.length).toBeGreaterThanOrEqual(20);
+    expect(sample.length).toBeGreaterThanOrEqual(6);
     const violations: Violation[] = [];
     for (const game of sample) {
       const moves = synthMoves(game.sans);
