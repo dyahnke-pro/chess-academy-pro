@@ -171,3 +171,43 @@ Start at queue #1 (criticality scan). The comparison foundation is landed and
 proven; everything hangs off the criticality scan. The anchor game + Danya
 transcript (gitignored `/tmp`, re-pull with yt-dlp + chess.com API) are the
 tuning reference. Hold `plan first → show David → build → show David`.
+
+---
+
+## ANCHOR TUNING PASS 1 — his-vs-ours on the Grand Prix game (2026-07-23)
+
+Method (David): pull his real game by chess.com username → reconstruct →
+run OUR review → compare to HIS narration. His side = the 5 distilled
+`danya-teachings.json` notes citing video `YXz0xSbhY70` (the anchor game
+`74342999351`, Dalibor6709 vs FrankfurtAirport/Danya, Grand Prix, 0-1).
+Ours = `audit-review-real-game.mjs` on the same PGN, student=Black.
+
+His 5 beats vs ours (grounded, move-by-move):
+
+| # | His beat | Ours | Verdict |
+|---|---|---|---|
+| 1 | Name the **Grand Prix Attack**; Black's ...d6/...e6 setup; **plan = ...b6/...Bb7 then ...d5/...e5 break** | "King's Pawn"→"Sicilian: Closed"; generic development; no plan | ❌ MISS |
+| 5 | move 12 **...Ba6 mistake**, ...Bb7 supports ...d5 (method of comparison) | ply 24 [INACCURACY] "stronger was Bb7… line runs Bb7,f5,exf5…" | ✅ HIT |
+| 2 | move 15 **...f4 dual-purpose** — hits e3 AND blocks kingside, gains tempo | ply 30: offense only ("wins the bishop…") | ⚠ PARTIAL |
+| 3 | endgame **prophylaxis** — ...Rc4 safer than ...Rxe4 | ply 46 [INACCURACY] flags ...Rxe4 (right moment) but offers Bc8, no prophylaxis frame | ⚠ PARTIAL |
+| 4 | the win **...Nf3+ fork** | audit capped at 60 steps → finish (55-66) uncaptured; product silence UNCONFIRMED | ⏳ RE-RUN |
+
+Cross-cutting: ours fires the deep engine readout on ~every move (12 deep
+projections / 66 plies); Danya modulates (light idea default, deep on the
+hinge). Register = engine-dump vs teacher.
+
+KNOBS (confirmed):
+1. **Opening name depth** — `detectOpening` tops out at "Sicilian: Closed"
+   for all plies; never "Grand Prix Attack". (openingDetectionService / DB)
+2. **Opening plan** — `buildOpeningDevelopmentPlan` speaks generic
+   development, not the side-specific ...d5/...e5 counter-break plan. Prod
+   path DOES pass {openingName,curatedIdeas,seed} (coachFeatureService:1451),
+   so the gap is inside the plan-builder / missing curated ideas for this
+   opening, NOT the wiring.
+3. **Dual-purpose synthesis** — pawn move that attacks AND blocks → say both + tempo.
+4. **Prophylaxis frame when ahead** — inaccuracies while winning get "consolidate first".
+5. **Selective depth** — deep projection only on the hinge; quiet moves one light line.
+6. (artifact, not product) audit walk cap was 60 → raised to 90 to capture full finish.
+
+NEXT: confirm beat 4 (re-run w/ 90 cap), then turn knobs 1+2 first (loudest
+misses), re-run anchor, re-compare. Then validate on the 9 pulled games.

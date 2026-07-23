@@ -195,7 +195,7 @@ const run = async () => {
   let stuck = 0;
   let remountRecovered = false; // one-time SW-update re-mount recovery (see below)
   log('\n===== PLY-BY-PLY WALK =====');
-  for (let step = 1; step <= 60; step++) {
+  for (let step = 1; step <= 90; step++) {
     const before = (await plyNow()).n;
     const cardsHere = await visibleCards();
     if (cardsHere.length) {
