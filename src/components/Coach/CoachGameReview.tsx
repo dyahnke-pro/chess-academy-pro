@@ -38,6 +38,7 @@ import { classifyGameTheme, type GameThemeResult } from '../../services/gameThem
 import { findRewindTarget, type RewindTarget } from '../../services/blunderRewind';
 import { buildTurningPointQuestion, judgeTurningPointPick, type TurningPointQuestion } from '../../services/reviewTurningPoint';
 import { buildOpeningTheoryLecture, buildTheoryLectureBeats, resolveOpeningIdeas, type TheoryLectureBeat } from '../../services/reviewOpeningTheory';
+import { reviewTheoryLookup } from '../../services/reviewOpeningsSource';
 import { captureEvent } from '../../services/analytics';
 import { detectMissedTactics } from '../../services/missedTacticService';
 import {
@@ -2011,7 +2012,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     const sans = moves.map((m) => m.san);
     let cancelled = false;
     const t = window.setTimeout(() => {
-      void buildOpeningTheoryLecture(reviewFens, sans, openingName ?? 'this opening')
+      void buildOpeningTheoryLecture(reviewFens, sans, openingName ?? 'this opening', { lookup: reviewTheoryLookup })
         .then((lec) => {
           if (cancelled || !lec) return;
           setTheoryBeats(buildTheoryLectureBeats(lec, resolveOpeningIdeas(openingName), playerColor));

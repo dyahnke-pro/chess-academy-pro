@@ -13,7 +13,7 @@
 // lecture; the LLM only phrases these computed facts.
 
 import { Chess } from 'chess.js';
-import type { MasterPlayResult, MasterPlayMove } from './masterPlayTypes';
+import type { MasterPlayResult, MasterPlayMove, MasterPlayTopGame } from './masterPlayTypes';
 import { lookupMasterPlay } from './masterPlayLookup';
 import { walkBookLine } from './theoryDeparture';
 import { detectOpeningTranspositional } from './openingDetectionService';
@@ -67,6 +67,10 @@ export interface TheoryBranch {
   mainlineDive: Array<{ san: string; fenAfter: string; why: string | null }>;
   /** The position after the mainline move — the FEN the dive starts from. */
   diveFromFen: string | null;
+  /** Master games that reached THIS position — Danya's "Carlsen had this against
+   *  Yangyi." From the lookup's topGames (rich sidecar / live), empty when the
+   *  source has none. */
+  topGames: MasterPlayTopGame[];
 }
 
 export interface OpeningTheoryLecture {
@@ -214,6 +218,7 @@ export async function buildOpeningTheoryLecture(
         mainlineName,
         mainlineDive: [],
         diveFromFen: null,
+        topGames: res.topGames ? [...res.topGames] : [],
       });
     }
 
@@ -261,13 +266,15 @@ export async function buildOpeningTheoryLecture(
   }
 
   if (branches.length === 0) return null;
-  // "The backbone of N master games" must be the count at THIS OPENING's
-  // DEFINING position — not the whole DB (move 1 = millions) and not the
-  // thin departure tail. Danya cites the count where the opening is still
-  // itself ("Bishop B5… over a thousand games"). Use the DEEPEST still-in-book
-  // branch: the size of the theory at the point the game finally left it.
+  // "The backbone of N master games" is the count at THIS OPENING's NAMING
+  // position — Danya's "over a thousand games." NOT the whole DB (plies 1-2 =
+  // startpos/e4 mega-counts), NOT the broad parent (the Nc3 Sicilian is ~600k
+  // before it's a Grand Prix), and NOT the thin deep tail (a move-9 position may
+  // have only tens). Use the branch where the game first reaches its OWN named
+  // opening; fall back to the deepest still-in-book position.
+  const namingBranch = branches.find((b) => b.variationName === openingName);
   const deepestInBook = [...branches].reverse().find((b) => !b.leftBook);
-  startGames = (deepestInBook ?? branches[0]).totalGames;
+  startGames = (namingBranch ?? deepestInBook ?? branches[0]).totalGames;
   return { openingName, branches, departurePly, startGames };
 }
 
@@ -341,6 +348,25 @@ function lineCompareClause(
 
 function pct(x: number): string {
   return `${Math.round(x * 100)}%`;
+}
+
+/** A model-game citation — Danya's "Carlsen had this against Yangyi." Prefers a
+ *  game the STUDENT's side WON (the instructive "here's how your side plays it"),
+ *  else the highest-profile game. Names + year are real (topGames from the DB /
+ *  live). Empty when the source carries no games. Depersonalized: names the
+ *  players (public record), never "he/his". */
+function modelGameClause(
+  topGames: MasterPlayTopGame[],
+  studentColor: 'white' | 'black' | undefined,
+): string {
+  const named = topGames.filter((g) => g.white && g.black);
+  if (named.length === 0) return '';
+  const studentWon = (g: MasterPlayTopGame): boolean =>
+    (studentColor === 'white' && g.result === '1-0') || (studentColor === 'black' && g.result === '0-1');
+  const pick = named.find(studentWon) ?? named[0];
+  const yr = pick.year ? `, ${pick.year}` : '';
+  const outcome = pick.result === '1-0' ? ' (a White win)' : pick.result === '0-1' ? ' (a Black win)' : '';
+  return ` This exact position was reached in ${pick.white}–${pick.black}${yr}${outcome}.`;
 }
 
 /** The grounded WHY of a move — what it DOES on the board (bears on a centre
@@ -448,6 +474,16 @@ export function buildTheoryLectureBeats(
     return ` ${w}`;
   };
 
+  // C4/G4 — cite ONE model game (Danya's "Carlsen had this against Yangyi"), on
+  // the first branch that carries games. Once per lecture so it stays a highlight.
+  let citedModel = false;
+  const modelClause = (b: TheoryBranch): string => {
+    if (citedModel) return '';
+    const c = modelGameClause(b.topGames, studentColor);
+    if (c) citedModel = true;
+    return c;
+  };
+
   // G2 — FAST-FORWARD the obvious, STOP at the distinctive. Danya rattles the
   // well-known opening moves ("G6, Bishop G7, Knight F3, Knight C6…") and stops
   // only at the branches that MATTER: a deviation from the main line, a real
@@ -525,7 +561,7 @@ export function buildTheoryLectureBeats(
         moveNumber: b.moveNumber,
         moverColor: b.moverColor,
         kind: 'mainline',
-        fact: `Move ${b.moveNumber}, ${nSan} — this defines the ${lecture.openingName}.${freshWhy(b.fenBefore, nSan)}`,
+        fact: `Move ${b.moveNumber}, ${nSan} — this defines the ${lecture.openingName}.${freshWhy(b.fenBefore, nSan)}${modelClause(b)}`,
       });
       continue;
     }
@@ -562,7 +598,7 @@ export function buildTheoryLectureBeats(
         // "the main line presses a touch harder" was flavor, not data. And when a
         // dive exists, the beat WALKS the main line so the student SEES the moves
         // being compared (David 2026-07-21: "what was the main line? Show me").
-        fact: `At move ${b.moveNumber}, the main line is ${b.mainline.san} (${pct(b.mainline.pct)}${scoreClause(b.mainline)}).${whySentence} This game took ${b.played.san} (${pct(b.played.pct)}) — a known sideline.${lineCompareClause(b.mainline, b.played, b.mainlineDive, studentColor && b.moverColor !== studentColor ? "your opponent's" : 'your')}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ` Let me walk you down the main line ${b.mainline.san} so you can compare.` : ''}`,
+        fact: `At move ${b.moveNumber}, the main line is ${b.mainline.san} (${pct(b.mainline.pct)}${scoreClause(b.mainline)}).${whySentence} This game took ${b.played.san} (${pct(b.played.pct)}) — a known sideline.${lineCompareClause(b.mainline, b.played, b.mainlineDive, studentColor && b.moverColor !== studentColor ? "your opponent's" : 'your')}${modelClause(b)}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ` Let me walk you down the main line ${b.mainline.san} so you can compare.` : ''}`,
         diveFromFen: b.diveFromFen ?? undefined,
         dive: b.mainlineDive.length >= 2 ? b.mainlineDive : undefined,
       });
@@ -574,7 +610,7 @@ export function buildTheoryLectureBeats(
         moveNumber: b.moveNumber,
         moverColor: b.moverColor,
         kind: 'mainline',
-        fact: `At move ${b.moveNumber}, ${b.mainline.san} is the main line for ${side} — ${pct(b.mainline.pct)} of games${scoreClause(b.mainline)}, the principled choice.${whySentence}${whyMainClause(b.mainline, b.sidelines)}${sidelineClause(b.sidelines)}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ' Let me show you where it leads.' : ''}`,
+        fact: `At move ${b.moveNumber}, ${b.mainline.san} is the main line for ${side} — ${pct(b.mainline.pct)} of games${scoreClause(b.mainline)}, the principled choice.${whySentence}${whyMainClause(b.mainline, b.sidelines)}${sidelineClause(b.sidelines)}${modelClause(b)}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ' Let me show you where it leads.' : ''}`,
         diveFromFen: b.diveFromFen ?? undefined,
         dive: b.mainlineDive.length >= 2 ? b.mainlineDive : undefined,
       });

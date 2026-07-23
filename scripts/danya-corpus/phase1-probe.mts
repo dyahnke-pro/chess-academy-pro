@@ -10,16 +10,27 @@ import type { MasterPlayResult, MasterPlayMove } from '../../src/services/master
 const dbRaw = JSON.parse(readFileSync('public/data/openings-masters-db.json', 'utf8')) as { positions: Record<string, Array<{ san: string; games: number; rating?: number; white?: number; draws?: number; black?: number }>> };
 const positions = dbRaw.positions;
 const key = (fen: string): string => fen.split(/\s+/).slice(0, 4).join(' ');
+// Rich review sidecar (W/D/L + topGames) — consulted FIRST, exactly like the app.
+const sidecar = JSON.parse(readFileSync('public/data/danya-review-openings.json', 'utf8')) as Record<string, { totalGames: number; moves: Array<{ san: string; games: number; white?: number; draws?: number; black?: number }>; topGames?: Array<{ white?: string; black?: string; year?: number; result?: string }> }>;
 
 const lookup = async (fen: string): Promise<MasterPlayResult> => {
-  const raw = positions[key(fen)] ?? [];
+  const k = key(fen);
+  const rich = sidecar[k];
+  if (rich && rich.moves.length > 0) {
+    const moves: MasterPlayMove[] = [...rich.moves].sort((a, b) => b.games - a.games).map((m) => {
+      const w = m.white ?? 0, d = m.draws ?? 0, b = m.black ?? 0, g = w + d + b || m.games;
+      return { san: m.san, games: m.games, white: w, draws: d, black: b, whitePct: g ? w / g : 0, drawPct: g ? d / g : 0, blackPct: g ? b / g : 0 };
+    });
+    return { fen: k, totalGames: rich.totalGames, moves, source: 'local', topGames: rich.topGames } as MasterPlayResult;
+  }
+  const raw = positions[k] ?? [];
   const total = raw.reduce((s, m) => s + m.games, 0);
   const moves: MasterPlayMove[] = raw.map((m) => {
     const w = m.white ?? 0, d = m.draws ?? 0, b = m.black ?? 0;
     const g = m.games || (w + d + b);
     return { san: m.san, games: m.games, white: w, draws: d, black: b, whitePct: g ? w / g : 0, drawPct: g ? d / g : 0, blackPct: g ? b / g : 0, averageRating: m.rating };
   });
-  return { fen: key(fen), totalGames: total, moves, source: total > 0 ? 'local' : 'none' } as MasterPlayResult;
+  return { fen: k, totalGames: total, moves, source: total > 0 ? 'local' : 'none' } as MasterPlayResult;
 };
 
 function movesFromPgn(pgn: string): { sans: string[]; fens: string[] } {

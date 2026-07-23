@@ -177,6 +177,29 @@ describe('buildTheoryLectureBeats — grounded playable beats', () => {
     // At least one mainline beat explains the "why it's main" from the data.
     expect(mainBeats.some((b) => /most-played and best-scoring|both counts|popular without being the top/i.test(b.fact))).toBe(true);
   });
+
+  it('cites ONE model game, preferring the student-side winner (C4/G4)', async () => {
+    const { fens, sans } = chain(['e4', 'e5', 'Nf3']);
+    const top = [
+      { white: 'Carlsen, M', black: 'Nakamura, Hi', year: 2019, result: '1-0' as const }, // White win
+      { white: 'Anand, V', black: 'Kramnik, V', year: 2008, result: '0-1' as const }, // Black win
+    ];
+    const lookup = async (fen: string): Promise<MasterPlayResult> => {
+      if (fen.startsWith('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')) return res(fen, [mv('e4', 600), mv('d4', 400)]);
+      if (fen.startsWith('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b')) return res(fen, [mv('e5', 500), mv('c5', 500)]);
+      if (fen.startsWith('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w')) {
+        return { fen, totalGames: 900, moves: [mv('Nf3', 500, 0.55), mv('Bc4', 250, 0.5), mv('Nc3', 150, 0.48)], source: 'local', topGames: top };
+      }
+      return res(fen, []);
+    };
+    const lec = await buildOpeningTheoryLecture(fens, sans, "King's Pawn", { lookup });
+    // Student is BLACK → the citation should prefer the Black-winning game.
+    const beats = buildTheoryLectureBeats(lec!, ['fight for the centre'], 'black');
+    const cites = beats.filter((b) => /position was reached in/i.test(b.fact));
+    expect(cites.length).toBe(1); // cited exactly once
+    expect(cites[0].fact).toMatch(/Anand, V–Kramnik, V/); // the Black win, not the White win
+    expect(cites[0].fact).toMatch(/Black win/);
+  });
 });
 
 describe('tabiya walk — sidelines get NARRATED dives + computed pros/cons (David 2026-07-21)', () => {
