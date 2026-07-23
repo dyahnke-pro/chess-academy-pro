@@ -28,6 +28,7 @@
 import { Chess } from 'chess.js';
 import { describeStructure } from './boardStructure';
 import { hisGroundedPlanSync } from './hisPlayLookup';
+import { mastersMovesSync, type LocalDbMove } from './masterPlayLookup';
 
 /** A plan-idea arrow. Colours: PLAN_BLUE for the student's plan, PLAN_AMBER for
  *  the opponent's — distinct from the green best-move arrow so the two never
@@ -293,47 +294,109 @@ function isCentralBreak(san: string): boolean {
  * falls through to the masters DB. Requires the his-play DB to be preloaded
  * (getHisPlayDb()); returns null if not.
  */
-export function buildHisGroundedPlanBeat(
-  fen: string,
-  studentColorWB: 'w' | 'b',
-  openingName: string | null,
-): PlanBeat | null {
-  const applyMove = (f: string, san: string): string | null => {
-    try { const c = new Chess(f); c.move(san); return c.fen(); } catch { return null; }
-  };
-  const plan = hisGroundedPlanSync(fen, applyMove, 6);
-  if (!plan || plan.side !== studentColorWB || plan.sideMoves.length === 0) return null;
+const applyMoveFen = (f: string, san: string): string | null => {
+  try { const c = new Chess(f); c.move(san); return c.fen(); } catch { return null; }
+};
 
-  const isBlack = plan.side === 'b';
+/** Render a plan beat from a side's move itinerary: depersonalized prose
+ *  (chronological order, central break flagged) + PLAN_BLUE lead-the-eye arrows
+ *  on each of that side's moves. Shared by the his-games + masters beats. */
+function renderPlanBeat(
+  fen: string,
+  side: 'w' | 'b',
+  sideMoves: string[],
+  line: string[],
+  openingName: string | null,
+  conf: string,
+  planWord: string,
+): PlanBeat {
+  const isBlack = side === 'b';
   const fmt = (san: string): string => (isBlack ? `…${san}` : san);
   const who = isBlack ? 'Black' : 'White';
-  // Keep his moves in CHRONOLOGICAL order (teaching the wrong sequence is a
-  // defect); flag the central break as the key lever without reordering.
-  const planStr = plan.sideMoves.map(fmt).join(', ');
-  const brk = plan.sideMoves.find(isCentralBreak);
+  const planStr = sideMoves.map(fmt).join(', ');
+  const brk = sideMoves.find(isCentralBreak);
   const breakNote = brk ? `, with the ${fmt(brk)} break the key lever` : '';
-  // Depersonalized (David 2026-07-23: "remove the word his") — the plan is
-  // grounded in his games internally, but the spoken text never attributes: it
-  // states the plan + a neutral confidence cue (the % is real, from the corpus).
-  const conf = plan.total >= 100
-    ? `the well-trodden plan here, scoring ${plan.leadWinPct}% in this structure`
-    : `a reliable plan in this structure (${plan.leadWinPct}%)`;
   const namePart = openingName ? `In the ${openingName}, ` : '';
-  const text = `${namePart}${who}'s plan is ${planStr}${breakNote}. It's ${conf}.`;
-
-  // Lead-the-eye: PLAN_BLUE arrow on each of HIS plan moves (replay for squares).
+  const text = `${namePart}${who}'s ${planWord} is ${planStr}${breakNote}. It's ${conf}.`;
   const arrows: PlanArrow[] = [];
   let cur = fen;
-  let curSide: 'w' | 'b' = plan.side;
-  for (const san of plan.line) {
+  let curSide: 'w' | 'b' = side;
+  for (const san of line) {
     let mv: { from: string; to: string } | null = null;
     try { const c = new Chess(cur); const r = c.move(san); mv = r; cur = c.fen(); } catch { break; }
-    if (curSide === plan.side && mv && arrows.length < 4) {
+    if (curSide === side && mv && arrows.length < 4) {
       arrows.push({ startSquare: mv.from, endSquare: mv.to, color: PLAN_BLUE });
     }
     curSide = curSide === 'w' ? 'b' : 'w';
   }
   return { text, arrows };
+}
+
+/** PRIMARY opening-plan beat — grounded in HIS OWN games (David 2026-07-23).
+ *  Null when he has no good plan for this position → caller falls to masters. */
+export function buildHisGroundedPlanBeat(
+  fen: string,
+  studentColorWB: 'w' | 'b',
+  openingName: string | null,
+): PlanBeat | null {
+  const plan = hisGroundedPlanSync(fen, applyMoveFen, 6);
+  if (!plan || plan.side !== studentColorWB || plan.sideMoves.length === 0) return null;
+  const conf = plan.total >= 100
+    ? `the well-trodden plan here, scoring ${plan.leadWinPct}% in this structure`
+    : `a reliable plan in this structure (${plan.leadWinPct}%)`;
+  return renderPlanBeat(fen, plan.side, plan.sideMoves, plan.line, openingName, conf, 'plan');
+}
+
+/** A master position needs at least this many games to teach its main line. */
+const MASTERS_PLAN_MIN_GAMES = 20;
+
+/** Score of a master move from `side`'s perspective (win% + half draw%). */
+function masterScore(m: LocalDbMove, side: 'w' | 'b'): number {
+  const num = side === 'w' ? (m.white ?? 0) + (m.draws ?? 0) / 2 : (m.black ?? 0) + (m.draws ?? 0) / 2;
+  return num / Math.max(1, m.games);
+}
+
+/** The best-scoring frequent master move (>= half the top move's games). */
+function bestMasterMove(moves: LocalDbMove[], side: 'w' | 'b'): LocalDbMove | null {
+  if (!moves.length) return null;
+  const topGames = moves[0].games;
+  const frequent = moves.filter((m) => m.games >= topGames * 0.5);
+  return frequent.reduce((a, b) => (masterScore(b, side) > masterScore(a, side) ? b : a), frequent[0]);
+}
+
+/** BACKUP opening-plan beat — the masters DB main line, used only when he has
+ *  no games in the structure (David 2026-07-23: "master DB should be the
+ *  backup"). Requires ensureMastersDbLoaded() first; null if not loaded / thin /
+ *  side mismatch. Framed as theory, not attributed. */
+export function buildMastersGroundedPlanBeat(
+  fen: string,
+  studentColorWB: 'w' | 'b',
+  openingName: string | null,
+): PlanBeat | null {
+  const side: 'w' | 'b' = fen.trim().split(/\s+/)[1] === 'b' ? 'b' : 'w';
+  if (side !== studentColorWB) return null;
+  const start = mastersMovesSync(fen);
+  if (!start) return null;
+  const total = start.reduce((s, m) => s + m.games, 0);
+  if (total < MASTERS_PLAN_MIN_GAMES) return null;
+  const line: string[] = [];
+  const sideMoves: string[] = [];
+  let cur = fen;
+  let curSide = side;
+  for (let i = 0; i < 6; i++) {
+    const mv = mastersMovesSync(cur);
+    if (!mv || mv.length === 0) break;
+    const pick = curSide === side ? (bestMasterMove(mv, side) ?? mv[0]) : mv[0];
+    line.push(pick.san);
+    if (curSide === side) sideMoves.push(pick.san);
+    const next = applyMoveFen(cur, pick.san);
+    if (!next) break;
+    cur = next;
+    curSide = curSide === 'w' ? 'b' : 'w';
+  }
+  if (sideMoves.length === 0) return null;
+  const conf = `the main line here (${total} master games)`;
+  return renderPlanBeat(fen, side, sideMoves, line, openingName, conf, 'main line');
 }
 
 // ─── MIDDLEGAME ORIENTATION (pawn majorities) ────────────────────────────────

@@ -6,8 +6,9 @@ import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhas
 import { plyFactsForMove, plyFactsClause, computePvLine, type PvLine, type PrevCaptureContext } from './pvPlayback';
 import { explainEvalByPieceQuality, lowestMinorMobility } from './pieceQuality';
 import type { Evaluate } from './moveComparison';
-import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan, buildHisGroundedPlanBeat } from './reviewStrategicOrientation';
+import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan, buildHisGroundedPlanBeat, buildMastersGroundedPlanBeat } from './reviewStrategicOrientation';
 import { getHisPlayDb } from './hisPlayLookup';
+import { ensureMastersDbLoaded } from './masterPlayLookup';
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
 import { detectOpening } from './openingDetectionService';
 import { resolveCuratedOpeningIdeas } from './reviewOpeningTheory';
@@ -1449,9 +1450,10 @@ export function buildReviewSegments(
       && m.ply <= OPENING_PLAN_MAX_PLY
       && (m.classification === null || m.classification === 'book' || m.classification === 'good')
     ) {
-      // PRIMARY: his own games (David 2026-07-23). Falls through to curated
-      // repertoire ideas, then nothing — the ungrounded generic template is gone.
+      // Grounding chain (David 2026-07-23): his games -> masters DB backup ->
+      // curated repertoire -> nothing. The ungrounded generic template is gone.
       const dev = buildHisGroundedPlanBeat(fenPair.fenBefore, studentColorWB, openingName ?? null)
+        ?? buildMastersGroundedPlanBeat(fenPair.fenBefore, studentColorWB, openingName ?? null)
         ?? buildOpeningDevelopmentPlan(fenPair.fenBefore, studentColorWB, { openingName: openingName ?? null, curatedIdeas: curatedOpeningIdeas, seed: gameSeed });
       if (dev) { narration = dev.text; planArrows = dev.arrows; openingPlanShown = true; narrationSource = 'opening-plan'; }
     }
@@ -2450,9 +2452,10 @@ export async function generateReviewNarration(params: {
     ? introTrimmed
     : defaultIntroText({ playerColor, result, openingName, mistakeCount });
 
-  // Warm the his-play DB (primary opening-plan grounding source) before the
-  // sync segment build so buildHisGroundedPlanBeat's sync lookup has data.
-  await getHisPlayDb();
+  // Warm the opening-plan grounding sources before the sync segment build:
+  // the his-play DB (primary) + the masters DB (backup). Concurrent; each
+  // degrades to null on failure so the beat just falls through.
+  await Promise.all([getHisPlayDb(), ensureMastersDbLoaded()]);
   const segments = buildReviewSegments(moves.slice(0, usableCount), playerColor, openingName, uncapped);
 
   // FUTURE-POSITION PROJECTIONS (#1 plan realization + #2 consequence projection)

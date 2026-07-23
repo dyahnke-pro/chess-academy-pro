@@ -56,7 +56,7 @@ import type { LichessExplorerResult } from '../types';
  *  Each position maps to a list of moves with at minimum `san` +
  *  `games`. Fixtures may include richer fields; we surface whatever
  *  is present and zero the rest. */
-interface LocalDbMove {
+export interface LocalDbMove {
   san: string;
   uci?: string;
   games: number;
@@ -172,6 +172,28 @@ async function getLocalDb(): Promise<LocalDb | null> {
 /** Test-only — reset the lazy-load cache. */
 export function __resetLocalDbForTests(): void {
   localDbCache = undefined;
+  localDbInflight = null;
+}
+
+/** Warm the local masters DB so mastersMovesSync can read it synchronously
+ *  during the (sync) review segment build. No-op cost after the first call. */
+export async function ensureMastersDbLoaded(): Promise<void> {
+  await getLocalDb();
+}
+
+/** Sync masters moves at a position — the review's opening-plan BACKUP source
+ *  (David 2026-07-23: "master DB should be the backup"). Returns null when the
+ *  DB isn't loaded (call ensureMastersDbLoaded first) or the position isn't in
+ *  it. Reuses the already-loaded cache — no second copy of the 37MB file. */
+export function mastersMovesSync(fen: string): LocalDbMove[] | null {
+  if (!localDbCache) return null;
+  const hit = readLocal(localDbCache, fen);
+  return hit && hit.moves.length > 0 ? hit.moves : null;
+}
+
+/** Test seam — inject a masters DB directly (node/test has no fetch). */
+export function __setLocalDbForTests(db: LocalDb | null): void {
+  localDbCache = db;
   localDbInflight = null;
 }
 
