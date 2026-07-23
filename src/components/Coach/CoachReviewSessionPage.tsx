@@ -22,7 +22,7 @@ import { Chess } from 'chess.js';
 import { CoachGameReview } from './CoachGameReview';
 import { db } from '../../db/schema';
 import { gameNeedsAnalysis, analyzeSingleGame } from '../../services/gameAnalysisService';
-import { detectOpening } from '../../services/openingDetectionService';
+import { detectOpeningTranspositional } from '../../services/openingDetectionService';
 import { useAppStore } from '../../stores/appStore';
 import { logAppAudit } from '../../services/appAuditor';
 import type {
@@ -178,7 +178,7 @@ function adaptGameRecord(
   // never named his opening — "B06" was being passed as the name, which
   // Polly reads as "B zero six"). detectOpening walks the canonical DB trie
   // over the game's actual SANs; ECO stays as the last-resort fallback.
-  const detected = detectOpening(moves.map((m) => m.san));
+  const detected = detectOpeningTranspositional(moves.map((m) => m.san));
   return {
     moves,
     keyMoments,

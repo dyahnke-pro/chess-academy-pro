@@ -147,11 +147,12 @@ describe('buildTheoryLectureBeats — grounded playable beats', () => {
     expect(dep!.fact).toMatch(/leaves mainstream theory/i);
     expect(dep!.fact).toMatch(/Nf3/);
     expect(dep!.showUci).toBe('g1f3'); // the mainline move is playable on the board
-    // every branch beat carries a real percentage (grounded); intro + the
-    // closing plan beat are prose.
-    for (const b of beats.filter((x) => x.kind !== 'intro' && x.kind !== 'outro')) {
-      expect(b.fact).toMatch(/\d+%/);
-    }
+    // DISTINCTIVE branch beats (departure / sideline / genuine-choice mainline)
+    // carry a real percentage (grounded). The obvious opening moves fold into a
+    // "standard theory" fast-forward beat that is PROSE (no stats) — Danya
+    // rattles the well-known moves without lecturing each (G2, David 2026-07-23).
+    expect(dep!.fact).toMatch(/\d+%/);
+    expect(beats.some((b) => /standard theory|standard move/i.test(b.fact))).toBe(true);
     // the lecture ends on the PLAN (Danya always lands on the middlegame idea).
     const outro = beats.find((b) => b.kind === 'outro');
     expect(outro?.fact).toMatch(/takeaway/i);
@@ -163,8 +164,11 @@ describe('buildTheoryLectureBeats — grounded playable beats', () => {
     const lookup = async (fen: string): Promise<MasterPlayResult> => {
       if (fen.startsWith('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')) return res(fen, [mv('e4', 600, 0.55), mv('d4', 400, 0.5)]);
       if (fen.startsWith('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b')) return res(fen, [mv('e5', 500, 0.4, 0.3, 0.3), mv('c5', 500, 0.42, 0.28, 0.3)]);
-      // after 1...e5: Nf3 most-played AND best white score, Bc4 a lower-scoring sideline
-      if (fen.startsWith('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w')) return res(fen, [mv('Nf3', 800, 0.56), mv('Bc4', 150, 0.5), mv('Nc3', 100, 0.48)]);
+      // after 1...e5: Nf3 most-played AND best white score, but a GENUINE choice
+      // (under the ~62% consensus threshold) so it stays a distinctive mainline
+      // beat that explains WHY it's main — an overwhelming move folds into the
+      // fast-forward instead (G2, David 2026-07-23).
+      if (fen.startsWith('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w')) return res(fen, [mv('Nf3', 500, 0.56), mv('Bc4', 300, 0.5), mv('Nc3', 250, 0.48)]);
       return res(fen, []);
     };
     const lec = await buildOpeningTheoryLecture(fens, sans, "King's Pawn", { lookup });

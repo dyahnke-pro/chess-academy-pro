@@ -16,7 +16,7 @@ import { Chess } from 'chess.js';
 import type { MasterPlayResult, MasterPlayMove } from './masterPlayTypes';
 import { lookupMasterPlay } from './masterPlayLookup';
 import { walkBookLine } from './theoryDeparture';
-import { detectOpening } from './openingDetectionService';
+import { detectOpeningTranspositional } from './openingDetectionService';
 import { buildReviewMoveTeaching } from './reviewMoveTeaching';
 import { explainTemptingCapture } from './reviewTeachingPoints';
 import repertoire from '../data/repertoire.json';
@@ -196,8 +196,8 @@ export async function buildOpeningTheoryLecture(
     // Record a branch when there's genuine choice (2+ known moves) OR the game
     // deviated (a sideline / a departure) — skip forced single-reply positions.
     if (res.moves.length >= 2 || !isMainline) {
-      const variationName = detectOpening(sans.slice(0, i + 1))?.name ?? null;
-      const mainlineName = detectOpening([...sans.slice(0, i), mainlineRaw.san])?.name ?? null;
+      const variationName = detectOpeningTranspositional(sans.slice(0, i + 1))?.name ?? null;
+      const mainlineName = detectOpeningTranspositional([...sans.slice(0, i), mainlineRaw.san])?.name ?? null;
       branches.push({
         ply: i + 1,
         moveNumber: Math.ceil((i + 1) / 2),
@@ -262,12 +262,12 @@ export async function buildOpeningTheoryLecture(
 
   if (branches.length === 0) return null;
   // "The backbone of N master games" must be the count at THIS OPENING's
-  // position, not the whole masters DB. `fens[0]`'s total is the size of the
-  // entire database (the start position) — voicing it made every lecture
-  // claim millions of games (board-awareness sweep, 2026-07-22). Use the
-  // first recorded branch's total: the games that actually reached the
-  // opening's defining position.
-  startGames = branches[0].totalGames;
+  // DEFINING position — not the whole DB (move 1 = millions) and not the
+  // thin departure tail. Danya cites the count where the opening is still
+  // itself ("Bishop B5… over a thousand games"). Use the DEEPEST still-in-book
+  // branch: the size of the theory at the point the game finally left it.
+  const deepestInBook = [...branches].reverse().find((b) => !b.leftBook);
+  startGames = (deepestInBook ?? branches[0]).totalGames;
   return { openingName, branches, departurePly, startGames };
 }
 
@@ -434,13 +434,108 @@ export function buildTheoryLectureBeats(
   const mainlineNameClause = (name: string | null): string =>
     !name || name === lastNamed ? '' : ` — the ${name}`;
 
-  for (const b of lecture.branches) {
+  // G5 — a WHY sentence is spoken at most ONCE across the lecture. The same
+  // developing move recurs ("the knight bears down on d4 and e5" on Nc3, Nf3,
+  // Nc6); repeating it verbatim is the robotic tell David flagged. First use
+  // keeps it; later identical sentences drop to silence.
+  const seenWhy = new Set<string>();
+  const freshWhy = (fenBefore: string, san: string): string => {
+    const w = moveWhy(fenBefore, san);
+    if (!w) return '';
+    const k = w.toLowerCase();
+    if (seenWhy.has(k)) return '';
+    seenWhy.add(k);
+    return ` ${w}`;
+  };
+
+  // G2 — FAST-FORWARD the obvious, STOP at the distinctive. Danya rattles the
+  // well-known opening moves ("G6, Bishop G7, Knight F3, Knight C6…") and stops
+  // only at the branches that MATTER: a deviation from the main line, a real
+  // choice (no overwhelming consensus move), a departure from book. Emitting a
+  // full "e4 is the main line, 45% of games" beat for every move is the firehose
+  // David rejected. A branch is DISTINCTIVE when the game deviated (sideline /
+  // off-book) or the position had genuine choice (top move under ~62%); the
+  // obvious high-consensus mainline moves fold into one quiet fast-forward beat
+  // that plays them on the board without stopping to lecture each.
+  const CONSENSUS = 0.62;
+  const isDistinctive = (b: TheoryBranch): boolean => {
+    // Plies 1-2 are the "which opening" choice (e4/d4, c5/e5) — the intro already
+    // named it; a full "e4 scores 45%, the other tries are d4 and Nf3" beat is
+    // exactly the firehose David rejected. Fold them (unless off-book).
+    if (b.ply <= 2 && !b.leftBook) return false;
+    return b.leftBook || b.isSideline || b.mainline.pct < CONSENSUS;
+  };
+
+  // Flush a run of folded obvious moves as ONE fast-forward beat (plays them on
+  // the board, quiet steps, single summary line — no per-move lecture).
+  const flushFF = (run: TheoryBranch[]): void => {
+    if (run.length === 0) return;
+    if (run.length === 1) {
+      // A lone obvious move isn't worth a fast-forward wrapper — give it a tight
+      // one-line mainline beat instead (no stats padding).
+      const b = run[0];
+      const side = b.moverColor === 'white' ? 'White' : 'Black';
+      beats.push({
+        fenBefore: b.fenBefore, showUci: uciFor(b.fenBefore, b.mainline.san), showSan: b.mainline.san,
+        moveNumber: b.moveNumber, moverColor: b.moverColor, kind: 'mainline',
+        fact: `${b.mainline.san} is the standard move for ${side} here.${freshWhy(b.fenBefore, b.mainline.san)}`,
+      });
+      return;
+    }
+    const first = run[0];
+    const dive: Array<{ san: string; fenAfter: string; why: string | null }> = [];
+    let prev = first.fenBefore;
+    for (const b of run) {
+      const san = b.played?.san ?? b.mainline.san;
+      try { const c = new Chess(prev); const m = c.move(san); if (!m) break; dive.push({ san, fenAfter: c.fen(), why: null }); prev = c.fen(); } catch { break; }
+    }
+    const sanList = dive.map((d) => d.san).join(', ');
+    beats.push({
+      fenBefore: first.fenBefore, showUci: null, showSan: null,
+      moveNumber: first.moveNumber, moverColor: first.moverColor, kind: 'mainline',
+      fact: `The next moves are standard theory — ${sanList} — normal development, both sides fighting for the centre.`,
+      diveFromFen: dive.length >= 2 ? first.fenBefore : undefined,
+      dive: dive.length >= 2 ? dive : undefined,
+    });
+  };
+
+  // The NAMING branch: the first ply where the game reaches its own named
+  // opening. Everything up to it is the opening's CONSTRUCTION — Danya rattles
+  // those moves ("Knight C3, G6, Bishop G7…") and stops to NAME the opening, he
+  // does NOT frame each as "you deviated from the Open Sicilian main line."
+  // Those moves ARE the Grand Prix, not a departure from it, so the misleading
+  // "the main line was g3, let me show you g3" dive is suppressed for them.
+  const namingIdx = lecture.branches.findIndex((b) => b.variationName === lecture.openingName);
+
+  let ffRun: TheoryBranch[] = [];
+  for (let idx = 0; idx < lecture.branches.length; idx++) {
+    const b = lecture.branches[idx];
+    // Opening-construction moves (before the naming ply) fold into the fast-
+    // forward — they're the road TO the opening, not choices within it.
+    if (namingIdx > 0 && idx < namingIdx && !b.leftBook) { ffRun.push(b); continue; }
+    // The naming ply: flush the road, then a single beat that NAMES the opening
+    // on its defining move (no "you left the main line" comparison).
+    if (idx === namingIdx && namingIdx >= 0) {
+      flushFF(ffRun); ffRun = [];
+      const nSan = b.played?.san ?? b.mainline.san;
+      beats.push({
+        fenBefore: b.fenBefore,
+        showUci: uciFor(b.fenBefore, nSan),
+        showSan: nSan,
+        moveNumber: b.moveNumber,
+        moverColor: b.moverColor,
+        kind: 'mainline',
+        fact: `Move ${b.moveNumber}, ${nSan} — this defines the ${lecture.openingName}.${freshWhy(b.fenBefore, nSan)}`,
+      });
+      continue;
+    }
+    if (!isDistinctive(b)) { ffRun.push(b); continue; }
+    flushFF(ffRun); ffRun = [];
     const side = b.moverColor === 'white' ? 'White' : 'Black';
     // The grounded WHY of the mainline move — Danya states the move, THEN the
     // reason as its own sentence ("Nf3. The knight bears down on d4 and e5.").
-    // Board-computed (buildReviewMoveTeaching, G3); may be null.
-    const why = moveWhy(b.fenBefore, b.mainline.san);
-    const whySentence = why ? ` ${why}` : '';
+    // Board-computed (buildReviewMoveTeaching, G3); may be null. Deduped (G5).
+    const whySentence = freshWhy(b.fenBefore, b.mainline.san);
     if (b.leftBook) {
       beats.push({
         fenBefore: b.fenBefore,
@@ -485,6 +580,7 @@ export function buildTheoryLectureBeats(
       });
     }
   }
+  flushFF(ffRun); // any trailing obvious moves
 
   // Closing PLAN beat — Danya always lands on the middlegame idea ("march the
   // queenside pawns, 2v1" / "e5 vs c5 breaks"). Use a second key idea if there
