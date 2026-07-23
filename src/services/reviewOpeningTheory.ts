@@ -147,6 +147,11 @@ const MIN_BRANCH_GAMES = 10;
  *  and offbeat ones stop honestly where the book does. */
 const MAX_PLIES = 24;
 
+/** A move needs at least this many master games for its win-rate to be worth
+ *  citing — below it, "scores 100%" is one or two games of noise, not a signal
+ *  Danya would ever quote (David 2026-07-23). Degrade to popularity instead. */
+const SCORE_MIN_GAMES = 10;
+
 function scoreForMover(m: MasterPlayMove, mover: 'white' | 'black'): number | null {
   // white/draw/black are win-shares of the games with this move. The bundled
   // masters DB currently ships WITHOUT the result split (enrich-openings-db.mjs
@@ -155,6 +160,8 @@ function scoreForMover(m: MasterPlayMove, mover: 'white' | 'black'): number | nu
   // of falsely claiming "scoring 0% — a matter of style" (David 2026-07-23).
   const hasData = m.whitePct + m.drawPct + m.blackPct > 0;
   if (!hasData) return null;
+  // Small-sample guard — a 1-2 game win-rate ("100%") is noise, not theory.
+  if (m.games < SCORE_MIN_GAMES) return null;
   return mover === 'white'
     ? m.whitePct + m.drawPct / 2
     : m.blackPct + m.drawPct / 2;
