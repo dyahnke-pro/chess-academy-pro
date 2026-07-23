@@ -38,6 +38,12 @@ const SEEDS = [
   // (The English seed found no legal black-win candidate in runs 1-3 — the
   // French position has a deep master-game pool with black wins.)
   { name: 'French (student=Black, win)',       play: 'e2e4,e7e6,d2d4,d7d5', student: 'black', want: 'black' },
+  // ── extended to 10 games (David: "the ten game test") — 4 more diverse
+  //    never-audited profiles across both colors + all three results.
+  { name: 'Italian Game (student=White, win)', play: 'e2e4,e7e5,g1f3,b8c6,f1c4', student: 'white', want: 'white' },
+  { name: 'Sicilian Dragon (student=Black, win)', play: 'e2e4,c7c5,g1f3,d7d6,d2d4,c5d4,f3d4,g8f6,b1c3,g7g6', student: 'black', want: 'black' },
+  { name: 'Slav (student=Black, DRAW)',        play: 'd2d4,d7d5,c2c4,c7c6', student: 'black', want: 'draw' },
+  { name: 'Scandinavian (student=Black, LOSS)', play: 'e2e4,d7d5,e4d5,d8d5,b1c3', student: 'black', want: 'white' },
 ];
 
 const seen = new Set();
