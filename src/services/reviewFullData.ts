@@ -185,10 +185,14 @@ export function computeMoveFacets(ctx: MoveFactContext): string[] {
         if (facets.some((f) => f.startsWith('[does]'))) fired.push('the new pressure the move creates');
         if (facets.some((f) => f.startsWith('[delta]'))) fired.push('the lines it opened and what it gave up');
         if (facets.some((f) => f.startsWith('[tactic]'))) fired.push('the tactic now sitting on the board');
-        const why = fired.length
-          ? `the shift is positional — ${fired.join(', and ')}`
-          : 'the shift is positional — the activity balance moved with no single tactical event';
-        facets.push(`[eval] The eval bar ${d > 0 ? 'ticks' : 'dips'} ${mag} ${dir} with no material story: ${why}.`);
+        // Only speak the eval shift when a CONCRETE change explains it. With no
+        // grounded reason, the old fallback ("the activity balance moved with no
+        // single tactical event") named nothing — pure filler. Silence teaches
+        // better than filler (Narration Voice Rules; G3 — don't voice a reason we
+        // don't have). David 2026-07-23 narration dial-in.
+        if (fired.length) {
+          facets.push(`[eval] The eval bar ${d > 0 ? 'ticks' : 'dips'} ${mag} ${dir} with no material story: the shift is positional — ${fired.join(', and ')}.`);
+        }
       }
     }
   }
