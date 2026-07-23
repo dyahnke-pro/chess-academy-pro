@@ -6,7 +6,9 @@ import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhas
 import { plyFactsForMove, plyFactsClause, computePvLine, type PvLine, type PrevCaptureContext } from './pvPlayback';
 import { explainEvalByPieceQuality, lowestMinorMobility } from './pieceQuality';
 import type { Evaluate } from './moveComparison';
-import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan } from './reviewStrategicOrientation';
+import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan, buildHisGroundedPlanBeat, buildMastersGroundedPlanBeat } from './reviewStrategicOrientation';
+import { getHisPlayDb } from './hisPlayLookup';
+import { ensureMastersDbLoaded } from './masterPlayLookup';
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
 import { detectOpening } from './openingDetectionService';
 import { resolveCuratedOpeningIdeas } from './reviewOpeningTheory';
@@ -1448,7 +1450,11 @@ export function buildReviewSegments(
       && m.ply <= OPENING_PLAN_MAX_PLY
       && (m.classification === null || m.classification === 'book' || m.classification === 'good')
     ) {
-      const dev = buildOpeningDevelopmentPlan(fenPair.fenBefore, studentColorWB, { openingName: openingName ?? null, curatedIdeas: curatedOpeningIdeas, seed: gameSeed });
+      // Grounding chain (David 2026-07-23): his games -> masters DB backup ->
+      // curated repertoire -> nothing. The ungrounded generic template is gone.
+      const dev = buildHisGroundedPlanBeat(fenPair.fenBefore, studentColorWB, openingName ?? null)
+        ?? buildMastersGroundedPlanBeat(fenPair.fenBefore, studentColorWB, openingName ?? null)
+        ?? buildOpeningDevelopmentPlan(fenPair.fenBefore, studentColorWB, { openingName: openingName ?? null, curatedIdeas: curatedOpeningIdeas, seed: gameSeed });
       if (dev) { narration = dev.text; planArrows = dev.arrows; openingPlanShown = true; narrationSource = 'opening-plan'; }
     }
     // (b) Middlegame orientation (structure anchor + both-sides plans), fired
@@ -2001,6 +2007,11 @@ async function augmentWithProjections(
     if (deepBudget <= 0) break;
     if (s.playerColor !== studentColorName) continue;
     if (s.classification !== 'good' && s.classification !== 'great' && s.classification !== 'brilliant') continue;
+    // NEVER STACK two forcing lines on one move (David 2026-07-23, narration
+    // dial-in): if #4 already extended this segment with the engine's
+    // continuation, one line is enough — Danya reserves deep calculation for the
+    // critical moment and never reads two long variations on a single move.
+    if (s.narration && /engine confirms it|if they try to run/i.test(s.narration)) continue;
     try {
       const parts = s.fenAfter.split(' ');
       if (parts[1] === (studentColorWB === 'w' ? 'w' : 'b')) continue; // already student's turn — not a threat read
@@ -2446,6 +2457,10 @@ export async function generateReviewNarration(params: {
     ? introTrimmed
     : defaultIntroText({ playerColor, result, openingName, mistakeCount });
 
+  // Warm the opening-plan grounding sources before the sync segment build:
+  // the his-play DB (primary) + the masters DB (backup). Concurrent; each
+  // degrades to null on failure so the beat just falls through.
+  await Promise.all([getHisPlayDb(), ensureMastersDbLoaded()]);
   const segments = buildReviewSegments(moves.slice(0, usableCount), playerColor, openingName, uncapped);
 
   // FUTURE-POSITION PROJECTIONS (#1 plan realization + #2 consequence projection)

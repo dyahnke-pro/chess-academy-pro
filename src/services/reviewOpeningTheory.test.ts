@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { buildOpeningTheoryLecture, buildTheoryLectureBeats, resolveOpeningIdeas } from './reviewOpeningTheory';
+import { buildOpeningTheoryLecture, buildTheoryLectureBeats, resolveOpeningIdeas, enrichLectureWithEngine } from './reviewOpeningTheory';
 import type { MasterPlayResult, MasterPlayMove } from '../types';
 
 function mv(san: string, games: number, w = 0.4, d = 0.3, b = 0.3): MasterPlayMove {
@@ -123,7 +123,7 @@ describe('the variation DIVE (Danya plays out the line)', () => {
     const beats = buildTheoryLectureBeats(lec!);
     const depBeat = beats.find((b) => b.kind === 'departure');
     expect(depBeat!.dive?.length).toBeGreaterThanOrEqual(2);
-    expect(depBeat!.fact).toMatch(/how the main line runs/i);
+    expect(depBeat!.fact).toMatch(/how it runs/i);
   });
 });
 
@@ -140,18 +140,19 @@ describe('buildTheoryLectureBeats — grounded playable beats', () => {
     const beats = buildTheoryLectureBeats(lec!, ['fight for the centre and develop with tempo']);
     expect(beats[0].kind).toBe('intro');
     expect(beats[0].fact).toMatch(/King's Pawn/);
-    expect(beats[0].fact).toMatch(/core idea/i); // the idea was woven in
+    expect(beats[0].fact).toMatch(/at its heart/i); // the idea was woven in
     // the departure beat names the book move + says you left theory.
     const dep = beats.find((b) => b.kind === 'departure');
     expect(dep).toBeTruthy();
-    expect(dep!.fact).toMatch(/leaves mainstream theory/i);
+    expect(dep!.fact).toMatch(/steps out of book/i);
     expect(dep!.fact).toMatch(/Nf3/);
     expect(dep!.showUci).toBe('g1f3'); // the mainline move is playable on the board
-    // every branch beat carries a real percentage (grounded); intro + the
-    // closing plan beat are prose.
-    for (const b of beats.filter((x) => x.kind !== 'intro' && x.kind !== 'outro')) {
-      expect(b.fact).toMatch(/\d+%/);
-    }
+    // DISTINCTIVE branch beats (departure / sideline / genuine-choice mainline)
+    // carry a real percentage (grounded). The obvious opening moves fold into a
+    // "standard theory" fast-forward beat that is PROSE (no stats) — Danya
+    // rattles the well-known moves without lecturing each (G2, David 2026-07-23).
+    expect(dep!.fact).toMatch(/\d+%/);
+    expect(beats.some((b) => /standard theory|standard move/i.test(b.fact))).toBe(true);
     // the lecture ends on the PLAN (Danya always lands on the middlegame idea).
     const outro = beats.find((b) => b.kind === 'outro');
     expect(outro?.fact).toMatch(/takeaway/i);
@@ -163,8 +164,11 @@ describe('buildTheoryLectureBeats — grounded playable beats', () => {
     const lookup = async (fen: string): Promise<MasterPlayResult> => {
       if (fen.startsWith('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')) return res(fen, [mv('e4', 600, 0.55), mv('d4', 400, 0.5)]);
       if (fen.startsWith('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b')) return res(fen, [mv('e5', 500, 0.4, 0.3, 0.3), mv('c5', 500, 0.42, 0.28, 0.3)]);
-      // after 1...e5: Nf3 most-played AND best white score, Bc4 a lower-scoring sideline
-      if (fen.startsWith('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w')) return res(fen, [mv('Nf3', 800, 0.56), mv('Bc4', 150, 0.5), mv('Nc3', 100, 0.48)]);
+      // after 1...e5: Nf3 most-played AND best white score, but a GENUINE choice
+      // (under the ~62% consensus threshold) so it stays a distinctive mainline
+      // beat that explains WHY it's main — an overwhelming move folds into the
+      // fast-forward instead (G2, David 2026-07-23).
+      if (fen.startsWith('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w')) return res(fen, [mv('Nf3', 500, 0.56), mv('Bc4', 300, 0.5), mv('Nc3', 250, 0.48)]);
       return res(fen, []);
     };
     const lec = await buildOpeningTheoryLecture(fens, sans, "King's Pawn", { lookup });
@@ -172,6 +176,82 @@ describe('buildTheoryLectureBeats — grounded playable beats', () => {
     const mainBeats = beats.filter((b) => b.kind === 'mainline' || b.kind === 'departure');
     // At least one mainline beat explains the "why it's main" from the data.
     expect(mainBeats.some((b) => /most-played and best-scoring|both counts|popular without being the top/i.test(b.fact))).toBe(true);
+  });
+
+  it('cites ONE model game, preferring the student-side winner (C4/G4)', async () => {
+    const { fens, sans } = chain(['e4', 'e5', 'Nf3']);
+    const top = [
+      { white: 'Carlsen, M', black: 'Nakamura, Hi', year: 2019, result: '1-0' as const }, // White win
+      { white: 'Anand, V', black: 'Kramnik, V', year: 2008, result: '0-1' as const }, // Black win
+    ];
+    const lookup = async (fen: string): Promise<MasterPlayResult> => {
+      if (fen.startsWith('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')) return res(fen, [mv('e4', 600), mv('d4', 400)]);
+      if (fen.startsWith('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b')) return res(fen, [mv('e5', 500), mv('c5', 500)]);
+      if (fen.startsWith('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w')) {
+        return { fen, totalGames: 900, moves: [mv('Nf3', 500, 0.55), mv('Bc4', 250, 0.5), mv('Nc3', 150, 0.48)], source: 'local', topGames: top };
+      }
+      return res(fen, []);
+    };
+    const lec = await buildOpeningTheoryLecture(fens, sans, "King's Pawn", { lookup });
+    // Student is BLACK → the citation should prefer the Black-winning game.
+    const beats = buildTheoryLectureBeats(lec!, ['fight for the centre'], 'black');
+    const cites = beats.filter((b) => /position was reached in/i.test(b.fact));
+    expect(cites.length).toBe(1); // cited exactly once
+    expect(cites[0].fact).toMatch(/Anand, V–Kramnik, V/); // the Black win, not the White win
+    expect(cites[0].fact).toMatch(/Black win/);
+  });
+
+  it('OFFERS the untaken alternatives as tappable explore lines (C8, David 2026-07-23)', async () => {
+    // Game follows the main line (e4 e5 Nf3 Nc6) — so the after-e5 branch has
+    // genuine UNTAKEN sidelines (Bc4, Nc3) the coach should march out.
+    const { fens, sans } = chain(['e4', 'e5', 'Nf3', 'Nc6']);
+    const byPrefix: Record<string, MasterPlayMove[]> = {
+      'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w': [mv('e4', 600), mv('d4', 400)],
+      'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b': [mv('e5', 500), mv('c5', 400)],
+      'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w': [mv('Nf3', 500), mv('Bc4', 220), mv('Nc3', 150)],
+      'rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b': [mv('Nc6', 500), mv('d6', 180)],
+      // Bc4 sideline continuation (so walkBookLine can march it out):
+      'rnbqkbnr/pppp1ppp/8/4p3/2B1P3/8/PPPP1PPP/RNBQK1NR b': [mv('Nf6', 300), mv('Bc5', 200)],
+      'rnbqkb1r/pppp1ppp/5n2/4p3/2B1P3/8/PPPP1PPP/RNBQK1NR w': [mv('Nc3', 220), mv('d3', 120)],
+    };
+    const lookup = async (fen: string): Promise<MasterPlayResult> => {
+      const key = Object.keys(byPrefix).find((p) => fen.startsWith(p));
+      return res(fen, key ? byPrefix[key] : []);
+    };
+    const lec = await buildOpeningTheoryLecture(fens, sans, 'Open Game', { lookup });
+    // The after-e5 branch carries explore lines for its untaken sidelines.
+    const withExplore = lec!.branches.find((b) => b.exploreLines.length > 0);
+    expect(withExplore).toBeTruthy();
+    expect(withExplore!.exploreLines[0].steps[0].san).toBe('Bc4'); // the alt move is step 0
+    expect(withExplore!.exploreLines[0].steps.length).toBeGreaterThanOrEqual(2); // marched out, not a lone move
+    // The C8 beat OFFERS the alternatives as tappable explore lines (chips) —
+    // NOT auto-marched, so the student chooses whether to see more theory.
+    const beats = buildTheoryLectureBeats(lec!, ['fight for the centre'], 'white');
+    const offer = beats.find((b) => (b.explore?.length ?? 0) > 0);
+    expect(offer).toBeTruthy();
+    expect(offer!.fact).toMatch(/Tap one below/i);
+    expect(offer!.dive).toBeUndefined(); // not auto-played
+    expect(offer!.explore![0].steps[0].san).toBe('Bc4'); // the alt move rides in the chip's line
+  });
+
+  it("voices the ENGINE's pick when it differs from the crowd (C7, David 2026-07-23)", async () => {
+    // After 1.e4 e5 the game plays 2.Nf3 (the popular main line), but the fake
+    // engine prefers a DIFFERENT move (Bc4) — the coach should voice it.
+    const { fens, sans } = chain(['e4', 'e5', 'Nf3']);
+    const lookup = async (fen: string): Promise<MasterPlayResult> => {
+      if (fen.startsWith('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')) return res(fen, [mv('e4', 600), mv('d4', 400)]);
+      if (fen.startsWith('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b')) return res(fen, [mv('e5', 500), mv('c5', 500)]);
+      if (fen.startsWith('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w')) return res(fen, [mv('Nf3', 500), mv('Bc4', 300), mv('Nc3', 200)]);
+      return res(fen, []);
+    };
+    const lec = await buildOpeningTheoryLecture(fens, sans, "King's Pawn", { lookup });
+    // Fake engine: at the after-e5 position (White to move) it returns Bc4 (f1c4).
+    const engine = { analyzePosition: async (fen: string) => (fen.startsWith('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w') ? { bestMove: 'f1c4', evaluation: 30 } : { bestMove: 'g1f3', evaluation: 20 }) };
+    await enrichLectureWithEngine(lec!, engine, { depth: 6, max: 3 });
+    const nf3Branch = lec!.branches.find((b) => b.mainline.san === 'Nf3' || b.played?.san === 'Nf3');
+    expect(nf3Branch?.engineBest?.san).toBe('Bc4'); // engine pick captured as SAN
+    const beats = buildTheoryLectureBeats(lec!, ['fight for the centre'], 'white');
+    expect(beats.some((b) => /engine.*Bc4|Bc4.*engine/i.test(b.fact))).toBe(true); // voiced
   });
 });
 
@@ -215,6 +295,6 @@ describe('tabiya walk — sidelines get NARRATED dives + computed pros/cons (Dav
     expect(sideBeat!.fact).toMatch(/scores|score about the same/i);
     expect(sideBeat!.fact).not.toMatch(/presses a touch harder/);
     // The walk is announced so the student knows the main line is being SHOWN.
-    expect(sideBeat!.fact).toMatch(/walk you down the main line/i);
+    expect(sideBeat!.fact).toMatch(/walk down/i);
   });
 });

@@ -180,6 +180,79 @@ export function detectOpening(moveHistory: string[]): DetectedOpening | null {
   };
 }
 
+/** A transposition SIGNATURE: a named opening identified by the SET of moves
+ *  that define it, regardless of order. The strict trie (`detectOpening`) only
+ *  matches the exact move order the DB stores, so a game that TRANSPOSES into a
+ *  named opening by a different order (the Grand Prix reached via 2…g6 before
+ *  …Nc6, so the game never occupies the DB's `…Nc6 f4` terminal position)
+ *  resolves only to the coarse parent ("Sicilian: Closed") — never its real
+ *  name ("Grand Prix Attack").
+ *
+ *  Each signature is GROUNDED, not invented (G3): both the `name` and the
+ *  defining `moves` come from a real Lichess DB entry (`dbPgn`), validated at
+ *  module load. The only relaxation is move ORDER — if a game played every one
+ *  of the signature's defining SANs (any order), it structurally IS that
+ *  opening. A signature only fires to REFINE a coarser exact match (a strict
+ *  prefix of the signature's name), never to override an already-specific one. */
+interface TranspositionSignature {
+  name: string;
+  eco: string;
+  /** The DB pgn this signature was derived from — validated to exist + to
+   *  contain every `defining` move, so the name is never fabricated. */
+  dbPgn: string;
+  /** The order-independent defining SANs (White's setup that names the line). */
+  defining: string[];
+}
+
+const RAW_SIGNATURES: TranspositionSignature[] = [
+  // The Grand Prix Attack is White's f4 thrust in the Nc3 Sicilian — named the
+  // moment f4 appears regardless of whether Black played …Nc6 or …g6 first
+  // (Naroditsky names it "Grand Prix attack" on f4). DB: B23.
+  { name: 'Sicilian Defense: Grand Prix Attack', eco: 'B23', dbPgn: 'e4 c5 Nc3 Nc6 f4', defining: ['e4', 'c5', 'Nc3', 'f4'] },
+];
+
+/** Validate each signature against the DB at load: the name+pgn must exist and
+ *  the pgn must contain every defining move. A bad signature is dropped (never
+ *  ships a fabricated name). */
+let _validSignatures: TranspositionSignature[] | null = null;
+function getSignatures(): TranspositionSignature[] {
+  if (_validSignatures) return _validSignatures;
+  _validSignatures = RAW_SIGNATURES.filter((sig) => {
+    const entry = openingsData.find((e) => e.pgn === sig.dbPgn && e.name === sig.name);
+    if (!entry) return false;
+    const pgnMoves = new Set(entry.pgn.split(/\s+/).filter(Boolean));
+    return sig.defining.every((m) => pgnMoves.has(m));
+  });
+  return _validSignatures;
+}
+
+/**
+ * Transposition-aware opening name. Returns the strict trie match, but REFINES
+ * it to a more specific named line when the game transposed into one (every
+ * defining move of a validated signature was played, any order). Every name is
+ * a real Lichess DB entry (G3) — only move order is relaxed. The signature only
+ * fires when it refines a coarser exact match whose name is a prefix of the
+ * signature's (so it deepens the name, never contradicts it).
+ */
+export function detectOpeningTranspositional(moveHistory: string[]): DetectedOpening | null {
+  const exact = detectOpening(moveHistory);
+  const played = new Set(moveHistory);
+  let best: DetectedOpening | null = exact;
+  let bestSpecificity = exact ? exact.name.length : 0;
+  for (const sig of getSignatures()) {
+    if (!sig.defining.every((m) => played.has(m))) continue;
+    // Only refine a coarser match: the exact name must be a prefix of (or absent
+    // vs) the signature's name, so we deepen "Sicilian: Closed" → "…: Grand Prix
+    // Attack", never overwrite an unrelated specific name.
+    if (exact && !sig.name.startsWith(exact.name.split(':')[0])) continue;
+    if (sig.name.length > bestSpecificity) {
+      best = { eco: sig.eco, name: sig.name, plyCount: moveHistory.length };
+      bestSpecificity = sig.name.length;
+    }
+  }
+  return best;
+}
+
 /**
  * Check if the current move sequence is still within known opening theory.
  */

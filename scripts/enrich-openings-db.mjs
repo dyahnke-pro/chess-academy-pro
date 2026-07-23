@@ -199,6 +199,13 @@ async function main() {
     positions[posFen] = moves.map((m) => ({
       san: m.san,
       games: m.white + m.black + m.draws,
+      // KEEP the result split (David 2026-07-23) — the review's opening lecture
+      // needs it to say "scores well / this line is testing" the way Danya does.
+      // Dropping it made every move read "scoring 0%". Rebuild the DB offline to
+      // populate these into the shipped public/data/openings-masters-db.json.
+      white: m.white,
+      draws: m.draws,
+      black: m.black,
       rating: m.averageRating ?? null,
     }));
 
