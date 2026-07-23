@@ -81,3 +81,66 @@ Quotes are his real words. Build the review to reproduce THESE components.
 Phase 3, then the framing layer. Each component gets mapped to the tool that
 produces it (or flagged as a gap to build). G0 holds throughout: every fact is
 computed (engine/DB/chess.js); the voice only phrases it.
+
+---
+
+## STATUS
+
+### ✅ PHASE 1 — engine-ON opening analysis — SIGNED OFF (David 2026-07-23)
+
+Dialed in against his real transcripts (fABTn305 / anchor Grand Prix), all in
+the opening-theory lecture (`reviewOpeningTheory.ts` + the house-voice warmer):
+
+- **C1** open the analysis — the intro beat ("Let's dig into the theory…").
+- **C2** grade each move — the review WALK already grades every move
+  (blunder/mistake/inaccuracy/good via the move-quality tally); the theory
+  lecture is the DB/theory layer.
+- **C3** theory + DB counts + SCORES — real W/D/L via the rich sidecar
+  (`danya-review-openings.json`); score framed clearly ("White scores 46% here,
+  a shade below even — comfortable for you").
+- **C4** model games by name — "Grischuk–Vachier Lagrave, 2017 (a Black win)".
+- **C5** correct in-game claims — *not built* (needs stored in-game claims to
+  contradict; low value, deferred).
+- **C6** deep sub-lines — the mainline/sideline DIVES walk the continuation.
+- **C7** engine's preferred move — `enrichLectureWithEngine` (non-blocking
+  Stockfish pass) → "the engine leans toward Nd4 — a sharper, more testing try".
+- **C8** what was left out — the opt-in "Explore a6 / e6" chips.
+- **VOICE** — templates rewritten out of database-speak ("At move N" / "the
+  principled choice" killed); warmer taught a `theory` register (names the move,
+  keeps the numbers).
+
+Follow-ups (scale, NOT Phase-1 mechanism): full masters-DB rebuild so every game
+(not just the dial-in set) gets scores/model-games in prod; rebuild the other 8
+narrated games and run them through the loop.
+
+### ▶ PHASE 2 — engine-OFF middlegame/endgame — IN PROGRESS (David 2026-07-23: "then we move onto the next phase")
+
+His Phase 2 (from the fABTn305 transcript): repeated illustrative model-game
+SEARCHES showing the SAME attacking pattern recur across different games ("I can
+search a thousand games that end precisely this way… a completely different game,
+ends exactly the same — the beauty of studying openings"), the DANGER/plan
+illustration ("this is why I did NOT castle kingside"), re-examining each critical
+middlegame moment ("E5 is already a mistake, premature — what should White have
+done?"), deep tactical LINES with refutations, the MISSED resources for BOTH
+sides ("what I missed — …h6, counter-attacking the knight"), NAMED tactical
+concepts ("it's a deflection — deflecting the knight from h7"), the DECISIVE move,
+endgame TECHNIQUE.
+
+Map to the EXISTING review-walk machinery (much is built; the work is register +
+gaps):
+- **C11** re-examine critical moments — the walk's move-grading + "what should X
+  have done" (better-line playback) — BUILT.
+- **C12** deep tactical lines + refutation — spot-the-shot / better-line — BUILT.
+- **C13** missed resources both sides — the threat-detection + opponent-move
+  commentary — PARTIAL.
+- **C14** named tactical concepts — `detectTactics` names fork/pin/deflection —
+  BUILT (verify "deflection" register).
+- **C16** decisive move — the turning-point card — BUILT.
+- **C9** pattern-recurrence model-game search — the `storyGame` chip cites ONE
+  game; the "here's the SAME pattern in a DIFFERENT game" recurrence is the
+  signature GAP to build first.
+- **C10** danger/plan illustration ("why I avoided X") — GAP.
+- **C17** endgame technique naming — PARTIAL (conversion-pattern naming exists).
+
+**Next build: C9 — the pattern-recurrence illustration** (his most-repeated Phase
+2 move), then C10/C13 register, dialed against the transcript the same way.
