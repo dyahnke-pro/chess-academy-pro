@@ -211,3 +211,42 @@ KNOBS (confirmed):
 
 NEXT: confirm beat 4 (re-run w/ 90 cap), then turn knobs 1+2 first (loudest
 misses), re-run anchor, re-compare. Then validate on the 9 pulled games.
+
+---
+
+## GROUNDING ARCHITECTURE — locked (David 2026-07-23): his games primary, masters DB backup
+
+David: "use his games as the primary source, then when he doesn't have any
+games we use the master DB." + "Master DB should be the backup." + corpus =
+BOTH accounts merged.
+
+The ungrounded generic development template ("the knight belongs on c6… get
+the king castled") that fired on EVERY game is KILLED. Opening-plan grounding
+chain (empty > generic):
+
+1. **His games (PRIMARY)** — merged corpus of `frankfurtairport` (speedrun /
+   teaching) + `danielnaroditsky` (main, ~140k). Aggregate the most-played
+   continuation / plan at the review game's opening structure (pro-rep §G9.1
+   spine + middlegame-pattern extraction, widened past the 2 hand-built
+   openings to a broad opening→plan index shipped as JSON).
+2. **Masters DB (BACKUP)** — `public/data/openings-masters-db.json` (37MB) /
+   lichess masters explorer: most-played master continuation for the
+   structure, ONLY when he has no games there.
+3. **Nothing** — neither has it → say nothing. Never the generic template.
+
+Build steps:
+- [in progress] pull both corpora (fetch-chesscom.mjs frankfurtairport +
+  danielnaroditsky).
+- build a broad `his-opening-plans` index (opening/FEN-prefix → his spine +
+  most-played middlegame plan + W/D/L), shipped as JSON, loaded by the review.
+- masters-DB backup query (FEN/prefix → top continuation) — reuse the
+  masterPlayLookup path.
+- wire into resolveCuratedOpeningIdeas / buildOpeningDevelopmentPlan: his →
+  masters → null; DELETE the devClause generic fallback.
+- gates + re-run anchor (Grand Prix must now speak HIS plan) + validate on the
+  9 pulled games.
+
+Scorecard update (beat-4 re-run, cap raised 60→90): the ...Nf3+ fork IS
+narrated (plies 63-64) — beat 5 = ✅ HIT; the silence was the audit cap, not
+the coach. Remaining misses: Beat 1 (opening plan — THIS grounding build),
+Beat 3 (...f4 dual-purpose), Beat 4 (prophylaxis frame), register density.
