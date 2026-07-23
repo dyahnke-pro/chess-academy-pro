@@ -102,6 +102,22 @@ export interface ResolvedWorker {
  *  Capacitor on iOS reports user agent containing "iPhone" /
  *  "iPad" too — same crash applies; same path applies. */
 function isIosSafari(): boolean {
+  // Capacitor native iOS is AUTHORITATIVE and UA-independent — check it first.
+  // The WKWebView intermittently reports the FROZEN desktop-Safari UA
+  // ("Macintosh; Intel Mac OS X 10_15_7", maxTouchPoints 0), which slips past
+  // the UA heuristic below and wrongly routes the native app to a WASM
+  // Stockfish build the WebView can't execute — producing the WASM traps
+  // (`call_indirect to a signature that does not match` / `Unreachable code
+  // should not be executed` / `Invalid opcode 0xfd`) that dominate PostHog,
+  // ALL from `capacitor://` iOS. `getPlatform() === 'ios'` is 100% reliable in
+  // the native app (returns 'web' in browsers), so mobile-web iOS Safari still
+  // falls through to the UA sniffing below. This pins every native-iOS WebView
+  // to the asm.js build regardless of the UA it spoofs.
+  try {
+    if (Capacitor.getPlatform() === 'ios') return true;
+  } catch {
+    /* not a Capacitor context — fall through to UA detection */
+  }
   if (typeof navigator === 'undefined') return false;
   const ua = navigator.userAgent ?? '';
   // iPad Safari masquerades as Mac on iPadOS 13+ — also check
