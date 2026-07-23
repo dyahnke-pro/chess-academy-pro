@@ -51,6 +51,13 @@ export interface PieceQualityOpts {
   swingThresholdCp?: number;
   /** Naming a SECOND piece requires the pair to swing at least this (cp). Default 180. */
   pairThresholdCp?: number;
+  /** Reject a swing above this (cp) — a piece's ACTIVITY is bounded, so a bigger
+   *  swing means the relocation manufactured a tactic, not that the piece was
+   *  passive. Default 500. */
+  maxSwingCp?: number;
+  /** White-POV cp of the position, if already known (skips the base re-eval —
+   *  the caller usually has it from the per-ply analysis). */
+  baseCp?: number;
 }
 
 /** Squares a piece at `sq` can move to, with the side-to-move flipped to its own
@@ -87,9 +94,17 @@ function enemyPawnAttacks(chess: Chess, enemy: Color): Set<string> {
   return out;
 }
 
-/** Build the FEN with the pieces at `from[]` teleported to their best safe empty
- *  square (max own-mobility, not attacked by an enemy pawn). Side-to-move is
- *  preserved. Returns null if a relocation isn't possible. */
+/** The square of `color`'s king, or null. */
+function kingSquare(chess: Chess, color: Color): Square | null {
+  for (const row of chess.board()) for (const cell of row) if (cell && cell.type === 'k' && cell.color === color) return cell.square;
+  return null;
+}
+
+/** Build the FEN with the pieces at `from[]` teleported to their best CLEAN
+ *  square (max own-mobility, not attacked by an enemy pawn, and NOT giving check
+ *  — a check-giving teleport manufactures a tactic that has nothing to do with
+ *  the piece being passive, which is what inflated the ablation to +900). Side-
+ *  to-move is preserved. Returns null if a clean relocation isn't possible. */
 function relocateToBest(fen: string, from: Square[]): string | null {
   try {
     const chess = new Chess(fen);
@@ -97,6 +112,7 @@ function relocateToBest(fen: string, from: Square[]): string | null {
     if (!moved) return null;
     const enemy: Color = moved.color === 'w' ? 'b' : 'w';
     const pawnAttacks = enemyPawnAttacks(chess, enemy);
+    const enemyKing = kingSquare(chess, enemy);
 
     for (const sq of from) chess.remove(sq);
 
@@ -112,6 +128,9 @@ function relocateToBest(fen: string, from: Square[]): string | null {
           if (pawnAttacks.has(cand)) continue; // would hang to a pawn
           const probe = new Chess(chess.fen());
           probe.put({ type: piece.type, color: piece.color }, cand);
+          // Reject a square that gives check — that's a manufactured tactic, not
+          // activity (kills the +900 mate-teleport artifact).
+          if (enemyKing && probe.isAttacked(enemyKing, piece.color)) continue;
           const parts = probe.fen().split(' ');
           parts[1] = piece.color;
           parts[3] = '-';
@@ -123,19 +142,31 @@ function relocateToBest(fen: string, from: Square[]): string | null {
       if (!bestSq) return null;
       chess.put({ type: piece.type, color: piece.color }, bestSq);
     }
+    // Legality: removing a minor can DISCOVER an attack on its own king. If the
+    // side NOT to move ends up in check, the position is illegal (the engine
+    // would choke) — bail rather than ablate a broken board.
+    const stm = chess.turn();
+    const otherKing = kingSquare(chess, stm === 'w' ? 'b' : 'w');
+    if (otherKing && chess.isAttacked(otherKing, stm)) return null;
     return chess.fen();
   } catch {
     return null;
   }
 }
 
-/** The mover's worst-placed non-pawn, non-king pieces, ascending by mobility. */
+/** The mover's worst-placed MINOR pieces (knight/bishop), ascending by mobility.
+ *  Minors only — that is Naroditsky's actual register ("the knight and bishop
+ *  are so bad"), and a minor's value really is decided by its SQUARE (a rim
+ *  knight, a buried bishop). A rook's passivity is an open-file/structural story
+ *  (owned by describeStructure), and an undeveloped rook on its home square
+ *  reads as "bad" when it's merely un-developed — so rooks/queens are excluded
+ *  to avoid overclaiming (empty > overclaim). */
 function worstPieces(fen: string, color: Color, maxMob: number): Array<{ sq: Square; type: PieceSymbol; mob: number }> {
   const chess = new Chess(fen);
   const out: Array<{ sq: Square; type: PieceSymbol; mob: number }> = [];
   for (const row of chess.board()) {
     for (const cell of row) {
-      if (!cell || cell.color !== color || cell.type === 'p' || cell.type === 'k') continue;
+      if (!cell || cell.color !== color || (cell.type !== 'n' && cell.type !== 'b')) continue;
       const mob = pieceMobility(fen, cell.square);
       if (mob <= maxMob) out.push({ sq: cell.square, type: cell.type, mob });
     }
@@ -144,6 +175,30 @@ function worstPieces(fen: string, color: Color, maxMob: number): Array<{ sq: Squ
 }
 
 function sideName(c: Color): string { return c === 'w' ? 'White' : 'Black'; }
+
+/**
+ * Lowest mobility among any minor (knight/bishop) on the board, either colour —
+ * a FREE (no-engine) proxy for "is a minor cramped enough here to be worth an
+ * ablation probe?". Infinity when there are no minors. Callers use it to TARGET
+ * the one position most likely to carry a bad-minor story, so the expensive
+ * ablation runs once, where it matters.
+ */
+export function lowestMinorMobility(fen: string): number {
+  try {
+    const chess = new Chess(fen);
+    let lo = Infinity;
+    for (const row of chess.board()) {
+      for (const cell of row) {
+        if (!cell || (cell.type !== 'n' && cell.type !== 'b')) continue;
+        const m = pieceMobility(fen, cell.square);
+        if (m < lo) lo = m;
+      }
+    }
+    return lo;
+  } catch {
+    return Infinity;
+  }
+}
 
 /**
  * Attribute a position's evaluation to a badly-placed piece (or pair), proven by
@@ -159,14 +214,14 @@ export async function explainEvalByPieceQuality(
   const maxBadMobility = opts.maxBadMobility ?? 3;
   const swingThreshold = opts.swingThresholdCp ?? 120;
   const pairThreshold = opts.pairThresholdCp ?? 180;
+  const maxSwing = opts.maxSwingCp ?? 500;
 
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
   if (chess.isGameOver()) return null;
 
-  const base = await evaluate(fen);
-  if (!Number.isFinite(base.cp)) return null;
-  const evalCp = base.cp;
+  const evalCp = Number.isFinite(opts.baseCp) ? (opts.baseCp as number) : (await evaluate(fen)).cp;
+  if (!Number.isFinite(evalCp)) return null;
   const favored: Color | 'equal' = evalCp > 30 ? 'w' : evalCp < -30 ? 'b' : 'equal';
 
   // Test BOTH sides' worst pieces; report the biggest proven swing. A "bad
@@ -188,7 +243,7 @@ export async function explainEvalByPieceQuality(
       if (Number.isFinite(e1.cp)) {
         const afterOwn = sign * e1.cp;
         const swing = afterOwn - beforeOwn;
-        if (swing >= swingThreshold && (!winner || swing > winner.ablation.swingCp)) {
+        if (swing >= swingThreshold && swing <= maxSwing && (!winner || swing > winner.ablation.swingCp)) {
           winner = {
             kind: 'bad-piece',
             color,
@@ -211,7 +266,7 @@ export async function explainEvalByPieceQuality(
             if (Number.isFinite(e2.cp)) {
               const afterOwn2 = sign * e2.cp;
               const swing2 = afterOwn2 - beforeOwn;
-              if (swing2 >= pairThreshold && swing2 > swing && (!winner || swing2 > winner.ablation.swingCp)) {
+              if (swing2 >= pairThreshold && swing2 <= maxSwing && swing2 > swing && (!winner || swing2 > winner.ablation.swingCp)) {
                 winner = {
                   kind: 'bad-piece',
                   color,

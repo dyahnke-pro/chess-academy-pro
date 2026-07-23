@@ -79,7 +79,7 @@ describe('explainEvalByPieceQuality', () => {
       const bSq = blackPieceSquare(f, 'b');
       const nMob = nSq ? pieceMobility(f, nSq as never) : 4;
       const bMob = bSq ? pieceMobility(f, bSq as never) : 6;
-      return { cp: 150 - 30 * (nMob + bMob) };
+      return { cp: 150 - 22 * (nMob + bMob) };
     };
     const res = await explainEvalByPieceQuality(fen, evaluate);
     expect(res!.delta).toBeTruthy();

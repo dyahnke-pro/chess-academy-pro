@@ -4,7 +4,7 @@ import { seeGain } from './positionReadingService';
 import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice, seatPieceReferences, describeStudentThreat, detectNewThreat, describeThreatRecognition, describeThreatPrevention } from './groundedAnswer';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
 import { plyFactsForMove, plyFactsClause, computePvLine, type PvLine, type PrevCaptureContext } from './pvPlayback';
-import { explainEvalByPieceQuality } from './pieceQuality';
+import { explainEvalByPieceQuality, lowestMinorMobility } from './pieceQuality';
 import type { Evaluate } from './moveComparison';
 import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan } from './reviewStrategicOrientation';
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
@@ -2089,42 +2089,43 @@ async function augmentWithProjections(
 
   // #6 — BAD-PIECE ATTRIBUTION (David 2026-07-23, IMG_4589: "the knight and the
   // bishop are so bad that White has fighting chances"). The method of comparison
-  // aimed at a PIECE: where the eval and the MATERIAL COUNT disagree most, the
-  // story is piece ACTIVITY, not material. Ablate the worst-placed piece(s) —
-  // teleport to the best safe square, re-eval — and speak it ONLY if the swing
-  // proves those pieces are the cause (the engine gates every claim; unproven →
-  // silent, G0). One position per game, timeout-guarded; both scopes (the beat
-  // is where Danya's "his pieces are terrible" reads live).
+  // aimed at a PIECE. TARGET the middlegame position with the most cramped MINOR
+  // (a free board scan — a bad piece is a rim knight / buried bishop, a low-
+  // mobility fact), then ablate it there: teleport to its best clean square,
+  // re-eval, and speak it ONLY if the swing proves that piece is the cause (the
+  // engine gates every claim; a check-giving teleport or an out-of-range swing
+  // is rejected, so we never invent a bad piece — G0). One position per game,
+  // timeout-guarded; both scopes (this is where Danya's "his pieces are
+  // terrible" reads live).
   {
     const pieceEvaluate: Evaluate = async (fen) => {
       const l = await raceTimeout(computePvLine(fen, { maxPlies: 1 }), PROJ_TIMEOUT_MS, null);
       return { cp: l ? l.rootEvalCp : NaN };
     };
-    const PQ_PTS: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
-    const whiteMaterial = (fen: string): number => {
-      try {
-        let s = 0;
-        for (const row of new Chess(fen).board()) for (const c of row) if (c) s += (c.color === 'w' ? 1 : -1) * (PQ_PTS[c.type] ?? 0);
-        return s;
-      } catch { return 0; }
-    };
-    // The single position where WHITE-POV material and eval diverge most (≥ 1.5
-    // pawns of eval the material can't explain) — that's a piece-activity story.
-    let target: ReviewMoveSegment | null = null;
-    let bestGap = 150;
-    for (const s of segments) {
-      if (s.evalAfter === null || Math.abs(s.evalAfter) >= 5000) continue; // skip mate-scores
-      const gap = Math.abs(whiteMaterial(s.fenAfter) * 100 - s.evalAfter);
-      if (gap > bestGap) { bestGap = gap; target = s; }
-    }
-    if (target) {
+    // Free selection: the middlegame plies whose most-cramped minor is the most
+    // cramped (≤ 2 legal moves = a genuinely bad minor worth the ablation). Probe
+    // the top TWO distinct positions — a cramped minor isn't always a COSTLY one,
+    // so trying just the single most-cramped can miss the real story. Reuse the
+    // already-computed eval as the ablation base (no extra base eval). Attach the
+    // biggest proven swing.
+    const candidates = segments
+      .filter((s) => s.ply >= 14 && !(s.evalAfter !== null && Math.abs(s.evalAfter) >= 5000))
+      .map((s) => ({ s, mob: lowestMinorMobility(s.fenAfter) }))
+      .filter((c) => c.mob <= 2)
+      .sort((a, b) => a.mob - b.mob)
+      .slice(0, 2);
+    let best: { seg: ReviewMoveSegment; text: string; swing: number } | null = null;
+    for (const c of candidates) {
       const res = await raceTimeout(
-        explainEvalByPieceQuality(target.fenAfter, pieceEvaluate, { swingThresholdCp: 150, pairThresholdCp: 220 }),
+        explainEvalByPieceQuality(c.s.fenAfter, pieceEvaluate, { swingThresholdCp: 150, pairThresholdCp: 220, baseCp: c.s.evalAfter ?? undefined }),
         PROJ_TIMEOUT_MS * 2,
         null,
       );
-      if (res?.delta) target.narration = `${target.narration ?? ''} ${res.delta.text}.`.trim();
+      if (res?.delta && (!best || res.delta.ablation.swingCp > best.swing)) {
+        best = { seg: c.s, text: res.delta.text, swing: res.delta.ablation.swingCp };
+      }
     }
+    if (best) best.seg.narration = `${best.seg.narration ?? ''} ${best.text}.`.trim();
   }
 
   if (scope === 'mistakes') return;
