@@ -2,6 +2,23 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { stockfishCache } from './stockfishCache';
 import type { StockfishAnalysis } from '../types';
 
+// Mutable Capacitor platform stub. Defaults ('web', non-native, no plugin)
+// match what the REAL @capacitor/core returns in the vitest env, so every
+// existing test is behavior-preserved; the native-iOS routing tests flip
+// `capacitorState.platform = 'ios'` to exercise the UA-independent iOS path.
+const capacitorState = vi.hoisted(() => ({ platform: 'web' as string, native: false }));
+vi.mock('@capacitor/core', () => ({
+  Capacitor: {
+    getPlatform: (): string => capacitorState.platform,
+    isNativePlatform: (): boolean => capacitorState.native,
+    isPluginAvailable: (): boolean => false,
+  },
+  // capacitor-stockfish-native calls registerPlugin at import — stub it so the
+  // module graph loads (returns an inert proxy; the native path is gated off by
+  // isPluginAvailable() === false above).
+  registerPlugin: (): Record<string, never> => ({}),
+}));
+
 // ---------------------------------------------------------------------------
 // Mock Worker infrastructure
 // ---------------------------------------------------------------------------
@@ -1300,6 +1317,32 @@ describe('resolveWorkerUrl', () => {
     vi.resetModules();
     const { resolveWorkerUrl } = await import('./stockfishEngine');
     expect(resolveWorkerUrl().variant).toBe('multi');
+  });
+
+  it('routes a Capacitor native-iOS WebView spoofing the desktop-Safari UA to asm.js (root fix for the call_indirect / Unreachable WASM traps from capacitor:// iOS)', async () => {
+    // The exact PostHog crash device: native iOS app whose WKWebView reports
+    // the FROZEN desktop-Safari UA ("Macintosh; Intel Mac OS X 10_15_7",
+    // maxTouchPoints 0) and claims WASM SIMD — the UA heuristic misses it and,
+    // without the Capacitor.getPlatform() short-circuit, it would pick the WASM
+    // single/multi build that WebKit traps on (`call_indirect to a signature
+    // that does not match`). getPlatform() === 'ios' must pin it to asm.js.
+    capacitorState.platform = 'ios';
+    try {
+      vi.stubGlobal('window', { crossOriginIsolated: true });
+      vi.stubGlobal('SharedArrayBuffer', function SharedArrayBufferStub() { /* stub */ });
+      vi.stubGlobal('navigator', {
+        userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.4 Safari/605.1.15',
+        maxTouchPoints: 0,
+      });
+      vi.stubGlobal('WebAssembly', { validate: () => true }); // SIMD present — only the platform check saves it
+      vi.resetModules();
+      const { resolveWorkerUrl } = await import('./stockfishEngine');
+      const result = resolveWorkerUrl();
+      expect(result.variant).toBe('asm');
+      expect(result.url).toBe('/stockfish/stockfish-asm.js');
+    } finally {
+      capacitorState.platform = 'web';
+    }
   });
 
   it('falls back to single-threaded variant when SharedArrayBuffer is undefined (even with isolation)', async () => {
