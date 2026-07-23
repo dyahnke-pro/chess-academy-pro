@@ -200,6 +200,37 @@ describe('buildTheoryLectureBeats — grounded playable beats', () => {
     expect(cites[0].fact).toMatch(/Anand, V–Kramnik, V/); // the Black win, not the White win
     expect(cites[0].fact).toMatch(/Black win/);
   });
+
+  it('MARCHES the untaken alternatives out with a dive (C8, David 2026-07-23)', async () => {
+    // Game follows the main line (e4 e5 Nf3 Nc6) — so the after-e5 branch has
+    // genuine UNTAKEN sidelines (Bc4, Nc3) the coach should march out.
+    const { fens, sans } = chain(['e4', 'e5', 'Nf3', 'Nc6']);
+    const byPrefix: Record<string, MasterPlayMove[]> = {
+      'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w': [mv('e4', 600), mv('d4', 400)],
+      'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b': [mv('e5', 500), mv('c5', 400)],
+      'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w': [mv('Nf3', 500), mv('Bc4', 220), mv('Nc3', 150)],
+      'rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b': [mv('Nc6', 500), mv('d6', 180)],
+      // Bc4 sideline continuation (so walkBookLine can march it out):
+      'rnbqkbnr/pppp1ppp/8/4p3/2B1P3/8/PPPP1PPP/RNBQK1NR b': [mv('Nf6', 300), mv('Bc5', 200)],
+      'rnbqkb1r/pppp1ppp/5n2/4p3/2B1P3/8/PPPP1PPP/RNBQK1NR w': [mv('Nc3', 220), mv('d3', 120)],
+    };
+    const lookup = async (fen: string): Promise<MasterPlayResult> => {
+      const key = Object.keys(byPrefix).find((p) => fen.startsWith(p));
+      return res(fen, key ? byPrefix[key] : []);
+    };
+    const lec = await buildOpeningTheoryLecture(fens, sans, 'Open Game', { lookup });
+    // The after-e5 branch carries explore lines for its untaken sidelines.
+    const withExplore = lec!.branches.find((b) => b.exploreLines.length > 0);
+    expect(withExplore).toBeTruthy();
+    expect(withExplore!.exploreLines[0].steps[0].san).toBe('Bc4'); // the alt move is step 0
+    expect(withExplore!.exploreLines[0].steps.length).toBeGreaterThanOrEqual(2); // marched out, not a lone move
+    // The beats include a march-out beat that PLAYS the alternative (dive), not a
+    // "go explore on your own" dead-end.
+    const beats = buildTheoryLectureBeats(lec!, ['fight for the centre'], 'white');
+    const march = beats.find((b) => /march/i.test(b.fact) && (b.dive?.length ?? 0) > 0);
+    expect(march).toBeTruthy();
+    expect(march!.dive![0].san).toBe('Bc4');
+  });
 });
 
 describe('tabiya walk — sidelines get NARRATED dives + computed pros/cons (David 2026-07-21)', () => {

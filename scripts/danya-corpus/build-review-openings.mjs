@@ -74,26 +74,45 @@ async function main() {
   let out = {};
   try { out = JSON.parse(readFileSync(OUT, 'utf8')); } catch { /* fresh */ }
 
+  // Seed from each game's opening line, then BFS a few plies so the UNTAKEN
+  // ALTERNATIVES (the C8 "what was left out" a6/e6 lines the coach marches out)
+  // have real continuations offline too — not just the moves the game played.
   const pgns = readdirSync(GAMES_DIR).filter((f) => f.endsWith('.pgn'));
-  const wantKeys = new Set();
+  const BFS_DEPTH = Number(process.argv[3] ?? 2);
+  const TOP_N = Number(process.argv[4] ?? 2); // expand the top-N moves per node
+  const seed = new Set();
   for (const f of pgns) {
-    const fens = openingFensFromPgn(readFileSync(`${GAMES_DIR}/${f}`, 'utf8'));
-    for (const fen of fens) wantKeys.add(posKey(fen));
+    for (const fen of openingFensFromPgn(readFileSync(`${GAMES_DIR}/${f}`, 'utf8'))) seed.add(posKey(fen));
   }
-  const keys = [...wantKeys];
-  console.log(`[enrich] ${pgns.length} games → ${keys.length} distinct opening positions (≤${MAX_PLIES} plies)`);
+  console.log(`[enrich] ${pgns.length} games → ${seed.size} seed positions; BFS depth ${BFS_DEPTH}, top-${TOP_N}`);
 
+  const visited = new Set();
+  const queue = [...seed].map((k) => [k, BFS_DEPTH]);
   let fetched = 0, kept = 0, skipped = 0;
-  for (const key of keys) {
-    if (out[key]) { skipped++; continue; } // already have it (merge)
-    const payload = await fetchPosition(`${key} 0 1`);
-    fetched++;
-    if (payload) {
-      const rich = toRich(payload);
+  while (queue.length > 0) {
+    const [key, depth] = queue.shift();
+    if (visited.has(key)) continue;
+    visited.add(key);
+    if (out[key]) { skipped++; }
+    else {
+      const payload = await fetchPosition(`${key} 0 1`);
+      fetched++;
+      const rich = payload ? toRich(payload) : null;
       if (rich) { out[key] = rich; kept++; }
+      if (fetched % 15 === 0) {
+        console.log(`  …${fetched} fetched, ${kept} kept, queue ${queue.length}`);
+        writeFileSync(OUT, JSON.stringify(out)); // incremental save — survive a timeout
+      }
+      await sleep(THROTTLE_MS);
     }
-    if (fetched % 10 === 0) console.log(`  …${fetched} fetched, ${kept} kept`);
-    await sleep(THROTTLE_MS);
+    // Expand children (top-N moves) while depth remains.
+    if (depth > 0 && out[key]) {
+      let board;
+      try { board = new Chess(`${key} 0 1`); } catch { continue; }
+      for (const m of out[key].moves.slice(0, TOP_N)) {
+        try { const c = new Chess(board.fen()); if (!c.move(m.san)) continue; const ck = posKey(c.fen()); if (!visited.has(ck)) queue.push([ck, depth - 1]); } catch { /* skip */ }
+      }
+    }
   }
 
   writeFileSync(OUT, JSON.stringify(out));

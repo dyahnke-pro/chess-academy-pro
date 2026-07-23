@@ -71,6 +71,26 @@ export interface TheoryBranch {
    *  Yangyi." From the lookup's topGames (rich sidecar / live), empty when the
    *  source has none. */
   topGames: MasterPlayTopGame[];
+  /** The untaken alternatives at this branch, each played OUT as a short masters
+   *  line so the coach can MARCH them on the board with narration during the
+   *  Opening-theory lecture (David 2026-07-23: "if we want the coach to march
+   *  those lines out with narration, the opening theory button is a good place").
+   *  Populated only on the C8 "what was left out" branch. Empty otherwise. */
+  exploreLines: ExploreLine[];
+}
+
+/** An untaken alternative the coach marches out on the review board — the
+ *  alternative move + a short masters continuation, each step with a computed
+ *  why (G0/G3: real moves, computed reasons). Rendered as a theory-beat dive. */
+export interface ExploreLine {
+  /** The alternative SAN (e.g. "a6"). */
+  san: string;
+  /** Its share of master games at the branch (0..1), for the beat prose. */
+  pct: number;
+  /** The position to play the line out FROM (the branch's fenBefore). */
+  fromFen: string;
+  /** The alternative move + its masters continuation, board-replayed. */
+  steps: Array<{ san: string; fenAfter: string; why: string | null }>;
 }
 
 export interface OpeningTheoryLecture {
@@ -219,6 +239,7 @@ export async function buildOpeningTheoryLecture(
         mainlineDive: [],
         diveFromFen: null,
         topGames: res.topGames ? [...res.topGames] : [],
+        exploreLines: [],
       });
     }
 
@@ -263,6 +284,43 @@ export async function buildOpeningTheoryLecture(
         });
       }
     } catch { /* a dive is a bonus, never a blocker */ }
+  }
+
+  // C8 EXPLORE — march the untaken alternatives out (David 2026-07-23). Pick the
+  // branch where the game FOLLOWED the main line (so its sidelines are genuinely
+  // unexplored) with the strongest alternatives, and play each of its top-2
+  // sidelines OUT: the alternative move + a short masters continuation, each step
+  // with a computed why. Attached to that branch; the lecture renders them as
+  // dives so the coach marches them on the board with narration.
+  const c8Candidate = branches
+    .filter((b) => b.ply >= 3 && !b.isSideline && !b.leftBook && b.played != null && b.sidelines.some((s) => s.games > 0))
+    .map((b) => ({ b, weight: b.sidelines.reduce((s, m) => s + m.pct, 0) }))
+    .sort((a, b) => b.weight - a.weight)[0]?.b;
+  if (c8Candidate) {
+    const alts = c8Candidate.sidelines.filter((s) => s.games > 0).slice(0, 2);
+    for (const alt of alts) {
+      try {
+        const c = new Chess(c8Candidate.fenBefore);
+        const mv = c.move(alt.san);
+        if (!mv) continue;
+        const afterAlt = c.fen();
+        const cont = await walkBookLine(afterAlt, { maxPlies: 4, minGames: 5, lookup: opts.lookup });
+        const steps: Array<{ san: string; fenAfter: string; why: string | null }> = [];
+        // Step 0 is the alternative move itself.
+        steps.push({ san: alt.san, fenAfter: afterAlt, why: moveWhy(c8Candidate.fenBefore, alt.san) });
+        let prev = afterAlt;
+        for (const p of cont) {
+          const parts: string[] = [];
+          const w = moveWhy(prev, p.san);
+          if (w) parts.push(w);
+          const tempt = explainTemptingCapture(prev, p.san, 'neutral');
+          if (tempt) parts.push(tempt);
+          steps.push({ san: p.san, fenAfter: p.fenAfter, why: parts.length ? parts.join(' ') : null });
+          prev = p.fenAfter;
+        }
+        c8Candidate.exploreLines.push({ san: alt.san, pct: alt.pct, fromFen: c8Candidate.fenBefore, steps });
+      } catch { /* a marched line is a bonus, never a blocker */ }
+    }
   }
 
   if (branches.length === 0) return null;
@@ -642,22 +700,28 @@ export function buildTheoryLectureBeats(
   // are genuinely UNTAKEN alternatives (never the move the game actually played).
   // Any colour: the opening's big untaken lines include the opponent's other
   // setups (Danya-as-Black cites White's "Bishop C4"). Strongest sidelines win.
-  const leftOut = lecture.branches
-    .filter((b) => b.ply >= 3 && !b.isSideline && !b.leftBook && b.played != null && b.sidelines.some((s) => s.games > 0))
-    .map((b) => ({ b, weight: b.sidelines.reduce((s, m) => s + m.pct, 0) }))
-    .sort((a, b) => b.weight - a.weight)[0];
-  if (leftOut) {
-    const alts = leftOut.b.sidelines.filter((s) => s.games > 0).slice(0, 2);
-    if (alts.length > 0) {
-      const list = alts.map((s) => `${s.san} (${pct(s.pct)})`).join(' and ');
+  const c8 = lecture.branches.find((b) => b.exploreLines.length > 0);
+  if (c8) {
+    // Intro the "what was left out" section once, then MARCH each alternative out
+    // on the board with narration (David 2026-07-23) — the coach plays a6, then
+    // e6, rather than telling the student to go explore alone.
+    const list = c8.exploreLines.map((e) => `${e.san} (${pct(e.pct)})`).join(' and ');
+    let first = true;
+    for (const e of c8.exploreLines) {
+      const lead = first
+        ? `We didn't cover everything — at move ${c8.moveNumber} the other main tries are ${list}. Let me march them out. First, ${e.san}.`
+        : `And the other try, ${e.san}.`;
+      first = false;
       beats.push({
-        fenBefore: leftOut.b.fenBefore,
-        showUci: uciFor(leftOut.b.fenBefore, alts[0].san),
-        showSan: alts[0].san,
-        moveNumber: leftOut.b.moveNumber,
-        moverColor: leftOut.b.moverColor,
-        kind: 'mainline',
-        fact: `We didn't cover everything — at move ${leftOut.b.moveNumber} the other main tries, ${list}, are big lines of their own. Explore them on your own to round out the opening.`,
+        fenBefore: e.fromFen,
+        showUci: uciFor(e.fromFen, e.san),
+        showSan: e.san,
+        moveNumber: c8.moveNumber,
+        moverColor: c8.moverColor,
+        kind: 'sideline',
+        fact: lead,
+        diveFromFen: e.fromFen,
+        dive: e.steps,
       });
     }
   }
