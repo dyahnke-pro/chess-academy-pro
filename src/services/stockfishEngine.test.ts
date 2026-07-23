@@ -1266,6 +1266,7 @@ describe('resolveWorkerUrl', () => {
   it('falls back to single-threaded variant when crossOriginIsolated is false', async () => {
     vi.stubGlobal('window', { crossOriginIsolated: false });
     vi.stubGlobal('SharedArrayBuffer', function SharedArrayBufferStub() { /* stub */ });
+    vi.stubGlobal('WebAssembly', { validate: () => true }); // SIMD-capable engine
     vi.resetModules();
     const { resolveWorkerUrl } = await import('./stockfishEngine');
     const result = resolveWorkerUrl();
@@ -1273,6 +1274,32 @@ describe('resolveWorkerUrl', () => {
     expect(result.url).toBe('/stockfish/stockfish-18-lite-single.js');
     expect(result.reason).toContain('multi-thread requirements not met');
     expect(result.reason).toContain('crossOriginIsolated=false');
+  });
+
+  it('routes a non-iOS engine WITHOUT WASM SIMD to the asm.js build (root fix for the 0xfd / Unreachable-code crash)', async () => {
+    // crossOriginIsolated + SAB would otherwise pick the SIMD-enabled `multi`
+    // WASM build — but without SIMD it fails to compile ("Invalid opcode 0xfd")
+    // or traps at runtime. Route to the SIMD-free asm.js build up front.
+    vi.stubGlobal('window', { crossOriginIsolated: true });
+    vi.stubGlobal('SharedArrayBuffer', function SharedArrayBufferStub() { /* stub */ });
+    vi.stubGlobal('navigator', { userAgent: 'Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80 Mobile', maxTouchPoints: 0 });
+    vi.stubGlobal('WebAssembly', { validate: () => false });
+    vi.resetModules();
+    const { resolveWorkerUrl } = await import('./stockfishEngine');
+    const result = resolveWorkerUrl();
+    expect(result.variant).toBe('asm');
+    expect(result.url).toBe('/stockfish/stockfish-asm.js');
+    expect(result.reason).toContain('SIMD');
+  });
+
+  it('keeps the WASM multi build when SIMD IS supported (non-iOS, isolated + SAB)', async () => {
+    vi.stubGlobal('window', { crossOriginIsolated: true });
+    vi.stubGlobal('SharedArrayBuffer', function SharedArrayBufferStub() { /* stub */ });
+    vi.stubGlobal('navigator', { userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120', maxTouchPoints: 0 });
+    vi.stubGlobal('WebAssembly', { validate: () => true });
+    vi.resetModules();
+    const { resolveWorkerUrl } = await import('./stockfishEngine');
+    expect(resolveWorkerUrl().variant).toBe('multi');
   });
 
   it('falls back to single-threaded variant when SharedArrayBuffer is undefined (even with isolation)', async () => {

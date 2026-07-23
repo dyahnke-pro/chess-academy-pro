@@ -118,6 +118,34 @@ function isIosSafari(): boolean {
   return !/CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
 }
 
+/** WASM SIMD capability probe (wasm-feature-detect's canonical module — it uses
+ *  the exact `0xfd` SIMD opcode family that appears in the crash). The shipped
+ *  `stockfish-18-lite{,-single}.wasm` builds are SIMD-enabled, so on an engine
+ *  WITHOUT WASM SIMD they fail to compile ("Invalid opcode 0xfd (enable with
+ *  --experimental-wasm-simd)") or trap at runtime ("Unreachable code should not
+ *  be executed") — the ~390 PostHog Stockfish crashes. Detect the capability up
+ *  front so a SIMD-incapable engine is routed to the bulletproof asm.js build
+ *  BEFORE the WASM crashes, instead of the crash-then-retry fallback. Cached —
+ *  SIMD support is a static per-engine capability. */
+let _wasmSimd: boolean | null = null;
+export function wasmSimdSupported(): boolean {
+  if (_wasmSimd !== null) return _wasmSimd;
+  try {
+    _wasmSimd =
+      typeof WebAssembly === 'object' &&
+      typeof WebAssembly.validate === 'function' &&
+      WebAssembly.validate(
+        new Uint8Array([
+          0, 97, 115, 109, 1, 0, 0, 0, 1, 5, 1, 96, 0, 1, 123, 3, 2, 1, 0,
+          10, 10, 1, 8, 0, 65, 0, 253, 15, 253, 98, 11,
+        ]),
+      );
+  } catch {
+    _wasmSimd = false;
+  }
+  return _wasmSimd;
+}
+
 export function resolveWorkerUrl(): ResolvedWorker {
   if (typeof window === 'undefined') {
     return { url: STOCKFISH_ST_URL, variant: 'single', reason: 'no-window', workerType: 'classic' };
@@ -141,6 +169,20 @@ export function resolveWorkerUrl(): ResolvedWorker {
       url: STOCKFISH_IOS_ASM_URL,
       variant: 'asm',
       reason: 'iOS — asm.js build (multi OOMs the iPhone heap; the WASM single build call_indirect-traps on WebKit)',
+      workerType: 'classic',
+    };
+  }
+  // No WASM SIMD → the SIMD-enabled WASM builds (multi AND single) can't run
+  // here: they fail to compile ("Invalid opcode 0xfd") or trap at runtime
+  // ("Unreachable code should not be executed"). Route to the SIMD-free asm.js
+  // build PROACTIVELY — a working engine beats a crashing one (root fix for the
+  // ~390 PostHog Stockfish WASM crashes; the old code only fell to asm AFTER a
+  // crash, and the single build has no crash-retry to asm).
+  if (!wasmSimdSupported()) {
+    return {
+      url: STOCKFISH_IOS_ASM_URL,
+      variant: 'asm',
+      reason: 'no WASM SIMD — asm.js build (the SIMD-enabled WASM builds crash on this engine)',
       workerType: 'classic',
     };
   }
