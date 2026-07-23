@@ -643,7 +643,7 @@ export function buildTheoryLectureBeats(
   // Any colour: the opening's big untaken lines include the opponent's other
   // setups (Danya-as-Black cites White's "Bishop C4"). Strongest sidelines win.
   const leftOut = lecture.branches
-    .filter((b) => !b.isSideline && !b.leftBook && b.played != null && b.sidelines.some((s) => s.games > 0))
+    .filter((b) => b.ply >= 3 && !b.isSideline && !b.leftBook && b.played != null && b.sidelines.some((s) => s.games > 0))
     .map((b) => ({ b, weight: b.sidelines.reduce((s, m) => s + m.pct, 0) }))
     .sort((a, b) => b.weight - a.weight)[0];
   if (leftOut) {
