@@ -181,8 +181,25 @@ function toTheoryMove(m: MasterPlayMove, total: number, mover: 'white' | 'black'
 }
 
 /** ", scoring 62%" when the result split exists, else "" (popularity-only). */
-function scoreClause(m: TheoryMove): string {
-  return m.scoreForMover != null ? `, scoring ${pct(m.scoreForMover)}` : '';
+/** The score is EXPECTED POINTS for the SIDE that plays the move (win=1, draw=½)
+ *  — so a bare "scoring 46%" reads as mediocre when it actually means "White
+ *  scores a shade under even here" (David 2026-07-23: "what does scoring 46%
+ *  mean?"). Name the side, anchor it to 50% (even), and when the move is the
+ *  OPPONENT's and they score under even, say plainly it's comfortable for the
+ *  student — the number is good news from their side. */
+function scoreClause(
+  m: TheoryMove,
+  moverColor: 'white' | 'black',
+  studentColor?: 'white' | 'black',
+): string {
+  if (m.scoreForMover == null) return '';
+  const side = moverColor === 'white' ? 'White' : 'Black';
+  // Bucket on the DISPLAYED (rounded) percent so "50%, a shade under even" can't
+  // happen — the words always agree with the number the student hears.
+  const rp = Math.round(m.scoreForMover * 100);
+  const vsEven = rp >= 54 ? 'a healthy plus' : rp >= 48 ? 'right around even' : 'a shade below even';
+  const benefit = studentColor && moverColor !== studentColor && rp <= 47 ? ' — comfortable for you' : '';
+  return `, and ${side} scores ${rp}% here, ${vsEven}${benefit}`;
 }
 
 /**
@@ -719,7 +736,7 @@ export function buildTheoryLectureBeats(
         kind: 'departure',
         // Danya's departure shape: name where book is, what it is, then the
         // anti-sideline recipe ("when in doubt, keep developing").
-        fact: `Here's where the game steps out of book. The main road for ${side} is ${b.mainline.san}${mainlineNameClause(b.mainlineName)} — ${pct(b.mainline.pct)} of master games${scoreClause(b.mainline)}.${whySentence}${sidelineClause(b.sidelines)}${b.mainlineDive.length >= 2 ? ' Let me show you how it runs from here.' : ' Past this point you\'re on your own — keep developing and fight for the centre.'}`,
+        fact: `Here's where the game steps out of book. The main road for ${side} is ${b.mainline.san}${mainlineNameClause(b.mainlineName)} — ${pct(b.mainline.pct)} of master games${scoreClause(b.mainline, b.moverColor, studentColor)}.${whySentence}${sidelineClause(b.sidelines)}${b.mainlineDive.length >= 2 ? ' Let me show you how it runs from here.' : ' Past this point you\'re on your own — keep developing and fight for the centre.'}`,
         diveFromFen: b.diveFromFen ?? undefined,
         dive: b.mainlineDive.length >= 2 ? b.mainlineDive : undefined,
       });
@@ -735,7 +752,7 @@ export function buildTheoryLectureBeats(
         // "the main line presses a touch harder" was flavor, not data. And when a
         // dive exists, the beat WALKS the main line so the student SEES the moves
         // being compared (David 2026-07-21: "what was the main line? Show me").
-        fact: `The main line here is ${b.mainline.san} — ${pct(b.mainline.pct)} of games${scoreClause(b.mainline)}.${whySentence} This game went ${b.played.san} instead (${pct(b.played.pct)}), a known sideline.${lineCompareClause(b.mainline, b.played, b.mainlineDive, studentColor && b.moverColor !== studentColor ? "your opponent's" : 'your')}${engineClause(b)}${modelClause(b)}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ` Let me walk down ${b.mainline.san} so you can compare.` : ''}`,
+        fact: `The main line here is ${b.mainline.san} — ${pct(b.mainline.pct)} of games${scoreClause(b.mainline, b.moverColor, studentColor)}.${whySentence} This game went ${b.played.san} instead (${pct(b.played.pct)}), a known sideline.${lineCompareClause(b.mainline, b.played, b.mainlineDive, studentColor && b.moverColor !== studentColor ? "your opponent's" : 'your')}${engineClause(b)}${modelClause(b)}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ` Let me walk down ${b.mainline.san} so you can compare.` : ''}`,
         diveFromFen: b.diveFromFen ?? undefined,
         dive: b.mainlineDive.length >= 2 ? b.mainlineDive : undefined,
       });
@@ -747,7 +764,7 @@ export function buildTheoryLectureBeats(
         moveNumber: b.moveNumber,
         moverColor: b.moverColor,
         kind: 'mainline',
-        fact: `${b.mainline.san} is ${side}'s main line here — ${pct(b.mainline.pct)} of master games${scoreClause(b.mainline)}.${whySentence}${oncePhrase(whyMainClause(b.mainline, b.sidelines))}${engineClause(b)}${sidelineClause(b.sidelines)}${modelClause(b)}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ' Let me show you where it leads.' : ''}`,
+        fact: `${b.mainline.san} is ${side}'s main line here — ${pct(b.mainline.pct)} of master games${scoreClause(b.mainline, b.moverColor, studentColor)}.${whySentence}${oncePhrase(whyMainClause(b.mainline, b.sidelines))}${engineClause(b)}${sidelineClause(b.sidelines)}${modelClause(b)}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ' Let me show you where it leads.' : ''}`,
         diveFromFen: b.diveFromFen ?? undefined,
         dive: b.mainlineDive.length >= 2 ? b.mainlineDive : undefined,
       });
