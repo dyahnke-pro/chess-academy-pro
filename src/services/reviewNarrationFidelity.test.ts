@@ -183,7 +183,10 @@ describe('describeStudentThreat — the threat call-out (David 2026-07-21)', () 
     const { describeStudentThreat } = await import('./groundedAnswer');
     const t = describeStudentThreat(fenBefore, fenAfter, 'b');
     expect(t).toMatch(/threatening Nxf2/);
-    expect(t).toMatch(/forks their queen on d1 and rook on h1/);
+    // Seat-neutral by design: the detector is side-agnostic (baking "their"
+    // caused a seat bug), and the "you're now threatening" wrapper already
+    // establishes whose pieces these are (board-awareness sweep, 2026-07-22).
+    expect(t).toMatch(/forks the queen on d1 and rook on h1/);
   });
 
   it('stays silent on the starting position (no threat created)', async () => {
@@ -231,7 +234,7 @@ describe('opponent-threat teaching — identify, recognize, prevent (David 2026-
     const { detectNewThreat, describeThreatPrevention } = await import('./groundedAnswer');
     const t = detectNewThreat(fenBefore, fenAfter, 'b');
     const p = describeThreatPrevention(fenAfter, t!, 'd4', 'b');
-    expect(p).toMatch(/striking the bishop on c5/);
-    expect(p).toMatch(/holding the whole combination together/);
+    expect(p).toMatch(/hitting the bishop on c5/);
+    expect(p).toMatch(/holding the whole thing together/);
   });
 });

@@ -932,16 +932,54 @@ export function buildReviewSegments(
   // (move/quality/tactic/loose/verdict/structure/king/sac/consequence) always
   // fires (David 2026-07-20 diagnostic: "Philidor Defense" was said 33 times).
   const emittedStaticFacets = new Set<string>();
-  // The last SPOKEN positional verdict — an unchanged verdict is not news
-  // (the new-games fleet caught "You're balanced." shipping verbatim on
-  // repeated quiet plies, R10).
-  let lastVerdictFacet: string | null = null;
-  // STANDING-STATE facets present on the PREVIOUS ply ([tactic]/[loose]) —
-  // a pin/hanging-piece is narrated when it APPEARS, not on every ply it
-  // persists (fleet run 1, Carlsen–Caruana: "Your bishop on a4 pins their
-  // knight on c6" shipped verbatim ply after ply). When the state facet
-  // drops off the board and later reappears, it is news again.
-  let prevStateFacets = new Set<string>();
+  // ── SAY-ONCE LEDGER (David 2026-07-23: "Drop repeats, drop repeats, and make
+  // every one add something new") ─────────────────────────────────────────────
+  // The standing-state family: a live tactic, an undefended piece, an
+  // attacker/defender imbalance, a royal-fork target, a rook on the 7th. Each
+  // teaching read is spoken ONCE PER GAME, keyed on a seat-normalized signature:
+  // a re-appearance of the SAME fact (even after it dropped off the board and
+  // returned) adds nothing new, so it stays silent; a genuinely DIFFERENT one
+  // (new squares → new signature) is new content and still speaks. This is the
+  // hard "drop repeats, drop repeats … every one adds something new" rule — it
+  // supersedes the earlier appear-only pass, which still let a flickering fact
+  // ("your pawn on e4 is undefended") restate itself two or three times.
+  const STANDING_STATE_RE = /^\[(tactic|loose|count|royal|rook7)\]/;
+  const standingSpoken = new Set<string>(); // signatures of standing reads spoken
+  const verdictSpoken = new Set<string>(); // distinct positional verdicts spoken
+  const sacSpoken = new Set<string>(); // sacrifice-compensation profiles spoken
+  const standingSig = (f: string): string =>
+    f.replace(/^\[[a-z0-9-]+\]\s*/, '')
+      .toLowerCase()
+      .replace(/\b(?:your|their|my|mine|our|white|black)\b/g, '')
+      .replace(/[^a-z0-9]+/g, ' ')
+      .trim();
+  // Structure is taught at the SUB-CLAIM level: each open file / outpost /
+  // passed / isolated / doubled pawn is named the first time it is true, then
+  // never restated. A genuinely new atom (a file that just opened, a new passed
+  // pawn) still speaks; the unchanged ones fall silent — so the [structure]
+  // line always ADDS something instead of re-listing the whole pawn skeleton.
+  const structAtomsSeen = new Set<string>();
+  const freshStructureFacet = (facet: string): string | null => {
+    const inner = facet.replace(/^\[structure\]\s*/, '').replace(/\.\s*$/, '');
+    const atoms: string[] = [];
+    for (const seg of inner.split(' · ')) {
+      const listed = /^(open files|passed pawns|isolated pawns|doubled pawns)\s+(.*)$/.exec(seg);
+      if (listed) {
+        const label = listed[1].replace(/s$/, ''); // "open files" → "open file"
+        for (const item of listed[2].split(/,\s*/)) atoms.push(`${label} ${item}`.trim());
+      } else {
+        // outposts segment: "White knight outpost e5; Black bishop outpost d4"
+        for (const item of seg.split(/;\s*/)) atoms.push(item.trim());
+      }
+    }
+    const fresh = atoms.filter((a) => {
+      const k = a.toLowerCase();
+      if (structAtomsSeen.has(k)) return false;
+      structAtomsSeen.add(k);
+      return true;
+    });
+    return fresh.length ? `[structure] ${fresh.join(' · ')}.` : null;
+  };
   // TEACHING REFRAINS speak ONCE per review (David 2026-07-22: "Once a line
   // like this has been said that's it"). The FACTS stay every time (the
   // squares given up, the piece walked away from); the PRINCIPLE attached to
@@ -1053,34 +1091,70 @@ export function buildReviewSegments(
       // Drop an identical STATIC state facet already spoken on an earlier ply
       // (opening / plan-opening / plan-middlegame / opp-dev); keep every dynamic
       // per-move fact.
-      const stateNow = new Set(facets.filter((f) => /^\[(tactic|loose)\]/.test(f)));
-      const kept = facets.filter((f) => {
-        // An UNCHANGED positional verdict is static state too — "You're
-        // balanced." repeated on every quiet ply is the R10 repetition the
-        // new-games fleet caught (Carlsen–Grischuk, 2026-07-22). Speak the
-        // verdict only when it CHANGED since it was last spoken; silence
-        // beats restating (Narration Voice Rules #3/#4).
+      // Build the kept list; some facets are REWRITTEN (structure → only its new
+      // sub-claims) so this is a loop, not a pure filter.
+      const keptRaw: string[] = [];
+      for (const f of facets) {
+        // Positional VERDICT — say-once per DISTINCT verdict (by signature): an
+        // oscillating "you're balanced" can't restate itself, while a genuinely
+        // changed verdict (new edge, new reasons → new signature) still speaks.
         if (/^\[verdict\]/.test(f)) {
-          if (f === lastVerdictFacet) return false;
-          lastVerdictFacet = f;
-          return true;
+          const sig = standingSig(f);
+          if (verdictSpoken.has(sig)) continue;
+          verdictSpoken.add(sig);
+          keptRaw.push(f);
+          continue;
         }
-        // A STANDING pin/hanging-piece is narrated when it APPEARS; while it
-        // persists unchanged from the previous ply it is not news.
-        if (/^\[(tactic|loose)\]/.test(f)) return !prevStateFacets.has(f);
+        // STANDING teaching read (live tactic / undefended piece / count /
+        // royal-fork target / rook-on-7th) — taught ONCE per game by signature.
+        if (STANDING_STATE_RE.test(f)) {
+          const sig = standingSig(f);
+          if (standingSpoken.has(sig)) continue;
+          standingSpoken.add(sig);
+          keptRaw.push(f);
+          continue;
+        }
+        // Structure: speak only the sub-claims not yet taught this game.
+        if (/^\[structure\]/.test(f)) {
+          const fresh = freshStructureFacet(f);
+          if (fresh) keptRaw.push(fresh);
+          continue;
+        }
+        // "Their king is stuck in the centre" is taught at most ONCE per game —
+        // it's a standing observation, robotic to repeat every ply it holds.
+        if (/^\[king\]/.test(f)) {
+          if (kingCenterTaught) continue;
+          kingCenterTaught = true;
+          keptRaw.push(f);
+          continue;
+        }
+        // A sacrifice's COMPENSATION profile is shared across a combination —
+        // state it once per game (by signature); later sacs are still NAMED via
+        // their own [sac-why] mechanism facet, which is dynamic per move.
+        if (/^\[sac\]/.test(f)) {
+          const sig = standingSig(f);
+          if (sacSpoken.has(sig)) continue;
+          sacSpoken.add(sig);
+          keptRaw.push(f);
+          continue;
+        }
         // Development nags: once per review by TAG (David 2026-07-22).
         const oneShot = /^\[(plan-opening|opp-dev)\]/.exec(f);
         if (oneShot) {
-          if (oneShotTags.has(oneShot[1])) return false;
+          if (oneShotTags.has(oneShot[1])) continue;
           oneShotTags.add(oneShot[1]);
-          return true;
+          keptRaw.push(f);
+          continue;
         }
-        if (!/^\[(opening|plan-middlegame|plan-now|passer|badbishop|worst|trapped)\]/.test(f)) return true;
-        if (emittedStaticFacets.has(f)) return false;
-        emittedStaticFacets.add(f);
-        return true;
-      }).map(applyRefrainOnce);
-      prevStateFacets = stateNow;
+        if (/^\[(opening|plan-middlegame|plan-now|passer|badbishop|worst|trapped)\]/.test(f)) {
+          if (emittedStaticFacets.has(f)) continue;
+          emittedStaticFacets.add(f);
+          keptRaw.push(f);
+          continue;
+        }
+        keptRaw.push(f);
+      }
+      const kept = keptRaw.map(applyRefrainOnce);
       segments.push({
         ply: m.ply,
         moveNumber: fullMove,

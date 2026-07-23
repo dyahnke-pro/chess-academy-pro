@@ -3448,14 +3448,19 @@ export function describeThreatRecognition(
           : `even though you cover ${threat.landing}`;
       // The geometry depends on the FORKING PIECE — "one knight's-hop" is only
       // true for a knight fork; detectNewThreat scans EVERY piece's moves, so a
-      // queen/rook/bishop fork was getting the knight's-hop lie (board-awareness
-      // sweep, 2026-07-22). Read the forker's type off the landing square.
-      const forker = c.get(threat.landing as Square);
-      const geom = forker?.type === 'n'
+      // queen/rook/bishop fork must not get the knight's-hop lie (board-awareness
+      // sweep, 2026-07-22). Read the forker's type from the THREAT'S SAN — the
+      // piece that MOVES — not off the landing square: on a capture-fork
+      // (Nxf2) the landing square still holds the VICTIM (the f2 pawn), so
+      // reading it there misread the knight as a pawn and dropped the
+      // knight's-hop geometry entirely (fidelity test, Berlin ...Bc5→Nxf2).
+      const sanPieceLetter = /^([NBRQK])/.exec(threat.san);
+      const forkerType = sanPieceLetter ? sanPieceLetter[1].toLowerCase() : 'p';
+      const geom = forkerType === 'n'
         ? `sitting one knight's-hop from ${threat.landing}`
-        : forker?.type === 'p'
+        : forkerType === 'p'
           ? `both caught by a pawn on ${threat.landing}`
-          : `both in the ${forker ? REVIEW_PIECE_NAME[forker.type] : 'piece'}'s line from ${threat.landing}`;
+          : `both in the ${REVIEW_PIECE_NAME[forkerType]}'s line from ${threat.landing}`;
       return `the pattern to spot: ${threat.targets.join(' and ')} ${geom}, ${guardBit} — that alignment IS the fork, a move before it lands`;
     }
     if (threat.kind === 'capture') {
