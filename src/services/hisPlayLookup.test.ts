@@ -17,7 +17,8 @@ const fenAfter = (sans: string[]): string => { const c = new Chess(); sans.forEa
 
 const DB = {
   [key(startFen)]: { total: 2270, moves: [
-    { san: 'd6', games: 829, w: 470, d: 120, l: 239 },
+    // d6 is both most-played AND his best-scoring (so it's the taught plan-move).
+    { san: 'd6', games: 829, w: 560, d: 60, l: 209 },
     { san: 'Nc6', games: 790, w: 371, d: 100, l: 319 },
     { san: 'e6', games: 424, w: 240, d: 80, l: 104 },
   ] },
@@ -62,7 +63,7 @@ describe('hisPlayLookup', () => {
     expect(plan!.line[0]).toBe('d6');
     expect(plan!.sideMoves[0]).toBe('d6');
     expect(plan!.leadGames).toBe(829);
-    expect(plan!.leadWinPct).toBe(Math.round((100 * 470) / 829));
+    expect(plan!.leadWinPct).toBe(Math.round((100 * 560) / 829));
     // walks into the follow-up positions present in the fixture
     expect(plan!.line).toContain('Nf3');
   });
