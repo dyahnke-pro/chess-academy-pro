@@ -30,6 +30,75 @@ import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBish
 
 interface Located { type: string; color: Color; square: string; }
 
+const MINOR_HOME: Record<Color, Record<'n' | 'b', string[]>> = {
+  w: { n: ['b1', 'g1'], b: ['c1', 'f1'] },
+  b: { n: ['b8', 'g8'], b: ['c8', 'f8'] },
+};
+/** How many of `color`'s knights + bishops have left their home squares. */
+function developedMinors(chess: Chess, color: Color): number {
+  let dev = 0;
+  for (const row of chess.board()) {
+    for (const sq of row) {
+      if (!sq || sq.color !== color || (sq.type !== 'n' && sq.type !== 'b')) continue;
+      if (!MINOR_HOME[color][sq.type].includes(sq.square)) dev += 1;
+    }
+  }
+  return dev;
+}
+/** Has `color`'s king reached a castled square (g/c file on its back rank)? */
+function kingCastled(chess: Chess, color: Color): boolean {
+  const back = color === 'w' ? '1' : '8';
+  for (const row of chess.board()) {
+    for (const sq of row) {
+      if (sq && sq.color === color && sq.type === 'k') {
+        return sq.square[1] === back && (sq.square[0] === 'g' || sq.square[0] === 'c');
+      }
+    }
+  }
+  return false;
+}
+/** Central files (d, e) with no pawn of either side — a proxy for an opened centre. */
+function openCentralFiles(chess: Chess): number {
+  let open = 0;
+  for (const f of ['d', 'e']) {
+    let pawn = false;
+    for (let r = 1; r <= 8; r++) { const p = chess.get(`${f}${r}` as never); if (p && p.type === 'p') { pawn = true; break; } }
+    if (!pawn) open += 1;
+  }
+  return open;
+}
+/**
+ * WHY a mistaken move is bad, for the one classic case we can PROVE: a central
+ * pawn break (d/e-file pawn) that OPENS the centre while the mover is behind in
+ * development (fewer developed minors) or has not castled while the opponent
+ * has. Danya's "e5 is premature — opening the centre before you're ready,
+ * because you're underdeveloped." Fires ONLY when BOTH the break and the lag are
+ * real on the board (G3 + David 2026-07-19: never overstate a non-applicable
+ * why). Returns the clause, or null when it doesn't genuinely apply.
+ */
+export function prematureBreakWhy(fenBefore: string, san: string): string | null {
+  try {
+    const before = new Chess(fenBefore);
+    const mover = before.turn();
+    const enemy: Color = mover === 'w' ? 'b' : 'w';
+    const after = new Chess(fenBefore);
+    const mv = after.move(san.replace(/[?!]+$/, ''));
+    if (!mv || mv.piece !== 'p') return null;
+    // A central pawn BREAK — a d/e-file pawn thrust to the 4th/5th rank (also the
+    // rank a central capture lands on). This is the "opening the centre" family
+    // even when the files open only after the exchange (…dxe5 fxe5).
+    const destRank = Number(mv.to[1]);
+    if ((mv.to[0] !== 'd' && mv.to[0] !== 'e') || (destRank !== 4 && destRank !== 5)) return null;
+    // Also honour a genuine immediate file-open, but don't require it.
+    void openCentralFiles;
+    const behindDev = developedMinors(before, mover) < developedMinors(before, enemy);
+    const kingLag = !kingCastled(before, mover) && kingCastled(before, enemy);
+    if (!behindDev && !kingLag) return null;                     // the lag must be real
+    const reason = behindDev ? 'still behind in development' : 'the king still uncastled';
+    return `a central break while ${reason} — premature, before the position is ready for it`;
+  } catch { return null; }
+}
+
 export interface MoveFactContext {
   fenBefore: string;
   fenAfter: string;
@@ -134,7 +203,14 @@ export function computeMoveFacets(ctx: MoveFactContext): string[] {
     && matingSideIsStudent(ctx.allSans, studentColorWB);
   if (ctx.classification && ctx.classification !== 'good' && ctx.classification !== 'book' && !insideStudentForcedMate) {
     const swingBit = swing != null ? ` (eval swung ${(swing / 100).toFixed(1)})` : '';
-    const betterBit = ctx.bestMoveSan ? ` — the stronger move was ${ctx.bestMoveSan}` : '';
+    // WHY it's a mistake, when we can prove it (a premature central break). Danya
+    // leads with the positional reason, THEN names the better move — so does this.
+    const whyBad = (ctx.classification === 'mistake' || ctx.classification === 'blunder' || ctx.classification === 'inaccuracy')
+      ? prematureBreakWhy(fenBefore, san)
+      : null;
+    const better = ctx.bestMoveSan ? `the stronger move was ${ctx.bestMoveSan}` : '';
+    const tail = [whyBad, better].filter(Boolean).join('; ');
+    const betterBit = tail ? ` — ${tail}` : '';
     // CARRY THE MOVER'S SUBJECT (David 2026-07-20 opera-ply-14 bug): a quiet move
     // (e.g. …Qe7) yields no [move] mechanics facet, so [quality] was the ONLY
     // clue to whose move it was — and with it subject-less, the LLM voiced Black's

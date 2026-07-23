@@ -17,7 +17,7 @@ import { pickStoryGame } from './reviewStoryGame';
 import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShield } from './reviewSacrifice';
 import { detectForcedMatingSequence, explainMatingSacMechanism } from './reviewForcedSequence';
 import { assessPositionalEdge } from './reviewPositionalAssessment';
-import { computeMoveFacets, computeThroughLine } from './reviewFullData';
+import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
 import { describeNotableMove, describeConcessions, findTrappedPiece } from './reviewTeachingPoints';
 import { walkBookLine } from './theoryDeparture';
 import { detectBadHabits } from './badHabitDetector';
@@ -714,6 +714,16 @@ function buildDeterministicNarration(params: {
 
   const variant = ply % 3;
 
+  // WHY the move is bad, when we can PROVE it (a premature central break while
+  // behind in development). Danya leads the mistake with the positional reason,
+  // THEN names the better move — so we prepend it to the negative-class stems.
+  // Grounded + gated (never overstated); null when it doesn't genuinely apply.
+  const whyBad = (classification === 'inaccuracy' || classification === 'mistake' || classification === 'blunder')
+    ? prematureBreakWhy(fenBefore, playedSan)
+    : null;
+  const whyLead = whyBad ? `That's ${whyBad}. ` : '';
+  const w = (s: string): string => whyLead + s; // prepend the proven why to a stem
+
   // The student's eval AFTER the move, in words — the honest fallback when a
   // strong move has no nameable geometry (a quiet consolidating move). Grounded
   // in the engine eval, never praise-for-praise's-sake.
@@ -805,14 +815,14 @@ function buildDeterministicNarration(params: {
           `${bestMoveSan} keeps the edge; this lets a little of it slip.`,
           `The precise move was ${bestMoveSan}. Small thing, but it adds up.`,
         ];
-        return stems[variant];
+        return w(stems[variant]);
       }
-      return 'A small inaccuracy — there was a more precise move available.';
+      return w('A small inaccuracy — there was a more precise move available.');
     }
     if (bestMoveSan) {
-      return `Your opponent slipped — ${bestMoveSan} was stronger.`;
+      return w(`Your opponent slipped — ${bestMoveSan} was stronger.`);
     }
-    return null;
+    return whyBad ? whyLead.trimEnd() : null;
   }
 
   if (classification === 'mistake') {
@@ -823,14 +833,14 @@ function buildDeterministicNarration(params: {
           `${bestMoveSan} was the move; this hands the initiative back.${swingPhrase}`,
           `A real concession. ${bestMoveSan} kept everything together.${swingPhrase}`,
         ];
-        return stems[variant];
+        return w(stems[variant]);
       }
-      return `A real mistake — the engine had a stronger continuation.${swingPhrase}`;
+      return w(`A real mistake — the engine had a stronger continuation.${swingPhrase}`);
     }
     if (bestMoveSan) {
-      return `Your opponent erred — ${bestMoveSan} was much better.${swingPhrase}`;
+      return w(`Your opponent erred — ${bestMoveSan} was much better.${swingPhrase}`);
     }
-    return `Your opponent gave ground here.${swingPhrase}`;
+    return w(`Your opponent gave ground here.${swingPhrase}`);
   }
 
   if (classification === 'blunder') {
@@ -841,14 +851,14 @@ function buildDeterministicNarration(params: {
           `Costly. Find ${bestMoveSan} here and the game holds.${swingPhrase}`,
           `${bestMoveSan} was sitting right there — this one changes the game.${swingPhrase}`,
         ];
-        return stems[variant];
+        return w(stems[variant]);
       }
-      return `A genuine blunder — the engine had a much stronger continuation.${swingPhrase}`;
+      return w(`A genuine blunder — the engine had a much stronger continuation.${swingPhrase}`);
     }
     if (bestMoveSan) {
-      return `Your opponent blundered — ${bestMoveSan} would have held.${swingPhrase}`;
+      return w(`Your opponent blundered — ${bestMoveSan} would have held.${swingPhrase}`);
     }
-    return `Your opponent blundered here.${swingPhrase}`;
+    return w(`Your opponent blundered here.${swingPhrase}`);
   }
 
   return null;
