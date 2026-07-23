@@ -431,13 +431,16 @@ export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: 
     if (!pc) return null;
     const enemyWB: Color = pc.color === 'w' ? 'b' : 'w';
     const eyes: string[] = [];
-    const guards: string[] = [];
     for (const row of a.board()) {
       for (const cell of row) {
         if (!cell || cell.square === to) continue;
         if (!a.attackers(cell.square, pc.color).includes(to)) continue;
+        // Only the ENEMY targets the moved piece now eyes are teaching — a
+        // fresh pressure the student should see. "guards your own pawn on d2"
+        // is mechanics, not an idea (David 2026-07-23: cut the per-move filler);
+        // a piece that must defend an ATTACKED friend surfaces via the
+        // [loose]/count detectors instead.
         if (cell.color === enemyWB && cell.type !== 'k') eyes.push(`the ${pieceWord(cell.type)} on ${cell.square}`);
-        else if (cell.color === pc.color && cell.type !== 'k') guards.push(`the ${pieceWord(cell.type)} on ${cell.square}`);
       }
     }
     const fights: string[] = [];
@@ -448,7 +451,6 @@ export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: 
     const bits: string[] = [];
     if (eyes.length) bits.push(`eyes ${eyes.slice(0, 2).join(' and ')}`);
     if (fights.length) bits.push(`fights for ${fights.join(' and ')}`);
-    if (guards.length) bits.push(`guards ${guards.slice(0, 2).join(' and ')}`);
     if (!bits.length) return null;
     return `The ${pieceWord(pc.type)} on ${to} now ${bits.join(', ')}.`;
   } catch {
