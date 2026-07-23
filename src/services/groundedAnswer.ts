@@ -3259,14 +3259,18 @@ export function seatPieceReferences(
     const ADJ = 'passed|weak|isolated|doubled|backward|extra|lone|bad|connected|protected|central|advanced|remaining|outside';
     return text.replace(
       new RegExp(
-        `(\\b[Yy]our opponent's\\s+|\\b[Yy]our\\s+|\\b[Tt]heir\\s+|\\b[Tt]he\\s+)?((?:${ADJ})\\s+)?\\b(Knight|Bishop|Rook|Queen|Pawn|King|knight|bishop|rook|queen|pawn|king)\\s+on\\s+([a-h][1-8])\\b`,
+        `(\\b[Yy]our opponent's\\s+|\\b[Yy]our\\s+|\\b[Tt]heir\\s+|\\b[Tt]he\\s+|\\b[Aa]n?\\s+)?((?:${ADJ})\\s+)?\\b(Knight|Bishop|Rook|Queen|Pawn|King|knight|bishop|rook|queen|pawn|king)\\s+on\\s+([a-h][1-8])\\b`,
         'g',
       ),
       (whole, lead: string | undefined, adj: string | undefined, piece: string, sq: string) => {
-        const leadLower = (lead ?? '').toLowerCase();
+        const leadLower = (lead ?? '').toLowerCase().trim();
         // Already seated — leave the author's possessive (and any adjective it
         // introduced) alone.
         if (leadLower.startsWith('your') || leadLower.startsWith('their')) return whole;
+        // An INDEFINITE article ("creates a passed pawn on c2") is already
+        // grammatical — stamping a possessive after it produced "a your passed
+        // pawn on c2" (prod line-read, 2026-07-23). Leave indefinite phrases be.
+        if (leadLower === 'a' || leadLower === 'an') return whole;
         const cell = board.get(sq as Square);
         if (!cell || cell.type !== WANT[piece.toLowerCase()]) return whole;
         const owner = cell.color === studentColorWB ? 'your' : 'their';
