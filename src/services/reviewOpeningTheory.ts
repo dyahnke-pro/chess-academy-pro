@@ -27,8 +27,9 @@ export interface TheoryMove {
   games: number;
   /** Share of games at this position that played this move (0..1). */
   pct: number;
-  /** Win-share for the SIDE TO MOVE (win + half the draws), 0..1. */
-  scoreForMover: number;
+  /** Win-share for the SIDE TO MOVE (win + half the draws), 0..1. Null when the
+   *  masters DB has no result split for this position (degrade to popularity). */
+  scoreForMover: number | null;
 }
 
 /** One theoretically-meaningful moment in the opening. */
@@ -122,8 +123,14 @@ const MIN_BRANCH_GAMES = 10;
  *  and offbeat ones stop honestly where the book does. */
 const MAX_PLIES = 24;
 
-function scoreForMover(m: MasterPlayMove, mover: 'white' | 'black'): number {
-  // white/draw/black are win-shares of the games with this move.
+function scoreForMover(m: MasterPlayMove, mover: 'white' | 'black'): number | null {
+  // white/draw/black are win-shares of the games with this move. The bundled
+  // masters DB currently ships WITHOUT the result split (enrich-openings-db.mjs
+  // dropped it — now fixed, but a rebuild is pending), so these are all 0 → no
+  // real score. Return null so the lecture DEGRADES to popularity-only instead
+  // of falsely claiming "scoring 0% — a matter of style" (David 2026-07-23).
+  const hasData = m.whitePct + m.drawPct + m.blackPct > 0;
+  if (!hasData) return null;
   return mover === 'white'
     ? m.whitePct + m.drawPct / 2
     : m.blackPct + m.drawPct / 2;
@@ -136,6 +143,11 @@ function toTheoryMove(m: MasterPlayMove, total: number, mover: 'white' | 'black'
     pct: total > 0 ? m.games / total : 0,
     scoreForMover: scoreForMover(m, mover),
   };
+}
+
+/** ", scoring 62%" when the result split exists, else "" (popularity-only). */
+function scoreClause(m: TheoryMove): string {
+  return m.scoreForMover != null ? `, scoring ${pct(m.scoreForMover)}` : '';
 }
 
 /**
@@ -302,13 +314,19 @@ function lineCompareClause(
   const parts: string[] = [];
   const lineWord = poss === 'your' ? 'your line' : "your opponent's line";
   const sideWord = poss === 'your' ? 'your sideline' : "your opponent's sideline";
-  const diff = mainline.scoreForMover - played.scoreForMover;
-  if (diff >= 0.03) {
-    parts.push(`In master play the main line scores ${pct(mainline.scoreForMover)} to ${lineWord}'s ${pct(played.scoreForMover)} — that's its pro; ${lineWord}'s pro is that opponents prepare for it less.`);
-  } else if (diff <= -0.03) {
-    parts.push(`Interestingly, ${sideWord} actually scores a touch BETTER in master play (${pct(played.scoreForMover)} to ${pct(mainline.scoreForMover)}) — it's less common, not worse.`);
+  // Score comparison ONLY when the result split exists; otherwise degrade to a
+  // popularity comparison (real data) — never a fabricated "0% vs 0%".
+  if (mainline.scoreForMover != null && played.scoreForMover != null) {
+    const diff = mainline.scoreForMover - played.scoreForMover;
+    if (diff >= 0.03) {
+      parts.push(`In master play the main line scores ${pct(mainline.scoreForMover)} to ${lineWord}'s ${pct(played.scoreForMover)} — that's its pro; ${lineWord}'s pro is that opponents prepare for it less.`);
+    } else if (diff <= -0.03) {
+      parts.push(`Interestingly, ${sideWord} actually scores a touch BETTER in master play (${pct(played.scoreForMover)} to ${pct(mainline.scoreForMover)}) — it's less common, not worse.`);
+    } else {
+      parts.push(`The two score about the same in master play (${pct(mainline.scoreForMover)} vs ${pct(played.scoreForMover)}) — the choice is a matter of style.`);
+    }
   } else {
-    parts.push(`The two score about the same in master play (${pct(mainline.scoreForMover)} vs ${pct(played.scoreForMover)}) — the choice is a matter of style.`);
+    parts.push(`The main line is the more travelled road (${pct(mainline.pct)} of games vs ${pct(played.pct)}); ${lineWord}'s upside is surprise — opponents prepare for it less.`);
   }
   // "Forcing" is measured on the MAINLINE dive only — we never dove the
   // sideline, so a comparative "sharper of the two" / "both are quiet" claim
@@ -367,7 +385,11 @@ function sidelineClause(sidelines: TheoryMove[]): string {
 function whyMainClause(mainline: TheoryMove, sidelines: TheoryMove[]): string {
   const named = sidelines.filter((s) => s.games > 0);
   if (named.length === 0) return '';
-  const bestSide = Math.max(...named.map((s) => s.scoreForMover));
+  // No result split → speak popularity only, never a fabricated score claim.
+  if (mainline.scoreForMover == null) {
+    return ' It\'s the most-played move here — the well-trodden main road.';
+  }
+  const bestSide = Math.max(...named.map((s) => s.scoreForMover ?? 0));
   if (mainline.scoreForMover >= bestSide) {
     return ' It leads the pack on BOTH counts — most-played and best-scoring — which is exactly why it earns the "main line" label.';
   }
@@ -429,7 +451,7 @@ export function buildTheoryLectureBeats(
         kind: 'departure',
         // Danya's departure shape: name where book is, what it is, then the
         // anti-sideline recipe ("when in doubt, keep developing").
-        fact: `At move ${b.moveNumber}, this is where the game leaves mainstream theory. The book move for ${side} is ${b.mainline.san}${mainlineNameClause(b.mainlineName)} — ${pct(b.mainline.pct)} of master games, scoring ${pct(b.mainline.scoreForMover)}.${whySentence}${sidelineClause(b.sidelines)}${b.mainlineDive.length >= 2 ? ' Let me show you how the main line runs from here.' : ' Past here you\'re on your own; keep developing and fight for the centre.'}`,
+        fact: `At move ${b.moveNumber}, this is where the game leaves mainstream theory. The book move for ${side} is ${b.mainline.san}${mainlineNameClause(b.mainlineName)} — ${pct(b.mainline.pct)} of master games${scoreClause(b.mainline)}.${whySentence}${sidelineClause(b.sidelines)}${b.mainlineDive.length >= 2 ? ' Let me show you how the main line runs from here.' : ' Past here you\'re on your own; keep developing and fight for the centre.'}`,
         diveFromFen: b.diveFromFen ?? undefined,
         dive: b.mainlineDive.length >= 2 ? b.mainlineDive : undefined,
       });
@@ -445,7 +467,7 @@ export function buildTheoryLectureBeats(
         // "the main line presses a touch harder" was flavor, not data. And when a
         // dive exists, the beat WALKS the main line so the student SEES the moves
         // being compared (David 2026-07-21: "what was the main line? Show me").
-        fact: `At move ${b.moveNumber}, the main line is ${b.mainline.san} (${pct(b.mainline.pct)}, scoring ${pct(b.mainline.scoreForMover)}).${whySentence} This game took ${b.played.san} (${pct(b.played.pct)}) — a known sideline.${lineCompareClause(b.mainline, b.played, b.mainlineDive, studentColor && b.moverColor !== studentColor ? "your opponent's" : 'your')}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ` Let me walk you down the main line ${b.mainline.san} so you can compare.` : ''}`,
+        fact: `At move ${b.moveNumber}, the main line is ${b.mainline.san} (${pct(b.mainline.pct)}${scoreClause(b.mainline)}).${whySentence} This game took ${b.played.san} (${pct(b.played.pct)}) — a known sideline.${lineCompareClause(b.mainline, b.played, b.mainlineDive, studentColor && b.moverColor !== studentColor ? "your opponent's" : 'your')}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ` Let me walk you down the main line ${b.mainline.san} so you can compare.` : ''}`,
         diveFromFen: b.diveFromFen ?? undefined,
         dive: b.mainlineDive.length >= 2 ? b.mainlineDive : undefined,
       });
@@ -457,7 +479,7 @@ export function buildTheoryLectureBeats(
         moveNumber: b.moveNumber,
         moverColor: b.moverColor,
         kind: 'mainline',
-        fact: `At move ${b.moveNumber}, ${b.mainline.san} is the main line for ${side} — ${pct(b.mainline.pct)} of games, scoring ${pct(b.mainline.scoreForMover)}, the principled choice.${whySentence}${whyMainClause(b.mainline, b.sidelines)}${sidelineClause(b.sidelines)}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ' Let me show you where it leads.' : ''}`,
+        fact: `At move ${b.moveNumber}, ${b.mainline.san} is the main line for ${side} — ${pct(b.mainline.pct)} of games${scoreClause(b.mainline)}, the principled choice.${whySentence}${whyMainClause(b.mainline, b.sidelines)}${sidelineClause(b.sidelines)}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ' Let me show you where it leads.' : ''}`,
         diveFromFen: b.diveFromFen ?? undefined,
         dive: b.mainlineDive.length >= 2 ? b.mainlineDive : undefined,
       });
