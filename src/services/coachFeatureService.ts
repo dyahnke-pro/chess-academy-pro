@@ -4,6 +4,8 @@ import { seeGain } from './positionReadingService';
 import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice, seatPieceReferences, describeStudentThreat, detectNewThreat, describeThreatRecognition, describeThreatPrevention } from './groundedAnswer';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
 import { plyFactsForMove, plyFactsClause, computePvLine, type PvLine, type PrevCaptureContext } from './pvPlayback';
+import { explainEvalByPieceQuality } from './pieceQuality';
+import type { Evaluate } from './moveComparison';
 import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan } from './reviewStrategicOrientation';
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
 import { detectOpening } from './openingDetectionService';
@@ -2083,6 +2085,46 @@ async function augmentWithProjections(
       s.narration = `${s.narration ?? ''} ${callOut}`.trim();
       deepOppBudget -= 1;
     } catch { /* skip this ply — never block the walk on a threat probe */ }
+  }
+
+  // #6 — BAD-PIECE ATTRIBUTION (David 2026-07-23, IMG_4589: "the knight and the
+  // bishop are so bad that White has fighting chances"). The method of comparison
+  // aimed at a PIECE: where the eval and the MATERIAL COUNT disagree most, the
+  // story is piece ACTIVITY, not material. Ablate the worst-placed piece(s) —
+  // teleport to the best safe square, re-eval — and speak it ONLY if the swing
+  // proves those pieces are the cause (the engine gates every claim; unproven →
+  // silent, G0). One position per game, timeout-guarded; both scopes (the beat
+  // is where Danya's "his pieces are terrible" reads live).
+  {
+    const pieceEvaluate: Evaluate = async (fen) => {
+      const l = await raceTimeout(computePvLine(fen, { maxPlies: 1 }), PROJ_TIMEOUT_MS, null);
+      return { cp: l ? l.rootEvalCp : NaN };
+    };
+    const PQ_PTS: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+    const whiteMaterial = (fen: string): number => {
+      try {
+        let s = 0;
+        for (const row of new Chess(fen).board()) for (const c of row) if (c) s += (c.color === 'w' ? 1 : -1) * (PQ_PTS[c.type] ?? 0);
+        return s;
+      } catch { return 0; }
+    };
+    // The single position where WHITE-POV material and eval diverge most (≥ 1.5
+    // pawns of eval the material can't explain) — that's a piece-activity story.
+    let target: ReviewMoveSegment | null = null;
+    let bestGap = 150;
+    for (const s of segments) {
+      if (s.evalAfter === null || Math.abs(s.evalAfter) >= 5000) continue; // skip mate-scores
+      const gap = Math.abs(whiteMaterial(s.fenAfter) * 100 - s.evalAfter);
+      if (gap > bestGap) { bestGap = gap; target = s; }
+    }
+    if (target) {
+      const res = await raceTimeout(
+        explainEvalByPieceQuality(target.fenAfter, pieceEvaluate, { swingThresholdCp: 150, pairThresholdCp: 220 }),
+        PROJ_TIMEOUT_MS * 2,
+        null,
+      );
+      if (res?.delta) target.narration = `${target.narration ?? ''} ${res.delta.text}.`.trim();
+    }
   }
 
   if (scope === 'mistakes') return;
