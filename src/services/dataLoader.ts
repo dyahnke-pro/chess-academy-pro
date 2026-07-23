@@ -380,6 +380,24 @@ export async function loadProRepertoireData(): Promise<void> {
  * some JSON content (G8, David 2026-05-28).
  */
 export async function reconcileProRepertoires(): Promise<void> {
+  const entries = (proRepertoireData as { openings: ProRepertoireEntry[] }).openings;
+
+  // Fast early-out BEFORE any heavy work or opening a write transaction: if the
+  // revision already matches, there's nothing to reconcile.
+  const meta0 = await db.meta.get(PRO_REVISION_KEY);
+  if (meta0?.value === PRO_DATA_REVISION) return;
+
+  // Precompute every position OUTSIDE the transaction. computePosition replays
+  // the full PGN through chess.js — heavy synchronous CPU. Doing it inside the
+  // rw transaction leaves long sync gaps with NO in-flight IDB request, and
+  // WebKit/iOS auto-commits an IndexedDB transaction the moment its microtask
+  // queue drains during such a gap → the later bulkDelete then fails with
+  // "Attempt to delete range from database without an in-progress transaction"
+  // (PostHog, iOS capacitor:// boot, 2026-07-21). Precomputing keeps the
+  // transaction body pure fast IDB ops, so it never idles mid-flight.
+  const posById = new Map<string, ReturnType<typeof computePosition>>();
+  for (const entry of entries) posById.set(entry.id, computePosition(entry.pgn));
+
   // Wrap the entire reconcile in a single read-write transaction so all
   // reads (get, toArray) and writes (bulkPut, bulkDelete, meta.put) share
   // one scope. Without this, each await in the for-of loop creates its own
@@ -387,15 +405,16 @@ export async function reconcileProRepertoires(): Promise<void> {
   // can race → "Attempt to get records from database without an in-progress
   // transaction" (Dexie runtime error, caught in prod 2026-06-30).
   await db.transaction('rw', db.openings, db.meta, async () => {
+    // Re-check inside the transaction in case a concurrent reconcile applied
+    // the revision between the read above and acquiring the write lock.
     const meta = await db.meta.get(PRO_REVISION_KEY);
     if (meta?.value === PRO_DATA_REVISION) return;
 
     const defaults = createDefaultSrsFields();
-    const entries = (proRepertoireData as { openings: ProRepertoireEntry[] }).openings;
 
     const toPut: OpeningRecord[] = [];
     for (const entry of entries) {
-      const { fen, uci } = computePosition(entry.pgn);
+      const { fen, uci } = posById.get(entry.id) ?? computePosition(entry.pgn);
       const existing = await db.openings.get(entry.id);
 
       if (existing) {
@@ -494,6 +513,19 @@ export async function reconcileProRepertoires(): Promise<void> {
  * Revision-gated so it no-ops once applied.
  */
 export async function reconcileBaseRepertoire(): Promise<void> {
+  const entries = repertoireData as RepertoireEntry[];
+
+  // Fast early-out before any heavy work / opening a write transaction.
+  const meta0 = await db.meta.get(BASE_REVISION_KEY);
+  if (meta0?.value === BASE_DATA_REVISION) return;
+
+  // Precompute positions OUTSIDE the transaction — see reconcileProRepertoires:
+  // heavy synchronous computePosition inside the rw transaction lets WebKit/iOS
+  // auto-commit the IndexedDB transaction mid-flight, breaking the later
+  // bulkDelete orphan sweep ("delete range without an in-progress transaction").
+  const posById = new Map<string, ReturnType<typeof computePosition>>();
+  for (const entry of entries) posById.set(entry.id, computePosition(entry.pgn));
+
   // Single rw transaction so the for-of get() loop, bulkPut, orphan sweep,
   // and revision bump share one scope (David 2026-06-30, prod catch).
   await db.transaction('rw', db.openings, db.meta, async () => {
@@ -502,9 +534,9 @@ export async function reconcileBaseRepertoire(): Promise<void> {
 
     const toPut: OpeningRecord[] = [];
     const defaults = createDefaultSrsFields();
-    for (const entry of repertoireData as RepertoireEntry[]) {
+    for (const entry of entries) {
       const existing = await db.openings.get(entry.id);
-      const { fen, uci } = computePosition(entry.pgn);
+      const { fen, uci } = posById.get(entry.id) ?? computePosition(entry.pgn);
       if (!existing) {
         // Brand-new masterclass added to repertoire.json AFTER this device was
         // first seeded (e.g. glek-system, David 2026-07-03). The first-install
