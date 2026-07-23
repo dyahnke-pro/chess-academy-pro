@@ -6,7 +6,8 @@ import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhas
 import { plyFactsForMove, plyFactsClause, computePvLine, type PvLine, type PrevCaptureContext } from './pvPlayback';
 import { explainEvalByPieceQuality, lowestMinorMobility } from './pieceQuality';
 import type { Evaluate } from './moveComparison';
-import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan } from './reviewStrategicOrientation';
+import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan, buildHisGroundedPlanBeat } from './reviewStrategicOrientation';
+import { getHisPlayDb } from './hisPlayLookup';
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
 import { detectOpening } from './openingDetectionService';
 import { resolveCuratedOpeningIdeas } from './reviewOpeningTheory';
@@ -1448,7 +1449,10 @@ export function buildReviewSegments(
       && m.ply <= OPENING_PLAN_MAX_PLY
       && (m.classification === null || m.classification === 'book' || m.classification === 'good')
     ) {
-      const dev = buildOpeningDevelopmentPlan(fenPair.fenBefore, studentColorWB, { openingName: openingName ?? null, curatedIdeas: curatedOpeningIdeas, seed: gameSeed });
+      // PRIMARY: his own games (David 2026-07-23). Falls through to curated
+      // repertoire ideas, then nothing — the ungrounded generic template is gone.
+      const dev = buildHisGroundedPlanBeat(fenPair.fenBefore, studentColorWB, openingName ?? null)
+        ?? buildOpeningDevelopmentPlan(fenPair.fenBefore, studentColorWB, { openingName: openingName ?? null, curatedIdeas: curatedOpeningIdeas, seed: gameSeed });
       if (dev) { narration = dev.text; planArrows = dev.arrows; openingPlanShown = true; narrationSource = 'opening-plan'; }
     }
     // (b) Middlegame orientation (structure anchor + both-sides plans), fired
@@ -2446,6 +2450,9 @@ export async function generateReviewNarration(params: {
     ? introTrimmed
     : defaultIntroText({ playerColor, result, openingName, mistakeCount });
 
+  // Warm the his-play DB (primary opening-plan grounding source) before the
+  // sync segment build so buildHisGroundedPlanBeat's sync lookup has data.
+  await getHisPlayDb();
   const segments = buildReviewSegments(moves.slice(0, usableCount), playerColor, openingName, uncapped);
 
   // FUTURE-POSITION PROJECTIONS (#1 plan realization + #2 consequence projection)

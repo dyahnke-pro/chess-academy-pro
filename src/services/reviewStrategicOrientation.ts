@@ -27,6 +27,7 @@
  */
 import { Chess } from 'chess.js';
 import { describeStructure } from './boardStructure';
+import { hisGroundedPlanSync } from './hisPlayLookup';
 
 /** A plan-idea arrow. Colours: PLAN_BLUE for the student's plan, PLAN_AMBER for
  *  the opponent's — distinct from the green best-move arrow so the two never
@@ -264,12 +265,72 @@ export function buildOpeningDevelopmentPlan(
   // the STUDENT's plan only, named by the opening (the arrows show both sides'
   // development) — never the symmetric "both sides have the exact same plan"
   // that read the same every game (David 2026-07-20). Empty > generic.
-  const myClause = devClause(mine, 'you');
-  if (!myClause) return null;
-  const myLower = myClause.charAt(0).toLowerCase() + myClause.slice(1);
-  const prefix = openingLabel ? `In the ${openingLabel}, ` : 'Out of the opening, ';
-  const text = `${prefix}${myLower}.`;
-  return { text: text.charAt(0).toUpperCase() + text.slice(1), arrows };
+  // NO ungrounded generic fallback (David 2026-07-23: the "the knight belongs
+  // on c6… get the king castled" template fired on EVERY game — it's an
+  // ungrounded suggestion, not teaching). Without curated ideas we say nothing
+  // here; the caller grounds the plan in HIS games (buildHisGroundedPlanBeat)
+  // first, masters DB second, and only then nothing. Empty > generic.
+  return null;
+}
+
+const CENTRAL_FILES = new Set(['c', 'd', 'e', 'f']);
+
+/** A central pawn break (a pawn move/capture landing on a c–f file, rank 4/5) —
+ *  the moves that challenge the centre. Flank pushes (a4/h4) are NOT breaks. */
+function isCentralBreak(san: string): boolean {
+  if (!/^[a-h]/.test(san)) return false; // pawn moves start with a file letter
+  const dest = san.match(/([a-h])([1-8])(?:=[QRBN])?[+#]?$/);
+  return !!dest && CENTRAL_FILES.has(dest[1]) && (dest[2] === '4' || dest[2] === '5');
+}
+
+/**
+ * The PRIMARY opening-plan beat — grounded in HIS OWN games (David 2026-07-23:
+ * "use his games as the primary source"). Looks up the position in the his-play
+ * DB, follows his best-scoring frequent move per ply, and speaks that real
+ * itinerary + the central break, with a confidence phrasing scaled by sample
+ * size + his win-rate. Lead-the-eye arrows point at each of his plan moves.
+ * Returns null when he has no (good) plan for this position — the caller then
+ * falls through to the masters DB. Requires the his-play DB to be preloaded
+ * (getHisPlayDb()); returns null if not.
+ */
+export function buildHisGroundedPlanBeat(
+  fen: string,
+  studentColorWB: 'w' | 'b',
+  openingName: string | null,
+): PlanBeat | null {
+  const applyMove = (f: string, san: string): string | null => {
+    try { const c = new Chess(f); c.move(san); return c.fen(); } catch { return null; }
+  };
+  const plan = hisGroundedPlanSync(fen, applyMove, 6);
+  if (!plan || plan.side !== studentColorWB || plan.sideMoves.length === 0) return null;
+
+  const isBlack = plan.side === 'b';
+  const fmt = (san: string): string => (isBlack ? `…${san}` : san);
+  const who = isBlack ? 'Black' : 'White';
+  // Keep his moves in CHRONOLOGICAL order (teaching the wrong sequence is a
+  // defect); flag the central break as the key lever without reordering.
+  const planStr = plan.sideMoves.map(fmt).join(', ');
+  const brk = plan.sideMoves.find(isCentralBreak);
+  const breakNote = brk ? `, with the ${fmt(brk)} break the key lever` : '';
+  const conf = plan.total >= 100
+    ? `his well-worn path here — ${plan.leadWinPct}% across ${plan.total} of his games`
+    : `his choice in this structure (${plan.leadWinPct}% over ${plan.total} of his games)`;
+  const namePart = openingName ? `In the ${openingName}, ` : '';
+  const text = `${namePart}${who}'s plan is ${planStr}${breakNote}. That's ${conf}.`;
+
+  // Lead-the-eye: PLAN_BLUE arrow on each of HIS plan moves (replay for squares).
+  const arrows: PlanArrow[] = [];
+  let cur = fen;
+  let curSide: 'w' | 'b' = plan.side;
+  for (const san of plan.line) {
+    let mv: { from: string; to: string } | null = null;
+    try { const c = new Chess(cur); const r = c.move(san); mv = r; cur = c.fen(); } catch { break; }
+    if (curSide === plan.side && mv && arrows.length < 4) {
+      arrows.push({ startSquare: mv.from, endSquare: mv.to, color: PLAN_BLUE });
+    }
+    curSide = curSide === 'w' ? 'b' : 'w';
+  }
+  return { text, arrows };
 }
 
 // ─── MIDDLEGAME ORIENTATION (pawn majorities) ────────────────────────────────
