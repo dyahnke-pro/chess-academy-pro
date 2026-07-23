@@ -79,16 +79,22 @@ for (const acct of ACCOUNTS) {
       let ok = true;
       for (let i = 0; i < Math.min(sans.length, MAX_PLY); i++) {
         const sideToMove = c.turn(); // whose move BEFORE sans[i]
-        if (sideToMove === hisColor) {
-          // record HIS move at this position
-          const key = fenKey(c.fen());
-          let entry = db.get(key);
-          if (!entry) { entry = { total: 0, moves: new Map() }; db.set(key, entry); }
-          entry.total += 1;
-          let mv = entry.moves.get(sans[i]);
-          if (!mv) { mv = { games: 0, w: 0, d: 0, l: 0 }; entry.moves.set(sans[i], mv); }
-          mv.games += 1; mv[hisRes] += 1;
-        }
+        // Record EVERY move — both his defense AND his opponents' side (David
+        // 2026-07-23: "he also talks about the plans for the person playing the
+        // Grand Prix… we can still latch grounded ideas from his corpus"). The
+        // FEN key includes side-to-move, so White-to-move positions capture the
+        // aggressor's plan, Black-to-move capture his defense. Result is from
+        // the MOVER's perspective (flip his result when the opponent moves).
+        const moverRes = sideToMove === hisColor
+          ? hisRes
+          : (hisRes === 'w' ? 'l' : hisRes === 'l' ? 'w' : 'd');
+        const key = fenKey(c.fen());
+        let entry = db.get(key);
+        if (!entry) { entry = { total: 0, moves: new Map() }; db.set(key, entry); }
+        entry.total += 1;
+        let mv = entry.moves.get(sans[i]);
+        if (!mv) { mv = { games: 0, w: 0, d: 0, l: 0 }; entry.moves.set(sans[i], mv); }
+        mv.games += 1; mv[moverRes] += 1;
         try { c.move(sans[i]); } catch { ok = false; break; }
       }
       if (ok) used++;
