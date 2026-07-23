@@ -945,8 +945,19 @@ export function buildReviewSegments(
   // ("your pawn on e4 is undefended") restate itself two or three times.
   const STANDING_STATE_RE = /^\[(tactic|loose|count|royal|rook7)\]/;
   const standingSpoken = new Set<string>(); // signatures of standing reads spoken
-  const verdictSpoken = new Set<string>(); // distinct positional verdicts spoken
   const sacSpoken = new Set<string>(); // sacrifice-compensation profiles spoken
+  // Verdict is ATOM-DIFFED: the verdict WORD (balanced/better/worse) speaks when
+  // it changes; each REASON speaks only the first time it is true — so a growing
+  // edge adds just the NEW asset ("you now own the open d-file") instead of
+  // re-listing the whole pile every ply ("bishop pair; a7 isolated; passer…").
+  let lastVerdictWord: string | null = null;
+  const verdictReasonsSeen = new Set<string>();
+  // Plans dedup by GOAL, not exact wording: the full "here's how" recipe is
+  // stated ONCE per distinct goal (attack the king / seize the d-file / win the
+  // weak pawn / push the passer), never re-recited when the phrasing drifts a
+  // ply later. Square specifics are stripped from the key so "attack the king on
+  // e8" and "attack the king on e8 before it runs" collapse to one goal.
+  const planGoalsSeen = new Set<string>();
   const standingSig = (f: string): string =>
     f.replace(/^\[[a-z0-9-]+\]\s*/, '')
       .toLowerCase()
@@ -1095,13 +1106,31 @@ export function buildReviewSegments(
       // sub-claims) so this is a loop, not a pure filter.
       const keptRaw: string[] = [];
       for (const f of facets) {
-        // Positional VERDICT — say-once per DISTINCT verdict (by signature): an
-        // oscillating "you're balanced" can't restate itself, while a genuinely
-        // changed verdict (new edge, new reasons → new signature) still speaks.
+        // Positional VERDICT — atom-diffed. Speak the verdict WORD when it
+        // changes, and only the REASONS not yet stated, so a growing edge adds
+        // the new asset instead of re-reciting the pile every ply.
         if (/^\[verdict\]/.test(f)) {
-          const sig = standingSig(f);
-          if (verdictSpoken.has(sig)) continue;
-          verdictSpoken.add(sig);
+          const vm = /^\[verdict\]\s*You're\s+([^:.]+?)(?::\s*(.*?))?\.?\s*$/.exec(f);
+          if (!vm) { keptRaw.push(f); continue; }
+          const word = vm[1].trim();
+          const reasons = vm[2] ? vm[2].split(/;\s*/).map((r) => r.trim()).filter(Boolean) : [];
+          const freshReasons = reasons.filter((r) => !verdictReasonsSeen.has(r.toLowerCase()));
+          const wordChanged = word.toLowerCase() !== lastVerdictWord;
+          if (!wordChanged && freshReasons.length === 0) continue; // nothing new
+          freshReasons.forEach((r) => verdictReasonsSeen.add(r.toLowerCase()));
+          lastVerdictWord = word.toLowerCase();
+          const why = freshReasons.length ? `: ${freshReasons.join('; ')}` : '';
+          keptRaw.push(`[verdict] You're ${word}${why}.`);
+          continue;
+        }
+        // Plans — the full "here's how" recipe ONCE per distinct goal.
+        if (/^\[plan-now\]/.test(f)) {
+          const gm = /the plan from here is to (.+?)(?:\.|,? here'?s)/i.exec(f);
+          const goalKey = gm
+            ? gm[1].toLowerCase().replace(/\b[a-h][1-8]\b/g, '').replace(/[^a-z ]/g, '').replace(/\s+/g, ' ').trim()
+            : f;
+          if (planGoalsSeen.has(goalKey)) continue;
+          planGoalsSeen.add(goalKey);
           keptRaw.push(f);
           continue;
         }
@@ -1146,7 +1175,7 @@ export function buildReviewSegments(
           keptRaw.push(f);
           continue;
         }
-        if (/^\[(opening|plan-middlegame|plan-now|passer|badbishop|worst|trapped)\]/.test(f)) {
+        if (/^\[(opening|plan-middlegame|passer|badbishop|worst|trapped)\]/.test(f)) {
           if (emittedStaticFacets.has(f)) continue;
           emittedStaticFacets.add(f);
           keptRaw.push(f);
