@@ -2007,6 +2007,11 @@ async function augmentWithProjections(
     if (deepBudget <= 0) break;
     if (s.playerColor !== studentColorName) continue;
     if (s.classification !== 'good' && s.classification !== 'great' && s.classification !== 'brilliant') continue;
+    // NEVER STACK two forcing lines on one move (David 2026-07-23, narration
+    // dial-in): if #4 already extended this segment with the engine's
+    // continuation, one line is enough — Danya reserves deep calculation for the
+    // critical moment and never reads two long variations on a single move.
+    if (s.narration && /engine confirms it|if they try to run/i.test(s.narration)) continue;
     try {
       const parts = s.fenAfter.split(' ');
       if (parts[1] === (studentColorWB === 'w' ? 'w' : 'b')) continue; // already student's turn — not a threat read
