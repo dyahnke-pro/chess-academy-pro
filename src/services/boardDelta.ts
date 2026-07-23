@@ -74,8 +74,11 @@ export function computeBoardDelta(fenBefore: string, san: string): string[] {
     const to = mv.to;
 
     // ── UNCOVERS + BLOCKS — sliders whose reach changed because of this move ──
-    const uncovered: string[] = [];
+    const uncovered: Array<{ type: PieceSymbol; sq: string; color: Color; text: string }> = [];
     const blocked: string[] = [];
+    // Every mover slider this move UNBLOCKED, ungated — used to spot the
+    // free-both-pieces IDEA below even when the diagonals open onto empty space.
+    const unblockedMover: Array<{ type: PieceSymbol; sq: string }> = [];
     for (const sq of SQUARES) {
       if (sq === from || sq === to) continue;
       const pb = before.get(sq);
@@ -89,20 +92,29 @@ export function computeBoardDelta(fenBefore: string, san: string): string[] {
       // The slider was UNBLOCKED by this move when it bore on the vacated
       // square before (a slider "attacks" its own blocker, so `from` lives in
       // the before-set, not the gained-set) and its reach actually grew.
-      // Meaningful growth only: an ENEMY piece newly hit, a central square, or
-      // real reach (≥3 new squares). A one-square extension onto an own piece
-      // (the a1 rook "reaching" the c1 bishop after Nc3) is noise.
-      const meaningfulGain = gained.some((g) => {
+      const wasUnblocked = sb.has(from) && gained.length > 0;
+      if (wasUnblocked && pb.color === moverColor) unblockedMover.push({ type: pb.type, sq });
+      // A newly-opened line is only WORTH SAYING when it reaches an ENEMY piece
+      // or a central square — "it now reaches h5" onto empty space is mechanics,
+      // not teaching (David 2026-07-23: voice the idea, cut the readout). The
+      // long-empty-diagonal case (≥3 squares) used to fire here and produced the
+      // 1.e4 "queen's line reaches h5 / bishop's line reaches a6" firehose; the
+      // freeing-of-pieces IDEA is voiced once, below, instead.
+      const worthSaying = gained.some((g) => {
         const occ = after.get(g as Square);
-        return (occ && occ.color !== pb.color) || CENTRAL.has(g);
-      }) || gained.length >= 3;
-      if (sb.has(from) && gained.length > 0 && meaningfulGain) {
+        // Reaching a PIECE is news only if it's an enemy (a fresh target);
+        // reaching your OWN piece — even the pawn you just pushed to d4 — is not.
+        // Reaching an EMPTY central square is real control worth a word.
+        if (occ) return occ.color !== pb.color;
+        return CENTRAL.has(g);
+      });
+      if (wasUnblocked && worthSaying) {
         const far = gained.reduce((m, g) => (chebyshev(g, sq) > chebyshev(m, sq) ? g : m), gained[0]);
         const hits = gained
           .map((g) => ({ g, p: after.get(g as Square) }))
           .filter((x) => x.p && x.p.color !== pb.color)
           .map((x) => `the ${PIECE_WORD[(x.p as { type: PieceSymbol }).type]} on ${x.g}`);
-        uncovered.push(`the ${PIECE_WORD[pb.type]} on ${sq}'s line just opened — it now reaches ${far}${hits.length ? `, hitting ${hits.slice(0, 2).join(' and ')}` : ''}`);
+        uncovered.push({ type: pb.type, sq, color: pb.color, text: `the ${PIECE_WORD[pb.type]} on ${sq}'s line just opened — it now reaches ${far}${hits.length ? `, hitting ${hits.slice(0, 2).join(' and ')}` : ''}` });
       }
       if (lost.length > 0 && !lost.includes(to) && sa.has(to) && pb.color === moverColor) {
         // The landing square sits on this OWN slider's former line — the move
@@ -113,7 +125,34 @@ export function computeBoardDelta(fenBefore: string, san: string): string[] {
         }
       }
     }
-    clauses.push(...uncovered.slice(0, 2));
+    // A pawn advance that swings open BOTH the queen's and a bishop's diagonal
+    // at once (the 1.e4 / 1...e5 idea) is ONE teaching point — voice the idea,
+    // not two mechanical "line opened" clauses (David 2026-07-23: "the most
+    // aggressive opening because it opens up both the diagonals for the queen
+    // and bishop").
+    const onDiagonal = (a: string, bSq: string): boolean => {
+      const df = Math.abs(a.charCodeAt(0) - bSq.charCodeAt(0));
+      const dr = Math.abs(Number(a[1]) - Number(bSq[1]));
+      return df > 0 && df === dr;
+    };
+    // The bishop always opened along a diagonal; the queen only qualifies for
+    // "opens the DIAGONALS for both" when the vacated square sits on the queen's
+    // DIAGONAL — not its file (…d6 frees the queen down the d-FILE, so "diagonals"
+    // would be a chess falsity there). This narrows the idea to the true e-pawn
+    // double-diagonal case (1.e4 / 1…e5).
+    const openQ = unblockedMover.find((u) => u.type === 'q' && onDiagonal(from, u.sq));
+    const openB = unblockedMover.find((u) => u.type === 'b');
+    if (mv.piece === 'p' && openQ && openB) {
+      // Seat-neutral ending — seatPieceReferences stamps the named pieces
+      // (your/their queen…); the tail must NOT hard-code "your" or it mis-seats
+      // the opponent's move ("free your pieces" on …e5).
+      clauses.push(`it opens the diagonals for both the ${PIECE_WORD.q} on ${openQ.sq} and the ${PIECE_WORD.b} on ${openB.sq} at once — the most aggressive way to open the position`);
+      // Any OTHER slider that opened onto a real target still reports normally.
+      const rest = uncovered.filter((u) => !(u.color === moverColor && (u.type === 'q' || u.type === 'b')));
+      clauses.push(...rest.slice(0, 2).map((u) => u.text));
+    } else {
+      clauses.push(...uncovered.slice(0, 2).map((u) => u.text));
+    }
     clauses.push(...blocked.slice(0, 2));
 
     // ── ABANDONS — own pieces the mover guarded from `from`, now guarded by nobody ──

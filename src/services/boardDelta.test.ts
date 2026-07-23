@@ -73,9 +73,28 @@ describe('[eval] attribution — the bar never moves unexplained (David 2026-07-
 });
 
 describe('computeBoardDelta — every relevant change, computed', () => {
-  it('UNCOVERS: 1.d4 opens the c1 bishop\'s diagonal', () => {
-    const clauses = computeBoardDelta(new Chess().fen(), 'd4');
-    expect(clauses.join(' | ')).toMatch(/bishop on c1's line just opened — it now reaches h6/);
+  it('UNCOVERS: 1.e4 voices the free-both-pieces IDEA, not two mechanical line-opens', () => {
+    // The queen (d1) and bishop (f1) diagonals both open through e2 → ONE idea,
+    // not "reaches h5 / reaches a6" (David 2026-07-23: voice the idea, cut the
+    // readout onto empty space).
+    const joined = computeBoardDelta(new Chess().fen(), 'e4').join(' | ');
+    expect(joined).toMatch(/opens the diagonals for both the queen on d1 and the bishop on f1 at once/);
+    expect(joined).not.toMatch(/line just opened — it now reaches h5/);
+    expect(joined).not.toMatch(/line just opened — it now reaches a6/);
+  });
+
+  it('UNCOVERS: a diagonal opening onto EMPTY space is not narrated', () => {
+    // 1.d4 opens only the c1 bishop onto empty squares — the queen opens the
+    // d-FILE (not a diagonal), so there's no "both diagonals" idea, and the
+    // empty-diagonal readout is suppressed as mechanics, not teaching.
+    expect(computeBoardDelta(new Chess().fen(), 'd4').join(' | ')).not.toMatch(/line just opened/);
+  });
+
+  it('UNCOVERS: a line opening onto a real ENEMY target IS still narrated', () => {
+    const c = new Chess();
+    c.move('e4'); c.move('e5'); c.move('Nf3'); c.move('d6'); c.move('d4'); c.move('Bg4');
+    const joined = computeBoardDelta(c.fen(), 'dxe5').join(' | ');
+    expect(joined).toMatch(/queen on d1's line just opened.*hitting the pawn on d6/);
   });
 
   it('BLOCKS: 2.Ne2 shuts in the f1 bishop', () => {
