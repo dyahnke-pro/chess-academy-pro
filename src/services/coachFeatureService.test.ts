@@ -554,6 +554,41 @@ describe('coachFeatureService', () => {
       // Fires at most once.
       expect(segments.filter((s) => s.narrationSource === 'assessment')).toHaveLength(1);
     });
+
+    it('say-once ledger: a standing observation is never restated verbatim (David 2026-07-23)', () => {
+      // The Opera Game — Black's king is stuck in the centre and the d-file
+      // stays open for a long stretch, so [king] / [structure] standing facets
+      // would repeat verbatim ply after ply WITHOUT the say-once ledger. With
+      // it, each standing sentence is spoken once and then falls silent.
+      const sans = [
+        'e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5', 'Bxf3', 'Qxf3', 'dxe5',
+        'Bc4', 'Nf6', 'Qb3', 'Qe7', 'Nc3', 'c6', 'Bg5', 'b5', 'Nxb5', 'cxb5',
+        'Bxb5+', 'Nbd7', 'O-O-O', 'Rd8', 'Rxd7', 'Rxd7', 'Rd1', 'Qe6',
+        'Bxd7+', 'Nxd7', 'Qb8+', 'Nxb8', 'Rd8#',
+      ];
+      const chess = new Chess();
+      const inputs: ReviewMoveInput[] = sans.map((san, i) => {
+        chess.move(san);
+        return move({ ply: i + 1, san, classification: 'good', fenAfter: chess.fen() });
+      });
+      // Uncapped diagnostic path — the plan-heavy every-facet narration.
+      const segments = buildReviewSegments(inputs, 'white', null, true);
+
+      // Any sentence carrying a STANDING-STATE marker must appear on at most
+      // ONE ply — "drop repeats, make every one add something new".
+      const STANDING = /stuck in the centre|Undefended right now|open files?|passed pawns?|isolated pawns?|doubled pawns?|outpost/i;
+      const counts = new Map<string, number>();
+      for (const seg of segments) {
+        if (!seg.narration) continue;
+        for (const sentence of seg.narration.split(/(?<=[.!])\s+/)) {
+          if (!STANDING.test(sentence)) continue;
+          const key = sentence.trim().toLowerCase();
+          counts.set(key, (counts.get(key) ?? 0) + 1);
+        }
+      }
+      const repeated = [...counts.entries()].filter(([, n]) => n > 1).map(([s]) => s);
+      expect(repeated).toEqual([]);
+    });
   });
 
   describe('buildReviewCitations (Phase 1c — grounded recap/preview spine)', () => {
