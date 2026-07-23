@@ -233,10 +233,8 @@ describe('review corpus sweep — no board-untrue line hides in any path (David 
     if (violations.length) {
       const byRule: Record<string, number> = {};
       for (const v of violations) byRule[v.rule] = (byRule[v.rule] ?? 0) + 1;
-      // eslint-disable-next-line no-console
       console.log(`\n[corpus-sweep] ${violations.length} violations over ${sample.length} games:`, byRule);
       for (const v of violations.slice(0, 60)) {
-        // eslint-disable-next-line no-console
         console.log(`  [${v.rule}] ${v.game} ply${v.ply} ${v.san}: ${v.detail}\n    → ${v.line.slice(0, 200)}`);
       }
     }
