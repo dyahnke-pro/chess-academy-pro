@@ -312,11 +312,14 @@ export function buildHisGroundedPlanBeat(
   const planStr = plan.sideMoves.map(fmt).join(', ');
   const brk = plan.sideMoves.find(isCentralBreak);
   const breakNote = brk ? `, with the ${fmt(brk)} break the key lever` : '';
+  // Depersonalized (David 2026-07-23: "remove the word his") — the plan is
+  // grounded in his games internally, but the spoken text never attributes: it
+  // states the plan + a neutral confidence cue (the % is real, from the corpus).
   const conf = plan.total >= 100
-    ? `his well-worn path here — ${plan.leadWinPct}% across ${plan.total} of his games`
-    : `his choice in this structure (${plan.leadWinPct}% over ${plan.total} of his games)`;
+    ? `the well-trodden plan here, scoring ${plan.leadWinPct}% in this structure`
+    : `a reliable plan in this structure (${plan.leadWinPct}%)`;
   const namePart = openingName ? `In the ${openingName}, ` : '';
-  const text = `${namePart}${who}'s plan is ${planStr}${breakNote}. That's ${conf}.`;
+  const text = `${namePart}${who}'s plan is ${planStr}${breakNote}. It's ${conf}.`;
 
   // Lead-the-eye: PLAN_BLUE arrow on each of HIS plan moves (replay for squares).
   const arrows: PlanArrow[] = [];
