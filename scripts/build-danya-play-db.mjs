@@ -30,7 +30,7 @@ const ACCOUNTS = ['frankfurtairport', 'danielnaroditsky'];
 const MAX_PLY = 24;        // opening phase (moves 1-12)
 const MIN_GAMES = 8;       // a position needs >= this many of his games to count
 const TOP_MOVES = 4;       // keep his top-N continuations per position
-const OUT = 'src/data/danya-play-db.json';
+const OUT = 'public/data/danya-play-db.json';
 
 /** FEN with the move-number + halfmove-clock fields stripped so transpositions
  *  into the same position merge (piece placement + side + castling + ep). */
