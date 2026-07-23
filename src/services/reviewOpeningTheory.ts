@@ -474,6 +474,18 @@ export function buildTheoryLectureBeats(
     return ` ${w}`;
   };
 
+  // Stock explanatory clauses (whyMain, fast-forward tail) are spoken at most
+  // once — repeating "most POPULAR without being the top-scorer" verbatim on
+  // every mainline beat is the robotic tell (G5).
+  const seenPhrase = new Set<string>();
+  const oncePhrase = (s: string): string => {
+    if (!s) return '';
+    const k = s.trim().toLowerCase();
+    if (seenPhrase.has(k)) return '';
+    seenPhrase.add(k);
+    return s;
+  };
+
   // C4/G4 — cite ONE model game (Danya's "Carlsen had this against Yangyi"), on
   // the first branch that carries games. Once per lecture so it stays a highlight.
   let citedModel = false;
@@ -526,10 +538,12 @@ export function buildTheoryLectureBeats(
       try { const c = new Chess(prev); const m = c.move(san); if (!m) break; dive.push({ san, fenAfter: c.fen(), why: null }); prev = c.fen(); } catch { break; }
     }
     const sanList = dive.map((d) => d.san).join(', ');
+    // Vary the tail so back-to-back fast-forwards don't read identically (G5).
+    const tail = oncePhrase(' — normal development, both sides fighting for the centre') || ' — standard development, played quickly';
     beats.push({
       fenBefore: first.fenBefore, showUci: null, showSan: null,
       moveNumber: first.moveNumber, moverColor: first.moverColor, kind: 'mainline',
-      fact: `The next moves are standard theory — ${sanList} — normal development, both sides fighting for the centre.`,
+      fact: `The next moves are standard theory — ${sanList}${tail}.`,
       diveFromFen: dive.length >= 2 ? first.fenBefore : undefined,
       dive: dive.length >= 2 ? dive : undefined,
     });
@@ -610,13 +624,43 @@ export function buildTheoryLectureBeats(
         moveNumber: b.moveNumber,
         moverColor: b.moverColor,
         kind: 'mainline',
-        fact: `At move ${b.moveNumber}, ${b.mainline.san} is the main line for ${side} — ${pct(b.mainline.pct)} of games${scoreClause(b.mainline)}, the principled choice.${whySentence}${whyMainClause(b.mainline, b.sidelines)}${sidelineClause(b.sidelines)}${modelClause(b)}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ' Let me show you where it leads.' : ''}`,
+        fact: `At move ${b.moveNumber}, ${b.mainline.san} is the main line for ${side} — ${pct(b.mainline.pct)} of games${scoreClause(b.mainline)}, the principled choice.${whySentence}${oncePhrase(whyMainClause(b.mainline, b.sidelines))}${sidelineClause(b.sidelines)}${modelClause(b)}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ' Let me show you where it leads.' : ''}`,
         diveFromFen: b.diveFromFen ?? undefined,
         dive: b.mainlineDive.length >= 2 ? b.mainlineDive : undefined,
       });
     }
   }
   flushFF(ffRun); // any trailing obvious moves
+
+  // C8 — WHAT WAS LEFT OUT. Danya always names the big lines he didn't cover
+  // ("we didn't analyze the entire Grand Prix — Bishop C4, the Botvinnik
+  // setup"). Grounded: the strongest UNEXPLORED sidelines from the DB — the
+  // branch whose alternatives to the played move carry the most master games.
+  // Only the STUDENT's own choice-points (a real fork you could have taken
+  // elsewhere), never the opponent's.
+  // Only branches where the game FOLLOWED the main line — there the sidelines
+  // are genuinely UNTAKEN alternatives (never the move the game actually played).
+  // Any colour: the opening's big untaken lines include the opponent's other
+  // setups (Danya-as-Black cites White's "Bishop C4"). Strongest sidelines win.
+  const leftOut = lecture.branches
+    .filter((b) => !b.isSideline && !b.leftBook && b.played != null && b.sidelines.some((s) => s.games > 0))
+    .map((b) => ({ b, weight: b.sidelines.reduce((s, m) => s + m.pct, 0) }))
+    .sort((a, b) => b.weight - a.weight)[0];
+  if (leftOut) {
+    const alts = leftOut.b.sidelines.filter((s) => s.games > 0).slice(0, 2);
+    if (alts.length > 0) {
+      const list = alts.map((s) => `${s.san} (${pct(s.pct)})`).join(' and ');
+      beats.push({
+        fenBefore: leftOut.b.fenBefore,
+        showUci: uciFor(leftOut.b.fenBefore, alts[0].san),
+        showSan: alts[0].san,
+        moveNumber: leftOut.b.moveNumber,
+        moverColor: leftOut.b.moverColor,
+        kind: 'mainline',
+        fact: `We didn't cover everything — at move ${leftOut.b.moveNumber} the other main tries, ${list}, are big lines of their own. Explore them on your own to round out the opening.`,
+      });
+    }
+  }
 
   // Closing PLAN beat — Danya always lands on the middlegame idea ("march the
   // queenside pawns, 2v1" / "e5 vs c5 breaks"). Use a second key idea if there
