@@ -367,6 +367,11 @@ export interface TheoryLectureBeat {
    *  Each step carries its computed why, spoken as the move lands. */
   diveFromFen?: string;
   dive?: Array<{ san: string; fenAfter: string; why: string | null }>;
+  /** Untaken alternatives the student can OPTIONALLY play out — rendered as
+   *  "Explore a6" chips, NOT auto-marched (David 2026-07-23: "the button lets
+   *  users decide if they want to listen/learn them, instead of forcing more
+   *  theory"). Present only on the C8 "what was left out" beat. */
+  explore?: ExploreLine[];
 }
 
 /** PROS AND CONS of main line vs the played sideline — ALL computed (David
@@ -709,28 +714,21 @@ export function buildTheoryLectureBeats(
   // setups (Danya-as-Black cites White's "Bishop C4"). Strongest sidelines win.
   const c8 = lecture.branches.find((b) => b.exploreLines.length > 0);
   if (c8) {
-    // Intro the "what was left out" section once, then MARCH each alternative out
-    // on the board with narration (David 2026-07-23) — the coach plays a6, then
-    // e6, rather than telling the student to go explore alone.
+    // ONE "what was left out" beat that NAMES the alternatives and OFFERS them —
+    // the student taps "Explore a6" to see it played out, or skips (David
+    // 2026-07-23: don't force more theory on someone who doesn't want it). The
+    // playable lines ride in `explore`, rendered as chips, not auto-marched.
     const list = c8.exploreLines.map((e) => `${e.san} (${pct(e.pct)})`).join(' and ');
-    let first = true;
-    for (const e of c8.exploreLines) {
-      const lead = first
-        ? `We didn't cover everything — at move ${c8.moveNumber} the other main tries are ${list}. Let me march them out. First, ${e.san}.`
-        : `And the other try, ${e.san}.`;
-      first = false;
-      beats.push({
-        fenBefore: e.fromFen,
-        showUci: uciFor(e.fromFen, e.san),
-        showSan: e.san,
-        moveNumber: c8.moveNumber,
-        moverColor: c8.moverColor,
-        kind: 'sideline',
-        fact: lead,
-        diveFromFen: e.fromFen,
-        dive: e.steps,
-      });
-    }
+    beats.push({
+      fenBefore: c8.fenBefore,
+      showUci: uciFor(c8.fenBefore, c8.exploreLines[0].san),
+      showSan: c8.exploreLines[0].san,
+      moveNumber: c8.moveNumber,
+      moverColor: c8.moverColor,
+      kind: 'mainline',
+      fact: `We didn't cover everything — at move ${c8.moveNumber} the other main tries are ${list}. Tap one below to see it played out, or move on.`,
+      explore: c8.exploreLines,
+    });
   }
 
   // Closing PLAN beat — Danya always lands on the middlegame idea ("march the

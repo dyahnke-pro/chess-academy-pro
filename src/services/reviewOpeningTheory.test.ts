@@ -201,7 +201,7 @@ describe('buildTheoryLectureBeats — grounded playable beats', () => {
     expect(cites[0].fact).toMatch(/Black win/);
   });
 
-  it('MARCHES the untaken alternatives out with a dive (C8, David 2026-07-23)', async () => {
+  it('OFFERS the untaken alternatives as tappable explore lines (C8, David 2026-07-23)', async () => {
     // Game follows the main line (e4 e5 Nf3 Nc6) — so the after-e5 branch has
     // genuine UNTAKEN sidelines (Bc4, Nc3) the coach should march out.
     const { fens, sans } = chain(['e4', 'e5', 'Nf3', 'Nc6']);
@@ -224,12 +224,14 @@ describe('buildTheoryLectureBeats — grounded playable beats', () => {
     expect(withExplore).toBeTruthy();
     expect(withExplore!.exploreLines[0].steps[0].san).toBe('Bc4'); // the alt move is step 0
     expect(withExplore!.exploreLines[0].steps.length).toBeGreaterThanOrEqual(2); // marched out, not a lone move
-    // The beats include a march-out beat that PLAYS the alternative (dive), not a
-    // "go explore on your own" dead-end.
+    // The C8 beat OFFERS the alternatives as tappable explore lines (chips) —
+    // NOT auto-marched, so the student chooses whether to see more theory.
     const beats = buildTheoryLectureBeats(lec!, ['fight for the centre'], 'white');
-    const march = beats.find((b) => /march/i.test(b.fact) && (b.dive?.length ?? 0) > 0);
-    expect(march).toBeTruthy();
-    expect(march!.dive![0].san).toBe('Bc4');
+    const offer = beats.find((b) => (b.explore?.length ?? 0) > 0);
+    expect(offer).toBeTruthy();
+    expect(offer!.fact).toMatch(/Tap one below/i);
+    expect(offer!.dive).toBeUndefined(); // not auto-played
+    expect(offer!.explore![0].steps[0].san).toBe('Bc4'); // the alt move rides in the chip's line
   });
 });
 
