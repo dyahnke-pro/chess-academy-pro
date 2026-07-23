@@ -15,6 +15,7 @@ import { Chess, type Color } from 'chess.js';
 import { plyFactsForMove } from './pvPlayback';
 import { seeGain } from './positionReadingService';
 import { detectTactics } from './tacticsDetector';
+import { verifyForkOnBoard } from './tacticVerification';
 import { seatPieceReferences, describeStudentThreat } from './groundedAnswer';
 import { describeStructure } from './boardStructure';
 import { assessPositionalEdge } from './reviewPositionalAssessment';
@@ -203,7 +204,19 @@ export function computeMoveFacets(ctx: MoveFactContext): string[] {
       ? seatPieceReferences(s, fenAfter, ctx.studentColorWB)
       : s;
     for (const tac of t.tactics) {
-      if (tac.type !== 'none' && tac.description) facets.push(`[tactic] ${seat(tac.description)}.`);
+      if (tac.type === 'none' || !tac.description) continue;
+      // A fork SHAPE is tempo-blind — the static scanner reports it whether or
+      // not the owner ever executes it and whether or not it wins anything.
+      // Verify it (tempo + SEE) before speaking it as a fact (David 2026-07-23:
+      // "tell the computer whose move it is"). Live win / real threat / drop.
+      if (tac.type === 'fork') {
+        const v = verifyForkOnBoard(fenAfter, tac.involvedSquares[0], tac.involvedSquares.slice(1));
+        if (v.status === 'live') facets.push(`[tactic] ${seat(tac.description)} — it's the move, so the material comes off.`);
+        else if (v.status === 'threat') facets.push(`[tactic] Threat: ${seat(tac.description)} — the defender can't save everything.`);
+        // status 'none' → unproven fork shape, say nothing (G0).
+        continue;
+      }
+      facets.push(`[tactic] ${seat(tac.description)}.`);
     }
     if (t.hangingPieces.length > 0) {
       const desc = t.hangingPieces.map((h) => `${pieceWord(h.piece)} on ${h.square}`).join(', ');

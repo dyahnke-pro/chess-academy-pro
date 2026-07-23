@@ -4,6 +4,8 @@ import { seeGain } from './positionReadingService';
 import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice, seatPieceReferences, describeStudentThreat, detectNewThreat, describeThreatRecognition, describeThreatPrevention } from './groundedAnswer';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
 import { plyFactsForMove, plyFactsClause, computePvLine, type PvLine, type PrevCaptureContext } from './pvPlayback';
+import { explainEvalByPieceQuality, lowestMinorMobility } from './pieceQuality';
+import type { Evaluate } from './moveComparison';
 import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan } from './reviewStrategicOrientation';
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
 import { detectOpening } from './openingDetectionService';
@@ -2083,6 +2085,47 @@ async function augmentWithProjections(
       s.narration = `${s.narration ?? ''} ${callOut}`.trim();
       deepOppBudget -= 1;
     } catch { /* skip this ply — never block the walk on a threat probe */ }
+  }
+
+  // #6 — BAD-PIECE ATTRIBUTION (David 2026-07-23, IMG_4589: "the knight and the
+  // bishop are so bad that White has fighting chances"). The method of comparison
+  // aimed at a PIECE. TARGET the middlegame position with the most cramped MINOR
+  // (a free board scan — a bad piece is a rim knight / buried bishop, a low-
+  // mobility fact), then ablate it there: teleport to its best clean square,
+  // re-eval, and speak it ONLY if the swing proves that piece is the cause (the
+  // engine gates every claim; a check-giving teleport or an out-of-range swing
+  // is rejected, so we never invent a bad piece — G0). One position per game,
+  // timeout-guarded; both scopes (this is where Danya's "his pieces are
+  // terrible" reads live).
+  {
+    const pieceEvaluate: Evaluate = async (fen) => {
+      const l = await raceTimeout(computePvLine(fen, { maxPlies: 1 }), PROJ_TIMEOUT_MS, null);
+      return { cp: l ? l.rootEvalCp : NaN };
+    };
+    // Free selection: the middlegame plies whose most-cramped minor is the most
+    // cramped (≤ 2 legal moves = a genuinely bad minor worth the ablation). Probe
+    // the top TWO distinct positions — a cramped minor isn't always a COSTLY one,
+    // so trying just the single most-cramped can miss the real story. Reuse the
+    // already-computed eval as the ablation base (no extra base eval). Attach the
+    // biggest proven swing.
+    const candidates = segments
+      .filter((s) => s.ply >= 14 && !(s.evalAfter !== null && Math.abs(s.evalAfter) >= 5000))
+      .map((s) => ({ s, mob: lowestMinorMobility(s.fenAfter) }))
+      .filter((c) => c.mob <= 2)
+      .sort((a, b) => a.mob - b.mob)
+      .slice(0, 2);
+    let best: { seg: ReviewMoveSegment; text: string; swing: number } | null = null;
+    for (const c of candidates) {
+      const res = await raceTimeout(
+        explainEvalByPieceQuality(c.s.fenAfter, pieceEvaluate, { swingThresholdCp: 150, pairThresholdCp: 220, baseCp: c.s.evalAfter ?? undefined }),
+        PROJ_TIMEOUT_MS * 2,
+        null,
+      );
+      if (res?.delta && (!best || res.delta.ablation.swingCp > best.swing)) {
+        best = { seg: c.s, text: res.delta.text, swing: res.delta.ablation.swingCp };
+      }
+    }
+    if (best) best.seg.narration = `${best.seg.narration ?? ''} ${best.text}.`.trim();
   }
 
   if (scope === 'mistakes') return;
