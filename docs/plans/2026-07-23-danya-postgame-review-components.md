@@ -136,11 +136,15 @@ gaps):
 - **C14** named tactical concepts — `detectTactics` names fork/pin/deflection —
   BUILT (verify "deflection" register).
 - **C16** decisive move — the turning-point card — BUILT.
-- **C9** pattern-recurrence model-game search — the `storyGame` chip cites ONE
-  game; the "here's the SAME pattern in a DIFFERENT game" recurrence is the
-  signature GAP to build first.
+- **C9** model-game illustration — the `storyGame` chip cites ONE game. **ONE is
+  enough (David 2026-07-23)** — do NOT build the multi-game recurrence; the single
+  cited story game covers it.
 - **C10** danger/plan illustration ("why I avoided X") — GAP.
 - **C17** endgame technique naming — PARTIAL (conversion-pattern naming exists).
 
-**Next build: C9 — the pattern-recurrence illustration** (his most-repeated Phase
-2 move), then C10/C13 register, dialed against the transcript the same way.
+**Guardrail (David 2026-07-23): last night's review build is the base — ADD to it,
+never detract.** Every Phase-2 change must be verified against the locked
+real-game review audit (`scripts/audit-review-real-game.mjs`) so the existing walk
+keeps working. Phase-1 changes are additive (transposition naming, theory lecture,
+opt-in explore chips, non-blocking engine pass) — confirmed by the gate suite +
+the real-game audit before moving on.
