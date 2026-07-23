@@ -110,11 +110,19 @@ light register, not its existence).
      draw, neither side can escape."
    - **Interactive "find it" challenge** — coach: *"there's one move — show me,
      play it on the board."* User plays it (board input already exists). Grade
-     by **eval** (a true only-move means alternatives measurably lose): within
-     tolerance → correct; off the cliff → **step the move back, play the right
-     one, explain the delta** via `compareTwoMoves` (or play out the refutation
-     of their move). This is the locked guided-find-the-move pattern, triggered
-     on only-moves and powered by the comparison engine.
+     by **eval** (a true only-move means alternatives measurably lose):
+     - **Correct** (within tolerance) → *"that's it — clean."* The coach **still
+       explains WHY it was the only move** (the proven delta / concept, spoken)
+       — but does **NOT replay the line**: they already saw it to find the move,
+       so a board replay is redundant. Speak the why, move on.
+     - **Wrong** (off the cliff) → **step the move back, play the right one, and
+       play the line out ON THE BOARD *while* explaining the delta** (via
+       `compareTwoMoves`, or by playing out the refutation of their move) — they
+       didn't see it, so show them.
+     Adaptive depth: the board animation is spent only where it teaches
+     (speak-only on right, speak-and-show on wrong). This is the locked
+     guided-find-the-move pattern, triggered on only-moves and powered by the
+     comparison engine.
 4. **Master-game references, un-rationed** — Danya references other games
    CONSTANTLY. We already have the masters DB, the game-export proxy (real full
    PGNs), curated model-games, and pro-game-references. Surface a REAL matching
