@@ -73,4 +73,26 @@ describe('hisPlayLookup', () => {
     });
     expect(hisGroundedPlanSync(startFen, apply, 6)).toBeNull();
   });
+
+  it('drops a frequent-but-LOSING plan to masters (win-rate gate) — the Barry Attack case', () => {
+    // His most-played move here scores badly (18%W, no draws) — teaching it
+    // would teach a losing plan, so hisGroundedPlanSync returns null.
+    __setHisPlayDbForTests({
+      [key(startFen)]: { total: 22, moves: [{ san: 'd6', games: 22, w: 4, d: 0, l: 18 }] },
+    });
+    expect(hisGroundedPlanSync(startFen, apply, 6)).toBeNull();
+  });
+
+  it('picks his best-scoring FREQUENT move, not merely the most-played', () => {
+    // d6: most-played but 30% score; e6: nearly as frequent and 65% score → e6 wins.
+    __setHisPlayDbForTests({
+      [key(startFen)]: { total: 200, moves: [
+        { san: 'd6', games: 100, w: 25, d: 10, l: 65 },
+        { san: 'e6', games: 90, w: 55, d: 8, l: 27 },
+      ] },
+    });
+    const plan = hisGroundedPlanSync(startFen, apply, 2);
+    expect(plan).not.toBeNull();
+    expect(plan!.sideMoves[0]).toBe('e6');
+  });
 });

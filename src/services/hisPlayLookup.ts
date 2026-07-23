@@ -32,9 +32,37 @@ type HisPlayDb = Record<string, HisPlayEntry>;
 
 const HIS_PLAY_DB_URL = '/data/danya-play-db.json';
 
-/** A position needs at least this many of his games before we call the most-
- *  played move "his plan" — below it the signal is too thin to teach. */
+/** A position needs at least this many of his games before we call a move
+ *  "his plan" — below it the signal is too thin to teach. */
 export const HIS_PLAN_MIN_GAMES = 12;
+
+/** The taught plan-move must clear this score (win% + draw%/2, from the mover's
+ *  perspective) — his most-PLAYED move in a position can still be a dubious /
+ *  bullet-noise line that SCORES badly (Barry Attack ...c5 at 17%W across the
+ *  10-game tuning set). Teaching a losing plan is worse than none: below this,
+ *  the position is treated as ungrounded and falls through to the masters DB. */
+export const HIS_PLAN_MIN_SCORE = 0.45;
+
+/** A candidate plan-move must be played in at least this fraction of the most-
+ *  played move's games to be considered — so we pick his BEST-scoring move from
+ *  among the ones he actually plays often, not a rare high-% outlier. */
+const FREQ_FLOOR_FRACTION = 0.5;
+
+/** Score of a move from the mover's perspective: win% + half the draw%. */
+function moveScore(m: HisPlayMove): number {
+  return (m.w + m.d / 2) / Math.max(1, m.games);
+}
+
+/** His best plan-move at a position: among his frequently-played moves (>= half
+ *  the top move's games), the highest-scoring one — "his frequent, successful
+ *  choice." Null if even that scores below HIS_PLAN_MIN_SCORE. */
+export function bestPlanMove(entry: HisPlayEntry): HisPlayMove | null {
+  if (!entry.moves.length) return null;
+  const topGames = entry.moves[0].games;
+  const frequent = entry.moves.filter((m) => m.games >= topGames * FREQ_FLOOR_FRACTION);
+  const best = frequent.reduce((a, b) => (moveScore(b) > moveScore(a) ? b : a), frequent[0]);
+  return moveScore(best) >= HIS_PLAN_MIN_SCORE ? best : null;
+}
 
 let dbCache: HisPlayDb | null | undefined;
 let dbInflight: Promise<HisPlayDb | null> | null = null;
@@ -119,8 +147,12 @@ export function hisGroundedPlanSync(
 ): HisGroundedPlan | null {
   const start = lookupHisPlaySync(fen);
   if (!start || start.total < HIS_PLAN_MIN_GAMES) return null;
+  // His most-PLAYED move can score badly (noise / a dropped line) — teach his
+  // best-scoring frequent move instead, and if even that is weak, this position
+  // is not a plan worth teaching → null → masters backup.
+  const lead = bestPlanMove(start);
+  if (!lead) return null;
   const side: 'w' | 'b' = fen.trim().split(/\s+/)[1] === 'b' ? 'b' : 'w';
-  const lead = start.moves[0];
   const line: string[] = [];
   const sideMoves: string[] = [];
   let curFen = fen;
@@ -128,10 +160,12 @@ export function hisGroundedPlanSync(
   for (let i = 0; i < maxPlies; i++) {
     const entry = lookupHisPlaySync(curFen);
     if (!entry || entry.moves.length === 0) break;
-    const top = entry.moves[0].san;
-    line.push(top);
-    if (curSide === side) sideMoves.push(top);
-    const next = applyMove(curFen, top);
+    // his side follows his best plan-move; the opponent side follows their most-
+    // played reply (what he actually faced) to keep the line realistic.
+    const pick = curSide === side ? (bestPlanMove(entry) ?? entry.moves[0]) : entry.moves[0];
+    line.push(pick.san);
+    if (curSide === side) sideMoves.push(pick.san);
+    const next = applyMove(curFen, pick.san);
     if (!next) break;
     curFen = next;
     curSide = curSide === 'w' ? 'b' : 'w';
