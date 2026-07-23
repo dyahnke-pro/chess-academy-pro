@@ -2488,7 +2488,32 @@ export async function voiceReviewLines(
   // volume is now the USER's choice via the Deep Review Detail toggle. The
   // rating still gates the interrupt policy (slipDetector picker) — that is
   // pedagogy, not phrasing, and is locked separately.
-  const system = systemBase;
+  //
+  // THEORY-LECTURE register (David 2026-07-23: "make the spoken narrations match
+  // Danya's"). Opening-theory facts ([theory]) are an OPENING LECTURE, not the
+  // per-move review — two rules FLIP: (1) here you DO name the move (Danya says
+  // "Bishop to B5, a very topical move"), the board is a lecture diagram, not a
+  // move the student just made; (2) the game counts + percentages are the MASTERCLASS
+  // SPINE — keep EVERY number, fold it into natural speech, drop none. Danya's
+  // opening cadence: he names the move, folds the popularity/score into a clause,
+  // and hands the verdict warmly ("the most popular move here, and it scores well").
+  const anyTheory = usable.some((it) => it.kind === 'theory');
+  const theoryClause = anyTheory
+    ? '\n\nTHEORY-LECTURE FACTS ([theory]) — an OPENING LECTURE, so TWO rules FLIP for these:\n' +
+      '1. You MAY (and should) name the move — this is a lecture diagram, not a move just played. ' +
+      'Spell it as a piece + square ("Bishop to b5", "the knight to d4"), never "5.Bb5".\n' +
+      '2. KEEP every game count and percentage in the fact — they are the point of the lecture. ' +
+      'Fold them into natural speech; NEVER drop a number or invent one.\n' +
+      'THEORY STYLE — fold the stat into the voice, Danya\'s opening cadence:\n' +
+      'FACT: "Bb5 is White\'s main line here — 57% of master games, scoring 46%." → "Bishop to b5 — this is ' +
+      'the main road, played in 57% of master games, and it holds up well." (numbers kept, move named)\n' +
+      'FACT: "The main line here is d5 — 41%, scoring 52%. This game went d6 instead (37%), a known sideline." → ' +
+      '"The main line is d5, and it\'s the pick of the two — 52% versus 48%. This game chose d6, a perfectly ' +
+      'respectable sideline at 37%." (both numbers kept, honest comparison)\n' +
+      'FACT: "This exact position was reached in Grischuk–Vachier Lagrave, 2017 (a Black win)." → "This exact ' +
+      'position showed up in Grischuk–Vachier Lagrave, 2017 — and Black won it." (names + year + result kept)'
+    : '';
+  const system = systemBase + theoryClause;
 
   const user =
     `Rephrase each of these ${usable.length} lines. Return exactly ${usable.length} numbered ` +

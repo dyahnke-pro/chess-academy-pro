@@ -37,7 +37,7 @@ import { pauseBatchAnalysis, resumeBatchAnalysis } from '../../services/gameAnal
 import { classifyGameTheme, type GameThemeResult } from '../../services/gameThemeClassifier';
 import { findRewindTarget, type RewindTarget } from '../../services/blunderRewind';
 import { buildTurningPointQuestion, judgeTurningPointPick, type TurningPointQuestion } from '../../services/reviewTurningPoint';
-import { buildOpeningTheoryLecture, buildTheoryLectureBeats, resolveOpeningIdeas, type TheoryLectureBeat, type ExploreLine } from '../../services/reviewOpeningTheory';
+import { buildOpeningTheoryLecture, buildTheoryLectureBeats, resolveOpeningIdeas, enrichLectureWithEngine, type TheoryLectureBeat, type ExploreLine } from '../../services/reviewOpeningTheory';
 import { reviewTheoryLookup } from '../../services/reviewOpeningsSource';
 import { captureEvent } from '../../services/analytics';
 import { detectMissedTactics } from '../../services/missedTacticService';
@@ -1361,10 +1361,14 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // from a single call (no per-step LLM racing during playback).
     let warmed = new Map<number, string>();
     try {
-      const warmInput: Array<{ id: number; fact: string }> = beats.map((b, i) => ({ id: i, fact: b.fact }));
+      // kind:'theory' tells the warmer this is an OPENING LECTURE — here it may
+      // name the move (Danya says "Bishop to B5") and MUST keep the game counts +
+      // percentages, unlike the per-move review register that suppresses the move
+      // name (David 2026-07-23: "make the spoken narrations match Danya's").
+      const warmInput: Array<{ id: number; fact: string; kind?: string }> = beats.map((b, i) => ({ id: i, fact: b.fact, kind: 'theory' }));
       beats.forEach((b, i) => {
         (b.dive ?? []).forEach((step, j) => {
-          if (step.why) warmInput.push({ id: 1000 * (i + 1) + j, fact: step.why });
+          if (step.why) warmInput.push({ id: 1000 * (i + 1) + j, fact: step.why, kind: 'theory' });
         });
       });
       warmed = await voiceReviewLines(warmInput);
@@ -2070,7 +2074,14 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       void buildOpeningTheoryLecture(reviewFens, sans, openingName ?? 'this opening', { lookup: reviewTheoryLookup })
         .then((lec) => {
           if (cancelled || !lec) return;
+          // Phase 1: show the DB-built lecture immediately (button appears fast).
           setTheoryBeats(buildTheoryLectureBeats(lec, resolveOpeningIdeas(openingName), playerColor));
+          // Phase 2: NON-blocking — let Stockfish weigh in on a few key branches,
+          // then re-derive so the beats gain the engine's voice ("the fish likes
+          // Knight d4"). Never blocks the button; a slow/absent engine is fine.
+          void enrichLectureWithEngine(lec, { analyzePosition: (f, d) => stockfishEngine.analyzeWithBudget(f, d, 2500) })
+            .then(() => { if (!cancelled) setTheoryBeats(buildTheoryLectureBeats(lec, resolveOpeningIdeas(openingName), playerColor)); })
+            .catch(() => { /* engine optional */ });
         })
         .catch(() => { /* DB down — no lecture, no crash */ });
     }, 500);

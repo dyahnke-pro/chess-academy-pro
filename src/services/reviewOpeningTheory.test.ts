@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { buildOpeningTheoryLecture, buildTheoryLectureBeats, resolveOpeningIdeas } from './reviewOpeningTheory';
+import { buildOpeningTheoryLecture, buildTheoryLectureBeats, resolveOpeningIdeas, enrichLectureWithEngine } from './reviewOpeningTheory';
 import type { MasterPlayResult, MasterPlayMove } from '../types';
 
 function mv(san: string, games: number, w = 0.4, d = 0.3, b = 0.3): MasterPlayMove {
@@ -123,7 +123,7 @@ describe('the variation DIVE (Danya plays out the line)', () => {
     const beats = buildTheoryLectureBeats(lec!);
     const depBeat = beats.find((b) => b.kind === 'departure');
     expect(depBeat!.dive?.length).toBeGreaterThanOrEqual(2);
-    expect(depBeat!.fact).toMatch(/how the main line runs/i);
+    expect(depBeat!.fact).toMatch(/how it runs/i);
   });
 });
 
@@ -140,11 +140,11 @@ describe('buildTheoryLectureBeats — grounded playable beats', () => {
     const beats = buildTheoryLectureBeats(lec!, ['fight for the centre and develop with tempo']);
     expect(beats[0].kind).toBe('intro');
     expect(beats[0].fact).toMatch(/King's Pawn/);
-    expect(beats[0].fact).toMatch(/core idea/i); // the idea was woven in
+    expect(beats[0].fact).toMatch(/at its heart/i); // the idea was woven in
     // the departure beat names the book move + says you left theory.
     const dep = beats.find((b) => b.kind === 'departure');
     expect(dep).toBeTruthy();
-    expect(dep!.fact).toMatch(/leaves mainstream theory/i);
+    expect(dep!.fact).toMatch(/steps out of book/i);
     expect(dep!.fact).toMatch(/Nf3/);
     expect(dep!.showUci).toBe('g1f3'); // the mainline move is playable on the board
     // DISTINCTIVE branch beats (departure / sideline / genuine-choice mainline)
@@ -233,6 +233,26 @@ describe('buildTheoryLectureBeats — grounded playable beats', () => {
     expect(offer!.dive).toBeUndefined(); // not auto-played
     expect(offer!.explore![0].steps[0].san).toBe('Bc4'); // the alt move rides in the chip's line
   });
+
+  it("voices the ENGINE's pick when it differs from the crowd (C7, David 2026-07-23)", async () => {
+    // After 1.e4 e5 the game plays 2.Nf3 (the popular main line), but the fake
+    // engine prefers a DIFFERENT move (Bc4) — the coach should voice it.
+    const { fens, sans } = chain(['e4', 'e5', 'Nf3']);
+    const lookup = async (fen: string): Promise<MasterPlayResult> => {
+      if (fen.startsWith('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')) return res(fen, [mv('e4', 600), mv('d4', 400)]);
+      if (fen.startsWith('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b')) return res(fen, [mv('e5', 500), mv('c5', 500)]);
+      if (fen.startsWith('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w')) return res(fen, [mv('Nf3', 500), mv('Bc4', 300), mv('Nc3', 200)]);
+      return res(fen, []);
+    };
+    const lec = await buildOpeningTheoryLecture(fens, sans, "King's Pawn", { lookup });
+    // Fake engine: at the after-e5 position (White to move) it returns Bc4 (f1c4).
+    const engine = { analyzePosition: async (fen: string) => (fen.startsWith('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w') ? { bestMove: 'f1c4', evaluation: 30 } : { bestMove: 'g1f3', evaluation: 20 }) };
+    await enrichLectureWithEngine(lec!, engine, { depth: 6, max: 3 });
+    const nf3Branch = lec!.branches.find((b) => b.mainline.san === 'Nf3' || b.played?.san === 'Nf3');
+    expect(nf3Branch?.engineBest?.san).toBe('Bc4'); // engine pick captured as SAN
+    const beats = buildTheoryLectureBeats(lec!, ['fight for the centre'], 'white');
+    expect(beats.some((b) => /engine.*Bc4|Bc4.*engine/i.test(b.fact))).toBe(true); // voiced
+  });
 });
 
 describe('tabiya walk — sidelines get NARRATED dives + computed pros/cons (David 2026-07-21)', () => {
@@ -275,6 +295,6 @@ describe('tabiya walk — sidelines get NARRATED dives + computed pros/cons (Dav
     expect(sideBeat!.fact).toMatch(/scores|score about the same/i);
     expect(sideBeat!.fact).not.toMatch(/presses a touch harder/);
     // The walk is announced so the student knows the main line is being SHOWN.
-    expect(sideBeat!.fact).toMatch(/walk you down the main line/i);
+    expect(sideBeat!.fact).toMatch(/walk down/i);
   });
 });
