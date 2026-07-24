@@ -18,7 +18,8 @@ import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShi
 import { detectForcedMatingSequence, explainMatingSacMechanism } from './reviewForcedSequence';
 import { assessPositionalEdge } from './reviewPositionalAssessment';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
-import { describeNotableMove, describeConcessions, findTrappedPiece, describeSimplifyingTrade } from './reviewTeachingPoints';
+import { describeNotableMove, describeConcessions, findTrappedPiece, describeSimplifyingTrade, describeTradeConsequence } from './reviewTeachingPoints';
+import { buildOpeningMoveDetail } from './reviewStrategicOrientation';
 import { walkBookLine } from './theoryDeparture';
 import { detectBadHabits } from './badHabitDetector';
 import { db } from '../db/schema';
@@ -913,6 +914,9 @@ export function buildReviewSegments(
 ): ReviewMoveSegment[] {
   // Curated, opening-specific ideas for the dev-plan beat (null → uncurated).
   const curatedOpeningIdeas = resolveCuratedOpeningIdeas(openingName ?? null);
+  // Package-completion once-per-game beats (David 2026-07-24: "complete the
+  // package"): the simplify-when-ahead trade idea fires at most once.
+  let tradeIdeaSpoken = false;
   // Per-GAME seed (stable within a game, different across games) — rotates the
   // dev-plan's lead idea + stem so the same opening never reads as the same
   // recording every game (David 2026-07-21: "the same response every time").
@@ -1416,6 +1420,17 @@ export function buildReviewSegments(
         narration = narration ? `${narration} ${tradeIdea}.` : `${tradeIdea}.`;
         narrationSource = narrationSource ?? 'per-move';
       }
+      // GENERAL simplify-when-ahead — a bare even TRADE while winning got only
+      // "captures the X" and the warmer padded it; give it the real idea, ONCE
+      // per game (David 2026-07-24 "complete the package").
+      if (!tradeIdea && !tradeIdeaSpoken) {
+        const tc = describeTradeConsequence(fenPair.fenBefore, m.san, true, studentPovForTrade);
+        if (tc) {
+          narration = narration ? `${narration} ${tc}.` : `${tc.charAt(0).toUpperCase()}${tc.slice(1)}.`;
+          narrationSource = narrationSource ?? 'per-move';
+          tradeIdeaSpoken = true;
+        }
+      }
     }
     // THE OPPONENT'S THREAT — identified, TAUGHT, and DEFUSED (David
     // 2026-07-22: "can the coach identify how to prevent this from happening
@@ -1620,12 +1635,16 @@ export function buildReviewSegments(
       && m.ply <= OPENING_TEACH_MAX_PLY
       && (m.classification === null || m.classification === 'book' || m.classification === 'good')
     ) {
-      // Rich PlyFacts FIRST (the same deep computer the best-move lines use —
-      // David 2026-07-20 "the best move lines have way better narration"), then
-      // the thinner teaching note. Both are grounded; the rich one just fires on
-      // far more moves so the walk stops going silent on eventful ones.
-      narration = plyFactsForMove(fenPair.fenBefore, m.san, prevCap, true) ?? buildReviewMoveTeaching(fenPair.fenBefore, m.san);
-      if (narration) narrationSource = 'per-move';
+      // GROUNDED opening detail FIRST (David 2026-07-24: "we already attached his
+      // corpus for opening details, master DB for games he doesn't have") — what
+      // his own games / the masters DB show at this position. Then the rich
+      // PlyFacts, then the thin teaching note. All grounded; the opening-detail
+      // just carries the real theory/repertoire content the warmer needs.
+      const openingDetail = buildOpeningMoveDetail(fenPair.fenBefore, m.san, true);
+      narration = openingDetail
+        ?? plyFactsForMove(fenPair.fenBefore, m.san, prevCap, true)
+        ?? buildReviewMoveTeaching(fenPair.fenBefore, m.san);
+      if (narration) narrationSource = openingDetail ? 'opening-plan' : 'per-move';
     }
     // NOTABLE MOVES — BOTH SIDES, ANY PHASE (David 2026-07-21, IMG_4570: "too
     // many moves passing without narration, for both sides. I feel like Danya

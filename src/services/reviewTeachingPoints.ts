@@ -609,6 +609,37 @@ export function describeSimplifyingTrade(
 }
 
 /**
+ * TRADE-CONSEQUENCE (David 2026-07-24, "complete the package"): a bare capture
+ * that's an even TRADE handed the warmer nothing but "captures the bishop", so
+ * it padded the vacuum with fluff. Give it the real idea instead: when the
+ * student is clearly AHEAD, every trade is progress (simplify the won game);
+ * board-verified it's actually a roughly-even trade (SEE ~ 0), not a win or a
+ * sac, and the eval confirms the student is ahead. Meant to fire ONCE or twice
+ * per game (the caller dedups), the way a coach notes the plan, not every swap.
+ */
+export function describeTradeConsequence(
+  fenBefore: string,
+  san: string,
+  moverIsStudent: boolean,
+  studentPovCp: number | null,
+): string | null {
+  if (studentPovCp === null || studentPovCp < 150) return null;
+  try {
+    const before = new Chess(fenBefore);
+    const mv = before.move(san.replace(/[?!]+$/, ''));
+    if (!mv || !mv.captured) return null;
+    let gain = 0;
+    try { gain = seeGain(new Chess(fenBefore), mv.to as Square); } catch { gain = 0; }
+    if (Math.abs(gain) >= 2) return null; // a real material swing isn't a "trade"
+    return moverIsStudent
+      ? 'another pair comes off — and with your extra material, every trade is one step closer to the win'
+      : "they simplify, but each trade only sharpens your extra-material edge — that's exactly what you want when you're ahead";
+  } catch {
+    return null;
+  }
+}
+
+/**
  * CONCESSION TEACHER (David 2026-07-21, IMG_4571: "What serious positional
  * concessions have been made? What are the ramifications of this move?"). For a
  * flagged move, name the LASTING damage it caused — computed by diffing the

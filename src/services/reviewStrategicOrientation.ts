@@ -27,8 +27,55 @@
  */
 import { Chess } from 'chess.js';
 import { describeStructure } from './boardStructure';
-import { hisGroundedPlanSync } from './hisPlayLookup';
+import { hisGroundedPlanSync, lookupHisPlaySync, HIS_PLAN_MIN_GAMES } from './hisPlayLookup';
 import { mastersMovesSync, type LocalDbMove } from './masterPlayLookup';
+
+/**
+ * GROUNDED per-move opening detail (David 2026-07-24: "we already attached his
+ * corpus for opening details, master DB for games he doesn't have"). For a
+ * student opening move, speak what the DATA shows — NOT hand-authored ideas:
+ *   1. HIS CORPUS first — how often he reaches this position and whether this is
+ *      his steady choice or a departure from it.
+ *   2. MASTERS DB second — for positions his own games don't cover, the theory
+ *      (how well-trodden the move is).
+ *   3. null when neither covers it (→ the walk falls back to piece-activity).
+ * The counts ARE the content (G3); nothing invented.
+ */
+export function buildOpeningMoveDetail(fenBefore: string, san: string, moverIsStudent: boolean): string | null {
+  if (!moverIsStudent) return null;
+  const strip = (s: string): string => s.replace(/[+#!?]+$/, '');
+  const played = strip(san);
+  // 1) HIS CORPUS.
+  const his = lookupHisPlaySync(fenBefore);
+  if (his && his.total >= HIS_PLAN_MIN_GAMES) {
+    const sorted = [...his.moves].sort((a, b) => b.games - a.games);
+    const top = sorted[0];
+    const mine = sorted.find((m) => strip(m.san) === played);
+    if (top && mine && strip(top.san) === played) {
+      const freq = mine.games / Math.max(1, his.total);
+      const score = Math.round(((mine.w + mine.d / 2) / Math.max(1, mine.games)) * 100);
+      const dominance = freq >= 0.7
+        ? 'your bread-and-butter — you play it almost every time here'
+        : freq >= 0.4
+          ? 'your main choice in this spot'
+          : 'one of your regular tries here';
+      return `This is ${dominance}${score >= 52 ? `, and it's scored well for you at ${score}%` : ''}`;
+    }
+    if (top && mine) {
+      return `A departure from your usual — here you almost always play ${strip(top.san)}; this time you went your own way`;
+    }
+  }
+  // 2) MASTERS DB.
+  const masters = mastersMovesSync(fenBefore);
+  if (masters && masters.length) {
+    const total = masters.reduce((a, m) => a + m.games, 0);
+    const mine = masters.find((m) => strip(m.san) === played);
+    if (mine && total >= 20) {
+      return `A well-trodden move — the masters reach this in ${mine.games.toLocaleString()} games, so you're right in the mainstream of theory`;
+    }
+  }
+  return null;
+}
 
 /** A plan-idea arrow. Colours: PLAN_BLUE for the student's plan, PLAN_AMBER for
  *  the opponent's — distinct from the green best-move arrow so the two never
@@ -454,9 +501,12 @@ export function buildMiddlegameOrientation(fen: string, studentColorWB: 'w' | 'b
     struct.kings.kingWing[studentColorWB] !== 'center' &&
     struct.kings.kingWing[enemyWB] !== 'center';
   if (oppositeCastling) {
-    parts.push('The kings castled on opposite wings — this is a race, and whoever storms the enemy king first wins');
     const enemyKingWing = struct.kings.kingWing[enemyWB] === 'queenside' ? 'queenside' : 'kingside';
     const myKingWing = struct.kings.kingWing[studentColorWB] === 'queenside' ? 'queenside' : 'kingside';
+    // Name the concrete TARGET, not a generic race (David 2026-07-24): storm the
+    // pawns at the enemy king's actual wing and rip the files open — that's where
+    // the mate comes from.
+    parts.push(`The kings castled on opposite wings — this is a race, and it's won by throwing your pawns at their king on the ${enemyKingWing} and tearing open the files around it before they do the same to you`);
     arrows.push(...stormArrows(all, studentColorWB, enemyKingWing, PLAN_BLUE));
     arrows.push(...stormArrows(all, enemyWB, myKingWing, PLAN_AMBER));
   }

@@ -102,6 +102,15 @@ describe.runIf(HARNESS_ON)('offline full-game narration harness', () => {
     const { generateReviewNarration } = await import('./coachFeatureService');
     type ReviewMoveInput = import('./coachFeatureService').ReviewMoveInput;
 
+    // Load HIS corpus so buildOpeningMoveDetail can ground the opening moves
+    // (prod loads it over the network; here we inject it from disk). Masters DB
+    // is the prod fallback — not loaded here.
+    try {
+      const { __setHisPlayDbForTests } = await import('./hisPlayLookup');
+      const { readFileSync } = await import('node:fs');
+      __setHisPlayDbForTests(JSON.parse(readFileSync('public/data/danya-play-db.json', 'utf8')));
+    } catch { /* opening detail falls through to piece-activity */ }
+
     // Replay → SAN + FEN chain.
     const chess = new Chess();
     const sans = PGN.replace(/\d+\.(\.\.)?\s*/g, '').replace(/\s*(1-0|0-1|1\/2-1\/2|\*)\s*$/, '').trim()
