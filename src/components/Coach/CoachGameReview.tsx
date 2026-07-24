@@ -204,6 +204,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       walkMountedRef.current = false;
     };
   }, []);
+  // Live mirror of the walk's current ply for async callbacks (spoken-line
+  // playout) whose closures would otherwise capture a stale ply.
+  const walkPlyRef = useRef(0);
 
   // The bulk analyzer stays PAUSED for the whole review session, not just
   // the pre-walk analysis (David 2026-07-19: the 694-game batch resumed
@@ -967,7 +970,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const shotCostLine = useCallback((s: { playedSan: string; costPawns: number | null }): string => {
     if (!s.playedSan) return ''; // rewind hold-challenges have no single "game move" to cite
     return s.costPawns !== null && s.costPawns >= 0.5
-      ? ` In the game you played ${s.playedSan} — that cost about ${s.costPawns.toFixed(1)} pawns.`
+      ? ` In the game you played ${s.playedSan} — that cost about ${s.costPawns.toFixed(1)} points.`
       : ` In the game you played ${s.playedSan}.`;
   }, []);
 
@@ -1339,7 +1342,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     const povCp = (moverIsWhite ? 1 : -1) * (line.terminalEvalCp ?? line.rootEvalCp);
     const closing = line.plies[line.plies.length - 1].facts.isMate
       ? 'That line goes all the way to mate.'
-      : `That line is about ${(Math.abs(povCp) / 100).toFixed(1)} pawns better.`;
+      : `That line is about ${(Math.abs(povCp) / 100).toFixed(1)} points better.`;
     await speakPaced(closing);
     setWalkExplorationFen(null);
     setWalkExplorationSan(null);
@@ -1644,7 +1647,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     const povCp = (moverIsWhite ? 1 : -1) * (line.terminalEvalCp ?? line.rootEvalCp);
     let closing = last.facts.isMate
       ? "That's the line — all the way to mate."
-      : `That's the line — about ${(Math.abs(povCp) / 100).toFixed(1)} pawns better at the end.`;
+      : `That's the line — about ${(Math.abs(povCp) / 100).toFixed(1)} points better at the end.`;
     if (state.fellOff) {
       // THE DEVICE (Phase 3) — a verified fall-off closes with the
       // calculation-depth tool + the computed "seen this before" history.
@@ -1805,6 +1808,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // 2026-05 review audit feedback). (The hook CALL moved above the
   // sequence block — Phase 1 — which needs playMoveSound earlier.)
   const lastSoundPlyRef = useRef<number>(walkPlayback.currentPly);
+  useEffect(() => { walkPlyRef.current = walkPlayback.currentPly; }, [walkPlayback.currentPly]);
   useEffect(() => {
     if (walkPlayback.currentPly === lastSoundPlyRef.current) return;
     const advancedForward = walkPlayback.currentPly > lastSoundPlyRef.current;
@@ -1893,28 +1897,21 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // walkout already plays that better line there, and every other interactive card
   // owns its own board.
   useEffect(() => { playedSpokenLineRef.current = new Set(); }, [props.gameId]);
-  useEffect(() => {
-    const ply = walkPlayback.currentPly;
-    const seg = walkPlayback.currentSegment;
-    const arrows = seg?.spokenLineArrows;
-    if (!arrows || arrows.length < 2) return;
-    if (ply <= 0 || ply > moves.length) return;
-    if (playedSpokenLineRef.current.has(ply)) return;
-    // Any interactive card / gate owns the board — never fight it.
-    if (
-      readingGate || faucetPhase !== 'idle' || shotState || shotReveal ||
-      turningQ || trapQ || rewindOffer ||
-      seqStateRef.current || cameoStateRef.current || theoryStateRef.current ||
-      quizzedPliesRef.current.has(ply)
-    ) return;
-    playedSpokenLineRef.current.add(ply);
+  // Play a spoken line OUT on the exploration board — green lead-the-eye arrow +
+  // SAN per move, then snap back. Shared by the auto-playout (waits for the
+  // segment's own narration to finish first) and the "Walk the line" button
+  // (cuts any narration and goes now). Fully token-guarded so a nav-away or a
+  // second invocation supersedes it; the freeze-fix auto-clear tears the overlay
+  // down on ply change.
+  const walkSpokenLine = useCallback(async (
+    arrows: NonNullable<ReviewMoveSegment['spokenLineArrows']>,
+    anchorPly: number,
+    opts?: { waitForVoice?: boolean },
+  ): Promise<void> => {
     const token = ++spokenLineTokenRef.current;
-    const anchorPly = ply;
     const alive = (): boolean =>
-      spokenLineTokenRef.current === token &&
-      walkMountedRef.current &&
-      walkPlayback.currentPly === anchorPly;
-    void (async () => {
+      spokenLineTokenRef.current === token && walkMountedRef.current && walkPlyRef.current === anchorPly;
+    if (opts?.waitForVoice) {
       // Let the segment's own narration (which SPOKE this line) finish first, so
       // the visual playout lands as its illustration — not over the top of it.
       const start = performance.now();
@@ -1923,35 +1920,56 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         if (!alive()) return;
         await new Promise((r) => setTimeout(r, 120));
       }
+    } else {
+      voiceService.stop(); // button: cut any narration and walk it now
+    }
+    if (!alive()) return;
+    for (const a of arrows) {
       if (!alive()) return;
-      for (const a of arrows) {
-        if (!alive()) return;
-        if (!a.uci || a.uci.length < 4) continue;
-        const from = a.uci.slice(0, 2);
-        const to = a.uci.slice(2, 4);
-        let san: string | null = null;
-        try {
-          const mv = new Chess(a.fenBefore).move({
-            from, to, promotion: a.uci.length > 4 ? a.uci.slice(4) : undefined,
-          });
-          san = mv?.san ?? null;
-        } catch { san = null; }
-        setWalkExplorationFen(a.fenAfter);
-        setWalkExplorationSan(san);
-        setWalkExplorationArrows([{ startSquare: from, endSquare: to, color: '#22c55e' }]);
-        if (san) { try { playMoveSound(san); } catch { /* sound optional */ } }
-        await new Promise((r) => setTimeout(r, 1050));
-      }
-      // Hold the final frame a beat, then snap back to the live line so nav is clean.
-      if (!alive()) return;
-      await new Promise((r) => setTimeout(r, 700));
-      if (!alive()) return;
-      setWalkExplorationFen(null);
-      setWalkExplorationSan(null);
-      setWalkExplorationArrows(null);
-    })();
+      if (!a.uci || a.uci.length < 4) continue;
+      const from = a.uci.slice(0, 2);
+      const to = a.uci.slice(2, 4);
+      let san: string | null = null;
+      try {
+        const mv = new Chess(a.fenBefore).move({
+          from, to, promotion: a.uci.length > 4 ? a.uci.slice(4) : undefined,
+        });
+        san = mv?.san ?? null;
+      } catch { san = null; }
+      setWalkExplorationFen(a.fenAfter);
+      setWalkExplorationSan(san);
+      setWalkExplorationArrows([{ startSquare: from, endSquare: to, color: '#22c55e' }]);
+      if (san) { try { playMoveSound(san); } catch { /* sound optional */ } }
+      await new Promise((r) => setTimeout(r, 1050));
+    }
+    if (!alive()) return;
+    await new Promise((r) => setTimeout(r, 700)); // hold the final frame a beat
+    if (!alive()) return;
+    setWalkExplorationFen(null);
+    setWalkExplorationSan(null);
+    setWalkExplorationArrows(null);
+  }, [playMoveSound]);
+  // AUTO-PLAYOUT — the delta shows itself when the walk lands on a plain
+  // (non-card) ply whose narration named a projected line.
+  useEffect(() => {
+    const ply = walkPlayback.currentPly;
+    const seg = walkPlayback.currentSegment;
+    const arrows = seg?.spokenLineArrows;
+    if (!arrows || arrows.length < 2) return;
+    if (ply <= 0 || ply > moves.length) return;
+    if (playedSpokenLineRef.current.has(ply)) return;
+    // Any interactive card / gate owns the board — never fight it. The §5 walkout
+    // already plays the better line on picker plies (quizzedPliesRef).
+    if (
+      readingGate || faucetPhase !== 'idle' || shotState || shotReveal ||
+      turningQ || trapQ || rewindOffer ||
+      seqStateRef.current || cameoStateRef.current || theoryStateRef.current ||
+      quizzedPliesRef.current.has(ply)
+    ) return;
+    playedSpokenLineRef.current.add(ply);
+    void walkSpokenLine(arrows, ply, { waitForVoice: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps -- fires on ply landing; card refs read live.
-  }, [walkPlayback.currentPly, walkPlayback.currentSegment, moves.length]);
+  }, [walkPlayback.currentPly, walkPlayback.currentSegment, moves.length, walkSpokenLine]);
 
   // Reset the explore-toggle on every ply change. Each arrow-bearing
   // ply has its OWN suggested-move-vs-played-move discussion, so the
@@ -3511,6 +3529,25 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 <MessageCircle size={12} />
                 Ask
               </button>
+              {/* WALK THE LINE — replay the projected line the coach mentioned on
+                  THIS ply (the delta) with a lead-the-eye arrow per move (David
+                  2026-07-24: "Or even a button that walks the line."). Auto-plays
+                  once on landing; this button lets the student re-walk on demand. */}
+              {walkPlayback.currentSegment?.spokenLineArrows
+                && walkPlayback.currentSegment.spokenLineArrows.length >= 2 && (
+                <button
+                  onClick={() => {
+                    const seg = walkPlayback.currentSegment;
+                    if (seg?.spokenLineArrows) void walkSpokenLine(seg.spokenLineArrows, walkPlayback.currentPly, { waitForVoice: false });
+                  }}
+                  className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-lg border border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20"
+                  style={{ color: 'var(--color-text)' }}
+                  data-testid="walk-the-line-btn"
+                >
+                  <Crosshair size={12} />
+                  Walk the line
+                </button>
+              )}
               {/* OPENING THEORY LECTURE — the masters-DB tour of the mainline,
                   sidelines, and where the game left theory (David 2026-07-20). */}
               {theoryBeats && theoryBeats.length > 0 && (
@@ -4078,7 +4115,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                           <span className="capitalize">{tactic.tacticType.replace(/_/g, ' ')}</span>
                         </span>
                         <span className="text-[10px] ml-1.5" style={{ color: 'var(--color-text-muted)' }}>
-                          ({(tactic.evalSwing / 100).toFixed(1)} pawns)
+                          ({(tactic.evalSwing / 100).toFixed(1)} points)
                         </span>
                       </div>
                     </button>

@@ -51,9 +51,11 @@ function evalPhrase(evalCp: number | null | undefined, mateIn: number | null | u
   const who = pawns >= 0 ? mover : (mover === 'white' ? 'black' : 'white');
   const mag = Math.abs(pawns);
   if (mag < 0.3) return 'the position is roughly balanced';
-  if (mag < 1.0) return `${who} is slightly better (about ${mag.toFixed(1)} pawns)`;
-  if (mag < 2.5) return `${who} is clearly better (about ${mag.toFixed(1)} pawns)`;
-  return `${who} is winning (about ${mag.toFixed(1)} pawns)`;
+  // Eval voiced in POINTS, never "pawns" (David 2026-07-24: "if the eval is
+  // called out then say up by three points, not three pawns").
+  if (mag < 1.0) return `${who} is slightly better (about ${mag.toFixed(1)} points)`;
+  if (mag < 2.5) return `${who} is clearly better (about ${mag.toFixed(1)} points)`;
+  return `${who} is winning (about ${mag.toFixed(1)} points)`;
 }
 
 /**
@@ -87,9 +89,9 @@ export function assemblePositionAssessment(opts: {
     const mag = Math.abs(studentEvalCp) / 100;
     const side = studentEvalCp >= 0 ? 'better' : 'worse';
     if (mag < 0.3) parts.push('The position is roughly balanced.');
-    else if (mag < 1.0) parts.push(`You're slightly ${side} — about ${mag.toFixed(1)} of a pawn.`);
-    else if (mag < 2.5) parts.push(`You're clearly ${side} — about ${mag.toFixed(1)} pawns.`);
-    else parts.push(studentEvalCp >= 0 ? `You're winning — about ${mag.toFixed(1)} pawns up.` : `You're losing — about ${mag.toFixed(1)} pawns down.`);
+    else if (mag < 1.0) parts.push(`You're slightly ${side} — about ${mag.toFixed(1)} of a point.`);
+    else if (mag < 2.5) parts.push(`You're clearly ${side} — about ${mag.toFixed(1)} points.`);
+    else parts.push(studentEvalCp >= 0 ? `You're winning — about ${mag.toFixed(1)} points up.` : `You're losing — about ${mag.toFixed(1)} points down.`);
   }
 
   // Add the single most relevant computed fact so the assessment names a WHY.
@@ -400,11 +402,11 @@ export function assembleCandidateMoveAnswer(opts: {
   } else if (cpLoss <= 30) {
     verdict = `${candNorm} is perfectly fine — essentially equal to the best move${bestSan ? ` ${bestSan}` : ''}.`;
   } else if (cpLoss <= 90) {
-    verdict = `${candNorm} is playable, just slightly worse than ${bestSan ?? 'the best move'} — about ${pawns} of a pawn.`;
+    verdict = `${candNorm} is playable, just slightly worse than ${bestSan ?? 'the best move'} — about ${pawns} of a point.`;
   } else if (cpLoss <= 200) {
-    verdict = `${candNorm} is an inaccuracy — it gives up about ${pawns} of a pawn versus ${bestSan ?? 'the best move'}.`;
+    verdict = `${candNorm} is an inaccuracy — it gives up about ${pawns} of a point versus ${bestSan ?? 'the best move'}.`;
   } else {
-    verdict = `${candNorm} is a mistake — it loses about ${pawns} pawns; ${bestSan ?? 'the engine move'} is much better.`;
+    verdict = `${candNorm} is a mistake — it loses about ${pawns} points; ${bestSan ?? 'the engine move'} is much better.`;
   }
 
   const parts = [verdict];
@@ -549,11 +551,11 @@ export function assembleAlternativesAnswer(opts: {
     if (cpLoss <= 30) {
       closeOnes.push(altSan);
     } else if (cpLoss <= 90) {
-      parts.push(`${altSan} is playable but slightly worse — about ${pawns} of a pawn${replyClause ? `; ${replyClause}` : ''}.`);
+      parts.push(`${altSan} is playable but slightly worse — about ${pawns} of a point${replyClause ? `; ${replyClause}` : ''}.`);
     } else if (cpLoss <= 200) {
-      parts.push(`${altSan} concedes about ${pawns} pawns${replyClause ? ` — ${replyClause}` : ''}.`);
+      parts.push(`${altSan} concedes about ${pawns} points${replyClause ? ` — ${replyClause}` : ''}.`);
     } else {
-      parts.push(`${altSan} is much worse — it gives up about ${pawns} pawns${replyClause ? `; ${replyClause}` : ''}.`);
+      parts.push(`${altSan} is much worse — it gives up about ${pawns} points${replyClause ? `; ${replyClause}` : ''}.`);
     }
   }
   // Honest when the engine says several moves are fine: don't invent a gap.
@@ -2115,7 +2117,7 @@ export function assembleMistakesAnswer(m: MistakesLike): GroundedAnswer | null {
     ? ` ${m.lateGameCollapses} game${m.lateGameCollapses === 1 ? ' collapsed' : 's collapsed'} late — errors bunched in the final moves, which usually means clock or fatigue.`
     : '';
   const costly = m.costliest && m.costliest.san
-    ? ` Your costliest slip was ${m.costliest.san} against ${m.costliest.opponentName || 'an opponent'}, dropping ${pawns(m.costliest.cpLoss)} pawns${m.costliest.openingName ? ` in the ${m.costliest.openingName}` : ''}.`
+    ? ` Your costliest slip was ${m.costliest.san} against ${m.costliest.opponentName || 'an opponent'}, dropping ${pawns(m.costliest.cpLoss)} points${m.costliest.openingName ? ` in the ${m.costliest.openingName}` : ''}.`
     : '';
   // Suggestion — pick the dominant lever.
   const suggest = m.thrownWins >= 2
@@ -2266,7 +2268,7 @@ export function assembleTacticsProfileAnswer(t: TacticsProfileLike): GroundedAns
     ? ` The motif you miss most is the ${top.type} (${top.count} time${top.count === 1 ? '' : 's'}).`
     : '';
   const cost = top && typeof t.topMissAvgCost === 'number' && t.topMissAvgCost > 0
-    ? ` Those cost about ${pawns(t.topMissAvgCost)} pawns each.`
+    ? ` Those cost about ${pawns(t.topMissAvgCost)} points each.`
     : '';
   const phase = t.worstPhase && t.worstPhase.count > 0
     ? ` Most of those misses come in the ${phaseWord(t.worstPhase.phase)}.`
@@ -2736,15 +2738,15 @@ export function assembleMoveRatingAnswer(r: MoveRatingLike): GroundedAnswer | nu
   } else if (r.wasBest || r.quality === 'best') {
     verdict = `${r.playedSan} was the engine's top move — you gave up nothing.`;
   } else if (r.quality === 'excellent') {
-    verdict = `${r.playedSan} is within a whisker of best — about ${pawns} pawns.${better}`;
+    verdict = `${r.playedSan} is within a whisker of best — about ${pawns} points.${better}`;
   } else if (r.quality === 'good') {
-    verdict = `${r.playedSan} is fine; it cost only about ${pawns} pawns.${better}`;
+    verdict = `${r.playedSan} is fine; it cost only about ${pawns} points.${better}`;
   } else if (r.quality === 'inaccuracy') {
-    verdict = `${r.playedSan} is a slight inaccuracy — it let about ${pawns} pawns slip.${better}`;
+    verdict = `${r.playedSan} is a slight inaccuracy — it let about ${pawns} points slip.${better}`;
   } else if (r.quality === 'mistake') {
-    verdict = `${r.playedSan} is a mistake: it cost about ${pawns} pawns.${better}`;
+    verdict = `${r.playedSan} is a mistake: it cost about ${pawns} points.${better}`;
   } else {
-    verdict = `${r.playedSan} is a blunder — it dropped about ${pawns} pawns.${better}`;
+    verdict = `${r.playedSan} is a blunder — it dropped about ${pawns} points.${better}`;
   }
 
   return { facts: verdict, ...arrow, sources: ['engine:stockfish'] };
@@ -2946,7 +2948,7 @@ export function assembleGameReviewAnswer(opts: {
     if (costed.length >= 2) {
       const top = costed[0];
       const dot = top.m.color === 'black' ? '…' : '.';
-      parts.push(`The turning point: move ${top.m.moveNumber}${dot} ${top.m.san} — the game's biggest single swing, about ${top.swing.toFixed(1)} pawns.`);
+      parts.push(`The turning point: move ${top.m.moveNumber}${dot} ${top.m.san} — the game's biggest single swing, about ${top.swing.toFixed(1)} points.`);
     }
   }
 

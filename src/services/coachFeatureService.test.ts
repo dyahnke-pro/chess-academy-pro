@@ -357,8 +357,9 @@ describe('coachFeatureService', () => {
       expect(blunderSeg.narration).toMatch(/Nf3/);
       // Should NOT include the played SAN — rule #3 ("don't restate the board")
       expect(blunderSeg.narration).not.toMatch(/Qh5/);
-      // Should include the swing magnitude in pawns
-      expect(blunderSeg.narration).toMatch(/3\.[0-9] pawns/);
+      // Should include the swing magnitude in POINTS (David 2026-07-24: eval
+      // voiced as points, never pawns).
+      expect(blunderSeg.narration).toMatch(/3\.[0-9] points/);
     });
 
     it('frames opponent mistakes from the student perspective', () => {

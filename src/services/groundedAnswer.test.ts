@@ -369,7 +369,7 @@ describe('assembleMistakesAnswer — Wave 1 "where do I go wrong" (+ suggestion)
     expect(a).not.toBeNull();
     expect(a!.facts).toMatch(/Across 40 games you average 1\.2 blunders and 2\.4 mistakes a game, losing about 55 centipawns/);
     expect(a!.facts).toMatch(/Most of your errors land in the middlegame \(31 there\)/);
-    expect(a!.facts).toMatch(/costliest slip was Qxd4 against GM Smith, dropping 6\.4 pawns in the Caro-Kann/);
+    expect(a!.facts).toMatch(/costliest slip was Qxd4 against GM Smith, dropping 6\.4 points in the Caro-Kann/);
     expect(a!.facts).toMatch(/Focus your training on the middlegame/);
     expect(a!.sources).toContain('data:your-games');
   });
@@ -403,7 +403,7 @@ describe('assembleTacticsProfileAnswer — Wave 1 (+ drill suggestion)', () => {
       worstMiss: { san: 'Nxe5', opponentName: 'Rival' },
       bestSequence: { san: 'Qxh7+', opponentName: 'Victim' },
     });
-    expect(a!.facts).toMatch(/cost about 1\.8 pawns each/);
+    expect(a!.facts).toMatch(/cost about 1\.8 points each/);
     expect(a!.facts).toMatch(/costliest miss was Nxe5 against Rival/);
     expect(a!.facts).toMatch(/sharpest shot on record: Qxh7\+ against Victim/);
   });
@@ -613,7 +613,7 @@ describe('Wave 4 assemblers — colour / records / puzzle-stats / transfer-gap',
   });
   it('assembleMoveRatingAnswer voices a mistake with the better move + arrow', () => {
     const a = assembleMoveRatingAnswer({ playedSan: 'd3', wasBest: false, cpLoss: 250, quality: 'mistake', betterSan: 'd4', betterFromTo: { from: 'd2', to: 'd4' }, missedMate: null, allowedMate: null });
-    expect(a!.facts).toMatch(/d3 is a mistake: it cost about 2\.5 pawns\. The engine preferred d4\./);
+    expect(a!.facts).toMatch(/d3 is a mistake: it cost about 2\.5 points\. The engine preferred d4\./);
     expect(a!.bestMoveFromTo).toEqual({ from: 'd2', to: 'd4' });
     expect(a!.bestMoveSan).toBe('d4');
   });
@@ -806,12 +806,12 @@ describe('assembleEndgameAnswer — Phase 5 (voice the tablebase verdict)', () =
 describe('assemblePositionAssessment — Phase 1 (who is winning / eval readout)', () => {
   it('voices the eval from the student POV (White)', () => {
     const a = assemblePositionAssessment({ evalCp: 120, mateIn: null, studentColor: 'white' });
-    expect(a!.facts).toMatch(/You're clearly better — about 1\.2 pawns\./);
+    expect(a!.facts).toMatch(/You're clearly better — about 1\.2 points\./);
     expect(a!.sources).toEqual(['engine:stockfish']);
   });
   it('flips perspective for Black (white-positive eval = Black worse)', () => {
     const a = assemblePositionAssessment({ evalCp: 120, mateIn: null, studentColor: 'black' });
-    expect(a!.facts).toMatch(/You're clearly worse — about 1\.2 pawns\./);
+    expect(a!.facts).toMatch(/You're clearly worse — about 1\.2 points\./);
   });
   it('calls a balanced position balanced', () => {
     expect(assemblePositionAssessment({ evalCp: 10, mateIn: null, studentColor: 'white' })!.facts).toBe('The position is roughly balanced.');
@@ -825,7 +825,7 @@ describe('assemblePositionAssessment — Phase 1 (who is winning / eval readout)
       evalCp: -250, mateIn: null, studentColor: 'white',
       tactics: tactics({ hanging: [{ square: 'd5', piece: 'n', color: 'w' }] }),
     });
-    expect(a!.facts).toContain("You're losing — about 2.5 pawns down."); // -250 white-POV, student is White
+    expect(a!.facts).toContain("You're losing — about 2.5 points down."); // -250 white-POV, student is White
     expect(a!.facts).toContain('Your knight on d5 is hanging.');
     expect(a!.sources).toContain('board:chess.js');
   });
@@ -1118,7 +1118,7 @@ describe('assembleAlternativesAnswer — grounded "why are the alternatives wors
     // d4 within 30cp → honest "essentially as good", never an invented gap.
     expect(a?.facts).toMatch(/d4 is essentially as good/i);
     // f3 at 110cp loss → concession, with the pawn magnitude.
-    expect(a?.facts).toMatch(/f3 concedes about 1\.1 pawns/i);
+    expect(a?.facts).toMatch(/f3 concedes about 1\.1 points/i);
   });
 
   it('flips evals to mover POV for Black to move', () => {
@@ -1134,8 +1134,8 @@ describe('assembleAlternativesAnswer — grounded "why are the alternatives wors
       ],
     });
     expect(a?.facts).toMatch(/best move is c5/i);
-    // mover-POV: best -30, alt -200 → 170cp loss → "concedes about 1.7 pawns"
-    expect(a?.facts).toMatch(/g5 concedes about 1\.7 pawns/i);
+    // mover-POV: best -30, alt -200 → 170cp loss → "concedes about 1.7 points"
+    expect(a?.facts).toMatch(/g5 concedes about 1\.7 points/i);
   });
 
   it('says an alternative walks into mate when its line is mated', () => {

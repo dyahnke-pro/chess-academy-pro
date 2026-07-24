@@ -771,7 +771,7 @@ function buildDeterministicNarration(params: {
     swingIsDecisive
       ? ' A game-deciding swing.'
       : swingPawns !== null && swingPawns >= 0.1
-        ? ` Drops about ${swingPawns.toFixed(1)} pawns.`
+        ? ` Drops about ${swingPawns.toFixed(1)} points.`
         : '';
 
   // WHY a strong move was strong — the concrete thing it DID on the board,

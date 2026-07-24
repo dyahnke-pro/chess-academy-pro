@@ -215,7 +215,9 @@ describe('material truth + tactic agent (David 2026-07-20 Opera nitpick)', () =>
     // White knight on e5 hangs; Black's d6 pawn takes it for free.
     const fb = 'rnbqkbnr/ppp2ppp/3p4/4N3/8/8/PPPPPPPP/RNBQKB1R b KQkq - 0 1';
     const line = plyFactsForMove(fb, 'dxe5') ?? '';
-    expect(line).toMatch(/wins 3 point/i);
+    // "wins material" — no point count spoken (David 2026-07-24: "sounds bad").
+    expect(line).toMatch(/wins material/i);
+    expect(line).not.toMatch(/wins \d+ point/i);
   });
 
   it('does NOT credit the mover for the OPPONENT\'s pin (backstop move)', () => {

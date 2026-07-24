@@ -397,7 +397,9 @@ export function plyFactsString(ply: PvPly): string | null {
   if (f.newPassedPawns.length > 0) parts.push(`creates a passed pawn on ${f.newPassedPawns.join(', ')}`);
   if (f.newOpenFiles.length > 0) parts.push(`opens the ${f.newOpenFiles.join(' and ')}-file`);
   if (f.shieldLost > 0) parts.push(`strips ${f.shieldLost} pawn${f.shieldLost > 1 ? 's' : ''} from the king's cover`);
-  if (f.materialGained >= 1) parts.push(`wins ${f.materialGained} point${f.materialGained > 1 ? 's' : ''} of material`);
+  // Say "wins material" — NEVER the point count (David 2026-07-24: "we don't need
+  // to call out how many points were gained with each capture. Sounds bad").
+  if (f.materialGained >= 1) parts.push('wins material');
   if (parts.length === 0) return null;
   return `The move ${ply.san} ${parts.join(', ')}.`;
 }
@@ -425,7 +427,8 @@ export function plyFactsClause(fenBefore: string, san: string, prev?: PrevCaptur
     if (f.newPassedPawns.length > 0) parts.push(`creates a passed pawn on ${f.newPassedPawns.join(', ')}`);
     if (f.newOpenFiles.length > 0) parts.push(`opens the ${f.newOpenFiles.join(' and ')}-file`);
     if (f.shieldLost > 0) parts.push(`strips ${f.shieldLost} pawn${f.shieldLost > 1 ? 's' : ''} from the king's cover`);
-    if (f.materialGained >= 1) parts.push(`wins ${f.materialGained} point${f.materialGained > 1 ? 's' : ''} of material`);
+    // "wins material", never the point count (David 2026-07-24 — sounds bad).
+    if (f.materialGained >= 1) parts.push('wins material');
     return parts.length === 0 ? null : parts.join(', ');
   } catch {
     return null;
@@ -477,7 +480,8 @@ export function plyFactsForMove(fenBefore: string, san: string, prev?: PrevCaptu
     if (f.newPassedPawns.length > 0) parts.push(vb(`create a passed pawn on ${f.newPassedPawns[0]}`, `creates a passed pawn on ${f.newPassedPawns[0]}`));
     if (f.newOpenFiles.length > 0) parts.push(vb(`open the ${f.newOpenFiles[0]}-file`, `opens the ${f.newOpenFiles[0]}-file`));
     if (f.shieldLost > 0) parts.push(vb(`strip ${f.shieldLost} pawn${plural(f.shieldLost)} from the king's cover`, `strips ${f.shieldLost} pawn${plural(f.shieldLost)} from the king's cover`));
-    if (f.materialGained >= 1) parts.push(vb(`win ${f.materialGained} point${plural(f.materialGained)} of material`, `wins ${f.materialGained} point${plural(f.materialGained)} of material`));
+    // "win/wins material", never the point count (David 2026-07-24 — sounds bad).
+    if (f.materialGained >= 1) parts.push(vb('win material', 'wins material'));
 
     if (parts.length === 0 || onlyBareCapture) return null;
     return `${subject} ${parts.join(', ')}.`;
