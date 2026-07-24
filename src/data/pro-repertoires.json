@@ -1111,6 +1111,11 @@
      "explanation": "In the Bb5+ Bd7 Bc4 Nb6 sub-line of the Nf6 spine, after Bxf7+! Kxf7 e6+, Black has a fork in the road: retreat …Kg8 (gives up castling forever, 10 games) or come forward. The trap line shown takes the …Kg8 retreat — White plays exd7 Qxd7 O-O and Black has lost castling rights, the f7-pawn, the bishop pair... all for one White bishop. From the actual game vs ShadowKing71 (3122) at chess.com/game/live/106030753121. 10 opponents fell into this exact retreat including AlexTruskavetsky (2676) and NovakCabarkapa (2847). When you reach the Bxf7+ check, drill the exd7 follow-up so you can execute it cleanly."
     },
     {
+     "name": "Bxf7+ King-Hunt — …Kg6 forced mate (Nh4+/d4+/Nf5+/Qxg5#, engine-verified)",
+     "pgn": "e4 c5 c3 Nf6 e5 Nd5 Nf3 d6 Bb5+ Bd7 Bc4 Nb6 Bxf7+ Kxf7 e6+ Kg6 Nh4+ Kh6 d4+ g5 Qg4 Rg8 Nf5+ Kg6 Qxg5#",
+     "explanation": "The king-hunt showpiece from Naroditsky's Alapin speedrun. In the same Bb5+ Bd7 Bc4 Nb6 Bxf7+! Kxf7 e6+ sub-line, the cool defence is …Kxe6 or …Ke8 (roughly equal — the sacrifice is a practical weapon, not an objective refutation). But a panicked king often flees UP the board with …Kg6, and THAT is a forced mate: Nh4+ Kh6, d4+ (a discovered check from the c1-bishop) g5, Qg4 Rg8, Nf5+ Kg6, Qxg5#. Stockfish confirms mate-in-5 with every Black defence losing. Drill the Nh4+/d4+/Nf5+ hunt so that when an opponent runs the king to g6 you finish cleanly — and know honestly that against …Kxe6 you play on a level game, not a won one."
+    },
+    {
      "name": "...Bg4 Pin Reflex in Nc6 line (7 games)",
      "pgn": "e4 c5 c3 Nc6 d4 cxd4 cxd4 d5 exd5 Qxd5 Nf3 Bg4 Nc3 Bxf3 gxf3 Qxd4 Qxd4 Nxd4",
      "explanation": "In the 2…Nc6 line after d4 cxd4 cxd4 d5 exd5 Qxd5 Nf3, Black's natural …Bg4 pinning the knight gets punished. 7 opponents fell into this, and the actual game continuation shows the structural exploit. The trap line is taken from a real game in his archive (see source below) — drill the punish so you don't allow Black to keep the pin."

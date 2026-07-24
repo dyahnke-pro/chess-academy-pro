@@ -197,6 +197,52 @@ const BXF7_WALK_IN: LessonScript = {
   ],
 };
 
+const KING_HUNT_MATE: LessonScript = {
+  openingId: 'pro-naroditsky-alapin',
+  title: 'Weapon: Bxf7+ king-hunt — …Kg6 runs into a forced mate',
+  minutes: 4,
+  orientation: 'white',
+  kind: 'trap',
+  sources: SRC,
+  beats: [
+    b({
+      id: 'khunt-e6',
+      moves: 'e4 c5 c3 Nf6 e5 Nd5 Nf3 d6 Bb5+ Bd7 Bc4 Nb6 Bxf7+ Kxf7 e6+ Kg6',
+      highlights: [H('e6', ATK), H('g6', ATK)],
+      say: "Same sacrifice — Bxf7+ Kxf7, then e6+. The cool defence is …Kxe6 or …Ke8, holding the balance; but at speed a panicked king often flees UP the board with …Kg6. That is fatal. With the king marooned on the sixth rank and every White piece pointing at it, this is now a forced mate — the engine confirms it.",
+      sayShort: '…Kg6 — the king flees upward. Fatal.',
+    }),
+    b({
+      id: 'khunt-nh4',
+      moves: 'e4 c5 c3 Nf6 e5 Nd5 Nf3 d6 Bb5+ Bd7 Bc4 Nb6 Bxf7+ Kxf7 e6+ Kg6 Nh4+',
+      highlights: [H('h4'), H('g6', ATK)],
+      say: "Nh4+ — the knight leaps in with check and takes away the g6-square. The only legal step is deeper into the storm.",
+      sayShort: 'Nh4+ — chase the king in.',
+    }),
+    b({
+      id: 'khunt-d4',
+      moves: 'e4 c5 c3 Nf6 e5 Nd5 Nf3 d6 Bb5+ Bd7 Bc4 Nb6 Bxf7+ Kxf7 e6+ Kg6 Nh4+ Kh6 d4+ g5',
+      highlights: [H('c1'), H('h6', ATK), H('g5')],
+      say: "Kh6 is forced, and now d4+ — a discovered check: the pawn steps aside and the c1-bishop rakes the whole diagonal onto the h6-king. Black has to throw the g-pawn in the way with …g5.",
+      sayShort: 'd4+ — discovered check, …g5 blocks.',
+    }),
+    b({
+      id: 'khunt-qg4',
+      moves: 'e4 c5 c3 Nf6 e5 Nd5 Nf3 d6 Bb5+ Bd7 Bc4 Nb6 Bxf7+ Kxf7 e6+ Kg6 Nh4+ Kh6 d4+ g5 Qg4',
+      highlights: [H('g4'), H('g5', ATK)],
+      say: "Qg4 — the queen joins the hunt, and the g5-pawn is now nailed in front of its king. Qxg5 is mate next move; Black is completely out of shelter.",
+      sayShort: 'Qg4 — Qxg5 mate looms.',
+    }),
+    b({
+      id: 'khunt-mate',
+      moves: 'e4 c5 c3 Nf6 e5 Nd5 Nf3 d6 Bb5+ Bd7 Bc4 Nb6 Bxf7+ Kxf7 e6+ Kg6 Nh4+ Kh6 d4+ g5 Qg4 Rg8 Nf5+ Kg6 Qxg5#',
+      highlights: [H('f5'), H('g5', ATK), H('g6', ATK)],
+      say: "…Rg8 is a last shrug; Nf5+ drives the king back to g6 and Qxg5 is checkmate — the queen, guarded by the knight on f5, seals a net the king can never leave. That is the whole point of the sacrifice: not to win a pawn, but to hunt the king into the open.",
+      sayShort: 'Nf5+ then Qxg5# — the hunt ends.',
+    }),
+  ],
+};
+
 const BG4_PIN_REFLEX: LessonScript = {
   openingId: 'pro-naroditsky-alapin',
   title: 'Weapon: Nc3 ignores the …Bg4 pin (Nc6 Line)',
@@ -412,6 +458,7 @@ const TRAPS: TrapEntry[] = [
   { name: 'Bc4-Gambit + exf7+ (Nc6 block fails, 62 games incl. Hans Niemann 3161)', lesson: BC4_GAMBIT_EXF7, kind: 'trap' },
   { name: 'd5-Open cxd4 → Nb5 Outpost (17 games incl. Sam Shankland 2934)', lesson: D5_OPEN_NB5, kind: 'trap' },
   { name: 'Bxf7+ → e6+ → Kg8 Walk-In (10 games incl. ShadowKing71 3122)', lesson: BXF7_WALK_IN, kind: 'trap' },
+  { name: 'Bxf7+ King-Hunt — …Kg6 forced mate (Nh4+/d4+/Nf5+/Qxg5#, engine-verified)', lesson: KING_HUNT_MATE, kind: 'trap' },
   { name: '...Bg4 Pin Reflex in Nc6 line (7 games)', lesson: BG4_PIN_REFLEX, kind: 'trap' },
   { name: 'Premature d4 push — Black equalises with …d5', lesson: PREMATURE_D4, kind: 'warning' },
   { name: 'Bc2 retreat instead of Bxe6 trade', lesson: BC2_RETREAT, kind: 'warning' },
