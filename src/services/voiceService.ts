@@ -223,6 +223,15 @@ const WEB_SPEECH_FALLBACK_ENABLED = false;
  *  within a move or two; long enough to avoid hammering a broken
  *  endpoint. */
 const POLLY_COOLDOWN_MS = 15_000;
+
+// David 2026-07-24: "Remove all caps for now. I want to see the full work. We add
+// back in when we know it works." The brief voice cap was clipping the review's
+// rich teaching — the delta, the better-line walkout, the mistake reasoning, the
+// threat defense — down to its first sentence before Polly ever spoke it (PostHog
+// today showed 700→56, 354→71, 315→62 char clips). Disabled globally for now so
+// every surface speaks the FULL narration. Flip back to `true` (or replace with a
+// per-surface gate that exempts the review) once the full-length work is verified.
+const NARRATION_BRIEF_CAP_ENABLED = false;
 /** Min cooldown floor when honoring a server-supplied `Retry-After`.
  *  Below this, we still pause briefly so we don't pound the endpoint. */
 const POLLY_COOLDOWN_MIN_MS = 3_000;
@@ -1058,7 +1067,7 @@ class VoiceService {
     // user explicitly chose to watch — so it bypasses the brief cap
     // (the silent gate above STILL applies). This is the single
     // sanctioned exemption to G5, used only by the lesson player.
-    if (narrationVerbosity === 'brief' && !opts?.bypassBriefCap && !opts?.bypassVerbosity) {
+    if (NARRATION_BRIEF_CAP_ENABLED && narrationVerbosity === 'brief' && !opts?.bypassBriefCap && !opts?.bypassVerbosity) {
       const cap = applyBriefVoiceCap(text, 'brief');
       if (cap.truncated) {
         void import('./appAuditor').then(({ logAppAudit }) => {
