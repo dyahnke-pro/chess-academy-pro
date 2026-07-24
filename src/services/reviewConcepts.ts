@@ -40,7 +40,8 @@ export interface ConceptCtx {
 
 export interface ConceptBeat {
   /** Stable concept key (for the dedup ledger + telemetry). */
-  concept: 'simplify-when-ahead' | 'outpost' | 'open-lines-at-king' | 'two-bishops' | 'convert-dont-rush';
+  concept: 'simplify-when-ahead' | 'outpost' | 'open-lines-at-king' | 'two-bishops'
+    | 'convert-dont-rush' | 'passed-pawn-push' | 'rook-seventh' | 'rook-open-file';
   /** The fact string, board-anchored; the house voice phrases it. */
   text: string;
   /** Independent reference (concept:<id> | reputable URL). */
@@ -195,10 +196,30 @@ function enemyKingCentral(fen: string, enemy: 'w' | 'b'): boolean {
 function detectOpenLinesAtKing(ctx: ConceptCtx): ConceptBeat | null {
   let mv;
   try { const c = new Chess(ctx.fenBefore); mv = c.move(ctx.san); } catch { return null; }
-  if (!mv || mv.piece !== 'p' || !mv.captured) return null;      // a pawn capture opens a line
-  const fromFile = mv.from[0];
-  if (fromFile < 'c' || fromFile > 'f') return null;             // central file
+  if (!mv || mv.piece !== 'p') return null;
   const enemy: 'w' | 'b' = ctx.moverColor === 'w' ? 'b' : 'w';
+  // Two ways a central pawn move cracks the centre open:
+  //   (a) a CAPTURE on a central file (opens a line immediately), or
+  //   (b) a PUSH that is a BREAK — its capture squares hit an enemy pawn, so it
+  //       forces lines open (the 4.d4 idea: "tearing the centre apart").
+  const fromFile = mv.from[0];
+  const toFile = mv.to[0];
+  const centralCapture = !!mv.captured && fromFile >= 'c' && fromFile <= 'f';
+  let breakPush = false;
+  if (!mv.captured && toFile >= 'c' && toFile <= 'f') {
+    const after = new Chess(ctx.fenBefore);       // scan the pre-move board for an enemy centre pawn the push attacks
+    const tf = toFile.charCodeAt(0) - 97;
+    const tr = parseInt(mv.to[1], 10);
+    const capRank = ctx.moverColor === 'w' ? tr + 1 : tr - 1;
+    for (const df of [-1, 1]) {
+      const f = tf + df;
+      if (f < 0 || f > 7 || capRank < 1 || capRank > 8) continue;
+      const sq = `${String.fromCharCode(97 + f)}${capRank}` as Square;
+      const p = after.get(sq);
+      if (p && p.type === 'p' && p.color === enemy) breakPush = true;
+    }
+  }
+  if (!centralCapture && !breakPush) return null;
   if (!enemyKingCentral(ctx.fenAfter, enemy)) return null;
   const mine = MINE(ctx.moverColor, ctx.studentColor);
   const text = mine
@@ -254,6 +275,87 @@ function detectConvertDontRush(ctx: ConceptCtx): ConceptBeat | null {
   return { concept: 'convert-dont-rush', text, source: 'concept:pos-centralization' };
 }
 
+/** A pawn on `square` (of `color`) is passed: no enemy pawn on its file or the
+ *  adjacent files anywhere AHEAD of it. */
+function isPassedPawn(fen: string, square: Square, color: 'w' | 'b'): boolean {
+  const c = new Chess(fen);
+  const file = square.charCodeAt(0) - 97;
+  const rank = parseInt(square[1], 10);
+  const enemy: 'w' | 'b' = color === 'w' ? 'b' : 'w';
+  for (const df of [-1, 0, 1]) {
+    const f = file + df;
+    if (f < 0 || f > 7) continue;
+    for (let r = 1; r <= 8; r++) {
+      const ahead = color === 'w' ? r > rank : r < rank;
+      if (!ahead) continue;
+      const p = c.get(`${String.fromCharCode(97 + f)}${r}` as Square);
+      if (p && p.type === 'p' && p.color === enemy) return false;
+    }
+  }
+  return true;
+}
+
+/** A file (0..7) with no pawns of either colour. */
+function fileIsOpen(fen: string, file: number): boolean {
+  const c = new Chess(fen);
+  for (let r = 1; r <= 8; r++) {
+    const p = c.get(`${String.fromCharCode(97 + file)}${r}` as Square);
+    if (p && p.type === 'p') return false;
+  }
+  return true;
+}
+
+/**
+ * PASSED-PAWN PUSH — advancing a passed pawn past the midpoint toward promotion.
+ * "Passed pawns must be pushed." Board-computable. Source: concept:pawn-passed.
+ */
+function detectPassedPawnPush(ctx: ConceptCtx): ConceptBeat | null {
+  let mv;
+  try { const c = new Chess(ctx.fenBefore); mv = c.move(ctx.san); } catch { return null; }
+  if (!mv || mv.piece !== 'p' || mv.captured) return null;      // a push, not a capture
+  const dest = mv.to as Square;
+  const rank = parseInt(dest[1], 10);
+  if (ctx.moverColor === 'w' && rank < 4) return null;          // past the midpoint = a real runner
+  if (ctx.moverColor === 'b' && rank > 5) return null;
+  if (!isPassedPawn(ctx.fenAfter, dest, ctx.moverColor)) return null;
+  const mine = MINE(ctx.moverColor, ctx.studentColor);
+  const file = dest[0];
+  const text = mine
+    ? `You're pushing your passed pawn on the ${file}-file — passed pawns are made to be pushed. It ties a piece down to babysit it, and the moment it's ignored, it queens.`
+    : `Your opponent's passed pawn on the ${file}-file is rolling — it will tie your pieces down to stop it. Blockade it on a dark/light square a knight or king can hold.`;
+  return { concept: 'passed-pawn-push', text, source: 'concept:pawn-passed' };
+}
+
+/**
+ * ROOK TO THE 7th / OPEN FILE — a rook landing on the 7th rank (2nd for Black)
+ * or on a fully open file. Board-computable. Sources: concept:end-rook-7th /
+ * concept:pos-open-file.
+ */
+function detectRookActivation(ctx: ConceptCtx): ConceptBeat | null {
+  let mv;
+  try { const c = new Chess(ctx.fenBefore); mv = c.move(ctx.san); } catch { return null; }
+  if (!mv || mv.piece !== 'r') return null;
+  const dest = mv.to as Square;
+  const rank = parseInt(dest[1], 10);
+  const file = dest.charCodeAt(0) - 97;
+  const mine = MINE(ctx.moverColor, ctx.studentColor);
+  const seventh = ctx.moverColor === 'w' ? 7 : 2;
+  if (rank === seventh) {
+    const text = mine
+      ? `Your rook reaches the 7th rank — the pigs on the seventh. It rakes their pawns from behind and pins their king to the back rank.`
+      : `Your opponent's rook lands on your 2nd rank, raking the pawns from behind. Challenge it or block the file before a second rook joins it.`;
+    return { concept: 'rook-seventh', text, source: 'concept:end-rook-7th' };
+  }
+  // Open file only counts if the rook actually just took it (moved onto it).
+  if (fileIsOpen(ctx.fenAfter, file)) {
+    const text = mine
+      ? `Your rook swings onto the open ${dest[0]}-file — the one highway into their position. Open files belong to rooks; this is how they get into the game.`
+      : `Your opponent seizes the open ${dest[0]}-file with the rook — the highway into your camp. Contest the file or your own rooks stay passive.`;
+    return { concept: 'rook-open-file', text, source: 'concept:pos-open-file' };
+  }
+  return null;
+}
+
 /**
  * Detect the highest-priority strategic concept this move expresses, or null.
  * Order = teaching specificity: a sharp attacking break or a structural
@@ -263,6 +365,8 @@ function detectConvertDontRush(ctx: ConceptCtx): ConceptBeat | null {
 export function detectConcept(ctx: ConceptCtx): ConceptBeat | null {
   return detectOpenLinesAtKing(ctx)
     ?? detectOutpost(ctx)
+    ?? detectRookActivation(ctx)
+    ?? detectPassedPawnPush(ctx)
     ?? detectTwoBishops(ctx)
     ?? detectSimplifyWhenAhead(ctx)
     ?? detectConvertDontRush(ctx);

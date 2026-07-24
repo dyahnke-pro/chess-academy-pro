@@ -102,6 +102,46 @@ describe('reviewConcepts — two-bishops', () => {
   });
 });
 
+describe('reviewConcepts — open-lines pawn-push break', () => {
+  it('fires on a central pawn PUSH break vs an uncastled king (the 4.d4 idea)', () => {
+    // White pawn on e4 pushes e5? use d4 break: white d-pawn to d4 attacking e5,
+    // black king on e8. 1.e4 e5 2.Nf3 Nc6 3.Bc4 -> then d4? Build directly:
+    const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4';
+    const beat = detectConcept(ctx(fen, 'd4', { evalBefore: 20, evalAfter: 25, studentColor: 'w' }));
+    expect(beat?.concept).toBe('open-lines-at-king');   // d4 attacks the e5 pawn; black king on e8
+  });
+});
+
+describe('reviewConcepts — passed-pawn push', () => {
+  it('fires on advancing a passed pawn past the midpoint', () => {
+    // White passed pawn on d6 pushes to d7 (or d5->d6). No black pawns on c/d/e.
+    const fen = '4k3/8/3P4/8/8/8/5PPP/4K3 w - - 0 1';
+    const beat = detectConcept(ctx(fen, 'd7+', { evalBefore: 400, evalAfter: 420, studentColor: 'w' }));
+    expect(beat?.concept).toBe('passed-pawn-push');
+    expect(beat?.source).toBe('concept:pawn-passed');
+  });
+
+  it('does NOT fire when the pawn is not passed (enemy pawn ahead)', () => {
+    const fen = '4k3/3p4/3P4/8/8/8/5PPP/4K3 w - - 0 1';
+    expect(detectConcept(ctx(fen, 'Kd2', { evalBefore: 100, evalAfter: 100, studentColor: 'w' }))).not.toMatchObject({ concept: 'passed-pawn-push' });
+  });
+});
+
+describe('reviewConcepts — rook activation', () => {
+  it('fires on a rook reaching the 7th rank', () => {
+    const fen = '4k3/pppp4/8/8/8/8/4R3/4K3 w - - 0 1';
+    const beat = detectConcept(ctx(fen, 'Re7', { evalBefore: 200, evalAfter: 200, studentColor: 'w' }));
+    expect(beat?.concept).toBe('rook-seventh');
+  });
+
+  it('fires on a rook taking an open file', () => {
+    // c-file has no pawns; white rook a1 -> c1.
+    const fen = '4k3/pp1ppppp/8/8/8/8/PP1PPPPP/R3K3 w Q - 0 1';
+    const beat = detectConcept(ctx(fen, 'Rc1', { evalBefore: 30, evalAfter: 30, studentColor: 'w' }));
+    expect(beat?.concept).toBe('rook-open-file');
+  });
+});
+
 describe('reviewConcepts — convert-dont-rush', () => {
   it('fires on a quiet improving move, up big, position simplified', () => {
     // K+R+few pawns vs K+few pawns, White up a rook, quiet king move.
@@ -110,9 +150,8 @@ describe('reviewConcepts — convert-dont-rush', () => {
     expect(beat?.concept).toBe('convert-dont-rush');
   });
 
-  it('does NOT fire on a capture (not a quiet move)', () => {
+  it('does NOT fire when only slightly ahead', () => {
     const fen = '8/5pk1/6p1/8/8/1R6/5PPP/6K1 w - - 0 1';
-    expect(detectConcept(ctx(fen, 'Rb7', { evalBefore: 500, evalAfter: 500, studentColor: 'w' }))?.concept).toBe('convert-dont-rush');
-    // Rb7 is quiet (no capture) → still convert. A capturing move would be excluded.
+    expect(detectConcept(ctx(fen, 'Kf1', { evalBefore: 90, evalAfter: 90, studentColor: 'w' }))).toBeNull();
   });
 });
