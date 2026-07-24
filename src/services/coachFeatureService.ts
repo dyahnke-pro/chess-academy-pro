@@ -1975,7 +1975,17 @@ async function augmentWithProjections(
     if (studentPovCp > -150) return "you're a bit worse";
     return "you're in trouble";
   };
-  const render = (line: PvLine): string => {
+  // Normalize a full teaching sentence ("The knight bears down on d4…") into a
+  // clause that flows after "SAN (…)": drop the leading article/subject and the
+  // trailing period, lowercase the lead so it reads "Nf3 (bears down on d4…)".
+  const teachClause = (fenBefore: string, san: string): string | null => {
+    const t = buildReviewMoveTeaching(fenBefore, san);
+    if (!t) return null;
+    let s = t.trim().replace(/\.$/, '');
+    s = s.replace(/^(The|A|An|It|Now)\s+/i, '');
+    return s.charAt(0).toLowerCase() + s.slice(1);
+  };
+  const render = (line: PvLine, rich = false): string => {
     // NARRATE EVERY MOVE of the projected line (David 2026-07-21: "narrate each
     // line and explain the why behind each move. The user needs just as much
     // detail here as every other move, if not more, because this is where the
@@ -1984,6 +1994,12 @@ async function augmentWithProjections(
     // threads through so an even queen trade never reads as two nine-point
     // windfalls (scrutiny 2026-07-21: "Qxd6 captures the queen… then Bxd6
     // captures the queen for nine points").
+    // RICH mode (David 2026-07-24: "add better narrations behind the delta
+    // lines… explain better what each move does and why it's better") — a QUIET
+    // move that has no tactical fact clause still gets its positional purpose
+    // (develops, seizes the outpost, opens the file) from buildReviewMoveTeaching
+    // instead of reading as a bare SAN. Used on the delta/better-line and the
+    // punishment line, where the teaching lives.
     const PV_PTS: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
     let prev: PrevCaptureContext = { square: null, capturedValue: 0 };
     const steps = line.plies.map((p) => {
@@ -1994,7 +2010,12 @@ async function augmentWithProjections(
           ? { square: mv.to, capturedValue: PV_PTS[mv.captured] ?? 0 }
           : { square: null, capturedValue: 0 };
       } catch { prev = { square: null, capturedValue: 0 }; }
-      return w ? `${p.san} (${w})` : p.san;
+      if (w) return `${p.san} (${w})`;
+      if (rich) {
+        const teach = teachClause(p.fenBefore, p.san);
+        if (teach) return `${p.san} (${teach})`;
+      }
+      return p.san;
     });
     const whiteCp = line.terminalEvalCp ?? line.rootEvalCp;
     const studentPov = studentColorWB === 'w' ? whiteCp : -whiteCp;
@@ -2037,8 +2058,8 @@ async function augmentWithProjections(
     const line = await raceTimeout(computePvLine(s.fenAfter, { maxPlies: 6 }), PROJ_TIMEOUT_MS, null);
     if (line && line.delivers && line.plies.length >= 2) {
       const frame = isStudentSlip
-        ? `Here's how it gets punished from here: ${render(line)}.`
-        : `Here's how you take advantage: ${render(line)}.`;
+        ? `Here's how it gets punished from here: ${render(line, true)}.`
+        : `Here's how you take advantage: ${render(line, true)}.`;
       s.narration = `${s.narration ?? ''} ${frame}`.trim();
       attachLineArrows(s, line, 4); // punishment/advantage line
       budget -= 1;
@@ -2093,8 +2114,8 @@ async function augmentWithProjections(
       const cmp = await raceTimeout(compareTwoMoves(s.fenBefore, s.san, bestName, deltaEvaluate), PROJ_TIMEOUT_MS, null);
       const why = cmp?.delta?.text ?? null;
       s.narration = why
-        ? `${s.narration ?? ''} Why ${bestName} was better — ${why}. The line runs ${render(line)}.`.trim()
-        : `${s.narration ?? ''} Why ${bestName} was better — the line runs ${render(line)}.`.trim();
+        ? `${s.narration ?? ''} Why ${bestName} was better — ${why}. The line runs ${render(line, true)}.`.trim()
+        : `${s.narration ?? ''} Why ${bestName} was better — the line runs ${render(line, true)}.`.trim();
       attachLineArrows(s, line, 5); // the delta / better-line — David's named priority
       whyBudget -= 1;
     }
