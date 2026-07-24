@@ -173,21 +173,29 @@ export function classifyCpLoss(
   return 'good';
 }
 
-function replayPgnToFens(pgn: string): { fens: string[]; moves: string[] } {
+export function replayPgnToFens(pgn: string): { fens: string[]; moves: string[] } {
   const chess = new Chess();
-  const fens: string[] = [chess.fen()];
+  const fens: string[] = [];
   const moves: string[] = [];
   try {
     chess.loadPgn(pgn);
-    const history = chess.history();
-    chess.reset();
-    for (const move of history) {
-      chess.move(move);
+    // Read positions straight from the VERBOSE history — `.before` on the first
+    // ply is the game's TRUE starting FEN (honors a `[SetUp]`/`[FEN]` header:
+    // odds games, custom positions) and `.after` is the FEN after each ply. The
+    // old code did `chess.reset()` (back to the STANDARD board) and re-`move`d
+    // the SANs — which threw/truncated on a later move that's legal only on the
+    // custom board (the two-knights-odds game where 3.O-O is legal without the
+    // g1-knight but illegal on a standard board). No replay, no throw.
+    const verbose = chess.history({ verbose: true });
+    if (verbose.length > 0) {
+      fens.push(verbose[0].before);
+      for (const mv of verbose) { fens.push(mv.after); moves.push(mv.san); }
+    } else {
       fens.push(chess.fen());
-      moves.push(move);
     }
   } catch {
     // Return what we have
+    if (fens.length === 0) fens.push(new Chess().fen());
   }
   return { fens, moves };
 }

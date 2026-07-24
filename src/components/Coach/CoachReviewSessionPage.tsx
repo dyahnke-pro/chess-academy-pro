@@ -98,7 +98,7 @@ function annotationFor(
   );
 }
 
-function adaptGameRecord(
+export function adaptGameRecord(
   game: GameRecord,
   playerColor: 'white' | 'black',
 ): AdaptedReviewProps | null {
@@ -111,13 +111,23 @@ function adaptGameRecord(
   const history = chess.history();
   if (history.length === 0) return null;
 
-  // Re-walk to capture FEN after each ply.
-  const replay = new Chess();
+  // Re-walk to capture FEN after each ply — from the GAME's ACTUAL starting
+  // position. loadPgn honored a `[SetUp]`/`[FEN]` header (odds games, custom
+  // positions), so replaying from a fresh STANDARD board would make a later
+  // move illegal and throw uncaught — the prod "Invalid move: O-O" crash on the
+  // two-knights-odds game chesscom-996944614, where 3.O-O is legal on the
+  // knight-less board but not on a standard one (a knight still sits on g1).
+  // `.before` on the first verbose move is that true start FEN (standard when
+  // there was no header). The per-move replay is also try-guarded so no other
+  // odd game can ever crash the review load.
+  const startFen = chess.history({ verbose: true })[0]?.before;
+  const replay = new Chess(startFen);
   const moves: CoachGameMove[] = [];
   let prevEval: number | null = null;
   for (let i = 0; i < history.length; i += 1) {
     const san = history[i];
-    const moveResult = replay.move(san);
+    let moveResult: ReturnType<typeof replay.move> | null = null;
+    try { moveResult = replay.move(san); } catch { break; }
     if (!moveResult) break;
     const fullMove = Math.floor(i / 2) + 1;
     const color: 'white' | 'black' = i % 2 === 0 ? 'white' : 'black';

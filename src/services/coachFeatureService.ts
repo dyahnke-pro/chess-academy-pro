@@ -578,7 +578,24 @@ export interface ReviewMoveCitation {
  *  shorter list (better to narrate the moves we can than refuse the
  *  whole review). */
 function buildFenChain(moves: ReviewMoveInput[]): { fenBefore: string; fenAfter: string }[] {
+  // TRUST the per-ply fenAfter already computed upstream (adaptGameRecord, which
+  // honors a `[SetUp]`/`[FEN]` header). Re-replaying the SANs from a fresh
+  // STANDARD board — as this used to — truncated custom-start games at the first
+  // move that's illegal on a standard board (the two-knights-odds game where
+  // 3.O-O is legal only without the g1-knight). fenBefore[i] chains from the
+  // prior ply's fenAfter; fenBefore[0] falls back to the standard start (only the
+  // move-1 beat is affected, and its teaching is start-position-generic). A
+  // legacy input without fenAfter drops to a guarded replay so nothing breaks.
+  const START = new Chess().fen();
   const chain: { fenBefore: string; fenAfter: string }[] = [];
+  if (moves.length > 0 && moves[0].fenAfter) {
+    for (let i = 0; i < moves.length; i += 1) {
+      const fenAfter = moves[i].fenAfter;
+      if (!fenAfter) break;
+      chain.push({ fenBefore: i > 0 ? moves[i - 1].fenAfter : START, fenAfter });
+    }
+    return chain;
+  }
   const chess = new Chess();
   for (const m of moves) {
     const fenBefore = chess.fen();
