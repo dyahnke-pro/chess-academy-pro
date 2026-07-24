@@ -164,7 +164,7 @@ describe.runIf(HARNESS_ON)('offline full-game narration harness', () => {
     const body = out.join('\n');
     console.log('\n' + body + '\n');
     const { writeFileSync } = await import('node:fs');
-    writeFileSync('/tmp/danya-narration.txt', body);
+    writeFileSync(process.env.HARNESS_OUT || '/tmp/danya-narration.txt', body);
 
     expect(narration.segments.length).toBeGreaterThan(0);
   });

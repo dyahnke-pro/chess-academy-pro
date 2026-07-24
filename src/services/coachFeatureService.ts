@@ -1374,7 +1374,13 @@ export function buildReviewSegments(
     // still named by the conversion beat at the end.
     if (forcedRun && m.ply === forcedRun.startPly) {
       const framing = "Here's the finish — from this move on it's forced. Every move is a check, the king has no square to run to, and it ends in mate. Watch it land.";
-      narration = narration ? `${framing} ${narration}` : framing;
+      // A move that FORCES MATE is not an inaccuracy/mistake/blunder in any way
+      // that matters — even if the engine sees a faster mate. Drop the negative
+      // "a more precise move was available" stem (David 2026-07-24 Opera read:
+      // "Bxd7+ [inaccuracy] … the precise move was Bxf6" ON a mating move). Keep
+      // a genuine sac description (prepend); replace a negative flag stem.
+      const flaggedNegative = m.classification === 'inaccuracy' || m.classification === 'mistake' || m.classification === 'blunder';
+      narration = (narration && !flaggedNegative) ? `${framing} ${narration}` : framing;
       narrationSource = narrationSource ?? 'flag';
     }
     // THE THREAT CALL-OUT (David 2026-07-21, emphatic: "The coach should
@@ -1869,6 +1875,20 @@ function raceTimeout<T>(p: Promise<T>, ms: number, fallback: T): Promise<T> {
  * flat); the projected facets are bracket-tagged so the cover-all voice pass
  * speaks them. Mutates the segments in place.
  */
+/** A projected line reads as a "threat"/"danger" ONLY when it is FORCING — it
+ *  mates, or a strong majority of its plies are checks or captures. A quiet
+ *  positional maneuver that merely improves the eval is NOT a threat; narrating
+ *  it as one dumps an engine line that reads nothing like a human threat (David
+ *  2026-07-24, full-game read: "Nxc3…d6…f5…Bd7…Ng5…Nf6" narrated as "a deeper
+ *  threat brewing" — a 7-ply quiet maneuver). The plan-beats teach quiet ideas
+ *  in words; the projection passes speak only forcing tactics. */
+function isForcingProjection(line: PvLine): boolean {
+  if (line.plies.length === 0) return false;
+  if (line.plies[line.plies.length - 1].facts.isMate) return true;
+  const forcing = line.plies.filter((p) => p.facts.isCheck || !!p.facts.captured).length;
+  return forcing / line.plies.length >= 0.6;
+}
+
 async function augmentWithProjections(
   segments: ReviewMoveSegment[],
   studentColorWB: 'w' | 'b',
@@ -1951,7 +1971,14 @@ async function augmentWithProjections(
   const flaggedStudent = segments
     .filter((s) => s.playerColor === studentColorName
       && (s.classification === 'inaccuracy' || s.classification === 'mistake' || s.classification === 'blunder')
-      && !!s.bestMoveUci)
+      && !!s.bestMoveUci
+      // bestMoveSan is nulled when the engine's best IS the move played (a
+      // depth-limited mis-rank of a strong move — Morphy's 13.Rxd7). Never
+      // narrate "Why Rxd7 was better" about the move that was actually played.
+      && !!s.bestMoveSan
+      // …and never nitpick a "better move" on a move that FORCES MATE — the
+      // forced-finish framing already owns that segment (David 2026-07-24).
+      && !/from this move on it's forced/.test(s.narration ?? ''))
     .sort((a, b) => {
       const swing = (x: ReviewMoveSegment): number =>
         x.evalBefore !== null && x.evalAfter !== null ? Math.abs(x.evalBefore - x.evalAfter) : 0;
@@ -2054,6 +2081,7 @@ async function augmentWithProjections(
       const decisiveJump = studentPovNow !== null && studentPovTerminal !== null
         && studentPovTerminal - studentPovNow >= 250;
       if (!matesOut && !decisiveJump) continue;
+      if (!isForcingProjection(line)) continue; // a quiet eval-swing maneuver is a plan, not a threat
       s.narration = `${s.narration ?? ''} And there's a deeper threat brewing — if they sit still, it runs ${render(line)}.`.trim();
       deepBudget -= 1;
     } catch { /* skip this ply — never block the walk on a threat probe */ }
@@ -2104,6 +2132,7 @@ async function augmentWithProjections(
       const decisiveJump = oppPovNow !== null && oppPovTerminal !== null
         && oppPovTerminal - oppPovNow >= 250;
       if (!matesOut && !decisiveJump) continue;
+      if (!isForcingProjection(line)) continue; // a quiet eval-swing maneuver is a plan, not a threat
       let callOut = `Watch what they're building — left alone, their idea runs ${render(line)}.`;
       const next = segments[i + 1];
       if (next && next.playerColor === studentColorName && next.bestMoveSan) {
