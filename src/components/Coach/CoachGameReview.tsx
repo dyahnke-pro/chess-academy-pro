@@ -272,6 +272,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const [walkExplorationArrows, setWalkExplorationArrows] =
     useState<Array<{ startSquare: string; endSquare: string; color: string }> | null>(null);
   const walkExplorationPlyRef = useRef<number | null>(null);
+  // Spoken-line playout (the delta arrows) — token supersedes an in-flight
+  // playout the instant the walk advances or a card opens; the set stops a
+  // ply's line re-playing. Declared here (above handleWalkForward) so the nav
+  // handler can cancel a running playout on any forward tap.
+  const spokenLineTokenRef = useRef(0);
+  const playedSpokenLineRef = useRef<Set<number>>(new Set());
   // Opt-in toggle: when on at an arrow-bearing ply, the board
   // displays `seg.fenBefore` (so the missed move is playable)
   // instead of the canonical `seg.fenAfter`. Resets when the
@@ -713,6 +719,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
   const handleWalkForward = useCallback((): void => {
     if (readingGate) return;             // a legacy gate is open (defensive)
+    // A forward tap always supersedes an in-flight spoken-line (delta) playout —
+    // whether it advances the ply or opens a card. Bumping the token aborts the
+    // async loop; the auto-clear effect tears its overlay down.
+    spokenLineTokenRef.current += 1;
     // FORWARD IS AN ESCAPE HATCH — never a frozen board (David 2026-07-19: "a
     // card popped up… i want to click forward to ignore it but the board is
     // frozen"). When the why-picker faucet or the end-of-game turning-point card
@@ -1867,6 +1877,81 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     }
     // action === 'hold' — leave the overlay put (a walkout stepping its line).
   }, [walkPlayback.currentPly, walkExplorationFen, walkExplorationSan]);
+
+  // LINE ARROWS FOR EVERY LINE THE COACH MENTIONS — the delta (David 2026-07-24:
+  // "we NEED arrows showing the lines the coach mentions. The delta!"). When the
+  // walk lands on a plain (non-card) ply whose narration named a projected line —
+  // the punishment/advantage line, the "why X was better" delta line, the deep
+  // threat, the plan or consequence line — augmentWithProjections stamped its
+  // moves on seg.spokenLineArrows. The coach SPOKE that line; now the board PLAYS
+  // IT OUT so the student sees exactly what was described: after the segment's own
+  // narration finishes, step each move on the exploration board with a green
+  // lead-the-eye arrow + its SAN. G0 — the moves are the engine's real PV, already
+  // computed; this only draws them. Fully guarded so a forward-tap mid-playout
+  // never strands the board (the auto-clear effect above tears the overlay down on
+  // any nav-away). Skips plies a picker/faucet owned (quizzedPliesRef) — the §5
+  // walkout already plays that better line there, and every other interactive card
+  // owns its own board.
+  useEffect(() => { playedSpokenLineRef.current = new Set(); }, [props.gameId]);
+  useEffect(() => {
+    const ply = walkPlayback.currentPly;
+    const seg = walkPlayback.currentSegment;
+    const arrows = seg?.spokenLineArrows;
+    if (!arrows || arrows.length < 2) return;
+    if (ply <= 0 || ply > moves.length) return;
+    if (playedSpokenLineRef.current.has(ply)) return;
+    // Any interactive card / gate owns the board — never fight it.
+    if (
+      readingGate || faucetPhase !== 'idle' || shotState || shotReveal ||
+      turningQ || trapQ || rewindOffer ||
+      seqStateRef.current || cameoStateRef.current || theoryStateRef.current ||
+      quizzedPliesRef.current.has(ply)
+    ) return;
+    playedSpokenLineRef.current.add(ply);
+    const token = ++spokenLineTokenRef.current;
+    const anchorPly = ply;
+    const alive = (): boolean =>
+      spokenLineTokenRef.current === token &&
+      walkMountedRef.current &&
+      walkPlayback.currentPly === anchorPly;
+    void (async () => {
+      // Let the segment's own narration (which SPOKE this line) finish first, so
+      // the visual playout lands as its illustration — not over the top of it.
+      const start = performance.now();
+      const idleMax = isReviewUncapped() ? 26000 : 12000;
+      while (voiceService.isPlaying() && performance.now() - start < idleMax) {
+        if (!alive()) return;
+        await new Promise((r) => setTimeout(r, 120));
+      }
+      if (!alive()) return;
+      for (const a of arrows) {
+        if (!alive()) return;
+        if (!a.uci || a.uci.length < 4) continue;
+        const from = a.uci.slice(0, 2);
+        const to = a.uci.slice(2, 4);
+        let san: string | null = null;
+        try {
+          const mv = new Chess(a.fenBefore).move({
+            from, to, promotion: a.uci.length > 4 ? a.uci.slice(4) : undefined,
+          });
+          san = mv?.san ?? null;
+        } catch { san = null; }
+        setWalkExplorationFen(a.fenAfter);
+        setWalkExplorationSan(san);
+        setWalkExplorationArrows([{ startSquare: from, endSquare: to, color: '#22c55e' }]);
+        if (san) { try { playMoveSound(san); } catch { /* sound optional */ } }
+        await new Promise((r) => setTimeout(r, 1050));
+      }
+      // Hold the final frame a beat, then snap back to the live line so nav is clean.
+      if (!alive()) return;
+      await new Promise((r) => setTimeout(r, 700));
+      if (!alive()) return;
+      setWalkExplorationFen(null);
+      setWalkExplorationSan(null);
+      setWalkExplorationArrows(null);
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- fires on ply landing; card refs read live.
+  }, [walkPlayback.currentPly, walkPlayback.currentSegment, moves.length]);
 
   // Reset the explore-toggle on every ply change. Each arrow-bearing
   // ply has its OWN suggested-move-vs-played-move discussion, so the

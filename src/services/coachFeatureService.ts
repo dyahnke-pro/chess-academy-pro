@@ -474,6 +474,18 @@ export interface ReviewMoveSegment {
    *  these arrows SHOW the plan instead of moving pieces (David 2026-07-19).
    *  Undefined on ordinary moves. */
   planArrows?: Array<{ startSquare: string; endSquare: string; color: string }>;
+  /** The projected line this segment's narration MENTIONS in prose — the delta
+   *  ("the line runs h3, then d5, then e5…"), the opponent-punishment line
+   *  ("here's how you take advantage: Ne5, then bxc5…"), or the deep-threat line
+   *  ("it runs Qf2, then Be6…"). The board PLAYS IT OUT with a lead-the-eye arrow
+   *  per move as the coach speaks it — the moves land on evolving positions, so
+   *  they can't be shown as static arrows on the current board (David 2026-07-24:
+   *  "we NEED arrows showing the lines the coach mentions. The delta!"). Each
+   *  entry: `uci` = the arrow from→to, `fenAfter` = the board frame for that move.
+   *  The student-slip better-line is already walked by the faucet's §5 playout, so
+   *  this carries the OTHER lines the walk only spoke. `fenBefore` lets the
+   *  board name the move (SAN) as it draws the arrow. */
+  spokenLineArrows?: Array<{ uci: string; fenBefore: string; fenAfter: string }>;
   /** The STATIC threat call-out this ply's narration carries, tagged so the
    *  engine pass can CONFIRM it (David 2026-07-21: "We need to find a way for
    *  these two to work together. They need to compliment each other!!"). The
@@ -1988,6 +2000,22 @@ async function augmentWithProjections(
     const studentPov = studentColorWB === 'w' ? whiteCp : -whiteCp;
     return `${steps.join(', then ')} — and ${verdictWord(studentPov)}`;
   };
+  // David 2026-07-24: "we NEED arrows showing the lines the coach mentions. The
+  // delta!" — whenever a projection line is spoken (render() above), the board
+  // PLAYS IT OUT with a lead-the-eye arrow per move (CoachGameReview). A segment
+  // can accrue several lines across passes; the board plays ONE, so keep the
+  // highest-priority (the delta/better-line beats a punishment beats a threat).
+  const spokenLineArrowPriority = new WeakMap<ReviewMoveSegment, number>();
+  const attachLineArrows = (s: ReviewMoveSegment, line: PvLine, priority: number): void => {
+    const existing = spokenLineArrowPriority.get(s) ?? -1;
+    if (priority <= existing) return;
+    const arrows = line.plies
+      .filter((p) => p.uci && p.uci.length >= 4)
+      .map((p) => ({ uci: p.uci, fenBefore: p.fenBefore, fenAfter: p.fenAfter }));
+    if (arrows.length === 0) return;
+    s.spokenLineArrows = arrows;
+    spokenLineArrowPriority.set(s, priority);
+  };
   // Budget: 'full' (uncapped) needs room for punishment + plan + consequence;
   // 'mistakes' (capped production) caps at 2 punishment lines per game so the
   // review prep never stalls on Stockfish.
@@ -2012,6 +2040,7 @@ async function augmentWithProjections(
         ? `Here's how it gets punished from here: ${render(line)}.`
         : `Here's how you take advantage: ${render(line)}.`;
       s.narration = `${s.narration ?? ''} ${frame}`.trim();
+      attachLineArrows(s, line, 4); // punishment/advantage line
       budget -= 1;
     }
   }
@@ -2066,6 +2095,7 @@ async function augmentWithProjections(
       s.narration = why
         ? `${s.narration ?? ''} Why ${bestName} was better — ${why}. The line runs ${render(line)}.`.trim()
         : `${s.narration ?? ''} Why ${bestName} was better — the line runs ${render(line)}.`.trim();
+      attachLineArrows(s, line, 5); // the delta / better-line — David's named priority
       whyBudget -= 1;
     }
   }
@@ -2097,6 +2127,7 @@ async function augmentWithProjections(
           return w ? `${p.san} (${w})` : p.san;
         }).join(', then ');
         s.narration = `${s.narration} The engine confirms it — and if they try to run, it continues ${tail}.`;
+        attachLineArrows(s, line, 3); // confirmed threat continuation
       }
     } else if (s.narration) {
       // DISAGREEMENT — the engine sees a stronger idea. Replace the static
@@ -2104,6 +2135,7 @@ async function augmentWithProjections(
       const engineWhy = plyFactsClause(line.plies[0].fenBefore, line.plies[0].san);
       const replacement = ` And the real threat here, per the engine: ${line.plies[0].san}${engineWhy ? ` — it ${engineWhy}` : ''}.`;
       s.narration = s.narration.replace(s.staticThreat.sentence, replacement);
+      attachLineArrows(s, line, 3); // engine's replacement threat line
     }
   }
 
@@ -2155,6 +2187,7 @@ async function augmentWithProjections(
       if (!matesOut && !decisiveJump) continue;
       if (!isForcingProjection(line)) continue; // a quiet eval-swing maneuver is a plan, not a threat
       s.narration = `${s.narration ?? ''} And there's a deeper threat brewing — if they sit still, it runs ${render(line)}.`.trim();
+      attachLineArrows(s, line, 3); // deep threat (student's)
       deepBudget -= 1;
     } catch { /* skip this ply — never block the walk on a threat probe */ }
   }
@@ -2211,6 +2244,7 @@ async function augmentWithProjections(
         callOut += ` Your defense starts with ${next.bestMoveSan}.`;
       }
       s.narration = `${s.narration ?? ''} ${callOut}`.trim();
+      attachLineArrows(s, line, 3); // deep threat (opponent's idea)
       deepOppBudget -= 1;
     } catch { /* skip this ply — never block the walk on a threat probe */ }
   }
@@ -2261,6 +2295,35 @@ async function augmentWithProjections(
     }
   }
 
+  // #0 — THE OPENING PLAN, PLAYED OUT (David 2026-07-24: "the first half did not
+  // have nearly as much detail as the back half"). The middlegame/endgame get
+  // their engine projection lines; the opening carried only single-beat plans. So
+  // the opening-plan beat's continuation is played out too — the engine's natural
+  // development from that position (G0, board-true) — giving the FIRST HALF a
+  // played-out line with lead-the-eye arrows (attachLineArrows), the same
+  // treatment that makes the back half rich. One opening beat; both scopes.
+  {
+    const openingPlanSeg = segments.find((s) =>
+      s.narrationSource === 'opening-plan'
+      && !!s.planArrows && s.planArrows.length > 0
+      && s.ply <= 14
+      && s.playerColor === studentColorName);
+    if (openingPlanSeg && !openingPlanSeg.spokenLineArrows) {
+      const line = await raceTimeout(computePvLine(openingPlanSeg.fenAfter, { maxPlies: 6 }), PROJ_TIMEOUT_MS, null);
+      // A DEVELOPING line only — quiet (a forcing shot is a tactic, not an opening
+      // plan; it belongs to the flag/threat passes) and the student stays sound
+      // (never play out a "plan" that quietly leaves them worse).
+      if (line && line.plies.length >= 4 && !isForcingProjection(line)) {
+        const whiteCp = line.terminalEvalCp ?? line.rootEvalCp;
+        const studentPov = studentColorWB === 'w' ? whiteCp : -whiteCp;
+        if (studentPov >= -80) {
+          openingPlanSeg.narration = `${openingPlanSeg.narration ?? ''} Played out, the game develops naturally from here — ${render(line)}.`.trim();
+          attachLineArrows(openingPlanSeg, line, 2);
+        }
+      }
+    }
+  }
+
   if (scope === 'mistakes') return;
 
   // #1 — plan realization from the plan's critical position. In uncapped mode
@@ -2272,6 +2335,7 @@ async function augmentWithProjections(
     const line = await raceTimeout(computePvLine(planSeg.fenAfter, { maxPlies: 8 }), PROJ_TIMEOUT_MS, null);
     if (line && line.delivers && line.plies.length >= 2) {
       planSeg.narration = `${planSeg.narration ?? ''} [plan-line] Played out from here, the plan runs ${render(line)}.`.trim();
+      attachLineArrows(planSeg, line, 2); // plan realization line
       budget -= 1;
     }
   }
@@ -2284,6 +2348,7 @@ async function augmentWithProjections(
     const line = await raceTimeout(computePvLine(s.fenAfter, { maxPlies: 6 }), PROJ_TIMEOUT_MS, null);
     if (line && line.delivers && line.plies.length >= 2) {
       s.narration = `${s.narration ?? ''} [consequence] Follow it up and it goes ${render(line)}.`.trim();
+      attachLineArrows(s, line, 2); // consequence line
       budget -= 1;
     }
   }
