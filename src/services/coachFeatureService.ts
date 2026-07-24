@@ -896,6 +896,10 @@ const MIDDLEGAME_ORIENTATION_MIN_PLY = 16;
  *  templates rather than hanging "Preparing…". Worst case ≈ 55s to ready. */
 const REVIEW_INTRO_VOICE_TIMEOUT_MS = 18000;
 const REVIEW_HOUSE_VOICE_TIMEOUT_MS = 38000;
+// Stockfish projection budget — bounds the ONE prep await that was try/catch-only
+// so a wedged engine worker can never leave the walk stuck on "Preparing…".
+const REVIEW_AUGMENT_TIMEOUT_MS = 20000;
+const REVIEW_AUGMENT_TIMEOUT_MS_UNCAPPED = 35000;
 
 export function buildReviewSegments(
   moves: ReviewMoveInput[],
@@ -2854,7 +2858,16 @@ export async function generateReviewNarration(params: {
     // Uncapped: all three projection passes. Capped production: the punishment
     // pass only — every review now answers "how does this mistake get taken
     // advantage of?" with the concrete engine line (David 2026-07-21).
-    await augmentWithProjections(segments, playerColor === 'white' ? 'w' : 'b', uncapped ? 'full' : 'mistakes');
+    // TIMEOUT-BOUNDED (David 2026-07-24, "Preparing…" stuck): this is the one
+    // prep await that was try/catch-only — a try/catch does NOT bound a HANG, so
+    // a wedged Stockfish projection could stall the walk forever. Race it; on
+    // timeout the segments keep whatever projections already landed (best-effort)
+    // and the walk still becomes ready.
+    await raceTimeout(
+      augmentWithProjections(segments, playerColor === 'white' ? 'w' : 'b', uncapped ? 'full' : 'mistakes'),
+      uncapped ? REVIEW_AUGMENT_TIMEOUT_MS_UNCAPPED : REVIEW_AUGMENT_TIMEOUT_MS,
+      undefined,
+    );
   } catch { /* projections are best-effort; the walk ships without them */ }
 
   // SILENT-MIDDLE FILL then STEM VARIETY (David 2026-07-24) — first give quiet
