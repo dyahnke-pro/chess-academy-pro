@@ -2515,6 +2515,60 @@ function fillSilentDevelopment(segments: ReviewMoveSegment[], playerColor: 'whit
   }
 }
 
+/**
+ * PAST-TENSE PASS (David 2026-07-24: "it's a post-game review" — the walk speaks
+ * in the RETROSPECTIVE register). The deterministic templates describe the move
+ * that WAS played in the present ("you capture the queen", "the knight forks the
+ * king"); in a post-game review that reads as live commentary. This converts the
+ * ACTUAL-MOVE clause to past tense — but NEVER the hypothetical tails (the
+ * "here's how you take advantage… then Nxe5 captures" projection lines are future
+ * variations that didn't happen) and NEVER a live threat ("it wins the queen" is
+ * a threat, not a past event). It splits each line at the first projection/threat
+ * marker and past-tenses only the head. Pure rephrase, adds no chess content (G0).
+ */
+const PAST_VERB: Record<string, string> = {
+  captures: 'captured', capture: 'captured', wins: 'won', win: 'won', gives: 'gave', give: 'gave',
+  throws: 'threw', throw: 'threw', grabs: 'grabbed', takes: 'took', take: 'took',
+  sacrifices: 'sacrificed', sacrifice: 'sacrificed', lands: 'landed', land: 'landed',
+  opens: 'opened', open: 'opened', creates: 'created', create: 'created', comes: 'came',
+  breaks: 'broke', castles: 'castled', castle: 'castled', plants: 'planted', plant: 'planted',
+  pins: 'pinned', attacks: 'attacked', attack: 'attacked', develops: 'developed', develop: 'developed',
+  settles: 'settled', forks: 'forked', fork: 'forked', recaptures: 'recaptured', adds: 'added',
+  add: 'added', meets: 'met', drops: 'dropped', walks: 'walked', holds: 'held', hold: 'held',
+  plays: 'played', play: 'played', skewers: 'skewered', skewer: 'skewered', strips: 'stripped',
+  strip: 'stripped', bears: 'bore', bear: 'bore', goes: 'went', trades: 'traded', trade: 'traded',
+  offers: 'offered', offer: 'offered', grabs: 'grabbed', grab: 'grabbed', settle: 'settled',
+  meet: 'met', walk: 'walked', drop: 'dropped', recapture: 'recaptured', break: 'broke',
+};
+const PROJECTION_MARKER = /(here's how you take advantage|the line runs|why [nbrqko][\w+#=-]* was better|why [a-h][\w+#=-]* was better|if they (sit still|try to run)|the engine confirms it|there's a deeper threat|deeper threat brewing|the real threat here|and the real threat|you're now threatening|now threatening|the pattern to spot|and once your opponent started slipping|watch out|careful)/i;
+// Verbs converted ONLY in verb position (after a subject or in a comma-series),
+// so noun objects survive — "lands a pin" → "landed a pin" (not "a pinned"),
+// "every trade" stays a noun.
+const V_ALT = '(captures?|forks?|gives?|wins?|throws?|takes?|sacrifices?|opens?|creates?|comes|breaks?|castles?|plants?|attacks?|develops?|settles?|recaptures?|adds?|meets?|drops?|walks?|holds?|plays?|goes|trades?|offers?|bears?|lands?|skewers?|strips?|grabs?)';
+const SUBJECT_VERB = new RegExp(`\\b(You|It|Your opponent|The (?:knight|bishop|rook|queen|king|pawn)) ${V_ALT}\\b`, 'g');
+const SERIES_VERB = new RegExp(`, ${V_ALT}\\b`, 'g');
+function toPastHead(head: string): string {
+  let h = head;
+  // contractions / state-of-being → past
+  h = h.replace(/\bthat's\b/gi, 'that was').replace(/\bit's\b/gi, 'it was')
+       .replace(/\byou're\b/gi, 'you were').replace(/\bthey're\b/gi, 'they were')
+       .replace(/\bthere's\b/gi, 'there was').replace(/\bis still\b/gi, 'was still');
+  // "points a pawn storm" is a verb; "2 points of material" is a noun — only the verb.
+  h = h.replace(/\bpoints a\b/gi, 'pointed a');
+  h = h.replace(SUBJECT_VERB, (_m, subj: string, verb: string) => `${subj} ${PAST_VERB[verb.toLowerCase()] ?? verb}`);
+  h = h.replace(SERIES_VERB, (_m, verb: string) => `, ${PAST_VERB[verb.toLowerCase()] ?? verb}`);
+  return h;
+}
+function pastTenseReviewNarration(segments: ReviewMoveSegment[]): void {
+  for (const s of segments) {
+    if (!s.narration) continue;
+    const m = PROJECTION_MARKER.exec(s.narration);
+    const cut = m ? m.index : s.narration.length;
+    const head = s.narration.slice(0, cut);
+    s.narration = toPastHead(head) + s.narration.slice(cut);
+  }
+}
+
 function varyRepeatedStems(segments: ReviewMoveSegment[]): void {
   const seen = new Map<string, number>();
   const bump = (k: string): number => { const n = (seen.get(k) ?? 0); seen.set(k, n + 1); return n; };
@@ -2672,6 +2726,10 @@ export async function generateReviewNarration(params: {
   // before the house-voice warm so the warmer varies from varied input.
   fillSilentDevelopment(segments, playerColor);
   varyRepeatedStems(segments);
+  // POST-GAME REVIEW register (David 2026-07-24) — the walk narrates a game
+  // already played, so the actual-move clauses speak in past tense (the
+  // hypothetical projection tails + live threats stay present).
+  pastTenseReviewNarration(segments);
 
   // BOOK-GROUNDED DEV TARGETS (David 2026-07-21, IMG_4569: the plan arrow said
   // g1→f3 while the theory lecture's masters data plays Ne2 — two "authorities"
