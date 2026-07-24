@@ -54,7 +54,7 @@ describe('reviewConcepts — outpost', () => {
     // White knight to d5, supported by the c4/e4 pawn; black has no c/e pawn to
     // challenge it (…c6/…e6 pawns are gone). Classic hole on d5.
     const fen = 'r1bqkb1r/pp3ppp/2n2n2/3p4/2PNP3/8/PP3PPP/RNBQKB1R w KQkq - 0 1';
-    const c = new Chess(fen);
+    const _c = new Chess(fen);
     // ensure a white pawn guards d5 after Nd5 style — build a cleaner fixture:
     const out = 'r1bqkb1r/pp3ppp/5n2/3n4/3PP3/2N5/PP3PPP/R1BQKB1R b KQkq - 0 1';
     const beat = detectConcept(ctx(out, 'Nxc3', { evalBefore: 0, evalAfter: 0, studentColor: 'b' }));

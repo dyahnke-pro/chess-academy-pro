@@ -525,7 +525,7 @@ export function buildMiddlegameOrientation(
     // If THIS move pushes a pawn toward the student's OWN king, it goes the wrong
     // way — the storm belongs at the enemy king, not in front of yours.
     const pawnMove = moveSan && /^[a-h]x?[a-h]?[1-8]/.test(moveSan) && !/^[KQRBNO]/.test(moveSan);
-    const destFile = pawnMove ? moveSan!.replace(/[^a-h]/g, '').slice(-1) : '';
+    const destFile = pawnMove && moveSan ? moveSan.replace(/[^a-h]/g, '').slice(-1) : '';
     if (pawnMove && destFile && fileWing(destFile) === myKingWing) {
       raceLine += ` — and note this pawn push goes the wrong way, opening lines in front of your OWN king instead of theirs`;
     }

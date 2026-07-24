@@ -601,7 +601,7 @@ export function describeSimplifyingTrade(
     );
     if (!enemyQueen) return null;
     // The moved queen (now on mv.to) must attack the enemy queen's square.
-    if (!after.attackers(enemyQueen.square as Square, mv.color).includes(mv.to as Square)) return null;
+    if (!after.attackers(enemyQueen.square, mv.color).includes(mv.to)) return null;
     return "You're offering a queen trade — and when you're ahead, every trade takes you a step closer to the win";
   } catch {
     return null;
@@ -629,7 +629,7 @@ export function describeTradeConsequence(
     const mv = before.move(san.replace(/[?!]+$/, ''));
     if (!mv || !mv.captured) return null;
     let gain = 0;
-    try { gain = seeGain(new Chess(fenBefore), mv.to as Square); } catch { gain = 0; }
+    try { gain = seeGain(new Chess(fenBefore), mv.to); } catch { gain = 0; }
     if (Math.abs(gain) >= 2) return null; // a real material swing isn't a "trade"
     return moverIsStudent
       ? 'another pair comes off — and with your extra material, every trade is one step closer to the win'
