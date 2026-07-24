@@ -2617,7 +2617,7 @@ const PAST_VERB: Record<string, string> = {
   add: 'added', meets: 'met', drops: 'dropped', walks: 'walked', holds: 'held', hold: 'held',
   plays: 'played', play: 'played', skewers: 'skewered', skewer: 'skewered', strips: 'stripped',
   strip: 'stripped', bears: 'bore', bear: 'bore', goes: 'went', trades: 'traded', trade: 'traded',
-  offers: 'offered', offer: 'offered', grabs: 'grabbed', grab: 'grabbed', settle: 'settled',
+  offers: 'offered', offer: 'offered', grab: 'grabbed', settle: 'settled',
   meet: 'met', walk: 'walked', drop: 'dropped', recapture: 'recaptured', break: 'broke',
 };
 const PROJECTION_MARKER = /(here's how you take advantage|the line runs|why [nbrqko][\w+#=-]* was better|why [a-h][\w+#=-]* was better|if they (sit still|try to run)|the engine confirms it|there's a deeper threat|deeper threat brewing|the real threat here|and the real threat|you're now threatening|now threatening|the pattern to spot|and once your opponent started slipping|watch out|careful)/i;
