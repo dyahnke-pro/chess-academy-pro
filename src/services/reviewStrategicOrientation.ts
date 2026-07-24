@@ -364,8 +364,11 @@ export function buildHisGroundedPlanBeat(
   fen: string,
   studentColorWB: 'w' | 'b',
   openingName: string | null,
+  /** THIS game's continuation (SANs) from `fen` — the walk follows it so the
+   *  plan tracks the game, not his aggregate line (David 2026-07-24). */
+  gameLine?: string[],
 ): PlanBeat | null {
-  const plan = hisGroundedPlanSync(fen, applyMoveFen, 6);
+  const plan = hisGroundedPlanSync(fen, applyMoveFen, 6, gameLine);
   if (!plan || plan.side !== studentColorWB || plan.sideMoves.length === 0) return null;
   const conf = plan.total >= 100
     ? `the well-trodden plan here, scoring ${plan.leadWinPct}% in this structure`

@@ -1498,7 +1498,10 @@ export function buildReviewSegments(
     ) {
       // Grounding chain (David 2026-07-23): his games -> masters DB backup ->
       // curated repertoire -> nothing. The ungrounded generic template is gone.
-      const dev = buildHisGroundedPlanBeat(fenPair.fenBefore, studentColorWB, openingName ?? null)
+      // THIS game's continuation from here — so the plan tracks the game, not
+      // his aggregate line (David 2026-07-24, the …e6 delta-context bug).
+      const gameLine = moves.slice(i).map((x) => x.san);
+      const dev = buildHisGroundedPlanBeat(fenPair.fenBefore, studentColorWB, openingName ?? null, gameLine)
         ?? buildMastersGroundedPlanBeat(fenPair.fenBefore, studentColorWB, openingName ?? null)
         ?? buildOpeningDevelopmentPlan(fenPair.fenBefore, studentColorWB, { openingName: openingName ?? null, curatedIdeas: curatedOpeningIdeas, seed: gameSeed });
       if (dev) { narration = dev.text; planArrows = dev.arrows; openingPlanShown = true; narrationSource = 'opening-plan'; }

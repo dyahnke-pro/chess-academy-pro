@@ -5,7 +5,7 @@ import {
   __resetHisPlayDbForTests,
   lookupHisPlaySync,
   hisGroundedPlanSync,
-  HIS_PLAN_MIN_GAMES,
+  HIS_PLAN_GUIDE_MIN_GAMES,
 } from './hisPlayLookup';
 
 // Small fixture keyed by positionFen (first 4 FEN fields), mirroring the real
@@ -68,11 +68,23 @@ describe('hisPlayLookup', () => {
     expect(plan!.line).toContain('Nf3');
   });
 
-  it('refuses to call a thin position "his plan" (below HIS_PLAN_MIN_GAMES)', () => {
+  it('refuses to call a truly thin position "his plan" (below the guide floor)', () => {
+    // David 2026-07-24: his corpus is now the GUIDE at a lower floor
+    // (HIS_PLAN_GUIDE_MIN_GAMES) — only BELOW that do we fall to the masters DB.
     __setHisPlayDbForTests({
-      [key(startFen)]: { total: HIS_PLAN_MIN_GAMES - 1, moves: [{ san: 'd6', games: 5, w: 3, d: 1, l: 1 }] },
+      [key(startFen)]: { total: HIS_PLAN_GUIDE_MIN_GAMES - 1, moves: [{ san: 'd6', games: 3, w: 2, d: 0, l: 1 }] },
     });
     expect(hisGroundedPlanSync(startFen, apply, 6)).toBeNull();
+  });
+
+  it('USES his corpus as a guide between the guide floor and the old plan bar', () => {
+    // A position with 8 of his games (>= guide floor 5, < old bar 12) now grounds
+    // the plan instead of dropping to masters (David 2026-07-24 "use his corpus
+    // as a guide").
+    __setHisPlayDbForTests({
+      [key(startFen)]: { total: 8, moves: [{ san: 'd6', games: 8, w: 5, d: 1, l: 2 }] },
+    });
+    expect(hisGroundedPlanSync(startFen, apply, 6)).not.toBeNull();
   });
 
   it('drops a frequent-but-LOSING plan to masters (win-rate gate) — the Barry Attack case', () => {

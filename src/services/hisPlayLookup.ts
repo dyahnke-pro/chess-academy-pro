@@ -36,6 +36,15 @@ const HIS_PLAY_DB_URL = '/data/danya-play-db.json';
  *  "his plan" — below it the signal is too thin to teach. */
 export const HIS_PLAN_MIN_GAMES = 12;
 
+/** His corpus is the GUIDE (David 2026-07-24: "use his corpus as a guide!! if
+ *  not in there then use the DB!!"). For the plan spine we lean on his games
+ *  with a LOWER floor than the strict plan bar — a handful of his games is a
+ *  better guide than the masters' generic line (which recommends moves he
+ *  deliberately avoids, e.g. …e6 in his Grand Prix). The SCORE floor in
+ *  bestPlanMove still blocks a losing plan; only below THIS do we fall to the
+ *  masters DB. */
+export const HIS_PLAN_GUIDE_MIN_GAMES = 5;
+
 /** The taught plan-move must clear this score (win% + draw%/2, from the mover's
  *  perspective) — his most-PLAYED move in a position can still be a dubious /
  *  bullet-noise line that SCORES badly (Barry Attack ...c5 at 17%W across the
@@ -144,9 +153,16 @@ export function hisGroundedPlanSync(
   fen: string,
   applyMove: (fen: string, san: string) => string | null,
   maxPlies = 6,
+  /** THIS game's actual continuation (SANs) from `fen`. When given, the walk
+   *  FOLLOWS it instead of his aggregate most-played reply (David 2026-07-24:
+   *  the plan context must track THIS game — his global line diverges onto a
+   *  different move order where a different plan applies, e.g. it drifted to the
+   *  …Bc4/…e6 line while the game went …Bb5/…Nd4). His corpus still supplies the
+   *  confidence %; it only guides the walk BEYOND the game's end. */
+  gameLine?: string[],
 ): HisGroundedPlan | null {
   const start = lookupHisPlaySync(fen);
-  if (!start || start.total < HIS_PLAN_MIN_GAMES) return null;
+  if (!start || start.total < HIS_PLAN_GUIDE_MIN_GAMES) return null;
   // His most-PLAYED move can score badly (noise / a dropped line) — teach his
   // best-scoring frequent move instead, and if even that is weak, this position
   // is not a plan worth teaching → null → masters backup.
@@ -158,14 +174,20 @@ export function hisGroundedPlanSync(
   let curFen = fen;
   let curSide = side;
   for (let i = 0; i < maxPlies; i++) {
-    const entry = lookupHisPlaySync(curFen);
-    if (!entry || entry.moves.length === 0) break;
-    // his side follows his best plan-move; the opponent side follows their most-
-    // played reply (what he actually faced) to keep the line realistic.
-    const pick = curSide === side ? (bestPlanMove(entry) ?? entry.moves[0]) : entry.moves[0];
-    line.push(pick.san);
-    if (curSide === side) sideMoves.push(pick.san);
-    const next = applyMove(curFen, pick.san);
+    // Follow THIS game's move when we have it — the plan must track the game,
+    // not drift onto his aggregate line (which recommends a move he avoids in
+    // this exact structure). His corpus guides only past the game's end.
+    let pickSan: string | null = gameLine && i < gameLine.length ? gameLine[i] : null;
+    if (!pickSan) {
+      const entry = lookupHisPlaySync(curFen);
+      if (!entry || entry.moves.length === 0) break;
+      // his side follows his best plan-move; the opponent side follows their
+      // most-played reply (what he actually faced) to keep the line realistic.
+      pickSan = curSide === side ? (bestPlanMove(entry) ?? entry.moves[0]).san : entry.moves[0].san;
+    }
+    line.push(pickSan);
+    if (curSide === side) sideMoves.push(pickSan);
+    const next = applyMove(curFen, pickSan);
     if (!next) break;
     curFen = next;
     curSide = curSide === 'w' ? 'b' : 'w';
