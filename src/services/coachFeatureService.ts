@@ -1525,7 +1525,7 @@ export function buildReviewSegments(
       // queenside-majority-endgame plan mid-mating-attack"). Board-true gate.
       && !enemyKingStuckInCenter(fenPair.fenBefore, studentColorWB)
     ) {
-      const orientation = buildMiddlegameOrientation(fenPair.fenBefore, studentColorWB);
+      const orientation = buildMiddlegameOrientation(fenPair.fenBefore, studentColorWB, m.san);
       if (orientation) { narration = orientation.text; planArrows = orientation.arrows; orientationShown = true; narrationSource = 'orientation'; }
     }
     // (b2) ENUMERATED POSITIONAL VERDICT — the "you're better here, and here's

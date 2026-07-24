@@ -484,7 +484,19 @@ function stormArrows(all: Located[], attacker: 'w' | 'b', enemyKingWing: Wing, a
  * the pawn majorities, with arrows leading the eye to each plan. Null when
  * nothing clear is computable.
  */
-export function buildMiddlegameOrientation(fen: string, studentColorWB: 'w' | 'b'): PlanBeat | null {
+/** Which wing a file letter sits on. */
+function fileWing(file: string): Wing { return file >= 'e' ? 'kingside' : 'queenside'; }
+
+export function buildMiddlegameOrientation(
+  fen: string,
+  studentColorWB: 'w' | 'b',
+  /** The move played on this ply (SAN). When the opposite-castling storm is the
+   *  plan and this move pushes a pawn toward the student's OWN king, the beat
+   *  says so — the storm belongs at the enemy king, not in front of your own
+   *  (audit 2026-07-24: the race beat landed on g5, a kingside push, while
+   *  advising to attack the queenside king). */
+  moveSan?: string,
+): PlanBeat | null {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
   const struct = describeStructure(fen);
@@ -509,7 +521,15 @@ export function buildMiddlegameOrientation(fen: string, studentColorWB: 'w' | 'b
     // Name the concrete TARGET, not a generic race (David 2026-07-24): storm the
     // pawns at the enemy king's actual wing and rip the files open — that's where
     // the mate comes from.
-    parts.push(`The kings castled on opposite wings — this is a race, and it's won by throwing your pawns at their king on the ${enemyKingWing} and tearing open the files around it before they do the same to you`);
+    let raceLine = `The kings castled on opposite wings — this is a race, and it's won by throwing your pawns at their king on the ${enemyKingWing} and tearing open the files around it before they do the same to you`;
+    // If THIS move pushes a pawn toward the student's OWN king, it goes the wrong
+    // way — the storm belongs at the enemy king, not in front of yours.
+    const pawnMove = moveSan && /^[a-h]x?[a-h]?[1-8]/.test(moveSan) && !/^[KQRBNO]/.test(moveSan);
+    const destFile = pawnMove ? moveSan!.replace(/[^a-h]/g, '').slice(-1) : '';
+    if (pawnMove && destFile && fileWing(destFile) === myKingWing) {
+      raceLine += ` — and note this pawn push goes the wrong way, opening lines in front of your OWN king instead of theirs`;
+    }
+    parts.push(raceLine);
     arrows.push(...stormArrows(all, studentColorWB, enemyKingWing, PLAN_BLUE));
     arrows.push(...stormArrows(all, enemyWB, myKingWing, PLAN_AMBER));
   }
