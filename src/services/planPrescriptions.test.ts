@@ -45,12 +45,14 @@ const PROBES: Array<{ name: string; fen: string; student: Color }> = [
 
 describe('castling and king-state claims match the board (board-awareness sweep)', () => {
   it('no castling advice when the rights are gone', () => {
-    // King back on e1 but BOTH white rights stripped; minors undeveloped so
-    // the dev plan fires.
+    // King on e1, BOTH white rights stripped (field "kq"); minors undeveloped.
+    // The ungrounded fallback is null now ("empty > generic", David 2026-07-23),
+    // so the plan fires on the CURATED path — and when it does it must give
+    // HONEST king-safety advice, never an illegal "get the king castled".
     const fen = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR w kq - 0 4';
-    const plan = buildOpeningDevelopmentPlan(fen, 'w');
+    const plan = buildOpeningDevelopmentPlan(fen, 'w', { curatedIdeas: ['fight for the centre with your pawns'] });
     expect(plan?.text ?? '').not.toMatch(/get the king castled|then castle\b/);
-    expect(plan?.text ?? '').toMatch(/castling rights are gone|lost its castling rights/);
+    expect(plan?.text ?? '').toMatch(/castling rights are gone|to safety by hand/);
   });
 
   it('the knight-shield clause never claims a castled king that is not castled', () => {

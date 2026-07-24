@@ -118,31 +118,10 @@ function assessDevelopment(all: Located[], color: 'w' | 'b', castlingField: stri
   return { hasCentre, fianchettoSquare, undevelopedKnights, undevelopedBishops, castled, castledShort, canCastle, canCastleShort };
 }
 
-function devClause(dev: SideDev, subject: 'you' | 'your opponent'): string | null {
-  const verb = subject === 'you' ? { have: "you've", need: 'you still need to', poss: 'your' } : { have: 'your opponent has', need: 'your opponent still needs to', poss: "the opponent's" };
-  const bits: string[] = [];
-  if (dev.hasCentre) bits.push(`${verb.have} claimed the centre — develop behind it`);
-  if (dev.fianchettoSquare) bits.push(`${verb.poss} fianchettoed bishop rakes the long diagonal`);
-  // NAME the pieces that still need a job — the generic "develop and castle"
-  // recipe read the same every game (David 2026-07-21, IMG_4579: "still
-  // showing generic future plans"). The knight's natural square is universal
-  // board truth (the arrows already point there — the words must name them);
-  // a home bishop is named without inventing its destination.
-  const jobs = devJobs(dev);
-  if (jobs) bits.push(jobs);
-  // Castling advice only when castling is still POSSIBLE — a king that lost
-  // its rights gets honest king-safety advice instead of an illegal
-  // instruction (board-awareness sweep, David 2026-07-22).
-  if (!dev.castled) {
-    bits.push(dev.canCastle
-      ? 'get the king castled'
-      : 'the king has lost its castling rights — walk it to safety by hand and connect the rooks');
-  }
-  if (bits.length === 0) return null;
-  // Capitalise the joined clause for the leading subject.
-  const joined = bits.join(', and ');
-  return joined.charAt(0).toUpperCase() + joined.slice(1);
-}
+// (devClause — the old generic development-recipe fallback — was retired when
+// buildOpeningDevelopmentPlan's ungrounded fallback became null ("empty >
+// generic", David 2026-07-23). The honest castling-safety phrasing lives on the
+// curated path's castleBit; devJobs is still used there.)
 
 /** WHY a knight belongs on its natural square — the CENTRAL squares it fights
  *  for from there, computed from knight geometry (David 2026-07-22: "And WHY
