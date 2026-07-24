@@ -3510,6 +3510,15 @@ export function describeThreatPrevention(
     const def = c.move(defenseSan);
     if (!def) return null;
     const defenderWB: 'w' | 'b' = threatWB === 'w' ? 'b' : 'w';
+    // (0) The threatened piece ITSELF steps out of danger — the defense move
+    // vacates the landing square. "adding a defender to <square>" is FALSE here:
+    // the square is now empty, so the piece that just fled cannot be said to
+    // "defend" it (audit 2026-07-24: Qb3 / Nf6 / Re8 / Bxe6 were each wrongly
+    // said to "add a defender" to the very square they FLED). Describe the escape.
+    if (def.from === threat.landing) {
+      const cap = def.captured ? `, grabbing the ${REVIEW_PIECE_NAME[def.captured]} on ${def.to} on the way` : '';
+      return `${defenseSan} gets the ${REVIEW_PIECE_NAME[def.piece]} out of the fire${cap}`;
+    }
     // (1) Undermine the guard: the defense attacks a guard of the landing sq.
     // "holding the WHOLE combination together" is only true when there is a
     // SINGLE guard — hitting one of two dismantles nothing (board-awareness

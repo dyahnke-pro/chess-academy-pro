@@ -238,7 +238,10 @@ export function nameEndgamePhase(fen: string): string | null {
     }
   } catch { return null; }
   if (wq > 0 && bq > 0) return 'a queen endgame — king safety and precision decide it';
-  if (wq === 0 && bq === 0 && wr > 0 && br > 0) return 'a rook endgame — activity over material, rooks belong behind passed pawns';
+  // A CLEAN rook endgame has no minors — rooks + bishops is a rook-and-minor
+  // endgame, not a rook endgame (audit 2026-07-24: bishops on the board were
+  // called "a rook endgame"). With minors present, skip rather than mislabel.
+  if (wq === 0 && bq === 0 && wr > 0 && br > 0 && wm + bm === 0) return 'a rook endgame — activity over material, rooks belong behind passed pawns';
   if (wq + bq + wr + br === 0) {
     return wm + bm > 0 ? 'a minor-piece endgame — the better piece and the outside pawn win it' : 'a king-and-pawn endgame — every tempo counts';
   }

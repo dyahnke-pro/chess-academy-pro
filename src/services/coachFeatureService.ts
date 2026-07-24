@@ -2695,6 +2695,16 @@ function varyRepeatedStems(segments: ReviewMoveSegment[]): void {
       return forms[(n - 1) % forms.length];
     });
 
+    // "And there it is —" is the brilliant/great-move stem; on a forced mating
+    // run every check is brilliant, so it fired 6× in a row (audit 2026-07-24).
+    // Keep the first, then rotate.
+    t = t.replace(/\bAnd there it is — /, (m0: string) => {
+      const n = bump('there-it-is');
+      if (n === 0) return m0;
+      const forms = ['And again — ', 'Same hammer — ', 'Once more — ', 'And onward — '];
+      return forms[(n - 1) % forms.length];
+    });
+
     // Opponent-mistake lead — "Your opponent erred —" / "slipped —" fire dozens
     // of times a game. Rotate after the first couple so the walk breathes.
     t = t.replace(/\bYour opponent (erred|slipped) — /, (m0: string) => {
