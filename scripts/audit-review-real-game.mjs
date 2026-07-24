@@ -424,7 +424,16 @@ const run = async () => {
   const midPlan = plies.some((p) => p.src === 'orientation')
     || plies.some((p) => p.ply > 10
       && /\b(the )?plan\b(?! from here runs)|majority|opposite wings|pawn(s)? forward|push those|storm|stuck in the (centre|center|middle)|marooned in the (centre|center)|pile (on|up)|punish the lag|throw your pieces|open lines|before they (ever )?(castle|scurry|wriggle)/i.test(p.narr || ''));
-  add('PLAN both-beats', openingPlan && midPlan, `opening=${openingPlan} middlegame=${midPlan}`);
+  // A SHARP/GAMBIT game is tactical from the opening — a mate threat or a real
+  // blunder in the first dozen plies — so a slow opening-DEVELOPMENT plan beat
+  // legitimately does not fire (forcing one would invent a plan the position
+  // doesn't have; audit 2026-07-24 vs a Qxf7#-by-move-11 gambit). Accept "no
+  // opening plan" in that case; the middlegame plan beat must still fire.
+  const tacticalOpening = plies.some((p) => p.ply <= 12
+    && (/\b(checkmate|delivers checkmate|forced .*mate|sacrific)\b|[QRBN][a-h1-8x]*#/i.test(p.narr || '')
+      || /BLUNDER|MISTAKE/i.test(p.badge || '')));
+  add('PLAN both-beats', midPlan && (openingPlan || tacticalOpening),
+    `opening=${openingPlan} middlegame=${midPlan} tacticalOpening=${tacticalOpening}`);
 
   // S5 — the better-line playout FIRED with a why on nearly every ply. A real
   // playout is intro + several per-ply whys + a verdict (>= 4 distinct lines).
