@@ -50,9 +50,12 @@ export async function getOrCreateMainProfile(): Promise<UserProfile> {
       anthropicApiKeyEncrypted: null,
       anthropicApiKeyIv: null,
       preferredModel: {
-        commentary: 'deepseek-chat',
-        analysis: 'deepseek-reasoner',
-        reports: 'deepseek-reasoner',
+        // DeepSeek deprecated deepseek-chat/deepseek-reasoner (API 400s them);
+        // v4-flash is the current fast tier. getModel.normalizeDeepSeekModel also
+        // corrects any legacy value already stored on existing profiles.
+        commentary: 'deepseek-v4-flash',
+        analysis: 'deepseek-v4-flash',
+        reports: 'deepseek-v4-flash',
       },
       monthlyBudgetCap: null,
       estimatedSpend: 0,

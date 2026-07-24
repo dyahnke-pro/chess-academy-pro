@@ -599,6 +599,21 @@ const INTERACTIVE_TASKS: ReadonlySet<CoachTask> = new Set<CoachTask>([
   'interactive_review',
 ]);
 
+/** DeepSeek deprecated the `deepseek-chat` / `deepseek-reasoner` names — the API
+ *  now 400s them ("The supported API model names are deepseek-v4-pro or
+ *  deepseek-v4-flash"). This normalizes ANY legacy/unknown DeepSeek model to the
+ *  current fast tier, so BOTH the task map AND a user's STORED `preferredModel`
+ *  (every profile's default seeded the dead names) send a valid name without a
+ *  data migration. v4-flash is fast, non-reasoning and tool-capable — no
+ *  thinking-mode `tool_choice` pitfalls. `deepseek-v4-pro` passes through for
+ *  callers that explicitly want the deep tier. (David 2026-07-24, caught live in
+ *  the audit stream.) */
+function normalizeDeepSeekModel(model: string): string {
+  if (!model.startsWith('deepseek-')) return model;
+  if (model === 'deepseek-v4-pro' || model === 'deepseek-v4-flash') return model;
+  return 'deepseek-v4-flash';
+}
+
 export function getModel(
   task: CoachTask,
   provider: AiProvider,
@@ -642,13 +657,13 @@ export function getModel(
       //    `chat_response → deepseek-chat` default (DEEPSEEK_MODEL_MAP:
       //    "biggest single cost win").
       if (compatible && !(INTERACTIVE_TASKS.has(task) && isReasoningModel(userChoice))) {
-        return userChoice;
+        return provider === 'deepseek' ? normalizeDeepSeekModel(userChoice) : userChoice;
       }
     }
   }
   return provider === 'anthropic'
     ? ANTHROPIC_MODEL_MAP[task]
-    : DEEPSEEK_MODEL_MAP[task];
+    : normalizeDeepSeekModel(DEEPSEEK_MODEL_MAP[task]);
 }
 
 /** "Reasoning"/"thinking" models (deepseek-reasoner, Claude extended-

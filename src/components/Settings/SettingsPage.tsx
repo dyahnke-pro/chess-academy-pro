@@ -727,8 +727,8 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
         { value: 'claude-opus-4-6', label: 'Opus (best)' },
       ]
     : [
-        { value: 'deepseek-chat', label: 'DeepSeek V3 (fast)' },
-        { value: 'deepseek-reasoner', label: 'DeepSeek R1 (reasoning)' },
+        { value: 'deepseek-v4-flash', label: 'DeepSeek V4 Flash (fast)' },
+        { value: 'deepseek-v4-pro', label: 'DeepSeek V4 Pro (deep)' },
       ];
 
   const handleProviderChange = async (newProvider: 'deepseek' | 'anthropic'): Promise<void> => {
