@@ -6,6 +6,7 @@ import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhas
 import { plyFactsForMove, plyFactsClause, computePvLine, type PvLine, type PrevCaptureContext } from './pvPlayback';
 import { explainEvalByPieceQuality, lowestMinorMobility } from './pieceQuality';
 import { compareTwoMoves, type Evaluate } from './moveComparison';
+import { detectConcept } from './reviewConcepts';
 import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan, buildHisGroundedPlanBeat, buildMastersGroundedPlanBeat } from './reviewStrategicOrientation';
 import { getHisPlayDb } from './hisPlayLookup';
 import { ensureMastersDbLoaded } from './masterPlayLookup';
@@ -2501,6 +2502,42 @@ export function narrationCoversFacets(det: string, warmed: string): boolean {
  * new development lines get deduped like any other stem. Opening / early-
  * middlegame only, where development is the story.
  */
+/**
+ * CONCEPT-BEAT FILL (David 2026-07-24: "build a concept level tool"). Fills a
+ * silent move with the STRATEGIC IDEA it expresses (`detectConcept` — grounded
+ * preconditions on board + engine eval; null when no concept computably holds,
+ * so nothing is invented). Higher teaching value than bare development merit, so
+ * it runs first. Deduped per concept: taught in FULL the first time it appears,
+ * a brief nod the second, silent after — a concept lectured on every trade in a
+ * won game would tune out (the very repetition dial we just turned).
+ */
+function fillConceptBeats(segments: ReviewMoveSegment[], playerColor: 'white' | 'black'): void {
+  const studentColor: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
+  const shown = new Map<string, number>();
+  for (const s of segments) {
+    if (s.narration || s.evalBefore === null || s.evalAfter === null) continue;
+    const moverColor: 'w' | 'b' = s.ply % 2 === 1 ? 'w' : 'b';
+    let beat: ReturnType<typeof detectConcept> = null;
+    try {
+      beat = detectConcept({
+        fenBefore: s.fenBefore, fenAfter: s.fenAfter, san: s.san,
+        moverColor, evalBefore: s.evalBefore, evalAfter: s.evalAfter, studentColor,
+      });
+    } catch { beat = null; }
+    if (!beat) continue;
+    const n = shown.get(beat.concept) ?? 0;
+    shown.set(beat.concept, n + 1);
+    if (n === 0) { s.narration = beat.text; s.narrationSource = 'orientation'; }
+    else if (n === 1 && beat.concept === 'simplify-when-ahead') {
+      s.narration = moverColor === studentColor
+        ? `Another pair comes off — exactly right when you're winning.`
+        : `More pieces off the board — that only speeds your win.`;
+      s.narrationSource = 'orientation';
+    }
+    // n >= 2 (or a repeat of a non-simplify concept): stay silent, the point landed.
+  }
+}
+
 function fillSilentDevelopment(segments: ReviewMoveSegment[], playerColor: 'white' | 'black'): void {
   for (const s of segments) {
     if (s.narration || s.classification === 'mistake' || s.classification === 'blunder' || s.classification === 'inaccuracy') continue;
@@ -2724,6 +2761,7 @@ export async function generateReviewNarration(params: {
   // dedup/rotate the signature stems the side-by-side caught repeating within a
   // single game. Both pure rephrases; run after every fact is on the segment and
   // before the house-voice warm so the warmer varies from varied input.
+  fillConceptBeats(segments, playerColor);
   fillSilentDevelopment(segments, playerColor);
   varyRepeatedStems(segments);
   // POST-GAME REVIEW register (David 2026-07-24) — the walk narrates a game
