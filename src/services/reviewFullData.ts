@@ -94,8 +94,23 @@ export function prematureBreakWhy(fenBefore: string, san: string): string | null
     const behindDev = developedMinors(before, mover) < developedMinors(before, enemy);
     const kingLag = !kingCastled(before, mover) && kingCastled(before, enemy);
     if (!behindDev && !kingLag) return null;                     // the lag must be real
-    const reason = behindDev ? 'still behind in development' : 'the king still uncastled';
-    return `a central break while ${reason} — premature, before the position is ready for it`;
+    // Name the CONCRETE lag Danya names ("he doesn't have his bishop out"),
+    // board-verified — a specific minor still on its starting square. Prefer a
+    // bishop (his emphasis); never claim a home piece that isn't there.
+    let homePiece: string | null = null;
+    if (behindDev) {
+      const homeMinors = before.board().flat().filter(
+        (p): p is NonNullable<typeof p> => !!p && p.color === mover
+          && (p.type === 'b' || p.type === 'n')
+          && MINOR_HOME[mover][p.type].includes(p.square),
+      );
+      const pick = homeMinors.find((p) => p.type === 'b') ?? homeMinors[0];
+      if (pick) homePiece = pick.type === 'b' ? 'a bishop' : 'a knight';
+    }
+    const reason = behindDev
+      ? (homePiece ? `with ${homePiece} still at home` : 'still behind in development')
+      : 'with the king still uncastled';
+    return `a central break ${reason} — premature, opening the centre before you're ready for it`;
   } catch { return null; }
 }
 

@@ -4,6 +4,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { plyFactsForMove } from './pvPlayback';
+import { describeSimplifyingTrade } from './reviewTeachingPoints';
 
 const at = (moves: string): string => {
   const c = new Chess();
@@ -51,5 +52,29 @@ describe('plyFactsForMove — dialed per-move walk narration (David 2026-07-23)'
     const out = plyFactsForMove(fen, 'Bd4+', undefined, true);
     expect(out).toMatch(/give check/);
     expect(out).not.toMatch(/, check|^You check/);
+  });
+});
+
+describe('describeSimplifyingTrade — the "offer a trade when ahead" why (David 2026-07-24)', () => {
+  const dvd = '3qk3/8/8/8/8/8/8/3QK3 w - - 0 1'; // white Qd1, black Qd8, open d-file
+
+  it('fires when the student is ahead and the queen move attacks the enemy queen', () => {
+    const out = describeSimplifyingTrade(dvd, 'Qd4', true, 250);
+    expect(out).toBeTruthy();
+    expect(out).toMatch(/offering a queen trade/);
+  });
+
+  it('stays silent when the student is NOT ahead (no desperate-trade mislabel)', () => {
+    expect(describeSimplifyingTrade(dvd, 'Qd4', true, 0)).toBeNull();
+    expect(describeSimplifyingTrade(dvd, 'Qd4', true, null)).toBeNull();
+  });
+
+  it('stays silent for the opponent and for non-queen moves', () => {
+    expect(describeSimplifyingTrade(dvd, 'Qd4', false, 250)).toBeNull();
+    expect(describeSimplifyingTrade(dvd, 'Ke2', true, 250)).toBeNull();
+  });
+
+  it('stays silent when the queen move does NOT attack the enemy queen', () => {
+    expect(describeSimplifyingTrade(dvd, 'Qa4', true, 250)).toBeNull();
   });
 });

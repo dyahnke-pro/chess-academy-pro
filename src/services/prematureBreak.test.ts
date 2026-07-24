@@ -15,7 +15,9 @@ describe('prematureBreakWhy — the grounded "why it\'s a mistake" (David 2026-0
     const why = prematureBreakWhy(fen, 'e5');
     expect(why).toBeTruthy();
     expect(why).toMatch(/central break/);
-    expect(why).toMatch(/behind in development|king still uncastled/);
+    // Names the concrete lag Danya names — a specific home piece or the general
+    // development/king lag.
+    expect(why).toMatch(/bishop still at home|knight still at home|behind in development|king still uncastled/);
     expect(why).toMatch(/premature/);
   });
 

@@ -573,6 +573,42 @@ export function describeNotableMove(fenBefore: string, san: string, moverIsStude
 }
 
 /**
+ * SIMPLIFY-WHEN-AHEAD (David 2026-07-24, fABTn305 side-by-side — Danya on
+ * 22…Qd4: "such a nice move… you're offering a queen trade"). When the student
+ * is clearly AHEAD and their QUEEN move attacks the enemy queen (offering a
+ * trade the opponent can take), name the strategic idea — trading down is how a
+ * winning game gets finished. Board-verified (G0): the moved piece must be a
+ * queen that, from its destination, actually attacks the enemy queen; fires
+ * only when the eval says the student is ahead, so it never mislabels a
+ * desperate trade as a simplification. Returns null otherwise.
+ */
+export function describeSimplifyingTrade(
+  fenBefore: string,
+  san: string,
+  moverIsStudent: boolean,
+  studentPovCp: number | null,
+): string | null {
+  if (!moverIsStudent || studentPovCp === null || studentPovCp < 150) return null;
+  try {
+    const before = new Chess(fenBefore);
+    const mv = before.move(san.replace(/[?!]+$/, ''));
+    if (!mv || mv.piece !== 'q') return null;
+    const after = new Chess(fenBefore);
+    after.move(san.replace(/[?!]+$/, ''));
+    const enemy: Color = mv.color === 'w' ? 'b' : 'w';
+    const enemyQueen = after.board().flat().find(
+      (p): p is NonNullable<typeof p> => !!p && p.color === enemy && p.type === 'q',
+    );
+    if (!enemyQueen) return null;
+    // The moved queen (now on mv.to) must attack the enemy queen's square.
+    if (!after.attackers(enemyQueen.square as Square, mv.color).includes(mv.to as Square)) return null;
+    return "You're offering a queen trade — and when you're ahead, every trade takes you a step closer to the win";
+  } catch {
+    return null;
+  }
+}
+
+/**
  * CONCESSION TEACHER (David 2026-07-21, IMG_4571: "What serious positional
  * concessions have been made? What are the ramifications of this move?"). For a
  * flagged move, name the LASTING damage it caused — computed by diffing the

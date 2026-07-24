@@ -18,7 +18,7 @@ import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShi
 import { detectForcedMatingSequence, explainMatingSacMechanism } from './reviewForcedSequence';
 import { assessPositionalEdge } from './reviewPositionalAssessment';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
-import { describeNotableMove, describeConcessions, findTrappedPiece } from './reviewTeachingPoints';
+import { describeNotableMove, describeConcessions, findTrappedPiece, describeSimplifyingTrade } from './reviewTeachingPoints';
 import { walkBookLine } from './theoryDeparture';
 import { detectBadHabits } from './badHabitDetector';
 import { db } from '../db/schema';
@@ -1406,6 +1406,15 @@ export function buildReviewSegments(
           nullParts[3] = '-';
           segmentStaticThreat = { san: threatSan.replace(/[.,]$/, ''), sentence, nullFen: nullParts.join(' ') };
         }
+      }
+      // SIMPLIFY-WHEN-AHEAD — Danya's strategic "you're offering a queen trade"
+      // on a winning game (fABTn305 22…Qd4). Board-verified; appends the idea to
+      // whatever tactic the move already carries, so the student hears BOTH.
+      const studentPovForTrade = m.evaluation != null ? (studentColorWB === 'w' ? m.evaluation : -m.evaluation) : null;
+      const tradeIdea = describeSimplifyingTrade(fenPair.fenBefore, m.san, true, studentPovForTrade);
+      if (tradeIdea) {
+        narration = narration ? `${narration} ${tradeIdea}.` : `${tradeIdea}.`;
+        narrationSource = narrationSource ?? 'per-move';
       }
     }
     // THE OPPONENT'S THREAT — identified, TAUGHT, and DEFUSED (David
