@@ -2735,6 +2735,33 @@ function varyRepeatedStems(segments: ReviewMoveSegment[]): void {
       return forms[(n - 2) % forms.length];
     });
 
+    // "— a target they can keep working on" — the opponent target-fixation tail
+    // (fired twice in the 2026-07-24 log: queen/c5, bishop/f2). Vary the tail.
+    t = t.replace(/ — a target they can keep working on/, (m0: string) => {
+      const n = bump('target-working');
+      if (n === 0) return m0;
+      const forms = ['', ' — and it stays a target', ' — pressure they can keep leaning on', ' — a weakness that lingers'];
+      return forms[n % forms.length];
+    });
+
+    // "… — contesting the centre" — the opponent developing-move frame (fired
+    // twice: knight to e4, knight to d4/e5). Vary the tail after the first.
+    t = t.replace(/ — contesting the (centre|center)/, (m0: string, sp: string) => {
+      const n = bump('contesting-centre');
+      if (n === 0) return m0;
+      const forms = ['', ` — fighting for the ${sp}`, ` — a bid for the ${sp}`, ` — staking the ${sp}`];
+      return forms[n % forms.length];
+    });
+
+    // "quiet development, getting the pieces coordinated" — the generic dev tag.
+    // Rotate so a game full of developing moves doesn't read like a form letter.
+    t = t.replace(/quiet development, getting the pieces coordinated/, (m0: string) => {
+      const n = bump('quiet-dev');
+      if (n === 0) return m0;
+      const forms = ['just getting a piece into play', 'a quiet developing move', 'bringing a piece toward the action', 'simple development'];
+      return forms[n % forms.length];
+    });
+
     s.narration = t;
   }
 }
