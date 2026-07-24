@@ -142,6 +142,35 @@ describe('reviewConcepts — rook activation', () => {
   });
 });
 
+describe('reviewConcepts — king safety / centralize / space', () => {
+  it('fires on castling', () => {
+    const fen = 'rnbqk2r/pppp1ppp/5n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1';
+    const beat = detectConcept(ctx(fen, 'O-O', { evalBefore: 10, evalAfter: 10, studentColor: 'w' }));
+    expect(beat?.concept).toBe('king-safety-castle');
+    expect(beat?.source).toBe('concept:pos-king-safety');
+  });
+
+  it('fires on a king marching to the centre in the endgame', () => {
+    const fen = '8/8/8/4k3/8/8/4P3/6K1 w - - 0 1';
+    const beat = detectConcept(ctx(fen, 'Kf2', { evalBefore: 50, evalAfter: 50, studentColor: 'w' }));
+    expect(beat?.concept).toBe('centralize-king'); // g1 -> f2 is more central
+  });
+
+  it('does NOT centralize the king when the board is still full', () => {
+    const fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+    expect(detectConcept(ctx(fen, 'Nf3', { evalBefore: 20, evalAfter: 20, studentColor: 'w' }))).toBeNull();
+  });
+
+  it('fires on a space-gaining pawn push (flank, crosses the middle, not a break)', () => {
+    // White pushes b4-b5 to rank 5 (flank, non-central → not open-lines); black
+    // b7 pawn keeps it from being passed; white a5+b5 advanced vs 0 → space edge.
+    const fen = '6k1/ppp5/2n5/P7/1P6/8/8/6K1 w - - 0 1';
+    const beat = detectConcept(ctx(fen, 'b5', { evalBefore: 30, evalAfter: 30, studentColor: 'w' }));
+    expect(beat?.concept).toBe('space-advantage');
+    expect(beat?.source).toBe('concept:pos-space');
+  });
+});
+
 describe('reviewConcepts — convert-dont-rush', () => {
   it('fires on a quiet improving move, up big, position simplified', () => {
     // K+R+few pawns vs K+few pawns, White up a rook, quiet king move.

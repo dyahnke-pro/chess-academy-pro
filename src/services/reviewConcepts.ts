@@ -41,7 +41,8 @@ export interface ConceptCtx {
 export interface ConceptBeat {
   /** Stable concept key (for the dedup ledger + telemetry). */
   concept: 'simplify-when-ahead' | 'outpost' | 'open-lines-at-king' | 'two-bishops'
-    | 'convert-dont-rush' | 'passed-pawn-push' | 'rook-seventh' | 'rook-open-file';
+    | 'convert-dont-rush' | 'passed-pawn-push' | 'rook-seventh' | 'rook-open-file'
+    | 'king-safety-castle' | 'centralize-king' | 'space-advantage';
   /** The fact string, board-anchored; the house voice phrases it. */
   text: string;
   /** Independent reference (concept:<id> | reputable URL). */
@@ -355,9 +356,88 @@ function detectRookActivation(ctx: ConceptCtx): ConceptBeat | null {
 }
 
 /**
+ * KING SAFETY — castling. Tucks the king away and brings a rook toward the
+ * centre. Board-trivial. Source: concept:pos-king-safety.
+ */
+function detectCastle(ctx: ConceptCtx): ConceptBeat | null {
+  if (ctx.san !== 'O-O' && ctx.san !== 'O-O-O') return null;
+  const mine = MINE(ctx.moverColor, ctx.studentColor);
+  const side = ctx.san === 'O-O' ? 'kingside' : 'queenside';
+  const text = mine
+    ? `You castle ${side} — the king tucks into safety and the rook swings toward the centre. Castling isn't only defence: it connects the rooks and brings your last piece into the game.`
+    : `Your opponent castles ${side}, king to safety and rooks connected. Note which wing — it tells you where to aim your own pawns.`;
+  return { concept: 'king-safety-castle', text, source: 'concept:pos-king-safety' };
+}
+
+/** Chebyshev distance from a square to the central 4 (d4/e4/d5/e5). */
+function distToCentre(square: Square): number {
+  const f = square.charCodeAt(0) - 97;
+  const r = parseInt(square[1], 10) - 1;
+  const df = Math.min(Math.abs(f - 3), Math.abs(f - 4));
+  const dr = Math.min(Math.abs(r - 3), Math.abs(r - 4));
+  return Math.max(df, dr);
+}
+
+/**
+ * CENTRALIZE THE KING — in the endgame, a king move toward the centre (it gets
+ * more central than it was). Board + piece-count computable. Source:
+ * concept:pos-centralization.
+ */
+function detectCentralizeKing(ctx: ConceptCtx): ConceptBeat | null {
+  let mv;
+  try { const c = new Chess(ctx.fenBefore); mv = c.move(ctx.san); } catch { return null; }
+  if (!mv || mv.piece !== 'k' || mv.san.startsWith('O-O')) return null;
+  if (pieceCount(ctx.fenAfter) > 12) return null;                        // endgame
+  if (distToCentre(mv.to) >= distToCentre(mv.from)) return null; // must get MORE central
+  const mine = MINE(ctx.moverColor, ctx.studentColor);
+  const text = mine
+    ? `In the endgame the king is a fighting piece — you're marching it to the centre where it shepherds your pawns and pressures theirs. Activating the king is often the whole plan.`
+    : `Your opponent brings the king to the centre — in the endgame that's a strong piece, not a liability. You want to do the same, or its activity tells.`;
+  return { concept: 'centralize-king', text, source: 'concept:pos-centralization' };
+}
+
+/** Pawns of `color` that have crossed into the enemy half (white on ranks 5-8,
+ *  black on ranks 1-4). */
+function advancedPawns(fen: string, color: 'w' | 'b'): number {
+  const c = new Chess(fen);
+  let n = 0;
+  for (let r = 1; r <= 8; r++) {
+    const across = color === 'w' ? r >= 5 : r <= 4;
+    if (!across) continue;
+    for (const f of ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']) {
+      const p = c.get(`${f}${r}` as Square);
+      if (p && p.type === 'p' && p.color === color) n += 1;
+    }
+  }
+  return n;
+}
+
+/**
+ * SPACE ADVANTAGE — a pawn PUSH that crosses into the enemy half and gives the
+ * mover a clear space edge (≥2 more advanced pawns than the opponent). Board-
+ * computable. Source: concept:pos-space.
+ */
+function detectSpaceAdvantage(ctx: ConceptCtx): ConceptBeat | null {
+  let mv;
+  try { const c = new Chess(ctx.fenBefore); mv = c.move(ctx.san); } catch { return null; }
+  if (!mv || mv.piece !== 'p' || mv.captured) return null;               // a push
+  const dest = mv.to;
+  const rank = parseInt(dest[1], 10);
+  const crossed = ctx.moverColor === 'w' ? rank >= 5 : rank <= 4;
+  if (!crossed) return null;                                             // this push crossed the middle
+  const enemy: 'w' | 'b' = ctx.moverColor === 'w' ? 'b' : 'w';
+  if (advancedPawns(ctx.fenAfter, ctx.moverColor) - advancedPawns(ctx.fenAfter, enemy) < 2) return null;
+  const mine = MINE(ctx.moverColor, ctx.studentColor);
+  const text = mine
+    ? `That pawn push stakes out space — your pawns are cramping their pieces, leaving them less room to manoeuvre. Space is a slow, real edge: keep it and your pieces breathe while theirs stumble over each other.`
+    : `Your opponent's pawns are grabbing space and cramping you. Look to challenge the chain with a break, or trade a pair to get your pieces room to breathe.`;
+  return { concept: 'space-advantage', text, source: 'concept:pos-space' };
+}
+
+/**
  * Detect the highest-priority strategic concept this move expresses, or null.
  * Order = teaching specificity: a sharp attacking break or a structural
- * imbalance is a more pointed lesson than the general "trade when ahead", which
+ * imbalance is a more pointed lesson than a general positional theme, which
  * beats the very general "don't rush". Extend the taxonomy by adding detectors.
  */
 export function detectConcept(ctx: ConceptCtx): ConceptBeat | null {
@@ -366,6 +446,9 @@ export function detectConcept(ctx: ConceptCtx): ConceptBeat | null {
     ?? detectRookActivation(ctx)
     ?? detectPassedPawnPush(ctx)
     ?? detectTwoBishops(ctx)
+    ?? detectSpaceAdvantage(ctx)
     ?? detectSimplifyWhenAhead(ctx)
+    ?? detectCastle(ctx)
+    ?? detectCentralizeKing(ctx)
     ?? detectConvertDontRush(ctx);
 }
