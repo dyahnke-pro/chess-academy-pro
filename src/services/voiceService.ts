@@ -2016,6 +2016,13 @@ audio.playbackRate = this.speed;
   }
 
   private async speakPolly(text: string, voice: string, style?: string, prosody?: 'spike'): Promise<boolean> {
+    // No speakable content (empty string, whitespace, or pure punctuation left by
+    // a sentence-split) → never build a /api/tts URL for it. Prod returns 400 on
+    // empty text, which littered the console with harmless resource errors and
+    // tripped the review audit's no-errors gate. Mirrors the speakInternal guard;
+    // \p{L}\p{N} keeps all real Unicode prose. Return false so callers fall
+    // through exactly as they do on any Polly miss (David 2026-07-24).
+    if (!/[\p{L}\p{N}]/u.test(text)) return false;
     this.lastSpeakDiagnostic.pollyAttempted = true;
     try {
       // Cache key includes style so a style change doesn't return
