@@ -2479,6 +2479,101 @@ export function narrationCoversFacets(det: string, warmed: string): boolean {
   return true;
 }
 
+/**
+ * STEM-VARIETY PASS (David 2026-07-24: the Naroditsky side-by-side showed our
+ * deterministic templates hammering the SAME stem across one game — "Clean."
+ * ×3, "an undefended piece is a standing invitation, and tactics find it" ×3,
+ * plus "It develops the X to Y" and "Your opponent erred —" dozens of times a
+ * game. Danya never repeats a stem). This is a PURE REPHRASE over the finished
+ * facts (G0-safe — adds zero chess content): the FIRST occurrence of each
+ * signature keeps its full form; later occurrences rotate to a shorter/alternate
+ * phrasing, keyed on the occurrence count so it's deterministic + resume-safe
+ * (no Math.random). Runs before the house-voice pass so the warmer varies from
+ * already-varied input, not from a wall of identical stems.
+ */
+/**
+ * SILENT-MIDDLE FILL (David 2026-07-24: the side-by-side showed us going silent
+ * on quiet moves where Danya keeps teaching — "he never goes silent"). Fills a
+ * silent quiet move with the GROUNDED merit of the piece it moved ("what it does
+ * + what it eyes") from `describeMoveMerit`, which returns null for a recapture
+ * / king-flight / passive shuffle — so those correctly STAY silent (G3: empty >
+ * generic > invented, no fabricated plan). Runs BEFORE the variety pass so the
+ * new development lines get deduped like any other stem. Opening / early-
+ * middlegame only, where development is the story.
+ */
+function fillSilentDevelopment(segments: ReviewMoveSegment[], playerColor: 'white' | 'black'): void {
+  for (const s of segments) {
+    if (s.narration || s.classification === 'mistake' || s.classification === 'blunder' || s.classification === 'inaccuracy') continue;
+    if (s.ply < 3 || s.ply > 30) continue;
+    const moverColor: 'white' | 'black' = s.ply % 2 === 1 ? 'white' : 'black';
+    let merit: string | null = null;
+    try { merit = describeMoveMerit(s.fenBefore, s.san, moverColor); } catch { merit = null; }
+    if (!merit) continue;
+    const mine = moverColor === playerColor;
+    s.narration = mine ? `It ${merit}.` : `Your opponent ${merit}.`;
+    s.narrationSource = mine ? 'per-move' : 'opponent';
+  }
+}
+
+function varyRepeatedStems(segments: ReviewMoveSegment[]): void {
+  const seen = new Map<string, number>();
+  const bump = (k: string): number => { const n = (seen.get(k) ?? 0); seen.set(k, n + 1); return n; };
+  const PIECE_UP: Record<string, string> = { knight: 'Knight', bishop: 'Bishop', rook: 'Rook', queen: 'Queen', king: 'King' };
+  for (const s of segments) {
+    if (!s.narration) continue;
+    let t = s.narration;
+
+    // "Clean." confirmation tag — keep the first, then rotate/drop.
+    if (/\bClean\./.test(t)) {
+      const n = bump('clean');
+      if (n > 0) {
+        const alts = ['', ' Simple.', ' Nothing fancy.', ' Just good chess.'];
+        t = t.replace(/\s*Clean\./, alts[n % alts.length]);
+      }
+    }
+
+    // "an undefended piece is a standing invitation, and tactics find it" — the
+    // loose-piece moral. Keep it once; after that, name the fact without the sermon.
+    if (/an undefended piece is a standing invitation, and tactics find it/.test(t)) {
+      if (bump('loose-invite') > 0) {
+        t = t.replace(/ — an undefended piece is a standing invitation, and tactics find it/, ' — it sits undefended');
+      }
+    }
+
+    // "another pair comes off — and with your extra material…" — keep the moral
+    // once, then just state the trade.
+    if (/another pair comes off — and with your extra material, every trade is one step closer to the win/.test(t)) {
+      if (bump('trade-moral') > 0) {
+        t = t.replace(/ — and with your extra material, every trade is one step closer to the win/, '');
+      }
+    }
+
+    // "It develops the <piece> to <sq>" — the development lead. Rotate the verb
+    // phrase by occurrence so it stops reading like a form letter.
+    t = t.replace(/\bIt develops the (knight|bishop|rook|queen|king) to ([a-h][1-8])\b/, (m0, piece: string, sq: string) => {
+      const n = bump('develops');
+      if (n === 0) return m0;
+      const forms = [
+        `The ${piece} comes to ${sq}`,
+        `The ${piece} settles on ${sq}`,
+        `${PIECE_UP[piece]} to ${sq}`,
+      ];
+      return forms[(n - 1) % forms.length];
+    });
+
+    // Opponent-mistake lead — "Your opponent erred —" / "slipped —" fire dozens
+    // of times a game. Rotate after the first couple so the walk breathes.
+    t = t.replace(/\bYour opponent (erred|slipped) — /, (m0, verb: string) => {
+      const n = bump('opp-mistake');
+      if (n < 2) return m0;
+      const forms = ['Your opponent went wrong here — ', 'A misstep from your opponent — ', 'Your opponent faltered — '];
+      return forms[(n - 2) % forms.length];
+    });
+
+    s.narration = t;
+  }
+}
+
 export async function generateReviewNarration(params: {
   moves: ReviewMoveInput[];
   playerColor: 'white' | 'black';
@@ -2569,6 +2664,14 @@ export async function generateReviewNarration(params: {
     // advantage of?" with the concrete engine line (David 2026-07-21).
     await augmentWithProjections(segments, playerColor === 'white' ? 'w' : 'b', uncapped ? 'full' : 'mistakes');
   } catch { /* projections are best-effort; the walk ships without them */ }
+
+  // SILENT-MIDDLE FILL then STEM VARIETY (David 2026-07-24) — first give quiet
+  // developing moves their grounded merit (Danya never goes silent), then
+  // dedup/rotate the signature stems the side-by-side caught repeating within a
+  // single game. Both pure rephrases; run after every fact is on the segment and
+  // before the house-voice warm so the warmer varies from varied input.
+  fillSilentDevelopment(segments, playerColor);
+  varyRepeatedStems(segments);
 
   // BOOK-GROUNDED DEV TARGETS (David 2026-07-21, IMG_4569: the plan arrow said
   // g1→f3 while the theory lecture's masters data plays Ne2 — two "authorities"

@@ -103,8 +103,6 @@ export function momentVerifies(
   }
 }
 
-function lowerFirst(s: string): string { return s.charAt(0).toLowerCase() + s.slice(1); }
-function stripPeriod(s: string): string { return s.replace(/\.\s*$/, '').trim(); }
 function topElo(g: ModelGameLike): number { return Math.max(g.whiteElo ?? 0, g.blackElo ?? 0); }
 
 /** Tidy a player name from the corpus — collapse doubled dots ("W.." → "W."),
@@ -152,9 +150,13 @@ export function pickStoryGame(openingName: string | null): StoryGame | null {
   const black = cleanName(pick.black ?? '');
   const event = cleanEvent(pick.event, year);
   const citation = `${white} – ${black}${event ? `, ${event}` : ''} (${year})`;
-  const ideaRaw = (pick.middlegameTheme ?? pick.lessonSummary ?? '').trim();
-  const idea = ideaRaw ? lowerFirst(stripPeriod(ideaRaw)) : '';
-  const ideaClause = idea ? ` — the model there is ${idea}` : '';
+  // The model game's stored theme is a GENERIC summary of that game — it is NOT
+  // verified against the CURRENT position, so asserting "the model there is
+  // <idea>" put a false plan on the board (David 2026-07-24 side-by-side: a
+  // forced tactical rout got "the model there is besiege the hanging d-pawn"
+  // with no hanging d-pawn in sight). Drop the unverifiable idea-clause; the
+  // citation still points the student at a real game to watch. Empty > wrong.
+  const ideaClause = '';
   const overview = (pick.overview ?? '').trim();
   const criticalMoments = (pick.criticalMoments ?? [])
     .filter((m): m is { moveNumber: number; color: 'white' | 'black'; annotation: string } =>
