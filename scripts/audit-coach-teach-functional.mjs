@@ -184,6 +184,26 @@ async function main() {
   record('stage-drill', drillUp, drillUp ? 'drill UI' : `phase=${await phase()}`);
   await clickReq('[data-testid="walkthrough-drill-line-0"]');
   await page.waitForTimeout(1200);
+  // B2b — WRONG-answer teaching (task #26 Phase B): play a deliberately wrong
+  // first move (a2→a3, never the taught e4) and assert the coach now TEACHES why
+  // the right move is right (walkthrough-drill-teaching), not just "the move is X".
+  let wrongTaught = false;
+  if (await visible('[data-square="a2"]') && await visible('[data-square="a3"]')) {
+    await page.locator('[data-square="a2"]').first().click({ force: true }).catch(() => undefined);
+    await page.waitForTimeout(300);
+    await page.locator('[data-square="a3"]').first().click({ force: true }).catch(() => undefined);
+    const wrongCard = await until(async () => visible('[data-testid="walkthrough-drill-wrong"]'), 6000);
+    // The teaching line is board-true and non-empty when a grounded why exists.
+    const teachEl = page.locator('[data-testid="walkthrough-drill-teaching"]').first();
+    const teachTxt = (await teachEl.count()) > 0 ? (await teachEl.textContent().catch(() => '') || '').trim() : '';
+    wrongTaught = wrongCard && teachTxt.length > 8;
+    record('drill-wrong-teaching', wrongTaught, wrongTaught ? `taught: "${teachTxt.slice(0, 80)}"` : `wrongCard=${wrongCard} teach="${teachTxt}"`);
+    // Dismiss the correction so the correct move can proceed.
+    await clickReq('[data-testid="walkthrough-drill-acknowledge"]').catch(() => undefined);
+    await page.waitForTimeout(400);
+  } else {
+    record('drill-wrong-teaching', false, 'drill board not interactable for wrong-move probe');
+  }
   let moved = false;
   if (await visible('[data-square="e2"]') && await visible('[data-square="e4"]')) {
     await page.locator('[data-square="e2"]').first().click({ force: true }).catch(() => undefined);

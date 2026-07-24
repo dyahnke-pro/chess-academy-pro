@@ -107,3 +107,54 @@ phrasing — never a copy of review sentences.
 - Retrospective register ("you should have", mistake recaps) — review-only.
 - The rating-banded audience clause — retired everywhere (one register).
 - Blocking cards on Play — Play stays a pure playing surface (locked).
+
+## Reconciliation against shipped code (2026-07-24 — read before building)
+
+The 07-22 plan was written before the Learn surface advanced. Reconciled against
+`useTeachWalkthrough.ts` / `CoachTeachPage.tsx` / the 07-13 behavior map, most of
+the big-ticket ports are ALREADY shipped or would be redundant. The genuine delta
+is narrower than the 10-item list. Verified state:
+
+- **ALREADY SHIPPED (do not rebuild):**
+  - Register + anti-overstatement + structural-beat prompt (#2/#4 prose side) —
+    task #7, commit `5698b87`; the WHY-DISCIPLINE bullet is at `openingGenerator.ts:1310`.
+  - The "why'd you play that?" faucet (#8) — `useDiscussionPractice(true,{interruptive:true})`
+    is LIVE in `CoachTeachPage.tsx:901`, rating-gated (`slipWarrantsInterjection`),
+    and BOTH Learn and Review call the SAME `captureMisconception` → shared weakness
+    bucket (Review uses the same hook at `CoachGameReview.tsx:641`). Feed unification
+    is DONE.
+  - Grounded board-move→coach-reply (#6 for the interactive reply path) — code
+    computes capture/check/mate + grounded why, LLM only voices (behavior map B8).
+  - Guided-find-the-move, threat-check, arrow dedupe — all live.
+
+- **REDUNDANT / DEFERRED (skip or hold):**
+  - #2 per-move why on the PASSIVE Watch walkthrough — the authored LLM prose
+    (gated by `narrationAccuracy`) already teaches the why per move; a deterministic
+    overlay on top would double-narrate and read robotic. The review computers are
+    also SEAT-framed ("you"), wrong for a demo game — would need a side-reframe.
+    Only worth it as a fidelity NET, not additive prose.
+  - #1 threat call-out on the passive walkthrough — David tagged "later build" on
+    07-22. Held.
+
+- **GENUINE GAP — BUILT 2026-07-24 (task #26 Phase B, this session):**
+  - **Drill wrong-answer teaching** (`learn.stage.drill.wrong`). Previously the
+    drill miss card showed only "the move is X" — no teaching. Now it computes the
+    review's better-move why via the new `learnMoveTeaching.buildDrillWrongTeaching`
+    (`explainBestMoveGrounded` played-vs-best + `buildReviewMoveTeaching` fallback —
+    pure board facts, G0/G3), renders it on the `walkthrough-drill-wrong` card
+    (`walkthrough-drill-teaching` testid), and voices it Silent-gated via
+    `speakWalkthroughText` (matches the sanctioned calc-drill "hint after wrong
+    attempt" pattern). The student is the mover in a drill, so the "your move" seat
+    framing is correct. Example output: *"It develops the knight to c6, eyeing d4
+    and e5, while your move let White play Nxe5, winning the pawn."* findMove/quiz
+    wrong answers already teach via authored per-candidate `explanation` — drill was
+    the only empty surface. Unit-tested (`learnMoveTeaching.test.ts`).
+
+- **STILL OPEN (remaining real delta):**
+  - #3b threat-diagnosis (3-way classify) — marginal over the costClause already
+    shown; low priority.
+  - #5 story-game surfacing in Learn (Phase C).
+  - #9 Deep Coach Detail toggle wired to Learn (Phase C).
+  - #10 shared ChatMessage renderer across Learn/Play/Review (Phase D) — David wants
+    this ("We need that identical").
+  - `audit-learn-real-line.mjs` clone of the real-game audit standard (Phase D).

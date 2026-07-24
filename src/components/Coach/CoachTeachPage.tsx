@@ -7605,6 +7605,14 @@ function DrillPanel({
         <div className="text-sm font-semibold text-red-500 px-1">
           Not quite — you played {drillWrongMove.tried}, the move is {drillWrongMove.expected}.
         </div>
+        {drillWrongMove.teaching ? (
+          <div
+            className="text-xs text-theme-text px-1 leading-snug"
+            data-testid="walkthrough-drill-teaching"
+          >
+            {drillWrongMove.teaching}
+          </div>
+        ) : null}
         <div className="text-[11px] text-theme-text-muted px-1">
           Resetting to this position. Try again.
         </div>

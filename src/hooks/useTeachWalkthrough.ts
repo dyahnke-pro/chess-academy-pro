@@ -36,6 +36,7 @@ import { voiceService } from '../services/voiceService';
 import { logAppAudit } from '../services/appAuditor';
 import { markStageComplete } from '../services/openingProgress';
 import { getCachedOpening } from '../services/openingGenerator';
+import { buildDrillWrongTeaching } from '../services/learnMoveTeaching';
 import { useAppStore } from '../stores/appStore';
 import { resolveCoachNarration } from '../utils/coachNarration';
 import type {
@@ -502,7 +503,7 @@ export interface UseTeachWalkthroughReturn {
   /** For 'drill' phase: when the student plays a wrong move, this
    *  holds the attempted SAN + the expected SAN so the UI can show
    *  feedback. null when no mistake pending. */
-  drillWrongMove: { tried: string; expected: string } | null;
+  drillWrongMove: { tried: string; expected: string; teaching?: string } | null;
   /** For 'drill' phase: true once the entire drill line has been
    *  played correctly. */
   drillComplete: boolean;
@@ -740,7 +741,7 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
   const [drillMoveIndex, setDrillMoveIndex] = useState(0);
   const [drillFen, setDrillFen] = useState(STARTING_FEN);
   const [drillWrongMove, setDrillWrongMove] = useState<
-    { tried: string; expected: string } | null
+    { tried: string; expected: string; teaching?: string } | null
   >(null);
   const [drillComplete, setDrillComplete] = useState(false);
   // Pending stage jump — set when the student picks a stage whose
@@ -1703,7 +1704,17 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
       const expected = line.moves[drillMoveIndex];
 
       if (san !== expected) {
-        setDrillWrongMove({ tried: san, expected });
+        // Port of the review's better-move "why" (task #26 Phase B): don't just
+        // flag the miss — teach WHY the right move is right and what the played
+        // move let slip. Pure board facts (G0/G3 — no LLM, no engine); the
+        // student IS the mover in a drill, so the "your move" seat framing is
+        // correct. Null → silent correction that still shows the move.
+        const teaching = buildDrillWrongTeaching(drillFen, san, expected) ?? undefined;
+        setDrillWrongMove({ tried: san, expected, teaching });
+        // Voice the correction honoring the verbosity gate (G5): full/brief
+        // speak, silent stays silent. A wrong-answer correction is a sanctioned
+        // voiced teaching moment even in an otherwise-silent drill (plan #3).
+        if (teaching) void speakWalkthroughText(teaching, teaching);
         return { ok: false };
       }
 
