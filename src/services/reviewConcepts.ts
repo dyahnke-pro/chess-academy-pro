@@ -40,7 +40,7 @@ export interface ConceptCtx {
 
 export interface ConceptBeat {
   /** Stable concept key (for the dedup ledger + telemetry). */
-  concept: 'simplify-when-ahead' | 'outpost';
+  concept: 'simplify-when-ahead' | 'outpost' | 'open-lines-at-king' | 'two-bishops' | 'convert-dont-rush';
   /** The fact string, board-anchored; the house voice phrases it. */
   text: string;
   /** Independent reference (concept:<id> | reputable URL). */
@@ -159,11 +159,111 @@ function detectOutpost(ctx: ConceptCtx): ConceptBeat | null {
   return { concept: 'outpost', text, source: 'concept:pos-outpost' };
 }
 
+/** How many bishops `color` has on the board. */
+function countBishops(fen: string, color: 'w' | 'b'): number {
+  const rows = fen.split(' ')[0];
+  const want = color === 'w' ? 'B' : 'b';
+  let n = 0;
+  for (const ch of rows) if (ch === want) n += 1;
+  return n;
+}
+
+/** Enemy king still stuck in the centre (d/e files, on or near its back rank) —
+ *  never castled to a wing. */
+function enemyKingCentral(fen: string, enemy: 'w' | 'b'): boolean {
+  const c = new Chess(fen);
+  for (let r = 1; r <= 8; r++) {
+    for (const f of ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']) {
+      const sq = `${f}${r}` as Square;
+      const p = c.get(sq);
+      if (p && p.type === 'k' && p.color === enemy) {
+        const centralFile = f === 'd' || f === 'e';
+        const homeRank = enemy === 'w' ? (r === 1 || r === 2) : (r === 7 || r === 8);
+        return centralFile && homeRank;
+      }
+    }
+  }
+  return false;
+}
+
+/**
+ * OPEN LINES AT THE KING — the `4.d4` idea. A central PAWN break/capture that
+ * cracks the centre open WHILE the enemy king is still stuck there. Board-
+ * computable: pawn move on a central file (c-f), a capture (opens a line), and
+ * the enemy king sits centrally (d/e, home ranks). Source: concept:pos-open-file.
+ */
+function detectOpenLinesAtKing(ctx: ConceptCtx): ConceptBeat | null {
+  let mv;
+  try { const c = new Chess(ctx.fenBefore); mv = c.move(ctx.san); } catch { return null; }
+  if (!mv || mv.piece !== 'p' || !mv.captured) return null;      // a pawn capture opens a line
+  const fromFile = mv.from[0];
+  if (fromFile < 'c' || fromFile > 'f') return null;             // central file
+  const enemy: 'w' | 'b' = ctx.moverColor === 'w' ? 'b' : 'w';
+  if (!enemyKingCentral(ctx.fenAfter, enemy)) return null;
+  const mine = MINE(ctx.moverColor, ctx.studentColor);
+  const text = mine
+    ? `You're cracking the centre open while their king is still stuck in it — with the files opening, every line runs straight at the uncastled king. Speed matters more than a pawn here.`
+    : `Your opponent tears the centre open while your king is still in it — that's the danger of leaving the king in the middle; the open lines all point at it.`;
+  return { concept: 'open-lines-at-king', text, source: 'concept:pos-open-file' };
+}
+
+/**
+ * TWO BISHOPS — the move that trades into the bishop pair (mover ends with both
+ * bishops vs the opponent's one-or-none) and DIDN'T have it a move ago. Board-
+ * computable from bishop counts before/after. Source: concept:pos-bishop-pair.
+ */
+function detectTwoBishops(ctx: ConceptCtx): ConceptBeat | null {
+  let mv;
+  try { const c = new Chess(ctx.fenBefore); mv = c.move(ctx.san); } catch { return null; }
+  // Capturing an enemy BISHOP with a non-bishop drops their bishop count THIS
+  // move (so the pair is newly established) while keeping ours intact.
+  if (!mv || mv.captured !== 'b' || mv.piece === 'b') return null;
+  const enemy: 'w' | 'b' = ctx.moverColor === 'w' ? 'b' : 'w';
+  const myB = countBishops(ctx.fenAfter, ctx.moverColor);
+  const enemyB = countBishops(ctx.fenAfter, enemy);
+  if (myB !== 2 || enemyB > 1) return null;                              // clean pair asymmetry now
+  // Even trade — the imbalance is the PAIR, not a won piece (a capture that
+  // wins material makes the eval jump; that's a different, bigger story).
+  const before = moverPovCp(ctx.evalBefore, ctx.moverColor);
+  const after = moverPovCp(ctx.evalAfter, ctx.moverColor);
+  if (before === null || after === null || Math.abs(after - before) > 110) return null;
+  const mine = MINE(ctx.moverColor, ctx.studentColor);
+  const text = mine
+    ? `That leaves you the two bishops against their single minor — in an open position the pair is a lasting edge, raking both diagonals from long range. Keep the position open for them.`
+    : `Your opponent's kept the two bishops against your single minor — a long-term edge in open positions. Closing the position, not opening it, is how you blunt them.`;
+  return { concept: 'two-bishops', text, source: 'concept:pos-bishop-pair' };
+}
+
+/**
+ * CONVERT, DON'T RUSH — up a clear amount, in a simplified position, playing a
+ * QUIET improving move (no capture, no check, eval steady). The technique of a
+ * won game: improve, trade, don't force. Board + engine computable. Source:
+ * concept:pos-centralization (improving the pieces is the corpus-tagged idea).
+ */
+function detectConvertDontRush(ctx: ConceptCtx): ConceptBeat | null {
+  const before = moverPovCp(ctx.evalBefore, ctx.moverColor);
+  const after = moverPovCp(ctx.evalAfter, ctx.moverColor);
+  if (before === null || after === null) return null;
+  if (before < 250) return null;                                 // clearly up
+  if (Math.abs(after - before) > 60) return null;                // steady, not a swing
+  if (/x|\+|=/.test(ctx.san)) return null;                       // quiet: no capture/check/promo
+  if (pieceCount(ctx.fenAfter) > 16) return null;                // simplified enough to be technique
+  const mine = MINE(ctx.moverColor, ctx.studentColor);
+  if (!mine) return null;                                        // "how to convert" is the student's lesson
+  const text = `You're up material with the position simplified — no need to force anything. Improve your worst piece, trade when it's offered, and let the extra material decide. Winning won positions is about patience, not haste.`;
+  return { concept: 'convert-dont-rush', text, source: 'concept:pos-centralization' };
+}
+
 /**
  * Detect the highest-priority strategic concept this move expresses, or null.
- * Order = teaching priority (a simplifying trade while winning is the headline
- * idea over a quiet outpost). Extend the taxonomy by adding detectors here.
+ * Order = teaching specificity: a sharp attacking break or a structural
+ * imbalance is a more pointed lesson than the general "trade when ahead", which
+ * beats the very general "don't rush". Extend the taxonomy by adding detectors.
  */
 export function detectConcept(ctx: ConceptCtx): ConceptBeat | null {
-  return detectSimplifyWhenAhead(ctx) ?? detectOutpost(ctx);
+  return detectOpenLinesAtKing(ctx)
+    ?? detectOutpost(ctx)
+    ?? detectTwoBishops(ctx)
+    ?? detectSimplifyWhenAhead(ctx)
+    ?? detectConvertDontRush(ctx);
 }

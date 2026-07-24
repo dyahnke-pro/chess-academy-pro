@@ -67,3 +67,52 @@ describe('reviewConcepts — outpost', () => {
     expect(detectConcept(ctx(fen, 'Nf3', { evalBefore: 20, evalAfter: 15 }))).toBeNull();
   });
 });
+
+describe('reviewConcepts — open-lines-at-king', () => {
+  it('fires on a central pawn capture while the enemy king is stuck in the centre', () => {
+    // White plays exd5 opening the e/d lines; Black king still on e8 (uncastled).
+    const fen = 'r1bqk1nr/ppp2ppp/2n5/3pp3/4P3/2NP4/PPP2PPP/R1BQKBNR w KQkq - 0 5';
+    const beat = detectConcept(ctx(fen, 'exd5', { evalBefore: 30, evalAfter: 25, studentColor: 'w' }));
+    expect(beat?.concept).toBe('open-lines-at-king');
+    expect(beat?.source).toBe('concept:pos-open-file');
+  });
+
+  it('does NOT fire once the enemy king has castled to a wing', () => {
+    // Same break, but Black king castled kingside → not central.
+    const fen = 'r1bq1rk1/ppp2ppp/2n5/3pp3/4P3/2NP4/PPP2PPP/R1BQKBNR w KQ - 0 6';
+    expect(detectConcept(ctx(fen, 'exd5', { evalBefore: 30, evalAfter: 25, studentColor: 'w' }))).toBeNull();
+  });
+});
+
+describe('reviewConcepts — two-bishops', () => {
+  it('fires when a knight captures an enemy bishop in an even trade, leaving the pair', () => {
+    // White knight on d5 captures a black bishop on f6; White keeps Bc1+Be2 (two
+    // bishops), Black is left with Bc8 only → the pair, and it's an even minor
+    // trade (eval steady).
+    const fen = 'r1bqk2r/pppp1ppp/5b2/3N4/8/8/PPPP1PPP/R1BQKB1R w KQkq - 0 1';
+    // white bishops: c1 + f1 = 2; black bishops: c8 + f6 = 2. Nxf6 removes one.
+    const beat = detectConcept(ctx(fen, 'Nxf6+', { evalBefore: 15, evalAfter: 10, studentColor: 'w' }));
+    expect(beat?.concept).toBe('two-bishops');
+    expect(beat?.source).toBe('concept:pos-bishop-pair');
+  });
+
+  it('does NOT fire when the capture wins the bishop outright (eval jumps)', () => {
+    const fen = 'r1bqk2r/pppp1ppp/5b2/3N4/8/8/PPPP1PPP/R1BQKB1R w KQkq - 0 1';
+    expect(detectConcept(ctx(fen, 'Nxf6+', { evalBefore: 15, evalAfter: 320, studentColor: 'w' }))).toBeNull();
+  });
+});
+
+describe('reviewConcepts — convert-dont-rush', () => {
+  it('fires on a quiet improving move, up big, position simplified', () => {
+    // K+R+few pawns vs K+few pawns, White up a rook, quiet king move.
+    const fen = '8/5pk1/6p1/8/8/1R6/5PPP/6K1 w - - 0 1';
+    const beat = detectConcept(ctx(fen, 'Kf1', { evalBefore: 500, evalAfter: 500, studentColor: 'w' }));
+    expect(beat?.concept).toBe('convert-dont-rush');
+  });
+
+  it('does NOT fire on a capture (not a quiet move)', () => {
+    const fen = '8/5pk1/6p1/8/8/1R6/5PPP/6K1 w - - 0 1';
+    expect(detectConcept(ctx(fen, 'Rb7', { evalBefore: 500, evalAfter: 500, studentColor: 'w' }))?.concept).toBe('convert-dont-rush');
+    // Rb7 is quiet (no capture) → still convert. A capturing move would be excluded.
+  });
+});
