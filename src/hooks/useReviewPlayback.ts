@@ -80,6 +80,14 @@ export interface UseReviewPlaybackResult {
 export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybackResult {
   const { narration, totalPlies, gameId, onPlyChange, initialPly } = args;
   const [currentPly, setCurrentPly] = useState(0);
+  // Live mirror of currentPly for callbacks whose dep list intentionally
+  // EXCLUDES currentPly (commitPly stays stable so goForward/goBack don't churn
+  // the render). Reading the state closure there captured the value at memo time
+  // (0), so the `review-playback-step` audit logged `fromPly:0 delta=N` on EVERY
+  // step — which silently defeated the skip-bug fingerprint this trail exists to
+  // catch (a delta != 1 from goForward). The ref always holds the live ply.
+  const currentPlyRef = useRef(0);
+  useEffect(() => { currentPlyRef.current = currentPly; }, [currentPly]);
   const [narrationState, setNarrationState] = useState<ReviewNarrationState>('idle');
   const introSpokenRef = useRef(false);
   const activeTokenRef = useRef(0);
@@ -237,7 +245,7 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
 
   const commitPly = useCallback((ply: number, opts: { speak: boolean; navSource?: string }): void => {
     const bounded = Math.max(0, Math.min(ply, lastPly + 1));
-    const fromPly = currentPly;
+    const fromPly = currentPlyRef.current;
     setCurrentPly(bounded);
     onPlyChange?.(bounded);
     void logAppAudit({

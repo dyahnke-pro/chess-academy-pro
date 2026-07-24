@@ -2,6 +2,7 @@ import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { RotateCcw, Home, ArrowLeft, MessageCircle, Loader2, Volume2, VolumeX, Target, Crosshair } from 'lucide-react';
 import { ChessBoard } from '../Board/ChessBoard';
 import { voiceService } from '../../services/voiceService';
+import { explorationAnchorAction } from '../../services/reviewExplorationAnchor';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { getCoachMove, resolveConfig } from '../../services/coachPlaySession';
 import { stockfishEngine } from '../../services/stockfishEngine';
@@ -1806,15 +1807,41 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     void advancedForward;
   }, [walkPlayback.currentPly, walkPlayback.currentSegment, moves, playMoveSound]);
 
-  // Auto-clear walk exploration when the student steps to a different
-  // ply. Exploration is anchored to ONE position — once they nav away,
-  // the actual game line resumes silently (snap-back is implicit).
+  // Auto-clear walk exploration when the student steps to a different ply.
+  // Exploration is anchored to ONE position — once they nav away, the actual
+  // game line resumes (snap-back is implicit).
+  //
+  // ROOT-CAUSE NOTE (David 2026-07-24 — "the pieces stopped moving when clicking
+  // the next arrow"): the displayed board is `walkExplorationFen ?? liveFen`, so
+  // a stranded exploration FEN pins the pieces while nav keeps advancing the ply.
+  // The FEN is set at ~20 sites (the §5 better-line / sequence / theory / show-me
+  // walkouts, the faucet move-preview), but the anchor ref that governed teardown
+  // was set at only two of them — AND each async walkout's own `setWalkExplorationFen(null)`
+  // cleanup sits AFTER token-guard `return`s that a mid-walkout nav trips, so an
+  // interrupted walkout never reached it. Either path stranded the FEN forever.
+  // Fix the DISEASE, not the one walkout: teardown is now automatic + atomic and
+  // depends on NOTHING the callers must remember. This effect (1) self-anchors —
+  // it stamps the anchor ply itself the first render exploration is active, so no
+  // caller has to; and (2) on ANY nav away from that anchor it clears EVERY piece
+  // of exploration display state (fen + san + arrows) in one shot, independent of
+  // whichever async walkout set them or whether that walkout was interrupted.
   useEffect(() => {
-    if (
-      walkExplorationFen !== null &&
-      walkExplorationPlyRef.current !== null &&
-      walkExplorationPlyRef.current !== walkPlayback.currentPly
-    ) {
+    const action = explorationAnchorAction(
+      walkExplorationFen !== null,
+      walkExplorationPlyRef.current,
+      walkPlayback.currentPly,
+    );
+    if (action === 'reset') {
+      // No exploration active — keep the anchor clean so the next episode
+      // re-anchors from scratch (and self-heals a ref stranded by an old bug).
+      walkExplorationPlyRef.current = null;
+    } else if (action === 'anchor') {
+      // Active but not yet anchored — stamp the ply it appears at, whatever
+      // caller set the FEN (ref-setting by the caller is no longer required).
+      walkExplorationPlyRef.current = walkPlayback.currentPly;
+    } else if (action === 'clear') {
+      // Anchored, and the student navigated to a different ply → snap the whole
+      // board back to the live game line (every overlay field, in one shot).
       void logAppAudit({
         kind: 'review-walk-resumed',
         category: 'subsystem',
@@ -1829,8 +1856,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       });
       setWalkExplorationFen(null);
       setWalkExplorationSan(null);
+      setWalkExplorationArrows(null);
       walkExplorationPlyRef.current = null;
     }
+    // action === 'hold' — leave the overlay put (a walkout stepping its line).
   }, [walkPlayback.currentPly, walkExplorationFen, walkExplorationSan]);
 
   // Reset the explore-toggle on every ply change. Each arrow-bearing
