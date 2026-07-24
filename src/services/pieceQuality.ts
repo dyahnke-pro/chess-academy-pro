@@ -174,7 +174,6 @@ function worstPieces(fen: string, color: Color, maxMob: number): Array<{ sq: Squ
   return out.sort((a, b) => a.mob - b.mob);
 }
 
-function sideName(c: Color): string { return c === 'w' ? 'White' : 'Black'; }
 
 /**
  * Lowest mobility among any minor (knight/bishop) on the board, either colour —
@@ -249,7 +248,7 @@ export async function explainEvalByPieceQuality(
             color,
             squares: [one.sq],
             pieces: [one.type],
-            text: `${sideName(color)}'s ${PIECE_WORD[one.type]} on ${one.sq} is doing nothing — put it on an active square and the evaluation swings back to ${sideName(color)}`,
+            text: `the ${PIECE_WORD[one.type]} on ${one.sq} is doing nothing where it sits — that passivity is the whole story here`,
             proof: 'ablation',
             ablation: { before: beforeOwn, after: afterOwn, swingCp: swing },
           };
@@ -272,7 +271,7 @@ export async function explainEvalByPieceQuality(
                   color,
                   squares: [one.sq, two.sq],
                   pieces: [one.type, two.type],
-                  text: `${sideName(color)}'s ${PIECE_WORD[one.type]} on ${one.sq} and ${PIECE_WORD[two.type]} on ${two.sq} are both so passive they're the whole story — activate them and ${sideName(color)}'s edge appears`,
+                  text: `the ${PIECE_WORD[one.type]} on ${one.sq} and the ${PIECE_WORD[two.type]} on ${two.sq} are both so passive they're the whole story here`,
                   proof: 'ablation',
                   ablation: { before: beforeOwn, after: afterOwn2, swingCp: swing2 },
                 };

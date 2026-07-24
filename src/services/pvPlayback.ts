@@ -136,7 +136,43 @@ function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
       // the f7 pawn to the bishop) — technically true, not worth a tactic call.
       .filter((x) => !(x.type === 'pin' && afterBoard.get(x.involvedSquares[1] as Square)?.type === 'p'))
       .find(() => true);
-    tacticLanded = landed ? landed.type : null;
+    // BOARD-TRUE tactic-reality gate (David 2026-07-23: "Bg7 lands a skewer" /
+    // "Qh4 lands a fork" fired on routine developing moves). detectTactics
+    // reports a bare geometric alignment even when every target is DEFENDED and
+    // of equal-or-greater value — winning nothing. A tactic only "lands" if the
+    // moved piece actually threatens to WIN material: a fork needs >=2 winnable
+    // targets; a pin/skewer needs its front target winnable (or an absolute pin
+    // against the king). "Winnable" = the target is worth more than the mover
+    // OR is undefended (it hangs). Kills the false alarms; keeps the real ones.
+    if (landed) {
+      const val = (t?: string): number => (t ? (PIECE_POINTS[t] ?? 0) : 0);
+      const attackerVal = val(afterBoard.get(landed.involvedSquares[0] as Square)?.type);
+      const winnable = (sq: string): boolean => {
+        const p = afterBoard.get(sq as Square);
+        if (!p) return false;
+        const undefended = afterBoard.attackers(sq as Square, p.color).length === 0;
+        return val(p.type) > attackerVal || undefended;
+      };
+      let real: boolean;
+      if (landed.type === 'fork') {
+        // A fork wins because the defender can't save BOTH — needs >=2 winnable
+        // targets. (Kills "Qh4 lands a fork" on two defended minors.)
+        real = landed.involvedSquares.slice(1).filter(winnable).length >= 2;
+      } else if (landed.type === 'skewer') {
+        // A skewer is real only if its FRONT piece can actually be won (or it's
+        // a royal skewer). (Kills "Bg7 lands a skewer" on a defended, equal-
+        // value knight with a pawn behind.)
+        const backIsKing = afterBoard.get(landed.involvedSquares[2] as Square)?.type === 'k';
+        real = winnable(landed.involvedSquares[1]) || backIsKing;
+      } else {
+        // A pin immobilizes its front piece against a more valuable one — the
+        // detector already requires back > front and filters pins-to-a-pawn, so
+        // the pressure is real even when the front can't be won immediately
+        // (Bg5 pinning the f6 knight to the queen). Keep it.
+        real = true;
+      }
+      tacticLanded = real ? landed.type : null;
+    }
   } catch { /* facts stay null */ }
 
   const isCheck = /[+#]$/.test(mv.san);
@@ -406,22 +442,45 @@ export function plyFactsClause(fenBefore: string, san: string, prev?: PrevCaptur
  * unifies the quality. Null on a genuinely quiet move (no concrete fact) →
  * silence, per the Narration Voice Rules. Pure — chess.js validates the SAN.
  */
-export function plyFactsForMove(fenBefore: string, san: string, prev?: PrevCaptureContext): string | null {
+export function plyFactsForMove(fenBefore: string, san: string, prev?: PrevCaptureContext, moverIsStudent?: boolean): string | null {
   try {
     const c = new Chess(fenBefore);
     const mv = c.move(san);
     if (!mv) return null;
-    const facts = computePlyFacts(fenBefore, c.fen(), {
+    const f = computePlyFacts(fenBefore, c.fen(), {
       captured: mv.captured, san: mv.san, color: mv.color, promotion: mv.promotion,
     }, prev);
-    return plyFactsString({
-      san: mv.san,
-      uci: `${mv.from}${mv.to}${mv.promotion ?? ''}`,
-      moverColor: mv.color === 'w' ? 'white' : 'black',
-      fenBefore,
-      fenAfter: c.fen(),
-      facts,
-    });
+
+    // Don't RESTATE a bare capture the student watched happen (Narration rule
+    // #3 — the board already told that story): if the only fact is the capture
+    // itself, no material won and no tactical/structural consequence, stay
+    // silent. A capture that WINS material or lands a real tactic still speaks.
+    const onlyBareCapture = !!f.captured && f.materialGained < 1 && !f.tacticLanded
+      && !f.isCheck && !f.outpostGained && f.newPassedPawns.length === 0
+      && f.newOpenFiles.length === 0 && f.shieldLost === 0;
+
+    // Name the PLAYER, not "The move Nxb5 …" (David 2026-07-23: the robotic
+    // "The move X …" prefix restated the move). "You capture" (student) /
+    // "Your opponent captures" (other side) with correct verb agreement; the
+    // subjectless "The move …" only when the seat isn't known (back-compat).
+    const isYou = moverIsStudent === true;
+    const subject = isYou ? 'You' : moverIsStudent === false ? 'Your opponent' : `The move ${mv.san}`;
+    const vb = (base: string, third: string): string => (isYou ? base : third);
+    const plural = (n: number): string => (n > 1 ? 's' : '');
+    const parts: string[] = [];
+    if (f.captured) parts.push(vb(`capture the ${f.captured}`, `captures the ${f.captured}`));
+    if (f.isMate) parts.push(vb('deliver checkmate', 'delivers checkmate'));
+    else if (f.isCheck) parts.push(vb('give check', 'gives check'));
+    if (f.promotion) parts.push(vb(`promote to a ${f.promotion}`, `promotes to a ${f.promotion}`));
+    if (f.tacticLanded) parts.push(vb(`land a ${f.tacticLanded}`, `lands a ${f.tacticLanded}`));
+    if (f.outpostGained) parts.push(vb(`plant an outpost on ${f.outpostGained}`, `plants an outpost on ${f.outpostGained}`));
+    if (f.newPassedPawns.length > 0) parts.push(vb(`create a passed pawn on ${f.newPassedPawns[0]}`, `creates a passed pawn on ${f.newPassedPawns[0]}`));
+    if (f.newOpenFiles.length > 0) parts.push(vb(`open the ${f.newOpenFiles[0]}-file`, `opens the ${f.newOpenFiles[0]}-file`));
+    if (f.shieldLost > 0) parts.push(vb(`strip ${f.shieldLost} pawn${plural(f.shieldLost)} from the king's cover`, `strips ${f.shieldLost} pawn${plural(f.shieldLost)} from the king's cover`));
+    if (f.materialGained >= 1) parts.push(vb(`win ${f.materialGained} point${plural(f.materialGained)} of material`, `wins ${f.materialGained} point${plural(f.materialGained)} of material`));
+
+    if (parts.length === 0 || onlyBareCapture) return null;
+    return `${subject} ${parts.join(', ')}.`;
   } catch {
     return null;
   }

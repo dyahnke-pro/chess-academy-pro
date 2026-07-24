@@ -197,11 +197,18 @@ describe('material truth + tactic agent (David 2026-07-20 Opera nitpick)', () =>
 
   it('a RECAPTURE claims no material windfall (even trade nets 0)', () => {
     // After 4...Bxf3, White recaptures 5.Qxf3 — an even knight-for-bishop trade.
+    // The subjectless clause states the capture but must claim NO material (the
+    // recapture nets 0). NB: the WALK's plyFactsForMove now stays silent on a
+    // bare even-trade capture (David 2026-07-23 dial-in — don't restate what the
+    // student saw); the material-truth is asserted here on plyFactsClause, which
+    // is what the PV renders speak.
     const fb = fenBefore(OPERA.slice(0, 8)); // up to ...Bxf3
     const prev = { square: 'f3', capturedValue: 3 }; // Black just took the knight on f3
-    const line = plyFactsForMove(fb, 'Qxf3', prev) ?? '';
-    expect(line).toMatch(/captures the bishop/i);
-    expect(line).not.toMatch(/wins \d+ point/i);
+    const clause = plyFactsClause(fb, 'Qxf3', prev) ?? '';
+    expect(clause).toMatch(/captures the bishop/i);
+    expect(clause).not.toMatch(/wins \d+ point/i);
+    // And the walk suppresses the bare even-trade restatement entirely.
+    expect(plyFactsForMove(fb, 'Qxf3', prev, true)).toBeNull();
   });
 
   it('a real hanging capture DOES win material', () => {

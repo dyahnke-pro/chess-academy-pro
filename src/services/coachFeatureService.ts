@@ -934,6 +934,11 @@ export function buildReviewSegments(
   let openingPlanShown = false;
   /** Trapped-piece beats announced, keyed side:square — once per trap, ever. */
   const trappedAnnounced = new Set<string>();
+  // Same enemy threat announced once — a threat that PERSISTS across the
+  // opponent's moves (e.g. Qxb7# standing for two plies) must not re-warn
+  // verbatim on each move (David 2026-07-23: the mating-net line repeated
+  // word-for-word on consecutive moves). Keyed by the threat's SAN.
+  const threatsAnnounced = new Set<string>();
   let orientationShown = false;
   // The enumerated POSITIONAL VERDICT ("you're better here, and here's why:
   // bishop pair, the open file, his weak pawn") — Danya's signature teaching
@@ -1409,7 +1414,8 @@ export function buildReviewSegments(
     if (playerColor && moverColor !== playerColor) {
       const oppWB: 'w' | 'b' = moverColor === 'white' ? 'w' : 'b';
       const oppThreat = detectNewThreat(fenPair.fenBefore, fenPair.fenAfter, oppWB);
-      if (oppThreat) {
+      if (oppThreat && !threatsAnnounced.has(oppThreat.san)) {
+        threatsAnnounced.add(oppThreat.san);
         let callOut = `Careful — their move threatens ${oppThreat.san}: it ${oppThreat.detail}.`;
         const recog = describeThreatRecognition(oppThreat, fenPair.fenAfter, playerColor === 'white' ? 'w' : 'b');
         if (recog) callOut += ` ${recog.charAt(0).toUpperCase()}${recog.slice(1)}.`;
@@ -1603,7 +1609,7 @@ export function buildReviewSegments(
       // David 2026-07-20 "the best move lines have way better narration"), then
       // the thinner teaching note. Both are grounded; the rich one just fires on
       // far more moves so the walk stops going silent on eventful ones.
-      narration = plyFactsForMove(fenPair.fenBefore, m.san, prevCap) ?? buildReviewMoveTeaching(fenPair.fenBefore, m.san);
+      narration = plyFactsForMove(fenPair.fenBefore, m.san, prevCap, true) ?? buildReviewMoveTeaching(fenPair.fenBefore, m.san);
       if (narration) narrationSource = 'per-move';
     }
     // NOTABLE MOVES — BOTH SIDES, ANY PHASE (David 2026-07-21, IMG_4570: "too
@@ -1664,7 +1670,7 @@ export function buildReviewSegments(
       // outposts/passed pawns/files/material), null → still silent for a truly
       // uneventful move.
       if (narration === null) {
-        const rich = plyFactsForMove(fenPair.fenBefore, m.san, prevCap);
+        const rich = plyFactsForMove(fenPair.fenBefore, m.san, prevCap, true);
         if (rich) { narration = rich; narrationSource = 'per-move'; }
       }
     }
@@ -2146,7 +2152,12 @@ async function augmentWithProjections(
         best = { seg: c.s, text: res.delta.text, swing: res.delta.ablation.swingCp };
       }
     }
-    if (best) best.seg.narration = `${best.seg.narration ?? ''} ${best.text}.`.trim();
+    if (best) {
+      // Appended as its own sentence — capitalize the lead so the seat-stamped
+      // possessive ("their"/"your") reads as a sentence start, not mid-clause.
+      const obs = best.text.charAt(0).toUpperCase() + best.text.slice(1);
+      best.seg.narration = `${best.seg.narration ?? ''} ${obs}.`.trim();
+    }
   }
 
   if (scope === 'mistakes') return;

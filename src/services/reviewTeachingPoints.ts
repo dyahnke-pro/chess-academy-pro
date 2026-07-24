@@ -562,7 +562,7 @@ export function describeNotableMove(fenBefore: string, san: string, moverIsStude
     const theirWing = kingWingOf(theirKing?.square);
     const parts: string[] = [];
     parts.push(`${subj === 'you' ? 'You throw' : 'Your opponent throws'} the ${file}-pawn forward — an ambitious ${wing} push that grabs space`);
-    if (theirWing === wing) parts.push(`and points a pawn storm at ${subj === 'you' ? 'their' : 'your'} king`);
+    if (theirWing === wing) parts.push(` and points a pawn storm at ${subj === 'you' ? 'their' : 'your'} king`);
     if (weakened.length) parts.push(`. The price: ${weakened.join(' and ')} ${weakened.length === 1 ? 'is' : 'are'} no longer guarded by a pawn — ${poss} own camp is looser behind it`);
     if (myWing === 'centre') parts.push(`, and ${poss} king is still in the middle, so it's a real commitment`);
     else if (myWing === wing) parts.push(`, and it's the wing ${poss} own king lives on — pushing those pawns thins the king's cover`);
