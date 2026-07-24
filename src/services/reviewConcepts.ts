@@ -42,7 +42,7 @@ export interface ConceptBeat {
   /** Stable concept key (for the dedup ledger + telemetry). */
   concept: 'simplify-when-ahead' | 'outpost' | 'open-lines-at-king' | 'two-bishops'
     | 'convert-dont-rush' | 'passed-pawn-push' | 'rook-seventh' | 'rook-open-file'
-    | 'king-safety-castle' | 'centralize-king' | 'space-advantage';
+    | 'king-safety-castle' | 'centralize-king' | 'space-advantage' | 'create-weakness';
   /** The fact string, board-anchored; the house voice phrases it. */
   text: string;
   /** Independent reference (concept:<id> | reputable URL). */
@@ -434,6 +434,65 @@ function detectSpaceAdvantage(ctx: ConceptCtx): ConceptBeat | null {
   return { concept: 'space-advantage', text, source: 'concept:pos-space' };
 }
 
+/** Files (0..7) on which `color` has a pawn, with multiplicity. */
+function pawnFileList(fen: string, color: 'w' | 'b'): number[] {
+  const c = new Chess(fen);
+  const files: number[] = [];
+  for (let r = 1; r <= 8; r++) {
+    for (let f = 0; f < 8; f++) {
+      const p = c.get(`${String.fromCharCode(97 + f)}${r}` as Square);
+      if (p && p.type === 'p' && p.color === color) files.push(f);
+    }
+  }
+  return files;
+}
+/** Files where `color` has a pawn with NO friendly pawn on an adjacent file. */
+function isolatedFileSet(fen: string, color: 'w' | 'b'): Set<number> {
+  const files = pawnFileList(fen, color);
+  const present = new Set(files);
+  const out = new Set<number>();
+  for (const f of files) if (!present.has(f - 1) && !present.has(f + 1)) out.add(f);
+  return out;
+}
+/** Files where `color` has 2+ pawns (doubled). */
+function doubledFileSet(fen: string, color: 'w' | 'b'): Set<number> {
+  const counts = new Map<number, number>();
+  for (const f of pawnFileList(fen, color)) counts.set(f, (counts.get(f) ?? 0) + 1);
+  const out = new Set<number>();
+  for (const [f, n] of counts) if (n >= 2) out.add(f);
+  return out;
+}
+
+/**
+ * CREATE A WEAKNESS — a capture that saddles the opponent with a NEW isolated or
+ * doubled pawn (their structure got worse this move). A pawn weakness is
+ * permanent — pieces come and go, a bad pawn stays. Board-computable by diffing
+ * the enemy pawn structure. Source: concept:pawn-isolated / concept:pawn-doubled.
+ */
+function detectCreateWeakness(ctx: ConceptCtx): ConceptBeat | null {
+  let mv;
+  try { const c = new Chess(ctx.fenBefore); mv = c.move(ctx.san); } catch { return null; }
+  if (!mv || !mv.captured) return null;                         // structural damage comes via a capture
+  const enemy: 'w' | 'b' = ctx.moverColor === 'w' ? 'b' : 'w';
+  const isoBefore = isolatedFileSet(ctx.fenBefore, enemy);
+  const isoAfter = isolatedFileSet(ctx.fenAfter, enemy);
+  const dblBefore = doubledFileSet(ctx.fenBefore, enemy);
+  const dblAfter = doubledFileSet(ctx.fenAfter, enemy);
+  const newIso = [...isoAfter].find((f) => !isoBefore.has(f));
+  const newDbl = [...dblAfter].find((f) => !dblBefore.has(f));
+  let kind: 'isolated' | 'doubled' | null = null;
+  let file = -1;
+  if (newIso !== undefined) { kind = 'isolated'; file = newIso; }
+  else if (newDbl !== undefined) { kind = 'doubled'; file = newDbl; }
+  if (!kind) return null;
+  const fileLetter = String.fromCharCode(97 + file);
+  const mine = MINE(ctx.moverColor, ctx.studentColor);
+  const text = mine
+    ? `That leaves them with ${kind === 'isolated' ? 'an isolated' : 'a doubled'} pawn on the ${fileLetter}-file — a permanent structural weakness. Pieces come and go, but a bad pawn stays bad; pile your pieces onto it and make them defend.`
+    : `Your structure just took a hit — ${kind === 'isolated' ? 'an isolated' : 'doubled'} pawn${kind === 'isolated' ? '' : 's'} on the ${fileLetter}-file. It's a lasting target; look to trade it off or use the half-open file it hands you.`;
+  return { concept: 'create-weakness', text, source: kind === 'isolated' ? 'concept:pawn-isolated' : 'concept:pawn-doubled' };
+}
+
 /**
  * Detect the highest-priority strategic concept this move expresses, or null.
  * Order = teaching specificity: a sharp attacking break or a structural
@@ -447,6 +506,7 @@ export function detectConcept(ctx: ConceptCtx): ConceptBeat | null {
     ?? detectPassedPawnPush(ctx)
     ?? detectTwoBishops(ctx)
     ?? detectSpaceAdvantage(ctx)
+    ?? detectCreateWeakness(ctx)
     ?? detectSimplifyWhenAhead(ctx)
     ?? detectCastle(ctx)
     ?? detectCentralizeKing(ctx)

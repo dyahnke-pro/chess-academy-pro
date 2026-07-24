@@ -2549,10 +2549,14 @@ export function narrationCoversFacets(det: string, warmed: string): boolean {
  * a brief nod the second, silent after — a concept lectured on every trade in a
  * won game would tune out (the very repetition dial we just turned).
  */
+const MAX_CONCEPT_BEATS_PER_GAME = 5;
 function fillConceptBeats(segments: ReviewMoveSegment[], playerColor: 'white' | 'black'): void {
   const studentColor: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
   const shown = new Map<string, number>();
+  let total = 0;  // Danya is SELECTIVE — a rich positional game shouldn't become a
+                  // wall of concept lectures. Cap the whole game's concept beats.
   for (const s of segments) {
+    if (total >= MAX_CONCEPT_BEATS_PER_GAME) break;
     if (s.narration || s.evalBefore === null || s.evalAfter === null) continue;
     const moverColor: 'w' | 'b' = s.ply % 2 === 1 ? 'w' : 'b';
     let beat: ReturnType<typeof detectConcept> = null;
@@ -2565,12 +2569,13 @@ function fillConceptBeats(segments: ReviewMoveSegment[], playerColor: 'white' | 
     if (!beat) continue;
     const n = shown.get(beat.concept) ?? 0;
     shown.set(beat.concept, n + 1);
-    if (n === 0) { s.narration = beat.text; s.narrationSource = 'orientation'; }
+    if (n === 0) { s.narration = beat.text; s.narrationSource = 'orientation'; total += 1; }
     else if (n === 1 && beat.concept === 'simplify-when-ahead') {
       s.narration = moverColor === studentColor
         ? `Another pair comes off — exactly right when you're winning.`
         : `More pieces off the board — that only speeds your win.`;
       s.narrationSource = 'orientation';
+      total += 1;
     }
     // n >= 2 (or a repeat of a non-simplify concept): stay silent, the point landed.
   }

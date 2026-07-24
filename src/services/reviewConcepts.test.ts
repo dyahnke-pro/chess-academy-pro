@@ -171,6 +171,25 @@ describe('reviewConcepts — king safety / centralize / space', () => {
   });
 });
 
+describe('reviewConcepts — create-weakness', () => {
+  it('fires when a capture isolates an enemy pawn (removes its only neighbour)', () => {
+    // Black pawns b7 + c7 (each the other's neighbour). White Nd6xb7 leaves c7
+    // with no neighbour → isolated on the c-file.
+    const fen = '4k3/1pp5/3N4/8/8/8/8/4K3 w - - 0 1';
+    const beat = detectConcept(ctx(fen, 'Nxb7', { evalBefore: 20, evalAfter: 20, studentColor: 'w' }));
+    expect(beat?.concept).toBe('create-weakness');
+    expect(beat?.source).toBe('concept:pawn-isolated');
+    expect(beat?.text).toMatch(/isolated pawn on the c-file/);
+  });
+
+  it('does NOT fire on a capture that leaves the pawn structure intact', () => {
+    // White knight takes a lone black knight; no pawn structure change.
+    const fen = '4k3/8/3n4/8/4N3/8/8/4K3 w - - 0 1';
+    const r = detectConcept(ctx(fen, 'Nxd6', { evalBefore: 30, evalAfter: 30, studentColor: 'w' }));
+    expect(r).toBeNull();
+  });
+});
+
 describe('reviewConcepts — convert-dont-rush', () => {
   it('fires on a quiet improving move, up big, position simplified', () => {
     // K+R+few pawns vs K+few pawns, White up a rook, quiet king move.
