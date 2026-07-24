@@ -2262,6 +2262,44 @@ async function augmentWithProjections(
       budget -= 1;
     }
   }
+
+  // #5 — PROPHYLAXIS (David 2026-07-24: "keep going" — the concept-tool member
+  // that needs the engine). A quiet student move that PREVENTS the opponent's
+  // threat: give the opponent a FREE tempo (null move) at fenBefore — if their
+  // best then gains ≥ ~1.5, they had a real threat; if the student's actual
+  // QUIET move (no capture/check/promo) holds the eval steady, that move took
+  // the sting out of it before it started. One extra engine eval per candidate,
+  // bounded by its own small budget. G0: the CODE proves the threat existed and
+  // was neutralised from the engine; the house voice only phrases it.
+  {
+    let prophyBudget = scope === 'full' ? 3 : 2;
+    const studentPov = (cp: number): number => (studentColorWB === 'w' ? cp : -cp);
+    for (const s of segments) {
+      if (prophyBudget <= 0) break;
+      if (s.narration) continue;                            // fill only silent moves
+      if (s.playerColor !== studentColorName) continue;     // the student's own prophylaxis
+      if (s.ply < 10) continue;                             // middlegame onward
+      if (/[x+=]/.test(s.san)) continue;                    // quiet: no capture / check / promotion
+      if (s.evalBefore === null || s.evalAfter === null) continue;
+      const parts = s.fenBefore.split(' ');
+      if (parts.length < 4) continue;
+      parts[1] = parts[1] === 'w' ? 'b' : 'w';
+      parts[3] = '-';
+      const nullFen = parts.join(' ');
+      try { new Chess(nullFen); } catch { continue; }        // flip must be a legal position
+      const threatLine = await raceTimeout(computePvLine(nullFen, { maxPlies: 3 }), PROJ_TIMEOUT_MS, null);
+      if (!threatLine || threatLine.plies.length === 0) continue;
+      const beforeEval = studentPov(s.evalBefore);
+      const afterEval = studentPov(s.evalAfter);
+      const freeMoveEval = studentPov(threatLine.rootEvalCp); // student POV if the opponent got a free move
+      if (beforeEval - freeMoveEval < 150) continue;         // no real threat → not prophylaxis
+      if (afterEval < beforeEval - 40) continue;             // the move conceded → it didn't neutralise
+      const threatSan = threatLine.plies[0].san;
+      s.narration = `A quiet, preventive move — this is prophylaxis. Your opponent was set up for ${threatSan}, and this takes the sting out of it before it starts. Stopping their idea is often worth more than making one of your own.`;
+      s.narrationSource = 'orientation';
+      prophyBudget -= 1;
+    }
+  }
 }
 
 /**
