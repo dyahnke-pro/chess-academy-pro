@@ -911,7 +911,40 @@ const REVIEW_HOUSE_VOICE_TIMEOUT_MS = 38000;
 // Stockfish projection budget — bounds the ONE prep await that was try/catch-only
 // so a wedged engine worker can never leave the walk stuck on "Preparing…".
 const REVIEW_AUGMENT_TIMEOUT_MS = 20000;
-const REVIEW_AUGMENT_TIMEOUT_MS_UNCAPPED = 35000;
+// UNCAPPED = "hear EVERYTHING the review has to say about every move" (David
+// 2026-07-24: "remove any caps… then we cap down as needed"). The projection
+// passes run with effectively-unlimited budgets in uncapped mode, so the ceiling
+// is time, not a per-pass count — give them room to cover both sides deeply.
+const REVIEW_AUGMENT_TIMEOUT_MS_UNCAPPED = 75000;
+
+/** Reframe a seat-free `buildReviewMoveTeaching` sentence as the OPPONENT's, so
+ *  Black's quiet developing moves get the SAME positional teaching the student's
+ *  do (David 2026-07-24: "same level of narrations for opponents moves… I'm not
+ *  hearing narrations for black's moves"). The teaching sentences are already
+ *  3rd-person-singular ("The knight bears down…", "Stakes a claim…"), so the
+ *  transform is clean: a piece subject becomes "Your opponent's <piece>…", a
+ *  verb-first observation becomes "Your opponent <verb>…", and "the opponent"
+ *  (which meant the student in a neutral sentence) becomes "you". */
+function frameTeachingForOpponent(sentence: string): string {
+  // The neutral sentence's "the opponent" means the mover's opponent = the
+  // STUDENT, so from the opponent's seat it becomes "you" / "your" (possessive
+  // FIRST so "the opponent's" → "your", never the broken "you's").
+  const s = sentence.trim()
+    .replace(/\bthe opponent's\b/g, 'your')
+    .replace(/\bthe opponent\b/g, 'you');
+  if (/^The\s+(knight|bishop|rook|queen|king|capture)\b/.test(s)) {
+    return s.replace(/^The\s+/, "Your opponent's ");
+  }
+  // "Now <student weakness>…" — a pawn move that leaves a weakness in the
+  // student's camp; frame it as the opponent's doing, not a bare "Now".
+  if (/^Now\s+/.test(s)) {
+    const rest = s.slice(4);
+    return `Your opponent's move — ${rest.charAt(0).toLowerCase()}${rest.slice(1)}`;
+  }
+  // Verb-first observation ("Stakes a claim…", "Opens the f-file…") — already
+  // 3rd-person-singular, so "Your opponent " + the verb reads correctly.
+  return `Your opponent ${s.charAt(0).toLowerCase()}${s.slice(1)}`;
+}
 
 export function buildReviewSegments(
   moves: ReviewMoveInput[],
@@ -1810,6 +1843,18 @@ export function buildReviewSegments(
       if (clause) {
         narration = `Your opponent ${clause}.`;
         narrationSource = 'opponent';
+      } else {
+        // PARITY (David 2026-07-24: "same level of narrations for opponents
+        // moves"). A quiet opponent developing move has no tactical fact clause,
+        // but it still has a positional purpose — the SAME buildReviewMoveTeaching
+        // the student's quiet moves get, reframed to the opponent's seat. Only a
+        // TRULY uneventful move (teaching === null) stays silent, symmetric with
+        // the student side.
+        const teach = buildReviewMoveTeaching(fenPair.fenBefore, m.san);
+        if (teach) {
+          narration = frameTeachingForOpponent(teach);
+          narrationSource = 'opponent';
+        }
       }
     }
     segments.push({
@@ -2040,7 +2085,7 @@ async function augmentWithProjections(
   // Budget: 'full' (uncapped) needs room for punishment + plan + consequence;
   // 'mistakes' (capped production) caps at 2 punishment lines per game so the
   // review prep never stalls on Stockfish.
-  let budget = scope === 'full' ? 5 : 3;
+  let budget = scope === 'full' ? 999 : 3; // uncapped: every eligible move (David 2026-07-24)
   const PROJ_TIMEOUT_MS = 7000;
 
   // #3 — PUNISHMENT projection on BOTH SIDES' mistakes/blunders: the engine PV
@@ -2074,7 +2119,7 @@ async function augmentWithProjections(
   // understanding, never just the name. Seeding firstUci reuses the stored
   // analysis' own top line, so this is usually a cache hit, not fresh engine
   // time. Biggest swings first so the budget lands on the moves that matter.
-  let whyBudget = scope === 'full' ? 5 : 3;
+  let whyBudget = scope === 'full' ? 999 : 3; // uncapped: every better-move delta
   // THE DELTA (David 2026-07-24: "the delta is what computes why a stockfish
   // move is good — wire it in"): the method of comparison proves the concrete
   // reason the better move beats the played one (engine-verified ablation), so
@@ -2131,7 +2176,7 @@ async function augmentWithProjections(
   // claim, the static sentence is REPLACED by the engine's line, voiced
   // through the same per-ply fact-computers. Truth from the engine,
   // mechanism from the statics — never a static story the engine disowns.
-  let confirmBudget = scope === 'full' ? 4 : 3;
+  let confirmBudget = scope === 'full' ? 999 : 3; // uncapped: every threat confirmation
   for (const s of segments) {
     if (confirmBudget <= 0) break;
     if (!s.staticThreat) continue;
@@ -2170,7 +2215,7 @@ async function augmentWithProjections(
   // threat — narrated ply-by-ply through the same render machinery. Skipped
   // when the position is in check (forcing lines are the punishment pass's
   // job) and on one-move threats (the static call-out already owns those).
-  let deepBudget = scope === 'full' ? 3 : 2;
+  let deepBudget = scope === 'full' ? 999 : 2; // uncapped: every deep threat
   for (const s of segments) {
     if (deepBudget <= 0) break;
     if (s.playerColor !== studentColorName) continue;
@@ -2224,7 +2269,7 @@ async function augmentWithProjections(
   // through the same render machinery, closed with the DEFENSE from the
   // stored analysis (the student's next best move — in the package, no
   // fresh search, G0).
-  let deepOppBudget = scope === 'full' ? 3 : 2;
+  let deepOppBudget = scope === 'full' ? 999 : 2; // uncapped: every opponent deep threat
   const oppWB: 'w' | 'b' = studentColorWB === 'w' ? 'b' : 'w';
   for (let i = 0; i < segments.length; i++) {
     const s = segments[i];
@@ -2383,7 +2428,7 @@ async function augmentWithProjections(
   // bounded by its own small budget. G0: the CODE proves the threat existed and
   // was neutralised from the engine; the house voice only phrases it.
   {
-    let prophyBudget = scope === 'full' ? 3 : 2;
+    let prophyBudget = scope === 'full' ? 999 : 2; // uncapped: every prophylactic move
     const studentPov = (cp: number): number => (studentColorWB === 'w' ? cp : -cp);
     for (const s of segments) {
       if (prophyBudget <= 0) break;
