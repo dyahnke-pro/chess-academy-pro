@@ -52,9 +52,31 @@ vi.mock('./stockfishEngine', async () => {
 
 import { generateReviewNarration } from './coachFeatureService';
 import type { ReviewMoveInput } from './coachFeatureService';
+import { detectTactics } from './tacticsDetector';
 import modelGamesRaw from '../data/model-games.json';
 
 const PIECE_PTS: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+
+/** Tactic-MEANINGFULNESS, re-derived independently of the narration pipeline
+ *  (David 2026-07-23: "how are false claims leaking?? we had that locked
+ *  down!!"). detectTactics reports a bare geometric alignment; a NAMED tactic
+ *  in the spoken line must actually threaten to WIN material, or it's the
+ *  "Bg7 lands a skewer" over-claim. Mirrors the computePlyFacts gate so a
+ *  legit pin/fork/skewer passes and a meaningless one is caught — across ALL
+ *  narration paths, not just the one that was fixed. */
+function tacticIsMeaningful(board: InstanceType<typeof Chess>, t: { type: string; involvedSquares: string[] }): boolean {
+  const val = (sq: string): number => PIECE_PTS[board.get(sq as Parameters<typeof board.get>[0])?.type ?? ''] ?? 0;
+  const attackerVal = val(t.involvedSquares[0]);
+  const winnable = (sq: string): boolean => {
+    const p = board.get(sq as Parameters<typeof board.get>[0]);
+    if (!p) return false;
+    const undefended = board.attackers(sq as Parameters<typeof board.attackers>[0], p.color).length === 0;
+    return (PIECE_PTS[p.type] ?? 0) > attackerVal || undefended;
+  };
+  if (t.type === 'fork') return t.involvedSquares.slice(1).filter(winnable).length >= 2;
+  if (t.type === 'skewer') return winnable(t.involvedSquares[1]) || board.get(t.involvedSquares[2] as Parameters<typeof board.get>[0])?.type === 'k';
+  return true; // pin — the immobilization against a more valuable piece is real
+}
 const PIECE_WORDS = 'pawn|knight|bishop|rook|queen|king';
 const WANT: Record<string, string> = { pawn: 'p', knight: 'n', bishop: 'b', rook: 'r', queen: 'q', king: 'k' };
 const ADJ = 'passed|weak|isolated|doubled|backward|extra|lone|bad|connected|protected|central|advanced|remaining|outside';
@@ -121,6 +143,21 @@ function scanLine(line: string, fenAfter: string, studentWB: Color, ctx: Omit<Vi
     if (!cell || cell.type !== type) { add('phantom-piece', `"${m[0].trim()}" — board has ${cell ? cell.type : 'empty'} on ${sq}`); continue; }
     if (poss === 'your' && cell.color !== studentWB) add('seat-error', `"${m[0].trim()}" — that ${m[2]} is the opponent's`);
     if (poss === 'their' && cell.color !== enemy) add('seat-error', `"${m[0].trim()}" — that ${m[2]} is yours`);
+  }
+
+  // TACTIC-REALITY: a "lands a fork/skewer/pin" claim on THIS move must be a
+  // WINNING tactic the moved piece makes — not a bare geometric alignment on
+  // defended, equal-value targets (the "Bg7 lands a skewer" leak). Present-tense
+  // head only, so the PV projection tails ("…then Rg4 (lands a skewer)…", which
+  // describe future positions) are excluded.
+  const tacticClaim = /\bland(?:s|ed)? an? (fork|skewer|pin)\b/i.exec(head);
+  if (tacticClaim) {
+    const claimed = tacticClaim[1].toLowerCase();
+    const landSq = ctx.san.replace(/[+#!?]+$/, '').match(/([a-h][1-8])(?!.*[a-h][1-8])/)?.[1] ?? null;
+    const real = landSq !== null && detectTactics(fenAfter).tactics.some(
+      (t) => t.type === claimed && t.involvedSquares[0] === landSq && tacticIsMeaningful(board, t),
+    );
+    if (!real) add('empty-tactic', `"lands a ${claimed}" — no winning ${claimed} by the piece on ${landSq ?? '?'}`);
   }
 
   // Prescriptive inventory: never tell the student to use a piece they lack.
