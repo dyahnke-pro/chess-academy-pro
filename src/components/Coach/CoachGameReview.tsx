@@ -573,9 +573,15 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // move (find-shot on a miss, trap on a greedy capture, why on any other slip);
   // the turning-point is the 3rd and final stop. Computed once from the
   // segments, so a question never fires at an irrelevant moment.
+  // David 2026-07-24: "remove all question budgets. I'll add a cap back once I
+  // know it works." The review was firing at most 2 interactive questions for a
+  // whole game (plus the freeze cut games short), so it felt like passive
+  // narration with no teaching. Uncapped now — EVERY student slip becomes a
+  // teaching stop. To re-cap later, set this back to a finite number.
+  const REVIEW_QUESTION_BUDGET = Infinity;
   const questionPlan = useMemo<Map<number, ReviewQuestionMoment>>(() => {
     if (!walkNarration || !playerColor) return new Map();
-    return selectReviewQuestions(walkNarration.segments, playerColor, { budget: 2 });
+    return selectReviewQuestions(walkNarration.segments, playerColor, { budget: REVIEW_QUESTION_BUDGET });
   }, [walkNarration, playerColor]);
 
   const [readingGate, setReadingGate] = useState<{ ply: number; fen: string } | null>(null);
