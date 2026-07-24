@@ -3310,10 +3310,18 @@ export interface DetectedThreat {
   san: string;
   detail: string;
   kind: 'mate' | 'fork' | 'capture';
+  /** The threatening piece's ORIGIN square — for drawing the threat arrow
+   *  (from → landing) on the board so the threat is SHOWN, not just spoken
+   *  (David 2026-07-24: "no threat detection" — it fired in audio but nothing
+   *  was drawn). */
+  from: string;
   /** The threatening piece's landing square. */
   landing: string;
   /** Fork victims ("queen on d1"), empty for non-forks. */
   targets: string[];
+  /** The SQUARES of the fork victims (for highlighting them on the board),
+   *  parallel to `targets`. Empty for non-forks. */
+  targetSquares: string[];
   /** Squares of the mover's pieces that DEFEND the landing square — the
    *  foundation a defender can undermine (the Berlin Bc5 guarding f2). */
   guards: string[];
@@ -3349,20 +3357,22 @@ export function detectNewThreat(
         if (!played) continue;
         // Mate-in-one: the highest-ranked threat, always safe to name.
         if (sim.isCheckmate()) {
-          best = { san: mv.san, detail: 'delivers checkmate', kind: 'mate', landing: played.to, targets: [], guards: guardsOf(sim, played.to), rank: 1000 };
+          best = { san: mv.san, detail: 'delivers checkmate', kind: 'mate', from: played.from, landing: played.to, targets: [], targetSquares: [], guards: guardsOf(sim, played.to), rank: 1000 };
           break;
         }
         // Safe royal fork from the landing square (king + major, or two majors),
         // un-takeable with profit.
         const majors: string[] = [];
+        const majorSquares: string[] = [];
+        let kingSquare: string | null = null;
         let hitsKing = false;
         for (const row of sim.board()) {
           for (const cell of row) {
             if (!cell || cell.color !== enemy) continue;
             if (cell.type !== 'k' && cell.type !== 'q' && cell.type !== 'r') continue;
             if (!sim.attackers(cell.square, moverWB).includes(played.to)) continue;
-            if (cell.type === 'k') hitsKing = true;
-            else majors.push(`${cell.type === 'q' ? 'queen' : 'rook'} on ${cell.square}`);
+            if (cell.type === 'k') { hitsKing = true; kingSquare = cell.square; }
+            else { majors.push(`${cell.type === 'q' ? 'queen' : 'rook'} on ${cell.square}`); majorSquares.push(cell.square); }
           }
         }
         if ((hitsKing && majors.length >= 1) || majors.length >= 2) {
@@ -3378,7 +3388,7 @@ export function detectNewThreat(
             const forkTargets = hitsKing ? `the king and ${majors[0]}` : `the ${majors.join(' and ')}`;
             const rank = 500 + (played.captured ? PIECE_VALUE_LOCAL[played.captured] ?? 0 : 0);
             if (!best || rank > best.rank) {
-              best = { san: mv.san, detail: `${capBit}forks ${forkTargets}`, kind: 'fork', landing: played.to, targets: hitsKing ? ['the king', majors[0]] : majors, guards: guardsOf(sim, played.to), rank };
+              best = { san: mv.san, detail: `${capBit}forks ${forkTargets}`, kind: 'fork', from: played.from, landing: played.to, targets: hitsKing ? ['the king', majors[0]] : majors, targetSquares: hitsKing ? [kingSquare as string, ...(majorSquares[0] ? [majorSquares[0]] : [])] : majorSquares, guards: guardsOf(sim, played.to), rank };
             }
             continue;
           }
@@ -3391,7 +3401,7 @@ export function detectNewThreat(
           const net = seeGain(c, mv.to);
           if (net >= 3 && (!best || net > best.rank)
             && !captureHasCounterTactic(fen, mv.san, moverWB === 'w' ? 'b' : 'w', net)) {
-            best = { san: mv.san, detail: `wins the ${REVIEW_PIECE_NAME[played.captured]} on ${mv.to}`, kind: 'capture', landing: mv.to, targets: [], guards: guardsOf(sim, mv.to), rank: net };
+            best = { san: mv.san, detail: `wins the ${REVIEW_PIECE_NAME[played.captured]} on ${mv.to}`, kind: 'capture', from: mv.from, landing: mv.to, targets: [], targetSquares: [], guards: guardsOf(sim, mv.to), rank: net };
           }
         }
       }

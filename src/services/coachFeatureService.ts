@@ -1396,6 +1396,12 @@ export function buildReviewSegments(
     // pawn and forks their queen and rook" went unsaid. A threat is a
     // keystone: it speaks even on an otherwise-quiet ply.
     let segmentStaticThreat: ReviewMoveSegment['staticThreat'];
+    // THREAT ARROWS (David 2026-07-24: "no threat detection" — it fired in audio
+    // but nothing was drawn). Show the threatened move on the board: GREEN for the
+    // student's own threat (your attack), RED for the opponent's (the danger),
+    // plus fork rays to the victim squares. Rides the segment's planArrows slot,
+    // which the board already renders when no walkout overlay is active.
+    let threatArrows: ReviewMoveSegment['planArrows'];
     if (playerColor && moverColor === playerColor) {
       const threat = describeStudentThreat(fenPair.fenBefore, fenPair.fenAfter, playerColor === 'white' ? 'w' : 'b');
       if (threat) {
@@ -1409,7 +1415,13 @@ export function buildReviewSegments(
           const nullParts = fenPair.fenAfter.split(' ');
           nullParts[1] = playerColor === 'white' ? 'w' : 'b';
           nullParts[3] = '-';
-          segmentStaticThreat = { san: threatSan.replace(/[.,]$/, ''), sentence, nullFen: nullParts.join(' ') };
+          const nullFen = nullParts.join(' ');
+          segmentStaticThreat = { san: threatSan.replace(/[.,]$/, ''), sentence, nullFen };
+          // Draw the student's threatened move (green — your attack).
+          try {
+            const tc = new Chess(nullFen).move(threatSan.replace(/[.,]$/, ''));
+            if (tc) threatArrows = [{ startSquare: tc.from, endSquare: tc.to, color: '#22c55e' }];
+          } catch { /* arrow is a bonus — never block the narration */ }
         }
       }
       // SIMPLIFY-WHEN-AHEAD — Danya's strategic "you're offering a queen trade"
@@ -1457,6 +1469,12 @@ export function buildReviewSegments(
         }
         narration = narration ? `${narration} ${callOut}` : callOut;
         narrationSource = narrationSource ?? 'per-move';
+        // Draw the danger (red): the threatened move from → landing, plus a ray
+        // to each fork victim so the eye lands on what's under attack.
+        threatArrows = [
+          { startSquare: oppThreat.from, endSquare: oppThreat.landing, color: '#ef4444' },
+          ...oppThreat.targetSquares.map((sq) => ({ startSquare: oppThreat.landing, endSquare: sq, color: '#f97316' })),
+        ];
       }
     }
     // OPPONENT-PSYCHOLOGY read (Danya register #14: "once one side starts to
@@ -1792,7 +1810,10 @@ export function buildReviewSegments(
       bestMoveUci: m.bestMove,
       narration,
       narrationSource,
-      ...(planArrows && planArrows.length ? { planArrows } : {}),
+      // Plan-idea arrows take the slot when present; else the threat arrows
+      // (they rarely coincide — a plan beat fires on a quiet move, a threat on a
+      // tactical one) so the danger/attack is SHOWN, not just spoken.
+      ...((planArrows && planArrows.length) ? { planArrows } : (threatArrows && threatArrows.length ? { planArrows: threatArrows } : {})),
       ...(segmentStoryGame ? { storyGame: segmentStoryGame } : {}),
       ...(segmentStaticThreat ? { staticThreat: segmentStaticThreat } : {}),
     });
