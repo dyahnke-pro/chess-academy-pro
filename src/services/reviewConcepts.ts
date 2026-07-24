@@ -48,8 +48,6 @@ export interface ConceptBeat {
   source: string;
 }
 
-const PIECE_VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
-
 /** Total piece count on the board (both sides), pawns included. */
 function pieceCount(fen: string): number {
   const rows = fen.split(' ')[0];
@@ -109,7 +107,7 @@ function detectOutpost(ctx: ConceptCtx): ConceptBeat | null {
     const c = new Chess(ctx.fenBefore);
     const mv = c.move(ctx.san);
     if (!mv) return null;
-    dest = mv.to as Square;
+    dest = mv.to;
     piece = mv.piece;
   } catch { return null; }
   if (!dest || (piece !== 'n' && piece !== 'b')) return null;
@@ -147,7 +145,7 @@ function detectOutpost(ctx: ConceptCtx): ConceptBeat | null {
   const supporters = board.attackers ? board.attackers(dest, mover) : [];
   let pawnGuard = false;
   for (const sq of supporters) {
-    const p = board.get(sq as Square);
+    const p = board.get(sq);
     if (p && p.type === 'p' && p.color === mover) { pawnGuard = true; break; }
   }
   if (!pawnGuard) return null;
@@ -313,7 +311,7 @@ function detectPassedPawnPush(ctx: ConceptCtx): ConceptBeat | null {
   let mv;
   try { const c = new Chess(ctx.fenBefore); mv = c.move(ctx.san); } catch { return null; }
   if (!mv || mv.piece !== 'p' || mv.captured) return null;      // a push, not a capture
-  const dest = mv.to as Square;
+  const dest = mv.to;
   const rank = parseInt(dest[1], 10);
   if (ctx.moverColor === 'w' && rank < 4) return null;          // past the midpoint = a real runner
   if (ctx.moverColor === 'b' && rank > 5) return null;
@@ -335,7 +333,7 @@ function detectRookActivation(ctx: ConceptCtx): ConceptBeat | null {
   let mv;
   try { const c = new Chess(ctx.fenBefore); mv = c.move(ctx.san); } catch { return null; }
   if (!mv || mv.piece !== 'r') return null;
-  const dest = mv.to as Square;
+  const dest = mv.to;
   const rank = parseInt(dest[1], 10);
   const file = dest.charCodeAt(0) - 97;
   const mine = MINE(ctx.moverColor, ctx.studentColor);

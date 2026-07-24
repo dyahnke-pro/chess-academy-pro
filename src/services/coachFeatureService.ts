@@ -2692,7 +2692,7 @@ function varyRepeatedStems(segments: ReviewMoveSegment[]): void {
 
     // Opponent-mistake lead — "Your opponent erred —" / "slipped —" fire dozens
     // of times a game. Rotate after the first couple so the walk breathes.
-    t = t.replace(/\bYour opponent (erred|slipped) — /, (m0, verb: string) => {
+    t = t.replace(/\bYour opponent (erred|slipped) — /, (m0: string) => {
       const n = bump('opp-mistake');
       if (n < 2) return m0;
       const forms = ['Your opponent went wrong here — ', 'A misstep from your opponent — ', 'Your opponent faltered — '];
