@@ -5,7 +5,7 @@ import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeS
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
 import { plyFactsForMove, plyFactsClause, computePvLine, type PvLine, type PrevCaptureContext } from './pvPlayback';
 import { explainEvalByPieceQuality, lowestMinorMobility } from './pieceQuality';
-import type { Evaluate } from './moveComparison';
+import { compareTwoMoves, type Evaluate } from './moveComparison';
 import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan, buildHisGroundedPlanBeat, buildMastersGroundedPlanBeat } from './reviewStrategicOrientation';
 import { getHisPlayDb } from './hisPlayLookup';
 import { ensureMastersDbLoaded } from './masterPlayLookup';
@@ -1999,6 +1999,14 @@ async function augmentWithProjections(
   // analysis' own top line, so this is usually a cache hit, not fresh engine
   // time. Biggest swings first so the budget lands on the moves that matter.
   let whyBudget = scope === 'full' ? 5 : 3;
+  // THE DELTA (David 2026-07-24: "the delta is what computes why a stockfish
+  // move is good — wire it in"): the method of comparison proves the concrete
+  // reason the better move beats the played one (engine-verified ablation), so
+  // "Why X was better" LEADS with the proven why, not just the line.
+  const deltaEvaluate: Evaluate = async (fen) => {
+    const l = await raceTimeout(computePvLine(fen, { maxPlies: 1 }), PROJ_TIMEOUT_MS, null);
+    return { cp: l ? l.rootEvalCp : NaN };
+  };
   const flaggedStudent = segments
     .filter((s) => s.playerColor === studentColorName
       && (s.classification === 'inaccuracy' || s.classification === 'mistake' || s.classification === 'blunder')
@@ -2024,7 +2032,14 @@ async function augmentWithProjections(
     );
     if (line && line.plies.length >= 3) {
       const bestName = line.plies[0].san;
-      s.narration = `${s.narration ?? ''} Why ${bestName} was better — the line runs ${render(line)}.`.trim();
+      // THE DELTA: prove WHY bestName beats the played move (engine-verified). A
+      // proven reason leads; when nothing survives, fall back to showing the
+      // line (compareTwoMoves returns delta=null and we just play it out).
+      const cmp = await raceTimeout(compareTwoMoves(s.fenBefore, s.san, bestName, deltaEvaluate), PROJ_TIMEOUT_MS, null);
+      const why = cmp?.delta?.text ?? null;
+      s.narration = why
+        ? `${s.narration ?? ''} Why ${bestName} was better — ${why}. The line runs ${render(line)}.`.trim()
+        : `${s.narration ?? ''} Why ${bestName} was better — the line runs ${render(line)}.`.trim();
       whyBudget -= 1;
     }
   }
