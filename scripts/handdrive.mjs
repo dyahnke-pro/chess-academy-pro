@@ -12,6 +12,17 @@ const CMD = '/tmp/hd_cmd.json', RES = '/tmp/hd_res.json';
 const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
 const page = await (await browser.newContext(sandboxContextOptions())).newPage();
 const errs = [];
+const http = [];
+page.on('response', async (r) => {
+  try {
+    if (r.status() >= 400 && !/\.(png|jpg|jpeg|svg|woff2?|ico|css)(\?|$)/i.test(r.url())) {
+      let body = '';
+      try { body = (await r.text()).slice(0, 220); } catch {}
+      http.push(`${r.status()} ${r.request().method()} ${r.url().slice(0, 130)} :: ${body.replace(/\s+/g, ' ')}`);
+      if (http.length > 40) http.shift();
+    }
+  } catch {}
+});
 page.on('pageerror', (e) => errs.push('PAGEERROR: ' + e.message));
 page.on('console', (m) => { if (m.type() === 'error') { const x = m.text(); if (!/Download the React|favicon|ERR_|Manifest|preload/i.test(x)) errs.push('CONSOLE: ' + x.slice(0, 200)); } });
 let recent = [], lastPiece = null;
@@ -41,6 +52,7 @@ async function exec(c) {
     if (c.action === 'playmove') { const ok = await page.evaluate(({ f, t }) => { if (typeof window.__playMove === 'function') { window.__playMove(f, t); return true; } return false; }, { f: c.from, t: c.to }); await page.waitForTimeout(c.wait || 2500); return { played: ok ? `${c.from}${c.to}` : 'no-hook' }; }
     if (c.action === 'smartmove') { const fen = await buildFen(c.color || 'b'); let g; try { g = new Chess(fen); } catch { return { err: 'badfen', fen }; } const mv = g.moves({ verbose: true }); if (!mv.length) return { err: 'nomoves' }; const V = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 }; const back = (c.color || 'b') === 'b' ? ['a8', 'b8', 'c8', 'd8', 'f8', 'g8', 'h8'] : ['a1', 'b1', 'c1', 'd1', 'f1', 'g1', 'h1']; const sc = (m) => { let s = Math.random() * 0.6; const gain = m.captured ? V[m.captured] - V[g.get(m.from).type] : 0; if (m.captured && gain >= 1) s += 30 + gain * 2; else if (m.captured) s -= 8; if (m.san.includes('+')) s += 2; if (m.san === 'O-O' || m.san === 'O-O-O') s += 18; if (/[nb]/.test(m.piece) && back.includes(m.from)) s += 14; if (m.piece === 'q') s -= 6; if (m.piece === 'r') s -= 7; if (m.piece === 'k' && m.san.length < 3) s -= 12; if (m.piece === 'p' && ['d', 'e', 'c'].includes(m.to[0])) s += 5; if (recent.includes(m.piece + m.to)) s -= 25; if (lastPiece === m.piece && !m.captured) s -= 7; return s; }; mv.sort((a, b) => sc(b) - sc(a)); const m = mv[0]; recent.push(m.piece + m.to); if (recent.length > 6) recent.shift(); lastPiece = m.piece; let ok; if (c.hook) { ok = await page.evaluate(({ f, t }) => { if (typeof window.__playMove === 'function') { window.__playMove(f, t); return true; } return false; }, { f: m.from, t: m.to }); } else { try { await page.locator(`[data-square="${m.from}"]`).first().click({ timeout: 4000 }); await page.waitForTimeout(150); await page.locator(`[data-square="${m.to}"]`).first().click({ timeout: 4000 }); ok = true; } catch { ok = false; } } await page.waitForTimeout(c.wait || 3200); return { played: ok ? m.san : 'fail' }; }
     if (c.action === 'errors') { return { errors: errs.slice(-30) }; }
+    if (c.action === 'http') { return { http: http.slice(-20) }; }
     if (c.action === 'clearerrors') { errs.length = 0; return { cleared: true }; }
     if (c.action === 'quit') { setTimeout(() => { browser.close(); process.exit(0); }, 200); return { bye: true }; }
     return { err: 'unknown action ' + c.action };
