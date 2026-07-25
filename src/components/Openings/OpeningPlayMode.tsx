@@ -116,10 +116,6 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
   >(null);
   const [punishRevealed, setPunishRevealed] = useState(false);
   const punishSpokenRef = useRef<string | null>(null);
-  // Bumped by the audit __seedFen hook so the punish detector re-runs on an
-  // imperative position load (setFen alone doesn't reliably re-trigger the effect
-  // from a non-React caller).
-  const [punishNonce, setPunishNonce] = useState(0);
   const handleChatBoardAnnotation = useCallback((commands: BoardAnnotationCommand[]) => {
     const newArrows: BoardArrow[] = [];
     const newHighlights: BoardHighlight[] = [];
@@ -263,11 +259,62 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
     onMissedTactic: handleMissedTacticInOpening,
   });
 
-  // NOTE: the Stockfish eval on position change is now computed by the merged
-  // eval+punish effect below — ONE analyzePosition feeds BOTH the eval bar AND
-  // the live punishment detector. Two separate analyzePosition calls collided on
-  // the single worker ("Analysis interrupted by new request"), leaving the
-  // callout silent even in a winning position (David 2026-07-24 seed demo).
+  // ─── Stockfish eval on position change ──────────────────────────────────
+  // Runs at priority='prefetch' so it doesn't contend with the
+  // opponent-move analyzePosition call (which runs at default 'brain'
+  // priority). Without this split the eval-bar pipe lost every race
+  // against getAdaptiveMove and the bar froze at its initial value.
+  // Each branch (success / prefetch-dropped / hard fail) emits an audit
+  // event so a stuck eval bar is debuggable from the audit stream.
+  useEffect(() => {
+    let cancelled = false;
+    void (async () => {
+      try {
+        const analysis = await stockfishEngine.analyzePosition(
+          game.fen,
+          12,
+          undefined,
+          'prefetch',
+        );
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (!cancelled) {
+          setLatestEval(analysis.evaluation);
+          setLatestIsMate(analysis.isMate);
+          setLatestMateIn(analysis.mateIn);
+          setLatestTopLines(analysis.topLines);
+          void logAppAudit({
+            kind: 'opening-play-eval-updated',
+            category: 'subsystem',
+            source: 'OpeningPlayMode.evalEffect',
+            summary: `eval=${analysis.evaluation}cp isMate=${analysis.isMate} mateIn=${analysis.mateIn ?? '-'} depth=${analysis.depth}`,
+            fen: game.fen,
+          });
+        }
+      } catch (err) {
+        const msg = (err as Error)?.message ?? String(err);
+        if (/PrefetchDropped|dropped/i.test(msg)) {
+          // Expected when the opponent-move analyzePosition is in flight;
+          // a subsequent FEN change will re-fire this effect.
+          void logAppAudit({
+            kind: 'opening-play-eval-prefetch-dropped',
+            category: 'subsystem',
+            source: 'OpeningPlayMode.evalEffect',
+            summary: `dropped by in-flight brain eval — will retry on next FEN change`,
+            fen: game.fen,
+          });
+          return;
+        }
+        void logAppAudit({
+          kind: 'opening-play-eval-error',
+          category: 'subsystem',
+          source: 'OpeningPlayMode.evalEffect',
+          summary: `analyzePosition failed — ${msg}`,
+          fen: game.fen,
+        });
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [game.fen]);
 
   // ─── Coach grounding (Layer A) — masterPlayWatcher prefetch ─────────────
   // Warms the local masters cache + look-ahead positions on every FEN
@@ -305,120 +352,77 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
       punishSpokenRef.current = null;
       return;
     }
-    let cancelled = false;
-    // Read the position from the game ref (always current), so an imperative
-    // seed / a lagging render never feeds the detector a stale FEN.
-    const curFen = game.getFen();
-    const studentWB = playerColor === 'white' ? 'w' : 'b';
-    // Derive whose turn it is from curFen (ground truth), NOT the isPlayersTurn
-    // state — after an imperative seed the state turn can lag and wrongly skip
-    // the punish branch (David 2026-07-24 seed demo).
-    const studentToMove = curFen.split(' ')[1] === studentWB;
 
-    const applyCue = (cue: NonNullable<typeof punishCue>): void => {
-      const spokeKey = `${curFen}|${cue.key}`;
-      setPunishCue((prev) => (prev && prev.key === cue.key && punishRevealed ? prev : cue));
-      if (punishSpokenRef.current !== spokeKey) {
-        punishSpokenRef.current = spokeKey;
-        setPunishRevealed(false);
-        setGemArrows([]); // withhold — no arrow until Show the line
-        void logAppAudit({
-          kind: 'coach-narration-spoken',
-          category: 'narration',
-          source: `OpeningPlayMode.punishCallout.${cue.source}`,
-          summary: `punish callout @[${curFen}]: ${cue.callout.slice(0, 80)}`,
-          fen: curFen,
-        });
-        void voiceService.speak(cue.callout);
-      }
-    };
-
-    // Opponent's THREAT (ambient) — shown when there's no punish for the student.
-    const showThreat = (): void => {
-      setPunishCue(null);
-      setPunishRevealed(false);
-      let threat: DeltaAside | null = null;
-      if (game.history.length > 0) {
-        try {
-          const c = new Chess();
-          for (const s of game.history.slice(0, -1)) c.move(s);
-          const moverWB = curFen.split(' ')[1] === 'w' ? 'b' : 'w';
-          threat = computeThreatDelta(c.fen(), curFen, moverWB);
-        } catch {
-          /* no threat */
-        }
-      }
-      if (!threat) {
-        setGemArrows([]);
-        gemSpokenRef.current = null;
-        return;
-      }
-      setGemArrows(toBoardArrows(threat.arrows));
-      if (gemSpokenRef.current !== threat.say) {
-        gemSpokenRef.current = threat.say;
-        void logAppAudit({
-          kind: 'coach-narration-spoken',
-          category: 'narration',
-          source: 'OpeningPlayMode.threatDelta',
-          summary: `threat @[${game.history.join(' ')}]: ${threat.say.slice(0, 120)}`,
-        });
-        void voiceService.speak(threat.say);
-      }
-    };
-
-    // Curated gem first — instant string-match, no engine (student's turn only).
-    let gemApplied = false;
-    if (studentToMove) {
+    // 1) PUNISH FOR THE STUDENT — only on the student's move.
+    if (isPlayersTurn) {
+      const studentWB = playerColor === 'white' ? 'w' : 'b';
       const gem = findLivePunishment(opening.id, game.history);
-      if (gem) {
-        applyCue({ callout: gem.callout, reveal: gem.reveal, arrows: toBoardArrows(gem.revealArrows), key: gem.gemId, source: 'gem' });
-        gemApplied = true;
+      const cue = gem
+        ? {
+            callout: gem.callout,
+            reveal: gem.reveal,
+            arrows: toBoardArrows(gem.revealArrows),
+            key: gem.gemId,
+            source: 'gem' as const,
+          }
+        : ((): typeof punishCue => {
+            const e = detectEnginePunish(game.fen, latestTopLines, studentWB);
+            return e
+              ? { callout: e.callout, reveal: e.reveal, arrows: toBoardArrows(e.arrows), key: e.key, source: 'engine' as const }
+              : null;
+          })();
+      if (cue) {
+        const spokeKey = `${game.fen}|${cue.key}`;
+        setPunishCue((prev) => (prev && prev.key === cue.key && punishRevealed ? prev : cue));
+        if (punishSpokenRef.current !== spokeKey) {
+          punishSpokenRef.current = spokeKey;
+          setPunishRevealed(false);
+          setGemArrows([]); // withhold — no arrow until Show the line
+          void logAppAudit({
+            kind: 'coach-narration-spoken',
+            category: 'narration',
+            source: `OpeningPlayMode.punishCallout.${cue.source}`,
+            summary: `punish callout @[${game.history.join(' ')}]: ${cue.callout.slice(0, 80)}`,
+            fen: game.fen,
+          });
+          void voiceService.speak(cue.callout);
+        }
+        return;
       }
     }
 
-    // ONE Stockfish eval — feeds the eval bar (always) AND the engine punish
-    // detector (student's turn). A SECOND analyzePosition would collide on the
-    // single worker ("Analysis interrupted by new request") and leave the
-    // callout silent even in a winning position (David 2026-07-24 seed demo).
-    // Reads game.getFen() (current) so an imperative seed / lagging render never
-    // feeds a stale position.
-    void stockfishEngine
-      .analyzePosition(curFen, 12, undefined, 'prefetch')
-      .then((analysis) => {
-        if (cancelled) return;
-        setLatestEval(analysis.evaluation);
-        setLatestIsMate(analysis.isMate);
-        setLatestMateIn(analysis.mateIn);
-        setLatestTopLines(analysis.topLines);
-        void logAppAudit({
-          kind: 'opening-play-eval-updated',
-          category: 'subsystem',
-          source: 'OpeningPlayMode.evalEffect',
-          summary: `eval=${analysis.evaluation}cp isMate=${analysis.isMate} depth=${analysis.depth}`,
-          fen: curFen,
-        });
-        if (!studentToMove) {
-          showThreat();
-        } else if (!gemApplied) {
-          const e = detectEnginePunish(curFen, analysis.topLines, studentWB);
-          if (e) applyCue({ callout: e.callout, reveal: e.reveal, arrows: toBoardArrows(e.arrows), key: e.key, source: 'engine' });
-          else showThreat();
-        }
-      })
-      .catch((err) => {
-        const msg = (err as Error)?.message ?? String(err);
-        void logAppAudit({
-          kind: /dropped/i.test(msg) ? 'opening-play-eval-prefetch-dropped' : 'opening-play-eval-error',
-          category: 'subsystem',
-          source: 'OpeningPlayMode.evalEffect',
-          summary: msg.slice(0, 90),
-          fen: curFen,
-        });
-        if (!cancelled && !gemApplied) showThreat();
+    // 2) NO PUNISH — clear the cue, show the opponent's THREAT (ambient) if any.
+    setPunishCue(null);
+    setPunishRevealed(false);
+    let threat: DeltaAside | null = null;
+    if (game.history.length > 0) {
+      try {
+        const c = new Chess();
+        for (const s of game.history.slice(0, -1)) c.move(s);
+        const moverWB = game.fen.split(' ')[1] === 'w' ? 'b' : 'w';
+        threat = computeThreatDelta(c.fen(), game.fen, moverWB);
+      } catch {
+        /* no threat */
+      }
+    }
+    if (!threat) {
+      setGemArrows([]);
+      gemSpokenRef.current = null;
+      return;
+    }
+    setGemArrows(toBoardArrows(threat.arrows));
+    if (gemSpokenRef.current !== threat.say) {
+      gemSpokenRef.current = threat.say;
+      void logAppAudit({
+        kind: 'coach-narration-spoken',
+        category: 'narration',
+        source: 'OpeningPlayMode.threatDelta',
+        summary: `threat @[${game.history.join(' ')}]: ${threat.say.slice(0, 120)}`,
       });
-    return () => { cancelled = true; };
+      void voiceService.speak(threat.say);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [game.fen, isPlayersTurn, punishNonce]);
+  }, [game.fen, latestTopLines]);
 
   // Show-the-line reveal — draws the punish arrow + speaks the (move-naming) line.
   const revealPunishLine = useCallback((): void => {
@@ -768,10 +772,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
     // runs. Gated behind the same flag; no-op for real users.
     w.__seedFen = (fen: string): boolean => {
       const ok = game.loadFen(fen);
-      if (ok) {
-        setPlayPhase('middlegame');
-        setPunishNonce((n) => n + 1); // force the punish detector to re-run
-      }
+      if (ok) setPlayPhase('middlegame');
       return ok;
     };
     return () => {
