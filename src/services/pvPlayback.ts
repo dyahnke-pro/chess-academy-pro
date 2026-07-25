@@ -484,6 +484,13 @@ export function plyFactsForMove(fenBefore: string, san: string, prev?: PrevCaptu
     if (f.materialGained >= 1) parts.push(vb('win material', 'wins material'));
 
     if (parts.length === 0 || onlyBareCapture) return null;
+    // A check ALONE teaches nothing as bare "gives check" — say what it DOES:
+    // forces a reply and hands the checker a free move (David 2026-07-25: TEACH
+    // every move, no thin lines). Only when the check is the SOLE fact; joined
+    // with a capture/tactic the plain "gives check" clause still reads fine.
+    if (parts.length === 1 && f.isCheck && !f.isMate) {
+      return `${subject} ${vb('check the king, forcing a reply and taking the initiative for a move', 'checks the king, forcing a reply and taking the initiative for a move')}.`;
+    }
     return `${subject} ${parts.join(', ')}.`;
   } catch {
     return null;

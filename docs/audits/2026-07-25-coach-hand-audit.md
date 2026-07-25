@@ -141,6 +141,51 @@ middlegame. Stats are a supporting tag, never the whole line.
   quality before the student commits (rule 1: zero board facts). Lower severity
   in review (the ?! is already visible), but note it.
 
+## 🔬 REVIEW — FULL FUNCTION SCAN (every testid from the code, David 2026-07-25 "did you scan EVERYTHING?")
+
+Authoritative list from `CoachGameReview.tsx` / `CoachReviewSessionPage.tsx` /
+`CoachReviewListPage.tsx`. Drive each by hand; check off only when confirmed.
+
+**List page**
+- [ ] FS1 review-filter-all / -coach / -lichess / -chesscom
+- [ ] FS2 review-game-card-* opens a game
+- [ ] FS3 import-games-cta
+
+**Analysis + walk shell**
+- [x] FS4 review-analyze-spinner → summary (R1)
+- [x] FS5 review-forward-btn / review-back-btn stepping (R2)
+- [ ] FS6 flip-button
+- [ ] FS7 move-cell-* scrub (partly seen — scrubs board, no walk narration)
+- [~] FS8 prev/next-key-moment (BUG: next-key-moment doesn't move the walk)
+- [ ] FS9 review-engine-lines-toggle → review-engine-lines-panel
+- [ ] FS10 walk-narration-toggle-btn (Replay narration)
+- [x] FS11 review-classification-badge (Good/Inaccuracy/Blunder shown)
+
+**Diagnostic cards (reach by stepping to the ply)**
+- [ ] FS12 review-find-shot-card: hint → reveal → continue / skip
+- [ ] FS13 review-rewind-card: decline / accept
+- [ ] FS14 review-turning-point-card: reveal → confirm → done
+- [ ] FS15 review-trap-card: reveal → done
+- [ ] FS16 review-principle-quiz + principle-quiz-skip
+- [~] FS17 discussion-practice-panel (why-picker): saw probe + Hint→reveal; FULL pick/type/grade not driven
+- [ ] FS18 review-capture-teach / -skip / -continue + review-blunder-capture
+
+**Playback**
+- [ ] FS19 review-cameo-watch → -playback → -ask / -skip / -stop
+- [ ] FS20 review-sequence-show → -playback → -ask / -skip
+- [ ] FS21 walk-theory-btn / review-theory-hint / -playback / -ask / -skip / -stop
+- [ ] FS22 review-story-watch-btn
+- [ ] FS23 walk-show-me-btn, walk-the-line-btn
+
+**Walk actions**
+- [ ] FS24 walk-explore-toggle-btn → walk-explore-btn-*  (show both lines)
+- [ ] FS25 walk-ask-toggle-btn → type a question → walk-ask-response (R11 — the fixed bug)
+- [ ] FS26 walk-practice-in-chat-btn
+- [ ] FS27 walk-play-again-btn
+- [ ] FS28 walk-back-to-coach-btn
+- [ ] FS29 walk-resume-game-btn
+- [ ] FS30 game-review-weakness-capture (add mistakes → weaknesses; learning-loop)
+
 ## Findings log
 (bugs found while driving, with the exact input that triggered them)
 

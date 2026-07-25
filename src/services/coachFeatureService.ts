@@ -949,7 +949,11 @@ function frameTeachingForOpponent(sentence: string): string {
   const s = sentence.trim()
     .replace(/\bthe opponent's\b/g, 'your')
     .replace(/\bthe opponent\b/g, 'you');
-  if (/^The\s+(knight|bishop|rook|queen|king|capture)\b/.test(s)) {
+  // The universal teacher (reviewMoveTeaching) emits "The pawn …" / "The check
+  // …" too, so include them — else "The pawn clamps down…" falls to the
+  // verb-first branch and reads "Your opponent the pawn clamps down…" (double
+  // subject — the 2026-07-25 re-walk bug).
+  if (/^The\s+(pawn|knight|bishop|rook|queen|king|check|capture)\b/.test(s)) {
     return s.replace(/^The\s+/, "Your opponent's ");
   }
   // "Now <student weakness>…" — a pawn move that leaves a weakness in the
