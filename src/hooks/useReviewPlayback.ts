@@ -294,7 +294,6 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
       text = seg?.narration ?? null;
     }
     speakCurrent(bounded, text);
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- tracked for dedicated audit; intentional dep list.
   }, [lastPly, narration, onPlyChange, segments, speakCurrent]);
 
   const goForward = useCallback(() => {

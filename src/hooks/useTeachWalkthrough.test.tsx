@@ -398,7 +398,7 @@ describe('gem-crush aside (Watch plays like his videos)', () => {
     const chain = ['Nc3', 'd5', 'd4', 'c6', 'e4'].reduce(
       (child, san) => ({
         san,
-        movedBy: (san === 'e4' || san === 'd4' || san === 'Nc3' ? 'white' : 'black') as 'white' | 'black',
+        movedBy: san === 'e4' || san === 'd4' || san === 'Nc3' ? 'white' : 'black',
         idea: san,
         children: [{ node: child }],
       }),
