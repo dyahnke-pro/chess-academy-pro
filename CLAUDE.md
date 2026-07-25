@@ -3403,6 +3403,26 @@ interactive, weaknesses, training-loop) are surface-specific loops — use them
 when the change is on THAT surface, but the unqualified word "audit" defaults
 to the punish-gems loop above.
 
+### 🔒🔒 THE AUDIT IS RUN BY HAND — YOU DRIVE IT, NOT A BOT (David 2026-07-24, LOCKED: "run the audit yourself, not a bot, so you can push buttons … Note that this is the standard, not a bot. Write that down.").
+
+An "audit" is Claude driving the surface INTERACTIVELY — launching Playwright and
+pushing the real buttons, one at a time, reading state between clicks and handling
+whatever appears (the pop-ups, the consent/calibration/help modals, the end-of-
+Watch "continue?" prompt, the unlock ladder, the difficulty toggle). A fire-and-
+forget scripted bot that assumes a fixed happy-path flow is NOT an audit — it
+stalls the moment a prompt it didn't anticipate appears (the 2026-07-24 full-play
+bot stalled on the end-of-Watch continue prompt), and it can't judge whether what
+rendered is actually RIGHT. Driving it by hand is exactly how the real defects
+surface (playing by hand is what showed the punish-callout must fire on a tactical
+SEQUENCE of 3-4 moves, like a gem — not "one move out"). So: for every audit, YOU
+push the buttons, YOU dismiss the pop-ups, YOU verify each surface behaves like it
+SHOULD. The committed `scripts/audit-*.mjs` are drivers you STEER and adapt live
+(add the button you hit that it didn't expect), not autopilots you trust green. A
+gated `__playMove`/`__seed*` hook that lets you drive a surface deterministically
+(e.g. `OpeningPlayMode`) is the right investment — build it when a surface can't be
+driven by hand otherwise. Combine with the three instruments (Playwright +
+audit-stream + narration listener) per §G1.
+
 ### 🔒🔒 THE REAL-GAME EXPERIENCE AUDIT — THE PLAYWRIGHT AUDIT STANDARD (David 2026-07-19, LOCKED, emphatic: "Lock this audit format into memory. This IS THE STANDARD!! This is the playwright audit!!"). The reference is `scripts/audit-review-real-game.mjs` (18/18); clone it per surface.
 
 For any surface that produces an EXPERIENCE (post-game review, Watch/matchup,

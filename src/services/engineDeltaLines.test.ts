@@ -68,36 +68,39 @@ describe('detectEnginePunish', () => {
     mate,
   });
 
-  it('fires when one move stands out and the student is clearly winning', () => {
-    // Ruy tabiya, White to move, pretend the engine loves Nf3 by +250 over the rest.
-    const fen = 'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1';
-    const cue = detectEnginePunish(fen, [line(['f3e5'], 260), line(['e1g1'], 40)], 'w');
+  // Position after 1.e4 e5 — White to move. The PV Qh5, Nc6, Qxe5+ is a forcing
+  // sequence that wins the e5 pawn with check (a real combination).
+  const AFTER_E4_E5 = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e6 0 2';
+
+  it('fires on a forcing SEQUENCE that wins material (3-4 moves), and names the line', () => {
+    const cue = detectEnginePunish(AFTER_E4_E5, [line(['d1h5', 'b8c6', 'h5e5'], 170), line(['g1f3'], 40)], 'w');
     expect(cue).toBeTruthy();
-    expect(cue!.arrows[0]).toMatchObject({ from: 'f3', to: 'e5', color: 'green' });
-    // Callout WITHHOLDS the move (guided find-the-move).
-    expect(cue!.callout).not.toMatch(/Nxe5|f3|e5/);
-    // Reveal NAMES the move but claims no material from the eval alone.
-    expect(cue!.reveal).toContain('Nxe5');
-    expect(cue!.reveal).not.toMatch(/win.* a pawn|wins the exchange|wins a piece/);
-    expect(cue!.reveal).toMatch(/winning|clearly better/);
+    expect(cue!.arrows[0]).toMatchObject({ from: 'd1', to: 'h5', color: 'green' });
+    // Callout WITHHOLDS every move (guided find-the-move).
+    expect(cue!.callout).not.toMatch(/Qh5|Qxe5|h5|e5/);
+    // Reveal names the SEQUENCE (the capturing move is in it).
+    expect(cue!.reveal).toMatch(/sequence/i);
+    expect(cue!.reveal).toContain('Qxe5');
   });
 
-  it('does NOT fire when many moves are roughly equal (no single shot)', () => {
-    const fen = 'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1';
-    // Winning, but best barely beats runner-up → not a "find the one move" moment.
-    expect(detectEnginePunish(fen, [line(['e1g1'], 220), line(['f3e5'], 190)], 'w')).toBeNull();
+  it('does NOT fire on a QUIET winning edge (no forcing move, no material won)', () => {
+    // Nf3, Nc6, Bc4 — clearly better by eval, but nothing forcing, nothing won.
+    expect(detectEnginePunish(AFTER_E4_E5, [line(['g1f3', 'b8c6', 'f1c4'], 220), line(['b1c3'], 40)], 'w')).toBeNull();
+  });
+
+  it('does NOT fire when the alternatives are roughly equal (no specific find)', () => {
+    expect(detectEnginePunish(AFTER_E4_E5, [line(['d1h5', 'b8c6', 'h5e5'], 190), line(['g1f3'], 150)], 'w')).toBeNull();
   });
 
   it('does NOT fire in a level position', () => {
-    const fen = 'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1';
-    expect(detectEnginePunish(fen, [line(['e1g1'], 30), line(['d2d3'], 10)], 'w')).toBeNull();
+    expect(detectEnginePunish(AFTER_E4_E5, [line(['g1f3'], 30), line(['b1c3'], 10)], 'w')).toBeNull();
   });
 
-  it('flips POV for Black (eval is white-POV)', () => {
-    // Black to move, white-POV eval −300 = Black winning; single best shot.
-    const fen = 'rnbqkbnr/ppp2ppp/8/3pp3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 0 1';
-    const cue = detectEnginePunish(fen, [line(['d5e4'], -300), line(['b8c6'], -60)], 'b');
+  it('flips POV for Black and fires on a black capture-sequence winning material', () => {
+    // Black to move; black wins White's hanging queen with Qxc3+ (capture+check).
+    const fen = '4k3/8/8/8/8/2Q5/3q4/4K3 b - - 0 1';
+    const cue = detectEnginePunish(fen, [line(['d2c3'], -800), line(['e8d8'], -80)], 'b');
     expect(cue).toBeTruthy();
-    expect(cue!.reveal).toMatch(/winning|clearly better/);
+    expect(cue!.reveal).toContain('Qxc3');
   });
 });

@@ -99,13 +99,19 @@ export function bestLineDeltaFromPv(pv: PvLine | null): DeltaAside | null {
  * moves?"). No new engine call — reads `latestTopLines` — so the callout adds
  * ZERO latency beyond the eval that was going to run anyway.
  *
- * Fires ONLY on a genuine tactical shot: the position is clearly winning for the
- * student AND one move stands out (a real find-the-move, not a quiet edge where
- * many moves are fine). The `callout` WITHHOLDS the move; the `reveal` names it.
+ * Fires ONLY on a genuine tactical SEQUENCE — a forcing combination of 3-4 moves
+ * that wins material or mates, exactly like a curated gem (David 2026-07-24: "it
+ * should fire if a tactical SEQUENCE is noted, not just one move out — gems are a
+ * series of moves, typically 3-4"). It replays the engine's principal variation
+ * and requires (a) the position is clearly winning for the student, (b) the best
+ * line clearly beats the alternatives (a specific find), and (c) the line is a
+ * real COMBINATION: a forcing student move (capture/check/sacrifice) that nets
+ * material or mates over the sequence — never a quiet positional edge. The
+ * `callout` WITHHOLDS the moves; the `reveal` names the whole 3-4 move sequence.
  *
- * PAYOFF DISCIPLINE (same as the gem packaging fix): the eval does NOT tell us
- * WHAT is won, so the reveal speaks an eval-magnitude verdict ("you're winning",
- * "clearly better") — NEVER "wins a pawn"/material, which we cannot prove here.
+ * PAYOFF DISCIPLINE: the eval does NOT tell us WHAT is won, so the verdict is an
+ * eval-magnitude phrase — but the SEQUENCE itself (replayed on chess.js) tells us
+ * whether material was actually won, which gates the fire.
  */
 export interface EnginePunishCue {
   callout: string;
@@ -116,17 +122,32 @@ export interface EnginePunishCue {
 }
 
 const ENGINE_CALLOUTS = [
-  'Hold on — there is a strong shot for you right here. Can you find it?',
-  'This is your moment — there is a punish in the position. Look for it.',
-  'There is a real chance here. One move stands out — do you see it?',
+  'Hold on — there is a combination here. Can you find the sequence?',
+  'This is your moment — there is a tactic in the position. Work out the line.',
+  'There is a real chance here — a forcing sequence wins. Do you see it?',
 ];
 
 /** WIN margin (student-POV cp) to call a position "clearly winning" for a shot. */
 const PUNISH_WIN_CP = 150;
-/** How much the best move must beat the runner-up to count as ONE clear shot. */
-const PUNISH_GAP_CP = 150;
+/** How much the best line must beat the runner-up to count as a specific find. */
+const PUNISH_GAP_CP = 100;
 /** Chess.js caps eval near mate; anything past this reads as decisive. */
 const DECISIVE_CP = 1000;
+/** How many plies of the PV we replay to judge the combination. */
+const SEQUENCE_PLIES = 6;
+
+const PIECE_VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+/** Net material (student − opponent, pawns) on a live chess.js position. */
+function netMaterial(c: Chess, studentWB: 'w' | 'b'): number {
+  let net = 0;
+  for (const row of c.board()) {
+    for (const sq of row) {
+      if (!sq) continue;
+      net += (sq.color === studentWB ? 1 : -1) * PIECE_VAL[sq.type];
+    }
+  }
+  return net;
+}
 
 export function detectEnginePunish(
   fen: string,
@@ -141,10 +162,10 @@ export function detectEnginePunish(
   const bestMate = best.mate; // plies to mate, sign = white-POV; null when none
   const studentMating = bestMate != null && (studentWB === 'w' ? bestMate > 0 : bestMate < 0);
 
-  // Must be clearly winning for the student.
+  // (a) Must be clearly winning for the student.
   if (!studentMating && bestCp < PUNISH_WIN_CP) return null;
 
-  // Must be ONE clear shot (a tactic), not a position where lots of moves win.
+  // (b) Must clearly beat the alternatives — a specific find, not many equal moves.
   if (topLines.length >= 2 && !studentMating) {
     const secondCp = toStudent(topLines[1].evaluation);
     if (bestCp - secondCp < PUNISH_GAP_CP) return null;
@@ -155,23 +176,34 @@ export function detectEnginePunish(
   const from = uci.slice(0, 2);
   const to = uci.slice(2, 4);
 
-  // Name the best move + a short continuation in SAN (board stays put; draw only
-  // the first move's arrow).
-  let sanLine = '';
+  // (c) Replay the PV as a SEQUENCE. Require a forcing student move (capture /
+  // check / sacrifice) AND a net material gain (or mate) over the line — that is
+  // what makes it a COMBINATION worth calling out, not a quiet edge.
+  let sans: string[] = [];
+  let forcing = false;
+  let wonMaterial = false;
   try {
     const c = new Chess(fen);
-    const sans: string[] = [];
-    for (const u of best.moves.slice(0, 3)) {
+    const netStart = netMaterial(c, studentWB);
+    let ply = 0;
+    for (const u of best.moves.slice(0, SEQUENCE_PLIES)) {
       const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u.slice(4) : undefined });
       if (!m) break;
+      const isStudentMove = ply % 2 === 0; // student is to move at the root
+      if (isStudentMove && (m.captured || m.san.includes('+') || m.san.includes('#'))) forcing = true;
       sans.push(cleanSan(m.san));
+      ply += 1;
     }
-    sanLine = sans.join(', ');
+    wonMaterial = netMaterial(c, studentWB) - netStart >= 1;
   } catch {
     return null;
   }
-  if (sanLine.length === 0) return null;
+  if (sans.length === 0) return null;
+  const decisive = studentMating || bestCp >= DECISIVE_CP;
+  // A real tactic: a forcing student move that wins material or is decisive.
+  if (!(forcing && (wonMaterial || decisive))) return null;
 
+  const sanLine = sans.slice(0, 4).join(', ');
   const verdict = studentMating
     ? "and it's a forced mate"
     : bestCp >= DECISIVE_CP
@@ -182,7 +214,7 @@ export function detectEnginePunish(
   const callout = ENGINE_CALLOUTS[from.charCodeAt(0) % ENGINE_CALLOUTS.length];
   return {
     callout,
-    reveal: `The strongest shot is ${sanLine}, ${verdict}.`,
+    reveal: `The sequence is ${sanLine}, ${verdict}.`,
     arrows: [{ from, to, color: 'green' }],
     key: uci,
   };

@@ -26,13 +26,13 @@ vi.mock('../../services/coachGameEngine', () => ({
 // A clearly winning single-best line for WHITE (student): Nf3 at +3.4, the
 // runner-up far behind — so detectEnginePunish fires (bestCp≥150, gap≥150).
 vi.mock('../../services/stockfishEngine', () => {
-  // Clearly winning single-best line for WHITE (student): Nf3 at +3.4, runner-up
-  // far behind → detectEnginePunish fires (bestCp≥150, gap≥150).
+  // A forcing SEQUENCE for WHITE (student) after 1.e4 e5: Qh5, Nc6, Qxe5+ wins
+  // the e5 pawn with check — a real combination → detectEnginePunish fires.
   const WIN = {
-    bestMove: 'g1f3', evaluation: 340, isMate: false, mateIn: null, depth: 12, nodesPerSecond: 0,
+    bestMove: 'd1h5', evaluation: 210, isMate: false, mateIn: null, depth: 12, nodesPerSecond: 0,
     topLines: [
-      { rank: 1, evaluation: 340, moves: ['g1f3', 'b8c6', 'f1c4'], mate: null },
-      { rank: 2, evaluation: 60, moves: ['b1c3'], mate: null },
+      { rank: 1, evaluation: 210, moves: ['d1h5', 'b8c6', 'h5e5'], mate: null },
+      { rank: 2, evaluation: 40, moves: ['g1f3'], mate: null },
     ],
   };
   return {
@@ -88,21 +88,21 @@ describe('OpeningPlayMode — live punishment callout wiring', () => {
     const banner = await screen.findByTestId('punish-callout', {}, { timeout: 8000 });
     expect(banner).toBeInTheDocument();
 
-    // Contract 1: the callout WITHHOLDS the move (no "Nf3" in the probe).
+    // Contract 1: the callout WITHHOLDS the moves (no SAN in the probe).
     const text = screen.getByTestId('punish-callout-text').textContent ?? '';
-    expect(text).not.toMatch(/Nf3/);
-    expect(text.toLowerCase()).toMatch(/shot|punish|find it/);
+    expect(text).not.toMatch(/Qxe5/);
+    expect(text.toLowerCase()).toMatch(/combination|sequence|tactic|find|do you see/);
 
     // Contract 2: Show-the-line reveals the move + speaks it.
     const showBtn = screen.getByTestId('show-the-line');
     act(() => { fireEvent.click(showBtn); });
 
     await waitFor(() => {
-      expect(screen.getByTestId('punish-callout-text').textContent ?? '').toMatch(/Nf3/);
+      expect(screen.getByTestId('punish-callout-text').textContent ?? '').toMatch(/Qxe5/);
     });
     // The reveal was spoken (voice fired with the move-naming line).
     expect(speakSpy).toHaveBeenCalled();
-    const spokenReveal = speakSpy.mock.calls.some((c) => String(c[0]).includes('Nf3'));
+    const spokenReveal = speakSpy.mock.calls.some((c) => String(c[0]).includes('Qxe5'));
     expect(spokenReveal).toBe(true);
     // Button gone after reveal.
     expect(screen.queryByTestId('show-the-line')).not.toBeInTheDocument();
