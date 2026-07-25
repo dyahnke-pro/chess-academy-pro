@@ -263,62 +263,11 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
     onMissedTactic: handleMissedTacticInOpening,
   });
 
-  // ─── Stockfish eval on position change ──────────────────────────────────
-  // Runs at priority='prefetch' so it doesn't contend with the
-  // opponent-move analyzePosition call (which runs at default 'brain'
-  // priority). Without this split the eval-bar pipe lost every race
-  // against getAdaptiveMove and the bar froze at its initial value.
-  // Each branch (success / prefetch-dropped / hard fail) emits an audit
-  // event so a stuck eval bar is debuggable from the audit stream.
-  useEffect(() => {
-    let cancelled = false;
-    void (async () => {
-      try {
-        const analysis = await stockfishEngine.analyzePosition(
-          game.fen,
-          12,
-          undefined,
-          'prefetch',
-        );
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (!cancelled) {
-          setLatestEval(analysis.evaluation);
-          setLatestIsMate(analysis.isMate);
-          setLatestMateIn(analysis.mateIn);
-          setLatestTopLines(analysis.topLines);
-          void logAppAudit({
-            kind: 'opening-play-eval-updated',
-            category: 'subsystem',
-            source: 'OpeningPlayMode.evalEffect',
-            summary: `eval=${analysis.evaluation}cp isMate=${analysis.isMate} mateIn=${analysis.mateIn ?? '-'} depth=${analysis.depth}`,
-            fen: game.fen,
-          });
-        }
-      } catch (err) {
-        const msg = (err as Error)?.message ?? String(err);
-        if (/PrefetchDropped|dropped/i.test(msg)) {
-          // Expected when the opponent-move analyzePosition is in flight;
-          // a subsequent FEN change will re-fire this effect.
-          void logAppAudit({
-            kind: 'opening-play-eval-prefetch-dropped',
-            category: 'subsystem',
-            source: 'OpeningPlayMode.evalEffect',
-            summary: `dropped by in-flight brain eval — will retry on next FEN change`,
-            fen: game.fen,
-          });
-          return;
-        }
-        void logAppAudit({
-          kind: 'opening-play-eval-error',
-          category: 'subsystem',
-          source: 'OpeningPlayMode.evalEffect',
-          summary: `analyzePosition failed — ${msg}`,
-          fen: game.fen,
-        });
-      }
-    })();
-    return () => { cancelled = true; };
-  }, [game.fen]);
+  // NOTE: the Stockfish eval on position change is now computed by the merged
+  // eval+punish effect below — ONE analyzePosition feeds BOTH the eval bar AND
+  // the live punishment detector. Two separate analyzePosition calls collided on
+  // the single worker ("Analysis interrupted by new request"), leaving the
+  // callout silent even in a winning position (David 2026-07-24 seed demo).
 
   // ─── Coach grounding (Layer A) — masterPlayWatcher prefetch ─────────────
   // Warms the local masters cache + look-ahead positions on every FEN
@@ -413,28 +362,56 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
       }
     };
 
+    // Curated gem first — instant string-match, no engine (student's turn only).
+    let gemApplied = false;
     if (isPlayersTurn) {
-      // Curated gem first — instant string-match, no engine.
       const gem = findLivePunishment(opening.id, game.history);
       if (gem) {
         applyCue({ callout: gem.callout, reveal: gem.reveal, arrows: toBoardArrows(gem.revealArrows), key: gem.gemId, source: 'gem' });
-      } else {
-        // Engine path: a DEDICATED, fresh eval for THIS position (not the shared
-        // eval-bar prefetch, which can be dropped/stale — that left the callout
-        // silent in a winning position; David 2026-07-24 seed demo caught it).
-        void stockfishEngine
-          .analyzePosition(curFen, 12)
-          .then((analysis) => {
-            if (cancelled) return;
-            const e = detectEnginePunish(curFen, analysis.topLines, studentWB);
-            if (e) applyCue({ callout: e.callout, reveal: e.reveal, arrows: toBoardArrows(e.arrows), key: e.key, source: 'engine' });
-            else showThreat();
-          })
-          .catch(() => { if (!cancelled) showThreat(); });
+        gemApplied = true;
       }
-    } else {
-      showThreat();
     }
+
+    // ONE Stockfish eval — feeds the eval bar (always) AND the engine punish
+    // detector (student's turn). A SECOND analyzePosition would collide on the
+    // single worker ("Analysis interrupted by new request") and leave the
+    // callout silent even in a winning position (David 2026-07-24 seed demo).
+    // Reads game.getFen() (current) so an imperative seed / lagging render never
+    // feeds a stale position.
+    void stockfishEngine
+      .analyzePosition(curFen, 12, undefined, 'prefetch')
+      .then((analysis) => {
+        if (cancelled) return;
+        setLatestEval(analysis.evaluation);
+        setLatestIsMate(analysis.isMate);
+        setLatestMateIn(analysis.mateIn);
+        setLatestTopLines(analysis.topLines);
+        void logAppAudit({
+          kind: 'opening-play-eval-updated',
+          category: 'subsystem',
+          source: 'OpeningPlayMode.evalEffect',
+          summary: `eval=${analysis.evaluation}cp isMate=${analysis.isMate} depth=${analysis.depth}`,
+          fen: curFen,
+        });
+        if (!isPlayersTurn) {
+          showThreat();
+        } else if (!gemApplied) {
+          const e = detectEnginePunish(curFen, analysis.topLines, studentWB);
+          if (e) applyCue({ callout: e.callout, reveal: e.reveal, arrows: toBoardArrows(e.arrows), key: e.key, source: 'engine' });
+          else showThreat();
+        }
+      })
+      .catch((err) => {
+        const msg = (err as Error)?.message ?? String(err);
+        void logAppAudit({
+          kind: /dropped/i.test(msg) ? 'opening-play-eval-prefetch-dropped' : 'opening-play-eval-error',
+          category: 'subsystem',
+          source: 'OpeningPlayMode.evalEffect',
+          summary: msg.slice(0, 90),
+          fen: curFen,
+        });
+        if (!cancelled && !gemApplied) showThreat();
+      });
     return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [game.fen, isPlayersTurn, punishNonce]);
