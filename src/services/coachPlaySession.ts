@@ -171,7 +171,10 @@ export async function getCoachMove(
     }
   }
 
-  const uci = await stockfishEngine.getBestMove(fen, config.moveTimeMs);
+  // Pass the config skill straight into getBestMove so the weakened strength is
+  // set per-call (immune to a full-strength eval resetting Skill Level on the
+  // shared singleton engine between moves).
+  const uci = await stockfishEngine.getBestMove(fen, config.moveTimeMs, config.skill);
   return parseUci(uci);
 }
 

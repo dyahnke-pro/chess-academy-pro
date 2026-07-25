@@ -1367,7 +1367,16 @@ class StockfishEngine {
     return this.pending !== null;
   }
 
-  async getBestMove(fen: string, moveTimeMs: number = 1000): Promise<string> {
+  /**
+   * Best move at `moveTimeMs`. `skill` (0–20) sets Stockfish Skill Level for
+   * THIS call — the worker is a singleton and options persist, so we set it
+   * EVERY call (default 20 = full strength) rather than trust prior state. This
+   * makes strength explicit per-caller: an adaptive opponent passes its low
+   * config skill; a best-move/hint caller gets full strength GUARANTEED, even
+   * after an adaptive game lowered the engine (David 2026-07-24 — no silent
+   * skill leak across callers).
+   */
+  async getBestMove(fen: string, moveTimeMs: number = 1000, skill: number = 20): Promise<string> {
     await this.initialize();
 
     return new Promise((resolve) => {
@@ -1380,6 +1389,7 @@ class StockfishEngine {
       };
 
       this.worker?.addEventListener('message', handler);
+      this.send(`setoption name Skill Level value ${Math.max(0, Math.min(20, Math.round(skill)))}`);
       this.send(`position fen ${fen}`);
       this.send(`go movetime ${moveTimeMs}`);
     });

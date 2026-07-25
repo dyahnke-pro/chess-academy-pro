@@ -2312,7 +2312,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
           try {
             const config = resolvePlayConfig(difficulty, playerRating);
             const uciResult = await withTimeout(
-              stockfishEngine.getBestMove(game.fen, config.moveTimeMs),
+              stockfishEngine.getBestMove(game.fen, config.moveTimeMs, config.skill),
               Math.max(2_000, config.moveTimeMs + 1_000),
               'fastpath-bestmove',
             );
