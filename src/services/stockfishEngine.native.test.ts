@@ -111,4 +111,42 @@ describe('native iOS Stockfish transport', () => {
     await Promise.resolve();
     expect(mockPlugin._exited).toBe(true);
   });
+
+  it('demotes a SILENTLY-HANGING native plugin to the asm.js worker instead of freezing 45s', async () => {
+    // The PostHog 2026-07-24 bug: a native plugin that boots but NEVER answers
+    // `uci` (no uciok, no error — "worker never signaled") used to wait the full
+    // 45s INIT_TIMEOUT_MS and re-pick ios-native forever. With the native
+    // early-failure timer it must fail fast to the asm.js Worker.
+    vi.useFakeTimers();
+    let workersSpawned = 0;
+    vi.stubGlobal(
+      'Worker',
+      class {
+        constructor() { workersSpawned += 1; }
+        postMessage() {}
+        terminate() {}
+        addEventListener() {}
+        removeEventListener() {}
+      },
+    );
+    const origCmd = mockPlugin.cmd;
+    // Silent hang: record the command but emit NOTHING (no uciok).
+    mockPlugin.cmd = async ({ cmd }: { cmd: string }) => {
+      mockPlugin._cmds.push(cmd);
+    };
+    try {
+      const engine = await getEngine();
+      const initP = engine.initialize();
+      initP.catch(() => undefined); // asm stub never reaches ready; swallow
+      // Advance past the 8s native early-failure window + the reclaim delay.
+      await vi.advanceTimersByTimeAsync(8_500);
+      // Native was torn down and the asm.js fallback Worker was spawned —
+      // NOT a 45s freeze re-picking the dead native plugin.
+      expect(mockPlugin._exited).toBe(true);
+      expect(workersSpawned).toBeGreaterThan(0);
+    } finally {
+      mockPlugin.cmd = origCmd;
+      vi.useRealTimers();
+    }
+  });
 });

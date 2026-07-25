@@ -78,6 +78,18 @@ const MAX_CRASH_RETRIES = 3;
  *  it, so 5s is enough to catch real failures while still allowing
  *  slow first-load WASM compilation to finish. */
 const MT_EARLY_FAILURE_WINDOW_MS = 5_000;
+/** How long to wait for the native iOS Stockfish plugin to reach `uciok`
+ *  before declaring it dead and demoting to the bulletproof asm.js build.
+ *  ROOT CAUSE (PostHog 2026-07-24, iOS 18.7 TestFlight, ~real testers): the
+ *  `ios-native` variant had NO early-failure timer (only `multi` did), so a
+ *  plugin that registers as available but hangs SILENTLY — never emits `uciok`,
+ *  never fires `onerror` ("worker never signaled") — waited the full 45s
+ *  INIT_TIMEOUT_MS, which rejected WITHOUT setting `_nativeFallbackAttempted`,
+ *  so the next initialize() re-picked `ios-native` → another 45s freeze. The
+ *  tester was left engine-less, thrashing 45s per attempt (dead eval bar on
+ *  /coach + /weaknesses). A working native ARM engine signals `uciok` in well
+ *  under a second, so 8s is generous; a silent hang fails fast → asm. */
+const NATIVE_EARLY_FAILURE_WINDOW_MS = 8_000;
 
 export type StockfishVariant = 'multi' | 'single' | 'lila' | 'asm' | 'ios-native';
 
@@ -696,6 +708,31 @@ class StockfishEngine {
           setTimeout(() => tryStart(true), WASM_RECLAIM_DELAY_MS);
         };
 
+        // Native iOS engine failed (errored OR hung silently past the early
+        // window) — demote to the asm.js Worker, sticky for the session, so the
+        // app is NEVER left engine-less. Idempotent: the first caller wins; a
+        // later error/timeout after we've already demoted is a no-op. Fixes the
+        // 45s "worker never signaled" thrash (PostHog 2026-07-24).
+        const demoteNativeToAsm = (reason: string): void => {
+          if (this.workerVariant !== 'ios-native') return;
+          if (this._nativeFallbackAttempted) return;
+          this._nativeFallbackAttempted = true;
+          clearUciRetry();
+          void logAppAudit({
+            kind: 'stockfish-variant-fallback',
+            category: 'subsystem',
+            source: 'stockfishEngine.initialize',
+            summary: `native iOS engine failed (${reason.slice(0, 120)}); falling back to asm.js`,
+          });
+          if (earlyFailureTimer !== null) {
+            clearTimeout(earlyFailureTimer);
+            earlyFailureTimer = null;
+          }
+          this.worker?.terminate();
+          this.worker = null;
+          setTimeout(() => tryStart(false), WASM_RECLAIM_DELAY_MS);
+        };
+
         try {
           // WO-STOCKFISH-SWAP — module worker shape for the lila
           // bridge (which uses ES module imports); classic worker
@@ -790,26 +827,12 @@ class StockfishEngine {
             }
             this._workerErrorWindow = { startedAt: now, count: 1 };
             console.error('[Stockfish] worker.onerror:', msg);
-            // Native iOS engine failed to boot — demote to the asm.js Worker
-            // (sticky for the session) so the app is never left engine-less.
+            // Native iOS engine errored during boot — demote to asm.js.
             if (
               this.workerVariant === 'ios-native' &&
               !this._nativeFallbackAttempted
             ) {
-              this._nativeFallbackAttempted = true;
-              void logAppAudit({
-                kind: 'stockfish-variant-fallback',
-                category: 'subsystem',
-                source: 'stockfishEngine.initialize',
-                summary: `native iOS engine failed to boot (${msg.slice(0, 120)}); falling back to asm.js`,
-              });
-              if (earlyFailureTimer !== null) {
-                clearTimeout(earlyFailureTimer);
-                earlyFailureTimer = null;
-              }
-              this.worker?.terminate();
-              this.worker = null;
-              setTimeout(() => tryStart(false), WASM_RECLAIM_DELAY_MS);
+              demoteNativeToAsm(msg);
               return true;
             }
             // Multi-thread bundle failed early — try the runtime
@@ -872,6 +895,15 @@ class StockfishEngine {
             earlyFailureTimer = setTimeout(() => {
               handleEarlyMultiFailure('no uciok within 5s of spawn');
             }, MT_EARLY_FAILURE_WINDOW_MS);
+          } else if (resolved.variant === 'ios-native') {
+            // The native plugin can hang SILENTLY (registers available, never
+            // signals uciok, never fires onerror). Without this timer that case
+            // waited the full 45s INIT_TIMEOUT_MS and re-picked ios-native next
+            // init → an endless 45s freeze with a dead eval bar. Fail fast to
+            // the bulletproof asm.js build instead (PostHog 2026-07-24).
+            earlyFailureTimer = setTimeout(() => {
+              demoteNativeToAsm('no uciok within 8s of native spawn');
+            }, NATIVE_EARLY_FAILURE_WINDOW_MS);
           }
 
           const initHandler = (event: MessageEvent<string>): void => {
