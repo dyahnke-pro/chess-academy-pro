@@ -97,10 +97,55 @@ function createdEnemyWeakness(before: Struct, after: Struct, mover: 'w' | 'b'): 
   return null;
 }
 
+const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+const PIECE_VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+const STEP_DELTAS: Record<string, number[][]> = {
+  n: [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]],
+  k: [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]],
+};
+const RAY_DELTAS: Record<string, number[][]> = {
+  b: [[1, 1], [1, -1], [-1, 1], [-1, -1]],
+  r: [[1, 0], [-1, 0], [0, 1], [0, -1]],
+  q: [[1, 1], [1, -1], [-1, 1], [-1, -1], [1, 0], [-1, 0], [0, 1], [0, -1]],
+};
+/** Squares the piece on `sq` bears on (board-true; rays stop at the first
+ *  piece). `enemies` = opponent pieces it attacks; `controlled` = empty squares
+ *  it covers. Pawns use capture geometry. Powers the UNIVERSAL TEACHER so every
+ *  move can say something concrete and true. */
+function pieceEyes(chess: Chess, sq: string, type: string, mover: 'w' | 'b'): { enemies: { sq: string; type: string }[]; controlled: string[] } {
+  const f0 = sq.charCodeAt(0) - 97;
+  const r0 = Number(sq[1]) - 1;
+  const enemies: { sq: string; type: string }[] = [];
+  const controlled: string[] = [];
+  const look = (f: number, r: number): 'stop' | 'go' => {
+    if (f < 0 || f > 7 || r < 0 || r > 7) return 'stop';
+    const s = `${String.fromCharCode(97 + f)}${r + 1}`;
+    const occ = chess.get(s as Sq);
+    if (occ) { if (occ.color !== mover) enemies.push({ sq: s, type: occ.type }); return 'stop'; }
+    controlled.push(s);
+    return 'go';
+  };
+  if (type === 'p') {
+    const dir = mover === 'w' ? 1 : -1;
+    for (const df of [-1, 1]) look(f0 + df, r0 + dir);
+  } else if (STEP_DELTAS[type]) {
+    for (const [df, dr] of STEP_DELTAS[type]) look(f0 + df, r0 + dr);
+  } else if (RAY_DELTAS[type]) {
+    for (const [df, dr] of RAY_DELTAS[type]) {
+      let f = f0 + df;
+      let r = r0 + dr;
+      while (look(f, r) === 'go') { f += df; r += dr; }
+    }
+  }
+  return { enemies, controlled };
+}
+
 /**
  * Build a grounded review note for ONE move. `fenBefore` is the position
  * before the move; `san` is the move played. Returns a concrete, board-true
- * sentence, or null for silence.
+ * sentence for EVERY move (David 2026-07-25: "TEACH TEACH TEACH — cannot stay
+ * silent"): the specific idea when there is one, else the universal teacher
+ * (what the piece now attacks/controls, the file it takes, the king's journey).
  */
 export function buildReviewMoveTeaching(
   fenBefore: string,
@@ -198,20 +243,60 @@ export function buildReviewMoveTeaching(
         return 'Makes luft — a breathing hole for the king, so a back-rank check can never turn into mate.';
       }
     }
-    return null;
+    // quiet pawn with no structural point → fall through to the universal teacher
   }
 
-  // Any other DEVELOPING move in the opening (a minor with no central target, or
-  // a queen/rook stepping into play) gets a light developing TAG — R2 (Danya):
-  // even a "nothing" move carries a tag ("standard development"), and the tag is
-  // information; ≥80% of opening moves should say SOMETHING. The house-voice pass
-  // varies the phrasing so it never reads as filler. King shuffles and quiet pawn
-  // moves (handled above) stay silent — those aren't development.
-  const DEV_WORD: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
-  if (DEV_WORD[mv.piece]) {
-    return `The ${DEV_WORD[mv.piece]} comes into the game — quiet development, getting the pieces coordinated.`;
+  // ── UNIVERSAL TEACHER — EVERY move teaches something concrete (David
+  //    2026-07-25: "TEACH TEACH TEACH — cannot stay silent"; overrides the old
+  //    "silence is acceptable" for the review walk). Everything below is
+  //    board-true from chess.js (G0/G3): the enemy piece the move now attacks,
+  //    the file it seizes, the squares it controls, or the king's journey. It
+  //    NEVER returns null and never falls back to a generic "quiet development"
+  //    tag — the whole point of the 2026-07-25 rebuild.
+  const eyes = pieceEyes(chess, mv.to, mv.piece, mv.color);
+  // (a) A check forces a reply — the student keeps the initiative for a move.
+  if (mv.san.includes('+') && !mv.san.includes('#')) {
+    return 'The check forces their king to react — you set the tempo and keep the initiative for a move.';
   }
-  return null;
+  // (b) The move attacks an enemy piece (not the king) — the strongest point.
+  const realTargets = eyes.enemies.filter((e) => e.type !== 'k');
+  if (realTargets.length) {
+    const tgt = [...realTargets].sort((a, b) => PIECE_VAL[b.type] - PIECE_VAL[a.type])[0];
+    return `The ${PIECE_NOUN[mv.piece]} trains on the ${PIECE_NOUN[tgt.type]} on ${tgt.sq} — pressure they have to answer.`;
+  }
+  // (c) A rook or queen seizing a file.
+  if (mv.piece === 'r' || mv.piece === 'q') {
+    const file = mv.to[0];
+    const struct = describeStructure(chess.fen());
+    if (struct?.pawns.openFiles.includes(file)) {
+      return `The ${PIECE_NOUN[mv.piece]} takes the open ${file}-file — a highway straight into their position.`;
+    }
+    if (struct?.pawns.halfOpenFiles[mv.color].includes(file)) {
+      return `The ${PIECE_NOUN[mv.piece]} presses down the half-open ${file}-file, leaning on what's left there.`;
+    }
+  }
+  // (d) Controls central squares, or reaches into the opponent's half.
+  const central = eyes.controlled.filter((s) => BROAD_CENTER.has(s));
+  if (central.length) {
+    return `The ${PIECE_NOUN[mv.piece]} clamps down on ${list(central.slice(0, 3))}, fighting for the center.`;
+  }
+  const advanced = eyes.controlled.filter((s) => (mv.color === 'w' ? Number(s[1]) >= 5 : Number(s[1]) <= 4));
+  if (advanced.length) {
+    return `The ${PIECE_NOUN[mv.piece]} reaches into their half, covering ${list(advanced.slice(0, 3))}.`;
+  }
+  // (e) The king — its journey IS the lesson (endgame = few pieces left → the
+  //     king turns into a fighting piece; else it's about getting to safety).
+  if (mv.piece === 'k') {
+    const heavyMinor = chess.board().flat().filter((c) => c && c.type !== 'p' && c.type !== 'k').length;
+    return heavyMinor <= 6
+      ? 'The king marches up — in the endgame it stops hiding and becomes a fighting piece.'
+      : 'The king steps toward safety; no place for it in the crossfire yet.';
+  }
+  // (f) Last resort — still concrete + true: name a square it now holds.
+  const holds = eyes.controlled[0];
+  return holds
+    ? `The ${PIECE_NOUN[mv.piece]} settles on ${mv.to}, covering ${holds} and getting into the game.`
+    : `The ${PIECE_NOUN[mv.piece]} steps to ${mv.to}, ready to join the attack.`;
 }
 
 /**

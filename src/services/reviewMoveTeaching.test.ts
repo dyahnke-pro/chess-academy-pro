@@ -31,20 +31,23 @@ describe('buildReviewMoveTeaching (grounded per-move review why)', () => {
     expect(t).toMatch(/e5/); // the enemy pawn it hits
   });
 
-  it('gives a light DEVELOPING tag on a blocked bishop — without overstating a diagonal it cannot use (R2)', () => {
+  it('teaches a blocked bishop concretely WITHOUT overstating a diagonal it cannot use (TEACH every move)', () => {
     // 1.e4 d6 2.d4 g6 3.f4 e6 4.Be3 — the e3-bishop is blocked by its own d4/f4
-    // pawns, so it must NOT claim a central diagonal; but R2 wants a why on
-    // opening moves, so it gets the light developing tag (no false specifics).
+    // pawns, so it must NOT claim a central diagonal; but every move teaches
+    // (David 2026-07-25: TEACH TEACH TEACH — no silence, no generic filler), so
+    // it says something concrete + board-true instead.
     const { fen, san } = beforeLast(['e4', 'd6', 'd4', 'g6', 'f4', 'e6', 'Be3']);
     const t = buildReviewMoveTeaching(fen, san);
-    expect(t).toMatch(/develop/i);
-    expect(t).not.toMatch(/rakes toward|bears down/i); // no invented central claim
+    expect(t).toBeTruthy();                             // never silent
+    expect(t).not.toMatch(/rakes toward|bears down/i);  // no invented central claim
+    expect(t).not.toMatch(/quiet development|comes into the game/i); // no generic tag
   });
 
-  it('gives a light developing tag on a quiet queen move — no invented specifics (R2)', () => {
+  it('teaches a quiet queen move concretely — never a generic filler tag (TEACH every move)', () => {
     const { fen, san } = beforeLast(['e4', 'd6', 'd4', 'g6', 'f4', 'e6', 'Be3', 'b6', 'c4', 'Bg7', 'Qd2']);
     const t = buildReviewMoveTeaching(fen, san);
-    expect(t).toMatch(/develop|comes into the game/i);
+    expect(t).toBeTruthy();
+    expect(t).not.toMatch(/quiet development|comes into the game/i);
   });
 
   it('names the created enemy weakness — a capture that isolates a pawn is a TARGET (§1)', () => {

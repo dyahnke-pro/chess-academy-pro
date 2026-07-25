@@ -126,9 +126,15 @@ middlegame. Stats are a supporting tag, never the whole line.
   getting the pieces coordinated" verbatim per PV move; the Hint one-liner is
   just "the best move was Bd3." Needs the real MECHANISM (what Bd3 threatens/
   achieves, what the played move failed to do), de-templated + de-duped.
-- [ ] **N4 — sparse one-off lines.** "You gave check." / bare SAN ("d6", "Kg8")
-  as the whole narration — either teach the point or stay genuinely silent
-  (don't surface a bare move as a "line").
+- [x] **N4 — EVERY move teaches, no silence, no generic filler (David: "TEACH
+  TEACH TEACH — cannot stay silent").** Rebuilt `buildReviewMoveTeaching` with a
+  UNIVERSAL TEACHER (`pieceEyes` — board-true squares a piece attacks/controls):
+  every move now returns a concrete line — the enemy piece it attacks, the file
+  it seizes (open/half-open), the central/advanced squares it controls, a check's
+  tempo, or the king's journey. The generic "comes into the game — quiet
+  development" tag is DELETED; no move returns null. Board-truth verified by the
+  corpus sweep (34 tests green). Overrides "silence is acceptable" for the review
+  walk per David.
 - [ ] **N5 (minor) — `next-key-moment` doesn't jump the walk** (only cycles the
   preview thumbnails). Wire it to move the walk to that ply.
 - [ ] **N6 (minor) — why-probe shows the "INACCURACY" label**, telegraphing move
