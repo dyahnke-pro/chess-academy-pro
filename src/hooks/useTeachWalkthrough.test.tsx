@@ -21,6 +21,8 @@ vi.mock('../services/appAuditor', () => ({
 }));
 
 import { useTeachWalkthrough, buildPunishWalkthroughTree } from './useTeachWalkthrough';
+import { logAppAudit } from '../services/appAuditor';
+import { voiceService } from '../services/voiceService';
 import { useAppStore } from '../stores/appStore';
 import type { PunishLesson } from '../types/walkthroughTree';
 
@@ -378,5 +380,49 @@ describe('buildPunishWalkthroughTree', () => {
     const tree = buildPunishWalkthroughTree(LESSON, PARENT);
     expect(tree.studentSide).toBe('black');
     expect(tree.eco).toBe('A65');
+  });
+});
+
+describe('gem-crush aside (Watch plays like his videos)', () => {
+  beforeEach(() => {
+    vi.mocked(voiceService.speakForced).mockResolvedValue(undefined);
+    vi.mocked(logAppAudit).mockClear();
+    useAppStore.setState({ activeProfile: undefined } as never);
+  });
+
+  it('fires the gem-crush aside on a real gem opening spine (Caro-Kann …dxe4)', async () => {
+    // Caro-Kann gem: after 1.e4 c6 2.d4 d5 3.Nc3 dxe4, White's natural 4.f3 loses
+    // to 4…exf3. The walkthrough should trace that crush with arrows + voice it,
+    // WITHOUT advancing the board — detected here via the gemCrushAside audit.
+    const leaf = { san: 'dxe4', movedBy: 'black' as const, idea: 'black recaptures', children: [] };
+    const chain = ['Nc3', 'd5', 'd4', 'c6', 'e4'].reduce(
+      (child, san) => ({
+        san,
+        movedBy: (san === 'e4' || san === 'd4' || san === 'Nc3' ? 'white' : 'black') as 'white' | 'black',
+        idea: san,
+        children: [{ node: child }],
+      }),
+      leaf as unknown as { san: string; movedBy: 'white' | 'black'; idea: string; children: { node: unknown }[] },
+    );
+    const tree: WalkthroughTree = {
+      openingName: 'Caro-Kann',
+      eco: 'B10',
+      intro: '',
+      outro: '',
+      root: { san: null, movedBy: null, idea: '', children: [{ node: chain as never }] },
+    } as WalkthroughTree;
+
+    const { result } = renderHook(() => useTeachWalkthrough());
+    act(() => result.current.start(tree));
+
+    await waitFor(
+      () => {
+        const fired = vi
+          .mocked(logAppAudit)
+          .mock.calls.some((c) => (c[0] as { source?: string })?.source === 'useTeachWalkthrough.gemCrushAside');
+        expect(fired).toBe(true);
+      },
+      { timeout: 8000 },
+    );
   });
 });

@@ -37,6 +37,7 @@ import { logAppAudit } from '../services/appAuditor';
 import { markStageComplete } from '../services/openingProgress';
 import { getCachedOpening } from '../services/openingGenerator';
 import { buildDrillWrongTeaching } from '../services/learnMoveTeaching';
+import { computeWatchGemAside } from '../services/gemCrushLines';
 import { useAppStore } from '../stores/appStore';
 import { resolveCoachNarration } from '../utils/coachNarration';
 import type {
@@ -883,7 +884,58 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
       // fork → check for matching trap lessons first (offer trap
       // prompt before the fork picker if any), else show fork picker;
       // leaf → set phase 'leaf'.
+      //
+      // GEM-CRUSH ASIDE (David 2026-07-24 "learn plays like his videos … gem
+      // lines would be extremely beneficial here!!!!"): if THIS position sits on
+      // a curated punish-gem's spine, first trace the crush with ARROWS on the
+      // STATIC board — the opponent's natural mistake (red) + our punish (green)
+      // — and speak the present-tense line, WITHOUT advancing the board. Then
+      // fall through to the real transition. Fires once per node; skip/pause
+      // cancels it via cancelNarrationRef like any other narration.
+      let gemAsideDone = false;
       const transitionAfter = (): void => {
+        if (!gemAsideDone) {
+          gemAsideDone = true;
+          const sansSoFar = path
+            .filter((n) => n.san !== null)
+            .map((n) => n.san as string);
+          const aside = computeWatchGemAside(null, sansSoFar);
+          if (aside) {
+            // Draw the crush on the current static position — board never moves.
+            setNarrationArrows(aside.arrows);
+            void logAppAudit({
+              kind: 'coach-narration-spoken',
+              category: 'narration',
+              source: 'useTeachWalkthrough.gemCrushAside',
+              summary: `gem crush aside @[${sansSoFar.join(' ')}]: ${aside.say.slice(0, 120)}`,
+            });
+            const backup = setTimeout(() => {
+              if (advanceTimerRef.current !== backup) return;
+              advanceTimerRef.current = null;
+              setNarrationArrows([]);
+              transitionAfter();
+            }, clampBackupMs(aside.say));
+            advanceTimerRef.current = backup;
+            cancelNarrationRef.current = (): void => {
+              if (advanceTimerRef.current === backup) {
+                clearTimeout(backup);
+                advanceTimerRef.current = null;
+              }
+              setNarrationArrows([]);
+            };
+            void speakWalkthroughText(aside.say, aside.short)
+              .catch(() => undefined)
+              .then(() => {
+                // Superseded (cancelled / backup already fired) → do nothing.
+                if (advanceTimerRef.current !== backup) return;
+                clearTimeout(backup);
+                advanceTimerRef.current = null;
+                setNarrationArrows([]);
+                transitionAfter(); // gemAsideDone=true → falls through below
+              });
+            return;
+          }
+        }
         cancelNarrationRef.current = null;
         if (advanceTimerRef.current) {
           clearTimeout(advanceTimerRef.current);
