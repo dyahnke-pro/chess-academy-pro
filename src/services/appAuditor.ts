@@ -267,6 +267,21 @@ export type AuditKind =
   // can fail silently. Surfaces WHY the bar is stuck at 0.0
   // (David 2026-06-15).
   | 'stockfish-analysis-stalled'
+  // OTA (Capgo capacitor-updater) lifecycle — emitted by otaObserver on native
+  // to make "the OTA hasn't worked once" (David 2026-07-24) OBSERVABLE instead
+  // of guessed. ota-boot carries the decisive per-launch snapshot (running vs
+  // builtin bundle); the rest trace the update journey (available → download →
+  // set → app-ready) and where it breaks (download/update-failed, or set with
+  // no following app-ready = the auto-revert).
+  | 'ota-boot'
+  | 'ota-update-available'
+  | 'ota-download-complete'
+  | 'ota-download-failed'
+  | 'ota-update-failed'
+  | 'ota-no-need-update'
+  | 'ota-set'
+  | 'ota-app-reloaded'
+  | 'ota-app-ready'
   // Eval-bar caller-level miss: the bar requested an analysis but it timed
   // out / came back empty, so the bar never updated — distinct from an engine
   // crash (the engine may be fine but too slow for the 5s bar budget). Catches

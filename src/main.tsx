@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Capacitor } from '@capacitor/core';
 import { CapacitorUpdater } from '@capgo/capacitor-updater';
+import { startOtaObserver } from './services/otaObserver';
 import './index.css';
 import { App } from './App';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
@@ -86,6 +87,10 @@ async function killServiceWorkerOnNative(): Promise<void> {
   mountApp();
   // Commit the (possibly OTA-applied) bundle now that it has booted.
   signalOtaReady();
+  // Make the OTA lifecycle observable (David 2026-07-24 "hasn't worked once").
+  // Telemetry only — snapshots the running bundle + traces the update journey
+  // so the audit tool can find the real failure instead of guessing.
+  void startOtaObserver();
 }
 
 void killServiceWorkerOnNative();
