@@ -1739,11 +1739,24 @@ export function buildReviewSegments(
       // his own games / the masters DB show at this position. Then the rich
       // PlyFacts, then the thin teaching note. All grounded; the opening-detail
       // just carries the real theory/repertoire content the warmer needs.
-      const openingDetail = buildOpeningMoveDetail(fenPair.fenBefore, m.san, true);
-      narration = openingDetail
-        ?? plyFactsForMove(fenPair.fenBefore, m.san, prevCap, true)
+      // Lead with the IDEA of the move — what it develops, which squares it
+      // fights for, what it threatens — the SAME grounded plyFacts / teaching
+      // engine the middlegame uses (`plyFactsForMove`, `buildReviewMoveTeaching`).
+      // The corpus/masters frequency STATS drop to a fallback (only when there's
+      // no board idea to teach), instead of PRE-EMPTING the idea. Stats winning
+      // the slot ("you play this 53%", "one of your regular tries here") was the
+      // whole reason opening narration read thin next to the middlegame — same
+      // engine, but buildOpeningMoveDetail was tried FIRST and buried it
+      // (2026-07-25 hand-audit N1 root cause).
+      const openingIdea = plyFactsForMove(fenPair.fenBefore, m.san, prevCap, true)
         ?? buildReviewMoveTeaching(fenPair.fenBefore, m.san);
-      if (narration) narrationSource = openingDetail ? 'opening-plan' : 'per-move';
+      if (openingIdea) {
+        narration = openingIdea;
+        narrationSource = 'per-move';
+      } else {
+        const openingStat = buildOpeningMoveDetail(fenPair.fenBefore, m.san, true);
+        if (openingStat) { narration = openingStat; narrationSource = 'opening-plan'; }
+      }
     }
     // NOTABLE MOVES — BOTH SIDES, ANY PHASE (David 2026-07-21, IMG_4570: "too
     // many moves passing without narration, for both sides. I feel like Danya
@@ -2075,6 +2088,14 @@ async function augmentWithProjections(
     // punishment line, where the teaching lives.
     const PV_PTS: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
     let prev: PrevCaptureContext = { square: null, capturedValue: 0 };
+    // A PV of quiet developing moves used to read "Rh3 (rook comes into the game
+    // — quiet development…), then Bd7 (bishop comes into the game — quiet
+    // development…), then Be2 (bishop comes into the game…), then Rf6 (rook comes
+    // into the game…)" — the same generic tag glued to four moves (2026-07-25
+    // hand-audit N3). Skip the bare generic dev tag in a PV (a bare SAN reads
+    // cleaner) and never repeat the same gloss twice in one line.
+    const GENERIC_DEV = /quiet development/i;
+    const seenTeach = new Set<string>();
     const steps = line.plies.map((p) => {
       const w = plyFactsClause(p.fenBefore, p.san, prev);
       try {
@@ -2086,7 +2107,10 @@ async function augmentWithProjections(
       if (w) return `${p.san} (${w})`;
       if (rich) {
         const teach = teachClause(p.fenBefore, p.san);
-        if (teach) return `${p.san} (${teach})`;
+        if (teach && !GENERIC_DEV.test(teach) && !seenTeach.has(teach)) {
+          seenTeach.add(teach);
+          return `${p.san} (${teach})`;
+        }
       }
       return p.san;
     });
