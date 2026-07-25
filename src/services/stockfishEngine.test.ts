@@ -325,6 +325,30 @@ describe('StockfishEngine', () => {
       expect(mockWorker.postMessageCalls).toContain('go depth 18 movetime 8000');
     });
 
+    // David 2026-07-24: the adaptive opponent lowers `Skill Level` (persists in
+    // the shared worker) — a full-strength analysis MUST reset it to 20 so the
+    // eval bar / hint / live-punishment detector see the TRUE best line.
+    it('normalizes Skill Level to 20 when no options are given', async () => {
+      const { stockfishEngine } = await getEngine();
+      await initEngine(stockfishEngine);
+
+      scheduleAnalysisResponse();
+      await stockfishEngine.analyzePosition(STARTING_FEN, 12);
+
+      expect(mockWorker.postMessageCalls).toContain('setoption name Skill Level value 20');
+    });
+
+    it('honors an explicit low Skill Level (adaptive opponent) and does NOT reset to 20', async () => {
+      const { stockfishEngine } = await getEngine();
+      await initEngine(stockfishEngine);
+
+      scheduleAnalysisResponse();
+      await stockfishEngine.analyzePosition(STARTING_FEN, 12, { 'Skill Level': 5 });
+
+      expect(mockWorker.postMessageCalls).toContain('setoption name Skill Level value 5');
+      expect(mockWorker.postMessageCalls).not.toContain('setoption name Skill Level value 20');
+    });
+
     // SEARCH_BUDGET_MS (2026-07-11 stall root-fix): slow single-threaded
     // variants get a movetime bound alongside depth (the search runs inside
     // the worker's event loop, so `stop` can never interrupt it — movetime is

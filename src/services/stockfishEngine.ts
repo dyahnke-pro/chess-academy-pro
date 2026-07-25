@@ -1292,11 +1292,22 @@ class StockfishEngine {
       const readyHandler = (event: MessageEvent<string>): void => {
         if (event.data === 'readyok') {
           this.worker?.removeEventListener('message', readyHandler);
-          // Apply per-analysis options (e.g. Skill Level). Persist until changed.
-          if (options) {
-            for (const [key, value] of Object.entries(options)) {
-              this.send(`setoption name ${key} value ${value}`);
-            }
+          // Apply per-analysis options (e.g. Skill Level). The worker is a
+          // SINGLETON and UCI options PERSIST until changed — so a prior adaptive
+          // opponent-move (getAdaptiveMove sets a LOW `Skill Level` to make
+          // rating-appropriate mistakes) would silently weaken every later
+          // FULL-STRENGTH analysis that shares the worker: the eval bar, the hint
+          // engine, and the live punishment detector (David 2026-07-24 — these
+          // MUST see the true best line). So NORMALIZE Skill Level every analysis:
+          // a call that does not explicitly ask for a weakened engine gets full
+          // strength (20). Only getAdaptiveMove, which passes an explicit low
+          // Skill Level, gets the weakened engine.
+          const opts = options ?? {};
+          if (!('Skill Level' in opts)) {
+            this.send('setoption name Skill Level value 20');
+          }
+          for (const [key, value] of Object.entries(opts)) {
+            this.send(`setoption name ${key} value ${value}`);
           }
           this.send(`position fen ${fen}`);
           // Variant-aware bounded search (see SEARCH_BUDGET_MS): slow
