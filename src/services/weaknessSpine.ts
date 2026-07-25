@@ -363,16 +363,35 @@ function mergeByKey(rows: UnifiedWeakness[]): UnifiedWeakness[] {
  *  conversion detector are all folded in here so no captured signal is dead.
  *  Ranked by open/due count, then severity, then recency. */
 export async function getUnifiedWeaknessProfile(): Promise<UnifiedWeakness[]> {
-  const [misAgg, allMis, mistakes, weakSpots, tactics, games, heatmap, addressedConv] = await Promise.all([
+  // The five direct store scans run inside ONE shared read transaction so they
+  // don't fight over concurrent transient transactions. Five bare
+  // `db.*.toArray()` in a Promise.all each open their own auto-transaction; on
+  // iOS WebKit under memory pressure one commits while another's cursor is
+  // mid-iteration → "Attempt to iterate a cursor that doesn't exist" /
+  // "…without an in-progress transaction" / "Transaction aborted" (PostHog
+  // unhandled-rejection on capacitor://…/weaknesses). Same fix pattern as
+  // coachContextSnapshot.buildCoachContextSnapshot. The three aggregate helpers
+  // manage their own transactions and stay concurrent.
+  const [misAgg, direct, heatmap, addressedConv] = await Promise.all([
     getMisconceptionProfile({ countedOnly: true }),
-    db.misconceptionTags.toArray(),
-    db.mistakePuzzles.toArray(),
-    db.openingWeakSpots.toArray(),
-    db.classifiedTactics.toArray(),
-    db.games.toArray(),
+    db.transaction(
+      'r',
+      [db.misconceptionTags, db.mistakePuzzles, db.openingWeakSpots, db.classifiedTactics, db.games],
+      async () => {
+        const [allMis, mistakes, weakSpots, tactics, games] = await Promise.all([
+          db.misconceptionTags.toArray(),
+          db.mistakePuzzles.toArray(),
+          db.openingWeakSpots.toArray(),
+          db.classifiedTactics.toArray(),
+          db.games.toArray(),
+        ]);
+        return { allMis, mistakes, weakSpots, tactics, games };
+      },
+    ),
     getSquareHeatmap(),
     getAddressedConversions(),
   ]);
+  const { allMis, mistakes, weakSpots, tactics, games } = direct;
 
   const prefs = useAppStore.getState().activeProfile?.preferences;
   const conversions = detectConversionFailures(games, {

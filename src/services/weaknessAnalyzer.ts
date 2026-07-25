@@ -967,17 +967,31 @@ function buildStrengthItems(
 export async function computeWeaknessProfile(
   profile: UserProfile,
 ): Promise<WeaknessProfile> {
-  // Gather all data in parallel
-  const [themeSkills, repertoire, recentGames, recentSessions, flashcards, mistakePuzzles, weakSpots, misconceptions] = await Promise.all([
+  // Gather all data in parallel. The five direct store scans run inside ONE
+  // shared read transaction so concurrent auto-transactions don't tear each
+  // other's cursors down mid-iteration on iOS WebKit ("cursor that doesn't
+  // exist" / "…without an in-progress transaction" — PostHog on /weaknesses).
+  // Same fix pattern as coachContextSnapshot + getUnifiedWeaknessProfile.
+  const [themeSkills, repertoire, direct, misconceptions] = await Promise.all([
     getThemeSkills(),
     getRepertoireOpenings(),
-    db.games.orderBy('date').reverse().limit(RECENT_GAMES_LIMIT).toArray(),
-    db.sessions.orderBy('date').reverse().limit(RECENT_SESSIONS_LIMIT).toArray(),
-    db.flashcards.toArray(),
-    db.mistakePuzzles.toArray(),
-    db.openingWeakSpots.toArray(),
+    db.transaction(
+      'r',
+      [db.games, db.sessions, db.flashcards, db.mistakePuzzles, db.openingWeakSpots],
+      async () => {
+        const [recentGames, recentSessions, flashcards, mistakePuzzles, weakSpots] = await Promise.all([
+          db.games.orderBy('date').reverse().limit(RECENT_GAMES_LIMIT).toArray(),
+          db.sessions.orderBy('date').reverse().limit(RECENT_SESSIONS_LIMIT).toArray(),
+          db.flashcards.toArray(),
+          db.mistakePuzzles.toArray(),
+          db.openingWeakSpots.toArray(),
+        ]);
+        return { recentGames, recentSessions, flashcards, mistakePuzzles, weakSpots };
+      },
+    ),
     getMisconceptionProfile({ countedOnly: true }),
   ]);
+  const { recentGames, recentSessions, flashcards, mistakePuzzles, weakSpots } = direct;
 
   // Run each analyzer
   const tactics = analyzeTactics(themeSkills);

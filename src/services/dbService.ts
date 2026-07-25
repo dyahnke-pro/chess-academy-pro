@@ -247,7 +247,12 @@ export async function getRecentSessions(limit: number = 30): Promise<SessionReco
 // ─── Export / Import ──────────────────────────────────────────────────────────
 
 export async function exportUserData(): Promise<string> {
-  const [
+  // All ten store scans run inside ONE shared read transaction. Ten bare
+  // `db.*.toArray()` in a Promise.all each open their own auto-transaction; on
+  // iOS WebKit one can commit while another's cursor is mid-iteration →
+  // "cursor that doesn't exist" / "Transaction aborted", failing the
+  // backup/cloud-sync. Same fix pattern as coachContextSnapshot.
+  const {
     profiles,
     sessions,
     openings,
@@ -258,27 +263,61 @@ export async function exportUserData(): Promise<string> {
     setupPuzzles,
     openingWeakSpots,
     meta,
-  ] = await Promise.all([
-    db.profiles.toArray(),
-    db.sessions.toArray(),
-    // Repertoire openings only — keeps the export tractable for the
-    // 3k+ row Lichess catalog. PR-4 adds `isFavorite` as a parallel
-    // filter so favorited NON-repertoire openings also sync (the
-    // rolodex reads the favorite flag, not isRepertoire).
-    db.openings.filter((o) => o.isRepertoire || o.isFavorite).toArray(),
-    db.flashcards.toArray(),
-    db.games.toArray(),
-    db.mistakePuzzles.toArray(),
-    db.classifiedTactics.toArray(),
-    db.setupPuzzles.toArray(),
-    db.openingWeakSpots.toArray(),
-    // WO-ROLODEX-UI-01 PR-4: include the meta key-value blob so
-    // coachMemoryStore state (intendedOpening, savedPosition, the
-    // rolodex's activeOpeningCardId / lastActiveRolodexColor /
-    // favoritedAt / userOrderedFavorites, etc.) syncs across
-    // devices via pushToCloud → Supabase. Previously stranded.
-    db.meta.toArray(),
-  ]);
+  } = await db.transaction(
+    'r',
+    // Array-of-tables form (Dexie's typed overload caps at 5 individual table
+    // args; the array overload is generic over the callback's return type).
+    [
+      db.profiles,
+      db.sessions,
+      db.openings,
+      db.flashcards,
+      db.games,
+      db.mistakePuzzles,
+      db.classifiedTactics,
+      db.setupPuzzles,
+      db.openingWeakSpots,
+      db.meta,
+    ],
+    async () => {
+      const [
+        profiles,
+        sessions,
+        openings,
+        flashcards,
+        games,
+        mistakePuzzles,
+        classifiedTactics,
+        setupPuzzles,
+        openingWeakSpots,
+        meta,
+      ] = await Promise.all([
+        db.profiles.toArray(),
+        db.sessions.toArray(),
+        // Repertoire openings only — keeps the export tractable for the
+        // 3k+ row Lichess catalog. PR-4 adds `isFavorite` as a parallel
+        // filter so favorited NON-repertoire openings also sync (the
+        // rolodex reads the favorite flag, not isRepertoire).
+        db.openings.filter((o) => o.isRepertoire || o.isFavorite).toArray(),
+        db.flashcards.toArray(),
+        db.games.toArray(),
+        db.mistakePuzzles.toArray(),
+        db.classifiedTactics.toArray(),
+        db.setupPuzzles.toArray(),
+        db.openingWeakSpots.toArray(),
+        // WO-ROLODEX-UI-01 PR-4: include the meta key-value blob so
+        // coachMemoryStore state (intendedOpening, savedPosition, the
+        // rolodex's activeOpeningCardId / lastActiveRolodexColor /
+        // favoritedAt / userOrderedFavorites, etc.) syncs across
+        // devices via pushToCloud → Supabase. Previously stranded.
+        db.meta.toArray(),
+      ]);
+      return {
+        profiles, sessions, openings, flashcards, games,
+        mistakePuzzles, classifiedTactics, setupPuzzles, openingWeakSpots, meta,
+      };
+    },
+  );
 
   return JSON.stringify(
     {
