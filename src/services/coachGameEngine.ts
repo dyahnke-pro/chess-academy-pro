@@ -52,6 +52,30 @@ function getDepthForElo(targetElo: number): number {
 }
 
 /**
+ * Probability the adaptive opponent BREAKS book in the opening (David 2026-07-24:
+ * "in the opening I want stockfish to break book if playing beginner/some
+ * intermediate players"). Beginners and lower-intermediates don't play textbook
+ * theory — they improvise and slip. Skipping the masters/Lichess book layers and
+ * letting Stockfish play at its rating-matched Skill Level makes the opening feel
+ * rating-appropriate AND lets the live punishment callout fire on real opening
+ * mistakes. Tapers to 0 by ~1600, where copying the crowd's book move is itself
+ * realistic; strong opponents always stay on book. Exported for threshold tests.
+ */
+export function breakBookProbability(targetElo: number): number {
+  if (targetElo >= 1600) return 0;
+  if (targetElo < 900) return 0.7;
+  if (targetElo < 1100) return 0.55;
+  if (targetElo < 1300) return 0.4;
+  if (targetElo < 1500) return 0.22;
+  return 0.1; // 1500–1600: mostly book, the occasional own move
+}
+
+function shouldBreakBook(targetElo: number): boolean {
+  const p = breakBookProbability(targetElo);
+  return p > 0 && Math.random() < p;
+}
+
+/**
  * Small chance of picking 2nd-best move for variety (not blundering).
  * Kept very low since Skill Level already weakens play naturally.
  */
@@ -209,6 +233,20 @@ export async function getAdaptiveMove(
   const depth = threaded ? getDepthForElo(targetElo) : Math.min(getDepthForElo(targetElo), 10);
   const skillLevel = getSkillLevelForElo(targetElo);
 
+  // BREAK BOOK for weak opponents: roll per move. When it hits, skip BOTH book
+  // layers so Stockfish-at-Skill-Level plays the opening itself (rating-
+  // appropriate, includes real slips). Strong opponents (>=1600) never break.
+  const breakBook = shouldBreakBook(targetElo);
+  if (breakBook) {
+    void logAppAudit({
+      kind: 'coach-opponent-move-source',
+      category: 'subsystem',
+      source: 'coachGameEngine.getAdaptiveMove',
+      summary: `break-book elo=${targetElo} — skipping masters/lichess, Stockfish skill=${skillLevel} plays this opening move`,
+      fen,
+    });
+  }
+
   // Layer 0 — master play. Consult the canonical masters DB (local
   // first, then live Lichess) BEFORE Stockfish. When this position has
   // master games, the opponent plays a weighted-random move from the
@@ -220,7 +258,7 @@ export async function getAdaptiveMove(
   //
   // Audit emissions on every branch so the play surface is debuggable
   // from the audit stream alone (no console-log archaeology).
-  try {
+  if (!breakBook) try {
     const masters = await lookupMasterPlay(fen, {
       triggeredBy: 'manual',
       surface: 'coachGameEngine.getAdaptiveMove',
@@ -277,7 +315,7 @@ export async function getAdaptiveMove(
   // init timed out in Bird's Opening. With this layer, deep
   // off-book positions still get a Lichess-played move (which any
   // user has tried before) instead of a chess.js random walk.
-  try {
+  if (!breakBook) try {
     const lichess = await pickBookMove(fen, {
       maxPly: 200,        // no horizon — try at any depth
       minTotalGames: 50,  // sparser than the 500-game cutoff for the

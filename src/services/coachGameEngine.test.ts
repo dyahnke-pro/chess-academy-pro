@@ -9,7 +9,7 @@ vi.mock('./stockfishEngine', () => ({
   },
 }));
 
-import { getAdaptiveMove, getTargetStrength, tryOpeningBookMove } from './coachGameEngine';
+import { getAdaptiveMove, getTargetStrength, tryOpeningBookMove, breakBookProbability } from './coachGameEngine';
 import { stockfishEngine } from './stockfishEngine';
 import type { StockfishAnalysis } from '../types';
 
@@ -161,6 +161,28 @@ describe('coachGameEngine', () => {
 
     it('returns 600 for low easy rating (at the floor)', () => {
       expect(getTargetStrength(800, 'easy')).toBe(600);
+    });
+  });
+
+  describe('breakBookProbability (opening book-break by rating)', () => {
+    it('strong players (>=1600) never break book', () => {
+      expect(breakBookProbability(1600)).toBe(0);
+      expect(breakBookProbability(2000)).toBe(0);
+    });
+
+    it('beginners break book most of the time', () => {
+      expect(breakBookProbability(800)).toBeGreaterThanOrEqual(0.6);
+    });
+
+    it('monotonically decreases as rating rises', () => {
+      const p = [700, 1000, 1200, 1400, 1550, 1600].map(breakBookProbability);
+      for (let i = 1; i < p.length; i += 1) expect(p[i]).toBeLessThanOrEqual(p[i - 1]);
+    });
+
+    it('lower-intermediates still break book sometimes, strong-intermediates rarely', () => {
+      expect(breakBookProbability(1250)).toBeGreaterThan(0.2);
+      expect(breakBookProbability(1550)).toBeGreaterThan(0);
+      expect(breakBookProbability(1550)).toBeLessThan(0.2);
     });
   });
 
