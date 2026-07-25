@@ -60,18 +60,18 @@ real audio playback is a device-only check (flagged `[~]` where it matters).
 
 ## REVIEW  (/coach/review post-game)
 
-- [ ] R1  Review loads a real game + runs Stockfish analysis (progress banner)
-- [ ] R2  Ply-by-ply walk (skip / next / back)
-- [ ] R3  Opening named early + retrospective register
-- [ ] R4  Per-move why on opening plies
-- [ ] R5  Structural beats (anchor→plan→named-target)
-- [ ] R6  find-the-shot card (hint → reveal → continue)
-- [ ] R7  blunder rewind card (decline / accept)
-- [ ] R8  turning-point card (pick → done)
-- [ ] R9  why-picker gated to the student side
-- [ ] R10 Recap reads the real move-quality tally
-- [ ] R11 Ask button answers a typed question
-- [ ] R12 No O-O crash on an odds / custom-FEN game (the shipped fix)
+- [x] R1  Italian "vs You" game → real Stockfish analysis, live "Analyzing move N of 36…" banner → summary
+- [x] R2  Walk mounts (`coach-game-review-walk`, "Ply 0/35"); 35 move-cells + prev/next key-moment nav + back/forward
+- [x] R3  Opening named early + retrospective register: "Let's review your game in the Italian Game: Giuoco Piano… you had White and it ended in a win. 2 moments worth a second look"
+- [~] R4  Per-move why — narration present; full per-ply confirm needs stepping all 35 plies
+- [~] R5  Structural beats — narration present; needs per-ply stepping to confirm anchor→plan→target
+- [~] R6  Missed-tactic listed ("Move 18: Tactical Sequence 5.4pts") + key-moment citations (BLUNDER 18 / INACCURACY 17); interactive find-the-shot card surfaces on stepping TO ply 18 (not driven yet)
+- [~] R7  blunder rewind — surfaces at the blunder ply (needs stepping)
+- [~] R8  turning point — surfaces at the turning ply (needs stepping)
+- [~] R9  why-picker student-side — surfaces at a student slip ply (needs stepping)
+- [x] R10 Recap reads the REAL tally: "77% ACCURACY · A+ Opening 96% · ?? 1 Blunder" from the analysis
+- [~] R11 Ask panel OPENS (`walk-ask-panel`); typing/response not driven (textarea testid + working LLM needed — see the 4× 400 finding)
+- [x] R12 Reviewed a full game with NO O-O crash (the odds-game fix is on 342e4ce; review loaded + analyzed clean)
 
 ---
 
