@@ -744,6 +744,27 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
     }
   }, [openingMoves, openingPhaseLength, firstDeviation, game, settings.moveQualityFlash, resetHints, discussion, playerColor, opening.id, opening.isRepertoire, playPhase, displayName]);
 
+  // Audit-only deterministic move hook — gated behind the `auditMoveHook`
+  // localStorage flag, so it is a NO-OP for every real user (nothing exposed
+  // unless the flag is set). Lets the full-play audit drive the Play GAME
+  // deterministically (OpeningPlayMode had no hook — only PlayableLinePlayer/
+  // Practice did — so the live punish-callout couldn't be triggered headlessly;
+  // David 2026-07-24 play audit). Mirrors the real drag path EXACTLY:
+  // game.onDrop commits + returns the MoveResult, then handlePlayerMove runs —
+  // identical to ControlledChessBoard.handlePieceDrop, so no behaviour drift.
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try { if (localStorage.getItem('auditMoveHook') !== '1') return; } catch { return; }
+    type AuditWin = Window & { __playMove?: (from: string, to: string) => void };
+    const w = window as AuditWin;
+    w.__playMove = (from: string, to: string): void => {
+      if (!isPlayersTurn || game.isGameOver) return;
+      const result = game.onDrop(from, to);
+      if (result) handlePlayerMove(result);
+    };
+    return () => { (window as AuditWin).__playMove = undefined; };
+  }, [isPlayersTurn, game, handlePlayerMove]);
+
   // Speak the "why?" prompt and the coach's teaching note (voice-first).
   useEffect(() => {
     if (discussion.phase === 'asking' && discussion.prompt) {
