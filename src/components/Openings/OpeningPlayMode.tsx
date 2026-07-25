@@ -24,6 +24,7 @@ import { stockfishEngine } from '../../services/stockfishEngine';
 import { fetchCloudEval } from '../../services/lichessExplorerService';
 import { voiceService } from '../../services/voiceService';
 import { computeWatchGemAside } from '../../services/gemCrushLines';
+import { computeThreatDelta, type DeltaAside } from '../../services/engineDeltaLines';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useMasterPlayWatcher } from '../../hooks/useMasterPlayWatcher';
 import { logAppAudit } from '../../services/appAuditor';
@@ -325,26 +326,43 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
       setGemArrows([]);
       return;
     }
-    const aside = computeWatchGemAside(opening.id, game.history);
+    // The delta at the live position: a curated gem crush first (highest value),
+    // else the ENGINE THREAT the last move just created (David 2026-07-24 "add
+    // engine delta to play"). Both draw arrows on the LIVE board WITHOUT moving a
+    // piece — non-blocking.
+    let aside: DeltaAside | null = computeWatchGemAside(opening.id, game.history);
+    if (!aside && game.history.length > 0) {
+      try {
+        const c = new Chess();
+        for (const s of game.history.slice(0, -1)) c.move(s);
+        // The last move was made by the side NOT to move now.
+        const moverWB = game.fen.split(' ')[1] === 'w' ? 'b' : 'w';
+        aside = computeThreatDelta(c.fen(), game.fen, moverWB);
+      } catch {
+        /* no delta */
+      }
+    }
     if (!aside) {
       setGemArrows([]);
       gemSpokenRef.current = null;
       return;
     }
+    const colorHex = (c?: string): string =>
+      c === 'red' ? '#ef4444' : c === 'blue' ? '#3b82f6' : '#22c55e';
     setGemArrows(
       aside.arrows.map((a) => ({
         startSquare: a.from,
         endSquare: a.to,
-        color: a.color === 'red' ? '#ef4444' : '#22c55e',
+        color: colorHex(a.color),
       })),
     );
-    if (gemSpokenRef.current !== aside.gemId) {
-      gemSpokenRef.current = aside.gemId;
+    if (gemSpokenRef.current !== aside.say) {
+      gemSpokenRef.current = aside.say;
       void logAppAudit({
         kind: 'coach-narration-spoken',
         category: 'narration',
-        source: 'OpeningPlayMode.gemCrushAside',
-        summary: `gem crush aside @[${game.history.join(' ')}]: ${aside.say.slice(0, 120)}`,
+        source: 'OpeningPlayMode.deltaAside',
+        summary: `delta aside @[${game.history.join(' ')}]: ${aside.say.slice(0, 120)}`,
       });
       void voiceService.speak(aside.say);
     }

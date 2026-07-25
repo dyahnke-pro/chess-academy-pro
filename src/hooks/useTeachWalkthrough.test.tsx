@@ -419,7 +419,7 @@ describe('gem-crush aside (Watch plays like his videos)', () => {
       () => {
         const fired = vi
           .mocked(logAppAudit)
-          .mock.calls.some((c) => (c[0] as { source?: string })?.source === 'useTeachWalkthrough.gemCrushAside');
+          .mock.calls.some((c) => (c[0] as { source?: string })?.source === 'useTeachWalkthrough.deltaAside');
         expect(fired).toBe(true);
       },
       { timeout: 8000 },

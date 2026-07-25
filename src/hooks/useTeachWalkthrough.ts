@@ -38,6 +38,7 @@ import { markStageComplete } from '../services/openingProgress';
 import { getCachedOpening } from '../services/openingGenerator';
 import { buildDrillWrongTeaching } from '../services/learnMoveTeaching';
 import { computeWatchGemAside } from '../services/gemCrushLines';
+import { computeThreatDelta, type DeltaAside } from '../services/engineDeltaLines';
 import { useAppStore } from '../stores/appStore';
 import { resolveCoachNarration } from '../utils/coachNarration';
 import type {
@@ -899,15 +900,28 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
           const sansSoFar = path
             .filter((n) => n.san !== null)
             .map((n) => n.san as string);
-          const aside = computeWatchGemAside(null, sansSoFar);
+          // The delta at this move: a curated gem crush first (highest value),
+          // else the ENGINE THREAT the move just created (David 2026-07-24 "add
+          // engine delta to watch"). Both draw arrows on the STATIC board.
+          let aside: DeltaAside | null = computeWatchGemAside(null, sansSoFar);
+          if (!aside && node.san !== null && node.movedBy) {
+            const fenAfter = fenForPath(sansSoFar, treeRef.current?.startFen);
+            const fenBefore = fenForPath(sansSoFar.slice(0, -1), treeRef.current?.startFen);
+            aside = computeThreatDelta(
+              fenBefore,
+              fenAfter,
+              node.movedBy === 'white' ? 'w' : 'b',
+            );
+          }
           if (aside) {
-            // Draw the crush on the current static position — board never moves.
+            // Draw the delta (gem crush or engine threat) on the current static
+            // position — board never moves.
             setNarrationArrows(aside.arrows);
             void logAppAudit({
               kind: 'coach-narration-spoken',
               category: 'narration',
-              source: 'useTeachWalkthrough.gemCrushAside',
-              summary: `gem crush aside @[${sansSoFar.join(' ')}]: ${aside.say.slice(0, 120)}`,
+              source: 'useTeachWalkthrough.deltaAside',
+              summary: `delta aside @[${sansSoFar.join(' ')}]: ${aside.say.slice(0, 120)}`,
             });
             const backup = setTimeout(() => {
               if (advanceTimerRef.current !== backup) return;
