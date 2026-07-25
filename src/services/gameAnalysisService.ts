@@ -120,7 +120,10 @@ function bestMoveEqualsPlayed(
   }
 }
 
-function classifyCpLoss(
+// Exported so the offline narration harness (reviewFullGameNarration.harness
+// .test.ts) classifies each ply with the SAME thresholds production uses —
+// keeps the dial-in output faithful, never a re-implemented approximation.
+export function classifyCpLoss(
   cpLoss: number,
   evalBefore?: number | null,
   evalAfter?: number | null,
