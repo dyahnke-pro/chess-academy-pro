@@ -23,6 +23,7 @@ import { getAdaptiveMove, getRandomLegalMove, getTargetStrength } from '../../se
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { fetchCloudEval } from '../../services/lichessExplorerService';
 import { voiceService } from '../../services/voiceService';
+import { computeWatchGemAside } from '../../services/gemCrushLines';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useMasterPlayWatcher } from '../../hooks/useMasterPlayWatcher';
 import { logAppAudit } from '../../services/appAuditor';
@@ -97,6 +98,13 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
   }, []);
   const [chatArrows, setChatArrows] = useState<BoardArrow[]>([]);
   const [chatHighlights, setChatHighlights] = useState<BoardHighlight[]>([]);
+  // Gem-crush arrows for the Play rung (David 2026-07-24: "It should also be on
+  // during the play function STILL UNDER LEARN"). When the LIVE position sits on
+  // a curated punish-gem's spine, trace the crush with arrows on the live board
+  // + voice it — NON-BLOCKING (never a picker; the game is never stopped), board
+  // never moved. Same engine as the Watch walkthrough.
+  const [gemArrows, setGemArrows] = useState<BoardArrow[]>([]);
+  const gemSpokenRef = useRef<string | null>(null);
   const handleChatBoardAnnotation = useCallback((commands: BoardAnnotationCommand[]) => {
     const newArrows: BoardArrow[] = [];
     const newHighlights: BoardHighlight[] = [];
@@ -305,6 +313,43 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
   // sync with `/coach/play` so opponent move source decisions stay
   // consistent across the app.
   useMasterPlayWatcher(`/openings/${opening.id}/play`, game.fen);
+
+  // ─── Gem-crush aside on the live Play position (Learn Play rung) ────────
+  // When the current position sits exactly on a curated punish-gem's spine,
+  // trace the crush (opponent's natural mistake in red + our punish in green)
+  // on the LIVE board and voice the present-tense line — WITHOUT moving a piece.
+  // Non-blocking (no picker, the game never stops), gem positions only, spoken
+  // once per position. Clears the moment the position leaves the gem spine.
+  useEffect(() => {
+    if (game.isGameOver || playPhase === 'pregame' || playPhase === 'postgame') {
+      setGemArrows([]);
+      return;
+    }
+    const aside = computeWatchGemAside(opening.id, game.history);
+    if (!aside) {
+      setGemArrows([]);
+      gemSpokenRef.current = null;
+      return;
+    }
+    setGemArrows(
+      aside.arrows.map((a) => ({
+        startSquare: a.from,
+        endSquare: a.to,
+        color: a.color === 'red' ? '#ef4444' : '#22c55e',
+      })),
+    );
+    if (gemSpokenRef.current !== aside.gemId) {
+      gemSpokenRef.current = aside.gemId;
+      void logAppAudit({
+        kind: 'coach-narration-spoken',
+        category: 'narration',
+        source: 'OpeningPlayMode.gemCrushAside',
+        summary: `gem crush aside @[${game.history.join(' ')}]: ${aside.say.slice(0, 120)}`,
+      });
+      void voiceService.speak(aside.say);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [game.fen]);
 
   // ─── Lichess cloud eval on position change ────────────────────────────
   useEffect(() => {
@@ -800,7 +845,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
             highlightSquares={computerLastMove}
             showLastMoveHighlight={settings.highlightLastMove}
             moveQualityFlash={moveFlash}
-            arrows={chatArrows.length > 0 ? chatArrows : (hintState.arrows.length > 0 ? hintState.arrows : undefined)}
+            arrows={chatArrows.length > 0 ? chatArrows : (hintState.arrows.length > 0 ? hintState.arrows : (gemArrows.length > 0 ? gemArrows : undefined))}
             annotationHighlights={chatHighlights.length > 0 ? chatHighlights : undefined}
             ghostMove={hintState.ghostMove}
           />
