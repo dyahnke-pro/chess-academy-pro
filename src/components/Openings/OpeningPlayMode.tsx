@@ -116,6 +116,10 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
   >(null);
   const [punishRevealed, setPunishRevealed] = useState(false);
   const punishSpokenRef = useRef<string | null>(null);
+  // Bumped by the audit __seedFen hook so the punish detector re-runs on an
+  // imperative position load (setFen alone doesn't reliably re-trigger the effect
+  // from a non-React caller).
+  const [punishNonce, setPunishNonce] = useState(0);
   const handleChatBoardAnnotation = useCallback((commands: BoardAnnotationCommand[]) => {
     const newArrows: BoardArrow[] = [];
     const newHighlights: BoardHighlight[] = [];
@@ -352,77 +356,88 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
       punishSpokenRef.current = null;
       return;
     }
+    let cancelled = false;
+    // Read the position from the game ref (always current), so an imperative
+    // seed / a lagging render never feeds the detector a stale FEN.
+    const curFen = game.getFen();
+    const studentWB = playerColor === 'white' ? 'w' : 'b';
 
-    // 1) PUNISH FOR THE STUDENT — only on the student's move.
-    if (isPlayersTurn) {
-      const studentWB = playerColor === 'white' ? 'w' : 'b';
-      const gem = findLivePunishment(opening.id, game.history);
-      const cue = gem
-        ? {
-            callout: gem.callout,
-            reveal: gem.reveal,
-            arrows: toBoardArrows(gem.revealArrows),
-            key: gem.gemId,
-            source: 'gem' as const,
-          }
-        : ((): typeof punishCue => {
-            const e = detectEnginePunish(game.fen, latestTopLines, studentWB);
-            return e
-              ? { callout: e.callout, reveal: e.reveal, arrows: toBoardArrows(e.arrows), key: e.key, source: 'engine' as const }
-              : null;
-          })();
-      if (cue) {
-        const spokeKey = `${game.fen}|${cue.key}`;
-        setPunishCue((prev) => (prev && prev.key === cue.key && punishRevealed ? prev : cue));
-        if (punishSpokenRef.current !== spokeKey) {
-          punishSpokenRef.current = spokeKey;
-          setPunishRevealed(false);
-          setGemArrows([]); // withhold — no arrow until Show the line
-          void logAppAudit({
-            kind: 'coach-narration-spoken',
-            category: 'narration',
-            source: `OpeningPlayMode.punishCallout.${cue.source}`,
-            summary: `punish callout @[${game.history.join(' ')}]: ${cue.callout.slice(0, 80)}`,
-            fen: game.fen,
-          });
-          void voiceService.speak(cue.callout);
+    const applyCue = (cue: NonNullable<typeof punishCue>): void => {
+      const spokeKey = `${curFen}|${cue.key}`;
+      setPunishCue((prev) => (prev && prev.key === cue.key && punishRevealed ? prev : cue));
+      if (punishSpokenRef.current !== spokeKey) {
+        punishSpokenRef.current = spokeKey;
+        setPunishRevealed(false);
+        setGemArrows([]); // withhold — no arrow until Show the line
+        void logAppAudit({
+          kind: 'coach-narration-spoken',
+          category: 'narration',
+          source: `OpeningPlayMode.punishCallout.${cue.source}`,
+          summary: `punish callout @[${curFen}]: ${cue.callout.slice(0, 80)}`,
+          fen: curFen,
+        });
+        void voiceService.speak(cue.callout);
+      }
+    };
+
+    // Opponent's THREAT (ambient) — shown when there's no punish for the student.
+    const showThreat = (): void => {
+      setPunishCue(null);
+      setPunishRevealed(false);
+      let threat: DeltaAside | null = null;
+      if (game.history.length > 0) {
+        try {
+          const c = new Chess();
+          for (const s of game.history.slice(0, -1)) c.move(s);
+          const moverWB = curFen.split(' ')[1] === 'w' ? 'b' : 'w';
+          threat = computeThreatDelta(c.fen(), curFen, moverWB);
+        } catch {
+          /* no threat */
         }
+      }
+      if (!threat) {
+        setGemArrows([]);
+        gemSpokenRef.current = null;
         return;
       }
-    }
-
-    // 2) NO PUNISH — clear the cue, show the opponent's THREAT (ambient) if any.
-    setPunishCue(null);
-    setPunishRevealed(false);
-    let threat: DeltaAside | null = null;
-    if (game.history.length > 0) {
-      try {
-        const c = new Chess();
-        for (const s of game.history.slice(0, -1)) c.move(s);
-        const moverWB = game.fen.split(' ')[1] === 'w' ? 'b' : 'w';
-        threat = computeThreatDelta(c.fen(), game.fen, moverWB);
-      } catch {
-        /* no threat */
+      setGemArrows(toBoardArrows(threat.arrows));
+      if (gemSpokenRef.current !== threat.say) {
+        gemSpokenRef.current = threat.say;
+        void logAppAudit({
+          kind: 'coach-narration-spoken',
+          category: 'narration',
+          source: 'OpeningPlayMode.threatDelta',
+          summary: `threat @[${game.history.join(' ')}]: ${threat.say.slice(0, 120)}`,
+        });
+        void voiceService.speak(threat.say);
       }
+    };
+
+    if (isPlayersTurn) {
+      // Curated gem first — instant string-match, no engine.
+      const gem = findLivePunishment(opening.id, game.history);
+      if (gem) {
+        applyCue({ callout: gem.callout, reveal: gem.reveal, arrows: toBoardArrows(gem.revealArrows), key: gem.gemId, source: 'gem' });
+      } else {
+        // Engine path: a DEDICATED, fresh eval for THIS position (not the shared
+        // eval-bar prefetch, which can be dropped/stale — that left the callout
+        // silent in a winning position; David 2026-07-24 seed demo caught it).
+        void stockfishEngine
+          .analyzePosition(curFen, 12)
+          .then((analysis) => {
+            if (cancelled) return;
+            const e = detectEnginePunish(curFen, analysis.topLines, studentWB);
+            if (e) applyCue({ callout: e.callout, reveal: e.reveal, arrows: toBoardArrows(e.arrows), key: e.key, source: 'engine' });
+            else showThreat();
+          })
+          .catch(() => { if (!cancelled) showThreat(); });
+      }
+    } else {
+      showThreat();
     }
-    if (!threat) {
-      setGemArrows([]);
-      gemSpokenRef.current = null;
-      return;
-    }
-    setGemArrows(toBoardArrows(threat.arrows));
-    if (gemSpokenRef.current !== threat.say) {
-      gemSpokenRef.current = threat.say;
-      void logAppAudit({
-        kind: 'coach-narration-spoken',
-        category: 'narration',
-        source: 'OpeningPlayMode.threatDelta',
-        summary: `threat @[${game.history.join(' ')}]: ${threat.say.slice(0, 120)}`,
-      });
-      void voiceService.speak(threat.say);
-    }
+    return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [game.fen, latestTopLines]);
+  }, [game.fen, isPlayersTurn, punishNonce]);
 
   // Show-the-line reveal — draws the punish arrow + speaks the (move-naming) line.
   const revealPunishLine = useCallback((): void => {
@@ -772,7 +787,10 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
     // runs. Gated behind the same flag; no-op for real users.
     w.__seedFen = (fen: string): boolean => {
       const ok = game.loadFen(fen);
-      if (ok) setPlayPhase('middlegame');
+      if (ok) {
+        setPlayPhase('middlegame');
+        setPunishNonce((n) => n + 1); // force the punish detector to re-run
+      }
       return ok;
     };
     return () => {
