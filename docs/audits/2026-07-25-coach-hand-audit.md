@@ -75,6 +75,66 @@ real audio playback is a device-only check (flagged `[~]` where it matters).
 
 ---
 
+## 🔑 WHY OPENING NARRATIONS SUCK — the code difference (root cause)
+
+The review beat cascade in `coachFeatureService.ts:buildReviewSegments` is a
+priority chain, first-match-wins (`narration === null` guard). Opening student
+moves and middlegame student moves hit DIFFERENT generators:
+
+- **Opening move (ply ≤ 24)** — `coachFeatureService.ts:1742`:
+  ```
+  narration = buildOpeningMoveDetail(...)   // TRIED FIRST — stats only
+           ?? plyFactsForMove(...)          // the RICH one — only if the above is null
+           ?? buildReviewMoveTeaching(...)
+  ```
+- **Middlegame move (ply > 24)** — `coachFeatureService.ts:1806`:
+  ```
+  narration = plyFactsForMove(...)          // the RICH one, DIRECTLY
+  ```
+
+`buildOpeningMoveDetail` (`reviewStrategicOrientation.ts:44`) is stats-BY-DESIGN
+(its own header: "speak what the DATA shows — NOT hand-authored ideas"). It
+returns only frequency/score:
+  - "your bread-and-butter — you play it almost every time here, scored 53%"
+  - "one of your regular tries here"
+  - "A well-trodden move — the masters reach this in 111 games…"
+
+**So opening moves lead with STATS + naming; middlegame moves lead with IDEAS
+(threats, targets, plans, mechanisms) from the SAME `plyFactsForMove` engine.**
+That is the entire difference. `plyFactsForMove` is available in the opening too
+— it's just buried behind the stats generator. Plus the VARIATION RE-NAMING beat
+(line 1660) fires first and claims slots with bare "This has become the {name}".
+
+**The bar David wants:** opening moves teach the IDEA — what the move develops,
+which square it fights for, what it threatens/prepares — exactly like the
+middlegame. Stats are a supporting tag, never the whole line.
+
+---
+
+## 📋 NARRATION FIX LIST (fix as ONE batch, then re-walk to verify)
+
+- [ ] **N1 (ROOT CAUSE) — opening moves must lead with the IDEA, not stats.**
+  Re-order the opening cascade so the rich idea wins: try `plyFactsForMove`
+  (and opening-plan/concept content) FIRST; demote `buildOpeningMoveDetail`
+  stats to a trailing supporting clause, or merge (idea + short stat tag).
+  A pure-stat line ("one of your regular tries here") must NEVER be a standalone
+  narration. `coachFeatureService.ts:1742` + `reviewStrategicOrientation.ts:44`.
+- [x] **N2 — ECO re-naming spam** ("This has become the Italian Game: {sub}" ×6).
+  FIXED (f45895d) — family-dedup. Verify on re-walk it's ≤1–2 lines.
+- [ ] **N3 — mistake-reveal deep-why is a templated PV dump.** The "why Bd3 was
+  better" reveal repeats "rook/bishop comes into the game — quiet development,
+  getting the pieces coordinated" verbatim per PV move; the Hint one-liner is
+  just "the best move was Bd3." Needs the real MECHANISM (what Bd3 threatens/
+  achieves, what the played move failed to do), de-templated + de-duped.
+- [ ] **N4 — sparse one-off lines.** "You gave check." / bare SAN ("d6", "Kg8")
+  as the whole narration — either teach the point or stay genuinely silent
+  (don't surface a bare move as a "line").
+- [ ] **N5 (minor) — `next-key-moment` doesn't jump the walk** (only cycles the
+  preview thumbnails). Wire it to move the walk to that ply.
+- [ ] **N6 (minor) — why-probe shows the "INACCURACY" label**, telegraphing move
+  quality before the student commits (rule 1: zero board facts). Lower severity
+  in review (the ?! is already visible), but note it.
+
 ## Findings log
 (bugs found while driving, with the exact input that triggered them)
 
