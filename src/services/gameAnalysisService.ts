@@ -224,6 +224,12 @@ class DedicatedWorker {
 
       const handler = (event: MessageEvent<string>): void => {
         const data = event.data;
+        // The worker can post a non-string message (Emscripten glue frames, and
+        // error/status objects from a crashing multi-thread bundle). A bare
+        // data.startsWith then throws an uncaught "t.startsWith is not a
+        // function" pageerror (caught live in the 2026-07-25 hand audit). Ignore
+        // anything that isn't a UCI text line.
+        if (typeof data !== 'string') return;
 
         if (data.startsWith('info ')) {
           const scoreMatch = /score (cp|mate) (-?\d+)/.exec(data);
