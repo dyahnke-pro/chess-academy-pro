@@ -310,6 +310,10 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
     // seed / a lagging render never feeds the detector a stale FEN.
     const curFen = game.getFen();
     const studentWB = playerColor === 'white' ? 'w' : 'b';
+    // Derive whose turn it is from curFen (ground truth), NOT the isPlayersTurn
+    // state — after an imperative seed the state turn can lag and wrongly skip
+    // the punish branch (David 2026-07-24 seed demo).
+    const studentToMove = curFen.split(' ')[1] === studentWB;
 
     const applyCue = (cue: NonNullable<typeof punishCue>): void => {
       const spokeKey = `${curFen}|${cue.key}`;
@@ -364,7 +368,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
 
     // Curated gem first — instant string-match, no engine (student's turn only).
     let gemApplied = false;
-    if (isPlayersTurn) {
+    if (studentToMove) {
       const gem = findLivePunishment(opening.id, game.history);
       if (gem) {
         applyCue({ callout: gem.callout, reveal: gem.reveal, arrows: toBoardArrows(gem.revealArrows), key: gem.gemId, source: 'gem' });
@@ -393,7 +397,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
           summary: `eval=${analysis.evaluation}cp isMate=${analysis.isMate} depth=${analysis.depth}`,
           fen: curFen,
         });
-        if (!isPlayersTurn) {
+        if (!studentToMove) {
           showThreat();
         } else if (!gemApplied) {
           const e = detectEnginePunish(curFen, analysis.topLines, studentWB);
