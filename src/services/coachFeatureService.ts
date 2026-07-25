@@ -1129,6 +1129,15 @@ export function buildReviewSegments(
   // once, in order, on a quiet opening move (grounded via detectOpening).
   const allSans: string[] = [];
   const announcedOpeningNames = new Set<string>();
+  // Base families already announced (text before the first ':' — "Italian Game",
+  // "Caro-Kann Defense"). The re-naming beat dedupes on THIS, not the full ECO
+  // name: a heavily-transposing opening yields a new sub-variation almost every
+  // ply, which used to emit 6+ bare "This has become the Italian Game: <sub>"
+  // lines with no teaching (the sparse-narration class caught in the 2026-07-25
+  // hand audit). Name the family ONCE; the rich plan/threat beats carry the
+  // specific sub-variation.
+  const announcedOpeningFamilies = new Set<string>();
+  const openingFamily = (n: string): string => n.split(':')[0].trim();
   let lastAnnouncedOpeningName: string | null = null;
   // §6 story-as-evidence — a cited illustrative game from the VERIFIED corpus,
   // spoken once per game (never invented). Null when the opening has no model game.
@@ -1669,9 +1678,11 @@ export function buildReviewSegments(
       && (m.classification === null || m.classification === 'book' || m.classification === 'good')
     ) {
       const named = detectOpening(allSans)?.name ?? null;
-      if (named && named !== lastAnnouncedOpeningName && !announcedOpeningNames.has(named)) {
-        const first = announcedOpeningNames.size === 0;
+      const family = named ? openingFamily(named) : null;
+      if (named && family && named !== lastAnnouncedOpeningName && !announcedOpeningFamilies.has(family)) {
+        const first = announcedOpeningFamilies.size === 0;
         announcedOpeningNames.add(named);
+        announcedOpeningFamilies.add(family);
         lastAnnouncedOpeningName = named;
         // Seat-framed (IMG_4572): a White student facing the Pirc hears
         // "the Austrian Attack vs the Pirc" / "your opponent steers into…",
