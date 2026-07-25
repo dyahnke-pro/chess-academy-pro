@@ -755,14 +755,30 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
   useEffect(() => {
     if (typeof window === 'undefined') return;
     try { if (localStorage.getItem('auditMoveHook') !== '1') return; } catch { return; }
-    type AuditWin = Window & { __playMove?: (from: string, to: string) => void };
+    type AuditWin = Window & {
+      __playMove?: (from: string, to: string) => void;
+      __seedFen?: (fen: string) => boolean;
+    };
     const w = window as AuditWin;
     w.__playMove = (from: string, to: string): void => {
       if (!isPlayersTurn || game.isGameOver) return;
       const result = game.onDrop(from, to);
       if (result) handlePlayerMove(result);
     };
-    return () => { (window as AuditWin).__playMove = undefined; };
+    // Audit-only: drop the Play game onto an arbitrary position (a known winning
+    // tactic) so the live punish-callout can be DEMONSTRATED deterministically on
+    // prod — the callout otherwise depends on a stochastic opponent slip. Sets
+    // the middlegame phase so the board is interactive + the eval/punish effect
+    // runs. Gated behind the same flag; no-op for real users.
+    w.__seedFen = (fen: string): boolean => {
+      const ok = game.loadFen(fen);
+      if (ok) setPlayPhase('middlegame');
+      return ok;
+    };
+    return () => {
+      (window as AuditWin).__playMove = undefined;
+      (window as AuditWin).__seedFen = undefined;
+    };
   }, [isPlayersTurn, game, handlePlayerMove]);
 
   // Speak the "why?" prompt and the coach's teaching note (voice-first).
