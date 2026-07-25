@@ -19,6 +19,7 @@
  *      node scripts/audit-punish-callout-prod.mjs
  */
 import { Chess } from 'chess.js';
+import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 const URL='https://chess-academy-pro.vercel.app'; const OPENING=process.env.OP||'caro-kann';
 const MYCOLOR=process.env.MYCOLOR||'b'; // caro-kann student = black
