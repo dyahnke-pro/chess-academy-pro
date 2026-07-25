@@ -120,34 +120,34 @@ import './masterPlayAuditBridge';
  *     the output is consumed as a reference artifact — HEAVY pays off.
  */
 const DEEPSEEK_MODEL_MAP: Record<CoachTask, string> = {
-  // High-frequency / short outputs → CHEAP (deepseek-chat)
-  move_commentary:         'deepseek-chat',
-  hint:                    'deepseek-chat',
-  puzzle_feedback:         'deepseek-chat',
-  game_commentary:         'deepseek-chat',
-  game_opening_line:       'deepseek-chat',
-  whatif_commentary:       'deepseek-chat',
-  game_narrative_summary:  'deepseek-chat',
-  chat_response:           'deepseek-chat',  // was 'deepseek-reasoner' — biggest single cost win
-  sideline_explanation:    'deepseek-chat',
-  smart_search:            'deepseek-chat',
-  explore_reaction:        'deepseek-chat',
-  intent_classify:         'deepseek-chat',
+  // High-frequency / short outputs → CHEAP (deepseek-v4-flash)
+  move_commentary:         'deepseek-v4-flash',
+  hint:                    'deepseek-v4-flash',
+  puzzle_feedback:         'deepseek-v4-flash',
+  game_commentary:         'deepseek-v4-flash',
+  game_opening_line:       'deepseek-v4-flash',
+  whatif_commentary:       'deepseek-v4-flash',
+  game_narrative_summary:  'deepseek-v4-flash',
+  chat_response:           'deepseek-v4-flash',  // was 'deepseek-v4-pro' — biggest single cost win
+  sideline_explanation:    'deepseek-v4-flash',
+  smart_search:            'deepseek-v4-flash',
+  explore_reaction:        'deepseek-v4-flash',
+  intent_classify:         'deepseek-v4-flash',
   // Kid-mode puzzle annotation — short, neutral, JSON-shaped prose.
   // Routed via getKidLlmResponse (skipPersonality=true) — see CLAUDE.md
   // "Kids section non-negotiables".
-  kid_puzzle_gen:          'deepseek-chat',
+  kid_puzzle_gen:          'deepseek-v4-flash',
 
-  // Per-event analysis → MID (deepseek-reasoner)
-  post_game_analysis:      'deepseek-reasoner',
-  daily_lesson:            'deepseek-reasoner',
-  bad_habit_report:        'deepseek-reasoner',
-  opening_overview:        'deepseek-reasoner',
-  game_post_review:        'deepseek-reasoner',
-  position_analysis_chat:  'deepseek-reasoner',
-  session_plan_generation: 'deepseek-reasoner',
-  // interactive_review → deepseek-chat (NOT reasoner). Audit log build
-  // 83233ab proved that deepseek-reasoner with max_tokens=420 consumes
+  // Per-event analysis → MID (deepseek-v4-pro)
+  post_game_analysis:      'deepseek-v4-pro',
+  daily_lesson:            'deepseek-v4-pro',
+  bad_habit_report:        'deepseek-v4-pro',
+  opening_overview:        'deepseek-v4-pro',
+  game_post_review:        'deepseek-v4-pro',
+  position_analysis_chat:  'deepseek-v4-pro',
+  session_plan_generation: 'deepseek-v4-pro',
+  // interactive_review → deepseek-v4-flash (NOT reasoner). Audit log build
+  // 83233ab proved that deepseek-v4-pro with max_tokens=420 consumes
   // all 420 tokens on hidden `reasoning_content` (1400+ chars of CoT)
   // for per-move commentary, leaving 0-20 tokens for visible `content`
   // — every llm-response audit showed `finishReason="length"`,
@@ -156,17 +156,17 @@ const DEEPSEEK_MODEL_MAP: Record<CoachTask, string> = {
   // narration is conversational coaching prose, not analysis — it
   // doesn't benefit from chain-of-thought. The Anthropic side already
   // uses non-reasoning Sonnet for the same task (see ANTHROPIC_MODEL_MAP
-  // below). Moving DeepSeek to deepseek-chat eliminates the wasted
+  // below). Moving DeepSeek to deepseek-v4-flash eliminates the wasted
   // reasoning budget; the same 420 max_tokens now produces ~1500 chars
   // of actual narration.
-  interactive_review:      'deepseek-chat',
-  model_game_annotation:   'deepseek-reasoner',
-  middlegame_plan_generation: 'deepseek-reasoner',
+  interactive_review:      'deepseek-v4-flash',
+  model_game_annotation:   'deepseek-v4-pro',
+  middlegame_plan_generation: 'deepseek-v4-pro',
 
   // Rare deep-dive outputs → still reasoner (DeepSeek has no heavier tier)
-  weakness_report:         'deepseek-reasoner',
-  weekly_report:           'deepseek-reasoner',
-  deep_analysis:           'deepseek-reasoner',
+  weakness_report:         'deepseek-v4-pro',
+  weekly_report:           'deepseek-v4-pro',
+  deep_analysis:           'deepseek-v4-pro',
 };
 
 const ANTHROPIC_MODEL_MAP: Record<CoachTask, string> = {
@@ -611,6 +611,9 @@ const INTERACTIVE_TASKS: ReadonlySet<CoachTask> = new Set<CoachTask>([
 function normalizeDeepSeekModel(model: string): string {
   if (!model.startsWith('deepseek-')) return model;
   if (model === 'deepseek-v4-pro' || model === 'deepseek-v4-flash') return model;
+  // Preserve a stored deep-tier pick's intent: the deprecated reasoner maps to
+  // the deep v4-pro; the fast `deepseek-chat` and any unknown collapse to flash.
+  if (model === 'deepseek-reasoner') return 'deepseek-v4-pro';
   return 'deepseek-v4-flash';
 }
 
@@ -685,12 +688,15 @@ function isReasoningModel(model: string): boolean {
  *  narration, drill/findMove/punish labels) 400 and silently fall back
  *  to generic template prose. */
 export function toolCapableModel(task: CoachTask, provider: AiProvider, model: string): string {
+  // DeepSeek: forced `tool_choice` needs a non-reasoning tier. v4-flash is the
+  // one confirmed tool-capable name (no thinking-mode tool_choice pitfalls), so
+  // pin every structured DeepSeek call to it — this also guarantees a
+  // deprecated/unknown name (the v4 rename 400s deepseek-chat/deepseek-reasoner)
+  // never reaches the wire on a tool call.
+  if (provider === 'deepseek') return 'deepseek-v4-flash';
   if (!isReasoningModel(model)) return model;
-  const fallback = provider === 'anthropic' ? ANTHROPIC_MODEL_MAP[task] : DEEPSEEK_MODEL_MAP[task];
-  if (isReasoningModel(fallback)) {
-    return provider === 'anthropic' ? 'claude-sonnet-4-6' : 'deepseek-chat';
-  }
-  return fallback;
+  const fallback = ANTHROPIC_MODEL_MAP[task];
+  return isReasoningModel(fallback) ? 'claude-sonnet-4-6' : fallback;
 }
 
 // ── DeepSeek (OpenAI-compatible) ──

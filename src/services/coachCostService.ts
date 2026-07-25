@@ -12,7 +12,10 @@ export interface ApiUsageEntry {
 
 // Rough per-token pricing (USD)
 const PRICING: Record<string, { input: number; output: number }> = {
-  // DeepSeek
+  // DeepSeek — current v4 tiers (flash = fast/cheap, pro = deep).
+  'deepseek-v4-flash': { input: 0.00000027, output: 0.0000011 },
+  'deepseek-v4-pro':   { input: 0.00000055, output: 0.00000219 },
+  // Legacy names kept so historical usage rows still price out.
   'deepseek-chat':     { input: 0.00000027, output: 0.0000011 },
   'deepseek-reasoner': { input: 0.00000055, output: 0.00000219 },
   // Anthropic
