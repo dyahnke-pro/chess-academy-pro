@@ -19,6 +19,15 @@ describe('computeGemCrush (shared core)', () => {
     expect(computeGemCrush('not-real', ['e4', 'e5'])).toBeNull();
   });
 
+  it('finds the gem by spine ALONE — no openingId needed (the Watch wiring path)', () => {
+    const gem = firstGem('caro-kann');
+    if (!gem) return;
+    const bySpine = computeGemCrush(null, gem.lineMoves.split(/\s+/));
+    const byId = computeGemCrush('caro-kann', gem.lineMoves.split(/\s+/));
+    expect(bySpine).toBeTruthy();
+    expect(bySpine!.gemId).toBe(byId!.gemId);
+  });
+
   it('computes crush facts + two arrows on the STATIC board (real data)', () => {
     const gem = firstGem('caro-kann');
     if (!gem) return;

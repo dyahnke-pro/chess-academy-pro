@@ -76,6 +76,13 @@ export function getPunishGemsForOpening(openingId: string | undefined | null): P
   return GEMS.filter((g) => g.openingId === openingId);
 }
 
+/** Every gem (both lanes). A gem's `lineMoves` is a unique full opening spine, so
+ *  a caller can look one up by position alone — no openingId resolution needed
+ *  (the Watch walkthrough / review walk have the SAN path, not the kebab id). */
+export function getAllPunishGems(): PunishGem[] {
+  return GEMS;
+}
+
 /** Gems that sit on a given variation tab. A gem belongs to a tab when the
  *  gem's (short) opening spine is a PREFIX of the tab's (long, curated) line —
  *  i.e. the inaccuracy happens on the early part of that variation. When

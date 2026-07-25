@@ -28,6 +28,7 @@
 import { Chess } from 'chess.js';
 import {
   getPunishGemsForOpening,
+  getAllPunishGems,
   isSurfaceableGem,
   gemId,
 } from '../data/lessons/punishGems';
@@ -76,12 +77,17 @@ export function computeGemCrush(
   openingId: string | undefined | null,
   pathSans: string[],
 ): GemCrush | null {
-  const gems = getPunishGemsForOpening(openingId).filter(isSurfaceableGem);
-  if (gems.length === 0) return null;
-
   const key = pathSans.join(' ').trim();
   if (key.length === 0) return null;
-  const gem = gems.find((g) => g.lineMoves.trim() === key);
+
+  // Scope to the opening's gems when we know the id; otherwise scan all gems —
+  // a gem's `lineMoves` is a unique full opening spine, so a position match is
+  // unambiguous even without the kebab id (the walkthrough has the SAN path,
+  // not the id).
+  const pool = openingId ? getPunishGemsForOpening(openingId) : getAllPunishGems();
+  const gem = pool
+    .filter(isSurfaceableGem)
+    .find((g) => g.lineMoves.trim() === key);
   if (!gem || (gem.tier !== 'confirmed' && gem.tier !== 'positional')) return null;
 
   // Static position = after the gem's opening spine (opponent to move).
