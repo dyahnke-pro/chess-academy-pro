@@ -23,8 +23,9 @@ import { getAdaptiveMove, getRandomLegalMove, getTargetStrength } from '../../se
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { fetchCloudEval } from '../../services/lichessExplorerService';
 import { voiceService } from '../../services/voiceService';
-import { computeWatchGemAside } from '../../services/gemCrushLines';
-import { computeThreatDelta, type DeltaAside } from '../../services/engineDeltaLines';
+import { findLivePunishment } from '../../services/gemCrushLines';
+import { computeThreatDelta, detectEnginePunish, type DeltaAside } from '../../services/engineDeltaLines';
+import type { NarrationArrow } from '../../types/walkthroughTree';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useMasterPlayWatcher } from '../../hooks/useMasterPlayWatcher';
 import { logAppAudit } from '../../services/appAuditor';
@@ -106,6 +107,15 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
   // never moved. Same engine as the Watch walkthrough.
   const [gemArrows, setGemArrows] = useState<BoardArrow[]>([]);
   const gemSpokenRef = useRef<string | null>(null);
+  // Live punishment callout (David 2026-07-24): the coach calls out when the
+  // student has a punish available — WITHOUT naming the move — plus a Show-the-
+  // line button that reveals it. Curated gem first (instant), else the engine
+  // eval already computed for the eval bar (zero extra latency).
+  const [punishCue, setPunishCue] = useState<
+    { callout: string; reveal: string; arrows: BoardArrow[]; key: string; source: 'gem' | 'engine' } | null
+  >(null);
+  const [punishRevealed, setPunishRevealed] = useState(false);
+  const punishSpokenRef = useRef<string | null>(null);
   const handleChatBoardAnnotation = useCallback((commands: BoardAnnotationCommand[]) => {
     const newArrows: BoardArrow[] = [];
     const newHighlights: BoardHighlight[] = [];
@@ -315,59 +325,119 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
   // consistent across the app.
   useMasterPlayWatcher(`/openings/${opening.id}/play`, game.fen);
 
-  // ─── Gem-crush aside on the live Play position (Learn Play rung) ────────
-  // When the current position sits exactly on a curated punish-gem's spine,
-  // trace the crush (opponent's natural mistake in red + our punish in green)
-  // on the LIVE board and voice the present-tense line — WITHOUT moving a piece.
-  // Non-blocking (no picker, the game never stops), gem positions only, spoken
-  // once per position. Clears the moment the position leaves the gem spine.
+  // ─── Live punishment callout + ambient threat (Learn Play rung) ─────────
+  // David 2026-07-24: "I want the llm to call out when a punishment line is found
+  // for the user … Add a show the line button as well." On the STUDENT's move,
+  // detect a punish available RIGHT NOW — curated gem (instant string-match) first,
+  // else the engine eval ALREADY computed for the eval bar (zero extra latency, so
+  // it beats a fast mover). The callout WITHHOLDS the move (guided find-the-move);
+  // the Show-the-line button reveals it (arrow + spoken line). When there's no
+  // punish, fall back to the opponent's THREAT arrow (ambient awareness). The
+  // board NEVER moves — arrows show the line.
+  const colorHex = useCallback(
+    (c?: string): string => (c === 'red' ? '#ef4444' : c === 'blue' ? '#3b82f6' : '#22c55e'),
+    [],
+  );
+  const toBoardArrows = useCallback(
+    (arr: NarrationArrow[]): BoardArrow[] =>
+      arr.map((a) => ({ startSquare: a.from, endSquare: a.to, color: colorHex(a.color) })),
+    [colorHex],
+  );
   useEffect(() => {
     if (game.isGameOver || playPhase === 'pregame' || playPhase === 'postgame') {
       setGemArrows([]);
+      setPunishCue(null);
+      setPunishRevealed(false);
+      gemSpokenRef.current = null;
+      punishSpokenRef.current = null;
       return;
     }
-    // The delta at the live position: a curated gem crush first (highest value),
-    // else the ENGINE THREAT the last move just created (David 2026-07-24 "add
-    // engine delta to play"). Both draw arrows on the LIVE board WITHOUT moving a
-    // piece — non-blocking.
-    let aside: DeltaAside | null = computeWatchGemAside(opening.id, game.history);
-    if (!aside && game.history.length > 0) {
+
+    // 1) PUNISH FOR THE STUDENT — only on the student's move.
+    if (isPlayersTurn) {
+      const studentWB = playerColor === 'white' ? 'w' : 'b';
+      const gem = findLivePunishment(opening.id, game.history);
+      const cue = gem
+        ? {
+            callout: gem.callout,
+            reveal: gem.reveal,
+            arrows: toBoardArrows(gem.revealArrows),
+            key: gem.gemId,
+            source: 'gem' as const,
+          }
+        : ((): typeof punishCue => {
+            const e = detectEnginePunish(game.fen, latestTopLines, studentWB);
+            return e
+              ? { callout: e.callout, reveal: e.reveal, arrows: toBoardArrows(e.arrows), key: e.key, source: 'engine' as const }
+              : null;
+          })();
+      if (cue) {
+        const spokeKey = `${game.fen}|${cue.key}`;
+        setPunishCue((prev) => (prev && prev.key === cue.key && punishRevealed ? prev : cue));
+        if (punishSpokenRef.current !== spokeKey) {
+          punishSpokenRef.current = spokeKey;
+          setPunishRevealed(false);
+          setGemArrows([]); // withhold — no arrow until Show the line
+          void logAppAudit({
+            kind: 'coach-narration-spoken',
+            category: 'narration',
+            source: `OpeningPlayMode.punishCallout.${cue.source}`,
+            summary: `punish callout @[${game.history.join(' ')}]: ${cue.callout.slice(0, 80)}`,
+            fen: game.fen,
+          });
+          void voiceService.speak(cue.callout);
+        }
+        return;
+      }
+    }
+
+    // 2) NO PUNISH — clear the cue, show the opponent's THREAT (ambient) if any.
+    setPunishCue(null);
+    setPunishRevealed(false);
+    let threat: DeltaAside | null = null;
+    if (game.history.length > 0) {
       try {
         const c = new Chess();
         for (const s of game.history.slice(0, -1)) c.move(s);
-        // The last move was made by the side NOT to move now.
         const moverWB = game.fen.split(' ')[1] === 'w' ? 'b' : 'w';
-        aside = computeThreatDelta(c.fen(), game.fen, moverWB);
+        threat = computeThreatDelta(c.fen(), game.fen, moverWB);
       } catch {
-        /* no delta */
+        /* no threat */
       }
     }
-    if (!aside) {
+    if (!threat) {
       setGemArrows([]);
       gemSpokenRef.current = null;
       return;
     }
-    const colorHex = (c?: string): string =>
-      c === 'red' ? '#ef4444' : c === 'blue' ? '#3b82f6' : '#22c55e';
-    setGemArrows(
-      aside.arrows.map((a) => ({
-        startSquare: a.from,
-        endSquare: a.to,
-        color: colorHex(a.color),
-      })),
-    );
-    if (gemSpokenRef.current !== aside.say) {
-      gemSpokenRef.current = aside.say;
+    setGemArrows(toBoardArrows(threat.arrows));
+    if (gemSpokenRef.current !== threat.say) {
+      gemSpokenRef.current = threat.say;
       void logAppAudit({
         kind: 'coach-narration-spoken',
         category: 'narration',
-        source: 'OpeningPlayMode.deltaAside',
-        summary: `delta aside @[${game.history.join(' ')}]: ${aside.say.slice(0, 120)}`,
+        source: 'OpeningPlayMode.threatDelta',
+        summary: `threat @[${game.history.join(' ')}]: ${threat.say.slice(0, 120)}`,
       });
-      void voiceService.speak(aside.say);
+      void voiceService.speak(threat.say);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [game.fen]);
+  }, [game.fen, latestTopLines]);
+
+  // Show-the-line reveal — draws the punish arrow + speaks the (move-naming) line.
+  const revealPunishLine = useCallback((): void => {
+    if (!punishCue) return;
+    setPunishRevealed(true);
+    setGemArrows(punishCue.arrows);
+    void logAppAudit({
+      kind: 'coach-narration-spoken',
+      category: 'narration',
+      source: `OpeningPlayMode.punishReveal.${punishCue.source}`,
+      summary: `reveal: ${punishCue.reveal.slice(0, 120)}`,
+      fen: game.fen,
+    });
+    void voiceService.speak(punishCue.reveal);
+  }, [punishCue, game.fen]);
 
   // ─── Lichess cloud eval on position change ────────────────────────────
   useEffect(() => {
@@ -875,6 +945,29 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
           <LichessLines cloudEval={cloudEval} fen={game.fen} className="mt-1" />
         )}
       </div>
+
+      {/* Live punishment callout + Show-the-line button (David 2026-07-24).
+          Non-blocking — the game keeps going; the coach flags the shot and the
+          student can find it or reveal it. */}
+      {punishCue && (playPhase === 'opening' || playPhase === 'middlegame') && !game.isGameOver && (
+        <div className="px-4 mt-2" data-testid="punish-callout">
+          <div className="max-w-lg mx-auto w-full border-2 border-green-500/40 bg-green-500/10 rounded-2xl p-3 flex items-center gap-3">
+            <p className="text-sm text-theme-text flex-1 leading-snug" data-testid="punish-callout-text">
+              {punishRevealed ? punishCue.reveal : punishCue.callout}
+            </p>
+            {!punishRevealed && (
+              <button
+                type="button"
+                onClick={revealPunishLine}
+                data-testid="show-the-line"
+                className="shrink-0 px-3 py-1.5 rounded-xl bg-green-600 text-white text-sm font-bold active:scale-95 transition-transform"
+              >
+                Show the line
+              </button>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Controls bar */}
       {(playPhase === 'opening' || playPhase === 'middlegame') && !game.isGameOver && (

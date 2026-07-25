@@ -18,9 +18,11 @@
  * G0/G3: every square is board-derived (chess.js / the engine PV); the voice
  * only phrases computed facts, never decides them. Present-tense, side-framed.
  */
+import { Chess } from 'chess.js';
 import { detectNewThreat } from './groundedAnswer';
 import type { PvLine } from './pvPlayback';
 import type { NarrationArrow } from '../types/walkthroughTree';
+import type { AnalysisLine } from '../types';
 
 export interface DeltaAside {
   arrows: NarrationArrow[];
@@ -86,5 +88,102 @@ export function bestLineDeltaFromPv(pv: PvLine | null): DeltaAside | null {
     arrows: [{ from, to, color: 'green' }],
     say,
     short,
+  };
+}
+
+// ─── LIVE engine punishment — a punish available RIGHT NOW, from the eval ────
+/**
+ * A punishing shot the STUDENT (to move) has available, detected from the engine
+ * eval the Play surface ALREADY computes every position (David 2026-07-24: "call
+ * out when a punishment line is found for the user … quick enough before the user
+ * moves?"). No new engine call — reads `latestTopLines` — so the callout adds
+ * ZERO latency beyond the eval that was going to run anyway.
+ *
+ * Fires ONLY on a genuine tactical shot: the position is clearly winning for the
+ * student AND one move stands out (a real find-the-move, not a quiet edge where
+ * many moves are fine). The `callout` WITHHOLDS the move; the `reveal` names it.
+ *
+ * PAYOFF DISCIPLINE (same as the gem packaging fix): the eval does NOT tell us
+ * WHAT is won, so the reveal speaks an eval-magnitude verdict ("you're winning",
+ * "clearly better") — NEVER "wins a pawn"/material, which we cannot prove here.
+ */
+export interface EnginePunishCue {
+  callout: string;
+  reveal: string;
+  arrows: NarrationArrow[];
+  /** Dedup / speak-once key (the best move's UCI). */
+  key: string;
+}
+
+const ENGINE_CALLOUTS = [
+  'Hold on — there is a strong shot for you right here. Can you find it?',
+  'This is your moment — there is a punish in the position. Look for it.',
+  'There is a real chance here. One move stands out — do you see it?',
+];
+
+/** WIN margin (student-POV cp) to call a position "clearly winning" for a shot. */
+const PUNISH_WIN_CP = 150;
+/** How much the best move must beat the runner-up to count as ONE clear shot. */
+const PUNISH_GAP_CP = 150;
+/** Chess.js caps eval near mate; anything past this reads as decisive. */
+const DECISIVE_CP = 1000;
+
+export function detectEnginePunish(
+  fen: string,
+  topLines: AnalysisLine[],
+  studentWB: 'w' | 'b',
+): EnginePunishCue | null {
+  if (topLines.length === 0) return null;
+  const best = topLines[0];
+  if (!best.moves || best.moves.length === 0) return null;
+  const toStudent = (cpWhitePov: number): number => (studentWB === 'w' ? cpWhitePov : -cpWhitePov);
+  const bestCp = toStudent(best.evaluation);
+  const bestMate = best.mate; // plies to mate, sign = white-POV; null when none
+  const studentMating = bestMate != null && (studentWB === 'w' ? bestMate > 0 : bestMate < 0);
+
+  // Must be clearly winning for the student.
+  if (!studentMating && bestCp < PUNISH_WIN_CP) return null;
+
+  // Must be ONE clear shot (a tactic), not a position where lots of moves win.
+  if (topLines.length >= 2 && !studentMating) {
+    const secondCp = toStudent(topLines[1].evaluation);
+    if (bestCp - secondCp < PUNISH_GAP_CP) return null;
+  }
+
+  const uci = best.moves[0];
+  if (!uci || uci.length < 4) return null;
+  const from = uci.slice(0, 2);
+  const to = uci.slice(2, 4);
+
+  // Name the best move + a short continuation in SAN (board stays put; draw only
+  // the first move's arrow).
+  let sanLine = '';
+  try {
+    const c = new Chess(fen);
+    const sans: string[] = [];
+    for (const u of best.moves.slice(0, 3)) {
+      const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u.slice(4) : undefined });
+      if (!m) break;
+      sans.push(cleanSan(m.san));
+    }
+    sanLine = sans.join(', ');
+  } catch {
+    return null;
+  }
+  if (sanLine.length === 0) return null;
+
+  const verdict = studentMating
+    ? "and it's a forced mate"
+    : bestCp >= DECISIVE_CP
+      ? "and you're completely winning"
+      : bestCp >= 300
+        ? "and you're winning"
+        : "and you're clearly better";
+  const callout = ENGINE_CALLOUTS[from.charCodeAt(0) % ENGINE_CALLOUTS.length];
+  return {
+    callout,
+    reveal: `The strongest shot is ${sanLine}, ${verdict}.`,
+    arrows: [{ from, to, color: 'green' }],
+    key: uci,
   };
 }

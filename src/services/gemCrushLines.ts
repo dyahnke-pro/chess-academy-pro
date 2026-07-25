@@ -50,10 +50,74 @@ export interface GemCrush {
   opponentSide: 'white' | 'black';
   /** The taught side — the one that plays the punish. */
   studentSide: 'white' | 'black';
-  /** 'confirmed' = wins material; 'positional' = clearly better. */
+  /** 'confirmed' = engine ≥ +1.0; 'positional' = +0.5..+1.0. NOT a material
+   *  claim — see `payoff`. */
   tier: 'confirmed' | 'positional';
   /** FEN of the position the arrows are drawn on (after the gem's spine). */
   staticFen: string;
+  /** BOARD-COMPUTED payoff clause (participial), never a tier proxy — the FACT
+   *  handed to the LLM warmer / spoken. Replays the punish line and reads the
+   *  real material swing off chess.js. David 2026-07-24: the "win material"
+   *  over-claim is a PACKAGING error — the payoff is a board fact, computed here.
+   *  ("winning a pawn" / "winning the exchange" / "winning a piece" / "with a
+   *  clearly better position" / "with a mating attack" / "sacrificing material
+   *  for a winning initiative".) */
+  payoff: string;
+  /** True iff the punisher is genuinely ahead in material at the quiet end of
+   *  the punish line, so callers can gate a "wins material" phrasing honestly. */
+  winsMaterial: boolean;
+}
+
+const PIECE_VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+
+/** Net material (white − black, pawns) read straight off a FEN board. */
+function boardMaterial(fen: string): number {
+  let net = 0;
+  for (const ch of fen.split(' ')[0]) {
+    const v = PIECE_VAL[ch.toLowerCase()];
+    if (v === undefined) continue;
+    net += ch === ch.toUpperCase() ? v : -v;
+  }
+  return net;
+}
+
+/** A crush's payoff, READ OFF THE BOARD — never inferred from `tier`. Replays
+ *  the curated punish line to its quiet end and measures the punisher's real
+ *  material swing + checks for mate. G0/G3: the FACT is computed in code; the
+ *  LLM only phrases it. */
+function computePayoff(
+  staticFen: string,
+  inaccuracy: string,
+  punishSeq: string[],
+  punisher: 'w' | 'b',
+  tier: 'confirmed' | 'positional',
+): { payoff: string; winsMaterial: boolean } {
+  let mated = false;
+  let endMaterial = boardMaterial(staticFen);
+  try {
+    const c = new Chess(staticFen);
+    c.move(inaccuracy);
+    for (const s of punishSeq) {
+      const m = c.move(s);
+      if (!m) break;
+      if (m.san.includes('#')) mated = true;
+    }
+    if (c.isCheckmate()) mated = true;
+    endMaterial = boardMaterial(c.fen());
+  } catch {
+    /* keep fallback */
+  }
+  const gain = punisher === 'w' ? endMaterial : -endMaterial;
+  if (mated) return { payoff: 'with a mating attack', winsMaterial: false };
+  if (gain >= 5) return { payoff: 'winning decisive material', winsMaterial: true };
+  if (gain >= 3) return { payoff: 'winning a piece', winsMaterial: true };
+  if (gain === 2) return { payoff: 'winning the exchange', winsMaterial: true };
+  if (gain === 1) return { payoff: 'winning a pawn', winsMaterial: true };
+  if (gain <= -1) return { payoff: 'sacrificing material for a winning initiative', winsMaterial: false };
+  return {
+    payoff: tier === 'confirmed' ? 'with a winning position' : 'with a clearly better position',
+    winsMaterial: false,
+  };
 }
 
 function sideWord(turn: 'w' | 'b'): 'white' | 'black' {
@@ -124,6 +188,15 @@ export function computeGemCrush(
     return null;
   }
 
+  const punisher: 'w' | 'b' = opponent === 'w' ? 'b' : 'w';
+  const { payoff, winsMaterial } = computePayoff(
+    staticFen,
+    gem.inaccuracy,
+    gem.punishSeq ?? [gem.punish],
+    punisher,
+    gem.tier,
+  );
+
   return {
     gemId: gemId(gem),
     inaccuracy: gem.inaccuracy,
@@ -133,9 +206,11 @@ export function computeGemCrush(
       { from: puFrom, to: puTo, color: 'green' }, // our crush
     ],
     opponentSide: sideWord(opponent),
-    studentSide: sideWord(opponent === 'w' ? 'b' : 'w'),
+    studentSide: sideWord(punisher),
     tier: gem.tier,
     staticFen,
+    payoff,
+    winsMaterial,
   };
 }
 
@@ -153,8 +228,8 @@ export interface GemAside {
 export function buildWatchGemSay(crush: GemCrush): string {
   const opp = cap(crush.opponentSide);
   const us = cap(crush.studentSide);
-  const payoff = crush.tier === 'confirmed' ? 'and we win material' : "and we're clearly better";
-  return `If ${opp} tries ${cleanSan(crush.inaccuracy)} here — natural-looking, but a mistake — ${us} crushes with ${cleanSan(crush.punish)}, ${payoff}.`;
+  // Payoff is READ OFF THE BOARD (crush.payoff), never a tier guess.
+  return `If ${opp} tries ${cleanSan(crush.inaccuracy)} here — natural-looking, but a mistake — ${us} crushes with ${cleanSan(crush.punish)}, ${crush.payoff}.`;
 }
 
 export function computeWatchGemAside(
@@ -190,7 +265,7 @@ export function buildReviewGemSay(crush: GemCrush, opts: ReviewGemOptions): stri
   const opp = cap(crush.opponentSide);
   const inSan = cleanSan(crush.inaccuracy);
   const puSan = cleanSan(crush.punish);
-  const payoff = crush.tier === 'confirmed' ? 'winning material' : 'with a clearly better game';
+  const payoff = crush.payoff; // board-computed, honest
   if (!opts.opponentPlayedInaccuracy) {
     // The opponent stayed on the main move — a teaching aside, not a live line.
     return `${opp} avoided ${inSan} here — the natural move that loses to ${puSan}, ${payoff}.`;
@@ -199,4 +274,93 @@ export function buildReviewGemSay(crush: GemCrush, opts: ReviewGemOptions): stri
     return `${opp} played ${inSan} — a known mistake — and you punished it correctly with ${puSan}, ${payoff}. Well spotted.`;
   }
   return `${opp} played ${inSan} here — a known mistake — and the crush was ${puSan}, ${payoff}.`;
+}
+
+// ─── LIVE punishment — the opponent JUST slipped, it's the student's move ────
+/**
+ * A curated punishment that is available RIGHT NOW, because the opponent's LAST
+ * move was a gem inaccuracy (David 2026-07-24: "I want the llm to call out when a
+ * punishment line is found for the user"). Detection is a pure string-compare —
+ * NO engine, NO LLM — so the callout can fire the instant the move lands, before
+ * the user replies. The `callout` WITHHOLDS the move (a guided find-the-move); the
+ * `reveal` (Show-the-line button) names it and draws the green arrow.
+ */
+export interface LivePunishment {
+  gemId: string;
+  /** The opponent's just-played mistake (SAN), for logging — NOT spoken in the callout. */
+  inaccuracy: string;
+  /** Our crushing reply (SAN). Withheld from the callout; spoken in the reveal. */
+  punish: string;
+  /** The taught side — the one to move now, who plays the punish. */
+  studentSide: 'white' | 'black';
+  /** Board-computed payoff clause (honest). */
+  payoff: string;
+  /** Instant, move-WITHHOLDING callout ("there's a punish here — can you find it?"). */
+  callout: string;
+  /** Green arrow on the punish (origin occupied on the CURRENT board). */
+  revealArrows: NarrationArrow[];
+  /** Reveal line — names the punish + the board payoff (spoken when Show-the-line is tapped). */
+  reveal: string;
+  /** Full curated punish continuation (SAN), for a played-out reveal if wanted. */
+  punishSeq: string[];
+}
+
+const CALLOUTS = [
+  'Hold on — your opponent just slipped. There is a punish right here. Can you find it?',
+  'That is a mistake. There is a strong shot for you in this position — look for it.',
+  'Careful — your opponent gave you a chance. A punish is on the board. Do you see it?',
+];
+
+/**
+ * If the LAST move in `pathSans` was a curated gem's inaccuracy (so the student is
+ * now to move with the punish available), return the live punishment. Otherwise
+ * null. Pure + instant.
+ */
+export function findLivePunishment(
+  openingId: string | undefined | null,
+  pathSans: string[],
+): LivePunishment | null {
+  if (pathSans.length === 0) return null;
+  const key = pathSans.join(' ').trim();
+  const pool = openingId ? getPunishGemsForOpening(openingId) : getAllPunishGems();
+  const gem = pool
+    .filter(isSurfaceableGem)
+    .find((g) => `${g.lineMoves.trim()} ${g.inaccuracy}`.trim() === key);
+  if (!gem || (gem.tier !== 'confirmed' && gem.tier !== 'positional')) return null;
+
+  // Current board = after spine + inaccuracy (student to move). Draw the punish
+  // from HERE — its origin piece is on the board right now.
+  let curFen: string;
+  let puFrom: string;
+  let puTo: string;
+  let punisher: 'w' | 'b';
+  try {
+    const c = new Chess();
+    for (const s of gem.lineMoves.split(/\s+/).filter(Boolean)) if (!c.move(s)) return null;
+    if (!c.move(gem.inaccuracy)) return null;
+    curFen = c.fen();
+    punisher = c.turn();
+    const pm = c.move(gem.punish);
+    if (!pm) return null;
+    puFrom = pm.from;
+    puTo = pm.to;
+  } catch {
+    return null;
+  }
+
+  const { payoff } = computePayoff(curFen, gem.punish, (gem.punishSeq ?? []).slice(1), punisher, gem.tier);
+  const us = cap(sideWord(punisher));
+  // Rotate the callout deterministically by gem so it varies without randomness.
+  const callout = CALLOUTS[gem.inaccuracy.length % CALLOUTS.length];
+  return {
+    gemId: gemId(gem),
+    inaccuracy: gem.inaccuracy,
+    punish: gem.punish,
+    studentSide: sideWord(punisher),
+    payoff,
+    callout,
+    revealArrows: [{ from: puFrom, to: puTo, color: 'green' }],
+    reveal: `${us} crushes with ${cleanSan(gem.punish)}, ${payoff}.`,
+    punishSeq: gem.punishSeq ?? [gem.punish],
+  };
 }
