@@ -91,8 +91,17 @@ const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop'
  */
 export function describeSacBreaksKingShield(fenBefore: string, san: string): string | null {
   let board: Chess;
-  try { board = new Chess(fenBefore); } catch { return null; }
-  const mv = board.move(san);
+  let mv: ReturnType<Chess['move']> | null;
+  // Guard the SAN apply too — chess.js throws on an illegal move (e.g. `O-O`
+  // replayed onto a desynced / odds-game position). Defense-in-depth: the caller
+  // pre-validates today, but a bare throw here bubbles to the review error
+  // boundary (the prod `Invalid move: O-O` class).
+  try {
+    board = new Chess(fenBefore);
+    mv = board.move(san);
+  } catch {
+    return null;
+  }
   if (!mv || !mv.captured) return null;
   const enemy: 'w' | 'b' = mv.color === 'w' ? 'b' : 'w';
   const kingSq = findKing(board, enemy); // AFTER the move — king hasn't moved on a capture

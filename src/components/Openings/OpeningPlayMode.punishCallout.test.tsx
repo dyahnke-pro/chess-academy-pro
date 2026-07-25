@@ -6,7 +6,7 @@
  * button reveals the move + speaks it. The engine eval is mocked to a clear
  * single-best winning line so detectEnginePunish fires deterministically.
  */
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { screen, waitFor, act, fireEvent } from '@testing-library/react';
 import { render } from '../../test/utils';
 import { OpeningPlayMode } from './OpeningPlayMode';
@@ -102,7 +102,7 @@ describe('OpeningPlayMode — live punishment callout wiring', () => {
     });
     // The reveal was spoken (voice fired with the move-naming line).
     expect(speakSpy).toHaveBeenCalled();
-    const spokenReveal = speakSpy.mock.calls.some((c) => String(c[0]).includes('Qxe5'));
+    const spokenReveal = speakSpy.mock.calls.some((c) => c[0].includes('Qxe5'));
     expect(spokenReveal).toBe(true);
     // Button gone after reveal.
     expect(screen.queryByTestId('show-the-line')).not.toBeInTheDocument();

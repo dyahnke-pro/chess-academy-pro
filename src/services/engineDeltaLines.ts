@@ -179,7 +179,7 @@ export function detectEnginePunish(
   // (c) Replay the PV as a SEQUENCE. Require a forcing student move (capture /
   // check / sacrifice) AND a net material gain (or mate) over the line — that is
   // what makes it a COMBINATION worth calling out, not a quiet edge.
-  let sans: string[] = [];
+  const sans: string[] = [];
   let forcing = false;
   let wonMaterial = false;
   try {
