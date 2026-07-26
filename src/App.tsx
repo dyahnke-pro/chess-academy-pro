@@ -18,7 +18,7 @@ import { voiceService } from './services/voiceService';
 import { stockfishEngine } from './services/stockfishEngine';
 import { db } from './db/schema';
 import { installGlobalErrorHooks, installConsoleBackdoor, logAppAudit, loadAuditStreamConfig } from './services/appAuditor';
-import { initAnalytics, identifyUser } from './services/analytics';
+import { initAnalytics, identifyUser, setUserProperties } from './services/analytics';
 import { emitAppBootAudit } from './services/appBootAudit';
 import { AppLayout } from './components/ui/AppLayout';
 import { LoadingScreen } from './components/ui/LoadingScreen';
@@ -236,6 +236,13 @@ export function App(): JSX.Element {
           const stableId = await getStableAnalyticsId();
           if (stableId) identifyUser(stableId);
         });
+
+        // Person-level retention anchors: first_seen_at is written ONCE (stable
+        // cohort boundary), last_seen_at every boot. No-op on keyless builds.
+        setUserProperties(
+          { last_seen_at: new Date().toISOString() },
+          { first_seen_at: new Date().toISOString() },
+        );
 
         // Hydrate the free-tier ledger (puzzle bucket / free opening / kid
         // window) into its runtime mirror so the soft paywall gate can read

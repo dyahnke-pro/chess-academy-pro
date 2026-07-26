@@ -24,6 +24,14 @@ import { Capacitor } from '@capacitor/core';
 import { useEntitlementStore } from '../stores/entitlementStore';
 import type { EntitlementSource } from '../stores/entitlementStore';
 import { logAppAudit } from './appAuditor';
+import {
+  syncSubscriptionPerson,
+  trackPurchaseSuccess,
+  trackPurchaseFailed,
+  trackPurchaseCancelled,
+  trackRestore,
+  trackRestoreFailed,
+} from './billingAnalytics';
 
 /** The single RevenueCat entitlement identifier the whole app gates on.
  *  Must match the entitlement id configured in the RevenueCat dashboard. */
@@ -35,6 +43,10 @@ export interface BillingPackage {
   id: string;
   /** Localized price string straight from the store, e.g. "$7.99". */
   priceString: string;
+  /** Numeric price in the store currency (0 when unknown) — for analytics revenue. */
+  priceAmount: number;
+  /** ISO 4217 currency code, e.g. "USD" (empty when unknown) — for analytics. */
+  currency: string;
   /** Localized product title, when the store provides one. */
   title: string;
   /** Localized description / billing period, when available. */
@@ -168,8 +180,11 @@ function applyCustomerInfo(customerInfo: {
         : 'subscription';
     const expiresAt = ent.expirationDate ? new Date(ent.expirationDate).getTime() : null;
     store.setEntitlement({ isPro: true, source, expiresAt });
+    // Mirror onto the PostHog person so engagement can be split by paid-vs-free.
+    syncSubscriptionPerson({ isPro: true, source, expiresAt });
   } else {
     store.setEntitlement({ isPro: false, source: 'none', expiresAt: null });
+    syncSubscriptionPerson({ isPro: false, source: 'none', expiresAt: null });
   }
 }
 
@@ -202,6 +217,8 @@ export async function getBillingPackages(): Promise<BillingPackage[]> {
     return {
       id: pkg.identifier,
       priceString: product.priceString,
+      priceAmount: product.price,
+      currency: product.currencyCode,
       title: product.title,
       description: product.description,
       hasFreeTrial: isFree,
@@ -231,6 +248,21 @@ export async function purchasePackage(packageId: string): Promise<boolean> {
       await refreshEntitlement();
     }
     logBilling('billing-purchase', 'billingService.purchasePackage', packageId);
+    // Split trial-start vs paid conversion off the resolved entitlement source
+    // (already computed by applyCustomerInfo) so the funnel distinguishes the
+    // two — revenue rides `purchase_completed` only.
+    const source = useEntitlementStore.getState().source;
+    const product = pkg.product;
+    trackPurchaseSuccess(
+      {
+        packageId,
+        priceString: product.priceString,
+        priceAmount: product.price,
+        currency: product.currencyCode,
+        isAnnual: (pkg.packageType as string) === 'ANNUAL',
+      },
+      source === 'trial' ? 'TRIAL' : 'NORMAL',
+    );
     return true;
   } catch (err) {
     // RevenueCat throws on user-cancel; treat cancel as a benign false.
@@ -238,10 +270,13 @@ export async function purchasePackage(packageId: string): Promise<boolean> {
       typeof err === 'object' && err !== null && 'userCancelled' in err
         ? Boolean((err as { userCancelled: unknown }).userCancelled)
         : /cancel/i.test(err instanceof Error ? err.message : '');
-    if (!cancelled) {
+    if (cancelled) {
+      trackPurchaseCancelled(packageId);
+    } else {
       const message = err instanceof Error ? err.message : 'purchase failed';
       useEntitlementStore.getState().setError(message);
       logBilling('billing-error', 'billingService.purchasePackage', message);
+      trackPurchaseFailed(packageId, message);
     }
     return false;
   }
@@ -255,11 +290,14 @@ export async function restorePurchases(): Promise<boolean> {
     await Purchases.restorePurchases();
     await refreshEntitlement();
     logBilling('billing-restore', 'billingService.restorePurchases', 'restore');
-    return useEntitlementStore.getState().isPro;
+    const becamePro = useEntitlementStore.getState().isPro;
+    trackRestore(becamePro);
+    return becamePro;
   } catch (err) {
     const message = err instanceof Error ? err.message : 'restore failed';
     useEntitlementStore.getState().setError(message);
     logBilling('billing-error', 'billingService.restorePurchases', message);
+    trackRestoreFailed(message);
     return false;
   }
 }

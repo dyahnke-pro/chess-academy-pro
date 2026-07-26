@@ -17,6 +17,10 @@ import { ModelGameViewer } from './ModelGameViewer';
 import { useEntitlement } from '../../hooks/useEntitlement';
 import { useFreeTierStore } from '../../stores/freeTierStore';
 import { canViewOpening, isEligibleFreeOpening } from '../../services/freeTierService';
+import {
+  trackFreeOpeningClaimed,
+  trackSecondOpeningWalled,
+} from '../../services/billingAnalytics';
 import { PaywallPage } from '../Paywall/PaywallPage';
 import { MiddlegamePlanStudy } from './MiddlegamePlanStudy';
 import { MiddlegamePractice } from './MiddlegamePractice';
@@ -736,8 +740,17 @@ export function OpeningDetailPage(): JSX.Element {
     if (!gateEnabled || isPro || !freeTierHydrated) return;
     if (!isDeepDive) return;
     if (!id || !isEligibleFreeOpening(id)) return;
-    if (freeTierRow.freeOpeningId != null) return; // one pick already claimed
-    void claimFreeOpening(id);
+    if (freeTierRow.freeOpeningId != null) {
+      // A different opening is already the free pick — this deep dive is the
+      // second-opening wall (the upgrade-pressure moment).
+      if (freeTierRow.freeOpeningId !== id) {
+        trackSecondOpeningWalled(id, freeTierRow.freeOpeningId);
+      }
+      return; // one pick already claimed
+    }
+    void claimFreeOpening(id).then((result) => {
+      if (result === 'ok') trackFreeOpeningClaimed(id);
+    });
   }, [gateEnabled, isPro, freeTierHydrated, isDeepDive, id, freeTierRow.freeOpeningId, claimFreeOpening]);
 
   if (loading) {

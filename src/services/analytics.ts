@@ -454,6 +454,25 @@ function crashFromAudit(entry: AuditEntry): Error {
   return err;
 }
 
+/**
+ * Set PostHog PERSON properties on the current person via `$set` / `$set_once`.
+ * Used to attach durable, queryable attributes (is_pro, plan, first_seen_at) so
+ * every event can be broken down by them. `once` props are written only if not
+ * already set (stable cohorts). No-op when disabled / opted out.
+ */
+export function setUserProperties(
+  props?: Record<string, unknown>,
+  once?: Record<string, unknown>,
+): void {
+  try {
+    if (!client || optedOut) return;
+    if (!props && !once) return;
+    client.setPersonProperties(props, once);
+  } catch {
+    /* swallow — analytics must never break a feature path */
+  }
+}
+
 /** Reset identity on logout so the next user starts a fresh anonymous id. */
 export function resetAnalytics(): void {
   try {
