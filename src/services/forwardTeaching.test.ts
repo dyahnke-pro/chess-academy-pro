@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { computePieceRoute, isKnightOutpost } from './forwardTeaching';
+import { computePieceRoute, isKnightOutpost, explainConditionalCapture } from './forwardTeaching';
 
 describe('computePieceRoute (Phase 1 — knight → supported outpost)', () => {
   it('routes a knight to a supported hole (b1 → c3 → d5, backed by e4)', () => {
@@ -49,5 +49,27 @@ describe('computePieceRoute (Phase 1 — knight → supported outpost)', () => {
     expect(route).not.toBeNull();
     expect(route?.target).toBe('d4');
     expect(route?.route).toEqual(['c6', 'd4']);
+  });
+});
+
+describe('explainConditionalCapture (Phase 2 — "if you take, then …")', () => {
+  it('teaches that exd5 + the recapture opens the e-file', () => {
+    // 1.e4 d5 — exd5 removes White\'s e-pawn (via d5), Black recaptures with the
+    // queen (least-valuable attacker of d5), and the e-file opens for White.
+    const fen = 'rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+    const r = explainConditionalCapture(fen, 'exd5');
+    expect(r).not.toBeNull();
+    expect(r?.line).toEqual(['exd5', 'Qxd5']);
+    expect(r?.consequence).toMatch(/e-file/);
+  });
+
+  it('returns null for a non-capture move', () => {
+    const fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+    expect(explainConditionalCapture(fen, 'e4')).toBeNull();
+  });
+
+  it('returns null for an illegal move', () => {
+    const fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+    expect(explainConditionalCapture(fen, 'Qxd7')).toBeNull();
   });
 });

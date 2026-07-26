@@ -80,8 +80,13 @@ the answer. NEW computer `forwardTeaching.detectDecisionPoint(fen)`:
 - Phase 5: wire each into Learn + Review narration; clone the real-game audit.
 
 ## Status
-- [ ] Phase 1 computePieceRoute — IN PROGRESS (this session).
-- [ ] Phases 2-5 — pending.
+- [x] Phase 1 computePieceRoute — DONE (6 unit tests).
+- [x] Phase 2 explainConditionalCapture — DONE (3 unit tests; if→then structure
+  delta: opens/rips a file, hands a passer, saddles the enemy with a weakness,
+  with an HONEST downside when the capture damages the mover's own pawns).
+- [ ] Phase 3 detectDecisionPoint (Stockfish multipv) — pending.
+- [ ] Phase 4 beat reordering — pending.
+- [ ] Phase 5 wire into Learn + Review narration + real-game audit — pending.
 
 ## Decisions log
 - 2026-07-26: coach-tab only; every forward claim computed in code, LLM voices

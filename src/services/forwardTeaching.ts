@@ -9,6 +9,9 @@
 // docs/plans/2026-07-26-forward-teaching.md.
 
 import { Chess, type Square, type Color } from 'chess.js';
+import { describeStructure } from './boardStructure';
+
+const PIECE_VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 
 const FILES = 'abcdefgh';
 const KNIGHT_DELTAS: ReadonlyArray<readonly [number, number]> = [
@@ -133,4 +136,83 @@ export function computePieceRoute(fen: string, fromSquare: Square): PieceRoute |
     }
   }
   return null;
+}
+
+// ── Phase 2: conditional captures — "if you take, then …" ──────────────────
+
+export interface ConditionalCapture {
+  /** The played line: [captureSan] or [captureSan, best recaptureSan]. */
+  line: string[];
+  /** Present-tense board-true consequence of the trade (opens a file, hands a
+   *  passer, saddles them with a weakness — with an HONEST downside when the
+   *  capture also damages the mover's own structure). */
+  consequence: string;
+}
+
+/**
+ * Explain the STRUCTURAL consequence of a capture BEFORE the student commits to
+ * it — the forward "if you take on d5, the recapture opens the e-file" teaching.
+ * Plays the capture + the opponent's best recapture (least-valuable attacker),
+ * then diffs the pawn structure before vs after. Pure chess.js + boardStructure
+ * (no engine); returns null when the move isn't a capture or has no structural
+ * story worth teaching (empty > invented).
+ */
+export function explainConditionalCapture(fen: string, captureSan: string): ConditionalCapture | null {
+  let chess: Chess;
+  try {
+    chess = new Chess(fen);
+  } catch {
+    return null;
+  }
+  const mover = chess.turn();
+  let cap;
+  try {
+    cap = chess.move(captureSan);
+  } catch {
+    return null;
+  }
+  if (!cap || !cap.captured) return null; // must be an actual capture
+  const target = cap.to;
+  const line: string[] = [cap.san];
+
+  // The opponent recaptures on the target with their LEAST-valuable attacker
+  // (the standard practical recapture) — pure heuristic, no engine.
+  const recaptures = chess
+    .moves({ verbose: true })
+    .filter((m) => m.to === target && m.captured);
+  if (recaptures.length > 0) {
+    recaptures.sort((a, b) => PIECE_VALUE[a.piece] - PIECE_VALUE[b.piece]);
+    const rc = chess.move(recaptures[0].san);
+    if (rc) line.push(rc.san);
+  }
+
+  const before = describeStructure(fen);
+  const after = describeStructure(chess.fen());
+  if (!before || !after) return null;
+
+  const enemy: Color = mover === 'w' ? 'b' : 'w';
+  const gained = (a: string[], b: string[]): string[] => a.filter((x) => !b.includes(x));
+
+  const openFiles = gained(after.pawns.openFiles, before.pawns.openFiles);
+  const halfOpen = gained(after.pawns.halfOpenFiles[mover], before.pawns.halfOpenFiles[mover]);
+  const passers = gained(after.pawns.passedPawns[mover], before.pawns.passedPawns[mover]);
+  const enemyDoubled = gained(after.pawns.doubledFiles[enemy], before.pawns.doubledFiles[enemy]);
+  const enemyIsolated = gained(after.pawns.isolatedPawns[enemy], before.pawns.isolatedPawns[enemy]);
+  const ownDoubled = gained(after.pawns.doubledFiles[mover], before.pawns.doubledFiles[mover]);
+  const ownIsolated = gained(after.pawns.isolatedPawns[mover], before.pawns.isolatedPawns[mover]);
+
+  let lead = '';
+  if (passers.length) lead = `it hands you a passed pawn on ${passers[0]}`;
+  else if (openFiles.length) lead = `it rips open the ${openFiles[0]}-file`;
+  else if (halfOpen.length) lead = `it opens the ${halfOpen[0]}-file for your rooks`;
+  else if (enemyDoubled.length) lead = `it saddles them with doubled pawns on the ${enemyDoubled[0]}-file`;
+  else if (enemyIsolated.length) lead = `it leaves them an isolated pawn on ${enemyIsolated[0]}`;
+
+  let downside = '';
+  if (ownDoubled.length) downside = `but it doubles your own pawns on the ${ownDoubled[0]}-file`;
+  else if (ownIsolated.length) downside = `but it leaves your ${ownIsolated[0]}-pawn isolated`;
+
+  if (!lead && !downside) return null; // no structural story to tell
+  const body = [lead, downside].filter(Boolean).join(' — ');
+  return { line, consequence: `${body.charAt(0).toUpperCase()}${body.slice(1)}.` };
 }
