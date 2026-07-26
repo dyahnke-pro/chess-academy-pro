@@ -38,7 +38,7 @@ import { markStageComplete } from '../services/openingProgress';
 import { getCachedOpening } from '../services/openingGenerator';
 import { buildDrillWrongTeaching } from '../services/learnMoveTeaching';
 import { computeWatchGemAside } from '../services/gemCrushLines';
-import { computeThreatDelta, type DeltaAside } from '../services/engineDeltaLines';
+import { computeThreatDelta, computeRouteDelta, type DeltaAside } from '../services/engineDeltaLines';
 import { useAppStore } from '../stores/appStore';
 import { resolveCoachNarration } from '../utils/coachNarration';
 import type {
@@ -912,6 +912,13 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
               fenAfter,
               node.movedBy === 'white' ? 'w' : 'b',
             );
+            // No immediate threat → teach the QUIET move's forward PLAN: where a
+            // developing knight is routing (its multi-move path to a supported
+            // outpost). Fills Watch's quiet-move look-ahead gap; engine-free
+            // (David 2026-07-26).
+            if (!aside) {
+              aside = computeRouteDelta(fenBefore, node.san);
+            }
           }
           if (aside) {
             // Draw the delta (gem crush or engine threat) on the current static

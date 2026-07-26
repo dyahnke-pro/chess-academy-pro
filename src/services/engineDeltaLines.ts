@@ -18,8 +18,9 @@
  * G0/G3: every square is board-derived (chess.js / the engine PV); the voice
  * only phrases computed facts, never decides them. Present-tense, side-framed.
  */
-import { Chess } from 'chess.js';
+import { Chess, type Square } from 'chess.js';
 import { detectNewThreat } from './groundedAnswer';
+import { computePieceRoute } from './forwardTeaching';
 import type { PvLine } from './pvPlayback';
 import type { NarrationArrow } from '../types/walkthroughTree';
 import type { AnalysisLine } from '../types';
@@ -61,6 +62,41 @@ export function computeThreatDelta(
     arrows: [{ from: t.from, to: t.landing, color: 'blue' }],
     say,
     short,
+  };
+}
+
+/**
+ * The ROUTE-PLAN delta — when the move just played was a QUIET developing knight
+ * move (no immediate threat), teach where the knight is HEADING: its multi-move
+ * route to a supported outpost. This is the forward-looking PLAN Watch was
+ * missing — quiet moves used to get zero look-ahead (David 2026-07-26: "the demo
+ * never says 'and now this knight is heading for f5'"). Engine-free (pure
+ * `computePieceRoute` — chess.js only), so it adds no latency to Watch auto-play.
+ * Draws ONE green arrow from the knight to its target (origin has the piece, so
+ * it's board-accurate on the static board). Null unless the moved piece is a
+ * knight with a real supported-outpost route.
+ */
+export function computeRouteDelta(
+  fenBeforeMove: string,
+  san: string,
+): DeltaAside | null {
+  let toSquare: Square;
+  let fenAfter: string;
+  try {
+    const c = new Chess(fenBeforeMove);
+    const mv = c.move(san);
+    if (!mv) return null;
+    toSquare = mv.to;
+    fenAfter = c.fen();
+  } catch {
+    return null;
+  }
+  const route = computePieceRoute(fenAfter, toSquare);
+  if (!route) return null;
+  return {
+    arrows: [{ from: route.from, to: route.target, color: 'green' }],
+    say: `${route.why}. The knight is routing there over the next few moves.`,
+    short: `Plan: knight to ${route.target}.`,
   };
 }
 

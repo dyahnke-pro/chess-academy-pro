@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { computeThreatDelta, bestLineDeltaFromPv, detectEnginePunish } from './engineDeltaLines';
+import { computeThreatDelta, bestLineDeltaFromPv, detectEnginePunish, computeRouteDelta } from './engineDeltaLines';
 import type { PvLine } from './pvPlayback';
 import type { AnalysisLine } from '../types';
 
@@ -102,5 +102,29 @@ describe('detectEnginePunish', () => {
     const cue = detectEnginePunish(fen, [line(['d2c3'], -800), line(['e8d8'], -80)], 'b');
     expect(cue).toBeTruthy();
     expect(cue!.reveal).toContain('Qxc3');
+  });
+});
+
+describe('computeRouteDelta (Watch quiet-move plan look-ahead, P1)', () => {
+  it('teaches a developing knight\'s route to a supported outpost', () => {
+    // White knight on b1, e4 pawn, d5 a supported hole. Nc3 develops with a
+    // route c3 → d5. The quiet move should now speak its forward plan.
+    const fenBefore = '4k3/p4p2/8/8/4P3/8/8/1N2K3 w - - 0 1';
+    const aside = computeRouteDelta(fenBefore, 'Nc3');
+    expect(aside).not.toBeNull();
+    expect(aside?.say).toMatch(/outpost/i);
+    expect(aside?.say).toMatch(/d5/);
+    expect(aside?.say).toMatch(/routing/i);
+    expect(aside?.arrows[0]).toMatchObject({ from: 'c3', to: 'd5', color: 'green' });
+  });
+
+  it('returns null for a non-knight move (no route plan to teach)', () => {
+    const fenBefore = '4k3/p4p2/8/8/4P3/8/8/1N2K3 w - - 0 1';
+    expect(computeRouteDelta(fenBefore, 'Ke2')).toBeNull();
+  });
+
+  it('returns null for an illegal move', () => {
+    const fenBefore = '4k3/p4p2/8/8/4P3/8/8/1N2K3 w - - 0 1';
+    expect(computeRouteDelta(fenBefore, 'Qh8')).toBeNull();
   });
 });
