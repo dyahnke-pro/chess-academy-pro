@@ -106,7 +106,9 @@ export function computePieceRoute(fen: string, fromSquare: Square): PieceRoute |
   const visited = new Set<string>([fromSquare]);
   const queue: Array<{ sq: Square; path: Square[] }> = [{ sq: fromSquare, path: [] }];
   while (queue.length > 0) {
-    const { sq: cur, path } = queue.shift()!;
+    const head = queue.shift();
+    if (!head) break;
+    const { sq: cur, path } = head;
     if (path.length >= MAX_HOPS) continue;
     const cf = fileIdx(cur);
     const cr = rankIdx(cur);
