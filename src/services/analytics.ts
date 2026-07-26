@@ -25,6 +25,7 @@
  * Contract: every export is fire-and-forget and swallows its own
  * errors — analytics must never break a feature path.
  */
+import { Capacitor } from '@capacitor/core';
 import type { AuditEntry, AuditKind } from './appAuditor';
 
 // `posthog-js` keeps its anonymous distinct-id in a first-party cookie /
@@ -235,6 +236,45 @@ function resolveKey(): string | undefined {
 }
 
 /**
+ * Resolve the platform super-properties so every event + person can be told
+ * apart: a native App Store / Play install vs an installed PWA vs a plain
+ * browser visit. This is the "real downloaders" filter — without it a native
+ * iOS install looks identical to someone visiting the website on an iPhone,
+ * because the app uses `posthog-js` inside the Capacitor webview. Pure + total
+ * (defends against non-Capacitor / SSR / test envs). Exported for tests.
+ */
+export function resolvePlatformSuperProps(): Record<string, unknown> {
+  let isNative = false;
+  let nativePlatform: string | null = null;
+  try {
+    isNative = Capacitor.isNativePlatform();
+    nativePlatform = isNative ? Capacitor.getPlatform() : null;
+  } catch {
+    /* not a Capacitor env */
+  }
+
+  let isStandalone = false;
+  try {
+    isStandalone =
+      (typeof window !== 'undefined' &&
+        typeof window.matchMedia === 'function' &&
+        window.matchMedia('(display-mode: standalone)').matches) ||
+      (typeof navigator !== 'undefined' &&
+        (navigator as Navigator & { standalone?: boolean }).standalone === true);
+  } catch {
+    /* matchMedia unavailable */
+  }
+
+  const platform = isNative ? 'native' : isStandalone ? 'pwa' : 'web';
+  return {
+    platform,
+    is_native: isNative,
+    is_standalone: isStandalone,
+    ...(nativePlatform ? { native_platform: nativePlatform } : {}),
+  };
+}
+
+/**
  * Initialize analytics. Idempotent. Call once at app boot.
  * - No key → permanent no-op (posthog-js never imported).
  * - `optedOut` → posthog loads but capturing is suppressed until the
@@ -283,6 +323,17 @@ export function initAnalytics(opts?: { optedOut?: boolean }): void {
       });
       client = posthog;
       enabled = true;
+      // Tag EVERY event (super-property) + the person with the platform so
+      // native installs are separable from PWA / browser web visitors — the
+      // "real downloaders" filter. Registered before the app_session_started
+      // capture below so that event carries it too.
+      try {
+        const platformProps = resolvePlatformSuperProps();
+        posthog.register(platformProps);
+        posthog.setPersonProperties(platformProps);
+      } catch {
+        /* swallow — never let tagging break init */
+      }
       if (optedOut) posthog.opt_out_capturing();
       else {
         flushQueue();
