@@ -32,6 +32,7 @@ export const BILLING_EVENT = {
   planSelected: 'plan_selected',
   /** User left the paywall without buying (back-to-free / dismiss). */
   paywallDismissed: 'paywall_dismissed',
+  paywallDeclineReason: 'paywall_decline_reason',
   /** A trial-bearing package purchase succeeded (period = TRIAL/INTRO). $0. */
   trialStarted: 'trial_started',
   /** A paid purchase succeeded (period = NORMAL) — carries revenue. */
@@ -106,6 +107,23 @@ export function trackPlanSelected(ctx: Pick<PurchaseContext, 'packageId' | 'isAn
 export function trackPaywallDismissed(walledFeature?: string | null): void {
   captureEvent(BILLING_EVENT.paywallDismissed, {
     ...(walledFeature ? { walled_feature: walledFeature } : {}),
+  });
+}
+
+/** The self-reported reason a user declined the paywall (David 2026-07-26:
+ *  "ask them why they said no"). `reason` is a stable slug (too_expensive /
+ *  not_sure_worth_it / just_exploring / want_more_free / other / skipped);
+ *  `detail` carries the optional free-text on "other". Props feed the
+ *  conversion-leak analysis in PostHog. */
+export function trackPaywallDeclineReason(
+  reason: string,
+  walledFeature?: string | null,
+  detail?: string,
+): void {
+  captureEvent(BILLING_EVENT.paywallDeclineReason, {
+    reason,
+    ...(walledFeature ? { walled_feature: walledFeature } : {}),
+    ...(detail ? { detail } : {}),
   });
 }
 

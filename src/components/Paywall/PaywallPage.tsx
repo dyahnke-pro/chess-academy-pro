@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Crown, Check, Loader2, AlertCircle } from 'lucide-react';
 import { useEntitlement } from '../../hooks/useEntitlement';
 import {
@@ -14,7 +14,18 @@ import {
   trackCheckoutStarted,
   trackPlanSelected,
   trackPaywallDismissed,
+  trackPaywallDeclineReason,
 } from '../../services/billingAnalytics';
+
+/** Decline-survey reasons (David 2026-07-26: "ask them why they said no").
+ *  Stable slug + the tappable label the user sees. */
+const DECLINE_REASONS: ReadonlyArray<{ slug: string; label: string }> = [
+  { slug: 'too_expensive', label: 'Too expensive' },
+  { slug: 'too_many_bugs', label: 'Too many bugs' },
+  { slug: 'didnt_work', label: "The app didn't work" },
+  { slug: 'not_sure_worth_it', label: "Not sure it's worth it" },
+  { slug: 'just_exploring', label: 'Just exploring for now' },
+];
 
 /**
  * PaywallPage — the hard wall shown when the entitlement gate is live and the
@@ -74,6 +85,20 @@ export function PaywallPage({ feature }: { feature?: PaywallFeature } = {}): JSX
   const [restoring, setRestoring] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  // Decline survey — shown when the user chooses "Not now" (David 2026-07-26).
+  const [declineOpen, setDeclineOpen] = useState(false);
+  const [otherText, setOtherText] = useState('');
+  const navigate = useNavigate();
+
+  /** Log the self-reported decline reason, then leave to the free features. */
+  const submitDecline = (slug: string): void => {
+    trackPaywallDeclineReason(
+      slug,
+      feature ?? null,
+      slug === 'other' ? otherText.trim() || undefined : undefined,
+    );
+    void navigate('/');
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -306,16 +331,77 @@ export function PaywallPage({ feature }: { feature?: PaywallFeature } = {}): JSX
         {/* Soft gate: this wall sits in front of ONE premium surface, not the
             whole app — always give a way back to the free features. */}
         <p className="mt-4 text-center text-xs">
-          <Link
-            to="/"
+          <button
+            type="button"
             className="text-zinc-400 underline"
             data-testid="paywall-back-free"
-            onClick={() => trackPaywallDismissed(feature ?? null)}
+            onClick={() => {
+              trackPaywallDismissed(feature ?? null);
+              setDeclineOpen(true);
+            }}
           >
             Not now — back to free features
-          </Link>
+          </button>
         </p>
       </div>
+
+      {declineOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 p-4 sm:items-center"
+          data-testid="decline-survey"
+          role="dialog"
+          aria-modal="true"
+          aria-label="What held you back?"
+        >
+          <div className="w-full max-w-sm rounded-2xl border border-zinc-700 bg-zinc-900 p-5 shadow-xl">
+            <h2 className="text-center text-base font-bold text-zinc-100">
+              Quick question — what held you back?
+            </h2>
+            <p className="mt-1 text-center text-xs text-zinc-400">
+              One tap helps us improve. Totally optional.
+            </p>
+            <div className="mt-4 flex flex-col gap-2">
+              {DECLINE_REASONS.map((r) => (
+                <button
+                  key={r.slug}
+                  type="button"
+                  data-testid={`decline-reason-${r.slug}`}
+                  onClick={() => submitDecline(r.slug)}
+                  className="rounded-xl border-2 border-zinc-700 bg-zinc-800/60 px-4 py-3 text-sm font-medium text-zinc-100 hover:border-amber-500/50"
+                >
+                  {r.label}
+                </button>
+              ))}
+              <input
+                type="text"
+                value={otherText}
+                onChange={(e) => setOtherText(e.target.value)}
+                placeholder="Tell us more (optional)…"
+                data-testid="decline-other-text"
+                className="mt-1 rounded-xl border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 placeholder-zinc-500"
+              />
+              {otherText.trim() && (
+                <button
+                  type="button"
+                  data-testid="decline-submit-other"
+                  onClick={() => submitDecline('other')}
+                  className="rounded-xl bg-amber-500 px-4 py-3 text-sm font-bold text-zinc-900"
+                >
+                  Send
+                </button>
+              )}
+            </div>
+            <button
+              type="button"
+              data-testid="decline-skip"
+              onClick={() => submitDecline('skipped')}
+              className="mt-3 w-full text-center text-xs text-zinc-500 underline"
+            >
+              Skip — back to free features
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
