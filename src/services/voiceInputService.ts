@@ -676,8 +676,16 @@ class VoiceInputService {
       // the playback route before the recognizer reconfigures the session for
       // record — starting in the same tick can still collide. Lazy import so
       // voiceInputService keeps no hard dep on voiceService.
+      const wasSpeaking = (() => { try { return !!this.voiceServiceRef?.isPlaying(); } catch { return false; } })();
       try { this.voiceServiceRef?.stop(); } catch { /* never block the mic on a TTS-stop failure */ }
-      await new Promise((resolve) => setTimeout(resolve, 150));
+      // After TTS, iOS needs a real beat to release the playback route and hand
+      // the LIVE input node to SFSpeechRecognizer. 150ms could still hand it a
+      // dead/silent input → the recognizer starts, hears nothing, and stops
+      // instantly with pending="" — the start→starve→auto-restart LOOP David hit
+      // (2026-07-26 audit: mic-start-requested → mic-native-stopped pending=""
+      // ×N, permissions all granted). Give the route a proper settle window when
+      // TTS was actually up; stay snappy from cold (no collision to clear).
+      await new Promise((resolve) => setTimeout(resolve, wasSpeaking ? 450 : 150));
       await SpeechRecognition.start({ language: 'en-US', maxResults: 2, partialResults: true, popup: false });
       // CONVERSATION MODE (turn-taking, David 2026-07-11): one tap arms a
       // whole back-and-forth. Each pause auto-submits and tears the
