@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { computePieceRoute, isKnightOutpost, explainConditionalCapture } from './forwardTeaching';
+import { computePieceRoute, isKnightOutpost, explainConditionalCapture, detectDecisionPoint } from './forwardTeaching';
 
 describe('computePieceRoute (Phase 1 — knight → supported outpost)', () => {
   it('routes a knight to a supported hole (b1 → c3 → d5, backed by e4)', () => {
@@ -71,5 +71,39 @@ describe('explainConditionalCapture (Phase 2 — "if you take, then …")', () =
   it('returns null for an illegal move', () => {
     const fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
     expect(explainConditionalCapture(fen, 'Qxd7')).toBeNull();
+  });
+});
+
+describe('detectDecisionPoint (Phase 3 — "feel the fork")', () => {
+  // 1.e4 d5: exd5 commits to a different pawn character (doubled d-file after
+  // the capture) than the quiet Nc3 — a genuine fork when the evals are close.
+  const fen = 'rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+
+  it('flags a fork when two near-equal moves lead to different pawn character', () => {
+    const dp = detectDecisionPoint(fen, [
+      { san: 'exd5', evalCp: 30 },
+      { san: 'Nc3', evalCp: 10 },
+    ]);
+    expect(dp).not.toBeNull();
+    expect(dp?.competing.map((c) => c.san)).toEqual(['exd5', 'Nc3']);
+  });
+
+  it('stays silent when one move is clearly best (eval gap beyond the band)', () => {
+    expect(detectDecisionPoint(fen, [
+      { san: 'exd5', evalCp: 300 },
+      { san: 'Nc3', evalCp: 10 },
+    ])).toBeNull();
+  });
+
+  it('stays silent when the two near-equal moves keep the same character', () => {
+    // Two quiet developing knight moves — no structural commitment, no fork.
+    expect(detectDecisionPoint(fen, [
+      { san: 'Nc3', evalCp: 20 },
+      { san: 'Nf3', evalCp: 10 },
+    ])).toBeNull();
+  });
+
+  it('returns null with fewer than two candidates', () => {
+    expect(detectDecisionPoint(fen, [{ san: 'exd5', evalCp: 30 }])).toBeNull();
   });
 });

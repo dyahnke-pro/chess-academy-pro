@@ -84,7 +84,10 @@ the answer. NEW computer `forwardTeaching.detectDecisionPoint(fen)`:
 - [x] Phase 2 explainConditionalCapture — DONE (3 unit tests; if→then structure
   delta: opens/rips a file, hands a passer, saddles the enemy with a weakness,
   with an HONEST downside when the capture damages the mover's own pawns).
-- [ ] Phase 3 detectDecisionPoint (Stockfish multipv) — pending.
+- [x] Phase 3 detectDecisionPoint — DONE (4 unit tests). Pure core: caller
+  supplies Stockfish multipv candidates; fires only when the top two are within
+  the eval band AND lead to different pawn-structure signatures (a real break /
+  commitment), else stays silent. The engine multipv call is a Phase-5 concern.
 - [ ] Phase 4 beat reordering — pending.
 - [ ] Phase 5 wire into Learn + Review narration + real-game audit — pending.
 

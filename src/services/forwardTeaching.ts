@@ -9,7 +9,7 @@
 // docs/plans/2026-07-26-forward-teaching.md.
 
 import { Chess, type Square, type Color } from 'chess.js';
-import { describeStructure } from './boardStructure';
+import { describeStructure, structureSignature, type StructureSignature } from './boardStructure';
 
 const PIECE_VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 
@@ -215,4 +215,78 @@ export function explainConditionalCapture(fen: string, captureSan: string): Cond
   if (!lead && !downside) return null; // no structural story to tell
   const body = [lead, downside].filter(Boolean).join(' — ');
   return { line, consequence: `${body.charAt(0).toUpperCase()}${body.slice(1)}.` };
+}
+
+// ── Phase 3: decision-tension — "feel the fork" ────────────────────────────
+
+type Wing = 'queenside' | 'center' | 'kingside';
+
+function wingOfFile(file: string): Wing {
+  if (file <= 'c') return 'queenside';
+  if (file >= 'f') return 'kingside';
+  return 'center';
+}
+
+export interface DecisionPoint {
+  /** The competing moves, top-first, each with the wing it commits to. */
+  competing: Array<{ san: string; evalCp: number; wing: Wing }>;
+}
+
+/** Two positions have DIFFERENT character when their pawn-structure signatures
+ *  diverge (a real pawn break / structural commitment), not merely a piece
+ *  landing on a different square. */
+function signaturesDiffer(a: StructureSignature | null, b: StructureSignature | null): boolean {
+  if (!a || !b) return false;
+  return (
+    a.openFiles.join() !== b.openFiles.join() ||
+    a.iqp !== b.iqp ||
+    a.lockedCenter !== b.lockedCenter ||
+    a.queensideMajority !== b.queensideMajority ||
+    a.passedPawnCount !== b.passedPawnCount ||
+    a.doubled !== b.doubled
+  );
+}
+
+/**
+ * Detect a genuine DECISION POINT — where two near-equal engine moves lead to
+ * STRUCTURALLY different positions, so the coach can voice the tension ("two
+ * roads: open it up, or hold and keep it closed") BEFORE handing the answer.
+ *
+ * Pure: the caller supplies the multipv `candidates` (san + white-POV cp) from
+ * Stockfish; this decides whether they constitute a real fork. Returns null when
+ * one move is clearly best (eval gap > band) or the top two lead to the same
+ * pawn character (no teachable tension) — so quiet only-moves stay silent.
+ */
+export function detectDecisionPoint(
+  fen: string,
+  candidates: ReadonlyArray<{ san: string; evalCp: number }>,
+  opts?: { bandCp?: number },
+): DecisionPoint | null {
+  const band = opts?.bandCp ?? 40;
+  if (candidates.length < 2) return null;
+  const [top, second] = candidates;
+  if (Math.abs(top.evalCp - second.evalCp) > band) return null; // one move clearly best
+
+  const info = (san: string): { sig: StructureSignature | null; wing: Wing } | null => {
+    try {
+      const c = new Chess(fen);
+      const mv = c.move(san);
+      if (!mv) return null;
+      return { sig: structureSignature(c.fen()), wing: wingOfFile(mv.to[0]) };
+    } catch {
+      return null;
+    }
+  };
+
+  const a = info(top.san);
+  const b = info(second.san);
+  if (!a || !b) return null;
+  if (!signaturesDiffer(a.sig, b.sig)) return null; // same character → not a fork
+
+  const competing = candidates.slice(0, 3).map((cand) => ({
+    san: cand.san,
+    evalCp: cand.evalCp,
+    wing: info(cand.san)?.wing ?? 'center',
+  }));
+  return { competing };
 }
