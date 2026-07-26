@@ -39,4 +39,13 @@ describe('pickStoryGame — cited illustrative game from the VERIFIED corpus (§
       expect(a?.citation).toBe(b?.citation);
     }
   });
+
+  it('yields a watchable pgn for a masterclass opening (the Learn leaf story-game button, #26 Phase C)', () => {
+    // The Learn walkthrough leaf surfaces "▶ Watch <citation>" ONLY when
+    // pickStoryGame returns a story WITH a real pgn — so the button never shows
+    // an empty viewer. Italian Game is a masterclass opening in the corpus.
+    const story = pickStoryGame('Italian Game');
+    expect(story).not.toBeNull();
+    expect(story?.pgn?.trim().length ?? 0).toBeGreaterThan(0);
+  });
 });
