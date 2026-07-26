@@ -79,4 +79,15 @@ note only). Fold in `computePieceRoute`; scrap `detectDecisionPoint`.
   known mistake — and the crush was exf3, …"; "well spotted" when the student
   found it) + red/green arrows. Appends (survives first-match-wins). Opening-phase
   guarded. Data-driven wiring test on a real caro-kann gem.
-- [ ] P3 next — de-shadow the Review forward cues (king-attack loses its slot).
+- [x] P3 DONE — de-shadowed the Review forward king-attack cue. The generic
+  positional-verdict beat (b2) now carries the same `!enemyKingStuckInCenter`
+  guard the orientation beat (b) already had, so when the enemy king is stuck in
+  the centre it yields the quiet-move slot to the forward king-attack cue (c)
+  instead of shadowing it.
+- [ ] P4 — recognition/prevention into Learn. **DESIGN-GATED, not a blind wire:**
+  `computeThreatDelta` is SHARED by Watch AND Play, so adding teaching there
+  leaks into Play (breaks its locked purity). Needs a Learn-only threat-delta
+  path + a register check (`describeThreatRecognition` seat-framing must not say
+  "you" in a demo). Careful build — do next with budget.
+- [ ] P5 — speak the deep PV look-ahead as computed fact (biggest lift).
+- [ ] Scrap `detectDecisionPoint` (dead dup of forkTalk) — cleanup, deferred.

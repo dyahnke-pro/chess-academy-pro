@@ -1669,6 +1669,12 @@ export function buildReviewSegments(
       && moverColor === playerColor
       && m.ply >= MIDDLEGAME_ORIENTATION_MIN_PLY
       && (m.classification === null || m.classification === 'book' || m.classification === 'good')
+      // P3 DE-SHADOW (David 2026-07-26): don't let the generic "you're better,
+      // here's why" verdict claim the slot when the enemy king is stuck in the
+      // centre — that quiet-move slot belongs to the forward king-attack cue (c)
+      // below, which was losing first-match-wins to this beat. Mirrors the same
+      // guard the orientation beat (b) already carries.
+      && !enemyKingStuckInCenter(fenPair.fenAfter, studentColorWB)
     ) {
       const studentPovCp = m.evaluation != null ? (studentColorWB === 'w' ? m.evaluation : -m.evaluation) : null;
       const assess = assessPositionalEdge(fenPair.fenAfter, studentColorWB, studentPovCp);
