@@ -74,6 +74,25 @@ async function main() {
   const locs = (await api('GET', `/v1/appStoreVersions/${version.id}/appStoreVersionLocalizations?limit=50`)).data;
   const enUS = locs.find((l) => l.attributes?.locale === 'en-US') || locs[0];
   if (!enUS) throw new Error('no version localization');
+
+  // KEYWORDS — the 100-char App Store search field that drives discoverability
+  // (ranking on "chess openings", "chess coach", etc.). "chess"/"academy"/"pro"
+  // are already indexed from the app NAME, so we spend the 100 chars on the
+  // complementary terms Apple combines with the name. Set via the KEYWORDS env;
+  // PATCH only when APPLY=1. `soft` so a review-locked field never crashes the run.
+  const KEYWORDS = process.env.KEYWORDS || '';
+  if (KEYWORDS) {
+    console.log(`\nkeywords now:  "${enUS.attributes?.keywords || '(empty)'}"`);
+    console.log(`keywords next: "${KEYWORDS}" (${KEYWORDS.length}/100 chars)`);
+    if (KEYWORDS.length > 100) console.log('⚠️  keywords exceed 100 chars — Apple will reject.');
+    if (APPLY) {
+      const kr = await api('PATCH', `/v1/appStoreVersionLocalizations/${enUS.id}`, {
+        data: { type: 'appStoreVersionLocalizations', id: enUS.id, attributes: { keywords: KEYWORDS } },
+      }, { soft: true });
+      console.log(kr.__error ? `⚠️  keywords PATCH failed: ${kr.__error} ${String(kr.__body).slice(0, 300)}` : '✅ keywords updated');
+    }
+  }
+
   const current = enUS.attributes?.description || '';
 
   if (current.includes(MARKER)) {
