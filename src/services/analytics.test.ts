@@ -10,6 +10,7 @@ import {
   mirrorAuditEvent,
   isAnalyticsEnabled,
   initAnalytics,
+  resolvePlatformSuperProps,
 } from './analytics';
 import type { AuditEntry } from './appAuditor';
 
@@ -47,6 +48,27 @@ describe('analytics — no-op without a PostHog key', () => {
         mirrorAuditEvent(entry({ kind, category: 'runtime', details: 'Error: x\n  at y' })),
       ).not.toThrow();
     }
+  });
+});
+
+describe('platform super-properties (the "real downloaders" filter)', () => {
+  it('tags web in a plain (non-native, non-standalone) env', () => {
+    const props = resolvePlatformSuperProps();
+    // jsdom test env: not Capacitor-native, not display-mode standalone.
+    expect(props.platform).toBe('web');
+    expect(props.is_native).toBe(false);
+    expect(props).not.toHaveProperty('native_platform');
+  });
+
+  it('always returns the three core keys, never throws', () => {
+    let props: Record<string, unknown> = {};
+    expect(() => {
+      props = resolvePlatformSuperProps();
+    }).not.toThrow();
+    expect(props).toHaveProperty('platform');
+    expect(props).toHaveProperty('is_native');
+    expect(props).toHaveProperty('is_standalone');
+    expect(['native', 'pwa', 'web']).toContain(props.platform);
   });
 });
 
