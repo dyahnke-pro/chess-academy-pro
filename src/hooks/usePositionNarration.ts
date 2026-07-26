@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { getCoachChatResponse } from '../services/coachApi';
 import { isSpokenSentenceGrounded } from '../services/coachAnswerGates';
-import { buildFedTacticsContext } from '../services/liveTacticsContext';
+import { buildFedTacticsContext, speakDeepestLookahead } from '../services/liveTacticsContext';
 import { voiceService } from '../services/voiceService';
 import { stockfishEngine, resolveWorkerUrl } from '../services/stockfishEngine';
 import { buildChessContextMessage, POSITION_NARRATION_ADDITION } from '../services/coachPrompts';
@@ -220,6 +220,18 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
         readingFacts = '';
       }
 
+      // P5 — GUARANTEED deep look-ahead (David 2026-07-26: "add it to the package
+      // gen to the llm — it will have no choice but to speak the words"). The
+      // app's DEEPEST foresight is the PV scan in posTactics; feeding it to the
+      // prompt as CONTEXT let the LLM skip it (diluted). Instead PRE-COMPOSE the
+      // exact spoken line in code (speakDeepestLookahead — G0: the engine decided,
+      // the voice only phrases) and inject it as a REQUIRED utterance, so the
+      // model must voice the computed foresight verbatim. Null on a quiet board.
+      const lookaheadLine = posTactics ? speakDeepestLookahead(posTactics) : null;
+      const requiredLookahead = lookaheadLine
+        ? ` REQUIRED: the engine has computed the deepest look-ahead for this position. You MUST include this exact sentence, verbatim, as part of your narration (do not paraphrase, do not omit it): "${lookaheadLine}"`
+        : '';
+
       const context: CoachContext = {
         fen: args.fen,
         lastMoveSan: null,
@@ -230,7 +242,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
         playerMove: null,
         moveClassification: null,
         playerProfile: { rating, weaknesses: [] },
-        additionalContext: `${readingFacts ? `${readingFacts}\n\n` : ''}The student is playing as ${args.playerColor}. They just tapped "Read this position" — give them a live, spoken narration of what you see.`,
+        additionalContext: `${readingFacts ? `${readingFacts}\n\n` : ''}The student is playing as ${args.playerColor}. They just tapped "Read this position" — give them a live, spoken narration of what you see.${requiredLookahead}`,
       };
 
       const userMessage = buildChessContextMessage(context);

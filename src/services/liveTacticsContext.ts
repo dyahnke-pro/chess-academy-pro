@@ -354,6 +354,55 @@ function pieceFullName(piece: string): string {
   }
 }
 
+/**
+ * speakDeepestLookahead — the DIRECTLY-SPOKEN deep look-ahead (P5, David
+ * 2026-07-26: "speak the deep PV look-ahead as computed fact"). The
+ * `TacticsLiveContext` PV scan (`scanUpcomingTactics`) is the app's DEEPEST
+ * foresight — a rating-adaptive walk of Stockfish's principal variation — but
+ * every surface only ever fed it to the LLM prompt (`formatTacticsSubBlock`),
+ * where it was diluted: the model might mention the upcoming fork, garble the
+ * line, or skip it entirely, and the grounding gate only STRIPS hallucinations,
+ * it never GUARANTEES the real foresight is voiced. This renderer turns the top
+ * DEEP entry (depthAhead ≥ 2 — the shallow 1-ply delta is already covered by the
+ * threat detector) into a grounded spoken sentence so the best look-ahead is
+ * spoken as computed FACT, never LLM-mediated (G0: the voice phrases; the engine
+ * decided).
+ *
+ * Register: seat-framed to the student — an OPPORTUNITY (student beneficiary) is
+ * empowering ("you've got …"), a THREAT (opponent) is a heads-up ("careful —
+ * they're lining up …"). Correct for any surface where the board is the
+ * student's own (the "Read this position" tap on Learn/Play/Review). Prefers the
+ * student's opportunity over the opponent's threat when both exist. Returns null
+ * when no depth-≥2 upcoming tactic exists (empty > generic — a quiet position
+ * gets no manufactured foresight).
+ */
+export function speakDeepestLookahead(
+  ctx: TacticsLiveContext,
+): string | null {
+  const deep = (
+    list: TacticsLiveContext['threats'],
+  ): TacticsLiveContext['threats'] =>
+    list.filter((e) => e.depthAhead >= 2 && e.line.length > 0);
+  const opportunity = deep(ctx.opportunities)[0] ?? null;
+  const threat = deep(ctx.threats)[0] ?? null;
+  const pick = opportunity ?? threat;
+  if (!pick) return null;
+  const isOpportunity = pick === opportunity;
+  const pattern = pick.type.replace(/[-_]/g, ' ');
+  // Walk the first few plies of the PV in prose — "after X, then Y, then Z".
+  // The SANs come straight from the engine line (chess.js-legal), so naming
+  // them is grounded, not invented.
+  const walk = pick.line.slice(0, 4);
+  const lineProse =
+    walk.length === 1
+      ? walk[0]
+      : `${walk[0]}, then ${walk.slice(1).join(', ')}`;
+  if (isOpportunity) {
+    return `Look a couple of moves ahead — you've got a ${pattern} coming, ${pick.depthAhead} deep: ${lineProse}.`;
+  }
+  return `Look ahead — they're lining up a ${pattern} in ${pick.depthAhead}: ${lineProse}. Spot it before it lands.`;
+}
+
 /** Render a computed `TacticsLiveContext` into the grounded prompt block (BOARD
  *  FACTS + immediate tactics + hanging + attack map + lookahead threats). Lives
  *  here, beside the builder, so the direct-prompt narration surfaces that DON'T

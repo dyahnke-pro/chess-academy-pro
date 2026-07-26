@@ -1,6 +1,15 @@
 import { describe, it, expect, vi } from 'vitest';
-import { buildTacticsLiveContext, buildFedTacticsContext } from './liveTacticsContext';
+import { buildTacticsLiveContext, buildFedTacticsContext, speakDeepestLookahead } from './liveTacticsContext';
 import type { StockfishAnalysis } from '../types';
+import type { TacticsLiveContext } from '../coach/types';
+
+/** Minimal TacticsLiveContext with the given upcoming lists (P5 tests). */
+function ctxWith(
+  opportunities: TacticsLiveContext['opportunities'],
+  threats: TacticsLiveContext['threats'],
+): TacticsLiveContext {
+  return { immediate: [], hanging: [], threats, opportunities, lookaheadDepth: 4 };
+}
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -234,5 +243,51 @@ describe('buildTacticsLiveContext — boardFacts', () => {
   it('returns undefined boardFacts on a malformed FEN', () => {
     const ctx = buildTacticsLiveContext('not-a-fen', null, 'w', 1500);
     expect(ctx.boardFacts).toBeUndefined();
+  });
+});
+
+describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', () => {
+  it('voices the student opportunity, walks the line, states the depth', () => {
+    const ctx = ctxWith(
+      [{ type: 'fork', description: 'knight fork', depthAhead: 2, line: ['Nd5', 'Bd6', 'Nxe7'] }],
+      [],
+    );
+    const say = speakDeepestLookahead(ctx);
+    expect(say).toBeTruthy();
+    expect(say!.toLowerCase()).toContain('fork');
+    expect(say).toContain('Nd5');
+    expect(say).toContain('Nxe7');
+    expect(say).toMatch(/you've got/i); // student-seat (opportunity)
+  });
+
+  it('prefers the student opportunity over an opponent threat when both exist', () => {
+    const ctx = ctxWith(
+      [{ type: 'fork', description: 'f', depthAhead: 2, line: ['Nd5', 'a6', 'Nxe7'] }],
+      [{ type: 'pin', description: 'p', depthAhead: 3, line: ['Bg5', 'h6', 'Bxf6'] }],
+    );
+    expect(speakDeepestLookahead(ctx)!).toMatch(/you've got/i);
+  });
+
+  it('warns on an opponent threat (heads-up seat) when no opportunity exists', () => {
+    const ctx = ctxWith(
+      [],
+      [{ type: 'skewer', description: 's', depthAhead: 3, line: ['Re1', 'Qd7', 'Rxe8'] }],
+    );
+    const say = speakDeepestLookahead(ctx);
+    expect(say).toMatch(/they're lining up/i);
+    expect(say!.toLowerCase()).toContain('skewer');
+    expect(say).toContain('Re1');
+  });
+
+  it('is the DEEP scan only — ignores depth-1 (shallow) upcoming tactics', () => {
+    const ctx = ctxWith(
+      [{ type: 'fork', description: 'f', depthAhead: 1, line: ['Nd5'] }],
+      [],
+    );
+    expect(speakDeepestLookahead(ctx)).toBeNull();
+  });
+
+  it('returns null on a quiet position (nothing upcoming)', () => {
+    expect(speakDeepestLookahead(ctxWith([], []))).toBeNull();
   });
 });

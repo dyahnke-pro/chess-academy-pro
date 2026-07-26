@@ -99,5 +99,20 @@ note only). Fold in `computePieceRoute`; scrap `detectDecisionPoint`.
     `speakWalkthroughText`; wired into `attemptDrillMove`'s correct-move path. 6
     unit tests. Also DID NOT touch the Watch demo path (which would need
     de-seating) — the interactive path was the register-clean win.
-- [ ] P5 — speak the deep PV look-ahead as computed fact (biggest lift).
+- [x] P5 DONE — the deepest look-ahead (the `TacticsLiveContext` PV scan) now
+  reaches the student as computed FACT, not LLM-diluted. New pure renderer
+  `speakDeepestLookahead(ctx)` pre-composes the exact spoken line for the top
+  depth-≥2 upcoming tactic (student opportunity preferred, else opponent threat),
+  naming the pattern + walking the PV. Per David's steer ("add it to the package
+  gen to the llm — it will have no choice but to speak the words") it's injected
+  into the narration PACKAGE as a REQUIRED verbatim utterance rather than a
+  separate spoken path that races the grounding gate:
+  • `usePositionNarration` ("Read this position" tap — the sanctioned read-aloud
+    affordance, register-safe on Learn/Play/Review) folds it into
+    `additionalContext` as a "you MUST include this exact sentence" directive.
+  • `usePhaseNarration` (phase transition) folds it into `extraFacts`, which the
+    grounded path voices.
+  Engine already in hand on both (no extra round trip); null on quiet positions
+  (empty > generic). 5 unit tests. G0-clean: the engine decided the line, the
+  voice only phrases it.
 - [ ] Scrap `detectDecisionPoint` (dead dup of forkTalk) — cleanup, deferred.

@@ -6,7 +6,7 @@ import { logAppAudit } from '../services/appAuditor';
 import { db } from '../db/schema';
 import { getCachedStockfish, setCachedStockfish } from './stockfishFenCache';
 import { isSpokenSentenceGrounded } from '../services/coachAnswerGates';
-import { buildFedTacticsContext } from '../services/liveTacticsContext';
+import { buildFedTacticsContext, speakDeepestLookahead } from '../services/liveTacticsContext';
 import { transitionTeachingForGame } from '../services/danyaTeachingService';
 import { detectOpening } from '../services/openingDetectionService';
 import type { PhaseNarrationVerbosity, StockfishAnalysis } from '../types';
@@ -270,6 +270,16 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
           }
         } catch { /* corpus is a bonus, never a blocker */ }
       }
+
+      // P5 — GUARANTEED deep look-ahead (David 2026-07-26: "add it to the package
+      // gen to the llm — it will have no choice but to speak the words"). The
+      // deepest foresight (phaseTactics' PV scan) rode into the prompt only as
+      // context, so the model could skip it. PRE-COMPOSE the exact spoken line in
+      // code (G0) and fold it into extraFacts, which the grounded path VOICES —
+      // so entering the middlegame the coach states what's coming as computed
+      // fact, not an LLM afterthought. Null on a quiet position.
+      const phaseLookahead = phaseTactics ? speakDeepestLookahead(phaseTactics) : null;
+      if (phaseLookahead) transitionSentence += ` ${phaseLookahead}`;
 
       // Sentence-buffered streaming TTS. Every sentence chains through
       // speakForced so each Polly call awaits the previous one's
