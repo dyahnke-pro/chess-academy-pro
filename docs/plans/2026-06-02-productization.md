@@ -201,8 +201,74 @@ affect the running app).
 - 2026-06-02 — Stays on a branch + draft PR, NOT straight to `main`: half-built
   auth/paywall must not reach beta testers' production app. Overrides the usual
   push-to-main default for this multi-phase feature. Confirm cutover with David.
+- 2026-07-26 — **Revenue funnel wired** (`billingAnalytics.ts`): checkout /
+  trial / purchase / failed / cancelled / restore + free-tier pressure events +
+  paid-vs-free person properties, all no-op-without-key. Fixed the root gap —
+  `billing-*` audit kinds were never mirrored to PostHog. Remaining: the
+  RevenueCat→PostHog server integration (dashboard toggle, David) for
+  renewal/refund/churn visibility. (David: "wire in.")
+
+## PostHog event catalog — revenue + upgrade funnel (added 2026-07-26)
+
+The money funnel was invisible: `billingService` audited purchases via
+`logAppAudit`, but the `billing-*` kinds were never on the PostHog mirror
+allowlist, so PostHog showed 0 sales while App Store Connect showed real
+proceeds. Fixed by firing the funnel DIRECTLY (so events carry numeric revenue +
+person properties the audit-mirror can't). Single source of truth for names +
+payloads: `src/services/billingAnalytics.ts` (`BILLING_EVENT`).
+
+**Money events** (native-only — iOS/Android; web is `unconfigured`/free):
+
+| Event | Fired from | Key properties |
+|---|---|---|
+| `checkout_started` | `PaywallPage.handleSubscribe` | `package_id`, `price`, `currency`, `is_annual`, `period`, `walled_feature?` |
+| `plan_selected` | `PaywallPage` plan button | `package_id`, `is_annual`, `period` |
+| `paywall_dismissed` | `PaywallPage` back-to-free link | `walled_feature?` |
+| `trial_started` | `billingService.purchasePackage` (period TRIAL/INTRO) | `package_id`, `price`, `period`, `period_type` |
+| `purchase_completed` | `billingService.purchasePackage` (period NORMAL) | …+ `revenue`, `$revenue` |
+| `purchase_failed` | `purchasePackage` catch (non-cancel) | `package_id`, `error_message` |
+| `purchase_cancelled` | `purchasePackage` catch (userCancelled) | `package_id` |
+| `restore_completed` / `restore_failed` | `restorePurchases` | `became_pro` / `error_message` |
+
+**Upgrade-pressure events** (fire wherever the soft gate is live):
+
+| Event | Fired from | Key properties |
+|---|---|---|
+| `free_puzzle_limit_reached` | `usePuzzleMeter.consume` (spend that empties the bucket) | — |
+| `free_opening_claimed` | `OpeningDetailPage` first deep dive | `opening_id` |
+| `second_opening_walled` | `OpeningDetailPage` deep dive into a 2nd opening | `attempted_opening_id`, `claimed_opening_id` |
+
+(The kid-window expiry is intentionally NOT a distinct event — `paywall_viewed`
+already carries `feature: 'kid'` at the route wall. Kept off to respect the
+event budget after the 2026-06-11 edge-request incident.)
+
+**Person properties** (`$set` via `billingAnalytics.syncSubscriptionPerson`, on
+every entitlement resolve — boot/renewal/purchase — plus `App.tsx` boot):
+`is_pro`, `subscription_status` (trial/subscription/promo/free), `plan`
+(annual/monthly), `subscription_expires_at`, `first_seen_at` (`$set_once`),
+`last_seen_at`. These let EVERY engagement metric be broken down by paid-vs-free
+and give clean retention cohorts.
+
+### RevenueCat → PostHog server integration (DAVID DOES THIS — dashboard toggle)
+
+Client events miss everything that happens while the app is CLOSED: renewals,
+cancellations, refunds, billing-issue churn, trial-expiry-without-conversion.
+Those are the churn/LTV signals — and only RevenueCat's server-side integration
+can send them. Setup (RevenueCat dashboard → Integrations → PostHog):
+1. Paste the PostHog **project API key** (`phc_…`) + host `https://us.i.posthog.com`.
+2. Enable the events: initial purchase, trial start, trial conversion, renewal,
+   cancellation, uncancellation, billing issue, refund, expiration.
+3. Set the integration's user-id to RevenueCat's app-user id — it MATCHES the id
+   `App.tsx` already `identify()`s with (`getStableAnalyticsId`), so server-side
+   subscription events attach to the SAME PostHog person as the client usage
+   events. Payment ↔ usage links for free.
+
+Without this, PostHog sees first purchases but never renewals/refunds/churn.
 
 ## Next-session pickup
 Phase 1 (PostHog) is on this branch. Next: Phase 2 (entitlement + hard paywall).
 Keep everything no-op-without-keys; do NOT enable the live gate on `main` until
 David approves the cutover (it locks every existing user out until they pay).
+
+Revenue funnel instrumentation landed 2026-07-26 (`billingAnalytics.ts`) — the
+one remaining piece is the RevenueCat→PostHog dashboard toggle above (David).

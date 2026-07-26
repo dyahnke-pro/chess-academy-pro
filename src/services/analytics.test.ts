@@ -5,6 +5,7 @@ import {
   captureEvent,
   captureException,
   identifyUser,
+  setUserProperties,
   resetAnalytics,
   mirrorAuditEvent,
   isAnalyticsEnabled,
@@ -34,6 +35,8 @@ describe('analytics — no-op without a PostHog key', () => {
     expect(() => captureEvent('checkout_started', { plan: 'annual' })).not.toThrow();
     expect(() => captureException(new Error('boom'), { surface: 'coach' })).not.toThrow();
     expect(() => identifyUser('user-123', { email: 'x@y.z' })).not.toThrow();
+    expect(() => setUserProperties({ is_pro: true }, { first_seen_at: 'now' })).not.toThrow();
+    expect(() => setUserProperties()).not.toThrow();
     expect(() => resetAnalytics()).not.toThrow();
     expect(() => mirrorAuditEvent(entry())).not.toThrow();
   });

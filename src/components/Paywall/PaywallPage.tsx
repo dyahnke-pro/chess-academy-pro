@@ -10,6 +10,11 @@ import {
   clearBillingError,
   type BillingPackage,
 } from '../../services/billingService';
+import {
+  trackCheckoutStarted,
+  trackPlanSelected,
+  trackPaywallDismissed,
+} from '../../services/billingAnalytics';
 
 /**
  * PaywallPage — the hard wall shown when the entitlement gate is live and the
@@ -96,6 +101,18 @@ export function PaywallPage({ feature }: { feature?: PaywallFeature } = {}): JSX
 
   async function handleSubscribe(): Promise<void> {
     if (!selected) return;
+    // Intent-to-buy — the top of the checkout funnel (paired downstream with
+    // trial_started / purchase_completed / purchase_failed from billingService).
+    trackCheckoutStarted(
+      {
+        packageId: selected.id,
+        priceString: selected.priceString,
+        priceAmount: selected.priceAmount,
+        currency: selected.currency,
+        isAnnual: selected.isAnnual,
+      },
+      feature ?? null,
+    );
     setBusy(true);
     setNotice(null);
     // Clear stale errors before the attempt so the banner reflects THIS attempt.
@@ -188,7 +205,10 @@ export function PaywallPage({ feature }: { feature?: PaywallFeature } = {}): JSX
                 <button
                   type="button"
                   key={p.id}
-                  onClick={() => setSelectedId(p.id)}
+                  onClick={() => {
+                    setSelectedId(p.id);
+                    trackPlanSelected({ packageId: p.id, isAnnual: p.isAnnual });
+                  }}
                   className={`relative flex w-full items-center justify-between rounded-2xl border-2 px-4 py-3 text-left transition ${
                     isSel ? 'border-[#c9a84c] bg-[#c9a84c]/10' : 'border-zinc-700 bg-transparent'
                   }`}
@@ -286,7 +306,12 @@ export function PaywallPage({ feature }: { feature?: PaywallFeature } = {}): JSX
         {/* Soft gate: this wall sits in front of ONE premium surface, not the
             whole app — always give a way back to the free features. */}
         <p className="mt-4 text-center text-xs">
-          <Link to="/" className="text-zinc-400 underline" data-testid="paywall-back-free">
+          <Link
+            to="/"
+            className="text-zinc-400 underline"
+            data-testid="paywall-back-free"
+            onClick={() => trackPaywallDismissed(feature ?? null)}
+          >
             Not now — back to free features
           </Link>
         </p>

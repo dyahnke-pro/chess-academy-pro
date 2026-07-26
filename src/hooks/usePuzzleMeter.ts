@@ -13,6 +13,7 @@ import { useCallback } from 'react';
 import { useEntitlement } from './useEntitlement';
 import { useFreeTierStore } from '../stores/freeTierStore';
 import { puzzlesRemaining, hasPuzzlesLeft } from '../services/freeTierService';
+import { trackFreePuzzleLimitReached } from '../services/billingAnalytics';
 
 export interface PuzzleMeter {
   /** True when metering is live (gate on + non-Pro). When false, everything is
@@ -38,8 +39,12 @@ export function usePuzzleMeter(): PuzzleMeter {
 
   const consume = useCallback(() => {
     if (!active) return;
+    // Fire the upgrade-pressure event on the spend that EMPTIES the bucket
+    // (remaining goes 1 → 0), not every solve.
+    const willEmpty = puzzlesRemaining(row) <= 1;
     void recordPuzzleSolved();
-  }, [active, recordPuzzleSolved]);
+    if (willEmpty) trackFreePuzzleLimitReached();
+  }, [active, recordPuzzleSolved, row]);
 
   return { active, remaining, hasLeft, consume };
 }
