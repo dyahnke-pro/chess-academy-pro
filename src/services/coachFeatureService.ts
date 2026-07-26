@@ -19,7 +19,7 @@ import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShi
 import { detectForcedMatingSequence, explainMatingSacMechanism } from './reviewForcedSequence';
 import { assessPositionalEdge } from './reviewPositionalAssessment';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
-import { describeNotableMove, describeConcessions, findTrappedPiece, describeSimplifyingTrade, describeTradeConsequence } from './reviewTeachingPoints';
+import { describeNotableMove, describeConcessions, findTrappedPiece, describeSimplifyingTrade, describeTradeConsequence, buildReviewDeepestLookahead } from './reviewTeachingPoints';
 import { computeGemCrush, buildReviewGemSay } from './gemCrushLines';
 import { buildOpeningMoveDetail } from './reviewStrategicOrientation';
 import { walkBookLine } from './theoryDeparture';
@@ -1015,6 +1015,10 @@ export function buildReviewSegments(
   // verbatim on each move (David 2026-07-23: the mating-net line repeated
   // word-for-word on consecutive moves). Keyed by the threat's SAN.
   const threatsAnnounced = new Set<string>();
+  // Deepest-look-ahead shots announced (David 2026-07-26 — the review-register
+  // peer of the live speakDeepestLookahead), keyed by the shot's SAN so the same
+  // combination is called out once per game.
+  const deepShotAnnounced = new Set<string>();
   let orientationShown = false;
   // The enumerated POSITIONAL VERDICT ("you're better here, and here's why:
   // bishop pair, the open file, his weak pawn") — Danya's signature teaching
@@ -1502,6 +1506,26 @@ export function buildReviewSegments(
             const tc = new Chess(nullFen).move(threatSan.replace(/[.,]$/, ''));
             if (tc) threatArrows = [{ startSquare: tc.from, endSquare: tc.to, color: '#22c55e' }];
           } catch { /* arrow is a bonus — never block the narration */ }
+        }
+      }
+      // REVIEW DEEPEST LOOK-AHEAD (David 2026-07-26 — the review-register peer of
+      // the live speakDeepestLookahead). On the student's own GOOD/BOOK/quiet move
+      // (flagged moves are already owned by the better-move teaching above, so
+      // this stays additive), walk the engine's best move ONE ply forward and, if
+      // it sets up a FORK or MATE, name the combination that was on the board.
+      // The fork VICTIMS are the OPPONENT's pieces — invariant to which move the
+      // student picked — so the claim is board-true regardless. Retrospective
+      // voice, guaranteed spoken (a direct computed beat, never LLM-mediated),
+      // deduped per game by the shot's SAN.
+      if (!m.isCoachMove && (m.classification === null || m.classification === 'book' || m.classification === 'good')) {
+        const shot = buildReviewDeepestLookahead(fenPair.fenBefore, m.bestMove, playerColor === 'white' ? 'w' : 'b');
+        if (shot) {
+          const shotKey = /—\s(\S+)\swas the shot/.exec(shot)?.[1] ?? shot.slice(0, 24);
+          if (!deepShotAnnounced.has(shotKey)) {
+            deepShotAnnounced.add(shotKey);
+            narration = narration ? `${narration} ${shot}` : shot;
+            narrationSource = narrationSource ?? 'per-move';
+          }
         }
       }
       // SIMPLIFY-WHEN-AHEAD — Danya's strategic "you're offering a queen trade"

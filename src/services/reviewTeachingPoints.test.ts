@@ -3,6 +3,7 @@ import { Chess } from 'chess.js';
 import {
   attackerDefenderCount, royalDefenderTarget, rookOnSeventh,
   badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, deriveNextPlan, deriveNextPlans,
+  buildReviewDeepestLookahead,
 } from './reviewTeachingPoints';
 
 function fenAfter(sans: string[]): string {
@@ -265,5 +266,41 @@ describe('findTrappedPiece (David 2026-07-21 — "the trapped piece was the quee
     for (const s of ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Qf6', 'Nc3']) c.move(s);
     // Black's early queen on f6 is loose play but has flights — never "trapped".
     expect(findTrappedPiece(c.fen(), 'b')).toBeNull();
+  });
+});
+
+describe('buildReviewDeepestLookahead (review-register deep look-ahead)', () => {
+  it('returns null on missing / malformed best move', () => {
+    const start = new Chess().fen();
+    expect(buildReviewDeepestLookahead(start, null, 'w')).toBeNull();
+    expect(buildReviewDeepestLookahead(start, 'e2', 'w')).toBeNull(); // too short
+    expect(buildReviewDeepestLookahead('not-a-fen', 'e2e4', 'w')).toBeNull();
+  });
+
+  it('returns null when the best move sets up nothing forcing (quiet development)', () => {
+    // 1.e4 e5 — best move like Nf3 develops but sets up no fork/mate.
+    const fen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+    expect(buildReviewDeepestLookahead(fen, 'g1f3', 'w')).toBeNull();
+  });
+
+  it('names the shot retrospectively when the best move sets up a royal fork', () => {
+    // Black king e8 + queen a8, white knight c3. Nd5 sets up Nc7+ forking king + queen.
+    const fen = 'q3k3/8/8/8/8/2N5/8/4K3 w - - 0 1';
+    const say = buildReviewDeepestLookahead(fen, 'c3d5', 'w');
+    expect(say).toBeTruthy();
+    expect(say!.toLowerCase()).toContain('shot');
+    expect(say!.toLowerCase()).toMatch(/fork/);
+    expect(say).toContain('Nd5'); // names the move that was the shot
+  });
+
+  it('stays silent on a plain winning capture (owned by the better-move teaching)', () => {
+    // Rxd4 just wins a hanging knight — a bare capture, no fork/mate follow-up.
+    const fen = '4k3/8/8/8/3n4/8/8/3RK3 w - - 0 1';
+    expect(buildReviewDeepestLookahead(fen, 'd1d4', 'w')).toBeNull();
+  });
+
+  it('never throws on an illegal best move for the position', () => {
+    const start = new Chess().fen();
+    expect(buildReviewDeepestLookahead(start, 'e2e5', 'w')).toBeNull();
   });
 });

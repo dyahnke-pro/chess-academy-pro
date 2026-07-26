@@ -34,7 +34,7 @@
 import { Chess, type Color, type Square } from 'chess.js';
 import { describeStructure } from './boardStructure';
 import { seeGain } from './positionReadingService';
-import { captureHasCounterTactic } from './groundedAnswer';
+import { captureHasCounterTactic, detectNewThreat } from './groundedAnswer';
 
 const PIECE_VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -348,6 +348,46 @@ export function deriveNextPlans(fen: string, studentColorWB: Color): string[] {
  *  that want just one. */
 export function deriveNextPlan(fen: string, studentColorWB: Color): string | null {
   return deriveNextPlans(fen, studentColorWB)[0] ?? null;
+}
+
+/**
+ * REVIEW DEEPEST LOOK-AHEAD (David 2026-07-26 — the Review-register peer of the
+ * live `speakDeepestLookahead`). The live narration surfaces speak the deepest
+ * foresight present-tense ("you've got a fork coming"); Review is RETROSPECTIVE
+ * and works from the engine's stored best move (it has no per-ply PV/topLines),
+ * so this walks the best move ONE ply forward and names the COMBINATION it sets
+ * up — the shot that was on the board — phrased in review's past-facing voice.
+ *
+ * Reuses the shared `detectNewThreat` null-move scanner (no engine, no PV): play
+ * `bestMoveUci`, then ask what NEW threat that move creates for the mover. Gated
+ * to FORK / MATE only — a plain winning capture is already covered by the
+ * flagged-move better-move teaching (`explainBestMoveGrounded`), so restricting
+ * to the multi-target combinations keeps this ADDITIVE, never a duplicate. G0:
+ * every square/piece is computed; the voice only phrases it. Null when the best
+ * move sets up nothing forcing (empty > generic).
+ */
+export function buildReviewDeepestLookahead(
+  fenBefore: string,
+  bestMoveUci: string | null,
+  moverColorWB: 'w' | 'b',
+): string | null {
+  if (!bestMoveUci || bestMoveUci.length < 4) return null;
+  try {
+    const chess = new Chess(fenBefore);
+    const from = bestMoveUci.slice(0, 2);
+    const to = bestMoveUci.slice(2, 4);
+    const promotion = bestMoveUci.slice(4) || undefined;
+    const mv = chess.move({ from, to, promotion });
+    if (!mv) return null;
+    const threat = detectNewThreat(fenBefore, chess.fen(), moverColorWB);
+    // Only the combinations — a bare capture is the better-move teaching's job.
+    if (!threat || (threat.kind !== 'fork' && threat.kind !== 'mate')) return null;
+    return threat.kind === 'mate'
+      ? `Look deeper — ${mv.san} was the shot: it forces mate. That's the kind of idea to hunt a move ahead.`
+      : `Look deeper — ${mv.san} was the shot: it ${threat.detail}. That's the fork to spot a move ahead.`;
+  } catch {
+    return null;
+  }
 }
 
 /** Can the opponent still WIN the `side` piece sitting on `sq` (value `val`),
