@@ -159,8 +159,21 @@ const MATCHUP_HINT_RE = /\b(?:vs\.?|versus|against)\b/i;
  *  after a lesson (David 2026-07-18). Kept as a constant so the leaf offer
  *  and the handleSubmit intercept can't drift apart. */
 const CONTINUE_GAME_CHIP = 'Watch the middlegame and endgame';
-/** Also match a user who TYPES the intent, not just taps the chip. */
-const CONTINUE_GAME_RE = /\b(?:watch|see|show|play|continue|finish|keep going).{0,30}\b(?:middlegame|endgame|rest of (?:the )?game|whole game|full game|entire game)\b/i;
+/** Also match a user who TYPES the intent, not just taps the chip.
+ *  Broadened (David 2026-07-26 gambit-switch bug): the old pattern only matched
+ *  "middlegame"/"endgame" as ONE word, so a natural "see the middle game" /
+ *  "watch it play out" / "play the line out" fell THROUGH to the walkthrough-
+ *  control classifier, which tore the current opening down and let the next
+ *  message generate a DIFFERENT opening (the reported "clicked yes → different
+ *  opening"). Now matches the spaced forms + "play (it/the line) out". */
+const CONTINUE_GAME_RE =
+  /(?:\b(?:watch|see|show|play|continue|finish|keep going|carry on).{0,40}\b(?:middle\s?game|end\s?game|rest of (?:the )?game|whole game|full game|entire game|play out)\b)|(?:\bplay (?:it|this|the line|the game) out\b)/i;
+/** A bare affirmative ("yes", "sure", "ok", "please do") — meaningful ONLY when
+ *  the coach has just offered to continue at the leaf, where an affirmative
+ *  unambiguously means "yes, keep going". Gated on walkthrough.phase==='leaf'
+ *  at the call site so it can never hijack a "yes" in another context. */
+const CONTINUE_AFFIRM_RE =
+  /^(?:yes|yea|yeah|yep|yup|sure|ok(?:ay)?|please(?:\s+do)?|go(?:\s+(?:on|ahead))?|do it|sounds good|let'?s go)\b[\s.!]*$/i;
 
 // Monotonic suffix for chat-message id bases. `Date.now()` alone collides
 // when two ids are minted in the SAME millisecond — which happens under
@@ -1552,7 +1565,20 @@ export function CoachTeachPage(): JSX.Element {
     // opening/matchup routing so it isn't parsed as an opening name.
     {
       const t = text.trim();
-      if (t === CONTINUE_GAME_CHIP || CONTINUE_GAME_RE.test(t)) {
+      // Only continue when there's a REAL opening/position on the board to
+      // continue from — an active walkthrough, or one paused at the leaf where
+      // the coach just offered "want to keep going?". Without this guard a
+      // "show me the middlegame" with nothing loaded would narrate a game from
+      // the start position; and it keeps the intent from being stolen from the
+      // opening router when the user genuinely wants a NEW opening.
+      const haveLineToContinue = walkthrough.isActive || walkthrough.phase === 'leaf';
+      const isContinueIntent =
+        t === CONTINUE_GAME_CHIP ||
+        (haveLineToContinue &&
+          (CONTINUE_GAME_RE.test(t) ||
+            // A bare "yes"/"sure" ONLY at the leaf, where the offer is showing.
+            (walkthrough.phase === 'leaf' && CONTINUE_AFFIRM_RE.test(t))));
+      if (isContinueIntent) {
         setCoachChoices(null);
         setMessages((prev) => [...prev, { id: uid('cont-u'), role: 'user', content: text, timestamp: Date.now() }]);
         void startContinuationRef.current();
