@@ -26,7 +26,7 @@
  *   Then set REVENUECAT_WEBHOOK_SECRET in Vercel (production).
  */
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { mapRevenueCatEvent, type RevenueCatEvent } from './_lib/revenuecatEvent';
+import { mapRevenueCatEvent, type RevenueCatEvent } from './_lib/revenuecatEvent.js';
 
 interface RevenueCatWebhookBody {
   event?: RevenueCatEvent;
