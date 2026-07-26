@@ -48,19 +48,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     return true
   }
 
-  /// Configure the shared audio session so Polly TTS, the board sound
-  /// effects, and Web Speech mic input work reliably with Bluetooth
-  /// headsets and the silent-switch engaged.
+  /// Configure the shared audio session so coach TTS + board sounds play,
+  /// HONOR the silent switch, and leave the mic route free for the native
+  /// speech recognizer to own.
   ///
-  /// ROOT FIX (David 2026-06-04: all native audio — board clicks AND coach
-  /// voice — went silent mid-session while audio worked fine on the web/Vercel
-  /// build). The session was configured ONLY on launch and the lifecycle
-  /// hooks were empty, so the FIRST audio interruption (backgrounding, a
-  /// notification, a phone call, Siri, a Bluetooth route change) deactivated
-  /// the session and nothing ever re-activated it — every later sound (which
-  /// plays through the WKWebView's Web Audio, gated by this session) was
-  /// dropped until the app was force-quit and relaunched. We now re-activate
-  /// on foreground + on interruption-end + on route change, so it self-heals.
+  /// DEEP AUDIO REWORK (David 2026-07-26 — "mute if phone is on silent" AND
+  /// "microphone not working"). BOTH problems traced to the old
+  /// `.playAndRecord` config:
+  ///   1. MUTE-ON-SILENT: `.playAndRecord` (like `.playback`) is designed to
+  ///      IGNORE the ringer/silent switch — audio plays even on silent. There
+  ///      is no way to honor silent while that category is active. `.ambient`
+  ///      is the one playback-capable category that RESPECTS the silent switch,
+  ///      so TTS + board sounds now mute when the phone is silenced.
+  ///   2. MIC STARVATION: the old `.playAndRecord` + `.defaultToSpeaker`
+  ///      pre-seized the record route and forced output to the speaker. When
+  ///      the @capacitor-community/speech-recognition plugin then started its
+  ///      OWN AVAudioEngine, it inherited that half-configured route and got no
+  ///      live input — the recognizer started, heard nothing, and stopped in a
+  ///      restart loop (2026-07-26 audit: mic-start-requested → mic-native-
+  ///      stopped pending="" ×N, permissions all granted). With `.ambient` the
+  ///      app no longer touches the record route; the plugin configures a clean
+  ///      `.record` session itself when the user taps the mic, and gets a valid
+  ///      input node. On stop the plugin deactivates with
+  ///      .notifyOthersOnDeactivation, and our foreground / interruption-end /
+  ///      route-change observers re-assert `.ambient` so silent-honor + TTS
+  ///      return for the next turn (the self-heal from the 2026-06-04 fix).
+  ///
+  /// `.ambient` mixes with other apps' audio by definition (no .mixWithOthers
+  /// needed) and never fails to activate on missing mic permission, so it also
+  /// removes the old "activation failed kills all audio" fragility.
   private func configureAudioSession() {
     // Guard against re-entry from the route-change notification that our own
     // setCategory/setActive calls post (see isConfiguringAudio).
@@ -69,30 +85,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     defer { isConfiguringAudio = false }
 
     let session = AVAudioSession.sharedInstance()
-    // PREFERRED: .playAndRecord so Web Speech mic input works alongside Polly
-    // TTS. BUT .playAndRecord activation FAILS ("Session activation failed")
-    // when microphone permission isn't granted — and that failure kills ALL
-    // audio, including TTS playback (David 2026-06-06: no voice rendering on
-    // device once the retry loop was removed; the loop had been masking this
-    // by occasionally slipping a successful activation through).
+    // Always (re-)assert .ambient on the lifecycle hooks so silent-honor + TTS
+    // return after a mic turn (the plugin leaves the category on .record when it
+    // stops). A route change during an active listen is rare, and the mic's own
+    // auto-restart re-arms it — so we prefer guaranteeing TTS/silent-honor
+    // recovery over protecting that edge.
     do {
-      try session.setCategory(
-        .playAndRecord,
-        mode: .default,
-        options: [.mixWithOthers, .allowBluetooth, .defaultToSpeaker]
-      )
+      try session.setCategory(.ambient, mode: .default, options: [])
       try session.setActive(true, options: [])
     } catch {
-      print("[AppDelegate] AVAudioSession .playAndRecord failed (\(error.localizedDescription)); falling back to .playback")
-      // FALLBACK: playback-only ALWAYS activates (no mic permission needed),
-      // so the coach voice is never silent. Mic-dependent features (Web
-      // Speech) re-request the session when the user actually invokes them.
-      do {
-        try session.setCategory(.playback, mode: .default, options: [.mixWithOthers])
-        try session.setActive(true, options: [])
-      } catch {
-        print("[AppDelegate] AVAudioSession .playback fallback also failed: \(error.localizedDescription)")
-      }
+      print("[AppDelegate] AVAudioSession .ambient failed: \(error.localizedDescription)")
     }
   }
 
