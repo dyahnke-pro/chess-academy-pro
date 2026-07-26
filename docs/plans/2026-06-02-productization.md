@@ -249,19 +249,32 @@ every entitlement resolve — boot/renewal/purchase — plus `App.tsx` boot):
 `last_seen_at`. These let EVERY engagement metric be broken down by paid-vs-free
 and give clean retention cohorts.
 
-### RevenueCat → PostHog server integration (DAVID DOES THIS — dashboard toggle)
+### RevenueCat → PostHog server-side tracking (webhook — BUILT 2026-07-26)
 
 Client events miss everything that happens while the app is CLOSED: renewals,
 cancellations, refunds, billing-issue churn, trial-expiry-without-conversion.
-Those are the churn/LTV signals — and only RevenueCat's server-side integration
-can send them. Setup (RevenueCat dashboard → Integrations → PostHog):
-1. Paste the PostHog **project API key** (`phc_…`) + host `https://us.i.posthog.com`.
-2. Enable the events: initial purchase, trial start, trial conversion, renewal,
-   cancellation, uncancellation, billing issue, refund, expiration.
-3. Set the integration's user-id to RevenueCat's app-user id — it MATCHES the id
-   `App.tsx` already `identify()`s with (`getStableAnalyticsId`), so server-side
-   subscription events attach to the SAME PostHog person as the client usage
-   events. Payment ↔ usage links for free.
+Those are the churn/LTV signals — only a server-side path can send them. Rather
+than depend on RevenueCat's plan-gated native PostHog integration, we run our own
+webhook receiver: `api/revenuecat-webhook.ts` (+ the pure mapper
+`api/_lib/revenuecatEvent.ts`, tested). RevenueCat POSTs every lifecycle event;
+we map it into the SAME PostHog vocabulary the client fires
+(`purchase_completed` / `trial_started` / `subscription_renewed` /
+`subscription_cancelled` / `subscription_expired` / `subscription_billing_issue`
+/ …), keyed on RevenueCat's app-user id — the SAME id `App.tsx` `identify()`s
+with (`getStableAnalyticsId`), so server events attach to the same PostHog person
+as in-app usage. Revenue rides `purchase_completed` / `subscription_renewed`;
+`$set` keeps `is_pro`/`subscription_status` fresh from the server side too.
+
+Auth: shared secret. `REVENUECAT_WEBHOOK_SECRET` is set in Vercel (production);
+the endpoint fails closed (500) if it's unset and 401s a wrong/absent
+`Authorization` header — never an open ingest.
+
+SETUP (David, one-time — RevenueCat dashboard → Project → Integrations →
+Webhooks → Add):
+- **URL:** `https://chess-academy-pro.vercel.app/api/revenuecat-webhook`
+- **Authorization header:** the `REVENUECAT_WEBHOOK_SECRET` value (in Vercel prod
+  env; ask a session to read it back if needed).
+- Send all event types. RevenueCat backfills recent history on connect.
 
 Without this, PostHog sees first purchases but never renewals/refunds/churn.
 
