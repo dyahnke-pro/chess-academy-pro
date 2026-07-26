@@ -722,7 +722,11 @@ async function callDeepSeekStream(
     max_tokens: maxTokens,
     messages,
     stream: true,
-  });
+    // Kill the hidden CoT latency on the live chat brain (v4-flash) so the
+    // interactive turn doesn't blow the 30s Coach Brain race (the
+    // "coach-turn-ask timeout" in the audit stream). See deepseekThinkingFor.
+    ...deepseekThinkingFor(model),
+  } as OpenAI.Chat.ChatCompletionCreateParamsStreaming & DeepSeekThinking);
 
   for await (const chunk of stream) {
     const text = chunk.choices[0]?.delta?.content ?? '';
@@ -792,6 +796,25 @@ export function consumeCoachActionOffer(): CoachActionOffer[] | null {
   return o;
 }
 
+/** DeepSeek v4 turned thinking-mode ON BY DEFAULT for BOTH tiers (regression
+ *  caught live in the audit stream 2026-07-26). Two symptoms, one cause:
+ *    1. Every forced `tool_choice` call 400s — "Thinking mode does not support
+ *       this tool_choice" — so all opening-narration / drill-label / stage-gen
+ *       structured calls fell back to bland template prose (the robotic
+ *       "e4 — stakes a claim in the center" voice David heard on both openings).
+ *    2. Interactive chat turns pay the hidden chain-of-thought latency and blow
+ *       the Coach Brain 30s race → "coach-turn-ask timeout".
+ *  The wire fix (verified 200 against the live proxy 2026-07-26): send
+ *  `thinking: { type: 'disabled' }`. Apply it to the FAST tier
+ *  (`deepseek-v4-flash`) — every structured tool call + every interactive turn
+ *  routes there — and KEEP thinking ON for the deep tier (`deepseek-v4-pro`)
+ *  that the single-shot reasoning tasks (post_game_analysis, reports, …) use.
+ *  The OpenAI SDK forwards this non-standard field verbatim (probe-confirmed). */
+type DeepSeekThinking = { thinking?: { type: 'disabled' } };
+function deepseekThinkingFor(model: string): DeepSeekThinking {
+  return model === 'deepseek-v4-flash' ? { thinking: { type: 'disabled' } } : {};
+}
+
 async function callDeepSeek(
   apiKey: string,
   model: string,
@@ -810,7 +833,8 @@ async function callDeepSeek(
     model,
     max_tokens: maxTokens,
     messages,
-  });
+    ...deepseekThinkingFor(model),
+  } as OpenAI.Chat.ChatCompletionCreateParamsNonStreaming & DeepSeekThinking);
 
   if (response.usage) {
     const { hit, miss } = deepseekCacheSplit(response.usage);
@@ -1070,7 +1094,12 @@ export async function callDeepseekWithTool(
       },
     ],
     tool_choice: { type: 'function', function: { name: toolName } },
-  });
+    // Forced tool_choice is REJECTED in DeepSeek v4 thinking-mode (400
+    // "Thinking mode does not support this tool_choice"). Structured
+    // extraction never benefits from CoT, so always disable it here — this
+    // is what was silently 400ing every narration/label/stage-gen call.
+    thinking: { type: 'disabled' },
+  } as OpenAI.Chat.ChatCompletionCreateParamsNonStreaming & DeepSeekThinking);
   if (response.usage) {
     const { hit, miss } = deepseekCacheSplit(response.usage);
     void recordApiUsage(task, model, response.usage.prompt_tokens, response.usage.completion_tokens);
