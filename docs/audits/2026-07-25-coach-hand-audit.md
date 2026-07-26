@@ -146,11 +146,19 @@ middlegame. Stats are a supporting tag, never the whole line.
   development" tag is DELETED; no move returns null. Board-truth verified by the
   corpus sweep (34 tests green). Overrides "silence is acceptable" for the review
   walk per David.
-- [ ] **N5 (minor) — `next-key-moment` doesn't jump the walk** (only cycles the
-  preview thumbnails). Wire it to move the walk to that ply.
-- [ ] **N6 (minor) — why-probe shows the "INACCURACY" label**, telegraphing move
-  quality before the student commits (rule 1: zero board facts). Lower severity
-  in review (the ?! is already visible), but note it.
+- [x] **N5 — NON-BUG (verified 2026-07-26).** The IN-WALK `next-key-moment` DOES
+  move the walk: `KeyMomentNav.onNavigate → walkPlayback.jumpToPly(idx+1) →
+  commitPly` (moves board + narrates). The "only cycles previews" observation
+  was the PRE-WALK summary's separate preview cycler, which scrubs by design. No
+  code change — correcting the note per "don't fix a non-bug."
+- [x] **N6 — FIXED surface-aware (2026-07-26).** The why-probe severity badge
+  (blunder/mistake/inaccuracy) leaked move quality before the student commits —
+  a SUPREME VOICE LAW violation (clean probe = zero board facts, not even
+  good-vs-bad) on the live Learn/Play faucet, where the ?! isn't otherwise
+  visible. BUT David 2026-07-10 explicitly wanted it in REVIEW ("I need to know
+  which move I'm clicking on"). Reconciled: `DiscussionPracticePanel` now gates
+  the badge on a `showSeverity` prop, DEFAULT false (clean probe on Learn/Play/
+  live), and ONLY the review walk opts in. Locked by `DiscussionPracticePanel.test`.
 
 ## 🔬 REVIEW — FULL FUNCTION SCAN (every testid from the code, David 2026-07-25 "did you scan EVERYTHING?")
 
@@ -251,11 +259,20 @@ Card render sites + testids confirmed present in `CoachGameReview.tsx`
 (find-shot 825, trap 812, why-picker, rewind follow-on, end turning-point).
 The multi-game browser scan is a poor instrument here (cards are probabilistic
 per game + cold Stockfish is slow) — the unit gate is the reliable proof.
-- **[PAPERCUT] Line-picker chip → "did you mean".** Tapping the `C56 · classical
-  Two Knights` line-picker chip did NOT resolve to its lesson — the coach replied
-  "I don't have an exact match for 'Italian Game: Italian: Two Knights with d4'.
-  Did you mean one of these?" (fuzzy list). A picker chip should resolve straight
-  to the lesson, not bounce to a disambiguation prompt.
+- **[PAPERCUT — FIXED 2026-07-26] Line-picker chip → "did you mean".** Tapping the
+  Two Knights line-picker chip bounced to a fuzzy disambiguation instead of its
+  lesson. Root cause: the tile submits `${parent}: ${variation}` = "Italian Game:
+  Italian: Two Knights with d4" (the curated variation name carries its own
+  family prefix → a doubled string). `resolveCuratedVariation` matches that exact
+  string and the gen path would teach it — but handleSubmit's Tier-0 fuzzy matcher
+  scored the compound below autoAccept and bounced it to "did you mean…" BEFORE
+  gen, and the Tier-2.5 pre-flight (`getOpeningMoves`, Lichess-DB only) then
+  rejected the non-DB curated name to the brain. Two-line fix in `CoachTeachPage`:
+  (1) skip the fuzzy matcher when `resolveCuratedVariation(name)` resolves (it's
+  already canonical); (2) let a curated variation pass the pre-flight gate so it
+  reaches Tier-3 gen. Locked by a new `openingDetectionService.test` case that
+  resolves the exact doubled name the picker produces. Typed/exact curated names
+  now also resolve straight to their lesson.
 
 ## PROOF LAYER — WATCH/LEARN/PLAY test battery (2026-07-26, 218 tests green)
 

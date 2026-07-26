@@ -3651,6 +3651,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
               onSubmit={(reason) => void reviewFaucet.submitReason(reason)}
               onSkip={resumeAfterFaucet}
               onDismissTeach={resumeAfterFaucet}
+              showSeverity
             />
 
             {/* FIND-THE-SHOT — "right here you had something; find it." The

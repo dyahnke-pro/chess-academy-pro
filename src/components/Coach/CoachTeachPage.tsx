@@ -44,6 +44,7 @@ import {
   getOpeningMoves,
   findLinePickerOptions,
   findOpeningByPgnPrefix,
+  resolveCuratedVariation,
   type LinePickerOption,
 } from '../../services/openingDetectionService';
 import { fuzzyMatchOpening } from '../../services/openingFuzzyMatcher';
@@ -2567,7 +2568,18 @@ export function CoachTeachPage(): JSX.Element {
       // Tier 2.5 pre-flight → brain, where isProgressQuestion/isConceptQuestion
       // route to the grounded voiceFacts path.
       if (requestedName && !isProgressQuestion(text) && !isImprovementTrendQuestion(text) && !isConceptQuestion(text) && !isOpeningProfileQuestion(text) && !isStatsQuestion(text) && !isStrengthsQuestion(text) && !isOpeningAccuracyQuestion(text) && !isOpeningTrapsQuestion(text) && !isReviewDueQuestion(text) && !isMistakesQuestion(text) && !isTacticsProfileQuestion(text) && !isPhaseQuestion(text) && !isRepertoireGapQuestion(text) && !isAccuracyQuestion(text) && !isConsistencyQuestion(text) && !isConvertingQuestion(text) && !isColorQuestion(text) && !isRecordsQuestion(text) && !isRecordVsQuestion(text) && !isMoveRatingQuestion(text) && !isTrainingRequest(text) && !isPuzzleStatsQuestion(text) && !isTransferGapQuestion(text) && !isSkillRadarQuestion(text)) {
-        const fuzzy = fuzzyMatchOpening(requestedName);
+        // EXACT curated-variation names bypass the fuzzy matcher. A
+        // line-picker tile submits `${parent}: ${variation}` (e.g. "Italian
+        // Game: Italian: Two Knights with d4") — an EXACT curated line the gen
+        // path resolves via resolveCuratedVariation. The fuzzy matcher scores
+        // that compound below autoAccept and wrongly bounced it to a "did you
+        // mean…" picker (David 2026-07-25 audit papercut: tapping a picker chip
+        // dropped to disambiguation). If the name IS a curated variation, it's
+        // already canonical — skip fuzzy and let the routing tiers gen it.
+        const curatedHit = resolveCuratedVariation(requestedName);
+        const fuzzy = curatedHit
+          ? { candidates: [], autoAccept: false, query: requestedName }
+          : fuzzyMatchOpening(requestedName);
         if (fuzzy.autoAccept && fuzzy.candidates[0]) {
           const top = fuzzy.candidates[0];
           if (top.canonicalName !== requestedName) {
@@ -2890,7 +2902,15 @@ export function CoachTeachPage(): JSX.Element {
         // entries with aliases / sub-variations). When it returns
         // null, refuse politely and route the input back to chat.
         const dbHit = getOpeningMoves(requestedName);
-        if (!dbHit) {
+        // A curated-repertoire VARIATION name (e.g. a line-picker tile's
+        // "Italian Game: Italian: Two Knights with d4") is NOT a Lichess-DB
+        // entry, so getOpeningMoves returns null — but it IS a real, teachable
+        // curated line the gen path resolves via resolveCuratedVariation. Treat
+        // it as a valid opening so it reaches Tier 3 gen instead of the
+        // "doesn't resolve → route to brain" rejection (David 2026-07-25 audit:
+        // tapping a picker chip bounced to "did you mean…").
+        const curatedPreflight = dbHit ? null : resolveCuratedVariation(requestedName);
+        if (!dbHit && !curatedPreflight) {
           // RESCUE (David 2026-07-16): getOpeningMoves filters out
           // terminal-short lines (short namesakes like the Scandi Panov) and
           // returns null even for real openings the student explicitly named,

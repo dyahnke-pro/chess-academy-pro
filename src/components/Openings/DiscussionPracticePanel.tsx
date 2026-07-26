@@ -15,6 +15,13 @@ interface DiscussionPracticePanelProps {
   onSubmit: (reason: string) => void;
   onSkip: () => void;
   onDismissTeach: () => void;
+  /** Show the move-quality (blunder/mistake/inaccuracy) badge. DEFAULT false —
+   *  the live Learn/Play why-faucet is a CLEAN PROBE (SUPREME VOICE LAW, David
+   *  2026-07-06: zero board facts, not even good-vs-bad, or the self-report is
+   *  contaminated). Only the REVIEW walk sets this true (David 2026-07-10: "I
+   *  need to know if it's a blunder or mistake I'm clicking on") — there the
+   *  student is stepping ONTO an already-flagged move whose ?! is visible. */
+  showSeverity?: boolean;
 }
 
 export function DiscussionPracticePanel({
@@ -24,6 +31,7 @@ export function DiscussionPracticePanel({
   onSubmit,
   onSkip,
   onDismissTeach,
+  showSeverity = false,
 }: DiscussionPracticePanelProps): JSX.Element | null {
   const [text, setText] = useState('');
   const [typing, setTyping] = useState(false);
@@ -77,10 +85,17 @@ export function DiscussionPracticePanel({
   return (
     <Shell>
       <div data-testid="discussion-prompt">
+        {/* The move-quality badge shows ONLY when the surface opts in
+            (showSeverity). Default = clean probe (SUPREME VOICE LAW, David
+            2026-07-06: zero board facts, not even good-vs-bad — the live
+            Learn/Play faucet must not leak the classification before the student
+            commits, or the self-report is contaminated). The review walk opts in
+            (David 2026-07-10: the student is clicking ONTO an already-?!-flagged
+            move and wants to know which). */}
         <div className="flex items-start justify-between gap-2 mb-2">
           <div className="flex items-center gap-2 flex-wrap">
             <p className="text-sm font-semibold text-amber-300">{prompt.question}</p>
-            {prompt.severity && (
+            {showSeverity && prompt.severity && (
               <span
                 data-testid="discussion-severity"
                 className={

@@ -564,6 +564,18 @@ describe('openingDetectionService', () => {
       expect(resolveCuratedVariation('Sicilian Defense: Najdorf Variation')).toBeNull();
       expect(resolveCuratedVariation('Pirc Defence')).toBeNull();
     });
+
+    it('resolves the EXACT compound name a line-picker tile submits (parent + sub-prefixed variation)', () => {
+      // A picker tile builds fullName = `${curatedEntry.name}: ${v.name}`, and
+      // when the curated variation name already carries its own family prefix
+      // this yields a "doubled" string like "Italian Game: Italian: Two Knights
+      // with d4". That is the EXACT string handleSubmit re-submits, so the
+      // resolver must match it (David 2026-07-25 papercut: the fuzzy matcher
+      // scored it below autoAccept and bounced the tap to "did you mean…").
+      const r = resolveCuratedVariation('Italian Game: Italian: Two Knights with d4');
+      expect(r).not.toBeNull();
+      expect(r?.moves.length ?? 0).toBeGreaterThan(0);
+    });
   });
 
   describe('findSiblingExtensionBranches extends to end of Lichess DB', () => {
