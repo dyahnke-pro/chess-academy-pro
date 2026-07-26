@@ -84,10 +84,20 @@ note only). Fold in `computePieceRoute`; scrap `detectDecisionPoint`.
   guard the orientation beat (b) already had, so when the enemy king is stuck in
   the centre it yields the quiet-move slot to the forward king-attack cue (c)
   instead of shadowing it.
-- [ ] P4 — recognition/prevention into Learn. **DESIGN-GATED, not a blind wire:**
-  `computeThreatDelta` is SHARED by Watch AND Play, so adding teaching there
-  leaks into Play (breaks its locked purity). Needs a Learn-only threat-delta
-  path + a register check (`describeThreatRecognition` seat-framing must not say
-  "you" in a demo). Careful build — do next with budget.
+- [x] P4 DONE — recognition/prevention AND positional plans into Learn, via the
+  **register-clean interactive drill path** (the student IS the mover/defender, so
+  the "you"/"yours" seat framing is CORRECT — no de-seating needed, and Play is
+  untouched because this is a Learn-only call site, not a change to the shared
+  `computeThreatDelta`). Two pure composers in `learnMoveTeaching.ts`:
+  • `buildDrillThreatSpot` — after the student answers correctly and the
+    opponent's reply auto-plays, if that reply created a concrete NEW threat
+    against the student, speak `describeThreatRecognition` ("the pattern to
+    spot: …"), student-as-victim register.
+  • `buildDrillCompletionPlan` — when the taught line ends, hand the student the
+    top `deriveNextPlans` forward plan for the reached position (silent when the
+    position is too early/quiet). Both honor the verbosity gate via
+    `speakWalkthroughText`; wired into `attemptDrillMove`'s correct-move path. 6
+    unit tests. Also DID NOT touch the Watch demo path (which would need
+    de-seating) — the interactive path was the register-clean win.
 - [ ] P5 — speak the deep PV look-ahead as computed fact (biggest lift).
 - [ ] Scrap `detectDecisionPoint` (dead dup of forkTalk) — cleanup, deferred.

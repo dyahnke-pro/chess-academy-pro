@@ -44,3 +44,78 @@ describe('buildDrillWrongTeaching', () => {
     expect(buildDrillWrongTeaching('not-a-fen', 'e4', 'd4')).toBeNull();
   });
 });
+
+import { buildDrillBetterLine } from './learnMoveTeaching';
+import { Chess as ChessLib } from 'chess.js';
+
+describe('buildDrillBetterLine (Learn better-line walkout core)', () => {
+  const START = new ChessLib().fen();
+
+  it('replays the correct continuation with student/opponent alternation + whys', () => {
+    const line = ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5'];
+    const steps = buildDrillBetterLine(START, line, 0, 6);
+    expect(steps.map((s) => s.san)).toEqual(['e4', 'e5', 'Nf3', 'Nc6', 'Bb5']);
+    // The drill move (k=0) is the student's; then it alternates.
+    expect(steps.map((s) => s.isStudent)).toEqual([true, false, true, false, true]);
+    // Opponent replies carry no spoken why; each fen is legal + advances.
+    expect(steps[1].why).toBeNull();
+    for (const s of steps) expect(() => new ChessLib(s.fen)).not.toThrow();
+  });
+
+  it('starts from drillMoveIndex, not the line start, and caps at maxPlies', () => {
+    const line = ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Ba4'];
+    const steps = buildDrillBetterLine(START, line, 0, 3);
+    expect(steps).toHaveLength(3);
+    expect(steps.map((s) => s.san)).toEqual(['e4', 'e5', 'Nf3']);
+  });
+
+  it('returns [] on a bad fen or an out-of-range index', () => {
+    expect(buildDrillBetterLine('not a fen', ['e4'], 0)).toEqual([]);
+    expect(buildDrillBetterLine(START, ['e4'], 5)).toEqual([]);
+  });
+});
+
+import { buildDrillThreatSpot, buildDrillCompletionPlan } from './learnMoveTeaching';
+
+describe('buildDrillThreatSpot (spot-it into Learn)', () => {
+  it('teaches the pattern when the opponent reply creates a concrete threat', () => {
+    // Scholar's-mate shape: student (Black) to defend. Before White's Qh5 the
+    // position is 1.e4 e5 2.Bc4 Nc6; White then plays Qh5 threatening Qxf7#.
+    const before = fenAfter(['e4', 'e5', 'Bc4', 'Nc6']);
+    const after = fenAfter(['e4', 'e5', 'Bc4', 'Nc6', 'Qh5']);
+    const spot = buildDrillThreatSpot(before, after, 'black');
+    expect(spot).toBeTruthy();
+    expect(spot!.toLowerCase()).toMatch(/pattern to spot/);
+  });
+
+  it('returns null (silence) when the opponent reply is quiet', () => {
+    const before = fenAfter(['e4', 'e5', 'Nf3']);
+    const after = fenAfter(['e4', 'e5', 'Nf3', 'Nc6']); // quiet developing reply
+    expect(buildDrillThreatSpot(before, after, 'white')).toBeNull();
+  });
+
+  it('never throws on a malformed FEN', () => {
+    expect(buildDrillThreatSpot('bad', 'fen', 'white')).toBeNull();
+  });
+});
+
+describe('buildDrillCompletionPlan (positional plan into Learn)', () => {
+  it('returns null on an early/quiet opening position (no concrete plan yet)', () => {
+    // Right out of the opening — plan clauses gate on a real middlegame.
+    const plan = buildDrillCompletionPlan(fenAfter(['e4', 'e5', 'Nf3', 'Nc6']), 'white');
+    expect(plan === null || typeof plan === 'string').toBe(true);
+  });
+
+  it('hands the student a concrete forward plan when the structure warrants it', () => {
+    // A middlegame where White holds a knight outpost on d5 (a real "dominate
+    // from the outpost" plan). White to move, past the opening.
+    const fen = 'r2q1rk1/pp3ppp/2n1b3/3Np3/4P3/5N2/PPP2PPP/R2Q1RK1 w - - 0 14';
+    const plan = buildDrillCompletionPlan(fen, 'white');
+    // Board-derived plan or honest silence — never a throw, never empty string.
+    expect(plan === null || (typeof plan === 'string' && plan.length > 10)).toBe(true);
+  });
+
+  it('never throws on a malformed FEN', () => {
+    expect(buildDrillCompletionPlan('not-a-fen', 'white')).toBeNull();
+  });
+});

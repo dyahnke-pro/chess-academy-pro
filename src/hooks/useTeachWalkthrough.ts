@@ -36,7 +36,7 @@ import { voiceService } from '../services/voiceService';
 import { logAppAudit } from '../services/appAuditor';
 import { markStageComplete } from '../services/openingProgress';
 import { getCachedOpening } from '../services/openingGenerator';
-import { buildDrillWrongTeaching } from '../services/learnMoveTeaching';
+import { buildDrillWrongTeaching, buildDrillBetterLine, buildDrillThreatSpot, buildDrillCompletionPlan } from '../services/learnMoveTeaching';
 import { computeWatchGemAside } from '../services/gemCrushLines';
 import { computeThreatDelta, computeRouteDelta, type DeltaAside } from '../services/engineDeltaLines';
 import { useAppStore } from '../stores/appStore';
@@ -1788,6 +1788,41 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
         // speak, silent stays silent. A wrong-answer correction is a sanctioned
         // voiced teaching moment even in an otherwise-silent drill (plan #3).
         if (teaching) void speakWalkthroughText(teaching, teaching);
+        // BETTER-LINE WALKOUT (David 2026-07-26): upgrade Learn's thinner
+        // wrong-answer text to Review's PLAYED-OUT better line (Danya's #1 habit).
+        // The correct continuation is the drill's OWN line (no engine): play it
+        // out on the board move-by-move with a spoken why on the student's moves,
+        // then reset to the retry position. Reuses cancelNarrationRef so pause /
+        // skip / navigation cancels it (same mechanism as the delta asides).
+        const walkoutSteps = buildDrillBetterLine(drillFen, line.moves, drillMoveIndex);
+        if (walkoutSteps.length > 0) {
+          const savedDrillFen = drillFen;
+          let walkoutCancelled = false;
+          cancelNarrationRef.current = (): void => {
+            walkoutCancelled = true;
+            setDrillFen(savedDrillFen);
+          };
+          const playWalkoutStep = async (k: number): Promise<void> => {
+            if (walkoutCancelled) return;
+            if (k >= walkoutSteps.length) {
+              setDrillFen(savedDrillFen); // back to the retry position
+              return;
+            }
+            setDrillFen(walkoutSteps[k].fen);
+            const why = walkoutSteps[k].why;
+            if (why) {
+              try { await speakWalkthroughText(why, why); } catch { /* voice off */ }
+            } else {
+              await new Promise((resolve) => setTimeout(resolve, 650));
+            }
+            if (!walkoutCancelled) void playWalkoutStep(k + 1);
+          };
+          // Let the correction be heard first, then walk the line out.
+          void (async (): Promise<void> => {
+            await new Promise((resolve) => setTimeout(resolve, 900));
+            if (!walkoutCancelled) void playWalkoutStep(0);
+          })();
+        }
         return { ok: false };
       }
 
@@ -1807,9 +1842,13 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
         return studentSide === 'white' ? isWhitesMove : !isWhitesMove;
       };
 
+      // Capture the position right before the LAST opponent reply so a threat it
+      // creates can be spotted (SPOT-IT into Learn, David 2026-07-26).
+      let fenBeforeLastOpp: string | null = null;
       while (nextIndex < line.moves.length && !isStudentMove(nextIndex)) {
         const opponentSan = line.moves[nextIndex];
         try {
+          fenBeforeLastOpp = probe.fen();
           probe.move(opponentSan);
           nextFen = probe.fen();
           nextIndex += 1;
@@ -1827,6 +1866,18 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
         if (tree.openingName) {
           void markStageComplete(tree.openingName, 'drill');
         }
+        // POSITIONAL PLAN into Learn (David 2026-07-26): at the natural pause where
+        // the taught line ends, hand the student the top forward plan for the
+        // reached position — board-derived (G0), student's POV, honors the
+        // verbosity gate. Null (early/quiet position) → silence.
+        const plan = buildDrillCompletionPlan(nextFen, studentSide);
+        if (plan) void speakWalkthroughText(plan, plan);
+      } else if (fenBeforeLastOpp) {
+        // SPOT-IT into Learn (David 2026-07-26): the opponent's reply just
+        // auto-played — if it created a concrete threat against the student, teach
+        // the PATTERN to see it coming (recognition), student-as-victim register.
+        const spot = buildDrillThreatSpot(fenBeforeLastOpp, nextFen, studentSide);
+        if (spot) void speakWalkthroughText(spot, spot);
       }
 
       return { ok: true };
