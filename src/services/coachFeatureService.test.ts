@@ -685,3 +685,26 @@ describe('frameOpeningForStudent (David 2026-07-21 — "Austrian Attack vs the P
     expect(frameOpeningForStudent('Sicilian Defense: Najdorf Variation', 'white').owned).toBe(false);
   });
 });
+
+import { getPunishGemsForOpening, isSurfaceableGem } from '../data/lessons/punishGems';
+
+describe('buildReviewSegments — gem crush wiring (P2, David: "crush lines during review")', () => {
+  it('appends the retrospective gem crush when the opponent plays a known gem inaccuracy', () => {
+    const gem = getPunishGemsForOpening('caro-kann').filter(isSurfaceableGem)[0];
+    if (!gem) return; // corpus may not carry a surfaceable caro-kann gem in this build
+    const spine = gem.lineMoves.split(/\s+/).filter(Boolean);
+    const c = new Chess();
+    for (const s of spine) c.move(s);
+    const studentColor: 'white' | 'black' = c.turn() === 'w' ? 'black' : 'white';
+    const sans = [...spine, gem.inaccuracy, gem.punish];
+    // ply is 1-indexed (odd = White) — the review derives moverColor from it.
+    const moves = sans.map((san, ix) => ({ classification: 'good' as const, san, ply: ix + 1 }));
+    const segs = buildReviewSegments(moves, studentColor, 'Caro-Kann Defense', false);
+    const joined = segs.map((seg) => seg.narration ?? '').join(' \n ');
+    const esc = (x: string): string => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    expect(joined).toMatch(new RegExp(esc(gem.inaccuracy)));
+    expect(joined).toMatch(/known mistake/i);
+    expect(joined).toMatch(new RegExp(esc(gem.punish)));
+    expect(joined).toMatch(/well spotted/i); // the student played the crush
+  });
+});

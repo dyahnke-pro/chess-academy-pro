@@ -72,4 +72,11 @@ note only). Fold in `computePieceRoute`; scrap `detectDecisionPoint`.
   3rd fallback (gem → threat → route-plan). Rescues `computePieceRoute` from dead
   code; quiet developing knight moves now teach their forward route to an outpost,
   present-tense, one green arrow, engine-free. 3 unit tests; walkthrough hook green.
-- [ ] P2 IN PROGRESS next — review gem-crush wiring.
+- [x] P2 DONE — review gem-crush wired. `buildReviewGemSay`/`computeGemCrush`
+  (built + tested, wired to nothing) now fire in `buildReviewSegments`: when the
+  path before a move is exactly a curated gem's spine and the opponent played the
+  known inaccuracy, the review APPENDS the retrospective crush ("… played f3 — a
+  known mistake — and the crush was exf3, …"; "well spotted" when the student
+  found it) + red/green arrows. Appends (survives first-match-wins). Opening-phase
+  guarded. Data-driven wiring test on a real caro-kann gem.
+- [ ] P3 next — de-shadow the Review forward cues (king-attack loses its slot).

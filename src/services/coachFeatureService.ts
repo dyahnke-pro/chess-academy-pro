@@ -20,6 +20,7 @@ import { detectForcedMatingSequence, explainMatingSacMechanism } from './reviewF
 import { assessPositionalEdge } from './reviewPositionalAssessment';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
 import { describeNotableMove, describeConcessions, findTrappedPiece, describeSimplifyingTrade, describeTradeConsequence } from './reviewTeachingPoints';
+import { computeGemCrush, buildReviewGemSay } from './gemCrushLines';
 import { buildOpeningMoveDetail } from './reviewStrategicOrientation';
 import { walkBookLine } from './theoryDeparture';
 import { detectBadHabits } from './badHabitDetector';
@@ -1554,6 +1555,33 @@ export function buildReviewSegments(
           { startSquare: oppThreat.from, endSquare: oppThreat.landing, color: '#ef4444' },
           ...oppThreat.targetSquares.map((sq) => ({ startSquare: oppThreat.landing, endSquare: sq, color: '#f97316' })),
         ];
+      }
+      // GEM CRUSH IN REVIEW (David: "add the gem calculator into review… showing
+      // crush lines during review!!!"). If the path BEFORE this move is exactly a
+      // curated gem's spine and the opponent JUST played that gem's known
+      // inaccuracy, append the retrospective crush note + arrows. APPENDS (like
+      // the threat call-out) so it survives the first-match-wins cascade.
+      // buildReviewGemSay was built + tested but wired to NOTHING until now.
+      // Guard to the opening phase — gem spines are opening lines.
+      if (i < 24) {
+        const gemPathBefore = moves.slice(0, i).map((mv) => mv.san);
+        const gemCrush = computeGemCrush(undefined, gemPathBefore);
+        const stripAnno = (s: string): string => s.replace(/[!?]+$/, '');
+        if (gemCrush && stripAnno(m.san) === stripAnno(gemCrush.inaccuracy)) {
+          const studentPunished = i + 1 < usable && stripAnno(moves[i + 1].san) === stripAnno(gemCrush.punish);
+          const gemSay = buildReviewGemSay(gemCrush, {
+            opponentPlayedInaccuracy: true,
+            studentPlayedPunish: studentPunished,
+          });
+          narration = narration ? `${narration} ${gemSay}` : gemSay;
+          narrationSource = narrationSource ?? 'per-move';
+          const gemArrows = gemCrush.arrows.map((a) => ({
+            startSquare: a.from,
+            endSquare: a.to,
+            color: a.color === 'green' ? '#22c55e' : a.color === 'red' ? '#ef4444' : '#3b82f6',
+          }));
+          threatArrows = [...(threatArrows ?? []), ...gemArrows];
+        }
       }
     }
     // OPPONENT-PSYCHOLOGY read (Danya register #14: "once one side starts to
