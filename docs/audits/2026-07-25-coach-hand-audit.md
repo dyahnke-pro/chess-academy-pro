@@ -206,13 +206,39 @@ Authoritative list from `CoachGameReview.tsx` / `CoachReviewSessionPage.tsx` /
 - **[CONFIRMED repro] `t.startsWith`** fired AGAIN on `/coach/teach` when the
   stockfish worker errored during lesson gen — same `gameAnalysisService.ts:228`
   root cause; my typeof-guard fix (local, not yet deployed) resolves it.
-- **[OPEN — needs URL] 4× HTTP 400** during `/coach/teach` lesson generation
-  (Italian Two Knights, cold gen). NON-FATAL — the walkthrough still generated
-  and narrated. Needs a network capture to confirm the endpoint; most likely
-  the primary LLM provider (DeepSeek baked key) 400ing and falling back to
-  Anthropic. Latent risk: if DeepSeek 400s every call, all coach LLM silently
-  rides Anthropic fallback → breaks when Anthropic credits run out (matches the
-  PostHog `coach-llm-provider-error: credit balance too low` issue).
+- **[BUG — ROOT-FIXED + DEPLOYED + VERIFIED] HTTP 400 on every DeepSeek call —
+  deprecated model names.** Captured live via the coverage-grid scan's response
+  listener: `POST /api/llm/deepseek/chat/completions → 400 {"error":"The
+  supported API model names are deepseek-v4-pro or deepseek-v4-flash, but you
+  passed deepseek-chat"}`. DeepSeek retired `deepseek-chat`/`deepseek-reasoner`.
+  This was the app-wide P0 — every coach LLM call 400'd and silently rode the
+  Anthropic fallback (matches the PostHog `credit balance too low` issue). Fixed
+  in `coachApi.ts`: the task map + profile seed were renamed and
+  `normalizeDeepSeekModel` existed, but **`toolCapableModel` bypassed the
+  normalizer** and returned raw `deepseek-chat` for every structured tool-use
+  call. Pinned the DeepSeek tool path to the confirmed tool-capable
+  `deepseek-v4-flash`; mapped a stored reasoner pick → deep `deepseek-v4-pro`;
+  priced the v4 tiers in `coachCostService`. Commit `d231320`, deployed to prod
+  (bundle `index-B4xSblYV.js`). **Verified: two prod coverage-grid scans →
+  `http>=400: 0`.** curl confirms `v4-flash`/`v4-pro` → 200, `deepseek-chat` → 400.
+
+## Review function scan — FS12-18 diagnostic cards (CONCLUSION)
+
+The FS12-18 diagnostic cards are **wired and gated by design, not orphaned.**
+`selectReviewQuestions` (`reviewQuestionPlan.ts`) computes the question plan up
+front and assigns ONE kind per student-mistake ply — `find-shot` (missed a
+winning shot), `trap` (grabbed poisoned material), or `why` (any other slip) —
+RANKED by centipawn loss and **budget-capped to ≤2 mid-game stops + 1 end-of-game
+turning-point** (David 2026-07-20: "don't overwhelm — insert ONLY when relevant").
+So a clean game (e.g. a student win) surfacing 0-2 cards is CORRECT, not a gap.
+Proof is deterministic, not a flaky browser walk:
+`reviewQuestionPlan.test.ts` (9 tests) proves find-shot@ply11 + trap@ply13 +
+why-for-other-slips + budget ranking; `guidedFindTheMove.test.ts` (13) +
+`reviewSacrifice.test.ts` (6) prove the card builders. All green.
+Card render sites + testids confirmed present in `CoachGameReview.tsx`
+(find-shot 825, trap 812, why-picker, rewind follow-on, end turning-point).
+The multi-game browser scan is a poor instrument here (cards are probabilistic
+per game + cold Stockfish is slow) — the unit gate is the reliable proof.
 - **[PAPERCUT] Line-picker chip → "did you mean".** Tapping the `C56 · classical
   Two Knights` line-picker chip did NOT resolve to its lesson — the coach replied
   "I don't have an exact match for 'Italian Game: Italian: Two Knights with d4'.
