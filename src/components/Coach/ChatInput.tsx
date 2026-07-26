@@ -29,7 +29,7 @@ interface ChatInputProps {
   autoFocus?: boolean;
 }
 
-export function ChatInput({ onSend, disabled, placeholder, coachChoices, onPickCoachChoice, autoFocus = true }: ChatInputProps): JSX.Element {
+export function ChatInput({ onSend, disabled, placeholder, coachChoices, onPickCoachChoice, autoFocus = false }: ChatInputProps): JSX.Element {
   const [text, setText] = useState('');
   const [listening, setListening] = useState(false);
   const [micError, setMicError] = useState<string | null>(null);
