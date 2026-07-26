@@ -132,11 +132,16 @@ middlegame. Stats are a supporting tag, never the whole line.
   narration. `coachFeatureService.ts:1742` + `reviewStrategicOrientation.ts:44`.
 - [x] **N2 — ECO re-naming spam** ("This has become the Italian Game: {sub}" ×6).
   FIXED (f45895d) — family-dedup. Verify on re-walk it's ≤1–2 lines.
-- [ ] **N3 — mistake-reveal deep-why is a templated PV dump.** The "why Bd3 was
-  better" reveal repeats "rook/bishop comes into the game — quiet development,
-  getting the pieces coordinated" verbatim per PV move; the Hint one-liner is
-  just "the best move was Bd3." Needs the real MECHANISM (what Bd3 threatens/
-  achieves, what the played move failed to do), de-templated + de-duped.
+- [x] **N3 — FIXED (2026-07-26).** Two parts: (a) the per-move PV dump ("quiet
+  development" repeated) was already de-templated by N4 (universal teacher +
+  GENERIC_DEV strip, routed through the house-voice `voiceReviewLines`). (b) The
+  bare "The best move was Bd3." Hint one-liner: the review path hands
+  `buildSlipReveal` only the best SAN (no engine PV), so it named the move
+  without teaching WHY. Now it appends the move's board-true MECHANISM from the
+  same universal teacher (`buildReviewMoveTeaching` — what it attacks / the file
+  it opens / the square it fights for), no extra engine call, G0-grounded.
+  Locked by `discussionPractice.test` (the no-PV reveal now carries a mechanism
+  clause, not a bare one-liner).
 - [x] **N4 — EVERY move teaches, no silence, no generic filler (David: "TEACH
   TEACH TEACH — cannot stay silent").** Rebuilt `buildReviewMoveTeaching` with a
   UNIVERSAL TEACHER (`pieceEyes` — board-true squares a piece attacks/controls):

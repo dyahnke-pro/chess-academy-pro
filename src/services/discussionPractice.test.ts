@@ -116,7 +116,11 @@ describe('buildSlipReveal — classification + best move + engine why (David 202
     expect(reveal).toMatch(/forks the king on e8 and the rook on a8/i);
   });
 
-  it('falls back to naming the best move when there is no PV', async () => {
+  it('names the best move AND teaches its board-true mechanism when there is no PV (N3)', async () => {
+    // The review path hands in only the best SAN (no engine PV). A bare "The
+    // best move was Nf3." names the move but never teaches WHY (David 2026-07-25
+    // N3). The reveal now appends the move's board-true mechanism from the
+    // universal teacher — here Nf3 bears on the e5-pawn / fights for the center.
     const { buildSlipReveal } = await import('./discussionPractice');
     const reveal = buildSlipReveal({
       cpLoss: 120,
@@ -127,6 +131,9 @@ describe('buildSlipReveal — classification + best move + engine why (David 202
     });
     expect(reveal).toMatch(/mistake/i);
     expect(reveal).toMatch(/best move was Nf3/i);
+    // The mechanism clause — no longer a bare one-liner.
+    expect(reveal).toMatch(/center|e5|bears down/i);
+    expect(reveal.length).toBeGreaterThan('That was a mistake. The best move was Nf3.'.length);
   });
 });
 

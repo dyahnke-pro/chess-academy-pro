@@ -12,6 +12,7 @@ import { Chess, type Square } from 'chess.js';
 import { detectSlip, slipSeverityLabel, type SlipInput, type SlipResult } from './slipDetector';
 import { detectTactics } from './tacticsDetector';
 import { assembleEngineReasoning } from './groundedAnswer';
+import { buildReviewMoveTeaching } from './reviewMoveTeaching';
 import {
   classifyMisconception,
   type ClassifyMisconceptionInput,
@@ -157,7 +158,14 @@ export function buildSlipReveal(args: {
     // Reframe "The engine plays X" → "The best move was X" for a slip teach.
     parts.push(reasoning.facts.replace(/^The engine plays /, 'The best move was '));
   } else if (args.bestSan) {
-    parts.push(`The best move was ${args.bestSan}.`);
+    // NO engine PV (the review path hands in only the best SAN) — a bare "The
+    // best move was Bd3." names the move but never TEACHES why (David 2026-07-25
+    // N3: "needs the real MECHANISM — what Bd3 threatens/achieves"). Add the
+    // move's board-true mechanism from the same universal teacher the walk uses
+    // (what it attacks / the file it opens / the square it fights for) — no
+    // extra engine call, G0-grounded.
+    const mech = buildReviewMoveTeaching(args.fenBefore, args.bestSan);
+    parts.push(mech ? `The best move was ${args.bestSan}. ${mech}` : `The best move was ${args.bestSan}.`);
   } else if (!hang) {
     parts.push('There was better.');
   }
