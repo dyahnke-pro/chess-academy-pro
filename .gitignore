@@ -97,3 +97,6 @@ src/data/spine-report-plans.json
 !native-plugins/capacitor-stockfish-native/dist/
 !native-plugins/capacitor-stockfish-native/dist/**
 .env*
+
+# Scratch audit runners (parallel-session throwaways)
+scripts/_*.mjs
