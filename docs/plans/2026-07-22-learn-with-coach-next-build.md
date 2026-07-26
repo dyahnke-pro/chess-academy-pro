@@ -153,7 +153,19 @@ is narrower than the 10-item list. Verified state:
 - **STILL OPEN (remaining real delta):**
   - #3b threat-diagnosis (3-way classify) — marginal over the costClause already
     shown; low priority.
-  - #5 story-game surfacing in Learn (Phase C).
+  - #5 story-game surfacing in Learn (Phase C) — **logic READY, WIRING BLOCKED
+    (2026-07-26).** The leaf "▶ Watch <citation>" button (via `pickStoryGame` +
+    the in-page model-game viewer) was built twice (inline + an extracted
+    `LeafStoryGameButton`); both fail the ship-check BUILD — `tsc -b --force`
+    (project-references/composite) reports `TS2304: Cannot find name
+    'setModelGameSession'` at the new `onWatch={setModelGameSession}` node, and
+    full-project lint flags it `no-unsafe-assignment`, while `tsc --noEmit` and
+    isolated-file lint are BOTH clean. A composite-build resolution quirk
+    isolated to adding a node to the ~7k-line CoachTeachPage. Reverted to keep
+    `main` green. Pick-up: split the leaf-panel JSX into its own component so
+    the new node lives in a small file, OR thread the watch through an existing
+    already-resolved callback instead of the raw setter. `pickStoryGame` +
+    corpus are proven and unchanged.
   - #9 Deep Coach Detail toggle wired to Learn (Phase C).
   - #10 shared ChatMessage renderer across Learn/Play/Review (Phase D) — David wants
     this ("We need that identical").

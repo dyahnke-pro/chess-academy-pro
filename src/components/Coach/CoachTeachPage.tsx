@@ -77,7 +77,6 @@ import {
 } from '../../services/walkthroughControlIntent';
 import { lookupPlayerGamesTool } from '../../coach/tools/cerebellum/lookupPlayerGames';
 import { buildSession } from '../../services/walkthroughAdapter';
-import { LeafStoryGameButton } from './LeafStoryGameButton';
 import { fetchChesscomPlayerGames } from '../../services/chesscomGamesService';
 import { OpeningPlayMode } from '../Openings/OpeningPlayMode';
 import type { WalkthroughSession } from '../../types/walkthrough';
@@ -6847,17 +6846,6 @@ function WalkthroughControls({
               <ChevronRight size={16} />
               Play this line out yourself
             </button>
-          )}
-          {/* STORY-AS-EVIDENCE (#26 Phase C): a one-tap "watch a master play
-              this" at the leaf. Extracted to its own component so ESLint's typed
-              program resolves the corpus types cleanly (see LeafStoryGameButton). */}
-          {tree && (
-            <LeafStoryGameButton
-              openingName={tree.openingName}
-              studentSide={tree.studentSide ?? inferStudentSide(tree.openingName)}
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- false positive: ESLint's typed program resolves this setState setter to `error` for newly-added nodes in this 7k-line file (tsc is clean; the setter's type is valid).
-              onWatch={setModelGameSession}
-            />
           )}
           {tree && extractDeepDiveOptions(tree).length > 0 && (
             <>
