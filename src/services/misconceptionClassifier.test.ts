@@ -96,3 +96,73 @@ describe('classifyMisconception (deterministic)', () => {
     expect(r!.tag).not.toBe('none');
   });
 });
+
+// ─── Coverage expansion (David 2026-07-28) ──────────────────────────────────
+// 9 of the catalog's tags were never emitted, so ~half of all captured
+// weaknesses fell into the 'other' holding pen and carried no theme. These
+// detectors are all BOARD-VERIFIED (chess.js), never inferred.
+
+describe('classifyMisconception — expanded coverage', () => {
+  it('tags bad-trade when a capture loses material to the recapture', async () => {
+    // White RxN on d5. The rook is DEFENDED by the c4-pawn (so it isn't
+    // "hanging"), but the c6-pawn recaptures: rook (5) for knight (3).
+    const r = await classifyMisconception({
+      fen: '4k3/8/2p5/3n4/2P5/8/8/3RK3 w - - 0 1',
+      playedSan: 'Rxd5',
+      gamePhase: 'middlegame',
+    });
+    expect(r!.tag).toBe('bad-trade');
+    expect(r!.coachNote).toContain('d5');
+  });
+
+  it('tags missed-opponents-threat when a piece is attacked by a cheaper one', async () => {
+    // The white rook on d5 is attacked by the black c6-pawn. It IS defended
+    // (c4-pawn), so it isn't hanging — but rook-for-pawn still loses material,
+    // so the threat had to be answered instead of shuffling the king.
+    const r = await classifyMisconception({
+      fen: '4k3/8/2p5/3R4/2P5/8/8/4K3 w - - 0 1',
+      playedSan: 'Ke2',
+      gamePhase: 'middlegame',
+    });
+    expect(r!.tag).toBe('missed-opponents-threat');
+    expect(r!.coachNote).toContain('d5');
+  });
+
+  it('tags created-pawn-weakness when a pawn move leaves it isolated', async () => {
+    // The lone a-pawn advances with no friendly pawn on the b-file.
+    const r = await classifyMisconception({
+      fen: '4k3/8/8/8/8/8/P3K3/8 w - - 0 1',
+      playedSan: 'a4',
+      gamePhase: 'middlegame',
+    });
+    expect(r!.tag).toBe('created-pawn-weakness');
+  });
+
+  it('tags misplaced-piece when a knight goes to the rim', async () => {
+    const r = await classifyMisconception({
+      fen: '4k3/8/8/8/8/2N5/8/4K3 w - - 0 1',
+      playedSan: 'Na4',
+      gamePhase: 'middlegame',
+    });
+    expect(r!.tag).toBe('misplaced-piece');
+    expect(r!.coachNote).toContain('a4');
+  });
+
+  it('tags passive-king-endgame when the king walks away from the centre', async () => {
+    const r = await classifyMisconception({
+      fen: '4k3/8/8/8/3K4/8/8/8 w - - 0 1',
+      playedSan: 'Kc3',
+      gamePhase: 'endgame',
+    });
+    expect(r!.tag).toBe('passive-king-endgame');
+  });
+
+  it('still falls back to other when nothing is provable (never invents a theme)', async () => {
+    const r = await classifyMisconception({
+      fen: '4k3/8/8/8/8/8/4P3/4K3 w - - 0 1',
+      playedSan: 'Kd2',
+      gamePhase: 'middlegame',
+    });
+    expect(r!.tag).toBe('other');
+  });
+});
