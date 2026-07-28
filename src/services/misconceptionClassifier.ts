@@ -101,6 +101,86 @@ function bestMoveLandsTactic(fen: string, bestSan: string, moverColor: Color): b
   }
 }
 
+function opponentOf(color: Color): Color {
+  return color === 'w' ? 'b' : 'w';
+}
+
+/** Squares from which `color` attacks `square`. Total — an unknown square or a
+ *  chess.js version without `attackers` degrades to "no attackers". */
+function attackersOf(chess: Chess, square: string, color: Color): string[] {
+  try {
+    return chess.attackers(square as never, color) as unknown as string[];
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * The most valuable own piece that is attacked by a STRICTLY cheaper enemy
+ * piece — the exchange loses material even when the piece is defended, so the
+ * threat had to be met. Returns null when nothing qualifies.
+ */
+function piecesAttackedByLesser(
+  chess: Chess,
+  color: Color,
+): { square: string; piece: string; byPiece: string } | null {
+  let worst: { square: string; piece: string; byPiece: string; loss: number } | null = null;
+  try {
+    for (const row of chess.board()) {
+      for (const sq of row) {
+        if (!sq || sq.color !== color || sq.type === 'k') continue;
+        const value = PIECE_VALUE[sq.type] ?? 0;
+        for (const from of attackersOf(chess, sq.square, opponentOf(color))) {
+          const attacker = chess.get(from as never);
+          if (!attacker) continue;
+          const attackerValue = PIECE_VALUE[attacker.type] ?? 0;
+          const loss = value - attackerValue;
+          if (loss > 0 && (!worst || loss > worst.loss)) {
+            worst = { square: sq.square, piece: sq.type, byPiece: attacker.type, loss };
+          }
+        }
+      }
+    }
+  } catch {
+    return null;
+  }
+  return worst ? { square: worst.square, piece: worst.piece, byPiece: worst.byPiece } : null;
+}
+
+/** How many pawns `color` has on the given file (0-indexed). */
+function pawnsOnFile(chess: Chess, color: Color, file: number): number {
+  let count = 0;
+  try {
+    for (const row of chess.board()) {
+      for (const sq of row) {
+        if (sq && sq.color === color && sq.type === 'p' && fileOf(sq.square) === file) count++;
+      }
+    }
+  } catch {
+    return 0;
+  }
+  return count;
+}
+
+/** Whether `color` has a pawn on either file adjacent to `file`. */
+function hasPawnOnAdjacentFile(chess: Chess, color: Color, file: number): boolean {
+  return pawnsOnFile(chess, color, file - 1) > 0 || pawnsOnFile(chess, color, file + 1) > 0;
+}
+
+/** The a/h files and the 1st/8th ranks — where a knight's reach collapses. */
+function isRimSquare(square: string): boolean {
+  const file = fileOf(square);
+  const rank = Number(square[1]);
+  return file === 0 || file === 7 || rank === 1 || rank === 8;
+}
+
+/** Chebyshev distance from the four central squares — bigger is more passive. */
+function centreDistance(square: string): number {
+  const file = fileOf(square);
+  const rank = Number(square[1]) - 1;
+  return Math.max(Math.abs(file - 3.5), Math.abs(rank - 3.5));
+}
+
 function phaseLabel(phase: 'opening' | 'middlegame' | 'endgame'): string {
   if (phase === 'opening') return 'Opening slip';
   if (phase === 'endgame') return 'Endgame slip';
@@ -221,6 +301,80 @@ function classifyMisconceptionImpl(
       }
     } catch {
       /* ignore */
+    }
+  }
+
+  // (g) BAD TRADE — we initiated a capture with a piece worth MORE than what we
+  // took, onto a square the opponent still defends, so the recapture nets them
+  // material. Distinct from (a): the piece isn't hanging, the exchange is just
+  // losing. Board-verified via the recapture defenders, never assumed.
+  if (move.captured) {
+    const ourValue = PIECE_VALUE[move.piece] ?? 0;
+    const tookValue = PIECE_VALUE[move.captured] ?? 0;
+    const defenders = attackersOf(chess, move.to, opponentOf(moverColor));
+    if (defenders.length > 0 && ourValue > tookValue) {
+      return {
+        tag: 'bad-trade',
+        coachNote: `Trading the ${PIECE_NAMES[move.piece] ?? 'piece'} for the ${PIECE_NAMES[move.captured] ?? 'piece'} on ${move.to} loses material once it's recaptured.`,
+      };
+    }
+  }
+
+  // (h) MISSED OPPONENT'S THREAT — one of our pieces is attacked by a piece
+  // worth LESS than it. Even with a defender that exchange loses material, so
+  // the threat had to be answered. (a) already covered the undefended case.
+  {
+    const threatened = piecesAttackedByLesser(chess, moverColor);
+    if (threatened) {
+      return {
+        tag: 'missed-opponents-threat',
+        coachNote: `The ${PIECE_NAMES[threatened.piece] ?? 'piece'} on ${threatened.square} is attacked by a ${PIECE_NAMES[threatened.byPiece] ?? 'piece'} — that threat needed answering.`,
+      };
+    }
+  }
+
+  // (i) CREATED PAWN WEAKNESS — a pawn move that leaves that pawn isolated (no
+  // friendly pawn on either adjacent file) or doubled, when it wasn't before.
+  if (move.piece === 'p') {
+    try {
+      const before = new Chess(input.fen);
+      const wasDoubled = pawnsOnFile(before, moverColor, fileOf(move.to)) >= 1;
+      const nowDoubled = pawnsOnFile(chess, moverColor, fileOf(move.to)) >= 2;
+      const isolated = !hasPawnOnAdjacentFile(chess, moverColor, fileOf(move.to));
+      if (isolated) {
+        return {
+          tag: 'created-pawn-weakness',
+          coachNote: `The pawn on ${move.to} has no friendly pawn beside it — it's isolated and hard to defend.`,
+        };
+      }
+      if (nowDoubled && !wasDoubled) {
+        return {
+          tag: 'created-pawn-weakness',
+          coachNote: `That leaves doubled pawns on the ${move.to[0]}-file, which can't defend each other.`,
+        };
+      }
+    } catch {
+      /* ignore — fall through */
+    }
+  }
+
+  // (j) MISPLACED PIECE — a knight sent to the rim, where it controls far fewer
+  // squares than from the centre ("a knight on the rim is dim").
+  if (move.piece === 'n' && isRimSquare(move.to)) {
+    return {
+      tag: 'misplaced-piece',
+      coachNote: `The knight on ${move.to} sits on the edge, where it covers only a fraction of the squares it would from the centre.`,
+    };
+  }
+
+  // (k) PASSIVE KING IN THE ENDGAME — in an endgame the king is a fighting
+  // piece; this move walked it further from the centre.
+  if (phase === 'endgame' && move.piece === 'k') {
+    if (centreDistance(move.to) > centreDistance(move.from)) {
+      return {
+        tag: 'passive-king-endgame',
+        coachNote: `In the endgame the king belongs in the centre — ${move.to} walks it further away.`,
+      };
     }
   }
 
