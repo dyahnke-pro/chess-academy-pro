@@ -5345,7 +5345,24 @@ export function CoachTeachPage(): JSX.Element {
                 <span className="hidden sm:inline">{pace === 'tour' ? 'Tour' : 'Full'}</span>
               </button>
               <button
-                onClick={() => useAppStore.getState().setCoachDrawerOpen(true)}
+                onClick={() => {
+                  // At md+ the chat panel is ALREADY inline (right column) —
+                  // opening the floating GlobalCoachDrawer there duplicated the
+                  // chat AND its fixed bottom-right card sat on top of the
+                  // teach-picker tiles, swallowing their clicks (found driving
+                  // the surface, David-approved fix 2026-07-28). Desktop: focus
+                  // the inline input. Mobile (stacked): keep the drawer sheet.
+                  const mdUp = typeof window !== 'undefined' && window.matchMedia('(min-width: 768px)').matches;
+                  if (mdUp) {
+                    const el = document.querySelector<HTMLTextAreaElement>('[data-testid="chat-text-input"] textarea, [data-testid="chat-text-input"]');
+                    if (el) {
+                      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                      el.focus();
+                      return;
+                    }
+                  }
+                  useAppStore.getState().setCoachDrawerOpen(true);
+                }}
                 className="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm font-medium transition-all duration-200"
                 style={{
                   background: 'var(--color-accent)',
