@@ -4,6 +4,7 @@ import type { SquareHandlerArgs } from 'react-chessboard';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
 import { voiceService } from '../../services/voiceService';
+import { captureEvent } from '../../services/analytics';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ChevronLeft,
@@ -86,6 +87,11 @@ export function ModelGameViewer({
   onExit,
 }: ModelGameViewerProps): JSX.Element {
   const moves = useMemo(() => parseGameMoves(game.pgn), [game.pgn]);
+  // Named usage event — a model game was opened for viewing (autocapture sees
+  // the tap; this is the clean, funnel-able record with the opening + game id).
+  useEffect(() => {
+    captureEvent('model_game_viewed', { opening_id: game.openingId, game_id: game.id });
+  }, [game.openingId, game.id]);
   const [currentIndex, setCurrentIndex] = useState(-1); // -1 = starting position
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
 

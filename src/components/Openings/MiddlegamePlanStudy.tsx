@@ -3,6 +3,7 @@ import { ControlledChessBoard } from '../Board/ControlledChessBoard';
 import { useChessGame } from '../../hooks/useChessGame';
 import { MiddlegamePractice } from './MiddlegamePractice';
 import { voiceService } from '../../services/voiceService';
+import { captureEvent } from '../../services/analytics';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowLeft,
@@ -103,6 +104,11 @@ export function MiddlegamePlanStudy({
   const [isMiddlegamePracticing, setIsMiddlegamePracticing] = useState(false);
   const [isNarrating, setIsNarrating] = useState(false);
   const narrationActiveRef = useRef(false);
+
+  // Named usage event — a middlegame plan was opened for study.
+  useEffect(() => {
+    captureEvent('middlegame_plan_studied', { opening_id: plan.openingId, plan_id: plan.id });
+  }, [plan.openingId, plan.id]);
 
   // Determine which FEN and arrows to show based on active section
   const { displayFen, displayArrows, displayHighlights } = useMemo(() => {
