@@ -1329,23 +1329,31 @@ function AboutTab(): JSX.Element {
         <div className="text-sm font-medium">Pro players &amp; attribution</div>
         <ProAttributionNotice />
       </div>
-      {/* Owner-device flag. Turn this ON for your own phone/laptop so your
-          usage never mixes into the product analytics. Persists per device. */}
-      <div className="pt-4 border-t space-y-1.5" style={{ borderColor: 'var(--color-border)' }}>
-        <div className="text-sm font-medium">Analytics</div>
-        <ToggleRow
-          label="This is my device"
-          tooltip="Excludes this device's usage from the product analytics. Turn on for your own phone and laptop."
-          checked={internalDevice}
-          onChange={toggleInternalDevice}
-          testId="internal-device-toggle"
-        />
-        {deviceId && (
-          <div className="text-xs font-mono" style={{ color: 'var(--color-text-muted)' }}>
-            device: {deviceId.slice(0, 8)}
-          </div>
-        )}
-      </div>
+      {/* Owner-device flag — DELIBERATELY only rendered on a device that is
+          ALREADY marked internal. A visible toggle here would let any beta
+          tester or App Store user exclude themselves from the product
+          analytics with one tap, silently corrupting the data (David
+          2026-07-28). Marking is done out-of-band via `?internal=1` (the same
+          unlisted-URL convention as the /debug/* routes), so a normal user can
+          never reach it; this row exists only so the owner can confirm the
+          flag took and can turn it back off. */}
+      {internalDevice && (
+        <div className="pt-4 border-t space-y-1.5" style={{ borderColor: 'var(--color-border)' }}>
+          <div className="text-sm font-medium">Analytics</div>
+          <ToggleRow
+            label="This is my device"
+            tooltip="This device is excluded from the product analytics. Turn off to include it again."
+            checked={internalDevice}
+            onChange={toggleInternalDevice}
+            testId="internal-device-toggle"
+          />
+          {deviceId && (
+            <div className="text-xs font-mono" style={{ color: 'var(--color-text-muted)' }}>
+              device: {deviceId.slice(0, 8)}
+            </div>
+          )}
+        </div>
+      )}
       <div className="pt-4 border-t space-y-3" style={{ borderColor: 'var(--color-border)' }}>
         {/* Feedback button — primary post-launch signal. Placed at top
             of the action list so users see it immediately when they
