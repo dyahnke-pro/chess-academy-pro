@@ -745,6 +745,9 @@ export function CoachTeachPage(): JSX.Element {
   // that: each play_move handler writes the chess instance's current
   // FEN into it, and getLiveFen reads from this ref. */
   const liveFenRef = useRef(game.fen);
+  /** Latest handleStudentMove — lets the (earlier-declared) handleSubmit hand a
+   *  typed move report to the exact board-move flow without a TDZ dep. */
+  const handleStudentMoveRef = useRef<((move: MoveResult) => void) | null>(null);
   // Active in-place drill (David 2026-07-03: the coach sets a REAL puzzle
   // up ON THE BOARD under Learn, no tab routing). `step` indexes the NEXT
   // expected move in `drill.solutionSan` (student moves at even indices,
@@ -1790,6 +1793,117 @@ export function CoachTeachPage(): JSX.Element {
           summary: `walkthrough control "resume" — continued ${walkthrough.tree?.openingName ?? '(none)'}`,
         });
         walkthrough.resume();
+        return;
+      }
+    }
+
+    // ─── Control phrase with NOTHING running (deterministic — G7 out-of-order) ───
+    // "stop" / "resume" / "start" with no walkthrough active used to fall all
+    // the way through to the unmapped-turn grounded default, which answered
+    // with a best-move readout — a nonsense reply to a control phrase (found
+    // driving the surface 2026-07-28: "stop" → "The best move is e4…").
+    // Acknowledge honestly instead. Pure regex; the LLM is never in this
+    // loop (G0).
+    if (
+      !opts?.kickoff &&
+      opts?.coachReplyPlayed === undefined &&
+      !walkthrough.isActive
+    ) {
+      const idleControl = classifyWalkthroughControl(trimmedText);
+      if (idleControl !== null) {
+        const idleTurnId = freshTurnId('walkthrough-control-idle');
+        const ack =
+          idleControl === 'stop'
+            ? "Nothing's running right now — the board is all yours. Name an opening to start a lesson."
+            : "There's no lesson running right now. Name an opening and we'll dive in.";
+        setMessages((prev) => [
+          ...prev,
+          { id: `${idleTurnId}-u`, role: 'user', content: text, timestamp: Date.now() },
+          { id: `${idleTurnId}-c`, role: 'assistant', content: ack, timestamp: Date.now() },
+        ]);
+        useCoachMemoryStore.getState().appendConversationMessage({
+          surface: 'chat-teach', role: 'user', text, fen: opts?.fenOverride ?? gameRef.current.fen, trigger: null,
+        });
+        useCoachMemoryStore.getState().appendConversationMessage({
+          surface: 'chat-teach', role: 'coach', text: ack, fen: gameRef.current.fen, trigger: null,
+        });
+        void voiceService.speakForced(ack).catch(() => undefined);
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'CoachTeachPage.handleSubmit.walkthroughControlIdle',
+          summary: `idle control "${idleControl}" acked deterministically via "${trimmedText.slice(0, 40)}"`,
+        });
+        return;
+      }
+    }
+
+    // ─── Typed MOVE REPORT (deterministic — the step-by-step branch) ───
+    // "I played e4." / "I played e4. Your move." typed with no walkthrough
+    // active used to fall to the unmapped-turn default: the student's move
+    // never touched the board and the reply was a canned best-move readout
+    // naming the move they had JUST played (found driving the surface
+    // 2026-07-28). A typed report IS a board move: parse the SAN, validate +
+    // apply via chess.js on the student's own turn, then hand off to the SAME
+    // engine-reply flow a board move takes (handleStudentMove) — so words and
+    // board can never diverge (G0/G3).
+    if (
+      !opts?.kickoff &&
+      opts?.coachReplyPlayed === undefined &&
+      !walkthrough.isActive &&
+      !activeDrillRef.current
+    ) {
+      const report = trimmedText.match(
+        /^i\s+(?:just\s+)?played\s+([a-hNBRQKO][a-hxNBRQK1-8=+#O-]*)\s*[.!]?\s*(?:your\s+(?:move|turn)\s*[.!]?)?$/i,
+      );
+      if (report) {
+        const sanRaw = report[1].replace(/[.,!?]+$/, '');
+        const reportTurnId = freshTurnId('typed-move-report');
+        const say = (reply: string): void => {
+          setMessages((prev) => [
+            ...prev,
+            { id: `${reportTurnId}-u`, role: 'user', content: text, timestamp: Date.now() },
+            { id: `${reportTurnId}-c`, role: 'assistant', content: reply, timestamp: Date.now() },
+          ]);
+          void voiceService.speakForced(reply).catch(() => undefined);
+        };
+        const liveFen = liveFenRef.current;
+        const sideToMove = liveFen.split(' ')[1] === 'w' ? 'white' : 'black';
+        if (sideToMove !== playerColor) {
+          say("Hold on — it's my move in this position, not yours. Let me reply first.");
+          return;
+        }
+        let applied: MoveResult | null = null;
+        try {
+          const probe = new Chess(liveFen);
+          const strip = (s: string): string => s.replace(/[+#]/g, '');
+          const match = probe
+            .moves({ verbose: true })
+            .find((mv) => mv.san === sanRaw || strip(mv.san) === strip(sanRaw));
+          if (match) applied = gameRef.current.makeMove(match.from, match.to, match.promotion);
+        } catch {
+          applied = null;
+        }
+        if (!applied) {
+          say(`${sanRaw} isn't a legal move in this position — take another look at the board and try again.`);
+          return;
+        }
+        // Post the user's report to the transcript, then run the exact
+        // board-move flow (slip faucet, engine reply, narration).
+        setMessages((prev) => [
+          ...prev,
+          { id: `${reportTurnId}-u`, role: 'user', content: text, timestamp: Date.now() },
+        ]);
+        useCoachMemoryStore.getState().appendConversationMessage({
+          surface: 'chat-teach', role: 'user', text, fen: liveFen, trigger: null,
+        });
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'CoachTeachPage.handleSubmit.typedMoveReport',
+          summary: `typed report "${sanRaw}" applied to board; routed to board-move flow`,
+        });
+        handleStudentMoveRef.current?.(applied);
         return;
       }
     }
@@ -4986,6 +5100,9 @@ export function CoachTeachPage(): JSX.Element {
       void navigate(`/coach/review/${gameId}`);
     })();
   }, [game.isGameOver, game.isCheckmate, game.turn, walkthrough.isActive, playerColor, game.history, activeProfile, navigate, walkthrough.tree?.openingName]);
+  // Keep the latest board-move handler reachable from handleSubmit's typed
+  // move-report branch (declared earlier in the file — ref avoids the TDZ).
+  handleStudentMoveRef.current = handleStudentMove;
 
   // Captured-pieces tray (David 2026-06-15: "make Learn identical to Play —
   // it also shows which pieces have been captured"). Computed from the board's
