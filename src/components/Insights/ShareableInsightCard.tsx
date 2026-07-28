@@ -1,4 +1,5 @@
 import { useRef, useState, useCallback } from 'react';
+import { captureEvent } from '../../services/analytics';
 import { Share2, Loader2 } from 'lucide-react';
 import type { ShareableInsight } from '../../services/shareableInsightsService';
 
@@ -27,6 +28,9 @@ export function ShareableInsightCard({ insight }: ShareableInsightCardProps): JS
 
   const handleShare = useCallback(async () => {
     if (!cardRef.current || sharing) return;
+    // The one place the app can be "shared" today — track it so growth-by-
+    // sharing is measurable (David 2026-07-28: "has anyone shared my app?").
+    captureEvent('insight_shared', { insight_id: insight.id, kind: insight.kind });
     setSharing(true);
 
     try {

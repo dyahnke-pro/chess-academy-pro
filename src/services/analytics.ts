@@ -515,6 +515,23 @@ function crashFromAudit(entry: AuditEntry): Error {
 }
 
 /**
+ * Register SUPER-PROPERTIES — attached to every subsequent event and persisted
+ * by posthog-js across sessions (so from the next load they ride every event
+ * including the boot ones). Used for the stable device identity + the internal
+ * (owner-device) flag. Also mirrors onto the person so cohorts can filter on
+ * them. No-op when disabled / opted out.
+ */
+export function registerSuperProperties(props: Record<string, unknown>): void {
+  try {
+    if (!client || optedOut) return;
+    client.register(props);
+    client.setPersonProperties(props);
+  } catch {
+    /* swallow — analytics must never break a feature path */
+  }
+}
+
+/**
  * Set PostHog PERSON properties on the current person via `$set` / `$set_once`.
  * Used to attach durable, queryable attributes (is_pro, plan, first_seen_at) so
  * every event can be broken down by them. `once` props are written only if not

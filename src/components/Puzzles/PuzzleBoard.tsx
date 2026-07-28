@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { captureEvent } from '../../services/analytics';
 import { Chess } from 'chess.js';
 import { ControlledChessBoard } from '../Board/ControlledChessBoard';
 import { HintButton } from '../Coach/HintButton';
@@ -303,6 +304,11 @@ export function PuzzleBoard({
 
       // Check if puzzle is fully solved
       if (nextIndex >= movesRef.current.length) {
+        captureEvent('puzzle_solved', {
+          puzzle_id: puzzle.id,
+          themes: puzzle.themes,
+          rating: puzzle.rating,
+        });
         setState('correct');
         triggerFlash('board-flash-success');
         playSuccessChime();

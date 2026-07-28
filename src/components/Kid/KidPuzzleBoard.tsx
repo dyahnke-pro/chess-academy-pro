@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
+import { captureEvent } from '../../services/analytics';
 import { Chess } from 'chess.js';
 import { KidChessboard } from '../Chessboard/KidChessboard';
 import { usePieceSound } from '../../hooks/usePieceSound';
@@ -114,6 +115,7 @@ export function KidPuzzleBoard({
         (!solve.promotion || move.promotion === solve.promotion);
 
       if (isCorrect) {
+        captureEvent('kid_puzzle_completed', { correct: true });
         setSolved(true);
         playSuccessChime();
         onComplete({ correct: true });
