@@ -17,6 +17,12 @@ export interface StockfishNativePlugin {
   getMaxMemory(): Promise<{ value: number }>;
   /** CPU architecture string (e.g. `arm64`). */
   getCPUArch(): Promise<{ value: string }>;
+  /**
+   * Which channel this install came from — `testflight` | `appstore` |
+   * `development`. Runtime receipt check (Apple promotes the same binary from
+   * TestFlight to the App Store, so a build-time flag would mislabel users).
+   */
+  getDistribution(): Promise<{ channel: string }>;
   /** One event per UCI output line the engine prints. */
   addListener(
     eventName: 'output',
