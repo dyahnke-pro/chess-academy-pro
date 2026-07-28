@@ -7,6 +7,7 @@
 
 import { db } from '../db/schema';
 import { logAppAudit } from './appAuditor';
+import { captureEvent } from './analytics';
 import type {
   MisconceptionTagRecord,
   MisconceptionSource,
@@ -125,6 +126,18 @@ export async function logMisconception(
       openingName: record.openingName,
       sourceGameId: record.sourceGameId,
     }),
+  });
+  // Structured weakness event for CROSS-USER meta-analysis (David 2026-07-28:
+  // "which themes pop up across all users"). Clean queryable props (not the
+  // audit summary string) so PostHog can rank buckets/tags across everyone.
+  captureEvent('weakness_captured', {
+    tag: record.tag,
+    bucket: getMisconceptionTag(record.tag)?.bucket ?? 'uncategorized',
+    phase: record.gamePhase,
+    cp_loss: record.cpLoss,
+    opening_id: record.openingId,
+    opening_name: record.openingName,
+    source: record.source,
   });
   return record;
 }
