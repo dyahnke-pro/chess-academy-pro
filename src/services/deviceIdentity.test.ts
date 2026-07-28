@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { db } from '../db/schema';
 import {
   getDeviceId,
+  resolveDistributionChannel,
   isInternalDevice,
   setInternalDevice,
   applyInternalFromUrl,
@@ -62,5 +63,17 @@ describe('deviceIdentity — ?internal= URL marking', () => {
     await setInternalDevice(true);
     expect(await applyInternalFromUrl('?foo=bar')).toBe(false);
     expect(await isInternalDevice()).toBe(true);
+  });
+});
+
+describe('deviceIdentity — distribution channel (TestFlight vs App Store)', () => {
+  it('reports web on a non-native platform', async () => {
+    // jsdom is not Capacitor-native, so the native receipt check is skipped.
+    expect(await resolveDistributionChannel()).toBe('web');
+  });
+
+  it('rides the resolved identity so every event can split beta vs real users', async () => {
+    const identity = await resolveDeviceIdentity();
+    expect(identity.distribution).toBe('web');
   });
 });

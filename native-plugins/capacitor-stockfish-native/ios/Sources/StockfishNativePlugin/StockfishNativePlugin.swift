@@ -23,6 +23,7 @@ public class StockfishNativePlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "exit", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getMaxMemory", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getCPUArch", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getDistribution", returnType: CAPPluginReturnPromise),
     ]
 
     private var started = false
@@ -92,5 +93,25 @@ public class StockfishNativePlugin: CAPPlugin, CAPBridgedPlugin {
 
     @objc func getCPUArch(_ call: CAPPluginCall) {
         call.resolve(["value": "arm64"])
+    }
+
+    // Which channel this install came from, so analytics can tell a TestFlight
+    // beta tester apart from a real App Store user. Apple promotes the SAME
+    // binary from TestFlight to the App Store, so this MUST be a runtime check
+    // — a compile-time flag would mislabel every user after release. The
+    // receipt filename is the documented signal: TestFlight (and sandbox)
+    // installs carry `sandboxReceipt`, App Store installs carry `receipt`.
+    // A simulator / dev build has no receipt at all.
+    @objc func getDistribution(_ call: CAPPluginCall) {
+        let receiptName = Bundle.main.appStoreReceiptURL?.lastPathComponent ?? ""
+        let channel: String
+        if receiptName == "sandboxReceipt" {
+            channel = "testflight"
+        } else if receiptName.isEmpty {
+            channel = "development"
+        } else {
+            channel = "appstore"
+        }
+        call.resolve(["channel": channel])
     }
 }

@@ -33,6 +33,8 @@ export interface DeviceIdentity {
   is_internal: boolean;
   /** Optional human name for the device ("David iPhone", "MacBook neo"). */
   device_label?: string;
+  /** Install channel: testflight | appstore | development | web | unknown. */
+  distribution?: string;
 }
 
 function newUuid(): string {
@@ -108,12 +110,41 @@ export async function applyInternalFromUrl(search?: string): Promise<boolean> {
   }
 }
 
+/**
+ * Which channel this install came from — `testflight` | `appstore` |
+ * `development` on native, `web` elsewhere. Lets analytics separate BETA
+ * TESTERS from real App Store users (David 2026-07-28).
+ *
+ * MUST be a runtime check: Apple promotes the SAME binary from TestFlight to
+ * the App Store, so a build-time flag would mislabel every user the moment a
+ * version ships. The native side reads the receipt filename (`sandboxReceipt`
+ * = TestFlight). Total — any failure degrades to `unknown`, never throws.
+ */
+export async function resolveDistributionChannel(): Promise<string> {
+  try {
+    const { Capacitor } = await import('@capacitor/core');
+    if (!Capacitor.isNativePlatform()) return 'web';
+    const { StockfishNative } = await import('capacitor-stockfish-native');
+    const res = await StockfishNative.getDistribution();
+    return res?.channel && res.channel.length > 0 ? res.channel : 'unknown';
+  } catch {
+    // Older native build without the method, or a non-Capacitor context.
+    return 'unknown';
+  }
+}
+
 /** Resolve the full identity for registration as PostHog super-properties. */
 export async function resolveDeviceIdentity(): Promise<DeviceIdentity> {
-  const [device_id, is_internal, label] = await Promise.all([
+  const [device_id, is_internal, label, distribution] = await Promise.all([
     getDeviceId(),
     isInternalDevice(),
     getDeviceLabel(),
+    resolveDistributionChannel(),
   ]);
-  return { device_id, is_internal, ...(label ? { device_label: label } : {}) };
+  return {
+    device_id,
+    is_internal,
+    distribution,
+    ...(label ? { device_label: label } : {}),
+  };
 }

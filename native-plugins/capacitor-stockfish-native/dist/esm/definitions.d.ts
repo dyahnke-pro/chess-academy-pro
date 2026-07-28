@@ -11,6 +11,9 @@ export interface StockfishNativePlugin {
     getCPUArch(): Promise<{
         value: string;
     }>;
+    getDistribution(): Promise<{
+        channel: string;
+    }>;
     addListener(eventName: 'output', listenerFunc: (data: {
         line: string;
     }) => void): Promise<PluginListenerHandle>;
