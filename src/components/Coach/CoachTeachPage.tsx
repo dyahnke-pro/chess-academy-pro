@@ -11,6 +11,7 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { uid } from '../../utils/uid';
+import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Chess } from 'chess.js';
 import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, X, Check, MessageCircle, Zap, Undo2, RotateCcw, Volume2 } from 'lucide-react';
@@ -1043,6 +1044,13 @@ export function CoachTeachPage(): JSX.Element {
       clearThreatCheck();
     }
   }, [walkthrough.isActive, clearGuidedFind, clearThreatCheck]);
+
+  // A live walkthrough must survive a deploy: hold the service-worker update
+  // reload (index.html controllerchange handler) until the lesson ends.
+  useEffect(() => {
+    if (!walkthrough.isActive) return;
+    return acquireSwReloadHold();
+  }, [walkthrough.isActive]);
 
   // Auto-flip the board when a walkthrough loads a tree whose
   // studentSide differs from the current orientation. Black-side

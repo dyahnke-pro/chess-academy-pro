@@ -1688,13 +1688,18 @@ export function installGlobalErrorHooks(): () => void {
   const swListeners: Array<() => void> = [];
   if ('serviceWorker' in navigator) {
     const onControllerChange = (): void => {
+      // `reloadHeld` mirrors the index.html handler's decision: true means an
+      // active session (walkthrough / coach game / review walk / WLPP rung)
+      // deferred the update reload instead of losing the session to it.
+      const reloadHeld = window.__HOLD_SW_RELOAD__ === true;
       void logAppAudit({
         kind: 'sw-lifecycle',
         category: 'subsystem',
         source: 'navigator.serviceWorker.controllerchange',
-        summary: 'service worker controllerchange — new bundle taking over',
+        summary: `service worker controllerchange — new bundle taking over${reloadHeld ? ' (reload DEFERRED: active session hold)' : ''}`,
         details: JSON.stringify({
           newScriptURL: navigator.serviceWorker.controller?.scriptURL ?? null,
+          reloadHeld,
         }),
       });
     };

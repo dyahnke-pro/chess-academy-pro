@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { uid } from '../../utils/uid';
+import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Undo2, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2, Lightbulb, AlertTriangle, GraduationCap, Compass, RotateCcw, Volume2, MessageCircle, Timer, HelpCircle } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -576,6 +577,17 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   // /coach/play feeds the bucket too. Enabled only during live play (not in
   // explore/practice modes — those are guarded by the routed handler).
   const discussion = useDiscussionPractice(gameState.status === 'playing');
+
+  // A live game must survive a deploy: hold the service-worker update reload
+  // (index.html controllerchange handler) while moves are on the board. A
+  // fresh board with zero moves has nothing to lose — no hold there.
+  const gameInProgress =
+    (gameState.status === 'playing' || gameState.status === 'blunder_pause') &&
+    gameState.moves.length > 0;
+  useEffect(() => {
+    if (!gameInProgress) return;
+    return acquireSwReloadHold();
+  }, [gameInProgress]);
 
   // Legacy shim: URL params (`?opening=…`, `?subject=…`) and resumed
   // games still call `handleOpeningRequest(name)`. We keep the name

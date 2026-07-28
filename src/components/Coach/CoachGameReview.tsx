@@ -2,6 +2,7 @@ import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { RotateCcw, Home, ArrowLeft, MessageCircle, Loader2, Volume2, VolumeX, Target, Crosshair } from 'lucide-react';
 import { ChessBoard } from '../Board/ChessBoard';
 import { voiceService } from '../../services/voiceService';
+import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { explorationAnchorAction } from '../../services/reviewExplorationAnchor';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { getCoachMove, resolveConfig } from '../../services/coachPlaySession';
@@ -218,6 +219,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       resumeBatchAnalysis();
     };
   }, []);
+
+  // A review walk in progress must survive a deploy: hold the service-worker
+  // update reload (index.html controllerchange handler) until unmount.
+  useEffect(() => acquireSwReloadHold(), []);
 
 
   // Auto-enroll THIS game's mistakes into the My Mistakes drill set on
