@@ -305,8 +305,17 @@ export function initAnalytics(opts?: { optedOut?: boolean }): void {
         ui_host: 'https://us.posthog.com',
         // SPA — we drive pageviews via the `route-changed` bridge.
         capture_pageview: false,
-        // Explicit events only; no DOM autocapture noise.
-        autocapture: false,
+        // DOM autocapture ON (David 2026-07-26: "I want ALL parts of the app
+        // monitored for use — everything that can be clicked"). Captures every
+        // button / link / input interaction across EVERY surface (openings,
+        // tactics, weaknesses, kids, settings, …) automatically, so usage is
+        // recorded without hand-wiring each control. Chess-board squares are
+        // plain divs and are NOT autocaptured, so this stays free of per-move
+        // board noise. Named semantic events (lesson_completed, purchases, etc.)
+        // still fire explicitly for clean funnels. Volume is well within the
+        // PostHog 1M-events/month free tier at current scale; scope to an
+        // element allowlist if it ever grows.
+        autocapture: true,
         capture_performance: false,
         // 🚨 DISABLE feature-flag polling. The app uses ZERO PostHog
         // feature flags, but posthog-js polls the `/flags/` endpoint on

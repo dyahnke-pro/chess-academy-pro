@@ -5,6 +5,7 @@ import { expandOpeningAbbrev } from '../utils/openingAbbrev';
 import { MAIN_LINE_INDEX } from '../utils/wlppLadder';
 import { buildVariationTabs } from './variationTabs';
 import { enrollOpeningLine } from './srsOpeningService';
+import { captureEvent } from './analytics';
 import openingManifests from '../data/opening-manifests.json';
 import antiOpeningsData from '../data/anti-openings.json';
 import gambitData from '../data/gambits.json';
@@ -468,6 +469,11 @@ export async function markRungComplete(
   if (upto.includes('learn') && patch.linesLearned) {
     void enrollOpeningLine(opening, variationIndex).catch(() => undefined);
   }
+
+  // Named completion event (the WLPP rung actually finished) — the outcome
+  // signal autocapture can't produce. Feeds the opening-lesson usage +
+  // Watch→Learn→Practice→Play drop-off funnel.
+  captureEvent('lesson_completed', { opening_id: id, rung, variation_index: variationIndex });
 }
 
 /** Marks a WLPP rung complete for a WEAPON (named trap / punish gem / warning,
@@ -495,6 +501,7 @@ export async function markWeaponRungComplete(
     map[weaponKey] = done;
     await db.openings.update(id, { weaponRungs: map });
   }
+  captureEvent('weapon_rung_completed', { opening_id: id, weapon_key: weaponKey, rung });
 }
 
 /** Per-line "I already know this" escape — unlocks every rung + the weapons
