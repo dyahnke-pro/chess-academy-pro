@@ -293,10 +293,15 @@ async function main() {
       .waitFor({ state: 'visible', timeout: 20_000 }).then(() => true).catch(() => false);
     if (review.summarySeen) await shot(`${gameTag}-summary`);
     const startBtn = page.locator('[data-testid="start-walk-btn"]');
-    const prepDeadline = Date.now() + 120_000;
+    // 180s: cold-runner Stockfish contention can push walk prep past the old
+    // 120s budget (run 30354871921 game-8-french: review "never mounted" —
+    // prep simply outran the clock on a loaded runner). Record the last
+    // observed button label so a genuine failure diagnoses itself.
+    const prepDeadline = Date.now() + 180_000;
     while (Date.now() < prepDeadline) {
       if (await page.locator('[data-testid="coach-game-review-walk"]').isVisible().catch(() => false)) break;
       const label = (await startBtn.innerText().catch(() => '')).trim();
+      if (label) review.lastPrepLabel = label;
       if (label === 'Start') { await startBtn.click({ timeout: 3000 }).catch(() => {}); break; }
       await page.waitForTimeout(1500);
     }
@@ -501,13 +506,24 @@ async function main() {
     }
     await shot(`${tag}-end`);
 
-    const review = await driveReview(tag, plies);
-
-    // Detected opening (family) from the app's own audit trail.
-    const entries = await dumpAudit();
-    const detects = entries.filter((e) => e.kind === 'coach-opening-auto-detected');
+    // Detected opening (family) from the app's own audit trail — extracted
+    // BEFORE the review walk. The in-page audit log is a 300-entry ROLLING
+    // buffer (APP_AUDIT_LOG_MAX_ENTRIES); a long review walk (35-72 steps,
+    // each logging several events) evicts every in-game entry, including all
+    // `coach-opening-auto-detected` events. Runs 30354871921 / 30266621261
+    // read the buffer post-review and got opening="null" on 7/10 games —
+    // exactly the games with the biggest game+review event volume — and
+    // failed distinctness on a phantom. Detection itself was fine (the app
+    // emits a detect on every player move; the last one sits near the buffer
+    // tail right here, before review floods it).
+    const preReviewEntries = await dumpAudit();
+    const detects = preReviewEntries.filter((e) => e.kind === 'coach-opening-auto-detected');
     const lastDetect = detects.length ? detects[detects.length - 1] : null;
     const openingName = lastDetect ? (/name="([^"]+)"/.exec(lastDetect.summary ?? '')?.[1] ?? null) : null;
+
+    const review = await driveReview(tag, plies);
+
+    const entries = await dumpAudit();
 
     // Persistence: the finished game must be in Dexie (source='coach').
     const persisted = await page.evaluate(async () => {
