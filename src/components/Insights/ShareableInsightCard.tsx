@@ -30,7 +30,7 @@ export function ShareableInsightCard({ insight }: ShareableInsightCardProps): JS
     if (!cardRef.current || sharing) return;
     // The one place the app can be "shared" today — track it so growth-by-
     // sharing is measurable (David 2026-07-28: "has anyone shared my app?").
-    captureEvent('insight_shared', { insight_id: insight.id, kind: insight.kind });
+    captureEvent('insight_shared', { insight_id: insight.id, tone: insight.tone });
     setSharing(true);
 
     try {
