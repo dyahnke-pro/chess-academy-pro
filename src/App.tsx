@@ -18,7 +18,8 @@ import { voiceService } from './services/voiceService';
 import { stockfishEngine } from './services/stockfishEngine';
 import { db } from './db/schema';
 import { installGlobalErrorHooks, installConsoleBackdoor, logAppAudit, loadAuditStreamConfig } from './services/appAuditor';
-import { initAnalytics, identifyUser, setUserProperties } from './services/analytics';
+import { initAnalytics, identifyUser, setUserProperties, registerSuperProperties } from './services/analytics';
+import { applyInternalFromUrl, resolveDeviceIdentity } from './services/deviceIdentity';
 import { emitAppBootAudit } from './services/appBootAudit';
 import { AppLayout } from './components/ui/AppLayout';
 import { LoadingScreen } from './components/ui/LoadingScreen';
@@ -243,6 +244,16 @@ export function App(): JSX.Element {
           { last_seen_at: new Date().toISOString() },
           { first_seen_at: new Date().toISOString() },
         );
+
+        // Stable device identity + the owner/internal flag (David 2026-07-28:
+        // real device counts, and "I never want my stats mixed in"). Honors
+        // ?internal=1 first so a device can be marked straight from a link,
+        // then registers device_id / is_internal as super-properties — every
+        // event carries them, and posthog persists them across sessions.
+        void applyInternalFromUrl()
+          .then(() => resolveDeviceIdentity())
+          .then((identity) => registerSuperProperties({ ...identity }))
+          .catch(() => undefined);
 
         // Hydrate the free-tier ledger (puzzle bucket / free opening / kid
         // window) into its runtime mirror so the soft paywall gate can read

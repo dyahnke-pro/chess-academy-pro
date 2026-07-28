@@ -7,6 +7,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import { exportUserData } from '../../services/dbService';
+import { resolveDeviceIdentity, setInternalDevice } from '../../services/deviceIdentity';
+import { registerSuperProperties } from '../../services/analytics';
 import { ThemePickerPanel } from '../ui/ThemePickerPanel';
 import { SyncSettingsPanel } from './SyncSettingsPanel';
 import { ImportGamesButton } from '../Games/ImportGamesButton';
@@ -1276,6 +1278,22 @@ function AboutTab(): JSX.Element {
   const [confirmReset, setConfirmReset] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [feedbackOpen, setFeedbackOpen] = useState(false);
+  // Owner-device flag — marks THIS device so its traffic is excluded from the
+  // product analytics (David 2026-07-28: "I never want my stats mixed in").
+  const [internalDevice, setInternalDeviceState] = useState(false);
+  const [deviceId, setDeviceId] = useState<string>('');
+  useEffect(() => {
+    void resolveDeviceIdentity().then((d) => {
+      setInternalDeviceState(d.is_internal);
+      setDeviceId(d.device_id);
+    });
+  }, []);
+  const toggleInternalDevice = (checked: boolean): void => {
+    setInternalDeviceState(checked);
+    void setInternalDevice(checked).then(() =>
+      registerSuperProperties({ device_id: deviceId, is_internal: checked }),
+    );
+  };
 
   const handleReset = async (): Promise<void> => {
     await db.delete();
@@ -1310,6 +1328,23 @@ function AboutTab(): JSX.Element {
       <div className="pt-4 border-t space-y-1.5" style={{ borderColor: 'var(--color-border)' }}>
         <div className="text-sm font-medium">Pro players &amp; attribution</div>
         <ProAttributionNotice />
+      </div>
+      {/* Owner-device flag. Turn this ON for your own phone/laptop so your
+          usage never mixes into the product analytics. Persists per device. */}
+      <div className="pt-4 border-t space-y-1.5" style={{ borderColor: 'var(--color-border)' }}>
+        <div className="text-sm font-medium">Analytics</div>
+        <ToggleRow
+          label="This is my device"
+          tooltip="Excludes this device's usage from the product analytics. Turn on for your own phone and laptop."
+          checked={internalDevice}
+          onChange={toggleInternalDevice}
+          testId="internal-device-toggle"
+        />
+        {deviceId && (
+          <div className="text-xs font-mono" style={{ color: 'var(--color-text-muted)' }}>
+            device: {deviceId.slice(0, 8)}
+          </div>
+        )}
       </div>
       <div className="pt-4 border-t space-y-3" style={{ borderColor: 'var(--color-border)' }}>
         {/* Feedback button — primary post-launch signal. Placed at top
