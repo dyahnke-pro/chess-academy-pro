@@ -562,8 +562,14 @@ export function App(): JSX.Element {
           the third-party AI + voice providers. Must live INSIDE BrowserRouter —
           it renders a <Link to="/privacy">, and a router consumer outside the
           Router throws "Cannot destructure property 'basename' from null" and
-          white-screens the whole app (P0, David 2026-07-02). */}
-      <AiConsentModal />
+          white-screens the whole app (P0, David 2026-07-02).
+          SEQUENCED after the strength bubble (David-approved fix 2026-07-28):
+          both used to mount at once and the consent modal (z-[120]) sat ON TOP
+          of the calibration bubble, intercepting its taps — two stacked
+          blocking prompts, answered in the opposite order to the comment
+          above. Gating on !needsCalibration makes the code match the stated
+          order: calibrate first, then consent. */}
+      {!needsCalibration && <AiConsentModal />}
       {/* Two-step review prompt — armed by reviewPromptService after enough
           positive moments; renders only when open. Global so it can surface
           from any surface that recorded the win. */}

@@ -31,13 +31,27 @@ interface Props {
 }
 
 /** Color palette — keyed by NarrationArrow['color'] / NarrationHighlight['color'].
- *  Tuned for visibility against both light and dark squares. */
+ *  MATCHES the openings-tab WLPP arrows (David 2026-07-28: "should be the same
+ *  arrow as opening tab wlpp"): the WLPP lesson players draw react-chessboard
+ *  arrows in classic green rgba(0,128,0,0.8) rendered at BOARD_ARROW_OPTIONS
+ *  opacity 0.65. This overlay mirrors that — same green, 0.8 colour alpha,
+ *  and ARROW_OPACITY 0.65 on the stroke — so a coach-walkthrough arrow is
+ *  visually identical to a masterclass lesson arrow. */
 const COLOR_MAP: Record<string, string> = {
-  green: 'rgba(34, 197, 94, 0.85)',
-  red: 'rgba(239, 68, 68, 0.85)',
-  blue: 'rgba(59, 130, 246, 0.85)',
-  yellow: 'rgba(234, 179, 8, 0.85)',
+  green: 'rgba(0, 128, 0, 0.8)',
+  red: 'rgba(239, 68, 68, 0.8)',
+  blue: 'rgba(59, 130, 246, 0.8)',
+  yellow: 'rgba(234, 179, 8, 0.8)',
 };
+
+/** Rendered arrow opacity — mirrors BOARD_ARROW_OPTIONS.opacity so the
+ *  overlay's arrows carry the same visual weight as the library-drawn ones. */
+const ARROW_OPACITY = 0.65;
+
+/** Stroke width in viewBox units (square = 1). react-chessboard draws arrows
+ *  at squareWidth / arrowWidthDenominator (5) — i.e. 0.2 of a square — so the
+ *  overlay uses the same. */
+const ARROW_STROKE_WIDTH = 0.2;
 
 const HIGHLIGHT_FILL_OPACITY = 0.4;
 
@@ -139,16 +153,17 @@ export function NarrationArrowOverlay({
               x2={tx}
               y2={ty}
               stroke={COLOR_MAP[color] ?? COLOR_MAP.green}
-              strokeWidth={0.16}
+              strokeWidth={ARROW_STROKE_WIDTH}
               strokeLinecap="round"
               markerEnd={`url(#narration-arrowhead-${color})`}
               // pathLength animation makes the line "draw" from
               // start to end. Arrowhead is part of the marker so
               // it appears once the tip arrives. Opacity fades the
               // whole shape in over a shorter window so the tip
-              // doesn't pop instantly.
+              // doesn't pop instantly. Settles at ARROW_OPACITY to
+              // match the WLPP arrows' rendered weight.
               initial={{ pathLength: 0, opacity: 0 }}
-              animate={{ pathLength: 1, opacity: 1 }}
+              animate={{ pathLength: 1, opacity: ARROW_OPACITY }}
               exit={{ opacity: 0 }}
               transition={{
                 pathLength: { duration: 0.55, ease: 'easeOut' },
