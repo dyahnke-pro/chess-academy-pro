@@ -14,6 +14,7 @@ import {
 import { LessonScaffold } from './LessonScaffold';
 import { voiceService } from '../../services/voiceService';
 import { logAppAudit } from '../../services/appAuditor';
+import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { reportPlayableLineContinuity } from '../../services/continuityGuard';
 import { sanToSpeech } from '../../utils/sanToSpeech';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
@@ -114,6 +115,10 @@ export function PlayableLinePlayer({
   const completedRef = useRef(false);
   const onCompleteRef = useRef(onComplete);
   useEffect(() => { onCompleteRef.current = onComplete; }, [onComplete]);
+
+  // A WLPP rung in progress must survive a deploy: hold the service-worker
+  // update reload (index.html controllerchange handler) until unmount.
+  useEffect(() => acquireSwReloadHold(), []);
   const finishLine = useCallback((): void => {
     if (completedRef.current) return;
     completedRef.current = true;

@@ -426,3 +426,90 @@ describe('gem-crush aside (Watch plays like his videos)', () => {
     );
   });
 });
+
+// ─── Drill line selection (hand-driven prod audit 2026-07-28) ─────────────
+// Tapping a drill line used to be state-invisible: selectDrillLine left
+// drillMoveIndex at 0 (the picker's "no line active" signature) so the picker
+// never dismissed, and a Black-side line stranded the student on the
+// OPPONENT's first move (nothing auto-played 1.e4).
+import { leadingDrillPosition } from './useTeachWalkthrough';
+
+const DRILL_TREE: WalkthroughTree = {
+  ...SMOKE_TREE,
+  openingName: 'Drill Smoke',
+  drill: [
+    {
+      name: 'Black-side line',
+      subtitle: 'student plays Black',
+      moves: ['e4', 'c5', 'Nf3', 'd6'],
+      studentSide: 'black',
+    },
+    {
+      name: 'White-side line',
+      subtitle: 'student plays White',
+      moves: ['e4', 'e5', 'Nc3'],
+      studentSide: 'white',
+    },
+  ],
+};
+
+describe('drill line selection', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    useAppStore.setState({ activeProfile: null });
+  });
+
+  it('leadingDrillPosition auto-plays leading opponent moves for a Black line', () => {
+    const black = leadingDrillPosition(DRILL_TREE.drill![0]);
+    expect(black.index).toBe(1); // 1.e4 auto-played; student to play ...c5
+    expect(black.fen).toContain('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b');
+    const white = leadingDrillPosition(DRILL_TREE.drill![1]);
+    expect(white.index).toBe(0); // student IS White — nothing auto-plays
+    expect(white.fen).toContain('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w');
+  });
+
+  it('selectDrillLine marks the line chosen and seats a Black student on THEIR move', async () => {
+    const { result } = renderHook(() => useTeachWalkthrough());
+    act(() => result.current.start(DRILL_TREE));
+    await waitFor(() => expect(result.current.isActive).toBe(true), { timeout: 5000 });
+    act(() => result.current.startStage('drill'));
+    expect(result.current.phase).toBe('drill');
+    expect(result.current.drillLineChosen).toBe(false); // picker showing
+    act(() => result.current.selectDrillLine(0)); // the Black-side line
+    expect(result.current.drillLineChosen).toBe(true); // picker dismisses
+    expect(result.current.drillMoveIndex).toBe(1); // 1.e4 already on the board
+    expect(result.current.drillFen).toContain(' b '); // Black to move
+    // The student's correct reply advances the drill (and the opponent's
+    // next move auto-plays).
+    let res: { ok: boolean } | null = null;
+    act(() => { res = result.current.attemptDrillMove('c5'); });
+    expect(res!.ok).toBe(true);
+    expect(result.current.drillMoveIndex).toBe(3); // Nf3 auto-played; ...d6 next
+  });
+
+  it('restartDrill re-seats a Black line past the leading opponent move', async () => {
+    const { result } = renderHook(() => useTeachWalkthrough());
+    act(() => result.current.start(DRILL_TREE));
+    await waitFor(() => expect(result.current.isActive).toBe(true), { timeout: 5000 });
+    act(() => result.current.startStage('drill'));
+    act(() => result.current.selectDrillLine(0));
+    act(() => { result.current.attemptDrillMove('c5'); });
+    expect(result.current.drillMoveIndex).toBe(3);
+    act(() => result.current.restartDrill());
+    expect(result.current.drillMoveIndex).toBe(1); // NOT 0 — 1.e4 replayed
+    expect(result.current.drillFen).toContain(' b ');
+  });
+
+  it('backToStageMenu clears the chosen-line marker so the picker returns', async () => {
+    const { result } = renderHook(() => useTeachWalkthrough());
+    act(() => result.current.start(DRILL_TREE));
+    await waitFor(() => expect(result.current.isActive).toBe(true), { timeout: 5000 });
+    act(() => result.current.startStage('drill'));
+    act(() => result.current.selectDrillLine(1));
+    expect(result.current.drillLineChosen).toBe(true);
+    act(() => result.current.backToStageMenu());
+    expect(result.current.drillLineChosen).toBe(false);
+    act(() => result.current.startStage('drill'));
+    expect(result.current.drillLineChosen).toBe(false);
+  });
+});

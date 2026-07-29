@@ -11,6 +11,7 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { uid } from '../../utils/uid';
+import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Chess } from 'chess.js';
 import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, X, Check, MessageCircle, Zap, Undo2, RotateCcw, Volume2 } from 'lucide-react';
@@ -1043,6 +1044,13 @@ export function CoachTeachPage(): JSX.Element {
       clearThreatCheck();
     }
   }, [walkthrough.isActive, clearGuidedFind, clearThreatCheck]);
+
+  // A live walkthrough must survive a deploy: hold the service-worker update
+  // reload (index.html controllerchange handler) until the lesson ends.
+  useEffect(() => {
+    if (!walkthrough.isActive) return;
+    return acquireSwReloadHold();
+  }, [walkthrough.isActive]);
 
   // Auto-flip the board when a walkthrough loads a tree whose
   // studentSide differs from the current orientation. Black-side
@@ -7675,6 +7683,7 @@ function DrillPanel({
     drillMoveIndex,
     drillWrongMove,
     drillComplete,
+    drillLineChosen,
   } = walkthrough;
 
   const drillLines = tree?.drill ?? [];
@@ -7701,15 +7710,13 @@ function DrillPanel({
     );
   }
 
-  // Line picker — shown until selectDrillLine is called explicitly
-  // OR right after startStage('drill') puts us here. We treat
-  // drillMoveIndex===0 with no line picked as the picker state.
-  // Once the user clicks a line, drillMoveIndex stays 0 but the line
-  // is "active." We use a separate state to detect this — for now,
-  // show the picker if drillMoveIndex===0 AND drillFen is the
-  // starting position AND the first move hasn't been played yet.
-  // Simpler: always show picker as a "switch line" option.
-  const lineActive = drillMoveIndex > 0 || drillWrongMove !== null || drillComplete;
+  // Line picker — shown until a line is explicitly picked. drillLineChosen is
+  // the load-bearing signal: inferring "active" from drillMoveIndex > 0 made
+  // selecting a line state-invisible (selectDrillLine used to leave the index
+  // at 0), so the picker never dismissed — dead tiles on prod (hand-driven
+  // audit 2026-07-28). The index/wrong/complete checks stay as fallbacks for
+  // the play-without-picking path (student just moves on the board).
+  const lineActive = drillLineChosen || drillMoveIndex > 0 || drillWrongMove !== null || drillComplete;
 
   if (!lineActive) {
     return (

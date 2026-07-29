@@ -4,6 +4,7 @@ import { ConsistentChessboard, type BoardArrow } from '../Chessboard/ConsistentC
 import { LessonScaffold } from './LessonScaffold';
 import { useStrictNarration } from '../../hooks/useStrictNarration';
 import { voiceService } from '../../services/voiceService';
+import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { useSettings } from '../../hooks/useSettings';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 import { useLocalizedBeats } from '../../services/narrationI18n';
@@ -116,6 +117,10 @@ export function LessonPlayer({ script, onExit, onComplete, onContinueToNext }: L
   const voiceEnabledRef = useRef(voiceEnabled);
   const revealTimersRef = useRef<number[]>([]);
   useEffect(() => { voiceEnabledRef.current = voiceEnabled; }, [voiceEnabled]);
+
+  // A Watch lesson in progress must survive a deploy: hold the service-worker
+  // update reload (index.html controllerchange handler) until unmount.
+  useEffect(() => acquireSwReloadHold(), []);
 
   const beatSquares = useCallback((b: LessonBeat | undefined): string[] => {
     if (!b) return [];

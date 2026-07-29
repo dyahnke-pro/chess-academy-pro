@@ -168,6 +168,29 @@ export function isValidDrillLine(line: DrillLine | null | undefined): boolean {
   return !!line && Array.isArray(line.moves) && line.moves.length > 0;
 }
 
+/** Where a drill line actually STARTS for the student: the position after
+ *  auto-playing any leading OPPONENT moves. A White-side line starts at the
+ *  initial position (index 0); a Black-side line starts with White's first
+ *  move already on the board (index 1). Stops at the first illegal SAN —
+ *  the drill guards handle the malformed-line case downstream. */
+export function leadingDrillPosition(line: DrillLine): { fen: string; index: number } {
+  const studentSide = line.studentSide ?? 'white';
+  const probe = new Chess();
+  let index = 0;
+  while (index < line.moves.length) {
+    const isWhitesMove = index % 2 === 0;
+    const isStudents = studentSide === 'white' ? isWhitesMove : !isWhitesMove;
+    if (isStudents) break;
+    try {
+      probe.move(line.moves[index]);
+    } catch {
+      break;
+    }
+    index += 1;
+  }
+  return { fen: probe.fen(), index };
+}
+
 /** Build a one-shot WalkthroughTree from a PunishLesson. Reuses the
  *  walkthrough engine to play the punish lesson with the same UI as
  *  the opening walkthrough — animated moves with narration, fork
@@ -509,6 +532,9 @@ export interface UseTeachWalkthroughReturn {
   /** For 'drill' phase: true once the entire drill line has been
    *  played correctly. */
   drillComplete: boolean;
+  /** For 'drill' phase: true once the student explicitly picked a line
+   *  (dismisses the line picker even before the first student move). */
+  drillLineChosen: boolean;
 
   /** Begin walking the given tree. Idempotent — calling start() twice
    *  with the same tree restarts from root. */
@@ -746,6 +772,11 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     { tried: string; expected: string; teaching?: string } | null
   >(null);
   const [drillComplete, setDrillComplete] = useState(false);
+  // Explicit "a line was picked" marker. The picker used to infer this from
+  // drillMoveIndex > 0 — which selectDrillLine left at 0, so tapping a line
+  // was state-invisible and the picker never dismissed (dead tiles on prod,
+  // hand-driven audit 2026-07-28).
+  const [drillLineChosen, setDrillLineChosen] = useState(false);
   // Pending stage jump — set when the student picks a stage whose
   // entries haven't generated yet. The polling effect on tree
   // (mergeStagesFromCache cadence) refreshes the tree from cache; an
@@ -1595,6 +1626,7 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     setQuizShowingFeedback(false);
     setDrillWrongMove(null);
     setDrillComplete(false);
+    setDrillLineChosen(false);
     setPendingStageJump(null);
     setPhase('stage-menu');
   }, [cleanupNarration]);
@@ -1640,6 +1672,7 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
         setDrillMoveIndex(0);
         setDrillFen(STARTING_FEN);
         setDrillComplete(false);
+        setDrillLineChosen(false);
         setPhase('drill');
       } else {
         setPhase('quiz');
@@ -1667,6 +1700,7 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
       setDrillMoveIndex(0);
       setDrillFen(STARTING_FEN);
       setDrillComplete(false);
+      setDrillLineChosen(false);
       setPhase('drill');
     } else {
       setPhase('quiz');
@@ -1686,12 +1720,22 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
       }
       // Never enter a malformed cached line (no `moves`) — same guard as
       // the picker + attemptDrillMove (David 2026-07-15 sibling sweep).
-      if (!isValidDrillLine(tree.drill[lineIndex])) return;
+      const line = tree.drill[lineIndex];
+      if (!isValidDrillLine(line)) return;
       setStageIndex(lineIndex);
-      setDrillMoveIndex(0);
-      setDrillFen(STARTING_FEN);
+      // Auto-play any LEADING opponent moves so the student always faces
+      // THEIR move first. A Black-side line (Sicilian/Caro/French/…) starts
+      // with White's move — before this, nothing played it: the picker never
+      // dismissed (selection left drillMoveIndex at 0, the picker's "no line
+      // active" signature) and the drill sat at the start position waiting
+      // for the student to play the OPPONENT's move. Hand-driven prod audit
+      // 2026-07-28: the Dragon drill tiles were dead buttons.
+      const lead = leadingDrillPosition(line);
+      setDrillMoveIndex(lead.index);
+      setDrillFen(lead.fen);
       setDrillWrongMove(null);
       setDrillComplete(false);
+      setDrillLineChosen(true);
     },
     [tree],
   );
@@ -1890,11 +1934,21 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
   }, []);
 
   const restartDrill = useCallback((): void => {
-    setDrillMoveIndex(0);
-    setDrillFen(STARTING_FEN);
+    // Restart re-plays the line's leading opponent moves too — resetting a
+    // Black-side line to the bare start position would re-strand the student
+    // on the opponent's turn (same bug selectDrillLine had).
+    const line = tree?.drill?.[stageIndex];
+    if (line && isValidDrillLine(line)) {
+      const lead = leadingDrillPosition(line);
+      setDrillMoveIndex(lead.index);
+      setDrillFen(lead.fen);
+    } else {
+      setDrillMoveIndex(0);
+      setDrillFen(STARTING_FEN);
+    }
     setDrillWrongMove(null);
     setDrillComplete(false);
-  }, []);
+  }, [tree, stageIndex]);
 
   /** Start a specific punish lesson as a self-contained walkthrough.
    *  Saves the current (parent) tree, then `start()`s a freshly-built
@@ -1985,6 +2039,7 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     drillFen,
     drillWrongMove,
     drillComplete,
+    drillLineChosen,
     pendingStageJump,
     cancelPendingStageJump,
     start,

@@ -23,6 +23,7 @@ import { getAdaptiveMove, getRandomLegalMove, getTargetStrength } from '../../se
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { fetchCloudEval } from '../../services/lichessExplorerService';
 import { voiceService } from '../../services/voiceService';
+import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { findLivePunishment } from '../../services/gemCrushLines';
 import { computeThreatDelta, detectEnginePunish, type DeltaAside } from '../../services/engineDeltaLines';
 import type { NarrationArrow } from '../../types/walkthroughTree';
@@ -260,6 +261,11 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
   });
 
   // ─── Stockfish eval on position change ──────────────────────────────────
+  // A locked-line Play game in progress must survive a deploy: hold the
+  // service-worker update reload (index.html controllerchange handler)
+  // until unmount.
+  useEffect(() => acquireSwReloadHold(), []);
+
   // Runs at priority='prefetch' so it doesn't contend with the
   // opponent-move analyzePosition call (which runs at default 'brain'
   // priority). Without this split the eval-bar pipe lost every race

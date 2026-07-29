@@ -33,11 +33,26 @@
             try { var p = r.update(); if (p && p.catch) p.catch(function() {}); } catch (e) { /* ignore */ }
           });
         }).catch(function() {});
-        // Reload once when a new SW activates
+        // Reload once when a new SW activates — but NEVER mid-session. A live
+        // walkthrough / coach game / review walk acquires a hold (see
+        // src/utils/swReloadHold.ts) via window.__HOLD_SW_RELOAD__; while it's
+        // set, keep the old bundle running and retry at the next quiet moment.
+        // Caught live 2026-07-28: a deploy landing mid-lesson hard-reloaded the
+        // page between two narration beats and destroyed the session.
         var refreshing = false;
         navigator.serviceWorker.addEventListener('controllerchange', function() {
-          if (!refreshing) { refreshing = true; location.reload(); }
+          if (refreshing) return;
+          refreshing = true;
+          var attempt = function() {
+            if (window.__HOLD_SW_RELOAD__) { setTimeout(attempt, 15000); return; }
+            location.reload();
+          };
+          attempt();
         });
+        // Recovery: if a deferred reload leaves the old page lazy-loading a
+        // chunk the new deploy no longer serves, the dynamic import fails —
+        // reload onto the fresh bundle instead of white-screening.
+        window.addEventListener('vite:preloadError', function() { location.reload(); });
       }
     </script>
   </body>
