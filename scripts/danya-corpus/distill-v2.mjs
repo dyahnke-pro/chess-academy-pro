@@ -234,6 +234,65 @@ export function trackBoard(text, opts = {}) {
  * mentioned moves trace, in order, and use THAT line's plies as the positions.
  * A chain that matches no real opening yields no position at all.
  */
+/**
+ * Deterministic opening tag from the VIDEO TITLE — the model no longer emits
+ * an `opening` field at all. v1 let the model guess it and the guesses were
+ * wrong at scale (543 corpus notes anchored on a different opening than their
+ * tag; the first v2 run tagged Scotch/KID/Italian on a Glek video and asserted
+ * the Glek is "in the Ruy Lopez"). One video = one topic, and the title names
+ * it — match the title's tokens against the DB's opening names and store the
+ * DB's canonical name. No match => null, never a guess.
+ */
+// Structural words that appear in most DB names and carry no identity. Without
+// stripping them, segment matching goes rogue: "Caro-Kann Fantasy" matched
+// "Ruy Lopez: Morphy Defense, Caro Variation" (via the "Caro Variation"
+// segment) and "The Najdorf Sicilian" matched "Pterodactyl Defense: Sicilian".
+// NOTE: 'attack' is deliberately NOT generic — it is identity-bearing (King's
+// Indian ATTACK vs DEFENSE, Grand Prix Attack, Austrian Attack). Stripping it
+// made "King's Indian Defense Explained" stamp as King's Indian Attack on a
+// shorter-name tiebreak.
+const GENERIC_NAME_TOKENS = new Set([
+  'variation', 'defense', 'defence', 'game', 'opening', 'system',
+  'main', 'line', 'accepted', 'declined', 'the', 'with', 'and',
+]);
+
+const distinctiveTokens = (s) =>
+  [...new Set(norm(s).split(' ').filter((t) => t.length > 2 && !GENERIC_NAME_TOKENS.has(t)))];
+
+export function openingFromTitle(title, dbNames) {
+  const titleTokens = new Set(norm(title).split(' ').filter((t) => t.length > 2));
+  if (titleTokens.size === 0) return null;
+  let best = null;
+  for (const name of dbNames) {
+    // ELIGIBILITY: some segment of the name (full, colon part, comma part) has
+    // all its distinctive tokens in the title. Titles say "Glek System"; the DB
+    // says "Four Knights Game: Glek System" — full-name matching alone fails.
+    const segments = [name, ...name.split(/[:,]/)];
+    const eligible = segments.some((seg) => {
+      const d = distinctiveTokens(seg);
+      return d.length > 0 && d.every((t) => titleTokens.has(t));
+    });
+    if (!eligible) continue;
+    // RANK by how much of the FULL name the title confirms — distinctive tokens
+    // first (so "Caro-Kann: Fantasy Variation" beats plain "Caro-Kann" on a
+    // Fantasy video, and "Sicilian: Najdorf" beats "Pterodactyl: Sicilian,
+    // Unpin" whose pterodactyl/unpin the title never mentions), then generic
+    // tokens (so "King's Indian DEFENSE" beats a same-distinctive sibling when
+    // the title says "Defense"), then the shorter canonical name.
+    const dHits = distinctiveTokens(name).filter((t) => titleTokens.has(t)).length;
+    // The generic bonus exists for exactly one tie: same-distinctive siblings
+    // split by DEFENSE (vs Attack). Counting other generic words backfires —
+    // a title saying "Variation" promoted "Masi Variation" over the plain
+    // family, and "with" promoted "London System, with Bd3".
+    const gHits = ['defense', 'defence'].filter((t) => norm(name).includes(t) && titleTokens.has(t)).length;
+    if (!best || dHits > best.dHits || (dHits === best.dHits && gHits > best.gHits) ||
+        (dHits === best.dHits && gHits === best.gHits && name.length < best.name.length)) {
+      best = { name, dHits, gHits };
+    }
+  }
+  return best ? best.name : null;
+}
+
 export function buildDbLineIndex(openings) {
   const lines = [];
   for (const o of openings) {
@@ -372,7 +431,6 @@ ABSOLUTE RULES:
 - Concise, concrete, idea-first. Name squares and pieces. No praise, no filler, no move-number prefixes ("Nf3", never "12.Nf3").
 
 Extract EVERY distinct teaching moment in this excerpt (usually 1-5). For each:
-- opening: opening/variation name if identifiable, else null
 - phase: "opening" | "middlegame" | "endgame" | "concept"
 - explains: 1-3 sentences — the read of THIS position (what matters, why)
 - teaches: 1-2 sentences — the transferable idea being taught
@@ -430,10 +488,13 @@ async function pool(items, limit, fn) {
   return out;
 }
 
-async function distillOne(videoId, meta, { dry, concurrency, dbLines }) {
+async function distillOne(videoId, meta, { dry, concurrency, dbLines, dbNames }) {
   const vtt = await readFile(`${TDIR}/${videoId}.en.vtt`, 'utf8');
   const text = vttToText(vtt);
   if (text.length < 500) throw new Error('transcript too short');
+
+  // Code-stamped opening tag (see openingFromTitle) — one video, one topic.
+  const stampedOpening = openingFromTitle(meta.title || '', dbNames);
 
   // DB-ALIGNED positions only (see alignToDbLine). No alignment => no
   // positions, and the notes fall back to opening-name keying. Never a guess.
@@ -446,6 +507,7 @@ async function distillOne(videoId, meta, { dry, concurrency, dbLines }) {
     chars: text.length,
     chunks: chunks.length,
     chunksWithPosition: withPos,
+    stampedOpening,
     alignedLine: align?.name ?? null,
     alignedPlies: align?.line.length ?? 0,
     movesMatched: align?.matched ?? 0,
@@ -492,7 +554,7 @@ async function distillOne(videoId, meta, { dry, concurrency, dbLines }) {
       seen.add(key);
       notes.push({
         lineSan,
-        opening: n.opening ? String(n.opening).trim() : null,
+        opening: stampedOpening,
         phase: ['opening', 'middlegame', 'endgame', 'concept'].includes(n.phase) ? n.phase : 'concept',
         explains, teaches, plans,
         concepts: Array.isArray(n.concepts) ? n.concepts.slice(0, 4).map(String) : [],
@@ -520,10 +582,13 @@ async function main() {
   const onlyId = arg('id', null);
   await mkdir(DDIR, { recursive: true });
 
-  // The DB is the move authority for positions (G3) — load it once.
+  // The DB is the move authority for positions (G3) — load it once. Its names
+  // are also the vocabulary for the code-stamped opening tag.
   const lich = JSON.parse(await readFile('src/data/openings-lichess.json', 'utf8'));
-  const dbLines = buildDbLineIndex(Array.isArray(lich) ? lich : Object.values(lich));
-  console.log(`[distill-v2] DB line index: ${dbLines.length} lines (>=6 plies)`);
+  const lichArr = Array.isArray(lich) ? lich : Object.values(lich);
+  const dbLines = buildDbLineIndex(lichArr);
+  const dbNames = [...new Set(lichArr.map((o) => o.name).filter(Boolean))];
+  console.log(`[distill-v2] DB line index: ${dbLines.length} lines (>=6 plies), ${dbNames.length} names`);
 
   // The manifest is the work queue when present; otherwise fall back to
   // whatever transcripts are on disk (a targeted --id run needs no manifest).
@@ -532,11 +597,22 @@ async function main() {
     const manifest = JSON.parse(await readFile('data/sources/naroditsky-voice/manifest.json', 'utf8'));
     videos = manifest.videos;
   } catch {
-    videos = onlyId ? [{ id: onlyId, title: onlyId, playlist: null }] : [];
+    videos = onlyId ? [{ id: onlyId, title: null, playlist: null }] : [];
   }
   if (onlyId) {
     videos = videos.filter((v) => v.id === onlyId);
-    if (videos.length === 0) videos = [{ id: onlyId, title: onlyId, playlist: null }];
+    if (videos.length === 0) videos = [{ id: onlyId, title: null, playlist: null }];
+  }
+  // The title is LOAD-BEARING now (opening stamp + alignment prior), so a
+  // manifest-less --id run fetches it from YouTube's oembed endpoint — no
+  // auth, no bot-check, unlike the watch page.
+  for (const v of videos) {
+    if (v.title) continue;
+    try {
+      const r = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${v.id}&format=json`);
+      if (r.ok) v.title = (await r.json()).title ?? v.id;
+    } catch { /* fall through */ }
+    if (!v.title) v.title = v.id;
   }
 
   const queue = [];
@@ -550,7 +626,7 @@ async function main() {
   let ok = 0; let fail = 0; let totalNotes = 0; let totalPositioned = 0;
   for (const v of queue.slice(0, limit)) {
     try {
-      const out = await distillOne(v.id, v, { dry, concurrency, dbLines });
+      const out = await distillOne(v.id, v, { dry, concurrency, dbLines, dbNames });
       if (!dry) await writeFile(`${DDIR}/${v.id}.json`, JSON.stringify(out, null, 2));
       ok += 1;
       totalNotes += out.notes.length;
