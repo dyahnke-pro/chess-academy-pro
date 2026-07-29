@@ -179,6 +179,14 @@ const AUDIT_EVENT_MAP: Partial<Record<AuditKind, string>> = {
   'opening-play-eval-error': 'opening_play_eval_error',
   'dexie-error': 'dexie_error',
   'network-error': 'network_error',
+  // Storage-persistence grant (David 2026-07-29). Without a grant, WebKit
+  // evicts IndexedDB from infrequently-opened apps — which was wiping testers'
+  // profiles/progress between sessions and minting a fresh analytics identity
+  // each time (~20 installs looked like 340 one-off users). Mirroring the
+  // per-boot grant state is how we VERIFY the fix lands in the wild: the share
+  // of boots reporting persisted=true should climb toward 100%, and
+  // `strength_calibrated` per device should collapse toward one.
+  'storage-persistence': 'storage_persistence',
   'lichess-error': 'lichess_error',
   'asset-load-error': 'asset_load_error',
   'auto-import-failed': 'auto_import_failed',

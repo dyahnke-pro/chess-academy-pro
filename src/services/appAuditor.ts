@@ -53,6 +53,10 @@ export type AuditKind =
   | 'lichess-error'
   | 'dexie-error'
   | 'network-error'
+  // Storage-persistence grant snapshot, fired once per boot. Tells us whether
+  // this device's IndexedDB is exempt from eviction — the signal that proves
+  // (or disproves) that the 2026-07-29 data-loss fix is holding in the wild.
+  | 'storage-persistence'
   // App state
   | 'error-boundary'
   | 'navigation-error'

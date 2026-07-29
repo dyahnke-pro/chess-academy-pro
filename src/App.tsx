@@ -20,6 +20,7 @@ import { db } from './db/schema';
 import { installGlobalErrorHooks, installConsoleBackdoor, logAppAudit, loadAuditStreamConfig } from './services/appAuditor';
 import { initAnalytics, identifyUser, setUserProperties, registerSuperProperties } from './services/analytics';
 import { applyInternalFromUrl, resolveDeviceIdentity } from './services/deviceIdentity';
+import { requestPersistentStorage } from './services/storageQuota';
 import { emitAppBootAudit } from './services/appBootAudit';
 import { AppLayout } from './components/ui/AppLayout';
 import { LoadingScreen } from './components/ui/LoadingScreen';
@@ -208,6 +209,24 @@ export function App(): JSX.Element {
       // listener is attached before the user's first tap. On iOS Safari the
       // context starts suspended; the listener resumes it on first touch.
       getSharedAudioContext();
+
+      // 🔒 DATA-LOSS FIX (David 2026-07-29) — claim PERSISTENT storage BEFORE
+      // the first Dexie write. Without this grant WebKit evicts IndexedDB from
+      // apps that aren't opened often, and the analytics showed it happening:
+      // devices that opened the app rarely re-ran first-run calibration on
+      // ~75% of boots (empty Dexie = lost profile, rating, unlocked openings,
+      // ladder progress, SRS, imported games), while the daily-use device lost
+      // it on only 7%. Runs first so the profile we're about to create lands in
+      // storage that won't be evicted. Total + fail-open — never blocks boot.
+      const persistence = await requestPersistentStorage();
+      void logAppAudit({
+        kind: 'storage-persistence',
+        category: 'app',
+        source: 'App.init',
+        summary: persistence.supported
+          ? `persisted=${String(persistence.persisted)} already=${String(persistence.alreadyPersisted)}`
+          : 'persist() unsupported on this platform',
+      });
 
       try {
         const profile = await getOrCreateMainProfile();
