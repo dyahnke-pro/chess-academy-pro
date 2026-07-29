@@ -212,6 +212,116 @@ export function trackBoard(text, opts = {}) {
   return { timeline, resolved, candidates: candidates.length, games, lost };
 }
 
+// ── DB ALIGNMENT (the correction) ─────────────────────────────────────────
+/**
+ * `trackBoard` above CANNOT be trusted on real auto-captions, and the --dry
+ * run proved it: on a single Glek theory video it reported 15 "games", not one
+ * of which even began with e4. Two reasons, and the second is fundamental:
+ *   - Captions are unpunctuated, so a move he PLAYS and a square he NAMES
+ *     ("control of d5", "the f4 idea") are syntactically identical. 771
+ *     candidates, 111 "resolved" — and those resolved by coincidence, because
+ *     from any position a lot of random pawn moves happen to be legal.
+ *   - He is TEACHING, so he narrates hypothetical branches constantly ("if he
+ *     plays f4, then g5"). No amount of parsing separates the line played from
+ *     a line merely discussed.
+ * Freely replaying candidates therefore manufactures plausible garbage, and the
+ * new-game reset heuristic HID it (trackerLost never fired). That is strictly
+ * worse than v1: v1 gave the model no position, this gave it a confident lie.
+ *
+ * The fix applies the rule the rest of the app already lives by (G3): THE DB
+ * OWNS THE MOVES. The transcript is downgraded to supplying only the TIMING —
+ * where in the video each move gets discussed. We find which real DB line the
+ * mentioned moves trace, in order, and use THAT line's plies as the positions.
+ * A chain that matches no real opening yields no position at all.
+ */
+export function buildDbLineIndex(openings) {
+  const lines = [];
+  for (const o of openings) {
+    const moves = String(o.pgn || '').trim().split(/\s+/).filter((t) => t && !/^\d+\.+$/.test(t));
+    if (moves.length >= 6) lines.push({ name: o.name, moves });
+  }
+  // Longest first: prefer the deepest line consistent with what he discussed.
+  lines.sort((a, b) => b.moves.length - a.moves.length);
+  return lines;
+}
+
+/** Align the spoken move mentions to the best-matching real DB line.
+ *  Returns { line, name, checkpoints, matched, coverage } or null when nothing
+ *  clears the bar. `checkpoints` maps a transcript offset to the SAN prefix of
+ *  the DB line as of that mention — so positions are always real theory. */
+export function alignToDbLine(text, dbLines, opts = {}) {
+  const minMatched = opts.minMatched ?? 6;
+  const minCoverage = opts.minCoverage ?? 0.6;
+
+  // FAIL CLOSED. Discovering the line from the transcript body does not work —
+  // three scoring schemes each returned a confident WRONG answer on the same
+  // Glek video (free replay: 15 invented "games"; DB subsequence: King's Indian
+  // Attack at coverage 1.0; DB clustered: Scotch Fraser). So an external prior
+  // is REQUIRED: the video's own title names the opening, and only DB lines
+  // matching that name may be considered. No hint, or no name match => no
+  // positions at all, and notes fall back to opening-name keying. A wrong
+  // position handed to the model as authoritative is worse than none (it is
+  // exactly the "Bg5 pins the knight" failure, manufactured at scale).
+  const hint = norm(opts.nameHint || '');
+  const hintTokens = new Set(hint.split(' ').filter((t) => t.length > 3));
+  if (hintTokens.size === 0) return null;
+  const candidateLines = dbLines.filter((l) => {
+    const lt = new Set(norm(l.name).split(' ').filter((t) => t.length > 3));
+    if (lt.size === 0) return false;
+    let shared = 0;
+    for (const t of lt) if (hintTokens.has(t)) shared += 1;
+    return shared / Math.min(lt.size, hintTokens.size) >= 0.6;
+  });
+  if (candidateLines.length === 0) return null;
+  dbLines = candidateLines;
+
+  // SAN -> ascending offsets where it was mentioned.
+  const mentions = new Map();
+  for (const cand of spokenMoveCandidates(text)) {
+    for (const san of cand.sans) {
+      const bucket = mentions.get(san) ?? [];
+      bucket.push(cand.index);
+      mentions.set(san, bucket);
+    }
+  }
+  if (mentions.size === 0) return null;
+
+  // CLUSTERING is what makes the match mean something. A plain in-order
+  // subsequence match is far too weak: with hundreds of scattered mentions
+  // almost any short DB line threads through at coverage 1.0 — which is how a
+  // Glek video first "aligned" to King's Indian Attack. The opening actually
+  // gets walked in a TIGHT BURST, so consecutive moves of the real line are
+  // mentioned close together. Require that, and score density over length.
+  const maxGap = opts.maxGap ?? 2500;
+  let best = null;
+  for (const dbLine of dbLines) {
+    let cursor = -1;
+    let matched = 0;
+    let first = -1;
+    const checkpoints = [];
+    for (let i = 0; i < dbLine.moves.length; i += 1) {
+      const offsets = mentions.get(dbLine.moves[i]);
+      if (!offsets) continue;
+      // Next mention after the previous match AND within the burst window.
+      const at = offsets.find((o) => o > cursor && (cursor < 0 || o - cursor <= maxGap));
+      if (at === undefined) continue;
+      if (first < 0) first = at;
+      cursor = at;
+      matched += 1;
+      checkpoints.push({ index: at, lineSan: dbLine.moves.slice(0, i + 1) });
+    }
+    const coverage = matched / dbLine.moves.length;
+    if (matched < minMatched || coverage < minCoverage) continue;
+    const span = Math.max(1, cursor - first);
+    // Density: many moves matched inside a small span beats a long thin thread.
+    const score = (matched * matched) / span + coverage * 5 + matched;
+    if (!best || score > best.score) {
+      best = { score, name: dbLine.name, line: dbLine.moves, checkpoints, matched, coverage, span };
+    }
+  }
+  return best;
+}
+
 /** The tracked position as of a transcript offset — the last checkpoint at or
  *  before it. Empty array when nothing has been resolved yet. */
 function positionAt(timeline, index) {
@@ -300,7 +410,9 @@ async function callModel(chunkText, lineSan, title, attempt = 0) {
   try {
     return JSON.parse(body.choices?.[0]?.message?.content ?? '');
   } catch {
-    return { notes: [] }; // one bad chunk must never kill a video
+    // One malformed reply must not kill a video — but it MUST be visible, not
+    // silently folded into "0 notes". See the pool()/distillOne contract below.
+    return { notes: [], failed: true };
   }
 }
 
@@ -318,33 +430,51 @@ async function pool(items, limit, fn) {
   return out;
 }
 
-async function distillOne(videoId, meta, { dry, concurrency }) {
+async function distillOne(videoId, meta, { dry, concurrency, dbLines }) {
   const vtt = await readFile(`${TDIR}/${videoId}.en.vtt`, 'utf8');
   const text = vttToText(vtt);
   if (text.length < 500) throw new Error('transcript too short');
 
-  const track = trackBoard(text);
+  // DB-ALIGNED positions only (see alignToDbLine). No alignment => no
+  // positions, and the notes fall back to opening-name keying. Never a guess.
+  const align = alignToDbLine(text, dbLines, { nameHint: meta.title });
+  const timeline = align?.checkpoints ?? [];
   const chunks = chunkTranscript(text);
-  const withPos = chunks.filter((c) => positionAt(track.timeline, c.start).length > 0).length;
+  const withPos = chunks.filter((c) => positionAt(timeline, c.start).length > 0).length;
 
   const stats = {
     chars: text.length,
     chunks: chunks.length,
     chunksWithPosition: withPos,
-    movesResolved: track.resolved,
-    moveCandidates: track.candidates,
-    gamesDetected: track.games,
-    trackerLost: track.lost,
+    alignedLine: align?.name ?? null,
+    alignedPlies: align?.line.length ?? 0,
+    movesMatched: align?.matched ?? 0,
+    coverage: align ? Number(align.coverage.toFixed(2)) : 0,
   };
   if (dry) return { videoId, title: meta.title, stats, notes: [] };
 
   const overlaps = makeOverlapGate(text);
+  // A SILENT NO-OP IS A FAILURE, NOT A ZERO (CLAUDE.md). The first real run
+  // returned "0 notes" and exit 0 while EVERY chunk call was 401-ing on a dead
+  // API key — the swallowed-error path made a hard outage look like an empty
+  // video. Chunk failures are now counted and a mostly-failed video THROWS.
+  let chunkErrors = 0;
   const perChunk = await pool(chunks, concurrency, async (c) => {
-    const lineSan = positionAt(track.timeline, c.start);
-    const parsed = await callModel(c.text, lineSan, meta.title);
+    const lineSan = positionAt(timeline, c.start);
+    let parsed;
+    try {
+      parsed = await callModel(c.text, lineSan, meta.title);
+    } catch (e) {
+      chunkErrors += 1;
+      throw e;
+    }
+    if (parsed?.failed) chunkErrors += 1;
     const raw = Array.isArray(parsed?.notes) ? parsed.notes : [];
     return raw.map((n) => ({ n, lineSan }));
   });
+  if (chunkErrors > chunks.length / 2) {
+    throw new Error(`${chunkErrors}/${chunks.length} chunk calls FAILED (provider down or key invalid) — refusing to write a near-empty distillation`);
+  }
 
   const notes = [];
   const dropped = { overlap: 0, empty: 0, dupe: 0 };
@@ -390,6 +520,11 @@ async function main() {
   const onlyId = arg('id', null);
   await mkdir(DDIR, { recursive: true });
 
+  // The DB is the move authority for positions (G3) — load it once.
+  const lich = JSON.parse(await readFile('src/data/openings-lichess.json', 'utf8'));
+  const dbLines = buildDbLineIndex(Array.isArray(lich) ? lich : Object.values(lich));
+  console.log(`[distill-v2] DB line index: ${dbLines.length} lines (>=6 plies)`);
+
   // The manifest is the work queue when present; otherwise fall back to
   // whatever transcripts are on disk (a targeted --id run needs no manifest).
   let videos = [];
@@ -415,15 +550,14 @@ async function main() {
   let ok = 0; let fail = 0; let totalNotes = 0; let totalPositioned = 0;
   for (const v of queue.slice(0, limit)) {
     try {
-      const out = await distillOne(v.id, v, { dry, concurrency });
+      const out = await distillOne(v.id, v, { dry, concurrency, dbLines });
       if (!dry) await writeFile(`${DDIR}/${v.id}.json`, JSON.stringify(out, null, 2));
       ok += 1;
       totalNotes += out.notes.length;
       totalPositioned += out.notes.filter((n) => n.lineSan.length > 0).length;
       const s = out.stats;
       console.log(
-        `[distill-v2] ${v.id} ✓ moves ${s.movesResolved}/${s.moveCandidates} resolved · ` +
-        `${s.gamesDetected} game(s)${s.trackerLost ? ' · TRACKER LOST' : ''} · ` +
+        `[distill-v2] ${v.id} ✓ ${s.alignedLine ? `aligned "${s.alignedLine}" (${s.alignedPlies}p, ${s.movesMatched} matched, cov ${s.coverage})` : 'NO DB ALIGNMENT — opening-name keying only'} · ` +
         `chunks ${s.chunksWithPosition}/${s.chunks} positioned` +
         (dry ? '' : ` · notes ${out.notes.length} (${out.notes.filter((n) => n.lineSan.length > 0).length} positioned)`),
       );
