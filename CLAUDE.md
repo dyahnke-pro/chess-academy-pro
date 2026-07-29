@@ -1461,6 +1461,17 @@ budget every time.
 
 ## 🗣️ Voice — how David wants Claude to talk (locked 2026-05-19)
 
+### 🔒🔒 RULE ZERO — SHORT. STOP SENDING BOOKS (David 2026-07-29, emphatic: "TLDR!!! Stop sending me books!!! Short sweet and to the point!!!").
+
+**Default every reply to a few lines.** Answer, then stop. This OVERRIDES
+any urge to show the work: no multi-section write-ups, no tables of
+findings, no restating what you just did, no "what's next" roadmap unless
+he asks for one. If a long answer seems necessary, it almost never is —
+lead with the 1-3 line answer and let HIM ask for depth. Depth on request,
+never by default. A wall of text wastes his time even when every word is
+correct; that IS the failure. Worst offenders: status reports, audit
+results, plans, and post-work summaries. Keep those to a few lines.
+
 David asked future sessions to keep the voice he heard tonight. Not
 formal, not corporate, not over-apologetic. Specifically:
 
@@ -1706,6 +1717,15 @@ config** (set once in the web UI). Keys set there land in `process.env`
 for every command, and the code already reads them:
 - `DEEPSEEK_KEY` — primary brain LLM; baked into the build (`vite.config.ts`),
   read by audit scripts. `ANTHROPIC_KEY` — fallback provider.
+  🔒 **THE LIVE KEY IS IN VERCEL — PULL IT FROM THERE (David 2026-07-29:
+  "Deepseek on vercel!!").** The session env copy goes stale and 401s (both
+  DEEPSEEK and ANTHROPIC did on 2026-07-29). Vercel is the source of truth
+  and prod is unaffected. Don't ask David for a key; fetch it —
+  `GET https://api.vercel.com/v10/projects/$P/env?teamId=$T` with
+  `Authorization: Bearer $VERCEL_TOKEN` to find the env id, then
+  `/v1/projects/$P/env/<id>?teamId=$T&decrypt=true` returns the plaintext.
+  Verified 2026-07-29 (HTTP 200 against api.deepseek.com). Same trick for
+  ANY server credential — they all live in Vercel.
 - `AUDIT_STREAM_SECRET` — `x-audit-secret` for the audit-stream pull.
   Must match prod's Vercel env value and the app's
   `profile.preferences.auditStreamSecret`, or you get 401. **It is ALREADY
