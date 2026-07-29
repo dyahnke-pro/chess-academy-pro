@@ -34,14 +34,18 @@
  * Writes:
  *   audit-reports/danya-anchor/report.json   full per-note outcome
  *   audit-reports/danya-anchor/rejected.json the defect list (mis-tags + lies)
- *   src/data/danya-teachings.anchored.json   the corpus with lineSan filled in
+ * audit-reports/danya-anchor/danya-teachings.anchored.json  (gitignored intermediate)
  */
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { Chess } from 'chess.js';
 
 const CORPUS = 'src/data/danya-teachings.json';
 const OUT_DIR = 'audit-reports/danya-anchor';
-const OUT_CORPUS = 'src/data/danya-teachings.anchored.json';
+// NOT src/data/ — that directory is imported into the app bundle, and this is a
+// regeneratable pipeline intermediate (150s from committed inputs), not shipped
+// app data. It also stays provisional until the position-tracking distiller
+// lands, so nothing should be able to import it by accident.
+const OUT_CORPUS = 'audit-reports/danya-anchor/danya-teachings.anchored.json';
 
 // Candidate-root search bounds. A note's opening name resolves to at most
 // MAX_SPINES spines; each contributes its first MAX_PLIES ply-prefixes as roots.
