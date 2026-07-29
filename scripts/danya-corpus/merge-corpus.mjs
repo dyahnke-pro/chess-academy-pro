@@ -32,11 +32,23 @@ function stripMoveNumbers(s) {
     .replace(/\b\d{1,2}\.(?=[NBRQKO]|[a-h][1-8x])/g, '');
 }
 
+const DDIR_V2 = 'data/sources/naroditsky-voice/distilled-v2';
+
 async function main() {
-  const files = (await readdir(DDIR)).filter((f) => f.endsWith('.json'));
+  // v2 (chunked distiller, ~5x denser, code-stamped opening) REPLACES v1
+  // per-video; v1 fills in every video v2 hasn't re-distilled yet, so breadth
+  // never regresses while the re-distill rolls through the catalog.
+  const v1Files = (await readdir(DDIR)).filter((f) => f.endsWith('.json'));
+  let v2Files = [];
+  try { v2Files = (await readdir(DDIR_V2)).filter((f) => f.endsWith('.json')); } catch { /* no v2 yet */ }
+  const v2Ids = new Set(v2Files.map((f) => f.replace(/\.json$/, '')));
+  const files = [
+    ...v2Files.map((f) => `${DDIR_V2}/${f}`),
+    ...v1Files.filter((f) => !v2Ids.has(f.replace(/\.json$/, ''))).map((f) => `${DDIR}/${f}`),
+  ];
   const all = [];
-  for (const f of files) {
-    const d = JSON.parse(await readFile(`${DDIR}/${f}`, 'utf8'));
+  for (const path of files) {
+    const d = JSON.parse(await readFile(path, 'utf8'));
     for (const n of d.notes ?? []) {
       if (!n.explains || !n.teaches || !Array.isArray(n.sources) || n.sources.length === 0) continue;
       // Anchoring: a note with no position key AND no opening name grounds

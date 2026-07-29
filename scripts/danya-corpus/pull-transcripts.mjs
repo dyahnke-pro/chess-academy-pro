@@ -35,7 +35,8 @@ async function main() {
   }
   console.log(`[pull] ${videos.length} videos in scope, ${missing.length} missing transcripts`);
 
-  let done = 0, failed = 0;
+  let done = 0, failed = 0, streak = 0;
+  const pauseMs = Number(process.env.PULL_PACE_MS ?? '5000');
   for (const v of missing.slice(0, limit)) {
     try {
       await run('yt-dlp', [
@@ -45,14 +46,25 @@ async function main() {
         `https://www.youtube.com/watch?v=${v.id}`,
       ], { maxBuffer: 8 * 1024 * 1024 });
       done += 1;
+      streak = 0;
       if (done % 10 === 0) console.log(`[pull] ${done}/${missing.length} …`);
     } catch (e) {
       failed += 1;
+      streak += 1;
       console.error(`[pull] FAIL ${v.id} (${v.title.slice(0, 50)}): ${String(e).split('\n')[0].slice(0, 120)}`);
+      // CIRCUIT BREAKER — 2026-07-29: after ~74 pulls YouTube bot-checked the
+      // IP and every subsequent request failed; the old loop burned the whole
+      // remaining queue on failures in minutes. Sustained failure means
+      // blocked, not unlucky: stop hammering, cool down long, then resume.
+      if (streak >= 5) {
+        console.log(`[pull] ${streak} consecutive failures — rate-limited. Cooling down 30 min…`);
+        await new Promise((r) => setTimeout(r, 30 * 60 * 1000));
+        streak = 0;
+      }
     }
     // Gentle pacing — the 2026-07-12 enumeration burst tripped a 429 +
     // bot-check for ~30 min. Slow is fine; blocked is not.
-    await new Promise((r) => setTimeout(r, 5000));
+    await new Promise((r) => setTimeout(r, pauseMs));
   }
   console.log(`[pull] done=${done} failed=${failed} remaining=${Math.max(0, missing.length - done - failed)}`);
 }
