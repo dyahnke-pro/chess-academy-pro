@@ -34,18 +34,14 @@
  * Writes:
  *   audit-reports/danya-anchor/report.json   full per-note outcome
  *   audit-reports/danya-anchor/rejected.json the defect list (mis-tags + lies)
- * audit-reports/danya-anchor/danya-teachings.anchored.json  (gitignored intermediate)
+ *   src/data/danya-teachings.anchored.json   the corpus with lineSan filled in
  */
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { Chess } from 'chess.js';
 
 const CORPUS = 'src/data/danya-teachings.json';
 const OUT_DIR = 'audit-reports/danya-anchor';
-// NOT src/data/ — that directory is imported into the app bundle, and this is a
-// regeneratable pipeline intermediate (150s from committed inputs), not shipped
-// app data. It also stays provisional until the position-tracking distiller
-// lands, so nothing should be able to import it by accident.
-const OUT_CORPUS = 'audit-reports/danya-anchor/danya-teachings.anchored.json';
+const OUT_CORPUS = 'src/data/danya-teachings.anchored.json';
 
 // Candidate-root search bounds. A note's opening name resolves to at most
 // MAX_SPINES spines; each contributes its first MAX_PLIES ply-prefixes as roots.
@@ -363,8 +359,8 @@ async function main() {
   console.log('\n──────── ANCHOR REPORT ────────');
   console.log(`processed            ${results.length}`);
   console.log(`anchored             ${tally.anchored || 0}  (${pct(tally.anchored || 0)})`);
-  console.log(`  ↳ HIGH confidence ${String(tiers.high || 0).padStart(4)}  (${pct(tiers.high || 0)})  ← authorable`);
-  console.log(`  ↳ medium           ${String(tiers.medium || 0).padStart(4)}  (${pct(tiers.medium || 0)})`);
+  console.log(`  \u21b3 HIGH confidence ${String(tiers.high || 0).padStart(4)}  (${pct(tiers.high || 0)})  \u2190 authorable`);
+  console.log(`  \u21b3 medium           ${String(tiers.medium || 0).padStart(4)}  (${pct(tiers.medium || 0)})`);
   console.log(`  ↳ newly placed     ${newlyAnchored.length}`);
   console.log(`  ↳ re-tagged opening${String(retagged.length).padStart(4)}`);
   console.log(`rejected             ${tally.rejected || 0}  (${pct(tally.rejected || 0)})`);
