@@ -77,14 +77,24 @@ function main() {
   const deepDir = `data/sources/${PLAYER}-deep`;
   const files = readdirSync(deepDir).filter((f) => f.startsWith(`${OPENING_ID}-`) && f.endsWith('.json'));
   const games = loadGames(PLAYER);
-  console.log(`[wider] ${games.length} games in the archive\n`);
+  // Colour comes from the TREE. The deep files carry no colour field, and
+  // defaulting it silently inverts every black repertoire — the Kan reported
+  // White's Nc3/Qe2/Re1 as the student's plans until this was caught.
+  let studentColor = null;
+  try {
+    studentColor = JSON.parse(readFileSync(`data/sources/${PLAYER}-trees/${OPENING_ID}.json`, 'utf8')).color ?? null;
+  } catch { /* fall through to the explicit failure below */ }
+  if (!studentColor) {
+    console.error(`no colour for ${OPENING_ID}: expected data/sources/${PLAYER}-trees/${OPENING_ID}.json`);
+    process.exit(1);
+  }
+  console.log(`[wider] ${games.length} games in the archive · student plays ${studentColor}\n`);
 
   for (const file of files) {
     const deep = JSON.parse(readFileSync(`${deepDir}/${file}`, 'utf8'));
     const key = file.replace(`${OPENING_ID}-`, '').replace(/\.json$/, '');
     if (ONLY_VARIATION && key !== ONLY_VARIATION) continue;
     const prefix = deep.variation?.prefix ?? [];
-    deep.color = deep.color ?? 'white';
     if (prefix.length === 0) continue;
 
     const matching = [];
@@ -97,13 +107,19 @@ function main() {
     }
     if (matching.length === 0) { console.log(`── ${key}: no games match the prefix\n`); continue; }
 
-    // Middlegame clusters: what the STUDENT plays in the plan window, minus the
-    // moves every game makes. Counting raw SAN frequency calls castling a plan
-    // ("O-O 71%") and buries the real ideas; a plan is a pawn break or a piece
-    // heading somewhere, so those are what get counted.
+    // Middlegame clusters — BOTH SIDES, reported separately (David: "We need
+    // ideas for both sides!"). A plan without the counter-plan is a move list:
+    // "Nge2-Ng3 regroups" means nothing except against "…c5 breaks". The
+    // narration register is explicitly both sides' ideas, and the opponent half
+    // is the ONLY place pitfalls and punish-gems can come from — a gem IS the
+    // opponent's slip plus the refutation, so filtering their moves out makes
+    // gem discovery structurally impossible.
+    //
+    // The noise worth dodging is ROUTINE moves (castling, king shuffles), which
+    // swamp raw frequency at ~70%. That is what gets filtered — not a side.
     const ROUTINE = /^(O-O(-O)?|K)/;
-    const studentIsWhite = (deep.color ?? 'white') === 'white';
-    const clusters = new Map();
+    const studentIsWhite = studentColor === 'white';
+    const clusters = { student: new Map(), opponent: new Map() };
     let inWindow = 0;
     for (const { sans } of matching) {
       if (sans.length <= MG_PLIES[0]) continue;
@@ -111,11 +127,12 @@ function main() {
       const seen = new Set();
       for (let i = MG_PLIES[0]; i < Math.min(sans.length, MG_PLIES[1]); i += 1) {
         const isWhiteMove = i % 2 === 0;
-        if (isWhiteMove !== studentIsWhite) continue;
+        const side = isWhiteMove === studentIsWhite ? 'student' : 'opponent';
         const san = sans[i];
-        if (ROUTINE.test(san) || seen.has(san)) continue;
-        seen.add(san);
-        clusters.set(san, (clusters.get(san) ?? 0) + 1);
+        const tag = `${side}:${san}`;
+        if (ROUTINE.test(san) || seen.has(tag)) continue;
+        seen.add(tag);
+        clusters[side].set(san, (clusters[side].get(san) ?? 0) + 1);
       }
     }
 
@@ -134,13 +151,16 @@ function main() {
     }
 
     console.log(`── ${key} — ${matching.length} games matching the prefix`);
-    const planRows = [...clusters.entries()]
+    const rowsFor = (m) => [...m.entries()]
       .map(([san, n]) => [san, n, Math.round((n / Math.max(1, inWindow)) * 100)])
       .filter((r) => r[2] >= MIN_PCT)
       .sort((a, b) => b[1] - a[1]);
+    const studentRows = rowsFor(clusters.student);
+    const oppRows = rowsFor(clusters.opponent);
     console.log(`   middlegame clusters >=${MIN_PCT}% (of ${inWindow} games reaching the window):`);
-    console.log(`     ${planRows.length ? planRows.map((r) => `${r[0]} ${r[2]}%`).join('  ') : '(none)'}`);
-    console.log(`   → ${planRows.length} candidate middlegame plan(s)`);
+    console.log(`     STUDENT  ${studentRows.length ? studentRows.map((r) => `${r[0]} ${r[2]}%`).join('  ') : '(none)'}`);
+    console.log(`     OPPONENT ${oppRows.length ? oppRows.map((r) => `${r[0]} ${r[2]}%`).join('  ') : '(none)'}`);
+    console.log(`   → ${studentRows.length} student plan candidate(s), ${oppRows.length} opponent-idea candidate(s)`);
 
     const endRows = [...endings.entries()]
       .map(([t, n]) => [t, n, Math.round((n / Math.max(1, classified)) * 100)])

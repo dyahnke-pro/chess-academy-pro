@@ -442,6 +442,20 @@ export function buildDanyaTeachingBlock(args: {
   return lines.join('\n');
 }
 
+/** The WHOLE beat as one spoken string (David 2026-07-30: "hand the entire
+ *  beat for the coach to speak in the package so it doesn't leave anything
+ *  out"). `plans` is the forward-looking half — the break being prepared, the
+ *  manoeuvre coming, the opponent reply being answered — so omitting it both
+ *  silences that teaching and starves the lead-the-eye pass, which derives
+ *  arrows from this text: a move named only in `plans` can never be arrowed
+ *  if `plans` never reaches the string. */
+export function teachingBeatText(note: DanyaNote): string {
+  return [note.explains, note.teaches, note.plans]
+    .map((part) => (part ?? '').trim())
+    .filter(Boolean)
+    .join(' ');
+}
+
 /** Corpus stats for audits / the settings debug panel. */
 export function danyaCorpusStats(): { notes: number; positioned: number; videos: number } {
   return {

@@ -45,7 +45,7 @@ import {
 import { db, type CachedOpening } from '../db/schema';
 import { gradeNarrationText } from './coachAnswerGates';
 import { logAppAudit } from './appAuditor';
-import { buildDanyaTeachingBlock, noteAtPosition } from './danyaTeachingService';
+import { buildDanyaTeachingBlock, noteAtPosition, teachingBeatText } from './danyaTeachingService';
 import { mentionedMoveArrows } from './mentionedMoveArrows';
 import { bakedNarrationFor } from './bakedWalkthroughNarration';
 import type {
@@ -221,7 +221,7 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 /** Bump to invalidate every cached walkthrough tree on next read. The corpus
  *  teaching splice happens at GENERATION time, so trees generated before it
  *  would keep speaking corpus-free narration forever off the warm cache. */
-const WALKTHROUGH_GEN_REV = '2026-07-30-baked-video-tier2';
+const WALKTHROUGH_GEN_REV = '2026-07-30-whole-beat-splice';
 
 export async function getCachedOpening(
   name: string,
@@ -1614,7 +1614,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       const note = noteAtPosition(prefix, p.fen);
       if (note && !splicedNoteIds.has(note.id)) {
         const teaching = gradeNarrationText(
-          `${note.explains} ${note.teaches}`.trim(),
+          teachingBeatText(note),
           p.fen,
           'openingGenerator.danyaSplice',
         );
