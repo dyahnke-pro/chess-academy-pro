@@ -17,6 +17,8 @@
 
 import { Chess } from 'chess.js';
 import teachingsData from '../data/danya-teachings.json';
+import { computeStructureSignature, signatureMatchScore, type StructureSignature } from './structureSignature';
+import { validateBoardClaims } from './boardClaimValidator';
 
 export interface DanyaNote {
   id: string;
@@ -192,6 +194,62 @@ export function transitionTeachingForGame(args: {
 
 /** Render notes as a compact system-prompt grounding block (the slot the
  *  book-passage block used to fill). Returns '' when nothing matches. */
+// ── STRUCTURE-TRANSFER tier (David 2026-07-30: "make those distilled ideas
+// work in similar positions not associated with the exact opening.
+// Deterministically."). A note taught at one position usually teaches a
+// STRUCTURE (IQP play, the Maróczy clamp, a rook-endgame technique), so it
+// applies wherever code proves the same structure exists:
+//   1. every position-keyed note's taught position gets a structure signature
+//      (lazily, once — pure chess.js);
+//   2. the live FEN gets the same signature; candidates = notes whose
+//      signature MATCHES (named family shared / same endgame material class);
+//   3. each candidate's prose is truth-filtered against the LIVE board — a
+//      note whose concrete piece-on-square claims don't hold here is dropped
+//      before it can be offered.
+// Code selects, code verifies; the model still only phrases (G0).
+const noteSignatures = new Map<string, StructureSignature>();
+let signatureIndexBuilt = false;
+
+function ensureSignatureIndex(): void {
+  if (signatureIndexBuilt) return;
+  signatureIndexBuilt = true;
+  for (const n of DATA.notes) {
+    if (n.lineSan.length === 0) continue;
+    try {
+      const c = new Chess();
+      for (const san of n.lineSan) c.move(san);
+      noteSignatures.set(n.id, computeStructureSignature(c.fen()));
+    } catch { /* gate guarantees legality; belt-and-suspenders */ }
+  }
+}
+
+/** Notes whose TAUGHT STRUCTURE matches the live position, regardless of
+ *  opening — deterministic transfer. Excludes exact-position hits (the FEN
+ *  tier owns those) and drops any note making a claim that is false on THIS
+ *  board. */
+export function notesForStructure(fen: string, maxNotes = 2): DanyaNote[] {
+  ensureSignatureIndex();
+  ensureFenIndex();
+  let live: StructureSignature;
+  try { live = computeStructureSignature(fen); } catch { return []; }
+  const exactHere = new Set((byFen.get(normFen(fen)) ?? []).map((n) => n.id));
+  const scored: Array<{ n: DanyaNote; score: number }> = [];
+  for (const n of DATA.notes) {
+    if (n.lineSan.length === 0 || exactHere.has(n.id)) continue;
+    const sig = noteSignatures.get(n.id);
+    if (!sig) continue;
+    const score = signatureMatchScore(live, sig);
+    if (score <= 0) continue;
+    // Truth filter: the note must not assert anything false about THIS board.
+    const text = `${n.explains} ${n.teaches}`;
+    try {
+      if (validateBoardClaims(text, fen).violations.length > 0) continue;
+    } catch { continue; }
+    scored.push({ n, score });
+  }
+  return scored.sort((a, b) => b.score - a.score).slice(0, maxNotes).map((s) => s.n);
+}
+
 export function buildDanyaTeachingBlock(args: {
   historySans?: string[];
   openingName?: string | null;
@@ -214,6 +272,14 @@ export function buildDanyaTeachingBlock(args: {
   }
   if (args.openingName && picked.length < max) {
     for (const n of notesForOpening(args.openingName, max - picked.length)) {
+      if (!seen.has(n.id)) { picked.push(n); seen.add(n.id); }
+    }
+  }
+  // LAST tier — structure transfer: teachings from OTHER openings whose
+  // structure provably matches this board (and whose claims survive the live
+  // truth filter). Fires mainly past book, where the tiers above go quiet.
+  if (args.fen && picked.length < max) {
+    for (const n of notesForStructure(args.fen, max - picked.length)) {
       if (!seen.has(n.id)) { picked.push(n); seen.add(n.id); }
     }
   }
