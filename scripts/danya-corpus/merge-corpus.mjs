@@ -114,9 +114,18 @@ async function main() {
   const openings = new Set(notes.map((n) => n.opening).filter(Boolean));
   const phases = notes.reduce((acc, n) => { acc[n.phase] = (acc[n.phase] ?? 0) + 1; return acc; }, {});
 
+  // v2VideoIds makes the distill DURABLE across ephemeral containers: the
+  // shipped corpus records which videos already went through the v2 chunked
+  // distiller, so distill-v2 skips them even when the gitignored per-video
+  // intermediates are gone. Union with any prior marker — the set only grows.
+  let priorV2 = [];
+  try { priorV2 = JSON.parse(await readFile(OUT, 'utf8')).v2VideoIds ?? []; } catch { /* fresh */ }
+  const v2VideoIds = [...new Set([...priorV2, ...v2Ids])].sort();
+
   await writeFile(OUT, JSON.stringify({
     generatedAt: new Date().toISOString(),
     videosDistilled: new Set(notes.map((n) => n.sources?.[0])).size,
+    v2VideoIds,
     noteCount: notes.length,
     notes,
   }, null, 1));

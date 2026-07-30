@@ -615,9 +615,19 @@ async function main() {
     if (!v.title) v.title = v.id;
   }
 
+  // Durable resume: the shipped corpus records every v2-distilled video id
+  // (merge-corpus writes v2VideoIds), so a FRESH container skips them even
+  // though the gitignored per-video intermediates are gone. Never re-pay
+  // DeepSeek for a video the corpus already carries at v2 density.
+  let shippedV2 = new Set();
+  try {
+    shippedV2 = new Set(JSON.parse(await readFile('src/data/danya-teachings.json', 'utf8')).v2VideoIds ?? []);
+  } catch { /* no shipped corpus */ }
+
   const queue = [];
   for (const v of videos) {
     if (!(await exists(`${TDIR}/${v.id}.en.vtt`))) continue;
+    if (!dry && shippedV2.has(v.id)) continue;
     if (!dry && (await exists(`${DDIR}/${v.id}.json`))) continue;
     queue.push(v);
   }
