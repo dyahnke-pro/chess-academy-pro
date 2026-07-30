@@ -83,8 +83,39 @@ function makeOverlapGate(transcriptText, n = 7) {
 const BANNED = /\b(naroditsky|danya|in this video|in the video|the streamer|chat|subscribe|this stream|speedrun)\b/i;
 const MOVE_NUM = /\b\d{1,2}(\.|…|\.\.\.)(?=[NBRQKO]|[a-h][1-8x])/;
 
+/** ALIGNMENT: idea[i] is spoken AS spine[i] animates, so it MUST speak about
+ *  its OWN move. The first Latvian bake shipped ideas 2-10 shifted one ply
+ *  ("f5 is the Latvian Gambit" narrated on Nf3's ply) — every board claim
+ *  was true, so only an own-move check catches the desync: the ply's SAN
+ *  (or its destination square / "castle") must appear in the text. */
+function mentionsOwnMove(text, san) {
+  const bare = san.replace(/[+#]/g, '');
+  if (/^O-O/.test(bare)) return /\bcastl/i.test(text) || text.includes(bare);
+  if (new RegExp(`\\b${bare.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`).test(text)) return true;
+  const dest = bare.match(/([a-h][1-8])(?:=[NBRQ])?$/)?.[1];
+  return dest ? new RegExp(`\\b${dest}\\b`).test(text) : false;
+}
+
 // ── spine: the exact line the app walks for this opening ─────────────────
+// The RUNTIME resolves (and middlegame-extends) its spine via
+// resolveTeachSpine; `bakedNarrationFor` requires a ply-for-ply prefix
+// match, so the bake MUST narrate that exact line. Ask the app code first
+// (tsx bridge); fall back to the local repertoire/DB guess only if the
+// bridge fails.
 async function resolveSpine(openingName) {
+  try {
+    const { execFileSync } = await import('node:child_process');
+    const raw = execFileSync('npx', ['tsx', 'scripts/danya-corpus/print-spine.mts', openingName], {
+      encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 180_000,
+    }).trim().split('\n').pop();
+    const r = JSON.parse(raw);
+    if (Array.isArray(r.spineMoves) && r.spineMoves.length > 0) {
+      console.log(`[narrate] runtime spine via print-spine: ${r.spineMoves.length} plies${r.extendedToMiddlegame ? ' (middlegame-extended)' : ''}`);
+      return { name: r.canonicalName, moves: r.spineMoves };
+    }
+  } catch (e) {
+    console.error(`  (print-spine bridge failed — ${String(e).slice(0, 120)}; falling back to local resolution)`);
+  }
   const q = norm(openingName);
   const rep = JSON.parse(await readFile('src/data/repertoire.json', 'utf8'));
   for (const o of rep) if (norm(o.name) === q || norm(o.id) === q.replace(/ /g, '-')) {
@@ -165,6 +196,7 @@ ABSOLUTE RULES:
 - NEVER name or reference the teacher, a video, stream, chat, or opponent. Timeless coaching voice: warm, rigorous, concept-first.
 - NO length cap on "text" — where he lingers and teaches deeply, teach deeply. "shortText" is the brief register: ONE sentence, max 18 words.
 - NO move-number prefixes ("5.Nc3" is banned — write "Nc3"). Mention the move's SAN or spoken form in each text.
+- ALIGNMENT IS ABSOLUTE: entry N is SPOKEN AS move N ANIMATES. It narrates move N — the move just played — and MUST name that move's SAN. It must NEVER present the NEXT move as its subject ("f5 is the gambit" as the entry for Nf3 is a hard failure). Forecasting what comes next is allowed only AFTER the entry has taught its own move.
 - Frame ideas for the student playing the side the app teaches.
 
 Return STRICT JSON:
@@ -215,6 +247,9 @@ FOR THIS CALL: return ONLY {"ideas":[...]} for moves ${start + 1}-${start + slic
     checkUnit(`ply ${i + 1} shortText`, idea.shortText, plies[i].fen);
     const shortWords = String(idea.shortText ?? '').trim().split(/\s+/).length;
     if (shortWords > 18) problems.push(`ply ${i + 1} shortText: ${shortWords} words (max 18)`);
+    if (idea.text && !mentionsOwnMove(idea.text, plies[i].san)) {
+      problems.push(`ply ${i + 1} text: does not speak about its OWN move ${plies[i].san} (misaligned narration)`);
+    }
   });
   // REPAIR PASS: a failed ply goes back to the model ONCE with the violation
   // named and the ply's true board; still-failing output kills the build.
@@ -236,6 +271,9 @@ FOR THIS CALL: return ONLY {"ideas":[...]} for moves ${start + 1}-${start + slic
     ideas.forEach((idea, i) => {
       checkUnit(`ply ${i + 1} (${plies[i].san}) text`, idea.text, plies[i].fen);
       checkUnit(`ply ${i + 1} shortText`, idea.shortText, plies[i].fen);
+      if (idea.text && !mentionsOwnMove(idea.text, plies[i].san)) {
+        problems.push(`ply ${i + 1} text: does not speak about its OWN move ${plies[i].san} (misaligned narration)`);
+      }
     });
     if (problems.length > 0) {
       console.error(`✗ ${problems.length} gate failure(s) after repair:`);

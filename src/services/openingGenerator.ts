@@ -47,6 +47,7 @@ import { gradeNarrationText } from './coachAnswerGates';
 import { logAppAudit } from './appAuditor';
 import { buildDanyaTeachingBlock, noteAtPosition } from './danyaTeachingService';
 import { mentionedMoveArrows } from './mentionedMoveArrows';
+import { bakedNarrationFor } from './bakedWalkthroughNarration';
 import type {
   WalkthroughTree,
   WalkthroughTreeNode,
@@ -220,7 +221,7 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 /** Bump to invalidate every cached walkthrough tree on next read. The corpus
  *  teaching splice happens at GENERATION time, so trees generated before it
  *  would keep speaking corpus-free narration forever off the warm cache. */
-const WALKTHROUGH_GEN_REV = '2026-07-30-full-uncapped';
+const WALKTHROUGH_GEN_REV = '2026-07-30-baked-video-tier2';
 
 export async function getCachedOpening(
   name: string,
@@ -1411,8 +1412,35 @@ ${branches.length > 0 ? `\nBranches available at the end of the spine (the stude
 
 Emit a JSON object with intro (string), shortIntro (string), outro (string), ideas (array of ${positions.length} objects { text, shortText }, one per spine move in order)${branches.length > 0 ? `, branchIdeas (array of ${branches.length} strings), shortBranchIdeas (array of ${branches.length} strings), and branchExtensionIdeas (2D array of { text, shortText } objects)` : ''}.`;
 
+  // ── Tier 2 (David 2026-07-30, locked): a BAKED video narration for this
+  // exact line replaces the runtime LLM spine narration. The bake script
+  // already handed the teacher's transcript to the model offline, reworded
+  // it into the house voice and gated every line — so a hit is final prose:
+  // no note splice, no reword pass, deterministic every session. The LLM is
+  // still called ONLY when fork branches need their teasers narrated.
+  const baked = faceContext
+    ? null
+    : bakedNarrationFor(entry.canonicalName, positions.map((p) => p.san));
+  if (baked) {
+    void logAppAudit({
+      kind: 'book-grounding-injected',
+      category: 'subsystem',
+      source: 'openingGenerator.bakedVideoNarration',
+      summary: `baked video narration hit for "${entry.canonicalName}" (${positions.length}/${baked.spine.length} plies, sources: ${baked.sourceVideos.join(',')})`,
+    });
+  }
+
   let narration: NarrationOutput;
   let narrationFellBack = false;
+  if (baked && branches.length === 0) {
+    // Full coverage, no branches — zero runtime LLM.
+    narration = {
+      intro: baked.intro,
+      ...(baked.shortIntro ? { shortIntro: baked.shortIntro } : {}),
+      outro: baked.outro,
+      ideas: baked.ideas.slice(0, positions.length),
+    };
+  } else {
   try {
     const result = await getCoachStructuredResponse(
       [{ role: 'user', content: userPrompt }],
@@ -1442,6 +1470,21 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       outro: `That's the canonical book line for the ${entry.canonicalName}. Drill the moves to lock them in, or ask for a deeper variation.`,
       ideas: positions.map((p) => ({ text: synthesizeIdeaFromSan(p.san, p.movedBy) })),
     };
+  }
+  if (baked) {
+    // Overlay the baked spine narration over whatever the call produced
+    // (or the fallback) — the branch fields keep the LLM's prose, the
+    // spine speaks the baked video teaching. A baked spine also un-fails
+    // the fallback: the tree's MAIN narration is real, so it may cache.
+    narration = {
+      ...narration,
+      intro: baked.intro,
+      ...(baked.shortIntro ? { shortIntro: baked.shortIntro } : {}),
+      outro: baked.outro,
+      ideas: baked.ideas.slice(0, positions.length),
+    };
+    narrationFellBack = false;
+  }
   }
 
   // 3. Build the tree from the bottom up using the LLM's ideas.
@@ -1564,6 +1607,9 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       (typeof ideaEntry === 'string' ? (ideaEntry as string).trim() : '') ||
       synthesizeIdeaFromSan(p.san, p.movedBy);
     try {
+      // Baked video narration IS the teaching for this ply — splicing a
+      // corpus note on top would double-teach the same source material.
+      if (baked) return text;
       const prefix = positions.slice(0, i + 1).map((q) => q.san);
       const note = noteAtPosition(prefix, p.fen);
       if (note && !splicedNoteIds.has(note.id)) {
@@ -1590,7 +1636,9 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
   // call failure the raw script ships as before.
   let finalPlyTexts = rawPlyTexts;
   try {
-    finalPlyTexts = await rewordNarrationInHouseVoice(positions, rawPlyTexts);
+    // A baked script is ALREADY reworded + gated offline — rewording it
+    // again could only drift it away from its verified form.
+    if (!baked) finalPlyTexts = await rewordNarrationInHouseVoice(positions, rawPlyTexts);
   } catch (err) {
     void logAppAudit({
       kind: 'llm-error',

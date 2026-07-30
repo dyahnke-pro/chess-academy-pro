@@ -49,7 +49,9 @@ import type { WalkthroughTree } from '../types/walkthroughTree';
 // cache the same way the local genRev eviction retires Dexie copies —
 // otherwise "teach me X" keeps serving corpus-free narration from any
 // user's (or audit bot's) older generation.
-export const PROMPT_VERSION = 7;
+// v8 (2026-07-30): Tier-2 baked video narrations land — pre-bake trees for
+// covered openings must regenerate so the baked script replaces them.
+export const PROMPT_VERSION = 8;
 
 interface SharedCacheConfig {
   supabaseUrl: string;
