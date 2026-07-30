@@ -6,6 +6,13 @@
 export const GLEK_SYSTEM_TAB_PLAN_IDS: Record<string, string[]> = {
   main: ['mp-gleksystem-bc5-f5', 'mp-gleksystem-traditional-f4', 'mp-gleksystem-f4trap'],
   'central 4...d5': ['mp-gleksystem-d5-outpost'],
+  // Explicit EMPTY entries — an unmapped tab key returns null, which the
+  // detail page treats as "no filter" and renders EVERY plan on the tab
+  // (main-line plans were leaking onto Pin and Fianchetto). No dedicated
+  // plan exists for these tabs yet; empty > wrong-tab content. Author real
+  // plans here when the corpus supports them, then fill the lists.
+  'pin 4...bb4': [],
+  'fianchetto 4...g6': [],
 };
 
 /** The hand-picked middlegame plan ids for a Glek System tab, or null when the

@@ -42,6 +42,18 @@ describe('Glek System masterclass wiring', () => {
     for (const id of d5Plans ?? []) expect(planIds.has(id), `missing plan ${id}`).toBe(true);
   });
 
+  it('every variation tab has an explicit plan entry (unmapped = leak-all)', () => {
+    // A tab key missing from the map returns null, which the detail page
+    // treats as "no filter" — every plan then renders on that tab. Each
+    // curated tab must therefore have an explicit (possibly empty) entry.
+    const entry = (repertoire as Array<{ id: string; variations?: Array<{ name: string; pgn: string }> }>).find((o) => o.id === GLEK);
+    const tabs = buildVariationTabs(GLEK, (entry?.variations ?? []) as never);
+    for (const tab of tabs) {
+      const key = tab.label.toLowerCase();
+      expect(getGlekSystemTabPlanIds(GLEK, key), `tab "${key}" unmapped — plans would leak`).not.toBeNull();
+    }
+  });
+
   it('returns null for a non-Glek opening', () => {
     expect(getGlekSystemTabPlanIds('four-knights-game', 'main')).toBeNull();
   });
