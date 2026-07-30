@@ -34,11 +34,15 @@ function stripMoveNumbers(s) {
 
 const DDIR_V2 = 'data/sources/naroditsky-voice/distilled-v2';
 
+// Mirrors src/data/danyaTeachings.test.ts BANNED — keep in sync.
+const BANNED = /\b(naroditsky|danya|in this video|in the video|the streamer|chat|subscribe|this stream)\b/i;
+
 async function main() {
   // v2 (chunked distiller, ~5x denser, code-stamped opening) REPLACES v1
   // per-video; v1 fills in every video v2 hasn't re-distilled yet, so breadth
   // never regresses while the re-distill rolls through the catalog.
-  const v1Files = (await readdir(DDIR)).filter((f) => f.endsWith('.json'));
+  let v1Files = [];
+  try { v1Files = (await readdir(DDIR)).filter((f) => f.endsWith('.json')); } catch { /* v1 intermediates absent */ }
   let v2Files = [];
   try { v2Files = (await readdir(DDIR_V2)).filter((f) => f.endsWith('.json')); } catch { /* no v2 yet */ }
   const v2Ids = new Set(v2Files.map((f) => f.replace(/\.json$/, '')));
@@ -47,6 +51,28 @@ async function main() {
     ...v1Files.filter((f) => !v2Ids.has(f.replace(/\.json$/, ''))).map((f) => `${DDIR}/${f}`),
   ];
   const all = [];
+  // Per-video intermediates are gitignored and the container is ephemeral, so
+  // v1's distilled dir usually does NOT exist here. The v1 notes' durable home
+  // is the SHIPPED corpus — carry forward every shipped note whose source
+  // video hasn't been re-distilled by v2, so breadth never regresses.
+  let carried = 0;
+  if (v1Files.length === 0) {
+    try {
+      const shipped = JSON.parse(await readFile(OUT, 'utf8'));
+      for (const n of shipped.notes ?? []) {
+        const vid = (n.sources?.[0] ?? '').replace(/^yt:/, '');
+        if (v2Ids.has(vid)) continue;
+        // Carried notes get the same depersonalization ban as fresh ones —
+        // the v1 corpus shipped with at least one "(Naroditsky vs. …)" leak
+        // that predates the gate's enforcement here.
+        if (BANNED.test(n.explains ?? '') || BANNED.test(n.teaches ?? '') || BANNED.test(n.plans ?? '') || BANNED.test(n.opening ?? '')) continue;
+        const { id, ...rest } = n; // ids are reassigned at the end
+        all.push(rest);
+        carried += 1;
+      }
+    } catch { /* no shipped corpus either — fresh build */ }
+    console.log(`[merge] carried ${carried} shipped v1 notes (videos not yet re-distilled)`);
+  }
   for (const path of files) {
     const d = JSON.parse(await readFile(path, 'utf8'));
     for (const n of d.notes ?? []) {
@@ -58,6 +84,11 @@ async function main() {
       n.teaches = stripMoveNumbers(n.teaches);
       n.plans = stripMoveNumbers(n.plans ?? '');
       if (n.explains.length > 600 || n.teaches.length > 400 || (n.plans ?? '').length > 400) continue;
+      // Depersonalization ban (mirrors danyaTeachings.test.ts BANNED) — the
+      // distill prompt forbids naming the teacher/medium, but one leak per few
+      // thousand notes still gets through the model. Drop mechanically here so
+      // the gate never trips on a merge output.
+      if (BANNED.test(n.explains) || BANNED.test(n.teaches) || BANNED.test(n.plans ?? '') || BANNED.test(n.opening ?? '')) continue;
       all.push(n);
     }
   }
@@ -85,7 +116,7 @@ async function main() {
 
   await writeFile(OUT, JSON.stringify({
     generatedAt: new Date().toISOString(),
-    videosDistilled: files.length,
+    videosDistilled: new Set(notes.map((n) => n.sources?.[0])).size,
     noteCount: notes.length,
     notes,
   }, null, 1));
