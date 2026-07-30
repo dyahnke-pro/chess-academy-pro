@@ -31,6 +31,20 @@ fs.mkdirSync(OUT_DIR, { recursive: true });
 // SAN prefix that defines reaching its position. The "color" field
 // tells us which side the player is on (white/black).
 const OPENINGS = {
+  // ===== CHESSBRAH / Aman Hambleton — TAUGHT openings (2026-07-30) =====
+  // Variation prefixes are the data-chosen branches from his own tree
+  // (extract-opening-tree.mjs), not theory picks.
+  'aman-queens-gambit': {
+    color: 'white', studentUsername: 'chessbrah',
+    variations: {
+      'qgd-exchange': { label: 'QGD Exchange (Bg5)', prefix: ['d4', 'd5', 'c4', 'e6', 'Nc3', 'Nf6', 'cxd5', 'exd5', 'Bg5'] },
+      'slav-c6': { label: 'Slav …c6', prefix: ['d4', 'd5', 'c4', 'c6'] },
+      'qga-dxc4': { label: 'QGA …dxc4', prefix: ['d4', 'd5', 'c4', 'dxc4'] },
+      'marshall-nf6': { label: 'Marshall Defense …Nf6', prefix: ['d4', 'd5', 'c4', 'Nf6'] },
+      'qgd-nf3': { label: 'QGD Nf3 move order', prefix: ['d4', 'd5', 'c4', 'e6', 'Nf3'] },
+    },
+  },
+
   // ===== CARUANA (2026-05-31) =====
   'caruana-ruy-lopez': {
     color: 'white', studentUsername: 'FabianoCaruana',

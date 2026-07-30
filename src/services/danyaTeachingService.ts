@@ -21,7 +21,7 @@ import { computeStructureSignature, signatureMatchScore, type StructureSignature
 import { validateBoardClaims } from './boardClaimValidator';
 import { secondaryNotesForGap, secondaryNotesForPosition } from './chessbrahTeachingService';
 import { detectOpening } from './openingDetectionService';
-import { noteContradictsLine } from './noteLineGuard';
+import { noteContradictsLine, notePhaseMismatchesBoard } from './noteLineGuard';
 
 export interface DanyaNote {
   id: string;
@@ -161,7 +161,8 @@ export function noteAtPosition(historySans: string[], fen?: string): DanyaNote |
   // A note that recites a different line than the one played narrates the wrong
   // opening (see noteLineGuard) — silence beats teaching someone else's theory.
   const onThisLine = (n: DanyaNote): boolean =>
-    !noteContradictsLine(`${n.explains} ${n.teaches}`, historySans);
+    !noteContradictsLine(`${n.explains} ${n.teaches}`, historySans)
+    && !notePhaseMismatchesBoard(n.phase, fen, historySans.length);
   const bucket = (byPrefix.get(historySans.join(' ')) ?? []).filter(onThisLine);
   if (bucket[0]) return bucket[0];
   if (fen) {

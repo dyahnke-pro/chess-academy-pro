@@ -20,6 +20,54 @@ const OUT_DIR = path.join('data', 'sources', `${PLAYER}-trees`);
 fs.mkdirSync(OUT_DIR, { recursive: true });
 
 const OPENINGS = {
+  // ── chessbrah TAUGHT openings (2026-07-30). His pro entries were built from
+  // the openings he PLAYS; the teaching corpus proves he teaches a different
+  // set. These are the taught ones, extracted from his own archive so the
+  // spines stay game-derived where his games reach (INSTRUCTIONAL-CONTENT
+  // doctrine covers the lines that are taught more than played).
+  'aman-colle-zukertort': {
+    name: 'Colle-Zukertort',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['d4', 'Nf6', 'Nf3', 'e6', 'e3'],
+    maxDepth: 80,
+  },
+  'aman-london': {
+    name: 'London System',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['d4', 'Nf6', 'Bf4'],
+    maxDepth: 80,
+  },
+  'aman-stonewall-attack': {
+    name: 'Stonewall Attack',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['d4', 'd5', 'e3'],
+    maxDepth: 80,
+  },
+  'aman-queens-gambit': {
+    name: "Queen's Gambit",
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['d4', 'd5', 'c4'],
+    maxDepth: 80,
+  },
+  'aman-english': {
+    name: 'English Opening',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['c4'],
+    maxDepth: 80,
+  },
+  'aman-polish': {
+    name: 'Polish Opening',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['b4'],
+    maxDepth: 80,
+  },
+
   'caro-kann': {
     name: 'Caro-Kann Defense',
     color: 'black',

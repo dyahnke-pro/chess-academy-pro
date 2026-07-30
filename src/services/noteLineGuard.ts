@@ -51,3 +51,31 @@ export function noteContradictsLine(text: string, historySans: string[]): boolea
   // position the student has not reached, so it is not teaching for this ply.
   return recited.length > historySans.length;
 }
+
+/** Is the board actually an endgame? Queens gone, or the position thinned out
+ *  enough that endgame technique is what applies. */
+function looksLikeEndgame(fen: string): boolean {
+  const placement = fen.split(' ')[0] ?? '';
+  const pieces = placement.replace(/[^a-zA-Z]/g, '');
+  const queens = (placement.match(/[qQ]/g) ?? []).length;
+  return queens === 0 || pieces.length <= 14;
+}
+
+/** True when a note's phase does not match the board it would be spoken on.
+ *
+ *  Anchoring places a note at a position its own prose verifies against, but a
+ *  speedrun video walks one game from opening to endgame, so an endgame lesson
+ *  can land on an opening-depth line: 43 notes across the two shipped corpora
+ *  are phase `endgame` yet anchored within 12 plies. Spoken there, the coach
+ *  tells a student five moves into the opening to trade queens and push the
+ *  connected passers. Middlegame notes at opening depth are NOT filtered — a
+ *  plan taught from the tabiya is exactly what the transition ritual wants. */
+export function notePhaseMismatchesBoard(
+  phase: string,
+  fen: string | undefined,
+  historyPlies: number,
+): boolean {
+  if (phase !== 'endgame') return false;
+  if (fen) return !looksLikeEndgame(fen);
+  return historyPlies < 20;
+}
