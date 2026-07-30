@@ -49,7 +49,7 @@ import type { WalkthroughTree } from '../types/walkthroughTree';
 // cache the same way the local genRev eviction retires Dexie copies —
 // otherwise "teach me X" keeps serving corpus-free narration from any
 // user's (or audit bot's) older generation.
-export const PROMPT_VERSION = 6;
+export const PROMPT_VERSION = 7;
 
 interface SharedCacheConfig {
   supabaseUrl: string;

@@ -1,0 +1,263 @@
+#!/usr/bin/env node
+/**
+ * narrate-from-video — build an opening's WALKTHROUGH NARRATION from the
+ * teacher's OWN VIDEO NARRATION, reworded into the coach's voice.
+ *
+ * David 2026-07-30 (twice, emphatically): "hand the entire video narration
+ * phrasing to the llm and have it reword it into our voice." The generated
+ * walkthrough narration sourced the model's own prose with corpus crumbs
+ * spliced in — the source material must be HIS teaching for the opening.
+ *
+ * The plagiarism line (2026-07-02 lock) holds: the transcript is REFERENCE —
+ * "translation, not invention". The model rewords his ideas into ORIGINAL
+ * prose; the 7-gram overlap gate kills any line that lifts his wording; the
+ * board-claim gate kills any line that lies about the position; the
+ * depersonalization ban kills any leak of the teacher/medium. Raw transcripts
+ * stay gitignored — only the reworded, gated narration ships.
+ *
+ * Output: src/data/walkthrough-narrations.json — keyed by normalized opening
+ * name, shaped like the generator's NarrationOutput (intro/outro/ideas with
+ * full `text` + brief `shortText`). The generator uses a hit as its narration
+ * source INSTEAD of calling the LLM at runtime: deterministic, same words
+ * every session, zero runtime generation for covered openings.
+ *
+ * Register rules (G5 applied here): `text` (full) has NO length cap — his
+ * depth where he lingers; `shortText` is the ≤18-word brief register; silent
+ * is the voice gate's job, not this file's.
+ *
+ * Usage:
+ *   DEEPSEEK_KEY=... node scripts/danya-corpus/narrate-from-video.mjs \
+ *     --opening "sicilian defense: alapin variation" \
+ *     --videos KNwKz9Ssi8c[,<id2>...]           # theory/speedrun vids for X
+ *     [--dry]                                    # spine+transcript check only
+ */
+import { readFile, writeFile, access } from 'node:fs/promises';
+import { Chess } from 'chess.js';
+
+const TDIR = 'data/sources/naroditsky-voice/transcripts';
+const OUT = 'src/data/walkthrough-narrations.json';
+const KEY = process.env.DEEPSEEK_KEY ?? process.env.VITE_DEEPSEEK_API_KEY ?? '';
+
+const arg = (n, d) => { const i = process.argv.indexOf(`--${n}`); return i >= 0 ? process.argv[i + 1] : d; };
+const DRY = process.argv.includes('--dry');
+const OPENING = arg('opening', null);
+const VIDEO_IDS = (arg('videos', '') || '').split(',').filter(Boolean);
+if (!OPENING || VIDEO_IDS.length === 0) {
+  console.error('usage: --opening "<canonical name>" --videos <id,id,...> [--dry]');
+  process.exit(1);
+}
+
+const norm = (s) => s.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
+
+// ── transcript prep (same VTT cleaner as distill-v2) ─────────────────────
+function vttToText(vtt) {
+  const lines = [];
+  for (const raw of vtt.split('\n')) {
+    const line = raw.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').trim();
+    if (!line) continue;
+    if (/^WEBVTT|^Kind:|^Language:|^NOTE/.test(line)) continue;
+    if (/^\d{2}:\d{2}/.test(line) && line.includes('-->')) continue;
+    if (/^\d+$/.test(line)) continue;
+    if (lines[lines.length - 1] === line) continue;
+    lines.push(line);
+  }
+  const out = [];
+  for (const l of lines) {
+    if (out[out.length - 1] === l || out[out.length - 2] === l) continue;
+    out.push(l);
+  }
+  return out.join(' ');
+}
+
+function makeOverlapGate(transcriptText, n = 7) {
+  const words = norm(transcriptText).split(' ');
+  const grams = new Set();
+  for (let i = 0; i + n <= words.length; i += 1) grams.add(words.slice(i, i + n).join(' '));
+  return (prose) => {
+    const w = norm(prose).split(' ');
+    for (let i = 0; i + n <= w.length; i += 1) if (grams.has(w.slice(i, i + n).join(' '))) return true;
+    return false;
+  };
+}
+
+const BANNED = /\b(naroditsky|danya|in this video|in the video|the streamer|chat|subscribe|this stream|speedrun)\b/i;
+const MOVE_NUM = /\b\d{1,2}(\.|…|\.\.\.)(?=[NBRQKO]|[a-h][1-8x])/;
+
+// ── spine: the exact line the app walks for this opening ─────────────────
+async function resolveSpine(openingName) {
+  const q = norm(openingName);
+  const rep = JSON.parse(await readFile('src/data/repertoire.json', 'utf8'));
+  for (const o of rep) if (norm(o.name) === q || norm(o.id) === q.replace(/ /g, '-')) {
+    return { name: o.name, moves: o.pgn.split(/\s+/).filter((t) => !/^\d+\.+$/.test(t)) };
+  }
+  const lich = JSON.parse(await readFile('src/data/openings-lichess.json', 'utf8'));
+  const arr = Array.isArray(lich) ? lich : Object.values(lich);
+  // Deepest DB entry whose name matches exactly, else longest name-prefixed line.
+  const exact = arr.filter((o) => norm(o.name) === q).sort((a, b) => b.pgn.length - a.pgn.length)[0];
+  const pick = exact ?? arr.filter((o) => norm(o.name).startsWith(q)).sort((a, b) => b.pgn.length - a.pgn.length)[0];
+  if (!pick) return null;
+  return { name: pick.name, moves: pick.pgn.split(/\s+/).filter((t) => !/^\d+\.+$/.test(t)) };
+}
+
+// ── board-claim gate (piece-on-square truth per ply) ─────────────────────
+const PIECE_CODE = { knight: 'n', bishop: 'b', rook: 'r', queen: 'q', king: 'k', pawn: 'p' };
+function boardClaimsOk(text, fen) {
+  const c = new Chess(fen);
+  const claims = [
+    ...text.matchAll(/\b(knight|bishop|rook|queen|king|pawn)\s+on\s+([a-h][1-8])\b/gi),
+    ...text.matchAll(/\b([a-h][1-8])-(knight|bishop|rook|queen|king|pawn)\b/gi),
+  ];
+  for (const m of claims) {
+    const rev = /^[a-h][1-8]$/.test(m[1]);
+    const sq = (rev ? m[1] : m[2]).toLowerCase();
+    const word = (rev ? m[2] : m[1]).toLowerCase();
+    const p = c.get(sq);
+    if (!p || p.type !== PIECE_CODE[word]) return false;
+  }
+  return true;
+}
+
+async function callModel(system, user, maxTokens) {
+  const res = await fetch('https://api.deepseek.com/chat/completions', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', authorization: `Bearer ${KEY}` },
+    body: JSON.stringify({
+      model: 'deepseek-chat', temperature: 0.4, max_tokens: maxTokens,
+      response_format: { type: 'json_object' },
+      messages: [{ role: 'system', content: system }, { role: 'user', content: user }],
+    }),
+  });
+  if (!res.ok) throw new Error(`deepseek ${res.status}: ${(await res.text()).slice(0, 160)}`);
+  return JSON.parse((await res.json()).choices?.[0]?.message?.content ?? '{}');
+}
+
+async function main() {
+  const spine = await resolveSpine(OPENING);
+  if (!spine) { console.error(`no spine resolves for "${OPENING}"`); process.exit(1); }
+
+  // Per-ply FENs, chess.js-computed (G3 — the moves are the DB's, never the model's).
+  const c = new Chess();
+  const plies = spine.moves.map((san) => {
+    const mv = c.move(san);
+    if (!mv) throw new Error(`illegal spine move ${san}`);
+    return { san: mv.san, movedBy: mv.color === 'w' ? 'white' : 'black', fen: c.fen() };
+  });
+
+  let transcript = '';
+  for (const id of VIDEO_IDS) {
+    try { transcript += `\n${vttToText(await readFile(`${TDIR}/${id}.en.vtt`, 'utf8'))}`; }
+    catch { console.error(`  (no transcript on disk for ${id} — skipping)`); }
+  }
+  if (transcript.length < 2000) { console.error('transcript material too thin'); process.exit(1); }
+  // DeepSeek context bound — keep the richest teaching bulk.
+  const clipped = transcript.length > 180_000 ? transcript.slice(0, 180_000) : transcript;
+  console.log(`[narrate] "${spine.name}" — ${plies.length} plies, ${VIDEO_IDS.length} video(s), ${Math.round(clipped.length / 1000)}k chars of reference`);
+  if (DRY) return;
+
+  const overlaps = makeOverlapGate(transcript);
+  const system = `You are the app's chess coach, rewording a master teacher's spoken video lesson into YOUR own narration of an opening walkthrough.
+
+THE SOURCE is the teacher's raw spoken transcript (reference ONLY). THE LINE is the exact move sequence the app walks. Your job: for each move of the line, find what the teacher TEACHES about that moment in the transcript — the idea, the plan, the warning, the story — and say it in YOUR OWN WORDS.
+
+ABSOLUTE RULES:
+- TRANSLATION, NOT TRANSCRIPTION: never copy or lightly rephrase his sentences. Never 7 consecutive words from the source. The ideas are chess knowledge; the wording must be original.
+- TRANSLATION, NOT INVENTION: add NO chess content the transcript or the line itself doesn't support. Where the transcript is silent on a move, one tight factual sentence about the move is all you write.
+- NEVER name or reference the teacher, a video, stream, chat, or opponent. Timeless coaching voice: warm, rigorous, concept-first.
+- NO length cap on "text" — where he lingers and teaches deeply, teach deeply. "shortText" is the brief register: ONE sentence, max 18 words.
+- NO move-number prefixes ("5.Nc3" is banned — write "Nc3"). Mention the move's SAN or spoken form in each text.
+- Frame ideas for the student playing the side the app teaches.
+
+Return STRICT JSON:
+{"intro": string, "shortIntro": string, "outro": string,
+ "ideas": [{"text": string, "shortText": string}, ...]}  // EXACTLY one per move, in order`;
+
+  const user = `OPENING: ${spine.name}
+THE LINE (${plies.length} plies, in order): ${plies.map((p, i) => `${i + 1}:${p.san}`).join(' ')}
+
+TEACHER'S SPOKEN TRANSCRIPT (reference only — reword, never quote):
+${clipped}`;
+
+  // One-shot asks under-deliver on long lines (28 plies → 15 ideas). Chunk:
+  // intro/outro from the first call, ideas in batches of 10 with the full
+  // reference each time, exact-count enforced per batch.
+  const BATCH = 10;
+  const first = await callModel(system, `${user}
+
+FOR THIS CALL: return intro, shortIntro, outro, and ideas for ONLY the first ${Math.min(BATCH, plies.length)} moves (${plies.slice(0, BATCH).map((p) => p.san).join(' ')}). EXACTLY ${Math.min(BATCH, plies.length)} idea entries.`, 8192);
+  const out = { intro: first.intro, shortIntro: first.shortIntro, outro: first.outro };
+  let ideas = Array.isArray(first.ideas) ? first.ideas.slice(0, BATCH) : [];
+  for (let start = BATCH; start < plies.length; start += BATCH) {
+    const slice = plies.slice(start, start + BATCH);
+    const more = await callModel(system, `${user}
+
+FOR THIS CALL: return ONLY {"ideas":[...]} for moves ${start + 1}-${start + slice.length} of the line (${slice.map((p) => p.san).join(' ')}), continuing the same narration. EXACTLY ${slice.length} idea entries.`, 8192);
+    ideas = ideas.concat(Array.isArray(more.ideas) ? more.ideas.slice(0, slice.length) : []);
+  }
+  if (ideas.length !== plies.length) {
+    console.error(`model returned ${ideas.length} ideas for ${plies.length} plies — refusing partial narration`);
+    process.exit(1);
+  }
+
+  // Gates, per unit. A failed unit fails the BUILD (fix the source or re-run) —
+  // a silently-dropped ply would desync narration from the board.
+  const problems = [];
+  const checkUnit = (label, text, fen) => {
+    if (!text || !text.trim()) return problems.push(`${label}: empty`);
+    if (overlaps(text)) return problems.push(`${label}: 7-gram overlap with transcript (lifted wording)`);
+    if (BANNED.test(text)) return problems.push(`${label}: attribution/medium leak`);
+    if (MOVE_NUM.test(text)) return problems.push(`${label}: move-number prefix`);
+    if (fen && !boardClaimsOk(text, fen)) return problems.push(`${label}: board-false piece claim`);
+  };
+  checkUnit('intro', out.intro, null);
+  checkUnit('outro', out.outro, null);
+  ideas.forEach((idea, i) => {
+    checkUnit(`ply ${i + 1} (${plies[i].san}) text`, idea.text, plies[i].fen);
+    checkUnit(`ply ${i + 1} shortText`, idea.shortText, plies[i].fen);
+    const shortWords = String(idea.shortText ?? '').trim().split(/\s+/).length;
+    if (shortWords > 18) problems.push(`ply ${i + 1} shortText: ${shortWords} words (max 18)`);
+  });
+  // REPAIR PASS: a failed ply goes back to the model ONCE with the violation
+  // named and the ply's true board; still-failing output kills the build.
+  if (problems.length > 0) {
+    const failing = [...new Set(problems.map((x) => x.match(/^ply (\d+)/)?.[1]).filter(Boolean).map(Number))];
+    console.error(`… repairing ${failing.length} gated plies: ${problems.slice(0, 6).join(' | ')}`);
+    if (failing.length > 0) {
+      const detail = failing.map((n) => {
+        const i = n - 1;
+        return `move ${n} (${plies[i].san}) — FEN after: ${plies[i].fen} — rejected because: ${problems.filter((x) => x.startsWith(`ply ${n} `)).join('; ')}`;
+      }).join('\n');
+      const fix = await callModel(system, `${user}\n\nREPAIR CALL: these narration entries were REJECTED. Rewrite ONLY these moves' entries. Make every piece/square claim TRUE on the given FEN, keep wording original, shortText ≤18 words.\n${detail}\nReturn {"ideas":[...]} with EXACTLY ${failing.length} entries, in the order listed.`, 4096);
+      const fixed = Array.isArray(fix.ideas) ? fix.ideas : [];
+      failing.forEach((n, k) => { if (fixed[k]) ideas[n - 1] = fixed[k]; });
+    }
+    problems.length = 0;
+    checkUnit('intro', out.intro, null);
+    checkUnit('outro', out.outro, null);
+    ideas.forEach((idea, i) => {
+      checkUnit(`ply ${i + 1} (${plies[i].san}) text`, idea.text, plies[i].fen);
+      checkUnit(`ply ${i + 1} shortText`, idea.shortText, plies[i].fen);
+    });
+    if (problems.length > 0) {
+      console.error(`✗ ${problems.length} gate failure(s) after repair:`);
+      for (const x of problems.slice(0, 12)) console.error('  -', x);
+      process.exit(1);
+    }
+  }
+
+  let file = { generatedAt: '', narrations: {} };
+  try { file = JSON.parse(await readFile(OUT, 'utf8')); } catch { /* first entry */ }
+  file.generatedAt = new Date().toISOString();
+  file.narrations[norm(spine.name)] = {
+    openingName: spine.name,
+    spine: plies.map((p) => p.san),
+    sourceVideos: VIDEO_IDS.map((id) => `yt:${id}`),
+    intro: out.intro.trim(),
+    shortIntro: String(out.shortIntro ?? '').trim(),
+    outro: out.outro.trim(),
+    ideas: ideas.map((i) => ({ text: i.text.trim(), shortText: String(i.shortText ?? '').trim() })),
+  };
+  await writeFile(OUT, JSON.stringify(file, null, 1));
+  console.log(`✓ "${spine.name}" narration baked from video — ${ideas.length} plies, all gates green → ${OUT}`);
+}
+
+main().catch((e) => { console.error(e); process.exit(1); });

@@ -219,7 +219,7 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 /** Bump to invalidate every cached walkthrough tree on next read. The corpus
  *  teaching splice happens at GENERATION time, so trees generated before it
  *  would keep speaking corpus-free narration forever off the warm cache. */
-const WALKTHROUGH_GEN_REV = '2026-07-30-house-reword';
+const WALKTHROUGH_GEN_REV = '2026-07-30-full-uncapped';
 
 export async function getCachedOpening(
   name: string,
@@ -1358,7 +1358,7 @@ VOICE RULES (locked 2026-05-19, still in force):
 For each move in the line, return:
 - text: the coach's spoken teaching for this move. ${pace === 'tour'
     ? 'TOUR MODE: keep every beat TIGHT — ONE sentence, max 14 words. The student wants a quick playthrough, not a lecture.'
-    : 'SPEND WORDS WHERE THEY MATTER (do not narrate every move at the same length): on a routine developing move, ONE tight sentence (~10-16 words). On a KEYSTONE move — the opening\'s defining decision, the tabiya, the pawn break, the move that gives the line its character — teach the WHY in one or two sentences (up to ~45 words): what it does, why it matters, and the plan it serves. A student should finish a keystone beat understanding the idea, not just the move.'} Conversational; mention the SAN or its spoken form. Examples:
+    : 'SPEND WORDS WHERE THEY MATTER — there is NO length cap on full narration (the user\'s verbosity setting handles brevity; you handle teaching). A routine developing move gets one tight sentence. A KEYSTONE move — the opening\'s defining decision, the tabiya, the pawn break, the move that gives the line its character — gets taught like a MASTERCLASS BEAT: what the move does, the plan it serves, what happens if the idea is ignored, and how the coming moves carry the plan forward. Take the space the teaching needs; a student should finish a keystone beat able to explain the idea to someone else.'} Conversational; mention the SAN or its spoken form. Examples:
   - routine: "Nf3 develops toward the center and eyes e5."
   - keystone (full): "Now the point of the whole line — c3, quietly building a big pawn duo with a later d4. It's not flashy, but it's the move that turns this into a space game: White wants to roll the center forward and leave Black cramped."
   - keystone (full): "…c5 is the move that defines the Sicilian — Black refuses the symmetrical fight and takes the game onto the queenside, where the half-open c-file becomes the source of all his counterplay."
@@ -1417,10 +1417,10 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       [{ role: 'user', content: userPrompt }],
       systemPrompt,
       'chat_response',
-      // Each idea is ~25 words ≈ 35 tokens. N moves + intro + outro
-      // + JSON envelope ≈ N×40 + 200. Cap at 4K which fits ~95 ideas
-      // (more than any realistic walkthrough).
-      4096,
+      // Full narration is UNCAPPED (David 2026-07-30: the only caps are the
+      // user's verbosity settings) — budget for masterclass-depth keystones:
+      // ~120 tokens per ply average + envelope. 8K fits a 60-ply line.
+      8192,
       'emit_walkthrough_narration',
       'Emit short coach narrations (one sentence per provided move) plus an intro and outro for the line.',
       NARRATION_SCHEMA,
@@ -1840,13 +1840,13 @@ HARD RULES:
 - Reword ONLY. Add NO chess content: no new squares, pieces, plans, tactics, or evaluations that are not already in the line's text.
 - NEVER restate the move being played ("knight to c6 — the knight goes to c6" is banned); the voice announces the move separately. Speak only the idea.
 - Keep every number, percentage, and move token that appears, verbatim.
-- One flowing sentence or two per line. No praise, no filler, no "let's".
+- NO length cap: keep a keystone's full teaching intact, keep a routine move tight. No praise, no filler, no "let's".
 Return STRICT JSON: {"lines": [string, ...]} with EXACTLY ${rawTexts.length} entries, in order.`;
   const result = (await getCoachStructuredResponse(
     [{ role: 'user', content: `NARRATION SCRIPT (${rawTexts.length} lines):\n${script}` }],
     system,
     'chat_response',
-    Math.min(8000, 400 + rawTexts.length * 60),
+    Math.min(8192, 600 + rawTexts.length * 140),
     'reword_walkthrough_narration',
     'Reword each narration line into the single house coach voice, same content, one entry per input line.',
     { type: 'object', properties: { lines: { type: 'array', items: { type: 'string' } } }, required: ['lines'] },
