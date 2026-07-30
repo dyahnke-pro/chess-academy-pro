@@ -34,6 +34,7 @@ import { applyCandidateArrows } from '../services/coachAnswerGates';
 import { assembleEnvelope } from './envelope';
 import { loadAnnotationContextForLive } from './sources/annotationContext';
 import { buildDanyaTeachingBlock } from '../services/danyaTeachingService';
+import { detectOpening } from '../services/openingDetectionService';
 import { loadMiddlegamePlanForLive } from './sources/middlegamePlan';
 import { loadModelGamesForLive } from './sources/modelGames';
 import { loadPlayerGamesForLive, resolvePlayerIdFromAsk } from './sources/playerGames';
@@ -825,9 +826,19 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
   // remain a READING feature on the opening pages only.
   if (!input.liveState.bookGrounding) {
     try {
+      // Opening name: the snapshot when the surface set one; otherwise detect
+      // it from the move history (Play's game-chat never sets a snapshot, and
+      // a null name silenced the corpus's opening-family tier there — the
+      // Learn/Play information-parity gap, David 2026-07-30).
+      let teachingOpeningName = input.liveState.lichessSnapshot?.name ?? null;
+      if (!teachingOpeningName && (input.liveState.moveHistory?.length ?? 0) >= 2) {
+        try {
+          teachingOpeningName = detectOpening(input.liveState.moveHistory ?? [])?.name ?? null;
+        } catch { /* detection is a bonus */ }
+      }
       const block = buildDanyaTeachingBlock({
         historySans: input.liveState.moveHistory ?? [],
-        openingName: input.liveState.lichessSnapshot?.name ?? null,
+        openingName: teachingOpeningName,
         // Live board FEN — transposition-safe exact-position notes.
         fen: input.liveState.fen ?? null,
       });
