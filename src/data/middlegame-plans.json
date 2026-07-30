@@ -83693,5 +83693,186 @@
     ]
    }
   ]
+ },
+ {
+  "id": "mp-gleksystem-traditional-f4",
+  "openingId": "glek-system",
+  "title": "Glek Traditional Plan: Kh2, Nd2 and the f4 Storm",
+  "criticalPositionFen": "r1bq1rk1/1pp2ppp/p1np1n2/2b1p3/4P3/2NP1NP1/PPP2PBP/R1BQ1RK1 w - - 2 8",
+  "overview": "The Glek's other road out of the 4...Bc5 tabiya — older than the Be3 plan and just as venomous. The whole idea fits in four moves: h3 keeps pieces off g4, the king steps to h2 so the f-pawn is free to run, the knight drops back to d2 to clear its path, and then f4 rips the kingside open. After exf4 gxf4 White owns a rolling pawn front, a half-open g-file, and a fianchettoed bishop guarding the king through it all. Two rules of the structure: the g2-bishop is the king's shelter, so never give it up lightly, and when Black's pieces build against h3, the advance f5 cuts the battery and shuts the attack down.",
+  "pawnBreaks": [
+   {
+    "move": "f4 — the storm breaks",
+    "explanation": "With the king on h2 and the knight rerouted to d2, f4 comes with real force: it levers the e5-pawn, opens the g-file after exf4 gxf4, and starts the pawn front rolling toward Black's king.",
+    "fen": "r4rk1/1ppq1pp1/p1npbn1p/2b5/4PP2/2NP3P/PPPN2BK/R1BQ1R2 b - - 0 12"
+   },
+   {
+    "move": "f5 — the clamp",
+    "explanation": "Whenever Black aims a battery at h3, the further advance f5 blocks the light-squared diagonal, restricts Black's minor pieces, and turns the storm pawn into a permanent clamp.",
+    "fen": "r4rk1/1ppq1pp1/p1npbn1p/2b5/4PP2/2NP3P/PPPN2BK/R1BQ1R2 b - - 0 12"
+   }
+  ],
+  "pieceManeuvers": [
+   {
+    "piece": "King",
+    "route": "Kg1-h2",
+    "idea": "The king tucks onto h2, defending the h3-pawn in advance and stepping off the g1-a7 diagonal so the f-pawn is free to advance."
+   },
+   {
+    "piece": "Knight",
+    "route": "Nf3-d2",
+    "idea": "The knight drops back to d2 to clear the f-pawn's path; it rejoins the game later via f3 or c4 once the storm has rolled."
+   }
+  ],
+  "strategicThemes": [
+   "Kingside pawn storm behind the fianchetto",
+   "Prophylaxis before action: h3 and Kh2 first",
+   "The g2-bishop as the king's shelter — never trade it lightly"
+  ],
+  "endgameTransitions": [
+   "If Black trades on f4 and swaps queens early, the half-open g-file and space edge carry into the ending — rooks double on g1 and the king is already active on h2."
+  ],
+  "playableLines": [
+   {
+    "fen": "r1bq1rk1/1pp2ppp/p1np1n2/2b1p3/4P3/2NP1NP1/PPP2PBP/R1BQ1RK1 w - - 2 8",
+    "title": "The Traditional Storm: h3, Kh2, Nd2, f4",
+    "intro": "From the tabiya, watch the four-move idea assemble itself — quiet preparation first, then the break.",
+    "moves": [
+     "h3",
+     "h6",
+     "Kh2",
+     "Be6",
+     "Nd2",
+     "Qd7",
+     "f4",
+     "exf4",
+     "gxf4"
+    ],
+    "annotations": [
+     "h3 first — pure prophylaxis. Black's pieces are denied the g4-square, so no pin or knight hop will ever interrupt the plan that follows.",
+     "Black mirrors with h6, a common reflex that costs time — there was no bishop coming to g5 in the first place.",
+     "Kh2 is the move that reveals the plan: the king defends the h3-pawn in advance and steps aside so the f-pawn is free to advance without dropping anything behind it.",
+     "Be6 develops the last minor piece and eyes the queenside; Black still has no target to bite on.",
+     "Nd2 drops the knight back on purpose — the f-pawn needs the f3-square empty. The knight isn't retreating from the game; it is clearing the runway.",
+     "Qd7 connects Black's pieces and hints at ideas against h3 — exactly the battery the g2-bishop and the coming f5 are built to answer.",
+     "f4! The storm breaks. The pawn levers e5, and whichever way Black responds, lines open in front of his king while White's own king sits safe behind the fianchetto.",
+     "Black takes — exf4 — the most natural reply, surrendering the centre tension to blunt the advance.",
+     "gxf4 recaptures toward the attack: the g-file is now half-open for White's rooks, the pawn duo on e4 and f4 rolls forward, and f5 is coming to clamp the position. The quiet system has become a kingside attack."
+    ],
+    "learnCues": [
+     "h3 — deny g4 first",
+     "h6 — a reflex, not a need",
+     "Kh2 — free the f-pawn",
+     "Be6 — Black completes development",
+     "Nd2 — clear the runway",
+     "Qd7 — eyes on h3",
+     "f4 — the storm breaks",
+     "exf4 — Black blunts",
+     "gxf4 — g-file open, pawns roll"
+    ],
+    "arrows": [
+     [],
+     [],
+     [],
+     [],
+     [],
+     [],
+     [],
+     [],
+     [
+      {
+       "from": "f1",
+       "to": "f4",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ]
+    ],
+    "highlights": [
+     [
+      {
+       "square": "h3",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "g4",
+       "color": "rgba(80,140,255,0.32)"
+      }
+     ],
+     [
+      {
+       "square": "h6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "h2",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "h3",
+       "color": "rgba(80,140,255,0.32)"
+      }
+     ],
+     [
+      {
+       "square": "e6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "d2",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "f4",
+       "color": "rgba(255,214,0,0.88)"
+      }
+     ],
+     [
+      {
+       "square": "d7",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "h3",
+       "color": "rgba(80,140,255,0.32)"
+      }
+     ],
+     [
+      {
+       "square": "f4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "e5",
+       "color": "rgba(80,140,255,0.32)"
+      }
+     ],
+     [
+      {
+       "square": "f4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "f4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "g2",
+       "color": "rgba(80,140,255,0.32)"
+      }
+     ]
+    ],
+    "sources": [
+     "book:four-knights-game",
+     "concept:pos-king-safety",
+     "https://en.wikipedia.org/wiki/Four_Knights_Game"
+    ]
+   }
+  ]
  }
 ]
