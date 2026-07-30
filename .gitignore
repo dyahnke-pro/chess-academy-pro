@@ -65,9 +65,10 @@ data/sources/*-otb/
 # family rollup + per-opening trees + voice notes (all <600KB each).
 data/sources/*-stats.json
 data/sources/*-families.json
-# Voice research: only the raw transcript pulls are ignored; the
-# hand-curated *.md notes are committed.
+# Voice research: only the raw transcript pulls and the auto-mined digests
+# derived from them are ignored; the hand-curated *.md notes are committed.
 data/sources/*-voice/transcripts/
+data/sources/*-voice/digests/
 data/sources/carlsen-alts/
 
 # Raw public-domain book OCR caches (re-fetched by build-library-*.mjs)
