@@ -90,7 +90,7 @@ import { buildForkTalk, type ForkTalk } from '../../services/forkTalk';
 import { parseSpokenMove } from '../../services/spokenMoveParser';
 import { parseCoachMoveCommand } from '../../services/coachMoveCommand';
 import { sanToSpeech } from '../../utils/sanToSpeech';
-import { noteAtPosition } from '../../services/danyaTeachingService';
+import { teachingNoteForBoard } from '../../services/danyaTeachingService';
 import { buildThinkAloud } from '../../services/thinkAloud';
 import { warmAmateurPlay, buildRatingRealityFact } from '../../services/amateurPlayCache';
 import { masterPlayCache } from '../../services/masterPlayCache';
@@ -4797,7 +4797,7 @@ export function CoachTeachPage(): JSX.Element {
                 // prefix; suppressed while a question is open (leak guard).
                 if (!questionArmed) {
                   try {
-                    const note = noteAtPosition(historyAfterReply, probe.fen());
+                    const note = teachingNoteForBoard(historyAfterReply, probe.fen());
                     if (note) {
                       facts.push(`Coaching note for THIS position: ${note.explains} ${note.teaches}${note.plans ? ` Plan: ${note.plans}` : ''}`);
                     }

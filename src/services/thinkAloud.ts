@@ -17,7 +17,7 @@ import { Chess } from 'chess.js';
 import { developmentRead, kingSafetyRead, findPieceQuality, findWeakPawns, findPawnBreaks } from './positionReadingService';
 import { describeMoveGeometry } from './groundedAnswer';
 import { detectPrincipleViolations } from './principleDetector';
-import { noteAtPosition } from './danyaTeachingService';
+import { teachingNoteForBoard } from './danyaTeachingService';
 
 export interface ThinkAloudLine {
   /** SAN of the line's first move (student POV candidates). */
@@ -109,7 +109,7 @@ export function buildThinkAloud(opts: {
 
   // 4. The curated teaching note at this exact position, when covered.
   try {
-    const note = noteAtPosition(historySans, fen);
+    const note = teachingNoteForBoard(historySans, fen);
     if (note) facts.push(`Coaching note for this position: ${note.explains} ${note.teaches}`);
   } catch { /* bonus */ }
 

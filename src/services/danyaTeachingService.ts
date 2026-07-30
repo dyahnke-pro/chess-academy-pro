@@ -128,6 +128,17 @@ export function noteAtPosition(historySans: string[], fen?: string): DanyaNote |
   return null;
 }
 
+/** The best teaching note for a live position, for FACT-PACKAGE builders
+ *  (thinkAloud, step narration): exact position first, then STRUCTURE
+ *  TRANSFER — a note from any opening whose taught structure matches this
+ *  board and whose claims are true on it. Selection + verification in code;
+ *  the note rides in the GROUNDED FACTS the model must voice (G0). */
+export function teachingNoteForBoard(historySans: string[], fen: string): DanyaNote | null {
+  const exact = noteAtPosition(historySans, fen);
+  if (exact) return exact;
+  return notesForStructure(fen, 1)[0] ?? null;
+}
+
 /** Opening-keyed notes by (fuzzy-tokenized) opening name. "Caro-Kann Defense:
  *  Advance Variation" matches notes filed under "Caro-Kann Defense" and vice
  *  versa via token-subset matching. */
@@ -188,6 +199,15 @@ export function transitionTeachingForGame(args: {
     // Deepest-keyed first — the most specific middlegame teaching for the family.
     family.sort((a, b) => b.lineSan.length - a.lineSan.length);
     if (family[0]) return family[0];
+  }
+  // 4. STRUCTURE TRANSFER — teaching from ANY opening whose taught structure
+  //    provably matches this board (and whose claims survive the live truth
+  //    filter). This note rides in the FACTS PACKAGE the model must voice
+  //    (David 2026-07-30: "we hand the package to the llm"), so past book the
+  //    transition teaching no longer goes quiet.
+  if (args.fen) {
+    const transferred = notesForStructure(args.fen, 2).find((n) => n.plans?.trim());
+    if (transferred) return transferred;
   }
   return null;
 }
