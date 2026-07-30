@@ -3,14 +3,18 @@
 // dilute or contradict Naroditsky teaching where that exists.
 
 import { describe, it, expect } from 'vitest';
-import { notesForOpening, secondaryNotesForGap, chessbrahCorpusStats } from './chessbrahTeachingService';
+import { notesForOpening, secondaryNotesForGap, secondaryNotesForPosition, chessbrahCorpusStats } from './chessbrahTeachingService';
 import {
   notesForOpening as primaryNotesForOpening,
   teachingNoteForBoard,
   transitionTeachingForGame,
   buildDanyaTeachingBlock,
+  noteAtPosition,
 } from './danyaTeachingService';
 import { Chess } from 'chess.js';
+
+// A real positioned gap note's line that the primary corpus has no note for.
+const SAMPLE_LINE = ["d4", "d5", "e3", "Nf6"];
 
 describe('chessbrahTeachingService — gap tier', () => {
   it('has a corpus', () => {
@@ -102,5 +106,17 @@ describe('gap tier reaches the packages the coach hands the LLM', () => {
     const CARO = ['e4', 'c6', 'd4', 'd5'];
     const note = teachingNoteForBoard(CARO, fenAfter(CARO), 'Caro-Kann Defence');
     expect(note?.id.startsWith('cb-'), 'gap tier displaced primary teaching').toBe(false);
+  });
+});
+
+describe('the walkthrough splice can see the gap corpus', () => {
+  it('noteAtPosition returns a secondary note keyed exactly at this line', () => {
+    const positioned = (chessbrahCorpusStats().positioned);
+    expect(positioned).toBeGreaterThan(0);
+    // Take a real positioned gap note and ask for its exact line.
+    const note = secondaryNotesForPosition(SAMPLE_LINE);
+    expect(note.length, `no secondary note at ${SAMPLE_LINE.join(' ')}`).toBeGreaterThan(0);
+    const spliced = noteAtPosition(SAMPLE_LINE);
+    expect(spliced?.id.startsWith('cb-')).toBe(true);
   });
 });

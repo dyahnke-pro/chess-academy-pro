@@ -103,6 +103,12 @@ export function notesForPrefix(historySans: string[], maxNotes = 3): DanyaNote[]
   return out;
 }
 
+/** Secondary notes keyed EXACTLY at this line — the only tier allowed to feed
+ *  `noteAtPosition`, whose contract is "at this position, not an ancestor". */
+export function secondaryNotesForPosition(historySans: string[]): DanyaNote[] {
+  return byPrefix.get(historySans.join(' ')) ?? [];
+}
+
 /** THE gap-filling entry point: teaching for an opening the primary corpus does
  *  not cover. Callers pass how many notes the primary already supplied for this
  *  position; a non-empty primary result means no top-up, so the secondary can

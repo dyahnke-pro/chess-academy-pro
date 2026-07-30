@@ -19,7 +19,7 @@ import { Chess } from 'chess.js';
 import teachingsData from '../data/danya-teachings.json';
 import { computeStructureSignature, signatureMatchScore, type StructureSignature } from './structureSignature';
 import { validateBoardClaims } from './boardClaimValidator';
-import { secondaryNotesForGap } from './chessbrahTeachingService';
+import { secondaryNotesForGap, secondaryNotesForPosition } from './chessbrahTeachingService';
 import { detectOpening } from './openingDetectionService';
 
 export interface DanyaNote {
@@ -159,8 +159,15 @@ export function notesForPrefix(historySans: string[], maxNotes = 3, withinPlies 
 export function noteAtPosition(historySans: string[], fen?: string): DanyaNote | null {
   const bucket = byPrefix.get(historySans.join(' ')) ?? [];
   if (bucket[0]) return bucket[0];
-  if (fen) return notesForFen(fen, 1)[0] ?? null;
-  return null;
+  if (fen) {
+    const viaFen = notesForFen(fen, 1)[0];
+    if (viaFen) return viaFen;
+  }
+  // GAP TIER, exact positions only. This is the walkthrough splice's source, so
+  // without it the narration goes silent on an opening the primary corpus never
+  // covers. The "exactly at this position" contract is preserved — only a
+  // secondary note keyed at THIS very line qualifies, never an opening-level one.
+  return secondaryNotesForPosition(historySans)[0] ?? null;
 }
 
 /** The best teaching note for a live position, for FACT-PACKAGE builders
