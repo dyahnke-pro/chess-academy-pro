@@ -40,6 +40,11 @@ export interface CachedOpening {
   eco: string;
   /** The validated walkthrough tree. */
   tree: WalkthroughTree;
+  /** Generator revision that produced this tree. Bumped when the generation
+   *  pipeline changes in a way cached trees must not survive (e.g. the
+   *  2026-07-30 deterministic Danya-teaching splice). Optional — legacy
+   *  records lack it and are treated as stale. */
+  genRev?: string;
   /** Unix ms when this was generated. */
   generatedAt: number;
 }

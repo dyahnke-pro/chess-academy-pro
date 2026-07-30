@@ -45,7 +45,7 @@ import {
 import { db, type CachedOpening } from '../db/schema';
 import { gradeNarrationText } from './coachAnswerGates';
 import { logAppAudit } from './appAuditor';
-import { buildDanyaTeachingBlock } from './danyaTeachingService';
+import { buildDanyaTeachingBlock, noteAtPosition } from './danyaTeachingService';
 import type {
   WalkthroughTree,
   WalkthroughTreeNode,
@@ -216,6 +216,11 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
   return tree;
 }
 
+/** Bump to invalidate every cached walkthrough tree on next read. The corpus
+ *  teaching splice happens at GENERATION time, so trees generated before it
+ *  would keep speaking corpus-free narration forever off the warm cache. */
+const WALKTHROUGH_GEN_REV = '2026-07-30-danya-splice';
+
 export async function getCachedOpening(
   name: string,
 ): Promise<WalkthroughTree | null> {
@@ -234,6 +239,20 @@ export async function getCachedOpening(
         summary: `cache miss: "${name}" → fresh generation`,
         details: JSON.stringify({ name, normalized }),
       });
+      return null;
+    }
+    // Generator-revision gate: a tree generated before the current pipeline
+    // (e.g. pre-dating the deterministic teaching splice) must not survive on
+    // the warm cache — evict it so the next request regenerates.
+    if (cached.genRev !== WALKTHROUGH_GEN_REV) {
+      void logAppAudit({
+        kind: 'opening-cache-invalidated',
+        category: 'subsystem',
+        source: 'openingGenerator.getCachedOpening',
+        summary: `cache invalidated: "${name}" — genRev ${cached.genRev ?? '(none)'} != ${WALKTHROUGH_GEN_REV}`,
+        details: JSON.stringify({ name, normalized }),
+      });
+      await db.cachedOpenings.delete(normalized);
       return null;
     }
     // Sanity-check the cached tree before returning. If illegal SANs
@@ -295,6 +314,7 @@ export async function cacheOpening(
       eco: tree.eco,
       tree,
       generatedAt: Date.now(),
+      genRev: WALKTHROUGH_GEN_REV,
     };
     await db.cachedOpenings.put(record);
   } catch (err) {
@@ -1511,15 +1531,40 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
     };
   });
   let nextChildren: ChildWrap[] = branchChildren;
+  // DETERMINISTIC teaching splice (David 2026-07-30: the corpus must reach the
+  // "teach me X" walkthrough as PACKAGE, not as advisory prompt context the
+  // model may ignore). CODE walks each spine ply, looks up the corpus note
+  // taught EXACTLY at that position (move-prefix or transposition-safe FEN —
+  // never the fuzzy tiers, so a note can't land on the wrong ply), grades its
+  // prose against that ply's board, and appends it to the spoken idea. The
+  // LLM's generated prose stays; the teaching rides regardless of what the
+  // model did with the advisory block. Once per note id, so an opening-level
+  // note can't spam every ply.
+  const splicedNoteIds = new Set<string>();
   for (let i = positions.length - 1; i >= 0; i -= 1) {
     const p = positions[i];
     const ideaEntry = narration.ideas[i];
-    const text =
+    let text =
       (typeof ideaEntry === 'object' && ideaEntry?.text?.trim()) ||
       // Tolerate legacy string-shaped entries (older cached gens
       // pre-arrows extension might still produce them).
       (typeof ideaEntry === 'string' ? (ideaEntry as string).trim() : '') ||
       synthesizeIdeaFromSan(p.san, p.movedBy);
+    try {
+      const prefix = positions.slice(0, i + 1).map((q) => q.san);
+      const note = noteAtPosition(prefix, p.fen);
+      if (note && !splicedNoteIds.has(note.id)) {
+        const teaching = gradeNarrationText(
+          `${note.explains} ${note.teaches}`.trim(),
+          p.fen,
+          'openingGenerator.danyaSplice',
+        );
+        if (teaching) {
+          splicedNoteIds.add(note.id);
+          text = `${text} ${teaching}`;
+        }
+      }
+    } catch { /* the corpus is a bonus, never a blocker */ }
     const shortText =
       typeof ideaEntry === 'object' && ideaEntry?.shortText?.trim()
         ? ideaEntry.shortText.trim()

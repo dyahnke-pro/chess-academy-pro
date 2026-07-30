@@ -18,6 +18,8 @@ import {
   repairNarrationArrows,
   stripMoveRecitationLeadIn,
   generateOpening,
+  getCachedOpening,
+  cacheOpening,
 } from './openingGenerator';
 import type {
   WalkthroughTree,
@@ -923,4 +925,40 @@ describe('generateOpening entryOverride (option B — teach non-built short line
     expect(viaOverride.ok).toBe(true);
     expect(viaOverride.tree?.openingName).toBe('Scandinavian Defense: Panov Transfer');
   }, 60000);
+});
+
+describe('walkthrough cache genRev gate (2026-07-30 danya splice)', () => {
+  it('evicts a cached tree that predates the current generator revision', async () => {
+    const { db } = await import('../db/schema');
+    const legacyTree = {
+      openingName: 'GenRev Legacy Probe',
+      eco: 'A00',
+      studentSide: 'white',
+      intro: 'legacy',
+      root: { san: null, movedBy: 'white', idea: '', children: [] },
+    };
+    // Written the way pre-splice builds wrote it: no genRev field at all.
+    await db.cachedOpenings.put({
+      normalizedName: 'genrev legacy probe',
+      displayName: 'GenRev Legacy Probe',
+      eco: 'A00',
+      tree: legacyTree as never,
+      generatedAt: Date.now(),
+    });
+    expect(await getCachedOpening('GenRev Legacy Probe')).toBeNull();
+    expect(await db.cachedOpenings.get('genrev legacy probe')).toBeUndefined();
+  });
+
+  it('round-trips a tree written by the current pipeline', async () => {
+    const tree = {
+      openingName: 'GenRev Fresh Probe',
+      eco: 'A00',
+      studentSide: 'white',
+      intro: 'fresh',
+      root: { san: null, movedBy: 'white', idea: '', children: [] },
+    };
+    await cacheOpening('GenRev Fresh Probe', tree as never);
+    const cached = await getCachedOpening('GenRev Fresh Probe');
+    expect(cached?.openingName).toBe('GenRev Fresh Probe');
+  });
 });
