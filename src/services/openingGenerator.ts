@@ -219,7 +219,7 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 /** Bump to invalidate every cached walkthrough tree on next read. The corpus
  *  teaching splice happens at GENERATION time, so trees generated before it
  *  would keep speaking corpus-free narration forever off the warm cache. */
-const WALKTHROUGH_GEN_REV = '2026-07-30-no-restatement';
+const WALKTHROUGH_GEN_REV = '2026-07-30-house-reword';
 
 export async function getCachedOpening(
   name: string,
@@ -1541,8 +1541,9 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
   // model did with the advisory block. Once per note id, so an opening-level
   // note can't spam every ply.
   const splicedNoteIds = new Set<string>();
-  for (let i = positions.length - 1; i >= 0; i -= 1) {
-    const p = positions[i];
+  // PASS 1 — assemble each ply's raw material: the generated idea plus the
+  // corpus note taught exactly at that position (board-graded).
+  const rawPlyTexts: string[] = positions.map((p, i) => {
     const ideaEntry = narration.ideas[i];
     let text =
       (typeof ideaEntry === 'object' && ideaEntry?.text?.trim()) ||
@@ -1565,6 +1566,32 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
         }
       }
     } catch { /* the corpus is a bonus, never a blocker */ }
+    return text;
+  });
+
+  // PASS 2 — HOUSE-VOICE REWORD (David 2026-07-30: "hand the entire narration
+  // to the llm and have it reword it in our coaches voice"). Template ideas
+  // stitched to raw note prose read as two voices and neither is the coach.
+  // The model REWORDS supplied content only — it adds nothing, decides
+  // nothing (G0) — and every line is re-graded against its own ply's board;
+  // any failure falls back to that line's pre-reword text. Best-effort: on
+  // call failure the raw script ships as before.
+  let finalPlyTexts = rawPlyTexts;
+  try {
+    finalPlyTexts = await rewordNarrationInHouseVoice(positions, rawPlyTexts);
+  } catch (err) {
+    void logAppAudit({
+      kind: 'llm-error',
+      category: 'subsystem',
+      source: 'openingGenerator.houseVoiceReword',
+      summary: `reword pass failed — shipping raw script: ${err instanceof Error ? err.message : String(err)}`,
+    });
+  }
+
+  for (let i = positions.length - 1; i >= 0; i -= 1) {
+    const p = positions[i];
+    const ideaEntry = narration.ideas[i];
+    const text = finalPlyTexts[i] ?? rawPlyTexts[i];
     const shortText =
       typeof ideaEntry === 'object' && ideaEntry?.shortText?.trim()
         ? ideaEntry.shortText.trim()
@@ -1783,6 +1810,54 @@ function synthesizeIdeaFromSan(
     `${prefix} — gaining space, supporting the center and freeing the pieces behind.`,
     `${prefix} — a pawn break, challenging the structure and opening the position.`,
   );
+}
+
+/** PASS-2 house-voice reword. Hands the assembled per-move script to the
+ *  model with one job: say the SAME content as ONE coach in the house
+ *  register (concept-first, warm, rigorous). Hard rules in the prompt: no
+ *  new chess content, never restate the move being played, keep every
+ *  number/percentage verbatim. Output is validated per line against that
+ *  ply's board (gradeNarrationText); a line that fails ships its pre-reword
+ *  text instead, so the pass can polish but never corrupt. */
+async function rewordNarrationInHouseVoice(
+  positions: Array<{ san: string; fen: string; movedBy: 'white' | 'black' }>,
+  rawTexts: string[],
+): Promise<string[]> {
+  if (rawTexts.length === 0) return rawTexts;
+  const script = rawTexts.map((t, i) => `${i + 1}. [after ${positions[i].san}] ${t}`).join('\n');
+  const system = `You are rewording a chess walkthrough narration so it sounds like ONE warm, rigorous coach — concept-first, plain language, ideas before names.
+HARD RULES:
+- Reword ONLY. Add NO chess content: no new squares, pieces, plans, tactics, or evaluations that are not already in the line's text.
+- NEVER restate the move being played ("knight to c6 — the knight goes to c6" is banned); the voice announces the move separately. Speak only the idea.
+- Keep every number, percentage, and move token that appears, verbatim.
+- One flowing sentence or two per line. No praise, no filler, no "let's".
+Return STRICT JSON: {"lines": [string, ...]} with EXACTLY ${'${rawTexts.length}'} entries, in order.`;
+  const result = (await getCoachStructuredResponse(
+    [{ role: 'user', content: `NARRATION SCRIPT (${'${rawTexts.length}'} lines):\n${'${script}'}` }],
+    system,
+    'chat_response',
+    Math.min(8000, 400 + rawTexts.length * 60),
+    'reword_walkthrough_narration',
+    'Reword each narration line into the single house coach voice, same content, one entry per input line.',
+    { type: 'object', properties: { lines: { type: 'array', items: { type: 'string' } } }, required: ['lines'] },
+  )) as { lines?: unknown };
+  const lines = Array.isArray(result?.lines) ? result.lines : [];
+  let kept = 0;
+  const out = rawTexts.map((raw, i) => {
+    const candidate = typeof lines[i] === 'string' ? (lines[i] as string).trim() : '';
+    if (!candidate) return raw;
+    const graded = gradeNarrationText(candidate, positions[i].fen, 'openingGenerator.houseVoiceReword');
+    if (!graded) return raw;
+    kept += 1;
+    return graded;
+  });
+  void logAppAudit({
+    kind: 'coach-surface-migrated',
+    category: 'subsystem',
+    source: 'openingGenerator.houseVoiceReword',
+    summary: `house-voice reword: ${'${kept}'}/${'${rawTexts.length}'} lines reworded (rest kept raw)`,
+  });
+  return out;
 }
 
 /** Strip a leading move-recitation sentence from an intro string.
