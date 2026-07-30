@@ -308,6 +308,15 @@ export async function cacheOpening(
   tree: WalkthroughTree,
 ): Promise<void> {
   try {
+    if (tree.narrationFallback) {
+      void logAppAudit({
+        kind: 'opening-cache-invalidated',
+        category: 'subsystem',
+        source: 'openingGenerator.cacheOpening',
+        summary: `refusing to cache "${name}" — template-fallback narration (regen next ask)`,
+      });
+      return;
+    }
     const record: CachedOpening = {
       normalizedName: normalizeOpeningName(name),
       displayName: tree.openingName,
@@ -1402,6 +1411,7 @@ ${branches.length > 0 ? `\nBranches available at the end of the spine (the stude
 Emit a JSON object with intro (string), shortIntro (string), outro (string), ideas (array of ${positions.length} objects { text, shortText }, one per spine move in order)${branches.length > 0 ? `, branchIdeas (array of ${branches.length} strings), shortBranchIdeas (array of ${branches.length} strings), and branchExtensionIdeas (2D array of { text, shortText } objects)` : ''}.`;
 
   let narration: NarrationOutput;
+  let narrationFellBack = false;
   try {
     const result = await getCoachStructuredResponse(
       [{ role: 'user', content: userPrompt }],
@@ -1425,6 +1435,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
     });
     // Template fallback: each move gets a generic sentence with
     // its SAN. Same as buildFallbackTreeFromDb logic.
+    narrationFellBack = true;
     narration = {
       intro: `${entry.canonicalName} — book moves from the Lichess opening database. Quick walkthrough of the canonical line.`,
       outro: `That's the canonical book line for the ${entry.canonicalName}. Drill the moves to lock them in, or ask for a deeper variation.`,
@@ -1624,6 +1635,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       ? stripMoveRecitationLeadIn(narration.shortIntro.trim()) || undefined
       : undefined;
   const tree: WalkthroughTree = {
+    ...(narrationFellBack ? { narrationFallback: true } : {}),
     openingName: displayName,
     eco: entry.eco,
     studentSide,

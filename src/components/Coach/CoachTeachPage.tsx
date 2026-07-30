@@ -91,6 +91,7 @@ import { parseSpokenMove } from '../../services/spokenMoveParser';
 import { parseCoachMoveCommand } from '../../services/coachMoveCommand';
 import { sanToSpeech } from '../../utils/sanToSpeech';
 import { teachingNoteForBoard } from '../../services/danyaTeachingService';
+import { findLivePunishment } from '../../services/gemCrushLines';
 import { buildThinkAloud } from '../../services/thinkAloud';
 import { warmAmateurPlay, buildRatingRealityFact } from '../../services/amateurPlayCache';
 import { masterPlayCache } from '../../services/masterPlayCache';
@@ -4802,6 +4803,24 @@ export function CoachTeachPage(): JSX.Element {
                       facts.push(`Coaching note for THIS position: ${note.explains} ${note.teaches}${note.plans ? ` Plan: ${note.plans}` : ''}`);
                     }
                   } catch { /* corpus is a bonus, never a blocker */ }
+                  // GEM DETECTION on Learn (David 2026-07-30: "This is for the
+                  // learn with coach tab!!"). If the coach's reply just walked
+                  // into a known engine-verified gem inaccuracy, the coach
+                  // flags the moment — but WITHHOLDS the punishing move (the
+                  // guided-find rule: name the opportunity, never the square).
+                  try {
+                    const gem = findLivePunishment(null, historyAfterReply);
+                    if (gem) {
+                      facts.push(`GEM ALERT (known verified inaccuracy by the coach's last move): ${gem.callout} Invite the student to FIND the punishing move — do NOT name or hint the move or its square.`);
+                      void logAppAudit({
+                        kind: 'coach-narration-spoken',
+                        category: 'narration',
+                        source: 'CoachTeachPage.gemDetection',
+                        summary: `gem alert on Learn @[${historyAfterReply.join(' ')}]: ${gem.callout.slice(0, 80)}`,
+                        fen: probe.fen(),
+                      });
+                    }
+                  } catch { /* gems are a bonus, never a blocker */ }
                 }
                 replyFact = `GROUNDED FACTS (voice ONLY these — never invent a capture, check, tactic, or threat not listed here): ${facts.join(' ')}`;
               }

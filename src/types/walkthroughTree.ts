@@ -142,6 +142,12 @@ export interface WalkthroughTree {
    *  must NOT feed it to `getCachedOpening` / completed-stage tracking
    *  or offer the "play this line out as an opening" leaf prompt. */
   derived?: boolean;
+  /** Set when the narration LLM call FAILED and the tree shipped with
+   *  template-fallback ideas. A fallback tree must NEVER be persisted to the
+   *  local or shared cache — caching one pins template narration onto the
+   *  opening for every future ask (prod incident 2026-07-30: a failed Alapin
+   *  gen wrote templates into the shared cache at the current version). */
+  narrationFallback?: boolean;
   /** ECO code (e.g. "C25" for Vienna). Used for opening-detection
    *  cross-reference. */
   eco: string;

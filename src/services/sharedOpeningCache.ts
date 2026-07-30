@@ -49,7 +49,7 @@ import type { WalkthroughTree } from '../types/walkthroughTree';
 // cache the same way the local genRev eviction retires Dexie copies —
 // otherwise "teach me X" keeps serving corpus-free narration from any
 // user's (or audit bot's) older generation.
-export const PROMPT_VERSION = 5;
+export const PROMPT_VERSION = 6;
 
 interface SharedCacheConfig {
   supabaseUrl: string;
@@ -200,6 +200,16 @@ export async function writeSharedCache(
   openingName: string,
   tree: WalkthroughTree,
 ): Promise<void> {
+  if ((tree as { narrationFallback?: boolean }).narrationFallback) {
+    void logAppAudit({
+      kind: 'opening-cache-invalidated',
+      category: 'subsystem',
+      source: 'sharedOpeningCache.write',
+      summary: `refusing shared-cache write for "${openingName}" — template-fallback narration`,
+    });
+    return;
+  }
+
   const config = await getCacheConfig();
   if (!config) return;
   const normalized = normalize(openingName);
