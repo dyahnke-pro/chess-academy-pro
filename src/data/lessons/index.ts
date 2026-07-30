@@ -771,6 +771,31 @@ export function buildLessonReferenceBlock(text: string | undefined | null): stri
  *  variation request (the Tier-1 capture bug, build 00aadcd). Used by the
  *  Learn-with-Coach walkthrough's masterclass tier (David 2026-07-30:
  *  "we teach from our masterclasses"). */
+const QUERY_STOPWORDS = new Set(['the', 'a', 'an', 'of']);
+const queryTokens = (s: string): string[] =>
+  s.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter((w) => w && !QUERY_STOPWORDS.has(w));
+
+/** Registry-name candidates for every MAIN lesson: the curated repertoire
+ *  display name plus the id itself. Built lazily once. The concept-service
+ *  name map alone missed registered masterclasses (the Glek incident,
+ *  2026-07-30: "Four Knights: Glek System" had a lesson but no name-map
+ *  pattern, and its canonical DB name carries a colon). */
+let mainNameIndex: Array<{ id: string; tokens: string[] }> | null = null;
+function getMainNameIndex(): Array<{ id: string; tokens: string[] }> {
+  if (mainNameIndex) return mainNameIndex;
+  mainNameIndex = [];
+  for (const id of Object.keys(LESSONS)) {
+    if (id.startsWith('pro-')) continue; // pro-rep asks route via their own surfaces
+    const rep = REPERTOIRE.find((r) => r.id === id);
+    const names = [rep?.name, id.replace(/-/g, ' ')].filter((n): n is string => !!n);
+    for (const n of names) {
+      const tokens = queryTokens(n);
+      if (tokens.length > 0) mainNameIndex.push({ id, tokens });
+    }
+  }
+  return mainNameIndex;
+}
+
 export function findLessonForQuery(
   text: string | undefined | null,
 ): { lesson: LessonScript; openingId: string; variationName: string | null } | null {
@@ -785,10 +810,32 @@ export function findLessonForQuery(
       }
     }
   }
+  // Registry-name match: a main lesson hits when EVERY token of one of its
+  // names appears in the query. Most-specific (most tokens) wins. A
+  // ":"-qualified ask names a sub-line — the candidate must also cover at
+  // least one significant post-colon token, so "Four Knights Game: Glek
+  // System" reaches the Glek masterclass while "Caro-Kann Defense: Fantasy
+  // Variation" is NOT hijacked by the Caro main (build 00aadcd bug class).
+  const qTokens = new Set(queryTokens(text));
+  const colonIdx = text.indexOf(':');
+  const postColon = colonIdx >= 0
+    ? queryTokens(text.slice(colonIdx + 1)).filter((t) => !['variation', 'defense', 'defence', 'system', 'attack', 'gambit', 'game', 'opening'].includes(t))
+    : [];
+  let best: { id: string; tokens: string[] } | null = null;
+  for (const cand of getMainNameIndex()) {
+    if (!cand.tokens.every((t) => qTokens.has(t))) continue;
+    if (postColon.length > 0 && !postColon.some((t) => cand.tokens.includes(t))) continue;
+    if (!best || cand.tokens.length > best.tokens.length) best = cand;
+  }
+  if (best) {
+    const main = LESSONS[best.id];
+    if (main) return { lesson: main, openingId: best.id, variationName: null };
+  }
   const id = resolveOpeningIdFromName(text);
   if (!id) return null;
-  // A ":"-qualified ask names a specific sub-line; without a matching
-  // variation lesson the ask falls through to the focused-generation tiers.
+  // Concept-map fallback is coarse (opening-family patterns), so the
+  // no-hijack guard stays: a ":"-qualified ask never lands on the family's
+  // main lesson through it.
   if (text.includes(':')) return null;
   const main = LESSONS[id];
   return main ? { lesson: main, openingId: id, variationName: null } : null;
