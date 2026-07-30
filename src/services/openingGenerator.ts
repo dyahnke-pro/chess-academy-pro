@@ -1782,8 +1782,6 @@ function synthesizeIdeaFromSan(
   // fallback varies move-to-move instead of repeating one sentence.
   const variant = dest ? (dest.charCodeAt(0) + Number(dest[1])) % 2 : 0;
   const pick = (a: string, b: string): string => (variant === 0 ? a : b);
-  const on = dest ? ` on ${dest}` : '';
-  const to = dest ? ` to ${dest}` : '';
   if (isCheck) {
     return `${prefix} — check, forcing a reply before anything else.`;
   }
@@ -1843,9 +1841,9 @@ HARD RULES:
 - NEVER restate the move being played ("knight to c6 — the knight goes to c6" is banned); the voice announces the move separately. Speak only the idea.
 - Keep every number, percentage, and move token that appears, verbatim.
 - One flowing sentence or two per line. No praise, no filler, no "let's".
-Return STRICT JSON: {"lines": [string, ...]} with EXACTLY ${'${rawTexts.length}'} entries, in order.`;
+Return STRICT JSON: {"lines": [string, ...]} with EXACTLY ${rawTexts.length} entries, in order.`;
   const result = (await getCoachStructuredResponse(
-    [{ role: 'user', content: `NARRATION SCRIPT (${'${rawTexts.length}'} lines):\n${'${script}'}` }],
+    [{ role: 'user', content: `NARRATION SCRIPT (${rawTexts.length} lines):\n${script}` }],
     system,
     'chat_response',
     Math.min(8000, 400 + rawTexts.length * 60),
@@ -1856,7 +1854,7 @@ Return STRICT JSON: {"lines": [string, ...]} with EXACTLY ${'${rawTexts.length}'
   const lines = Array.isArray(result?.lines) ? result.lines : [];
   let kept = 0;
   const out = rawTexts.map((raw, i) => {
-    const candidate = typeof lines[i] === 'string' ? (lines[i] as string).trim() : '';
+    const candidate = typeof lines[i] === 'string' ? lines[i].trim() : '';
     if (!candidate) return raw;
     const graded = gradeNarrationText(candidate, positions[i].fen, 'openingGenerator.houseVoiceReword');
     if (!graded) return raw;
@@ -1867,7 +1865,7 @@ Return STRICT JSON: {"lines": [string, ...]} with EXACTLY ${'${rawTexts.length}'
     kind: 'coach-surface-migrated',
     category: 'subsystem',
     source: 'openingGenerator.houseVoiceReword',
-    summary: `house-voice reword: ${'${kept}'}/${'${rawTexts.length}'} lines reworded (rest kept raw)`,
+    summary: `house-voice reword: ${kept}/${rawTexts.length} lines reworded (rest kept raw)`,
   });
   return out;
 }
