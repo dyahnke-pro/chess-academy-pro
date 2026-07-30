@@ -94,13 +94,14 @@ export function mentionedMoveArrows(
       try { probe.move(hit.san); } catch { /* keep arrowing */ }
     } else {
       const flippedFen = flipTurn(probe.fen());
-      const flipped = flippedFen ? resolveOn(new Chess(flippedFen), m) : null;
-      if (flipped) {
-        hit = flipped;
-        try { probe = new Chess(flippedFen); probe.move(hit.san); } catch { /* keep arrowing */ }
-      } else {
-        hit = resolveOn(original, m); // parallel mention from the live position
+      if (flippedFen) {
+        const flipped = resolveOn(new Chess(flippedFen), m);
+        if (flipped) {
+          hit = flipped;
+          try { probe = new Chess(flippedFen); probe.move(hit.san); } catch { /* keep arrowing */ }
+        }
       }
+      if (!hit) hit = resolveOn(original, m); // parallel mention from the live position
     }
     if (!hit) continue;
     const key = `${hit.from}-${hit.to}`;
