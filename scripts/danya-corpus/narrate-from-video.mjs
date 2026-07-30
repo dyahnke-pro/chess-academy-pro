@@ -137,9 +137,11 @@ const PIECE_CODE = { knight: 'n', bishop: 'b', rook: 'r', queen: 'q', king: 'k',
  *  sentence lied, or it rewrites blind and fails the same gate again. */
 function boardClaimProblem(text, fen) {
   const c = new Chess(fen);
+  // "the e4 pawn" (space form) counts too — the Bird bake claimed a "d4
+  // pawn" on a board with a d3 pawn and the hyphen-only pattern missed it.
   const claims = [
     ...text.matchAll(/\b(knight|bishop|rook|queen|king|pawn)\s+on\s+([a-h][1-8])\b/gi),
-    ...text.matchAll(/\b([a-h][1-8])-(knight|bishop|rook|queen|king|pawn)\b/gi),
+    ...text.matchAll(/\b([a-h][1-8])[-\s](knight|bishop|rook|queen|king|pawn)\b/gi),
   ];
   for (const m of claims) {
     const rev = /^[a-h][1-8]$/.test(m[1]);
@@ -217,17 +219,31 @@ ${clipped}`;
   // intro/outro from the first call, ideas in batches of 10 with the full
   // reference each time, exact-count enforced per batch.
   const BATCH = 10;
-  const first = await callModel(system, `${user}
+  // The model sometimes under-delivers a batch's count — retry the batch
+  // (up to 3 tries) before refusing; a partial narration never ships.
+  const callBatch = async (prompt, want, maxTokens) => {
+    for (let attempt = 1; attempt <= 3; attempt += 1) {
+      const res = await callModel(system, prompt, maxTokens);
+      const got = Array.isArray(res.ideas) ? res.ideas : [];
+      if (got.length >= want) return { ...res, ideas: got.slice(0, want) };
+      console.error(`  (batch returned ${got.length}/${want} ideas — retry ${attempt}/3)`);
+    }
+    return null;
+  };
+  const firstWant = Math.min(BATCH, plies.length);
+  const first = await callBatch(`${user}
 
-FOR THIS CALL: return intro, shortIntro, outro, and ideas for ONLY the first ${Math.min(BATCH, plies.length)} moves (${plies.slice(0, BATCH).map((p) => p.san).join(' ')}). EXACTLY ${Math.min(BATCH, plies.length)} idea entries.`, 8192);
+FOR THIS CALL: return intro, shortIntro, outro, and ideas for ONLY the first ${firstWant} moves (${plies.slice(0, BATCH).map((p) => p.san).join(' ')}). EXACTLY ${firstWant} idea entries — one per listed move, count them.`, firstWant, 8192);
+  if (!first) { console.error(`model kept under-delivering the first batch — refusing partial narration`); process.exit(1); }
   const out = { intro: first.intro, shortIntro: first.shortIntro, outro: first.outro };
-  let ideas = Array.isArray(first.ideas) ? first.ideas.slice(0, BATCH) : [];
+  let ideas = first.ideas;
   for (let start = BATCH; start < plies.length; start += BATCH) {
     const slice = plies.slice(start, start + BATCH);
-    const more = await callModel(system, `${user}
+    const more = await callBatch(`${user}
 
-FOR THIS CALL: return ONLY {"ideas":[...]} for moves ${start + 1}-${start + slice.length} of the line (${slice.map((p) => p.san).join(' ')}), continuing the same narration. EXACTLY ${slice.length} idea entries.`, 8192);
-    ideas = ideas.concat(Array.isArray(more.ideas) ? more.ideas.slice(0, slice.length) : []);
+FOR THIS CALL: return ONLY {"ideas":[...]} for moves ${start + 1}-${start + slice.length} of the line (${slice.map((p) => p.san).join(' ')}), continuing the same narration. EXACTLY ${slice.length} idea entries — one per listed move, count them.`, slice.length, 8192);
+    if (!more) { console.error(`model kept under-delivering batch at ${start + 1} — refusing partial narration`); process.exit(1); }
+    ideas = ideas.concat(more.ideas);
   }
   if (ideas.length !== plies.length) {
     console.error(`model returned ${ideas.length} ideas for ${plies.length} plies — refusing partial narration`);

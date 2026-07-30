@@ -327,7 +327,10 @@ export function validateBoardClaims(text: string, fen: string): BoardClaimResult
     if (!sentence.trim()) continue;
     const claims: Array<{ type: PieceSymbol; color?: 'w' | 'b'; square: string; raw: string }> = [];
     const fwd = /\b(white|black)?(?:'s)?\s*(pawn|knight|bishop|rook|queen|king)\s+(?:on|at)\s+([a-h][1-8])\b/gi;
-    const rev = /\b(?:the\s+)?([a-h][1-8])\s*[-–]\s*(pawn|knight|bishop|rook|queen|king)\b/gi;
+    // hyphen OR space form — "the e4-pawn" and "the e4 pawn" both claim
+    // occupancy (the 2026-07-30 Bird bake said "d4 pawn" on a d3 board and
+    // the hyphen-only pattern missed it).
+    const rev = /\b(?:the\s+)?([a-h][1-8])[\s-–]\s*(pawn|knight|bishop|rook|queen|king)\b/gi;
     let pm: RegExpExecArray | null;
     while ((pm = fwd.exec(sentence)) !== null) {
       claims.push({

@@ -221,7 +221,7 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 /** Bump to invalidate every cached walkthrough tree on next read. The corpus
  *  teaching splice happens at GENERATION time, so trees generated before it
  *  would keep speaking corpus-free narration forever off the warm cache. */
-const WALKTHROUGH_GEN_REV = '2026-07-30-whole-beat-splice';
+const WALKTHROUGH_GEN_REV = '2026-07-30-tier2-batch1-whole-beat';
 
 export async function getCachedOpening(
   name: string,
