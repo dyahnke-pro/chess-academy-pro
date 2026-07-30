@@ -219,7 +219,7 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 /** Bump to invalidate every cached walkthrough tree on next read. The corpus
  *  teaching splice happens at GENERATION time, so trees generated before it
  *  would keep speaking corpus-free narration forever off the warm cache. */
-const WALKTHROUGH_GEN_REV = '2026-07-30-danya-splice';
+const WALKTHROUGH_GEN_REV = '2026-07-30-no-restatement';
 
 export async function getCachedOpening(
   name: string,
@@ -1724,11 +1724,15 @@ function synthesizeIdeaFromSan(
   // idea.
   const prefix = san;
   const side = movedBy === 'white' ? 'White' : 'Black';
+  // The voice announces the move itself (the SAN prefix expands to "knight
+  // to c6" in TTS), so the idea half must NEVER restate piece+destination —
+  // "knight to c6 — knight jumps to c6" is the redundancy David flagged
+  // (2026-07-30). Idea text carries ONLY what the announcement doesn't.
   if (san === 'O-O' || san === '0-0') {
-    return `${prefix} — ${side} castles kingside, tucking the king to safety and connecting the rooks.`;
+    return `${prefix} — ${side}'s king tucks to safety and the rooks connect.`;
   }
   if (san === 'O-O-O' || san === '0-0-0') {
-    return `${prefix} — ${side} castles queenside, bringing the rook to bear on the central d-file.`;
+    return `${prefix} — ${side}'s rook comes to bear on the central d-file.`;
   }
   const piece = /^[NBRQK]/.test(san) ? san[0] : 'P';
   const destMatch = san.match(/([a-h][1-8])(?:=[NBRQ])?[+#]?$/);
@@ -1742,42 +1746,42 @@ function synthesizeIdeaFromSan(
   const on = dest ? ` on ${dest}` : '';
   const to = dest ? ` to ${dest}` : '';
   if (isCheck) {
-    return `${prefix} — checks the king${dest ? ` from ${dest}` : ''}, forcing a reply before anything else.`;
+    return `${prefix} — check, forcing a reply before anything else.`;
   }
   if (piece === 'N') {
     return isCapture
-      ? `${prefix} — the knight takes${on}, trading off a defender.`
-      : `${prefix} — ${pick(`knight to ${dest}, developing toward the center and eyeing key squares.`, `knight jumps${to}, hitting central squares and adding pressure.`)}`;
+      ? `${prefix} — trading off a defender.`
+      : `${prefix} — ${pick('developing toward the center and eyeing key squares.', 'adding pressure on the central squares.')}`;
   }
   if (piece === 'B') {
     return isCapture
-      ? `${prefix} — the bishop captures${on}, giving up the pair for structure or tempo.`
-      : `${prefix} — ${pick(`bishop${to}, raking a long diagonal toward the center.`, `bishop develops${to}, pinning or pressuring along its diagonal.`)}`;
+      ? `${prefix} — giving up the pair for structure or tempo.`
+      : `${prefix} — ${pick('raking a long diagonal toward the center.', 'pinning or pressuring along the diagonal.')}`;
   }
   if (piece === 'R') {
     return isCapture
-      ? `${prefix} — the rook grabs${on}, winning the exchange or a pawn.`
-      : `${prefix} — ${pick(`rook swings${to}, claiming an open or soon-to-open file.`, `rook lifts${to}, preparing to double or contest the file.`)}`;
+      ? `${prefix} — winning material on the file.`
+      : `${prefix} — ${pick('claiming an open or soon-to-open file.', 'preparing to double or contest the file.')}`;
   }
   if (piece === 'Q') {
     return isCapture
-      ? `${prefix} — the queen takes${on}; watch she isn't chased with tempo.`
-      : `${prefix} — ${pick(`queen${to}, joining the attack while keeping flexibility.`, `queen steps${to}, coordinating the pieces and eyeing weak squares.`)}`;
+      ? `${prefix} — grabbing material; watch she isn't chased with tempo.`
+      : `${prefix} — ${pick('joining the attack while keeping flexibility.', 'coordinating the pieces and eyeing weak squares.')}`;
   }
   if (piece === 'K') {
-    return `${prefix} — king${to}, walking to safety or activating in the late opening.`;
+    return `${prefix} — walking to safety or activating in the late opening.`;
   }
   // Pawn move.
   if (isCapture) {
-    return `${prefix} — the pawn captures${on}, opening lines and reshaping the center.`;
+    return `${prefix} — opening lines and reshaping the center.`;
   }
   const central = dest && (dest[0] === 'd' || dest[0] === 'e');
   if (central) {
-    return `${prefix} — stakes a claim in the center${on}, fighting for space and open lines.`;
+    return `${prefix} — staking a claim in the center, fighting for space and open lines.`;
   }
   return pick(
-    `${prefix} — gains space${on}, supporting the center and freeing the pieces behind.`,
-    `${prefix} — a pawn break${on}, challenging the structure and opening the position.`,
+    `${prefix} — gaining space, supporting the center and freeing the pieces behind.`,
+    `${prefix} — a pawn break, challenging the structure and opening the position.`,
   );
 }
 
