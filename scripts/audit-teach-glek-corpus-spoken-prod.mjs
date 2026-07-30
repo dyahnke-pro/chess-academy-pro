@@ -66,7 +66,7 @@ try {
     }
     const spokenPool = [
       ...ttsTexts,
-      ...listener.entries().map((e) => `${e.summary ?? ''} ${e.details ?? ''}`),
+      ...listener.getCapturedEvents().map((e) => `${e.summary ?? ''} ${e.details ?? ''}`),
     ].join(' ').toLowerCase();
     for (const mark of CORPUS_MARKS) {
       if (!seenSpoken && spokenPool.includes(mark)) seenSpoken = mark;
@@ -77,7 +77,7 @@ try {
       if (await skip.isVisible({ timeout: 500 })) await skip.click({ force: true });
     } catch { /* nothing to nudge */ }
   }
-  detail = `onScreen=${seenOnScreen ?? 'NO'} spoken=${seenSpoken ?? 'NO'} tts=${ttsTexts.length} listener=${listener.entries().length} (${Math.round((Date.now() - started) / 1000)}s)`;
+  detail = `onScreen=${seenOnScreen ?? 'NO'} spoken=${seenSpoken ?? 'NO'} tts=${ttsTexts.length} listener=${listener.getCapturedEvents().length} (${Math.round((Date.now() - started) / 1000)}s)`;
 } catch (e) {
   detail = `ERROR ${String(e).slice(0, 140)}`;
 }

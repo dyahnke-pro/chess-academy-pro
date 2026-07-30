@@ -1,0 +1,114 @@
+// THE AUDIBLE PROOF (David 2026-07-30): "teach me <X>" on LIVE prod must SPEAK
+// corpus teaching, deterministically spliced by openingGenerator at gen time.
+//
+// v1 of this probe hardcoded note fragments and failed for two reasons worth
+// remembering: (a) at shared prefixes (e4 e5 Nf3 Nc6) MANY notes collide and
+// noteAtPosition speaks bucket[0], not the note you guessed; (b) marks sitting
+// past ply ~10 aren't reached inside a probe window — the walkthrough is
+// voice-paced. So: marks are computed HERE from the shipped corpus (every
+// positioned note of the opening, early plies preferred), and ANY hit proves
+// the splice. Default opening: Latvian Gambit — its f5 prefix is unique from
+// ply 4, so no bucket collisions.
+//
+//   AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY \
+//   AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app \
+//   [AUDIT_OPENING="latvian gambit"] node scripts/audit-teach-corpus-spoken-prod.mjs
+import { readFile, writeFile } from 'node:fs/promises';
+import { chromium } from 'playwright';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { startAuditListener } from './audit-lib/audit-listener.mjs';
+
+const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
+const ASK = process.env.AUDIT_OPENING || 'latvian gambit';
+
+// Marks: distinctive mid-sentence fragments (≥6 words) from every positioned
+// note of the target opening, shallow lines first. Lowercased for matching.
+const corpus = JSON.parse(await readFile('src/data/danya-teachings.json', 'utf8'));
+const norm = (t) => t.toLowerCase().replace(/\s+/g, ' ').trim();
+const askNorm = norm(ASK).replace(/[^a-z0-9 ]/g, '');
+const notes = corpus.notes
+  .filter((n) => n.lineSan.length > 0 && norm(n.opening ?? '').replace(/[^a-z0-9 ]/g, '').includes(askNorm))
+  .sort((a, b) => a.lineSan.length - b.lineSan.length);
+const marks = [];
+for (const n of notes) {
+  for (const field of [n.explains, n.teaches]) {
+    const words = norm(field).replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').split(' ');
+    if (words.length >= 8) marks.push(words.slice(1, 8).join(' '));
+  }
+}
+if (marks.length === 0) {
+  console.log(`✗ FAIL: no positioned corpus notes for "${ASK}" — nothing to prove`);
+  process.exit(1);
+}
+console.log(`[probe] "${ASK}" — ${notes.length} positioned notes, ${marks.length} marks (shallowest line: ${notes[0].lineSan.join(' ')})`);
+
+const listener = await startAuditListener();
+const b = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
+const p = await (await b.newContext(sandboxContextOptions())).newPage();
+const ttsTexts = [];
+p.on('request', (r) => {
+  if (r.url().includes('/api/tts')) {
+    // /api/tts is a GET with the spoken text in the query string.
+    try { ttsTexts.push(new URL(r.url()).searchParams.get('text') ?? ''); } catch { /* malformed */ }
+  }
+});
+
+async function dismiss() {
+  for (const [gate, btn] of [
+    ['[data-testid="ai-consent-modal"]', '[data-testid="ai-consent-allow"]'],
+    ['[data-testid="strength-calibration-bubble"]', '[data-testid="skill-band-intermediate"]'],
+  ]) {
+    try { const g = p.locator(gate); await g.waitFor({ timeout: 8000 }); await p.locator(btn).click(); await g.waitFor({ state: 'detached', timeout: 15000 }); } catch { /* absent */ }
+  }
+  try { const m = p.locator('[data-testid="page-help-modal"]'); await m.waitFor({ timeout: 4000 }); await p.keyboard.press('Escape'); await m.waitFor({ state: 'detached', timeout: 5000 }); } catch { /* absent */ }
+}
+
+const clean = (t) => norm(t).replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ');
+let seenOnScreen = null;
+let seenSpoken = null;
+let detail = '';
+try {
+  await p.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 45000 });
+  // The app reads auditStreamUrl at boot — set it, then RELOAD so it takes.
+  await p.evaluate((url) => localStorage.setItem('auditStreamUrl', url), listener.url).catch(() => undefined);
+  await p.reload({ waitUntil: 'domcontentloaded' });
+  await dismiss(); await dismiss();
+
+  const box = p.locator('[data-testid="chat-text-input"]');
+  await box.waitFor({ timeout: 20000 });
+  await box.click();
+  await box.pressSequentially(`teach me the ${ASK}`, { delay: 12 });
+  await box.press('Enter');
+
+  const started = Date.now();
+  while (Date.now() - started < 420000 && !(seenOnScreen && seenSpoken)) {
+    await p.waitForTimeout(4000);
+    const body = clean(await p.locator('body').innerText().catch(() => ''));
+    for (const mark of marks) if (!seenOnScreen && body.includes(mark)) seenOnScreen = mark;
+    const spokenPool = clean([
+      ...ttsTexts,
+      ...listener.getCapturedEvents().map((e) => `${e.summary ?? ''} ${e.details ?? ''}`),
+    ].join(' '));
+    for (const mark of marks) if (!seenSpoken && spokenPool.includes(mark)) seenSpoken = mark;
+    try {
+      const skip = p.locator('[data-testid="walkthrough-skip"], button:has-text("Continue")').first();
+      if (await skip.isVisible({ timeout: 500 })) await skip.click({ force: true });
+    } catch { /* nothing to nudge */ }
+  }
+  detail = `onScreen=${seenOnScreen ? 'YES' : 'NO'} spoken=${seenSpoken ? 'YES' : 'NO'} tts=${ttsTexts.length} listener=${listener.getCapturedEvents().length} (${Math.round((Date.now() - started) / 1000)}s)`;
+} catch (e) {
+  detail = `ERROR ${String(e).slice(0, 140)}`;
+}
+const finalBody = await p.locator('body').innerText().catch(() => '(unreadable)');
+await writeFile('/tmp/teach-probe-tts.json', JSON.stringify({ ask: ASK, ttsTexts, listenerEvents: listener.getCapturedEvents().length, finalBody: finalBody.slice(0, 8000) }, null, 1)).catch(() => undefined);
+await b.close();
+await listener.stop().catch(() => undefined);
+
+// The claim under test is SPOKEN corpus teaching. The tts request text IS the
+// narration text routed to voice, so spoken evidence subsumes display; the
+// onScreen flag stays informational (a 4s poll can miss a ply's window).
+const ok = !!seenSpoken;
+console.log(`${ok ? '✓ PASS' : '✗ FAIL'}: teach-me-${ASK} speaks the corpus — ${detail}`);
+if (seenSpoken) console.log(`  spoken mark: "${seenSpoken}"`);
+console.log('  tts transcript → /tmp/teach-probe-tts.json');
+process.exit(ok ? 0 : 1);
