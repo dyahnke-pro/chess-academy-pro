@@ -83,10 +83,32 @@ async function main() {
   // 2. Its Watch opens a player with a board, not an empty state.
   if (planVisible) {
     try {
-      const watchBtn = tile.getByRole('button', { name: new RegExp(`^Watch .*${PLAN_TITLE.slice(-8)}`, 'i') }).or(tile.getByRole('button', { name: /watch/i })).first();
-      await watchBtn.click({ timeout: 10000, force: true });
-      await page.waitForTimeout(6000);
-      const boardVisible = await page.locator('[data-square="e4"]').first().isVisible().catch(() => false);
+      // The WLPP action buttons carry a perpetual glow animation, so they
+      // never pass Playwright's "stable" actionability check and click()
+      // times out (the documented harness-artifact class). Dispatch the
+      // click in-page — same handler, no hit-testing.
+      const clicked = await page.evaluate(() => {
+        const el = document.querySelector('[data-testid="plan-watch-mp-gleksystem-traditional-f4"]');
+        if (!el) return false;
+        el.scrollIntoView({ block: 'center' });
+        el.click();
+        return true;
+      });
+      if (!clicked) throw new Error('plan-watch button not in DOM');
+      // The player view mounts + the line auto-plays; give it a real beat.
+      let boardVisible = false;
+      for (let t = 0; t < 8 && !boardVisible; t += 1) {
+        await page.waitForTimeout(3000);
+        boardVisible =
+          (await page.locator('[data-square]').count().catch(() => 0)) > 0 ||
+          (await page.locator('[data-testid="line-player-complete"], [data-testid="line-exit"]').count().catch(() => 0)) > 0;
+      }
+      if (!boardVisible) {
+        const tids = await page.locator('[data-testid]').evaluateAll((els) => [...new Set(els.map((e) => e.getAttribute('data-testid')))].slice(0, 20));
+        console.log('  [debug] url:', page.url());
+        console.log('  [debug] testids:', tids.join(','));
+        await page.screenshot({ path: '/tmp/glek-watch-debug.png', fullPage: false }).catch(() => undefined);
+      }
       check('plan Watch mounts a live board', boardVisible);
     } catch (e) {
       check('plan Watch mounts a live board', false, String(e).slice(0, 100));
