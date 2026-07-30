@@ -9,9 +9,11 @@
  * coverage so each wave's gain is visible).
  */
 import { readFile, writeFile, readdir } from 'node:fs/promises';
+import { resolveCreator } from './creator.mjs';
 
-const DDIR = 'data/sources/naroditsky-voice/distilled';
-const OUT = 'src/data/danya-teachings.json';
+const CREATOR = resolveCreator();
+const DDIR = CREATOR.distilled;
+const OUT = CREATOR.corpus;
 
 const norm = (s) => s.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
 function similar(a, b) {
@@ -32,10 +34,13 @@ function stripMoveNumbers(s) {
     .replace(/\b\d{1,2}\.(?=[NBRQKO]|[a-h][1-8x])/g, '');
 }
 
-const DDIR_V2 = 'data/sources/naroditsky-voice/distilled-v2';
+const DDIR_V2 = CREATOR.distilledV2;
 
-// Mirrors src/data/danyaTeachings.test.ts BANNED — keep in sync.
-const BANNED = /\b(naroditsky|danya|in this video|in the video|the streamer|chat|subscribe|this stream)\b/i;
+// Mirrors src/data/<creator>Teachings.test.ts BANNED — keep in sync. The base
+// list is shared; each creator adds its own name + medium terms (creator.mjs),
+// so adding a creator never changes what another creator's merge drops.
+const BANNED_BASE = ['naroditsky', 'danya', 'in this video', 'in the video', 'the streamer', 'chat', 'subscribe', 'this stream'];
+const BANNED = new RegExp(`\\b(${[...BANNED_BASE, ...(CREATOR.bannedExtra ?? [])].join('|')})\\b`, 'i');
 
 async function main() {
   // v2 (chunked distiller, ~5x denser, code-stamped opening) REPLACES v1
@@ -109,7 +114,7 @@ async function main() {
     }
   }
 
-  const notes = [...byKey.values()].flat().map((n, i) => ({ id: `dt-${i.toString(36)}`, ...n }));
+  const notes = [...byKey.values()].flat().map((n, i) => ({ id: `${CREATOR.idPrefix}-${i.toString(36)}`, ...n }));
   const positioned = notes.filter((n) => n.lineSan.length > 0);
   const openings = new Set(notes.map((n) => n.opening).filter(Boolean));
   const phases = notes.reduce((acc, n) => { acc[n.phase] = (acc[n.phase] ?? 0) + 1; return acc; }, {});

@@ -12,7 +12,8 @@
 //
 //   AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY \
 //   AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app \
-//   [AUDIT_OPENING="latvian gambit"] node scripts/audit-teach-corpus-spoken-prod.mjs
+//   [AUDIT_OPENING="latvian gambit"] [AUDIT_CORPUS=src/data/chessbrah-teachings.json] \
+//   node scripts/audit-teach-corpus-spoken-prod.mjs
 import { readFile, writeFile } from 'node:fs/promises';
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
@@ -23,7 +24,11 @@ const ASK = process.env.AUDIT_OPENING || 'latvian gambit';
 
 // Marks: distinctive mid-sentence fragments (≥6 words) from every positioned
 // note of the target opening, shallow lines first. Lowercased for matching.
-const corpus = JSON.parse(await readFile('src/data/danya-teachings.json', 'utf8'));
+// Which shipped corpus the marks come from. The coach reads both — the second
+// creator's corpus is the gap tier for openings the primary never covers — so
+// proving THOSE openings speak means computing marks from that file.
+const CORPUS_PATH = process.env.AUDIT_CORPUS || 'src/data/danya-teachings.json';
+const corpus = JSON.parse(await readFile(CORPUS_PATH, 'utf8'));
 const norm = (t) => t.toLowerCase().replace(/\s+/g, ' ').trim();
 const askNorm = norm(ASK).replace(/[^a-z0-9 ]/g, '');
 const notes = corpus.notes

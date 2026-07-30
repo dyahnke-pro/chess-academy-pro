@@ -42,14 +42,17 @@
  * Usage:
  *   node scripts/danya-corpus/distill-v2.mjs [--id VIDEOID] [--limit N]
  *                                            [--concurrency 4] [--dry]
+ *                                            [--creator naroditsky|chessbrah]
  *   --dry  runs the board tracker + chunker and reports coverage WITHOUT
  *          calling the model. Use it to verify tracking before spending tokens.
  */
 import { readFile, writeFile, mkdir, access } from 'node:fs/promises';
 import { Chess } from 'chess.js';
+import { resolveCreator } from './creator.mjs';
 
-const TDIR = 'data/sources/naroditsky-voice/transcripts';
-const DDIR = 'data/sources/naroditsky-voice/distilled-v2';
+const CREATOR = resolveCreator();
+const TDIR = CREATOR.transcripts;
+const DDIR = CREATOR.distilledV2;
 const KEY = process.env.DEEPSEEK_KEY ?? process.env.VITE_DEEPSEEK_API_KEY ?? '';
 
 const arg = (name, dflt) => {
@@ -489,16 +492,24 @@ async function pool(items, limit, fn) {
 }
 
 async function distillOne(videoId, meta, { dry, concurrency, dbLines, dbNames }) {
-  const vtt = await readFile(`${TDIR}/${videoId}.en.vtt`, 'utf8');
-  const text = vttToText(vtt);
+  // Raw caption file when present; a farm that already cleaned to prose (the
+  // generic fetch-youtube-transcripts pipeline) writes .txt instead.
+  const raw = await readFile(`${TDIR}/${videoId}.en.vtt`, 'utf8').catch(() => null);
+  const text = raw === null ? await readFile(`${TDIR}/${videoId}.txt`, 'utf8') : vttToText(raw);
   if (text.length < 500) throw new Error('transcript too short');
 
   // Code-stamped opening tag (see openingFromTitle) — one video, one topic.
-  const stampedOpening = openingFromTitle(meta.title || '', dbNames);
+  // A creator whose series titles are marketing ("How to WIN with the QUEEN'S
+  // GAMBIT | 1400-1500 ELO") dilutes the hint tokens below the name-match
+  // threshold, so the manifest may carry an explicit openingHint. It is a
+  // CURATED external prior, same role as the title, and stays fail-closed:
+  // no hint and no title match still means no positions.
+  const nameHint = meta.openingHint || meta.title || '';
+  const stampedOpening = openingFromTitle(nameHint, dbNames);
 
   // DB-ALIGNED positions only (see alignToDbLine). No alignment => no
   // positions, and the notes fall back to opening-name keying. Never a guess.
-  const align = alignToDbLine(text, dbLines, { nameHint: meta.title });
+  const align = alignToDbLine(text, dbLines, { nameHint });
   const timeline = align?.checkpoints ?? [];
   const chunks = chunkTranscript(text);
   const withPos = chunks.filter((c) => positionAt(timeline, c.start).length > 0).length;
@@ -594,7 +605,7 @@ async function main() {
   // whatever transcripts are on disk (a targeted --id run needs no manifest).
   let videos = [];
   try {
-    const manifest = JSON.parse(await readFile('data/sources/naroditsky-voice/manifest.json', 'utf8'));
+    const manifest = JSON.parse(await readFile(CREATOR.manifest, 'utf8'));
     videos = manifest.videos;
   } catch {
     videos = onlyId ? [{ id: onlyId, title: null, playlist: null }] : [];
@@ -621,12 +632,12 @@ async function main() {
   // DeepSeek for a video the corpus already carries at v2 density.
   let shippedV2 = new Set();
   try {
-    shippedV2 = new Set(JSON.parse(await readFile('src/data/danya-teachings.json', 'utf8')).v2VideoIds ?? []);
+    shippedV2 = new Set(JSON.parse(await readFile(CREATOR.corpus, 'utf8')).v2VideoIds ?? []);
   } catch { /* no shipped corpus */ }
 
   const queue = [];
   for (const v of videos) {
-    if (!(await exists(`${TDIR}/${v.id}.en.vtt`))) continue;
+    if (!(await exists(`${TDIR}/${v.id}.en.vtt`)) && !(await exists(`${TDIR}/${v.id}.txt`))) continue;
     if (!dry && shippedV2.has(v.id)) continue;
     if (!dry && (await exists(`${DDIR}/${v.id}.json`))) continue;
     queue.push(v);

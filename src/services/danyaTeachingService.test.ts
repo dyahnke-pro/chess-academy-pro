@@ -4,7 +4,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import teachings from '../data/danya-teachings.json';
-import { notesForFen, noteAtPosition, planNoteForPath, notesForPrefix } from './danyaTeachingService';
+import { notesForFen, noteAtPosition, planNoteForPath, notesForPrefix, notesForOpening } from './danyaTeachingService';
 
 interface Note { id: string; lineSan: string[]; plans: string }
 const positioned = (teachings as { notes: Note[] }).notes.filter((n) => n.lineSan.length > 0);
@@ -65,5 +65,37 @@ describe('danyaTeachingService — transpositions + staleness', () => {
     const hit = planNoteForPath(['a3', 'a6'], fen); // bogus history, right board
     expect(hit).not.toBeNull();
     expect(hit!.plans.trim().length).toBeGreaterThan(0);
+  });
+});
+
+// ── Opening-name matching across the app's vocabulary and the corpus's.
+// The app writes British spellings + diacritics; corpus tags come from the
+// Lichess DB in American ASCII. Before the fold, "French Defence" scored 0.50
+// against "French Defense" and matched NOTHING, while "Réti Opening" degraded
+// to the single token "opening" and matched 344 notes from a dozen unrelated
+// openings at a perfect score.
+describe('notesForOpening — name vocabulary', () => {
+  it('matches British spellings against American corpus tags', () => {
+    for (const name of ['French Defence', 'Pirc Defence', 'Dutch Defence', 'Slav Defence']) {
+      const hits = notesForOpening(name, 5);
+      expect(hits.length, `${name} should reach its corpus notes`).toBeGreaterThan(0);
+    }
+  });
+
+  it('matches diacritic names against their ASCII corpus tags', () => {
+    expect(notesForOpening('Grünfeld Defence', 5).length).toBeGreaterThan(0);
+  });
+
+  it('never matches on a generic token alone', () => {
+    // "Réti Opening" shares only "opening" with these, so each must be absent.
+    const hits = notesForOpening('Réti Opening', 40);
+    const wrong = hits.filter((n) => /Ponziani|Catalan|Bishop's Opening|Polish|Van't Kruijs/i.test(n.opening ?? ''));
+    expect(wrong.map((n) => n.opening)).toEqual([]);
+  });
+
+  it('still matches the opening it actually names', () => {
+    const hits = notesForOpening('Caro-Kann Defence', 5);
+    expect(hits.length).toBeGreaterThan(0);
+    expect(hits.every((n) => /caro/i.test(n.opening ?? ''))).toBe(true);
   });
 });

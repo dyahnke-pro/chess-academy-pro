@@ -15,9 +15,10 @@
  * The corpus gates (danyaTeachings.test.ts) re-verify legality downstream.
  */
 import { readFile, writeFile } from 'node:fs/promises';
+import { resolveCreator } from './creator.mjs';
 
-const CORPUS = 'src/data/danya-teachings.json';
-const REPORT = 'audit-reports/danya-anchor/report.json';
+const CORPUS = resolveCreator().corpus;
+const REPORT = `${resolveCreator().anchorDir}/report.json`;
 
 const corpus = JSON.parse(await readFile(CORPUS, 'utf8'));
 const report = JSON.parse(await readFile(REPORT, 'utf8'));

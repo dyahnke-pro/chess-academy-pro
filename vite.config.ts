@@ -193,6 +193,11 @@ export default defineConfig(({ mode }) => {
             // rule it inlined into `index`, pushed it to 9.9 MB, and broke
             // every deploy after 2026-07-12 wave 6.
             if (id.includes('danya-teachings.json')) return 'appdata-danya';
+            // The secondary teaching corpus (gap-tier coverage) — same rule for
+            // the same reason: statically imported, MB-scale, and it re-broke
+            // the entry chunk (7.7 → 10.0 MB) the moment it was added without
+            // one. A new corpus needs a chunk rule in the same commit.
+            if (id.includes('chessbrah-teachings.json')) return 'appdata-chessbrah';
             if (id.includes('/lessons/sublineNarration')) return 'appdata-subline-narration';
             if (id.includes('model-games.json')) return 'appdata-modelgames';
           }

@@ -19,6 +19,8 @@ import { Chess } from 'chess.js';
 import teachingsData from '../data/danya-teachings.json';
 import { computeStructureSignature, signatureMatchScore, type StructureSignature } from './structureSignature';
 import { validateBoardClaims } from './boardClaimValidator';
+import { secondaryNotesForGap } from './chessbrahTeachingService';
+import { detectOpening } from './openingDetectionService';
 
 export interface DanyaNote {
   id: string;
@@ -46,8 +48,41 @@ const byPrefix = new Map<string, DanyaNote[]>();
 /** Opening-keyed notes (normalized opening-name token key). */
 const byOpening = new Map<string, DanyaNote[]>();
 
-const normName = (s: string): string =>
-  s.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
+// Opening names reach this from two vocabularies that do NOT agree: the app's
+// own surfaces use British spellings and diacritics ("French Defence", "Réti
+// Opening", "Grünfeld"), while corpus tags are stamped from the Lichess DB in
+// American ASCII ("French Defense", "Reti Opening", "Grunfeld"). Folding both
+// to one form is what makes the token matcher below mean anything — without
+// the fold, `é` was stripped to a SPACE, which shredded "Réti" into "r"+"ti"
+// and left the query as the single generic token "opening".
+const SPELLING_VARIANTS: Array<[RegExp, string]> = [
+  [/\bdefence\b/g, 'defense'],
+  [/\bcentre\b/g, 'center'],
+  [/\bmanoeuvre\b/g, 'maneuver'],
+  [/\bgambit accepted\b/g, 'accepted'],
+];
+
+const normName = (s: string): string => {
+  let out = s
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  for (const [re, to] of SPELLING_VARIANTS) out = out.replace(re, to);
+  return out;
+};
+
+// Tokens that name no opening on their own. A query that shares ONLY these with
+// a corpus key has matched nothing: "Réti Opening" once reduced to {opening}
+// and pulled 344 notes from the Ponziani, the Catalan and Bishop's Opening at a
+// perfect 1.0 score. A match must agree on something that actually identifies
+// the opening.
+const GENERIC_TOKENS = new Set([
+  'opening', 'defense', 'game', 'attack', 'variation', 'system', 'gambit',
+  'line', 'setup', 'declined', 'accepted', 'main', 'modern', 'classical',
+]);
 
 for (const n of DATA.notes) {
   if (n.lineSan.length > 0) {
@@ -133,9 +168,38 @@ export function noteAtPosition(historySans: string[], fen?: string): DanyaNote |
  *  TRANSFER — a note from any opening whose taught structure matches this
  *  board and whose claims are true on it. Selection + verification in code;
  *  the note rides in the GROUNDED FACTS the model must voice (G0). */
-export function teachingNoteForBoard(historySans: string[], fen: string): DanyaNote | null {
+export function teachingNoteForBoard(
+  historySans: string[],
+  fen: string,
+  openingName?: string | null,
+): DanyaNote | null {
   const exact = noteAtPosition(historySans, fen);
   if (exact) return exact;
+  // GAP TIER — an opening the primary corpus never covers still gets a note in
+  // the FACTS PACKAGE, so the coach can teach its ideas instead of going quiet.
+  //
+  // Ordered BEFORE structure transfer deliberately: transfer borrows a note
+  // from a DIFFERENT opening because the structures rhyme, which is the right
+  // answer when the primary corpus knows this opening and simply has nothing at
+  // this exact position — but a poor one when it has never taught the opening
+  // at all. There, teaching actually about the opening in front of the student
+  // beats a structural analogy. The gate is `primaryHits`: any opening-level
+  // coverage in the primary corpus suppresses the gap tier entirely.
+  //
+  // Most gap-tier notes are opening-keyed rather than position-keyed, so the
+  // opening name is what reaches them. Callers that already know it pass it;
+  // for the rest it is derived here from the move history, so every existing
+  // facts-package call site gains gap coverage without being rewired.
+  const resolvedOpening = openingName ?? (() => {
+    try { return detectOpening(historySans)?.name ?? null; } catch { return null; }
+  })();
+  const gap = secondaryNotesForGap({
+    historySans,
+    openingName: resolvedOpening,
+    primaryHits: !resolvedOpening || primaryCoversOpening(resolvedOpening) ? 1 : 0,
+    maxNotes: 1,
+  })[0];
+  if (gap) return gap;
   return notesForStructure(fen, 1)[0] ?? null;
 }
 
@@ -149,14 +213,38 @@ export function notesForOpening(openingName: string, maxNotes = 4): DanyaNote[] 
   for (const [key, bucket] of byOpening) {
     const kTokens = key.split(' ').filter((t) => t.length > 2);
     if (kTokens.length === 0) continue;
-    const shared = kTokens.filter((t) => qTokens.has(t)).length;
-    const score = shared / Math.max(1, Math.min(kTokens.length, qTokens.size));
+    const sharedTokens = kTokens.filter((t) => qTokens.has(t));
+    // Agreement on "opening"/"defense" alone is not agreement on an opening.
+    if (!sharedTokens.some((t) => !GENERIC_TOKENS.has(t))) continue;
+    const score = sharedTokens.length / Math.max(1, Math.min(kTokens.length, qTokens.size));
     if (score >= 0.6) for (const n of bucket) scored.push({ n, score });
   }
   return scored
     .sort((a, b) => b.score - a.score || (b.n.lineSan.length - a.n.lineSan.length))
     .slice(0, maxNotes)
     .map((s) => s.n);
+}
+
+/** Does the primary corpus teach THIS opening specifically — not merely its
+ *  family? `notesForOpening` matches a variation against its parent by design
+ *  ("Caro-Kann Defense: Advance" ↔ "Caro-Kann Defense"), which is right for
+ *  retrieval and wrong as a coverage test: a query for the Taimanov matches 40
+ *  notes tagged plain "Sicilian Defense", none of which teach the Taimanov.
+ *
+ *  Specific coverage means some primary tag carries EVERY identifying token of
+ *  the query, so "French Defence" is covered by "French Defense" while
+ *  "Sicilian … Taimanov" is not covered by "Sicilian Defense". This gates the
+ *  gap tier only; ordinary lookups keep their family matching. */
+export function primaryCoversOpening(openingName: string): boolean {
+  const qTokens = normName(openingName)
+    .split(' ')
+    .filter((t) => t.length > 2 && !GENERIC_TOKENS.has(t));
+  if (qTokens.length === 0) return byOpening.size > 0;
+  for (const key of byOpening.keys()) {
+    const kTokens = new Set(key.split(' '));
+    if (qTokens.every((t) => kTokens.has(t))) return true;
+  }
+  return false;
 }
 
 /** A plans-bearing note for the current path — the phase-transition hook
@@ -200,11 +288,22 @@ export function transitionTeachingForGame(args: {
     family.sort((a, b) => b.lineSan.length - a.lineSan.length);
     if (family[0]) return family[0];
   }
-  // 4. STRUCTURE TRANSFER — teaching from ANY opening whose taught structure
-  //    provably matches this board (and whose claims survive the live truth
-  //    filter). This note rides in the FACTS PACKAGE the model must voice
-  //    (David 2026-07-30: "we hand the package to the llm"), so past book the
-  //    transition teaching no longer goes quiet.
+  // 4. GAP TIER — the transition ritual on an opening the primary corpus never
+  //    covers. Ahead of structure transfer for the reason given on
+  //    `teachingNoteForBoard`: a real plan for THIS opening beats a borrowed
+  //    plan from another one. Any primary opening-level coverage suppresses it.
+  if (args.openingName) {
+    const gap = secondaryNotesForGap({
+      historySans: args.historySans,
+      openingName: args.openingName,
+      primaryHits: primaryCoversOpening(args.openingName) ? 1 : 0,
+      maxNotes: 4,
+    }).find((n) => n.plans?.trim());
+    if (gap) return gap;
+  }
+  // 5. STRUCTURE TRANSFER — teaching from ANY opening whose structure provably
+  //    matches this board (and whose claims survive the live truth filter), so
+  //    past book the transition teaching no longer goes quiet.
   if (args.fen) {
     const transferred = notesForStructure(args.fen, 2).find((n) => n.plans?.trim());
     if (transferred) return transferred;
@@ -300,6 +399,20 @@ export function buildDanyaTeachingBlock(args: {
   // truth filter). Fires mainly past book, where the tiers above go quiet.
   if (args.fen && picked.length < max) {
     for (const n of notesForStructure(args.fen, max - picked.length)) {
+      if (!seen.has(n.id)) { picked.push(n); seen.add(n.id); }
+    }
+  }
+  // GAP TIER — a second creator's corpus, consulted ONLY when everything above
+  // came back empty, i.e. this opening is one the primary corpus never covers.
+  // It supplies ideas, never voice, and cannot dilute Naroditsky teaching where
+  // that exists: a single primary hit suppresses it entirely.
+  if (picked.length === 0) {
+    for (const n of secondaryNotesForGap({
+      historySans: args.historySans,
+      openingName: args.openingName,
+      primaryHits: picked.length,
+      maxNotes: max,
+    })) {
       if (!seen.has(n.id)) { picked.push(n); seen.add(n.id); }
     }
   }
