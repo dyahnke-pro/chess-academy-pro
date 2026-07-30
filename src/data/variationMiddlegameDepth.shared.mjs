@@ -25,7 +25,13 @@ export function reachesMiddlegame(pgn) {
   let wCastle = false;
   let bCastle = false;
   for (const m of moves) {
-    const r = chess.move(m); // throws on illegal — legality is gated elsewhere
+    // FAIL CLOSED on an illegal move. This used to throw, and the throw escaped
+    // through openingDetectionService.mainLineReaches into opening RESOLUTION —
+    // so a single bad move in one entry's line crashed "teach me <that opening>"
+    // outright rather than the line simply not qualifying as a middlegame.
+    let r = null;
+    try { r = chess.move(m); } catch { r = null; }
+    if (!r) return { pass: false, plies: moves.length, wCastle, bCastle, wDev: 0, bDev: 0, illegalAt: m };
     if (r.san === 'O-O' || r.san === 'O-O-O') {
       if (r.color === 'w') wCastle = true;
       else bCastle = true;
