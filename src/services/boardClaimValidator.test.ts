@@ -106,6 +106,19 @@ describe('validateBoardClaims — piece on square', () => {
     const r = validateBoardClaims('The f3-knight is well placed.', BUG_FEN);
     expect(r.ok).toBe(true);
   });
+
+  it("flags the possessive wrong-color form — \"Black's bishop on f1\" when f1 holds WHITE's", () => {
+    // 2026-07-30 Glek prod probe: the spoken narration attributed White's
+    // f1-bishop to Black; the possessive 's broke the color capture and the
+    // claim degraded to a colorless (true) one.
+    const r = validateBoardClaims("Black's bishop on f1 is awkwardly placed.", START_FEN);
+    expect(r.violations.some((v) => v.kind === 'piece-on-square' && /white, not black/.test(v.reason))).toBe(true);
+  });
+
+  it("accepts the possessive form when the color is right — \"White's bishop on f1\"", () => {
+    const r = validateBoardClaims("White's bishop on f1 waits for the fianchetto.", START_FEN);
+    expect(r.ok).toBe(true);
+  });
 });
 
 describe('stripDisprovenSentences', () => {

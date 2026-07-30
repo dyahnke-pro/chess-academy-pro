@@ -130,7 +130,11 @@ function firstPieceRef(phrase: string): PieceRef | null {
 function allPieceRefs(phrase: string): PieceRef[] {
   const out: PieceRef[] = [];
   // "white? (piece) (on|at|from)? square?" and reversed "square(-| )piece".
-  const fwd = /\b(white|black)?\s*(pawn|knight|bishop|rook|queen|king)\b(?:\s*(?:on|at|from)?\s*([a-h][1-8]))?/gi;
+  // "(white|black)('s)? piece" — the possessive form ("Black's bishop on
+  // f1") must bind the color too; without it the claim degrades to a
+  // colorless one and a wrong-color attribution rides through (caught on
+  // the 2026-07-30 Glek prod probe).
+  const fwd = /\b(white|black)?(?:'s)?\s*(pawn|knight|bishop|rook|queen|king)\b(?:\s*(?:on|at|from)?\s*([a-h][1-8]))?/gi;
   const rev = /\b([a-h][1-8])\s*[-–]?\s*(pawn|knight|bishop|rook|queen|king)\b/gi;
   let m: RegExpExecArray | null;
   while ((m = fwd.exec(phrase)) !== null) {
@@ -322,7 +326,7 @@ export function validateBoardClaims(text: string, fen: string): BoardClaimResult
     const sentence = fm ? fullSentence.slice(0, fm.index) : fullSentence;
     if (!sentence.trim()) continue;
     const claims: Array<{ type: PieceSymbol; color?: 'w' | 'b'; square: string; raw: string }> = [];
-    const fwd = /\b(white|black)?\s*(pawn|knight|bishop|rook|queen|king)\s+(?:on|at)\s+([a-h][1-8])\b/gi;
+    const fwd = /\b(white|black)?(?:'s)?\s*(pawn|knight|bishop|rook|queen|king)\s+(?:on|at)\s+([a-h][1-8])\b/gi;
     const rev = /\b(?:the\s+)?([a-h][1-8])\s*[-–]\s*(pawn|knight|bishop|rook|queen|king)\b/gi;
     let pm: RegExpExecArray | null;
     while ((pm = fwd.exec(sentence)) !== null) {
