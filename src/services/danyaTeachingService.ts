@@ -21,6 +21,7 @@ import { computeStructureSignature, signatureMatchScore, type StructureSignature
 import { validateBoardClaims } from './boardClaimValidator';
 import { secondaryNotesForGap, secondaryNotesForPosition } from './chessbrahTeachingService';
 import { detectOpening } from './openingDetectionService';
+import { noteContradictsLine } from './noteLineGuard';
 
 export interface DanyaNote {
   id: string;
@@ -157,17 +158,21 @@ export function notesForPrefix(historySans: string[], maxNotes = 3, withinPlies 
  *  narrate a move that already happened. Pass `fen` (the live board) to also
  *  catch transpositions into a taught position. */
 export function noteAtPosition(historySans: string[], fen?: string): DanyaNote | null {
-  const bucket = byPrefix.get(historySans.join(' ')) ?? [];
+  // A note that recites a different line than the one played narrates the wrong
+  // opening (see noteLineGuard) — silence beats teaching someone else's theory.
+  const onThisLine = (n: DanyaNote): boolean =>
+    !noteContradictsLine(`${n.explains} ${n.teaches}`, historySans);
+  const bucket = (byPrefix.get(historySans.join(' ')) ?? []).filter(onThisLine);
   if (bucket[0]) return bucket[0];
   if (fen) {
-    const viaFen = notesForFen(fen, 1)[0];
+    const viaFen = notesForFen(fen, 1).filter(onThisLine)[0];
     if (viaFen) return viaFen;
   }
   // GAP TIER, exact positions only. This is the walkthrough splice's source, so
   // without it the narration goes silent on an opening the primary corpus never
   // covers. The "exactly at this position" contract is preserved — only a
   // secondary note keyed at THIS very line qualifies, never an opening-level one.
-  return secondaryNotesForPosition(historySans)[0] ?? null;
+  return secondaryNotesForPosition(historySans).filter(onThisLine)[0] ?? null;
 }
 
 /** The best teaching note for a live position, for FACT-PACKAGE builders
