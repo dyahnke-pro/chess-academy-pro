@@ -361,6 +361,13 @@ const RESOLVER_MIN_FUZZY_LEN = 4;
  *  that DO exist in the DB. Pre-flight aliases the input before
  *  attempting match against the DB. */
 const NAME_ALIASES: Record<string, string> = {
+  // "the alapin" means the anti-Sicilian 2.c3 to essentially everyone — but
+  // fuzzy resolution preferred "Ruy Lopez: Alapin Defense" (the obscure
+  // 3...Bb4 sideline named after the same man), so "teach me the alapin"
+  // taught the wrong opening entirely (prod probe, 2026-07-30).
+  alapin: 'Sicilian Defense: Alapin Variation',
+  'the alapin': 'Sicilian Defense: Alapin Variation',
+  'alapin sicilian': 'Sicilian Defense: Alapin Variation',
   kid: "King's Indian Defense",
   // "KIA" — King's Indian Attack (White's g3/Nf2/e4 setup). A common
   // acronym that resolved to nothing, so "teach me the KIA" dead-ended
