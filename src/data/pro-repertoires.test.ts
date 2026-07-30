@@ -52,8 +52,12 @@ describe('Pro Repertoire PGN Legality', () => {
     }
   });
 
-  it('has all 15 players', () => {
-    expect(proRepertoire.players).toHaveLength(15);
+  it('has all 8 players', () => {
+    // 2026-07-30: the seven placeholder pros that carried zero openings
+    // (firouzja, dubov, gukesh, praggnanandhaa, niemann, annacramling,
+    // chesswithakeem) were removed — they rendered as dead "0 openings"
+    // cards. See the "Elite roster" gate below.
+    expect(proRepertoire.players).toHaveLength(8);
   });
 
   it('has the expected number of openings', () => {
@@ -154,5 +158,27 @@ describe('Pro Repertoire Trap Line Quality', () => {
       }
     }
     expect(offenders).toEqual([]);
+  });
+});
+
+describe('Elite roster', () => {
+  const players = proRepertoire.players as { id: string; name: string }[];
+
+  it('every roster player carries at least one opening', () => {
+    // A player with zero openings renders as a dead "0 openings" card in
+    // the Elite tab and a blank player page. Removed 2026-07-30; this gate
+    // keeps placeholder pros from coming back before their content does.
+    const empty = players
+      .filter((p) => !entries.some((o) => o.playerId === p.id))
+      .map((p) => `${p.id} (${p.name})`);
+    expect(empty).toEqual([]);
+  });
+
+  it('every opening belongs to a roster player', () => {
+    const rosterIds = new Set(players.map((p) => p.id));
+    const orphans = entries
+      .filter((o) => !rosterIds.has(o.playerId))
+      .map((o) => `${o.id} → unknown player "${o.playerId}"`);
+    expect(orphans).toEqual([]);
   });
 });

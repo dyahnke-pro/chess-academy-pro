@@ -376,14 +376,12 @@ describe('reconcileProRepertoires — pick up JSON updates without wiping progre
     expect(after.isRepertoire).toBe(false);
   }, 60000);
 
-  it('sweeps orphans for a player whose openings were wiped entirely (G8)', async () => {
+  it('sweeps orphans for a player dropped from the roster entirely (G8)', async () => {
     await seedFully();
-    // Simulate an already-seeded device still carrying a slate-wiped
-    // player's openings: the player is still in the roster but now carries
-    // ZERO JSON entries. The per-player orphan sweep must delete the stale
-    // Dexie rows. NOTE: pick a roster player that genuinely has 0 openings
-    // (a placeholder) — a built player (carlsen, caruana, …) is NOT swept
-    // because its openings ARE in the JSON.
+    // Simulate an already-seeded device still carrying openings for a pro
+    // who has since left the roster (the 2026-07-30 removal of the seven
+    // zero-opening placeholders). The per-player sweep only walks players
+    // still in the JSON, so a dropped player needs its own sweep.
     const template = await db.openings.get('pro-naroditsky-caro-kann');
     expect(template).toBeDefined();
     if (!template) return;
@@ -395,7 +393,23 @@ describe('reconcileProRepertoires — pick up JSON updates without wiping progre
     await db.meta.delete('pro_data_revision');
     await reconcileProRepertoires();
 
-    // The wiped-player orphan is gone; a kept opening survives.
+    // The dropped-player orphan is gone; a kept opening survives.
+    expect(await db.openings.get(orphanId)).toBeUndefined();
+    expect(await db.openings.get('pro-naroditsky-caro-kann')).toBeDefined();
+  }, 60000);
+
+  it('sweeps a scrapped opening for a player still on the roster (G8)', async () => {
+    await seedFully();
+    const template = await db.openings.get('pro-naroditsky-caro-kann');
+    expect(template).toBeDefined();
+    if (!template) return;
+    const orphanId = 'pro-naroditsky-scrapped-line';
+    await db.openings.put({ ...template, id: orphanId, proPlayerId: 'naroditsky' });
+    expect(await db.openings.get(orphanId)).toBeDefined();
+
+    await db.meta.delete('pro_data_revision');
+    await reconcileProRepertoires();
+
     expect(await db.openings.get(orphanId)).toBeUndefined();
     expect(await db.openings.get('pro-naroditsky-caro-kann')).toBeDefined();
   }, 60000);

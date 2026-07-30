@@ -46,51 +46,6 @@
    "imageInitials": "TM"
   },
   {
-   "id": "firouzja",
-   "name": "Dynamic Attacking Systems",
-   "title": "",
-   "rating": 2785,
-   "style": "Dynamic, Creative",
-   "description": "A dynamic, attacking repertoire statistically derived from public games of elite players. Coming soon.",
-   "imageInitials": "DA"
-  },
-  {
-   "id": "dubov",
-   "name": "Creative Surprise Weapons",
-   "title": "",
-   "rating": 2700,
-   "style": "Creative, Unconventional",
-   "description": "A creative, unconventional repertoire statistically derived from public games of elite players. Coming soon.",
-   "imageInitials": "CS"
-  },
-  {
-   "id": "gukesh",
-   "name": "Classical Attacking Repertoire",
-   "title": "",
-   "rating": 2763,
-   "style": "Classical, Attacking",
-   "description": "A classical attacking repertoire statistically derived from public games of elite players. Coming soon.",
-   "imageInitials": "CA"
-  },
-  {
-   "id": "praggnanandhaa",
-   "name": "Balanced Calculating Repertoire",
-   "title": "",
-   "rating": 2740,
-   "style": "Balanced, Calculating",
-   "description": "A balanced, calculation-heavy repertoire statistically derived from public games of elite players. Coming soon.",
-   "imageInitials": "BC"
-  },
-  {
-   "id": "niemann",
-   "name": "Dynamic Fighting Repertoire",
-   "title": "",
-   "rating": 2700,
-   "style": "Dynamic, Competitive",
-   "description": "A dynamic, combative repertoire statistically derived from public games of elite players. Coming soon.",
-   "imageInitials": "DF"
-  },
-  {
    "id": "ericrosen",
    "name": "The Gambit & Trap Repertoire",
    "title": "",
@@ -98,24 +53,6 @@
    "style": "Trappy, Creative",
    "description": "A trappy, gambit-based repertoire statistically derived from public games — built around opening traps and creative sacrifices.",
    "imageInitials": "GT"
-  },
-  {
-   "id": "annacramling",
-   "name": "Solid Classical Repertoire",
-   "title": "",
-   "rating": 2175,
-   "style": "Solid, Classical",
-   "description": "A solid, classical repertoire statistically derived from public games of elite players. Coming soon.",
-   "imageInitials": "SC"
-  },
-  {
-   "id": "chesswithakeem",
-   "name": "Tactical Blitz Repertoire",
-   "title": "",
-   "rating": 2304,
-   "style": "Tactical, Blitz Specialist",
-   "description": "A tactical blitz repertoire statistically derived from public games of elite players. Coming soon.",
-   "imageInitials": "TB"
   },
   {
    "id": "samayraina",

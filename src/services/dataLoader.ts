@@ -115,7 +115,7 @@ const SEED_KEY = 'db_seeded_v12';
  * compared byte-for-byte to the meta key, so any change triggers a
  * full content refresh.
  */
-const PRO_DATA_REVISION = '2026-07-24-alapin-king-hunt-mate';
+const PRO_DATA_REVISION = '2026-07-30-drop-empty-pro-players';
 const PRO_REVISION_KEY = 'pro_data_revision';
 // Bump when repertoire.json CONTENT changes need to reach already-seeded
 // devices (the base repertoire is otherwise only loaded on first install).
@@ -497,6 +497,18 @@ export async function reconcileProRepertoires(): Promise<void> {
       if (orphanIds.length > 0) {
         await db.openings.bulkDelete(orphanIds);
       }
+    }
+
+    // Sweep rows belonging to a player who left the roster entirely
+    // (2026-07-30: the seven placeholder pros that carried zero openings
+    // were removed). The per-player loop above only covers players still
+    // in the JSON, so a dropped player's rows would otherwise survive on
+    // a device seeded before the removal.
+    const droppedPlayerRows = allOpenings
+      .filter((o) => o.proPlayerId && !(o.proPlayerId in idsByPlayer))
+      .map((o) => o.id);
+    if (droppedPlayerRows.length > 0) {
+      await db.openings.bulkDelete(droppedPlayerRows);
     }
 
     await db.meta.put({ key: PRO_REVISION_KEY, value: PRO_DATA_REVISION });
