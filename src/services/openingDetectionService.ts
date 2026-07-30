@@ -368,6 +368,22 @@ const NAME_ALIASES: Record<string, string> = {
   alapin: 'Sicilian Defense: Alapin Variation',
   'the alapin': 'Sicilian Defense: Alapin Variation',
   'alapin sicilian': 'Sicilian Defense: Alapin Variation',
+  // "the colle" is the d5/e3/Bd3 system with the Zukertort b3 plan — the
+  // baked Tier-2 narration lives on this canonical row; unaliased, fuzzy
+  // resolution preferred the obscure Siroccopteryx g6 line.
+  colle: "Queen's Pawn Game: Colle System",
+  'the colle': "Queen's Pawn Game: Colle System",
+  'colle system': "Queen's Pawn Game: Colle System",
+  'colle zukertort': "Queen's Pawn Game: Colle System",
+  'colle-zukertort': "Queen's Pawn Game: Colle System",
+  // "the polish" / 1.b4 — the OPENING (Sokolsky), not the 1.d4 b5 Polish
+  // DEFENSE the fuzzy match lands on. The KID/Sokolsky Attack row is the
+  // deepest teachable 1.b4 line in the DB and carries the baked narration.
+  'polish opening': "Polish Opening: King's Indian Variation, Sokolsky Attack",
+  'the polish': "Polish Opening: King's Indian Variation, Sokolsky Attack",
+  sokolsky: "Polish Opening: King's Indian Variation, Sokolsky Attack",
+  orangutan: "Polish Opening: King's Indian Variation, Sokolsky Attack",
+  b4: "Polish Opening: King's Indian Variation, Sokolsky Attack",
   kid: "King's Indian Defense",
   // "KIA" — King's Indian Attack (White's g3/Nf2/e4 setup). A common
   // acronym that resolved to nothing, so "teach me the KIA" dead-ended

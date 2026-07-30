@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { LessonScaffold } from './LessonScaffold';
 import { voiceService } from '../../services/voiceService';
+import { mentionedMoveArrows } from '../../services/mentionedMoveArrows';
 import { logAppAudit } from '../../services/appAuditor';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { reportPlayableLineContinuity } from '../../services/continuityGuard';
@@ -195,9 +196,17 @@ export function PlayableLinePlayer({
     // Intro beat: the plan's idea arrows (breaks + future-open lines) on the
     // static critical position, before any move.
     if (demoMoveIndex < 0) return arrowsToBoard(line.intro?.arrows);
-    if (demoMoveIndex >= (line.arrows ?? []).length) return [];
-    return arrowsToBoard(line.arrows[demoMoveIndex]);
-  }, [demoMoveIndex, line.arrows, line.intro]);
+    const authored = demoMoveIndex < (line.arrows ?? []).length ? (line.arrows?.[demoMoveIndex] ?? []) : [];
+    // LEAD THE EYE on every move the annotation MENTIONS but doesn't play
+    // out (David 2026-07-30) — future plans, opponent replies, named
+    // breaks. Same code-computed pass the walkthroughs and LessonPlayer
+    // use; authored arrows stay first and duplicates are excluded.
+    const say = demoMoveIndex < (line.annotations ?? []).length ? (line.annotations?.[demoMoveIndex] ?? '') : '';
+    const mentioned = say
+      ? mentionedMoveArrows(say, demoFenAtIndex(demoMoveIndex), authored.map((a) => ({ from: a.from, to: a.to })))
+      : [];
+    return arrowsToBoard([...authored, ...mentioned]);
+  }, [demoMoveIndex, line.arrows, line.intro, line.annotations, demoFenAtIndex]);
 
   // Lead-the-eye highlights — light up exactly the squares the current
   // annotation names so the student looks where the words point instead

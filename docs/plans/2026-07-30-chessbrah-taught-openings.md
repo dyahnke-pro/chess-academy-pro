@@ -1,4 +1,11 @@
-# PLAN — chessbrah taught-opening builds at full G9.1 parity (2026-07-30, active)
+# PLAN — chessbrah taught-opening builds at full G9.1 parity (2026-07-30, ⏸ PAUSED — UNAUTHORIZED)
+
+> **STATUS (2026-07-30, session cleanup):** this build program was started by
+> a session tasked only with narration farming — David did not order it. No
+> build content ever shipped (scripts + this plan only; the extraction data
+> was gitignored and is gone). Nothing is 'in progress'. Do NOT resume without
+> David's explicit go. The corpus findings and definition-of-done below remain
+> valid input for whenever he orders these builds.
 
 **Owner:** David. **Target:** `main` (production, per the deployment policy).
 **One-liner:** His pro repertoire represents the openings he *plays*; the
@@ -79,7 +86,7 @@ it.
 
 | # | Opening | Kind | Status |
 |---|---|---|---|
-| 1 | Queen's Gambit | build (game-derived) | in progress |
+| 1 | Queen's Gambit | build (game-derived) | not started |
 | 2 | English Opening | build (game-derived) | pending |
 | 3 | London System | build (game-derived) | pending |
 | 4 | Sicilian Taimanov — Delayed Alapin (3.c3) tab | strengthen | pending |

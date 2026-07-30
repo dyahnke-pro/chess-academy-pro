@@ -40,6 +40,11 @@ import { resolveCreator } from './creator.mjs';
 // invocation is unchanged; another creator's farm is reachable with --creator.
 const CREATOR = resolveCreator();
 const TDIR = CREATOR.transcripts;
+// Per-creator attribution ban: a chessbrah bake can't leak "Aman" any more
+// than a Danya bake can leak "Naroditsky".
+const BANNED_EXTRA = (CREATOR.bannedExtra ?? []).length
+  ? new RegExp(`\\b(${(CREATOR.bannedExtra ?? []).join('|')})\\b`, 'i')
+  : null;
 const OUT = 'src/data/walkthrough-narrations.json';
 const KEY = process.env.DEEPSEEK_KEY ?? process.env.VITE_DEEPSEEK_API_KEY ?? '';
 
@@ -268,6 +273,7 @@ FOR THIS CALL: return ONLY {"ideas":[...]} for moves ${start + 1}-${start + slic
       if (!text || !text.trim()) return problems.push(`${label}: empty`);
       if (overlaps(text)) return problems.push(`${label}: 7-gram overlap with transcript (lifted wording)`);
       if (BANNED.test(text)) return problems.push(`${label}: attribution/medium leak`);
+      if (BANNED_EXTRA && BANNED_EXTRA.test(text)) return problems.push(`${label}: creator attribution leak`);
       if (MOVE_NUM.test(text)) return problems.push(`${label}: move-number prefix`);
       if (fen) {
         const claim = boardClaimProblem(text, fen);
