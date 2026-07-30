@@ -1,3 +1,4 @@
+import { mentionedMoveArrows } from '../../services/mentionedMoveArrows';
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { Chess } from 'chess.js';
 import { ConsistentChessboard, type BoardArrow } from '../Chessboard/ConsistentChessboard';
@@ -302,10 +303,23 @@ export function LessonPlayer({ script, onExit, onComplete, onContinueToNext }: L
   // once the moves have settled AND the sentence naming their square has been
   // spoken (revealedSquares) — so the eye lands on each square as the coach
   // says its name, not all at once.
+  // LEAD THE EYE on MENTIONED moves (David 2026-07-30): narration that names
+  // other moves/roads ("h3, then Kh2, Nd2, and f4"; "Na4 wins the bishop
+  // pair") gets code-computed vision arrows for each mention, revealed on the
+  // same spoken-sentence cadence as authored arrows. Authored arrows and the
+  // trail are excluded so nothing doubles up.
+  const mentionArrows = useMemo(
+    () =>
+      mentionedMoveArrows(beat.say ?? '', fens[idx] ?? '', [
+        ...(beat.arrows ?? []),
+        ...trailArrows.map((t) => ({ from: t.startSquare, to: t.endSquare })),
+      ]),
+    [beat, fens, idx, trailArrows],
+  );
   const boardArrows: BoardArrow[] = [
     ...trailArrows,
     ...(settled
-      ? (beat.arrows ?? [])
+      ? [...(beat.arrows ?? []), ...mentionArrows]
           .filter((a) => revealedSquares.has(a.to) || revealedSquares.has(a.from))
           .map((a) => ({
             startSquare: a.from,

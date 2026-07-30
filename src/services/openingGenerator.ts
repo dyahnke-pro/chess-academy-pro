@@ -46,6 +46,7 @@ import { db, type CachedOpening } from '../db/schema';
 import { gradeNarrationText } from './coachAnswerGates';
 import { logAppAudit } from './appAuditor';
 import { buildDanyaTeachingBlock, noteAtPosition } from './danyaTeachingService';
+import { mentionedMoveArrows } from './mentionedMoveArrows';
 import type {
   WalkthroughTree,
   WalkthroughTreeNode,
@@ -1616,8 +1617,13 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       children: nextChildren,
     };
     if (shortText) node.shortIdea = shortText;
-    if (arrows.length > 0) {
-      const segment: NarrationSegmentType = { text, arrows };
+    const mentionArrows = mentionedMoveArrows(text, p.fen, [
+      { from: p.from, to: p.to },
+      ...arrows.map((a) => ({ from: a.from, to: a.to })),
+    ]);
+    const segmentArrows = [...arrows, ...mentionArrows];
+    if (segmentArrows.length > 0) {
+      const segment: NarrationSegmentType = { text, arrows: segmentArrows };
       if (shortText) segment.shortText = shortText;
       node.narration = [segment];
     }
