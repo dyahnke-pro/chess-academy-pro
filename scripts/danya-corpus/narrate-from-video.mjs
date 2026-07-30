@@ -132,7 +132,10 @@ async function resolveSpine(openingName) {
 
 // ── board-claim gate (piece-on-square truth per ply) ─────────────────────
 const PIECE_CODE = { knight: 'n', bishop: 'b', rook: 'r', queen: 'q', king: 'k', pawn: 'p' };
-function boardClaimsOk(text, fen) {
+/** Returns null when every piece-on-square claim is true, else a message
+ *  naming the FIRST false claim — the repair call needs to know WHICH
+ *  sentence lied, or it rewrites blind and fails the same gate again. */
+function boardClaimProblem(text, fen) {
   const c = new Chess(fen);
   const claims = [
     ...text.matchAll(/\b(knight|bishop|rook|queen|king|pawn)\s+on\s+([a-h][1-8])\b/gi),
@@ -143,9 +146,10 @@ function boardClaimsOk(text, fen) {
     const sq = (rev ? m[1] : m[2]).toLowerCase();
     const word = (rev ? m[2] : m[1]).toLowerCase();
     const p = c.get(sq);
-    if (!p || p.type !== PIECE_CODE[word]) return false;
+    if (!p) return `claims "${m[0]}" but ${sq} is EMPTY`;
+    if (p.type !== PIECE_CODE[word]) return `claims "${m[0]}" but ${sq} holds a ${Object.entries(PIECE_CODE).find(([, v]) => v === p.type)?.[0]}`;
   }
-  return true;
+  return null;
 }
 
 async function callModel(system, user, maxTokens) {
@@ -232,54 +236,52 @@ FOR THIS CALL: return ONLY {"ideas":[...]} for moves ${start + 1}-${start + slic
 
   // Gates, per unit. A failed unit fails the BUILD (fix the source or re-run) —
   // a silently-dropped ply would desync narration from the board.
-  const problems = [];
-  const checkUnit = (label, text, fen) => {
-    if (!text || !text.trim()) return problems.push(`${label}: empty`);
-    if (overlaps(text)) return problems.push(`${label}: 7-gram overlap with transcript (lifted wording)`);
-    if (BANNED.test(text)) return problems.push(`${label}: attribution/medium leak`);
-    if (MOVE_NUM.test(text)) return problems.push(`${label}: move-number prefix`);
-    if (fen && !boardClaimsOk(text, fen)) return problems.push(`${label}: board-false piece claim`);
-  };
-  checkUnit('intro', out.intro, null);
-  checkUnit('outro', out.outro, null);
-  ideas.forEach((idea, i) => {
-    checkUnit(`ply ${i + 1} (${plies[i].san}) text`, idea.text, plies[i].fen);
-    checkUnit(`ply ${i + 1} shortText`, idea.shortText, plies[i].fen);
-    const shortWords = String(idea.shortText ?? '').trim().split(/\s+/).length;
-    if (shortWords > 18) problems.push(`ply ${i + 1} shortText: ${shortWords} words (max 18)`);
-    if (idea.text && !mentionsOwnMove(idea.text, plies[i].san)) {
-      problems.push(`ply ${i + 1} text: does not speak about its OWN move ${plies[i].san} (misaligned narration)`);
-    }
-  });
-  // REPAIR PASS: a failed ply goes back to the model ONCE with the violation
-  // named and the ply's true board; still-failing output kills the build.
-  if (problems.length > 0) {
-    const failing = [...new Set(problems.map((x) => x.match(/^ply (\d+)/)?.[1]).filter(Boolean).map(Number))];
-    console.error(`… repairing ${failing.length} gated plies: ${problems.slice(0, 6).join(' | ')}`);
-    if (failing.length > 0) {
-      const detail = failing.map((n) => {
-        const i = n - 1;
-        return `move ${n} (${plies[i].san}) — FEN after: ${plies[i].fen} — rejected because: ${problems.filter((x) => x.startsWith(`ply ${n} `)).join('; ')}`;
-      }).join('\n');
-      const fix = await callModel(system, `${user}\n\nREPAIR CALL: these narration entries were REJECTED. Rewrite ONLY these moves' entries. Make every piece/square claim TRUE on the given FEN, keep wording original, shortText ≤18 words.\n${detail}\nReturn {"ideas":[...]} with EXACTLY ${failing.length} entries, in the order listed.`, 4096);
-      const fixed = Array.isArray(fix.ideas) ? fix.ideas : [];
-      failing.forEach((n, k) => { if (fixed[k]) ideas[n - 1] = fixed[k]; });
-    }
-    problems.length = 0;
+  const runGates = () => {
+    const problems = [];
+    const checkUnit = (label, text, fen) => {
+      if (!text || !text.trim()) return problems.push(`${label}: empty`);
+      if (overlaps(text)) return problems.push(`${label}: 7-gram overlap with transcript (lifted wording)`);
+      if (BANNED.test(text)) return problems.push(`${label}: attribution/medium leak`);
+      if (MOVE_NUM.test(text)) return problems.push(`${label}: move-number prefix`);
+      if (fen) {
+        const claim = boardClaimProblem(text, fen);
+        if (claim) return problems.push(`${label}: ${claim}`);
+      }
+    };
     checkUnit('intro', out.intro, null);
     checkUnit('outro', out.outro, null);
     ideas.forEach((idea, i) => {
       checkUnit(`ply ${i + 1} (${plies[i].san}) text`, idea.text, plies[i].fen);
       checkUnit(`ply ${i + 1} shortText`, idea.shortText, plies[i].fen);
+      const shortWords = String(idea.shortText ?? '').trim().split(/\s+/).length;
+      if (shortWords > 18) problems.push(`ply ${i + 1} shortText: ${shortWords} words (max 18)`);
       if (idea.text && !mentionsOwnMove(idea.text, plies[i].san)) {
         problems.push(`ply ${i + 1} text: does not speak about its OWN move ${plies[i].san} (misaligned narration)`);
       }
     });
-    if (problems.length > 0) {
-      console.error(`✗ ${problems.length} gate failure(s) after repair:`);
-      for (const x of problems.slice(0, 12)) console.error('  -', x);
-      process.exit(1);
-    }
+    return problems;
+  };
+  // REPAIR LOOP: a failed ply goes back to the model with the EXACT violation
+  // (which claim lied, on which FEN) — up to 2 rounds; a blind repair that
+  // doesn't know which sentence lied just fails the same gate again.
+  let problems = runGates();
+  for (let round = 1; round <= 2 && problems.length > 0; round += 1) {
+    const failing = [...new Set(problems.map((x) => x.match(/^ply (\d+)/)?.[1]).filter(Boolean).map(Number))];
+    if (failing.length === 0) break;
+    console.error(`… repair round ${round}: ${failing.length} gated plies: ${problems.slice(0, 6).join(' | ')}`);
+    const detail = failing.map((n) => {
+      const i = n - 1;
+      return `move ${n} (${plies[i].san}) — FEN after: ${plies[i].fen} — rejected because: ${problems.filter((x) => x.startsWith(`ply ${n} `)).join('; ')}`;
+    }).join('\n');
+    const fix = await callModel(system, `${user}\n\nREPAIR CALL: these narration entries were REJECTED for the exact reasons listed. Rewrite ONLY these moves' entries. Each entry MUST name its own move's SAN, every piece/square claim must be TRUE on the given FEN (simplest fix: drop the false claim entirely), wording original, shortText ≤18 words.\n${detail}\nReturn {"ideas":[...]} with EXACTLY ${failing.length} entries, in the order listed.`, 4096);
+    const fixed = Array.isArray(fix.ideas) ? fix.ideas : [];
+    failing.forEach((n, k) => { if (fixed[k]) ideas[n - 1] = fixed[k]; });
+    problems = runGates();
+  }
+  if (problems.length > 0) {
+    console.error(`✗ ${problems.length} gate failure(s) after repair:`);
+    for (const x of problems.slice(0, 12)) console.error('  -', x);
+    process.exit(1);
   }
 
   let file = { generatedAt: '', narrations: {} };

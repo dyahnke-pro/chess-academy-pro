@@ -119,3 +119,43 @@ The pipeline is Naroditsky-pathed (`naroditsky-voice/` dirs, one corpus file,
 manifest, but a SEPARATE corpus file + service seam — do NOT mix voices into
 `danya-teachings.json`. The house VOICE stays Naroditsky-register regardless
 (CLAUDE.md doctrine); another creator's corpus supplies IDEAS, not voice.
+
+## The 3-tier walkthrough narration architecture (David 2026-07-30, LOCKED)
+
+"Teach me X" on /coach/teach resolves narration in this order:
+
+1. **Masterclass** — `masterclassWalkthroughAdapter.masterclassWalkthroughTree`
+   adapts a monotonic `LessonScript` into a WalkthroughTree on the fly:
+   authored beats, authored arrows + mentioned-move lead-the-eye arrows,
+   ZERO LLM, instant. Rewinding/branching lessons (ruy, queens-gambit,
+   kings-gambit) and roadmap/trap shapes fall through. Face/tour skip it.
+2. **Baked video narration** — `bakedWalkthroughNarration.bakedNarrationFor`
+   looks up `src/data/walkthrough-narrations.json` (built by
+   `scripts/danya-corpus/narrate-from-video.mjs`): the teacher's transcript
+   handed to the model OFFLINE, reworded, gated. Hit = deterministic spine
+   narration, no note splice, no reword; zero runtime LLM when branch-free.
+3. **Computed generation** — the existing DB-narration path (LLM prose +
+   note splice + house-voice reword), template fallback never cached.
+
+### Baking a new opening (Tier 2)
+
+```bash
+# spine comes from the RUNTIME resolution (print-spine tsx bridge) — a bake
+# on any other line will never match at runtime:
+node scripts/danya-corpus/narrate-from-video.mjs \
+  --opening "<canonical name>" --videos <ytId1,ytId2> [--dry]
+```
+
+Gates (bake script + `src/data/walkthroughNarrations.test.ts` build gate):
+legal spine, one idea per ply, 7-gram overlap, attribution leak, move-number
+prefix, board-claim truth (claim named in the failure), and **ALIGNMENT** —
+every idea must speak about its OWN ply's move (the first Latvian bake
+shipped ideas shifted one ply; every board claim was true, only the own-move
+check caught it). Repair loop = up to 2 rounds with the exact violation named.
+After a successful bake: bump `WALKTHROUGH_GEN_REV` + shared `PROMPT_VERSION`
+so cached trees regenerate, commit the JSON, push, then run
+`AUDIT_TIER=baked AUDIT_OPENING="<name>" node scripts/audit-teach-tiers-spoken-prod.mjs`
+against prod. Read the baked ideas against the board before shipping —
+gates catch classes, not every semantic lie (the Latvian's "Qxg2 grabs the
+rook on h8" passed every gate; hand-fix such plies in the JSON, the build
+gate re-verifies).

@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-07-30T20:36:47.605Z",
+ "generatedAt": "2026-07-30T20:49:53.938Z",
  "narrations": {
   "latvian gambit": {
    "openingName": "Latvian Gambit",
@@ -44,7 +44,7 @@
      "shortText": "f5 weakens Black's king."
     },
     {
-     "text": "Bc4 develops the bishop to a powerful diagonal, eyeing f7\u2014the weakest square in Black's camp. This move increases pressure and threatens immediate checkmate if Black isn't careful.",
+     "text": "Bc4 develops the bishop to a powerful diagonal, eyeing f7—the weakest square in Black's camp. This move increases pressure and threatens immediate checkmate if Black isn't careful.",
      "shortText": "Bc4 targets f7."
     },
     {
@@ -60,11 +60,11 @@
      "shortText": "Qg5 is a poor square."
     },
     {
-     "text": "Nf7 forks Black's queen and rook, winning material. This knight jump is the direct punishment for Black's careless play\u2014the queen must move, and we'll capture the rook.",
+     "text": "Nf7 forks Black's queen and rook, winning material. This knight jump is the direct punishment for Black's careless play—the queen must move, and we'll capture the rook.",
      "shortText": "Nf7 forks queen and rook."
     },
     {
-     "text": "Qxg2 \u2014 Black ignores the fork, snapping off a pawn and attacking the rook on h1. It looks scary, but the queen has wandered far from her own king, and your fork on f7 still wins the exchange. Defend calmly and the counterplay evaporates.",
+     "text": "Qxg2 — Black ignores the fork, snapping off a pawn and attacking the rook on h1. It looks scary, but the queen has wandered far from her own king, and your fork on f7 still wins the exchange. Defend calmly and the counterplay evaporates.",
      "shortText": "Qxg2 ignores the fork and attacks the rook on h1."
     },
     {
@@ -82,6 +82,85 @@
     {
      "text": "Nf6 is a final blunder, but the game is already lost. Black's knight moves to f6, but it doesn't defend anything crucial. We can now finish with a simple tactic, like Qe2+ followed by Rd1, winning the queen.",
      "shortText": "Nf6 is a decisive mistake."
+    }
+   ]
+  },
+  "four knights game glek system": {
+   "openingName": "Four Knights Game: Glek System",
+   "spine": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "g3",
+    "d5",
+    "exd5",
+    "Nxd5",
+    "Bg2",
+    "Nxc3",
+    "bxc3"
+   ],
+   "sourceVideos": [
+    "yt:C6vYlx-lS6g",
+    "yt:DnJl1cmihNQ"
+   ],
+   "intro": "Welcome to the Four Knights Game: Glek System. This is an underrated weapon that sets up a fianchetto against Black's king pawn setup. Let's walk through the first critical moves.",
+   "shortIntro": "Glek System: fianchetto the bishop to fight for the center.",
+   "outro": "After Nxd5, Black has central control but White's fianchettoed bishop and flexible setup offer dynamic chances. The key ideas are to complete kingside development and prepare either d4 or f4 breaks.",
+   "ideas": [
+    {
+     "text": "e4 opens the center and stakes a claim in the heart of the board. This is the standard first move for White, aiming to control d5 and f5.",
+     "shortText": "e4 claims central space."
+    },
+    {
+     "text": "e5 is Black's symmetrical response, also grabbing central space and freeing the f8 bishop.",
+     "shortText": "e5 mirrors White's center."
+    },
+    {
+     "text": "Nf3 develops a knight to its best square, attacking e5 and preparing to castle kingside.",
+     "shortText": "Nf3 attacks e5, develops."
+    },
+    {
+     "text": "Nc6 develops Black's knight, defending e5 and eyeing d4.",
+     "shortText": "Nc6 defends e5."
+    },
+    {
+     "text": "Nc3 develops the other knight, supporting e4 and preparing to challenge the center.",
+     "shortText": "Nc3 supports e4."
+    },
+    {
+     "text": "Nf6 develops Black's knight, attacking e4 and putting pressure on White's center.",
+     "shortText": "Nf6 pressures e4."
+    },
+    {
+     "text": "g3 is the hallmark of the Glek System. You fianchetto the bishop to g2, controlling the long diagonal and preparing to castle. This move often catches Black off guard because it's less common than d4 or Bb5.",
+     "shortText": "g3 fianchettoes the bishop."
+    },
+    {
+     "text": "d5 is Black's principled central strike, challenging White's e4 pawn and opening lines. This is the most common and critical response to g3.",
+     "shortText": "d5 challenges the center."
+    },
+    {
+     "text": "exd5 captures the pawn, opening the center and forcing Black to recapture. White is not afraid of the resulting pawn structure.",
+     "shortText": "exd5 opens the center."
+    },
+    {
+     "text": "Nxd5 recaptures with the knight, centralizing it and threatening to disrupt White's pawns if Black takes on c3. This is a key moment: Black's knight on d5 is active, but White's fianchettoed bishop will target it.",
+     "shortText": "Nxd5 centralizes the knight."
+    },
+    {
+     "text": "Bg2. We fianchetto our bishop, completing our kingside development. This bishop will be a key defender and attacker along the long diagonal, especially after the center opens.",
+     "shortText": "Bg2 fianchettoes the bishop, controlling the long diagonal."
+    },
+    {
+     "text": "Nxc3. Black trades knights, capturing on c3. This is a common decision in the Glek; we should be happy to recapture with the b-pawn, as it opens the b-file and prepares d2-d4.",
+     "shortText": "Nxc3 trades knights, leading to doubled pawns for us."
+    },
+    {
+     "text": "bxc3. We recapture with the b-pawn, accepting doubled pawns. This structure is intentional: it opens the b-file for our rook and makes it easier to push d4, gaining central control. The doubled pawns are not a weakness here—they give us dynamic play.",
+     "shortText": "bxc3 opens the b-file and prepares d4."
     }
    ]
   }
