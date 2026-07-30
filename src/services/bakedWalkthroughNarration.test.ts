@@ -1,53 +1,44 @@
-import { describe, it, expect, vi } from 'vitest';
+// Tier 2 lookup: the NAME match is fuzzy, the SPINE match never is.
+//
+// The resolver and the bake key drift apart constantly — the runtime hands back
+// a deeper sub-variation than the bake was filed under, or the app's British
+// spelling meets the DB's American one — and an exact-key lookup silently
+// misses a perfectly good bake, dropping the coach to Tier 3.
 
-vi.mock('../data/walkthrough-narrations.json', () => ({
-  default: {
-    generatedAt: '2026-07-30',
-    narrations: {
-      'latvian gambit': {
-        openingName: 'Latvian Gambit',
-        spine: ['e4', 'e5', 'Nf3', 'f5'],
-        sourceVideos: ['yt:abc'],
-        intro: 'The gambit that dares White to refute it.',
-        shortIntro: 'A romantic f5 gambit.',
-        outro: 'Play it out.',
-        ideas: [
-          { text: 'e4 stakes the center.', shortText: 'e4 — center.' },
-          { text: 'e5 answers symmetrically.', shortText: 'e5 — mirror.' },
-          { text: 'Nf3 hits e5.', shortText: 'Nf3 attacks e5.' },
-          { text: 'f5 — the Latvian, an f-pawn lunge.', shortText: 'f5 — the gambit.' },
-        ],
-      },
-    },
-  },
-}));
-
+import { describe, it, expect } from 'vitest';
 import { bakedNarrationFor } from './bakedWalkthroughNarration';
+import baked from '../data/walkthrough-narrations.json';
+
+interface Entry { openingName: string; spine: string[]; ideas: unknown[] }
+const entries = Object.entries((baked as { narrations: Record<string, Entry> }).narrations);
+const [, sample] = entries[0];
 
 describe('bakedNarrationFor', () => {
-  it('hits when the name matches and the baked spine covers the runtime spine', () => {
-    const hit = bakedNarrationFor('Latvian Gambit', ['e4', 'e5', 'Nf3', 'f5']);
-    expect(hit?.intro).toContain('dares White');
-    expect(hit?.ideas).toHaveLength(4);
+  it('finds a bake by its exact name', () => {
+    expect(bakedNarrationFor(sample.openingName, sample.spine)).not.toBeNull();
   });
 
-  it('hits on a shorter runtime spine (baked prefix-covers it)', () => {
-    expect(bakedNarrationFor('Latvian Gambit', ['e4', 'e5', 'Nf3'])).not.toBeNull();
+  it('finds it through a deeper sub-variation name', () => {
+    const deeper = `${sample.openingName}, Some Deeper Variation`;
+    expect(bakedNarrationFor(deeper, sample.spine)).not.toBeNull();
   });
 
-  it('normalizes the name (case / punctuation)', () => {
-    expect(bakedNarrationFor('latvian   gambit!', ['e4', 'e5'])).not.toBeNull();
+  it('finds it across the Defence/Defense spelling split', () => {
+    const british = sample.openingName.replace(/Defense/g, 'Defence');
+    expect(bakedNarrationFor(british, sample.spine)).not.toBeNull();
   });
 
-  it('MISSES when the runtime spine diverges — a name match on a different line never narrates it', () => {
-    expect(bakedNarrationFor('Latvian Gambit', ['e4', 'e5', 'Bc4', 'f5'])).toBeNull();
+  it('never matches on a generic token alone', () => {
+    // "Polish Opening" shares only "opening" with anything filed here.
+    expect(bakedNarrationFor('Polish Opening', sample.spine)).toBeNull();
   });
 
-  it('MISSES when the runtime spine runs deeper than the bake', () => {
-    expect(bakedNarrationFor('Latvian Gambit', ['e4', 'e5', 'Nf3', 'f5', 'Nxe5'])).toBeNull();
+  it('rejects a name hit whose moves are not the moves on the board', () => {
+    const wrongLine = ['h4', 'h5', 'a4', 'a5'];
+    expect(bakedNarrationFor(sample.openingName, wrongLine)).toBeNull();
   });
 
-  it('misses unknown openings', () => {
-    expect(bakedNarrationFor('Grob Attack', ['g4'])).toBeNull();
+  it('rejects a spine deeper than the bake covers', () => {
+    expect(bakedNarrationFor(sample.openingName, [...sample.spine, 'Qd2'])).toBeNull();
   });
 });

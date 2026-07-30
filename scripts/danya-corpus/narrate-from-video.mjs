@@ -29,12 +29,17 @@
  *   DEEPSEEK_KEY=... node scripts/danya-corpus/narrate-from-video.mjs \
  *     --opening "sicilian defense: alapin variation" \
  *     --videos KNwKz9Ssi8c[,<id2>...]           # theory/speedrun vids for X
+ *     [--creator naroditsky|chessbrah]           # whose transcript farm
  *     [--dry]                                    # spine+transcript check only
  */
 import { readFile, writeFile, access } from 'node:fs/promises';
 import { Chess } from 'chess.js';
+import { resolveCreator } from './creator.mjs';
 
-const TDIR = 'data/sources/naroditsky-voice/transcripts';
+// Whose transcripts to bake from. Defaults to naroditsky, so every existing
+// invocation is unchanged; another creator's farm is reachable with --creator.
+const CREATOR = resolveCreator();
+const TDIR = CREATOR.transcripts;
 const OUT = 'src/data/walkthrough-narrations.json';
 const KEY = process.env.DEEPSEEK_KEY ?? process.env.VITE_DEEPSEEK_API_KEY ?? '';
 
@@ -182,8 +187,13 @@ async function main() {
 
   let transcript = '';
   for (const id of VIDEO_IDS) {
-    try { transcript += `\n${vttToText(await readFile(`${TDIR}/${id}.en.vtt`, 'utf8'))}`; }
-    catch { console.error(`  (no transcript on disk for ${id} — skipping)`); }
+    // Raw captions when present; a farm that already cleaned to prose (the
+    // generic fetch-youtube-transcripts pipeline) writes .txt instead.
+    const vtt = await readFile(`${TDIR}/${id}.en.vtt`, 'utf8').catch(() => null);
+    if (vtt !== null) { transcript += `\n${vttToText(vtt)}`; continue; }
+    const txt = await readFile(`${TDIR}/${id}.txt`, 'utf8').catch(() => null);
+    if (txt !== null) { transcript += `\n${txt}`; continue; }
+    console.error(`  (no transcript on disk for ${id} — skipping)`);
   }
   if (transcript.length < 2000) { console.error('transcript material too thin'); process.exit(1); }
   // DeepSeek context bound — keep the richest teaching bulk.
