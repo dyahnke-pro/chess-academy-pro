@@ -4,7 +4,7 @@
 // (must match variationTabs.ts CURATED['glek-system'] labels).
 
 export const GLEK_SYSTEM_TAB_PLAN_IDS: Record<string, string[]> = {
-  main: ['mp-gleksystem-bc5-f5', 'mp-gleksystem-f4trap'],
+  main: ['mp-gleksystem-bc5-f5', 'mp-gleksystem-traditional-f4', 'mp-gleksystem-f4trap'],
   'central 4...d5': ['mp-gleksystem-d5-outpost'],
 };
 
