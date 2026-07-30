@@ -159,3 +159,25 @@ against prod. Read the baked ideas against the board before shipping —
 gates catch classes, not every semantic lie (the Latvian's "Qxg2 grabs the
 rook on h8" passed every gate; hand-fix such plies in the JSON, the build
 gate re-verifies).
+
+## Tier-2 openings = the FUTURE MASTERCLASS QUEUE (David 2026-07-30)
+
+Every Tier-2 baked opening is a flagged candidate for a full masterclass
+build (playbook + G9.x). When one gets its masterclass, Tier 1 takes over
+automatically and the baked entry goes dormant — nothing to remove.
+
+| Opening | Baked | Notes |
+|---|---|---|
+| Latvian Gambit | ✅ 14 plies | 2 dedicated videos |
+| Four Knights: Glek System | dormant | masterclass EXISTS — Tier 1 serves it |
+| Elephant Gambit | ✅ 8 plies | 3 videos |
+| Sicilian: Grand Prix Attack | ✅ 5 plies | 6 videos — deep video coverage, strong masterclass candidate |
+| Bird Opening | ✅ 18 plies | 2 videos |
+| Torre Attack | ❌ bake rejected (side-voice confusion; 1 multi-topic video) | needs dedicated source or hand-authoring |
+| Hippopotamus Defense | ❌ bake rejected (DB spine is the joke Nh6 line; narration described the wrong side) | classic double-fianchetto hippo needs a curated spine first |
+
+Video-covered openings that already HAVE masterclasses (no Tier-2 needed):
+scandinavian (17 vids), philidor (14), smith-morra (13), french (16),
+accelerated dragon (8), najdorf (6), vienna gambit (6), danish (6),
+stafford (2), benko (1), catalan (1) — these videos are still voice-corpus
+input for masterclass narration polish.
