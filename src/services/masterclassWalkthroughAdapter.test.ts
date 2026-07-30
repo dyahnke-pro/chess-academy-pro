@@ -50,18 +50,45 @@ describe('lessonToWalkthroughTree', () => {
     }
   });
 
-  it('rejects a lesson that rewinds to an earlier position', () => {
+  it('a rewinding sideline beat becomes a labeled fork, and a wrap-up beat appends on its node', () => {
     const rewinding: LessonScript = {
       openingId: 'x',
       title: 'Rewinder',
       minutes: 5,
       orientation: 'white',
       beats: [
-        { id: 'a', moves: ['e4', 'e5', 'Nf3'], say: 'Develop.' },
-        { id: 'b', moves: ['e4', 'e5'], say: 'Back up — imagine Black tried f6.' },
+        { id: 'a', moves: ['e4', 'e5', 'Nf3'], say: 'Nf3 develops.' },
+        { id: 'branch-sideline', moves: ['e4', 'e5', 'Bc4'], say: 'Bc4 is the other road, aiming at f7.', sayShort: 'Bc4 — the bishop road' },
+        { id: 'close', moves: ['e4', 'e5', 'Nf3'], say: 'That is the heart of it.' },
       ],
     };
-    expect(lessonToWalkthroughTree(rewinding, 'Rewinder')).toBeNull();
+    const tree = lessonToWalkthroughTree(rewinding, 'Rewinder');
+    expect(tree).not.toBeNull();
+    const e5 = (tree as NonNullable<typeof tree>).root.children[0].node.children[0].node;
+    expect(e5.children.map((c) => c.node.san).sort()).toEqual(['Bc4', 'Nf3']);
+    for (const c of e5.children) expect(c.label).toBeTruthy();
+    const mainLeaf = e5.children.find((c) => c.node.san === 'Nf3')?.node;
+    expect(mainLeaf?.idea).toContain('Nf3 develops.');
+    expect(mainLeaf?.idea).toContain('That is the heart of it.');
+    // the union keeps the FIRST-built (main) child as the default path
+    expect(e5.children[0].node.san).toBe('Nf3');
+  });
+
+  it('adapts the Ruy — a real rewinding masterclass — into a legal fork tree', () => {
+    const tree = masterclassWalkthroughTree('Ruy Lopez');
+    expect(tree).not.toBeNull();
+    let forks = 0;
+    const walk = (n: WalkthroughTreeNode, fen: string): void => {
+      const c = new Chess(fen);
+      expect(() => c.move(n.san as string)).not.toThrow();
+      if (n.children.length > 1) {
+        forks += 1;
+        for (const ch of n.children) expect(ch.label).toBeTruthy();
+      }
+      for (const ch of n.children) walk(ch.node, c.fen());
+    };
+    for (const ch of (tree as NonNullable<typeof tree>).root.children) walk(ch.node, new Chess().fen());
+    expect(forks).toBeGreaterThan(0);
   });
 
   it('rejects roadmap/trap-shaped lessons', () => {

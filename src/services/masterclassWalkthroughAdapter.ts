@@ -10,14 +10,14 @@
 // zero LLM calls, zero generation wait (G0: the LLM decides nothing; here
 // it isn't even asked to phrase).
 //
-// Scope: only lessons whose beats advance MONOTONICALLY along one line
-// (each beat's moves extends the previous beat's). A lesson that rewinds
-// or branches to a sideline is a story the linear tree can't tell without
-// corrupting it — those openings fall through to Tier 2/3 untouched.
-// Empirical coverage at build time: 9 of 13 masterclass main lessons are
-// monotonic (caro-kann, pirc, italian, london, scotch, english, KID,
-// nimzo, sicilian-alapin); vienna rewinds but already has its hand-crafted
-// static tree, and ruy/queens-gambit/kings-gambit rewind by design.
+// Scope: every masterclass main lesson adapts. Monotonic lessons become a
+// linear chain; lessons with rewind beats (ruy / queens-gambit /
+// kings-gambit style: a monotonic main run + "branch-*" sideline pointers
+// + a closing wrap-up on the main leaf) become a UNION TREE — each beat's
+// path is created or reused and its narration lands on the path's terminal
+// node, so sidelines surface as labeled fork tiles and the wrap-up speaks
+// on the main line's leaf. Registered variation lessons additionally graft
+// as full fork branches (replacing any shallow same-move pointer).
 import { Chess } from 'chess.js';
 import type { LessonScript, LessonBeat, AnnotationArrow, AnnotationHighlight } from '../types';
 import type {
@@ -108,9 +108,24 @@ interface BuiltChain {
   introBeats: LessonBeat[];
 }
 
-/** Build a linear node chain from a monotonic lesson's beats. `fromPly`
- *  drops narration for plies before it (used for variation branches whose
- *  trunk plies are narrated by the main lesson). */
+/** Attach a beat's narration to its terminal node (appending when the node
+ *  already speaks — e.g. a closing wrap-up beat on the main line's leaf). */
+function attachNarration(node: WalkthroughTreeNode, beat: LessonBeat, fen: string, moveSquares: { from: string; to: string } | null): void {
+  const seg = beatSegment(beat, fen, moveSquares);
+  node.narration = [...(node.narration ?? []), seg];
+  node.idea = node.idea ? `${node.idea} ${beat.say}` : beat.say;
+  if (beat.sayShort && !node.shortIdea) node.shortIdea = beat.sayShort;
+}
+
+/** Build the UNION TREE of every beat's move path. Masterclass lessons are
+ *  a monotonic main run plus optional rewind beats — sideline pointers
+ *  ("branch-*") and a closing wrap-up that returns to the deepest main
+ *  position. Each beat's path is created (or reused) node-by-node and its
+ *  narration lands on the path's terminal node; a beat whose path already
+ *  exists appends its narration there. Children keep beat order, so the
+ *  first-created (main) continuation stays the default path. `fromPly`
+ *  drops narration for plies before it (variation branches whose trunk is
+ *  narrated by the main lesson). */
 function buildChain(lesson: LessonScript, fromPly = 0): BuiltChain | null {
   const introBeats: LessonBeat[] = [];
   let firstMoveBeat = 0;
@@ -120,49 +135,81 @@ function buildChain(lesson: LessonScript, fromPly = 0): BuiltChain | null {
   }
 
   const root: WalkthroughTreeNode = { san: null, movedBy: null, idea: '', children: [] };
+  // Main chain = the longest monotonic run from the first move beat; its
+  // nodes (per ply) anchor variation grafting.
   const nodes: WalkthroughTreeNode[] = [];
-  let tail = root;
-  const board = new Chess();
-  let played: string[] = [];
+  let mainMoves: string[] = [];
 
   for (let b = firstMoveBeat; b < lesson.beats.length; b++) {
     const beat = lesson.beats[b];
-    const newMoves = beat.moves.slice(played.length);
-    if (newMoves.length === 0) {
-      // Commentary beat on the position already shown — extra segment on
-      // the current node so the runtime speaks it in sequence.
-      if (tail !== root && played.length > fromPly) {
-        const seg = beatSegment(beat, board.fen(), null);
-        tail.narration = [...(tail.narration ?? []), seg];
-        tail.idea = tail.idea ? `${tail.idea} ${beat.say}` : beat.say;
+    if (beat.moves.length === 0) continue; // framing beats past the intro carry no anchor ply
+    // Replay the beat's full path from the start, creating missing nodes.
+    const board = new Chess();
+    let cursor = root;
+    let ok = true;
+    let lastMv: { from: string; to: string } | null = null;
+    for (let i = 0; i < beat.moves.length; i++) {
+      let mv;
+      try {
+        mv = board.move(beat.moves[i]);
+      } catch {
+        ok = false;
+        break;
       }
-      continue;
+      lastMv = { from: mv.from, to: mv.to };
+      let child = cursor.children.find((c) => c.node.san === mv.san);
+      if (!child) {
+        const node: WalkthroughTreeNode = {
+          san: mv.san,
+          movedBy: mv.color === 'w' ? 'white' : 'black',
+          idea: '',
+          children: [],
+        };
+        child = { node };
+        cursor.children.push(child);
+      }
+      cursor = child.node;
     }
-    for (let i = 0; i < newMoves.length; i++) {
-      const mv = board.move(newMoves[i]);
-      const node: WalkthroughTreeNode = {
-        san: mv.san,
-        movedBy: mv.color === 'w' ? 'white' : 'black',
-        idea: '',
-        children: [],
-      };
-      tail.children.push({ node });
-      tail = node;
-      nodes.push(node);
-      // The beat's narration lands on its LAST move; interstitial moves in
-      // a multi-move beat animate silently (silence is acceptable — the
-      // narration voice rules prefer it over filler).
-      if (i === newMoves.length - 1 && nodes.length > fromPly) {
-        node.idea = beat.say;
-        if (beat.sayShort) node.shortIdea = beat.sayShort;
-        node.narration = [beatSegment(beat, board.fen(), { from: mv.from, to: mv.to })];
+    if (!ok || cursor === root) continue; // illegal beat path — skip, never corrupt
+    // Track the main chain: a beat extending the current main line.
+    if (beat.moves.length >= mainMoves.length && mainMoves.every((m, i) => beat.moves[i] === m)) {
+      let walker = root;
+      const chain: WalkthroughTreeNode[] = [];
+      for (const san of beat.moves) {
+        const c = walker.children.find((x) => x.node.san === san);
+        if (!c) break;
+        chain.push(c.node);
+        walker = c.node;
+      }
+      if (chain.length === beat.moves.length) {
+        mainMoves = beat.moves;
+        nodes.length = 0;
+        nodes.push(...chain);
       }
     }
-    played = beat.moves;
+    if (beat.moves.length > fromPly) attachNarration(cursor, beat, board.fen(), lastMv);
   }
 
   if (nodes.length === 0) return null;
-  return { root, nodes, moves: played, introBeats };
+  // Label any fork a rewind beat created: the first (main) child gets the
+  // main-line label; a sideline child labels itself from its own narration.
+  const labelForks = (node: WalkthroughTreeNode): void => {
+    if (node.children.length > 1) {
+      node.children.forEach((c, idx) => {
+        if (c.label) return;
+        if (idx === 0) {
+          c.label = `Main line — ${c.node.san ?? ''}`;
+          c.forkSubtitle = c.node.shortIdea ?? 'The masterclass main line.';
+        } else {
+          c.label = c.node.shortIdea ?? `Sideline — ${c.node.san ?? ''}`;
+          c.forkSubtitle = c.node.idea.split(/(?<=[.!?])\s/)[0]?.slice(0, 90) ?? '';
+        }
+      });
+    }
+    for (const c of node.children) labelForks(c.node);
+  };
+  labelForks(root);
+  return { root, nodes, moves: mainMoves, introBeats };
 }
 
 /** Graft the opening's registered VARIATION lessons onto the main chain as
@@ -194,11 +241,18 @@ function graftVariationForks(main: BuiltChain, openingId: string): number {
       parent.children[0].forkSubtitle = mainNext.shortIdea ?? 'The masterclass main line.';
     }
     const firstBranchBeat = lesson.beats.find((bt) => bt.moves.length > d);
-    parent.children.push({
+    const child = {
       label: name,
       forkSubtitle: firstBranchBeat?.sayShort ?? lesson.title,
       node: branchEntry,
-    });
+    };
+    // The main lesson may carry its own shallow "branch-*" pointer beat on
+    // the same move — the full variation lesson REPLACES it (richer line,
+    // same entry SAN); never leave two tiles playing the same move.
+    const existing = parent.children.findIndex((c) => c !== parent.children[0] && c.node.san === branchEntry.san);
+    if (existing > 0) parent.children[existing] = child;
+    else if (mainNext?.san === branchEntry.san) continue; // variation IS the main continuation — nothing to graft
+    else parent.children.push(child);
     grafted += 1;
   }
   return grafted;
@@ -210,7 +264,6 @@ export function lessonToWalkthroughTree(
   openingId?: string,
 ): WalkthroughTree | null {
   if (lesson.kind && lesson.kind !== 'variation') return null;
-  if (!isMonotonic(lesson.beats)) return null;
 
   const main = buildChain(lesson);
   if (!main) return null;
