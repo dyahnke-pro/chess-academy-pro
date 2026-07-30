@@ -4305,7 +4305,7 @@ export async function getCoachChatResponse(
   // Skipped on kid surfaces per CLAUDE.md kid §3.
   const allMessagesText = messages.map((m) => m.content).join(' ');
   const narrationGrounding = skipPersonality
-    ? { block: '', loadedCount: 0, loaded: { annotation: false, bookPassages: false, middlegamePlan: false, modelGames: false } }
+    ? { block: '', loadedCount: 0, loaded: { annotation: false, bookPassages: false, middlegamePlan: false, modelGames: false, teaching: false } }
     : await buildNarrationGroundingBlock({
         askText: allMessagesText,
         // No reliable opening name or moveHistory in raw message text;

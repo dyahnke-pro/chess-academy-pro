@@ -46,6 +46,7 @@ import { loadAnnotationContextForLive } from '../coach/sources/annotationContext
 import { loadBookGroundingForLive } from '../coach/sources/bookGrounding';
 import { loadMiddlegamePlanForLive } from '../coach/sources/middlegamePlan';
 import { loadModelGamesForLive } from '../coach/sources/modelGames';
+import { buildDanyaTeachingBlock } from './danyaTeachingService';
 import {
   formatAnnotationContextSubBlock,
   formatBookGroundingSubBlock,
@@ -68,6 +69,9 @@ export interface NarrationGroundingArgs {
    *  openingName isn't set and to window the annotation block
    *  around the current ply. */
   moveHistory?: string[];
+  /** Live board FEN when the surface has one — unlocks the corpus's
+   *  exact-position and structure-transfer tiers. */
+  fen?: string | null;
   /** Source identifier for the audit emission so we can tell which
    *  bypass path requested grounding (e.g. "coachApi.chatResponse",
    *  "coachApi.commentary", "voiceChat", "puzzleFeedback"). */
@@ -86,6 +90,7 @@ export interface NarrationGroundingResult {
     bookPassages: boolean;
     middlegamePlan: boolean;
     modelGames: boolean;
+    teaching: boolean;
   };
 }
 
@@ -104,11 +109,21 @@ export async function buildNarrationGroundingBlock(
   // Run loaders in parallel — annotation is async (dynamic import),
   // the others are sync but wrap them in resolved promises so the
   // single Promise.all settles cleanly even when one throws.
-  const [annotation, plan, games, book] = await Promise.all([
+  const [annotation, plan, games, book, teaching] = await Promise.all([
     loadAnnotationContextForLive({ openingName, moveHistory }).catch(() => null),
     Promise.resolve(loadMiddlegamePlanForLive({ openingName, moveHistory })).catch(() => null),
     Promise.resolve(loadModelGamesForLive({ openingName, moveHistory })).catch(() => null),
     Promise.resolve(loadBookGroundingForLive({ askText, openingName })).catch(() => null),
+    // Corpus teaching (David 2026-07-30: EVERY surface that teaches or answers
+    // gets the full teaching stack — Play answers with the same information
+    // Learn narrates, it just waits to be asked). Exact position → prefix →
+    // opening → structure transfer, all code-selected + truth-filtered.
+    Promise.resolve(buildDanyaTeachingBlock({
+      historySans: moveHistory,
+      openingName,
+      fen: args.fen ?? null,
+      maxNotes: 3,
+    })).catch(() => ''),
   ]);
 
   const parts: string[] = [];
@@ -116,6 +131,7 @@ export async function buildNarrationGroundingBlock(
   if (book) parts.push(formatBookGroundingSubBlock(book));
   if (plan) parts.push(formatMiddlegamePlanSubBlock(plan));
   if (games) parts.push(formatModelGamesSubBlock(games));
+  if (teaching) parts.push(teaching);
 
   const block = parts.filter(Boolean).join('\n\n');
   const loaded = {
@@ -123,6 +139,7 @@ export async function buildNarrationGroundingBlock(
     bookPassages: !!book,
     middlegamePlan: !!plan,
     modelGames: !!games,
+    teaching: !!teaching,
   };
   const loadedCount = Object.values(loaded).filter(Boolean).length;
 
