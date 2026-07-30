@@ -77,6 +77,52 @@ describe('lessonToWalkthroughTree', () => {
   });
 });
 
+describe('variation fork grafting', () => {
+  it('offers the Glek sublines as labeled fork tiles at their divergence ply', () => {
+    const tree = masterclassWalkthroughTree('Four Knights Game: Glek System');
+    expect(tree).not.toBeNull();
+    // walk to the fork
+    let node = (tree as NonNullable<typeof tree>).root;
+    while (node.children.length === 1) node = node.children[0].node;
+    expect(node.san).toBe('g3');
+    const labels = node.children.map((c) => c.label);
+    expect(labels).toContain('Central Break: 4...d5');
+    expect(labels).toContain('Pin Variation: 4...Bb4');
+    expect(labels).toContain('Symmetrical: 4...g6');
+    expect(labels.some((l) => l?.startsWith('Main line'))).toBe(true);
+    // every child at a fork carries a label + subtitle (runtime contract)
+    for (const c of node.children) {
+      expect(c.label).toBeTruthy();
+      expect(c.forkSubtitle).toBeTruthy();
+    }
+    // each branch replays legally and narrates its own tail
+    for (const c of node.children) {
+      const probe = new Chess();
+      for (const san of ['e4', 'e5', 'Nf3', 'Nc6', 'Nc3', 'Nf6', 'g3']) probe.move(san);
+      let n = c.node;
+      let sawNarration = false;
+      for (;;) {
+        probe.move(n.san as string);
+        if (n.idea.trim().length > 0) sawNarration = true;
+        if (n.children.length === 0) break;
+        n = n.children[0].node;
+      }
+      expect(sawNarration).toBe(true);
+    }
+  });
+
+  it('a variation ask walks only its own line (no forks grafted)', () => {
+    const tree = masterclassWalkthroughTree('berlin defense');
+    if (tree) {
+      let node = tree.root;
+      while (node.children.length > 0) {
+        expect(node.children.length).toBe(1);
+        node = node.children[0].node;
+      }
+    }
+  });
+});
+
 describe('masterclassWalkthroughTree', () => {
   it('resolves a canonical opening name to its masterclass tree', () => {
     const tree = masterclassWalkthroughTree('Caro-Kann Defense');

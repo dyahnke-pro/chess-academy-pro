@@ -27,7 +27,7 @@ import type {
   NarrationArrow,
   NarrationHighlight,
 } from '../types/walkthroughTree';
-import { findLessonForQuery } from '../data/lessons';
+import { findLessonForQuery, getVariationLessonScriptsForOpening } from '../data/lessons';
 import { mentionedMoveArrows } from './mentionedMoveArrows';
 
 /** Map an authored arrow color (rgba / css string) onto the walkthrough
@@ -100,15 +100,18 @@ function beatSegment(beat: LessonBeat, fen: string, moveSquares: { from: string;
  *  null when the lesson rewinds/branches (not adaptable) or is a roadmap /
  *  trap shape (those stop short by design — the walkthrough should not
  *  present them as the opening's line). */
-export function lessonToWalkthroughTree(
-  lesson: LessonScript,
-  openingName: string,
-): WalkthroughTree | null {
-  if (lesson.kind && lesson.kind !== 'variation') return null;
-  if (!isMonotonic(lesson.beats)) return null;
+interface BuiltChain {
+  root: WalkthroughTreeNode;
+  /** Node per ply, in order — nodes[i] is the position after moves[0..i]. */
+  nodes: WalkthroughTreeNode[];
+  moves: string[];
+  introBeats: LessonBeat[];
+}
 
-  // Zero-move beats before the first move are the lesson's framing — they
-  // become the tree intro, spoken before anything animates.
+/** Build a linear node chain from a monotonic lesson's beats. `fromPly`
+ *  drops narration for plies before it (used for variation branches whose
+ *  trunk plies are narrated by the main lesson). */
+function buildChain(lesson: LessonScript, fromPly = 0): BuiltChain | null {
   const introBeats: LessonBeat[] = [];
   let firstMoveBeat = 0;
   while (firstMoveBeat < lesson.beats.length && lesson.beats[firstMoveBeat].moves.length === 0) {
@@ -117,6 +120,7 @@ export function lessonToWalkthroughTree(
   }
 
   const root: WalkthroughTreeNode = { san: null, movedBy: null, idea: '', children: [] };
+  const nodes: WalkthroughTreeNode[] = [];
   let tail = root;
   const board = new Chess();
   let played: string[] = [];
@@ -127,9 +131,11 @@ export function lessonToWalkthroughTree(
     if (newMoves.length === 0) {
       // Commentary beat on the position already shown — extra segment on
       // the current node so the runtime speaks it in sequence.
-      const seg = beatSegment(beat, board.fen(), null);
-      tail.narration = [...(tail.narration ?? []), seg];
-      tail.idea = tail.idea ? `${tail.idea} ${beat.say}` : beat.say;
+      if (tail !== root && played.length > fromPly) {
+        const seg = beatSegment(beat, board.fen(), null);
+        tail.narration = [...(tail.narration ?? []), seg];
+        tail.idea = tail.idea ? `${tail.idea} ${beat.say}` : beat.say;
+      }
       continue;
     }
     for (let i = 0; i < newMoves.length; i++) {
@@ -142,10 +148,11 @@ export function lessonToWalkthroughTree(
       };
       tail.children.push({ node });
       tail = node;
+      nodes.push(node);
       // The beat's narration lands on its LAST move; interstitial moves in
       // a multi-move beat animate silently (silence is acceptable — the
       // narration voice rules prefer it over filler).
-      if (i === newMoves.length - 1) {
+      if (i === newMoves.length - 1 && nodes.length > fromPly) {
         node.idea = beat.say;
         if (beat.sayShort) node.shortIdea = beat.sayShort;
         node.narration = [beatSegment(beat, board.fen(), { from: mv.from, to: mv.to })];
@@ -154,7 +161,61 @@ export function lessonToWalkthroughTree(
     played = beat.moves;
   }
 
-  if (root.children.length === 0) return null;
+  if (nodes.length === 0) return null;
+  return { root, nodes, moves: played, introBeats };
+}
+
+/** Graft the opening's registered VARIATION lessons onto the main chain as
+ *  fork tiles at their natural divergence ply (David 2026-07-30: the Glek's
+ *  three built sublines never surfaced on /coach/teach — the walkthrough
+ *  must pause at the fork like a real coach and offer them). */
+function graftVariationForks(main: BuiltChain, openingId: string): number {
+  let grafted = 0;
+  for (const { name, lesson } of getVariationLessonScriptsForOpening(openingId)) {
+    if (lesson.kind && lesson.kind !== 'variation') continue;
+    if (!isMonotonic(lesson.beats)) continue;
+    const varMoves = lesson.beats[lesson.beats.length - 1].moves;
+    // Divergence ply: first index where the variation leaves the main line.
+    let d = 0;
+    while (d < varMoves.length && d < main.moves.length && varMoves[d] === main.moves[d]) d += 1;
+    if (d === 0 || d >= varMoves.length) continue; // no shared trunk / no divergence
+    const branch = buildChain(lesson, d);
+    if (!branch) continue;
+    const branchEntry = branch.nodes[d];
+    if (!branchEntry) continue;
+    const parent = main.nodes[d - 1];
+    // Label the fork the way generated trees do: the runtime shows tap
+    // targets whenever a node has >1 child. An unlabeled single child is
+    // the main continuation (a variation diverging AT the terminus has no
+    // main continuation to label).
+    const mainNext = main.nodes[d];
+    if (mainNext && parent.children.length === 1 && !parent.children[0].label) {
+      parent.children[0].label = `Main line — ${mainNext.san ?? ''}`;
+      parent.children[0].forkSubtitle = mainNext.shortIdea ?? 'The masterclass main line.';
+    }
+    const firstBranchBeat = lesson.beats.find((bt) => bt.moves.length > d);
+    parent.children.push({
+      label: name,
+      forkSubtitle: firstBranchBeat?.sayShort ?? lesson.title,
+      node: branchEntry,
+    });
+    grafted += 1;
+  }
+  return grafted;
+}
+
+export function lessonToWalkthroughTree(
+  lesson: LessonScript,
+  openingName: string,
+  openingId?: string,
+): WalkthroughTree | null {
+  if (lesson.kind && lesson.kind !== 'variation') return null;
+  if (!isMonotonic(lesson.beats)) return null;
+
+  const main = buildChain(lesson);
+  if (!main) return null;
+  if (openingId) graftVariationForks(main, openingId);
+  const { root, introBeats } = main;
 
   const intro = introBeats.map((bt) => bt.say).join(' ')
     || `The ${openingName}, taught from this app's master class — the verified line, move by move.`;
@@ -179,5 +240,7 @@ export function masterclassWalkthroughTree(query: string | undefined | null): Wa
   const hit = findLessonForQuery(query);
   if (!hit) return null;
   const displayName = hit.variationName ?? query.trim();
-  return lessonToWalkthroughTree(hit.lesson, displayName);
+  // A MAIN-lesson walkthrough offers the opening's registered variation
+  // lessons as fork tiles; a variation ask walks just its own line.
+  return lessonToWalkthroughTree(hit.lesson, displayName, hit.variationName ? undefined : hit.openingId);
 }

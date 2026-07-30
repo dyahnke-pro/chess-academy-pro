@@ -680,6 +680,19 @@ export function getAllVariationLessonKeys(): string[] {
   return Object.keys(VARIATION_LESSONS);
 }
 
+/** Every registered variation lesson for one opening, with its tab name.
+ *  Used by the Tier-1 walkthrough adapter to offer the sublines as fork
+ *  tiles (David 2026-07-30: the Glek walkthrough taught the main line but
+ *  its three built sublines never surfaced on /coach/teach). */
+export function getVariationLessonScriptsForOpening(
+  openingId: string,
+): Array<{ name: string; lesson: LessonScript }> {
+  const prefix = `${openingId}::`;
+  return Object.entries(VARIATION_LESSONS)
+    .filter(([key]) => key.startsWith(prefix))
+    .map(([key, lesson]) => ({ name: key.slice(prefix.length), lesson }));
+}
+
 /** Every registered lesson (main-line + variations) with its registry key.
  *  Exported for build-time tooling (the lesson-tail diagnostic) and gate
  *  tests — NOT for runtime routing. The key is the openingId for main lessons
