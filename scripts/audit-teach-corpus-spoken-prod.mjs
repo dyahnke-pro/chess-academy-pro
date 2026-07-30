@@ -74,9 +74,15 @@ let seenSpoken = null;
 let detail = '';
 try {
   await p.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 45000 });
-  // The app reads auditStreamUrl at boot — set it, then RELOAD so it takes.
-  await p.evaluate((url) => localStorage.setItem('auditStreamUrl', url), listener.url).catch(() => undefined);
-  await p.reload({ waitUntil: 'domcontentloaded' });
+  // Listener attach ONLY on http (localhost): an https prod page posting to
+  // http://127.0.0.1 is MIXED CONTENT — the browser silently drops every
+  // event (that's the listener=0 all day, and it hid the llm-error naming a
+  // failed generation). On https the events go to the prod stream; the
+  // post-run pull below surfaces them.
+  if (BASE.startsWith('http://')) {
+    await p.evaluate((url) => localStorage.setItem('auditStreamUrl', url), listener.url).catch(() => undefined);
+    await p.reload({ waitUntil: 'domcontentloaded' });
+  }
   await dismiss(); await dismiss();
 
   const box = p.locator('[data-testid="chat-text-input"]');
@@ -112,6 +118,19 @@ await listener.stop().catch(() => undefined);
 // The claim under test is SPOKEN corpus teaching. The tts request text IS the
 // narration text routed to voice, so spoken evidence subsumes display; the
 // onScreen flag stays informational (a 4s poll can miss a ply's window).
+// Post-run prod-stream pull — generation-side events the sandboxed page
+// can't relay locally (llm-error names a failed gen; reword/splice show the
+// voice pipeline ran; cache-invalidated shows a fallback tree was refused).
+try {
+  const since = Date.now() - 15 * 60 * 1000;
+  const res = await fetch(`${BASE}/api/audit-stream?since=${since}`, { headers: { 'x-audit-secret': process.env.AUDIT_STREAM_SECRET ?? '' } });
+  if (res.ok) {
+    const events = (await res.json()).entries ?? [];
+    const rel = events.filter((e) => /llm-error|reword|danyaSplice|cache-invalidated/i.test(`${e.kind} ${e.source}`));
+    for (const e of rel.slice(-6)) console.log(`  [prod-audit] ${e.kind} | ${e.source} | ${(e.summary ?? '').slice(0, 110)}`);
+  }
+} catch { /* stream optional */ }
+
 const ok = !!seenSpoken;
 console.log(`${ok ? '✓ PASS' : '✗ FAIL'}: teach-me-${ASK} speaks the corpus — ${detail}`);
 if (seenSpoken) console.log(`  spoken mark: "${seenSpoken}"`);
