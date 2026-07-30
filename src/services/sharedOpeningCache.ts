@@ -44,7 +44,12 @@ import type { WalkthroughTree } from '../types/walkthroughTree';
  *  Increment when shipping a prompt change that affects tree shape
  *  or move depth. Reads filter to >= this value; writes record this
  *  value so older clients can still read forward-compatible rows. */
-export const PROMPT_VERSION = 2;
+// v3 (2026-07-30): the deterministic Danya-teaching splice happens at
+// generation time, so every pre-splice tree must fall out of the shared
+// cache the same way the local genRev eviction retires Dexie copies —
+// otherwise "teach me X" keeps serving corpus-free narration from any
+// user's (or audit bot's) older generation.
+export const PROMPT_VERSION = 3;
 
 interface SharedCacheConfig {
   supabaseUrl: string;
