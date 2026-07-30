@@ -929,6 +929,11 @@
     "name": "Alapin: 2...d5 3.exd5 Nf6 (Knight Recapture)",
     "pgn": "e4 c5 c3 d5 exd5 Nf6 d4 cxd4 cxd4 Nxd5 Nf3 Nc6 Be2",
     "explanation": "Instead of the common 3...Qxd5, Black recaptures with 3...Nf6 to avoid the queen sortie and reach a solid Caro-Kann-like structure. After 4.d4 cxd4 5.cxd4 Nxd5, White gets the IQP but Black develops smoothly with ...Nc6, ...Be7, ...O-O. The fianchetto with ...b6 and ...Bb7 targets d5 and the weakened long diagonal, while ...Na5-c4 blockades the isolated pawn."
+   },
+   {
+    "name": "Alapin: Stoltz Attack (4.Nf3 before d4)",
+    "pgn": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6 Qxd6 O-O Be6 Bxe6 Qxe6 a4 Qd7 a5 Nd5 a6 b6 d4 e6 Ne5 Nxe5 dxe5 Be7",
+    "explanation": "The modern move order: White develops with Nf3 and Bc4 before touching d4, sidestepping the early queen trade of the classical order. The bishop drops to b3, and when Black breaks with d5, White captures en passant and castles into a rich middlegame instead of an endgame. The signature idea is the rolling a-pawn — a4, a5, a6 — gaining queenside space and fixing b6 as a long-term target while the knight recycles through e5. When a line has the reputation of being dead equal, a move order or a pawn push like this is exactly how White changes the character of the game without taking on risk."
    }
   ],
   "trapLines": [],

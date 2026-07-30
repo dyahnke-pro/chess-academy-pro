@@ -221,6 +221,7 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /Qxd5/i, label: '2...d5 Qxd5' },
     { test: /5\.cxd4 d6 \(IQP Accepted\)/i, label: '2...Nf6 IQP' },
     { test: /3\.exd5 Nf6/i, label: '2...d5 Nf6' },
+    { test: /stoltz/i, label: 'Stoltz 4.Nf3' },
   ],
   // Italian Game — hand-picked tabs, ordered by reasoned amateur prevalence
   // (the explorer freq query was unavailable when this was built; ordering is
