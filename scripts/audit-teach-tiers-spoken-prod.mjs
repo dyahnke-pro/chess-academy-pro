@@ -34,7 +34,11 @@ let marks = [];
 if (TIER === 'baked') {
   const baked = JSON.parse(await readFile('src/data/walkthrough-narrations.json', 'utf8'));
   const key = norm(ASK).replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
-  const entry = baked.narrations[key];
+  // Mark sourcing mirrors the runtime lookup: exact key first, then any
+  // entry whose key contains every ask token (the runtime's name match is
+  // fuzzy — probing with the short auto-accepting ask must still find marks).
+  const entry = baked.narrations[key]
+    ?? Object.entries(baked.narrations).find(([k]) => key.split(' ').every((t) => k.includes(t)))?.[1];
   if (!entry) { console.log(`✗ FAIL: no baked narration for "${ASK}"`); process.exit(1); }
   marks = toMarks([entry.intro, ...entry.ideas.map((i) => i.text)]);
 } else {
