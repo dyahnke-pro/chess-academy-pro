@@ -25,6 +25,7 @@ import { useTeachWalkthrough, isStartablePunishLesson, isValidConceptsQuestion, 
 import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
+import { masterclassWalkthroughTree } from '../../services/masterclassWalkthroughAdapter';
 import { pickGreeting, pickSuggestedQuestions, weaknessNudgeFromItem } from '../../data/coachGreetings';
 import { getStoredWeaknessProfile } from '../../services/weaknessAnalyzer';
 import type {
@@ -2835,7 +2836,15 @@ export function CoachTeachPage(): JSX.Element {
         // Dexie cache (previously LLM-generated), runtime LLM
         // generation (last resort). Each later tier is slower but
         // covers more openings.
-        const staticTree = resolveWalkthroughTree(requestedName);
+        // Tier 1 is TWO registries: the legacy hand-crafted static trees
+        // (Vienna), then the masterclass LessonScripts adapted on the fly
+        // (David 2026-07-30, locked: "we teach from our masterclasses" —
+        // authored narration, zero LLM calls). Face mode teaches the
+        // COUNTER side and tour mode wants the quick overview, so both
+        // skip the masterclass tier and generate as before.
+        const staticTree =
+          resolveWalkthroughTree(requestedName) ??
+          (!faceMode && pace !== 'tour' ? masterclassWalkthroughTree(requestedName) : null);
         const surfaceTurnId = freshTurnId('walkthrough-surface');
         // Always show the user's ask in the transcript.
         setMessages((prev) => [...prev, {

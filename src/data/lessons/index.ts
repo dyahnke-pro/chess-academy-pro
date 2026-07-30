@@ -764,6 +764,36 @@ export function buildLessonReferenceBlock(text: string | undefined | null): stri
   ].join('\n');
 }
 
+/** Resolve a free-text "teach me X" ask to the most specific masterclass
+ *  lesson we hold: a named-subline hit (VARIATION_KEYWORDS) first, then the
+ *  opening's MAIN lesson. Sub-variation asks that we have NO variation
+ *  lesson for return null — the main lesson must never hijack a focused
+ *  variation request (the Tier-1 capture bug, build 00aadcd). Used by the
+ *  Learn-with-Coach walkthrough's masterclass tier (David 2026-07-30:
+ *  "we teach from our masterclasses"). */
+export function findLessonForQuery(
+  text: string | undefined | null,
+): { lesson: LessonScript; openingId: string; variationName: string | null } | null {
+  if (!text?.trim()) return null;
+  const lower = text.toLowerCase();
+  for (const [key, kws] of Object.entries(VARIATION_KEYWORDS)) {
+    if (kws.some((k) => lower.includes(k))) {
+      const lesson = VARIATION_LESSONS[key];
+      if (lesson) {
+        const sep = key.indexOf('::');
+        return { lesson, openingId: key.slice(0, sep), variationName: key.slice(sep + 2) };
+      }
+    }
+  }
+  const id = resolveOpeningIdFromName(text);
+  if (!id) return null;
+  // A ":"-qualified ask names a specific sub-line; without a matching
+  // variation lesson the ask falls through to the focused-generation tiers.
+  if (text.includes(':')) return null;
+  const main = LESSONS[id];
+  return main ? { lesson: main, openingId: id, variationName: null } : null;
+}
+
 
 // ─── Course-scoped coach (David 2026-05-22) ─────────────────────────────
 //
