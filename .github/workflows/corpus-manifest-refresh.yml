@@ -1,0 +1,46 @@
+# corpus-manifest-refresh — keep the Naroditsky video manifest current
+# (David 2026-07-31: the transcript farm's work-queue must not go stale).
+#
+# Weekly sweep of the teaching playlists + the channel uploads via
+# scripts/danya-corpus/fetch-manifest.mjs, committing manifest.json when new
+# videos appear. TRANSCRIPTS ARE NOT FETCHED HERE — they are gitignored
+# reference material (plagiarism guard) that bake sessions pull on demand
+# with yt-dlp. No repo secrets: the default GITHUB_TOKEN pushes the commit.
+name: corpus-manifest-refresh
+
+on:
+  schedule:
+    - cron: '0 9 * * 1' # Mondays 09:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: corpus-manifest-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install yt-dlp
+        run: pipx install yt-dlp || pip install --user yt-dlp
+      - name: Refresh manifest (playlists + channel sweep)
+        run: node scripts/danya-corpus/fetch-manifest.mjs
+      - name: Commit if changed
+        run: |
+          if git diff --quiet data/sources/naroditsky-voice/manifest.json; then
+            echo "manifest unchanged — nothing to commit"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/sources/naroditsky-voice/manifest.json
+          git commit -m "chore(corpus): weekly manifest refresh (new uploads)"
+          git push

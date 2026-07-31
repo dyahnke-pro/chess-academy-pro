@@ -6,7 +6,13 @@
  * distill; re-running refreshes it (new uploads appear, nothing is lost).
  *
  * Usage: node scripts/danya-corpus/fetch-manifest.mjs [playlistKey ...]
- *   (no args = all playlists)
+ *   (no args = all playlists + the channel-uploads sweep)
+ *
+ * CHANNEL SWEEP (2026-07-31): ~160 uploads live on the channel but in no
+ * teaching playlist. The no-args run also enumerates the channel's uploads
+ * and files any video not already claimed by a playlist under the
+ * `channel-other` tag, so bake sessions can DISCOVER them by title. A
+ * playlist tag always wins over `channel-other` on refresh.
  */
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -51,6 +57,26 @@ async function main() {
       n += 1;
     }
     console.log(`[manifest] ${key}: ${n} videos`);
+  }
+
+  // Channel sweep — only on a full (no-args) run. Playlist tags win: a
+  // video already filed under a playlist is never demoted to channel-other,
+  // and a channel-other video that later joins a playlist gets promoted by
+  // the playlist pass above (it runs first).
+  if (process.argv.slice(2).length === 0) {
+    console.log('[manifest] channel sweep …');
+    const { stdout } = await run('yt-dlp', [
+      '--flat-playlist', '--print', '%(id)s\t%(title)s',
+      'https://www.youtube.com/@DanielNaroditskyGM/videos',
+    ], { maxBuffer: 16 * 1024 * 1024 });
+    let added = 0;
+    for (const line of stdout.split('\n')) {
+      const [id, ...t] = line.split('\t');
+      if (!id?.trim() || byId.has(id.trim())) continue;
+      byId.set(id.trim(), { id: id.trim(), title: t.join('\t').trim(), playlist: 'channel-other' });
+      added += 1;
+    }
+    console.log(`[manifest] channel sweep: ${added} non-playlist videos filed as channel-other`);
   }
 
   const videos = [...byId.values()];
