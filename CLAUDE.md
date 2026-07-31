@@ -3792,6 +3792,7 @@ After every `git push origin main`:
    | `/coach/play` + `/coach` review — full games | `scripts/audit-coach-full-games.mjs` via the `full-game-audit.yml` workflow (🔒 THE FULL-GAME AUDIT STANDARD — see locked section below the matrix) |
    | `/coach/chat` | `scripts/audit-coach-chat.mjs` |
    | `/coach/teach` (Learn) | `scripts/audit-coach-teach-unknown-line.mjs` (unknown / sub-line resolution + middlegame spine depth + leaf play-out prompt) |
+   | `/coach/teach` fork / leaf / branch panels (any change to walkthrough intent routing) | `scripts/audit-teach-forkdive-prod.mjs` (a "Deep dive" tile must START A LESSON, never route to chat — fails on brain-refusal / auto-pause / "did you mean…") |
    | coach surfaces (any) — master-play grounding | `scripts/audit-coach-master-integration.mjs` |
    | coach surfaces (any) — player-game references | `scripts/audit-coach-player-games.mjs` (proGameReferences Dexie seed + shape; playerGames envelope event when a provider key is present) |
    | `src/data/pro-game-references.json` (any pro-rep build) | `scripts/audit-coach-player-games.mjs` + `npx vitest run src/data/proGameReferences.test.ts` |
