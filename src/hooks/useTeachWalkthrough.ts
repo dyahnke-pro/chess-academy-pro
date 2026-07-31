@@ -1370,6 +1370,32 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
         // distinguishes it.
         summary: `walkthrough fork picked: ${choice.label ?? '(unlabeled)'}`,
       });
+      // COMPARATIVE BRIDGE (David 2026-07-31: "narration that explains
+      // similarities and differences between what was already learned vs
+      // what is new"). All facts COMPUTED (G0): the shared trunk IS the
+      // similarity, the fork IS the difference. Spoken at the divergence
+      // moment, only on a sideline pick, only when the ledger says the
+      // student has been taught this opening before. Best-effort: any
+      // failure just advances without the bridge.
+      const t = treeRef.current;
+      const mainChoice = node.children[0];
+      if (choice !== mainChoice && t && !t.derived) {
+        void (async () => {
+          try {
+            const { getTeachingVisits } = await import('../services/teachingLedger');
+            const visits = await getTeachingVisits(t.openingName);
+            if (visits.length > 0 && mainChoice.node.san && choice.node.san) {
+              const knownLabel = /^main line/i.test(mainChoice.label ?? '')
+                ? 'the main line you know'
+                : (mainChoice.label ?? 'the line you know');
+              const bridge = `A quick bridge first. Everything to this position is the same road we walked before — that part you already own. Right here is where the stories split: ${knownLabel} plays ${mainChoice.node.san}, and today's line answers ${choice.node.san} instead. One choice, and the plans change — watch what that single move does to the position.`;
+              await speakWalkthroughText(bridge, `Same road until here — ${choice.node.san} instead of ${mainChoice.node.san}.`);
+            }
+          } catch { /* bridge is a bonus, never a blocker */ }
+          narrateAndAdvance([...pathNodes, choice.node]);
+        })();
+        return;
+      }
       narrateAndAdvance([...pathNodes, choice.node]);
     },
     [pathNodes, narrateAndAdvance],
