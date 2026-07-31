@@ -97,7 +97,14 @@ try {
   await p.evaluate(({ url, secret, local }) => {
     try {
       if (local) localStorage.setItem('auditStreamUrl', url);
-      if (secret) localStorage.setItem('auditStreamSecret', secret);
+      // BOTH are required: appAuditor only POSTs when it has a url AND a
+      // secret, so seeding the secret alone leaves every CLIENT-side audit
+      // (walkthrough, voice, generator) unstreamed while server-side ones
+      // still land — which reads as "the app stopped emitting".
+      if (secret) {
+        localStorage.setItem('auditStreamSecret', secret);
+        localStorage.setItem('auditStreamUrl', `${location.origin}/api/audit-stream`);
+      }
     } catch { /* storage blocked */ }
   }, { url: listener.url, secret: SECRET, local: BASE.startsWith('http://') }).catch(() => undefined);
   await p.reload({ waitUntil: 'domcontentloaded' });
