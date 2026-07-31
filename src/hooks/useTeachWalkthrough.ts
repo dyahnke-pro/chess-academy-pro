@@ -749,6 +749,23 @@ function stageHasEntries(
 export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
   const [tree, setTree] = useState<WalkthroughTree | null>(null);
   const [phase, setPhase] = useState<WalkthroughPhase>('idle');
+
+  // Commit this visit to the teaching ledger when the student reaches a
+  // leaf — the layer planned at start() is now DELIVERED, so the next
+  // "teach me X" recaps it and adds the next layer (David 2026-07-31).
+  useEffect(() => {
+    if (phase !== 'leaf') return;
+    const t = treeRef.current;
+    const plan = teachingPlanRef.current;
+    if (!t || t.derived || !plan || plan.opening !== t.openingName) return;
+    teachingPlanRef.current = null; // once per visit
+    void (async () => {
+      try {
+        const { recordTeachingVisit, takeawayForTree } = await import('../services/teachingLedger');
+        await recordTeachingVisit(t.openingName, plan.layer, takeawayForTree(t));
+      } catch { /* memory is a bonus, never a blocker */ }
+    })();
+  }, [phase]);
   // pathNodes[0] is always the root when active. The current node
   // is pathNodes[pathNodes.length - 1].
   const [pathNodes, setPathNodes] = useState<WalkthroughTreeNode[]>([]);
@@ -773,6 +790,9 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
   // flipped register (baked narrations do), the flipped text speaks. A
   // ref, read at SPEAK time — a mid-lesson flip takes effect on the very
   // next spoken line, no re-render churn.
+  // This visit's planned teaching layer (set at start, recorded at the
+  // leaf) — the coach's memory of what it taught (teachingLedger).
+  const teachingPlanRef = useRef<{ opening: string; layer: string } | null>(null);
   const viewOrientationRef = useRef<'white' | 'black' | null>(null);
   const setViewOrientation = useCallback((color: 'white' | 'black'): void => {
     viewOrientationRef.current = color;
@@ -1285,10 +1305,25 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
           if (settled) return;
           settle();
         }, backupMs);
-        speakWalkthroughText(
-          pickRegister(newTree.intro, newTree.introFlipped),
-          pickRegister(newTree.shortIntro ?? '', newTree.shortIntroFlipped) || newTree.shortIntro,
-        )
+        // TEACHING MEMORY (David 2026-07-31: "last time we went over X,
+        // today we add Y — MEMORY!!"). Code reads the per-opening ledger,
+        // plans this visit's layer, and prepends the recap to the spoken
+        // intro. Best-effort: a ledger error just speaks the plain intro.
+        void (async () => {
+          let recapPrefix = '';
+          if (!newTree.derived) {
+            try {
+              const { planTeachingVisit } = await import('../services/teachingLedger');
+              const plan = await planTeachingVisit(newTree.openingName, newTree);
+              teachingPlanRef.current = { opening: newTree.openingName, layer: plan.layer };
+              if (plan.recap) recapPrefix = `${plan.recap} `;
+            } catch { /* memory is a bonus, never a blocker */ }
+          }
+          return speakWalkthroughText(
+            recapPrefix + pickRegister(newTree.intro, newTree.introFlipped),
+            recapPrefix + (pickRegister(newTree.shortIntro ?? '', newTree.shortIntroFlipped) || newTree.shortIntro || ''),
+          );
+        })()
           .then(() => {
             if (settled) return;
             // Add the post-narration buffer.

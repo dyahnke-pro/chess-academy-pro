@@ -2482,8 +2482,12 @@ export function CoachTeachPage(): JSX.Element {
       //   resolves it directly. Catches "The Vienna" / "Vienna please"
       //   / "Italian" — phrases the user typed in build 3e2263c that
       //   the verb-prefix pattern missed.
+      // "learn" and "teach" are the SAME ask (David 2026-07-31: "learn or
+      // teach, don't let this get lost in semantics!!") — the surface is
+      // CALLED Learn with Coach, yet "learn the grand prix" missed this
+      // pattern while "teach me the grand prix" hit it.
       const TEACH_PATTERN =
-        /\b(teach\s+me|walk\s+(?:me\s+)?through|show\s+me|let'?s\s+do|let'?s\s+go\s+over|let'?s\s+try|tell\s+me\s+about|review)\b\s+(?:the\s+)?(.+?)(?:\s+(?:opening|defense|defence|game|gambit|attack|variation|line|system))?[.?!]*\s*$/i;
+        /\b(teach(?:\s+me)?|(?:i\s+want\s+to\s+|help\s+me\s+)?learn|study|walk\s+(?:me\s+)?through|show\s+me|let'?s\s+do|let'?s\s+go\s+over|let'?s\s+try|tell\s+me\s+about|review)\b\s+(?:the\s+)?(.+?)(?:\s+(?:opening|defense|defence|game|gambit|attack|variation|line|system))?[.?!]*\s*$/i;
       // Stage-keyword detection: user inputs like "drill Vienna" /
       // "Vienna punish" / "quiz me on the Sicilian" should skip the
       // walkthrough animation and land directly at that stage. User
@@ -5257,6 +5261,14 @@ export function CoachTeachPage(): JSX.Element {
       const resultLine = continuationResult(local.isCheckmate(), local.isDraw(), local.turn());
       setMessages((prev) => [...prev, { id: uid('cont-result'), role: 'assistant', content: resultLine, timestamp: Date.now() }]);
       speechChainRef.current = speechChainRef.current.then(() => voiceService.speakForced(resultLine)).catch(() => undefined);
+      // Teaching memory: the play-out is a delivered layer — the next
+      // "teach me X" recaps it and moves to the weave-together visit.
+      if (walkthrough.tree && !walkthrough.tree.derived) {
+        try {
+          const { recordTeachingVisit } = await import('../../services/teachingLedger');
+          await recordTeachingVisit(walkthrough.tree.openingName, 'continuation', 'the middlegame and endgame play-out');
+        } catch { /* memory is a bonus */ }
+      }
     } finally {
       continuationRef.current = false;
     }
