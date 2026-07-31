@@ -694,6 +694,32 @@ function findMatchingTraps(
   });
 }
 
+/** The ACCUMULATING orange trail — the path the student just watched being
+ *  played, not only the newest move.
+ *
+ *  This is the arrow-STYLE difference David measured between the two surfaces
+ *  (2026-07-31: "program the same style of arrow as opening tab"). The opening
+ *  tab's LessonPlayer pushes a trail arrow per move as a beat plays out, so a
+ *  beat covering three moves leaves three orange arrows showing the road in.
+ *  The coach walkthrough advances one move per node and replaced its arrow set
+ *  each segment, so it only ever showed one. Rebuilding the last few plies of
+ *  the walked path here matches the opening tab without changing any tree data,
+ *  so every tier (masterclass, baked, computed) gets it at once. */
+const TRAIL_PLIES = 3;
+function trailArrowsForPath(pathSans: string[], startFen?: string): NarrationArrow[] {
+  const out: NarrationArrow[] = [];
+  const first = Math.max(0, pathSans.length - TRAIL_PLIES);
+  for (let i = first; i < pathSans.length; i += 1) {
+    const before = fenForPath(pathSans.slice(0, i), startFen);
+    try {
+      const c = new Chess(before);
+      const mv = c.move(pathSans[i]);
+      if (mv) out.push({ from: mv.from, to: mv.to, color: 'orange' });
+    } catch { /* bad data is caught by validate.ts; just draw fewer arrows */ }
+  }
+  return out;
+}
+
 /** Compute the FEN at a node by walking chess.js through the SAN
  *  path from the root. Returns the start FEN (or standard starting
  *  position) if the path is empty. Middlegame pattern trees pass a
@@ -1160,7 +1186,17 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
             // the visual lands at the same moment Polly starts saying
             // the words. (Segment without `arrows` clears them; segment
             // with empty array clears them too.)
-            setNarrationArrows(segment.arrows ?? []);
+            // Trail first so the segment's own arrows (its orange move arrow
+            // and any green vision arrows) win on a duplicate square pair.
+            const trail = trailArrowsForPath(
+              path.filter((n) => n.san !== null).map((n) => n.san as string),
+              treeRef.current?.startFen,
+            );
+            const ownKeys = new Set((segment.arrows ?? []).map((a) => `${a.from}-${a.to}`));
+            setNarrationArrows([
+              ...trail.filter((t) => !ownKeys.has(`${t.from}-${t.to}`)),
+              ...(segment.arrows ?? []),
+            ]);
             setNarrationHighlights(segment.highlights ?? []);
             try {
               await speakWalkthroughText(

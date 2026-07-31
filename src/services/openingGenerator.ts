@@ -47,7 +47,7 @@ import { db, type CachedOpening } from '../db/schema';
 import { gradeNarrationText } from './coachAnswerGates';
 import { logAppAudit } from './appAuditor';
 import { buildDanyaTeachingBlock, noteAtPosition, teachingBeatText } from './danyaTeachingService';
-import { mentionedMoveArrows } from './mentionedMoveArrows';
+import { deriveNarrationArrows } from './narrationArrows';
 import { bakedNarrationFor } from './bakedWalkthroughNarration';
 import type {
   WalkthroughTree,
@@ -225,7 +225,7 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 // Bumped for the truncated-narration salvage + wider retry: lessons generated
 // before it are cached with all-template ideas (the "repetitive, nothing like
 // Naroditsky" narration) and must regenerate rather than serve that forever.
-const WALKTHROUGH_GEN_REV = '2026-07-31-narration-truncation-salvage';
+const WALKTHROUGH_GEN_REV = '2026-07-31-deterministic-arrows';
 
 export async function getCachedOpening(
   name: string,
@@ -1672,7 +1672,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
           text,
           arrows: [
             { from: extMove.from, to: extMove.to, color: 'orange' },
-            ...mentionedMoveArrows(text, extMove.fen, [{ from: extMove.from, to: extMove.to }]).map(
+            ...deriveNarrationArrows(text, extMove.fen, [{ from: extMove.from, to: extMove.to }]).arrows.map(
               (a) => ({ from: a.from, to: a.to, color: 'green' as const }),
             ),
           ],
@@ -1696,7 +1696,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
         text: teaser,
         arrows: [
           { from: branchMove.from, to: branchMove.to, color: 'orange' },
-          ...mentionedMoveArrows(teaser, branchMove.fen, [{ from: branchMove.from, to: branchMove.to }]).map(
+          ...deriveNarrationArrows(teaser, branchMove.fen, [{ from: branchMove.from, to: branchMove.to }]).arrows.map(
             (a) => ({ from: a.from, to: a.to, color: 'green' as const }),
           ),
         ],
@@ -1797,7 +1797,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
     // THE OPENING-TAB ARROW GRAMMAR (David 2026-07-31, third request —
     // "the arrows on the coach tab need to MATCH the opening tab"):
     // ORANGE trail on the played move (LessonPlayer's TRAIL), GREEN vision
-    // arrows ONLY for moves the narration actually NAMES (mentionedMoveArrows
+    // arrows ONLY for moves the narration actually NAMES (deriveNarrationArrows
     // — the same helper the opening tab uses), YELLOW highlights on squares
     // the narration points at. The old threat/look-ahead heuristics
     // (computeLeadEyeArrows) are GONE from walkthrough segments — they drew
@@ -1805,7 +1805,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
     // "wrong arrows" David kept reporting.
     const segmentArrows: NarrationSegmentType['arrows'] = [
       { from: p.from, to: p.to, color: 'orange' },
-      ...mentionedMoveArrows(text, p.fen, [{ from: p.from, to: p.to }]).map((a) => ({
+      ...deriveNarrationArrows(text, p.fen, [{ from: p.from, to: p.to }]).arrows.map((a) => ({
         from: a.from,
         to: a.to,
         color: 'green' as const,

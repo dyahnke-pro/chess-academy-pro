@@ -28,7 +28,6 @@ import type {
   NarrationHighlight,
 } from '../types/walkthroughTree';
 import { findLessonForQuery, getVariationLessonScriptsForOpening } from '../data/lessons';
-import { mentionedMoveArrows } from './mentionedMoveArrows';
 
 /** Map an authored arrow color (rgba / css string) onto the walkthrough
  *  runtime's named palette. Authored masterclass arrows are green vision
@@ -98,17 +97,13 @@ function isMonotonic(beats: LessonBeat[]): boolean {
  *  move the prose MENTIONS (David 2026-07-30: "arrows pointing out other
  *  moves that are mentioned during the narrations. Lead the eye!") merged
  *  after the authored arrows. `fen` is the position AFTER the beat's move. */
-function beatSegment(beat: LessonBeat, fen: string, moveSquares: { from: string; to: string } | null): NarrationSegment {
+function beatSegment(beat: LessonBeat, moveSquares: { from: string; to: string } | null): NarrationSegment {
   const authored = toSegmentArrows(beat.arrows);
-  const exclude = [
-    ...(moveSquares ? [moveSquares] : []),
-    ...authored.map((a) => ({ from: a.from, to: a.to })),
-  ];
-  const mentioned = mentionedMoveArrows(beat.say, fen, exclude).map((a) => ({
-    from: a.from,
-    to: a.to,
-    color: 'green' as const,
-  }));
+  // AUTHORED ARROWS ONLY on a masterclass beat. The lesson author already drew
+  // the lead-the-eye arrows for this beat, and the opening tab shows exactly
+  // those — computing extras here made the same lesson look different on the
+  // two surfaces (David 2026-07-31). Nothing more, nothing less.
+  const mentioned: NarrationArrow[] = [];
   // ORANGE played-move trail (David 2026-07-31: coach-tab arrows match the
   // opening tab) — LessonPlayer paints this trail at render time; on the
   // walkthrough it rides the segment.
@@ -137,8 +132,8 @@ interface BuiltChain {
 
 /** Attach a beat's narration to its terminal node (appending when the node
  *  already speaks — e.g. a closing wrap-up beat on the main line's leaf). */
-function attachNarration(node: WalkthroughTreeNode, beat: LessonBeat, fen: string, moveSquares: { from: string; to: string } | null): void {
-  const seg = beatSegment(beat, fen, moveSquares);
+function attachNarration(node: WalkthroughTreeNode, beat: LessonBeat, moveSquares: { from: string; to: string } | null): void {
+  const seg = beatSegment(beat, moveSquares);
   node.narration = [...(node.narration ?? []), seg];
   node.idea = node.idea ? `${node.idea} ${beat.say}` : beat.say;
   if (beat.sayShort && !node.shortIdea) node.shortIdea = beat.sayShort;
@@ -214,7 +209,7 @@ function buildChain(lesson: LessonScript, fromPly = 0): BuiltChain | null {
         nodes.push(...chain);
       }
     }
-    if (beat.moves.length > fromPly) attachNarration(cursor, beat, board.fen(), lastMv);
+    if (beat.moves.length > fromPly) attachNarration(cursor, beat, lastMv);
   }
 
   if (nodes.length === 0) return null;

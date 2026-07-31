@@ -166,6 +166,13 @@ describe('useTeachWalkthrough', () => {
     // contract: each segment's arrows appear BEFORE that segment's
     // text starts speaking, replacing whatever was visible from the
     // previous segment, and clear when the node finishes.
+    //
+    // Since 2026-07-31 the walked path also contributes an ACCUMULATING
+    // orange trail (trailArrowsForPath) so the coach board shows the road in,
+    // the way the opening tab's LessonPlayer does. Here the path is the single
+    // move e2-e4, so the trail is that one arrow and the segment's own arrows
+    // follow it. A segment arrow on the SAME square pair wins over the trail,
+    // which is why segment 1 shows e2-e4 green rather than orange.
     const { voiceService } = await import('../services/voiceService');
     const tree = {
       openingName: 'Arrow Smoke',
@@ -223,6 +230,7 @@ describe('useTeachWalkthrough', () => {
     // Segment 1's arrows land BEFORE its voice promise resolves.
     await waitFor(
       () => {
+        // Trail's e2-e4 is deduped away by the segment's own e2-e4 arrow.
         expect(result.current.narrationArrows).toEqual([
           { from: 'e2', to: 'e4', color: 'green' },
         ]);
@@ -237,7 +245,10 @@ describe('useTeachWalkthrough', () => {
     });
     await waitFor(
       () => {
+        // Segment 2 arrows a DIFFERENT pair, so the played-move trail shows
+        // alongside it — the road in stays visible under the new arrow.
         expect(result.current.narrationArrows).toEqual([
+          { from: 'e2', to: 'e4', color: 'orange' },
           { from: 'd1', to: 'h5', color: 'blue' },
         ]);
         expect(result.current.narrationHighlights).toEqual([
