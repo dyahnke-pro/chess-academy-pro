@@ -76,6 +76,12 @@ data/sources/*.txt
 
 # All raw public-domain book sources (re-fetched by build-library-*.mjs)
 data/sources/
+# NB: a creator's video manifest lives under this ignored tree but IS tracked
+# (force-added). A negation pattern cannot re-include it — git never descends
+# into an excluded directory — so manifests are added with `git add -f`, and
+# once tracked their changes are diffed normally. This matters: the weekly
+# corpus-manifest-refresh cron was a SILENT NO-OP until 2026-07-31 because it
+# ran plain `git add` on an untracked, ignored path and exited green.
 
 # Ruby / fastlane — CI installs gems via bundler-cache; the vendored bundle is a
 # local cache (98 MB) and Gemfile.lock is generated per-Ruby (this container's

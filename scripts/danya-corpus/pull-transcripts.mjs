@@ -13,7 +13,10 @@ import { promisify } from 'node:util';
 import { readFile, access } from 'node:fs/promises';
 
 const run = promisify(execFile);
-const TDIR = 'data/sources/naroditsky-voice/transcripts';
+import { resolveCreator } from './creator.mjs';
+
+const CREATOR = resolveCreator();
+const TDIR = CREATOR.transcripts;
 
 function arg(name, dflt) {
   const i = process.argv.indexOf(`--${name}`);
@@ -25,7 +28,7 @@ async function exists(p) { try { await access(p); return true; } catch { return 
 async function main() {
   const playlist = arg('playlist', null);
   const limit = Number(arg('limit', '10000'));
-  const manifest = JSON.parse(await readFile('data/sources/naroditsky-voice/manifest.json', 'utf8'));
+  const manifest = JSON.parse(await readFile(CREATOR.manifest, 'utf8'));
   let videos = manifest.videos;
   if (playlist) videos = videos.filter((v) => v.playlist === playlist);
 

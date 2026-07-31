@@ -17,6 +17,9 @@
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { resolveCreator } from './creator.mjs';
+
+const CREATOR = resolveCreator();
 
 const run = promisify(execFile);
 
@@ -33,17 +36,48 @@ export const PLAYLISTS = {
   'mastery-explained':  { id: 'PLT1F2nOxLHOcZlKiT0J-ov5-RsM9taTvm', title: 'Chess Mastery Explained' },
 };
 
-const OUT = 'data/sources/naroditsky-voice/manifest.json';
+const OUT = CREATOR.manifest;
+
+/** Playlists to enumerate for this creator. Naroditsky ships an explicit map
+ *  (his 10 teaching playlists); a creator with `playlistFilter` instead has
+ *  its channel's playlist index enumerated and filtered by TITLE — the Saint
+ *  Louis club channel carries ~260 playlists of which only the "Lectures
+ *  with …" series are teaching material, and new lecturers appear constantly.
+ */
+async function resolvePlaylists() {
+  if (!CREATOR.playlistFilter) {
+    return Object.entries(PLAYLISTS).map(([key, pl]) => ({ key, id: pl.id, title: pl.title }));
+  }
+  const include = new RegExp(CREATOR.playlistFilter, 'i');
+  const exclude = CREATOR.playlistExclude ? new RegExp(CREATOR.playlistExclude, 'i') : null;
+  const { stdout } = await run('yt-dlp', [
+    '--flat-playlist', '--print', '%(id)s\t%(title)s', CREATOR.channel,
+  ], { maxBuffer: 32 * 1024 * 1024 });
+  const out = [];
+  for (const line of stdout.split('\n')) {
+    const [id, ...t] = line.split('\t');
+    const title = t.join('\t').trim();
+    if (!id?.trim() || !title) continue;
+    if (!include.test(title)) continue;
+    if (exclude && exclude.test(title)) continue;
+    // Playlist key = a slug of its title, so the manifest records WHICH
+    // series a video came from (useful when one lecturer distills thin).
+    out.push({ key: title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60), id: id.trim(), title });
+  }
+  console.log(`[manifest] ${CREATOR.key}: ${out.length} playlist(s) matched the teaching filter`);
+  return out;
+}
 
 async function main() {
-  const keys = process.argv.slice(2).length ? process.argv.slice(2) : Object.keys(PLAYLISTS);
+  const argKeys = process.argv.slice(2).filter((a) => !a.startsWith('--') && a !== CREATOR.key);
+  const all = await resolvePlaylists();
+  const selected = argKeys.length ? all.filter((p) => argKeys.includes(p.key)) : all;
   let existing = { videos: [] };
   try { existing = JSON.parse(await readFile(OUT, 'utf8')); } catch { /* fresh */ }
   const byId = new Map(existing.videos.map((v) => [v.id, v]));
 
-  for (const key of keys) {
-    const pl = PLAYLISTS[key];
-    if (!pl) { console.error(`unknown playlist key: ${key}`); continue; }
+  for (const pl of selected) {
+    const key = pl.key;
     console.log(`[manifest] ${key} …`);
     const { stdout } = await run('yt-dlp', [
       '--flat-playlist', '--print', '%(id)s\t%(title)s',
@@ -63,7 +97,7 @@ async function main() {
   // video already filed under a playlist is never demoted to channel-other,
   // and a channel-other video that later joins a playlist gets promoted by
   // the playlist pass above (it runs first).
-  if (process.argv.slice(2).length === 0) {
+  if (argKeys.length === 0 && !CREATOR.playlistFilter) {
     console.log('[manifest] channel sweep …');
     const { stdout } = await run('yt-dlp', [
       '--flat-playlist', '--print', '%(id)s\t%(title)s',
@@ -80,7 +114,7 @@ async function main() {
   }
 
   const videos = [...byId.values()];
-  await mkdir('data/sources/naroditsky-voice', { recursive: true });
+  await mkdir(CREATOR.voiceDir, { recursive: true });
   await writeFile(OUT, JSON.stringify({ updatedAt: new Date().toISOString(), videos }, null, 2));
   console.log(`[manifest] total ${videos.length} videos → ${OUT}`);
 }

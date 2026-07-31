@@ -31,16 +31,22 @@ jobs:
           node-version: 20
       - name: Install yt-dlp
         run: pipx install yt-dlp || pip install --user yt-dlp
-      - name: Refresh manifest (playlists + channel sweep)
-        run: node scripts/danya-corpus/fetch-manifest.mjs
+      - name: Refresh manifests (playlists + channel sweep, per creator)
+        run: |
+          node scripts/danya-corpus/fetch-manifest.mjs
+          node scripts/danya-corpus/fetch-manifest.mjs --creator hangingpawns
+          node scripts/danya-corpus/fetch-manifest.mjs --creator saintlouis
       - name: Commit if changed
         run: |
-          if git diff --quiet data/sources/naroditsky-voice/manifest.json; then
-            echo "manifest unchanged — nothing to commit"
+          # -f: the manifests live under the gitignored data/sources/ tree.
+          # Plain `git add` silently added nothing, so this job reported
+          # success while committing nothing for weeks (fixed 2026-07-31).
+          git add -f data/sources/*-voice/manifest.json
+          if git diff --cached --quiet; then
+            echo "manifests unchanged — nothing to commit"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/sources/naroditsky-voice/manifest.json
           git commit -m "chore(corpus): weekly manifest refresh (new uploads)"
           git push

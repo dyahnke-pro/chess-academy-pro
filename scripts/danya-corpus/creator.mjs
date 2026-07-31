@@ -28,6 +28,46 @@ export const CREATORS = {
     idPrefix: 'cb',
     bannedExtra: ['aman', 'hambleton', 'chessbrah', 'eric hansen', 'building habits', 'speedrun', 'botez'],
   },
+  // David 2026-07-31 ("Farm"). Two very different shapes:
+  //   hangingpawns — one host, playlists that ARE openings ("Complete
+  //     Caro-Kann", "Trompowsky Attack Opening Theory"). Titles name the
+  //     opening, so distill's code-stamped `openingFromTitle` lands cleanly.
+  //   saintlouis  — a CLUB channel: ~260 playlists, most of them tournament
+  //     broadcasts (commentary, not teaching). Only the 77 "Lectures with …"
+  //     series are corpus material, so this creator filters by playlist TITLE
+  //     rather than listing ids — new lecturers are picked up automatically
+  //     and no broadcast ever enters the farm.
+  hangingpawns: {
+    key: 'hangingpawns',
+    voiceDir: 'data/sources/hangingpawns-voice',
+    corpus: 'src/data/hangingpawns-teachings.json',
+    idPrefix: 'hp',
+    bannedExtra: ['hanging pawns', 'stjepan', 'tomic', 'this channel', 'the channel', 'patreon'],
+    channel: 'https://www.youtube.com/@HangingPawns/playlists',
+    // Theory/strategy series only — skip the game-log series (Road to 2500,
+    // Daily Chess Test, world-championship recaps) which are play-by-play.
+    playlistFilter: '(opening|theory|complete|gambit|defense|defence|attack|system|strategy|endgame|middlegame|traps|lessons|learn from)',
+    playlistExclude: '(road to|daily chess test|world championship|vs\\.? gukesh|recap)',
+  },
+  saintlouis: {
+    key: 'saintlouis',
+    voiceDir: 'data/sources/saintlouis-voice',
+    corpus: 'src/data/saintlouis-teachings.json',
+    idPrefix: 'sl',
+    // A club channel means MANY named lecturers; every one of them is a
+    // depersonalization risk, plus the venue and the medium itself.
+    bannedExtra: [
+      'saint louis', 'st. louis', 'stl', 'chess club', 'scholastic center',
+      'finegold', 'seirawan', 'shahade', 'maurice ashley', 'shankland',
+      'yermolinsky', 'khachiyan', 'nemcova', 'shabalov', 'nyzhnyk',
+      'bruzon', 'novikov', 'mikhalevski', 'landa', 'quesada', 'edouard',
+      'georgiev', 'durarbayli', 'cordova', 'chandra', 'denby', 'lecture',
+      'lectures', 'audience', 'the club',
+    ],
+    channel: 'https://www.youtube.com/@STLChessClub/playlists',
+    playlistFilter: '(^lectures with|course|strategy across the board)',
+    playlistExclude: '(grand chess tour|championship|cup|classic|rapid|blitz|showdown|today in chess|candidates)',
+  },
 };
 
 export function resolveCreator(argv = process.argv) {
