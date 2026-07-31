@@ -1,1161 +1,145 @@
-# PLAN — Vienna Gambit Declined restructure: Qf3 primary tab + Nf3 deep tab (2026-07-17, active)
+# PLAN — coach-tab error checklist (2026-07-31, active)
 
-David: the …d5 declined line should teach **Qf3 as the primary/main tab** (most-common online + engine +0.6), **Nf3 as a deep tab right after** (level). Extend both to a middlegame via Stockfish. "Quality not haste; one step at a time." Ships with the next TestFlight build (per the OTA-on staging).
+David: *"I want a full check list of ALL errors found so I can see the progress
+you are making. Fix everything."*
 
-## Locked, engine-verified spines (Stockfish 16 + Lichess DB, G3-legal)
-- **Qf3 (main, White +0.58→+0.72 throughout):**
-  `e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 Nxc3 dxc3 Be6 Bf4 Be7 O-O-O c6 Qg3 g6 Nf3 Qa5 Kb1 Nd7 Nd4 O-O-O Be2 Qc7 Bg4 Nc5` (move 14, both castled). Extension plies 11-14 = Stockfish best; first 4 (Kb1 Nd7 Nd4 O-O-O) ALSO the online most-played → double-grounded.
-- **Nf3 (secondary, ~0.00 level):**
-  `e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Be7 Qe2 Nxc3 dxc3 c5 Bf4 Nc6 O-O-O Be6 h4 h6 g3 Qa5 a3 O-O-O Bh3 Kb8 Kb1 Rhf8` (move 14).
-- Frequency: Qf3 online 42% vs Nf3 26%; masters Nf3 52% vs Qf3 29%. Audience plays online → Qf3 main; masters-vs-online nuance framed HONESTLY in narration (not a silent doctrine break).
-
-## Source content (already authored — reuse + extend, don't rewrite)
-- `viennaGambitVariations.ts` `Qf3 Setup (vs …d5)` — 4 beats to move 10 → +2 beats to move 14.
-- `viennaGambit.ts` `VIENNA_GAMBIT_LESSON` (Nf3) — 7 beats to move 11 → +1 beat to move 14.
-- Both keyed openingId `vienna-gambit` = ORPHAN (not in repertoire.json/registry → unreachable). Fold into `vienna-game`.
-
-## Build steps (one at a time, gate after each)
-1. [x] PLAN + commit (this).
-2. [ ] Extend the Qf3 lesson beats (moves 11-14) — board-verified, sources.
-3. [ ] Extend the Nf3 lesson beat (moves 12-14).
-4. [ ] repertoire.json: rename tab[0] → `Vienna Gambit: Qf3 (Declined)` (pgn = Qf3 spine, explanation, keyIdeas); ADD `Vienna Gambit: Nf3 (Declined)` tab right after; keep `Vienna Gambit Accepted`.
-5. [ ] viennaVariations.ts: register `vienna-game::Vienna Gambit: Qf3 (Declined)` + `::Nf3 (Declined)` (re-keyed from the orphan).
-6. [ ] Retire orphan `vienna-gambit` (registration + `vienna-gambit::0::/::1::` sublineNarration) OR keep dormant — decide to avoid a dangling openingId.
-7. [ ] index.ts alias map: point the `vienna gambit` search terms at the Qf3 tab.
-8. [ ] Rebuild `course-sublines.json` (build-course-sublines.mjs) for vienna-game's new tab indices.
-9. [ ] Gate battery (narrationAccuracy, lessonIntegrity, wlppNarration, lessonDepth, variationMiddlegameDepth, middlegamePlanThemes, OpeningDetailPage.wiring) + `ship-check`.
-10. [ ] Stage on `main` (branch→PR→merge) + post-deploy audit.
-
-## Decisions
-- Qf3-main is audience-driven (online), not masters-doctrine — flagged in narration, not silent.
-- Nf3 = separate deep tab, NOT a subline (the engine models sublines as OPPONENT deviations only, so a White alternative can't be a subline — confirmed w/ David).
-
-## Status: COMPLETE — gate-green, staging on main (2026-07-17)
-- Qf3 lesson (9 beats → move-14 middlegame) authored + registered; every board claim chess.js-verified.
-- "Vienna Gambit: Qf3" is the primary (first) tab; "Vienna Gambit" (Nf3) kept intact as the classical tab (all links preserved), stale metadata cleaned.
-- Nf3 tab was ALREADY the deep line (move 11, GAMBIT const) — no extension needed (revised the earlier assumption it was short).
-- Orphan `vienna-gambit` left dormant (has gems/sublines/annotations; retiring it is unrelated risk — flagged for a later cleanup pass, NOT needed for this).
-- course-sublines.json: SURGICAL merge of vienna-game only (a full local rebuild drops 70 openings the local env can't build — would've been destructive; diff confirmed vienna-game-only).
-- Aliases repointed; ship-check READY TO PUSH (typecheck/build/lint/content gates green: narrationAccuracy, narrationGrounding, lessonIntegrity, wlppNarration, lessonSources, variationMiddlegameDepth).
-- Ships with the next TestFlight build (OTA-on staging).
-
-### Flagged for later (not blocking)
-- Orphan `vienna-gambit` opening is unreachable dead content (duplicate Qf3 Setup + gems + sublines). Clean it up when convenient.
-- The `build-course-sublines.mjs` full rebuild can't run completely in the web sandbox (70 openings need the live explorer) — scope with `OPENINGS=<id>` + surgical merge, or run in CI.
+Every error found this session, from three sources: his device audit log
+(build `fcdf531`, iPhone/standalone), his direct reports, and my own probes.
+Status is honest — `FIXED` means shipped to `main` AND verified; `SHIPPED` means
+on `main` but not yet confirmed on his device; `OPEN` means not started.
 
 ---
 
-# PLAN — Coach dead-end → picker + voice fallover telemetry fix (2026-07-17, active)
+## A. From his device audit log (300 findings, build fcdf531)
 
-Origin: PostHog review (2026-07-17). Two real user-facing dents in last-24h data:
-1. Home-chat coach bricks with *"I can't verify that precisely from grounded data
-   right now"* when the user names an opening it can't map ("Panov"). David: **fix
-   the dead end; any coach suggestion should also populate a picker prompt.**
-2. iOS voice fallover logged `Polly failed (http 200) → Web Speech` — a
-   client-playback failure mislabeled as an HTTP-200 (server-success) cause.
+- [ ] **A1. Walkthrough replays beats / walk goes backward** — SHIPPED (instrumented only, NOT fixed)
+  Evidence: `transitionAfter pos@[…Nc3]` at 18:30:58, `pos@[…Bxf3]` at 18:31:13,
+  then **back to** `pos@[…Nc3]` at 18:31:15, and the same 226-char "Bxf3 takes
+  the knight…" spoken at 18:30:58.760 AND 18:31:16.337. Five nodes hit twice.
+  Findings 43/44 also show two `transitionAfter` 15ms apart at different
+  positions — a double-advance.
+  Two causes fit and the log can't separate them: two concurrent narration
+  chains ~2s offset, or one chain that rewinds. `narrateAndAdvance` now stamps
+  a monotonic entry id + depth + path (`d8a9776`) so the next device log is
+  decisive. **This is the one that ruins the lesson — top priority once the
+  next log lands.**
 
-## Findings (grounded, file:line)
-- `STOCK_GROUNDING_FALLBACK` = `coachApi.ts:1735`. Served in `getCoachChatResponse`
-  at `:4093` (chess-signal / no assembler — the home-chat unknown-opening case),
-  `:4108`, `:4138`. All have `originalQuery` in hand.
-- `fuzzyMatchOpening(query)` `openingFuzzyMatcher.ts:256` → DB-grounded
-  `.candidates[]` + `.autoAccept`. VERIFIED: "Najdorff"→Najdorf ×4, "Caro Cann"→
-  Caro-Kann ×4, "panov"/"KID"/"dragon" autoAccept, "what are my weaknesses"→EMPTY.
-  Whole-query only — **per-token REJECTED** (probe: "move"/"the"/"endgame"
-  autoAccept to junk openings → would wreck normal questions).
-- Picker = the `[CHOICES: A | B | C]` text marker → `coachChoices` chips.
-  Extractor `CoachTeachPage.tsx:3021-3052`; chips via `ChatInput.tsx:209-216`;
-  tap `onPickCoachChoice` `CoachTeachPage.tsx:5432`. Home-chat `GameChatPanel.tsx`
-  uses `ChatInput` but renders NO chips today.
-- G0-safe: candidates from the DB via the trusted matcher; reply built in CODE,
-  LLM decides nothing (strictly more grounded than the stock line).
+- [x] **A2. Polly "fallover" log line** — NOT A DEFECT (corrected 2026-07-31)
+  F111 logged `stream playback error: code=3 Media failed to decode → Web
+  Speech`. I reported this as "fell over to the robotic voice mid-lesson".
+  David: *"it never fell over to robotic web voice. It was Polly the whole
+  way."* He's right — Polly was invoked at 18:27:30.812 and the fallover fired
+  at 18:28:09.129, 38s later at the tail of that 851-char line, as the next
+  beat began. The audio had already played. Keep an eye on whether the
+  fallover triggers a silent duplicate utterance (relevant to A1), but nothing
+  was audibly wrong.
 
-## Plan (one batched deploy)
-- [x] P0 — voice: pure `describePollyFalloverReason()` in `voiceService.ts`; a 2xx
-      status w/ no explicit error → `"client playback failed (server ok, http 200)"`.
-- [x] P1 — coachApi: `buildOpeningSuggestionReply(query)` (≤5-word guard →
-      `fuzzyMatchOpening` → null / single-offer / did-you-mean + `[CHOICES:]`);
-      wired at ALL THREE dead-ends — chess-signal, conversational (top, before the
-      LLM call), grounded fall-through; coverage tag `opening-suggestion-picker`.
-      Never preempts a grounded engine answer (only replaces the stock line / the
-      non-chess lane).
-- [x] P2 — home-chat picker: `GameChatPanel.tsx` extracts `[CHOICES:]`, strips from
-      display (sanitizeCoachText), holds `coachChoices`, passes to `ChatInput`; tap
-      → `void navigate('/coach/teach?teach=<name>&auto=1')`.
-- [x] P3 — teach: unchanged — existing `[CHOICES:]` extractor + `stripCoachMarkup`
-      handle the marker; `coach-choice-chips` render/tap already audited.
-- [x] P4 — tests: `voiceService.test.ts` (4 label cases) + coachApi
-      `buildOpeningSuggestionReply` (4 cases) green. Living-audit: existing
-      `audit-learn-comprehensive` / `audit-coach-teach-interactive` /
-      `audit-coach-discovery-prod` already assert `[CHOICES:]` chips + home
-      `coach-choice-chip-0`; none assert the old wall → no de-staling needed.
-- [ ] P5 — ship-check → main → post-deploy audit → PostHog double-check the voice
-      label (David asked to double-check the voice fix).
+- [ ] **A3. Punish narration gated to EMPTY** — OPEN
+  Eight `punish.narrationGate` trips with `kept: ""` (F129-136, F193-200). The
+  board-claim gate dropped the whole sentence, so those punish lessons ship
+  with no narration at all. Empty > wrong, but empty is still a hole.
 
-## Decisions log
-- 2026-07-17: per-token fuzzy REJECTED (noisy); whole-query only.
-- 2026-07-17: dead-end fix lives in `coachApi.ts` (both surfaces bottom out there),
-  pure-code reply → G0-safe.
+- [ ] **A4. Truncated sentence survived the gate** — OPEN
+  F173 `danyaSplice.narrationGate` kept `"…Black should update which squares
+  become safe for their pieces, like"` — ends mid-clause and gets spoken.
+
+- [ ] **A5. `persisted=false` on every boot** — OPEN
+  F254, F263, F282, F292. Storage persistence is refused, so iOS may evict
+  Dexie — games, progress, opening cache. Data-loss risk, not cosmetic.
+
+- [ ] **A6. DeepSeek returned a wrong tool name** — OPEN
+  F232: `emit_walkthrough_narrator` instead of `emit_walkthrough_narration`,
+  which threw away the entire first attempt. The retry recovered it. Accepting
+  a near-miss name is far cheaper than a full re-call.
+
+- [ ] **A7. Ungrounded squares reaching the voice** — OPEN
+  F144 (`d2, d8, c8, d7`) and F205 (`a2`) tripped `voiceFacts.containmentTripwire`
+  — the LLM introduced squares with no grounding. A G0 leak.
+
+- [ ] **A8. Lichess explorer 429** — EXTERNAL, no fix
+  F2/F3 `upstream-blocked`, 30s cooldown. Their rate limit, already handled.
 
 ---
 
-# PLAN — LEARN + POST-GAME REVIEW behavior map & full-behavior audit (2026-07-13, active)
+## B. From his direct reports
 
-**David's ask:** map the EXACT coaching behavior of the entire Learn (`/coach/teach`)
-AND Post-Game Review sections, then run an audit against ALL behaviors.
+- [ ] **B1. Middlegame play-out is SILENT** — OPEN *(his biggest complaint)*
+  `narratedContinuation.ts:79-99` only speaks on a phase transition or a ≥2pt
+  material swing; every other move returns `text: null`. His log shows the
+  continuation start followed by 16 straight `stockfish-cache-miss` with zero
+  narration. Worse in his case: he was already in an endgame, so the phase
+  never *changed* and even the transition line never fired.
+  Fix = narrate every move with a computed why (engine PV + `detectTactics`),
+  per the in-game register in CLAUDE.md.
 
-## Approach (adversarial-audit doctrine, G7 + 2026-06-12)
-1. **MAP** — exhaustive per-behavior inventory (ID · trigger · file:line · expected ·
-   testid · audit assertion). Fan-out mappers:
-   - Learn intent-routing layer (handleSubmit branches, resolution tiers, Q&A classes).
-   - Learn walkthrough runtime + voice/narration + "why did you play that?" faucet +
-     guided-find-the-move.
-   - Post-Game Review (summary card, walk, find-the-shot / blunder-rewind / turning-
-     point cards, mistake-puzzle+weakness pipeline, persistence).
-2. **COVERAGE GRID** — every mapped behavior → reached? (which assertion) → pass/fail.
-   A silent no-op is a FAIL, not a pass (2026-06-12). Untested = ❌ NOT TESTED.
-3. **AUDIT** — functional click-through (drive real affordances) + adversarial loop
-   (messy human input, escalate, break it). Capture every break with exact input +
-   React key/stack. Real-bug → fix code + sweep + confirm; artifact → prove + pace.
-   MET only on 3 consecutive break-free passes, each harder.
+- [ ] **B2. Middlegame play-out draws NO arrows** — OPEN
+  The continuation never sets narration arrows at all.
 
-## Status
-- [~] MAP — 3 mappers dispatched (Learn-routing, Learn-runtime/faucet, Review).
-- [ ] Synthesize map → `docs/plans/2026-07-13-learn-review-behavior-map.md`.
-- [ ] Build/extend audit scripts (extend audit-coach-teach-functional/loop +
-      audit-coach-full-games review leg; add review-specific coverage).
-- [ ] Run localhost (Chromium can't reach prod here — ERR_CONNECTION_RESET), fix
-      breaks, then the CI leg against prod.
+- [ ] **B3. No endgame viewing option** — OPEN (feature)
+  The endgame is an announcement inside B1's silent loop, not something you
+  can choose to watch.
+
+- [ ] **B4. No "learn other lines" when a walkthrough finishes** — OPEN (feature)
+  Leaf deep-dive tiles only render when the tree has its own branches. His
+  Alapin sub-variation ended `children=0`, so nothing was offered. Should fall
+  back to the parent opening's sibling variations from the DB.
+
+- [x] **B5. Deep dive reset to the start of the line** — SHIPPED `d8a9776`
+  Now hands over the SANs already watched; the new lesson walks that prefix
+  and narrates from the first unheard move.
+
+- [x] **B6. No forward/back navigation** — SHIPPED `d8a9776`
+  `stepBack()` re-narrates the previous move, beside Skip.
+
+- [x] **B7. Permanent spinner read as "stuck loading"** — SHIPPED `d8a9776`
+  It was never a loader — a spinning `Loader2` used as the "narrating"
+  indicator. Replaced. (It was NOT causing the replay; see A1.)
+
+- [x] **B8. Fork "Deep dive" tile dead-ended the lesson** — FIXED `1eebc0c`
+  A 69-char canonical name blew the 60-char bare-name cap and fell through to
+  the brain. Verified on prod, 11/11.
+
+- [x] **B9. "Repetitive, nothing like Naroditsky" narration** — FIXED `1cc5dc4`
+  DeepSeek returned malformed JSON; the whole lesson dropped to template
+  sentences. Now salvages the complete prefix and retries wider. Confirmed
+  firing on his device (F228/229: 0/3 plies at 8192 → 3/3 at 16384).
 
 ---
 
-# PLAN — LOOP AUDIT: full-game coach standard (2026-07-13) — ✅ CLOSED (GREEN ON PROD)
+## C. Coach-tab arrow work (his 4× repeated report)
 
-**Run 29264437648 (commit 4f54c50) PASSED on prod** — 10 full games, 10 distinct
-openings, reviews driven per game, persistence, blunder interceptions, 0 errors
-(~51 min; wider game-1 budget stretched runtime but it's green). All three breaks
-fixed: (1) engine cold-boot crash → warmup [Fable]; (2) Italian→French + Scandinavian→
-Zukertort collisions → subject-steer every coach-dependent plan; (3) cold game-1
-stall → wider game-1 reply budget. NOTE: if the ~51-min runtime is a concern, tune
-game-1 budget down (75s→~50s) or warm the brain path too — the length is the
-wider-budget tradeoff, not a failure.
+- [x] **C1. Arrow geometry mismatch** — FIXED `18dafca`, measured on prod
+  Identical shape class both surfaces (same stroke-width/square, opacity 0.65,
+  arrowhead polygon).
+- [x] **C2. Marker colour collapsed to green** — FIXED `ac98484`
+  `toNamedColor` matched colour *words* against rgba *literals*, so every
+  authored marker fell through to green. Opening tab yellow, coach tab green.
+- [x] **C3. Board settings ignored** — FIXED `b5bdba6`
+  `ChessBoard` never read `settings.highlightLastMove`; all accents hardcoded
+  to the Cyan preset, ignoring the other 11 colours + None.
+- [x] **C4. Phantom arrows from prose scraping** — FIXED `ed7311b`
+  31 false arrows removed across 21 baked openings; shadow diff reviewed.
+- [x] **C5. Silent arrow cap** — FIXED `fcdf531`
+  A ply naming >6 moves dropped the tail with no record.
+- [ ] **C6. Opening tab still uses the old scrape** — DEFERRED by David
+  `LessonPlayer` / `PlayableLinePlayer` have the same weakness. He scoped this
+  to the coach tab; not touching without a word.
 
 ---
-# PLAN — LOOP AUDIT: full-game coach standard (2026-07-13, archived detail)
 
-**Instrument:** `scripts/audit-coach-full-games.mjs` via
-`.github/workflows/full-game-audit.yml` (workflow_dispatch + nightly cron;
-own concurrency group `full-game-audit` — never trigger a parallel run, it
-cancels the in-flight one). The FULL-GAME AUDIT STANDARD (CLAUDE.md, locked
-2026-07-13): ≥10 full games on `/coach/play`, all distinct openings, blunder
-interceptions counted, post-game review driven per game, persistence verified
-from IndexedDB; ANY pageerror / non-NOISE console error is a hard fail.
+## Order of work
 
-## State
-- **Root cause of the last 3 dispatch failures = ONE break, not many.** Report
-  from run 29232631772 (report.json inspected): games 2–10 were pristine (0
-  pageerrors, 9 distinct families: Nimzo-Indian, English, Zukertort, Bird,
-  Sicilian, Caro-Kann, French, Modern, Scandinavian). ONLY game-1 (italian-shape)
-  died — 1,188 pageerrors, 2 plies, opening never detected → which ALSO caused
-  the secondary "10 games → 9 families" distinctness fail (the missing 10th was
-  italian-shape itself). Both failures, one cause.
-- **Fix 1 (Fable, commit 985729f):** warm the Stockfish variant probe on a
-  throwaway `/coach/play` load before game 1. **CONFIRMED WORKING** — run
-  29249281899: all 10 games played to natural ends, `errs=0/0`, zero pageerrors.
-  The cold-boot crashloop is dead. Real devices pay this probe once per install.
-- **Second break (exposed once game 1 actually played):** the audit still failed
-  "openings not all distinct" — a GENUINE collision, not the crash cascade. The
-  `italian-shape` White plan scripts only WHITE's moves; the coach owns Black, so
-  when it answered 1.e4 with ...e6 the game was (correctly) detected as "French
-  Defense: Knight Variation" → collided with the Black `french` plan's "French
-  Defense" root (9 families, not 10).
-- **Fix (David's steer — "ask the coach to play the Italian as black"):** a plan
-  whose family depends on the coach's replies must TELL the coach which opening
-  to play via `?subject=`. Gave `italian-shape` `subject: 'Italian Game'` and
-  pass it on the /coach/play URL, so the coach follows the Italian's book side
-  and the game is a real, distinct "Italian Game". (The earlier b3 swap was a
-  workaround; reverted in favour of this.) The White-SYSTEM plans (d4/c4/Nf3/f4)
-  need no subject — their family is named by White's own structure.
-- **LIVE-VERIFIED the coach plays the Italian SOUNDLY on both sides** (localhost,
-  prod bundle code; Chromium can't reach prod in this container — ERR_CONNECTION_
-  RESET egress quirk, curl 200):
-  - student BLACK + subject=Italian → coach (White) played the mainline Giuoco
-    Pianissimo `e4 Nf3 Bc4 O-O d3 c3 h3 Re1 Bb3 Nbd2 Nf1`, detected "Italian Game:
-    Giuoco Piano", 0 pageerrors.
-  - student WHITE + subject=Italian → coach (Black) played `e5 Nc6 Bc5 Nf6 d6 O-O
-    a6 h6 Be6 Bxb3`, detected "Italian Game: Classical Variation, Giuoco
-    Pianissimo" (C54), 0 pageerrors.
-  → The Italian itself is NOT defective; the red was the audit failing to STEER
-  the coach. If a different opening is defective, it needs to be named + repro'd.
-- **Run 29260208403 (subject=Italian only):** Italian fix WORKED (game 1 =
-  "Italian Game" ✓, French collision gone). But surfaced TWO more issues, both
-  the SAME nondeterminism class + a cold-timing one:
-  1. `scandinavian → "Zukertort Opening: Tennison Gambit"` collided with `reti →
-     "Zukertort Opening"` — the coach opened 1.Nf3 (not 1.e4), so 1.Nf3 d5 2.e4 =
-     Tennison. The Black defenses depend on the coach's OPENING move; `queens-pawn`
-     (1.d4) is the same trap (a Black ...g6 reply → "Modern Defense" collision).
-  2. game-1-italian stall-resigned at ply 12 → review never mounted + not
-     persisted. Cold first game's mid-game Stockfish searches spiked past the 30s
-     reply budget (only reply #1 got 90s); games 2-10 clean on 30s.
-- **Fixes (commit pending):**
-  - subject-steer ALL coach-dependent plans: queens-pawn="Queen's Gambit",
-    sicilian/caro-kann/french/modern/scandinavian = their own defense. Verified
-    LIVE the coach opens deterministically (Scandinavian→e4, Modern→d4, Queen's
-    Gambit→coach ...d5→"Slav Defense" root). The 3 flank White systems
-    (c4/Nf3/f4) need no subject (root fixed by White's move). 10 deterministic
-    distinct roots: Italian, Slav, English, Zukertort, Bird, Sicilian, Caro-Kann,
-    French, Modern, Scandinavian.
-  - game-1 (g===0) per-reply budget → 75s + one extra stall of grace; warm games
-    keep the tight 30s. Prevents the cold-first-game stall-resign.
-- **Validating run: PENDING** — trigger full-game-audit on this branch after push.
-
-## Tracked follow-up (was Fable's session-local "task #32" — now durable here)
-- **Cold-boot JS bug `t.startsWith is not a function`** — the FIRST error in the
-  game-1 crashloop (minified `t`; no stack captured; only fires on the
-  **multi-thread WASM build** = crossOriginIsolated + SharedArrayBuffer, non-iOS,
-  i.e. CI runner + desktop Chrome first-ever load). iOS beta testers use the asm
-  build and NEVER hit this path; desktop-web first-load DOES. The warm-up scopes
-  it out of the audit but does not fix it. Real fix needs a source-mapped repro
-  of the multi-thread variant probe to locate `t` (something calls `.startsWith`
-  on a non-string worker message before any analysis is pending). Not yet fixed.
-
-### P5 VARIATION-LESSON STREAM — CLOSED (2026-07-16 late session)
-
-True coverage map (built from the real lessons index, not grep): 316
-variation tabs total → **299 lessoned, 16 G3-blocked, 1 data defect.**
-The "42 openings" framing overstated it — the workable gap was 19 lessons.
-
-Shipped this stream (19 authored): sicilian-alapin 4 (2...Nf6 endgame /
-alt-order — corrected mid-authoring: Bxd1 exists via c2, "king must take"
-was false; d5-Nc6-e5 honest-framed at -0.74; knight-recapture), old-indian 3
-(Janowski/Main-d5/Seirawan), qga 2 (both teach the d5-break defusal), slav
-quiet-e3, two-knights 2 (quiet-Italian, Fritz cxd4? punish +3.5), then the
-10-opening closure batch: italian closed-a4, sveshnikov 11.c4, catalan
-Qa4-regain, tromp 4.f3, qgd Cambridge Springs trap (+3.5), neo-grunfeld,
-leningrad dutch, benoni b5-race (-0.73 honest), english b4-break, KIA
-vs-the-e5-stake (-0.58 honest: "system, not refutation"). Method per lesson:
-replay w/ captures/checks → extend <20p lines on masters-explorer (engine
-fallback) → engine-screen terminus from student side → author with
-board-verified claims → 7-file gate battery. Never claim equality on a
-worse line.
-
-**G3-BLOCKED (16) — openings-lichess simply lacks these lines (DO NOT
-author lessons; DB is the canon):** london-system all 6 missing tabs (DB
-London canon = Nf3-first 11p + Jobava 6p + Steinitz-CG 6p only),
-reti-opening 3, sicilian-alapin 2 (no 2...e6/2...g6 in DB), KIA 2,
-philidor 1, dutch 1, birds 1.
-
-**DATA DEFECTS flagged for David:**
-1. slav-defence "Winawer Countergambit (...e5!?)" tab: pgn is a Botvinnik
-   Semi-Slav line (`...e6 Bg5 h6 Bh4 dxc4 e4 g5`) — ...e5 never played.
-   Name/line mismatch; lesson deliberately NOT authored over it.
-2. english-opening "Hedgehog System" tab is actually the Symmetrical
-   (...g6/...d6/...a6, no ...e6/b6 hedgehog) — name stretch, lesson authored
-   truthfully as the symmetrical b4-break.
-
-**REGISTRY LESSON (hard-won):** a new variation-lesson map spread into
-index.ts VARIATION_LESSONS but NOT reachable from registry.ts OPENINGS is
-INVISIBLE to every content gate (test count doesn't grow = the tell). The
-10-lesson batch was first authored as a side file and silently escaped all
-gates; redistributed into the per-opening registered maps, 5 real gate
-catches surfaced immediately (2 arrows from vacated squares, 1 blocked
-arrow, 1 premature piece-square claim, 1 over-long cue). Always verify the
-gate test count GROWS when adding lessons.
-
-**Post-deploy audit infra fix:** `wait-for-prod-build.mjs` now tolerates
-short-sha length drift (runner computes 7 chars, Vercel build env stamped
-8 — `f455271+` never matched `f4552716+`, causing a false 900s "never went
-live" timeout on the f455271 re-run). The f455271 audit failures themselves
-were double-deploy churn: push triggered the git-integration Vercel build
-AND the immediately-fired daily-deploy CLI deploy overwrote it mid-audit
-(16:45:51, audits ran to 16:56) — cached HTML referencing purged assets
-half-boots the app (no watcher events, no auto-detect). Lesson: don't fire
-daily-deploy right after a push; let the audit finish first.
-
-### DB-EMPTY ENGINE-EXTENSION WAVE — the 16 blocked lessons BUILT (2026-07-16, David's rule)
-
-David (verbatim): "if a DB is empty, we use stockfish best moves to get us
-to the middle game." Locked as the ENGINE_EXTENDED_LESSONS sanctioned set in
-lessonIntegrity.test.ts — those 16 keys anchor whatever the DB has (floor
-≥2) and continue on explorer/engine best play; every OTHER lesson keeps the
-≥6 anchor floor. All 16 built same-session, per-lesson replay + extension +
-terminus screen + full battery (incl. narrationGrounding — ~20 gate catches
-fixed across the wave):
-- london-system 6/6: vs-QP (Ne5/f4 grip +0.34), vs-Grünfeld (Qb3/Qa3 punish
-  +0.18), vs-Dutch (knight-stack, +1.04!), Bf5-mirror (+0.16), Nh4-f5 tab
-  (authored truthfully as the Ne5-trade grip — pgn has NO Nh4; name/line
-  mismatch flagged below), early-c5 gambit (Bxc5/Bd4 +0.23).
-- reti-opening 3/3: Accepted (e4-e5 plan +0.31), Réti Gambit (tempo-hunt
-  −0.09 level), Reversed Benoni (b4 "Benko a tempo up" +0.41).
-- sicilian-alapin 2/2: 2…e6 French-structure (−0.30), 2…g6 fianchetto
-  (+0.29 for Black).
-- kings-indian-attack 2/2: vs-Sicilian (a4→Nc4, 0.00), vs-Caro (−0.20).
-- philidor 1/1: Modern d3 Hybrid (…Bxc4 doubled-pawns plan, −0.46).
-- dutch 1/1: Anti-Dutch 2.Bg5 (honest-framed −0.74: "know the storm";
-  the h4-h5 attack shown, …Ne4 resource taught).
-- birds 1/1: Swiss Gambit (honest −0.29: "practical weapon, priced
-  accordingly").
-Variation-tab lesson coverage: **315/316** — the only gap is the
-slav-Winawer name/line data defect (David's call).
-
-**THIRD name/line mismatch found:** london-system "Nh4-f5 Knight Maneuver"
-tab — its pgn never plays Nh4 (it's the Nd2-order Ne5/Nxc6 line). Joins
-slav "Winawer CG" (Botvinnik moves) and english "Hedgehog" (Symmetrical)
-on the tab-rename list for David.
-
-### NAME/LINE MISMATCH RESOLUTION — David's "do what is best" call (2026-07-16 late)
-
-All three flagged tabs resolved per the standards:
-1. **slav "Winawer Countergambit (...e5!?)" — LINE REBUILT to match the name.**
-   The old pgn was Botvinnik Semi-Slav moves (duplicate of semi-slav content);
-   the tab's own explanation text already described the real countergambit —
-   the pgn had simply been pasted wrong. New spine = the actual WCG main line,
-   100% masters-sourced 24 plies (`d4 d5 c4 c6 Nc3 e5 dxe5 d4 Ne4 Qa5+ ...
-   O-O-O O-O e3 dxe3 fxe3 Qc7`), terminus +0.24 FOR BLACK. Lesson authored.
-2. **english "Hedgehog System" — LINE REBUILT to the real Hedgehog.** Old pgn
-   was the Symmetrical four-knights (no hedgehog shell). New spine anchors the
-   DB's `Symmetrical, Hedgehog, Flexible Formation` entry (19 plies!) extended
-   to 26 on masters moves, terminus +0.40 White. Explanation rewritten; the
-   interim symmetrical-b4 lesson replaced with a true Hedgehog-bind lesson.
-3. **london "Nh4-f5 Knight Maneuver" — TAB RENAMED** to "London: Ne5 Trade
-   Plan (Nd2 Order)" (no mainstream London line justifies Nh4-f5; inventing
-   one would violate G3). Renamed in repertoire.json + lesson key +
-   ENGINE_EXTENDED_LESSONS. The KIA Nh4-f5 references elsewhere are real KIA
-   content, untouched.
-**Variation-tab lesson coverage: 316/316 — COMPLETE.** No gems/plans keyed to
-any of the three tabs (verified before touching).
+1. **B1 + B2** — the silent middlegame. Biggest felt quality gap.
+2. **A3, A4, A7** — narration gates leaving holes or letting fragments through.
+3. **A6** — cheap tool-name tolerance.
+4. **A5** — storage persistence; data-loss risk.
+5. **B3, B4** — endgame step + learn-another-line.
+6. **A1** — the replay, once his next log carries the entry ids.
 
 ## Next-session pickup
-Confirm run 29249281899 green → loop break closed. If a NEW break surfaces,
-diagnose from its report.json artifact (download via the artifact API, inspect
-per-game pageErrors + the `failures[]` array), fix the CODE, re-run (respect the
-concurrency group). The audit is the deliverable; a green run + report is the
-proof.
 
----
-
-# PLAN — Pro-Rep Build: MAGNUS CARLSEN repertoire (2026-06-01)
-
-**Player:** `carlsen` (Magnus Carlsen) · chess.com `magnuscarlsen` · 9,336
-games on disk (gitignored — re-fetch: `node scripts/pro-repertoire/fetch-chesscom.mjs magnuscarlsen`).
-**Scope (David):** a MULTI-opening repertoire (≥8), matching the standard of the
-existing pro-reps (Gotham 18 / Naroditsky 10 / Rosen 8 / Hikaru 5). Build to
-full G9.1 parity per opening; **2-3 model games per variation** (David: "more
-than just one game" — favour the OTB classical wins). Push straight to `main`.
-
-## Corpus: ONLINE + TOURNAMENT (David: "check tournament play as well")
-- Online (chess.com `magnuscarlsen`): 9,336 games (6,879 blitz / 2,122 bullet /
-  335 rapid; no classical).
-- **OTB tournament (pgnmentor `Carlsen.pgn`): 7,484 classical games**, converted
-  to chess.com JSONL (`_otb-tournament.jsonl`) and MERGED into the corpus.
-- **Tournament play VALIDATES the pick** — OTB top systems mirror online exactly
-  (W: Ruy/1.e4 e5, d4-c4, Open Sicilian; B: 1...e5, Nimzo/QGD, Sicilian, KID).
-- Spines now built on the COMBINED ~16.8k-game corpus → 300-1,351 games each,
-  tournament-authentic main lines. Model games favour the OTB classical wins.
-
-## The 8 signature openings (combined-corpus, frequency-ranked)
-
-| # | id | Line | Games | Score |
-|---|---|---|---|---|
-| 1 | `pro-carlsen-open-sicilian` | Open Sicilian (W) | 1118 | 77% |
-| 2 | `pro-carlsen-ruy-lopez` | Ruy Lopez / Open Games (W) | 1113 | 73% |
-| 3 | `pro-carlsen-queens-pawn` | Queen's Pawn / Catalan (W) | 1107 | 74% |
-| 4 | `pro-carlsen-sicilian` | Sicilian Defense (B) | 1351 | 69% |
-| 5 | `pro-carlsen-1e5` | 1...e5 / Ruy / Berlin (B) | 1011 | 61% |
-| 6 | `pro-carlsen-nimzo` | Nimzo-Indian / QGD (B) | 605 | 63% |
-| 7 | `pro-carlsen-kid` | King's Indian (B) | 300 | 67% |
-| 8 | `pro-carlsen-french` | French Defense (B) | 317 | 71% |
-
-Trees: `data/sources/magnuscarlsen-trees/carlsen-*.json` (combined corpus).
-Coverage: White answers 1...c5 / 1...e5 / 1.d4-setups; Black answers 1.e4
-(Sicilian + 1...e5 + French) and 1.d4 (Nimzo/QGD + KID).
-
-### Variation tabs per opening (from tree frequency)
-- **Open Sicilian (W):** Najdorf (main) · Rossolimo vs ...Nc6 (138g) · Taimanov vs ...e6 (82g) · Sozin Bc4 (72g) · Moscow Bb5+ (48g) · 2...Nf6 (28g)
-- **Ruy/Open Games (W):** Closed Ruy (main) · Italian Bc4 (121g) · Berlin (68g) · Petrov (64g) · Scotch d4 (39g) · Anti-Berlin d3 (34g)
-- **Sicilian (B):** Najdorf Bg5 (main) · Taimanov ...e6 (158g) · Rossolimo (142g) · Alapin c3 (62g) · Moscow Bb5+ (55g) · Smith-Morra d4 (54g)
-- **Berlin (B):** Berlin endgame (main) · Italian Bc4 (89g) · Open Berlin Nxe4 (38g) · Steinitz ...d6 (27g) · Scotch d4 (25g) · Four Knights (25g)
-- **KID (B):** Classical (main) · Fianchetto g3 (22g) · Nf3 system (29g) · Makogonov h3 (11g)
-
-## Build order (G9.3 Gate D + efficient-recipe layers, batched across all 8)
-- [x] STEP 0-3 — fetch · trees · variation ID
-- [x] STEP 4 — deep-build per variation (46 files, all 8 openings)
-- [ ] STEP 5 — honest MG/endgame plan counts (wider-corpus)
-- [ ] STEP 6 — voice corpus (Magnus per-opening teaching, web)
-- [~] LAYER 1 (Gate A) — LessonScripts main+variations
-  - [x] #1 Open Sicilian: main (English Attack) + 5 variation lessons, arrows
-        self-verified (geometry checker `_arrowcheck.mjs`; fixed 7 blocked/pawn arrows)
-  - [ ] #2 Ruy · #3 Queen's Pawn · #4 Sicilian · #5 1...e5 · #6 Nimzo · #7 KID · #8 French
-- [ ] LAYER 2 — model games (≥2-3/variation, student WINS, **prefer OTB classical**,
-      hand overview ≥40 chars). NOTE deep-build topModelGames is thin → write a
-      broader corpus win-extractor (classical-first, high opp rating, decisive, deep).
-- [ ] LAYER 3 (Gate C) — middlegame plans anchored at spine terminus
-- [ ] LAYER 4 — pitfalls (ENGINE-verified; sign: studentEval = -rawEval)
-- [ ] LAYER 5 — endgames (real game → ending, only where data supports)
-- [ ] pro-repertoires.json entries · register LESSONS/VARIATION_LESSONS · bump PRO_DATA_REVISION
-- [ ] STEP 15 — gates + `npm run ship-check` → READY TO PUSH
-- [ ] STEP 16 — push main + 3-instrument audit + Gate A/B watch-depth prod audit
-
-## WIP location
-On branch `claude/pensive-knuth-Gzrws`, draft PR #698. Lands on `main` only when
-all 8 are gate-green (G9.3 — no half-builds in prod). Helper scripts:
-`scripts/pro-repertoire/_carlsen_spine.mjs` (spine FEN printer),
-`_arrowcheck.mjs` (vision-arrow geometry verifier).
-
-## Decisions log
-- 2026-06-01: Carlsen picked; Sicilian-White spine (14-ply) > d4-c4 (8-ply).
-- 2026-06-01: Scoped to 5 openings (David: "more than one opening"), matching
-  the Hikaru build count; coherent White(e4) + Black(vs e4 ×2, vs d4) coverage.
-
-## Next-session pickup
-Resume at first unchecked LAYER. Each opening must be COMPLETE (Gate A lesson +
-plans + ≥2 model games + entry + registered) before ship — no half-builds (G9.3).
-
----
----
-
-# PLAN — Masterclass DATA-REBUILD (2026-05-29, scope-corrected 2026-05-30)
-
-> Doctrine: `docs/plans/2026-05-29-masterclass-data-rebuild-doctrine.md`.
-> Diagnostic: `audit-reports/lesson-tails.json` (ranked tail-overhang report).
-
-## MIDDLEGAME-PLAN ≥8-PLY PASS (2026-05-31) — 65 of 85 done, 20 honest leaves
-Every masterclass middlegame-plan playableLine should be ≥8 plies, sourced from
-the REAL game that reached the position (David's directive). Started at 85 short
-(<8-ply) masterclass plans; **65 done** (extended along real masters
-continuations OR re-anchored to a sourced student-side-win model game), each
-gate-green and on `main`. Tooling built: `extend-plan-line.mjs` (fen= masters
-continuation), `source-variation-model-game.mjs` + `source-by-prefix.mjs`
-(student-win game sourcing w/ amateur-explorer fallback), `extract-game-segment.mjs`.
-
-**The 20 remaining are HONEST LEAVES** (per "empty > generic > invented" + the
-wins-only model-game rule) — each is sound on a DB-validated line; none has a
-clean real extension:
-- **No sourceable master-quality student-win game** (solid equalizing lines whose
-  masters topGames skew to the higher-rated/other side; only amateur <2400 wins
-  exist, below the masterclass bar): benoni-main, grunfeld-main, petrov-main,
-  philidor-main, old-indian-main, dutch-main, dutch-ilyinzhenevsky, fk-italian,
-  reti-antislav, queensgambit-minority (game ADDED for the tab; plan stays on its
-  on-theme b4-b5 minority attack, +1 not sourceable at that exact FEN).
-- **Sharp forced theory where extending = inventing moves (G3 forbidden)**:
-  najdorf-poisoned (game ADDED), najdorf-ng4, sveshnikov-chelyabinsk, benko-zaitsev.
-- **Offbeat lines with no matching real game**: birds-nimzo, birds-stonewall,
-  trompowsky-main/e6/raptor, sicilian-dragon-chinese.
-These can be revisited if/when a real master game surfaces; the plans are sound
-as-is. NOT a defect — a deliberate, rule-driven stopping point.
-
-
-## SCOPE CORRECTION (2026-05-30) — diagnostic-driven, NOT all 42
-The diagnostic proved most masterclass lessons are ALREADY on deep+common data
-lines (overhang 0): caro-kann (main m13/742g), its Advance/Panov/Tartakower,
-italian main (now rebuilt), etc. We do NOT rebuild those, and we do NOT "flip"
-a sound showcase main line (the playbook lets the main-line pill be a canonical
-showcase, exempt from the frequency sort).
-
-The rebuild targets are the **over-extended / early-divergent** lessons:
-master-pool, NOT pro-*, where the lesson walks well past where games go
-(common-ends early AND big overhang). Per-target judgment: a genuinely
-divergent line (common ends m3-7, lesson marches to m12-19 on an uncommon
-line) gets REBUILT on its data spine; a deliberately-sharp GAMBIT showcase
-(short forced theory) is LEFT. Distinguish before touching.
-
-## Rebuild targets (worst-first; master pool, overhang≥8 or common≤m6)
-Genuine defects (positional lines on divergent/over-extended tails):
-- philidor-defence:: Antoshin(oh24 c-m4) / Exchange(17 m7) / Counter-Gambit(17 m3) / Nimzowitsch(16 m7)
-- alekhine-defence (main oh20 m9) / Chase(14 m4) / Scand-Transposition(12 m5)
-- vienna-game (main oh19 c-m4 — CHECK if deliberate sharp showcase first)
-- italian-game::Modern Moller Attack (oh16 m8)  [italian MAIN done]
-- london-system (main oh14 m5) / vs KID(15 m5)
-- birds-opening:: Stonewall/Williams/From (oh12-15, c-m3-4)
-- scandinavian-defence (main oh14 m7) / Gubinsky-Melts(12 m5) / Portuguese(8 m7)
-- four-knights-game::Rubinstein 4.Bb5 Nd4 (oh13 m4)
-- queens-gambit::Anti-QGD Early Bf4 (oh13 m4)
-- pirc-defence:: Byrne(12 m5) / 150 Attack(10 m6) / Austrian e5 c5(8 m6)
-- scotch-game (main oh9 m8) / Steinitz 4...Qh4 (11 m5)
-- petrov-defence:: 5.Bd3(14 m10) / Italian(13 m10) / Three Knights(11 m11)
-- trompowsky-attack:: (several, c-m5-6)
-- old-indian / queens-indian / benoni / grunfeld / nimzo / qgd / dutch: deep-ish
-  common (m9-13) + modest tail — TRIM not rebuild (lower priority)
-Likely-LEAVE (deliberate sharp gambit showcases — verify, don't auto-rebuild):
-- kings-gambit + its variations, evans-gambit lines, albin/schliemann/budapest
-  gambit lines (short forced theory is correct for a gambit).
-
-## Process per target
-Divergent → `build-opening-spine.mjs <id> "<variation seed>"` → re-author the
-lesson on the data spine → gates → commit. Over-extended-but-deep → trim the
-tail beats to the common terminus → fix the final beat → gates → commit.
-Ship the whole batch at once when the Vercel cap clears.
-
-## DONE so far
-- [x] Doctrine + spine engine + diagnostic + scope correction
-- [x] Wave 0: italian-game MAIN line rebuilt (Pianissimo data spine), tabs
-      reconciled, gates + localhost 6/6. On main. Prod audit pending cap.
-- [ ] Finish italian-game::Modern Moller Attack variation (oh16)
-- [~] philidor-defence — data spines generated (phil-antoshin/exchange/
-      nimzowitsch/countergambit.json). Findings: Antoshin data=9.Qd5 (vs
-      lesson 9.Bd3) but 4...Nxe4 is a pawn sac — VERIFY soundness for Black
-      before showcasing; Counter-Gambit data=4.dxe5 (vs 4.Nc3); Nimzowitsch
-      CONVERGES with main 16 plies (may fold into main, §0.1c — drop tab?);
-      Exchange shares 13 plies then modern ...Re8. SOUNDNESS CHECKED (engine
-      depth 20): Exchange -0.10 (equal, SOUND → REBUILT on data spine, gates
-      green); Antoshin -1.58 + Counter-Gambit -1.68 (both clearly bad for Black
-      vs the critical reply — DUBIOUS showcases; left as-is for now, candidates
-      to demote to warnings/drop — flagged for a considered call); Nimzowitsch
-      converges with main (fold candidate).
-- [x] alekhine-defence MAIN — tail rebuilt on data ...Nc6 line (38p->30p,
-      engine -0.33, gates green).
-- [LEAVE] london-system MAIN — sound + instructive (the ...Qb6 b2-poisoned-pawn
-      antidote teaches the London's ideas); the data c3/Nbd2 line is more common
-      but ends equal w/ the bishop traded, teaching the ideas worse. Playbook
-      main-line showcase exemption → LEAVE.
-- [LEAVE] scotch-game MAIN — sound, well-authored Classical Scotch (4...Bc5)
-      that teaches the ideas (centralised Nd4, d4-battle, trade into doubled
-      c-pawns). oh9 is mild; the "tail" teaches the key structural payoff.
-      Trimming would remove instruction. Playbook showcase-exemption → LEAVE.
-
-## REFINED SCOPE INSIGHT (2026-05-30)
-After per-line judgment, the rebuild is MUCH more surgical than the 67-flag
-count. Most flagged lessons are SOUND INSTRUCTIVE SHOWCASES (London, Scotch
-Classical) that teach the opening's ideas well — the diagnostic flags their
-mild over-extension, but the playbook exempts a sound idea-teaching main from
-the frequency sort → LEAVE. Genuine rebuilds = lessons that teach a
-DEAD/uncommon line (Italian old d4 = 1 game at m18), a MISLABELED/DUBIOUS line
-(Philidor Antoshin), or cram a thinning tail into bad pedagogy (Alekhine's
-one-giant-beat). Those are DONE. The remaining genuine candidates to still
-triage case-by-case (most likely leaves): vienna(keystone, likely the sharp
-Vienna Gambit showcase=leave), four-knights Rubinstein, queens-gambit Anti-QGD,
-pirc Byrne, trompowsky, birds(offbeat). Verify each is dead/dubious before
-rebuilding; do NOT rebuild sound showcases to inflate a count.
-- [x] philidor Antoshin — FIXED via DB: the old lesson mislabeled the dubious
-      4.dxe5 Nxe4 (-1.58) and falsely claimed "dead-level"; rebuilt on the REAL
-      Antoshin (exd4 + g6 fianchetto, -0.40, sound sharp opposite-castling).
-- [KEEP] philidor Counter-Gambit (3...f5) — can't be made sound (-1.64, refuted),
-      but already honestly framed as a sharp surprise gambit (not claiming
-      equality); teaches the practical 4.Nc3 line. Kept per anti-drop preference.
-## Nonnegotiables unchanged: data-chosen lines, reach middlegame, traps stay,
-## narrations change, no invented moves, no cut corners. Batch-ship.
-
-## SOUNDNESS SWEEP RESULTS (2026-05-30 overnight) — scripts/soundness-sweep.mjs
-Engine-evaled every masterclass lesson's final position (student perspective).
-22 flagged < -1.0. Verdicts after per-line verification (eval progression +
-data alternative):
-
-### FIXED (6) — sound lines ruined by a blundered tail; rebuilt on the data
-line + re-verified, gates green, shipped:
-- philidor Antoshin: -1.58 -> real exd4+g6 Antoshin, -0.40
-- petrov Steinitz: -2.08 -> cxd5 + ...Qxc3 counterplay, -0.22
-- scandi Gubinsky-Melts: -1.58 -> White's calm Bg5/Re1/Qd3, -0.03
-- qgd Bf4: -1.39 -> ...c6/...Qc7 + bishop trade, -0.33
-- qga Smyslov: -1.75 -> White's best dxc5 queen-trade endgame, -0.18
-- philidor Nimzowitsch: -2.15 -> sound Qe2 ...exd4/...Re8/...Bf8, 0.00
-
-### FLAGGED 5 — ALL RESOLVED 2026-05-30 (was "C"). Two rebuilt sound on data
-### spines; three given honest narration per the soundness rule (negative eval
-### is the opening's reality, not a lie). On main via cherry-pick (clean):
-- [x] pirc 150 Attack: -3.18 -> REBUILT on the masters-data antidote
-  (...c6/...b5/...e5/...Bb7, ...b4 buries the c3-knight on d1), -0.42 at 22p.
-  Commit b33ac5f. Verified every move = masters most-played at its ply.
-- [x] two-knights Max Lange: -2.82 -> REBUILT on Black's sound 5...Nxe4
-  antidote (decline the maze; ...d5, ...Qd8, Rxe4+ ...Be7 Nxd4, ...f5 ...O-O),
-  -0.39 at 22p. Commit 837628a.
-- [x] semi-slav Botvinnik Deep: -3.34 -> NARRATION-HONESTY fix (commit 3ab33b1).
-  Too treacherous to rebuild unsupervised; the bo4 beat no longer claims
-  "balanced / sound for both sides" — now states White holds the edge, Black
-  defends under pressure, high-risk surprise weapon. **FLAG FOR DAVID:** a true
-  rebuild would re-anchor to a precise modern drawing line in the main
-  Botvinnik (move-30 forced theory) — your call.
-- [x] old-indian Be2 (-1.26) / Czech (-1.11): NARRATION-HONESTY fix (commit
-  7ca21f7). The Old Indian is cramped/slightly-worse by nature; both terminal
-  beats now say plainly White has a real space pull and Black is a shade worse
-  but solid/resilient — no more false-equality claims.
-- [x] benoni Taimanov f4/Bb5+ (-1.98): NARRATION-HONESTY fix (commit f5b5b56).
-  The toughest anti-Benoni; the t4 beat no longer claims "fully equal" — now
-  says White's space gives a real pull, Black slightly worse but in a playable
-  double-edged fight with the ...b5 break.
-
-### "C" COMPLETION STATUS (2026-05-30)
-- [x] Connectivity checks: all openings reach the middlegame (lessonDepth green,
-  0 shallow); middlegame-plan coherence gates green (middlegamePlanner /
-  middlegamePlanThemes / middlegamePlanFenCoherence). Plans correctly start AT
-  or PAST the opening terminus — "pick up where the opening leaves off".
-- [x] 5 flagged variations fixed (above).
-- [x] Soundness re-sweep confirms pirc-150 + max-lange DROPPED off the flagged
-  list; the 3 narration-fixed lines stay engine-negative by design (honest now).
-- [x] ship-check: READY TO PUSH (typecheck + lint + all content gates green).
-- [x] Landed on main (5 commits cherry-picked clean onto fresh origin/main).
-- [ ] **G1 prod Playwright audit BLOCKED in this container (escalate):** (a) the
-  Chromium binary at /opt/pw-browsers/chromium-1194/... is ABSENT here
-  (/opt/pw-browsers empty), so the Playwright instrument cannot launch; (b) the
-  prod bundle hash had not advanced past the push within ~3min of polling —
-  deploy queued/capped behind today's heavy parallel-session pushes (many Gotham
-  commits). Audit-stream endpoint IS healthy (200, redis, empty=app-not-open).
-  NEXT SESSION / DAVID: once prod redeploys, run the 3-instrument audit
-  (AUDIT_SANDBOX=1 against the live URL) on /openings/pirc-defence (150 tab) +
-  /openings/two-knights-defence (Max Lange tab) to confirm the rebuilt content
-  renders + Watch/Learn voice fires. Content correctness already verified by
-  engine evals + content gates.
-- [x] **A — DONE 2026-05-30 (this session): prod G1 render+voice audit GREEN.**
-  Prod bundle (index-CE2ym1Vc.js) confirmed to carry PR #693 (greps "buries the
-  knight on d1" + Max Lange markers). New focused instrument
-  `scripts/audit-masterclass-variation-watch-prod.mjs` (the heavy 3-tier
-  punish-gems loop times out against slow prod) ran AUDIT_SANDBOX=1 vs LIVE prod:
-  6/6 GREEN — pirc-150 + two-knights-Max-Lange BOTH mount the curated
-  LessonPlayer (positive [data-testid=lesson-player], NOT legacy
-  walkthrough-progress) and fire a real beat /api/tts (warmup `.` probe
-  excluded). Audit-stream pull corroborated: 2 coach-narration-spoken events
-  with the exact rebuilt text ("The 150 Attack — bishop to e3…", "The Max Lange
-  is one of the oldest…"), voice=ruth. Also fixed audit-punish-gems-loop.mjs to
-  use sandbox cert helpers (was plain launch → cert-fails vs prod). Chromium
-  binary IS present (corrects the PLAN's earlier "absent" note); only blocker
-  was node_modules needed `npm install` on a fresh clone, and pollyEnabled
-  defaults false in a fresh context (the audit flips it on the seeded profile).
-
-### REMAINING engine-negative lessons (NOT in "C" scope — all sharp showcases /
-### opening-nature, correctly LEFT per the soundness rule): kings-gambit
-### Allgaier/Muzio/Classical, alekhine Four Pawns, sicilian-dragon Chinese,
-### schliemann, vienna vs 2...Nc6, KID Fianchetto, pirc Czech, philidor
-### Counter-Gambit. Negative eval is EXPECTED for a sac/gambit showcase.
-
-### C — NARRATION POLISH, DONE 2026-05-30 (this session).
-- Verified the sharp-showcase termini are HONEST, not equality-claiming:
-  Muzio ("the Muzio is not objectively sound… the line you play to WIN games"),
-  Allgaier (same honest register), Chinese Dragon ("trades a little soundness
-  for raw speed… attack first and ask questions never"). No fix needed.
-- Engine-evaled (depth 20, student perspective) the engine-negative lines that
-  ALSO claimed equality/comfort — the precise false-equality defect class:
-  KID Fianchetto -104cp claimed "fully equal" → **FIXED** (honest: "White's
-  extra central space gives a small lasting pull, Black a shade worse but the
-  c5-outpost keeps it a comfortable, fully playable fight"). alekhine Four
-  Pawns -99cp / vienna vs 2…Nc6 -64cp / pirc Czech -99cp claim NO equality →
-  honest, left. pirc Fianchetto -34cp legitimately equal → left.
-- Coverage-gate baselines at FLOOR for masterclass: middlegamePlanShort=0,
-  punishGemNarration=0 (both COMPLETE), middlegamePlanThemes=4 (all leave-
-  flagged "never fabricate a contrived move" deferrals — can't go lower
-  honestly). The 20 variationMiddlegameDepth entries are ALL pro-rep (pro-*),
-  a separate pro-rep-deepening effort (§G9.3 Gate B), NOT masterclass C-scope.
-- Gates re-run green: narrationAccuracy / lessonIntegrity / wlppNarration /
-  lessonDepth (3753+ tests).
-
-### B + D — PENDING DAVID (genuine forks, surfaced 2026-05-30):
-- B (Botvinnik): left HONEST (current state doesn't lie). A true re-anchor to
-  the 9.Nxg5 main needs move-30 forced drawing theory — G3 forbids authoring it
-  from memory, and it's too sharp to data-rebuild unsupervised. Asked David:
-  supply the line / keep honest / demote tab.
-- D (Endgames): pro/structural R+minor+P data prepped; each plan needs a
-  specific drawn master game + holding technique (~1hr/opening). Asked David to
-  confirm scope + model games before authoring.
-
-### LEAVE (sharp gambit/sac showcases — negative eval EXPECTED, honest):
-kings-gambit Muzio/Allgaier/Classical, two-knights/scotch Max Lange gem lines,
-albin/schliemann gambits, sicilian-dragon Yugoslav (sharp). Per the soundness
-rule: a sac showcase is meant to be engine-negative.
-
-## ENDGAME LAYER — METHOD LOCKED + FLAGSHIP AUTHORED (D, this session 2026-05-30)
-David locked the build method into CLAUDE.md ("🔒 ENDGAME LAYER" rule): ground
-every endgame plan in a REAL master game that played the SAME variation being
-taught, walked into its ending — opening→middlegame→endgame as ONE continuous
-real line (never invented; G3). Tooling: `scripts/pick-endgame-game.mjs` (built
-this session) seeds the masters explorer on the taught variation, pulls real
-full PGNs via the `/api/lichess-game-export` proxy (BOTH proxies reachable from
-the sandbox — confirmed 200), classifies the ending, and surfaces the specific
-game + its endgame move tail + transition FEN. Proven on the Italian Pianissimo
-(Carlsen–Erigaisi 2025 R+B-vs-R draw) and the Caro Classical (3 real drawn
-R+minor+P games incl. the WO's Anand–Leko 2008).
-FLAGSHIP SHIPPED: `mp-carokann-main-endgame` — the Classical Caro endgame,
-grounded in Anand–Topalov (Amber 2008), a clean R+B-vs-R+N hold: Black doubles
-on the d-file (…Rfd8/…Rd6/…Rcd8), reroutes the bishop (…Ba3-b4), and fixes the
-queenside (…a5). 14 real board-verified moves, two registers, lead-the-eye
-highlights, sources resolvable. Wired into the Caro main tab
-(caroKannMasterclassTabs). All gates green (middlegamePlanThemes / planner /
-EndgamePlansSection / ship-check). Live render audit runs post-merge.
-ROLLOUT (this session, all grounded in real same-variation master games, gated):
-- [x] caro-kann main — Anand–Topalov 2008 (R+B-vs-R+N hold)
-- [x] slav-defence main — Topalov–Wang Yue 2009 (R+minor hold, c-file activity)
-- [x] caro-kann Advance — Leko–Anand 2009 (symmetric R+minor, d5-outpost hold)
-- [x] qgd main — Hertneck–Hübner 1994 (Orthodox, Black converts the structure)
-- [x] french-defence main — So–Nepomniachtchi 2021 (passed-pawn counterplay holds)
-- [SKIP] caro-kann Exchange — the only drawn R+minor game in the data
-  (Ding–Carlsen 2020) resolves by bare perpetual check; no holding/conversion
-  technique to teach, so the section self-hides (empty > a non-lesson).
-Masterclass openings with endgame plans now: ruy-lopez, caro-kann (main +
-Advance), slav-defence, qgd, french-defence. Same locked method extends to any
-other structural opening where a real same-variation teachable ending exists.
-
-## ENDGAME LAYER — DATA PREPPED (2026-05-30 overnight), authoring teed up
-Ran scripts/extract-endgame-structures.mjs on the structural openings. The
-characteristic endgame is consistently R+minor+P (the minority-attack /
-superior-structure conversion):
-- caro-classical: R+minor+P 7/15 (47% — strongly characteristic)
-- caro-advance:   R+minor+P 4/15 (+ Q+pieces when queens stay)
-- french:         R+minor+P 5/15 (33%, 3 decisive)
-- qgd:            R+minor+P 4 + minor+P 3 (minority-attack endings)
-- slav:           R+minor+P 4/15 (all decisive)
-- caro-exchange:  R+minor+P (27%, minority attack) [extracted earlier]
-NEXT (authoring, best with a careful pass / David's eye — NOT rushed overnight):
-for each, take a real master game's line into the R+minor+P ending, author a
-`mp-<id>-<tab>-endgame` plan (overview + the line + sources), wire via the tab-
-plan map. Sharp/attacking openings (gambits, Dragon, etc.) correctly get NONE.
-
-## OVERNIGHT SESSION SUMMARY (for David, morning)
-DONE + shipped to main (all gate-green):
-- Opening-spine rebuilds: italian (prod-audited), philidor Exchange+Antoshin,
-  alekhine — genuine defects (dead/mislabeled/over-extended lines) on data spines.
-- Soundness sweep (NEW tool) found + FIXED 6 lessons that were SECRETLY LOSING
-  while narrating equality: petrov Steinitz (-2.08->-0.22), scandi Gubinsky
-  (-1.58->-0.03), qgd Bf4 (-1.39->-0.33), qga Smyslov (-1.75->-0.18), philidor
-  Nimzowitsch (-2.15->0.00) [+ Antoshin above]. Each rebuilt on the sound master
-  line + re-verified by engine.
-- Memory locked: data-rebuild doctrine + soundness-sweep rule in CLAUDE.md.
-- Tools built: build-opening-spine, diagnose-lesson-tails, soundness-sweep,
-  extract-endgame-structures.
-NEEDS DAVID / DEEPER WORK (flagged, NOT risked autonomously):
-- 4 genuinely-hard/sharp variations (pirc 150, two-knights Max Lange, semi-slav
-  Botvinnik, old-indian) — see SOUNDNESS SWEEP RESULTS above. [benoni Taimanov
-  RESOLVED 2026-06-10: KEEP — re-eval at depth 26 = -0.96 (the -1.98 was a
-  shallow-depth artifact); branchpoint already -0.83 before the lesson moves,
-  best play holds -0.86 to -0.96, student plays engine-best (...Nfd7 + the
-  ...Na6-c7-a6-b5 consensus counterplay). No sound equalising line exists (the
-  Taimanov is THE critical anti-Benoni); narration already honest ('slightly
-  worse... not an equaliser'). Tab explanation aligned to match.]
-- Endgame authoring across the ~6 structural openings (data prepped above).
-- London/Scotch/Vienna/Caro mains etc. = sound showcases, correctly LEFT.
-
-## LAYER STATUS VERIFIED (2026-05-30) — what's complete vs the remaining gap
-- MIDDLEGAME PLANS: COMPLETE. 42/42 masterclass openings have plans, 0 floor
-  gaps. Gate-verified (middlegamePlanner/Themes in ship-check).
-- NARRATIONS: re-authored on every rebuild; all pass narrationAccuracy/Grounding.
-- SOUNDNESS: comprehensively swept. 6 secretly-losing lessons FIXED; 5 hard/sharp
-  flagged (Pirc 150, Two Knights Max Lange, Semi-Slav Botvinnik, Old-Indian,
-  Benoni RESOLVED 2026-06-10: KEEP, -0.96 at depth 26, honest narration). Sharp gambit showcases left.
-- OPENING SPINES: genuine defects rebuilt (Italian, Philidor x2, Alekhine);
-  sound showcases (London, Scotch, Vienna, Caro, Scandi mains) correctly LEFT.
-- ENDGAMES: the one genuinely-missing layer (only Ruy has them). DATA PREPPED
-  (R+minor+P characteristic). BLOCKER CONFIRMED: unlike the Berlin (forced
-  move-8 queen trade), the structural Black defenses (Caro/French/QGD/Slav)
-  have NO clean modal queenless line — their modal lines stay middlegames
-  (Caro Classical keeps queens through move 15), and the R+minor+P endings
-  arise via varied, game-specific deep simplifications. So each endgame plan
-  must be grounded in a SPECIFIC drawn/held master game (e.g. Anand-Leko Caro
-  Classical R+minor+P draw) + teach the Black-HOLDING technique — ~1hr each,
-  quality-critical. RECOMMENDED: a focused endgame pass, ideally with David
-  confirming the model games (removes the sourcing + holding-line risk), rather
-  than rushed autonomous authoring. (NOT a line that lies — empty > generic.)
-
----
-
-## CARLSEN FULL-PARITY BUILD (2026-06-01, branch claude/carlsen-full-parity)
-All gaps closed in one PR, data-grounded, gate-green:
-- **Game references (STEP 11.5):** 300 real wins/draws (was 0), bounded 5/variation.
-- **Endgame plans:** 13/14 (added open-sic/sicilian/kid/french; KG self-hides).
-- **Pitfalls:** 12/14 (added 10 engine-verified across 6 openings; Réti+Caro empty/honest).
-- **Per-variation middlegame plans:** 9 (DATA-COMPLETE — rarer variations diverge
-  within 3-4 plies past terminus; building stubs would be padding).
-- **Gems:** 2 confirmed (Siberian + Elephant) — ENGINE-COMPLETE (~30 candidate
-  lines hand-verified; the rest equalize or aren't amateur-played; his solid
-  style genuinely yields few).
-- **Per-variation model games:** +49 (one real high-rated win per variation,
-  hand-authored overview). Now ~3/opening + 1/variation.
-All gates green. Next: ship-check → PR → loop audit on prod (3 instruments).
-
-## 2026-06-04 — Final pre-TestFlight content audit (single session)
-
-- [x] Extend short base-repertoire main lines: Schliemann 14→20p, Jänisch
-      Accepted variation 8→12p. Every added move = top Lichess-masters
-      continuation (explorer-verified). Albin stays 16p (no master line ≥5
-      games past terminus). repertoire.test 40→42. — committed
-- [x] Narrate the extended lines: schliemannDefence.ts main lesson +3 beats
-      (Qe2/Nf6, f4/Qxf4, Ne5+/c6) board-verified; Jänisch var already
-      narrated. narrationAccuracy + lessonIntegrity green. — committed
-- [ ] Personally review all 193 GEM_NARRATION entries: the Watch text on the
-      inaccuracy ply must explain WHY the move is bad; the punish ply must
-      explain the refutation (why it earns the gems tab). Tool:
-      scripts/dump-gem-narration.mts grounds each against board facts.
-- [ ] Fix any gem whose inaccuracy/punish narration is empty or doesn't explain.
-- [ ] Re-run punishGems.test + narration gates.
-- [ ] ship-check + deploy + TestFlight handoff.
-
-### 2026-06-05 — gem narration review COMPLETE
-- [x] Personally reviewed all 296 GEM_NARRATION entries (board-grounded via
-      scripts/dump-gem-narration.mts). Fixes:
-      - 31 narrations corrected total:
-        - 25 generic-placeholder Samay gems rewritten with board-verified prose
-          (material claims only where material is actually won at the quiet end;
-          positional language otherwise — verified each).
-        - 6 mislabeled tactics corrected: Italian Bxf7+ (e5 not f7 guard);
-          KG Qb5+ royal-fork→fork; Scotch fxe3 false queen-fork→Nxe7+ wins knight;
-          Gotham/open-e5 Qe1+ skewer→fork; Alapin Bc4 discovered→direct + c7 guard;
-          Alapin Qb3 false e6-hit; Aman Na5/Nxe5 false Qh5-fork→f7 gang-up;
-          Aman Bc5/Bxd5 pin mechanism; Aman Nbd7/Nd6# fork→smothered-mate (Qe2 pin);
-          English Bc5/Nxe5 skewer→fork.
-- [x] All gates green: punishGems, narrationAccuracy, lessonIntegrity,
-      wlppNarration, lessons/, repertoire.
-
-### 2026-06-05 — full green + WLPP Learn redesign
-- [x] All 14 test failures triaged + fixed (real bug vs stale-test, verified each):
-      - trap classification: 46 Naroditsky trapLines classified (all positional →
-        mistake/theme, none forced traps); Alapin mechanism test re-anchored on a
-        LIVE forced trap (Carlsen Siberian).
-      - model-games variation tags: regenerated from the deterministic classifier
-        (only variation fields changed, zero game-data touched).
-      - orphanLessons baseline emptied (every pro-rep variation now has a lesson).
-      - verify-annotation-resolution: curated lesson now counts as a reachable
-        Watch source (34 'unreachable' openings all have curated lessons; G9.3
-        Gate A bans annotations for them).
-      - audit-openings-narration: overflow now tests SAN legality, not DB-base
-        length (the ruy-lopez 30-move walkthrough is legal).
-      - 4 stale UI tests aligned with intentional changes (one-tap hint, R8
-        full-voice-map persistence) + 1 flaky walkthrough test made deterministic.
-- [x] FULL SUITE GREEN: 415 files / 20,379 passed / 0 failed. ship-check READY.
-- [x] WLPP LEARN redesign (David 2026-06-05): voice dictates the move only;
-      written narration shown below the board; opponent reply voice-promise-gated
-      (no choppy cut-off); square highlight kept. CLAUDE.md contract updated.
-- [ ] TestFlight upload (Mac-only — David's machine). Push to main pending
-      David's "we push at the end" signal.
-
----
-
-# PLAN — FULL-CATALOG MASTERCLASS SWEEP (David 2026-07-15: "sweep every opening… all the things") — ACTIVE
-
-David's order: sweep EVERY opening (not just the new ones): gems, middlegame +
-endgame plans, opening stops at the middlegame, middlegame plans start where the
-opening left off, all lines sound (no losing positions), sublines + variations,
-"watch out for" warnings, From-the-Books + Classic Wisdom present and NOT
-redundant with each other.
-
-## Instruments
-- `audit-reports/masterclass-sweep/matrix.json` — 167-opening inventory
-  (42 masterclass + 7 gambit-tab + 82 pro + 35 anti + 1 repertoire-only).
-- `audit-reports/masterclass-sweep/gatec2.json` — pawn-skeleton continuity.
-- `.soundness-all.mjs` → `soundness.json` — full-catalog engine sweep (every
-  lesson terminus + every data pgn main/variation, FEN-deduped, depth 18).
-
-## CLEAN (verified 2026-07-15)
-- **Gate A 100%** — all 167 openings resolve a curated lesson.
-- **Classic Wisdom vs From-the-Books: ZERO text redundancy** (different
-  sources; no overlap found on any opening).
-- Zero un-narrated model games, zero none-surfaceable gem sets, zero openings
-  without middlegame plans.
-
-## BACKLOG (priority order)
-1. **P0 soundness — ✅ DONE 2026-07-15.** 1,598 lines / 994 unique termini
-   at depth 18, 0 illegal. 33 termini < −1.0: honest showcases exempt
-   (verified by say-tail scan — Muzio/Halloween/Stafford/Benko/Fajarowicz/
-   Chinese-Dragon/KID/naroditsky-KID/benoni-Taimanov/old-indian-Be2+Czech all
-   narrate "not an equaliser" honestly); 10 genuine defects REBUILT on
-   engine-verified tails + shipped (commit "fix(soundness): P0 sweep"):
-   pirc Austrian (−1.76→−0.76, lesson beats rewritten to the …c4!/b5 line in
-   Danya register), pirc 150, anti-colle Nbd2 (was auto-mined junk), vienna
-   vs 2…Nc6 (honest-gambit reframe), gotham english, old-indian ×2,
-   carlsen-modern, benoni b5-race, caro Advance, evans Anderssen
-   (dxe5??→Ba3!, false "engine says plus-one" narration corrected, +2.14).
-1b. **✅ RESOLVED 2026-07-15 — kid "re-mount stall" was an audit artifact,
-   and it unmasked a real perf finding.** Local repro: a FULL page load of
-   ANY surface takes ~14-15s to first mount (dashboard 14.8s, /kid 14.4s,
-   /openings 29.7s — dev server; prod audit hops showed the same 15-21s),
-   while IN-APP navigation back to /kid is 329ms. The audit full-reloaded
-   /kid before every card hop, re-paying the cold boot 4x — prod variance
-   pushed hop 4 past the 45s wait. FIX: audit-untouched-surfaces kid loop
-   now navigates in-app (goBack) like a real user — hops dropped to ~2.7s.
-   NEW FINDING for a dedicated perf pass: **~15s cold boot to first paint**
-   (module eval + per-boot G8 reconcilers + seed) — that's what a beta
-   tester pays on every fresh open. Instrument:
-   scripts/catalog-sweep/repro-kid-stall.mjs. OLD note: Reproduced 2/3 prod
-   audit runs: goto /kid → visit /kid/puzzles → goto /kid = kid-mode-page
-   not visible in 45s (mount times degrade per hop: 21s→15s→22s→46s+).
-   Route /kid/play-games registered fine — the stall is the re-mount.
-   Needs localhost repro with CPU profile. Audit-flake note: coach-analyse
-   FEN mount + openings-ui ECO groups + master-integration context-destroyed
-   each failed once and passed on rerun (cold-prod timing, not code).
-2. **P1 Gate C breaks — IN PROGRESS 2026-07-15 (128 → 112).** The anchors
-   turned out to live on REAL CORPUS-GAME paths in the STEP-4 deep files
-   (data/sources/<player>-deep/*.json topModelGames) — 58 of 110 found there.
-   17 prefix-compatible extensions engine-screened (student ≥ −1.0 at the new
-   terminus) and APPLIED: the variation pgn now walks to the plan's anchor
-   (Gate D order — skeleton only, narration untouched). Gate B baseline
-   shrank 12→9 as a side effect. Instruments:
-   scripts/catalog-sweep/gatec-{reconnect,deep-hunt,extend,masters-bfs}.mjs.
-   REMAINING: ~40 transposition cases (game path found but diverges from the
-   entry's move order) + masterclass 16 — the masters-DB BFS pass connects
-   from the entry's own lines; its connectors get the same engine screen.
-   1 unsound extension rejected (naroditsky-KID four-pawns, −1.65 — matches
-   the honest-worse lesson; needs a plan-side re-anchor instead).
-   OLD scope note: 128 plans** (pawn diff ≥4 from every line of their
-   opening — the Watch→plan handoff is incoherent). 5 masterclass
-   (kingsindianattack-kid, nimzoindian-rubinstein, queensgambit-slav,
-   catalanopening-slav, alekhinedefence-scandtrans) + ~123 pro-rep (gotham +
-   naroditsky + caruana heavy). Re-anchor at true termini + re-derive playable
-   lines. 52 close continuations + 31 drifted = verify-only.
-3. **P2 Gate B shorts** — 6 masterclass variations un-baselined (scotch
-   Steinitz 12p, alapin 2…d5 13p, alekhine scandi-trans 13p, old-indian
-   Janowski 12p, birds Swiss Gambit 10p, schliemann ×2 12p); 12 pro in the
-   sealed shrinking baseline; anti trap/mate showcase lines exempt by nature;
-   gambit-tab 0p rows are a matrix artifact (no repertoire pgn — check spines).
-4. **P3 zero-gem openings: 57** (25 masterclass first). Hand-curated per the
-   traps-by-hand doctrine: explorer slips → engine refutation (tiered) →
-   theory check → both-register narration + sources.
-5. **P4 zero-endgame-plan openings: 62** — data-gated, not auto-defects: run
-   endgame-structure classification per opening (masters explorer / corpus);
-   build only where ≥~15% of games reach the ending; record "data says none".
-6. **P5 variation-lesson gaps: 42 openings** (worst: sicilian-alapin 2/8,
-   london-system 2/8, old-indian 4/7, qga 4/6).
-7. **P6 small holes** — model games: sicilian-alapin, pro-samayraina-kings-
-   gambit. Pitfalls: schliemann, pro-caruana-{nimzo,french,kid},
-   pro-carlsen-{caro-kann,reti}.
-
-## Sequencing logic
-Soundness (worst defect class) → continuity (incoherent handoffs) → depth →
-content presence (gems → endgames → variation lessons; weeks of hand-curation,
-per-opening to the locked doctrines).
-
-### Gate D retro-sweep (David 2026-07-15 "D next" + "check sublines and variations") — IN PROGRESS
-- Instrument: `scripts/catalog-sweep/gated-skeleton-scan.mjs` → 84 rows
-  (lesson-vs-data skeleton divergences + shallow-lesson gaps).
-- **Triage verdict:** every lesson terminus is engine-cleared by the P0
-  soundness sweep, so DIVERGES rows are overwhelmingly the deliberate
-  curated-lesson vs drill-line architecture (lesson spines are data-chosen
-  independently of repertoire pgns). Real defects = lessons left on
-  P0-refuted lines: pirc Austrian (FIXED — beats rewritten); pirc 150 and
-  caro Advance lessons teach their own SOUND alternative sub-lines (cleared,
-  left); vienna vs 2…Nc6 lesson is an honest 11p gambit hub (left).
-- **Gate B masterclass shorts: ALL 7 EXTENDED** (scotch Steinitz, alapin
-  2…d5, alekhine scandi-trans, old-indian Janowski, birds Swiss Gambit,
-  schliemann ×2) — engine best-play to 16-18 plies, termini screened
-  (worst −0.89 Old-Indian-nature; Schliemann lines Black-POSITIVE).
-- **Sublines: course-sublines.json REGENERATED** against the moved pgns
-  (build-course-sublines.mjs, masters DB + explorer + engine fallback);
-  42k-test sublineNarration gate run for orphans.
-
-### Gate C baseline grind (David 2026-07-15 "handle gate C") — IN PROGRESS, 109 → 40
-- Gate sealed as `middlegamePlanContinuity.test.ts` (pawn-skeleton diff ≤3 vs
-  the opening's lines; shrink-only baseline). The backlog was the alien
-  batch-authoring run: plans anchored on positions in ZERO corpus games with
-  fabricated "real win from this repertoire" claims.
-- **The proven loop (per cluster):** tree-continue the corpus from each
-  declared line → reroute/extend variation pgns where the corpus disagrees →
-  engine-screen every terminus (student ≥ −1.0) → 8-ply engine tails →
-  rebuild plans with hand-written Danya-register narration citing measured
-  junction stats → author Gate-A Watch lessons for every new variation →
-  full gate suite → main.
-- **Shipped:** Rossolimo (109→100), Jobava (→94), KIA (→86), Gotham English
-  (→80, +c6 variation), Fantasy/London/Vienna (→65, +3 variations incl. the
-  16-1 Vienna Gambit Accepted; 2 fabricated plans deleted), Alekhine (→60,
-  2 variations REROUTED onto his real corpus — the Rubinstein …Nd4 103/132),
-  Caro-Kann+Ruy (→52, d3-Closed rerouted, Berlin queen-trade plan),
-  Scandi+ClosedSic+Ponziani (→40, +7 variations, Ponziani honestly priced
-  at −0.3, its −5.7 Nc3 candidate discarded).
-- **COMPLETE (2026-07-16): baseline 109 → 1.** Final waves: Najdorf/AntiSic/
-  Italian (→31, +Two Knights variation), all pro-rep singles (→16 — the
-  Trompowsky b2-trap at +5.5, both Stafford refutations, the honest Milner
-  −0.9 and Advance …Qb6 0.00 poisoned-pawn pricing), all masterclass
-  leftovers (→1, 15 plans incl. the Alapin rewritten from the BLACK side it
-  actually teaches, 21 lead-the-eye violations caught by middlegamePlanner
-  and fixed — two arrows were drawn through blocking pawns, i.e. false claims).
-- **THE IRREDUCIBLE CORE (1): mp-pronaroKID-fourpawns-reroute** — Danya's own
-  …c5/Nd6 Four-Pawns line evals −1.1 for Black at 25s depth at his own 4-2
-  corpus terminus. Teaching it as fine would lie (soundness doctrine); the
-  fix is a content decision: re-teach via the e5!? sideline his videos also
-  cover. DAVID CALL.
-- **Side finds fixed en route:** 9 dangling resolver ids pruned; caruana-najdorf
-  + dragodorf wired (parallel build had left them unresolved); orphaned
-  vienna-gambit-main rebuilt instead of deleted; stale ruy d6@13 subline dropped.
-- **Known debt:** proRepTabPlanCoverage's RESOLVERS list omits all Gotham
-  resolvers ("keep in sync" comment violated) — sync would surface more
-  unresolved pairs; separate hygiene task. → **PAID 2026-07-16** (below).
-
-## Claims truth-audit + resolver sync (2026-07-16 — done)
-- **"Real win from this repertoire" claims audited across all plan prose.**
-  All 43 claims naming an opponent VERIFIED against the corpus (opponent
-  present in that opening's tree/deep/model-games/archive data; two traced
-  move-by-move to the actual game — Samay's Italian endgame = his win over
-  Sankalp_Pathak 2025-04; Naroditsky's Sämisch-KID endgame = his win over
-  abhijeetgupta1016 2017-12). 18 generic no-game claims were engine-tail
-  model lines wearing a fabricated "real win" label → reworded to honest
-  model-line framing (overviews + intros, varied stems). One fabricated
-  rating claim stripped (Rosen Stafford "beat a 3165" — max real Stafford
-  opponent is 2982). Per David's "we teach his teachings": teaching-derived
-  lines are framed as what he TEACHES, never as games that didn't happen.
-- **Resolver sync done:** all 18 Gotham resolvers wired into
-  proRepTabPlanCoverage's RESOLVERS chain — every Gotham (opening, variation)
-  pair resolves; 18 openings dropped from BASELINE_UNRESOLVED (shrink).
-- **Dangling-plan-id class found + sealed:** 39 'mp-*' ids referenced by tab
-  resolvers that never existed in middlegame-plans.json (silently empty plan
-  zones — invisible to the coverage gate because the resolver returns
-  non-null). Fixed: grunfeld 'modern rb1' repointed to the real
-  mp-grunfelddefence-modernrb1; 2 live-empty pro tabs got their plans
-  AUTHORED (Gotham French Tarrasch …b5-gambit refutation, engine +4.7 tail
-  w/ the Nc2+ fork + Bh3+ + Nd4-deflection mate motif; Gotham QGD Exchange
-  Carlsbad …Nf8/…g6/…Be6 hold, honest −0.5 pricing); 2 stale ids pruned
-  (naroKID classical-c5, caroadv bf5-c4break — tabs keep their real plans).
-  **New gate: `src/data/middlegamePlanIdIntegrity.test.ts`** — every mp-*
-  literal in a resolver file must exist in middlegame-plans.json; shrink-only
-  BASELINE_MISSING carries the remaining 34 never-authored masterclass
-  variation plans (albin ×3, semislav ×4, qgd ×3, petrov ×3, philidor ×3,
-  schliemann ×3, budapest ×2, qga ×2, queensindian ×2, oldindian ×2, KID ×2,
-  twoknights ×2, benoni/najdorf-6f3/slav-schlechter ×1). That baseline IS the
-  masterclass variation-plan authoring backlog.
-
-## Masterclass variation-plan backlog (2026-07-16 — 31/34 done)
-31 of the 34 baselined plans authored in three batches (QGD×3, Semi-Slav×4,
-Petrov×3, Philidor×3, Najdorf-6f3, Slav-Schlechter, KID×2, Benoni, QGA×2,
-Queen's Indian×2, Two Knights×2, Budapest×2, Albin×2, Schliemann×3) — each
-anchored at the taught variation terminus (Gate C), engine tail at movetime
-6000 (25s deep-verify on borderline anchors), hand-written two-register
-narration, all plan gates green. Highlights: Meran …h6! refutes the Ng5 raid
-(+1.5 Black), Petrov 5.Bd3 avalanche wins a piece (+3.3), Schliemann
-Schönemann entombs White's queen on h8, Albin Lasker Trap conversion (+5.8).
-Honest pricing kept throughout (Bayonet ~−0.8, Dyckhoff −0.7, Fajarowicz −1.1
-gambit toll stated plainly).
-
-**3 BLOCKED on unsound variation lines (deep-verify @25s, student side):**
-`mp-albincountergambit-fianchetto` (−1.62 and deteriorating — engine refutes
-Black's own line), `mp-oldindiandefence-czech` (−1.20),
-`mp-oldindiandefence-be2` (−1.40). All over the quiet-line soundness bar —
-authoring plans over them would teach losing positions. FIX THE VARIATIONS
-FIRST (rebuild on sounder data spines via build-opening-spine, or demote/
-relabel honestly), then author the plans and shrink the baseline to 0.
-
-## Variation rebuilds + baseline ZERO (2026-07-16 — done, b16f650 on main)
-The 3 unsound variation lines rebuilt on masters-data spines
-(build-opening-spine walks), all engine-sound at 25s:
-- OI Czech: …c5 lock (−1.20) → …a6/…b5 expansion (−0.51). Lesson re-authored.
-- OI Be2: …c5 lock (−1.40) → …a6/…Qc7 flexible setup (−0.43).
-- Albin Fianchetto: …Bg4/…O-O-O storm (−1.62) → the modern …Nge7 REGAIN
-  (−0.22): knight tours to g6, collects the gambit pawn, queens trade,
-  Black castles with the bishop pair. Lesson re-authored as the regain plan.
-All 3 plans authored at the new termini → **middlegamePlanIdIntegrity
-BASELINE_MISSING = ZERO** (all 34 originally-dangling ids resolved).
-Bonus catch: the grounding-evals regen flagged the SHIPPED mp-carokann-main
-plan teaching an immediate …c5 that loses by force (−1.5); rewritten as the
-"wall first" move-order lesson (…e6 before …c5, −0.32). Deploy verified:
-prod plans chunk live with the new content; localhost Playwright deep-link
-spot-check 4/4 green (Chromium cannot reach prod in this container — curl
-can; deploy verified at content level).
-
-## Zero-gem hand-curation stream (2026-07-16 — STARTED, Evans done)
-Current zero-gem masterclass count: 26 → 25 (Evans shipped 3 gems).
-**The proven per-opening pipeline (scan → judge → verify → author):**
-1. SCAN: throwaway helper walks the taught lines; at each OPPONENT-to-move
-   position, print amateur-explorer (ratings=1600,1800,2000) alternatives
-   ≥2%/30g with W%. (A data print, not a bot — the judgment stays by hand.)
-2. JUDGE by hand which alternatives are plausibly refutable (greed, battery
-   ignores, premature releases) — practical W% is NOT evidence (QGD c5?! ran
-   57% practical but only +0.47 objective → DROPPED).
-3. VERIFY: engine baseline BEFORE the slip (12s) + 10-ply best-play playout
-   after it; grade at the quiet end (≥+1.0 confirmed / +0.5..1.0 positional /
-   below → DROP). Verified drops this pass: QGD c5?! (+0.47), Evans Nxb4
-   (+0.32), Evans 5...Bc5 (+0.39) — famous "punishes" that don't clear the
-   objective bar. Empty > marginal.
-4. AUTHOR: gem object in punish-gems.json (schema: lineMoves/inaccuracy/
-   punish/punishSeq/playLine/engineCp/tier/freq fields) + BOTH-register
-   GEM_NARRATION entry (watch/learn arrays EXACTLY playLine length) +
-   sources[]. Gate: punishGems.test.ts.
-**Shipped so far (26 → 24 zero-gem):**
-- Evans Gambit (Compromised Qb3 battery node, 3 gems): Qf6?! → Bg5!
-  (+0.54 positional, 30.5k games), Nf6?? → Bxf7+! (+2.43 confirmed),
-  d5?? → exd5! (+4.95 confirmed).
-- Sicilian Dragon (the Rc8 x-ray node, 3 CONFIRMED — all skip the
-  mandatory Bb3 and lose to the same …Nxd4! removal shot): Kb1?? →
-  Nxd4/Ng4!! queen-win discovery (+3.4, 7.6k games), g4?? (+4.1, 4.2k),
-  h4?? (+3.8, 3.9k).
-**Honestly ZERO (verified drops recorded, do not re-scan):**
-- Budapest: the one crush (axb4?? Nd3#, B100%, 37.8k games) is already
-  the named Kieninger trapLine; h3?! (jump 0.10) and Adler Qd5?! (0.41)
-  under the bar.
-- Sveshnikov main: Nf5?! → …d5! only EQUALIZES (−0.11); Nf3?! +0.12.
-  Sharp-but-well-trodden — White's slips concede equality, not material.
-- Schliemann: Schönemann Bc4?!/Be2?! retreats land +0.58 Black — but the
-  baseline after the taught …c6 is ALREADY +0.46 (jump 0.12): the edge is
-  the opening's, not the slip's. Jump-from-baseline is part of the bar.
-- Trompowsky: Bf5?? → f3! SHIPPED (+1.31 confirmed, W64%; the trade offer
-  nothing defends). g5?! verified +0.89/jump 0.67 (positional) but
-  GATE-BLOCKED: the slip is at ply 6, so lineMoves is only 5 plies — under
-  MIN_DB_ANCHOR_PLY=6. A real finding with no gem slot; candidate for
-  warning/lesson content instead.
-- KIA + Bird scanned: no candidate cleared the practical-plus-plausible
-  screen (biggest: KIA Bxf3 W49%, Bird d4 W40% — that one's a WARNING
-  candidate against White, not a gem).
-- London: Nh5?! → Bh2! SHIPPED (+0.68 positional, jump 0.53; 12.9k games —
-  the bishop hunt h3 already refuted; rim knight costs the d5-outpost).
-- QG early dxc4 (jump 0.29) + Catalan Nc6?! (jump 0.34) verified and
-  DROPPED — the volume was tempting, the objective jump wasn't there.
-- Anti-Alapin: Bxh7+?? → Kxh7! SHIPPED (+4.36 confirmed — the failed
-  Greek gift, no follow-up exists; B70%). d4?! at ply 5 verified +0.77/
-  jump 0.98 (positional, 109k games!) but GATE-BLOCKED (4-ply setup <
-  MIN_DB_ANCHOR_PLY=6) — same class as Tromp g5; both are candidates for
-  a future early-slip surface that can anchor shorter.
-- Grünfeld main verified-and-dropped: Qc2?! (jump -0.67 but quiet-end
-  only +0.38 Black — under the absolute bar), early Nxd5 (+0.03).
-- Slav/KID/Dutch/Benoni/QGA mains scanned: no candidate cleared the
-  practical-plus-plausible screen.
-- Semi-Slav: Nxg5?? → hxg5!/…Be7! SHIPPED (+2.48 confirmed — the
-  Botvinnik piece grab; the pin dissolves; 4.2k games, B61%).
-- English: e4?! +0.45 (hair under the bar, dropped); d6?! +0.63 clears
-  numerically but the "punish" is plain development — no pointed idea to
-  teach, hand-judgment SKIP. Réti's monster dxc4 (1.3M games, +?) and
-  the ply-5 slips are all GATE-BLOCKED (≤5-ply setups).
-- Queens-Indian / Old-Indian / Glek mains: nothing above noise floors.
-
-**Variation-tab pass (second pass, in progress):**
-- French: Winawer cxd4?? → Qc3+!! (+4.16 confirmed, B88%) + Advance b3?!
-  → cxd4! (+0.50 positional, 389k games) SHIPPED.
-- Italian Hungarian Qh5 node: Be6?? → Bxe6! (+4.53) + Nh6?? → Bxh6!
-  (+5.12) SHIPPED — the two wrong f7-defences.
-- Anti-Sveshnikov …d5 node: a3?? → Bxc3+!/dxe4! fork (+4.96, B83%) and
-  Bd2?? → same collapse (+4.06, B76%) SHIPPED. O-O dropped (+0.28).
-- QGA: Nc6?! → Bxc4/e4! SHIPPED (+0.86 positional, 43k games — the
-  c-pawn block; big centre unopposed). The famous b5?! greed verified
-  and DROPPED (+0.44 — best play holds it; the Qf3 trap needs follow-up
-  errors).
-- Dropped: Giuoco Nxc3?! (+0.04 quiet-end — the W62% mirage), Caro tab
-  candidates under floor, Ruy tabs nothing above noise, Najdorf/Dutch
-  tabs nothing above B60% worth verifying, KID/Grünfeld/Benoni tabs
-  nothing new (Grünfeld Qc2 already dropped at +0.38).
-
-**Tab-pass running total: 7 gems (French 2, Hungarian 2, Anti-Svesh 2,
-QGA 1). Session total: 17 gems. Remaining unscanned tab territory:
-sveshnikov/najdorf tabs 6+, glek/reti/dutch deeper tabs, gambit set.**
-
-**Tab-pass wave 2 (2026-07-16 late): 5 more gems shipped.**
-- King's Gambit Fischer-Defense node `e4 e5 f4 exf4 Nf3 d6 d4 g5 h4`:
-  Bg4?! → hxg5! (+1.87 confirmed, 4.6k games). (An earlier Muzio Bd6→d4
-  +2.10 also in this batch's working tree.)
-- Najdorf 6.Be3 …Ng4 tab: Bf4?! → e5! forking d4+f4, then Nxf2! forking
-  Q+R (+1.22 confirmed, jump 1.58, 13,219 games — already committed by
-  the earlier main-pass, kept); f3?? → Ne3! octopus fork, Bxd4 wins a
-  piece (+4.64 confirmed, jump 4.74, 212 games).
-- Najdorf Fischer-Sozin tab: e5?! → Bb7! through the vacated diagonal;
-  exd6 zwischenzug killed by Bxd6 (+0.62 positional, jump 0.68, 536g).
-- Sveshnikov Kalashnikov tab: Nxb4?? → Qa5! traps the knight, Nxc2+
-  (+4.00 confirmed, jump 4.44, 207g); Qa4?! → Bd7! then Nxe4 snaps the
-  centre pawn (+1.13 confirmed, jump 1.50, 314g).
-- GATE-BLOCKED (logged, do not re-scan): Réti Accepted `Nf3 d5 c4 dxc4
-  e3` node — b5?! (127,559 games, 24%!! the hold-the-pawn classic) and
-  Bg4?! (42k) sit at a 5-ply node; the deeper `…Nf6 Bxc4 Bg4` (32k)
-  node's move order also only anchors 5 plies in openings-lichess.
-  All three fail MIN_DB_ANCHOR_PLY=6 structurally. Candidates for the
-  future early-slip surface alongside Réti dxc4/Alapin d4/Tromp g5.
-- Scanned clean (nothing above the bar): Benko tabs (4), Najdorf
-  Adams/Anti-Najdorf tabs, Sveshnikov 11.c4/…Rb8 tabs, Glek all 3 tabs,
-  Dutch all 7 tabs, Réti KIA/Advance/LSB/Nimzo-English/Gambit/Anti-Slav/
-  Reversed-Benoni tabs.
-
-**Tab-pass running total: 12 gems. Session total: 22 gems (318 in the
-DB). Remaining unscanned tab territory: the gambit set (kings-gambit
-deeper tabs done; evans/budapest/albin/benko done or clean).**
-
-**MASTERCLASS SWEEP COMPLETE (2026-07-16): 10 gems shipped across 6
-openings** (Evans 3, Dragon 3, Tromp 1, London 1, anti-Alapin 1,
-Semi-Slav 1); ~20 openings honestly yield zero from their taught mains
-(solid systems — slips concede equality, not material; every verified
-drop recorded above so nothing gets re-scanned). Remaining zero-gem
-count 26 → 20. Deeper VARIATION-line scans (each opening has 4-8 tabs;
-only mains were swept) are the natural second pass if David wants more
-weapon density.
-
-## Next-session pickup
-(1) 62 zero-endgame openings (data-gated endgame plans — the last big
-content stream); (2) David's calls: slav Winawer-CG tab name/line mismatch,
-mp-pronaroKID-fourpawns-reroute (−1.1 line vs his 4-2 record); (3) verify
-the nightly external Beta App Review submission cleared (armed check
-2026-07-17 02:20 UTC); (4) gem + variation-lesson streams are CLOSED
-(tab territory exhausted; P5 at 299/316 with the rest G3-blocked).
+Run the coach-teach surface on prod and pull the audit stream. If
+`useTeachWalkthrough.narrateAndAdvance` entries show **two interleaved id
+sequences**, it's concurrent chains (find the second `start`/`resume` caller);
+if it's **one sequence whose depth decreases**, it's a rewind (look at
+`transitionAfter` / the delta-aside guards).
