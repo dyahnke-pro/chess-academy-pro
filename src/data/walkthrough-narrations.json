@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-07-31T03:23:40.900Z",
+ "generatedAt": "2026-07-31T05:28:05.272Z",
  "narrations": {
   "latvian gambit": {
    "openingName": "Latvian Gambit",
@@ -812,6 +812,188 @@
      "shortText": "Bd3 finishes the Stonewall setup, eyeing the kingside."
     }
    ]
+  },
+  "sicilian defense alapin variation": {
+   "openingName": "Sicilian Defense: Alapin Variation",
+   "spine": [
+    "e4",
+    "c5",
+    "c3"
+   ],
+   "sourceVideos": [
+    "yt:KNwKz9Ssi8c",
+    "yt:kWk-UW7GdnY",
+    "yt:o29kg7LLAVg",
+    "yt:0fb75Z-i03A",
+    "yt:ktoa6lk6qNk",
+    "yt:uJro3yCDEgk"
+   ],
+   "studentSide": "white",
+   "intro": "The Alapin is all about one thing: grabbing the center with c3 and daring Black to prove that the c-pawn is misplaced. Every move in this opening is a step toward that central battle.",
+   "shortIntro": "The Alapin: claim the center with c3 and dare Black to react.",
+   "outro": "With c3, White has set the trap: the center is claimed, and Black must decide how to respond. The battle for d4 has begun.",
+   "ideas": [
+    {
+     "text": "e4 opens the game with a claim on the center, inviting Black into the Sicilian. This is the start of a fight for the d4-square, where White will try to build a strong pawn duo.",
+     "shortText": "e4 claims the center and starts the fight for d4."
+    },
+    {
+     "text": "c5 is Black's standard Sicilian response, immediately challenging the center from the flank. It's a signal that Black wants to keep the game unbalanced and fight for the d4-square.",
+     "shortText": "c5 challenges the center from the flank."
+    },
+    {
+     "text": "c3 is the Alapin's key move: it prepares d4, staking a claim in the center. The pawn on c3 also supports a future d4 push, and while it blocks the knight's natural square, it sets up a solid central presence that Black must address.",
+     "shortText": "c3 prepares d4, claiming the center."
+    }
+   ],
+   "introFlipped": "Black's c5 has challenged the center, and White's c3 prepares to stake a claim with d4. Our task is to prove that this central ambition is premature, and that the c5 pawn is a target, not a strength.",
+   "shortIntroFlipped": "Black challenges the center; White prepares d4.",
+   "outroFlipped": "White's c3 has set the stage for a central clash. Our c5 pawn has done its job, and now we must be ready to strike at the heart of White's ambitions.",
+   "ideasFlipped": [
+    {
+     "text": "e4 opens the game with a claim on the center, inviting us into the Sicilian. This is the start of a fight for the d4-square, where White will try to build a strong pawn duo.",
+     "shortText": "e4 claims the center and starts the fight for d4."
+    },
+    {
+     "text": "c5 is our standard Sicilian response, immediately challenging the center from the flank. It's a signal that we want to keep the game unbalanced and fight for the d4-square.",
+     "shortText": "c5 challenges the center from the flank."
+    },
+    {
+     "text": "c3 is the Alapin's key move: it prepares d4, staking a claim in the center. The pawn on c3 also supports a future d4 push, and while it blocks the knight's natural square, it sets up a solid central presence that we must address.",
+     "shortText": "c3 prepares d4, claiming the center."
+    }
+   ],
+   "branchNarrations": {
+    "d5": {
+     "label": "Barmen Defense",
+     "moves": [
+      "d5",
+      "exd5",
+      "Qxd5",
+      "d4",
+      "cxd4",
+      "cxd4",
+      "Nc6",
+      "Nf3",
+      "Bg4",
+      "Nc3",
+      "Bxf3"
+     ],
+     "teaser": "d5 — Black strikes at the center immediately, turning the Alapin into a kind of Scandi with the c-pawns still on the board. The queen will come out early, and that's both a strength and a target.",
+     "shortTeaser": "d5 — Black challenges the center; the queen will be a target.",
+     "ideas": [
+      {
+       "text": "exd5 — We take the pawn, and Black's queen recaptures on d5. That queen is a powerful piece, but it's also a magnet — every move we make from here will be aimed at chasing it around and using its exposure to build our initiative.",
+       "shortText": "exd5 — Black's queen comes out early; we'll chase it."
+      },
+      {
+       "text": "Qxd5 — There she is, the queen on d5. She controls a lot of squares, but she's also a target. Our whole plan is to develop with tempo, hitting that queen, and if Black mishandles it, the initiative will be ours.",
+       "shortText": "Qxd5 — The queen is exposed; we'll develop with tempo."
+      },
+      {
+       "text": "d4 — Now we strike in the center. This is the whole point of the c3 pawn — we wanted to be able to play d4 and occupy the center. Black has to decide: take on d4 now, or let us keep a strong pawn duo.",
+       "shortText": "d4 — The c3 pawn pays off; we take the center."
+      },
+      {
+       "text": "cxd4 — Black takes, and that's a common mistake. By opening the c3 square, Black allows our knight to come to c3 with tempo, chasing the queen. If Black instead kept the tension, we'd have to work harder, but this gives us a free developing move.",
+       "shortText": "cxd4 — Black opens c3 for our knight; we'll use it."
+      },
+      {
+       "text": "cxd4 — We recapture, and now the c3 square is free. Our knight will come to c3 next, hitting that queen on d5. The queen is already feeling the heat, and Black's early development is starting to look like a liability.",
+       "shortText": "cxd4 — The c3 square is open; the knight is coming."
+      },
+      {
+       "text": "Nc6 — Black develops the knight, but the queen on d5 is still in the center. We're going to bring our knight to f3, and then we'll see how Black tries to handle the pressure. The queen's position is the key — it's both a strength and a weakness.",
+       "shortText": "Nc6 — Black develops, but the queen remains a target."
+      },
+      {
+       "text": "Nf3 — We develop the knight, and now we're ready to bring the bishop to c4, hitting that queen. Black has to be careful — if the queen gets chased too much, the king will be stuck in the center, and our pieces will swarm.",
+       "shortText": "Nf3 — We prepare Bc4, hitting the queen."
+      },
+      {
+       "text": "Bg4 — Black pins our knight, trying to disrupt our development. But this is a double-edged move — it doesn't address the queen's exposure. We'll deal with the pin, but the queen on d5 is still the main character in this story.",
+       "shortText": "Bg4 — A pin, but the queen is still the target."
+      },
+      {
+       "text": "Nc3 — We develop with tempo, hitting the queen. This is the move we've been building toward — the knight comes to c3, and Black's queen has to move again. Every tempo we gain is a step toward a massive initiative.",
+       "shortText": "Nc3 — The knight hits the queen; we gain tempo."
+      },
+      {
+       "text": "Bxf3 — Black trades the bishop for our knight, but this is a concession. The queen on d5 is still exposed, and we'll recapture with the queen, keeping the pressure. Black's early queen sortie has left the king vulnerable, and our pieces are ready to attack.",
+       "shortText": "Bxf3 — A trade, but the queen is still in danger."
+      }
+     ]
+    },
+    "Nf6": {
+     "label": "Stoltz Attack",
+     "moves": [
+      "Nf6",
+      "e5",
+      "Nd5",
+      "Nf3",
+      "Nc6",
+      "Bc4",
+      "Nb6",
+      "Bb3",
+      "c4",
+      "Bc2",
+      "Qc7"
+     ],
+     "teaser": "Nf6 — Black challenges the center immediately, and this is the Stoltz Attack, where we're going to push them back and build a big space advantage.",
+     "shortTeaser": "Nf6 — the Stoltz Attack begins.",
+     "ideas": [
+      {
+       "text": "e5 — We kick the knight right away. Black's knight has to move, and it's going to land on d5, but that's fine — we're going to use our space advantage to make that knight a target.",
+       "shortText": "e5 kicks the knight, gaining space."
+      },
+      {
+       "text": "Nd5 — The knight retreats to d5, but this is exactly what we want. That knight is going to be a target for our c-pawn and our bishop, and it's going to be hard for Black to keep it there.",
+       "shortText": "Nd5 — a target for our pawns."
+      },
+      {
+       "text": "Nf3 — We develop the knight and prepare to castle. Notice that we're not in a hurry to attack the knight on d5 yet — we want to get our pieces out first and then strike.",
+       "shortText": "Nf3 develops, preparing castling."
+      },
+      {
+       "text": "Nc6 — Black brings out another piece, but this knight is going to be in the way of their own development. We're going to use our space to keep them cramped.",
+       "shortText": "Nc6 — Black's knight gets in the way."
+      },
+      {
+       "text": "Bc4 — Now we hit the knight on d5 with the bishop. This is a key move: it forces Black to deal with the attack, and it also eyes the f7 square, which is a classic weakness.",
+       "shortText": "Bc4 attacks the knight and eyes f7."
+      },
+      {
+       "text": "Nb6 — the knight drops back again, hitting our bishop on c4. We simply slide the bishop to safety and keep it aimed at the kingside — Black has now spent three moves on one knight while we develop.",
+       "shortText": "Nb6 hits the bishop; we keep developing."
+      },
+      {
+       "text": "Bb3 keeps the bishop trained on f7 from a safe square. Count the tempi: Black's knight has wandered while our pieces flow out — that lead in development is the Alapin's quiet promise.",
+       "shortText": "Bb3 — safe, still eyeing f7."
+      },
+      {
+       "text": "c4 — now Black grabs space and swats at our bishop. It looks aggressive, but the pawn overextends: it gives up its grip on the centre, and we keep the bishop healthy with a quiet slide to c2.",
+       "shortText": "c4 swats the bishop; we tuck it away."
+      },
+      {
+       "text": "Bc2 tucks the bishop out of the pawn's bite, still healthy on the long diagonal toward h7. Nothing is lost — the bishop re-emerges the moment the centre opens.",
+       "shortText": "Bc2 — bishop safe on the long diagonal."
+      },
+      {
+       "text": "Qc7 — Black's queen leans on our advanced e5-pawn, the real point of this setup. We meet it calmly — defend e5, finish development, and our space tells in the middlegame.",
+       "shortText": "Qc7 pressures e5; defend and develop."
+      }
+     ]
+    }
+   },
+   "bridges": {
+    "Nf6": {
+     "mainSan": "d5",
+     "text": "Same three moves as always — e4, c5, and our c3 promise of a big d4 centre. You've walked the d5 road before: Black strikes the centre at once, and after the pawn trade his queen comes out early to d5, letting us develop with tempo. Today's pick is Nf6 — the Stoltz road: instead of striking the centre, Black attacks our e4-pawn, we push e5 with tempo, and his knight hops to d5 where our centre and quick development set the terms. Watch how the same c3 idea — build d4 — plays out against a completely different Black setup.",
+     "shortText": "You know d5's early queen; Nf6 hits e4 — e5 kicks, we build d4.",
+     "textFlipped": "Same three moves — e4, c5, and White's c3 promise of a big d4 centre. You've walked the d5 road before: we strike the centre at once, and after the pawn trade our queen comes out early to d5 to keep White honest. Today's pick is Nf6 — the Stoltz road: we attack the e4-pawn instead, White pushes e5 with tempo, and our knight hops to d5 to blockade. Watch how White's same c3 idea — build d4 — meets a completely different setup from us.",
+     "shortTextFlipped": "Instead of d5's early queen, Nf6 hits e4 and our knight blockades d5."
+    }
+   }
   }
  }
 }

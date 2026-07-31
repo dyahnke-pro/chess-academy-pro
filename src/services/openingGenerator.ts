@@ -1454,16 +1454,37 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
 
   let narration: NarrationOutput;
   let narrationFellBack = false;
-  if (baked && branches.length === 0) {
-    // Full coverage, no branches — zero runtime LLM.
+  // Full-tree bake coverage: every fork branch has a baked narration deep
+  // enough for its extension line → zero runtime LLM even WITH branches
+  // (David 2026-07-31: "Tier 2 openings fully in effect?").
+  const bakedBranchesCoverAll =
+    baked !== null &&
+    branches.every((b) => {
+      const bn = baked.branchNarrations?.[b.san];
+      return bn !== undefined && bn.ideas.length >= b.extensionMoves.length;
+    });
+  if (baked && (branches.length === 0 || bakedBranchesCoverAll)) {
+    // Full coverage — zero runtime LLM.
     narration = {
       intro: baked.intro,
       ...(baked.shortIntro ? { shortIntro: baked.shortIntro } : {}),
       outro: baked.outro,
       ideas: baked.ideas.slice(0, positions.length),
+      ...(bakedBranchesCoverAll && branches.length > 0
+        ? {
+            branchIdeas: branches.map((b) => baked.branchNarrations?.[b.san]?.teaser ?? ''),
+            shortBranchIdeas: branches.map((b) => baked.branchNarrations?.[b.san]?.shortTeaser ?? ''),
+            branchExtensionIdeas: branches.map((b) => baked.branchNarrations?.[b.san]?.ideas ?? []),
+          }
+        : {}),
     };
   } else {
-  try {
+  // Up to 2 attempts before the template fallback. A single transient
+  // failure (truncated/malformed tool JSON — the 2026-07-31 Alapin session:
+  // "JSON Parse error: Expected ']'") used to drop the WHOLE lesson to
+  // template ideas ("e4 — staking a claim…", "c5 — gaining space…" — the
+  // repetitive garbage David heard). One retry almost always recovers.
+  const callNarration = async (): Promise<NarrationOutput> => {
     const result = await getCoachStructuredResponse(
       [{ role: 'user', content: userPrompt }],
       systemPrompt,
@@ -1476,7 +1497,20 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       'Emit short coach narrations (one sentence per provided move) plus an intro and outro for the line.',
       NARRATION_SCHEMA,
     );
-    narration = result as NarrationOutput;
+    return result as NarrationOutput;
+  };
+  try {
+    try {
+      narration = await callNarration();
+    } catch (firstErr) {
+      void logAppAudit({
+        kind: 'llm-error',
+        category: 'subsystem',
+        source: 'openingGenerator.generateOpeningFromDbNarration',
+        summary: `narration attempt 1 failed for "${name}" — retrying once: ${firstErr instanceof Error ? firstErr.message : String(firstErr)}`,
+      });
+      narration = await callNarration();
+    }
   } catch (err) {
     void logAppAudit({
       kind: 'llm-error',
@@ -1495,15 +1529,26 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
   }
   if (baked) {
     // Overlay the baked spine narration over whatever the call produced
-    // (or the fallback) — the branch fields keep the LLM's prose, the
-    // spine speaks the baked video teaching. A baked spine also un-fails
-    // the fallback: the tree's MAIN narration is real, so it may cache.
+    // (or the fallback) — the spine speaks the baked video teaching, and
+    // any branch WITH a baked narration speaks it too (LLM prose only for
+    // uncovered branches). A baked spine also un-fails the fallback: the
+    // tree's MAIN narration is real, so it may cache.
+    const branchIdeas = branches.map(
+      (b, i) => baked.branchNarrations?.[b.san]?.teaser ?? narration.branchIdeas?.[i] ?? '',
+    );
+    const shortBranchIdeas = branches.map(
+      (b, i) => baked.branchNarrations?.[b.san]?.shortTeaser ?? narration.shortBranchIdeas?.[i] ?? '',
+    );
+    const branchExtensionIdeas = branches.map(
+      (b, i) => baked.branchNarrations?.[b.san]?.ideas ?? narration.branchExtensionIdeas?.[i] ?? [],
+    );
     narration = {
       ...narration,
       intro: baked.intro,
       ...(baked.shortIntro ? { shortIntro: baked.shortIntro } : {}),
       outro: baked.outro,
       ideas: baked.ideas.slice(0, positions.length),
+      ...(branches.length > 0 ? { branchIdeas, shortBranchIdeas, branchExtensionIdeas } : {}),
     };
     narrationFellBack = false;
   }

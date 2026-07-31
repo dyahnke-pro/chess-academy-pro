@@ -33,6 +33,18 @@ export interface BakedBridge {
   shortTextFlipped?: string;
 }
 
+/** Baked narration for ONE fork branch (teaser + one idea per extension
+ *  ply) — Tier 2 covering the whole tree, not just the spine (David
+ *  2026-07-31: "Tier 2 openings fully in effect?" — the Alapin proved a
+ *  3-ply spine bake leaves the student hearing LLM/template prose for
+ *  the branch lines, which is most of the lesson). */
+export interface BakedBranchNarration {
+  label?: string;
+  teaser: string;
+  shortTeaser?: string;
+  ideas: BakedIdea[];
+}
+
 export interface BakedNarration {
   openingName: string;
   spine: string[];
@@ -53,6 +65,8 @@ export interface BakedNarration {
   ideasFlipped?: BakedIdea[];
   /** Comparative bridges for the spine-terminus fork, keyed by sideline SAN. */
   bridges?: Record<string, BakedBridge>;
+  /** Baked narration per fork branch, keyed by the branch's first SAN. */
+  branchNarrations?: Record<string, BakedBranchNarration>;
 }
 
 interface BakedFileShape {

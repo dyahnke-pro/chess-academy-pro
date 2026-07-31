@@ -160,7 +160,7 @@ function boardClaimProblem(text, fen) {
   // PLURAL + LIST form counts too — "pawns on e6 and c5" claims BOTH
   // squares (the Taimanov bridge claimed a traded-off c5 pawn this way).
   const claims = [];
-  for (const m of text.matchAll(/\b(knight|bishop|rook|queen|king|pawn)s?\s+(?:on|at)\s+([a-h][1-8])((?:\s*(?:,|and)\s*[a-h][1-8])*)\b/gi)) {
+  for (const m of text.matchAll(/\b(knight|bishop|rook|queen|king|pawn)s?\s+(?:(?:is|are|sits|stands|now|still)\s+)*(?:on|at)\s+([a-h][1-8])((?:\s*(?:,|and)\s*[a-h][1-8])*)\b/gi)) {
     for (const sq of [m[2], ...(m[3]?.match(/[a-h][1-8]/g) ?? [])]) claims.push({ raw: m[0], sq, word: m[1] });
   }
   for (const m of text.matchAll(/\b([a-h][1-8])[-\s](knight|bishop|rook|queen|king|pawn)\b/gi)) {
@@ -282,6 +282,88 @@ ${clipped.slice(0, 60_000)}`;
     }
   }
   return Object.keys(bridges).length ? bridges : null;
+}
+
+// ── BRANCH PASS (David 2026-07-31: "Tier 2 openings fully in effect?") ──
+// A spine-only bake leaves every fork BRANCH speaking LLM/template prose —
+// on a short-spine opening (the Alapin: 3 plies then the Barmen/Stoltz
+// fork) that is MOST of the lesson. Bake each branch's teaser + one idea
+// per extension ply from the transcript, gated exactly like spine ideas
+// (alignment per ply, board claims on the replayed FEN, overlap, bans).
+// Best-effort per branch: a branch that can't pass ships absent and the
+// runtime keeps the LLM path for it.
+async function bakeBranchNarrations(spine, plies, clipped, overlaps, system) {
+  const branches = spine.branches ?? [];
+  if (branches.length === 0) return null;
+  const side = spine.studentSide ?? 'white';
+  const out = {};
+  for (const b of branches) {
+    // Replay the branch line from the spine terminus for per-ply FENs.
+    const seq = [];
+    try {
+      const c = new Chess();
+      for (const san of spine.moves) c.move(san);
+      for (const san of [b.san, ...(b.extensionMoves ?? [])]) {
+        const mv = c.move(san);
+        seq.push({ san: mv.san, fen: c.fen() });
+      }
+    } catch { console.error(`  (branch ${b.san}: illegal replay — skipped)`); continue; }
+    const promptFor = (repairNote) => `OPENING: ${spine.name}
+THE STUDENT PLAYS: ${side.toUpperCase()} — "we/our" means ${side} in every entry.
+THE SHARED SPINE ALREADY NARRATED (${plies.length} plies): ${plies.map((p) => p.san).join(' ')}
+THIS CALL COVERS ONE BRANCH: ${b.san}${b.label ? ` — "${b.label}"` : ''}
+THE BRANCH LINE (${seq.length} plies, continuing from the spine): ${seq.map((p, i) => `${i + 1}:${p.san}`).join(' ')}
+
+FOR THIS CALL return STRICT JSON:
+{"teaser": string, "shortTeaser": string, "ideas": [{"text","shortText"}...]}
+- teaser: 1-2 sentences spoken AS ${b.san} animates — name the move AND the line's character (continue the story from the spine; never re-introduce the opening).
+- ideas: EXACTLY ${seq.length - 1} entries, one per move AFTER ${b.san} (${seq.slice(1).map((p) => p.san).join(' ')}), same alignment/teaching rules as always. Count them.
+- TIME-OF-BOARD TRUTH: entry N is spoken at the position AFTER move N. NEVER state a piece is "on" a square it only reaches EARLIER or LATER in the line — if the queen recaptures on d5 two moves from now, say "the queen will take back on d5" (motion/future), never "the queen on d5" (location). A location claim must be true at that exact ply.
+${repairNote ? `\nYOUR PREVIOUS ATTEMPT WAS REJECTED: ${repairNote}\nFix exactly those units (simplest fix: drop the false location claim) and return the full JSON again.\n` : ''}
+TEACHER'S SPOKEN TRANSCRIPT (reference only — reword, never quote):
+${clipped.slice(0, 120_000)}`;
+    const gateUnit = (label, text, fen, san) => {
+      if (!text || !text.trim()) return `${label}: empty`;
+      const gram = overlaps(text);
+      if (gram) return `${label}: lifts "${gram}"`;
+      if (BANNED.test(text) || (BANNED_EXTRA && BANNED_EXTRA.test(text))) return `${label}: attribution leak`;
+      if (MOVE_NUM.test(text)) return `${label}: move-number prefix`;
+      if (fen) { const c = boardClaimProblem(text, fen); if (c) return `${label}: ${c}`; }
+      if (san && !mentionsOwnMove(text, san)) return `${label}: does not speak about its own move ${san}`;
+      return null;
+    };
+    let baked = null;
+    let note = null;
+    for (let attempt = 1; attempt <= 3 && !baked; attempt += 1) {
+      try {
+        const res = await callModel(system, promptFor(note), 6144);
+        const ideas = Array.isArray(res.ideas) ? res.ideas : [];
+        if (ideas.length !== seq.length - 1) { console.error(`  (branch ${b.san} attempt ${attempt}: ${ideas.length}/${seq.length - 1} ideas)`); continue; }
+        const problems = [];
+        const tp = gateUnit(`branch ${b.san} teaser`, res.teaser, seq[0].fen, b.san);
+        if (tp) problems.push(tp);
+        ideas.forEach((idea, i) => {
+          const ip = gateUnit(`branch ${b.san} ply ${i + 2}`, idea.text, seq[i + 1].fen, seq[i + 1].san);
+          if (ip) problems.push(ip);
+          const shortWords = String(idea.shortText ?? '').trim().split(/\s+/).length;
+          if (shortWords > 18) problems.push(`branch ${b.san} ply ${i + 2} shortText: ${shortWords} words`);
+        });
+        if (problems.length > 0) { note = problems.join('; '); console.error(`  (branch ${b.san} attempt ${attempt}: ${problems.slice(0, 3).join(' | ')})`); continue; }
+        baked = {
+          ...(b.label ? { label: b.label } : {}),
+          moves: seq.map((p) => p.san),
+          teaser: String(res.teaser).trim(),
+          shortTeaser: String(res.shortTeaser ?? '').trim(),
+          ideas: ideas.map((i) => ({ text: String(i.text).trim(), shortText: String(i.shortText ?? '').trim() })),
+        };
+      } catch (e) {
+        console.error(`  (branch ${b.san} attempt ${attempt} call failed: ${String(e).slice(0, 100)})`);
+      }
+    }
+    if (baked) { out[b.san] = baked; console.log(`  branch baked: ${b.san}${b.label ? ` (${b.label})` : ''} — ${baked.ideas.length + 1} plies`); }
+    else console.error(`  (branch ${b.san}: gates never passed — runtime keeps the LLM path)`);
+  }
+  return Object.keys(out).length ? out : null;
 }
 
 async function main() {
@@ -516,6 +598,8 @@ ${finished}`, 8192);
 
   // Comparative bridges for the fork's sidelines (needs ≥2 branches).
   const bridges = await bakeBridges(spine, plies, clipped, overlaps);
+  // Branch narrations — Tier 2 covers the whole tree, not just the spine.
+  const branchNarrations = await bakeBranchNarrations(spine, plies, clipped, overlaps, system);
 
   let file = { generatedAt: '', narrations: {} };
   try { file = JSON.parse(await readFile(OUT, 'utf8')); } catch { /* first entry */ }
@@ -536,6 +620,7 @@ ${finished}`, 8192);
       ideasFlipped: flipped.ideas.map((i) => ({ text: String(i.text).trim(), shortText: String(i.shortText ?? '').trim() })),
     } : {}),
     ...(bridges ? { bridges } : {}),
+    ...(branchNarrations ? { branchNarrations } : {}),
   };
   await writeFile(OUT, JSON.stringify(file, null, 1));
   console.log(`✓ "${spine.name}" narration baked from video — ${ideas.length} plies${flipped ? ' + flip register' : ''}, all gates green → ${OUT}`);

@@ -329,7 +329,10 @@ export function validateBoardClaims(text: string, fen: string): BoardClaimResult
     // PLURAL + LIST form counts too — "pawns on e6 and c5" claims BOTH
     // squares (the 2026-07-31 Taimanov bridge claimed a c5 pawn that had
     // been traded off; the singular-only pattern missed it entirely).
-    const fwd = /\b(white|black)?(?:'s)?\s*(pawn|knight|bishop|rook|queen|king)s?\s+(?:on|at)\s+([a-h][1-8])((?:\s*(?:,|and)\s*[a-h][1-8])*)\b/gi;
+    // "the knight IS on d7" / "sits on" / "still on" count too — the
+    // 2026-07-31 Stoltz bake claimed "knight is on d7" (it was on b6) and
+    // the bare on/at pattern missed the linking verb.
+    const fwd = /\b(white|black)?(?:'s)?\s*(pawn|knight|bishop|rook|queen|king)s?\s+(?:(?:is|are|sits|stands|now|still)\s+)*(?:on|at)\s+([a-h][1-8])((?:\s*(?:,|and)\s*[a-h][1-8])*)\b/gi;
     // hyphen OR space form — "the e4-pawn" and "the e4 pawn" both claim
     // occupancy (the 2026-07-30 Bird bake said "d4 pawn" on a d3 board and
     // the hyphen-only pattern missed it).

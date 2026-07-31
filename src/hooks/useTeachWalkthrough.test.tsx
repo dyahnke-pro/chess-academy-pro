@@ -86,7 +86,7 @@ describe('useTeachWalkthrough', () => {
     expect(result.current.isActive).toBe(false);
   });
 
-  it('advances through linear moves, shows the fork picker, then auto-advances down the main line', async () => {
+  it('advances through linear moves, then WAITS at the fork for the pick', async () => {
     const { result } = renderHook(() => useTeachWalkthrough());
     act(() => {
       result.current.start(SMOKE_TREE);
@@ -106,9 +106,16 @@ describe('useTeachWalkthrough', () => {
     expect(result.current.forkOptions[1].label).toBe('2.Nf3');
     // FEN should be the position after 1.e4 e5.
     expect(result.current.fen).toContain('rnbqkbnr/pppp1ppp/8/4p3/4P3/');
-    // … but Watch keeps flowing: without any pick, it auto-advances down the
-    // MAIN line (first child = 2.Nc3) and plays on to the leaf on its own
-    // (David 2026-06-12: "the pages need to advance automatically").
+    // … and the fork WAITS — no auto-advance timer (David 2026-07-31, third
+    // report: "the selections disappeared before I could pick one"). The
+    // picker stays until the student picks.
+    // 4.5s > the old 4s timer — proves no timer fires.
+    await new Promise((r) => setTimeout(r, 4500));
+    expect(result.current.phase).toBe('fork');
+    // Picking advances down the chosen line to the leaf.
+    act(() => {
+      result.current.pickFork(0);
+    });
     await waitFor(
       () => {
         expect(result.current.phase).toBe('leaf');
@@ -116,7 +123,7 @@ describe('useTeachWalkthrough', () => {
       { timeout: 8000 },
     );
     expect(result.current.pathSans).toEqual(['e4', 'e5', 'Nc3']);
-  });
+  }, 20000);
 
   it('picking a fork advances down the chosen branch and lands on a leaf', async () => {
     const { result } = renderHook(() => useTeachWalkthrough());

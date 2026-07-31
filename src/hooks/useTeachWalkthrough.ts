@@ -403,12 +403,12 @@ const BACKUP_WPM = 180;
 const MIN_BACKUP_MS = 3000;
 const MAX_BACKUP_MS = 45_000;
 const POST_NARRATION_BUFFER_MS = 400;
-// Watch = auto-play. At a fork the lesson shows the variation picker so the
-// student CAN choose a line — but it also keeps flowing on its own down the
-// MAIN line (first child) after this beat, so the pages advance automatically
-// instead of stalling at every branch (David 2026-06-12: "the pages need to
-// advance automatically"). A manual pickFork / pause cancels it.
-const FORK_AUTO_ADVANCE_MS = 4_000;
+// Watch = auto-play for LINEAR beats ("the pages need to advance
+// automatically", David 2026-06-12 — that stays). A FORK is different: it is
+// a decision point, and the picker WAITS for the student's choice. The old
+// 4s auto-advance made the tiles vanish while David was still reading them —
+// reported three times, PostHog-confirmed on the 2026-07-31 Alapin session
+// ("the selections disappeared before I could pick one"). No fork timer.
 
 function clampBackupMs(text: string): number {
   const wordCount = text.trim().split(/\s+/).filter(Boolean).length;
@@ -1061,16 +1061,14 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
               narrateAndAdvance([...path, node.children[0].node]);
             }, POST_NARRATION_BUFFER_MS);
           } else {
-            // Fork: surface the picker so the student CAN branch, but DON'T
-            // stall — auto-advance down the main line (first child) after a
-            // beat so the lesson keeps playing on its own. pickFork / pause
-            // both run cleanupNarration → clear this timer, so a manual
-            // choice or pause cancels the auto-advance cleanly.
+            // Fork: surface the picker and WAIT for the student's pick.
+            // NO auto-advance — David hit this three times (2026-07-31,
+            // PostHog-confirmed on the Alapin: "the selections disappeared
+            // before I could pick one"; the old 4s timer barreled down the
+            // main line while he was still reading the tiles). The fork is
+            // a decision point; the student decides. pickFork advances,
+            // skip advances, pause pauses — nothing advances on a timer.
             setPhase('fork');
-            advanceTimerRef.current = setTimeout(() => {
-              advanceTimerRef.current = null;
-              narrateAndAdvance([...path, node.children[0].node]);
-            }, FORK_AUTO_ADVANCE_MS);
           }
         };
 
@@ -1186,14 +1184,9 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
         if (node.children.length === 1) {
           narrateAndAdvance([...path, node.children[0].node]);
         } else if (node.children.length > 1) {
-          // Fork with nothing to read: show the picker but keep flowing down
-          // the main line so it doesn't stall (auto-advance; pickFork/pause
-          // cancels — same as the narrated-fork case above).
+          // Fork with nothing to read: show the picker and WAIT for the
+          // pick (no auto-advance — see the narrated-fork case above).
           setPhase('fork');
-          advanceTimerRef.current = setTimeout(() => {
-            advanceTimerRef.current = null;
-            narrateAndAdvance([...path, node.children[0].node]);
-          }, FORK_AUTO_ADVANCE_MS);
         } else {
           setPhase('leaf');
         }
@@ -1608,15 +1601,9 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     } else if (node.children.length === 1) {
       narrateAndAdvance([...pathNodes, node.children[0].node]);
     } else {
-      // Skipping ONTO a fork: same as the passive-narration case — show the
-      // picker but keep flowing down the main line so the lesson doesn't stall
-      // (pages advance automatically). pickFork / pause / another skip clears
-      // this timer.
+      // Skipping ONTO a fork: show the picker and WAIT for the pick
+      // (no auto-advance — see the narrated-fork case above).
       setPhase('fork');
-      advanceTimerRef.current = setTimeout(() => {
-        advanceTimerRef.current = null;
-        narrateAndAdvance([...pathNodes, node.children[0].node]);
-      }, FORK_AUTO_ADVANCE_MS);
     }
   }, [phase, pathNodes, narrateAndAdvance]);
 

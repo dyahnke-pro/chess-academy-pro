@@ -23,6 +23,14 @@ interface BakedBridge {
   textFlipped?: string;
   shortTextFlipped?: string;
 }
+interface BakedBranchNarration {
+  label?: string;
+  /** The branch line as replayed at bake time: [branchSan, ...extensions]. */
+  moves?: string[];
+  teaser: string;
+  shortTeaser?: string;
+  ideas: BakedIdea[];
+}
 interface BakedEntry {
   openingName: string;
   spine: string[];
@@ -32,6 +40,7 @@ interface BakedEntry {
   ideas: BakedIdea[];
   ideasFlipped?: BakedIdea[];
   bridges?: Record<string, BakedBridge>;
+  branchNarrations?: Record<string, BakedBranchNarration>;
 }
 
 const NARRATIONS = (baked as { narrations: Record<string, BakedEntry> }).narrations;
@@ -43,7 +52,7 @@ function boardClaimsOk(text: string, fen: string): boolean {
   const code: Record<string, string> = { knight: 'n', bishop: 'b', rook: 'r', queen: 'q', king: 'k', pawn: 'p' };
   // Plural + list forms ("pawns on e6 and c5") claim EVERY listed square.
   const claims: Array<{ sq: string; word: string }> = [];
-  for (const m of text.matchAll(/\b(knight|bishop|rook|queen|king|pawn)s?\s+(?:on|at)\s+([a-h][1-8])((?:\s*(?:,|and)\s*[a-h][1-8])*)\b/gi)) {
+  for (const m of text.matchAll(/\b(knight|bishop|rook|queen|king|pawn)s?\s+(?:(?:is|are|sits|stands|now|still)\s+)*(?:on|at)\s+([a-h][1-8])((?:\s*(?:,|and)\s*[a-h][1-8])*)\b/gi)) {
     for (const sq of [m[2], ...(m[3]?.match(/[a-h][1-8]/g) ?? [])]) claims.push({ sq, word: m[1] });
   }
   for (const m of text.matchAll(/\b([a-h][1-8])[-\s](knight|bishop|rook|queen|king|pawn)\b/gi)) {
@@ -143,6 +152,53 @@ describe('walkthrough-narrations.json (Tier-2 baked video narrations)', () => {
         if (b.textFlipped) {
           expect(b.textFlipped.trim(), `${label}: textFlipped identical to primary — not actually flipped`).not.toBe(b.text.trim());
         }
+      }
+    },
+  );
+
+  // BRANCH NARRATIONS (Tier 2 covers the whole tree): each branch line must
+  // be legal from the spine terminus, each idea aligned to its own ply with
+  // board-true claims, short registers capped.
+  const branched = entries.filter(([, e]) => e.branchNarrations && Object.keys(e.branchNarrations).length > 0);
+  it.each(branched.map(([key, e]) => [key, e] as const))(
+    '%s: branch narrations are legal, aligned, and board-true',
+    (_key, e) => {
+      const base = new Chess();
+      for (const san of e.spine) base.move(san);
+      const terminusFen = base.fen();
+      for (const [san, bn] of Object.entries(e.branchNarrations ?? {})) {
+        const label = `${e.openingName} branch ${san}`;
+        const replay = new Chess(terminusFen);
+        expect(() => replay.move(san), `${label}: branch SAN illegal at the spine terminus`).not.toThrow();
+        expect(bn.teaser.trim().length, `${label}: empty teaser`).toBeGreaterThan(0);
+        expect(BANNED.test(bn.teaser), `${label}: teaser attribution leak`).toBe(false);
+        expect(MOVE_NUM.test(bn.teaser), `${label}: teaser move-number prefix`).toBe(false);
+        expect(mentionsOwnMove(bn.teaser, san), `${label}: teaser never names its own move`).toBe(true);
+        expect(boardClaimsOk(bn.teaser, replay.fen()), `${label}: teaser board-false claim`).toBe(true);
+        // With the persisted branch line, verify legality + alignment +
+        // board claims per idea ply (idea i narrates moves[i+1]).
+        const line = bn.moves ?? [];
+        if (line.length > 0) {
+          expect(line[0], `${label}: moves[0] must be the branch SAN`).toBe(san);
+          expect(bn.ideas.length, `${label}: ideas/moves length mismatch`).toBe(line.length - 1);
+        }
+        bn.ideas.forEach((idea, i) => {
+          const il = `${label} idea ${i + 1}`;
+          expect(idea.text?.trim().length, `${il}: empty`).toBeGreaterThan(0);
+          expect(BANNED.test(idea.text), `${il}: attribution leak`).toBe(false);
+          expect(MOVE_NUM.test(idea.text), `${il}: move-number prefix`).toBe(false);
+          if (line.length > 0) {
+            const c = new Chess(terminusFen);
+            for (let k = 0; k <= i + 1; k += 1) {
+              expect(() => c.move(line[k]), `${il}: illegal move ${line[k]}`).not.toThrow();
+            }
+            expect(mentionsOwnMove(idea.text, line[i + 1]), `${il}: misaligned — does not speak about ${line[i + 1]}`).toBe(true);
+            expect(boardClaimsOk(idea.text, c.fen()), `${il}: board-false claim`).toBe(true);
+          }
+          if (idea.shortText) {
+            expect(idea.shortText.trim().split(/\s+/).length, `${il}: shortText over 18 words`).toBeLessThanOrEqual(18);
+          }
+        });
       }
     },
   );
