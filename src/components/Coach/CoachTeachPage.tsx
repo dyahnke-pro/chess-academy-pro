@@ -5790,6 +5790,10 @@ export function CoachTeachPage(): JSX.Element {
                         showResetButton={false}
                         showEvalBar={false}
                         showVoiceMic={false}
+                        // Matches the opening tab's lesson board, which paints
+                        // the played move's squares (ConsistentChessboard's
+                        // last-move style) — measured, not assumed.
+                        showLastMoveHighlight
                         arrows={walkthroughBoardArrows(walkthrough.narrationArrows)}
                         annotationHighlights={walkthroughBoardHighlights(walkthrough.narrationHighlights)}
                         onMove={

@@ -257,10 +257,7 @@ export function ControlledChessBoard({
       }
     }
 
-    const centerSquares = ['e4', 'd4', 'e5', 'd5'];
-    for (const sq of centerSquares) {
-      styles[sq] = { ...styles[sq], boxShadow: mergeGlow(`inset 0 0 8px 2px rgba(${accent}, 0.08)`) };
-    }
+    // No centre-square glow — matches the opening tab's lesson board.
 
     if (effectiveShowLastMoveHighlight) {
       const moveHighlight = lastMove ?? highlightSquares;

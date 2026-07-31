@@ -245,11 +245,9 @@ export function ChessBoard({
       }
     }
 
-    // Center squares — subtle persistent highlight
-    const centerSquares = ['e4', 'd4', 'e5', 'd5'];
-    for (const sq of centerSquares) {
-      styles[sq] = { ...styles[sq], boxShadow: mergeGlow(`inset 0 0 8px 2px rgba(${accent}, 0.08)`) };
-    }
+    // No centre-square glow. The opening tab's lesson board draws none, and an
+    // always-on decoration on e4/d4/e5/d5 competed with the lead-the-eye
+    // markers there (measured on prod, David 2026-07-31).
 
     // Last-move highlight — distinct outline color so it stands out.
     // Honors Settings → Board → "Highlight Last Move" (an explicit prop still
