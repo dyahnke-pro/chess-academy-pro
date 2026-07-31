@@ -94,7 +94,17 @@ cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
 # ([does]/[delta]/[eval]), the composed-advice doctrine (board-object-composed
 # plans — no inventory/phase-blind advice), Pattern Recognition school, and the
 # unified review chat.
-IOS_MARKETING_VERSION="3.3"
+# BUMP 3.3 → 3.4 (2026-07-31): 3.3 is READY_FOR_SALE on the App Store, so Apple
+# rejects any new build uploaded under it — the same released-version signature
+# as 2.8, 3.0, 3.1 and 3.2. Caught before the build this time: create-asc-version
+# reported 3.3 already existed in state READY_FOR_SALE, so the in-flight 3.3
+# build was cancelled rather than left to die at PrepareBuildForAppStoreConnect.
+# 3.4 carries the coach-tab teaching rebuild: one continuous narrated lesson per
+# opening, deterministic lead-the-eye arrows on every mentioned square, teaching
+# memory across visits, resume-in-place at forks, back/forward navigation, a
+# narrated middlegame play-out with an endgame step, and the Tier-2 baked
+# narrations across every gap opening.
+IOS_MARKETING_VERSION="3.4"
 sed -i '' -e "s/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = ${IOS_MARKETING_VERSION};/g" \
   ios/App/App.xcodeproj/project.pbxproj
 echo "ci_post_clone: MARKETING_VERSION set to ${IOS_MARKETING_VERSION} (build ${CI_BUILD_NUMBER:-?})"
