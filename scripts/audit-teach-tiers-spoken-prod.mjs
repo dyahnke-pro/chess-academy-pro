@@ -37,9 +37,25 @@ if (TIER === 'baked') {
   // Mark sourcing mirrors the runtime lookup: exact key first, then any
   // entry whose key contains every ask token (the runtime's name match is
   // fuzzy — probing with the short auto-accepting ask must still find marks).
-  const entry = baked.narrations[key]
+  // The runtime resolves an ASK through NAME_ALIASES before looking up the
+  // bake ("jobava london" → "Rapport-Jobava System"), so a probe that only
+  // token-matches the raw ask reports a FALSE FAIL on every aliased opening
+  // (2026-07-31: Jobava failed here while the app served it correctly). Ask
+  // the app for the canonical name first, exactly as the runtime does.
+  let canonical = ASK;
+  try {
+    const { execFileSync } = await import('node:child_process');
+    const out = execFileSync('npx', ['tsx', 'scripts/danya-corpus/print-spine.mts', ASK], {
+      encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 180_000,
+    }).trim().split('\n').pop();
+    canonical = JSON.parse(out).canonicalName ?? ASK;
+  } catch { /* fall back to the raw ask */ }
+  const canonKey = norm(canonical).replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+  const entry = baked.narrations[canonKey]
+    ?? baked.narrations[key]
+    ?? Object.entries(baked.narrations).find(([k]) => canonKey.split(' ').every((t) => k.includes(t)))?.[1]
     ?? Object.entries(baked.narrations).find(([k]) => key.split(' ').every((t) => k.includes(t)))?.[1];
-  if (!entry) { console.log(`✗ FAIL: no baked narration for "${ASK}"`); process.exit(1); }
+  if (!entry) { console.log(`✗ FAIL: no baked narration for "${ASK}" (canonical "${canonical}")`); process.exit(1); }
   marks = toMarks([entry.intro, ...entry.ideas.map((i) => i.text)]);
 } else {
   // masterclass: marks from the registered LessonScript's beats (tsx bridge —

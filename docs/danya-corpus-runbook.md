@@ -160,6 +160,37 @@ gates catch classes, not every semantic lie (the Latvian's "Qxg2 grabs the
 rook on h8" passed every gate; hand-fix such plies in the JSON, the build
 gate re-verifies).
 
+### Full-tree bakes + the batch driver (David 2026-07-31)
+
+"Do all openings now… Tier 2 openings fully in effect?" — a bake covers the
+WHOLE tree, not just the spine. `narrate-from-video` emits `branchNarrations`
+(teaser + one idea per extension ply, per fork branch), and when every branch
+is covered the generator runs with ZERO runtime LLM. On a short-spine opening
+this is most of the lesson: the Alapin is 3 spine plies then an 11-ply fork.
+
+Target the gaps, don't guess:
+
+```bash
+# which tier actually serves each ask (1 masterclass / 2 baked / 3 computed)
+npx tsx scripts/danya-corpus/tier-coverage.mts "<ask>" "<ask>" …
+# bake every mapped gap in one run
+DEEPSEEK_KEY=… node scripts/danya-corpus/batch-bake.mjs [--only "<ask>"]
+```
+
+**HAND REVIEW IS NOT OPTIONAL — every batch so far shipped a defect the gates
+cannot see.** Read every beat against its board before pushing. Real examples:
+a bake lifted an illustrative sentence out of the prompt itself, carrying a
+claim ("Nc3 defends e4") that is false in a d4 opening; a Black-side bake
+opened with "We open with e4"; a ply re-narrated two earlier moves. The first
+two are now gated (the prompt no longer demonstrates a sentence;
+`claimsOpponentMove` rejects claiming the opponent's move as ours) — the third
+class still needs eyes. A gate proves a beat is not FALSE; only reading proves
+it TEACHES.
+
+The repair loop runs 5 rounds and hands the model the actual piece placement
+plus the exact token the alignment check wants — without both it oscillates
+(round 1 fixes the false claim and drops the move name, round 2 the reverse).
+
 ### Comparative bridges (baked "what's different" — David 2026-07-31)
 
 When the runtime spine ends in a fork with ≥2 branches, the bake also emits
