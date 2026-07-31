@@ -3133,9 +3133,10 @@ async function generateOneStage(
       'chat_response',
       // 4096 tokens per stage is plenty — focused content fits
       // easily and keeps cost down compared to the full 16K main call.
+      // No forceProvider: the Anthropic key was removed 2026-06-25, so a
+      // pinned 'anthropic' resolved to a null config and every stage gen
+      // failed with "provider unreachable" — let the spine pick DeepSeek.
       4096,
-      undefined,
-      'anthropic',
     );
   } catch (err) {
     return { ok: false, reason: `LLM call failed: ${err instanceof Error ? err.message : String(err)}` };

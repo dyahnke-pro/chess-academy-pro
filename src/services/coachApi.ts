@@ -2768,12 +2768,12 @@ export async function getCoachChatResponse(
    *  guarantee a single source of truth for the length directive. */
   verbosityOverride?: CoachVerbosity,
   /** Force a specific API provider for this call, overriding the
-   *  default `getProviderConfig()` selection. Used by the brain's
-   *  per-surface routing — `/coach/teach` forces Anthropic so the
-   *  Learn tab always gets Sonnet/Haiku regardless of the global
-   *  default, while every other surface stays on DeepSeek. The
-   *  fallback chain still kicks in if the forced provider's call
-   *  errors. */
+   *  default `getProviderConfig()` selection. Prefer NOT pinning
+   *  (CLAUDE.md: let the spine pick + the fallback chain handle
+   *  outages). If the forced provider has no resolvable key, the
+   *  call falls back to the default selection instead of failing —
+   *  and the error-time fallback chain still kicks in if the forced
+   *  provider's call errors. */
   forceProvider?: AiProvider,
   /** Kid-mode safety lane. When true, skips both
    *  `loadPersonalityAddition` and `loadResponseLengthAddition` so the
@@ -2796,8 +2796,13 @@ export async function getCoachChatResponse(
   // follow-up chip). See `consumeCoachActionOffer`.
   lastCoachActionOffer = null;
 
+  // A forced provider with NO resolvable key (e.g. Anthropic after the
+  // 2026-06-25 key removal) must not dead-end the call — fall back to the
+  // default spine selection so the surface still gets an answer. This is
+  // what killed background stage gen for a month: generateOneStage pinned
+  // 'anthropic', the forced config resolved null, and every stage failed.
   const config = forceProvider
-    ? await getForcedProviderConfig(forceProvider)
+    ? (await getForcedProviderConfig(forceProvider)) ?? (await getProviderConfig())
     : await getProviderConfig();
   // With the server-side proxy this is near-unreachable (the sentinel key
   // always resolves) — but keep the ⚠️ prefix: the kid-lane sanitizer keys
