@@ -36,6 +36,23 @@ import { mentionedMoveArrows } from './mentionedMoveArrows';
 function toNamedColor(color: string | undefined): NarrationArrow['color'] {
   if (!color) return 'green';
   const c = color.toLowerCase();
+  // Authored masterclass markers are rgba LITERALS, not colour words — the
+  // key square is `rgba(255,214,0,0.88)`. Matching on the string containing
+  // "yellow" therefore never fired and EVERY authored marker fell through to
+  // green, so the coach tab painted green key squares where the opening tab
+  // painted yellow (measured on prod, David 2026-07-31). Read the channels.
+  const m = /rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/.exec(c)
+    ?? /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/.exec(c);
+  if (m) {
+    const base = m[0].startsWith('#') ? 16 : 10;
+    const [r, g, b] = [parseInt(m[1], base), parseInt(m[2], base), parseInt(m[3], base)];
+    // Warm + bright on both red and green channels = yellow/amber/orange.
+    if (r > 180 && g > 130 && b < 120) return 'yellow';
+    if (r > 150 && g < 130 && b < 130) return 'red';
+    if (b > 140 && b >= r && b >= g) return 'blue';
+    if (g > 120 && g >= r) return 'green';
+    return 'green';
+  }
   if (c.includes('red')) return 'red';
   if (c.includes('blue') || c.includes('indigo') || c.includes('purple')) return 'blue';
   if (c.includes('yellow') || c.includes('amber') || c.includes('orange')) return 'yellow';
