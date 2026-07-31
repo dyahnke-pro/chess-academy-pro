@@ -47,6 +47,7 @@ import {
   findLinePickerOptions,
   findOpeningByPgnPrefix,
   resolveCuratedVariation,
+  inferStudentSideFromName,
   type LinePickerOption,
 } from '../../services/openingDetectionService';
 import { fuzzyMatchOpening } from '../../services/openingFuzzyMatcher';
@@ -2540,6 +2541,16 @@ export function CoachTeachPage(): JSX.Element {
         faceMode = true;
         workingInput = workingInput.replace(/^face:\s*/i, '').trim();
       }
+      // Explicit side ask — "teach me the alapin AS WHITE" (David
+      // 2026-07-31: "I can't switch sides, to be taught from white's
+      // perspective"). Stripped so name resolution never sees it; wins
+      // over name inference when choosing which tier may serve the ask.
+      let sideOverride: 'white' | 'black' | null = null;
+      const sideMatch = /\b(?:as|from|for)\s+(white|black)(?:'s\s+perspective|\s+side)?\b/i.exec(workingInput);
+      if (sideMatch) {
+        sideOverride = sideMatch[1].toLowerCase() as 'white' | 'black';
+        workingInput = workingInput.replace(sideMatch[0], ' ').replace(/\s+/g, ' ').trim();
+      }
 
       // A MOVE REPORT ("I played e4." — with or without "Your move.") or an
       // engine-driven step turn is NEVER an opening-name query. Skip the
@@ -2856,7 +2867,12 @@ export function CoachTeachPage(): JSX.Element {
         // skip the masterclass tier and generate as before.
         const staticTree =
           resolveWalkthroughTree(requestedName) ??
-          (!faceMode && pace !== 'tour' ? masterclassWalkthroughTree(requestedName) : null);
+          (!faceMode && pace !== 'tour'
+            ? masterclassWalkthroughTree(
+                requestedName,
+                sideOverride ?? inferStudentSideFromName(requestedName),
+              )
+            : null);
         const surfaceTurnId = freshTurnId('walkthrough-surface');
         // Always show the user's ask in the transcript.
         setMessages((prev) => [...prev, {
@@ -5057,6 +5073,11 @@ export function CoachTeachPage(): JSX.Element {
         // the student types instead always wins (sovereignty).
         void getStoredWeaknessProfile()
           .then(async (profile) => {
+            // The student may have started (typed an ask, gotten a line
+            // picker) while these reads resolved — NOTHING here may run
+            // then: the unguarded nudge upgrade was REPLACING the line
+            // picker's chips before David could tap one (2026-07-31).
+            if (userInteractedRef.current) return;
             const top = (profile?.items ?? []).slice().sort((a, b) => b.severity - a.severity)[0];
             const nudge = top ? weaknessNudgeFromItem(top.category, top.label) : null;
             if (nudge) {

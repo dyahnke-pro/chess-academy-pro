@@ -288,10 +288,19 @@ export function lessonToWalkthroughTree(
 
 /** Tier-1 entry: resolve a canonicalized "teach me X" name to a masterclass
  *  walkthrough tree, or null when no adaptable masterclass exists. */
-export function masterclassWalkthroughTree(query: string | undefined | null): WalkthroughTree | null {
+export function masterclassWalkthroughTree(
+  query: string | undefined | null,
+  /** The side the student wants to be taught (explicit "as white/black"
+   *  ask, else name inference). A masterclass authored for the OTHER side
+   *  cannot serve it — hand prose can't flip — so the ask falls through to
+   *  the generated tiers on the requested side (David 2026-07-31: "the
+   *  Alapin is a white opening" — the Black-side masterclass hijacked it). */
+  desiredSide?: 'white' | 'black',
+): WalkthroughTree | null {
   if (!query?.trim()) return null;
   const hit = findLessonForQuery(query);
   if (!hit) return null;
+  if (desiredSide && hit.lesson.orientation !== desiredSide) return null;
   const displayName = hit.variationName ?? query.trim();
   // A MAIN-lesson walkthrough offers the opening's registered variation
   // lessons as fork tiles; a variation ask walks just its own line.
