@@ -63,7 +63,7 @@ on `main` but not yet confirmed on his device; `OPEN` means not started.
 
 ## B. From his direct reports
 
-- [ ] **B1. Middlegame play-out is SILENT** — OPEN *(his biggest complaint)*
+- [x] **B1. Middlegame play-out is SILENT** — SHIPPED `63d1fd4`
   `narratedContinuation.ts:79-99` only speaks on a phase transition or a ≥2pt
   material swing; every other move returns `text: null`. His log shows the
   continuation start followed by 16 straight `stockfish-cache-miss` with zero
@@ -72,10 +72,10 @@ on `main` but not yet confirmed on his device; `OPEN` means not started.
   Fix = narrate every move with a computed why (engine PV + `detectTactics`),
   per the in-game register in CLAUDE.md.
 
-- [ ] **B2. Middlegame play-out draws NO arrows** — OPEN
+- [x] **B2. Middlegame play-out draws NO arrows** — SHIPPED `63d1fd4`
   The continuation never sets narration arrows at all.
 
-- [ ] **B3. No endgame viewing option** — OPEN (feature)
+- [x] **B3. No endgame viewing option** — SHIPPED `63d1fd4`
   The endgame is an announcement inside B1's silent loop, not something you
   can choose to watch.
 
