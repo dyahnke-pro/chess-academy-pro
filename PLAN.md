@@ -34,27 +34,40 @@ on `main` but not yet confirmed on his device; `OPEN` means not started.
   fallover triggers a silent duplicate utterance (relevant to A1), but nothing
   was audibly wrong.
 
-- [ ] **A3. Punish narration gated to EMPTY** — OPEN
+- [x] **A3. Punish narration gated to EMPTY** — SHIPPED
   Eight `punish.narrationGate` trips with `kept: ""` (F129-136, F193-200). The
-  board-claim gate dropped the whole sentence, so those punish lessons ship
-  with no narration at all. Empty > wrong, but empty is still a hole.
+  gate returns `''` when it strips every sentence, and `?? x` doesn't catch an
+  empty string — so the lesson shipped silent. Now falls back to a COMPUTED
+  board-true line describing the move actually played (same fact composer the
+  play-out uses). Empty beats wrong; computed beats empty.
 
-- [ ] **A4. Truncated sentence survived the gate** — OPEN
-  F173 `danyaSplice.narrationGate` kept `"…Black should update which squares
-  become safe for their pieces, like"` — ends mid-clause and gets spoken.
+- [x] **A4. Truncated sentence survived the gate** — NOT A DEFECT (my misread)
+  The string is EXACTLY 120 characters and `coachAnswerGates.ts` slices the
+  `kept` audit field at 120. I read a truncated LOG FIELD as a truncated
+  sentence — same class of mistake as A2, twice in one sift. The gate log now
+  carries `keptLength` + `keptTruncatedInThisLog` so it can't fool the next
+  reader.
 
-- [ ] **A5. `persisted=false` on every boot** — OPEN
-  F254, F263, F282, F292. Storage persistence is refused, so iOS may evict
-  Dexie — games, progress, opening cache. Data-loss risk, not cosmetic.
+- [x] **A5. `persisted=false` on every boot** — PLATFORM LIMIT, not fixable in code
+  F254/263/282/292 are the SUPPORTED branch: WebKit was asked correctly and
+  REFUSED. `requestPersistentStorage` is already single-flight, fail-open and
+  never re-prompts. No code change flips WebKit's answer, and claiming a fix
+  would be inventing one. The audit now records `standalone` + `platformRefused`
+  so the pattern is legible. **The durable answer is cloud sync** — the
+  eviction risk is real and outside our control.
 
-- [ ] **A6. DeepSeek returned a wrong tool name** — OPEN
-  F232: `emit_walkthrough_narrator` instead of `emit_walkthrough_narration`,
-  which threw away the entire first attempt. The retry recovered it. Accepting
-  a near-miss name is far cheaper than a full re-call.
+- [x] **A6. DeepSeek returned a wrong tool name** — SHIPPED
+  F232: `emit_walkthrough_narrator` for `emit_walkthrough_narration` discarded
+  a good generation. We force `tool_choice` to ONE function, so the call can
+  only be ours — a near-miss name is now accepted (tight prefix match, short
+  tails) and audited. A genuinely different tool still throws.
 
-- [ ] **A7. Ungrounded squares reaching the voice** — OPEN
-  F144 (`d2, d8, c8, d7`) and F205 (`a2`) tripped `voiceFacts.containmentTripwire`
-  — the LLM introduced squares with no grounding. A G0 leak.
+- [x] **A7. Ungrounded squares reaching the voice** — SHIPPED
+  F144 (`d2, d8, c8, d7`) / F205 (`a2`). Root cause found: `repairConceptsStage`
+  validated structure and path legality but ran NO board gate on the prose —
+  concepts was the one stage with no `gradeNarrationText` at all, while
+  findMove and punish both had one. A quiz could name a square that isn't what
+  is on the board. Now gated against the position its `path` reaches.
 
 - [ ] **A8. Lichess explorer 429** — EXTERNAL, no fix
   F2/F3 `upstream-blocked`, 30s cooldown. Their rate limit, already handled.
@@ -79,10 +92,12 @@ on `main` but not yet confirmed on his device; `OPEN` means not started.
   The endgame is an announcement inside B1's silent loop, not something you
   can choose to watch.
 
-- [ ] **B4. No "learn other lines" when a walkthrough finishes** — OPEN (feature)
-  Leaf deep-dive tiles only render when the tree has its own branches. His
-  Alapin sub-variation ended `children=0`, so nothing was offered. Should fall
-  back to the parent opening's sibling variations from the DB.
+- [x] **B4. No "learn other lines" when a walkthrough finishes** — SHIPPED
+  Leaf tiles only rendered where the tree itself branches; his Alapin
+  sub-variation ended `children=0` so the leaf was a dead end. Falls back to
+  the DB's sibling variations of the opening just taught, headed "Learn
+  another line". Returns [] when the DB has none, so it self-hides rather
+  than inventing lines (G3).
 
 - [x] **B5. Deep dive reset to the start of the line** — SHIPPED `d8a9776`
   Now hands over the SANs already watched; the new lesson walks that prefix
@@ -129,12 +144,15 @@ on `main` but not yet confirmed on his device; `OPEN` means not started.
 
 ## Order of work
 
-1. **B1 + B2** — the silent middlegame. Biggest felt quality gap.
-2. **A3, A4, A7** — narration gates leaving holes or letting fragments through.
-3. **A6** — cheap tool-name tolerance.
-4. **A5** — storage persistence; data-loss risk.
-5. **B3, B4** — endgame step + learn-another-line.
-6. **A1** — the replay, once his next log carries the entry ids.
+Everything except **A1** is done. A1 is instrumented and waits on his next
+device log — he's sending one once the rest landed.
+
+### Two of my own reports were wrong, and both the same way
+A2 and A4 were LOG-FORMATTING artifacts I reported as defects: a fallover
+logged 38s after the audio had played, and a 120-char audit slice read as a
+cut-off sentence. Both audit fields now state their own truncation/timing so
+the next reader isn't misled. Worth remembering when sifting a log: check
+whether the field is a preview before calling it a bug.
 
 ## Next-session pickup
 

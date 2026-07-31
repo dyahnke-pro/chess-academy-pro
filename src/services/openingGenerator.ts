@@ -45,6 +45,7 @@ import {
 } from './openingDetectionService';
 import { db, type CachedOpening } from '../db/schema';
 import { gradeNarrationText } from './coachAnswerGates';
+import { narrateContinuationMove } from './continuationMoveNarration';
 import { logAppAudit } from './appAuditor';
 import { buildDanyaTeachingBlock, noteAtPosition, teachingBeatText } from './danyaTeachingService';
 import { deriveNarrationArrows } from './narrationArrows';
@@ -502,11 +503,31 @@ export function repairConceptsStage(
         `concepts[${i}]: promoted to multiSelect (had ${correctCount} correct)`,
       );
     }
-    if (q.path && q.path.length > 0 && !replayAll(q.path)) {
-      const droppedPath = q.path.join(' ');
-      q.path = [];
-      report.fixed += 1;
-      report.notes.push(`concepts[${i}]: stripped illegal path "${droppedPath}"`);
+    let atFen: string | null = null;
+    if (q.path && q.path.length > 0) {
+      const replayed = replayAll(q.path);
+      if (!replayed) {
+        const droppedPath = q.path.join(' ');
+        q.path = [];
+        report.fixed += 1;
+        report.notes.push(`concepts[${i}]: stripped illegal path "${droppedPath}"`);
+      } else {
+        atFen = replayed.fen();
+      }
+    }
+    // Board-claim gate the quiz prose, the same way findMove and punish are
+    // gated. Concepts was the ONE stage with no board gate at all, which is
+    // what `voiceFacts.containmentTripwire` kept catching on David's device
+    // (2026-07-31: squares d2/d8/c8/d7 and a2 introduced with no grounding) —
+    // a quiz could name a square that isn't what's on the board.
+    if (atFen) {
+      q.prompt = gradeNarrationText(q.prompt, atFen, 'openingGenerator.concepts') || q.prompt;
+      for (const c of q.choices) {
+        c.text = gradeNarrationText(c.text, atFen, 'openingGenerator.concepts') || c.text;
+        if (c.explanation) {
+          c.explanation = gradeNarrationText(c.explanation, atFen, 'openingGenerator.concepts') || c.explanation;
+        }
+      }
     }
     kept.push(q);
   }
@@ -652,6 +673,26 @@ export function repairDrillStage(
  *  - illegal individual distractor → drop just that distractor
  *  - 0 distractors remaining → drop the lesson (MC needs alternatives)
  *  - illegal followup move → truncate followup at the failing index */
+/** Keep gated prose when anything survived; otherwise describe the move from
+ *  the board. `gradeNarrationText` returns '' when it strips every sentence,
+ *  which used to leave punish lessons silent (A3, David's 2026-07-31 log). */
+function gatedOrComputed(
+  gated: string | undefined,
+  fenBefore: string,
+  fenAfter: string,
+  san: string,
+): string {
+  if (gated && gated.trim().length > 0) return gated;
+  try {
+    const c = new Chess(fenBefore);
+    const mv = c.move(stripSanAnnotations(san));
+    if (!mv) return '';
+    return narrateContinuationMove(fenBefore, fenAfter, mv.san, mv.from, mv.to).say;
+  } catch {
+    return '';
+  }
+}
+
 export function repairPunishStage(
   data: PunishLesson[],
 ): { kept: PunishLesson[]; report: StageRepairReport } {
@@ -752,8 +793,20 @@ export function repairPunishStage(
     // Shared narration gate on the punish prose: whyBad describes the
     // position AFTER the inaccuracy, whyPunish the position AFTER the
     // punishment — drop any board-false sentence against those exact FENs.
-    lesson.whyBad = gradeNarrationText(lesson.whyBad, postInaccuracyFen, 'openingGenerator.punish') ?? lesson.whyBad;
-    lesson.whyPunish = gradeNarrationText(lesson.whyPunish, postPunishFen, 'openingGenerator.punish') ?? lesson.whyPunish;
+    // When the gate strips EVERY sentence it returns '' — and `?? x` doesn't
+    // catch an empty string, so the lesson shipped with NO narration at all
+    // (eight of these in David's 2026-07-31 device log, all `kept: ""`).
+    // Empty beats wrong, but a computed board-true line beats empty: the same
+    // per-move fact composer the play-out uses can always describe the move
+    // that was actually played, from the position it was played in.
+    lesson.whyBad = gatedOrComputed(
+      gradeNarrationText(lesson.whyBad, postInaccuracyFen, 'openingGenerator.punish'),
+      setupFen, postInaccuracyFen, lesson.inaccuracy,
+    ) || lesson.whyBad;
+    lesson.whyPunish = gatedOrComputed(
+      gradeNarrationText(lesson.whyPunish, postPunishFen, 'openingGenerator.punish'),
+      postInaccuracyFen, postPunishFen, lesson.punishment,
+    ) || lesson.whyPunish;
     // Each distractor explanation describes the position AFTER that
     // distractor move; each followup idea the position after its move.
     for (const d of lesson.distractors) {

@@ -774,6 +774,23 @@ function buildSystemPromptWithVerbosity(base: string, verbosity: CoachVerbosity,
  *  is unavailable / rate-limited. DeepSeek returns the tool's
  *  arguments as a JSON STRING in tool_calls[].function.arguments;
  *  we JSON.parse that string and return the object. */
+/** True when the model mangled the tool NAME but plainly meant ours: same
+ *  prefix up to a short differing suffix ("…_narrator" vs "…_narration"). We
+ *  force tool_choice to a single function, so the call can only be ours —
+ *  this guards against accepting something wildly different all the same. */
+export function isNearMissToolName(got: string, want: string): boolean {
+  if (!got || !want) return false;
+  const shared = (() => {
+    let i = 0;
+    while (i < got.length && i < want.length && got[i] === want[i]) i += 1;
+    return i;
+  })();
+  // Require most of the name to match and both tails to be short.
+  return shared >= Math.floor(want.length * 0.7)
+    && got.length - shared <= 6
+    && want.length - shared <= 6;
+}
+
 export async function callDeepseekWithTool(
   apiKey: string,
   model: string,
@@ -821,11 +838,28 @@ export async function callDeepseekWithTool(
   const toolCall = choice?.message?.tool_calls?.[0];
   // The OpenAI SDK union types tool_call as function | custom. We
   // only emit `function` tools so narrow on `type === 'function'`.
-  if (!toolCall || toolCall.type !== 'function' || toolCall.function.name !== toolName) {
-    const got = toolCall && toolCall.type === 'function' ? toolCall.function.name : 'none';
-    throw new Error(
-      `DeepSeek API returned no matching tool_call for "${toolName}" — got ${got}`,
-    );
+  // We force `tool_choice` to ONE function, so any function call that comes
+  // back is that call — the model occasionally mangles the NAME while getting
+  // the arguments right ("emit_walkthrough_narrator" for
+  // "emit_walkthrough_narration", David's device log 2026-07-31, which threw
+  // away an otherwise-good generation and cost a full re-call). Accept a
+  // near-miss name; only a genuinely different or absent call is an error.
+  if (!toolCall || toolCall.type !== 'function') {
+    throw new Error(`DeepSeek API returned no tool_call for "${toolName}"`);
+  }
+  const calledName = toolCall.function.name;
+  if (calledName !== toolName) {
+    if (!isNearMissToolName(calledName, toolName)) {
+      throw new Error(
+        `DeepSeek API returned no matching tool_call for "${toolName}" — got ${calledName}`,
+      );
+    }
+    void logAppAudit({
+      kind: 'llm-error',
+      category: 'subsystem',
+      source: 'coachApi.callDeepseekWithTool',
+      summary: `accepted near-miss tool name "${calledName}" for "${toolName}" — forced tool_choice means this is the call we asked for`,
+    });
   }
   // DeepSeek emits `arguments` as a JSON string. A blob cut off at
   // `max_tokens` used to throw here and the caller dropped its ENTIRE result

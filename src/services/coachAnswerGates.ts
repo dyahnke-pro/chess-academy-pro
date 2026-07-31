@@ -121,7 +121,17 @@ export function gradeNarrationText(
         category: 'subsystem',
         source: `${source}.narrationGate`,
         summary: `dropped ${droppedCount} board/eval-false narration sentence(s)`,
-        details: JSON.stringify({ source, fen, kept: out.slice(0, 120) }),
+        // `kept` is a PREVIEW. Twice on 2026-07-31 a 120-char slice was read
+        // as a sentence that had been cut off mid-clause, and reported as a
+        // bug that didn't exist — so say outright how long the real text is
+        // and whether this field is truncated.
+        details: JSON.stringify({
+          source,
+          fen,
+          kept: out.slice(0, 120),
+          keptLength: out.length,
+          keptTruncatedInThisLog: out.length > 120,
+        }),
         fen,
       });
     }

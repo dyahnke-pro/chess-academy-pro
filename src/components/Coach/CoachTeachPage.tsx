@@ -64,6 +64,7 @@ import { useTeachWalkthrough, isStartablePunishLesson, isValidConceptsQuestion, 
 import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
+import { findSiblingExtensionBranches } from '../../services/openingDetectionService';
 import { masterclassWalkthroughTree } from '../../services/masterclassWalkthroughAdapter';
 import { pickGreeting, pickSuggestedQuestions, weaknessNudgeFromItem } from '../../data/coachGreetings';
 import { getStoredWeaknessProfile } from '../../services/weaknessAnalyzer';
@@ -440,6 +441,29 @@ function extractDeepDiveOptions(tree: WalkthroughTree): DeepDiveOption[] {
   }
   walk(tree.root, []);
   return options;
+}
+
+/** Other lines to learn once a walkthrough ends, for a tree that carries NO
+ *  fork of its own. David 2026-07-31: "I also want an option to learn other
+ *  lines once a walkthrough is finished." His Alapin sub-variation ended
+ *  `children=0`, so the leaf offered nothing at all — the in-tree deep-dive
+ *  tiles only exist where the tree itself branches. This falls back to the
+ *  DB's sibling variations of the opening just taught, which is where a
+ *  student would naturally go next. Returns [] when the DB has none, so the
+ *  section self-hides rather than inventing lines (G3). */
+function siblingLineOptions(tree: WalkthroughTree, walkedSans: string[]): DeepDiveOption[] {
+  try {
+    const branches = findSiblingExtensionBranches(tree.openingName, walkedSans.join(' '));
+    return branches.slice(0, 5).map((b) => ({
+      pathSans: [],
+      label: b.label,
+      subtitle: b.fullName,
+      childSan: b.san,
+      extensionSans: [],
+    }));
+  } catch {
+    return [];
+  }
 }
 
 /** Build the canonical deep-dive query for a chosen branch:
@@ -7363,12 +7387,21 @@ function WalkthroughControls({
               Play this line out yourself
             </button>
           )}
-          {tree && extractDeepDiveOptions(tree).length > 0 && (
+          {tree && (() => {
+            // In-tree forks first; when the line taught has none of its own,
+            // offer the opening's SIBLING lines so the leaf is never a dead
+            // end (David 2026-07-31 — his Alapin sub-variation ended with
+            // children=0 and nothing was offered).
+            const inTree = extractDeepDiveOptions(tree);
+            const opts = inTree.length > 0 ? inTree : siblingLineOptions(tree, walkthrough.pathSans);
+            const heading = inTree.length > 0 ? 'Dive deeper into a variation' : 'Learn another line';
+            if (opts.length === 0) return null;
+            return (
             <>
               <div className="text-xs font-medium text-theme-text-muted px-1 pt-1">
-                Dive deeper into a variation
+                {heading}
               </div>
-              {extractDeepDiveOptions(tree).map((opt, idx) => {
+              {opts.map((opt, idx) => {
                 const variationName =
                   opt.subtitle.split('—')[0].trim() ||
                   opt.label ||
@@ -7393,7 +7426,9 @@ function WalkthroughControls({
                     data-testid={`walkthrough-leaf-deepdive-${idx}`}
                   >
                     <div className="flex flex-col min-w-0 flex-1">
-                      <span className="text-xs font-medium text-theme-text-muted">Deep dive</span>
+                      <span className="text-xs font-medium text-theme-text-muted">
+                        {inTree.length > 0 ? 'Deep dive' : 'Another line'}
+                      </span>
                       <span className="text-sm text-theme-text truncate">{variationName}</span>
                     </div>
                     <ChevronRight size={14} className="text-theme-text-muted flex-shrink-0" />
@@ -7401,7 +7436,8 @@ function WalkthroughControls({
                 );
               })}
             </>
-          )}
+            );
+          })()}
           {canBacktrack && (
             <button
               onClick={() => walkthrough.backtrackToLastFork()}

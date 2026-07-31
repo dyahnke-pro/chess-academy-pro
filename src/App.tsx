@@ -219,13 +219,32 @@ export function App(): JSX.Element {
       // it on only 7%. Runs first so the profile we're about to create lands in
       // storage that won't be evicted. Total + fail-open — never blocks boot.
       const persistence = await requestPersistentStorage();
+      // David's 2026-07-31 device log showed `persisted=false already=false` on
+      // every boot — the SUPPORTED branch, i.e. WebKit was asked properly and
+      // refused. That is a platform decision we can't override; what we can do
+      // is record the context that explains it, since WebKit weighs install
+      // state and engagement. Without these fields the log can't distinguish
+      // "we asked wrong" from "the platform said no".
+      const standalone = typeof window !== 'undefined'
+        && (window.matchMedia?.('(display-mode: standalone)').matches
+          || (window.navigator as { standalone?: boolean }).standalone === true);
       void logAppAudit({
         kind: 'storage-persistence',
         category: 'app',
         source: 'App.init',
         summary: persistence.supported
-          ? `persisted=${String(persistence.persisted)} already=${String(persistence.alreadyPersisted)}`
+          ? `persisted=${String(persistence.persisted)} already=${String(persistence.alreadyPersisted)} standalone=${String(standalone)}`
           : 'persist() unsupported on this platform',
+        details: JSON.stringify({
+          supported: persistence.supported,
+          persisted: persistence.persisted,
+          alreadyPersisted: persistence.alreadyPersisted,
+          standalone,
+          // A refusal on a standalone install is WebKit policy, not a bug in
+          // the request — the eviction risk is real either way, and cloud sync
+          // is the only durable answer.
+          platformRefused: persistence.supported && !persistence.persisted,
+        }),
       });
 
       try {
