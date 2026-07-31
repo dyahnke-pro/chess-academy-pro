@@ -160,6 +160,31 @@ gates catch classes, not every semantic lie (the Latvian's "Qxg2 grabs the
 rook on h8" passed every gate; hand-fix such plies in the JSON, the build
 gate re-verifies).
 
+### Comparative bridges (baked "what's different" — David 2026-07-31)
+
+When the runtime spine ends in a fork with ≥2 branches, the bake also emits
+`bridges` — per-sideline comparative prose ("where the main continuation
+plays X toward plan A, today's line answers Y toward plan B") spoken by
+`useTeachWalkthrough.pickFork` ONLY to a returning student (teaching-ledger
+visits > 0), with flip registers, falling back to the computed v1 template
+on any miss. Re-bake bridges alone (never churns reviewed narration):
+
+```bash
+node scripts/danya-corpus/narrate-from-video.mjs \
+  --opening "<canonical name>" --videos <same ids> --bridges-only
+```
+
+Bridge gates (bake + build): both SANs named (the comparison anchor), board
+claims true at the DIVERGENCE FEN — the prompt forces MOTION phrasing
+("lands on b5") over location ("the knight on b5") because the fork position
+predates both continuations — plural/list claims ("pawns on e6 and c5")
+count per square, flipped register must actually differ from the primary.
+Hand-review remains mandatory: the first Taimanov bridge said "chase it with
+d6" (d6 blunts Nd6+; …a6 does the chasing) and its flip register inverted a
+FACT ("White develops freely" for Black's tempo gain) — classes no gate
+catches. Ground every claim in the branch's real `extensionMoves` before
+shipping.
+
 ## Tier-2 openings = the FUTURE MASTERCLASS QUEUE (David 2026-07-30)
 
 Every Tier-2 baked opening is a flagged candidate for a full masterclass

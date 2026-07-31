@@ -31,5 +31,13 @@ console.log(
     spineMoves: spine.spineMoves,
     extendedToMiddlegame: spine.extendedToMiddlegame,
     branchCount: spine.branches.length,
+    // The fork set at the spine terminus — the bake's BRIDGE PASS narrates
+    // "what's different" per sideline vs branches[0] (the runtime's main
+    // continuation, children[0] in the fork picker).
+    branches: spine.branches.map((b) => ({
+      san: b.san,
+      label: b.label,
+      extensionMoves: b.extensionMoves.slice(0, 10),
+    })),
   }),
 );

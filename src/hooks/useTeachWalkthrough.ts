@@ -36,6 +36,7 @@ import { voiceService } from '../services/voiceService';
 import { logAppAudit } from '../services/appAuditor';
 import { markStageComplete } from '../services/openingProgress';
 import { getCachedOpening } from '../services/openingGenerator';
+import { bakedNarrationFor } from '../services/bakedWalkthroughNarration';
 import { buildDrillWrongTeaching, buildDrillBetterLine, buildDrillThreatSpot, buildDrillCompletionPlan } from '../services/learnMoveTeaching';
 import { computeWatchGemAside } from '../services/gemCrushLines';
 import { computeThreatDelta, computeRouteDelta, type DeltaAside } from '../services/engineDeltaLines';
@@ -1409,11 +1410,29 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
             const { getTeachingVisits } = await import('../services/teachingLedger');
             const visits = await getTeachingVisits(t.openingName);
             if (visits.length > 0 && mainChoice.node.san && choice.node.san) {
-              const knownLabel = /^main line/i.test(mainChoice.label ?? '')
-                ? 'the main line you know'
-                : (mainChoice.label ?? 'the line you know');
-              const bridge = `A quick bridge first. Everything to this position is the same road we walked before — that part you already own. Right here is where the stories split: ${knownLabel} plays ${mainChoice.node.san}, and today's line answers ${choice.node.san} instead. One choice, and the plans change — watch what that single move does to the position.`;
-              await speakWalkthroughText(bridge, `Same road until here — ${choice.node.san} instead of ${mainChoice.node.san}.`);
+              // BAKED bridge first (richer per-opening prose from the video
+              // corpus, gated offline — David 2026-07-31). `mainSan` must
+              // match the live fork's main choice, or the bake was built
+              // against a different fork shape and the computed v1 speaks.
+              let spoke = false;
+              try {
+                const walkedSans = pathNodes.map((n) => n.san).filter((s): s is string => !!s);
+                const bakedBridge = bakedNarrationFor(t.openingName, walkedSans)?.bridges?.[choice.node.san];
+                if (bakedBridge && bakedBridge.mainSan === mainChoice.node.san) {
+                  await speakWalkthroughText(
+                    pickRegister(bakedBridge.text, bakedBridge.textFlipped),
+                    pickRegister(bakedBridge.shortText ?? '', bakedBridge.shortTextFlipped) || bakedBridge.shortText,
+                  );
+                  spoke = true;
+                }
+              } catch { /* baked lookup is best-effort — v1 below */ }
+              if (!spoke) {
+                const knownLabel = /^main line/i.test(mainChoice.label ?? '')
+                  ? 'the main line you know'
+                  : (mainChoice.label ?? 'the line you know');
+                const bridge = `A quick bridge first. Everything to this position is the same road we walked before — that part you already own. Right here is where the stories split: ${knownLabel} plays ${mainChoice.node.san}, and today's line answers ${choice.node.san} instead. One choice, and the plans change — watch what that single move does to the position.`;
+                await speakWalkthroughText(bridge, `Same road until here — ${choice.node.san} instead of ${mainChoice.node.san}.`);
+              }
             }
           } catch { /* bridge is a bonus, never a blocker */ }
           narrateAndAdvance([...pathNodes, choice.node]);
@@ -1422,7 +1441,7 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
       }
       narrateAndAdvance([...pathNodes, choice.node]);
     },
-    [pathNodes, narrateAndAdvance],
+    [pathNodes, narrateAndAdvance, pickRegister],
   );
 
   const backtrackToLastFork = useCallback((): void => {

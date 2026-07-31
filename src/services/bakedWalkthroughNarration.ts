@@ -17,6 +17,22 @@ interface BakedIdea {
   shortText?: string;
 }
 
+/** A baked COMPARATIVE BRIDGE (David 2026-07-31: "narration that explains
+ *  similarities and differences between what was already learned vs what is
+ *  new") — spoken at the fork when a returning student picks this sideline,
+ *  replacing the computed v1 template with richer per-opening prose baked
+ *  from the video corpus and gated offline. Keyed by the sideline's first
+ *  SAN; `mainSan` sanity-locks it to the fork shape it was baked against. */
+export interface BakedBridge {
+  /** children[0]'s SAN at bake time — a runtime fork whose main choice
+   *  differs (DB reshuffle) falls back to the computed bridge. */
+  mainSan: string;
+  text: string;
+  shortText?: string;
+  textFlipped?: string;
+  shortTextFlipped?: string;
+}
+
 export interface BakedNarration {
   openingName: string;
   spine: string[];
@@ -35,6 +51,8 @@ export interface BakedNarration {
   shortIntroFlipped?: string;
   outroFlipped?: string;
   ideasFlipped?: BakedIdea[];
+  /** Comparative bridges for the spine-terminus fork, keyed by sideline SAN. */
+  bridges?: Record<string, BakedBridge>;
 }
 
 interface BakedFileShape {

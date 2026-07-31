@@ -50,6 +50,9 @@ const KEY = process.env.DEEPSEEK_KEY ?? process.env.VITE_DEEPSEEK_API_KEY ?? '';
 
 const arg = (n, d) => { const i = process.argv.indexOf(`--${n}`); return i >= 0 ? process.argv[i + 1] : d; };
 const DRY = process.argv.includes('--dry');
+// Re-bake ONLY the comparative bridges for an already-shipped entry —
+// never churns reviewed narration prose.
+const BRIDGES_ONLY = process.argv.includes('--bridges-only');
 const OPENING = arg('opening', null);
 const VIDEO_IDS = (arg('videos', '') || '').split(',').filter(Boolean);
 if (!OPENING || VIDEO_IDS.length === 0) {
@@ -125,8 +128,8 @@ async function resolveSpine(openingName) {
     }).trim().split('\n').pop();
     const r = JSON.parse(raw);
     if (Array.isArray(r.spineMoves) && r.spineMoves.length > 0) {
-      console.log(`[narrate] runtime spine via print-spine: ${r.spineMoves.length} plies${r.extendedToMiddlegame ? ' (middlegame-extended)' : ''}`);
-      return { name: r.canonicalName, moves: r.spineMoves, studentSide: r.studentSide };
+      console.log(`[narrate] runtime spine via print-spine: ${r.spineMoves.length} plies${r.extendedToMiddlegame ? ' (middlegame-extended)' : ''}, ${(r.branches ?? []).length} fork branch(es)`);
+      return { name: r.canonicalName, moves: r.spineMoves, studentSide: r.studentSide, branches: r.branches ?? [] };
     }
   } catch (e) {
     console.error(`  (print-spine bridge failed — ${String(e).slice(0, 120)}; falling back to local resolution)`);
@@ -154,17 +157,19 @@ function boardClaimProblem(text, fen) {
   const c = new Chess(fen);
   // "the e4 pawn" (space form) counts too — the Bird bake claimed a "d4
   // pawn" on a board with a d3 pawn and the hyphen-only pattern missed it.
-  const claims = [
-    ...text.matchAll(/\b(knight|bishop|rook|queen|king|pawn)\s+on\s+([a-h][1-8])\b/gi),
-    ...text.matchAll(/\b([a-h][1-8])[-\s](knight|bishop|rook|queen|king|pawn)\b/gi),
-  ];
-  for (const m of claims) {
-    const rev = /^[a-h][1-8]$/.test(m[1]);
-    const sq = (rev ? m[1] : m[2]).toLowerCase();
-    const word = (rev ? m[2] : m[1]).toLowerCase();
-    const p = c.get(sq);
-    if (!p) return `claims "${m[0]}" but ${sq} is EMPTY`;
-    if (p.type !== PIECE_CODE[word]) return `claims "${m[0]}" but ${sq} holds a ${Object.entries(PIECE_CODE).find(([, v]) => v === p.type)?.[0]}`;
+  // PLURAL + LIST form counts too — "pawns on e6 and c5" claims BOTH
+  // squares (the Taimanov bridge claimed a traded-off c5 pawn this way).
+  const claims = [];
+  for (const m of text.matchAll(/\b(knight|bishop|rook|queen|king|pawn)s?\s+(?:on|at)\s+([a-h][1-8])((?:\s*(?:,|and)\s*[a-h][1-8])*)\b/gi)) {
+    for (const sq of [m[2], ...(m[3]?.match(/[a-h][1-8]/g) ?? [])]) claims.push({ raw: m[0], sq, word: m[1] });
+  }
+  for (const m of text.matchAll(/\b([a-h][1-8])[-\s](knight|bishop|rook|queen|king|pawn)\b/gi)) {
+    claims.push({ raw: m[0], sq: m[1], word: m[2] });
+  }
+  for (const { raw, sq, word } of claims) {
+    const p = c.get(sq.toLowerCase());
+    if (!p) return `claims "${raw}" but ${sq} is EMPTY`;
+    if (p.type !== PIECE_CODE[word.toLowerCase()]) return `claims "${raw}" but ${sq} holds a ${Object.entries(PIECE_CODE).find(([, v]) => v === p.type)?.[0]}`;
   }
   return null;
 }
@@ -181,6 +186,102 @@ async function callModel(system, user, maxTokens) {
   });
   if (!res.ok) throw new Error(`deepseek ${res.status}: ${(await res.text()).slice(0, 160)}`);
   return JSON.parse((await res.json()).choices?.[0]?.message?.content ?? '{}');
+}
+
+// ── BRIDGE PASS (David 2026-07-31: "narration that explains similarities
+// and differences between what was already learned vs what is new"). For
+// each SIDELINE at the spine-terminus fork (branches[1..] vs the main
+// continuation branches[0]), bake a comparative bridge in the house voice —
+// spoken at runtime only to a RETURNING student the ledger says has walked
+// this opening before. Facts are the two real DB lines; the transcript is
+// reference for the plans' framing. Gated like every other unit, PLUS both
+// SANs must be named (the comparison anchor). Best-effort per branch — a
+// bridge that can't pass its gates ships absent (runtime falls back to the
+// computed v1 template).
+async function bakeBridges(spine, plies, clipped, overlaps) {
+  const branches = spine.branches ?? [];
+  if (branches.length < 2) return null;
+  const main = branches[0];
+  const divergenceFen = plies[plies.length - 1].fen;
+  const side = spine.studentSide ?? 'white';
+  const other = side === 'white' ? 'black' : 'white';
+  const bridgeSystem = `You are the app's chess coach speaking to a RETURNING student at a fork in an opening they have studied with you before. They know the MAIN continuation; today they just tapped a SIDELINE. Write the comparative bridge you speak at that exact moment.
+
+SHAPE (2-5 sentences, house voice — concept-first, warm, rigorous):
+1. Anchor the similarity in one clause: everything up to this position is the same road they already own.
+2. Name the split: the main continuation plays its move toward its plan; today's sideline plays its move toward a DIFFERENT plan. Name BOTH moves by SAN and contrast the two plans concretely, grounded in the given continuation moves.
+3. End by pointing their eyes at what to watch for as the new line unfolds.
+
+ABSOLUTE RULES:
+- Never 7 consecutive words from the reference transcript. Original prose only.
+- Never name a teacher, video, stream, or chat.
+- No move-number prefixes ("5.Nc3" banned — write "Nc3").
+- Every piece-on-square claim must be TRUE on the given FEN. The FEN is the position BEFORE either continuation is played — so NEVER say a piece is "on" a square it only reaches later, and never name a pawn/piece that exists only in a future position. Speak continuations as MOTION ("Nb5 jumps in", "the knight lands on b5", "aiming at d6"), never as location ("the knight on b5", "the d6 pawn").
+- Add no chess content the two given lines or the transcript don't support.
+- "we/our" = ${side.toUpperCase()}. Also return the FLIPPED register where "we/our" = ${other.toUpperCase()} (same facts, other color addressed as the student).
+- shortText / shortTextFlipped: ONE sentence, max 18 words, naming both SANs.
+
+Return STRICT JSON: {"text": string, "shortText": string, "textFlipped": string, "shortTextFlipped": string}`;
+  const bridges = {};
+  for (const alt of branches.slice(1, 5)) {
+    const promptFor = (repairNote) => `OPENING: ${spine.name}
+THE SHARED ROAD (already learned, ${plies.length} plies): ${plies.map((p) => p.san).join(' ')}
+POSITION AT THE FORK (FEN): ${divergenceFen}
+THE MAIN CONTINUATION THEY KNOW: ${main.san}${main.label ? ` — "${main.label}"` : ''}, continuing ${[main.san, ...(main.extensionMoves ?? [])].join(' ')}
+TODAY'S SIDELINE (just picked): ${alt.san}${alt.label ? ` — "${alt.label}"` : ''}, continuing ${[alt.san, ...(alt.extensionMoves ?? [])].join(' ')}
+${repairNote ? `\nYOUR PREVIOUS ATTEMPT WAS REJECTED: ${repairNote}\nFix exactly that and return the full JSON again.\n` : ''}
+TEACHER'S SPOKEN TRANSCRIPT (reference only — reword, never quote):
+${clipped.slice(0, 60_000)}`;
+    const gateBridge = (label, text) => {
+      if (!text || !text.trim()) return `${label}: empty`;
+      const gram = overlaps(text);
+      if (gram) return `${label}: lifts the transcript phrase "${gram}"`;
+      if (BANNED.test(text)) return `${label}: attribution/medium leak`;
+      if (BANNED_EXTRA && BANNED_EXTRA.test(text)) return `${label}: creator attribution leak`;
+      if (MOVE_NUM.test(text)) return `${label}: move-number prefix`;
+      const claim = boardClaimProblem(text, divergenceFen);
+      if (claim) return `${label}: ${claim}`;
+      if (!mentionsOwnMove(text, alt.san)) return `${label}: never names the sideline move ${alt.san}`;
+      if (!mentionsOwnMove(text, main.san)) return `${label}: never names the main move ${main.san} (no comparison anchor)`;
+      return null;
+    };
+    let baked = null;
+    let note = null;
+    for (let attempt = 1; attempt <= 3 && !baked; attempt += 1) {
+      try {
+        const res = await callModel(bridgeSystem, promptFor(note), 2048);
+        const primaryProblem = gateBridge('text', res.text)
+          ?? (String(res.shortText ?? '').trim().split(/\s+/).length > 18 ? 'shortText: over 18 words' : null)
+          ?? gateBridge('shortText', res.shortText);
+        if (primaryProblem) { note = primaryProblem; console.error(`  (bridge ${alt.san} attempt ${attempt}: ${primaryProblem})`); continue; }
+        const flipProblem = gateBridge('textFlipped', res.textFlipped)
+          ?? (String(res.shortTextFlipped ?? '').trim().split(/\s+/).length > 18 ? 'shortTextFlipped: over 18 words' : null)
+          // An unflipped copy is worse than no flip — the runtime would
+          // speak the wrong pronouns on a flipped board thinking it's safe.
+          ?? (String(res.textFlipped ?? '').trim() === String(res.text ?? '').trim() ? 'textFlipped: identical to the primary — not actually flipped' : null);
+        baked = {
+          mainSan: main.san,
+          text: String(res.text).trim(),
+          shortText: String(res.shortText ?? '').trim(),
+          ...(flipProblem ? {} : {
+            textFlipped: String(res.textFlipped).trim(),
+            shortTextFlipped: String(res.shortTextFlipped ?? '').trim(),
+          }),
+        };
+        if (flipProblem) console.error(`  (bridge ${alt.san}: flipped register dropped — ${flipProblem})`);
+      } catch (e) {
+        note = null;
+        console.error(`  (bridge ${alt.san} attempt ${attempt} call failed: ${String(e).slice(0, 100)})`);
+      }
+    }
+    if (baked) {
+      bridges[alt.san] = baked;
+      console.log(`  bridge baked: ${main.san} (known) vs ${alt.san} (new)${baked.textFlipped ? ' + flip' : ''}`);
+    } else {
+      console.error(`  (bridge ${alt.san}: gates never passed — runtime keeps the computed v1)`);
+    }
+  }
+  return Object.keys(bridges).length ? bridges : null;
 }
 
 async function main() {
@@ -212,6 +313,27 @@ async function main() {
   if (DRY) return;
 
   const overlaps = makeOverlapGate(transcript);
+
+  if (BRIDGES_ONLY) {
+    const file = JSON.parse(await readFile(OUT, 'utf8'));
+    const key = norm(spine.name);
+    const entry = file.narrations[key];
+    if (!entry) { console.error(`--bridges-only: no shipped entry for "${spine.name}" — bake the narration first`); process.exit(1); }
+    const shipped = entry.spine.join(' ');
+    const runtime = plies.map((p) => p.san).join(' ');
+    if (!shipped.startsWith(runtime) && !runtime.startsWith(shipped)) {
+      console.error(`--bridges-only: shipped spine diverges from the runtime spine — re-bake the whole entry\n  shipped: ${shipped}\n  runtime: ${runtime}`);
+      process.exit(1);
+    }
+    const bridges = await bakeBridges(spine, plies, clipped, overlaps);
+    if (!bridges) { console.error('no bridge passed its gates (or <2 fork branches) — nothing written'); process.exit(1); }
+    entry.bridges = bridges;
+    file.generatedAt = new Date().toISOString();
+    await writeFile(OUT, JSON.stringify(file, null, 1));
+    console.log(`✓ "${spine.name}" — ${Object.keys(bridges).length} comparative bridge(s) baked → ${OUT}`);
+    return;
+  }
+
   const system = `You are the app's chess coach — think Daniel Naroditsky sitting next to the student — rewording a master teacher's spoken video lesson into YOUR own narration of an opening walkthrough.
 
 THE SOURCE is the teacher's raw spoken transcript (reference ONLY). THE LINE is the exact move sequence the app walks. Your job: for each move of the line, find what the teacher TEACHES about that moment in the transcript — the idea, the plan, the warning, the story — and say it in YOUR OWN WORDS.
@@ -392,6 +514,9 @@ ${finished}`, 8192);
     console.error(`  (flip call failed — shipping primary only: ${String(e).slice(0, 100)})`);
   }
 
+  // Comparative bridges for the fork's sidelines (needs ≥2 branches).
+  const bridges = await bakeBridges(spine, plies, clipped, overlaps);
+
   let file = { generatedAt: '', narrations: {} };
   try { file = JSON.parse(await readFile(OUT, 'utf8')); } catch { /* first entry */ }
   file.generatedAt = new Date().toISOString();
@@ -410,6 +535,7 @@ ${finished}`, 8192);
       outroFlipped: String(flipped.outro).trim(),
       ideasFlipped: flipped.ideas.map((i) => ({ text: String(i.text).trim(), shortText: String(i.shortText ?? '').trim() })),
     } : {}),
+    ...(bridges ? { bridges } : {}),
   };
   await writeFile(OUT, JSON.stringify(file, null, 1));
   console.log(`✓ "${spine.name}" narration baked from video — ${ideas.length} plies${flipped ? ' + flip register' : ''}, all gates green → ${OUT}`);

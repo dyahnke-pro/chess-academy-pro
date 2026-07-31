@@ -95,6 +95,17 @@ describe('validateBoardClaims — piece on square', () => {
     expect(r.violations.some((v) => v.kind === 'piece-on-square')).toBe(true);
   });
 
+  it('flags PLURAL + LIST claims per listed square (the Taimanov-bridge leak)', () => {
+    // "pawns on e6 and c5" claims BOTH squares — the singular-only pattern
+    // let a traded-off c5 pawn ride through in the 2026-07-31 bridge bake.
+    const start = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+    const r = validateBoardClaims('Black keeps pawns on e7 and c5 as a wall.', start);
+    expect(r.violations.some((v) => v.kind === 'piece-on-square' && v.reason.includes('c5'))).toBe(true);
+    // Both squares genuinely occupied → clean.
+    const ok = validateBoardClaims('Black keeps pawns on e7 and c7 as a wall.', start);
+    expect(ok.violations.some((v) => v.kind === 'piece-on-square')).toBe(false);
+  });
+
   it('does NOT flag piece-on-square claims about a FUTURE position', () => {
     // f6 is empty NOW, but "after ...Nf6" describes a future board — skip.
     const r = validateBoardClaims('After the knight goes to f6, the knight on f6 guards d5.', BUG_FEN);

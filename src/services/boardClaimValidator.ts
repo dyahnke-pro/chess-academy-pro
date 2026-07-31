@@ -326,19 +326,25 @@ export function validateBoardClaims(text: string, fen: string): BoardClaimResult
     const sentence = fm ? fullSentence.slice(0, fm.index) : fullSentence;
     if (!sentence.trim()) continue;
     const claims: Array<{ type: PieceSymbol; color?: 'w' | 'b'; square: string; raw: string }> = [];
-    const fwd = /\b(white|black)?(?:'s)?\s*(pawn|knight|bishop|rook|queen|king)\s+(?:on|at)\s+([a-h][1-8])\b/gi;
+    // PLURAL + LIST form counts too — "pawns on e6 and c5" claims BOTH
+    // squares (the 2026-07-31 Taimanov bridge claimed a c5 pawn that had
+    // been traded off; the singular-only pattern missed it entirely).
+    const fwd = /\b(white|black)?(?:'s)?\s*(pawn|knight|bishop|rook|queen|king)s?\s+(?:on|at)\s+([a-h][1-8])((?:\s*(?:,|and)\s*[a-h][1-8])*)\b/gi;
     // hyphen OR space form — "the e4-pawn" and "the e4 pawn" both claim
     // occupancy (the 2026-07-30 Bird bake said "d4 pawn" on a d3 board and
     // the hyphen-only pattern missed it).
     const rev = /\b(?:the\s+)?([a-h][1-8])[\s-–]\s*(pawn|knight|bishop|rook|queen|king)\b/gi;
     let pm: RegExpExecArray | null;
     while ((pm = fwd.exec(sentence)) !== null) {
-      claims.push({
-        type: PIECE_WORD_TO_TYPE[pm[2].toLowerCase()],
-        color: pm[1] ? COLOR_WORD[pm[1].toLowerCase()] : undefined,
-        square: pm[3].toLowerCase(),
-        raw: pm[0].trim(),
-      });
+      const listSquares = [pm[3], ...(pm[4]?.match(/[a-h][1-8]/g) ?? [])];
+      for (const sq of listSquares) {
+        claims.push({
+          type: PIECE_WORD_TO_TYPE[pm[2].toLowerCase()],
+          color: pm[1] ? COLOR_WORD[pm[1].toLowerCase()] : undefined,
+          square: sq.toLowerCase(),
+          raw: pm[0].trim(),
+        });
+      }
     }
     while ((pm = rev.exec(sentence)) !== null) {
       claims.push({

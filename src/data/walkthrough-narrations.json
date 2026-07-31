@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-07-31T02:28:26.541Z",
+ "generatedAt": "2026-07-31T03:23:40.900Z",
  "narrations": {
   "latvian gambit": {
    "openingName": "Latvian Gambit",
@@ -445,7 +445,16 @@
      "text": "Nc6 develops the knight and attacks White's knight on d4. This is a natural developing move that also challenges White's central outpost.",
      "shortText": "Nc6 develops and attacks d4."
     }
-   ]
+   ],
+   "bridges": {
+    "Nb5": {
+     "mainSan": "Nc3",
+     "text": "You know this road well — everything up to here is the Taimanov you've already mastered. The main line plays Nc3, keeping the center solid and preparing the familiar dance where your queen comes to c7 and Ndb5 knocks it back. Today's sideline, Nb5, is a different beast: the knight jumps in eyeing the d6 square, and you calmly take that square away with d6. White grabs space with c4, and only after a6 does the knight concede the trip to a3, where it sits on the rim. That wandering costs time — you develop freely and castle, and the fight becomes piece activity against White's space rather than the usual central tension.",
+     "shortText": "Nc3 is the main road; Nb5 eyes d6 — blunt it, then a6 sends it to a3.",
+     "textFlipped": "You know this road well — everything up to here is the Taimanov you've already mastered. The main line plays Nc3, keeping the center solid and preparing the familiar dance where Black's queen comes to c7 and Ndb5 knocks it back. Today's sideline, Nb5, is a different beast: we jump in eyeing the d6 square, Black blunts it with d6, and we grab space with c4. After a6 our knight concedes the trip to a3 — the price of the early jump — so the plan shifts: lean on the extra space, regroup the rim knight, and squeeze a slow maneuvering game instead of the usual central battle.",
+     "shortTextFlipped": "Nc3 is the main road; with Nb5 we trade knight time for c4 space."
+    }
+   }
   },
   "rubinstein opening": {
    "openingName": "Rubinstein Opening",
