@@ -2487,7 +2487,7 @@ export function CoachTeachPage(): JSX.Element {
       // CALLED Learn with Coach, yet "learn the grand prix" missed this
       // pattern while "teach me the grand prix" hit it.
       const TEACH_PATTERN =
-        /\b(teach(?:\s+me)?|(?:i\s+want\s+to\s+|help\s+me\s+)?learn|study|walk\s+(?:me\s+)?through|show\s+me|let'?s\s+do|let'?s\s+go\s+over|let'?s\s+try|tell\s+me\s+about|review)\b\s+(?:the\s+)?(.+?)(?:\s+(?:opening|defense|defence|game|gambit|attack|variation|line|system))?[.?!]*\s*$/i;
+        /\b(teach(?:\s+me)?|(?:i\s+want\s+to\s+|help\s+me\s+)?learn|study|continue|walk\s+(?:me\s+)?through|show\s+me|let'?s\s+do|let'?s\s+go\s+over|let'?s\s+try|tell\s+me\s+about|review)\b\s+(?:the\s+)?(.+?)(?:\s+(?:opening|defense|defence|game|gambit|attack|variation|line|system))?[.?!]*\s*$/i;
       // Stage-keyword detection: user inputs like "drill Vienna" /
       // "Vienna punish" / "quiz me on the Sicilian" should skip the
       // walkthrough animation and land directly at that stage. User
@@ -5073,6 +5073,24 @@ export function CoachTeachPage(): JSX.Element {
             }
           })
           .catch(() => { /* stored-profile read failed — generic chips stand */ });
+        // CLASSROOM MEMORY GREETING (David 2026-07-31: "a custom phrase when
+        // a user reenters the classroom — last session we did x, I suggest we
+        // build off of that"). The teaching ledger names the most recent
+        // lesson; the coach greets with it and offers a one-tap continue.
+        // The walkthrough's own recap then names TODAY'S layer. Async +
+        // guarded like the weakness nudge — never lands on an active chat.
+        void import('../../services/teachingLedger')
+          .then(({ getLastTaughtOpening }) => getLastTaughtOpening())
+          .then((last) => {
+            if (!last || userInteractedRef.current) return;
+            const rememberLine = `Last session we worked on the ${last.openingName} — ${last.visit.takeaway || 'the main line'}. I'd build on that today.`;
+            setMessages((prev) => [...prev, { id: uid('classroom-memory'), role: 'assistant', content: rememberLine, timestamp: Date.now() }]);
+            setCoachChoices((prev) => [`Continue the ${last.openingName}`, ...(prev ?? [])].slice(0, 4));
+            speechChainRef.current = speechChainRef.current
+              .then(() => voiceService.speakForced(rememberLine))
+              .catch(() => undefined);
+          })
+          .catch(() => { /* ledger read failed — greeting stands */ });
       }
       useCoachMemoryStore.getState().appendConversationMessage({
         surface: 'chat-teach',

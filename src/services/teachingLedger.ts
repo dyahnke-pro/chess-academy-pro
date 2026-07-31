@@ -73,6 +73,21 @@ export async function getTeachingVisits(openingName: string): Promise<TeachingVi
   return blob[keyFor(openingName)] ?? [];
 }
 
+/** The most recent teaching visit across ALL openings — fuels the
+ *  classroom-entry greeting ("last session we did X on the <opening>; I'd
+ *  build on that"). Returns the opening's ledger KEY (lowercased name,
+ *  fine for a "teach me <name>" ask) or null when nothing was ever taught. */
+export async function getLastTaughtOpening(): Promise<{ openingName: string; visit: TeachingVisit } | null> {
+  const blob = await read();
+  let best: { openingName: string; visit: TeachingVisit } | null = null;
+  for (const [key, visits] of Object.entries(blob)) {
+    for (const v of visits) {
+      if (!best || v.at > best.visit.at) best = { openingName: key, visit: v };
+    }
+  }
+  return best;
+}
+
 /** All fork-tile labels the tree offers (the teachable sidelines). */
 function branchLabels(tree: WalkthroughTree): string[] {
   const labels: string[] = [];
