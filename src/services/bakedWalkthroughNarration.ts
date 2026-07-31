@@ -21,10 +21,20 @@ export interface BakedNarration {
   openingName: string;
   spine: string[];
   sourceVideos: string[];
+  /** The side the PRIMARY registers address as "we". Absent on old bakes
+   *  (treated as matching the runtime's side). */
+  studentSide?: 'white' | 'black';
   intro: string;
   shortIntro?: string;
   outro: string;
   ideas: BakedIdea[];
+  /** OPPOSITE-perspective registers (same plies, other color addressed as
+   *  the student) — the runtime speaks these when the board is flipped
+   *  (David 2026-07-31). Baked + gated offline like the primary set. */
+  introFlipped?: string;
+  shortIntroFlipped?: string;
+  outroFlipped?: string;
+  ideasFlipped?: BakedIdea[];
 }
 
 interface BakedFileShape {

@@ -1562,3 +1562,33 @@ export function getNextOpeningBookMove(
 export function _resetTrie(): void {
   cachedTrie = null;
 }
+
+/** Which side a canonicalized opening name teaches. Named WHITE attacking
+ *  systems inside a "Defense" family (Grand Prix, Smith-Morra, Rossolimo,
+ *  Austrian/150 Attack, …) teach WHITE — a student asking for them wants to
+ *  PLAY them (David 2026-07-31: "Grand Prix should be white"). */
+export function inferStudentSideFromName(name: string): 'white' | 'black' {
+  const lower = name.toLowerCase();
+  // Named WHITE attacking systems inside a "Defense" family: a student who
+  // asks for the Grand Prix (or another anti-Sicilian White system) wants to
+  // PLAY it — "Sicilian Defense: Grand Prix Attack" taught the BLACK side
+  // because the family name carries "Defense" (David 2026-07-31: "Grand Prix
+  // should be white").
+  const whiteSystemKeywords = [
+    'grand prix', 'smith-morra', 'smith morra', 'alapin variation',
+    'rossolimo', 'moscow variation', 'closed sicilian', "king's indian attack",
+    'austrian attack', '150 attack', 'fantasy variation', 'advance variation',
+    'exchange variation',
+  ];
+  for (const kw of whiteSystemKeywords) if (lower.includes(kw)) return 'white';
+  if (/\bdefen[cs]e\b/.test(lower)) return 'black';
+  const blackKeywords = [
+    'sicilian', 'french', 'caro-kann', 'caro kann', 'pirc',
+    'modern', 'alekhine', 'scandinavian', 'scandi',
+    "king's indian", 'kings indian', "queen's indian", 'queens indian',
+    'nimzo', 'grunfeld', 'grünfeld', 'benoni', 'benko',
+    'dutch', 'philidor', 'petroff', 'petrov', 'slav',
+  ];
+  for (const kw of blackKeywords) if (lower.includes(kw)) return 'black';
+  return 'white';
+}

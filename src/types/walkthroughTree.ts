@@ -42,6 +42,13 @@ export interface WalkthroughTreeNode {
    *  by `scripts/generate-short-narrations.mjs` for annotation JSONs;
    *  hand-written for static trees (e.g. vienna.ts). */
   shortIdea?: string;
+  /** OPPOSITE-PERSPECTIVE variants (David 2026-07-31: board orientation
+   *  dictates the coach's pronouns — flip the board, the coach flips which
+   *  color it calls "we"). Same facts, other side addressed as the student.
+   *  When absent, the primary register speaks regardless of orientation.
+   *  Populated for BAKED narrations (both registers gated offline). */
+  ideaFlipped?: string;
+  shortIdeaFlipped?: string;
   /** Optional segmented narration with per-segment arrows and
    *  highlights. When present, the runtime speaks each segment's
    *  text in order via voice service, setting arrows/highlights
@@ -79,6 +86,9 @@ export interface NarrationSegment {
    *  silent — never auto-truncates, so the user never hears half a
    *  setup sentence with the punchline missing. */
   shortText?: string;
+  /** Opposite-perspective variants — see WalkthroughTreeNode.ideaFlipped. */
+  textFlipped?: string;
+  shortTextFlipped?: string;
   /** Arrows visible during this segment. Replaces any arrows from
    *  the previous segment. Empty array (or omitted) clears arrows
    *  on this segment. */
@@ -163,6 +173,11 @@ export interface WalkthroughTree {
    *  Reaches the student at the end of a chosen branch — should
    *  invite backtrack-to-fork or play-it-out. */
   outro: string;
+  /** Opposite-perspective variants of intro/shortIntro/outro — see
+   *  WalkthroughTreeNode.ideaFlipped (board flip flips the coach's "we"). */
+  introFlipped?: string;
+  shortIntroFlipped?: string;
+  outroFlipped?: string;
   /** Optional per-leaf outro override map, keyed by a leaf path
    *  (the SAN moves from root joined by spaces). Used when a
    *  particular branch deserves a custom takeaway message. */

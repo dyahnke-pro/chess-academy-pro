@@ -9,6 +9,7 @@ import {
   resolveOpeningEntry,
   resolveCuratedVariation,
   resolveTeachSpine,
+  inferStudentSideFromName,
 } from '../../src/services/openingDetectionService';
 
 const name = process.argv[2];
@@ -26,6 +27,7 @@ console.log(
   JSON.stringify({
     canonicalName: entry.canonicalName,
     eco: entry.eco,
+    studentSide: inferStudentSideFromName(entry.canonicalName),
     spineMoves: spine.spineMoves,
     extendedToMiddlegame: spine.extendedToMiddlegame,
     branchCount: spine.branches.length,

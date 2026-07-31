@@ -1073,6 +1073,14 @@ export function CoachTeachPage(): JSX.Element {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [walkthrough.tree]);
+
+  // Board orientation dictates the coach's pronouns (David 2026-07-31):
+  // report every orientation change into the walkthrough runtime so a
+  // flipped board speaks the flipped register from the next line on.
+  useEffect(() => {
+    walkthrough.setViewOrientation(playerColor);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playerColor]);
   // Live Stockfish evaluation of the current position. Drives the
   // eval bar on the board so it moves with each ply (matches what
   // /coach/play and /coach/review already do). Debounced — every

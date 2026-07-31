@@ -598,6 +598,11 @@ export interface UseTeachWalkthroughReturn {
    *  Eliminates the "I have to play the whole opening every time
    *  just to drill" complaint. */
   startAtStageMenu: (tree: WalkthroughTree, autoSelectStage?: StageKind) => void;
+  /** Report the CURRENT board view orientation. When it differs from the
+   *  tree's studentSide and the narration carries flipped registers, the
+   *  coach addresses the flipped color as "we" (David 2026-07-31). Call on
+   *  every orientation change; takes effect on the next spoken line. */
+  setViewOrientation: (color: 'white' | 'black') => void;
   /** Re-start the walkthrough from move 1 from any phase. Used by
    *  the "Watch walkthrough again" CTA on the stage menu. */
   restartWalkthrough: () => void;
@@ -761,6 +766,30 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
   const treeRef = useRef<WalkthroughTree | null>(null);
   treeRef.current = tree;
 
+  // BOARD-ORIENTATION-DRIVEN REGISTER (David 2026-07-31: "if the user flips
+  // the board, I want the coach to flip how it addresses the different
+  // colors"). The surface reports the CURRENT view orientation; when it
+  // differs from the tree's studentSide and a node/segment carries a
+  // flipped register (baked narrations do), the flipped text speaks. A
+  // ref, read at SPEAK time — a mid-lesson flip takes effect on the very
+  // next spoken line, no re-render churn.
+  const viewOrientationRef = useRef<'white' | 'black' | null>(null);
+  const setViewOrientation = useCallback((color: 'white' | 'black'): void => {
+    viewOrientationRef.current = color;
+  }, []);
+  const flippedRegisterActive = useCallback((): boolean => {
+    const t = treeRef.current;
+    const view = viewOrientationRef.current;
+    if (!t || !view) return false;
+    return (t.studentSide ?? 'white') !== view;
+  }, []);
+  /** Pick primary vs flipped text by the live view orientation. */
+  const pickRegister = useCallback(
+    (primary: string, flipped: string | undefined): string =>
+      flipped && flippedRegisterActive() ? flipped : primary,
+    [flippedRegisterActive],
+  );
+
   // ─── Stage 2-5 state (post-walkthrough pedagogy) ───────────
   const [activeStage, setActiveStage] = useState<StageKind | null>(null);
   const [stageIndex, setStageIndex] = useState(0);
@@ -885,8 +914,10 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
   const leafOutro = useMemo(() => {
     if (!isLeaf || !tree) return null;
     const key = pathSans.join(' ');
-    return tree.leafOutros?.[key] ?? tree.outro;
-  }, [isLeaf, tree, pathSans]);
+    const override = tree.leafOutros?.[key];
+    if (override) return override;
+    return pickRegister(tree.outro, tree.outroFlipped);
+  }, [isLeaf, tree, pathSans, pickRegister]);
 
   /** Speak the given node's idea, then transition based on its
    *  children. Linear → push child onto path + recurse. Fork → set
@@ -1105,7 +1136,10 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
             setNarrationArrows(segment.arrows ?? []);
             setNarrationHighlights(segment.highlights ?? []);
             try {
-              await speakWalkthroughText(segment.text, segment.shortText);
+              await speakWalkthroughText(
+                pickRegister(segment.text, segment.textFlipped),
+                pickRegister(segment.shortText ?? '', segment.shortTextFlipped) || segment.shortText,
+              );
             } catch {
               // Voice errored — keep going so the narration arc
               // completes; backup timer is a safety net.
@@ -1168,7 +1202,7 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
       advanceTimerRef.current = backupTimer;
 
       // Primary gate: voice completion.
-      speakWalkthroughText(idea, node.shortIdea)
+      speakWalkthroughText(pickRegister(idea, node.ideaFlipped), pickRegister(node.shortIdea ?? '', node.shortIdeaFlipped) || node.shortIdea)
         .then(() => {
           if (settled) return;
           settle();
@@ -1251,7 +1285,10 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
           if (settled) return;
           settle();
         }, backupMs);
-        speakWalkthroughText(newTree.intro, newTree.shortIntro)
+        speakWalkthroughText(
+          pickRegister(newTree.intro, newTree.introFlipped),
+          pickRegister(newTree.shortIntro ?? '', newTree.shortIntroFlipped) || newTree.shortIntro,
+        )
           .then(() => {
             if (settled) return;
             // Add the post-narration buffer.
@@ -2051,6 +2088,7 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     skipNarration,
     enterStageMenu,
     startAtStageMenu,
+    setViewOrientation,
     restartWalkthrough,
     startStage,
     selectDrillLine,

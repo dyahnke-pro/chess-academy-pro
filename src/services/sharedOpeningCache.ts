@@ -51,7 +51,7 @@ import type { WalkthroughTree } from '../types/walkthroughTree';
 // user's (or audit bot's) older generation.
 // v8 (2026-07-30): Tier-2 baked video narrations land — pre-bake trees for
 // covered openings must regenerate so the baked script replaces them.
-export const PROMPT_VERSION = 9;
+export const PROMPT_VERSION = 10;
 
 interface SharedCacheConfig {
   supabaseUrl: string;

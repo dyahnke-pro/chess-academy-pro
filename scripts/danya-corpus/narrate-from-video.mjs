@@ -83,10 +83,15 @@ function makeOverlapGate(transcriptText, n = 7) {
   const words = norm(transcriptText).split(' ');
   const grams = new Set();
   for (let i = 0; i + n <= words.length; i += 1) grams.add(words.slice(i, i + n).join(' '));
+  // Returns the OFFENDING gram (so a repair call can name what to avoid —
+  // a blind "overlap" verdict kept failing the same way), or null.
   return (prose) => {
     const w = norm(prose).split(' ');
-    for (let i = 0; i + n <= w.length; i += 1) if (grams.has(w.slice(i, i + n).join(' '))) return true;
-    return false;
+    for (let i = 0; i + n <= w.length; i += 1) {
+      const g = w.slice(i, i + n).join(' ');
+      if (grams.has(g)) return g;
+    }
+    return null;
   };
 }
 
@@ -121,7 +126,7 @@ async function resolveSpine(openingName) {
     const r = JSON.parse(raw);
     if (Array.isArray(r.spineMoves) && r.spineMoves.length > 0) {
       console.log(`[narrate] runtime spine via print-spine: ${r.spineMoves.length} plies${r.extendedToMiddlegame ? ' (middlegame-extended)' : ''}`);
-      return { name: r.canonicalName, moves: r.spineMoves };
+      return { name: r.canonicalName, moves: r.spineMoves, studentSide: r.studentSide };
     }
   } catch (e) {
     console.error(`  (print-spine bridge failed — ${String(e).slice(0, 120)}; falling back to local resolution)`);
@@ -212,7 +217,7 @@ async function main() {
 THE SOURCE is the teacher's raw spoken transcript (reference ONLY). THE LINE is the exact move sequence the app walks. Your job: for each move of the line, find what the teacher TEACHES about that moment in the transcript — the idea, the plan, the warning, the story — and say it in YOUR OWN WORDS.
 
 THE HOUSE VOICE (this is the bar — flat textbook prose is a FAILURE):
-- Teach the IDEA, not just the move. A student should finish each beat understanding WHY, not just WHAT. "Nc3 does two jobs — it braces e4 so Black can never strike there for free, and it keeps the king-knight home, so White still gets to choose which attacking setup to build" beats "Nc3 develops and defends e4."
+- Teach the IDEA, not just the move. A student should finish each beat understanding WHY, not just WHAT. "Nc3 does two jobs — it braces e4 so Black can never strike there for free, and it keeps the king-knight home, so White still gets to choose which attacking setup to build" beats "Nc3 develops and defends e4." (These are STYLE illustrations — never copy their sentences into your output.)
 - Concept-first and conversational: "Here's the thing about this line…", "notice that…", "the point is…". Warmth is welcome; hollow hype is not.
 - The opening turns on ONE central idea — find it in the transcript and teach toward it, so the beats build an argument instead of listing facts.
 - Reach for the clarifying detail the teacher reaches for — the square that matters, the piece that's secretly the star, the plan three moves away.
@@ -234,6 +239,7 @@ Return STRICT JSON:
  "ideas": [{"text": string, "shortText": string}, ...]}  // EXACTLY one per move, in order`;
 
   const user = `OPENING: ${spine.name}
+THE STUDENT PLAYS: ${(spine.studentSide ?? 'white').toUpperCase()} — "we/our" means ${(spine.studentSide ?? 'white')} in every entry; the other color is addressed by name.
 THE LINE (${plies.length} plies, in order): ${plies.map((p, i) => `${i + 1}:${p.san}`).join(' ')}
 
 TEACHER'S SPOKEN TRANSCRIPT (reference only — reword, never quote):
@@ -280,7 +286,8 @@ FOR THIS CALL: return ONLY {"ideas":[...]} for moves ${start + 1}-${start + slic
     const problems = [];
     const checkUnit = (label, text, fen) => {
       if (!text || !text.trim()) return problems.push(`${label}: empty`);
-      if (overlaps(text)) return problems.push(`${label}: 7-gram overlap with transcript (lifted wording)`);
+      const gram = overlaps(text);
+      if (gram) return problems.push(`${label}: lifts the transcript phrase "${gram}" — reword it`);
       if (BANNED.test(text)) return problems.push(`${label}: attribution/medium leak`);
       if (BANNED_EXTRA && BANNED_EXTRA.test(text)) return problems.push(`${label}: creator attribution leak`);
       if (MOVE_NUM.test(text)) return problems.push(`${label}: move-number prefix`);
@@ -308,13 +315,21 @@ FOR THIS CALL: return ONLY {"ideas":[...]} for moves ${start + 1}-${start + slic
   let problems = runGates();
   for (let round = 1; round <= 2 && problems.length > 0; round += 1) {
     const failing = [...new Set(problems.map((x) => x.match(/^ply (\d+)/)?.[1]).filter(Boolean).map(Number))];
-    if (failing.length === 0) break;
-    console.error(`… repair round ${round}: ${failing.length} gated plies: ${problems.slice(0, 6).join(' | ')}`);
-    const detail = failing.map((n) => {
-      const i = n - 1;
-      return `move ${n} (${plies[i].san}) — FEN after: ${plies[i].fen} — rejected because: ${problems.filter((x) => x.startsWith(`ply ${n} `)).join('; ')}`;
-    }).join('\n');
-    const fix = await callModel(system, `${user}\n\nREPAIR CALL: these narration entries were REJECTED for the exact reasons listed. Rewrite ONLY these moves' entries. Each entry MUST name its own move's SAN, every piece/square claim must be TRUE on the given FEN (simplest fix: drop the false claim entirely), wording original, shortText ≤18 words.\n${detail}\nReturn {"ideas":[...]} with EXACTLY ${failing.length} entries, in the order listed.`, 4096);
+    const introFailing = problems.some((x) => x.startsWith('intro'));
+    const outroFailing = problems.some((x) => x.startsWith('outro'));
+    if (failing.length === 0 && !introFailing && !outroFailing) break;
+    console.error(`… repair round ${round}: ${problems.slice(0, 6).join(' | ')}`);
+    const detail = [
+      ...(introFailing ? [`the INTRO — rejected because: ${problems.filter((x) => x.startsWith('intro')).join('; ')}`] : []),
+      ...(outroFailing ? [`the OUTRO — rejected because: ${problems.filter((x) => x.startsWith('outro')).join('; ')}`] : []),
+      ...failing.map((n) => {
+        const i = n - 1;
+        return `move ${n} (${plies[i].san}) — FEN after: ${plies[i].fen} — rejected because: ${problems.filter((x) => x.startsWith(`ply ${n} `)).join('; ')}`;
+      }),
+    ].join('\n');
+    const fix = await callModel(system, `${user}\n\nREPAIR CALL: these narration units were REJECTED for the exact reasons listed. Rewrite ONLY the listed units. Never reuse 7 consecutive words from the transcript; each move entry MUST name its own move's SAN; every piece/square claim must be TRUE on the given FEN (simplest fix: drop the false claim); shortText ≤18 words.\n${detail}\nReturn JSON with ${introFailing ? '"intro" and "shortIntro", ' : ''}${outroFailing ? '"outro", ' : ''}${failing.length > 0 ? `and "ideas" with EXACTLY ${failing.length} entries in the order listed` : 'nothing else'}.`, 4096);
+    if (introFailing && fix.intro) { out.intro = fix.intro; if (fix.shortIntro) out.shortIntro = fix.shortIntro; }
+    if (outroFailing && fix.outro) out.outro = fix.outro;
     const fixed = Array.isArray(fix.ideas) ? fix.ideas : [];
     failing.forEach((n, k) => { if (fixed[k]) ideas[n - 1] = fixed[k]; });
     problems = runGates();
@@ -325,6 +340,52 @@ FOR THIS CALL: return ONLY {"ideas":[...]} for moves ${start + 1}-${start + slic
     process.exit(1);
   }
 
+  // ── FLIP PASS (David 2026-07-31: board orientation dictates the coach's
+  // pronouns). One more offline call rewrites the finished, gated narration
+  // addressing the OTHER color as "we" — same facts, same gates. Best-effort:
+  // a flipped set that can't pass the gates ships absent (the primary
+  // register then speaks regardless of orientation), never half-gated.
+  const side = spine.studentSide ?? 'white';
+  const other = side === 'white' ? 'black' : 'white';
+  let flipped = null;
+  try {
+    const finished = ideas.map((idea, i) => `${i + 1}. [after ${plies[i].san}] ${idea.text} || SHORT: ${idea.shortText}`).join('\n');
+    const flip = await callModel(system, `${user}
+
+FLIP CALL: below is the FINISHED narration for this line, written for the student playing ${side.toUpperCase()} ("we" = ${side}). Rewrite the intro, shortIntro, outro, and EVERY entry so the student is playing ${other.toUpperCase()} instead — "we/our" now means ${other}, and ${side} becomes "White"/"Black" by name. SAME facts, SAME move each entry speaks about, same alignment and truth rules. Return {"intro":string,"shortIntro":string,"outro":string,"ideas":[{"text","shortText"}...]} with EXACTLY ${ideas.length} idea entries.
+
+FINISHED NARRATION:
+${finished}`, 8192);
+    const fIdeas = Array.isArray(flip.ideas) ? flip.ideas : [];
+    if (fIdeas.length === ideas.length && flip.intro && flip.outro) {
+      const fProblems = [];
+      const checkFlip = (label, text, fen) => {
+        if (!text || !text.trim()) return fProblems.push(`${label}: empty`);
+        const fGram = overlaps(text);
+        if (fGram) return fProblems.push(`${label}: lifts "${fGram}"`);
+        if (BANNED.test(text) || (BANNED_EXTRA && BANNED_EXTRA.test(text))) return fProblems.push(`${label}: attribution leak`);
+        if (MOVE_NUM.test(text)) return fProblems.push(`${label}: move-number prefix`);
+        if (fen) { const c = boardClaimProblem(text, fen); if (c) return fProblems.push(`${label}: ${c}`); }
+      };
+      checkFlip('flip intro', flip.intro, null);
+      checkFlip('flip outro', flip.outro, null);
+      fIdeas.forEach((idea, i) => {
+        checkFlip(`flip ply ${i + 1}`, idea.text, plies[i].fen);
+        if (idea.text && !mentionsOwnMove(idea.text, plies[i].san)) fProblems.push(`flip ply ${i + 1}: misaligned`);
+      });
+      if (fProblems.length === 0) {
+        flipped = flip;
+        console.log(`  flip register baked (${other} perspective) — all gates green`);
+      } else {
+        console.error(`  (flip register FAILED ${fProblems.length} gate(s) — shipping primary only: ${fProblems.slice(0, 3).join(' | ')})`);
+      }
+    } else {
+      console.error('  (flip register malformed — shipping primary only)');
+    }
+  } catch (e) {
+    console.error(`  (flip call failed — shipping primary only: ${String(e).slice(0, 100)})`);
+  }
+
   let file = { generatedAt: '', narrations: {} };
   try { file = JSON.parse(await readFile(OUT, 'utf8')); } catch { /* first entry */ }
   file.generatedAt = new Date().toISOString();
@@ -332,13 +393,20 @@ FOR THIS CALL: return ONLY {"ideas":[...]} for moves ${start + 1}-${start + slic
     openingName: spine.name,
     spine: plies.map((p) => p.san),
     sourceVideos: VIDEO_IDS.map((id) => `yt:${id}`),
+    studentSide: side,
     intro: out.intro.trim(),
     shortIntro: String(out.shortIntro ?? '').trim(),
     outro: out.outro.trim(),
     ideas: ideas.map((i) => ({ text: i.text.trim(), shortText: String(i.shortText ?? '').trim() })),
+    ...(flipped ? {
+      introFlipped: String(flipped.intro).trim(),
+      shortIntroFlipped: String(flipped.shortIntro ?? '').trim(),
+      outroFlipped: String(flipped.outro).trim(),
+      ideasFlipped: flipped.ideas.map((i) => ({ text: String(i.text).trim(), shortText: String(i.shortText ?? '').trim() })),
+    } : {}),
   };
   await writeFile(OUT, JSON.stringify(file, null, 1));
-  console.log(`✓ "${spine.name}" narration baked from video — ${ideas.length} plies, all gates green → ${OUT}`);
+  console.log(`✓ "${spine.name}" narration baked from video — ${ideas.length} plies${flipped ? ' + flip register' : ''}, all gates green → ${OUT}`);
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });

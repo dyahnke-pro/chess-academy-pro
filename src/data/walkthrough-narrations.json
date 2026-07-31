@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-07-30T23:18:35.753Z",
+ "generatedAt": "2026-07-31T01:19:18.588Z",
  "narrations": {
   "latvian gambit": {
    "openingName": "Latvian Gambit",
@@ -44,7 +44,7 @@
      "shortText": "f5 weakens Black's king."
     },
     {
-     "text": "Bc4 develops the bishop to a powerful diagonal, eyeing f7\u2014the weakest square in Black's camp. This move increases pressure and threatens immediate checkmate if Black isn't careful.",
+     "text": "Bc4 develops the bishop to a powerful diagonal, eyeing f7—the weakest square in Black's camp. This move increases pressure and threatens immediate checkmate if Black isn't careful.",
      "shortText": "Bc4 targets f7."
     },
     {
@@ -60,11 +60,11 @@
      "shortText": "Qg5 is a poor square."
     },
     {
-     "text": "Nf7 forks Black's queen and rook, winning material. This knight jump is the direct punishment for Black's careless play\u2014the queen must move, and we'll capture the rook.",
+     "text": "Nf7 forks Black's queen and rook, winning material. This knight jump is the direct punishment for Black's careless play—the queen must move, and we'll capture the rook.",
      "shortText": "Nf7 forks queen and rook."
     },
     {
-     "text": "Qxg2 \u2014 Black ignores the fork, snapping off a pawn and attacking the rook on h1. It looks scary, but the queen has wandered far from her own king, and your fork on f7 still wins the exchange. Defend calmly and the counterplay evaporates.",
+     "text": "Qxg2 — Black ignores the fork, snapping off a pawn and attacking the rook on h1. It looks scary, but the queen has wandered far from her own king, and your fork on f7 still wins the exchange. Defend calmly and the counterplay evaporates.",
      "shortText": "Qxg2 ignores the fork and attacks the rook on h1."
     },
     {
@@ -159,7 +159,7 @@
      "shortText": "Nxc3 trades knights, leading to doubled pawns for us."
     },
     {
-     "text": "bxc3. We recapture with the b-pawn, accepting doubled pawns. This structure is intentional: it opens the b-file for our rook and makes it easier to push d4, gaining central control. The doubled pawns are not a weakness here\u2014they give us dynamic play.",
+     "text": "bxc3. We recapture with the b-pawn, accepting doubled pawns. This structure is intentional: it opens the b-file for our rook and makes it easier to push d4, gaining central control. The doubled pawns are not a weakness here—they give us dynamic play.",
      "shortText": "bxc3 opens the b-file and prepares d4."
     }
    ]
@@ -202,7 +202,7 @@
      "shortText": "d5 is the gambit offer."
     },
     {
-     "text": "Nxe5 accepts the gambit \u2014 we grab the pawn and our knight lands on a strong central square. Precision from here keeps the extra material.",
+     "text": "Nxe5 accepts the gambit — we grab the pawn and our knight lands on a strong central square. Precision from here keeps the extra material.",
      "shortText": "Nxe5 accepts the gambit."
     },
     {
@@ -233,29 +233,55 @@
     "yt:YXz0xSbhY70",
     "yt:mCB8n7v0MEA"
    ],
-   "intro": "We're playing the Sicilian Defense, and White has gone for the Grand Prix Attack. This is a sharp, dangerous system where White aims to attack our king quickly, often with the bishop on c4 and the queen heading to h4. Our job is to neutralize that attack by developing sensibly and not falling for the typical traps.",
-   "shortIntro": "Sicilian Defense: Grand Prix Attack \u2014 White goes for a quick kingside assault.",
-   "outro": "So after f4, we have the classic Grand Prix setup. Black's plan is to fianchetto the bishop with g6, develop the knight to c6, and then choose between d6 or e6 depending on White's next move. The key is to avoid getting crushed on the kingside by keeping the center solid and not castling too early.",
+   "studentSide": "white",
+   "intro": "We're playing the Grand Prix Attack as White — an aggressive system against the Sicilian where we aim to build a quick kingside attack. The key idea is to get our bishop to c4, eyeing f7, and then launch pawns and pieces at Black's king before they can organize. Let's walk through the first moves.",
+   "shortIntro": "Grand Prix Attack — we attack f7 and aim for a quick kingside assault.",
+   "outro": "With f4 we've set up the classic Grand Prix structure. Now we'll look to develop the knight to f3 and get the bishop to c4, keeping the pressure on Black's kingside.",
    "ideas": [
     {
-     "text": "e4 opens the game, and we respond with the Sicilian \u2014 c5 \u2014 immediately fighting for the center from the flank. This is the start of a rich, complex battle.",
-     "shortText": "e4 opens; c5 fights for the center."
+     "text": "e4 opens the center and grabs space — the standard first move in the Sicilian, inviting Black to respond with c5.",
+     "shortText": "e4 opens the center."
     },
     {
-     "text": "c5 is our Sicilian response, challenging White's central control and steering the game into unbalanced territory.",
-     "shortText": "c5 challenges the center."
+     "text": "c5 is Black's Sicilian response, immediately challenging the center and preventing e5. Now we choose our anti-Sicilian weapon.",
+     "shortText": "c5 is the Sicilian challenge."
     },
     {
-     "text": "Nc3 is the Grand Prix Attack. White skips the open Sicilian and instead prepares f4, aiming to build a quick kingside attack. Notice that White hasn't committed the knight to f3 yet \u2014 that flexibility is part of the system.",
-     "shortText": "Nc3 signals the Grand Prix Attack."
+     "text": "Nc3 does two jobs: it braces e4 so Black can never strike there for free, and it keeps the king-knight home, so White still gets to choose which attacking setup to build.",
+     "shortText": "Nc3 defends e4 and keeps options."
     },
     {
-     "text": "Nc6 is our most flexible developing move. We don't commit to a pawn structure yet \u2014 we just bring out a piece and wait to see where White puts the bishop before deciding on d6 or e6.",
-     "shortText": "Nc6 develops, keeping options open."
+     "text": "Nc6 is Black's most flexible developing move — it doesn't commit to a pawn structure yet, just brings a piece out and waits to see our plan.",
+     "shortText": "Nc6 develops, waits for our setup."
     },
     {
-     "text": "f4 is the hallmark of the Grand Prix. White immediately strengthens the center and prepares to launch the bishop to c4, targeting f7. This is a direct, aggressive setup \u2014 we need to be careful not to let White's attack gain momentum.",
-     "shortText": "f4 launches the Grand Prix attack."
+     "text": "f4 is the signature of the Grand Prix Attack. We immediately stake a claim in the center and prepare to swing the bishop to c4, targeting the weak f7 square. This pawn also supports a future e5 push or a kingside pawn storm.",
+     "shortText": "f4 starts the Grand Prix attack."
+    }
+   ],
+   "introFlipped": "We're playing the Sicilian as Black, and White has chosen the Grand Prix Attack — a sharp system where they aim to storm our kingside before we can organize. Our job is to neutralize their attacking ideas and prove that their pawn on f4 is actually a weakness.",
+   "shortIntroFlipped": "Black faces the Grand Prix Attack — we need to neutralize White's kingside ambitions.",
+   "outroFlipped": "So with f4, White has committed to the Grand Prix. Our plan is to keep the center solid, develop flexibly, and eventually strike back — either with d5 or by exploiting the holes White's pawn advance creates.",
+   "ideasFlipped": [
+    {
+     "text": "e4 opens the center and grabs space — the standard first move in the Sicilian, inviting us to respond with c5.",
+     "shortText": "e4 opens the center."
+    },
+    {
+     "text": "c5 is our Sicilian response, immediately challenging the center and preventing White from playing e5. Now we see which anti-Sicilian White chooses.",
+     "shortText": "c5 is the Sicilian challenge."
+    },
+    {
+     "text": "Nc3 does two jobs: it braces e4 so we can never strike there for free, and it keeps the king-knight home, so White still gets to choose which attacking setup to build.",
+     "shortText": "Nc3 defends e4 and keeps options."
+    },
+    {
+     "text": "Nc6 is our most flexible developing move — it doesn't commit to a pawn structure yet, just brings a piece out and waits to see White's plan.",
+     "shortText": "Nc6 develops, waits for White's setup."
+    },
+    {
+     "text": "f4 is the signature of the Grand Prix Attack. White immediately stakes a claim in the center and prepares to swing the bishop to c4, targeting our weak f7 square. This pawn also supports a future e5 push or a kingside pawn storm.",
+     "shortText": "f4 starts the Grand Prix attack."
     }
    ]
   },
@@ -302,7 +328,7 @@
      "shortText": "Nf3 develops and supports e5."
     },
     {
-     "text": "g6: Black fianchettoes the kingside bishop, preparing to put it on g7 to pressure the long diagonal. This is a flexible setup, often leading to a King's Indian or Gr\u00fcnfeld-like structure.",
+     "text": "g6: Black fianchettoes the kingside bishop, preparing to put it on g7 to pressure the long diagonal. This is a flexible setup, often leading to a King's Indian or Grünfeld-like structure.",
      "shortText": "g6 prepares Bg7."
     },
     {
@@ -496,11 +522,11 @@
      "shortText": "Castle to safety and activate your rook."
     },
     {
-     "text": "Black develops the bishop to d6, eyeing the kingside and the e5 square. This is a solid developing move, but it also signals that Black might be looking to push e5 or create threats on the long diagonal. Keep an eye on that bishop\u2014it's well-placed for Black's plans.",
+     "text": "Black develops the bishop to d6, eyeing the kingside and the e5 square. This is a solid developing move, but it also signals that Black might be looking to push e5 or create threats on the long diagonal. Keep an eye on that bishop—it's well-placed for Black's plans.",
      "shortText": "Black's bishop eyes the kingside."
     },
     {
-     "text": "Now we fianchetto our own bishop to b2. This is a key part of our setup\u2014it controls the long diagonal, pressures the center, and supports any future pawn breaks like e4 or f4. With the bishop here, our position becomes very harmonious.",
+     "text": "Now we fianchetto our own bishop to b2. This is a key part of our setup—it controls the long diagonal, pressures the center, and supports any future pawn breaks like e4 or f4. With the bishop here, our position becomes very harmonious.",
      "shortText": "Fianchetto the bishop to control the diagonal."
     },
     {
@@ -662,7 +688,7 @@
      "shortText": "O-O secures Black's king."
     },
     {
-     "text": "d4 completes the broad centre \u2014 pawns on b4, c4 and d4 grab space across the board, with the b2-bishop waiting behind them for the long diagonal to open. From here the plan is simple: finish development, castle, and expand on the queenside where the space is already yours.",
+     "text": "d4 completes the broad centre — pawns on b4, c4 and d4 grab space across the board, with the b2-bishop waiting behind them for the long diagonal to open. From here the plan is simple: finish development, castle, and expand on the queenside where the space is already yours.",
      "shortText": "d4 builds the broad centre."
     }
    ]
@@ -693,7 +719,7 @@
      "shortText": "d4 claims the center."
     },
     {
-     "text": "d5 is a natural response, challenging our center. We don't mind\u2014we'll build our wall with e3 next.",
+     "text": "d5 is a natural response, challenging our center. We don't mind—we'll build our wall with e3 next.",
      "shortText": "d5 challenges our center."
     },
     {

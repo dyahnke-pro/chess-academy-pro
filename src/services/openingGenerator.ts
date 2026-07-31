@@ -40,6 +40,7 @@ import {
   findShortestCanonicalPgn,
   resolveTeachSpine,
   findContinuationsAtPly,
+  inferStudentSideFromName,
   type ForkBranch,
 } from './openingDetectionService';
 import { db, type CachedOpening } from '../db/schema';
@@ -221,7 +222,7 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 /** Bump to invalidate every cached walkthrough tree on next read. The corpus
  *  teaching splice happens at GENERATION time, so trees generated before it
  *  would keep speaking corpus-free narration forever off the warm cache. */
-const WALKTHROUGH_GEN_REV = '2026-07-30-tier2-batch1-whole-beat';
+const WALKTHROUGH_GEN_REV = '2026-07-31-flip-registers';
 
 export async function getCachedOpening(
   name: string,
@@ -1418,17 +1419,40 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
   // it into the house voice and gated every line — so a hit is final prose:
   // no note splice, no reword pass, deterministic every session. The LLM is
   // still called ONLY when fork branches need their teasers narrated.
-  const baked = faceContext
+  const bakedRaw = faceContext
     ? null
     : bakedNarrationFor(entry.canonicalName, positions.map((p) => p.san));
-  if (baked) {
+  if (bakedRaw) {
     void logAppAudit({
       kind: 'book-grounding-injected',
       category: 'subsystem',
       source: 'openingGenerator.bakedVideoNarration',
-      summary: `baked video narration hit for "${entry.canonicalName}" (${positions.length}/${baked.spine.length} plies, sources: ${baked.sourceVideos.join(',')})`,
+      summary: `baked video narration hit for "${entry.canonicalName}" (${positions.length}/${bakedRaw.spine.length} plies, sources: ${bakedRaw.sourceVideos.join(',')})`,
     });
   }
+  // Orient the bake to THIS tree's studentSide: when the bake's primary
+  // register addresses the other color (side inference changed, or the bake
+  // predates it) and a flipped register exists, the registers swap — the
+  // spoken "we" always matches the side the student is learning. The other
+  // register rides along for the live board-flip (David 2026-07-31).
+  const baked = (() => {
+    if (!bakedRaw) return null;
+    const mismatched =
+      bakedRaw.studentSide !== undefined && bakedRaw.studentSide !== studentSide;
+    if (!mismatched || !bakedRaw.ideasFlipped) return bakedRaw;
+    return {
+      ...bakedRaw,
+      intro: bakedRaw.introFlipped ?? bakedRaw.intro,
+      shortIntro: bakedRaw.shortIntroFlipped ?? bakedRaw.shortIntro,
+      outro: bakedRaw.outroFlipped ?? bakedRaw.outro,
+      ideas: bakedRaw.ideasFlipped,
+      introFlipped: bakedRaw.intro,
+      shortIntroFlipped: bakedRaw.shortIntro,
+      outroFlipped: bakedRaw.outro,
+      ideasFlipped: bakedRaw.ideas,
+      studentSide,
+    };
+  })();
 
   let narration: NarrationOutput;
   let narrationFellBack = false;
@@ -1665,6 +1689,12 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       children: nextChildren,
     };
     if (shortText) node.shortIdea = shortText;
+    // Opposite-perspective register from the bake (board-flip pronouns).
+    const flippedIdea = baked?.ideasFlipped?.[i];
+    if (flippedIdea?.text?.trim()) {
+      node.ideaFlipped = flippedIdea.text.trim();
+      if (flippedIdea.shortText?.trim()) node.shortIdeaFlipped = flippedIdea.shortText.trim();
+    }
     const mentionArrows = mentionedMoveArrows(text, p.fen, [
       { from: p.from, to: p.to },
       ...arrows.map((a) => ({ from: a.from, to: a.to })),
@@ -1673,6 +1703,8 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
     if (segmentArrows.length > 0) {
       const segment: NarrationSegmentType = { text, arrows: segmentArrows };
       if (shortText) segment.shortText = shortText;
+      if (node.ideaFlipped) segment.textFlipped = node.ideaFlipped;
+      if (node.shortIdeaFlipped) segment.shortTextFlipped = node.shortIdeaFlipped;
       node.narration = [segment];
     }
     nextChildren = [{ node }];
@@ -1698,6 +1730,9 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       `${displayName} — let's walk through the main line.`,
     ...(shortIntro ? { shortIntro } : {}),
     outro: narration.outro?.trim() || `Drill the moves to lock them in.`,
+    ...(baked?.introFlipped ? { introFlipped: baked.introFlipped } : {}),
+    ...(baked?.shortIntroFlipped ? { shortIntroFlipped: baked.shortIntroFlipped } : {}),
+    ...(baked?.outroFlipped ? { outroFlipped: baked.outroFlipped } : {}),
     root: { san: null, movedBy: null, idea: '', children: nextChildren },
   };
   // Drop redundant arrows (no-ops + arrows pointing AT the move's
@@ -1783,19 +1818,6 @@ function buildFallbackTreeFromDb(
 
 /** Same logic as inferStudentSide in src/data/openingWalkthroughs/index.ts
  *  but local so this module doesn't import from a sibling. */
-function inferStudentSideFromName(name: string): 'white' | 'black' {
-  const lower = name.toLowerCase();
-  if (/\bdefen[cs]e\b/.test(lower)) return 'black';
-  const blackKeywords = [
-    'sicilian', 'french', 'caro-kann', 'caro kann', 'pirc',
-    'modern', 'alekhine', 'scandinavian', 'scandi',
-    "king's indian", 'kings indian', "queen's indian", 'queens indian',
-    'nimzo', 'grunfeld', 'grünfeld', 'benoni', 'benko',
-    'dutch', 'philidor', 'petroff', 'petrov', 'slav',
-  ];
-  for (const kw of blackKeywords) if (lower.includes(kw)) return 'black';
-  return 'white';
-}
 
 /** Build a short idea sentence for a SAN — the template fallback used
  *  only when the LLM narration call is unavailable.
