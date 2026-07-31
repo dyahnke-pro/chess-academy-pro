@@ -202,7 +202,7 @@ export function normalizeOpeningName(name: string): string {
 export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
   try {
     if (Array.isArray(tree.concepts) && tree.concepts.length > 0) {
-      tree.concepts = repairConceptsStage(tree.concepts).kept;
+      tree.concepts = repairConceptsStage(tree.concepts, tree.startFen).kept;
     }
     if (Array.isArray(tree.findMove) && tree.findMove.length > 0) {
       tree.findMove = repairFindMoveStage(tree.findMove).kept;
@@ -480,6 +480,10 @@ function replayAll(sans: string[], startFen?: string): Chess | null {
  *    starting-position MC) */
 export function repairConceptsStage(
   data: ConceptCheckQuestion[],
+  /** The tree's own start position, so a question carrying NO path is still
+   *  board-gated against the opening it belongs to. Without this the gate had
+   *  a hole: path-less questions were checked against nothing at all. */
+  startFen?: string,
 ): { kept: ConceptCheckQuestion[]; report: StageRepairReport } {
   const kept: ConceptCheckQuestion[] = [];
   const report: StageRepairReport = { dropped: 0, fixed: 0, notes: [] };
@@ -503,9 +507,10 @@ export function repairConceptsStage(
         `concepts[${i}]: promoted to multiSelect (had ${correctCount} correct)`,
       );
     }
-    let atFen: string | null = null;
+    // Default to the opening's own position; a path just moves us deeper.
+    let atFen: string | null = startFen ?? new Chess().fen();
     if (q.path && q.path.length > 0) {
-      const replayed = replayAll(q.path);
+      const replayed = replayAll(q.path, startFen);
       if (!replayed) {
         const droppedPath = q.path.join(' ');
         q.path = [];

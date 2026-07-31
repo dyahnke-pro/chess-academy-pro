@@ -147,6 +147,21 @@ on `main` but not yet confirmed on his device; `OPEN` means not started.
 Everything except **A1** is done. A1 is instrumented and waits on his next
 device log — he's sending one once the rest landed.
 
+### Universality (David 2026-07-31: "I will be choosing a different opening")
+Everything shipped today was diagnosed on ONE line (the Alapin), so it was
+swept across 12 structurally different openings — both colours, open/closed,
+gambits, fianchettos, queen's-pawn and flank systems — plus castling both
+sides, promotion, en passant, and an unreadable position.
+`continuationMoveNarration.universal.test.ts`, 41 assertions, all green.
+Two gaps that sweep found, both now closed:
+- the A7 concepts gate skipped questions carrying NO path — they were checked
+  against nothing at all. It now defaults to the tree's own start position.
+- my first universality assertion was itself wrong: it checked arrow legality
+  against the START position, which defeats a chained plan ("Nf3, then d4 and
+  Qd2" — Qd2 only becomes legal once the d2-pawn has left). Replaced with the
+  invariant that actually matters visually: an arrow's origin must hold a
+  piece the student can see.
+
 ### Two of my own reports were wrong, and both the same way
 A2 and A4 were LOG-FORMATTING artifacts I reported as defects: a fallover
 logged 38s after the audio had played, and a 120-char audit slice read as a
