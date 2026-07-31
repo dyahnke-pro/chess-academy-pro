@@ -6654,6 +6654,41 @@ function WalkthroughControls({
 }): JSX.Element {
   const { phase, forkOptions, canBacktrack, leafOutro, tree } = walkthrough;
 
+  // Ledger-aware revisit picker (David 2026-07-31: "be able to revisit
+  // whichever you wanted"): on the chooser, surface the coach's pick for
+  // TODAY plus what's been covered. Async Dexie read, null until resolved.
+  const [revisitPlan, setRevisitPlan] = useState<{
+    layer: string;
+    todayLabel: string;
+    coveredLine: string | null;
+  } | null>(null);
+  useEffect(() => {
+    if (phase !== 'choose-mode' || !tree || tree.derived) {
+      setRevisitPlan(null);
+      return;
+    }
+    let stale = false;
+    void (async () => {
+      try {
+        const { planTeachingVisit, getTeachingVisits } = await import('../../services/teachingLedger');
+        const [plan, visits] = await Promise.all([
+          planTeachingVisit(tree.openingName, tree),
+          getTeachingVisits(tree.openingName),
+        ]);
+        if (stale) return;
+        const covered = visits.map((v) => v.takeaway).filter(Boolean);
+        setRevisitPlan({
+          layer: plan.layer,
+          todayLabel: plan.todayLabel,
+          coveredLine: covered.length > 0 ? `Covered so far: ${covered.join(' · ')}` : null,
+        });
+      } catch {
+        if (!stale) setRevisitPlan(null);
+      }
+    })();
+    return () => { stale = true; };
+  }, [phase, tree]);
+
   // Fetch completed stages for the current opening so we can show
   // checkmarks on the stage menu. Re-fetch whenever we re-enter the
   // stage-menu phase (after completing a stage we want to see the
@@ -6752,7 +6787,28 @@ function WalkthroughControls({
             ? `You've already learned the ${tree.openingName}. How do you want to dive back in?`
             : 'How do you want to dive back in?'}
         </div>
+        {revisitPlan?.coveredLine && (
+          <div className="text-[11px] text-theme-text-muted px-1">{revisitPlan.coveredLine}</div>
+        )}
         <div className="flex flex-col gap-2">
+          {revisitPlan && (
+            <button
+              type="button"
+              onClick={() => {
+                if (revisitPlan.layer === 'continuation') onWatchContinuation();
+                else walkthrough.restartWalkthrough();
+              }}
+              className="w-full flex items-center justify-between gap-3 px-3 py-3 rounded-lg bg-theme-accent text-theme-bg text-left min-h-[60px] transition-colors"
+              style={goldGlowStrongStyle}
+              data-testid="walkthrough-choose-next-layer"
+            >
+              <div className="flex flex-col">
+                <span className="text-sm font-semibold">Today&apos;s lesson: {revisitPlan.todayLabel}</span>
+                <span className="text-[11px] opacity-80">The coach&apos;s pick — builds on what you&apos;ve covered</span>
+              </div>
+              <ChevronRight size={16} className="flex-shrink-0" />
+            </button>
+          )}
           <button
             type="button"
             onClick={() => walkthrough.restartWalkthrough()}
