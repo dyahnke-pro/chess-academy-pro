@@ -46,6 +46,33 @@ export const BOARD_ARROW_OPTIONS = {
   arrowStartOffset: 0.2,
 };
 
+/** Lead-the-eye square highlight — a SOLID FILL, the way the opening tab's
+ *  LessonPlayer paints its key squares.
+ *
+ *  David 2026-07-31 (fourth report on this): "It's not just the color of arrow
+ *  but the shape and look of them… make the physical arrow code the same in
+ *  coach tab/everywhere in the app that uses arrows." The arrow geometry was
+ *  already shared via BOARD_ARROW_OPTIONS; what still read as different was
+ *  everything AROUND the arrow — the coach boards drew a narration highlight
+ *  as a 3px inset RING while the opening tab filled the square. Same marker,
+ *  two different pictures. This is the one definition both use now. */
+export function leadEyeSquareStyle(color: string): React.CSSProperties {
+  return { background: color };
+}
+
+/** The rgb triple for board ACCENT decorations — the last-move wash, the
+ *  selected square, legal-move dots, the centre-square glow. These are the
+ *  "light background / glow effect" and they are a SETTING (Settings → Board →
+ *  glow colour), so every board must answer that one control.
+ *
+ *  David 2026-07-31: "I think that's a settings option. The light background.
+ *  Glow effect." He was right, and the coach boards were ignoring it — they
+ *  painted a literal cyan while the user's chosen glow colour applied
+ *  everywhere else. Falls back to the app cyan only when glow is switched off. */
+export function boardAccentRgb(boardGlowRgb: string | undefined): string {
+  return !boardGlowRgb || boardGlowRgb === 'none' ? '0, 229, 255' : boardGlowRgb;
+}
+
 export interface BoardTheme {
   scheme: BoardColorScheme;
   darkSquareStyle: { backgroundColor: string };

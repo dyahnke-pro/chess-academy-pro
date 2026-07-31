@@ -5790,7 +5790,6 @@ export function CoachTeachPage(): JSX.Element {
                         showResetButton={false}
                         showEvalBar={false}
                         showVoiceMic={false}
-                        showLastMoveHighlight
                         arrows={walkthroughBoardArrows(walkthrough.narrationArrows)}
                         annotationHighlights={walkthroughBoardHighlights(walkthrough.narrationHighlights)}
                         onMove={

@@ -7,7 +7,7 @@ import { useChessGame } from '../../hooks/useChessGame';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useSettings } from '../../hooks/useSettings';
 import { useBoardGlow } from '../../hooks/useBoardGlow';
-import { BOARD_ARROW_OPTIONS } from '../../hooks/useBoardTheme';
+import { BOARD_ARROW_OPTIONS, leadEyeSquareStyle, boardAccentRgb } from '../../hooks/useBoardTheme';
 import { getBoardColor } from '../../services/boardColorService';
 import { buildPieceRenderer } from '../../services/pieceSetService';
 import { buildPieceGlowFilter } from '../../utils/neonColors';
@@ -48,7 +48,8 @@ export interface ChessBoardProps {
   computerColor?: 'w' | 'b';
   /** External square highlights (e.g. computer's last move) — shown as yellow background */
   highlightSquares?: { from: string; to: string } | null;
-  /** Whether to show last-move highlights. Defaults to true. */
+  /** Force last-move highlights on/off. Omit to follow the user's
+   *  Settings → Board → "Highlight Last Move" toggle. */
   showLastMoveHighlight?: boolean;
   /** Flash the board border with a quality color (green/amber/red). Resets after animation. */
   moveQualityFlash?: MoveQuality;
@@ -110,7 +111,7 @@ export function ChessBoard({
   className = '',
   computerColor,
   highlightSquares = null,
-  showLastMoveHighlight = true,
+  showLastMoveHighlight,
   moveQualityFlash = null,
   arrows,
   annotationHighlights,
@@ -221,7 +222,13 @@ export function ChessBoard({
   const { lastMove, checkSquare, selectedSquare, legalMoves, getPiece } = game;
 
   // Board square neon glow from user settings
-  const { baseGlow: baseGlowStr, mergeGlow } = useBoardGlow();
+  const { baseGlow: baseGlowStr, mergeGlow, boardGlowRgb } = useBoardGlow();
+  // The last-move wash / selection / legal-move dots / centre glow are the
+  // user's Settings → Board glow colour, not a hardcoded cyan.
+  const accent = boardAccentRgb(boardGlowRgb);
+  // Explicit prop wins; otherwise the user's setting governs (same rule as
+  // ControlledChessBoard).
+  const effectiveShowLastMoveHighlight = showLastMoveHighlight ?? settings.highlightLastMove;
 
   const customSquareStyles = useMemo((): Record<string, React.CSSProperties> => {
     const styles: Record<string, React.CSSProperties> = {};
@@ -241,24 +248,31 @@ export function ChessBoard({
     // Center squares — subtle persistent highlight
     const centerSquares = ['e4', 'd4', 'e5', 'd5'];
     for (const sq of centerSquares) {
-      styles[sq] = { ...styles[sq], boxShadow: mergeGlow('inset 0 0 8px 2px rgba(0, 229, 255, 0.08)') };
+      styles[sq] = { ...styles[sq], boxShadow: mergeGlow(`inset 0 0 8px 2px rgba(${accent}, 0.08)`) };
     }
 
-    // Last-move highlight — distinct outline color so it stands out
-    if (showLastMoveHighlight) {
+    // Last-move highlight — distinct outline color so it stands out.
+    // Honors Settings → Board → "Highlight Last Move" (an explicit prop still
+    // wins, for boards that must force it). This board ignored the setting
+    // entirely while ControlledChessBoard respected it, so the same toggle
+    // worked on one board and was dead on the other (David 2026-07-31).
+    if (effectiveShowLastMoveHighlight) {
       const moveHighlight = lastMove ?? highlightSquares;
       if (moveHighlight) {
-        styles[moveHighlight.from] = { ...styles[moveHighlight.from], background: 'rgba(0, 229, 255, 0.2)', boxShadow: mergeGlow('inset 0 0 12px rgba(0, 229, 255, 0.15)') };
-        styles[moveHighlight.to] = { ...styles[moveHighlight.to], background: 'rgba(0, 229, 255, 0.25)', boxShadow: mergeGlow('inset 0 0 12px rgba(0, 229, 255, 0.2)') };
+        styles[moveHighlight.from] = { ...styles[moveHighlight.from], background: `rgba(${accent}, 0.2)`, boxShadow: mergeGlow(`inset 0 0 12px rgba(${accent}, 0.15)`) };
+        styles[moveHighlight.to] = { ...styles[moveHighlight.to], background: `rgba(${accent}, 0.25)`, boxShadow: mergeGlow(`inset 0 0 12px rgba(${accent}, 0.2)`) };
       }
     }
 
-    // Coach annotation highlights
+    // Coach annotation highlights — the lead-the-eye markers. Applied AFTER
+    // the last-move/centre decorations so a narrated square reads as the
+    // opening tab's clean fill, not a ring layered over a cyan wash.
     if (annotationHighlights) {
       for (const h of annotationHighlights) {
         styles[h.square] = {
           ...styles[h.square],
-          boxShadow: mergeGlow(`inset 0 0 0 3px ${h.color}`),
+          ...leadEyeSquareStyle(h.color),
+          boxShadow: mergeGlow(),
         };
       }
     }
@@ -274,7 +288,7 @@ export function ChessBoard({
 
     // Selected square
     if (selectedSquare) {
-      styles[selectedSquare] = { ...styles[selectedSquare], background: 'rgba(0, 229, 255, 0.35)', boxShadow: mergeGlow('inset 0 0 8px rgba(0, 229, 255, 0.4)') };
+      styles[selectedSquare] = { ...styles[selectedSquare], background: `rgba(${accent}, 0.35)`, boxShadow: mergeGlow(`inset 0 0 8px rgba(${accent}, 0.4)`) };
     }
 
     // Legal move targets
@@ -284,20 +298,20 @@ export function ChessBoard({
         styles[sq] = {
           ...styles[sq],
           background:
-            'radial-gradient(circle, rgba(0,0,0,0) 60%, rgba(0, 229, 255, 0.3) 60%, rgba(0, 229, 255, 0.3) 80%, rgba(0,0,0,0) 80%)',
+            `radial-gradient(circle, rgba(0,0,0,0) 60%, rgba(${accent}, 0.3) 60%, rgba(${accent}, 0.3) 80%, rgba(0,0,0,0) 80%)`,
           cursor: 'pointer',
         };
       } else {
         styles[sq] = {
           ...styles[sq],
-          background: 'radial-gradient(circle, rgba(0, 229, 255, 0.3) 25%, transparent 25%)',
+          background: `radial-gradient(circle, rgba(${accent}, 0.3) 25%, transparent 25%)`,
           cursor: 'pointer',
         };
       }
     }
 
     return styles;
-  }, [lastMove, highlightSquares, checkSquare, selectedSquare, legalMoves, getPiece, showLastMoveHighlight, annotationHighlights, baseGlowStr, mergeGlow]);
+  }, [lastMove, highlightSquares, checkSquare, selectedSquare, legalMoves, getPiece, effectiveShowLastMoveHighlight, annotationHighlights, baseGlowStr, mergeGlow]);
 
   // ─── Render ─────────────────────────────────────────────────────────────────
 
@@ -350,9 +364,9 @@ export function ChessBoard({
           style={{
             ...(boardColorScheme.borderGlow
               ? {
-                  boxShadow: `${boardColorScheme.borderGlow}, inset 0 0 40px 8px rgba(0, 229, 255, 0.06)`,
+                  boxShadow: `${boardColorScheme.borderGlow}, inset 0 0 40px 8px rgba(${accent}, 0.06)`,
                   borderRadius: '4px',
-                  border: '1px solid rgba(0, 229, 255, 0.15)',
+                  border: `1px solid rgba(${accent}, 0.15)`,
                 }
               : {}),
             touchAction: 'none',

@@ -7,6 +7,7 @@ import { useStrictNarration } from '../../hooks/useStrictNarration';
 import { voiceService } from '../../services/voiceService';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { useSettings } from '../../hooks/useSettings';
+import { leadEyeSquareStyle } from '../../hooks/useBoardTheme';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 import { useLocalizedBeats } from '../../services/narrationI18n';
 import type { LessonScript, LessonBeat } from '../../types';
@@ -333,7 +334,7 @@ export function LessonPlayer({ script, onExit, onComplete, onContinueToNext }: L
   if (settled) {
     for (const h of beat.highlights ?? []) {
       if (!revealedSquares.has(h.square)) continue;
-      squareStyles[h.square] = { background: h.color ?? 'rgba(255,214,0,0.88)' };
+      squareStyles[h.square] = leadEyeSquareStyle(h.color ?? 'rgba(255,214,0,0.88)');
     }
   }
 

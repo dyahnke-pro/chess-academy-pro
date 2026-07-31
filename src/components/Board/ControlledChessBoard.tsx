@@ -5,7 +5,7 @@ import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useSettings } from '../../hooks/useSettings';
 import { useBoardGlow } from '../../hooks/useBoardGlow';
-import { BOARD_ARROW_OPTIONS } from '../../hooks/useBoardTheme';
+import { BOARD_ARROW_OPTIONS, leadEyeSquareStyle, boardAccentRgb } from '../../hooks/useBoardTheme';
 import { getBoardColor } from '../../services/boardColorService';
 import { buildPieceRenderer } from '../../services/pieceSetService';
 import { buildPieceGlowFilter } from '../../utils/neonColors';
@@ -225,7 +225,10 @@ export function ControlledChessBoard({
   const { lastMove, checkSquare, selectedSquare, legalMoves, getPiece } = game;
 
   // Board square neon glow from user settings
-  const { baseGlow: baseGlowStr, mergeGlow } = useBoardGlow();
+  const { baseGlow: baseGlowStr, mergeGlow, boardGlowRgb } = useBoardGlow();
+  // The last-move wash / selection / legal-move dots / centre glow are the
+  // user's Settings → Board glow colour, not a hardcoded cyan.
+  const accent = boardAccentRgb(boardGlowRgb);
 
   // Defensive square-validity filter for arrows. react-chessboard computes an
   // arrow's SVG path from its start/end square coordinates; a malformed or
@@ -256,22 +259,26 @@ export function ControlledChessBoard({
 
     const centerSquares = ['e4', 'd4', 'e5', 'd5'];
     for (const sq of centerSquares) {
-      styles[sq] = { ...styles[sq], boxShadow: mergeGlow('inset 0 0 8px 2px rgba(0, 229, 255, 0.08)') };
+      styles[sq] = { ...styles[sq], boxShadow: mergeGlow(`inset 0 0 8px 2px rgba(${accent}, 0.08)`) };
     }
 
     if (effectiveShowLastMoveHighlight) {
       const moveHighlight = lastMove ?? highlightSquares;
       if (moveHighlight) {
-        styles[moveHighlight.from] = { ...styles[moveHighlight.from], background: 'rgba(0, 229, 255, 0.2)', boxShadow: mergeGlow('inset 0 0 12px rgba(0, 229, 255, 0.15)') };
-        styles[moveHighlight.to] = { ...styles[moveHighlight.to], background: 'rgba(0, 229, 255, 0.25)', boxShadow: mergeGlow('inset 0 0 12px rgba(0, 229, 255, 0.2)') };
+        styles[moveHighlight.from] = { ...styles[moveHighlight.from], background: `rgba(${accent}, 0.2)`, boxShadow: mergeGlow(`inset 0 0 12px rgba(${accent}, 0.15)`) };
+        styles[moveHighlight.to] = { ...styles[moveHighlight.to], background: `rgba(${accent}, 0.25)`, boxShadow: mergeGlow(`inset 0 0 12px rgba(${accent}, 0.2)`) };
       }
     }
 
+    // Lead-the-eye markers — same solid fill as every other board (see
+    // leadEyeSquareStyle). Applied after the last-move decoration so the
+    // narrated square isn't a ring over a cyan wash.
     if (annotationHighlights) {
       for (const h of annotationHighlights) {
         styles[h.square] = {
           ...styles[h.square],
-          boxShadow: mergeGlow(`inset 0 0 0 3px ${h.color}`),
+          ...leadEyeSquareStyle(h.color),
+          boxShadow: mergeGlow(),
         };
       }
     }
@@ -285,7 +292,7 @@ export function ControlledChessBoard({
     }
 
     if (selectedSquare) {
-      styles[selectedSquare] = { ...styles[selectedSquare], background: 'rgba(0, 229, 255, 0.35)', boxShadow: mergeGlow('inset 0 0 8px rgba(0, 229, 255, 0.4)') };
+      styles[selectedSquare] = { ...styles[selectedSquare], background: `rgba(${accent}, 0.35)`, boxShadow: mergeGlow(`inset 0 0 8px rgba(${accent}, 0.4)`) };
     }
 
     if (effectiveShowLegalMoves) {
@@ -295,13 +302,13 @@ export function ControlledChessBoard({
           styles[sq] = {
             ...styles[sq],
             background:
-              'radial-gradient(circle, rgba(0,0,0,0) 60%, rgba(0, 229, 255, 0.3) 60%, rgba(0, 229, 255, 0.3) 80%, rgba(0,0,0,0) 80%)',
+              `radial-gradient(circle, rgba(0,0,0,0) 60%, rgba(${accent}, 0.3) 60%, rgba(${accent}, 0.3) 80%, rgba(0,0,0,0) 80%)`,
             cursor: 'pointer',
           };
         } else {
           styles[sq] = {
             ...styles[sq],
-            background: 'radial-gradient(circle, rgba(0, 229, 255, 0.3) 25%, transparent 25%)',
+            background: `radial-gradient(circle, rgba(${accent}, 0.3) 25%, transparent 25%)`,
             cursor: 'pointer',
           };
         }
@@ -342,9 +349,9 @@ export function ControlledChessBoard({
           data-testid="board-wrapper"
           style={boardColorScheme.borderGlow
             ? {
-                boxShadow: `${boardColorScheme.borderGlow}, inset 0 0 40px 8px rgba(0, 229, 255, 0.06)`,
+                boxShadow: `${boardColorScheme.borderGlow}, inset 0 0 40px 8px rgba(${accent}, 0.06)`,
                 borderRadius: '4px',
-                border: '1px solid rgba(0, 229, 255, 0.15)',
+                border: `1px solid rgba(${accent}, 0.15)`,
               }
             : undefined
           }
