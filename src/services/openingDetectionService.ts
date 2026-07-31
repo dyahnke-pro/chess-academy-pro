@@ -361,6 +361,19 @@ const RESOLVER_MIN_FUZZY_LEN = 4;
  *  that DO exist in the DB. Pre-flight aliases the input before
  *  attempting match against the DB. */
 const NAME_ALIASES: Record<string, string> = {
+  // 2026-07-31 sweep — asks that resolved to the WRONG opening (or to
+  // nothing) in the tier-coverage probe. Each maps to the real DB row.
+  'jobava london': 'Rapport-Jobava System',
+  'jobava': 'Rapport-Jobava System',
+  'jobava attack': 'Rapport-Jobava System',
+  'rapport-jobava': 'Rapport-Jobava System',
+  'budapest gambit': 'Indian Defense: Budapest Defense, Alekhine Variation',
+  'budapest': 'Indian Defense: Budapest Defense, Alekhine Variation',
+  'budapest defense': 'Indian Defense: Budapest Defense, Alekhine Variation',
+  // Unaliased, "closed sicilian" fuzzy-matched an ENGLISH reversed line.
+  'closed sicilian': 'Sicilian Defense: Closed',
+  'the closed sicilian': 'Sicilian Defense: Closed',
+  'sicilian closed': 'Sicilian Defense: Closed',
   // "the alapin" means the anti-Sicilian 2.c3 to essentially everyone — but
   // fuzzy resolution preferred "Ruy Lopez: Alapin Defense" (the obscure
   // 3...Bb4 sideline named after the same man), so "teach me the alapin"
@@ -1574,11 +1587,26 @@ export function inferStudentSideFromName(name: string): 'white' | 'black' {
   // PLAY it — "Sicilian Defense: Grand Prix Attack" taught the BLACK side
   // because the family name carries "Defense" (David 2026-07-31: "Grand Prix
   // should be white").
+  // Named WHITE systems that live inside a "Defense" family name — the side
+  // whose STRUCTURE defines the game is the teach-side default (David
+  // 2026-07-31: "we know alapin is a white opening because white's structure
+  // defines the game… that rule can be applied across openings"). Checked
+  // BEFORE the defense→black rule, so "Sicilian Defense: Alapin Variation"
+  // teaches White.
   const whiteSystemKeywords = [
     'grand prix', 'smith-morra', 'smith morra', 'alapin variation',
-    'rossolimo', 'moscow variation', 'closed sicilian', "king's indian attack",
+    'rossolimo', 'moscow variation', 'closed sicilian', 'defense: closed',
+    "king's indian attack",
     'austrian attack', '150 attack', 'fantasy variation', 'advance variation',
     'exchange variation',
+    // 2026-07-31 sweep: every one of these is a White system/attack whose
+    // canonical DB name can carry a "…Defense" suffix from the reply.
+    'torre attack', 'veresov', 'jobava', 'trompowsky', 'colle',
+    'stonewall attack', 'london system', 'catalan', 'panov', 'tarrasch attack',
+    'yugoslav attack', 'english attack', 'maroczy', 'canal attack',
+    'bishop opening', "bishop's opening", 'evans gambit', 'danish gambit',
+    'goring gambit', 'göring gambit', 'scotch gambit', 'king\'s gambit',
+    'wing gambit', 'morra', 'sokolsky', 'stoltz attack', 'barmen',
   ];
   for (const kw of whiteSystemKeywords) if (lower.includes(kw)) return 'white';
   if (/\bdefen[cs]e\b/.test(lower)) return 'black';

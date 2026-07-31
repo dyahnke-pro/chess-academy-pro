@@ -116,9 +116,18 @@ function nameScore(query: string, key: string): number {
   return shared.length / Math.min(kTokens.length, qTokens.size);
 }
 
-/** Does this bake's spine cover the runtime spine ply-for-ply? */
+/** Is this bake built for EXACTLY the line the runtime is about to walk?
+ *
+ *  Length equality is the load-bearing part. Every bake is generated against
+ *  `print-spine` output, so a bake for THIS opening always matches the runtime
+ *  spine exactly — while a merely PREFIX-matching bake belongs to a different
+ *  opening that happens to share the opening moves. The 2026-07-31 sweep
+ *  caught "Closed Sicilian" (e4 c5 Nc3, heading for g3) being served the GRAND
+ *  PRIX bake (e4 c5 Nc3 f4 …): the first three moves are identical, the fuzzy
+ *  name score cleared 0.6 on "sicilian", and the student would have been
+ *  taught the f4 storm on a line that never plays f4. Prefix ≠ same opening. */
 function spineCovers(entry: BakedNarration, spineMoves: string[]): boolean {
-  if (entry.spine.length < spineMoves.length) return false;
+  if (entry.spine.length !== spineMoves.length) return false;
   if (entry.ideas.length !== entry.spine.length) return false;
   for (let i = 0; i < spineMoves.length; i += 1) {
     if (entry.spine[i] !== spineMoves[i]) return false;
