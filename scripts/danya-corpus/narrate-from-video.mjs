@@ -106,6 +106,18 @@ const MOVE_NUM = /\b\d{1,2}(\.|…|\.\.\.)(?=[NBRQKO]|[a-h][1-8x])/;
  *  ("f5 is the Latvian Gambit" narrated on Nf3's ply) — every board claim
  *  was true, so only an own-move check catches the desync: the ply's SAN
  *  (or its destination square / "castle") must appear in the text. */
+/** SIDE VOICE: entry i narrates the move made by plies[i].movedBy. When that
+ *  is the OPPONENT, the text must not claim the move as ours — the 2026-07-31
+ *  Stafford bake opened a BLACK repertoire with "We open with e4". Only the
+ *  claim-the-move pattern is flagged (a later "we answer…" clause is fine). */
+function claimsOpponentMove(text, san, movedBy, studentSide) {
+  if (movedBy === studentSide) return false;
+  const bare = san.replace(/[+#]/g, '');
+  const esc = bare.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const re = new RegExp(`\\b(we|our)\\b[^.!?]{0,60}\\b${esc}\\b|\\b${esc}\\b[^.!?]{0,20}\\b(is|are)\\s+our\\b`, 'i');
+  return re.test(text);
+}
+
 function mentionsOwnMove(text, san) {
   const bare = san.replace(/[+#]/g, '');
   if (/^O-O/.test(bare)) return /\bcastl/i.test(text) || text.includes(bare);
@@ -172,6 +184,22 @@ function boardClaimProblem(text, fen) {
     if (p.type !== PIECE_CODE[word.toLowerCase()]) return `claims "${raw}" but ${sq} holds a ${Object.entries(PIECE_CODE).find(([, v]) => v === p.type)?.[0]}`;
   }
   return null;
+}
+
+/** Compact "what is ACTUALLY on the board" listing for a FEN. Handed to the
+ *  repair call: naming a false square is the #1 gate trip, and the model
+ *  cannot check a FEN string by eye — it can read a square list. */
+function piecePlacement(fen) {
+  const c = new Chess(fen);
+  const names = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+  const white = [], black = [];
+  for (const file of 'abcdefgh') for (const rank of '12345678') {
+    const sq = `${file}${rank}`;
+    const pc = c.get(sq);
+    if (!pc) continue;
+    (pc.color === 'w' ? white : black).push(`${names[pc.type]} ${sq}`);
+  }
+  return `WHITE: ${white.join(', ')}\nBLACK: ${black.join(', ')}`;
 }
 
 async function callModel(system, user, maxTokens) {
@@ -427,7 +455,7 @@ ONE CONTINUOUS STORY (the teacher's videos are a NARRATIVE, not a move list — 
 - NEVER re-introduce the opening mid-line, never reset context, never write an entry that stands alone.
 
 THE HOUSE VOICE (this is the bar — flat textbook prose is a FAILURE):
-- Teach the IDEA, not just the move. A student should finish each beat understanding WHY, not just WHAT. "Nc3 does two jobs — it braces e4 so Black can never strike there for free, and it keeps the king-knight home, so White still gets to choose which attacking setup to build" beats "Nc3 develops and defends e4." (These are STYLE illustrations — never copy their sentences into your output.)
+- Teach the IDEA, not just the move. A student should finish each beat understanding WHY, not just WHAT: name the concrete job the move does in THIS position (the square it takes away, the piece it frees, the plan it enables) rather than restating that it develops. Never reuse a sentence pattern from these instructions — earlier bakes copied an illustrative sentence out of this prompt verbatim, complete with a claim that was false on their board.
 - Concept-first and conversational: "Here's the thing about this line…", "notice that…", "the point is…". Warmth is welcome; hollow hype is not.
 - The opening turns on ONE central idea — find it in the transcript and teach toward it, so the beats build an argument instead of listing facts.
 - Reach for the clarifying detail the teacher reaches for — the square that matters, the piece that's secretly the star, the plan three moves away.
@@ -516,14 +544,21 @@ FOR THIS CALL: return ONLY {"ideas":[...]} for moves ${start + 1}-${start + slic
       if (idea.text && !mentionsOwnMove(idea.text, plies[i].san)) {
         problems.push(`ply ${i + 1} text: does not speak about its OWN move ${plies[i].san} (misaligned narration)`);
       }
+      if (idea.text && claimsOpponentMove(idea.text, plies[i].san, plies[i].movedBy, spine.studentSide ?? 'white')) {
+        problems.push(`ply ${i + 1} text: claims the OPPONENT's move ${plies[i].san} as ours — the student plays ${spine.studentSide ?? 'white'}, so ${plies[i].movedBy} played it`);
+      }
     });
     return problems;
   };
   // REPAIR LOOP: a failed ply goes back to the model with the EXACT violation
-  // (which claim lied, on which FEN) — up to 2 rounds; a blind repair that
-  // doesn't know which sentence lied just fails the same gate again.
+  // (which claim lied, on which FEN) — a blind repair that doesn't know which
+  // sentence lied just fails the same gate again. 5 rounds because the repair
+  // OSCILLATES on hard plies (2026-07-31 batch: round 1 fixes the false claim
+  // but drops the move name, round 2 restores the name and re-invents a
+  // claim); it converges once it is given the actual piece placement AND the
+  // exact token the alignment check wants.
   let problems = runGates();
-  for (let round = 1; round <= 2 && problems.length > 0; round += 1) {
+  for (let round = 1; round <= 5 && problems.length > 0; round += 1) {
     const failing = [...new Set(problems.map((x) => x.match(/^ply (\d+)/)?.[1]).filter(Boolean).map(Number))];
     const introFailing = problems.some((x) => x.startsWith('intro'));
     const outroFailing = problems.some((x) => x.startsWith('outro'));
@@ -534,10 +569,16 @@ FOR THIS CALL: return ONLY {"ideas":[...]} for moves ${start + 1}-${start + slic
       ...(outroFailing ? [`the OUTRO — rejected because: ${problems.filter((x) => x.startsWith('outro')).join('; ')}`] : []),
       ...failing.map((n) => {
         const i = n - 1;
-        return `move ${n} (${plies[i].san}) — FEN after: ${plies[i].fen} — rejected because: ${problems.filter((x) => x.startsWith(`ply ${n} `)).join('; ')}`;
+        const bare = plies[i].san.replace(/[+#]/g, '');
+        const dest = bare.match(/([a-h][1-8])(?:=[NBRQ])?$/)?.[1];
+        const token = /^O-O/.test(bare) ? `"${bare}" (or the word "castles")` : `"${bare}"${dest ? ` (or at minimum the square "${dest}")` : ''}`;
+        return `move ${n} (${plies[i].san}) — rejected because: ${problems.filter((x) => x.startsWith(`ply ${n} `)).join('; ')}
+  MUST CONTAIN the token ${token}.
+  THE BOARD AFTER THIS MOVE (name NO square that contradicts this):
+  ${piecePlacement(plies[i].fen).replace(/\n/g, '\n  ')}`;
       }),
     ].join('\n');
-    const fix = await callModel(system, `${user}\n\nREPAIR CALL: these narration units were REJECTED for the exact reasons listed. Rewrite ONLY the listed units. Never reuse 7 consecutive words from the transcript; each move entry MUST name its own move's SAN; every piece/square claim must be TRUE on the given FEN (simplest fix: drop the false claim); shortText ≤18 words.\n${detail}\nReturn JSON with ${introFailing ? '"intro" and "shortIntro", ' : ''}${outroFailing ? '"outro", ' : ''}${failing.length > 0 ? `and "ideas" with EXACTLY ${failing.length} entries in the order listed` : 'nothing else'}.`, 4096);
+    const fix = await callModel(system, `${user}\n\nREPAIR CALL: these narration units were REJECTED for the exact reasons listed. Rewrite ONLY the listed units. HARD RULES, all of which must hold AT ONCE (past repairs fixed one and broke another): (1) the entry MUST contain the required token shown for it; (2) EVERY piece-on-square claim must appear in that move's board listing below — if you are unsure, name no square at all and teach the move's PURPOSE instead; (3) never reuse 7 consecutive words from the transcript; (4) shortText ≤18 words.\n${detail}\nReturn JSON with ${introFailing ? '"intro" and "shortIntro", ' : ''}${outroFailing ? '"outro", ' : ''}${failing.length > 0 ? `and "ideas" with EXACTLY ${failing.length} entries in the order listed` : 'nothing else'}.`, 4096);
     if (introFailing && fix.intro) { out.intro = fix.intro; if (fix.shortIntro) out.shortIntro = fix.shortIntro; }
     if (outroFailing && fix.outro) out.outro = fix.outro;
     const fixed = Array.isArray(fix.ideas) ? fix.ideas : [];
