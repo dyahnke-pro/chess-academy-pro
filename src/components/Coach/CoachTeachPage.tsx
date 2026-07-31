@@ -17,7 +17,46 @@ import { Chess } from 'chess.js';
 import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, X, Check, MessageCircle, Zap, Undo2, RotateCcw, Volume2 } from 'lucide-react';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessBoard } from '../Board/ChessBoard';
-import { NarrationArrowOverlay } from './NarrationArrowOverlay';
+import type { NarrationArrow, NarrationHighlight } from '../../types/walkthroughTree';
+
+// Walkthrough arrows/highlights render through the SAME react-chessboard
+// pipeline the opening tab's LessonPlayer uses — identical palette, identical
+// tapered arrows (David 2026-07-31, third request: "the arrows on the coach
+// tab need to MATCH the opening tab"). The old NarrationArrowOverlay drew its
+// own chunky SVG lines and never looked like the opening tab.
+const WALKTHROUGH_ARROW_PALETTE: Record<string, string> = {
+  // LessonPlayer TRAIL — the played move.
+  orange: 'rgba(255,170,60,0.6)',
+  // LessonPlayer vision default — moves the narration names.
+  green: 'rgba(40,185,95,0.92)',
+  red: 'rgba(239,68,68,0.85)',
+  blue: 'rgba(59,130,246,0.85)',
+  yellow: 'rgba(234,179,8,0.85)',
+};
+function walkthroughBoardArrows(
+  arrows: NarrationArrow[],
+): Array<{ startSquare: string; endSquare: string; color: string }> {
+  return arrows.map((a) => ({
+    startSquare: a.from,
+    endSquare: a.to,
+    color: WALKTHROUGH_ARROW_PALETTE[a.color ?? 'green'] ?? WALKTHROUGH_ARROW_PALETTE.green,
+  }));
+}
+// LessonPlayer highlight default (yellow key square).
+const WALKTHROUGH_HIGHLIGHT_PALETTE: Record<string, string> = {
+  yellow: 'rgba(255,214,0,0.88)',
+  green: 'rgba(40,185,95,0.55)',
+  red: 'rgba(239,68,68,0.55)',
+  blue: 'rgba(59,130,246,0.55)',
+};
+function walkthroughBoardHighlights(
+  highlights: NarrationHighlight[],
+): Array<{ square: string; color: string }> {
+  return highlights.map((h) => ({
+    square: h.square,
+    color: WALKTHROUGH_HIGHLIGHT_PALETTE[h.color ?? 'yellow'] ?? WALKTHROUGH_HIGHLIGHT_PALETTE.yellow,
+  }));
+}
 import { AnalysisToggles } from '../Board/AnalysisToggles';
 import { useChessGame, type MoveResult } from '../../hooks/useChessGame';
 import { usePositionNarration } from '../../hooks/usePositionNarration';
@@ -5662,8 +5701,6 @@ export function CoachTeachPage(): JSX.Element {
         <div className="px-2 py-1 flex justify-center w-full">
           <div className="w-full md:max-w-[420px]">
             {walkthrough.isActive ? (
-              // Wrap the board in a relative container so the
-              // NarrationArrowOverlay sits absolutely on top.
               // In drill mode, the board becomes interactive — the
               // student plays moves on it and the hook routes them
               // through attemptDrillMove. Otherwise the board is
@@ -5718,6 +5755,8 @@ export function CoachTeachPage(): JSX.Element {
                         showEvalBar={false}
                         showVoiceMic={false}
                         showLastMoveHighlight
+                        arrows={walkthroughBoardArrows(walkthrough.narrationArrows)}
+                        annotationHighlights={walkthroughBoardHighlights(walkthrough.narrationHighlights)}
                         onMove={
                           isFindMoveQuiz
                             ? (move) => {
@@ -5729,11 +5768,6 @@ export function CoachTeachPage(): JSX.Element {
                     );
                   })()
                 )}
-                <NarrationArrowOverlay
-                  arrows={walkthrough.narrationArrows}
-                  highlights={walkthrough.narrationHighlights}
-                  orientation={playerColor}
-                />
               </div>
             ) : (
               <ConsistentChessboard

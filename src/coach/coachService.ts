@@ -43,7 +43,6 @@ import { consumeCoachActionOffer, translateToEnglish } from '../services/coachAp
 import type { CoachActionOffer } from '../services/coachApi';
 import { detectLanguage } from '../utils/detectLanguage';
 import { deepseekProvider } from './providers/deepseek';
-import { anthropicProvider } from './providers/anthropic';
 import { COACH_TOOLS, getTool, getToolDefinitions } from './tools/registry';
 import type {
   AssembledEnvelope,
@@ -181,11 +180,14 @@ function resolveProviderName(): ProviderName {
     ? process.env.COACH_PROVIDER
     : undefined;
   const raw = (fromVite ?? fromProcess ?? 'deepseek').toLowerCase();
-  return raw === 'anthropic' ? 'anthropic' : 'deepseek';
+  // Anthropic removed 2026-07-31 — DeepSeek is the only provider; a
+  // legacy 'anthropic' env value is coerced.
+  void raw;
+  return 'deepseek';
 }
 
-function pickProvider(name: ProviderName): Provider {
-  return name === 'anthropic' ? anthropicProvider : deepseekProvider;
+function pickProvider(_name: ProviderName): Provider {
+  return deepseekProvider;
 }
 
 // coachSurfaceToRoute + the question-intent detectors + buildQuestionGrounding

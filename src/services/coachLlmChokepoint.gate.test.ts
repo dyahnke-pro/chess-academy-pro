@@ -74,21 +74,22 @@ describe('LLM chokepoint gate — every model wire funnels through coachApi.ts',
 
   it('every network primitive in coachApi.ts is leak-audited (emits >= SDK instantiations)', () => {
     const src = readFileSync(COACH_API, 'utf8');
-    const instantiations =
-      (src.match(/\bnew\s+OpenAI\s*\(/g)?.length ?? 0) +
-      (src.match(/\bnew\s+Anthropic\s*\(/g)?.length ?? 0);
+    // Anthropic removed 2026-07-31 — DeepSeek (OpenAI SDK) is the only
+    // provider, leaving 3 primitives (callDeepSeek, callDeepSeekStream,
+    // callDeepseekWithTool).
+    const instantiations = src.match(/\bnew\s+OpenAI\s*\(/g)?.length ?? 0;
     // Count CALL sites only — exclude the `function emitCoachLlmCallAudit(`
     // declaration so removing a primitive's emit (while keeping the def) still
     // trips the gate.
     const emits = (src.match(/emitCoachLlmCallAudit\s*\(/g)?.length ?? 0) -
       (src.match(/function\s+emitCoachLlmCallAudit\s*\(/g)?.length ?? 0);
-    // The 6 primitives each instantiate once and each emit once. If someone
-    // adds a 7th primitive (a new instantiation) without an emit, this trips.
+    // Each primitive instantiates once and emits once. If someone adds a
+    // new primitive (a new instantiation) without an emit, this trips.
     expect(
       emits,
       `Found ${instantiations} SDK instantiation(s) but only ${emits} emitCoachLlmCallAudit() call(s). Every network primitive must call emitCoachLlmCallAudit() so the leak audit stays exhaustive by construction.`,
     ).toBeGreaterThanOrEqual(instantiations);
-    // Sanity floor — the 6 known primitives.
-    expect(instantiations).toBeGreaterThanOrEqual(6);
+    // Sanity floor — the 3 known DeepSeek primitives.
+    expect(instantiations).toBeGreaterThanOrEqual(3);
   });
 });

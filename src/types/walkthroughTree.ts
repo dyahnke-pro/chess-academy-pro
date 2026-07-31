@@ -108,8 +108,10 @@ export interface NarrationArrow {
   to: string;
   /** Arrow color. Default 'green'. Use 'red' for warnings ("don't
    *  play this"), 'blue' for plans ("future move"), 'yellow' for
-   *  attention ("look here"). */
-  color?: 'green' | 'red' | 'blue' | 'yellow';
+   *  attention ("look here"), 'orange' for the played-move trail
+   *  (the opening tab's LessonPlayer trail color — David 2026-07-31:
+   *  coach-tab arrows must match the opening tab). */
+  color?: 'green' | 'red' | 'blue' | 'yellow' | 'orange';
 }
 
 /** A square highlight — fills the square with a translucent color

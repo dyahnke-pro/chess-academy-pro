@@ -709,7 +709,6 @@ function ProfileTab({ profile, setProfile }: TabProps): JSX.Element {
 function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
   const [apiKey, setApiKey] = useState('');
   const [showKey, setShowKey] = useState(false);
-  const [provider, setProvider] = useState<'deepseek' | 'anthropic'>(profile.preferences.aiProvider);
   const [budgetCap, setBudgetCap] = useState<number | null>(profile.preferences.monthlyBudgetCap);
   const [commentaryModel, setCommentaryModel] = useState(profile.preferences.preferredModel.commentary);
   const [analysisModel, setAnalysisModel] = useState(profile.preferences.preferredModel.analysis);
@@ -717,38 +716,14 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
   const [status, setStatus] = useState<string | null>(null);
   const [keySaved, setKeySaved] = useState(false);
 
-  const isAnthropic = provider === 'anthropic';
-  const hasExistingKey = isAnthropic
-    ? Boolean(profile.preferences.anthropicApiKeyEncrypted)
-    : Boolean(profile.preferences.apiKeyEncrypted);
+  // Anthropic removed 2026-07-31 (David: "Remove Anthropic key from code so
+  // this doesn't happen again") — DeepSeek is the only provider. No picker.
+  const hasExistingKey = Boolean(profile.preferences.apiKeyEncrypted);
 
-  const modelOptions = isAnthropic
-    ? [
-        { value: 'claude-haiku-4-5-20251001', label: 'Haiku (fastest)' },
-        { value: 'claude-sonnet-4-6', label: 'Sonnet (balanced)' },
-        { value: 'claude-opus-4-6', label: 'Opus (best)' },
-      ]
-    : [
-        { value: 'deepseek-v4-flash', label: 'DeepSeek V4 Flash (fast)' },
-        { value: 'deepseek-v4-pro', label: 'DeepSeek V4 Pro (deep)' },
-      ];
-
-  const handleProviderChange = async (newProvider: 'deepseek' | 'anthropic'): Promise<void> => {
-    setProvider(newProvider);
-    const updatedPrefs = { ...profile.preferences, aiProvider: newProvider };
-    await db.profiles.update(profile.id, { preferences: updatedPrefs });
-    setProfile({ ...profile, preferences: updatedPrefs });
-    // R7 (audit): do NOT clear the input on provider switch. The
-    // encrypted key for each provider is stored independently
-    // (`apiKey{Encrypted,Iv}` for DeepSeek, `anthropicApiKey{...}` for
-    // Anthropic), so nothing is lost — and silently clearing the input
-    // hid that fact. The label below already shows "(saved)" when a
-    // key is present for the active provider; the placeholder shows
-    // "••••••••" so the user can tell at a glance. If they want to
-    // replace the key, typing into the input still does the right
-    // thing.
-    setShowKey(false);
-  };
+  const modelOptions = [
+    { value: 'deepseek-v4-flash', label: 'DeepSeek V4 Flash (fast)' },
+    { value: 'deepseek-v4-pro', label: 'DeepSeek V4 Pro (deep)' },
+  ];
 
   const handleSaveApiKey = async (): Promise<void> => {
     if (!apiKey.trim()) return;
@@ -756,9 +731,7 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
       const { encrypted, iv } = await encryptApiKey(apiKey.trim());
       // Always write aiProvider atomically with the key so the coach never reads
       // a mismatched provider/key pair after a rapid toggle-then-save sequence.
-      const updatedPrefs = isAnthropic
-        ? { ...profile.preferences, aiProvider: 'anthropic' as const, anthropicApiKeyEncrypted: encrypted, anthropicApiKeyIv: iv }
-        : { ...profile.preferences, aiProvider: 'deepseek' as const, apiKeyEncrypted: encrypted, apiKeyIv: iv };
+      const updatedPrefs = { ...profile.preferences, aiProvider: 'deepseek' as const, apiKeyEncrypted: encrypted, apiKeyIv: iv };
       await db.profiles.update(profile.id, { preferences: updatedPrefs });
       setProfile({ ...profile, preferences: updatedPrefs });
       setApiKey('');
@@ -808,7 +781,7 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
   // re-arrangement.
   // Live summaries on each modal row so the user sees the actual
   // current selection without having to open the modal. WO-AUTOSAVE-01.
-  const aiSummary = `${isAnthropic ? 'Anthropic' : 'DeepSeek'}${hasExistingKey ? ' · key saved' : ''}`;
+  const aiSummary = `DeepSeek${hasExistingKey ? ' · key saved' : ''}`;
   const coachNarrationLabels: Record<string, string> = {
     silent: 'Silent',
     brief: 'Brief',
@@ -830,36 +803,14 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
         <div className="space-y-4">
           <div>
             <label className="text-xs font-medium block mb-1" style={{ color: 'var(--color-text-muted)' }}>
-              AI Provider
-            </label>
-            <div className="flex rounded-lg border overflow-hidden" style={{ borderColor: 'var(--color-border)' }} data-testid="provider-toggle">
-              {(['deepseek', 'anthropic'] as const).map((p) => (
-                <button
-                  key={p}
-                  onClick={() => void handleProviderChange(p)}
-                  className="flex-1 px-4 py-2 text-sm font-medium transition-colors"
-                  style={{
-                    background: provider === p ? 'var(--color-accent)' : 'var(--color-bg)',
-                    color: provider === p ? 'var(--color-bg)' : 'var(--color-text)',
-                  }}
-                  data-testid={`provider-${p}`}
-                >
-                  {p === 'deepseek' ? 'DeepSeek' : 'Anthropic'}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <label className="text-xs font-medium block mb-1" style={{ color: 'var(--color-text-muted)' }}>
-              {isAnthropic ? 'Anthropic' : 'DeepSeek'} API Key {hasExistingKey && '(saved)'}
+              DeepSeek API Key {hasExistingKey && '(saved)'}
             </label>
             <div className="flex gap-2">
               <input
                 type={showKey ? 'text' : 'password'}
                 value={apiKey}
                 onChange={(e) => setApiKey(e.target.value)}
-                placeholder={hasExistingKey ? '••••••••' : (isAnthropic ? 'sk-ant-...' : 'sk-...')}
+                placeholder={hasExistingKey ? '••••••••' : 'sk-...'}
                 className="flex-1 px-3 py-2 rounded-lg border text-sm"
                 style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
                 data-testid="api-key-input"
@@ -881,7 +832,7 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
               </button>
             </div>
             <p className="text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>
-              {isAnthropic ? 'Get a key at console.anthropic.com' : 'Get a key at platform.deepseek.com'}
+              Get a key at platform.deepseek.com
             </p>
           </div>
 

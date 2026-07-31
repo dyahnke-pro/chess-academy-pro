@@ -24,7 +24,7 @@
  */
 import { Chess, type Move } from 'chess.js';
 import puzzleData from '../data/puzzles.json';
-import { computeLeadEyeArrows, type LineMove } from './arrowEngine';
+import { extractMentionedSquares, MAX_CANDIDATE_HIGHLIGHTS, type LineMove } from './arrowEngine';
 import { getCoachChatResponse, getCoachStructuredResponse } from './coachApi';
 import {
   validateMoveLegality,
@@ -222,7 +222,7 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 /** Bump to invalidate every cached walkthrough tree on next read. The corpus
  *  teaching splice happens at GENERATION time, so trees generated before it
  *  would keep speaking corpus-free narration forever off the warm cache. */
-const WALKTHROUGH_GEN_REV = '2026-07-31-flip-registers';
+const WALKTHROUGH_GEN_REV = '2026-07-31-opening-tab-arrow-grammar';
 
 export async function getCachedOpening(
   name: string,
@@ -804,6 +804,11 @@ export function repairNarrationArrows(tree: WalkthroughTree): number {
           const before = seg.arrows.length;
           seg.arrows = seg.arrows.filter((a) => {
             if (a.from === a.to) return false;
+            // The ORANGE played-move trail deliberately ends on the move's
+            // destination — that's the opening-tab trail arrow (David
+            // 2026-07-31). Keep it; the redundancy rule below is for
+            // vision arrows only.
+            if (a.color === 'orange') return true;
             // Drop arrows where the END is the move's destination
             // (showing where the piece just moved TO). Note: arrows
             // FROM the destination toward another square (e.g.
@@ -1276,16 +1281,9 @@ async function generateOpeningFromDbNarration(
       to: mv.to,
     });
   }
-  // CODE-COMPUTED lead-the-eye arrows for the spine (G0 — no LLM
-  // chooses board geometry). One FromTo[] per spine ply, by index.
-  const spineArrows = computeLeadEyeArrows(
-    positions.map((p) => ({
-      from: p.from,
-      to: p.to,
-      color: p.movedBy === 'white' ? 'w' : 'b',
-      fen: p.fen,
-    })),
-  );
+  // (Heuristic threat/look-ahead arrows removed 2026-07-31 — walkthrough
+  // segments now use the opening tab's grammar: orange played-move trail +
+  // green mention arrows + yellow named squares. See the node build below.)
 
   // Tour mode caps branch extensions tighter so the lesson stays
   // snappy. Full mode runs each branch to the END of the Lichess DB
@@ -1523,8 +1521,8 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
   const terminusFen = positions[positions.length - 1].fen;
   const branchChildren: ChildWrap[] = branches.map((b, idx) => {
     // CODE-COMPUTED arrows for [b.san, ...extensionMoves], replayed
-    // from the spine terminus. branchArrows[0] = b.san's arrow;
-    // branchArrows[1 + j] = extensionMoves[j]'s arrow.
+    // from the spine terminus. branchSeq[0] = b.san's replayed move;
+    // branchSeq[1 + j] = extensionMoves[j]'s.
     const branchSeq: LineMove[] = [];
     const bc = new Chess(terminusFen);
     for (const san of [b.san, ...b.extensionMoves]) {
@@ -1535,7 +1533,6 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
         break; // shouldn't happen (DB-validated), but never throw mid-build
       }
     }
-    const branchArrows = computeLeadEyeArrows(branchSeq);
     // The branch's first move belongs to the side whose turn it is
     // after the canonical's last ply. Position[i].ply = i, so after
     // the last spine move the next ply is positions.length (odd =
@@ -1573,8 +1570,6 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
         typeof ideaEntry === 'object' && ideaEntry?.shortText?.trim()
           ? ideaEntry.shortText.trim()
           : undefined;
-      // Code-computed: branchArrows[0] is b.san, so extension j is 1+j.
-      const arrows = branchArrows[j + 1] ?? [];
       const node: WalkthroughTreeNode = {
         san: extSan,
         movedBy: extMovedBy,
@@ -1582,8 +1577,20 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
         children: extChildren,
       };
       if (shortText) node.shortIdea = shortText;
-      if (arrows.length > 0) {
-        const segment: NarrationSegmentType = { text, arrows };
+      // Opening-tab grammar (see the spine build below): orange trail on
+      // the played move + green mention arrows. branchSeq[1 + j] is the
+      // j-th extension move's replayed from/to/fen.
+      const extMove = branchSeq[j + 1];
+      if (extMove) {
+        const segment: NarrationSegmentType = {
+          text,
+          arrows: [
+            { from: extMove.from, to: extMove.to, color: 'orange' },
+            ...mentionedMoveArrows(text, extMove.fen, [{ from: extMove.from, to: extMove.to }]).map(
+              (a) => ({ from: a.from, to: a.to, color: 'green' as const }),
+            ),
+          ],
+        };
         if (shortText) segment.shortText = shortText;
         node.narration = [segment];
       }
@@ -1597,9 +1604,17 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       children: extChildren,
     };
     if (shortTeaser) branchNode.shortIdea = shortTeaser;
-    const branchEntryArrows = branchArrows[0] ?? [];
-    if (branchEntryArrows.length > 0) {
-      const segment: NarrationSegmentType = { text: teaser, arrows: branchEntryArrows };
+    const branchMove = branchSeq[0];
+    if (branchMove) {
+      const segment: NarrationSegmentType = {
+        text: teaser,
+        arrows: [
+          { from: branchMove.from, to: branchMove.to, color: 'orange' },
+          ...mentionedMoveArrows(teaser, branchMove.fen, [{ from: branchMove.from, to: branchMove.to }]).map(
+            (a) => ({ from: a.from, to: a.to, color: 'green' as const }),
+          ),
+        ],
+      };
       if (shortTeaser) segment.shortText = shortTeaser;
       branchNode.narration = [segment];
     }
@@ -1680,8 +1695,6 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       typeof ideaEntry === 'object' && ideaEntry?.shortText?.trim()
         ? ideaEntry.shortText.trim()
         : undefined;
-    // Code-computed lead-the-eye arrows for this ply (G0 — not the LLM).
-    const arrows = spineArrows[i] ?? [];
     const node: WalkthroughTreeNode = {
       san: p.san,
       movedBy: p.movedBy,
@@ -1695,18 +1708,34 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       node.ideaFlipped = flippedIdea.text.trim();
       if (flippedIdea.shortText?.trim()) node.shortIdeaFlipped = flippedIdea.shortText.trim();
     }
-    const mentionArrows = mentionedMoveArrows(text, p.fen, [
-      { from: p.from, to: p.to },
-      ...arrows.map((a) => ({ from: a.from, to: a.to })),
-    ]);
-    const segmentArrows = [...arrows, ...mentionArrows];
-    if (segmentArrows.length > 0) {
-      const segment: NarrationSegmentType = { text, arrows: segmentArrows };
-      if (shortText) segment.shortText = shortText;
-      if (node.ideaFlipped) segment.textFlipped = node.ideaFlipped;
-      if (node.shortIdeaFlipped) segment.shortTextFlipped = node.shortIdeaFlipped;
-      node.narration = [segment];
+    // THE OPENING-TAB ARROW GRAMMAR (David 2026-07-31, third request —
+    // "the arrows on the coach tab need to MATCH the opening tab"):
+    // ORANGE trail on the played move (LessonPlayer's TRAIL), GREEN vision
+    // arrows ONLY for moves the narration actually NAMES (mentionedMoveArrows
+    // — the same helper the opening tab uses), YELLOW highlights on squares
+    // the narration points at. The old threat/look-ahead heuristics
+    // (computeLeadEyeArrows) are GONE from walkthrough segments — they drew
+    // arrows at squares the voice never talked about, which is exactly the
+    // "wrong arrows" David kept reporting.
+    const segmentArrows: NarrationSegmentType['arrows'] = [
+      { from: p.from, to: p.to, color: 'orange' },
+      ...mentionedMoveArrows(text, p.fen, [{ from: p.from, to: p.to }]).map((a) => ({
+        from: a.from,
+        to: a.to,
+        color: 'green' as const,
+      })),
+    ];
+    const namedSquares = extractMentionedSquares(text)
+      .filter((sq) => sq !== p.to && sq !== p.from)
+      .slice(0, MAX_CANDIDATE_HIGHLIGHTS);
+    const segment: NarrationSegmentType = { text, arrows: segmentArrows };
+    if (namedSquares.length > 0) {
+      segment.highlights = namedSquares.map((square) => ({ square, color: 'yellow' as const }));
     }
+    if (shortText) segment.shortText = shortText;
+    if (node.ideaFlipped) segment.textFlipped = node.ideaFlipped;
+    if (node.shortIdeaFlipped) segment.shortTextFlipped = node.shortIdeaFlipped;
+    node.narration = [segment];
     nextChildren = [{ node }];
   }
   // In Face mode, surface the canonical counter's name with a

@@ -47,7 +47,11 @@ function toSegmentArrows(arrows: AnnotationArrow[] | undefined): NarrationArrow[
 }
 
 function toSegmentHighlights(highlights: AnnotationHighlight[] | undefined): NarrationHighlight[] {
-  return (highlights ?? []).map((h) => ({ square: h.square, color: toNamedColor(h.color) ?? 'yellow' }));
+  return (highlights ?? []).map((h) => {
+    // Highlights have no orange register — the trail is arrows-only.
+    const named = toNamedColor(h.color);
+    return { square: h.square, color: named === 'orange' ? 'yellow' : named };
+  });
 }
 
 /** True when every beat's moves extends the previous beat's line (equal
@@ -88,10 +92,16 @@ function beatSegment(beat: LessonBeat, fen: string, moveSquares: { from: string;
     to: a.to,
     color: 'green' as const,
   }));
+  // ORANGE played-move trail (David 2026-07-31: coach-tab arrows match the
+  // opening tab) — LessonPlayer paints this trail at render time; on the
+  // walkthrough it rides the segment.
+  const trail: NarrationArrow[] = moveSquares
+    ? [{ from: moveSquares.from, to: moveSquares.to, color: 'orange' }]
+    : [];
   return {
     text: beat.say,
     ...(beat.sayShort ? { shortText: beat.sayShort } : {}),
-    arrows: [...authored, ...mentioned],
+    arrows: [...trail, ...authored, ...mentioned],
     highlights: toSegmentHighlights(beat.highlights),
   };
 }

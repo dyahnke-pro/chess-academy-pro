@@ -1,7 +1,6 @@
 // All LLM API calls must go through this file only — per CLAUDE.md
 import OpenAI from 'openai';
 import { detectLanguage } from '../utils/detectLanguage';
-import Anthropic from '@anthropic-ai/sdk';
 import { Capacitor } from '@capacitor/core';
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
@@ -154,9 +153,8 @@ const DEEPSEEK_MODEL_MAP: Record<CoachTask, string> = {
   // `completionTokens=420`, `reasoningContentLength≈1400`, content
   // empty or truncated mid-sentence ("Now it's you"). Per-move
   // narration is conversational coaching prose, not analysis — it
-  // doesn't benefit from chain-of-thought. The Anthropic side already
-  // uses non-reasoning Sonnet for the same task (see ANTHROPIC_MODEL_MAP
-  // below). Moving DeepSeek to deepseek-v4-flash eliminates the wasted
+  // doesn't benefit from chain-of-thought. Moving DeepSeek to
+  // deepseek-v4-flash eliminates the wasted
   // reasoning budget; the same 420 max_tokens now produces ~1500 chars
   // of actual narration.
   interactive_review:      'deepseek-v4-flash',
@@ -169,48 +167,7 @@ const DEEPSEEK_MODEL_MAP: Record<CoachTask, string> = {
   deep_analysis:           'deepseek-v4-pro',
 };
 
-const ANTHROPIC_MODEL_MAP: Record<CoachTask, string> = {
-  // High-frequency / short outputs → CHEAP (Haiku)
-  move_commentary:         'claude-haiku-4-5-20251001',
-  hint:                    'claude-haiku-4-5-20251001',
-  puzzle_feedback:         'claude-haiku-4-5-20251001',
-  game_commentary:         'claude-haiku-4-5-20251001',
-  game_opening_line:       'claude-haiku-4-5-20251001',
-  whatif_commentary:       'claude-haiku-4-5-20251001',
-  game_narrative_summary:  'claude-haiku-4-5-20251001',
-  // chat_response runs on Sonnet 4.6 because chat is where TEACHING
-  // happens (in-game ask, standalone chat, /coach/teach lesson surface).
-  // Haiku is fast but formulaic; Sonnet does the creative leaps a real
-  // coach makes — pattern naming, opening trap callouts, "if you do X,
-  // I respond Y" multi-step walkthroughs. Per-move live narration
-  // (interactive_review task) stays on Haiku for speed; chat depth
-  // beats chat speed for teaching surfaces.
-  chat_response:           'claude-sonnet-4-6',
-  sideline_explanation:    'claude-haiku-4-5-20251001',
-  smart_search:            'claude-haiku-4-5-20251001',
-  explore_reaction:        'claude-haiku-4-5-20251001',
-  intent_classify:         'claude-haiku-4-5-20251001',
-  // Kid-mode puzzle annotation — Haiku is plenty for neutral kid-safe
-  // hint text. Same isolation contract as DEEPSEEK_MODEL_MAP above.
-  kid_puzzle_gen:          'claude-haiku-4-5-20251001',
-
-  // Per-event analysis → MID (Sonnet)
-  post_game_analysis:      'claude-sonnet-4-6',
-  daily_lesson:            'claude-sonnet-4-6',
-  bad_habit_report:        'claude-sonnet-4-6',
-  opening_overview:        'claude-sonnet-4-6',
-  game_post_review:        'claude-sonnet-4-6',
-  position_analysis_chat:  'claude-sonnet-4-6',
-  session_plan_generation: 'claude-sonnet-4-6',
-  interactive_review:      'claude-haiku-4-5-20251001',
-  model_game_annotation:   'claude-sonnet-4-6',
-  middlegame_plan_generation: 'claude-sonnet-4-6',
-
-  // Rare deep-dive outputs → HEAVY (Opus)
-  weakness_report:         'claude-opus-4-6',
-  weekly_report:           'claude-opus-4-6',
-  deep_analysis:           'claude-opus-4-6',
-};
+// (ANTHROPIC_MODEL_MAP deleted 2026-07-31 — provider fully removed.)
 
 /** Report a hard coach failure to PostHog as a `$exception` so it surfaces in
  *  error tracking instead of being swallowed into OFFLINE_FALLBACKS. The audit
@@ -325,18 +282,15 @@ function apiOrigin(): string {
   return window.location.origin;
 }
 const DEEPSEEK_PROXY_BASE = `${apiOrigin()}/api/llm/deepseek`;
-const ANTHROPIC_PROXY_BASE = `${apiOrigin()}/api/llm/anthropic`;
 
-function getAnthropicKey(): string | undefined {
-  // ANTHROPIC KEY REMOVED (David 2026-06-25): back-to-back charges on a leaked
-  // Anthropic key. Returning undefined makes the client treat Anthropic as
-  // having NO key, so getProviderConfig / getForcedProviderConfig / the
-  // fallback chain never select it — every coach call routes to DeepSeek (the
-  // primary). The provider wiring/types stay in place (dormant) so this is a
-  // one-line revert if a key is ever re-added. The server proxy also no longer
-  // injects ANTHROPIC_KEY (api/llm-proxy.ts).
-  return undefined;
-}
+// ANTHROPIC FULLY REMOVED (David 2026-07-31: "Remove Anthropic key from code
+// so this doesn't happen again"). History: the key leaked and was revoked
+// 2026-06-25; the dormant wiring then silently killed background stage gen
+// for a month (generateOneStage pinned 'anthropic' → null config → every
+// stage failed). There is now NO Anthropic key source, NO Anthropic call
+// path, and NO UI to select it — every provider resolution returns DeepSeek
+// (via the server proxy). The `'anthropic'` string survives only as a legacy
+// STORED-preference value, coerced to DeepSeek wherever it is read.
 
 function getDeepseekKey(): string | undefined {
   return PROXY_SENTINEL_KEY;
@@ -344,133 +298,37 @@ function getDeepseekKey(): string | undefined {
 
 async function getProviderConfig(): Promise<ProviderConfig | null> {
   try {
-    const anthropicEnvKey = getAnthropicKey();
-    const deepseekEnvKey = getDeepseekKey();
-
     const profile = await db.profiles.get('main');
-
-    // Audit-mode provider override (2026-05-19): the Playwright loop
-    // audit re-runs the coach dozens of times per scenario and David
-    // doesn't want to burn Anthropic API tokens on test traffic.
-    // When the audit script (or any caller) sets `auditForceProvider`
-    // in Dexie's `meta` table to 'deepseek' or 'anthropic',
-    // `getProviderConfig` honors it for the duration of the override.
-    // Real user settings are untouched — this is a per-tab / per-test
-    // override that the audit script clears at teardown. Less critical
-    // now that the prod default is also DeepSeek (see note below), but
-    // retained as belt-and-suspenders so the audit pins the provider
-    // regardless of cooldowns / key availability.
-    const auditOverrideRecord = await db.meta.get('auditForceProvider');
-    const auditOverride =
-      auditOverrideRecord?.value === 'deepseek' || auditOverrideRecord?.value === 'anthropic'
-        ? (auditOverrideRecord.value as AiProvider)
-        : null;
-
-    // DeepSeek is the primary as of 2026-05-19 (David's call: "switch
-    // to deepseek tokens"). Previously Anthropic-first since 2026-05-14
-    // for pedagogy reasons. The fallback chain below auto-retries on
-    // Anthropic if DeepSeek 401s/429s on this single call. The
-    // dead-state cooldown above means subsequent calls within the
-    // next 60s skip DeepSeek entirely if we just saw it fail — avoids
-    // paying the failed-primary latency on every coach interaction
-    // during an extended outage. A user with ONLY an Anthropic key
-    // still gets Anthropic.
-    const anthropicReachable = !!anthropicEnvKey && !isProviderInCooldown('anthropic');
-    const deepseekReachable = !!deepseekEnvKey && !isProviderInCooldown('deepseek');
-    const provider: AiProvider = auditOverride
-      ? auditOverride
-      : (deepseekReachable
-          ? 'deepseek'
-          : (anthropicReachable
-              ? 'anthropic'
-              // Both keys absent OR both in cooldown — fall through to
-              // whichever key exists (try-anyway over no-coach), then to
-              // profile preference. Cooldown lifts on its own after 60s.
-              : (deepseekEnvKey
-                  ? 'deepseek'
-                  : (anthropicEnvKey
-                      ? 'anthropic'
-                      : (profile?.preferences.aiProvider ?? 'deepseek')))));
-
-    if (auditOverride) {
-      void logAppAudit({
-        kind: 'coach-llm-model-selected',
-        category: 'subsystem',
-        source: 'coachApi.getProviderConfig.auditOverride',
-        summary: `audit-mode override forcing provider=${provider}`,
-        details: JSON.stringify({ override: auditOverride, willPick: provider }),
-      });
-    }
-
     const preferredModel = profile?.preferences.preferredModel;
-
-    if (provider === 'anthropic') {
-      if (anthropicEnvKey) return { provider, apiKey: anthropicEnvKey, preferredModel };
-      if (!profile?.preferences.anthropicApiKeyEncrypted || !profile.preferences.anthropicApiKeyIv) {
-        if (deepseekEnvKey) return { provider: 'deepseek', apiKey: deepseekEnvKey, preferredModel };
-        return null;
-      }
-      const { decryptApiKey } = await import('./cryptoService');
-      const apiKey = await decryptApiKey(
-        profile.preferences.anthropicApiKeyEncrypted,
-        profile.preferences.anthropicApiKeyIv,
-      );
-      return { provider, apiKey, preferredModel };
-    } else {
-      if (deepseekEnvKey) return { provider, apiKey: deepseekEnvKey, preferredModel };
-      if (!profile?.preferences.apiKeyEncrypted || !profile.preferences.apiKeyIv) {
-        if (anthropicEnvKey) return { provider: 'anthropic', apiKey: anthropicEnvKey, preferredModel };
-        return null;
-      }
-      const { decryptApiKey } = await import('./cryptoService');
-      const apiKey = await decryptApiKey(
-        profile.preferences.apiKeyEncrypted,
-        profile.preferences.apiKeyIv,
-      );
-      return { provider, apiKey, preferredModel };
+    const deepseekEnvKey = getDeepseekKey();
+    if (deepseekEnvKey) return { provider: 'deepseek', apiKey: deepseekEnvKey, preferredModel };
+    if (!profile?.preferences.apiKeyEncrypted || !profile.preferences.apiKeyIv) {
+      return null;
     }
+    const { decryptApiKey } = await import('./cryptoService');
+    const apiKey = await decryptApiKey(
+      profile.preferences.apiKeyEncrypted,
+      profile.preferences.apiKeyIv,
+    );
+    return { provider: 'deepseek', apiKey, preferredModel };
   } catch {
     return null;
   }
 }
 
-/** Pin the provider for a single call. Used by the brain's per-surface
- *  routing (e.g. /coach/teach forces 'anthropic'). Walks the same key
- *  resolution order as `getProviderConfig` for that provider only:
- *  env key → encrypted profile key → null. NEVER falls back to the
- *  other provider — that's the caller's job via `getFallbackConfig`. */
+/** Pin the provider for a single call. With Anthropic removed there is
+ *  only DeepSeek — a stray 'anthropic' pin (a bug) is coerced and logged
+ *  so it can never dead-end a surface again. */
 async function getForcedProviderConfig(provider: AiProvider): Promise<ProviderConfig | null> {
-  try {
-    const profile = await db.profiles.get('main');
-    const preferredModel = profile?.preferences.preferredModel;
-    if (provider === 'anthropic') {
-      const envKey = getAnthropicKey();
-      if (envKey) return { provider, apiKey: envKey, preferredModel };
-      if (!profile?.preferences.anthropicApiKeyEncrypted || !profile.preferences.anthropicApiKeyIv) {
-        return null;
-      }
-      const { decryptApiKey } = await import('./cryptoService');
-      const apiKey = await decryptApiKey(
-        profile.preferences.anthropicApiKeyEncrypted,
-        profile.preferences.anthropicApiKeyIv,
-      );
-      return { provider, apiKey, preferredModel };
-    } else {
-      const envKey = getDeepseekKey();
-      if (envKey) return { provider, apiKey: envKey, preferredModel };
-      if (!profile?.preferences.apiKeyEncrypted || !profile.preferences.apiKeyIv) {
-        return null;
-      }
-      const { decryptApiKey } = await import('./cryptoService');
-      const apiKey = await decryptApiKey(
-        profile.preferences.apiKeyEncrypted,
-        profile.preferences.apiKeyIv,
-      );
-      return { provider, apiKey, preferredModel };
-    }
-  } catch {
-    return null;
+  if (provider === 'anthropic') {
+    void logAppAudit({
+      kind: 'llm-error',
+      category: 'subsystem',
+      source: 'coachApi.getForcedProviderConfig',
+      summary: "caller pinned the removed 'anthropic' provider — coerced to deepseek (fix the caller)",
+    });
   }
+  return getProviderConfig();
 }
 
 // ─── Provider dead-state cooldown ────────────────────────────────────
@@ -556,9 +414,9 @@ function emitProviderFailureAudit(
   }).catch(() => undefined);
 }
 
-function isProviderInCooldown(provider: AiProvider): boolean {
-  return Date.now() < providerDeadUntil[provider];
-}
+// (isProviderInCooldown deleted 2026-07-31 — with a single provider there is
+// no alternate to steer to; "try anyway" beats "no coach". markProviderDead
+// still records failures for the audit/fallback path.)
 
 /** Reset the dead-state cache. Test-only — production code never
  *  calls this; the timestamps decay on their own after 60s. */
@@ -567,17 +425,15 @@ export function __resetProviderCooldownsForTests(): void {
   providerDeadUntil.deepseek = 0;
 }
 
-/** Get a fallback config using the OTHER provider. Returns null if no alternate key available. */
+/** Get a fallback config for a failed call. DeepSeek is the ONLY provider,
+ *  so a DeepSeek failure has no alternate — null (the caller surfaces the
+ *  error / retries later). A failed 'anthropic' can only mean a legacy pin
+ *  slipped through — route it to DeepSeek. */
 function getFallbackConfig(failedProvider: AiProvider): ProviderConfig | null {
   try {
-    const anthropicEnvKey = getAnthropicKey();
     const deepseekEnvKey = getDeepseekKey();
-
     if (failedProvider === 'anthropic' && deepseekEnvKey) {
       return { provider: 'deepseek', apiKey: deepseekEnvKey };
-    }
-    if (failedProvider === 'deepseek' && anthropicEnvKey) {
-      return { provider: 'anthropic', apiKey: anthropicEnvKey };
     }
     return null;
   } catch {
@@ -664,9 +520,7 @@ export function getModel(
       }
     }
   }
-  return provider === 'anthropic'
-    ? ANTHROPIC_MODEL_MAP[task]
-    : normalizeDeepSeekModel(DEEPSEEK_MODEL_MAP[task]);
+  return normalizeDeepSeekModel(DEEPSEEK_MODEL_MAP[task]);
 }
 
 /** "Reasoning"/"thinking" models (deepseek-reasoner, Claude extended-
@@ -687,16 +541,13 @@ function isReasoningModel(model: string): boolean {
  *  `deepseek-reasoner` makes EVERY structured call (walkthrough
  *  narration, drill/findMove/punish labels) 400 and silently fall back
  *  to generic template prose. */
-export function toolCapableModel(task: CoachTask, provider: AiProvider, model: string): string {
-  // DeepSeek: forced `tool_choice` needs a non-reasoning tier. v4-flash is the
-  // one confirmed tool-capable name (no thinking-mode tool_choice pitfalls), so
-  // pin every structured DeepSeek call to it — this also guarantees a
-  // deprecated/unknown name (the v4 rename 400s deepseek-chat/deepseek-reasoner)
-  // never reaches the wire on a tool call.
-  if (provider === 'deepseek') return 'deepseek-v4-flash';
-  if (!isReasoningModel(model)) return model;
-  const fallback = ANTHROPIC_MODEL_MAP[task];
-  return isReasoningModel(fallback) ? 'claude-sonnet-4-6' : fallback;
+export function toolCapableModel(_task: CoachTask, _provider: AiProvider, _model: string): string {
+  // Forced `tool_choice` needs a non-reasoning tier. v4-flash is the one
+  // confirmed tool-capable name (no thinking-mode tool_choice pitfalls), so
+  // pin every structured call to it — this also guarantees a deprecated /
+  // unknown name never reaches the wire on a tool call. (DeepSeek is the
+  // only provider — Anthropic removed 2026-07-31.)
+  return 'deepseek-v4-flash';
 }
 
 // ── DeepSeek (OpenAI-compatible) ──
@@ -861,140 +712,7 @@ async function callDeepSeek(
   return message?.content ?? '';
 }
 
-// ── Anthropic ──
-
-async function callAnthropicStream(
-  apiKey: string,
-  model: string,
-  systemPrompt: string,
-  messages: { role: 'user' | 'assistant'; content: string }[],
-  maxTokens: number,
-  onStream: (chunk: string) => void,
-  task: string = 'chat_response',
-): Promise<string> {
-  emitCoachLlmCallAudit({ grounded: task === 'grounded_voice', intent: task });
-  const client = new Anthropic({
-    apiKey,
-    baseURL: ANTHROPIC_PROXY_BASE,
-    dangerouslyAllowBrowser: true,
-  });
-
-  let fullText = '';
-  const stream = client.messages.stream({
-    model,
-    max_tokens: maxTokens,
-    system: [{ type: 'text', text: systemPrompt, cache_control: { type: 'ephemeral' } }],
-    messages,
-  });
-
-  for await (const chunk of stream) {
-    if (chunk.type === 'content_block_delta' && chunk.delta.type === 'text_delta') {
-      fullText += chunk.delta.text;
-      onStream(chunk.delta.text);
-    }
-  }
-
-  const finalMsg = await stream.finalMessage();
-  void recordApiUsage(
-    'stream',
-    model,
-    finalMsg.usage.input_tokens,
-    finalMsg.usage.output_tokens,
-  );
-  emitLlmTokenUsage('stream', model, 'anthropic', finalMsg.usage.input_tokens, finalMsg.usage.output_tokens, finalMsg.stop_reason ?? null);
-  return fullText;
-}
-
-async function callAnthropic(
-  apiKey: string,
-  model: string,
-  systemPrompt: string,
-  messages: { role: 'user' | 'assistant'; content: string }[],
-  maxTokens: number,
-  task: string,
-): Promise<string> {
-  emitCoachLlmCallAudit({ grounded: task === 'grounded_voice', intent: task });
-  const client = new Anthropic({
-    apiKey,
-    baseURL: ANTHROPIC_PROXY_BASE,
-    dangerouslyAllowBrowser: true,
-  });
-
-  const response = await client.messages.create({
-    model,
-    max_tokens: maxTokens,
-    system: [{ type: 'text', text: systemPrompt, cache_control: { type: 'ephemeral' } }],
-    messages,
-  });
-
-  void recordApiUsage(task, model, response.usage.input_tokens, response.usage.output_tokens);
-  emitLlmTokenUsage(task, model, 'anthropic', response.usage.input_tokens, response.usage.output_tokens, response.stop_reason ?? null);
-  const content = response.content[0];
-  return content.type === 'text' ? content.text : '';
-}
-
-/** Force the LLM to emit a structured JSON object matching the
- *  given input schema by defining a tool and using `tool_choice` to
- *  require the LLM call it. The API enforces schema validation
- *  server-side, so the returned object is guaranteed to be valid
- *  JSON of the right shape — no client-side parse errors possible.
- *
- *  Production audit (build e86aa19): "THIS IS GETTING OLD" — the
- *  LLM kept emitting structurally broken JSON for niche openings
- *  (Najdorf, Pirc, Blackburne-Kostić) and our parse-recovery
- *  pipeline couldn't catch all edge cases. Tool-use eliminates the
- *  parse problem at the source. Returns the tool's input as an
- *  unknown so the caller can validate field shapes (we still need
- *  to assertTreeShape for our own invariants).
- *
- *  Throws if the API doesn't return a tool_use block (network error,
- *  rate limit, etc.). */
-export async function callAnthropicWithTool(
-  apiKey: string,
-  model: string,
-  systemPrompt: string,
-  messages: { role: 'user' | 'assistant'; content: string }[],
-  maxTokens: number,
-  task: string,
-  toolName: string,
-  toolDescription: string,
-  inputSchema: Record<string, unknown>,
-): Promise<unknown> {
-  emitCoachLlmCallAudit({ grounded: false, intent: task });
-  const client = new Anthropic({
-    apiKey,
-    baseURL: ANTHROPIC_PROXY_BASE,
-    dangerouslyAllowBrowser: true,
-  });
-  const response = await client.messages.create({
-    model,
-    max_tokens: maxTokens,
-    system: [{ type: 'text', text: systemPrompt, cache_control: { type: 'ephemeral' } }],
-    messages,
-    tools: [
-      {
-        name: toolName,
-        description: toolDescription,
-        // SDK types want a specific shape; cast through unknown so
-        // the caller can pass any JSON Schema sub-tree.
-        input_schema: inputSchema as unknown as { type: 'object' },
-      },
-    ],
-    // Force the model to call THIS tool and only this tool. No prose,
-    // no choice — the API validates the input matches input_schema.
-    tool_choice: { type: 'tool', name: toolName },
-  });
-  void recordApiUsage(task, model, response.usage.input_tokens, response.usage.output_tokens);
-  emitLlmTokenUsage(task, model, 'anthropic', response.usage.input_tokens, response.usage.output_tokens, response.stop_reason ?? null);
-  for (const block of response.content) {
-    if (block.type === 'tool_use' && block.name === toolName) {
-      return block.input;
-    }
-  }
-  throw new Error(
-    `Anthropic API returned no tool_use block for tool "${toolName}" — got ${response.content.map((b) => b.type).join(',')}`,
-  );
-}
+// (Anthropic call primitives deleted 2026-07-31 — provider fully removed.)
 
 // ── Public API ──
 
@@ -1025,21 +743,14 @@ async function callChatWithConfig(
       }),
     });
   }).catch(() => undefined);
-  if (config.provider === 'anthropic') {
-    if (onStream) {
-      return await callAnthropicStream(config.apiKey, model, systemPrompt, messages, maxTokens, onStream, task);
-    }
-    return await callAnthropic(config.apiKey, model, systemPrompt, messages, maxTokens, task);
-  } else {
-    const allMessages: OpenAI.Chat.ChatCompletionMessageParam[] = [
-      { role: 'system', content: systemPrompt },
-      ...messages,
-    ];
-    if (onStream) {
-      return await callDeepSeekStream(config.apiKey, model, allMessages, maxTokens, onStream, task);
-    }
-    return await callDeepSeek(config.apiKey, model, allMessages, maxTokens, task);
+  const allMessages: OpenAI.Chat.ChatCompletionMessageParam[] = [
+    { role: 'system', content: systemPrompt },
+    ...messages,
+  ];
+  if (onStream) {
+    return await callDeepSeekStream(config.apiKey, model, allMessages, maxTokens, onStream, task);
   }
+  return await callDeepSeek(config.apiKey, model, allMessages, maxTokens, task);
 }
 
 async function getCoachVerbosity(): Promise<CoachVerbosity> {
@@ -1120,13 +831,9 @@ export async function callDeepseekWithTool(
   return JSON.parse(toolCall.function.arguments);
 }
 
-/** Top-level helper for tool-use generation. Tries Anthropic first —
- *  Sonnet/Haiku schema-validate tool calls more reliably than DeepSeek
- *  and chess pedagogy quality is better. Falls back to DeepSeek on
- *  any failure (no Anthropic key, network error, schema rejection,
- *  quota). The dead-state cooldown skips Anthropic for 60s after a
- *  failure so subsequent calls go straight to DeepSeek. CLAUDE.md
- *  2026-05-14: Anthropic-primary across the app. */
+/** Top-level helper for tool-use generation — DeepSeek tool-use via the
+ *  server proxy (Anthropic removed 2026-07-31; DeepSeek is the only
+ *  provider). */
 export async function getCoachStructuredResponse(
   messages: { role: 'user' | 'assistant'; content: string }[],
   systemPrompt: string,
@@ -1136,35 +843,7 @@ export async function getCoachStructuredResponse(
   toolDescription: string,
   inputSchema: Record<string, unknown>,
 ): Promise<unknown> {
-  let lastErr: unknown = null;
-  if (!isProviderInCooldown('anthropic')) {
-    const anthropicConfig = await getForcedProviderConfig('anthropic');
-    if (anthropicConfig) {
-      try {
-        const model = toolCapableModel(
-          task,
-          anthropicConfig.provider,
-          getModel(task, anthropicConfig.provider, anthropicConfig.preferredModel),
-        );
-        return await callAnthropicWithTool(
-          anthropicConfig.apiKey,
-          model,
-          systemPrompt,
-          messages,
-          maxTokens,
-          task,
-          toolName,
-          toolDescription,
-          inputSchema,
-        );
-      } catch (err) {
-        lastErr = err;
-        markProviderDead('anthropic');
-        // Fall through to DeepSeek.
-      }
-    }
-  }
-  const deepseekConfig = await getForcedProviderConfig('deepseek');
+  const deepseekConfig = await getProviderConfig();
   if (deepseekConfig) {
     const model = toolCapableModel(
       task,
@@ -1187,11 +866,6 @@ export async function getCoachStructuredResponse(
       markProviderDead('deepseek');
       throw err;
     }
-  }
-  if (lastErr) {
-    throw lastErr instanceof Error
-      ? lastErr
-      : new Error(typeof lastErr === 'string' ? lastErr : JSON.stringify(lastErr));
   }
   // Keys are injected SERVER-SIDE by the /api/llm proxy — the client always
   // holds the proxy sentinel, so landing here means the provider failed or is
@@ -2152,9 +1826,7 @@ export async function translateToEnglish(text: string, providerConfig?: Provider
     '(e4, Nf3, O-O, Qxd5) unchanged. Output ONLY the English translation — no ' +
     'quotes, no explanation, nothing else.';
   try {
-    const out = cfg.provider === 'anthropic'
-      ? await callAnthropic(cfg.apiKey, ANTHROPIC_MODEL_MAP.move_commentary, system, [{ role: 'user', content: text }], 120, 'translate_to_english')
-      : await callDeepSeek(cfg.apiKey, DEEPSEEK_MODEL_MAP.move_commentary, [{ role: 'system', content: system }, { role: 'user', content: text }], 120, 'translate_to_english');
+    const out = await callDeepSeek(cfg.apiKey, DEEPSEEK_MODEL_MAP.move_commentary, [{ role: 'system', content: system }, { role: 'user', content: text }], 120, 'translate_to_english');
     return typeof out === 'string' && out.trim() ? out.trim() : text;
   } catch { return text; }
 }
@@ -2332,15 +2004,13 @@ export async function voiceFacts(
   // 2-sentence spoken cap via applyBriefVoiceCap, silent stays silent.
   const voiceMaxTokens = register === 'review' ? 700 : opts.warm ? 560 : 240;
   try {
-    const out = cfg.provider === 'anthropic'
-      ? await callAnthropic(cfg.apiKey, ANTHROPIC_MODEL_MAP.move_commentary, system, [{ role: 'user', content: user }], voiceMaxTokens, 'grounded_voice')
-      : await callDeepSeek(
-          cfg.apiKey,
-          DEEPSEEK_MODEL_MAP.move_commentary,
-          [{ role: 'system', content: system }, { role: 'user', content: user }],
-          voiceMaxTokens,
-          'grounded_voice',
-        );
+    const out = await callDeepSeek(
+      cfg.apiKey,
+      DEEPSEEK_MODEL_MAP.move_commentary,
+      [{ role: 'system', content: system }, { role: 'user', content: user }],
+      voiceMaxTokens,
+      'grounded_voice',
+    );
     // Leak audit fires at the primitive (callAnthropic/callDeepSeek) with
     // task='grounded_voice' → tagged grounded=true there. No emit needed here.
     //
@@ -2589,9 +2259,7 @@ export async function voiceReviewLines(
     : Math.min(3000, 120 + usable.length * 70);
 
   try {
-    const out = cfg.provider === 'anthropic'
-      ? await callAnthropic(cfg.apiKey, ANTHROPIC_MODEL_MAP.move_commentary, system, [{ role: 'user', content: user }], maxTokens, 'grounded_voice')
-      : await callDeepSeek(cfg.apiKey, DEEPSEEK_MODEL_MAP.move_commentary, [{ role: 'system', content: system }, { role: 'user', content: user }], maxTokens, 'grounded_voice');
+    const out = await callDeepSeek(cfg.apiKey, DEEPSEEK_MODEL_MAP.move_commentary, [{ role: 'system', content: system }, { role: 'user', content: user }], maxTokens, 'grounded_voice');
     if (typeof out !== 'string' || !out.trim()) return result;
     // Parse "N. text" lines, joining any wrapped continuation onto the current
     // number until the next "N." marker.
