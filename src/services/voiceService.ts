@@ -150,6 +150,11 @@ export function resolvePollySecondaryVoice(
 /** Absolute URL for Polly TTS — needed when running inside Capacitor WKWebView */
 const VERCEL_ORIGIN = 'https://chess-academy-pro.vercel.app';
 
+/** How long a FAILED warmup probe suppresses Polly before the next speak
+ *  retries it. Short on purpose: a cold-boot network blip shouldn't cost the
+ *  whole session its voice (David's native log, 2026-07-31). */
+const WARMUP_RETRY_MS = 20_000;
+
 /**
  * True when running inside the native (Capacitor) app, where the web assets
  * are served from a `capacitor://…` origin and `/api/tts` must be called
@@ -257,11 +262,17 @@ export type VoiceTier = 'polly' | 'web-speech' | 'muted';
  *  response (David 2026-07-17, the King's Indian Attack narration fallover). An
  *  explicit `error` always wins; otherwise only >=400 is a real HTTP cause. */
 export function describePollyFalloverReason(
-  diag: { error: string | null; pollyStatus: number | null },
+  diag: { error: string | null; pollyStatus: number | null; pollyAttempted?: boolean },
 ): string {
   if (diag.error) return diag.error;
   if (diag.pollyStatus && diag.pollyStatus >= 400) return `http ${diag.pollyStatus}`;
   if (diag.pollyStatus) return `client playback failed (server ok, http ${diag.pollyStatus})`;
+  // No status AND no error means Polly was never ATTEMPTED — `isPollyLive()`
+  // was false (warmup never succeeded, or a cooldown is latched), so
+  // speakInternal skipped the tier entirely. Reporting that as "client
+  // playback failed" sent this investigation looking for a decode bug that
+  // wasn't there (David 2026-07-31).
+  if (diag.pollyAttempted === false) return 'Polly not live (warmup failed or cooling down) — never attempted';
   return 'client playback failed (no server error)';
 }
 
@@ -767,11 +778,40 @@ class VoiceService {
           const buf = await res.arrayBuffer();
           const ctx = getSharedAudioContext();
           try { await ctx.decodeAudioData(buf); } catch { /* tiny clip may fail — ok */ }
+        } else {
+          this.warmupFailed(`probe http ${res.status}`);
         }
-      } catch {
-        // Polly unreachable — stays disabled
+      } catch (e) {
+        this.warmupFailed(e instanceof Error ? e.message : String(e));
       }
     }
+  }
+
+
+  /** A failed warmup probe used to leave Polly disabled for the WHOLE session,
+   *  silently: `pollyAvailable` stayed false and `pollyCooldownUntil` stayed
+   *  null, so `isPollyLive()`'s recovery branch could never fire and every
+   *  later narration fell to Web Speech with no diagnostic. David's native
+   *  TestFlight log (2026-07-31) shows exactly that — 34 consecutive
+   *  `voice-fallover` entries, all `pollyStatus: null`, all robotic.
+   *
+   *  One 3-second timeout at boot must not cost the session its voice. Set a
+   *  SHORT cooldown so the next speak retries, and say so out loud: this is
+   *  the single most consequential voice decision in the app and it had no
+   *  audit trail at all. */
+  private warmupFailed(reason: string): void {
+    this.pollyAvailable = false;
+    this.pollyCooldownUntil = Date.now() + WARMUP_RETRY_MS;
+    // Dynamic import — voiceService deliberately takes no hard dep on
+    // appAuditor (see the note further down this file).
+    void import('./appAuditor').then(({ logAppAudit }) => {
+      void logAppAudit({
+        kind: 'tts-failure',
+        category: 'subsystem',
+        source: 'voiceService.warmup',
+        summary: `Polly warmup probe failed (${reason}) — retrying in ${Math.round(WARMUP_RETRY_MS / 1000)}s; narration is Web Speech until then`,
+      });
+    }).catch(() => undefined);
   }
 
   /** iOS grants an <audio> element programmatic-play permission only

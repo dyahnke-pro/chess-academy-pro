@@ -65,6 +65,34 @@ async function computeTemperature(): Promise<StudentTemperature> {
 /** The student's HOME opening: ledger visits weigh heaviest (they keep
  *  coming back), favorites next, games played last. Null when nothing
  *  signals yet. Returns the display-ready name. */
+/** ECO FAMILY ROOTS — names that describe which pawn moved, not a system the
+ *  student chose. "Queen's Pawn Game" IS the entry for the bare move `d4`
+ *  (ECO A40/D00), so every 1.d4 game that doesn't classify any deeper lands
+ *  in it. That bucket then aggregates unrelated games and outscores the real
+ *  repertoire, which is split across specific names.
+ *
+ *  David 2026-07-31: "my queen pawn being my main opening statement has got
+ *  to be false." He was right — the coach was reporting a classification
+ *  artifact as his home opening. A home opening must be something he CHOSE.
+ *
+ *  Deliberately narrow: `Bird Opening`, `Grob Opening`, `Nimzo-Larsen`,
+ *  `Sicilian Defense` and friends are also short-PGN entries but they are
+ *  real systems, so ply-count is the wrong test — only bare first-move
+ *  descriptors and family umbrellas belong here. */
+const ECO_FAMILY_ROOTS = new Set([
+  "queen's pawn game",
+  "king's pawn game",
+  'indian defense',
+  'indian game',
+  'open game',
+  'closed game',
+  'semi-open game',
+]);
+
+function isFamilyRoot(name: string): boolean {
+  return ECO_FAMILY_ROOTS.has(name.trim().toLowerCase());
+}
+
 export async function computeHomeOpening(): Promise<string | null> {
   const scores = new Map<string, { score: number; display: string; derived: boolean }>();
   // Ledger keys are lowercased — title-case them for prose; a real store
@@ -73,6 +101,8 @@ export async function computeHomeOpening(): Promise<string | null> {
     s.replace(/(^|[\s-])([a-z])/g, (_m, sep: string, ch: string) => `${sep}${ch.toUpperCase()}`);
   const bump = (key: string, display: string, points: number, derived = false): void => {
     const k = key.toLowerCase();
+    // A family root is where classification LANDED, not what he plays.
+    if (isFamilyRoot(k)) return;
     const shown = derived ? titleCase(display) : display;
     const cur = scores.get(k) ?? { score: 0, display: shown, derived };
     cur.score += points;
