@@ -19,7 +19,7 @@ import { Chess } from 'chess.js';
 import teachingsData from '../data/danya-teachings.json';
 import { computeStructureSignature, signatureMatchScore, type StructureSignature } from './structureSignature';
 import { validateBoardClaims } from './boardClaimValidator';
-import { secondaryNotesForGap, secondaryNotesForPosition } from './chessbrahTeachingService';
+import { secondaryNotesForGap, secondaryNotesForPosition } from './secondaryCorpora';
 import { detectOpening } from './openingDetectionService';
 import { noteContradictsLine, notePhaseMismatchesBoard } from './noteLineGuard';
 
