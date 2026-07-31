@@ -546,7 +546,17 @@ export interface UseTeachWalkthroughReturn {
    *  with the same tree restarts from root. */
   start: (
     tree: WalkthroughTree,
-    options?: { showChooser?: boolean },
+    options?: {
+      showChooser?: boolean;
+      /** SANs the student has ALREADY watched. The walk fast-forwards through
+       *  the matching prefix and begins narrating at the first move they
+       *  haven't heard — so taking a Deep dive doesn't replay the opening
+       *  (David 2026-07-31: "I want it to remain in place so I don't have to
+       *  listen to each starting move over again"). A prefix that stops
+       *  matching just means the new line diverges there, which is exactly
+       *  where the teaching should resume anyway. */
+      resumeFromSans?: string[];
+    },
   ) => void;
   /** Pause mid-narration (user typed in chat / asked a question).
    *  Voice stops; board freezes; phase = 'paused'. */
@@ -564,6 +574,12 @@ export interface UseTeachWalkthroughReturn {
    *  → next, fork → exposed, leaf → exposed). Useful for "I get it,
    *  next" tap. */
   skipNarration: () => void;
+  /** Step BACK one move and re-narrate it. David 2026-07-31: "I want to add
+   *  forward and back arrows to navigate as desired." Forward is
+   *  skipNarration; this is its mirror. No-op at the root. */
+  stepBack: () => void;
+  /** True when there is a previous move to step back to. */
+  canStepBack: boolean;
 
   // ─── Stage 2-5 actions ──────────────────────────────────────
   /** From a leaf, transition to the stage-menu hub. */
@@ -804,6 +820,8 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
   // Arrow + highlight state, set by the currently-speaking
   // narration segment (or empty when not narrating).
   const [narrationArrows, setNarrationArrows] = useState<NarrationArrow[]>([]);
+  /** Monotonic counter for the replay instrumentation above. */
+  const narrationEntryRef = useRef(0);
   const [narrationHighlights, setNarrationHighlights] = useState<
     NarrationHighlight[]
   >([]);
@@ -991,6 +1009,19 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     (path: WalkthroughTreeNode[]): void => {
       cleanupNarration();
       const node = path[path.length - 1];
+      // REPLAY INSTRUMENTATION (David 2026-07-31: beats spoken twice, and his
+      // device log shows the walk returning to a node it had already left).
+      // Two shapes would explain it and the log can't tell them apart: TWO
+      // concurrent narration chains running ~2s offset, or ONE chain that
+      // rewinds. Stamping each entry with a monotonic id + the path makes the
+      // next log decisive instead of another guess.
+      narrationEntryRef.current += 1;
+      void logAppAudit({
+        kind: 'coach-narration-spoken',
+        category: 'narration',
+        source: 'useTeachWalkthrough.narrateAndAdvance',
+        summary: `entry #${narrationEntryRef.current} depth=${path.length} node=${node?.san ?? '(root)'} path=[${path.filter((n) => n.san).map((n) => n.san).join(' ')}]`,
+      });
       setPhase('narrating');
       setPathNodes(path);
       // Clear arrows from any prior node — fresh canvas for this one.
@@ -1275,7 +1306,7 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
   const start = useCallback(
     (
       newTree: WalkthroughTree,
-      options?: { showChooser?: boolean },
+      options?: { showChooser?: boolean; resumeFromSans?: string[] },
     ): void => {
       // Returning visitor flow: if the page passed showChooser=true
       // (because completion data shows the walkthrough was already
@@ -1324,6 +1355,40 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
       });
       cleanupNarration();
       setTree(newTree);
+
+      // RESUME IN PLACE — walk the tree down the SANs already watched and
+      // start narrating at the first new move. Skips the intro too: they just
+      // heard this opening's introduction.
+      const resumeSans = options?.resumeFromSans ?? [];
+      if (resumeSans.length > 0) {
+        const walked: WalkthroughTreeNode[] = [newTree.root];
+        let cursor = newTree.root;
+        for (const san of resumeSans) {
+          const next = cursor.children.find((c) => c.node.san === san);
+          if (!next) break;
+          cursor = next.node;
+          walked.push(cursor);
+        }
+        // Only worth resuming if we actually matched something AND there is
+        // more line to teach; otherwise fall through to the normal start.
+        if (walked.length > 1 && cursor.children.length > 0) {
+          void logAppAudit({
+            kind: 'coach-surface-migrated',
+            category: 'subsystem',
+            source: 'useTeachWalkthrough.start',
+            summary: `resumed in place at ply ${walked.length - 1} of ${resumeSans.length} watched — "${newTree.openingName}"`,
+          });
+          if (cursor.children.length === 1) {
+            narrateAndAdvance([...walked, cursor.children[0].node]);
+          } else {
+            // A branch point right where they left off: show the picker.
+            setPathNodes(walked);
+            setPhase('fork');
+          }
+          return;
+        }
+      }
+
       // Speak the intro first if it exists, then start the tree at root.
       if (newTree.intro.trim()) {
         // Treat the intro as a virtual narration: play it before the
@@ -1629,6 +1694,14 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     setPendingStageJump(null);
     deferredTransitionRef.current = null;
   }, [cleanupNarration]);
+
+  const stepBack = useCallback((): void => {
+    // pathNodes[0] is the root (no move), so a real previous move needs 3+.
+    if (pathNodes.length < 3) return;
+    cleanupNarration();
+    voiceService.stop();
+    narrateAndAdvance(pathNodes.slice(0, -1));
+  }, [pathNodes, cleanupNarration, narrateAndAdvance]);
 
   const skipNarration = useCallback((): void => {
     if (phase !== 'narrating') return;
@@ -2225,6 +2298,8 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     backtrackToLastFork,
     stop,
     skipNarration,
+    stepBack,
+    canStepBack: pathNodes.length >= 3,
     enterStageMenu,
     startAtStageMenu,
     setViewOrientation,

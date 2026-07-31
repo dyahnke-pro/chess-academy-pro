@@ -14,7 +14,7 @@ import { uid } from '../../utils/uid';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Chess } from 'chess.js';
-import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, X, Check, MessageCircle, Zap, Undo2, RotateCcw, Volume2 } from 'lucide-react';
+import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, ChevronLeft, X, Check, MessageCircle, Zap, Undo2, RotateCcw, Volume2 } from 'lucide-react';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight } from '../../types/walkthroughTree';
@@ -626,6 +626,21 @@ export function CoachTeachPage(): JSX.Element {
   // navigate-to-/coach/session/walkthrough flow that lost the chat
   // panel. See `useTeachWalkthrough` + `data/openingWalkthroughs/`.
   const walkthrough = useTeachWalkthrough();
+  /** SANs the student already watched, handed over by a Deep-dive tap so the
+   *  next lesson resumes there instead of replaying the opening moves
+   *  (David 2026-07-31). Consumed exactly once by startWalkthrough. */
+  const deepDiveResumeRef = useRef<string[] | null>(null);
+  /** Start a walkthrough, consuming any pending Deep-dive resume point. Every
+   *  teach path routes through here so a new start site can't silently lose
+   *  the resume — there are ten of them. */
+  const startWalkthrough = useCallback((
+    tree: WalkthroughTree,
+    options?: { showChooser?: boolean },
+  ): void => {
+    const resumeFromSans = deepDiveResumeRef.current ?? undefined;
+    deepDiveResumeRef.current = null;
+    walkthrough.start(tree, { ...options, ...(resumeFromSans ? { resumeFromSans } : {}) });
+  }, [walkthrough]);
 
   // Ponder on the student's clock (David 2026-07-03) — while the free-play board
   // is interactive (no walkthrough auto-driving it), warm the engine cache for
@@ -2089,7 +2104,7 @@ export function CoachTeachPage(): JSX.Element {
     // never fired. Six prior audits showed the same brain ignoring
     // the tool's prompt-side description. We can't trust the model
     // for this routing; pattern-match at the surface and call
-    // walkthrough.start() directly when the student types an obvious
+    // startWalkthrough() directly when the student types an obvious
     // "teach me / walk me through / show me [opening]" ask. The
     // brain only sees asks that DON'T match.
     //
@@ -2778,7 +2793,7 @@ export function CoachTeachPage(): JSX.Element {
               if (result.ok && result.tree) {
                 await cacheOpening(canonicalName, result.tree);
                 voiceService.stop();
-                walkthrough.start(result.tree);
+                startWalkthrough(result.tree);
                 return;
               }
               setMessages((prev) => [...prev, {
@@ -3030,9 +3045,9 @@ export function CoachTeachPage(): JSX.Element {
           if (stageHint) {
             walkthrough.startAtStageMenu(staticTree, stageHint);
           } else if (walkthroughDone) {
-            walkthrough.start(staticTree, { showChooser: true });
+            startWalkthrough(staticTree, { showChooser: true });
           } else {
-            walkthrough.start(staticTree);
+            startWalkthrough(staticTree);
           }
           return;
         }
@@ -3141,9 +3156,9 @@ export function CoachTeachPage(): JSX.Element {
           if (stageHint) {
             walkthrough.startAtStageMenu(cachedTree, stageHint);
           } else if (walkthroughDone) {
-            walkthrough.start(cachedTree, { showChooser: true });
+            startWalkthrough(cachedTree, { showChooser: true });
           } else {
-            walkthrough.start(cachedTree);
+            startWalkthrough(cachedTree);
           }
           // Re-fire background gen for any stages still missing
           // from the cache. Production audit (build c95ccc9) caught
@@ -3220,7 +3235,7 @@ export function CoachTeachPage(): JSX.Element {
               if (result.ok && result.tree) {
                 await cacheOpening(rescueHit.name, result.tree);
                 voiceService.stop();
-                walkthrough.start(result.tree);
+                startWalkthrough(result.tree);
                 return;
               }
             } catch {
@@ -3279,7 +3294,7 @@ export function CoachTeachPage(): JSX.Element {
           } else if (stageHint) {
             walkthrough.startAtStageMenu(sharedTree, stageHint);
           } else {
-            walkthrough.start(sharedTree);
+            startWalkthrough(sharedTree);
           }
           // Kick off background stage gens for any missing stages
           // (the shared row may not have all of them populated).
@@ -3359,7 +3374,7 @@ export function CoachTeachPage(): JSX.Element {
             } else if (stageHint) {
               walkthrough.startAtStageMenu(result.tree, stageHint);
             } else {
-              walkthrough.start(result.tree);
+              startWalkthrough(result.tree);
             }
             // Fire-and-forget: generate missing stages in background.
             // Each is a focused smaller LLM call that's more reliable
@@ -3911,7 +3926,7 @@ export function CoachTeachPage(): JSX.Element {
               // brain's [VOICE:] fallback doesn't re-queue after the
               // walkthrough is running.
               turnAbortRef.aborted = true;
-              walkthrough.start(tree);
+              startWalkthrough(tree);
               return { ok: true };
             }
             // No static / cached tree — generate in-place via the
@@ -3979,7 +3994,7 @@ export function CoachTeachPage(): JSX.Element {
                   fen: gameRef.current.fen,
                   trigger: null,
                 });
-                walkthrough.start(genResult.tree);
+                startWalkthrough(genResult.tree);
                 if (pace !== 'tour') {
                   void generateMissingStagesInBackground(
                     genResult.tree.openingName,
@@ -5075,7 +5090,7 @@ export function CoachTeachPage(): JSX.Element {
                 if (result.ok && result.tree) {
                   await cacheOpening(rec.name, result.tree);
                   voiceService.stop();
-                  walkthrough.start(result.tree);
+                  startWalkthrough(result.tree);
                   return;
                 }
               }
@@ -5911,7 +5926,12 @@ export function CoachTeachPage(): JSX.Element {
           <WalkthroughControls
             walkthrough={walkthrough}
             navigate={navigate}
-            onDeepDive={(query) => void handleSubmit(query, { teachIntent: true })}
+            onDeepDive={(query, watchedSans) => {
+              // Carry the path already watched so the new line picks up where
+              // this one left off instead of replaying the opening moves.
+              deepDiveResumeRef.current = watchedSans;
+              void handleSubmit(query, { teachIntent: true });
+            }}
             onPlayOutLine={(opening, customLine) => setLeafPlayOut({ opening, customLine })}
             onWatchContinuation={() => void startContinuationRef.current()}
           />
@@ -6750,7 +6770,7 @@ function WalkthroughControls({
    *  menu. The parent submits the resulting query through the same
    *  surface routing that handles chat input, so existing typo
    *  tolerance + broad-vs-specific depth logic kicks in. */
-  onDeepDive: (query: string) => void;
+  onDeepDive: (query: string, watchedSans: string[]) => void;
   /** Fired by the leaf "Play this line out yourself" button — the parent
    *  mounts OpeningPlayMode in-page, LOCKED to the taught line via
    *  customLine (plays it move-for-move, then adaptive Stockfish in the
@@ -7100,8 +7120,9 @@ function WalkthroughControls({
                   <button
                     key={`fork-deepdive-${idx}`}
                     onClick={() => {
+                      const watched = walkthrough.pathSans;
                       walkthrough.stop();
-                      onDeepDive(query);
+                      onDeepDive(query, watched);
                     }}
                     className="w-full flex items-center justify-between gap-3 px-3 py-2 rounded-lg bg-theme-bg hover:bg-theme-surface text-left min-h-[44px] transition-colors"
                     style={greenGlowStyle}
@@ -7287,8 +7308,9 @@ function WalkthroughControls({
                   <button
                     key={`leaf-deepdive-${idx}`}
                     onClick={() => {
+                      const watched = walkthrough.pathSans;
                       walkthrough.stop();
-                      onDeepDive(query);
+                      onDeepDive(query, watched);
                     }}
                     className="w-full flex items-center justify-between gap-3 px-3 py-2 rounded-lg bg-theme-bg hover:bg-theme-surface text-left min-h-[44px] transition-colors"
                     style={greenGlowStyle}
@@ -7457,8 +7479,9 @@ function WalkthroughControls({
                       variationName,
                       opt.extensionSans,
                     );
+                    const watched = walkthrough.pathSans;
                     walkthrough.stop();
-                    onDeepDive(query);
+                    onDeepDive(query, watched);
                   }}
                   className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg bg-theme-surface hover:bg-theme-bg text-left min-h-[52px] transition-colors"
                   style={greenGlowStyle}
@@ -7555,11 +7578,25 @@ function WalkthroughControls({
   // phase === 'narrating' (default)
   return (
     <div className="px-3 pb-3 space-y-2" data-testid="walkthrough-narrating-panel">
+      {/* A permanently-spinning Loader2 used to sit here. It is not a load —
+          it is the "narrating" phase — but it reads as stuck, and David spent
+          a lesson thinking the page never finished loading and was refreshing
+          itself (2026-07-31). Show the move being taught instead. */}
       <div className="flex items-center justify-center gap-2 text-xs text-theme-text-muted">
-        <Loader2 size={12} className="animate-spin" />
+        <Volume2 size={12} className="shrink-0" />
         <span>{tree ? `Teaching — ${tree.openingName}` : 'Teaching…'}</span>
       </div>
       <div className="flex items-center justify-center gap-2">
+        <button
+          onClick={() => walkthrough.stepBack()}
+          disabled={!walkthrough.canStepBack}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-sm transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          data-testid="walkthrough-step-back"
+          aria-label="Previous move"
+        >
+          <ChevronLeft size={14} />
+          Back
+        </button>
         <button
           onClick={() => walkthrough.skipNarration()}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-sm transition-colors"
