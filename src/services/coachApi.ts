@@ -1,6 +1,7 @@
 // All LLM API calls must go through this file only — per CLAUDE.md
 import OpenAI from 'openai';
 import { detectLanguage } from '../utils/detectLanguage';
+import { parseJsonSalvaging, isTruncatedJson } from '../utils/salvageJson';
 import { Capacitor } from '@capacitor/core';
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
@@ -826,9 +827,31 @@ export async function callDeepseekWithTool(
       `DeepSeek API returned no matching tool_call for "${toolName}" — got ${got}`,
     );
   }
-  // DeepSeek emits `arguments` as a JSON string. Parse here; let
-  // exceptions propagate so the caller can decide to fall back.
-  return JSON.parse(toolCall.function.arguments);
+  // DeepSeek emits `arguments` as a JSON string. A blob cut off at
+  // `max_tokens` used to throw here and the caller dropped its ENTIRE result
+  // — for a walkthrough that meant every move getting the same generic
+  // template sentence (David 2026-07-31: "repetitive and sounded nothing like
+  // Naroditsky"). Salvage the complete prefix instead: the elements the model
+  // actually finished are kept, the partial tail is discarded, nothing is
+  // invented (G0/G3 — the caller still validates the shape). A genuinely
+  // malformed blob still throws so the caller can fall back.
+  const rawArgs = toolCall.function.arguments;
+  try {
+    return JSON.parse(rawArgs);
+  } catch (parseErr) {
+    const salvaged = parseJsonSalvaging(rawArgs);
+    if (salvaged === null) throw parseErr;
+    void logAppAudit({
+      kind: 'llm-error',
+      category: 'subsystem',
+      source: 'coachApi.callDeepseekWithTool',
+      summary:
+        `salvaged a ${isTruncatedJson(rawArgs) ? 'truncated' : 'malformed'} "${toolName}" tool payload ` +
+        `(${rawArgs.length} chars, finish_reason=${choice?.finish_reason ?? 'unknown'}, max_tokens=${maxTokens}) ` +
+        `— kept the complete prefix instead of failing the whole call`,
+    });
+    return salvaged;
+  }
 }
 
 /** Top-level helper for tool-use generation — DeepSeek tool-use via the

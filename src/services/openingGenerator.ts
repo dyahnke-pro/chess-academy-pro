@@ -222,7 +222,10 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 /** Bump to invalidate every cached walkthrough tree on next read. The corpus
  *  teaching splice happens at GENERATION time, so trees generated before it
  *  would keep speaking corpus-free narration forever off the warm cache. */
-const WALKTHROUGH_GEN_REV = '2026-07-31-opening-tab-arrow-grammar';
+// Bumped for the truncated-narration salvage + wider retry: lessons generated
+// before it are cached with all-template ideas (the "repetitive, nothing like
+// Naroditsky" narration) and must regenerate rather than serve that forever.
+const WALKTHROUGH_GEN_REV = '2026-07-31-narration-truncation-salvage';
 
 export async function getCachedOpening(
   name: string,
@@ -1484,24 +1487,36 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
   // "JSON Parse error: Expected ']'") used to drop the WHOLE lesson to
   // template ideas ("e4 — staking a claim…", "c5 — gaining space…" — the
   // repetitive garbage David heard). One retry almost always recovers.
-  const callNarration = async (): Promise<NarrationOutput> => {
+  const callNarration = async (maxTokens: number): Promise<NarrationOutput> => {
     const result = await getCoachStructuredResponse(
       [{ role: 'user', content: userPrompt }],
       systemPrompt,
       'chat_response',
-      // Full narration is UNCAPPED (David 2026-07-30: the only caps are the
-      // user's verbosity settings) — budget for masterclass-depth keystones:
-      // ~120 tokens per ply average + envelope. 8K fits a 60-ply line.
-      8192,
+      maxTokens,
       'emit_walkthrough_narration',
       'Emit short coach narrations (one sentence per provided move) plus an intro and outro for the line.',
       NARRATION_SCHEMA,
     );
     return result as NarrationOutput;
   };
+  // How many plies this output actually narrates. A truncated tool payload is
+  // now SALVAGED rather than thrown away (coachApi.callDeepseekWithTool), so a
+  // short `ideas` array means "the model ran out of room", not "it failed" —
+  // every unnarrated ply silently falls back to the generic template sentence.
+  const covered = (n: NarrationOutput | null): number =>
+    Array.isArray(n?.ideas) ? n.ideas.filter((e) => typeof e === 'object' ? !!e?.text?.trim() : !!e).length : 0;
+  // Full narration is UNCAPPED (David 2026-07-30: the only caps are the user's
+  // verbosity settings) — 8K fits a ~60-ply line at ~120 tokens/ply. A deep
+  // sub-variation with a big grounding block overruns it, which is exactly
+  // what made the Alapin lesson all-template ("repetitive and sounded nothing
+  // like Naroditsky", 2026-07-31). When coverage comes back short, buy more
+  // room and keep whichever attempt narrates more of the line.
+  const FIRST_BUDGET = 8192;
+  const RETRY_BUDGET = 16384;
   try {
+    let attempt: NarrationOutput | null = null;
     try {
-      narration = await callNarration();
+      attempt = await callNarration(FIRST_BUDGET);
     } catch (firstErr) {
       void logAppAudit({
         kind: 'llm-error',
@@ -1509,8 +1524,34 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
         source: 'openingGenerator.generateOpeningFromDbNarration',
         summary: `narration attempt 1 failed for "${name}" — retrying once: ${firstErr instanceof Error ? firstErr.message : String(firstErr)}`,
       });
-      narration = await callNarration();
     }
+    // Retry when the call failed outright OR narrated less than the whole
+    // line. Keep the better of the two — a wider retry that comes back worse
+    // (a transient stumble) must never cost us the first attempt's prose.
+    if (covered(attempt) < positions.length) {
+      const shortfall = `${covered(attempt)}/${positions.length} plies`;
+      try {
+        const wider = await callNarration(RETRY_BUDGET);
+        void logAppAudit({
+          kind: 'llm-error',
+          category: 'subsystem',
+          source: 'openingGenerator.generateOpeningFromDbNarration',
+          summary:
+            `narration covered only ${shortfall} for "${name}" at ${FIRST_BUDGET} tokens — ` +
+            `retried at ${RETRY_BUDGET}, got ${covered(wider)}/${positions.length}`,
+        });
+        if (covered(wider) > covered(attempt)) attempt = wider;
+      } catch (retryErr) {
+        void logAppAudit({
+          kind: 'llm-error',
+          category: 'subsystem',
+          source: 'openingGenerator.generateOpeningFromDbNarration',
+          summary: `wider narration retry failed for "${name}" (kept ${shortfall}): ${retryErr instanceof Error ? retryErr.message : String(retryErr)}`,
+        });
+      }
+    }
+    if (covered(attempt) === 0) throw new Error('narration returned no usable ideas');
+    narration = attempt as NarrationOutput;
   } catch (err) {
     void logAppAudit({
       kind: 'llm-error',
