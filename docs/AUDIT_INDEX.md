@@ -146,3 +146,4 @@ scripts/audit-pitfalls-prod.mjs — post-deploy audit for opening pitfalls (comm
 | `scripts/audit-teach-corpus-spoken-prod.mjs` | /coach/teach — 'teach me X' generation SPEAKS corpus teaching (listener + tts-query evidence; AUDIT_OPENING param) |
 | `scripts/audit-teach-memory-prod.mjs` | /coach/teach — teaching MEMORY: two visits in one context; visit 2 must SPEAK the ledger recap ('Last time we covered…') (AUDIT_OPENING param) |
 | `scripts/audit-teach-tiers-spoken-prod.mjs` | /coach/teach — Tier-1 (masterclass beats) / Tier-2 (baked video narration) SPOKEN on prod; marks computed from the shipped tier source (AUDIT_TIER=masterclass\|baked, AUDIT_OPENING) |
+| `scripts/audit-stage-gen-prod.mjs` | /coach/teach — background stage gen E2E on PROD: uncached opening → "kicking off N background stage gens" fires → zero provider-unreachable errors (regression probe for the 2026-07-31 dead-Anthropic-pin fix) |

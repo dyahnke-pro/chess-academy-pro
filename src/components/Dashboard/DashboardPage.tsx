@@ -76,6 +76,7 @@ function TodayStatus(): JSX.Element | null {
   const navigate = useNavigate();
   const [reps, setReps] = useState<RepCandidate[] | null>(null);
   const [completedKeys, setCompletedKeys] = useState<Set<string>>(new Set());
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -93,27 +94,37 @@ function TodayStatus(): JSX.Element | null {
     return () => { cancelled = true; };
   }, []);
 
-  if (reps === null) return null;
-  if (reps.length === 0) return null;
+  // The slot is RESERVED from first paint (fixed min-height) so the reps
+  // arriving async never push the section grid down mid-tap — David's
+  // misclick report (2026-07-31): the late-loading tiles shifted the
+  // layout and his Coach tap landed on a training row. Collapsed by
+  // default; expanding is user-initiated, so that shift is fine.
+  const doneCount = reps?.filter((r) => completedKeys.has(r.key)).length ?? 0;
+  const allDone = reps !== null && reps.length > 0 && doneCount === reps.length;
 
   return (
-    <div className="max-w-lg mx-auto w-full flex flex-col gap-2" data-testid="dashboard-due-board">
-      {reps.length > 0 && (
-        <div className="flex items-center gap-2 px-1 pt-1" data-testid="dashboard-today-status">
+    <div className="max-w-lg mx-auto w-full flex flex-col gap-2 min-h-[2.75rem]" data-testid="dashboard-due-board">
+      {reps !== null && reps.length > 0 && (
+        <button
+          onClick={() => setExpanded((e) => !e)}
+          className={`w-full h-11 flex items-center gap-2 px-4 rounded-xl border transition-all hover:opacity-80 ${allDone ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-theme-accent/10 border-theme-accent/30'}`}
+          data-testid="dashboard-today-toggle"
+          data-expanded={expanded ? 'true' : 'false'}
+        >
           <Target size={16} className="text-theme-accent shrink-0" />
           <span className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
             Today&apos;s training
           </span>
-          <button
-            onClick={() => void navigate('/coach/plan')}
-            className="ml-auto text-xs text-theme-text-muted hover:text-theme-accent transition-colors"
-            data-testid="dashboard-today-seeall"
-          >
-            See plan
-          </button>
-        </div>
+          <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+            {doneCount}/{reps.length} done
+          </span>
+          <ChevronRight
+            size={16}
+            className={`ml-auto shrink-0 text-theme-text-muted transition-transform ${expanded ? 'rotate-90' : ''}`}
+          />
+        </button>
       )}
-      {reps.map((rep) => {
+      {expanded && reps !== null && reps.map((rep) => {
         const done = completedKeys.has(rep.key);
         return (
           <button
@@ -133,6 +144,15 @@ function TodayStatus(): JSX.Element | null {
           </button>
         );
       })}
+      {expanded && (
+        <button
+          onClick={() => void navigate('/coach/plan')}
+          className="self-end px-1 text-xs text-theme-text-muted hover:text-theme-accent transition-colors"
+          data-testid="dashboard-today-seeall"
+        >
+          See full plan
+        </button>
+      )}
     </div>
   );
 }
