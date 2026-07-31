@@ -154,7 +154,12 @@ export function deriveNarrationArrows(
   const LIST_JOIN = /^[\s,]*(and|or|,)?[\s,]*\(?$/i;
 
   const consider = (token: string, index: number, alternative: boolean): void => {
-    if (arrows.length >= MAX_ARROWS) return;
+    // Never drop a mention silently — a capped tail reads as full coverage
+    // when it isn't, so the overflow is recorded for the review pass.
+    if (arrows.length >= MAX_ARROWS) {
+      rejected.push({ token, index, reason: `over the ${MAX_ARROWS}-arrow cap for one ply` });
+      return;
+    }
     const before = text.slice(Math.max(0, index - 24), index);
     const after = text.slice(index + token.length, index + token.length + 14);
 
