@@ -123,6 +123,7 @@ import { fetchChesscomPlayerGames } from '../../services/chesscomGamesService';
 import { OpeningPlayMode } from '../Openings/OpeningPlayMode';
 import type { WalkthroughSession } from '../../types/walkthrough';
 import { classifyPhase } from '../../services/gamePhaseService';
+import { narrateContinuationMove } from '../../services/continuationMoveNarration';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { shouldOfferGuidedFind, buildGuidedFindChallenge, judgeGuidedFindAttempt, type GuidedFindChallenge } from '../../services/guidedFindTheMove';
 import { buildThreatCheckQuestion, judgeThreatCheckPick, type ThreatCheckQuestion } from '../../services/threatCheck';
@@ -757,6 +758,15 @@ export function CoachTeachPage(): JSX.Element {
   // Guard for the narrated middle+endgame continuation (see
   // startNarratedContinuation). Declared early so handleSubmit can cancel it.
   const continuationRef = useRef(false);
+  /** Arrows for the current play-out move — the same orange trail + green
+   *  threat grammar the walkthrough uses, so the middlegame looks like the
+   *  lesson it continues (David 2026-07-31). */
+  const [continuationArrows, setContinuationArrows] = useState<NarrationArrow[]>([]);
+  /** True while the play-out is paused at the opening→endgame boundary,
+   *  offering the endgame as its own step rather than sliding through it. */
+  const [continuationEndgamePrompt, setContinuationEndgamePrompt] = useState(false);
+  /** Resolver for that prompt: true = watch the endgame, false = stop here. */
+  const endgameChoiceRef = useRef<((watch: boolean) => void) | null>(null);
   // gameRef is the closure-staleness escape hatch. React state updates
   // are batched per render, so when ControlledChessBoard's `onMove`
   // fires (synchronously inside the click/drag handler) and we call
@@ -5377,6 +5387,7 @@ export function CoachTeachPage(): JSX.Element {
       for (let i = 0; i < MAX_PLIES; i += 1) {
         if (!continuationRef.current) return; // cancelled
         if (local.isGameOver()) break;
+        const fenAtMove = local.fen();
         const uci = await stockfishEngine.getBestMove(local.fen(), 400).catch(() => '');
         if (!continuationRef.current) return;
         if (!uci || uci.length < 4) break;
@@ -5391,16 +5402,43 @@ export function CoachTeachPage(): JSX.Element {
         }
         if (!landed) break;
         // Drive the visible board with the same move.
+        const fenBefore = fenAtMove;
         gameRef.current.makeMove(from, to, promotion);
         ply += 1;
-        const { text, state: next } = continuationNarration(local.fen(), ply, state);
+
+        // EVERY move gets a spoken why + arrows (David 2026-07-31: "the middle
+        // game plans were devoid of narration and arrows"). The old behaviour
+        // spoke only on a phase change or a big material swing, so a normal
+        // move said nothing — and when the play-out began already in an
+        // endgame, the phase never changed and it ran silent start to finish.
+        const perMove = narrateContinuationMove(fenBefore, local.fen(), landed.san, from, to);
+        setContinuationArrows(perMove.arrows);
+
+        // Keystone lines (phase change, decisive material) still take
+        // precedence — they carry more than the move itself does.
+        const { text: keystone, state: next } = continuationNarration(local.fen(), ply, state);
+        const phaseChanged = next.phase !== state.phase;
         state = next;
-        if (text) {
-          setMessages((prev) => [...prev, { id: uid('cont-move'), role: 'assistant', content: text, timestamp: Date.now() }]);
-          speechChainRef.current = speechChainRef.current.then(() => voiceService.speakForced(text)).catch(() => undefined);
+        const text = keystone ?? perMove.say;
+        setMessages((prev) => [...prev, { id: uid('cont-move'), role: 'assistant', content: text, timestamp: Date.now() }]);
+        speechChainRef.current = speechChainRef.current
+          .then(() => voiceService.speakForced(text))
+          .catch(() => undefined);
+
+        // ENDGAME AS ITS OWN STEP (David 2026-07-31: "no option for endgame
+        // viewing"). Reaching an endgame used to slide past inside this loop;
+        // now it stops and hands the choice back.
+        if (phaseChanged && next.phase === 'endgame') {
+          setContinuationEndgamePrompt(true);
+          const resumeChoice = await new Promise<boolean>((resolve) => {
+            endgameChoiceRef.current = resolve;
+          });
+          setContinuationEndgamePrompt(false);
+          endgameChoiceRef.current = null;
+          if (!resumeChoice || !continuationRef.current) return;
         }
-        // Pace it so the student can watch — a bit longer when we narrated.
-        await new Promise((r) => setTimeout(r, text ? 1500 : 750));
+        // Pace it so the student can watch.
+        await new Promise((r) => setTimeout(r, 1500));
       }
 
       if (!continuationRef.current) return;
@@ -5417,6 +5455,9 @@ export function CoachTeachPage(): JSX.Element {
       }
     } finally {
       continuationRef.current = false;
+      setContinuationArrows([]);
+      setContinuationEndgamePrompt(false);
+      endgameChoiceRef.current = null;
     }
   }, [walkthrough]);
   // Bind the late ref so handleSubmit (defined earlier) can trigger it.
@@ -5837,12 +5878,47 @@ export function CoachTeachPage(): JSX.Element {
                 showVoiceMic={false}
                 showLastMoveHighlight
                 onMove={handleStudentMove}
-                arrows={arrows.length > 0 ? arrows : undefined}
+                // During the middlegame/endgame play-out the continuation owns
+                // the board's arrows — same orange trail + green threat grammar
+                // as the lesson it continues.
+                arrows={
+                  continuationArrows.length > 0
+                    ? walkthroughBoardArrows(continuationArrows)
+                    : (arrows.length > 0 ? arrows : undefined)
+                }
                 annotationHighlights={highlights.length > 0 ? highlights : undefined}
               />
             )}
           </div>
         </div>
+
+        {/* ENDGAME AS ITS OWN STEP (David 2026-07-31: "no option for endgame
+            viewing"). The play-out stops at the opening→endgame boundary and
+            hands the choice back instead of sliding through it unremarked. */}
+        {continuationEndgamePrompt && (
+          <div className="px-3 pb-2 space-y-2" data-testid="continuation-endgame-prompt">
+            <div className="text-xs font-medium text-theme-text-muted px-1">
+              The queens are off — this is an endgame now.
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => endgameChoiceRef.current?.(true)}
+                className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-theme-accent text-theme-bg text-sm font-semibold min-h-[44px] transition-colors"
+                data-testid="continuation-watch-endgame"
+              >
+                <ChevronRight size={16} />
+                Watch the endgame
+              </button>
+              <button
+                onClick={() => endgameChoiceRef.current?.(false)}
+                className="px-3 py-2.5 rounded-lg border border-theme-border bg-theme-surface hover:bg-theme-bg text-sm font-medium text-theme-text min-h-[44px] transition-colors"
+                data-testid="continuation-stop-here"
+              >
+                Stop here
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Player (David) info bar — matches Play's layout below the
             board. */}
