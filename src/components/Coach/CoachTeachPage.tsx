@@ -5764,6 +5764,7 @@ export function CoachTeachPage(): JSX.Element {
             navigate={navigate}
             onDeepDive={(query) => void handleSubmit(query)}
             onPlayOutLine={(opening, customLine) => setLeafPlayOut({ opening, customLine })}
+            onWatchContinuation={() => void startContinuationRef.current()}
           />
         ) : (
           // Control buttons styled to MATCH Play's row exactly (David
@@ -6592,6 +6593,7 @@ function WalkthroughControls({
   navigate,
   onDeepDive,
   onPlayOutLine,
+  onWatchContinuation,
 }: {
   walkthrough: ReturnType<typeof useTeachWalkthrough>;
   navigate: ReturnType<typeof useNavigate>;
@@ -6606,6 +6608,11 @@ function WalkthroughControls({
    *  middlegame). Kept in the parent so the play-out overlay lives at the
    *  page root, not inside these controls. */
   onPlayOutLine: (opening: OpeningRecord, customLine: OpeningVariation) => void;
+  /** Fired by the leaf "Watch the middlegame and endgame" button — the
+   *  coach plays out BOTH sides with Stockfish from where the lesson ended,
+   *  narrating the keystones (David 2026-07-30: the option existed only as
+   *  a chat chip and got missed; it belongs on the leaf panel itself). */
+  onWatchContinuation: () => void;
 }): JSX.Element {
   const { phase, forkOptions, canBacktrack, leafOutro, tree } = walkthrough;
 
@@ -6976,6 +6983,17 @@ function WalkthroughControls({
           </div>
         )}
         <div className="flex flex-col gap-2">
+          {tree && !tree.derived && (
+            <button
+              onClick={() => onWatchContinuation()}
+              className="w-full flex items-center justify-center gap-2 px-3 py-3 rounded-lg bg-theme-accent text-theme-bg text-sm font-semibold min-h-[48px] transition-colors"
+              style={goldGlowStrongStyle}
+              data-testid="walkthrough-watch-continuation"
+            >
+              <ChevronRight size={16} />
+              Watch the middlegame and endgame
+            </button>
+          )}
           {hasStages && (
             <button
               onClick={() => walkthrough.enterStageMenu()}

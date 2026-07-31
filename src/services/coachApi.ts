@@ -1193,7 +1193,12 @@ export async function getCoachStructuredResponse(
       ? lastErr
       : new Error(typeof lastErr === 'string' ? lastErr : JSON.stringify(lastErr));
   }
-  throw new Error('No API key configured for tool-use call (neither DeepSeek nor Anthropic)');
+  // Keys are injected SERVER-SIDE by the /api/llm proxy — the client always
+  // holds the proxy sentinel, so landing here means the provider failed or is
+  // in its failure cooldown, NOT that a key is missing. The old "No API key
+  // configured — go to Settings" text sent prod users hunting for a setting
+  // that no longer exists (David's device, PostHog 2026-07-30).
+  throw new Error('The coach’s AI provider is temporarily unreachable — it usually recovers within a minute.');
 }
 
 // ─── WO-COACH-MASTER-INTEGRATION — master-play grounding (Layers B + D) ─
@@ -2794,7 +2799,10 @@ export async function getCoachChatResponse(
   const config = forceProvider
     ? await getForcedProviderConfig(forceProvider)
     : await getProviderConfig();
-  if (!config) return '⚠️ No API key configured. Go to Settings to add your Anthropic or DeepSeek API key.';
+  // With the server-side proxy this is near-unreachable (the sentinel key
+  // always resolves) — but keep the ⚠️ prefix: the kid-lane sanitizer keys
+  // off it to suppress error text from young ears.
+  if (!config) return '⚠️ The coach’s AI provider is temporarily unreachable — try again in a minute.';
 
   const verbosity = verbosityOverride ?? await getCoachVerbosity();
   // Pull the active profile's personality dials so EVERY surface that
