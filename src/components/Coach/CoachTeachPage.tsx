@@ -5046,25 +5046,41 @@ export function CoachTeachPage(): JSX.Element {
         // nudge-led set if a stored weakness profile is available (non-blocking
         // — the kickoff IIFE is synchronous). Null-guarded end to end.
         setCoachChoices(generic);
+        // THE COACH'S CALL (David 2026-07-31: "a GREAT coach tells you what
+        // to work on because they already know your game inside and out").
+        // ONE unified read replaces the separate session-opener + memory
+        // greeting so the coach never repeats itself: policy over the games
+        // store (temperature), the teaching ledger + favorites (home
+        // opening), and the weakness profile — rough patch → build on the
+        // strength; running hot → invest in the weakness; steady → keep
+        // building the home opening. The call is an OFFER (a chip): whatever
+        // the student types instead always wins (sovereignty).
         void getStoredWeaknessProfile()
-          .then((profile) => {
+          .then(async (profile) => {
             const top = (profile?.items ?? []).slice().sort((a, b) => b.severity - a.severity)[0];
             const nudge = top ? weaknessNudgeFromItem(top.category, top.label) : null;
             if (nudge) {
               setCoachChoices([nudge, ...generic.filter((q) => q !== nudge)].slice(0, 4));
             }
-            // SESSION OPENER (David 2026-07-11 bookends): a coach names the
-            // day's focus before the first move — computed from the stored
-            // weakness profile, spoken AFTER the greeting resolves (the
-            // speech chain serializes; never talks over the welcome line).
-            // The profile read is async — the student may have started a
-            // conversation while it resolved. Don't append the opener onto
-            // an active transcript (the non-sequitur David caught).
-            if (top && !userInteractedRef.current) {
-              // Use the label VERBATIM (a colon, not a lowercased em-dash
-              // splice): the label is a proper noun phrase — "Recurring
-              // mistakes in the Vienna Game" — and `.toLowerCase()` mangled
-              // it into "recurring mistakes in vienna game" (David 2026-07-18).
+            let spokeCall = false;
+            try {
+              const { computeCoachsCall } = await import('../../services/coachsCall');
+              const call = await computeCoachsCall(top?.label ?? null);
+              if (call && !userInteractedRef.current) {
+                // Label VERBATIM per David 2026-07-18 — the weakness label is
+                // a proper noun phrase; never lowercase-splice it.
+                spokeCall = true;
+                const chip = call.prescription === 'weakness' && nudge ? nudge : call.chip;
+                setMessages((prev) => [...prev, { id: uid('coachs-call'), role: 'assistant', content: call.line, timestamp: Date.now() }]);
+                setCoachChoices((prev) => [chip, ...(prev ?? generic).filter((q) => q !== chip)].slice(0, 4));
+                speechChainRef.current = speechChainRef.current
+                  .then(() => voiceService.speakForced(call.line))
+                  .catch(() => undefined);
+              }
+            } catch { /* the call is a bonus — fall through to the opener */ }
+            // SESSION OPENER (David 2026-07-11 bookends) — the fallback when
+            // the coach's call had nothing to say but a weakness exists.
+            if (!spokeCall && top && !userInteractedRef.current) {
               const planLine = `One thing to keep in the back of your mind today: ${top.label}. That's the pattern that's been costing you the most, and I'll be watching for it.`;
               setMessages((prev) => [...prev, { id: uid('session-opener'), role: 'assistant', content: planLine, timestamp: Date.now() }]);
               speechChainRef.current = speechChainRef.current
@@ -5073,24 +5089,6 @@ export function CoachTeachPage(): JSX.Element {
             }
           })
           .catch(() => { /* stored-profile read failed — generic chips stand */ });
-        // CLASSROOM MEMORY GREETING (David 2026-07-31: "a custom phrase when
-        // a user reenters the classroom — last session we did x, I suggest we
-        // build off of that"). The teaching ledger names the most recent
-        // lesson; the coach greets with it and offers a one-tap continue.
-        // The walkthrough's own recap then names TODAY'S layer. Async +
-        // guarded like the weakness nudge — never lands on an active chat.
-        void import('../../services/teachingLedger')
-          .then(({ getLastTaughtOpening }) => getLastTaughtOpening())
-          .then((last) => {
-            if (!last || userInteractedRef.current) return;
-            const rememberLine = `Last session we worked on the ${last.openingName} — ${last.visit.takeaway || 'the main line'}. I'd build on that today.`;
-            setMessages((prev) => [...prev, { id: uid('classroom-memory'), role: 'assistant', content: rememberLine, timestamp: Date.now() }]);
-            setCoachChoices((prev) => [`Continue the ${last.openingName}`, ...(prev ?? [])].slice(0, 4));
-            speechChainRef.current = speechChainRef.current
-              .then(() => voiceService.speakForced(rememberLine))
-              .catch(() => undefined);
-          })
-          .catch(() => { /* ledger read failed — greeting stands */ });
       }
       useCoachMemoryStore.getState().appendConversationMessage({
         surface: 'chat-teach',
