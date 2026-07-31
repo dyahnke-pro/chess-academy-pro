@@ -1609,6 +1609,18 @@ export function inferStudentSideFromName(name: string): 'white' | 'black' {
     'wing gambit', 'morra', 'sokolsky', 'stoltz attack', 'barmen',
   ];
   for (const kw of whiteSystemKeywords) if (lower.includes(kw)) return 'white';
+  // UNSOUND BLACK GAMBITS are taught from the PUNISHING side — the sanctioned
+  // exception to "the side whose structure defines the game" (CLAUDE.md). The
+  // shipped Latvian/Elephant bakes are explicitly White-voiced ("we're playing
+  // the white side… our plan is to exploit the exposed king"), and they only
+  // landed on white by falling through to the default at the bottom of this
+  // function — one new entry in `blackKeywords` would have silently inverted
+  // the coach's pronouns against reviewed narration. State it outright.
+  const punishFromWhiteKeywords = [
+    'latvian gambit', 'elephant gambit', 'englund gambit', 'damiano defense',
+    'damiano defence',
+  ];
+  for (const kw of punishFromWhiteKeywords) if (lower.includes(kw)) return 'white';
   if (/\bdefen[cs]e\b/.test(lower)) return 'black';
   const blackKeywords = [
     'sicilian', 'french', 'caro-kann', 'caro kann', 'pirc',

@@ -107,6 +107,24 @@ describe('walkthrough-narrations.json (Tier-2 baked video narrations)', () => {
       // rails as the primary — a bad hand-merge must not ship half-gated.
       if (e.ideasFlipped) {
         expect(e.ideasFlipped, `${e.openingName}: ideasFlipped length mismatch`).toHaveLength(e.spine.length);
+        // Two silent-failure modes the 2026-07-31 sweep produced and that no
+        // board check can see: an IDENTITY flip (the model echoed the primary
+        // back — speaks the wrong side's pronouns on a flipped board), and a
+        // MECHANICAL COLOUR SWAP (White↔Black find-replaced, which inverts
+        // chess FACTS: "f5 weakens White's kingside" on a move Black played).
+        const canon = (t: string): string => t.toLowerCase().replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+        const swapColors = (t: string): string => t.replace(/\b(white|black)\b/gi, (m) => (m.toLowerCase() === 'white' ? 'black' : 'white'));
+        const overlapRatio = (a: string, b: string): number => {
+          const A = canon(a).split(' ');
+          const B = new Set(canon(b).split(' '));
+          return A.length === 0 ? 0 : A.filter((w) => B.has(w)).length / A.length;
+        };
+        e.ideasFlipped.forEach((idea, i) => {
+          const fl = `${e.openingName} flip ply ${i + 1}`;
+          const prim = e.ideas[i]?.text ?? '';
+          expect(canon(idea.text), `${fl}: identical to the primary register`).not.toBe(canon(prim));
+          expect(overlapRatio(swapColors(idea.text), prim), `${fl}: mechanical White/Black swap of the primary`).toBeLessThan(0.92);
+        });
         e.ideasFlipped.forEach((idea, i) => {
           const label = `${e.openingName} flip ply ${i + 1} (${e.spine[i]})`;
           expect(idea.text?.trim().length, `${label}: empty text`).toBeGreaterThan(0);

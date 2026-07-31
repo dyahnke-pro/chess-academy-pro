@@ -53,6 +53,10 @@ const DRY = process.argv.includes('--dry');
 // Re-bake ONLY the comparative bridges for an already-shipped entry —
 // never churns reviewed narration prose.
 const BRIDGES_ONLY = process.argv.includes('--bridges-only');
+// Add the OPPOSITE-perspective registers to an already-shipped entry without
+// touching its reviewed prose (8 bakes predate the flip pass — on those the
+// coach's pronouns stayed put when the board was flipped).
+const FLIP_ONLY = process.argv.includes('--flip-only');
 const OPENING = arg('opening', null);
 const VIDEO_IDS = (arg('videos', '') || '').split(',').filter(Boolean);
 if (!OPENING || VIDEO_IDS.length === 0) {
@@ -394,6 +398,88 @@ ${clipped.slice(0, 120_000)}`;
   return Object.keys(out).length ? out : null;
 }
 
+/** Rewrite a FINISHED, gated narration for the OTHER colour as the student —
+ *  same facts, same per-ply alignment, gated identically. Returns null when
+ *  the flipped set can't pass (the primary register then speaks regardless of
+ *  orientation, which is the pre-2026-07-31 behaviour). */
+async function bakeFlipRegister(ideas, plies, spine, user, system, overlaps, side, other) {
+  try {
+    const finished = ideas.map((idea, i) => `${i + 1}. [after ${plies[i].san}] ${idea.text} || SHORT: ${idea.shortText}`).join('\n');
+    const flip = await callModel(system, `${user}
+
+FLIP CALL. Below is the FINISHED narration for this line, written for a student playing ${side.toUpperCase()}. Rewrite it for a student playing ${other.toUpperCase()} instead.
+
+THIS IS A RELABELLING OF THE TWO PLAYERS — NOT A RECOLOURING OF THE CHESS. Apply exactly this transformation:
+- Every "we / our / us / you / your" in the original refers to ${side.toUpperCase()}. Those become "${side === 'white' ? 'White' : 'Black'}" (by name).
+- Every mention of ${other.toUpperCase()} by name becomes "we / our / us".
+- NOTHING ELSE CHANGES. Do NOT swap the words "White" and "Black" anywhere else. Whoever played a move still played it; whichever side owns a weakness still owns it. If the original says a move "weakens Black's kingside", the flipped version ALSO says Black's kingside — because the same pawn on the same square still belongs to Black.
+
+Two failure modes we reject automatically, so avoid both:
+- Returning the entry unchanged (nothing relabelled).
+- Find-replacing White↔Black throughout, which inverts the chess into nonsense.
+
+Keep every entry on the SAME move it already narrates, keep every board claim true, keep shortText ≤18 words. Return json: {"intro":string,"shortIntro":string,"outro":string,"ideas":[{"text","shortText"}...]} with EXACTLY ${ideas.length} idea entries.
+
+FINISHED NARRATION:
+${finished}`, 8192);
+    const fIdeas = Array.isArray(flip.ideas) ? flip.ideas : [];
+    if (fIdeas.length !== ideas.length || !flip.intro || !flip.outro) {
+      console.error('  (flip register malformed — shipping primary only)');
+      return null;
+    }
+    const fProblems = [];
+    // IDENTITY flip — the model echoed the primary back (Modern Defense
+    // shipped one). A flipped register that equals the primary speaks the
+    // WRONG side's pronouns whenever the board is flipped.
+    // BLIND COLOUR SWAP — the model find-replaced White↔Black instead of
+    // changing perspective, inverting chess FACTS ("f5 weakens White's
+    // kingside" when Black played f5). Detect by swapping the colours back:
+    // if that reproduces the primary, no perspective work was done.
+    const canon = (t) => String(t).toLowerCase().replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+    const swapColors = (t) => String(t).replace(/\b(white|black)\b/gi, (m) => (m.toLowerCase() === 'white' ? 'black' : 'white'));
+    const overlapRatio = (a, b) => {
+      const A = canon(a).split(' '), B = new Set(canon(b).split(' '));
+      if (A.length === 0) return 0;
+      return A.filter((w) => B.has(w)).length / A.length;
+    };
+    fIdeas.forEach((idea, i) => {
+      const prim = ideas[i]?.text ?? '';
+      if (canon(idea.text) === canon(prim)) {
+        fProblems.push(`flip ply ${i + 1}: identical to the primary register (no perspective rewrite)`);
+      } else if (overlapRatio(swapColors(idea.text), prim) >= 0.92) {
+        fProblems.push(`flip ply ${i + 1}: mechanical White/Black swap of the primary — the FACTS must not flip, only who is called "we"`);
+      }
+    });
+    const checkFlip = (label, text, fen) => {
+      if (!text || !text.trim()) return fProblems.push(`${label}: empty`);
+      const fGram = overlaps(text);
+      if (fGram) return fProblems.push(`${label}: lifts "${fGram}"`);
+      if (BANNED.test(text) || (BANNED_EXTRA && BANNED_EXTRA.test(text))) return fProblems.push(`${label}: attribution leak`);
+      if (MOVE_NUM.test(text)) return fProblems.push(`${label}: move-number prefix`);
+      if (fen) { const c = boardClaimProblem(text, fen); if (c) return fProblems.push(`${label}: ${c}`); }
+    };
+    checkFlip('flip intro', flip.intro, null);
+    checkFlip('flip outro', flip.outro, null);
+    fIdeas.forEach((idea, i) => {
+      checkFlip(`flip ply ${i + 1}`, idea.text, plies[i].fen);
+      if (idea.text && !mentionsOwnMove(idea.text, plies[i].san)) fProblems.push(`flip ply ${i + 1}: misaligned`);
+      // The flipped register's student is `other`, so the side-voice check inverts.
+      if (idea.text && claimsOpponentMove(idea.text, plies[i].san, plies[i].movedBy, other)) {
+        fProblems.push(`flip ply ${i + 1}: claims the opponent's move as ours`);
+      }
+    });
+    if (fProblems.length > 0) {
+      console.error(`  (flip register FAILED ${fProblems.length} gate(s) — shipping primary only: ${fProblems.slice(0, 3).join(' | ')})`);
+      return null;
+    }
+    console.log(`  flip register baked (${other} perspective) — all gates green`);
+    return flip;
+  } catch (e) {
+    console.error(`  (flip call failed — shipping primary only: ${String(e).slice(0, 100)})`);
+    return null;
+  }
+}
+
 async function main() {
   const spine = await resolveSpine(OPENING);
   if (!spine) { console.error(`no spine resolves for "${OPENING}"`); process.exit(1); }
@@ -482,6 +568,36 @@ THE LINE (${plies.length} plies, in order): ${plies.map((p, i) => `${i + 1}:${p.
 
 TEACHER'S SPOKEN TRANSCRIPT (reference only — reword, never quote):
 ${clipped}`;
+
+  // FLIP-ONLY: add the opposite-perspective registers to an already-shipped
+  // entry without touching its reviewed prose. Placed HERE, after `system`
+  // and `user` exist, so it reuses the EXACT prompts the full bake uses — the
+  // first attempt at this ran earlier in main() with a hand-rolled thin
+  // prompt and the model degraded to find-replacing White↔Black, inverting
+  // the chess ("f5 weakens White's kingside" on a move Black played).
+  if (FLIP_ONLY) {
+    const file = JSON.parse(await readFile(OUT, 'utf8'));
+    const key = norm(spine.name);
+    const entry = file.narrations[key];
+    if (!entry) { console.error(`--flip-only: no shipped entry for "${spine.name}"`); process.exit(1); }
+    if (entry.spine.join(' ') !== plies.map((p) => p.san).join(' ')) {
+      console.error('--flip-only: shipped spine != runtime spine — re-bake the whole entry');
+      process.exit(1);
+    }
+    const fSide = entry.studentSide ?? spine.studentSide ?? 'white';
+    const fOther = fSide === 'white' ? 'black' : 'white';
+    const flippedOnly = await bakeFlipRegister(entry.ideas, plies, spine, user, system, overlaps, fSide, fOther);
+    if (!flippedOnly) { console.error('flip register did not pass its gates — nothing written'); process.exit(1); }
+    entry.studentSide = fSide;
+    entry.introFlipped = String(flippedOnly.intro).trim();
+    entry.shortIntroFlipped = String(flippedOnly.shortIntro ?? '').trim();
+    entry.outroFlipped = String(flippedOnly.outro).trim();
+    entry.ideasFlipped = flippedOnly.ideas.map((i) => ({ text: String(i.text).trim(), shortText: String(i.shortText ?? '').trim() }));
+    file.generatedAt = new Date().toISOString();
+    await writeFile(OUT, JSON.stringify(file, null, 1));
+    console.log(`✓ "${spine.name}" — flip register (${fOther} perspective) added → ${OUT}`);
+    return;
+  }
 
   // One-shot asks under-deliver on long lines (28 plies → 15 ideas). Chunk:
   // intro/outro from the first call, ideas in batches of 10 with the full
@@ -598,44 +714,7 @@ FOR THIS CALL: return ONLY {"ideas":[...]} for moves ${start + 1}-${start + slic
   // register then speaks regardless of orientation), never half-gated.
   const side = spine.studentSide ?? 'white';
   const other = side === 'white' ? 'black' : 'white';
-  let flipped = null;
-  try {
-    const finished = ideas.map((idea, i) => `${i + 1}. [after ${plies[i].san}] ${idea.text} || SHORT: ${idea.shortText}`).join('\n');
-    const flip = await callModel(system, `${user}
-
-FLIP CALL: below is the FINISHED narration for this line, written for the student playing ${side.toUpperCase()} ("we" = ${side}). Rewrite the intro, shortIntro, outro, and EVERY entry so the student is playing ${other.toUpperCase()} instead — "we/our" now means ${other}, and ${side} becomes "White"/"Black" by name. SAME facts, SAME move each entry speaks about, same alignment and truth rules. Return {"intro":string,"shortIntro":string,"outro":string,"ideas":[{"text","shortText"}...]} with EXACTLY ${ideas.length} idea entries.
-
-FINISHED NARRATION:
-${finished}`, 8192);
-    const fIdeas = Array.isArray(flip.ideas) ? flip.ideas : [];
-    if (fIdeas.length === ideas.length && flip.intro && flip.outro) {
-      const fProblems = [];
-      const checkFlip = (label, text, fen) => {
-        if (!text || !text.trim()) return fProblems.push(`${label}: empty`);
-        const fGram = overlaps(text);
-        if (fGram) return fProblems.push(`${label}: lifts "${fGram}"`);
-        if (BANNED.test(text) || (BANNED_EXTRA && BANNED_EXTRA.test(text))) return fProblems.push(`${label}: attribution leak`);
-        if (MOVE_NUM.test(text)) return fProblems.push(`${label}: move-number prefix`);
-        if (fen) { const c = boardClaimProblem(text, fen); if (c) return fProblems.push(`${label}: ${c}`); }
-      };
-      checkFlip('flip intro', flip.intro, null);
-      checkFlip('flip outro', flip.outro, null);
-      fIdeas.forEach((idea, i) => {
-        checkFlip(`flip ply ${i + 1}`, idea.text, plies[i].fen);
-        if (idea.text && !mentionsOwnMove(idea.text, plies[i].san)) fProblems.push(`flip ply ${i + 1}: misaligned`);
-      });
-      if (fProblems.length === 0) {
-        flipped = flip;
-        console.log(`  flip register baked (${other} perspective) — all gates green`);
-      } else {
-        console.error(`  (flip register FAILED ${fProblems.length} gate(s) — shipping primary only: ${fProblems.slice(0, 3).join(' | ')})`);
-      }
-    } else {
-      console.error('  (flip register malformed — shipping primary only)');
-    }
-  } catch (e) {
-    console.error(`  (flip call failed — shipping primary only: ${String(e).slice(0, 100)})`);
-  }
+  const flipped = await bakeFlipRegister(ideas, plies, spine, user, system, overlaps, side, other);
 
   // Comparative bridges for the fork's sidelines (needs ≥2 branches).
   const bridges = await bakeBridges(spine, plies, clipped, overlaps);

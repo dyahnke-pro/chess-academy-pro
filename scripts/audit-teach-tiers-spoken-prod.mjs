@@ -96,10 +96,15 @@ let seenSpoken = null;
 let detail = '';
 try {
   await p.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 45000 });
-  if (BASE.startsWith('http://')) {
-    await p.evaluate((url) => localStorage.setItem('auditStreamUrl', url), listener.url).catch(() => undefined);
-    await p.reload({ waitUntil: 'domcontentloaded' });
-  }
+  // Attach the narration listener on PROD too, not just localhost. The old
+  // http:// gate meant every prod run silently reported listener=0 and the
+  // 3-instrument standard degraded to two (Playwright + /api/tts decode) —
+  // and a decoded TTS request is NOT proof the app spoke. Chromium treats
+  // http://localhost as a potentially-trustworthy origin, so an https page
+  // may post to it; the listener already sends the CORS + private-network
+  // headers that allows.
+  await p.evaluate((url) => localStorage.setItem('auditStreamUrl', url), listener.url).catch(() => undefined);
+  await p.reload({ waitUntil: 'domcontentloaded' });
   await dismiss(); await dismiss();
 
   const box = p.locator('[data-testid="chat-text-input"]');
