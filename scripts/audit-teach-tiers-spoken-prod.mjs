@@ -103,7 +103,32 @@ try {
   // http://localhost as a potentially-trustworthy origin, so an https page
   // may post to it; the listener already sends the CORS + private-network
   // headers that allows.
-  await p.evaluate((url) => localStorage.setItem('auditStreamUrl', url), listener.url).catch(() => undefined);
+  // Seed the profile DIRECTLY (url AND secret) then reload so App.init()
+  // hydrates its config cache from it. Two bugs kept listener=0 on every
+  // run: the old code wrote only localStorage — which the app migrates from
+  // just once, and only when a profile already exists, so a write right
+  // after goto() lands too late — and it never set the SECRET at all, so
+  // the listener 401'd whatever did arrive.
+  await p.evaluate(({ url, secret }) => new Promise((res) => {
+    const o = indexedDB.open('ChessAcademyDB');
+    o.onsuccess = () => {
+      const dbi = o.result;
+      try {
+        const tx = dbi.transaction('profiles', 'readwrite');
+        const g = tx.objectStore('profiles').get('main');
+        g.onsuccess = () => {
+          const prof = g.result;
+          if (prof) {
+            prof.preferences = { ...prof.preferences, auditStreamUrl: url, auditStreamSecret: secret };
+            tx.objectStore('profiles').put(prof);
+          }
+        };
+        tx.oncomplete = () => { dbi.close(); res(true); };
+        tx.onerror = () => { dbi.close(); res(false); };
+      } catch { dbi.close(); res(false); }
+    };
+    o.onerror = () => res(false);
+  }), { url: listener.url, secret: listener.secret }).catch(() => undefined);
   await p.reload({ waitUntil: 'domcontentloaded' });
   await dismiss(); await dismiss();
 
