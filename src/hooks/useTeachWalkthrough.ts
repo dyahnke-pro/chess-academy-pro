@@ -793,6 +793,9 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
   // This visit's planned teaching layer (set at start, recorded at the
   // leaf) — the coach's memory of what it taught (teachingLedger).
   const teachingPlanRef = useRef<{ opening: string; layer: string } | null>(null);
+  /** Opening whose recap already spoke this visit (chooser + intro both
+   *  speak it — never twice in a row). */
+  const recapSpokenForRef = useRef<string | null>(null);
   const viewOrientationRef = useRef<'white' | 'black' | null>(null);
   const setViewOrientation = useCallback((color: 'white' | 'black'): void => {
     viewOrientationRef.current = color;
@@ -1258,6 +1261,24 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
           source: 'useTeachWalkthrough.start',
           summary: `chooser shown for "${newTree.openingName}" (previously completed)`,
         });
+        // TEACHING MEMORY at the chooser — the RETURNING visitor is exactly
+        // who the recap is for, and this path skips the intro entirely (the
+        // 2026-07-31 memory probe caught the recap never firing on it).
+        // Speak "last time X, today Y" over the chooser; the guard stops a
+        // double-speak if they then pick "walk through again".
+        if (!newTree.derived) {
+          void (async () => {
+            try {
+              const { planTeachingVisit } = await import('../services/teachingLedger');
+              const plan = await planTeachingVisit(newTree.openingName, newTree);
+              teachingPlanRef.current = { opening: newTree.openingName, layer: plan.layer };
+              if (plan.recap && recapSpokenForRef.current !== newTree.openingName) {
+                recapSpokenForRef.current = newTree.openingName;
+                await speakWalkthroughText(plan.recap, plan.recap);
+              }
+            } catch { /* memory is a bonus, never a blocker */ }
+          })();
+        }
         return;
       }
       void logAppAudit({
@@ -1316,7 +1337,10 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
               const { planTeachingVisit } = await import('../services/teachingLedger');
               const plan = await planTeachingVisit(newTree.openingName, newTree);
               teachingPlanRef.current = { opening: newTree.openingName, layer: plan.layer };
-              if (plan.recap) recapPrefix = `${plan.recap} `;
+              if (plan.recap && recapSpokenForRef.current !== newTree.openingName) {
+                recapSpokenForRef.current = newTree.openingName;
+                recapPrefix = `${plan.recap} `;
+              }
             } catch { /* memory is a bonus, never a blocker */ }
           }
           return speakWalkthroughText(
