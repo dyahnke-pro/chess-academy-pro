@@ -1623,6 +1623,22 @@ export function CoachTeachPage(): JSX.Element {
        *  queen"). Handed in so the LLM narrates the REAL capture, never an
        *  invented one. */
       coachReplyFact?: string;
+      /** The caller ALREADY KNOWS this is a teach request and `text` is a
+       *  canonical opening name it resolved from the DB — a "Deep dive"
+       *  tile, not something the student typed. Skips the free-text intent
+       *  heuristics entirely (TEACH_PATTERN, the 60-char bare-name cap, the
+       *  control-phrase guard) and skips the ask-a-question auto-pause.
+       *
+       *  Why this exists (David 2026-07-31, "the learn lesson stops after
+       *  selecting a line to learn/fork in the road"): the fork's Deep-dive
+       *  tiles laundered their query through the free-text router, so a
+       *  perfectly valid DB name like "Sicilian Defense: Alapin Variation,
+       *  Barmen Defense, Endgame Variation" (69 chars) blew past the 60-char
+       *  bare-name cap, fell through to the brain, and dead-ended on "I
+       *  can't verify that precisely from grounded data right now" — with
+       *  the walkthrough auto-paused behind it. An intent the CODE resolved
+       *  must never be re-guessed from its own prose. */
+      teachIntent?: boolean;
     },
   ): Promise<void> => {
     if (!text.trim() || busy) return;
@@ -2546,7 +2562,13 @@ export function CoachTeachPage(): JSX.Element {
       // CALLED Learn with Coach, yet "learn the grand prix" missed this
       // pattern while "teach me the grand prix" hit it.
       const TEACH_PATTERN =
-        /\b(teach(?:\s+me)?|(?:i\s+want\s+to\s+|help\s+me\s+)?learn|study|continue|walk\s+(?:me\s+)?through|show\s+me|let'?s\s+do|let'?s\s+go\s+over|let'?s\s+try|tell\s+me\s+about|review)\b\s+(?:the\s+)?(.+?)(?:\s+(?:opening|defense|defence|game|gambit|attack|variation|line|system))?[.?!]*\s*$/i;
+        // `walk\s*(?:me\s+)?through` — the ONE-WORD "walkthrough the alapin"
+        // is the same ask as "walk me through the alapin" but missed the
+        // pattern and fell into the bare-name tier, where it fuzzy-matched
+        // the literal phrase "Walkthrough the alapin" as an opening NAME
+        // (David's 2026-07-31 audit, finding 103). Same class as the
+        // learn/teach synonym fix below — don't lose the ask to semantics.
+        /\b(teach(?:\s+me)?|(?:i\s+want\s+to\s+|help\s+me\s+)?learn|study|continue|walk\s*(?:me\s+)?through|show\s+me|let'?s\s+do|let'?s\s+go\s+over|let'?s\s+try|tell\s+me\s+about|review)\b\s+(?:the\s+)?(.+?)(?:\s+(?:opening|defense|defence|game|gambit|attack|variation|line|system))?[.?!]*\s*$/i;
       // Stage-keyword detection: user inputs like "drill Vienna" /
       // "Vienna punish" / "quiz me on the Sicilian" should skip the
       // walkthrough animation and land directly at that stage. User
@@ -2642,7 +2664,11 @@ export function CoachTeachPage(): JSX.Element {
         ? null
         : (stageHint ? stageStrippedInput : workingInput).match(TEACH_PATTERN);
       let requestedName: string | null = null;
-      if (isMoveReport) {
+      if (opts?.teachIntent) {
+        // Code-resolved canonical name (a Deep-dive tile). No heuristics —
+        // see the `teachIntent` doc on the opts type.
+        requestedName = workingInput;
+      } else if (isMoveReport) {
         requestedName = null;
       } else if (m && m[2]) {
         requestedName = m[2].trim();
@@ -2807,8 +2833,14 @@ export function CoachTeachPage(): JSX.Element {
         // mean…" picker (David 2026-07-25 audit papercut: tapping a picker chip
         // dropped to disambiguation). If the name IS a curated variation, it's
         // already canonical — skip fuzzy and let the routing tiers gen it.
-        const curatedHit = resolveCuratedVariation(requestedName);
-        const fuzzy = curatedHit
+        // A Deep-dive tile's query is a canonical name CODE already resolved
+        // from the DB (findOpeningByPgnPrefix), so there is nothing for the
+        // fuzzy matcher to add — at best it round-trips the name, at worst it
+        // scores a long compound below autoAccept and bounces the student to a
+        // "did you mean…" picker instead of the lesson they tapped. Same
+        // reasoning as the curated-variation bypass beside it.
+        const alreadyCanonical = !!opts?.teachIntent || !!resolveCuratedVariation(requestedName);
+        const fuzzy = alreadyCanonical
           ? { candidates: [], autoAccept: false, query: requestedName }
           : fuzzyMatchOpening(requestedName);
         if (fuzzy.autoAccept && fuzzy.candidates[0]) {
@@ -3739,8 +3771,12 @@ export function CoachTeachPage(): JSX.Element {
     // (Resume / End buttons) lets them restart manually. User: "I
     // want that. Pause walkthrough and answer questions then confirm
     // continuation with user before restarting walkthrough."
+    // A Deep-dive tile is NOT a chat question — it already called
+    // walkthrough.stop(), but `walkthrough` here is this render's closure so
+    // isActive still reads the stale `true` and the walkthrough got paused
+    // out from under the new lesson. Explicit intent wins over the stale read.
     const autoPausedThisTurn =
-      walkthrough.isActive && walkthrough.phase !== 'paused';
+      !opts?.teachIntent && walkthrough.isActive && walkthrough.phase !== 'paused';
     if (autoPausedThisTurn) {
       walkthrough.pause();
       void logAppAudit({
@@ -5872,7 +5908,7 @@ export function CoachTeachPage(): JSX.Element {
           <WalkthroughControls
             walkthrough={walkthrough}
             navigate={navigate}
-            onDeepDive={(query) => void handleSubmit(query)}
+            onDeepDive={(query) => void handleSubmit(query, { teachIntent: true })}
             onPlayOutLine={(opening, customLine) => setLeafPlayOut({ opening, customLine })}
             onWatchContinuation={() => void startContinuationRef.current()}
           />

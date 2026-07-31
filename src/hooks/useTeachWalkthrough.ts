@@ -403,6 +403,11 @@ const BACKUP_WPM = 180;
 const MIN_BACKUP_MS = 3000;
 const MAX_BACKUP_MS = 45_000;
 const POST_NARRATION_BUFFER_MS = 400;
+/** Hard ceiling on the fork's comparative bridge. It is spoken BEFORE the
+ *  pick advances, so a wedged TTS promise would strand the lesson at the
+ *  fork panel — past this the walk advances regardless. Generous enough that
+ *  a healthy bridge (~45 words) always finishes speaking first. */
+const BRIDGE_MAX_MS = 30_000;
 // Watch = auto-play for LINEAR beats ("the pages need to advance
 // automatically", David 2026-06-12 — that stays). A FORK is different: it is
 // a decision point, and the picker WAITS for the student's choice. The old
@@ -1399,6 +1404,13 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
       const mainChoice = node.children[0];
       if (choice !== mainChoice && t && !t.derived) {
         void (async () => {
+          // The bridge is a BONUS spoken before the pick advances — so it can
+          // never be allowed to strand the lesson at the fork. A rejected
+          // speak is already caught; a speak promise that never SETTLES (a
+          // wedged TTS stream) would leave narrateAndAdvance unreachable and
+          // the student staring at a dead fork panel. Bound it.
+          const bounded = (p: Promise<void>): Promise<void> =>
+            Promise.race([p, new Promise<void>((r) => setTimeout(r, BRIDGE_MAX_MS))]);
           try {
             const { getTeachingVisits } = await import('../services/teachingLedger');
             const visits = await getTeachingVisits(t.openingName);
@@ -1412,10 +1424,10 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
                 const walkedSans = pathNodes.map((n) => n.san).filter((s): s is string => !!s);
                 const bakedBridge = bakedNarrationFor(t.openingName, walkedSans)?.bridges?.[choice.node.san];
                 if (bakedBridge && bakedBridge.mainSan === mainChoice.node.san) {
-                  await speakWalkthroughText(
+                  await bounded(speakWalkthroughText(
                     pickRegister(bakedBridge.text, bakedBridge.textFlipped),
                     pickRegister(bakedBridge.shortText ?? '', bakedBridge.shortTextFlipped) || bakedBridge.shortText,
-                  );
+                  ));
                   spoke = true;
                 }
               } catch { /* baked lookup is best-effort — v1 below */ }
@@ -1424,7 +1436,7 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
                   ? 'the main line you know'
                   : (mainChoice.label ?? 'the line you know');
                 const bridge = `A quick bridge first. Everything to this position is the same road we walked before — that part you already own. Right here is where the stories split: ${knownLabel} plays ${mainChoice.node.san}, and today's line answers ${choice.node.san} instead. One choice, and the plans change — watch what that single move does to the position.`;
-                await speakWalkthroughText(bridge, `Same road until here — ${choice.node.san} instead of ${mainChoice.node.san}.`);
+                await bounded(speakWalkthroughText(bridge, `Same road until here — ${choice.node.san} instead of ${mainChoice.node.san}.`));
               }
             }
           } catch { /* bridge is a bonus, never a blocker */ }
