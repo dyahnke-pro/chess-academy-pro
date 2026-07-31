@@ -216,6 +216,12 @@ async function main() {
 
 THE SOURCE is the teacher's raw spoken transcript (reference ONLY). THE LINE is the exact move sequence the app walks. Your job: for each move of the line, find what the teacher TEACHES about that moment in the transcript — the idea, the plan, the warning, the story — and say it in YOUR OWN WORDS.
 
+ONE CONTINUOUS STORY (the teacher's videos are a NARRATIVE, not a move list — this is the shape):
+- The INTRO states the story's through-line: the one tension this whole line is about (the square being fought over, the attack being built, the trap being set). Every entry advances THAT story.
+- Each entry PICKS UP where the previous one left off — connective tissue is mandatory: "Now that the centre is braced…", "Remember the bishop we posted on g2? This is why…", "Black just called our bluff, so…". An entry that could be shuffled to any other position in the line is a FAILURE.
+- Call BACK to earlier moves when a plan pays off, and plant setups the later entries will collect. The last entry and the outro land the payoff of the through-line stated in the intro.
+- NEVER re-introduce the opening mid-line, never reset context, never write an entry that stands alone.
+
 THE HOUSE VOICE (this is the bar — flat textbook prose is a FAILURE):
 - Teach the IDEA, not just the move. A student should finish each beat understanding WHY, not just WHAT. "Nc3 does two jobs — it braces e4 so Black can never strike there for free, and it keeps the king-knight home, so White still gets to choose which attacking setup to build" beats "Nc3 develops and defends e4." (These are STYLE illustrations — never copy their sentences into your output.)
 - Concept-first and conversational: "Here's the thing about this line…", "notice that…", "the point is…". Warmth is welcome; hollow hype is not.
