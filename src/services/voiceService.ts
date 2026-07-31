@@ -1039,6 +1039,16 @@ class VoiceService {
     // IN-GAME narration only. Explicit "read this text to me" buttons on the
     // opening detail page are a read-aloud affordance the user just tapped —
     // they bypass verbosity entirely (silent AND brief) via bypassVerbosity.
+    // BACKGROUNDED = SILENT, unconditionally. The visibilitychange stop()
+    // kills the CURRENT utterance, but auto-advancing surfaces (the
+    // walkthrough loop, speech chains) queue the NEXT one and hidden-tab
+    // JS keeps running — so the coach kept talking after leaving the app
+    // (David 2026-07-31: "It doesn't stop when leaving the app"). Refuse
+    // every new utterance while hidden; the app resumes speaking the
+    // moment it's visible again.
+    if (typeof document !== 'undefined' && document.visibilityState === 'hidden') {
+      return;
+    }
     const narrationPrefs = useAppStore.getState().activeProfile?.preferences;
     const narrationVerbosity = resolveCoachNarration(narrationPrefs);
     if (narrationVerbosity === 'silent' && !opts?.bypassVerbosity) {

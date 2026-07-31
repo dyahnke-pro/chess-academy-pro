@@ -1082,6 +1082,25 @@ export function CoachTeachPage(): JSX.Element {
     walkthrough.setViewOrientation(playerColor);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playerColor]);
+
+  // Leaving the app pauses the lesson (David 2026-07-31: the coach kept
+  // talking after backgrounding). voiceService refuses utterances while
+  // hidden; pausing here keeps the walkthrough from silently racing ahead
+  // so the student resumes exactly where they left. Ref-backed: the
+  // walkthrough object is a fresh identity per render, and this listener
+  // must live for the page's whole life without re-subscribing.
+  const walkthroughForVisibilityRef = useRef(walkthrough);
+  walkthroughForVisibilityRef.current = walkthrough;
+  useEffect(() => {
+    const onVisibility = (): void => {
+      const w = walkthroughForVisibilityRef.current;
+      if (document.visibilityState === 'hidden' && w.isActive) {
+        w.pause();
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => document.removeEventListener('visibilitychange', onVisibility);
+  }, []);
   // Live Stockfish evaluation of the current position. Drives the
   // eval bar on the board so it moves with each ply (matches what
   // /coach/play and /coach/review already do). Debounced — every
