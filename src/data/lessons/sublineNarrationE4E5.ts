@@ -1181,18 +1181,10 @@ const VN_GAMBIT_E5: SublineNarration = {
   ],
   sources: VN_CTR,
 };
-// var6 — Mieses g3 fianchetto (Nc3 Nf6 g3 d5 exd5 Nxd5 Bg2).
-const VN_G3: SublineNarration = {
-  intro: {
-    say: "The Mieses g3 system — you fianchetto the king's bishop and let the g2-bishop rake the long light diagonal toward Black's queenside. After the central trades you carry the bishop pair and a flexible structure; castle, play d3 and Nf3, and lean on the long diagonal and the half-open b-file. A calm, strategically rich game where your harmonious setup gives the durable pull.",
-    sayShort: 'g3 — fianchetto, press the long diagonal.',
-  },
-  sources: VN,
-};
 // var7 — Qg4 f2-sacrifice attack (Bc4 Bc5 Qg4 Qf6 Nd5 Qxf2+ Kd1).
 const VN_QG4: SublineNarration = {
   intro: {
-    say: "The Qg4 gambit — you throw the queen to g4 hitting g7, and after the f2-pawn falls Nd5 leaps to the heart of the board threatening c7 and the fork while Black's queen is misplaced. It's a swashbuckling, double-edged attack: your king walks to d1 but your pieces swarm Black's loose camp and uncastled king. Sharp and dangerous — keep the initiative roaring and hunt the king.",
+    say: "The Qg4 gambit — you throw the queen to g4 hitting g7, Nd5 leaps to the heart of the board threatening c7 and the fork, and Black grabs f2 while your king walks to d1. It's a swashbuckling, double-edged attack: the king sidesteps, but your pieces swarm Black's loose camp and uncastled king. Sharp and dangerous — keep the initiative roaring and hunt the king.",
     sayShort: 'Qg4 — Nd5 central, hunt the king.',
   },
   beats: [
@@ -1706,16 +1698,6 @@ const COV_SC_D6: SublineNarration = {
 };
 
 // ── Vienna Game (student WHITE) ──
-const COV_VN_GAMBIT_OO: SublineNarration = {
-  intro: {
-    say: "…O-O — Black castles into the Vienna Gambit tabiya. You gave the f-pawn for a roaring lead in development and a half-open f-file pointed at Black's king. Pour it on: develop the dark-squared bishop with menace, swing a rook to the f-file, and let the cramping e5-pawn choke Black while your pieces attack.",
-    sayShort: "…O-O — storm the f-file.",
-  },
-  beats: [
-    { atMove: 13, say: "O-O tucks Black's king away — now you hunt it. Bg5 develops with menace, pinning and pressuring the kingside, and the f-file plus the cramping e5-pawn give your attack all the fuel it needs.", sayShort: "Bg5 — develop with menace.", arrows: [A('c1', 'g5')], highlights: [H('f7', ATK), H('e5', KEY)] },
-  ],
-  sources: ['book:vienna-game', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Vienna_Game'],
-};
 const COV_VN_H6: SublineNarration = {
   intro: {
     say: "…h6 — a quiet, useful luft that stops your Bg5 and Ng5 pins before they start. Nothing forcing here, so out-build him: jump the knight to the d5 outpost or prepare the c3-and-d4 central break, keep the Bc4 trained on f7, and play a rich Italian-style middlegame with the freer game.",
@@ -2488,112 +2470,85 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'kings-gambit::7::Bc5@9': { ...KG_BISHOPS, beats: [{ atMove: 10, say: "d4 — you build the broad centre, hitting the c5-bishop and gaining space; the Bishop's Gambit's development compensates the pawn.", sayShort: "d4 — build, hit c5.", arrows: [A('d4', 'c5')], highlights: [H('d4'), H('c5', ATK)] }, { atMove: 16, say: "d5 — the centre surges, gaining space and cramping Black; White's pawns and active pieces press the initiative.", sayShort: "d5 — surge, cramp.", highlights: [H('d5')] }] },
 
   // -- Vienna Game --
-  'vienna-game::0::Bc5@9': { ...VN_F4D5, beats: [
+  // 2026-07-31 repair: course-sublines.json was re-derived after these were
+  // authored — the old var-0/1/2 blocks now live at var 1/2/3 (the new var 0
+  // is the Qf3 move order), and every subline was truncated to its current
+  // depth. Entries were re-keyed to the variation their prose actually
+  // narrates, beats beyond the current line trimmed, and entries whose
+  // content no longer matches any real subline deleted (empty > invented).
+  'vienna-game::1::Bc5@9': { ...VN_F4D5, beats: [
     { atMove: 9, say: "Bc5 develops actively in the open f4-d5 Vienna. Develop and contest: d4 or Be2 and O-O, the half-open f-file your rook's highway. After the dust the game is balanced with a small pull for you — castle, claim the f-file, and squeeze.", sayShort: "Bc5 — develop, claim the f-file.", highlights: [H('f7', KEY)] },
-    { atMove: 14, say: "d4 stakes out the centre and shuts the dark-squared bishop out of the game; Bd2 and Bd3 follow, and the half-open f-file remains your rook's highway.", sayShort: "d4 — seize the centre.", arrows: [A('d2', 'd4')], highlights: [H('d4', KEY)] },
-    { atMove: 18, say: "Bd3 trains on h7 and Black's king while you castle and double on the f-file. The bishop pair and the open lines give you the more pleasant game — press it.", sayShort: "Bd3 — aim h7, press the f-file.", highlights: [H('f7', SOFT)] },
   ] },
-  'vienna-game::0::Nc6@9': { ...VN_F4D5, beats: [
+  'vienna-game::0::Nc6@9': { ...VN_F4D5, intro: {
+    say: "…d5 — Black's principled central counter to your f4, the soundest reply to the Vienna Gambit. The game opens up: fxe5 and Qf3 develop, and after the dust settles you reach a lively, roughly level middlegame with the half-open f-file and easy piece play. Don't force it — develop, castle, contest the centre, and the f-file pressure gives a small, pleasant edge.",
+    sayShort: '…d5 — open it up, press the f-file.',
+  }, beats: [
     { atMove: 9, say: "Nc6 develops, eyeing e5. Recover and develop: d4 or Qe2, hold the e5-pawn or trade, and the half-open f-file points at f7. The open game is roughly level with a small pull — castle and press the f-file.", sayShort: "Nc6 — develop, press the f-file.", highlights: [H('f7', KEY)] },
     { atMove: 10, say: "Bb5 pins the c6-knight; Bxc6+ doubles Black's pawns and you castle into a structural edge with the half-open f-file at his king.", sayShort: "Bb5 — pin, double his pawns.", arrows: [A('b5', 'c6')], highlights: [H('c6', KEY)] },
-    { atMove: 18, say: "d4 grabs the centre after the trades; with Black's doubled c-pawns and your rook on the f-file, you press a small, lasting pull.", sayShort: "d4 — centre, press the f-file.", highlights: [H('d4', KEY), H('f7', SOFT)] },
   ] },
-  'vienna-game::0::Be6@13': { ...VN_F4D5, beats: [
-    { atMove: 13, say: "Be6 develops in the open Vienna; you've recaptured with dxc3, gaining the bishop pair and the half-open d- and f-files. Develop Bf4 or Be3, castle, and press both files at Black's position. The bishop pair gives the pull.", sayShort: "Be6 — bishop pair, press the files.", highlights: [H('f7', KEY)] },
-    { atMove: 16, say: "Qg3 swings the queen to the kingside, eyeing g6 and e5 while Bd3 lines up on h7. The two bishops and the half-open files aim everything at Black's king.", sayShort: "Qg3 — swing at the kingside.", highlights: [H('e5', SOFT)] },
-    { atMove: 18, say: "Bd3 completes the attacking battery toward h7; castle, double the rooks, and the bishop pair plus the open f-file give the lasting pull.", sayShort: "Bd3 — aim h7, double rooks.", arrows: [A('d3', 'h7')], highlights: [H('h7', ATK)] },
+  'vienna-game::1::Be6@13': { ...VN_F4D5, beats: [
+    { atMove: 13, say: "Be6 develops in the open Vienna; you've recaptured with dxc3 and hold the half-open d- and f-files. Develop Bf4 or Be3, castle, and press both files at Black's position.", sayShort: "Be6 — press the open files.", highlights: [H('f7', KEY)] },
   ] },
-  'vienna-game::0::Nc6@13': { ...VN_F4D5, beats: [
-    { atMove: 13, say: "Nc6 develops. With dxc3 you hold the bishop pair and the half-open d- and f-files; develop Bf4, castle, and double on the open files. The structure and the two bishops give a small, lasting edge — press.", sayShort: "Nc6 — bishop pair, double the files.", highlights: [H('f7', KEY)] },
-    { atMove: 14, say: "Be3 develops and eyes the queenside; O-O-O follows, throwing your rook onto the open d-file for an opposite-wing attack.", sayShort: "Be3 — develop, then O-O-O.", highlights: [H('e3', KEY)] },
-    { atMove: 18, say: "Bf4 and the castled rooks bear down the d- and f-files; with the bishop pair and the open lines, you press a clear, lasting edge — roll the kingside pawns.", sayShort: "Bf4 — press both open files.", highlights: [H('f7', SOFT)] },
+  'vienna-game::1::Nc6@13': { ...VN_F4D5, beats: [
+    { atMove: 13, say: "Nc6 develops. With dxc3 you hold the half-open d- and f-files; develop Bf4, castle, and double on the open files. The structure gives a small, lasting edge — press.", sayShort: "Nc6 — double the open files.", highlights: [H('f7', KEY)] },
   ] },
-  'vienna-game::0::Bg4@13': { ...VN_F4D5, beats: [
-    { atMove: 13, say: "Bg4 pins your f3-knight — Be2 or h3 breaks it. You hold the bishop pair from dxc3 and the half-open files; develop, castle, and double the rooks on the d- and f-files. The pin is a trifle against your structural pull.", sayShort: "Bg4 — break the pin, press the files.", highlights: [H('f3', KEY)] },
-    { atMove: 14, say: "Bf4 develops with gain of tempo and clears the way for O-O-O onto the open d-file. The pin on f3 is a trifle against your raking bishops.", sayShort: "Bf4 — develop, then O-O-O.", highlights: [H('f4', KEY)] },
-    { atMove: 16, say: "O-O-O throws the rook onto the half-open d-file and tucks the king to safety; now the kingside pawns roll while the two bishops and open files do the talking.", sayShort: "O-O-O — rook to the d-file.", highlights: [H('f7', SOFT)] },
+  'vienna-game::1::Bg4@13': { ...VN_F4D5, beats: [
+    { atMove: 13, say: "Bg4 pins your f3-knight — Be2 or h3 breaks it. You hold the half-open files from dxc3; develop, castle, and double the rooks on the d- and f-files. The pin is a trifle against your structural pull.", sayShort: "Bg4 — break the pin, press the files.", highlights: [H('f3', KEY)] },
   ] },
-  'vienna-game::0::Bg4@9': { ...VN_F4D5, beats: [
+  'vienna-game::1::Bg4@9': { ...VN_F4D5, beats: [
     { atMove: 9, say: "Bg4 pins your knight early — h3 puts the question, or Be2. Develop and recover: hold or trade the e5-pawn, castle, and the half-open f-file feeds your rook. The open game is level with a small pull — press the f-file.", sayShort: "Bg4 — h3, press the f-file.", highlights: [H('f3', KEY), H('f7', SOFT)] },
-    { atMove: 10, say: "Qe2 develops, unpins and prepares to recapture on c3 with the d-pawn — handing you the bishop pair and the half-open d-file.", sayShort: "Qe2 — unpin, prep dxc3.", highlights: [H('f3', KEY)] },
-    { atMove: 14, say: "Bf4 develops toward the queenside and clears for O-O-O; with the two bishops and the open files you steer into an opposite-wing attack. Press the kingside.", sayShort: "Bf4 — develop, then O-O-O.", highlights: [H('f4', KEY)] },
   ] },
-  'vienna-game::0::c6@13': { ...VN_F4D5, beats: [
-    { atMove: 13, say: "c6 props Black's centre. You hold the bishop pair from dxc3 and the half-open d- and f-files; develop Bf4 and the rooks, castle, and press both files. The two bishops and the structure give the pull — squeeze.", sayShort: "c6 — bishop pair, press the files.", highlights: [H('f7', KEY)] },
-    { atMove: 16, say: "Qg3 swings the queen to the kingside while Bd3 lines up on h7. With the bishop pair from dxc3 and the half-open f-file, your pieces all point at Black's king.", sayShort: "Qg3 — swing at the king.", highlights: [H('e5', SOFT)] },
-    { atMove: 18, say: "Bd3 completes the battery toward h7; castle, double the rooks on the open files, and the two bishops give the lasting pull. Squeeze.", sayShort: "Bd3 — aim h7, double rooks.", arrows: [A('d3', 'h7')], highlights: [H('h7', ATK)] },
+  'vienna-game::1::c6@13': { ...VN_F4D5, beats: [
+    { atMove: 13, say: "c6 props Black's centre. You hold the half-open d- and f-files from dxc3; develop Bf4 and the rooks, castle, and press both files. The structure gives the pull — squeeze.", sayShort: "c6 — press the open files.", highlights: [H('f7', KEY)] },
   ] },
-  'vienna-game::0::d6@5': { ...VN_F4D5, beats: [
+  'vienna-game::1::d6@5': { ...VN_F4D5, beats: [
     { atMove: 5, say: "…d6 declines the gambit quietly, propping up e5. Take the space and develop: Nf3 eyes e5 and prepares to open the f-file with fxe5 when it suits.", sayShort: "…d6 — develop Nf3, hold f4.", arrows: [A('g1', 'f3')], highlights: [H('f4', KEY)] },
     { atMove: 6, say: "Nf3 develops, leans on e5 and braces the f4-lever. The half-open f-file points at f7, and fxe5 opens lines whenever you choose.", sayShort: "Nf3 — eye e5, ready fxe5.", arrows: [A('f3', 'e5')], highlights: [H('e5', SOFT)] },
     { atMove: 7, say: "…Nbd7 props the centre, but you hold the space and the f4-break in hand. Bc4, castle, and fxe5 to crack open the f-file at the king when the moment comes — a comfortable, pressing game.", sayShort: "…Nbd7 — keep the f-file lever.", highlights: [H('f7', KEY)] },
   ] },
-  'vienna-game::0::f5@11': { ...VN_F4D5, beats: [
+  'vienna-game::1::f5@11': { ...VN_F4D5, beats: [
     { atMove: 11, say: "f5 props Black's knight but loosens the king badly. Strike: d3 hits the e4-knight, or exf6 en passant rips open the f-file. The weakened light squares around Black's king are your targets — develop with threats and attack.", sayShort: "f5 — hit e4, rip the f-file open.", highlights: [H('e4', KEY)] },
-    { atMove: 12, say: "g3 calmly prepares Bg2, blunting Black's e4-knight on the long diagonal while his …f5 has loosened the king and the e6-square for good.", sayShort: "g3 — fianchetto, exploit e6.", highlights: [H('e4', SOFT)] },
-    { atMove: 16, say: "d3 challenges the e4-knight; after the trade your bishop swings to g2 and rakes the long diagonal and the weakened light squares around Black's king are permanent targets.", sayShort: "d3 — hit e4, target light squares.", highlights: [H('e4', KEY)] },
   ] },
-  'vienna-game::1::Ng5@7': { ...VN_FRANKENSTEIN, beats: [{ atMove: 14, say: "Bxg5 — you snap the knight; after the trades White emerges with the bishop pair and a safe edge — the Frankenstein-Dracula's greed punished.", sayShort: "Bxg5 — snap, stay ahead.", highlights: [H('g5')] }, { atMove: 18, say: "Qh5+ — the check harries Black's exposed king; White's active pieces and better structure press the advantage.", sayShort: "Qh5+ — harry the king.", highlights: [H('h5')] }] },
-  'vienna-game::1::Nc6@5': { ...VN_BC4_DEV, beats: [{ atMove: 6, say: "d3 — you settle into the Stanley, a reversed Spanish a tempo up; solid development and the c4-bishop's pressure give White a small, lasting pull.", sayShort: "d3 — solid Stanley setup.", highlights: [H('d3')] }, { atMove: 12, say: "Nf3 — you develop, eyeing the centre; with the half-open a-file and the bishop pair offsetting the doubled b-pawns, White stands comfortably.", sayShort: "Nf3 — develop, press.", highlights: [H('f3')] }] },
-  'vienna-game::1::Qf6@11': { ...VN_FRANKENSTEIN, beats: [{ atMove: 12, say: "Nxc7+ — the knight forks king and rook, the Frankenstein-Dracula's point; White wins the exchange in the wild line.", sayShort: "Nxc7+ — fork king and rook.", arrows: [A('c7', 'a8')], highlights: [H('c7')] }, { atMove: 14, say: "Nxa8 — the knight grabs the rook in the corner; White is up the exchange, with the task of extracting the knight under Black's pressure.", sayShort: "Nxa8 — grab the rook.", highlights: [H('a8')] }] },
-  'vienna-game::1::Bc5@5': { ...VN_BC4_DEV, beats: [{ atMove: 12, say: "a3 — you secure the queenside and prepare slow maneuvering; the Stanley's reversed-Italian setup gives White a comfortable, flexible game.", sayShort: "a3 — secure, maneuver.", highlights: [H('a3')] }, { atMove: 18, say: "Nh2 — the knight reroutes toward g4 and the kingside, the thematic maneuver; White builds patiently behind the solid centre.", sayShort: "Nh2 — reroute to the kingside.", highlights: [H('h2')] }] },
-  'vienna-game::1::Be7@9': { ...VN_FRANKENSTEIN, beats: [{ atMove: 10, say: "Qxe5 — you snap the centre pawn, the queen dominant; White banks material from the Stanley line and presses Black's loose position.", sayShort: "Qxe5 — snap the pawn.", highlights: [H('e5')] }, { atMove: 16, say: "d4 — you build the broad centre, your extra pawn and active pieces pressing; White holds a comfortable edge.", sayShort: "d4 — build, press.", highlights: [H('d4')] }] },
-  'vienna-game::1::Bg7@19': { ...VN_FRANKENSTEIN, beats: [{ atMove: 20, say: "Qc5 — you offer a queen trade to defuse Black's attack while up the exchange; White steers toward converting the material.", sayShort: "Qc5 — offer the trade.", highlights: [H('c5')] }, { atMove: 22, say: "Ne2 — you develop, shoring up the king; with the extra exchange, White consolidates the Frankenstein-Dracula booty.", sayShort: "Ne2 — develop, consolidate.", highlights: [H('e2')] }] },
-  'vienna-game::2::Nc6@11': { ...VN_QUIET, beats: [{ atMove: 12, say: "Na4 — the knight jumps to challenge the c5-bishop; trading it leaves Black with doubled pawns and White the better structure.", sayShort: "Na4 — challenge the bishop.", arrows: [A('a4', 'c5')], highlights: [H('a4'), H('c5', ATK)] }, { atMove: 18, say: "Bxe6 — you trade and saddle Black with doubled e-pawns; White's superior structure presses the advantage.", sayShort: "Bxe6 — double his pawns.", highlights: [H('e6')] }] },
-  'vienna-game::2::c6@11': { ...VN_QUIET, beats: [{ atMove: 14, say: "Ba2 — the bishop tucks to the safe a2-g8 diagonal, staying aimed at f7; White maneuvers patiently in the solid Hybrid structure.", sayShort: "Ba2 — tuck, aim at f7.", arrows: [A('a2', 'f7')], highlights: [H('a2'), H('f7', SOFT)] }, { atMove: 20, say: "Be3 — you develop, offering to trade the dark bishops and eyeing the queenside; White's harmonious setup holds a small pull.", sayShort: "Be3 — develop, press.", highlights: [H('e3')] }] },
-  'vienna-game::2::Be6@11': { ...VN_QUIET, beats: [{ atMove: 12, say: "Bb3 — you tuck the bishop, keeping it aimed at f7 and avoiding the trade; White maneuvers in the solid Hybrid.", sayShort: "Bb3 — tuck, aim at f7.", arrows: [A('b3', 'f7')], highlights: [H('b3'), H('f7', SOFT)] }, { atMove: 16, say: "Bxe6 — you trade and saddle Black with doubled e-pawns; White's better structure gives the edge.", sayShort: "Bxe6 — double his pawns.", highlights: [H('e6')] }] },
-  'vienna-game::2::a6@11': { ...VN_QUIET, beats: [{ atMove: 12, say: "Ne2 — the knight reroutes toward g3 and f5, the thematic Hybrid maneuver; White builds slowly behind the solid centre.", sayShort: "Ne2 — reroute toward f5.", highlights: [H('e2')] }, { atMove: 18, say: "Ng3 — the knight reaches g3, eyeing f5 and the kingside; White's harmonious Hybrid setup presses for the initiative.", sayShort: "Ng3 — eye f5, press.", highlights: [H('g3'), H('f5', SOFT)] }] },
-  'vienna-game::2::Nc6@5': { ...VN_QUIET, beats: [{ atMove: 6, say: "d3 — you settle into the Stanley, a reversed Spanish a tempo up; solid development and the c4-bishop's pressure give White a small, lasting pull.", sayShort: "d3 — solid Stanley setup.", highlights: [H('d3')] }, { atMove: 12, say: "Nf3 — you develop, eyeing the centre; with the half-open a-file and the bishop pair offsetting the doubled b-pawns, White stands comfortably.", sayShort: "Nf3 — develop, press.", highlights: [H('f3')] }] },
-  'vienna-game::2::Nxe4@5': { ...VN_FRANKENSTEIN, beats: [
+  'vienna-game::2::Nc6@5': VN_BC4_DEV,
+  'vienna-game::2::Qf6@11': VN_FRANKENSTEIN,
+  'vienna-game::2::Bc5@5': VN_BC4_DEV,
+  'vienna-game::2::Be7@9': VN_FRANKENSTEIN,
+  'vienna-game::2::Bg7@19': VN_FRANKENSTEIN,
+  'vienna-game::3::Nc6@11': VN_QUIET,
+  'vienna-game::3::c6@11': VN_QUIET,
+  'vienna-game::3::Be6@11': VN_QUIET,
+  'vienna-game::3::a6@11': VN_QUIET,
+  'vienna-game::3::Nxe4@5': { ...VN_FRANKENSTEIN, beats: [
     { atMove: 5, say: "…Nxe4 grabs the e4-pawn — the critical Frankenstein-Dracula moment. Don't bother recapturing; strike with Qh5! hitting the loose e5-pawn and the e4-knight in one blow.", sayShort: "…Nxe4 — answer Qh5!", arrows: [A('d1', 'h5')], highlights: [H('h5', KEY)] },
     { atMove: 6, say: "Qh5 — the double attack: …Qxe5+ regaining a pawn and Qxe4 regaining the knight both loom. Black scrambles to cover with …Nd6.", sayShort: "Qh5 — double attack, e5 and e4.", arrows: [A('h5', 'e5')], highlights: [H('e5', ATK)] },
     { atMove: 7, say: "…Nd6 drops back to block, forking your queen and the c4-bishop. Save the bishop with tempo — slide it to b3 and keep raking f7.", sayShort: "…Nd6 — save the bishop, Bb3.", arrows: [A('d6', 'c4')], highlights: [H('c4', ATK)] },
     { atMove: 8, say: "Bb3 tucks the bishop onto the a2-g8 diagonal, still glaring at f7 behind the lines. Black develops …Be7; now you pour pieces at the loosened king.", sayShort: "Bb3 — safe bishop, eye f7.", arrows: [A('b3', 'f7')], highlights: [H('f7', KEY)] },
     { atMove: 9, say: "…Be7 — the main tabiya. Nb5 leaps at c7, your queen and bishop rake the kingside, and Black stays tangled. Theory calls it balanced, but over the board the initiative for the pawn is fierce — keep attacking.", sayShort: "…Be7 — Nb5 at c7, attack.", arrows: [A('c3', 'b5')], highlights: [H('c7', KEY)] },
   ] },
-  'vienna-game::2::c6@7': { ...VN_QUIET, beats: [{ atMove: 8, say: "Nf3 — you develop, settling into the solid Vienna Hybrid; White's flexible setup and the c4-bishop give a comfortable game.", sayShort: "Nf3 — develop, solid.", highlights: [H('f3')] }, { atMove: 20, say: "Ng3 — the knight reaches g3, eyeing f5; White's slow maneuvering toward the kingside is the Hybrid's plan.", sayShort: "Ng3 — eye f5.", highlights: [H('g3'), H('f5', SOFT)] }] },
-  'vienna-game::2::Bb4@5': { ...VN_QUIET, beats: [{ atMove: 8, say: "f4 — you strike in the centre, the Vienna's signature break; White opens lines and seizes the initiative against the pinned-bishop setup.", sayShort: "f4 — strike, open lines.", highlights: [H('f4')] }, { atMove: 16, say: "fxg7 — the pawn crashes through to g7, forking the rook and tearing open Black's kingside; White's attack reaps material in the sharp line.", sayShort: "fxg7 — crash through.", highlights: [H('g7')] }] },
-  'vienna-game::2::Nc6@7': { ...VN_QUIET, beats: [{ atMove: 10, say: "Na4 — the knight challenges the c5-bishop; trading it gives Black doubled pawns and White the better structure.", sayShort: "Na4 — challenge the bishop.", arrows: [A('a4', 'c5')], highlights: [H('a4'), H('c5', ATK)] }, { atMove: 18, say: "Bxe6 — you trade, saddling Black with doubled e-pawns; White's superior structure presses.", sayShort: "Bxe6 — double his pawns.", highlights: [H('e6')] }] },
-  'vienna-game::3::Ng5@7': { ...VN_FRANKENSTEIN, beats: [{ atMove: 14, say: "Bxg5 — you snap the knight; after the trades White emerges with the bishop pair and a safe edge — the Frankenstein-Dracula's greed punished.", sayShort: "Bxg5 — snap, stay ahead.", highlights: [H('g5')] }, { atMove: 18, say: "Qh5+ — the check harries Black's exposed king; White's active pieces and better structure press the advantage.", sayShort: "Qh5+ — harry the king.", highlights: [H('h5')] }] },
-  'vienna-game::3::Nc6@5': { ...VN_BC4_DEV, beats: [{ atMove: 6, say: "d3 — you settle into the Stanley, a reversed Spanish a tempo up; solid development and the c4-bishop's pressure give White a small, lasting pull.", sayShort: "d3 — solid Stanley setup.", highlights: [H('d3')] }, { atMove: 12, say: "Nf3 — you develop, eyeing the centre; with the half-open a-file and the bishop pair offsetting the doubled b-pawns, White stands comfortably.", sayShort: "Nf3 — develop, press.", highlights: [H('f3')] }] },
-  'vienna-game::3::Bc5@5': { ...VN_BC4_DEV, beats: [{ atMove: 12, say: "a3 — you secure the queenside and prepare slow maneuvering; the Stanley's reversed-Italian setup gives White a comfortable, flexible game.", sayShort: "a3 — secure, maneuver.", highlights: [H('a3')] }, { atMove: 18, say: "Nh2 — the knight reroutes toward g4 and the kingside, the thematic maneuver; White builds patiently behind the solid centre.", sayShort: "Nh2 — reroute to the kingside.", highlights: [H('h2')] }] },
-  'vienna-game::3::Bb4@5': { ...VN_BC4_DEV, beats: [{ atMove: 8, say: "f4 — you strike in the centre, the Vienna's signature break; White opens lines and seizes the initiative against the pinned-bishop setup.", sayShort: "f4 — strike, open lines.", highlights: [H('f4')] }, { atMove: 16, say: "fxg7 — the pawn crashes through to g7, forking the rook and tearing open Black's kingside; White's attack reaps material in the sharp line.", sayShort: "fxg7 — crash through.", highlights: [H('g7')] }] },
-  'vienna-game::3::Nc6@9': { ...VN_FRANKENSTEIN, beats: [{ atMove: 10, say: "d4 — you strike in the centre, opening lines for your pieces against Black's awkward knights; White's initiative builds in the Frankenstein-Dracula.", sayShort: "d4 — strike, open lines.", highlights: [H('d4')] }, { atMove: 14, say: "Qxe5 — the queen grabs the centre pawn, dominating; White collects material and keeps the pieces active.", sayShort: "Qxe5 — grab, dominate.", highlights: [H('e5')] }] },
-  'vienna-game::3::c6@5': { ...VN_BC4_DEV, beats: [
-    { atMove: 5, say: "…c6 prepares the …d5 freeing break — strike first. d4 seizes the centre at once, before Black can get …d5 in on his terms.", sayShort: "…c6 — answer d4.", arrows: [A('d2', 'd4')], highlights: [H('d4', KEY)] },
-    { atMove: 6, say: "d4 grabs the full centre and jabs at e5. Black pins with …Bb4, but you're better developed with more space.", sayShort: "d4 — take the centre, hit e5.", arrows: [A('d4', 'e5')], highlights: [H('e5', ATK)] },
-    { atMove: 7, say: "…Bb4 pins your c3-knight — a nuisance, not a threat. Bd3, Nf3 or Qe2 and castling consolidate the broad centre and the space edge while you keep the bishop trained on f7.", sayShort: "…Bb4 — consolidate, keep the space.", highlights: [H('c3', SOFT)] },
-  ] },
-  'vienna-game::4::h6@11': { ...VN_HAMPPE, beats: [{ atMove: 12, say: "h4 — you strike at Black's g5-pawn, prising open the kingside; White's attack rolls in the sharp Vienna Gambit Max Lange.", sayShort: "h4 — strike g5.", arrows: [A('h4', 'g5')], highlights: [H('h4'), H('g5', ATK)] }, { atMove: 14, say: "Qd3 — the queen centralises behind the big centre, eyeing the kingside; White's pieces and pawns press Black's loose position.", sayShort: "Qd3 — centralise, press.", highlights: [H('d3')] }] },
-  'vienna-game::4::g4@11': { ...VN_HAMPPE, beats: [{ atMove: 12, say: "Bxf4 — you recover the gambit pawn, the bishop developing; White's centre and pieces hold the Max Lange initiative.", sayShort: "Bxf4 — recover, develop.", highlights: [H('f4')] }, { atMove: 16, say: "Bxf7+ — the bishop crashes in with check, dragging the king out; White's pieces swarm the exposed monarch in the Max Lange.", sayShort: "Bxf7+ — drag the king out.", arrows: [A('f7', 'e8')], highlights: [H('f7')] }] },
-  'vienna-game::4::Nh6@11': { ...VN_HAMPPE, beats: [{ atMove: 12, say: "h4 — you strike at the g5-pawn, prising open the kingside; White's attack rolls in the Max Lange.", sayShort: "h4 — strike g5.", arrows: [A('h4', 'g5')], highlights: [H('h4'), H('g5', ATK)] }, { atMove: 16, say: "Bxf4 — you recover the gambit pawn, the bishop active; White's broad centre and pieces dominate.", sayShort: "Bxf4 — recover, develop.", highlights: [H('f4')] }] },
-  'vienna-game::4::Nge7@11': { ...VN_HAMPPE, beats: [{ atMove: 12, say: "Nxg5 — the knight pounces toward f7, exploiting the loosened kingside; White's attack roars in the Max Lange.", sayShort: "Nxg5 — pounce at f7.", arrows: [A('g5', 'f7')], highlights: [H('g5'), H('f7', ATK)] }, { atMove: 14, say: "Qh5 — the queen joins the assault, eyeing f7 and h7; White's pieces converge for a crushing attack on the king.", sayShort: "Qh5 — join the assault.", highlights: [H('h5'), H('f7', ATK)] }] },
-  'vienna-game::4::Bc5@5': { ...VN_HAMPPE, beats: [
-    { atMove: 5, say: "…Bc5 develops actively instead of grabbing the pawn. Develop with purpose: Nf3 adds a guard to e5 and readies the f4-lever to open the file.", sayShort: "…Bc5 — develop Nf3.", arrows: [A('g1', 'f3')], highlights: [H('f4', KEY)] },
-    { atMove: 6, say: "Nf3 leans on e5 and supports the f4-tension. With d3, Bc4 and castling you keep the space and the half-open f-file aimed at Black's king — a comfortable, pressing game.", sayShort: "Nf3 — guard e5, ready f4.", arrows: [A('f3', 'e5')], highlights: [H('e5', SOFT)] },
-  ] },
-  'vienna-game::5::Qe7@7': VN_GAMBIT_E5,
-  'vienna-game::5::d6@9': { ...VN_GAMBIT_E5, beats: [{ atMove: 14, say: "Ne4 — the knight leaps to a dominant central post, eyeing d6 and f6; White's e5-wedge and active pieces give the initiative.", sayShort: "Ne4 — dominant post.", highlights: [H('e4')] }, { atMove: 16, say: "Bc4 — the bishop eyes f7, joining the development; White's space and pieces are full value for the gambit pawn.", sayShort: "Bc4 — eye f7, develop.", arrows: [A('c4', 'f7')], highlights: [H('c4'), H('f7', SOFT)] }] },
-  'vienna-game::5::Nc6@9': { ...VN_GAMBIT_E5, beats: [{ atMove: 14, say: "d4 — you build the broad centre, the e5- and d4-pawns cramping Black; White's space is the compensation for the pawn.", sayShort: "d4 — broad centre.", highlights: [H('d4'), H('e5', SOFT)] }, { atMove: 16, say: "Bxf4 — you recover the gambit pawn, the bishop developing; White's space and active pieces give the initiative.", sayShort: "Bxf4 — recover, develop.", highlights: [H('f4')] }] },
-  'vienna-game::5::g5@9': { ...VN_GAMBIT_E5, beats: [{ atMove: 14, say: "Qe2 — the queen centralises, supporting e5 and the coming O-O-O; White weathers Black's wild g-pawn push and keeps the initiative.", sayShort: "Qe2 — centralise, support e5.", highlights: [H('e2'), H('e5', SOFT)] }, { atMove: 18, say: "Bb2 — the bishop rakes the long diagonal toward g7 and e5; White's pieces converge while Black's kingside loosens.", sayShort: "Bb2 — rake the long diagonal.", arrows: [A('b2', 'g7')], highlights: [H('b2')] }] },
-  'vienna-game::5::Bc5@9': { ...VN_GAMBIT_E5, beats: [{ atMove: 14, say: "d4 — you build the broad centre, hitting the c5-bishop; White's space and development compensate the pawn.", sayShort: "d4 — build, hit c5.", arrows: [A('d4', 'c5')], highlights: [H('d4'), H('c5', ATK)] }, { atMove: 18, say: "Nxd5 — the knight seizes the centre with tempo, hitting Black's loose pieces; White's active forces press the initiative.", sayShort: "Nxd5 — seize the centre.", highlights: [H('d5')] }] },
-  'vienna-game::5::Be7@9': { ...VN_GAMBIT_E5, beats: [{ atMove: 14, say: "Bc4 — the bishop eyes f7, joining the attack; White's lead in development and the e5-pawn are full value for the gambit.", sayShort: "Bc4 — eye f7, attack.", arrows: [A('c4', 'f7')], highlights: [H('c4'), H('f7', SOFT)] }, { atMove: 18, say: "exd6 — you open the position, the passed d-pawn and active pieces pressing; White's initiative rolls forward.", sayShort: "exd6 — open, press.", highlights: [H('d6')] }] },
-  'vienna-game::5::f6@9': { ...VN_GAMBIT_E5, beats: [{ atMove: 14, say: "d4 — you build the centre while Black overextends his kingside pawns; White's development punishes the loosening.", sayShort: "d4 — build, punish him.", highlights: [H('d4'), H('e5', SOFT)] }, { atMove: 18, say: "Nxf5 — the knight crashes into f5, exploiting Black's weakened kingside; White's pieces converge on the holes.", sayShort: "Nxf5 — exploit the holes.", highlights: [H('f5')] }] },
-  'vienna-game::5::h6@9': { ...VN_GAMBIT_E5, beats: [{ atMove: 14, say: "Bc4 — the bishop eyes f7 and d5; with Black drifting on the kingside, White's development lead presses for the attack.", sayShort: "Bc4 — eye f7, press.", arrows: [A('c4', 'f7')], highlights: [H('c4'), H('f7', SOFT)] }, { atMove: 16, say: "Bxd5 — you snap the central pawn, the bishop dominating; White's active pieces and the e5-wedge give a strong initiative.", sayShort: "Bxd5 — snap, dominate.", highlights: [H('d5')] }] },
-  'vienna-game::5::Bg4@11': { ...VN_GAMBIT_E5, beats: [{ atMove: 14, say: "Bxf4 — you recover the gambit pawn, the bishop developing with tempo; White's centre and active pieces press.", sayShort: "Bxf4 — recover, develop.", highlights: [H('f4')] }, { atMove: 16, say: "Be2 — you break the g4-pin and develop; White's broad centre and harmonious pieces hold the initiative.", sayShort: "Be2 — break the pin.", highlights: [H('e2')] }] },
-  'vienna-game::6::Bc5@5': { ...VN_G3, beats: [
-    { atMove: 5, say: "…Bc5 develops actively against your Mieses g3 setup. Stay the course: Bg2 completes the fianchetto, putting the bishop on the long light diagonal.", sayShort: "…Bc5 — answer Bg2.", arrows: [A('f1', 'g2')], highlights: [H('g2', KEY)] },
-    { atMove: 6, say: "Bg2 finishes the fianchetto. With O-O, d3 and Nf3 to follow, the bishop will rake the long diagonal once the centre clears — a calm, strategically rich game where your harmonious setup gives the lasting pull.", sayShort: "Bg2 — fianchetto, long diagonal.", highlights: [H('g2', KEY)] },
-  ] },
-  'vienna-game::7::d6@11': { ...VN_QG4, beats: [{ atMove: 12, say: "Qxg7 — you grab the g-pawn and eye the h8-rook; in the wild Meitner-Mieses, White scoops up material while Black attacks.", sayShort: "Qxg7 — grab, eye the rook.", arrows: [A('g7', 'h8')], highlights: [H('g7')] }, { atMove: 18, say: "Qxh8 — the queen crashes into the corner, winning the rook; White is up serious material, with the task of weathering Black's initiative.", sayShort: "Qxh8 — win the rook.", highlights: [H('h8')] }] },
-  'vienna-game::7::Nf6@11': { ...VN_QG4, beats: [{ atMove: 12, say: "Qxg7 — you grab the g-pawn and eye the rook; White scoops up material in the wild Meitner-Mieses while Black attacks.", sayShort: "Qxg7 — grab the pawn.", arrows: [A('g7', 'h8')], highlights: [H('g7')] }, { atMove: 16, say: "Qxh8 — the queen takes the rook in the corner; White banks a decisive material edge in the Meitner-Mieses melee.", sayShort: "Qxh8 — take the rook.", highlights: [H('h8')] }] },
-  'vienna-game::7::Bb6@11': { ...VN_QG4, beats: [{ atMove: 14, say: "Nxf2 — you snap off Black's marauding queen; White emerges up a queen for a rook and bishop — a decisive material edge.", sayShort: "Nxf2 — win the queen.", highlights: [H('f2')] }, { atMove: 16, say: "Nxg4 — you recapture, the dust settling with White comfortably ahead in material; the Meitner-Mieses gambit has backfired.", sayShort: "Nxg4 — recapture, stay up.", highlights: [H('g4')] }] },
-  'vienna-game::7::Qg6@9': { ...VN_QG4, beats: [{ atMove: 10, say: "Nxc7+ — the knight forks king and rook before you trade queens; White wins the exchange and material in the Meitner-Mieses.", sayShort: "Nxc7+ — fork king and rook.", arrows: [A('c7', 'a8')], highlights: [H('c7')] }, { atMove: 14, say: "Nxa8 — the knight grabs the rook in the corner; White is up serious material from the gambit's complications.", sayShort: "Nxa8 — grab the rook.", highlights: [H('a8')] }] },
-  'vienna-game::7::Na5@11': { ...VN_QG4, beats: [{ atMove: 12, say: "Nh3 — you develop, attacking the f2-queen and untangling; White consolidates the extra material from the gambit.", sayShort: "Nh3 — attack the queen.", arrows: [A('h3', 'f2')], highlights: [H('h3'), H('f2', ATK)] }, { atMove: 14, say: "Qxg7 — you grab the g-pawn and eye the rook; White scoops material while Black scrambles for the attack.", sayShort: "Qxg7 — grab the pawn.", highlights: [H('g7')] }] },
-  'vienna-game::7::Bxf2+@9': { ...VN_QG4, beats: [{ atMove: 12, say: "Nxc7+ — the knight forks king and rook; White grabs material in the Meitner-Mieses while Black's attack peters out.", sayShort: "Nxc7+ — fork king and rook.", arrows: [A('c7', 'a8')], highlights: [H('c7')] }, { atMove: 16, say: "Nxa8 — the knight takes the rook in the corner; White emerges up serious material from the gambit complications.", sayShort: "Nxa8 — take the rook.", highlights: [H('a8')] }] },
-  'vienna-game::7::Bd6@11': { ...VN_QG4, beats: [{ atMove: 12, say: "Qxg7 — you grab the g-pawn and eye the h8-rook; White scoops up material in the wild Meitner-Mieses.", sayShort: "Qxg7 — grab, eye the rook.", arrows: [A('g7', 'h8')], highlights: [H('g7')] }, { atMove: 14, say: "Qxh8 — the queen takes the rook in the corner; White banks a decisive material edge in the wild gambit.", sayShort: "Qxh8 — take the rook.", highlights: [H('h8')] }] },
-  'vienna-game::7::Nge7@11': { ...VN_QG4, beats: [{ atMove: 14, say: "Nxf2 — you snap off Black's marauding queen; White emerges up material as the gambit backfires.", sayShort: "Nxf2 — win the queen.", highlights: [H('f2')] }, { atMove: 16, say: "Nxg4 — you recapture, the smoke clearing with White comfortably ahead in material.", sayShort: "Nxg4 — recapture, stay up.", highlights: [H('g4')] }] },
-  'vienna-game::7::h5@13': { ...VN_QG4, beats: [{ atMove: 14, say: "Qg5 — the queen sidesteps to safety, eyeing the kingside; White holds the extra material while keeping the queen active.", sayShort: "Qg5 — sidestep, stay active.", highlights: [H('g5')] }, { atMove: 16, say: "Nxf2 — you snap off Black's deep queen; even after the trades, White emerges with a material edge from the gambit.", sayShort: "Nxf2 — win the queen.", highlights: [H('f2')] }] },
+  'vienna-game::3::c6@7': VN_QUIET,
+  'vienna-game::3::Nc6@7': VN_QUIET,
+  'vienna-game::3::Nc6@5': VN_BC4_DEV,
+  'vienna-game::3::Bb4@5': VN_BC4_DEV,
+  'vienna-game::4::h6@11': VN_HAMPPE,
+  'vienna-game::4::g4@11': VN_HAMPPE,
+  'vienna-game::4::Nh6@11': VN_HAMPPE,
+  'vienna-game::4::Nge7@11': VN_HAMPPE,
+  'vienna-game::5::d6@9': VN_GAMBIT_E5,
+  'vienna-game::5::Nc6@9': VN_GAMBIT_E5,
+  'vienna-game::5::g5@9': VN_GAMBIT_E5,
+  'vienna-game::5::Bc5@9': VN_GAMBIT_E5,
+  'vienna-game::5::Be7@9': VN_GAMBIT_E5,
+  'vienna-game::5::f6@9': VN_GAMBIT_E5,
+  'vienna-game::5::h6@9': VN_GAMBIT_E5,
+  'vienna-game::5::Bg4@11': VN_GAMBIT_E5,
+  'vienna-game::7::d6@11': VN_QG4,
+  'vienna-game::7::Nf6@11': VN_QG4,
+  'vienna-game::7::Bb6@11': VN_QG4,
+  'vienna-game::7::Na5@11': VN_QG4,
+  'vienna-game::7::Bxf2+@9': VN_QG4,
+  'vienna-game::7::Bd6@11': VN_QG4,
+  'vienna-game::7::Nge7@11': VN_QG4,
+  'vienna-game::7::h5@13': VN_QG4,
 
   // -- Vienna Gambit --
   'vienna-gambit::0::Qe7@7': { ...VG_E5, beats: [{ atMove: 8, say: "a3 — a flexible waiting move; the Vienna Gambit has given a pawn for the e5-centre and open lines, and you keep developing toward the attack.", sayShort: "a3 — flexible, keep developing.", highlights: [H('a3'), H('e5', SOFT)] }, { atMove: 14, say: "Kxf2 — you mop up the advanced pawn; the king is a touch airy, but Black has spent time grabbing material and White's pieces stay active.", sayShort: "Kxf2 — mop up, stay active.", highlights: [H('f2')] }] },
@@ -3024,8 +2979,7 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'scotch-game::5::d6@5': COV_SC_D6,
   'scotch-game::6::d6@5': COV_SC_D6,
   'scotch-game::7::d6@5': COV_SC_D6,
-  'vienna-game::0::O-O@13': { ...COV_VN_GAMBIT_OO, beats: [{ atMove: 14, say: "Be3 — you develop the bishop, eyeing the kingside and supporting the centre; White's broad pawns and the coming O-O-O give attacking chances.", sayShort: "Be3 — develop, support.", highlights: [H('e3')] }, { atMove: 16, say: "O-O-O — you castle long, the rooks aiming at Black's centre and king; White's space and pieces converge for the Vienna Gambit attack.", sayShort: "O-O-O — castle long, attack.", highlights: [H('c1')] }] },
-  'vienna-game::2::h6@11': { ...COV_VN_H6, beats: [{ atMove: 12, say: "Ne2 — the knight reroutes toward g3 and f5, the thematic Vienna Hybrid maneuver; White builds slowly behind the solid centre.", sayShort: "Ne2 — reroute toward f5.", highlights: [H('e2')] }, { atMove: 14, say: "Bxe6 — you trade and damage Black's structure with fxe6; White's better pawns and the half-open f-file give a lasting pull.", sayShort: "Bxe6 — damage the structure.", highlights: [H('e6')] }] },
+  'vienna-game::3::h6@11': COV_VN_H6,
   'petrov-defence::1::O-O@10': { ...COV_PT_OO, beats: [{ atMove: 11, say: "…Nxe5 — you trade off the strong e5-knight; after dxe5 the position simplifies and your solid setup holds the balance comfortably.", sayShort: "…Nxe5 — trade, simplify.", highlights: [H('e5')] }, { atMove: 17, say: "…O-O — you castle into a sound, symmetrical structure; with pieces traded and a rock-solid centre, Black is fully equal.", sayShort: "…O-O — solid, equal.", highlights: [H('g8')] }] },
   'petrov-defence::3::Bc4+@10': COV_PT_BC4,
   'philidor-defence::1::Re1@12': { ...COV_PH_RE1, beats: [{ atMove: 13, say: "…c6 — you brace the centre and prepare …b5 or …d5, the flexible Lion move; Black's solid setup is ready to expand.", sayShort: "…c6 — brace, prepare …b5.", highlights: [H('c6')] }, { atMove: 17, say: "…d5 — you strike in the centre, freeing your position; with the break in, Black equalises comfortably.", sayShort: "…d5 — strike, free up.", highlights: [H('d5')] }] },
