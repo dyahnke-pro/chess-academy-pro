@@ -602,15 +602,23 @@ ${clipped}`;
   // One-shot asks under-deliver on long lines (28 plies → 15 ideas). Chunk:
   // intro/outro from the first call, ideas in batches of 10 with the full
   // reference each time, exact-count enforced per batch.
-  const BATCH = 10;
+  // 5, not 10: an exact-count list is the thing the model gets wrong, and the
+  // error scales with the count. An 8-ply line asked as 8-at-once returned 7
+  // every time; asked as 5+3 each batch is short enough to count reliably.
+  const BATCH = 5;
   // The model sometimes under-delivers a batch's count — retry the batch
   // (up to 3 tries) before refusing; a partial narration never ships.
   const callBatch = async (prompt, want, maxTokens) => {
     for (let attempt = 1; attempt <= 3; attempt += 1) {
-      const res = await callModel(system, prompt, maxTokens);
+      // NOT a token problem — measured. Widening the budget made it WORSE
+      // (7/8 at 8192, 7/8 at 16384, 6/8 at 32768), so the model is not being
+      // truncated, it simply miscounts a long exact-count list. The fix is a
+      // SMALLER ask per call (see BATCH), not a bigger budget.
+      const budget = maxTokens;
+      const res = await callModel(system, prompt, budget);
       const got = Array.isArray(res.ideas) ? res.ideas : [];
       if (got.length >= want) return { ...res, ideas: got.slice(0, want) };
-      console.error(`  (batch returned ${got.length}/${want} ideas — retry ${attempt}/3)`);
+      console.error(`  (batch returned ${got.length}/${want} ideas at ${budget} tokens — retry ${attempt}/3)`);
     }
     return null;
   };
