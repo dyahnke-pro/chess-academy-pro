@@ -14,11 +14,46 @@
 //
 // The rule is deliberately narrow, because prose also recites hypothetical
 // continuations that are not claims about the game so far: a note is rejected
-// only when it recites an opening sequence that STARTS on the same first move
-// the game did, and then diverges from what was actually played. A recitation
-// beginning on some other move is treated as a hypothetical and left alone.
+// only when it recites an opening sequence that diverges from what was actually
+// played.
+//
+// 2026-08-01 — the FIRST-MOVE hole. The original rule waved through any
+// recitation beginning on a different first move than the game, on the theory
+// that it must be a hypothetical. That left an absurd asymmetry: a note
+// reciting a SIBLING line was rejected while one reciting an ENTIRELY DIFFERENT
+// opening was trusted. Measured on the shipped corpora, a Ruy Lopez at ply 6
+// pulled a Grünfeld note and a King's Indian at ply 6 pulled a King's Gambit
+// note — both spoken, and (once arrows became note-grounded) both drawing
+// another opening's moves on the student's board.
+//
+// The right discriminator is not WHICH move the recitation opens on but WHERE
+// it starts from. A hypothetical continues from where the student IS, so it
+// only makes sense on the live board; an opening recitation replays from move
+// one. So: replay the recited moves from the STARTING POSITION. If they are
+// legal from there it is an opening recitation and gets judged against what was
+// actually played; if they are not, it is a continuation and is left alone.
+// "After Nf3 Ng5 Bxf7" is illegal from the start (Black has no ...Ng5 on move
+// one), so it stays a hypothetical — which is exactly right.
+
+import { Chess } from 'chess.js';
 
 const SAN_TOKEN = /^(?:[NBRQK][a-h]?[1-8]?x?[a-h][1-8](?:=[NBRQ])?|[a-h](?:x[a-h])?[1-8](?:=[NBRQ])?|O-O(?:-O)?)[+#]?$/;
+
+/** Does this recitation make sense as an OPENING — i.e. does it replay legally
+ *  from the standard start? A hypothetical continuation ("After Nf3 Ng5 Bxf7…")
+ *  only makes sense on the live board and fails here, which is how the two are
+ *  told apart without guessing from the prose. */
+function replaysFromStart(sans: string[]): boolean {
+  const chess = new Chess();
+  for (const san of sans) {
+    try {
+      if (!chess.move(san)) return false;
+    } catch {
+      return false;
+    }
+  }
+  return true;
+}
 
 /** The first opening sequence a note recites, e.g. "After d4 d5 c4 e6 Nc3 Nf6,"
  *  → ['d4','d5','c4','e6','Nc3','Nf6']. Empty when the note recites nothing. */
@@ -40,9 +75,13 @@ export function recitedLine(text: string): string[] {
 export function noteContradictsLine(text: string, historySans: string[]): boolean {
   const recited = recitedLine(text);
   if (recited.length === 0) return false;
-  // Only judge recitations that start where the game started; anything else is
-  // a hypothetical continuation, not a claim about the moves played.
-  if (historySans.length === 0 || recited[0] !== historySans[0]) return false;
+  if (historySans.length === 0) return false;
+  // A recitation that does not replay from the starting position is a
+  // continuation of the live board, not a claim about the moves played.
+  if (!replaysFromStart(recited)) return false;
+  // It IS an opening recitation. Judge it against what was actually played —
+  // including when it opens on a different first move, which means it is
+  // teaching a different opening entirely.
   const compared = Math.min(recited.length, historySans.length);
   for (let i = 0; i < compared; i += 1) {
     if (recited[i] !== historySans[i]) return true;

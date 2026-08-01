@@ -900,6 +900,67 @@ export function repairNarrationArrows(tree: WalkthroughTree): number {
  *  piece-on-square / pin-geometry claims are dropped; positional phrasing
  *  ("shoring up d5") is the idea-frontier and is left untouched. Returns the
  *  count of sentences dropped. */
+/** THE GROUNDED ARROW SOURCE for one ply (G0 — David 2026-08-01: "it shouldn't
+ *  decide. the narrations are grounded in the notes. whatever the notes say
+ *  about squares are what get arrows").
+ *
+ *  Arrows used to be scraped off the MODEL's finished prose, which left the
+ *  choice of what to point at with the model: mention a square and it gets an
+ *  arrow, stay quiet and it doesn't. That is the LLM deciding board content.
+ *  The teaching note is what the narration is grounded in, so the note is what
+ *  the arrows come from — computed in code, before the model speaks a word.
+ *
+ *  Returns the note's teaching text ALREADY graded against this ply's board
+ *  (`gradeNarrationText` drops provably-false piece-on-square claims), or null
+ *  when no note is taught at this position — an ungrounded ply has nothing but
+ *  the prose to go on, and that fallback stays as it was.
+ *
+ *  `seenIds` keeps an opening-level note from re-arrowing every ply. */
+function noteArrowSourceAt(
+  historySans: string[],
+  fen: string,
+  seenIds: Set<string>,
+): string | null {
+  try {
+    const note = noteAtPosition(historySans, fen);
+    if (!note || seenIds.has(note.id)) return null;
+    const graded = gradeNarrationText(teachingBeatText(note), fen, 'openingGenerator.noteArrows');
+    if (!graded?.trim()) return null;
+    seenIds.add(note.id);
+    return graded;
+  } catch {
+    return null; // the corpus is a bonus, never a blocker
+  }
+}
+
+/** The ply's arrows: the ORANGE trail on the move just played, plus GREEN
+ *  vision arrows for the moves the GROUNDING SOURCE names.
+ *
+ *  `noteText` is the note that grounds this ply (null when none is taught
+ *  here); `prose` is the narration actually spoken. The note wins whenever it
+ *  exists — that is the whole G0 point, and it is why this takes both rather
+ *  than a single pre-resolved string: the caller must not be able to quietly
+ *  hand the prose in as if it were grounding. */
+export function groundedSegmentArrows(
+  noteText: string | null,
+  prose: string,
+  move: { from: string; to: string; fen: string },
+): { arrows: NarrationSegmentType['arrows']; source: 'note' | 'prose' } {
+  const source = noteText?.trim() ? 'note' : 'prose';
+  const text = source === 'note' ? (noteText as string) : prose;
+  return {
+    source,
+    arrows: [
+      { from: move.from, to: move.to, color: 'orange' },
+      ...deriveNarrationArrows(text, move.fen, [{ from: move.from, to: move.to }]).arrows.map((a) => ({
+        from: a.from,
+        to: a.to,
+        color: 'green' as const,
+      })),
+    ],
+  };
+}
+
 export function gradeNarrationBoardClaims(tree: WalkthroughTree): number {
   const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
   let touched = 0;
@@ -1663,7 +1724,17 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
   // Branches sit at the spine terminus; replay each branch line from
   // there so its lead-the-eye arrows are code-computed too.
   const terminusFen = positions[positions.length - 1].fen;
+  const spineSans = positions.map((q) => q.san);
   const branchChildren: ChildWrap[] = branches.map((b, idx) => {
+    // Notes ground this branch's arrows the same way they ground the spine's
+    // (G0). Scoped per branch: a branch is a path the student takes INSTEAD of
+    // the others, so one note may legitimately teach on two of them.
+    const branchNoteIds = new Set<string>();
+    // Resolved in FORWARD ply order and cached, because the tree below is
+    // assembled bottom-up: walking the once-per-note dedupe in reverse would
+    // hand a note to the deepest ply it touches instead of the first.
+    // [0] = the branch move itself, [1 + j] = extension move j.
+    const branchNoteSources: Array<string | null> = [];
     // CODE-COMPUTED arrows for [b.san, ...extensionMoves], replayed
     // from the spine terminus. branchSeq[0] = b.san's replayed move;
     // branchSeq[1 + j] = extensionMoves[j]'s.
@@ -1676,6 +1747,12 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       } catch {
         break; // shouldn't happen (DB-validated), but never throw mid-build
       }
+    }
+    const branchSans = [b.san, ...b.extensionMoves];
+    for (let k = 0; k < branchSeq.length; k += 1) {
+      branchNoteSources.push(
+        noteArrowSourceAt([...spineSans, ...branchSans.slice(0, k + 1)], branchSeq[k].fen, branchNoteIds),
+      );
     }
     // The branch's first move belongs to the side whose turn it is
     // after the canonical's last ply. Position[i].ply = i, so after
@@ -1728,12 +1805,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       if (extMove) {
         const segment: NarrationSegmentType = {
           text,
-          arrows: [
-            { from: extMove.from, to: extMove.to, color: 'orange' },
-            ...deriveNarrationArrows(text, extMove.fen, [{ from: extMove.from, to: extMove.to }]).arrows.map(
-              (a) => ({ from: a.from, to: a.to, color: 'green' as const }),
-            ),
-          ],
+          arrows: groundedSegmentArrows(branchNoteSources[j + 1] ?? null, text, extMove).arrows,
         };
         if (shortText) segment.shortText = shortText;
         node.narration = [segment];
@@ -1752,12 +1824,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
     if (branchMove) {
       const segment: NarrationSegmentType = {
         text: teaser,
-        arrows: [
-          { from: branchMove.from, to: branchMove.to, color: 'orange' },
-          ...deriveNarrationArrows(teaser, branchMove.fen, [{ from: branchMove.from, to: branchMove.to }]).arrows.map(
-            (a) => ({ from: a.from, to: a.to, color: 'green' as const }),
-          ),
-        ],
+        arrows: groundedSegmentArrows(branchNoteSources[0] ?? null, teaser, branchMove).arrows,
       };
       if (shortTeaser) segment.shortText = shortTeaser;
       branchNode.narration = [segment];
@@ -1779,6 +1846,10 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
   // model did with the advisory block. Once per note id, so an opening-level
   // note can't spam every ply.
   const splicedNoteIds = new Set<string>();
+  // The GROUNDED arrow source per spine ply — the note's graded teaching text,
+  // captured BEFORE the house-voice reword so the arrows can never drift with
+  // the model's phrasing (G0, see `noteArrowSourceAt`). null = ungrounded ply.
+  const plyNoteText: Array<string | null> = positions.map(() => null);
   // PASS 1 — assemble each ply's raw material: the generated idea plus the
   // corpus note taught exactly at that position (board-graded).
   const rawPlyTexts: string[] = positions.map((p, i) => {
@@ -1794,17 +1865,10 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       // corpus note on top would double-teach the same source material.
       if (baked) return text;
       const prefix = positions.slice(0, i + 1).map((q) => q.san);
-      const note = noteAtPosition(prefix, p.fen);
-      if (note && !splicedNoteIds.has(note.id)) {
-        const teaching = gradeNarrationText(
-          teachingBeatText(note),
-          p.fen,
-          'openingGenerator.danyaSplice',
-        );
-        if (teaching) {
-          splicedNoteIds.add(note.id);
-          text = `${text} ${teaching}`;
-        }
+      const teaching = noteArrowSourceAt(prefix, p.fen, splicedNoteIds);
+      if (teaching) {
+        plyNoteText[i] = teaching;
+        text = `${text} ${teaching}`;
       }
     } catch { /* the corpus is a bonus, never a blocker */ }
     return text;
@@ -1861,15 +1925,26 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
     // (computeLeadEyeArrows) are GONE from walkthrough segments — they drew
     // arrows at squares the voice never talked about, which is exactly the
     // "wrong arrows" David kept reporting.
-    const segmentArrows: NarrationSegmentType['arrows'] = [
-      { from: p.from, to: p.to, color: 'orange' },
-      ...deriveNarrationArrows(text, p.fen, [{ from: p.from, to: p.to }]).arrows.map((a) => ({
-        from: a.from,
-        to: a.to,
-        color: 'green' as const,
-      })),
-    ];
-    const namedSquares = extractMentionedSquares(text)
+    //
+    // G0 (David 2026-08-01): the arrows come from the NOTE, not the model's
+    // prose. Scraping the finished narration handed the model the board — what
+    // it chose to mention became what the student's eye was led to. The note is
+    // what the narration is grounded in, so `plyNoteText[i]` (graded against
+    // this ply's board, captured before the reword) is the arrow source
+    // whenever the ply is grounded. An UNGROUNDED ply has no note to read, so
+    // it falls back to the prose exactly as before — deterministic either way.
+    // A BAKED ply carries no plyNoteText and correctly falls back to its prose:
+    // that prose IS the teaching, reworded and board-gated OFFLINE where a bad
+    // line could be rejected. Deriving from it is still deriving from grounded
+    // content — it is not the runtime model choosing what to point at.
+    const grounded = groundedSegmentArrows(plyNoteText[i], text, p);
+    const segmentArrows: NarrationSegmentType['arrows'] = grounded.arrows;
+    // Highlights read the SAME source as the arrows — a yellow square the
+    // narration points at is the same class of claim as a green arrow, so
+    // letting it come from the prose while the arrows come from the note
+    // would put the model back in charge of half the board.
+    const arrowSource = grounded.source === 'note' ? (plyNoteText[i] as string) : text;
+    const namedSquares = extractMentionedSquares(arrowSource)
       .filter((sq) => sq !== p.to && sq !== p.from)
       .slice(0, MAX_CANDIDATE_HIGHLIGHTS);
     const segment: NarrationSegmentType = { text, arrows: segmentArrows };

@@ -10,6 +10,7 @@ import gemsData from '../punish-gems.json';
 import gambitGemsData from '../gambit-punish-gems.json';
 import { getGemNarration, hasGemNarration } from './punishGemNarration';
 import { narrateContinuationMove } from '../../services/continuationMoveNarration';
+import { deriveNarrationArrows } from '../../services/narrationArrows';
 import { GAMBIT_GEM_NARRATION } from './gambitGemNarration';
 import type { PlayableMiddlegameLine, AnnotationArrow } from '../../types';
 
@@ -185,11 +186,31 @@ export function gemToPlayableLine(gem: PunishGem): PlayableMiddlegameLine | null
       learnCues.push(computed.short);
       continue;
     }
-    arrows.push(from && to ? [{ from, to, color: 'orange' }] : []);
+    // The SAME arrow grammar the walkthrough uses (David 2026-08-01): ORANGE
+    // trail on the move just played, GREEN vision arrows for the moves the
+    // narration NAMES. Gems used to draw the orange trail alone, so a beat
+    // saying "the knight on d5 hits c7 and e7" pointed at none of it — the
+    // lead-the-eye rule broken on the one surface that is pure tactics.
+    // Grounded the same way too: the authored Watch prose IS the gem's
+    // teaching, and `deriveNarrationArrows` resolves each named move against
+    // this exact position or draws nothing (G3).
+    const watch = narration?.watch[i] ?? '';
+    arrows.push(
+      from && to
+        ? [
+            { from, to, color: 'orange' },
+            ...deriveNarrationArrows(watch, chess.fen(), [{ from, to }]).arrows.map((a) => ({
+              from: a.from,
+              to: a.to,
+              color: 'green' as const,
+            })),
+          ]
+        : [],
+    );
     learnCues.push(narration?.learn[i] ?? '');
 
     if (narration) {
-      annotations.push(narration.watch[i] ?? '');
+      annotations.push(watch);
     } else if (i === inaccuracyPly) {
       annotations.push(
         `${gem.inaccuracy} is a common try here — at your level it scores worse for your opponent than the main move.`,

@@ -134,7 +134,11 @@ describe('arrow derivation is universal', () => {
         }
       }
     }
-  });
+  // 30s, not the 5s default: this derives arrows at EVERY ply of EVERY opening
+  // in the sweep, so its cost grows with the opening set and it crossed the
+  // default as that set grew. The sweep is the point — give it room rather
+  // than narrowing what it covers.
+  }, 30000);
 
   it('draws nothing at all when the prose names no moves', () => {
     for (const { sans } of OPENINGS.slice(0, 4)) {
