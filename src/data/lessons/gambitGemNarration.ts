@@ -324,4 +324,20 @@ export const GAMBIT_GEM_NARRATION: Record<string, GambitGemNarration> = {
     watch: ['', '', '', '', '', '', '', '', '', '', '', '…e5 grabs space and looks solid, but it puts a pawn on a dark square and leaves d5 with nothing to defend it ever again.', 'c4! The bind. Pawns on c4 and e4 own d5 between them, and Black can never free the position with …d5.', '', '', '', 'Be2 — no rush. When the opponent has no pawn break, White can just improve pieces one at a time.', '', 'Be3 completes it: Black is solid but has no plan, and White chooses where to play. That is what the hole on d5 costs.', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', 'c4 — clamp d5 for good', '', '', '', '', '', 'Be3 — solid, and completely passive', ''],
   },
+  // KGD: …Ng4 lunges at a defended f2 with no follow-up. Qe2 holds and prepares
+  // f5, after which the knight has no square and must trek home — two tempi for
+  // nothing while White takes the space.
+  'gambit-kings-gambit:e4_e5_f4_Bc5_Nf3_d6_Nc3_Nf6_Bc4_O-O_d3:Ng4': {
+    sources: ["concept:pos-initiative", "concept:pos-weak-squares", "https://en.wikipedia.org/wiki/King%27s_Gambit"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '…Ng4 lunges at f2, but f2 is guarded and the knight has no follow-up — it has jumped to a square where nothing happens.', 'Qe2 — calm. Add a defender, and quietly prepare the pawn push that will ask the knight what it is actually doing out there.', '', 'f5! Now the knight on g4 is biting on granite, and it has no good square to go to.', '', '', '…Ngf6 — the knight comes all the way home. Two moves spent to end up where it started, and White owns the space.', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', 'Qe2 — hold f2, prepare f5', '', 'f5 — the knight has no job', '', '', '', '', ''],
+  },
+  // Budapest: h3 kicks a knight that wanted to go to e5 anyway. …Ngxe5 regains
+  // the gambit pawn hitting f3; after the trade Black has the broad centre and
+  // the open f-file, and h3 was a tempo White could not spare.
+  'gambit-budapest-gambit:d4_Nf6_c4_e5_dxe5_Ng4_Nf3_Nc6_Bf4_Bb4+_Nc3_Bxc3+_bxc3_Qe7_Qd5_f6:h3': {
+    sources: ["concept:pos-initiative", "concept:pos-center", "https://en.wikipedia.org/wiki/Budapest_Gambit"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'h3 shoos the knight away — but that knight has been aiming at e5 since move three, and shooing it is exactly what it wants.', '…Ngxe5! It simply takes the gambit pawn, and lands hitting the knight on f3 into the bargain.', '', '', "Trading on e5 hands Black a broad pawn front and opens the f-file straight at White's king.", "…fxe5 — the pawn is back, the file is open, and White's h3 turned out to be a wasted move in a position that needed development.", '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…Ngxe5 — take it, with tempo', '', '', '', '…fxe5 — pawn back, file open', '', '', ''],
+  },
 };
