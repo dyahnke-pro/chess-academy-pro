@@ -176,3 +176,50 @@ Run the coach-teach surface on prod and pull the audit stream. If
 sequences**, it's concurrent chains (find the second `start`/`resume` caller);
 if it's **one sequence whose depth decreases**, it's a rewind (look at
 `transitionAfter` / the delta-aside guards).
+
+---
+
+## PUNISH LINES MUST PLAY OUT (David 2026-08-01, permission granted to touch stage-gen)
+
+"Make sure the gem lines are not sparse and play out fully… and it needs to
+play out. You have permission to touch the punish stage gen."
+
+Three surfaces show a punish. Two are fixed, one is not.
+
+| Surface | Source | Plays out? |
+|---|---|---|
+| Gem tiles (opening tab) | mined `punish-gems.json` | ✅ `extend-punish-gems.mjs`, 344 lines |
+| Live callout (Play + Learn) | same mined data | ✅ `gemCrushLines.reveal` speaks until the advantage lands |
+| **Tree punish stage** | runtime stage-gen | ❌ **OPEN** |
+
+### The defect
+`PunishLesson.followup` is OPTIONAL and ungated for depth:
+- puzzle-derived path (`openingGenerator.ts:3000-3005`) ends where the PUZZLE
+  ends, not where the advantage lands;
+- LLM path is only truncated for ILLEGALITY (`:780-795`), never extended.
+So the student finds the punish and the line stops before the payoff is visible
+— the exact defect fixed for the gems.
+
+### The fix (proven pattern, from `scripts/extend-punish-gems.mjs`)
+After the punish, play engine best-moves for BOTH sides until:
+1. QUIET — side to move not in check, engine's best is not a capture/check;
+2. SETTLED — held two consecutive plies;
+3. SHOWN — punisher up real material, or mate.
+Never let the opponent cooperate; if best play dissolves the edge, KEEP the
+short line (that's the truth about the lesson). Cap the walk.
+
+### The design decision this needs FIRST
+Unlike the gems, this is RUNTIME generation, so engine playouts add latency to
+the "…about a minute" first-generation path. Pick one:
+- (a) extend at generation time, cache with the lesson (slower first build,
+      instant thereafter — consistent with how the walkthrough already caches);
+- (b) extend lazily when the student reveals (no build cost, brief pause on
+      reveal);
+- (c) extend offline for curated openings only, leave generated ones short.
+Recommendation: (a) — it matches the existing cache contract and the cost is
+paid once per device, on a path that already warns the user it takes a minute.
+
+### Narration
+Each appended ply needs board-true text. `narrateContinuationMove`
+(`src/services/continuationMoveNarration.ts`) already does exactly this and is
+what the gem demonstration tail uses — reuse it, do not author prose.
