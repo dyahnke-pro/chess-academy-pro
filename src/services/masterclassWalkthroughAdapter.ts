@@ -28,6 +28,7 @@ import type {
   NarrationHighlight,
 } from '../types/walkthroughTree';
 import { findLessonForQuery, getVariationLessonScriptsForOpening } from '../data/lessons';
+import { gemPunishLessonsForOpeningName } from './gemPunishLessons';
 
 /** Map an authored arrow color (rgba / css string) onto the walkthrough
  *  runtime's named palette. Authored masterclass arrows are green vision
@@ -326,5 +327,25 @@ export function masterclassWalkthroughTree(
   const displayName = hit.variationName ?? query.trim();
   // A MAIN-lesson walkthrough offers the opening's registered variation
   // lessons as fork tiles; a variation ask walks just its own line.
-  return lessonToWalkthroughTree(hit.lesson, displayName, hit.variationName ? undefined : hit.openingId);
+  const tree = lessonToWalkthroughTree(hit.lesson, displayName, hit.variationName ? undefined : hit.openingId);
+  if (!tree) return null;
+
+  // THE STATIC TREE WAS A DEAD END FOR EVERYTHING BUT PROSE (David 2026-08-01:
+  // "lets add in the gem lines to the static builds").
+  //
+  // A masterclass tree ships hand-authored narration and NOTHING else — no
+  // punish stage — because it skips the generation pipeline that builds them.
+  // So a King's Gambit lesson, the opening with the most curated weapons in
+  // the set (27 gems, 20 confirmed), logged `0/0 punish lesson(s) match` on
+  // every ply and could never show one. The fast, hand-written path was also
+  // the poorest one. Pure data the app already owns — no model, no engine, so
+  // the tree stays instant.
+  try {
+    const gems = gemPunishLessonsForOpeningName(displayName);
+    if (gems.length > 0) tree.punish = gems;
+  } catch { /* gems are a bonus, never a blocker */ }
+
+  return tree;
 }
+
+
