@@ -39,6 +39,15 @@ concurrency:
   group: farm-corpus-${{ github.event.inputs.creator || 'saintlouis' }}
   cancel-in-progress: false
 
+# The default GITHUB_TOKEN is read-only, so the final step 403'd:
+# "Permission to dyahnke-pro/chess-academy-pro.git denied to github-actions[bot]".
+# Every earlier step succeeded — the transcripts pulled fine on the fresh runner
+# IP, the corpus merged, the gate passed — and then the whole run failed on the
+# push, throwing the work away. The farm's entire purpose is committing that
+# corpus, so it needs write.
+permissions:
+  contents: write
+
 jobs:
   farm:
     runs-on: ubuntu-latest

@@ -162,11 +162,18 @@ export async function playOutPunish(
     if (chess.isCheckmate()) { terminus = 'mate'; break; }
   }
 
-  // Playing on made it WORSE — return nothing rather than walk the student
-  // into a line that gives the advantage back. The caller keeps what it had.
-  if (steps.length > 0 && materialDelta(chess, punisher) < startMaterial) {
+  // THE ADVANTAGE IS GONE — return nothing rather than walk the student into a
+  // line that hands back what they just won. The caller keeps what it had.
+  //
+  // The test is "is the punisher still up material", NOT "did the number ever
+  // go down". Any recapture lowers it: winning a rook for a pawn reads as +6
+  // then +4, and treating that as a dissolution threw away the play-out on the
+  // most ordinary sequence there is — a trade. What matters is whether the
+  // edge survives to the end, which is the same bar `shown` uses.
+  if (steps.length > 0 && materialDelta(chess, punisher) < 1) {
     return { steps: [], terminus: 'dissolved' };
   }
+  void startMaterial;
   return { steps, terminus };
 }
 
@@ -176,7 +183,10 @@ export async function playOutPunish(
 export function advantageAlreadyShown(fen: string, punisher: 'w' | 'b'): boolean {
   try {
     const chess = new Chess(fen);
-    if (chess.isGameOver()) return true;
+    // NOT short-circuiting on game-over: a stalemate or a dead draw is "over"
+    // but shows no advantage at all, and answering true there would claim a win
+    // the student never got. The walk's own first check handles a finished game
+    // without spending an engine call, so there is nothing to save here.
     if (chess.inCheck()) return false;
     // Anything hanging to a capture means the dust has not settled, so the
     // material on the board is not yet the material the student keeps.

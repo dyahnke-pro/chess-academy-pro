@@ -39,6 +39,7 @@ import { getCachedOpening } from '../services/openingGenerator';
 import { bakedNarrationFor } from '../services/bakedWalkthroughNarration';
 import { buildDrillWrongTeaching, buildDrillBetterLine, buildDrillThreatSpot, buildDrillCompletionPlan } from '../services/learnMoveTeaching';
 import { computeWatchGemAside } from '../services/gemCrushLines';
+import { playOutPunish, advantageAlreadyShown } from '../services/punishPlayout';
 import { computeThreatDelta, computeRouteDelta, type DeltaAside } from '../services/engineDeltaLines';
 import { useAppStore } from '../stores/appStore';
 import { resolveCoachNarration } from '../utils/coachNarration';
@@ -1643,7 +1644,10 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
           `${lesson.inaccuracy} — ${lesson.whyBad}`,
           lesson.shortWhyBad ? `${lesson.inaccuracy} — ${lesson.shortWhyBad}` : undefined,
         );
-        // 2. Punishment.
+        // 2. Punishment. Whose advantage this is gets fixed HERE — the side
+        // that plays the punishing move — not read off the turn later, which
+        // flips with every followup ply.
+        const punisher: 'w' | 'b' = c.turn();
         try {
           c.move(lesson.punishment);
         } catch {
@@ -1670,6 +1674,40 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
               fm.shortIdea ? `${fm.san} — ${fm.shortIdea}` : undefined,
             );
           }
+        }
+        // 3b. PLAY THE ADVANTAGE OUT (David 2026-08-01: "it needs to play
+        // out"). A gem-sourced lesson already ends where the material is on
+        // the board, but a puzzle-derived one stops wherever the puzzle's
+        // solution ended — often mid-recapture, so the student is told they
+        // won something they never saw arrive. Walk on with best play until
+        // the position is quiet and the material is actually there.
+        //
+        // Costs nothing the student notices: `advantageAlreadyShown` skips the
+        // engine entirely in the common case, and when it does run, each ply
+        // is computed while the previous one is still being spoken.
+        try {
+          if (!advantageAlreadyShown(c.fen(), punisher)) {
+            const { steps, terminus } = await playOutPunish(c.fen(), punisher);
+            for (const step of steps) {
+              try {
+                c.move(step.san);
+              } catch {
+                break;
+              }
+              setTrapFen(c.fen());
+              await speakAndWait(`${step.san} — ${step.idea}`, `${step.san} — ${step.shortIdea}`);
+            }
+            if (steps.length > 0) {
+              void logAppAudit({
+                kind: 'coach-surface-migrated',
+                category: 'subsystem',
+                source: 'useTeachWalkthrough.acceptTrap',
+                summary: `punish played out ${steps.length} extra ply(s) to "${terminus}" — ${lesson.name}`,
+              });
+            }
+          }
+        } catch {
+          // The play-out is an enhancement; never let it break the lesson.
         }
         // 4. Snap back; advance to next queued trap or fork picker.
         setTrapFen(null);
