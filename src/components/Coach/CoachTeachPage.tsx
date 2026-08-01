@@ -4991,6 +4991,35 @@ export function CoachTeachPage(): JSX.Element {
                   try {
                     const gem = findLivePunishment(null, historyAfterReply);
                     if (gem) {
+                      // ARM A REAL CHALLENGE BEHIND THE QUESTION (David
+                      // 2026-08-01: "Pressing the hint button will then show
+                      // the answer to the gem question asked by coach right?").
+                      // It did not. The gem pushed a question into the prose
+                      // but armed nothing, so Hint had no answer to reveal and
+                      // a correct board move was never judged correct — the
+                      // coach asked and then could not respond to the answer.
+                      //
+                      // The gem's punish is a BETTER answer source than the
+                      // engine recommendation guided-find normally uses: it is
+                      // curated, tiered, and already played out. So the gem
+                      // supplies the move and the existing guided-find
+                      // machinery supplies the question, the hint ladder, and
+                      // the judging — no new UI, and Hint reveals the real
+                      // punish.
+                      let gemChallenge: GuidedFindChallenge | null = null;
+                      try {
+                        const gc = new Chess(probe.fen());
+                        const gm = gc.move(gem.punish);
+                        if (gm) gemChallenge = buildGuidedFindChallenge(probe.fen(), `${gm.from}${gm.to}${gm.promotion ?? ''}`);
+                      } catch { /* fall back to the text-only callout below */ }
+                      if (gemChallenge && !guidedFindRef.current) {
+                        guidedFindRef.current = gemChallenge;
+                        guidedFindAttemptsRef.current = 0;
+                        setGuidedFind(gemChallenge);
+                        questionArmed = true;
+                        sessionStatsRef.current.questions += 1;
+                        captureEvent('guided_find_asked', { surface: 'coach-teach-gem', answer: gemChallenge.answerSan });
+                      }
                       facts.push(`GEM ALERT (known verified inaccuracy by the coach's last move): ${gem.callout} Invite the student to FIND the punishing move — do NOT name or hint the move or its square.`);
                       void logAppAudit({
                         kind: 'coach-narration-spoken',
@@ -5354,6 +5383,38 @@ export function CoachTeachPage(): JSX.Element {
   // like every other board marker.
   const handleHint = useCallback(async () => {
     if (hintBusy) return;
+    // ANSWER THE QUESTION THAT WAS ACTUALLY ASKED (David 2026-08-01: "the hint
+    // button needs to answer any question posed by the coach. that will be the
+    // natural reflex of users. they dont know the answer so they press the
+    // hint button").
+    //
+    // This used to do exactly one thing — run Stockfish on the live position
+    // and draw its best move — no matter what the coach had just asked. So the
+    // coach would ask "which of your pieces is in danger?" and Hint would
+    // answer a question nobody asked. On a guided-find it looked right by
+    // coincidence (the engine's move is usually the challenge's answer) while
+    // silently bypassing the hint LADDER that gives the piece first and the
+    // move last.
+    //
+    // Order is by specificity: an armed question owns the button while it is
+    // on screen, and the engine best-move is the fallback for when the student
+    // is simply playing and wants a nudge.
+    if (guidedFindRef.current) {
+      handleGuidedFindHint();
+      return;
+    }
+    const threat = threatCheckRef.current;
+    if (threat) {
+      captureEvent('threat_check_result', { surface: 'coach-teach', outcome: 'hint', answer: threat.answer });
+      setMessages((prev) => [...prev, { id: uid('threat-hint'), role: 'assistant', content: threat.reveal, timestamp: Date.now() }]);
+      void voiceService.speakForced(threat.reveal).catch(() => undefined);
+      // Lead the eye to the piece the answer names, the same way the
+      // engine-hint branch below leads it to a move.
+      setHighlights([{ square: threat.answerSquare, color: '#eab308' }]);
+      threatCheckRef.current = null;
+      setThreatCheck(null);
+      return;
+    }
     const fen = liveFenRef.current;
     setHintBusy(true);
     try {
@@ -5370,7 +5431,7 @@ export function CoachTeachPage(): JSX.Element {
     } finally {
       setHintBusy(false);
     }
-  }, [hintBusy]);
+  }, [hintBusy, handleGuidedFindHint]);
 
   // NARRATED CONTINUATION (David 2026-07-18): after a lesson, the coach can
   // play out both sides with Stockfish from where the opening ended and

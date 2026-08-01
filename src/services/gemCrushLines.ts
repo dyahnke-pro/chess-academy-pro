@@ -32,6 +32,7 @@ import {
   isSurfaceableGem,
   gemId,
   gemNarrationFor,
+  type PunishGem,
 } from '../data/lessons/punishGems';
 import type { NarrationArrow } from '../types/walkthroughTree';
 
@@ -67,6 +68,70 @@ export interface GemCrush {
   /** True iff the punisher is genuinely ahead in material at the quiet end of
    *  the punish line, so callers can gate a "wins material" phrasing honestly. */
   winsMaterial: boolean;
+}
+
+/** POSITION KEY — placement + turn + castling + en passant. The move counters
+ *  are dropped deliberately: two move orders reaching the same board differ in
+ *  halfmove clock, and that difference says nothing about whether the gem's
+ *  refutation is available. */
+function positionKey(fen: string): string {
+  return fen.split(' ').slice(0, 4).join(' ');
+}
+
+/** Gems indexed by the POSITION their spine reaches, so a gem fires whenever
+ *  the student stands in that position — not only when they arrived by the
+ *  exact move order the gem happens to store.
+ *
+ *  David 2026-08-01, on the gem calculator running behind Watch and teach:
+ *  "so when a chance for a gem arrives the coach can teach it on the fly?" It
+ *  did run on every ply, but it matched on full-string SAN equality from move
+ *  one, so an identical board reached in a different order taught nothing. The
+ *  Alekhine has exactly that shape — `d4 d6 c4 Nb6` and `c4 Nb6 d4 d6` are the
+ *  same position, and the walkthrough may well walk the order the gem does not
+ *  store.
+ *
+ *  Built once, lazily. A position can host more than one gem (different
+ *  inaccuracies from the same board), so the value is a list.
+ *
+ *  This CANNOT create a false positive: the key is the position, and the caller
+ *  still verifies the inaccuracy and the punish are legal from it. */
+let gemsByPosition: Map<string, PunishGem[]> | null = null;
+function positionIndex(): Map<string, PunishGem[]> {
+  if (gemsByPosition) return gemsByPosition;
+  const index = new Map<string, PunishGem[]>();
+  for (const gem of getAllPunishGems()) {
+    if (!isSurfaceableGem(gem)) continue;
+    const chess = new Chess();
+    let ok = true;
+    for (const san of gem.lineMoves.split(/\s+/).filter(Boolean)) {
+      try {
+        if (!chess.move(san)) { ok = false; break; }
+      } catch {
+        ok = false;
+        break;
+      }
+    }
+    if (!ok) continue;
+    const key = positionKey(chess.fen());
+    const bucket = index.get(key);
+    if (bucket) bucket.push(gem);
+    else index.set(key, [gem]);
+  }
+  gemsByPosition = index;
+  return index;
+}
+
+/** The gems whose spine reaches the position `pathSans` stands in. */
+function gemsAtPosition(pathSans: string[]): PunishGem[] {
+  try {
+    const chess = new Chess();
+    for (const san of pathSans) {
+      if (!chess.move(san)) return [];
+    }
+    return positionIndex().get(positionKey(chess.fen())) ?? [];
+  } catch {
+    return [];
+  }
 }
 
 const PIECE_VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
@@ -150,9 +215,12 @@ export function computeGemCrush(
   // unambiguous even without the kebab id (the walkthrough has the SAN path,
   // not the id).
   const pool = openingId ? getPunishGemsForOpening(openingId) : getAllPunishGems();
+  // Exact move order first (cheap, and the common case), then the POSITION —
+  // the same board reached another way is the same teaching moment.
   const gem = pool
     .filter(isSurfaceableGem)
-    .find((g) => g.lineMoves.trim() === key);
+    .find((g) => g.lineMoves.trim() === key)
+    ?? gemsAtPosition(pathSans).find((g) => !openingId || g.openingId === openingId);
   if (!gem || (gem.tier !== 'confirmed' && gem.tier !== 'positional')) return null;
 
   // Static position = after the gem's opening spine (opponent to move).
@@ -328,9 +396,16 @@ export function findLivePunishment(
   if (pathSans.length === 0) return null;
   const key = pathSans.join(' ').trim();
   const pool = openingId ? getPunishGemsForOpening(openingId) : getAllPunishGems();
+  // Exact move order first, then the POSITION the opponent just played into:
+  // here the path INCLUDES their slip, so the gem's spine is everything before
+  // it and the inaccuracy must be the move they actually just made.
   const gem = pool
     .filter(isSurfaceableGem)
-    .find((g) => `${g.lineMoves.trim()} ${g.inaccuracy}`.trim() === key);
+    .find((g) => `${g.lineMoves.trim()} ${g.inaccuracy}`.trim() === key)
+    ?? gemsAtPosition(pathSans.slice(0, -1)).find(
+      (g) => g.inaccuracy === pathSans[pathSans.length - 1]
+        && (!openingId || g.openingId === openingId),
+    );
   if (!gem || (gem.tier !== 'confirmed' && gem.tier !== 'positional')) return null;
 
   // Current board = after spine + inaccuracy (student to move). Draw the punish
