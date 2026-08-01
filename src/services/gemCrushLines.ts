@@ -299,6 +299,10 @@ export interface LivePunishment {
   callout: string;
   /** Green arrow on the punish (origin occupied on the CURRENT board). */
   revealArrows: NarrationArrow[];
+  /** The plies AFTER the punish, played out to a quiet position where the
+   *  material is on the board. The reveal speaks the first few; a surface that
+   *  can animate should play the whole thing rather than stop at the punish. */
+  continuation: string[];
   /** Reveal line — names the punish + the board payoff (spoken when Show-the-line is tapped). */
   reveal: string;
   /** Full curated punish continuation (SAN), for a played-out reveal if wanted. */
@@ -348,10 +352,25 @@ export function findLivePunishment(
     return null;
   }
 
-  const { payoff } = computePayoff(curFen, gem.punish, (gem.punishSeq ?? []).slice(1), punisher, gem.tier);
+  const continuation = (gem.punishSeq ?? []).slice(1);
+  const { payoff } = computePayoff(curFen, gem.punish, continuation, punisher, gem.tier);
   const us = cap(sideWord(punisher));
   // Rotate the callout deterministically by gem so it varies without randomness.
   const callout = CALLOUTS[gem.inaccuracy.length % CALLOUTS.length];
+
+  // SHOW THE LINE LANDING, not just its first move (David 2026-08-01: "make
+  // sure the gem lines are not sparse and play out fully"). The gem carries a
+  // sequence played out to a quiet position where the material is actually on
+  // the board — naming only the punish told the student they won something
+  // they never saw arrive. Speak the next few plies so the payoff is earned.
+  //
+  // Bounded to 4 plies: this is a SPOKEN reveal, and a 16-ply recitation is
+  // not teaching. The full sequence still ships on `punishSeq` for any surface
+  // that wants to play it out on the board.
+  const spokenTail = continuation.slice(0, 4).map(cleanSan);
+  const tail = spokenTail.length > 0
+    ? ` — and after ${spokenTail.join(', ')}${continuation.length > spokenTail.length ? '' : ''}`
+    : '';
   return {
     gemId: gemId(gem),
     inaccuracy: gem.inaccuracy,
@@ -360,7 +379,8 @@ export function findLivePunishment(
     payoff,
     callout,
     revealArrows: [{ from: puFrom, to: puTo, color: 'green' }],
-    reveal: `${us} crushes with ${cleanSan(gem.punish)}, ${payoff}.`,
+    reveal: `${us} crushes with ${cleanSan(gem.punish)}${tail}, ${payoff}.`,
+    continuation,
     punishSeq: gem.punishSeq ?? [gem.punish],
   };
 }
