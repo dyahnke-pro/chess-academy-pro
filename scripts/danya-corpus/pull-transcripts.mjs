@@ -38,19 +38,34 @@ async function main() {
   }
   console.log(`[pull] ${videos.length} videos in scope, ${missing.length} missing transcripts`);
 
-  let done = 0, failed = 0, streak = 0;
+  let done = 0, failed = 0, streak = 0, recovered = 0;
   const pauseMs = Number(process.env.PULL_PACE_MS ?? '5000');
+  const fetchOne = (id) => run('yt-dlp', [
+    '--write-auto-sub', '--skip-download', '--sub-format', 'vtt', '--sub-langs', 'en',
+    '--sleep-requests', '2',
+    '-o', `${TDIR}/%(id)s.%(ext)s`,
+    `https://www.youtube.com/watch?v=${id}`,
+  ], { maxBuffer: 8 * 1024 * 1024 });
+
   for (const v of missing.slice(0, limit)) {
     try {
-      await run('yt-dlp', [
-        '--write-auto-sub', '--skip-download', '--sub-format', 'vtt', '--sub-langs', 'en',
-        '--sleep-requests', '2',
-        '-o', `${TDIR}/%(id)s.%(ext)s`,
-        `https://www.youtube.com/watch?v=${v.id}`,
-      ], { maxBuffer: 8 * 1024 * 1024 });
+      // ONE retry before this counts as a failure (2026-08-01). Measured on the
+      // Saint Louis pull: every one of the 12 "failures" downloaded fine on an
+      // immediate manual retry — they are transient, not blocks. Without the
+      // retry, five unlucky ones in a row trip the circuit breaker below and
+      // burn 30 idle minutes; that is what left the Hanging Pawns pull at
+      // 475/540. The breaker still catches a REAL bot-check, because that
+      // fails the retry too.
+      try {
+        await fetchOne(v.id);
+      } catch {
+        await new Promise((r) => setTimeout(r, 8000));
+        await fetchOne(v.id);
+        recovered += 1;
+      }
       done += 1;
       streak = 0;
-      if (done % 10 === 0) console.log(`[pull] ${done}/${missing.length} …`);
+      if (done % 10 === 0) console.log(`[pull] ${done}/${missing.length} … (${recovered} recovered on retry)`);
     } catch (e) {
       failed += 1;
       streak += 1;
