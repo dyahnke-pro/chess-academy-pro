@@ -39,7 +39,11 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { spawn } from 'node:child_process';
 import { Chess } from 'chess.js';
 
-const GEMS = 'src/data/punish-gems.json';
+// The masterclass lane by default; `--file` reaches the SEPARATE gambit lane
+// (gambit-punish-gems.json), which is never touched by the masterclass path.
+const GEMS = process.argv.includes('--file')
+  ? process.argv[process.argv.indexOf('--file') + 1]
+  : 'src/data/punish-gems.json';
 const ENGINE = 'node_modules/stockfish/bin/stockfish-18-lite-single.js';
 const arg = (n, d) => { const i = process.argv.indexOf(`--${n}`); return i >= 0 ? process.argv[i + 1] : d; };
 const DRY = process.argv.includes('--dry');

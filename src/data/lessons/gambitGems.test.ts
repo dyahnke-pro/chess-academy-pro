@@ -27,9 +27,17 @@ describe('gambit punish-gems (separate lane)', () => {
     for (const gem of GEMS) {
       const n = GAMBIT_GEM_NARRATION[gemId(gem)];
       if (!n) continue;
+      // Authored arrays cover the TAUGHT plies. `demonstrationPlies` is the
+      // tail `extend-punish-gems.mjs` appended so the advantage actually lands
+      // on the board (David 2026-08-01); that tail is narrated board-true at
+      // runtime, not by hand. The alignment guarantee is unchanged — a cue must
+      // never slide onto the wrong move — so the authored arrays must match the
+      // authored plies exactly and never exceed the line.
       const plies = gem.playLine.split(/\s+/).filter(Boolean).length;
-      expect(n.watch.length, `watch length for ${gemId(gem)}`).toBe(plies);
-      expect(n.learn.length, `learn length for ${gemId(gem)}`).toBe(plies);
+      const authored = plies - (gem.demonstrationPlies ?? 0);
+      expect(authored, `demonstrationPlies exceeds playLine for ${gemId(gem)}`).toBeGreaterThan(0);
+      expect(n.watch.length, `watch length for ${gemId(gem)}`).toBe(authored);
+      expect(n.learn.length, `learn length for ${gemId(gem)}`).toBe(authored);
     }
   });
 
