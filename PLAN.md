@@ -223,3 +223,42 @@ paid once per device, on a path that already warns the user it takes a minute.
 Each appended ply needs board-true text. `narrateContinuationMove`
 (`src/services/continuationMoveNarration.ts`) already does exactly this and is
 what the gem demonstration tail uses — reuse it, do not author prose.
+
+---
+
+## ARROWS MUST COME FROM THE NOTES, NOT THE MODEL'S PROSE (David 2026-08-01)
+
+"It shouldn't decide. The narrations are grounded in the notes. Whatever the
+notes say about squares are what get arrows. It should be G0."
+
+### What is wired today (verified, `openingGenerator.ts:1733/1757/1866`)
+`deriveNarrationArrows(text, fen, moves)` runs on the model's FINISHED prose.
+Code scrapes the narration for named moves/squares and draws arrows for those.
+Deterministic, and it honours "nothing more, nothing less" — but it is
+derive-AFTER, so the MODEL still decides which squares get arrows by deciding
+what to mention. Vague prose ⇒ no arrows.
+
+### What it must become (G0)
+The notes are the ground truth:
+1. Extract the squares/moves the NOTE names (same matcher, different input).
+2. VALIDATE each against the LIVE FEN — origin occupied, square real, sight-line
+   clear. This check is load-bearing and must survive the inversion: a note is
+   keyed to an opening/line, so its squares are not automatically true at the
+   position on screen. Without it, grounding in the notes would let a note about
+   a typical structure draw an arrow from an empty square — exactly what the
+   board-claim gates exist to prevent.
+3. Hand the survivors into the package as ARROW FACTS.
+4. The model VOICES the note. It never picks a square.
+Arrows and prose then match by construction, not by scraping.
+
+### Why this is the right direction
+G0: "the LLM generates ZERO chess content… its ONLY job is to phrase those
+facts." Arrow choice is chess content. Derive-after leaves that choice with the
+model; hand-before removes it.
+
+### Care
+- Do NOT rewire the coach arrow path twice in a week without re-running the
+  arrow-parity audit (`scripts/audit-arrow-parity-prod.mjs`) — three separate
+  measurement errors were made against it on 2026-07-31; read its header first.
+- Keep the per-ply arrow cap's audit (`C5`) — a silently dropped arrow is the
+  regression that started this whole thread.
