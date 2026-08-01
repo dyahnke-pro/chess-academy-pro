@@ -31,7 +31,7 @@
 import { Chess } from 'chess.js';
 import { stockfishEngine } from './stockfishEngine';
 import { narrateContinuationMove } from './continuationMoveNarration';
-import type { NarrationArrow } from '../types';
+import type { NarrationArrow } from '../types/walkthroughTree';
 
 export interface PlayoutStep {
   san: string;
@@ -48,7 +48,7 @@ export interface PlayoutStep {
 export interface PlayoutResult {
   steps: PlayoutStep[];
   /** Why the walk stopped — for audits, not for the student. */
-  terminus: 'shown' | 'mate' | 'gameover' | 'nobest' | 'illegal' | 'ceiling' | 'dissolved';
+  terminus: 'shown' | 'mate' | 'gameover' | 'nobest' | 'illegal' | 'ceiling' | 'dissolved' | 'budget';
 }
 
 const PIECE_VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
@@ -87,6 +87,17 @@ function applyUci(chess: Chess, uci: string): { san: string; from: string; to: s
  *  deepest extended gem needed 26 plies. */
 const SAFETY_CEILING = 60;
 
+/** WALL-CLOCK budget for the whole walk. The ply ceiling bounds how MANY moves
+ *  are searched; this bounds how LONG, which is the thing that can actually
+ *  hurt a student. On a phone falling back to the asm.js Stockfish build a
+ *  single ply can take far longer than the 350ms budget asks for, and a lesson
+ *  that sits frozen mid-narration is a worse outcome than a play-out that stops
+ *  a move or two early. So the walk hands back whatever it has when the budget
+ *  is spent — the moves it already found are still real, still legal, still
+ *  narrated. This surface is a WORKING coach; nothing added to it may be able
+ *  to stall it on any device. */
+const PLAYOUT_BUDGET_MS = 6000;
+
 /**
  * Play `fen` out with best play from both sides until the advantage is shown.
  *
@@ -116,8 +127,10 @@ export async function playOutPunish(
   let quietRun = 0;
   let terminus: PlayoutResult['terminus'] = 'ceiling';
 
+  const deadline = Date.now() + PLAYOUT_BUDGET_MS;
   for (let i = 0; i < SAFETY_CEILING; i += 1) {
     if (chess.isGameOver()) { terminus = 'gameover'; break; }
+    if (Date.now() > deadline) { terminus = 'budget'; break; }
 
     let best: string;
     try {
