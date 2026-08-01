@@ -31,6 +31,7 @@ import {
   getAllPunishGems,
   isSurfaceableGem,
   gemId,
+  gemNarrationFor,
 } from '../data/lessons/punishGems';
 import type { NarrationArrow } from '../types/walkthroughTree';
 
@@ -353,8 +354,7 @@ export function findLivePunishment(
   }
 
   const continuation = (gem.punishSeq ?? []).slice(1);
-  const { payoff, winsMaterial } = computePayoff(curFen, gem.punish, continuation, punisher, gem.tier);
-  const concrete = winsMaterial || /mating attack/.test(payoff);
+  const { payoff } = computePayoff(curFen, gem.punish, continuation, punisher, gem.tier);
   const us = cap(sideWord(punisher));
   // Rotate the callout deterministically by gem so it varies without randomness.
   const callout = CALLOUTS[gem.inaccuracy.length % CALLOUTS.length];
@@ -380,12 +380,12 @@ export function findLivePunishment(
   // find the first ply where the punisher's material reaches the value it ends
   // on, and speak to there. A line that genuinely needs 20 plies to win the
   // piece gets all 20; a line that wins it on ply 3 stops at 3.
-  // ONLY recite the line when the payoff is CONCRETE — material or mate. A
-  // positional gem has no landing moment, so the material rule above would walk
-  // the entire grind: one gem spoke 22 SANs to demonstrate "a winning position",
-  // which teaches nothing. There the punish + the payoff clause is the lesson,
-  // and the board shows the rest.
-  const spokenTail = !concrete ? [] : ((): string[] => {
+  // NO SUPPRESSION and NO CAP here (David 2026-08-01: "dont worry about caping
+  // narrations. we removed all caps for full narration setting"). Length is the
+  // VERBOSITY system's job — `applyBriefVoiceCap` clips the spoken line on
+  // Brief, Full is uncapped, Silent never speaks. A second private cap in this
+  // file would silently override the setting the student chose.
+  const spokenTail = ((): string[] => {
     try {
       const c = new Chess(curFen);
       c.move(gem.punish);
@@ -406,6 +406,24 @@ export function findLivePunishment(
     }
   })();
   const tail = spokenTail.length > 0 ? ` — and after ${spokenTail.join(', ')}` : '';
+
+  // SPEAK THE GEM'S OWN NOTES when it has them (David 2026-08-01: "if there are
+  // notes associated with the gem i want those narrations spoken"). Every
+  // surfaceable gem carries HAND-AUTHORED narration keyed per ply; the punish
+  // ply's line is the one written for exactly this moment. Authored prose leads,
+  // then the computed line + payoff — so the student hears the teaching, not
+  // just the moves. Falls through silently when a gem has no note for that ply.
+  const authored = ((): string => {
+    try {
+      const narr = gemNarrationFor(gemId(gem));
+      if (!narr) return '';
+      const punishPly = gem.lineMoves.split(/\s+/).filter(Boolean).length + 1;
+      const line = (narr.watch ?? [])[punishPly] ?? '';
+      return line.trim();
+    } catch {
+      return '';
+    }
+  })();
   return {
     gemId: gemId(gem),
     inaccuracy: gem.inaccuracy,
@@ -414,7 +432,7 @@ export function findLivePunishment(
     payoff,
     callout,
     revealArrows: [{ from: puFrom, to: puTo, color: 'green' }],
-    reveal: `${us} crushes with ${cleanSan(gem.punish)}${tail}, ${payoff}.`,
+    reveal: `${authored ? `${authored} ` : ''}${us} crushes with ${cleanSan(gem.punish)}${tail}, ${payoff}.`,
     continuation,
     punishSeq: gem.punishSeq ?? [gem.punish],
   };

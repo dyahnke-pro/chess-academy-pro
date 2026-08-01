@@ -47,7 +47,7 @@ const GEMS = [...(gemsData as PunishGem[]), ...(gambitGemsData as PunishGem[])];
 // Narration lookup that also covers the gambit-lane narration map, so gambit
 // gems surface + play through the same WLPP path without the masterclass
 // punishGemNarration.ts depending on the gambit file.
-function gemNarrationFor(id: string): ReturnType<typeof getGemNarration> {
+export function gemNarrationFor(id: string): ReturnType<typeof getGemNarration> {
   return GAMBIT_GEM_NARRATION[id] ?? getGemNarration(id);
 }
 function hasNarrationFor(id: string): boolean {
