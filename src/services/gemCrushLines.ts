@@ -353,7 +353,8 @@ export function findLivePunishment(
   }
 
   const continuation = (gem.punishSeq ?? []).slice(1);
-  const { payoff } = computePayoff(curFen, gem.punish, continuation, punisher, gem.tier);
+  const { payoff, winsMaterial } = computePayoff(curFen, gem.punish, continuation, punisher, gem.tier);
+  const concrete = winsMaterial || /mating attack/.test(payoff);
   const us = cap(sideWord(punisher));
   // Rotate the callout deterministically by gem so it varies without randomness.
   const callout = CALLOUTS[gem.inaccuracy.length % CALLOUTS.length];
@@ -364,13 +365,47 @@ export function findLivePunishment(
   // the board — naming only the punish told the student they won something
   // they never saw arrive. Speak the next few plies so the payoff is earned.
   //
-  // Bounded to 4 plies: this is a SPOKEN reveal, and a 16-ply recitation is
-  // not teaching. The full sequence still ships on `punishSeq` for any surface
-  // that wants to play it out on the board.
-  const spokenTail = continuation.slice(0, 4).map(cleanSan);
-  const tail = spokenTail.length > 0
-    ? ` — and after ${spokenTail.join(', ')}${continuation.length > spokenTail.length ? '' : ''}`
-    : '';
+  // NO PLY CAP (David 2026-08-01: "what if it takes longer for the advantage to
+  // play out?"). A fixed cut is arbitrary and re-creates the very defect this
+  // fixes — a line that stops before the advantage lands. It is also redundant:
+  // `extend-punish-gems` already trims every sequence to its MINIMUM terminus,
+  // halting the moment the position is quiet, settled and the material is on
+  // the board. So the continuation's length IS "as long as it takes", and
+  // speaking all of it is correct by construction.
+  // Stop where the ADVANTAGE LANDS, computed off the board — never a fixed ply
+  // count. The sequence runs to a QUIET terminus (settled, nothing hanging),
+  // which is right for the board but too long to recite: the deepest line is 26
+  // plies, and 25 spoken SANs is not teaching. The material almost always
+  // arrives earlier, and everything after it is consolidation. So walk the line,
+  // find the first ply where the punisher's material reaches the value it ends
+  // on, and speak to there. A line that genuinely needs 20 plies to win the
+  // piece gets all 20; a line that wins it on ply 3 stops at 3.
+  // ONLY recite the line when the payoff is CONCRETE — material or mate. A
+  // positional gem has no landing moment, so the material rule above would walk
+  // the entire grind: one gem spoke 22 SANs to demonstrate "a winning position",
+  // which teaches nothing. There the punish + the payoff clause is the lesson,
+  // and the board shows the rest.
+  const spokenTail = !concrete ? [] : ((): string[] => {
+    try {
+      const c = new Chess(curFen);
+      c.move(gem.punish);
+      const finalGain = (): number => (punisher === 'w' ? boardMaterial(c.fen()) : -boardMaterial(c.fen()));
+      const played: string[] = [];
+      const gains: number[] = [];
+      for (const san of continuation) {
+        if (!c.move(san)) break;
+        played.push(cleanSan(san));
+        gains.push(finalGain());
+      }
+      if (played.length === 0) return [];
+      const end = gains[gains.length - 1];
+      const landed = gains.findIndex((g) => g >= end);
+      return landed >= 0 ? played.slice(0, landed + 1) : played;
+    } catch {
+      return continuation.map(cleanSan);
+    }
+  })();
+  const tail = spokenTail.length > 0 ? ` — and after ${spokenTail.join(', ')}` : '';
   return {
     gemId: gemId(gem),
     inaccuracy: gem.inaccuracy,
