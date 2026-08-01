@@ -76,6 +76,50 @@ function formatDbEntriesForPrompt(
  *  so the LLM has a "book on the table" of verified PGN sequences
  *  to anchor on. Empty string when the DB has nothing for the name
  *  (in which case the LLM falls back to training-memory). */
+/** TEACHING grounding for a STAGE prompt.
+ *
+ *  The walkthrough spine was moved off the pre-1930 book corpus and onto the
+ *  farmed teaching notes (David 2026-07-12, "unwire the books"), but the STAGES
+ *  — the concept checks, find-the-move questions, drills and punishes the
+ *  student actually works through after watching — were left on the books. So
+ *  the lesson taught one set of ideas and then quizzed a different, century-old
+ *  set. The notes are what the coach just said; the questions should come from
+ *  the same place.
+ *
+ *  Opening-level rather than per-ply: a stage spans many positions, so the note
+ *  selection keys off the opening name and the canonical spine.
+ *
+ *  This ADDS to the book block rather than replacing it — the book block is
+ *  what carries the DB move sequences a stage must stay inside (G3), and those
+ *  are load-bearing for legality. Only the IDEAS move to the notes. */
+function buildStageTeachingBlock(openingName?: string): string {
+  if (!openingName) return '';
+  try {
+    const entry = resolveOpeningEntry(openingName);
+    const block = buildDanyaTeachingBlock({
+      historySans: entry?.moves ?? [],
+      openingName: entry?.canonicalName ?? openingName,
+      maxNotes: 6,
+    });
+    if (!block) return '';
+    void logAppAudit({
+      kind: 'book-grounding-injected',
+      category: 'subsystem',
+      source: 'openingGenerator.stageTeaching',
+      summary: `stage prompt grounded with teaching notes for "${openingName}" (${block.length} chars)`,
+    });
+    return `${block}
+
+USE THE TEACHING ABOVE. The questions, labels and explanations you write must
+draw on those ideas — they are what the coach already taught the student in the
+walkthrough, so a stage that tests something else teaches two different lessons.
+Ground the PROSE in them; the move sequences still come from the database lines
+below.`;
+  } catch {
+    return ''; // the corpus is a bonus, never a blocker
+  }
+}
+
 function buildBookSourceBlock(openingName?: string): string {
   if (!openingName) return '';
   const entries = findRelatedDbEntries(openingName, 30);
@@ -2561,7 +2605,7 @@ CRITICAL:
 ${stage === 'concepts' ? `- Single-select questions (multiSelect omitted or false) need EXACTLY ONE correct choice. If 2+ choices are correct, set multiSelect: true on that question.\n` : ''}${stage === 'findMove' ? `- Each question needs 2+ candidates. EXACTLY ONE is correct. The path SANs must be a legal sequence from the standard starting position.\n` : ''}${stage === 'drill' ? `- Trace the FULL move sequence with chess.js mentally before emitting. Each move must be legal from the position the prior moves create. studentSide MUST match the opening — black for Sicilian, French, Caro-Kann, Pirc, KID, Nimzo-Indian, Modern, Alekhine, Scandinavian, etc.; white for Italian, Vienna, Spanish, Queen's Gambit, etc.\n` : ''}${stage === 'punish' ? `- setupMoves + inaccuracy + punishment + each distractor + each followup move must ALL be legal in sequence. Distractors are LEGAL alternatives that don't punish as well — they are NOT illegal moves. Each lesson needs at least 2 distractors.
 - CRITICAL — STAY ON THE OPENING: setupMoves MUST match the canonical PGN of "${openingName}" exactly for the first N plies (where N = the canonical PGN's ply count). Production audit (build 1304700) caught the LLM emitting Dragon punishes (5...g6) under the Najdorf banner (5...a6) — same family but a different sub-variation. The OPENING POSITION CONTEXT block below shows the exact moves; do NOT substitute a different sub-line just because you find traps there easier to write.
 - The inaccuracy is what the OPPONENT plays AFTER the canonical line is reached. setupMoves usually ends RIGHT AT the canonical spine's end FEN (or at most 1-2 plies deeper on a known main-line continuation).
-\n` : ''}- Output JSON only. Validation pipeline rejects anything else.${buildBookSourceBlock(openingName)}${buildStagePositionBlock(openingName)}`;
+\n` : ''}- Output JSON only. Validation pipeline rejects anything else.${buildStageTeachingBlock(openingName)}${buildBookSourceBlock(openingName)}${buildStagePositionBlock(openingName)}`;
 }
 
 // ─── DB-narration stage generators ──────────────────────────────────
@@ -2665,7 +2709,7 @@ async function generateDrillFromDb(
 - name: 4-8 words. Lead with the canonical sub-variation name (e.g. "English Attack — Najdorf Sicilian").
 - subtitle: 3-7 words capturing the strategic flavor (e.g. "Sharp kingside pawn-storm" or "Quiet positional setup").
 
-The move sequences come from the Lichess opening database — DO NOT alter them, do NOT repeat them in the labels. Output ONLY via the tool.`;
+The move sequences come from the Lichess opening database — DO NOT alter them, do NOT repeat them in the labels. Output ONLY via the tool.${buildStageTeachingBlock(entry.canonicalName)}`;
 
   const userPrompt = `Opening: ${entry.canonicalName} (${entry.eco})
 Student plays: ${studentSide}
@@ -2788,7 +2832,7 @@ async function generateFindMoveFromDb(
     label: 2-6 words tagging the move's idea ("eyes f7", "claims the center", "entering the Spanish")
     explanation: ONE sentence explaining why it's right or what other opening it heads into.
 
-The SANs and the correct answer are GIVEN — DO NOT alter them, do NOT add candidates, do NOT change the order. Just label + explain. Output ONLY via the tool.`;
+The SANs and the correct answer are GIVEN — DO NOT alter them, do NOT add candidates, do NOT change the order. Just label + explain. Output ONLY via the tool.${buildStageTeachingBlock(entry.canonicalName)}`;
 
   const userPrompt = `Opening: ${entry.canonicalName} (${entry.eco})
 Student plays: ${studentSide}
@@ -3166,7 +3210,7 @@ async function generatePunishFromDb(
 - followupIdeas: ONE short sentence per followup move (in order) describing the tactical thread — "rook lifts to win the queen", "the king is dragged into the open", etc.
 - shortFollowupIdeas: parallel array — for EACH followup move, a ≤18-word Brief-mode variant of the matching followupIdea.
 
-The SANs and FENs are GIVEN by the puzzle database — DO NOT alter them, do NOT add or reorder distractors, do NOT invent moves. Just write the prose. Output ONLY via the tool.`;
+The SANs and FENs are GIVEN by the puzzle database — DO NOT alter them, do NOT add or reorder distractors, do NOT invent moves. Just write the prose. Output ONLY via the tool.${buildStageTeachingBlock(entry.canonicalName)}`;
 
   const lessonsBlock = prepared
     .map((l, i) => {
