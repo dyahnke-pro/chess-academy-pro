@@ -157,6 +157,41 @@ export function notesForPrefix(historySans: string[], maxNotes = 3, withinPlies 
  *  (not an ancestor) — for step narration, where an ancestor note would
  *  narrate a move that already happened. Pass `fen` (the live board) to also
  *  catch transpositions into a taught position. */
+/** The SUPPORT-tier fallback for a ply the exact tier has nothing for.
+ *
+ *  David 2026-08-01, on a Tier-2 opening whose exact tier covers 3 of 10
+ *  plies: "hopefully the other notes pick up the slack. That should happen
+ *  right?" — it should, and on the walkthrough it did not. The support tier
+ *  and structure transfer were wired into `teachingNoteForBoard` (the
+ *  chat/facts-package path) but not into the walkthrough splice, so the
+ *  uncovered plies fell back to computed prose while perfectly good notes sat
+ *  unused. This is the same ordering `teachingNoteForBoard` uses: a note keyed
+ *  at THIS position always wins, then teaching about THIS opening, then a
+ *  borrowed note whose structure provably matches the board.
+ *
+ *  Kept separate from `noteAtPosition` rather than folded into it: that
+ *  function's contract is "EXACTLY at this position", and several callers
+ *  (fork talk, step narration) depend on that strictness. Widening it in place
+ *  would loosen all of them at once. */
+export function supportNoteForPly(
+  historySans: string[],
+  fen: string,
+  openingName?: string | null,
+): DanyaNote | null {
+  const onThisLine = (n: DanyaNote): boolean =>
+    !noteContradictsLine(`${n.explains} ${n.teaches}`, historySans)
+    && !notePhaseMismatchesBoard(n.phase, fen, historySans.length);
+  try {
+    if (openingName) {
+      const support = secondarySupportNotes({ historySans, openingName, maxNotes: 4 }).filter(onThisLine)[0];
+      if (support) return support;
+    }
+    return notesForStructure(fen, 2).filter(onThisLine)[0] ?? null;
+  } catch {
+    return null; // the corpus is a bonus, never a blocker
+  }
+}
+
 export function noteAtPosition(historySans: string[], fen?: string): DanyaNote | null {
   // A note that recites a different line than the one played narrates the wrong
   // opening (see noteLineGuard) — silence beats teaching someone else's theory.

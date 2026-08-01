@@ -2301,6 +2301,45 @@ walkthrough path (generateOpeningFromDbNarration) are SEPARATE engines; share
 the grounded fact-computers (openingIdeasNarrator ideas, explainBestMoveGrounded,
 computePvLine PlyFacts), not the review's phrasing.
 
+### 🔒🔒 THE THREE NARRATION TIERS — get these the right way round (David 2026-08-01, LOCKED: "Tier 2 is not baked. Tier 1 is baked. Tier 2 is note driven. Tier 3 has neither.")
+
+Sessions keep re-deriving this backwards and picking the wrong opening to
+test. The tiers are about WHERE THE TEACHING COMES FROM, and they are
+ordered best-to-worst:
+
+- **TIER 1 = BAKED.** Narration generated offline, reviewed, and gated
+  before it ships, then read at runtime from
+  `src/data/walkthrough-narrations.json` via `bakedNarrationFor`. 23
+  openings today. A baked ply takes NO runtime note splice and NO
+  house-voice reword — it is already in its verified final form, so
+  re-processing it could only drift it.
+- **TIER 2 = NOTE-DRIVEN.** No bake, but the farmed corpora teach at these
+  positions, so real teaching notes are spliced into the narration at
+  runtime (`noteAtPosition` → `teachingBeatText` → board-graded). This is
+  the tier the note-grounded ARROWS matter on: the arrows come from the
+  note, not from the model's prose (G0).
+- **TIER 3 = NEITHER.** No bake, no notes. The teaching is computed in
+  code from the DB moves and the board. Still G0/G3 — the model only
+  phrases what code computed — but there is no corpus behind it.
+
+Baking a Tier-3 opening's farmed notes is what PROMOTES it; the goal is to
+move openings up, never down. To find a genuine Tier-2 test case: assert
+`bakedNarrationFor(name, sans)` is null AND count how many plies
+`noteAtPosition(prefix, fen)` returns a note that survives
+`gradeNarrationText`. Do not guess from the opening's name.
+
+🚨 **KNOWN GAP (2026-08-01, open):** the WALKTHROUGH splice calls only
+`noteAtPosition` — the exact-position tier. The SUPPORT tier
+(`secondarySupportNotes`) and structure transfer (`notesForStructure`)
+are wired into `teachingNoteForBoard`, which the chat/facts-package path
+uses, but NOT into the walkthrough. So a Tier-2 opening with notes at 3 of
+10 plies teaches from notes on 3 plies and from computed prose on the
+other 7, instead of the support tier filling the gap the way David asked
+("splice them in anywhere there is a gap"). Close this by having the
+walkthrough fall back to the support tier when the exact tier misses —
+keeping the exact tier FIRST, since a note keyed at this very position
+always beats a borrowed one.
+
 ### 🔒🔒 THE NARODITSKY HOUSE VOICE + PLAYED-OUT / EVERY-STEP STANDARD — the ENTIRE repertoire (David 2026-07-02, LOCKED. "I want the entire repertoire to be in Naroditsky's teaching/language style. It's beautiful.")
 
 David watched a Naroditsky Dragodorf teaching video and locked three things

@@ -47,7 +47,7 @@ import { db, type CachedOpening } from '../db/schema';
 import { gradeNarrationText } from './coachAnswerGates';
 import { narrateContinuationMove } from './continuationMoveNarration';
 import { logAppAudit } from './appAuditor';
-import { buildDanyaTeachingBlock, noteAtPosition, teachingBeatText } from './danyaTeachingService';
+import { buildDanyaTeachingBlock, noteAtPosition, supportNoteForPly, teachingBeatText } from './danyaTeachingService';
 import { deriveNarrationArrows } from './narrationArrows';
 import { bakedNarrationFor } from './bakedWalkthroughNarration';
 import { gemPunishLessonsForOpeningName } from './gemPunishLessons';
@@ -921,9 +921,15 @@ function noteArrowSourceAt(
   historySans: string[],
   fen: string,
   seenIds: Set<string>,
+  openingName?: string | null,
 ): string | null {
   try {
-    const note = noteAtPosition(historySans, fen);
+    // EXACT tier first — a note keyed at this very position always beats a
+    // borrowed one. Only when it misses do we reach for the support tier, so a
+    // Tier-2 opening teaches from notes on the plies its corpus does not cover
+    // exactly, instead of dropping to computed prose (David 2026-08-01).
+    const note = noteAtPosition(historySans, fen)
+      ?? supportNoteForPly(historySans, fen, openingName);
     if (!note || seenIds.has(note.id)) return null;
     const graded = gradeNarrationText(teachingBeatText(note), fen, 'openingGenerator.noteArrows');
     if (!graded?.trim()) return null;
@@ -1752,7 +1758,12 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
     const branchSans = [b.san, ...b.extensionMoves];
     for (let k = 0; k < branchSeq.length; k += 1) {
       branchNoteSources.push(
-        noteArrowSourceAt([...spineSans, ...branchSans.slice(0, k + 1)], branchSeq[k].fen, branchNoteIds),
+        noteArrowSourceAt(
+          [...spineSans, ...branchSans.slice(0, k + 1)],
+          branchSeq[k].fen,
+          branchNoteIds,
+          entry.canonicalName,
+        ),
       );
     }
     // The branch's first move belongs to the side whose turn it is
@@ -1866,7 +1877,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       // corpus note on top would double-teach the same source material.
       if (baked) return text;
       const prefix = positions.slice(0, i + 1).map((q) => q.san);
-      const teaching = noteArrowSourceAt(prefix, p.fen, splicedNoteIds);
+      const teaching = noteArrowSourceAt(prefix, p.fen, splicedNoteIds, entry.canonicalName);
       if (teaching) {
         plyNoteText[i] = teaching;
         text = `${text} ${teaching}`;
