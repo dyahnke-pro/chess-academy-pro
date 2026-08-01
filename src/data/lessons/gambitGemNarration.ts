@@ -160,4 +160,31 @@ export const GAMBIT_GEM_NARRATION: Record<string, GambitGemNarration> = {
     watch: ['', '', '', '', '', '', '', '', '', '', 'Bc3 attacks the queen and seems to defend the a1-rook — but the bishop is now overloaded.', '…Bb4! pins the c3-bishop to the rook; it can’t guard a1 and answer the pin at once.', '', '…Qxa1 — the queen swipes the corner rook. The classic Englund trap.', '', '', '', '', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', 'Bb4 — pin the overloaded bishop', '', 'Qxa1 — win the corner rook', '', '', '', '', ''],
   },
+  // Albin: 5.Bd3? puts the bishop on the ONE square Black's recapturing knight
+  // already hits. …Nxe5 regains the gambit pawn and forks the d3-bishop and the
+  // c4-pawn, so White spends the next moves untangling and drops c4 anyway.
+  'albin-countergambit:d4_d5_c4_e5_dxe5_d4_e4_Nc6:Bd3': {
+    sources: ['concept:tac-fork', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Albin_Countergambit'],
+    watch: ['', '', '', '', '', '', '', '',
+      'Bd3? is a natural developing move that walks onto the one square Black\u2019s knight is already eyeing \u2014 e5 hits both d3 and c4.',
+      '\u2026Nxe5! The gambit pawn comes back, and the knight lands attacking the bishop on d3 and the pawn on c4 at the same time. One move, two targets.',
+      '', '', '', '', '', '',
+      'Bc2 finally steps the bishop off the fork, but c4 was never defended \u2014 and now nothing guards it.'],
+    learn: ['', '', '', '', '', '', '', '', '',
+      '\u2026Nxe5 \u2014 hits the bishop and c4', '', '', '', '', '', '', ''],
+  },
+  // Budapest: 5.Qd5?! props up e5 with the queen. …d6! hits the pawn she is
+  // guarding, and after the queens come off the g4-knight has Nxf2 winning the
+  // g5-bishop back with interest.
+  'gambit-budapest-gambit:d4_Nf6_c4_e5_dxe5_Ng4_Bf4_Nc6:Qd5': {
+    sources: ['concept:tac-fork', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
+    watch: ['', '', '', '', '', '', '', '',
+      'Qd5 holds the extra pawn on e5, but it is the queen doing the guarding \u2014 and a queen tied to a pawn is a target, not a defender.',
+      '\u2026d6! Strike the pawn she is protecting. White cannot keep both the pawn and the queen comfortable.',
+      '', '\u2026dxe5 \u2014 the gambit pawn is back, and Black has the freer development for it.',
+      '', 'The queens come off on d8. Black gives up castling, but the centre is already settled and the king sits safely behind its own pawns.',
+      '', '', 'h3 finally asks the g4-knight to move \u2014 but it has something far better than a retreat.'],
+    learn: ['', '', '', '', '', '', '', '', '',
+      '\u2026d6 \u2014 hit the pawn she guards', '', '\u2026dxe5 \u2014 pawn back, freer game', '', '', '', '', ''],
+  },
 };
