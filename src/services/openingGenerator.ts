@@ -49,6 +49,7 @@ import { narrateContinuationMove } from './continuationMoveNarration';
 import { logAppAudit } from './appAuditor';
 import { buildDanyaTeachingBlock, noteAtPosition, supportNoteForPly, teachingBeatText } from './danyaTeachingService';
 import { deriveNarrationArrows } from './narrationArrows';
+import { splitSentences, squaresInText } from './narrationSegments';
 import { bakedNarrationFor } from './bakedWalkthroughNarration';
 import { gemPunishLessonsForOpeningName } from './gemPunishLessons';
 import type {
@@ -996,20 +997,86 @@ export function groundedSegmentArrows(
   noteText: string | null,
   prose: string,
   move: { from: string; to: string; fen: string },
-): { arrows: NarrationSegmentType['arrows']; source: 'note' | 'prose' } {
+): {
+  arrows: NarrationSegmentType['arrows'];
+  source: 'note' | 'prose';
+  /** Per GREEN arrow: the SAN it represents and where that move was mentioned
+   *  in the source text. The offset is what lets a caller hand each arrow to
+   *  the sentence that actually speaks it. The orange trail has no span — it is
+   *  the move being played, not a mention. */
+  spans: Array<{ from: string; to: string; san: string; index: number }>;
+} {
   const source = noteText?.trim() ? 'note' : 'prose';
   const text = source === 'note' ? (noteText as string) : prose;
+  const derived = deriveNarrationArrows(text, move.fen, [{ from: move.from, to: move.to }]).arrows;
   return {
     source,
+    spans: derived.map((a) => ({ from: a.from, to: a.to, san: a.san, index: a.index })),
     arrows: [
       { from: move.from, to: move.to, color: 'orange' },
-      ...deriveNarrationArrows(text, move.fen, [{ from: move.from, to: move.to }]).arrows.map((a) => ({
-        from: a.from,
-        to: a.to,
-        color: 'green' as const,
-      })),
+      ...derived.map((a) => ({ from: a.from, to: a.to, color: 'green' as const })),
     ],
   };
+}
+
+/** Split one ply's narration into per-SENTENCE segments, each carrying only the
+ *  arrows that sentence names, so the board reveals in step with the voice.
+ *
+ *  The ORANGE trail rides every segment — it marks the move being played and
+ *  must not blink out mid-beat. Green arrows are placed by the sentence their
+ *  mention falls in; anything unplaceable rides the first segment rather than
+ *  being dropped. A single-sentence beat returns exactly what it was handed. */
+export function splitSegmentBySentence(
+  segment: NarrationSegmentType,
+  spans: Array<{ from: string; to: string; san: string; index: number }>,
+): NarrationSegmentType[] {
+  const sentences = splitSentences(segment.text);
+  if (sentences.length <= 1) return [segment];
+
+  const trail = (segment.arrows ?? []).filter((a) => a.color === 'orange');
+  const green = (segment.arrows ?? []).filter((a) => a.color !== 'orange');
+  const spanOf = new Map(spans.map((sp) => [`${sp.from}-${sp.to}`, sp.index]));
+
+  // Character range of each sentence within the beat, walked in order so a
+  // repeated sentence cannot resolve to the wrong occurrence.
+  const bounds: Array<{ start: number; end: number }> = [];
+  let cursor = 0;
+  for (const sentence of sentences) {
+    const at = segment.text.indexOf(sentence, cursor);
+    const start = at >= 0 ? at : cursor;
+    bounds.push({ start, end: start + sentence.length });
+    cursor = start + sentence.length;
+  }
+
+  const sentenceOf = (key: string): number => {
+    const idx = spanOf.get(key);
+    if (idx === undefined) return 0;
+    const hit = bounds.findIndex((b) => idx >= b.start && idx < b.end);
+    return hit >= 0 ? hit : 0;
+  };
+
+  // Highlights follow their arrow's sentence when one names the same square,
+  // so a yellow square lights up with the words that point at it.
+  const highlights = segment.highlights ?? [];
+  return sentences.map((text, i) => {
+    const own = green.filter((a) => sentenceOf(`${a.from}-${a.to}`) === i);
+    const out: NarrationSegmentType = { text, arrows: [...trail, ...own] };
+    const mine = highlights.filter((h) => squaresInText(text).has(h.square));
+    const leftovers = i === sentences.length - 1
+      ? highlights.filter((h) => !sentences.some((sent) => squaresInText(sent).has(h.square)))
+      : [];
+    const combined = [...mine, ...leftovers];
+    if (combined.length > 0) out.highlights = combined;
+    // The short register and the flipped registers describe the WHOLE beat, so
+    // they belong to its first segment only — repeating them per sentence would
+    // speak the cue several times over.
+    if (i === 0) {
+      if (segment.shortText) out.shortText = segment.shortText;
+      if (segment.textFlipped) out.textFlipped = segment.textFlipped;
+      if (segment.shortTextFlipped) out.shortTextFlipped = segment.shortTextFlipped;
+    }
+    return out;
+  });
 }
 
 export function gradeNarrationBoardClaims(tree: WalkthroughTree): number {
@@ -1941,7 +2008,16 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
   try {
     // A baked script is ALREADY reworded + gated offline — rewording it
     // again could only drift it away from its verified form.
-    if (!baked) finalPlyTexts = await rewordNarrationInHouseVoice(positions, rawPlyTexts);
+    if (!baked) {
+      // The arrows are decided HERE, in code, from the note — then handed to
+      // the model as a requirement it must voice (David 2026-08-01: "we need to
+      // hand the arrows in the package to the llm... but we dont let the LLM
+      // decide"). Computing them before the reword is what makes that possible.
+      const arrowSans = positions.map((p, i) =>
+        groundedSegmentArrows(plyNoteText[i], rawPlyTexts[i], p).spans.map((sp) => sp.san),
+      );
+      finalPlyTexts = await rewordNarrationInHouseVoice(positions, rawPlyTexts, arrowSans);
+    }
   } catch (err) {
     void logAppAudit({
       kind: 'llm-error',
@@ -2010,7 +2086,23 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
     if (shortText) segment.shortText = shortText;
     if (node.ideaFlipped) segment.textFlipped = node.ideaFlipped;
     if (node.shortIdeaFlipped) segment.shortTextFlipped = node.shortIdeaFlipped;
-    node.narration = [segment];
+    // ARROWS ARRIVE AS THEY ARE SPOKEN (David 2026-08-01: "can we have the
+    // arrows appear as they are being spoken?").
+    //
+    // The runtime already does this — the walkthrough loops a node's segments
+    // and sets each one's arrows immediately BEFORE speaking it. What was
+    // missing is that this builder emitted ONE segment per ply carrying every
+    // arrow, so there was nothing to stagger: eight arrows landed at once while
+    // the coach was still on the first clause. Splitting the ply into
+    // sentences, each holding only the arrows it names, is what turns the
+    // existing reveal loop into a lead-the-eye.
+    //
+    // The split is by the arrow's own character offset in the text, not by
+    // re-matching square names: `deriveNarrationArrows` already recorded where
+    // each move was mentioned, so a sentence gets exactly the arrows it speaks.
+    // Any arrow whose sentence cannot be identified rides the FIRST segment, so
+    // an arrow is never dropped for being hard to place.
+    node.narration = splitSegmentBySentence(segment, grounded.spans);
     nextChildren = [{ node }];
   }
   // In Face mode, surface the canonical counter's name with a
@@ -2212,15 +2304,26 @@ function synthesizeIdeaFromSan(
 async function rewordNarrationInHouseVoice(
   positions: Array<{ san: string; fen: string; movedBy: 'white' | 'black' }>,
   rawTexts: string[],
+  /** The moves CODE has already decided to draw an arrow for at each ply, in
+   *  SAN. Handed to the model as a requirement, never as a suggestion — see
+   *  the arrow contract below. */
+  arrowSans: string[][] = [],
 ): Promise<string[]> {
   if (rawTexts.length === 0) return rawTexts;
-  const script = rawTexts.map((t, i) => `${i + 1}. [after ${positions[i].san}] ${t}`).join('\n');
+  const script = rawTexts
+    .map((t, i) => {
+      const arrows = arrowSans[i] ?? [];
+      const arrowNote = arrows.length > 0 ? ` [ARROWS ON THE BOARD: ${arrows.join(', ')}]` : '';
+      return `${i + 1}. [after ${positions[i].san}]${arrowNote} ${t}`;
+    })
+    .join('\n');
   const system = `You are rewording a chess walkthrough narration so it sounds like ONE warm, rigorous coach — concept-first, plain language, ideas before names.
 HARD RULES:
 - Reword ONLY. Add NO chess content: no new squares, pieces, plans, tactics, or evaluations that are not already in the line's text.
 - NEVER restate the move being played ("knight to c6 — the knight goes to c6" is banned); the voice announces the move separately. Speak only the idea.
 - Keep every number, percentage, and move token that appears, verbatim.
 - NO length cap: keep a keystone's full teaching intact, keep a routine move tight. No praise, no filler, no "let's".
+- ARROW CONTRACT: when a line is tagged [ARROWS ON THE BOARD: ...], those moves are ALREADY DRAWN on the student's board while your line is spoken. Your reworded line MUST mention every one of them, so the words match what the eye is being led to. You are not choosing them and you may not add others — arrows the student cannot hear explained, and words pointing at squares with no arrow, both read as broken.
 Return STRICT JSON: {"lines": [string, ...]} with EXACTLY ${rawTexts.length} entries, in order.`;
   const result = (await getCoachStructuredResponse(
     [{ role: 'user', content: `NARRATION SCRIPT (${rawTexts.length} lines):\n${script}` }],
@@ -2233,11 +2336,28 @@ Return STRICT JSON: {"lines": [string, ...]} with EXACTLY ${rawTexts.length} ent
   )) as { lines?: unknown };
   const lines = Array.isArray(result?.lines) ? result.lines : [];
   let kept = 0;
+  let dropped = 0;
   const out = rawTexts.map((raw, i) => {
     const candidate = typeof lines[i] === 'string' ? lines[i].trim() : '';
     if (!candidate) return raw;
     const graded = gradeNarrationText(candidate, positions[i].fen, 'openingGenerator.houseVoiceReword');
     if (!graded) return raw;
+    // ARROW/WORD AGREEMENT, verified rather than trusted (David 2026-08-01:
+    // "we need to hand the arrows in the package to the llm. this should be
+    // done matching the narration... but we dont let the LLM decide").
+    // The arrows are already fixed by code; the model's only job is to voice
+    // them. A reword that drops one leaves an arrow nobody explains — which is
+    // exactly the mismatch reported from prod — so that line falls back to its
+    // pre-reword text, which names the squares by construction.
+    const required = arrowSans[i] ?? [];
+    if (required.length > 0) {
+      const bare = (san: string): string => san.replace(/[+#!?]/g, '');
+      const missing = required.filter((san) => !graded.includes(bare(san)));
+      if (missing.length > 0) {
+        dropped += 1;
+        return raw;
+      }
+    }
     kept += 1;
     return graded;
   });
@@ -2245,7 +2365,7 @@ Return STRICT JSON: {"lines": [string, ...]} with EXACTLY ${rawTexts.length} ent
     kind: 'coach-surface-migrated',
     category: 'subsystem',
     source: 'openingGenerator.houseVoiceReword',
-    summary: `house-voice reword: ${kept}/${rawTexts.length} lines reworded (rest kept raw)`,
+    summary: `house-voice reword: ${kept}/${rawTexts.length} lines reworded (rest kept raw${dropped > 0 ? `; ${dropped} reverted for dropping their arrow moves` : ''})`,
   });
   return out;
 }
