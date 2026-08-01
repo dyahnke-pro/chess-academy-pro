@@ -282,7 +282,15 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 // Bumped for the truncated-narration salvage + wider retry: lessons generated
 // before it are cached with all-template ideas (the "repetitive, nothing like
 // Naroditsky" narration) and must regenerate rather than serve that forever.
-const WALKTHROUGH_GEN_REV = '2026-07-31-deterministic-arrows';
+// BUMP THIS whenever the SHAPE of generated narration changes, not just its
+// wording — a cached tree is replayed exactly as it was built, so a shipped
+// improvement nobody can see is the same as no fix at all. 2026-08-01: arrows are now
+// grounded in the teaching note and each ply is split into per-sentence
+// segments so the board reveals in step with the voice. Both are baked in at
+// generation time, so every tree cached before this rev still narrates the old
+// way (David: "squares and arrows are still not appearing as they are being
+// mentioned" — they were not, because his Alekhine came from cache).
+const WALKTHROUGH_GEN_REV = '2026-08-01-note-arrows-sentence-reveal';
 
 export async function getCachedOpening(
   name: string,
