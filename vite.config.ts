@@ -198,6 +198,8 @@ export default defineConfig(({ mode }) => {
             // the entry chunk (7.7 → 10.0 MB) the moment it was added without
             // one. A new corpus needs a chunk rule in the same commit.
             if (id.includes('chessbrah-teachings.json')) return 'appdata-chessbrah';
+            if (id.includes('hangingpawns-teachings.json')) return 'appdata-hangingpawns';
+            if (id.includes('saintlouis-teachings.json')) return 'appdata-saintlouis';
             if (id.includes('/lessons/sublineNarration')) return 'appdata-subline-narration';
             if (id.includes('model-games.json')) return 'appdata-modelgames';
           }
