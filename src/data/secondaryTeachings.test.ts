@@ -11,10 +11,19 @@
 //
 // An EMPTY corpus is legal here (the farm ships the shell before the distill
 // run fills it) — but everything in a non-empty one must pass.
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import hangingpawns from './hangingpawns-teachings.json';
-import saintlouis from './saintlouis-teachings.json';
+
+// Read from `public/data/`, not an import: a farmed corpus is fetched at
+// runtime rather than bundled (see `farmedCorpusData` — they scale with a
+// creator's back-catalogue and would blow the precache cap). Reading the file
+// keeps this gate on the EXACT bytes the app will serve.
+// cwd-anchored, not `import.meta.url`: under the jsdom test environment that
+// URL does not resolve to a real filesystem path.
+const readCorpus = (name: string): { notes: Note[] } =>
+  JSON.parse(readFileSync(resolve(process.cwd(), `public/data/${name}-teachings.json`), 'utf8'));
 
 interface Note {
   id: string;
@@ -22,8 +31,11 @@ interface Note {
   opening: string | null;
   phase: string;
   explains: string;
-  teaches: string;
-  plans: string;
+  // Optional in practice: a note may legitimately carry no plan, and this gate
+  // reads raw shipped JSON rather than a typed import, so the read below stays
+  // defensive.
+  teaches?: string;
+  plans?: string;
   sources: string[];
 }
 
@@ -34,13 +46,13 @@ const CORPORA: Array<{ key: string; idPrefix: string; notes: Note[]; banned: Reg
   {
     key: 'hangingpawns',
     idPrefix: 'hp',
-    notes: (hangingpawns as { notes: Note[] }).notes,
+    notes: readCorpus('hangingpawns').notes,
     banned: new RegExp(`\\b(${SHARED_BAN}|hanging pawns|stjepan|tomic|patreon)\\b`, 'i'),
   },
   {
     key: 'saintlouis',
     idPrefix: 'sl',
-    notes: (saintlouis as { notes: Note[] }).notes,
+    notes: readCorpus('saintlouis').notes,
     banned: new RegExp(
       `\\b(${SHARED_BAN}|saint louis|st\\. louis|chess club|finegold|seirawan|shahade|maurice ashley|shankland|yermolinsky|khachiyan|nemcova|shabalov|nyzhnyk|novikov|mikhalevski|landa|quesada|georgiev|durarbayli|cordova|chandra|denby|lecture|lectures|audience)\\b`,
       'i',

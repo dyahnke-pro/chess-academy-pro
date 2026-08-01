@@ -40,7 +40,7 @@ export const CREATORS = {
   hangingpawns: {
     key: 'hangingpawns',
     voiceDir: 'data/sources/hangingpawns-voice',
-    corpus: 'src/data/hangingpawns-teachings.json',
+    corpus: 'public/data/hangingpawns-teachings.json',
     idPrefix: 'hp',
     bannedExtra: ['hanging pawns', 'stjepan', 'tomic', 'this channel', 'the channel', 'patreon'],
     channel: 'https://www.youtube.com/@HangingPawns/playlists',
@@ -52,7 +52,7 @@ export const CREATORS = {
   saintlouis: {
     key: 'saintlouis',
     voiceDir: 'data/sources/saintlouis-voice',
-    corpus: 'src/data/saintlouis-teachings.json',
+    corpus: 'public/data/saintlouis-teachings.json',
     idPrefix: 'sl',
     // A club channel means MANY named lecturers; every one of them is a
     // depersonalization risk, plus the venue and the medium itself.

@@ -1,24 +1,57 @@
 // secondaryCorpora — the registry of every non-primary teaching corpus.
 //
-// Adding a farmed creator is a two-line change here plus its corpus JSON:
-// the lookup logic lives once in `secondaryCorpus.ts`. Order matters only as a
-// tie-break — the gap chain prefers a LINE-ANCHORED note from any corpus over
-// an opening-name match from any corpus.
+// Adding a farmed creator is a one-line change in `farmedCorpusData` plus its
+// corpus JSON in `public/data/`: the lookup logic lives once in
+// `secondaryCorpus.ts`. Order matters only as a tie-break — the gap chain
+// prefers a LINE-ANCHORED note from any corpus over an opening-name match from
+// any corpus.
 //
 // Doctrine (CLAUDE.md): the house narration VOICE is Naroditsky-register
 // everywhere; these corpora supply IDEAS ONLY, and only where the primary is
 // silent. Each keeps its own file and its own note-id prefix.
+//
+// TWO LOAD SHAPES, one registry (2026-08-01). chessbrah is small and stays a
+// static import. The FARMED corpora scale with a creator's back-catalogue, not
+// with the app, so they are fetched from `public/` — see `farmedCorpusData` for
+// why (Hanging Pawns alone would have sat 250 KB under the precache cap, and
+// Saint Louis could never have fitted). The public API below stays SYNCHRONOUS
+// either way; farmed corpora simply contribute nothing until the boot prewarm
+// resolves, which is safe because this is the gap tier: an unprimed cache means
+// "no gap teaching yet", never wrong teaching.
 import chessbrahData from '../data/chessbrah-teachings.json';
-import hangingpawnsData from '../data/hangingpawns-teachings.json';
-import saintlouisData from '../data/saintlouis-teachings.json';
+import { getFarmedCorporaSync } from './farmedCorpusData';
 import { createSecondaryCorpus, gapNotesAcross, type SecondaryCorpus, type TeachingsBundle } from './secondaryCorpus';
 import type { DanyaNote } from './danyaTeachingService';
 
-export const SECONDARY_CORPORA: SecondaryCorpus[] = [
+const STATIC_CORPORA: SecondaryCorpus[] = [
   createSecondaryCorpus('chessbrah', chessbrahData as unknown as TeachingsBundle),
-  createSecondaryCorpus('hangingpawns', hangingpawnsData as unknown as TeachingsBundle),
-  createSecondaryCorpus('saintlouis', saintlouisData as unknown as TeachingsBundle),
 ];
+
+// Indexing a farmed corpus is O(notes) and these run tens of thousands of notes,
+// so build each one ONCE and keep it — keyed by the bundle identity so a test
+// that swaps the cache rebuilds instead of serving a stale index.
+const builtFarmed = new Map<string, { source: TeachingsBundle; corpus: SecondaryCorpus }>();
+
+function farmedCorpora(): SecondaryCorpus[] {
+  const out: SecondaryCorpus[] = [];
+  for (const { key, data } of getFarmedCorporaSync()) {
+    const cached = builtFarmed.get(key);
+    if (cached && cached.source === data) {
+      out.push(cached.corpus);
+      continue;
+    }
+    const corpus = createSecondaryCorpus(key, data);
+    builtFarmed.set(key, { source: data, corpus });
+    out.push(corpus);
+  }
+  return out;
+}
+
+/** Every corpus currently available — static ones always, farmed ones once the
+ *  boot prewarm (`loadFarmedCorpora`) has resolved. */
+export function secondaryCorpora(): SecondaryCorpus[] {
+  return [...STATIC_CORPORA, ...farmedCorpora()];
+}
 
 /** THE gap-filling entry point: teaching for an opening the primary corpus does
  *  not cover. Callers pass how many notes the primary already supplied. */
@@ -28,15 +61,15 @@ export function secondaryNotesForGap(args: {
   primaryHits: number;
   maxNotes?: number;
 }): DanyaNote[] {
-  return gapNotesAcross(SECONDARY_CORPORA, args);
+  return gapNotesAcross(secondaryCorpora(), args);
 }
 
 /** Secondary notes keyed EXACTLY at this line, across every corpus. */
 export function secondaryNotesForPosition(historySans: string[]): DanyaNote[] {
-  return SECONDARY_CORPORA.flatMap((c) => c.notesForPosition(historySans));
+  return secondaryCorpora().flatMap((c) => c.notesForPosition(historySans));
 }
 
 /** Per-corpus stats for audits / the settings debug panel. */
 export function secondaryCorpusStats(): Array<{ key: string; notes: number; positioned: number; videos: number }> {
-  return SECONDARY_CORPORA.map((c) => ({ key: c.key, ...c.stats() }));
+  return secondaryCorpora().map((c) => ({ key: c.key, ...c.stats() }));
 }

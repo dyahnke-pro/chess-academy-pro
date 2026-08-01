@@ -9,6 +9,7 @@ import gambitData from '../data/gambits.json';
 import antiOpeningsData from '../data/anti-openings.json';
 import modelGamesData from '../data/model-games.json';
 import { loadProGameReferenceData } from './proGameReferenceData';
+import { loadFarmedCorpora } from './farmedCorpusData';
 import middlegamePlansData from '../data/middlegame-plans.json';
 // Separate-lane gambit-tab plans (David 2026-05-27): own file so the masterclass
 // lane never touches them; merged into the shared plan store here at load time,
@@ -968,6 +969,12 @@ async function runSeedOnce(): Promise<void> {
 }
 
 export function seedDatabase(): Promise<void> {
+  // Prime the FARMED teaching corpora (public/data, not bundled) immediately
+  // and OFF the critical path. The gap tier reads them synchronously and simply
+  // contributes nothing until this resolves, so starting it here — rather than
+  // inside the ~50s deferred seed — is what keeps the coach from being silent
+  // on an uncovered opening early in a session. Never rejects.
+  void loadFarmedCorpora();
   // Reuse the in-flight promise so concurrent callers share one run.
   // Resolves after the CRITICAL seed (repertoire) — the heavy ECO/pro/
   // gambit/model-game backfill continues detached. Callers that need
