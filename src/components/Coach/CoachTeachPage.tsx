@@ -4421,11 +4421,31 @@ export function CoachTeachPage(): JSX.Element {
         // when the coach CALLS IT OUT LOUD, so pass the spoken text — a threat
         // written only in the bubble stays un-arrowed.
         const spokenForArrows = spokenForTurn.join(' ').trim();
-        const arrowed = await applyCandidateArrows(finalText, fen, 'CoachTeachPage', {
+        // ARROW THE WORDS THE STUDENT ACTUALLY GOT (David 2026-08-01: "the
+        // arrows are hallucinating! BAD MOVES!!").
+        //
+        // This read `finalText` — the FULL written reply — while the student
+        // reads and hears `displayText`, the [VOICE:] inner (or, when that
+        // marker is missing, just the first sentence). So every move named in
+        // the part that was never spoken still drew an arrow. His board showed
+        // Bc4 and Nc3 while the coach said one sentence about the pawn on e4,
+        // and the stream explains why: 20 replies that turn fell back with
+        // "[VOICE:] missing — fallback spoke first sentence", leaving most of
+        // finalText unspoken but still arrowed.
+        //
+        // The gates make it worse, not better: tacticClaimGate strips a false
+        // tactic SENTENCE from both texts, but an arrow sourced from the
+        // pre-strip prose survives its own claim's deletion — an arrow for
+        // something the app itself judged untrue.
+        //
+        // displayText is post-strip and is exactly what was said, so arrows
+        // now follow the voice by construction.
+        const arrowSourceText = displayText.trim() || finalText;
+        const arrowed = await applyCandidateArrows(arrowSourceText, fen, 'CoachTeachPage', {
           excludeSan: replyPlayed,
           spokenText: spokenForArrows || undefined,
         });
-        const highlightMarkers = candidateHighlightMarkers(finalText, 'CoachTeachPage');
+        const highlightMarkers = candidateHighlightMarkers(arrowSourceText, 'CoachTeachPage');
         const annotated = highlightMarkers.length > 0
           ? `${arrowed} ${highlightMarkers.join(' ')}`
           : arrowed;
