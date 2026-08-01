@@ -63,6 +63,11 @@ const CORPORA: Array<{ key: string; idPrefix: string; notes: Note[]; banned: Reg
 const MOVE_NUMBER_PREFIX = /\d{1,2}(\.|…|\.\.\.)(?=[NBRQKO]|[a-h][1-8x])/;
 
 describe.each(CORPORA.map((c) => [c.key, c] as const))('%s-teachings corpus gate', (_key, corpus) => {
+  // 30s, not the 5s default: this replays EVERY position-keyed note through
+  // chess.js, so the cost grows with the corpus. Hanging Pawns alone is 3,600
+  // replays and crossed the default the moment a second corpus shared the
+  // process. The check is cheap per note and must never be weakened — give it
+  // room instead.
   it('every position-keyed note replays legally from the start position (G3)', () => {
     for (const n of corpus.notes) {
       if (n.lineSan.length === 0) continue;
@@ -73,7 +78,7 @@ describe.each(CORPORA.map((c) => [c.key, c] as const))('%s-teachings corpus gate
         expect(ok, `${n.id}: illegal move "${san}" in [${n.lineSan.join(' ')}]`).toBe(true);
       }
     }
-  });
+  }, 30000);
 
   it('every note is anchored: position-keyed or opening-named', () => {
     for (const n of corpus.notes) {
