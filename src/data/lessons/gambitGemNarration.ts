@@ -209,4 +209,24 @@ export const GAMBIT_GEM_NARRATION: Record<string, GambitGemNarration> = {
       'Bxd5 \u2014 still hitting f7', '',
       'Bxf7+ \u2014 take with check', ''],
   },
+  // Danish: after Bxf7+ Black declines with ...Ke7?, keeping the king in the
+  // centre that two sacrificed pawns were paid to open. Qb3 holds the bishop on
+  // f7 and joins the same diagonal; e5 then clears the long diagonal so the
+  // b2-bishop stares at g7. Every claim checked against the board.
+  'danish-gambit:e4_e5_d4_exd4_c3_dxc3_Bc4_cxb2_Bxb2_d5_Bxd5_Nf6_Bxf7+:Ke7': {
+    sources: ['concept:pos-king-safety', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Danish_Gambit'],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '',
+      '\u2026Ke7? refuses the bishop, but the king stays in the centre \u2014 which is exactly what two sacrificed pawns bought.',
+      'Qb3! The queen guards the bishop on f7 and steps onto the same diagonal. The king cannot take it and cannot run.',
+      '',
+      'e5! The pawn attacks the knight and clears the long diagonal, so the bishop on b2 looks straight through to g7.',
+      '',
+      'Bd5 drops back onto the diagonal with tempo \u2014 it hits the knight on e4 and keeps every white piece aimed at the king.',
+      '', '',
+      'Black checks from a6 to buy air, but the king on e7 is still the problem and White is simply better developed.'],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Qb3 \u2014 guard f7, join the diagonal', '',
+      'e5 \u2014 open the long diagonal', '',
+      'Bd5 \u2014 back with tempo', '', '', ''],
+  },
 };
