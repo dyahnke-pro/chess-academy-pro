@@ -19,7 +19,7 @@ import { Chess } from 'chess.js';
 import teachingsData from '../data/danya-teachings.json';
 import { computeStructureSignature, signatureMatchScore, type StructureSignature } from './structureSignature';
 import { validateBoardClaims } from './boardClaimValidator';
-import { secondaryNotesForGap, secondaryNotesForPosition } from './secondaryCorpora';
+import { secondarySupportNotes, secondaryNotesForPosition } from './secondaryCorpora';
 import { detectOpening } from './openingDetectionService';
 import { noteContradictsLine, notePhaseMismatchesBoard } from './noteLineGuard';
 
@@ -206,13 +206,12 @@ export function teachingNoteForBoard(
   const resolvedOpening = openingName ?? (() => {
     try { return detectOpening(historySans)?.name ?? null; } catch { return null; }
   })();
-  const gap = secondaryNotesForGap({
+  const support = secondarySupportNotes({
     historySans,
     openingName: resolvedOpening,
-    primaryHits: !resolvedOpening || primaryCoversOpening(resolvedOpening) ? 1 : 0,
     maxNotes: 1,
   })[0];
-  if (gap) return gap;
+  if (support) return support;
   return notesForStructure(fen, 1)[0] ?? null;
 }
 
@@ -306,13 +305,12 @@ export function transitionTeachingForGame(args: {
   //    `teachingNoteForBoard`: a real plan for THIS opening beats a borrowed
   //    plan from another one. Any primary opening-level coverage suppresses it.
   if (args.openingName) {
-    const gap = secondaryNotesForGap({
+    const support = secondarySupportNotes({
       historySans: args.historySans,
       openingName: args.openingName,
-      primaryHits: primaryCoversOpening(args.openingName) ? 1 : 0,
       maxNotes: 4,
     }).find((n) => n.plans?.trim());
-    if (gap) return gap;
+    if (support) return support;
   }
   // 5. STRUCTURE TRANSFER — teaching from ANY opening whose structure provably
   //    matches this board (and whose claims survive the live truth filter), so
@@ -407,25 +405,29 @@ export function buildDanyaTeachingBlock(args: {
       if (!seen.has(n.id)) { picked.push(n); seen.add(n.id); }
     }
   }
-  // LAST tier — structure transfer: teachings from OTHER openings whose
-  // structure provably matches this board (and whose claims survive the live
-  // truth filter). Fires mainly past book, where the tiers above go quiet.
-  if (args.fen && picked.length < max) {
-    for (const n of notesForStructure(args.fen, max - picked.length)) {
+  // SUPPORT TIER — the farmed corpora, filling whatever slots the primary
+  // corpus left empty (David 2026-08-01: "a third source that supports at
+  // runtime"). It runs whether or not the primary covered this opening, because
+  // opening-level coverage does not mean there is teaching for THIS position —
+  // the primary knows the Caro-Kann while having nothing on the Advance/Tal
+  // sub-line. It cannot dilute the house voice: the primary tiers above already
+  // took their slots, so these only ever supplement, never displace.
+  if (picked.length < max) {
+    for (const n of secondarySupportNotes({
+      historySans: args.historySans,
+      openingName: args.openingName,
+      maxNotes: max - picked.length,
+    })) {
       if (!seen.has(n.id)) { picked.push(n); seen.add(n.id); }
     }
   }
-  // GAP TIER — a second creator's corpus, consulted ONLY when everything above
-  // came back empty, i.e. this opening is one the primary corpus never covers.
-  // It supplies ideas, never voice, and cannot dilute Naroditsky teaching where
-  // that exists: a single primary hit suppresses it entirely.
-  if (picked.length === 0) {
-    for (const n of secondaryNotesForGap({
-      historySans: args.historySans,
-      openingName: args.openingName,
-      primaryHits: picked.length,
-      maxNotes: max,
-    })) {
+  // LAST tier — structure transfer: teachings from OTHER openings whose
+  // structure provably matches this board (and whose claims survive the live
+  // truth filter). Fires mainly past book, where the tiers above go quiet.
+  // Deliberately AFTER the support tier: a real note about the opening in front
+  // of the student beats a borrowed analogy from a different one.
+  if (args.fen && picked.length < max) {
+    for (const n of notesForStructure(args.fen, max - picked.length)) {
       if (!seen.has(n.id)) { picked.push(n); seen.add(n.id); }
     }
   }

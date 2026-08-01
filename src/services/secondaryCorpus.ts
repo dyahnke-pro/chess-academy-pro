@@ -138,6 +138,31 @@ export function gapNotesAcross(
   },
 ): DanyaNote[] {
   if (args.primaryHits > 0) return [];
+  return supportNotesAcross(corpora, args);
+}
+
+/** The same lookup WITHOUT the primary-coverage gate — the SUPPORT tier.
+ *
+ *  David 2026-08-01: "I want the notes to be able to cover gaps in any
+ *  masterclass or Danya openings we teach. Splice them in anywhere there is a
+ *  gap or where they can be used even when either of these two have primary
+ *  teachings. A third source that supports at runtime."
+ *
+ *  The gap tier answers "does the primary corpus know this OPENING?", which is
+ *  too coarse: it knows the Caro-Kann, so a farmed note on the Advance/Tal
+ *  sub-line was suppressed even at a position the primary has nothing to say
+ *  about — and the caller then fell through to STRUCTURE TRANSFER, borrowing a
+ *  note from a DIFFERENT opening entirely. A real note about the opening in
+ *  front of the student beats a structural analogy from another one, so callers
+ *  now consult this tier before transfer.
+ *
+ *  It never displaces primary teaching: callers fill from the primary corpus
+ *  first and use this only for the slots still empty, so the house voice keeps
+ *  the lead and these supply supporting IDEAS. */
+export function supportNotesAcross(
+  corpora: SecondaryCorpus[],
+  args: { historySans?: string[]; openingName?: string | null; maxNotes?: number },
+): DanyaNote[] {
   const max = args.maxNotes ?? 2;
   const out: DanyaNote[] = [];
   const seen = new Set<string>();
@@ -149,19 +174,31 @@ export function gapNotesAcross(
       seen.add(n.id);
     }
   };
+  // ROUND-ROBIN across corpora, not corpus-at-a-time. Draining the first corpus
+  // before touching the second sounds harmless because "order is only a
+  // tie-break" — it is not, once the budget is small. Callers ask for 1-4 slots,
+  // so the FIRST-registered corpus took every slot and the others never
+  // contributed at all: chessbrah (2.5 MB) shut out Hanging Pawns (10,209
+  // notes) on every opening they both cover. Interleaving gives each corpus its
+  // turn, so the budget is shared instead of claimed.
+  const roundRobin = (pick: (c: SecondaryCorpus) => DanyaNote[]): void => {
+    const queues = corpora.map(pick);
+    for (let i = 0; out.length < max; i += 1) {
+      // Stop once every queue is exhausted at this depth.
+      if (queues.every((q) => i >= q.length)) break;
+      for (const q of queues) {
+        if (out.length >= max) break;
+        if (i < q.length) take([q[i]]);
+      }
+    }
+  };
   // Line-anchored notes from every corpus first — a note keyed at the exact
   // line beats any opening-name match, whichever corpus it came from.
   if (args.historySans && args.historySans.length > 0) {
-    for (const c of corpora) {
-      if (out.length >= max) break;
-      take(c.notesForPrefix(args.historySans, max - out.length));
-    }
+    roundRobin((c) => c.notesForPrefix(args.historySans as string[], max));
   }
   if (args.openingName) {
-    for (const c of corpora) {
-      if (out.length >= max) break;
-      take(c.notesForOpening(args.openingName, max - out.length));
-    }
+    roundRobin((c) => c.notesForOpening(args.openingName as string, max));
   }
   return out;
 }

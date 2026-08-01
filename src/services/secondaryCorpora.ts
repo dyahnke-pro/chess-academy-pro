@@ -20,7 +20,7 @@
 // "no gap teaching yet", never wrong teaching.
 import chessbrahData from '../data/chessbrah-teachings.json';
 import { getFarmedCorporaSync } from './farmedCorpusData';
-import { createSecondaryCorpus, gapNotesAcross, type SecondaryCorpus, type TeachingsBundle } from './secondaryCorpus';
+import { createSecondaryCorpus, gapNotesAcross, supportNotesAcross, type SecondaryCorpus, type TeachingsBundle } from './secondaryCorpus';
 import type { DanyaNote } from './danyaTeachingService';
 
 const STATIC_CORPORA: SecondaryCorpus[] = [
@@ -62,6 +62,19 @@ export function secondaryNotesForGap(args: {
   maxNotes?: number;
 }): DanyaNote[] {
   return gapNotesAcross(secondaryCorpora(), args);
+}
+
+/** SUPPORT tier: secondary notes for this line/opening REGARDLESS of whether the
+ *  primary corpus covers the opening. Callers fill from the primary corpus
+ *  first and pass only the slots left over, so this supplements the house voice
+ *  and never displaces it. See `supportNotesAcross` for why the gap tier's
+ *  opening-level gate was too coarse. */
+export function secondarySupportNotes(args: {
+  historySans?: string[];
+  openingName?: string | null;
+  maxNotes?: number;
+}): DanyaNote[] {
+  return supportNotesAcross(secondaryCorpora(), args);
 }
 
 /** Secondary notes keyed EXACTLY at this line, across every corpus. */
