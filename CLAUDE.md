@@ -3796,6 +3796,7 @@ After every `git push origin main`:
    | coach surfaces (any) — master-play grounding | `scripts/audit-coach-master-integration.mjs` |
    | coach surfaces (any) — player-game references | `scripts/audit-coach-player-games.mjs` (proGameReferences Dexie seed + shape; playerGames envelope event when a provider key is present) |
    | `src/data/pro-game-references.json` (any pro-rep build) | `scripts/audit-coach-player-games.mjs` + `npx vitest run src/data/proGameReferences.test.ts` |
+   | `public/data/*-teachings.json` (any farmed corpus) or `farmedCorpusData` / `secondaryCorpora` | `scripts/audit-farmed-corpus-prod.mjs` + `npx vitest run src/data/secondaryTeachings.test.ts src/services/farmedCorpusData.test.ts` — a farmed corpus is FETCHED, not bundled, so a green build proves nothing about whether the running app can actually reach it |
    | coach surfaces (any) — tactical-awareness wiring | `scripts/audit-coach-tactical-awareness.mjs` (verifies the TacticsLiveContext block fires + rating-adaptive lookahead lands in {1,2,4,6}) |
    | `/coach/endgame` + `/coach/session/middlegame` | `scripts/audit-coach-middlegame-endgame.mjs` (mode coverage matrix: which of Teach/Drill/Quiz/Trap/Play each surface supports today) |
    | `/coach/home` + tile nav | `scripts/audit-untouched-surfaces.mjs` |
