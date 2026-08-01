@@ -141,7 +141,26 @@ export async function initBilling(appUserId?: string): Promise<void> {
     if (import.meta.env.DEV) {
       await Purchases.setLogLevel({ level: LOG_LEVEL.DEBUG });
     }
-    await Purchases.configure({ apiKey: key, appUserID: appUserId });
+    // Configure ANONYMOUSLY, then alias — never configure straight into the
+    // stable id (David 2026-08-01). RevenueCat treats a first configure with a
+    // new appUserID as a DIFFERENT customer, so every existing install would be
+    // orphaned from its own purchase and look un-subscribed until the user
+    // found "Restore". `logIn` is the documented migration: it aliases the
+    // anonymous customer onto the stable id and carries the entitlements over.
+    await Purchases.configure({ apiKey: key });
+    if (appUserId) {
+      try {
+        await Purchases.logIn({ appUserID: appUserId });
+      } catch (aliasErr) {
+        // A failed alias must never cost the user their entitlement — stay on
+        // the anonymous customer, which still owns the purchase.
+        logBilling(
+          'billing-error',
+          'billingService.initBilling.alias',
+          aliasErr instanceof Error ? aliasErr.message : 'alias failed',
+        );
+      }
+    }
     // Push-driven entitlement updates (renewals, refunds, family sharing).
     await Purchases.addCustomerInfoUpdateListener(() => {
       void refreshEntitlement();

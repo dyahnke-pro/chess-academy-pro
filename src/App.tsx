@@ -19,7 +19,7 @@ import { stockfishEngine } from './services/stockfishEngine';
 import { db } from './db/schema';
 import { installGlobalErrorHooks, installConsoleBackdoor, logAppAudit, loadAuditStreamConfig } from './services/appAuditor';
 import { initAnalytics, identifyUser, setUserProperties, registerSuperProperties } from './services/analytics';
-import { applyInternalFromUrl, resolveDeviceIdentity } from './services/deviceIdentity';
+import { applyInternalFromUrl, resolveDeviceIdentity, getDeviceId } from './services/deviceIdentity';
 import { requestPersistentStorage } from './services/storageQuota';
 import { emitAppBootAudit } from './services/appBootAudit';
 import { AppLayout } from './components/ui/AppLayout';
@@ -271,10 +271,19 @@ export function App(): JSX.Element {
         // fresh anonymous "person" every session — the reason user counts
         // inflate and per-install retention is invisible. identify() makes each
         // install ONE tracked user; no-op on web/keyless (stable cookie id).
-        void initBilling().then(async () => {
-          const stableId = await getStableAnalyticsId();
-          if (stableId) identifyUser(stableId);
-        });
+        // Hand RevenueCat our OWN durable device id (David 2026-08-01). Without
+        // it every install is a throwaway $RCAnonymousID: a reinstall orphans
+        // the customer, and no entitlement can be granted to a specific person
+        // because there is no stable person to grant it to. `initBilling`
+        // configures anonymously first and ALIASES onto this id, so existing
+        // purchases carry over instead of vanishing.
+        void getDeviceId()
+          .catch(() => undefined)
+          .then((deviceId) => initBilling(deviceId ?? undefined))
+          .then(async () => {
+            const stableId = await getStableAnalyticsId();
+            if (stableId) identifyUser(stableId);
+          });
 
         // Person-level retention anchors: first_seen_at is written ONCE (stable
         // cohort boundary), last_seen_at every boot. No-op on keyless builds.
