@@ -244,4 +244,12 @@ export const GAMBIT_GEM_NARRATION: Record<string, GambitGemNarration> = {
     watch: ['', '', '', '', '', '', '', '', '', '', 'd3 is the natural developing square, but it does nothing about f2 — and in this gambit f2 is the whole point. Only the king defends it.', '…Ng4! Straight at f2. Black gave up the pawn for exactly this: pieces pointing at a king still sitting in the centre.', 'Be3 is the only real way to prop up f2 — but it puts a bishop on a square the knight can simply take.', '', "fxe3 keeps material level, at the price of doubled e-pawns and an open f-file pointing back at White's own king.", '…Bxe3 takes the pawn straight back. Material is level, but only one king is safe.', '', '…Qg5 guards the bishop and adds a second piece to the dark-square squeeze. White still cannot castle.', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '…Ng4 — hit f2 at once', '', '', '', '…Bxe3 — pawn back, king exposed', '', '…Qg5 — guard e3, pile on', ''],
   },
+  // Scotch Gambit: 11.Bxf7+ and 24% of players DECLINE with …Kf8. Declining is
+  // worse than taking — the king has lost castling regardless, Black is a pawn
+  // down, and the bishop survives. Nxc3 rebuilds, then Qd5+ and Qxc5+ collect.
+  'scotch-gambit:e4_e5_Nf3_Nc6_d4_exd4_Bc4_Bc5_c3_dxc3_Bxf7+:Kf8': {
+    sources: ["concept:pos-king-safety", "concept:pos-initiative", "https://en.wikipedia.org/wiki/Scotch_Game"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '…Kf8 declines the bishop. But the sacrifice has already done its work — the king has lost castling either way, and now Black is simply a pawn down with the bishop still sitting on f7.', 'Nxc3! No rush to save the bishop. White takes the gambit pawn back and finishes developing; the bishop on f7 is not going anywhere.', '', 'Qd5+ forces the king back, and it is the loose bishop on c5 that pays for it.', '', "Qxc5+ takes the bishop with check. White is a clear piece up with Black's king stranded in the centre of its own back rank.", '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', 'Nxc3 — take the pawn, keep the bishop', '', 'Qd5+ — check, then win c5', '', 'Qxc5+ — the bishop, with check', '', '', ''],
+  },
 };
