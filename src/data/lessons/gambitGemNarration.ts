@@ -292,4 +292,20 @@ export const GAMBIT_GEM_NARRATION: Record<string, GambitGemNarration> = {
     watch: ['', '', '', '', '', '', '', '', '', '…Bg4 pins the knight to the queen — but a pin only bites if the pinned piece has to stay.', 'fxe5! Ignore it. The f-file rips open and the pawn hits d6; the pin was never really a pin.', '', 'Qxf3 recaptures, and look where the queen lands — straight down the open f-file at f7.', '', 'Nd5 jumps into the hole. White has the bishop pair, the open file and the better king; the pin cost Black the initiative.', '', '', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', 'fxe5 — the pin was an illusion', '', 'Qxf3 — queen onto the open f-file', '', 'Nd5 — into the hole', '', '', ''],
   },
+  // KGD: taking on f4 only after Nf3 and Nc3 are out gives Black none of the
+  // counterplay the accepted lines rely on. d4! hits the bishop and claims the
+  // centre; Bxf4 then recovers the pawn with everything developed.
+  'gambit-kings-gambit:e4_e5_f4_Bc5_Nf3_d6_Nc3:exf4': {
+    sources: ["concept:pos-center", "concept:pos-initiative", "https://en.wikipedia.org/wiki/King%27s_Gambit"],
+    watch: ['', '', '', '', '', '', '', '…exf4 accepts the pawn at last — but a move too late. White has already developed both knights, so Black gets none of the counterplay the real accepted lines are built on.', 'd4! Tempo on the bishop and the whole centre in one stroke. Black has to move the bishop again while White simply takes over.', '', 'Bxf4 collects the pawn straight back. White has the centre, both bishops out, and a free hand.', '', '', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', 'd4 — tempo, and the centre', '', 'Bxf4 — the pawn returns', '', '', '', '', ''],
+  },
+  // Danish declined: …Bb4+ then …Bxc3+ swaps off Black's most active piece and
+  // gives White the bishop pair. bxc3 builds the c3+d4 centre and opens the
+  // b-file — doubled pawns are a cheap price for that.
+  'danish-gambit:e4_e5_d4_exd4_c3_d5_exd5_Qxd5_cxd4_Nc6_Nf3_Bb4+_Nc3:Bxc3+': {
+    sources: ["concept:pos-bishop-pair", "concept:pos-center", "https://en.wikipedia.org/wiki/Danish_Gambit"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '…Bxc3+ releases the pin, but it trades off the piece that was doing all the annoying — and hands White the bishop pair for it.', 'bxc3! Recapture toward the middle. The pawns on c3 and d4 form a broad centre, the b-file opens, and White keeps both bishops.', '', '', 'O-O — the king is tucked away and every white piece points at the kingside. Doubled c-pawns are a small price for this.', '', '', '', '…Qd6 — Black is solid but passive. White has the two bishops, the centre and the open file; this is the pleasant side to play.'],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'bxc3 — recapture toward the centre', '', '', 'O-O — king safe, pieces aimed', '', '', '', ''],
+  },
 };
