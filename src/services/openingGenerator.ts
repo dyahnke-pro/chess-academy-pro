@@ -50,6 +50,7 @@ import { logAppAudit } from './appAuditor';
 import { buildDanyaTeachingBlock, noteAtPosition, teachingBeatText } from './danyaTeachingService';
 import { deriveNarrationArrows } from './narrationArrows';
 import { bakedNarrationFor } from './bakedWalkthroughNarration';
+import { gemPunishLessonsForOpeningName } from './gemPunishLessons';
 import type {
   WalkthroughTree,
   WalkthroughTreeNode,
@@ -3346,6 +3347,33 @@ async function generateOneStage(
     }
   }
   if (!retryContext && stage === 'punish') {
+    // CURATED WEAPONS FIRST (David 2026-08-01: "we are building out the
+    // gem/punish lines in coach"). The gems beat anything the puzzle path can
+    // produce for this opening — the opponent's slip is what really gets
+    // played at this level, the refutation is engine-verified and tiered, the
+    // line is already played out to where the material lands, and the prose is
+    // hand-written, so no LLM call is needed at all. The puzzle path stays as
+    // the fallback for the openings with no gems (most of the DB's 3,000).
+    try {
+      const gemLessons = gemPunishLessonsForOpeningName(openingName);
+      if (gemLessons.length >= 2) {
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'openingGenerator.generateOneStage',
+          summary: `punish via CURATED GEMS for "${openingName}" — ${gemLessons.length} engine-verified weapons, no LLM call`,
+        });
+        return { ok: true, data: gemLessons };
+      }
+    } catch (err) {
+      void logAppAudit({
+        kind: 'llm-error',
+        category: 'subsystem',
+        source: 'openingGenerator.generateOneStage',
+        summary: `gem punish path failed for "${openingName}" — falling through to the puzzle DB`,
+        details: err instanceof Error ? err.message : String(err),
+      });
+    }
     try {
       const punishData = await generatePunishFromDb(openingName);
       if (punishData && punishData.length >= 2) {
