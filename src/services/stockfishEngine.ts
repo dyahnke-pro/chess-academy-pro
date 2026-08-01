@@ -324,10 +324,43 @@ const ASM_RECOVER_CEILING_MS = 15_000;
  *  skip multi entirely after the first failure on a given device. */
 const MULTI_FALLBACK_LS_KEY = 'sfx.multi-fallback-attempted.v1';
 
+/** How long a runtime multi-thread failure keeps a device on the single-thread
+ *  engine before multi is tried again.
+ *
+ *  David 2026-08-01, from a prod audit showing `sticky fallback (multi
+ *  previously failed at runtime)`: the flag was written once and read forever,
+ *  so a SINGLE transient crash retired the fast engine on that device
+ *  permanently. That matters because capability is already checked upstream —
+ *  `resolveWorkerUrl` only picks multi when crossOriginIsolated and
+ *  SharedArrayBuffer are both present — so what lands here is a CRASH or an OOM
+ *  under momentary memory pressure, which is exactly the kind of fault that
+ *  clears on its own. Everything engine-backed pays for that: Hint, the delta
+ *  asides, the punish play-out.
+ *
+ *  A day is the balance. A genuinely broken host fails again on the next probe
+ *  and re-sticks, costing ~2s of init once per day; a device that hit a bad
+ *  moment gets its fast engine back. */
+const MULTI_FALLBACK_TTL_MS = 24 * 60 * 60 * 1000;
+
 function readPersistedMultiFallback(): boolean {
   if (typeof localStorage === 'undefined') return false;
   try {
-    return localStorage.getItem(MULTI_FALLBACK_LS_KEY) === '1';
+    const raw = localStorage.getItem(MULTI_FALLBACK_LS_KEY);
+    if (!raw) return false;
+    // Legacy '1' entries carry no timestamp. Treat them as EXPIRED rather than
+    // permanent — they are the devices this bug already stranded, and the whole
+    // point is to give them multi back.
+    if (raw === '1') {
+      localStorage.removeItem(MULTI_FALLBACK_LS_KEY);
+      return false;
+    }
+    const at = Number(raw);
+    if (!Number.isFinite(at)) return false;
+    if (Date.now() - at > MULTI_FALLBACK_TTL_MS) {
+      localStorage.removeItem(MULTI_FALLBACK_LS_KEY);
+      return false;
+    }
+    return true;
   } catch {
     return false;
   }
@@ -336,7 +369,7 @@ function readPersistedMultiFallback(): boolean {
 function writePersistedMultiFallback(): void {
   if (typeof localStorage === 'undefined') return;
   try {
-    localStorage.setItem(MULTI_FALLBACK_LS_KEY, '1');
+    localStorage.setItem(MULTI_FALLBACK_LS_KEY, String(Date.now()));
   } catch {
     // localStorage can throw (private browsing, quota, etc.) —
     // not worth surfacing; we just don't get persistence.

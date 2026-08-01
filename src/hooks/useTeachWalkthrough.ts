@@ -447,13 +447,52 @@ async function speakWalkthroughText(
   const prefs = useAppStore.getState().activeProfile?.preferences;
   const verbosity = resolveCoachNarration(prefs);
   if (verbosity === 'full') {
-    return voiceService.speakForced(text);
+    return speakPaced(text);
   }
   if (verbosity === 'brief' && shortText && shortText.trim().length > 0) {
-    return voiceService.speakForced(shortText);
+    return speakPaced(shortText);
   }
   // 'silent', or 'brief' without a short variant on this node.
   await new Promise<void>((resolve) => setTimeout(resolve, clampBackupMs(text)));
+}
+
+/** Below this, a speak call CANNOT have spoken the words — no real utterance of
+ *  a full sentence returns in a fraction of a second. */
+const IMPOSSIBLY_FAST_MS = 300;
+/** Short enough that a fast return is plausible rather than suspicious. */
+const TRIVIAL_TEXT_CHARS = 40;
+
+/**
+ * Speak, and do not return before the words could physically have been said.
+ *
+ * THE BUG THIS FIXES (prod audit, David 2026-08-01 — "some plies repeat after
+ * being played out"): auto-advance is gated on the voice promise, and this
+ * treated "the speak call returned" as "the student heard it". When the voice
+ * does not actually play — another surface owns the channel, Polly is not live,
+ * an error is swallowed downstream — the call returns in milliseconds and the
+ * gate stops gating. The stream caught exactly that: ten plies narrated in ten
+ * seconds while every voice event in the window belonged to the coach GAME page
+ * running in parallel, none to the walkthrough.
+ *
+ * This is a FLOOR, not a timer racing the voice — the ban on fallback timers
+ * exists because a timer that can fire while speech is still playing cuts it
+ * off. Nothing here can do that: it only ever waits AFTER the promise has
+ * already resolved, and only when it resolved impossibly fast.
+ */
+async function speakPaced(text: string): Promise<void> {
+  const startedAt = Date.now();
+  await voiceService.speakForced(text);
+  const elapsed = Date.now() - startedAt;
+  if (text.trim().length <= TRIVIAL_TEXT_CHARS || elapsed >= IMPOSSIBLY_FAST_MS) return;
+  const remaining = clampBackupMs(text) - elapsed;
+  if (remaining <= 0) return;
+  void logAppAudit({
+    kind: 'coach-narration-spoken',
+    category: 'narration',
+    source: 'useTeachWalkthrough.speakPaced',
+    summary: `voice returned in ${elapsed}ms for ${text.trim().length} chars — held ${remaining}ms so the walkthrough cannot outrun its own narration`,
+  });
+  await new Promise<void>((resolve) => setTimeout(resolve, remaining));
 }
 
 export type WalkthroughPhase =

@@ -44,7 +44,7 @@ import {
   type ForkBranch,
 } from './openingDetectionService';
 import { db, type CachedOpening } from '../db/schema';
-import { gradeNarrationText } from './coachAnswerGates';
+import { gradeNarrationText, gradeNarrationAcrossLine } from './coachAnswerGates';
 import { narrateContinuationMove } from './continuationMoveNarration';
 import { logAppAudit } from './appAuditor';
 import { buildDanyaTeachingBlock, noteAtPosition, supportNoteForPly, teachingBeatText } from './danyaTeachingService';
@@ -248,7 +248,17 @@ export function normalizeOpeningName(name: string): string {
 export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
   try {
     if (Array.isArray(tree.concepts) && tree.concepts.length > 0) {
-      tree.concepts = repairConceptsStage(tree.concepts, tree.startFen).kept;
+      // The taught main line, so a concept question that EXPLAINS the opening
+      // is judged against the positions it actually talks about rather than
+      // against move 0 (David 2026-08-01 — 22 true sentences deleted in one
+      // lesson). First child at each level = the spine; branches are
+      // alternatives the question is not about.
+      const mainLine: string[] = [];
+      for (let n = tree.root.children?.[0]?.node; n; n = n.children?.[0]?.node) {
+        if (n.san) mainLine.push(n.san);
+        if (mainLine.length > 40) break; // never walk a malformed cycle
+      }
+      tree.concepts = repairConceptsStage(tree.concepts, tree.startFen, mainLine).kept;
     }
     if (Array.isArray(tree.findMove) && tree.findMove.length > 0) {
       tree.findMove = repairFindMoveStage(tree.findMove).kept;
@@ -530,7 +540,27 @@ export function repairConceptsStage(
    *  board-gated against the opening it belongs to. Without this the gate had
    *  a hole: path-less questions were checked against nothing at all. */
   startFen?: string,
+  /** The taught line's SANs. A concept question EXPLAINS the opening, so its
+   *  prose ranges over the whole line — see `gradeNarrationAcrossLine`. Given
+   *  these, a claim is judged against every position the line passes through
+   *  instead of one snapshot where most of the pieces it names do not exist
+   *  yet. Without them the behaviour is unchanged. */
+  lineSans?: readonly string[],
 ): { kept: ConceptCheckQuestion[]; report: StageRepairReport } {
+  // Every position the taught line passes through, computed once.
+  const linePositions: string[] = [];
+  if (lineSans && lineSans.length > 0) {
+    const walker = startFen ? new Chess(startFen) : new Chess();
+    linePositions.push(walker.fen());
+    for (const san of lineSans) {
+      try {
+        walker.move(stripSanAnnotations(san));
+      } catch {
+        break;
+      }
+      linePositions.push(walker.fen());
+    }
+  }
   const kept: ConceptCheckQuestion[] = [];
   const report: StageRepairReport = { dropped: 0, fixed: 0, notes: [] };
   for (let i = 0; i < data.length; i += 1) {
@@ -571,12 +601,18 @@ export function repairConceptsStage(
     // what `voiceFacts.containmentTripwire` kept catching on David's device
     // (2026-07-31: squares d2/d8/c8/d7 and a2 introduced with no grounding) —
     // a quiz could name a square that isn't what's on the board.
-    if (atFen) {
-      q.prompt = gradeNarrationText(q.prompt, atFen, 'openingGenerator.concepts') || q.prompt;
+    // A question with its OWN path points at a specific position, so it is
+    // graded there. A path-LESS question explains the opening as a whole and is
+    // graded across the line — the root cause of 22 true sentences being
+    // deleted in a single lesson (David 2026-08-01).
+    const scope = q.path && q.path.length > 0 ? [atFen] : (linePositions.length > 0 ? linePositions : [atFen]);
+    const fens = scope.filter((f): f is string => !!f);
+    if (fens.length > 0) {
+      q.prompt = gradeNarrationAcrossLine(q.prompt, fens, 'openingGenerator.concepts') || q.prompt;
       for (const c of q.choices) {
-        c.text = gradeNarrationText(c.text, atFen, 'openingGenerator.concepts') || c.text;
+        c.text = gradeNarrationAcrossLine(c.text, fens, 'openingGenerator.concepts') || c.text;
         if (c.explanation) {
-          c.explanation = gradeNarrationText(c.explanation, atFen, 'openingGenerator.concepts') || c.explanation;
+          c.explanation = gradeNarrationAcrossLine(c.explanation, fens, 'openingGenerator.concepts') || c.explanation;
         }
       }
     }

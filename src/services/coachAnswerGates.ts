@@ -98,6 +98,72 @@ export function isSpokenSentenceGrounded(
  *
  *  Returns the cleaned text (may be '' if the whole line was a board lie —
  *  silent beats false). `source` namespaces the audit. */
+/** Grade prose that describes a LINE rather than a single position.
+ *
+ *  David 2026-08-01, on 22 concepts sentences the gate deleted in one lesson:
+ *  "that narration was explaining the opening. Nd5 is a move that happens."
+ *
+ *  That is the whole problem. `gradeNarrationText` asks "is this claim true on
+ *  THIS board", which is exactly right for a walkthrough beat — the student is
+ *  looking at one position while it is spoken. A concept question explaining an
+ *  opening is not like that: its prose ranges over the entire line, naming the
+ *  knight that arrives on d5, the pawn that will be on e5, the c4 push. Checked
+ *  against move 0 none of those pieces exist yet; checked against the terminus,
+ *  the early ones have moved on. Either way TRUE teaching reads as board-false
+ *  and is silently deleted.
+ *
+ *  So a sentence survives if it is true at ANY position the line passes
+ *  through. That is not a weaker gate — a claim false at every position on the
+ *  line is still dropped, which is the only thing the check can honestly
+ *  assert about prose that spans all of them.
+ *
+ *  Falls back to single-position grading when the caller has no line. */
+export function gradeNarrationAcrossLine(
+  text: string | undefined,
+  fens: readonly string[],
+  source: string,
+): string | undefined {
+  if (!text || !text.trim()) return text;
+  if (fens.length === 0) return text;
+  if (fens.length === 1) return gradeNarrationText(text, fens[0], source);
+  try {
+    // A sentence is kept when ANY position on the line keeps it. Running the
+    // existing per-position stripper and unioning the survivors reuses one
+    // claim checker rather than growing a second, divergent one.
+    const survivors = new Set<string>();
+    for (const fen of fens) {
+      const kept = stripDisprovenSentences(text, fen).clean;
+      for (const sentence of kept.split(/(?<=[.!?])\s+/)) {
+        const trimmed = sentence.trim();
+        if (trimmed) survivors.add(trimmed);
+      }
+    }
+    const out = text
+      .split(/(?<=[.!?])\s+/)
+      .map((sentence) => sentence.trim())
+      .filter((sentence) => sentence && survivors.has(sentence))
+      .join(' ');
+    const originalCount = text.split(/(?<=[.!?])\s+/).filter((x) => x.trim()).length;
+    const keptCount = out.split(/(?<=[.!?])\s+/).filter((x) => x.trim()).length;
+    if (keptCount < originalCount) {
+      void logAppAudit({
+        kind: 'claim-validator-trip',
+        category: 'subsystem',
+        source: `${source}.lineGate`,
+        summary: `dropped ${originalCount - keptCount} sentence(s) false at EVERY position on the line (${fens.length} checked)`,
+      });
+    }
+    // Returns '' when every sentence is false at every position on the line —
+    // the honest answer. An earlier draft handed the original text back here so
+    // a beat could never go silent, but that let a single false sentence
+    // through untouched, which is precisely what the gate exists to stop. What
+    // to do with nothing is the CALLER's decision, not this function's.
+    return out;
+  } catch {
+    return text;
+  }
+}
+
 export function gradeNarrationText(
   text: string | undefined,
   fen: string | null | undefined,

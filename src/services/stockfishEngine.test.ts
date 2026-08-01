@@ -1944,14 +1944,20 @@ describe('runtime fallback (multi → single)', () => {
       vi.useRealTimers();
       await Promise.resolve();
 
-      expect(localStorage.getItem('sfx.multi-fallback-attempted.v1')).toBe('1');
+      // A TIMESTAMP, not a bare '1'. The flag used to be permanent, so one
+      // transient crash retired the fast engine on that device forever; it now
+      // records WHEN the failure happened so it can expire (2026-08-01).
+      const stamp = localStorage.getItem('sfx.multi-fallback-attempted.v1');
+      expect(stamp).toBeTruthy();
+      expect(Number.isFinite(Number(stamp))).toBe(true);
+      expect(Number(stamp)).toBeGreaterThan(0);
     });
 
-    it('skips multi-thread on init when localStorage flag is set', async () => {
+    it('skips multi-thread on init when the flag is RECENT', async () => {
       installMultiCapableEnv();
-      // Pre-seed the persisted flag — simulates a returning user
-      // whose previous session already discovered multi is broken.
-      localStorage.setItem('sfx.multi-fallback-attempted.v1', '1');
+      // A returning user whose previous session discovered multi is broken
+      // minutes ago — still trusted, so don't re-probe a known-bad bundle.
+      localStorage.setItem('sfx.multi-fallback-attempted.v1', String(Date.now() - 60_000));
 
       const { stockfishEngine } = await getEngine();
       completeInit();
@@ -1959,6 +1965,37 @@ describe('runtime fallback (multi → single)', () => {
 
       // Should go STRAIGHT to single — no multi-thread spawn.
       expect(workerConstructorCallCount).toBe(1);
+    });
+
+    it('RE-PROBES multi once the flag has aged out', async () => {
+      installMultiCapableEnv();
+      // Two days old. The failure that wrote this is long past, and a single
+      // transient crash must not retire the fast engine forever (2026-08-01).
+      localStorage.setItem(
+        'sfx.multi-fallback-attempted.v1',
+        String(Date.now() - 48 * 60 * 60 * 1000),
+      );
+
+      const { stockfishEngine } = await getEngine();
+      completeInit();
+      await stockfishEngine.initialize();
+
+      // Multi is tried again, and the stale flag is cleared.
+      expect(localStorage.getItem('sfx.multi-fallback-attempted.v1')).toBeNull();
+    });
+
+    it('expires a LEGACY permanent flag so stranded devices recover', async () => {
+      installMultiCapableEnv();
+      // The old format carried no timestamp and was read forever. These are
+      // exactly the devices the bug stranded, so they must be freed, not
+      // grandfathered into the slow engine.
+      localStorage.setItem('sfx.multi-fallback-attempted.v1', '1');
+
+      const { stockfishEngine } = await getEngine();
+      completeInit();
+      await stockfishEngine.initialize();
+
+      expect(localStorage.getItem('sfx.multi-fallback-attempted.v1')).toBeNull();
     });
 
     it('does NOT retry a second time after the retry budget is spent', async () => {
