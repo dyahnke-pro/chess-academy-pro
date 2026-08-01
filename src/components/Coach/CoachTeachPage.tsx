@@ -664,7 +664,24 @@ export function CoachTeachPage(): JSX.Element {
   ): void => {
     const resumeFromSans = deepDiveResumeRef.current ?? undefined;
     deepDiveResumeRef.current = null;
-    walkthrough.start(tree, { ...options, ...(resumeFromSans ? { resumeFromSans } : {}) });
+    // A DEEP DIVE IS ALREADY A CHOICE — never answer it with a chooser
+    // (David 2026-08-01: "the deep dive main line wasnt working for me").
+    //
+    // The returning-visitor chooser is right for a TYPED request: ask for an
+    // opening you have already watched and being offered the stages instead of
+    // a replay is helpful. But a Deep dive is a TAP on a specific line, meaning
+    // "teach me this one, now". Both paths came through here as
+    // `showChooser: true` purely because the opening had been completed, so the
+    // tap opened a chooser and the lesson never started. His audit stream
+    // caught exactly that: `chooser shown for "Alekhine Defense: Two Pawns
+    // Attack, Lasker Variation" (previously completed)` one second after the
+    // deep-dive routed. The contract for this tile is that it STARTS A LESSON.
+    const fromDeepDive = !!resumeFromSans;
+    walkthrough.start(tree, {
+      ...options,
+      ...(fromDeepDive ? { showChooser: false } : {}),
+      ...(resumeFromSans ? { resumeFromSans } : {}),
+    });
   }, [walkthrough]);
 
   // Ponder on the student's clock (David 2026-07-03) — while the free-play board

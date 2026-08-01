@@ -174,6 +174,57 @@ try {
   record('run completed without throwing', false, String(e).slice(0, 160));
 }
 
+// ── THE RETURNING-VISITOR CASE ────────────────────────────────────────────
+// The run above deep-dives an opening this context has never seen, so
+// `walkthroughDone` is false and the returning-visitor chooser can never fire.
+// That is a happy path, and it is why this audit was 11/11 green while the
+// tile was broken in David's hands (2026-08-01: "the deep dive main line wasnt
+// working for me"). His opening was already COMPLETED, so the tap answered
+// with a chooser instead of a lesson — the stream caught `chooser shown for
+// "…Lasker Variation" (previously completed)` one second after the deep-dive
+// routed. A Deep dive is a TAP on a named line: it must start that lesson.
+try {
+  // Ask for the SAME opening again. Whatever the first pass completed is now
+  // in the "already watched" state, which is exactly the state that broke.
+  const box2 = p.locator('[data-testid="chat-text-input"]');
+  await box2.waitFor({ timeout: 20000 });
+  await box2.click();
+  await box2.pressSequentially(`teach me the ${ASK}`, { delay: 12 });
+  await box2.press('Enter');
+
+  const dive2 = p.locator(
+    '[data-testid^="walkthrough-fork-deepdive-"], [data-testid^="walkthrough-leaf-deepdive-"]',
+  ).first();
+  const t2 = Date.now();
+  let reached2 = false;
+  while (Date.now() - t2 < 240000) {
+    if (await dive2.isVisible().catch(() => false)) { reached2 = true; break; }
+    await p.waitForTimeout(1000);
+  }
+  if (!reached2) {
+    record('returning visitor: a Deep-dive tile is reachable', false, 'never surfaced on the second pass');
+  } else {
+    await dive2.click({ force: true });
+    await p.waitForTimeout(6000);
+    // THE ASSERTION. A chooser here means the tap did not start a lesson.
+    // The REAL testid, verified in CoachTeachPage (phase === 'choose-mode' →
+    // data-testid="walkthrough-choose-mode"). Asserting on a testid that does
+    // not exist is worse than no assertion: it can never fail, so it reports
+    // coverage the run never had.
+    const chooser = await p.locator('[data-testid="walkthrough-choose-mode"]')
+      .first().isVisible().catch(() => false);
+    record('returning visitor: Deep dive does NOT answer with a chooser', !chooser,
+      chooser ? 'chooser intercepted the tap — the lesson never started' : '');
+    // And it must actually be teaching, not merely "not a chooser".
+    const teaching = await p.locator('[data-testid="walkthrough-skip"], [data-testid="walkthrough-back"], [data-testid^="walkthrough-fork-option-"]')
+      .first().isVisible().catch(() => false);
+    record('returning visitor: a lesson is running after the tap', teaching,
+      teaching ? '' : 'no walkthrough controls on screen');
+  }
+} catch (err) {
+  record('returning visitor: deep dive on a completed opening', false, String(err).slice(0, 120));
+}
+
 await b.close();
 await listener.stop().catch(() => undefined);
 
