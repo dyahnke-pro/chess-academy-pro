@@ -9,6 +9,7 @@ import { Chess } from 'chess.js';
 import gemsData from '../punish-gems.json';
 import gambitGemsData from '../gambit-punish-gems.json';
 import { getGemNarration, hasGemNarration } from './punishGemNarration';
+import { narrateContinuationMove } from '../../services/continuationMoveNarration';
 import { GAMBIT_GEM_NARRATION } from './gambitGemNarration';
 import type { PlayableMiddlegameLine, AnnotationArrow } from '../../types';
 
@@ -31,6 +32,10 @@ export interface PunishGem {
   // WEAPONS that surface (David 2026-05-24).
   tier: 'practical' | 'positional' | 'confirmed' | 'weak';
   why: string;
+  /** Plies appended by `extend-punish-gems.mjs` to play the advantage out onto
+   *  the board. Hand-authored narration covers only the plies BEFORE these;
+   *  the tail is narrated board-true at runtime. Absent on un-extended gems. */
+  demonstrationPlies?: number;
 }
 
 // Masterclass gems + the SEPARATE-LANE gambit gems (David 2026-05-27). Sourced
@@ -144,16 +149,41 @@ export function gemToPlayableLine(gem: PunishGem): PlayableMiddlegameLine | null
   const annotations: string[] = [];
   const learnCues: string[] = [];
 
+  // The DEMONSTRATION TAIL (David 2026-08-01: "extend the trap lines until the
+  // full advantage has played out. Some of the gems stopped short and didn't
+  // really explain or show the advantage"). The miner used to stop at a fixed
+  // 8 plies, routinely mid-recapture, so the student was told they won
+  // something they never saw land. `extend-punish-gems.mjs` now plays each
+  // refutation out to a quiet position where the material is actually on the
+  // board, and records how many plies that took.
+  //
+  // Those extra plies are NOT hand-authored — authoring them would mean writing
+  // prose for ~1,900 new plies, and inventing it is exactly what G3 forbids.
+  // They are narrated by the same board-true composer the middlegame play-out
+  // uses: every clause is checked against the position before it is spoken, so
+  // the tail explains the advantage instead of just replaying moves silently.
+  const authoredPlies = moves.length - (gem.demonstrationPlies ?? 0);
+
   for (let i = 0; i < moves.length; i++) {
     let from = '';
     let to = '';
+    const fenBefore = chess.fen();
+    let san = moves[i];
     try {
       const mv = chess.move(moves[i]);
       from = mv.from;
       to = mv.to;
+      san = mv.san;
     } catch {
       // playLine is gate-proven legal, but stay defensive.
       break;
+    }
+    if (i >= authoredPlies) {
+      const computed = narrateContinuationMove(fenBefore, chess.fen(), san, from, to);
+      arrows.push(computed.arrows);
+      annotations.push(computed.say);
+      learnCues.push(computed.short);
+      continue;
     }
     arrows.push(from && to ? [{ from, to, color: 'orange' }] : []);
     learnCues.push(narration?.learn[i] ?? '');

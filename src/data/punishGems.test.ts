@@ -25,6 +25,7 @@ interface Gem {
   inaccuracy: string;
   punish: string;
   playLine: string;
+  demonstrationPlies?: number;
   tier: string;
   engineCp: number | null;
 }
@@ -110,9 +111,18 @@ describe('punish-gems are real, legal, DB-grounded', () => {
         const g = byId.get(id);
         expect(g, `narration for unknown gemId "${id}"`).toBeTruthy();
         if (!g) return;
+        // The authored arrays cover the TAUGHT plies. `demonstrationPlies` are
+        // the tail `extend-punish-gems.mjs` appended to play the advantage onto
+        // the board (David 2026-08-01) — those are narrated board-true at
+        // runtime, not hand-authored, so they are excluded here. The alignment
+        // worry the gate exists for is unchanged: a cue must never slide onto
+        // the wrong move, so the authored arrays must match the authored plies
+        // EXACTLY, and must be a prefix of the line (never longer than it).
         const plies = g.playLine.split(' ').length;
-        expect(narr.watch.length, 'watch array length ≠ playLine plies').toBe(plies);
-        expect(narr.learn.length, 'learn array length ≠ playLine plies').toBe(plies);
+        const authored = plies - (g.demonstrationPlies ?? 0);
+        expect(authored, 'demonstrationPlies exceeds the playLine').toBeGreaterThan(0);
+        expect(narr.watch.length, 'watch array length ≠ authored plies').toBe(authored);
+        expect(narr.learn.length, 'learn array length ≠ authored plies').toBe(authored);
       });
     }
   });
