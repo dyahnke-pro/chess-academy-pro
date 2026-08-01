@@ -1,0 +1,124 @@
+name: Farm teaching corpus (CI runners)
+
+# WHY THIS EXISTS (2026-08-01). The transcript pull runs from whatever machine
+# starts it, and YouTube bot-checks that IP after a few hundred fetches: the
+# Saint Louis farm sat at 371/1715 for hours, every request failing, the
+# circuit breaker burning 30-minute cooldowns for zero throughput. Retrying
+# from the same address cannot fix a block on that address.
+#
+# GitHub runners are fresh IPs, so the pull simply works there. The whole
+# pipeline runs on the runner and commits ONLY the shipped corpus:
+#   pull (yt-dlp) → distill-v2 (DeepSeek) → merge-corpus → public/data/*.json
+#
+# PLAGIARISM GUARD INTACT (CLAUDE.md, David 2026-07-02): raw transcripts live
+# and die on the runner. They are never uploaded, never artifacted, never
+# committed — they exist only so the distiller can read WHICH established idea
+# is taught at each move. Shipped prose is original.
+#
+# The DeepSeek key is pulled from Vercel at run time with the runner's
+# VERCEL_TOKEN, per the standing rule that server credentials live in Vercel
+# and are never committed or duplicated into GitHub secrets.
+
+on:
+  workflow_dispatch:
+    inputs:
+      creator:
+        description: 'Creator key (saintlouis | hangingpawns | chessbrah)'
+        required: true
+        default: 'saintlouis'
+      pull_limit:
+        description: 'Max transcripts to pull this run'
+        required: false
+        default: '400'
+  schedule:
+    # Every 6h — each run chips away at the backlog on a fresh runner IP.
+    - cron: '0 */6 * * *'
+
+concurrency:
+  # Never let two runs fight over the same corpus file.
+  group: farm-corpus-${{ github.event.inputs.creator || 'saintlouis' }}
+  cancel-in-progress: false
+
+jobs:
+  farm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
+
+      - name: Install yt-dlp
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq python3-pip
+          pip3 install --quiet --upgrade yt-dlp
+          yt-dlp --version
+
+      - name: Resolve the DeepSeek key from Vercel
+        id: key
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "::warning::VERCEL_TOKEN not set — pulling transcripts only, no distill."
+            echo "have_key=0" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          P=prj_qYJMwF1apaxdp6sIZzcvZMz9BcZN; T=team_EG9m215w9cQHWilBOPnOtIFS
+          ID=$(curl -s -H "Authorization: Bearer $VERCEL_TOKEN" \
+            "https://api.vercel.com/v10/projects/$P/env?teamId=$T" \
+            | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{const e=JSON.parse(s).envs.find(e=>e.key==='DEEPSEEK_KEY');console.log(e?e.id:'')})")
+          VAL=$(curl -s -H "Authorization: Bearer $VERCEL_TOKEN" \
+            "https://api.vercel.com/v1/projects/$P/env/$ID?teamId=$T&decrypt=true" \
+            | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{console.log(JSON.parse(s).value||'')})")
+          if [ -z "$VAL" ]; then
+            echo "::warning::could not resolve DEEPSEEK_KEY — pulling only."
+            echo "have_key=0" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          echo "::add-mask::$VAL"
+          echo "DEEPSEEK_KEY=$VAL" >> "$GITHUB_ENV"
+          echo "have_key=1" >> "$GITHUB_OUTPUT"
+
+      - name: Pull transcripts (fresh runner IP)
+        env:
+          PULL_PACE_MS: '4000'
+        run: |
+          node scripts/danya-corpus/pull-transcripts.mjs \
+            --creator "${{ github.event.inputs.creator || 'saintlouis' }}" \
+            --limit "${{ github.event.inputs.pull_limit || '400' }}"
+
+      - name: Distill
+        if: steps.key.outputs.have_key == '1'
+        run: |
+          node scripts/danya-corpus/distill-v2.mjs \
+            --creator "${{ github.event.inputs.creator || 'saintlouis' }}" --concurrency 4
+
+      - name: Merge into the shipped corpus
+        if: steps.key.outputs.have_key == '1'
+        run: |
+          node scripts/danya-corpus/merge-corpus.mjs \
+            --creator "${{ github.event.inputs.creator || 'saintlouis' }}"
+
+      - name: Gate the corpus before it can ship
+        if: steps.key.outputs.have_key == '1'
+        run: npx vitest run src/data/secondaryTeachings.test.ts
+
+      - name: Commit the corpus (never the transcripts)
+        if: steps.key.outputs.have_key == '1'
+        run: |
+          git config user.email noreply@anthropic.com
+          git config user.name Claude
+          # ONLY the shipped JSON. data/sources/** is gitignored and stays that
+          # way — the raw transcripts must never enter the repo.
+          git add public/data/*-teachings.json src/data/*-teachings.json 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "no corpus change this run"; exit 0
+          fi
+          COUNT=$(node -e "
+            const f='public/data/${{ github.event.inputs.creator || 'saintlouis' }}-teachings.json';
+            try { console.log(JSON.parse(require('fs').readFileSync(f,'utf8')).notes.length) } catch { console.log('?') }")
+          git commit -m "feat(corpus): farm ${{ github.event.inputs.creator || 'saintlouis' }} — ${COUNT} notes"
+          git pull --rebase origin main
+          git push origin HEAD:main
