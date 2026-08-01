@@ -268,4 +268,28 @@ export const GAMBIT_GEM_NARRATION: Record<string, GambitGemNarration> = {
     watch: ['', '', '', '', '', '', 'f4 hangs on to the extra pawn, but it empties f2 — and the whole a7-g1 diagonal now runs straight at the white king.', '…Bc5! Onto that diagonal at once. With f2 gone and nothing on e3 or d4, White has to spend a move just to block it.', 'e3 is forced to shut the diagonal, and it buries the bishop on c1 behind its own pawns.', '…d6 undermines the e5-pawn. The thing White grabbed is now the thing White has to defend.', '', '', '', '…dxe5 — the pawn comes back, and Black has the better structure and the freer pieces for it.', ''],
     learn: ['', '', '', '', '', '', '', '…Bc5 — onto the open diagonal', '', '…d6 — undermine e5', '', '', '', '…dxe5 — pawn back, better game', ''],
   },
+  // Scotch Gambit: 5.O-O and …h6 (52,262 games) is a wasted tempo in a line where
+  // White paid a pawn for exactly that time. c3! recovers it and cxd4 builds the
+  // ideal e4+d4 centre with tempo on the c5-bishop.
+  'scotch-gambit:e4_e5_Nf3_Nc6_d4_exd4_Bc4_Bc5_O-O:h6': {
+    sources: ["concept:pos-initiative", "concept:pos-center", "https://en.wikipedia.org/wiki/Scotch_Game"],
+    watch: ['', '', '', '', '', '', '', '', '', '…h6 is a useful-looking little move, but this is a gambit — White paid a pawn for time, and a free tempo is exactly the currency Black cannot afford to hand back.', 'c3! No tricks needed. White just asks for the pawn back, and taking on d4 will hit the bishop on c5 as well.', '', 'cxd4 — and there it is: pawns on e4 and d4, the ideal centre, obtained for free because Black spent a move on the edge.', '', '', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', 'c3 — claim the pawn back', '', 'cxd4 — the full centre, free', '', '', '', '', ''],
+  },
+  // Kieseritzky: after Nxg4, …Bxg4 (29.3%, 35,599 games) removes Black's own
+  // light-square defender. Qxg4 recaptures onto a wide-open board with the black
+  // king already stripped of its pawn cover.
+  'gambit-kings-gambit:e4_e5_f4_exf4_Nf3_g5_h4_g4_Ne5_d6_Nxg4:Bxg4': {
+    sources: ["concept:pos-king-safety", "concept:pos-initiative", "https://en.wikipedia.org/wiki/King%27s_Gambit"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', "…Bxg4 wins the piece back, but it trades away the one piece guarding the light squares around Black's king.", "Qxg4 recaptures and the queen arrives on an open board. Black's kingside pawns are gone and the king has nowhere to hide.", '', 'Bb5 develops with a threat — every white piece comes out hitting something while Black is still untangling.', '', '', '', "Qf5 plants the queen in the middle of Black's position. The extra pawn on f4 is small comfort with a king this exposed.", ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', 'Qxg4 — recapture, queen active', '', 'Bb5 — develop with a threat', '', '', '', 'Qf5 — the queen moves in', ''],
+  },
+  // KGD: …Bg4 pins the f3-knight, but fxe5! shows the pin is an illusion — White
+  // is happy to give the knight to open the f-file, and after Qxf3 the queen
+  // stares at f7 with the bishop pair thrown in.
+  'gambit-kings-gambit:e4_e5_f4_Bc5_Nf3_d6_Nc3_Nf6_Bc4:Bg4': {
+    sources: ["concept:tac-pin", "concept:pos-initiative", "https://en.wikipedia.org/wiki/King%27s_Gambit"],
+    watch: ['', '', '', '', '', '', '', '', '', '…Bg4 pins the knight to the queen — but a pin only bites if the pinned piece has to stay.', 'fxe5! Ignore it. The f-file rips open and the pawn hits d6; the pin was never really a pin.', '', 'Qxf3 recaptures, and look where the queen lands — straight down the open f-file at f7.', '', 'Nd5 jumps into the hole. White has the bishop pair, the open file and the better king; the pin cost Black the initiative.', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', 'fxe5 — the pin was an illusion', '', 'Qxf3 — queen onto the open f-file', '', 'Nd5 — into the hole', '', '', ''],
+  },
 };
