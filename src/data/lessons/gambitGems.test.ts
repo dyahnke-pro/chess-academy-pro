@@ -47,6 +47,10 @@ describe('gambit punish-gems (separate lane)', () => {
     }
   });
 
+  // 30s, not the 5s default: this builds a playable line for EVERY gem, and each
+  // one now replays its extended play-out through chess.js and composes
+  // board-true narration for the demonstration tail. The cost grows with the
+  // gem set, so the budget has to as well — the assertions are unchanged.
   it('each gambit opening surfaces exactly its OWN narrated weapons, and they build playable lines', () => {
     // Per-opening (not a single hardcoded KG count): for every opening, the
     // surfaced set must equal the gems whose gemId has a narration entry.
@@ -73,5 +77,5 @@ describe('gambit punish-gems (separate lane)', () => {
     // Every narration key maps to a surfaced gem (none keyed to a dropped /
     // non-weapon gem).
     expect(surfacedTotal).toBe(narratedIds.size);
-  });
+  }, 30000);
 });

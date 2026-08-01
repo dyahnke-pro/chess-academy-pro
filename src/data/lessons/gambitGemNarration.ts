@@ -340,4 +340,28 @@ export const GAMBIT_GEM_NARRATION: Record<string, GambitGemNarration> = {
     watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'h3 shoos the knight away — but that knight has been aiming at e5 since move three, and shooing it is exactly what it wants.', '…Ngxe5! It simply takes the gambit pawn, and lands hitting the knight on f3 into the bargain.', '', '', "Trading on e5 hands Black a broad pawn front and opens the f-file straight at White's king.", "…fxe5 — the pawn is back, the file is open, and White's h3 turned out to be a wasted move in a position that needed development.", '', '', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…Ngxe5 — take it, with tempo', '', '', '', '…fxe5 — pawn back, file open', '', '', ''],
   },
+  // Albin: with …Bg4 already pinning f3, Bd3 steps onto the square the knight
+  // covers. …Nxe5 regains the pawn hitting the bishop; White's queen shuffles
+  // out and back and the king loses castling.
+  'albin-countergambit:d4_d5_c4_e5_dxe5_d4_e4_Nc6_Nf3_Bg4:Bd3': {
+    sources: ["concept:tac-pin", "concept:pos-initiative", "https://en.wikipedia.org/wiki/Albin_Countergambit"],
+    watch: ['', '', '', '', '', '', '', '', '', '', "Bd3 develops onto the one square Black's knight already covers — and with the bishop on g4 pinning the f3-knight, there is no time to fix it.", '…Nxe5! The gambit pawn comes back and the knight lands hitting the bishop on d3, while f3 is still pinned.', '', '', 'Qd1 — all the way home. White has spent two queen moves to end up where the queen started.', '', "Kf1 — and the king loses castling. Black is level on material with every piece working and White's still untangling.", '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '…Nxe5 — pawn back, hits d3', '', '', '', '', 'Kf1 — no castling for White', '', ''],
+  },
+  // Smith-Morra: …b5 loosens the queenside with the king still central. Bxb5!
+  // takes, because …axb5 Nxb5 threatens the c7 fork on king and rook; Bxc6 then
+  // squares material and Rc1 owns the file.
+  'smith-morra-gambit:e4_c5_d4_cxd4_c3_dxc3_Nxc3_Nc6_Nf3_e6_Bc4_a6_O-O_Nge7_Bg5_h6_Bh4:b5': {
+    sources: ["concept:tac-fork", "concept:pos-initiative", "https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', "…b5 shoves at the bishop, but it loosens the whole queenside while Black's king is still sitting in the centre.", 'Bxb5! Just take it. If Black recaptures, Nxb5 arrives threatening the knight fork on c7 — king and rook at once.', '', "Bxc6 removes the defender and straightens the material out; Black's structure is the thing that is left broken.", '', '', '', 'Rc1 — the open c-file, pointing at everything Black weakened. This is the Morra doing exactly what it is for.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Bxb5 — take it; Nxb5 forks c7', '', '', '', '', '', 'Rc1 — the c-file does the rest', ''],
+  },
+  // Bishop's Gambit: …Be7 develops but blocks the queen's retreat and cedes the
+  // centre. e5! opens it with the black king still there; Nd5 forks c7 and e7,
+  // Bb5+ costs castling, and Nxf4 takes the gambit pawn back.
+  'gambit-kings-gambit:e4_e5_f4_exf4_Bc4_Qh4+_Kf1_d6_Nf3_Qh5_d4_Nf6_Nc3:Be7': {
+    sources: ["concept:pos-king-safety", "concept:pos-center", "https://en.wikipedia.org/wiki/King%27s_Gambit"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', "…Be7 is a developing move that solves nothing — it blocks the queen's road home and leaves the centre to White.", "e5! Kick the knight and rip the centre open while Black's king is still in it.", '', 'Nd5 lands in the hole, hitting c7 and the bishop on e7 at the same time.', '', 'Bb5+ drags the king to d8 — castling gone for good.', '', 'Nxf4 finally collects the gambit pawn. White has the centre, the initiative, and a black king stranded on d8.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', "e5 — open it while he's central", '', 'Nd5 — hits c7 and e7', '', '', '', 'Nxf4 — the pawn, and the game', ''],
+  },
 };
