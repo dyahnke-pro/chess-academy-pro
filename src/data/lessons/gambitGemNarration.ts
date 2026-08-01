@@ -252,4 +252,20 @@ export const GAMBIT_GEM_NARRATION: Record<string, GambitGemNarration> = {
     watch: ['', '', '', '', '', '', '', '', '', '', '', '…Kf8 declines the bishop. But the sacrifice has already done its work — the king has lost castling either way, and now Black is simply a pawn down with the bishop still sitting on f7.', 'Nxc3! No rush to save the bishop. White takes the gambit pawn back and finishes developing; the bishop on f7 is not going anywhere.', '', 'Qd5+ forces the king back, and it is the loose bishop on c5 that pays for it.', '', "Qxc5+ takes the bishop with check. White is a clear piece up with Black's king stranded in the centre of its own back rank.", '', '', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', 'Nxc3 — take the pawn, keep the bishop', '', 'Qd5+ — check, then win c5', '', 'Qxc5+ — the bishop, with check', '', '', ''],
   },
+  // Bishop's Gambit: after Kf1, …Bc5 is the 36.9% try (124,564 games). d4! hits
+  // the bishop AND takes the centre; Nf3 then chases the queen home, and Bxf4
+  // recovers the gambit pawn with White far ahead in development.
+  'gambit-kings-gambit:e4_e5_f4_exf4_Bc4_Qh4+_Kf1:Bc5': {
+    sources: ["concept:pos-initiative", "concept:pos-king-safety", "https://en.wikipedia.org/wiki/King%27s_Gambit"],
+    watch: ['', '', '', '', '', '', '', '…Bc5 eyes the soft f2-g1 corner, but the bishop is standing on a square White wants to hit with tempo.', "d4! Gain the tempo and build the centre in one move. The bishop has to move again, and White's pawns take over the middle.", '', 'Nf3 asks the queen the same question. She has been the only black piece in play, and now she is the one losing time.', '…Qd8 — all the way home. Three queen moves for nothing, and White has the centre and the development.', 'Bxf4 finally collects the gambit pawn back. Material is level, but only White has a game.', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', 'd4 — tempo and the centre', '', 'Nf3 — kick the queen', '', 'Bxf4 — the pawn comes back', '', '', ''],
+  },
+  // Budapest: 4.f4 is the greedy hold (156,799 games) and it empties f2, opening
+  // the a7-g1 diagonal at White's own king. …Bc5! forces e3, which entombs the
+  // c1-bishop; …d6 then wins the grabbed pawn straight back.
+  'gambit-budapest-gambit:d4_Nf6_c4_e5_dxe5_Ng4:f4': {
+    sources: ["concept:pos-king-safety", "concept:pos-initiative", "https://en.wikipedia.org/wiki/Budapest_Gambit"],
+    watch: ['', '', '', '', '', '', 'f4 hangs on to the extra pawn, but it empties f2 — and the whole a7-g1 diagonal now runs straight at the white king.', '…Bc5! Onto that diagonal at once. With f2 gone and nothing on e3 or d4, White has to spend a move just to block it.', 'e3 is forced to shut the diagonal, and it buries the bishop on c1 behind its own pawns.', '…d6 undermines the e5-pawn. The thing White grabbed is now the thing White has to defend.', '', '', '', '…dxe5 — the pawn comes back, and Black has the better structure and the freer pieces for it.', ''],
+    learn: ['', '', '', '', '', '', '', '…Bc5 — onto the open diagonal', '', '…d6 — undermine e5', '', '', '', '…dxe5 — pawn back, better game', ''],
+  },
 };
