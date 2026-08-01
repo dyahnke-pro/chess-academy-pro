@@ -46,8 +46,9 @@
     "playLine": "e4 e5 f4 exf4 Bc4 Qh4+ Kf1 d6 Nf3 Qh5 d4 Nc6 Nc3 Nf6 Bxf4 Bg4 Be2 O-O-O h3 d5",
     "engineCp": 55,
     "materialDelta": 0,
-    "tier": "positional",
-    "why": "At your level opponents play Nc6 here in 4% of games. Punish with the best move Nc3 — the engine has White clearly better (+0.6)."
+    "tier": "weak",
+    "why": "At your level opponents play Nc6 here in 4% of games. Punish with the best move Nc3 — the engine has White clearly better (+0.6).",
+    "demotedReason": "no material or mate at the quiet terminus"
   },
   {
     "openingId": "gambit-kings-gambit",

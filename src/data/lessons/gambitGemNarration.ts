@@ -187,4 +187,26 @@ export const GAMBIT_GEM_NARRATION: Record<string, GambitGemNarration> = {
     learn: ['', '', '', '', '', '', '', '', '',
       '\u2026d6 \u2014 hit the pawn she guards', '', '\u2026dxe5 \u2014 pawn back, freer game', '', '', '', '', ''],
   },
+  // Smith-Morra: 5...e5?! grabs the centre but leaves d5 soft and f7 unguarded.
+  // Bc4 and Qb3 both land on the a2-g8 diagonal; ...d5 only blocks it for one
+  // move, and after Bxd5 the f7-square is still the target. Verified move by
+  // move against the board.
+  'smith-morra-gambit:e4_c5_d4_cxd4_c3_dxc3_Nxc3:e5': {
+    sources: ['concept:tac-fork', 'concept:pos-weak-squares', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
+    watch: ['', '', '', '', '', '', '',
+      '\u2026e5 takes the centre, but the pawn on c5 has already left d5 behind \u2014 and with it, the diagonal running at f7.',
+      'Bc4! The bishop takes the open diagonal the moment it appears. It is pointed straight at f7, the one square the king alone defends.',
+      '',
+      'Qb3! A second piece onto the same diagonal. Two attackers on f7, and only the king defending it.',
+      '',
+      'Bxd5 \u2014 the block is removed and the bishop is back on the diagonal, still staring at f7.',
+      '',
+      'Bxf7+! The bishop takes with check, so the knight lunging at the queen never gets its turn.',
+      'The king has to step up to e7. It is a pawn and the right to castle, and the king is standing in the open with the position still to be played.'],
+    learn: ['', '', '', '', '', '', '', '',
+      'Bc4 \u2014 take aim at f7', '',
+      'Qb3 \u2014 second attacker on f7', '',
+      'Bxd5 \u2014 still hitting f7', '',
+      'Bxf7+ \u2014 take with check', ''],
+  },
 };
