@@ -526,6 +526,19 @@ async function distillOne(videoId, meta, { dry, concurrency, dbLines, dbNames })
   };
   if (dry) return { videoId, title: meta.title, stats, notes: [] };
 
+  // NOTHING TO ANCHOR TO — skip before spending a single token (2026-08-01).
+  // `merge-corpus` DROPS any note with neither a position key nor an opening
+  // name (empty > invented), so for a video with no title/hint opening AND no
+  // positioned chunk, every model call would be paid for and then discarded.
+  // Both facts are known here, before the first call. Measured on the Saint
+  // Louis farm, where the lecture titles are thematic rather than named
+  // ("Calculate & Evaluate Like a Grandmaster"): 41.6% of 1,715 titles name no
+  // opening, against 12.6% for Hanging Pawns. This writes the usual per-video
+  // file so the skip is durable and never re-attempted.
+  if (!stampedOpening && withPos === 0) {
+    return { videoId, playlist: meta.playlist, title: meta.title, distilledAt: new Date().toISOString(), skipped: 'unanchored', stats: { ...stats, notes: 0, positioned: 0, dropped: { overlap: 0, empty: 0, dupe: 0 } }, notes: [] };
+  }
+
   const overlaps = makeOverlapGate(text);
   // A SILENT NO-OP IS A FAILURE, NOT A ZERO (CLAUDE.md). The first real run
   // returned "0 notes" and exit 0 while EVERY chunk call was 401-ing on a dead
@@ -644,7 +657,7 @@ async function main() {
   }
   console.log(`[distill-v2] ${queue.length} video(s) to process${dry ? ' (DRY — tracker only, no model calls)' : ''}`);
 
-  let ok = 0; let fail = 0; let totalNotes = 0; let totalPositioned = 0;
+  let ok = 0; let fail = 0; let skipped = 0; let totalNotes = 0; let totalPositioned = 0;
   for (const v of queue.slice(0, limit)) {
     try {
       const out = await distillOne(v.id, v, { dry, concurrency, dbLines, dbNames });
@@ -653,17 +666,24 @@ async function main() {
       totalNotes += out.notes.length;
       totalPositioned += out.notes.filter((n) => n.lineSan.length > 0).length;
       const s = out.stats;
+      // A SKIP must not read as an empty distillation — "notes 0" repeated
+      // hundreds of times is exactly the silent-no-op this file warns about.
+      if (out.skipped) {
+        skipped += 1;
+        console.log(`[distill-v2] ${v.id} — SKIPPED (unanchored: no opening in the title, no positioned chunk) · no tokens spent`);
+      } else {
       console.log(
         `[distill-v2] ${v.id} ✓ ${s.alignedLine ? `aligned "${s.alignedLine}" (${s.alignedPlies}p, ${s.movesMatched} matched, cov ${s.coverage})` : 'NO DB ALIGNMENT — opening-name keying only'} · ` +
         `chunks ${s.chunksWithPosition}/${s.chunks} positioned` +
         (dry ? '' : ` · notes ${out.notes.length} (${out.notes.filter((n) => n.lineSan.length > 0).length} positioned)`),
       );
+      }
     } catch (e) {
       fail += 1;
       console.error(`[distill-v2] ${v.id} ✗ ${String(e).split('\n')[0].slice(0, 150)}`);
     }
   }
-  console.log(`\n[distill-v2] ok=${ok} fail=${fail}` + (dry ? '' : ` notes=${totalNotes} positioned=${totalPositioned} (${totalNotes ? ((100 * totalPositioned) / totalNotes).toFixed(1) : '0'}%)`));
+  console.log(`\n[distill-v2] ok=${ok} skipped=${skipped} fail=${fail}` + (dry ? '' : ` notes=${totalNotes} positioned=${totalPositioned} (${totalNotes ? ((100 * totalPositioned) / totalNotes).toFixed(1) : '0'}%)`));
   if (!dry && ok > 0) console.log(`[distill-v2] mean notes/video = ${(totalNotes / ok).toFixed(1)}  (v1 baseline: 10.8, 18% positioned)`);
 }
 
