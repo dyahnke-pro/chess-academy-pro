@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-07-31T11:20:59.910Z",
+ "generatedAt": "2026-08-01T16:31:31.098Z",
  "narrations": {
   "latvian gambit": {
    "openingName": "Latvian Gambit",
@@ -1006,53 +1006,53 @@
     "yt:d6tZXETpqT0"
    ],
    "studentSide": "white",
-   "intro": "This line is all about the fight for the center. White's d4 and c4 pawns are like a battering ram, and Black's c6 and e6 are the walls holding them back. Our job is to build a solid center, develop our pieces to their best squares, and keep the pressure on Black's position. Every move we make should either reinforce our center or bring a piece closer to the action.",
-   "shortIntro": "White builds a rock-solid center and develops with purpose.",
-   "outro": "So there we have it—a classic Queen's Gambit Declined setup. We've built a center, developed our pieces, and put pressure on Black's position. The battle is just beginning, but we've laid the groundwork for a strong middlegame.",
+   "intro": "This opening is all about the fight for the center. White's first moves stake a claim to d4 and c4, while Black's responses shore up d5. The tension will soon come to a head, and the side that understands the pawn structure will come out ahead.",
+   "shortIntro": "The battle for the center begins.",
+   "outro": "With Nf3, White completes the first stage of development, keeping the pressure on Black's center. The stage is set for a classic middlegame struggle.",
    "ideas": [
     {
-     "text": "d4 stakes our claim in the center. We're saying, 'I want to control these central squares,' and it sets up the whole game. Black has to respond or risk being overrun.",
-     "shortText": "d4 grabs central space and sets the pace."
+     "text": "We start with d4, claiming a share of the center and opening lines for the queen and bishop. This is the first step in a battle for central space.",
+     "shortText": "d4 stakes our claim in the center."
     },
     {
-     "text": "d5 is Black's most solid reply, challenging our pawn head-on. They're saying, 'You can have d4, but I'll take d5.' This is the start of a classic central fight.",
-     "shortText": "Black contests the center with d5."
+     "text": "Black answers with d5, challenging our central pawn. This is the classic Queen's Gambit Declined setup, where Black solidifies the center and prepares to develop.",
+     "shortText": "Black's d5 solidifies the center."
     },
     {
-     "text": "c4 is the Queen's Gambit. We offer a pawn to lure Black's pawn away from the center. If they take, we can recapture with our knight and build a strong center. If they don't, we've gained space and a target.",
-     "shortText": "c4 offers a pawn to undermine Black's center."
+     "text": "We offer the gambit with c4, inviting Black to take on c4 and surrender the center. If Black accepts, we can recapture with the pawn and build a strong center. If Black declines, we maintain the tension and develop naturally.",
+     "shortText": "c4 offers the gambit, testing Black's center."
     },
     {
-     "text": "c6 is the Slav defense—Black bolsters d5 and keeps the center solid. They're not falling for our gambit; they're building a wall. Now we need to develop and find ways to pressure that wall.",
-     "shortText": "Black reinforces d5 with c6."
+     "text": "Black chooses the Slav Defense with c6, supporting d5 and preparing to develop the light-squared bishop. This is a solid choice that keeps the center closed and avoids the main lines of the Queen's Gambit Declined.",
+     "shortText": "c6 supports d5, keeping the center solid."
     },
     {
-     "text": "Nf3 develops the knight to its best square, eyeing e5 and supporting our center. It's a natural developing move that also prepares to castle quickly.",
+     "text": "We develop the knight to f3, preparing to castle and keeping pressure on d4. This is a natural developing move that also eyes e5, a key central square.",
      "shortText": "Nf3 develops and eyes e5."
     },
     {
-     "text": "Nf6 develops the knight to its most natural square, attacking e4 and preparing to castle. It also keeps the center solid, as Black is not yet ready to strike.",
-     "shortText": "Nf6 develops and eyes e4."
+     "text": "Nf6 develops the knight and puts immediate pressure on the d4 pawn, but more importantly, it prepares to unpin the c-pawn. If White ever takes on d5, we'll be ready to recapture with the knight, keeping the center solid.",
+     "shortText": "Nf6 develops and eyes d4, ready to recapture on d5."
     },
     {
-     "text": "Nc3 develops the last minor piece toward the centre and takes the e4 square away from Black for good. It also adds a third attacker to d5, so the pawn Black has spent two moves propping up is now the busiest point on the board.",
-     "shortText": "Nc3 — develop, and clamp on d5."
+     "text": "Nc3 is the natural developing move, but notice it also reinforces the d4 pawn. With our knight on f6, White can't easily push e4 without allowing a trade, so the center remains stable while we finish development.",
+     "shortText": "Nc3 bolsters d4 and prepares to develop the kingside."
     },
     {
-     "text": "e6 is Black's way of completing their pawn chain. Now they have a solid wall from c6 to e6, but it also blocks in their light-squared bishop. That's a long-term problem for them—we'll see it later.",
-     "shortText": "Black completes the pawn chain with e6."
+     "text": "e6 is the classic QGD move, but here it has a specific point: it prepares to develop the bishop to e7, which will break the pin on our f6 knight. It also keeps the d5 pawn solid, making it hard for White to create any central breakthrough.",
+     "shortText": "e6 readies the bishop to unpin and keeps d5 strong."
     },
     {
-     "text": "Bg5 is a pin! We're pinning the knight on f6 to the queen on d8. This puts pressure on Black's position and prevents them from developing freely. They'll have to deal with this pin before they can castle.",
-     "shortText": "Bg5 pins the knight and creates pressure."
+     "text": "Bg5 is the most testing move — it pins our knight to the queen, threatening to win the d5 pawn. But notice that our e6 move has already prepared the unpin: we'll play Be7 next, and the pin will be neutralized. The bishop on g5 also becomes a target if we can later play h6.",
+     "shortText": "Bg5 pins the knight, but e6 prepares the unpin with Be7."
     },
     {
-     "text": "Nbd7 is Black's way of unpinning. They develop another knight and prepare to castle. But notice their light-squared bishop is still stuck on c8—that's a problem they'll have to solve later.",
-     "shortText": "Black develops and prepares to castle."
+     "text": "Nbd7 is a flexible developing move that keeps our options open. It prepares to bring the knight to f8 or e4 later, and it also supports the e5 square if we want to challenge the center. More importantly, it doesn't block the bishop's path to e7, so we're ready to unpin next move.",
+     "shortText": "Nbd7 develops and keeps the bishop's path to e7 open."
     },
     {
-     "text": "e3 solidifies the center and opens the diagonal for the bishop on f1, completing White's development. Now White is ready to castle and continue the fight.",
-     "shortText": "e3 solidifies and readies development."
+     "text": "With e3, we finally give our dark-squared bishop a path out, but more importantly, we're saying to Black: 'I've got a solid centre, my pieces are coming out, and I'm not scared of your setup.' This move shores up the d4 pawn, which is the heart of our position, and prepares to bring the bishop to e2 or d3, completing our development. It's the calm before the storm — we've built a fortress, and now we're ready to see what Black's plan really is.",
+     "shortText": "e3 solidifies the centre and frees our bishop, completing our setup."
     }
    ]
   },
@@ -1074,29 +1074,29 @@
     "yt:Ybg_2qbKXdA"
    ],
    "studentSide": "white",
-   "intro": "This is the Rapport-Jobava System, an opening that looks like a quiet London but hides a venomous attacking setup. The whole line is about one thing: White's knight on c3 and bishop on f4 create immediate pressure on d5 and c7, setting up tactical tricks and a kingside pawn storm. Black must be precise from the very first moves, or White's initiative becomes overwhelming.",
-   "shortIntro": "The Rapport-Jobava: a quiet-looking London with hidden venom.",
-   "outro": "With the bishop on f4, White has completed the Jobava setup. The knight on c3 and bishop on f4 eye d5 and c7, and Black already has to watch for tricks like Nb5. This is the starting point for White's aggressive plans: a quick e3, Nf3, and then the deadly g4-h4 pawn storm. The opening is a practical weapon that often catches opponents off guard.",
+   "intro": "This opening is built on a single tension: White deliberately breaks the classic rule of not blocking the c-pawn, and in doing so creates a uniquely aggressive setup. The knight on c3 isn't just developing—it's a springboard for tactical ideas like Nb5, and the whole system is designed to put immediate pressure on Black's center and king. Every move here serves that story.",
+   "shortIntro": "White breaks the rules to build a venomous, attacking setup.",
+   "outro": "With the bishop on f4, the Jabava London is fully formed. The knight on c3 and bishop on f4 combine to pressure d5 and prepare the central break e4 or the tactical Nb5. Black already has to be careful not to stumble into one of the many traps this setup conceals.",
    "ideas": [
     {
-     "text": "We start with d4, claiming the center and opening lines for the queen and bishop. This is the foundation of every queen-pawn opening, but in the Jobava, we're about to take a different path than the usual London.",
-     "shortText": "d4 claims the center and sets up our queen-pawn structure."
+     "text": "We start with d4, claiming the center and setting the stage for a London-style setup. But notice the difference from the traditional London: we're not going to play c4 to support this pawn. Instead, we'll use our pieces to pressure the center, and the knight is about to take a very un-London-like post.",
+     "shortText": "d4 claims the center, but we're not playing the usual c4 support."
     },
     {
-     "text": "Black answers with d5, staking their own claim in the center. This is the most common response, and it's exactly what we want—now the battle lines are drawn around this pawn.",
-     "shortText": "Black's d5 solidifies the center—now we can target it."
+     "text": "Black answers with d5, grabbing their share of the center. This is the most common response, and it's exactly what we want. Now the pawn on d5 becomes a fixed target—something our pieces can pressure, and something that will make Black's position cramped if we can keep it under control.",
+     "shortText": "d5 gives us a fixed target in the center."
     },
     {
-     "text": "Nc3 is the key move that defines the Jobava. It violates the usual London principle of not blocking the c-pawn, but it does two jobs: it puts immediate pressure on d5, and it prepares the knight to jump to b5, attacking c7. This is the move that makes the opening aggressive and tricky.",
-     "shortText": "Nc3 pressures d5 and prepares the deadly Nb5."
+     "text": "Here's the move that defines this opening: Nc3. In most d4 openings, you'd never block your c-pawn, because that pawn is the engine of central expansion. But here, we're deliberately breaking that rule. The knight on c3 does two jobs: it pressures d5, and it prepares the tactical idea Nb5, which can be devastating if Black isn't careful. This is the move that makes the Jabava London different from a passive London.",
+     "shortText": "Nc3 breaks the rules to pressure d5 and prepare Nb5."
     },
     {
-     "text": "Black develops the knight to f6, a natural move that defends d5 and prepares to castle. But in the Jobava, this knight can become a target for our pawn storm later. For now, we continue our setup.",
-     "shortText": "Nf6 is natural, but it'll be a target for our kingside attack."
+     "text": "Black develops the knight to f6, attacking our pawn on d4 and reinforcing their control of the center. This is a natural move, but it also gives us a target. The knight on f6 is now a piece we can potentially pin or harass with our bishop, and it's one of the reasons our next move is so effective.",
+     "shortText": "Nf6 develops and attacks d4, but also gives us a target."
     },
     {
-     "text": "Bf4 completes the Jobava setup. The bishop develops to a strong square, eyeing the c7 pawn and supporting the knight's future jump to b5. Now we have a harmonious, aggressive setup that can quickly turn into a kingside pawn storm with g4 and h4. Black already has to be careful—moves like Nc6 or Nbd7 can run into Nb5 and win the c7 pawn.",
-     "shortText": "Bf4 finishes the setup, eyeing c7 and preparing the attack."
+     "text": "Bf4 completes the Jabava London setup. The bishop takes up a strong post, eyeing the h2-b8 diagonal and putting pressure on d6 and the knight on f6. Now our pieces are all working together: the knight on c3 pressures d5, the bishop on f4 pressures the kingside, and we're ready to castle and launch an attack. Black already has to be careful—moves like Nc6 or Nbd7 can run into the tactical Nb5, and the position is full of venom.",
+     "shortText": "Bf4 completes the setup, ready to attack."
     }
    ]
   },
@@ -1117,41 +1117,41 @@
     "yt:_4xbS0Crtic"
    ],
    "studentSide": "black",
-   "intro": "This is the Stafford Gambit, a spicy weapon for Black that dares White to take on e5 and then punishes greed with a relentless attack against the king. The whole story is about creating chaos and exploiting White's weakened kingside before they can consolidate. Let's see how it unfolds.",
-   "shortIntro": "The Stafford Gambit: dare White to take on e5, then strike.",
-   "outro": "And that's the Stafford Gambit in a nutshell: you sacrifice a pawn, but in return you get a lead in development, open lines, and a king that's stuck in the center. If White doesn't know the refutation, they can easily get overwhelmed. It's a fun opening to have in your back pocket, but remember, it's a weapon for surprise, not a long-term strategy.",
+   "intro": "The Stafford Gambit is all about creating chaos before White can consolidate. We sacrifice a pawn to open lines and target f2, banking on White's king getting stuck in the center. Every move we make is about speed and threats—if White gets to castle, our initiative fizzles out.",
+   "shortIntro": "We sacrifice a pawn to attack White's king before he can castle.",
+   "outro": "We've won the queen and have a winning material advantage. The game is effectively over—now it's just about converting efficiently and avoiding any silly tricks.",
    "ideas": [
     {
-     "text": "White opens with e4, the most ambitious first move, claiming the centre and opening lines for the queen and bishop. That suits us perfectly: the Stafford only exists against an e4 player who likes to grab material.",
-     "shortText": "White opens e4 — exactly the player we want."
+     "text": "White opens with e4, and we answer with e5, claiming our share of the center. This is the start of a fight for the dark squares, especially the f2 square, which is going to become the target of our whole opening. We're setting up to play the Stafford Gambit, where we'll offer a pawn to rip open White's king position.",
+     "shortText": "We meet e4 with e5, eyeing the f2 square."
     },
     {
-     "text": "e5 answers symmetrically, keeping the balance. We're not afraid of the main lines; we have a special surprise in store if White goes for the knight.",
-     "shortText": "e5 keeps the center balanced, ready for the gambit."
+     "text": "White brings out the knight to f3, attacking our e5 pawn. This is the invitation we're hoping for—now we can lure him into the Stafford Gambit.",
+     "shortText": "White attacks our pawn with Nf3."
     },
     {
-     "text": "Nf3 is the critical test. White develops and attacks our e5 pawn, and if they take it, we'll unleash the Stafford Gambit. This is exactly what we're hoping for.",
-     "shortText": "Nf3 attacks e5, inviting the Stafford Gambit."
+     "text": "Nf3 — White develops the knight and attacks our e5 pawn. This is exactly what we want: it gives us the chance to play the Stafford Gambit, where we'll let White take the pawn and then strike back with Nf6, hitting that knight and starting our attack.",
+     "shortText": "Nf3 attacks e5, inviting our gambit."
     },
     {
-     "text": "Nf6 is the key move of the gambit. We ignore the attack on e5 and instead develop and counterattack White's e4 pawn. This is the moment where we offer the pawn sacrifice, banking on the initiative we'll get in return.",
-     "shortText": "Nf6 ignores the pawn, counterattacking e4 and offering the gambit."
+     "text": "Nf6 — we develop the knight and counterattack White's e4 pawn. Now if White takes our e5 pawn, we'll have a powerful initiative: our pieces will come out with tempo, and White's king will be stuck in the center. This is the heart of the Stafford — we're not afraid to give up a pawn for a raging attack.",
+     "shortText": "Nf6 hits e4, ready to gambit."
     },
     {
-     "text": "Nxe5 is White taking the bait. They grab the pawn, but this is exactly what we want. Now we can start our attack with Nc6, hitting the knight and gaining time.",
-     "shortText": "Nxe5 accepts the gambit, walking into our trap."
+     "text": "We play Nc6, developing with tempo and attacking White's knight on e5. This forces White to deal with the threat, and we're already ahead in development—the Stafford is in full swing.",
+     "shortText": "We develop with tempo, attacking the knight."
     },
     {
-     "text": "Nc6 develops with tempo, attacking the knight on e5. We're not just developing; we're forcing White to deal with our threats, and we're building up pressure on the center and the f2 square.",
-     "shortText": "Nc6 attacks the knight, gaining time and building pressure."
+     "text": "Nc6 — Black develops with a purpose: this knight immediately challenges the intruder on e5, and if White takes it, we recapture with the d-pawn, opening lines for our queen and bishop while keeping the initiative. The point is to make White's extra pawn a liability, not an asset.",
+     "shortText": "Nc6 challenges the knight and prepares to open lines."
     },
     {
-     "text": "Nxc6 is White's best try, but it's not enough. They trade the knight, but it opens up the b-file and gives us a chance to recapture with the pawn, creating a strong pawn center and open lines for our pieces.",
-     "shortText": "Nxc6 trades knights, but we get a strong pawn center."
+     "text": "Nxc6 — White takes the knight, but this is exactly what we want. By capturing with our d-pawn next, we'll have a central pawn majority and open the d-file for our rook, while White's king remains exposed. The knight on c6 was a temporary visitor; now we convert it into long-term pressure.",
+     "shortText": "Nxc6 is welcomed — we recapture with the d-pawn."
     },
     {
-     "text": "dxc6 recaptures with the pawn, and now we have a beautiful pawn duo in the center. More importantly, we have a lead in development and open lines for our bishop to go to c5, targeting f2. The gambit is fully justified – we have full compensation for the pawn.",
-     "shortText": "dxc6 recaptures, giving us a strong center and open lines."
+     "text": "dxc6 — Now we recapture with the pawn, and look at the position: our queen and bishop are ready to target f2, the d-file is half-open for our rook, and White's king is still stuck in the center. The pawn on c6 also cramps White's queenside. This is the Stafford Gambit's core idea — we've traded a pawn for a lasting initiative.",
+     "shortText": "dxc6 opens lines and keeps the initiative alive."
     }
    ]
   },
@@ -1167,28 +1167,28 @@
     "yt:ecbOBKL_hos"
    ],
    "studentSide": "white",
-   "intro": "The Closed Sicilian is all about choosing your battleground. With Nc3, White avoids the heavy theory of the Open Sicilian and keeps the game in structures where understanding plans matters more than memorizing lines. The tension here is between White's desire to build a kingside attack and Black's flexibility to steer the game into familiar territory.",
-   "shortIntro": "White sidesteps Open Sicilian theory with Nc3, keeping the game in strategic channels.",
-   "outro": "With Nc3, White has set the stage for the Closed Sicilian. The battle will be about space and piece placement, not just opening traps. Black's next move will determine whether we get a Grand Prix or a Closed setup, but our knight is ready for either.",
+   "intro": "This line is about choosing your battleground. Black plays the Sicilian, and instead of diving into the open main lines, we steer into the Closed Sicilian with Nc3. The story here is about controlling the center and preparing a kingside attack, while Black tries to find counterplay on the queenside or in the center. Every move we make builds toward that central tension.",
+   "shortIntro": "We choose the Closed Sicilian with Nc3, setting up a central and kingside battle.",
+   "outro": "With Nc3, we've set the stage for a closed, maneuvering battle. The center is braced, and we're ready to expand on the kingside with f4 or g3, while Black will try to undermine our center with ...d5 or ...e5. The tension is set — now it's about who breaks first.",
    "ideas": [
     {
-     "text": "e4 stakes a claim in the center and opens lines for the bishop and queen. It's the move that defines the Sicilian — Black's c5 will immediately challenge this pawn, and the fight for the d4-square begins.",
-     "shortText": "e4 claims central space and starts the fight for d4."
+     "text": "We start with e4, claiming our share of the center and opening lines for the bishop and queen. This is the move that defines the Sicilian — Black's c5 will immediately challenge our central pawn, but we're ready for the fight.",
+     "shortText": "e4 stakes our claim in the center."
     },
     {
-     "text": "c5 is Black's signature response — it immediately attacks the center from the flank and creates an imbalanced position. Black is saying, 'I'll let you have the center, but I'll chip away at it from the side.' This is the Sicilian's DNA.",
-     "shortText": "c5 challenges the center from the flank, creating imbalance."
+     "text": "Black plays c5, the Sicilian's signature move — a pawn thrust that fights for the d4 square and creates an unbalanced, double-edged game. This is Black's way of saying they're not interested in a quiet center; they want a fight.",
+     "shortText": "c5 is Black's challenge for d4."
     },
     {
-     "text": "Nc3 is the gateway to the Closed Sicilian. Instead of committing to the Open Sicilian with Nf3 and d4, we keep the center flexible and prepare to build a kingside attack with moves like f4 or g3. The knight also defends e4, so Black can't easily strike at our center pawn.",
-     "shortText": "Nc3 keeps options open, heading for Closed Sicilian structures."
+     "text": "Nc3 is our gateway to the Closed Sicilian. Instead of rushing into the open main lines with Nf3 and d4, we keep the center closed and prepare to build a kingside attack. This move also keeps Black guessing—they can't force us into their favorite theory.",
+     "shortText": "Nc3 heads for the Closed Sicilian, keeping the center closed."
     }
    ],
    "bridges": {
     "d6": {
      "mainSan": "Nc6",
-     "text": "You know this road well—everything up to here is the same Closed Sicilian you've walked before. The main line plays Nc6, heading straight into the Botvinnik setup where you'll fianchetto and build that kingside fortress. Today's sideline, d6, takes a different turn: it keeps the c-pawn flexible and invites d4, where after cxd4 and Qxd4, your knight can come to c6 with tempo, aiming to pressure the queen and steer into a Carlsen-style structure. Watch how the early queen sortie changes the rhythm—your pieces get to develop with threats, and the center stays more fluid than in the closed setup.",
-     "shortText": "Nc6 builds the Botvinnik; d6 invites d4 and a queen sortie."
+     "text": "You know this road well — everything up to here is the same closed Sicilian you've walked before. The main line plays Nc6, heading straight into the Botvinnik setup where you'll fianchetto on g6 and build that solid kingside fortress. Today's sideline, d6, is the Carlsen Variation — a quieter, more flexible move that keeps the c-pawn holding the center and invites white to open things with d4. Watch how the queen comes out to d2 after the trade — that's the signal that white is aiming for a slower, more positional squeeze rather than the sharp kingside race.",
+     "shortText": "Nc6 heads for the Botvinnik; d6 invites the Carlsen — two different plans."
     }
    },
    "branchNarrations": {
@@ -1207,48 +1207,48 @@
       "Nh3",
       "Nge7"
      ],
-     "teaser": "Nc6 keeps our options open—if White tries to transpose into an Open Sicilian with Nf3, we can play g6 and head for our Accelerated Dragon setup. For now, we're steering into the Closed Sicilian, where we'll build a kingside attack.",
-     "shortTeaser": "Nc6 keeps the Accelerated Dragon option alive while entering the Closed Sicilian.",
+     "teaser": "Nc6 keeps our Accelerated Dragon options alive — if White ever plays Nf3, we can still transpose into our favorite setup with g6.",
+     "shortTeaser": "Nc6 keeps our Accelerated Dragon options alive.",
      "ideas": [
       {
-       "text": "g3 is the hallmark of the Closed Sicilian—White decides to fianchetto the bishop and build a slow, positional setup rather than strike in the center. This move signals that White is happy to let us develop freely, but it also means White's king will be safe on the kingside, so we need a plan to create weaknesses there.",
-       "shortText": "g3 starts White's fianchetto setup, signaling a slow, positional battle."
+       "text": "g3 starts the Closed Sicilian — White signals a slower, more positional fight, avoiding the sharp Open Sicilian lines. Our knight on c6 already eyes d4, and now we'll fianchetto our bishop to pressure the center from afar.",
+       "shortText": "g3 begins the Closed Sicilian — a slower, positional fight."
       },
       {
-       "text": "g6 mirrors White's setup—we're also fianchettoing our bishop to g7, where it will eye the center and the queenside. This is the standard way to fight the Closed Sicilian: we're not afraid of the closed position because our bishop will be a monster on the long diagonal.",
-       "shortText": "g6 fianchettoes our bishop, preparing to fight for the center from afar."
+       "text": "g6 mirrors White's setup — we're building our own fianchetto, aiming our bishop at the long diagonal. This is the Accelerated Dragon structure we know and love, even if White chose a different path.",
+       "shortText": "g6 mirrors White's fianchetto — our bishop eyes the long diagonal."
       },
       {
-       "text": "Bg2 completes White's kingside fianchetto—the bishop now controls the h1-a8 diagonal, which means it's eyeing our queenside pawns and the c6 knight. This is a key piece for White in this setup, so we need to be aware of its pressure, especially on our b-pawn if we ever push it.",
-       "shortText": "Bg2 puts the bishop on the long diagonal, eyeing our queenside."
+       "text": "Bg2 completes White's kingside fianchetto — the bishop bears down on d5 and the a8-h1 diagonal. Our plan is to challenge that diagonal with our own bishop and prepare to strike in the center.",
+       "shortText": "Bg2 finishes White's fianchetto — pressure on d5."
       },
       {
-       "text": "Bg7 is our response—we develop our bishop to the same diagonal, creating a battle of the fianchettoed bishops. This is a classic Closed Sicilian structure: both sides have bishops on g2 and g7, and the fight will revolve around controlling the center and the dark squares.",
-       "shortText": "Bg7 completes our fianchetto, setting up a battle of the bishops."
+       "text": "Bg7 develops our bishop to its ideal square, directly opposing White's bishop on the long diagonal. Now both sides are committed to a battle for control of the center and the dark squares.",
+       "shortText": "Bg7 develops our bishop to oppose White's."
       },
       {
-       "text": "d3 is a flexible move for White—it supports the e4 pawn and prepares to develop the knight to f3 or e2. It also keeps the center closed for now, which means we have time to complete our development and prepare our own pawn breaks. Notice that White is not in a hurry to open the position, so we should be patient too.",
-       "shortText": "d3 supports e4 and keeps the center closed, giving us time to develop."
+       "text": "d3 supports the e4 pawn and prepares to develop the knight to e2 or f3. White is keeping the center solid before deciding on a plan. We'll respond with d6, maintaining our flexible setup.",
+       "shortText": "d3 solidifies the center for White."
       },
       {
-       "text": "d6 is our standard move in the Closed Sicilian—it solidifies the c5 pawn and prepares to develop our kingside pieces. We're also keeping the center flexible: we can later play e5 or even f5 to challenge White's setup. This move also prevents any immediate tactics on the d-file.",
-       "shortText": "d6 solidifies our center and prepares kingside development."
+       "text": "d6 reinforces our c5 pawn and prepares to develop our kingside pieces. This is the classic Sicilian move — we keep the center flexible while we finish development. Notice how our pawn chain c5-d6 controls the important d4 and e5 squares.",
+       "shortText": "d6 reinforces c5 and prepares development."
       },
       {
-       "text": "f4 is a critical move for White—it's the start of the Grand Prix attack, a plan to push f5 and create a kingside attack. White wants to gain space and eventually play f5, which would cramp our position and open lines for their pieces. We need to be alert to this plan and find a way to counter it.",
-       "shortText": "f4 signals White's Grand Prix attack, aiming for f5 and kingside space."
+       "text": "f4 grabs space on the kingside — White is setting up a Grand Prix-like attack, planning to push f5 and maybe trade dark-squared bishops. This is the critical moment: we must respond energetically to prevent White from gaining a free hand.",
+       "shortText": "f4 signals White's kingside ambitions."
       },
       {
-       "text": "e5 is a strong response—we strike in the center to challenge White's pawn chain. By pushing e5, we create a pawn duo on e5 and d6 that controls key squares like f4 and d4. This also prepares to develop our knight to e7 or f6, and it puts pressure on White's f4 pawn, which can become a target.",
-       "shortText": "e5 challenges White's center and prepares our knight's development."
+       "text": "e5 is the key break! By pushing this pawn, we challenge White's center and open lines for our pieces. If White takes on e5, we recapture with the knight, gaining activity. This move also prepares to free our bishop on g7 and creates a pawn chain that restricts White's pieces.",
+       "shortText": "e5 challenges the center and opens lines."
       },
       {
-       "text": "Nh3 is an unusual move by White—it develops the knight to the edge of the board, but it's not a bad move. It prepares to play Nf2, which would support the f4 pawn and potentially reroute the knight to g4 or e4. However, the knight on h3 is offside for now, and we can use this time to improve our position.",
-       "shortText": "Nh3 is a flexible move, preparing Nf2 and supporting f4."
+       "text": "Nh3 develops the knight to a somewhat unusual square, but it's aimed at f4 and g5, supporting White's kingside plans. However, this knight is awkwardly placed and can become a target. We'll use this to our advantage as we continue our own development.",
+       "shortText": "Nh3 is an awkward but purposeful development."
       },
       {
-       "text": "Nge7 is our final piece of development—we bring the knight to e7, where it supports the d5 square and can later go to f5 or g6. This is a typical setup in the Closed Sicilian: we have a solid structure with pawns on e5 and d6, and our pieces are ready for action. Now we can start thinking about our own kingside play, perhaps with f5 or g5.",
-       "shortText": "Nge7 completes our development, preparing for active play."
+       "text": "Nge7 brings our knight to a flexible square, eyeing f5 and d5. It also clears the way for our bishop on g7 to have more influence. We're now fully developed and ready to strike in the center or on the kingside, depending on White's next move.",
+       "shortText": "Nge7 completes our development, eyeing f5."
       }
      ]
     },
@@ -1262,28 +1262,28 @@
       "Nc6",
       "Qd2"
      ],
-     "teaser": "d6 — Black keeps the center fluid and invites us to choose our setup. This is the Carlsen Variation, a flexible, patient move that keeps all of Black's options open.",
-     "shortTeaser": "d6 — Black keeps options open, inviting us to choose our setup.",
+     "teaser": "d6 sets the stage for a closed Sicilian battle, where we'll fight for control of the center and prepare a kingside clamp.",
+     "shortTeaser": "d6 — the closed Sicilian begins.",
      "ideas": [
       {
-       "text": "d4 — Now we strike at the center. Black's d6 supports c5, so we challenge the pawn directly. If Black takes, we recapture and get a central presence.",
-       "shortText": "d4 — We challenge the c5 pawn, opening the center."
+       "text": "d4 strikes at the heart of Black's setup. We're challenging the c5 pawn immediately, forcing Black to make a decision about the center. This is the classic break that defines the Open Sicilian, and here it's especially potent because Black's knight on c3 is already committed, limiting their flexibility.",
+       "shortText": "d4 — the central challenge."
       },
       {
-       "text": "cxd4 — Black takes, and now we have a choice. We can recapture with the knight or, as we'll see, with the queen. This is a key moment: the queen recapture is a special line that avoids the usual Open Sicilian structures.",
-       "shortText": "cxd4 — Black takes, and we decide how to recapture."
+       "text": "cxd4 — Black accepts the trade, and now we have a choice. Instead of recapturing with the knight, we bring the queen out with Qxd4. This might look unusual, but it's a precise move: it keeps the knight on c3 free to develop, and it puts pressure on the d6 pawn, which is now a bit weak without its neighbor on c5.",
+       "shortText": "cxd4 — we recapture with the queen."
       },
       {
-       "text": "Qxd4 — Here's the point: we take back with the queen, not the knight. This is the Carlsen Variation, named after the world champion who popularized this exact move. It avoids the mainline Open Sicilian and keeps Black's pieces slightly off-balance.",
-       "shortText": "Qxd4 — The queen recaptures, a Carlsen specialty."
+       "text": "Qxd4 — the queen steps into the center, but this is not just a greedy grab. It's a move that fights for control of the d-file and the dark squares. Black's next move, Nc6, will attack the queen, but we're ready to retreat to a safe square while keeping our central influence.",
+       "shortText": "Qxd4 — centralizing the queen."
       },
       {
-       "text": "Nc6 — Black develops with tempo, attacking our queen. This is the natural follow-up. We have to move the queen again, but that's fine — we're not losing time because Black spent a move to develop.",
-       "shortText": "Nc6 — Black develops and attacks the queen."
+       "text": "Nc6 — Black develops with tempo, attacking our queen. This is a natural move, but it also signals that Black is happy to trade off central pawns and play a more open game. We need to be careful not to let the queen get chased around, but we have a good retreat planned.",
+       "shortText": "Nc6 — Black attacks the queen."
       },
       {
-       "text": "Qd2 — We drop back to d2, a safe square that keeps the queen active and supports a future b4 or c4 expansion. Notice how our queen is well-placed to help in the center and on the queenside. Black's knight on c6 is developed, but our setup is solid.",
-       "shortText": "Qd2 — The queen retreats, keeping pressure and flexibility."
+       "text": "Qd2 — the queen drops back, but this is not a retreat in shame. It's a flexible square that keeps an eye on the center and prepares to connect the rooks. Notice how we've kept the knight on c3 and the bishop on f1 free to develop. Black's central pawns are gone, but we have a lead in development and a clear plan to build up pressure.",
+       "shortText": "Qd2 — a flexible retreat."
       }
      ]
     }
@@ -1304,37 +1304,37 @@
     "yt:o17K4WiESWQ"
    ],
    "studentSide": "white",
-   "intro": "This line is all about one battle: White wants to play e4 and build a big center, while Black's job is to strike back in the center and prove that White's ambitious setup is actually full of holes. Every move here is part of that fight for the center.",
-   "shortIntro": "White wants e4; Black must strike in the center.",
-   "outro": "So White's f3 was a desperate attempt to keep the center together, but Black's central strike has left White's position in ruins. The lesson: when your opponent makes a weakening move on the side, strike in the center and expose the weaknesses.",
+   "intro": "This line is all about one thing: White's dream of playing e4. Every move we make either supports that dream or punishes Black for trying to stop it. Watch how a single pawn push can turn the whole game on its head.",
+   "shortIntro": "The battle for e4 defines this opening.",
+   "outro": "And that's the story of the Richter-Veresov: a single-minded push for e4, and the precise way Black can dismantle it. Remember, when your opponent makes a weakening move like f3, strike in the center—c5 is the key. Keep this pattern in mind, and you'll be ready for anyone who tries to get too creative against d4.",
    "ideas": [
     {
-     "text": "We start with d4, claiming our share of the center and opening lines for the queen and bishop. This is the foundation of every queen-pawn opening, and it sets the stage for the battle over the e4 square.",
-     "shortText": "d4 claims the center and opens lines."
+     "text": "We start with d4, claiming our share of the center and opening lines for the queen and bishop. This is the foundation of everything we want to do—it's the pawn that will become the target of Black's counterplay, but for now, it's the anchor of our space advantage.",
+     "shortText": "d4 stakes our claim in the center."
     },
     {
-     "text": "Black answers with Nf6, developing a knight and putting pressure on d4. This is the most flexible response, keeping the center fluid and preparing to fight for e4.",
-     "shortText": "Nf6 develops and eyes d4."
+     "text": "Black answers with Nf6, developing a knight and putting immediate pressure on our d4 pawn. This is the most flexible reply—it keeps all options open and invites us to commit to a plan. Notice how Black is already eyeing the e4 square, ready to fight for it.",
+     "shortText": "Nf6 pressures d4 and eyes e4."
     },
     {
-     "text": "Nc3 is the move that makes this the Veresov rather than a quiet queen-pawn game. The knight eyes d5 and e4 — and e4 is the square this whole system is built to occupy, with f3 and the bishop coming to support the push.",
-     "shortText": "Nc3 — the Veresov's knight, eyeing e4."
+     "text": "Nc3 is the move that gives this opening its character. It develops the knight to its most active square, but it also blocks our c-pawn. That's a trade-off we accept because it supports the big idea: pushing e4. The knight on c3 is the battering ram that will help us break through in the center.",
+     "shortText": "Nc3 supports the e4 push."
     },
     {
-     "text": "Black plays d5, striking at the center and preventing e4 for now. This is the classic response to Nc3: Black challenges our central pawn and makes it clear that we'll have to work hard to achieve our dream of e4.",
-     "shortText": "d5 challenges the center and stops e4."
+     "text": "Black plays d5, and this is the critical moment. By challenging our d4 pawn, Black is saying, 'If you want e4, you'll have to work for it.' This move prevents e4 for now, because after e4, Black can simply take on e4 and we'd have to recapture with the knight, giving up the center. So we need a different way to fight for that square.",
+     "shortText": "d5 challenges our center and blocks e4."
     },
     {
-     "text": "Bg5 pins the knight on f6, adding pressure to d5 and preparing to castle quickly. This is a natural developing move that also creates a threat: if Black isn't careful, we might capture on f6 and double their pawns.",
-     "shortText": "Bg5 pins the knight and develops."
+     "text": "Bg5 is our response—a pin that increases the pressure on the knight and prepares to castle quickly. The bishop on g5 also eyes the e7 square, and it sets a trap: if Black is careless, we can take on f6 and double their pawns, weakening their kingside. But the real point is to keep the tension and make Black prove that d5 was the right move.",
+     "shortText": "Bg5 pins the knight and prepares castling."
     },
     {
-     "text": "Black develops the bishop to f5, putting pressure on our e4 square and preparing to castle. This is a sensible move, but it doesn't actually stop our plan: we can still play e4, sacrificing a pawn to open lines and get a strong attack.",
-     "shortText": "Bf5 develops and eyes e4."
+     "text": "Black develops the light-squared bishop to f5, eyeing the e4 square. This is a natural developing move that also puts pressure on the center. However, it doesn't actually stop White from playing e4—White can still push the pawn and sacrifice it, leading to a sharp position where Black's bishop on f5 becomes a target. The bishop is not safe here; it can be hit by e4, and after the dust settles, White's queen can come to f3 with tempo, attacking the bishop and creating chaos. So while Bf5 is a reasonable move, it's not the most precise—Black should be looking for a way to strike at White's center immediately, rather than allowing White to take the initiative.",
+     "shortText": "Bf5 is natural but allows e4, so Black should strike the center first."
     },
     {
-     "text": "f3 is the move that defines this line: it's a pawn move that supports e4, but it's also a serious weakening of the kingside. The point is to prepare e4, but Black will now show us why this is too slow and too loose.",
-     "shortText": "f3 supports e4 but weakens the kingside."
+     "text": "White plays f3, a move that looks like it's preparing e4, but it's a double-edged sword. On one hand, it supports the e4 push and gives White a solid center. On the other hand, it weakens the kingside and, crucially, takes away the f3 square from the knight, making it harder to defend the d4 pawn. This is a key moment: Black should recognize that White's f3 is a concession—it's a move that doesn't develop and creates weaknesses. Black can now exploit this by playing c5, striking at the center and putting pressure on d4, since White can no longer bring the knight to f3 to help defend it. This is the beginning of Black's plan to undermine White's center and expose the weaknesses created by f3.",
+     "shortText": "f3 weakens the kingside and blocks the knight, so Black should strike with c5."
     }
    ]
   },
@@ -1359,88 +1359,58 @@
     "yt:qfiO5HGBWWc"
    ],
    "studentSide": "black",
-   "intro": "This line is all about one square: d4. White has pushed both center pawns, leaving a permanent hole on d4 that our knight will eventually occupy. But the key is patience — we don't rush to d4; we build up control first, and only when the time is right do we strike.",
-   "shortIntro": "The battle for d4 — White's hole, our outpost.",
-   "outro": "And there it is — the Accelerated Dragon's signature idea. We've delayed d6, kept the bishop's diagonal open, and now we're ready to hit d5 in one go. The hole on d4 was never about occupying it immediately; it's about controlling it from afar, and now that control pays off.",
+   "intro": "This is the Accelerated Dragon, and the whole game is about one square: d4. White's early c4 has created a permanent hole on d4 that we'll spend the entire opening fighting over. But here's the key lesson — controlling a square and occupying it are two different things. We're going to be patient, develop our pieces, and only later will we cash in on that weakness.",
+   "shortIntro": "The Accelerated Dragon: fight for d4, but don't rush to occupy it.",
+   "outro": "And that's the Accelerated Dragon in a nutshell: don't rush to plant a knight on d4. Instead, build a wall of pieces and pawns that controls the square from afar, trade off the defenders, and only then occupy it. The hole doesn't go away — it just waits for the right moment.",
    "ideas": [
     {
-     "text": "White's first move is e4, and we're going to meet it with the Sicilian. This is the start of a fight for the center, and we're already setting up a structure where we'll be able to challenge White's pawns later.",
-     "shortText": "e4 starts the fight for the center."
+     "text": "e4 opens the center and stakes a claim to d4 and f5. White is saying, 'I'll control the center.' We respond in classic Sicilian fashion: we don't try to fight for the center symmetrically — we'll chip away from the flank.",
+     "shortText": "e4: White claims the center; we'll fight from the flank."
     },
     {
-     "text": "c5 is the Sicilian's calling card: we fight for the center from the flank, and we immediately point at that d4 hole. White's e4 pawn is already a target for our future ...d5 break.",
-     "shortText": "c5 challenges the center and eyes d4."
+     "text": "c5 stakes our claim to the d4 hole. White's e-pawn and c-pawn have both advanced to the fourth rank, so neither can defend a square on that rank anymore — d4 is a permanent weakness. We're not going to jump a knight in right away, though; that would just let White kick it out. The hole is a long-term asset, and we'll build toward it.",
+     "shortText": "c5 claims the d4 hole for later."
     },
     {
-     "text": "Nf3 develops and reinforces e4, but it also means White is committed to the open Sicilian. Notice that the knight on f3 will be a key defender of d4 — we'll want to trade it off later.",
-     "shortText": "Nf3 bolsters e4 and guards d4."
+     "text": "White develops the knight to f3, bringing another piece to bear on our d4 outpost. But here's the thing: we're not in a hurry to jump a knight to d4 ourselves. That square is a long-term weakness for white—it's not going anywhere. What matters is that we keep control of it from afar, and that's exactly what our next move will set up.",
+     "shortText": "Nf3 eyes d4, but we're not rushing—control matters more."
     },
     {
-     "text": "Nc6 develops and puts immediate pressure on d4. We're not rushing to occupy the hole yet — that would just let White kick our knight away. Instead, we're building a long-term claim on that square.",
-     "shortText": "Nc6 eyes d4 without rushing in."
+     "text": "Nc6 develops a knight and puts pressure on d4, but we're not planning to jump to d4 immediately. If we played Nd4 now, White would just play Nf3 and kick our knight away. The hole is a long-term asset, not a short-term target. We develop naturally and keep the d4 square in our sights.",
+     "shortText": "Nc6: Develop, but don't rush to d4."
     },
     {
-     "text": "d4 is the critical test. White opens the center, but this is exactly what we want — after the exchange, our knight will land on d4 with tempo, and the hole becomes a permanent feature of White's position.",
-     "shortText": "d4 opens the center — we're ready."
+     "text": "d4 is White's attempt to close the hole, but it doesn't work — it just gives us a target. When White pushes d4, we take with our c-pawn, and the hole moves to a different square: now it's the d4 pawn itself that's weak, and White's knight will have to recapture. This is exactly the kind of central tension we want.",
+     "shortText": "d4 opens the center; we take."
     },
     {
-     "text": "cxd4 is the trade every Sicilian player makes without thinking twice: our wing pawn comes off for White's centre pawn. Two things follow immediately — the c-file swings open for our rook and queen, and White is left with a single centre pawn on e4 instead of the big duo they wanted. That lopsided trade is the whole reason the Sicilian scores so well.",
-     "shortText": "cxd4 — wing pawn for a centre pawn, c-file opens."
+     "text": "cxd4 removes White's pawn and leaves the d4 square empty again. Now White's knight is forced to recapture, which means it leaves its natural square on f3. We're happy to let White centralize a piece here because our plan is to challenge it later. The hole is still there — it's just wearing a different uniform.",
+     "shortText": "cxd4 clears d4 for our knight."
     },
     {
-     "text": "Nxd4 — White's knight takes the outpost, but this is a hollow victory. The knight on d4 is exposed, and our ...g6 and ...Bg7 will make it a liability. We're happy to let White occupy the square — we control it from afar.",
-     "shortText": "Nxd4 is a hollow outpost — we control it."
+     "text": "Nxd4 puts a knight on the hole, but this is not the moment to celebrate. White's knight is well-placed, but it's also a target. Our next move will start the process of undermining it. The key is that we're not going to let this knight stay — we'll trade it off or chase it away, and then the hole becomes ours.",
+     "shortText": "Nxd4 occupies the hole — for now."
     },
     {
-     "text": "g6 is the Accelerated Dragon's key move. We fianchetto the bishop to pressure d4 and the center, and we hold back ...d6 — that's the whole point. We keep the option of ...d5 in one go, which is the opening's lifeblood.",
-     "shortText": "g6 fianchettoes and keeps ...d5 in reserve."
+     "text": "Now we fianchetto with g6. This is the defining move of the Accelerated Dragon: we're preparing to post our bishop on the long diagonal, where it will exert immense pressure on the center and especially on the d4 square. By keeping the pawn on d7, we retain the option to strike with d5 later—a key resource that the mainline Dragon doesn't have. This is the move that gives our whole setup its character.",
+     "shortText": "g6 prepares the fianchetto, keeping d5 in reserve."
     }
    ],
    "bridges": {
+    "Nc3": {
+     "mainSan": "c4",
+     "text": "Everything up to this point is the same road you already own—the Accelerated Dragon's early moves. The main continuation, c4, locks the center with the Maróczy Bind, aiming to cramp us and build a slow squeeze. Today's sideline, Nc3, instead develops a knight and keeps the center fluid, inviting us to fianchetto and strike with d5. Watch how the fight for the d5 square becomes the central theme as this line unfolds.",
+     "shortText": "c4 locks the center; Nc3 keeps it fluid.",
+     "textFlipped": "Everything up to this point is the same road you already own—the Accelerated Dragon's early moves. The main continuation, c4, locks the center with the Maróczy Bind, aiming to cramp Black and build a slow squeeze. Today's sideline, Nc3, instead develops a knight and keeps the center fluid, inviting Black to fianchetto and strike with d5. Watch how the fight for the d5 square becomes the central theme as this line unfolds.",
+     "shortTextFlipped": "c4 locks the center; Nc3 keeps it fluid."
+    },
     "Nxc6": {
      "mainSan": "c4",
-     "text": "Everything up to this fork is the road you already own—the Accelerated Dragon's early moves, all leading to this exact moment. The main continuation, c4, locks the center with the Maróczy Bind, aiming to restrict your pieces and play against your dark-squared bishop. Today's sideline, Nxc6, takes a different path: it trades off your knight immediately, opening the b-file and changing the whole character of the fight. Watch how the open b-file and your pawn structure become the new battleground.",
-     "shortText": "c4 locks the center; Nxc6 opens the b-file.",
-     "textFlipped": "Everything up to this fork is the road you already own—the Accelerated Dragon's early moves, all leading to this exact moment. The main continuation, c4, locks the center with the Maróczy Bind, aiming to restrict Black's pieces and play against the dark-squared bishop. Today's sideline, Nxc6, takes a different path: it trades off the knight immediately, opening the b-file and changing the whole character of the fight. Watch how the open b-file and Black's pawn structure become the new battleground.",
-     "shortTextFlipped": "c4 locks the center; Nxc6 opens the b-file."
+     "text": "Everything up to this moment is the same road you already own—the Accelerated Dragon's early moves are yours. But now the path splits: the main continuation plays c4, locking the center with the Maróczy Bind, aiming to restrict your pieces and build a space advantage. Today's sideline, Nxc6, takes a different route—it trades off your knight, opening the b-file and preparing to push e5, trying to seize central space with pawns. Watch how your pawn structure and piece activity change as this new line unfolds.",
+     "shortText": "Main c4 locks the center; sideline Nxc6 opens the b-file."
     }
    },
    "branchNarrations": {
-    "c4": {
-     "label": "Maróczy Bind",
-     "moves": [
-      "c4",
-      "Nf6",
-      "Nc3",
-      "Nxd4",
-      "Qxd4",
-      "d6"
-     ],
-     "teaser": "White's c4 is a surprise — it's a Maróczy Bind, a positional clamp on d5. But it leaves a permanent hole on d4, and that's the story of this whole line: we're going to make that hole the center of our world.",
-     "shortTeaser": "White's c4 clamps d5 but leaves a hole on d4 — that's our target.",
-     "ideas": [
-      {
-       "text": "Nf6 is the right response to c4 — it hits e4 right away, challenging White's center before it gets too comfortable. The hole on d4 is tempting, but we're not rushing to occupy it yet; first we need to develop and make that outpost count.",
-       "shortText": "Nf6 hits e4, challenging the bind before it settles."
-      },
-      {
-       "text": "Nc3 is White's natural development, but notice it doesn't fix the hole on d4 — that square is still weak. We'll keep building our position, and that hole will be there for us later.",
-       "shortText": "Nc3 develops but leaves d4 weak — our target stays."
-      },
-      {
-       "text": "Nxd4 — we take back with the knight, and now we're eyeing that hole on d4. But we're not placing a knight there yet; we're just keeping the pressure. The knight on d4 is well-placed, but the real prize is controlling that square long-term.",
-       "shortText": "Nxd4 recaptures, keeping d4 in our sights."
-      },
-      {
-       "text": "Qxd4 — White recaptures with the queen, and that's exactly what we wanted. The queen on d4 is exposed to our dark-squared bishop once it reaches g7. We're setting up a pin that will make White's queen a target.",
-       "shortText": "Qxd4 puts the queen on a square our bishop will attack."
-      },
-      {
-       "text": "d6 — this move does two things: it prepares to develop the bishop to g7, and it solidifies our control over e5. Now our bishop will hit that queen on d4, and White will have to deal with the pressure. The hole on d4 is ours to exploit.",
-       "shortText": "d6 prepares Bg7, hitting the queen and claiming d4."
-      }
-     ]
-    },
     "Nc3": {
      "label": "Modern Variation",
      "moves": [
@@ -1450,24 +1420,24 @@
       "Nf6",
       "Bc4"
      ],
-     "teaser": "Nc3 — the main line. White finally commits to the open Sicilian, and we're ready to show why the Accelerated Dragon is the perfect weapon here.",
-     "shortTeaser": "Nc3 — the main line. Time to show why the Accelerated Dragon works.",
+     "teaser": "Nc3 is the most natural way for White to develop, but it also signals that they're not afraid of the Accelerated Dragon. Now we get to show why this opening is so dangerous: our dark-squared bishop is about to take aim at the long diagonal.",
+     "shortTeaser": "Nc3 develops, but our bishop is ready to dominate the dark squares.",
      "ideas": [
       {
-       "text": "Bg7 — we fianchetto immediately, putting our bishop on the long diagonal where it will pressure the center and the d4 square for the rest of the game. This is the Accelerated Dragon's signature: we develop the bishop before committing our d-pawn, keeping the option of an early d5 break.",
-       "shortText": "Bg7 — the bishop eyes the long diagonal, ready to pressure d4."
+       "text": "Bg7 finishes the fianchetto, and now the bishop on g7 is the star of our position. It controls the long diagonal, putting pressure on the d4 knight and the b2 pawn. This is the piece that will make White's life miserable if they don't respect it.",
+       "shortText": "Bg7: our bishop eyes the long diagonal, pressuring d4 and b2."
       },
       {
-       "text": "Be3 — White develops the bishop to e3, a natural square in many Sicilian lines. But notice how it doesn't challenge our setup. Our bishop on g7 is already doing its job, and we're ready to continue with our own development. The tension is building: White's pieces are centralized, but our structure is flexible.",
-       "shortText": "Be3 — White develops, but our bishop on g7 remains the star."
+       "text": "Be3 is White's most natural way to develop, but it also creates a target. Notice that the bishop on e3 is now on the same diagonal as our g7 bishop, and it's a piece we can attack with tempo later. For now, we just continue with our own development.",
+       "shortText": "Be3 develops, but it's a target for our bishop later."
       },
       {
-       "text": "Nf6 — we bring the knight to f6, attacking e4 and putting pressure on White's center. This is a key moment: we're not rushing to play d6, because we want to keep the option of an early d5 break. If White plays f3 to support e4, we'll be ready to strike with d5, opening the center to our advantage.",
-       "shortText": "Nf6 — attacking e4, keeping d5 in reserve."
+       "text": "Nf6 is the key move in this position. We're not just developing a piece; we're preparing to challenge White's center with d5. The knight on f6 also eyes the e4 pawn, which is a constant thorn in White's side. If White ever plays f3 to support e4, we'll have d5 ready to strike.",
+       "shortText": "Nf6: preparing d5 to break the center."
       },
       {
-       "text": "Bc4 — White develops the bishop to c4, eyeing f7. But this move has a hidden drawback: it leaves the d4 square even weaker. Our knight on f6 and bishop on g7 are both aiming at that hole. If White ever castles queenside, we'll have a ready-made attack down the b-file. For now, we continue with our plan: castle kingside and prepare d5.",
-       "shortText": "Bc4 — a natural move, but it leaves d4 weak. We'll exploit it."
+       "text": "Bc4 is a natural developing move for White, but it also allows us to play d5 immediately. The bishop on c4 is a target for our pawn break, and if White takes on d5, we recapture with the knight, gaining a tempo on the bishop. This is the moment our preparation pays off.",
+       "shortText": "Bc4: now d5 is even stronger, hitting the bishop."
       }
      ]
     },
@@ -1476,8 +1446,8 @@
      "moves": [
       "Nxc6"
      ],
-     "teaser": "Nxc6 — the Exchange Variation. White trades off our knight, but this isn't a punishment; it's a concession. By taking on c6, White gives us the b-file and a central pawn majority, and we get to keep our powerful dark-squared bishop. This is a key moment to understand: the exchange is not something to fear, but a signal that White is avoiding the main lines.",
-     "shortTeaser": "Nxc6 — White trades knights, giving us the b-file and central majority.",
+     "teaser": "Nxc6 — the Exchange Variation. White trades our knight to open the b-file and challenge our dark-square grip. We'll recapture toward the center and turn that open file into our highway.",
+     "shortTeaser": "Nxc6 — the Exchange Variation. We recapture toward the center and use the open b-file.",
      "ideas": []
     }
    }
@@ -1504,53 +1474,53 @@
     "yt:k9lpwbZ1Cyw"
    ],
    "studentSide": "white",
-   "intro": "This line is all about the battle for the d4 square. White's setup aims to control the center and prepare a d4 break, while Black's fianchettoed bishop and pawn structure are designed to clamp down on d4. Every move in this opening is part of that central struggle.",
-   "shortIntro": "The fight for d4 defines this opening.",
-   "outro": "With e5, Black has locked the center, but White's pieces are ready to challenge it. The battle for d4 will continue in the middlegame, where White's space advantage and Black's solid structure will clash.",
+   "intro": "The Rossolimo is a positional beast: White trades a bishop for a knight to damage Black's pawn structure, then spends the whole game exploiting those cracks. The battle is over the d4-square and the weak pawns on c6 and a6 — every move we make should either tighten our grip on the center or point at those targets.",
+   "shortIntro": "A positional fight: White trades a bishop to damage Black's pawns, then squeezes the center.",
+   "outro": "The bishop trade has done its job: Black's pawns are cracked, and our pieces are already circling the weak squares. Now we develop with purpose, keeping the center solid and the pressure on — the rest of the game is about turning this structural edge into a win.",
    "ideas": [
     {
-     "text": "e4 stakes a claim in the center and opens lines for the queen and bishop. This is the start of a battle for central control, where every move will be about supporting or challenging the d4 square.",
-     "shortText": "e4 claims central space and opens lines."
+     "text": "e4 stakes a claim in the center, opening lines for the bishop and queen. It's the first step in a battle for control of the key squares, especially d4 and d5.",
+     "shortText": "e4 grabs central space and opens lines."
     },
     {
-     "text": "c5 is the Sicilian's immediate challenge to e4, fighting for d4 from the flank. Black is saying, 'I won't let you have an easy center.'",
-     "shortText": "c5 fights for d4 from the flank."
+     "text": "c5 is the Sicilian's signature: Black immediately challenges the e4 pawn and fights for the d4 square. This move sets up a pawn structure that will define the fight for the center.",
+     "shortText": "c5 challenges e4 and fights for d4."
     },
     {
-     "text": "Nf3 develops the knight and adds pressure on d4, preparing to support a future d4 push. It also keeps an eye on e5, ready to challenge any central pawn.",
-     "shortText": "Nf3 supports the d4 break."
+     "text": "Nf3 develops and eyes the e5-square, but more importantly it clears the way for our bishop to reach b5. This knight is a quiet piece — it's not attacking anything yet, but it's part of the setup that lets us trade on c6 and start chipping at Black's pawns.",
+     "shortText": "Nf3 prepares the bishop's journey to b5."
     },
     {
-     "text": "Nc6 develops and reinforces Black's control over d4, making it harder for White to push d4 without preparation. The knight also eyes e5, ready to challenge White's center.",
-     "shortText": "Nc6 bolsters Black's grip on d4."
+     "text": "Nc6 is Black's natural development, but it walks right into our plan. The knight is a target — we're going to trade our bishop for it, and Black will have to recapture with a pawn, leaving doubled c-pawns and a hole on c6. That's the structural damage we're after.",
+     "shortText": "Nc6 is the target — we'll trade bishop for knight."
     },
     {
-     "text": "Bb5 is the Rossolimo, a move that avoids the sharp Open Sicilian and instead targets the knight on c6. By pinning it, White hopes to either trade it off and damage Black's pawn structure or use the pin to control the center.",
-     "shortText": "Bb5 pins the knight, aiming at the center."
+     "text": "Bb5 is the Rossolimo: White develops the bishop to b5, eyeing the knight on c6. The idea is to pressure Black's structure and, if Black takes, recapture with the d-pawn to open lines and control the center.",
+     "shortText": "Bb5 pressures the knight and prepares central control."
     },
     {
-     "text": "g6 signals Black's intention to fianchetto the bishop, aiming to control the center from afar. White's bishop on b5 already pressures the knight, and Black's setup prepares to challenge White's central control.",
-     "shortText": "g6 prepares the fianchetto, challenging White's center."
+     "text": "With g6, Black commits to the fianchetto setup. This is the Accelerated Dragon's answer to the Rossolimo — we're signaling that we'll develop the bishop to g7 and fight for the center with pieces rather than pawns. It's a flexible move that keeps all options open, but it also tells White we're not afraid of the bishop pair.",
+     "shortText": "g6 commits to the fianchetto, the Accelerated Dragon's answer to the Rossolimo."
     },
     {
-     "text": "O-O is a natural developing move that also brings the rook closer to the center. White is ready to support a d4 push, and the king is safe, allowing White to focus on the central struggle.",
-     "shortText": "O-O readies the rook for central action."
+     "text": "O-O is the natural follow-up. Now that our king is safe, we can focus on the center. Notice that White hasn't committed to taking on c6 yet — that's fine, we're just developing and keeping our structure intact. Castling also prepares to bring the rook to e1, which will support the e4 pawn and eye the center.",
+     "shortText": "O-O gets the king safe, ready for central operations."
     },
     {
-     "text": "Bg7 completes Black's fianchetto, and now the bishop on g7 is a key defender of d4. Black's setup is solid, and the bishop's influence over the center is a major factor in this opening.",
-     "shortText": "Bg7 completes the fianchetto, guarding d4."
+     "text": "Bg7 completes the fianchetto. This bishop is the star of our setup — it controls the long diagonal and puts pressure on d4. With the bishop on g7, we're clamping down on the dark squares, making it hard for White to play d4 without consequences. This is the classic Accelerated Dragon idea: fight for the center with pieces, not just pawns.",
+     "shortText": "Bg7 finishes the fianchetto, clamping down on d4."
     },
     {
-     "text": "Re1 is a flexible move that keeps the e4 pawn defended and prepares to support a d4 break. It also clears the f1 square for the bishop, giving White more options in the center.",
-     "shortText": "Re1 defends e4 and prepares d4."
+     "text": "Re1 is a precise move. Instead of committing to c3 or d4 immediately, White keeps the center flexible. The rook on e1 supports the e4 pawn and prepares to push d4 in one go. It also discourages ...Bg4, since the bishop would be hitting a defended pawn. This is a waiting move — White wants to see our setup before choosing the plan.",
+     "shortText": "Re1 supports e4 and keeps d4 as a future option."
     },
     {
-     "text": "e5 is Black's key move, clamping down on d4 and locking the center. The pawn on e5, supported by the bishop on g7, makes it very difficult for White to ever play d4, and Black's structure is solid. This is the moment where Black commits to a strategy of central control.",
-     "shortText": "e5 locks the center, denying d4."
+     "text": "e5 is the key move. This is the defining decision of the Gurgenidze Variation. By pushing the pawn to e5, we lock the center and create a clamp on d4. The bishop on g7 and the pawn on e5 work together as a unit, controlling the key squares. This move also frees the knight to go to e7, where it will support the center and prepare a kingside pawn storm. It looks like it blocks the bishop, but in this structure, the bishop and pawn are a team — the pawn is an extension of the bishop's power.",
+     "shortText": "e5 locks the center, clamping down on d4."
     },
     {
-     "text": "b4 is the key queenside expansion, gaining space and fixing Black's c5 pawn as a target. It also prepares to open lines on the queenside, where White's pieces are well placed to exploit any weaknesses.",
-     "shortText": "b4 expands on the queenside, targeting Black's c5 pawn."
+     "text": "b4 is a space-gaining move on the queenside, but it's also about supporting the central clamp. White is grabbing room to maneuver and preparing to reinforce the d4 square, keeping Black's pieces passive.",
+     "shortText": "b4 gains space and supports the center."
     }
    ]
   },
@@ -1567,29 +1537,29 @@
     "yt:untay_co3oY"
    ],
    "studentSide": "white",
-   "intro": "The Torre Attack looks like a London System, but that one-square difference — bishop on g5 instead of f4 — changes everything. This line is about the fight for the dark squares and the bishop's pin on the knight, which sets up a completely different game than the London. Let's see how White can use this pin to build pressure and what Black's typical plans are.",
-   "shortIntro": "The Torre Attack: a London lookalike with a very different character.",
-   "outro": "So the Torre Attack is not just a London with a different bishop square — it's a different beast. The bishop on g5 pins the knight and sets up a fight for the center and the dark squares. Whether Black goes for the King's Indian setup with d6 and g6, or tries to break with c5, White's plan revolves around that pin and the pressure it creates. Keep this distinction in mind, and you'll be ready for whatever Black throws at you.",
+   "intro": "The Torre Attack looks like a London System, but that bishop on g5 changes everything. In this line, White's real challenge is to make something of the pin while Black tries to prove that the bishop is misplaced. We'll see how the fight for the center and the dark squares shapes the whole game.",
+   "shortIntro": "The Torre Attack: a London lookalike with a twist—the bishop on g5 changes everything.",
+   "outro": "So there you have it: the Torre Attack is not just a London with a different bishop square—it's a completely different animal. The pin on the knight is the key, and Black must be careful not to let White's pressure build. Remember, the battle for the center and the dark squares will decide who comes out on top.",
    "ideas": [
     {
-     "text": "We open with d4, claiming our share of the center and setting the stage for the battle of the dark squares. This is the move that defines the opening — everything else will revolve around this central pawn.",
+     "text": "We start with d4, claiming a big share of the center and opening lines for the queen and bishop. It's the foundation of every queen pawn opening, and here it sets the stage for the battle over the dark squares.",
      "shortText": "d4 stakes our claim in the center."
     },
     {
-     "text": "Black answers with Nf6, developing and immediately attacking the e4 square. This is the most natural response, and it sets up the fight for the center that will shape the whole opening.",
-     "shortText": "Nf6 challenges our central control."
+     "text": "Black answers with Nf6, developing and immediately attacking our pawn. This is the most natural reply—it puts pressure on d4 and prepares to control the center with e6 or d5.",
+     "shortText": "Nf6 challenges our center right away."
     },
     {
-     "text": "We bring out the knight to f3, supporting the d4 pawn and preparing to develop the bishop next. Nothing fancy here — just solid development that keeps our options open.",
-     "shortText": "Nf3 supports d4 and prepares development."
+     "text": "We bring out the knight to f3, defending d4 and preparing to castle. It's a quiet move, but it keeps our options open—we could go for the London with Bf4, or the Torre with Bg5, or even a kingside fianchetto.",
+     "shortText": "Nf3 supports d4 and keeps our plans flexible."
     },
     {
-     "text": "Black plays e6, preparing to develop the bishop to d6 or b4, and also freeing the queen. This is a flexible move that keeps Black's options open, but it also allows us to develop our bishop to g5 next.",
-     "shortText": "e6 prepares Black's development."
+     "text": "Black plays e6, solidifying the center and freeing the light-squared bishop. This is a flexible move—it could lead to a French or a Queen's Indian, but here it sets up the classical defense to the Torre.",
+     "shortText": "e6 shores up Black's center and frees the bishop."
     },
     {
-     "text": "And here's the key move: Bg5. This is the Torre Attack. It looks like the London, but the bishop on g5 pins the knight on f6, putting immediate pressure on Black's position. This pin is the whole point — it makes the Torre a different opening from the London, and it's what we'll build our play around.",
-     "shortText": "Bg5 pins the knight — the Torre's signature."
+     "text": "Now we play Bg5, pinning the knight on f6. This is the defining move of the Torre Attack—it looks like the London, but the bishop on g5 puts pressure on Black's position. The pin makes it hard for Black to play e5, and it sets up the possibility of trading on f6 to damage Black's kingside.",
+     "shortText": "Bg5 pins the knight and defines the Torre."
     }
    ],
    "branchNarrations": {
@@ -1601,20 +1571,20 @@
       "b6",
       "d5"
      ],
-     "teaser": "c5 strikes at the center, challenging White's setup and signaling our intention to fight for the initiative.",
-     "shortTeaser": "c5 challenges the center.",
+     "teaser": "Black answers with c5, striking at the center and signaling the Petrosian Gambit — a flexible, counterattacking setup.",
+     "shortTeaser": "c5 — Black strikes the center, inviting the Petrosian Gambit.",
      "ideas": [
       {
-       "text": "With e3, White shores up the d4 pawn and keeps the position solid, but this move is a bit passive—it doesn't fight for the center or create any real threats. It's a waiting move that lets us continue our development.",
-       "shortText": "e3 is solid but passive."
+       "text": "With e3, White shores up the d4 pawn and keeps the position solid, but it's a modest move that doesn't challenge Black's setup.",
+       "shortText": "e3 — solid, but unambitious."
       },
       {
-       "text": "b6 prepares to fianchetto the bishop to g7, where it will pressure the long diagonal and support our central pawn breaks. This is a key part of our setup, giving us a strong piece on the diagonal that eyes d4 and e5.",
-       "shortText": "b6 prepares the fianchetto."
+       "text": "Black's b6 prepares to fianchetto the bishop, adding pressure on d4 and the long diagonal — a typical idea in this gambit.",
+       "shortText": "b6 — preparing the fianchetto."
       },
       {
-       "text": "d5 is the central break we've been building toward. By pushing this pawn, we challenge White's center and open lines for our pieces. If White takes, we recapture with the queen, and if not, we've gained space and a strong pawn chain.",
-       "shortText": "d5 breaks in the center."
+       "text": "d5 is the point: Black strikes in the center, and if White takes, Black recaptures with the queen, gaining free play and a lead in development.",
+       "shortText": "d5 — the central strike."
       }
      ]
     }
@@ -1639,49 +1609,49 @@
     "yt:iCtRgphJ3_8"
    ],
    "studentSide": "black",
-   "intro": "This line is all about the fight for the dark squares on Black's kingside. White's early bishop trade and pawn break aim to expose Black's king, while Black's unusual knight sortie to h6 and pawn thrust f5 try to challenge White's center. Our job as Black is to survive the opening and reach a playable middlegame, but White's plan is clear: open lines and attack.",
-   "shortIntro": "White trades dark-squared bishops to expose our king; we must survive the opening.",
-   "outro": "So after White's aggressive opening, we've managed to castle and get our king to safety. The position is complex, but we've survived the worst of the storm. White's extra pawn is balanced by our active pieces and the weak squares around their king. The fight continues in the middlegame.",
+   "intro": "This line is all about the fight for the center and the light squares. Black's Modern Defense with g6 and Nh6 is a tricky setup, but we're going to meet it with principled play, aiming to control the center and exploit Black's unusual knight development.",
+   "shortIntro": "Black's Modern Defense: we fight for the center and punish the early Nh6.",
+   "outro": "With our pieces developed and the center secured, we're ready to continue our plan. Black's knight on h6 is misplaced, and our control of the center gives us a solid advantage.",
    "ideas": [
     {
-     "text": "White opens with e4, claiming the center and preparing to develop. As Black, we're playing the Modern Defense, a flexible setup where we delay committing our pieces and aim to undermine White's center later.",
-     "shortText": "White plays e4, we play the Modern."
+     "text": "e4 stakes our claim in the center immediately. Black's g6 signals the Modern Defense, a flexible setup where they delay committing their knight. By occupying the center, we dare them to challenge it.",
+     "shortText": "e4 grabs the center, challenging Black's flexible Modern."
     },
     {
-     "text": "g6 is the Modern Defense—we fianchetto our bishop to put pressure on White's center from afar. It's a flexible setup, but it also invites White to build a big pawn center.",
-     "shortText": "g6 prepares a fianchetto, flexible but risky."
+     "text": "Black starts with g6, the Modern Defense. This is a flexible setup where Black delays knight development, keeping options open for a Pirc or a Gurgenidze. We need to be ready to play principled chess against it.",
+     "shortText": "Black plays g6, the Modern Defense, staying flexible."
     },
     {
-     "text": "d4 reinforces White's central pawn duo. They're building a big center, and we need to challenge it before we get crushed.",
-     "shortText": "d4 solidifies White's center."
+     "text": "d4 grabs space and stakes a claim in the center. White is saying, 'I'll take the center, you try to undermine it.' This is the principled response to Black's provocative setup, and it sets the stage for the coming battle over the dark squares.",
+     "shortText": "d4: White seizes central space."
     },
     {
-     "text": "Nh6 is an unusual move, but it's part of the Gurgenidze system. We're aiming to bring the knight to f5, where it can pressure White's center and support our light-square strategy.",
-     "shortText": "Nh6 heads for f5, a key square."
+     "text": "Nh6 is Black's attempt to reroute the knight to f5, but it leaves the knight on the rim, where it's not doing much. We'll develop naturally and look to punish this misplaced piece.",
+     "shortText": "Nh6 is a rim job; we'll punish it."
     },
     {
-     "text": "Nc3 is a natural developing move for White, supporting the d4 pawn and preparing to push f4. It also controls d5, making it harder for us to play ...d5 ourselves.",
-     "shortText": "Nc3 develops and eyes d5."
+     "text": "Nc3 develops and supports our d4 pawn. It also prepares to meet Black's ...d5 with exd5, transposing into a favorable Fantasy-like structure. Our pieces are coming out with purpose, while Black's knight is stuck on h6.",
+     "shortText": "Nc3 develops and eyes the center."
     },
     {
-     "text": "f5 is the key move of the Gurgenidze. We strike at White's center, challenging the e4 pawn. This is a typical break in this system, aiming to open lines and create counterplay.",
-     "shortText": "f5 challenges the center, a thematic break."
+     "text": "f5 is a bold pawn thrust, but it's premature. Black is opening the center while White has a lead in development, which is exactly what you shouldn't do. This move creates a permanent weakness on e6 and gives White a target to attack.",
+     "shortText": "f5: Black opens the center prematurely."
     },
     {
-     "text": "Bxh6 is a sharp choice by White. They trade off our dark-squared bishop, which was a key defender of our kingside. This leaves us with weaknesses on the dark squares, but it also opens the g-file for our rook.",
-     "shortText": "Bxh6 removes our bishop, exposing our king."
+     "text": "Bxh6 is a key move: White trades off Black's dark-squared bishop, the piece that was supposed to control the long diagonal. This leaves Black with a gaping hole on h6 and weakens the dark squares around Black's king. It's a clear signal that White is going for the attack.",
+     "shortText": "Bxh6: White removes Black's key defender."
     },
     {
-     "text": "Bxh6 recaptures with the bishop. We get our pawn back, but more importantly, we open the g-file for our rook. This gives us some counterplay against White's king, which is still in the center.",
-     "shortText": "Bxh6 recaptures and opens the g-file."
+     "text": "Black recaptures with Bxh6, but this bishop is not the same piece it was on g7. Now it's on h6, where it's actually a bit awkward — it's not doing much, and our dark-squared bishop is gone, but we still have a nice grip on the center. The key is that we're not in a hurry; we can continue developing and building pressure.",
+     "shortText": "Black's bishop ends up misplaced on h6 — we're fine."
     },
     {
-     "text": "exf5 is a natural recapture, but it also opens the e-file and gives us a target on f5. White is willing to give up the center pawn to keep the initiative and expose our king further.",
-     "shortText": "exf5 opens lines and keeps pressure."
+     "text": "exf5 opens the f-file and gives White a protected passed pawn on f5. This pawn cramps Black's position and serves as a battering ram for the kingside attack. White is not just winning a pawn; they're creating a permanent structural advantage.",
+     "shortText": "exf5: White gains a powerful passer."
     },
     {
-     "text": "O-O is a crucial move for us. We get our king to safety, out of the center, and connect our rooks. This is essential because White's pieces are bearing down on us, and we need to consolidate before we can think about counterplay.",
-     "shortText": "O-O gets our king safe and connects rooks."
+     "text": "O-O gets the king to safety and connects the rooks. Now White can double on the f-file or bring the rook to e1, increasing the pressure. Black's king is still in the center, and White's pieces are ready to swarm.",
+     "shortText": "O-O: White's king finds safety."
     }
    ]
   },
@@ -1781,6 +1751,145 @@
     {
      "text": "Kh1 sidesteps the check and completes our king's journey to safety. Now Black's pawn on h2 is stuck, and we have a clear path to attack down the h-file — our pieces are ready to deliver the final blow.",
      "shortText": "Kh1 escapes check and leaves Black's pawn stranded."
+    }
+   ]
+  },
+  "queen s gambit accepted": {
+   "openingName": "Queen's Gambit Accepted",
+   "spine": [
+    "d4",
+    "d5",
+    "c4",
+    "dxc4",
+    "Nf3",
+    "Nf6",
+    "e3",
+    "e6",
+    "Bxc4",
+    "c5",
+    "O-O"
+   ],
+   "sourceVideos": [
+    "yt:U7pqt57VwuU",
+    "yt:Ty0DEz4Wevw",
+    "yt:hX6W4X_CqkA"
+   ],
+   "studentSide": "white",
+   "intro": "This line is all about the fight for the d4-pawn and the center. White gambits a pawn to build a powerful pawn center and seize the initiative, while black tries to hold onto the extra pawn and undermine white's structure. The tension revolves around whether white can maintain the center and develop with tempo, or whether black can consolidate and neutralize white's space advantage.",
+   "shortIntro": "White gambits a pawn to build a powerful center and seize the initiative.",
+   "outro": "With the knight on f3, white has developed a piece and prepared to recapture the pawn on c4. The battle for the center continues, with white's space advantage and black's extra pawn hanging in the balance. The next moves will determine whether white can maintain the initiative or black can consolidate.",
+   "ideas": [
+    {
+     "text": "We start with d4, staking a claim in the center and opening lines for our pieces. This is the first step in building a strong pawn center, which will be the foundation of our play.",
+     "shortText": "d4 claims the center and opens lines."
+    },
+    {
+     "text": "Black responds with d5, directly challenging our central pawn. This is a natural move, but it sets the stage for the tension that will define the opening.",
+     "shortText": "Black challenges our center with d5."
+    },
+    {
+     "text": "Now we play c4, the Queen's Gambit. We offer a pawn to deflect black's d5 pawn and gain more control over the center. If black takes, we'll have a lead in development and a strong center to build on.",
+     "shortText": "c4 offers a pawn to gain central control."
+    },
+    {
+     "text": "Black accepts the gambit with dxc4, taking the pawn. This is the Queen's Gambit Accepted. Black grabs material but falls behind in development. Our job now is to recapture the pawn while maintaining our central presence and initiative.",
+     "shortText": "Black takes the pawn, accepting the gambit."
+    },
+    {
+     "text": "We develop the knight to f3, preparing to recapture the pawn on c4 with our bishop. This also adds pressure on d4 and e5, and gets a piece out while keeping our options open for the center.",
+     "shortText": "Nf3 develops and prepares to recapture."
+    },
+    {
+     "text": "Nf6 develops the knight to its most natural square, attacking nothing but preparing to castle. It's a solid developing move that keeps the position flexible.",
+     "shortText": "Nf6 develops and prepares to castle."
+    },
+    {
+     "text": "We play e3, and this is the calm, positional choice. Instead of trying to blow black off the board with e4, we're saying, 'I'll just win the pawn back and build a solid center.' The downside is that our bishop on c1 is now blocked, but we're prioritizing safety and structure over immediate aggression.",
+     "shortText": "e3 is the solid, positional way to reclaim the pawn."
+    },
+    {
+     "text": "e6 solidifies the center and prepares to develop the light-squared bishop. It's a quiet but important move, ensuring Black's pawn structure remains sound.",
+     "shortText": "e6 solidifies the center."
+    },
+    {
+     "text": "Now we take back the pawn with Bxc4. This is the moment we've been working toward: we've regained our pawn, and our bishop is now on a great diagonal, eyeing f7. Black's position is solid, but we have a slight space advantage, and our pieces are ready to flow out. The battle will revolve around the d5 square—if we can control it, black will be in trouble.",
+     "shortText": "Bxc4 recaptures the pawn and eyes f7."
+    },
+    {
+     "text": "Black plays c5, striking at our center immediately. This is the critical test: if we allow black to trade on d4, we'll end up with an isolated pawn, which can be a weakness. But we're not afraid—we can simply castle, and then we'll have a comfortable game. The key is to remember that our center is solid, and we have no weaknesses to exploit.",
+     "shortText": "c5 challenges our center, but we're ready."
+    },
+    {
+     "text": "Now we castle, getting the king to safety and connecting the rooks. Black's counterplay is gone — our king was the last loose end, and with it tied up, our extra pawn and better development will do the rest.",
+     "shortText": "Castle to safety; the rest is easy."
+    }
+   ]
+  },
+  "owen defense": {
+   "openingName": "Owen Defense",
+   "spine": [
+    "e4",
+    "b6",
+    "d4",
+    "Bb7",
+    "Bd3",
+    "f5",
+    "exf5",
+    "Bxg2",
+    "Qh5+",
+    "g6"
+   ],
+   "sourceVideos": [
+    "yt:C4xtj2rc0_k",
+    "yt:oF7Rh6qXj1A",
+    "yt:_JQ-AH3OYQ4",
+    "yt:opvsrx5TCdU",
+    "yt:2fYsaiS_NS4"
+   ],
+   "studentSide": "black",
+   "intro": "This line is all about the fight for the e4 pawn. Black's bishop on b7 is eyeing it, and the whole opening is built around overprotecting that pawn so Black's pressure never becomes a real threat. We're going to see how a simple setup can neutralize Black's ideas and leave us with a comfortable, active position.",
+   "shortIntro": "The battle for e4 begins.",
+   "outro": "With the bishop on d3, we've overprotected e4 and taken the sting out of Black's pressure. The stage is set for a comfortable game where Black's bishop on b7 is just a spectator.",
+   "ideas": [
+    {
+     "text": "White opens with e4, claiming the center and inviting us to react. But we're not here to play a normal game — we're going to let White overextend, then strike at the weak points. Our b6 is the first step in a plan to make White's center a target, not a strength.",
+     "shortText": "White claims the center; we'll let them overextend and strike back."
+    },
+    {
+     "text": "Black responds with b6, preparing to fianchetto the bishop to b7. That bishop is going to put pressure on e4, so we need to be ready to defend it properly.",
+     "shortText": "b6 signals the bishop is coming to b7."
+    },
+    {
+     "text": "d4 grabs the center and opens lines for the queen and bishop. It's the natural follow-up to b6, claiming space and preparing to develop quickly. White is already eyeing the e4 pawn, which becomes a target for Black's pieces.",
+     "shortText": "d4 claims central space and prepares development."
+    },
+    {
+     "text": "There it is: Bb7, the point of b6. That bishop is now staring down the long diagonal at e4. It's a good move, but we have a plan to make it harmless.",
+     "shortText": "Bb7 puts pressure on e4."
+    },
+    {
+     "text": "Bd3 is the key move. We overprotect e4, so Black's pressure on that pawn is neutralized. The bishop also has potential energy, aiming at the kingside if Black ever castles. This is the foundation of our whole setup.",
+     "shortText": "Bd3 overprotects e4 and eyes the kingside."
+    },
+    {
+     "text": "Black strikes at the heart of our setup with f5, challenging the e4 pawn and trying to open lines for the bishop on b7. This is the Owen's Defense's main counterpunch — if we let Black take on e4, our center crumbles. But we're ready: our pieces are overprotecting e4, so this pawn break doesn't scare us. Instead, we see it as an invitation to open the position and expose Black's uncastled king.",
+     "shortText": "f5 challenges our center, but our pieces are ready to punish."
+    },
+    {
+     "text": "exf5 captures the pawn and opens the f-file, but it also gives Black's bishop on b7 a clear diagonal. This trade simplifies the center and leaves White with a pawn on f5, which can be a target. The move is straightforward, but it changes the character of the position.",
+     "shortText": "exf5 opens the f-file and simplifies the center."
+    },
+    {
+     "text": "Black grabs the pawn back with Bxg2, snatching material and attacking our rook on h1. This is a critical moment — we can't let Black get away with this. But notice: Black's bishop on g2 is now far from the action, and our queen is ready to leap into the attack. We have a lead in development and a clear plan: use our pieces to hunt down Black's king before they can consolidate.",
+     "shortText": "Bxg2 wins a pawn, but Black's king is still exposed."
+    },
+    {
+     "text": "Qh5+ is the hammer blow — we check the king and force it to move, keeping the initiative. Black's king has no safe square: it can't go to e7 because our bishop on d3 controls that, and it can't stay on e8 because we'll just keep checking. This is the payoff for all our development — Black's pieces are still on their starting squares, and we're already attacking with our queen.",
+     "shortText": "Qh5+ forces the king out, exploiting Black's lag."
+    },
+    {
+     "text": "Black tries to block the check with g6, but this only weakens the dark squares around their king. Now we have a target: the pawn on g6 is a hook we can use to open the king side. Our next moves will be about breaking through — maybe with a pawn push or a piece sacrifice — while Black's king remains trapped in the center. The attack is just beginning.",
+     "shortText": "g6 weakens the king side, giving us a target."
     }
    ]
   }
