@@ -229,4 +229,19 @@ export const GAMBIT_GEM_NARRATION: Record<string, GambitGemNarration> = {
       'e5 \u2014 open the long diagonal', '',
       'Bd5 \u2014 back with tempo', '', '', ''],
   },
+  // Evans: after 9.Nc3 the centre is huge and f7 is the pressure point. …Nge7?
+  // takes the last guard off g5, so Ng5! lands with Bc4 already aimed at f7.
+  'gambit-evans-gambit:e4_e5_Nf3_Nc6_Bc4_Bc5_b4_Bxb4_c3_Bc5_d4_exd4_O-O_d6_cxd4_Bb6_Nc3:Nge7': {
+    sources: ['concept:pos-king-safety', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Evans_Gambit'],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…Nge7 develops, but it hands the f7-square its worst possible defender count — the bishop on c4 is already staring at it and the knight no longer covers g5.', 'Ng5! Straight at f7. Two attackers, one defender, and Black cannot castle out of it in time.', '', 'Qh5 brings the third attacker to bear on f7. Black is now defending with pieces that have nowhere to go.', '', 'Nxh7 collects the pawn and hits the rook on f8 — the attack pays for itself.', '', 'Bg5 turns the last screw, pinning Black to the back rank while the extra pawn keeps.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Ng5 — pile onto f7', '', 'Qh5 — third attacker on f7', '', 'Nxh7 — pawn, and hits the rook', '', '', ''],
+  },
+  // Stafford: 6.d3? is natural and too slow — f2 is defended by the king alone,
+  // and …Ng4! is the move the whole gambit is built around. Be3 Nxe3 fxe3 Bxe3
+  // restores material and leaves White shattered with the king stuck in the middle.
+  'stafford-gambit:e4_e5_Nf3_Nf6_Nxe5_Nc6_Nxc6_dxc6_Nc3_Bc5:d3': {
+    sources: ["concept:pos-king-safety", "concept:pos-initiative", "https://en.wikipedia.org/wiki/Stafford_Gambit"],
+    watch: ['', '', '', '', '', '', '', '', '', '', 'd3 is the natural developing square, but it does nothing about f2 — and in this gambit f2 is the whole point. Only the king defends it.', '…Ng4! Straight at f2. Black gave up the pawn for exactly this: pieces pointing at a king still sitting in the centre.', 'Be3 is the only real way to prop up f2 — but it puts a bishop on a square the knight can simply take.', '', "fxe3 keeps material level, at the price of doubled e-pawns and an open f-file pointing back at White's own king.", '…Bxe3 takes the pawn straight back. Material is level, but only one king is safe.', '', '…Qg5 guards the bishop and adds a second piece to the dark-square squeeze. White still cannot castle.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '…Ng4 — hit f2 at once', '', '', '', '…Bxe3 — pawn back, king exposed', '', '…Qg5 — guard e3, pile on', ''],
+  },
 };
