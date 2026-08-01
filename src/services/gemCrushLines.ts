@@ -424,6 +424,23 @@ export function findLivePunishment(
       return '';
     }
   })();
+  // DON'T NAME THE PUNISH TWICE. The authored note almost always opens on the
+  // move it is teaching ("exf3 — take it. You stay a pawn to the good…"), so
+  // bolting the computed "Black crushes with exf3" on the front said the same
+  // SAN twice in one breath. When the note already names it, the note IS the
+  // announcement and the computed half only has to carry the line and the
+  // payoff. Without a note, the computed announcement still does that job.
+  const punishSan = cleanSan(gem.punish);
+  const noteNamesPunish = authored.length > 0
+    && new RegExp(`(^|[^A-Za-z0-9])${punishSan.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}([^A-Za-z0-9]|$)`).test(authored);
+  const buildReveal = (): string => {
+    if (!authored) return `${us} crushes with ${punishSan}${tail}, ${payoff}.`;
+    if (!noteNamesPunish) return `${authored} ${us} crushes with ${punishSan}${tail}, ${payoff}.`;
+    // The note said the move; continue its sentence rather than restart it.
+    const line = spokenTail.length > 0 ? `The line runs ${spokenTail.join(', ')} — ${payoff}.` : `${cap(payoff)}.`;
+    return `${authored} ${line}`;
+  };
+
   return {
     gemId: gemId(gem),
     inaccuracy: gem.inaccuracy,
@@ -432,7 +449,7 @@ export function findLivePunishment(
     payoff,
     callout,
     revealArrows: [{ from: puFrom, to: puTo, color: 'green' }],
-    reveal: `${authored ? `${authored} ` : ''}${us} crushes with ${cleanSan(gem.punish)}${tail}, ${payoff}.`,
+    reveal: buildReveal(),
     continuation,
     punishSeq: gem.punishSeq ?? [gem.punish],
   };
