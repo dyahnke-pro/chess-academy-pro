@@ -30,7 +30,7 @@ import {
 } from '../data/lessons/punishGems';
 import { narrateContinuationMove } from './continuationMoveNarration';
 import repertoireData from '../data/repertoire.json';
-import type { PunishLesson } from '../types';
+import type { PunishLesson } from '../types/walkthroughTree';
 
 /** How many weapons the coach's punish stage carries. Matches the puzzle
  *  path's own ceiling so the two sources produce a stage of the same size. */
