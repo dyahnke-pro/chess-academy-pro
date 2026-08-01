@@ -308,4 +308,20 @@ export const GAMBIT_GEM_NARRATION: Record<string, GambitGemNarration> = {
     watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '…Bxc3+ releases the pin, but it trades off the piece that was doing all the annoying — and hands White the bishop pair for it.', 'bxc3! Recapture toward the middle. The pawns on c3 and d4 form a broad centre, the b-file opens, and White keeps both bishops.', '', '', 'O-O — the king is tucked away and every white piece points at the kingside. Doubled c-pawns are a small price for this.', '', '', '', '…Qd6 — Black is solid but passive. White has the two bishops, the centre and the open file; this is the pleasant side to play.'],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'bxc3 — recapture toward the centre', '', '', 'O-O — king safe, pieces aimed', '', '', '', ''],
   },
+  // Scotch Gambit: …h6 is a second quiet edge move in a line where White paid a
+  // pawn for time. cxd4 recovers it WITH tempo on the c5-bishop and leaves the
+  // ideal e4+d4 centre.
+  'scotch-gambit:e4_e5_Nf3_Nc6_d4_exd4_Bc4_Bc5_O-O_d6_c3:h6': {
+    sources: ["concept:pos-initiative", "concept:pos-center", "https://en.wikipedia.org/wiki/Scotch_Game"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '…h6 again spends a move on the edge. White paid a pawn for time; every quiet move like this hands some of it straight back.', 'cxd4! Take the pawn back and build the centre in the same move — and it comes with tempo on the bishop sitting on c5.', '…Bb6 has to move, so White gets another free developing move out of it.', '', '', '', '', 'Re1 finishes the job: pawns on e4 and d4, every piece out, the rook on the open file. All from one wasted tempo.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', 'cxd4 — pawn back, centre built', '', '', '', '', '', 'Re1 — the file, and the centre', ''],
+  },
+  // Smith-Morra declined: …e5 looks like a space grab but concedes d5 forever.
+  // c4! is the bind — c4 and e4 own the square, …d5 can never come, and Black
+  // is left solid with no break.
+  'smith-morra-gambit:e4_c5_d4_cxd4_c3_d3_Bxd3_Nc6_Nf3_d6_O-O:e5': {
+    sources: ["concept:pos-weak-squares", "concept:pos-center", "https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit"],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '…e5 grabs space and looks solid, but it puts a pawn on a dark square and leaves d5 with nothing to defend it ever again.', 'c4! The bind. Pawns on c4 and e4 own d5 between them, and Black can never free the position with …d5.', '', '', '', 'Be2 — no rush. When the opponent has no pawn break, White can just improve pieces one at a time.', '', 'Be3 completes it: Black is solid but has no plan, and White chooses where to play. That is what the hole on d5 costs.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', 'c4 — clamp d5 for good', '', '', '', '', '', 'Be3 — solid, and completely passive', ''],
+  },
 };
