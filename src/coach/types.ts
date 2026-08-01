@@ -268,6 +268,11 @@ export interface LiveState {
    *  straight through `voiceFacts` (the LLM only phrases); see the matching
    *  field on `MasterGroundingOptions`. */
   moveNarrationFacts?: string;
+  /** Instructions for the phrasing model that must NEVER be spoken. Separate
+   *  from `moveNarrationFacts` because every guard in `voiceFacts` falls back
+   *  to serving that string verbatim — which is how the coach came to read
+   *  "never suggest playing it" aloud on prod (David 2026-08-01). */
+  moveNarrationDirectives?: string;
   /** The review walk's STORED engine read for the ply the student is asking
    *  about — fenBefore + played SAN + the analysis' best-move UCI. Threaded by
    *  the review Ask so a "why was h3 better" question answers INSTANTLY from

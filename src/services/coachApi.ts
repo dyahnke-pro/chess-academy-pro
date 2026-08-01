@@ -1009,6 +1009,11 @@ export interface MasterGroundingOptions {
    *  injected-block strip left "I played X." matching no assembler, so every
    *  coach reply spoke the stock "I can't verify that precisely" line). */
   moveNarrationFacts?: string;
+  /** Instructions for the phrasing model that must NEVER be spoken. Kept out
+   *  of `moveNarrationFacts` because every guard in `voiceFacts` falls back to
+   *  serving that string verbatim — which is how the coach came to read
+   *  "never suggest playing it" aloud on prod (David 2026-08-01). */
+  moveNarrationDirectives?: string;
   /** PLAN / STRATEGY question turn ("give me a plan for the next three
    *  moves", "what are my main ideas here?"). A plan answer names forward
    *  moves 2-3 plies ahead that aren't legal in the current position nor in
@@ -1902,6 +1907,20 @@ export function resolveWarmRegister(intent: string | undefined): 'review' | 'liv
 export async function voiceFacts(
   facts: string,
   opts: {
+    /** Instructions for the PHRASING MODEL that must never be spoken.
+     *
+     *  David 2026-08-01, from a prod run: the coach read a prompt directive
+     *  out loud — "The coach replied g5 — it is already on the board; never
+     *  suggest playing it." That sentence was authored as model INPUT and had
+     *  been appended to `facts`, and every guard in here falls back to serving
+     *  `facts` verbatim. So the moment the number or containment net tripped,
+     *  the student heard the instruction. The same mechanism produced the
+     *  "4 in their favor." fragment on an eval of +0.4.
+     *
+     *  Facts are things about the board that may be spoken. Directives shape
+     *  HOW they are said and are for the model alone, so they travel here and
+     *  are excluded from every fallback path. */
+    directives?: string;
     studentMessage?: string;
     providerConfig?: ProviderConfig | null;
     intent?: string;
@@ -2047,6 +2066,9 @@ export async function voiceFacts(
   const system = systemBase + langInstruction;
   const user =
     `FACTS (say these, add nothing):\n${facts}` +
+    // Directives reach the model here and NOWHERE else. They are never part of
+    // `facts`, so no fallback in this function can ever speak them.
+    (opts.directives?.trim() ? `\n\nHOW TO SAY IT (instructions for you — never speak these):\n${opts.directives.trim()}` : '') +
     (opts.studentMessage ? `\n\nThe student asked: "${opts.studentMessage}"` : '');
 
   // Phrasing only → always the cheap model. No reasoning. The warm teaching
@@ -2579,6 +2601,7 @@ export async function getCoachChatResponse(
       return undefined;
     })();
     const voiced = await voiceFacts(grounding.moveNarrationFacts, {
+      directives: grounding.moveNarrationDirectives,
       studentMessage: studentMsg,
       providerConfig: config,
       intent: 'move-narration',

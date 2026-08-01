@@ -3795,10 +3795,19 @@ export function CoachTeachPage(): JSX.Element {
       // fork / chain directives.
       moveNarrationFacts:
         !walkthrough.isActive && opts?.coachReplyPlayed && opts.coachReplyPlayed.length > 0
+          // FACTS ONLY — anything here can be SPOKEN verbatim when a voiceFacts
+          // guard trips and serves the computed prose. Two model instructions
+          // used to sit in this string, and David heard one read aloud on prod
+          // (2026-08-01). They now travel in `moveNarrationDirectives`, which
+          // no fallback path can reach.
           ? `The student played ${text.replace(/^i\s+played\s+/i, '').replace(/\.$/, '')}. ` +
-            `The coach replied ${opts.coachReplyPlayed} — it is already on the board; never suggest playing it. ` +
-            `${opts?.coachReplyFact ?? ''} ` +
-            `Narrate the coach's reply and its idea in one or two sentences, then prompt the student's move.`
+            `The coach replied ${opts.coachReplyPlayed}. ` +
+            (opts?.coachReplyFact ?? '')
+          : undefined,
+      moveNarrationDirectives:
+        !walkthrough.isActive && opts?.coachReplyPlayed && opts.coachReplyPlayed.length > 0
+          ? `${opts.coachReplyPlayed} is already on the board — never suggest playing it. `
+            + "Narrate the coach's reply and its idea in one or two sentences, then prompt the student's move."
           : undefined,
       ...(evalForAsk ?? {}),
       ...(lichessForAsk ?? {}),
