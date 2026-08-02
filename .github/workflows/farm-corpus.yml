@@ -152,13 +152,24 @@ jobs:
           # ONLY the shipped JSON. data/sources/** is gitignored and stays that
           # way — the raw transcripts must never enter the repo.
           git add public/data/*-teachings.json src/data/*-teachings.json 2>/dev/null || true
+          # NOTES are the deliverable, not bytes. Run 7 went fully green and
+          # committed "7199 notes" for the second time running: merge rewrote the
+          # file (timestamp, ordering) so `git diff --cached` saw a change and the
+          # no-op guard below never fired. Compare what the corpus actually holds
+          # against what it held at HEAD.
+          NOW=$(node -e "
+            const f='public/data/${{ github.event.inputs.creator || 'saintlouis' }}-teachings.json';
+            try { console.log(JSON.parse(require('fs').readFileSync(f,'utf8')).notes.length) } catch { console.log(0) }")
+          WAS=$(git show HEAD:public/data/${{ github.event.inputs.creator || 'saintlouis' }}-teachings.json 2>/dev/null \
+            | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{try{console.log(JSON.parse(s).notes.length)}catch{console.log(0)}})")
+          echo "notes: ${WAS} -> ${NOW}"
           # A run that ships NOTHING must be RED. Four runs on 2026-08-01 burned
           # 11 hours between them and committed zero notes, and nobody noticed
           # because a no-op exits 0 and reads as a healthy green run — the exact
           # failure mode CLAUDE.md warns about (a silent no-op reporting success
           # is worse than a crash). The farm's whole job is landing a chunk, so
           # not landing one is a failure, not a quiet skip.
-          if git diff --cached --quiet; then
+          if [ "$NOW" -le "$WAS" ]; then
             LEFT=$(node -e "
               try { console.log(JSON.parse(require('fs').readFileSync('.pull-status.json','utf8')).missingAtStart) }
               catch { console.log('unknown') }")
@@ -166,12 +177,9 @@ jobs:
               echo "::notice::nothing left to farm for this creator — backlog is empty"
               exit 0
             fi
-            echo "::error::farm ran but shipped no notes (backlog was ${LEFT}) — the pull or distill produced nothing"
+            echo "::error::farm ran but added no notes (${WAS} -> ${NOW}, backlog was ${LEFT}) — the pull or distill produced nothing"
             exit 1
           fi
-          COUNT=$(node -e "
-            const f='public/data/${{ github.event.inputs.creator || 'saintlouis' }}-teachings.json';
-            try { console.log(JSON.parse(require('fs').readFileSync(f,'utf8')).notes.length) } catch { console.log('?') }")
-          git commit -m "feat(corpus): farm ${{ github.event.inputs.creator || 'saintlouis' }} — ${COUNT} notes"
+          git commit -m "feat(corpus): farm ${{ github.event.inputs.creator || 'saintlouis' }} — ${NOW} notes (+$((NOW-WAS)))"
           git pull --rebase origin main
           git push origin HEAD:main

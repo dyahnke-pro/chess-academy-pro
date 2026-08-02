@@ -54,12 +54,25 @@ async function main() {
   const NO_SUBS = `${TDIR}/.no-subs.json`;
   const noSubs = new Set(await readFile(NO_SUBS, 'utf8').then(JSON.parse).catch(() => []));
 
+  // DURABLE RESUME, the same one the distiller has (2026-08-02). Resuming purely
+  // by "is the VTT on disk" works locally and is meaningless on CI: the
+  // transcripts dir is gitignored, so every fresh runner starts empty, decides
+  // all 1,715 videos are missing, and re-pulls the SAME first 400 from the top
+  // of the manifest. The distiller then skips all of them as already shipped and
+  // the run commits nothing — which is why CI never advanced even before the
+  // caption bug. The shipped corpus records every distilled video id, so trust
+  // that ledger too and a fresh runner starts at the real frontier.
+  let shipped = new Set();
+  try {
+    shipped = new Set(JSON.parse(await readFile(CREATOR.corpus, 'utf8')).v2VideoIds ?? []);
+  } catch { /* no shipped corpus yet — pull everything */ }
+
   const missing = [];
   for (const v of videos) {
-    if (noSubs.has(v.id)) continue;
+    if (noSubs.has(v.id) || shipped.has(v.id)) continue;
     if (!(await exists(`${TDIR}/${v.id}.en.vtt`))) missing.push(v);
   }
-  console.log(`[pull] ${videos.length} videos in scope, ${missing.length} missing transcripts (${noSubs.size} known caption-less)`);
+  console.log(`[pull] ${videos.length} videos in scope, ${missing.length} to pull (${shipped.size} already shipped, ${noSubs.size} caption-less)`);
 
   let done = 0, failed = 0, streak = 0, recovered = 0;
   const pauseMs = Number(process.env.PULL_PACE_MS ?? '5000');
