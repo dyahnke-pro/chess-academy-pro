@@ -298,9 +298,40 @@ function normalizeNameForMatch(s: string): string {
     .replace(/[‘’'`]s\b/g, '')
     .replace(/[‘’'`]/g, '')   // remaining apostrophes (straight + curly)
     .replace(/-/g, ' ')                 // hyphens to space
+    // DB names are punctuated ("Vienna Game: Vienna Gambit, Main Line"); people
+    // type them flat ("vienna gambit main line"). Leaving the commas and colons
+    // in meant the flat form was not a substring of the punctuated one, so a
+    // name the DB HAS resolved to null — David 2026-08-02 asked for the Vienna
+    // Gambit main line and was told there was no grounded data for it.
+    .replace(/[,:;./]/g, ' ')
     .replace(/\s+/g, ' ')               // collapse whitespace
-    .trim();
+    .trim()
+    // British spellings, folded on BOTH sides so the DB's American names match
+    // what people type. "Philidor Defence" and "Caro-Kann Defence" resolved to
+    // null before this — the DB has both, spelled the other way.
+    .replace(/\bdefence\b/g, 'defense')
+    .replace(/\bcentre\b/g, 'center')
+    .replace(/\bmanoeuvre\b/g, 'maneuver');
 }
+
+/** SAN moves a query names to pin down WHICH line it means — "the Vienna
+ *  Gambit main line with Qf3", "the Bg5 line". People identify a variation by
+ *  its defining move at least as often as by its book name (the Qf3 line's DB
+ *  name is "Paulsen Attack", which nobody types), so the move has to be a way
+ *  in. Deliberately narrow: piece moves, captures and castling only — a bare
+ *  "e4"-shaped token is as likely to be part of a name or stray prose. */
+const NAMED_SAN = /\b(?:O-O(?:-O)?|[KQRBNkqrbn][a-h]?[1-8]?x?[a-h][1-8]|[a-h]x[a-h][1-8])\b/gi;
+
+/** People type "qf3", the DB stores "Qf3" — piece letter up, squares down. */
+function canonicalizeSan(raw: string): string {
+  if (/^O-O(-O)?$/i.test(raw)) return raw.toUpperCase();
+  return /^[a-h]x/i.test(raw) ? raw.toLowerCase() : raw[0].toUpperCase() + raw.slice(1).toLowerCase();
+}
+
+/** Connector words left dangling once the SAN is lifted out of a query
+ *  ("…main line with Qf3" → "…main line with"). Trailing only — "with" is a
+ *  real part of "Vienna Gambit, with Max Lange Defense". */
+const TRAILING_CONNECTORS = /\s+(?:with|using|via|featuring|and|plus|,)\s*$/i;
 
 /** Token-set match: does `target` contain every meaningful token
  *  from `query`? Used as the word-order-insensitive fallback.
@@ -592,8 +623,26 @@ export function resolveOpeningEntry(
   // Preserves all teachable openings; deep-dive (PGN-prefix) and
   // in-game detection still see the full DB via separate code paths.
   const entries = (openingsData).filter(isTeachableEntry);
-  const trimmed = openingName.trim();
-  if (!trimmed) return null;
+  const rawTrimmed = openingName.trim();
+  if (!rawTrimmed) return null;
+
+  // Lift out any SAN the query names, and resolve the NAME from what's left —
+  // "Vienna Gambit main line with Qf3" is a name plus a move, and only the name
+  // half can match a DB name. The move is put back to work below, to choose
+  // among the lines under that name.
+  const namedSans: string[] = [];
+  let trimmed = rawTrimmed;
+  // An exact DB name wins outright — never dismantle a query that already IS a
+  // name (no shipped name is SAN-shaped today, but that is not a guarantee).
+  if (!entries.some((e) => normalizeNameForMatch(e.name) === normalizeNameForMatch(rawTrimmed))) {
+    const stripped = rawTrimmed.replace(NAMED_SAN, (san) => { namedSans.push(canonicalizeSan(san)); return ' '; });
+    if (namedSans.length > 0) {
+      const remainder = stripped.replace(/\s+/g, ' ').trim().replace(TRAILING_CONNECTORS, '').trim();
+      // A query that is ONLY a move names no opening — leave it to the caller.
+      if (remainder.length === 0) return null;
+      trimmed = remainder;
+    }
+  }
 
   // Apply alias map first (KID → King's Indian Defense, najdorf →
   // Sicilian Defense: Najdorf Variation, etc.). Case-insensitive.
@@ -617,6 +666,22 @@ export function resolveOpeningEntry(
     });
   }
   function emit(e: OpeningEntry): { canonicalName: string; eco: string; moves: string[] } {
+    // THE MOVE THE QUERY NAMED decides which line under this name is meant.
+    // Among the DB lines that continue the resolved one, take the shallowest
+    // that actually plays every named move — the entry where that move is the
+    // point, not one that happens to reach it later. Still pure DB (G3): the
+    // move only ever SELECTS an existing entry, it never invents a line.
+    if (namedSans.length > 0) {
+      const under = entries.filter((cand) => {
+        if (cand.pgn !== e.pgn && !cand.pgn.startsWith(`${e.pgn} `)) return false;
+        const moves = cand.pgn.split(/\s+/);
+        return namedSans.every((san) => moves.includes(san));
+      });
+      if (under.length > 0) {
+        const best = under.reduce((a, b) => (a.pgn.length <= b.pgn.length ? a : b));
+        return { canonicalName: best.name, eco: best.eco, moves: best.pgn.split(/\s+/).filter(Boolean) };
+      }
+    }
     return {
       canonicalName: e.name,
       eco: e.eco,
@@ -1241,6 +1306,31 @@ export interface LinePickerOption {
    *  student can see whether they'll be following a same-side plan
    *  or learning to face an opposite-side attack. */
   leadingSide: 'white' | 'black';
+  /** The move that MAKES this line the line, numbered as it would be written
+   *  ("5.Qf3", "5...a6") — the last move of the variation's canonical PGN,
+   *  which is the ply the DB names it at.
+   *
+   *  David 2026-08-02: book names are not how people hold variations in their
+   *  heads. He asked for the Vienna Gambit "main line with Qf3" — the DB calls
+   *  that the Paulsen Attack, a name he had no reason to know. Showing the move
+   *  on the tile is what connects the two. */
+  keyMove: string;
+}
+
+/** "5.Qf3" / "5...a6" — the numbered form of the LAST move in a line, which is
+ *  the move that named it. */
+function namingMove(pgn: string): string {
+  const moves = pgn.split(/\s+/).filter(Boolean);
+  return numberedMoveAt(moves, moves.length - 1);
+}
+
+/** "5.Qf3" / "5...a6" for the move at `index` (0-based). */
+function numberedMoveAt(moves: string[], index: number): string {
+  const san = moves[index];
+  if (!san) return '';
+  const ply = index + 1;
+  const moveNumber = Math.ceil(ply / 2);
+  return ply % 2 === 1 ? `${moveNumber}.${san}` : `${moveNumber}...${san}`;
 }
 
 /** Normalize for opening-family matching, collapsing the Defence/Defense
@@ -1446,6 +1536,23 @@ export function findLinePickerOptions(
   const curatedEntry = findCuratedOpeningByName(bareCandidate.name);
   if (curatedEntry?.variations?.length) {
     const variations = curatedEntry.variations;
+    // A curated variation's PGN runs all the way to a middlegame (G9.3 Gate B),
+    // so its LAST move is deep in the line and says nothing about which line it
+    // is — "Austrian Attack, 11...Nac5". Nor is the shared trunk enough: half
+    // the Ruy lines play 3...a6 and part ways later, so the trunk would label
+    // Marshall, Open and Exchange identically. The move that identifies a line
+    // is the first ply at which it is ALONE among its siblings — Berlin at
+    // 3...Nf6, Marshall at 8...d5, Exchange at 4.Bxc6.
+    const siblingLines = variations.map((v) => v.pgn.split(/\s+/).filter(Boolean));
+    const uniqueAt = (moves: string[]): number => {
+      for (let i = 0; i < moves.length; i += 1) {
+        const sharers = siblingLines.filter(
+          (other) => other.length > i && other.slice(0, i + 1).every((san, j) => san === moves[j]),
+        );
+        if (sharers.length === 1) return i;
+      }
+      return moves.length - 1;
+    };
     const curatedOptions: LinePickerOption[] = buildVariationTabs(curatedEntry.id, variations)
       .map((tab) => {
         const v = variations[tab.index];
@@ -1465,6 +1572,7 @@ export function findLinePickerOptions(
           // hidden — matching the clean look (vs deriving from the curated
           // PGN's arbitrary length, which gave a misleading mixed W/B).
           leadingSide: studentSide === 'white' ? 'black' : 'white',
+          keyMove: numberedMoveAt(moves, uniqueAt(moves)),
         };
       });
     if (curatedOptions.length > 0) {
@@ -1507,6 +1615,7 @@ export function findLinePickerOptions(
         pgnLength,
         studentSide,
         leadingSide,
+        keyMove: namingMove(e.pgn),
       };
     })
     // Sort by popularity descending (count of DB entries falling under

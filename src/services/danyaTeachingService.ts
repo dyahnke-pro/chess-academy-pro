@@ -255,6 +255,14 @@ export function supportNoteForPly(
     if (openingName) {
       const support = secondarySupportNotes({ historySans, openingName, maxNotes: 4 }).filter(onThisLine)[0];
       if (support) return support;
+      // STRUCTURE TRANSFER IS OFF INSIDE A TAUGHT LESSON (David 2026-08-02:
+      // "tighten the narration notes just a touch… make sure the coach stays
+      // scoped to the opening that it was asked to teach"). Borrowing a note
+      // from a different opening because the pawn structures rhyme is the right
+      // answer for a live board past book — it is the wrong answer when the
+      // student named the opening they wanted taught. A ply with nothing to say
+      // falls back to computed prose about THIS position, which is on topic.
+      return null;
     }
     return notesForStructure(fen, 2).filter(onThisLine)[0] ?? null;
   } catch {
@@ -552,21 +560,26 @@ export function buildDanyaTeachingBlock(args: {
   const max = args.maxNotes ?? 3;
   const picked: DanyaNote[] = [];
   const seen = new Set<string>();
-  if (args.fen) {
-    for (const n of notesForFen(args.fen, max)) {
-      if (!seen.has(n.id)) { picked.push(n); seen.add(n.id); }
+  // SCOPED TO THE OPENING BEING TAUGHT (David 2026-08-02). This block is handed
+  // to the model as the teaching material for the whole lesson, and it was
+  // assembled with no reference to the opening at all — so an ancestor-keyed or
+  // structurally-similar note about a different opening could sit in the prompt
+  // for every ply of the lesson. Each tier below still runs; a note tagged with
+  // another opening just doesn't make it into the block.
+  const onTopic = (n: DanyaNote): boolean => !noteOpeningConflicts(n.opening, args.openingName);
+  const add = (notes: DanyaNote[]): void => {
+    for (const n of notes) {
+      if (picked.length >= max) return;
+      if (seen.has(n.id) || !onTopic(n)) continue;
+      picked.push(n);
+      seen.add(n.id);
     }
+  };
+  if (args.fen) add(notesForFen(args.fen, max));
+  if (args.historySans && args.historySans.length > 0) {
+    add(notesForPrefix(args.historySans, max));
   }
-  if (args.historySans && args.historySans.length > 0 && picked.length < max) {
-    for (const n of notesForPrefix(args.historySans, max - picked.length)) {
-      if (!seen.has(n.id)) { picked.push(n); seen.add(n.id); }
-    }
-  }
-  if (args.openingName && picked.length < max) {
-    for (const n of notesForOpening(args.openingName, max - picked.length)) {
-      if (!seen.has(n.id)) { picked.push(n); seen.add(n.id); }
-    }
-  }
+  if (args.openingName) add(notesForOpening(args.openingName, max));
   // SUPPORT TIER — the farmed corpora, filling whatever slots the primary
   // corpus left empty (David 2026-08-01: "a third source that supports at
   // runtime"). It runs whether or not the primary covered this opening, because
@@ -575,23 +588,23 @@ export function buildDanyaTeachingBlock(args: {
   // sub-line. It cannot dilute the house voice: the primary tiers above already
   // took their slots, so these only ever supplement, never displace.
   if (picked.length < max) {
-    for (const n of secondarySupportNotes({
+    add(secondarySupportNotes({
       historySans: args.historySans,
       openingName: args.openingName,
-      maxNotes: max - picked.length,
-    })) {
-      if (!seen.has(n.id)) { picked.push(n); seen.add(n.id); }
-    }
+      maxNotes: max,
+    }));
   }
   // LAST tier — structure transfer: teachings from OTHER openings whose
   // structure provably matches this board (and whose claims survive the live
   // truth filter). Fires mainly past book, where the tiers above go quiet.
   // Deliberately AFTER the support tier: a real note about the opening in front
   // of the student beats a borrowed analogy from a different one.
-  if (args.fen && picked.length < max) {
-    for (const n of notesForStructure(args.fen, max - picked.length)) {
-      if (!seen.has(n.id)) { picked.push(n); seen.add(n.id); }
-    }
+  //
+  // Skipped entirely once the opening is known — the same scoping rule as
+  // `supportNoteForPly`. Borrowing another opening's teaching is for a board
+  // that has left book, not for a lesson the student asked for by name.
+  if (args.fen && !args.openingName && picked.length < max) {
+    add(notesForStructure(args.fen, max));
   }
   if (picked.length === 0) return '';
   const lines: string[] = [

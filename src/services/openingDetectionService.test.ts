@@ -656,3 +656,72 @@ describe('openingDetectionService', () => {
     });
   });
 });
+
+// ── "Vienna Gambit main line with Qf3" (David 2026-08-02) ──────────────────
+// He asked for the line Levy teaches against the declined Vienna Gambit and was
+// told there was no grounded data — but the DB has it twice over, as
+// "Vienna Gambit, Main Line" and (with Qf3) "Paulsen Attack". The resolver was
+// what failed, on two counts: DB names are punctuated and people type them
+// flat, and nobody types "Paulsen Attack" when they mean "the Qf3 line".
+describe('resolveOpeningEntry — flat names and named moves', () => {
+  it('resolves a punctuated DB name typed flat', () => {
+    expect(resolveOpeningEntry('Vienna Gambit main line')?.canonicalName)
+      .toBe('Vienna Game: Vienna Gambit, Main Line');
+    expect(resolveOpeningEntry('Vienna Gambit, Main Line')?.canonicalName)
+      .toBe('Vienna Game: Vienna Gambit, Main Line');
+  });
+
+  it('picks the line by the move the query names', () => {
+    const qf3 = resolveOpeningEntry('Vienna Gambit main line with Qf3');
+    expect(qf3?.canonicalName).toBe('Vienna Game: Vienna Gambit, Paulsen Attack');
+    expect(qf3?.moves).toEqual(['e4', 'e5', 'Nc3', 'Nf6', 'f4', 'd5', 'fxe5', 'Nxe4', 'Qf3']);
+    // Lower-case is how people actually type it.
+    expect(resolveOpeningEntry('vienna gambit qf3')?.canonicalName)
+      .toBe('Vienna Game: Vienna Gambit, Paulsen Attack');
+  });
+
+  it('leaves a bare move alone — a move is not an opening name', () => {
+    expect(resolveOpeningEntry('Qf3')).toBeNull();
+    expect(resolveOpeningEntry('Bg5')).toBeNull();
+  });
+
+  it('resolves British spellings the DB stores American', () => {
+    expect(resolveOpeningEntry('Philidor Defence')?.canonicalName).toBe('Philidor Defense');
+    expect(resolveOpeningEntry('Caro-Kann Defence')?.canonicalName).toBe('Caro-Kann Defense');
+    expect(resolveOpeningEntry('French Defence')?.canonicalName).toBe('French Defense');
+  });
+
+  it('still refuses chat noise', () => {
+    expect(resolveOpeningEntry('it')).toBeNull();
+    expect(resolveOpeningEntry('the')).toBeNull();
+  });
+});
+
+describe('findLinePickerOptions — every tile names its move', () => {
+  it('labels each variation with the move that identifies it', () => {
+    const ruy = findLinePickerOptions('Ruy Lopez');
+    const byLabel = new Map((ruy?.options ?? []).map((o) => [o.label, o.keyMove]));
+    expect(byLabel.get('Berlin')).toBe('3...Nf6');
+    expect(byLabel.get('Exchange')).toBe('4.Bxc6');
+    expect(byLabel.get('Open')).toBe('5...Nxe4');
+
+    const caro = findLinePickerOptions('Caro-Kann Defense');
+    const caroByLabel = new Map((caro?.options ?? []).map((o) => [o.label, o.keyMove]));
+    expect(caroByLabel.get('Advance')).toBe('3.e5');
+    expect(caroByLabel.get('Fantasy')).toBe('3.f3');
+  });
+
+  it('numbers the move from the side that plays it', () => {
+    const sicilian = findLinePickerOptions('Sicilian Defense');
+    const najdorf = (sicilian?.options ?? []).find((o) => /najdorf/i.test(o.label));
+    expect(najdorf?.keyMove).toBe('5...a6');
+  });
+
+  it('gives every tile a key move', () => {
+    for (const family of ['Ruy Lopez', 'Vienna Game', 'Pirc Defence', 'Italian Game']) {
+      for (const opt of findLinePickerOptions(family)?.options ?? []) {
+        expect(opt.keyMove, `${family} / ${opt.label}`).toMatch(/^\d+\.(\.\.)?\S+$/);
+      }
+    }
+  });
+});

@@ -133,7 +133,7 @@ import { buildForkTalk, type ForkTalk } from '../../services/forkTalk';
 import { parseSpokenMove } from '../../services/spokenMoveParser';
 import { parseCoachMoveCommand } from '../../services/coachMoveCommand';
 import { sanToSpeech } from '../../utils/sanToSpeech';
-import { teachingNoteForBoard, noteCoverageForLine } from '../../services/danyaTeachingService';
+import { teachingNoteForBoard, noteCoverageForLine, teachingBeatText } from '../../services/danyaTeachingService';
 
 /** How many note-covered plies an opening needs before the NOTES take the
  *  lesson from a hand-authored masterclass.
@@ -196,7 +196,7 @@ import { stockfishEngine } from '../../services/stockfishEngine';
 import { buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
 import { explainBestMoveGrounded } from '../../services/groundedAnswer';
 import { stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
-import { applyCandidateArrows, candidateHighlightMarkers } from '../../services/coachAnswerGates';
+import { applyCandidateArrows, candidateHighlightMarkers, gradeNarrationText } from '../../services/coachAnswerGates';
 import { groundArrows, dedupeArrowsBySquarePair } from '../../utils/arrowGrounding';
 import type { StockfishAnalysis } from '../../types';
 import { fetchLichessExplorer } from '../../services/lichessExplorerService';
@@ -213,6 +213,16 @@ const MATCHUP_HINT_RE = /\b(?:vs\.?|versus|against)\b/i;
  *  after a lesson (David 2026-07-18). Kept as a constant so the leaf offer
  *  and the handleSubmit intercept can't drift apart. */
 const CONTINUE_GAME_CHIP = 'Watch the middlegame and endgame';
+
+/** How long a line takes to READ, as the floor for how long its position stays
+ *  on screen. Used by the narrated play-out when the voice returns without
+ *  having spoken (muted, silent mode, another surface holding the channel) —
+ *  the board must never outrun the teaching. Matches the walkthrough's pacing
+ *  budget: ~150 wpm, floored and capped. */
+function readingPaceMs(text: string): number {
+  const words = text.trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1500, Math.min(20_000, (words / 150) * 60_000 * 1.4));
+}
 /** Also match a user who TYPES the intent, not just taps the chip.
  *  Broadened (David 2026-07-26 gambit-switch bug): the old pattern only matched
  *  "middlegame"/"endgame" as ONE word, so a natural "see the middle game" /
@@ -3191,8 +3201,10 @@ export function CoachTeachPage(): JSX.Element {
             //     about Sicilian when asked which Italian variation
             //     had the most traps.
             const ack = `The ${pickerData.canonicalName} branches into many lines. Pick one to dive in deep, or just type the variation name.`;
+            // Name AND defining move — so a follow-up like "which one is the
+            // Qf3 line?" is answerable from the context the brain was handed.
             const variationList = pickerData.options
-              .map((o) => o.label)
+              .map((o) => (o.keyMove ? `${o.label} (${o.keyMove})` : o.label))
               .join(', ');
             const pickerContextNote = `[ui-state: line picker visible for "${pickerData.canonicalName}". Variations on screen: ${variationList}.]`;
             setMessages((prev) => [...prev, {
@@ -5556,6 +5568,13 @@ export function CoachTeachPage(): JSX.Element {
       // capture it BEFORE stopping, then seed `game` with it so both the
       // visible board and the continuation begin from where the lesson ended.
       const startFen = walkthrough.fen || gameRef.current.fen;
+      // The opening the student asked to be taught — captured before stop()
+      // clears the tree. It scopes the teaching notes below to THIS opening
+      // (see danyaTeachingService), exactly as the opening walkthrough does.
+      const taughtOpening = walkthrough.tree?.openingName ?? null;
+      // The moves that got us here, so a note keyed at this line can be found
+      // by prefix and not only by FEN.
+      const openingSans = walkthrough.pathSans ?? [];
       walkthrough.stop(); // release the board from the walkthrough state machine
       gameRef.current.loadFen(startFen);
       const intro = "Let's watch it play out. I'll take both sides and call out the turning points.";
@@ -5568,6 +5587,8 @@ export function CoachTeachPage(): JSX.Element {
       });
 
       const local = new Chess(startFen);
+      /** One splice per note — an opening-level note must not narrate every move. */
+      const continuationNoteIds = new Set<string>();
       // Ply count from the FEN's fullmove clock (game.history is the free
       // board's, not the walkthrough's).
       const parts = startFen.split(' ');
@@ -5611,11 +5632,36 @@ export function CoachTeachPage(): JSX.Element {
         const { text: keystone, state: next } = continuationNarration(local.fen(), ply, state);
         const phaseChanged = next.phase !== state.phase;
         state = next;
-        const text = keystone ?? perMove.say;
+        let text = keystone ?? perMove.say;
+
+        // TEACHING NOTE, same as the opening (David 2026-08-02: "the same level
+        // of standard throughout the entire teaching session"). The opening
+        // walkthrough splices a curated corpus note per ply; the play-out never
+        // consulted the corpus at all, so the middlegame and endgame got bare
+        // move mechanics — "Black's rook to g7, eyeing the queen on g6" —
+        // where the opening had teaching. Same selection rule (code picks,
+        // scoped to the taught opening), same board-grading of the prose, and
+        // once per note so one note can't narrate every move.
+        try {
+          const note = teachingNoteForBoard(
+            [...openingSans, ...local.history()],
+            local.fen(),
+            taughtOpening,
+          );
+          if (note && !continuationNoteIds.has(note.id)) {
+            const graded = gradeNarrationText(
+              teachingBeatText(note),
+              local.fen(),
+              'CoachTeachPage.continuationNote',
+            );
+            if (graded?.trim()) {
+              continuationNoteIds.add(note.id);
+              text = `${text} ${graded.trim()}`;
+            }
+          }
+        } catch { /* the corpus is a bonus, never a blocker */ }
+
         setMessages((prev) => [...prev, { id: uid('cont-move'), role: 'assistant', content: text, timestamp: Date.now() }]);
-        speechChainRef.current = speechChainRef.current
-          .then(() => voiceService.speakForced(text))
-          .catch(() => undefined);
 
         // ENDGAME AS ITS OWN STEP (David 2026-07-31: "no option for endgame
         // viewing"). Reaching an endgame used to slide past inside this loop;
@@ -5629,8 +5675,27 @@ export function CoachTeachPage(): JSX.Element {
           endgameChoiceRef.current = null;
           if (!resumeChoice || !continuationRef.current) return;
         }
-        // Pace it so the student can watch.
-        await new Promise((r) => setTimeout(r, 1500));
+        // PACED BY THE VOICE, not by a stopwatch (David 2026-08-02: the
+        // play-out "plays out too quickly and loses the beautiful teaching
+        // narrations that the opening had"). The opening walkthrough advances
+        // only when its narration has actually been spoken; this loop queued
+        // the speech and moved the board 1.5s later regardless, so the pieces
+        // ran away from the words and every line after the first was heard
+        // over the wrong position. Same contract as the walkthrough: wait for
+        // the voice, and if it came back impossibly fast (muted, silent mode,
+        // another surface owning the channel) hold a reading pace instead so
+        // the board still can't outrun the teaching.
+        const spokeAt = Date.now();
+        speechChainRef.current = speechChainRef.current
+          .then(() => voiceService.speakForced(text))
+          .catch(() => undefined);
+        await speechChainRef.current;
+        const spokenMs = Date.now() - spokeAt;
+        const floorMs = readingPaceMs(text);
+        if (spokenMs < floorMs) {
+          await new Promise((r) => setTimeout(r, floorMs - spokenMs));
+        }
+        if (!continuationRef.current) return;
       }
 
       if (!continuationRef.current) return;
@@ -6502,6 +6567,11 @@ export function CoachTeachPage(): JSX.Element {
                       )}
                     </div>
                     <span className="text-sm font-semibold text-theme-text leading-tight">{opt.label}</span>
+                    {/* The move that MAKES the line — a book name alone ("Paulsen
+                        Attack") doesn't tell you it's the Qf3 line (David 2026-08-02). */}
+                    {opt.keyMove && (
+                      <span className="text-[10px] font-mono text-theme-text-muted leading-tight">{opt.keyMove}</span>
+                    )}
                   </button>
                 );
               });

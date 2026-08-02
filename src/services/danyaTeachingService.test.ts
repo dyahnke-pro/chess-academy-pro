@@ -4,7 +4,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import teachings from '../data/danya-teachings.json';
-import { notesForFen, noteAtPosition, planNoteForPath, notesForPrefix, notesForOpening, noteOpeningConflicts } from './danyaTeachingService';
+import { notesForFen, noteAtPosition, planNoteForPath, notesForPrefix, notesForOpening, noteOpeningConflicts, supportNoteForPly, buildDanyaTeachingBlock } from './danyaTeachingService';
 
 interface Note { id: string; lineSan: string[]; plans: string }
 const positioned = (teachings as { notes: Note[] }).notes.filter((n) => n.lineSan.length > 0);
@@ -137,6 +137,35 @@ describe('noteAtPosition — stays on the opening being taught', () => {
     for (const shallow of [['e4'], ['d4'], ['e4', 'e5'], ['d4', 'd5']]) {
       const hit = noteAtPosition(shallow, fenAfter(shallow));
       expect(hit, `a ${shallow.length}-ply anchor is not position teaching`).toBeNull();
+    }
+  });
+});
+
+// David 2026-08-02: "tighten the narration notes just a touch… make sure the
+// coach stays scoped to the opening that it was asked to teach."
+describe('scoped to the taught opening', () => {
+  it('does not borrow another opening\'s teaching inside a named lesson', () => {
+    // Mid-lesson position, an opening the student named. Structure transfer is
+    // for a board past book, not for a lesson requested by name.
+    const sans = ['e4', 'e5', 'Nc3', 'Nf6', 'f4', 'd5'];
+    const fen = fenAfter(sans);
+    const note = supportNoteForPly(sans, fen, 'Vienna Game: Vienna Gambit');
+    if (note) {
+      expect(noteOpeningConflicts(note.opening, 'Vienna Game: Vienna Gambit')).toBe(false);
+    }
+  });
+
+  it('keeps off-opening notes out of the teaching block', () => {
+    const sans = ['e4', 'e5', 'Nc3', 'Nf6', 'f4', 'd5'];
+    const block = buildDanyaTeachingBlock({
+      historySans: sans,
+      fen: fenAfter(sans),
+      openingName: 'Vienna Game: Vienna Gambit',
+      maxNotes: 4,
+    });
+    // Whatever it picked, nothing in it may advertise a different opening.
+    for (const other of ['Caro-Kann', 'Najdorf', 'Grünfeld', 'Stonewall']) {
+      expect(block, `block must not teach the ${other}`).not.toContain(other);
     }
   });
 });
