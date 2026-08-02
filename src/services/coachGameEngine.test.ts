@@ -4,6 +4,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 vi.mock('./stockfishEngine', () => ({
   stockfishEngine: {
     analyzePosition: vi.fn(),
+    getBestMove: vi.fn(),
+    forceRestart: vi.fn(),
     initialize: vi.fn(),
     stop: vi.fn(),
   },
@@ -14,6 +16,7 @@ import { stockfishEngine } from './stockfishEngine';
 import type { StockfishAnalysis } from '../types';
 
 const analyzePositionMock = vi.mocked(stockfishEngine).analyzePosition;
+const getBestMoveMock = vi.mocked(stockfishEngine).getBestMove;
 
 const mockAnalysis: StockfishAnalysis = {
   bestMove: 'e2e4',
@@ -32,6 +35,7 @@ const mockAnalysis: StockfishAnalysis = {
 describe('coachGameEngine', () => {
   beforeEach(() => {
     analyzePositionMock.mockResolvedValue(mockAnalysis);
+    getBestMoveMock.mockResolvedValue('e2e4');
     // Default to the threaded (desktop) path so the depth-by-ELO assertions
     // below test the full curve. The single-threaded depth cap is covered by
     // its own test.
@@ -225,5 +229,41 @@ describe('coachGameEngine', () => {
       const result = tryOpeningBookMove(START_FEN, [], italianMoves, 'white');
       expect(result).toBe('e2e4');
     });
+  });
+});
+
+// David 2026-08-02, playing a Vienna on his iPhone: EIGHT coach moves, EIGHT
+// `analyzePosition failed/timeout after 8000ms`, every one landing on the
+// fallback — which called getBestMove WITHOUT a skill argument, so it defaulted
+// to 20. A 1684-rated opponent played full-strength Stockfish for the whole
+// game and beat him by seven pawns.
+describe('getAdaptiveMove — the single-threaded (iOS) opponent', () => {
+  beforeEach(() => {
+    analyzePositionMock.mockClear();
+    getBestMoveMock.mockClear();
+    vi.stubGlobal('crossOriginIsolated', false);
+    vi.stubGlobal('SharedArrayBuffer', undefined);
+  });
+
+  it('searches by TIME, not depth, so it cannot time out every move', async () => {
+    const result = await getAdaptiveMove('r3k2r/pp2bppp/2n5/3pP3/2pP2Q1/5N2/P1P1B1PP/q3BK1R b kq - 1 15', 1684);
+    expect(getBestMoveMock).toHaveBeenCalled();
+    expect(analyzePositionMock).not.toHaveBeenCalled();
+    expect(result.move).toBe('e2e4');
+  });
+
+  it('plays at the rating-matched skill level, never full strength', async () => {
+    await getAdaptiveMove('r3k2r/pp2bppp/2n5/3pP3/2pP2Q1/5N2/P1P1B1PP/q3BK1R b kq - 1 15', 1684);
+    const skillArgs = getBestMoveMock.mock.calls.map((c) => c[2]);
+    expect(skillArgs.length).toBeGreaterThan(0);
+    for (const skill of skillArgs) {
+      expect(skill).toBe(16); // getSkillLevelForElo(1684)
+      expect(skill).not.toBe(20);
+    }
+  });
+
+  it('a weaker opponent gets a weaker skill level', async () => {
+    await getAdaptiveMove('r3k2r/pp2bppp/2n5/3pP3/2pP2Q1/5N2/P1P1B1PP/q3BK1R b kq - 1 15', 900);
+    expect(getBestMoveMock.mock.calls.some((c) => c[2] === 5)).toBe(true);
   });
 });

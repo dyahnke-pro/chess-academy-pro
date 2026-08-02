@@ -13,6 +13,12 @@ import type { StockfishAnalysis, CoachDifficulty } from '../types';
 // the weak/random fallback (David 2026-06-21: "coach is not playing good moves").
 const COACH_MOVE_TIMEOUT_MS = 8000;
 
+/** Movetime budget for the single-threaded (iOS/asm.js) opponent search. Long
+ *  enough for a sensible rating-matched move, short enough that the student
+ *  isn't waiting — and, unlike a depth search, it is a CEILING the engine
+ *  cannot overrun. */
+const SINGLE_THREAD_MOVETIME_MS = 2500;
+
 const FALLBACK_ANALYSIS: StockfishAnalysis = {
   bestMove: '',
   evaluation: 0,
@@ -232,7 +238,6 @@ export async function getAdaptiveMove(
   const threaded = typeof SharedArrayBuffer !== 'undefined' && globalThis.crossOriginIsolated;
   const depth = threaded ? getDepthForElo(targetElo) : Math.min(getDepthForElo(targetElo), 10);
   const skillLevel = getSkillLevelForElo(targetElo);
-
   // BREAK BOOK for weak opponents: roll per move. When it hits, skip BOTH book
   // layers so Stockfish-at-Skill-Level plays the opening itself (rating-
   // appropriate, includes real slips). Strong opponents (>=1600) never break.
@@ -355,6 +360,40 @@ export async function getAdaptiveMove(
     });
   }
 
+  // ON SINGLE-THREADED, SEARCH BY TIME, NOT BY DEPTH (David 2026-08-02, playing
+  // a Vienna on his iPhone). The depth cap above was supposed to make the
+  // skill-limited search complete on asm.js; in a real middlegame it does not.
+  // His log: EIGHT coach moves, EIGHT `analyzePosition failed/timeout after
+  // 8000ms`, every one landing on the fallback — so each reply cost him 8
+  // seconds of nothing, and none of them were the rating-matched move the depth
+  // search was there to produce. A movetime search cannot overrun: the engine
+  // returns the best move it has when the clock runs out, at the skill level it
+  // was given. Depth search stays on desktop, where it completes.
+  if (!threaded) {
+    try {
+      const timed = await Promise.race([
+        stockfishEngine.getBestMove(fen, SINGLE_THREAD_MOVETIME_MS, skillLevel),
+        makeTimeoutPromise(SINGLE_THREAD_MOVETIME_MS + 3000),
+      ]);
+      if (timed && timed !== '(none)') {
+        void logAppAudit({
+          kind: 'coach-opponent-move-source',
+          category: 'subsystem',
+          source: 'coachGameEngine.getAdaptiveMove',
+          summary: `source=stockfish-timed move=${timed} skill=${skillLevel} elo=${targetElo} (single-threaded movetime search)`,
+          fen,
+        });
+        return {
+          move: timed,
+          analysis: { ...FALLBACK_ANALYSIS, bestMove: timed },
+          source: 'stockfish-best',
+        };
+      }
+    } catch {
+      // Fall through to the depth search + its recovery ladder below.
+    }
+  }
+
   let analysis: StockfishAnalysis;
   try {
     analysis = await Promise.race([
@@ -371,10 +410,16 @@ export async function getAdaptiveMove(
     });
     stockfishEngine.stop();
 
-    // Second attempt: use movetime-based best move (always returns within budget)
+    // Second attempt: use movetime-based best move (always returns within
+    // budget). AT THE RATING-MATCHED SKILL LEVEL — `getBestMove`'s skill
+    // parameter defaults to 20, and these fallbacks were omitting it, so every
+    // recovered move was FULL-STRENGTH Stockfish. That is what a fallback on
+    // every move actually felt like to David (2026-08-02): a 1684-rated
+    // opponent that crushed him by seven pawns. A fallback may play a slightly
+    // worse move than the primary search; it may never play a stronger one.
     try {
       const bestMove = await Promise.race([
-        stockfishEngine.getBestMove(fen, 2000),
+        stockfishEngine.getBestMove(fen, 2000, skillLevel),
         makeTimeoutPromise(4000),
       ]);
       if (bestMove && bestMove !== '(none)') {
@@ -410,7 +455,7 @@ export async function getAdaptiveMove(
     try {
       stockfishEngine.forceRestart('getAdaptiveMove hung-worker recovery');
       const revivedMove = await Promise.race([
-        stockfishEngine.getBestMove(fen, 2000),
+        stockfishEngine.getBestMove(fen, 2000, skillLevel),
         makeTimeoutPromise(6000),
       ]).catch(() => null);
       if (revivedMove && revivedMove !== '(none)') {
