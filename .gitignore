@@ -107,3 +107,4 @@ src/data/spine-report-plans.json
 
 # Scratch audit runners (parallel-session throwaways)
 scripts/_*.mjs
+.pull-status.json

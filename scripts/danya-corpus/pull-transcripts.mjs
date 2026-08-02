@@ -20,7 +20,7 @@
  */
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { readFile, access } from 'node:fs/promises';
+import { readFile, access, writeFile } from 'node:fs/promises';
 
 const run = promisify(execFile);
 import { resolveCreator } from './creator.mjs';
@@ -114,6 +114,17 @@ async function main() {
     console.log(`[pull] stopped early (${stoppedEarly}) — handing ${done} transcripts to the distiller`);
   }
   console.log(`[pull] done=${done} failed=${failed} remaining=${Math.max(0, missing.length - done - failed)}`);
+  // The farm treats "shipped no notes" as a failure, which is right while
+  // there is still a backlog and wrong once there is not: a finished creator
+  // has nothing left to pull and would otherwise go red forever. Record what
+  // was actually left so the caller can tell those two apart.
+  // Fixed path, not the per-creator transcripts dir: the CI step that reads it
+  // is shell, and making shell resolve a creator config is how you get a
+  // guard that silently reads "unknown" and stops guarding anything.
+  await writeFile(
+    '.pull-status.json',
+    JSON.stringify({ missingAtStart: missing.length, done, failed, stoppedEarly }),
+  );
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });

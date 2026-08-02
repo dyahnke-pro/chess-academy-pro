@@ -145,8 +145,22 @@ jobs:
           # ONLY the shipped JSON. data/sources/** is gitignored and stays that
           # way — the raw transcripts must never enter the repo.
           git add public/data/*-teachings.json src/data/*-teachings.json 2>/dev/null || true
+          # A run that ships NOTHING must be RED. Four runs on 2026-08-01 burned
+          # 11 hours between them and committed zero notes, and nobody noticed
+          # because a no-op exits 0 and reads as a healthy green run — the exact
+          # failure mode CLAUDE.md warns about (a silent no-op reporting success
+          # is worse than a crash). The farm's whole job is landing a chunk, so
+          # not landing one is a failure, not a quiet skip.
           if git diff --cached --quiet; then
-            echo "no corpus change this run"; exit 0
+            LEFT=$(node -e "
+              try { console.log(JSON.parse(require('fs').readFileSync('.pull-status.json','utf8')).missingAtStart) }
+              catch { console.log('unknown') }")
+            if [ "$LEFT" = "0" ]; then
+              echo "::notice::nothing left to farm for this creator — backlog is empty"
+              exit 0
+            fi
+            echo "::error::farm ran but shipped no notes (backlog was ${LEFT}) — the pull or distill produced nothing"
+            exit 1
           fi
           COUNT=$(node -e "
             const f='public/data/${{ github.event.inputs.creator || 'saintlouis' }}-teachings.json';
