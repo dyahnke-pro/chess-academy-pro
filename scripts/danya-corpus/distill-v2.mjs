@@ -306,7 +306,18 @@ export function openingFromTitle(title, dbNames) {
     // Unpin" whose pterodactyl/unpin the title never mentions), then generic
     // tokens (so "King's Indian DEFENSE" beats a same-distinctive sibling when
     // the title says "Defense"), then the shorter canonical name.
-    const dHits = distinctiveTokens(name).filter((t) => titleTokens.has(t)).length;
+    const dAll = distinctiveTokens(name);
+    const dHits = dAll.filter((t) => titleTokens.has(t)).length;
+    // CONFIRM ENOUGH OF THE NAME. One token out of a long name is not
+    // identification, it is a coincidence: "Capablanca's Endgames" matched
+    // Queen's Indian Defense: Capablanca Variation, "Vassily Ivanchuk's Best
+    // Endgames" matched Sicilian: Alapin, Stoltz Attack, Ivanchuk Line — the
+    // surname is in the title because the lecture is ABOUT the player. So a
+    // short name must be confirmed whole ("Vienna Game", "London System" carry
+    // one distinctive token and one is all there is), while a longer one needs
+    // at least two. This does cost the odd showcase title like "The Glek
+    // System", which names only its sub-variation — untagged beats mistagged.
+    if (dHits < Math.min(2, dAll.length)) continue;
     // The generic bonus exists for exactly one tie: same-distinctive siblings
     // split by DEFENSE (vs Attack). Counting other generic words backfires —
     // a title saying "Variation" promoted "Masi Variation" over the plain
