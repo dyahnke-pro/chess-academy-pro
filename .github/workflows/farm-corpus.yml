@@ -114,11 +114,18 @@ jobs:
         continue-on-error: true
         timeout-minutes: 45
         env:
-          PULL_PACE_MS: '4000'
+          PULL_PACE_MS: '2500'
         run: |
+          # 4 workers, not 1. Sequential costs ~60s per transcript, so a 40
+          # minute budget bought about 40 of them and the backlog would outlive
+          # the year. 14 workers got the IP rate-limited within 15 minutes
+          # (measured 2026-08-02) and every worker fell into a 30-minute
+          # cooldown; 4-6 ran clean. Stay at the low end here — a runner IP that
+          # gets bot-checked poisons the one advantage CI has over local.
           node scripts/danya-corpus/pull-transcripts.mjs \
             --creator "${{ github.event.inputs.creator || 'saintlouis' }}" \
             --limit "${{ github.event.inputs.pull_limit || '400' }}" \
+            --concurrency 4 \
             --budget-minutes 40
 
       - name: Distill
