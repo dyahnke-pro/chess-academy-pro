@@ -169,3 +169,34 @@ describe('scoped to the taught opening', () => {
     }
   });
 });
+
+// The support tier needs the same anchor floor as the exact tier (David
+// 2026-08-02, verifying the first fix): the Vienna came back clean, but a
+// Caro-Kann lesson still opened move ONE with `hp-5d5` — the ["e4"]-anchored
+// note recounting a game six moves deep. The exact tier refused it; the support
+// tier picked it straight back up, because its only scope check was the opening
+// tag, and for a Caro-Kann lesson the tag agrees.
+describe('the first few moves of a lesson', () => {
+  it('never teaches from an anchor too short to be about the position', () => {
+    for (const [lesson, line] of [
+      ['Caro-Kann Defense: Advance Variation', ['e4', 'c6', 'd4']],
+      ['Vienna Game: Copycat Variation', ['e4', 'e5', 'Nc3']],
+      ["King's Indian Defense", ['d4', 'Nf6', 'c4']],
+    ] as Array<[string, string[]]>) {
+      const chess = new Chess();
+      const prefix: string[] = [];
+      for (const san of line) {
+        chess.move(san);
+        prefix.push(san);
+        const note = noteAtPosition(prefix, chess.fen(), lesson)
+          ?? supportNoteForPly(prefix, chess.fen(), lesson);
+        if (note) {
+          expect(
+            note.lineSan.length,
+            `${lesson} ply ${prefix.length}: note ${note.id} is anchored at ${note.lineSan.length} ply`,
+          ).toBeGreaterThanOrEqual(3);
+        }
+      }
+    }
+  });
+});

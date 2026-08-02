@@ -247,13 +247,21 @@ export function supportNoteForPly(
   fen: string,
   openingName?: string | null,
 ): DanyaNote | null {
+  // The support tier needs the SAME anchor floor as the exact tier. Verified
+  // after the first fix (David 2026-08-02, "the first few moves stay scoped?"):
+  // the Vienna was clean, but a Caro-Kann lesson still opened move one with
+  // `hp-5d5` — the ["e4"]-anchored note recounting a game six moves deep. The
+  // exact tier had correctly refused it; the support tier picked it straight
+  // back up, because its only scope check was the opening tag, and the tag
+  // agrees. On-topic and about-this-position are two different questions.
   const onThisLine = (n: DanyaNote): boolean =>
-    !noteContradictsLine(`${n.explains} ${n.teaches}`, historySans)
+    anchorTeachesItsPosition(n)
+    && !noteContradictsLine(`${n.explains} ${n.teaches}`, historySans)
     && !notePhaseMismatchesBoard(n.phase, fen, historySans.length)
     && !noteOpeningConflicts(n.opening, openingName);
   try {
     if (openingName) {
-      const support = secondarySupportNotes({ historySans, openingName, maxNotes: 4 }).filter(onThisLine)[0];
+      const support = secondarySupportNotes({ historySans, openingName, maxNotes: 8 }).filter(onThisLine)[0];
       if (support) return support;
       // STRUCTURE TRANSFER IS OFF INSIDE A TAUGHT LESSON (David 2026-08-02:
       // "tighten the narration notes just a touch… make sure the coach stays
