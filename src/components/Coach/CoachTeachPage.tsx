@@ -5150,7 +5150,16 @@ export function CoachTeachPage(): JSX.Element {
                     }
                   } catch { /* gems are a bonus, never a blocker */ }
                 }
-                replyFact = `GROUNDED FACTS (voice ONLY these — never invent a capture, check, tactic, or threat not listed here): ${facts.join(' ')}`;
+                // FACTS ONLY — the directive that used to lead this string
+                // ("GROUNDED FACTS (voice ONLY these — never invent a capture,
+                // check, tactic, or threat not listed here):") is model INPUT,
+                // and every net in `voiceFacts` falls back to speaking the
+                // facts verbatim. So the moment containment tripped, the
+                // student heard the prompt read aloud — prod, David 2026-08-02,
+                // five times in one game. Directives travel in `directives`,
+                // which is excluded from every fallback path; facts are things
+                // about the board that may be spoken.
+                replyFact = facts.join(' ');
               }
             } catch {
               /* probe is best-effort; absence just means no extra fact */

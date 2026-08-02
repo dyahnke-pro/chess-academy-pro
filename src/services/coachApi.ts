@@ -1904,6 +1904,22 @@ export function resolveWarmRegister(intent: string | undefined): 'review' | 'liv
   return /^(game-review\b|review-)/.test(intent) ? 'review' : 'live';
 }
 
+/** A fallback must never speak a DIRECTIVE.
+ *
+ *  Every net in `voiceFacts` falls back to serving `facts` verbatim, so any
+ *  instruction a caller prepended to the facts string is read to the student
+ *  the moment a net trips. `directives` exists precisely so that can't happen,
+ *  but a caller can always slip — and prod caught exactly that again (David
+ *  2026-08-02): the coach opened five replies in one game with "GROUNDED FACTS
+ *  (voice ONLY these — never invent a capture, check, tactic, or threat not
+ *  listed here):". This strips a leading SHOUTED directive header so a caller's
+ *  slip costs the header, not the student's ear. */
+export function speakableFacts(facts: string): string {
+  return facts
+    .replace(/^\s*[A-Z][A-Z0-9 '’-]{4,}\s*(?:\([^)]*\))?\s*:\s*/, '')
+    .trim();
+}
+
 export async function voiceFacts(
   facts: string,
   opts: {
@@ -1983,14 +1999,14 @@ export async function voiceFacts(
   const targetLanguage = opts.targetLanguage
     ?? (opts.studentMessage ? detectLanguage(opts.studentMessage).name : undefined);
   const translating = !!targetLanguage && targetLanguage !== 'English';
-  if (opts.preferRaw && !opts.kidSafe && !opts.warm && !translating) return facts.trim();
+  if (opts.preferRaw && !opts.kidSafe && !opts.warm && !translating) return speakableFacts(facts);
   const cfg = opts.providerConfig ?? (await getProviderConfig());
   // No provider configured → there's nothing to phrase WITH, but the computed
   // `facts` are already correct, coach-voiced prose. Speak them directly rather
   // than returning null and letting the caller fall through to an ungrounded
   // path (David 2026-07-04: "make sure the correct answer gets to the user").
   // The phrasing LLM is a nicety, not a requirement, for a grounded answer.
-  if (!cfg) return facts.trim();
+  if (!cfg) return speakableFacts(facts);
 
   const register = resolveWarmRegister(opts.warm ? opts.intent : undefined);
   const systemBase = opts.kidSafe
@@ -2116,7 +2132,7 @@ export async function voiceFacts(
           summary: `phrasing fidelity trip (intent=${opts.intent ?? 'n/a'}): introduced [${introduced.join(', ')}] dropped [${dropped.join(', ')}] → served computed prose`,
           details: JSON.stringify({ intent: opts.intent ?? null, introduced, dropped, facts: facts.slice(0, 200), out: out.slice(0, 200) }),
         });
-        return facts.trim();
+        return speakableFacts(facts);
       }
       // CONTAINMENT NET (Phase 0a, David 2026-07-18: the knight-fork-definition
       // tangent). The nets above catch invented NUMBERS and dropped tokens — but
@@ -2139,7 +2155,7 @@ export async function voiceFacts(
             summary: `phrasing containment trip (intent=${opts.intent ?? 'n/a'}): added [${contained.violations.join(', ')}] → served computed prose`,
             details: JSON.stringify({ intent: opts.intent ?? null, violations: contained.violations, facts: facts.slice(0, 200), out: out.slice(0, 200) }),
           });
-          return facts.trim();
+          return speakableFacts(facts);
         }
         return contained.text;
       }
@@ -2147,7 +2163,7 @@ export async function voiceFacts(
     }
     // Empty / whitespace-only phrasing → don't hand the caller a falsy value
     // that drops it to the ungrounded path. Speak the computed facts.
-    return facts.trim();
+    return speakableFacts(facts);
   } catch {
     // The phrasing call failed or TIMED OUT (the DeepSeek provider races a 30s
     // ceiling). Returning null here would DROP the correct computed answer and
@@ -2155,7 +2171,7 @@ export async function voiceFacts(
     // "a race prevents the correct answer" failure David flagged 2026-07-04.
     // The facts are already correct coach prose, so speak them raw instead of
     // throwing away a right answer over a phrasing hiccup.
-    return facts.trim();
+    return speakableFacts(facts);
   }
 }
 
