@@ -31,8 +31,11 @@ on:
         required: false
         default: '400'
   schedule:
-    # Every 6h — each run chips away at the backlog on a fresh runner IP.
-    - cron: '0 */6 * * *'
+    # Every 2h. The backlog is finite (~1,300 Saint Louis transcripts at 400 a
+    # run), and David wants it farming CONSTANTLY until it is done rather than
+    # trickling. A healthy run finishes in well under an hour, so a 2h cadence
+    # keeps a runner working almost continuously without ever overlapping.
+    - cron: '0 */2 * * *'
 
 concurrency:
   # Never let two runs fight over the same corpus file.
@@ -51,7 +54,13 @@ permissions:
 jobs:
   farm:
     runs-on: ubuntu-latest
-    timeout-minutes: 330
+    # 90, not 330. Run 4 hung and sat in_progress for 3.7 HOURS holding the
+    # concurrency group, so every scheduled run behind it was blocked from even
+    # starting — one stall silently froze the whole farm. A healthy run pulls in
+    # ~32 min and finishes well inside this, so a job still alive at 90 minutes
+    # is stuck, and killing it frees the queue for the next cron instead of
+    # letting it idle until the 5.5h ceiling.
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
