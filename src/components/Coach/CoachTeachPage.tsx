@@ -64,7 +64,7 @@ import { useTeachWalkthrough, isStartablePunishLesson, isValidConceptsQuestion, 
 import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
-import { findSiblingExtensionBranches } from '../../services/openingDetectionService';
+import { findSiblingExtensionBranches, resolveOpeningEntry } from '../../services/openingDetectionService';
 import { masterclassWalkthroughTree } from '../../services/masterclassWalkthroughAdapter';
 import { pickGreeting, pickSuggestedQuestions, weaknessNudgeFromItem } from '../../data/coachGreetings';
 import { getStoredWeaknessProfile } from '../../services/weaknessAnalyzer';
@@ -133,7 +133,16 @@ import { buildForkTalk, type ForkTalk } from '../../services/forkTalk';
 import { parseSpokenMove } from '../../services/spokenMoveParser';
 import { parseCoachMoveCommand } from '../../services/coachMoveCommand';
 import { sanToSpeech } from '../../utils/sanToSpeech';
-import { teachingNoteForBoard } from '../../services/danyaTeachingService';
+import { teachingNoteForBoard, noteCoverageForLine } from '../../services/danyaTeachingService';
+
+/** How many note-covered plies an opening needs before the NOTES take the
+ *  lesson from a hand-authored masterclass.
+ *
+ *  Measured, not picked: an opening with 3+ distinct exact-tier notes has the
+ *  corpora teaching the LINE at real branch points, while 1-2 is usually a
+ *  single opening-level note that happened to match early. Below the floor the
+ *  instant, verified masterclass is still the better lesson, so it keeps it. */
+const NOTE_PRIMARY_MIN_PLIES = 3;
 import { findLivePunishment } from '../../services/gemCrushLines';
 import { buildThinkAloud } from '../../services/thinkAloud';
 import { warmAmateurPlay, buildRatingRealityFact } from '../../services/amateurPlayCache';
@@ -3021,7 +3030,22 @@ export function CoachTeachPage(): JSX.Element {
         // authored narration, zero LLM calls). Face mode teaches the
         // COUNTER side and tour mode wants the quick overview, so both
         // skip the masterclass tier and generate as before.
-        const staticTree =
+        // NOTES ARE THE PRIMARY SOURCE (David 2026-08-01: "let's make the
+        // notes/tier 2 the primary source for lessons/walkthroughs").
+        //
+        // The static masterclass used to win outright, which is why his King's
+        // Gambit was instant but taught nothing the farmed corpora know, and
+        // why it logged 0/0 punish lessons. A static tree carries hand prose
+        // and nothing else: no note splice, no per-sentence arrow reveal, and
+        // no benefit from any future narration work. The generated path gets
+        // all of it.
+        //
+        // MEASURED, not assumed. Static is instant and verified, so handing an
+        // opening to the slower generated path only pays when the notes have
+        // something real to say about THIS line. An opening the corpora never
+        // covered would otherwise trade a good lesson for a slow, thinner one,
+        // so coverage below the floor keeps the masterclass.
+        const candidateStatic =
           resolveWalkthroughTree(requestedName) ??
           (!faceMode && pace !== 'tour'
             ? masterclassWalkthroughTree(
@@ -3029,6 +3053,43 @@ export function CoachTeachPage(): JSX.Element {
                 sideOverride ?? inferStudentSideFromName(requestedName),
               )
             : null);
+        // Coverage is measured over the line the LESSON actually walks, not the
+        // database's canonical stub. A masterclass spine runs 24-39 plies while
+        // its DB entry is 3-7, so measuring the stub asked "do the notes cover
+        // the first three moves" — nearly always no — and would have left the
+        // masterclass in charge almost everywhere. The real question is whether
+        // the corpora teach the line the student is about to be walked through.
+        const noteCoverage = (() => {
+          try {
+            const spine: string[] = [];
+            if (candidateStatic) {
+              let cur = candidateStatic.root;
+              while (cur.children.length > 0) {
+                const next = cur.children[0].node;
+                if (next.san) spine.push(next.san);
+                cur = next;
+                if (spine.length > 60) break;
+              }
+            }
+            if (spine.length === 0) {
+              const entry = resolveOpeningEntry(requestedName);
+              if (entry) spine.push(...entry.moves);
+            }
+            return noteCoverageForLine(spine);
+          } catch {
+            return 0;
+          }
+        })();
+        const notesLeadThisLesson = noteCoverage >= NOTE_PRIMARY_MIN_PLIES;
+        const staticTree = notesLeadThisLesson ? null : candidateStatic;
+        if (notesLeadThisLesson) {
+          void logAppAudit({
+            kind: 'coach-surface-migrated',
+            category: 'subsystem',
+            source: 'CoachTeachPage.notesPrimary',
+            summary: `notes lead "${requestedName}" — ${noteCoverage} note-covered ply(s); skipping the static masterclass`,
+          });
+        }
         const surfaceTurnId = freshTurnId('walkthrough-surface');
         // Always show the user's ask in the transcript.
         setMessages((prev) => [...prev, {

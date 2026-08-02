@@ -217,7 +217,7 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
     expect(mockSpeakQueuedForced).not.toHaveBeenCalled();
   });
 
-  it('routes "Teach me the Vienna" to the in-place walkthrough WITHOUT calling the brain (build 2ab2726 audit fix)', async () => {
+  it('routes a masterclass-led ask to the in-place walkthrough WITHOUT calling the brain (build 2ab2726 audit fix)', async () => {
     // Brain audit (build 2ab2726) showed the LLM hallucinating that
     // it had called start_walkthrough_for_opening — its [VOICE:]
     // marker said "the walkthrough is queued but keeps hitting a
@@ -225,16 +225,23 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
     // calls. The walkthrough never fired. Fix: surface-level
     // pattern-match this kind of ask and call walkthrough.start()
     // directly, never invoking the brain.
+    //
+    // Uses the ITALIAN, not the Vienna (2026-08-01). Notes became the primary
+    // source for lessons, so an opening the farmed corpora teach well now takes
+    // the generated path on purpose and DOES call the brain — the Vienna has 3
+    // note-covered plies and flipped. The Italian has 2, below the floor, so it
+    // still leads with the masterclass and is the right subject for the
+    // no-brain contract this test exists to protect.
     render(<CoachTeachPage />);
-    await sendStudentMessage('Teach me the Vienna.');
+    await sendStudentMessage('Teach me the Italian.');
 
     // The brain was NOT invoked at all — surface short-circuited.
     expect(coachService.ask).not.toHaveBeenCalled();
     // The user's ask AND the canned acknowledgement both rendered
     // in the transcript so the conversation is honest.
     await waitFor(() => {
-      expect(screen.getByText("Teach me the Vienna.")).toBeInTheDocument();
-      expect(screen.getByText(/let's walk through the Vienna Game/i)).toBeInTheDocument();
+      expect(screen.getByText("Teach me the Italian.")).toBeInTheDocument();
+      expect(screen.getByText(/let's walk through the Italian Game/i)).toBeInTheDocument();
     });
   });
 

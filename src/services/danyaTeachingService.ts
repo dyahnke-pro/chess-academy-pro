@@ -192,6 +192,37 @@ export function supportNoteForPly(
   }
 }
 
+/** How many plies of an opening's canonical line the farmed corpora actually
+ *  teach at.
+ *
+ *  This is the switch that decides whether a lesson is taught from the NOTES or
+ *  from a hand-authored masterclass (David 2026-08-01: "let's make the
+ *  notes/tier 2 the primary source for lessons/walkthroughs"). It has to be
+ *  measured rather than assumed: a static masterclass is instant and verified,
+ *  so handing an opening to the slower generated path only pays when the notes
+ *  have something real to say about it. An opening the corpora never covered
+ *  would otherwise trade a good lesson for a slow, thinner one.
+ *
+ *  Counts the EXACT tier only, and each note once — an opening-level note that
+ *  matches everywhere is not coverage of the line. */
+export function noteCoverageForLine(historySans: readonly string[]): number {
+  if (historySans.length === 0) return 0;
+  const seen = new Set<string>();
+  const chess = new Chess();
+  const prefix: string[] = [];
+  for (const san of historySans) {
+    try {
+      if (!chess.move(san)) break;
+    } catch {
+      break;
+    }
+    prefix.push(san);
+    const note = noteAtPosition(prefix, chess.fen());
+    if (note && !seen.has(note.id)) seen.add(note.id);
+  }
+  return seen.size;
+}
+
 export function noteAtPosition(historySans: string[], fen?: string): DanyaNote | null {
   // A note that recites a different line than the one played narrates the wrong
   // opening (see noteLineGuard) — silence beats teaching someone else's theory.
