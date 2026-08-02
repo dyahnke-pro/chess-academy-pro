@@ -4,7 +4,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import teachings from '../data/danya-teachings.json';
-import { notesForFen, noteAtPosition, planNoteForPath, notesForPrefix, notesForOpening } from './danyaTeachingService';
+import { notesForFen, noteAtPosition, planNoteForPath, notesForPrefix, notesForOpening, noteOpeningConflicts } from './danyaTeachingService';
 
 interface Note { id: string; lineSan: string[]; plans: string }
 const positioned = (teachings as { notes: Note[] }).notes.filter((n) => n.lineSan.length > 0);
@@ -97,5 +97,46 @@ describe('notesForOpening — name vocabulary', () => {
     const hits = notesForOpening('Caro-Kann Defence', 5);
     expect(hits.length).toBeGreaterThan(0);
     expect(hits.every((n) => /caro/i.test(n.opening ?? ''))).toBe(true);
+  });
+});
+
+// ── The Vienna-taught-the-Caro-Kann incident (David 2026-08-02) ────────────
+// Teaching the Vienna Copycat, the first ply was narrated with a note anchored
+// at ["e4"] and tagged "Caro-Kann Defense: Advance Variation, Botvinnik-Carls
+// Defense", so the coach opened a Vienna lesson by recounting a Caro-Kann game.
+describe('noteAtPosition — stays on the opening being taught', () => {
+  it('rejects a note tagged with a different opening than the lesson', () => {
+    expect(noteOpeningConflicts('Caro-Kann Defense: Advance Variation', 'Vienna Game: Copycat Variation')).toBe(true);
+    expect(noteOpeningConflicts('Sicilian Defense: Najdorf', "King's Indian Defense")).toBe(true);
+  });
+
+  it('accepts a note from the same opening family, including sub-variations', () => {
+    expect(noteOpeningConflicts('Vienna Game', 'Vienna Game: Copycat Variation')).toBe(false);
+    expect(noteOpeningConflicts('Sicilian Defense: Scheveningen', 'Sicilian Defense: Najdorf Variation')).toBe(false);
+    // British/American vocabulary must not read as a different opening.
+    expect(noteOpeningConflicts('French Defense: Winawer', 'French Defence')).toBe(false);
+  });
+
+  it('has nothing to contradict when either side is untagged', () => {
+    expect(noteOpeningConflicts(null, 'Vienna Game')).toBe(false);
+    expect(noteOpeningConflicts('Vienna Game', null)).toBe(false);
+  });
+
+  it('does not teach a corpus note through a lesson on another opening', () => {
+    const tagged = positioned.find((n) => (n as unknown as { opening: string | null }).opening);
+    expect(tagged).toBeDefined();
+    const opening = (tagged as unknown as { opening: string }).opening;
+    const fen = fenAfter(tagged.lineSan);
+    // Same position, two different lessons: its own opening keeps the note,
+    // an unrelated one drops it.
+    expect(noteAtPosition(tagged.lineSan, fen, opening)?.opening).toBe(opening);
+    expect(noteAtPosition(tagged.lineSan, fen, 'Zzyzx Gambit Nonsense')).toBeNull();
+  });
+
+  it('never teaches from an anchor too short to identify a position', () => {
+    for (const shallow of [['e4'], ['d4'], ['e4', 'e5'], ['d4', 'd5']]) {
+      const hit = noteAtPosition(shallow, fenAfter(shallow));
+      expect(hit, `a ${shallow.length}-ply anchor is not position teaching`).toBeNull();
+    }
   });
 });

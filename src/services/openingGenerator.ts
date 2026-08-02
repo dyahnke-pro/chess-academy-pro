@@ -1017,7 +1017,7 @@ function noteArrowSourceAt(
     // borrowed one. Only when it misses do we reach for the support tier, so a
     // Tier-2 opening teaches from notes on the plies its corpus does not cover
     // exactly, instead of dropping to computed prose (David 2026-08-01).
-    const note = noteAtPosition(historySans, fen)
+    const note = noteAtPosition(historySans, fen, openingName)
       ?? supportNoteForPly(historySans, fen, openingName);
     if (!note || seenIds.has(note.id)) return null;
     const graded = gradeNarrationText(teachingBeatText(note), fen, 'openingGenerator.noteArrows');

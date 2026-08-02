@@ -85,6 +85,59 @@ const GENERIC_TOKENS = new Set([
   'line', 'setup', 'declined', 'accepted', 'main', 'modern', 'classical',
 ]);
 
+/** The tokens of an opening name that actually NAME an opening, with the
+ *  generic scaffolding ("Opening", "Defense", "Variation") removed. */
+const identifyingTokens = (name: string): Set<string> =>
+  new Set(normName(name).split(' ').filter((t) => t.length > 2 && !GENERIC_TOKENS.has(t)));
+
+/** A note tagged with an opening may only teach in a lesson on THAT opening.
+ *
+ *  Found on prod (David 2026-08-02, teaching the Vienna Copycat): the first ply
+ *  of the lesson was narrated with `hp-5d5` — a note anchored at ["e4"] and
+ *  tagged "Caro-Kann Defense: Advance Variation, Botvinnik-Carls Defense" — so
+ *  the coach opened a Vienna lesson by recounting a Caro-Kann game ("White
+ *  played the greedy Qd4… in the Caro-Kann, ...Nc6 is a natural way to do
+ *  this"). Every existing guard passed it: its claims are true of the position
+ *  it describes, it recites no "After …" line, and its phase is `opening`.
+ *
+ *  Nothing about the BOARD can catch this, because at ply 1 the board is
+ *  consistent with both openings. What catches it is the note's own tag: the
+ *  corpus already says which opening the note teaches, and that is not the
+ *  opening the student asked for.
+ *
+ *  Agreement is at FAMILY level — one shared identifying token is enough — so a
+ *  "Vienna Game" note still teaches in "Vienna Game: Copycat Variation", and a
+ *  Najdorf lesson still hears general Sicilian teaching. Only a note that
+ *  shares nothing with the lesson's name is rejected. An untagged note has
+ *  made no claim to contradict, and a lesson with no resolved name has nothing
+ *  to compare against; both are left alone. */
+export function noteOpeningConflicts(
+  noteOpening: string | null | undefined,
+  lessonOpening: string | null | undefined,
+): boolean {
+  if (!noteOpening || !lessonOpening) return false;
+  const noteTokens = identifyingTokens(noteOpening);
+  const lessonTokens = identifyingTokens(lessonOpening);
+  if (noteTokens.size === 0 || lessonTokens.size === 0) return false;
+  for (const t of noteTokens) if (lessonTokens.has(t)) return false;
+  return true;
+}
+
+/** A move prefix shorter than this identifies no opening, so a note anchored
+ *  there is not teaching about the position — it is teaching about wherever
+ *  its own line went, which the student has not played.
+ *
+ *  The same prod incident: `hp-5d5` sits at ["e4"] and narrates a game six
+ *  moves deep. Anchored one ply in, it matched EVERY 1.e4 lesson's first move.
+ *  The corpora carry 82 such notes (≤ 2 plies) and every one is tagged with a
+ *  specific opening — proof that the anchor is a truncation, not the position
+ *  being taught. They are excluded from the EXACT tier entirely; the opening
+ *  tier still reaches them for the lesson they actually belong to. */
+const MIN_TEACHING_ANCHOR_PLIES = 3;
+
+const anchorTeachesItsPosition = (n: DanyaNote): boolean =>
+  n.lineSan.length >= MIN_TEACHING_ANCHOR_PLIES;
+
 for (const n of DATA.notes) {
   if (n.lineSan.length > 0) {
     const key = n.lineSan.join(' ');
@@ -180,7 +233,8 @@ export function supportNoteForPly(
 ): DanyaNote | null {
   const onThisLine = (n: DanyaNote): boolean =>
     !noteContradictsLine(`${n.explains} ${n.teaches}`, historySans)
-    && !notePhaseMismatchesBoard(n.phase, fen, historySans.length);
+    && !notePhaseMismatchesBoard(n.phase, fen, historySans.length)
+    && !noteOpeningConflicts(n.opening, openingName);
   try {
     if (openingName) {
       const support = secondarySupportNotes({ historySans, openingName, maxNotes: 4 }).filter(onThisLine)[0];
@@ -223,12 +277,20 @@ export function noteCoverageForLine(historySans: readonly string[]): number {
   return seen.size;
 }
 
-export function noteAtPosition(historySans: string[], fen?: string): DanyaNote | null {
+export function noteAtPosition(
+  historySans: string[],
+  fen?: string,
+  openingName?: string | null,
+): DanyaNote | null {
   // A note that recites a different line than the one played narrates the wrong
   // opening (see noteLineGuard) — silence beats teaching someone else's theory.
+  // `openingName` is the lesson's own opening: a note tagged with a DIFFERENT
+  // one is teaching a different opening even when it is anchored right here.
   const onThisLine = (n: DanyaNote): boolean =>
-    !noteContradictsLine(`${n.explains} ${n.teaches}`, historySans)
-    && !notePhaseMismatchesBoard(n.phase, fen, historySans.length);
+    anchorTeachesItsPosition(n)
+    && !noteContradictsLine(`${n.explains} ${n.teaches}`, historySans)
+    && !notePhaseMismatchesBoard(n.phase, fen, historySans.length)
+    && !noteOpeningConflicts(n.opening, openingName);
   const bucket = (byPrefix.get(historySans.join(' ')) ?? []).filter(onThisLine);
   if (bucket[0]) return bucket[0];
   if (fen) {
@@ -252,7 +314,7 @@ export function teachingNoteForBoard(
   fen: string,
   openingName?: string | null,
 ): DanyaNote | null {
-  const exact = noteAtPosition(historySans, fen);
+  const exact = noteAtPosition(historySans, fen, openingName);
   if (exact) return exact;
   // GAP TIER — an opening the primary corpus never covers still gets a note in
   // the FACTS PACKAGE, so the coach can teach its ideas instead of going quiet.
@@ -275,9 +337,13 @@ export function teachingNoteForBoard(
   const support = secondarySupportNotes({
     historySans,
     openingName: resolvedOpening,
-    maxNotes: 1,
-  })[0];
+    maxNotes: 4,
+  }).filter((n) => !noteOpeningConflicts(n.opening, resolvedOpening))[0];
   if (support) return support;
+  // STRUCTURE TRANSFER is deliberately cross-opening (a note from anywhere whose
+  // structure provably matches this board), so the tag check does not apply —
+  // its licence to borrow is the proven structure match plus the live-board
+  // claim filter inside `notesForStructure`.
   return notesForStructure(fen, 1)[0] ?? null;
 }
 

@@ -443,18 +443,41 @@ function clampBackupMs(text: string): number {
 async function speakWalkthroughText(
   text: string,
   shortText?: string,
+  stillCurrent?: () => boolean,
 ): Promise<void> {
   const prefs = useAppStore.getState().activeProfile?.preferences;
   const verbosity = resolveCoachNarration(prefs);
   if (verbosity === 'full') {
-    return speakPaced(text);
+    return speakPaced(text, stillCurrent);
   }
   if (verbosity === 'brief' && shortText && shortText.trim().length > 0) {
-    return speakPaced(shortText);
+    return speakPaced(shortText, stillCurrent);
   }
   // 'silent', or 'brief' without a short variant on this node.
-  await new Promise<void>((resolve) => setTimeout(resolve, clampBackupMs(text)));
+  await waitInterruptibly(clampBackupMs(text), stillCurrent);
 }
+
+/** Sleep, but wake early the moment this chain is superseded.
+ *
+ *  A plain `setTimeout` here is what let a cancelled chain come back from the
+ *  dead: the walkthrough's holds run 14-40s, and a chain paused/stopped inside
+ *  one kept its place in the await and resumed narrating when the timer finally
+ *  fired. Checking the guard on a short tick means a superseded chain unwinds
+ *  within a tick instead of a minute. */
+async function waitInterruptibly(ms: number, stillCurrent?: () => boolean): Promise<void> {
+  if (!stillCurrent) {
+    await new Promise<void>((resolve) => setTimeout(resolve, ms));
+    return;
+  }
+  const deadline = Date.now() + ms;
+  while (Date.now() < deadline) {
+    if (!stillCurrent()) return;
+    const slice = Math.min(HOLD_TICK_MS, deadline - Date.now());
+    await new Promise<void>((resolve) => setTimeout(resolve, slice));
+  }
+}
+
+const HOLD_TICK_MS = 250;
 
 /** Below this, a speak call CANNOT have spoken the words — no real utterance of
  *  a full sentence returns in a fraction of a second. */
@@ -479,11 +502,16 @@ const TRIVIAL_TEXT_CHARS = 40;
  * off. Nothing here can do that: it only ever waits AFTER the promise has
  * already resolved, and only when it resolved impossibly fast.
  */
-async function speakPaced(text: string): Promise<void> {
+async function speakPaced(text: string, stillCurrent?: () => boolean): Promise<void> {
   const startedAt = Date.now();
   await voiceService.speakForced(text);
   const elapsed = Date.now() - startedAt;
   if (text.trim().length <= TRIVIAL_TEXT_CHARS || elapsed >= IMPOSSIBLY_FAST_MS) return;
+  // A superseded chain must not hold at all — the hold exists to stop the
+  // walkthrough outrunning its own voice, and a chain nobody is listening to
+  // has no voice to keep pace with. Holding anyway is what made a stopped
+  // walkthrough narrate again half a minute later.
+  if (stillCurrent && !stillCurrent()) return;
   const remaining = clampBackupMs(text) - elapsed;
   if (remaining <= 0) return;
   void logAppAudit({
@@ -492,7 +520,7 @@ async function speakPaced(text: string): Promise<void> {
     source: 'useTeachWalkthrough.speakPaced',
     summary: `voice returned in ${elapsed}ms for ${text.trim().length} chars — held ${remaining}ms so the walkthrough cannot outrun its own narration`,
   });
-  await new Promise<void>((resolve) => setTimeout(resolve, remaining));
+  await waitInterruptibly(remaining, stillCurrent);
 }
 
 export type WalkthroughPhase =
@@ -951,6 +979,16 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
   // Active narration cancel + backup timer refs.
   const cancelNarrationRef = useRef<(() => void) | null>(null);
   const advanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  /** Monotonic id of the LIVE narration chain. Every continuation carries the
+   *  id it started under and does nothing once it no longer matches — see
+   *  `cleanupNarration`. */
+  const runIdRef = useRef(0);
+  /** Which sentence of the current node the voice had reached. `resume` picks
+   *  up here instead of restarting the beat (David 2026-08-02: "the narrations
+   *  keep resetting to the start of the last move"). The walkthrough pauses on
+   *  every chat question AND every app backgrounding, so on a five-sentence
+   *  beat a glance at another app cost the student the whole beat again. */
+  const segmentCursorRef = useRef(0);
   // When transitionAfter detects a matching punish-lesson trap, the
   // original "what would happen next" (linear advance / fork picker /
   // leaf) gets stashed here so acceptTrap / skipTrap can resume the
@@ -960,6 +998,23 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
   const deferredTransitionRef = useRef<(() => void) | null>(null);
 
   const cleanupNarration = useCallback((): void => {
+    // ORPHAN EVERY IN-FLIGHT CHAIN FIRST (David 2026-08-02: beats repeating,
+    // and the board resetting to the start position after "Watch the middlegame").
+    //
+    // Cancellation used to be spread across three partial guards — a per-node
+    // `ctrl.cancelled`, the single `cancelNarrationRef` slot (which
+    // `transitionAfter` nulls out while it hands off), and the identity of
+    // `advanceTimerRef` — so a chain interrupted in the wrong window kept its
+    // place inside an await and woke up later with nobody watching it. The
+    // prod log caught all three consequences: a node narrated twice 8ms apart,
+    // an aside re-firing 27s after the walk had moved two plies on, and — worst
+    // — `narrateAndAdvance` running AFTER `stop()`, which set phase back to
+    // 'narrating' with a null tree, so `fen` fell through to STARTING_FEN and
+    // the board snapped back to move one mid-lesson.
+    //
+    // One monotonic token fixes all of them: bumping it here orphans every
+    // continuation of every live chain at once, whatever it was awaiting.
+    runIdRef.current += 1;
     if (cancelNarrationRef.current) {
       cancelNarrationRef.current();
       cancelNarrationRef.current = null;
@@ -1046,8 +1101,17 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
    *    2. `node.idea` (single block) — fallback when `narration` is
    *       omitted. No arrows. Same backup-timer pattern as before. */
   const narrateAndAdvance = useCallback(
-    (path: WalkthroughTreeNode[]): void => {
+    (path: WalkthroughTreeNode[], options?: { fromSegment?: number }): void => {
       cleanupNarration();
+      // This chain's identity. `cleanupNarration` just bumped the counter, so
+      // every chain started before this one is already orphaned; every
+      // continuation below re-checks `isCurrent()` before it touches state.
+      const runId = runIdRef.current;
+      const isCurrent = (): boolean => runIdRef.current === runId;
+      // A fresh node starts at its first sentence; only `resume` asks to pick
+      // up mid-beat.
+      const fromSegment = options?.fromSegment ?? 0;
+      segmentCursorRef.current = fromSegment;
       const node = path[path.length - 1];
       // REPLAY INSTRUMENTATION (David 2026-07-31: beats spoken twice, and his
       // device log shows the walk returning to a node it had already left).
@@ -1083,6 +1147,7 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
       // cancels it via cancelNarrationRef like any other narration.
       let gemAsideDone = false;
       const transitionAfter = (): void => {
+        if (!isCurrent()) return;
         if (!gemAsideDone) {
           gemAsideDone = true;
           const sansSoFar = path
@@ -1119,7 +1184,7 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
               summary: `delta aside @[${sansSoFar.join(' ')}]: ${aside.say.slice(0, 120)}`,
             });
             const backup = setTimeout(() => {
-              if (advanceTimerRef.current !== backup) return;
+              if (!isCurrent() || advanceTimerRef.current !== backup) return;
               advanceTimerRef.current = null;
               setNarrationArrows([]);
               transitionAfter();
@@ -1132,11 +1197,11 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
               }
               setNarrationArrows([]);
             };
-            void speakWalkthroughText(aside.say, aside.short)
+            void speakWalkthroughText(aside.say, aside.short, isCurrent)
               .catch(() => undefined)
               .then(() => {
                 // Superseded (cancelled / backup already fired) → do nothing.
-                if (advanceTimerRef.current !== backup) return;
+                if (!isCurrent() || advanceTimerRef.current !== backup) return;
                 clearTimeout(backup);
                 advanceTimerRef.current = null;
                 setNarrationArrows([]);
@@ -1155,10 +1220,12 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
         // trap-prompt interception. Captured here so the trap-flow
         // can defer to it after the user skips/finishes the trap.
         const defaultTransition = (): void => {
+          if (!isCurrent()) return;
           if (node.children.length === 0) {
             setPhase('leaf');
           } else if (node.children.length === 1) {
             advanceTimerRef.current = setTimeout(() => {
+              if (!isCurrent()) return;
               advanceTimerRef.current = null;
               narrateAndAdvance([...path, node.children[0].node]);
             }, POST_NARRATION_BUFFER_MS);
@@ -1219,7 +1286,7 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
           const shortIntro = first.shortWhyBad
             ? `Watch out — ${first.inaccuracy} is a mistake. ${first.shortWhyBad}`
             : undefined;
-          void speakWalkthroughText(intro, shortIntro).catch(() => undefined);
+          void speakWalkthroughText(intro, shortIntro, isCurrent).catch(() => undefined);
           setPhase('trap-prompt');
           return;
         }
@@ -1245,14 +1312,16 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
         const totalText = segments.map((s) => s.text).join(' ');
         const backupMs = clampBackupMs(totalText);
         advanceTimerRef.current = setTimeout(() => {
-          if (ctrl.cancelled) return;
+          if (ctrl.cancelled || !isCurrent()) return;
           ctrl.cancelled = true;
           transitionAfter();
         }, backupMs);
 
         void (async () => {
-          for (const segment of segments) {
-            if (ctrl.cancelled) return;
+          for (let i = Math.min(fromSegment, segments.length - 1); i < segments.length; i += 1) {
+            const segment = segments[i];
+            if (ctrl.cancelled || !isCurrent()) return;
+            segmentCursorRef.current = i;
             // Set arrows + highlights BEFORE speaking the segment so
             // the visual lands at the same moment Polly starts saying
             // the words. (Segment without `arrows` clears them; segment
@@ -1273,13 +1342,14 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
               await speakWalkthroughText(
                 pickRegister(segment.text, segment.textFlipped),
                 pickRegister(segment.shortText ?? '', segment.shortTextFlipped) || segment.shortText,
+                isCurrent,
               );
             } catch {
               // Voice errored — keep going so the narration arc
               // completes; backup timer is a safety net.
             }
           }
-          if (ctrl.cancelled) return;
+          if (ctrl.cancelled || !isCurrent()) return;
           // Clear arrows once the node finishes — next node sets
           // fresh arrows on its first segment.
           setNarrationArrows([]);
@@ -1308,7 +1378,7 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
       // Voice + backup timer + post-narration buffer, then transition.
       let settled = false;
       const settle = (): void => {
-        if (settled) return;
+        if (settled || !isCurrent()) return;
         settled = true;
         transitionAfter();
       };
@@ -1331,7 +1401,11 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
       advanceTimerRef.current = backupTimer;
 
       // Primary gate: voice completion.
-      speakWalkthroughText(pickRegister(idea, node.ideaFlipped), pickRegister(node.shortIdea ?? '', node.shortIdeaFlipped) || node.shortIdea)
+      speakWalkthroughText(
+        pickRegister(idea, node.ideaFlipped),
+        pickRegister(node.shortIdea ?? '', node.shortIdeaFlipped) || node.shortIdea,
+        isCurrent,
+      )
         .then(() => {
           if (settled) return;
           settle();
@@ -1436,9 +1510,13 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
         // transitioning into narrateAndAdvance starting at the root.
         setPathNodes([newTree.root]);
         setPhase('narrating');
+        // Same run token as the per-node chains: an intro interrupted by a
+        // stop / a new lesson must not walk into the old tree's root.
+        const introRunId = runIdRef.current;
+        const introIsCurrent = (): boolean => runIdRef.current === introRunId;
         let settled = false;
         const settle = (): void => {
-          if (settled) return;
+          if (settled || !introIsCurrent()) return;
           settled = true;
           cancelNarrationRef.current = null;
           if (advanceTimerRef.current) {
@@ -1486,10 +1564,11 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
           return speakWalkthroughText(
             recapPrefix + pickRegister(newTree.intro, newTree.introFlipped),
             recapPrefix + (pickRegister(newTree.shortIntro ?? '', newTree.shortIntroFlipped) || newTree.shortIntro || ''),
+            introIsCurrent,
           );
         })()
           .then(() => {
-            if (settled) return;
+            if (settled || !introIsCurrent()) return;
             // Add the post-narration buffer.
             advanceTimerRef.current = setTimeout(() => {
               advanceTimerRef.current = null;
@@ -1514,8 +1593,9 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
 
   const resume = useCallback((): void => {
     if (phase !== 'paused' || pathNodes.length === 0) return;
-    // Re-narrate from the current node.
-    narrateAndAdvance(pathNodes);
+    // Pick the beat back up where the voice was interrupted, not at its first
+    // sentence — see `segmentCursorRef`.
+    narrateAndAdvance(pathNodes, { fromSegment: segmentCursorRef.current });
   }, [phase, pathNodes, narrateAndAdvance]);
 
   const pickFork = useCallback(

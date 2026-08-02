@@ -348,6 +348,105 @@ describe('useTeachWalkthrough', () => {
       { timeout: 10000 },
     );
   }, 15000);
+
+  // David 2026-08-02: after tapping "Watch the middlegame", the board snapped
+  // back to the starting position while narration carried on. The continuation
+  // calls walkthrough.stop() and then drives the board itself — but a narration
+  // chain that survived the stop called narrateAndAdvance again, which set
+  // phase back to 'narrating' with a null tree, and `fen` then falls through to
+  // STARTING_FEN. Nothing may re-activate the walkthrough after stop().
+  it('a narration chain in flight cannot re-activate the walkthrough after stop', async () => {
+    const { voiceService } = await import('../services/voiceService');
+    // A speak that never settles while the chain is live — the shape that let
+    // a continuation run long after the student left the walkthrough.
+    let releaseSpeak: (() => void) | null = null;
+    vi.mocked(voiceService.speakForced).mockImplementation(
+      () => new Promise<void>((resolve) => { releaseSpeak = resolve; }),
+    );
+
+    const { result } = renderHook(() => useTeachWalkthrough());
+    act(() => result.current.start(SMOKE_TREE));
+    await waitFor(() => expect(result.current.phase).toBe('narrating'), { timeout: 10000 });
+
+    act(() => result.current.stop());
+    expect(result.current.phase).toBe('idle');
+
+    // The stranded speak now resolves — its continuation must be a no-op.
+    await act(async () => {
+      releaseSpeak?.();
+      await Promise.resolve();
+    });
+    await new Promise((r) => setTimeout(r, 50));
+
+    expect(result.current.phase).toBe('idle');
+    expect(result.current.tree).toBeNull();
+    expect(result.current.isActive).toBe(false);
+
+    vi.mocked(voiceService.speakForced).mockResolvedValue(undefined);
+  }, 15000);
+
+  // David 2026-08-02: "the narrations keep resetting to the start of the last
+  // move". The walkthrough pauses on every chat question AND every app
+  // backgrounding, and resume used to replay the whole beat — so a glance at
+  // another app cost the student every sentence of the move again.
+  it('resume picks the beat up where it was interrupted, not at sentence one', async () => {
+    const { voiceService } = await import('../services/voiceService');
+    let releaseSpeak: (() => void) | null = null;
+    vi.mocked(voiceService.speakForced).mockImplementation(
+      () => new Promise<void>((resolve) => { releaseSpeak = resolve; }),
+    );
+
+    const tree: WalkthroughTree = {
+      openingName: 'Resume Smoke',
+      eco: 'Z00',
+      intro: '',
+      outro: 'done',
+      root: {
+        san: null,
+        movedBy: null,
+        idea: '',
+        children: [{
+          node: {
+            san: 'e4', movedBy: 'white' as const, idea: 'fallback prose',
+            narration: [
+              { text: 'beat one.' },
+              { text: 'beat two.' },
+              { text: 'beat three.' },
+            ],
+            children: [],
+          },
+        }],
+      },
+    };
+
+    const { result } = renderHook(() => useTeachWalkthrough());
+    act(() => result.current.start(tree));
+    await waitFor(
+      () => expect(vi.mocked(voiceService.speakForced)).toHaveBeenCalledWith('beat one.'),
+      { timeout: 10000 },
+    );
+    // Let the first sentence finish and the second start.
+    await act(async () => { releaseSpeak?.(); await Promise.resolve(); });
+    await waitFor(
+      () => expect(vi.mocked(voiceService.speakForced)).toHaveBeenCalledWith('beat two.'),
+      { timeout: 10000 },
+    );
+
+    act(() => result.current.pause());
+    expect(result.current.phase).toBe('paused');
+
+    vi.mocked(voiceService.speakForced).mockClear();
+    vi.mocked(voiceService.speakForced).mockResolvedValue(undefined);
+    act(() => result.current.resume());
+
+    await waitFor(
+      () => expect(vi.mocked(voiceService.speakForced).mock.calls.length).toBeGreaterThan(0),
+      { timeout: 10000 },
+    );
+    const spokenAfterResume = vi.mocked(voiceService.speakForced).mock.calls.map((c) => c[0]);
+    expect(spokenAfterResume[0]).toBe('beat two.');
+    expect(spokenAfterResume).not.toContain('beat one.');
+  }, 20000);
 });
 
 describe('buildPunishWalkthroughTree', () => {
