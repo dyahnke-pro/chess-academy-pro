@@ -7,6 +7,16 @@
  *
  * Usage:
  *   node scripts/danya-corpus/pull-transcripts.mjs [--playlist key] [--limit N]
+ *                                                  [--budget-minutes M]
+ *
+ * The budget is what makes the farm CONVERGE instead of stalling. Every
+ * transcript this run downloads is useless until the distiller reads it, and
+ * the distiller only runs after this script EXITS — so a pull that keeps
+ * grinding is not slow progress, it is zero progress. Run 4 on 2026-08-01
+ * pulled for 3.7 hours, got cancelled mid-step, and shipped nothing at all;
+ * runs 1-3 the same. Stopping on a clock and handing over what is already on
+ * disk turns every run into a committed chunk, and the resume-by-existence
+ * check means the next run picks up exactly where this one stopped.
  */
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -40,6 +50,9 @@ async function main() {
 
   let done = 0, failed = 0, streak = 0, recovered = 0;
   const pauseMs = Number(process.env.PULL_PACE_MS ?? '5000');
+  const budgetMs = Number(arg('budget-minutes', process.env.PULL_BUDGET_MIN ?? '0')) * 60_000;
+  const deadline = budgetMs > 0 ? Date.now() + budgetMs : Infinity;
+  const timeLeft = () => deadline - Date.now();
   const fetchOne = (id) => run('yt-dlp', [
     '--write-auto-sub', '--skip-download', '--sub-format', 'vtt', '--sub-langs', 'en',
     '--sleep-requests', '2',
@@ -47,7 +60,12 @@ async function main() {
     `https://www.youtube.com/watch?v=${id}`,
   ], { maxBuffer: 8 * 1024 * 1024 });
 
+  let stoppedEarly = null;
   for (const v of missing.slice(0, limit)) {
+    if (timeLeft() <= 0) {
+      stoppedEarly = 'budget';
+      break;
+    }
     try {
       // ONE retry before this counts as a failure (2026-08-01). Measured on the
       // Saint Louis pull: every one of the 12 "failures" downloaded fine on an
@@ -74,7 +92,15 @@ async function main() {
       // IP and every subsequent request failed; the old loop burned the whole
       // remaining queue on failures in minutes. Sustained failure means
       // blocked, not unlucky: stop hammering, cool down long, then resume.
+      // …but never cool down past the budget. Sleeping 30 minutes with 5 left
+      // spends the whole run on an idle timer and hands the distiller nothing;
+      // ending now ships what is already on disk and the next run gets a fresh
+      // runner IP anyway, which is the actual cure for a bot-check.
       if (streak >= 5) {
+        if (timeLeft() < 31 * 60 * 1000) {
+          stoppedEarly = 'rate-limited with no room left to cool down';
+          break;
+        }
         console.log(`[pull] ${streak} consecutive failures — rate-limited. Cooling down 30 min…`);
         await new Promise((r) => setTimeout(r, 30 * 60 * 1000));
         streak = 0;
@@ -83,6 +109,9 @@ async function main() {
     // Gentle pacing — the 2026-07-12 enumeration burst tripped a 429 +
     // bot-check for ~30 min. Slow is fine; blocked is not.
     await new Promise((r) => setTimeout(r, pauseMs));
+  }
+  if (stoppedEarly) {
+    console.log(`[pull] stopped early (${stoppedEarly}) — handing ${done} transcripts to the distiller`);
   }
   console.log(`[pull] done=${done} failed=${failed} remaining=${Math.max(0, missing.length - done - failed)}`);
 }

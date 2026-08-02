@@ -99,13 +99,27 @@ jobs:
           echo "DEEPSEEK_KEY=$VAL" >> "$GITHUB_ENV"
           echo "have_key=1" >> "$GITHUB_OUTPUT"
 
+      # A pull that never ENDS ships nothing: the distiller only reads the
+      # transcripts once this step exits, so runs 1-4 on 2026-08-01 pulled for
+      # 3.7, 5.5, 2.0 and 0.6 hours and committed ZERO notes between them —
+      # every one either got cancelled or timed out mid-pull and threw the
+      # whole download away. The script now stops on its own clock and hands
+      # over what it has; these two settings make that guarantee survive a
+      # genuinely hung yt-dlp:
+      #   • timeout-minutes — a hard backstop if the process wedges past its
+      #     own budget check (which only runs between fetches).
+      #   • continue-on-error — a killed or failed pull must NOT skip distill /
+      #     merge / commit. Whatever landed on disk is real work and ships.
       - name: Pull transcripts (fresh runner IP)
+        continue-on-error: true
+        timeout-minutes: 45
         env:
           PULL_PACE_MS: '4000'
         run: |
           node scripts/danya-corpus/pull-transcripts.mjs \
             --creator "${{ github.event.inputs.creator || 'saintlouis' }}" \
-            --limit "${{ github.event.inputs.pull_limit || '400' }}"
+            --limit "${{ github.event.inputs.pull_limit || '400' }}" \
+            --budget-minutes 40
 
       - name: Distill
         if: steps.key.outputs.have_key == '1'
