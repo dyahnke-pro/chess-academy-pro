@@ -82,9 +82,26 @@ async function main() {
     const d = JSON.parse(await readFile(path, 'utf8'));
     for (const n of d.notes ?? []) {
       if (!n.explains || !n.teaches || !Array.isArray(n.sources) || n.sources.length === 0) continue;
-      // Anchoring: a note with no position key AND no opening name grounds
-      // nothing — drop it (the runtime can never select it).
-      if ((n.lineSan ?? []).length === 0 && !n.opening) continue;
+      // ANCHORING — three ways a note can be selectable, not two.
+      //
+      // A position key or an opening name were the only anchors, on the
+      // assumption that all teaching hangs off an opening. Most does not.
+      // 11,921 Saint Louis notes were dropped here — "in endgames the king is
+      // an attacking piece", "do not trade pieces just to trade", "target the
+      // weakness in the pawn structure" — universal principles that belong to
+      // a PHASE and a CONCEPT and to no opening at all. Forcing them under an
+      // opening label is what produced generic endgame advice tagged
+      // Caro-Kann (2026-08-02); dropping them threw the teaching away.
+      // So a note also anchors when it says WHEN it applies (phase) and WHAT
+      // it is about (concepts) — the runtime selects on those instead.
+      const conceptAnchored = !!n.phase && Array.isArray(n.concepts) && n.concepts.length > 0;
+      if ((n.lineSan ?? []).length === 0 && !n.opening && !conceptAnchored) continue;
+      // An opening NAME alone is not enough to be worth keeping. A note with no
+      // position and no concepts has nothing in it a caller could select on
+      // except a label — and the one note in 28,797 that fits that description
+      // is the distiller reporting "No chess ideas are present in this
+      // excerpt", which is an empty chunk, not teaching.
+      if ((n.lineSan ?? []).length === 0 && !conceptAnchored) continue;
       n.explains = stripMoveNumbers(n.explains);
       n.teaches = stripMoveNumbers(n.teaches);
       n.plans = stripMoveNumbers(n.plans ?? '');

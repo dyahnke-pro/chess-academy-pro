@@ -48,6 +48,8 @@ const DATA = teachingsData as unknown as TeachingsBundle;
 const byPrefix = new Map<string, DanyaNote[]>();
 /** Opening-keyed notes (normalized opening-name token key). */
 const byOpening = new Map<string, DanyaNote[]>();
+/** Concept-keyed notes, "phase::concept" — teaching that belongs to no opening. */
+const byConcept = new Map<string, DanyaNote[]>();
 
 // Opening names reach this from two vocabularies that do NOT agree: the app's
 // own surfaces use British spellings and diacritics ("French Defence", "Réti
@@ -150,6 +152,19 @@ for (const n of DATA.notes) {
     const bucket = byOpening.get(key) ?? [];
     bucket.push(n);
     byOpening.set(key, bucket);
+  }
+  // CONCEPT tier — teaching that belongs to no opening (2026-08-02). Most of
+  // what a lecture channel teaches is universal: king activity in endgames,
+  // when a trade actually helps, how to target a structural weakness. Keyed by
+  // "phase::concept" so a caller can ask for the phase it is in and the idea
+  // it is teaching, which is the only thing that is true about these notes.
+  if (n.concepts.length > 0) {
+    for (const c of n.concepts) {
+      const key = `${n.phase}::${c.toLowerCase()}`;
+      const bucket = byConcept.get(key) ?? [];
+      bucket.push(n);
+      byConcept.set(key, bucket);
+    }
   }
 }
 
@@ -597,4 +612,48 @@ export function danyaCorpusStats(): { notes: number; positioned: number; videos:
     positioned: DATA.notes.filter((n) => n.lineSan.length > 0).length,
     videos: DATA.videosDistilled,
   };
+}
+
+/** Teaching for a phase and a set of ideas, for positions no opening explains.
+ *
+ *  The position and opening tiers answer "what is known about THIS line". This
+ *  one answers "what is known about this KIND of position" — the endgame where
+ *  king activity decides it, the middlegame where the only plan is to hit a
+ *  backward pawn. That teaching exists in quantity (it is most of what a
+ *  lecture channel says) and had nowhere to live: with no opening to hang on,
+ *  the merge dropped it.
+ *
+ *  Concepts are OR-ed and the strongest are returned first — a note tagged with
+ *  several of the asked-for ideas is more on-point than one that matches a
+ *  single tag. Deduped by id, since a note is indexed once per concept. */
+export function conceptNotesFor(args: {
+  phase: DanyaNote['phase'];
+  concepts: string[];
+  limit?: number;
+}): DanyaNote[] {
+  const wanted = args.concepts.map((c) => c.toLowerCase()).filter(Boolean);
+  if (wanted.length === 0) return [];
+  const hits = new Map<string, { note: DanyaNote; matched: number }>();
+  for (const c of wanted) {
+    for (const n of byConcept.get(`${args.phase}::${c}`) ?? []) {
+      const seen = hits.get(n.id);
+      if (seen) seen.matched += 1;
+      else hits.set(n.id, { note: n, matched: 1 });
+    }
+  }
+  return [...hits.values()]
+    .sort((a, b) => b.matched - a.matched)
+    .slice(0, args.limit ?? 6)
+    .map((h) => h.note);
+}
+
+/** Which ideas this corpus can actually teach in a phase, commonest first.
+ *  Callers use it to ask for concepts that exist rather than guessing tags. */
+export function conceptsAvailable(phase: DanyaNote['phase']): Array<{ concept: string; notes: number }> {
+  const out: Array<{ concept: string; notes: number }> = [];
+  for (const [key, notes] of byConcept) {
+    if (!key.startsWith(`${phase}::`)) continue;
+    out.push({ concept: key.slice(phase.length + 2), notes: notes.length });
+  }
+  return out.sort((a, b) => b.notes - a.notes);
 }

@@ -80,9 +80,28 @@ describe.each(CORPORA.map((c) => [c.key, c] as const))('%s-teachings corpus gate
     }
   }, 30000);
 
-  it('every note is anchored: position-keyed or opening-named', () => {
+  it('every note is anchored: position-keyed, opening-named, or concept-keyed', () => {
+    // Three tiers, not two. A note that teaches "king activity decides rook
+    // endgames" belongs to no opening and no single position, but it is not
+    // unanchored — its phase says when it applies and its concepts say what it
+    // is about, which is what conceptNotesFor selects on. What is still banned
+    // is a note the runtime could never reach by any route.
     for (const n of corpus.notes) {
-      expect(n.lineSan.length > 0 || !!n.opening, `${n.id}: unanchored note`).toBe(true);
+      const anchored = n.lineSan.length > 0 || !!n.opening || (!!n.phase && (n.concepts?.length ?? 0) > 0);
+      expect(anchored, `${n.id}: unanchored note`).toBe(true);
+    }
+  });
+
+  it('a concept-keyed note never claims an opening it cannot back up', () => {
+    // The failure this corpus actually shipped: generic endgame technique
+    // labelled "Caro-Kann Defense: Endgame Variation" because the lecture title
+    // contained the word "endgame". A note with no position may still name an
+    // opening — the title genuinely said so — but then it must carry the
+    // concepts that let it be selected on its own merits rather than riding an
+    // opening tag it cannot support.
+    for (const n of corpus.notes) {
+      if (n.lineSan.length > 0 || !n.opening) continue;
+      expect((n.concepts?.length ?? 0) > 0, `${n.id}: opening-tagged, unpositioned, and untagged by concept`).toBe(true);
     }
   });
 
