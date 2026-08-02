@@ -22,6 +22,7 @@ import { validateBoardClaims } from './boardClaimValidator';
 import { secondarySupportNotes, secondaryNotesForPosition } from './secondaryCorpora';
 import { detectOpening } from './openingDetectionService';
 import { noteContradictsLine, notePhaseMismatchesBoard } from './noteLineGuard';
+import { boardConcepts } from './boardConcepts';
 
 export interface DanyaNote {
   id: string;
@@ -359,7 +360,21 @@ export function teachingNoteForBoard(
   // structure provably matches this board), so the tag check does not apply —
   // its licence to borrow is the proven structure match plus the live-board
   // claim filter inside `notesForStructure`.
-  return notesForStructure(fen, 1)[0] ?? null;
+  const transferred = notesForStructure(fen, 1)[0];
+  if (transferred) return transferred;
+  // CONCEPT TIER — last, because it is the least specific: teaching about this
+  // KIND of position rather than this one. It earns its place at the end of the
+  // chain because the alternative here is silence, and a rook endgame where the
+  // corpus knows the technique should not go untaught merely because no note
+  // was authored at this exact FEN.
+  //
+  // The tags come from `boardConcepts`, which reads the board and emits nothing
+  // unless the position plainly shows the idea — so an unremarkable middlegame
+  // still falls through to null rather than collecting a platitude. Code picks
+  // the ideas, the model only phrases the note (G0).
+  const derived = boardConcepts(fen);
+  if (!derived) return null;
+  return conceptNotesFor({ phase: derived.phase, concepts: derived.concepts, limit: 1 })[0] ?? null;
 }
 
 /** Opening-keyed notes by (fuzzy-tokenized) opening name. "Caro-Kann Defense:
