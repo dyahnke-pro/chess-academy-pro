@@ -259,6 +259,21 @@ const GENERIC_NAME_TOKENS = new Set([
   'main', 'line', 'accepted', 'declined', 'the', 'with', 'and',
 ]);
 
+// Words that are ordinary chess or English vocabulary. They may appear IN a
+// name, but a name segment made only of these identifies nothing — see the
+// eligibility check in openingFromTitle.
+const ORDINARY_WORDS = new Set([
+  'endgame', 'middlegame', 'castling', 'castle', 'push', 'full', 'early',
+  'late', 'normal', 'quiet', 'general', 'basic', 'simple', 'double', 'single',
+  'long', 'short', 'fast', 'slow', 'big', 'small', 'first', 'second', 'third',
+  'other', 'another', 'best', 'better', 'good', 'bad', 'new', 'old',
+  // 'center' costs us the Center Game, which really is named for it — but the
+  // word is unavoidable in chess prose, and it was tagging 52 notes of generic
+  // structure advice as that opening with not one position among them. A rare
+  // opening left untagged beats a common word mislabelling everything.
+  'center', 'centre',
+]);
+
 const distinctiveTokens = (s) =>
   [...new Set(norm(s).split(' ').filter((t) => t.length > 2 && !GENERIC_NAME_TOKENS.has(t)))];
 
@@ -273,7 +288,16 @@ export function openingFromTitle(title, dbNames) {
     const segments = [name, ...name.split(/[:,]/)];
     const eligible = segments.some((seg) => {
       const d = distinctiveTokens(seg);
-      return d.length > 0 && d.every((t) => titleTokens.has(t));
+      // A segment may only establish eligibility if something in it actually
+      // IDENTIFIES an opening. The DB is full of segments that reduce to one
+      // ordinary word — "Endgame Variation", "Full Line", "Push Variation",
+      // "Castling Line" — and those matched any title containing that word:
+      // "The Rook Endgame Myth Nobody Talks About" was stamped Caro-Kann
+      // Defense: Endgame Variation, and 782 Saint Louis notes of generic
+      // king-and-pawn technique shipped under that tag (2026-08-02). A proper
+      // noun or a real phrase can name a line; the word "endgame" cannot.
+      if (d.length === 0 || !d.some((t) => !ORDINARY_WORDS.has(t))) return false;
+      return d.every((t) => titleTokens.has(t));
     });
     if (!eligible) continue;
     // RANK by how much of the FULL name the title confirms — distinctive tokens
