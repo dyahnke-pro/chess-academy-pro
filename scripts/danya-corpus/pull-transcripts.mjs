@@ -35,6 +35,9 @@ function arg(name, dflt) {
 
 async function exists(p) { try { await access(p); return true; } catch { return false; } }
 
+/** Marker for the one failure that is permanent rather than transient. */
+const NO_SUBS_ERR = 'no English subtitles written';
+
 async function main() {
   const playlist = arg('playlist', null);
   const limit = Number(arg('limit', '10000'));
@@ -42,30 +45,68 @@ async function main() {
   let videos = manifest.videos;
   if (playlist) videos = videos.filter((v) => v.playlist === playlist);
 
+  // Videos YouTube has no English captions for at all — tournament broadcasts,
+  // untitled uploads. They are not transient failures and they never will be,
+  // so without a memory every future run re-grinds them: on Saint Louis that is
+  // most of the queue, and a budgeted run would spend itself entirely on videos
+  // that cannot produce a transcript. Remembering them is what lets the backlog
+  // actually reach zero.
+  const NO_SUBS = `${TDIR}/.no-subs.json`;
+  const noSubs = new Set(await readFile(NO_SUBS, 'utf8').then(JSON.parse).catch(() => []));
+
   const missing = [];
   for (const v of videos) {
+    if (noSubs.has(v.id)) continue;
     if (!(await exists(`${TDIR}/${v.id}.en.vtt`))) missing.push(v);
   }
-  console.log(`[pull] ${videos.length} videos in scope, ${missing.length} missing transcripts`);
+  console.log(`[pull] ${videos.length} videos in scope, ${missing.length} missing transcripts (${noSubs.size} known caption-less)`);
 
   let done = 0, failed = 0, streak = 0, recovered = 0;
   const pauseMs = Number(process.env.PULL_PACE_MS ?? '5000');
   const budgetMs = Number(arg('budget-minutes', process.env.PULL_BUDGET_MIN ?? '0')) * 60_000;
   const deadline = budgetMs > 0 ? Date.now() + budgetMs : Infinity;
   const timeLeft = () => deadline - Date.now();
+  // PIN THE PLAYER CLIENT (2026-08-02). yt-dlp's default rotation lands on
+  // `android_vr`, which serves the video but carries NO caption tracks at all
+  // — every request came back "There are no subtitles for the requested
+  // languages" and, because that is not an ERROR, yt-dlp exited 0 and the loop
+  // below counted a pull that wrote no file as a success. That is how the farm
+  // ran for hours reporting healthy progress and produced zero transcripts.
+  // `android` returns the caption track and is not bot-checked (`web`,
+  // `web_safari`, `web_embedded`, `mweb` and `ios` all demand a sign-in
+  // challenge from a datacenter IP; `tv` is DRM-walled).
   const fetchOne = (id) => run('yt-dlp', [
+    '--extractor-args', 'youtube:player_client=android',
     '--write-auto-sub', '--skip-download', '--sub-format', 'vtt', '--sub-langs', 'en',
     '--sleep-requests', '2',
     '-o', `${TDIR}/%(id)s.%(ext)s`,
     `https://www.youtube.com/watch?v=${id}`,
   ], { maxBuffer: 8 * 1024 * 1024 });
+  // Exit code 0 is NOT proof of a transcript — see above. The file on disk is.
+  const fetchVerified = async (id) => {
+    await fetchOne(id);
+    if (!(await exists(`${TDIR}/${id}.en.vtt`))) throw new Error(NO_SUBS_ERR);
+  };
 
+  // WORKERS OVER A SHARED QUEUE (2026-08-02). Strictly sequential, one pull
+  // cost ~60s — yt-dlp startup, its own 2s inter-request sleep, a 300KB VTT for
+  // an hour-long lecture, then our pacing — so 1,341 Saint Louis transcripts
+  // would have taken 22 hours. The rate limit that matters is REQUESTS PER
+  // SECOND, and pacing is applied per worker, so N workers with the same pace
+  // finish N times sooner at N times the request rate; keep N modest.
+  const queue = missing.slice(0, limit);
+  let cursor = 0;
   let stoppedEarly = null;
-  for (const v of missing.slice(0, limit)) {
+  const worker = async () => {
+   for (;;) {
+    if (stoppedEarly) break;
     if (timeLeft() <= 0) {
       stoppedEarly = 'budget';
       break;
     }
+    const v = queue[cursor];
+    cursor += 1;
+    if (!v) break;
     try {
       // ONE retry before this counts as a failure (2026-08-01). Measured on the
       // Saint Louis pull: every one of the 12 "failures" downloaded fine on an
@@ -75,10 +116,10 @@ async function main() {
       // 475/540. The breaker still catches a REAL bot-check, because that
       // fails the retry too.
       try {
-        await fetchOne(v.id);
+        await fetchVerified(v.id);
       } catch {
         await new Promise((r) => setTimeout(r, 8000));
-        await fetchOne(v.id);
+        await fetchVerified(v.id);
         recovered += 1;
       }
       done += 1;
@@ -88,6 +129,13 @@ async function main() {
       failed += 1;
       streak += 1;
       console.error(`[pull] FAIL ${v.id} (${v.title.slice(0, 50)}): ${String(e).split('\n')[0].slice(0, 120)}`);
+      // Only a clean "yt-dlp answered, there are no captions" is permanent. A
+      // network error or a bot-check must stay retryable, or one bad hour would
+      // blacklist videos that do have transcripts.
+      if (String(e).includes(NO_SUBS_ERR)) {
+        noSubs.add(v.id);
+        await writeFile(NO_SUBS, JSON.stringify([...noSubs]));
+      }
       // CIRCUIT BREAKER — 2026-07-29: after ~74 pulls YouTube bot-checked the
       // IP and every subsequent request failed; the old loop burned the whole
       // remaining queue on failures in minutes. Sustained failure means
@@ -109,7 +157,11 @@ async function main() {
     // Gentle pacing — the 2026-07-12 enumeration burst tripped a 429 +
     // bot-check for ~30 min. Slow is fine; blocked is not.
     await new Promise((r) => setTimeout(r, pauseMs));
-  }
+   }
+  };
+  const concurrency = Math.max(1, Number(arg('concurrency', process.env.PULL_CONCURRENCY ?? '1')));
+  await Promise.all(Array.from({ length: concurrency }, () => worker()));
+
   if (stoppedEarly) {
     console.log(`[pull] stopped early (${stoppedEarly}) — handing ${done} transcripts to the distiller`);
   }
