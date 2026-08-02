@@ -1,47 +1,54 @@
 // Post-deploy audit for the 2026-08-02 lesson-drift fixes (David's Vienna
 // Copycat session). Three contracts, driven the way he drove it:
 //
-//   1. ON TOPIC — the FIRST move of the lesson must not be narrated with
-//      another opening's teaching. His run opened with a Caro-Kann game
-//      recounted over 1.e4 ("White played the greedy Qd4… in the Caro-Kann").
-//   2. NO REPEATS — no walkthrough node may be narrated twice, and no spoken
-//      line may repeat, while the lesson plays forward untouched.
+//   1. ON TOPIC — the opening plies must not be narrated with another
+//      opening's teaching. His run opened with a Caro-Kann game recounted over
+//      1.e4 ("White played the greedy Qd4… in the Caro-Kann, ...Nc6").
+//   2. NO REPEATS — no node narrated twice and no line spoken twice while the
+//      lesson plays forward untouched.
 //   3. BOARD HOLDS — tapping "Watch the middlegame and endgame" must leave the
-//      board on the lesson's final position, never snap back to move one.
+//      board where the lesson ended, never snap back to move one.
 //
-// Instruments (G1): Playwright drives, the page's own audit events are captured
-// off the network, and the spoken text is read from what the app hands /api/tts.
+// THREE INSTRUMENTS (G1). Playwright drives; the narration LISTENER sidecar
+// captures what the app actually spoke; the app's own audit events come back
+// through that same sidecar. The first version of this script sniffed POST
+// bodies for both and captured NOTHING — /api/tts is a GET with the text in the
+// query string — so all three of its checks passed on empty sets. A check that
+// cannot fail is worse than no check: it reports coverage it does not have.
+// Every assertion below therefore proves it had data before it may pass.
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-lib/audit-listener.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
-const LESSON = process.env.AUDIT_LESSON || 'Teach me the Vienna Game Copycat Variation';
-// Openings the lesson must never start teaching instead. Deliberately families,
-// not sub-lines — a Vienna lesson mentioning "the Italian bishop" is fine.
-const OFF_TOPIC = [/caro-?kann/i, /najdorf/i, /french defen[cs]e/i, /gr[uü]nfeld/i, /slav/i, /stonewall/i];
+const LESSON = process.env.AUDIT_LESSON || 'Vienna Game';
+const VARIATION = process.env.AUDIT_VARIATION || 'Copycat';
+// Families the lesson must never start teaching instead. Families, not
+// sub-lines — a Vienna lesson mentioning "the Italian bishop" is fine.
+const OFF_TOPIC = [/caro-?kann/i, /najdorf/i, /french defen[cs]e/i, /gr[uü]nfeld/i, /stonewall/i, /king'?s indian/i];
+const LESSON_BUDGET_MS = Number(process.env.AUDIT_LESSON_BUDGET_MS ?? 600_000);
 
+const listener = await startAuditListener();
 const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
 const ctx = await browser.newContext(sandboxContextOptions());
 const page = await ctx.newPage();
 
-/** Every narration audit the app emitted, and every line it sent to Polly. */
-const narrationEntries = [];
+/** What the app actually SPOKE. /api/tts is a GET; the text is in the query. */
 const spoken = [];
 page.on('request', (req) => {
   const url = req.url();
+  if (!url.includes('/api/tts')) return;
   try {
-    if (url.includes('/api/audit-stream')) {
-      const body = req.postData();
-      if (!body) return;
-      for (const e of JSON.parse(body).events ?? []) {
-        if (e.source === 'useTeachWalkthrough.narrateAndAdvance') narrationEntries.push(e.summary ?? '');
-      }
-    } else if (url.includes('/api/tts')) {
-      const body = req.postData();
-      if (body) spoken.push(String(JSON.parse(body).text ?? ''));
-    }
-  } catch { /* a malformed capture must not fail the run */ }
+    const text = new URL(url).searchParams.get('text');
+    if (text && text.trim() !== '.') spoken.push(text); // '.' is the warmup probe
+  } catch { /* a malformed URL must not fail the run */ }
 });
+
+const results = [];
+const check = (name, pass, detail) => { results.push({ name, pass, detail }); };
+const narrationEntries = () => listener.getCapturedEvents()
+  .filter((e) => e.source === 'useTeachWalkthrough.narrateAndAdvance')
+  .map((e) => e.summary ?? '');
 
 async function dismissGates() {
   for (const [gate, btn] of [
@@ -63,10 +70,15 @@ async function dismissGates() {
   } catch { /* no help modal */ }
 }
 
-const results = [];
-const check = (name, pass, detail) => { results.push({ name, pass, detail }); };
-
 try {
+  // Point the app's audit stream at the sidecar BEFORE anything mounts, so the
+  // walkthrough's own events are captured from the first ply.
+  await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 45000 });
+  await page.evaluate(([url, secret]) => {
+    localStorage.setItem('auditStreamUrl', url);
+    localStorage.setItem('auditStreamSecret', secret);
+  }, [listener.url, LOCAL_LISTENER_SECRET]);
+
   await page.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 45000 });
   await dismissGates(); await dismissGates();
 
@@ -76,28 +88,55 @@ try {
   await box.pressSequentially(LESSON, { delay: 12 });
   await box.press('Enter');
 
-  // Let the lesson resolve and play forward on its own — no skipping, so any
-  // repeat is the walkthrough's doing and not a tap of mine.
-  const deadline = Date.now() + 240_000;
+  // A broad family name opens the LINE PICKER — a real user taps a line, and an
+  // audit that doesn't is stuck on the picker while every later step silently
+  // no-ops (the false-coverage failure mode this repo has hit before).
+  try {
+    const picker = page.locator('[data-testid="line-picker"]');
+    await picker.waitFor({ timeout: 60_000 });
+    const tile = page.locator(`[data-testid^="line-picker-"][data-fullname*="${VARIATION}"]`).first();
+    await tile.waitFor({ timeout: 10_000 });
+    // The tile must name its move — the picker contract shipped with this fix.
+    const tileText = await tile.innerText();
+    check('picker tile names the line\'s key move', /\d+\.(\.\.)?[A-Za-z]/.test(tileText),
+      `tile text: ${JSON.stringify(tileText.replace(/\s+/g, ' ').slice(0, 80))}`);
+    await tile.click();
+    await picker.waitFor({ state: 'detached', timeout: 20_000 });
+  } catch (err) {
+    check('line picker reached and a variation picked', false, String(err).slice(0, 140));
+  }
+
+  // Let the lesson play forward on its own — no skipping, so any repeat is the
+  // walkthrough's doing and not a tap of mine. Voice-gated narration is slow;
+  // that IS the user's experience.
+  const deadline = Date.now() + LESSON_BUDGET_MS;
   let sawLeaf = false;
   while (Date.now() < deadline) {
-    await page.waitForTimeout(3000);
-    if (await page.locator('[data-testid="walkthrough-narrating-panel"]').count() === 0
-        && narrationEntries.length === 0) continue;
+    await page.waitForTimeout(4000);
     if ((await page.locator('body').innerText()).includes('Watch the middlegame and endgame')) { sawLeaf = true; break; }
   }
 
-  // ── 1. ON TOPIC on the first move.
-  // The first spoken lines belong to the opening ply; check every line spoken
-  // before the second node was narrated.
-  const firstNodeLines = spoken.slice(0, Math.max(1, spoken.findIndex((s) => /mirror|copies/i.test(s)) + 1) || spoken.length);
-  const drift = firstNodeLines.filter((line) => OFF_TOPIC.some((re) => re.test(line)));
-  check('first move stays on the taught opening', drift.length === 0,
-    drift.length ? `off-topic line(s): ${drift.map((d) => JSON.stringify(d.slice(0, 90))).join(' | ')}` : `${firstNodeLines.length} opening line(s), none off-topic`);
+  const paths = narrationEntries().map((s) => /path=\[([^\]]*)\]/.exec(s)?.[1] ?? s);
+
+  // ── 0. The instruments actually captured something. Without this the three
+  //       checks below can pass on empty sets, which is how the first version
+  //       of this script reported 3/4 green while testing nothing.
+  check('narration listener captured the lesson', paths.length >= 4,
+    `${paths.length} narrated node(s), ${listener.getCapturedEvents().length} audit event(s) total`);
+  check('TTS capture saw the coach speak', spoken.length >= 4,
+    `${spoken.length} spoken line(s)`);
+
+  // ── 1. ON TOPIC across the opening plies.
+  const drift = spoken.filter((line) => OFF_TOPIC.some((re) => re.test(line)));
+  check('lesson never teaches another opening', drift.length === 0,
+    drift.length ? `off-topic: ${drift.map((d) => JSON.stringify(d.slice(0, 90))).join(' | ')}` : `${spoken.length} line(s) checked, none off-topic`);
+
+  // ── 1b. and never reads its own prompt aloud.
+  const directive = spoken.filter((l) => /GROUNDED FACTS|voice ONLY these|GEM ALERT \(/i.test(l));
+  check('coach never speaks its own directives', directive.length === 0,
+    directive.length ? JSON.stringify(directive[0].slice(0, 90)) : 'no directive text spoken');
 
   // ── 2. NO REPEATS while it plays forward untouched.
-  const nodeOf = (summary) => (/path=\[([^\]]*)\]/.exec(summary)?.[1] ?? summary);
-  const paths = narrationEntries.map(nodeOf);
   const repeatedNodes = paths.filter((p, i) => paths.indexOf(p) !== i);
   check('no walkthrough node narrated twice', repeatedNodes.length === 0,
     repeatedNodes.length ? `repeated: ${[...new Set(repeatedNodes)].slice(0, 4).join(' / ')}` : `${paths.length} node(s), all distinct`);
@@ -108,18 +147,18 @@ try {
 
   // ── 3. BOARD HOLDS through the continuation hand-off.
   if (!sawLeaf) {
-    check('board holds after "Watch the middlegame"', false, 'lesson never reached the leaf prompt in 240s');
+    check('board holds after "Watch the middlegame"', false,
+      `lesson never reached the leaf prompt in ${Math.round(LESSON_BUDGET_MS / 1000)}s (${paths.length} nodes narrated)`);
   } else {
-    const squareCount = async () => page.locator('[data-piece]').count();
-    const beforePieces = await squareCount();
+    const pieces = async () => page.locator('[data-piece]').count();
+    const before = await pieces();
     await page.getByText('Watch the middlegame and endgame').first().click();
-    await page.waitForTimeout(6000);
-    const afterPieces = await squareCount();
-    // The starting position is the only 32-piece board a mid-lesson position
-    // can snap back to, and the lesson's leaf is well past that.
-    const reset = afterPieces === 32 && beforePieces < 32;
+    await page.waitForTimeout(8000);
+    const after = await pieces();
+    // 32 pieces is the starting position, and the lesson's leaf is well past it.
+    const reset = after === 32 && before < 32;
     check('board holds after "Watch the middlegame"', !reset,
-      `pieces before=${beforePieces} after=${afterPieces}${reset ? ' — board snapped back to the start' : ''}`);
+      `pieces before=${before} after=${after}${reset ? ' — snapped back to the start' : ''}`);
     check('walkthrough released the board', await page.locator('[data-testid="walkthrough-narrating-panel"]').count() === 0,
       'the walkthrough panel must be gone once the continuation owns the board');
   }
@@ -128,6 +167,7 @@ try {
 }
 
 await browser.close();
+await listener.stop();
 
 let failed = 0;
 for (const r of results) {

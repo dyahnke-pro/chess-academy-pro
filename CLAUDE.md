@@ -3831,6 +3831,7 @@ After every `git push origin main`:
    | `/coach/play` + `/coach` review — full games | `scripts/audit-coach-full-games.mjs` via the `full-game-audit.yml` workflow (🔒 THE FULL-GAME AUDIT STANDARD — see locked section below the matrix) |
    | `/coach/chat` | `scripts/audit-coach-chat.mjs` |
    | `/coach/teach` (Learn) | `scripts/audit-coach-teach-unknown-line.mjs` (unknown / sub-line resolution + middlegame spine depth + leaf play-out prompt) |
+   | `/coach/teach` lesson scope / narration repeats / play-out hand-off | `scripts/audit-teach-on-topic-prod.mjs` (3-instrument: Playwright + narration-listener sidecar + `/api/tts` GET capture. Asserts the lesson never teaches another opening, never speaks its own directives, narrates each node once, and that "Watch the middlegame" does not reset the board. Two checks assert the instruments CAPTURED data — a check that can pass on an empty set is worse than no check) |
    | `/coach/teach` fork / leaf / branch panels (any change to walkthrough intent routing) | `scripts/audit-teach-forkdive-prod.mjs` (a "Deep dive" tile must START A LESSON, never route to chat — fails on brain-refusal / auto-pause / "did you mean…") |
    | coach surfaces (any) — master-play grounding | `scripts/audit-coach-master-integration.mjs` |
    | coach surfaces (any) — player-game references | `scripts/audit-coach-player-games.mjs` (proGameReferences Dexie seed + shape; playerGames envelope event when a provider key is present) |
