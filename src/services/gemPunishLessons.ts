@@ -211,10 +211,28 @@ export function gemPunishLessonsForOpening(
 /** Gems are keyed by kebab opening id, but the coach's stage generator works
  *  from the canonical NAME, so the two have to be joined. `repertoire.json`
  *  carries both, which makes it the join table — no new mapping to drift. */
+/** The join key. `repertoire.json` writes British ("Caro-Kann Defence") while
+ *  the coach resolves names from the Lichess DB, which is American ("Caro-Kann
+ *  Defense") — so a straight lowercase compare silently missed on exactly the
+ *  openings whose names differ by that one letter. Measured 2026-08-02: a
+ *  request for the Caro-Kann or Scandinavian traps found ZERO of their gems and
+ *  fell to the puzzle path, while the French found all of them. Fold both
+ *  spellings, and the diacritics and apostrophes too, so the join is on the
+ *  opening rather than on how it happens to be spelled. */
+const joinKey = (s: string): string =>
+  s
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[’'`]/g, '')
+    .replace(/\bdefence\b/g, 'defense')
+    .replace(/\s+/g, ' ')
+    .trim();
+
 const ID_BY_NAME = new Map<string, string>(
   (repertoireData as Array<{ id?: string; name?: string }>)
     .filter((e) => e.id && e.name)
-    .map((e) => [(e.name as string).toLowerCase(), e.id as string]),
+    .map((e) => [joinKey(e.name as string), e.id as string]),
 );
 
 /** The curated weapons for an opening named the way the coach names it.
@@ -224,7 +242,7 @@ export function gemPunishLessonsForOpeningName(
   openingName: string | undefined | null,
 ): PunishLesson[] {
   if (!openingName) return [];
-  const name = openingName.toLowerCase().trim();
+  const name = joinKey(openingName);
   const direct = ID_BY_NAME.get(name);
   if (direct) return gemPunishLessonsForOpening(direct);
   // A coach session often resolves to a VARIATION ("Vienna Game: Falkbeer

@@ -95,3 +95,34 @@ describe('gem → coach punish lesson', () => {
   // chess.js and the set grows with every mining pass.
   }, 30000);
 });
+
+// David 2026-08-02: "Learn with coach cannot teach traps in x openings. Wire
+// that in. Should be gem lines." The stage generator already preferred gems —
+// but the NAME→id join was a plain lowercase compare, and `repertoire.json`
+// writes British while the coach resolves American off the Lichess DB. So a
+// request for the Caro-Kann or Scandinavian traps found none of their gems and
+// fell through to the weaker puzzle path, while the French found all of theirs.
+describe('gemPunishLessonsForOpeningName — joins on the opening, not the spelling', () => {
+  it('finds the same weapons either side of the Defence/Defense split', () => {
+    for (const [british, american] of [
+      ['Caro-Kann Defence', 'Caro-Kann Defense'],
+      ['Scandinavian Defence', 'Scandinavian Defense'],
+      ['French Defence', 'French Defense'],
+    ]) {
+      const b = gemPunishLessonsForOpeningName(british);
+      const a = gemPunishLessonsForOpeningName(american);
+      expect(b.length, `${british} should have weapons`).toBeGreaterThan(0);
+      expect(a.map((l) => l.name)).toEqual(b.map((l) => l.name));
+    }
+  });
+
+  it('tolerates a missing apostrophe', () => {
+    expect(gemPunishLessonsForOpeningName('Kings Gambit').length)
+      .toBe(gemPunishLessonsForOpeningName("King's Gambit").length);
+  });
+
+  it('still returns nothing for an opening with no gems', () => {
+    expect(gemPunishLessonsForOpeningName('Nonexistent Opening')).toEqual([]);
+    expect(gemPunishLessonsForOpeningName(null)).toEqual([]);
+  });
+});

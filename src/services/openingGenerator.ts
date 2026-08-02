@@ -3618,7 +3618,13 @@ async function generateOneStage(
     // the fallback for the openings with no gems (most of the DB's 3,000).
     try {
       const gemLessons = gemPunishLessonsForOpeningName(openingName);
-      if (gemLessons.length >= 2) {
+      // ONE curated weapon is enough (David 2026-08-02: traps "should be gem
+      // lines"). The >= 2 bar is the generic "enough material for a stage"
+      // rule the drill and find-move paths use, and it was wrong here: a gem
+      // is a hand-narrated, engine-verified, tiered refutation, and 23 of the
+      // 86 openings with gems have exactly one — those were falling past it to
+      // the puzzle path, which is the WEAKER source, to make up a count.
+      if (gemLessons.length >= 1) {
         void logAppAudit({
           kind: 'coach-surface-migrated',
           category: 'subsystem',

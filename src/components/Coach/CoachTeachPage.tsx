@@ -2669,6 +2669,20 @@ export function CoachTeachPage(): JSX.Element {
         { regex: /\b(?:the\s+)?(?:.+?)\s+drill(?:s)?\b/i, stage: 'drill' },
         { regex: /\bpunish(?:ment)?(?:\s+lines?)?\s+(?:in\s+|for\s+|from\s+)?(?:the\s+)?/i, stage: 'punish' },
         { regex: /\b(?:the\s+)?(?:.+?)\s+punish(?:ment)?(?:\s+lines?)?\b/i, stage: 'punish' },
+        // TRAPS ARE THE PUNISH STAGE (David 2026-08-02: "Learn with coach
+        // cannot teach traps in x openings. Wire that in. Should be gem
+        // lines."). Nobody asks for "punish lines" — they ask for traps. The
+        // stage they mean already exists and already prefers the curated,
+        // engine-verified gems over the puzzle path (openingGenerator's punish
+        // branch), so this is purely the missing word: with no pattern for it,
+        // "teach me the traps in the Vienna" fell through to the brain, which
+        // is forbidden from inventing chess content and correctly refused.
+        //
+        // Two patterns, mirroring the punish pair, but each matching ONLY the
+        // keyword and its connective — the opening name must survive the strip
+        // to be resolved afterwards.
+        { regex: /\btraps?(?:\s+lines?)?\s+(?:in|for|from|of|against|with)\s+(?:the\s+)?/i, stage: 'punish' },
+        { regex: /\btraps?(?:\s+lines?)?\b/i, stage: 'punish' },
         { regex: /\b(?:quiz\s+me\s+on|quiz)\s+(?:the\s+)?/i, stage: 'concepts' },
         { regex: /\b(?:concept(?:\s+check)?|concepts)\s+(?:for\s+|of\s+)?(?:the\s+)?/i, stage: 'concepts' },
         { regex: /\b(?:find(?:\s+the)?\s+moves?|recognition)\s+(?:in\s+|for\s+)?(?:the\s+)?/i, stage: 'findMove' },
