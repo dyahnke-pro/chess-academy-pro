@@ -698,7 +698,20 @@ async function main() {
     if (!dry && (await exists(`${DDIR}/${v.id}.json`))) continue;
     queue.push(v);
   }
-  console.log(`[distill-v2] ${queue.length} video(s) to process${dry ? ' (DRY — tracker only, no model calls)' : ''}`);
+  // SHARD — videos are distilled one at a time (only their chunks run in
+  // parallel), so a single process tops out around 5 videos a minute whatever
+  // --concurrency says. Splitting the queue by index lets several processes
+  // work disjoint slices without duplicating a video or needing a lock.
+  const shard = arg('shard', null);
+  const queueForThisRun = (() => {
+    if (!shard) return queue;
+    const [i, n] = shard.split('/').map(Number);
+    if (!Number.isFinite(i) || !Number.isFinite(n) || n < 1) return queue;
+    return queue.filter((_, idx) => idx % n === i % n);
+  })();
+  queue.length = 0;
+  queue.push(...queueForThisRun);
+  console.log(`[distill-v2] ${queue.length} video(s) to process${shard ? ` (shard ${shard})` : ''}${dry ? ' (DRY — tracker only, no model calls)' : ''}`);
 
   let ok = 0; let fail = 0; let skipped = 0; let totalNotes = 0; let totalPositioned = 0;
   for (const v of queue.slice(0, limit)) {
