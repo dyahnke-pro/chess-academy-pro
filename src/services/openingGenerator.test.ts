@@ -17,6 +17,7 @@ import {
   assertTreeShape,
   repairNarrationArrows,
   stripMoveRecitationLeadIn,
+  narrationTailCovered,
   generateOpening,
   getCachedOpening,
   cacheOpening,
@@ -960,5 +961,42 @@ describe('walkthrough cache genRev gate (2026-07-30 danya splice)', () => {
     await cacheOpening('GenRev Fresh Probe', tree as never);
     const cached = await getCachedOpening('GenRev Fresh Probe');
     expect(cached?.openingName).toBe('GenRev Fresh Probe');
+  });
+});
+
+describe('narrationTailCovered (truncated branch tail triggers the wider retry)', () => {
+  const ext = (n: number) => Array.from({ length: n }, () => [{ text: 'idea' }]);
+
+  it('treats a spine-only line as covered — there is no tail to lose', () => {
+    expect(narrationTailCovered({}, 0)).toBe(true);
+    expect(narrationTailCovered(null, 0)).toBe(true);
+  });
+
+  it('flags a payload cut off before the branch fields', () => {
+    // What a max_tokens truncation actually looks like after salvage: the
+    // spine survived, everything after it is simply gone.
+    expect(narrationTailCovered({}, 3)).toBe(false);
+    expect(narrationTailCovered(null, 3)).toBe(false);
+  });
+
+  it('flags a payload cut off midway through the branch fields', () => {
+    expect(narrationTailCovered({ branchIdeas: ['a', 'b'], branchExtensionIdeas: ext(2) }, 3)).toBe(false);
+    // branchExtensionIdeas is the LAST field, so it is the usual casualty.
+    expect(narrationTailCovered({ branchIdeas: ['a', 'b', 'c'] }, 3)).toBe(false);
+  });
+
+  it('does not count blank strings as narration', () => {
+    expect(narrationTailCovered({ branchIdeas: ['a', '   ', 'c'], branchExtensionIdeas: ext(3) }, 3)).toBe(false);
+  });
+
+  it('accepts a complete tail', () => {
+    expect(narrationTailCovered({ branchIdeas: ['a', 'b', 'c'], branchExtensionIdeas: ext(3) }, 3)).toBe(true);
+  });
+
+  it('accepts a thin-but-present extension array — skimping is not truncation', () => {
+    // The model emitted every field but under-filled an inner array. A retry
+    // does not fix that; the per-move template fallback covers it, and firing
+    // a second call on every gen would be pure latency.
+    expect(narrationTailCovered({ branchIdeas: ['a', 'b'], branchExtensionIdeas: [[], []] }, 2)).toBe(true);
   });
 });

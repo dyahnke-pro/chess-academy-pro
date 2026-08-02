@@ -1477,6 +1477,26 @@ interface NarrationOutput {
   branchExtensionIdeas?: NarrationIdea[][];
 }
 
+/** Did the narration payload survive to its LAST field, or was it cut off?
+ *
+ *  The model emits the schema in order — spine `ideas` first, then
+ *  `branchIdeas`, then `branchExtensionIdeas` — and a payload that hits
+ *  max_tokens is salvaged by keeping the complete prefix and dropping the
+ *  partial tail. So a full spine proves nothing about the fork prose: the
+ *  branches are exactly what a truncated payload loses. Absence is the signal.
+ *  An extension array that is PRESENT but thin is the model skimping rather
+ *  than running out of room, and a retry does not fix that (the per-move
+ *  template fallback covers it), so only whole missing fields count here. */
+export function narrationTailCovered(
+  n: { branchIdeas?: string[]; branchExtensionIdeas?: unknown[] } | null,
+  branchCount: number,
+): boolean {
+  if (branchCount === 0) return true;
+  const ideas = Array.isArray(n?.branchIdeas) ? n.branchIdeas.filter((s) => !!s?.trim()).length : 0;
+  const ext = Array.isArray(n?.branchExtensionIdeas) ? n.branchExtensionIdeas.length : 0;
+  return ideas >= branchCount && ext >= branchCount;
+}
+
 /** PRIMARY gen path: build the walkthrough tree skeleton from the
  *  Lichess DB's canonical PGN (deterministic — moves are legal by
  *  DB construction, FENs are correct by chess.js replay), then ask
@@ -1786,14 +1806,28 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
   // every unnarrated ply silently falls back to the generic template sentence.
   const covered = (n: NarrationOutput | null): number =>
     Array.isArray(n?.ideas) ? n.ideas.filter((e) => typeof e === 'object' ? !!e?.text?.trim() : !!e).length : 0;
+  // The spine is only the FIRST field the model emits. branchIdeas and
+  // branchExtensionIdeas come after it in the schema, so a payload cut off at
+  // max_tokens loses the TAIL first — the salvage keeps the complete prefix
+  // and drops everything past it. Counting spine plies alone therefore scores
+  // a truncated payload as fully covered and the retry never fires, which is
+  // how the fork branches ended up on template prose while the spine read
+  // fine. Missing tail FIELDS mean the JSON was cut short; an inner extension
+  // array that is present but thin is the model skimping, which a retry does
+  // not fix (the per-move template fallback covers it), so only absence counts.
+  const tailCovered = (n: NarrationOutput | null): boolean => narrationTailCovered(n, branches.length);
   // Full narration is UNCAPPED (David 2026-07-30: the only caps are the user's
-  // verbosity settings) — 8K fits a ~60-ply line at ~120 tokens/ply. A deep
-  // sub-variation with a big grounding block overruns it, which is exactly
-  // what made the Alapin lesson all-template ("repetitive and sounded nothing
-  // like Naroditsky", 2026-07-31). When coverage comes back short, buy more
-  // room and keep whichever attempt narrates more of the line.
-  const FIRST_BUDGET = 8192;
-  const RETRY_BUDGET = 16384;
+  // verbosity settings; 2026-08-02: "remove the ceiling"). 8K was never the
+  // model's limit — it was ours: api.deepseek.com accepts max_tokens up to
+  // 131072 on deepseek-v4-flash (probed 2026-08-02), and the model burns part
+  // of whatever budget it gets on hidden reasoning_content before writing a
+  // token of output, so a deep line with a big grounding block ran out of room
+  // and shipped template prose (the Alapin lesson, "repetitive and sounded
+  // nothing like Naroditsky", 2026-07-31). A ceiling costs nothing when the
+  // output is short — generation stops when the model is done, not when the
+  // budget is spent — so there is no reason to sit below what the API allows.
+  const FIRST_BUDGET = 65536;
+  const RETRY_BUDGET = 131072;
   try {
     let attempt: NarrationOutput | null = null;
     try {
@@ -1809,8 +1843,10 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
     // Retry when the call failed outright OR narrated less than the whole
     // line. Keep the better of the two — a wider retry that comes back worse
     // (a transient stumble) must never cost us the first attempt's prose.
-    if (covered(attempt) < positions.length) {
-      const shortfall = `${covered(attempt)}/${positions.length} plies`;
+    if (covered(attempt) < positions.length || !tailCovered(attempt)) {
+      const shortfall = tailCovered(attempt)
+        ? `${covered(attempt)}/${positions.length} plies`
+        : `${covered(attempt)}/${positions.length} plies and a truncated branch tail`;
       try {
         const wider = await callNarration(RETRY_BUDGET);
         void logAppAudit({
@@ -1819,9 +1855,16 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
           source: 'openingGenerator.generateOpeningFromDbNarration',
           summary:
             `narration covered only ${shortfall} for "${name}" at ${FIRST_BUDGET} tokens — ` +
-            `retried at ${RETRY_BUDGET}, got ${covered(wider)}/${positions.length}`,
+            `retried at ${RETRY_BUDGET}, got ${covered(wider)}/${positions.length}` +
+            (tailCovered(wider) ? ' with the branch tail intact' : ' and still no branch tail'),
         });
-        if (covered(wider) > covered(attempt)) attempt = wider;
+        // Prefer the retry when it narrates more of the spine, and also when it
+        // merely rescues the branch tail the first attempt lost — equal spine
+        // coverage plus real fork prose is strictly the better lesson.
+        // ...but never trade spine prose away for it: a retry that narrates
+        // FEWER plies is a transient stumble, tail or no tail.
+        const rescuesTail = tailCovered(wider) && !tailCovered(attempt) && covered(wider) >= covered(attempt);
+        if (covered(wider) > covered(attempt) || rescuesTail) attempt = wider;
       } catch (retryErr) {
         void logAppAudit({
           kind: 'llm-error',
