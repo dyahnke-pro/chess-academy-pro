@@ -28,6 +28,7 @@
     "setup:android": "npx cap add android; npx cap sync android; node scripts/apply-android-patches.mjs; npm run assets:generate",
     "audit:voice": "node scripts/audit-voice-coverage.js",
     "audit:openings": "tsx src/data/openingWalkthroughs/auditMoveQuality.ts",
+    "tts:prerender": "tsx scripts/tts-prerender.mts",
     "audit:endgame": "node scripts/audit-endgame-results.mjs",
     "audit:smoke": "node scripts/audit-smoke.mjs",
     "data:audit": "node scripts/audit-structural.mjs",
