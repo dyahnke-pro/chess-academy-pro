@@ -1,57 +1,58 @@
-A chess coach that actually watches your games — and tells you exactly what to fix.
+A chess coach that actually watches your games and tells you what to fix.
 
-Most chess apps hand you puzzles in one corner and opening videos in another, then leave you to guess what to study. Chess Academy Pro is different. It watches the games you play, finds the mistakes you keep making, and builds every puzzle, opening, and lesson around YOUR weaknesses — out loud, move by move, with the board lighting up exactly where to look.
+Most apps give you puzzles in one tab and opening videos in another, then leave you to figure out what to study. This one watches the games you play, finds the mistakes you keep repeating, and builds your puzzles, openings and lessons around those. Out loud. Move by move. With the board lighting up exactly where to look.
 
-A private coach in your pocket, for less than the price of one lesson.
+A real coach in your pocket for less than one lesson costs.
 
 ★ FREE OPENING MASTERCLASS ★
-Start with a full opening masterclass, completely free — every move played out on the board and explained out loud by a live AI coach. Watch the line, learn it move by move, practice it, then play it against a coach locked to that opening. No card needed.
+Start with a full masterclass, free. Every move played out on the board and explained out loud by a live AI coach. Watch the line, learn it, practice it, then play it against a coach locked to that exact opening. No card needed.
 
-ONE CONNECTED LOOP — THE PART NO OTHER APP DOES
-Your games are reviewed by a full-strength Stockfish engine. Your mistakes are sorted into the patterns you keep missing. Those weaknesses flow straight into your next puzzles and lessons, and spaced repetition brings the hard ones back until they stick. Stop guessing what to study — the app always knows what's next.
+LEARN WITH COACH TEACHES 3,600+ OPENINGS
+Type any opening and get a real lesson, not a video. Over 3,600 openings, every line checked by the engine before you ever hear it. 43 of them are full hand built masterclasses covering 318 named variations, each taught the same way: watch it, learn it, drill it, then play it against the coach.
 
-— EVERYTHING INSIDE —
+344 TRAP LINES THAT ACTUALLY WORK
+Ask for the traps in any opening and the coach walks you through them. 344 curated trap lines across 86 openings. Every single one starts from a slip real players at your rating genuinely play, and the punishment is verified by Stockfish before it ships. 238 of them win material outright. No made up gotcha lines. If the engine cannot prove it, it does not make the cut.
+
+ONE CONNECTED LOOP
+Your games get reviewed by full strength Stockfish. Your mistakes get sorted into the patterns you keep missing. Those weaknesses feed straight into your next puzzles and lessons, and spaced repetition brings the hard ones back until they stick. You never have to guess what to study.
 
 YOUR AI COACH
-• A talking coach that narrates every move and answers your questions mid-game, in plain English
-• Voice coaching with lead-the-eye arrows and highlights — your eye lands exactly where the coach is pointing
-• Tells you WHY a move was wrong and what to play instead — never cryptic engine numbers
+• Narrates every move and answers questions mid game in plain English
+• Lead the eye arrows and highlights, so your eye lands exactly where the coach is pointing
+• Tells you WHY a move was wrong and what to play instead, never just an engine number
+• Speaks 15 languages while it teaches
 
-OPENINGS — PLAYED OUT AND EXPLAINED
-• 42 guided masterclasses using the Watch → Learn → Practice → Play method — every line engine-verified, no memorizing
-• Over 3,600 opening lines to explore
-• 15 pro-player repertoires across 82 openings — study the exact lines top players use
-• 644 annotated model games
-• 550 middlegame plans that grow naturally out of your openings
-• 296 traps and tactical "gems" hidden in the lines
-• Common pitfalls flagged across 127 openings
+OPENINGS, PLAYED OUT AND EXPLAINED
+• 43 guided masterclasses using Watch, Learn, Practice, Play
+• 318 named variations, each with its own lesson
+• 8 pro repertoires across 82 openings, built from those players' real games
+• 646 annotated model games
+• 578 middlegame plans that grow out of your own openings
+• Common pitfalls flagged across 130 openings
 
-TACTICS & PUZZLES
-• 15,000 hand-curated puzzles across 72 themes — forks, pins, skewers, sacrifices, mating nets and more
-• Spaced repetition brings your misses back until they're automatic
-• Difficulty adapts to your rating, every puzzle in the sweet spot
-• 37 named mating patterns to recognize on sight
+TACTICS AND PUZZLES
+• 15,000 curated puzzles across 72 themes
+• Difficulty adapts to your rating so every puzzle sits in the sweet spot
+• Spaced repetition brings your misses back until they are automatic
 
-ANALYSIS & IMPROVEMENT
-• Full-strength Stockfish 18 runs on your device
+ANALYSIS
+• Stockfish 18 runs on your device at full strength
 • Import your Chess.com and Lichess games for instant review
+• Post game review that talks you through the turning points
 • Every mistake becomes a weakness your training targets next
-• Shareable insight cards built from your own games
 
-ENDGAMES
-• Master the rook, pawn, and minor-piece endgames that actually decide games
+ALSO INSIDE
+• Rook, pawn and minor piece endgames, the ones that actually decide games
+• Kids mode with six piece hubs, no timers and no pressure
 
-A KIDS MODE
-• A dedicated, friendly mode with encouraging lessons for young players
+WHY IT IS DIFFERENT
+Every move, line and evaluation you hear comes from Stockfish, chess.js and a real opening database. The AI only puts it into words. It cannot invent a move, a threat or a trap, because it never picks them. That is the whole design.
 
-— START FREE, NO CARD NEEDED —
-• 20 tactics puzzles to solve
-• A complete opening masterclass, free — Watch, Learn, Practice, Play
-• Import your games and see your personal Weaknesses page
-• A full week of Kids mode
+START FREE, NO CARD
+20 puzzles, a complete opening masterclass, your Weaknesses page, and a full week of Kids mode.
 
-Go Pro anytime to unlock the unlimited AI coach, all 42 opening masterclasses, the full 15,000-puzzle bank, and complete game analysis. Start with a 7-DAY FREE TRIAL, then $7.99/month or $79.99/year. Cancel anytime.
+Go Pro for the unlimited coach, all 43 masterclasses, the full puzzle bank and complete analysis. 7 day free trial, then $7.99/month or $79.99/year. Cancel anytime.
 
-Engine analysis runs on your device; the coach's voice and chat are powered by secure cloud services.
+Engine analysis runs on your device. The coach's voice and chat run on secure cloud services.
 
-Pick an opening and start improving today.
+Pick an opening and start improving.

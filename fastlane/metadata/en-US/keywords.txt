@@ -1,1 +1,1 @@
-puzzles,endgame,study,learn,grandmaster,stockfish,analysis,strategy,lessons,checkmate,review,improve
+puzzles,openings,traps,endgame,study,learn,grandmaster,stockfish,analysis,lessons,checkmate,improve

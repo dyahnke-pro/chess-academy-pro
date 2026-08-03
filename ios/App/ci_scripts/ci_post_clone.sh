@@ -104,7 +104,16 @@ cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
 # memory across visits, resume-in-place at forks, back/forward navigation, a
 # narrated middlegame play-out with an endgame step, and the Tier-2 baked
 # narrations across every gap opening.
-IOS_MARKETING_VERSION="3.4"
+# BUMP 3.4 → 3.5 (2026-08-02): Apple rejected build 166 under 3.4 with the same
+# released-version signature as 2.8, 3.0, 3.1, 3.2 and 3.3 (ITMS-90186 "the train
+# version 3.4 is closed for new build submissions" + ITMS-90062 "must contain a
+# higher version than the previously approved version 3.4"). 3.5 carries the
+# lesson-scope fixes (a lesson can no longer be narrated with another opening's
+# teaching), the stale-narration fix (beats repeating, the board resetting to
+# move one under the play-out), traps wired to the curated gem lines, the coach
+# speaking the student's language on every surface, the rating-matched opponent
+# on iOS, and the training ledger that feeds the weakness profile again.
+IOS_MARKETING_VERSION="3.5"
 sed -i '' -e "s/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = ${IOS_MARKETING_VERSION};/g" \
   ios/App/App.xcodeproj/project.pbxproj
 echo "ci_post_clone: MARKETING_VERSION set to ${IOS_MARKETING_VERSION} (build ${CI_BUILD_NUMBER:-?})"
