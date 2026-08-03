@@ -3,6 +3,10 @@ export const config = { runtime: 'edge' };
 import { checkUsageGuard, POLLY_USD_PER_CHAR } from './_lib/usageGuard.js';
 import { detectVoiceForText } from './_lib/ttsLang.js';
 import { isAllowedOrigin } from './_lib/allowedOrigin.js';
+import { googleProvider } from './_lib/tts/google.js';
+import { pollyProvider } from './_lib/tts/polly.js';
+import { lookupPrerendered, isPrerenderEnabled } from './_lib/tts/prerendered.js';
+import { TtsProviderError, type TtsProvider, type SynthesisRequest } from './_lib/tts/types.js';
 
 // Origin allowlist: shared module (api/_lib/allowedOrigin.ts) — the single
 // source of truth for every api/* gate (kills the copy-drift that left the
@@ -15,7 +19,7 @@ import { isAllowedOrigin } from './_lib/allowedOrigin.js';
  * trigger TTS on a user's behalf (cost-amplification risk), and the
  * security audit flagged it as a launch blocker. When the origin
  * isn't on the allowlist we omit the ACAO header entirely and the
- * caller returns 403 so the request never runs Polly.
+ * caller returns 403 so the request never reaches a TTS vendor.
  */
 function getCorsHeaders(req?: Request): Record<string, string> {
   const origin = req?.headers.get('Origin') ?? '';
@@ -51,6 +55,15 @@ interface VoiceConfig {
   engine: string;
 }
 
+/**
+ * The app's voice roster — the keys `voiceService` may request, and the engine
+ * CLASS each one implies (which decides whether prosody SSML is honored).
+ *
+ * Provider-agnostic on purpose: the display names are historical (they came
+ * from Polly) but each provider maps these keys onto its own voices — see
+ * `_lib/tts/googleVoices.ts`. An unknown key still 400s here rather than
+ * silently substituting a different voice.
+ */
 const ALLOWED_VOICES: Record<string, VoiceConfig> = {
   ruth:     { voiceId: 'Ruth',     engine: 'generative' },
   matthew:  { voiceId: 'Matthew',  engine: 'generative' },
@@ -68,6 +81,42 @@ const ALLOWED_VOICES: Record<string, VoiceConfig> = {
 };
 
 const MAX_TEXT_LENGTH = 3000;
+
+/**
+ * Cache policy for synthesized audio — the cheapest cost control we have.
+ *
+ * A given (text, voice, style) always produces the SAME audio, so a clip is
+ * immutable and can be cached essentially forever. Verified against prod
+ * 2026-08-03: `/api/tts` responses are already served by Vercel's CDN
+ * (`x-vercel-cache: HIT` on a repeat request), so every hit is a vendor call
+ * we never pay for.
+ *
+ * The old policy was `max-age=86400` — one day. That threw away the cache
+ * nightly and re-billed the same lesson lines forever. The TTL is now the
+ * effective maximum (David 2026-08-03: "make it 100 years"):
+ *   - `max-age`   — the client's own LRU / HTTP cache.
+ *   - `s-maxage`  — the CDN copy, which is the one that saves money across
+ *                   ALL users rather than per-device.
+ *   - `stale-while-revalidate` — serve the cached clip instantly while a
+ *                   refresh happens behind it, so an expiry never costs a
+ *                   user latency.
+ *   - `immutable` — the part that actually means "never re-fetch this". It
+ *                   tells caches not to revalidate at all, which is what makes
+ *                   the duration academic.
+ *
+ * 2147483647 is used rather than a literal century because HTTP caps this in
+ * practice: RFC 9111 has caches clamp values above ~2^31 seconds (≈68 years),
+ * and CDNs apply their own ceiling (Vercel's is a year) regardless of what we
+ * send. So this is the largest number that means anything — a bigger one would
+ * be silently clamped and just look like it did something.
+ *
+ * This is why bulk pre-rendering the whole corpus up front is NOT needed
+ * (David 2026-08-03: "can't we just capture recordings as they play out?").
+ * Lines get cached the first time they're actually played, so we pay only for
+ * what someone genuinely hears, and popular content is cached first by
+ * construction.
+ */
+const AUDIO_CACHE_CONTROL = 'public, max-age=2147483647, s-maxage=2147483647, stale-while-revalidate=86400, immutable';
 
 /**
  * Per-IP rate limit. A legit voice-coach session sends roughly one
@@ -118,106 +167,39 @@ function isRateLimited(req: Request): boolean {
   return entry.count > RATE_LIMIT_MAX_REQUESTS;
 }
 
-function escapeForSsml(text: string): string {
-  // Strip codepoints illegal in XML 1.0 BEFORE escaping. A single control
-  // char or lone surrogate anywhere in the passage makes Polly reject the
-  // whole request with InvalidSsmlException (=> 500 => client falls over to
-  // iOS Web Speech, silent in a standalone PWA). The five-char escape alone
-  // is NOT enough; client-side sanitizers / pasted content can introduce
-  // these silent killers. Filter by codepoint, then escape the XML-five.
-  let out = "";
-  for (const ch of text) {
-    const c = ch.codePointAt(0)!;
-    // Allow tab/newline/CR; drop the rest below U+0020.
-    if (c < 0x20 && c !== 0x09 && c !== 0x0a && c !== 0x0d) continue;
-    // Drop the non-characters U+FFFE / U+FFFF.
-    if (c === 0xfffe || c === 0xffff) continue;
-    // Lone surrogates (U+D800-U+DFFF) never reach here: the for..of iterator
-    // yields whole code points, so unpaired surrogates surface as U+FFFD
-    // (replacement char), which is valid XML. Belt-and-suspenders: drop them.
-    if (c >= 0xd800 && c <= 0xdfff) continue;
-    out += ch;
-  }
-  return out
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&apos;");
-}
+// SSML construction moved to `_lib/tts/ssml.ts` when the provider seam landed:
+// whether a voice accepts SSML is a VENDOR fact, so the document has to be
+// built inside the provider (Google's Chirp3 voices take plain text only and
+// would otherwise read the markup aloud). Re-exported here because it is part
+// of this module's public surface — `src/services/ttsProsody.test.ts` imports
+// it from `api/tts`.
+export { buildSsmlForEngine } from './_lib/tts/ssml.js';
 
 /**
- * Wrap plain coaching text in engine-appropriate SSML for natural
- * inflection. Polly tag support differs by engine:
- *   - GENERATIVE voices (Ruth / Matthew / Danielle / Gregory) only
- *     support structural tags (<speak>, <p>, <s>, <lang>, <mark>,
- *     <sub>, <w>). They interpret punctuation, pacing and emotion
- *     from context on their own, so we only add paragraph structure
- *     to help the engine parse it cleanly.
- *   - NEURAL voices support prosody / break / emphasis / amazon:domain.
- *     We tune `<prosody rate>` and `<prosody pitch>` per personality
- *     so the same Joanna voice can sound gentler for soft,
- *     clipped for drill-sergeant, etc.
+ * Pick the synthesis provider.
  *
- * Plain text is always safe to fall back to — SSML is opt-in.
- *
- * @param style — optional personality string for prosody tuning. When
- *   absent, falls back to the previous default 'rate=95%'.
+ * Google is primary (perpetual monthly free tier; Polly's is a one-time
+ * 12-month cliff). Polly stays as the fallback leg ONLY until the Google key is
+ * live and the branch audit is green — see
+ * docs/plans/2026-08-03-polly-to-google-tts.md. Removing it is then a one-line
+ * change here plus deleting `_lib/tts/polly.ts`.
  */
-// All-ages contract (David 2026-06-28): no 'flirtatious' style.
-type PersonalityStyle = 'default' | 'soft' | 'edgy' | 'drill-sergeant';
-
-const NEURAL_PROSODY_BY_STYLE: Record<PersonalityStyle, { rate: string; pitch?: string; volume?: string }> = {
-  // Default: mild slowdown for warmth — matches the previous behavior.
-  default: { rate: '95%' },
-  // Soft: gentler, slightly slower.
-  soft: { rate: '92%', volume: 'soft' },
-  // Edgy: faster, sharper. Slight pitch lift for cutting tone.
-  edgy: { rate: '105%', pitch: '+2%' },
-  // Drill sergeant: crisp, loud, no slowdown.
-  'drill-sergeant': { rate: '108%', volume: 'x-loud' },
-};
-
-export function buildSsmlForEngine(text: string, engine: string, style?: string, prosodyMode?: string): string {
-  const escaped = escapeForSsml(text);
-  if (engine === 'generative') {
-    // Generative engines don't honor prosody — paragraph wrap is the
-    // only safe enrichment. Engine handles emotion / pacing on its own.
-    // (The #25 spike is therefore a documented no-op here.)
-    return `<speak><p>${escaped}</p></speak>`;
-  }
-  const personality = (style ?? 'default') as PersonalityStyle;
-  const prosody = NEURAL_PROSODY_BY_STYLE[personality] ?? NEURAL_PROSODY_BY_STYLE.default;
-  // Decisive-beat SPIKE (#25, David 2026-07-11 approval): a slight lift on
-  // the payoff lines ("You called it", the brilliancy stems). Composed OVER
-  // the personality base — rate +8 points, pitch +6% — never a new register.
-  let rate = prosody.rate;
-  let pitch = prosody.pitch;
-  if (prosodyMode === 'spike') {
-    const baseRate = Number.parseInt(prosody.rate, 10);
-    rate = `${Number.isFinite(baseRate) ? Math.min(baseRate + 8, 130) : 103}%`;
-    pitch = '+6%';
-  }
-  const attrs = [
-    `rate="${rate}"`,
-    pitch ? `pitch="${pitch}"` : '',
-    prosody.volume ? `volume="${prosody.volume}"` : '',
-  ].filter(Boolean).join(' ');
-  return `<speak><prosody ${attrs}><p>${escaped}</p></prosody></speak>`;
+export function selectProviders(): TtsProvider[] {
+  const chain: TtsProvider[] = [];
+  if (googleProvider.isConfigured()) chain.push(googleProvider);
+  if (pollyProvider.isConfigured()) chain.push(pollyProvider);
+  return chain;
 }
 
 async function synthesize(text: string, voice: string, req: Request, useSsml: boolean, style?: string, prosodyMode?: string): Promise<Response> {
   const cors = getCorsHeaders(req);
-  const accessKeyId = process.env.AWS_ACCESS_KEY_ID_POLLY;
-  const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY_POLLY;
-  const region = process.env.AWS_REGION_POLLY || 'us-east-1';
+  const providers = selectProviders();
 
-  if (!accessKeyId || !secretAccessKey) {
-    const missing = [
-      !accessKeyId && 'AWS_ACCESS_KEY_ID_POLLY',
-      !secretAccessKey && 'AWS_SECRET_ACCESS_KEY_POLLY',
-    ].filter(Boolean).join(', ');
-    return new Response(`TTS not configured — missing env: ${missing}`, { status: 503, headers: cors });
+  if (providers.length === 0) {
+    return new Response(
+      'TTS not configured — set GOOGLE_TTS_API_KEY (or AWS_ACCESS_KEY_ID_POLLY / AWS_SECRET_ACCESS_KEY_POLLY)',
+      { status: 503, headers: cors },
+    );
   }
 
   if (!text || text.length > MAX_TEXT_LENGTH) {
@@ -236,18 +218,19 @@ async function synthesize(text: string, voice: string, req: Request, useSsml: bo
   // Language-aware voice (the coach answers in the user's language, but the
   // voice map is all US-English — an English voice mangles Spanish/French and
   // can't read Japanese/Arabic/Cyrillic at all). If the passage is non-English,
-  // speak it with a native Polly voice. When detection isn't confident it
-  // returns null → we keep the requested English voice, so English is unchanged.
-  // The catch below falls back to English on any synth failure, so a detected
-  // voice can never make narration go silent.
-  const englishVoice = { voiceId: voiceConfig.voiceId, engine: voiceConfig.engine, languageCode: undefined as string | undefined };
+  // speak it with a native voice. When detection isn't confident it returns
+  // null → we keep the requested English voice, so English is unchanged. Each
+  // provider falls back to English on a synth failure, so a detected voice can
+  // never make narration go silent.
   const langVoice = detectVoiceForText(text);
-  const effectiveVoice = langVoice ?? englishVoice;
+  // The engine class drives SSML shape: generative engines take structural
+  // tags only, neural honor prosody. Language voices carry their own class.
+  const engine = (langVoice?.engine ?? voiceConfig.engine) as SynthesisRequest['engine'];
 
   // Cross-fleet cost guard: KV-backed per-IP rate limit + the shared global
-  // daily $ kill-switch (Polly is the bigger cost driver, ~$16/1M chars). This
-  // is the durable layer on top of the per-isolate in-memory limit above;
-  // no-op until KV is provisioned (api/_lib/usageGuard.ts).
+  // daily $ kill-switch. This is the durable layer on top of the per-isolate
+  // in-memory limit above; no-op until KV is provisioned
+  // (api/_lib/usageGuard.ts).
   const guard = await checkUsageGuard('tts', req, text.length * POLLY_USD_PER_CHAR);
   if (!guard.allowed) {
     return new Response('Usage limit reached. Voice is resting briefly.', {
@@ -256,144 +239,105 @@ async function synthesize(text: string, voice: string, req: Request, useSsml: bo
     });
   }
 
-  try {
-    // Lazy import to avoid crashing at module load time
-    const { PollyClient, SynthesizeSpeechCommand } = await import('@aws-sdk/client-polly');
-
-    const polly = new PollyClient({
-      region,
-      credentials: { accessKeyId, secretAccessKey },
-    });
-
-    // Build the command for a given mode. `asSsml=false` is the safe
-    // fallback path — plain text can never raise InvalidSsmlException.
-    const buildCommand = (asSsml: boolean, vc: { voiceId: string; engine: string; languageCode?: string }) =>
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic import loses type info
-      new SynthesizeSpeechCommand({
-        Text: asSsml ? buildSsmlForEngine(text, vc.engine, style, prosodyMode) : text,
-        TextType: asSsml ? 'ssml' : 'text',
-        OutputFormat: 'mp3',
-        VoiceId: vc.voiceId,
-        Engine: vc.engine,
-        // Pin the locale for the language voices (harmless for English, where
-        // it's undefined and omitted). Helps Polly pick the right pronunciation
-        // for bilingual voices.
-        ...(vc.languageCode ? { LanguageCode: vc.languageCode } : {}),
-      } as any);
-
-    // Keep server timeout ≥ client timeout (voiceService uses 10s) so
-    // the server never aborts a request the client is still willing
-    // to wait for.
-    const send = async (command: InstanceType<typeof SynthesizeSpeechCommand>) => {
-      const abortController = new AbortController();
-      const timeout = setTimeout(() => abortController.abort(), 10000);
-      try {
-        return await polly.send(command, { abortSignal: abortController.signal });
-      } finally {
-        clearTimeout(timeout);
-      }
-    };
-
-    let result;
-    try {
-      result = await send(buildCommand(useSsml, effectiveVoice));
-    } catch (err: unknown) {
-      // SSML safety net (the silent-narration bug, David 2026-06-12): a
-      // friend on an iOS standalone PWA heard NO narration because the
-      // read-aloud passage's SSML tripped InvalidSsmlException → 500 →
-      // the client fell over to iOS Web Speech (silent in standalone).
-      // Plain text never raises this, so on an SSML parse error retry once
-      // as plain text. Polly is the canonical voice (G4); an SSML quirk must
-      // never demote a user to silent Web Speech. Audit captures the recovery.
-      const errName = err instanceof Error ? err.name : '';
-      if (useSsml && errName === 'InvalidSsmlException') {
-        console.warn('[TTS] InvalidSsmlException — retrying as plain text');
-        try {
-          result = await send(buildCommand(false, effectiveVoice));
-        } catch (err2) {
-          // Plain text still failed on a detected language voice → fall back
-          // to the English voice so narration never goes silent.
-          if (langVoice) {
-            console.warn(`[TTS] language voice ${effectiveVoice.voiceId} failed — falling back to English ${englishVoice.voiceId}`);
-            result = await send(buildCommand(false, englishVoice));
-          } else {
-            throw err2;
-          }
-        }
-      } else if (langVoice) {
-        // A non-SSML failure while using a detected language voice (e.g. an
-        // unexpected voice/engine mismatch Polly rejects) must never go silent
-        // — fall back to the requested English voice, i.e. today's behavior.
-        console.warn(`[TTS] language voice ${effectiveVoice.voiceId} failed (${errName}) — falling back to English ${englishVoice.voiceId}`);
-        result = await send(buildCommand(useSsml, englishVoice));
-      } else {
-        throw err;
-      }
-    }
-
-    if (!result.AudioStream) {
-      return new Response('No audio returned', { status: 500, headers: cors });
-    }
-
-    // Stream the Polly MP3 bytes through to the client instead of
-    // buffering the full response in memory. Polly synthesizes a
-    // sentence-length clip in ~600-1500ms; with the prior
-    // `transformToByteArray()` we waited the FULL synthesis time
-    // before sending a single byte. Piping the SDK's web
-    // ReadableStream directly into the Response means the first
-    // chunk hits the client as soon as Polly produces it, cutting
-    // perceived latency by half on typical 1-2 sentence narrations.
-    //
-    // Production audit (2026-05-18, David's report): voice lag was
-    // showing as multi-second waits between brain answer and Polly
-    // playback — the inventory traced it to this buffer. Streaming
-    // the response is part 1 of the fix; the client-side progressive
-    // decoder lands in a follow-up so audio plays AS chunks arrive,
-    // not after the full body downloads.
-    //
-    // No Content-Length header — body is now chunked transfer.
-    // Cache-Control still 24h so repeat narrations on the same text
-    // (cached by the client's LRU) skip Polly entirely.
-    const audioStream = result.AudioStream as unknown as ReadableStream<Uint8Array>;
-    return new Response(audioStream, {
+  // Pre-rendered clip? The Watch/Learn corpus is identical for every user, so
+  // it is synthesized once offline and served from the CDN instead of being
+  // billed per playback. Fails open in every branch — a miss (or any error)
+  // just falls through to live synthesis below.
+  const prerendered = await lookupPrerendered({ text, voiceKey, style, prosodyMode, ssml: useSsml });
+  if (prerendered) {
+    return new Response(prerendered, {
       status: 200,
       headers: {
         ...cors,
         'Content-Type': 'audio/mpeg',
-        'Cache-Control': 'public, max-age=86400',
+        'Cache-Control': AUDIO_CACHE_CONTROL,
+        'X-TTS-Source': 'prerendered',
       },
     });
-  } catch (error: unknown) {
-    const msg = error instanceof Error ? error.message : String(error);
-    const name = error instanceof Error ? error.name : '';
-    console.error('[TTS] Polly error:', name, msg);
-
-    // Classify AWS Polly errors so the client can pick the right backoff.
-    // Audit log (2026-05-27/28) showed 10 generic "API error 500" cooldowns
-    // with no signal whether Polly was throttling, the credentials were
-    // wrong, or the service was down — every failure looked the same and
-    // got the same 15s cooldown. Map throttle → 429 (short backoff,
-    // retry-after), service / internal failure → 503, auth → 503 long,
-    // anything else → 500. Surface the AWS error name in a response header
-    // so the client audit captures the actual cause without parsing the body.
-    const isThrottle = name === 'ThrottlingException' || name === 'TooManyRequestsException';
-    const isServiceUnavail = name === 'ServiceUnavailableException' || name === 'InternalServiceException';
-    const isAuth = name === 'AccessDeniedException' || name === 'InvalidSignatureException' || name === 'UnrecognizedClientException';
-
-    const errHeaders: Record<string, string> = { ...cors, 'X-TTS-Error-Name': name || 'Unknown' };
-    let status = 500;
-    if (isThrottle) {
-      status = 429;
-      errHeaders['Retry-After'] = '5';
-    } else if (isServiceUnavail) {
-      status = 503;
-      errHeaders['Retry-After'] = '10';
-    } else if (isAuth) {
-      status = 503;
-      errHeaders['Retry-After'] = '60';
-    }
-    return new Response(`TTS error [${name}]: ${msg}`, { status, headers: errHeaders });
   }
+
+  // Walk the provider chain. Google is primary; the Polly leg (removed once
+  // the Google key is verified on prod) is the safety net so a vendor outage
+  // or a misconfigured key can never take the coach's voice down.
+  const synthRequest: SynthesisRequest = {
+    // RAW text. Each provider decides whether its resolved voice accepts SSML
+    // and builds the document itself — a pre-built <speak> document handed to
+    // a plain-text-only voice gets read out as literal markup.
+    text,
+    voiceKey,
+    engine,
+    languageCode: langVoice?.languageCode,
+    ssml: useSsml,
+    style,
+    prosodyMode,
+  };
+
+  let lastError: TtsProviderError | null = null;
+
+  for (const provider of providers) {
+    try {
+      const audioStream = await provider.synthesize(synthRequest);
+
+      // Stream the MP3 bytes through to the client instead of buffering the
+      // full clip in memory. Synthesis of a sentence-length clip takes
+      // ~600-1500ms; buffering meant waiting the FULL synthesis time before
+      // sending a single byte. Piping the provider's ReadableStream straight
+      // into the Response means the first chunk hits the client as soon as the
+      // vendor produces it, roughly halving perceived latency on a typical
+      // 1-2 sentence narration.
+      //
+      // Production audit (2026-05-18, David's report): voice lag showed as
+      // multi-second waits between the brain's answer and playback, and the
+      // inventory traced it to exactly that buffer. CLAUDE.md G4 makes
+      // streaming canonical and the buffered path permanently dead.
+      //
+      // No Content-Length header — the body is chunked transfer. Cache-Control
+      // stays 24h so repeat narrations of the same text (also held in the
+      // client's LRU) skip the vendor entirely.
+      return new Response(audioStream, {
+        status: 200,
+        headers: {
+          ...cors,
+          'Content-Type': 'audio/mpeg',
+          'Cache-Control': AUDIO_CACHE_CONTROL,
+          'X-TTS-Source': provider.id,
+        },
+      });
+    } catch (error: unknown) {
+      const providerError = error instanceof TtsProviderError
+        ? error
+        : new TtsProviderError(
+            error instanceof Error ? error.name || 'Unknown' : 'Unknown',
+            error instanceof Error ? error.message : String(error),
+          );
+      console.error(`[TTS] ${provider.id} error:`, providerError.errorName, providerError.message);
+      lastError = providerError;
+      // Try the next leg rather than returning an error the client will turn
+      // into a cooldown — a fallover is strictly better than silence.
+      //
+      // NB: this only covers failures raised BEFORE the first byte (auth,
+      // quota, a rejected voice, a non-2xx). Once we've returned the Response
+      // the stream is committed, so a mid-stream fault surfaces to the client
+      // as a truncated clip — which voiceService already detects and retries.
+      // Falling over mid-stream would mean buffering, and G4 forbids that.
+    }
+  }
+
+  // Every leg failed. Report the LAST failure using the contract the client
+  // already understands: the vendor error name in `X-TTS-Error-Name` (so the
+  // audit shows the real cause without parsing the body) and a `Retry-After`
+  // that tunes voiceService's cooldown — throttles back off briefly, auth
+  // failures back off longer. Before this classification existed, every
+  // failure looked identical and got the same flat 15s cooldown (audit log
+  // 2026-05-27/28).
+  const name = lastError?.errorName ?? 'Unknown';
+  const msg = lastError?.message ?? 'No TTS provider available';
+  const errHeaders: Record<string, string> = { ...cors, 'X-TTS-Error-Name': name };
+  if (lastError?.retryAfterSec) errHeaders['Retry-After'] = String(lastError.retryAfterSec);
+  return new Response(`TTS error [${name}]: ${msg}`, {
+    status: lastError?.status ?? 500,
+    headers: errHeaders,
+  });
 }
 
 export default async function handler(req: Request): Promise<Response> {
@@ -404,8 +348,8 @@ export default async function handler(req: Request): Promise<Response> {
       return new Response(null, { status: 204, headers: cors });
     }
 
-    // Hard origin check — bail before calling Polly if the request
-    // isn't coming from one of our known origins. Protects the AWS
+    // Hard origin check — bail before calling the TTS vendor if the request
+    // isn't coming from one of our known origins. Protects the synthesis
     // budget from cost-amplification attacks via random sites.
     if (!isOriginAllowed(req)) {
       return new Response('Origin not allowed', { status: 403, headers: cors });
@@ -438,15 +382,23 @@ export default async function handler(req: Request): Promise<Response> {
       // Decisive-beat prosody spike (#25) — additive; Neural voices only.
       const prosodyMode = url.searchParams.get('prosody') ?? undefined;
 
-      // Diagnostic mode: /api/tts?diag=1 returns env var status without calling Polly
+      // Diagnostic mode: /api/tts?diag=1 reports which provider would serve,
+      // without synthesizing anything. Names only — never a secret VALUE.
       if (url.searchParams.get('diag') === '1') {
-        const hasKey = Boolean(process.env.AWS_ACCESS_KEY_ID_POLLY);
-        const hasSecret = Boolean(process.env.AWS_SECRET_ACCESS_KEY_POLLY);
-        const r = process.env.AWS_REGION_POLLY || '(not set, default us-east-1)';
-        return new Response(
-          `ENV CHECK:\nAWS_ACCESS_KEY_ID_POLLY: ${hasKey ? 'SET' : 'MISSING'}\nAWS_SECRET_ACCESS_KEY_POLLY: ${hasSecret ? 'SET' : 'MISSING'}\nAWS_REGION_POLLY: ${r}\n`,
-          { status: 200, headers: { ...cors, 'Content-Type': 'text/plain' } },
-        );
+        const chain = selectProviders();
+        const lines = [
+          'ENV CHECK:',
+          `GOOGLE_TTS_API_KEY: ${process.env.GOOGLE_TTS_API_KEY ? 'SET' : 'MISSING'}`,
+          `AWS_ACCESS_KEY_ID_POLLY: ${process.env.AWS_ACCESS_KEY_ID_POLLY ? 'SET' : 'MISSING'}`,
+          `AWS_SECRET_ACCESS_KEY_POLLY: ${process.env.AWS_SECRET_ACCESS_KEY_POLLY ? 'SET' : 'MISSING'}`,
+          `AWS_REGION_POLLY: ${process.env.AWS_REGION_POLLY || '(not set, default us-east-1)'}`,
+          `TTS_PRERENDER_BASE_URL: ${isPrerenderEnabled() ? 'SET' : 'MISSING (pre-render serving off)'}`,
+          `provider chain: ${chain.length ? chain.map((p) => p.id).join(' → ') : '(none configured)'}`,
+        ];
+        return new Response(`${lines.join('\n')}\n`, {
+          status: 200,
+          headers: { ...cors, 'Content-Type': 'text/plain' },
+        });
       }
 
       return synthesize(text, voice, req, useSsml, style, prosodyMode);
