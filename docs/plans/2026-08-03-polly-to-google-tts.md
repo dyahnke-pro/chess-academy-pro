@@ -94,10 +94,59 @@ not silently deferred.
 four credential states, so the "no Google key ⇒ identical to today" property
 can't regress silently.
 
-## Phase 2 — pre-rendered narration
+## Phase 2 — caching strategy
 
-The Watch/Learn corpus is identical for every user, so it should be synthesized
-once, not per user per playback.
+### 🔒 DECIDED 2026-08-03: cache on first play. Do NOT bulk pre-render.
+
+David: *"Can't we just capture recordings as they play out for the first time
+and then cache them?"* — yes, and it is strictly better than the bulk
+pre-render this plan originally proposed. Reasons, in order of weight:
+
+1. **Bulk rendering pays for speculation.** The corpus is 17,262 lines, but a
+   large share (obscure variations, openings nobody opens) may never be played.
+   Rendering all of them costs ~$30 up front to produce audio that may never be
+   heard. Caching on play costs only for lines someone genuinely hears.
+2. **Popular content gets cached first, by construction** — no need to guess
+   which lessons matter.
+3. **Zero up-front spend**, and the ceiling is the same $30 in the worst case
+   where literally every line eventually plays.
+
+**The mechanism was already there and we weren't using it properly.** Verified
+against prod 2026-08-03: `/api/tts` responses are served by Vercel's CDN
+(`x-vercel-cache: MISS` then `HIT` on a repeat request). The endpoint was
+sending `max-age=86400` — a ONE DAY TTL, so the cache was discarded nightly and
+the same lesson lines were re-billed forever.
+
+Fix (`AUDIO_CACHE_CONTROL` in `api/tts.ts`): a given (text, voice, style) always
+produces identical audio, so the clip is immutable. TTL is now a year, with
+`s-maxage` (the shared CDN copy — the one that saves money across ALL users, not
+per-device) and `stale-while-revalidate` so an expiry never costs a user
+latency.
+
+Two lines of config, no new failure modes, no storage layer to operate.
+
+**Caveats, honestly:**
+- `Vary: Origin` is set (correctly — it fixed the 2026-06-28 Android CORS bug),
+  so the CDN keys per origin. With ~3 origins the first play of a line costs one
+  synthesis per origin, not one globally.
+- CDN entries evict under pressure, so this is not durable storage. That is
+  acceptable: eviction is LRU, so what evicts is exactly the cold content that
+  is cheap to re-synthesize.
+
+**A durable blob write-through was considered and deliberately NOT built.** It
+would mean one blob write per unique line — the same per-event blob pattern that
+once billed 79K ops against a 2K cap and got the account PAUSED (see the warning
+in `api/audit-stream.ts`). Bounded here, but not worth the risk or the operating
+burden until real usage data shows CDN misses are actually costing money. Empty
+> generic > invented, applied to infrastructure.
+
+### The pre-render script stays — as an opt-in tool, not the strategy
+
+`scripts/tts-prerender.mts` is kept because it is genuinely useful for
+deliberately warming the cache (e.g. guaranteeing zero first-play latency on a
+flagship opening before a launch). It is **dry-run by default**, disabled in the
+endpoint unless `TTS_PRERENDER_BASE_URL` is set, and costs nothing while unused.
+Do not run it as a matter of course.
 
 - `scripts/tts-prerender.mts` (`npm run tts:prerender`) — walks the corpora,
   dedupes by `sha256(text|voice|style|prosody|ssml)`, synthesizes via Google,

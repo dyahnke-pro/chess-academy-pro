@@ -83,6 +83,42 @@ const ALLOWED_VOICES: Record<string, VoiceConfig> = {
 const MAX_TEXT_LENGTH = 3000;
 
 /**
+ * Cache policy for synthesized audio — the cheapest cost control we have.
+ *
+ * A given (text, voice, style) always produces the SAME audio, so a clip is
+ * immutable and can be cached essentially forever. Verified against prod
+ * 2026-08-03: `/api/tts` responses are already served by Vercel's CDN
+ * (`x-vercel-cache: HIT` on a repeat request), so every hit is a vendor call
+ * we never pay for.
+ *
+ * The old policy was `max-age=86400` — one day. That threw away the cache
+ * nightly and re-billed the same lesson lines forever. The TTL is now the
+ * effective maximum (David 2026-08-03: "make it 100 years"):
+ *   - `max-age`   — the client's own LRU / HTTP cache.
+ *   - `s-maxage`  — the CDN copy, which is the one that saves money across
+ *                   ALL users rather than per-device.
+ *   - `stale-while-revalidate` — serve the cached clip instantly while a
+ *                   refresh happens behind it, so an expiry never costs a
+ *                   user latency.
+ *   - `immutable` — the part that actually means "never re-fetch this". It
+ *                   tells caches not to revalidate at all, which is what makes
+ *                   the duration academic.
+ *
+ * 2147483647 is used rather than a literal century because HTTP caps this in
+ * practice: RFC 9111 has caches clamp values above ~2^31 seconds (≈68 years),
+ * and CDNs apply their own ceiling (Vercel's is a year) regardless of what we
+ * send. So this is the largest number that means anything — a bigger one would
+ * be silently clamped and just look like it did something.
+ *
+ * This is why bulk pre-rendering the whole corpus up front is NOT needed
+ * (David 2026-08-03: "can't we just capture recordings as they play out?").
+ * Lines get cached the first time they're actually played, so we pay only for
+ * what someone genuinely hears, and popular content is cached first by
+ * construction.
+ */
+const AUDIO_CACHE_CONTROL = 'public, max-age=2147483647, s-maxage=2147483647, stale-while-revalidate=86400, immutable';
+
+/**
  * Per-IP rate limit. A legit voice-coach session sends roughly one
  * TTS request per coach narration — call it 1/sec at peak, a few
  * hundred per 15-min session. 600/hour leaves comfortable headroom
@@ -214,7 +250,7 @@ async function synthesize(text: string, voice: string, req: Request, useSsml: bo
       headers: {
         ...cors,
         'Content-Type': 'audio/mpeg',
-        'Cache-Control': 'public, max-age=86400',
+        'Cache-Control': AUDIO_CACHE_CONTROL,
         'X-TTS-Source': 'prerendered',
       },
     });
@@ -263,7 +299,7 @@ async function synthesize(text: string, voice: string, req: Request, useSsml: bo
         headers: {
           ...cors,
           'Content-Type': 'audio/mpeg',
-          'Cache-Control': 'public, max-age=86400',
+          'Cache-Control': AUDIO_CACHE_CONTROL,
           'X-TTS-Source': provider.id,
         },
       });

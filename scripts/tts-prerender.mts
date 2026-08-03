@@ -226,8 +226,14 @@ async function main(): Promise<void> {
   }
   console.log(`[prerender] already rendered: ${existing.size.toLocaleString()}`);
   console.log(`[prerender] to render now:    ${pending.length.toLocaleString()} (${pendingChars.toLocaleString()} chars)`);
-  // One-time cost at the Chirp3-HD rate; every playback after this is free.
-  console.log(`[prerender] one-time synthesis cost ≈ $${((pendingChars / 1_000_000) * 30).toFixed(2)} at Chirp3-HD rates`);
+  // One-time cost at the Chirp3-HD rate, net of the month's free allowance;
+  // every playback after this is free forever.
+  const FREE_CHARS_PER_MONTH = 1_000_000; // Chirp3-HD / Neural2 tier
+  const billable = Math.max(0, pendingChars - FREE_CHARS_PER_MONTH);
+  console.log(
+    `[prerender] one-time cost ≈ $${((billable / 1_000_000) * 30).toFixed(2)} ` +
+    `(${pendingChars.toLocaleString()} chars − ${FREE_CHARS_PER_MONTH.toLocaleString()} free/month @ $30/M Chirp3-HD)`,
+  );
 
   if (!commit) {
     console.log('\n[prerender] DRY RUN — nothing synthesized or uploaded. Re-run with --commit.');
@@ -248,37 +254,80 @@ async function main(): Promise<void> {
   const rendered = new Set(existing);
   let done = 0;
   let failed = 0;
+  let sinceCheckpoint = 0;
 
-  for (const clip of queue) {
-    try {
-      const audio = await synthesize(clip.text, googleVoice.voiceName, googleVoice.languageCode);
-      await put(`tts/v1/${clip.key}.mp3`, audio, {
-        access: 'public',
-        addRandomSuffix: false,
-        contentType: 'audio/mpeg',
-        token: process.env.BLOB_READ_WRITE_TOKEN,
-      });
-      rendered.add(clip.key);
-      done += 1;
-      if (done % 25 === 0) console.log(`[prerender] ${done}/${queue.length}…`);
-    } catch (err) {
-      failed += 1;
-      console.warn(`[prerender] FAILED ${clip.key} (${clip.source}): ${(err as Error).message}`);
-      // Keep going: a partial render is still a win, and the manifest below
-      // only ever lists clips that actually uploaded.
+  const publishManifest = async (): Promise<void> => {
+    // Only ever lists hashes that really uploaded — a manifest entry with no
+    // object behind it makes the endpoint fetch a 404 on every playback of
+    // that line.
+    await put('tts/v1/manifest.json', JSON.stringify({ version: 1, hashes: [...rendered] }), {
+      access: 'public',
+      addRandomSuffix: false,
+      contentType: 'application/json',
+      token: process.env.BLOB_READ_WRITE_TOKEN,
+      allowOverwrite: true,
+    });
+  };
+
+  /**
+   * Chirp3-HD allows 200 requests/minute. Stay comfortably under it: a small
+   * worker pool plus a minimum spacing between starts. Going faster would just
+   * earn 429s, and going serial would take hours.
+   */
+  const CONCURRENCY = Number(arg('concurrency') ?? '4');
+  const MIN_SPACING_MS = 60_000 / 180; // ≈180 req/min ceiling
+  let nextSlot = Date.now();
+  const takeSlot = async (): Promise<void> => {
+    const now = Date.now();
+    const at = Math.max(now, nextSlot);
+    nextSlot = at + MIN_SPACING_MS;
+    if (at > now) await new Promise((r) => setTimeout(r, at - now));
+  };
+
+  let cursor = 0;
+  const worker = async (): Promise<void> => {
+    for (;;) {
+      const idx = cursor++;
+      if (idx >= queue.length) return;
+      const clip = queue[idx];
+      try {
+        await takeSlot();
+        const audio = await synthesize(clip.text, googleVoice.voiceName, googleVoice.languageCode);
+        await put(`tts/v1/${clip.key}.mp3`, audio, {
+          access: 'public',
+          addRandomSuffix: false,
+          contentType: 'audio/mpeg',
+          token: process.env.BLOB_READ_WRITE_TOKEN,
+          allowOverwrite: true,
+        });
+        rendered.add(clip.key);
+        done += 1;
+        sinceCheckpoint += 1;
+      } catch (err) {
+        failed += 1;
+        console.warn(`[prerender] FAILED ${clip.key} (${clip.source}): ${(err as Error).message.slice(0, 160)}`);
+        // Keep going — a partial render is still a win.
+      }
+
+      // CHECKPOINT. Synthesis costs money; a crash at clip 16,000 must not
+      // throw away 16,000 paid-for clips. Publishing the manifest periodically
+      // means a re-run resumes from here instead of re-billing everything.
+      if (sinceCheckpoint >= 250) {
+        sinceCheckpoint = 0;
+        try {
+          await publishManifest();
+          console.log(`[prerender] ${done}/${queue.length} — checkpoint published (${rendered.size} in manifest)`);
+        } catch (err) {
+          console.warn(`[prerender] checkpoint failed: ${(err as Error).message.slice(0, 120)}`);
+        }
+      } else if (done % 50 === 0) {
+        console.log(`[prerender] ${done}/${queue.length}…`);
+      }
     }
-  }
+  };
 
-  // Publish the manifest LAST, and only with hashes that really landed — a
-  // manifest entry with no object behind it would make the endpoint fetch a
-  // 404 on every playback of that line.
-  await put('tts/v1/manifest.json', JSON.stringify({ version: 1, hashes: [...rendered] }), {
-    access: 'public',
-    addRandomSuffix: false,
-    contentType: 'application/json',
-    token: process.env.BLOB_READ_WRITE_TOKEN,
-    allowOverwrite: true,
-  });
+  await Promise.all(Array.from({ length: Math.max(1, CONCURRENCY) }, () => worker()));
+  await publishManifest();
 
   console.log(`[prerender] done: ${done} rendered, ${failed} failed, ${rendered.size} in manifest.`);
 }
