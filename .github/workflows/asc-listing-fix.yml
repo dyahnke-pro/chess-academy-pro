@@ -22,7 +22,7 @@ jobs:
           ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
           ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
           APP_BUNDLE_ID: com.chessacademy.pro
-          APP_VERSION: '3.4'
+          APP_VERSION: '3.5'
           APPLY: ${{ github.event.inputs.apply }}
           KEYWORDS: 'openings,coach,tactics,puzzles,trainer,training,strategy,endgame,lessons,analysis,gambit,learn,study'
         run: node scripts/ci/asc-listing-fix.mjs

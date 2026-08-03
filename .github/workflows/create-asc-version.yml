@@ -34,7 +34,7 @@ jobs:
           ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
           ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
           APP_BUNDLE_ID: com.chessacademy.pro
-          APP_VERSION: '3.4'
+          APP_VERSION: '3.5'
           WHATS_NEW: ${{ github.event.inputs.whats_new }}
           PROMO_TEXT: ${{ github.event.inputs.promo_text }}
           RELEASE_TYPE: ${{ github.event.inputs.release_type }}
