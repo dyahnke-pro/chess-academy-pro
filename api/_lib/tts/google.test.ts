@@ -10,7 +10,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { streamAudioContent, base64ToBytes } from './google';
-import { GOOGLE_VOICES, GOOGLE_LANG_VOICES, resolveGoogleVoice, engineForGoogleVoice } from './googleVoices';
+import { GOOGLE_VOICES, GOOGLE_LANG_VOICES, resolveGoogleVoice, engineForGoogleVoice, chirp3ProsodyFor } from './googleVoices';
 import { LANG_VOICES } from '../ttsLang';
 
 /** A ReadableStream that emits exactly the chunk boundaries we specify. */
@@ -183,5 +183,41 @@ describe('google voice map', () => {
     expect(resolveGoogleVoice('nonexistent')).toBe(GOOGLE_VOICES.ruth);
     // An unmapped locale keeps the requested voice instead of going silent.
     expect(resolveGoogleVoice('joanna', 'xx-XX')).toBe(GOOGLE_VOICES.joanna);
+  });
+});
+
+describe('chirp3 personality prosody', () => {
+  it('leaves the DEFAULT voice exactly as David approved it (rate 1.0, no gain)', () => {
+    // He A/B-ed the shipping voice against slowed variants and picked the
+    // unmodified one. voiceService sends NO style for the default personality,
+    // so `undefined` must resolve to the same thing.
+    expect(chirp3ProsodyFor(undefined)).toEqual({ speakingRate: 1, volumeGainDb: 0 });
+    expect(chirp3ProsodyFor('default')).toEqual({ speakingRate: 1, volumeGainDb: 0 });
+  });
+
+  it('gives each personality a genuinely different register', () => {
+    const styles = ['soft', 'default', 'edgy', 'drill-sergeant'];
+    const rates = styles.map((s) => chirp3ProsodyFor(s).speakingRate);
+    // Under Polly these were all identical — the picker moved a dead dial.
+    expect(new Set(rates).size).toBe(styles.length);
+    // soft < default < edgy < drill-sergeant
+    expect(rates).toEqual([...rates].sort((a, b) => a - b));
+  });
+
+  it('composes the #25 spike OVER the personality base, never as a new register', () => {
+    expect(chirp3ProsodyFor('default', 'spike').speakingRate).toBeCloseTo(1.08, 3);
+    expect(chirp3ProsodyFor('edgy', 'spike').speakingRate).toBeCloseTo(1.13, 3);
+    // Volume is the personality's, untouched by the spike.
+    expect(chirp3ProsodyFor('edgy', 'spike').volumeGainDb).toBe(chirp3ProsodyFor('edgy').volumeGainDb);
+  });
+
+  it('clamps to Google’s accepted range and survives an unknown style', () => {
+    for (const s of ['nonsense', '', 'DEFAULT']) {
+      const p = chirp3ProsodyFor(s);
+      expect(p.speakingRate).toBeGreaterThanOrEqual(0.25);
+      expect(p.speakingRate).toBeLessThanOrEqual(2);
+    }
+    // An unknown style falls back to the approved default rather than 400ing.
+    expect(chirp3ProsodyFor('nonsense')).toEqual({ speakingRate: 1, volumeGainDb: 0 });
   });
 });

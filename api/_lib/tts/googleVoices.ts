@@ -83,6 +83,70 @@ export const GOOGLE_LANG_VOICES: Record<string, GoogleVoice> = {
 export const DEFAULT_GOOGLE_VOICE = GOOGLE_VOICES.ruth;
 
 /**
+ * Personality → audioConfig, for the voices that take NO SSML (Chirp3).
+ *
+ * This restores a control that was DEAD under Polly. Polly's generative engine
+ * discarded prosody tags, so `soft` / `edgy` / `drill-sergeant` all produced an
+ * identical Ruth — the personality picker moved a dial connected to nothing.
+ * Chirp3 refuses SSML too, BUT it honors `speakingRate` and `volumeGainDb` on
+ * audioConfig, so the same intent can be expressed there instead (David
+ * 2026-08-03: "Give personality?").
+ *
+ * The non-default styles mirror the SHAPE of `NEURAL_PROSODY_BY_STYLE` in
+ * `ssml.ts` so a personality sounds like ITSELF whether the student is on a
+ * Chirp3 voice or a Neural2 one — one design, two transports:
+ *   soft            0.92 / quieter      → warm, unhurried
+ *   default         1.00                → see below
+ *   edgy            1.05 / a bit louder → clipped, sharper
+ *   drill-sergeant  1.08 / loudest      → crisp, no slowdown
+ *
+ * 🔒 `default` is 1.00, NOT the neural map's 0.95 (David 2026-08-03). He
+ * A/B-ed the shipping voice against slowed variants and picked the unmodified
+ * one. Since voiceService normalises the DEFAULT personality to no `style`
+ * param, every default request lands here — so a 0.95 default would have
+ * silently slowed the exact voice he chose. The neural map keeps its own 95%
+ * because that IS its long-standing register; this is the Chirp3 baseline and
+ * it is pinned to what he approved. Do not "harmonise" the two without asking.
+ *
+ * Pitch is NOT here on purpose: Chirp3 rejects it outright ("This voice does
+ * not support pitch parameters at this time"), verified against the live API
+ * 2026-08-03. Sending it would 400 the whole request, so the neural map's pitch
+ * lift simply has no Chirp3 equivalent.
+ */
+export interface Chirp3Prosody {
+  speakingRate: number;
+  volumeGainDb: number;
+}
+
+const CHIRP3_PROSODY_BY_STYLE: Record<string, Chirp3Prosody> = {
+  default: { speakingRate: 1.0, volumeGainDb: 0 },
+  soft: { speakingRate: 0.92, volumeGainDb: -2 },
+  edgy: { speakingRate: 1.05, volumeGainDb: 1 },
+  'drill-sergeant': { speakingRate: 1.08, volumeGainDb: 3 },
+};
+
+/** Hard bounds Google enforces — clamp rather than let a bad style 400 us. */
+const RATE_MIN = 0.25;
+const RATE_MAX = 2.0;
+
+/**
+ * Resolve the audioConfig prosody for a plain-text (Chirp3) request.
+ *
+ * `prosodyMode === 'spike'` is the #25 decisive-beat lift — composed OVER the
+ * personality base exactly as the SSML path does (+8 rate points), never a new
+ * register. The SSML path also lifts pitch; Chirp3 can't, so the spike is
+ * rate-only there.
+ */
+export function chirp3ProsodyFor(style?: string, prosodyMode?: string): Chirp3Prosody {
+  const base = CHIRP3_PROSODY_BY_STYLE[style ?? 'default'] ?? CHIRP3_PROSODY_BY_STYLE.default;
+  const rate = prosodyMode === 'spike' ? base.speakingRate + 0.08 : base.speakingRate;
+  return {
+    speakingRate: Math.min(RATE_MAX, Math.max(RATE_MIN, Number(rate.toFixed(3)))),
+    volumeGainDb: base.volumeGainDb,
+  };
+}
+
+/**
  * Resolve the Google voice for a request. `languageCode` (set by the
  * language-detection path) wins over the app voice key, exactly as the Polly
  * path lets a detected language voice override the requested English one.

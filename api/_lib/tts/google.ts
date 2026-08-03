@@ -23,7 +23,7 @@
  */
 import type { SynthesisRequest, TtsProvider } from './types.js';
 import { TtsProviderError } from './types.js';
-import { resolveGoogleVoice, type GoogleVoice } from './googleVoices.js';
+import { resolveGoogleVoice, chirp3ProsodyFor, type GoogleVoice, type Chirp3Prosody } from './googleVoices.js';
 import { buildSsmlForEngine } from './ssml.js';
 
 const GOOGLE_TTS_ENDPOINT = 'https://texttospeech.googleapis.com/v1/text:synthesize';
@@ -216,6 +216,7 @@ async function postSynthesize(
   payload: string,
   voice: GoogleVoice,
   useSsml: boolean,
+  prosody?: Chirp3Prosody,
 ): Promise<Response> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
@@ -237,6 +238,10 @@ async function postSynthesize(
           // decode path (MediaSource, ManagedMediaSource, buffered <audio> on
           // iOS) is unchanged.
           audioEncoding: 'MP3',
+          // Personality, for voices that take no SSML. On an SSML voice the
+          // prosody lives in the document instead, so this is omitted rather
+          // than applied twice.
+          ...(prosody ? { speakingRate: prosody.speakingRate, volumeGainDb: prosody.volumeGainDb } : {}),
         },
       }),
       signal: controller.signal,
@@ -267,8 +272,12 @@ export const googleProvider: TtsProvider = {
     const payload = useSsml
       ? buildSsmlForEngine(req.text, 'neural', req.style, req.prosodyMode)
       : req.text;
+    // Personality goes through SSML on voices that accept it, and through
+    // audioConfig on the ones that don't — same intent, different transport.
+    // Applying both would double the effect.
+    const prosody = useSsml ? undefined : chirp3ProsodyFor(req.style, req.prosodyMode);
 
-    let res = await postSynthesize(payload, voice, useSsml);
+    let res = await postSynthesize(payload, voice, useSsml, prosody);
 
     // A rejected voice/locale pair must never mean silence. Retry once on the
     // broad-coverage WaveNet fallback — the same "never go silent" chain the
@@ -280,7 +289,7 @@ export const googleProvider: TtsProvider = {
       // Resend the SAME payload in the SAME mode. WaveNet would accept SSML,
       // but re-wrapping the text mid-flight would change what gets spoken on a
       // retry — the retry exists to preserve the narration, not to alter it.
-      res = await postSynthesize(payload, fallback, useSsml);
+      res = await postSynthesize(payload, fallback, useSsml, prosody);
     }
 
     if (!res.ok) {
