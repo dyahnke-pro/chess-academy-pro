@@ -139,11 +139,38 @@ async function main() {
       },
     }, { soft: true });
     if (add.__error) {
-      // 409 "state does not allow adding more items" means the submission is
-      // already sealed with its items — fine, proceed to submit as-is.
-      console.log(`add item → ${add.__error} (proceeding; submission likely already sealed)`);
+      // A 409 can mean "already sealed with its items" — but it can equally
+      // mean we tried to add to an EMPTY sealed shell, and the old code then
+      // flipped submitted=true on a submission containing NOTHING. That ships
+      // an empty review to Apple and burns a review cycle (1-3 days) on an app
+      // with live paying customers. Never assume; verify below.
+      console.log(`add item → ${add.__error} (will verify the submission actually carries ${VERSION})`);
     } else {
       console.log(`added version ${VERSION} as a reviewSubmissionItem`);
+    }
+  }
+
+  // 2b. VERIFY the submission really contains this version before submitting.
+  // This is the gate the 409-is-benign path skipped. Diagnose on 2026-08-03
+  // found three stale READY_FOR_REVIEW shells with items=0 that the reuse
+  // branch would happily pick up, so an unverified submit was a live risk.
+  {
+    const items = (await api(
+      'GET',
+      `/v1/reviewSubmissions/${sub.id}/items?include=appStoreVersion&limit=50`,
+      null,
+      { soft: true },
+    ))?.data || [];
+    const carries = items.some(
+      (it) => it.relationships?.appStoreVersion?.data?.id === version.id,
+    );
+    console.log(`submission ${sub.id} now has ${items.length} item(s); carries ${VERSION}: ${carries}`);
+    if (!carries) {
+      throw new Error(
+        `reviewSubmission ${sub.id} does NOT contain version ${VERSION} (${items.length} item(s)). ` +
+        `Refusing to submit — flipping submitted=true here would send Apple an empty or wrong review. ` +
+        `Delete the stale empty reviewSubmission shells in App Store Connect and re-run.`,
+      );
     }
   }
 

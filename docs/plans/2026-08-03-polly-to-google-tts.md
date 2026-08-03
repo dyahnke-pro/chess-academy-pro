@@ -237,3 +237,72 @@ Text-to-Speech enabled on the GCP project). Then:
    voices), then prod after merge.
 4. Delete `api/_lib/tts/polly.ts` and drop `pollyProvider` from
    `selectProviders()` in `api/tts.ts`.
+
+---
+
+# OUTCOME (2026-08-03, end of session)
+
+## Shipped to production
+
+- **Google Cloud TTS is LIVE on prod**, verified three ways: `x-tts-source: google`
+  on a real request, byte-perfect streaming decode, and a 13/13 prod Playwright
+  audit where the narration listener captured 5 real voice events.
+- **Cache-on-first-play** replaced the bulk pre-render (David's call, and the
+  better design). `AUDIT_CACHE_CONTROL` is now immutable + max TTL; the old
+  `max-age=86400` was discarding the CDN cache nightly and re-billing the same
+  lesson lines forever — that was costing money on Polly too.
+- **The personality picker controls the voice again.** Under Polly it was a dead
+  control (generative voices discard prosody); Chirp3 honors speakingRate +
+  volumeGainDb. Verified live on prod: soft 3.67s / default 3.53s /
+  drill-sergeant 3.12s on the same sentence.
+- **Voice choice: unchanged.** David A/B-ed 8 candidates and picked the shipping
+  one (`en-US-Chirp3-HD-Aoede`, rate 1.0). `default` is pinned to 1.0 in
+  `CHIRP3_PROSODY_BY_STYLE` for exactly this reason — do not "harmonise" it to
+  the neural map's 0.95.
+
+## Bugs found that were NOT part of the original task
+
+1. **All 11 `asc-*.yml` workflows had `APP_VERSION: '3.4'` — the LIVE version.**
+   Attach/submit/readiness were aimed at the release customers are running.
+   Fixed to 3.5 + `src/data/ascWorkflowVersion.test.ts` fails the build if they
+   ever drift from `ci_post_clone.sh` again.
+2. **`audit-book-reader-prod.mjs` never installed `autoDismissCalibration`** —
+   the only prod audit missing it. The page-help modal intercepted every click,
+   producing 13 cascading failures that read as a voice regression on the exact
+   night the voice provider changed. Fixed; 13/13 green.
+3. **The env var name mismatch** (`google_api_key` vs `GOOGLE_TTS_API_KEY`).
+   Without the multi-name read, prod would have silently stayed on Polly with no
+   error anywhere — the migration would have looked like it simply never
+   happened.
+
+## Not a bug (investigated and closed)
+
+- **David's paywall.** All six of his subscriptions were `sandbox`; Apple caps
+  sandbox at exactly 6 auto-renewals and his last lapsed 2026-08-01. The app was
+  correctly reporting no entitlement. Fix on his side: re-subscribe in
+  TestFlight (free in sandbox). Real revenue verified intact via the RevenueCat
+  API: 1 active subscription, 1 active trial, $7 MRR, 146 active users.
+- **170/172 RevenueCat customers are anonymous.** Expected — they predate the
+  2026-08-01 alias fix. Not a live bug, but those users would be orphaned from
+  their purchase on reinstall. A one-time backfill is worth considering.
+
+## Blocked on David (no credentials in this environment)
+
+- **A build sits in Beta App Review** (`ANOTHER_BUILD_IN_REVIEW` on the 168
+  distribute step), which blocks the next external submission. The App Store
+  Connect secrets API 403s through the agent proxy and no `.p8` exists on disk,
+  so cancelling it requires David in App Store Connect.
+- Note: **workflow DISPATCH does work** from a session via the GitHub MCP
+  (204 on `run_workflow`), even though the raw Actions API 403s. That means the
+  `asc-*` workflows CAN be driven from a session — they hold the credentials
+  even though the session doesn't. This corrects the "Actions dispatch is
+  proxy-blocked" note elsewhere in CLAUDE.md.
+
+## Remaining sequence for the 3.5 App Store release
+
+1. David cancels the in-review build in App Store Connect.
+2. `create-asc-version.yml` (APP_VERSION now 3.5) with What's New copy.
+3. `asc-attach-latest-build.yml` — build 168 / ASC id 1782017440, state VALID.
+4. `asc-readiness.yml` — now points at 3.5, so it validates the PENDING
+   submission rather than the live release.
+5. `asc-submit-review.yml`.
