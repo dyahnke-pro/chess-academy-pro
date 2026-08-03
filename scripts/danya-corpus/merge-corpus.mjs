@@ -16,13 +16,18 @@ const DDIR = CREATOR.distilled;
 const OUT = CREATOR.corpus;
 
 const norm = (s) => s.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
-function similar(a, b) {
-  const A = new Set(norm(a).split(' '));
-  const B = new Set(norm(b).split(' '));
-  if (A.size === 0 || B.size === 0) return false;
+const tokenSet = (s) => new Set(norm(s ?? '').split(' ').filter(Boolean));
+
+/** Same 0.8 overlap rule, on sets the caller already built. Splitting this out
+ *  is what makes bucket dedup affordable: the old `similar(a, b)` re-tokenized
+ *  BOTH strings on every pairwise comparison, so a bucket of n notes rebuilt
+ *  O(n²) sets from scratch. */
+function similarTokens(A, B) {
+  if (!A || !B || A.size === 0 || B.size === 0) return false;
+  const [small, large] = A.size <= B.size ? [A, B] : [B, A];
   let shared = 0;
-  for (const w of A) if (B.has(w)) shared += 1;
-  return shared / Math.min(A.size, B.size) >= 0.8;
+  for (const w of small) if (large.has(w)) shared += 1;
+  return shared / small.size >= 0.8;
 }
 
 /** G9.4 voice-register normalization: "1.e4" → "e4", "1...g6" → "…g6" —
@@ -115,13 +120,31 @@ async function main() {
     }
   }
 
-  // Dedup within each position key.
+  // Dedup within each bucket. The bucket key MUST spread the notes: dedup is
+  // quadratic inside a bucket, so one oversized bucket dominates everything.
+  //
+  // Keying on the position alone did that. Unpositioned notes all join('') to
+  // the SAME empty key, which was harmless while such notes were dropped
+  // outright — and became 24k notes in a single bucket once the concept tier
+  // gave them a home. That is ~288M comparisons, each allocating two tokenized
+  // Sets, and it turned a 39-minute merge into a two-hour one (2026-08-03).
+  //
+  // So fall back through the same anchors the runtime selects on: position,
+  // else opening, else phase+concept. Notes that could never be duplicates of
+  // each other now never get compared.
   const byKey = new Map();
   for (const n of all) {
-    const key = (n.lineSan ?? []).join(' ');
+    const key = (n.lineSan ?? []).length > 0
+      ? n.lineSan.join(' ')
+      : n.opening
+        ? `o:${n.opening}`
+        : `c:${n.phase}:${(n.concepts ?? [])[0] ?? ''}`;
     if (!byKey.has(key)) byKey.set(key, []);
     const bucket = byKey.get(key);
-    const dupIdx = bucket.findIndex((m) => similar(m.teaches, n.teaches));
+    // Tokenize ONCE per note rather than once per comparison — the same set was
+    // being rebuilt for every note already in the bucket.
+    n.__tokens ??= tokenSet(n.teaches);
+    const dupIdx = bucket.findIndex((m) => similarTokens(m.__tokens, n.__tokens));
     if (dupIdx >= 0) {
       if ((n.explains.length + n.teaches.length) > (bucket[dupIdx].explains.length + bucket[dupIdx].teaches.length)) {
         bucket[dupIdx] = n;
@@ -131,7 +154,12 @@ async function main() {
     }
   }
 
-  const notes = [...byKey.values()].flat().map((n, i) => ({ id: `${CREATOR.idPrefix}-${i.toString(36)}`, ...n }));
+  const notes = [...byKey.values()].flat().map((n, i) => {
+    // `__tokens` is dedup scratch and must never reach the shipped corpus.
+    const { __tokens, ...rest } = n;
+    void __tokens;
+    return { id: `${CREATOR.idPrefix}-${i.toString(36)}`, ...rest };
+  });
   const positioned = notes.filter((n) => n.lineSan.length > 0);
   const openings = new Set(notes.map((n) => n.opening).filter(Boolean));
   const phases = notes.reduce((acc, n) => { acc[n.phase] = (acc[n.phase] ?? 0) + 1; return acc; }, {});
