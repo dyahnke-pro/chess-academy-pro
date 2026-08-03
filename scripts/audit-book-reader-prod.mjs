@@ -25,6 +25,7 @@ import {
   sandboxContextOptions,
 } from './audit-lib/chromium.mjs';
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
 const ID = process.env.AUDIT_OPENING || 'ruy-lopez';
@@ -70,6 +71,14 @@ async function main() {
   const browser = await chromium.launch({ headless: true, executablePath, args: sandboxLaunchArgs() });
   const ctx = await browser.newContext({ ...sandboxContextOptions() });
 
+  // Neutralize the strength-calibration bubble AND the page-help modal before
+  // any app code runs. Untouched they render as full-screen overlays that
+  // intercept pointer events, so every paragraph click times out and the whole
+  // read-aloud suite fails for a reason with nothing to do with voice — exactly
+  // the 2026-08-03 run (13 failures, all cascading from one undismissed modal).
+  // Every other prod audit installs this; this one was missed.
+  await ctx.addInitScript(autoDismissCalibration);
+
   // Point the app's audit stream at our listener BEFORE any app code runs,
   // so every voice-speak-invoked event is POSTed to the sidecar.
   await ctx.addInitScript(([url, secret]) => {
@@ -110,7 +119,11 @@ async function main() {
       await help.waitFor({ state: 'detached', timeout: 6000 }).catch(() => {});
     }
   }
-  rec('page-help modal dismissed', (await help.count()) === 0);
+  // Neutralized counts as dismissed: auto-dismiss sets pointer-events:none +
+  // opacity:0 rather than unmounting, so the node can be present while being
+  // entirely non-interactive. Assert the property we actually depend on.
+  const helpBlocks = (await help.count()) > 0 && (await help.first().isVisible().catch(() => false));
+  rec('page-help modal cannot intercept clicks', !helpBlocks);
 
   // ── Instrument 1: drive the reads ───────────────────────────────────
   const book = page.locator('[data-testid="book-reader"]');
