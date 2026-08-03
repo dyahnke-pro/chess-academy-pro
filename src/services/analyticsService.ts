@@ -448,7 +448,7 @@ export async function kindFrequency(w: AnalyticsWindow): Promise<KindFrequencyRo
 
 export interface DeadCaptureProbe {
   label: string;
-  status: 'orphan-table' | 'no-consumer' | 'forensic-only';
+  status: 'orphan-table' | 'no-consumer' | 'forensic-only' | 'live';
   rationale: string;
   fixHint: string;
 }
@@ -457,11 +457,11 @@ export function deadCaptureProbes(): DeadCaptureProbe[] {
   return [
     {
       label: 'db.sessions',
-      status: 'orphan-table',
+      status: 'live',
       rationale:
-        'Written by sessionGenerator.ts:69 on session end (durationMinutes, xpEarned, coachSummary, puzzleAccuracy). No surface queries it.',
+        'The training ledger. Written by trainingSessionLedger on session start + end (durationMinutes, puzzlesSolved, puzzleAccuracy, xpEarned); read by computeWeaknessProfile (recent sessions), the export bundle and cloud-sync restore. This card previously claimed the exact opposite in both directions — that it was written on session end and read by nothing — while in fact WO-ROLODEX-UI-01 PR-1 had deleted the writer and left the readers on an empty table (David 2026-08-02).',
       fixHint:
-        'Either wire into a dashboard surface (sessions-this-week, surface-time-distribution) or delete the writer.',
+        'No action. The SRS card + line sessions record; wire any new training surface through trainingSessionLedger so it joins the loop.',
     },
     {
       label: 'AuditEntry.details on forensic kinds',

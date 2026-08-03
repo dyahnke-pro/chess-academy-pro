@@ -286,7 +286,13 @@ export function AnalyticsAuditPanel(): JSX.Element {
                   <span
                     className="text-[9px] uppercase tracking-wide px-1 py-0.5 rounded"
                     style={{
-                      color: row.status === 'orphan-table' ? 'var(--color-error)' : 'var(--color-text-muted)',
+                      // Red only for an actual orphan; a healthy row reads green
+                      // so "live" is not mistaken for another warning.
+                      color: row.status === 'orphan-table'
+                        ? 'var(--color-error)'
+                        : row.status === 'live'
+                          ? 'var(--color-success)'
+                          : 'var(--color-text-muted)',
                       background: 'color-mix(in srgb, var(--color-border) 40%, transparent)',
                     }}
                   >

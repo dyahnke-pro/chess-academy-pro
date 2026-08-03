@@ -58,6 +58,7 @@ import {
 } from '../../services/srsOpeningService';
 import { getOpeningById } from '../../services/openingService';
 import { logAppAudit } from '../../services/appAuditor';
+import { beginTrainingSession, finishTrainingSession, type OpenTrainingSession } from '../../services/trainingSessionLedger';
 import { recordPositiveMoment } from '../../services/reviewPromptService';
 import type { OpeningRecord, SrsOpeningCard } from '../../types';
 
@@ -159,6 +160,8 @@ export function SrsTrainerPage(): JSX.Element {
   >(null);
   const [moveFlash, setMoveFlash] = useState<MoveQuality>(null);
   const lastCardIdRef = useRef<string | null>(null);
+  /** The ledger row for the session in flight — see `trainingSessionLedger`. */
+  const openSessionRef = useRef<OpenTrainingSession | null>(null);
 
   // ─── Line-mode session state ──────────────────────────────────────────
   const [lineQueue, setLineQueue] = useState<DueLine[]>([]);
@@ -281,6 +284,12 @@ export function SrsTrainerPage(): JSX.Element {
       source: 'SrsTrainerPage.startCardSession',
       summary: `card-mode session — ${cards.length} cards`,
     });
+    // Open the ledger row — see `trainingSessionLedger` for the loop this
+    // feeds. Awaited so the handle exists before the first card is answered.
+    openSessionRef.current = await beginTrainingSession({
+      blockType: 'flashcards',
+      targetMinutes: Math.max(5, Math.round(cards.length * 0.5)),
+    });
   }, []);
 
   const advanceCard = useCallback((): void => {
@@ -294,6 +303,13 @@ export function SrsTrainerPage(): JSX.Element {
         source: 'SrsTrainerPage.advanceCard',
         summary: `card-mode complete — ${cardCorrect} / ${cardWrong}`,
       });
+      // `cardCorrect` counts the cards answered right; the +1 is this last
+      // card, which has not been folded into state yet at this point.
+      void finishTrainingSession(openSessionRef.current, {
+        itemsCompleted: cardQueue.length,
+        itemsCorrect: cardCorrect,
+      });
+      openSessionRef.current = null;
       // Rating harvest (David 2026-07-14): finishing a spaced-repetition review
       // session is a genuine accomplishment — arm the review prompt.
       void recordPositiveMoment('srs-session-complete');
@@ -369,6 +385,11 @@ export function SrsTrainerPage(): JSX.Element {
       source: 'SrsTrainerPage.startLineSession',
       summary: `line-mode session — ${lines.length} lines`,
     });
+    openSessionRef.current = await beginTrainingSession({
+      blockType: 'opening_review',
+      targetMinutes: Math.max(5, lines.length * 2),
+      openingId: first.openingId,
+    });
   }, [game]);
 
   /** Move to next line in the queue, or end the session. */
@@ -393,6 +414,13 @@ export function SrsTrainerPage(): JSX.Element {
           source: 'SrsTrainerPage.advanceToNextLine',
           summary: `line-mode complete — ${linesPerfected + (perfect ? 1 : 0)} / ${linesAttempted + 1} perfected`,
         });
+        // A line drilled with no wrong attempt is the "correct" unit here —
+        // the same thing the perfected counter tracks.
+        void finishTrainingSession(openSessionRef.current, {
+          itemsCompleted: linesAttempted + 1,
+          itemsCorrect: linesPerfected + (perfect ? 1 : 0),
+        });
+        openSessionRef.current = null;
         return;
       }
       const next = lineQueue[lineIndex + 1];
