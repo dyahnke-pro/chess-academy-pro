@@ -2152,7 +2152,35 @@ once it lands) is the runtime gate; this list is the design gate.
 
 Chess Academy Pro is an AI-powered chess training PWA built with React + TypeScript + Vite. It wraps as a native iOS app via Capacitor and is distributed through TestFlight. The app features an LLM-powered chess coach (Claude API), Stockfish WASM analysis, spaced repetition puzzles, opening training, and adaptive difficulty.
 
-**Beta-testing for App Store / Play Store release.** Distributed via TestFlight today, headed to the public stores. Currently no multi-tenancy and no auth beyond optional Supabase cloud sync, but it is being built for real beta testers and public store users — not a private one-person app.
+### 🔴🔴 THE APP IS LIVE ON THE APP STORE WITH PAYING CUSTOMERS (David 2026-08-03, LOCKED: "Lock into your memory where I stand with the App Store. It's live, have 21 downloads, and 2 paying members").
+
+**This is a SHIPPED, REVENUE-GENERATING product. It is NOT a beta and NOT a
+private app.** As of 2026-08-03: **live on the App Store, 21 downloads, 2 PAYING
+members.** Every session must operate with that as the baseline fact — it
+supersedes any older "beta-testing ahead of release" framing elsewhere in this
+file.
+
+What this changes, concretely:
+
+- **A regression is not an inconvenience — it breaks something people paid
+  for.** Two paying customers is a small number and exactly the number at which
+  churn is most damaging: losing one is losing half the paying base, and early
+  users who feel burned leave reviews that outlive the bug.
+- **Every push to `main` reaches real users.** The G1 post-deploy audit is not
+  ceremony; it is the only thing standing between a bad merge and paying
+  customers. Never claim "shipped" without it.
+- **App Store submissions are public releases**, not test builds. A rejection
+  costs a review cycle (1-3 days); a bad approval ships the defect to everyone.
+- **Prefer the reversible order**: land on `main` → verify prod → TestFlight →
+  only then submit to the App Store. Never submit a build whose runtime
+  behavior has not been verified on prod.
+- **Revenue path is load-bearing.** RevenueCat subscriptions + the freemium
+  free-tier are how those 2 members pay. Treat anything touching billing,
+  paywall, restore, or entitlement as production-critical.
+
+Distribution today: **App Store (live)** + TestFlight (internal + external beta
+groups) for pre-release builds. Currently no multi-tenancy and no auth beyond
+optional Supabase cloud sync.
 
 ## Tech Stack (exact versions)
 
