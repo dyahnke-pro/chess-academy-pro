@@ -2,15 +2,33 @@ import { Languages } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 
 /**
- * Settings control for the lesson-narration language (localization pilot).
+ * Settings control for the coach's narration language.
  * Self-contained: reads/writes the active profile's `narrationLanguage`.
- * Only languages we ship a narration pack for are offered; English is the
- * always-available source of truth. Switching speaks + shows the masterclass
- * Watch narration in that language (voice follows automatically via TTS).
+ * English is the always-available source of truth; every other language is
+ * produced from it at speech time (`spokenLanguage`), so the list is not
+ * limited to the openings that ship a written translation pack.
  */
+// Every language the coach can SPEAK. It used to list only the two we ship a
+// written translation pack for, because packs were the only mechanism — but the
+// coach's spoken narration now translates at the voice chokepoint, which needs
+// no pack at all (see `spokenLanguage`). So the list is what the coach can say,
+// not what happens to be pre-translated.
 const LANGUAGES: ReadonlyArray<{ code: string; label: string }> = [
   { code: 'en', label: 'English' },
-  { code: 'es', label: 'Español (beta)' },
+  { code: 'es', label: 'Español' },
+  { code: 'fr', label: 'Français' },
+  { code: 'de', label: 'Deutsch' },
+  { code: 'pt', label: 'Português' },
+  { code: 'it', label: 'Italiano' },
+  { code: 'nl', label: 'Nederlands' },
+  { code: 'pl', label: 'Polski' },
+  { code: 'tr', label: 'Türkçe' },
+  { code: 'ru', label: 'Русский' },
+  { code: 'ar', label: 'العربية' },
+  { code: 'hi', label: 'हिन्दी' },
+  { code: 'ja', label: '日本語' },
+  { code: 'ko', label: '한국어' },
+  { code: 'zh', label: '中文' },
 ];
 
 export function NarrationLanguageSetting(): JSX.Element | null {
@@ -34,8 +52,10 @@ export function NarrationLanguageSetting(): JSX.Element | null {
         Lesson narration language
       </div>
       <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-        The language the masterclass Watch lessons are taught and spoken in. The
-        coaching voice matches automatically. App menus stay in English.
+        The language the coach teaches and speaks in — lessons, walkthroughs,
+        the middlegame play-out, chat replies. Moves stay in standard notation
+        and the voice matches the language automatically. App menus stay in
+        English, and a few written lesson texts may still show English.
       </p>
       <select
         value={current}

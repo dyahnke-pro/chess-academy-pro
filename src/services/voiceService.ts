@@ -11,6 +11,7 @@ import { db } from '../db/schema';
 import type { CoachPersonality } from '../coach/types';
 import { useAppStore } from '../stores/appStore';
 import { resolveCoachNarration, applyBriefVoiceCap } from '../utils/coachNarration';
+import { localizeSpokenText, spokenLanguageName } from './spokenLanguage';
 
 /** Shape of `window.ManagedMediaSource` on iOS Safari 17.1+. Not in
  *  lib.dom.d.ts yet, so we describe just the surface we use:
@@ -1150,6 +1151,15 @@ class VoiceService {
     // content — `\p{L}\p{N}` covers Latin, Cyrillic, CJK, etc., so
     // Unicode-content prose still speaks. Pure punctuation, ellipses,
     // dashes, em-dashes, asterisks alone all silently drop.
+    // SPEAK THE STUDENT'S LANGUAGE (David 2026-08-02: "make sure it's
+    // everywhere"). Placed here, after the verbosity gate and the brief-cap, so
+    // the cap's word budget is still measured on the English source and a line
+    // policy would have suppressed is never translated. See `spokenLanguage`
+    // for why this belongs at the voice chokepoint rather than at each of the
+    // ~70 call sites. No-op — and no import cost — on English.
+    if (spokenLanguageName()) {
+      text = await localizeSpokenText(text);
+    }
     if (!/[\p{L}\p{N}]/u.test(text)) {
       void import('./appAuditor').then(({ logAppAudit }) => {
         void logAppAudit({

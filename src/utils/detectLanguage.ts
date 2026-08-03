@@ -22,7 +22,7 @@ export interface DetectedLanguage {
 
 const EN: DetectedLanguage = { code: 'en', name: 'English', nonEnglish: false };
 
-const LANG_NAME: Record<string, string> = {
+export const LANG_NAME: Record<string, string> = {
   es: 'Spanish', fr: 'French', de: 'German', pt: 'Portuguese', it: 'Italian',
   ru: 'Russian', ar: 'Arabic', hi: 'Hindi', ko: 'Korean', ja: 'Japanese',
   zh: 'Chinese', nl: 'Dutch', pl: 'Polish', tr: 'Turkish', en: 'English',
@@ -90,4 +90,14 @@ export function detectLanguage(text: string | undefined | null): DetectedLanguag
     if (re.test(raw)) return { code, name: LANG_NAME[code] ?? code, nonEnglish: true };
   }
   return EN;
+}
+
+/** The human name a language code phrases in ("es" → "Spanish"), or null when
+ *  the code is unknown or is English. The coach's translation path keys off the
+ *  NAME, and the narration-language preference stores the CODE, so this is the
+ *  join between the two. */
+export function languageNameFor(code: string | undefined | null): string | null {
+  if (!code) return null;
+  const name = LANG_NAME[code.toLowerCase().split('-')[0]];
+  return !name || name === 'English' ? null : name;
 }
