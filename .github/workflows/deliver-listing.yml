@@ -6,6 +6,17 @@ name: Upload App Store listing (metadata + screenshots)
 # Manual trigger only.
 on:
   workflow_dispatch:
+    inputs:
+      # The listing TEXT (description, subtitle, promo, keywords, release notes)
+      # was unreachable from here: the lane defaults `skip_metadata` to true, so
+      # every run pushed screenshots and nothing else, and the env var that turns
+      # it on was never exposed (David 2026-08-02, after a full rewrite of the
+      # copy sat in the repo unpublished). Default stays OFF so a screenshot-only
+      # run is still one click.
+      metadata:
+        description: 'Also upload the listing TEXT (description, subtitle, promo, keywords, release notes)'
+        type: boolean
+        default: false
 
 jobs:
   deliver:
@@ -31,6 +42,9 @@ jobs:
         env:
           APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
           APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          # The lane reads this: anything other than the string 'false' means
+          # skip the text. Opt in via the `metadata` input above.
+          DELIVER_SKIP_METADATA: ${{ inputs.metadata && 'false' || 'true' }}
         run: |
           export APP_STORE_CONNECT_API_KEY_B64="$(openssl base64 -A -in "$RUNNER_TEMP/asc_sec1.pem")"
           bundle exec fastlane ios upload_listing

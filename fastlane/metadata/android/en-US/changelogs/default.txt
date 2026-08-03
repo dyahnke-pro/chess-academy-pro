@@ -1,19 +1,23 @@
 What's new in 3.5
 
-TRAPS, WIRED INTO LEARN WITH COACH
+WALKTHROUGHS FOR 3,600+ OPENINGS
+• Type any opening and the coach plays the line out one move at a time, explains why each move is there, and draws arrows on the squares it is talking about while it speaks.
+• Ask by name or by move. "The Vienna Gambit main line with Qf3" now lands on the right lesson instead of coming up empty, and British spellings work too.
+• Every variation tile shows the move that makes it that line. Berlin 3...Nf6, Exchange 4.Bxc6, Advance 3.e5.
+
+TRAPS, TAUGHT PROPERLY
 • Ask for the traps in any opening and the coach teaches them. 344 curated trap lines across 86 openings, each one starting from a slip real players actually make, with the punishment verified by the engine.
-• Every variation tile now shows the move that makes it that line, so you can spot the one you meant at a glance. Berlin 3...Nf6, Exchange 4.Bxc6, Advance 3.e5.
-• Ask for a line by its move and you will get it. "The Vienna Gambit main line with Qf3" now lands on the right lesson instead of coming up empty.
 
-LESSONS STAY ON YOUR OPENING
-• Fixed a bug where the first move of a lesson could be taught with a completely different opening's material. Verified across six openings on live prod.
-• Fixed beats repeating themselves, narration restarting after you switch apps, and the board snapping back to move one when you tapped Watch the middlegame.
-• The middlegame play out now teaches at the same level as the opening, and waits for each line to finish before moving the pieces.
+WATCH THE WHOLE GAME
+• The middlegame and endgame play out now teaches at the same level as the opening, and waits for each idea to finish before it moves a piece.
 
-THE COACH SPEAKS YOUR LANGUAGE
+YOUR LANGUAGE, EVERYWHERE
 • 15 languages, everywhere the coach talks. Lessons, walkthroughs, the play out, chat. Moves stay in normal notation.
 
-A FAIRER OPPONENT ON iPHONE
-• The coach was quietly playing at full engine strength on iOS no matter what rating you set. It now plays at the strength you picked.
+FIXES
+• Lessons stay on the opening you asked for. The first move of a lesson could previously be taught with a completely different opening's material.
+• Fixed beats repeating, narration restarting after you switch apps, and the board jumping back to move one when you tapped Watch the middlegame.
+• The coach was quietly playing at full engine strength on iPhone no matter what rating you set. It now plays at the strength you picked.
+• Your training sessions are recorded again, so the Weaknesses page knows what you have actually been working on.
 
-Plus the usual fixes and polish. Pick an opening and go.
+Pick an opening and go.
