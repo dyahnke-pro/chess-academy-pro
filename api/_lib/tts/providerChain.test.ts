@@ -12,7 +12,13 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { selectProviders } from '../../tts';
 
-const ENV_KEYS = ['GOOGLE_TTS_API_KEY', 'AWS_ACCESS_KEY_ID_POLLY', 'AWS_SECRET_ACCESS_KEY_POLLY'] as const;
+const ENV_KEYS = [
+  'GOOGLE_TTS_API_KEY',
+  'GOOGLE_API_KEY',
+  'google_api_key',
+  'AWS_ACCESS_KEY_ID_POLLY',
+  'AWS_SECRET_ACCESS_KEY_POLLY',
+] as const;
 const saved: Record<string, string | undefined> = {};
 
 beforeEach(() => {
@@ -56,6 +62,18 @@ describe('selectProviders', () => {
   it('reports an empty chain when nothing is configured (endpoint 503s)', () => {
     // Never a crash, and never a silent 200 with no audio.
     expect(selectProviders()).toEqual([]);
+  });
+
+  it('accepts every provisioned spelling of the Google key', () => {
+    // process.env lookups are case-sensitive and the key on the Vercel project
+    // is `google_api_key`, not the canonical name. Reading only one spelling
+    // would leave prod silently on Polly — the migration would look like it
+    // simply never happened.
+    for (const name of ['GOOGLE_TTS_API_KEY', 'GOOGLE_API_KEY', 'google_api_key']) {
+      for (const k of ['GOOGLE_TTS_API_KEY', 'GOOGLE_API_KEY', 'google_api_key']) delete process.env[k];
+      process.env[name] = 'test-google-key';
+      expect(selectProviders().map((p) => p.id), `not read from ${name}`).toEqual(['google']);
+    }
   });
 
   it('reads credentials per call, not at module load', () => {

@@ -36,10 +36,26 @@ const REQUEST_TIMEOUT_MS = 10_000;
  *  artifact (quotes, escapes, whitespace) rather than payload. */
 const BASE64_CHARS = /[A-Za-z0-9+/=]/;
 
+/**
+ * Env var names accepted for the Google key, in priority order.
+ *
+ * `GOOGLE_TTS_API_KEY` is canonical, but process.env lookups are CASE-SENSITIVE
+ * and the key actually provisioned on the Vercel project is `google_api_key`
+ * (David 2026-08-03). A single-name read would have found nothing and silently
+ * left prod on the Polly fallback — a config typo that presents as "the
+ * migration just didn't happen", which is exactly the kind of silent no-op that
+ * is worth spending five lines to make impossible.
+ */
+const API_KEY_ENV_NAMES = ['GOOGLE_TTS_API_KEY', 'GOOGLE_API_KEY', 'google_api_key'] as const;
+
 function apiKey(): string {
   // Read lazily, per request: Edge runtime env vars are not reliably bound at
   // module-evaluation time (same hazard documented in _lib/usageGuard.ts).
-  return process.env.GOOGLE_TTS_API_KEY || '';
+  for (const name of API_KEY_ENV_NAMES) {
+    const value = process.env[name];
+    if (value) return value;
+  }
+  return '';
 }
 
 /** Decode a base64 string to bytes. `atob` is available on the Edge runtime. */
