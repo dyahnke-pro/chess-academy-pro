@@ -134,7 +134,7 @@ import { buildForkTalk, type ForkTalk } from '../../services/forkTalk';
 import { parseSpokenMove } from '../../services/spokenMoveParser';
 import { parseCoachMoveCommand } from '../../services/coachMoveCommand';
 import { sanToSpeech } from '../../utils/sanToSpeech';
-import { teachingNoteForBoard, noteCoverageForLine, teachingBeatText } from '../../services/danyaTeachingService';
+import { teachingSourceForBoard, teachingFactLine, noteCoverageForLine, teachingBeatText } from '../../services/danyaTeachingService';
 
 /** How many note-covered plies an opening needs before the NOTES take the
  *  lesson from a hand-authored masterclass.
@@ -5139,16 +5139,20 @@ export function CoachTeachPage(): JSX.Element {
                     }
                   } catch { /* the chain is a bonus, never a blocker */ }
                 }
-                // TEACHING NOTE at this exact position (David 2026-07-12:
-                // "what he teaches in every position… his explanation… and
-                // the future plans"). Curated corpus, code-selected by move
-                // prefix; suppressed while a question is open (leak guard).
+                // TEACHING NOTE (David 2026-07-12: "what he teaches in every
+                // position… his explanation… and the future plans"). Curated
+                // corpus, code-selected; suppressed while a question is open
+                // (leak guard).
+                //
+                // The label is now derived from PROVENANCE, not assumed. This
+                // said "for THIS position" unconditionally while the selector
+                // could also return a note borrowed from another opening or a
+                // general principle — so the model was told a borrowed idea was
+                // a fact about the board, and dutifully said so (2026-08-04).
                 if (!questionArmed) {
                   try {
-                    const note = teachingNoteForBoard(historyAfterReply, probe.fen());
-                    if (note) {
-                      facts.push(`Coaching note for THIS position: ${note.explains} ${note.teaches}${note.plans ? ` Plan: ${note.plans}` : ''}`);
-                    }
+                    const source = teachingSourceForBoard(historyAfterReply, probe.fen());
+                    if (source) facts.push(teachingFactLine(source));
                   } catch { /* corpus is a bonus, never a blocker */ }
                   // GEM DETECTION on Learn (David 2026-07-30: "This is for the
                   // learn with coach tab!!"). If the coach's reply just walked
@@ -5699,20 +5703,27 @@ export function CoachTeachPage(): JSX.Element {
         // where the opening had teaching. Same selection rule (code picks,
         // scoped to the taught opening), same board-grading of the prose, and
         // once per note so one note can't narrate every move.
+        //
+        // POSITION-TAUGHT NOTES ONLY (2026-08-04). This is spoken narration
+        // about the move that just happened, so a note borrowed from another
+        // opening's matching structure — or a general principle — would be
+        // heard as a statement about this board. Those origins are honest
+        // teaching in a facts package that labels them; they are not honest
+        // when appended to "Black's rook to g7" as if they described it.
         try {
-          const note = teachingNoteForBoard(
+          const source = teachingSourceForBoard(
             [...openingSans, ...local.history()],
             local.fen(),
             taughtOpening,
           );
-          if (note && !continuationNoteIds.has(note.id)) {
+          if (source?.origin === 'position' && !continuationNoteIds.has(source.note.id)) {
             const graded = gradeNarrationText(
-              teachingBeatText(note),
+              teachingBeatText(source.note),
               local.fen(),
               'CoachTeachPage.continuationNote',
             );
             if (graded?.trim()) {
-              continuationNoteIds.add(note.id);
+              continuationNoteIds.add(source.note.id);
               text = `${text} ${graded.trim()}`;
             }
           }

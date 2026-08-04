@@ -26,6 +26,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { __setFarmedCorporaCache } from '../services/farmedCorpusData';
+import { warmSecondaryPositionIndexSync } from '../services/secondaryCorpora';
 import type { TeachingsBundle } from '../services/secondaryCorpus';
 
 /** Mirrors the `FARMED` list in farmedCorpusData — same keys, same files. */
@@ -61,6 +62,12 @@ export function loadFullCorpus(): Array<{ key: string; notes: number }> {
     });
   }
   __setFarmedCorporaCache(primed);
+  // Build the transposition index too. In the browser the boot prewarm does this
+  // in chunks; nothing in vitest performs that either, and `notesForFen` is
+  // read-only by design (forcing the build on a lookup is a multi-second stall
+  // on a phone). Without this, a test asserting on the transposition tier would
+  // pass or fail on whether some earlier test happened to warm the index.
+  warmSecondaryPositionIndexSync();
   return primed.map((c) => ({ key: c.key, notes: c.data.notes.length }));
 }
 

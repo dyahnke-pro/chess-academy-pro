@@ -103,6 +103,12 @@ export async function warmSecondaryPositionIndex(): Promise<void> {
   for (const c of secondaryCorpora()) await c.warmFenIndex();
 }
 
+/** The same build in one synchronous pass — for node and tests, where the stall
+ *  is free and a half-built index would make assertions depend on timing. */
+export function warmSecondaryPositionIndexSync(): void {
+  for (const c of secondaryCorpora()) c.warmFenIndexSync();
+}
+
 /** Per-corpus stats for audits / the settings debug panel. */
 export function secondaryCorpusStats(): Array<{ key: string; notes: number; positioned: number; videos: number }> {
   return secondaryCorpora().map((c) => ({ key: c.key, ...c.stats() }));

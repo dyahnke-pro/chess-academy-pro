@@ -7,7 +7,7 @@ import { db } from '../db/schema';
 import { getCachedStockfish, setCachedStockfish } from './stockfishFenCache';
 import { isSpokenSentenceGrounded } from '../services/coachAnswerGates';
 import { buildFedTacticsContext, speakDeepestLookahead } from '../services/liveTacticsContext';
-import { transitionTeachingForGame } from '../services/danyaTeachingService';
+import { transitionTeachingSourceForGame } from '../services/danyaTeachingService';
 import { detectOpening } from '../services/openingDetectionService';
 import type { PhaseNarrationVerbosity, StockfishAnalysis } from '../types';
 import type { PhaseTransitionEvent } from '../services/phaseTransitionDetector';
@@ -261,12 +261,23 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
         try {
           const sans = (getPgn() ?? '').split(/\s+/).filter((t) => t && !/^\d+\.$/.test(t));
           const openingName = getOpeningName?.() ?? detectOpening(sans)?.name ?? null;
-          const note = transitionTeachingForGame({ historySans: sans, fen: event.fen, openingName });
-          if (note) {
-            const ritual = [note.explains, note.teaches, note.plans ? `The plan: ${note.plans}` : '']
+          const source = transitionTeachingSourceForGame({ historySans: sans, fen: event.fen, openingName });
+          if (source) {
+            // HOW MUCH of the note may be spoken depends on WHERE it came from
+            // (2026-08-04). Only the exact-position tier was authored at the
+            // board the student is looking at; the recent-path, opening-family
+            // and structure-transfer tiers describe a DIFFERENT position, and
+            // speaking their `explains`/`teaches` narrated that position as if
+            // it were this one. `plans` survives the move — it says where this
+            // kind of position is heading, which is the point of a transition
+            // ritual and stays true when the note is borrowed.
+            const { note, origin } = source;
+            const ritual = (origin === 'position'
+              ? [note.explains, note.teaches, note.plans ? `The plan: ${note.plans}` : '']
+              : [note.plans ? `The plan from here: ${note.plans}` : ''])
               .filter((s) => s && s.trim())
               .join(' ');
-            transitionSentence += ` ${ritual}`;
+            if (ritual.trim()) transitionSentence += ` ${ritual}`;
           }
         } catch { /* corpus is a bonus, never a blocker */ }
       }

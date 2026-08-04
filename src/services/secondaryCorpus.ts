@@ -38,6 +38,9 @@ export interface SecondaryCorpus {
    *  chess.js each, so doing it in one go would hold the main thread for
    *  seconds — the same jank the seed already chunks around. */
   warmFenIndex: () => Promise<void>;
+  /** Build it in ONE synchronous pass. For node/tests, where a 5s stall costs
+   *  nothing and determinism is worth more. NEVER call this on a UI thread. */
+  warmFenIndexSync: () => void;
   stats: () => { notes: number; positioned: number; videos: number };
 }
 
@@ -151,6 +154,7 @@ export function createSecondaryCorpus(key: string, data: TeachingsBundle): Secon
       } catch { /* a note whose line won't replay simply isn't position-keyed */ }
     }
   };
+  const warmFenIndexSync = (): void => { indexUpTo(data.notes.length); };
   const warmFenIndex = async (): Promise<void> => {
     while (fenCursor < data.notes.length) {
       indexUpTo(fenCursor + 500);
@@ -158,13 +162,20 @@ export function createSecondaryCorpus(key: string, data: TeachingsBundle): Secon
       await new Promise<void>((resolve) => { setTimeout(resolve, 0); });
     }
   };
-  const notesForFen = (fen: string): DanyaNote[] => {
-    // Correctness beats smoothness if a lookup beats the prewarm: finish the
-    // index synchronously rather than answer from a half-built one, which would
-    // silently look like "the corpus doesn't teach here".
-    indexUpTo(data.notes.length);
-    return byFen.get(normFen(fen)) ?? [];
-  };
+  // READ-ONLY: never forces the build. A lookup that beats the prewarm gets
+  // whatever is indexed so far, which for an unbuilt index is nothing.
+  //
+  // The alternative — finishing the index synchronously on first miss — was
+  // tried and is worse: it is ~5s of chess.js across the farmed corpora, on
+  // whatever thread happens to ask first, which on a phone is a frozen UI. It
+  // also broke a 5s unit test outright, which is the same stall wearing a
+  // different hat.
+  //
+  // Degrading to silence is the sanctioned trade for this whole tier (an
+  // unprimed corpus cache means "no gap teaching yet", never wrong teaching) and
+  // it self-heals within a second of boot. Coverage may lag the prewarm; what is
+  // spoken is never wrong.
+  const notesForFen = (fen: string): DanyaNote[] => byFen.get(normFen(fen)) ?? [];
 
   const notesForPrefix = (historySans: string[], maxNotes = Infinity): DanyaNote[] => {
     const out: DanyaNote[] = [];
@@ -188,6 +199,7 @@ export function createSecondaryCorpus(key: string, data: TeachingsBundle): Secon
       byPrefix.get(historySans.join(' ')) ?? [],
     notesForFen,
     warmFenIndex,
+    warmFenIndexSync,
     stats: () => ({
       notes: data.notes.length,
       positioned: data.notes.filter((n) => n.lineSan.length > 0).length,

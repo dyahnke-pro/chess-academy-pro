@@ -120,12 +120,14 @@ const MODEL_GAMES = modelGamesRaw as unknown as ModelGame[];
 const OPENING_NAME_BY_ID = new Map(REPERTOIRE.map((e) => [e.id, e.name]));
 
 describe('teaching coverage report (Phase 0 measurement)', () => {
+  // 120s: the helper parses ~37 MB of corpus JSON and builds the transposition
+  // index in one synchronous pass. Heavy, deliberately — see loadFullCorpus.
   beforeAll(() => {
     const loaded = loadFullCorpus();
     const total = loaded.reduce((n, c) => n + c.notes, 0);
     // Fail loudly rather than quietly re-measuring against a fifth of the data.
     expect(total, `farmed corpora not primed: ${JSON.stringify(loaded)}`).toBeGreaterThan(46_000);
-  });
+  }, 120_000);
 
   it('measures both walkthrough paths and writes the report', () => {
     const perOpening: Array<Record<string, unknown>> = [];

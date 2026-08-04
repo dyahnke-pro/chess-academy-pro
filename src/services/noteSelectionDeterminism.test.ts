@@ -21,7 +21,7 @@
 // by Nxe5 works only if Black's bishop on d6 is defended" at move two.
 import { describe, it, expect, beforeAll } from 'vitest';
 import { Chess } from 'chess.js';
-import { noteAtPosition } from './danyaTeachingService';
+import { noteAtPosition, teachingSourceForBoard, teachingFactLine } from './danyaTeachingService';
 import { noteArrowSourceAt } from './openingGenerator';
 import { loadFullCorpus } from '../test/loadFullCorpus';
 import repertoireRaw from '../data/repertoire.json';
@@ -67,12 +67,14 @@ function notePositionFen(lineSan: readonly string[]): string | null {
 }
 
 describe('note selection is position-determined', () => {
+  // 120s: the helper parses ~37 MB of corpus JSON and builds the transposition
+  // index in one synchronous pass. Heavy, deliberately — see loadFullCorpus.
   beforeAll(() => {
     // Two of the four corpora are fetched at runtime, so without this the whole
     // suite would pass while exercising a fifth of the data.
     const total = loadFullCorpus().reduce((n, c) => n + c.notes, 0);
     expect(total).toBeGreaterThan(46_000);
-  });
+  }, 120_000);
 
   it('never selects a note authored at a different position', () => {
     const offences: string[] = [];
@@ -137,4 +139,87 @@ describe('note selection is position-determined', () => {
       `${offences.length} of ${spliced} splices were about a DIFFERENT position`,
     ).toEqual([]);
   }, 300_000);
+});
+
+// ── THE SAME RULE, EVERYWHERE ELSE THE CORPUS IS SPOKEN ────────────────────
+//
+// The walkthrough splice was the loudest instance, not the only one. Three
+// other surfaces — the Learn facts package and the play-out narration
+// (`CoachTeachPage`), and the deliberation reader (`thinkAloud`) — called
+// `teachingNoteForBoard` and announced every result as "Coaching note for THIS
+// position", while that selector could also return a note borrowed from
+// another opening's matching structure, or a general principle attached to no
+// position at all. The note was fine; the CLAIM wrapped around it was false,
+// and the model phrased the claim.
+//
+// The fix is provenance in the package: `teachingSourceForBoard` says WHERE the
+// note came from, and `teachingFactLine` writes the label. These pin both ends.
+describe('teaching notes carry honest provenance', () => {
+  beforeAll(() => {
+    loadFullCorpus();
+  }, 120_000);
+
+  it('only calls a note "position" when it was authored at that position', () => {
+    const offences: string[] = [];
+    let claimed = 0;
+
+    for (const entry of REPERTOIRE) {
+      if (!entry.pgn) continue;
+      for (const step of walk(entry.pgn)) {
+        const source = teachingSourceForBoard(step.prefix, step.fen, entry.name);
+        if (source?.origin !== 'position') continue;
+        claimed += 1;
+        if (notePositionFen(source.note.lineSan) !== normFen(step.fen)) {
+          offences.push(`${entry.name} ply ${step.prefix.length} → ${source.note.id}`);
+        }
+      }
+    }
+
+    expect(claimed).toBeGreaterThan(0);
+    expect(offences.slice(0, 10), `${offences.length} notes labelled 'position' were authored elsewhere`).toEqual([]);
+  }, 300_000);
+
+  it('labels a borrowed note as borrowed, never as this board', () => {
+    const chess = new Chess();
+    for (const san of ['e4', 'e5', 'Nf3', 'Nc6']) chess.move(san);
+    const note = { id: 'x', lineSan: ['d4', 'd5'], opening: null, phase: 'middlegame' as const,
+      explains: 'The isolated pawn gives space.', teaches: '', plans: '', concepts: [], sources: [] };
+
+    // Every non-position origin must SAY it is not describing this board — that
+    // sentence is the whole mechanism, so assert the disclaimer, not the wording.
+    for (const origin of ['structure', 'concept'] as const) {
+      const line = teachingFactLine({ note, origin });
+      expect(line, `${origin} must disclaim`).toMatch(/NOT a (?:description of this board|claim about this board)/i);
+    }
+    expect(teachingFactLine({ note, origin: 'position' })).toContain('THIS position');
+  });
+
+  it('no surface writes a position claim around an unprovenanced note', async () => {
+    // A static guard, because this defect is invisible at runtime: the prose
+    // reads perfectly and the board never contradicts a hypothetical. A file
+    // that pairs the un-provenanced selector with the word "position" has
+    // reintroduced exactly the bug (2026-08-04).
+    const { readFileSync, readdirSync, statSync } = await import('node:fs');
+    const { join } = await import('node:path');
+    const offenders: string[] = [];
+    const walkDir = (dir: string): void => {
+      for (const name of readdirSync(dir)) {
+        const p = join(dir, name);
+        if (statSync(p).isDirectory()) { walkDir(p); continue; }
+        if (!/\.(ts|tsx)$/.test(p) || /\.test\.tsx?$/.test(p)) continue;
+        if (p.endsWith('danyaTeachingService.ts')) continue; // where both live
+        const src = readFileSync(p, 'utf8');
+        if (!src.includes('teachingNoteForBoard(')) continue;
+        // Strip comments so the explanatory prose above a correct call site
+        // (there is plenty) cannot trip this.
+        const code = src.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/^\s*\/\/.*$/gm, ' ');
+        if (/teachingNoteForBoard\(/.test(code) && /position/i.test(code)) offenders.push(p);
+      }
+    };
+    walkDir('src');
+    expect(
+      offenders,
+      'use teachingSourceForBoard + teachingFactLine so the label matches the note\'s origin',
+    ).toEqual([]);
+  });
 });

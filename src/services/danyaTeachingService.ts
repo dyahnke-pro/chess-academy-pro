@@ -379,13 +379,33 @@ export function noteAtPosition(
  *  TRANSFER — a note from any opening whose taught structure matches this
  *  board and whose claims are true on it. Selection + verification in code;
  *  the note rides in the GROUNDED FACTS the model must voice (G0). */
-export function teachingNoteForBoard(
+/** WHERE a teaching note came from — and therefore what a caller is allowed to
+ *  say about it.
+ *
+ *  This exists because three surfaces were labelling every note "Coaching note
+ *  for THIS position" while `teachingNoteForBoard` could return a note borrowed
+ *  from another opening or a general principle attached to no position at all.
+ *  The note was fine; the CLAIM around it was false, and the model faithfully
+ *  phrased the claim. Handing the origin along with the note is what makes an
+ *  honest label possible (David 2026-08-04: "not handing the correct package to
+ *  the llm and letting it hallucinate"). */
+export type TeachingOrigin = 'position' | 'opening-family' | 'structure' | 'concept';
+
+export interface TeachingSource {
+  note: DanyaNote;
+  origin: TeachingOrigin;
+}
+
+/** The note, WITH its provenance. Prefer this over `teachingNoteForBoard`
+ *  anywhere the note is described to the model or the student — see
+ *  `teachingFactLine`. */
+export function teachingSourceForBoard(
   historySans: string[],
   fen: string,
   openingName?: string | null,
-): DanyaNote | null {
+): TeachingSource | null {
   const exact = noteAtPosition(historySans, fen, openingName);
-  if (exact) return exact;
+  if (exact) return { note: exact, origin: 'position' };
   // GAP TIER — an opening the primary corpus never covers still gets a note in
   // the FACTS PACKAGE, so the coach can teach its ideas instead of going quiet.
   //
@@ -401,6 +421,15 @@ export function teachingNoteForBoard(
   // opening name is what reaches them. Callers that already know it pass it;
   // for the rest it is derived here from the move history, so every existing
   // facts-package call site gains gap coverage without being rewired.
+  // GAP TIER — teaching for an opening the primary corpus never covers (David
+  // 2026-08-01: "I want the notes to be able to cover gaps in any masterclass or
+  // Danya openings we teach"). Selected by opening NAME, so it is teaching about
+  // the OPENING, not about this board — which is exactly what `origin` records.
+  // It used to be returned indistinguishable from an exact-position note, and
+  // every caller then announced it as "Coaching note for THIS position". The
+  // teaching was never the problem; the claim wrapped around it was. Callers
+  // that SPEAK a note about the current move take `origin === 'position'` only;
+  // a facts package may carry this one, labelled.
   const resolvedOpening = openingName ?? (() => {
     try { return detectOpening(historySans)?.name ?? null; } catch { return null; }
   })();
@@ -410,13 +439,15 @@ export function teachingNoteForBoard(
     maxNotes: 1,
     accept: (n) => !noteOpeningConflicts(n.opening, resolvedOpening),
   })[0];
-  if (support) return support;
+  if (support) return { note: support, origin: 'opening-family' };
   // STRUCTURE TRANSFER is deliberately cross-opening (a note from anywhere whose
-  // structure provably matches this board), so the tag check does not apply —
-  // its licence to borrow is the proven structure match plus the live-board
-  // claim filter inside `notesForStructure`.
+  // structure provably matches this board), so no tag check applies — its
+  // licence to borrow is the proven signature match plus the live-board claim
+  // filter inside `notesForStructure`. It is honest teaching about a DIFFERENT
+  // position, which is why it carries `origin: 'structure'` and must never be
+  // announced as a fact about this board.
   const transferred = notesForStructure(fen)[0];
-  if (transferred) return transferred;
+  if (transferred) return { note: transferred, origin: 'structure' };
   // CONCEPT TIER — last, because it is the least specific: teaching about this
   // KIND of position rather than this one. It earns its place at the end of the
   // chain because the alternative here is silence, and a rook endgame where the
@@ -429,7 +460,44 @@ export function teachingNoteForBoard(
   // the ideas, the model only phrases the note (G0).
   const derived = boardConcepts(fen);
   if (!derived) return null;
-  return conceptNotesFor({ phase: derived.phase, concepts: derived.concepts, limit: 1 })[0] ?? null;
+  const concept = conceptNotesFor({ phase: derived.phase, concepts: derived.concepts, limit: 1 })[0];
+  return concept ? { note: concept, origin: 'concept' } : null;
+}
+
+/** The note alone, for callers that only need the text and make no claim about
+ *  where it came from. If you are about to write the word "position" next to the
+ *  result, use `teachingSourceForBoard` + `teachingFactLine` instead. */
+export function teachingNoteForBoard(
+  historySans: string[],
+  fen: string,
+  openingName?: string | null,
+): DanyaNote | null {
+  return teachingSourceForBoard(historySans, fen, openingName)?.note ?? null;
+}
+
+/**
+ * The note rendered as ONE grounded fact, labelled with what it actually is.
+ *
+ * Every caller used to write "Coaching note for THIS position: …" regardless of
+ * where the note came from, so a principle about rook endgames in general, or a
+ * note borrowed from another opening because the structures match, reached the
+ * model as an assertion about the board in front of the student. The model then
+ * phrased the assertion — correctly, from its point of view. Stating the
+ * provenance is what makes that impossible, and it belongs here rather than at
+ * each call site so the three surfaces cannot drift apart again.
+ */
+export function teachingFactLine(source: TeachingSource): string {
+  const beat = teachingBeatText(source.note);
+  switch (source.origin) {
+    case 'position':
+      return `Coaching note taught at THIS position: ${beat}`;
+    case 'opening-family':
+      return `Teaching about this OPENING in general, NOT a claim about this board: ${beat}`;
+    case 'structure':
+      return `Teaching from a DIFFERENT position with the same pawn structure — an analogy, NOT a description of this board: ${beat}`;
+    case 'concept':
+      return `A general principle for this KIND of position, not a claim about this board: ${beat}`;
+  }
 }
 
 /** Opening-keyed notes by (fuzzy-tokenized) opening name. "Caro-Kann Defense:
@@ -501,21 +569,38 @@ export function planNoteForPath(historySans: string[], fen?: string): DanyaNote 
  *       apply (the structure family is what he teaches from).
  *  Board-false specifics in a family-level note are dropped downstream by the
  *  per-sentence spoken gate; the structural teaching survives. */
-export function transitionTeachingForGame(args: {
+export type TransitionOrigin = 'position' | 'recent-path' | 'opening-family' | 'structure';
+
+export interface TransitionTeaching {
+  note: DanyaNote;
+  origin: TransitionOrigin;
+}
+
+/** The transition teaching WITH its provenance — which decides how much of the
+ *  note may be spoken.
+ *
+ *  Only tier 1 is authored at the board the student is looking at. The caller
+ *  used to speak every tier's `explains` + `teaches` + `plans` verbatim into the
+ *  transition sentence, so a family-level note's description of ITS position was
+ *  narrated as a description of THIS one. `plans` is the exception and the
+ *  reason the lower tiers still earn their place: it is forward-looking — where
+ *  this kind of position is heading — which stays true when borrowed. See
+ *  `usePhaseNarration`, which speaks the full ritual only for `'position'`. */
+export function transitionTeachingSourceForGame(args: {
   historySans: string[];
   fen?: string;
   openingName?: string | null;
-}): DanyaNote | null {
+}): TransitionTeaching | null {
   const exact = args.fen ? notesForFen(args.fen).find((n) => n.plans?.trim()) : undefined;
-  if (exact) return exact;
+  if (exact) return { note: exact, origin: 'position' };
   const recent = notesForPrefix(args.historySans, Infinity, 12).find((n) => n.plans?.trim());
-  if (recent) return recent;
+  if (recent) return { note: recent, origin: 'recent-path' };
   if (args.openingName) {
     const family = notesForOpening(args.openingName)
       .filter((n) => n.phase === 'middlegame' && n.plans?.trim());
     // Deepest-keyed first — the most specific middlegame teaching for the family.
     family.sort((a, b) => b.lineSan.length - a.lineSan.length);
-    if (family[0]) return family[0];
+    if (family[0]) return { note: family[0], origin: 'opening-family' };
   }
   // 4. GAP TIER — the transition ritual on an opening the primary corpus never
   //    covers. Ahead of structure transfer for the reason given on
@@ -527,16 +612,26 @@ export function transitionTeachingForGame(args: {
       openingName: args.openingName,
       maxNotes: 4,
     }).find((n) => n.plans?.trim());
-    if (support) return support;
+    if (support) return { note: support, origin: 'opening-family' };
   }
   // 5. STRUCTURE TRANSFER — teaching from ANY opening whose structure provably
   //    matches this board (and whose claims survive the live truth filter), so
   //    past book the transition teaching no longer goes quiet.
   if (args.fen) {
     const transferred = notesForStructure(args.fen).find((n) => n.plans?.trim());
-    if (transferred) return transferred;
+    if (transferred) return { note: transferred, origin: 'structure' };
   }
   return null;
+}
+
+/** Back-compat shim for callers that need only the note. Anything that SPEAKS
+ *  the note must use `transitionTeachingSourceForGame` and honour the origin. */
+export function transitionTeachingForGame(args: {
+  historySans: string[];
+  fen?: string;
+  openingName?: string | null;
+}): DanyaNote | null {
+  return transitionTeachingSourceForGame(args)?.note ?? null;
 }
 
 /** Render notes as a compact system-prompt grounding block (the slot the

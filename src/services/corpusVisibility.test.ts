@@ -18,9 +18,11 @@ import { secondaryCorpusStats } from './secondaryCorpora';
 import { danyaCorpusStats } from './danyaTeachingService';
 
 describe('teaching corpus visibility', () => {
+  // 120s: the helper parses ~37 MB of corpus JSON and builds the transposition
+  // index in one synchronous pass. Heavy, deliberately — see loadFullCorpus.
   beforeAll(() => {
     loadFullCorpus();
-  });
+  }, 120_000);
 
   it('sees all four corpora, with counts matching the files on disk', () => {
     const secondary = secondaryCorpusStats();

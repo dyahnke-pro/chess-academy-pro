@@ -98,7 +98,12 @@ describe('gap tier reaches the packages the coach hands the LLM', () => {
       openingName: 'Sicilian Taimanov',
       fen: fenAfter(TAIMANOV),
     });
-    expect(block).toContain('TEACHING CONTEXT');
+    // The header says LESSON BACKGROUND, not "teaching context for this
+    // position" (2026-08-04). This block mixes opening-level notes with
+    // position-keyed ones, and the old wording invited the model to write any
+    // of them up as a fact about the board in front of the student.
+    expect(block).toContain('LESSON BACKGROUND');
+    expect(block).toContain('NOT claims about the current position');
     expect(block.length).toBeGreaterThan(80);
   });
 
