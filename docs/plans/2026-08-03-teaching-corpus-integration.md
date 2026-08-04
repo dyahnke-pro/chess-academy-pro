@@ -235,6 +235,72 @@ start — tune from Phase 0.
 
 ### Phase 3 — TACTICS — `pending`
 
+**🚨 CORRECTION (David 2026-08-04, from his two screenshots): there are TWO
+tactics surfaces with DIFFERENT registers. My earlier single "tactic" register
+was wrong.**
+
+| surface | source | register | note timing |
+|---|---|---|---|
+| `TacticDrillPage` ("Find the Mate") | random Lichess puzzles | **R4** present, pattern-naming | **after** resolve only (spoiler) |
+| `MistakePuzzleBoard` | **HIS OWN GAME** | **R1** past, retrospective | **BEFORE** the attempt — it's orientation, not a spoiler |
+
+David: *"Tactics just need a solid analysis of the stale position. Maybe include
+the moves that played out before to summarize where the user 'stood in the game'
+— winning/losing/critical moment analysis. From your mistakes and calculations."*
+
+He's right, and it changes the design: a mistake puzzle is a **fragment of his
+own game shown with zero memory of how he got there**. Telling him "you were +2
+and about to convert" does NOT reveal the move — so unlike a pattern note, the
+orientation can and should fire BEFORE the attempt.
+
+#### What his screenshot actually shows (diagnosed in code)
+
+Spoken line: *"Uh oh — Ng5 dropped about 3.5 pawns — a serious swing. Find the
+right move. Middlegame positions require checking for checks, captures, and
+threats on every move."* / `Move 30 • 350cp loss`.
+
+Three defects, all confirmed in `src/services/mistakeNarration.ts`:
+
+- **M1 — the "where you stood" clause is gated behind the wrong field.**
+  `buildContextSentence` (line 56) returns `''` unless `opponentName` **or**
+  `gameDate` is set (line 71). The eval clause — `advantageText(evalBefore)`,
+  the ONE sentence that says whether he was winning — is appended *inside* that
+  block (line 78). So a puzzle with a known `evalBefore` but no opponent
+  metadata silently drops the standing. That's his screenshot: no context
+  sentence at all. **Eval context must not depend on opponent metadata.**
+- **M2 — the tail is a hardcoded generic pool.** `PHASE_CONTEXT` (line 279) is
+  3 fixed strings per phase; "Middlegame positions require checking for checks,
+  captures, and threats…" is literally string #2. It is identical on every
+  middlegame puzzle forever, names no square and no piece, and violates
+  narration rules #1 (concrete over generic) and #6 (no meta). **Delete the
+  pool**; replace with a board-computed read, silent when there's nothing
+  concrete to say (empty > generic).
+- **M3 — nothing walks the preceding moves.** `MistakePuzzle.moves` is the
+  FORWARD solution line, not the game history. The history is reachable —
+  `sourceGameId` → the `games` record — but no code follows it. So "how you got
+  here" is currently unknowable to the narration even though the data is one
+  join away.
+
+#### The fix: a stale-position orientation
+
+New leaf `src/services/mistakeOrientation.ts`, register **R1 (past,
+retrospective, 2nd person)**, built from data already on the puzzle + its source
+game:
+
+1. **Where you stood** — `evalBefore` → winning / better / level / worse /
+   lost, stated unconditionally (kills M1).
+2. **How you got here** — the last few plies from the source game + the opening
+   name: the short story of the position, not a move list.
+3. **Why this is the moment** — the eval swing across this ply (`evalBefore` vs
+   `cpLoss`) framed as the critical moment: *"this was the ply the game turned."*
+4. **What the position is** — board-computed structural read (replaces M2's
+   generic pool) + a corpus note via `corpusNoteFacts(register: 'review')`.
+
+None of 1-4 names the best move, so none is a spoiler. The move-level teaching
+still waits for the attempt to resolve.
+
+#### Build order for this phase
+
 Order matters: **fix the surface, then teach on it.**
 
 1. **T2 viewport probe** → confirm/deny the below-the-fold diagnosis.
@@ -245,8 +311,42 @@ Order matters: **fix the surface, then teach on it.**
    Silent when no note survives the gates — a puzzle with no teaching note is a
    puzzle that simply ends.
 
-Puzzle themes give a strong retrieval key here — the concept tier
-(`conceptNotesFor`) is the natural first hop for tactics, not the position tier.
+Puzzle themes give a strong retrieval key for the RANDOM puzzles — the concept
+tier (`conceptNotesFor`) is the natural first hop there, not the position tier.
+Mistake puzzles are the opposite: they carry a real opening + real history, so
+the position/support tiers apply.
+
+---
+
+## 3b. "Is walkthrough the same as teach-me-X?" — NO. Three engines, one word.
+
+David: *"walkthrough is the same as teach x opening isn't it? Because teach me x
+is working perfectly!"*
+
+They are different code paths, and **that is exactly why teach-me-X feels
+right and the others don't** — teach-me-X is the only one with the corpus.
+
+| what the user does | engine | corpus? |
+|---|---|---|
+| `/coach/teach` → "teach me the Caro-Kann" | `useTeachWalkthrough` → **`generateOpeningFromDbNarration`** (`openingGenerator.ts`) | ✅ spliced (`noteAtPosition`, tier 1) |
+| opening detail → **Watch**, opening HAS a `LessonScript` | curated `LessonPlayer` (hand-authored beats) | ❌ none — beats are static |
+| opening detail → **Watch**, opening has NO `LessonScript` | legacy `WalkthroughMode` + `src/data/annotations/` | ❌ none, and the annotations are the ungated auto-generated swamp (G9.3 Gate A) |
+
+So "walkthrough" names three different things in this app. The one David says
+works perfectly is the DB-narration engine **with corpus notes spliced in** —
+which is the strongest single piece of evidence in this plan that the corpus is
+what makes a surface feel taught rather than described.
+
+Consequences for the plan:
+- **Phase 6's target is the teach engine's splice** (upgrade tier-1-only
+  `noteAtPosition` → the full tiered seam). That path already works; this makes
+  it work on the ~7 of 10 plies it currently goes quiet on.
+- **Curated `LessonScript` beats stay hand-authored** — do NOT splice corpus
+  notes into them at runtime. They're already reviewed and gated; runtime
+  splicing could only drift them (same reasoning as the Tier-1 baked-narration
+  rule). The corpus improves those at BAKE time, not at read time.
+- The legacy `WalkthroughMode` path is a pre-existing G9.3 Gate A defect, not a
+  corpus problem. Out of scope here; noted so it isn't confused with one.
 
 ### Phase 4 — READ THIS POSITION — `pending`
 
