@@ -1845,32 +1845,51 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     try {
       const fresh = await getCachedOpening(tree.openingName);
       if (!fresh) return;
-      // Only merge if the cache has data we don't.
-      const haveConcepts = (tree.concepts?.length ?? 0) > 0;
-      const haveFindMove = (tree.findMove?.length ?? 0) > 0;
-      const haveDrill = (tree.drill?.length ?? 0) > 0;
-      const havePunish = (tree.punish?.length ?? 0) > 0;
-      const cacheConcepts = (fresh.concepts?.length ?? 0) > 0;
-      const cacheFindMove = (fresh.findMove?.length ?? 0) > 0;
-      const cacheDrill = (fresh.drill?.length ?? 0) > 0;
-      const cachePunish = (fresh.punish?.length ?? 0) > 0;
-      if (
-        (cacheConcepts && !haveConcepts) ||
-        (cacheFindMove && !haveFindMove) ||
-        (cacheDrill && !haveDrill) ||
-        (cachePunish && !havePunish)
-      ) {
+      // Merge a stage when the CACHE has one the student could actually be
+      // shown and the running tree does not.
+      //
+      // This asked `length > 0` on both sides until 2026-08-04, which was the
+      // THIRD place that mistook "the array is non-empty" for "the stage
+      // exists" — and the one that survived the first fix. A tree holding a
+      // non-empty but entirely UNSTARTABLE punish array counted as "already
+      // have it", so freshly regenerated, perfectly good lessons were refused
+      // (`cachePunish && !havePunish` → false), the tree never changed, and a
+      // parked stage jump waited forever on a merge that was being declined
+      // every poll. Found on prod: the transcript said "Punish (trap) lessons
+      // just loaded" while the surface sat on "Hang tight…".
+      //
+      // Usability is the only sane test here: replacing broken entries with
+      // working ones is exactly what this merge is for.
+      const upgrade = (s: StageKind): boolean =>
+        stageArrayHasUsableEntry(s, fresh[s]) && !stageArrayHasUsableEntry(s, tree[s]);
+      const takeConcepts = upgrade('concepts');
+      const takeFindMove = upgrade('findMove');
+      const takeDrill = upgrade('drill');
+      const takePunish = upgrade('punish');
+      const upgradable = [
+        takeConcepts && 'concepts',
+        takeFindMove && 'findMove',
+        takeDrill && 'drill',
+        takePunish && 'punish',
+      ].filter(Boolean);
+      if (upgradable.length > 0) {
         setTree((prev) =>
           prev
             ? {
                 ...prev,
-                concepts: cacheConcepts ? fresh.concepts : prev.concepts,
-                findMove: cacheFindMove ? fresh.findMove : prev.findMove,
-                drill: cacheDrill ? fresh.drill : prev.drill,
-                punish: cachePunish ? fresh.punish : prev.punish,
+                concepts: takeConcepts ? fresh.concepts : prev.concepts,
+                findMove: takeFindMove ? fresh.findMove : prev.findMove,
+                drill: takeDrill ? fresh.drill : prev.drill,
+                punish: takePunish ? fresh.punish : prev.punish,
               }
             : prev,
         );
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'useTeachWalkthrough.mergeStagesFromCache',
+          summary: `merged usable stages from cache: ${upgradable.join(', ')}`,
+        });
       }
     } catch {
       // Cache fetch failures are non-fatal; user just sees what they had.

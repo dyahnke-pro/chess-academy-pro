@@ -88,3 +88,44 @@ describe('getMissingStages agrees with the stage menu', () => {
     );
   });
 });
+
+// The THIRD instance of the same mistake, caught on prod after the first fix
+// shipped (2026-08-04). getMissingStages and the stage menu had been brought
+// into agreement, so the punish stage correctly regenerated and merged into the
+// cache — the transcript even said "Punish (trap) lessons just loaded" — but
+// the surface stayed on "Hang tight…". `mergeStagesFromCache` was deciding
+// whether to pull the cache's stage into the running tree with its OWN
+// `length > 0` test, so a tree holding a non-empty-but-unstartable array read
+// as "already have it" and the good lessons were refused every poll.
+//
+// The rule this pins: the merge must upgrade on USABILITY, because replacing
+// broken entries with working ones is the entire point of it.
+describe('cache merge upgrades on usability, not on length', () => {
+  const cacheHasGood = [startableLesson()];
+  const treeHasBroken = [unstartableLesson()];
+
+  /** The decision `mergeStagesFromCache` makes, in isolation. */
+  const shouldUpgrade = (fresh: PunishLesson[], current: PunishLesson[]): boolean =>
+    stageArrayHasUsableEntry('punish', fresh) && !stageArrayHasUsableEntry('punish', current);
+
+  it('upgrades when the cache has a startable lesson and the tree does not', () => {
+    expect(shouldUpgrade(cacheHasGood, treeHasBroken)).toBe(true);
+  });
+
+  it('does not churn when the tree already has a startable lesson', () => {
+    expect(shouldUpgrade(cacheHasGood, [startableLesson()])).toBe(false);
+  });
+
+  it('never downgrades a working stage to a broken one', () => {
+    expect(shouldUpgrade(treeHasBroken, [startableLesson()])).toBe(false);
+  });
+
+  it('the old length test is what got this wrong — proof', () => {
+    const lengthTest = (fresh: PunishLesson[], current: PunishLesson[]): boolean =>
+      fresh.length > 0 && !(current.length > 0);
+    // Same inputs, opposite answers. The length test refuses the upgrade that
+    // unblocks the student; that refusal was the hang.
+    expect(lengthTest(cacheHasGood, treeHasBroken)).toBe(false);
+    expect(shouldUpgrade(cacheHasGood, treeHasBroken)).toBe(true);
+  });
+});
