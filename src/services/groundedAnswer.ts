@@ -979,7 +979,23 @@ export function quietPurposePhrase(
       try { return b.attackers(s as Square, mc).includes(mv.to); } catch { return false; }
     });
     if (eyes.length > 0) {
-      return `develops the ${REVIEW_PIECE_NAME[mv.piece]} to ${mv.to}, eyeing ${eyes.slice(0, 2).join(' and ')}`;
+      // A KING never "develops" — development is about bringing pieces off the
+      // back rank into the game, which is the one thing a king is not doing.
+      // Marching it toward the centre is ACTIVATION, and it is an endgame idea
+      // (narration rule #1: say the thing that is actually true of the board).
+      // Without this the mistake narration produced "It develops the king to
+      // g5" on a bare K+N endgame — David's logged Kg3 puzzle.
+      if (mv.piece === 'k') {
+        return `brings the king to ${mv.to}, where it covers ${eyes.slice(0, 2).join(' and ')}`;
+      }
+      // DEVELOPMENT means coming off the back rank. A piece already in play
+      // that merely improves is being REPOSITIONED, and calling that
+      // "developing" is false on the board — the queen on a4 swinging to b5 was
+      // narrated as "develops the queen to b5". Same class as the king fix
+      // above: say what the move actually is.
+      const homeRank = mc === 'w' ? '1' : '8';
+      const verb = mv.from[1] === homeRank ? 'develops' : 'repositions';
+      return `${verb} the ${REVIEW_PIECE_NAME[mv.piece]} to ${mv.to}, eyeing ${eyes.slice(0, 2).join(' and ')}`;
     }
     return null;
   } catch {

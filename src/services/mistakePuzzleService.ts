@@ -3,6 +3,7 @@ import { db } from '../db/schema';
 import { createDefaultSrsFields, calculateNextInterval } from './srsEngine';
 import { stockfishEngine } from './stockfishEngine';
 import { generateMistakeNarration } from './mistakeNarration';
+import { voiceMistakeNarration } from './mistakeNarrationVoice';
 import { detectTacticType } from './missedTacticService';
 import { tacticTypeLabel } from './tacticAlertService';
 import { getOpeningNameByEco } from './openingDetectionService';
@@ -441,7 +442,7 @@ async function analyzeGameWithStockfish(
       : -evalBefore / 100;
 
     const movesUci = pvMoves.join(' ');
-    const narration = generateMistakeNarration({
+    const narrationParams = {
       classification,
       gamePhase,
       playerMoveSan,
@@ -453,7 +454,14 @@ async function analyzeGameWithStockfish(
       gameDate: gameContext.gameDate,
       openingName: gameContext.openingName,
       evalBefore: evalBeforeFromPlayer,
-    });
+    };
+    // PASS 1 computes the facts (distilled note first, board read behind it);
+    // PASS 2 hands them to the phrasing model through the one grounding
+    // chokepoint. A phrasing failure returns PASS 1 unchanged.
+    const narration = await voiceMistakeNarration(
+      generateMistakeNarration(narrationParams),
+      narrationParams,
+    );
 
     // Store annotation for the game record. Centipawns, White POV —
     // same contract as gameAnalysisService (legacy `/ 100` storage
@@ -662,7 +670,7 @@ async function generateFromAnnotations(
       }
     }
 
-    const narration = generateMistakeNarration({
+    const narrationParams = {
       classification,
       gamePhase,
       playerMoveSan,
@@ -674,7 +682,11 @@ async function generateFromAnnotations(
       gameDate: gameContext.gameDate,
       openingName: gameContext.openingName,
       evalBefore: evalBeforeFromPlayer,
-    });
+    };
+    const narration = await voiceMistakeNarration(
+      generateMistakeNarration(narrationParams),
+      narrationParams,
+    );
 
     puzzles.push({
       id: generateId(),

@@ -19,6 +19,14 @@ import type { MoveAnnotation } from '../types';
 // developing-move bestMoves which would otherwise classify as
 // tactical_sequence and be filtered out. Force a tactical type so the
 // fixtures land as puzzles.
+// The narration's PHRASING pass is an LLM round-trip. Left real, these specs
+// make live provider calls — slow, non-deterministic, and dependent on a key
+// being present in the environment. The computed facts (PASS 1) are what this
+// service is responsible for; the phrasing pass has its own module and gates.
+vi.mock('./mistakeNarrationVoice', () => ({
+  voiceMistakeNarration: vi.fn(async (narration: unknown) => narration),
+}));
+
 vi.mock('./missedTacticService', async () => {
   const actual = await vi.importActual<typeof import('./missedTacticService')>(
     './missedTacticService',
