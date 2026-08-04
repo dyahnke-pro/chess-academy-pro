@@ -252,27 +252,39 @@ teaching source for teach-me-X. Evidence, two call sites in
   *"USE THE TEACHING ABOVE… Ground the PROSE in them; the move sequences still
   come from the database lines below."*
 
-So the grounding is **opening-level (6 notes keyed by spine + name)**, not
-per-ply. The 10.9% figure came from `noteAtPosition` per-ply exact-position
-hits — which in this file feed **`noteArrowSourceAt` (`:1009`), the ARROW
-grounding**, deciding which squares get green vision arrows. It is not a
-measure of whether the teaching came from the corpus. **Do not cite 10.9% as
-"corpus coverage."** Correct labels:
+So there are TWO corpus channels, and the first pass conflated them:
+
+- the **opening-level block** (6 notes keyed by spine + name) is ADVISORY
+  prompt context — the model is asked to write from it, and may not;
+- the **per-ply note** is the GUARANTEED channel. `noteArrowSourceAt` (`:1009`)
+  is spliced into the ply's spoken text in PASS 1, not only into the arrows.
+  The in-code comment says so: *"the teaching rides regardless of what the
+  model did with the advisory block."* As of 2026-08-04 that note also LEADS
+  the beat rather than trailing it.
+
+> ⚠️ A sibling session's first cut of this section said the per-ply note feeds
+> "arrow grounding" only. It feeds both — arrows AND the spliced teaching text.
+> That is precisely why the splice exists: the advisory block can be ignored,
+> the splice cannot.
+
+Correct labels — and note the baseline itself was wrong until re-measured
+(see the correction banner above §0's table):
 
 | number | what it actually is |
 |---|---|
-| 143/1310 (10.9%) | plies with an EXACT-position note → arrow grounding |
-| 922/1310 (70.4%) | plies reachable by the full tiered retrieval → arrow-grounding headroom |
-| opening-level block | the actual teaching source, present on every generated opening |
+| 143/1310 (10.9%) | plies with an EXACT-position note |
+| 444/1310 (**33.9%**) | **plies with a spliced note TODAY** — exact + support. The live number |
+| 922/1310 (70.4%) | ceiling if the opening-scoping rule were dropped. NOT a target |
+| opening-level block | advisory prompt grounding, present on every generated opening |
 
 **Two further corrections found while confirming:**
 
-1. **The CLAUDE.md "known gap" is at least partly closed already.**
+1. **The CLAUDE.md "known gap" is closed** (updated 2026-08-04).
    `noteArrowSourceAt` (`:1020-1021`) ALREADY does
    `noteAtPosition(...) ?? supportNoteForPly(...)`, with an in-code comment
-   dated David 2026-08-01. **Phase 6 was scoped against a stale premise —
-   re-read that function before touching it.** What remains unwired there is
-   the structure-transfer + concept tiers, not the support tier.
+   dated David 2026-08-01. **Phase 6 was scoped against a stale premise and is
+   now CANCELLED.** What remains unwired is structure transfer + the concept
+   tier — deliberately, so a named lesson stays scoped to its own opening.
 2. **Tier 2 baked narration bypasses the runtime path entirely** (`:1720`
    onward): a baked hit is final prose — no note splice, no reword. Openings
    with a bake are out of scope for any runtime splice work.
@@ -426,7 +438,7 @@ the position/support tiers apply.
 
 ---
 
-## 3b. "Is walkthrough the same as teach-me-X?" — NO. Three engines, one word.
+## 3b. "Is walkthrough the same as teach-me-X?" — in the coach tab, YES.
 
 David: *"walkthrough is the same as teach x opening isn't it? Because teach me x
 is working perfectly!"*
@@ -555,7 +567,7 @@ drill queue. Closes the loop instead of ending at the review screen.
 | | **teach-me-X** (`/coach/teach`) | **Watch** (opening detail) |
 |---|---|---|
 | engine | `generateOpeningFromDbNarration` | `LessonPlayer` (curated `LessonScript`) |
-| where the teaching comes from | **the corpus notes — primary source.** `buildDanyaTeachingBlock` (6 notes, opening-level) grounds the generation; the prose is written FROM them | **hand-authored beats**, written + reviewed + gated offline. No corpus at runtime |
+| where the teaching comes from | **the corpus notes — primary source**, on two channels: `buildDanyaTeachingBlock` (6 notes, opening-level) grounds the prompt ADVISORY, and the per-ply note is SPLICED into the beat and LEADS it (33.9% of plies) | **hand-authored beats**, written + reviewed + gated offline. No corpus at runtime |
 | moves | Lichess DB spine (G3) | the lesson's authored spine |
 | when it runs | at runtime, per request | pre-built, read from disk |
 | reach | any of ~3,000 DB openings | 125 curated (43 masterclass + 82 pro) |
@@ -571,12 +583,32 @@ Both are 100% narrated; neither has silent plies.
 
 ## 8. HANDOFF — start here
 
-**State:** plan + Phase 0 measurement are on `main` (`8122fd9`). **No product
-code has been written.** All four decisions are answered (§6).
+**State:** all four decisions are answered (§6). Phase 0 is done and
+re-measured. **Product code HAS landed** — see "Landed 2026-08-04" below.
 
 **Read in this order:** §0b (the corrected numbers — do not trust the 10.9%
-label from the first pass), §7 (the two paths), §2 (the register table), §3
-(the tactics defects), then the phases in §4.
+label from the first pass, and do not chase the 70.4%), §7 (the two paths),
+§2 (the register table), §3 (the tactics defects), then the phases in §4.
+
+### Landed 2026-08-04 (on `main`, ship-check green)
+
+- **The trap-stage hang is fixed.** `getMissingStages` and the stage menu now
+  share one definition of "this stage exists" (`services/stageEntryValidity`).
+  A stage that cannot be entered gets rebuilt; one that exhausts its attempts
+  says so instead of spinning. Gate: `stageEntryValidity.test.ts`.
+- **The corpus note LEADS every taught beat**, on the spine AND on branch /
+  extension beats (whose arrows were note-grounded while the prose never named
+  what they pointed at). `WALKTHROUGH_GEN_REV` bumped so cached trees
+  regenerate — without that, an already-taught opening keeps the old order.
+- **The uncurated Watch fallback hands off to `/coach/teach`** instead of the
+  ungated legacy walkthrough. Gate in `OpeningDetailPage.wiring.test.ts`.
+- **Phase 0 re-measured** with production semantics: 33.9%, not 10.9%.
+  **Phase 6 cancelled.**
+
+**Still open, needs David's call:** the 38 trap / warning lines that still
+render through `WalkthroughMode` (19 in `repertoire.json`, 19 on uncurated pro
+openings). Retiring the component means hand-authoring two-register narration
+per line — content work with a real cost, not a refactor.
 
 **Do first — the two tactics defects (§3). They are real, independent of the
 corpus, and need no Phase-0 gate:**
@@ -593,11 +625,8 @@ corpus, and need no Phase-0 gate:**
   filler pool (`:279`), and nothing walking the game history via
   `sourceGameId`.
 
-**Before touching Phase 6, re-verify its premise.** `noteArrowSourceAt`
-(`openingGenerator.ts:1009-1026`) already chains exact → support tier. Confirm
-what is actually missing (structure-transfer + concept tiers) before scoping
-the change — the plan's original framing was written against a stale
-CLAUDE.md note.
+**Then Phase 1** — the shared `corpusNoteFacts` seam — followed by Phases
+2 / 4 / 5 / 7. Phase 6 is cancelled; do not reopen it without David.
 
 **Still unmeasured (does not block anything above):** review's silent-ply rate
 via `generateReviewNarration` over the 646-game sweep, and corpus survivor rate
@@ -607,30 +636,5 @@ at those plies. The instrument to extend is
 
 **Process notes:** the pre-push `ship-check` hook takes ~6-7 minutes — budget
 for it rather than assuming a hung network. `--report-unused-disable-directives`
-turns an unused `eslint-disable` into a hard error.
-
----
-
-## 9. Next-session pickup
-
-**Landed 2026-08-04** (all on `main`, ship-check green):
-- The trap-stage hang — `getMissingStages` and the stage menu now share one
-  definition of "this stage exists" via `services/stageEntryValidity`. A stage
-  that cannot be entered gets rebuilt; one that exhausts its attempts says so
-  instead of spinning. Gate: `stageEntryValidity.test.ts`.
-- The corpus note now LEADS every taught beat, on the spine AND on branch /
-  extension beats. `WALKTHROUGH_GEN_REV` bumped so cached trees regenerate.
-- The uncurated Watch fallback hands off to `/coach/teach` instead of the
-  ungated legacy walkthrough. Gate in `OpeningDetailPage.wiring.test.ts`.
-- Phase 0 re-measured with production semantics (33.9%, not 10.9%); Phase 6
-  cancelled.
-
-**Next, in order:**
-1. **Phase 3 — tactics.** T1 (no auto-advance) and T2 (nav below the fold) are
-   confirmed defects, independent of the corpus. Then M1/M2/M3 on
-   `mistakeNarration` — all three verified in code, all still open.
-2. **Phase 1** — the shared `corpusNoteFacts` seam, then Phases 2 / 4 / 5 / 7.
-3. **Open, needs David's call:** the 38 trap / warning lines still rendering
-   through `WalkthroughMode` (19 in `repertoire.json`, 19 on uncurated pro
-   openings). Retiring the component means hand-authoring two-register
-   narration for each — content work with a real cost, not a refactor.
+turns an unused `eslint-disable` into a hard error. Parallel sessions edit this
+doc — `git fetch origin main` and check `HEAD..origin/main` before pushing.
