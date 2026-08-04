@@ -61,6 +61,7 @@ import { AnalysisToggles } from '../Board/AnalysisToggles';
 import { useChessGame, type MoveResult } from '../../hooks/useChessGame';
 import { usePositionNarration } from '../../hooks/usePositionNarration';
 import { useTeachWalkthrough, isStartablePunishLesson, isValidConceptsQuestion, isValidFindMoveQuestion, isValidDrillLine } from '../../hooks/useTeachWalkthrough';
+import { stageArrayHasUsableEntry } from '../../services/stageEntryValidity';
 import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
@@ -7278,11 +7279,20 @@ function WalkthroughControls({
     // stage merges and the Continue Learning button surfaces.
     if (!tree) return;
     if (phase !== 'stage-menu' && phase !== 'leaf') return;
+    // "Filled" means every stage has an entry the student could ACTUALLY be
+    // shown — not merely a non-empty array. This asked `length > 0` until
+    // 2026-08-04 and was the last of FOUR places making that mistake: a tree
+    // whose four stage arrays were non-empty but entirely unstartable read as
+    // fully filled, so this effect returned before starting the interval and
+    // mergeStagesFromCache was never polled at all. The freshly regenerated
+    // lessons sat in the cache while the surface showed "Loading trap lines…"
+    // forever. Caught on prod, not by unit tests — the arrays were populated,
+    // just useless.
     const allStagesFilled =
-      (tree.concepts?.length ?? 0) > 0 &&
-      (tree.findMove?.length ?? 0) > 0 &&
-      (tree.drill?.length ?? 0) > 0 &&
-      (tree.punish?.length ?? 0) > 0;
+      stageArrayHasUsableEntry('concepts', tree.concepts) &&
+      stageArrayHasUsableEntry('findMove', tree.findMove) &&
+      stageArrayHasUsableEntry('drill', tree.drill) &&
+      stageArrayHasUsableEntry('punish', tree.punish);
     if (allStagesFilled) return;
     // Immediate first read — picks up any stage that just merged
     // milliseconds before this effect ran.

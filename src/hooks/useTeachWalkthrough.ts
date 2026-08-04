@@ -1836,6 +1836,12 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
    *  the student opens the stage menu so background-completed stages
    *  appear as cards if they finished while the walkthrough played. */
   const mergeStagesFromCache = useCallback(async (): Promise<void> => {
+    // Read the tree from the REF, not the closure. `generateMissingStagesInBackground`
+    // captures its `onStageMerged` callback at submit time — when the walkthrough
+    // has not started and `tree` is still null — so a closure-read here made the
+    // post-merge refresh a guaranteed no-op ("Punish lessons just loaded" fired,
+    // nothing merged). The ref is always current whichever render's copy is called.
+    const tree = treeRef.current;
     if (!tree?.openingName) return;
     // Derived trees (punish one-shots) have a composite display name,
     // not a cache key — looking it up is a guaranteed miss that just
