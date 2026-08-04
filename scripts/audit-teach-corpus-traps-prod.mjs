@@ -7,11 +7,22 @@
  *
  * What it proves, one scenario per shipped change:
  *
- *  A. THE TRAP STAGE NO LONGER HANGS. "teach me the traps in the Vienna" must
- *     reach the punish stage (or say plainly that it has none) — never sit on
- *     the stage-menu loading state forever. That deadlock was the bug: the
- *     generator's length check and the stage menu's validity check disagreed,
- *     so a non-empty-but-unstartable punish array parked the jump for good.
+ *  A. THE TRAP STAGE NO LONGER HANGS. The ask must reach the punish stage (or
+ *     say plainly that it has none) — never sit on the stage-menu loading
+ *     state forever.
+ *
+ *     It drives DAVID'S EXACT WORDING, smart-quote and all: "Teach me trap
+ *     lines in bishop’s opening". That is not incidental — his device log is
+ *     what cracked this, and the phrasing is load-bearing. The stage-strip
+ *     removes "trap lines in ", the TEACH_PATTERN suffix group eats the
+ *     trailing "opening", and the iOS apostrophe survives, so the row gets
+ *     written under "bishop’s" while the resolved tree teaches "Bishop's
+ *     Opening". Retyping this as a tidy "the Vienna" hides the bug the audit
+ *     exists to catch.
+ *
+ *     Two defects stack here, both fixed: the generator's length check and the
+ *     stage menu's validity check disagreed about whether a stage existed, and
+ *     the cache row was written under one name and read back under another.
  *
  *  B. AN UNCURATED WATCH HANDS OFF TO THE COACH. Opening an ECO-tail opening's
  *     Watch must land on /coach/teach, NOT render the legacy walkthrough. The
@@ -158,7 +169,7 @@ async function main() {
     await input.waitFor({ state: 'visible', timeout: 20_000 });
     // pressSequentially, not fill — the React textarea needs real key events
     // or the send button stays disabled and the message never submits.
-    await input.pressSequentially('teach me the traps in the Vienna', { delay: 12 });
+    await input.pressSequentially('Teach me trap lines in bishop\u2019s opening', { delay: 12 });
     await page.keyboard.press('Enter');
 
     const deadline = Date.now() + STAGE_SETTLE_MS;
