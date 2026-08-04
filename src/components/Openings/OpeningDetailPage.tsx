@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { useParams, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
+import { useParams, useNavigate, useLocation, useSearchParams, Navigate } from 'react-router-dom';
 import { Chess } from 'chess.js';
 import { sanitizeForTTS, voiceService } from '../../services/voiceService';
 import { generateWalkthroughNarrations } from '../../services/walkthroughLlmNarrator';
@@ -808,14 +808,25 @@ export function OpeningDetailPage(): JSX.Element {
       );
     }
   }
+  // NO CURATED LESSON FOR THIS WATCH — hand off to the coach instead of the
+  // legacy walkthrough (David 2026-08-04).
+  //
+  // Every masterclass and pro opening HAS a LessonScript (43/43 + 82/82, and
+  // 318/318 + 285/285 variations), so the only openings reaching here are the
+  // ~3,300 raw ECO rows `dataLoader` seeds into `db.openings`. `WalkthroughMode`
+  // narrated those from `src/data/annotations/` — LLM-bulk-generated text that
+  // is never board-checked, and the source of the "Bg5 pins the knight" claim
+  // on a board with no knight (G9.3). `generateOpeningFromDbNarration` teaches
+  // the same opening with DB moves, board-graded prose and note-grounded
+  // arrows, so the coach is strictly the better answer for an unbuilt opening —
+  // and it is the hand-off `/coach/session/walkthrough` already makes.
   if (viewMode === 'walkthrough' || viewMode === 'variation-walkthrough') {
-    return (
-      <WalkthroughMode
-        opening={opening}
-        variationIndex={viewMode === 'variation-walkthrough' ? activeVariationIndex : undefined}
-        onExit={handleExit}
-      />
-    );
+    const variation =
+      viewMode === 'variation-walkthrough' ? opening.variations?.[activeVariationIndex] : undefined;
+    const teachName = variation?.name ?? opening.name;
+    const params = new URLSearchParams({ teach: teachName, auto: '1', oid: opening.id });
+    if (opening.eco) params.set('eco', opening.eco);
+    return <Navigate to={`/coach/teach?${params.toString()}`} replace />;
   }
 
   // Named-trap masterclass lesson (hand-authored show -> snap-back beats,

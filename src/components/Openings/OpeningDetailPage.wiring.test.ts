@@ -45,3 +45,36 @@ describe('OpeningDetailPage live-wiring — masterclass sections are mounted', (
     expect(source.includes('<ModelGameViewer')).toBe(true);
   });
 });
+
+// The Watch rung must never fall back to legacy WalkthroughMode (G9.3 Gate A).
+//
+// That component narrates from `src/data/annotations/` — LLM-bulk-generated
+// text that is never board-checked, and the source of the "Bg5 pins the knight"
+// claim on a board with no knight. Every masterclass and pro opening now has a
+// curated LessonScript, so the only openings that could reach the fallback are
+// raw ECO rows; those hand off to the coach's DB-narration engine instead.
+//
+// WalkthroughMode is still legitimately mounted for the ~38 trap / warning
+// lines that have no curated trap lesson yet — so this gate is deliberately
+// narrow: it pins the MAIN and VARIATION Watch branches, not the whole file.
+describe('OpeningDetailPage — Watch never falls back to the ungated walkthrough', () => {
+  it('routes an uncurated main/variation Watch to the coach, not <WalkthroughMode>', () => {
+    const branch = source.slice(
+      source.indexOf("if (viewMode === 'walkthrough' || viewMode === 'variation-walkthrough')"),
+    );
+    expect(
+      branch.length > 0,
+      'the main/variation Watch fallback branch is gone — update this gate deliberately',
+    ).toBe(true);
+    // Look only at the branch body, up to its closing brace.
+    const body = branch.slice(0, branch.indexOf('\n  }') + 4);
+    expect(
+      body.includes('<WalkthroughMode'),
+      'the main/variation Watch rung mounts legacy WalkthroughMode again — that is the ungated auto-annotation path (G9.3 Gate A). Hand off to /coach/teach instead.',
+    ).toBe(false);
+    expect(
+      body.includes('/coach/teach'),
+      'the uncurated Watch fallback should hand off to the coach walkthrough engine',
+    ).toBe(true);
+  });
+});
