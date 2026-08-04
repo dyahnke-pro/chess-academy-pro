@@ -169,7 +169,48 @@ teaching moment at all today. That's the slot §4 fills.
 Each phase is one PR-sized chunk landing on `main` per the deployment policy.
 **Phase 0 gates everything after it.**
 
-### Phase 0 — MEASURE FIRST (no product change) — `pending`
+### Phase 0 — MEASURE FIRST — `DONE (2026-08-04)`
+
+Instrument: `src/services/teachingCoverage.report.test.ts` →
+`audit-reports/teaching-coverage.json`. David's ask: *"Audit walkthrough and
+teach x opening to make sure coverage is 100% and tell me the difference
+between the two."*
+
+**Headline: neither path has silent plies. Coverage of NARRATION is already
+100% on both. The gap is not presence — it's GROUNDING.**
+
+| | teach-me-X (`generateOpeningFromDbNarration`) | Watch (`LessonPlayer`) |
+|---|---|---|
+| openings | 43 measured (any of ~3,000 DB entries reachable) | **125 curated (43 masterclass + 82 pro)** |
+| plies / beats | 1,310 plies | 346 masterclass beats |
+| narration present | 100% (written per ply at runtime) | 100% (hand-authored) |
+| **corpus-grounded** | **10.9%** (143/1,310) | **0%** |
+| corpus-grounded WITH tiered retrieval | **70.4%** (922/1,310) | n/a (bake-time only) |
+| still silent after tiers | 388 plies (29.6%) | n/a |
+| legacy `WalkthroughMode` fallbacks | n/a | **0** — G9.3 Gate A is satisfied everywhere |
+| both registers on every beat | n/a | **346/346** |
+
+Three findings that change the plan:
+
+- **The teach path is corpus-grounded on 1 ply in 9.** David's *"teach me x is
+  working perfectly"* is running on computed prose for 89% of its plies. The
+  corpus is doing far less work than the surface's quality suggests.
+- **Tier-1-only is the whole gap.** Swapping `noteAtPosition` →
+  `teachingNoteForBoard` takes it **10.9% → 70.4%, a 6.4×**. That single change
+  is the largest measured win in this plan — **promote Phase 6 to run right
+  after Phase 1.**
+- **Gate A is clean.** All 43 masterclass AND all 82 pro openings have a
+  registered `LessonScript`; zero fall through to the ungated auto-annotations.
+  The G9.3 GothamChess defect is fixed. Nothing to repair there.
+
+**Go/no-go: GO.** 70.4% tiered reach on real opening lines clears the 20% bar
+by a wide margin.
+
+Still to measure (review-specific, does not block Phase 6): silent-ply rate in
+`generateReviewNarration` over the 646-game sweep, and corpus survivor rate at
+those plies.
+
+#### Original Phase 0 spec (retained)
 
 Do not build blind. Extend `src/services/reviewCorpusSweep.test.ts` (already
 drives full production narration over 646 real model games) to emit a coverage
@@ -414,18 +455,19 @@ drill queue. Closes the loop instead of ending at the review screen.
 
 ---
 
-## 6. Decisions for David
+## 6. Decisions — ANSWERED by David 2026-08-04
 
-1. **Corpus priority vs computed reads.** Plan says computed reads win, corpus
-   fills silence. Alternative — corpus first where a note exists — sounds more
-   like a coach but risks a generic note displacing a specific board fact.
-   *Recommend: computed-first.*
-2. **Tactics auto-advance on a MISS.** Advance after showing the solution, or
-   hold until the student taps? *Recommend: hold on miss, auto-advance on
-   solve* — a missed puzzle is the teaching moment.
-3. **Beat budget per game** (≤3 in review to start). Tune after Phase 0.
-4. **Attribution** — notes stay depersonalized per the house-voice rule.
-   `noteId` is kept for `sources[]`/audit, never spoken. Confirming.
+1. **Corpus priority vs computed reads** → **computed reads win, corpus fills
+   the silence.** ("1 good.")
+2. **Tactics advance** → **hold on a miss, auto-advance on a solve** — AND
+   **add forward/back arrows**, on the mistake-puzzle surface too (his
+   screenshot has none there at all). ("2 yes but also add forward and back
+   arrows.")
+3. **Beat budget** → ≤3 corpus beats per review to start. ("3 yes.")
+4. **Attribution** → notes stay depersonalized; `noteId` is an internal
+   debugging breadcrumb for `sources[]` + the audit trail, **never spoken and
+   never shown**. No channel or person is ever named — the house-voice rule
+   already forbids it. Nothing about this reaches the user.
 
 ---
 
