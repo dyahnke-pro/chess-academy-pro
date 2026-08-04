@@ -11,9 +11,10 @@
 //
 // These tests pin the agreement, not the implementation: whatever
 // `stageArrayHasUsableEntry` rejects, `getMissingStages` must report as missing.
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { stageArrayHasUsableEntry, isStartablePunishLesson } from './stageEntryValidity';
-import { getMissingStages } from './openingGenerator';
+import { getMissingStages, cacheOpening } from './openingGenerator';
+import { db } from '../db/schema';
 import type { WalkthroughTree, PunishLesson } from '../types/walkthroughTree';
 
 /** A punish lesson that passes every shape check and replays legally. */
@@ -127,5 +128,57 @@ describe('cache merge upgrades on usability, not on length', () => {
     // unblocks the student; that refusal was the hang.
     expect(lengthTest(cacheHasGood, treeHasBroken)).toBe(false);
     expect(shouldUpgrade(cacheHasGood, treeHasBroken)).toBe(true);
+  });
+});
+
+// The FIFTH and final link: the cache-key round trip.
+//
+// Even with all four length-vs-validity checks agreed, the trap stage still
+// hung on prod. The audit stream gave it away in one line pair:
+//
+//   startAtStageMenu            :: … for "Vienna Game"
+//   mergeStageIntoCache         :: merged punish (5 entries) into cached "Vienna"
+//
+// A tree is cached under the name the CALLER resolved ("Vienna"); its own
+// `openingName` is the canonical line it teaches ("Vienna Game"). The stage
+// merge re-read the row by `openingName` and found a different row (or none),
+// so perfectly good lessons sat in the cache while the surface waited forever.
+//
+// `cacheOpening` now stamps the normalized key onto the tree, and
+// `getCachedOpening` re-stamps on the way out for rows written before that.
+describe('a cached tree knows which row it lives in', () => {
+  beforeEach(async () => {
+    await db.cachedOpenings.clear();
+  });
+
+  const tree = (): WalkthroughTree => ({
+    // Deliberately DIFFERENT from the key it will be cached under — that
+    // divergence is the whole bug.
+    openingName: 'Vienna Game',
+    eco: 'C25',
+    intro: 'x',
+    outro: 'x',
+    root: { san: '', movedBy: 'white', idea: '', children: [] },
+  } as unknown as WalkthroughTree);
+
+  it('stamps cacheKey on the tree the caller keeps, not just the stored copy', async () => {
+    const live = tree();
+    await cacheOpening('Vienna', live);
+    // The caller hands THIS object to startWalkthrough — it must carry the key.
+    expect(live.cacheKey).toBeTruthy();
+    expect(live.cacheKey).not.toBe(live.openingName);
+  });
+
+  it('stores the tree under the stamped key, not under openingName', async () => {
+    const live = tree();
+    await cacheOpening('Vienna', live);
+    // Assert against the row itself rather than round-tripping through
+    // getCachedOpening, whose legality/eviction gates are a separate concern.
+    const row = await db.cachedOpenings.get(live.cacheKey as string);
+    expect(row, 'the stamped cacheKey is the row it was stored under').toBeTruthy();
+    expect(row?.tree.cacheKey).toBe(live.cacheKey);
+    // And the canonical name is NOT a key — reading by it is what missed.
+    const byName = await db.cachedOpenings.get('vienna game');
+    expect(byName, 'openingName is not a cache key — that miss was the hang').toBeUndefined();
   });
 });

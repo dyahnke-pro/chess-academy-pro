@@ -360,6 +360,11 @@ export async function getCachedOpening(
     // a legacy cached tree can carry a malformed concepts/findMove/drill/
     // punish entry that would crash a downstream picker/render.
     sanitizeTreeStages(cached.tree);
+    // Stamp the key on the way OUT too, so a tree served from a row written
+    // before `cacheOpening` started stamping still knows where it lives. A
+    // warm cache long outlives a deploy; without this the trap-stage hang
+    // would simply persist for anyone already holding an old row.
+    cached.tree.cacheKey = normalized;
     void logAppAudit({
       kind: 'opening-cache-hit',
       category: 'subsystem',
@@ -395,8 +400,27 @@ export async function cacheOpening(
       });
       return;
     }
+    // STAMP THE CACHE KEY ON THE TREE (David 2026-08-04 — the trap-stage hang).
+    //
+    // A tree is cached under the key the CALLER resolved ("Vienna"), while the
+    // tree's own `openingName` is the canonical line it ended up teaching
+    // ("Vienna Game"). Anything later wanting to re-read this entry — chiefly
+    // `mergeStagesFromCache`, picking up background-generated stages — was
+    // looking it up by `openingName` and missing entirely. The stages really
+    // were written ("merged punish (5 entries) into cached \"Vienna\"") and the
+    // surface really did wait forever, because it was reading a different row.
+    //
+    // Carrying the key on the tree makes the round trip closed: whoever holds
+    // the tree knows exactly where it lives, regardless of which of the six
+    // cacheOpening call sites wrote it or what name they used.
+    // Stamped in PLACE, deliberately: the caller hands this exact tree to
+    // `startWalkthrough` right after caching it, so the running walkthrough
+    // must carry the key too — a stamped copy in Dexie would leave the live
+    // tree unable to find its own row.
+    const normalizedName = normalizeOpeningName(name);
+    tree.cacheKey = normalizedName;
     const record: CachedOpening = {
-      normalizedName: normalizeOpeningName(name),
+      normalizedName,
       displayName: tree.openingName,
       eco: tree.eco,
       tree,

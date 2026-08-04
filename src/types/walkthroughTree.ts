@@ -154,6 +154,17 @@ export interface WalkthroughTree {
    *  must NOT feed it to `getCachedOpening` / completed-stage tracking
    *  or offer the "play this line out as an opening" leaf prompt. */
   derived?: boolean;
+  /** The NORMALIZED key this tree is cached under, stamped by `cacheOpening`.
+   *
+   *  Not the same thing as `openingName`: a tree is cached under the name the
+   *  caller resolved ("Vienna") while `openingName` is the canonical line it
+   *  teaches ("Vienna Game"). Re-reading the entry by `openingName` therefore
+   *  misses — which is how background-generated stages could merge into the
+   *  cache while the running surface waited forever for them (2026-08-04).
+   *  Prefer this over `openingName` for any `getCachedOpening` round trip.
+   *  Absent on trees that were never cached (derived one-shots, static
+   *  registry entries). */
+  cacheKey?: string;
   /** Set when the narration LLM call FAILED and the tree shipped with
    *  template-fallback ideas. A fallback tree must NEVER be persisted to the
    *  local or shared cache — caching one pins template narration onto the

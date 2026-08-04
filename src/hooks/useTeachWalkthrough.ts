@@ -1843,13 +1843,19 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     // nothing merged). The ref is always current whichever render's copy is called.
     const tree = treeRef.current;
     if (!tree?.openingName) return;
+    // Look the entry up by the key it was CACHED under, not by the canonical
+    // line it teaches. Those differ ("Vienna" vs "Vienna Game"), and reading by
+    // openingName is why background-generated stages never reached the running
+    // tree — the audit stream showed "merged punish (5 entries) into cached
+    // \"Vienna\"" while the surface sat on "Loading trap lines…" forever.
+    const lookupName = tree.cacheKey ?? tree.openingName;
     // Derived trees (punish one-shots) have a composite display name,
     // not a cache key — looking it up is a guaranteed miss that just
     // noises the audit stream ("cache miss → fresh generation"). They
     // carry no opening stages to merge anyway.
     if (tree.derived) return;
     try {
-      const fresh = await getCachedOpening(tree.openingName);
+      const fresh = await getCachedOpening(lookupName);
       if (!fresh) return;
       // Merge a stage when the CACHE has one the student could actually be
       // shown and the running tree does not.
