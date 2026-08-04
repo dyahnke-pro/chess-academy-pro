@@ -61,7 +61,8 @@ FEN. `lineSan` is often empty (opening-level notes).
 |---|---|---|
 | coach chat / facts package | ✅ | `teachingNoteForBoard` (5-tier) |
 | **phase transition** (`usePhaseNarration`) | ✅ | `transitionTeachingForGame` (own 4-tier chain) |
-| walkthrough / Watch | ⚠️ partial | `noteAtPosition` — **tier 1 only** (known gap) |
+| teach-me-X walkthrough | ✅ | `noteAtPosition ?? supportNoteForPly` — exact + support. The note LEADS each beat as of 2026-08-04 |
+| Watch (curated `LessonScript`) | ❌ by design | beats are reviewed + gated offline; the corpus improves them at BAKE time, never at read time |
 | think-aloud, fork talk, opening generator | ✅ | `teachingNoteForBoard` |
 | **post-game review** (~20 facet computers) | ❌ **zero** | — |
 | **tactics** (all 14 files) | ❌ **zero** | — |
@@ -187,34 +188,51 @@ between the two."*
 **Headline: neither path has silent plies. Coverage of NARRATION is already
 100% on both.**
 
+> 🚨 **RE-MEASURED 2026-08-04 — the first cut of this section was wrong.** It
+> measured `noteAtPosition` as "today", but the teach path has spliced
+> `noteAtPosition ?? supportNoteForPly` since 2026-08-01
+> (`openingGenerator.noteArrowSourceAt`). The support tier IS production and
+> belongs in the baseline. Corrected numbers below; the instrument
+> (`teachingCoverage.report.test.ts`) now measures all three tiers separately.
+
 | | teach-me-X (`generateOpeningFromDbNarration`) | Watch (`LessonPlayer`) |
 |---|---|---|
 | openings | 43 measured (any of ~3,000 DB entries reachable) | **125 curated (43 masterclass + 82 pro)** |
 | plies / beats | 1,310 plies | 346 masterclass beats |
 | narration present | 100% (written per ply at runtime) | 100% (hand-authored) |
-| **corpus-grounded** | **10.9%** (143/1,310) | **0%** |
-| corpus-grounded WITH tiered retrieval | **70.4%** (922/1,310) | n/a (bake-time only) |
-| still silent after tiers | 388 plies (29.6%) | n/a |
-| legacy `WalkthroughMode` fallbacks | n/a | **0** — G9.3 Gate A is satisfied everywhere |
+| exact tier | 143 plies (10.9%) | — |
+| support tier | 301 plies (23.0%) | — |
+| **corpus-grounded TODAY (exact + support)** | **33.9%** (444/1,310) | **0% at runtime** |
+| ceiling if opening-scoping were dropped | 70.4% (922/1,310) | n/a (bake-time only) |
+| still silent at every tier | 388 plies (29.6%) | n/a |
+| legacy `WalkthroughMode` fallbacks | n/a | **0** on main + variation Watch |
 | both registers on every beat | n/a | **346/346** |
 
 Three findings that change the plan:
 
-- **The teach path is corpus-grounded on 1 ply in 9.** David's *"teach me x is
-  working perfectly"* is running on computed prose for 89% of its plies. The
-  corpus is doing far less work than the surface's quality suggests.
-- **Tier-1-only is the whole gap.** Swapping `noteAtPosition` →
-  `teachingNoteForBoard` takes it **10.9% → 70.4%, a 6.4×**. That single change
-  is the largest measured win in this plan — **promote Phase 6 to run right
-  after Phase 1.**
-- **Gate A is clean.** All 43 masterclass AND all 82 pro openings have a
-  registered `LessonScript`; zero fall through to the ungated auto-annotations.
-  The G9.3 GothamChess defect is fixed. Nothing to repair there.
+- **The teach path is corpus-grounded on 1 ply in 3, not 1 in 9.** Better than
+  the first cut claimed, but David's *"teach me x is working perfectly"* still
+  runs on computed prose for two-thirds of its plies.
+- **The 70.4% is a CEILING, not a target — and Phase 6 as written is dead.**
+  The whole 33.9 → 70.4 delta is structure transfer + the concept tier, both
+  deliberately OFF inside a taught lesson: `supportNoteForPly` returns null
+  rather than borrowing another opening's note when the student named the
+  opening they wanted (David 2026-08-02, *"make sure the coach stays scoped to
+  the opening that it was asked to teach"*). Reaching 70.4% means reversing
+  that rule, not fixing a bug. **Phase 6's tier swap is cancelled** (David
+  2026-08-04, "keep things the way they are"). Coverage grows by farming and
+  baking more notes for the openings we teach.
+- **Gate A is clean for the curated set** — 43/43 masterclass and 82/82 pro
+  mains, plus 318/318 and 285/285 variations, all have a registered
+  `LessonScript`. It was NOT clean for the ~3,300 raw ECO rows `dataLoader`
+  seeds into `db.openings`, whose Watch fell through to the ungated
+  auto-annotations; those now hand off to the coach instead (2026-08-04).
+  `WalkthroughMode` survives only for the 38 trap / warning lines with no
+  curated trap lesson.
 
-**Go/no-go: GO.** 70.4% tiered reach on real opening lines clears the 20% bar
-by a wide margin.
+**Go/no-go: GO.** 33.9% live reach on real opening lines clears the 20% bar.
 
-Still to measure (review-specific, does not block Phase 6): silent-ply rate in
+Still to measure (review-specific, blocks nothing): silent-ply rate in
 `generateReviewNarration` over the 646-game sweep, and corpus survivor rate at
 those plies.
 
@@ -418,25 +436,27 @@ right and the others don't** — teach-me-X is the only one with the corpus.
 
 | what the user does | engine | corpus? |
 |---|---|---|
-| `/coach/teach` → "teach me the Caro-Kann" | `useTeachWalkthrough` → **`generateOpeningFromDbNarration`** (`openingGenerator.ts`) | ✅ spliced (`noteAtPosition`, tier 1) |
-| opening detail → **Watch**, opening HAS a `LessonScript` | curated `LessonPlayer` (hand-authored beats) | ❌ none — beats are static |
-| opening detail → **Watch**, opening has NO `LessonScript` | legacy `WalkthroughMode` + `src/data/annotations/` | ❌ none, and the annotations are the ungated auto-generated swamp (G9.3 Gate A) |
+| `/coach/teach` → "teach me the Caro-Kann" | `useTeachWalkthrough` → **`generateOpeningFromDbNarration`** (`openingGenerator.ts`) | ✅ spliced — exact + support tiers; the note LEADS the beat (2026-08-04) |
+| opening detail → **Watch**, opening HAS a `LessonScript` | curated `LessonPlayer` (hand-authored beats) | ❌ none at runtime — bake-time only, by design |
+| opening detail → **Watch**, opening has NO `LessonScript` | ~~legacy `WalkthroughMode`~~ → **hands off to `/coach/teach`** (2026-08-04) | ✅ inherits the teach path's splice |
 
-So "walkthrough" names three different things in this app. The one David says
-works perfectly is the DB-narration engine **with corpus notes spliced in** —
-which is the strongest single piece of evidence in this plan that the corpus is
-what makes a surface feel taught rather than described.
+**`/coach/session/walkthrough` is NOT a fourth engine — it already redirects to
+`/coach/teach`** (`CoachSessionPage.tsx:126`). Inside `/coach/teach`,
+"walkthrough" is just the name of the lesson-playing phase of teach-me-X. The
+word names one live engine plus a legacy component, not three products.
 
 Consequences for the plan:
-- **Phase 6's target is the teach engine's splice** (upgrade tier-1-only
-  `noteAtPosition` → the full tiered seam). That path already works; this makes
-  it work on the ~7 of 10 plies it currently goes quiet on.
+- **Phase 6 is CANCELLED.** Its premise (tier-1-only) was stale, and its fix
+  (the full tiered seam) would re-enable cross-opening borrowing inside a named
+  lesson — switched off on purpose. See the Phase 0 correction above.
 - **Curated `LessonScript` beats stay hand-authored** — do NOT splice corpus
   notes into them at runtime. They're already reviewed and gated; runtime
   splicing could only drift them (same reasoning as the Tier-1 baked-narration
   rule). The corpus improves those at BAKE time, not at read time.
-- The legacy `WalkthroughMode` path is a pre-existing G9.3 Gate A defect, not a
-  corpus problem. Out of scope here; noted so it isn't confused with one.
+- **The `WalkthroughMode` Watch fallback is gone** (2026-08-04). It survives
+  only for the 38 trap / warning lines with no curated trap lesson — converting
+  those needs hand-authored two-register narration per line, which is content
+  work, not a refactor. Flagged, not silently dropped.
 
 ### Phase 4 — READ THIS POSITION — `pending`
 
@@ -460,13 +480,22 @@ onto the shared seam so an opening the corpus never covers still gets the
 transition ritual. Low risk, already-proven surface. Keep register `phase`
 (present, forward-looking) — do NOT let review's retrospective phrasing leak in.
 
-### Phase 6 — WALKTHROUGH gap (the freebie) — `pending`
+### Phase 6 — WALKTHROUGH gap — `CANCELLED (2026-08-04)`
 
-CLAUDE.md's open known-gap: the walkthrough splice calls `noteAtPosition` only,
-so a Tier-2 opening teaches from notes on 3 plies and computed prose on the
-other 7. Swap it to the shared seam (exact tier still FIRST). Registers R5/R6:
-voice stays move-dictation on Learn, the note goes to the written narration
-below the board.
+The premise was stale: the splice has called
+`noteAtPosition ?? supportNoteForPly` since 2026-08-01, so the "tier 1 only"
+gap does not exist. What the swap would actually add is structure transfer +
+the concept tier — cross-opening borrowing that is switched OFF inside a taught
+lesson on purpose. David 2026-08-04: *"keep things the way they are."*
+
+What shipped instead, on the same surface:
+- The corpus note now **LEADS** each beat rather than trailing it, so voice and
+  arrows share one source (the arrows were already note-grounded).
+- Branch / extension beats splice the note text at all — previously their
+  arrows pointed at squares the prose never named.
+
+Coverage from here grows by farming and baking more notes for the openings we
+teach, not by borrowing another opening's.
 
 ### Phase 7 — ENDGAME — `pending`
 
@@ -584,6 +613,24 @@ turns an unused `eslint-disable` into a hard error.
 
 ## 9. Next-session pickup
 
-Start at **Phase 0** — the coverage report is the go/no-go for everything after
-it. The one exception that does NOT wait on Phase 0: the **tactics T1/T2 bugs**
-(§3) are real defects independent of the corpus and can ship immediately.
+**Landed 2026-08-04** (all on `main`, ship-check green):
+- The trap-stage hang — `getMissingStages` and the stage menu now share one
+  definition of "this stage exists" via `services/stageEntryValidity`. A stage
+  that cannot be entered gets rebuilt; one that exhausts its attempts says so
+  instead of spinning. Gate: `stageEntryValidity.test.ts`.
+- The corpus note now LEADS every taught beat, on the spine AND on branch /
+  extension beats. `WALKTHROUGH_GEN_REV` bumped so cached trees regenerate.
+- The uncurated Watch fallback hands off to `/coach/teach` instead of the
+  ungated legacy walkthrough. Gate in `OpeningDetailPage.wiring.test.ts`.
+- Phase 0 re-measured with production semantics (33.9%, not 10.9%); Phase 6
+  cancelled.
+
+**Next, in order:**
+1. **Phase 3 — tactics.** T1 (no auto-advance) and T2 (nav below the fold) are
+   confirmed defects, independent of the corpus. Then M1/M2/M3 on
+   `mistakeNarration` — all three verified in code, all still open.
+2. **Phase 1** — the shared `corpusNoteFacts` seam, then Phases 2 / 4 / 5 / 7.
+3. **Open, needs David's call:** the 38 trap / warning lines still rendering
+   through `WalkthroughMode` (19 in `repertoire.json`, 19 on uncurated pro
+   openings). Retiring the component means hand-authoring two-register
+   narration for each — content work with a real cost, not a refactor.

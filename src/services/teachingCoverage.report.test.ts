@@ -14,11 +14,15 @@
 //  A. "teach me <opening>"  — /coach/teach → useTeachWalkthrough →
 //     generateOpeningFromDbNarration. Spine from openings-lichess.json /
 //     repertoire.json, per-ply narration written at runtime, with a corpus
-//     note SPLICED per ply via noteAtPosition (TIER 1 ONLY — the known gap).
+//     note SPLICED per ply via `noteAtPosition ?? supportNoteForPly` — the
+//     EXACT tier plus the SUPPORT tier. (An earlier cut of this report said
+//     "tier 1 only"; that was already stale when written — see `tierAt`.)
 //
-//  B. opening detail → Watch — curated LessonScript (LessonPlayer) when one is
-//     registered, else the legacy WalkthroughMode fed by the ungated
-//     auto-generated src/data/annotations/ (G9.3 Gate A). No corpus either way.
+//  B. opening detail → Watch — curated LessonScript (LessonPlayer). Every
+//     masterclass and pro opening has one, so this path no longer falls back
+//     to the legacy WalkthroughMode; an uncurated ECO row hands off to path A
+//     instead (2026-08-04). No runtime corpus either way — a curated beat is
+//     reviewed and gated offline, so the corpus improves it at BAKE time.
 //
 // Coverage is therefore a DIFFERENT question per path:
 //   A: what share of plies get a teaching note at all (today vs. with the full
@@ -28,7 +32,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { writeFileSync, mkdirSync } from 'node:fs';
-import { noteAtPosition, teachingNoteForBoard } from './danyaTeachingService';
+import { noteAtPosition, supportNoteForPly, teachingNoteForBoard } from './danyaTeachingService';
 import { getLessonScript } from '../data/lessons';
 import repertoireRaw from '../data/repertoire.json';
 
@@ -66,13 +70,30 @@ function walk(pgn: string): Array<{ prefix: string[]; fen: string }> {
   return out;
 }
 
-type Tier = 'exact' | 'tiered-only' | 'none';
+// The tiers, in the order the TEACH PATH actually consults them.
+//
+// CORRECTED 2026-08-04. The first cut of this report compared `noteAtPosition`
+// against `teachingNoteForBoard` and called the former "today" — but the teach
+// path has not been exact-tier-only since 2026-08-01. `noteArrowSourceAt` in
+// openingGenerator is `noteAtPosition(...) ?? supportNoteForPly(...)`, so the
+// SUPPORT tier is production and belongs in the baseline. Measuring without it
+// understated live coverage by three-fold (10.9% vs the real 33.9%) and made
+// the gap look like a free swap.
+//
+// `transfer-or-concept` is what `teachingNoteForBoard` adds ON TOP of
+// production: structure transfer (borrow a note from another opening whose
+// structure matches) and the concept tier. Both are deliberately OFF inside a
+// taught lesson — `supportNoteForPly` returns null rather than borrowing when
+// the student named the opening they wanted (David 2026-08-02: "make sure the
+// coach stays scoped to the opening that it was asked to teach"). It is
+// reported as a CEILING, not a target: reaching it would mean reversing that
+// scoping rule, not fixing a bug.
+type Tier = 'exact' | 'support' | 'transfer-or-concept' | 'none';
 
 function tierAt(prefix: string[], fen: string, openingName: string): Tier {
-  const exact = noteAtPosition(prefix, fen, openingName);
-  if (exact) return 'exact';
-  const tiered = teachingNoteForBoard(prefix, fen, openingName);
-  return tiered ? 'tiered-only' : 'none';
+  if (noteAtPosition(prefix, fen, openingName)) return 'exact';
+  if (supportNoteForPly(prefix, fen, openingName)) return 'support';
+  return teachingNoteForBoard(prefix, fen, openingName) ? 'transfer-or-concept' : 'none';
 }
 
 describe('teaching coverage report (Phase 0 measurement)', () => {
@@ -81,6 +102,7 @@ describe('teaching coverage report (Phase 0 measurement)', () => {
 
     let plies = 0;
     let exactHits = 0;
+    let supportHits = 0;
     let tieredHits = 0;
     let curatedLessons = 0;
     let legacyFallbacks = 0;
@@ -94,14 +116,17 @@ describe('teaching coverage report (Phase 0 measurement)', () => {
 
       // ── PATH A: the teach engine's per-ply corpus splice ──────────────
       let exact = 0;
+      let support = 0;
       let tiered = 0;
       for (const step of steps) {
         const t = tierAt(step.prefix, step.fen, entry.name);
         if (t === 'exact') exact += 1;
-        else if (t === 'tiered-only') tiered += 1;
+        else if (t === 'support') support += 1;
+        else if (t === 'transfer-or-concept') tiered += 1;
       }
       plies += steps.length;
       exactHits += exact;
+      supportHits += support;
       tieredHits += tiered;
 
       // ── PATH B: does Watch use a curated lesson, and is it two-register? ─
@@ -125,10 +150,14 @@ describe('teaching coverage report (Phase 0 measurement)', () => {
         plies: steps.length,
         teachPath: {
           exactTierHits: exact,
-          tieredOnlyHits: tiered,
-          silent: steps.length - exact - tiered,
-          coverageToday: +(exact / steps.length).toFixed(3),
-          coverageWithTiers: +((exact + tiered) / steps.length).toFixed(3),
+          supportTierHits: support,
+          transferOrConceptHits: tiered,
+          silent: steps.length - exact - support - tiered,
+          // PRODUCTION = exact + support. This is the number to move.
+          coverageToday: +((exact + support) / steps.length).toFixed(3),
+          // Ceiling only — reaching it means re-enabling cross-opening
+          // borrowing inside a named lesson, which is switched off on purpose.
+          coverageCeilingIfScopingDropped: +((exact + support + tiered) / steps.length).toFixed(3),
         },
         watchPath: {
           curatedLesson: Boolean(lesson),
@@ -143,18 +172,26 @@ describe('teaching coverage report (Phase 0 measurement)', () => {
       note: 'Phase 0 measurement for docs/plans/2026-08-03-teaching-corpus-integration.md',
       openingsMeasured: perOpening.length,
       teachPath: {
-        engine: 'generateOpeningFromDbNarration (splice: noteAtPosition, tier 1 only)',
+        engine: 'generateOpeningFromDbNarration (splice: noteAtPosition ?? supportNoteForPly)',
         plies,
         exactTierHits: exactHits,
-        tieredOnlyHits: tieredHits,
-        silentPlies: plies - exactHits - tieredHits,
-        coverageToday: plies ? +(exactHits / plies).toFixed(3) : 0,
-        coverageWithTiers: plies ? +((exactHits + tieredHits) / plies).toFixed(3) : 0,
+        supportTierHits: supportHits,
+        transferOrConceptHits: tieredHits,
+        silentPlies: plies - exactHits - supportHits - tieredHits,
+        coverageToday: plies ? +((exactHits + supportHits) / plies).toFixed(3) : 0,
+        coverageCeilingIfScopingDropped: plies
+          ? +((exactHits + supportHits + tieredHits) / plies).toFixed(3)
+          : 0,
       },
       watchPath: {
-        engine: 'LessonPlayer (curated LessonScript) | legacy WalkthroughMode (auto-annotations)',
+        engine: 'LessonPlayer (curated LessonScript); uncurated openings hand off to the coach',
         curatedLessons,
-        legacyFallbacks,
+        // Openings with no curated main lesson. These no longer render the
+        // legacy walkthrough — they redirect to /coach/teach — so this counts
+        // HAND-OFFS, not ungated fallbacks. NB: this loop measures
+        // repertoire.json only; pro openings and every variation were measured
+        // separately (82/82 and 318/318 + 285/285, all curated).
+        coachHandoffs: legacyFallbacks,
         curatedShare: perOpening.length ? +(curatedLessons / perOpening.length).toFixed(3) : 0,
         beatsTotal,
         beatsWithBothRegisters: beatsBothRegisters,

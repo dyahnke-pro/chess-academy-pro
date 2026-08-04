@@ -2356,17 +2356,35 @@ move openings up, never down. To find a genuine Tier-2 test case: assert
 `noteAtPosition(prefix, fen)` returns a note that survives
 `gradeNarrationText`. Do not guess from the opening's name.
 
-🚨 **KNOWN GAP (2026-08-01, open):** the WALKTHROUGH splice calls only
-`noteAtPosition` — the exact-position tier. The SUPPORT tier
-(`secondarySupportNotes`) and structure transfer (`notesForStructure`)
-are wired into `teachingNoteForBoard`, which the chat/facts-package path
-uses, but NOT into the walkthrough. So a Tier-2 opening with notes at 3 of
-10 plies teaches from notes on 3 plies and from computed prose on the
-other 7, instead of the support tier filling the gap the way David asked
-("splice them in anywhere there is a gap"). Close this by having the
-walkthrough fall back to the support tier when the exact tier misses —
-keeping the exact tier FIRST, since a note keyed at this very position
-always beats a borrowed one.
+✅ **CLOSED (2026-08-01/02), and the numbers re-measured 2026-08-04.** The
+walkthrough splice is `noteAtPosition ?? supportNoteForPly` — the EXACT tier
+first (a note keyed at this very position always beats a borrowed one), then
+the SUPPORT tier filling the gaps. Structure transfer (`notesForStructure`)
+and the concept tier stay OFF inside a taught lesson on purpose (David
+2026-08-02: *"make sure the coach stays scoped to the opening that it was
+asked to teach"*) — borrowing another opening's note because the pawn
+structures rhyme is right for a live board past book, wrong when the student
+named the opening they wanted taught.
+
+Measured over the 1,310 plies of `repertoire.json`
+(`teachingCoverage.report.test.ts` → `audit-reports/teaching-coverage.json`):
+**exact 10.9% + support 23.0% = 33.9% live coverage**, 29.6% silent at every
+tier. The 70.4% figure that gets quoted is the CEILING you would reach by
+dropping the opening-scoping rule — it is NOT a target. **Coverage grows by
+farming and baking more notes for the openings we teach.** A session that
+"discovers" it can 2× coverage by switching the splice to
+`teachingNoteForBoard` has rediscovered the scoping rule, not a bug — this
+has now been mis-derived twice.
+
+🔒 **THE NOTE LEADS THE BEAT (David 2026-08-04: "corpus notes are primary for
+teach me x opening").** In `openingGenerator` PASS 1 the graded note is
+FIRST and the generated prose fills in behind it — not the other way round.
+The arrows already come from the note (`noteArrowSourceAt`), so leading with
+it puts voice and board on one source, which is the G0 posture: the note is
+the fact, the model only phrases it. Branch and extension beats splice the
+note text too. Bump `WALKTHROUGH_GEN_REV` whenever this ordering changes —
+beats are baked at generation time, so a cached tree serves the old order
+forever.
 
 ### 🔒🔒 THE NARODITSKY HOUSE VOICE + PLAYED-OUT / EVERY-STEP STANDARD — the ENTIRE repertoire (David 2026-07-02, LOCKED. "I want the entire repertoire to be in Naroditsky's teaching/language style. It's beautiful.")
 
