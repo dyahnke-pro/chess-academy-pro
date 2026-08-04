@@ -291,7 +291,13 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 // generation time, so every tree cached before this rev still narrates the old
 // way (David: "squares and arrows are still not appearing as they are being
 // mentioned" — they were not, because his Alekhine came from cache).
-const WALKTHROUGH_GEN_REV = '2026-08-01-note-arrows-sentence-reveal';
+// 2026-08-04: the corpus note now LEADS each beat instead of trailing it
+// (David: "corpus notes are primary for teach me x opening"), and branch /
+// extension beats splice the note text at all — previously their arrows were
+// note-grounded while the prose never named what the arrows pointed at. Both
+// are baked in at generation time, so without this bump every already-taught
+// opening keeps narrating the old note-as-afterthought order off the cache.
+const WALKTHROUGH_GEN_REV = '2026-08-04-corpus-note-leads';
 
 export async function getCachedOpening(
   name: string,
@@ -1995,9 +2001,16 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       const extMovedBy: 'white' | 'black' =
         absolutePly % 2 === 0 ? 'white' : 'black';
       const ideaEntry = extIdeas[j];
-      const text =
-        (typeof ideaEntry === 'object' && ideaEntry?.text?.trim()) ||
-        synthesizeIdeaFromSan(extSan, extMovedBy);
+      const extGenerated =
+        (typeof ideaEntry === 'object' && ideaEntry?.text?.trim()) || '';
+      // Same note-leads rule as the spine. The branch's arrows were ALREADY
+      // grounded on this note (`branchNoteSources` below); until now the prose
+      // never said what they pointed at, so a green arrow could land on a
+      // square the narration never named — the lead-the-eye defect.
+      const extNote = baked ? null : branchNoteSources[j + 1] ?? null;
+      const text = extNote
+        ? (extGenerated ? `${extNote} ${extGenerated}` : extNote)
+        : (extGenerated || synthesizeIdeaFromSan(extSan, extMovedBy));
       const shortText =
         typeof ideaEntry === 'object' && ideaEntry?.shortText?.trim()
           ? ideaEntry.shortText.trim()
@@ -2024,17 +2037,22 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       extChildren = [{ node }];
     }
     const shortTeaser = narration.shortBranchIdeas?.[idx]?.trim();
+    // The note leads what is SPOKEN on the branch move. `teaser` itself stays
+    // untouched — it doubles as the fork tile's `forkSubtitle`, which must
+    // remain a short label, not a paragraph.
+    const branchNote = baked ? null : branchNoteSources[0] ?? null;
+    const branchSpoken = branchNote ? `${branchNote} ${teaser}` : teaser;
     const branchNode: WalkthroughTreeNode = {
       san: b.san,
       movedBy: branchMovedBy,
-      idea: teaser,
+      idea: branchSpoken,
       children: extChildren,
     };
     if (shortTeaser) branchNode.shortIdea = shortTeaser;
     const branchMove = branchSeq[0];
     if (branchMove) {
       const segment: NarrationSegmentType = {
-        text: teaser,
+        text: branchSpoken,
         arrows: groundedSegmentArrows(branchNoteSources[0] ?? null, teaser, branchMove).arrows,
       };
       if (shortTeaser) segment.shortText = shortTeaser;
@@ -2061,28 +2079,44 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
   // captured BEFORE the house-voice reword so the arrows can never drift with
   // the model's phrasing (G0, see `noteArrowSourceAt`). null = ungrounded ply.
   const plyNoteText: Array<string | null> = positions.map(() => null);
-  // PASS 1 — assemble each ply's raw material: the generated idea plus the
-  // corpus note taught exactly at that position (board-graded).
+  // PASS 1 — assemble each ply's raw material.
+  //
+  // THE NOTE LEADS (David 2026-08-04: "corpus notes are primary for teach me x
+  // opening"). The corpus note is the TEACHING; the generated prose is what
+  // fills in around it. Until now the order was the other way round — the
+  // model's idea led and the note was appended — which read as an afterthought
+  // and left the spoken beat opening on prose the arrows were not grounded in
+  // (the arrows already come from the note, see `noteArrowSourceAt`). Leading
+  // with the note puts voice and board on the same source, which is the G0
+  // posture: the note is the fact, the model only phrases it.
+  //
+  // Nothing is discarded — the generated idea still follows, and PASS 2's
+  // house-voice reword fuses the two into one voice. The ONE exception is the
+  // bare `synthesizeIdeaFromSan` template ("White plays Nc3"): when a real note
+  // is teaching this ply, restating the move the board just showed is filler
+  // (narration rule #3), so the note stands alone.
   const rawPlyTexts: string[] = positions.map((p, i) => {
     const ideaEntry = narration.ideas[i];
-    let text =
+    const generated =
       (typeof ideaEntry === 'object' && ideaEntry?.text?.trim()) ||
       // Tolerate legacy string-shaped entries (older cached gens
       // pre-arrows extension might still produce them).
       (typeof ideaEntry === 'string' ? (ideaEntry as string).trim() : '') ||
-      synthesizeIdeaFromSan(p.san, p.movedBy);
+      '';
+    const fallback = generated || synthesizeIdeaFromSan(p.san, p.movedBy);
     try {
       // Baked video narration IS the teaching for this ply — splicing a
       // corpus note on top would double-teach the same source material.
-      if (baked) return text;
+      if (baked) return fallback;
       const prefix = positions.slice(0, i + 1).map((q) => q.san);
       const teaching = noteArrowSourceAt(prefix, p.fen, splicedNoteIds, entry.canonicalName);
-      if (teaching) {
-        plyNoteText[i] = teaching;
-        text = `${text} ${teaching}`;
-      }
-    } catch { /* the corpus is a bonus, never a blocker */ }
-    return text;
+      if (!teaching) return fallback;
+      plyNoteText[i] = teaching;
+      return generated ? `${teaching} ${generated}` : teaching;
+    } catch {
+      /* the corpus is a bonus, never a blocker */
+      return fallback;
+    }
   });
 
   // PASS 2 — HOUSE-VOICE REWORD (David 2026-07-30: "hand the entire narration
