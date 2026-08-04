@@ -52,6 +52,7 @@ import { deriveNarrationArrows } from './narrationArrows';
 import { splitSentences, squaresInText } from './narrationSegments';
 import { bakedNarrationFor } from './bakedWalkthroughNarration';
 import { gemPunishLessonsForOpeningName } from './gemPunishLessons';
+import { stageArrayHasUsableEntry } from './stageEntryValidity';
 import type {
   WalkthroughTree,
   WalkthroughTreeNode,
@@ -3869,11 +3870,20 @@ async function mergeStageIntoCache(
  *  background-fill targeting). Empty arrays count as missing — we
  *  want SOMETHING for each stage, not a hollow shell. */
 export function getMissingStages(tree: WalkthroughTree): OptionalStage[] {
+  // MISSING means "the student cannot be shown this stage", NOT "the array is
+  // empty" (David 2026-08-04 — the "teach me the traps in X just keeps
+  // loading" bug). A tree from a legacy Dexie row or the shared Supabase cache
+  // never re-ran `repair*Stage`, so it can carry a NON-EMPTY punish array in
+  // which every lesson is unstartable — missing `distractors`, or an illegal
+  // inaccuracy/punishment. Under the old length test that stage counted as
+  // present, so nothing regenerated it, while the stage menu's own validity
+  // test refused to enter it. The jump parked forever and the student watched
+  // a spinner. Both sides now ask `stageArrayHasUsableEntry`, so a stage that
+  // cannot be entered is a stage that gets rebuilt.
   const missing: OptionalStage[] = [];
-  if (!tree.concepts || tree.concepts.length === 0) missing.push('concepts');
-  if (!tree.findMove || tree.findMove.length === 0) missing.push('findMove');
-  if (!tree.drill || tree.drill.length === 0) missing.push('drill');
-  if (!tree.punish || tree.punish.length === 0) missing.push('punish');
+  for (const stage of ['concepts', 'findMove', 'drill', 'punish'] as const) {
+    if (!stageArrayHasUsableEntry(stage, tree[stage])) missing.push(stage);
+  }
   return missing;
 }
 
@@ -3888,6 +3898,12 @@ export async function generateMissingStagesInBackground(
   openingName: string,
   tree: WalkthroughTree,
   onStageMerged?: (stage: 'concepts' | 'findMove' | 'drill' | 'punish') => void,
+  /** Fired when a stage has EXHAUSTED its attempts and still has nothing the
+   *  student could be shown. The caller may be parked on a pending jump into
+   *  that stage; without this it waits forever for a merge that will never
+   *  come (David 2026-08-04). Silence beats a spinner — tell the surface so it
+   *  can say so honestly and let the student do something else. */
+  onStageUnavailable?: (stage: 'concepts' | 'findMove' | 'drill' | 'punish') => void,
 ): Promise<void> {
   const missing = getMissingStages(tree);
   if (missing.length === 0) return;
@@ -3901,6 +3917,9 @@ export async function generateMissingStagesInBackground(
   // individual failures don't block other stages.
   await Promise.all(
     missing.map(async (stage) => {
+      const giveUp = (): void => {
+        try { onStageUnavailable?.(stage); } catch { /* swallow */ }
+      };
       const first = await generateOneStage(openingName, stage);
       if (!first.ok || !first.data) {
         void logAppAudit({
@@ -3909,6 +3928,7 @@ export async function generateMissingStagesInBackground(
           source: 'openingGenerator.generateMissingStagesInBackground',
           summary: `background stage gen failed for "${openingName}" / ${stage}: ${first.reason ?? 'unknown'}`,
         });
+        giveUp();
         return;
       }
       const merge = await mergeStageIntoCache(openingName, stage, first.data);
@@ -3943,6 +3963,7 @@ export async function generateMissingStagesInBackground(
           source: 'openingGenerator.generateMissingStagesInBackground',
           summary: `background stage gen retry failed for "${openingName}" / ${stage}: ${retry.reason ?? 'unknown'}`,
         });
+        giveUp();
         return;
       }
       const retryMerge = await mergeStageIntoCache(openingName, stage, retry.data);
@@ -3953,6 +3974,7 @@ export async function generateMissingStagesInBackground(
           source: 'openingGenerator.generateMissingStagesInBackground',
           summary: `${stage} retry merge failed for "${openingName}": ${retryMerge.reason ?? 'unknown'}`,
         });
+        giveUp();
       } else {
         try { onStageMerged?.(stage); } catch { /* swallow */ }
       }

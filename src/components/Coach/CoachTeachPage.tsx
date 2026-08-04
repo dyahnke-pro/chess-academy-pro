@@ -1625,6 +1625,35 @@ export function CoachTeachPage(): JSX.Element {
     [walkthrough],
   );
 
+  /** Background generation ran out of attempts for a stage. If the student is
+   *  parked waiting to jump into it, stop the wait and say so — a spinner that
+   *  never resolves is the worst possible answer (David 2026-08-04: "teach me
+   *  traps for x openings just keeps loading / never plays the trap lines").
+   *  Only the parked stage gets a message; a stage nobody asked for failing in
+   *  the background is not news. */
+  const handleStageUnavailable = useCallback(
+    (stage: 'concepts' | 'findMove' | 'drill' | 'punish'): void => {
+      if (walkthrough.pendingStageJump !== stage) {
+        walkthrough.abandonStageJump(stage);
+        return;
+      }
+      walkthrough.abandonStageJump(stage);
+      const labels: Record<typeof stage, string> = {
+        concepts: 'quiz questions',
+        findMove: 'find-the-move puzzles',
+        drill: 'drill lines',
+        punish: 'trap lines',
+      };
+      const msg = `No verified ${labels[stage]} for this opening yet — the ones we had didn't hold up. The rest of the menu still works.`;
+      const id = `stage-unavailable-${stage}-${Date.now()}`;
+      setMessages((prev) => [
+        ...prev,
+        { id, role: 'assistant', content: msg, timestamp: Date.now() },
+      ]);
+    },
+    [walkthrough],
+  );
+
   // Coach asks the student whether they want to play the line out
   // themselves the first time they reach the leaf of a given opening.
   // Conversational prompt that matches the user's path into the
@@ -3315,6 +3344,7 @@ export function CoachTeachPage(): JSX.Element {
               cachedTree.openingName,
               cachedTree,
               handleStageMerged,
+              handleStageUnavailable,
             );
           }
           return;
@@ -3441,6 +3471,7 @@ export function CoachTeachPage(): JSX.Element {
               sharedTree.openingName,
               sharedTree,
               handleStageMerged,
+              handleStageUnavailable,
             );
           }
           return;
@@ -3523,6 +3554,7 @@ export function CoachTeachPage(): JSX.Element {
                 requestedName,
                 result.tree,
                 handleStageMerged,
+                handleStageUnavailable,
               );
             }
           } else {
@@ -4147,6 +4179,7 @@ export function CoachTeachPage(): JSX.Element {
                     genResult.tree.openingName,
                     genResult.tree,
                     handleStageMerged,
+                    handleStageUnavailable,
                   );
                 }
                 return { ok: true };

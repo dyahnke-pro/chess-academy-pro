@@ -41,6 +41,13 @@ import { buildDrillWrongTeaching, buildDrillBetterLine, buildDrillThreatSpot, bu
 import { computeWatchGemAside } from '../services/gemCrushLines';
 import { playOutPunish, advantageAlreadyShown } from '../services/punishPlayout';
 import { computeThreatDelta, computeRouteDelta, type DeltaAside } from '../services/engineDeltaLines';
+import {
+  isStartablePunishLesson,
+  isValidConceptsQuestion,
+  isValidFindMoveQuestion,
+  isValidDrillLine,
+  stageArrayHasUsableEntry,
+} from '../services/stageEntryValidity';
 import { useAppStore } from '../stores/appStore';
 import { resolveCoachNarration } from '../utils/coachNarration';
 import type {
@@ -48,8 +55,6 @@ import type {
   WalkthroughTreeNode,
   WalkthroughTreeChild,
   PunishLesson,
-  ConceptCheckQuestion,
-  FindMoveQuestion,
   DrillLine,
   NarrationArrow,
   NarrationHighlight,
@@ -89,86 +94,18 @@ function sideAtIndex(plyIndex: number): 'white' | 'black' {
   return plyIndex % 2 === 0 ? 'white' : 'black';
 }
 
-/** Is this punish lesson safe to launch as a trap walkthrough?
- *
- *  The picker feeds EVERY punish lesson on the tree into
- *  `buildPunishWalkthroughTree` + `start()`. Fresh gen paths
- *  (`generatePunishFromDb` / `repairPunishStage`) guarantee the shape,
- *  but a lesson that entered `tree.punish` via a LEGACY Dexie tree or
- *  the SHARED Supabase cache never re-runs the repair pipeline —
- *  `getCachedOpening` only re-checks the tree's move legality, not the
- *  punish-stage field shapes. Such a lesson can be missing
- *  `distractors` / `setupMoves`, or carry an illegal inaccuracy /
- *  punishment. Launching it used to throw synchronously in the
- *  picker's onClick (missing field) or freeze the board at the setup
- *  position (illegal SAN) — the "trap line fails to start" bug (David
- *  2026-07-15). Gate every lesson through this before surfacing it in
- *  the picker OR counting it toward the stage-menu button, so a broken
- *  lesson never reaches the student.
- *
- *  Requirements: a punishment + inaccuracy SAN, at least one distractor
- *  (so the fork is a real choice, not a degenerate auto-answer), a
- *  reachable start position (setupFen OR replayable setupMoves), and
- *  legality of inaccuracy → punishment from that position. */
-export function isStartablePunishLesson(lesson: PunishLesson | null | undefined): boolean {
-  if (!lesson) return false;
-  const distractors = Array.isArray(lesson.distractors) ? lesson.distractors : [];
-  const setupMoves = Array.isArray(lesson.setupMoves) ? lesson.setupMoves : [];
-  if (distractors.length < 1) return false;
-  if (typeof lesson.inaccuracy !== 'string' || !lesson.inaccuracy.trim()) return false;
-  if (typeof lesson.punishment !== 'string' || !lesson.punishment.trim()) return false;
-  try {
-    const c = lesson.setupFen ? new Chess(lesson.setupFen) : new Chess();
-    if (!lesson.setupFen) {
-      for (const san of setupMoves) c.move(stripSanAnnotations(san));
-    }
-    // The opponent's inaccuracy, then the student's punishment, must
-    // both be legal from the resolved position.
-    if (!c.move(stripSanAnnotations(lesson.inaccuracy))) return false;
-    if (!c.move(stripSanAnnotations(lesson.punishment))) return false;
-  } catch {
-    return false;
-  }
-  return true;
-}
-
-/** Shape-guards for the OTHER post-walkthrough stages (David 2026-07-15
- *  — the "did you sweep for similar failures?" pass). Same failure class
- *  as `isStartablePunishLesson`: `concepts` / `findMove` / `drill` are
- *  loaded from the SAME cache paths as `punish`, and a legacy Dexie tree
- *  or shared Supabase cache entry never re-runs its `repair*Stage`. A
- *  malformed one (missing `choices` / `candidates` / `moves`) makes the
- *  QuizPanel's `q.choices.map(...)` / `q.candidates.map(...)` throw at
- *  RENDER time (worse than punish's onClick throw) or the drill runtime
- *  crash on `line.moves.length`. Gate the stage counts + the pickers on
- *  these so a stage composed only of malformed entries never shows a
- *  dead tile, and defend the renders/handlers so one that slips through
- *  degrades to empty instead of crashing. */
-export function isValidConceptsQuestion(q: ConceptCheckQuestion | null | undefined): boolean {
-  return (
-    !!q &&
-    typeof q.prompt === 'string' &&
-    q.prompt.trim().length > 0 &&
-    Array.isArray(q.choices) &&
-    q.choices.length >= 2 &&
-    q.choices.some((c) => !!c && c.correct)
-  );
-}
-
-export function isValidFindMoveQuestion(q: FindMoveQuestion | null | undefined): boolean {
-  return (
-    !!q &&
-    typeof q.prompt === 'string' &&
-    q.prompt.trim().length > 0 &&
-    Array.isArray(q.candidates) &&
-    q.candidates.length >= 2 &&
-    q.candidates.some((c) => !!c && c.correct)
-  );
-}
-
-export function isValidDrillLine(line: DrillLine | null | undefined): boolean {
-  return !!line && Array.isArray(line.moves) && line.moves.length > 0;
-}
+// The four stage-entry shape guards now live in the LEAF
+// `services/stageEntryValidity` so the GENERATOR can import them too. They used
+// to live here, in a hook, which is why `openingGenerator.getMissingStages`
+// grew its own weaker `length > 0` test — and why "teach me the traps in X"
+// could hang forever on a stage that was non-empty but entirely unusable
+// (David 2026-08-04). Re-exported so every existing import site keeps working.
+export {
+  isStartablePunishLesson,
+  isValidConceptsQuestion,
+  isValidFindMoveQuestion,
+  isValidDrillLine,
+};
 
 /** Where a drill line actually STARTS for the student: the position after
  *  auto-playing any leading OPPONENT moves. A White-side line starts at the
@@ -583,6 +520,11 @@ export interface UseTeachWalkthroughReturn {
    *  automatically when the stage merges in. null = no pending
    *  jump. */
   pendingStageJump: StageKind | null;
+  /** Clear a parked stage jump because background generation exhausted its
+   *  attempts and the stage will never fill. No-op unless the given stage is
+   *  the one currently parked, so a late failure for some OTHER stage can't
+   *  cancel a jump that is still legitimately waiting. */
+  abandonStageJump: (stage: StageKind) => void;
   /** Cancel a pending stage jump (UI's "back" / "cancel" affordance
    *  on the loading indicator). The student returns to the regular
    *  stage menu and can pick a different stage. */
@@ -841,25 +783,14 @@ function stageHasEntries(
   t: WalkthroughTree | null,
 ): boolean {
   if (!t) return false;
-  const arr = t[stage];
-  if (!Array.isArray(arr) || arr.length === 0) return false;
   // Every stage's entries can be individually malformed when they come
   // from a legacy/shared cache that skipped `repair*Stage` — count only
   // the ones that will actually work, so the stage-menu button + auto-
   // jump never land the student on a dead tile or a crashing render
-  // (David 2026-07-15, the "sweep the siblings" pass).
-  switch (stage) {
-    case 'punish':
-      return (arr as PunishLesson[]).some(isStartablePunishLesson);
-    case 'concepts':
-      return (arr as ConceptCheckQuestion[]).some(isValidConceptsQuestion);
-    case 'findMove':
-      return (arr as FindMoveQuestion[]).some(isValidFindMoveQuestion);
-    case 'drill':
-      return (arr as DrillLine[]).some(isValidDrillLine);
-    default:
-      return true;
-  }
+  // (David 2026-07-15, the "sweep the siblings" pass). The generator asks
+  // the SAME question through the same helper, so a stage can never be
+  // "present enough to skip regenerating" but "too broken to enter".
+  return stageArrayHasUsableEntry(stage, t[stage]);
 }
 
 export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
@@ -2119,6 +2050,24 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     });
   }, [pendingStageJump, tree]);
 
+  /** Give up on a parked stage jump: background generation ran out of attempts
+   *  and this stage will never fill for this opening. Without this the student
+   *  sits on the "loading…" state forever (David 2026-08-04, "teach me the
+   *  traps in X just keeps loading"). Clearing it drops them back to the stage
+   *  menu, where the surface says so plainly and the other stages still work. */
+  const abandonStageJump = useCallback((stage: StageKind): void => {
+    setPendingStageJump((current) => {
+      if (current !== stage) return current;
+      void logAppAudit({
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'useTeachWalkthrough.pendingStageJump.abandoned',
+        summary: `stage "${stage}" produced nothing startable — clearing the parked jump`,
+      });
+      return null;
+    });
+  }, []);
+
   const selectDrillLine = useCallback(
     (lineIndex: number): void => {
       if (!tree?.drill || lineIndex < 0 || lineIndex >= tree.drill.length) {
@@ -2448,6 +2397,7 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     drillLineChosen,
     pendingStageJump,
     cancelPendingStageJump,
+    abandonStageJump,
     start,
     pause,
     resume,
