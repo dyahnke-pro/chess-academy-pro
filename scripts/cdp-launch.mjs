@@ -8,6 +8,7 @@
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 async function main() {
   const exe = await resolveChromiumExecutable(false);
@@ -18,6 +19,7 @@ async function main() {
   });
   const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 414, height: 896 }, deviceScaleFactor: 2, userAgent: 'AuditCoachPlayBot/1.0 (byhand-cdp)' });
   await ctx.addInitScript(autoDismissCalibration);
+  await ctx.addInitScript(muteTtsForAudit); // no TTS spend — see mute-tts.mjs
   await ctx.newPage();
   console.log('[cdp-launch] ready on :9222');
   // keep alive

@@ -20,6 +20,7 @@
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
@@ -53,6 +54,7 @@ async function run() {
   const browser = await chromium.launch({ executablePath, args: sandboxLaunchArgs() });
   const ctx = await browser.newContext(sandboxContextOptions());
   await ctx.addInitScript(autoDismissCalibration);
+  await ctx.addInitScript(muteTtsForAudit); // no TTS spend — see mute-tts.mjs
 
   const results = [];
   const page = await ctx.newPage();

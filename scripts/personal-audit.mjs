@@ -5,6 +5,7 @@
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 const BASE = process.env.AUDIT_SMOKE_URL ?? 'https://chess-academy-pro.vercel.app';
 const log = (s) => console.log(s);
 async function snap(p){return p.$$eval('[data-testid="chat-message-assistant"]',es=>es.map(e=>{const b=e.querySelector('[data-testid="coach-badge"]');const bt=b?.textContent??'';let t=e.textContent||'';if(bt&&t.startsWith(bt))t=t.slice(bt.length);return t.trim();}));}
@@ -16,7 +17,8 @@ async function main(){
   const exe=await resolveChromiumExecutable(false);
   const br=await chromium.launch({headless:true,executablePath:exe,args:sandboxLaunchArgs()});
   const ctx=await br.newContext({...sandboxContextOptions(),viewport:{width:414,height:896},userAgent:'PersonalAudit/1.0'});
-  await ctx.addInitScript(autoDismissCalibration);const page=await ctx.newPage();
+  await ctx.addInitScript(autoDismissCalibration);
+  await ctx.addInitScript(muteTtsForAudit); // no TTS spend — see mute-tts.mjsconst page=await ctx.newPage();
   log(`\n================ PERSONAL AUDIT — ${BASE} ================\n`);
   // setpos board reads (fresh session each)
   const SET=[

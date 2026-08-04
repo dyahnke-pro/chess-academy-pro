@@ -8,6 +8,7 @@
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 const APP = process.env.AUDIT_SMOKE_URL || 'http://localhost:5173';
 
@@ -53,6 +54,7 @@ const browser = await chromium.launch({ executablePath: exe, headless: true, arg
 const ctx = await browser.newContext(sandboxContextOptions());
 const page = await ctx.newPage();
 await page.addInitScript(autoDismissCalibration);
+  await page.addInitScript(muteTtsForAudit); // no TTS spend — see mute-tts.mjs
 
 try {
   console.log(`=== calc-from-games classification matrix → ${APP} ===\n`);

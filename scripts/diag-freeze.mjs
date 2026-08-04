@@ -6,6 +6,7 @@ import {
   resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions,
 } from './audit-lib/chromium.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL ?? 'https://chess-academy-pro.vercel.app';
 const log = (s) => console.log(s);
@@ -27,6 +28,7 @@ async function main() {
     ...sandboxContextOptions(), viewport: { width: 414, height: 896 }, userAgent: 'FreezeDiag/1.0',
   });
   if (process.env.DISMISS_BUBBLE !== '0') await ctx.addInitScript(autoDismissCalibration);
+  await ctx.addInitScript(muteTtsForAudit); // no TTS spend — see mute-tts.mjs
   const page = await ctx.newPage();
 
   const consoleMsgs = [];

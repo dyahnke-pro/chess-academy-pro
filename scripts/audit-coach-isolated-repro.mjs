@@ -11,6 +11,7 @@
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'http://localhost:5173';
 const CAP_MS = Number(process.env.REPRO_CAP_MS ?? 120000);
@@ -33,6 +34,7 @@ async function main() {
   for (const input of INPUTS) {
     const ctx = await browser.newContext({ ...sandboxContextOptions() });
     await ctx.addInitScript(autoDismissCalibration);
+  await ctx.addInitScript(muteTtsForAudit); // no TTS spend — see mute-tts.mjs
     const page = await ctx.newPage();
     let verdict = 'NO-RESPONSE';
     let elapsed = CAP_MS;

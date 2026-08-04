@@ -19,6 +19,7 @@
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { readFile, appendFile, writeFile } from 'node:fs/promises';
 
 const BASE = process.env.AUDIT_SMOKE_URL ?? 'http://127.0.0.1:8099';
@@ -34,6 +35,7 @@ const exe = await resolveChromiumExecutable(false);
 const browser = await chromium.launch({ headless: true, executablePath: exe, args: sandboxLaunchArgs() });
 const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, userAgent: 'AuditManualDrive/1.0 (chromium)' });
 await ctx.addInitScript(autoDismissCalibration);
+  await ctx.addInitScript(muteTtsForAudit); // no TTS spend — see mute-tts.mjs
 await ctx.addInitScript(() => { const s=()=>{const a=document.querySelector('[data-testid="ai-consent-allow"]'); if(a instanceof HTMLElement)a.click();}; const st=()=>{if(!document.body){setTimeout(st,50);return;} new MutationObserver(s).observe(document.body,{childList:true,subtree:true}); s();}; st(); setInterval(s,300); });
 const page = await ctx.newPage();
 const errs = [];

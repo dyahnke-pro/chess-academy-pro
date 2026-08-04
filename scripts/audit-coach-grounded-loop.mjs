@@ -21,6 +21,7 @@
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL ?? 'http://127.0.0.1:8099';
 const MAX_PASSES = Number(process.env.AUDIT_MAX_PASSES ?? 5);
@@ -64,6 +65,7 @@ async function run() {
   const browser = await chromium.launch({ headless: true, executablePath: exe, args: sandboxLaunchArgs() });
   const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 414, height: 896 }, userAgent: 'AuditGroundedLoopBot/1.0 (chromium)' });
   await ctx.addInitScript(autoDismissCalibration);
+  await ctx.addInitScript(muteTtsForAudit); // no TTS spend — see mute-tts.mjs
   // Auto-grant AI consent (Apple 5.1.1) so sends aren't blocked by the modal.
   await ctx.addInitScript(() => {
     const sweep = () => { const a = document.querySelector('[data-testid="ai-consent-allow"]'); if (a instanceof HTMLElement) a.click(); };

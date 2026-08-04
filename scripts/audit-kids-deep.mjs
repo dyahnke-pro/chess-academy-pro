@@ -14,6 +14,7 @@ import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
@@ -48,6 +49,7 @@ async function main() {
   const page = await ctx.newPage();
 
   await page.addInitScript(autoDismissCalibration);
+  await page.addInitScript(muteTtsForAudit); // no TTS spend — see mute-tts.mjs
   await page.addInitScript(() => {
     // @ts-ignore
     window.__audit_speak_calls = [];

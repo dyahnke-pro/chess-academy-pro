@@ -58,6 +58,52 @@ After every push that lands on `main`, run the post-deploy audit
 instrument verifies a different layer; missing one leaves a gap that
 the others can't see.
 
+🔒🔒 **AUDITS RUN MUTED — NEVER SPEND TTS MONEY TO AUDIT (David 2026-08-04,
+emphatic: "I like that fix for the audit!! Lock it in!!!" — after the
+3-instrument audit ran him **$100 over** in a single day).**
+
+An audit needs to know WHAT the coach said, not to hear it. The narration
+listener already reads the spoken line out of the app's own
+`coach-narration-spoken` audit event, which carries the full text — so
+synthesising it produces audio nobody is in the room to hear, and bills for it.
+
+**Every audit that drives the app injects the mute:**
+```js
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
+await ctx.addInitScript(muteTtsForAudit);   // next to autoDismissCalibration
+```
+It sets `localStorage.auditMuteTts='1'`; `voiceService.speakInternal` honours it
+by emitting the SAME `coach-narration-spoken` event with the SAME text, resolving
+the speak promise on a text-proportional delay (so voice-gated auto-advance keeps
+real pacing), and skipping every synthesis tier. Same signal, zero bill. Gate:
+`voiceService.auditMute.test.ts` (product code may never set the flag; the helper
+key and the service key may never drift — a drift is invisible, audits stay green
+while the bill grows).
+
+**The ONLY audits that may synthesise** are the ones whose purpose IS the audio:
+the `/api/tts` contract, iOS decode, MediaSource streaming. Those are short,
+deliberate runs — never a side effect of auditing something else. ~43 scripts
+still intercept `/api/tts` as their narration instrument and are therefore left
+unmuted; they should migrate to the listener (which is the proper instrument per
+§G1 anyway — "decoding /api/tts request text alone is NOT the voice gate").
+
+**THE VOICE IS GOOGLE, NOT POLLY (David 2026-08-04).** The migration landed —
+`/api/tts` is served by Google Cloud TTS behind the provider seam (`x-tts-source:
+google` on prod). The client method is still named `speakPolly` and the tier
+comment still says "Amazon Polly": that is LEGACY NAMING, not the current
+provider. Don't reason about cost from those names, and don't "fix" a bug by
+reaching for Polly. The audit mute is placed above the tier for exactly this
+reason — it skips the `/api/tts` request itself and stays correct across seam
+swaps.
+
+**COST ALSO COMES FROM CACHE INVALIDATION, not just from speaking.** `/api/tts`
+clips are CDN-cached forever on `(text, voice, style)`, so repeated identical
+lines are free. But bumping `WALKTHROUGH_GEN_REV` regenerates every lesson's
+prose into NEW strings, which miss the clip cache entirely and re-synthesise from
+scratch. The bump is often necessary (beats bake at generation time), but **batch
+gen-rev changes into ONE bump per deploy**, never one per fix, and expect a
+synthesis bill after any bump.
+
 The three instruments (use them on EVERY post-deploy audit, no
 exceptions):
 

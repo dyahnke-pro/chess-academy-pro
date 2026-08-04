@@ -27,6 +27,7 @@ import { chromium } from 'playwright';
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL ?? 'http://127.0.0.1:8099';
@@ -85,6 +86,7 @@ async function run() {
   const browser = await chromium.launch({ headless: true, executablePath: exe, args: sandboxLaunchArgs() });
   const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 414, height: 896 }, userAgent: 'AuditGroundingCoverageBot/1.0 (chromium)' });
   await ctx.addInitScript(autoDismissCalibration);
+  await ctx.addInitScript(muteTtsForAudit); // no TTS spend — see mute-tts.mjs
   // Point the app's audit stream at the local listener + auto-grant AI consent.
   // The listener 401s any POST whose x-audit-secret != its own secret, so the
   // app's auditStreamSecret MUST be listener.secret or nothing is captured.

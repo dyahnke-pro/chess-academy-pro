@@ -13,6 +13,7 @@ import { chromium } from 'playwright';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -67,7 +68,8 @@ async function main() {
   const exe = await resolveChromiumExecutable(HEADED);
   const browser = await chromium.launch({ args: sandboxLaunchArgs(), headless: !HEADED, executablePath: exe });
   const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 414, height: 896 }, deviceScaleFactor: 2, userAgent: 'AuditCoachPlayBot/1.0 (openings-teach)' });
-  await ctx.addInitScript(autoDismissCalibration); const page = await ctx.newPage();
+  await ctx.addInitScript(autoDismissCalibration);
+  await ctx.addInitScript(muteTtsForAudit); // no TTS spend — see mute-tts.mjs const page = await ctx.newPage();
   await gotoS(page, '/', null); await page.getByText('Chess Academy Pro', { exact: true }).first().waitFor({ timeout: 30000 }).catch(() => {});
   const seeded = await waitForSeed(page); log(`[seed] openings store count = ${seeded}`);
 

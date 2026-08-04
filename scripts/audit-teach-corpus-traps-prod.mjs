@@ -41,6 +41,7 @@ import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
@@ -116,6 +117,9 @@ async function main() {
     { url: listener.url, secret: listener.secret },
   );
   await context.addInitScript(autoDismissCalibration);
+  // No TTS spend: the listener reads the spoken text from the audit events, so
+  // synthesising it buys nothing and costs real money (see mute-tts.mjs).
+  await context.addInitScript(muteTtsForAudit);
   const page = await context.newPage();
 
   const pageErrors = [];

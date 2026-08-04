@@ -10,6 +10,7 @@ import { mkdir } from 'node:fs/promises';
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'http://localhost:5173';
 const OUT = 'audit-reports/kid-screenshots';
@@ -33,6 +34,7 @@ async function main() {
     hasTouch: true,
   });
   await ctx.addInitScript(autoDismissCalibration);
+  await ctx.addInitScript(muteTtsForAudit); // no TTS spend — see mute-tts.mjs
   const page = await ctx.newPage();
 
   // Warm the app once so the deferred seed (puzzle pool, kid data) lands before

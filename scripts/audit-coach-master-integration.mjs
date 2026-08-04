@@ -42,6 +42,7 @@
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { attachAuditStreamTracker, attributeScenarioEvents, readAllPageAudits } from './audit-lib/event-attribution.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -112,6 +113,7 @@ async function main() {
   // Configure the audit stream so logAppAudit() POSTs land on the
   // captured-requests list below.
   await ctx.addInitScript(autoDismissCalibration);
+  await ctx.addInitScript(muteTtsForAudit); // no TTS spend — see mute-tts.mjs
   await ctx.addInitScript(
     ({ url, secret }) => {
       try {

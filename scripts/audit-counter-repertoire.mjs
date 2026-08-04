@@ -25,6 +25,7 @@
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'https://chess-academy-pro.vercel.app';
@@ -98,6 +99,7 @@ async function main() {
       // isolation is the only configuration that reproduced 100% (2026-07-15).
       const context = await browser.newContext(sandboxContextOptions());
       await context.addInitScript(autoDismissCalibration);
+  await context.addInitScript(muteTtsForAudit); // no TTS spend — see mute-tts.mjs
       const page = await context.newPage();
       await page.goto(`${BASE_URL}/coach/chat`, { waitUntil: 'domcontentloaded', timeout: 45_000 });
       await page.waitForTimeout(6_000); // store hydration (see audit-coach-chat)

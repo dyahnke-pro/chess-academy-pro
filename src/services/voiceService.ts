@@ -1360,6 +1360,38 @@ class VoiceService {
 
     this.speed = prefs.voiceSpeed;
 
+    // ── AUDIT MUTE (David 2026-08-04: "I like that fix for the audit!! Lock it
+    //    in!!!") ────────────────────────────────────────────────────────────
+    //
+    // An audit needs to know WHAT the coach said, not to hear it. The narration
+    // listener reads the text out of the `coach-narration-spoken` audit event,
+    // so the synthesis itself adds nothing to the signal — it only spends money.
+    // Driving prod narration repeatedly through Playwright ran David $100 over
+    // on TTS in a single day.
+    //
+    // So in audit mode we emit the SAME events with the SAME text and skip
+    // every synthesis tier. The audit is byte-identical; the bill is zero.
+    //
+    // PROVIDER-AGNOSTIC ON PURPOSE, and deliberately placed ABOVE Tier 1. The
+    // method below is still called `speakPolly` and the tier comment still says
+    // "Amazon Polly", but that is legacy naming: since the provider-seam
+    // migration the voice is GOOGLE CLOUD TTS, served behind `/api/tts` (a prod
+    // probe returns `x-tts-source: google`). Muting here skips the `/api/tts`
+    // request itself, so it costs nothing whichever provider is on the other
+    // side — and it keeps working when the seam swaps again.
+    //
+    // The promise still resolves on a duration proportional to the text,
+    // because auto-advance is VOICE-PROMISE GATED (the locked strict-narration
+    // contract) — returning instantly would rip the walkthrough through its
+    // beats and audit a pacing no user will ever see.
+    if (this.isAuditMuted()) {
+      void this.logNarrationSpoken(text, 'audit-muted', prefs);
+      this.lastTier = 'muted';
+      this.lastSpeakDiagnostic.tier = 'muted';
+      await this.simulateSpeechDuration(text);
+      return;
+    }
+
     // Tier 1: Amazon Polly.
     if (prefs.pollyEnabled && this.isPollyLive()) {
       // WO-COACH-PERSONALITY-VOICE: resolve voice from active
@@ -1593,6 +1625,50 @@ class VoiceService {
         details: reason,
       });
     });
+  }
+
+  /** Is this session an audit that must not spend a cent on TTS?
+   *
+   *  Set by the audit harness before the app boots:
+   *      await context.addInitScript(() => {
+   *        window.localStorage.setItem('auditMuteTts', '1');
+   *      });
+   *
+   *  Deliberately a localStorage flag rather than an env var or a build flag:
+   *  the audit drives the LIVE PRODUCTION bundle (that is the whole point of a
+   *  post-deploy audit), so the switch has to be something a Playwright context
+   *  can set on the real site. It is read once and cached — this sits on the
+   *  hot path of every spoken line.
+   *
+   *  A real user never has this key. Nothing in the app writes it. */
+  private auditMutedCache: boolean | null = null;
+
+  private isAuditMuted(): boolean {
+    if (this.auditMutedCache !== null) return this.auditMutedCache;
+    try {
+      this.auditMutedCache = globalThis.localStorage?.getItem('auditMuteTts') === '1';
+    } catch {
+      this.auditMutedCache = false; // no localStorage (SSR, locked-down context)
+    }
+    return this.auditMutedCache;
+  }
+
+  /** Hold for roughly as long as the line would have taken to speak.
+   *
+   *  ~150 wpm is Polly's real pace for chess prose (see the READING_WPM notes
+   *  in WalkthroughMode). Bounded at both ends so a one-word cue still yields a
+   *  beat and a long keystone can't stall an audit for a minute. Cancellable by
+   *  the same stop-generation counter every other tier respects, so a stop() or
+   *  a superseding speak() cuts it short exactly as real audio would be cut. */
+  private async simulateSpeechDuration(text: string): Promise<void> {
+    const words = text.trim().split(/\s+/).filter(Boolean).length;
+    const ms = Math.min(12_000, Math.max(400, Math.round((words / 150) * 60_000)));
+    const genAtStart = this.stopGeneration;
+    const step = 100;
+    for (let waited = 0; waited < ms; waited += step) {
+      if (this.stopGeneration !== genAtStart) return; // superseded — stop early
+      await new Promise((r) => setTimeout(r, Math.min(step, ms - waited)));
+    }
   }
 
   /** WO-COACH-PERSONALITY-VOICE: emit a `coach-narration-spoken` audit

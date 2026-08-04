@@ -25,6 +25,7 @@
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'https://chess-academy-pro.vercel.app';
@@ -98,6 +99,7 @@ async function main() {
       userAgent: 'AuditCoachMoveCmdBot/1.0 (chromium)',
     });
     await ctx.addInitScript(autoDismissCalibration);
+  await ctx.addInitScript(muteTtsForAudit); // no TTS spend — see mute-tts.mjs
     await ctx.addInitScript(() => {
       const sweep = () => {
         const allow = document.querySelector('[data-testid="ai-consent-allow"]');

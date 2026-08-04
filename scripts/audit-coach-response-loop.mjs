@@ -25,6 +25,7 @@ import { chromium } from 'playwright';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -431,6 +432,7 @@ async function main() {
   const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 414, height: 896 }, deviceScaleFactor: 2, userAgent: 'AuditCoachPlayBot/1.0 (response-loop)' });
   await ctx.addInitScript(({ url, secret }) => { try { localStorage.setItem('auditStreamUrl', url); localStorage.setItem('auditStreamSecret', secret); } catch {} }, { url: STREAM_URL, secret: SECRET });
   await ctx.addInitScript(autoDismissCalibration);
+  await ctx.addInitScript(muteTtsForAudit); // no TTS spend — see mute-tts.mjs
   const page = await ctx.newPage();
   await gotoSurface(page, '/', null);
   await page.getByText('Chess Academy Pro', { exact: true }).first().waitFor({ timeout: 30_000 }).catch(() => {});

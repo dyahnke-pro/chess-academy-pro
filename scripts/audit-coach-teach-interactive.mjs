@@ -25,6 +25,7 @@
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 // SANDBOX_CHROMIUM_ARGS workaround exists but this script has
 // scenario-level issues (welcome-line testid changed; coach-response
 // wait pattern broken) that surface once brain is unblocked. Keep
@@ -268,6 +269,7 @@ async function main() {
     ignoreHTTPSErrors: true,
   });
   await ctx.addInitScript(autoDismissCalibration);
+  await ctx.addInitScript(muteTtsForAudit); // no TTS spend — see mute-tts.mjs
   const page = await ctx.newPage();
 
   // Brain-reachability gate. This audit drives ~10 scenarios that
