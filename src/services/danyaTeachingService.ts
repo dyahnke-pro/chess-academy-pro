@@ -19,10 +19,11 @@ import { Chess } from 'chess.js';
 import teachingsData from '../data/danya-teachings.json';
 import { computeStructureSignature, signatureMatchScore, type StructureSignature } from './structureSignature';
 import { validateBoardClaims } from './boardClaimValidator';
-import { secondarySupportNotes, secondaryNotesForPosition } from './secondaryCorpora';
+import { secondarySupportNotes, secondaryNotesForPosition, secondaryNotesForFen } from './secondaryCorpora';
 import { detectOpening } from './openingDetectionService';
 import { noteContradictsLine, notePhaseMismatchesBoard } from './noteLineGuard';
 import { boardConcepts } from './boardConcepts';
+import { noteDescribesPosition } from './noteAnchorIntegrity';
 
 export interface DanyaNote {
   id: string;
@@ -141,6 +142,7 @@ const MIN_TEACHING_ANCHOR_PLIES = 3;
 const anchorTeachesItsPosition = (n: DanyaNote): boolean =>
   n.lineSan.length >= MIN_TEACHING_ANCHOR_PLIES;
 
+
 for (const n of DATA.notes) {
   if (n.lineSan.length > 0) {
     const key = n.lineSan.join(' ');
@@ -199,7 +201,7 @@ function ensureFenIndex(): void {
 
 /** Notes whose taught position IS this position — regardless of the move
  *  order that reached it (transposition-safe). */
-export function notesForFen(fen: string, maxNotes = 3): DanyaNote[] {
+export function notesForFen(fen: string, maxNotes = Infinity): DanyaNote[] {
   ensureFenIndex();
   return (byFen.get(normFen(fen)) ?? []).slice(0, maxNotes);
 }
@@ -209,7 +211,7 @@ export function notesForFen(fen: string, maxNotes = 3): DanyaNote[] {
  *  `withinPlies` bounds ancestor staleness — a note anchored more than that
  *  many plies behind the current position is skipped (its moment has passed;
  *  the plan may already be resolved). `maxNotes` bounds the injection size. */
-export function notesForPrefix(historySans: string[], maxNotes = 3, withinPlies = Infinity): DanyaNote[] {
+export function notesForPrefix(historySans: string[], maxNotes = Infinity, withinPlies = Infinity): DanyaNote[] {
   const out: DanyaNote[] = [];
   const minLen = Number.isFinite(withinPlies) ? Math.max(1, historySans.length - withinPlies) : 1;
   for (let len = historySans.length; len >= minLen && out.length < maxNotes; len -= 1) {
@@ -226,53 +228,60 @@ export function notesForPrefix(historySans: string[], maxNotes = 3, withinPlies 
  *  (not an ancestor) — for step narration, where an ancestor note would
  *  narrate a move that already happened. Pass `fen` (the live board) to also
  *  catch transpositions into a taught position. */
-/** The SUPPORT-tier fallback for a ply the exact tier has nothing for.
+/** STRUCTURE-TRANSFER fallback for a ply the exact tier has nothing for: a note
+ *  from any opening whose taught STRUCTURE provably matches this board and whose
+ *  concrete claims survive the live-board filter inside `notesForStructure`.
+ *  Code selects, code verifies.
  *
- *  David 2026-08-01, on a Tier-2 opening whose exact tier covers 3 of 10
- *  plies: "hopefully the other notes pick up the slack. That should happen
- *  right?" — it should, and on the walkthrough it did not. The support tier
- *  and structure transfer were wired into `teachingNoteForBoard` (the
- *  chat/facts-package path) but not into the walkthrough splice, so the
- *  uncovered plies fell back to computed prose while perfectly good notes sat
- *  unused. This is the same ordering `teachingNoteForBoard` uses: a note keyed
- *  at THIS position always wins, then teaching about THIS opening, then a
- *  borrowed note whose structure provably matches the board.
+ *  🔒 THE OPENING-NAME ARM IS GONE (2026-08-04). This used to reach any note
+ *  TAGGED with the lesson's opening — matched on name-token overlap, scored
+ *  ≥ 0.6, with no reference to the board at all. That was the one
+ *  non-deterministic selector in the chain, and it is what put a note authored
+ *  at a different position in front of the model to phrase as if it described
+ *  this one: a Caro-Kann lesson narrating "the tactic Bxf7+ followed by Nxe5
+ *  works only if Black's bishop on d6 is defended" at move two. `openingGenerator`
+ *  had documented the correct contract since 2026-07-30 — "never the fuzzy
+ *  tiers, so a note can't land on the wrong ply" — and wiring this tier into
+ *  the splice on 2026-08-01 broke it.
+ *
+ *  Opening-level notes are not lost. They are lesson-level material, and
+ *  `buildDanyaTeachingBlock` is where they belong: context for the whole
+ *  lesson, never a claim about the move on the board right now.
  *
  *  Kept separate from `noteAtPosition` rather than folded into it: that
  *  function's contract is "EXACTLY at this position", and several callers
- *  (fork talk, step narration) depend on that strictness. Widening it in place
- *  would loosen all of them at once. */
+ *  (fork talk, step narration) depend on that strictness. */
 export function supportNoteForPly(
   historySans: string[],
   fen: string,
   openingName?: string | null,
+  /** Notes the caller has already spoken, so this can advance to the next
+   *  usable one instead of returning a repeat the caller must discard.
+   *
+   *  Measured 2026-08-04 across the 1,310 plies of `repertoire.json`: 647 of
+   *  them — 49% — retrieved a note the lesson had ALREADY used, and every one
+   *  was thrown away by the generator's dedupe, leaving the ply silent. That is
+   *  three times as many plies as actually got teaching (207). Retrieval always
+   *  returned its single best candidate; the caller could only accept or drop
+   *  it, never ask for the next one. */
+  exclude?: ReadonlySet<string>,
 ): DanyaNote | null {
-  // The support tier needs the SAME anchor floor as the exact tier. Verified
-  // after the first fix (David 2026-08-02, "the first few moves stay scoped?"):
-  // the Vienna was clean, but a Caro-Kann lesson still opened move one with
-  // `hp-5d5` — the ["e4"]-anchored note recounting a game six moves deep. The
-  // exact tier had correctly refused it; the support tier picked it straight
-  // back up, because its only scope check was the opening tag, and the tag
-  // agrees. On-topic and about-this-position are two different questions.
-  const onThisLine = (n: DanyaNote): boolean =>
+  const usable = (n: DanyaNote): boolean =>
     anchorTeachesItsPosition(n)
     && !noteContradictsLine(`${n.explains} ${n.teaches}`, historySans)
     && !notePhaseMismatchesBoard(n.phase, fen, historySans.length)
-    && !noteOpeningConflicts(n.opening, openingName);
+    && !noteOpeningConflicts(n.opening, openingName)
+    && noteDescribesPosition(n, fen)
+    && !exclude?.has(n.id);
   try {
-    if (openingName) {
-      const support = secondarySupportNotes({ historySans, openingName, maxNotes: 8 }).filter(onThisLine)[0];
-      if (support) return support;
-      // STRUCTURE TRANSFER IS OFF INSIDE A TAUGHT LESSON (David 2026-08-02:
-      // "tighten the narration notes just a touch… make sure the coach stays
-      // scoped to the opening that it was asked to teach"). Borrowing a note
-      // from a different opening because the pawn structures rhyme is the right
-      // answer for a live board past book — it is the wrong answer when the
-      // student named the opening they wanted taught. A ply with nothing to say
-      // falls back to computed prose about THIS position, which is on topic.
-      return null;
-    }
-    return notesForStructure(fen, 2).filter(onThisLine)[0] ?? null;
+    // STRUCTURE TRANSFER IS OFF INSIDE A TAUGHT LESSON (David 2026-08-02:
+    // "make sure the coach stays scoped to the opening that it was asked to
+    // teach"). Borrowing another opening's note because the pawn structures
+    // rhyme is right for a live board past book, wrong when the student named
+    // the opening they wanted taught. A ply with nothing to say falls back to
+    // computed prose about THIS position, which is on topic and true.
+    if (openingName) return null;
+    return notesForStructure(fen).filter(usable)[0] ?? null;
   } catch {
     return null; // the corpus is a bonus, never a blocker
   }
@@ -309,10 +318,23 @@ export function noteCoverageForLine(historySans: readonly string[]): number {
   return seen.size;
 }
 
+// 🔒 A note is selected for a ply when its ANCHOR PRODUCES THAT PLY'S POSITION —
+// by move-prefix or by transposition into the same FEN. Nothing else selects.
+//
+// There is deliberately no "close enough" here (David 2026-08-04: "All
+// narrations need to be deterministically found and handed to llm in the
+// package. There is no room for false narrations on this app! Ever!!"). An
+// anchor a few plies back, or a note merely TAGGED with this opening, teaches
+// about a board the student is not looking at — and handing that to the model
+// to phrase is the hallucination, upstream of any gate that might catch it. A
+// staleness window was tried here first and was wrong for the same reason: the
+// same fuzziness, smaller. `noteSelectionDeterminism.test.ts` is the proof.
 export function noteAtPosition(
   historySans: string[],
   fen?: string,
   openingName?: string | null,
+  /** Notes the caller has already spoken. See `supportNoteForPly`. */
+  exclude?: ReadonlySet<string>,
 ): DanyaNote | null {
   // A note that recites a different line than the one played narrates the wrong
   // opening (see noteLineGuard) — silence beats teaching someone else's theory.
@@ -322,18 +344,34 @@ export function noteAtPosition(
     anchorTeachesItsPosition(n)
     && !noteContradictsLine(`${n.explains} ${n.teaches}`, historySans)
     && !notePhaseMismatchesBoard(n.phase, fen, historySans.length)
-    && !noteOpeningConflicts(n.opening, openingName);
+    && !noteOpeningConflicts(n.opening, openingName)
+    // The note must describe THIS position, not merely be filed at it. 3.8% of
+    // position-keyed notes open by describing a board that cannot arise here —
+    // a transcript distilled against the wrong moment. See noteAnchorIntegrity.
+    && noteDescribesPosition(n, fen)
+    && !exclude?.has(n.id);
   const bucket = (byPrefix.get(historySans.join(' ')) ?? []).filter(onThisLine);
   if (bucket[0]) return bucket[0];
   if (fen) {
-    const viaFen = notesForFen(fen, 1).filter(onThisLine)[0];
+    // Uncapped: `notesForFen(fen, 1)` handed the filter a single candidate, so
+    // one note failing `onThisLine` (or already spoken) meant silence at a
+    // position the corpus does teach.
+    const viaFen = notesForFen(fen).filter(onThisLine)[0];
     if (viaFen) return viaFen;
   }
   // GAP TIER, exact positions only. This is the walkthrough splice's source, so
   // without it the narration goes silent on an opening the primary corpus never
   // covers. The "exactly at this position" contract is preserved — only a
   // secondary note keyed at THIS very line qualifies, never an opening-level one.
-  return secondaryNotesForPosition(historySans).filter(onThisLine)[0] ?? null;
+  const viaSecondaryPrefix = secondaryNotesForPosition(historySans).filter(onThisLine)[0];
+  if (viaSecondaryPrefix) return viaSecondaryPrefix;
+  // SECONDARY TRANSPOSITION — same contract, other corpora. Until 2026-08-04
+  // only the primary corpus was indexed by position, so 5,412 position-keyed
+  // secondary notes were reachable only by an exact move-order string match.
+  // That scarcity is what made the fuzzy opening-name arm look necessary; this
+  // is the deterministic way to get the reach back, and the note is provably
+  // about THIS board.
+  return fen ? secondaryNotesForFen(fen).filter(onThisLine)[0] ?? null : null;
 }
 
 /** The best teaching note for a live position, for FACT-PACKAGE builders
@@ -369,14 +407,15 @@ export function teachingNoteForBoard(
   const support = secondarySupportNotes({
     historySans,
     openingName: resolvedOpening,
-    maxNotes: 4,
-  }).filter((n) => !noteOpeningConflicts(n.opening, resolvedOpening))[0];
+    maxNotes: 1,
+    accept: (n) => !noteOpeningConflicts(n.opening, resolvedOpening),
+  })[0];
   if (support) return support;
   // STRUCTURE TRANSFER is deliberately cross-opening (a note from anywhere whose
   // structure provably matches this board), so the tag check does not apply —
   // its licence to borrow is the proven structure match plus the live-board
   // claim filter inside `notesForStructure`.
-  const transferred = notesForStructure(fen, 1)[0];
+  const transferred = notesForStructure(fen)[0];
   if (transferred) return transferred;
   // CONCEPT TIER — last, because it is the least specific: teaching about this
   // KIND of position rather than this one. It earns its place at the end of the
@@ -396,7 +435,7 @@ export function teachingNoteForBoard(
 /** Opening-keyed notes by (fuzzy-tokenized) opening name. "Caro-Kann Defense:
  *  Advance Variation" matches notes filed under "Caro-Kann Defense" and vice
  *  versa via token-subset matching. */
-export function notesForOpening(openingName: string, maxNotes = 4): DanyaNote[] {
+export function notesForOpening(openingName: string, maxNotes = Infinity): DanyaNote[] {
   const qTokens = new Set(normName(openingName).split(' ').filter((t) => t.length > 2));
   if (qTokens.size === 0) return [];
   const scored: Array<{ n: DanyaNote; score: number }> = [];
@@ -444,10 +483,10 @@ export function primaryCoversOpening(openingName: string): boolean {
  *  move 14; David 2026-07-12 "improve the other limitations"). */
 export function planNoteForPath(historySans: string[], fen?: string): DanyaNote | null {
   if (fen) {
-    const exact = notesForFen(fen, 6).find((n) => n.plans && n.plans.trim().length > 0);
+    const exact = notesForFen(fen).find((n) => n.plans && n.plans.trim().length > 0);
     if (exact) return exact;
   }
-  const notes = notesForPrefix(historySans, 6, 12);
+  const notes = notesForPrefix(historySans, Infinity, 12);
   return notes.find((n) => n.plans && n.plans.trim().length > 0) ?? null;
 }
 
@@ -467,12 +506,12 @@ export function transitionTeachingForGame(args: {
   fen?: string;
   openingName?: string | null;
 }): DanyaNote | null {
-  const exact = args.fen ? notesForFen(args.fen, 6).find((n) => n.plans?.trim()) : undefined;
+  const exact = args.fen ? notesForFen(args.fen).find((n) => n.plans?.trim()) : undefined;
   if (exact) return exact;
-  const recent = notesForPrefix(args.historySans, 6, 12).find((n) => n.plans?.trim());
+  const recent = notesForPrefix(args.historySans, Infinity, 12).find((n) => n.plans?.trim());
   if (recent) return recent;
   if (args.openingName) {
-    const family = notesForOpening(args.openingName, 8)
+    const family = notesForOpening(args.openingName)
       .filter((n) => n.phase === 'middlegame' && n.plans?.trim());
     // Deepest-keyed first — the most specific middlegame teaching for the family.
     family.sort((a, b) => b.lineSan.length - a.lineSan.length);
@@ -494,7 +533,7 @@ export function transitionTeachingForGame(args: {
   //    matches this board (and whose claims survive the live truth filter), so
   //    past book the transition teaching no longer goes quiet.
   if (args.fen) {
-    const transferred = notesForStructure(args.fen, 2).find((n) => n.plans?.trim());
+    const transferred = notesForStructure(args.fen).find((n) => n.plans?.trim());
     if (transferred) return transferred;
   }
   return null;
@@ -535,7 +574,7 @@ function ensureSignatureIndex(): void {
  *  opening — deterministic transfer. Excludes exact-position hits (the FEN
  *  tier owns those) and drops any note making a claim that is false on THIS
  *  board. */
-export function notesForStructure(fen: string, maxNotes = 2): DanyaNote[] {
+export function notesForStructure(fen: string, maxNotes = Infinity): DanyaNote[] {
   ensureSignatureIndex();
   ensureFenIndex();
   let live: StructureSignature;
@@ -583,11 +622,16 @@ export function buildDanyaTeachingBlock(args: {
       seen.add(n.id);
     }
   };
-  if (args.fen) add(notesForFen(args.fen, max));
+  // `max` is the BLOCK's budget (how many notes reach the prompt), not each
+  // tier's search bound. Passing it down as both meant a tier could spend its
+  // whole allowance on notes `add` then rejected as off-topic or duplicate, and
+  // the later tiers never contributed — the same "budget spent before the
+  // filter" bug the support tier had. Search wide; `add` still stops at `max`.
+  if (args.fen) add(notesForFen(args.fen));
   if (args.historySans && args.historySans.length > 0) {
-    add(notesForPrefix(args.historySans, max));
+    add(notesForPrefix(args.historySans));
   }
-  if (args.openingName) add(notesForOpening(args.openingName, max));
+  if (args.openingName) add(notesForOpening(args.openingName));
   // SUPPORT TIER — the farmed corpora, filling whatever slots the primary
   // corpus left empty (David 2026-08-01: "a third source that supports at
   // runtime"). It runs whether or not the primary covered this opening, because
@@ -599,7 +643,9 @@ export function buildDanyaTeachingBlock(args: {
     add(secondarySupportNotes({
       historySans: args.historySans,
       openingName: args.openingName,
-      maxNotes: max,
+      maxNotes: max - picked.length,
+      exclude: seen,
+      accept: onTopic,
     }));
   }
   // LAST tier — structure transfer: teachings from OTHER openings whose
@@ -612,17 +658,31 @@ export function buildDanyaTeachingBlock(args: {
   // `supportNoteForPly`. Borrowing another opening's teaching is for a board
   // that has left book, not for a lesson the student asked for by name.
   if (args.fen && !args.openingName && picked.length < max) {
-    add(notesForStructure(args.fen, max));
+    add(notesForStructure(args.fen));
   }
   if (picked.length === 0) return '';
   const lines: string[] = [
-    '═══ TEACHING CONTEXT (curated coaching notes for this opening/position — teach from these) ═══',
+    // LESSON CONTEXT, not per-ply truth. This block is assembled from tiers that
+    // include OPENING-LEVEL notes — teaching about the opening as a whole, filed
+    // under no particular position. Read as "facts about the current board" (the
+    // old header invited exactly that, saying "this opening/position"), it hands
+    // the model prose about one position to write up as if it described another.
+    // That is the same failure the per-ply splice had, one layer up: per-ply
+    // teaching now comes ONLY from a note whose line reproduces that ply's board
+    // (see `noteAtPosition`), and this block is background, never a board claim.
+    '═══ LESSON BACKGROUND (what this opening is about — NOT claims about the current position) ═══',
   ];
   for (const n of picked) {
-    const where = n.lineSan.length > 0 ? `after ${n.lineSan.join(' ')}` : (n.opening ?? 'general');
+    // Say where each note was taught, and say plainly when that is nowhere in
+    // particular, so a general idea can never be mistaken for a fact about the
+    // board the student is looking at.
+    const where = n.lineSan.length > 0
+      ? `taught after ${n.lineSan.join(' ')}`
+      : `general — ${n.opening ?? 'no specific line'}`;
     lines.push(`• [${where}] ${n.explains} ${n.teaches}${n.plans ? ` Plan: ${n.plans}` : ''}`);
   }
-  lines.push('Use these ideas when they fit the student\'s question/position; never contradict the board.');
+  lines.push('These are background ideas for the opening, NOT descriptions of the position on the board.');
+  lines.push('Draw on them only where they fit; state nothing about the current position that the board does not show.');
   lines.push('═══════════════════════════════════════════════════════════════════');
   return lines.join('\n');
 }

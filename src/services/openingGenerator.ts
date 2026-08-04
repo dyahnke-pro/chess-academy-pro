@@ -47,7 +47,7 @@ import { db, type CachedOpening } from '../db/schema';
 import { gradeNarrationText, gradeNarrationAcrossLine } from './coachAnswerGates';
 import { narrateContinuationMove } from './continuationMoveNarration';
 import { logAppAudit } from './appAuditor';
-import { buildDanyaTeachingBlock, noteAtPosition, supportNoteForPly, teachingBeatText } from './danyaTeachingService';
+import { buildDanyaTeachingBlock, noteAtPosition, teachingBeatText } from './danyaTeachingService';
 import { deriveNarrationArrows } from './narrationArrows';
 import { splitSentences, squaresInText } from './narrationSegments';
 import { bakedNarrationFor } from './bakedWalkthroughNarration';
@@ -1036,21 +1036,34 @@ export function repairNarrationArrows(tree: WalkthroughTree): number {
  *  when no note is taught at this position — an ungrounded ply has nothing but
  *  the prose to go on, and that fallback stays as it was.
  *
- *  `seenIds` keeps an opening-level note from re-arrowing every ply. */
-function noteArrowSourceAt(
+ *  `seenIds` keeps an opening-level note from re-arrowing every ply.
+ *
+ *  Exported for MEASUREMENT (`teachingCoverage.report.test`). Coverage has to be
+ *  counted through this function rather than through the raw retrieval tiers:
+ *  those say what the corpus COULD offer, while this says what a lesson actually
+ *  splices — the dedupe and the board-truth grade both drop plies, and a report
+ *  that skips them overstates by a factor of three. */
+export function noteArrowSourceAt(
   historySans: string[],
   fen: string,
   seenIds: Set<string>,
   openingName?: string | null,
 ): string | null {
   try {
-    // EXACT tier first — a note keyed at this very position always beats a
-    // borrowed one. Only when it misses do we reach for the support tier, so a
-    // Tier-2 opening teaches from notes on the plies its corpus does not cover
-    // exactly, instead of dropping to computed prose (David 2026-08-01).
-    const note = noteAtPosition(historySans, fen, openingName)
-      ?? supportNoteForPly(historySans, fen, openingName);
-    if (!note || seenIds.has(note.id)) return null;
+    // POSITION ONLY — move-prefix or transposition into this very FEN. This is
+    // the contract documented at the splice site below, and for three days the
+    // code did not honour it: a `supportNoteForPly` fallback reached notes by
+    // OPENING-NAME token overlap, which asks nothing about the board. That put
+    // teaching authored at a different position in front of the model to phrase
+    // as if it described this move — the hallucination, upstream of every gate
+    // (David 2026-08-04: "fix the package or how the position is chosen").
+    //
+    // `seenIds` goes IN rather than being checked on the way out: rejecting the
+    // result here left 647 of 1,310 plies silent, because retrieval kept handing
+    // back a note the lesson had already spoken and had no way to be asked for
+    // the next one.
+    const note = noteAtPosition(historySans, fen, openingName, seenIds);
+    if (!note) return null;
     const graded = gradeNarrationText(teachingBeatText(note), fen, 'openingGenerator.noteArrows');
     if (!graded?.trim()) return null;
     seenIds.add(note.id);

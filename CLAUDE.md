@@ -2402,25 +2402,72 @@ move openings up, never down. To find a genuine Tier-2 test case: assert
 `noteAtPosition(prefix, fen)` returns a note that survives
 `gradeNarrationText`. Do not guess from the opening's name.
 
-✅ **CLOSED (2026-08-01/02), and the numbers re-measured 2026-08-04.** The
-walkthrough splice is `noteAtPosition ?? supportNoteForPly` — the EXACT tier
-first (a note keyed at this very position always beats a borrowed one), then
-the SUPPORT tier filling the gaps. Structure transfer (`notesForStructure`)
-and the concept tier stay OFF inside a taught lesson on purpose (David
-2026-08-02: *"make sure the coach stays scoped to the opening that it was
-asked to teach"*) — borrowing another opening's note because the pawn
-structures rhyme is right for a live board past book, wrong when the student
-named the opening they wanted taught.
+### 🔒🔒 A NOTE IS SELECTED BY POSITION, NEVER BY NAME — and every number below was re-measured 2026-08-04 (David, emphatic: *"All narrations need to be deterministically found and handed to llm in the package. There is no room for false narrations on this app! Ever!!"* and *"The problem is NOT the gate… Gates are back ups that should never fire. Fix the package or how the position is chosen."*).
 
-Measured over the 1,310 plies of `repertoire.json`
+**THE RULE: a corpus note may be spoken at a ply only if the note's own taught
+line PRODUCES that ply's position** — by move-prefix or by transposition into the
+same FEN. Nothing else selects. `noteSelectionDeterminism.test.ts` walks every
+ply of `repertoire.json` and fails if any selected note was authored elsewhere.
+
+**What this replaced, and why you must not put it back.** The splice used to be
+`noteAtPosition ?? supportNoteForPly`, and `supportNoteForPly` reached notes by
+**opening-NAME token overlap** (score ≥ 0.6 on name tokens) with no reference to
+the board at all. `openingGenerator` had documented the correct contract since
+2026-07-30 — *"never the fuzzy tiers, so a note can't land on the wrong ply"* —
+and wiring the support tier into the splice on 2026-08-01 broke it. The result
+was teaching authored at one position handed to the model to phrase as if it
+described another: a Caro-Kann lesson narrating *"the tactic Bxf7+ followed by
+Nxe5 works only if Black's bishop on d6 is defended"* at move two. **That is a
+SELECTION bug, and no gate can fix it** — the prose is fluent, internally
+consistent, and true somewhere else. Adding a fourth claim-stripper was the wrong
+instinct (G0 says so outright); the cure is that the wrong note is never chosen.
+
+A second, smaller source of the same lie: **3.8% of position-keyed notes are
+mis-anchored** — filed at the right position but opening with prose about a
+different one, because transcript distillation attached the text to the wrong
+moment. `noteAnchorIntegrity.noteDescribesPosition` drops those at SELECTION too
+(free — selection has already proven anchor == live FEN, so the board is in
+hand). `noteAnchorIntegrity.test.ts` holds the rate as a shrink-only baseline so
+a re-farm that regresses the corpus fails loudly.
+
+**The corpus, in full (58,124 notes — verify with `corpusVisibility.test.ts`):**
+danya 8,162 + chessbrah 3,223 are static imports; hangingpawns 10,209 +
+saintlouis 36,530 are FETCHED from `public/data/` at boot. Nothing in vitest
+performs that fetch, so any measurement taken without `src/test/loadFullCorpus.ts`
+sees 19.6% of the data. Every coverage number produced before 2026-08-04 was
+computed that way and was wrong.
+
+**Only 6,768 of the 58,124 notes carry a position at all** (danya 1,356,
+chessbrah 457, hangingpawns 3,600, saintlouis 1,355) — the rest are
+opening-tagged or concept-tagged only. That is the real ceiling on per-ply
+teaching, and it is why the fuzzy name arm looked necessary. All four are now
+indexed by FEN (previously primary-only, 1,356), so a note authored through one
+move order is found when a game transposes into it. On canonical repertoire lines
+that adds ~4 plies — those lines ARE the authored move orders — so the payoff is
+on a student's real game in review/play, not on the spine.
+
+**Live coverage over the 1,310 plies of `repertoire.json`
 (`teachingCoverage.report.test.ts` → `audit-reports/teaching-coverage.json`):
-**exact 10.9% + support 23.0% = 33.9% live coverage**, 29.6% silent at every
-tier. The 70.4% figure that gets quoted is the CEILING you would reach by
-dropping the opening-scoping rule — it is NOT a target. **Coverage grows by
-farming and baking more notes for the openings we teach.** A session that
-"discovers" it can 2× coverage by switching the splice to
-`teachingNoteForBoard` has rediscovered the scoping rule, not a bug — this
-has now been mis-derived twice.
+14.8% of plies get a note spliced, and every one is provably about that board.**
+Do NOT compare that against the 33.9% this file used to claim: that figure was
+measured against a fifth of the corpus AND counted retrieval, not delivery.
+Retrieval reaches ~65% of plies; per-lesson dedupe and board-truth grading cut
+what is actually spoken. The honest before/after for the determinism fix is
+15.8% → 14.8% — flat coverage, minus the lies.
+
+**Coverage grows by FARMING and BAKING more notes for the openings we teach —
+never by loosening selection.** Two sessions have now "discovered" they could
+multiply coverage by reaching for `teachingNoteForBoard` or the name-matched
+tier. Both rediscovered the scoping rule, not a bug. Structure transfer and the
+concept tier stay OFF inside a taught lesson (David 2026-08-02: *"make sure the
+coach stays scoped to the opening that it was asked to teach"*) — borrowing
+another opening's note because the pawn structures rhyme is right for a live
+board past book, wrong when the student named the opening they wanted taught.
+
+Opening-level notes are not lost: they are LESSON BACKGROUND, handed to the model
+by `buildDanyaTeachingBlock` under a header that says outright they are not
+claims about the current position. Background for a lesson, never a fact about
+the move on the board.
 
 🔒 **THE NOTE LEADS THE BEAT (David 2026-08-04: "corpus notes are primary for
 teach me x opening").** In `openingGenerator` PASS 1 the graded note is

@@ -63,6 +63,21 @@ function hasPassedPawn(all: Sq[], color: 'w' | 'b'): boolean {
 }
 
 /**
+ * Which phase a position is in, on its own. `boardConcepts` returns null when a
+ * position has no notable ideas, so a caller that needs only the phase — to
+ * scope teaching by phase, or to split a coverage measurement — cannot get it
+ * from there without conflating "unremarkable" with "unknown".
+ */
+export function phaseOfFen(fen: string): Phase | null {
+  try {
+    const all = pieces(new Chess(fen));
+    return all.length === 0 ? null : phaseOf(all);
+  } catch {
+    return null;
+  }
+}
+
+/**
  * The ideas this position is about, for selecting teaching that is not tied to
  * any opening. Returns few tags by design — see the note at the top of the file.
  */
