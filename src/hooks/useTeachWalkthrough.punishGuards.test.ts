@@ -164,3 +164,52 @@ describe('sibling stage validity gates', () => {
     expect(isValidDrillLine({ ...goodDrill, moves: [] })).toBe(false);
   });
 });
+
+// ── The trap line is WALKED, not teleported to (David 2026-08-05) ───────────
+//
+// "i was expecting a walk through of the trap lines, like how we teach the
+// openings." The builder used to skip the setup animation whenever a lesson
+// carried `setupFen` — meant for puzzle-derived lessons whose SANs are only
+// legal mid-game, but the curated GEMS also record a setupFen computed by
+// replaying their own line, so the one source that IS a line from move one
+// jumped the board to move eight and played two moves. The test is now
+// behavioural: moves that replay get animated; only moves that don't fall
+// back to the FEN.
+describe('buildPunishWalkthroughTree — walk the line when it replays', () => {
+  it('animates a gem-shaped lesson (setupFen present, moves replay) from move one', () => {
+    const gemShaped: PunishLesson = {
+      ...validLesson,
+      // What gemPunishLessons emits: setupFen = the replayed line's own FEN.
+      setupFen: 'rnbqkbnr/pppp1p1p/6p1/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3',
+      setupMoves: ['e4', 'e5', 'Nf3'],
+    };
+    const tree = buildPunishWalkthroughTree(gemShaped, parent);
+    // The line animates — startFen must NOT be set (fenForPath replays the
+    // SANs from the standard start), and the root chain must carry the setup
+    // plies before the inaccuracy.
+    expect(tree.startFen, 'a replayable line animates; loading its FEN too would double-apply it').toBeUndefined();
+    const chain: string[] = [];
+    let node = tree.root;
+    while (node.children.length === 1) {
+      node = node.children[0].node;
+      if (node.san) chain.push(node.san);
+    }
+    expect(chain).toEqual(['e4', 'e5', 'Nf3', 'f6']);
+  });
+
+  it('still loads a puzzle-shaped lesson (moves do not replay) from its FEN', () => {
+    const puzzleShaped: PunishLesson = {
+      ...validLesson,
+      // A real mid-game FEN whose path is unknown — setupMoves is context, not
+      // a replayable line (this is what the puzzle-DB path produces).
+      setupFen: 'r1bq1rk1/ppp2ppp/2np1n2/2b1p3/2B1P3/2PP1N2/PP3PPP/RNBQ1RK1 b - - 0 7',
+      setupMoves: ['e4', 'e5', 'this-does-not-replay'],
+      inaccuracy: 'Nxe4',
+      punishment: 'Bxf7+',
+    };
+    const tree = buildPunishWalkthroughTree(puzzleShaped, parent);
+    expect(tree.startFen).toBe(puzzleShaped.setupFen);
+    // No setup animation: root's only child is the inaccuracy itself.
+    expect(tree.root.children[0]?.node.san).toBe('Nxe4');
+  });
+});

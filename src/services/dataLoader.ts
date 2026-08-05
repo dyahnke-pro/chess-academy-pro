@@ -10,6 +10,7 @@ import antiOpeningsData from '../data/anti-openings.json';
 import modelGamesData from '../data/model-games.json';
 import { loadProGameReferenceData } from './proGameReferenceData';
 import { loadFarmedCorpora } from './farmedCorpusData';
+import { warmSecondaryPositionIndex } from './secondaryCorpora';
 import middlegamePlansData from '../data/middlegame-plans.json';
 // Separate-lane gambit-tab plans (David 2026-05-27): own file so the masterclass
 // lane never touches them; merged into the shared plan store here at load time,
@@ -974,7 +975,16 @@ export function seedDatabase(): Promise<void> {
   // contributes nothing until this resolves, so starting it here — rather than
   // inside the ~50s deferred seed — is what keeps the coach from being silent
   // on an uncovered opening early in a session. Never rejects.
-  void loadFarmedCorpora();
+  void loadFarmedCorpora().then(() => {
+    // Build the TRANSPOSITION index once the corpora are in hand. It is what
+    // lets a note authored through one move order be found by a lesson that
+    // reached the same board through another — the deterministic tier that
+    // replaced the fuzzy opening-name match (2026-08-04). Replaying ~5,400 note
+    // lines is seconds of chess.js, so it runs here — after the fetch, off the
+    // critical path, and CHUNKED with a yield between batches so it never holds
+    // the main thread. A lookup that beats it finishes the index itself.
+    void warmSecondaryPositionIndex().catch(() => { /* the corpus is a bonus, never a blocker */ });
+  });
   // Reuse the in-flight promise so concurrent callers share one run.
   // Resolves after the CRITICAL seed (repertoire) — the heavy ECO/pro/
   // gambit/model-game backfill continues detached. Callers that need

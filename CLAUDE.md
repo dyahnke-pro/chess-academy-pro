@@ -2402,25 +2402,72 @@ move openings up, never down. To find a genuine Tier-2 test case: assert
 `noteAtPosition(prefix, fen)` returns a note that survives
 `gradeNarrationText`. Do not guess from the opening's name.
 
-✅ **CLOSED (2026-08-01/02), and the numbers re-measured 2026-08-04.** The
-walkthrough splice is `noteAtPosition ?? supportNoteForPly` — the EXACT tier
-first (a note keyed at this very position always beats a borrowed one), then
-the SUPPORT tier filling the gaps. Structure transfer (`notesForStructure`)
-and the concept tier stay OFF inside a taught lesson on purpose (David
-2026-08-02: *"make sure the coach stays scoped to the opening that it was
-asked to teach"*) — borrowing another opening's note because the pawn
-structures rhyme is right for a live board past book, wrong when the student
-named the opening they wanted taught.
+### 🔒🔒 A NOTE IS SELECTED BY POSITION, NEVER BY NAME — and every number below was re-measured 2026-08-04 (David, emphatic: *"All narrations need to be deterministically found and handed to llm in the package. There is no room for false narrations on this app! Ever!!"* and *"The problem is NOT the gate… Gates are back ups that should never fire. Fix the package or how the position is chosen."*).
 
-Measured over the 1,310 plies of `repertoire.json`
+**THE RULE: a corpus note may be spoken at a ply only if the note's own taught
+line PRODUCES that ply's position** — by move-prefix or by transposition into the
+same FEN. Nothing else selects. `noteSelectionDeterminism.test.ts` walks every
+ply of `repertoire.json` and fails if any selected note was authored elsewhere.
+
+**What this replaced, and why you must not put it back.** The splice used to be
+`noteAtPosition ?? supportNoteForPly`, and `supportNoteForPly` reached notes by
+**opening-NAME token overlap** (score ≥ 0.6 on name tokens) with no reference to
+the board at all. `openingGenerator` had documented the correct contract since
+2026-07-30 — *"never the fuzzy tiers, so a note can't land on the wrong ply"* —
+and wiring the support tier into the splice on 2026-08-01 broke it. The result
+was teaching authored at one position handed to the model to phrase as if it
+described another: a Caro-Kann lesson narrating *"the tactic Bxf7+ followed by
+Nxe5 works only if Black's bishop on d6 is defended"* at move two. **That is a
+SELECTION bug, and no gate can fix it** — the prose is fluent, internally
+consistent, and true somewhere else. Adding a fourth claim-stripper was the wrong
+instinct (G0 says so outright); the cure is that the wrong note is never chosen.
+
+A second, smaller source of the same lie: **3.8% of position-keyed notes are
+mis-anchored** — filed at the right position but opening with prose about a
+different one, because transcript distillation attached the text to the wrong
+moment. `noteAnchorIntegrity.noteDescribesPosition` drops those at SELECTION too
+(free — selection has already proven anchor == live FEN, so the board is in
+hand). `noteAnchorIntegrity.test.ts` holds the rate as a shrink-only baseline so
+a re-farm that regresses the corpus fails loudly.
+
+**The corpus, in full (58,124 notes — verify with `corpusVisibility.test.ts`):**
+danya 8,162 + chessbrah 3,223 are static imports; hangingpawns 10,209 +
+saintlouis 36,530 are FETCHED from `public/data/` at boot. Nothing in vitest
+performs that fetch, so any measurement taken without `src/test/loadFullCorpus.ts`
+sees 19.6% of the data. Every coverage number produced before 2026-08-04 was
+computed that way and was wrong.
+
+**Only 6,768 of the 58,124 notes carry a position at all** (danya 1,356,
+chessbrah 457, hangingpawns 3,600, saintlouis 1,355) — the rest are
+opening-tagged or concept-tagged only. That is the real ceiling on per-ply
+teaching, and it is why the fuzzy name arm looked necessary. All four are now
+indexed by FEN (previously primary-only, 1,356), so a note authored through one
+move order is found when a game transposes into it. On canonical repertoire lines
+that adds ~4 plies — those lines ARE the authored move orders — so the payoff is
+on a student's real game in review/play, not on the spine.
+
+**Live coverage over the 1,310 plies of `repertoire.json`
 (`teachingCoverage.report.test.ts` → `audit-reports/teaching-coverage.json`):
-**exact 10.9% + support 23.0% = 33.9% live coverage**, 29.6% silent at every
-tier. The 70.4% figure that gets quoted is the CEILING you would reach by
-dropping the opening-scoping rule — it is NOT a target. **Coverage grows by
-farming and baking more notes for the openings we teach.** A session that
-"discovers" it can 2× coverage by switching the splice to
-`teachingNoteForBoard` has rediscovered the scoping rule, not a bug — this
-has now been mis-derived twice.
+14.8% of plies get a note spliced, and every one is provably about that board.**
+Do NOT compare that against the 33.9% this file used to claim: that figure was
+measured against a fifth of the corpus AND counted retrieval, not delivery.
+Retrieval reaches ~65% of plies; per-lesson dedupe and board-truth grading cut
+what is actually spoken. The honest before/after for the determinism fix is
+15.8% → 14.8% — flat coverage, minus the lies.
+
+**Coverage grows by FARMING and BAKING more notes for the openings we teach —
+never by loosening selection.** Two sessions have now "discovered" they could
+multiply coverage by reaching for `teachingNoteForBoard` or the name-matched
+tier. Both rediscovered the scoping rule, not a bug. Structure transfer and the
+concept tier stay OFF inside a taught lesson (David 2026-08-02: *"make sure the
+coach stays scoped to the opening that it was asked to teach"*) — borrowing
+another opening's note because the pawn structures rhyme is right for a live
+board past book, wrong when the student named the opening they wanted taught.
+
+Opening-level notes are not lost: they are LESSON BACKGROUND, handed to the model
+by `buildDanyaTeachingBlock` under a header that says outright they are not
+claims about the current position. Background for a lesson, never a fact about
+the move on the board.
 
 🔒 **THE NOTE LEADS THE BEAT (David 2026-08-04: "corpus notes are primary for
 teach me x opening").** In `openingGenerator` PASS 1 the graded note is
@@ -3027,7 +3074,14 @@ robotic and tune out fast.
 Code templates that violate these rules are bugs. When in doubt,
 prefer silence.
 
-### 🔒🔒 THE APP'S COACH VOICE + THE "WHY DID YOU PLAY THAT?" FAUCET — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")
+### 🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")
+
+> ⚠️ **READ THE 2026-08-05 SUPERSEDE NOTE BEFORE BUILDING ANY OF THE PICKER
+> MECHANICS BELOW.** The VOICE in this section is current and binding. The
+> blocking "why did you play that?" card, the threat-check and guided
+> find-the-move are REMOVED from Learn — David's call after using them. The
+> section further down says what replaced them and, more importantly, why the
+> mistake RECORD must never be deleted along with the UI.
 
 This is the single voice of the coach across the whole app — every spoken
 line, every teaching interjection. It governs (and is consistent with) the
@@ -3135,28 +3189,48 @@ silent when silence teaches better. The gates exist for pedagogy, not
 budget. Strip cost-flavored reasoning ("sparse", "rate-limited to save")
 from any design of this surface.
 
-**BUILD REALITY — the whole chain EXISTS; one link is dead.** The probe
-engine (`discussionPractice.ts`), the gate (`slipDetector.ts`), the
-classifier + buckets (`misconceptionClassifier` / `misconceptionService` /
-`weaknessSpine`), the mistake-puzzle bridge (`addMistakePuzzleFromCapture`),
-the drill queue, the pop-up panel (`DiscussionPracticePanel`), and the
-per-surface voice effects are ALL alive. The ONLY dead link is
-`useDiscussionPractice` — an inert no-op stub since the 2026-06-11
-retirement. **That retirement was a mistake** (the "automated post-game
-capture makes the live faucet redundant" reasoning was wrong — the analyst
-never replaces the coach asking in the moment). The faucet is CORE, always-on
-**on Learn**, **not disable-able**.
+### 🔒🔒 SUPERSEDED 2026-08-05 — THE MID-GAME CARDS ARE GONE FROM LEARN. The RECORD stays; the INTERRUPTION does not.
 
-The build (per the SURFACE PLACEMENT rule above):
-- **LEARN** — un-retire the hook → clean probe → good AND bad triggers →
-  deterministic reason picker + Hint → grounded reveal → buckets → drill.
-  Rating gate on the picker. Voice it in Danya's cadence. Do NOT re-stub.
-- **PLAY** — keep it a pure playing surface: NO picker. Only phase-transition
-  narration that may mention a couple of mistakes with positional analysis.
-- **POST-GAME REVIEW** — the full diagnostic for Play games goes here; its
-  wiring is designed WITH David first (do not build unprompted).
-- Guided find-the-move (winning position) + the narration-channel upgrade are
-  later phases (see the plan doc).
+David, after living with them: the threat-check is *"annoying AF"*, guided
+find-the-move *"is what we are kinda building here anyway"*, and the "why did
+you play that?" picker *"can be replaced"*. All three are removed from
+`/coach/teach`. This REVERSES the "CORE, always-on, not disable-able" line
+above — deliberately, by the person who wrote it. **Do not restore them.**
+
+What replaces them: Learn is a game the coach TALKS YOU THROUGH — running
+commentary in the Naroditsky speedrun register (improving moves, trading off
+the opponent's best piece, then the tactic when it appears), plus the phase
+transitions Learn never had (`usePhaseNarration` was mounted in Play only).
+The teaching arrives as the game unfolds instead of as a card that stops it.
+
+🚨 **THE RECORD IS NOT THE UI. Never delete the capture with the pop-up.**
+Recording was a side effect of the card in THREE ways, every one of which
+would have silently starved My Mistakes, the Tactics drill queue and the
+weakness spine:
+1. `captureMisconception` was reachable only by answering the card or playing
+   through it — both need `ctxRef` armed, so no card meant no record;
+2. `slipWarrantsInterjection` sat in front of the early return, so the
+   rating bar decided what got REMEMBERED — an 800-rated player's 150cp
+   mistake never reached their own drill queue;
+3. `active = enabled && !!opts.interruptive` — one flag for the card AND the
+   record, so switching off interruption switched off the data.
+
+Now: `active` gates the INTERRUPTION, `recording` gates the RECORD, and
+capture runs inside `evaluatePlayerMove` ahead of the rating gate. The bar
+keeps its real job — deciding whether to interrupt — and loses the one it
+should never have had. Gate: `learnSilentCapture.test.ts`.
+
+**Still true, and still the standard** — everything above about the VOICE
+(concept-first, facts then the point, warm but rigorous, grounded per G0),
+the honesty contract (never hand over the answer), and PLAY staying a pure
+playing surface. What changed is only the delivery: commentary, not cards.
+
+**KEPT in Learn** because none of them stop the board: in-place drills, live
+gem detection (names the opportunity, withholds the square), fork-in-the-road
+(answered by PLAYING), and think-aloud.
+
+**POST-GAME REVIEW** still owns the full diagnostic for Play games; its wiring
+is designed WITH David first (do not build unprompted).
 
 ### State Management
 - **Zustand** for global app state (user profile, settings, current session, theme).

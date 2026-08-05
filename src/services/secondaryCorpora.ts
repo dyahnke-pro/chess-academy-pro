@@ -73,6 +73,8 @@ export function secondarySupportNotes(args: {
   historySans?: string[];
   openingName?: string | null;
   maxNotes?: number;
+  exclude?: ReadonlySet<string>;
+  accept?: (note: DanyaNote) => boolean;
 }): DanyaNote[] {
   return supportNotesAcross(secondaryCorpora(), args);
 }
@@ -80,6 +82,31 @@ export function secondarySupportNotes(args: {
 /** Secondary notes keyed EXACTLY at this line, across every corpus. */
 export function secondaryNotesForPosition(historySans: string[]): DanyaNote[] {
   return secondaryCorpora().flatMap((c) => c.notesForPosition(historySans));
+}
+
+/** Secondary notes whose taught line PRODUCES this position, across every
+ *  corpus — transposition-safe, so a note authored through one move order is
+ *  found by a lesson that reached the same board through another.
+ *
+ *  This is the deterministic way to widen what the coach can say about a ply:
+ *  the note IS about this board, proven by chess.js. It replaced the fuzzy
+ *  opening-name arm that used to fill those plies with teaching authored
+ *  somewhere else (2026-08-04). */
+export function secondaryNotesForFen(fen: string): DanyaNote[] {
+  return secondaryCorpora().flatMap((c) => c.notesForFen(fen));
+}
+
+/** Build every secondary corpus's transposition index. Call from the boot
+ *  prewarm: replaying ~5,400 note lines is seconds of chess.js, which belongs
+ *  off the critical path rather than on whichever lookup happens to be first. */
+export async function warmSecondaryPositionIndex(): Promise<void> {
+  for (const c of secondaryCorpora()) await c.warmFenIndex();
+}
+
+/** The same build in one synchronous pass — for node and tests, where the stall
+ *  is free and a half-built index would make assertions depend on timing. */
+export function warmSecondaryPositionIndexSync(): void {
+  for (const c of secondaryCorpora()) c.warmFenIndexSync();
 }
 
 /** Per-corpus stats for audits / the settings debug panel. */

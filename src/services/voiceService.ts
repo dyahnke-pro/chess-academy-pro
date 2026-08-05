@@ -1219,6 +1219,16 @@ class VoiceService {
             details: `prevTier=${this.lastTier}`,
           });
         }).catch(() => undefined);
+        // Resolve on READING PACE, never instantly. Auto-advance is
+        // voice-promise gated (the locked strict-narration contract), so an
+        // instant resolve here handed a walkthrough beat a zero-length clock:
+        // the chain advanced early and the NEXT beat's cleanup `stop()` cut
+        // the still-playing sentence mid-word — David 2026-08-05, "sentences
+        // getting cut off by other sentences", with these very audit entries
+        // as the fingerprint. Same mechanism the audit mute uses, and for the
+        // same reason ("returning instantly would rip the walkthrough through
+        // its beats").
+        await this.simulateSpeechDuration(text);
         return;
       }
       // (3) THROTTLE — cap the rate of DISTINCT narration lines so a burst
@@ -1237,6 +1247,11 @@ class VoiceService {
             details: `sinceLastMs=${now - last.ts}`,
           });
         }).catch(() => undefined);
+        // Reading-pace resolve — same pacing contract as the no-overlap drop
+        // above. (Dedup stays instant on purpose: a duplicate within the tight
+        // window is the SAME caller double-firing, not a second beat pacing
+        // anything real.)
+        await this.simulateSpeechDuration(text);
         return;
       }
       this.lastAdmittedSpeak = { text, ts: now };

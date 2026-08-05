@@ -1,7 +1,7 @@
 import { Chess } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
 import { explainBestMoveGrounded, describeMoveGeometry } from './groundedAnswer';
-import { noteAtPosition, teachingBeatText } from './danyaTeachingService';
+import { noteAtPosition, spokenBeatText } from './danyaTeachingService';
 import { gradeNarrationText } from './coachAnswerGates';
 import type { MistakeClassification, MistakeGamePhase, MistakeNarration } from '../types';
 
@@ -356,7 +356,7 @@ function buildNoteRead(
     const note = noteAtPosition([], fen, openingName ?? null);
     if (!note) return '';
     const graded = gradeNarrationText(
-      teachingBeatText(note),
+      spokenBeatText(note),
       fen,
       'mistakeNarration.note',
       whiteAheadCp(fen, evalBefore),

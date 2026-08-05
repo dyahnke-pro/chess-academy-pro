@@ -213,7 +213,15 @@ export function useDiscussionPractice(
   /** Ply of the last good-move recognition — the atta-boy cooldown. */
   const goodMoveLastPlyRef = useRef(-999);
 
+  // TWO different switches, deliberately separated (David 2026-08-05).
+  //
+  // `active` gates the INTERRUPTION — the card that stops the board. `enabled`
+  // gates the RECORD. They used to be the same flag, so a surface that turned
+  // off `interruptive` also, silently, stopped feeding My Mistakes, the Tactics
+  // drill queue and the weakness spine. That is the trap in removing the
+  // pop-ups: the data disappears with the UI and nothing tells you.
   const active = enabled && !!opts.interruptive;
+  const recording = enabled;
 
   const reset = useCallback((): void => {
     busyRef.current = false;
@@ -226,7 +234,9 @@ export function useDiscussionPractice(
 
   const evaluatePlayerMove = useCallback(
     async (args: EvaluatePlayerMoveArgs): Promise<void> => {
-      if (!active) return;             // inert on non-Learn surfaces (Play stays pure)
+      // Runs when RECORDING is on, even with interruption off — the capture
+      // below is the only record of a mistake once the cards are gone.
+      if (!recording) return;          // inert on surfaces that opt out entirely
       if (busyRef.current) return;     // never stack a probe over an open one
 
       let evalBeforeW: number;
@@ -271,13 +281,49 @@ export function useDiscussionPractice(
         learned: args.learned,
       });
 
+      // ── CAPTURE FIRST, INDEPENDENT OF WHETHER ANYTHING IS SHOWN ──────────
+      // (David 2026-08-05: "need to verify that mistakes are captured
+      // correctly.") Recording used to be a side effect of the pop-up: the
+      // only routes to `captureMisconception` were answering the card or
+      // playing through it, and both need `ctxRef` to have been armed. So a
+      // slip that never raised a card was never recorded — and the
+      // rating-adaptive gate below decides exactly that. A beginner's 150cp
+      // mistake fell under the bar, returned early, and never reached their own
+      // drill queue.
+      //
+      // `slipWarrantsInterjection` is about WHEN TO INTERRUPT, not what is
+      // worth remembering. It keeps that job; it no longer gates the record.
+      if (slip.isSlip && bestSan) {
+        void captureMisconception({
+          classifyInput: {
+            fen: args.fenBefore,
+            playedSan: args.playedSan,
+            bestSan,
+            gamePhase: args.gamePhase,
+            userReason: '(not asked — captured silently during play)',
+          },
+          source: opts.source ?? 'discussion-practice',
+          shouldCount: slip.shouldCount,
+          context: {
+            fen: args.fenBefore,
+            playedSan: args.playedSan,
+            bestSan,
+            cpLoss,
+            gamePhase: args.gamePhase,
+            moveNumber: args.moveNumber,
+            openingId: args.openingId,
+            openingName: args.openingName,
+          },
+        }).catch(() => undefined);
+      }
+
       // The interjection bar is RATING-ADAPTIVE (slipWarrantsInterjection):
       // beginner→blunders, intermediate→mistakes, advanced→inaccuracies. The
       // coach interrupts a slip at the level it matters for THIS player.
-      const isSlip = slip.isSlip && slipWarrantsInterjection(cpLoss, args.studentRating);
+      const isSlip = active && slip.isSlip && slipWarrantsInterjection(cpLoss, args.studentRating);
       const plyNow = (args.moveNumber ?? 0) * 2;
       const goodMoveOffCooldown = plyNow === 0 || plyNow - goodMoveLastPlyRef.current >= GOOD_MOVE_MIN_PLY_GAP;
-      const isGood = !isSlip && goodMoveOffCooldown && isNearBest(cpLoss) && createdTactic(args.fenAfter, moverChar);
+      const isGood = active && !isSlip && goodMoveOffCooldown && isNearBest(cpLoss) && createdTactic(args.fenAfter, moverChar);
       if (!isSlip && !isGood) {
         setGoodMove(null); // an unremarkable move clears any lingering atta-boy
         return;
@@ -532,27 +578,10 @@ export function useDiscussionPractice(
       logged_tag: null,
       bucket: null,
     });
-    void captureMisconception({
-      classifyInput: {
-        fen: ctx.args.fenBefore,
-        playedSan: ctx.args.playedSan,
-        bestSan: ctx.bestSan,
-        gamePhase: ctx.args.gamePhase,
-        userReason: '(played on without answering)',
-      },
-      source: opts.source ?? 'discussion-practice',
-      shouldCount: ctx.shouldCount,
-      context: {
-        fen: ctx.args.fenBefore,
-        playedSan: ctx.args.playedSan,
-        bestSan: ctx.bestSan,
-        cpLoss: ctx.cpLoss,
-        gamePhase: ctx.args.gamePhase,
-        moveNumber: ctx.args.moveNumber,
-        openingId: ctx.args.openingId,
-        openingName: ctx.args.openingName,
-      },
-    }).catch(() => undefined);
+    // NO capture here any more — `evaluatePlayerMove` already recorded this
+    // slip the moment it was detected. Logging again would double-count the
+    // same mistake in the weakness profile purely because a card happened to be
+    // open when the student played on.
     reset();
   }, [opts.surface, opts.source, reset]);
 

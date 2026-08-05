@@ -47,7 +47,7 @@ import { db, type CachedOpening } from '../db/schema';
 import { gradeNarrationText, gradeNarrationAcrossLine } from './coachAnswerGates';
 import { narrateContinuationMove } from './continuationMoveNarration';
 import { logAppAudit } from './appAuditor';
-import { buildDanyaTeachingBlock, noteAtPosition, supportNoteForPly, teachingBeatText } from './danyaTeachingService';
+import { buildDanyaTeachingBlock, noteAtPosition, spokenBeatText } from './danyaTeachingService';
 import { deriveNarrationArrows } from './narrationArrows';
 import { splitSentences, squaresInText } from './narrationSegments';
 import { bakedNarrationFor } from './bakedWalkthroughNarration';
@@ -227,6 +227,58 @@ export function normalizeOpeningName(name: string): string {
   return name.trim().toLowerCase();
 }
 
+/** `Tour:` / `Face:` mark genuinely DIFFERENT lessons of the same opening — a
+ *  quick tour, or the counter side — so they must never share a cache row. Any
+ *  canonical key has to carry the prefix the caller asked with. */
+const MODE_PREFIX_RE = /^((?:tour:\s*)?(?:face:\s*)?)/;
+
+/** Where a generated tree SHOULD live: the mode prefix the caller used, plus the
+ *  opening the tree actually teaches.
+ *
+ *  The lesson used to be cached under whatever the STUDENT TYPED. `requestedName`
+ *  in `CoachTeachPage.handleSubmit` is raw input on four of its five paths (only
+ *  the fuzzy branch canonicalizes), so "teach the caro" and "teach me the
+ *  Caro-Kann" wrote two rows and each paid the full ~60s build — David 2026-08-05:
+ *  "routing takes about 60 seconds because the lesson plans needs to build. It
+ *  should cache after first use."
+ *
+ *  Keying on the tree's own identity also repairs the stage merge for free.
+ *  `generateMissingStagesInBackground` is handed `tree.openingName`, and
+ *  `mergeStageIntoCache` normalizes THAT to find the row — so with the row filed
+ *  under the typed name it was reading a key that did not exist. */
+export function canonicalCacheKey(requestedName: string, tree?: WalkthroughTree): string {
+  const normalizedRequest = normalizeOpeningName(requestedName);
+  const prefix = MODE_PREFIX_RE.exec(normalizedRequest)?.[1] ?? '';
+  const base = normalizedRequest.slice(prefix.length).trim();
+  if (!base) return normalizedRequest;
+  // Resolve the phrasing to the DB's canonical name. `resolveOpeningEntry`'s
+  // own doc has said to do this since it was written — "Callers should use the
+  // returned canonicalName for cache keys … so that 'najdorf' and 'Sicilian
+  // Defense: Najdorf Variation' land on the same cache row" — and no caller
+  // did. Resolving on BOTH read and write is what makes a phrasing never seen
+  // before hit a row an earlier phrasing built, with no alias to consult.
+  // Resolve the PHRASING first, then the tree's own name. Both must go through
+  // the resolver or they disagree on spelling: the app writes "Caro-Kann
+  // Defence" while the DB is American ASCII ("Caro-Kann Defense"), so keying a
+  // write off the tree name and a read off the resolver split one opening
+  // across two rows — the exact bug this function exists to close.
+  for (const candidate of [base, tree?.openingName]) {
+    if (!candidate) continue;
+    try {
+      const resolved = resolveOpeningEntry(candidate)?.canonicalName;
+      if (resolved) return `${prefix}${normalizeOpeningName(resolved)}`;
+    } catch { /* try the next candidate */ }
+  }
+  // No DB match (a constructed matchup, a face-mode counter line): the tree
+  // knows what it taught, which is still better than the raw phrasing. A read
+  // has no tree, so those land on the alias written at cache time.
+  const fromTree = normalizeOpeningName(tree?.openingName ?? '');
+  return fromTree ? `${prefix}${fromTree}` : normalizedRequest;
+}
+
+/** Meta key pointing a typed phrasing at the row its lesson really lives in. */
+const aliasKey = (normalized: string): string => `walkthroughAlias:${normalized}`;
+
 /** Read-through cache: check Dexie before generating. RE-VALIDATES
  *  the cached tree before returning — production audit (build
  *  c2bc340) caught a bad Pirc tree shipping into the cache during
@@ -297,14 +349,38 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 // note-grounded while the prose never named what the arrows pointed at. Both
 // are baked in at generation time, so without this bump every already-taught
 // opening keeps narrating the old note-as-afterthought order off the cache.
-const WALKTHROUGH_GEN_REV = '2026-08-04-corpus-note-leads';
+// ONE bump covering the whole 2026-08-05 narration batch (spoken-register cap,
+// move-recitation drop, variation-scope filter) — batched per the locked cost
+// rule: every bump makes cached lessons regenerate and their TTS re-synthesise.
+const WALKTHROUGH_GEN_REV = '2026-08-05-spoken-register';
 
 export async function getCachedOpening(
   name: string,
 ): Promise<WalkthroughTree | null> {
   try {
-    const normalized = normalizeOpeningName(name);
-    const cached = await db.cachedOpenings.get(normalized);
+    const typed = normalizeOpeningName(name);
+    let normalized = typed;
+    let cached = await db.cachedOpenings.get(normalized);
+    if (!cached) {
+      // Resolve the phrasing to the row the lesson is really filed under. This
+      // is what makes a brand-new phrasing hit — "caro kann" finding what "the
+      // caro" built — instead of paying the ~60s rebuild again.
+      const resolvedKey = canonicalCacheKey(name);
+      if (resolvedKey !== typed) {
+        cached = await db.cachedOpenings.get(resolvedKey);
+        if (cached) normalized = resolvedKey;
+      }
+    }
+    if (!cached) {
+      // Belt and braces for rows written before canonical keying, and for names
+      // the resolver cannot place (constructed matchups, face-mode counters).
+      const alias = await db.meta.get(aliasKey(typed));
+      const target = typeof alias?.value === 'string' ? alias.value : '';
+      if (target && target !== typed) {
+        cached = await db.cachedOpenings.get(target);
+        if (cached) normalized = target;
+      }
+    }
     if (!cached) {
       // Audit-instrumentation phase-1 (2026-05-19): per-cache-lookup
       // hit/miss event. Generation is the most expensive operation in
@@ -417,8 +493,15 @@ export async function cacheOpening(
     // `startWalkthrough` right after caching it, so the running walkthrough
     // must carry the key too — a stamped copy in Dexie would leave the live
     // tree unable to find its own row.
-    const normalizedName = normalizeOpeningName(name);
+    // File under the OPENING, not the phrasing (see `canonicalCacheKey`), and
+    // leave a pointer from what the student typed so the next phrasing of the
+    // same ask lands on the row instead of rebuilding it.
+    const typedKey = normalizeOpeningName(name);
+    const normalizedName = canonicalCacheKey(name, tree);
     tree.cacheKey = normalizedName;
+    if (typedKey && typedKey !== normalizedName) {
+      await db.meta.put({ key: aliasKey(typedKey), value: normalizedName });
+    }
     const record: CachedOpening = {
       normalizedName,
       displayName: tree.openingName,
@@ -1036,22 +1119,42 @@ export function repairNarrationArrows(tree: WalkthroughTree): number {
  *  when no note is taught at this position — an ungrounded ply has nothing but
  *  the prose to go on, and that fallback stays as it was.
  *
- *  `seenIds` keeps an opening-level note from re-arrowing every ply. */
-function noteArrowSourceAt(
+ *  `seenIds` keeps an opening-level note from re-arrowing every ply.
+ *
+ *  Exported for MEASUREMENT (`teachingCoverage.report.test`). Coverage has to be
+ *  counted through this function rather than through the raw retrieval tiers:
+ *  those say what the corpus COULD offer, while this says what a lesson actually
+ *  splices — the dedupe and the board-truth grade both drop plies, and a report
+ *  that skips them overstates by a factor of three. */
+export function noteArrowSourceAt(
   historySans: string[],
   fen: string,
   seenIds: Set<string>,
   openingName?: string | null,
 ): string | null {
   try {
-    // EXACT tier first — a note keyed at this very position always beats a
-    // borrowed one. Only when it misses do we reach for the support tier, so a
-    // Tier-2 opening teaches from notes on the plies its corpus does not cover
-    // exactly, instead of dropping to computed prose (David 2026-08-01).
-    const note = noteAtPosition(historySans, fen, openingName)
-      ?? supportNoteForPly(historySans, fen, openingName);
-    if (!note || seenIds.has(note.id)) return null;
-    const graded = gradeNarrationText(teachingBeatText(note), fen, 'openingGenerator.noteArrows');
+    // POSITION ONLY — move-prefix or transposition into this very FEN. This is
+    // the contract documented at the splice site below, and for three days the
+    // code did not honour it: a `supportNoteForPly` fallback reached notes by
+    // OPENING-NAME token overlap, which asks nothing about the board. That put
+    // teaching authored at a different position in front of the model to phrase
+    // as if it described this move — the hallucination, upstream of every gate
+    // (David 2026-08-04: "fix the package or how the position is chosen").
+    //
+    // `seenIds` goes IN rather than being checked on the way out: rejecting the
+    // result here left 647 of 1,310 plies silent, because retrieval kept handing
+    // back a note the lesson had already spoken and had no way to be asked for
+    // the next one.
+    const note = noteAtPosition(historySans, fen, openingName, seenIds);
+    if (!note) return null;
+    // SPOKEN register, not the full beat. `teachingBeatText` concatenates
+    // explains+teaches+plans (median 544 chars) and the splice then stacked
+    // generated prose on top — ~130 spoken words for one move. David 2026-08-05:
+    // "a bit too wordy … droned on with long strings of FENs which lost me."
+    // `spokenBeatText` is explains-only, recitation sentences dropped, capped
+    // at a sentence boundary; teaches/plans still reach the model via the
+    // lesson-level teaching block.
+    const graded = gradeNarrationText(spokenBeatText(note), fen, 'openingGenerator.noteArrows');
     if (!graded?.trim()) return null;
     seenIds.add(note.id);
     return graded;
@@ -3458,17 +3561,42 @@ async function generatePunishFromDb(
   }
   if (prepared.length < 2) return null; // not enough to make a stage
 
-  // Single LLM call: ask for prose labels for all lessons. The LLM
-  // sees the SANs, the FENs, the themes, and the opening context; it
-  // writes coach prose tying each tactic back to the opening's
-  // strategic character.
+  // Single LLM call: prose labels for all lessons, describing THE POSITION
+  // GIVEN and nothing else.
+  //
+  // 🚨 These are NOT the opening's trap lines. They are tactics from games that
+  // merely carried this opening's ECO tag, and `setupFen` is routinely move 14+
+  // — long past any theory. The prompt used to say "tie it back to the opening's
+  // character (Italian's Bc4-and-Ng5 pressure on f7, …)", which INSTRUCTED the
+  // model to assert a relationship it has no way to check. David's 2026-08-05
+  // prod run is what that produces: on a move-14 position from a stranger's
+  // game, "Black's Bxh1 grabs a rook but completely ignores the bishop's-opening
+  // pressure White has built on f7." There was no bishop's-opening pressure.
+  //
+  // The board gate did fire on the neighbouring sentences (audit findings
+  // 50-57, several dropping to kept:"") and could not catch this one, because
+  // "the opening's pressure" names no square and so is not a checkable claim.
+  // That is G0 exactly: the cure is not another gate, it is not asking for the
+  // invention. The model gets the FEN, the moves and the themes — enough to
+  // describe what is actually on the board — and is told the opening name is
+  // provenance, not a fact about this position.
+  //
+  // `buildStageTeachingBlock` is DROPPED here for the same reason. It was
+  // injecting ~4KB of the opening's corpus teaching (audit findings 102-105)
+  // into a prompt about positions the opening never reaches, which is the
+  // conflation with the volume turned up. It stays on every stage that IS the
+  // opening — only this puzzle-derived one loses it.
   const studentSide = inferStudentSideFromName(entry.canonicalName);
-  const systemPrompt = `You are an expert chess coach narrating punish lessons rooted in the "${entry.canonicalName}" opening. The student plays ${studentSide}. For each lesson below, output:
-- name: 4-8 words tying the lesson to the opening + the tactic. Examples:
-  • "Italian: Knight grabs f7 — fork on the queen"
-  • "Caro-Kann: Careless Ngf6?? — Nd6 is mate"
-  • "Sicilian: Loose d6 invites the bishop sack"
-- whyBad: 1-2 sentences on WHY the opponent's move loses. Tie it back to the opening's character (Italian's Bc4-and-Ng5 pressure on f7, Caro-Kann's solid-but-tempo-sensitive structure, Sicilian's tactical density on the queenside, etc.).
+  const systemPrompt = `You are an expert chess coach narrating tactical lessons drawn from real games. The student plays ${studentSide}.
+
+THESE POSITIONS ARE NOT OPENING THEORY. Each one is a middlegame position from a game that happened to begin with the ${entry.canonicalName}, often more than ten moves earlier. The opening name is PROVENANCE ONLY. Never claim the position shows that opening's ideas, pressure, structure or plans, and never name the opening as the reason a move works — you cannot see how this position was reached, so any such claim would be invented. Describe ONLY what the given FEN shows.
+
+For each lesson below, output:
+- name: 4-8 words naming the mistake and the tactic, from the position itself. Examples:
+  • "Knight grabs f7 — fork on the queen"
+  • "Careless Ngf6?? — Nd6 is mate"
+  • "The loose bishop invites a sack"
+- whyBad: 1-2 sentences on WHY the opponent's move loses, in terms of the pieces and squares ON THIS BOARD — what it leaves undefended, what line it opens, what square it stops covering.
 - shortWhyBad: REQUIRED ≤28-word compression of whyBad for the Brief Coach Narration setting. Preserve the KEY tactical / positional reason the move loses.
 - whyPunish: 1-2 sentences on the punishing IDEA — sacrifice for tempo, fork the queen, exploit the loose bishop, etc. Reference the puzzle's themes when natural ("a classic Bxf7+ sac that wins the queen by deflection").
 - shortWhyPunish: REQUIRED ≤28-word compression of whyPunish for Brief mode.
@@ -3476,7 +3604,7 @@ async function generatePunishFromDb(
 - followupIdeas: ONE short sentence per followup move (in order) describing the tactical thread — "rook lifts to win the queen", "the king is dragged into the open", etc.
 - shortFollowupIdeas: parallel array — for EACH followup move, a ≤18-word Brief-mode variant of the matching followupIdea.
 
-The SANs and FENs are GIVEN by the puzzle database — DO NOT alter them, do NOT add or reorder distractors, do NOT invent moves. Just write the prose. Output ONLY via the tool.${buildStageTeachingBlock(entry.canonicalName)}`;
+The SANs and FENs are GIVEN by the puzzle database — DO NOT alter them, do NOT add or reorder distractors, do NOT invent moves. Just write the prose. Output ONLY via the tool.`;
 
   const lessonsBlock = prepared
     .map((l, i) => {
@@ -3492,8 +3620,10 @@ ${l.followup.length > 0 ? l.followup.map((f, j) => `    ${j + 1}. ${f.san}`).joi
     })
     .join('\n\n');
 
-  const userPrompt = `Opening: ${entry.canonicalName} (${entry.eco})
-Canonical line: ${entry.moves.join(' ')}
+  // No canonical line here — handing the model the opening's move list next to
+  // a move-14 puzzle FEN invites it to narrate the two as one line. The FEN in
+  // each lesson block is the only position it may describe.
+  const userPrompt = `Games in this set opened with: ${entry.canonicalName} (${entry.eco}) — provenance only, not the position.
 Student plays: ${studentSide}
 
 ${prepared.length} lessons to label (in order):
@@ -3989,7 +4119,7 @@ export async function generateMissingStagesInBackground(
         giveUp();
         return;
       }
-      const merge = await mergeStageIntoCache(openingName, stage, first.data);
+      const merge = await mergeStageIntoCache(tree.cacheKey ?? openingName, stage, first.data);
       if (merge.merged) {
         // Notify caller — the walkthrough is likely already running
         // and needs to refresh its in-memory tree so newly-arrived
@@ -4024,7 +4154,7 @@ export async function generateMissingStagesInBackground(
         giveUp();
         return;
       }
-      const retryMerge = await mergeStageIntoCache(openingName, stage, retry.data);
+      const retryMerge = await mergeStageIntoCache(tree.cacheKey ?? openingName, stage, retry.data);
       if (!retryMerge.merged) {
         void logAppAudit({
           kind: 'llm-error',

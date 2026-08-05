@@ -20,7 +20,12 @@ describe('buildThinkAloud', () => {
     expect(moment!.withheldSan).toBe('Nf1');
     expect(moment!.facts).not.toContain('Nf1');
     expect(moment!.facts).toMatch(/do NOT answer/i);
-  });
+    // 30s, not the 5s default: this is the first call in the file, so it pays
+    // for the corpus indexes `teachingSourceForBoard` builds on demand —
+    // replaying 8,162 note lines through chess.js for the structure-transfer
+    // signatures. ~3.6s alone, but enough over 5s under a parallel suite run to
+    // fail on machine load rather than on anything about the code.
+  }, 30_000);
 
   it('names the tempting second line with its gap', () => {
     const moment = buildThinkAloud({

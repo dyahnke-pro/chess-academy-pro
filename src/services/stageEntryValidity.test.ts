@@ -177,8 +177,12 @@ describe('a cached tree knows which row it lives in', () => {
     const row = await db.cachedOpenings.get(live.cacheKey as string);
     expect(row, 'the stamped cacheKey is the row it was stored under').toBeTruthy();
     expect(row?.tree.cacheKey).toBe(live.cacheKey);
-    // And the canonical name is NOT a key — reading by it is what missed.
-    const byName = await db.cachedOpenings.get('vienna game');
-    expect(byName, 'openingName is not a cache key — that miss was the hang').toBeUndefined();
+    // And the RAW display name is NOT a key — a consumer must go through the
+    // stamped cacheKey (or canonicalCacheKey), never `get(tree.openingName)`.
+    // NB: the NORMALIZED canonical name may legitimately BE the key ("Vienna"
+    // resolves to "Vienna Game" → key "vienna game") — that overlap is the
+    // resolver working, not openingName acting as a key.
+    const byRawName = await db.cachedOpenings.get(live.openingName);
+    expect(byRawName, 'tree.openingName is not a cache key — that miss was the hang').toBeUndefined();
   });
 });

@@ -14,10 +14,12 @@ import { uid } from '../../utils/uid';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Chess } from 'chess.js';
-import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, ChevronLeft, X, Check, MessageCircle, Zap, Undo2, RotateCcw, Volume2 } from 'lucide-react';
+import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, ChevronLeft, X, Check, MessageCircle, Zap, Undo2, RotateCcw, Volume2, Swords } from 'lucide-react';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessBoard } from '../Board/ChessBoard';
-import type { NarrationArrow, NarrationHighlight } from '../../types/walkthroughTree';
+import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
+import { trapPlayPosition } from '../../services/trapPlayPosition';
+import { buildPlayCommentary } from '../../services/playCommentary';
 
 // Walkthrough arrows/highlights render through the SAME react-chessboard
 // pipeline the opening tab's LessonPlayer uses — identical palette, identical
@@ -60,6 +62,13 @@ function walkthroughBoardHighlights(
 import { AnalysisToggles } from '../Board/AnalysisToggles';
 import { useChessGame, type MoveResult } from '../../hooks/useChessGame';
 import { usePositionNarration } from '../../hooks/usePositionNarration';
+import { usePhaseNarration } from '../../hooks/usePhaseNarration';
+import {
+  createPhaseTransitionState,
+  detectPhaseTransition,
+  type PhaseTransitionState,
+} from '../../services/phaseTransitionDetector';
+import { resolvePhaseNarrationVerbosity } from '../../utils/coachNarration';
 import { useTeachWalkthrough, isStartablePunishLesson, isValidConceptsQuestion, isValidFindMoveQuestion, isValidDrillLine } from '../../hooks/useTeachWalkthrough';
 import { stageArrayHasUsableEntry } from '../../services/stageEntryValidity';
 import { useEnginePonder } from '../../hooks/useEnginePonder';
@@ -127,14 +136,11 @@ import type { WalkthroughSession } from '../../types/walkthrough';
 import { classifyPhase } from '../../services/gamePhaseService';
 import { narrateContinuationMove } from '../../services/continuationMoveNarration';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
-import { shouldOfferGuidedFind, buildGuidedFindChallenge, judgeGuidedFindAttempt, type GuidedFindChallenge } from '../../services/guidedFindTheMove';
-import { buildThreatCheckQuestion, judgeThreatCheckPick, type ThreatCheckQuestion } from '../../services/threatCheck';
 import { buildOpeningChainFacts } from '../../services/openingFactChains';
 import { buildForkTalk, type ForkTalk } from '../../services/forkTalk';
-import { parseSpokenMove } from '../../services/spokenMoveParser';
 import { parseCoachMoveCommand } from '../../services/coachMoveCommand';
 import { sanToSpeech } from '../../utils/sanToSpeech';
-import { teachingNoteForBoard, noteCoverageForLine, teachingBeatText } from '../../services/danyaTeachingService';
+import { teachingSourceForBoard, teachingFactLine, generalizedTeaching, noteCoverageForLine, spokenBeatText } from '../../services/danyaTeachingService';
 
 /** How many note-covered plies an opening needs before the NOTES take the
  *  lesson from a hand-authored masterclass.
@@ -157,12 +163,6 @@ const THINK_ALOUD_MIN_PLY_GAP = 6;
 const FORK_TALK_MAX_PER_GAME = 3;
 import { captureEvent } from '../../services/analytics';
 
-/** Min plies between guided find-the-move questions — the coach quizzes at
- *  real moments, not every move of a won game. */
-const GUIDED_FIND_MIN_PLY_GAP = 6;
-/** Min plies between threat-check questions — the danger drill fires at
- *  moments, not on every hanging pawn of a sloppy game. */
-const THREAT_CHECK_MIN_PLY_GAP = 8;
 import { getNeonColor, scaledShadow } from '../../utils/neonColors';
 import {
   getCompletedStages,
@@ -174,7 +174,6 @@ import { DifficultyToggle } from './DifficultyToggle';
 import type { CoachDifficulty, MiddlegamePlan } from '../../types';
 import { PlayerInfoBar } from './PlayerInfoBar';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
-import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
 import { coachService, isProgressQuestion, isImprovementTrendQuestion, isConceptQuestion, isOpeningProfileQuestion, isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion, isOpeningTrapsQuestion, isReviewDueQuestion, isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion, isRepertoireGapQuestion, isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion, isColorQuestion, isRecordsQuestion, isRecordVsQuestion, isMoveRatingQuestion, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion } from '../../coach/coachService';
 import { logAppAudit, mintTurnId, setCurrentTurnId } from '../../services/appAuditor';
 import { resolveCoachNarration } from '../../utils/coachNarration';
@@ -644,6 +643,37 @@ export function CoachTeachPage(): JSX.Element {
     });
   }, []);
 
+  // "Play this trap out" at the punish leaf (David 2026-08-05: "then maybe a
+  // chance to play them out against the coach"). The student has just WATCHED
+  // the opponent slip and the refutation land; now they get the same position
+  // back with the mistake on the board and have to find the punishment
+  // themselves, then play on against adaptive Stockfish. Reuses the plan
+  // play-out overlay — `syntheticOpeningFromSession` derives the student's side
+  // from the FEN, which is what a puzzle-derived trap needs since it can sit on
+  // either side of the board.
+  const handlePlayOutTrap = useCallback(
+    (lesson: PunishLesson, parentName: string | undefined): void => {
+      const spot = trapPlayPosition(lesson);
+      if (!spot) return; // won't replay — offer nothing rather than a guess
+      setPlayOutSession({
+        title: parentName ? `${parentName} — ${lesson.name}` : lesson.name,
+        subtitle: 'Find the punishment, then play it out',
+        startFen: spot.fen,
+        orientation: spot.studentColor,
+        steps: [],
+        kind: 'custom',
+      });
+      void logAppAudit({
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'CoachTeachPage.handlePlayOutTrap',
+        summary: `in-page play-out started from trap position ("${lesson.name}")`,
+      });
+    },
+
+    [],
+  );
+
   // "Play this line out yourself" at the walkthrough LEAF — the student
   // has just watched the taught line into the middlegame; now they play
   // it out. We mount OpeningPlayMode IN-PAGE, LOCKED to the taught line
@@ -1044,9 +1074,14 @@ export function CoachTeachPage(): JSX.Element {
   // the COACH's move (not the student's slip), so the "why?" prompt fills
   // the gap instead of conflicting. Honors the coachInGameDiscussion setting
   // (falls back to silent capture when the user turned the interjection off).
+  // `interruptive: false` — the cards are gone (2026-08-05), but the hook is
+  // still ENABLED because that is what records the slip. Those are two
+  // different switches on purpose: `enabled` gates the RECORD, `interruptive`
+  // gates the CARD. Setting enabled=false here would silently stop feeding My
+  // Mistakes, the Tactics drill queue and the weakness spine.
   const discussion = useDiscussionPractice(true, {
     surface: 'coach-teach',
-    interruptive: true,
+    interruptive: false,
     // After the student answers "why did you play that?", the picker pop-up
     // disappears and the reveal (best move + the engine's why) lands in the
     // chat — no lingering card (David 2026-07-10).
@@ -1055,50 +1090,6 @@ export function CoachTeachPage(): JSX.Element {
   const [coachTipsOn, setCoachTipsOn] = useState<boolean>(true);
   const [evalBarOverride, setEvalBarOverride] = useState<boolean | null>(null);
 
-  // GUIDED FIND-THE-MOVE (P2 of the faucet — David 2026-07-11: "I would love
-  // for the coach to ask the user questions"). When the student is clearly
-  // winning and the engine's move is notable, the coach names the piece + goal
-  // and WITHHOLDS the square; the student answers by playing it on the board.
-  // Everything computed (guidedFindTheMove.ts); the narration LLM is handed
-  // ONLY the question, never the answer, so it cannot leak it. The card below
-  // the board carries Hint (reveals) + Skip.
-  const [guidedFind, setGuidedFind] = useState<GuidedFindChallenge | null>(null);
-  const guidedFindRef = useRef<GuidedFindChallenge | null>(null);
-  const guidedFindAttemptsRef = useRef(0);
-  /** Ply of the last question asked — min-gap throttle so the coach doesn't
-   *  quiz every single move of a won game. */
-  const guidedFindLastAskPlyRef = useRef(-999);
-
-  const clearGuidedFind = useCallback((): void => {
-    guidedFindRef.current = null;
-    guidedFindAttemptsRef.current = 0;
-    setGuidedFind(null);
-  }, []);
-
-  const handleGuidedFindHint = useCallback((): void => {
-    const ch = guidedFindRef.current;
-    if (!ch) return;
-    captureEvent('guided_find_result', { surface: 'coach-teach', outcome: 'hint', attempts: guidedFindAttemptsRef.current, answer: ch.answerSan });
-    setMessages((prev) => [...prev, { id: uid('guided-hint'), role: 'assistant', content: ch.hint, timestamp: Date.now() }]);
-    void voiceService.speakForced(ch.hint).catch(() => undefined);
-    clearGuidedFind(); // answer revealed — the student plays on freely
-  }, [clearGuidedFind]);
-
-  const handleGuidedFindSkip = useCallback((): void => {
-    const ch = guidedFindRef.current;
-    if (!ch) return;
-    captureEvent('guided_find_result', { surface: 'coach-teach', outcome: 'skip', attempts: guidedFindAttemptsRef.current, answer: ch.answerSan });
-    clearGuidedFind();
-  }, [clearGuidedFind]);
-
-  // THREAT-CHECK question (David 2026-07-11) — after the coach's reply, when
-  // one of the STUDENT's pieces is genuinely hanging, the coach asks WHICH
-  // piece is in danger before they move. Chips computed (threatCheck.ts);
-  // the tactics narration facts are suppressed while it's open so nothing
-  // leaks the answer.
-  const [threatCheck, setThreatCheck] = useState<ThreatCheckQuestion | null>(null);
-  const threatCheckRef = useRef<ThreatCheckQuestion | null>(null);
-  const threatCheckLastAskPlyRef = useRef(-999);
   /** Traps/gems already announced this game (openingFactChains dedup) — the
    *  same lurking line isn't re-announced on every ply it stays live. */
   const announcedTrapsRef = useRef(new Set<string>());
@@ -1121,15 +1112,6 @@ export function CoachTeachPage(): JSX.Element {
   // takeaway spoken on End Lesson — questions asked/found + slips stopped on.
   // All computed; the closer is a deterministic line (no LLM needed).
   const sessionStatsRef = useRef({ slips: 0, questions: 0, correct: 0 });
-  const lastPromptCountedRef = useRef(false);
-  useEffect(() => {
-    if (discussion.prompt && !lastPromptCountedRef.current) {
-      lastPromptCountedRef.current = true;
-      sessionStatsRef.current.slips += 1;
-    } else if (!discussion.prompt) {
-      lastPromptCountedRef.current = false;
-    }
-  }, [discussion.prompt]);
 
   /** The chain's lead-the-eye arrows/highlights for the CURRENT position
    *  (David 2026-07-11: "help the user visualize the moves the coach is
@@ -1139,39 +1121,6 @@ export function CoachTeachPage(): JSX.Element {
   const chainArrowsRef = useRef<BoardArrow[]>([]);
   const chainHighlightsRef = useRef<BoardHighlight[]>([]);
 
-  const clearThreatCheck = useCallback((): void => {
-    threatCheckRef.current = null;
-    setThreatCheck(null);
-  }, []);
-
-  const handleThreatCheckPick = useCallback((picked: string): void => {
-    const q = threatCheckRef.current;
-    if (!q) return;
-    const correct = judgeThreatCheckPick(q, picked);
-    if (correct) sessionStatsRef.current.correct += 1;
-    const text = `${correct ? "That's the one." : 'Not quite.'} ${q.reveal}`;
-    captureEvent('threat_check_result', { surface: 'coach-teach', outcome: correct ? 'correct' : 'wrong', picked, answer: q.answer });
-    clearThreatCheck();
-    setMessages((prev) => [...prev, { id: uid('threat-reveal'), role: 'assistant', content: text, timestamp: Date.now() }]);
-    void voiceService.speakForced(text).catch(() => undefined);
-  }, [clearThreatCheck]);
-
-  const handleThreatCheckSkip = useCallback((): void => {
-    const q = threatCheckRef.current;
-    if (!q) return;
-    captureEvent('threat_check_result', { surface: 'coach-teach', outcome: 'skip', answer: q.answer });
-    clearThreatCheck();
-  }, [clearThreatCheck]);
-
-  // A walkthrough taking over the board supersedes any open question — the
-  // judge's stale-FEN check already refuses to score a drifted board; this
-  // just removes the card so it never lingers over a lesson.
-  useEffect(() => {
-    if (walkthrough.isActive) {
-      clearGuidedFind();
-      clearThreatCheck();
-    }
-  }, [walkthrough.isActive, clearGuidedFind, clearThreatCheck]);
 
   // A live walkthrough must survive a deploy: hold the service-worker update
   // reload (index.html controllerchange handler) until the lesson ends.
@@ -1601,27 +1550,17 @@ export function CoachTeachPage(): JSX.Element {
    *  Need to figure out a way for coach to let them know that punish
    *  lines and quizzes have loaded." */
   const handleStageMerged = useCallback(
-    (stage: 'concepts' | 'findMove' | 'drill' | 'punish'): void => {
+    (_stage: 'concepts' | 'findMove' | 'drill' | 'punish'): void => {
       void walkthrough.mergeStagesFromCache();
-      const labels: Record<typeof stage, string> = {
-        concepts: 'Quiz questions',
-        findMove: 'Find-the-move puzzles',
-        drill: 'Drill lines',
-        punish: 'Punish (trap) lessons',
-      };
-      const msg = `${labels[stage]} just loaded — they'll show up in the menu when you reach the end of the walkthrough.`;
-      const id = `stage-loaded-${stage}-${Date.now()}`;
-      setMessages((prev) => [
-        ...prev,
-        { id, role: 'assistant', content: msg, timestamp: Date.now() },
-      ]);
-      useCoachMemoryStore.getState().appendConversationMessage({
-        surface: 'chat-teach',
-        role: 'coach',
-        text: msg,
-        fen: gameRef.current.fen,
-        trigger: null,
-      });
+      // SILENT. This used to push a chat bubble per stage — four near-identical
+      // "X just loaded — they'll show up in the menu when you reach the end of
+      // the walkthrough" messages that dominated David's transcript (2026-08-05
+      // screenshot), pointed at a menu the flow may never reach, and each one
+      // yanked the auto-scroll while he was reading. The MENU is the
+      // notification: the stage tile appears with its count when it exists, and
+      // a stage the student is parked WAITING on already resolves through
+      // `pendingStageJump` (auto-jump) or `handleStageUnavailable` (honest
+      // failure). Background progress a user didn't ask about is not news.
     },
     [walkthrough],
   );
@@ -4769,6 +4708,47 @@ export function CoachTeachPage(): JSX.Element {
     openingName: walkthrough.tree?.openingName ?? null,
   });
 
+  // PHASE TRANSITIONS — Learn never had them (2026-08-05). `usePhaseNarration`
+  // was mounted in Play only, so a game played HERE crossed into the middlegame
+  // and the endgame in silence, and none of the middlegame/endgame corpus
+  // teaching could reach it. With the question cards gone this IS the teaching:
+  // the coach marks the moment the opening ends and says what the position is
+  // now about. Report lands in the chat, same as Play.
+  const phaseStateRef = useRef<PhaseTransitionState>(createPhaseTransitionState());
+  const phaseNarration = usePhaseNarration({
+    getPgn: () => game.history.join(' '),
+    getOpeningName: () => walkthrough.tree?.openingName
+      ?? useCoachMemoryStore.getState().intendedOpening?.name
+      ?? null,
+    onReport: (text) => setMessages((prev) => [...prev, {
+      id: uid('phase'), role: 'assistant', content: text, timestamp: Date.now(),
+    }]),
+  });
+
+  /** Fire the transition after a move settles. Called from the move handler
+   *  once the coach's reply has landed, so the board is at rest and the
+   *  detector reads the position the student will actually look at. */
+  const runPhaseTransition = useCallback((fen: string, san: string, plyCount: number): void => {
+    // A walkthrough owns the board and has its own narration — never talk over
+    // a lesson (the same rule that used to clear the question cards).
+    if (walkthrough.isActive) return;
+    try {
+      const event = detectPhaseTransition(
+        { fen, san, moveNumber: plyCount, isCoachMove: false },
+        phaseStateRef.current,
+        playerColor,
+      );
+      if (!event) return;
+      const verbosity = resolvePhaseNarrationVerbosity(
+        useAppStore.getState().activeProfile?.preferences,
+      );
+      // Silent honours the verbosity contract (G5); an in-flight read-aloud is
+      // user-triggered and wins.
+      if (verbosity === 'off' || positionNarration.isNarrating) return;
+      void phaseNarration.narrate(event, verbosity);
+    } catch { /* narration is a bonus, never a blocker */ }
+  }, [walkthrough.isActive, playerColor, phaseNarration, positionNarration.isNarrating]);
+
   // Stream the "Read this position" narration into the CHAT as it arrives — the
   // banner is gone (David 2026-07-10: "read position and phase narration needs
   // to go in the chat section. No more special place for them."). One growing
@@ -4812,40 +4792,6 @@ export function CoachTeachPage(): JSX.Element {
     // An open "why did you play that?" is closed by playing on — the coach
     // lets it go and the slip is captured silently for review/drills (David
     // 2026-07-11: never a stale card over a live board).
-    if (discussion.prompt) {
-      discussion.dismissOnMove();
-    }
-    // An open THREAT-CHECK is answered by the move itself — the student chose
-    // to act rather than tap a chip. Log it and clear; never block the move.
-    if (threatCheckRef.current) {
-      captureEvent('threat_check_result', { surface: 'coach-teach', outcome: 'moved-through', answer: threatCheckRef.current.answer });
-      clearThreatCheck();
-    }
-    // GUIDED FIND-THE-MOVE answer attempt (P2 — David 2026-07-11: the coach
-    // asks, the student answers ON THE BOARD). Found → confirm + the move
-    // stands and play continues. Wrong → the move is taken back and the
-    // student looks again (the doctrine's takeback-retry). Stale board
-    // (reset/jump since the ask) → silently clear and treat as a normal move.
-    const guidedChallenge = guidedFindRef.current;
-    if (guidedChallenge) {
-      const verdict = judgeGuidedFindAttempt(guidedChallenge, { san: move.san, from: move.from, to: move.to, fenBefore });
-      if (verdict === 'stale') {
-        clearGuidedFind();
-      } else if (verdict === 'found') {
-        sessionStatsRef.current.correct += 1;
-        captureEvent('guided_find_result', { surface: 'coach-teach', outcome: 'found', attempts: guidedFindAttemptsRef.current + 1, answer: guidedChallenge.answerSan });
-        setMessages((prev) => [...prev, { id: uid('guided-found'), role: 'assistant', content: guidedChallenge.confirm, timestamp: Date.now() }]);
-        void voiceService.speakForced(guidedChallenge.confirm, { prosodySpike: true }).catch(() => undefined);
-        clearGuidedFind();
-        // fall through — the found move stands; the opponent replies normally.
-      } else {
-        guidedFindAttemptsRef.current += 1;
-        captureEvent('guided_find_result', { surface: 'coach-teach', outcome: 'retry', attempts: guidedFindAttemptsRef.current, answer: guidedChallenge.answerSan });
-        gameRef.current.undoMove();
-        void voiceService.speakForced(guidedChallenge.retry).catch(() => undefined);
-        return; // consumed — the board is back where it was; no opponent reply
-      }
-    }
     // Update liveFenRef SYNCHRONOUSLY with the post-move FEN that the
     // MoveResult already carries. This is what every brain trip's
     // getLiveFen will read, so trip 1 sees the post-student-move
@@ -4896,6 +4842,10 @@ export function CoachTeachPage(): JSX.Element {
         if (reply) {
           const played = handlePlayMove(reply);
           if (played.ok) {
+            // PHASE TRANSITION on the settled position. Keyed off the STUDENT's
+            // move (the detector ignores coach moves), fired here so the board
+            // has stopped moving before the coach speaks about it.
+            runPhaseTransition(move.fen, move.san, (move.moveNumber ?? 1) * 2);
             // GROUNDING COMPLETENESS (David 2026-06-15): compute what the
             // reply ACTUALLY did — captured piece + squares — from the BEFORE
             // position, so the LLM narrates the real move instead of inventing
@@ -4936,7 +4886,6 @@ export function CoachTeachPage(): JSX.Element {
                 const tacticsFacts: string[] = [];
                 if (tctx.immediate.length > 0) tacticsFacts.push(`Real tactics on the board now: ${tctx.immediate.map((t) => t.description).join('; ')}.`);
                 if (tctx.hanging.length > 0) tacticsFacts.push(`Undefended/attacked: ${tctx.hanging.map((h) => `${NAME[h.piece] ?? h.piece} on ${h.square}`).join(', ')}.`);
-                let questionArmed = false;
                 const historyAfterReply = [...move.history, m.san];
                 // Rating-banded reality (#23): warm the amateur-band cache for
                 // this opening position NOW — the engine analysis below gives
@@ -4969,52 +4918,17 @@ export function CoachTeachPage(): JSX.Element {
                 try {
                   const studentBest = await stockfishEngine.analyzeWithBudget(probe.fen(), 12, 1200);
                   const recUci = studentBest?.bestMove;
-                  // GUIDED FIND-THE-MOVE (P2): student clearly winning + the
-                  // engine's move is notable → ASK instead of telling. The
-                  // narration is handed ONLY the square-free question — never
-                  // the answer — so it cannot leak it (honesty by construction).
-                  const studentPovEval = typeof studentBest?.evaluation === 'number'
-                    ? (playerColor === 'white' ? studentBest.evaluation : -studentBest.evaluation)
-                    : null;
+                  // Ply of the move just played — the throttle clock for
+                  // think-aloud and fork-talk below. (It used to be declared
+                  // inside the guided-find block; both of those outlived it.)
                   const plyNow = (move.moveNumber ?? 1) * 2;
-                  const mayAsk =
-                    !guidedFindRef.current &&
-                    !threatCheckRef.current &&
-                    !activeDrillRef.current &&
-                    plyNow - guidedFindLastAskPlyRef.current >= GUIDED_FIND_MIN_PLY_GAP &&
-                    shouldOfferGuidedFind({ fen: probe.fen(), bestUci: recUci, evalCpStudentPov: studentPovEval });
-                  const challenge = mayAsk && recUci ? buildGuidedFindChallenge(probe.fen(), recUci) : null;
-                  // THREAT-CHECK (David 2026-07-11): when one of the STUDENT's
-                  // pieces is genuinely hanging after the coach's reply, ask
-                  // WHICH piece is in danger before they move — the
-                  // check-what-changed discipline as a question. Guided-find
-                  // takes priority (a winning shot usually answers the threat
-                  // too); one question at a time, always.
-                  const threatQ = !challenge &&
-                    !threatCheckRef.current &&
-                    !guidedFindRef.current &&
-                    !activeDrillRef.current &&
-                    plyNow - threatCheckLastAskPlyRef.current >= THREAT_CHECK_MIN_PLY_GAP
-                    ? buildThreatCheckQuestion(probe.fen(), studentCC)
-                    : null;
-                  if (challenge) {
-                    guidedFindRef.current = challenge;
-                    guidedFindAttemptsRef.current = 0;
-                    guidedFindLastAskPlyRef.current = plyNow;
-                    setGuidedFind(challenge);
-                    questionArmed = true;
-                    sessionStatsRef.current.questions += 1;
-                    captureEvent('guided_find_asked', { surface: 'coach-teach', answer: challenge.answerSan, eval_cp: studentPovEval });
-                    facts.push(`Do NOT recommend, name, or hint at ANY move, threat, or tactic for the student in this reply. End your reply with exactly this question to the student, then stop: "${challenge.question}"`);
-                  } else if (threatQ) {
-                    threatCheckRef.current = threatQ;
-                    threatCheckLastAskPlyRef.current = plyNow;
-                    setThreatCheck(threatQ);
-                    questionArmed = true;
-                    sessionStatsRef.current.questions += 1;
-                    captureEvent('threat_check_asked', { surface: 'coach-teach', answer: threatQ.answer });
-                    facts.push(`Do NOT name any threat, attacked piece, undefended piece, or tactic in this reply. End your reply with exactly this question to the student, then stop: "${threatQ.question}"`);
-                  } else {
+                  // GUIDED FIND-THE-MOVE and THREAT-CHECK used to arm blocking
+                  // cards here. Both removed 2026-08-05 (David: the threat
+                  // check is "annoying AF"; find-the-move "is what we are kinda
+                  // building here anyway"). Learn teaches by TALKING THROUGH
+                  // the game now, not by stopping it to quiz. Fork-in-the-road
+                  // below survives precisely because it is answered by PLAYING.
+                  {
                     // FORK IN THE ROAD — near-equal options with different
                     // characters get deliberated as two lives, not a readout.
                     // Fires INSTEAD of the plain best-move recommendation; the
@@ -5088,14 +5002,29 @@ export function CoachTeachPage(): JSX.Element {
                 } catch { /* engine down → no move named; the prompt keeps the prompt-for-next-move general */ }
                 // Tactics facts reach the narration ONLY when no question is
                 // open — otherwise they leak the answer.
-                if (!questionArmed) facts.push(...tacticsFacts);
+                facts.push(...tacticsFacts);
+                // TRADE OFF THEIR BEST PIECE — the Naroditsky speedrun's middle
+                // beat (B7r1bgPEyIQ ~18-23min; David: "trading off opponents
+                // best piece"). The tactic and improving-move beats already
+                // live above (tacticsFacts / think-aloud / the engine rec);
+                // this is the one the chain had no slot for. buildPlayCommentary
+                // is deliberately narrow — an unchallengeable outpost knight or
+                // an open-file rook, and only when the trade is available on
+                // THIS move — so most turns it stays silent (G0: the read is
+                // computed; the model only phrases it).
+                try {
+                  const beat = buildPlayCommentary({ fen: probe.fen(), studentColor: playerColor });
+                  if (beat?.kind === 'trade-the-best-piece') {
+                    facts.push(...beat.facts);
+                  }
+                } catch { /* commentary is a bonus, never a blocker */ }
                 // OPENING FACT-CHAIN (David 2026-07-11: "the purpose of each
                 // move and what traps might form") — during the opening, hand
                 // the narration where the moves LEAD (named DB continuations)
                 // + any engine-verified trap/gem forming on this exact path.
                 // Suppressed while a question is open (nothing extra leaks),
                 // and each lurking line is announced once per game.
-                if (!questionArmed) {
+                {
                   try {
                     const chainHistory = historyAfterReply;
                     if (chainHistory.length <= 2) {
@@ -5139,16 +5068,20 @@ export function CoachTeachPage(): JSX.Element {
                     }
                   } catch { /* the chain is a bonus, never a blocker */ }
                 }
-                // TEACHING NOTE at this exact position (David 2026-07-12:
-                // "what he teaches in every position… his explanation… and
-                // the future plans"). Curated corpus, code-selected by move
-                // prefix; suppressed while a question is open (leak guard).
-                if (!questionArmed) {
+                // TEACHING NOTE (David 2026-07-12: "what he teaches in every
+                // position… his explanation… and the future plans"). Curated
+                // corpus, code-selected; suppressed while a question is open
+                // (leak guard).
+                //
+                // The label is now derived from PROVENANCE, not assumed. This
+                // said "for THIS position" unconditionally while the selector
+                // could also return a note borrowed from another opening or a
+                // general principle — so the model was told a borrowed idea was
+                // a fact about the board, and dutifully said so (2026-08-04).
+                {
                   try {
-                    const note = teachingNoteForBoard(historyAfterReply, probe.fen());
-                    if (note) {
-                      facts.push(`Coaching note for THIS position: ${note.explains} ${note.teaches}${note.plans ? ` Plan: ${note.plans}` : ''}`);
-                    }
+                    const source = teachingSourceForBoard(historyAfterReply, probe.fen());
+                    if (source) facts.push(teachingFactLine(source));
                   } catch { /* corpus is a bonus, never a blocker */ }
                   // GEM DETECTION on Learn (David 2026-07-30: "This is for the
                   // learn with coach tab!!"). If the coach's reply just walked
@@ -5173,20 +5106,13 @@ export function CoachTeachPage(): JSX.Element {
                       // machinery supplies the question, the hint ladder, and
                       // the judging — no new UI, and Hint reveals the real
                       // punish.
-                      let gemChallenge: GuidedFindChallenge | null = null;
-                      try {
-                        const gc = new Chess(probe.fen());
-                        const gm = gc.move(gem.punish);
-                        if (gm) gemChallenge = buildGuidedFindChallenge(probe.fen(), `${gm.from}${gm.to}${gm.promotion ?? ''}`);
-                      } catch { /* fall back to the text-only callout below */ }
-                      if (gemChallenge && !guidedFindRef.current) {
-                        guidedFindRef.current = gemChallenge;
-                        guidedFindAttemptsRef.current = 0;
-                        setGuidedFind(gemChallenge);
-                        questionArmed = true;
-                        sessionStatsRef.current.questions += 1;
-                        captureEvent('guided_find_asked', { surface: 'coach-teach-gem', answer: gemChallenge.answerSan });
-                      }
+                      // The gem is now CALLED OUT IN THE COMMENTARY, not armed
+                      // as a card (2026-08-05). It used to borrow the
+                      // guided-find machinery for its question/hint/judging;
+                      // with the cards gone the callout stands on its own —
+                      // which is what a coach does anyway: point out that
+                      // something is there, and let the student look.
+                      // Still withholds the move and the square.
                       facts.push(`GEM ALERT (known verified inaccuracy by the coach's last move): ${gem.callout} Invite the student to FIND the punishing move — do NOT name or hint the move or its square.`);
                       void logAppAudit({
                         kind: 'coach-narration-spoken',
@@ -5236,7 +5162,7 @@ export function CoachTeachPage(): JSX.Element {
         setOpponentThinking(false);
       }
     })();
-  }, [handleSubmit, discussion, walkthrough.tree?.openingName, playerColor, resolveCoachReplyMove, handlePlayMove, setOpponentThinking, activeProfile?.puzzleRating, activeProfile?.currentRating, positionNarration, clearGuidedFind, clearThreatCheck]);
+  }, [handleSubmit, discussion, walkthrough.tree?.openingName, playerColor, resolveCoachReplyMove, handlePlayMove, setOpponentThinking, activeProfile?.puzzleRating, activeProfile?.currentRating, positionNarration, runPhaseTransition]);
 
   // ─── Guided-opening-play kickoff ─────────────────────────────────────────
   // On mount, pull the student's last 5 games + weakness profile so the
@@ -5247,9 +5173,17 @@ export function CoachTeachPage(): JSX.Element {
   // Snap to top when a new message lands or while the reply is
   // streaming in. Reverse-flow puts newest at the top so scrollTop=0
   // is always the active turn.
+  //
+  // ONLY when the reader is already at the active end. David 2026-08-05:
+  // "cannot scroll back up" — he was reading history while background stage
+  // notices kept landing, and the unconditional snap yanked him back to the
+  // top on every one. Scrolled away = reading; a reader is never interrupted.
+  // The next message they send (or a snap while they're already at top)
+  // resumes the follow behavior on its own.
   useEffect(() => {
     const el = transcriptRef.current;
     if (!el) return;
+    if (el.scrollTop > 48) return; // reading history — don't steal the scroll
     el.scrollTop = 0;
   }, [messages.length, streaming]);
 
@@ -5575,22 +5509,8 @@ export function CoachTeachPage(): JSX.Element {
     // Order is by specificity: an armed question owns the button while it is
     // on screen, and the engine best-move is the fallback for when the student
     // is simply playing and wants a nudge.
-    if (guidedFindRef.current) {
-      handleGuidedFindHint();
-      return;
-    }
-    const threat = threatCheckRef.current;
-    if (threat) {
-      captureEvent('threat_check_result', { surface: 'coach-teach', outcome: 'hint', answer: threat.answer });
-      setMessages((prev) => [...prev, { id: uid('threat-hint'), role: 'assistant', content: threat.reveal, timestamp: Date.now() }]);
-      void voiceService.speakForced(threat.reveal).catch(() => undefined);
-      // Lead the eye to the piece the answer names, the same way the
-      // engine-hint branch below leads it to a move.
-      setHighlights([{ square: threat.answerSquare, color: '#eab308' }]);
-      threatCheckRef.current = null;
-      setThreatCheck(null);
-      return;
-    }
+    // With the question cards gone (2026-08-05) Hint has ONE job again: the
+    // engine's best move on the live board.
     const fen = liveFenRef.current;
     setHintBusy(true);
     try {
@@ -5607,7 +5527,7 @@ export function CoachTeachPage(): JSX.Element {
     } finally {
       setHintBusy(false);
     }
-  }, [hintBusy, handleGuidedFindHint]);
+  }, [hintBusy]);
 
   // NARRATED CONTINUATION (David 2026-07-18): after a lesson, the coach can
   // play out both sides with Stockfish from where the opening ended and
@@ -5699,21 +5619,33 @@ export function CoachTeachPage(): JSX.Element {
         // where the opening had teaching. Same selection rule (code picks,
         // scoped to the taught opening), same board-grading of the prose, and
         // once per note so one note can't narrate every move.
+        //
+        // MIDDLEGAME + ENDGAME TEACHING (David 2026-08-05: "need middle and
+        // endgame notes under learn with coach as well"). This play-out IS the
+        // middlegame and endgame of a taught lesson, and restricting it to
+        // position-taught notes made it near-silent past book — exact-position
+        // hits are 0.2% of middlegame plies and 0% of endgame plies, because
+        // middlegames do not repeat.
+        //
+        // A borrowed note still may NOT be spoken as a description of this
+        // board — that was the whole 2026-08-04 lesson. It is spoken as what it
+        // is: an explicit generalization ("in rook endings, …"), which is true
+        // wherever it is said. Same rule the phase transitions follow.
         try {
-          const note = teachingNoteForBoard(
+          const source = teachingSourceForBoard(
             [...openingSans, ...local.history()],
             local.fen(),
             taughtOpening,
           );
-          if (note && !continuationNoteIds.has(note.id)) {
+          if (source && !continuationNoteIds.has(source.note.id)) {
             const graded = gradeNarrationText(
-              teachingBeatText(note),
+              spokenBeatText(source.note),
               local.fen(),
               'CoachTeachPage.continuationNote',
             );
             if (graded?.trim()) {
-              continuationNoteIds.add(note.id);
-              text = `${text} ${graded.trim()}`;
+              continuationNoteIds.add(source.note.id);
+              text = `${text} ${generalizedTeaching(source.origin, graded.trim())}`;
             }
           }
         } catch { /* the corpus is a bonus, never a blocker */ }
@@ -6246,67 +6178,12 @@ export function CoachTeachPage(): JSX.Element {
           />
         </div>
 
-        {/* Guided find-the-move (P2 — the coach ASKS; the student answers on
-            the board). Persistent card so the question survives after the
-            voice line; Hint reveals the square, Skip dismisses. */}
-        {guidedFind && (
-          <div data-testid="guided-find-card" className="mx-4 my-1 rounded-xl border-2 border-purple-500/40 bg-purple-500/10 px-3 py-2">
-            <div className="text-sm text-purple-100">{guidedFind.question}</div>
-            <div className="mt-1.5 flex items-center gap-2">
-              <span className="text-xs text-purple-300/70">Play your answer on the board.</span>
-              <button
-                type="button"
-                data-testid="guided-find-hint"
-                onClick={handleGuidedFindHint}
-                className="ml-auto rounded-lg border border-purple-400/50 px-2.5 py-1 text-xs font-semibold text-purple-200 hover:bg-purple-500/20"
-              >
-                Hint
-              </button>
-              <button
-                type="button"
-                data-testid="guided-find-skip"
-                onClick={handleGuidedFindSkip}
-                className="rounded-lg border border-slate-500/50 px-2.5 py-1 text-xs text-slate-300 hover:bg-slate-500/20"
-              >
-                Skip
-              </button>
-            </div>
-          </div>
-        )}
 
-        {/* Threat-check — "which of your pieces is in danger?" Chips computed;
-            a board move answers it implicitly (never blocks). */}
-        {threatCheck && (
-          <div data-testid="threat-check-card" className="mx-4 my-1 rounded-xl border-2 border-rose-500/40 bg-rose-500/10 px-3 py-2">
-            <div className="text-sm text-rose-100">{threatCheck.question}</div>
-            <div className="mt-2 flex flex-wrap items-center gap-2">
-              {threatCheck.options.map((opt) => (
-                <button key={opt} type="button" data-testid="threat-check-option"
-                  onClick={() => handleThreatCheckPick(opt)}
-                  className="rounded-lg border border-rose-400/50 px-2.5 py-1 text-xs font-semibold text-rose-200 hover:bg-rose-500/20">
-                  {opt}
-                </button>
-              ))}
-              <button type="button" data-testid="threat-check-skip" onClick={handleThreatCheckSkip}
-                className="ml-auto rounded-lg border border-slate-500/50 px-2.5 py-1 text-xs text-slate-300 hover:bg-slate-500/20">
-                Skip
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Coach "why did you play that?" question on a real slip — the same
-            faucet Play uses, now surfaced in Learn (David 2026-06-04). The
-            slip threshold is rating-adaptive (beginners: blunders only;
-            2000+: inaccuracies too). */}
-        <DiscussionPracticePanel
-          phase={discussion.phase}
-          prompt={discussion.prompt}
-          teach={discussion.teach}
-          onSubmit={(reason) => void discussion.submitReason(reason)}
-          onSkip={() => void discussion.skip()}
-          onDismissTeach={discussion.dismissTeach}
-        />
+        {/* The "why did you play that?" card is GONE (2026-08-05). Learn
+            teaches by talking through the game, not by stopping it to ask.
+            The slip is still RECORDED — silently, inside
+            `evaluatePlayerMove` — so My Mistakes, the Tactics drill queue and
+            the weakness spine keep being fed. See `learnSilentCapture.test`. */}
 
         {/* Control buttons row — Takeback / Restart / Resign, same as
             Play. Resign on the teach surface ends the lesson and pops
@@ -6323,6 +6200,7 @@ export function CoachTeachPage(): JSX.Element {
               void handleSubmit(query, { teachIntent: true });
             }}
             onPlayOutLine={(opening, customLine) => setLeafPlayOut({ opening, customLine })}
+            onPlayOutTrap={handlePlayOutTrap}
             onWatchContinuation={() => void startContinuationRef.current()}
           />
         ) : (
@@ -6437,24 +6315,7 @@ export function CoachTeachPage(): JSX.Element {
         {/* Pinned input — first thing under the board. */}
         <div className="border-b border-theme-border">
           <ChatInput
-            onSend={(text, modality) => {
-              // VOICE ANSWER ROUTING (David 2026-07-11: "I would love for the
-              // coach to ask the user questions" + the turn-taking mic). When
-              // the "why did you play that?" picker is open, a SPOKEN
-              // utterance IS the answer — route it into the picker (the
-              // misconception classifier handles free text) instead of
-              // spawning a chat turn over the open question. Typed chat still
-              // goes to chat; the picker has its own typed input.
-              if (modality === 'voice' && discussion.prompt) {
-                void logAppAudit({
-                  kind: 'discussion-voice-answer',
-                  category: 'subsystem',
-                  source: 'CoachTeachPage.voiceAnswerRouting',
-                  summary: `spoken answer routed to open why-picker: "${text.slice(0, 60)}"`,
-                });
-                void discussion.submitReason(text);
-                return;
-              }
+            onSend={(text) => {
               // Spoken MOVE answer to an open guided find-the-move ("knight
               // to d5"). Parsed against chess.js's legal moves for the
               // challenge position (spokenMoveParser — never guesses). The
@@ -6462,24 +6323,6 @@ export function CoachTeachPage(): JSX.Element {
               // handleStudentMove's judge (confirm + play continues); a wrong
               // move gets the retry nudge; unparseable speech falls through
               // to a normal chat question.
-              if (modality === 'voice' && guidedFindRef.current) {
-                const ch = guidedFindRef.current;
-                const parsed = parseSpokenMove(text, ch.fen);
-                if (parsed) {
-                  if (parsed.san === ch.answerSan || (parsed.from === ch.from && parsed.to === ch.to)) {
-                    const result = game.makeMove(parsed.from, parsed.to);
-                    if (result) {
-                      handleStudentMove(result);
-                      return;
-                    }
-                  } else {
-                    guidedFindAttemptsRef.current += 1;
-                    captureEvent('guided_find_result', { surface: 'coach-teach', outcome: 'retry', attempts: guidedFindAttemptsRef.current, answer: ch.answerSan, modality: 'voice' });
-                    void voiceService.speakForced(ch.retry).catch(() => undefined);
-                    return;
-                  }
-                }
-              }
               void handleSubmit(text);
             }}
             disabled={busy}
@@ -7157,6 +7000,7 @@ function WalkthroughControls({
   navigate,
   onDeepDive,
   onPlayOutLine,
+  onPlayOutTrap,
   onWatchContinuation,
 }: {
   walkthrough: ReturnType<typeof useTeachWalkthrough>;
@@ -7172,6 +7016,11 @@ function WalkthroughControls({
    *  middlegame). Kept in the parent so the play-out overlay lives at the
    *  page root, not inside these controls. */
   onPlayOutLine: (opening: OpeningRecord, customLine: OpeningVariation) => void;
+  /** Fired by the punish-leaf "Play it out against the coach" button — the
+   *  parent mounts the plan play-out overlay from the trap's own position
+   *  (mistake on the board, punishment still to find). David 2026-08-05:
+   *  "then maybe a chance to play them out against the coach." */
+  onPlayOutTrap: (lesson: PunishLesson, parentName: string | undefined) => void;
   /** Fired by the leaf "Watch the middlegame and endgame" button — the
    *  coach plays out BOTH sides with Stockfish from where the lesson ended,
    *  narrating the keystones (David 2026-07-30: the option existed only as
@@ -7577,10 +7426,32 @@ function WalkthroughControls({
             </div>
           )}
           <div className="flex flex-col gap-2">
+            {/* Watching the refutation is half the lesson; landing it
+                yourself is the other half (David 2026-08-05). Offered first
+                because it is the one that teaches — and only when the
+                lesson's own moves replay, so a malformed entry degrades to
+                the exits below instead of opening a guessed position. */}
+            {walkthrough.activePunishLesson &&
+              trapPlayPosition(walkthrough.activePunishLesson) && (
+              <button
+                onClick={() => {
+                  const lesson = walkthrough.activePunishLesson;
+                  if (!lesson) return;
+                  const parentName = walkthrough.parentOpeningTree?.openingName;
+                  walkthrough.stop();
+                  onPlayOutTrap(lesson, parentName);
+                }}
+                className="w-full flex items-center justify-center gap-2 px-3 py-3 rounded-lg bg-theme-accent text-theme-bg text-sm font-semibold min-h-[48px] transition-colors"
+                style={goldGlowStrongStyle}
+                data-testid="walkthrough-punish-play-out"
+              >
+                <Swords size={16} />
+                Play it out against the coach
+              </button>
+            )}
             <button
               onClick={() => walkthrough.exitPunishToMenu()}
-              className="w-full flex items-center justify-center gap-2 px-3 py-3 rounded-lg bg-theme-accent text-theme-bg text-sm font-semibold min-h-[48px] transition-colors"
-              style={goldGlowStrongStyle}
+              className="w-full flex items-center justify-center gap-2 px-3 py-3 rounded-lg border border-theme-border bg-theme-surface hover:bg-theme-bg text-sm font-semibold text-theme-text min-h-[48px] transition-colors"
               data-testid="walkthrough-punish-back-to-lessons"
             >
               <ChevronRight size={16} />
@@ -8082,13 +7953,17 @@ function QuizPanel({
       }
     }
     if (promptToSpeak.trim()) {
-      // Use speakForced so it cuts any in-flight speech (e.g. the
-      // walkthrough's narration just finished or a prior quiz answer's
-      // explanation is being read).
       void voiceService.speakForced(promptToSpeak);
     }
-     
-  }, [activeStage, stageIndex, tree]);
+    // Keyed on the QUESTION IDENTITY (stage + index + opening), NOT the tree
+    // object. Background `mergeStagesFromCache` swaps the tree's identity
+    // while a question is being read; with `tree` in the deps the effect
+    // re-fired mid-sentence and re-spoke the same prompt over itself — one of
+    // the "sentences getting cut off by other sentences" paths in David's
+    // 2026-08-05 run. The prompt text is derived state; the question changing
+    // is the only real trigger.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeStage, stageIndex, tree?.openingName]);
 
   // Punish stage gets a LESSON PICKER (not the MC quiz UI) per user
   // morning iteration: "Punishment lines need to be in walk through
@@ -8305,11 +8180,20 @@ function PunishLessonPicker({
   if (startable.length === 0) {
     return <div data-testid="walkthrough-punish-empty" />;
   }
+  // Say what these lessons ARE. Curated trap lines replay from move one; the
+  // puzzle-DB fallback serves mid-game tactics from games that merely OPENED
+  // with this opening. David asked the Bishop's Opening (0 gems) for its traps
+  // and got puzzle tactics presented as if they were its trap lines — the
+  // honest header is the difference between a fallback and a lie (2026-08-05:
+  // "i was expecting a walk through of the trap lines"). Empty > generic >
+  // invented applies to framing, not just content.
+  const allFromLine = startable.every(({ lesson }) => trapPlayPosition(lesson) !== null || !lesson.setupFen);
   return (
     <div className="px-3 pb-3 space-y-2" data-testid="walkthrough-punish-picker">
       <div className="text-xs font-medium text-theme-text-muted px-1">
-        Pick a lesson — Black plays a common mistake, you find the punishment.
-        Plays out as a walkthrough on the board.
+        {allFromLine
+          ? 'Pick a trap line — watch it play out from move one, catch the mistake, find the punishment. Then play it out against the coach.'
+          : `No hand-verified trap lines for the ${tree?.openingName ?? 'this opening'} yet — these are real tactical punishments from games that began with it. Pick one, find the punishing move.`}
       </div>
       <div className="flex flex-col gap-2">
         {startable.map(({ lesson, idx }) => {

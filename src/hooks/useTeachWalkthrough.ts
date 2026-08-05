@@ -32,6 +32,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Chess } from 'chess.js';
 import { stripSanAnnotations } from '../data/openingWalkthroughs/validate';
+import { trapPlayPosition } from '../services/trapPlayPosition';
 import { voiceService } from '../services/voiceService';
 import { logAppAudit } from '../services/appAuditor';
 import { markStageComplete } from '../services/openingProgress';
@@ -259,17 +260,37 @@ export function buildPunishWalkthroughTree(
     children: forkChildren,
   };
 
-  // Two paths to position the board at the inaccuracy:
-  //   (a) setupFen is provided (puzzle-DB-derived lessons). The
-  //       built tree's startFen carries the position directly; the
-  //       inaccuracy node sits as the root child with no setup
-  //       animation — the student starts at the puzzle position
-  //       with the lesson's intro framing the opening context.
-  //   (b) setupMoves SAN sequence (LLM-emitted lessons). Animate
-  //       each setup move quickly with empty idea so the position
-  //       builds visibly from the standard start.
+  // Position the board at the inaccuracy. WALK THE LINE whenever the lesson's
+  // own moves replay from the standard start — David 2026-08-05, after asking
+  // for the Bishop's Opening traps: "i was expecting a walk through of the trap
+  // lines, like how we teach the openings." The old rule keyed on `setupFen`
+  // being PRESENT, which was meant to catch puzzle-derived lessons whose SANs
+  // are only legal from mid-game — but the curated GEMS also record a setupFen
+  // (computed by replaying their own DB-anchored line), so the one source whose
+  // whole point is the line from move one was skipping straight to move eight
+  // and playing two moves on a board that appeared from nowhere.
+  //
+  // The test is therefore behavioural, not structural: do the moves replay?
+  //   • yes → animate them from the standard start (fast, silent plies), and
+  //     do NOT set startFen — `fenForPath` walks the same SANs.
+  //   • no  → the puzzle case; load setupFen directly, no animation.
+  const setupReplays = (() => {
+    if (lessonSetupMoves.length === 0) return false;
+    try {
+      const probe = new Chess();
+      for (const san of lessonSetupMoves) {
+        if (!probe.move(stripSanAnnotations(san))) return false;
+      }
+      // The inaccuracy must also be legal from the replayed position — if it
+      // is only legal from setupFen, the moves and the FEN disagree and the
+      // FEN is the lesson's real anchor.
+      return !!probe.move(stripSanAnnotations(lesson.inaccuracy));
+    } catch {
+      return false;
+    }
+  })();
   let rootChild: WalkthroughTreeNode = inaccuracyNode;
-  if (!lesson.setupFen) {
+  if (setupReplays || !lesson.setupFen) {
     for (let i = lessonSetupMoves.length - 1; i >= 0; i -= 1) {
       const san = lessonSetupMoves[i];
       const movedBy = sideAtIndex(i);
@@ -301,19 +322,20 @@ export function buildPunishWalkthroughTree(
     // Inherit board orientation from the parent opening so a black-
     // side opening's punish lessons keep Black on bottom.
     studentSide: parentOpening.studentSide,
-    // When setupFen is set, the walkthrough loads from that FEN
-    // directly. Otherwise the walkthrough animates setupMoves from
-    // the standard start.
-    startFen: lesson.setupFen,
+    // Only a lesson whose moves DON'T replay loads from its FEN — a replayable
+    // line animates from the standard start instead (see `setupReplays`), and
+    // setting startFen too would make `fenForPath` replay the SANs on top of
+    // the already-set-up position.
+    startFen: setupReplays ? undefined : lesson.setupFen,
     // Spoken intro: plain teaching prose. We deliberately do NOT
     // prepend `lesson.name` — it's a terse internal label packed with
     // raw SAN ("Benoni Nge2: Nxf8?? — Qxg2#") that TTS reads aloud as
     // "knight g to e2 ... knight takes f8 question question ..." (per
     // CLAUDE.md narration rules: name the pattern, never dump SAN). The
     // label still shows on the picker tile; voice carries only framing.
-    intro: lesson.setupFen
-      ? `${opponentLabel} has just played a careless move out of the opening — find the punishment.`
-      : `Watch the position set up, then find the punishment.`,
+    intro: setupReplays || !lesson.setupFen
+      ? `Watch the line play out — then catch the moment it goes wrong.`
+      : `${opponentLabel} has just played a careless move out of the opening — find the punishment.`,
     outro: lesson.whyPunish,
     root,
   };
@@ -651,6 +673,11 @@ export interface UseTeachWalkthroughReturn {
    *  this to render the "Back to lessons" button instead of the
    *  default "End walkthrough" on the leaf panel. */
   isInPunishLesson: boolean;
+  /** The lesson that sub-flow is running, so the leaf can offer to play
+   *  THIS trap out against the coach. null outside a punish lesson. */
+  activePunishLesson: PunishLesson | null;
+  /** The opening we came from, for naming that play-out. null outside. */
+  parentOpeningTree: WalkthroughTree | null;
   /** Refresh the optional stages (concepts / findMove / drill /
    *  punish) from Dexie cache. Used after background generation so
    *  newly-completed stages appear in the stage menu without a full
@@ -907,6 +934,16 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
   const [parentOpeningTree, setParentOpeningTree] =
     useState<WalkthroughTree | null>(null);
 
+  // The lesson that sub-flow is running. Kept beside the parent tree
+  // rather than read back out of it by `stageIndex`, which the picker
+  // moves independently — the leaf needs the lesson the student actually
+  // watched, so it can offer to play THAT trap out against the coach
+  // (David 2026-08-05: "then maybe a chance to play them out against the
+  // coach"). Until now the leaf's only exits were "Back to lessons" and
+  // "End for now": you could watch a trap, never play it.
+  const [activePunishLesson, setActivePunishLesson] =
+    useState<PunishLesson | null>(null);
+
   // Active narration cancel + backup timer refs.
   const cancelNarrationRef = useRef<(() => void) | null>(null);
   const advanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -1002,9 +1039,21 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
         // rather than leaving the walkthrough's leaf FEN visible.
         if (q) return tree?.startFen ?? STARTING_FEN;
       }
+      // Punish MC-quiz: show the position the question is actually about — the
+      // lesson's own board with the inaccuracy played. David's 2026-08-05 prod
+      // run asked "What is your punishment?" over the STARTING position: this
+      // branch didn't exist, so the memo fell through to `fenForPath(pathSans)`
+      // with an empty path. Asking a student to punish a move they cannot see
+      // is the exact class the findMove branch above was added for (c95ccc9).
+      if (activeStage === 'punish') {
+        const lesson = tree?.punish?.[stageIndex];
+        const spot = trapPlayPosition(lesson);
+        if (spot) return spot.fen;
+        if (lesson?.setupFen) return lesson.setupFen;
+      }
       return fenForPath(pathSans, tree?.startFen);
     },
-    [pathSans, tree?.startFen, tree?.findMove, tree?.concepts, activeStage, stageIndex],
+    [pathSans, tree?.startFen, tree?.findMove, tree?.concepts, tree?.punish, activeStage, stageIndex],
   );
   const isLeaf = currentNode !== null && currentNode.children.length === 0;
   const forkOptions =
@@ -2362,6 +2411,7 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
       const punishTree = buildPunishWalkthroughTree(lesson, tree);
       // Stash the parent so we can return to it on exit.
       setParentOpeningTree(tree);
+      setActivePunishLesson(lesson);
       // Track which lesson we're on so the "next/prev" UI can advance.
       setStageIndex(lessonIndex);
       // Run the punish tree through the same engine as the opening
@@ -2384,6 +2434,7 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     }
     cleanupNarration();
     setParentOpeningTree(null);
+    setActivePunishLesson(null);
     // Restore the parent tree's state. We can't call start() on
     // parent because that would re-narrate the intro; instead, set
     // the tree directly and jump to stage-menu phase.
@@ -2454,6 +2505,8 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     startPunishLesson,
     exitPunishToMenu,
     isInPunishLesson: parentOpeningTree !== null,
+    activePunishLesson,
+    parentOpeningTree,
     mergeStagesFromCache,
     pendingTrap: trapQueue[trapIndex] ?? null,
     trapFen,
