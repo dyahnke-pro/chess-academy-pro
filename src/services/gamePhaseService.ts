@@ -2,8 +2,12 @@ import type { CoachGameMove, GamePhase, PhaseAccuracy } from '../types';
 import { winPercent, accuracyFromWinDelta } from './accuracyService';
 
 /**
- * Piece material values for endgame detection.
- * Counts only non-pawn, non-king pieces by value.
+ * Piece material values. Counts every non-king piece INCLUDING pawns — the
+ * start position totals 78, which `gamePhaseService.test` pins.
+ *
+ * The old comment here claimed pawns were excluded, and
+ * ENDGAME_MATERIAL_THRESHOLD was calibrated against that fiction. See
+ * `isEndgameByMaterial` for what replaced it.
  */
 const PIECE_VALUES: Record<string, number> = {
   q: 9, Q: 9,
@@ -13,7 +17,9 @@ const PIECE_VALUES: Record<string, number> = {
   p: 1, P: 1,
 };
 
-/** Endgame threshold — total material (excluding kings) at or below this is endgame */
+/** @deprecated Calibrated as though `countMaterial` excluded pawns; it does
+ *  not, so this can barely fire. Kept only so an external caller does not break
+ *  on the symbol — use `isEndgameByMaterial`. */
 export const ENDGAME_MATERIAL_THRESHOLD = 13;
 
 /** Opening cutoff — moves at or below this number are considered opening */
@@ -51,8 +57,10 @@ export function classifyPhase(fen: string, moveNumber: number): GamePhase {
     return 'opening';
   }
 
-  const material = countMaterial(fen);
-  if (material <= ENDGAME_MATERIAL_THRESHOLD) {
+  // Structural test, not a material threshold — queens off, or one side
+  // reduced to a bare king and a piece. The old `countMaterial(fen) <= 13`
+  // could barely ever fire because pawns count toward that total.
+  if (isEndgameByMaterial(fen)) {
     return 'endgame';
   }
 
@@ -148,4 +156,57 @@ function harmonicMean(values: number[]): number {
     reciprocalSum += 1 / Math.max(1, v);
   }
   return values.length / reciprocalSum;
+}
+
+/** THE middlegame → endgame test, shared by every surface that needs one.
+ *
+ *  Lived privately in `phaseTransitionDetector` until 2026-08-05, while
+ *  `classifyPhase` used a material THRESHOLD that was quietly broken:
+ *  `ENDGAME_MATERIAL_THRESHOLD = 13` was calibrated as though `countMaterial`
+ *  excluded pawns (its `PIECE_VALUES` comment says so) — but it counts them, so
+ *  the sixteen pawns alone outweigh the threshold. A double-rook ending with
+ *  fourteen pawns scores 40 and was classified MIDDLEGAME. Measured over 17,727
+ *  plies of 200 real games, that rule found an endgame on 5.5% of them against
+ *  31.6% for the test below.
+ *
+ *  `countMaterial` is left alone deliberately: its tests pin 78 for the start
+ *  position, so "all material including pawns" is its intended contract. The
+ *  threshold was the mistake, not the count.
+ *  Fires when:
+ *    - queens are off (any rook count), OR
+ *    - either side is reduced to bare king or king + ≤ 1 minor (the
+ *      "lopsided endgame" — even with the winning side still holding
+ *      a queen, this is structurally an endgame: the losing side's
+ *      coaching priority is king activity, not middlegame planning).
+ *
+ *  Audit cycle 8 surfaced the lopsided gap: kQ6/8/p7/P7/4PB2/1p6/
+ *  1PP2PPP/R3K2R was sitting on "phase=middlegame" for moves on end,
+ *  even though black had only king + 2 pawns. The original spec
+ *  required queens off; the lopsided clause closes that hole. */
+export function isEndgameByMaterial(fen: string): boolean {
+  const board = fen.split(' ')[0] ?? '';
+  let whiteQueens = 0;
+  let blackQueens = 0;
+  let whiteRooks = 0;
+  let blackRooks = 0;
+  let whiteMinors = 0;
+  let blackMinors = 0;
+  for (const ch of board) {
+    if (ch === 'Q') whiteQueens++;
+    else if (ch === 'q') blackQueens++;
+    else if (ch === 'R') whiteRooks++;
+    else if (ch === 'r') blackRooks++;
+    else if (ch === 'B' || ch === 'N') whiteMinors++;
+    else if (ch === 'b' || ch === 'n') blackMinors++;
+  }
+  const queensOff = whiteQueens === 0 && blackQueens === 0;
+  if (queensOff && whiteRooks <= 1 && blackRooks <= 1) return true;
+  if (queensOff) return true;
+  // Lopsided clause: one side is reduced to king + ≤ 1 piece (where
+  // a "piece" is a queen, rook, or minor — pawns alone don't count
+  // as material for this purpose).
+  const whitePieces = whiteQueens + whiteRooks + whiteMinors;
+  const blackPieces = blackQueens + blackRooks + blackMinors;
+  if (whitePieces <= 1 || blackPieces <= 1) return true;
+  return false;
 }

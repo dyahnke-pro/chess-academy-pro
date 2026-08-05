@@ -15,7 +15,7 @@
 
 import { Chess } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
-import { countMaterial, ENDGAME_MATERIAL_THRESHOLD } from './gamePhaseService';
+import { isEndgameByMaterial } from './gamePhaseService';
 import {
   hasCastled,
   rooksConnected,
@@ -61,7 +61,7 @@ const rankOf = (sq: string): number => Number(sq[1]);
 function phaseOfBoard(fen: string): Phase {
   // ENDGAME first: material is the reliable signal and must outrank any
   // development rule — a queenless rook ending is an ending however it arose.
-  if (countMaterial(fen) <= ENDGAME_MATERIAL_THRESHOLD) return 'endgame';
+  if (isEndgameByMaterial(fen)) return 'endgame';
   const developed = countDevelopedMinors(fen);
   const castledAndConnected = (['white', 'black'] as const)
     .some((c) => hasCastled(fen, c) && rooksConnected(fen, c));

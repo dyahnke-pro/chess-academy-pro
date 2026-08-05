@@ -1,5 +1,5 @@
 import { Chess } from 'chess.js';
-import { classifyPhase, countMaterial } from './gamePhaseService';
+import { classifyPhase, countMaterial, isEndgameByMaterial } from './gamePhaseService';
 
 /** Direct FEN-based castling check. Replaces the assessPosition call
  *  that WO-PHASE-FIX-01 used — assessPosition runs multiple analyzers
@@ -122,45 +122,6 @@ export function rooksConnected(fen: string, color: 'white' | 'black'): boolean {
   return rookCount >= 2;
 }
 
-/** Material-based fallback for the middlegame → endgame boundary.
- *  Fires when:
- *    - queens are off (any rook count), OR
- *    - either side is reduced to bare king or king + ≤ 1 minor (the
- *      "lopsided endgame" — even with the winning side still holding
- *      a queen, this is structurally an endgame: the losing side's
- *      coaching priority is king activity, not middlegame planning).
- *
- *  Audit cycle 8 surfaced the lopsided gap: kQ6/8/p7/P7/4PB2/1p6/
- *  1PP2PPP/R3K2R was sitting on "phase=middlegame" for moves on end,
- *  even though black had only king + 2 pawns. The original spec
- *  required queens off; the lopsided clause closes that hole. */
-function isEndgameByMaterialFallback(fen: string): boolean {
-  const board = fen.split(' ')[0] ?? '';
-  let whiteQueens = 0;
-  let blackQueens = 0;
-  let whiteRooks = 0;
-  let blackRooks = 0;
-  let whiteMinors = 0;
-  let blackMinors = 0;
-  for (const ch of board) {
-    if (ch === 'Q') whiteQueens++;
-    else if (ch === 'q') blackQueens++;
-    else if (ch === 'R') whiteRooks++;
-    else if (ch === 'r') blackRooks++;
-    else if (ch === 'B' || ch === 'N') whiteMinors++;
-    else if (ch === 'b' || ch === 'n') blackMinors++;
-  }
-  const queensOff = whiteQueens === 0 && blackQueens === 0;
-  if (queensOff && whiteRooks <= 1 && blackRooks <= 1) return true;
-  if (queensOff) return true;
-  // Lopsided clause: one side is reduced to king + ≤ 1 piece (where
-  // a "piece" is a queen, rook, or minor — pawns alone don't count
-  // as material for this purpose).
-  const whitePieces = whiteQueens + whiteRooks + whiteMinors;
-  const blackPieces = blackQueens + blackRooks + blackMinors;
-  if (whitePieces <= 1 || blackPieces <= 1) return true;
-  return false;
-}
 
 /** Count minor pieces that are NOT on their starting squares, per side.
  *  A captured minor counts as "developed" — if a knight is gone it's
@@ -387,7 +348,7 @@ export function detectPhaseTransition(
 
   // ── Middlegame → endgame ─────────────────────────────────────────
   if (!state.middlegameToEndgameFired) {
-    const inEndgame = phase === 'endgame' || isEndgameByMaterialFallback(lastMove.fen);
+    const inEndgame = phase === 'endgame' || isEndgameByMaterial(lastMove.fen);
     if (inEndgame) {
       state.middlegameToEndgameFired = true;
       console.log('[PHASE-DETECT-03] EVENT EMITTED: middlegame-to-endgame', {
@@ -405,7 +366,7 @@ export function detectPhaseTransition(
     }
     console.log('[PHASE-DETECT-02] reject: endgame conditions not met', {
       phase,
-      endgameByMaterialFallback: isEndgameByMaterialFallback(lastMove.fen),
+      endgameByMaterialFallback: isEndgameByMaterial(lastMove.fen),
     });
   } else {
     console.log('[PHASE-DETECT-02] reject: already fired middlegame→endgame');
@@ -424,7 +385,7 @@ export function debugPhaseDiagnostics(fen: string, moveNumber: number): {
   return {
     phase: classifyPhase(fen, moveNumber),
     material: countMaterial(fen),
-    endgameByMaterialFallback: isEndgameByMaterialFallback(fen),
+    endgameByMaterialFallback: isEndgameByMaterial(fen),
   };
 }
 
@@ -468,7 +429,7 @@ export function phaseTransitionDiagnostic(
     studentRooksOnBackRank: rooksConnected(lastMove.fen, playerColor),
     developedMinors: countDevelopedMinors(lastMove.fen),
     majorPieceCaptured: hasMajorPieceCaptured(lastMove.fen),
-    endgameByMaterialFallback: isEndgameByMaterialFallback(lastMove.fen),
+    endgameByMaterialFallback: isEndgameByMaterial(lastMove.fen),
     openingToMiddlegameFired: state.openingToMiddlegameFired,
     middlegameToEndgameFired: state.middlegameToEndgameFired,
   };
