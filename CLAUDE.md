@@ -3074,7 +3074,14 @@ robotic and tune out fast.
 Code templates that violate these rules are bugs. When in doubt,
 prefer silence.
 
-### 🔒🔒 THE APP'S COACH VOICE + THE "WHY DID YOU PLAY THAT?" FAUCET — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")
+### 🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")
+
+> ⚠️ **READ THE 2026-08-05 SUPERSEDE NOTE BEFORE BUILDING ANY OF THE PICKER
+> MECHANICS BELOW.** The VOICE in this section is current and binding. The
+> blocking "why did you play that?" card, the threat-check and guided
+> find-the-move are REMOVED from Learn — David's call after using them. The
+> section further down says what replaced them and, more importantly, why the
+> mistake RECORD must never be deleted along with the UI.
 
 This is the single voice of the coach across the whole app — every spoken
 line, every teaching interjection. It governs (and is consistent with) the
@@ -3182,28 +3189,48 @@ silent when silence teaches better. The gates exist for pedagogy, not
 budget. Strip cost-flavored reasoning ("sparse", "rate-limited to save")
 from any design of this surface.
 
-**BUILD REALITY — the whole chain EXISTS; one link is dead.** The probe
-engine (`discussionPractice.ts`), the gate (`slipDetector.ts`), the
-classifier + buckets (`misconceptionClassifier` / `misconceptionService` /
-`weaknessSpine`), the mistake-puzzle bridge (`addMistakePuzzleFromCapture`),
-the drill queue, the pop-up panel (`DiscussionPracticePanel`), and the
-per-surface voice effects are ALL alive. The ONLY dead link is
-`useDiscussionPractice` — an inert no-op stub since the 2026-06-11
-retirement. **That retirement was a mistake** (the "automated post-game
-capture makes the live faucet redundant" reasoning was wrong — the analyst
-never replaces the coach asking in the moment). The faucet is CORE, always-on
-**on Learn**, **not disable-able**.
+### 🔒🔒 SUPERSEDED 2026-08-05 — THE MID-GAME CARDS ARE GONE FROM LEARN. The RECORD stays; the INTERRUPTION does not.
 
-The build (per the SURFACE PLACEMENT rule above):
-- **LEARN** — un-retire the hook → clean probe → good AND bad triggers →
-  deterministic reason picker + Hint → grounded reveal → buckets → drill.
-  Rating gate on the picker. Voice it in Danya's cadence. Do NOT re-stub.
-- **PLAY** — keep it a pure playing surface: NO picker. Only phase-transition
-  narration that may mention a couple of mistakes with positional analysis.
-- **POST-GAME REVIEW** — the full diagnostic for Play games goes here; its
-  wiring is designed WITH David first (do not build unprompted).
-- Guided find-the-move (winning position) + the narration-channel upgrade are
-  later phases (see the plan doc).
+David, after living with them: the threat-check is *"annoying AF"*, guided
+find-the-move *"is what we are kinda building here anyway"*, and the "why did
+you play that?" picker *"can be replaced"*. All three are removed from
+`/coach/teach`. This REVERSES the "CORE, always-on, not disable-able" line
+above — deliberately, by the person who wrote it. **Do not restore them.**
+
+What replaces them: Learn is a game the coach TALKS YOU THROUGH — running
+commentary in the Naroditsky speedrun register (improving moves, trading off
+the opponent's best piece, then the tactic when it appears), plus the phase
+transitions Learn never had (`usePhaseNarration` was mounted in Play only).
+The teaching arrives as the game unfolds instead of as a card that stops it.
+
+🚨 **THE RECORD IS NOT THE UI. Never delete the capture with the pop-up.**
+Recording was a side effect of the card in THREE ways, every one of which
+would have silently starved My Mistakes, the Tactics drill queue and the
+weakness spine:
+1. `captureMisconception` was reachable only by answering the card or playing
+   through it — both need `ctxRef` armed, so no card meant no record;
+2. `slipWarrantsInterjection` sat in front of the early return, so the
+   rating bar decided what got REMEMBERED — an 800-rated player's 150cp
+   mistake never reached their own drill queue;
+3. `active = enabled && !!opts.interruptive` — one flag for the card AND the
+   record, so switching off interruption switched off the data.
+
+Now: `active` gates the INTERRUPTION, `recording` gates the RECORD, and
+capture runs inside `evaluatePlayerMove` ahead of the rating gate. The bar
+keeps its real job — deciding whether to interrupt — and loses the one it
+should never have had. Gate: `learnSilentCapture.test.ts`.
+
+**Still true, and still the standard** — everything above about the VOICE
+(concept-first, facts then the point, warm but rigorous, grounded per G0),
+the honesty contract (never hand over the answer), and PLAY staying a pure
+playing surface. What changed is only the delivery: commentary, not cards.
+
+**KEPT in Learn** because none of them stop the board: in-place drills, live
+gem detection (names the opportunity, withholds the square), fork-in-the-road
+(answered by PLAYING), and think-aloud.
+
+**POST-GAME REVIEW** still owns the full diagnostic for Play games; its wiring
+is designed WITH David first (do not build unprompted).
 
 ### State Management
 - **Zustand** for global app state (user profile, settings, current session, theme).
