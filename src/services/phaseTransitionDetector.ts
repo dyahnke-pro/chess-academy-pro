@@ -6,7 +6,7 @@ import { classifyPhase, countMaterial } from './gamePhaseService';
  *  (pawn structure, piece activity) that can throw on edge-case FENs,
  *  silently collapsing to castled=false. This parses only the castling-
  *  rights field + king square, three lines, zero throw surface. */
-function hasCastled(fen: string, color: 'white' | 'black'): boolean {
+export function hasCastled(fen: string, color: 'white' | 'black'): boolean {
   const parts = fen.split(' ');
   const board = parts[0] ?? '';
   const castlingRights = parts[2] ?? '-';

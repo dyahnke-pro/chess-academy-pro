@@ -15,6 +15,13 @@
 
 import { Chess } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
+import { countMaterial, ENDGAME_MATERIAL_THRESHOLD } from './gamePhaseService';
+import {
+  hasCastled,
+  rooksConnected,
+  countDevelopedMinors,
+  hasMajorPieceCaptured,
+} from './phaseTransitionDetector';
 
 export type Phase = 'opening' | 'middlegame' | 'endgame';
 
@@ -36,15 +43,32 @@ const pieces = (chess: Chess): Sq[] => {
 const fileOf = (sq: string): number => sq.charCodeAt(0) - 97;
 const rankOf = (sq: string): number => Number(sq[1]);
 
-/** Phase by material, not move number — a queenless position ten moves in is an
- *  endgame whatever the clock says, and that is what decides which teaching
- *  applies. */
-function phaseOf(all: Sq[]): Phase {
-  const heavy = all.filter((p) => p.type !== 'p' && p.type !== 'k');
-  const queens = all.filter((p) => p.type === 'q').length;
-  if (heavy.length <= 6 && queens === 0) return 'endgame';
-  if (heavy.length >= 13) return 'opening';
-  return 'middlegame';
+/** THE phase rule, and deliberately the SAME signals the coach speaks aloud
+ *  (David 2026-08-05: "middle game when castled and rooks connected, endgame
+ *  when the queens or both rooks, or all minor pieces and a rook come off").
+ *
+ *  This used to be a private material count — endgame at ≤6 pieces with no
+ *  queens, opening while ≥13 remained. That made a THIRD phase definition in a
+ *  codebase that already had two, and it disagreed with the one the student
+ *  hears: at move 20, both sides castled, one piece traded,
+ *  `detectPhaseTransition` has already announced the middlegame while this
+ *  still said "opening" — so a middlegame-tagged note was rejected at exactly
+ *  the position the coach had just called a middlegame.
+ *
+ *  Reuses the detector's own pure helpers rather than restating its rules, so
+ *  the two cannot drift. The full ledger-driven detector stays where it is;
+ *  this is the stateless read of the same board facts. */
+function phaseOfBoard(fen: string): Phase {
+  // ENDGAME first: material is the reliable signal and must outrank any
+  // development rule — a queenless rook ending is an ending however it arose.
+  if (countMaterial(fen) <= ENDGAME_MATERIAL_THRESHOLD) return 'endgame';
+  const developed = countDevelopedMinors(fen);
+  const castledAndConnected = (['white', 'black'] as const)
+    .some((c) => hasCastled(fen, c) && rooksConnected(fen, c));
+  if (castledAndConnected
+    || (developed.white >= 3 && developed.black >= 3)
+    || hasMajorPieceCaptured(fen)) return 'middlegame';
+  return 'opening';
 }
 
 /** Files with no pawn of the given colour — where a rook belongs. */
@@ -184,7 +208,7 @@ function passedPawns(all: Sq[], color: 'w' | 'b'): Sq[] {
 export function phaseOfFen(fen: string): Phase | null {
   try {
     const all = pieces(new Chess(fen));
-    return all.length === 0 ? null : phaseOf(all);
+    return all.length === 0 ? null : phaseOfBoard(fen);
   } catch {
     return null;
   }
@@ -203,7 +227,8 @@ export function boardConcepts(fen: string): BoardConcepts | null {
   }
   const all = pieces(chess);
   if (all.length === 0) return null;
-  const phase = phaseOf(all);
+  // ONE definition, shared with `phaseOfFen` and with what the coach says.
+  const phase = phaseOfBoard(fen);
   const concepts = new Set<string>();
 
   const minorsAndMajors = all.filter((p) => p.type !== 'p' && p.type !== 'k');

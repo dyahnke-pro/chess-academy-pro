@@ -14,7 +14,7 @@ const PIECE_VALUES: Record<string, number> = {
 };
 
 /** Endgame threshold — total material (excluding kings) at or below this is endgame */
-const ENDGAME_MATERIAL_THRESHOLD = 13;
+export const ENDGAME_MATERIAL_THRESHOLD = 13;
 
 /** Opening cutoff — moves at or below this number are considered opening */
 const OPENING_MOVE_CUTOFF = 10;
