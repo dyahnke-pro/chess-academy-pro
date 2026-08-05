@@ -7953,13 +7953,17 @@ function QuizPanel({
       }
     }
     if (promptToSpeak.trim()) {
-      // Use speakForced so it cuts any in-flight speech (e.g. the
-      // walkthrough's narration just finished or a prior quiz answer's
-      // explanation is being read).
       void voiceService.speakForced(promptToSpeak);
     }
-     
-  }, [activeStage, stageIndex, tree]);
+    // Keyed on the QUESTION IDENTITY (stage + index + opening), NOT the tree
+    // object. Background `mergeStagesFromCache` swaps the tree's identity
+    // while a question is being read; with `tree` in the deps the effect
+    // re-fired mid-sentence and re-spoke the same prompt over itself — one of
+    // the "sentences getting cut off by other sentences" paths in David's
+    // 2026-08-05 run. The prompt text is derived state; the question changing
+    // is the only real trigger.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeStage, stageIndex, tree?.openingName]);
 
   // Punish stage gets a LESSON PICKER (not the MC quiz UI) per user
   // morning iteration: "Punishment lines need to be in walk through
