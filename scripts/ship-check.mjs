@@ -287,6 +287,7 @@ const AUDIT_MATRIX = [
   { script: 'audit-coach-review.mjs',        globs: ['src/components/Coach/Review', 'src/services/gameReview'] },
   { script: 'audit-back-from-review.mjs',    globs: ['src/components/Coach/Review'] },
   { script: 'audit-tactics.mjs',             globs: ['src/components/Tactics', 'src/services/srsEngine'] },
+  { script: 'audit-tactic-drill-flow-prod.mjs', globs: ['src/components/Tactics/TacticDrillPage.tsx', 'src/components/Puzzles/PuzzleBoard.tsx'] },
   { script: 'audit-settings-behavior.mjs',   globs: ['src/components/Settings'] },
 ];
 
