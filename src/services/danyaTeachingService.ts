@@ -506,6 +506,40 @@ export function teachingNoteForBoard(
  * provenance is what makes that impossible, and it belongs here rather than at
  * each call site so the three surfaces cannot drift apart again.
  */
+/**
+ * The note as a SPOKEN line, framed so a borrowed one is heard as a
+ * generalization rather than as a description of this board.
+ *
+ * `teachingFactLine` is for a facts PACKAGE handed to the model, where a header
+ * sentence is the right shape. This is for narration a student hears mid-game,
+ * where "Teaching from a DIFFERENT position with the same pawn structure —"
+ * would be absurd out loud. The honesty requirement is identical; only the
+ * register changes. A note taught at this very position needs no frame at all.
+ */
+export function generalizedTeaching(
+  origin: TeachingOrigin | TransitionOrigin,
+  text: string,
+): string {
+  switch (origin) {
+    case 'position':
+      return text;
+    // Anchored a few plies back on THIS line — near enough to be about the run
+    // of play, so it is framed as continuation rather than as generalization.
+    case 'recent-path':
+      return `Following on from the line so far: ${text}`;
+    case 'opening-family':
+      return `A general idea in this opening: ${text}`;
+    case 'structure':
+      return `The same idea shows up in positions like this: ${text}`;
+    case 'concept':
+      return `As a rule in these positions: ${text}`;
+    // Exhaustive today; an origin added later must state its own framing rather
+    // than silently reaching the student as a bare claim about this board.
+    default:
+      return text;
+  }
+}
+
 export function teachingFactLine(source: TeachingSource): string {
   const beat = teachingBeatText(source.note);
   switch (source.origin) {
@@ -611,13 +645,21 @@ export function transitionTeachingSourceForGame(args: {
   fen?: string;
   openingName?: string | null;
 }): TransitionTeaching | null {
-  const exact = args.fen ? notesForFen(args.fen).find((n) => n.plans?.trim()) : undefined;
+  // WHICH phase's teaching this transition wants. Hardcoded to 'middlegame'
+  // until 2026-08-05, which was invisible while the caller only ran this on the
+  // opening→middlegame boundary. The moment the endgame transition started
+  // using it, that hardcoding would have handed a student entering a rook
+  // ending a middlegame plan.
+  const wantPhase = (args.fen ? phaseOfFen(args.fen) : null) ?? 'middlegame';
+  const usable = (n: DanyaNote): boolean =>
+    Boolean(n.plans?.trim()) && noteTeachesChessNotItsSource(n);
+  const exact = args.fen ? notesForFen(args.fen).find(usable) : undefined;
   if (exact) return { note: exact, origin: 'position' };
-  const recent = notesForPrefix(args.historySans, Infinity, 12).find((n) => n.plans?.trim());
+  const recent = notesForPrefix(args.historySans, Infinity, 12).find(usable);
   if (recent) return { note: recent, origin: 'recent-path' };
   if (args.openingName) {
     const family = notesForOpening(args.openingName)
-      .filter((n) => n.phase === 'middlegame' && n.plans?.trim());
+      .filter((n) => n.phase === wantPhase && usable(n));
     // Deepest-keyed first — the most specific middlegame teaching for the family.
     family.sort((a, b) => b.lineSan.length - a.lineSan.length);
     if (family[0]) return { note: family[0], origin: 'opening-family' };
@@ -630,16 +672,28 @@ export function transitionTeachingSourceForGame(args: {
     const support = secondarySupportNotes({
       historySans: args.historySans,
       openingName: args.openingName,
-      maxNotes: 4,
-    }).find((n) => n.plans?.trim());
+      maxNotes: 1,
+      accept: (n) => n.phase === wantPhase && usable(n),
+    })[0];
     if (support) return { note: support, origin: 'opening-family' };
   }
   // 5. STRUCTURE TRANSFER — teaching from ANY opening whose structure provably
   //    matches this board (and whose claims survive the live truth filter), so
   //    past book the transition teaching no longer goes quiet.
   if (args.fen) {
-    const transferred = notesForStructure(args.fen).find((n) => n.plans?.trim());
+    const transferred = notesForStructure(args.fen).find((n) => n.phase === wantPhase && usable(n));
     if (transferred) return { note: transferred, origin: 'structure' };
+    // CONCEPT tier — the endgame's own teaching lives here (king activity, the
+    // rook behind the passed pawn), keyed off what the board plainly shows.
+    // Without it a transition into an ending the corpus has no opening-tagged
+    // note for goes quiet, which is most of them: only 97 endgame notes carry a
+    // position at all.
+    const derived = boardConcepts(args.fen);
+    if (derived) {
+      const concept = conceptNotesFor({ phase: derived.phase, concepts: derived.concepts, limit: 1 })
+        .find(usable);
+      if (concept) return { note: concept, origin: 'structure' };
+    }
   }
   return null;
 }

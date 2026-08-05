@@ -134,7 +134,7 @@ import { buildForkTalk, type ForkTalk } from '../../services/forkTalk';
 import { parseSpokenMove } from '../../services/spokenMoveParser';
 import { parseCoachMoveCommand } from '../../services/coachMoveCommand';
 import { sanToSpeech } from '../../utils/sanToSpeech';
-import { teachingSourceForBoard, teachingFactLine, noteCoverageForLine, teachingBeatText } from '../../services/danyaTeachingService';
+import { teachingSourceForBoard, teachingFactLine, generalizedTeaching, noteCoverageForLine, teachingBeatText } from '../../services/danyaTeachingService';
 
 /** How many note-covered plies an opening needs before the NOTES take the
  *  lesson from a hand-authored masterclass.
@@ -5704,19 +5704,24 @@ export function CoachTeachPage(): JSX.Element {
         // scoped to the taught opening), same board-grading of the prose, and
         // once per note so one note can't narrate every move.
         //
-        // POSITION-TAUGHT NOTES ONLY (2026-08-04). This is spoken narration
-        // about the move that just happened, so a note borrowed from another
-        // opening's matching structure — or a general principle — would be
-        // heard as a statement about this board. Those origins are honest
-        // teaching in a facts package that labels them; they are not honest
-        // when appended to "Black's rook to g7" as if they described it.
+        // MIDDLEGAME + ENDGAME TEACHING (David 2026-08-05: "need middle and
+        // endgame notes under learn with coach as well"). This play-out IS the
+        // middlegame and endgame of a taught lesson, and restricting it to
+        // position-taught notes made it near-silent past book — exact-position
+        // hits are 0.2% of middlegame plies and 0% of endgame plies, because
+        // middlegames do not repeat.
+        //
+        // A borrowed note still may NOT be spoken as a description of this
+        // board — that was the whole 2026-08-04 lesson. It is spoken as what it
+        // is: an explicit generalization ("in rook endings, …"), which is true
+        // wherever it is said. Same rule the phase transitions follow.
         try {
           const source = teachingSourceForBoard(
             [...openingSans, ...local.history()],
             local.fen(),
             taughtOpening,
           );
-          if (source?.origin === 'position' && !continuationNoteIds.has(source.note.id)) {
+          if (source && !continuationNoteIds.has(source.note.id)) {
             const graded = gradeNarrationText(
               teachingBeatText(source.note),
               local.fen(),
@@ -5724,7 +5729,7 @@ export function CoachTeachPage(): JSX.Element {
             );
             if (graded?.trim()) {
               continuationNoteIds.add(source.note.id);
-              text = `${text} ${graded.trim()}`;
+              text = `${text} ${generalizedTeaching(source.origin, graded.trim())}`;
             }
           }
         } catch { /* the corpus is a bonus, never a blocker */ }

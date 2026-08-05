@@ -7,7 +7,7 @@ import { db } from '../db/schema';
 import { getCachedStockfish, setCachedStockfish } from './stockfishFenCache';
 import { isSpokenSentenceGrounded } from '../services/coachAnswerGates';
 import { buildFedTacticsContext, speakDeepestLookahead } from '../services/liveTacticsContext';
-import { transitionTeachingSourceForGame } from '../services/danyaTeachingService';
+import { transitionTeachingSourceForGame, generalizedTeaching } from '../services/danyaTeachingService';
 import { detectOpening } from '../services/openingDetectionService';
 import type { PhaseNarrationVerbosity, StockfishAnalysis } from '../types';
 import type { PhaseTransitionEvent } from '../services/phaseTransitionDetector';
@@ -257,7 +257,13 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       // note, code-selected; the model still only phrases (G0), and the
       // per-sentence board gate drops any family-level specific that isn't
       // true on this exact board.
-      if (event.kind === 'opening-to-middlegame') {
+      // BOTH transitions, not just the first (David 2026-08-05: "need middle
+      // and endgame notes"). The splice used to sit inside an
+      // `opening-to-middlegame` guard, so the endgame transition got the
+      // computed lookahead and nothing else — 7,120 endgame notes in the
+      // corpus and not one reachable, because the code that fetches them never
+      // ran on that branch.
+      {
         try {
           const sans = (getPgn() ?? '').split(/\s+/).filter((t) => t && !/^\d+\.$/.test(t));
           const openingName = getOpeningName?.() ?? detectOpening(sans)?.name ?? null;
@@ -274,7 +280,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             const { note, origin } = source;
             const ritual = (origin === 'position'
               ? [note.explains, note.teaches, note.plans ? `The plan: ${note.plans}` : '']
-              : [note.plans ? `The plan from here: ${note.plans}` : ''])
+              : [note.plans ? generalizedTeaching(origin, note.plans) : ''])
               .filter((s) => s && s.trim())
               .join(' ');
             if (ritual.trim()) transitionSentence += ` ${ritual}`;
