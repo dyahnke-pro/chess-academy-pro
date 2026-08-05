@@ -33,12 +33,11 @@ describe('spokenBeatText', () => {
     expect(spokenBeatText(n)).toBe('The doubled f-pawns give Black an open g-file to attack down.');
   });
 
-  it('caps at a sentence boundary, never mid-thought', () => {
+  it('has NO word cap — every teaching sentence of explains is kept (David: "remove cap.")', () => {
     const s = 'This sentence carries exactly ten words of teaching for you.';
     const n = note({ explains: `${s} ${s} ${s} ${s} ${s} ${s} ${s} ${s}` });
     const spoken = spokenBeatText(n);
-    const words = spoken.split(/\s+/).length;
-    expect(words).toBeLessThanOrEqual(60);
+    expect(spoken.split(/\s+/).length).toBe(80); // all 8 sentences survive
     expect(spoken.endsWith('.')).toBe(true);
   });
 

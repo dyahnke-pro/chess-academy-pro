@@ -885,10 +885,6 @@ export function teachingBeatText(note: DanyaNote): string {
 /** SAN-shaped tokens — the same shape sanitizeForTTS later expands aloud. */
 const SAN_TOKEN = /\b(?:[NBRQK][a-h]?[1-8]?x?[a-h][1-8][+#]?|[a-h]x?[a-h][1-8][+#]?|O-O(?:-O)?[+#]?)\b/g;
 
-/** Spoken per-ply budget. ~50 words is ~15s of TTS — a real teaching beat,
- *  not a lecture. The cut is at a sentence boundary, never mid-thought. */
-const SPOKEN_BEAT_MAX_WORDS = 50;
-
 /**
  * What a note contributes to ONE SPOKEN PLY — as opposed to `teachingBeatText`,
  * which is the note's full teaching for prompt blocks and written contexts.
@@ -905,15 +901,19 @@ const SPOKEN_BEAT_MAX_WORDS = 50;
  *
  * So the spoken register is: `explains` ONLY (`teaches`/`plans` still reach the
  * model through the lesson-level block), minus any sentence that is a move
- * recitation, capped at a sentence boundary. Empty string = this note has
- * nothing speakable — the caller falls back to its generated prose.
+ * recitation. Empty string = this note has nothing speakable — the caller
+ * falls back to its generated prose.
+ *
+ * NO word cap (David 2026-08-05: "remove cap."). A 50-word ceiling shipped
+ * briefly and was cut the same night — dropping explains's tail could land on
+ * a setup instead of the punchline. Explains-only + no dictation is the whole
+ * trim.
  */
 export function spokenBeatText(note: DanyaNote): string {
   const explains = (note.explains ?? '').trim();
   if (!explains) return '';
   const sentences = explains.match(/[^.!?]+[.!?]+(?:\s|$)|[^.!?]+$/g) ?? [explains];
   const kept: string[] = [];
-  let words = 0;
   for (const raw of sentences) {
     const sentence = raw.trim();
     if (!sentence) continue;
@@ -922,11 +922,7 @@ export function spokenBeatText(note: DanyaNote): string {
     SAN_TOKEN.lastIndex = 0;
     const sanCount = sentence.match(SAN_TOKEN)?.length ?? 0;
     if (sanCount >= 4) continue;
-    const sentenceWords = sentence.split(/\s+/).length;
-    if (kept.length > 0 && words + sentenceWords > SPOKEN_BEAT_MAX_WORDS) break;
     kept.push(sentence);
-    words += sentenceWords;
-    if (words >= SPOKEN_BEAT_MAX_WORDS) break;
   }
   return kept.join(' ');
 }
