@@ -22,8 +22,8 @@ import { validateBoardClaims } from './boardClaimValidator';
 import { secondarySupportNotes, secondaryNotesForPosition, secondaryNotesForFen } from './secondaryCorpora';
 import { detectOpening } from './openingDetectionService';
 import { noteContradictsLine, notePhaseMismatchesBoard } from './noteLineGuard';
-import { boardConcepts } from './boardConcepts';
-import { noteDescribesPosition } from './noteAnchorIntegrity';
+import { boardConcepts, phaseOfFen } from './boardConcepts';
+import { noteDescribesPosition, noteTeachesChessNotItsSource } from './noteAnchorIntegrity';
 
 export interface DanyaNote {
   id: string;
@@ -272,6 +272,7 @@ export function supportNoteForPly(
     && !notePhaseMismatchesBoard(n.phase, fen, historySans.length)
     && !noteOpeningConflicts(n.opening, openingName)
     && noteDescribesPosition(n, fen)
+    && noteTeachesChessNotItsSource(n)
     && !exclude?.has(n.id);
   try {
     // STRUCTURE TRANSFER IS OFF INSIDE A TAUGHT LESSON (David 2026-08-02:
@@ -349,6 +350,7 @@ export function noteAtPosition(
     // position-keyed notes open by describing a board that cannot arise here —
     // a transcript distilled against the wrong moment. See noteAnchorIntegrity.
     && noteDescribesPosition(n, fen)
+    && noteTeachesChessNotItsSource(n)
     && !exclude?.has(n.id);
   const bucket = (byPrefix.get(historySans.join(' ')) ?? []).filter(onThisLine);
   if (bucket[0]) return bucket[0];
@@ -406,6 +408,23 @@ export function teachingSourceForBoard(
 ): TeachingSource | null {
   const exact = noteAtPosition(historySans, fen, openingName);
   if (exact) return { note: exact, origin: 'position' };
+  // THE NOTE'S PHASE MUST MATCH THE BOARD'S (2026-08-05). Sampling what this
+  // function actually returned past book came back 14 for 14 `opening-family`,
+  // reciting opening theory at ply 34, 51, 68 — "After c4 c5 Nc3, if Black
+  // plays ...c6" to a student in a middlegame. The family tier answers on
+  // almost any position (the corpus holds thousands of notes per opening), so
+  // it SHADOWED structure transfer and the concept tier completely: neither
+  // could ever be reached, and the middlegame/endgame corpus stayed dark.
+  //
+  // `notePhaseMismatchesBoard` did not catch it — it only rejects an ENDGAME
+  // note on a non-endgame board, so nothing stopped an OPENING note at move 30.
+  // Matching the phase keeps the tier where it is right (an opening's own
+  // middlegame plan is a middlegame note) and lets the board-read tiers answer
+  // where they belong.
+  const boardPhase = phaseOfFen(fen);
+  const phaseFits = (note: DanyaNote): boolean =>
+    noteTeachesChessNotItsSource(note)
+    && (!boardPhase || note.phase === 'concept' || note.phase === boardPhase);
   // GAP TIER — an opening the primary corpus never covers still gets a note in
   // the FACTS PACKAGE, so the coach can teach its ideas instead of going quiet.
   //
@@ -437,7 +456,7 @@ export function teachingSourceForBoard(
     historySans,
     openingName: resolvedOpening,
     maxNotes: 1,
-    accept: (n) => !noteOpeningConflicts(n.opening, resolvedOpening),
+    accept: (n) => !noteOpeningConflicts(n.opening, resolvedOpening) && phaseFits(n),
   })[0];
   if (support) return { note: support, origin: 'opening-family' };
   // STRUCTURE TRANSFER is deliberately cross-opening (a note from anywhere whose
@@ -446,7 +465,7 @@ export function teachingSourceForBoard(
   // filter inside `notesForStructure`. It is honest teaching about a DIFFERENT
   // position, which is why it carries `origin: 'structure'` and must never be
   // announced as a fact about this board.
-  const transferred = notesForStructure(fen)[0];
+  const transferred = notesForStructure(fen).filter(phaseFits)[0];
   if (transferred) return { note: transferred, origin: 'structure' };
   // CONCEPT TIER — last, because it is the least specific: teaching about this
   // KIND of position rather than this one. It earns its place at the end of the
@@ -460,7 +479,8 @@ export function teachingSourceForBoard(
   // the ideas, the model only phrases the note (G0).
   const derived = boardConcepts(fen);
   if (!derived) return null;
-  const concept = conceptNotesFor({ phase: derived.phase, concepts: derived.concepts, limit: 1 })[0];
+  const concept = conceptNotesFor({ phase: derived.phase, concepts: derived.concepts, limit: 1 })
+    .filter(phaseFits)[0];
   return concept ? { note: concept, origin: 'concept' } : null;
 }
 

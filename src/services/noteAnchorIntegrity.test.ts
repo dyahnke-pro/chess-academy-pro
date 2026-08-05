@@ -20,7 +20,7 @@
 // letting the coach narrate more confident nonsense.
 import { describe, it, expect, beforeAll } from 'vitest';
 import { Chess } from 'chess.js';
-import { noteDescribesPosition } from './noteAnchorIntegrity';
+import { noteDescribesPosition, noteTeachesChessNotItsSource } from './noteAnchorIntegrity';
 import danyaRaw from '../data/danya-teachings.json';
 import type { DanyaNote } from './danyaTeachingService';
 
@@ -119,5 +119,44 @@ describe('corpus notes describe the position they are filed at', () => {
     };
     expect(noteDescribesPosition(plain, new Chess().fen())).toBe(true);
     expect(noteDescribesPosition(plain, undefined)).toBe(true);
+  });
+});
+
+// ── A note must teach CHESS, not describe where it came from ────────────────
+//
+// These corpora are distilled from video transcripts and the distillation
+// sometimes keeps the frame instead of the content. Measured past book across
+// 120 real games, 63 of 770 selected notes — 8.2% — opened by describing their
+// own source. Spoken mid-game that is worse than silence: it is the narration
+// rules' "never reference the interface, no meta" arriving through the corpus
+// rather than through a template.
+describe('notes teach chess, not the material they came from', () => {
+  const meta = (explains: string): DanyaNote => ({
+    id: 'm', lineSan: ['e4', 'e5', 'Nf3'], opening: null, phase: 'middlegame',
+    explains, teaches: '', plans: '', concepts: [], sources: [],
+  });
+
+  it('drops a note describing its own source', () => {
+    for (const text of [
+      'The transcript discusses a common tactical pattern where Black wins a piece.',
+      'The repertoire is built on the idea of playing ...g6 setups against e4.',
+      'In this video he explains why the knight belongs on d5.',
+      'The speaker prefers the quiet line here.',
+    ]) {
+      expect(noteTeachesChessNotItsSource(meta(text)), text).toBe(false);
+    }
+  });
+
+  it('keeps teaching that merely mentions chess material', () => {
+    // The filter must not reach ordinary chess prose. "Course" and "series" are
+    // narrow enough to need their article; a rook on an open FILE is not a clip.
+    for (const text of [
+      'The rook belongs behind the passed pawn.',
+      'Black should meet the pawn storm with a central break.',
+      'This structure repeats across the whole Sicilian complex.',
+      'He has the bishop pair, so keep the position open.',
+    ]) {
+      expect(noteTeachesChessNotItsSource(meta(text)), text).toBe(true);
+    }
   });
 });

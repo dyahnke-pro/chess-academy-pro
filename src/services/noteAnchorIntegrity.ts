@@ -93,3 +93,32 @@ export function noteDescribesPosition(note: DanyaNote, fen: string | undefined):
     return true; // never let the integrity check itself silence teaching
   }
 }
+
+/** Phrases that give away a note describing its own SOURCE rather than a chess
+ *  position: the video it was distilled from, the course it belongs to, the
+ *  person talking. */
+const SOURCE_META = /\b(?:the|this)\s+(?:transcript|video|clip|course|lesson|repertoire|series|segment)\b|\bthe (?:speaker|commentator|presenter|author)\b|\bhe (?:says|explains|mentions|notes)\b|\bin this (?:episode|section)\b/i;
+
+/**
+ * True when the note teaches CHESS rather than describing the material it came
+ * from.
+ *
+ * These corpora are distilled from video transcripts, and the distillation
+ * sometimes keeps the frame instead of the content: "The transcript discusses a
+ * common tactical pattern…", "The repertoire is built on the idea of …g6
+ * setups". Measured past book, 8.2% of selected notes — one in twelve — opened
+ * like that. Spoken to a student mid-game it is worse than silence: it breaks
+ * the fiction that a coach is talking about their board, and it is precisely
+ * the "never reference the interface / no meta" rule in the narration voice
+ * rules, arriving through the corpus instead of through a template.
+ *
+ * Dropped at SELECTION for the same reason as everything else here — a note
+ * that cannot be spoken should never be chosen (G0).
+ */
+export function noteTeachesChessNotItsSource(note: DanyaNote): boolean {
+  try {
+    return !SOURCE_META.test(`${note.explains} ${note.teaches} ${note.plans}`);
+  } catch {
+    return true;
+  }
+}
