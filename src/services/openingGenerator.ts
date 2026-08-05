@@ -3551,17 +3551,42 @@ async function generatePunishFromDb(
   }
   if (prepared.length < 2) return null; // not enough to make a stage
 
-  // Single LLM call: ask for prose labels for all lessons. The LLM
-  // sees the SANs, the FENs, the themes, and the opening context; it
-  // writes coach prose tying each tactic back to the opening's
-  // strategic character.
+  // Single LLM call: prose labels for all lessons, describing THE POSITION
+  // GIVEN and nothing else.
+  //
+  // 🚨 These are NOT the opening's trap lines. They are tactics from games that
+  // merely carried this opening's ECO tag, and `setupFen` is routinely move 14+
+  // — long past any theory. The prompt used to say "tie it back to the opening's
+  // character (Italian's Bc4-and-Ng5 pressure on f7, …)", which INSTRUCTED the
+  // model to assert a relationship it has no way to check. David's 2026-08-05
+  // prod run is what that produces: on a move-14 position from a stranger's
+  // game, "Black's Bxh1 grabs a rook but completely ignores the bishop's-opening
+  // pressure White has built on f7." There was no bishop's-opening pressure.
+  //
+  // The board gate did fire on the neighbouring sentences (audit findings
+  // 50-57, several dropping to kept:"") and could not catch this one, because
+  // "the opening's pressure" names no square and so is not a checkable claim.
+  // That is G0 exactly: the cure is not another gate, it is not asking for the
+  // invention. The model gets the FEN, the moves and the themes — enough to
+  // describe what is actually on the board — and is told the opening name is
+  // provenance, not a fact about this position.
+  //
+  // `buildStageTeachingBlock` is DROPPED here for the same reason. It was
+  // injecting ~4KB of the opening's corpus teaching (audit findings 102-105)
+  // into a prompt about positions the opening never reaches, which is the
+  // conflation with the volume turned up. It stays on every stage that IS the
+  // opening — only this puzzle-derived one loses it.
   const studentSide = inferStudentSideFromName(entry.canonicalName);
-  const systemPrompt = `You are an expert chess coach narrating punish lessons rooted in the "${entry.canonicalName}" opening. The student plays ${studentSide}. For each lesson below, output:
-- name: 4-8 words tying the lesson to the opening + the tactic. Examples:
-  • "Italian: Knight grabs f7 — fork on the queen"
-  • "Caro-Kann: Careless Ngf6?? — Nd6 is mate"
-  • "Sicilian: Loose d6 invites the bishop sack"
-- whyBad: 1-2 sentences on WHY the opponent's move loses. Tie it back to the opening's character (Italian's Bc4-and-Ng5 pressure on f7, Caro-Kann's solid-but-tempo-sensitive structure, Sicilian's tactical density on the queenside, etc.).
+  const systemPrompt = `You are an expert chess coach narrating tactical lessons drawn from real games. The student plays ${studentSide}.
+
+THESE POSITIONS ARE NOT OPENING THEORY. Each one is a middlegame position from a game that happened to begin with the ${entry.canonicalName}, often more than ten moves earlier. The opening name is PROVENANCE ONLY. Never claim the position shows that opening's ideas, pressure, structure or plans, and never name the opening as the reason a move works — you cannot see how this position was reached, so any such claim would be invented. Describe ONLY what the given FEN shows.
+
+For each lesson below, output:
+- name: 4-8 words naming the mistake and the tactic, from the position itself. Examples:
+  • "Knight grabs f7 — fork on the queen"
+  • "Careless Ngf6?? — Nd6 is mate"
+  • "The loose bishop invites a sack"
+- whyBad: 1-2 sentences on WHY the opponent's move loses, in terms of the pieces and squares ON THIS BOARD — what it leaves undefended, what line it opens, what square it stops covering.
 - shortWhyBad: REQUIRED ≤28-word compression of whyBad for the Brief Coach Narration setting. Preserve the KEY tactical / positional reason the move loses.
 - whyPunish: 1-2 sentences on the punishing IDEA — sacrifice for tempo, fork the queen, exploit the loose bishop, etc. Reference the puzzle's themes when natural ("a classic Bxf7+ sac that wins the queen by deflection").
 - shortWhyPunish: REQUIRED ≤28-word compression of whyPunish for Brief mode.
@@ -3569,7 +3594,7 @@ async function generatePunishFromDb(
 - followupIdeas: ONE short sentence per followup move (in order) describing the tactical thread — "rook lifts to win the queen", "the king is dragged into the open", etc.
 - shortFollowupIdeas: parallel array — for EACH followup move, a ≤18-word Brief-mode variant of the matching followupIdea.
 
-The SANs and FENs are GIVEN by the puzzle database — DO NOT alter them, do NOT add or reorder distractors, do NOT invent moves. Just write the prose. Output ONLY via the tool.${buildStageTeachingBlock(entry.canonicalName)}`;
+The SANs and FENs are GIVEN by the puzzle database — DO NOT alter them, do NOT add or reorder distractors, do NOT invent moves. Just write the prose. Output ONLY via the tool.`;
 
   const lessonsBlock = prepared
     .map((l, i) => {
@@ -3585,8 +3610,10 @@ ${l.followup.length > 0 ? l.followup.map((f, j) => `    ${j + 1}. ${f.san}`).joi
     })
     .join('\n\n');
 
-  const userPrompt = `Opening: ${entry.canonicalName} (${entry.eco})
-Canonical line: ${entry.moves.join(' ')}
+  // No canonical line here — handing the model the opening's move list next to
+  // a move-14 puzzle FEN invites it to narrate the two as one line. The FEN in
+  // each lesson block is the only position it may describe.
+  const userPrompt = `Games in this set opened with: ${entry.canonicalName} (${entry.eco}) — provenance only, not the position.
 Student plays: ${studentSide}
 
 ${prepared.length} lessons to label (in order):

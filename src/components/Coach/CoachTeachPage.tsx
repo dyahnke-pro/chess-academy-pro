@@ -14,10 +14,11 @@ import { uid } from '../../utils/uid';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Chess } from 'chess.js';
-import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, ChevronLeft, X, Check, MessageCircle, Zap, Undo2, RotateCcw, Volume2 } from 'lucide-react';
+import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, ChevronLeft, X, Check, MessageCircle, Zap, Undo2, RotateCcw, Volume2, Swords } from 'lucide-react';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessBoard } from '../Board/ChessBoard';
-import type { NarrationArrow, NarrationHighlight } from '../../types/walkthroughTree';
+import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
+import { trapPlayPosition } from '../../services/trapPlayPosition';
 
 // Walkthrough arrows/highlights render through the SAME react-chessboard
 // pipeline the opening tab's LessonPlayer uses — identical palette, identical
@@ -640,6 +641,37 @@ export function CoachTeachPage(): JSX.Element {
       summary: `in-page play-out started from plan position ("${session.title}")`,
     });
   }, []);
+
+  // "Play this trap out" at the punish leaf (David 2026-08-05: "then maybe a
+  // chance to play them out against the coach"). The student has just WATCHED
+  // the opponent slip and the refutation land; now they get the same position
+  // back with the mistake on the board and have to find the punishment
+  // themselves, then play on against adaptive Stockfish. Reuses the plan
+  // play-out overlay — `syntheticOpeningFromSession` derives the student's side
+  // from the FEN, which is what a puzzle-derived trap needs since it can sit on
+  // either side of the board.
+  const handlePlayOutTrap = useCallback(
+    (lesson: PunishLesson, parentName: string | undefined): void => {
+      const spot = trapPlayPosition(lesson);
+      if (!spot) return; // won't replay — offer nothing rather than a guess
+      setPlayOutSession({
+        title: parentName ? `${parentName} — ${lesson.name}` : lesson.name,
+        subtitle: 'Find the punishment, then play it out',
+        startFen: spot.fen,
+        orientation: spot.studentColor,
+        steps: [],
+        kind: 'custom',
+      });
+      void logAppAudit({
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'CoachTeachPage.handlePlayOutTrap',
+        summary: `in-page play-out started from trap position ("${lesson.name}")`,
+      });
+    },
+
+    [],
+  );
 
   // "Play this line out yourself" at the walkthrough LEAF — the student
   // has just watched the taught line into the middlegame; now they play
@@ -6154,6 +6186,7 @@ export function CoachTeachPage(): JSX.Element {
               void handleSubmit(query, { teachIntent: true });
             }}
             onPlayOutLine={(opening, customLine) => setLeafPlayOut({ opening, customLine })}
+            onPlayOutTrap={handlePlayOutTrap}
             onWatchContinuation={() => void startContinuationRef.current()}
           />
         ) : (
@@ -6953,6 +6986,7 @@ function WalkthroughControls({
   navigate,
   onDeepDive,
   onPlayOutLine,
+  onPlayOutTrap,
   onWatchContinuation,
 }: {
   walkthrough: ReturnType<typeof useTeachWalkthrough>;
@@ -6968,6 +7002,11 @@ function WalkthroughControls({
    *  middlegame). Kept in the parent so the play-out overlay lives at the
    *  page root, not inside these controls. */
   onPlayOutLine: (opening: OpeningRecord, customLine: OpeningVariation) => void;
+  /** Fired by the punish-leaf "Play it out against the coach" button — the
+   *  parent mounts the plan play-out overlay from the trap's own position
+   *  (mistake on the board, punishment still to find). David 2026-08-05:
+   *  "then maybe a chance to play them out against the coach." */
+  onPlayOutTrap: (lesson: PunishLesson, parentName: string | undefined) => void;
   /** Fired by the leaf "Watch the middlegame and endgame" button — the
    *  coach plays out BOTH sides with Stockfish from where the lesson ended,
    *  narrating the keystones (David 2026-07-30: the option existed only as
@@ -7373,10 +7412,32 @@ function WalkthroughControls({
             </div>
           )}
           <div className="flex flex-col gap-2">
+            {/* Watching the refutation is half the lesson; landing it
+                yourself is the other half (David 2026-08-05). Offered first
+                because it is the one that teaches — and only when the
+                lesson's own moves replay, so a malformed entry degrades to
+                the exits below instead of opening a guessed position. */}
+            {walkthrough.activePunishLesson &&
+              trapPlayPosition(walkthrough.activePunishLesson) && (
+              <button
+                onClick={() => {
+                  const lesson = walkthrough.activePunishLesson;
+                  if (!lesson) return;
+                  const parentName = walkthrough.parentOpeningTree?.openingName;
+                  walkthrough.stop();
+                  onPlayOutTrap(lesson, parentName);
+                }}
+                className="w-full flex items-center justify-center gap-2 px-3 py-3 rounded-lg bg-theme-accent text-theme-bg text-sm font-semibold min-h-[48px] transition-colors"
+                style={goldGlowStrongStyle}
+                data-testid="walkthrough-punish-play-out"
+              >
+                <Swords size={16} />
+                Play it out against the coach
+              </button>
+            )}
             <button
               onClick={() => walkthrough.exitPunishToMenu()}
-              className="w-full flex items-center justify-center gap-2 px-3 py-3 rounded-lg bg-theme-accent text-theme-bg text-sm font-semibold min-h-[48px] transition-colors"
-              style={goldGlowStrongStyle}
+              className="w-full flex items-center justify-center gap-2 px-3 py-3 rounded-lg border border-theme-border bg-theme-surface hover:bg-theme-bg text-sm font-semibold text-theme-text min-h-[48px] transition-colors"
               data-testid="walkthrough-punish-back-to-lessons"
             >
               <ChevronRight size={16} />
@@ -8101,11 +8162,20 @@ function PunishLessonPicker({
   if (startable.length === 0) {
     return <div data-testid="walkthrough-punish-empty" />;
   }
+  // Say what these lessons ARE. Curated trap lines replay from move one; the
+  // puzzle-DB fallback serves mid-game tactics from games that merely OPENED
+  // with this opening. David asked the Bishop's Opening (0 gems) for its traps
+  // and got puzzle tactics presented as if they were its trap lines — the
+  // honest header is the difference between a fallback and a lie (2026-08-05:
+  // "i was expecting a walk through of the trap lines"). Empty > generic >
+  // invented applies to framing, not just content.
+  const allFromLine = startable.every(({ lesson }) => trapPlayPosition(lesson) !== null || !lesson.setupFen);
   return (
     <div className="px-3 pb-3 space-y-2" data-testid="walkthrough-punish-picker">
       <div className="text-xs font-medium text-theme-text-muted px-1">
-        Pick a lesson — Black plays a common mistake, you find the punishment.
-        Plays out as a walkthrough on the board.
+        {allFromLine
+          ? 'Pick a trap line — watch it play out from move one, catch the mistake, find the punishment. Then play it out against the coach.'
+          : `No hand-verified trap lines for the ${tree?.openingName ?? 'this opening'} yet — these are real tactical punishments from games that began with it. Pick one, find the punishing move.`}
       </div>
       <div className="flex flex-col gap-2">
         {startable.map(({ lesson, idx }) => {
