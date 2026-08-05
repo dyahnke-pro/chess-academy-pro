@@ -16,6 +16,7 @@ import type { PuzzleOutcome } from '../Puzzles/PuzzleBoard';
 import type { PuzzleRecord } from '../../types';
 import { db } from '../../db/schema';
 import { logAppAudit } from '../../services/appAuditor';
+import { teachingSourceForBoard, generalizedTeaching, spokenBeatText } from '../../services/danyaTeachingService';
 
 type Phase = 'loading' | 'solving' | 'summary';
 
@@ -78,6 +79,25 @@ export function TacticDrillPage(): JSX.Element {
   const seenIdsRef = useRef<Set<string>>(new Set());
   const completedRef = useRef<Set<number>>(new Set());
   const resultsRef = useRef<DrillResult[]>([]);
+
+  // POST-SOLVE NOTE — after a puzzle is graded, one corpus teaching note about
+  // THIS position, WRITTEN only (narration rule #8: drill positions stay
+  // silent — the board is the lesson; text under it doesn't break the
+  // silence). Selection is the same deterministic ladder every other surface
+  // uses (position → structure), framed honestly by origin. Keyed by index so
+  // navigating between puzzles shows each one's own note.
+  const [postSolveNotes, setPostSolveNotes] = useState<Record<number, string>>({});
+  // AUTO-ADVANCE — a solved puzzle flows to the next after a beat instead of
+  // demanding a tap per puzzle. Fails stay put (the student should sit with
+  // the solution), and any manual nav cancels the pending advance.
+  const autoAdvanceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const cancelAutoAdvance = useCallback((): void => {
+    if (autoAdvanceRef.current) {
+      clearTimeout(autoAdvanceRef.current);
+      autoAdvanceRef.current = null;
+    }
+  }, []);
+  useEffect(() => cancelAutoAdvance, [cancelAutoAdvance]);
 
   const currentPuzzle = puzzleHistory[currentIndex] ?? null;
   const themeLabel = themes.length === 1
@@ -218,9 +238,33 @@ export function TacticDrillPage(): JSX.Element {
         }
       });
     }
-  }, [currentIndex, puzzleHistory, sessionRating, activeProfile, setActiveProfile, fetchNextPuzzle]);
+
+    // The post-solve note — one grounded teaching line about the position just
+    // played, when the corpus genuinely has one (most puzzles get none; empty
+    // beats generic). Scoped to the opening filter when the drill has one,
+    // otherwise unscoped — a bare puzzle has no lesson to stay inside.
+    try {
+      const source = teachingSourceForBoard([], puzzle.fen, openingFilter);
+      const text = source ? spokenBeatText(source.note) : '';
+      if (source && text.trim()) {
+        setPostSolveNotes((prev) => ({ ...prev, [currentIndex]: generalizedTeaching(source.origin, text.trim()) }));
+      }
+    } catch { /* the note is a bonus, never a blocker */ }
+
+    // Auto-advance on a SOLVE. 3s is enough to see the final position and the
+    // rating tick; a fail never auto-advances. `goNextRef` — goNext is
+    // declared below and this callback must not capture a stale one.
+    if (outcome.correct) {
+      cancelAutoAdvance();
+      autoAdvanceRef.current = setTimeout(() => {
+        autoAdvanceRef.current = null;
+        goNextRef.current?.();
+      }, 3000);
+    }
+  }, [currentIndex, puzzleHistory, sessionRating, activeProfile, setActiveProfile, fetchNextPuzzle, openingFilter, cancelAutoAdvance]);
 
   const goNext = useCallback((): void => {
+    cancelAutoAdvance(); // manual or timed — either way the pending one is spent
     const nextIndex = currentIndex + 1;
     if (nextIndex >= DRILL_SIZE || nextIndex >= puzzleHistory.length) {
       // Check if we need to wait for the next puzzle to load
@@ -245,13 +289,19 @@ export function TacticDrillPage(): JSX.Element {
       }
     }
     setCurrentIndex(nextIndex);
-  }, [currentIndex, puzzleHistory.length, sessionRating, fetchNextPuzzle]);
+  }, [currentIndex, puzzleHistory.length, sessionRating, fetchNextPuzzle, cancelAutoAdvance]);
+
+  // handlePuzzleComplete fires before goNext is declared; the ref bridges the
+  // ordering without reshuffling the callbacks.
+  const goNextRef = useRef<(() => void) | null>(null);
+  goNextRef.current = goNext;
 
   const goPrev = useCallback((): void => {
+    cancelAutoAdvance(); // stepping back means the student wants to look, not flow
     if (currentIndex > 0) {
       setCurrentIndex(currentIndex - 1);
     }
-  }, [currentIndex]);
+  }, [currentIndex, cancelAutoAdvance]);
 
   const totalCompleted = solved + failed;
 
@@ -348,6 +398,19 @@ export function TacticDrillPage(): JSX.Element {
             <span style={{ color: 'var(--color-error)' }}>{failed} missed</span>
             <span>Puzzle: {currentPuzzle.rating}</span>
           </div>
+
+          {/* Post-solve teaching note — written only; drill positions stay
+              silent (narration rule #8). Renders only once THIS puzzle is
+              graded, so it can never leak a hint mid-solve. */}
+          {completedRef.current.has(currentIndex) && postSolveNotes[currentIndex] && (
+            <div
+              className="mx-4 mt-1 px-3 py-2 rounded-lg border text-sm"
+              style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-muted)' }}
+              data-testid="post-solve-note"
+            >
+              {postSolveNotes[currentIndex]}
+            </div>
+          )}
         </div>
       )}
 
