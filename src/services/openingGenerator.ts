@@ -227,6 +227,58 @@ export function normalizeOpeningName(name: string): string {
   return name.trim().toLowerCase();
 }
 
+/** `Tour:` / `Face:` mark genuinely DIFFERENT lessons of the same opening — a
+ *  quick tour, or the counter side — so they must never share a cache row. Any
+ *  canonical key has to carry the prefix the caller asked with. */
+const MODE_PREFIX_RE = /^((?:tour:\s*)?(?:face:\s*)?)/;
+
+/** Where a generated tree SHOULD live: the mode prefix the caller used, plus the
+ *  opening the tree actually teaches.
+ *
+ *  The lesson used to be cached under whatever the STUDENT TYPED. `requestedName`
+ *  in `CoachTeachPage.handleSubmit` is raw input on four of its five paths (only
+ *  the fuzzy branch canonicalizes), so "teach the caro" and "teach me the
+ *  Caro-Kann" wrote two rows and each paid the full ~60s build — David 2026-08-05:
+ *  "routing takes about 60 seconds because the lesson plans needs to build. It
+ *  should cache after first use."
+ *
+ *  Keying on the tree's own identity also repairs the stage merge for free.
+ *  `generateMissingStagesInBackground` is handed `tree.openingName`, and
+ *  `mergeStageIntoCache` normalizes THAT to find the row — so with the row filed
+ *  under the typed name it was reading a key that did not exist. */
+export function canonicalCacheKey(requestedName: string, tree?: WalkthroughTree): string {
+  const normalizedRequest = normalizeOpeningName(requestedName);
+  const prefix = MODE_PREFIX_RE.exec(normalizedRequest)?.[1] ?? '';
+  const base = normalizedRequest.slice(prefix.length).trim();
+  if (!base) return normalizedRequest;
+  // Resolve the phrasing to the DB's canonical name. `resolveOpeningEntry`'s
+  // own doc has said to do this since it was written — "Callers should use the
+  // returned canonicalName for cache keys … so that 'najdorf' and 'Sicilian
+  // Defense: Najdorf Variation' land on the same cache row" — and no caller
+  // did. Resolving on BOTH read and write is what makes a phrasing never seen
+  // before hit a row an earlier phrasing built, with no alias to consult.
+  // Resolve the PHRASING first, then the tree's own name. Both must go through
+  // the resolver or they disagree on spelling: the app writes "Caro-Kann
+  // Defence" while the DB is American ASCII ("Caro-Kann Defense"), so keying a
+  // write off the tree name and a read off the resolver split one opening
+  // across two rows — the exact bug this function exists to close.
+  for (const candidate of [base, tree?.openingName]) {
+    if (!candidate) continue;
+    try {
+      const resolved = resolveOpeningEntry(candidate)?.canonicalName;
+      if (resolved) return `${prefix}${normalizeOpeningName(resolved)}`;
+    } catch { /* try the next candidate */ }
+  }
+  // No DB match (a constructed matchup, a face-mode counter line): the tree
+  // knows what it taught, which is still better than the raw phrasing. A read
+  // has no tree, so those land on the alias written at cache time.
+  const fromTree = normalizeOpeningName(tree?.openingName ?? '');
+  return fromTree ? `${prefix}${fromTree}` : normalizedRequest;
+}
+
+/** Meta key pointing a typed phrasing at the row its lesson really lives in. */
+const aliasKey = (normalized: string): string => `walkthroughAlias:${normalized}`;
+
 /** Read-through cache: check Dexie before generating. RE-VALIDATES
  *  the cached tree before returning — production audit (build
  *  c2bc340) caught a bad Pirc tree shipping into the cache during
@@ -303,8 +355,29 @@ export async function getCachedOpening(
   name: string,
 ): Promise<WalkthroughTree | null> {
   try {
-    const normalized = normalizeOpeningName(name);
-    const cached = await db.cachedOpenings.get(normalized);
+    const typed = normalizeOpeningName(name);
+    let normalized = typed;
+    let cached = await db.cachedOpenings.get(normalized);
+    if (!cached) {
+      // Resolve the phrasing to the row the lesson is really filed under. This
+      // is what makes a brand-new phrasing hit — "caro kann" finding what "the
+      // caro" built — instead of paying the ~60s rebuild again.
+      const resolvedKey = canonicalCacheKey(name);
+      if (resolvedKey !== typed) {
+        cached = await db.cachedOpenings.get(resolvedKey);
+        if (cached) normalized = resolvedKey;
+      }
+    }
+    if (!cached) {
+      // Belt and braces for rows written before canonical keying, and for names
+      // the resolver cannot place (constructed matchups, face-mode counters).
+      const alias = await db.meta.get(aliasKey(typed));
+      const target = typeof alias?.value === 'string' ? alias.value : '';
+      if (target && target !== typed) {
+        cached = await db.cachedOpenings.get(target);
+        if (cached) normalized = target;
+      }
+    }
     if (!cached) {
       // Audit-instrumentation phase-1 (2026-05-19): per-cache-lookup
       // hit/miss event. Generation is the most expensive operation in
@@ -417,8 +490,15 @@ export async function cacheOpening(
     // `startWalkthrough` right after caching it, so the running walkthrough
     // must carry the key too — a stamped copy in Dexie would leave the live
     // tree unable to find its own row.
-    const normalizedName = normalizeOpeningName(name);
+    // File under the OPENING, not the phrasing (see `canonicalCacheKey`), and
+    // leave a pointer from what the student typed so the next phrasing of the
+    // same ask lands on the row instead of rebuilding it.
+    const typedKey = normalizeOpeningName(name);
+    const normalizedName = canonicalCacheKey(name, tree);
     tree.cacheKey = normalizedName;
+    if (typedKey && typedKey !== normalizedName) {
+      await db.meta.put({ key: aliasKey(typedKey), value: normalizedName });
+    }
     const record: CachedOpening = {
       normalizedName,
       displayName: tree.openingName,
@@ -4002,7 +4082,7 @@ export async function generateMissingStagesInBackground(
         giveUp();
         return;
       }
-      const merge = await mergeStageIntoCache(openingName, stage, first.data);
+      const merge = await mergeStageIntoCache(tree.cacheKey ?? openingName, stage, first.data);
       if (merge.merged) {
         // Notify caller — the walkthrough is likely already running
         // and needs to refresh its in-memory tree so newly-arrived
@@ -4037,7 +4117,7 @@ export async function generateMissingStagesInBackground(
         giveUp();
         return;
       }
-      const retryMerge = await mergeStageIntoCache(openingName, stage, retry.data);
+      const retryMerge = await mergeStageIntoCache(tree.cacheKey ?? openingName, stage, retry.data);
       if (!retryMerge.merged) {
         void logAppAudit({
           kind: 'llm-error',
