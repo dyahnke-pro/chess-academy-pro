@@ -160,3 +160,38 @@ describe('notes teach chess, not the material they came from', () => {
     }
   });
 });
+
+// ── A note may not narrate a different variation than the lesson ────────────
+//
+// The class position-matching cannot catch: at a shared prefix (e4 c6 d4 d5
+// serves five Caro variations) a note is correctly ANCHORED while its prose
+// teaches a branch the lesson never takes. David's 2026-08-05 prod run heard
+// "In the Fantasy, the center is crucial…" inside a Tartakower lesson.
+describe('notes stay in the lesson\'s scope', () => {
+  const noteWith = (explains: string): DanyaNote => ({
+    id: 's', lineSan: ['e4', 'c6', 'd4', 'd5'], opening: 'Caro-Kann Defense',
+    phase: 'opening', explains, teaches: '', plans: '', concepts: [], sources: [],
+  });
+
+  it('drops a note naming a variation foreign to the lesson', async () => {
+    const { noteStaysInScope } = await import('./noteAnchorIntegrity');
+    const fantasy = noteWith('In the Fantasy Variation, the center is crucial; c3 is often necessary.');
+    expect(noteStaysInScope(fantasy, 'Caro-Kann Defense: Tartakower Variation')).toBe(false);
+    expect(noteStaysInScope(fantasy, 'Caro-Kann Defense')).toBe(false);
+  });
+
+  it('keeps a note naming the lesson\'s own opening or variation', async () => {
+    const { noteStaysInScope } = await import('./noteAnchorIntegrity');
+    const advance = noteWith('In the Advance Variation, the light-squared bishop gets out before ...e6.');
+    expect(noteStaysInScope(advance, 'Caro-Kann Defense: Advance Variation')).toBe(true);
+    const family = noteWith('The Caro-Kann Defense trades central tension for structure.');
+    expect(noteStaysInScope(family, 'Caro-Kann Defense: Advance Variation')).toBe(true);
+  });
+
+  it('always keeps a note that names no variation, and passes with no scope', async () => {
+    const { noteStaysInScope } = await import('./noteAnchorIntegrity');
+    const plain = noteWith('The centre is the first thing to fight for.');
+    expect(noteStaysInScope(plain, 'Caro-Kann Defense')).toBe(true);
+    expect(noteStaysInScope(noteWith('In the Fantasy Variation, c3 holds.'), null)).toBe(true);
+  });
+});

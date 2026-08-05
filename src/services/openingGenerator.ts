@@ -47,7 +47,7 @@ import { db, type CachedOpening } from '../db/schema';
 import { gradeNarrationText, gradeNarrationAcrossLine } from './coachAnswerGates';
 import { narrateContinuationMove } from './continuationMoveNarration';
 import { logAppAudit } from './appAuditor';
-import { buildDanyaTeachingBlock, noteAtPosition, teachingBeatText } from './danyaTeachingService';
+import { buildDanyaTeachingBlock, noteAtPosition, spokenBeatText } from './danyaTeachingService';
 import { deriveNarrationArrows } from './narrationArrows';
 import { splitSentences, squaresInText } from './narrationSegments';
 import { bakedNarrationFor } from './bakedWalkthroughNarration';
@@ -349,7 +349,10 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 // note-grounded while the prose never named what the arrows pointed at. Both
 // are baked in at generation time, so without this bump every already-taught
 // opening keeps narrating the old note-as-afterthought order off the cache.
-const WALKTHROUGH_GEN_REV = '2026-08-04-corpus-note-leads';
+// ONE bump covering the whole 2026-08-05 narration batch (spoken-register cap,
+// move-recitation drop, variation-scope filter) — batched per the locked cost
+// rule: every bump makes cached lessons regenerate and their TTS re-synthesise.
+const WALKTHROUGH_GEN_REV = '2026-08-05-spoken-register';
 
 export async function getCachedOpening(
   name: string,
@@ -1144,7 +1147,14 @@ export function noteArrowSourceAt(
     // the next one.
     const note = noteAtPosition(historySans, fen, openingName, seenIds);
     if (!note) return null;
-    const graded = gradeNarrationText(teachingBeatText(note), fen, 'openingGenerator.noteArrows');
+    // SPOKEN register, not the full beat. `teachingBeatText` concatenates
+    // explains+teaches+plans (median 544 chars) and the splice then stacked
+    // generated prose on top — ~130 spoken words for one move. David 2026-08-05:
+    // "a bit too wordy … droned on with long strings of FENs which lost me."
+    // `spokenBeatText` is explains-only, recitation sentences dropped, capped
+    // at a sentence boundary; teaches/plans still reach the model via the
+    // lesson-level teaching block.
+    const graded = gradeNarrationText(spokenBeatText(note), fen, 'openingGenerator.noteArrows');
     if (!graded?.trim()) return null;
     seenIds.add(note.id);
     return graded;

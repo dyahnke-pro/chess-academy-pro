@@ -122,3 +122,74 @@ export function noteTeachesChessNotItsSource(note: DanyaNote): boolean {
     return true;
   }
 }
+
+// ── A note may not narrate a DIFFERENT variation than the lesson ────────────
+//
+// David's 2026-08-05 prod run: a Tartakower/Breyer lesson spoke "In the
+// Fantasy, the center is crucial…". Position selection cannot catch this class:
+// at a SHARED prefix (e4 c6 d4 d5 is common to the Fantasy, Advance, Exchange,
+// Classical and Tartakower) the note IS correctly anchored — its prose just
+// teaches a branch the lesson never takes. `noteDescribesPosition` passes it
+// because no unreachable move is named. 12.7% of position-keyed notes name a
+// variation in their prose, so this is not a corner case.
+//
+// The check is against the note's PROSE, never its `opening` field — that field
+// is unreliable (notes filed "Indian Defense" teach the Caro-Kann Fantasy).
+/** "in the Fantasy Variation", "against the Advance", "the Botvinnik-Carls
+ *  System" — a capitalised name attached to a variation-class noun. */
+const NAMED_VARIATION = /\b([A-Z][a-zA-Z'-]+(?:[ -][A-Z][a-zA-Z'-]+){0,2})\s+(?:Variation|Defense|Defence|Attack|Gambit|System|Opening)\b|\bthe\s+([A-Z][a-zA-Z'-]+)\s+variation\b/g;
+
+/** Words that pass the capitalised-name shape without naming an opening. */
+const NOT_A_VARIATION = new Set(['the', 'this', 'that', 'a', 'an', 'his', 'her', 'their', 'in', 'main', 'king', 'queen']);
+
+/**
+ * True when every variation the note NAMES belongs to the lesson being taught.
+ *
+ * "Belongs" is a token test against the lesson's canonical name: a note saying
+ * "in the Advance Variation" is in scope for "Caro-Kann Defense: Advance
+ * Variation" and out of scope for the Exchange. A lesson named at family level
+ * ("Caro-Kann Defense") keeps only notes naming the family itself — a
+ * variation-naming note is exactly the risk there, since the family lesson
+ * walks one specific spine (empty > generic > invented applies to scope too).
+ *
+ * A note that names NO variation always passes — this only judges notes that
+ * commit to a name, and only drops provable mismatches.
+ */
+export function noteStaysInScope(
+  note: DanyaNote,
+  openingName: string | null | undefined,
+): boolean {
+  if (!openingName?.trim()) return true; // no lesson scope to violate
+  try {
+    const prose = `${note.explains} ${note.teaches} ${note.plans}`;
+    // Hyphens SPLIT on both sides ("Caro-Kann" → caro, kann) so the two
+    // tokenizations can never disagree about compound names.
+    const lessonTokens = new Set(
+      openingName
+        .toLowerCase()
+        .replace(/defence/g, 'defense')
+        .split(/[^a-z']+/)
+        .filter((t) => t.length > 2),
+    );
+    NAMED_VARIATION.lastIndex = 0;
+    for (const m of prose.matchAll(NAMED_VARIATION)) {
+      const name = (m[1] ?? m[2] ?? '').trim();
+      if (!name) continue;
+      const tokens = name
+        .toLowerCase()
+        .replace(/defence/g, 'defense')
+        .split(/[^a-z']+/)
+        .filter((t) => t.length > 2 && !NOT_A_VARIATION.has(t));
+      if (tokens.length === 0) continue;
+      // Every mentioned name must share a SUBSTANTIVE token with the lesson —
+      // class words can't vouch, or "X Defense" would pass in any defense.
+      const classWords = new Set(['defense', 'variation', 'attack', 'gambit', 'system', 'opening', 'game']);
+      const substantive = tokens.filter((t) => !classWords.has(t));
+      if (substantive.length === 0) continue;
+      if (!substantive.some((t) => lessonTokens.has(t))) return false;
+    }
+    return true;
+  } catch {
+    return true;
+  }
+}

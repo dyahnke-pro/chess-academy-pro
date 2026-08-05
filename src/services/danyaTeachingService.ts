@@ -23,7 +23,7 @@ import { secondarySupportNotes, secondaryNotesForPosition, secondaryNotesForFen 
 import { detectOpening } from './openingDetectionService';
 import { noteContradictsLine, notePhaseMismatchesBoard } from './noteLineGuard';
 import { boardConcepts, phaseOfFen } from './boardConcepts';
-import { noteDescribesPosition, noteTeachesChessNotItsSource } from './noteAnchorIntegrity';
+import { noteDescribesPosition, noteTeachesChessNotItsSource, noteStaysInScope } from './noteAnchorIntegrity';
 
 export interface DanyaNote {
   id: string;
@@ -273,6 +273,12 @@ export function supportNoteForPly(
     && !noteOpeningConflicts(n.opening, openingName)
     && noteDescribesPosition(n, fen)
     && noteTeachesChessNotItsSource(n)
+    // A correctly-ANCHORED note can still narrate a different BRANCH: at a
+    // shared prefix (e4 c6 d4 d5 serves five Caro variations) the position
+    // says nothing about which line the prose teaches. A note naming a
+    // variation foreign to this lesson is out of scope — David's 2026-08-05
+    // run heard "In the Fantasy…" inside a Tartakower lesson.
+    && noteStaysInScope(n, openingName)
     && !exclude?.has(n.id);
   try {
     // STRUCTURE TRANSFER IS OFF INSIDE A TAUGHT LESSON (David 2026-08-02:
@@ -351,6 +357,12 @@ export function noteAtPosition(
     // a transcript distilled against the wrong moment. See noteAnchorIntegrity.
     && noteDescribesPosition(n, fen)
     && noteTeachesChessNotItsSource(n)
+    // A correctly-ANCHORED note can still narrate a different BRANCH: at a
+    // shared prefix (e4 c6 d4 d5 serves five Caro variations) the position
+    // says nothing about which line the prose teaches. A note naming a
+    // variation foreign to this lesson is out of scope — David's 2026-08-05
+    // run heard "In the Fantasy…" inside a Tartakower lesson.
+    && noteStaysInScope(n, openingName)
     && !exclude?.has(n.id);
   const bucket = (byPrefix.get(historySans.join(' ')) ?? []).filter(onThisLine);
   if (bucket[0]) return bucket[0];
@@ -868,6 +880,55 @@ export function teachingBeatText(note: DanyaNote): string {
     .map((part) => (part ?? '').trim())
     .filter(Boolean)
     .join(' ');
+}
+
+/** SAN-shaped tokens — the same shape sanitizeForTTS later expands aloud. */
+const SAN_TOKEN = /\b(?:[NBRQK][a-h]?[1-8]?x?[a-h][1-8][+#]?|[a-h]x?[a-h][1-8][+#]?|O-O(?:-O)?[+#]?)\b/g;
+
+/** Spoken per-ply budget. ~50 words is ~15s of TTS — a real teaching beat,
+ *  not a lecture. The cut is at a sentence boundary, never mid-thought. */
+const SPOKEN_BEAT_MAX_WORDS = 50;
+
+/**
+ * What a note contributes to ONE SPOKEN PLY — as opposed to `teachingBeatText`,
+ * which is the note's full teaching for prompt blocks and written contexts.
+ *
+ * David's 2026-08-05 prod feedback, after a lesson on the new note-led splice:
+ * "a bit too wordy … it droned on with long strings of FENs which lost me."
+ * Both defects are measured, not anecdotal:
+ *   • the full beat (`explains`+`teaches`+`plans`) is a median 544 chars, and
+ *     the splice put generated prose on top — ~130 spoken words per single move;
+ *   • 11.4% of primary-corpus notes carry ≥5 SAN tokens in `explains`, which
+ *     TTS faithfully expands into "knight to c3, d-pawn takes e4, knight takes
+ *     e4…" — dictating moves the board itself plays (narration rule #3: don't
+ *     restate the board).
+ *
+ * So the spoken register is: `explains` ONLY (`teaches`/`plans` still reach the
+ * model through the lesson-level block), minus any sentence that is a move
+ * recitation, capped at a sentence boundary. Empty string = this note has
+ * nothing speakable — the caller falls back to its generated prose.
+ */
+export function spokenBeatText(note: DanyaNote): string {
+  const explains = (note.explains ?? '').trim();
+  if (!explains) return '';
+  const sentences = explains.match(/[^.!?]+[.!?]+(?:\s|$)|[^.!?]+$/g) ?? [explains];
+  const kept: string[] = [];
+  let words = 0;
+  for (const raw of sentences) {
+    const sentence = raw.trim();
+    if (!sentence) continue;
+    // A sentence carrying 4+ moves is dictation, not teaching — the board
+    // plays the moves; the voice carries only what the picture doesn't.
+    SAN_TOKEN.lastIndex = 0;
+    const sanCount = sentence.match(SAN_TOKEN)?.length ?? 0;
+    if (sanCount >= 4) continue;
+    const sentenceWords = sentence.split(/\s+/).length;
+    if (kept.length > 0 && words + sentenceWords > SPOKEN_BEAT_MAX_WORDS) break;
+    kept.push(sentence);
+    words += sentenceWords;
+    if (words >= SPOKEN_BEAT_MAX_WORDS) break;
+  }
+  return kept.join(' ');
 }
 
 /** Corpus stats for audits / the settings debug panel. */

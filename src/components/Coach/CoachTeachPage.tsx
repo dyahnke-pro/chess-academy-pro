@@ -139,7 +139,7 @@ import { buildOpeningChainFacts } from '../../services/openingFactChains';
 import { buildForkTalk, type ForkTalk } from '../../services/forkTalk';
 import { parseCoachMoveCommand } from '../../services/coachMoveCommand';
 import { sanToSpeech } from '../../utils/sanToSpeech';
-import { teachingSourceForBoard, teachingFactLine, generalizedTeaching, noteCoverageForLine, teachingBeatText } from '../../services/danyaTeachingService';
+import { teachingSourceForBoard, teachingFactLine, generalizedTeaching, noteCoverageForLine, spokenBeatText } from '../../services/danyaTeachingService';
 
 /** How many note-covered plies an opening needs before the NOTES take the
  *  lesson from a hand-authored masterclass.
@@ -1549,27 +1549,17 @@ export function CoachTeachPage(): JSX.Element {
    *  Need to figure out a way for coach to let them know that punish
    *  lines and quizzes have loaded." */
   const handleStageMerged = useCallback(
-    (stage: 'concepts' | 'findMove' | 'drill' | 'punish'): void => {
+    (_stage: 'concepts' | 'findMove' | 'drill' | 'punish'): void => {
       void walkthrough.mergeStagesFromCache();
-      const labels: Record<typeof stage, string> = {
-        concepts: 'Quiz questions',
-        findMove: 'Find-the-move puzzles',
-        drill: 'Drill lines',
-        punish: 'Punish (trap) lessons',
-      };
-      const msg = `${labels[stage]} just loaded — they'll show up in the menu when you reach the end of the walkthrough.`;
-      const id = `stage-loaded-${stage}-${Date.now()}`;
-      setMessages((prev) => [
-        ...prev,
-        { id, role: 'assistant', content: msg, timestamp: Date.now() },
-      ]);
-      useCoachMemoryStore.getState().appendConversationMessage({
-        surface: 'chat-teach',
-        role: 'coach',
-        text: msg,
-        fen: gameRef.current.fen,
-        trigger: null,
-      });
+      // SILENT. This used to push a chat bubble per stage — four near-identical
+      // "X just loaded — they'll show up in the menu when you reach the end of
+      // the walkthrough" messages that dominated David's transcript (2026-08-05
+      // screenshot), pointed at a menu the flow may never reach, and each one
+      // yanked the auto-scroll while he was reading. The MENU is the
+      // notification: the stage tile appears with its count when it exists, and
+      // a stage the student is parked WAITING on already resolves through
+      // `pendingStageJump` (auto-jump) or `handleStageUnavailable` (honest
+      // failure). Background progress a user didn't ask about is not news.
     },
     [walkthrough],
   );
@@ -5167,9 +5157,17 @@ export function CoachTeachPage(): JSX.Element {
   // Snap to top when a new message lands or while the reply is
   // streaming in. Reverse-flow puts newest at the top so scrollTop=0
   // is always the active turn.
+  //
+  // ONLY when the reader is already at the active end. David 2026-08-05:
+  // "cannot scroll back up" — he was reading history while background stage
+  // notices kept landing, and the unconditional snap yanked him back to the
+  // top on every one. Scrolled away = reading; a reader is never interrupted.
+  // The next message they send (or a snap while they're already at top)
+  // resumes the follow behavior on its own.
   useEffect(() => {
     const el = transcriptRef.current;
     if (!el) return;
+    if (el.scrollTop > 48) return; // reading history — don't steal the scroll
     el.scrollTop = 0;
   }, [messages.length, streaming]);
 
@@ -5625,7 +5623,7 @@ export function CoachTeachPage(): JSX.Element {
           );
           if (source && !continuationNoteIds.has(source.note.id)) {
             const graded = gradeNarrationText(
-              teachingBeatText(source.note),
+              spokenBeatText(source.note),
               local.fen(),
               'CoachTeachPage.continuationNote',
             );
