@@ -19,6 +19,7 @@ import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
+import { buildPlayCommentary } from '../../services/playCommentary';
 
 // Walkthrough arrows/highlights render through the SAME react-chessboard
 // pipeline the opening tab's LessonPlayer uses — identical palette, identical
@@ -5002,6 +5003,21 @@ export function CoachTeachPage(): JSX.Element {
                 // Tactics facts reach the narration ONLY when no question is
                 // open — otherwise they leak the answer.
                 facts.push(...tacticsFacts);
+                // TRADE OFF THEIR BEST PIECE — the Naroditsky speedrun's middle
+                // beat (B7r1bgPEyIQ ~18-23min; David: "trading off opponents
+                // best piece"). The tactic and improving-move beats already
+                // live above (tacticsFacts / think-aloud / the engine rec);
+                // this is the one the chain had no slot for. buildPlayCommentary
+                // is deliberately narrow — an unchallengeable outpost knight or
+                // an open-file rook, and only when the trade is available on
+                // THIS move — so most turns it stays silent (G0: the read is
+                // computed; the model only phrases it).
+                try {
+                  const beat = buildPlayCommentary({ fen: probe.fen(), studentColor: playerColor });
+                  if (beat?.kind === 'trade-the-best-piece') {
+                    facts.push(...beat.facts);
+                  }
+                } catch { /* commentary is a bonus, never a blocker */ }
                 // OPENING FACT-CHAIN (David 2026-07-11: "the purpose of each
                 // move and what traps might form") — during the opening, hand
                 // the narration where the moves LEAD (named DB continuations)

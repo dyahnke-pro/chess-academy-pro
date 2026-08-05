@@ -48,7 +48,7 @@ const NAME: Record<string, string> = {
 function capturesOf(chess: Chess, square: string): string[] {
   try {
     return chess.moves({ verbose: true })
-      .filter((m) => m.to === square && m.flags.includes('c'))
+      .filter((m) => m.to === square && m.isCapture())
       .map((m) => m.san);
   } catch {
     return [];
@@ -131,32 +131,27 @@ export function buildPlayCommentary(args: {
     return null;
   }
   const me: 'w' | 'b' = args.studentColor === 'white' ? 'w' : 'b';
+  const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
   if (chess.turn() !== me) return null; // not the student's move — say nothing
   const all = pieces(chess);
   if (all.length === 0) return null;
 
   // ── 1. A TACTIC. The video's third beat, and the one worth interrupting a
-  // quiet plan for. Only the student's OWN tactics — pointing out the
-  // opponent's would be handing over the game.
+  // quiet plan for. `detectTactics` reports geometry without a beneficiary
+  // side, so only the side-attributed HANGING read is used here — the
+  // structured tactic list already reaches the narration through the
+  // TacticsLiveContext block, which does carry sides. Only the OPPONENT'S
+  // hanging pieces: pointing out the student's own would be handing the
+  // opponent's game plan to the student's ears mid-game.
   try {
     const t = detectTactics(args.fen);
-    const mine = t.tactics.filter((tac) => tac.side === args.studentColor);
-    const theirHanging = t.hangingPieces.filter((h) => h.color !== args.studentColor);
-    if (mine.length > 0) {
-      const tac = mine[0];
-      return {
-        kind: 'tactic',
-        facts: [
-          `TACTIC ON THE BOARD for the student: ${tac.description}. Point out that something is there and WHY the geometry works. Do NOT name the move or the destination square — let them find it.`,
-        ],
-      };
-    }
+    const theirHanging = t.hangingPieces.filter((h) => h.color === them);
     if (theirHanging.length > 0) {
       const h = theirHanging[0];
       return {
         kind: 'tactic',
         facts: [
-          `UNDEFENDED: the opponent's ${NAME[h.type] ?? 'piece'} on ${h.square} is not defended. Say what you notice — an undefended piece is the seed of a tactic — without naming the move that wins it.`,
+          `UNDEFENDED: the opponent's ${NAME[h.piece] ?? 'piece'} on ${h.square} is not defended. Say what you notice — an undefended piece is the seed of a tactic — without naming the move that wins it.`,
         ],
       };
     }
@@ -164,7 +159,6 @@ export function buildPlayCommentary(args: {
 
   // ── 2. TRADE OFF THEIR BEST PIECE. Only when the trade is actually
   // available on this move — otherwise it is advice about a different position.
-  const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
   const best = opponentsBestPiece(all, them);
   if (best) {
     const trades = capturesOf(chess, best.piece.square);
@@ -191,7 +185,7 @@ export function buildPlayCommentary(args: {
       try {
         const probe = new Chess(args.fen);
         const m = probe.move({ from, to: args.bestUci.slice(2, 4) as Square, promotion: 'q' });
-        return !!m && !m.captures && !probe.isCheck();
+        return !!m && !m.captured && !probe.isCheck();
       } catch {
         return false;
       }
