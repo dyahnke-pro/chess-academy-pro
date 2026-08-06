@@ -41,7 +41,7 @@ import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
-import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
+import { muteTtsForAudit, stampAuditRunId } from './audit-lib/mute-tts.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
@@ -120,6 +120,12 @@ async function main() {
   // No TTS spend: the listener reads the spoken text from the audit events, so
   // synthesising it buys nothing and costs real money (see mute-tts.mjs).
   await context.addInitScript(muteTtsForAudit);
+  // Stamp the run so the PostHog read-back (the canonical https narration
+  // instrument) can isolate this run's events by audit_run_id.
+  const RUN_ID = process.env.AUDIT_RUN_ID
+    ?? `traps-${Math.random().toString(36).slice(2, 10)}`;
+  console.log(`[audit-run-id] ${RUN_ID}`);
+  await context.addInitScript(stampAuditRunId(RUN_ID));
   const page = await context.newPage();
 
   const pageErrors = [];
