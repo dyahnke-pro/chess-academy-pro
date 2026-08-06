@@ -350,6 +350,15 @@ export function initAnalytics(opts?: { optedOut?: boolean }): void {
       // capture below so that event carries it too.
       try {
         const platformProps = resolvePlatformSuperProps();
+        // AUDIT RUN CORRELATION — read the driver's stamp HERE, in the one
+        // place that provably runs before the first capture, instead of
+        // depending on App.tsx's identity chain (whose registration reached
+        // PostHog without the stamp on the 2026-08-06 probes — the chain is
+        // one race too many for a correlation key). Absent for real users.
+        try {
+          const auditRunId = globalThis.localStorage?.getItem('auditRunId');
+          if (auditRunId) (platformProps).audit_run_id = auditRunId;
+        } catch { /* locked-down context */ }
         posthog.register(platformProps);
         posthog.setPersonProperties(platformProps);
         // Anything registered while the library was still loading — the
