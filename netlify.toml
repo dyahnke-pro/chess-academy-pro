@@ -1,4 +1,10 @@
+# 🔒 BUILD ONLY main — deploy previews are OFF (David's 2026-08-06 alert: 75%
+# of the 300 monthly credits burned in ONE day; every branch push was building
+# a preview on top of a production build per merge). Audits run against the
+# LIVE prod URL; previews serve nobody. Netlify semantics: ignore-command
+# exit 0 = SKIP the build, non-zero = build.
 [build]
+  ignore = "test \"$BRANCH\" != \"main\""
   command = "npx vite build"
   publish = "dist"
 
