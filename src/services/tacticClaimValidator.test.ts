@@ -152,3 +152,28 @@ describe('stripUngroundedTacticSentences (the enforcing gate)', () => {
     expect(clean).not.toMatch(/fork/);
   });
 });
+
+describe('licensedFacts — code-computed facts license their own tactic vocabulary (2026-08-06)', () => {
+  it("keeps the TRUE fork claim David's session lost", () => {
+    // The bounded live context carried no fork, but the reply-fact bundle
+    // (explainBestMoveGrounded — code) DID: b5 really forked a4 and c4.
+    const text = 'It forks the knight on a4 and the bishop on c4. Strong reply.';
+    const facts = "The coach replied b5. Why it's strong: It forks the knight on a4 and the bishop on c4.";
+    const without = stripUngroundedTacticSentences(text, EMPTY_CTX);
+    expect(without.dropped.length).toBe(1);
+    const withFacts = stripUngroundedTacticSentences(text, EMPTY_CTX, facts);
+    expect(withFacts.dropped).toHaveLength(0);
+    expect(withFacts.clean).toContain('forks the knight');
+  });
+
+  it('licenses by TYPE inflection, and never licenses a tactic the facts do not speak', () => {
+    // Facts say "forks"; prose says "forking" — same type, licensed.
+    const inflected = stripUngroundedTacticSentences(
+      'A forking pattern appears on the queenside.', EMPTY_CTX, 'It forks two pieces.');
+    expect(inflected.dropped).toHaveLength(0);
+    // Facts about a fork do NOT license a skewer claim.
+    const skewer = stripUngroundedTacticSentences(
+      'This skewers the king and rook.', EMPTY_CTX, 'It forks two pieces.');
+    expect(skewer.dropped.length).toBe(1);
+  });
+});
