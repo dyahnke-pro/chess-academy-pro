@@ -55,4 +55,31 @@ describe('detectSlip', () => {
     });
     expect(r.isSlip).toBe(false);
   });
+
+  it("playing the engine's own best move is never a slip, whatever the noise says", () => {
+    // David's 2026-08-06 log: Nh4 == engine best, yet 73cp of depth/parity
+    // noise between the before/after reads filed it as "misplaced-piece".
+    const r = detectSlip({
+      inBook: false, playedSan: 'Nh4', bestMoveSan: 'Nh4',
+      evalBeforeCp: 40, evalAfterCp: 40 - SLIP_CP.mistake, learned: true,
+    });
+    expect(r.isSlip).toBe(false);
+  });
+
+  it('best-move guard ignores check/mate suffixes ("Nf3+" == "Nf3")', () => {
+    const r = detectSlip({
+      inBook: false, playedSan: 'Nf3+', bestMoveSan: 'Nf3',
+      evalBeforeCp: 0, evalAfterCp: -SLIP_CP.blunder, learned: true,
+    });
+    expect(r.isSlip).toBe(false);
+  });
+
+  it('a genuinely different worse move still fires with the guard present', () => {
+    const r = detectSlip({
+      inBook: false, playedSan: 'h3', bestMoveSan: 'Nf3',
+      evalBeforeCp: 50, evalAfterCp: 50 - SLIP_CP.blunder, learned: true,
+    });
+    expect(r.isSlip).toBe(true);
+    expect(r.severity).toBe('blunder');
+  });
 });
