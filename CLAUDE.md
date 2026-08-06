@@ -2228,6 +2228,37 @@ Distribution today: **App Store (live)** + TestFlight (internal + external beta
 groups) for pre-release builds. Currently no multi-tenancy and no auth beyond
 optional Supabase cloud sync.
 
+### 🔒🔒 THE VERCEL / WEB APP STAYS PERMANENTLY UNLOCKED — it is a PROMISE to the beta testers, not an oversight (David 2026-08-06, LOCKED).
+
+**`chess-academy-pro.vercel.app` is free and fully open, forever. David told
+the beta testers he would leave it unlocked as a thank-you for testing. NEVER
+gate it.** If you find the web app open and assume the paywall is
+mis-configured — it isn't. That is the intended state.
+
+Web is currently held open by TWO independent conditions, and BOTH must stay
+that way:
+1. `VITE_PAYWALL_ENABLED` is **absent** on Vercel → `gateEnabled` false →
+   `resolveAccess` returns `allow` on its first line.
+2. `billingService.resolvePlatformKey()` has **no web branch** (it reads a key
+   only for `ios` / `android`, and returns `undefined` otherwise) → billing is
+   `unconfigured` → `isPro = true` → allow.
+
+**Do NOT set `VITE_PAYWALL_ENABLED` on Vercel.** It is a no-op *today* (rule 2
+still holds), which is exactly what makes it dangerous: it silently removes one
+of the two protections, so whoever later wires up web billing walls the beta
+testers with no visible connection to the change. It was set on 2026-08-06 for
+about an hour and removed for this reason. Nothing about the freemium gate
+needs it on web.
+
+**THE PAYWALL IS A NATIVE-ONLY SWITCH.** The wall lives on iOS, where the
+RevenueCat key really is baked in (real purchases/trials/renewals prove it).
+Turning it on means setting `VITE_PAYWALL_ENABLED=true` in the **Xcode Cloud**
+workflow environment (App Store Connect UI — the ASC API cannot do it safely;
+see `scripts/ci/asc-workflow-env.mjs`) and cutting a new iOS build, because the
+flag is baked at BUILD time. Before flipping it, check which surface the beta
+testers actually use: the unlock promise covers the **web URL only**, so a
+tester on TestFlight WOULD get walled.
+
 ## Tech Stack (exact versions)
 
 - React 19.2.4 + ReactDOM 19.2.4
