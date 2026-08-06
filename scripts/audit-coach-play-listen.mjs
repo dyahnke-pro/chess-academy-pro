@@ -35,6 +35,7 @@ import { chromium } from 'playwright';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { falseBoardClaims, resolveClaimFen } from './audit-lib/board-claims.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-lib/audit-listener.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -81,6 +82,10 @@ async function main() {
       },
       { url: listener.url, secret: LOCAL_LISTENER_SECRET },
     );
+    // MUTED (G1 lock): the spoken text arrives via the listener's
+    // coach-narration-spoken events; synthesising it would bill for audio
+    // nobody hears. The /api/tts capture leg stays but will be empty.
+    await ctx.addInitScript(muteTtsForAudit);
     const page = await ctx.newPage();
 
     // ── HEAR IT: capture the ACTUAL spoken text from every /api/tts request.
