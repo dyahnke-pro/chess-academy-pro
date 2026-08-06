@@ -45,6 +45,10 @@ interface QueuedEvent {
   props?: Record<string, unknown>;
 }
 const preInitQueue: QueuedEvent[] = [];
+/** Super-properties registered before posthog-js finished its lazy load —
+ *  flushed by the init callback so an early `registerSuperProperties` (the
+ *  App-boot identity chain, an audit run stamp) is never silently lost. */
+const pendingSuperProps: Record<string, unknown> = {};
 /** Exceptions captured before posthog-js loads (boot-time crashes are exactly
  *  what we want to keep) — replayed on load. */
 const preInitExceptions: Array<{ error: unknown; props?: Record<string, unknown> }> = [];
@@ -348,6 +352,14 @@ export function initAnalytics(opts?: { optedOut?: boolean }): void {
         const platformProps = resolvePlatformSuperProps();
         posthog.register(platformProps);
         posthog.setPersonProperties(platformProps);
+        // Anything registered while the library was still loading — the
+        // identity chain frequently wins that race. Registered before the
+        // app_session_started capture below so even the first event carries
+        // device_id / is_internal / audit_run_id.
+        if (Object.keys(pendingSuperProps).length > 0) {
+          posthog.register({ ...pendingSuperProps });
+          posthog.setPersonProperties({ ...pendingSuperProps });
+        }
       } catch {
         /* swallow — never let tagging break init */
       }
@@ -531,7 +543,16 @@ function crashFromAudit(entry: AuditEntry): Error {
  */
 export function registerSuperProperties(props: Record<string, unknown>): void {
   try {
-    if (!client || optedOut) return;
+    if (optedOut) return;
+    // posthog-js loads LAZILY — `client` lands in the import's .then, and the
+    // App-boot identity chain (device_id / is_internal / audit_run_id) often
+    // resolves first. Returning here silently LOST those registrations: the
+    // 2026-08-06 pipe probe stamped an audit_run_id that reached no event and
+    // never entered the taxonomy. Queue instead; the init callback flushes.
+    if (!client) {
+      if (initStarted) Object.assign(pendingSuperProps, props);
+      return;
+    }
     client.register(props);
     client.setPersonProperties(props);
   } catch {
