@@ -2934,7 +2934,21 @@ export function buildLineFactsBlock(openingName?: string): string {
       const bits = [`${side}'s ${PUNISH_PIECE_WORD[m.piece]} goes to ${m.to}`];
       if (m.captured) bits.push(`capturing the ${PUNISH_PIECE_WORD[m.captured]}`);
       if (m.san.includes('+')) bits.push('with check');
-      facts.push(`  ${Math.floor(i / 2) + 1}${m.color === 'w' ? '.' : '…'} ${m.san} — ${bits.join(', ')}`);
+      // What the landed piece now EYES — the control vocabulary concepts
+      // prose actually needs ("the knight eyes f4 and g5"). Without it the
+      // model invents control claims; measured on the first probe (13
+      // concepts drops survived landing-facts alone).
+      if (m.piece !== 'p' && m.piece !== 'k') {
+        try {
+          const parts = c.fen().split(' ');
+          parts[1] = m.color;
+          parts[3] = '-';
+          const view = new Chess(parts.join(' '));
+          const eyes = [...new Set(view.moves({ square: m.to, verbose: true }).map((x) => x.to))].slice(0, 8);
+          if (eyes.length > 0) bits.push(`from ${m.to} it eyes ${eyes.join(', ')}`);
+        } catch { /* reachability read optional */ }
+      }
+      facts.push(`  ${Math.floor(i / 2) + 1}${m.color === 'w' ? '.' : '…'} ${m.san} — ${bits.join('; ')}`);
     }
     if (facts.length === 0) return '';
     return `
@@ -2942,7 +2956,7 @@ export function buildLineFactsBlock(openingName?: string): string {
 LINE FACTS (computed by code — the ONLY piece/square claims you may make):
 ${facts.join('\n')}
 
-Any claim about WHERE a piece stands, what it captures, or what square it occupies must come from the LINE FACTS above. Ideas, plans and principles may draw on the teaching/book context, but never invent a piece-on-square fact that is not listed.`;
+Any claim about WHERE a piece stands, what it captures or attacks, or what square it occupies or eyes must come from the LINE FACTS above. Ideas, plans and principles may draw on the teaching/book context, but never invent a piece-on-square or control claim that is not listed. Do NOT assert who stands better or any evaluation — no engine eval is provided here.`;
   } catch {
     return '';
   }

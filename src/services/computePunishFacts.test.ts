@@ -49,6 +49,19 @@ describe('buildLineFactsBlock is board-true', () => {
       expect(mv, `line "${line.trim()}" did not replay`).toBeTruthy();
       expect(mv.to).toBe(m[4]);
       expect(NAME2SYM[m[3]]).toBe(mv.piece);
+      // Every "eyes" square must be a genuine move-target of the landed
+      // piece — the control claims are facts, not decoration.
+      const eyes = line.match(/from ([a-h][1-8]) it eyes ([a-h1-8, ]+)/);
+      if (eyes) {
+        const parts = c.fen().split(' ');
+        parts[1] = mv.color;
+        parts[3] = '-';
+        const view = new Chess(parts.join(' '));
+        const targets = new Set(view.moves({ square: eyes[1] as Square, verbose: true }).map((x) => x.to));
+        for (const sq of eyes[2].split(',').map((s) => s.trim()).filter(Boolean)) {
+          expect(targets.has(sq as Square), `"${sq}" is not reachable from ${eyes[1]}`).toBe(true);
+        }
+      }
     }
     expect(c.history().length).toBeGreaterThan(2);
   });
