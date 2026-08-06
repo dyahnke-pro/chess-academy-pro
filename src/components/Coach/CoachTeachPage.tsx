@@ -3698,7 +3698,7 @@ export function CoachTeachPage(): JSX.Element {
       // the only gate between the brain and the voice, so it must ENFORCE, not
       // just audit. Guarded so it never silences a turn on a fault.
       try {
-        const tac = stripUngroundedTacticSentences(grounded, fedTacticsRef.current ?? tacticsForAsk);
+        const tac = stripUngroundedTacticSentences(grounded, fedTacticsRef.current ?? tacticsForAsk, opts?.coachReplyFact);
         if (tac.dropped.length > 0) {
           grounded = tac.clean;
           void logAppAudit({
@@ -4409,8 +4409,15 @@ export function CoachTeachPage(): JSX.Element {
         // brief-cap in voiceService.speakInternal still clips them to ≤2 sentences
         // on 'brief', so 'full' hears the whole answer and 'brief' hears the gist.
         // Long free-form prose (> ~600 chars) still falls back to the first
-        // sentence so a rambling brain turn isn't read out wholesale.
-        const speakText = finalText.length > 0 && finalText.length <= 600
+        // sentence so a rambling brain turn isn't read out wholesale — EXCEPT on
+        // a MOVE-NARRATION turn: the warm reply IS the spoken lesson (voiceFacts
+        // built it to be heard), and the 600-char cap was cutting it to its intro
+        // sentence on every move of David's 2026-08-06 session ("the last
+        // narration was about to say magic! But then it never did"). Learn is
+        // the coach talking you THROUGH the game — speak the whole thing; the
+        // G5 verbosity contract still governs (brief clips, silent stays silent).
+        const moveNarrationTurn = isStepByStepReport || opts?.coachReplyPlayed !== undefined;
+        const speakText = finalText.length > 0 && (finalText.length <= 600 || moveNarrationTurn)
           ? finalText.trim()
           : firstSentence;
         if (speakText) {
@@ -4471,7 +4478,11 @@ export function CoachTeachPage(): JSX.Element {
       // in the context is never touched. Mirrors the shared groundCoachReply
       // gate so there is one tactic-grounding standard.
       try {
-        const ft = stripUngroundedTacticSentences(finalText, fedTacticsRef.current ?? tacticsForAsk);
+        // The reply-fact bundle licenses its own tactic vocabulary — the facts
+        // are code (explainBestMoveGrounded), so the model echoing them is
+        // grounded by construction. Without this the gate stripped David's
+        // TRUE "b5 forks the knight on a4 and the bishop on c4" (2026-08-06).
+        const ft = stripUngroundedTacticSentences(finalText, fedTacticsRef.current ?? tacticsForAsk, opts?.coachReplyFact);
         if (ft.dropped.length > 0) {
           finalText = ft.clean;
           void logAppAudit({
@@ -4912,7 +4923,10 @@ export function CoachTeachPage(): JSX.Element {
                 // 3. Why it's strong — material/check judgment (no-LLM grounded "why").
                 const coachColor: 'white' | 'black' = playerColor === 'white' ? 'black' : 'white';
                 const why = explainBestMoveGrounded(move.fen, null, `${m.from}${m.to}${m.promotion ?? ''}`, coachColor);
-                if (why) facts.push(`Why it's strong: ${why}.`);
+                // Trim a trailing period before adding ours — "eyeing f5.."
+                // split the downstream sentence streamer mid-parenthesis and
+                // Ruth spoke a bare "3 points)." fragment (2026-08-06).
+                if (why) facts.push(`Why it's strong: ${why.replace(/\.+$/, '')}.`);
                 // 4. REAL tactics + loose pieces in the resulting position (student
                 //    to move) — the true fork/pin/threat, so the coach narrates the
                 //    ACTUAL tactic instead of inventing one (the validators were
