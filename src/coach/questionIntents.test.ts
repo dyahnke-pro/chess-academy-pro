@@ -980,6 +980,11 @@ describe('isCandidateMoveQuestion / extractCandidateSan (Bug 2, David 2026-07-10
     'should I play O-O',
     'does Ng5 work',
     'is a3 playable',
+    // The literal whatif — the canonical phrasing the list never carried
+    // (caught 2026-08-06 re-verifying the inversion inventory).
+    'what if I play Nf3?',
+    'what happens if I take exd5',
+    'what happens after Bc4',
   ])('matches a NAMED-move soundness ask: %s', (q) => {
     expect(isCandidateMoveQuestion(q)).toBe(true);
   });
