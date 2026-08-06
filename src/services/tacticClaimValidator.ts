@@ -67,6 +67,13 @@ const TACTIC_VOCABULARY: Array<{
     patterns: [/\btrapped piece\b/i, /\bpiece is trapped\b/i],
   },
   {
+    // The 2026-08-06 detector expansion made mate threats first-class —
+    // without this entry the gate would strip the coach saying "there's a
+    // mate here" at the exact moment it matters most.
+    type: 'mate_threat',
+    patterns: [/\bcheckmate\b/i, /\bmate[- ](?:threat|in one|in 1)\b/i, /\bmating\b/i],
+  },
+  {
     type: 'hanging',
     patterns: [/\bhanging piece\b/i, /\bhanging (?:pawn|knight|bishop|rook|queen)\b/i, /\bis hanging\b/i],
   },

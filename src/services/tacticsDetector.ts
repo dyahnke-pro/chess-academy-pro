@@ -136,6 +136,7 @@ function findForks(chess: Chess): TacticPattern[] {
         );
         forks.push({
           type: 'fork',
+          beneficiary: piece.color,
           involvedSquares: [sq, ...targets.map((t) => t.square)],
           description: `${capitalize(forkerName)} on ${sq} forks ${targetDescs.join(' and ')}`,
         });
@@ -183,6 +184,7 @@ function findPins(chess: Chess): TacticPattern[] {
         ) {
           pins.push({
             type: 'pin',
+            beneficiary: piece.color,
             involvedSquares: [sq, first.square, second.square],
             description: `${capitalize(PIECE_NAMES[piece.type] ?? piece.type)} on ${sq} pins ${PIECE_NAMES[first.type] ?? first.type} on ${first.square} against ${PIECE_NAMES[second.type] ?? second.type} on ${second.square}`,
           });
@@ -232,6 +234,7 @@ function findSkewers(chess: Chess): TacticPattern[] {
         ) {
           skewers.push({
             type: 'skewer',
+            beneficiary: piece.color,
             involvedSquares: [sq, first.square, second.square],
             description: `${capitalize(PIECE_NAMES[piece.type] ?? piece.type)} on ${sq} skewers ${PIECE_NAMES[first.type] ?? first.type} on ${first.square} with ${PIECE_NAMES[second.type] ?? second.type} on ${second.square} behind it`,
           });
@@ -241,6 +244,217 @@ function findSkewers(chess: Chess): TacticPattern[] {
   }
 
   return skewers;
+}
+
+// ─── Expanded geometries (David 2026-08-06: "expansive across many tactics
+// and fundamentals", not just the video's three). Same discipline as the
+// original three: pure chess.js, conservative thresholds, a pattern is only
+// reported when it is PLAINLY on the board — a detector that cries wolf gets
+// tuned out, which is worse than a narrow one. Every pattern carries its
+// beneficiary so playCommentary can speak the student's tactics without
+// handing over the opponent's. ────────────────────────────────────────────
+
+/** With `color` to move in `chess`'s position regardless of whose turn the
+ *  FEN says it is. Null when the position won't re-parse (rare edge FENs). */
+function withTurn(chess: Chess, color: Color): Chess | null {
+  const parts = chess.fen().split(' ');
+  parts[1] = color;
+  parts[3] = '-'; // an en-passant square for the other side breaks parsing
+  try { return new Chess(parts.join(' ')); } catch { return null; }
+}
+
+/** MATE THREAT: `color` has mate-in-1 available right now. The strongest
+ *  possible "something is here" — and the one the old detector missed
+ *  entirely, so the coach could name a fork while ignoring a mate. */
+function findMateThreats(chess: Chess): TacticPattern[] {
+  const out: TacticPattern[] = [];
+  for (const color of ['w', 'b'] as Color[]) {
+    const probe = withTurn(chess, color);
+    if (!probe || probe.isCheck()) continue; // in-check positions: not a quiet threat
+    const mate = probe.moves({ verbose: true }).find((m) => m.san.includes('#'));
+    if (mate) {
+      out.push({
+        type: 'mate_threat',
+        beneficiary: color,
+        involvedSquares: [mate.from, mate.to],
+        description: `${color === 'w' ? 'White' : 'Black'} has a checkmate available from ${mate.from}`,
+      });
+    }
+  }
+  return out;
+}
+
+/** BACK-RANK WEAKNESS: a king sitting on its home rank with no luft while an
+ *  enemy heavy piece can legally land on that rank WITH CHECK. Requiring the
+ *  actual checking move keeps this a live weakness, not decor. */
+function findBackRankWeakness(chess: Chess): TacticPattern[] {
+  const out: TacticPattern[] = [];
+  const board = chess.board();
+  for (const color of ['w', 'b'] as Color[]) {
+    const rank = color === 'w' ? 1 : 8;
+    let kingSq: Square | null = null;
+    for (const row of board) {
+      for (const p of row) {
+        if (p && p.type === 'k' && p.color === color && rankOfSquare(p.square) === rank) kingSq = p.square;
+      }
+    }
+    if (!kingSq) continue;
+    // No luft: every square directly in front of the king (and diagonals
+    // forward) is blocked by a friendly piece or off-board.
+    const [kf] = squareToCoords(kingSq);
+    const forward = color === 'w' ? 1 : -1;
+    let luft = false;
+    for (const df of [-1, 0, 1]) {
+      const sq = coordsToSquare(kf + df, (rank - 1) + forward);
+      if (!sq) continue;
+      const occ = chess.get(sq);
+      if (!occ || occ.color !== color) { luft = true; break; }
+    }
+    if (luft) continue;
+    // An enemy heavy can check on the home rank right now.
+    const enemy: Color = color === 'w' ? 'b' : 'w';
+    const probe = withTurn(chess, enemy);
+    if (!probe) continue;
+    const invader = probe.moves({ verbose: true }).find((m) =>
+      (m.piece === 'r' || m.piece === 'q') && rankOfSquare(m.to) === rank && m.san.includes('+'));
+    if (invader) {
+      out.push({
+        type: 'back_rank',
+        beneficiary: enemy,
+        involvedSquares: [kingSq, invader.to, invader.from],
+        description: `${color === 'w' ? "White's" : "Black's"} king on ${kingSq} has no escape square and the back rank can be invaded from ${invader.from}`,
+      });
+    }
+  }
+  return out;
+}
+
+/** TRAPPED PIECE: a knight-or-better piece that is ATTACKED and has no move
+ *  to a square that isn't attacked by a CHEAPER enemy piece. Defended-but-
+ *  cornered — the class `findHangingPieces` (undefended only) cannot see. */
+function findTrappedPieces(chess: Chess): TacticPattern[] {
+  const out: TacticPattern[] = [];
+  const board = chess.board();
+  for (const row of board) {
+    for (const p of row) {
+      if (!p || p.type === 'k' || p.type === 'p') continue;
+      const sq = p.square;
+      const enemy: Color = p.color === 'w' ? 'b' : 'w';
+      // Must be under attack to be "trapped" rather than merely passive.
+      const enemyView = withTurn(chess, enemy);
+      if (!enemyView?.isAttacked(sq, enemy)) continue;
+      const myView = withTurn(chess, p.color);
+      if (!myView) continue;
+      const escapes = myView.moves({ square: sq, verbose: true });
+      const hasSafeSquare = escapes.some((m) => {
+        try {
+          const after = new Chess(myView.fen());
+          after.move({ from: m.from, to: m.to, promotion: 'q' });
+          // Safe = not attackable by a piece CHEAPER than the runner.
+          const attackers = attackersOfSquare(after, m.to, enemy);
+          return !attackers.some((a) => PIECE_VALUE[a] < PIECE_VALUE[p.type]);
+        } catch { return true; }
+      });
+      if (!hasSafeSquare && escapes.length >= 0) {
+        out.push({
+          type: 'trapped_piece',
+          beneficiary: enemy,
+          involvedSquares: [sq],
+          description: `The ${PIECE_NAMES[p.type]} on ${sq} is attacked and has no safe square — it is trapped`,
+        });
+      }
+    }
+  }
+  return out;
+}
+
+/** Piece types of `by` currently attacking `sq`. */
+function attackersOfSquare(chess: Chess, sq: Square, by: Color): PieceSymbol[] {
+  const probe = withTurn(chess, by);
+  if (!probe) return [];
+  return probe.moves({ verbose: true })
+    .filter((m) => m.to === sq)
+    .map((m) => m.piece);
+}
+
+/** DISCOVERED ATTACK available: a piece standing between a friendly line
+ *  piece and an enemy ROOK-OR-BETTER target (or king), where the blocker has
+ *  at least one move off the ray. Conservative: minor targets excluded — a
+ *  discovered hit on a bishop is rarely worth the interruption. */
+function findDiscoveredAttacks(chess: Chess): TacticPattern[] {
+  const out: TacticPattern[] = [];
+  const board = chess.board();
+  for (const row of board) {
+    for (const p of row) {
+      if (!p) continue;
+      if (p.type !== 'b' && p.type !== 'r' && p.type !== 'q') continue;
+      const sq = p.square;
+      const dirs = p.type === 'b' ? BISHOP_DIRS : p.type === 'r' ? ROOK_DIRS : [...BISHOP_DIRS, ...ROOK_DIRS];
+      for (const dir of dirs) {
+        const ray = traceRay(chess, sq, dir);
+        if (ray.length < 2) continue;
+        const [blocker, target] = ray;
+        if (blocker.color !== p.color) continue;
+        if (target.color === p.color) continue;
+        if (target.type !== 'r' && target.type !== 'q' && target.type !== 'k') continue;
+        // WITH TEMPO, or it isn't worth a word: the blocker must have a move
+        // that itself checks or wins a piece while unveiling. The bare
+        // "something stands between two pieces" shape fired on 16% of real
+        // opening plies (measured 2026-08-06, 1,310 plies) — decor, not a
+        // tactic. With the tempo requirement a discovery is an event.
+        const myView = withTurn(chess, p.color);
+        if (!myView) continue;
+        const withTempo = myView.moves({ square: blocker.square, verbose: true }).some((m) =>
+          m.san.includes('+') || m.san.includes('#') ||
+          (m.captured !== undefined && PIECE_VALUE[m.captured] >= 3));
+        if (!withTempo) continue;
+        out.push({
+          type: 'discovery',
+          beneficiary: p.color,
+          involvedSquares: [blocker.square, sq, target.square],
+          description: `Moving the ${PIECE_NAMES[blocker.type]} on ${blocker.square} would unveil the ${PIECE_NAMES[p.type]} on ${sq} against the ${PIECE_NAMES[target.type]} on ${target.square}`,
+        });
+      }
+    }
+  }
+  return out;
+}
+
+/** REMOVAL OF THE GUARD: an enemy piece we can capture whose job is defending
+ *  an attacked knight-or-better target that has NO other defender. Capturing
+ *  the guard wins the guarded piece. */
+function findRemovableGuards(chess: Chess): TacticPattern[] {
+  const out: TacticPattern[] = [];
+  const board = chess.board();
+  for (const color of ['w', 'b'] as Color[]) {
+    const enemy: Color = color === 'w' ? 'b' : 'w';
+    for (const row of board) {
+      for (const t of row) {
+        if (!t || t.color !== enemy || t.type === 'k' || PIECE_VALUE[t.type] < 3) continue;
+        const targetSq = t.square;
+        // We attack the target; it has exactly one defender; we can take that defender.
+        if (attackersOfSquare(chess, targetSq, color).length === 0) continue;
+        // `attackers()` (not `moves()`) — a defender of an own-occupied
+        // square has no MOVE there, so a move-based scan sees zero defenders
+        // everywhere and this detector never fires.
+        const defenders = chess.attackers(targetSq, enemy).filter((d) => d !== targetSq);
+        if (defenders.length !== 1) continue;
+        const guardSq = defenders[0];
+        if (attackersOfSquare(chess, guardSq, color).length === 0) continue;
+        out.push({
+          type: 'removal_of_guard',
+          beneficiary: color,
+          involvedSquares: [guardSq, targetSq],
+          description: `The ${PIECE_NAMES[chess.get(guardSq)?.type ?? 'p']} on ${guardSq} is the only defender of the ${PIECE_NAMES[t.type]} on ${targetSq} — and it can be taken`,
+        });
+      }
+    }
+  }
+  return out;
+}
+
+function rankOfSquare(sq: string): number {
+  return Number(sq[1]);
 }
 
 // ─── Main Detection Function ────────────────────────────────────────────────
@@ -261,7 +475,18 @@ export function detectTactics(fen: string): TacticsDetectionResult {
     const forks = findForks(chess);
     const pins = findPins(chess);
     const skewers = findSkewers(chess);
-    const tactics = [...forks, ...pins, ...skewers];
+    // The 2026-08-06 expansion — mate threats FIRST so a mate is never
+    // shadowed by a mere fork in consumers that read tactics[0].
+    const tactics = [
+      ...findMateThreats(chess),
+      ...forks,
+      ...pins,
+      ...skewers,
+      ...findDiscoveredAttacks(chess),
+      ...findBackRankWeakness(chess),
+      ...findTrappedPieces(chess),
+      ...findRemovableGuards(chess),
+    ];
 
     // Build highlights — hanging pieces first, then tactic squares
     const highlights: BoardHighlight[] = [];
