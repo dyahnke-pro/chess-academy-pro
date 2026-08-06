@@ -300,7 +300,18 @@ export function App(): JSX.Element {
         // event carries them, and posthog persists them across sessions.
         void applyInternalFromUrl()
           .then(() => resolveDeviceIdentity())
-          .then((identity) => registerSuperProperties({ ...identity }))
+          .then((identity) => {
+            // AUDIT RUN CORRELATION (David 2026-08-06: "pull the narrations
+            // from posthog instead of listener tool"). A Playwright driver
+            // stamps localStorage.auditRunId next to auditMuteTts; riding it
+            // as a super-property makes one run's events isolable in PostHog
+            // (`WHERE properties.audit_run_id = '<id>'`) instead of guessed
+            // from $session_id + wall clock. Absent for every real user —
+            // registering nothing in that case.
+            let auditRunId: string | null = null;
+            try { auditRunId = globalThis.localStorage?.getItem('auditRunId'); } catch { /* locked-down context */ }
+            registerSuperProperties({ ...identity, ...(auditRunId ? { audit_run_id: auditRunId } : {}) });
+          })
           .catch(() => undefined);
 
         // Hydrate the free-tier ledger (puzzle bucket / free opening / kid
