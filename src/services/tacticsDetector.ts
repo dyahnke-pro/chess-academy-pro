@@ -440,7 +440,15 @@ function findRemovableGuards(chess: Chess): TacticPattern[] {
         const defenders = chess.attackers(targetSq, enemy).filter((d) => d !== targetSq);
         if (defenders.length !== 1) continue;
         const guardSq = defenders[0];
-        if (attackersOfSquare(chess, guardSq, color).length === 0) continue;
+        const takers = attackersOfSquare(chess, guardSq, color);
+        if (takers.length === 0) continue;
+        // Taking a DEFENDED guard with a pricier piece is a losing trade, not
+        // a removal — a pawn guard covered by another pawn is not removable
+        // by a knight. Undefended guards are removable by anything.
+        const guardVal = PIECE_VALUE[chess.get(guardSq)?.type ?? 'p'];
+        const guardIsDefended = chess.attackers(guardSq, enemy).some((d) => d !== guardSq);
+        const cheapestTaker = Math.min(...takers.map((p) => PIECE_VALUE[p]));
+        if (guardIsDefended && cheapestTaker > guardVal) continue;
         out.push({
           type: 'removal_of_guard',
           beneficiary: color,

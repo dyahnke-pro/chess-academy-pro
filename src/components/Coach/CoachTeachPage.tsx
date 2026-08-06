@@ -5029,7 +5029,13 @@ export function CoachTeachPage(): JSX.Element {
                 // computed; the model only phrases it).
                 try {
                   const beat = buildPlayCommentary({ fen: probe.fen(), studentColor: playerColor });
-                  if (beat?.kind === 'trade-the-best-piece') {
+                  // 'tactic' beats are deliberately dropped here — tacticsFacts
+                  // above already speaks the side-attributed tactic library, and
+                  // one position must never be narrated twice. The seeding
+                  // observation (the speedrun's opening beat — "there is an
+                  // alignment of the rooks") and the trade beat have no other
+                  // voice, so they ride through.
+                  if (beat && (beat.kind === 'trade-the-best-piece' || beat.kind === 'seeding-observation')) {
                     facts.push(...beat.facts);
                   }
                 } catch { /* commentary is a bonus, never a blocker */ }

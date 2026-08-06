@@ -17,7 +17,11 @@ import { Chess } from 'chess.js';
 import type { Square } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
 
-export type CommentaryKind = 'tactic' | 'trade-the-best-piece' | 'improving-move';
+export type CommentaryKind =
+  | 'tactic'
+  | 'seeding-observation'
+  | 'trade-the-best-piece'
+  | 'improving-move';
 
 export interface PlayCommentary {
   kind: CommentaryKind;
@@ -104,6 +108,85 @@ function opponentsBestPiece(
 }
 
 /**
+ * The video's opening beat — "there is an alignment of the Rooks…". Two big
+ * enemy pieces sharing a line the student owns a matching slider for. Not a
+ * tactic yet: the NOTICING that precedes one, which is the first thing he
+ * teaches students to see.
+ *
+ * Deliberately conservative, because king+queen share a rank in every game
+ * ever played: only king+queen and queen+rook pairs count, the shared rank
+ * must not be the opponent's home rank (that is the back-rank detector's
+ * lesson), the two pieces must have at most one piece between them, and the
+ * student must own a slider that moves along that geometry.
+ */
+function findAlignmentSeed(
+  all: Piece[],
+  me: 'w' | 'b',
+  them: 'w' | 'b',
+): { what: string; line: string; tool: string } | null {
+  const bigs = all.filter(
+    (p) => p.color === them && (p.type === 'k' || p.type === 'q' || p.type === 'r'),
+  );
+  const homeRank = them === 'w' ? 1 : 8;
+  const occupied = new Set(all.map((p) => p.square));
+
+  const betweenCount = (a: Piece, b: Piece): number => {
+    const df = Math.sign(fileOf(b.square) - fileOf(a.square));
+    const dr = Math.sign(rankOf(b.square) - rankOf(a.square));
+    let f = fileOf(a.square) + df;
+    let r = rankOf(a.square) + dr;
+    let n = 0;
+    while (f !== fileOf(b.square) || r !== rankOf(b.square)) {
+      if (occupied.has(`${String.fromCharCode(97 + f)}${r}`)) n += 1;
+      f += df;
+      r += dr;
+    }
+    return n;
+  };
+
+  const myTool = (kinds: string[]): string | null => {
+    for (const k of kinds) {
+      if (all.some((p) => p.color === me && p.type === k)) return NAME[k];
+    }
+    return null;
+  };
+
+  for (let i = 0; i < bigs.length; i++) {
+    for (let j = i + 1; j < bigs.length; j++) {
+      const a = bigs[i];
+      const b = bigs[j];
+      const pair = [a.type, b.type].sort().join('');
+      if (pair !== 'kq' && pair !== 'qr') continue;
+      const df = fileOf(b.square) - fileOf(a.square);
+      const dr = rankOf(b.square) - rankOf(a.square);
+      // Adjacent pieces are a huddle, not an alignment worth a word.
+      if (Math.max(Math.abs(df), Math.abs(dr)) < 2) continue;
+
+      let line: string | null = null;
+      let tool: string | null = null;
+      if (df === 0) {
+        line = `${a.square[0]}-file`;
+        tool = myTool(['r', 'q']);
+      } else if (dr === 0 && rankOf(a.square) !== homeRank) {
+        line = `${rankOf(a.square)}th rank`.replace(/^1th/, '1st').replace(/^2th/, '2nd').replace(/^3th/, '3rd');
+        tool = myTool(['r', 'q']);
+      } else if (Math.abs(df) === Math.abs(dr)) {
+        line = 'diagonal';
+        tool = myTool(['b', 'q']);
+      }
+      if (!line || !tool) continue;
+      if (betweenCount(a, b) > 1) continue;
+      return {
+        what: `${NAME[a.type]} on ${a.square} and ${NAME[b.type]} on ${b.square}`,
+        line,
+        tool,
+      };
+    }
+  }
+  return null;
+}
+
+/**
  * The running commentary for the position the student is about to move in.
  *
  * Priority is the coach's: a tactic on the board beats a plan, and a plan beats
@@ -145,7 +228,38 @@ export function buildPlayCommentary(args: {
   // opponent's game plan to the student's ears mid-game.
   try {
     const t = detectTactics(args.fen);
-    const theirHanging = t.hangingPieces.filter((h) => h.color === them);
+    // The 2026-08-06 expansion put a beneficiary on every pattern, so the
+    // full tactic library speaks here — the STUDENT'S OWN tactics only
+    // (naming the opponent's would hand their plan over). Mate outranks
+    // everything; the detector already orders mate_threat first.
+    const EVENT_ORDER: Record<string, number> = {
+      mate_threat: 0, fork: 1, trapped_piece: 2, removal_of_guard: 3, back_rank: 4, discovery: 5,
+    };
+    const mine = t.tactics
+      .filter((tac) => tac.beneficiary === me && tac.type in EVENT_ORDER)
+      .sort((a, b) => (EVENT_ORDER[a.type] ?? 9) - (EVENT_ORDER[b.type] ?? 9));
+    if (mine.length > 0) {
+      const tac = mine[0];
+      if (tac.type === 'mate_threat') {
+        return {
+          kind: 'tactic',
+          facts: [
+            'MATE IS ON THE BOARD for the student. Say plainly that a checkmate is available right now and they should look for the forcing move. Do NOT name the move or the square.',
+          ],
+        };
+      }
+      return {
+        kind: 'tactic',
+        facts: [
+          `TACTIC ON THE BOARD for the student: ${tac.description}. Name the PATTERN and why the geometry works. Do NOT name the winning move — let them find it.`,
+        ],
+      };
+    }
+    // Pieces only — a "hanging" PAWN on a repertoire line is usually the
+    // gambit itself (measured: 7.9% of theory plies have a pawn en prise,
+    // 3.3% a real piece). Narrating every loose pawn is the tuned-out
+    // failure, and calling a gambit pawn a tactic-seed is wrong teaching.
+    const theirHanging = t.hangingPieces.filter((h) => h.color === them && h.piece !== 'p');
     if (theirHanging.length > 0) {
       const h = theirHanging[0];
       return {
@@ -156,6 +270,20 @@ export function buildPlayCommentary(args: {
       };
     }
   } catch { /* the detector is a bonus, never a blocker */ }
+
+  // ── 1.5 THE SEEDING OBSERVATION — the video's opening beat ("there is an
+  // alignment of the Rooks…"): two big enemy pieces sharing a line the
+  // student owns a matching slider for. Not a tactic yet — the NOTICING that
+  // precedes one, which is exactly what he teaches students to see first.
+  const seed = findAlignmentSeed(all, me, them);
+  if (seed) {
+    return {
+      kind: 'seeding-observation',
+      facts: [
+        `ALIGNMENT: the opponent's ${seed.what} line up on the same ${seed.line}. The student owns a ${seed.tool} that moves along that geometry. Point out the alignment as something worth noticing — nothing more. Do NOT suggest a move.`,
+      ],
+    };
+  }
 
   // ── 2. TRADE OFF THEIR BEST PIECE. Only when the trade is actually
   // available on this move — otherwise it is advice about a different position.
@@ -185,7 +313,7 @@ export function buildPlayCommentary(args: {
       try {
         const probe = new Chess(args.fen);
         const m = probe.move({ from, to: args.bestUci.slice(2, 4) as Square, promotion: 'q' });
-        return !!m && !m.captured && !probe.isCheck();
+        return !m.captured && !probe.isCheck();
       } catch {
         return false;
       }
