@@ -187,6 +187,30 @@ function findAlignmentSeed(
 }
 
 /**
+ * THE INSTANT REPLY LINE — the ≤1-second voice (David 2026-08-06: "Down to
+ * one second after moving"). The warm LLM beat takes seconds to generate, so
+ * the moment the coach's reply lands on the board, this deterministic line is
+ * spoken first: the move + its mechanics, all from chess.js. A capture or
+ * check carries its own emphasis, so important replies are never silent while
+ * the teaching catches up. The SAN is left raw — sanitizeForTTS expands it
+ * into natural speech ("knight to a5") on the way to the voice.
+ */
+export function buildInstantReplyLine(m: {
+  san: string;
+  captured?: string;
+  isCheckmate: boolean;
+  isCheck: boolean;
+}): string {
+  const capturedName = m.captured ? (NAME[m.captured] ?? 'piece') : null;
+  const move = m.san.replace(/[+#]$/, '');
+  if (m.isCheckmate) return `${move} — checkmate.`;
+  if (capturedName && m.isCheck) return `${move} — taking your ${capturedName}, with check.`;
+  if (capturedName) return `${move} — taking your ${capturedName}.`;
+  if (m.isCheck) return `${move} — check.`;
+  return `${move}.`;
+}
+
+/**
  * THE REJECTED TEMPTING MOVE — the speedrun beat "if you play the tempting
  * Knight to c5, Black can push e5". Deterministic: the tempting candidate is
  * a CAPTURE or CHECK the engine's multipv scored ≥1.5 pawns worse than the

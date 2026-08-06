@@ -3,7 +3,7 @@
 // nothing (the locked voice law: speak when it instructs).
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst } from './playCommentary';
+import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine } from './playCommentary';
 
 describe('buildPlayCommentary', () => {
   it('names the opponent knight on an unchallengeable outpost when the trade is available', () => {
@@ -148,5 +148,43 @@ describe('buildPriorityFirst', () => {
     // Black's d5 has a c6 neighbour — connected, not weak. Same knight jump.
     const fen = '6k1/pp3ppp/2p5/3p4/8/8/PP1N1PPP/1N4K1 w - - 0 20';
     expect(buildPriorityFirst({ fen, studentColor: 'white', bestUci: 'b1c3' })).toBeNull();
+  });
+});
+
+describe('buildInstantReplyLine', () => {
+  it('a quiet move is just the move', () => {
+    expect(buildInstantReplyLine({ san: 'Nf3', isCheckmate: false, isCheck: false }))
+      .toBe('Nf3.');
+  });
+
+  it('a capture names the victim from chess.js, never invented', () => {
+    expect(buildInstantReplyLine({ san: 'Bxc6', captured: 'n', isCheckmate: false, isCheck: false }))
+      .toBe('Bxc6 — taking your knight.');
+  });
+
+  it('check and capture-with-check carry their own emphasis', () => {
+    expect(buildInstantReplyLine({ san: 'Qh5+', isCheckmate: false, isCheck: true }))
+      .toBe('Qh5 — check.');
+    expect(buildInstantReplyLine({ san: 'Qxf7+', captured: 'p', isCheckmate: false, isCheck: true }))
+      .toBe('Qxf7 — taking your pawn, with check.');
+  });
+
+  it('checkmate outranks everything', () => {
+    expect(buildInstantReplyLine({ san: 'Qxf7#', captured: 'p', isCheckmate: true, isCheck: true }))
+      .toBe('Qxf7 — checkmate.');
+  });
+
+  it('the whole flow from a real board — chess.js fields feed it directly', () => {
+    // Scholar's mate final position: Qxf7# captures a pawn and mates.
+    const c = new Chess('r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 4 4');
+    const m = c.move('Qxf7');
+    expect(m).toBeTruthy();
+    const line = buildInstantReplyLine({
+      san: m.san,
+      captured: m.captured,
+      isCheckmate: c.isCheckmate(),
+      isCheck: c.isCheck(),
+    });
+    expect(line).toBe('Qxf7 — checkmate.');
   });
 });
