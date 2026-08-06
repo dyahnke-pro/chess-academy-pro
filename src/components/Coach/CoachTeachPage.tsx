@@ -19,7 +19,7 @@ import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
-import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst } from '../../services/playCommentary';
+import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine } from '../../services/playCommentary';
 
 // Walkthrough arrows/highlights render through the SAME react-chessboard
 // pipeline the opening tab's LessonPlayer uses — identical palette, identical
@@ -1700,6 +1700,13 @@ export function CoachTeachPage(): JSX.Element {
        *  queen"). Handed in so the LLM narrates the REAL capture, never an
        *  invented one. */
       coachReplyFact?: string;
+      /** The deterministic instant reply line (`buildInstantReplyLine`) was
+       *  ALREADY spoken the moment the coach's move landed on the board —
+       *  the ≤1s voice (David 2026-08-06: "Down to one second after
+       *  moving"). handleSubmit must NOT stop it or reset the speech chain;
+       *  the warm [VOICE:] beat chains after it instead of cutting it
+       *  mid-word. */
+      instantLineSpoken?: boolean;
       /** The caller ALREADY KNOWS this is a teach request and `text` is a
        *  canonical opening name it resolved from the DB — a "Deep dive"
        *  tile, not something the student typed. Skips the free-text intent
@@ -3580,8 +3587,16 @@ export function CoachTeachPage(): JSX.Element {
     if (turnAbortRefRef.current) {
       turnAbortRefRef.current.aborted = true;
     }
-    voiceService.stop();
-    speechChainRef.current = Promise.resolve();
+    // The instant reply line ("Nf3 — taking your knight.") is speaking RIGHT
+    // NOW on engine-driven step turns — it started the moment the coach's
+    // move landed, seconds before this call. Stopping it here would cut it
+    // mid-word (the "about to say magic! But then it never did" class), so
+    // those turns keep the existing chain and the warm beat queues AFTER it.
+    // Every other turn starts clean as before.
+    if (!opts?.instantLineSpoken) {
+      voiceService.stop();
+      speechChainRef.current = Promise.resolve();
+    }
     const turnAbortRef = { aborted: false };
     turnAbortRefRef.current = turnAbortRef;
 
@@ -3893,6 +3908,9 @@ export function CoachTeachPage(): JSX.Element {
         !walkthrough.isActive && opts?.coachReplyPlayed && opts.coachReplyPlayed.length > 0
           ? `${opts.coachReplyPlayed} is already on the board — never suggest playing it. `
             + "Narrate the coach's reply and its idea in one or two sentences, then prompt the student's move."
+            + (opts?.instantLineSpoken
+              ? ` The move ${opts.coachReplyPlayed} was ALREADY announced aloud the moment it landed — lead with its IDEA, never a bare restatement of the move.`
+              : '')
           : undefined,
       ...(evalForAsk ?? {}),
       ...(lichessForAsk ?? {}),
@@ -3964,7 +3982,7 @@ export function CoachTeachPage(): JSX.Element {
       (STEP_BY_STEP_RE.test(text) || engineDrivenStep) && !walkthrough.isActive;
     const effectiveAsk =
       replyPlayed && replyPlayed.length > 0
-        ? `${text}\n\n[STEP-BY-STEP NARRATION — the engine already played the coach's reply ${replyPlayed}; it is ALREADY on the board. ${opts?.coachReplyFact ?? ''} You do NOT and CANNOT play moves (play_move is disabled). NARRATE ${replyPlayed} using ONLY the grounded fact above for what it captured — never invent a captured piece. Name the idea behind the move, draw [BOARD: arrow:from-to:green] on that move AND on every SAN you mention in prose. Put your SPOKEN narration in a [VOICE: ...] marker — one or two plain sentences naming the move and its idea — so the coach speaks it aloud (this is REQUIRED; without it the student hears nothing). Do NOT summarize or continue any earlier topic; narrate this reply, then prompt the student's turn. If you name a move for the student to play, it MUST be the engine move named in the grounded facts above — recommend ONLY that one. If the facts name no engine move, do NOT name any move; just say it's their turn. NEVER invent a move, NEVER tell them to move a piece to a square it already occupies, and NEVER recommend a move that isn't in the facts above.]`
+        ? `${text}\n\n[STEP-BY-STEP NARRATION — the engine already played the coach's reply ${replyPlayed}; it is ALREADY on the board. ${opts?.coachReplyFact ?? ''} You do NOT and CANNOT play moves (play_move is disabled). ${opts?.instantLineSpoken ? `The bare move ${replyPlayed} was already announced aloud as it landed — open with the IDEA behind it, not another bare statement of the move. ` : ''}NARRATE ${replyPlayed} using ONLY the grounded fact above for what it captured — never invent a captured piece. Name the idea behind the move, draw [BOARD: arrow:from-to:green] on that move AND on every SAN you mention in prose. Put your SPOKEN narration in a [VOICE: ...] marker — one or two plain sentences naming the move and its idea — so the coach speaks it aloud (this is REQUIRED; without it the student hears nothing). Do NOT summarize or continue any earlier topic; narrate this reply, then prompt the student's turn. If you name a move for the student to play, it MUST be the engine move named in the grounded facts above — recommend ONLY that one. If the facts name no engine move, do NOT name any move; just say it's their turn. NEVER invent a move, NEVER tell them to move a piece to a square it already occupies, and NEVER recommend a move that isn't in the facts above.]`
         : engineDrivenStep
           ? text // no legal coach reply (game over) — narrate the student's move only
           : isStepByStepReport
@@ -4900,6 +4918,33 @@ export function CoachTeachPage(): JSX.Element {
             // opponent". Everything below is narration prep; it never gets to
             // hold the board.
             setOpponentThinking(false);
+            // THE INSTANT REPLY LINE (David 2026-08-06: "Down to one second
+            // after moving"). The warm LLM beat is seconds away (engine facts
+            // + a non-streaming phrasing call), so the coach speaks the reply's
+            // MECHANICS the moment it lands — pure chess.js, no engine, no
+            // LLM. speakForced honors the verbosity gate (silent stays
+            // silent); the warm beat chains AFTER this promise via
+            // `instantLineSpoken`, so it is never cut mid-word.
+            let instantSpoken = false;
+            try {
+              const ip = new Chess(move.fen);
+              const im = ip.move(reply);
+              if (im) {
+                const instant = buildInstantReplyLine({
+                  san: im.san,
+                  captured: im.captured,
+                  isCheckmate: ip.isCheckmate(),
+                  isCheck: ip.isCheck(),
+                });
+                // Abort any straggler links from the previous turn's chain
+                // (same move handleSubmit makes), then make the instant line
+                // the head of a fresh chain the warm beat will append to.
+                if (turnAbortRefRef.current) turnAbortRefRef.current.aborted = true;
+                voiceService.stop();
+                speechChainRef.current = Promise.resolve(voiceService.speakForced(instant)).catch(() => undefined);
+                instantSpoken = true;
+              }
+            } catch { /* instant line is a bonus — the warm beat still speaks */ }
             // PHASE TRANSITION on the settled position. Keyed off the STUDENT's
             // move (the detector ignores coach moves), fired here so the board
             // has stopped moving before the coach speaks about it.
@@ -5253,6 +5298,7 @@ export function CoachTeachPage(): JSX.Element {
               fenOverride: liveFenRef.current,
               coachReplyPlayed: reply,
               coachReplyFact: replyFact,
+              instantLineSpoken: instantSpoken,
             });
             return;
           }
