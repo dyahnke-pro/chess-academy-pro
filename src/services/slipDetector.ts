@@ -31,6 +31,14 @@ export interface SlipInput {
    *  weaknesses; first-exposure theory is "not learned yet", not a slip
    *  to count. */
   learned: boolean;
+  /** The engine's best move for the position BEFORE the move, when known.
+   *  Playing it is never a slip — two independent depth-N reads (before at
+   *  the mover's parity, after at the opponent's) routinely disagree by
+   *  50-100cp of pure noise, and without this guard the objectively best
+   *  move gets filed into My Mistakes. David's 2026-08-06 session logged
+   *  Nh4/g3/d4 (each played == engine best) as misconceptions with cpLoss
+   *  56-104 — poisoning the drill queue with non-mistakes. */
+  bestMoveSan?: string;
 }
 
 export interface SlipResult {
@@ -100,6 +108,14 @@ export function detectSlip(input: SlipInput): SlipResult {
 
   // Following the book move is never a slip.
   if (input.inBook && input.bookMoveSan && input.playedSan === input.bookMoveSan) {
+    return none;
+  }
+
+  // Playing the engine's own best move is never a slip either — any measured
+  // "loss" is depth/parity noise between the two independent analyses, not a
+  // defect in the move. (SAN check/mate suffixes stripped so "Nf3+" == "Nf3".)
+  const bare = (san: string): string => san.replace(/[+#]$/, '');
+  if (input.bestMoveSan && bare(input.playedSan) === bare(input.bestMoveSan)) {
     return none;
   }
 

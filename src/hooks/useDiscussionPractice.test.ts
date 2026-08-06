@@ -38,12 +38,15 @@ import { captureEvent } from '../services/analytics';
 const FEN_BEFORE = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 const FEN_AFTER = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
 
-/** Point the engine at a before/after eval (white-perspective cp). */
+/** Point the engine at a before/after eval (white-perspective cp). The
+ *  engine's best move defaults to d2d4 — DIFFERENT from the played e4 —
+ *  because playing the engine's own best is never a slip (the 2026-08-06
+ *  best-move guard), so slip fixtures must genuinely deviate. */
 function setEvals(beforeCp: number, afterCp: number): void {
   const analyze = vi.mocked(stockfishEngine.analyzePosition);
   analyze.mockReset();
   analyze
-    .mockResolvedValueOnce({ evaluation: beforeCp, bestMove: 'e2e4' } as never)
+    .mockResolvedValueOnce({ evaluation: beforeCp, bestMove: 'd2d4' } as never)
     .mockResolvedValueOnce({ evaluation: afterCp, bestMove: 'e7e5' } as never);
 }
 

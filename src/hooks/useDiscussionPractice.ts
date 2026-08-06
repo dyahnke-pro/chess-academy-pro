@@ -279,6 +279,10 @@ export function useDiscussionPractice(
         evalBeforeCp: evalBeforeMover,
         evalAfterCp: evalAfterMover,
         learned: args.learned,
+        // Playing the engine's own best move is never a slip — without this,
+        // depth/parity noise between the two reads filed David's Nh4/g3/d4
+        // (each the engine's best) into My Mistakes (2026-08-06 audit log).
+        bestMoveSan: bestSan,
       });
 
       // ── CAPTURE FIRST, INDEPENDENT OF WHETHER ANYTHING IS SHOWN ──────────
