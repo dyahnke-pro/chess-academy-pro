@@ -170,6 +170,7 @@ import {
 } from '../../services/openingProgress';
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
+import { useCoachFreeMeter } from '../../hooks/useCoachFreeMeter';
 import { DifficultyToggle } from './DifficultyToggle';
 import type { CoachDifficulty, MiddlegamePlan } from '../../types';
 import { PlayerInfoBar } from './PlayerInfoBar';
@@ -701,6 +702,12 @@ export function CoachTeachPage(): JSX.Element {
   // navigate-to-/coach/session/walkthrough flow that lost the chat
   // panel. See `useTeachWalkthrough` + `data/openingWalkthroughs/`.
   const walkthrough = useTeachWalkthrough();
+  // Free-tier coach budget (David 2026-08-06): 7 lesson starts + 50 chat
+  // turns, lifetime, no trial-clock start. `consumeLesson` fires on a
+  // genuinely new walkthrough start (below, onStartWalkthroughForOpening);
+  // `consumeChatTurn` fires once per real user turn (handleSubmit). No-op
+  // when the gate is off or the user is Pro.
+  const coachFreeMeter = useCoachFreeMeter();
   /** SANs the student already watched, handed over by a Deep-dive tap so the
    *  next lesson resumes there instead of replaying the opening moves
    *  (David 2026-07-31). Consumed exactly once by startWalkthrough. */
@@ -1696,6 +1703,9 @@ export function CoachTeachPage(): JSX.Element {
     },
   ): Promise<void> => {
     if (!text.trim() || busy) return;
+    // Free-tier coach budget: count one chat turn per real user turn (never
+    // the kickoff greeting, which the user didn't initiate).
+    if (!opts?.kickoff) coachFreeMeter.consumeChatTurn();
     // Audit-instrumentation phase-1 (2026-05-19): mint a turn id and
     // make it the module-default for the duration of this handleSubmit.
     // Every logAppAudit call from any code reached during this turn
@@ -4018,8 +4028,13 @@ export function CoachTeachPage(): JSX.Element {
               }
               return { ok: true };
             }
-            // No walkthrough in progress — start fresh. Check the
-            // static registry first, then the Dexie cache for any
+            // No walkthrough in progress — start fresh. This is a genuinely
+            // NEW lesson (resuming above never reaches here), so it's the one
+            // choke point for the free-tier lesson bucket — both branches
+            // below (cached/static tree, or freshly generated) come through
+            // here exactly once per lesson start.
+            coachFreeMeter.consumeLesson();
+            // Check the static registry first, then the Dexie cache for any
             // LLM-generated tree from a prior visit. Production audit
             // (build 62a884d) caught Sicilian getting handed off to
             // /coach/session/walkthrough (the legacy surface) because

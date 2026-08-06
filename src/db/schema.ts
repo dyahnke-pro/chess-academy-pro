@@ -73,9 +73,11 @@ export interface MasterPlayCacheRecord {
 /** Free-tier usage ledger for the metered soft paywall (freeTierService).
  *  A SINGLE row keyed 'singleton' tracks what a non-Pro user has spent of
  *  their free allowance: the lifetime 20-puzzle bucket, the one free opening
- *  they claimed, and when they first entered the kid section (for the 7-day
- *  kid window). Dormant unless the paywall gate is live AND the user is not
- *  Pro — see freeTierService / accessPolicy. */
+ *  they claimed, when they first entered the kid section (for the 7-day kid
+ *  window), and the coach free tier (David 2026-08-06: "give them a little
+ *  more... I'm giving value" — 7 free lessons + 50 free chat turns, lifetime,
+ *  no trial-clock start). Dormant unless the paywall gate is live AND the
+ *  user is not Pro — see freeTierService / accessPolicy. */
 export interface FreeTierRecord {
   /** Always 'singleton' — only ever one row. */
   id: string;
@@ -87,6 +89,17 @@ export interface FreeTierRecord {
   /** Unix ms of the FIRST kid-section access, or null if never entered.
    *  Starts the 7-day free kid window. */
   kidFirstAccessAt: number | null;
+  /** Count of coach Watch lessons started against the free lifetime bucket
+   *  (7). Resuming a paused lesson doesn't count again — only a genuinely
+   *  new lesson start does. */
+  coachLessonsUsed: number;
+  /** Count of coach chat turns sent against the free lifetime bucket (50). */
+  coachChatTurnsUsed: number;
+  /** Unix ms the "the coach is free to try" announcement was shown/dismissed,
+   *  or null if never shown. Drives CoachUnlockAnnouncement — fires once for
+   *  every non-Pro user, INCLUDING existing users whose row predates this
+   *  field (they backfill to null via loadFreeTier, so they see it too). */
+  coachUnlockSeenAt: number | null;
   /** Unix ms of the last write — for debugging / future pruning. */
   updatedAt: number;
 }
