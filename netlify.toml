@@ -8,6 +8,18 @@
   command = "npx vite build"
   publish = "dist"
 
+# 🔒 THE MIRROR IS RETIRED — every visitor goes to the REAL app (David
+# 2026-08-06: 14 people were using this stale copy; it has none of the Vercel
+# API functions, so no coach voice, no explorer, and gates that depend on
+# those APIs can misbehave. One funnel, one paywall, one prod). FIRST redirect
+# wins in Netlify; force=true overrides any file match including the SPA
+# fallback below.
+[[redirects]]
+  from = "/*"
+  to = "https://chess-academy-pro.vercel.app/:splat"
+  status = 301
+  force = true
+
 # Proxy voice pack downloads from GitHub Releases (avoids CORS + keeps same domain)
 [[redirects]]
   from = "/voice-packs/*"
