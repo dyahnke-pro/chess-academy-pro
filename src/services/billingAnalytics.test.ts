@@ -118,6 +118,26 @@ describe('billingAnalytics — failure + restore', () => {
     expect(props.error_message.length).toBe(200);
   });
 
+  it('purchase_failed carries the RevenueCat error detail when present', () => {
+    trackPurchaseFailed('pro_annual', 'There was a problem with the App Store.', {
+      code: '2',
+      readableErrorCode: 'STORE_PROBLEM_ERROR',
+      underlyingErrorMessage: 'y'.repeat(500),
+    });
+    const props = capture.mock.calls[0][1] as Record<string, unknown>;
+    expect(props.error_code).toBe('2');
+    expect(props.readable_error_code).toBe('STORE_PROBLEM_ERROR');
+    expect((props.underlying_error_message as string).length).toBe(300);
+  });
+
+  it('purchase_failed omits detail keys entirely when no detail is given', () => {
+    trackPurchaseFailed('pro_monthly', 'purchase failed');
+    const props = capture.mock.calls[0][1] as Record<string, unknown>;
+    expect('error_code' in props).toBe(false);
+    expect('readable_error_code' in props).toBe(false);
+    expect('underlying_error_message' in props).toBe(false);
+  });
+
   it('purchase_cancelled names the package', () => {
     trackPurchaseCancelled('pro_annual');
     expect(capture).toHaveBeenCalledWith(BILLING_EVENT.purchaseCancelled, {
