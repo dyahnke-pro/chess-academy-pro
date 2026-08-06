@@ -59,6 +59,13 @@ describe('the 2026-08-06 fundamentals are board-provable', () => {
     expect(tags(new Chess().fen()).has('development')).toBe(false);
   });
 
+  it('development: a side whose minors were TRADED is not "undeveloped"', () => {
+    // White has two developed minors + castled; Black's minors are all GONE
+    // (exchanged) with rooks/queen at home. Development-count says +3 for
+    // White, but nothing is asleep — no lesson about development here.
+    expect(tags('r2qk2r/pppppppp/8/8/2B5/2N2N2/PPPPPPPP/R2Q1RK1 w kq - 0 12').has('development')).toBe(false);
+  });
+
   it('simplification: ahead a piece with heavies on; equal material silent', () => {
     // White up a full rook, queens and rooks still on the board.
     expect(tags('1q3rk1/1pp2ppp/8/8/8/8/1PP2PPP/RQ3RK1 w - - 0 20').has('simplification')).toBe(true);

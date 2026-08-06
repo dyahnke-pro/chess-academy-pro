@@ -311,11 +311,20 @@ export function boardConcepts(fen: string): BoardConcepts | null {
   // stay off because no position can prove an intent.
 
   // DEVELOPMENT: one side is ≥2 developed pieces ahead (minors off their
-  // home squares + castled counts as one). A lead, not mere development —
-  // "both sides are developing" teaches nothing.
+  // home squares + castled counts as one) AND the laggard still has ≥2 minors
+  // ASLEEP at home. Without the second half, even minor-piece trades read as
+  // a "lead" — a side whose knights were exchanged is not undeveloped, its
+  // knights are gone (2026-08-06 accuracy audit).
   if (phase !== 'endgame') {
     const devLead = developmentCount(all, fen, 'w') - developmentCount(all, fen, 'b');
-    if (Math.abs(devLead) >= 2) concepts.add('development');
+    const laggard = devLead > 0 ? 'b' : 'w';
+    const laggardHome = laggard === 'w'
+      ? new Set(['b1', 'g1', 'c1', 'f1'])
+      : new Set(['b8', 'g8', 'c8', 'f8']);
+    const asleep = all.filter(
+      (p) => p.color === laggard && (p.type === 'n' || p.type === 'b') && laggardHome.has(p.square),
+    ).length;
+    if (Math.abs(devLead) >= 2 && asleep >= 2) concepts.add('development');
   }
 
   // MATERIAL for the two conversion-family tags, in pawns.
