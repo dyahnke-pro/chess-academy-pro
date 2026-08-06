@@ -52,6 +52,7 @@ import { deriveNarrationArrows } from './narrationArrows';
 import { splitSentences, squaresInText } from './narrationSegments';
 import { bakedNarrationFor } from './bakedWalkthroughNarration';
 import { gemPunishLessonsForOpeningName } from './gemPunishLessons';
+import { detectTactics } from './tacticsDetector';
 import { stageArrayHasUsableEntry } from './stageEntryValidity';
 import type {
   WalkthroughTree,
@@ -2915,6 +2916,38 @@ OPENING POSITION CONTEXT:
 Use this position as your anchor. Stage entries' setup paths (findMove.path, drill.moves prefixes, punish.setupMoves) typically branch from this position or earlier in the line. Verify each SAN against the actual piece placement at the relevant FEN before emitting it.`;
 }
 
+/** Computed, board-true facts for every ply of the canonical line — G0 for
+ *  the concepts lane (145 gate drops in 14 days: the model was READING the
+ *  line itself and mis-stating where pieces stand). Each line is derived by
+ *  chess.js replay, so a prose claim built from this block cannot be a
+ *  board lie. */
+export function buildLineFactsBlock(openingName?: string): string {
+  const entry = openingName ? resolveOpeningEntry(openingName) : null;
+  if (!entry || entry.moves.length === 0) return '';
+  try {
+    const c = new Chess();
+    const facts: string[] = [];
+    for (const [i, raw] of entry.moves.slice(0, 24).entries()) {
+      const m = c.move(stripSanAnnotations(raw));
+      if (!m) break;
+      const side = m.color === 'w' ? 'White' : 'Black';
+      const bits = [`${side}'s ${PUNISH_PIECE_WORD[m.piece]} goes to ${m.to}`];
+      if (m.captured) bits.push(`capturing the ${PUNISH_PIECE_WORD[m.captured]}`);
+      if (m.san.includes('+')) bits.push('with check');
+      facts.push(`  ${Math.floor(i / 2) + 1}${m.color === 'w' ? '.' : '…'} ${m.san} — ${bits.join(', ')}`);
+    }
+    if (facts.length === 0) return '';
+    return `
+
+LINE FACTS (computed by code — the ONLY piece/square claims you may make):
+${facts.join('\n')}
+
+Any claim about WHERE a piece stands, what it captures, or what square it occupies must come from the LINE FACTS above. Ideas, plans and principles may draw on the teaching/book context, but never invent a piece-on-square fact that is not listed.`;
+  } catch {
+    return '';
+  }
+}
+
 function buildStageSystemPrompt(stage: OptionalStage, openingName?: string): string {
   const schemas: Record<OptionalStage, string> = {
     concepts: `Output a JSON array of ConceptCheckQuestion objects:
@@ -2974,7 +3007,7 @@ CRITICAL:
 ${stage === 'concepts' ? `- Single-select questions (multiSelect omitted or false) need EXACTLY ONE correct choice. If 2+ choices are correct, set multiSelect: true on that question.\n` : ''}${stage === 'findMove' ? `- Each question needs 2+ candidates. EXACTLY ONE is correct. The path SANs must be a legal sequence from the standard starting position.\n` : ''}${stage === 'drill' ? `- Trace the FULL move sequence with chess.js mentally before emitting. Each move must be legal from the position the prior moves create. studentSide MUST match the opening — black for Sicilian, French, Caro-Kann, Pirc, KID, Nimzo-Indian, Modern, Alekhine, Scandinavian, etc.; white for Italian, Vienna, Spanish, Queen's Gambit, etc.\n` : ''}${stage === 'punish' ? `- setupMoves + inaccuracy + punishment + each distractor + each followup move must ALL be legal in sequence. Distractors are LEGAL alternatives that don't punish as well — they are NOT illegal moves. Each lesson needs at least 2 distractors.
 - CRITICAL — STAY ON THE OPENING: setupMoves MUST match the canonical PGN of "${openingName}" exactly for the first N plies (where N = the canonical PGN's ply count). Production audit (build 1304700) caught the LLM emitting Dragon punishes (5...g6) under the Najdorf banner (5...a6) — same family but a different sub-variation. The OPENING POSITION CONTEXT block below shows the exact moves; do NOT substitute a different sub-line just because you find traps there easier to write.
 - The inaccuracy is what the OPPONENT plays AFTER the canonical line is reached. setupMoves usually ends RIGHT AT the canonical spine's end FEN (or at most 1-2 plies deeper on a known main-line continuation).
-\n` : ''}- Output JSON only. Validation pipeline rejects anything else.${buildStageTeachingBlock(openingName)}${buildBookSourceBlock(openingName)}${buildStagePositionBlock(openingName)}`;
+\n` : ''}- Output JSON only. Validation pipeline rejects anything else.${buildStageTeachingBlock(openingName)}${buildBookSourceBlock(openingName)}${buildStagePositionBlock(openingName)}${buildLineFactsBlock(openingName)}`;
 }
 
 // ─── DB-narration stage generators ──────────────────────────────────
@@ -3480,6 +3513,110 @@ interface PreparedPunishLesson {
   distractors: { san: string }[];
   themes: string[];
   rating: number;
+  /** Code-computed board facts — the ONLY claims the label prose may make.
+   *  See computePunishFacts. */
+  computedFacts: string;
+}
+
+const PUNISH_PIECE_WORD: Record<string, string> = {
+  p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
+};
+const PUNISH_PIECE_VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
+
+/** G0 for the punish labels (2026-08-06, after the trip-rate ranking put this
+ *  lane FIRST — 133 narrationGate drops in 14 days). The prompt used to hand
+ *  the model a raw FEN and ask it to work out WHY the move loses — asking an
+ *  LLM to read a FEN is asking it to decide board facts, and the gate drops
+ *  proved it can't. Every claim the prose needs is computed HERE with
+ *  chess.js + detectTactics (ground-truth-audited the same day: 49,725
+ *  description claims, zero false) and injected as the only permissible
+ *  assertions. The model phrases; it does not read the board. */
+export function computePunishFacts(
+  postInaccuracyFen: string,
+  punishment: string,
+  followup: { san: string }[],
+  distractors: { san: string }[],
+): string {
+  const lines: string[] = [];
+  try {
+    const base = new Chess(postInaccuracyFen);
+    const student = base.turn();
+    // 1. What is ON the board for the punisher — the detector's audited prose.
+    try {
+      const t = detectTactics(postInaccuracyFen);
+      for (const tac of t.tactics.filter((x) => x.beneficiary === student).slice(0, 3)) {
+        lines.push(tac.description);
+      }
+      for (const h of t.hangingPieces.filter((x) => x.color !== student).slice(0, 2)) {
+        lines.push(`the opponent's ${PUNISH_PIECE_WORD[h.piece] ?? 'piece'} on ${h.square} is undefended`);
+      }
+    } catch { /* detector optional */ }
+    // 2. The punishing move's mechanics + the sequence's material arithmetic.
+    const seq = new Chess(postInaccuracyFen);
+    let studentGain = 0;
+    let opponentGain = 0;
+    const first = seq.move(punishment);
+    if (first) {
+      const mech: string[] = [];
+      if (first.captured) mech.push(`captures the ${PUNISH_PIECE_WORD[first.captured]} on ${first.to}`);
+      if (first.san.includes('#')) mech.push('is checkmate');
+      else if (first.san.includes('+')) mech.push('gives check');
+      if (mech.length === 0) mech.push('is a quiet move');
+      lines.push(`the punishing move ${first.san} ${mech.join(' and ')}`);
+      if (first.captured) studentGain += PUNISH_PIECE_VALUE[first.captured] ?? 0;
+      let mover: 'student' | 'opponent' = 'opponent';
+      for (const f of followup) {
+        const m = (() => { try { return seq.move(f.san); } catch { return null; } })();
+        if (!m) break;
+        if (m.captured) {
+          if (mover === 'student') studentGain += PUNISH_PIECE_VALUE[m.captured] ?? 0;
+          else opponentGain += PUNISH_PIECE_VALUE[m.captured] ?? 0;
+        }
+        mover = mover === 'student' ? 'opponent' : 'student';
+      }
+      const last = followup.length > 0 ? followup[followup.length - 1].san : first.san;
+      if (last.includes('#')) lines.push('the sequence ends in checkmate');
+      else if (studentGain - opponentGain >= 2) {
+        lines.push(`over the full sequence the student comes out ${studentGain - opponentGain} points of material ahead`);
+      }
+    }
+    // 3. Why each distractor fails — computed, not guessed.
+    const mateAvailable = (() => {
+      try { return new Chess(postInaccuracyFen).moves().some((m) => m.includes('#')); } catch { return false; }
+    })();
+    for (const d of distractors) {
+      try {
+        const probe = new Chess(postInaccuracyFen);
+        const m = probe.move(d.san);
+        if (!m) continue;
+        const why: string[] = [];
+        if (mateAvailable && !m.san.includes('#')) why.push('misses the available checkmate');
+        // Does the moved piece land where a CHEAPER enemy piece can take it?
+        const parts = probe.fen().split(' ');
+        const enemy = student === 'w' ? 'b' : 'w';
+        parts[1] = enemy;
+        parts[3] = '-';
+        try {
+          const enemyView = new Chess(parts.join(' '));
+          const takers = enemyView.moves({ verbose: true }).filter((x) => x.to === m.to);
+          const cheapest = Math.min(...takers.map((x) => PUNISH_PIECE_VALUE[x.piece] ?? 99));
+          const moverVal = PUNISH_PIECE_VALUE[m.piece] ?? 0;
+          const defended = takers.length > 0 && (() => {
+            const backParts = probe.fen().split(' ');
+            backParts[1] = student;
+            backParts[3] = '-';
+            try { return new Chess(backParts.join(' ')).isAttacked(m.to, student); } catch { return false; }
+          })();
+          if (takers.length > 0 && (cheapest < moverVal || !defended)) {
+            why.push(`the ${PUNISH_PIECE_WORD[m.piece]} can simply be captured on ${m.to}`);
+          }
+        } catch { /* skip the safety read */ }
+        if (why.length === 0) why.push(m.captured ? 'wins less than the main move' : 'does not create a threat');
+        lines.push(`distractor ${d.san}: ${why.join('; ')}`);
+      } catch { /* illegal — skip */ }
+    }
+  } catch { /* facts are a constraint, never a blocker */ }
+  return lines.length > 0 ? lines.map((l) => `    • ${l}`).join('\n') : '    • (no computed facts — describe only the moves given)';
 }
 
 /** Walk one Lichess puzzle into a PunishLesson skeleton.
@@ -3521,6 +3658,7 @@ function preparePunishFromPuzzle(p: RawPuzzle): PreparedPunishLesson | null {
     distractors,
     themes: p.themes,
     rating: p.rating,
+    computedFacts: computePunishFacts(postInaccuracyFen, punishment, followup, distractors),
   };
 }
 
@@ -3604,6 +3742,8 @@ For each lesson below, output:
 - followupIdeas: ONE short sentence per followup move (in order) describing the tactical thread — "rook lifts to win the queen", "the king is dragged into the open", etc.
 - shortFollowupIdeas: parallel array — for EACH followup move, a ≤18-word Brief-mode variant of the matching followupIdea.
 
+Each lesson carries a COMPUTED BOARD FACTS block. Those facts were verified against the board by code — they are the ONLY board claims you may make. Phrase them naturally; never assert a piece, square, capture, threat or material count that is not in the block. If the block doesn't mention it, you don't know it.
+
 The SANs and FENs are GIVEN by the puzzle database — DO NOT alter them, do NOT add or reorder distractors, do NOT invent moves. Just write the prose. Output ONLY via the tool.`;
 
   const lessonsBlock = prepared
@@ -3613,6 +3753,8 @@ The SANs and FENs are GIVEN by the puzzle database — DO NOT alter them, do NOT
   setupFen: ${l.setupFen}
   Opponent's mistake (inaccuracy): ${l.inaccuracy}
   Punishing move: ${l.punishment}
+  COMPUTED BOARD FACTS (your only permissible board claims):
+${l.computedFacts}
   Distractors (in order — write label + explanation for each):
 ${l.distractors.map((d, j) => `    ${String.fromCharCode(97 + j)}) ${d.san}`).join('\n')}
   Followup moves after the punishment (in order):
