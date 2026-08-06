@@ -340,9 +340,12 @@ function findTrappedPieces(chess: Chess): TacticPattern[] {
       if (!p || p.type === 'k' || p.type === 'p') continue;
       const sq = p.square;
       const enemy: Color = p.color === 'w' ? 'b' : 'w';
-      // Must be under attack to be "trapped" rather than merely passive.
-      const enemyView = withTurn(chess, enemy);
-      if (!enemyView?.isAttacked(sq, enemy)) continue;
+      // Trapped means ATTACKED BY CHEAPER with nowhere to run. A piece whose
+      // only attacker is pricier (or equal — that is a trade offer) is not
+      // trapped when it stands defended, and if it is undefended that is
+      // findHangingPieces' pattern, not this one.
+      const attackersHere = attackersOfSquare(chess, sq, enemy);
+      if (!attackersHere.some((a) => PIECE_VALUE[a] < PIECE_VALUE[p.type])) continue;
       const myView = withTurn(chess, p.color);
       if (!myView) continue;
       const escapes = myView.moves({ square: sq, verbose: true });
@@ -355,7 +358,7 @@ function findTrappedPieces(chess: Chess): TacticPattern[] {
           return !attackers.some((a) => PIECE_VALUE[a] < PIECE_VALUE[p.type]);
         } catch { return true; }
       });
-      if (!hasSafeSquare && escapes.length >= 0) {
+      if (!hasSafeSquare) {
         out.push({
           type: 'trapped_piece',
           beneficiary: enemy,
@@ -404,9 +407,23 @@ function findDiscoveredAttacks(chess: Chess): TacticPattern[] {
         // tactic. With the tempo requirement a discovery is an event.
         const myView = withTurn(chess, p.color);
         if (!myView) continue;
+        // The tempo move must LEAVE the ray — a capture along the very line
+        // it is blocking unveils nothing. (A checking move that stays on the
+        // ray keeps blocking, so chess.js gives it no '+' from the unveiled
+        // slider either; the collinearity test makes the capture clause
+        // honest too.)
+        const [sf, sr] = squareToCoords(sq);
+        const onRay = (to: Square): boolean => {
+          const [tf, tr] = squareToCoords(to);
+          const df = tf - sf;
+          const dr = tr - sr;
+          if (Math.sign(df) !== dir[0] || Math.sign(dr) !== dir[1]) return false;
+          return dir[0] === 0 || dir[1] === 0 || Math.abs(df) === Math.abs(dr);
+        };
         const withTempo = myView.moves({ square: blocker.square, verbose: true }).some((m) =>
-          m.san.includes('+') || m.san.includes('#') ||
-          (m.captured !== undefined && PIECE_VALUE[m.captured] >= 3));
+          !onRay(m.to) &&
+          (m.san.includes('+') || m.san.includes('#') ||
+            (m.captured !== undefined && PIECE_VALUE[m.captured] >= 3)));
         if (!withTempo) continue;
         out.push({
           type: 'discovery',
