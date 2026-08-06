@@ -341,6 +341,16 @@ export function initAnalytics(opts?: { optedOut?: boolean }): void {
         advanced_disable_flags: true,
         // Respect Do-Not-Track at the library level too.
         respect_dnt: true,
+        // posthog-js drops ALL events on bot/headless user agents by default
+        // (HeadlessChrome, anything matching "bot"). Correct for real traffic
+        // — but it silently discarded every muted audit run, which is how the
+        // 2026-08-06 probes sent literally nothing while real users flowed.
+        // An audit run is stamped (localStorage.auditRunId); ONLY then do we
+        // opt out of the UA filter so its transcript reaches PostHog, tagged
+        // with audit_run_id for clean isolation from product analytics.
+        opt_out_useragent_filter: (() => {
+          try { return !!globalThis.localStorage?.getItem('auditRunId'); } catch { return false; }
+        })(),
       });
       client = posthog;
       enabled = true;
