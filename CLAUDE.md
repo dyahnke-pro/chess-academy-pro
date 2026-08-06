@@ -3489,6 +3489,21 @@ them. Two enforcement layers:
   (exit 1 = build, exit 0 = skip). With a `VERCEL_TOKEN` in the env config a
   session can set this via the Vercel API; otherwise it's a one-time
   dashboard toggle. This stops preview builds even if some branch is pushed.
+- **Netlify side (same lesson, learned the expensive way — David 2026-08-06,
+  after ONE session's cadence burned 75% of the 300 free monthly credits in a
+  day).** The `chess-academy-pro.netlify.app` mirror builds from the same
+  repo, and it was building a deploy-preview per branch push PLUS a
+  production build per merge. `netlify.toml` now carries
+  `[build] ignore = "test \"$BRANCH\" != \"main\""` (exit 0 = SKIP — note
+  Netlify's ignore semantics are the OPPOSITE of Vercel's) so only `main`
+  builds, and a first-position force-301 redirects every path to
+  `chess-academy-pro.vercel.app` (David: the mirror's free riders funnel to
+  the real app; the redirect IS the product there now). Do NOT remove either
+  rule, and do NOT re-introduce per-branch Netlify builds. **Batch merges**:
+  every PR merge is a Netlify+Vercel build each — 5 small PRs in a night is
+  10 builds where 1 batched merge would have been 2. Netlify free plan
+  cannot overcharge (builds stop at 0 credits) but a dead mirror mid-month
+  is still a failure; treat credits like the Vercel cap.
 
 
 OVERRIDE IT (David 2026-05-26, emphatic: "always push to main production

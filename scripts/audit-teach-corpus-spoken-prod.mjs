@@ -21,8 +21,22 @@ import { startAuditListener } from './audit-lib/audit-listener.mjs';
 import { muteTtsForAudit, stampAuditRunId } from './audit-lib/mute-tts.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
-const ASK = process.env.AUDIT_OPENING || 'latvian gambit';
+// Default MUST be a genuine TIER-2 opening (notes, no bake). The Latvian —
+// v2's default — is TIER-1 BAKED (walkthrough-narrations.json): its verified
+// prose takes NO runtime splice by locked doctrine, so its marks can never be
+// spoken and the audit red was a false alarm (2026-08-06). The Englund has 18
+// shallow positioned notes, no bake, and a prefix unique from ply 2.
+const ASK = process.env.AUDIT_OPENING || 'englund gambit';
 const RUN_ID = `spoken-${Date.now().toString(36)}`;
+
+// FAIL FAST on a Tier-1 baked opening — testing the splice against baked
+// prose is the wrong-opening mistake the tiers doctrine (CLAUDE.md) names.
+const bakedKeys = Object.keys(JSON.parse(await readFile('src/data/walkthrough-narrations.json', 'utf8')).narrations ?? {});
+const askKey = ASK.toLowerCase().replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+if (bakedKeys.some((k) => k.includes(askKey) || askKey.includes(k))) {
+  console.log(`✗ WRONG OPENING: "${ASK}" is TIER-1 BAKED — baked prose takes no runtime splice by design. Pick a Tier-2 opening (positioned notes, no bake).`);
+  process.exit(1);
+}
 
 // Marks: distinctive mid-sentence fragments (≥6 words) from every positioned
 // note of the target opening, shallow lines first. Lowercased for matching.
@@ -121,7 +135,7 @@ try {
   detail = `ERROR ${String(e).slice(0, 140)}`;
 }
 const finalBody = await p.locator('body').innerText().catch(() => '(unreadable)');
-await writeFile('/tmp/teach-probe-tts.json', JSON.stringify({ ask: ASK, ttsTexts, listenerEvents: listener.getCapturedEvents().length, finalBody: finalBody.slice(0, 8000) }, null, 1)).catch(() => undefined);
+await writeFile('/tmp/teach-probe-tts.json', JSON.stringify({ ask: ASK, runId: RUN_ID, marks, ttsTexts, listenerEvents: listener.getCapturedEvents().length, finalBody: finalBody.slice(0, 8000) }, null, 1)).catch(() => undefined);
 await b.close();
 await listener.stop().catch(() => undefined);
 
@@ -141,10 +155,27 @@ try {
   }
 } catch { /* stream optional */ }
 
-const ok = !!seenSpoken;
-console.log(`${ok ? '✓ PASS' : '✗ FAIL'}: teach-me-${ASK} speaks the corpus — ${detail}`);
-if (seenSpoken) console.log(`  spoken mark: "${seenSpoken}"`);
+// Verdict. On localhost the local instruments carry it. On https they are
+// structurally blind (muted /api/tts + mixed-content listener), so the local
+// leg can NEVER pass there — the script's job on https is the DRIVE; the
+// spoken verdict comes from the PostHog read-back by audit_run_id, which the
+// SESSION runs via the PostHog MCP (scripts never touch the deprecated phx_
+// key — locked rule). Exit 2 = drive complete, verdict pending that query.
+// A clean https drive is NOT reported as PASS — mushy green is the failure
+// mode this exit code exists to prevent.
+const isHttps = BASE.startsWith('https://');
+if (seenSpoken) {
+  console.log(`✓ PASS: teach-me-${ASK} speaks the corpus — ${detail}`);
+  console.log(`  spoken mark: "${seenSpoken}"`);
+  process.exit(0);
+}
+if (isHttps && !detail.startsWith('ERROR')) {
+  console.log(`◌ PENDING: drive complete on https — verdict lives in PostHog — ${detail}`);
+  console.log(`  marks (${marks.length}) saved to /tmp/teach-probe-tts.json; match them against:`);
+  console.log(`  audit_run_id=${RUN_ID} (project 390808, ~90s ingest lag):`);
+  console.log(`    SELECT timestamp, properties.narration_text FROM events WHERE event='coach_narration_spoken' AND properties.audit_run_id='${RUN_ID}' ORDER BY timestamp`);
+  process.exit(2);
+}
+console.log(`✗ FAIL: teach-me-${ASK} speaks the corpus — ${detail}`);
 console.log('  tts transcript → /tmp/teach-probe-tts.json');
-console.log(`  audit_run_id=${RUN_ID} — full transcript via PostHog MCP (project 390808, ~90s lag):`);
-console.log(`    SELECT timestamp, properties.narration_text FROM events WHERE event='coach_narration_spoken' AND properties.audit_run_id='${RUN_ID}' ORDER BY timestamp`);
-process.exit(ok ? 0 : 1);
+process.exit(1);

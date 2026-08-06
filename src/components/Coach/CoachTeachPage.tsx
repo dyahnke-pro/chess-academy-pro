@@ -19,7 +19,7 @@ import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
-import { buildPlayCommentary } from '../../services/playCommentary';
+import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst } from '../../services/playCommentary';
 
 // Walkthrough arrows/highlights render through the SAME react-chessboard
 // pipeline the opening tab's LessonPlayer uses — identical palette, identical
@@ -161,6 +161,11 @@ const THINK_ALOUD_MIN_PLY_GAP = 6;
 
 /** Fork-in-the-road deliberations per game (David 2026-07-11: "3 total"). */
 const FORK_TALK_MAX_PER_GAME = 3;
+// The speedrun's two remaining beats (2026-08-06): a refuted tempting move is
+// worth at most a couple of warnings a game; priority-first framing needs
+// room to breathe between firings or every quiet move gets a "priority".
+const REJECTED_TEMPTING_MAX_PER_GAME = 2;
+const PRIORITY_FIRST_MIN_PLY_GAP = 10;
 import { captureEvent } from '../../services/analytics';
 
 import { getNeonColor, scaledShadow } from '../../utils/neonColors';
@@ -1124,6 +1129,8 @@ export function CoachTeachPage(): JSX.Element {
   const pendingCoachMoveRef = useRef<string | null>(null);
   /** Last ply a think-aloud deliberation fired (#20 throttle). */
   const thinkAloudLastPlyRef = useRef(-999);
+  const rejectedTemptingCountRef = useRef(0);
+  const priorityFirstLastPlyRef = useRef(-999);
   // SESSION BOOKENDS (David 2026-07-11): running tallies for the closing
   // takeaway spoken on End Lesson — questions asked/found + slips stopped on.
   // All computed; the closer is a deterministic line (no LLM needed).
@@ -5015,11 +5022,48 @@ export function CoachTeachPage(): JSX.Element {
                         captureEvent('think_aloud_offered', { surface: 'coach-teach', withheld: thinkMoment.withheldSan });
                         facts.push(thinkMoment.facts);
                       } else if (recUci && recUci.length >= 4) {
-                        const recProbe = new Chess(probe.fen());
-                        const recMove = recProbe.move({ from: recUci.slice(0, 2), to: recUci.slice(2, 4), promotion: recUci.slice(4, 5) || undefined });
-                        if (recMove) {
-                          facts.push(`The student's strongest reply in THIS position is ${recMove.san} (engine). If you point them toward a move, name ONLY ${recMove.san} — never suggest any other move, and never tell them to move a piece to a square it already occupies.`);
+                        // PRIORITY-FIRST (the speedrun's framing beat): when
+                        // the best move attacks a structurally weak enemy
+                        // pawn, name the PRIORITY and withhold the move —
+                        // the upgrade of the plain recommendation, never an
+                        // addition to it.
+                        const pf = plyNow - priorityFirstLastPlyRef.current >= PRIORITY_FIRST_MIN_PLY_GAP
+                          ? buildPriorityFirst({ fen: probe.fen(), studentColor: playerColor, bestUci: recUci })
+                          : null;
+                        if (pf) {
+                          priorityFirstLastPlyRef.current = plyNow;
+                          captureEvent('priority_first_offered', { surface: 'coach-teach', target: pf.targetSquare });
+                          facts.push(pf.facts);
+                        } else {
+                          const recProbe = new Chess(probe.fen());
+                          const recMove = recProbe.move({ from: recUci.slice(0, 2), to: recUci.slice(2, 4), promotion: recUci.slice(4, 5) || undefined });
+                          if (recMove) {
+                            facts.push(`The student's strongest reply in THIS position is ${recMove.san} (engine). If you point them toward a move, name ONLY ${recMove.san} — never suggest any other move, and never tell them to move a piece to a square it already occupies.`);
+                          }
                         }
+                      }
+                    }
+                    // THE REJECTED TEMPTING MOVE (the speedrun's warning
+                    // beat): a capture/check the multipv scored ≥1.5 pawns
+                    // worse than best, refuted by its own line's reply. Rides
+                    // alongside whichever beat fired above — it warns about a
+                    // DIFFERENT move, so nothing leaks.
+                    if (rejectedTemptingCountRef.current < REJECTED_TEMPTING_MAX_PER_GAME) {
+                      const rtLines = (studentBest?.topLines ?? [])
+                        .slice(0, 4)
+                        .filter((l) => typeof l.moves?.[0] === 'string' && typeof l.evaluation === 'number')
+                        .map((l) => ({
+                          uci: l.moves[0],
+                          replyUci: typeof l.moves[1] === 'string' ? l.moves[1] : null,
+                          evalCp: playerColor === 'white' ? l.evaluation : -l.evaluation,
+                        }));
+                      const rt = rtLines.length >= 2
+                        ? buildRejectedTempting({ fen: probe.fen(), studentColor: playerColor, lines: rtLines })
+                        : null;
+                      if (rt) {
+                        rejectedTemptingCountRef.current += 1;
+                        captureEvent('rejected_tempting_offered', { surface: 'coach-teach', tempting: rt.temptingSan, refutation: rt.refutationSan });
+                        facts.push(rt.facts);
                       }
                     }
                   }
@@ -5061,6 +5105,8 @@ export function CoachTeachPage(): JSX.Element {
                       announcedTrapsRef.current.clear(); // fresh game
                       forkTalkCountRef.current = 0;
                       pendingForkRef.current = null;
+                      rejectedTemptingCountRef.current = 0;
+                      priorityFirstLastPlyRef.current = -999;
                     }
                     if (classifyPhase(probe.fen(), chainHistory.length) === 'opening') {
                       const chain = buildOpeningChainFacts({
