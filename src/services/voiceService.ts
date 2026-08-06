@@ -1127,6 +1127,9 @@ class VoiceService {
             category: 'subsystem',
             source: 'voiceService.speakInternal.briefCap',
             summary: `brief-cap applied: ${cap.originalLength}→${cap.text.length} chars`,
+            // Full text of the SUPPRESSED line — PostHog keeps it as narration_text
+            // so an audit can prove what was dropped, not just that something was.
+            narrationText: text,
             // Audit-instrumentation phase-1 (2026-05-19, Bug I): log
             // the FULL original text and the FULL clipped output so
             // we can review exactly what got lost without re-running
@@ -1193,6 +1196,9 @@ class VoiceService {
             category: 'subsystem',
             source: 'voiceService.speakInternal.dedup',
             summary: `dropped duplicate line within ${VoiceService.DEDUP_WINDOW_MS}ms: "${text.slice(0, 40)}"`,
+            // Full text of the SUPPRESSED line — PostHog keeps it as narration_text
+            // so an audit can prove what was dropped, not just that something was.
+            narrationText: text,
             details: `sinceLastMs=${now - last.ts}`,
           });
         }).catch(() => undefined);
@@ -1216,6 +1222,9 @@ class VoiceService {
             category: 'subsystem',
             source: 'voiceService.speakInternal.noOverlap',
             summary: `dropped overlapping line (already speaking): "${text.slice(0, 40)}"`,
+            // Full text of the SUPPRESSED line — PostHog keeps it as narration_text
+            // so an audit can prove what was dropped, not just that something was.
+            narrationText: text,
             details: `prevTier=${this.lastTier}`,
           });
         }).catch(() => undefined);
@@ -1244,6 +1253,9 @@ class VoiceService {
             category: 'subsystem',
             source: 'voiceService.speakInternal.throttle',
             summary: `throttled line (<${VoiceService.THROTTLE_MS}ms since last): "${text.slice(0, 40)}"`,
+            // Full text of the SUPPRESSED line — PostHog keeps it as narration_text
+            // so an audit can prove what was dropped, not just that something was.
+            narrationText: text,
             details: `sinceLastMs=${now - last.ts}`,
           });
         }).catch(() => undefined);
@@ -1525,6 +1537,12 @@ class VoiceService {
         }),
       });
     }).catch(() => undefined);
+    // The Web Speech tier gets the SAME full-text narration record the Polly
+    // and audit-mute tiers get. Until 2026-08-06 only those two called
+    // `logNarrationSpoken`, so a device-TTS line reached PostHog as a 40-char
+    // preview at best — whole lines missing from any transcript reconstructed
+    // there. What was spoken is what is recorded, whichever tier spoke it.
+    void this.logNarrationSpoken(text, 'web-speech', prefs);
     await this.speakFallback(text);
     this.lastTier = 'web-speech';
     this.lastSpeakDiagnostic.tier = 'web-speech';

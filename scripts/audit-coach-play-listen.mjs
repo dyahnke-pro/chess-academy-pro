@@ -35,7 +35,7 @@ import { chromium } from 'playwright';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { falseBoardClaims, resolveClaimFen } from './audit-lib/board-claims.mjs';
-import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
+import { muteTtsForAudit, stampAuditRunId } from './audit-lib/mute-tts.mjs';
 import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-lib/audit-listener.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -47,6 +47,7 @@ const PLY_CAP = Number(process.env.AUDIT_PLY_CAP ?? 70);
 const HEADED = process.env.AUDIT_SMOKE_HEADED === '1';
 const BOOT_TIMEOUT_MS = 60_000;
 const MOVE_SETTLE_MS = 6500; // student move + coach engine reply + narration
+const RUN_ID = `playlisten-${Date.now().toString(36)}`;
 const OUT_DIR = join('audit-reports', `coach-play-listen-${new Date().toISOString().replace(/[:.]/g, '-')}`);
 
 const NARRATION_KINDS = new Set([
@@ -85,6 +86,11 @@ async function main() {
     // MUTED (G1 lock): the spoken text arrives via the listener's
     // coach-narration-spoken events; synthesising it would bill for audio
     // nobody hears. The /api/tts capture leg stays but will be empty.
+    // PostHog run correlation — against https prod the local listener cannot
+    // attach (mixed content), so the transcript is reconstructed from PostHog
+    // instead: every coach_narration_spoken this run emits carries
+    // audit_run_id = RUN_ID with the FULL narration_text.
+    await ctx.addInitScript(stampAuditRunId(RUN_ID));
     await ctx.addInitScript(muteTtsForAudit);
     const page = await ctx.newPage();
 
@@ -345,6 +351,8 @@ async function main() {
 
   const met = consecutiveClean >= CLEAN_TARGET;
   console.log(`\n[play-listen] ===== SUMMARY =====`);
+  console.log(`  audit_run_id=${RUN_ID} — on https targets the listener is blind (mixed content); pull the transcript from PostHog (MCP, project 390808, ~90s ingest lag):`);
+  console.log(`    SELECT timestamp, properties.source, properties.narration_text FROM events WHERE event='coach_narration_spoken' AND properties.audit_run_id='${RUN_ID}' ORDER BY timestamp`);
   for (const r of gameReports) {
     console.log(`  game ${r.game}: ${r.inconclusive ? 'INCONCLUSIVE' : r.clean ? 'CLEAN' : `${r.breakCount} BREAK(S)`}  (narration lines: ${r.narrationLines})`);
   }
