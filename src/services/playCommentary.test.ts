@@ -41,4 +41,42 @@ describe('buildPlayCommentary', () => {
     const fen = new Chess().fen();
     expect(buildPlayCommentary({ fen, studentColor: 'white' })).toBeNull();
   });
+
+  it('a hanging PAWN alone stays silent — gambit pawns are theory, not tactics', () => {
+    // Black's a5-pawn is en prise to b4 and nothing else is on. Measured on
+    // the repertoire corpus: 7.9% of theory plies have a loose pawn; speaking
+    // on each is the tuned-out failure.
+    expect(buildPlayCommentary({ fen: '4k3/8/8/p7/1P6/8/8/4K3 w - - 0 1', studentColor: 'white' })).toBeNull();
+  });
+
+  it('mate on the board outranks everything and never names the move', () => {
+    // Ra8# is available. The fact says mate exists; it must not say where.
+    const beat = buildPlayCommentary({ fen: '6k1/5ppp/8/8/8/8/8/R5K1 w - - 0 1', studentColor: 'white' });
+    expect(beat?.kind).toBe('tactic');
+    expect(beat?.facts[0]).toContain('MATE');
+    expect(beat?.facts[0]).not.toContain('a8');
+  });
+
+  it('speaks the student\'s OWN event tactic from the expanded detector', () => {
+    // White Rd1 attacks the black knight on d4 whose sole defender (Bb6) is
+    // itself capturable by Rb1 — removal of the guard, beneficiary White.
+    const beat = buildPlayCommentary({ fen: '6k1/8/1b6/8/3n4/8/6PP/1R1R2K1 w - - 0 1', studentColor: 'white' });
+    expect(beat?.kind).toBe('tactic');
+    expect(beat?.facts[0]).toContain('TACTIC ON THE BOARD');
+  });
+
+  it('seeding observation: enemy queen and rook on one file, student owns a rook', () => {
+    // Black Qd6 + Rd8 share the d-file (d7 empty, luft on h6 so no back-rank
+    // flag); White owns Ra1. Not a tactic — the noticing that precedes one.
+    const beat = buildPlayCommentary({ fen: '3r2k1/5pp1/3q3p/8/8/8/6PP/R5K1 w - - 0 20', studentColor: 'white' });
+    expect(beat?.kind).toBe('seeding-observation');
+    expect(beat?.facts[0]).toContain('d-file');
+    expect(beat?.facts[0]).toContain('rook');
+  });
+
+  it('seeding observation stays silent without a matching slider for the line', () => {
+    // Same alignment, but White\'s only piece is a bishop — wrong geometry.
+    const beat = buildPlayCommentary({ fen: '3r2k1/5pp1/3q3p/8/8/8/6PP/B5K1 w - - 0 20', studentColor: 'white' });
+    expect(beat?.kind).not.toBe('seeding-observation');
+  });
 });

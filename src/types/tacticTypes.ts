@@ -28,6 +28,12 @@ export interface TacticPattern {
   involvedSquares: string[];
   /** Human-readable description, e.g., "Knight on d5 forks queen on c7 and rook on f6" */
   description: string;
+  /** The color the tactic FAVORS (the attacker's side). Optional for
+   *  backward compatibility with classifier-produced patterns; every
+   *  geometry detector in tacticsDetector sets it — it is what lets
+   *  playCommentary speak about the student's own tactics without
+   *  handing the opponent's over (2026-08-06 expansion). */
+  beneficiary?: 'w' | 'b';
 }
 
 export type TacticPatternType =
@@ -38,6 +44,8 @@ export type TacticPatternType =
   | 'double_check'
   | 'back_rank'
   | 'removal_of_guard'
+  | 'trapped_piece'
+  | 'mate_threat'
   | 'none';
 
 export interface HangingPiece {
