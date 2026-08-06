@@ -45,6 +45,28 @@ describe('isCounterRepertoireQuestion', () => {
     expect(g2.counterRepertoireQuestion ?? false).toBe(false);
     expect(isBestMoveQuestion('what is the best move here?')).toBe(true);
   });
+
+  // A real user asked "What should I play against the Caro khan" and got a
+  // confident answer about the ELEPHANT GAMBIT — their overall worst
+  // matchup, nothing to do with what they asked (PostHog, 2026-07-15). Root
+  // cause: repertoireGapQuestion ALSO fired on this text (both patterns
+  // share "what should I..." phrasing), and coachApi's counter-repertoire
+  // branch isn't mutually exclusive with the repertoire-gap branch below it
+  // — when the counter-repertoire voiceFacts call fails, execution falls
+  // through into repertoire-gap, which answers from a different question
+  // entirely. Fix: suppress repertoireGapQuestion on a counter-repertoire
+  // ask, the same way bestMoveQuestion is already suppressed above.
+  it('suppresses the repertoire-gap hijack in buildQuestionGrounding', () => {
+    for (const ask of ['What should I play against the Caro khan', 'What should I play against the Caro-Kann']) {
+      const g = buildQuestionGrounding(ask);
+      expect(g.counterRepertoireQuestion, ask).toBe(true);
+      expect(g.repertoireGapQuestion, ask).toBe(false);
+    }
+    // sanity: a genuine repertoire-gap ask (no against-object) still fires.
+    const g2 = buildQuestionGrounding('what should I learn next in my repertoire?');
+    expect(g2.counterRepertoireQuestion ?? false).toBe(false);
+    expect(g2.repertoireGapQuestion).toBe(true);
+  });
 });
 
 // ─── The grounded computer ───────────────────────────────────────────────────

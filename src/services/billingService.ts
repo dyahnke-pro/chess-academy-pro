@@ -293,12 +293,58 @@ export async function purchasePackage(packageId: string): Promise<boolean> {
       trackPurchaseCancelled(packageId);
     } else {
       const message = err instanceof Error ? err.message : 'purchase failed';
+      const detail = extractPurchaseErrorDetail(err);
       useEntitlementStore.getState().setError(message);
-      logBilling('billing-error', 'billingService.purchasePackage', message);
-      trackPurchaseFailed(packageId, message);
+      logBilling(
+        'billing-error',
+        'billingService.purchasePackage',
+        [
+          message,
+          detail.code ? `code=${detail.code}` : null,
+          detail.readableErrorCode ? `readableErrorCode=${detail.readableErrorCode}` : null,
+          detail.underlyingErrorMessage ? `underlying=${detail.underlyingErrorMessage}` : null,
+        ]
+          .filter(Boolean)
+          .join(' | '),
+      );
+      trackPurchaseFailed(packageId, message, detail);
     }
     return false;
   }
+}
+
+/**
+ * Pull the RevenueCat `PurchasesError` diagnostic fields out of a caught
+ * error, when present. `err.message` alone is a generic canned string (e.g.
+ * "There was a problem with the App Store." for every STORE_PROBLEM_ERROR,
+ * whatever the real cause) — `code` / `readableErrorCode` /
+ * `underlyingErrorMessage` are what actually distinguish a Paid-Apps-
+ * Agreement issue from a sandbox account issue from a real StoreKit outage.
+ * Added 2026-08-06 after a real user's purchase attempt failed identically
+ * on both packages within 1s each, six times in 46s, with nothing beyond
+ * the generic message to diagnose it — see PostHog `purchase_failed`.
+ */
+export function extractPurchaseErrorDetail(err: unknown): {
+  code?: string;
+  readableErrorCode?: string;
+  underlyingErrorMessage?: string;
+} {
+  if (typeof err !== 'object' || err === null) return {};
+  const e = err as Record<string, unknown>;
+  const userInfo = typeof e.userInfo === 'object' && e.userInfo !== null
+    ? (e.userInfo as Record<string, unknown>)
+    : undefined;
+  return {
+    code: typeof e.code === 'string' ? e.code : undefined,
+    readableErrorCode:
+      typeof userInfo?.readableErrorCode === 'string'
+        ? userInfo.readableErrorCode
+        : typeof e.readableErrorCode === 'string'
+          ? e.readableErrorCode
+          : undefined,
+    underlyingErrorMessage:
+      typeof e.underlyingErrorMessage === 'string' ? e.underlyingErrorMessage : undefined,
+  };
 }
 
 /** Restore previously-purchased subscriptions (App Store requirement). */

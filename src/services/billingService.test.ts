@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { initBilling, isBillingConfigured, getBillingPackages, purchasePackage, restorePurchases, clearBillingError, getStableAnalyticsId } from './billingService';
+import { initBilling, isBillingConfigured, getBillingPackages, purchasePackage, restorePurchases, clearBillingError, getStableAnalyticsId, extractPurchaseErrorDetail } from './billingService';
 import { useEntitlementStore } from '../stores/entitlementStore';
 
 // The audit sink is a fire-and-forget side effect — stub it so the test stays
@@ -44,6 +44,50 @@ describe('billingService — keyless (graceful degradation)', () => {
     expect(useEntitlementStore.getState().lastError).toBe('StoreKit exploded');
     clearBillingError();
     expect(useEntitlementStore.getState().lastError).toBeNull();
+  });
+});
+
+// extractPurchaseErrorDetail — pulls RevenueCat's PurchasesError diagnostic
+// fields (code / readableErrorCode / underlyingErrorMessage) out of a caught
+// error, so a purchase_failed event carries more than the generic canned
+// `.message` string (David 2026-08-06, after a real user's purchase failed
+// identically 3x with nothing but "There was a problem with the App Store."
+// to go on).
+describe('billingService — extractPurchaseErrorDetail', () => {
+  it('extracts code + underlyingErrorMessage from a RevenueCat PurchasesError shape', () => {
+    const err = {
+      code: '2',
+      message: 'There was a problem with the App Store.',
+      userInfo: { readableErrorCode: 'STORE_PROBLEM_ERROR' },
+      underlyingErrorMessage: 'The App Store could not process the purchase.',
+    };
+    expect(extractPurchaseErrorDetail(err)).toEqual({
+      code: '2',
+      readableErrorCode: 'STORE_PROBLEM_ERROR',
+      underlyingErrorMessage: 'The App Store could not process the purchase.',
+    });
+  });
+
+  it('falls back to a top-level readableErrorCode when userInfo is absent', () => {
+    const err = { code: '3', readableErrorCode: 'PURCHASE_NOT_ALLOWED_ERROR' };
+    expect(extractPurchaseErrorDetail(err)).toEqual({
+      code: '3',
+      readableErrorCode: 'PURCHASE_NOT_ALLOWED_ERROR',
+      underlyingErrorMessage: undefined,
+    });
+  });
+
+  it('returns an empty object for a plain Error (non-RevenueCat throw)', () => {
+    expect(extractPurchaseErrorDetail(new Error('network down'))).toEqual({
+      code: undefined,
+      readableErrorCode: undefined,
+      underlyingErrorMessage: undefined,
+    });
+  });
+
+  it('returns an empty object for a non-object throw', () => {
+    expect(extractPurchaseErrorDetail('a string throw')).toEqual({});
+    expect(extractPurchaseErrorDetail(null)).toEqual({});
   });
 });
 

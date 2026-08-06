@@ -231,8 +231,17 @@ function readingPaceMs(text: string): number {
  *  control classifier, which tore the current opening down and let the next
  *  message generate a DIFFERENT opening (the reported "clicked yes → different
  *  opening"). Now matches the spaced forms + "play (it/the line) out". */
-const CONTINUE_GAME_RE =
-  /(?:\b(?:watch|see|show|play|continue|finish|keep going|carry on).{0,40}\b(?:middle\s?game|end\s?game|rest of (?:the )?game|whole game|full game|entire game|play out)\b)|(?:\bplay (?:it|this|the line|the game) out\b)/i;
+// Broadened again (2026-08-06): a real user typed "Keep playing the line
+// out" — the -ing form of "play" — which matched neither branch (the verb
+// list required the bare "play"/"keep going", not "keep playing"), so it
+// fell through to the LLM chat path and got the generic ungrounded refusal
+// instead of resuming the walkthrough (PostHog). Verbs now accept -ing.
+// Exported for direct regression testing (CoachTeachPage.continueGameRe.test.ts)
+// — this pattern has now needed two real-world-phrasing patches (2026-07-26,
+// 2026-08-06); testing it in isolation catches the next miss without
+// standing up the whole component.
+export const CONTINUE_GAME_RE =
+  /(?:\b(?:watch(?:ing)?|see(?:ing)?|show(?:ing)?|play(?:ing)?|continu(?:e|ing)|finish(?:ing)?|keep(?:ing)?\s+going|carry(?:ing)?\s+on).{0,40}\b(?:middle\s?game|end\s?game|rest of (?:the )?game|whole game|full game|entire game|play out)\b)|(?:\bplay(?:ing)?\s(?:it|this|the line|the game)\s+out\b)/i;
 /** A bare affirmative ("yes", "sure", "ok", "please do") — meaningful ONLY when
  *  the coach has just offered to continue at the leaf, where an affirmative
  *  unambiguously means "yes, keep going". Gated on walkthrough.phase==='leaf'

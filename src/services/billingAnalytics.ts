@@ -150,11 +150,34 @@ export function trackPurchaseSuccess(ctx: PurchaseContext, periodType: BillingPe
   });
 }
 
-/** A purchase failed with a real error (not a user cancel). */
-export function trackPurchaseFailed(packageId: string, errorMessage: string): void {
+/** RevenueCat `PurchasesError` diagnostic fields beyond the generic
+ *  `.message` — see `billingService.extractPurchaseErrorDetail`. All
+ *  optional since a non-RevenueCat throw (e.g. a network error before the
+ *  SDK call) won't carry them. */
+export interface PurchaseErrorDetail {
+  code?: string;
+  readableErrorCode?: string;
+  underlyingErrorMessage?: string;
+}
+
+/** A purchase failed with a real error (not a user cancel). `detail` carries
+ *  the RevenueCat error code / underlying StoreKit message when available —
+ *  the top-level message alone is a canned string shared by every error of
+ *  the same class (e.g. "There was a problem with the App Store." for every
+ *  STORE_PROBLEM_ERROR, whatever the actual cause). */
+export function trackPurchaseFailed(
+  packageId: string,
+  errorMessage: string,
+  detail?: PurchaseErrorDetail,
+): void {
   captureEvent(BILLING_EVENT.purchaseFailed, {
     package_id: packageId,
     error_message: errorMessage.slice(0, 200),
+    ...(detail?.code ? { error_code: detail.code } : {}),
+    ...(detail?.readableErrorCode ? { readable_error_code: detail.readableErrorCode } : {}),
+    ...(detail?.underlyingErrorMessage
+      ? { underlying_error_message: detail.underlyingErrorMessage.slice(0, 300) }
+      : {}),
   });
 }
 

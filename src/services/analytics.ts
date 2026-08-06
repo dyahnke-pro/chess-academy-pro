@@ -653,6 +653,14 @@ export function mirrorAuditEvent(entry: AuditEntry): void {
         ...(entry.route ? { route: entry.route } : {}),
         ...(entry.fen ? { fen: entry.fen } : {}),
         ...(entry.buildId ? { build_id: entry.buildId } : {}),
+        // `details`/`narrationText` used to be dropped entirely for
+        // exception-class kinds (only `summary` survived) — a real
+        // `sanitizer-leak` fired in prod with nothing but "Piece-letter
+        // shorthand survived sanitizeForTTS" to go on; the actual leaked
+        // TEXT was gone the moment the audit-stream buffer rotated, so the
+        // defect was unreproducible after the fact. Both carry now, bounded.
+        ...(entry.narrationText ? { narration_text: entry.narrationText.slice(0, 500) } : {}),
+        ...(entry.details ? { details: entry.details.slice(0, 500) } : {}),
       });
       return;
     }

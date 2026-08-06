@@ -1328,6 +1328,14 @@ const COUNTER_REPERTOIRE_RE = anyOf([
   // reads the opening name from the rest of the message ("I struggle against
   // the KID. Which opening do you suggest I play against it and why?").
   String.raw`\bwhich\s+(?:opening|line|defen[cs]e|system)\s+(?:do\s+you|would\s+you)\s+(?:suggest|recommend)\b`,
+  // Object-FIRST word order: "Against the Caro-Kann, what should I play?" A
+  // real user's exact phrasing missed every pattern above (all anchor on
+  // "what ... against", not "against ... what") and fell through to the
+  // generic ungrounded refusal instead of a real recommendation (PostHog,
+  // 2026-07-15). The deictic-object strip above already runs before this
+  // regex, so "against this position, what should I play" still correctly
+  // does NOT match (nothing real is left after stripping "this position").
+  String.raw`\bagainst\s+(?:the\s+|an?\s+)?[a-z][\w\s-]{0,40},?\s+what\s+(?:should|do|can|would)\s+(?:i|you)\s*(?:play|use|go\s+with)?\b`,
 ]);
 export function isCounterRepertoireQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
@@ -1896,7 +1904,16 @@ export function buildQuestionGrounding(
     mistakesQuestion: isMistakesQuestion(a) && !isErrorsBySituationQuestion(a) && !isMisconceptionsQuestion(a),
     tacticsProfileQuestion: isTacticsProfileQuestion(a),
     phaseQuestion: isPhaseQuestion(a),
-    repertoireGapQuestion: isRepertoireGapQuestion(a),
+    // Suppressed on a counter-repertoire ask ("what should I play against the
+    // Caro-Kann?") — both patterns can fire on the same "what should I..."
+    // phrasing, and when they do, the counter-repertoire branch runs FIRST in
+    // coachApi but isn't mutually exclusive with this one: if its voiceFacts
+    // call fails, execution falls through into this block, which answers
+    // from the student's OVERALL worst matchup — a confidently wrong-topic
+    // answer (a real "Caro khan" ask got told to play against the Elephant
+    // Gambit, PostHog 2026-07-15). The counter-repertoire ask is the more
+    // specific, correct read of the question — it wins outright.
+    repertoireGapQuestion: isRepertoireGapQuestion(a) && !isCounterRepertoireQuestion(a),
     repertoireGapKind: repertoireGapKind(a),
     accuracyQuestion: isAccuracyQuestion(a),
     consistencyQuestion: isConsistencyQuestion(a),
