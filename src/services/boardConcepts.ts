@@ -294,10 +294,111 @@ export function boardConcepts(fen: string): BoardConcepts | null {
   // A NAMED pattern only. Hanging pieces were included at first and the tag
   // fired 9,532 times: in a real game something is momentarily undefended
   // almost every ply, and "there is a loose piece" is not a teaching moment.
+  // EVENT patterns only (2026-08-06): the detector expansion made pins and
+  // skewers plentiful — a routine opening pin put the tag on 51% of real
+  // plies. A position is "about tactics" when something DECISIVE is on the
+  // board, not whenever two pieces share a diagonal.
   try {
-    if (detectTactics(fen).tactics.length > 0) concepts.add('tactics');
+    const EVENT_TACTICS = new Set(['mate_threat', 'fork', 'trapped_piece', 'removal_of_guard', 'back_rank', 'discovery']);
+    if (detectTactics(fen).tactics.some((t) => EVENT_TACTICS.has(t.type))) concepts.add('tactics');
   } catch { /* a detector fault must not invent or suppress a tag */ }
+
+  // ── FUNDAMENTALS (2026-08-06, David: "expansive across many tactics and
+  // fundamentals"). Five more corpus seams made board-provable — development
+  // 1,117 notes, conversion 1,039, simplification 953, pawn-break 1,101,
+  // open-file 636. Same rule as ever: a tag is emitted only when the board
+  // PROVES it; the judgement seams (initiative, prophylaxis, counterplay)
+  // stay off because no position can prove an intent.
+
+  // DEVELOPMENT: one side is ≥2 developed pieces ahead (minors off their
+  // home squares + castled counts as one). A lead, not mere development —
+  // "both sides are developing" teaches nothing.
+  if (phase !== 'endgame') {
+    const devLead = developmentCount(all, fen, 'w') - developmentCount(all, fen, 'b');
+    if (Math.abs(devLead) >= 2) concepts.add('development');
+  }
+
+  // MATERIAL for the two conversion-family tags, in pawns.
+  const material = (c: 'w' | 'b'): number =>
+    all.reduce((s, p) => s + (p.color === c ? ({ p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 }[p.type] ?? 0) : 0), 0);
+  const lead = material('w') - material('b');
+
+  // SIMPLIFICATION: clearly ahead with heavy pieces still on — the "trade
+  // when winning" principle applies to THIS board.
+  const heaviesOn = all.some((p) => p.type === 'q' || p.type === 'r');
+  if (Math.abs(lead) >= 3 && heaviesOn && phase !== 'endgame') concepts.add('simplification');
+
+  // CONVERSION: an endgame the student is actually winning (or losing —
+  // holding notes live under the same tag).
+  if (phase === 'endgame' && Math.abs(lead) >= 2) concepts.add('conversion');
+
+  // PAWN BREAK available: a legal pawn ADVANCE that attacks an enemy pawn —
+  // the lever is on the board right now, not a someday plan. Both corpus
+  // spellings are emitted so both note pools are reachable.
+  if (hasPawnBreak(chess, 'w') || hasPawnBreak(chess, 'b')) {
+    concepts.add('pawn-break');
+    concepts.add('pawn-breaks');
+  }
+
+  // OPEN FILE up for grabs: a fully open file exists while both sides still
+  // own rooks and NEITHER has taken it — the teachable moment is seizing it,
+  // which is what the corpus's open-file notes teach. A file already owned
+  // is `piece-activity` (above), a different lesson.
+  {
+    const openFiles = [...openFilesFor(all, 'w')].filter((f) => openFilesFor(all, 'b').has(f));
+    const rookFiles = new Set(all.filter((p) => p.type === 'r').map((p) => fileOf(p.square)));
+    if (phase !== 'endgame'
+      && all.some((p) => p.type === 'r' && p.color === 'w')
+      && all.some((p) => p.type === 'r' && p.color === 'b')
+      && openFiles.some((f) => !rookFiles.has(f))) {
+      concepts.add('open-file');
+    }
+  }
 
   if (concepts.size === 0) return null;
   return { phase, concepts: [...concepts] };
+}
+
+/** Developed pieces for `c`: minors off their home squares, plus one for a
+ *  castled king. Queens/rooks deliberately uncounted — early queen sorties
+ *  are not "development" and rook lifts are a different idea. */
+function developmentCount(all: Sq[], fen: string, c: 'w' | 'b'): number {
+  const home = c === 'w'
+    ? new Set(['b1', 'g1', 'c1', 'f1'])
+    : new Set(['b8', 'g8', 'c8', 'f8']);
+  let n = all.filter((p) => p.color === c && (p.type === 'n' || p.type === 'b') && !home.has(p.square)).length;
+  if (hasCastled(fen, c === 'w' ? 'white' : 'black')) n += 1;
+  return n;
+}
+
+/** A legal pawn ADVANCE landing where it attacks an enemy CHAIN pawn — one
+ *  defended by its own pawn. The bare "some lever exists" shape fired on 97%
+ *  of real plies (measured 2026-08-06): in an open position a lever is
+ *  always available and teaches nothing. Attacking a pawn CHAIN is the
+ *  break the corpus notes actually teach — undermine the base, the chain
+ *  falls. */
+function hasPawnBreak(chess: Chess, c: 'w' | 'b'): boolean {
+  const parts = chess.fen().split(' ');
+  parts[1] = c;
+  parts[3] = '-';
+  let probe: Chess;
+  try { probe = new Chess(parts.join(' ')); } catch { return false; }
+  const dir = c === 'w' ? 1 : -1;
+  const enemyDir = -dir;
+  const isChainPawn = (f: number, r: number): boolean => {
+    const t = probe.get(`${String.fromCharCode(97 + f)}${r}` as Parameters<Chess['get']>[0]);
+    if (!t || t.type !== 'p' || t.color === c) return false;
+    // Defended by its OWN pawn = a chain member worth undermining.
+    for (const df of [-1, 1]) {
+      const d = probe.get(`${String.fromCharCode(97 + f + df)}${r + enemyDir}` as Parameters<Chess['get']>[0]);
+      if (d && d.type === 'p' && d.color !== c) return true;
+    }
+    return false;
+  };
+  return probe.moves({ verbose: true }).some((m) => {
+    if (m.piece !== 'p' || m.captured) return false;
+    const f = fileOf(m.to);
+    const r = rankOf(m.to);
+    return isChainPawn(f - 1, r + dir) || isChainPawn(f + 1, r + dir);
+  });
 }

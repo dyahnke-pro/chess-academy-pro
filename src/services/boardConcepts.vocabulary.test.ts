@@ -52,6 +52,42 @@ describe('corpus-vocabulary tags are board-provable', () => {
   });
 });
 
+describe('the 2026-08-06 fundamentals are board-provable', () => {
+  it('development: a 2+ piece lead tags; balanced development stays silent', () => {
+    // White: both knights + a bishop out and castled; Black: nothing moved.
+    expect(tags('rnbqkbnr/pppppppp/8/8/2B5/2N2N2/PPPPPPPP/R1BQ1RK1 w kq - 0 6').has('development')).toBe(true);
+    expect(tags(new Chess().fen()).has('development')).toBe(false);
+  });
+
+  it('simplification: ahead a piece with heavies on; equal material silent', () => {
+    // White up a full rook, queens and rooks still on the board.
+    expect(tags('1q3rk1/1pp2ppp/8/8/8/8/1PP2PPP/RQ3RK1 w - - 0 20').has('simplification')).toBe(true);
+    expect(tags('1q3rk1/1pp2ppp/8/8/8/8/1PP2PPP/1Q3RK1 w - - 0 20').has('simplification')).toBe(false);
+  });
+
+  it('conversion: a won endgame tags; a level one does not', () => {
+    expect(tags('8/5pk1/6p1/8/1R6/6P1/5PK1/8 w - - 0 40').has('conversion')).toBe(true);
+    expect(tags('8/5pk1/6p1/8/8/6P1/5PK1/8 w - - 0 40').has('conversion')).toBe(false);
+  });
+
+  it('pawn-break: undermining a CHAIN tags; an open board with stray levers does not', () => {
+    // French-style chain d5/e6 vs d4/e5 — White's f4-f5 hits the e6 base? Use
+    // the direct shape: White pawn f4 can advance to f5 attacking e6, which
+    // is defended by f7 — a chain member.
+    expect(tags('6k1/5p2/4p3/3p4/3P1P2/8/6PP/6K1 w - - 0 20').has('pawn-break')).toBe(true);
+    // Same pawns but the target is an ISLAND (no defender) — the 97%-of-plies
+    // shape the tightened detector must ignore.
+    expect(tags('6k1/8/4p3/8/5P2/8/6PP/6K1 w - - 0 20').has('pawn-break')).toBe(false);
+  });
+
+  it('open-file: an unclaimed open file with rooks on both sides tags', () => {
+    // ONLY the e-file is open; every rook sits elsewhere.
+    expect(tags('1q3rk1/pppp1ppp/8/8/8/8/PPPP1PPP/RQ4K1 w - - 0 20').has('open-file')).toBe(true);
+    // A rook already owns the only open file → piece-activity's lesson.
+    expect(tags('1q3rk1/pppp1ppp/8/8/8/4R3/PPPP1PPP/1Q4K1 w - - 0 20').has('open-file')).toBe(false);
+  });
+});
+
 describe('the vocabulary reaches the corpus', () => {
   it('holds the reachability floor across all four corpora', () => {
     // Measured 2026-08-05: 15,761 of 34,101 mg/eg notes (46.2%) carry at least
@@ -61,6 +97,9 @@ describe('the vocabulary reaches the corpus', () => {
     const VOCAB = new Set([
       'rook-endgame', 'pawn-endgame', 'king-activity', 'passed-pawn', 'bishop-pair',
       'pawn-structure', 'knight-outpost', 'pawn-storm', 'king-safety', 'piece-activity', 'tactics',
+      // The 2026-08-06 fundamentals expansion (David: "expansive across many
+      // tactics and fundamentals") — measured 18,643/34,101 (54.7%) reachable.
+      'development', 'simplification', 'conversion', 'pawn-break', 'pawn-breaks', 'open-file',
     ]);
     const files = [
       'src/data/danya-teachings.json',
@@ -84,7 +123,8 @@ describe('the vocabulary reaches the corpus', () => {
       }
     }
     expect(total).toBeGreaterThan(30_000);
-    expect(reachable, `${reachable}/${total} mg/eg notes reachable — the vocabulary drifted`).toBeGreaterThanOrEqual(15_000);
+    // Floor raised 15,000 → 18,000 with the fundamentals expansion.
+    expect(reachable, `${reachable}/${total} mg/eg notes reachable — the vocabulary drifted`).toBeGreaterThanOrEqual(18_000);
     console.log(`[reachability] ${reachable}/${total} mg/eg notes (${((reachable / total) * 100).toFixed(1)}%) reachable via the emitted vocabulary`);
   });
 });
