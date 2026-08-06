@@ -18,9 +18,11 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
+import { muteTtsForAudit, stampAuditRunId } from './audit-lib/mute-tts.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
 const ASK = process.env.AUDIT_OPENING || 'latvian gambit';
+const RUN_ID = `spoken-${Date.now().toString(36)}`;
 
 // Marks: distinctive mid-sentence fragments (≥6 words) from every positioned
 // note of the target opening, shallow lines first. Lowercased for matching.
@@ -49,7 +51,15 @@ console.log(`[probe] "${ASK}" — ${notes.length} positioned notes, ${marks.leng
 
 const listener = await startAuditListener();
 const b = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
-const p = await (await b.newContext(sandboxContextOptions())).newPage();
+const ctx = await b.newContext(sandboxContextOptions());
+// MUTED + run-stamped (David 2026-08-06): the spoken marks are read back from
+// PostHog (coach_narration_spoken.narration_text carries the FULL line, incl.
+// on the muted tier), keyed by audit_run_id — the local listener cannot attach
+// on https prod (mixed content) and /api/tts must never be synthesised just to
+// observe text. The local ttsTexts + listener legs still work on localhost.
+await ctx.addInitScript(muteTtsForAudit);
+await ctx.addInitScript(stampAuditRunId(RUN_ID));
+const p = await ctx.newPage();
 const ttsTexts = [];
 p.on('request', (r) => {
   if (r.url().includes('/api/tts')) {
@@ -135,4 +145,6 @@ const ok = !!seenSpoken;
 console.log(`${ok ? '✓ PASS' : '✗ FAIL'}: teach-me-${ASK} speaks the corpus — ${detail}`);
 if (seenSpoken) console.log(`  spoken mark: "${seenSpoken}"`);
 console.log('  tts transcript → /tmp/teach-probe-tts.json');
+console.log(`  audit_run_id=${RUN_ID} — full transcript via PostHog MCP (project 390808, ~90s lag):`);
+console.log(`    SELECT timestamp, properties.narration_text FROM events WHERE event='coach_narration_spoken' AND properties.audit_run_id='${RUN_ID}' ORDER BY timestamp`);
 process.exit(ok ? 0 : 1);

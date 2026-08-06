@@ -36,3 +36,24 @@ export function muteTtsForAudit() {
     /* no localStorage in this context — the app then speaks normally */
   }
 }
+
+/** Stamp a RUN ID the app registers as the `audit_run_id` PostHog
+ *  super-property (App.tsx, next to device identity), so THIS run's events —
+ *  including every `coach_narration_spoken` with its full `narration_text` —
+ *  are isolable in PostHog with a WHERE clause instead of $session_id + wall-
+ *  clock guesswork. This is the prod-https replacement for the local listener,
+ *  which cannot attach cross-scheme (David 2026-08-06: "pull the narrations
+ *  from posthog instead of listener tool"). Returns an init-script function;
+ *  inject beside the mute:
+ *
+ *      const runId = `audit-${Date.now().toString(36)}`;
+ *      await ctx.addInitScript(stampAuditRunId(runId));
+ *
+ *  Read back (ingest lag ~90s; via the PostHog MCP, never the dead phx_ key):
+ *      SELECT timestamp, properties.source, properties.narration_text
+ *      FROM events WHERE event = 'coach_narration_spoken'
+ *      AND properties.audit_run_id = '<runId>' ORDER BY timestamp
+ */
+export function stampAuditRunId(runId) {
+  return `try { window.localStorage.setItem('auditRunId', ${JSON.stringify(String(runId))}); } catch {}`;
+}
