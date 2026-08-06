@@ -16,9 +16,27 @@ function setEnt(over: Partial<typeof entitlement>): void {
   Object.assign(entitlement, over);
 }
 
-function setRow(over: Partial<{ puzzlesSolved: number; freeOpeningId: string | null; kidFirstAccessAt: number | null }>): void {
+function setRow(
+  over: Partial<{
+    puzzlesSolved: number;
+    freeOpeningId: string | null;
+    kidFirstAccessAt: number | null;
+    coachLessonsUsed: number;
+    coachChatTurnsUsed: number;
+  }>,
+): void {
   useFreeTierStore.setState({
-    row: { id: 'singleton', puzzlesSolved: 0, freeOpeningId: null, kidFirstAccessAt: null, updatedAt: 0, ...over },
+    row: {
+      id: 'singleton',
+      puzzlesSolved: 0,
+      freeOpeningId: null,
+      kidFirstAccessAt: null,
+      coachLessonsUsed: 0,
+      coachChatTurnsUsed: 0,
+      coachUnlockSeenAt: null,
+      updatedAt: 0,
+      ...over,
+    },
     hydrated: true,
   });
 }
@@ -68,7 +86,8 @@ describe('AccessGate — free surfaces', () => {
 });
 
 describe('AccessGate — walled', () => {
-  it('walls the coach', () => {
+  it('walls the coach once both free-tier buckets are spent', () => {
+    setRow({ coachLessonsUsed: 7, coachChatTurnsUsed: 50 });
     renderAt('/coach/teach');
     expect(wallShown()).toBe(true);
     expect(appShown()).toBe(false);
@@ -104,6 +123,15 @@ describe('AccessGate — allowed free tier', () => {
   it('meters tactics while the bucket has room', () => {
     setRow({ puzzlesSolved: 5 });
     renderAt('/tactics/classic');
+    expect(appShown()).toBe(true);
+  });
+  it('meters the coach with a fresh free-tier budget', () => {
+    renderAt('/coach/teach');
+    expect(appShown()).toBe(true);
+  });
+  it('meters the coach while only one bucket is spent', () => {
+    setRow({ coachLessonsUsed: 7, coachChatTurnsUsed: 12 });
+    renderAt('/coach/play');
     expect(appShown()).toBe(true);
   });
   it('shows kid mode before the window starts', () => {

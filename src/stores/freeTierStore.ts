@@ -15,11 +15,15 @@ import {
   recordPuzzleSolved as svcRecordPuzzleSolved,
   claimFreeOpening as svcClaimFreeOpening,
   stampKidAccess as svcStampKidAccess,
+  recordCoachLessonUsed as svcRecordCoachLessonUsed,
+  recordCoachChatTurnUsed as svcRecordCoachChatTurnUsed,
+  markCoachUnlockAnnouncementSeen as svcMarkCoachUnlockAnnouncementSeen,
   type ClaimResult,
 } from '../services/freeTierService';
 
 export interface FreeTierState {
-  /** Current ledger snapshot (puzzlesSolved / freeOpeningId / kidFirstAccessAt). */
+  /** Current ledger snapshot (puzzlesSolved / freeOpeningId / kidFirstAccessAt /
+   *  coachLessonsUsed / coachChatTurnsUsed). */
   row: FreeTierRecord;
   /** True once the initial Dexie hydrate has completed. */
   hydrated: boolean;
@@ -32,6 +36,12 @@ export interface FreeTierState {
   claimFreeOpening: (openingId: string) => Promise<ClaimResult>;
   /** Stamp first kid-section access if unset; persists + updates the mirror. */
   stampKidAccess: () => Promise<void>;
+  /** Record one coach lesson start; persists + updates the mirror. */
+  recordCoachLessonUsed: () => Promise<void>;
+  /** Record one coach chat turn; persists + updates the mirror. */
+  recordCoachChatTurnUsed: () => Promise<void>;
+  /** Mark the coach-unlock announcement seen; persists + updates the mirror. */
+  markCoachUnlockSeen: () => Promise<void>;
 }
 
 const INITIAL_ROW: FreeTierRecord = {
@@ -39,6 +49,9 @@ const INITIAL_ROW: FreeTierRecord = {
   puzzlesSolved: 0,
   freeOpeningId: null,
   kidFirstAccessAt: null,
+  coachLessonsUsed: 0,
+  coachChatTurnsUsed: 0,
+  coachUnlockSeenAt: null,
   updatedAt: 0,
 };
 
@@ -61,6 +74,18 @@ export const useFreeTierStore = create<FreeTierState>((set) => ({
   },
   stampKidAccess: async () => {
     const row = await svcStampKidAccess();
+    set({ row });
+  },
+  recordCoachLessonUsed: async () => {
+    const row = await svcRecordCoachLessonUsed();
+    set({ row });
+  },
+  recordCoachChatTurnUsed: async () => {
+    const row = await svcRecordCoachChatTurnUsed();
+    set({ row });
+  },
+  markCoachUnlockSeen: async () => {
+    const row = await svcMarkCoachUnlockAnnouncementSeen();
     set({ row });
   },
 }));

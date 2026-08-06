@@ -2,7 +2,13 @@ import { describe, it, expect } from 'vitest';
 import { resolveAccess, type AccessInput } from './accessPolicy';
 import { KID_FREE_MS } from './freeTierService';
 
-const FRESH: AccessInput['freeTier'] = { puzzlesSolved: 0, freeOpeningId: null, kidFirstAccessAt: null };
+const FRESH: AccessInput['freeTier'] = {
+  puzzlesSolved: 0,
+  freeOpeningId: null,
+  kidFirstAccessAt: null,
+  coachLessonsUsed: 0,
+  coachChatTurnsUsed: 0,
+};
 
 function decide(pathname: string, over: Partial<AccessInput> = {}) {
   return resolveAccess({ pathname, isPro: false, gateEnabled: true, freeTier: FRESH, ...over });
@@ -84,11 +90,34 @@ describe('accessPolicy — kid window', () => {
   });
 });
 
+describe('accessPolicy — coach free tier (7 lessons + 50 chat turns)', () => {
+  it.each(['/coach/play', '/coach/teach', '/coach/home'])('meters %s with a fresh budget', (p) => {
+    expect(decide(p)).toEqual({ decision: 'meter', feature: 'coach' });
+  });
+  it('meters coach while EITHER bucket still has room', () => {
+    expect(decide('/coach/teach', { freeTier: { ...FRESH, coachLessonsUsed: 7, coachChatTurnsUsed: 10 } })).toEqual({
+      decision: 'meter',
+      feature: 'coach',
+    });
+    expect(decide('/coach/teach', { freeTier: { ...FRESH, coachLessonsUsed: 2, coachChatTurnsUsed: 50 } })).toEqual({
+      decision: 'meter',
+      feature: 'coach',
+    });
+  });
+  it('walls coach once BOTH buckets are spent', () => {
+    expect(decide('/coach/teach', { freeTier: { ...FRESH, coachLessonsUsed: 7, coachChatTurnsUsed: 50 } })).toEqual({
+      decision: 'wall',
+      feature: 'coach',
+    });
+    expect(decide('/coach/play', { freeTier: { ...FRESH, coachLessonsUsed: 9, coachChatTurnsUsed: 60 } })).toEqual({
+      decision: 'wall',
+      feature: 'coach',
+    });
+  });
+});
+
 describe('accessPolicy — walled premium', () => {
   it.each([
-    ['/coach/play', 'coach'],
-    ['/coach/teach', 'coach'],
-    ['/coach/home', 'coach'],
     ['/academy', 'academy'],
     ['/academy/course/x', 'academy'],
   ])('walls %s as %s', (p, feature) => {

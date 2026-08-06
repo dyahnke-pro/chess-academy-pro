@@ -111,6 +111,7 @@ import { AccessGate } from './components/Paywall/AccessGate';
 import { initBilling, getStableAnalyticsId } from './services/billingService';
 import { useFreeTierStore } from './stores/freeTierStore';
 import { ReviewPrompt } from './components/Feedback/ReviewPrompt';
+import { CoachUnlockAnnouncement } from './components/Paywall/CoachUnlockAnnouncement';
 
 /**
  * Mounted inside BrowserRouter so it can use router hooks. Wires the
@@ -621,6 +622,11 @@ export function App(): JSX.Element {
           positive moments; renders only when open. Global so it can surface
           from any surface that recorded the win. */}
       <ReviewPrompt />
+      {/* One-time "the coach is free to try" toast (David 2026-08-06) — fires
+          for every non-Pro user, including existing users whose freeTier row
+          predates the coach fields (see CoachUnlockAnnouncement doc comment).
+          Non-blocking bottom sheet, safe to mount unconditionally. */}
+      <CoachUnlockAnnouncement />
     </BrowserRouter>
     </>
   );

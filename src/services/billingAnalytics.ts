@@ -47,6 +47,8 @@ export const BILLING_EVENT = {
   restoreFailed: 'restore_failed',
   /** The free 20-puzzle bucket was just emptied (the spend that hit 0). */
   freePuzzleLimitReached: 'free_puzzle_limit_reached',
+  /** BOTH free coach buckets (7 lessons + 50 chat turns) were just emptied. */
+  freeCoachLimitReached: 'free_coach_limit_reached',
   /** The one free masterclass opening was just claimed (first deep dive). */
   freeOpeningClaimed: 'free_opening_claimed',
   /** A deep dive into a SECOND opening was blocked (upgrade-pressure moment). */
@@ -200,6 +202,12 @@ export function syncSubscriptionPerson(p: SubscriptionPerson): void {
 /** The free 20-puzzle bucket was just emptied. */
 export function trackFreePuzzleLimitReached(): void {
   captureEvent(BILLING_EVENT.freePuzzleLimitReached);
+}
+
+/** BOTH free coach buckets were just emptied by this spend — the coach route
+ *  walls from here on. `via` names which bucket's spend triggered it. */
+export function trackFreeCoachLimitReached(via: 'lesson' | 'chat_turn'): void {
+  captureEvent(BILLING_EVENT.freeCoachLimitReached, { via });
 }
 
 /** The one free masterclass opening was just claimed (activation milestone). */

@@ -11,7 +11,7 @@
  * whole app, so today's behavior is unchanged until the flag flips.
  */
 import type { FreeTierRecord } from '../db/schema';
-import { isEligibleFreeOpening, hasPuzzlesLeft, kidWindowActive } from './freeTierService';
+import { isEligibleFreeOpening, hasPuzzlesLeft, kidWindowActive, hasCoachAccessLeft } from './freeTierService';
 
 /** Which premium surface a wall/meter is for — drives the paywall's contextual
  *  copy and analytics. */
@@ -25,14 +25,17 @@ export type GatedFeature =
 
 export type AccessDecision =
   | { decision: 'allow' }
-  | { decision: 'meter'; feature: 'puzzles' } // mount, board self-walls when spent
+  | { decision: 'meter'; feature: 'puzzles' | 'coach' } // mount, surface self-walls when spent
   | { decision: 'wall'; feature: GatedFeature };
 
 export interface AccessInput {
   pathname: string;
   isPro: boolean;
   gateEnabled: boolean;
-  freeTier: Pick<FreeTierRecord, 'puzzlesSolved' | 'freeOpeningId' | 'kidFirstAccessAt'>;
+  freeTier: Pick<
+    FreeTierRecord,
+    'puzzlesSolved' | 'freeOpeningId' | 'kidFirstAccessAt' | 'coachLessonsUsed' | 'coachChatTurnsUsed'
+  >;
   /** Injectable clock for the kid-window check (tests). */
   now?: number;
 }
@@ -109,8 +112,17 @@ export function resolveAccess(input: AccessInput): AccessDecision {
       : { decision: 'wall', feature: 'puzzles' };
   }
 
-  // Coach + Academy — Pro only.
-  if (startsWith(pathname, '/coach')) return { decision: 'wall', feature: 'coach' };
+  // Coach — metered free tier (7 lessons + 50 chat turns, lifetime, no trial
+  // start — David 2026-08-06: "give them a little more... I'm giving value").
+  // Two independent buckets; the surface self-walls once BOTH are spent (a
+  // lesson start / chat turn consumed there flips the store, and this route
+  // re-evaluates to `wall` on the next render — see useCoachFreeMeter).
+  if (startsWith(pathname, '/coach')) {
+    return hasCoachAccessLeft(freeTier)
+      ? { decision: 'meter', feature: 'coach' }
+      : { decision: 'wall', feature: 'coach' };
+  }
+  // Academy — Pro only.
   if (startsWith(pathname, '/academy')) return { decision: 'wall', feature: 'academy' };
 
   // Anything else → walled by default (fail closed on unknown premium routes).

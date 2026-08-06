@@ -22,6 +22,13 @@ import openingManifests from '../data/opening-manifests.json';
 /** Lifetime free puzzle allowance (one-time bucket, not per-day). */
 export const FREE_PUZZLE_LIMIT = 20;
 
+/** Lifetime free coach allowance (David 2026-08-06 — no trial-clock start,
+ *  deliberately generous: TTS is cheap at current scale — see freeTierService
+ *  doc comment on FreeTierRecord). Both buckets are independent; the coach
+ *  route walls only once BOTH are spent (see accessPolicy). */
+export const FREE_COACH_LESSON_LIMIT = 7;
+export const FREE_COACH_CHAT_LIMIT = 50;
+
 /** Free kid-section window: 7 days from first kid access. */
 export const KID_FREE_MS = 7 * 24 * 60 * 60 * 1000;
 
@@ -54,16 +61,21 @@ const DEFAULT_ROW: FreeTierRecord = {
   puzzlesSolved: 0,
   freeOpeningId: null,
   kidFirstAccessAt: null,
+  coachLessonsUsed: 0,
+  coachChatTurnsUsed: 0,
+  coachUnlockSeenAt: null,
   updatedAt: 0,
 };
 
 /** Load the singleton ledger row, creating an in-memory default if absent.
  *  Never throws — a Dexie hiccup resolves to the default (fail-open-ish; the
- *  gate itself also requires the flag + non-Pro). */
+ *  gate itself also requires the flag + non-Pro). Merges over DEFAULT_ROW so a
+ *  row persisted before the coach fields existed backfills them as 0 instead
+ *  of undefined (a stale row predates FREE_COACH_LESSON_LIMIT/FREE_COACH_CHAT_LIMIT). */
 export async function loadFreeTier(): Promise<FreeTierRecord> {
   try {
     const row = await db.freeTier.get(SINGLETON_ID);
-    return row ?? { ...DEFAULT_ROW };
+    return row ? { ...DEFAULT_ROW, ...row } : { ...DEFAULT_ROW };
   } catch {
     return { ...DEFAULT_ROW };
   }
@@ -95,6 +107,66 @@ export function puzzlesRemaining(state: Pick<FreeTierRecord, 'puzzlesSolved'>): 
 /** Whether the free puzzle bucket still has room. Pure. */
 export function hasPuzzlesLeft(state: Pick<FreeTierRecord, 'puzzlesSolved'>): boolean {
   return puzzlesRemaining(state) > 0;
+}
+
+/** Record one coach lesson start against the free lifetime bucket. Call only
+ *  on a genuinely NEW walkthrough start — resuming a paused one must not call
+ *  this again (see CoachTeachPage.onStartWalkthroughForOpening). */
+export async function recordCoachLessonUsed(): Promise<FreeTierRecord> {
+  const cur = await loadFreeTier();
+  return patch({ coachLessonsUsed: cur.coachLessonsUsed + 1 });
+}
+
+/** Lessons left in the free bucket (never negative). Pure. */
+export function coachLessonsRemaining(state: Pick<FreeTierRecord, 'coachLessonsUsed'>): number {
+  return Math.max(0, FREE_COACH_LESSON_LIMIT - state.coachLessonsUsed);
+}
+
+/** Whether the free coach-lesson bucket still has room. Pure. */
+export function hasCoachLessonsLeft(state: Pick<FreeTierRecord, 'coachLessonsUsed'>): boolean {
+  return coachLessonsRemaining(state) > 0;
+}
+
+/** Record one coach chat turn against the free lifetime bucket. */
+export async function recordCoachChatTurnUsed(): Promise<FreeTierRecord> {
+  const cur = await loadFreeTier();
+  return patch({ coachChatTurnsUsed: cur.coachChatTurnsUsed + 1 });
+}
+
+/** Chat turns left in the free bucket (never negative). Pure. */
+export function coachChatTurnsRemaining(state: Pick<FreeTierRecord, 'coachChatTurnsUsed'>): number {
+  return Math.max(0, FREE_COACH_CHAT_LIMIT - state.coachChatTurnsUsed);
+}
+
+/** Whether the free coach-chat bucket still has room. Pure. */
+export function hasCoachChatTurnsLeft(state: Pick<FreeTierRecord, 'coachChatTurnsUsed'>): boolean {
+  return coachChatTurnsRemaining(state) > 0;
+}
+
+/** Whether ANY coach budget remains — the route-level mount decision. The two
+ *  buckets are independent spends (a lesson start doesn't touch chat turns and
+ *  vice versa); the coach route walls only once BOTH are exhausted. Pure. */
+export function hasCoachAccessLeft(
+  state: Pick<FreeTierRecord, 'coachLessonsUsed' | 'coachChatTurnsUsed'>,
+): boolean {
+  return hasCoachLessonsLeft(state) || hasCoachChatTurnsLeft(state);
+}
+
+/** Whether the "the coach is free to try" announcement still needs to be
+ *  shown. Pure. True for every non-Pro user who hasn't seen it yet —
+ *  including a pre-existing row, which backfills `coachUnlockSeenAt: null`
+ *  via loadFreeTier (see FreeTierRecord doc comment). */
+export function needsCoachUnlockAnnouncement(
+  state: Pick<FreeTierRecord, 'coachUnlockSeenAt'>,
+): boolean {
+  return state.coachUnlockSeenAt == null;
+}
+
+/** Mark the coach-unlock announcement as shown/dismissed (idempotent). */
+export async function markCoachUnlockAnnouncementSeen(): Promise<FreeTierRecord> {
+  const cur = await loadFreeTier();
+  if (cur.coachUnlockSeenAt != null) return cur;
+  return patch({ coachUnlockSeenAt: Date.now() });
 }
 
 export type ClaimResult =
