@@ -31,6 +31,7 @@
 import { chromium } from 'playwright';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { falseBoardClaims, resolveClaimFen } from './audit-lib/board-claims.mjs';
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
 import { startProdApiRelay } from './audit-lib/prod-api-relay.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -44,7 +45,6 @@ const HEADED = process.env.AUDIT_SMOKE_HEADED === '1';
 const BOOT_TIMEOUT_MS = 60_000;
 const BRIEF_WORD_CAP = 34;
 const OUT_DIR = join('audit-reports', `coach-polyglot-${new Date().toISOString().replace(/[:.]/g, '-')}`);
-const PIECE_WORD = { pawn: 'p', knight: 'n', bishop: 'b', rook: 'r', queen: 'q', king: 'k' };
 
 /**
  * Per-language bank. `q` = questions (kind + text), `a` = action commands
@@ -180,23 +180,6 @@ const LANGS = [
     ],
   },
 ];
-
-/** PROVABLY-false piece-on-square claim vs `fen` (works across languages by
- *  matching the algebraic square + a piece word in EN or the target lang). */
-function falseBoardClaims(text, fen) {
-  if (!text || !fen) return [];
-  let chess; try { chess = new Chess(fen); } catch { return []; }
-  const lower = String(text).toLowerCase();
-  const out = [];
-  const re = /\b(pawn|knight|bishop|rook|queen|king)\s+on\s+([a-h][1-8])\b|\b([a-h][1-8])[-\s](pawn|knight|bishop|rook|queen|king)\b/g;
-  let m;
-  while ((m = re.exec(lower)) !== null) {
-    const piece = (m[1] || m[4]); const sq = (m[2] || m[3]);
-    const got = chess.get(sq);
-    if (!got || got.type !== PIECE_WORD[piece]) out.push(`"${m[0]}" — actual: ${got ? got.color + got.type : 'EMPTY'}`);
-  }
-  return out;
-}
 
 /** Heuristic: is `reply` written in `lang`? Count marker hits for the target
  *  vs English. Non-English target with strong English lean + no target markers

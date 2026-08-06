@@ -34,6 +34,7 @@
 import { chromium } from 'playwright';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { falseBoardClaims, resolveClaimFen } from './audit-lib/board-claims.mjs';
 import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-lib/audit-listener.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -47,58 +48,10 @@ const BOOT_TIMEOUT_MS = 60_000;
 const MOVE_SETTLE_MS = 6500; // student move + coach engine reply + narration
 const OUT_DIR = join('audit-reports', `coach-play-listen-${new Date().toISOString().replace(/[:.]/g, '-')}`);
 
-const PIECE_WORD = { pawn: 'p', knight: 'n', bishop: 'b', rook: 'r', queen: 'q', king: 'k' };
 const NARRATION_KINDS = new Set([
   'voice-speak-invoked', 'coach-narration-spoken', 'coach-move-narration-fired',
   'coach-voice-marker-extracted', 'phase-narration-spoken',
 ]);
-
-/** Resolve the board to check a spoken line against. The line often
- *  describes a HYPOTHETICAL ("Watch out — if I play Nxd3+, knight on d3
- *  forks…"): the piece-on-square claims are about the position AFTER that
- *  move, not the current one. Detect a leading "if I play <SAN>" / "<SAN>
- *  from you" and apply it to `fen` first, so the post-move claims are
- *  checked against the post-move board (kills the false positives the
- *  current-FEN check produced). Returns the FEN to verify against. */
-function resolveClaimFen(text, fen) {
-  if (!fen) return fen;
-  const m = /\bif i play\s+([A-Za-z][a-h1-8x+#=-]{1,6})|^([A-Za-z][a-h1-8x+#=-]{1,6})\s+from you/i.exec(String(text));
-  const san = (m && (m[1] || m[2]) || '').trim().replace(/[.,!?]$/, '');
-  if (!san) return fen;
-  for (const f of [fen, fen.replace(/ (w|b) /, (s, c) => ` ${c === 'w' ? 'b' : 'w'} `)]) {
-    try { const c = new Chess(f); if (c.move(san, { strict: false })) return c.fen(); } catch { /* try next */ }
-  }
-  return fen;
-}
-
-/** Conservative HEARD-HALLUCINATION check: flag only a PROVABLY-false
- *  piece-on-square claim against `fen` (the strongest signal — e.g. "the
- *  knight on f6" when f6 is empty or holds another piece). Subtler invented
- *  tactics are left for the dumped transcript review. */
-function falseBoardClaims(text, fen) {
-  if (!text || !fen) return [];
-  let chess;
-  try { chess = new Chess(fen); } catch { return []; }
-  const lower = String(text).toLowerCase();
-  const out = [];
-  const patterns = [
-    [/\b(pawn|knight|bishop|rook|queen|king)\s+on\s+([a-h][1-8])\b/g, 1, 2],
-    [/\b([a-h][1-8])[-\s](pawn|knight|bishop|rook|queen|king)\b/g, 2, 1],
-  ];
-  for (const [re, pcIdx, sqIdx] of patterns) {
-    re.lastIndex = 0;
-    let m;
-    while ((m = re.exec(lower)) !== null) {
-      const sq = m[sqIdx];
-      const want = PIECE_WORD[m[pcIdx]];
-      const got = chess.get(sq);
-      if (!got || got.type !== want) {
-        out.push(`"${m[0]}" — actual: ${got ? got.color + got.type : 'EMPTY'}`);
-      }
-    }
-  }
-  return out;
-}
 
 async function main() {
   await mkdir(OUT_DIR, { recursive: true });

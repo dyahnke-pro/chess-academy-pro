@@ -5,7 +5,7 @@ import { groundedMoveFeedback } from '../services/coachApi';
 import { logAppAudit } from '../services/appAuditor';
 import { db } from '../db/schema';
 import { getCachedStockfish, setCachedStockfish } from './stockfishFenCache';
-import { isSpokenSentenceGrounded } from '../services/coachAnswerGates';
+import { isSpokenSentenceGrounded, gradeNarrationText } from '../services/coachAnswerGates';
 import { buildFedTacticsContext, speakDeepestLookahead } from '../services/liveTacticsContext';
 import { transitionTeachingSourceForGame, generalizedTeaching } from '../services/danyaTeachingService';
 import { detectOpening } from '../services/openingDetectionService';
@@ -278,11 +278,22 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             // kind of position is heading, which is the point of a transition
             // ritual and stays true when the note is borrowed.
             const { note, origin } = source;
-            const ritual = (origin === 'position'
+            const rawRitual = (origin === 'position'
               ? [note.explains, note.teaches, note.plans ? `The plan: ${note.plans}` : '']
               : [note.plans ? generalizedTeaching(origin, note.plans) : ''])
               .filter((s) => s && s.trim())
               .join(' ');
+            // THE BACKUP THAT SHOULD NEVER FIRE (G0). Selection now refuses a
+            // note whose spoken text names pieces this board no longer has —
+            // but this text is about to ride into the model's package as
+            // grounding, and grounding must be board-true by construction.
+            // Every other splice site grades before speaking; this one did
+            // not, which is how a "trade rooks" plan reached a king-and-pawn
+            // ending (David's K+P sample, 2026-08-05). A trip here logs under
+            // `usePhaseNarration.transitionNote.narrationGate` — expect ZERO.
+            const ritual = rawRitual.trim()
+              ? (gradeNarrationText(rawRitual, event.fen, 'usePhaseNarration.transitionNote') ?? '')
+              : '';
             if (ritual.trim()) transitionSentence += ` ${ritual}`;
           }
         } catch { /* corpus is a bonus, never a blocker */ }
@@ -305,6 +316,11 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       let sentenceBuffer = '';
       let speechChain: Promise<void> = Promise.resolve();
       let sentenceCount = 0;
+      // The sentences that SURVIVED the gate — what chat may persist. The
+      // message used to store the raw `fullText`, so a sentence dropped from
+      // speech as board-false still landed in the transcript in writing.
+      // One gate, one truth: what was speakable is what is kept.
+      const keptSentences: string[] = [];
       const dispatchSentence = (sentence: string): void => {
         const trimmed = sentence.trim();
         if (!trimmed) return;
@@ -315,6 +331,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
         // it was omitted, so a hallucinated fork/pin was board-checked only and
         // still SPOKEN (David 2026-07-04 PostHog sweep).
         if (!isSpokenSentenceGrounded(trimmed, event.fen, 'usePhaseNarration', phaseTactics)) return;
+        keptSentences.push(trimmed);
         sentenceCount += 1;
         if (sentenceCount === 1) {
           const firstDispatchMs = Date.now() - detectedTs;
@@ -422,9 +439,12 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
         dispatchSentence(sentenceBuffer);
         sentenceBuffer = '';
       }
-      // The streamed path produced the whole report in fullText — that's what
-      // persists as the chat message.
-      if (fullText.trim()) reportText = fullText.trim();
+      // Persist the GATED text, not the raw response — a sentence the board
+      // gate refused to speak must not survive in writing either. Falls back
+      // to fullText only when nothing was dispatched at all (the non-streaming
+      // fallback below re-checks that case on its own path).
+      if (keptSentences.length > 0) reportText = keptSentences.join(' ');
+      else if (fullText.trim()) reportText = fullText.trim();
 
       // Fallback: if nothing streamed and nothing dispatched but the
       // API returned a usable response (non-streaming provider, rare),

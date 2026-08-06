@@ -702,8 +702,20 @@ export function transitionTeachingSourceForGame(args: {
     // position at all.
     const derived = boardConcepts(args.fen);
     if (derived) {
-      const concept = conceptNotesFor({ phase: derived.phase, concepts: derived.concepts, limit: 1 })
-        .find(usable);
+      // Concept notes are keyed off IDEAS, not positions — so the tier must
+      // still refuse a note whose spoken text names pieces this board no
+      // longer has (the K+P/"trade rooks" class), and whose claims fail the
+      // same live truth filter the structure tier applies. Selection owns
+      // this; the caller's grade is the backup that should never fire.
+      const boardFen = args.fen;
+      const concept = conceptNotesFor({ phase: derived.phase, concepts: derived.concepts, limit: 5 })
+        .find((n) => {
+          if (!usable(n)) return false;
+          if (!namedPiecesExistOnBoard(n.plans ?? '', boardFen)) return false;
+          try {
+            return validateBoardClaims(`${n.explains} ${n.teaches} ${n.plans}`, boardFen).violations.length === 0;
+          } catch { return false; }
+        });
       if (concept) return { note: concept, origin: 'structure' };
     }
   }
@@ -751,6 +763,32 @@ function ensureSignatureIndex(): void {
   }
 }
 
+/** Every piece TYPE a note's spoken text names must exist on the board for at
+ *  least one side. This is what stops "black should trade rooks" being
+ *  borrowed for a king-and-pawn ending — the exact defect David's K+P sample
+ *  surfaced (2026-08-05): the structure and concept tiers select by STRUCTURE
+ *  or CONCEPT, so nothing else in the ladder ever asks whether the pieces the
+ *  prose talks about are still on the board. Square-specific claims stay the
+ *  grading gate's job; this is the cheaper, selection-time question a note
+ *  must answer first (G0: fix the package, the gate is the backup). */
+export function namedPiecesExistOnBoard(text: string, fen: string): boolean {
+  const spoken = (text ?? '').toLowerCase();
+  if (!spoken) return true;
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return true; } // unjudgeable → pass
+  const present = new Set<string>();
+  for (const row of chess.board()) {
+    for (const p of row) if (p) present.add(p.type);
+  }
+  const NAMES: Array<[string, string]> = [
+    ['queen', 'q'], ['rook', 'r'], ['bishop', 'b'], ['knight', 'n'], ['pawn', 'p'],
+  ];
+  for (const [word, type] of NAMES) {
+    if (!present.has(type) && new RegExp(`\\b${word}s?\\b`).test(spoken)) return false;
+  }
+  return true;
+}
+
 /** Notes whose TAUGHT STRUCTURE matches the live position, regardless of
  *  opening — deterministic transfer. Excludes exact-position hits (the FEN
  *  tier owns those) and drops any note making a claim that is false on THIS
@@ -769,9 +807,15 @@ export function notesForStructure(fen: string, maxNotes = Infinity): DanyaNote[]
     const score = signatureMatchScore(live, sig);
     if (score <= 0) continue;
     // Truth filter: the note must not assert anything false about THIS board.
-    const text = `${n.explains} ${n.teaches}`;
+    // `plans` is IN the filtered text — it is the only field the transition
+    // path SPEAKS for a borrowed note (usePhaseNarration, non-position
+    // origins), and until 2026-08-05 it was the one field never checked: a
+    // "trade rooks" plan sailed onto a king-and-pawn ending because only
+    // explains+teaches were judged. Filter what will be spoken.
+    const text = `${n.explains} ${n.teaches} ${n.plans}`;
     try {
       if (validateBoardClaims(text, fen).violations.length > 0) continue;
+      if (!namedPiecesExistOnBoard(n.plans ?? '', fen)) continue;
     } catch { continue; }
     scored.push({ n, score });
   }
