@@ -320,6 +320,11 @@ const CANDIDATE_MOVE_RE = anyOf([
   String.raw`\bis\s+(?:(?:that|the|this)\s+move\s+)?[A-Za-z0-9+#=-]{2,6}\s+(?:too\s+)?(?:ok(?:ay)?|fine|alright|all\s+right|playable|sound|safe|reasonable|decent|good|bad|wrong|winning|losing|strong|solid|risky|dubious|passive|any\s+good|a\s+(?:good|bad|sound|reasonable|decent|blunder|mistake|misstep))\b`,
   String.raw`\b(?:can|could|should|may)\s+i\s+(?:play|go(?:\s+(?:for|with))?|try|pick|choose|castle)\b`,
   String.raw`\b(?:what|how)\s+about\b`,
+  // The literal whatif — "what if I play Nf3", "what happens if I take on e5".
+  // The canonical phrasing of the question this vertical exists for, and the
+  // one form the list somehow never carried (caught 2026-08-06 while
+  // re-verifying the inversion inventory).
+  String.raw`\bwhat\s+(?:if|happens?\s+(?:if|when|after))\b`,
   String.raw`\bis\s+it\s+(?:ok(?:ay)?|fine|safe|good|playable|alright)\s+to\s+(?:play|castle)\b`,
   String.raw`\bwould\s+[A-Za-z0-9+#=-]{2,6}\s+(?:be\s+)?(?:ok(?:ay)?|fine|work|playable|good|sound|safe)\b`,
   String.raw`\bdoes\s+[A-Za-z0-9+#=-]{2,6}\s+(?:work|hold|lose|win|blunder)\b`,

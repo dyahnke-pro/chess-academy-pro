@@ -129,11 +129,14 @@ The DECISION/Q&A paths are inverted. What remains splits in two:
      from the student's POV; falls through off-tablebase).
 
    **Only two genuine decision holes remain — both need a call, not a blind build:**
-   - **whatif** ("what if I play X?") — needs a Stockfish eval of the HYPOTHETICAL
-     position INSIDE the chat path (coachApi → stockfishEngine worker, ~1-5s +
-     timeout handling). In-book whatifs are already partly covered by the
-     master-play lookahead. This is the heaviest remaining plumbing + a latency
-     concern — do it deliberately, not overnight-blind.
+   - **whatif — DONE (verified 2026-08-06; built 2026-07-10 as the NAMED-CANDIDATE
+     vertical, this list was stale).** `isCandidateMoveQuestion` +
+     `extractCandidateSan` (questionIntents.ts) + `buildCandidateEval`
+     (enginePlanContext.ts — chess.js-applies the named move, Stockfish-evals the
+     HYPOTHETICAL position, cache-first) + the `candidateMoveQuestion`
+     interception in coachApi. The 2026-08-06 pass added the literal "what
+     if I play X" / "what happens if/after X" phrasings, which the pattern
+     list never carried.
    - **General chat-fallback → gate 0** is a **PRODUCT CALL for David.** Today,
      when no specific assembler matches a position question, the LLM still
      reasons (validator backstop + strip). Fully inverting it = assemble position
