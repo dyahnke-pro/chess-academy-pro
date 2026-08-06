@@ -4849,20 +4849,28 @@ export function CoachTeachPage(): JSX.Element {
     chainHighlightsRef.current = [];
     // Silent faucet: a genuine eval-worsening slip during guided play feeds
     // the bucket so it resurfaces as a drill. No panel/voice — the brain is
-    // already narrating this move.
+    // already narrating this move. DEFERRED a few seconds (2026-08-06,
+    // "narration still too slow"): its engine eval was queuing AHEAD of the
+    // narration's own engine read on the single Stockfish worker, adding
+    // ~2s of serialized engine time to every turn's time-to-voice. The slip
+    // record is background bookkeeping — nothing reads it for seconds — so
+    // it now waits until the narration pipeline has claimed the worker.
     const openingName = walkthrough.tree?.openingName;
-    void discussion.evaluatePlayerMove({
-      fenBefore,
-      fenAfter: move.fen,
-      playedSan: move.san,
-      playerColor,
-      inBook: false,
-      learned: !!openingName,
-      gamePhase: classifyPhase(move.fen, (move.moveNumber ?? 1) * 2),
-      moveNumber: move.moveNumber,
-      openingName,
-      studentRating: activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? undefined,
-    });
+    const capturedMoveNumber = move.moveNumber;
+    setTimeout(() => {
+      void discussion.evaluatePlayerMove({
+        fenBefore,
+        fenAfter: move.fen,
+        playedSan: move.san,
+        playerColor,
+        inBook: false,
+        learned: !!openingName,
+        gamePhase: classifyPhase(move.fen, (capturedMoveNumber ?? 1) * 2),
+        moveNumber: capturedMoveNumber,
+        openingName,
+        studentRating: activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? undefined,
+      });
+    }, 6000);
     // The ENGINE plays the coach's reply (in code), then the LLM is asked to
     // NARRATE that exact move — play_move is disabled on the narration call,
     // so the LLM can't pick or play. Words always match the board.

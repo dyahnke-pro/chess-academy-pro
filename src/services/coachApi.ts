@@ -2079,7 +2079,10 @@ export async function voiceFacts(
       'square, piece, eval number, name, opening, threat, or claim of your own; if a fact ' +
       'is not given, you do not know it. The teaching voice, the connective phrasing, the ' +
       'warmth are all yours; every chess fact is only what the facts say. Never hedge, ' +
-      'never mention an engine or analysis.'
+      'never mention an engine or analysis. LENGTH: five to eight spoken sentences — a ' +
+      'punchy coaching beat, never a lecture. Land the single most important idea in your ' +
+      'FIRST sentence so it can stand alone, then build. Every fact voiced once; no ' +
+      'restating, no wind-up, no summary at the end.'
     : 'You are a warm, concise chess coach speaking to a student. You will be given ' +
     'FACTS that are already true and verified. Your ONLY job is to say those facts ' +
     'to the student naturally, as a coach would. Add NOTHING: do not introduce any ' +
@@ -2106,12 +2109,15 @@ export async function voiceFacts(
   // more room than the terse plain/kid readout — bump the cap in warm mode.
   // The review register walks up to 8 critical moments as a story and needs the
   // most room of all.
-  // Warm live budget 420→560 (David 2026-07-12): the teaching-corpus notes
-  // (explanation + idea + plan) ride the live fact bundle now, and 420 clipped
-  // the phrased teaching mid-thought. Quality is the metric (2026-07-06 voice
-  // law); the G5 verbosity contracts are untouched — brief users still get the
-  // 2-sentence spoken cap via applyBriefVoiceCap, silent stays silent.
-  const voiceMaxTokens = register === 'review' ? 700 : opts.warm ? 560 : 240;
+  // Warm live budget 560→384 (David 2026-08-06: "Narration also still too
+  // slow"). The phrasing call is NON-streaming — nothing speaks until the
+  // whole completion exists — so output length IS the lag: his session's
+  // 400-560-token lessons took 6-8s to generate (and one hit the 560 cap,
+  // clipping mid-sentence). The prompt now asks for a 5-8-sentence coaching
+  // beat and the cap sits comfortably above it, so the beat completes in
+  // ~2.5-4s and never truncates. G5 untouched (brief still clips via
+  // applyBriefVoiceCap, silent stays silent).
+  const voiceMaxTokens = register === 'review' ? 700 : opts.warm ? 384 : 240;
   try {
     const out = await callDeepSeek(
       cfg.apiKey,
