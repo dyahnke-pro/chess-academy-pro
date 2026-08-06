@@ -36,6 +36,7 @@
 import { chromium } from 'playwright';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { falseBoardClaims, resolveClaimFen } from './audit-lib/board-claims.mjs';
 import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-lib/audit-listener.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -48,30 +49,8 @@ const HEADED = process.env.AUDIT_SMOKE_HEADED === '1';
 const BOOT_TIMEOUT_MS = 60_000;
 const OUT_DIR = join('audit-reports', `coach-settings-qa-${new Date().toISOString().replace(/[:.]/g, '-')}`);
 
-const PIECE_WORD = { pawn: 'p', knight: 'n', bishop: 'b', rook: 'r', queen: 'q', king: 'k' };
 const BRIEF_WORD_CAP = 34; // G5 brief = ≤2 sentences / ≤30 words; small margin.
 
-/** PROVABLY-false piece-on-square claim vs `fen` — a heard hallucination. */
-function falseBoardClaims(text, fen) {
-  if (!text || !fen) return [];
-  let chess;
-  try { chess = new Chess(fen); } catch { return []; }
-  const lower = String(text).toLowerCase();
-  const out = [];
-  const patterns = [
-    [/\b(pawn|knight|bishop|rook|queen|king)\s+on\s+([a-h][1-8])\b/g, 1, 2],
-    [/\b([a-h][1-8])[-\s](pawn|knight|bishop|rook|queen|king)\b/g, 2, 1],
-  ];
-  for (const [re, pcIdx, sqIdx] of patterns) {
-    re.lastIndex = 0;
-    let m;
-    while ((m = re.exec(lower)) !== null) {
-      const got = chess.get(m[sqIdx]);
-      if (!got || got.type !== PIECE_WORD[m[pcIdx]]) out.push(`"${m[0]}" — actual: ${got ? got.color + got.type : 'EMPTY'}`);
-    }
-  }
-  return out;
-}
 const wordCount = (s) => String(s).trim().split(/\s+/).filter(Boolean).length;
 
 async function main() {
