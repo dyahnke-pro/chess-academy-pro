@@ -1,0 +1,33 @@
+name: Xcode Cloud env (read / set a build-time VITE_ flag)
+
+# The iOS bundle bakes its VITE_* flags from the XCODE CLOUD environment (its
+# ci_post_clone.sh runs its own `npm run build`), not from Vercel — so this is
+# the only place the native paywall flag can be flipped. Read-only unless a
+# `set` input is given; never triggers a build.
+on:
+  workflow_dispatch:
+    inputs:
+      set:
+        description: 'Optional KEY=VALUE to set (leave blank to just read)'
+        type: string
+        default: ''
+
+jobs:
+  env:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - name: Read / set Xcode Cloud workflow env
+        env:
+          APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+        run: |
+          if [ -n "${{ github.event.inputs.set }}" ]; then
+            node scripts/ci/asc-workflow-env.mjs --set "${{ github.event.inputs.set }}"
+          else
+            node scripts/ci/asc-workflow-env.mjs
+          fi
