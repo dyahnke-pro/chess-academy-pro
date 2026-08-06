@@ -28,6 +28,7 @@
  * `source` namespaces the audit events to the caller (spine vs a specific
  * surface) so the audit log shows where a gate tripped.
  */
+import { Chess } from 'chess.js';
 import { logAppAudit } from './appAuditor';
 import { validateBoardClaims, stripDisprovenSentences } from './boardClaimValidator';
 import { injectCandidateArrows, injectCandidateHighlights, type RankedCandidate } from './arrowEngine';
@@ -137,6 +138,42 @@ export function gradeNarrationAcrossLine(
         const trimmed = sentence.trim();
         if (trimmed) survivors.add(trimmed);
       }
+    }
+    // BRANCH-AWARE second chance (C5, 2026-08-06): a sentence like "…if White
+    // replies f4, the knight lands on d5" is true only one hypothetical move
+    // OFF the line — false at every on-line position by construction, so the
+    // union above deletes real teaching. Before dropping a sentence, REPLAY
+    // the moves it names (chess.js, each single SAN plus the mention-order
+    // chain) from every line position and keep it if it is true on any of
+    // those branch boards. Deterministic, bounded, and only runs for
+    // sentences already headed for the floor.
+    const allSentences = text.split(/(?<=[.!?])\s+/).map((s) => s.trim()).filter(Boolean);
+    const SAN_RE = /\b(?:O-O(?:-O)?|[NBRQK][a-h]?[1-8]?x?[a-h][1-8](?:=[NBRQ])?|[a-h]x[a-h][1-8](?:=[NBRQ])?|[a-h][1-8](?:=[NBRQ])?)[+#]?\b/g;
+    for (const sentence of allSentences) {
+      if (survivors.has(sentence)) continue;
+      const sans = [...new Set((sentence.match(SAN_RE) ?? []).map((s) => s.replace(/[+#]$/, '')))].slice(0, 4);
+      if (sans.length === 0) continue;
+      const trueOnBranch = fens.some((fen) => {
+        // Each named move alone…
+        for (const san of sans) {
+          try {
+            const probe = new Chess(fen);
+            if (probe.move(san) && stripDisprovenSentences(sentence, probe.fen()).clean.trim()) return true;
+          } catch { /* illegal here — try elsewhere */ }
+        }
+        // …and the mention-order chain, graded after each legal step.
+        try {
+          const chain = new Chess(fen);
+          for (const san of sans) {
+            let m = null;
+            try { m = chain.move(san); } catch { m = null; }
+            if (!m) break;
+            if (stripDisprovenSentences(sentence, chain.fen()).clean.trim()) return true;
+          }
+        } catch { /* unreplayable — not this fen */ }
+        return false;
+      });
+      if (trueOnBranch) survivors.add(sentence);
     }
     const out = text
       .split(/(?<=[.!?])\s+/)

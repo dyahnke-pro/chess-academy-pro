@@ -187,6 +187,113 @@ function findAlignmentSeed(
 }
 
 /**
+ * THE REJECTED TEMPTING MOVE — the speedrun beat "if you play the tempting
+ * Knight to c5, Black can push e5". Deterministic: the tempting candidate is
+ * a CAPTURE or CHECK the engine's multipv scored ≥1.5 pawns worse than the
+ * best line, and the refutation is that line's own reply. Unlike the other
+ * beats this one NAMES both moves — it is a warning the video delivers
+ * openly, not a quiz — but it never names the BEST move (the honesty
+ * contract holds).
+ */
+export function buildRejectedTempting(args: {
+  fen: string;
+  studentColor: 'white' | 'black';
+  /** Engine multipv lines, best first: first move + its reply (UCI), eval
+   *  from the STUDENT's perspective in centipawns. */
+  lines: Array<{ uci: string; replyUci?: string | null; evalCp: number }>;
+}): { facts: string; temptingSan: string; refutationSan: string } | null {
+  if (args.lines.length < 2) return null;
+  const me: 'w' | 'b' = args.studentColor === 'white' ? 'w' : 'b';
+  let base: Chess;
+  try {
+    base = new Chess(args.fen);
+  } catch {
+    return null;
+  }
+  if (base.turn() !== me) return null;
+  const bestEval = args.lines[0].evalCp;
+  for (const line of args.lines.slice(1)) {
+    if (!line.replyUci || bestEval - line.evalCp < 150) continue;
+    try {
+      const probe = new Chess(args.fen);
+      const tempting = probe.move({ from: line.uci.slice(0, 2) as Square, to: line.uci.slice(2, 4) as Square, promotion: (line.uci[4] as 'q' | undefined) ?? undefined });
+      if (!tempting) continue;
+      // Tempting = it LOOKS like it wins something or forces something.
+      const looksGood = tempting.captured !== undefined || probe.isCheck();
+      if (!looksGood) continue;
+      const refutation = probe.move({ from: line.replyUci.slice(0, 2) as Square, to: line.replyUci.slice(2, 4) as Square, promotion: (line.replyUci[4] as 'q' | undefined) ?? undefined });
+      if (!refutation) continue;
+      const dropPawns = ((bestEval - line.evalCp) / 100).toFixed(1);
+      const why = tempting.captured !== undefined
+        ? `it grabs the ${NAME[tempting.captured] ?? 'piece'} on ${tempting.to}`
+        : 'it comes with check';
+      return {
+        temptingSan: tempting.san,
+        refutationSan: refutation.san,
+        facts: `TEMPTING BUT REFUTED: ${tempting.san} looks natural — ${why} — but the reply ${refutation.san} leaves the student about ${dropPawns} pawns worse than the best plan. Teach the habit from this: calculate the opponent's most forcing reply BEFORE trusting a tempting move. Name ${tempting.san} and ${refutation.san} exactly as given. Do NOT name or hint at the best move.`,
+      };
+    } catch { /* malformed line — try the next */ }
+  }
+  return null;
+}
+
+/**
+ * PRIORITY-FIRST FRAMING — the speedrun beat "our main priority is to attack
+ * the d5 pawn; the moment you tell yourself that, the move becomes obvious".
+ * Fires only when the engine's best move ATTACKS a structurally weak enemy
+ * pawn (isolated, or doubled with no cover on the file) — then the coach
+ * names the PRIORITY and withholds the move, which finds itself.
+ */
+export function buildPriorityFirst(args: {
+  fen: string;
+  studentColor: 'white' | 'black';
+  /** Engine best move for the student, UCI. */
+  bestUci: string;
+}): { facts: string; targetSquare: string } | null {
+  const me: 'w' | 'b' = args.studentColor === 'white' ? 'w' : 'b';
+  const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
+  let chess: Chess;
+  try {
+    chess = new Chess(args.fen);
+  } catch {
+    return null;
+  }
+  if (chess.turn() !== me) return null;
+  const all = pieces(chess);
+  const theirPawns = all.filter((p) => p.type === 'p' && p.color === them);
+  const theirFiles = new Set(theirPawns.map((p) => fileOf(p.square)));
+  const weakPawns = theirPawns.filter((p) => {
+    const f = fileOf(p.square);
+    const isolated = !theirFiles.has(f - 1) && !theirFiles.has(f + 1);
+    const doubled = theirPawns.filter((q) => fileOf(q.square) === f).length >= 2;
+    return isolated || doubled;
+  });
+  if (weakPawns.length === 0) return null;
+  try {
+    const probe = new Chess(args.fen);
+    const moved = probe.move({ from: args.bestUci.slice(0, 2) as Square, to: args.bestUci.slice(2, 4) as Square, promotion: (args.bestUci[4] as 'q' | undefined) ?? undefined });
+    if (!moved || moved.captured !== undefined || probe.isCheck()) return null; // forcing moves are the tactic lane's job
+    // After the best move lands, does the MOVED piece attack a weak pawn?
+    const parts = probe.fen().split(' ');
+    parts[1] = me;
+    parts[3] = '-';
+    const myTurn = new Chess(parts.join(' '));
+    const attacked = new Set(myTurn.moves({ square: moved.to, verbose: true }).map((m) => m.to));
+    const target = weakPawns.find((p) => attacked.has(p.square as Square));
+    if (!target) return null;
+    const flaw = !theirFiles.has(fileOf(target.square) - 1) && !theirFiles.has(fileOf(target.square) + 1)
+      ? 'isolated — no pawn can ever defend it'
+      : 'doubled — its file is a lasting weakness';
+    return {
+      targetSquare: target.square,
+      facts: `PRIORITY FIRST: the opponent's pawn on ${target.square} is ${flaw}, and the strongest plan ATTACKS it. Frame the thought the way strong players do — "our priority is the ${target.square} pawn" — and let them find the move that fits the priority. Do NOT name the move or the piece that attacks it.`,
+    };
+  } catch {
+    return null;
+  }
+}
+
+/**
  * The running commentary for the position the student is about to move in.
  *
  * Priority is the coach's: a tactic on the board beats a plan, and a plan beats
