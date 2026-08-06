@@ -10,16 +10,23 @@
  * keyless → isPro=true → the gate is dormant anyway). This is the only place
  * the native paywall flag can actually be flipped.
  *
- * 🚨 SAFETY — `environmentVariables` is a FULL-REPLACE attribute on the ASC
- * API, and SECRET values read back REDACTED (value omitted / isSecret true).
- * A naive read-modify-write therefore WIPES every secret var — which on this
- * project would destroy VITE_REVENUECAT_IOS_KEY and silently break billing on
- * the next build. So `--set` REFUSES to write whenever any existing var is
- * secret; the only safe path in that case is the App Store Connect UI.
+ * 🚨 THIS SCRIPT IS READ-ONLY. `--set` exists only to explain why it can't run.
  *
- * Read-only by default.
- *   node scripts/ci/asc-workflow-env.mjs
- *   node scripts/ci/asc-workflow-env.mjs --set KEY=VALUE
+ * `environmentVariables` is a FULL-REPLACE attribute on the ASC API, and the
+ * API does not disclose secret values. Verified 2026-08-06: it returned
+ * `environmentVariables: []` for a workflow that demonstrably DOES carry
+ * build-time vars — the shipped app completes real RevenueCat purchases, which
+ * is impossible unless VITE_REVENUECAT_IOS_KEY is baked in by this very
+ * workflow's `npm run build`. So secrets are omitted from the response
+ * entirely, not returned redacted, and an empty list can NEVER be read as
+ * "nothing would be lost".
+ *
+ * That makes a safe read-modify-write impossible: any PATCH would blank every
+ * undisclosed secret and silently break billing on the next build. Set flags
+ * in the App Store Connect UI (Xcode Cloud → Workflow → Environment).
+ *
+ *   node scripts/ci/asc-workflow-env.mjs            # read
+ *   node scripts/ci/asc-workflow-env.mjs --set K=V  # refuses, explains why
  */
 import crypto from 'node:crypto';
 
@@ -81,23 +88,25 @@ if (eq < 1) { console.error('::error::--set expects KEY=VALUE'); process.exit(1)
 const newKey = setArg.slice(0, eq);
 const newValue = setArg.slice(eq + 1);
 
-const anySecret = vars.some((v) => v.isSecret);
-if (anySecret) {
-  console.error(
-    '\n::error::REFUSING to write. This workflow has SECRET environment variables whose ' +
-    'values the API does not return, and `environmentVariables` is a full-replace ' +
-    'attribute — writing would blank them (including the RevenueCat key, which would ' +
-    'silently break billing on the next build). Set this var in the App Store Connect UI instead.',
-  );
-  process.exit(1);
-}
-
-const next = vars.filter((v) => v.key !== newKey).concat([{ key: newKey, value: newValue, isSecret: false }]);
-const patch = await api('PATCH', `/v1/ciWorkflows/${WORKFLOW}`, {
-  data: { type: 'ciWorkflows', id: WORKFLOW, attributes: { environmentVariables: next } },
-});
-if (patch.status >= 400) {
-  console.error(`::error::PATCH failed (${patch.status})`, JSON.stringify(patch.j).slice(0, 400));
-  process.exit(1);
-}
-console.log(`\n✓ set ${newKey} — takes effect on the NEXT iOS build (no build is triggered by this script).`);
+// 🚨 Verified 2026-08-06: this API returns `environmentVariables: []` for a
+// workflow that demonstrably DOES carry build-time vars — the shipped app
+// makes real RevenueCat purchases, which is impossible without
+// VITE_REVENUECAT_IOS_KEY baked in by this very workflow's `npm run build`.
+// So Apple omits secret vars from the response entirely rather than listing
+// them with isSecret:true. An empty (or all-plain) list therefore CANNOT be
+// read as "nothing would be lost" — and because `environmentVariables` is a
+// full-replace attribute, a PATCH built from it would silently blank every
+// undisclosed secret, killing billing on the next build.
+//
+// There is no way to write safely through this API without being able to read
+// back what's already there, so the write path is disabled outright. Set the
+// variable in the App Store Connect UI (Xcode Cloud → Workflow → Environment).
+console.error(
+  `\n::error::REFUSING to write ${newKey}=${'*'.repeat(Math.min(newValue.length, 8))}.\n` +
+  '  This API does NOT disclose secret environment variables, and\n' +
+  '  `environmentVariables` is a FULL-REPLACE attribute — so a PATCH built from\n' +
+  '  what we can read would blank every undisclosed secret, including\n' +
+  '  VITE_REVENUECAT_IOS_KEY. That silently breaks billing on the next build.\n' +
+  '  Set it in the App Store Connect UI instead: Xcode Cloud → Workflow → Environment.',
+);
+process.exit(1);
