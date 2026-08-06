@@ -142,3 +142,28 @@ describe('containmentAudit — the audit-only tripwire for ungrounded lanes', ()
     expect(containmentAudit('', 'e4 is strong').introduced.length).toBeGreaterThan(0);
   });
 });
+
+describe("David's 2026-08-06 iPhone session — every turn false-tripped", () => {
+  it('vocabulary from the DIRECTIVES is licensed (the "trap"/"d4" trips)', () => {
+    const facts = 'The student played Bc4. The coach replied Nf6. It develops the knight to f6.';
+    const directives = 'When a trap is lurking mention it. The other road at the fork was d4.';
+    const out = 'Your Bc4 comes out, and Black answers Nf6 — developing the knight to f6. No trap here yet, and the d4 road is still in the past.';
+    // Against facts alone this trips (trap + d4 introduced)…
+    expect(containmentCheck(facts, out).text).toBeNull();
+    // …but the directives are code-assembled prompt too, so they license it.
+    expect(containmentCheck(facts, out, directives).text).not.toBeNull();
+  });
+
+  it('warm teaching over a full fact bundle passes the proportional budget', () => {
+    // 13 fact sentences → 27 spoken sentences was the exact live trip.
+    const facts = Array.from({ length: 13 }, (_, i) => `Fact number ${i + 1} holds.`).join(' ');
+    const out = Array.from({ length: 27 }, (_, i) => `Spoken thought ${i + 1} lands.`).join(' ');
+    expect(sentenceBudgetExceeded(facts, out)).toBe(false);
+  });
+
+  it('a genuine ramble over terse facts still trips the budget', () => {
+    const facts = 'You blundered once, on move 20.';
+    const out = Array.from({ length: 6 }, (_, i) => `Padding sentence ${i + 1} says nothing.`).join(' ');
+    expect(sentenceBudgetExceeded(facts, out)).toBe(true);
+  });
+});

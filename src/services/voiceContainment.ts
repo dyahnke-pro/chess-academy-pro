@@ -95,12 +95,18 @@ export function sentenceCount(text: string): number {
   return matches ? Math.max(1, matches.length) : 1;
 }
 
-/** Padding gate: the phrased output may run at most `slack` sentences past
- *  the facts. Catches contentless rambles ("chess is a beautiful game…")
- *  that the vocabulary scan can't see. Slack 2 leaves the warm registers
- *  room to split a fact across two spoken sentences. */
-export function sentenceBudgetExceeded(facts: string, out: string, slack = 2): boolean {
-  return sentenceCount(out) > sentenceCount(facts) + slack;
+/** Padding gate: catches PATHOLOGICAL rambles only. The original budget
+ *  (facts+2) was tuned for the terse register and strangled the warm one —
+ *  David's 2026-08-06 iPhone session tripped it on every move-narration turn
+ *  (27 spoken sentences over 13 fact sentences is warm TEACHING, not
+ *  padding), downgrading each reply to the raw facts string. Warm phrasing
+ *  legitimately splits a fact across sentences and breathes between them, so
+ *  the ceiling is proportional: twice the facts plus four. A 9-sentence
+ *  ramble over 2 facts still trips; a warm lesson over a full fact bundle
+ *  no longer does. (Tuned to ×2+2: David's 27-over-13 warm session passes;
+ *  a 5-sentence ramble over a 1-fact readout still trips.) */
+export function sentenceBudgetExceeded(facts: string, out: string): boolean {
+  return sentenceCount(out) > sentenceCount(facts) * 2 + 2;
 }
 
 /** A GLOSSARY-definition shape — "X is when…", "X means…", "In chess, X…".
@@ -153,15 +159,28 @@ export interface ContainmentVerdict {
  * The full containment check voiceFacts runs after its number/token nets.
  * Order: strip ungrounded definition sentences first (save the good parts),
  * then reject on any remaining introduced chess term or sentence overrun.
+ *
+ * `extraLicensed` is the REST of the code-assembled prompt (directives +
+ * student message). Everything in the prompt was put there by code, so
+ * vocabulary drawn from any of it is grounded by construction — checking
+ * against `facts` alone made every echo of a directive's word a false trip
+ * (David's 2026-08-06 session: "trap" and "d4" both lived in the prompt, and
+ * all three replies were downgraded to the raw facts string). Definitions
+ * stay keyed on `facts` only — a directive never licenses a glossary tangent.
  */
-export function containmentCheck(facts: string, out: string): ContainmentVerdict {
+export function containmentCheck(
+  facts: string,
+  out: string,
+  extraLicensed = '',
+): ContainmentVerdict {
   const stripped = stripUngroundedDefinitions(facts, out);
-  const introduced = introducedChessTerms(facts, stripped);
+  const licensed = extraLicensed ? `${facts}\n${extraLicensed}` : facts;
+  const introduced = introducedChessTerms(licensed, stripped);
   if (introduced.length > 0) return { text: null, violations: introduced };
   if (sentenceBudgetExceeded(facts, stripped)) {
     return {
       text: null,
-      violations: [`sentence-budget: ${sentenceCount(stripped)} > ${sentenceCount(facts)}+2`],
+      violations: [`sentence-budget: ${sentenceCount(stripped)} > ${sentenceCount(facts)}*2+2`],
     };
   }
   return { text: stripped, violations: [] };

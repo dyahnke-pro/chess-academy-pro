@@ -1916,7 +1916,21 @@ export function resolveWarmRegister(intent: string | undefined): 'review' | 'liv
  *  slip costs the header, not the student's ear. */
 export function speakableFacts(facts: string): string {
   return facts
-    .replace(/^\s*[A-Z][A-Z0-9 '’-]{4,}\s*(?:\([^)]*\))?\s*:\s*/, '')
+    // EVERY internal header, anywhere — not just a leading one. David's
+    // 2026-08-06 iPhone session heard "quiet knight move c6->a5, no capture."
+    // and had "FORK IN THE ROAD —" / "Why it's strong:" sitting in the reply
+    // text, because the containment fallback served the fact bundle with its
+    // labels still on. Shouted labels ("ROAD CHOSEN:", "FORK IN THE ROAD —")
+    // and known mixed-case labels are seams of the internal package, never
+    // speech.
+    .replace(/(?:^|(?<=[.!?]\s))\s*[A-Z][A-Z0-9 '’-]{4,}\s*(?:\([^)]*\))?\s*[:—–-]\s*/g, '')
+    .replace(/\bWhy it(?:'|’)?s strong:\s*/gi, '')
+    .replace(/\bWhy it works:\s*/gi, '')
+    // "c6->a5" / "c6→a5" is notation for the eyes, not the ear.
+    .replace(/\b([a-h][1-8])\s*(?:->|→)\s*([a-h][1-8])\b/g, '$1 to $2')
+    // Double terminators from concatenated fact fragments ("…to a5, eyeing c4..").
+    .replace(/\.\.(?=\s|$)/g, '.')
+    .replace(/\s{2,}/g, ' ')
     .trim();
 }
 
@@ -2146,7 +2160,14 @@ export async function voiceFacts(
       // translated output legitimately shares few literal tokens with the
       // English facts (the number net above remains language-agnostic).
       if (!translating) {
-        const contained = containmentCheck(facts, out);
+        // The directives + student message are part of the code-assembled
+        // prompt, so their vocabulary is licensed — checking against facts
+        // alone false-tripped on every warm move-narration turn (2026-08-06).
+        const contained = containmentCheck(
+          facts,
+          out,
+          `${opts.directives ?? ''}\n${opts.studentMessage ?? ''}`,
+        );
         if (contained.text === null) {
           void logAppAudit({
             kind: 'claim-validator-trip',

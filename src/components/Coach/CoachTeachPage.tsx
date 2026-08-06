@@ -4873,6 +4873,14 @@ export function CoachTeachPage(): JSX.Element {
         if (reply) {
           const played = handlePlayMove(reply);
           if (played.ok) {
+            // UNLOCK THE INSTANT THE REPLY IS ON THE BOARD. The unlock used to
+            // sit below the facts assembly, whose awaited engine analysis put
+            // seconds (once 12, on a suspended iOS asm worker) between the
+            // coach's move appearing and the student being allowed to answer
+            // it — David's 2026-08-06 "board slow to let me move after
+            // opponent". Everything below is narration prep; it never gets to
+            // hold the board.
+            setOpponentThinking(false);
             // PHASE TRANSITION on the settled position. Keyed off the STUDENT's
             // move (the detector ignores coach moves), fired here so the board
             // has stopped moving before the coach speaks about it.
@@ -4892,9 +4900,11 @@ export function CoachTeachPage(): JSX.Element {
                 const facts: string[] = [];
                 // 1. What it did — the victim is gone from the after-FEN, so this
                 //    is the ONLY source of the captured piece.
+                // Speakable at the SOURCE: "c6->a5" was read aloud verbatim on
+                // any containment fallback (David's 2026-08-06 session).
                 facts.push(m.captured
                   ? `CAPTURED the ${NAME[m.captured] ?? 'piece'} on ${m.to} (${mover} from ${m.from}).`
-                  : `quiet ${mover} move ${m.from}->${m.to}, no capture.`);
+                  : `quiet ${mover} move from ${m.from} to ${m.to}, no capture.`);
                 // 2. Check / mate / stalemate — straight from chess.js.
                 if (probe.isCheckmate()) facts.push('This is CHECKMATE — the game is over.');
                 else if (probe.isCheck()) facts.push('It gives CHECK.');
@@ -5214,9 +5224,8 @@ export function CoachTeachPage(): JSX.Element {
             } catch {
               /* probe is best-effort; absence just means no extra fact */
             }
-            // Opponent's move is on the board — UNLOCK immediately so the
-            // student can play again right away; the narration below runs
-            // unblocked and is cut by voiceService.stop() if they do move.
+            // (Unlock already happened the moment the reply landed — this is
+            // the idempotent safety repeat for any path that skipped it.)
             setOpponentThinking(false);
             void handleSubmit(`I played ${move.san}.`, {
               fenOverride: liveFenRef.current,
