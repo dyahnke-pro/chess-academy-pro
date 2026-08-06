@@ -92,6 +92,31 @@ describe('stockfish defects route to Error Tracking (David 2026-06-15)', () => {
   });
 });
 
+describe('defect-kind exceptions carry the diagnostic text (David: unreproducible sanitizer-leak)', () => {
+  // A real `sanitizer-leak` fired in prod with nothing but the generic
+  // "Piece-letter shorthand survived sanitizeForTTS" summary — the actual
+  // leaked TEXT lived only in `details`, which this exception path used to
+  // drop entirely (only summary/route/fen/build_id survived), and the
+  // audit-stream buffer that held it had already rotated by the time anyone
+  // looked. `details` and `narrationText` now ride along on every
+  // DEFECT_KINDS/CRASH_KINDS exception so the next one is reproducible.
+  it('mirrorAuditEvent does not throw with details/narrationText present on an exception-class kind', () => {
+    expect(() =>
+      mirrorAuditEvent(
+        entry({
+          kind: 'sanitizer-leak',
+          category: 'subsystem',
+          summary: 'Piece-letter shorthand survived sanitizeForTTS',
+          details: 'text: The N on f6 hangs to the bishop.',
+          narrationText: 'The N on f6 hangs to the bishop.',
+        }),
+      ),
+    ).not.toThrow();
+    // sanitizer-leak is a defect (exception), never a funnel event.
+    expect(auditKindToEvent('sanitizer-leak')).toBeUndefined();
+  });
+});
+
 describe('auditKindToEvent — curated allowlist', () => {
   it('maps high-signal product kinds to event names', () => {
     expect(auditKindToEvent('app-boot')).toBe('app_opened');
