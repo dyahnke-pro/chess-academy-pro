@@ -2079,12 +2079,14 @@ export async function voiceFacts(
       'square, piece, eval number, name, opening, threat, or claim of your own; if a fact ' +
       'is not given, you do not know it. The teaching voice, the connective phrasing, the ' +
       'warmth are all yours; every chess fact is only what the facts say. Never hedge, ' +
-      'never mention an engine or analysis. LENGTH: two to three spoken sentences — ' +
-      'live commentary between moves, never a lecture (David 2026-08-06: a longer beat ' +
-      'outlives the student\'s next move and gets cut mid-sentence, so brevity IS the ' +
-      'craft here). Land the single most important teaching moment in your FIRST ' +
-      'sentence so it can stand alone. Every fact voiced once; no restating, no ' +
-      'wind-up, no summary. Do not re-describe a move the student just watched — no ' +
+      'never mention an engine or analysis. LENGTH: five to eight spoken sentences — a ' +
+      'punchy coaching beat, never a lecture (David 2026-08-06 vetoed a shorter cap: ' +
+      '"if we cap to three sentences we lose important information about the position"). ' +
+      'ORDER IS EVERYTHING: land the single most important teaching moment in your ' +
+      'FIRST sentence so it stands alone, then build outward most-important-first — the ' +
+      'student may move before you finish, and whatever gets cut must only ever be the ' +
+      'least important tail. Every fact voiced once; no restating, no wind-up, no ' +
+      'summary at the end. Do not re-describe a move the student just watched — no ' +
       'from-square/to-square mechanics; say what it MEANS.'
     : 'You are a warm, concise chess coach speaking to a student. You will be given ' +
     'FACTS that are already true and verified. Your ONLY job is to say those facts ' +
@@ -2112,16 +2114,15 @@ export async function voiceFacts(
   // more room than the terse plain/kid readout — bump the cap in warm mode.
   // The review register walks up to 8 critical moments as a story and needs the
   // most room of all.
-  // Warm live budget 560→384→200 (David 2026-08-06, twice in one day: first
-  // "narration still too slow", then his live log proved every 800-1400-char
-  // beat OUTLIVED his move cadence and was cut mid-sentence by his next
-  // move, every turn). The phrasing call is NON-streaming — output length IS
-  // the lag AND the spoken length. The prompt now asks for a 2-3-sentence
-  // teaching moment; 200 tokens sits comfortably above that, generates in
-  // ~1.5-2s, and the whole beat finishes speaking before the student's next
-  // move. G5 untouched (brief still clips via applyBriefVoiceCap, silent
-  // stays silent).
-  const voiceMaxTokens = register === 'review' ? 700 : opts.warm ? 200 : 240;
+  // Warm live budget 560→384 (David 2026-08-06: "Narration also still too
+  // slow"). The phrasing call is NON-streaming — nothing speaks until the
+  // whole completion exists — so output length IS the lag. A later 200-token
+  // cut was VETOED same day ("if we cap to three sentences we lose important
+  // information about the position"): depth stays; the speed comes from
+  // pyramid ordering (the prompt) + the stale-beat guard + pre-warmed engine
+  // reads, not from starving the beat. G5 untouched (brief still clips via
+  // applyBriefVoiceCap, silent stays silent).
+  const voiceMaxTokens = register === 'review' ? 700 : opts.warm ? 384 : 240;
   try {
     const out = await callDeepSeek(
       cfg.apiKey,
