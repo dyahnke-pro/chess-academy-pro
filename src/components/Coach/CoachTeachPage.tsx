@@ -20,6 +20,7 @@ import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence } from '../../services/playCommentary';
+import { buildNarrationSegments } from '../../services/narrationSegments';
 
 // Walkthrough arrows/highlights render through the SAME react-chessboard
 // pipeline the opening tab's LessonPlayer uses — identical palette, identical
@@ -3739,6 +3740,16 @@ export function CoachTeachPage(): JSX.Element {
      *  check whether the LLM honored the "Setting the board to {name}."
      *  prompt rule on state-changing turns. */
     const spokenForTurn: string[] = [];
+    // LEAD-THE-EYE SYNC (David 2026-08-07: "make sure they fire on every
+    // mentioned move, AS it's being mentioned — mirror the other coach
+    // tabs"). Resolves the moment the beat's speech actually STARTS (after
+    // any Track A fragments finish on the chain), so the arrow-reveal
+    // pacing in the finalization anchors to the real utterance start —
+    // the same reveal clock LessonPlayer runs.
+    let resolveBeatSpeechStarted: (() => void) | null = null;
+    const beatSpeechStarted = new Promise<void>((resolve) => {
+      resolveBeatSpeechStarted = resolve;
+    });
     const queueSpeak = (raw: string): void => {
       // STALE-BEAT GUARD (David 2026-08-07: "faster narration so we are not
       // narrating one move behind"). A move-narration beat is about ONE
@@ -3811,6 +3822,9 @@ export function CoachTeachPage(): JSX.Element {
       speechChainRef.current = speechChainRef.current
         .then(() => {
           if (turnAbortRef.aborted) return;
+          // Anchor the lead-the-eye reveal clock to the utterance start.
+          resolveBeatSpeechStarted?.();
+          resolveBeatSpeechStarted = null;
           return voiceService.speakForced(sentence);
         })
         .catch(() => undefined);
@@ -4692,8 +4706,54 @@ export function CoachTeachPage(): JSX.Element {
           // chain each obey their own cap, but together they flooded
           // David's board with 5 arrows (2026-08-07 screenshots). Four
           // is the ceiling for one position.
-          setArrows(uniqueArrows(groundArrows([...codeArrows, ...chainArrowsRef.current], fen)).slice(0, 4));
-          setHighlights([...codeHighlights, ...chainHighlightsRef.current]);
+          const mergedArrows = uniqueArrows(groundArrows([...codeArrows, ...chainArrowsRef.current], fen)).slice(0, 4);
+          const mergedHighlights = [...codeHighlights, ...chainHighlightsRef.current];
+          // LEAD-THE-EYE SYNC (David 2026-08-07: "make sure they fire on
+          // every mentioned move, AS it's being mentioned — mirror how we
+          // do that for other coach tabs"). This mirrors LessonPlayer's
+          // paced reveal: the opening-chain cues (about the reply move
+          // already on the board) paint immediately; every prose-derived
+          // arrow/highlight appears ~as its sentence is spoken, revealed
+          // on the same ~55ms/char clock LessonPlayer runs, anchored to
+          // the moment the beat's speech actually starts (after any Track
+          // A fragments). A square no sentence names lands with the last
+          // segment (buildNarrationSegments' fallback) so nothing is ever
+          // lost. No voice this turn → paint everything at once.
+          const spokenNow = spokenDisplayText.trim();
+          if (spokenForTurn.length === 0 || !spokenNow) {
+            setArrows(mergedArrows);
+            setHighlights(mergedHighlights);
+          } else {
+            const chainKeys = new Set(chainArrowsRef.current.map((a) => `${a.startSquare}-${a.endSquare}`));
+            const chainHl = new Set(chainHighlightsRef.current.map((h) => h.square));
+            const revealed = new Set<string>();
+            const paintRevealed = (): void => {
+              setArrows(mergedArrows.filter((a) => chainKeys.has(`${a.startSquare}-${a.endSquare}`) || revealed.has(a.endSquare)));
+              setHighlights(mergedHighlights.filter((h) => chainHl.has(h.square) || revealed.has(h.square)));
+            };
+            paintRevealed();
+            const markerSquares = Array.from(new Set([
+              ...mergedArrows.map((a) => a.endSquare),
+              ...mergedHighlights.map((h) => h.square),
+            ]));
+            const segments = buildNarrationSegments(spokenNow, markerSquares);
+            const totalChars = segments.reduce((n, s) => n + s.text.length, 0) || 1;
+            const estMs = Math.max(totalChars * 55, 1200);
+            void beatSpeechStarted.then(() => {
+              let accChars = 0;
+              for (const seg of segments) {
+                const at = (accChars / totalChars) * estMs;
+                accChars += seg.text.length;
+                if (seg.revealSquares.length === 0) continue;
+                const squares = seg.revealSquares;
+                window.setTimeout(() => {
+                  if (turnAbortRef.aborted || liveFenRef.current !== fen) return;
+                  for (const s of squares) revealed.add(s);
+                  paintRevealed();
+                }, at);
+              }
+            });
+          }
         } else {
           void logAppAudit({
             kind: 'coach-narration-spoken',
@@ -5091,6 +5151,11 @@ export function CoachTeachPage(): JSX.Element {
           let trackAAnnounce: string | null = null;
           let trackANote: string | null = null;
           let trackABestReply: string | null = null;
+          // The rec move's geometry, painted GREEN the instant Track A
+          // SPEAKS it (David 2026-08-07: lead-the-eye "on every mentioned
+          // move, AS it's being mentioned") — the warm beat's arrow pass
+          // arrives seconds later and re-derives the same arrow.
+          let trackABestReplyArrow: BoardArrow | null = null;
           const factsReady = (async () => {
             try {
               const probe = new Chess(move.fen);
@@ -5286,6 +5351,7 @@ export function CoachTeachPage(): JSX.Element {
                             // fork / think-aloud / priority beat withheld the
                             // move (speaking it then would leak the answer).
                             trackABestReply = recLine;
+                            trackABestReplyArrow = { startSquare: recMove.from, endSquare: recMove.to, color: 'green' };
                           }
                         }
                       }
@@ -5615,7 +5681,16 @@ export function CoachTeachPage(): JSX.Element {
             void factsReady.then(() => {
               try {
                 const teachLine = trackAAnnounce ?? trackANote ?? trackABestReply;
-                if (teachLine && liveFenRef.current === fenAfterReply) speakTrackA(teachLine);
+                if (teachLine && liveFenRef.current === fenAfterReply) {
+                  speakTrackA(teachLine);
+                  // Lead-the-eye AT the mention: the rec move's green arrow
+                  // paints the instant the voice names it — not seconds
+                  // later when the warm beat's arrow pass lands.
+                  if (teachLine === trackABestReply && trackABestReplyArrow) {
+                    const arrow = trackABestReplyArrow;
+                    setArrows((prev) => uniqueArrows([...prev, arrow]).slice(0, 4));
+                  }
+                }
               } catch { /* bonus */ }
             });
             // PHASE TRANSITION on the settled position. Keyed off the
