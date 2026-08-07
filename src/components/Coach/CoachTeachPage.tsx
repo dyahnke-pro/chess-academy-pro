@@ -5044,6 +5044,169 @@ export function CoachTeachPage(): JSX.Element {
     }
   }, [positionNarration.isNarrating, positionNarration.currentText]);
 
+  /**
+   * THE INSTANT TEACHING PASS — everything the coach can say about the reply
+   * that just landed WITHOUT waiting for an engine search.
+   *
+   * David 2026-08-07 asked how long corpus narration takes to fire. Measured
+   * on prod: median 5.6s, worst 10.4s. The cause was never the lookup — a
+   * corpus note is an in-memory index read — it was that the note, the
+   * opening announcement and the tactics alert were computed inside the facts
+   * bundle that first awaits a ~1.2s Stockfish read NONE of them use, and were
+   * then queued as three separate utterances, each behind the previous one's
+   * full playback plus its own TTS fetch.
+   *
+   * This runs synchronously the instant the reply is on the board, and the
+   * caller speaks its strings as ONE utterance. Everything here is chess.js or
+   * a corpus index. The engine's own recommendation still arrives later, on
+   * `factsReady`, because that one genuinely needs the search.
+   *
+   * It OWNS the side effects (the announced-name ref, the seen-note ids, the
+   * alert dedup key) so they happen exactly once — which is also what makes
+   * the later fact pass fall silent on its own: the name is already announced
+   * and the note is already seen, so it re-derives nothing. The fact lines it
+   * returns are handed to that pass so the model's prompt keeps every fact it
+   * had before.
+   */
+  const computeInstantTeaching = useCallback((args: {
+    fenAfterReply: string;
+    historyAfterReply: string[];
+    moveFrom: string;
+    moveTo: string;
+    studentColor: 'white' | 'black';
+  }): {
+    alertLine: string | null;
+    alertArrow: BoardArrow | null;
+    teachLine: string | null;
+    leadEyeArrows: BoardArrow[];
+    factLines: string[];
+  } => {
+    const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+    const AV: Record<string, number> = { n: 3, b: 3, r: 5, q: 9 };
+    const factLines: string[] = [];
+    const leadEyeArrows: BoardArrow[] = [];
+    let alertLine: string | null = null;
+    let alertArrow: BoardArrow | null = null;
+    let announceLine: string | null = null;
+    let noteLine: string | null = null;
+    const studentCC: 'w' | 'b' = args.studentColor === 'white' ? 'w' : 'b';
+    const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200;
+    const history = args.historyAfterReply;
+
+    // ── TACTICS ALERT ──────────────────────────────────────────────────────
+    // Built with a NULL analysis on purpose: `immediate`, `hanging` and
+    // `boardFacts` are all FEN-only, so the alert loses nothing by skipping
+    // the engine — it only loses the wait.
+    try {
+      const tctx = buildTacticsLiveContext(args.fenAfterReply, null, studentCC, rating);
+      let alertKey = '';
+      const myHanging = tctx.hanging
+        .filter((h) => h.color === studentCC && AV[h.piece] !== undefined)
+        .sort((a, b) => (AV[b.piece] ?? 0) - (AV[a.piece] ?? 0));
+      const theirHanging = tctx.hanging
+        .filter((h) => h.color !== studentCC && AV[h.piece] !== undefined)
+        .sort((a, b) => (AV[b.piece] ?? 0) - (AV[a.piece] ?? 0));
+      // A tactic against the student outranks one loose piece — but not when
+      // the piece DELIVERING it is itself hanging (his e2 queen "forking"
+      // two pieces while en prise: the lesson is take it, not fear it).
+      const theirLoose = new Set(theirHanging.map((h) => h.square));
+      const againstMe = tctx.immediate.filter(
+        (t) => t.side === 'opponent' && !theirLoose.has(t.squares[0] ?? ''),
+      );
+      if (tctx.boardFacts?.mateInOne) {
+        alertKey = `mate1:${tctx.boardFacts.mateInOne}`;
+        alertLine = 'You have a checkmate in one — find it.';
+      } else if (againstMe.length > 0) {
+        const t = againstMe[0];
+        alertKey = `vs:${t.type}:${t.squares.join('')}`;
+        alertLine = `Watch out — ${t.description.charAt(0).toLowerCase()}${t.description.slice(1)}.`;
+      } else if (myHanging.length > 0) {
+        const worst = myHanging[0];
+        alertKey = `hang:${worst.piece}${worst.square}`;
+        alertLine = `Careful — your ${NAME[worst.piece] ?? 'piece'} on ${worst.square} is attacked and undefended.`;
+        const flip = args.fenAfterReply.split(' ');
+        flip[1] = studentCC === 'w' ? 'b' : 'w';
+        flip[3] = '-';
+        const fp = new Chess(flip.join(' '));
+        const cap = fp.moves({ verbose: true })
+          .filter((cm) => cm.to === worst.square && cm.isCapture())
+          .sort((a, b) => (AV[a.piece] ?? 1) - (AV[b.piece] ?? 1))[0];
+        if (cap) alertArrow = { startSquare: cap.from, endSquare: cap.to, color: 'red' };
+      } else if (theirHanging.length > 0) {
+        const prize = theirHanging[0];
+        alertKey = `win:${prize.piece}${prize.square}`;
+        alertLine = `Their ${NAME[prize.piece] ?? 'piece'} on ${prize.square} is undefended — there's something to win here.`;
+      } else {
+        const mine = tctx.immediate.filter((t) => t.side === 'student');
+        if (mine.length > 0) {
+          const t = mine[0];
+          alertKey = `opp:${t.type}:${t.squares.join('')}`;
+          alertLine = `There's a real ${t.type.replace(/_/g, ' ')} here for you — look for it.`;
+        }
+      }
+      // One alert per danger — a persisting threat must not nag every ply.
+      if (alertLine && alertKey === lastTacticsAlertRef.current) {
+        alertLine = null;
+        alertArrow = null;
+      } else if (alertLine) {
+        lastTacticsAlertRef.current = alertKey;
+        captureEvent('tactics_alert_spoken', { surface: 'coach-teach', alert: alertKey });
+      }
+    } catch { /* the alert is a bonus — never block the teaching */ }
+
+    // ── OPENING ANNOUNCEMENT ───────────────────────────────────────────────
+    try {
+      const det = detectOpening(history);
+      if (det && det.name && det.name !== announcedOpeningNameRef.current) {
+        const firstResolve = announcedOpeningNameRef.current === null;
+        announcedOpeningNameRef.current = det.name;
+        const ideaNote = notesForOpening(det.name, 1)[0]
+          ?? secondarySupportNotes({ openingName: det.name, maxNotes: 1 })[0];
+        const idea = ideaNote ? spokenBeatText(ideaNote) : '';
+        announceLine = (firstResolve
+          ? `This game is now the ${det.name}.`
+          : `The line has sharpened into the ${det.name}.`) + (idea ? ` Key idea: ${idea}` : '');
+        factLines.push(announceLine);
+        captureEvent('opening_announced', {
+          surface: 'coach-teach', name: det.name, first: firstResolve, has_idea: idea.length > 0,
+        });
+        void logAppAudit({
+          kind: 'coach-narration-spoken',
+          category: 'narration',
+          source: 'CoachTeachPage.openingAnnouncement',
+          summary: `opening ${firstResolve ? 'identified' : 'refined'}: ${det.name}${idea ? ' (+corpus idea)' : ''}`,
+          fen: args.fenAfterReply,
+        });
+      }
+    } catch { /* announcement is a bonus, never a blocker */ }
+
+    // ── THE TAUGHT NOTE + its lead-the-eye arrows ──────────────────────────
+    try {
+      const noteText = noteArrowSourceAt(history, args.fenAfterReply, teachNoteSeenIdsRef.current);
+      if (noteText) {
+        factLines.push(`Coaching note taught at THIS position: ${noteText}`);
+        noteLine = noteText;
+        const seg = groundedSegmentArrows(noteText, '', { from: args.moveFrom, to: args.moveTo, fen: args.fenAfterReply });
+        for (const a of (seg.arrows ?? [])) {
+          if (a.color === 'green') leadEyeArrows.push({ startSquare: a.from, endSquare: a.to, color: 'green' });
+        }
+        if (leadEyeArrows.length > 0) {
+          void logAppAudit({
+            kind: 'coach-narration-spoken',
+            category: 'narration',
+            source: 'CoachTeachPage.noteLeadEye',
+            summary: `note lead-the-eye: ${leadEyeArrows.length} green arrow(s) from the taught note`,
+            fen: args.fenAfterReply,
+          });
+        }
+      }
+    } catch { /* corpus is a bonus, never a blocker */ }
+
+    // The announcement outranks the per-ply note — a newly resolved opening
+    // name is the bigger event, and the note keeps teaching on later plies.
+    return { alertLine, alertArrow, teachLine: announceLine ?? noteLine, leadEyeArrows, factLines };
+  }, [activeProfile?.puzzleRating, activeProfile?.currentRating]);
+
   const handleStudentMove = useCallback((move: MoveResult): void => {
     // A board move DISMISSES the "Read this position" banner (clears its
     // text) — same as Play. The student answered the position by playing.
@@ -5166,22 +5329,26 @@ export function CoachTeachPage(): JSX.Element {
           // never the LLM: assembled here during the pad from already-gated
           // strings; the picker at play-time speaks the event line plus ONE
           // teaching fragment (announcement > taught note > best reply).
-          let trackAAnnounce: string | null = null;
-          let trackANote: string | null = null;
+          // The announcement and the taught note are now produced by the
+          // SYNCHRONOUS instant pass (see `computeInstantTeaching`) and spoken
+          // with the move; only the engine-derived recommendation is still
+          // assembled here, because only it needs the search.
           let trackABestReply: string | null = null;
+          /** The instant pass's fact lines, handed to the model's fact bundle
+           *  below so the prompt keeps everything it used to compute here. */
+          let instantFactLines: string[] = [];
+          /** True when the instant utterance already carried teaching, so the
+           *  late engine line stays quiet rather than repeating the turn. */
+          let hasInstantTeaching = false;
           // The rec move's geometry, painted GREEN the instant Track A
           // SPEAKS it (David 2026-08-07: lead-the-eye "on every mentioned
           // move, AS it's being mentioned") — the warm beat's arrow pass
           // arrives seconds later and re-derives the same arrow.
           let trackABestReplyArrow: BoardArrow | null = null;
-          // THE TACTICS ALERT (David 2026-08-07: "I saw no tactics alerts.
-          // It's like all the notes are not being used."). The watcher's
-          // read was PROMPT-ONLY — his log shipped hanging=2/threats=5
-          // turns to the model and the danger came back buried in
-          // positional prose. A real danger now speaks DETERMINISTICALLY
-          // as its own Track A fragment, ahead of the teach line.
-          let trackAAlert: string | null = null;
-          let trackAAlertArrow: BoardArrow | null = null;
+          // THE TACTICS ALERT (David 2026-08-07: "I saw no tactics alerts.")
+          // now speaks from the SYNCHRONOUS instant pass, ahead of this
+          // engine wait — a danger the student can see is not worth a
+          // 1.2s search before it is named.
           const factsReady = (async () => {
             try {
               const probe = new Chess(move.fen);
@@ -5259,92 +5426,10 @@ export function CoachTeachPage(): JSX.Element {
                 // (named, square withheld — the kept gem style). One alert
                 // per turn; a repeat of last turn's alert stays silent
                 // instead of nagging.
-                try {
-                  const AV: Record<string, number> = { n: 3, b: 3, r: 5, q: 9 };
-                  let alertKey = '';
-                  const myHanging = tctx.hanging
-                    .filter((h) => h.color === studentCC && AV[h.piece] !== undefined)
-                    .sort((a, b) => (AV[b.piece] ?? 0) - (AV[a.piece] ?? 0));
-                  // Their loose piece — the biggest teaching moment of
-                  // David's 2026-08-07 game (the coach's queen sat en prise
-                  // on e2) and the ladder had NO branch for it: the alert
-                  // fell through to a "tactic here for you" line that was
-                  // actually describing BLACK's fork. Found by probing the
-                  // real FENs, not by reading the code.
-                  const theirHanging = tctx.hanging
-                    .filter((h) => h.color !== studentCC && AV[h.piece] !== undefined)
-                    .sort((a, b) => (AV[b.piece] ?? 0) - (AV[a.piece] ?? 0));
-                  // A tactic AGAINST the student outranks a single loose
-                  // piece (David 2026-08-07: "No tactical alert about the
-                  // center fork trick"). His pawn-fork moment alerted only
-                  // "your bishop on c4 is undefended" — true, but it named
-                  // one prong of a fork that was hitting two pieces. The
-                  // detector's own description carries both.
-                  //
-                  // …UNLESS the piece delivering it is itself hanging. On
-                  // his e2 position the "threat" was a queen forking two
-                  // pieces while sitting undefended — the lesson there is
-                  // TAKE IT, not fear it. The forker is the tactic's first
-                  // involved square, so this is decided from the data, not
-                  // guessed. Falls through to the win branch below.
-                  const theirLooseSquares = new Set(theirHanging.map((h) => h.square));
-                  const againstMe = tctx.immediate.filter(
-                    (t) => t.side === 'opponent' && !theirLooseSquares.has(t.squares[0] ?? ''),
-                  );
-                  if (tctx.boardFacts?.mateInOne) {
-                    alertKey = `mate1:${tctx.boardFacts.mateInOne}`;
-                    trackAAlert = 'You have a checkmate in one — find it.';
-                  } else if (againstMe.length > 0) {
-                    const t = againstMe[0];
-                    alertKey = `vs:${t.type}:${t.squares.join('')}`;
-                    // The description is chess.js-derived geometry ("Pawn on
-                    // d5 forks knight on e4 and bishop on c4") — speakable
-                    // verbatim, and it tells him WHAT to solve, not just
-                    // which piece to mourn.
-                    trackAAlert = `Watch out — ${t.description.charAt(0).toLowerCase()}${t.description.slice(1)}.`;
-                  } else if (myHanging.length > 0) {
-                    const worst = myHanging[0];
-                    alertKey = `hang:${worst.piece}${worst.square}`;
-                    trackAAlert = `Careful — your ${NAME[worst.piece] ?? 'piece'} on ${worst.square} is attacked and undefended.`;
-                    // The attacker's capture is forcing by definition —
-                    // the one sanctioned red arrow, painted as the alert
-                    // speaks.
-                    const flip = probe.fen().split(' ');
-                    flip[1] = studentCC === 'w' ? 'b' : 'w';
-                    flip[3] = '-';
-                    const fp = new Chess(flip.join(' '));
-                    const cap = fp.moves({ verbose: true })
-                      .filter((cm) => cm.to === worst.square && cm.isCapture())
-                      .sort((a, b) => (AV[a.piece] ?? 1) - (AV[b.piece] ?? 1))[0];
-                    if (cap) trackAAlertArrow = { startSquare: cap.from, endSquare: cap.to, color: 'red' };
-                  } else if (theirHanging.length > 0) {
-                    const prize = theirHanging[0];
-                    alertKey = `win:${prize.piece}${prize.square}`;
-                    // Name the prize, WITHHOLD the capture (the gem/honesty
-                    // contract) — the square is the opportunity, the move is
-                    // the student's to find.
-                    trackAAlert = `Their ${NAME[prize.piece] ?? 'piece'} on ${prize.square} is undefended — there's something to win here.`;
-                  } else {
-                    // STUDENT-SIDE ONLY (David 2026-08-07 probe): the
-                    // `immediate` list carries BOTH sides' geometry, and
-                    // every position in his real game reported the
-                    // OPPONENT'S pin/fork. Announcing those as "here for
-                    // you" is a false claim; `side` now carries the answer.
-                    const mine = tctx.immediate.filter((t) => t.side === 'student');
-                    if (mine.length > 0) {
-                      const t = mine[0];
-                      alertKey = `opp:${t.type}:${t.squares.join('')}`;
-                      trackAAlert = `There's a real ${t.type.replace(/_/g, ' ')} here for you — look for it.`;
-                    }
-                  }
-                  if (trackAAlert && alertKey === lastTacticsAlertRef.current) {
-                    trackAAlert = null;
-                    trackAAlertArrow = null;
-                  } else if (trackAAlert) {
-                    lastTacticsAlertRef.current = alertKey;
-                    captureEvent('tactics_alert_spoken', { surface: 'coach-teach', alert: alertKey });
-                  }
-                } catch { /* the alert is a bonus — never block the facts */ }
+                // The tactics alert is computed SYNCHRONOUSLY now, before
+                // this engine read (see `computeInstantTeaching`), so the
+                // warning reaches the student without waiting for a search
+                // it never used. Nothing to do here.
                 const historyAfterReply = [...move.history, m.san];
                 // Rating-banded reality (#23): warm the amateur-band cache for
                 // this opening position NOW — the engine analysis below gives
@@ -5602,7 +5687,13 @@ export function CoachTeachPage(): JSX.Element {
                         // arrived late and died stale, or the model buried
                         // the name). Anything he must hear AT a moment is
                         // spoken by code AT that moment.
-                        trackAAnnounce = announceLine;
+                        // NOT spoken from here any more — the announcement
+                        // is voiced by the instant pass, seconds earlier.
+                        // In practice this block no longer runs at all: that
+                        // pass already set `announcedOpeningNameRef`, so the
+                        // name-changed test above is false. It stays as the
+                        // fallback path for any turn the instant pass could
+                        // not run.
                         captureEvent('opening_announced', {
                           surface: 'coach-teach',
                           name: det.name,
@@ -5682,7 +5773,8 @@ export function CoachTeachPage(): JSX.Element {
                     const noteText = noteArrowSourceAt(historyAfterReply, probe.fen(), teachNoteSeenIdsRef.current);
                     if (noteText) {
                       facts.push(`Coaching note taught at THIS position: ${noteText}`);
-                      trackANote = noteText;
+                      // Voiced by the instant pass instead (which also
+                      // marked the note seen, so this rarely re-derives one).
                       const seg = groundedSegmentArrows(noteText, '', { from: m.from, to: m.to, fen: probe.fen() });
                       // Map the narration-arrow shape onto the board's
                       // (startSquare/endSquare); green vision arrows only —
@@ -5824,13 +5916,48 @@ export function CoachTeachPage(): JSX.Element {
                 fen: liveFenRef.current,
               });
             };
+            // ── THE INSTANT UTTERANCE ──────────────────────────────────────
+            // ONE clip, not three. Each fragment used to be its own TTS fetch
+            // (~1s) queued behind the previous fragment's FULL playback, so
+            // the corpus note started only after the event line and the alert
+            // had finished speaking — measured at 3.2-10.4s after the move.
+            // Joined here, they cost one fetch and no boundaries, and the
+            // teaching arrives with the move instead of after it.
             try {
               const ip = new Chess(move.fen);
               const im = ip.move(reply);
+              const lines: string[] = [];
               const eventLine = im
                 ? buildInstantReplyLine({ san: im.san, captured: im.captured, isCheckmate: ip.isCheckmate(), isCheck: ip.isCheck() })
                 : null;
-              if (eventLine) speakTrackA(eventLine);
+              if (eventLine) lines.push(eventLine);
+              if (im) {
+                const instant = computeInstantTeaching({
+                  fenAfterReply: ip.fen(),
+                  historyAfterReply: [...move.history, im.san],
+                  moveFrom: im.from,
+                  moveTo: im.to,
+                  studentColor: playerColor,
+                });
+                instantFactLines = instant.factLines;
+                if (instant.alertLine) {
+                  lines.push(instant.alertLine);
+                  if (instant.alertArrow) {
+                    const arrow = instant.alertArrow;
+                    void padDone.then(() => setArrows((prev) => uniqueArrows([...prev, arrow]).slice(0, 4)));
+                  }
+                }
+                if (instant.teachLine) {
+                  lines.push(instant.teachLine);
+                  hasInstantTeaching = true;
+                }
+                if (instant.leadEyeArrows.length > 0) {
+                  const leadEye = instant.leadEyeArrows;
+                  chainArrowsRef.current = [...chainArrowsRef.current, ...leadEye];
+                  void padDone.then(() => setArrows((prev) => uniqueArrows([...prev, ...leadEye]).slice(0, 4)));
+                }
+              }
+              if (lines.length > 0) speakTrackA(lines.join(' '));
             } catch { /* Track A is a bonus — the warm beat still speaks */ }
             // Registered BEFORE the `await factsReady` below, so this
             // callback runs first when the facts settle — handleSubmit
@@ -5838,24 +5965,18 @@ export function CoachTeachPage(): JSX.Element {
             void factsReady.then(() => {
               try {
                 if (liveFenRef.current !== fenAfterReply) return;
-                // THE TACTICS ALERT speaks FIRST — danger before lesson
-                // (David 2026-08-07: "I saw no tactics alerts"). Its red
-                // arrow (the forcing capture onto the hanging piece)
-                // paints as the words land.
-                if (trackAAlert) {
-                  speakTrackA(trackAAlert);
-                  if (trackAAlertArrow) {
-                    const arrow = trackAAlertArrow;
-                    setArrows((prev) => uniqueArrows([...prev, arrow]).slice(0, 4));
-                  }
-                }
-                const teachLine = trackAAnnounce ?? trackANote ?? trackABestReply;
+                // The alert and the taught note already spoke WITH the move
+                // (the instant pass above). All that is left here is the
+                // engine-derived recommendation, and it stays quiet when the
+                // instant utterance already taught this turn — one thing per
+                // turn, never a second lesson seconds late.
+                const teachLine = hasInstantTeaching ? null : trackABestReply;
                 if (teachLine) {
                   speakTrackA(teachLine);
                   // Lead-the-eye AT the mention: the rec move's green arrow
                   // paints the instant the voice names it — not seconds
                   // later when the warm beat's arrow pass lands.
-                  if (teachLine === trackABestReply && trackABestReplyArrow) {
+                  if (trackABestReplyArrow) {
                     const arrow = trackABestReplyArrow;
                     setArrows((prev) => uniqueArrows([...prev, arrow]).slice(0, 4));
                   }
@@ -5868,6 +5989,13 @@ export function CoachTeachPage(): JSX.Element {
             runPhaseTransition(move.fen, move.san, (move.moveNumber ?? 1) * 2);
             // The beat needs the full fact bundle — normally already done.
             await factsReady;
+            // The announcement and the taught note are computed by the instant
+            // pass now, not inside `factsReady` — but the model still needs
+            // them as facts, or the warm beat loses everything the voice just
+            // taught. Joined here, after both have settled.
+            if (instantFactLines.length > 0) {
+              replyFact = replyFact ? `${replyFact} ${instantFactLines.join(' ')}` : instantFactLines.join(' ');
+            }
             setOpponentThinking(false);
             void handleSubmit(`I played ${move.san}.`, {
               fenOverride: liveFenRef.current,
