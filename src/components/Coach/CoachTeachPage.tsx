@@ -1203,6 +1203,9 @@ export function CoachTeachPage(): JSX.Element {
   /** Notes already spliced into this game's narration (same dedup contract as
    *  the walkthrough's `noteArrowSourceAt` seenIds — a note teaches once). */
   const teachNoteSeenIdsRef = useRef(new Set<string>());
+  /** Last spoken tactics-alert key (David 2026-08-07: "I saw no tactics
+   *  alerts") — a persisting danger alerts once, not every turn. */
+  const lastTacticsAlertRef = useRef('');
   // FORK IN THE ROAD (David 2026-07-11: "when there is a fork in the road the
   // coach could talk about both options… advantages and disadvantages of
   // both"). Near-equal, different-character options get deliberated — the
@@ -4525,23 +4528,16 @@ export function CoachTeachPage(): JSX.Element {
         const firstSentence = firstSentenceMatch
           ? firstSentenceMatch[1].trim()
           : finalText.trim();
-        // Grounded answers (stats / mistakes / repertoire-gap / …) are concise,
-        // complete, and carry NO [VOICE:] marker — they must be spoken in FULL,
-        // not truncated to one sentence (David 2026-07-04 voice attachments). The
-        // brief-cap in voiceService.speakInternal still clips them to ≤2 sentences
-        // on 'brief', so 'full' hears the whole answer and 'brief' hears the gist.
-        // Long free-form prose (> ~600 chars) still falls back to the first
-        // sentence so a rambling brain turn isn't read out wholesale — EXCEPT on
-        // a MOVE-NARRATION turn: the warm reply IS the spoken lesson (voiceFacts
-        // built it to be heard), and the 600-char cap was cutting it to its intro
-        // sentence on every move of David's 2026-08-06 session ("the last
-        // narration was about to say magic! But then it never did"). Learn is
-        // the coach talking you THROUGH the game — speak the whole thing; the
-        // G5 verbosity contract still governs (brief clips, silent stays silent).
-        const moveNarrationTurn = isStepByStepReport || opts?.coachReplyPlayed !== undefined;
-        const speakText = finalText.length > 0 && (finalText.length <= 600 || moveNarrationTurn)
-          ? finalText.trim()
-          : firstSentence;
+        // NO CAPS ON FULL — the VERBOSITY SETTING is the only voice budget
+        // (David 2026-08-07: "I don't want capped voices. Only if setting is
+        // set to short. Full gets the entire prose."). The old ~600-char
+        // clip-to-first-sentence for non-move turns is GONE: every fallback
+        // speaks the whole grounded answer, and G5 enforcement lives solely
+        // in voiceService.speakInternal — 'brief' clips to its numeric cap,
+        // 'silent' stays silent, 'full' hears everything. One chokepoint,
+        // no second budget fighting it. (firstSentence survives only for
+        // the which-shape-spoke audit label below.)
+        const speakText = finalText.trim();
         if (speakText) {
           voiceSpokenForTurn = true;
           // Transcript mirrors the spoken fallback too (text == narration).
@@ -5156,6 +5152,14 @@ export function CoachTeachPage(): JSX.Element {
           // move, AS it's being mentioned") — the warm beat's arrow pass
           // arrives seconds later and re-derives the same arrow.
           let trackABestReplyArrow: BoardArrow | null = null;
+          // THE TACTICS ALERT (David 2026-08-07: "I saw no tactics alerts.
+          // It's like all the notes are not being used."). The watcher's
+          // read was PROMPT-ONLY — his log shipped hanging=2/threats=5
+          // turns to the model and the danger came back buried in
+          // positional prose. A real danger now speaks DETERMINISTICALLY
+          // as its own Track A fragment, ahead of the teach line.
+          let trackAAlert: string | null = null;
+          let trackAAlertArrow: BoardArrow | null = null;
           const factsReady = (async () => {
             try {
               const probe = new Chess(move.fen);
@@ -5209,6 +5213,55 @@ export function CoachTeachPage(): JSX.Element {
                 const tacticsFacts: string[] = [];
                 if (tctx.immediate.length > 0) tacticsFacts.push(`Real tactics on the board now: ${tctx.immediate.map((t) => t.description).join('; ')}.`);
                 if (tctx.hanging.length > 0) tacticsFacts.push(`Undefended/attacked: ${tctx.hanging.map((h) => `${NAME[h.piece] ?? h.piece} on ${h.square}`).join(', ')}.`);
+                // THE TACTICS ALERT — spoken, deterministic, board-true by
+                // construction (every claim reads straight off the current
+                // FEN; the PV-conditional threats stay prompt-only because
+                // their lines start with the STUDENT's own move). Priority:
+                // mate-in-one (find it — move withheld, honesty contract) >
+                // the student's most valuable hanging piece (pawns excluded,
+                // gambit noise) > a live tactic available to the student
+                // (named, square withheld — the kept gem style). One alert
+                // per turn; a repeat of last turn's alert stays silent
+                // instead of nagging.
+                try {
+                  const AV: Record<string, number> = { n: 3, b: 3, r: 5, q: 9 };
+                  let alertKey = '';
+                  if (tctx.boardFacts?.mateInOne) {
+                    alertKey = `mate1:${tctx.boardFacts.mateInOne}`;
+                    trackAAlert = 'You have a checkmate in one — find it.';
+                  } else {
+                    const myHanging = tctx.hanging
+                      .filter((h) => h.color === studentCC && AV[h.piece] !== undefined)
+                      .sort((a, b) => (AV[b.piece] ?? 0) - (AV[a.piece] ?? 0));
+                    if (myHanging.length > 0) {
+                      const worst = myHanging[0];
+                      alertKey = `hang:${worst.piece}${worst.square}`;
+                      trackAAlert = `Careful — your ${NAME[worst.piece] ?? 'piece'} on ${worst.square} is attacked and undefended.`;
+                      // The attacker's capture is forcing by definition —
+                      // the one sanctioned red arrow, painted as the alert
+                      // speaks.
+                      const flip = probe.fen().split(' ');
+                      flip[1] = studentCC === 'w' ? 'b' : 'w';
+                      flip[3] = '-';
+                      const fp = new Chess(flip.join(' '));
+                      const cap = fp.moves({ verbose: true })
+                        .filter((cm) => cm.to === worst.square && cm.isCapture())
+                        .sort((a, b) => (AV[a.piece] ?? 1) - (AV[b.piece] ?? 1))[0];
+                      if (cap) trackAAlertArrow = { startSquare: cap.from, endSquare: cap.to, color: 'red' };
+                    } else if (tctx.immediate.length > 0) {
+                      const t = tctx.immediate[0];
+                      alertKey = `opp:${t.type}:${t.squares.join('')}`;
+                      trackAAlert = `There's a real ${t.type.replace(/_/g, ' ')} here for you — look for it.`;
+                    }
+                  }
+                  if (trackAAlert && alertKey === lastTacticsAlertRef.current) {
+                    trackAAlert = null;
+                    trackAAlertArrow = null;
+                  } else if (trackAAlert) {
+                    lastTacticsAlertRef.current = alertKey;
+                    captureEvent('tactics_alert_spoken', { surface: 'coach-teach', alert: alertKey });
+                  }
+                } catch { /* the alert is a bonus — never block the facts */ }
                 const historyAfterReply = [...move.history, m.san];
                 // Rating-banded reality (#23): warm the amateur-band cache for
                 // this opening position NOW — the engine analysis below gives
@@ -5331,7 +5384,11 @@ export function CoachTeachPage(): JSX.Element {
                         } else {
                           const recProbe = new Chess(probe.fen());
                           const recMove = recProbe.move({ from: recUci.slice(0, 2), to: recUci.slice(2, 4), promotion: recUci.slice(4, 5) || undefined });
-                          if (recMove) {
+                          // Mate-in-one → the alert owns this moment ("find
+                          // it", move WITHHELD per the honesty contract). No
+                          // rec fact means neither the voice nor the model
+                          // can hand over the move.
+                          if (recMove && !tctx.boardFacts?.mateInOne) {
                             // SPEAKABLE — this string reaches the voice
                             // verbatim on any gate fallback, and David heard
                             // the old instruction tail ("If you point them
@@ -5418,6 +5475,7 @@ export function CoachTeachPage(): JSX.Element {
                       announcedTrapsRef.current.clear(); // fresh game
                       announcedOpeningNameRef.current = null;
                       teachNoteSeenIdsRef.current.clear();
+                      lastTacticsAlertRef.current = '';
                       forkTalkCountRef.current = 0;
                       pendingForkRef.current = null;
                       rejectedTemptingCountRef.current = 0;
@@ -5680,8 +5738,20 @@ export function CoachTeachPage(): JSX.Element {
             // always sees the complete instantSpokenText.
             void factsReady.then(() => {
               try {
+                if (liveFenRef.current !== fenAfterReply) return;
+                // THE TACTICS ALERT speaks FIRST — danger before lesson
+                // (David 2026-08-07: "I saw no tactics alerts"). Its red
+                // arrow (the forcing capture onto the hanging piece)
+                // paints as the words land.
+                if (trackAAlert) {
+                  speakTrackA(trackAAlert);
+                  if (trackAAlertArrow) {
+                    const arrow = trackAAlertArrow;
+                    setArrows((prev) => uniqueArrows([...prev, arrow]).slice(0, 4));
+                  }
+                }
                 const teachLine = trackAAnnounce ?? trackANote ?? trackABestReply;
-                if (teachLine && liveFenRef.current === fenAfterReply) {
+                if (teachLine) {
                   speakTrackA(teachLine);
                   // Lead-the-eye AT the mention: the rec move's green arrow
                   // paints the instant the voice names it — not seconds
@@ -6688,12 +6758,21 @@ export function CoachTeachPage(): JSX.Element {
                 // During the middlegame/endgame play-out the continuation owns
                 // the board's arrows — same orange trail + green threat grammar
                 // as the lesson it continues.
+                //
+                // THE LIGHTBULB OWNS THE ARROWS (David 2026-08-07: "make sure
+                // the arrows are tied into the lightbulb for on/off settings").
+                // `coachTipsOn` was a glowing button wired to NOTHING — now
+                // Tips OFF hides every coach arrow + highlight at render
+                // (instant both ways; the underlying state keeps computing,
+                // so toggling back on restores the current turn's cues).
                 arrows={
-                  continuationArrows.length > 0
-                    ? walkthroughBoardArrows(continuationArrows)
-                    : (arrows.length > 0 ? arrows : undefined)
+                  !coachTipsOn
+                    ? undefined
+                    : continuationArrows.length > 0
+                      ? walkthroughBoardArrows(continuationArrows)
+                      : (arrows.length > 0 ? arrows : undefined)
                 }
-                annotationHighlights={highlights.length > 0 ? highlights : undefined}
+                annotationHighlights={coachTipsOn && highlights.length > 0 ? highlights : undefined}
               />
             )}
           </div>

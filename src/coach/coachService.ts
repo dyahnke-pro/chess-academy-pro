@@ -34,6 +34,7 @@ import { applyCandidateArrows } from '../services/coachAnswerGates';
 import { assembleEnvelope } from './envelope';
 import { loadAnnotationContextForLive } from './sources/annotationContext';
 import { buildDanyaTeachingBlock } from '../services/danyaTeachingService';
+import { classifyPhase } from '../services/gamePhaseService';
 import { detectOpening } from '../services/openingDetectionService';
 import { loadMiddlegamePlanForLive } from './sources/middlegamePlan';
 import { loadModelGamesForLive } from './sources/modelGames';
@@ -838,11 +839,31 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
           teachingOpeningName = detectOpening(input.liveState.moveHistory ?? [])?.name ?? null;
         } catch { /* detection is a bonus */ }
       }
+      // LIVE TACTIC TYPES from the watcher's context (David 2026-08-07:
+      // "Positional notes are there, not tactical notes") — a real tactic
+      // on the board pulls ONE corpus concept note teaching it into the
+      // block. Detector-emitted types only (G0); the student's hanging
+      // pieces count as 'hanging'.
+      const liveTactics = input.liveState.tactics;
+      const liveTacticTypes = liveTactics
+        ? Array.from(new Set([
+            ...liveTactics.immediate.map((t) => t.type),
+            ...(liveTactics.hanging.length > 0 ? ['hanging'] : []),
+          ]))
+        : [];
+      let teachingPhase: 'opening' | 'middlegame' | 'endgame' = 'middlegame';
+      try {
+        if (input.liveState.fen) {
+          teachingPhase = classifyPhase(input.liveState.fen, Math.ceil((input.liveState.moveHistory?.length ?? 0) / 2));
+        }
+      } catch { /* default middlegame */ }
       const block = buildDanyaTeachingBlock({
         historySans: input.liveState.moveHistory ?? [],
         openingName: teachingOpeningName,
         // Live board FEN — transposition-safe exact-position notes.
         fen: input.liveState.fen ?? null,
+        liveTacticTypes,
+        phase: teachingPhase,
       });
       if (block) {
         const sourceCount = (block.match(/^•/gm)?.length ?? 0);
