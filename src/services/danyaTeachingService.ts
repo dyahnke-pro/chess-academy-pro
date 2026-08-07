@@ -24,6 +24,7 @@ import { detectOpening } from './openingDetectionService';
 import { noteContradictsLine, notePhaseMismatchesBoard } from './noteLineGuard';
 import { boardConcepts, phaseOfFen } from './boardConcepts';
 import { noteDescribesPosition, noteTeachesChessNotItsSource, noteStaysInScope } from './noteAnchorIntegrity';
+import { bakedSpoken } from './spokenNoteBake';
 
 export interface DanyaNote {
   id: string;
@@ -1072,6 +1073,14 @@ const SAN_TOKEN = /\b(?:[NBRQK][a-h]?[1-8]?x?[a-h][1-8][+#]?|[a-h]x?[a-h][1-8][+
  * trim.
  */
 export function spokenBeatText(note: DanyaNote): string {
+  // THE BAKE WINS. When a note has a committed spoken form it is already in its
+  // verified final shape — reviewed, gated, and (for a note with no position)
+  // with the foreign example's geometry generalized away. Re-running the
+  // pruning below over it could only drift it.
+  const bake = bakedSpoken(note.id);
+  if (bake?.unspeakable) return '';   // honest silence: it needs geometry it cannot have here
+  if (bake?.spoken) return bake.spoken;
+
   const explains = (note.explains ?? '').trim();
   if (!explains) return '';
   const sentences = explains.match(/[^.!?]+[.!?]+(?:\s|$)|[^.!?]+$/g) ?? [explains];
