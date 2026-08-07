@@ -1206,6 +1206,10 @@ export function CoachTeachPage(): JSX.Element {
   /** Last spoken tactics-alert key (David 2026-08-07: "I saw no tactics
    *  alerts") — a persisting danger alerts once, not every turn. */
   const lastTacticsAlertRef = useRef('');
+  /** Track A generation — bumped per coach reply so a chain link created in
+   *  an older turn can't speak a line about a position the student already
+   *  left (and can't steal the throttle window from the current line). */
+  const trackAGenRef = useRef(0);
   // FORK IN THE ROAD (David 2026-07-11: "when there is a fork in the road the
   // coach could talk about both options… advantages and disadvantages of
   // both"). Near-equal, different-character options get deliberated — the
@@ -4089,7 +4093,7 @@ export function CoachTeachPage(): JSX.Element {
       (STEP_BY_STEP_RE.test(text) || engineDrivenStep) && !walkthrough.isActive;
     const effectiveAsk =
       replyPlayed && replyPlayed.length > 0
-        ? `${text}\n\n[STEP-BY-STEP NARRATION — the engine already played the coach's reply ${replyPlayed}; it is ALREADY on the board. ${opts?.coachReplyFact ?? ''} You do NOT and CANNOT play moves (play_move is disabled). The student WATCHED ${replyPlayed} land — do NOT describe its mechanics (no from-square, no to-square, no "quiet move", no "no capture"). ${opts?.instantSpokenText ? `Already spoken aloud as the move landed: "${opts.instantSpokenText}" — never repeat or rephrase those lines; build PAST them. ` : ''}Open with the IMPORTANT TEACHING MOMENT for the STUDENT — what my reply threatens AGAINST them and how to meet it, or the plan THEY should be playing for; NEVER praise my reply or dwell on why my move is strong — using ONLY the grounded facts above (never invent a captured piece, tactic, or threat not listed there). Draw [BOARD: arrow:from-to:green] on that move AND on every SAN you mention in prose. Put your SPOKEN narration in a [VOICE: ...] marker — one or two plain sentences of the teaching moment — so the coach speaks it aloud (this is REQUIRED; without it the student hears nothing). Do NOT summarize or continue any earlier topic; teach this moment, then prompt the student's turn. If you name a move for the student to play, it MUST be the engine move named in the grounded facts above — recommend ONLY that one. If the facts name no engine move, do NOT name any move; just say it's their turn. NEVER invent a move, NEVER tell them to move a piece to a square it already occupies, and NEVER recommend a move that isn't in the facts above.]`
+        ? `${text}\n\n[STEP-BY-STEP NARRATION — the engine already played the coach's reply ${replyPlayed}; it is ALREADY on the board. ${opts?.coachReplyFact ?? ''} You do NOT and CANNOT play moves (play_move is disabled). The student WATCHED ${replyPlayed} land — do NOT describe its mechanics (no from-square, no to-square, no "quiet move", no "no capture"). ${opts?.instantSpokenText ? `Already spoken aloud as the move landed: "${opts.instantSpokenText}" — never repeat or rephrase those lines; build PAST them. ` : ''}Open with the IMPORTANT TEACHING MOMENT for the STUDENT — what my reply threatens AGAINST them and how to meet it, or the plan THEY should be playing for; NEVER praise my reply or dwell on why my move is strong — using ONLY the grounded facts above (never invent a captured piece, tactic, or threat not listed there). Draw [BOARD: arrow:from-to:green] on that move AND on every SAN you mention in prose. Do NOT emit a [VOICE: ...] marker — your WHOLE reply is spoken aloud, so write every sentence to be heard. Do NOT summarize or continue any earlier topic; teach this moment, then prompt the student's turn. If you name a move for the student to play, it MUST be the engine move named in the grounded facts above — recommend ONLY that one. If the facts name no engine move, do NOT name any move; just say it's their turn. NEVER invent a move, NEVER tell them to move a piece to a square it already occupies, and NEVER recommend a move that isn't in the facts above.]`
         : engineDrivenStep
           ? text // no legal coach reply (game over) — narrate the student's move only
           : isStepByStepReport
@@ -5211,8 +5215,22 @@ export function CoachTeachPage(): JSX.Element {
                 // narrating the live tactics would hand over the very answer
                 // the question withholds (honesty contract rule 1).
                 const tacticsFacts: string[] = [];
-                if (tctx.immediate.length > 0) tacticsFacts.push(`Real tactics on the board now: ${tctx.immediate.map((t) => t.description).join('; ')}.`);
-                if (tctx.hanging.length > 0) tacticsFacts.push(`Undefended/attacked: ${tctx.hanging.map((h) => `${NAME[h.piece] ?? h.piece} on ${h.square}`).join(', ')}.`);
+                // SAY WHOSE TACTIC IT IS. The list was side-blind, so the
+                // model could read the OPPONENT'S fork as the student's
+                // chance — on David's 2026-08-07 game a probe found every
+                // position reporting Black's geometry with nothing marking
+                // it. Same for hanging pieces: "yours" vs "theirs" is the
+                // difference between a warning and an opportunity.
+                if (tctx.immediate.length > 0) {
+                  tacticsFacts.push(`Real tactics on the board now: ${tctx.immediate
+                    .map((t) => `${t.description} (${t.side === 'student' ? "the STUDENT's tactic" : t.side === 'opponent' ? "the OPPONENT's tactic — a danger to the student" : 'side unknown'})`)
+                    .join('; ')}.`);
+                }
+                if (tctx.hanging.length > 0) {
+                  tacticsFacts.push(`Undefended/attacked: ${tctx.hanging
+                    .map((h) => `${h.color === studentCC ? "the student's" : "the opponent's"} ${NAME[h.piece] ?? h.piece} on ${h.square}`)
+                    .join(', ')}.`);
+                }
                 // THE TACTICS ALERT — spoken, deterministic, board-true by
                 // construction (every claim reads straight off the current
                 // FEN; the PV-conditional threats stay prompt-only because
@@ -5226,30 +5244,52 @@ export function CoachTeachPage(): JSX.Element {
                 try {
                   const AV: Record<string, number> = { n: 3, b: 3, r: 5, q: 9 };
                   let alertKey = '';
+                  const myHanging = tctx.hanging
+                    .filter((h) => h.color === studentCC && AV[h.piece] !== undefined)
+                    .sort((a, b) => (AV[b.piece] ?? 0) - (AV[a.piece] ?? 0));
+                  // Their loose piece — the biggest teaching moment of
+                  // David's 2026-08-07 game (the coach's queen sat en prise
+                  // on e2) and the ladder had NO branch for it: the alert
+                  // fell through to a "tactic here for you" line that was
+                  // actually describing BLACK's fork. Found by probing the
+                  // real FENs, not by reading the code.
+                  const theirHanging = tctx.hanging
+                    .filter((h) => h.color !== studentCC && AV[h.piece] !== undefined)
+                    .sort((a, b) => (AV[b.piece] ?? 0) - (AV[a.piece] ?? 0));
                   if (tctx.boardFacts?.mateInOne) {
                     alertKey = `mate1:${tctx.boardFacts.mateInOne}`;
                     trackAAlert = 'You have a checkmate in one — find it.';
+                  } else if (myHanging.length > 0) {
+                    const worst = myHanging[0];
+                    alertKey = `hang:${worst.piece}${worst.square}`;
+                    trackAAlert = `Careful — your ${NAME[worst.piece] ?? 'piece'} on ${worst.square} is attacked and undefended.`;
+                    // The attacker's capture is forcing by definition —
+                    // the one sanctioned red arrow, painted as the alert
+                    // speaks.
+                    const flip = probe.fen().split(' ');
+                    flip[1] = studentCC === 'w' ? 'b' : 'w';
+                    flip[3] = '-';
+                    const fp = new Chess(flip.join(' '));
+                    const cap = fp.moves({ verbose: true })
+                      .filter((cm) => cm.to === worst.square && cm.isCapture())
+                      .sort((a, b) => (AV[a.piece] ?? 1) - (AV[b.piece] ?? 1))[0];
+                    if (cap) trackAAlertArrow = { startSquare: cap.from, endSquare: cap.to, color: 'red' };
+                  } else if (theirHanging.length > 0) {
+                    const prize = theirHanging[0];
+                    alertKey = `win:${prize.piece}${prize.square}`;
+                    // Name the prize, WITHHOLD the capture (the gem/honesty
+                    // contract) — the square is the opportunity, the move is
+                    // the student's to find.
+                    trackAAlert = `Their ${NAME[prize.piece] ?? 'piece'} on ${prize.square} is undefended — there's something to win here.`;
                   } else {
-                    const myHanging = tctx.hanging
-                      .filter((h) => h.color === studentCC && AV[h.piece] !== undefined)
-                      .sort((a, b) => (AV[b.piece] ?? 0) - (AV[a.piece] ?? 0));
-                    if (myHanging.length > 0) {
-                      const worst = myHanging[0];
-                      alertKey = `hang:${worst.piece}${worst.square}`;
-                      trackAAlert = `Careful — your ${NAME[worst.piece] ?? 'piece'} on ${worst.square} is attacked and undefended.`;
-                      // The attacker's capture is forcing by definition —
-                      // the one sanctioned red arrow, painted as the alert
-                      // speaks.
-                      const flip = probe.fen().split(' ');
-                      flip[1] = studentCC === 'w' ? 'b' : 'w';
-                      flip[3] = '-';
-                      const fp = new Chess(flip.join(' '));
-                      const cap = fp.moves({ verbose: true })
-                        .filter((cm) => cm.to === worst.square && cm.isCapture())
-                        .sort((a, b) => (AV[a.piece] ?? 1) - (AV[b.piece] ?? 1))[0];
-                      if (cap) trackAAlertArrow = { startSquare: cap.from, endSquare: cap.to, color: 'red' };
-                    } else if (tctx.immediate.length > 0) {
-                      const t = tctx.immediate[0];
+                    // STUDENT-SIDE ONLY (David 2026-08-07 probe): the
+                    // `immediate` list carries BOTH sides' geometry, and
+                    // every position in his real game reported the
+                    // OPPONENT'S pin/fork. Announcing those as "here for
+                    // you" is a false claim; `side` now carries the answer.
+                    const mine = tctx.immediate.filter((t) => t.side === 'student');
+                    if (mine.length > 0) {
+                      const t = mine[0];
                       alertKey = `opp:${t.type}:${t.squares.join('')}`;
                       trackAAlert = `There's a real ${t.type.replace(/_/g, ' ')} here for you — look for it.`;
                     }
@@ -5703,7 +5743,20 @@ export function CoachTeachPage(): JSX.Element {
             const fenAfterReply = liveFenRef.current;
             let instantSpokenText = '';
             let trackAStarted = false;
+            // GENERATION TOKEN — the fix for the lost-line collision (David
+            // 2026-08-07 log, findings 92-95): resetting `speechChainRef`
+            // does NOT cancel `.then()` links already attached to the OLD
+            // chain. A previous turn's teach line therefore still called
+            // speakForced when its turn came up — 2ms before THIS turn's
+            // line, which the 600ms throttle then dropped. The stale line
+            // won and "Your strongest reply here is Nxe2, winning the queen"
+            // was never heard. Every link now checks the generation it was
+            // created in and no-ops if a newer turn has started, so the
+            // newest line always wins (the same newest-move-wins doctrine
+            // the parked-submit refire follows).
+            const myTrackAGen = ++trackAGenRef.current;
             const speakTrackA = (line: string): void => {
+              if (trackAGenRef.current !== myTrackAGen) return;
               if (!trackAStarted) {
                 trackAStarted = true;
                 // Abort any straggler links from the previous turn's chain
@@ -5714,7 +5767,10 @@ export function CoachTeachPage(): JSX.Element {
                 speechChainRef.current = Promise.resolve();
               }
               speechChainRef.current = (speechChainRef.current ?? Promise.resolve())
-                .then(() => voiceService.speakForced(line))
+                .then(() => {
+                  if (trackAGenRef.current !== myTrackAGen) return undefined;
+                  return voiceService.speakForced(line);
+                })
                 .catch(() => undefined);
               instantSpokenText = instantSpokenText ? `${instantSpokenText} ${line}` : line;
               void logAppAudit({

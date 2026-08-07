@@ -294,7 +294,7 @@ function pieceInventory(board: ReturnType<Chess['board']>): { whitePieces: strin
  *  find. */
 function detectImmediateTactics(
   fen: string,
-  _playerColor: 'w' | 'b',
+  playerColor: 'w' | 'b',
 ): TacticsLiveContext['immediate'] {
   try {
     // classifyPosition expects (fenBefore, fenAfter, san, evalBefore,
@@ -307,7 +307,7 @@ function detectImmediateTactics(
     const result = classifyPosition(fen, fen, '', 0, 0);
     return result.tactics
       .filter((t) => t.type !== 'none')
-      .map(tacticPatternToEntry);
+      .map((t) => tacticPatternToEntry(t, playerColor));
   } catch {
     return [];
   }
@@ -323,11 +323,19 @@ function detectHangingPieces(fen: string): TacticsLiveContext['hanging'] {
   }
 }
 
-function tacticPatternToEntry(t: TacticPattern): TacticsLiveContext['immediate'][number] {
+function tacticPatternToEntry(
+  t: TacticPattern,
+  playerColor: 'w' | 'b',
+): TacticsLiveContext['immediate'][number] {
   return {
     type: t.type,
     description: t.description,
     squares: t.involvedSquares,
+    // Carry the detector's side through (David 2026-08-07). Dropping it
+    // here made every consumer side-blind: a probe of his real game showed
+    // pin/fork on almost every position, all of them BLACK's, with nothing
+    // to say so.
+    ...(t.beneficiary ? { side: t.beneficiary === playerColor ? 'student' as const : 'opponent' as const } : {}),
   };
 }
 

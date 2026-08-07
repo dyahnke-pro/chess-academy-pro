@@ -478,6 +478,14 @@ export interface TacticsLiveContext {
     description: string;
     /** Squares involved in the tactic. */
     squares: string[];
+    /** WHOSE tactic this is (David 2026-08-07: the list was side-BLIND —
+     *  `tacticPatternToEntry` dropped the detector's `beneficiary`, so a
+     *  probe of his real game found every position reporting the
+     *  OPPONENT'S fork/pin with nothing marking it as theirs. The model
+     *  was then free to narrate Black's fork as the student's chance, and
+     *  a consumer could not filter. Absent only for classifier-produced
+     *  patterns that never carried a side. */
+    side?: 'student' | 'opponent';
   }>;
   /** Undefended attacked pieces (either color). */
   hanging: Array<{ square: string; piece: string; color: 'w' | 'b' }>;
