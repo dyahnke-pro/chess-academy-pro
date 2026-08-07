@@ -188,26 +188,27 @@ function findAlignmentSeed(
 
 /**
  * THE INSTANT REPLY LINE — the ≤1-second voice (David 2026-08-06: "Down to
- * one second after moving"). The warm LLM beat takes seconds to generate, so
- * the moment the coach's reply lands on the board, this deterministic line is
- * spoken first: the move + its mechanics, all from chess.js. A capture or
- * check carries its own emphasis, so important replies are never silent while
- * the teaching catches up. The SAN is left raw — sanitizeForTTS expands it
- * into natural speech ("knight to a5") on the way to the voice.
+ * one second after moving", REVISED same day: "I did not like the narrations
+ * speaking the opponents move, waste of tokens. I want important teaching
+ * moments stated after opponent moves"). The voice never announces the move
+ * itself — the student watched it land (Narration Voice Rule 3: don't restate
+ * the board). It speaks ONLY when the reply is an EVENT the student must deal
+ * with — checkmate, check, or a capture — and names the EFFECT, not the SAN.
+ * A quiet reply returns null and the coach stays silent until the warm
+ * teaching beat arrives.
  */
 export function buildInstantReplyLine(m: {
   san: string;
   captured?: string;
   isCheckmate: boolean;
   isCheck: boolean;
-}): string {
+}): string | null {
   const capturedName = m.captured ? (NAME[m.captured] ?? 'piece') : null;
-  const move = m.san.replace(/[+#]$/, '');
-  if (m.isCheckmate) return `${move} — checkmate.`;
-  if (capturedName && m.isCheck) return `${move} — taking your ${capturedName}, with check.`;
-  if (capturedName) return `${move} — taking your ${capturedName}.`;
-  if (m.isCheck) return `${move} — check.`;
-  return `${move}.`;
+  if (m.isCheckmate) return 'Checkmate.';
+  if (capturedName && m.isCheck) return `That takes your ${capturedName} — and it's check.`;
+  if (capturedName) return `That takes your ${capturedName}.`;
+  if (m.isCheck) return 'Check.';
+  return null;
 }
 
 /**

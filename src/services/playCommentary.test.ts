@@ -152,26 +152,31 @@ describe('buildPriorityFirst', () => {
 });
 
 describe('buildInstantReplyLine', () => {
-  it('a quiet move is just the move', () => {
-    expect(buildInstantReplyLine({ san: 'Nf3', isCheckmate: false, isCheck: false }))
-      .toBe('Nf3.');
+  // David 2026-08-06: "I did not like the narrations speaking the opponents
+  // move… I want important teaching moments stated after opponent moves."
+  // The instant voice never announces the move — only mate/check/capture
+  // EVENTS get a call-out of their effect; quiet replies stay silent.
+
+  it('a quiet move is SILENT — the student watched it land', () => {
+    expect(buildInstantReplyLine({ san: 'Nf3', isCheckmate: false, isCheck: false })).toBeNull();
   });
 
-  it('a capture names the victim from chess.js, never invented', () => {
-    expect(buildInstantReplyLine({ san: 'Bxc6', captured: 'n', isCheckmate: false, isCheck: false }))
-      .toBe('Bxc6 — taking your knight.');
+  it('a capture calls out the EFFECT, never the SAN', () => {
+    const line = buildInstantReplyLine({ san: 'Bxc6', captured: 'n', isCheckmate: false, isCheck: false });
+    expect(line).toBe('That takes your knight.');
+    expect(line).not.toContain('Bxc6');
   });
 
-  it('check and capture-with-check carry their own emphasis', () => {
+  it('check and capture-with-check carry their own emphasis, SAN-free', () => {
     expect(buildInstantReplyLine({ san: 'Qh5+', isCheckmate: false, isCheck: true }))
-      .toBe('Qh5 — check.');
+      .toBe('Check.');
     expect(buildInstantReplyLine({ san: 'Qxf7+', captured: 'p', isCheckmate: false, isCheck: true }))
-      .toBe('Qxf7 — taking your pawn, with check.');
+      .toBe("That takes your pawn — and it's check.");
   });
 
   it('checkmate outranks everything', () => {
     expect(buildInstantReplyLine({ san: 'Qxf7#', captured: 'p', isCheckmate: true, isCheck: true }))
-      .toBe('Qxf7 — checkmate.');
+      .toBe('Checkmate.');
   });
 
   it('the whole flow from a real board — chess.js fields feed it directly', () => {
@@ -185,6 +190,6 @@ describe('buildInstantReplyLine', () => {
       isCheckmate: c.isCheckmate(),
       isCheck: c.isCheck(),
     });
-    expect(line).toBe('Qxf7 — checkmate.');
+    expect(line).toBe('Checkmate.');
   });
 });

@@ -87,6 +87,8 @@ import {
   getCachedOpening,
   cacheOpening,
   generateMissingStagesInBackground,
+  noteArrowSourceAt,
+  groundedSegmentArrows,
 } from '../../services/openingGenerator';
 import {
   readSharedCache,
@@ -98,6 +100,7 @@ import {
   findOpeningByPgnPrefix,
   resolveCuratedVariation,
   inferStudentSideFromName,
+  detectOpening,
   type LinePickerOption,
 } from '../../services/openingDetectionService';
 import { fuzzyMatchOpening } from '../../services/openingFuzzyMatcher';
@@ -140,7 +143,8 @@ import { buildOpeningChainFacts } from '../../services/openingFactChains';
 import { buildForkTalk, type ForkTalk } from '../../services/forkTalk';
 import { parseCoachMoveCommand } from '../../services/coachMoveCommand';
 import { sanToSpeech } from '../../utils/sanToSpeech';
-import { teachingSourceForBoard, teachingFactLine, generalizedTeaching, noteCoverageForLine, spokenBeatText } from '../../services/danyaTeachingService';
+import { teachingSourceForBoard, teachingFactLine, generalizedTeaching, noteCoverageForLine, spokenBeatText, notesForOpening } from '../../services/danyaTeachingService';
+import { secondarySupportNotes } from '../../services/secondaryCorpora';
 
 /** How many note-covered plies an opening needs before the NOTES take the
  *  lesson from a hand-authored masterclass.
@@ -592,6 +596,68 @@ function syntheticOpeningFromSession(session: WalkthroughSession): OpeningRecord
   };
 }
 
+/** Options for `handleSubmit` — extracted to a named type so the
+ *  newest-move-wins parking ref can carry a full pending submit
+ *  (David 2026-08-07: an engine-driven move narration must never be
+ *  silently swallowed while a previous turn is in flight). */
+interface TeachSubmitOpts {
+  kickoff?: boolean;
+  /** Explicit post-move FEN override. Required when handleSubmit
+   *  is called from a board onMove callback because React hasn't
+   *  re-rendered yet — `gameRef.current` still holds the previous
+   *  render's value at that moment. The MoveResult emitted by
+   *  useChessGame already carries the post-move FEN, so the move
+   *  callback hands it in. Without this the brain saw the pre-move
+   *  FEN and replied "e4 hasn't landed yet" after the student
+   *  played e4 (production audit, build cf2fe0b). */
+  fenOverride?: string;
+  /** Engine-driven step-by-step turn (GROUNDING TRUTH): the engine/DB
+   *  ALREADY played the coach's reply (this SAN) in code; the brain must
+   *  only NARRATE it. Defined (a SAN, or '' when there was no legal
+   *  reply) means "this is the step-by-step path; play_move is disabled
+   *  so the LLM cannot pick or play a move." Undefined = legacy path. */
+  coachReplyPlayed?: string;
+  /** GROUNDING COMPLETENESS (David 2026-06-15): the captured-piece +
+   *  squares fact for the coach's reply, computed in code (chess.js).
+   *  The SAN alone (e.g. "Qxg5") tells the LLM a capture happened but NOT
+   *  what was taken — and the after-FEN can't tell it either (the victim
+   *  is gone). Without this the LLM fabricates the victim ("queen takes
+   *  queen"). Handed in so the LLM narrates the REAL capture, never an
+   *  invented one. */
+  coachReplyFact?: string;
+  /** The deterministic instant reply line (`buildInstantReplyLine`) was
+   *  ALREADY spoken the moment the coach's move landed on the board —
+   *  the ≤1s voice (David 2026-08-06: "Down to one second after
+   *  moving"). handleSubmit must NOT stop it or reset the speech chain;
+   *  the warm [VOICE:] beat chains after it instead of cutting it
+   *  mid-word. */
+  instantLineSpoken?: boolean;
+  /** Fresh full analysis of the position this move-narration turn is
+   *  about (the post-reply fen), computed in handleStudentMove. Beats
+   *  the eval-bar watcher race: without it, fast play shipped the ask
+   *  before `latestEvalRef` caught up, and the tactics context went to
+   *  the model as zeros — every turn of David's 2026-08-06 log
+   *  ("immediate=0 threats=0 opps=0") while real threats sat on the
+   *  board (David 2026-08-07: "WIRE THAT SHIT IN!!"). */
+  replyAnalysis?: { fen: string; analysis: StockfishAnalysis };
+  /** The caller ALREADY KNOWS this is a teach request and `text` is a
+   *  canonical opening name it resolved from the DB — a "Deep dive"
+   *  tile, not something the student typed. Skips the free-text intent
+   *  heuristics entirely (TEACH_PATTERN, the 60-char bare-name cap, the
+   *  control-phrase guard) and skips the ask-a-question auto-pause.
+   *
+   *  Why this exists (David 2026-07-31, "the learn lesson stops after
+   *  selecting a line to learn/fork in the road"): the fork's Deep-dive
+   *  tiles laundered their query through the free-text router, so a
+   *  perfectly valid DB name like "Sicilian Defense: Alapin Variation,
+   *  Barmen Defense, Endgame Variation" (69 chars) blew past the 60-char
+   *  bare-name cap, fell through to the brain, and dead-ended on "I
+   *  can't verify that precisely from grounded data right now" — with
+   *  the walkthrough auto-paused behind it. An intent the CODE resolved
+   *  must never be re-guessed from its own prose. */
+  teachIntent?: boolean;
+}
+
 export function CoachTeachPage(): JSX.Element {
   const navigate = useNavigate();
   // Quick Tour mode: ?mode=tour in the URL flips lessons into a
@@ -862,6 +928,14 @@ export function CoachTeachPage(): JSX.Element {
   // a fresh one — orphan chain links observe `aborted=true` and skip,
   // current chain links observe `aborted=false` and proceed.
   const turnAbortRefRef = useRef<{ aborted: boolean } | null>(null);
+  // NEWEST-MOVE-WINS (David 2026-08-07): the latest engine-driven move
+  // narration that arrived while a previous turn was in flight. Fired from
+  // handleSubmit's finally; overwritten (never queued) so only the current
+  // position ever gets narrated. handleSubmitRef is the late-bound self
+  // handle the refire calls through (same pattern as the continuation ref
+  // above — keeps handleSubmit out of its own dependency array).
+  const pendingMoveNarrationRef = useRef<{ text: string; opts: TeachSubmitOpts } | null>(null);
+  const handleSubmitRef = useRef<((text: string, opts?: TeachSubmitOpts) => Promise<void>) | null>(null);
   // Late-bound handle to startNarratedContinuation (defined far below, near
   // the other chip handlers). handleSubmit calls through this ref so it
   // doesn't need the callback in its dependency array (which would TDZ on a
@@ -1114,6 +1188,17 @@ export function CoachTeachPage(): JSX.Element {
   /** Traps/gems already announced this game (openingFactChains dedup) — the
    *  same lurking line isn't re-announced on every ply it stays live. */
   const announcedTrapsRef = useRef(new Set<string>());
+  /** OPENING ANNOUNCEMENT dedup (David 2026-08-06: "I should hear some
+   *  important phrases about the Vienna as soon as the coach realizes I'm
+   *  playing it"). The last opening name the coach announced aloud this
+   *  game — announced again only when detection RESOLVES A NEW NAME (first
+   *  recognition, or refinement like Vienna Game → Vienna Gambit). The Play
+   *  page has had announce-on-first-recognition since WO-NARRATION-CADENCE;
+   *  Learn never got the wire. */
+  const announcedOpeningNameRef = useRef<string | null>(null);
+  /** Notes already spliced into this game's narration (same dedup contract as
+   *  the walkthrough's `noteArrowSourceAt` seenIds — a note teaches once). */
+  const teachNoteSeenIdsRef = useRef(new Set<string>());
   // FORK IN THE ROAD (David 2026-07-11: "when there is a fork in the road the
   // coach could talk about both options… advantages and disadvantages of
   // both"). Near-equal, different-character options get deliberated — the
@@ -1675,57 +1760,29 @@ export function CoachTeachPage(): JSX.Element {
 
   const handleSubmit = useCallback(async (
     text: string,
-    opts?: {
-      kickoff?: boolean;
-      /** Explicit post-move FEN override. Required when handleSubmit
-       *  is called from a board onMove callback because React hasn't
-       *  re-rendered yet — `gameRef.current` still holds the previous
-       *  render's value at that moment. The MoveResult emitted by
-       *  useChessGame already carries the post-move FEN, so the move
-       *  callback hands it in. Without this the brain saw the pre-move
-       *  FEN and replied "e4 hasn't landed yet" after the student
-       *  played e4 (production audit, build cf2fe0b). */
-      fenOverride?: string;
-      /** Engine-driven step-by-step turn (GROUNDING TRUTH): the engine/DB
-       *  ALREADY played the coach's reply (this SAN) in code; the brain must
-       *  only NARRATE it. Defined (a SAN, or '' when there was no legal
-       *  reply) means "this is the step-by-step path; play_move is disabled
-       *  so the LLM cannot pick or play a move." Undefined = legacy path. */
-      coachReplyPlayed?: string;
-      /** GROUNDING COMPLETENESS (David 2026-06-15): the captured-piece +
-       *  squares fact for the coach's reply, computed in code (chess.js).
-       *  The SAN alone (e.g. "Qxg5") tells the LLM a capture happened but NOT
-       *  what was taken — and the after-FEN can't tell it either (the victim
-       *  is gone). Without this the LLM fabricates the victim ("queen takes
-       *  queen"). Handed in so the LLM narrates the REAL capture, never an
-       *  invented one. */
-      coachReplyFact?: string;
-      /** The deterministic instant reply line (`buildInstantReplyLine`) was
-       *  ALREADY spoken the moment the coach's move landed on the board —
-       *  the ≤1s voice (David 2026-08-06: "Down to one second after
-       *  moving"). handleSubmit must NOT stop it or reset the speech chain;
-       *  the warm [VOICE:] beat chains after it instead of cutting it
-       *  mid-word. */
-      instantLineSpoken?: boolean;
-      /** The caller ALREADY KNOWS this is a teach request and `text` is a
-       *  canonical opening name it resolved from the DB — a "Deep dive"
-       *  tile, not something the student typed. Skips the free-text intent
-       *  heuristics entirely (TEACH_PATTERN, the 60-char bare-name cap, the
-       *  control-phrase guard) and skips the ask-a-question auto-pause.
-       *
-       *  Why this exists (David 2026-07-31, "the learn lesson stops after
-       *  selecting a line to learn/fork in the road"): the fork's Deep-dive
-       *  tiles laundered their query through the free-text router, so a
-       *  perfectly valid DB name like "Sicilian Defense: Alapin Variation,
-       *  Barmen Defense, Endgame Variation" (69 chars) blew past the 60-char
-       *  bare-name cap, fell through to the brain, and dead-ended on "I
-       *  can't verify that precisely from grounded data right now" — with
-       *  the walkthrough auto-paused behind it. An intent the CODE resolved
-       *  must never be re-guessed from its own prose. */
-      teachIntent?: boolean;
-    },
+    opts?: TeachSubmitOpts,
   ): Promise<void> => {
-    if (!text.trim() || busy) return;
+    if (!text.trim()) return;
+    if (busy) {
+      // NEWEST-MOVE-WINS (David 2026-08-07: "not narrating one move behind
+      // the user"). An engine-driven move narration must never be silently
+      // swallowed while a previous turn is in flight — his 2026-08-06 log
+      // caught the Nc3 turn getting ZERO narration exactly this way. Park
+      // the LATEST one (overwriting any earlier parked move — only the
+      // current position matters); the finally below fires it the moment
+      // the pipeline frees. Ordinary typed turns keep the old drop — the
+      // input is disabled while busy, so they can't arrive here anyway.
+      if (opts?.coachReplyPlayed !== undefined) {
+        pendingMoveNarrationRef.current = { text, opts };
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'CoachTeachPage.handleSubmit.newestMoveWins',
+          summary: `move narration parked while busy: "${text.slice(0, 40)}" — will fire when the pipeline frees`,
+        });
+      }
+      return;
+    }
     // Free-tier coach budget: count one chat turn per real user turn (never
     // the kickoff greeting, which the user didn't initiate).
     if (!opts?.kickoff) coachFreeMeter.consumeChatTurn();
@@ -3680,6 +3737,24 @@ export function CoachTeachPage(): JSX.Element {
      *  prompt rule on state-changing turns. */
     const spokenForTurn: string[] = [];
     const queueSpeak = (raw: string): void => {
+      // STALE-BEAT GUARD (David 2026-08-07: "faster narration so we are not
+      // narrating one move behind"). A move-narration beat is about ONE
+      // position; if the student has already moved past it by the time the
+      // beat is ready to speak, voicing it narrates a board that no longer
+      // exists — his 2026-08-06 log caught the e4 essay starting AFTER the
+      // coach had answered his next move. The chat still shows the text;
+      // only the voice skips. Chat Q&A answers are conversation, not
+      // position-bound, so they still speak.
+      if (opts?.coachReplyPlayed !== undefined && liveFenRef.current !== fen) {
+        void logAppAudit({
+          kind: 'voice-speak-invoked',
+          category: 'subsystem',
+          source: 'CoachTeachPage.queueSpeak.staleBeatSkip',
+          summary: `stale move-narration beat dropped (board moved on): "${raw.slice(0, 40)}"`,
+          fen,
+        });
+        return;
+      }
       // GROUND every spoken line against the live board before it leaves the
       // device. The chat prose is grounded post-hoc, but the [VOICE:] marker
       // is spoken mid-stream and would otherwise bypass that gate — letting
@@ -3835,7 +3910,9 @@ export function CoachTeachPage(): JSX.Element {
     const cachedAnalysis =
       latestEvalRef.current && latestEvalRef.current.fen === fen
         ? latestEvalRef.current.analysis
-        : null;
+        : opts?.replyAnalysis && opts.replyAnalysis.fen === fen
+          ? opts.replyAnalysis.analysis
+          : null;
     const studentColor = fenTurn === 'white' ? 'w' : 'b';
     // Rating proxy = puzzleRating (1200 fresh, drifts up/down with
     // adaptive puzzles). Drives lookahead depth via
@@ -3907,9 +3984,14 @@ export function CoachTeachPage(): JSX.Element {
       moveNarrationDirectives:
         !walkthrough.isActive && opts?.coachReplyPlayed && opts.coachReplyPlayed.length > 0
           ? `${opts.coachReplyPlayed} is already on the board — never suggest playing it. `
-            + "Narrate the coach's reply and its idea in one or two sentences, then prompt the student's move."
+            // David 2026-08-06: "I did not like the narrations speaking the
+            // opponents move, waste of tokens. I want important teaching
+            // moments stated after opponent moves." The student WATCHED the
+            // move land — describing its mechanics is dead air.
+            + 'Do NOT describe the reply\'s mechanics — no from-square, no to-square, no "quiet move", no "no capture"; the student watched it happen. '
+            + 'Open with the IMPORTANT TEACHING MOMENT the reply creates: the threat it makes, the plan it serves, or what the student should do about it. Then prompt their move.'
             + (opts?.instantLineSpoken
-              ? ` The move ${opts.coachReplyPlayed} was ALREADY announced aloud the moment it landed — lead with its IDEA, never a bare restatement of the move.`
+              ? ' Any capture or check was already called out aloud as it landed — never re-announce it.'
               : '')
           : undefined,
       ...(evalForAsk ?? {}),
@@ -3982,7 +4064,7 @@ export function CoachTeachPage(): JSX.Element {
       (STEP_BY_STEP_RE.test(text) || engineDrivenStep) && !walkthrough.isActive;
     const effectiveAsk =
       replyPlayed && replyPlayed.length > 0
-        ? `${text}\n\n[STEP-BY-STEP NARRATION — the engine already played the coach's reply ${replyPlayed}; it is ALREADY on the board. ${opts?.coachReplyFact ?? ''} You do NOT and CANNOT play moves (play_move is disabled). ${opts?.instantLineSpoken ? `The bare move ${replyPlayed} was already announced aloud as it landed — open with the IDEA behind it, not another bare statement of the move. ` : ''}NARRATE ${replyPlayed} using ONLY the grounded fact above for what it captured — never invent a captured piece. Name the idea behind the move, draw [BOARD: arrow:from-to:green] on that move AND on every SAN you mention in prose. Put your SPOKEN narration in a [VOICE: ...] marker — one or two plain sentences naming the move and its idea — so the coach speaks it aloud (this is REQUIRED; without it the student hears nothing). Do NOT summarize or continue any earlier topic; narrate this reply, then prompt the student's turn. If you name a move for the student to play, it MUST be the engine move named in the grounded facts above — recommend ONLY that one. If the facts name no engine move, do NOT name any move; just say it's their turn. NEVER invent a move, NEVER tell them to move a piece to a square it already occupies, and NEVER recommend a move that isn't in the facts above.]`
+        ? `${text}\n\n[STEP-BY-STEP NARRATION — the engine already played the coach's reply ${replyPlayed}; it is ALREADY on the board. ${opts?.coachReplyFact ?? ''} You do NOT and CANNOT play moves (play_move is disabled). The student WATCHED ${replyPlayed} land — do NOT describe its mechanics (no from-square, no to-square, no "quiet move", no "no capture"). ${opts?.instantLineSpoken ? 'Any capture or check was already called out aloud as it landed — never re-announce it. ' : ''}Open with the IMPORTANT TEACHING MOMENT the reply creates — the threat it makes, the plan it serves, or what the student should do about it — using ONLY the grounded facts above (never invent a captured piece, tactic, or threat not listed there). Draw [BOARD: arrow:from-to:green] on that move AND on every SAN you mention in prose. Put your SPOKEN narration in a [VOICE: ...] marker — one or two plain sentences of the teaching moment — so the coach speaks it aloud (this is REQUIRED; without it the student hears nothing). Do NOT summarize or continue any earlier topic; teach this moment, then prompt the student's turn. If you name a move for the student to play, it MUST be the engine move named in the grounded facts above — recommend ONLY that one. If the facts name no engine move, do NOT name any move; just say it's their turn. NEVER invent a move, NEVER tell them to move a piece to a square it already occupies, and NEVER recommend a move that isn't in the facts above.]`
         : engineDrivenStep
           ? text // no legal coach reply (game over) — narrate the student's move only
           : isStepByStepReport
@@ -4588,8 +4670,27 @@ export function CoachTeachPage(): JSX.Element {
         // Merge the opening-chain's lead-the-eye arrows so the narration's
         // own arrow pass doesn't wipe them — both describe THIS reply.
         // groundArrows re-validates everything against the live fen.
-        setArrows(uniqueArrows(groundArrows([...codeArrows, ...chainArrowsRef.current], fen)));
-        setHighlights([...codeHighlights, ...chainHighlightsRef.current]);
+        //
+        // STALE-TURN GUARD (David 2026-08-06: "arrows still showed bad moves…
+        // they adjust if left alone"): this pass runs seconds after the turn
+        // started, and his log caught it painting arrows computed for a
+        // move-5 board AFTER he'd played on to move 6 — the student-move
+        // handler clears arrows, then this late pass repaints expired ones
+        // on the new position. If the live board has moved past this turn's
+        // fen, the arrows are history: skip the paint (the chat text still
+        // lands; only the board decoration is dropped).
+        if (liveFenRef.current === fen) {
+          setArrows(uniqueArrows(groundArrows([...codeArrows, ...chainArrowsRef.current], fen)));
+          setHighlights([...codeHighlights, ...chainHighlightsRef.current]);
+        } else {
+          void logAppAudit({
+            kind: 'coach-narration-spoken',
+            category: 'subsystem',
+            source: 'CoachTeachPage.arrowEngine.staleTurnSkip',
+            summary: `skipped stale arrow paint — board moved past this turn (${codeArrows.length} arrow(s) dropped)`,
+            fen,
+          });
+        }
         setMessages((prev) => [...prev, {
           id: `${turnId}-c`,
           role: 'assistant',
@@ -4660,9 +4761,22 @@ export function CoachTeachPage(): JSX.Element {
       // out-of-turn events (route changes, background tasks) don't
       // get mis-tagged with the just-finished turn.
       setCurrentTurnId(null);
+      // NEWEST-MOVE-WINS refire: a move narration parked while this turn
+      // was in flight runs now. Its own fenOverride/replyAnalysis describe
+      // the newest position, and the stale-beat + stale-arrow guards make
+      // any leftovers from THIS turn harmless — so the coach always ends
+      // up narrating the board that's actually in front of the student.
+      const pending = pendingMoveNarrationRef.current;
+      if (pending) {
+        pendingMoveNarrationRef.current = null;
+        void handleSubmitRef.current?.(pending.text, pending.opts);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- tracked for dedicated audit; current deps cover the live callers.
   }, [busy, activeProfile, handlePlayMove, handleTakeBack, handleSetBoardPosition, handleResetBoard, navigate, kickoffStatus, walkthrough, playerColor, playDictatedMove]);
+  // Keep the late-bound self handle current (the newest-move-wins refire in
+  // the finally above calls through it).
+  handleSubmitRef.current = handleSubmit;
 
   // Student-driven moves go through ControlledChessBoard's onMove
   // callback (below). useChessGame already handles the click-to-move
@@ -4902,6 +5016,20 @@ export function CoachTeachPage(): JSX.Element {
         // so a genuinely slow engine call doesn't stack an extra wait on top.
         const thinkStart = Date.now();
         const reply = await resolveCoachReplyMove(move.fen);
+        // PRE-WARM THE POST-REPLY ANALYSIS DURING THE THINK PAD (David
+        // 2026-08-07: ride the always-watching layer). The reply is chosen;
+        // the 1-2s pad below is dead time — spend it analyzing the position
+        // the narration is about to need, so the facts assembly's engine
+        // read (and the rich tactics context built from it) is a cache hit
+        // instead of a serial wait.
+        if (reply) {
+          try {
+            const warmProbe = new Chess(move.fen);
+            if (warmProbe.move(reply)) {
+              void stockfishEngine.analyzeWithBudget(warmProbe.fen(), 12, 2500).catch(() => undefined);
+            }
+          } catch { /* warming is a bonus, never a blocker */ }
+        }
         const minThink = 1000 + Math.floor(Math.random() * 1000); // 1000–2000ms
         const elapsed = Date.now() - thinkStart;
         if (elapsed < minThink) {
@@ -4919,12 +5047,14 @@ export function CoachTeachPage(): JSX.Element {
             // hold the board.
             setOpponentThinking(false);
             // THE INSTANT REPLY LINE (David 2026-08-06: "Down to one second
-            // after moving"). The warm LLM beat is seconds away (engine facts
-            // + a non-streaming phrasing call), so the coach speaks the reply's
-            // MECHANICS the moment it lands — pure chess.js, no engine, no
-            // LLM. speakForced honors the verbosity gate (silent stays
-            // silent); the warm beat chains AFTER this promise via
-            // `instantLineSpoken`, so it is never cut mid-word.
+            // after moving" + same-day revision: "I did not like the
+            // narrations speaking the opponents move… I want important
+            // teaching moments stated after opponent moves"). The voice never
+            // announces the move — only an EVENT the student must deal with
+            // (mate / check / capture) gets an instant call-out of its
+            // EFFECT; quiet replies stay silent until the warm teaching beat.
+            // speakForced honors the verbosity gate; the warm beat chains
+            // AFTER this promise via `instantLineSpoken`, never cutting it.
             let instantSpoken = false;
             try {
               const ip = new Chess(move.fen);
@@ -4936,13 +5066,15 @@ export function CoachTeachPage(): JSX.Element {
                   isCheckmate: ip.isCheckmate(),
                   isCheck: ip.isCheck(),
                 });
-                // Abort any straggler links from the previous turn's chain
-                // (same move handleSubmit makes), then make the instant line
-                // the head of a fresh chain the warm beat will append to.
-                if (turnAbortRefRef.current) turnAbortRefRef.current.aborted = true;
-                voiceService.stop();
-                speechChainRef.current = Promise.resolve(voiceService.speakForced(instant)).catch(() => undefined);
-                instantSpoken = true;
+                if (instant) {
+                  // Abort any straggler links from the previous turn's chain
+                  // (same move handleSubmit makes), then make the instant line
+                  // the head of a fresh chain the warm beat will append to.
+                  if (turnAbortRefRef.current) turnAbortRefRef.current.aborted = true;
+                  voiceService.stop();
+                  speechChainRef.current = Promise.resolve(voiceService.speakForced(instant)).catch(() => undefined);
+                  instantSpoken = true;
+                }
               }
             } catch { /* instant line is a bonus — the warm beat still speaks */ }
             // PHASE TRANSITION on the settled position. Keyed off the STUDENT's
@@ -4955,6 +5087,9 @@ export function CoachTeachPage(): JSX.Element {
             // the victim ("queen takes queen"). The SAN + after-FEN alone don't
             // carry the captured piece.
             let replyFact = '';
+            // Carries the fresh post-reply analysis out to the handleSubmit
+            // call so the ask's tactics context is built rich, not raced.
+            let replyAnalysisForAsk: { fen: string; analysis: StockfishAnalysis } | undefined;
             try {
               const probe = new Chess(move.fen);
               const m = probe.move(reply);
@@ -4986,7 +5121,20 @@ export function CoachTeachPage(): JSX.Element {
                 //    stripping invented "fork/discovery" all session).
                 const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200;
                 const studentCC: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
-                const tctx = buildTacticsLiveContext(probe.fen(), null, studentCC, rating);
+                // THE WATCHER FEEDS THE PROMPT (David 2026-08-07: "WIRE THAT
+                // SHIT IN!!"). The engine read runs FIRST — pre-warmed during
+                // the coach's think-time pad, so this await is normally a
+                // cache hit — and the tactics context is built WITH it.
+                // Before this, the second argument was a hand-written `null`:
+                // threats/opportunities could never populate, and every turn
+                // of David's 2026-08-06 log shipped "immediate=0 threats=0
+                // opps=0" to the model while he hung a knight for 530cp.
+                let studentBest: StockfishAnalysis | null = null;
+                try {
+                  studentBest = await stockfishEngine.analyzeWithBudget(probe.fen(), 12, 1200);
+                } catch { /* engine down → thin (chess.js-only) context below */ }
+                if (studentBest) replyAnalysisForAsk = { fen: probe.fen(), analysis: studentBest };
+                const tctx = buildTacticsLiveContext(probe.fen(), studentBest, studentCC, rating);
                 // Tactics facts are held back until the question decision
                 // below — when a guided-find or threat-check question arms,
                 // narrating the live tactics would hand over the very answer
@@ -5024,7 +5172,6 @@ export function CoachTeachPage(): JSX.Element {
                 // cached on a warm engine; the board already unlocked above, so this
                 // only delays the async narration, never the student's next move.
                 try {
-                  const studentBest = await stockfishEngine.analyzeWithBudget(probe.fen(), 12, 1200);
                   const recUci = studentBest?.bestMove;
                   // Ply of the move just played — the throttle clock for
                   // think-aloud and fork-talk below. (It used to be declared
@@ -5180,11 +5327,56 @@ export function CoachTeachPage(): JSX.Element {
                     const chainHistory = historyAfterReply;
                     if (chainHistory.length <= 2) {
                       announcedTrapsRef.current.clear(); // fresh game
+                      announcedOpeningNameRef.current = null;
+                      teachNoteSeenIdsRef.current.clear();
                       forkTalkCountRef.current = 0;
                       pendingForkRef.current = null;
                       rejectedTemptingCountRef.current = 0;
                       priorityFirstLastPlyRef.current = -999;
                     }
+                    // OPENING ANNOUNCEMENT — fires when detection resolves a
+                    // NEW name (first recognition or a refinement). Name from
+                    // the opening DB, idea from the corpus's opening-level
+                    // notes, the model only phrases (G0). David heard the
+                    // detection resolve "Vienna Gambit, Paulsen Attack" turn
+                    // by turn in his 2026-08-06 log with zero narration about
+                    // it — the name was context, never an event.
+                    try {
+                      const det = detectOpening(chainHistory);
+                      if (det && det.name && det.name !== announcedOpeningNameRef.current) {
+                        const firstResolve = announcedOpeningNameRef.current === null;
+                        announcedOpeningNameRef.current = det.name;
+                        // Idea source spans ALL the speaking-note corpora
+                        // (David 2026-08-07: "make sure all the notes get
+                        // wired in"): primary first (house voice), then the
+                        // farmed corpora via the support tier. Opening-level
+                        // register by design — this is teaching about the
+                        // OPENING, not a claim about the board.
+                        const ideaNote = notesForOpening(det.name, 1)[0]
+                          ?? secondarySupportNotes({ openingName: det.name, maxNotes: 1 })[0];
+                        const idea = ideaNote ? spokenBeatText(ideaNote) : '';
+                        facts.push(
+                          `OPENING IDENTIFIED: the game is now the ${det.name}. ` +
+                          (firstResolve
+                            ? `Announce the opening BY NAME as your opener — the student just steered into it. `
+                            : `The line has sharpened into this named variation — mention the new name in passing. `) +
+                          (idea ? `Teach this verified idea about it: ${idea}` : ''),
+                        );
+                        captureEvent('opening_announced', {
+                          surface: 'coach-teach',
+                          name: det.name,
+                          first: firstResolve,
+                          has_idea: idea.length > 0,
+                        });
+                        void logAppAudit({
+                          kind: 'coach-narration-spoken',
+                          category: 'narration',
+                          source: 'CoachTeachPage.openingAnnouncement',
+                          summary: `opening ${firstResolve ? 'identified' : 'refined'}: ${det.name}${idea ? ' (+corpus idea)' : ''}`,
+                          fen: probe.fen(),
+                        });
+                      }
+                    } catch { /* announcement is a bonus, never a blocker */ }
                     if (classifyPhase(probe.fen(), chainHistory.length) === 'opening') {
                       const chain = buildOpeningChainFacts({
                         historySans: chainHistory,
@@ -5233,8 +5425,42 @@ export function CoachTeachPage(): JSX.Element {
                 // a fact about the board, and dutifully said so (2026-08-04).
                 {
                   try {
-                    const source = teachingSourceForBoard(historyAfterReply, probe.fen());
-                    if (source) facts.push(teachingFactLine(source));
+                    // LEAD-THE-EYE FROM THE NOTE (David 2026-08-07: "add the
+                    // lead the eye arrows like teach me x opening has").
+                    // Position-taught notes ride the SAME grounded pipeline
+                    // the walkthrough uses: `noteArrowSourceAt` grades the
+                    // spoken note against THIS board, and
+                    // `groundedSegmentArrows` derives green vision arrows
+                    // from the moves the NOTE names — the note decides what
+                    // gets pointed at, never the model's prose (G0). Other
+                    // origins (opening-family / structure / concept) keep the
+                    // provenance-labeled fact line, no arrows — they are not
+                    // about this board.
+                    const noteText = noteArrowSourceAt(historyAfterReply, probe.fen(), teachNoteSeenIdsRef.current);
+                    if (noteText) {
+                      facts.push(`Coaching note taught at THIS position: ${noteText}`);
+                      const seg = groundedSegmentArrows(noteText, '', { from: m.from, to: m.to, fen: probe.fen() });
+                      // Map the narration-arrow shape onto the board's
+                      // (startSquare/endSquare); green vision arrows only —
+                      // the orange trail is the move itself, already visible.
+                      const leadEye: BoardArrow[] = (seg.arrows ?? [])
+                        .filter((a) => a.color === 'green')
+                        .map((a) => ({ startSquare: a.from, endSquare: a.to, color: 'green' }));
+                      if (leadEye.length > 0) {
+                        chainArrowsRef.current = [...chainArrowsRef.current, ...leadEye];
+                        setArrows((prev) => uniqueArrows([...prev, ...leadEye]));
+                        void logAppAudit({
+                          kind: 'coach-narration-spoken',
+                          category: 'narration',
+                          source: 'CoachTeachPage.noteLeadEye',
+                          summary: `note lead-the-eye: ${leadEye.length} green arrow(s) from the taught note`,
+                          fen: probe.fen(),
+                        });
+                      }
+                    } else {
+                      const source = teachingSourceForBoard(historyAfterReply, probe.fen());
+                      if (source) facts.push(teachingFactLine(source));
+                    }
                   } catch { /* corpus is a bonus, never a blocker */ }
                   // GEM DETECTION on Learn (David 2026-07-30: "This is for the
                   // learn with coach tab!!"). If the coach's reply just walked
@@ -5299,6 +5525,7 @@ export function CoachTeachPage(): JSX.Element {
               coachReplyPlayed: reply,
               coachReplyFact: replyFact,
               instantLineSpoken: instantSpoken,
+              replyAnalysis: replyAnalysisForAsk,
             });
             return;
           }

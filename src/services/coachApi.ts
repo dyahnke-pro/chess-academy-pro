@@ -2080,9 +2080,14 @@ export async function voiceFacts(
       'is not given, you do not know it. The teaching voice, the connective phrasing, the ' +
       'warmth are all yours; every chess fact is only what the facts say. Never hedge, ' +
       'never mention an engine or analysis. LENGTH: five to eight spoken sentences — a ' +
-      'punchy coaching beat, never a lecture. Land the single most important idea in your ' +
-      'FIRST sentence so it can stand alone, then build. Every fact voiced once; no ' +
-      'restating, no wind-up, no summary at the end.'
+      'punchy coaching beat, never a lecture (David 2026-08-06 vetoed a shorter cap: ' +
+      '"if we cap to three sentences we lose important information about the position"). ' +
+      'ORDER IS EVERYTHING: land the single most important teaching moment in your ' +
+      'FIRST sentence so it stands alone, then build outward most-important-first — the ' +
+      'student may move before you finish, and whatever gets cut must only ever be the ' +
+      'least important tail. Every fact voiced once; no restating, no wind-up, no ' +
+      'summary at the end. Do not re-describe a move the student just watched — no ' +
+      'from-square/to-square mechanics; say what it MEANS.'
     : 'You are a warm, concise chess coach speaking to a student. You will be given ' +
     'FACTS that are already true and verified. Your ONLY job is to say those facts ' +
     'to the student naturally, as a coach would. Add NOTHING: do not introduce any ' +
@@ -2111,11 +2116,11 @@ export async function voiceFacts(
   // most room of all.
   // Warm live budget 560→384 (David 2026-08-06: "Narration also still too
   // slow"). The phrasing call is NON-streaming — nothing speaks until the
-  // whole completion exists — so output length IS the lag: his session's
-  // 400-560-token lessons took 6-8s to generate (and one hit the 560 cap,
-  // clipping mid-sentence). The prompt now asks for a 5-8-sentence coaching
-  // beat and the cap sits comfortably above it, so the beat completes in
-  // ~2.5-4s and never truncates. G5 untouched (brief still clips via
+  // whole completion exists — so output length IS the lag. A later 200-token
+  // cut was VETOED same day ("if we cap to three sentences we lose important
+  // information about the position"): depth stays; the speed comes from
+  // pyramid ordering (the prompt) + the stale-beat guard + pre-warmed engine
+  // reads, not from starving the beat. G5 untouched (brief still clips via
   // applyBriefVoiceCap, silent stays silent).
   const voiceMaxTokens = register === 'review' ? 700 : opts.warm ? 384 : 240;
   try {
