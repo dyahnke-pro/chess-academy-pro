@@ -130,6 +130,25 @@ function findAlignmentSeed(
   const homeRank = them === 'w' ? 1 : 8;
   const occupied = new Set(all.map((p) => p.square));
 
+  // The rank branch used to require `rank !== homeRank`, which was aimed at the
+  // untouched opening huddle but hit far more than that: it made a back-rank
+  // alignment PERMANENTLY invisible. David 2026-08-07 — "often times the queen
+  // and king align when castling long" — and he is right; verified with two
+  // identical positions one rank apart, where king-c7 + queen-f7 seeded and
+  // king-c8 + queen-f8 said nothing. The back rank is where castling puts the
+  // king and where back-rank tactics live, so it is the LAST rank to go blind on.
+  //
+  // What the filter actually wants is "these pieces have not moved yet". After
+  // castling the king stands on c1/c8, not e1/e8, so this admits the castled
+  // case and still refuses to narrate the starting position.
+  const ORIGINAL: Record<string, string[]> = {
+    kw: ['e1'], kb: ['e8'], qw: ['d1'], qb: ['d8'], rw: ['a1', 'h1'], rb: ['a8', 'h8'],
+  };
+  const unmoved = (p: Piece): boolean =>
+    (ORIGINAL[`${p.type}${p.color}`] ?? []).includes(p.square);
+  const bothUnmoved = (a: Piece, b: Piece): boolean =>
+    rankOf(a.square) === homeRank && unmoved(a) && unmoved(b);
+
   const betweenCount = (a: Piece, b: Piece): number => {
     const df = Math.sign(fileOf(b.square) - fileOf(a.square));
     const dr = Math.sign(rankOf(b.square) - rankOf(a.square));
@@ -167,7 +186,7 @@ function findAlignmentSeed(
       if (df === 0) {
         line = `${a.square[0]}-file`;
         tool = myTool(['r', 'q']);
-      } else if (dr === 0 && rankOf(a.square) !== homeRank) {
+      } else if (dr === 0 && !bothUnmoved(a, b)) {
         line = `${rankOf(a.square)}th rank`.replace(/^1th/, '1st').replace(/^2th/, '2nd').replace(/^3th/, '3rd');
         tool = myTool(['r', 'q']);
       } else if (Math.abs(df) === Math.abs(dr)) {

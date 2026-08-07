@@ -824,17 +824,89 @@ export function notesForStructure(fen: string, maxNotes = Infinity): DanyaNote[]
 
 /** Detector tactic type → the corpus concept tags that teach it. Unknown
  *  tags simply miss in the concept index (OR semantics) — never a throw. */
-const TACTIC_TYPE_CONCEPTS: Record<string, string[]> = {
-  fork: ['fork', 'tactics'],
-  pin: ['pin', 'tactics'],
-  skewer: ['skewer', 'tactics'],
-  discovery: ['discovered-attack', 'tactics'],
-  double_check: ['tactics', 'king-safety'],
-  back_rank: ['back-rank-weakness', 'king-safety'],
-  removal_of_guard: ['tactics', 'calculation'],
-  mate_threat: ['king-safety', 'attack'],
-  trapped_piece: ['trapped-piece', 'tactics'],
-  hanging: ['tactical-awareness', 'calculation'],
+/** Detector type → the concept tags the CORPUS actually uses for it.
+ *
+ *  These were one or two tags each, chosen by what the idea is *called* rather
+ *  than by what the 58,124 notes are *tagged*, and the difference was most of
+ *  the lane. `back_rank` pointed at `back-rank-weakness` — 47 notes — while
+ *  `back-rank-mate` (390) and `back-rank` (89) sat unreachable; `trapped_piece`
+ *  reached 187 and missed `queen-trap` (169), `trapping` (122), `trap` (104),
+ *  `traps` (90); and NOTHING reached `sacrifice` (1,597), `deflection` (413) or
+ *  `overloading` (203) at all. Every tag below was counted in the corpus first —
+ *  a tag no note carries is a dead entry that silently narrows the lane.
+ *
+ *  Ordering matters: the SPECIFIC tags lead so a note actually about the live
+ *  pattern outranks a generic `tactics` note that merely mentions one. */
+export const TACTIC_TYPE_CONCEPTS: Record<string, string[]> = {
+  fork: ['fork', 'knight-fork', 'double-attack', 'tactics'],
+  pin: ['pin', 'pins', 'pinning', 'absolute-pin', 'relative-pin', 'tactics'],
+  skewer: ['skewer', 'x-ray', 'tactics'],
+  discovery: ['discovered-attack', 'discovered-check', 'double-attack', 'tactics'],
+  double_check: ['discovered-check', 'double-attack', 'king-safety', 'tactics'],
+  back_rank: ['back-rank-mate', 'back-rank', 'back-rank-weakness', 'checkmate-pattern', 'king-safety'],
+  removal_of_guard: ['deflection', 'overloading', 'overloaded-piece', 'removing-the-defender', 'tactics', 'calculation'],
+  mate_threat: ['checkmate-threat', 'mate-threat', 'forced-mate', 'checkmate-pattern', 'checkmate-patterns', 'king-hunt', 'attack'],
+  trapped_piece: ['trapped-piece', 'queen-trap', 'trapping', 'trap', 'traps', 'tactics'],
+  hanging: ['hanging-piece', 'hanging-pieces', 'undefended-piece', 'material-gain', 'tactical-awareness', 'calculation'],
+  sacrifice: ['sacrifice', 'piece-sacrifice', 'exchange-sacrifice', 'pawn-sacrifice', 'compensation', 'tactics'],
+};
+
+/** ONE corpus note teaching a tactic that is PROVEN on the board right now,
+ *  returned as plain spoken text for the instant voice.
+ *
+ *  The tactical lane existed but fed only `buildDanyaTeachingBlock` — the
+ *  model's prompt. So a note about the fork on the board reached the student
+ *  paraphrased 6-23s later, or not at all when the beat was dropped stale
+ *  (measured: 4 of 6 beats in a real game). It is a concept-index lookup with
+ *  no engine and no model in it, so there is no reason it cannot be spoken the
+ *  moment the pattern appears. `types` comes from the DETECTORS only (G0) —
+ *  never guessed, never from prose. */
+export function spokenTacticNote(args: {
+  types: string[];
+  phase?: 'opening' | 'middlegame' | 'endgame';
+  /** Ids already spoken this game — a repeated note teaches nothing. */
+  seenIds?: Set<string>;
+}): { id: string; text: string } | null {
+  if (args.types.length === 0) return null;
+  const concepts = Array.from(new Set(
+    args.types.flatMap((t) => TACTIC_TYPE_CONCEPTS[t] ?? ['tactics', 'tactical-awareness']),
+  ));
+  // THE TAG IS NOT THE TEACHING. A tag says a note was FILED under the pattern;
+  // it does not say the note TEACHES it. Selecting on the tag alone returned
+  // `dt-b1` for a skewer — "Black castles long and White plays Rf4, but Black is
+  // better" — a move-recitation fragment about an unrelated game that happens to
+  // carry the tag. Spoken at the moment a skewer appears, that is noise dressed
+  // as coaching. So the note's own PROSE must name the pattern it is being
+  // chosen to explain.
+  const patternWords = args.types.flatMap((t) => TACTIC_PATTERN_WORDS[t] ?? []);
+  if (patternWords.length === 0) return null;
+  for (const n of conceptNotesFor({ phase: args.phase ?? 'middlegame', concepts, limit: 40 })) {
+    if (args.seenIds?.has(n.id)) continue;
+    const text = spokenBeatText(n);
+    if (!text) continue;
+    const low = text.toLowerCase();
+    if (!patternWords.some((w) => low.includes(w))) continue;
+    args.seenIds?.add(n.id);
+    return { id: n.id, text };
+  }
+  return null;
+}
+
+/** The words a note must actually SAY to count as teaching a given pattern.
+ *  Deliberately narrow — a note that never names the idea is not explaining it,
+ *  whatever it was tagged. */
+const TACTIC_PATTERN_WORDS: Record<string, string[]> = {
+  fork: ['fork', 'double attack', 'two pieces at once'],
+  pin: ['pin', 'pinned', 'pinning'],
+  skewer: ['skewer', 'x-ray'],
+  discovery: ['discover', 'discovered'],
+  double_check: ['double check', 'discovered check'],
+  back_rank: ['back rank', 'back-rank'],
+  removal_of_guard: ['defender', 'deflect', 'overload', 'guard'],
+  mate_threat: ['mate', 'mating'],
+  trapped_piece: ['trap', 'trapped'],
+  hanging: ['hanging', 'undefended', 'en prise', 'loose piece'],
+  sacrifice: ['sacrifice', 'sacrific'],
 };
 
 export function buildDanyaTeachingBlock(args: {
