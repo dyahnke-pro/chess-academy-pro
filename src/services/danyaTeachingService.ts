@@ -822,12 +822,38 @@ export function notesForStructure(fen: string, maxNotes = Infinity): DanyaNote[]
   return scored.sort((a, b) => b.score - a.score).slice(0, maxNotes).map((s) => s.n);
 }
 
+/** Detector tactic type → the corpus concept tags that teach it. Unknown
+ *  tags simply miss in the concept index (OR semantics) — never a throw. */
+const TACTIC_TYPE_CONCEPTS: Record<string, string[]> = {
+  fork: ['fork', 'tactics'],
+  pin: ['pin', 'tactics'],
+  skewer: ['skewer', 'tactics'],
+  discovery: ['discovered-attack', 'tactics'],
+  double_check: ['tactics', 'king-safety'],
+  back_rank: ['back-rank-weakness', 'king-safety'],
+  removal_of_guard: ['tactics', 'calculation'],
+  mate_threat: ['king-safety', 'attack'],
+  trapped_piece: ['trapped-piece', 'tactics'],
+  hanging: ['tactical-awareness', 'calculation'],
+};
+
 export function buildDanyaTeachingBlock(args: {
   historySans?: string[];
   openingName?: string | null;
   /** Live board FEN — adds transposition-safe exact-position notes. */
   fen?: string | null;
   maxNotes?: number;
+  /** DETECTOR-PROVEN tactic types live on the board right now (fork, pin,
+   *  hanging, …), from the watcher's TacticsLiveContext (David 2026-08-07:
+   *  "Positional notes are there, not tactical notes"). When present, ONE
+   *  concept note teaching the live tactic joins the block — the corpus's
+   *  thousands of tactics/calculation notes were unreachable here because
+   *  every tier keys on position or opening name, and past book those go
+   *  positional-only. Emitted only from the detectors (G0), never guessed. */
+  liveTacticTypes?: string[];
+  /** Game phase for the concept lookup (defaults to middlegame — where the
+   *  live-tactic tier overwhelmingly fires). */
+  phase?: DanyaNote['phase'];
 }): string {
   const max = args.maxNotes ?? 3;
   const picked: DanyaNote[] = [];
@@ -855,6 +881,26 @@ export function buildDanyaTeachingBlock(args: {
   if (args.fen) add(notesForFen(args.fen));
   if (args.historySans && args.historySans.length > 0) {
     add(notesForPrefix(args.historySans));
+  }
+  // LIVE-TACTIC CONCEPT TIER (David 2026-08-07: "I saw no tactics alerts.
+  // It's like all the notes are not being used. Positional notes are there,
+  // not tactical notes."). A detector-proven tactic on the live board earns
+  // ONE concept note teaching that tactic — placed AHEAD of the opening-level
+  // tier so generic opening background can't crowd it out (the exact symptom:
+  // his whole game got the same 3 positional notes while a queen trade, a
+  // pin, and hanging pieces went un-taught). Capped at one so the block stays
+  // mostly about the opening; the background label below still governs —
+  // concept prose, never board claims.
+  if (args.liveTacticTypes && args.liveTacticTypes.length > 0 && picked.length < max) {
+    const concepts = Array.from(new Set(
+      args.liveTacticTypes.flatMap((t) => TACTIC_TYPE_CONCEPTS[t] ?? ['tactics', 'tactical-awareness']),
+    ));
+    for (const n of conceptNotesFor({ phase: args.phase ?? 'middlegame', concepts, limit: 6 })) {
+      if (seen.has(n.id) || !onTopic(n)) continue;
+      picked.push(n);
+      seen.add(n.id);
+      break; // one tactical note per block
+    }
   }
   if (args.openingName) add(notesForOpening(args.openingName));
   // SUPPORT TIER — the farmed corpora, filling whatever slots the primary

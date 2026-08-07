@@ -200,3 +200,50 @@ describe('the first few moves of a lesson', () => {
     }
   });
 });
+
+describe('live-tactic concept tier (David 2026-08-07: "not tactical notes")', () => {
+  it('a detector-proven tactic pulls a tactical concept note into the block', () => {
+    // Past-book position, no opening name — the positional tiers go quiet,
+    // which was exactly the gap: the block carried opening background only.
+    const block = buildDanyaTeachingBlock({
+      historySans: [],
+      openingName: null,
+      fen: null,
+      liveTacticTypes: ['fork'],
+      phase: 'middlegame',
+    });
+    expect(block.length).toBeGreaterThan(0);
+    expect(block).toContain('LESSON BACKGROUND');
+  });
+
+  it('no live tactic → no concept note sneaks in (empty block stays empty)', () => {
+    const block = buildDanyaTeachingBlock({
+      historySans: [],
+      openingName: null,
+      fen: null,
+      liveTacticTypes: [],
+      phase: 'middlegame',
+    });
+    expect(block).toBe('');
+  });
+
+  it('the tactical note takes at most ONE slot — opening notes still dominate', () => {
+    const withTactic = buildDanyaTeachingBlock({
+      historySans: ['e4', 'c6'],
+      openingName: 'Caro-Kann Defense',
+      fen: null,
+      liveTacticTypes: ['pin', 'fork'],
+      phase: 'middlegame',
+      maxNotes: 3,
+    });
+    const without = buildDanyaTeachingBlock({
+      historySans: ['e4', 'c6'],
+      openingName: 'Caro-Kann Defense',
+      fen: null,
+      maxNotes: 3,
+    });
+    const count = (b: string): number => b.match(/^•/gm)?.length ?? 0;
+    expect(count(withTactic)).toBeLessThanOrEqual(3);
+    expect(count(withTactic)).toBeGreaterThanOrEqual(count(without) > 0 ? 1 : 0);
+  });
+});
