@@ -57,8 +57,37 @@ const RUN_ID = process.env.AUDIT_RUN_ID ?? `learngame-${Date.now()}`;
 const stamp = new Date().toISOString().replace(/[:.]/g, '-');
 const OUT_DIR = `audit-reports/learn-live-game-${stamp}`;
 
-/** The student's moves (White). The coach answers from its own book. */
-const STUDENT_MOVES = ['e4', 'd4', 'Nc3', 'f4', 'Bc4', 'Nxe4'];
+/** How many student moves to play. The moves themselves are CHOSEN FROM THE
+ *  LIVE POSITION, not scripted: the coach's book pick is weighted-random, so a
+ *  fixed line dies the first time it answers 1.e4 with c5 instead of d6 (it
+ *  did, on the first real run). Adapting keeps the audit honest — the
+ *  assertions are about what the coach SAYS on whatever game happens, and a
+ *  capture-hungry policy reaches tactical positions faster than any script. */
+const STUDENT_PLIES = 7;
+const OPENING_PREF = ['e4', 'd4', 'Nf3', 'Nc3', 'Bc4', 'f4', 'Bb5', 'O-O'];
+const PIECE_VALUE = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+
+/** Pick the student's move from the position the game is ACTUALLY in.
+ *  Deterministic (pure ordering, no randomness) so a run is reproducible:
+ *  winning captures first, then a preferred developing move, then any
+ *  capture, then the first legal move by SAN order. */
+function pickStudentMove(chess) {
+  const legal = chess.moves({ verbose: true });
+  if (legal.length === 0) return null;
+  const scored = legal.map((m) => {
+    let score = 0;
+    if (m.captured) {
+      const gain = (PIECE_VALUE[m.captured] ?? 0) - (PIECE_VALUE[m.piece] ?? 0);
+      score += 100 + (PIECE_VALUE[m.captured] ?? 0) * 10 + (gain > 0 ? 50 : 0);
+    }
+    const prefIdx = OPENING_PREF.indexOf(m.san);
+    if (prefIdx >= 0) score += 60 - prefIdx;
+    if (m.san.includes('+')) score += 5;
+    return { m, score };
+  });
+  scored.sort((a, b) => (b.score - a.score) || a.m.san.localeCompare(b.m.san));
+  return scored[0].m;
+}
 const BOOT_TIMEOUT_MS = 60_000;
 /** How long to let a turn settle before playing the next move. The reply is a
  *  book lookup plus the think-pad; narration lands behind it. */
@@ -176,15 +205,12 @@ async function main() {
     // position it was spoken on — the app's board is the source of truth for
     // the coach's replies, so read it back after each turn and re-sync.
     const mirror = new Chess();
-    for (const san of STUDENT_MOVES) {
+    for (let ply = 0; ply < STUDENT_PLIES; ply += 1) {
       const before = listener.getCapturedEvents().length;
-      let mv;
-      try {
-        mv = mirror.move(san);
-      } catch {
-        record(`student can play ${san}`, false, 'illegal in the mirrored game — the coach diverged from book');
-        break;
-      }
+      const chosen = pickStudentMove(mirror);
+      if (!chosen) { console.log('[play] no legal move — game over'); break; }
+      const san = chosen.san;
+      const mv = mirror.move(san);
       await clickSquare(page, mv.from);
       await clickSquare(page, mv.to);
       console.log(`[play] ${san}`);
