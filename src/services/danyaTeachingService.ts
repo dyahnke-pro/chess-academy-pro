@@ -1018,11 +1018,17 @@ export function spokenBeatText(note: DanyaNote): string {
     const sentence = raw.trim();
     if (!sentence) continue;
     if (startsBroken(sentence)) continue;
-    // A sentence carrying 4+ moves is dictation, not teaching — the board
+    // A sentence carrying 3+ moves is dictation, not teaching — the board
     // plays the moves; the voice carries only what the picture doesn't.
+    //
+    // The bar was 4, and 31.2% of the 6,768 speakable notes still got through
+    // with a three-moves-in-one-breath sentence — measured, and exactly the
+    // droning David has reported. At 3 that class is ZERO. It costs 7.8 points
+    // of note coverage (6,302 → 5,775 notes still speak); the notes that go
+    // quiet were the ones reciting a line the student is watching anyway.
     SAN_TOKEN.lastIndex = 0;
     const sanCount = sentence.match(SAN_TOKEN)?.length ?? 0;
-    if (sanCount >= 4) continue;
+    if (sanCount >= 3) continue;
     kept.push(sentence);
   }
   return kept.join(' ');

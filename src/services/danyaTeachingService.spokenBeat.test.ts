@@ -46,6 +46,22 @@ describe('spokenBeatText', () => {
     expect(spokenBeatText(note({ explains: 'The line runs e4 c6 d4 d5 exd5 cxd5 Bd3 Nc6.' }))).toBe('');
   });
 
+  it('drops a THREE-move sentence — the measured droning class', () => {
+    // The bar was 4 moves per sentence, and 31.2% of the 6,768 speakable
+    // corpus notes still got through carrying a three-moves-in-one-breath
+    // sentence. At 3 that class is empty. This is the exact shape: three
+    // moves the student is already watching land on the board.
+    const n = note({
+      explains: 'After Bg5, Black can play Be7 and later Nh5. The pin is the only thing holding the position together.',
+    });
+    expect(spokenBeatText(n)).toBe('The pin is the only thing holding the position together.');
+  });
+
+  it('keeps a TWO-move sentence — two moves is teaching, not dictation', () => {
+    const n = note({ explains: 'Once White pushes e5, Black hits back with f6.' });
+    expect(spokenBeatText(n)).toBe('Once White pushes e5, Black hits back with f6.');
+  });
+
   it('keeps a normal short beat untouched', () => {
     const n = note({ explains: 'White grabs space; Black will strike at the base with c5.' });
     expect(spokenBeatText(n)).toBe('White grabs space; Black will strike at the base with c5.');
