@@ -3832,6 +3832,24 @@ export function CoachTeachPage(): JSX.Element {
           // Anchor the lead-the-eye reveal clock to the utterance start.
           resolveBeatSpeechStarted?.();
           resolveBeatSpeechStarted = null;
+          // WHAT WAS ON THE BOARD WHEN THIS WAS SAID (David 2026-08-07:
+          // "test on the simulator or live and pull the audit log
+          // yourself"). Every other narration audit records the TEXT and
+          // leaves the position implicit, so a log can show a line and
+          // still not answer whether it was true — the live-game audit
+          // had to guess an anchor from arrival order and mis-blamed a
+          // line that was true when it started. Stamping the live FEN at
+          // the instant the utterance begins makes every spoken line
+          // gradeable after the fact, by this session or by David's own
+          // export.
+          void logAppAudit({
+            kind: 'coach-narration-spoken',
+            category: 'narration',
+            source: 'CoachTeachPage.queueSpeak.spoken',
+            summary: `spoke (${sentence.length}c): "${sentence.slice(0, 80)}"`,
+            narrationText: sentence,
+            fen: liveFenRef.current,
+          });
           return voiceService.speakForced(sentence);
         })
         .catch(() => undefined);
