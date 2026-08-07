@@ -193,7 +193,15 @@ export function getTtsUrl(text: string, voice: string, useSsml = true, style?: s
   // prosody tags by engine design). Changes the cache key, correctly: a
   // spiked clip is a different clip.
   const prosodyParam = prosody ? `&prosody=${prosody}` : '';
-  return `${base}/api/tts?text=${encodeURIComponent(text)}&voice=${encodeURIComponent(voice)}${ssmlParam}${styleParam}${prosodyParam}`;
+  // CACHE GENERATION (v=2, David 2026-08-07: he heard "the old Polly voice"
+  // on some lines and the new Google voice on others in ONE session). Clips
+  // are CDN-cached ~forever per URL, so everything cached before the
+  // 2026-08-04 Google migration is still POLLY AUDIO. Bumping the key
+  // retires every pre-migration clip at once; each line re-synthesizes on
+  // Google the first time it's played again (pay-as-played, Google's
+  // perpetual free tier). ONE deliberate bump — do not bump casually; every
+  // bump re-bills the whole active corpus (the gen-rev cost rule).
+  return `${base}/api/tts?text=${encodeURIComponent(text)}&voice=${encodeURIComponent(voice)}${ssmlParam}${styleParam}${prosodyParam}&v=2`;
 }
 
 /** Available Amazon Polly voices (served via /api/tts endpoint) */
@@ -2273,6 +2281,23 @@ audio.playbackRate = this.speed;
       const response = await fetch(url, { signal: combinedSignal });
       this.lastSpeakDiagnostic.pollyStatus = response.status;
       this.lastSpeakDiagnostic.pollyOk = response.ok;
+      // WHICH PROVIDER'S VOICE IS THIS? (David 2026-08-07: "I heard a weird
+      // accent… the last narration switched to the old Polly voice" — and the
+      // audit trail had no way to answer which line came from which provider.)
+      // The server stamps X-TTS-Source per response; a CDN-cached clip keeps
+      // the header it was cached with, so this attributes cached Polly-era
+      // audio too. One event per line, forensics-only.
+      const ttsSource = response.headers.get('x-tts-source');
+      if (ttsSource && response.ok) {
+        void import('./appAuditor').then(({ logAppAudit }) => {
+          void logAppAudit({
+            kind: 'coach-narration-spoken',
+            category: 'narration',
+            source: 'voiceService.ttsProvider',
+            summary: `tts served by ${ttsSource}${response.headers.get('age') ? ' (CDN-cached)' : ''}: "${text.slice(0, 60)}"`,
+          });
+        });
+      }
       if (!response.ok) {
         // Pull the AWS error code + Retry-After hint the server now
         // attaches on failure (api/tts.ts catch block). Audit log
