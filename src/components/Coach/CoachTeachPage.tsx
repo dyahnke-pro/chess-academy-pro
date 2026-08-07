@@ -4528,23 +4528,16 @@ export function CoachTeachPage(): JSX.Element {
         const firstSentence = firstSentenceMatch
           ? firstSentenceMatch[1].trim()
           : finalText.trim();
-        // Grounded answers (stats / mistakes / repertoire-gap / …) are concise,
-        // complete, and carry NO [VOICE:] marker — they must be spoken in FULL,
-        // not truncated to one sentence (David 2026-07-04 voice attachments). The
-        // brief-cap in voiceService.speakInternal still clips them to ≤2 sentences
-        // on 'brief', so 'full' hears the whole answer and 'brief' hears the gist.
-        // Long free-form prose (> ~600 chars) still falls back to the first
-        // sentence so a rambling brain turn isn't read out wholesale — EXCEPT on
-        // a MOVE-NARRATION turn: the warm reply IS the spoken lesson (voiceFacts
-        // built it to be heard), and the 600-char cap was cutting it to its intro
-        // sentence on every move of David's 2026-08-06 session ("the last
-        // narration was about to say magic! But then it never did"). Learn is
-        // the coach talking you THROUGH the game — speak the whole thing; the
-        // G5 verbosity contract still governs (brief clips, silent stays silent).
-        const moveNarrationTurn = isStepByStepReport || opts?.coachReplyPlayed !== undefined;
-        const speakText = finalText.length > 0 && (finalText.length <= 600 || moveNarrationTurn)
-          ? finalText.trim()
-          : firstSentence;
+        // NO CAPS ON FULL — the VERBOSITY SETTING is the only voice budget
+        // (David 2026-08-07: "I don't want capped voices. Only if setting is
+        // set to short. Full gets the entire prose."). The old ~600-char
+        // clip-to-first-sentence for non-move turns is GONE: every fallback
+        // speaks the whole grounded answer, and G5 enforcement lives solely
+        // in voiceService.speakInternal — 'brief' clips to its numeric cap,
+        // 'silent' stays silent, 'full' hears everything. One chokepoint,
+        // no second budget fighting it. (firstSentence survives only for
+        // the which-shape-spoke audit label below.)
+        const speakText = finalText.trim();
         if (speakText) {
           voiceSpokenForTurn = true;
           // Transcript mirrors the spoken fallback too (text == narration).
@@ -6765,12 +6758,21 @@ export function CoachTeachPage(): JSX.Element {
                 // During the middlegame/endgame play-out the continuation owns
                 // the board's arrows — same orange trail + green threat grammar
                 // as the lesson it continues.
+                //
+                // THE LIGHTBULB OWNS THE ARROWS (David 2026-08-07: "make sure
+                // the arrows are tied into the lightbulb for on/off settings").
+                // `coachTipsOn` was a glowing button wired to NOTHING — now
+                // Tips OFF hides every coach arrow + highlight at render
+                // (instant both ways; the underlying state keeps computing,
+                // so toggling back on restores the current turn's cues).
                 arrows={
-                  continuationArrows.length > 0
-                    ? walkthroughBoardArrows(continuationArrows)
-                    : (arrows.length > 0 ? arrows : undefined)
+                  !coachTipsOn
+                    ? undefined
+                    : continuationArrows.length > 0
+                      ? walkthroughBoardArrows(continuationArrows)
+                      : (arrows.length > 0 ? arrows : undefined)
                 }
-                annotationHighlights={highlights.length > 0 ? highlights : undefined}
+                annotationHighlights={coachTipsOn && highlights.length > 0 ? highlights : undefined}
               />
             )}
           </div>
