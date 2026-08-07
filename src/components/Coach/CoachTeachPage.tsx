@@ -5256,9 +5256,34 @@ export function CoachTeachPage(): JSX.Element {
                   const theirHanging = tctx.hanging
                     .filter((h) => h.color !== studentCC && AV[h.piece] !== undefined)
                     .sort((a, b) => (AV[b.piece] ?? 0) - (AV[a.piece] ?? 0));
+                  // A tactic AGAINST the student outranks a single loose
+                  // piece (David 2026-08-07: "No tactical alert about the
+                  // center fork trick"). His pawn-fork moment alerted only
+                  // "your bishop on c4 is undefended" — true, but it named
+                  // one prong of a fork that was hitting two pieces. The
+                  // detector's own description carries both.
+                  //
+                  // …UNLESS the piece delivering it is itself hanging. On
+                  // his e2 position the "threat" was a queen forking two
+                  // pieces while sitting undefended — the lesson there is
+                  // TAKE IT, not fear it. The forker is the tactic's first
+                  // involved square, so this is decided from the data, not
+                  // guessed. Falls through to the win branch below.
+                  const theirLooseSquares = new Set(theirHanging.map((h) => h.square));
+                  const againstMe = tctx.immediate.filter(
+                    (t) => t.side === 'opponent' && !theirLooseSquares.has(t.squares[0] ?? ''),
+                  );
                   if (tctx.boardFacts?.mateInOne) {
                     alertKey = `mate1:${tctx.boardFacts.mateInOne}`;
                     trackAAlert = 'You have a checkmate in one — find it.';
+                  } else if (againstMe.length > 0) {
+                    const t = againstMe[0];
+                    alertKey = `vs:${t.type}:${t.squares.join('')}`;
+                    // The description is chess.js-derived geometry ("Pawn on
+                    // d5 forks knight on e4 and bishop on c4") — speakable
+                    // verbatim, and it tells him WHAT to solve, not just
+                    // which piece to mourn.
+                    trackAAlert = `Watch out — ${t.description.charAt(0).toLowerCase()}${t.description.slice(1)}.`;
                   } else if (myHanging.length > 0) {
                     const worst = myHanging[0];
                     alertKey = `hang:${worst.piece}${worst.square}`;

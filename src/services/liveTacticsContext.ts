@@ -31,10 +31,10 @@ import { Chess } from 'chess.js';
 import type { TacticsLiveContext } from '../coach/types';
 import type { StockfishAnalysis } from '../types';
 import {
-  classifyPosition,
   findHangingPieces,
   scanUpcomingTactics,
 } from './tacticClassifier';
+import { detectTactics } from './tacticsDetector';
 import { getTacticLookahead } from './tacticAlertService';
 import { stockfishEngine } from './stockfishEngine';
 import type { TacticPattern, UpcomingTactic } from '../types/tacticTypes';
@@ -297,17 +297,34 @@ function detectImmediateTactics(
   playerColor: 'w' | 'b',
 ): TacticsLiveContext['immediate'] {
   try {
-    // classifyPosition expects (fenBefore, fenAfter, san, evalBefore,
-    // evalAfter). With fenBefore = fenAfter and no san, the eval-
-    // swing math returns 0 (no move quality change), but the tactic
-    // detectors still scan the current position for forks, pins,
-    // back-rank threats, etc. Wrapped in try because chess.js is
-    // strict about input. Filter out 'none' placeholders so the
-    // brain envelope only carries real patterns (G3 bounded vocab).
-    const result = classifyPosition(fen, fen, '', 0, 0);
+    // ASK THE POSITION DETECTOR, NOT THE MOVE CLASSIFIER (David
+    // 2026-08-07: "No tactical alert about the center fork trick. No
+    // corpus notes about geometry").
+    //
+    // This called `classifyPosition(fen, fen, '', 0, 0)` — a MOVE
+    // classifier, handed no move — on the theory that its detectors would
+    // still scan the position. They do not: every one of its patterns is
+    // derived from the move that was played, so with an empty SAN it
+    // returns nothing, and `immediate` was EMPTY on every ply of every
+    // game. His whole 2026-08-07 log reads `immediate=0`, including the
+    // ply where a pawn on d5 forked his bishop on c4 and his knight on
+    // e4 — measured:
+    //   detectTactics      → "Pawn on d5 forks knight on e4 and bishop on c4"
+    //   this function      → 0 tactics
+    // That single hole starved three consumers at once: the spoken
+    // tactics alert (no tactic to speak), the live-tactic corpus tier
+    // (no type to look up, so tactical teaching notes never loaded), and
+    // the model's own fact block. `detectTactics` is the position-based
+    // geometry detector — the one ground-truth-tested against the 15,000
+    // -puzzle corpus, and the one that carries `beneficiary`.
+    //
+    // Capped like threats/opportunities: a busy middlegame can show
+    // several patterns and the envelope is token-bounded.
+    const result = detectTactics(fen);
     return result.tactics
       .filter((t) => t.type !== 'none')
-      .map((t) => tacticPatternToEntry(t, playerColor));
+      .map((t) => tacticPatternToEntry(t, playerColor))
+      .slice(0, 5);
   } catch {
     return [];
   }

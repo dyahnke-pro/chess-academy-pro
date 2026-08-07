@@ -844,10 +844,21 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
       // on the board pulls ONE corpus concept note teaching it into the
       // block. Detector-emitted types only (G0); the student's hanging
       // pieces count as 'hanging'.
+      //
+      // The UPCOMING lanes count too (David 2026-08-07: "no corpus notes
+      // about geometry and how to set any traps myself"). A tactic the
+      // student can STEER TOWARD — an opportunity in their own PV — is
+      // exactly the trap-setting teaching he's asking for, and it was
+      // ignored: only tactics already ON the board pulled a note, so the
+      // corpus could describe a fork he'd walked into but never one he
+      // could build. Threats feed it as well: knowing the shape the
+      // opponent is aiming at is how you learn to avoid or invert it.
       const liveTactics = input.liveState.tactics;
       const liveTacticTypes = liveTactics
         ? Array.from(new Set([
             ...liveTactics.immediate.map((t) => t.type),
+            ...liveTactics.opportunities.map((t) => t.type),
+            ...liveTactics.threats.map((t) => t.type),
             ...(liveTactics.hanging.length > 0 ? ['hanging'] : []),
           ]))
         : [];
