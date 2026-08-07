@@ -1220,6 +1220,33 @@ class StockfishEngine {
       });
     }
 
+    // IN-FLIGHT COALESCING — share a search that is ALREADY RUNNING for this
+    // exact position and depth instead of starting a second one. The cache
+    // above is written only on COMPLETION, so before this, two callers racing
+    // the same `(fen, depth)` both missed and both searched — and rule 3 below
+    // serializes them, so the second one waited out the first and then paid
+    // the same cost again, on the single worker, ahead of the narration's own
+    // engine read. David's 2026-08-07 game log: 9 duplicate pairs / 43 misses.
+    // A shared search that FAILS is not inherited — the joiner falls through
+    // and runs its own.
+    if (!options) {
+      const shared = stockfishCache.inflight(fen, depth);
+      if (shared) {
+        try {
+          const result = await shared;
+          void logAppAudit({
+            kind: 'stockfish-cache-hit',
+            category: 'subsystem',
+            source: 'stockfishCache.coalesced',
+            summary: `joined in-flight search fen=${fen.slice(0, 30)}... depth=${depth}`,
+          });
+          return result;
+        } catch {
+          /* the search we joined failed — run our own below */
+        }
+      }
+    }
+
     // Priority contention rules:
     //   1. Incoming brain call cancels any in-flight prefetch.
     //   2. Incoming prefetch is DROPPED if a brain call is in flight
@@ -1232,29 +1259,34 @@ class StockfishEngine {
       throw new PrefetchDroppedError();
     }
 
-    if (priority === 'brain') {
-      // Append to the brain serialization chain. The previous entry
-      // resolves either when the prior brain eval finishes or when it
-      // fails — either way we're cleared to start. Prefetch in-flight
-      // is fine; the Promise body below cancels it on entry.
-      const prev = this._brainMutex;
-      let release!: () => void;
-      this._brainMutex = new Promise<void>((r) => {
-        release = r;
-      });
-      try {
-        await prev;
-      } catch {
-        /* prior brain rejected — we still proceed */
+    const run = async (): Promise<StockfishAnalysis> => {
+      if (priority === 'brain') {
+        // Append to the brain serialization chain. The previous entry
+        // resolves either when the prior brain eval finishes or when it
+        // fails — either way we're cleared to start. Prefetch in-flight
+        // is fine; the Promise body below cancels it on entry.
+        const prev = this._brainMutex;
+        let release!: () => void;
+        this._brainMutex = new Promise<void>((r) => {
+          release = r;
+        });
+        try {
+          await prev;
+        } catch {
+          /* prior brain rejected — we still proceed */
+        }
+        try {
+          return await this._dispatchAnalysis(fen, depth, options, priority);
+        } finally {
+          release();
+        }
       }
-      try {
-        return await this._dispatchAnalysis(fen, depth, options, priority);
-      } finally {
-        release();
-      }
-    }
+      return this._dispatchAnalysis(fen, depth, options, priority);
+    };
 
-    return this._dispatchAnalysis(fen, depth, options, priority);
+    // Only the cacheable path is shareable — an `options` call carries
+    // per-caller engine settings that are deliberately not part of the key.
+    return options ? run() : stockfishCache.trackInflight(fen, depth, run());
   }
 
   private async _dispatchAnalysis(

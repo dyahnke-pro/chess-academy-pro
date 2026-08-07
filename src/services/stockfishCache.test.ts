@@ -77,4 +77,43 @@ describe('stockfishCache', () => {
     expect(stockfishCache.size()).toBe(1);
     expect(stockfishCache.get(STARTING, 18)?.bestMove).toBe('d2d4');
   });
+
+  describe('in-flight coalescing', () => {
+    it('hands a concurrent asker the SAME promise instead of a second search', async () => {
+      let resolve!: (a: ReturnType<typeof buildAnalysis>) => void;
+      const search = new Promise<ReturnType<typeof buildAnalysis>>((r) => { resolve = r; });
+      const tracked = stockfishCache.trackInflight(STARTING, 18, search);
+
+      // A second asker for the same (fen, depth) sees the running search.
+      expect(stockfishCache.inflight(STARTING, 18)).toBe(tracked);
+      // A different depth is a different search — never shared.
+      expect(stockfishCache.inflight(STARTING, 12)).toBeUndefined();
+      expect(stockfishCache.inflight(E4, 18)).toBeUndefined();
+
+      resolve(buildAnalysis('e2e4', 18));
+      expect((await tracked).bestMove).toBe('e2e4');
+    });
+
+    it('deregisters on settle so a later asker is not served a stale promise', async () => {
+      const tracked = stockfishCache.trackInflight(STARTING, 18, Promise.resolve(buildAnalysis('e2e4', 18)));
+      await tracked;
+      await Promise.resolve();
+      expect(stockfishCache.inflight(STARTING, 18)).toBeUndefined();
+      expect(stockfishCache.inflightSize()).toBe(0);
+    });
+
+    it('a FAILED search does not poison the key — the next asker starts fresh', async () => {
+      const failing = stockfishCache.trackInflight(STARTING, 18, Promise.reject(new Error('worker died')));
+      await expect(failing).rejects.toThrow('worker died');
+      await Promise.resolve();
+      expect(stockfishCache.inflight(STARTING, 18)).toBeUndefined();
+    });
+
+    it('clear() drops in-flight entries too', () => {
+      void stockfishCache.trackInflight(STARTING, 18, new Promise(() => undefined));
+      expect(stockfishCache.inflightSize()).toBe(1);
+      stockfishCache.clear();
+      expect(stockfishCache.inflightSize()).toBe(0);
+    });
+  });
 });
