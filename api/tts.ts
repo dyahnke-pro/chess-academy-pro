@@ -4,7 +4,6 @@ import { checkUsageGuard, POLLY_USD_PER_CHAR } from './_lib/usageGuard.js';
 import { detectVoiceForText } from './_lib/ttsLang.js';
 import { isAllowedOrigin } from './_lib/allowedOrigin.js';
 import { googleProvider } from './_lib/tts/google.js';
-import { pollyProvider } from './_lib/tts/polly.js';
 import { lookupPrerendered, isPrerenderEnabled } from './_lib/tts/prerendered.js';
 import { TtsProviderError, type TtsProvider, type SynthesisRequest } from './_lib/tts/types.js';
 
@@ -185,9 +184,17 @@ export { buildSsmlForEngine } from './_lib/tts/ssml.js';
  * change here plus deleting `_lib/tts/polly.ts`.
  */
 export function selectProviders(): TtsProvider[] {
+  // POLLY LEG REMOVED (David 2026-08-07, second "I heard the old Polly
+  // voice" report — this time on the NEW cache generation, so the clip was
+  // freshly served by the fallback leg, not a stale CDN entry). The
+  // migration plan's exit criteria are met: the Google key is live on prod
+  // (`x-tts-source: google` verified across real games), so per the plan
+  // this is the sanctioned one-line removal. One server voice, always. A
+  // rare Google failure now returns an error and the client falls to its
+  // device-TTS floor — an obviously-different voice for one line beats
+  // sometimes-Ruth-sometimes-Polly, which reads as a broken app.
   const chain: TtsProvider[] = [];
   if (googleProvider.isConfigured()) chain.push(googleProvider);
-  if (pollyProvider.isConfigured()) chain.push(pollyProvider);
   return chain;
 }
 
@@ -302,7 +309,11 @@ async function synthesize(text: string, voice: string, req: Request, useSsml: bo
       // poisoning that line in that region long after the primary recovered.
       // Fallback clips serve uncached, so the next request re-tries the
       // primary and the mixed-voice session heals itself.
-      const isPrimary = provider === providers[0];
+      // Identity check, NOT chain position — if the chain ever again holds a
+      // non-Google leg and Google's key resolution hiccups, position-based
+      // "primary" would eternal-cache the wrong voice (the 2026-08-07
+      // mixed-voice report). Only Google audio is ever cached forever.
+      const isPrimary = provider.id === 'google';
       return new Response(audioStream, {
         status: 200,
         headers: {

@@ -2294,7 +2294,7 @@ audio.playbackRate = this.speed;
             kind: 'coach-narration-spoken',
             category: 'narration',
             source: 'voiceService.ttsProvider',
-            summary: `tts served by ${ttsSource}${response.headers.get('age') ? ' (CDN-cached)' : ''}: "${text.slice(0, 60)}"`,
+            summary: `tts served by ${ttsSource}${Number(response.headers.get('age') ?? 0) > 0 ? ' (CDN-cached)' : ''}: "${text.slice(0, 60)}"`,
           });
         });
       }

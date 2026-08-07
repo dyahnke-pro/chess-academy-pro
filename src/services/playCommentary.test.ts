@@ -3,7 +3,7 @@
 // nothing (the locked voice law: speak when it instructs).
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine } from './playCommentary';
+import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence } from './playCommentary';
 
 describe('buildPlayCommentary', () => {
   it('names the opponent knight on an unchallengeable outpost when the trade is available', () => {
@@ -191,5 +191,39 @@ describe('buildInstantReplyLine', () => {
       isCheck: c.isCheck(),
     });
     expect(line).toBe('Checkmate.');
+  });
+});
+
+describe('describeMoveConsequence (the computed why — David 2026-08-07: "a couple hallucinations")', () => {
+  it('names the capture a recommended move makes', () => {
+    // 1.e4 e5 2.Nf3 — Black to move; Nxe4?? no — test White capture: after
+    // 1.e4 d5, exd5 wins the pawn on d5.
+    const c = new Chess();
+    c.move('e4'); c.move('d5');
+    expect(describeMoveConsequence(c.fen(), 'exd5')).toBe(', winning the pawn on d5');
+  });
+
+  it('names a check', () => {
+    // 1.e4 e5 2.Qh5? — no; use 1.e4 f6 2.Qh5+ (a real check, no capture)
+    const c = new Chess();
+    c.move('e4'); c.move('f6');
+    expect(describeMoveConsequence(c.fen(), 'Qh5+')).toBe(', with check');
+  });
+
+  it('names the most valuable enemy piece a quiet move newly attacks', () => {
+    // After 1.e4 d5: the quiet 2.e5?? is nothing, but 1...d5 leaves the d5
+    // pawn attackable — instead test a knight development that attacks a
+    // pawn: 1.e4 e5 2.Nf3 attacks the pawn on e5.
+    const c = new Chess();
+    c.move('e4'); c.move('e5');
+    expect(describeMoveConsequence(c.fen(), 'Nf3')).toBe(', attacking the pawn on e5');
+  });
+
+  it('returns empty for a quiet move that attacks nothing', () => {
+    expect(describeMoveConsequence(new Chess().fen(), 'a3')).toBe('');
+  });
+
+  it('never throws on an illegal SAN — returns empty', () => {
+    expect(describeMoveConsequence(new Chess().fen(), 'Qh5')).toBe('');
   });
 });

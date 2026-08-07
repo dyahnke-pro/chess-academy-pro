@@ -1,13 +1,14 @@
 /**
- * The migration's safety property, as a test.
+ * ONE SERVER VOICE — the chain is Google-only (David 2026-08-07, second
+ * "I heard the old Polly voice" report; the migration plan's exit criteria
+ * were met — `x-tts-source: google` verified on prod — so the Polly leg is
+ * removed per the plan's sanctioned one-line change).
  *
- * David's constraint on this work was "don't break my app". Concretely that
- * means: on a deployment with NO Google key — which is every deployment until
- * the key is provisioned — `/api/tts` must behave EXACTLY as it does today,
- * i.e. serve from Polly. And when the Google key is added, Google must take
- * over while Polly stays behind it as the safety net.
- *
- * That is entirely decided by `selectProviders()`, so it is pinned here.
+ * The properties pinned here:
+ *  - Polly credentials NEVER put Polly in the chain, in any combination.
+ *  - Google serves alone whenever any accepted spelling of its key is set.
+ *  - Nothing configured → empty chain (endpoint 503s; the client falls to
+ *    its device-TTS floor). Never a crash, never a silent 200.
  */
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { selectProviders } from '../../tts';
@@ -41,34 +42,25 @@ function withPolly(): void {
 }
 
 describe('selectProviders', () => {
-  it('serves from Polly alone when no Google key is set (today\'s prod)', () => {
+  it('NEVER serves from Polly — even with only AWS credentials set', () => {
     withPolly();
-    expect(selectProviders().map((p) => p.id)).toEqual(['polly']);
+    expect(selectProviders()).toEqual([]);
   });
 
-  it('puts Google first once its key lands, keeping Polly as the safety net', () => {
+  it('runs on Google alone even when Polly credentials are still provisioned', () => {
     withPolly();
-    process.env.GOOGLE_TTS_API_KEY = 'test-google-key';
-    expect(selectProviders().map((p) => p.id)).toEqual(['google', 'polly']);
-  });
-
-  it('runs on Google alone once the Polly credentials are removed', () => {
-    // The end state: deleting the AWS env vars is what finishes the migration,
-    // and it must leave a working single-provider chain.
     process.env.GOOGLE_TTS_API_KEY = 'test-google-key';
     expect(selectProviders().map((p) => p.id)).toEqual(['google']);
   });
 
   it('reports an empty chain when nothing is configured (endpoint 503s)', () => {
-    // Never a crash, and never a silent 200 with no audio.
     expect(selectProviders()).toEqual([]);
   });
 
   it('accepts every provisioned spelling of the Google key', () => {
     // process.env lookups are case-sensitive and the key on the Vercel project
     // is `google_api_key`, not the canonical name. Reading only one spelling
-    // would leave prod silently on Polly — the migration would look like it
-    // simply never happened.
+    // would leave prod silently voiceless.
     for (const name of ['GOOGLE_TTS_API_KEY', 'GOOGLE_API_KEY', 'google_api_key']) {
       for (const k of ['GOOGLE_TTS_API_KEY', 'GOOGLE_API_KEY', 'google_api_key']) delete process.env[k];
       process.env[name] = 'test-google-key';
@@ -81,7 +73,7 @@ describe('selectProviders', () => {
     // a cached module-scope read would pin the chain to whatever was set at
     // cold start. Same hazard documented in _lib/usageGuard.ts.
     expect(selectProviders()).toEqual([]);
-    withPolly();
-    expect(selectProviders().map((p) => p.id)).toEqual(['polly']);
+    process.env.GOOGLE_TTS_API_KEY = 'test-google-key';
+    expect(selectProviders().map((p) => p.id)).toEqual(['google']);
   });
 });

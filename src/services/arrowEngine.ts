@@ -130,6 +130,13 @@ const NON_MOVE_PHRASE_PRECEDERS = new Set([
   // SQUARE_REF_PRECEDERS so the two extractors never fight over a coord.
   'outpost', 'target', 'weak', 'weakness', 'backward', 'isolated',
   'passed', 'break', 'hole', 'controls', 'covers', 'eyes', 'hits',
+  // PAST/DIRECTIONAL preceders (David 2026-08-07, "arrows still not
+  // accurate"): "from d6 to b4" / "eyeing c5" narrate history or a gaze,
+  // not a candidate move — his board grew a red b4→d6 arrow because the
+  // prose mentioned the bishop's OLD square and the resolver turn-flipped
+  // it into a hypothetical retreat.
+  'from', 'to', 'toward', 'towards', 'via', 'eyeing', 'eyed', 'controlling',
+  'covering', 'hitting', 'targeting', 'attacking', 'defending', 'guarding',
 ]);
 
 /** Strip `[BOARD: ...]` directives so the SAN scan doesn't match the
@@ -180,6 +187,25 @@ function toggleTurn(fen: string): string {
   if (parts.length < 2) return fen;
   parts[1] = parts[1] === 'w' ? 'b' : 'w';
   return parts.join(' ');
+}
+
+/** Resolve a SAN ONLY when it is a forcing move (capture or check) from
+ *  `fen` or its turn-flip. Quiet resolutions return null — used by the
+ *  red THREAT arrow pass, where a non-forcing mention is by definition
+ *  not a threat worth an arrow. */
+export function resolveForcingMove(san: string, fen: string): FromTo | null {
+  for (const f of [fen, toggleTurn(fen)]) {
+    try {
+      const probe = new Chess(f);
+      const mv = probe.move(san, { strict: false });
+      if (mv && (mv.isCapture() || mv.san.includes('+') || mv.san.includes('#'))) {
+        return { from: mv.from, to: mv.to };
+      }
+    } catch {
+      /* try next */
+    }
+  }
+  return null;
 }
 
 /** A move the engine ranked at this position. */
@@ -282,14 +308,20 @@ export async function injectCandidateArrows(
   const threats: { san: string; from: string; to: string; color: ArrowColor }[] = [];
   if (opts?.spokenText) {
     for (const san of Array.from(new Set(extractMentionedSans(opts.spokenText)))) {
-      const arrow = resolveSanToArrow(san, [fen]);
-      if (!arrow) continue;
-      const key = `${arrow.from}-${arrow.to}`;
+      // A red arrow must depict a FORCING move — a capture or a check
+      // (David 2026-08-07: his board carried red arrows on quiet pawn
+      // pushes d4/d5 and a hypothetical bishop RETREAT to d6, all
+      // resolved from past-tense / positional mentions via the
+      // turn-flip retry). A mention that resolves only to a quiet move
+      // is not a threat; it gets no arrow at all.
+      const forcing = resolveForcingMove(san, fen);
+      if (!forcing) continue;
+      const key = `${forcing.from}-${forcing.to}`;
       if (key === excludeKey || drawnKeys.has(key)) continue; // played move / already drawn
-      const rank = rankOf(arrow);
+      const rank = rankOf(forcing);
       if (rank === 1 || rank === 2 || rank === 3) continue; // a suggestion, not a threat
       drawnKeys.add(key);
-      threats.push({ san, from: arrow.from, to: arrow.to, color: 'red' });
+      threats.push({ san, from: forcing.from, to: forcing.to, color: 'red' });
     }
   }
 

@@ -19,7 +19,7 @@ import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
-import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine } from '../../services/playCommentary';
+import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence } from '../../services/playCommentary';
 
 // Walkthrough arrows/highlights render through the SAME react-chessboard
 // pipeline the opening tab's LessonPlayer uses — identical palette, identical
@@ -4688,7 +4688,11 @@ export function CoachTeachPage(): JSX.Element {
         // fen, the arrows are history: skip the paint (the chat text still
         // lands; only the board decoration is dropped).
         if (liveFenRef.current === fen) {
-          setArrows(uniqueArrows(groundArrows([...codeArrows, ...chainArrowsRef.current], fen)));
+          // Cap the MERGED set too — the candidate pass and the opening
+          // chain each obey their own cap, but together they flooded
+          // David's board with 5 arrows (2026-08-07 screenshots). Four
+          // is the ceiling for one position.
+          setArrows(uniqueArrows(groundArrows([...codeArrows, ...chainArrowsRef.current], fen)).slice(0, 4));
           setHighlights([...codeHighlights, ...chainHighlightsRef.current]);
         } else {
           void logAppAudit({
@@ -5269,11 +5273,19 @@ export function CoachTeachPage(): JSX.Element {
                             // toward a move, name ONLY…") read aloud on prod
                             // (2026-08-07). The recommend-only-this-move rule
                             // already travels in the step directive.
-                            facts.push(`Your strongest reply here is ${recMove.san}.`);
+                            //
+                            // THE WHY IS COMPUTED, NEVER LEFT TO THE MODEL
+                            // (David 2026-08-07: "a couple hallucinations" —
+                            // a bare move name left a vacuum the model filled
+                            // with invented reasons). chess.js supplies the
+                            // concrete consequence; empty when there is none.
+                            const recWhy = describeMoveConsequence(probe.fen(), recMove.san);
+                            const recLine = `Your strongest reply here is ${recMove.san}${recWhy}.`;
+                            facts.push(recLine);
                             // Track A candidate — ONLY set here, where no
                             // fork / think-aloud / priority beat withheld the
                             // move (speaking it then would leak the answer).
-                            trackABestReply = `Your strongest reply here is ${recMove.san}.`;
+                            trackABestReply = recLine;
                           }
                         }
                       }
@@ -5552,46 +5564,60 @@ export function CoachTeachPage(): JSX.Element {
             // "board slow to let me move after opponent") — narration prep
             // never holds the board.
             setOpponentThinking(false);
-            // Track A wants the fragments the facts computed, but never at
-            // the cost of its own instancy: give the facts a short grace to
-            // settle (they normally finished during the pad on a warm
-            // engine), then speak with whatever is ready. A cold engine
-            // costs fragments, not seconds.
-            await Promise.race([factsReady, new Promise((r) => setTimeout(r, 400))]);
-            // TRACK A SPEAK — the event line first (mate/check/capture),
-            // then ONE teaching fragment: announcement > taught note > best
-            // reply. Every string is code-computed and already gated; the
-            // LLM beat chains behind and is told never to repeat these.
+            // TRACK A — STAGED SPEAK (David 2026-08-07: "Still too long of
+            // a delay"). The old shape raced the facts against a 400ms
+            // timer and spoke ONCE with whatever was ready — but the
+            // engine analysis that computes the teaching fragment takes
+            // seconds, so his whole game produced exactly ONE Track A
+            // line (the capture event). Staged: the EVENT line (mate/
+            // check/capture — computed synchronously) speaks the instant
+            // the reply lands; the ONE teaching fragment (announcement >
+            // taught note > best reply) speaks the moment the facts
+            // settle, chained behind, stale-guarded — however long the
+            // engine takes, it beats the LLM beat by seconds and the
+            // student is never left in silence.
+            const fenAfterReply = liveFenRef.current;
             let instantSpokenText = '';
+            let trackAStarted = false;
+            const speakTrackA = (line: string): void => {
+              if (!trackAStarted) {
+                trackAStarted = true;
+                // Abort any straggler links from the previous turn's chain
+                // (same move handleSubmit makes), then make Track A the
+                // head of a fresh chain the warm beat appends to.
+                if (turnAbortRefRef.current) turnAbortRefRef.current.aborted = true;
+                voiceService.stop();
+                speechChainRef.current = Promise.resolve();
+              }
+              speechChainRef.current = (speechChainRef.current ?? Promise.resolve())
+                .then(() => voiceService.speakForced(line))
+                .catch(() => undefined);
+              instantSpokenText = instantSpokenText ? `${instantSpokenText} ${line}` : line;
+              void logAppAudit({
+                kind: 'coach-narration-spoken',
+                category: 'narration',
+                source: 'CoachTeachPage.trackA',
+                summary: `track A spoke: "${line.slice(0, 80)}"`,
+                fen: liveFenRef.current,
+              });
+            };
             try {
               const ip = new Chess(move.fen);
               const im = ip.move(reply);
               const eventLine = im
                 ? buildInstantReplyLine({ san: im.san, captured: im.captured, isCheckmate: ip.isCheckmate(), isCheck: ip.isCheck() })
                 : null;
-              const teachLine = trackAAnnounce ?? trackANote ?? trackABestReply;
-              const lines = [eventLine, teachLine].filter((l): l is string => !!l);
-              if (lines.length > 0) {
-                // Abort any straggler links from the previous turn's chain
-                // (same move handleSubmit makes), then make Track A the head
-                // of a fresh chain the warm beat appends to.
-                if (turnAbortRefRef.current) turnAbortRefRef.current.aborted = true;
-                voiceService.stop();
-                let chain: Promise<void> = Promise.resolve();
-                for (const line of lines) {
-                  chain = chain.then(() => voiceService.speakForced(line)).catch(() => undefined);
-                }
-                speechChainRef.current = chain;
-                instantSpokenText = lines.join(' ');
-                void logAppAudit({
-                  kind: 'coach-narration-spoken',
-                  category: 'narration',
-                  source: 'CoachTeachPage.trackA',
-                  summary: `track A spoke ${lines.length} fragment(s): "${instantSpokenText.slice(0, 80)}"`,
-                  fen: liveFenRef.current,
-                });
-              }
+              if (eventLine) speakTrackA(eventLine);
             } catch { /* Track A is a bonus — the warm beat still speaks */ }
+            // Registered BEFORE the `await factsReady` below, so this
+            // callback runs first when the facts settle — handleSubmit
+            // always sees the complete instantSpokenText.
+            void factsReady.then(() => {
+              try {
+                const teachLine = trackAAnnounce ?? trackANote ?? trackABestReply;
+                if (teachLine && liveFenRef.current === fenAfterReply) speakTrackA(teachLine);
+              } catch { /* bonus */ }
+            });
             // PHASE TRANSITION on the settled position. Keyed off the
             // STUDENT's move (the detector ignores coach moves), fired here
             // so the board has stopped moving before the coach speaks.
