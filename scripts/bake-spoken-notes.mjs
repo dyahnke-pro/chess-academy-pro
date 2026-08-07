@@ -54,7 +54,10 @@ const CORPORA = [
 
 const API_KEY = process.env.DEEPSEEK_KEY ?? process.env.VITE_DEEPSEEK_API_KEY ?? '';
 const MODEL = 'deepseek-chat';
-const CONCURRENCY = 12;
+// 48, not 12. At 12 the full corpus was pacing for ~19 hours; the calls are
+// tiny (110 max tokens) and almost entirely latency, so the fix is more of them
+// in flight, not faster ones. Resumable, so a rate-limit wall costs one restart.
+const CONCURRENCY = 48;
 
 const SHARED = `You rewrite chess teaching notes so a coach can SPEAK them aloud.
 
@@ -268,7 +271,7 @@ async function main() {
   for (let i = 0; i < notes.length; i += CONCURRENCY) {
     await Promise.all(notes.slice(i, i + CONCURRENCY).map(runOne));
     done += Math.min(CONCURRENCY, notes.length - i);
-    if (done % 240 < CONCURRENCY || done === notes.length) {
+    if (done % 480 < CONCURRENCY || done === notes.length) {
       mkdirSync(dirname(OUT), { recursive: true });
       writeFileSync(OUT, JSON.stringify(baked));
       console.log(`[bake] ${done}/${notes.length} · ok=${stats.ok} needs-geometry=${stats.ungeneralizable} rejected=${stats.rejected}`);
