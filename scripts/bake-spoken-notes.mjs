@@ -235,12 +235,30 @@ async function main() {
   const limit = Number(args[args.indexOf('--limit') + 1]) || 0;
   const kindOnly = args.includes('--kind') ? args[args.indexOf('--kind') + 1] : null;
 
-  const baked = existsSync(OUT) ? JSON.parse(readFileSync(OUT, 'utf8')) : {};
-  let notes = loadNotes().filter((n) => !baked[n.id]);
+  // SHARDING. Workers must never share an output file: two processes doing
+  // read-modify-write on the same JSON means last-writer-wins and a whole
+  // shard's work disappears silently. So `--shard i/N` slices the work and
+  // `--out` gives each worker its own file, merged afterwards. Every worker
+  // still reads the COMMITTED bake to know what is already done, so a CI run
+  // never re-pays for notes a local run already baked.
+  const shardArg = args.includes('--shard') ? args[args.indexOf('--shard') + 1] : null;
+  const [shardIdx, shardCount] = shardArg
+    ? shardArg.split('/').map(Number)
+    : [0, 1];
+  const outPath = args.includes('--out') ? resolve(ROOT, args[args.indexOf('--out') + 1]) : OUT;
+
+  const alreadyDone = existsSync(OUT) ? JSON.parse(readFileSync(OUT, 'utf8')) : {};
+  // A resumed shard reads back its OWN partial file too, so a killed runner
+  // picks up where it stopped rather than from zero.
+  const baked = outPath !== OUT && existsSync(outPath) ? JSON.parse(readFileSync(outPath, 'utf8')) : (outPath === OUT ? alreadyDone : {});
+  let notes = loadNotes().filter((n) => !alreadyDone[n.id] && !baked[n.id]);
+  // Slice AFTER the done-filter and by index, so the shards stay balanced as
+  // the committed bake grows.
+  if (shardCount > 1) notes = notes.filter((_, i) => i % shardCount === shardIdx);
   if (kindOnly) notes = notes.filter((n) => n.kind === kindOnly);
   if (limit) notes = notes.slice(0, limit);
 
-  console.log(`[bake] ${notes.length} to bake (${Object.keys(baked).length} already done)`);
+  console.log(`[bake] shard ${shardIdx + 1}/${shardCount} → ${notes.length} to bake (${Object.keys(alreadyDone).length} already committed) → ${outPath}`);
   const stats = { ok: 0, ungeneralizable: 0, rejected: 0 };
   const why = new Map();
   let done = 0;
@@ -272,13 +290,13 @@ async function main() {
     await Promise.all(notes.slice(i, i + CONCURRENCY).map(runOne));
     done += Math.min(CONCURRENCY, notes.length - i);
     if (done % 480 < CONCURRENCY || done === notes.length) {
-      mkdirSync(dirname(OUT), { recursive: true });
-      writeFileSync(OUT, JSON.stringify(baked));
+      mkdirSync(dirname(outPath), { recursive: true });
+      writeFileSync(outPath, JSON.stringify(baked));
       console.log(`[bake] ${done}/${notes.length} · ok=${stats.ok} needs-geometry=${stats.ungeneralizable} rejected=${stats.rejected}`);
     }
   }
-  mkdirSync(dirname(OUT), { recursive: true });
-  writeFileSync(OUT, JSON.stringify(baked));
+  mkdirSync(dirname(outPath), { recursive: true });
+  writeFileSync(outPath, JSON.stringify(baked));
   console.log(`[bake] done — ${JSON.stringify(stats)}`);
   if (why.size > 0) {
     console.log('[bake] rejection reasons:');

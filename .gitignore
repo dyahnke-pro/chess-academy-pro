@@ -108,3 +108,6 @@ src/data/spine-report-plans.json
 # Scratch audit runners (parallel-session throwaways)
 scripts/_*.mjs
 .pull-status.json
+
+# Per-shard bake outputs — merged into public/data/corpus-spoken.json, never committed raw.
+.bake/

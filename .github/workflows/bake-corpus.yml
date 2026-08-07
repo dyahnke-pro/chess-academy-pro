@@ -1,0 +1,158 @@
+# bake-corpus — rewrite the teaching corpus into SPOKEN form on CI runners.
+#
+# David 2026-08-07 authorized the one-time model spend so the coach never
+# phrases anything at runtime: "I'm willing to pay the price this time if it
+# means never using it again for the coach tab."
+#
+# WHY CI AND NOT A LAPTOP. The bake is hours of work and a dev container is
+# ephemeral — a session that ends mid-run takes the unbaked remainder with it,
+# and the money already spent buys nothing until the file is committed. A runner
+# finishes regardless of who is watching, and commits the result itself.
+#
+# WHY SHARDS WITH SEPARATE FILES. Two workers sharing one JSON means
+# read-modify-write, last-writer-wins, and a whole shard vanishing silently —
+# the worst kind of failure, because the run still reports success. Each shard
+# writes its OWN artifact and the merge job unions them. `--shard i/N` slices
+# the work AFTER filtering out what the committed bake already holds, so a
+# re-run never re-pays for a note that is already done.
+name: Bake spoken corpus
+
+on:
+  workflow_dispatch:
+    inputs:
+      shards:
+        description: 'Parallel shards (each is one runner)'
+        required: false
+        default: '8'
+      kind:
+        description: 'Limit to one kind: anchored | floating (blank = both)'
+        required: false
+        default: ''
+
+concurrency:
+  # One bake at a time. Two concurrent runs would each merge against a
+  # different base and the second push would clobber the first.
+  group: bake-corpus
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.build.outputs.matrix }}
+    steps:
+      - id: build
+        run: |
+          N=${{ github.event.inputs.shards || '8' }}
+          echo "matrix=$(node -e "console.log(JSON.stringify([...Array($N).keys()]))")" >> "$GITHUB_OUTPUT"
+
+  bake:
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    strategy:
+      fail-fast: false          # one shard dying must not bin the others' work
+      matrix:
+        shard: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # The key lives in Vercel, never in a repo secret — same resolution the
+      # corpus farm uses. A session's copy goes stale; Vercel's is the one prod
+      # actually runs on.
+      - name: Resolve the DeepSeek key from Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "::error::VERCEL_TOKEN not set — cannot resolve the model key, nothing to bake."
+            exit 1
+          fi
+          P=prj_qYJMwF1apaxdp6sIZzcvZMz9BcZN; T=team_EG9m215w9cQHWilBOPnOtIFS
+          ID=$(curl -s -H "Authorization: Bearer $VERCEL_TOKEN" \
+            "https://api.vercel.com/v10/projects/$P/env?teamId=$T" \
+            | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{const e=JSON.parse(s).envs.find(e=>e.key==='DEEPSEEK_KEY');console.log(e?e.id:'')})")
+          VAL=$(curl -s -H "Authorization: Bearer $VERCEL_TOKEN" \
+            "https://api.vercel.com/v1/projects/$P/env/$ID?teamId=$T&decrypt=true" \
+            | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{console.log(JSON.parse(s).value||'')})")
+          if [ -z "$VAL" ]; then
+            echo "::error::could not resolve DEEPSEEK_KEY from Vercel."
+            exit 1
+          fi
+          echo "::add-mask::$VAL"
+          echo "DEEPSEEK_KEY=$VAL" >> "$GITHUB_ENV"
+
+      - name: Bake shard ${{ matrix.shard }}
+        run: |
+          node scripts/bake-spoken-notes.mjs \
+            --shard ${{ matrix.shard }}/${{ github.event.inputs.shards || '8' }} \
+            --out .bake/shard-${{ matrix.shard }}.json \
+            ${{ github.event.inputs.kind && format('--kind {0}', github.event.inputs.kind) || '' }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bake-shard-${{ matrix.shard }}
+          path: .bake/shard-${{ matrix.shard }}.json
+          if-no-files-found: warn
+
+  merge:
+    needs: bake
+    if: always()               # partial shards are still worth banking
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: .bake
+          pattern: bake-shard-*
+          merge-multiple: true
+
+      - name: Merge shards into the shipped bake
+        run: |
+          node -e "
+            const fs = require('fs');
+            const OUT = 'public/data/corpus-spoken.json';
+            const base = fs.existsSync(OUT) ? JSON.parse(fs.readFileSync(OUT, 'utf8')) : {};
+            const was = Object.keys(base).length;
+            let files = [];
+            try { files = fs.readdirSync('.bake').filter(f => f.endsWith('.json')); } catch {}
+            for (const f of files) {
+              const part = JSON.parse(fs.readFileSync('.bake/' + f, 'utf8'));
+              // The committed bake WINS: a note already reviewed and shipped is
+              // never silently replaced by a fresh rewrite of the same note.
+              for (const [id, v] of Object.entries(part)) if (!base[id]) base[id] = v;
+            }
+            fs.writeFileSync(OUT, JSON.stringify(base));
+            const now = Object.keys(base).length;
+            const spoken = Object.values(base).filter(v => v.spoken).length;
+            console.log(\`[merge] \${files.length} shard(s): \${was} -> \${now} baked (\${spoken} speakable)\`);
+            fs.writeFileSync(process.env.GITHUB_ENV, \`BAKE_NOW=\${now}\nBAKE_WAS=\${was}\nBAKE_SPOKEN=\${spoken}\n\`, { flag: 'a' });
+          "
+
+      - name: Gate the bake before it can ship
+        run: npx vitest run src/services/spokenNoteBake.test.ts src/services/danyaTeachingService.spokenBeat.test.ts
+
+      - name: Commit
+        run: |
+          git config user.email noreply@anthropic.com
+          git config user.name Claude
+          git add public/data/corpus-spoken.json
+          # A run that banks NOTHING must be RED. A no-op exits 0 and reads as a
+          # healthy green run, which is the failure mode that let the corpus farm
+          # sit broken for a day without anyone noticing.
+          if [ "$BAKE_NOW" -le "$BAKE_WAS" ]; then
+            echo "::error::bake ran but added no notes (${BAKE_WAS} -> ${BAKE_NOW}) — every shard produced nothing"
+            exit 1
+          fi
+          git commit -m "data(narration): bake ${BAKE_NOW} notes (${BAKE_SPOKEN} speakable, +$((BAKE_NOW-BAKE_WAS)))"
+          git pull --rebase origin main
+          git push origin HEAD:main
