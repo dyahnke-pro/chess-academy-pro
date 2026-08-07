@@ -2147,17 +2147,46 @@ export async function voiceFacts(
     // computed answer, not a regen. Omitting a number is fine (the student just
     // hears fewer); inventing/altering one is what we refuse to speak.
     if (typeof out === 'string' && out.trim()) {
-      const introduced = introducedNumbers(facts, out);
-      const dropped = droppedTokens(opts.mustPreserve, out);
-      if (introduced.length > 0 || dropped.length > 0) {
+      // PROPORTIONATE ENFORCEMENT (David 2026-08-07, after his live session:
+      // one introduced "9" nuked a good beat and Ruth spoke the raw fact
+      // bundle — stage directions included — for 90 seconds). A violation
+      // costs its SENTENCE, not the beat: strip the offending sentences,
+      // re-check the remainder, and only when nothing clean survives fall
+      // back to the computed prose. Gates unchanged in WHAT they catch —
+      // only the penalty is now surgical.
+      const stripSentencesWith = (text: string, tokens: string[]): string =>
+        text
+          .split(/(?<=[.!?])\s+/)
+          .filter((s) => !tokens.some((t) => s.toLowerCase().includes(t.toLowerCase())))
+          .join(' ')
+          .trim();
+      let vetted = out;
+      const introduced = introducedNumbers(facts, vetted);
+      const dropped = droppedTokens(opts.mustPreserve, vetted);
+      if (dropped.length > 0) {
+        // A REQUIRED token is missing from the whole output — stripping more
+        // can't restore it; the computed prose is the only correct serve.
         void logAppAudit({
           kind: 'claim-validator-trip',
           category: 'subsystem',
           source: 'voiceFacts.numberFidelity',
-          summary: `phrasing fidelity trip (intent=${opts.intent ?? 'n/a'}): introduced [${introduced.join(', ')}] dropped [${dropped.join(', ')}] → served computed prose`,
-          details: JSON.stringify({ intent: opts.intent ?? null, introduced, dropped, facts: facts.slice(0, 200), out: out.slice(0, 200) }),
+          summary: `phrasing fidelity trip (intent=${opts.intent ?? 'n/a'}): dropped [${dropped.join(', ')}] → served computed prose`,
+          details: JSON.stringify({ intent: opts.intent ?? null, introduced, dropped, facts: facts.slice(0, 200), out: vetted.slice(0, 200) }),
         });
         return speakableFacts(facts);
+      }
+      if (introduced.length > 0) {
+        const stripped = stripSentencesWith(vetted, introduced);
+        const stillIntroduced = stripped ? introducedNumbers(facts, stripped) : ['(empty)'];
+        void logAppAudit({
+          kind: 'claim-validator-trip',
+          category: 'subsystem',
+          source: 'voiceFacts.numberFidelity',
+          summary: `phrasing fidelity trip (intent=${opts.intent ?? 'n/a'}): introduced [${introduced.join(', ')}] → ${stripped && stillIntroduced.length === 0 ? 'stripped offending sentence(s)' : 'served computed prose'}`,
+          details: JSON.stringify({ intent: opts.intent ?? null, introduced, facts: facts.slice(0, 200), out: vetted.slice(0, 200) }),
+        });
+        if (!stripped || stillIntroduced.length > 0) return speakableFacts(facts);
+        vetted = stripped;
       }
       // CONTAINMENT NET (Phase 0a, David 2026-07-18: the knight-fork-definition
       // tangent). The nets above catch invented NUMBERS and dropped tokens — but
@@ -2174,24 +2203,26 @@ export async function voiceFacts(
         // The directives + student message are part of the code-assembled
         // prompt, so their vocabulary is licensed — checking against facts
         // alone false-tripped on every warm move-narration turn (2026-08-06).
-        const contained = containmentCheck(
-          facts,
-          out,
-          `${opts.directives ?? ''}\n${opts.studentMessage ?? ''}`,
-        );
+        const licensed = `${opts.directives ?? ''}\n${opts.studentMessage ?? ''}`;
+        const contained = containmentCheck(facts, vetted, licensed);
         if (contained.text === null) {
+          // Proportionate: drop the sentences carrying the introduced terms
+          // and re-check — the beat survives minus the bad sentence(s).
+          const stripped = stripSentencesWith(vetted, contained.violations);
+          const recheck = stripped ? containmentCheck(facts, stripped, licensed) : { text: null as string | null, violations: [] as string[] };
           void logAppAudit({
             kind: 'claim-validator-trip',
             category: 'subsystem',
             source: 'voiceFacts.containment',
-            summary: `phrasing containment trip (intent=${opts.intent ?? 'n/a'}): added [${contained.violations.join(', ')}] → served computed prose`,
-            details: JSON.stringify({ intent: opts.intent ?? null, violations: contained.violations, facts: facts.slice(0, 200), out: out.slice(0, 200) }),
+            summary: `phrasing containment trip (intent=${opts.intent ?? 'n/a'}): added [${contained.violations.join(', ')}] → ${recheck.text !== null ? 'stripped offending sentence(s)' : 'served computed prose'}`,
+            details: JSON.stringify({ intent: opts.intent ?? null, violations: contained.violations, facts: facts.slice(0, 200), out: vetted.slice(0, 200) }),
           });
+          if (recheck.text !== null && recheck.text.trim()) return recheck.text;
           return speakableFacts(facts);
         }
         return contained.text;
       }
-      return out;
+      return vetted;
     }
     // Empty / whitespace-only phrasing → don't hand the caller a falsy value
     // that drops it to the ungrounded path. Speak the computed facts.

@@ -957,10 +957,21 @@ export function spokenBeatText(note: DanyaNote): string {
   const explains = (note.explains ?? '').trim();
   if (!explains) return '';
   const sentences = explains.match(/[^.!?]+[.!?]+(?:\s|$)|[^.!?]+$/g) ?? [explains];
+  // A truncated distillation artifact, not a sentence: begins mid-clause
+  // (", Bd2, Be2) lead to…") or closes a parenthesis it never opened. David
+  // heard one read aloud on prod 2026-08-07 — "Coaching note taught at THIS
+  // position: , bishop to d2, bishop to e2) lead to a position…".
+  const startsBroken = (s: string): boolean => {
+    if (/^[,;:.)\]]/.test(s)) return true;
+    const open = s.indexOf('(');
+    const close = s.indexOf(')');
+    return close !== -1 && (open === -1 || close < open);
+  };
   const kept: string[] = [];
   for (const raw of sentences) {
     const sentence = raw.trim();
     if (!sentence) continue;
+    if (startsBroken(sentence)) continue;
     // A sentence carrying 4+ moves is dictation, not teaching — the board
     // plays the moves; the voice carries only what the picture doesn't.
     SAN_TOKEN.lastIndex = 0;

@@ -3977,8 +3977,10 @@ export function CoachTeachPage(): JSX.Element {
           // used to sit in this string, and David heard one read aloud on prod
           // (2026-08-01). They now travel in `moveNarrationDirectives`, which
           // no fallback path can reach.
-          ? `The student played ${text.replace(/^i\s+played\s+/i, '').replace(/\.$/, '')}. ` +
-            `The coach replied ${opts.coachReplyPlayed}. ` +
+          // SPEAKABLE, second person — on a gate fallback this whole string is
+          // read aloud, and David heard "The student played f4. The coach
+          // replied d5." spoken AT him (2026-08-07).
+          ? `You played ${text.replace(/^i\s+played\s+/i, '').replace(/\.$/, '')}; I answered ${opts.coachReplyPlayed}. ` +
             (opts?.coachReplyFact ?? '')
           : undefined,
       moveNarrationDirectives:
@@ -3989,7 +3991,9 @@ export function CoachTeachPage(): JSX.Element {
             // moments stated after opponent moves." The student WATCHED the
             // move land — describing its mechanics is dead air.
             + 'Do NOT describe the reply\'s mechanics — no from-square, no to-square, no "quiet move", no "no capture"; the student watched it happen. '
-            + 'Open with the IMPORTANT TEACHING MOMENT the reply creates: the threat it makes, the plan it serves, or what the student should do about it. Then prompt their move.'
+            + 'Open with the IMPORTANT TEACHING MOMENT the reply creates: the threat it makes, the plan it serves, or what the student should do about it. Then prompt their move. '
+            + 'If the facts say the game just became (or sharpened into) a NAMED opening, say the name naturally and teach its key idea from the facts. '
+            + 'If the facts name the student\'s strongest reply, recommend ONLY that move — never any other.'
             + (opts?.instantLineSpoken
               ? ' Any capture or check was already called out aloud as it landed — never re-announce it.'
               : '')
@@ -4761,22 +4765,33 @@ export function CoachTeachPage(): JSX.Element {
       // out-of-turn events (route changes, background tasks) don't
       // get mis-tagged with the just-finished turn.
       setCurrentTurnId(null);
-      // NEWEST-MOVE-WINS refire: a move narration parked while this turn
-      // was in flight runs now. Its own fenOverride/replyAnalysis describe
-      // the newest position, and the stale-beat + stale-arrow guards make
-      // any leftovers from THIS turn harmless — so the coach always ends
-      // up narrating the board that's actually in front of the student.
-      const pending = pendingMoveNarrationRef.current;
-      if (pending) {
-        pendingMoveNarrationRef.current = null;
-        void handleSubmitRef.current?.(pending.text, pending.opts);
-      }
+      // (Newest-move-wins refire lives in the `busy`-watching effect below —
+      // firing from here re-entered handleSubmit through a STALE closure
+      // whose `busy` still read true, so the pending move re-parked itself
+      // forever and the turn was never narrated. David's 2026-08-07 session:
+      // Nc3 parked 3×, spoken 0×; PostHog confirmed no words.)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- tracked for dedicated audit; current deps cover the live callers.
   }, [busy, activeProfile, handlePlayMove, handleTakeBack, handleSetBoardPosition, handleResetBoard, navigate, kickoffStatus, walkthrough, playerColor, playDictatedMove]);
-  // Keep the late-bound self handle current (the newest-move-wins refire in
-  // the finally above calls through it).
+  // Keep the late-bound self handle current.
   handleSubmitRef.current = handleSubmit;
+  // NEWEST-MOVE-WINS refire — runs on the render where `busy` has actually
+  // flipped false, so the parked move enters a FRESH handleSubmit closure and
+  // passes its busy guard. (Firing from the finally re-entered a stale
+  // closure that still read busy=true and re-parked the move forever.)
+  useEffect(() => {
+    if (busy) return;
+    const pending = pendingMoveNarrationRef.current;
+    if (!pending) return;
+    pendingMoveNarrationRef.current = null;
+    void logAppAudit({
+      kind: 'coach-surface-migrated',
+      category: 'subsystem',
+      source: 'CoachTeachPage.newestMoveWins.refire',
+      summary: `parked move narration firing now: "${pending.text.slice(0, 40)}"`,
+    });
+    void handleSubmitRef.current?.(pending.text, pending.opts);
+  }, [busy]);
 
   // Student-driven moves go through ControlledChessBoard's onMove
   // callback (below). useChessGame already handles the click-to-move
@@ -4989,13 +5004,24 @@ export function CoachTeachPage(): JSX.Element {
     // it now waits until the narration pipeline has claimed the worker.
     const openingName = walkthrough.tree?.openingName;
     const capturedMoveNumber = move.moveNumber;
+    // BOOK MOVES ARE NEVER MISTAKES (David 2026-08-07: his Vienna Gambit f4 —
+    // main-line theory — landed in My Mistakes as "hung-material, 53cp" off
+    // pure eval noise, because this call hardcoded inBook:false). If the
+    // position INCLUDING this move still matches the opening trie, the move
+    // is theory and detectSlip's book exemption gets the real signal.
+    let studentMoveInBook = false;
+    try {
+      const bookDet = detectOpening(move.history);
+      studentMoveInBook = !!bookDet && bookDet.plyCount >= move.history.length;
+    } catch { /* book check is a bonus; default stays not-in-book */ }
     setTimeout(() => {
       void discussion.evaluatePlayerMove({
         fenBefore,
         fenAfter: move.fen,
         playedSan: move.san,
         playerColor,
-        inBook: false,
+        inBook: studentMoveInBook,
+        bookMoveSan: studentMoveInBook ? move.san : undefined,
         learned: !!openingName,
         gamePhase: classifyPhase(move.fen, (capturedMoveNumber ?? 1) * 2),
         moveNumber: capturedMoveNumber,
@@ -5262,7 +5288,13 @@ export function CoachTeachPage(): JSX.Element {
                           const recProbe = new Chess(probe.fen());
                           const recMove = recProbe.move({ from: recUci.slice(0, 2), to: recUci.slice(2, 4), promotion: recUci.slice(4, 5) || undefined });
                           if (recMove) {
-                            facts.push(`The student's strongest reply in THIS position is ${recMove.san} (engine). If you point them toward a move, name ONLY ${recMove.san} — never suggest any other move, and never tell them to move a piece to a square it already occupies.`);
+                            // SPEAKABLE — this string reaches the voice
+                            // verbatim on any gate fallback, and David heard
+                            // the old instruction tail ("If you point them
+                            // toward a move, name ONLY…") read aloud on prod
+                            // (2026-08-07). The recommend-only-this-move rule
+                            // already travels in the step directive.
+                            facts.push(`Your strongest reply here is ${recMove.san}.`);
                           }
                         }
                       }
@@ -5355,12 +5387,16 @@ export function CoachTeachPage(): JSX.Element {
                         const ideaNote = notesForOpening(det.name, 1)[0]
                           ?? secondarySupportNotes({ openingName: det.name, maxNotes: 1 })[0];
                         const idea = ideaNote ? spokenBeatText(ideaNote) : '';
+                        // SPEAKABLE — on a gate fallback this string IS the
+                        // voice (David heard the old "mention the new name in
+                        // passing" instruction read aloud, 2026-08-07). The
+                        // say-the-name-naturally instruction travels in the
+                        // step directive, never here.
                         facts.push(
-                          `OPENING IDENTIFIED: the game is now the ${det.name}. ` +
                           (firstResolve
-                            ? `Announce the opening BY NAME as your opener — the student just steered into it. `
-                            : `The line has sharpened into this named variation — mention the new name in passing. `) +
-                          (idea ? `Teach this verified idea about it: ${idea}` : ''),
+                            ? `This game is now the ${det.name}.`
+                            : `The line has sharpened into the ${det.name}.`) +
+                          (idea ? ` Key idea: ${idea}` : ''),
                         );
                         captureEvent('opening_announced', {
                           surface: 'coach-teach',
