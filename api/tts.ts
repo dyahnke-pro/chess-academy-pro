@@ -294,12 +294,21 @@ async function synthesize(text: string, voice: string, req: Request, useSsml: bo
       // No Content-Length header — the body is chunked transfer. Cache-Control
       // stays 24h so repeat narrations of the same text (also held in the
       // client's LRU) skip the vendor entirely.
+      // FALLBACK AUDIO IS NEVER CACHED FOREVER (David 2026-08-07, after
+      // hearing "the old Polly voice" mid-session). The eternal immutable
+      // policy is correct only for the PRIMARY provider's audio: a clip the
+      // fallback leg served during a transient primary outage would
+      // otherwise be frozen into the CDN in the WRONG VOICE for ~68 years,
+      // poisoning that line in that region long after the primary recovered.
+      // Fallback clips serve uncached, so the next request re-tries the
+      // primary and the mixed-voice session heals itself.
+      const isPrimary = provider === providers[0];
       return new Response(audioStream, {
         status: 200,
         headers: {
           ...cors,
           'Content-Type': 'audio/mpeg',
-          'Cache-Control': AUDIO_CACHE_CONTROL,
+          'Cache-Control': isPrimary ? AUDIO_CACHE_CONTROL : 'no-store',
           'X-TTS-Source': provider.id,
         },
       });
@@ -386,9 +395,15 @@ export default async function handler(req: Request): Promise<Response> {
       // without synthesizing anything. Names only — never a secret VALUE.
       if (url.searchParams.get('diag') === '1') {
         const chain = selectProviders();
+        // Same accepted-names list as the provider itself — the diag used to
+        // read only the canonical name and printed MISSING while google was
+        // actually serving (the provisioned key is `google_api_key`), which
+        // sent a 2026-08-07 voice investigation down the wrong path.
+        const googleKeySet = ['GOOGLE_TTS_API_KEY', 'GOOGLE_API_KEY', 'google_api_key']
+          .some((n) => Boolean(process.env[n]));
         const lines = [
           'ENV CHECK:',
-          `GOOGLE_TTS_API_KEY: ${process.env.GOOGLE_TTS_API_KEY ? 'SET' : 'MISSING'}`,
+          `google key (any accepted name): ${googleKeySet ? 'SET' : 'MISSING'}`,
           `AWS_ACCESS_KEY_ID_POLLY: ${process.env.AWS_ACCESS_KEY_ID_POLLY ? 'SET' : 'MISSING'}`,
           `AWS_SECRET_ACCESS_KEY_POLLY: ${process.env.AWS_SECRET_ACCESS_KEY_POLLY ? 'SET' : 'MISSING'}`,
           `AWS_REGION_POLLY: ${process.env.AWS_REGION_POLLY || '(not set, default us-east-1)'}`,
