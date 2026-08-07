@@ -212,6 +212,7 @@ async function main() {
       const san = chosen.san;
       const mv = mirror.move(san);
       await clickSquare(page, mv.from);
+      const moveAt = Date.now();
       await clickSquare(page, mv.to);
       console.log(`[play] ${san}`);
       await page.waitForTimeout(TURN_SETTLE_MS);
@@ -230,7 +231,7 @@ async function main() {
       if (latest) {
         try { mirror.load(latest); } catch { /* keep the local mirror */ }
       }
-      plies.push({ san, fen: latest ?? mirror.fen(), events: fresh });
+      plies.push({ san, fen: latest ?? mirror.fen(), events: fresh, moveAt });
     }
 
     // ── Grade what was said ────────────────────────────────────────────────
@@ -252,7 +253,11 @@ async function main() {
         // a pacing problem, not a false claim, and must not be reported as
         // one. Those lines are still listed in the report for the record.
         const anchored = eventFen(e);
-        spoken.push({ ply: p.san, fen: anchored, graded: Boolean(anchored), source: e.source, text });
+        // Latency from the student's move landing to this line being handed
+        // to the voice — the number David asks for when he says narration is
+        // "too long" or "one move behind".
+        const msAfterMove = (e.receivedAt ?? e.timestamp ?? 0) - p.moveAt;
+        spoken.push({ ply: p.san, fen: anchored, graded: Boolean(anchored), source: e.source, text, msAfterMove });
       }
     }
     console.log(`\n[spoken] ${spoken.length} voice line(s) captured across ${plies.length} plies`);
@@ -311,11 +316,31 @@ async function main() {
         ? 'no fork-shaped position reached in this line (nothing to alert)'
         : `tactic plies [${tacticPlies.join(', ')}]; ${alertLines.length} alert line(s): ${alertLines.map((a) => a.text.slice(0, 70)).join(' | ')}`);
 
+    // ── LATENCY: how long until the student HEARS teaching ─────────────────
+    // The question David asks directly ("How long does it take for corpus
+    // narrations to fire?"), answered with measurements instead of a guess.
+    const lat = (pred) => spoken.filter((s) => pred(s) && s.msAfterMove > 0).map((s) => s.msAfterMove).sort((a, b) => a - b);
+    const med = (xs) => (xs.length === 0 ? null : xs[Math.floor(xs.length / 2)]);
+    const isTrackA = (s) => /trackA/.test(String(s.source ?? ''));
+    const isCorpus = (s) => /Key idea:|sharpened into|This game is now/.test(s.text);
+    const isEvent = (s) => isTrackA(s) && /^track A spoke: "(That takes|Check|Checkmate)/.test(s.text);
+    const isWarm = (s) => /queueSpeak\.spoken/.test(String(s.source ?? ''));
+    const buckets = {
+      eventLine: lat(isEvent),
+      corpusOrAnnouncement: lat(isCorpus),
+      anyTrackA: lat(isTrackA),
+      warmLlmBeat: lat(isWarm),
+    };
+    console.log('\n[latency ms after the student\'s move landed]');
+    for (const [k, xs] of Object.entries(buckets)) {
+      console.log(`   ${k.padEnd(22)} n=${String(xs.length).padEnd(3)} median=${med(xs) ?? '-'}  all=[${xs.join(', ')}]`);
+    }
+
     record('E. no uncaught page errors', pageErrors.length === 0, pageErrors.slice(0, 2).join(' | ') || 'clean');
 
     await mkdir(OUT_DIR, { recursive: true });
     await writeFile(`${OUT_DIR}/report.json`, JSON.stringify({
-      runId: RUN_ID, baseUrl: BASE_URL, results, spoken, plies: plies.map((p) => ({ san: p.san, fen: p.fen })), pageErrors,
+      runId: RUN_ID, baseUrl: BASE_URL, results, latencyMs: buckets, spoken, plies: plies.map((p) => ({ san: p.san, fen: p.fen })), pageErrors,
     }, null, 2));
   } finally {
     await page.waitForTimeout(4_000); // let posthog-js flush
