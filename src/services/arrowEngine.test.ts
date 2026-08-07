@@ -150,15 +150,33 @@ describe('injectCandidateArrows', () => {
     expect(injected.some((i) => i.san === 'Nc3')).toBe(true);
   });
 
-  it('RED-arrows a threat the coach says OUT LOUD (spoken, off-top-3) — David 2026-07-13', async () => {
-    // Nh3 is off-top-3 (a non-suggestion). Named in prose only → no arrow.
-    // Named in the SPOKEN text → a red "danger" threat arrow.
-    const analyze = async (): Promise<RankedCandidate[]> => [{ from: 'e2', to: 'e4', rank: 1 }];
-    const both = await injectCandidateArrows('Careful, Nh3 is coming.', start, analyze, {
-      spokenText: 'Careful, Nh3 is coming.',
+  it('RED-arrows a FORCING threat the coach says OUT LOUD (spoken, off-top-3) — David 2026-07-13 + 2026-08-07', async () => {
+    // After 1.e4 e5 2.Nf3 (Black to move), the spoken warning names White's
+    // capture Nxe5 — forcing (a capture), off-top-3 → red threat arrow.
+    const afterNf3 = new Chess();
+    for (const m of ['e4', 'e5', 'Nf3']) afterNf3.move(m);
+    const analyze = async (): Promise<RankedCandidate[]> => [{ from: 'b8', to: 'c6', rank: 1 }];
+    const both = await injectCandidateArrows('Careful, Nxe5 is coming.', afterNf3.fen(), analyze, {
+      spokenText: 'Careful, Nxe5 is coming.',
     });
-    expect(both.text).toContain('[BOARD: arrow:g1-h3:red]');
-    expect(both.injected).toContainEqual({ san: 'Nh3', color: 'red' });
+    expect(both.text).toContain('[BOARD: arrow:f3-e5:red]');
+    expect(both.injected).toContainEqual({ san: 'Nxe5', color: 'red' });
+  });
+
+  it('draws NO red arrow for a QUIET spoken mention — a non-forcing move is not a threat (David 2026-08-07)', async () => {
+    // His board carried red arrows on quiet pawn pushes (d4/d5) and a
+    // hypothetical bishop retreat (Bd6) resolved from past-tense prose.
+    // Quiet resolutions must never paint red.
+    const analyze = async (): Promise<RankedCandidate[]> => [{ from: 'e2', to: 'e4', rank: 1 }];
+    const res = await injectCandidateArrows('The plan revolves around d5 later.', start, analyze, {
+      spokenText: 'The plan revolves around d5 later.',
+    });
+    expect(res.text).not.toContain(':red');
+    expect(res.injected.some((i) => i.color === 'red')).toBe(false);
+  });
+
+  it('ignores past-tense / directional square mentions ("from d6", "eyeing c5") — David 2026-08-07', () => {
+    expect(extractMentionedSans('The bishop went from d6 to b4, eyeing c5.')).toEqual([]);
   });
 
   it('does NOT arrow a threat that is only WRITTEN, not spoken', async () => {

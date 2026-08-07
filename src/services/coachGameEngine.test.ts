@@ -42,38 +42,36 @@ describe('coachGameEngine', () => {
     vi.stubGlobal('crossOriginIsolated', true);
   });
 
-  describe('getAdaptiveMove', () => {
-    it('returns a move and analysis', async () => {
+  describe('getAdaptiveMove — movetime-first (David 2026-08-07: depth-14 selection took 5-6s per reply)', () => {
+    it('returns the movetime search result as the move', async () => {
+      const result = await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1200);
+      expect(result.move).toBe('e2e4');
+      expect(result.source).toBe('stockfish-best');
+      expect(analyzePositionMock).not.toHaveBeenCalled(); // depth search never runs when the timed search delivers
+    });
+
+    it('uses the bounded THREADED movetime with the rating-matched skill', async () => {
+      await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1200);
+      expect(getBestMoveMock).toHaveBeenCalledWith(expect.any(String), 1200, 11);
+    });
+
+    it('uses the longer single-threaded movetime when not cross-origin isolated', async () => {
+      vi.stubGlobal('crossOriginIsolated', false);
+      await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1500);
+      expect(getBestMoveMock).toHaveBeenCalledWith(expect.any(String), 2500, 14);
+    });
+  });
+
+  describe('getAdaptiveMove — depth-search recovery ladder (movetime search failed)', () => {
+    beforeEach(() => {
+      // The timed search must FAIL for the depth ladder to run at all.
+      getBestMoveMock.mockResolvedValue('(none)');
+    });
+
+    it('returns a move and analysis from the depth search', async () => {
       const result = await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1200);
       expect(result.move).toBeTruthy();
       expect(result.analysis).toBe(mockAnalysis);
-    });
-
-    it('passes Skill Level via options to analyzePosition', async () => {
-      await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1200);
-      expect(analyzePositionMock).toHaveBeenCalledWith(
-        expect.any(String),
-        14,
-        { 'Skill Level': 11 },
-      );
-    });
-
-    it('calls stockfish with lower depth for lower ELO', async () => {
-      await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 800);
-      expect(analyzePositionMock).toHaveBeenCalledWith(
-        expect.any(String),
-        10,
-        { 'Skill Level': 5 },
-      );
-    });
-
-    it('calls stockfish with higher depth for higher ELO', async () => {
-      await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1900);
-      expect(analyzePositionMock).toHaveBeenCalledWith(
-        expect.any(String),
-        18,
-        { 'Skill Level': 18 },
-      );
     });
 
     it('always returns the best move or 2nd-best move', async () => {
@@ -82,17 +80,15 @@ describe('coachGameEngine', () => {
         expect(['e2e4', 'd2d4']).toContain(result.move);
       }
     });
-  });
 
-  describe('getAdaptiveMove — depth by ELO', () => {
     it('uses depth 10 for < 1000 ELO', async () => {
       await getAdaptiveMove('startfen', 900);
-      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 10, expect.any(Object));
+      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 10, { 'Skill Level': 5 });
     });
 
     it('uses depth 12 for 1000-1199 ELO', async () => {
       await getAdaptiveMove('startfen', 1100);
-      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 12, expect.any(Object));
+      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 12, { 'Skill Level': 8 });
     });
 
     it('uses depth 14 for 1200-1499 ELO', async () => {
@@ -117,27 +113,10 @@ describe('coachGameEngine', () => {
       await getAdaptiveMove('startfen', 1600); // depth 16 on threaded
       expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 10, expect.any(Object));
     });
-  });
 
-  describe('getAdaptiveMove — Skill Level by ELO', () => {
     it('uses skill 2 for < 800 ELO', async () => {
       await getAdaptiveMove('startfen', 700);
       expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), expect.any(Number), { 'Skill Level': 2 });
-    });
-
-    it('uses skill 5 for 800-999 ELO', async () => {
-      await getAdaptiveMove('startfen', 900);
-      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), expect.any(Number), { 'Skill Level': 5 });
-    });
-
-    it('uses skill 8 for 1000-1199 ELO', async () => {
-      await getAdaptiveMove('startfen', 1100);
-      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), expect.any(Number), { 'Skill Level': 8 });
-    });
-
-    it('uses skill 14 for 1400-1599 ELO', async () => {
-      await getAdaptiveMove('startfen', 1500);
-      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), expect.any(Number), { 'Skill Level': 14 });
     });
 
     it('uses skill 20 for 2000+ ELO', async () => {

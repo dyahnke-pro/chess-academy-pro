@@ -19,6 +19,21 @@ const COACH_MOVE_TIMEOUT_MS = 8000;
  *  cannot overrun. */
 const SINGLE_THREAD_MOVETIME_MS = 2500;
 
+/** Movetime budget for the THREADED opponent search (David 2026-08-07: the
+ *  depth-14 selection search took 5-6s per reply on his live game — the
+ *  single biggest chunk of the move→voice delay). A skill-limited engine's
+ *  strength comes from the Skill Level cap, not the extra plies; one bounded
+ *  second returns an indistinguishable rating-matched move and the reply
+ *  lands while the think-pad is still on screen. */
+const THREADED_MOVETIME_MS = 1200;
+
+/** Consecutive getAdaptiveMove calls where BOTH book layers (masters +
+ *  broader lichess) missed. At ≥2 the lookups are skipped for the rest of
+ *  the game — out-of-book positions never come back into book, and each
+ *  miss pair costs ~0.5-1.5s of dead time before the engine starts. Reset
+ *  by any hit or a fresh game (fullmove ≤ 4). */
+let bookMissStreak = 0;
+
 const FALLBACK_ANALYSIS: StockfishAnalysis = {
   bestMove: '',
   evaluation: 0,
@@ -238,6 +253,15 @@ export async function getAdaptiveMove(
   const threaded = typeof SharedArrayBuffer !== 'undefined' && globalThis.crossOriginIsolated;
   const depth = threaded ? getDepthForElo(targetElo) : Math.min(getDepthForElo(targetElo), 10);
   const skillLevel = getSkillLevelForElo(targetElo);
+  // BOOK-MISS STREAK BREAKER (David 2026-08-07: "Still too long of a
+  // delay"). Once a game is genuinely out of book, the masters lookup +
+  // broader-lichess lookup miss on EVERY subsequent move (his log: 10
+  // consecutive misses, ~0.5-1.5s each) — pure dead time before the engine
+  // even starts. Two consecutive both-layers misses ⇒ skip the lookups for
+  // the rest of the game; a fresh game (low fullmove number) re-arms them.
+  const fullmove = Number(fen.split(' ')[5] ?? '1');
+  if (fullmove <= 4) bookMissStreak = 0;
+  const skipBookLookups = bookMissStreak >= 2;
   // BREAK BOOK for weak opponents: roll per move. When it hits, skip BOTH book
   // layers so Stockfish-at-Skill-Level plays the opening itself (rating-
   // appropriate, includes real slips). Strong opponents (>=1600) never break.
@@ -263,7 +287,7 @@ export async function getAdaptiveMove(
   //
   // Audit emissions on every branch so the play surface is debuggable
   // from the audit stream alone (no console-log archaeology).
-  if (!breakBook) try {
+  if (!breakBook && !skipBookLookups) try {
     const masters = await lookupMasterPlay(fen, {
       triggeredBy: 'manual',
       surface: 'coachGameEngine.getAdaptiveMove',
@@ -273,6 +297,7 @@ export async function getAdaptiveMove(
       if (picked) {
         const uci = sanToUci(fen, picked.san);
         if (uci) {
+          bookMissStreak = 0;
           void logAppAudit({
             kind: 'coach-opponent-move-source',
             category: 'subsystem',
@@ -320,7 +345,7 @@ export async function getAdaptiveMove(
   // init timed out in Bird's Opening. With this layer, deep
   // off-book positions still get a Lichess-played move (which any
   // user has tried before) instead of a chess.js random walk.
-  if (!breakBook) try {
+  if (!breakBook && !skipBookLookups) try {
     const lichess = await pickBookMove(fen, {
       maxPly: 200,        // no horizon — try at any depth
       minTotalGames: 50,  // sparser than the 500-game cutoff for the
@@ -330,6 +355,7 @@ export async function getAdaptiveMove(
     });
     if (lichess) {
       const uci = `${lichess.uci.slice(0, 2)}${lichess.uci.slice(2, 4)}${lichess.uci.length > 4 ? lichess.uci[4] : ''}`;
+      bookMissStreak = 0;
       void logAppAudit({
         kind: 'coach-opponent-move-source',
         category: 'subsystem',
@@ -343,11 +369,12 @@ export async function getAdaptiveMove(
         source: 'lichess-games',
       };
     }
+    bookMissStreak += 1;
     void logAppAudit({
       kind: 'coach-opponent-masters-miss',
       category: 'subsystem',
       source: 'coachGameEngine.getAdaptiveMove',
-      summary: `lichess-games also empty — falling to stockfish (elo=${targetElo})`,
+      summary: `lichess-games also empty — falling to stockfish (elo=${targetElo}, missStreak=${bookMissStreak})`,
       fen,
     });
   } catch (err) {
@@ -369,18 +396,25 @@ export async function getAdaptiveMove(
   // search was there to produce. A movetime search cannot overrun: the engine
   // returns the best move it has when the clock runs out, at the skill level it
   // was given. Depth search stays on desktop, where it completes.
-  if (!threaded) {
+  // MOVETIME SEARCH ON EVERY BUILD (extended to threaded, David 2026-08-07:
+  // the desktop depth-14 selection search took 5-6 seconds per reply — the
+  // biggest chunk of his "still too long" move→voice delay). The reply's
+  // strength comes from the Skill Level cap, not extra plies; a bounded
+  // think returns the same rating-matched move in ~1-2.5s and CANNOT
+  // overrun. The depth search below stays only as the recovery ladder.
+  {
+    const movetime = threaded ? THREADED_MOVETIME_MS : SINGLE_THREAD_MOVETIME_MS;
     try {
       const timed = await Promise.race([
-        stockfishEngine.getBestMove(fen, SINGLE_THREAD_MOVETIME_MS, skillLevel),
-        makeTimeoutPromise(SINGLE_THREAD_MOVETIME_MS + 3000),
+        stockfishEngine.getBestMove(fen, movetime, skillLevel),
+        makeTimeoutPromise(movetime + 3000),
       ]);
       if (timed && timed !== '(none)') {
         void logAppAudit({
           kind: 'coach-opponent-move-source',
           category: 'subsystem',
           source: 'coachGameEngine.getAdaptiveMove',
-          summary: `source=stockfish-timed move=${timed} skill=${skillLevel} elo=${targetElo} (single-threaded movetime search)`,
+          summary: `source=stockfish-timed move=${timed} skill=${skillLevel} elo=${targetElo} (${movetime}ms movetime search)`,
           fen,
         });
         return {

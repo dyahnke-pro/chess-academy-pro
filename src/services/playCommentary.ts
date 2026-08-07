@@ -212,6 +212,46 @@ export function buildInstantReplyLine(m: {
 }
 
 /**
+ * THE COMPUTED WHY — a speakable clause explaining what a recommended move
+ * concretely DOES (David 2026-08-07: "Last narration had a couple
+ * hallucinations" — the rec fact named only the move, so the model invented
+ * the reason behind it). Everything here is chess.js-verified: the capture it
+ * makes, the check it gives, or the most valuable enemy piece it newly
+ * attacks. Returns '' when the move does nothing concrete — the fact then
+ * stays bare and the prompt forbids inventing a reason.
+ */
+export function describeMoveConsequence(fenBefore: string, san: string): string {
+  try {
+    const probe = new Chess(fenBefore);
+    const mv = probe.move(san, { strict: false });
+    if (mv.san.includes('#')) return ' — checkmate';
+    const capturedName = mv.captured ? (NAME[mv.captured] ?? 'piece') : null;
+    if (capturedName && mv.san.includes('+')) return `, winning the ${capturedName} on ${mv.to} with check`;
+    if (capturedName) return `, winning the ${capturedName} on ${mv.to}`;
+    if (mv.san.includes('+')) return ', with check';
+    // Quiet move: what does the piece newly attack from its destination?
+    // Flip the side to move so the mover's follow-ups generate (legal here —
+    // the move gave no check, so the flip is a valid position).
+    const parts = probe.fen().split(' ');
+    if (parts.length < 4) return '';
+    parts[1] = mv.color;
+    parts[3] = '-';
+    const flipped = new Chess();
+    flipped.load(parts.join(' '));
+    const value: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
+    let best: { name: string; to: string; score: number } | null = null;
+    for (const t of flipped.moves({ square: mv.to, verbose: true })) {
+      if (!t.isCapture() || !t.captured) continue;
+      const score = value[t.captured] ?? 0;
+      if (!best || score > best.score) best = { name: NAME[t.captured] ?? 'piece', to: t.to, score };
+    }
+    return best ? `, attacking the ${best.name} on ${best.to}` : '';
+  } catch {
+    return '';
+  }
+}
+
+/**
  * THE REJECTED TEMPTING MOVE — the speedrun beat "if you play the tempting
  * Knight to c5, Black can push e5". Deterministic: the tempting candidate is
  * a CAPTURE or CHECK the engine's multipv scored ≥1.5 pawns worse than the
