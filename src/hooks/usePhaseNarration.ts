@@ -8,6 +8,7 @@ import { getCachedStockfish, setCachedStockfish } from './stockfishFenCache';
 import { isSpokenSentenceGrounded, gradeNarrationText } from '../services/coachAnswerGates';
 import { buildFedTacticsContext, speakDeepestLookahead } from '../services/liveTacticsContext';
 import { transitionTeachingSourceForGame, generalizedTeaching } from '../services/danyaTeachingService';
+import { buildVoicePackage } from '../services/voicePackage';
 import { detectOpening } from '../services/openingDetectionService';
 import type { PhaseNarrationVerbosity, StockfishAnalysis } from '../types';
 import type { PhaseTransitionEvent } from '../services/phaseTransitionDetector';
@@ -387,8 +388,16 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             fen: event.fen,
           });
         }
+        // PACKAGED, not handed over raw. This surface measured 2 of 4 lines
+        // board-false on 2026-08-08 while every one of them went straight to
+        // TTS as a string — nothing downstream could check them, because a
+        // string carries no board. Through the package the same lines score
+        // zero. `event.fen` is the position the line was computed from, which
+        // is the board it must be judged against.
         speechChain = speechChain
-          .then(() => voiceService.speakForced(trimmed))
+          .then(() => voiceService.speakPackage(
+            buildVoicePackage([{ kind: 'computed', text: trimmed, fen: event.fen }]),
+          ))
           .catch(() => undefined);
       };
       // `+` (not `*`) so a bare terminator like "..." can't match a
@@ -534,7 +543,11 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
           // King activity..."). Chat keeps the prefix; voice gets the
           // bare prose.
           const spokenFallback = fallback.replace(/^\s*\*\s*/, '');
-          voiceService.speakForced(spokenFallback).catch(() => {
+          // The fallback path speaks too, so it is packaged too — an escape
+          // hatch that skips verification is where the untrue line comes out.
+          voiceService.speakPackage(
+            buildVoicePackage([{ kind: 'computed', text: spokenFallback, fen: event.fen }]),
+          ).catch(() => {
             /* swallow — TTS hangs / device failures audit elsewhere */
           });
         } else {

@@ -1017,6 +1017,44 @@ class VoiceService {
   }
 
   /**
+   * THE COACH'S WAY TO THE VOICE. Speak a verified package.
+   *
+   * David 2026-08-08: "We need to get back to packaging the spoken words. They
+   * just need to be handed to Google instead of the llm."
+   *
+   * The package was what crossed the boundary while a phrasing model sat at it:
+   * facts assembled in code, each speakable, each checked against the board it
+   * came from, instructions kept out by construction. Removing the model from
+   * the live lane did not move the package to the new consumer — it dropped it,
+   * and 74 call sites went back to handing this service a bare string. A bare
+   * string cannot be checked: it carries no board, so nothing downstream can
+   * tell "the knight on f6 is loose" from the same sentence about another game.
+   *
+   * That is what this method exists to end. The package carries a FEN per fact
+   * and has already refused anything false or unspeakable, so what arrives here
+   * is speech that has been proven rather than trusted. `buildVoicePackage` is
+   * ~0.2ms, so this costs nothing on the path that matters.
+   *
+   * A coach narration path that still calls `speakForced` with a raw string is
+   * unmigrated, not exempt.
+   */
+  async speakPackage(pkg: { spoken: string; kept: Array<{ kind: string; text: string }> }): Promise<void> {
+    if (!pkg.spoken.trim()) return;              // silence is a valid package
+    // Dynamic import, matching the rest of this file: voiceService must not
+    // take a hard dependency on appAuditor.
+    void import('./appAuditor').then(({ logAppAudit }) => {
+      void logAppAudit({
+        kind: 'coach-narration-spoken',
+        category: 'narration',
+        source: 'voiceService.speakPackage',
+        summary: `${pkg.kept.map((f) => f.kind).join('+')} — ${pkg.spoken.slice(0, 200)}`,
+        narrationText: pkg.spoken,
+      });
+    });
+    return this.speakForced(pkg.spoken);
+  }
+
+  /**
    * Speak a long-form master-class lecture line. Bypasses the brief
    * voice cap (a lecture is opt-in long-form, unlike per-move coach
    * commentary) but fully honors the silent gate. Used only by the
