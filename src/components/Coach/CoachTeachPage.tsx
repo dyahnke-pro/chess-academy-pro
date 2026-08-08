@@ -665,6 +665,21 @@ interface TeachSubmitOpts {
   teachIntent?: boolean;
 }
 
+/** A detector PLACEHOLDER, not an opening.
+ *
+ *  "King's Pawn Game" is what `detectOpening` says before an opening exists,
+ *  and its only name tokens are `pawn` and `game`. `notesForOpening` matches on
+ *  name-token overlap, so asking it for teaching about a placeholder selects a
+ *  note on the strength of the word "pawn" — which is how David heard "This
+ *  game is now the King's Pawn Game. Key idea: … Queen d7 then Qh3" after
+ *  1.e4 e5 (2026-08-08).
+ *
+ *  Naming the placeholder is useful. Attaching teaching to it is not, because
+ *  there is no opening yet for the teaching to be about. */
+function isGenericOpeningName(name: string): boolean {
+  return /^(?:king's|queen's) pawn (?:game|opening)$|^(?:irregular|uncommon)\b/i.test(name.trim());
+}
+
 export function CoachTeachPage(): JSX.Element {
   const navigate = useNavigate();
   // Quick Tour mode: ?mode=tour in the URL flips lessons into a
@@ -5174,8 +5189,22 @@ export function CoachTeachPage(): JSX.Element {
       if (det && det.name && det.name !== announcedOpeningNameRef.current) {
         const firstResolve = announcedOpeningNameRef.current === null;
         announcedOpeningNameRef.current = det.name;
-        const ideaNote = notesForOpening(det.name, 1)[0]
-          ?? secondarySupportNotes({ openingName: det.name, maxNotes: 1 })[0];
+        // A PLACEHOLDER NAME EARNS NO KEY IDEA. David 2026-08-08, from a live
+        // run: after 1.e4 e5 the coach said "This game is now the King's Pawn
+        // Game. Key idea: The queen is the last piece still out of the fight…
+        // Queen d7 then Qh3 is the strong path" — teaching with nothing to do
+        // with the position.
+        //
+        // `notesForOpening` matches on NAME-TOKEN overlap, and "King's Pawn
+        // Game" carries only `pawn` and `game`. It is not an opening; it is
+        // what the detector says BEFORE an opening exists, and matching a
+        // corpus note against it selects on the word "pawn". Naming the
+        // placeholder is fine and useful; attaching teaching to it is not,
+        // because there is no opening yet for the teaching to be about.
+        const ideaNote = isGenericOpeningName(det.name)
+          ? undefined
+          : (notesForOpening(det.name, 1)[0]
+            ?? secondarySupportNotes({ openingName: det.name, maxNotes: 1 })[0]);
         const idea = ideaNote ? spokenBeatText(ideaNote) : '';
         announceLine = (firstResolve
           ? `This game is now the ${det.name}.`
@@ -5794,8 +5823,14 @@ export function CoachTeachPage(): JSX.Element {
                         // farmed corpora via the support tier. Opening-level
                         // register by design — this is teaching about the
                         // OPENING, not a claim about the board.
-                        const ideaNote = notesForOpening(det.name, 1)[0]
-                          ?? secondarySupportNotes({ openingName: det.name, maxNotes: 1 })[0];
+                        // Same placeholder guard as the instant lane above —
+                        // both sites build this sentence, so a fix applied to
+                        // one of them is a fix the student still hears the bug
+                        // from on the other.
+                        const ideaNote = isGenericOpeningName(det.name)
+                          ? undefined
+                          : (notesForOpening(det.name, 1)[0]
+                            ?? secondarySupportNotes({ openingName: det.name, maxNotes: 1 })[0]);
                         const idea = ideaNote ? spokenBeatText(ideaNote) : '';
                         // SPEAKABLE — on a gate fallback this string IS the
                         // voice (David heard the old "mention the new name in
