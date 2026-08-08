@@ -395,6 +395,15 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             surface: 'phase-narration',
             extraFacts: transitionSentence,
             warm: true,
+            // NO PHRASING CALL. Everything above this line is already computed:
+            // the transition label, the engine read, the board-verified tactics,
+            // and the corpus note — which is now BAKED, so it arrives in its
+            // final spoken form rather than as written prose needing a rewrite.
+            // The model was rewording text that the speakable-facts law already
+            // requires be speakable, and charging 3,648ms to first dispatch for
+            // it (measured, David's game) — after which the line was dropped as
+            // overlapping anyway, so the whole call bought silence.
+            computedOnly: true,
           }),
           NARRATION_API_TIMEOUT_MS,
           'phase-narration-api',
