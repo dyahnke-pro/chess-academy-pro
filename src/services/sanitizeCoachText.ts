@@ -47,8 +47,22 @@ const DOUBLE_MARKUP_RE = /\\?\[\[[A-Z][A-Z0-9_]*(?::[\s\S]*?)?\]\]/g;
 const JSON_MARKUP_RE = /\\?\[\[?[A-Z][A-Z0-9_]*:[^[\]{]*\{[\s\S]*?\}\s*\]\]?/g;
 
 /** Legacy single-bracket form `[DIRECTIVE:args]`. `args` is `[^\]]*`
- *  because legacy tags didn't support nested `]`. */
-const SINGLE_MARKUP_RE = /\\?\[[A-Z][A-Z0-9_]+:[^\]]*\]/g;
+ *  because legacy tags didn't support nested `]`.
+ *
+ *  The tag name allows SPACES between all-caps words. It did not until
+ *  2026-08-08, and `openingGenerator` emits `[ARROWS ON THE BOARD: e7-e5]`
+ *  on every narrated walkthrough ply — three words, so the old
+ *  `[A-Z][A-Z0-9_]+:` never matched and the marker sailed through
+ *  `sanitizeForTTS`, which documents itself as "the chokepoint that catches
+ *  every caller" so markup "can never reach Polly". Confirmed live on prod:
+ *  a PostHog read-back of a muted audit run shows the marker inside the
+ *  spoken text of every beat, so the voice opened each move with "ARROWS ON
+ *  THE BOARD e7 e5" before any teaching — the coach reading its own stage
+ *  direction aloud.
+ *
+ *  Bracketed ALL-CAPS-then-colon is a directive by construction; ordinary
+ *  prose does not shout inside square brackets. */
+const SINGLE_MARKUP_RE = /\\?\[[A-Z][A-Z0-9_]*(?: [A-Z][A-Z0-9_]*)*:[^\]]*\]/g;
 
 /** Board markup the LLM sometimes emits as PROSE despite the "code draws
  *  the board" rule (G0) — a "Board arrows:" / "Board highlights:" header

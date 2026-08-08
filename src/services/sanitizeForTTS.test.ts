@@ -204,3 +204,29 @@ describe('sanitizeForTTS', () => {
     });
   });
 });
+
+// Found by reading a PostHog transcript of a MUTED prod audit run
+// (spoken-mskw3dj4, 2026-08-08): every narrated walkthrough beat reached the
+// voice with its stage direction still attached.
+describe('a multi-word directive tag is still a directive', () => {
+  it('THE REGRESSION: strips [ARROWS ON THE BOARD: …] before it can be spoken', () => {
+    // `openingGenerator` tags each ply with the arrows already drawn, so the
+    // reword model can name them. The tag name has SPACES, and the legacy
+    // single-bracket pattern required `[A-Z][A-Z0-9_]+:` with none — so this
+    // marker sailed through the function that documents itself as "the
+    // chokepoint that catches every caller". Live on prod, the voice opened
+    // every move with its own stage direction read aloud.
+    expect(sanitizeForTTS("[ARROWS ON THE BOARD: e7-e5] There's the gambit.")).toBe(
+      "There's the gambit.",
+    );
+  });
+
+  it('leaves ordinary bracketed prose alone', () => {
+    // The rule is ALL-CAPS-then-colon inside brackets, which is a directive by
+    // construction. Lowercase asides and bare references are prose.
+    expect(sanitizeForTTS('The rook lifts to [the third rank] and swings over.')).toBe(
+      'The rook lifts to [the third rank] and swings over.',
+    );
+    expect(sanitizeForTTS('He said [A] was better.')).toBe('He said [A] was better.');
+  });
+});
