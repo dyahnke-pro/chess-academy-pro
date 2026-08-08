@@ -69,6 +69,80 @@ function evalPhrase(evalCp: number | null | undefined, mateIn: number | null | u
  * caller falls through. Takes WHITE-perspective eval (LiveState convention)
  * and converts to the student's POV internally.
  */
+// ── THE POSITION READ, IN THE HOUSE VOICE ────────────────────────────────────
+//
+// These strings are SPOKEN, on a surface the student hits several times a game,
+// and they were one flat sentence each: "The position is roughly balanced."
+// Correct, and it read like an instrument panel.
+//
+// They could not be warmed by the corpus bake, and it is worth saying why: the
+// bake rewrites 58,124 STORED notes offline, but these are parameterized — the
+// eval, the square, the piece are filled in at run time, so there is no fixed
+// string to rewrite. Warming a template means WRITING it warm, which is
+// narration voice rule 9 ("code templates should not be the source of
+// frequently-spoken text; write 3-5 variants and rotate").
+//
+// Every variant says exactly what the engine said. The eval is never softened,
+// never dropped, never rounded differently — only the sentence around it
+// changes. `{m}` is the magnitude in points, `{n}` the mate distance.
+const BALANCED = [
+  'The position is roughly balanced.',
+  'Materially and positionally, this is level.',
+  'Neither side has anything concrete here yet.',
+  'Dead level — this one gets decided by ideas, not by the count.',
+];
+const SLIGHT_EDGE = [
+  "You're slightly better — about {m} of a point.",
+  "A small edge to you, about {m} of a point. Worth nursing.",
+  "You hold a shade the better of it, roughly {m} of a point.",
+  "About {m} of a point in your favour — an edge, not yet an advantage.",
+];
+const SLIGHT_DEFICIT = [
+  "You're slightly worse — about {m} of a point.",
+  "You're a shade worse here, around {m} of a point. Nothing fatal.",
+  "About {m} of a point against you — solvable, but do not drift.",
+  "Slightly the worse side, {m} of a point. Time to be accurate.",
+];
+const CLEAR_EDGE = [
+  "You're clearly better — about {m} points.",
+  "A real advantage now, about {m} points. Convert it.",
+  "About {m} points to you — this is the kind of edge that wins games.",
+  "Clearly your position, {m} points up. Keep the initiative.",
+];
+const CLEAR_DEFICIT = [
+  "You're clearly worse — about {m} points.",
+  "About {m} points against you. This needs active defence.",
+  "You are the worse side by roughly {m} points — look for counterplay.",
+  "{m} points down. Complicate before it simplifies.",
+];
+const WINNING = [
+  "You're winning — about {m} points up.",
+  "This is won, {m} points up. Technique from here.",
+  "About {m} points ahead — take the simplest road home.",
+  "Decisive, {m} points in hand. Trade pieces, not pawns.",
+];
+const LOSING = [
+  "You're losing — about {m} points down.",
+  "About {m} points down. Only practical chances left.",
+  "{m} points against you — set problems, do not resign the position.",
+  "Objectively lost by {m} points. Make it hard.",
+];
+const MATE_FOR_YOU = [
+  'You have a forced mate in {n}.',
+  'Mate in {n} is there — find it.',
+  'There is a forced mate in {n} for you.',
+];
+const MATE_AGAINST_YOU = [
+  'There is a forced mate against you in {n}.',
+  'You are being mated in {n}. Look for the check that stops it.',
+  'Mate against you in {n} — this needs a defence right now.',
+];
+
+/** Deterministic variant choice. The same position always reads the same way —
+ *  consistency beats novelty, and it keeps the TTS clip cache warm. */
+const pick = (variants: readonly string[], seed: number): string =>
+  variants[Math.abs(seed) % variants.length];
+
 export function assemblePositionAssessment(opts: {
   evalCp: number | null | undefined;
   mateIn: number | null | undefined;
@@ -84,14 +158,22 @@ export function assemblePositionAssessment(opts: {
   const studentMateIn = typeof opts.mateIn === 'number' ? (studentColor === 'white' ? opts.mateIn : -opts.mateIn) : null;
 
   if (typeof studentMateIn === 'number' && studentMateIn !== 0) {
-    parts.push(studentMateIn > 0 ? `You have a forced mate in ${Math.abs(studentMateIn)}.` : `There is a forced mate against you in ${Math.abs(studentMateIn)}.`);
+    const n = Math.abs(studentMateIn);
+    parts.push(studentMateIn > 0
+      ? pick(MATE_FOR_YOU, n).replace('{n}', String(n))
+      : pick(MATE_AGAINST_YOU, n).replace('{n}', String(n)));
   } else if (typeof studentEvalCp === 'number') {
     const mag = Math.abs(studentEvalCp) / 100;
-    const side = studentEvalCp >= 0 ? 'better' : 'worse';
-    if (mag < 0.3) parts.push('The position is roughly balanced.');
-    else if (mag < 1.0) parts.push(`You're slightly ${side} — about ${mag.toFixed(1)} of a point.`);
-    else if (mag < 2.5) parts.push(`You're clearly ${side} — about ${mag.toFixed(1)} points.`);
-    else parts.push(studentEvalCp >= 0 ? `You're winning — about ${mag.toFixed(1)} points up.` : `You're losing — about ${mag.toFixed(1)} points down.`);
+    const ahead = studentEvalCp >= 0;
+    // Rotation seed: the eval itself. The SAME position always reads the same
+    // way — consistency matters more than novelty, and it keeps the TTS clip
+    // cache warm — while different positions draw different stems, so a long
+    // game never sounds like one recording (narration voice rule 9).
+    const seed = Math.abs(Math.round(studentEvalCp));
+    if (mag < 0.3) parts.push(pick(BALANCED, seed));
+    else if (mag < 1.0) parts.push(pick(ahead ? SLIGHT_EDGE : SLIGHT_DEFICIT, seed).replace('{m}', mag.toFixed(1)));
+    else if (mag < 2.5) parts.push(pick(ahead ? CLEAR_EDGE : CLEAR_DEFICIT, seed).replace('{m}', mag.toFixed(1)));
+    else parts.push(pick(ahead ? WINNING : LOSING, seed).replace('{m}', mag.toFixed(1)));
   }
 
   // Add the single most relevant computed fact so the assessment names a WHY.
@@ -2951,7 +3033,11 @@ export function assembleGameReviewAnswer(opts: {
       // the move played, in real pawns. Only on genuine errors with both evals.
       const swing = m.classification === 'brilliant' ? null : swingPawns(m);
       const costStr = swing !== null && swing >= 0.5 && typeof m.bestMoveEval === 'number'
-        ? ` Best play here kept it at ${fmtWhiteEval(m.bestMoveEval)} — this one move swung about ${swing.toFixed(1)} pawn${swing >= 1.05 ? 's' : ''}.`
+        // "points", not "pawns". These two sentences land in the SAME spoken
+        // paragraph as the turning-point line below, and they disagreed —
+        // "swung about 4.0 pawns" immediately followed by "about 4.0 points".
+        // One unit per read; the app says points everywhere else.
+        ? ` Best play here kept it at ${fmtWhiteEval(m.bestMoveEval)} — this one move swung about ${swing.toFixed(1)} point${swing >= 1.05 ? 's' : ''}.`
         : '';
       parts.push(`- Move ${m.moveNumber}${dot} ${m.san} — ${m.classification.toUpperCase()}${evalStr ? `, ${evalStr}` : ''}${bestStr ? `; ${bestStr}` : ''}.${costStr}`);
     }

@@ -245,9 +245,17 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       // fires right after the student's move — and serveGroundedPositionDefault
       // handles the perspective flip + the student-relative assessment).
       const bestUci = stockfishAnalysis?.bestMove || stockfishAnalysis?.topLines?.[0]?.moves?.[0];
-      let transitionSentence = event.kind === 'opening-to-middlegame'
-        ? "The opening's set — we're into the middlegame now."
-        : 'This is heading into an endgame.';
+      /** True once a corpus note has been spliced. NOTHING is spoken without
+       *  one — see the silence rule below. */
+      let ritualSpoken = false;
+      // THE LABEL IS GONE (David 2026-08-08: "that phase transition you showed
+      // me was just useless noise"). It used to open with "The opening's set —
+      // we're into the middlegame now", which names no square, no piece and no
+      // idea; the student is looking at the board and can see that already.
+      // Narration voice rule 1 asks every spoken sentence to name something
+      // concrete, and rule 4 says silence is a legitimate answer. A phase
+      // boundary is a good MOMENT to teach — it is not, by itself, teaching.
+      let transitionSentence = '';
       // TEACHING at the transition (David 2026-07-12: "make the phase
       // transitions match more closely to danya's teachings"): his
       // opening→middlegame ritual is structure → idea → plan, so the whole
@@ -295,9 +303,11 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
               ? (gradeNarrationText(rawRitual, event.fen, 'usePhaseNarration.transitionNote') ?? '')
               : '';
             if (ritual.trim()) transitionSentence += ` ${ritual}`;
+            if (ritual.trim()) ritualSpoken = true;
           }
         } catch { /* corpus is a bonus, never a blocker */ }
       }
+
 
       // P5 — GUARANTEED deep look-ahead (David 2026-07-26: "add it to the package
       // gen to the llm — it will have no choice but to speak the words"). The
@@ -308,6 +318,34 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       // fact, not an LLM afterthought. Null on a quiet position.
       const phaseLookahead = phaseTactics ? speakDeepestLookahead(phaseTactics) : null;
       if (phaseLookahead) transitionSentence += ` ${phaseLookahead}`;
+
+      // ── NOTHING CONCRETE, NOTHING SPOKEN ───────────────────────────────────
+      // David 2026-08-08: "phase narration stays silent if no notes are
+      // available", and the label it used to open with is "just useless noise".
+      // What is left after removing those two is exactly his 90/10: the corpus
+      // note is the teaching, the look-ahead is the threat detection, and
+      // NEITHER of them is a status announcement or an eval readout.
+      //
+      // Both count. Gating the whole transition on the corpus alone was too
+      // blunt — it silenced a real three-move threat, named with its pattern,
+      // its depth and its moves, whenever the corpus happened to have nothing
+      // for that position. That line is the most concrete thing the coach can
+      // say (voice rule 1) and it comes from the engine, not the corpus.
+      //
+      // Returning here also skips the engine read and the timeout templates,
+      // which is the point: "* We're entering the middlegame" is the same noise
+      // with an asterisk on it.
+      if (!ritualSpoken && !phaseLookahead) {
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'usePhaseNarration.silent',
+          summary: `nothing concrete at this ${event.kind} (no note, no look-ahead) — staying silent`,
+          fen: event.fen,
+        });
+        if (token === activeTokenRef.current) setIsNarrating(false);
+        return;
+      }
 
       // Sentence-buffered streaming TTS. Every sentence chains through
       // speakForced so each Polly call awaits the previous one's
@@ -395,6 +433,15 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             surface: 'phase-narration',
             extraFacts: transitionSentence,
             warm: true,
+            // NO PHRASING CALL. Everything above this line is already computed:
+            // the transition label, the engine read, the board-verified tactics,
+            // and the corpus note — which is now BAKED, so it arrives in its
+            // final spoken form rather than as written prose needing a rewrite.
+            // The model was rewording text that the speakable-facts law already
+            // requires be speakable, and charging 3,648ms to first dispatch for
+            // it (measured, David's game) — after which the line was dropped as
+            // overlapping anyway, so the whole call bought silence.
+            computedOnly: true,
           }),
           NARRATION_API_TIMEOUT_MS,
           'phase-narration-api',

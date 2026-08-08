@@ -24,6 +24,7 @@ import { detectOpening } from './openingDetectionService';
 import { noteContradictsLine, notePhaseMismatchesBoard } from './noteLineGuard';
 import { boardConcepts, phaseOfFen } from './boardConcepts';
 import { noteDescribesPosition, noteTeachesChessNotItsSource, noteStaysInScope } from './noteAnchorIntegrity';
+import { bakedSpoken } from './spokenNoteBake';
 
 export interface DanyaNote {
   id: string;
@@ -824,17 +825,169 @@ export function notesForStructure(fen: string, maxNotes = Infinity): DanyaNote[]
 
 /** Detector tactic type → the corpus concept tags that teach it. Unknown
  *  tags simply miss in the concept index (OR semantics) — never a throw. */
-const TACTIC_TYPE_CONCEPTS: Record<string, string[]> = {
-  fork: ['fork', 'tactics'],
-  pin: ['pin', 'tactics'],
-  skewer: ['skewer', 'tactics'],
-  discovery: ['discovered-attack', 'tactics'],
-  double_check: ['tactics', 'king-safety'],
-  back_rank: ['back-rank-weakness', 'king-safety'],
-  removal_of_guard: ['tactics', 'calculation'],
-  mate_threat: ['king-safety', 'attack'],
-  trapped_piece: ['trapped-piece', 'tactics'],
-  hanging: ['tactical-awareness', 'calculation'],
+/** Detector type → the concept tags the CORPUS actually uses for it.
+ *
+ *  These were one or two tags each, chosen by what the idea is *called* rather
+ *  than by what the 58,124 notes are *tagged*, and the difference was most of
+ *  the lane. `back_rank` pointed at `back-rank-weakness` — 47 notes — while
+ *  `back-rank-mate` (390) and `back-rank` (89) sat unreachable; `trapped_piece`
+ *  reached 187 and missed `queen-trap` (169), `trapping` (122), `trap` (104),
+ *  `traps` (90); and NOTHING reached `sacrifice` (1,597), `deflection` (413) or
+ *  `overloading` (203) at all. Every tag below was counted in the corpus first —
+ *  a tag no note carries is a dead entry that silently narrows the lane.
+ *
+ *  Ordering matters: the SPECIFIC tags lead so a note actually about the live
+ *  pattern outranks a generic `tactics` note that merely mentions one. */
+export const TACTIC_TYPE_CONCEPTS: Record<string, string[]> = {
+  fork: ['fork', 'knight-fork', 'double-attack', 'tactics'],
+  pin: ['pin', 'pins', 'pinning', 'absolute-pin', 'relative-pin', 'tactics'],
+  skewer: ['skewer', 'x-ray', 'tactics'],
+  discovery: ['discovered-attack', 'discovered-check', 'double-attack', 'tactics'],
+  double_check: ['discovered-check', 'double-attack', 'king-safety', 'tactics'],
+  back_rank: ['back-rank-mate', 'back-rank', 'back-rank-weakness', 'checkmate-pattern', 'king-safety'],
+  removal_of_guard: ['deflection', 'overloading', 'overloaded-piece', 'removing-the-defender', 'tactics', 'calculation'],
+  mate_threat: ['checkmate-threat', 'mate-threat', 'forced-mate', 'checkmate-pattern', 'checkmate-patterns', 'king-hunt', 'attack'],
+  trapped_piece: ['trapped-piece', 'queen-trap', 'trapping', 'trap', 'traps', 'tactics'],
+  hanging: ['hanging-piece', 'hanging-pieces', 'undefended-piece', 'material-gain', 'tactical-awareness', 'calculation'],
+  sacrifice: ['sacrifice', 'piece-sacrifice', 'exchange-sacrifice', 'pawn-sacrifice', 'compensation', 'tactics'],
+  // Not tactics the live detectors emit — these exist for PUZZLE themes, where
+  // Lichess labels a pattern the corpus teaches but no board-reader announces.
+  passed_pawn: ['passed-pawn', 'pawn-promotion', 'promotion', 'outside-passed-pawn'],
+  attack: ['kingside-attack', 'attack', 'king-hunt', 'pawn-storm'],
+  defense: ['defense', 'prophylaxis', 'counterplay'],
+};
+
+/** ONE corpus note teaching a tactic that is PROVEN on the board right now,
+ *  returned as plain spoken text for the instant voice.
+ *
+ *  The tactical lane existed but fed only `buildDanyaTeachingBlock` — the
+ *  model's prompt. So a note about the fork on the board reached the student
+ *  paraphrased 6-23s later, or not at all when the beat was dropped stale
+ *  (measured: 4 of 6 beats in a real game). It is a concept-index lookup with
+ *  no engine and no model in it, so there is no reason it cannot be spoken the
+ *  moment the pattern appears. `types` comes from the DETECTORS only (G0) —
+ *  never guessed, never from prose. */
+export function spokenTacticNote(args: {
+  types: string[];
+  phase?: 'opening' | 'middlegame' | 'endgame';
+  /** Ids already spoken this game — a repeated note teaches nothing. */
+  seenIds?: Set<string>;
+}): { id: string; text: string } | null {
+  if (args.types.length === 0) return null;
+  const concepts = Array.from(new Set(
+    args.types.flatMap((t) => TACTIC_TYPE_CONCEPTS[t] ?? ['tactics', 'tactical-awareness']),
+  ));
+  // THE TAG IS NOT THE TEACHING. A tag says a note was FILED under the pattern;
+  // it does not say the note TEACHES it. Selecting on the tag alone returned
+  // `dt-b1` for a skewer — "Black castles long and White plays Rf4, but Black is
+  // better" — a move-recitation fragment about an unrelated game that happens to
+  // carry the tag. Spoken at the moment a skewer appears, that is noise dressed
+  // as coaching. So the note's own PROSE must name the pattern it is being
+  // chosen to explain.
+  const patternWords = args.types.flatMap((t) => TACTIC_PATTERN_WORDS[t] ?? []);
+  if (patternWords.length === 0) return null;
+  for (const n of conceptNotesFor({ phase: args.phase ?? 'middlegame', concepts, limit: 40 })) {
+    if (args.seenIds?.has(n.id)) continue;
+    const text = spokenBeatText(n);
+    if (!text) continue;
+    const low = text.toLowerCase();
+    if (!patternWords.some((w) => low.includes(w))) continue;
+    // NO GEOMETRY. This tier is reached by PATTERN, so the note is spoken over
+    // a board it was never written about — its own example's squares would be
+    // false about the position in front of the student. The bake generalizes
+    // them away; a note that still names one has not been baked yet (or could
+    // not be), and is not safe to speak here. Caught live: a fork drill offered
+    // "if the opponent captures on f6…" over a puzzle with nothing on f6.
+    //
+    // This doubles as the bake-readiness check, so coverage rises on its own as
+    // the bake lands rather than needing a flag day.
+    if (NAMES_A_SQUARE.test(text)) continue;
+    args.seenIds?.add(n.id);
+    return { id: n.id, text };
+  }
+  return null;
+}
+
+/** A board square named in prose ("f6", "d4"). Case-sensitive on the file so
+ *  ordinary capitalised words never trip it. */
+const NAMES_A_SQUARE = /\b[a-h][1-8]\b/;
+
+/** Lichess puzzle themes → the detector keys above.
+ *
+ *  A puzzle already knows what pattern it is; the corpus has thousands of notes
+ *  about those patterns. The drill was asking the wrong question — it looked a
+ *  note up by the PUZZLE'S POSITION, and a Lichess puzzle position is
+ *  essentially never in a corpus of taught lines, so the lookup fired almost
+ *  never. The theme is the key that actually matches.
+ *
+ *  Vocabularies do not agree (Lichess camelCases and splits finely), so this is
+ *  the translation layer. Themes describing DIFFICULTY or PHASE — `short`,
+ *  `long`, `endgame`, `crushing` — are deliberately absent: they say nothing
+ *  about what the student should learn. */
+export const PUZZLE_THEME_TO_TACTIC: Record<string, string> = {
+  fork: 'fork', doubleAttack: 'fork',
+  pin: 'pin',
+  skewer: 'skewer', xRayAttack: 'skewer',
+  discoveredAttack: 'discovery',
+  doubleCheck: 'double_check',
+  backRankMate: 'back_rank',
+  deflection: 'removal_of_guard', attraction: 'removal_of_guard',
+  decoy: 'removal_of_guard', clearance: 'removal_of_guard',
+  interference: 'removal_of_guard', overloading: 'removal_of_guard',
+  capturingDefender: 'removal_of_guard',
+  sacrifice: 'sacrifice',
+  trappedPiece: 'trapped_piece',
+  hangingPiece: 'hanging',
+  advancedPawn: 'passed_pawn', promotion: 'passed_pawn',
+  kingsideAttack: 'attack', queensideAttack: 'attack', exposedKing: 'attack',
+  defensiveMove: 'defense',
+  mate: 'mate_threat', mateIn1: 'mate_threat', mateIn2: 'mate_threat',
+  mateIn3: 'mate_threat', mateIn4: 'mate_threat', mateIn5: 'mate_threat',
+  smotheredMate: 'mate_threat', arabianMate: 'mate_threat', anastasiaMate: 'mate_threat',
+  bodenMate: 'mate_threat', doubleBishopMate: 'mate_threat', hookMate: 'mate_threat',
+};
+
+/** ONE corpus note teaching the pattern a PUZZLE is about, for the moment
+ *  AFTER it has been graded.
+ *
+ *  Never before or during: while the student is solving, the board is the
+ *  lesson, and naming the pattern IS the answer (narration rule 8 — drill
+ *  positions stay silent). Afterwards it is the teaching, and it matters most
+ *  on a MISS, where the note is precisely the idea they did not have.
+ *
+ *  The note it returns is geometry-free by construction — `spokenTacticNote`
+ *  serves the baked form, and a floating note's ORIGINAL prose names its own
+ *  example's squares, which would be false about the position the student is
+ *  still looking at. */
+export function tacticNoteForPuzzleThemes(args: {
+  themes: string[];
+  seenIds?: Set<string>;
+}): { id: string; text: string } | null {
+  const types = Array.from(new Set(
+    args.themes.map((t) => PUZZLE_THEME_TO_TACTIC[t]).filter((t): t is string => Boolean(t)),
+  ));
+  if (types.length === 0) return null;
+  return spokenTacticNote({ types, phase: 'middlegame', seenIds: args.seenIds });
+}
+
+/** The words a note must actually SAY to count as teaching a given pattern.
+ *  Deliberately narrow — a note that never names the idea is not explaining it,
+ *  whatever it was tagged. */
+const TACTIC_PATTERN_WORDS: Record<string, string[]> = {
+  fork: ['fork', 'double attack', 'two pieces at once'],
+  pin: ['pin', 'pinned', 'pinning'],
+  skewer: ['skewer', 'x-ray'],
+  discovery: ['discover', 'discovered'],
+  double_check: ['double check', 'discovered check'],
+  back_rank: ['back rank', 'back-rank'],
+  removal_of_guard: ['defender', 'deflect', 'overload', 'guard'],
+  mate_threat: ['mate', 'mating'],
+  trapped_piece: ['trap', 'trapped'],
+  hanging: ['hanging', 'undefended', 'en prise', 'loose piece'],
+  sacrifice: ['sacrifice', 'sacrific'],
+  passed_pawn: ['passed pawn', 'promote', 'promotion', 'queening'],
+  attack: ['attack', 'assault', 'storm'],
+  defense: ['defend', 'defence', 'defense'],
 };
 
 export function buildDanyaTeachingBlock(args: {
@@ -1000,6 +1153,14 @@ const SAN_TOKEN = /\b(?:[NBRQK][a-h]?[1-8]?x?[a-h][1-8][+#]?|[a-h]x?[a-h][1-8][+
  * trim.
  */
 export function spokenBeatText(note: DanyaNote): string {
+  // THE BAKE WINS. When a note has a committed spoken form it is already in its
+  // verified final shape — reviewed, gated, and (for a note with no position)
+  // with the foreign example's geometry generalized away. Re-running the
+  // pruning below over it could only drift it.
+  const bake = bakedSpoken(note.id);
+  if (bake?.unspeakable) return '';   // honest silence: it needs geometry it cannot have here
+  if (bake?.spoken) return bake.spoken;
+
   const explains = (note.explains ?? '').trim();
   if (!explains) return '';
   const sentences = explains.match(/[^.!?]+[.!?]+(?:\s|$)|[^.!?]+$/g) ?? [explains];
@@ -1018,11 +1179,17 @@ export function spokenBeatText(note: DanyaNote): string {
     const sentence = raw.trim();
     if (!sentence) continue;
     if (startsBroken(sentence)) continue;
-    // A sentence carrying 4+ moves is dictation, not teaching — the board
+    // A sentence carrying 3+ moves is dictation, not teaching — the board
     // plays the moves; the voice carries only what the picture doesn't.
+    //
+    // The bar was 4, and 31.2% of the 6,768 speakable notes still got through
+    // with a three-moves-in-one-breath sentence — measured, and exactly the
+    // droning David has reported. At 3 that class is ZERO. It costs 7.8 points
+    // of note coverage (6,302 → 5,775 notes still speak); the notes that go
+    // quiet were the ones reciting a line the student is watching anyway.
     SAN_TOKEN.lastIndex = 0;
     const sanCount = sentence.match(SAN_TOKEN)?.length ?? 0;
-    if (sanCount >= 4) continue;
+    if (sanCount >= 3) continue;
     kept.push(sentence);
   }
   return kept.join(' ');

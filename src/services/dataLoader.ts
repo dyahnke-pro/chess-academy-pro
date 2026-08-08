@@ -10,6 +10,7 @@ import antiOpeningsData from '../data/anti-openings.json';
 import modelGamesData from '../data/model-games.json';
 import { loadProGameReferenceData } from './proGameReferenceData';
 import { loadFarmedCorpora } from './farmedCorpusData';
+import { loadSpokenBake } from './spokenNoteBake';
 import { warmSecondaryPositionIndex } from './secondaryCorpora';
 import middlegamePlansData from '../data/middlegame-plans.json';
 // Separate-lane gambit-tab plans (David 2026-05-27): own file so the masterclass
@@ -975,6 +976,11 @@ export function seedDatabase(): Promise<void> {
   // contributes nothing until this resolves, so starting it here — rather than
   // inside the ~50s deferred seed — is what keeps the coach from being silent
   // on an uncovered opening early in a session. Never rejects.
+  // The BAKED spoken forms, alongside the corpora and for the same reason: it
+  // is what the voice actually says, so a note selected before it lands would
+  // speak its original written prose. Same-origin, never rejects, and until it
+  // resolves every caller falls back to that prose — the pre-bake behaviour.
+  void loadSpokenBake();
   void loadFarmedCorpora().then(() => {
     // Build the TRANSPOSITION index once the corpora are in hand. It is what
     // lets a note authored through one move order be found by a lesson that

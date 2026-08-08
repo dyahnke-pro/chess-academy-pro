@@ -130,6 +130,25 @@ function findAlignmentSeed(
   const homeRank = them === 'w' ? 1 : 8;
   const occupied = new Set(all.map((p) => p.square));
 
+  // The rank branch used to require `rank !== homeRank`, which was aimed at the
+  // untouched opening huddle but hit far more than that: it made a back-rank
+  // alignment PERMANENTLY invisible. David 2026-08-07 — "often times the queen
+  // and king align when castling long" — and he is right; verified with two
+  // identical positions one rank apart, where king-c7 + queen-f7 seeded and
+  // king-c8 + queen-f8 said nothing. The back rank is where castling puts the
+  // king and where back-rank tactics live, so it is the LAST rank to go blind on.
+  //
+  // What the filter actually wants is "these pieces have not moved yet". After
+  // castling the king stands on c1/c8, not e1/e8, so this admits the castled
+  // case and still refuses to narrate the starting position.
+  const ORIGINAL: Record<string, string[]> = {
+    kw: ['e1'], kb: ['e8'], qw: ['d1'], qb: ['d8'], rw: ['a1', 'h1'], rb: ['a8', 'h8'],
+  };
+  const unmoved = (p: Piece): boolean =>
+    (ORIGINAL[`${p.type}${p.color}`] ?? []).includes(p.square);
+  const bothUnmoved = (a: Piece, b: Piece): boolean =>
+    rankOf(a.square) === homeRank && unmoved(a) && unmoved(b);
+
   const betweenCount = (a: Piece, b: Piece): number => {
     const df = Math.sign(fileOf(b.square) - fileOf(a.square));
     const dr = Math.sign(rankOf(b.square) - rankOf(a.square));
@@ -142,6 +161,20 @@ function findAlignmentSeed(
       r += dr;
     }
     return n;
+  };
+
+  /** Is there an empty square just beyond either end of the pair, on their
+   *  shared line, for a slider to stand on? That is what makes an alignment
+   *  exploitable rather than merely tidy. */
+  const standpointBeyond = (a: Piece, b: Piece): boolean => {
+    const df = Math.sign(fileOf(b.square) - fileOf(a.square));
+    const dr = Math.sign(rankOf(b.square) - rankOf(a.square));
+    const free = (f: number, r: number): boolean =>
+      f >= 0 && f <= 7 && r >= 1 && r <= 8 && !occupied.has(`${String.fromCharCode(97 + f)}${r}`);
+    return (
+      free(fileOf(b.square) + df, rankOf(b.square) + dr) ||
+      free(fileOf(a.square) - df, rankOf(a.square) - dr)
+    );
   };
 
   const myTool = (kinds: string[]): string | null => {
@@ -159,15 +192,13 @@ function findAlignmentSeed(
       if (pair !== 'kq' && pair !== 'qr') continue;
       const df = fileOf(b.square) - fileOf(a.square);
       const dr = rankOf(b.square) - rankOf(a.square);
-      // Adjacent pieces are a huddle, not an alignment worth a word.
-      if (Math.max(Math.abs(df), Math.abs(dr)) < 2) continue;
 
       let line: string | null = null;
       let tool: string | null = null;
       if (df === 0) {
         line = `${a.square[0]}-file`;
         tool = myTool(['r', 'q']);
-      } else if (dr === 0 && rankOf(a.square) !== homeRank) {
+      } else if (dr === 0 && !bothUnmoved(a, b)) {
         line = `${rankOf(a.square)}th rank`.replace(/^1th/, '1st').replace(/^2th/, '2nd').replace(/^3th/, '3rd');
         tool = myTool(['r', 'q']);
       } else if (Math.abs(df) === Math.abs(dr)) {
@@ -176,6 +207,19 @@ function findAlignmentSeed(
       }
       if (!line || !tool) continue;
       if (betweenCount(a, b) > 1) continue;
+      // An alignment is only worth a word if a slider can actually GET on the
+      // line. This replaced a flat "adjacent pieces are a huddle" skip, which
+      // threw away the sharpest version of the pattern: David 2026-08-07 —
+      // "the queen often moves to d7 after long castle, the king on c8 and
+      // queen on d7 then line up on the same diagonal". They are adjacent, so
+      // the huddle rule dropped it, but nothing stands between them and a
+      // bishop reaching e6, f5, g4 or h3 pins the queen dead against the king.
+      // Adjacency is the STRONGEST form of the alignment, not a disqualifier.
+      //
+      // What actually disqualifies one is having nowhere to attack it FROM —
+      // a king on g8 with the queen on h7 has both ends of its diagonal off
+      // the board, so no slider can ever exploit it.
+      if (!standpointBeyond(a, b)) continue;
       return {
         what: `${NAME[a.type]} on ${a.square} and ${NAME[b.type]} on ${b.square}`,
         line,

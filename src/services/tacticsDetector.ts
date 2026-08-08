@@ -491,7 +491,28 @@ function rankOfSquare(sq: string): number {
  *
  * Uses only chess.js — no engine required. Deterministic and fast.
  */
+/** Detection is a pure function of the FEN and costs ~100ms on a busy middlegame
+ *  — enough that repeating it hurts. Callers legitimately ask about the same
+ *  position more than once (a review walks a game the eval bar already read;
+ *  the live watcher re-reads on every render), so the second ask is free.
+ *  Capacity is a few games' worth of plies; insertion order makes the oldest
+ *  key the first one out. */
+const DETECT_CACHE = new Map<string, TacticsDetectionResult>();
+const DETECT_CACHE_MAX = 400;
+
 export function detectTactics(fen: string): TacticsDetectionResult {
+  const cached = DETECT_CACHE.get(fen);
+  if (cached) return cached;
+  const computed = detectTacticsUncached(fen);
+  if (DETECT_CACHE.size >= DETECT_CACHE_MAX) {
+    const oldest = DETECT_CACHE.keys().next().value;
+    if (oldest !== undefined) DETECT_CACHE.delete(oldest);
+  }
+  DETECT_CACHE.set(fen, computed);
+  return computed;
+}
+
+function detectTacticsUncached(fen: string): TacticsDetectionResult {
   try {
     const chess = new Chess(fen);
     const turn = chess.turn();

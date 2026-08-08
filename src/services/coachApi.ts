@@ -1766,6 +1766,15 @@ export async function groundedMoveFeedback(opts: {
   /** Deliver in the warm house voice (default true for move feedback). Set
    *  false for the terse plain readout. */
   warm?: boolean;
+  /** Skip the phrasing call and return the COMPUTED prose itself.
+   *
+   *  The facts below are already written to be spoken — that is the speakable-
+   *  facts law, which exists because every gate fallback voices them verbatim.
+   *  So on a surface where the model only rewords them, it is buying nothing
+   *  and costing seconds: phase narration measured 3,648ms to first dispatch in
+   *  David's game, and the line it eventually produced was dropped as
+   *  overlapping anyway. Set this and the same content speaks immediately. */
+  computedOnly?: boolean;
 }): Promise<string | null> {
   const config = await getProviderConfig();
   const framing = [opts.extraFacts?.trim(), describeMoveMoment(opts.moment)]
@@ -1783,7 +1792,7 @@ export async function groundedMoveFeedback(opts: {
     },
     config,
     opts.studentMessage,
-    { warm: opts.warm !== false, extraFacts: framing || undefined },
+    { warm: opts.warm !== false, extraFacts: framing || undefined, computedOnly: opts.computedOnly },
   );
 }
 
@@ -1801,9 +1810,10 @@ async function serveGroundedPositionDefault(
    *  voice (phrasing model) instead of the plain raw readout; `extraFacts` is a
    *  COMPUTED pedagogical cue line (e.g. an eval-swing "recovery") prepended to
    *  the fact bundle so the warm voice can acknowledge it truthfully. */
-  voice?: { warm?: boolean; extraFacts?: string },
+  voice?: { warm?: boolean; extraFacts?: string; computedOnly?: boolean },
 ): Promise<string | null> {
   const warm = voice?.warm === true;
+  const computedOnly = voice?.computedOnly === true;
   const prefix = voice?.extraFacts ? `${voice.extraFacts.trim()}\n` : '';
   const fen = grounding.currentFen ?? null;
   const bestUci = grounding.engineBestMoveUci ?? null;
@@ -1818,6 +1828,7 @@ async function serveGroundedPositionDefault(
         ? (blackToMove ? -grounding.engineMateIn : grounding.engineMateIn)
         : null;
     const answer = assembleMoveEvalAnswer({ fen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn });
+    if (computedOnly && answer?.facts?.trim()) return `${prefix}${answer.facts}`.trim();
     if (answer) {
       const voiced = await voiceFacts(`${prefix}${answer.facts}`, { studentMessage, providerConfig: config, intent: 'safe-default-bestmove', preferRaw: !warm, warm });
       if (voiced) {
@@ -1836,6 +1847,7 @@ async function serveGroundedPositionDefault(
     studentColor: sc,
   });
   if (assess) {
+    if (computedOnly && assess.facts.trim()) return `${prefix}${assess.facts}`.trim();
     const voiced = await voiceFacts(`${prefix}${assess.facts}`, { studentMessage, providerConfig: config, intent: 'safe-default-assessment', preferRaw: !warm, warm });
     if (voiced) return voiced;
   }

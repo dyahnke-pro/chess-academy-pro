@@ -2500,6 +2500,60 @@ by `buildDanyaTeachingBlock` under a header that says outright they are not
 claims about the current position. Background for a lesson, never a fact about
 the move on the board.
 
+### 🔒🔒 THE CORPUS IS THE COACH'S VOICE — 90% of what gets said lives in the notes (David 2026-08-07: "This is the heart and soul of coach narrations. 90% of what needs to be said to user lives within these notes. The other 10% comes from threat and gem detection.").
+
+Read that as the ARCHITECTURE, not a compliment to the corpus. When a coach
+surface has something to say, the default source is a farmed note; the
+detectors (threats, hanging pieces, gems, tactics) supply the remaining ~10% —
+the urgent, board-computed interrupts. A surface that narrates mostly from code
+templates or mostly from the model has the ratio inverted and is not this coach.
+
+Practical consequences:
+- **Coverage work beats phrasing work.** A note that cannot be retrieved is 100%
+  lost; a note phrased slightly stiffly is still teaching. Reach first.
+- **Latency budget follows the ratio.** The 90% is a synchronous index lookup —
+  it has no business arriving behind an engine read or a model call.
+- **A silent surface is a retrieval failure, not a design choice** (except Play,
+  which is silent by contract — see below).
+
+### 🔒🔒 EVERY COACHING SURFACE GETS THE CORPUS — review, play, learn, tactics, all of it (David 2026-08-07, emphatic).
+
+The 58,124 farmed notes are the app's teaching. A surface that coaches without
+them is coaching from nothing. As of the 2026-08-03 integration audit **three
+surfaces had literal ZERO corpus access** — post-game review (~20 facet
+computers), tactics (all 14 files), and "read this position"
+(`usePositionNarration`) — plus the endgame page. That is the gap this rule
+exists to close, and to keep closed.
+
+**The contract, per surface:**
+- **Learn** (`/coach/teach`) — wired. The note LEADS the beat.
+- **Post-game review** — owed. Every facet that explains a moment should be able
+  to reach the note that teaches it.
+- **Tactics** — owed, and it is the highest-value gap: 17,972 notes carry a
+  tactical concept tag, and a drill is exactly where that teaching belongs.
+- **Read this position** — owed. It is a READ of the board; a note about this
+  structure is the substance of the read.
+- **Endgame** — owed. 7,120 endgame notes, 1.4% position-keyed, so this surface
+  lives on the concept + structure tiers.
+- **Play** (`/coach/play`) — wired for access, but **PLAY STAYS SILENT UNTIL THE
+  STUDENT ASKS.** Play is a pure playing surface (locked): the corpus is
+  available to phase-transition narration and to anything the student explicitly
+  requests, and it NEVER volunteers a note mid-game. Access is not permission
+  to speak.
+- **Kid surfaces** — permanently EXCLUDED by contract. Do not wire them.
+
+**Use the existing retrieval, never a new one.** `teachingNoteForBoard`
+(exact position → prefix → opening family → structure → concept) and
+`transitionTeachingForGame` are the reference implementations; they are already
+board-gated. A new surface calls one of them. Reinventing retrieval is how a
+surface ends up selecting by name.
+
+**A WIRE THAT DOES NOT FIRE IS NOT A WIRE (David 2026-08-07: "I don't want to run
+an audit and find nothing working").** Every integration ships with a test that
+proves a real note comes OUT of that surface for a real position — not that the
+function was called, not that the import exists. If you cannot show the note in
+the output, the surface is not wired, and it must not be reported as wired.
+
 🔒 **THE NOTE LEADS THE BEAT (David 2026-08-04: "corpus notes are primary for
 teach me x opening").** In `openingGenerator` PASS 1 the graded note is
 FIRST and the generated prose fills in behind it — not the other way round.

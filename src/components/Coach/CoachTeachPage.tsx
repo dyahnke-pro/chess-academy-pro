@@ -156,6 +156,7 @@ import { secondarySupportNotes } from '../../services/secondaryCorpora';
  *  instant, verified masterclass is still the better lesson, so it keeps it. */
 const NOTE_PRIMARY_MIN_PLIES = 3;
 import { findLivePunishment } from '../../services/gemCrushLines';
+import { spokenTacticNote } from '../../services/danyaTeachingService';
 import { buildThinkAloud } from '../../services/thinkAloud';
 import { warmAmateurPlay, buildRatingRealityFact } from '../../services/amateurPlayCache';
 import { masterPlayCache } from '../../services/masterPlayCache';
@@ -1203,6 +1204,9 @@ export function CoachTeachPage(): JSX.Element {
   /** Notes already spliced into this game's narration (same dedup contract as
    *  the walkthrough's `noteArrowSourceAt` seenIds — a note teaches once). */
   const teachNoteSeenIdsRef = useRef(new Set<string>());
+  /** The last gem callout spoken, so a gem that stays live across plies is
+   *  named once rather than nagged every move. */
+  const gemSeenRef = useRef<string | null>(null);
   /** Last spoken tactics-alert key (David 2026-08-07: "I saw no tactics
    *  alerts") — a persisting danger alerts once, not every turn. */
   const lastTacticsAlertRef = useRef('');
@@ -5089,6 +5093,7 @@ export function CoachTeachPage(): JSX.Element {
     let alertArrow: BoardArrow | null = null;
     let announceLine: string | null = null;
     let noteLine: string | null = null;
+    let gemLine: string | null = null;
     const studentCC: 'w' | 'b' = args.studentColor === 'white' ? 'w' : 'b';
     const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200;
     const history = args.historyAfterReply;
@@ -5180,6 +5185,23 @@ export function CoachTeachPage(): JSX.Element {
       }
     } catch { /* announcement is a bonus, never a blocker */ }
 
+    // ── THE GEM — a verified punishable slip by the coach ──────────────────
+    // `findLivePunishment` is a JSON lookup: no engine, no model. It was buried
+    // inside the engine-gated fact pass and handed to the LLM as a FACT, so the
+    // highest-value thing that can happen in a game reached the student
+    // paraphrased 6-23s later, or not at all when the beat died stale. It leads
+    // the chain now. The honesty contract is intact — the callout names the
+    // opportunity and withholds the move.
+    try {
+      const gem = findLivePunishment(null, history);
+      if (gem && gem.callout && gemSeenRef.current !== gem.callout) {
+        gemSeenRef.current = gem.callout;
+        gemLine = gem.callout;
+        factLines.push(`GEM ALERT (verified inaccuracy by the coach's last move): ${gem.callout}`);
+        captureEvent('gem_alert_spoken', { surface: 'coach-teach' });
+      }
+    } catch { /* gems are a bonus, never a blocker */ }
+
     // ── THE TAUGHT NOTE + its lead-the-eye arrows ──────────────────────────
     try {
       const noteText = noteArrowSourceAt(history, args.fenAfterReply, teachNoteSeenIdsRef.current);
@@ -5202,9 +5224,39 @@ export function CoachTeachPage(): JSX.Element {
       }
     } catch { /* corpus is a bonus, never a blocker */ }
 
-    // The announcement outranks the per-ply note — a newly resolved opening
-    // name is the bigger event, and the note keeps teaching on later plies.
-    return { alertLine, alertArrow, teachLine: announceLine ?? noteLine, leadEyeArrows, factLines };
+    // ── THE TACTICAL NOTE — corpus teaching for a pattern PROVEN on the board.
+    // The last resort before silence, and the reason it can speak at all is the
+    // bake: a floating note's original prose names a foreign example's squares
+    // ("bishop d2 attacks the queen … rook to b1 skewers"), every one a lie
+    // here. `spokenBeatText` serves the baked, geometry-free rewrite, and
+    // returns '' for a note that could not be generalized.
+    let tacticLine: string | null = null;
+    if (!noteLine) {
+      try {
+        const tctx = buildTacticsLiveContext(args.fenAfterReply, null, studentCC, rating);
+        const types = Array.from(new Set([
+          ...tctx.immediate.map((t) => t.type),
+          ...(tctx.hanging.length > 0 ? ['hanging'] : []),
+        ])).filter((t) => t !== 'none');
+        const hit = spokenTacticNote({ types, phase: 'middlegame', seenIds: teachNoteSeenIdsRef.current });
+        if (hit) {
+          tacticLine = hit.text;
+          factLines.push(`Coaching note for the ${types.join('/')} on the board: ${hit.text}`);
+        }
+      } catch { /* the corpus is a bonus, never a blocker */ }
+    }
+
+    // THE ORDER IS THE PRIORITY. The gem is the sharpest thing that can happen,
+    // then a newly resolved opening name, then teaching about THIS position,
+    // then teaching about the pattern on it. Silence when none of them fired —
+    // a note that restates the board teaches nothing (narration rule 3).
+    return {
+      alertLine,
+      alertArrow,
+      teachLine: gemLine ?? announceLine ?? noteLine ?? tacticLine,
+      leadEyeArrows,
+      factLines,
+    };
   }, [activeProfile?.puzzleRating, activeProfile?.currentRating]);
 
   const handleStudentMove = useCallback((move: MoveResult): void => {
@@ -5320,10 +5372,8 @@ export function CoachTeachPage(): JSX.Element {
           // reply ACTUALLY did — captured piece + squares — from the BEFORE
           // position, so the LLM narrates the real move instead of inventing
           // the victim ("queen takes queen").
-          let replyFact = '';
           // Carries the fresh post-reply analysis out to the handleSubmit
           // call so the ask's tactics context is built rich, not raced.
-          let replyAnalysisForAsk: { fen: string; analysis: StockfishAnalysis } | undefined;
           // TRACK A — the instant code voice (David 2026-08-07: the two-track
           // plan). What Ruth says the moment the move lands comes from CODE,
           // never the LLM: assembled here during the pad from already-gated
@@ -5334,9 +5384,6 @@ export function CoachTeachPage(): JSX.Element {
           // with the move; only the engine-derived recommendation is still
           // assembled here, because only it needs the search.
           let trackABestReply: string | null = null;
-          /** The instant pass's fact lines, handed to the model's fact bundle
-           *  below so the prompt keeps everything it used to compute here. */
-          let instantFactLines: string[] = [];
           /** True when the instant utterance already carried teaching, so the
            *  late engine line stays quiet rather than repeating the turn. */
           let hasInstantTeaching = false;
@@ -5393,7 +5440,6 @@ export function CoachTeachPage(): JSX.Element {
                 try {
                   studentBest = await stockfishEngine.analyzeWithBudget(probe.fen(), 12, 1200);
                 } catch { /* engine down → thin (chess.js-only) context below */ }
-                if (studentBest) replyAnalysisForAsk = { fen: probe.fen(), analysis: studentBest };
                 const tctx = buildTacticsLiveContext(probe.fen(), studentBest, studentCC, rating);
                 // Tactics facts are held back until the question decision
                 // below — when a guided-find or threat-check question arms,
@@ -5848,7 +5894,16 @@ export function CoachTeachPage(): JSX.Element {
                 // five times in one game. Directives travel in `directives`,
                 // which is excluded from every fallback path; facts are things
                 // about the board that may be spoken.
-                replyFact = facts.join(' ');
+                // The bundle is no longer handed to a model on a move — it is
+                // kept as the audit record of what the turn COMPUTED, which is
+                // what makes a spoken line traceable back to its facts.
+                void logAppAudit({
+                  kind: 'coach-narration-spoken',
+                  category: 'subsystem',
+                  source: 'CoachTeachPage.turnFacts',
+                  summary: `computed ${facts.length} fact(s) for the turn`,
+                  fen: probe.fen(),
+                });
               }
             } catch {
               /* probe is best-effort; absence just means no extra fact */
@@ -5939,7 +5994,17 @@ export function CoachTeachPage(): JSX.Element {
                   moveTo: im.to,
                   studentColor: playerColor,
                 });
-                instantFactLines = instant.factLines;
+                // Not handed to a model any more — logged, so the audit stream
+                // still shows WHY the coach said what it said on this move.
+                if (instant.factLines.length > 0) {
+                  void logAppAudit({
+                    kind: 'coach-narration-spoken',
+                    category: 'subsystem',
+                    source: 'CoachTeachPage.instantFacts',
+                    summary: instant.factLines.join(' ').slice(0, 300),
+                    fen: ip.fen(),
+                  });
+                }
                 if (instant.alertLine) {
                   lines.push(instant.alertLine);
                   if (instant.alertArrow) {
@@ -5989,22 +6054,31 @@ export function CoachTeachPage(): JSX.Element {
             runPhaseTransition(move.fen, move.san, (move.moveNumber ?? 1) * 2);
             // The beat needs the full fact bundle — normally already done.
             await factsReady;
-            // The announcement and the taught note are computed by the instant
-            // pass now, not inside `factsReady` — but the model still needs
-            // them as facts, or the warm beat loses everything the voice just
-            // taught. Joined here, after both have settled.
-            if (instantFactLines.length > 0) {
-              replyFact = replyFact ? `${replyFact} ${instantFactLines.join(' ')}` : instantFactLines.join(' ');
-            }
             setOpponentThinking(false);
-            void handleSubmit(`I played ${move.san}.`, {
-              fenOverride: liveFenRef.current,
-              coachReplyPlayed: reply,
-              coachReplyFact: replyFact,
-              instantLineSpoken: instantSpokenText.length > 0,
-              instantSpokenText: instantSpokenText || undefined,
-              replyAnalysis: replyAnalysisForAsk,
-            });
+            // ── NO MODEL CALL ON A MOVE ────────────────────────────────────
+            // This used to hand every move to the brain — 900-1,400 characters
+            // composed in 6-23s, unrequested, on a move the student made ~15s
+            // ago. Four of six were dropped stale in David's own game; he heard
+            // the teaching twice in six moves and paid for six.
+            //
+            // The corpus is 90% of what the coach has to say (David 2026-08-07)
+            // and every tier of it is a synchronous index lookup, so there was
+            // never a reason for the model to stand between the note and the
+            // student. The instant chain above — gem, threat, opening, taught
+            // note, tactical note — has already spoken, in ~1s, for free.
+            //
+            // The brain is NOT gone from this surface: a typed question still
+            // goes to it through `handleSubmit`, because a real question needs a
+            // real answer. What ended is the coach answering a question nobody
+            // asked, on every single move.
+            if (instantSpokenText.trim()) {
+              setMessages((prev) => [...prev, {
+                id: uid('move-note'),
+                role: 'assistant',
+                content: instantSpokenText.trim(),
+                timestamp: Date.now(),
+              }]);
+            }
             return;
           }
         }

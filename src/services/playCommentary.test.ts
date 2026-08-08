@@ -227,3 +227,50 @@ describe('describeMoveConsequence (the computed why — David 2026-08-07: "a cou
     expect(describeMoveConsequence(new Chess().fen(), 'Qh5')).toBe('');
   });
 });
+
+describe('back-rank alignment after castling long', () => {
+  // David 2026-08-07: "often times the queen and king align when castling
+  // long." He was right and the detector was blind to it — the rank branch
+  // required the pair to be OFF the home rank, so the geometry castling
+  // actually creates was the one case it refused to see. Verified with two
+  // identical positions one rank apart: c7+f7 seeded, c8+f8 said nothing.
+  const seed = (fen: string): string | null => {
+    const out = buildPlayCommentary({ fen, studentColor: 'white' });
+    return out?.kind === 'seeding-observation' ? out.facts[0] : null;
+  };
+
+  it('seeds the alignment when Black has castled long', () => {
+    const fact = seed('2kr1q2/ppp2ppp/8/8/8/2N5/PPP2PPP/R2QK2R w KQ - 0 12');
+    expect(fact).toContain('king on c8');
+    expect(fact).toContain('queen on f8');
+    expect(fact).toContain('8th rank');
+  });
+
+  it('still says nothing about the untouched starting huddle', () => {
+    expect(seed('rnbqkbnr/pppppppp/8/8/8/2N5/PPPPPPPP/R1BQKBNR b KQkq - 1 1')).toBeNull();
+  });
+
+  it('is not rank-dependent — the same shape off the home rank still seeds', () => {
+    expect(seed('8/ppkr1q2/8/8/8/2N5/PPP2PPP/R2QK2R w KQ - 0 12')).toContain('7th rank');
+  });
+
+  it('seeds the ADJACENT c8-king / d7-queen diagonal — the sharpest form', () => {
+    // David 2026-08-07: "the queen often moves to d7 after long castle, the
+    // king on c8 and queen on d7 then line up on the same diagonal." A flat
+    // "adjacent pieces are a huddle" skip threw this away, though nothing
+    // stands between them and a bishop reaching e6/f5/g4/h3 pins the queen
+    // dead against the king. Adjacency is the STRONGEST alignment, not a
+    // disqualifier — what disqualifies one is nowhere to attack it from.
+    const fact = seed('2kr2nr/pppq1ppp/8/8/8/2N1B3/PPP1BPPP/R2QK2R w KQ - 0 12');
+    expect(fact).toContain('king on c8');
+    expect(fact).toContain('queen on d7');
+    expect(fact).toContain('diagonal');
+    expect(fact).toContain('bishop');
+  });
+
+  it('stays silent when the line has no square to attack from', () => {
+    // King g8 with the queen on h7: adjacent on a diagonal whose both ends
+    // run off the board, so no slider can ever exploit it.
+    expect(seed('6k1/7q/8/8/8/2N1B3/PPP1BPPP/R2QK2R w KQ - 0 20')).toBeNull();
+  });
+});
