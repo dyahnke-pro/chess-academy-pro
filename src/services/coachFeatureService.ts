@@ -7,6 +7,8 @@ import { plyFactsForMove, plyFactsClause, computePvLine, type PvLine, type PrevC
 import { explainEvalByPieceQuality, lowestMinorMobility } from './pieceQuality';
 import { compareTwoMoves, type Evaluate } from './moveComparison';
 import { detectConcept } from './reviewConcepts';
+import { detectTactics } from './tacticsDetector';
+import { spokenTacticNote } from './danyaTeachingService';
 import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan, buildHisGroundedPlanBeat, buildMastersGroundedPlanBeat } from './reviewStrategicOrientation';
 import { getHisPlayDb } from './hisPlayLookup';
 import { ensureMastersDbLoaded } from './masterPlayLookup';
@@ -989,6 +991,14 @@ export function buildReviewSegments(
   // Package-completion once-per-game beats (David 2026-07-24: "complete the
   // package"): the simplify-when-ahead trade idea fires at most once.
   let tradeIdeaSpoken = false;
+  // THE PATTERN THEY MISSED — one corpus note per game, on the student's worst
+  // error, teaching the tactic that was on the board when they went wrong.
+  // Review had NO corpus access at all across its 43 facet computers, which is
+  // the surface where a missed pattern is most teachable: the game is over, the
+  // stakes are gone, and the student is looking at the exact moment it cost
+  // them. Once per game, because a lesson repeated is a lesson ignored.
+  let patternNoteSpoken = false;
+  const patternNoteSeen = new Set<string>();
   // Per-GAME seed (stable within a game, different across games) — rotates the
   // dev-plan's lead idea + stem so the same opening never reads as the same
   // recording every game (David 2026-07-21: "the same response every time").
@@ -1351,6 +1361,28 @@ export function buildReviewSegments(
     if (narration && (m.classification === 'mistake' || m.classification === 'blunder' || m.classification === 'inaccuracy')) {
       const concession = describeConcessions(fenPair.fenBefore, m.san, playerColor ? moverColor === playerColor : !m.isCoachMove);
       if (concession) narration = `${narration} ${concession}`;
+    }
+    // THE CORPUS NOTE — the pattern that was live when the student erred. Only
+    // on THEIR blunders and mistakes (an inaccuracy rarely turns on a pattern),
+    // and only once per game. The note is geometry-free by construction: it
+    // teaches the shape, never this board's squares, because it was written
+    // about someone else's position.
+    if (
+      narration && !patternNoteSpoken && !m.isCoachMove &&
+      (m.classification === 'blunder' || m.classification === 'mistake')
+    ) {
+      try {
+        const types = detectTactics(fenPair.fenBefore).tactics
+          .map((t) => t.type)
+          .filter((t) => t !== 'none');
+        const hit = types.length > 0
+          ? spokenTacticNote({ types, phase: 'middlegame', seenIds: patternNoteSeen })
+          : null;
+        if (hit) {
+          narration = `${narration} ${hit.text}`;
+          patternNoteSpoken = true;
+        }
+      } catch { /* the note is a bonus, never a blocker */ }
     }
     // Don't scold a near-FORCED recapture the engine only dings as an inaccuracy/
     // mistake (David 2026-07-20 Opera nitpick: the loser's forced takes-back got
