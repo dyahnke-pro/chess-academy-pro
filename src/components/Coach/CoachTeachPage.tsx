@@ -20,6 +20,7 @@ import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
 import { buildVoicePackage, describeVoicePackage, type VoicePackage } from '../../services/voicePackage';
+import { buildPositionalRead } from '../../services/positionalRead';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -5247,11 +5248,68 @@ export function CoachTeachPage(): JSX.Element {
     let computedLine: string | null = null;
     try {
       const beat = buildPlayCommentary({ fen: args.fenAfterReply, studentColor: playerColor });
-      if (beat && beat.facts.length > 0) {
-        computedLine = beat.facts.join(' ');
-        factLines.push(`Computed from the board (${beat.kind}): ${computedLine}`);
+      if (beat) {
+        // `spoken`, NOT `facts`. The facts are written at a phrasing model —
+        // shouted header, then an instruction ("Do NOT name the winning move")
+        // — so once the package started refusing scaffolding this lane was
+        // being dropped on every single ply, silently. It is the lane meant to
+        // FILL the silence: the corpus can only reach ~14% of the plies we
+        // teach, and the computed read is what the other 86% was always
+        // supposed to hear. Feeding it directives made it contribute nothing.
+        computedLine = beat.spoken;
+        factLines.push(`Computed from the board (${beat.kind}): ${beat.facts.join(' ')}`);
       }
     } catch { /* commentary is a bonus, never a blocker */ }
+
+    // ── THE SILENT PLIES. David 2026-08-08, after reading a ply-by-ply
+    // transcript: "There needs to be positional notes then or something at the
+    // silent plies… Plans or structure notes. Some sort of teaching
+    // information should fire."
+    //
+    // He is right that silence was the real complaint, not repetition. The
+    // position-keyed note above reaches ~14% of the plies we teach, the
+    // detectors reach the sharp moments, and the rest of a game — measured at
+    // 46% of student plies — had nothing at all. A coach absent for half the
+    // game reads as broken however true its other half is.
+    //
+    // Two fallbacks, in order, both only when everything above stayed quiet:
+    //
+    //  1. The BROADER teaching tiers. `noteArrowSourceAt` is position-only by
+    //     design and must stay that way inside a taught lesson. But this is a
+    //     LIVE game past book, and the locked rule draws exactly that line:
+    //     borrowing a note because the structures rhyme is right for a live
+    //     board, wrong when the student named the opening they wanted taught.
+    //     `generalizedTeaching` frames it honestly ("The same idea shows up in
+    //     positions like this"), so a borrowed note is never heard as a claim
+    //     about these squares.
+    //
+    //  2. The POSITIONAL READ — king safety, development, a bad piece, a weak
+    //     pawn, an available lever. All of it was already computed and
+    //     board-true, reachable only through a prompt block that can never be
+    //     spoken.
+    //
+    // Measured together: 13.4% → 99.2% of student plies with something true to
+    // say. Five plies in 656 stay silent, which is the honest number.
+    let fallbackLine: string | null = null;
+    if (!gemLine && !alertLine && !announceLine && !computedLine && !noteLine) {
+      try {
+        const src = teachingSourceForBoard(history, args.fenAfterReply, null);
+        if (src && !teachNoteSeenIdsRef.current.has(src.note.id)) {
+          const t = spokenBeatText(src.note);
+          if (t.trim()) {
+            fallbackLine = generalizedTeaching(src.origin, t);
+            teachNoteSeenIdsRef.current.add(src.note.id);
+            factLines.push(`Teaching (${src.origin}): ${fallbackLine}`);
+          }
+        }
+      } catch { /* the corpus is a bonus, never a blocker */ }
+      if (!fallbackLine) {
+        try {
+          const pr = buildPositionalRead(args.fenAfterReply, playerColor);
+          if (pr) { fallbackLine = pr; factLines.push(`Positional read: ${pr}`); }
+        } catch { /* never a blocker */ }
+      }
+    }
 
     // THE PACKAGE. Priority is a declared rank in `voicePackage`, not a `??`
     // chain here, and every entry is verified against the board it was computed
@@ -5264,6 +5322,9 @@ export function CoachTeachPage(): JSX.Element {
       ...(announceLine ? [{ kind: 'opening' as const, text: announceLine, fen: args.fenAfterReply }] : []),
       ...(computedLine ? [{ kind: 'computed' as const, text: computedLine, fen: args.fenAfterReply }] : []),
       ...(noteLine ? [{ kind: 'note' as const, text: noteLine, fen: args.fenAfterReply }] : []),
+      // Lowest rank by construction — it only exists because nothing above it
+      // fired, and it must never displace a tactic, a threat or a taught note.
+      ...(fallbackLine ? [{ kind: 'note' as const, text: fallbackLine, fen: args.fenAfterReply }] : []),
     ]);
 
     return {
