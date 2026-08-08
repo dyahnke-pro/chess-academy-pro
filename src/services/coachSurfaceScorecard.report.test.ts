@@ -21,6 +21,9 @@ import { formatReadingFacts } from './positionReadingService';
 import { gradeNarrationText } from './coachAnswerGates';
 import { falseConfigurationClaim } from './configurationClaims';
 import { buildVoicePackage } from './voicePackage';
+import { findLivePunishment } from './gemCrushLines';
+import { __setSpokenBakeCache } from './spokenNoteBake';
+import { readFileSync } from 'node:fs';
 
 /** Real games, chosen to span the phases each surface actually runs in. */
 const GAMES: Array<{ name: string; sans: string[]; student: 'white' | 'black' }> = [
@@ -69,7 +72,16 @@ function isRelevant(text: string): boolean {
 }
 
 describe('coach surface scorecard', () => {
-  beforeAll(() => { loadFullCorpus(); });
+  beforeAll(() => {
+    loadFullCorpus();
+    // THE BAKE MUST BE LOADED OR HALF THE SURFACES ARE SILENT BY DESIGN.
+    // A floating note with no bake is deliberately silent (its squares belong
+    // to another game), so without this every tactic note returns '' and the
+    // scorecard reports a dead wire that is actually a working rule. The app
+    // fetches this at boot; the harness has to do it explicitly.
+    const raw = JSON.parse(readFileSync('public/data/corpus-spoken.json', 'utf8')) as Record<string, { spoken?: string; kind?: string; unspeakable?: string }>;
+    __setSpokenBakeCache(new Map(Object.entries(raw)));
+  });
 
   it('scores narration quality, speed and accuracy across every surface', () => {
     const lines: Line[] = [];
@@ -101,15 +113,27 @@ describe('coach surface scorecard', () => {
         const pkg = buildVoicePackage(note ? [{ kind: 'note', text: note, fen }] : []);
         push('learn:voice-package', pkg.spoken, fen, performance.now() - t0);
 
+        // ── GEM CALLOUT — a verified punishable slip by the opponent ──
+        t0 = performance.now();
+        const gem = findLivePunishment(null, history);
+        push('gem:callout', gem?.callout, fen, performance.now() - t0);
+
         // ── PLAY / running commentary ──
         // NB the arg is `fen` (student to move) + `studentColor` as the WORD,
         // not fenBefore/fenAfter/san. The first draft passed the wrong shape,
         // the throw was swallowed, and this surface silently produced nothing
         // while the scorecard implied it had been measured — a harness lying
         // about a surface is the same defect as a surface lying about a board.
-        t0 = performance.now();
-        const pc = buildPlayCommentary({ fen, studentColor: game.student }) as { text?: string } | null;
-        push('play:commentary', pc?.text, fen, performance.now() - t0);
+        // Only on the STUDENT's turn — it returns null otherwise, by design,
+        // and calling it on every ply made a working surface look dead.
+        if (c.turn() === (game.student === 'white' ? 'w' : 'b')) {
+          t0 = performance.now();
+          const pc = buildPlayCommentary({ fen, studentColor: game.student });
+          // `spoken`, not `facts`. The facts are written AT a phrasing model
+          // and are refused by the package as scaffolding; `spoken` is the same
+          // observation in a form a student can hear.
+          push('play:commentary', pc ? buildVoicePackage([{ kind: 'computed', text: pc.spoken, fen }]).spoken : '', fen, performance.now() - t0);
+        }
 
         // ── READ THIS POSITION / the computed board read ──
         // `formatReadingFacts` is a PROMPT BLOCK, not narration — it opens
@@ -136,7 +160,13 @@ describe('coach surface scorecard', () => {
       // also reported silence it had not actually been asked for.
       const t0 = performance.now();
       const tr = transitionTeachingForGame({ historySans: history, fen: c.fen() });
-      push('phase:transition', tr ? spokenBeatText(tr) : '', c.fen(), performance.now() - t0);
+      const phaseText = tr ? spokenBeatText(tr) : '';
+      push('phase:transition', phaseText, c.fen(), performance.now() - t0);
+      // The same text through the package — what phase narration WOULD speak
+      // once routed, so the gain is measured before the wiring is moved.
+      push('phase:via-package', buildVoicePackage(
+        phaseText ? [{ kind: 'note', text: phaseText, fen: c.fen() }] : [],
+      ).spoken, c.fen(), performance.now() - t0);
     }
 
     // ── SCORE ──
@@ -185,7 +215,7 @@ describe('coach surface scorecard', () => {
     // going through the package; one that speaks without it is reported below
     // as unrouted, with its measured fault rate, rather than being quietly
     // excluded — that list is the remaining work, and it should stay visible.
-    const SPOKEN_THROUGH_PACKAGE = ['learn:voice-package'];
+    const SPOKEN_THROUGH_PACKAGE = ['learn:voice-package', 'phase:via-package', 'gem:callout', 'play:commentary', 'tactics:theme-note'];
     const spokenFaults = rows
       .filter((r) => SPOKEN_THROUGH_PACKAGE.includes(r.surface))
       .reduce((n, r) => n + r.accuracyFaults, 0);

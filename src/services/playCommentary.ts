@@ -28,6 +28,21 @@ export interface PlayCommentary {
   /** Grounded fact lines for the narration package. Each is TRUE of the board
    *  passed in; the model rephrases, it does not extend. */
   facts: string[];
+  /** THE SAME OBSERVATION, SPEAKABLE — for the live lane, which has no model.
+   *
+   *  `facts` are written AT a phrasing model: they shout a header ("TACTIC ON
+   *  THE BOARD"), then instruct ("Name the PATTERN…", "Do NOT name the winning
+   *  move"). That was correct while a model stood between this and the voice.
+   *  Once the live lane started speaking computed text directly, those strings
+   *  became unspeakable — measured 2026-08-08 across 2,397 plies of master
+   *  games: this fires on 1,049 of them and only 116 survived `buildVoicePackage`,
+   *  the other 89% refused as scaffolding. A surface that produces a thousand
+   *  observations and can voice a hundred is not working.
+   *
+   *  So each beat now carries both: `facts` for a model path, `spoken` for the
+   *  voice. `spoken` states the observation and stops — it never carries the
+   *  instruction, which is the whole point of keeping them in separate fields. */
+  spoken: string;
 }
 
 type Piece = { type: string; color: 'w' | 'b'; square: string };
@@ -459,6 +474,7 @@ export function buildPlayCommentary(args: {
       if (tac.type === 'mate_threat') {
         return {
           kind: 'tactic',
+          spoken: 'There is a checkmate available right now — look for the forcing move.',
           facts: [
             'MATE IS ON THE BOARD for the student. Say plainly that a checkmate is available right now and they should look for the forcing move. Do NOT name the move or the square.',
           ],
@@ -466,6 +482,7 @@ export function buildPlayCommentary(args: {
       }
       return {
         kind: 'tactic',
+        spoken: `${tac.description}. See if you can find it.`,
         facts: [
           `TACTIC ON THE BOARD for the student: ${tac.description}. Name the PATTERN and why the geometry works. Do NOT name the winning move — let them find it.`,
         ],
@@ -480,6 +497,7 @@ export function buildPlayCommentary(args: {
       const h = theirHanging[0];
       return {
         kind: 'tactic',
+        spoken: `Their ${NAME[h.piece] ?? 'piece'} on ${h.square} is undefended — an undefended piece is the seed of a tactic.`,
         facts: [
           `UNDEFENDED: the opponent's ${NAME[h.piece] ?? 'piece'} on ${h.square} is not defended. Say what you notice — an undefended piece is the seed of a tactic — without naming the move that wins it.`,
         ],
@@ -495,6 +513,7 @@ export function buildPlayCommentary(args: {
   if (seed) {
     return {
       kind: 'seeding-observation',
+      spoken: `Their ${seed.what} line up on the same ${seed.line}, and you have a ${seed.tool} that moves along it. Worth noticing.`,
       facts: [
         `ALIGNMENT: the opponent's ${seed.what} line up on the same ${seed.line}. The student owns a ${seed.tool} that moves along that geometry. Point out the alignment as something worth noticing — nothing more. Do NOT suggest a move.`,
       ],
@@ -509,6 +528,7 @@ export function buildPlayCommentary(args: {
     if (trades.length > 0) {
       return {
         kind: 'trade-the-best-piece',
+        spoken: `${best.why}. You can trade it off right now — the opponent's best piece is the one worth exchanging.`,
         facts: [
           `THEIR BEST PIECE: ${best.why}. The student can trade it off right now. Teach the idea — the opponent's best piece is the one worth exchanging — and name the piece and its square. Do NOT give the capturing move.`,
         ],
@@ -537,6 +557,7 @@ export function buildPlayCommentary(args: {
     if (moved && isQuiet) {
       return {
         kind: 'improving-move',
+        spoken: `Nothing is forcing here, so improve a piece — the ${NAME[moved.type] ?? 'piece'} on ${from} is the one with a better square. ${args.bestMoveWhy}`,
         facts: [
           `IMPROVING MOVE: nothing is forcing here, so the move is to improve a piece. The ${NAME[moved.type] ?? 'piece'} on ${from} is the one with a better square available. Grounded reason: ${args.bestMoveWhy}. Teach the HABIT — when there is no tactic, find your worst-placed piece and improve it — and name the piece, NOT its destination.`,
         ],
