@@ -3033,7 +3033,11 @@ export function assembleGameReviewAnswer(opts: {
       // the move played, in real pawns. Only on genuine errors with both evals.
       const swing = m.classification === 'brilliant' ? null : swingPawns(m);
       const costStr = swing !== null && swing >= 0.5 && typeof m.bestMoveEval === 'number'
-        ? ` Best play here kept it at ${fmtWhiteEval(m.bestMoveEval)} — this one move swung about ${swing.toFixed(1)} pawn${swing >= 1.05 ? 's' : ''}.`
+        // "points", not "pawns". These two sentences land in the SAME spoken
+        // paragraph as the turning-point line below, and they disagreed —
+        // "swung about 4.0 pawns" immediately followed by "about 4.0 points".
+        // One unit per read; the app says points everywhere else.
+        ? ` Best play here kept it at ${fmtWhiteEval(m.bestMoveEval)} — this one move swung about ${swing.toFixed(1)} point${swing >= 1.05 ? 's' : ''}.`
         : '';
       parts.push(`- Move ${m.moveNumber}${dot} ${m.san} — ${m.classification.toUpperCase()}${evalStr ? `, ${evalStr}` : ''}${bestStr ? `; ${bestStr}` : ''}.${costStr}`);
     }
