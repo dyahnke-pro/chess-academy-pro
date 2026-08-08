@@ -9,6 +9,7 @@ import { describe, it, expect, beforeAll } from 'vitest';
 import { Chess } from 'chess.js';
 import { buildReviewSegments } from './coachFeatureService';
 import { loadFullCorpus } from '../test/loadFullCorpus';
+import { loadSpokenBake } from '../test/loadSpokenBake';
 import { detectTactics } from './tacticsDetector';
 import { spokenTacticNote } from './danyaTeachingService';
 
@@ -44,7 +45,9 @@ const segmentsFor = (): ReturnType<typeof buildReviewSegments> => {
 };
 
 describe('review reaches the corpus', () => {
-  beforeAll(() => { loadFullCorpus(); });
+  // 60s: the corpus is 58,124 notes and the bake is an 11 MB JSON parse, which
+  // runs past vitest's 10s hook default whenever anything else is running.
+  beforeAll(() => { loadFullCorpus(); loadSpokenBake(); }, 60000);
 
   it('a blunder gets the note teaching the pattern that was live', () => {
     // NOT "narration exists" — the review pipeline narrates with or without the

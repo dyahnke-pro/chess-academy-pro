@@ -1185,6 +1185,30 @@ export function spokenBeatText(note: DanyaNote): string {
   if (bake?.unspeakable) return '';   // honest silence: it needs geometry it cannot have here
   if (bake?.spoken) return bake.spoken;
 
+  // A FLOATING note with no bake is SILENT. This is the same rule as
+  // `unspeakable` above, and leaving it out was the defect David heard on
+  // 2026-08-08: "none of the narrations are matching the position".
+  //
+  // Floating means the note has no lineSan — it is reached by concept or tactic
+  // tag, so it is spoken over a board it was never written about, and every
+  // square in it belongs to somebody else's game. Stripping that geometry is
+  // the entire reason the bake exists. Falling through to `explains` hands the
+  // student the un-stripped original: measured at 1,665 notes naming a foreign
+  // square, including raw move-list fragments like "Nxc4, exploiting the pinned
+  // knight on c3."
+  //
+  // The hole predates the bake (a note that never baked always fell through),
+  // but purging 867 contaminated notes back to this fallback on 2026-08-08
+  // widened it, which is what made it audible. Fixing the fallback fixes both.
+  //
+  // ANCHORED notes keep the fallback: the coach only speaks them on the
+  // position they were authored at, so their squares are true.
+  //
+  // Before the bake finishes fetching, `bakedSpoken` returns undefined for
+  // everything, so floating notes stay quiet for that window. That is the
+  // correct trade — a silent second beats a sentence about another board.
+  if (!note.lineSan?.length) return '';
+
   const explains = (note.explains ?? '').trim();
   if (!explains) return '';
   const sentences = explains.match(/[^.!?]+[.!?]+(?:\s|$)|[^.!?]+$/g) ?? [explains];

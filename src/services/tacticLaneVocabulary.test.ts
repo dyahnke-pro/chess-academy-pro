@@ -20,6 +20,7 @@ import { readFileSync } from 'node:fs';
 import { TACTIC_TYPE_CONCEPTS, spokenTacticNote } from './danyaTeachingService';
 import { detectTactics } from './tacticsDetector';
 import { loadFullCorpus } from '../test/loadFullCorpus';
+import { loadSpokenBake } from '../test/loadSpokenBake';
 import danya from '../data/danya-teachings.json';
 import chessbrah from '../data/chessbrah-teachings.json';
 
@@ -35,7 +36,9 @@ const everyNote = (): Note[] => [
 const norm = (c: string): string => c.toLowerCase().trim();
 
 describe('tactical lane vocabulary', () => {
-  beforeAll(() => { loadFullCorpus(); });
+  // 60s: the corpus is 58,124 notes and the bake is an 11 MB JSON parse, which
+  // runs past vitest's 10s hook default whenever anything else is running.
+  beforeAll(() => { loadFullCorpus(); loadSpokenBake(); }, 60000);
 
   it('every mapped tag exists in the corpus — a dead tag is fake coverage', () => {
     const counts = new Map<string, number>();

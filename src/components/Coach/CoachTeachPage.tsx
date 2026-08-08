@@ -156,7 +156,7 @@ import { secondarySupportNotes } from '../../services/secondaryCorpora';
  *  instant, verified masterclass is still the better lesson, so it keeps it. */
 const NOTE_PRIMARY_MIN_PLIES = 3;
 import { findLivePunishment } from '../../services/gemCrushLines';
-import { spokenTacticNote } from '../../services/danyaTeachingService';
+
 import { buildThinkAloud } from '../../services/thinkAloud';
 import { warmAmateurPlay, buildRatingRealityFact } from '../../services/amateurPlayCache';
 import { masterPlayCache } from '../../services/masterPlayCache';
@@ -5224,36 +5224,48 @@ export function CoachTeachPage(): JSX.Element {
       }
     } catch { /* corpus is a bonus, never a blocker */ }
 
-    // ── THE TACTICAL NOTE — corpus teaching for a pattern PROVEN on the board.
-    // The last resort before silence, and the reason it can speak at all is the
-    // bake: a floating note's original prose names a foreign example's squares
-    // ("bishop d2 attacks the queen … rook to b1 skewers"), every one a lie
-    // here. `spokenBeatText` serves the baked, geometry-free rewrite, and
-    // returns '' for a note that could not be generalized.
-    let tacticLine: string | null = null;
-    if (!noteLine) {
-      try {
-        const tctx = buildTacticsLiveContext(args.fenAfterReply, null, studentCC, rating);
-        const types = Array.from(new Set([
-          ...tctx.immediate.map((t) => t.type),
-          ...(tctx.hanging.length > 0 ? ['hanging'] : []),
-        ])).filter((t) => t !== 'none');
-        const hit = spokenTacticNote({ types, phase: 'middlegame', seenIds: teachNoteSeenIdsRef.current, fen: args.fenAfterReply });
-        if (hit) {
-          tacticLine = hit.text;
-          factLines.push(`Coaching note for the ${types.join('/')} on the board: ${hit.text}`);
-        }
-      } catch { /* the corpus is a bonus, never a blocker */ }
-    }
+    // ── THE COMPUTED READ — what is actually true of THIS board right now.
+    //
+    // This slot used to hold a corpus note reached by TACTIC TAG, announced as
+    // "Coaching note for the pin on the board". A tag-reached note is FLOATING:
+    // it teaches a sequence from another game, so the pin it describes is not
+    // the pin in front of the student. David heard three of them in one Pirc on
+    // 2026-08-08 — "the bishop sits undefended … when the queen steps out with
+    // mate threats" on move 3 with no queen out; "the check pins the knight"
+    // with no check; "the rook arrives with threats that cannot all be met"
+    // with no rook arriving. Baking those notes had stripped their squares, so
+    // every square-based gate passed them: that made them unfalsifiable, not
+    // true. A floating note may teach a pattern; it may never be announced as a
+    // description of the board.
+    //
+    // `buildPlayCommentary` is the honest occupant — deterministic, G0, each
+    // fact verified against the FEN it was handed, and null on a quiet
+    // position, which is the correct answer most of the time.
+    let computedLine: string | null = null;
+    try {
+      const beat = buildPlayCommentary({ fen: args.fenAfterReply, studentColor: playerColor });
+      if (beat && beat.facts.length > 0) {
+        computedLine = beat.facts.join(' ');
+        factLines.push(`Computed from the board (${beat.kind}): ${computedLine}`);
+      }
+    } catch { /* commentary is a bonus, never a blocker */ }
 
-    // THE ORDER IS THE PRIORITY. The gem is the sharpest thing that can happen,
-    // then a newly resolved opening name, then teaching about THIS position,
-    // then teaching about the pattern on it. Silence when none of them fired —
-    // a note that restates the board teaches nothing (narration rule 3).
+    // THE ORDER IS THE PRIORITY, and the computed read now outranks the note.
+    //
+    // It was `gemLine ?? announceLine ?? noteLine`, with no computed lane in the
+    // chain at all — so threat detection, tactics and the positional read could
+    // never reach the student's ear, and a corpus note spoke in their place on
+    // every ply that had one. That is exactly what David reported: "I heard no
+    // threat detection, no tactics, no positional read. Nothing!!"
+    //
+    // The corpus is still 90% of what the coach says; the detectors are the
+    // urgent 10%, and an interrupt that cannot preempt is not an interrupt. So
+    // the note keeps its place — it fills silence, it no longer displaces a
+    // fact. Silence when none fired: restating the board teaches nothing.
     return {
       alertLine,
       alertArrow,
-      teachLine: gemLine ?? announceLine ?? noteLine ?? tacticLine,
+      teachLine: gemLine ?? announceLine ?? computedLine ?? noteLine,
       leadEyeArrows,
       factLines,
     };

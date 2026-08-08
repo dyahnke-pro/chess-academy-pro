@@ -8,7 +8,7 @@ import { explainEvalByPieceQuality, lowestMinorMobility } from './pieceQuality';
 import { compareTwoMoves, type Evaluate } from './moveComparison';
 import { detectConcept } from './reviewConcepts';
 import { detectTactics } from './tacticsDetector';
-import { spokenTacticNote } from './danyaTeachingService';
+import { spokenTacticNote, generalizedTeaching } from './danyaTeachingService';
 import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan, buildHisGroundedPlanBeat, buildMastersGroundedPlanBeat } from './reviewStrategicOrientation';
 import { getHisPlayDb } from './hisPlayLookup';
 import { ensureMastersDbLoaded } from './masterPlayLookup';
@@ -1385,7 +1385,15 @@ export function buildReviewSegments(
         const hit = types.length > 0
           ? spokenTacticNote({ types, phase: 'middlegame', seenIds: patternNoteSeen, fen: fenPair.fenBefore })
           : null;
-        if (hit) narration = `${narration} ${hit.text}`;
+        // FRAMED, not appended bare. The tactic TYPE is real here — it came
+        // from `detectTactics` on this very position — but the note is
+        // floating, so its narrative ("the rook takes the knight", "the queen
+        // steps out") belongs to the game it was written about, not this one.
+        // Glued on unframed it read as a description of the student's board,
+        // the same defect David heard three times in live play on 2026-08-08.
+        // The concept framing says what it is: a rule for this kind of
+        // position, not a claim about this one.
+        if (hit) narration = `${narration} ${generalizedTeaching('concept', hit.text)}`;
       } catch { /* the note is a bonus, never a blocker */ }
     }
     // Don't scold a near-FORCED recapture the engine only dings as an inaccuracy/
