@@ -25,6 +25,8 @@ import { noteContradictsLine, notePhaseMismatchesBoard } from './noteLineGuard';
 import { boardConcepts, phaseOfFen } from './boardConcepts';
 import { noteDescribesPosition, noteTeachesChessNotItsSource, noteStaysInScope } from './noteAnchorIntegrity';
 import { bakedSpoken } from './spokenNoteBake';
+import { falseConfigurationClaim } from './configurationClaims';
+import { logAppAudit } from './appAuditor';
 
 export interface DanyaNote {
   id: string;
@@ -872,6 +874,12 @@ export function spokenTacticNote(args: {
   phase?: 'opening' | 'middlegame' | 'endgame';
   /** Ids already spoken this game — a repeated note teaches nothing. */
   seenIds?: Set<string>;
+  /** The LIVE board. Without it a note may assert a configuration this
+   *  position does not have — caught on prod at move 4: "doubled rooks on the
+   *  open file x-ray the opposing rook behind a knight", with every rook still
+   *  at home. Squares were already stripped; that sentence names none, which is
+   *  exactly why stripping squares was not enough. */
+  fen?: string | null;
 }): { id: string; text: string } | null {
   if (args.types.length === 0) return null;
   const concepts = Array.from(new Set(
@@ -902,6 +910,20 @@ export function spokenTacticNote(args: {
     // This doubles as the bake-readiness check, so coverage rises on its own as
     // the bake lands rather than needing a flag day.
     if (NAMES_A_SQUARE.test(text)) continue;
+    // …and no structural claim the board does not support.
+    if (args.fen) {
+      const bad = falseConfigurationClaim(text, args.fen);
+      if (bad) {
+        void logAppAudit({
+          kind: 'claim-validator-trip',
+          category: 'subsystem',
+          source: 'spokenTacticNote.configurationClaim',
+          summary: `skipped a note claiming "${bad}" — not true of this board`,
+          fen: args.fen,
+        });
+        continue;
+      }
+    }
     args.seenIds?.add(n.id);
     return { id: n.id, text };
   }
@@ -962,12 +984,14 @@ export const PUZZLE_THEME_TO_TACTIC: Record<string, string> = {
 export function tacticNoteForPuzzleThemes(args: {
   themes: string[];
   seenIds?: Set<string>;
+  /** The puzzle's board — a note may not assert a configuration it lacks. */
+  fen?: string | null;
 }): { id: string; text: string } | null {
   const types = Array.from(new Set(
     args.themes.map((t) => PUZZLE_THEME_TO_TACTIC[t]).filter((t): t is string => Boolean(t)),
   ));
   if (types.length === 0) return null;
-  return spokenTacticNote({ types, phase: 'middlegame', seenIds: args.seenIds });
+  return spokenTacticNote({ types, phase: 'middlegame', seenIds: args.seenIds, fen: args.fen });
 }
 
 /** The words a note must actually SAY to count as teaching a given pattern.

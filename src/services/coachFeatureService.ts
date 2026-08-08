@@ -1383,7 +1383,7 @@ export function buildReviewSegments(
           .map((t) => t.type)
           .filter((t) => t !== 'none');
         const hit = types.length > 0
-          ? spokenTacticNote({ types, phase: 'middlegame', seenIds: patternNoteSeen })
+          ? spokenTacticNote({ types, phase: 'middlegame', seenIds: patternNoteSeen, fen: fenPair.fenBefore })
           : null;
         if (hit) narration = `${narration} ${hit.text}`;
       } catch { /* the note is a bonus, never a blocker */ }

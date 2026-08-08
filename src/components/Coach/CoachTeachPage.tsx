@@ -5238,7 +5238,7 @@ export function CoachTeachPage(): JSX.Element {
           ...tctx.immediate.map((t) => t.type),
           ...(tctx.hanging.length > 0 ? ['hanging'] : []),
         ])).filter((t) => t !== 'none');
-        const hit = spokenTacticNote({ types, phase: 'middlegame', seenIds: teachNoteSeenIdsRef.current });
+        const hit = spokenTacticNote({ types, phase: 'middlegame', seenIds: teachNoteSeenIdsRef.current, fen: args.fenAfterReply });
         if (hit) {
           tacticLine = hit.text;
           factLines.push(`Coaching note for the ${types.join('/')} on the board: ${hit.text}`);
