@@ -299,8 +299,27 @@ export function fuzzyMatchOpening(rawQuery: string): FuzzyMatchResult {
   // doesn't resolve directly (so "Sicilian Defense" — no separator — is
   // untouched, and a rare opening literally containing "vs" still gets a
   // direct hit first via the tiers below).
+  // "…against ME" IS NOT A MATCHUP. David 2026-08-08, from a live run: he typed
+  // "Play the Vienna gambit against me", the left side resolved PERFECTLY
+  // (resolveOpeningEntry, score 1.00), and he was told "I don't have an exact
+  // match" and handed a picker with one option in it.
+  //
+  // The splitter fired on "against", took "me" as the opposing opening, and
+  // matchups never auto-accept — correctly, because "Sicilian vs Alapin" really
+  // is a which-did-you-mean. But an OPPONENT PRONOUN is the opposite: it names
+  // who is playing, not a second opening, and "play X against me" is the most
+  // natural way there is to ask for a game in X.
+  const OPPONENT_PRONOUN = /^(?:me|us|myself|you|the\s+(?:coach|computer|engine|bot))$/i;
   const matchupSides = query.split(MATCHUP_SPLIT_RE);
-  if (matchupSides.length === 2 && !resolveOpeningEntry(query)) {
+  const facingAPerson = matchupSides.length === 2 && OPPONENT_PRONOUN.test(matchupSides[1].trim());
+  if (facingAPerson && matchupSides[0].trim()) {
+    // Match on the OPENING alone. Falling through with "against me" still
+    // attached would leave the tiers scoring a string no opening is named
+    // after, which is how a 1.00 direct hit turned into a one-option picker.
+    const inner = fuzzyMatchOpening(matchupSides[0].trim());
+    if (inner.candidates.length > 0) return { ...inner, query };
+  }
+  if (matchupSides.length === 2 && !facingAPerson && !resolveOpeningEntry(query)) {
     const [left, right] = matchupSides.map((s) => s.replace(/^the\s+/i, '').trim());
     const merged: FuzzyCandidate[] = [];
     for (const side of [left, right]) {

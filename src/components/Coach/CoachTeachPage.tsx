@@ -1206,6 +1206,11 @@ export function CoachTeachPage(): JSX.Element {
   /** Notes already spliced into this game's narration (same dedup contract as
    *  the walkthrough's `noteArrowSourceAt` seenIds — a note teaches once). */
   const teachNoteSeenIdsRef = useRef(new Set<string>());
+  /** Positional observations already spoken this game — see `buildPositionalRead`.
+   *  Without it an uncastled king repeats the same sentence every ply until it
+   *  castles, and the boundary repeat-guard turns each of those back into the
+   *  silence this lane exists to fill. */
+  const positionalSaidRef = useRef(new Set<string>());
   /** The last gem callout spoken, so a gem that stays live across plies is
    *  named once rather than nagged every move. */
   const gemSeenRef = useRef<string | null>(null);
@@ -5305,7 +5310,7 @@ export function CoachTeachPage(): JSX.Element {
       } catch { /* the corpus is a bonus, never a blocker */ }
       if (!fallbackLine) {
         try {
-          const pr = buildPositionalRead(args.fenAfterReply, playerColor);
+          const pr = buildPositionalRead(args.fenAfterReply, playerColor, positionalSaidRef.current);
           if (pr) { fallbackLine = pr; factLines.push(`Positional read: ${pr}`); }
         } catch { /* never a blocker */ }
       }

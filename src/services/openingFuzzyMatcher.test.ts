@@ -31,11 +31,38 @@ describe('fuzzyMatchOpening', () => {
     );
   });
 
-  it("British spelling ('Defence') → autoAccept via british-normalized rewrite", () => {
+  it("British spelling ('Defence') resolves and auto-accepts", () => {
+    // WHAT THIS GUARDS is the 2026-05-19 incident: David typed "Philidor
+    // Defence" and got bounced. The contract is that the British spelling
+    // reaches the right opening without a picker — that is what a student
+    // experiences, and it still holds.
+    //
+    // It previously also asserted `source === 'british-normalized'`, naming
+    // WHICH tier did the work, and had been failing (before and independent of
+    // any change in this file) because `resolveOpeningEntry` has since learned
+    // British spellings and now answers at tier 1. Same opening, same
+    // auto-accept, one hop earlier — strictly better, and the test was red for
+    // an improvement.
+    //
+    // Probed 17 British forms on 2026-08-08 — every "Defence", "Centre Game",
+    // "Centre Counter", "Petrov/Owen/Hungarian Defence" — and all resolve at
+    // tier 1, so the `british-normalized` tier now appears UNREACHABLE. It is
+    // left in place as a backstop rather than deleted: the locked rule is to
+    // prove code is dead before removing it, and "I could not reach it from
+    // outside" is not that proof.
     const r = fuzzyMatchOpening('Philidor Defence');
     expect(r.autoAccept).toBe(true);
     expect(r.candidates[0].canonicalName).toMatch(/Philidor Defense/);
-    expect(r.candidates[0].source).toBe('british-normalized');
+  });
+
+  it('the whole British-spelling class reaches its opening', () => {
+    // Breadth the single Philidor case never had. Asserting the outcome rather
+    // than the tier means this keeps working whichever layer handles it.
+    for (const q of ['Sicilian Defence', 'French Defence', 'Caro-Kann Defence', 'Pirc Defence', 'Centre Game']) {
+      const r = fuzzyMatchOpening(q);
+      expect(r.autoAccept, q).toBe(true);
+      expect(r.candidates[0]?.canonicalName, q).toBeTruthy();
+    }
   });
 
   it("British 'Centre Counter' rewrites to 'Center Counter'", () => {
@@ -188,5 +215,32 @@ describe('fuzzyMatchOpening', () => {
       expect(r.autoAccept).toBe(true);
       expect(r.candidates[0]?.canonicalName).toBe('Sicilian Defense');
     });
+  });
+});
+
+// David 2026-08-08, from a live run: he typed "Play the Vienna gambit against
+// me", got "I don't have an exact match" and a picker containing ONE option —
+// the very opening he named, scored 1.00 by resolveOpeningEntry.
+//
+// The matchup splitter fired on "against" and took "me" as the second opening.
+// Matchups never auto-accept, correctly, because "French vs the Advance" really
+// is a which-did-you-mean. An opponent PRONOUN is the opposite: it names who is
+// playing, and "play X against me" is the most natural way to ask for a game.
+describe('"against me" is a request, not a matchup', () => {
+  it('THE REGRESSION: auto-accepts the opening the student named', () => {
+    const m = fuzzyMatchOpening('Play the Vienna gambit against me');
+    expect(m.candidates[0]?.canonicalName).toBe('Vienna Game: Vienna Gambit');
+    expect(m.autoAccept).toBe(true);
+  });
+
+  it('covers the other ways a student phrases it', () => {
+    for (const q of ['play the Caro-Kann against me', "let's play the Italian versus me", 'play the London against the computer']) {
+      expect(fuzzyMatchOpening(q).autoAccept, q).toBe(true);
+    }
+  });
+
+  it('a REAL matchup still surfaces the picker', () => {
+    // Two openings named — the student has to say which side they want.
+    expect(fuzzyMatchOpening('French Defense against the Advance').autoAccept).toBe(false);
   });
 });

@@ -32,7 +32,6 @@ import {
   findWeakPawns,
   findPieceQuality,
   findPawnBreaks,
-  strongestWeakestPiece,
 } from './positionReadingService';
 
 const NAME: Record<string, string> = {
@@ -47,7 +46,24 @@ const NAME: Record<string, string> = {
  * move: this lane exists to teach the student to SEE, and handing over the move
  * is the thing the coach is explicitly not supposed to do.
  */
-export function buildPositionalRead(fen: string, studentColor: 'white' | 'black'): string {
+export function buildPositionalRead(
+  fen: string,
+  studentColor: 'white' | 'black',
+  /** Observation keys already spoken this game. A quiet position often has the
+   *  SAME true thing to say for many plies running — an uncastled king stays
+   *  uncastled — and repeating it is what makes a coach sound stuck. The
+   *  boundary repeat-guard would suppress the duplicate, but suppression turns
+   *  the ply back into silence, which is the problem this file exists to fix.
+   *  So the ladder SKIPS what has been said and descends to the next true
+   *  observation instead: king safety, then development, then the bad piece,
+   *  then structure, then a lever. Caller owns the set for the game. */
+  said?: Set<string>,
+): string {
+  const fresh = (key: string, line: string): string | null => {
+    if (said?.has(key)) return null;
+    said?.add(key);
+    return line;
+  };
   const me: Color = studentColor === 'white' ? 'w' : 'b';
   const them: Color = me === 'w' ? 'b' : 'w';
 
@@ -56,11 +72,13 @@ export function buildPositionalRead(fen: string, studentColor: 'white' | 'black'
   const king = kingSafetyRead(fen, me);
   if (king) {
     if (king.inCenter && !king.castled) {
-      return 'Your king is still in the centre — getting it castled is worth more than another pawn move right now.';
+      const l = fresh('king-centre', 'Your king is still in the centre — getting it castled is worth more than another pawn move right now.');
+      if (l) return l;
     }
     if (king.exposed && king.openFilesNearKing.length > 0) {
       const files = king.openFilesNearKing.slice(0, 2).join(' and ');
-      return `The ${files} file${king.openFilesNearKing.length > 1 ? 's are' : ' is'} open toward your king — that is the road an attack would come down.`;
+      const l = fresh('king-open-file', `The ${files} file${king.openFilesNearKing.length > 1 ? 's are' : ' is'} open toward your king — that is the road an attack would come down.`);
+      if (l) return l;
     }
   }
 
@@ -71,7 +89,8 @@ export function buildPositionalRead(fen: string, studentColor: 'white' | 'black'
   if (mine && theirs && mine.totalMinors > 0) {
     const asleep = mine.totalMinors - mine.developedMinors;
     if (asleep >= 2 && theirs.developedMinors > mine.developedMinors) {
-      return `You still have ${asleep} minor pieces at home and they are ahead in development — the next move probably belongs to a piece, not a pawn.`;
+      const l = fresh('development', `You still have ${asleep} minor pieces at home and they are ahead in development — the next move probably belongs to a piece, not a pawn.`);
+      if (l) return l;
     }
   }
 
@@ -80,38 +99,50 @@ export function buildPositionalRead(fen: string, studentColor: 'white' | 'black'
   const quality = findPieceQuality(fen);
   const outpost = quality.find((q) => q.color === me && q.quality === 'good');
   if (outpost) {
-    return `Your ${NAME[outpost.piece] ?? 'piece'} on ${outpost.square} is your best-placed piece — ${outpost.reason}.`;
+    const l = fresh(`good-${outpost.square}`, `Your ${NAME[outpost.piece] ?? 'piece'} on ${outpost.square} is your best-placed piece — ${outpost.reason}.`);
+    if (l) return l;
   }
   const bad = quality.find((q) => q.color === me && q.quality === 'bad');
   if (bad) {
-    return `Your ${NAME[bad.piece] ?? 'piece'} on ${bad.square} is your problem piece — ${bad.reason}. Improving it is a plan in itself.`;
+    const l = fresh(`bad-${bad.square}`, `Your ${NAME[bad.piece] ?? 'piece'} on ${bad.square} is your problem piece — ${bad.reason}. Improving it is a plan in itself.`);
+    if (l) return l;
   }
 
   // 4. STRUCTURE — a weakness that will still be there in the endgame.
   const weak = findWeakPawns(fen, me);
   if (weak.isolated.length > 0) {
-    return `Your pawn on ${weak.isolated[0]} is isolated — no friendly pawn can ever defend it, so a piece has to.`;
+    const l = fresh(`iso-${weak.isolated[0]}`, `Your pawn on ${weak.isolated[0]} is isolated — no friendly pawn can ever defend it, so a piece has to.`);
+    if (l) return l;
   }
   const theirWeak = findWeakPawns(fen, them);
   if (theirWeak.isolated.length > 0) {
-    return `Their pawn on ${theirWeak.isolated[0]} is isolated — that is a long-term target worth playing against.`;
+    const l = fresh(`their-iso-${theirWeak.isolated[0]}`, `Their pawn on ${theirWeak.isolated[0]} is isolated — that is a long-term target worth playing against.`);
+    if (l) return l;
   }
   if (weak.doubled.length > 0) {
-    return `Your pawns on the ${weak.doubled[0][0]}-file are doubled — they cannot defend each other, so the file matters more than the count.`;
+    const l = fresh(`doubled-${weak.doubled[0][0]}`, `Your pawns on the ${weak.doubled[0][0]}-file are doubled — they cannot defend each other, so the file matters more than the count.`);
+    if (l) return l;
   }
 
   // 5. A LEVER. Last because it is the least specific, but a pawn break is the
   //    honest answer to "what do I even do here".
   const breaks = findPawnBreaks(fen);
   if (breaks.length > 0) {
-    return `A pawn break is available on ${breaks[0]} — in a quiet position the pawn levers are where the play comes from.`;
+    const l = fresh(`break-${breaks[0]}`, `A pawn break is available on ${breaks[0]} — in a quiet position the pawn levers are where the play comes from.`);
+    if (l) return l;
   }
 
-  // 6. Nothing structural at all. Name the strongest piece so the read is still
-  //    concrete, or say nothing.
-  const { strongest } = strongestWeakestPiece(fen, me);
-  if (strongest) {
-    return `Nothing is forcing here. Your ${NAME[strongest.piece] ?? 'piece'} on ${strongest.square} is doing the most work — build around it.`;
-  }
+  // 6. NOTHING. Deliberately not a "your strongest piece is X" line.
+  //
+  // That branch existed and was cut on 2026-08-08 after reading its output: on
+  // a quiet Pirc it produced "Nothing is forcing here. Your queen on d1 is
+  // doing the most work — build around it." True by the mobility score, and
+  // terrible teaching — the queen had not moved, and "build around it" is
+  // advice a student would be worse for taking. `strongestWeakestPiece` ranks
+  // by scope, which an undeveloped queen wins in an open position precisely
+  // because it is doing nothing yet.
+  //
+  // Silence beats bad advice. Five plies in 656 reach here, and saying nothing
+  // on those is the honest answer.
   return '';
 }
