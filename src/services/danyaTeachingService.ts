@@ -1201,6 +1201,28 @@ const SAN_TOKEN = /\b(?:[NBRQK][a-h]?[1-8]?x?[a-h][1-8][+#]?|[a-h]x?[a-h][1-8][+
  * a setup instead of the punchline. Explains-only + no dictation is the whole
  * trim.
  */
+/** Words that carry no teaching once the moves are stripped out: the two side
+ *  names, and the verbs that only say a move happened. */
+const EMPTY_AFTER_MOVES = new Set([
+  'white', 'black', 'plays', 'play', 'played', 'follows', 'follow', 'followed',
+  'goes', 'go', 'went', 'moves', 'move', 'moved', 'then', 'next', 'here', 'is',
+  'are', 'was', 'were', 'the', 'a', 'an', 'and', 'with', 'to', 'his', 'her',
+  'their', 'its',
+]);
+
+/** True when a sentence announces a move and nothing else. */
+function sentenceIsOnlyMoveAnnouncement(sentence: string): boolean {
+  SAN_TOKEN.lastIndex = 0;
+  const withoutMoves = sentence.replace(SAN_TOKEN, ' ');
+  // Bare pawn pushes are not in SAN_TOKEN (see SAN_SRC) — take them too, or
+  // "d6." reads as the word "d6" and looks like content.
+  const words = withoutMoves
+    .replace(/\b[a-h][1-8]\b/g, ' ')
+    .toLowerCase()
+    .match(/[a-z]+/g) ?? [];
+  return words.every((w) => EMPTY_AFTER_MOVES.has(w));
+}
+
 /** Drop a leading recitation of the note's OWN anchor: "In the Nimzo, after
  *  d4 Nf6 c4 e6 Nc3 Bb4, Black's main replies are…" → "Black's main replies
  *  are…".
@@ -1293,6 +1315,9 @@ export function spokenBeatText(note: DanyaNote): string {
   // position: , bishop to d2, bishop to e2) lead to a position…".
   const startsBroken = (s: string): boolean => {
     if (/^[,;:.)\]]/.test(s)) return true;
+    // "is dubious." — a bare copula/auxiliary opener has lost its subject to
+    // the sentence before it.
+    if (/^(?:is|are|was|were|has|have|had|can|could|would|should|will|does|do|did)\b/.test(s)) return true;
     // "Kf8, and the knight must retreat, losing time." — a move token then a
     // comma is a continuation of a list the distiller cut in half, not a
     // sentence. Read aloud it lands as a bare "king f8" with no verb.
@@ -1337,6 +1362,18 @@ export function spokenBeatText(note: DanyaNote): string {
     SAN_TOKEN.lastIndex = 0;
     const sanCount = sentence.match(SAN_TOKEN)?.length ?? 0;
     if (sanCount >= 3) { droppedPrevious = true; continue; }
+    // Says nothing the BOARD does not already say. "Be7." / "d6." / "g6
+    // follows." / "White plays Be3." are move announcements, and the student
+    // is watching the move being made — the narration voice rules put this
+    // first ("Don't restate the board. Voice carries only what the picture
+    // doesn't") and allow silence outright ("An empty idea string means no
+    // narration").
+    //
+    // Judged on what is LEFT after the moves are removed: if every remaining
+    // word is a side name or a verb of motion, the sentence carried only the
+    // move. A short line with real content ("Accept it.", "Check.") keeps its
+    // words and survives, which is why this is not a length rule.
+    if (sentenceIsOnlyMoveAnnouncement(sentence)) { droppedPrevious = true; continue; }
     kept.push(sentence);
     droppedPrevious = false;
   }

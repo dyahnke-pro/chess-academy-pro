@@ -166,3 +166,41 @@ describe('spokenBeatText — the fragment rule stays narrow', () => {
     expect(spokenBeatText(n)).toBe('e4 and d4 are both playable here.');
   });
 });
+
+// Found by dumping the spoken teaching across all 43 taught openings and
+// reading it. The narration voice rules put this first: "Don't restate the
+// board — voice carries only what the picture doesn't", and "Silence is
+// acceptable."
+describe('spokenBeatText — a move announcement is not teaching', () => {
+  const note = (over: Partial<DanyaNote>): DanyaNote => ({
+    id: 'x', lineSan: ['e4'], opening: null, phase: 'opening',
+    explains: '', teaches: '', plans: '', concepts: [], sources: [],
+    ...over,
+  });
+
+  it.each([
+    ['a bare move', 'Be7.'],
+    ['a bare pawn push', 'd6.'],
+    ['a move with a motion verb', 'g6 follows.'],
+    ['a side playing a move', 'White plays Be3. Bg7.'],
+  ])('says nothing for %s', (_label, explains) => {
+    expect(spokenBeatText(note({ explains }))).toBe('');
+  });
+
+  it('KEEPS a short line that carries real content', () => {
+    // This is not a length rule — "Accept it." is two words and is exactly the
+    // kind of punchy coaching the voice should keep. What disqualifies a
+    // sentence is having nothing left once the moves are removed.
+    expect(spokenBeatText(note({ explains: 'Accept it.' }))).toBe('Accept it.');
+  });
+
+  it('KEEPS a move-bearing sentence that also teaches', () => {
+    expect(spokenBeatText(note({ explains: 'Be7 unpins the knight and frees the rook.' })))
+      .toBe('Be7 unpins the knight and frees the rook.');
+  });
+
+  it('drops a clause that lost its subject to the sentence before it', () => {
+    // "…the resulting structure. is dubious." — a bare copula opener.
+    expect(spokenBeatText(note({ explains: 'is dubious.' }))).toBe('');
+  });
+});
