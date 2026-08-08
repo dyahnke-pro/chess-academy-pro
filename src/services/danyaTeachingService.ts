@@ -27,6 +27,7 @@ import { noteDescribesPosition, noteTeachesChessNotItsSource, noteStaysInScope }
 import { bakedSpoken } from './spokenNoteBake';
 import { falseConfigurationClaim } from './configurationClaims';
 import { logAppAudit } from './appAuditor';
+import { applyDerivedAnchors } from './noteAnchorOverrides';
 
 export interface DanyaNote {
   id: string;
@@ -47,7 +48,14 @@ interface TeachingsBundle {
   notes: DanyaNote[];
 }
 
-const DATA = teachingsData as unknown as TeachingsBundle;
+const RAW_DATA = teachingsData as unknown as TeachingsBundle;
+
+// Derived anchors are applied ONCE, here, before any index below is built —
+// every lookup map (prefix, opening, concept, fen) must be keyed on the
+// corrected line or the correction is invisible to selection. See
+// `noteAnchorOverrides`, and read `scripts/derive-note-anchors.mjs` before
+// touching the derivation itself.
+const DATA: TeachingsBundle = { ...RAW_DATA, notes: applyDerivedAnchors(RAW_DATA.notes ?? []) };
 
 /** Position-keyed notes indexed by their SAN-prefix key ("e4 c6 d4"). */
 const byPrefix = new Map<string, DanyaNote[]>();
@@ -1150,6 +1158,23 @@ export function teachingBeatText(note: DanyaNote): string {
 }
 
 /** SAN-shaped tokens — the same shape sanitizeForTTS later expands aloud. */
+/** One SAN token, as a source fragment so the patterns below stay in step.
+ *  NOTE the plain pawn push (`[a-h][1-8]`) — `SAN_TOKEN` omits it, so the
+ *  dictation counter does not see "e4 c6 d4 d5" as moves at all. That is a
+ *  separate, deliberately-tuned threshold and is left alone here; this
+ *  fragment check needs the full alphabet or "c4 and forced the bishop back"
+ *  reads as prose. */
+const SAN_SRC = '(?:[NBRQK][a-h]?[1-8]?x?[a-h][1-8]|[a-h]x[a-h][1-8]|[a-h][1-8]|O-O(?:-O)?)[+#]?';
+
+/** A sentence that begins mid-clause because the distiller cut the half that
+ *  carried its subject: "Kf8, and the knight must retreat" / "c4 and forced the
+ *  bishop back to d2".
+ *
+ *  The "and" arm requires that what follows is NOT another move, so a real
+ *  sentence like "e4 and d4 are both playable here" survives — there the moves
+ *  are the SUBJECT, not an orphaned predicate. */
+const SENTENCE_OPENS_MID_CLAUSE = new RegExp(`^${SAN_SRC}(?:,|\\s+and\\s+(?!${SAN_SRC}\\b))`);
+
 const SAN_TOKEN = /\b(?:[NBRQK][a-h]?[1-8]?x?[a-h][1-8][+#]?|[a-h]x?[a-h][1-8][+#]?|O-O(?:-O)?[+#]?)\b/g;
 
 /**
@@ -1176,6 +1201,56 @@ const SAN_TOKEN = /\b(?:[NBRQK][a-h]?[1-8]?x?[a-h][1-8][+#]?|[a-h]x?[a-h][1-8][+
  * a setup instead of the punchline. Explains-only + no dictation is the whole
  * trim.
  */
+/** Drop a leading recitation of the note's OWN anchor: "In the Nimzo, after
+ *  d4 Nf6 c4 e6 Nc3 Bb4, Black's main replies are…" → "Black's main replies
+ *  are…".
+ *
+ *  The student is LOOKING at that position — the note is only selected where
+ *  its anchor produces the board — so reciting the moves that reached it is
+ *  restating the picture, which the narration voice rules ban outright ("Don't
+ *  restate the board. Voice carries only what the picture doesn't"). Spoken
+ *  aloud it is also the worst of the droning David reported: `sanitizeForTTS`
+ *  expands every token, so a six-ply prefix becomes "after d4, knight f6, c4,
+ *  e6, knight c3, bishop b4…" before the teaching even starts.
+ *
+ *  It matters more than tidiness because the SAN-density rule below drops a
+ *  whole sentence at 3+ moves, and the recited prefix alone blows that budget.
+ *  That silenced notes whose actual teaching was well under it — a note is
+ *  MORE likely to recite its anchor precisely when it was anchored FROM that
+ *  recitation (see `scripts/derive-note-anchors.mjs`), so the two interact.
+ *
+ *  Conservative by construction: only a prefix, only when the recited moves are
+ *  literally this note's own anchor, and only when real teaching follows. A
+ *  sentence that recites some OTHER line is left alone for the SAN rule to
+ *  judge — that one IS dictation. */
+function stripAnchorRecitation(sentence: string, lineSan: string[] | undefined): string {
+  if (!sentence || !lineSan?.length) return sentence;
+  // "…after <moves>, <teaching>" / "…after <moves> <teaching>" — the recited
+  // run must START at this note's first move, so an unrelated line never matches.
+  const first = lineSan[0].replace(/[+#]/g, '');
+  const idx = sentence.search(new RegExp(`\\b${first.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`));
+  if (idx === -1) return sentence;
+  const head = sentence.slice(0, idx);
+  // Only strip an INTRODUCTORY clause — if substantial prose precedes the
+  // recitation, the moves are being used mid-argument, not as a preamble.
+  if (head.replace(/[^a-z]/gi, '').length > 40) return sentence;
+  let rest = sentence.slice(idx);
+  let consumed = 0;
+  for (const san of lineSan) {
+    const m = rest.match(new RegExp(`^\\s*(?:\\d+\\.(?:\\.\\.)?)?\\s*${san.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b[!?]*[,]?`));
+    if (!m) break;
+    rest = rest.slice(m[0].length);
+    consumed += 1;
+  }
+  // A stray one- or two-move mention is not a recitation; leave it be.
+  if (consumed < 3) return sentence;
+  const tail = rest.replace(/^\s*[,;:—-]*\s*/, '').trim();
+  // Nothing but the moves — the note said only where we are, which the board
+  // already says. Silence is the honest result.
+  if (tail.replace(/[^a-z]/gi, '').length < 12) return '';
+  return tail.charAt(0).toUpperCase() + tail.slice(1);
+}
+
 export function spokenBeatText(note: DanyaNote): string {
   // THE BAKE WINS. When a note has a committed spoken form it is already in its
   // verified final shape — reviewed, gated, and (for a note with no position)
@@ -1218,15 +1293,39 @@ export function spokenBeatText(note: DanyaNote): string {
   // position: , bishop to d2, bishop to e2) lead to a position…".
   const startsBroken = (s: string): boolean => {
     if (/^[,;:.)\]]/.test(s)) return true;
+    // "Kf8, and the knight must retreat, losing time." — a move token then a
+    // comma is a continuation of a list the distiller cut in half, not a
+    // sentence. Read aloud it lands as a bare "king f8" with no verb.
+    // "Kf8, and the knight must retreat, losing time." — a move token then a
+    // comma, or then a bare "and", is a clause whose SUBJECT was in the
+    // sentence before it ("White played c4 and forced the bishop back…"). Read
+    // aloud it lands as "c4 and forced…" with nobody doing it.
+    //
+    // Deliberately narrow: "dxe4 would be a threat once Black gets more pieces
+    // out" also opens on a move and is a complete, useful claim about THIS
+    // board. Only the two fragment shapes are refused.
+    if (SENTENCE_OPENS_MID_CLAUSE.test(s)) return true;
     const open = s.indexOf('(');
     const close = s.indexOf(')');
     return close !== -1 && (open === -1 || close < open);
   };
+  // A sentence that opens with a BACKWARD REFERENCE needs the sentence before
+  // it. Pruning is sentence-wise, so whenever one is dropped the next can be
+  // left stranded — heard on the real corpus as "It is one of the oldest and
+  // most analyzed openings" (what is?), "Instead, Black counterattacks
+  // immediately" (instead of WHAT?), "Kf8, and the knight must retreat".
+  //
+  // Either half alone is fine: a discourse connective is only broken when its
+  // antecedent went missing, which is why this is tracked across the loop
+  // rather than judged per sentence.
+  const DANGLING = /^(?:it|this|that|these|those|they|instead|however|then|also|additionally|therefore|thus|so|but|and|otherwise|conversely|similarly|meanwhile|here)\b/i;
   const kept: string[] = [];
+  let droppedPrevious = false;
   for (const raw of sentences) {
-    const sentence = raw.trim();
-    if (!sentence) continue;
-    if (startsBroken(sentence)) continue;
+    const sentence = stripAnchorRecitation(raw.trim(), note.lineSan);
+    if (!sentence) { droppedPrevious = true; continue; }
+    if (startsBroken(sentence)) { droppedPrevious = true; continue; }
+    if (droppedPrevious && DANGLING.test(sentence)) continue;
     // A sentence carrying 3+ moves is dictation, not teaching — the board
     // plays the moves; the voice carries only what the picture doesn't.
     //
@@ -1237,8 +1336,9 @@ export function spokenBeatText(note: DanyaNote): string {
     // quiet were the ones reciting a line the student is watching anyway.
     SAN_TOKEN.lastIndex = 0;
     const sanCount = sentence.match(SAN_TOKEN)?.length ?? 0;
-    if (sanCount >= 3) continue;
+    if (sanCount >= 3) { droppedPrevious = true; continue; }
     kept.push(sentence);
+    droppedPrevious = false;
   }
   return kept.join(' ');
 }

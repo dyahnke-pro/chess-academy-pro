@@ -17,6 +17,7 @@
 // model phrases teaching from them and decides nothing.
 import { Chess } from 'chess.js';
 import type { DanyaNote } from './danyaTeachingService';
+import { applyDerivedAnchors } from './noteAnchorOverrides';
 
 export interface TeachingsBundle {
   generatedAt: string;
@@ -77,7 +78,11 @@ const GENERIC_TOKENS = new Set([
 
 /** Build the lookup surface for one secondary corpus. Indexes are built once
  *  at module init (these files are static imports). */
-export function createSecondaryCorpus(key: string, data: TeachingsBundle): SecondaryCorpus {
+export function createSecondaryCorpus(key: string, bundle: TeachingsBundle): SecondaryCorpus {
+  // Derived anchors first, so EVERY index below (prefix, fen, opening, stats)
+  // is built from the corrected line. Applying it downstream of an index would
+  // leave that index keyed on the truncation — see noteAnchorOverrides.
+  const data: TeachingsBundle = { ...bundle, notes: applyDerivedAnchors(bundle.notes ?? []) };
   const byOpening = new Map<string, DanyaNote[]>();
   const byPrefix = new Map<string, DanyaNote[]>();
 
