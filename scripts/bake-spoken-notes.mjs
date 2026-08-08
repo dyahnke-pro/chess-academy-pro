@@ -104,23 +104,51 @@ Write the pattern with NO squares and NO move names at all. Teach the shape:
 which pieces, what they do to each other, what the opponent is forced into, and
 what that wins.
 
-  source: "Bishop d2 attacks the queen and knight simultaneously. The queen must
-           move to b2 to protect the knight, after which rook to b1 skewers the
-           queen and wins material."
-  good:   "The bishop hits queen and knight at once. When the queen steps aside
-           to defend, the rook lines up behind her and the skewer wins material."
+HOW TO STRIP THE GEOMETRY — apply these substitutions to the note in front of
+you. They are a procedure, not a script to copy; the words must come from the
+note you were given.
 
-  source: "Moving the queen to a5 to regain the pawn immediately gives White
-           tempi and neglects development."
-  good:   "The pawn is a gift, not a debt. Chasing it with the queen concedes
-           tempi and leaves development undone."
-  BAD:    "…hands the opponent free moves and leaves the rest of the army at
-           home."  ← "tempi" and "development" were the right words; replacing
-           them with plain English teaches the student less than the note did.
+  "Bishop d2 attacks…"      → name the piece, drop the square: "the bishop"
+  "must move to b2"         → say what the move ACHIEVES: "steps aside to defend"
+  "rook to b1 skewers"      → name the pattern: "the rook skewers"
+  "…along the a1-h8"        → "the long diagonal" / "the file" / "the rank"
+  "after 15.Nf5"            → "when the knight jumps in"
+
+KEEP THE NOTE'S OWN SUBJECT. If the note is about a pawn break on the queenside,
+the rewrite is about a pawn break on the queenside — never about a different
+piece or a different tactic. A rewrite that changes WHICH pieces are involved is
+a fabrication, and worse than no rewrite at all.
 
 Never write a letter-and-number square (like e4 or d2), and never write a move
 name (like Nf3 or Bxd5). If the idea cannot survive without them, reply with
 exactly: CANNOT_GENERALIZE`;
+
+/** The exemplars that caused the contamination, kept verbatim AFTER their
+ *  removal from the prompt. Deleting them from the instructions stops NEW
+ *  echoes; keeping them here is what lets the gate still recognise the old ones
+ *  — a shard resumed from a pre-fix output file, or a re-bake seeded from the
+ *  committed JSON, would otherwise carry them straight back in. A retired
+ *  exemplar is never re-retired. */
+const RETIRED_EXEMPLARS = `
+The bishop hits queen and knight at once. When the queen steps aside to defend,
+the rook lines up behind her and the skewer wins material.
+The pawn is a gift, not a debt. Chasing it with the queen concedes tempi and
+leaves development undone.
+hands the opponent free moves and leaves the rest of the army at home`;
+
+/** Every worked phrase this file shows the model, as one blob.
+ *
+ *  THE 2026-08-08 CONTAMINATION. The first bake's FLOATING_RULES carried two
+ *  fully-written "good:" sentences, and 310 notes came back echoing them — 68
+ *  sharing "the rest of the army", 65 opening "the bishop hits queen and knight
+ *  at once". A Philidor prophylaxis note and a K+P endgame both came back as
+ *  skewer prose. My own exemplar, reflected off the model, presented as corpus
+ *  teaching. The gate never looked: `longestSharedRun` compared the output only
+ *  against the SOURCE NOTE, so a phrase lifted from the PROMPT was invisible to
+ *  it. Rewriting the exemplars as a substitution procedure (above) removes the
+ *  polished sentence there was to copy; this constant closes the hole for good,
+ *  including any exemplar a future edit adds. */
+const EXEMPLAR_TEXT = [SHARED, ANCHORED_RULES, FLOATING_RULES, RETIRED_EXEMPLARS].join(' ');
 
 // ── gates ────────────────────────────────────────────────────────────────────
 
@@ -153,6 +181,91 @@ function longestSharedRun(source, out) {
   return longest;
 }
 
+/** Substantive chess content — WHICH pieces, WHICH tactic. Deliberately excludes
+ *  geometry words (square/file/rank/diagonal/centre/flank), because generalising
+ *  "f1" into "the diagonal" is the floating rewrite obeying its own rule, and
+ *  scoring that as invented content would punish it for being correct. */
+const PIECE_OF_SAN = { k: 'king', q: 'queen', r: 'rook', b: 'bishop', n: 'knight' };
+const SUBSTANTIVE = new Set([
+  'king', 'queen', 'rook', 'bishop', 'knight', 'pawn',
+  'fork', 'pin', 'skewer', 'discovered', 'sacrifice', 'mate', 'check', 'stalemate',
+  'outpost', 'tempo', 'prophylaxis', 'zugzwang', 'compensation', 'luft', 'fianchetto',
+  'overloaded', 'zwischenzug', 'minority', 'backward', 'isolated', 'doubled', 'passed',
+  'opposition', 'castle', 'promote', 'promotion', 'blockade', 'fortress', 'triangulation',
+  'deflection', 'decoy', 'battery', 'x-ray', 'trapped', 'hanging', 'perpetual',
+]);
+const SYNONYM = {
+  tempi: 'tempo', discovery: 'discovered', sac: 'sacrifice', checkmate: 'mate',
+  castling: 'castle', castled: 'castle', prophylactic: 'prophylaxis', pawns: 'pawn',
+  xray: 'x-ray', promotes: 'promote', queening: 'promote', sacrificed: 'sacrifice',
+  sacrificing: 'sacrifice', pinned: 'pin', forked: 'fork', skewers: 'skewer',
+};
+
+/** The chess a text ASSERTS. Source SAN is expanded first — a note that writes
+ *  "Bd2" is talking about a bishop, so a rewrite that says "the bishop" is
+ *  faithful, not inventive. */
+function substantiveTerms(text, expandSan) {
+  const out = new Set();
+  if (expandSan) {
+    SAN.lastIndex = 0;
+    for (const m of String(text).matchAll(SAN)) {
+      if (m[0].startsWith('O-O')) { out.add('king'); out.add('rook'); out.add('castle'); continue; }
+      const piece = PIECE_OF_SAN[m[0][0].toLowerCase()];
+      out.add(piece ?? 'pawn');
+    }
+  }
+  for (const raw of String(text).toLowerCase().replace(/[^a-z\s-]/g, ' ').split(/\s+/)) {
+    const w = SYNONYM[raw] ?? raw;
+    if (SUBSTANTIVE.has(w)) out.add(w);
+  }
+  return out;
+}
+
+/** Does the rewrite talk about the same chess as the note? Flags only the clear
+ *  case — three or more pieces/tactics asserted, none of them the note's — which
+ *  is what a hallucinated rewrite looks like and what a faithful reword never
+ *  does. `dt-sw` (a Philidor prophylaxis note that came back as bishop-queen-
+ *  knight-rook-skewer prose) is the case this exists for. */
+export function fidelityBreach(source, out) {
+  const src = substantiveTerms(source, true);
+  const said = [...substantiveTerms(out, true)];
+  if (said.length < 3) return null;                 // too little asserted to judge
+  const foreign = said.filter((t) => !src.has(t));
+  if (foreign.length >= 3 && (said.length - foreign.length) / said.length <= 0.25) {
+    return `different subject (asserts ${foreign.slice(0, 4).join(', ')}; note has none)`;
+  }
+  return null;
+}
+
+/** The vocabulary a chess academy is FOR. David, on catching the first bake
+ *  turn "gives White tempi" into "hands the opponent free moves": "Tempi was the
+ *  better word." The prompt already asks for these to survive; asking is not a
+ *  mechanism, so this is the one that makes it stick — and because the reason is
+ *  fed back to the model on retry, it names the exact word to put back. */
+const ADVANCED = [
+  'prophyla', 'zugzwang', 'zwischenzug', 'luft', 'fianchett', 'outpost', 'initiative',
+  'compensation', 'overload', 'overprotect', 'minority attack', 'opposition', 'isolani',
+  'undermin', 'triangulat', 'fortress', 'desperado', 'interference', 'clearance',
+  'en passant', 'underpromot', 'zwisch',
+];
+const saysTempo = (s) => s.includes('tempo') || s.includes('tempi');
+
+/** A rewrite that carries a term is fine; a rewrite that carries none of the
+ *  one or two the note leaned on has taught the student less than the note did.
+ *  Only enforced at one or two terms — a note using four cannot fit them all
+ *  into two spoken sentences, and demanding it would just force a fallback to
+ *  the longer original. */
+function vocabularyLoss(source, out) {
+  const s = source.toLowerCase();
+  const b = out.toLowerCase();
+  const used = ADVANCED.filter((t) => s.includes(t));
+  if (saysTempo(s)) used.push('tempo');
+  if (used.length === 0 || used.length > 2) return null;
+  const kept = used.filter((t) => (t === 'tempo' ? saysTempo(b) : b.includes(t)));
+  if (kept.length > 0) return null;
+  return `dropped the note's chess term "${used[0]}" — keep it, do not simplify it away`;
+}
+
 /** Returns a rejection reason, or null when the rewrite is clean. */
 export function gateSpoken(source, out, kind) {
   const text = (out ?? '').trim();
@@ -180,7 +293,14 @@ export function gateSpoken(source, out, kind) {
 
   const run = longestSharedRun(source, text);
   if (run >= 6) return `lifted ${run}-word phrase`;
-  return null;
+
+  // The prompt is not a source. Five words is a tighter bar than the source's
+  // six because there is no innocent reason to share a phrase with the
+  // INSTRUCTIONS — an echo here is the model reciting me, not the corpus.
+  const echo = longestSharedRun(EXEMPLAR_TEXT, text);
+  if (echo >= 5) return `echoes the prompt (${echo} words)`;
+
+  return fidelityBreach(source, text) ?? vocabularyLoss(source, text);
 }
 
 // ── the bake ─────────────────────────────────────────────────────────────────
@@ -256,6 +376,14 @@ async function main() {
   // the committed bake grows.
   if (shardCount > 1) notes = notes.filter((_, i) => i % shardCount === shardIdx);
   if (kindOnly) notes = notes.filter((n) => n.kind === kindOnly);
+  // `--only ids.json` re-bakes a named set. Used after a gate is tightened and
+  // the notes it now rejects are pulled back out of the bake: without it, the
+  // run would also re-attempt every note that already failed three times, which
+  // is thousands of calls that will fail again for the same reason.
+  if (args.includes('--only')) {
+    const only = new Set(JSON.parse(readFileSync(resolve(ROOT, args[args.indexOf('--only') + 1]), 'utf8')));
+    notes = notes.filter((n) => only.has(n.id));
+  }
   if (limit) notes = notes.slice(0, limit);
 
   console.log(`[bake] shard ${shardIdx + 1}/${shardCount} → ${notes.length} to bake (${Object.keys(alreadyDone).length} already committed) → ${outPath}`);

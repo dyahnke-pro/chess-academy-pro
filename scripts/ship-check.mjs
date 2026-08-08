@@ -224,6 +224,11 @@ const GATE_TESTS = [
   'src/data/groundingLessons.test.ts',    // lesson sublines (deep Watch/Learn tails) sound for the student (engine)
   'src/data/groundingPlans.test.ts',      // middlegame-plan lines sound for the student (engine)
   'src/data/lessons/groundingContinuation.test.ts', // no NEW out-of-book decaying-tail line (stage-2 best-move tripwire)
+  // The bake IS what the voice says, and it is committed data — so the file
+  // that ships can drift from the offline gate that produced it. Re-runs the
+  // real gate over the real bake (2026-08-08: 342 lines had come back echoing
+  // the prompt's own example, turning a Philidor note into skewer prose).
+  'src/services/spokenBakeFidelity.test.ts',
   // ── WEAKNESS-LOOP / BUCKET-DELIVERY GATES (David 2026-07-06 "log and audit the buckets"). ──
   'src/services/bucketPipelineAudit.test.ts', // captured answer → right bucket + drill (delivery) + ranking/dedup/SRS (organization)
   'src/hooks/useDiscussionPractice.test.ts',  // faucet: rating-adaptive slip picker, good-move non-blocking line, response logging
