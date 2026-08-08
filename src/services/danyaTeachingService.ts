@@ -887,10 +887,79 @@ export function spokenTacticNote(args: {
     if (!text) continue;
     const low = text.toLowerCase();
     if (!patternWords.some((w) => low.includes(w))) continue;
+    // NO GEOMETRY. This tier is reached by PATTERN, so the note is spoken over
+    // a board it was never written about — its own example's squares would be
+    // false about the position in front of the student. The bake generalizes
+    // them away; a note that still names one has not been baked yet (or could
+    // not be), and is not safe to speak here. Caught live: a fork drill offered
+    // "if the opponent captures on f6…" over a puzzle with nothing on f6.
+    //
+    // This doubles as the bake-readiness check, so coverage rises on its own as
+    // the bake lands rather than needing a flag day.
+    if (NAMES_A_SQUARE.test(text)) continue;
     args.seenIds?.add(n.id);
     return { id: n.id, text };
   }
   return null;
+}
+
+/** A board square named in prose ("f6", "d4"). Case-sensitive on the file so
+ *  ordinary capitalised words never trip it. */
+const NAMES_A_SQUARE = /\b[a-h][1-8]\b/;
+
+/** Lichess puzzle themes → the detector keys above.
+ *
+ *  A puzzle already knows what pattern it is; the corpus has thousands of notes
+ *  about those patterns. The drill was asking the wrong question — it looked a
+ *  note up by the PUZZLE'S POSITION, and a Lichess puzzle position is
+ *  essentially never in a corpus of taught lines, so the lookup fired almost
+ *  never. The theme is the key that actually matches.
+ *
+ *  Vocabularies do not agree (Lichess camelCases and splits finely), so this is
+ *  the translation layer. Themes describing DIFFICULTY or PHASE — `short`,
+ *  `long`, `endgame`, `crushing` — are deliberately absent: they say nothing
+ *  about what the student should learn. */
+const PUZZLE_THEME_TO_TACTIC: Record<string, string> = {
+  fork: 'fork', doubleAttack: 'fork',
+  pin: 'pin',
+  skewer: 'skewer', xRayAttack: 'skewer',
+  discoveredAttack: 'discovery',
+  doubleCheck: 'double_check',
+  backRankMate: 'back_rank',
+  deflection: 'removal_of_guard', attraction: 'removal_of_guard',
+  decoy: 'removal_of_guard', clearance: 'removal_of_guard',
+  interference: 'removal_of_guard', overloading: 'removal_of_guard',
+  capturingDefender: 'removal_of_guard',
+  sacrifice: 'sacrifice',
+  trappedPiece: 'trapped_piece',
+  hangingPiece: 'hanging',
+  mate: 'mate_threat', mateIn1: 'mate_threat', mateIn2: 'mate_threat',
+  mateIn3: 'mate_threat', mateIn4: 'mate_threat', mateIn5: 'mate_threat',
+  smotheredMate: 'mate_threat', arabianMate: 'mate_threat', anastasiaMate: 'mate_threat',
+  bodenMate: 'mate_threat', doubleBishopMate: 'mate_threat', hookMate: 'mate_threat',
+};
+
+/** ONE corpus note teaching the pattern a PUZZLE is about, for the moment
+ *  AFTER it has been graded.
+ *
+ *  Never before or during: while the student is solving, the board is the
+ *  lesson, and naming the pattern IS the answer (narration rule 8 — drill
+ *  positions stay silent). Afterwards it is the teaching, and it matters most
+ *  on a MISS, where the note is precisely the idea they did not have.
+ *
+ *  The note it returns is geometry-free by construction — `spokenTacticNote`
+ *  serves the baked form, and a floating note's ORIGINAL prose names its own
+ *  example's squares, which would be false about the position the student is
+ *  still looking at. */
+export function tacticNoteForPuzzleThemes(args: {
+  themes: string[];
+  seenIds?: Set<string>;
+}): { id: string; text: string } | null {
+  const types = Array.from(new Set(
+    args.themes.map((t) => PUZZLE_THEME_TO_TACTIC[t]).filter((t): t is string => Boolean(t)),
+  ));
+  if (types.length === 0) return null;
+  return spokenTacticNote({ types, phase: 'middlegame', seenIds: args.seenIds });
 }
 
 /** The words a note must actually SAY to count as teaching a given pattern.
