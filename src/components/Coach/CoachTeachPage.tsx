@@ -19,6 +19,7 @@ import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
+import { buildVoicePackage, describeVoicePackage, type VoicePackage } from '../../services/voicePackage';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -5079,9 +5080,11 @@ export function CoachTeachPage(): JSX.Element {
     moveTo: string;
     studentColor: 'white' | 'black';
   }): {
-    alertLine: string | null;
+    /** The utterance AND its provenance, from one object. Callers speak
+     *  `pkg.spoken` and log `pkg.kept` — never a separately-assembled string,
+     *  which is how the log and the voice drifted apart. */
+    pkg: VoicePackage;
     alertArrow: BoardArrow | null;
-    teachLine: string | null;
     leadEyeArrows: BoardArrow[];
     factLines: string[];
   } => {
@@ -5250,22 +5253,22 @@ export function CoachTeachPage(): JSX.Element {
       }
     } catch { /* commentary is a bonus, never a blocker */ }
 
-    // THE ORDER IS THE PRIORITY, and the computed read now outranks the note.
-    //
-    // It was `gemLine ?? announceLine ?? noteLine`, with no computed lane in the
-    // chain at all — so threat detection, tactics and the positional read could
-    // never reach the student's ear, and a corpus note spoke in their place on
-    // every ply that had one. That is exactly what David reported: "I heard no
-    // threat detection, no tactics, no positional read. Nothing!!"
-    //
-    // The corpus is still 90% of what the coach says; the detectors are the
-    // urgent 10%, and an interrupt that cannot preempt is not an interrupt. So
-    // the note keeps its place — it fills silence, it no longer displaces a
-    // fact. Silence when none fired: restating the board teaches nothing.
+    // THE PACKAGE. Priority is a declared rank in `voicePackage`, not a `??`
+    // chain here, and every entry is verified against the board it was computed
+    // from before it may be spoken. What comes back is one object that is both
+    // the utterance and the log — the divergence between those two is what let
+    // three foreign notes reach David as "the pin on the board".
+    const pkg = buildVoicePackage([
+      ...(gemLine ? [{ kind: 'gem' as const, text: gemLine, fen: args.fenAfterReply }] : []),
+      ...(alertLine ? [{ kind: 'alert' as const, text: alertLine, fen: args.fenAfterReply }] : []),
+      ...(announceLine ? [{ kind: 'opening' as const, text: announceLine, fen: args.fenAfterReply }] : []),
+      ...(computedLine ? [{ kind: 'computed' as const, text: computedLine, fen: args.fenAfterReply }] : []),
+      ...(noteLine ? [{ kind: 'note' as const, text: noteLine, fen: args.fenAfterReply }] : []),
+    ]);
+
     return {
-      alertLine,
+      pkg,
       alertArrow,
-      teachLine: gemLine ?? announceLine ?? computedLine ?? noteLine,
       leadEyeArrows,
       factLines,
     };
@@ -6006,27 +6009,31 @@ export function CoachTeachPage(): JSX.Element {
                   moveTo: im.to,
                   studentColor: playerColor,
                 });
-                // Not handed to a model any more — logged, so the audit stream
-                // still shows WHY the coach said what it said on this move.
-                if (instant.factLines.length > 0) {
-                  void logAppAudit({
-                    kind: 'coach-narration-spoken',
-                    category: 'subsystem',
-                    source: 'CoachTeachPage.instantFacts',
-                    summary: instant.factLines.join(' ').slice(0, 300),
-                    fen: ip.fen(),
-                  });
-                }
-                if (instant.alertLine) {
-                  lines.push(instant.alertLine);
-                  if (instant.alertArrow) {
+                // THE PACKAGE IS THE UTTERANCE. This used to log `factLines`
+                // while speaking a separately-assembled `alertLine`/`teachLine`
+                // pair — two truths for one turn, so the audit could report
+                // "Coaching note for the pin on the board" while the voice said
+                // a bare, unverified sentence. Both now come from `instant.pkg`,
+                // which was verified fact-by-fact against the board it was
+                // computed from.
+                void logAppAudit({
+                  kind: 'coach-narration-spoken',
+                  category: 'subsystem',
+                  source: 'CoachTeachPage.voicePackage',
+                  summary: `${describeVoicePackage(instant.pkg)} — ${instant.pkg.spoken.slice(0, 240)}`,
+                  narrationText: instant.pkg.spoken,
+                  fen: ip.fen(),
+                });
+                if (instant.pkg.spoken) {
+                  lines.push(instant.pkg.spoken);
+                  // The alert's arrow rides only when the alert actually
+                  // SURVIVED into the utterance — an arrow pointing at a claim
+                  // the package refused is the same lie drawn instead of said.
+                  if (instant.alertArrow && instant.pkg.kept.some((f) => f.kind === 'alert')) {
                     const arrow = instant.alertArrow;
                     void padDone.then(() => setArrows((prev) => uniqueArrows([...prev, arrow]).slice(0, 4)));
                   }
-                }
-                if (instant.teachLine) {
-                  lines.push(instant.teachLine);
-                  hasInstantTeaching = true;
+                  if (instant.pkg.kept.some((f) => f.kind !== 'alert')) hasInstantTeaching = true;
                 }
                 if (instant.leadEyeArrows.length > 0) {
                   const leadEye = instant.leadEyeArrows;
