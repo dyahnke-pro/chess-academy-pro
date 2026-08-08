@@ -850,6 +850,11 @@ export const TACTIC_TYPE_CONCEPTS: Record<string, string[]> = {
   trapped_piece: ['trapped-piece', 'queen-trap', 'trapping', 'trap', 'traps', 'tactics'],
   hanging: ['hanging-piece', 'hanging-pieces', 'undefended-piece', 'material-gain', 'tactical-awareness', 'calculation'],
   sacrifice: ['sacrifice', 'piece-sacrifice', 'exchange-sacrifice', 'pawn-sacrifice', 'compensation', 'tactics'],
+  // Not tactics the live detectors emit — these exist for PUZZLE themes, where
+  // Lichess labels a pattern the corpus teaches but no board-reader announces.
+  passed_pawn: ['passed-pawn', 'pawn-promotion', 'promotion', 'outside-passed-pawn'],
+  attack: ['kingside-attack', 'attack', 'king-hunt', 'pawn-storm'],
+  defense: ['defense', 'prophylaxis', 'counterplay'],
 };
 
 /** ONE corpus note teaching a tactic that is PROVEN on the board right now,
@@ -919,7 +924,7 @@ const NAMES_A_SQUARE = /\b[a-h][1-8]\b/;
  *  the translation layer. Themes describing DIFFICULTY or PHASE — `short`,
  *  `long`, `endgame`, `crushing` — are deliberately absent: they say nothing
  *  about what the student should learn. */
-const PUZZLE_THEME_TO_TACTIC: Record<string, string> = {
+export const PUZZLE_THEME_TO_TACTIC: Record<string, string> = {
   fork: 'fork', doubleAttack: 'fork',
   pin: 'pin',
   skewer: 'skewer', xRayAttack: 'skewer',
@@ -933,6 +938,9 @@ const PUZZLE_THEME_TO_TACTIC: Record<string, string> = {
   sacrifice: 'sacrifice',
   trappedPiece: 'trapped_piece',
   hangingPiece: 'hanging',
+  advancedPawn: 'passed_pawn', promotion: 'passed_pawn',
+  kingsideAttack: 'attack', queensideAttack: 'attack', exposedKing: 'attack',
+  defensiveMove: 'defense',
   mate: 'mate_threat', mateIn1: 'mate_threat', mateIn2: 'mate_threat',
   mateIn3: 'mate_threat', mateIn4: 'mate_threat', mateIn5: 'mate_threat',
   smotheredMate: 'mate_threat', arabianMate: 'mate_threat', anastasiaMate: 'mate_threat',
@@ -977,6 +985,9 @@ const TACTIC_PATTERN_WORDS: Record<string, string[]> = {
   trapped_piece: ['trap', 'trapped'],
   hanging: ['hanging', 'undefended', 'en prise', 'loose piece'],
   sacrifice: ['sacrifice', 'sacrific'],
+  passed_pawn: ['passed pawn', 'promote', 'promotion', 'queening'],
+  attack: ['attack', 'assault', 'storm'],
+  defense: ['defend', 'defence', 'defense'],
 };
 
 export function buildDanyaTeachingBlock(args: {

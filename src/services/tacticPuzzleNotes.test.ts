@@ -6,9 +6,10 @@
 // A puzzle already declares what pattern it is, and the corpus has thousands of
 // notes about those patterns.
 import { describe, it, expect, beforeAll } from 'vitest';
-import { tacticNoteForPuzzleThemes } from './danyaTeachingService';
+import { tacticNoteForPuzzleThemes, PUZZLE_THEME_TO_TACTIC } from './danyaTeachingService';
 import { loadFullCorpus } from '../test/loadFullCorpus';
 import puzzles from '../data/puzzles.json';
+
 
 interface Puzzle { id: string; fen: string; themes: string[] }
 
@@ -53,11 +54,17 @@ describe('tactic notes by puzzle theme', () => {
     for (const p of sample) {
       // Fresh set per puzzle: session dedupe is a UX concern, not a coverage one.
       const hit = tacticNoteForPuzzleThemes({ themes: p.themes ?? [] });
-      if ((p.themes ?? []).some((t) => t !== 'short' && t !== 'long')) mappable += 1;
+      if ((p.themes ?? []).some((t) => t in PUZZLE_THEME_TO_TACTIC)) mappable += 1;
       if (hit) fired += 1;
     }
     const pct = (fired / sample.length) * 100;
-    console.log(`[tactics] ${fired}/${sample.length} puzzles get a themed note (${pct.toFixed(1)}%)`);
+    // Two numbers, and the gap between them is the diagnosis. Measured, they
+    // are EQUAL: every puzzle naming a pattern we understand gets a note, so
+    // the shortfall is VOCABULARY (themes we do not map), never corpus depth.
+    // The puzzles that get nothing are tagged only for difficulty or phase --
+    // short, crushing, advantage, master -- which teach nothing by themselves.
+    console.log(`[tactics] ${mappable}/${sample.length} puzzles name a known pattern; ${fired} got a note (${pct.toFixed(1)}%)`);
+    expect(fired).toBeLessThanOrEqual(mappable);
     // A floor, not a target — it may only rise as the corpus grows.
     expect(pct).toBeGreaterThan(50);
   }, 300_000);
