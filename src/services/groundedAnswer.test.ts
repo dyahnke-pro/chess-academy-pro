@@ -814,7 +814,13 @@ describe('assemblePositionAssessment — Phase 1 (who is winning / eval readout)
     expect(a!.facts).toMatch(/You're clearly worse — about 1\.2 points\./);
   });
   it('calls a balanced position balanced', () => {
-    expect(assemblePositionAssessment({ evalCp: 10, mateIn: null, studentColor: 'white' })!.facts).toBe('The position is roughly balanced.');
+    // Asserts the READ, not one exact stem. The assessment rotates between
+    // hand-written variants (narration voice rule 9 — a line spoken several
+    // times a game must not always be the same recording), and pinning the
+    // literal string would make the gate a spelling test rather than a
+    // correctness one.
+    expect(assemblePositionAssessment({ evalCp: 10, mateIn: null, studentColor: 'white' })!.facts)
+      .toMatch(/balanced|level|concrete/i);
   });
   it('voices a forced mate for / against the student', () => {
     expect(assemblePositionAssessment({ evalCp: null, mateIn: 3, studentColor: 'white' })!.facts).toContain('You have a forced mate in 3.');
@@ -825,7 +831,10 @@ describe('assemblePositionAssessment — Phase 1 (who is winning / eval readout)
       evalCp: -250, mateIn: null, studentColor: 'white',
       tactics: tactics({ hanging: [{ square: 'd5', piece: 'n', color: 'w' }] }),
     });
-    expect(a!.facts).toContain("You're losing — about 2.5 points down."); // -250 white-POV, student is White
+    // -250 white-POV, student is White: the DIRECTION and the MAGNITUDE are
+    // the contract; the sentence around them rotates.
+    expect(a!.facts).toMatch(/2\.5/);
+    expect(a!.facts).toMatch(/losing|down|against you|lost/i);
     expect(a!.facts).toContain('Your knight on d5 is hanging.');
     expect(a!.sources).toContain('board:chess.js');
   });
