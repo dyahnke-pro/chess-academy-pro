@@ -5109,6 +5109,27 @@ export function CoachTeachPage(): JSX.Element {
     leadEyeArrows: BoardArrow[];
     factLines: string[];
   } => {
+    // THE GAME IS OVER — SAY NOTHING MORE. David's 2026-08-08 run ended in
+    // checkmate and the coach said: "Checkmate. Watch out — black has a
+    // checkmate available from b8. Their rook on h8 and queen on h4 line up on
+    // the same h-file, and you have a rook that moves along it. Worth noticing."
+    //
+    // Every clause is true and every one is absurd once the game has ended.
+    // "Watch out" warns about a future that no longer exists; "worth noticing"
+    // invites a plan on a board nobody will move again. The detectors have no
+    // concept of a finished game — they read a position, and a mated position
+    // is still a position — so the check belongs here, before they run.
+    //
+    // The result itself is announced by the event line (`buildInstantReplyLine`
+    // handles checkmate), and the post-game review is where the game gets
+    // discussed. This lane's job is help for the NEXT move, and there isn't one.
+    try {
+      const over = new Chess(args.fenAfterReply);
+      if (over.isGameOver()) {
+        return { pkg: buildVoicePackage([]), alertArrow: null, leadEyeArrows: [], factLines: [] };
+      }
+    } catch { /* unreadable FEN — fall through and let the lanes gate it */ }
+
     const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
     const AV: Record<string, number> = { n: 3, b: 3, r: 5, q: 9 };
     const factLines: string[] = [];

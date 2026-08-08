@@ -86,3 +86,36 @@ describe('the voice package', () => {
     expect(pkg.dropped.map((d) => d.reason)).toEqual(['over budget']);
   });
 });
+
+// From David's live Vienna run, 2026-08-08.
+describe('the join', () => {
+  it('THE REGRESSION: a following fact starts a sentence, not a clause', () => {
+    // He heard: "That takes your pawn. the knight on e4 sits on an outpost…"
+    // and "There's a real pin here for you — look for it. the knight on e4…".
+    // Each producer writes a standalone sentence; some open lowercase because
+    // they were authored to be spliced mid-sentence. After a full stop that
+    // lowercase reads as a mistake and HEARS as one — the voice drops pitch as
+    // if continuing a clause.
+    const fen = 'rnbqkb1r/ppp2ppp/8/3pP3/4n3/2N5/PPPP2PP/R1BQKBNR w KQkq - 0 5';
+    const pkg = buildVoicePackage([
+      { kind: 'alert', text: 'That takes your pawn.', fen },
+      { kind: 'computed', text: 'the knight on e4 sits on an outpost no pawn can challenge.', fen },
+    ]);
+    expect(pkg.spoken).toBe('That takes your pawn. The knight on e4 sits on an outpost no pawn can challenge.');
+  });
+
+  it('leaves a move name lowercase — capitalising a SAN would be wrong', () => {
+    const fen = 'rnbqkb1r/ppp2ppp/8/3pP3/4n3/2N5/PPPP2PP/R1BQKBNR w KQkq - 0 5';
+    const pkg = buildVoicePackage([
+      { kind: 'alert', text: 'Careful.', fen },
+      { kind: 'computed', text: 'dxe5 would open the file.', fen },
+    ]);
+    expect(pkg.spoken).toContain('dxe5');
+    expect(pkg.spoken).not.toContain('Dxe5');
+  });
+
+  it('does not touch a first fact that is already a sentence', () => {
+    const fen = 'rnbqkb1r/ppp2ppp/8/3pP3/4n3/2N5/PPPP2PP/R1BQKBNR w KQkq - 0 5';
+    expect(buildVoicePackage([{ kind: 'alert', text: 'Careful here.', fen }]).spoken).toBe('Careful here.');
+  });
+});

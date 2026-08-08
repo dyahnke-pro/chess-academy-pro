@@ -154,7 +154,28 @@ export function buildVoicePackage(facts: VoiceFact[], maxFacts = 3): VoicePackag
     kept.push({ ...f, text: result.text });
   }
 
-  return { spoken: kept.map((f) => f.text).join(' '), kept, dropped };
+  // SENTENCE CASE AT THE JOIN. David's 2026-08-08 run: "That takes your pawn.
+  // the knight on e4 sits on an outpost…" and "There's a real pin here for you
+  // — look for it. the knight on e4 sits…". Each fact is written as a standalone
+  // sentence by its own producer, and some start lowercase because they were
+  // authored to be spliced mid-sentence. Joined with a space after a full stop,
+  // that lowercase reads as a mistake and HEARS as one — the TTS drops its
+  // pitch as if continuing a clause.
+  //
+  // Fixed here rather than in each producer: this is the only place that knows
+  // a fact is about to follow a sentence boundary.
+  const sentence = (t: string, isFirst: boolean): string => {
+    const trimmed = t.trim();
+    if (!trimmed) return trimmed;
+    // Leave an intentional lowercase opener alone when it is a SAN token
+    // ("dxe5 wins a pawn") — capitalising a move name would be wrong.
+    if (/^[a-h][1-8x]/.test(trimmed) || /^[KQRBN]x?[a-h][1-8]/.test(trimmed)) return trimmed;
+    return isFirst || /^[A-Z]/.test(trimmed)
+      ? trimmed
+      : trimmed[0].toUpperCase() + trimmed.slice(1);
+  };
+  const spoken = kept.map((f, i) => sentence(f.text, i === 0)).join(' ');
+  return { spoken, kept, dropped };
 }
 
 /** One-line summary for the audit stream, built from the SAME object that was
