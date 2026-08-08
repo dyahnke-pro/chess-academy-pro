@@ -1371,6 +1371,13 @@ export function buildReviewSegments(
       narration && !patternNoteSpoken && !m.isCoachMove &&
       (m.classification === 'blunder' || m.classification === 'mistake')
     ) {
+      // ONE ATTEMPT per game, not one SUCCESS. The flag used to trip only when
+      // a note was found, so a game with several blunders re-ran the detector
+      // and a 40-candidate corpus scan on every one of them — enough to time
+      // out the Opera Game review at 5s. Both calls are heavy and synchronous,
+      // and the beat is once-per-game either way, so the first flagged move is
+      // the only one that pays.
+      patternNoteSpoken = true;
       try {
         const types = detectTactics(fenPair.fenBefore).tactics
           .map((t) => t.type)
@@ -1378,10 +1385,7 @@ export function buildReviewSegments(
         const hit = types.length > 0
           ? spokenTacticNote({ types, phase: 'middlegame', seenIds: patternNoteSeen })
           : null;
-        if (hit) {
-          narration = `${narration} ${hit.text}`;
-          patternNoteSpoken = true;
-        }
+        if (hit) narration = `${narration} ${hit.text}`;
       } catch { /* the note is a bonus, never a blocker */ }
     }
     // Don't scold a near-FORCED recapture the engine only dings as an inaccuracy/
