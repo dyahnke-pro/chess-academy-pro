@@ -1040,6 +1040,36 @@ class VoiceService {
    */
   async speakPackage(pkg: { spoken: string; kept: Array<{ kind: string; text: string }> }): Promise<void> {
     if (!pkg.spoken.trim()) return;              // silence is a valid package
+
+    // NOT TWICE. David 2026-08-08, from a ply-by-ply transcript of a Pirc: the
+    // identical tactic note spoke on all SIXTEEN plies, and the opening note
+    // nine times running. Every per-line gate passed it — each sentence was
+    // true, speakable, and grounded — because repetition is not a property of
+    // a line. It is a property of the STREAM, so it can only be caught where
+    // the whole stream passes, which is here.
+    //
+    // A per-turn `seenIds` set exists at some call sites and is the right idea,
+    // but it is per-surface and per-session-object: nothing stopped two
+    // surfaces, or two turns, from saying the same sentence. This is the
+    // backstop that does not depend on any caller remembering.
+    const key = pkg.spoken.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 120);
+    if (this.recentlySpoken.includes(key)) {
+      void import('./appAuditor').then(({ logAppAudit }) => {
+        void logAppAudit({
+          kind: 'coach-narration-spoken',
+          category: 'narration',
+          source: 'voiceService.speakPackage.repeat',
+          summary: `suppressed a repeat: ${pkg.spoken.slice(0, 120)}`,
+          narrationText: pkg.spoken,
+        });
+      });
+      return;
+    }
+    this.recentlySpoken.push(key);
+    // Small window on purpose. A genuine teaching line CAN recur later in a
+    // long game and be welcome then; what makes a coach sound broken is the
+    // same sentence back-to-back.
+    if (this.recentlySpoken.length > 12) this.recentlySpoken.shift();
     // Dynamic import, matching the rest of this file: voiceService must not
     // take a hard dependency on appAuditor.
     void import('./appAuditor').then(({ logAppAudit }) => {
@@ -1735,6 +1765,17 @@ class VoiceService {
    *
    *  A real user never has this key. Nothing in the app writes it. */
   private auditMutedCache: boolean | null = null;
+
+  /** Recently-spoken utterance keys, for the repeat guard in `speakPackage`.
+   *  Reset by `resetSpokenMemory()` when a new game/lesson starts. */
+  private recentlySpoken: string[] = [];
+
+  /** Forget what has been said. Call when a NEW game or lesson begins — the
+   *  repeat guard must not silence a line in this game because the last game
+   *  happened to use it. */
+  resetSpokenMemory(): void {
+    this.recentlySpoken = [];
+  }
 
   private isAuditMuted(): boolean {
     if (this.auditMutedCache !== null) return this.auditMutedCache;
