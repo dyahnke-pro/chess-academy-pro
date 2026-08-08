@@ -5345,25 +5345,62 @@ export function CoachTeachPage(): JSX.Element {
     //
     // Measured together: 13.4% → 99.2% of student plies with something true to
     // say. Five plies in 656 stay silent, which is the honest number.
-    let fallbackLine: string | null = null;
-    if (!gemLine && !alertLine && !announceLine && !computedLine && !noteLine) {
+    // 🔒 THE CORPUS IS NOT A FALLBACK. It runs whenever the exact-position tier
+    // found nothing — NOT only when the detectors are also silent.
+    //
+    // It was gated behind `!gemLine && !alertLine && !computedLine && !noteLine`,
+    // and `computedLine` fires on most plies, so in practice the corpus tier
+    // was switched OFF for an entire game. David's 2026-08-08 audit log is that
+    // bug in full: 88 spoken lines across a whole game, every one of them an
+    // alert or a computed read or a positional read, and not one corpus note —
+    // "Narrations still missing. I hear no Naroditsky corpus."
+    //
+    // It also inverts the locked ratio (CLAUDE.md): "90% of what needs to be
+    // said to user lives within these notes. The other 10% comes from threat
+    // and gem detection." The 10% was suppressing the 90%.
+    //
+    // Ordering is not this function's job and never was — `buildVoicePackage`
+    // declares the rank and enforces the budget, which is the whole reason the
+    // package exists ("Order is a declared rank, not the accident of a `??`
+    // chain"). Computing a fact and letting the package decide is the contract;
+    // deciding here by not computing it is the same `??` chain wearing an `if`.
+    let teachingLine: string | null = null;
+    if (!noteLine) {
       try {
-        const src = teachingSourceForBoard(history, args.fenAfterReply, null);
+        // 🔒 PASS THE OPENING. It was `null`, which switches OFF
+        // `noteOpeningConflicts` — the guard whose entire job is stopping a
+        // note tagged for one opening from teaching in another. Walking the
+        // Vienna with it null, ply 1 spoke "The Scotch was beloved in Morphy's
+        // era, then vanished for eight decades. Kasparov's 1990 title match
+        // revival…" — the Scotch, in a Vienna, which is the exact failure the
+        // guard was built for (the hp-5d5 Caro-in-a-Vienna incident).
+        //
+        // The board cannot catch this: at ply 1 the position is consistent with
+        // both openings. Only the note's own tag can, and only if it is given
+        // something to disagree with.
+        const src = teachingSourceForBoard(history, args.fenAfterReply, announcedOpeningNameRef.current);
         if (src && !teachNoteSeenIdsRef.current.has(src.note.id)) {
           const t = spokenBeatText(src.note);
           if (t.trim()) {
-            fallbackLine = generalizedTeaching(src.origin, t);
+            teachingLine = generalizedTeaching(src.origin, t);
             teachNoteSeenIdsRef.current.add(src.note.id);
-            factLines.push(`Teaching (${src.origin}): ${fallbackLine}`);
+            factLines.push(`Teaching (${src.origin}): ${teachingLine}`);
           }
         }
       } catch { /* the corpus is a bonus, never a blocker */ }
-      if (!fallbackLine) {
-        try {
-          const pr = buildPositionalRead(args.fenAfterReply, playerColor, positionalSaidRef.current);
-          if (pr) { fallbackLine = pr; factLines.push(`Positional read: ${pr}`); }
-        } catch { /* never a blocker */ }
-      }
+    }
+
+    // The POSITIONAL READ stays a true last resort — king safety, development,
+    // a bad piece, a weak pawn, a lever. It is the only lane here that is
+    // FILLER rather than teaching, so it speaks only when nothing else in the
+    // turn did, corpus included. Promoting it alongside the others is how the
+    // coach ends up narrating "your pawn on a2 is isolated" over a real tactic.
+    let positionalLine: string | null = null;
+    if (!gemLine && !alertLine && !announceLine && !computedLine && !noteLine && !teachingLine) {
+      try {
+        const pr = buildPositionalRead(args.fenAfterReply, playerColor, positionalSaidRef.current);
+        if (pr) { positionalLine = pr; factLines.push(`Positional read: ${pr}`); }
+      } catch { /* never a blocker */ }
     }
 
     // THE PACKAGE. Priority is a declared rank in `voicePackage`, not a `??`
@@ -5377,9 +5414,15 @@ export function CoachTeachPage(): JSX.Element {
       ...(announceLine ? [{ kind: 'opening' as const, text: announceLine, fen: args.fenAfterReply }] : []),
       ...(computedLine ? [{ kind: 'computed' as const, text: computedLine, fen: args.fenAfterReply }] : []),
       ...(noteLine ? [{ kind: 'note' as const, text: noteLine, fen: args.fenAfterReply }] : []),
+      // Corpus teaching reached by structure/concept transfer. Same `note`
+      // rank as the exact-position tier — both are the corpus speaking, and
+      // `generalizedTeaching` has already framed the borrowed one honestly
+      // ("The same idea shows up in positions like this"), so it is never
+      // heard as a claim about these squares.
+      ...(teachingLine ? [{ kind: 'note' as const, text: teachingLine, fen: args.fenAfterReply }] : []),
       // Lowest rank by construction — it only exists because nothing above it
       // fired, and it must never displace a tactic, a threat or a taught note.
-      ...(fallbackLine ? [{ kind: 'note' as const, text: fallbackLine, fen: args.fenAfterReply }] : []),
+      ...(positionalLine ? [{ kind: 'note' as const, text: positionalLine, fen: args.fenAfterReply }] : []),
     ]);
 
     return {

@@ -204,3 +204,25 @@ describe('spokenBeatText — a move announcement is not teaching', () => {
     expect(spokenBeatText(note({ explains: 'is dubious.' }))).toBe('');
   });
 });
+
+describe('spokenBeatText — an opening parenthetical is a cut clause', () => {
+  const note = (over: Partial<DanyaNote>): DanyaNote => ({
+    id: 'x', lineSan: ['e4'], opening: null, phase: 'opening',
+    explains: '', teaches: '', plans: '', concepts: [], sources: [],
+    ...over,
+  });
+
+  it('drops a sentence that opens ON a parenthetical', () => {
+    // Heard walking the Vienna Gambit on 2026-08-08: "(old) or Qf3 (new), the
+    // recommended practical response is …Nc6." The distiller cut the clause the
+    // aside belonged to, so the sentence begins by qualifying something never
+    // said. `startsBroken` already caught a stray CLOSING paren; an opening one
+    // is the same truncation from the other end.
+    expect(spokenBeatText(note({ explains: '(old) or Qf3 (new), the practical response is Nc6.' }))).toBe('');
+  });
+
+  it('keeps a normal sentence that merely contains a parenthetical', () => {
+    expect(spokenBeatText(note({ explains: 'The bishop (already developed) covers the diagonal.' })))
+      .toBe('The bishop (already developed) covers the diagonal.');
+  });
+});

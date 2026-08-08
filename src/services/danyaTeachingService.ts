@@ -1330,6 +1330,11 @@ export function spokenBeatText(note: DanyaNote): string {
     // out" also opens on a move and is a complete, useful claim about THIS
     // board. Only the two fragment shapes are refused.
     if (SENTENCE_OPENS_MID_CLAUSE.test(s)) return true;
+    // Opens ON a parenthetical: "(old) or Qf3 (new), the recommended practical
+    // response is …Nc6." — the distiller cut the clause the aside belonged to,
+    // so the sentence begins by qualifying something that was never said. Heard
+    // walking the Vienna Gambit on 2026-08-08.
+    if (/^\(/.test(s)) return true;
     const open = s.indexOf('(');
     const close = s.indexOf(')');
     return close !== -1 && (open === -1 || close < open);
