@@ -264,6 +264,7 @@ export function TacticDrillPage(): JSX.Element {
         const themed = tacticNoteForPuzzleThemes({
           themes: puzzle.themes ?? [],
           seenIds: noteIdsSeenRef.current,
+          fen: puzzle.fen,
         });
         if (themed) note = themed.text;
       }
