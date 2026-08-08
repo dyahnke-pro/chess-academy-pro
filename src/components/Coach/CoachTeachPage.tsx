@@ -21,6 +21,7 @@ import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../typ
 import { trapPlayPosition } from '../../services/trapPlayPosition';
 import { buildVoicePackage, describeVoicePackage, type VoicePackage } from '../../services/voicePackage';
 import { buildPositionalRead } from '../../services/positionalRead';
+import { curatedBeatAt } from '../../services/curatedBeatSource';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -1221,6 +1222,10 @@ export function CoachTeachPage(): JSX.Element {
   /** Notes already spliced into this game's narration (same dedup contract as
    *  the walkthrough's `noteArrowSourceAt` seenIds — a note teaches once). */
   const teachNoteSeenIdsRef = useRef(new Set<string>());
+  /** Masterclass beats already spoken this game. A lesson teaches the same
+   *  idea at several plies; hearing it twice is what makes a coach sound stuck. */
+  const curatedBeatSeenRef = useRef(new Set<string>());
+
   /** Positional observations already spoken this game — see `buildPositionalRead`.
    *  Without it an uncastled king repeats the same sentence every ply until it
    *  castles, and the boundary repeat-guard turns each of those back into the
@@ -5364,8 +5369,28 @@ export function CoachTeachPage(): JSX.Element {
     // package exists ("Order is a declared rank, not the accident of a `??`
     // chain"). Computing a fact and letting the package decide is the contract;
     // deciding here by not computing it is the same `??` chain wearing an `if`.
+    // ── THE CURATED BEAT — the masterclass speaking on this exact position ──
+    // 1,659 hand-authored beats across 361 lessons, and the live game could not
+    // see one of them (David 2026-08-08: "Don't we have coverage on the copycat
+    // lines? … Don't we pull narrations from there if corpus is empty?"). We
+    // did not. Walking the Copycat, the coach was silent on the very ply where
+    // `viennaVariations` teaches "White shatters the symmetry with Qg4!".
+    //
+    // Ranked ABOVE the corpus deliberately: a beat is verified BEFORE it ships
+    // (narrationAccuracy, lessonIntegrity, wlppNarration, lessonSources), which
+    // is the standard a farmed note only reaches once baked.
+    let curatedLine: string | null = null;
+    try {
+      const beat = curatedBeatAt(history, args.fenAfterReply, curatedBeatSeenRef.current, announcedOpeningNameRef.current);
+      if (beat) {
+        curatedBeatSeenRef.current.add(beat.id);
+        curatedLine = beat.text;
+        factLines.push(`Masterclass beat (${beat.lesson}): ${beat.text}`);
+      }
+    } catch { /* curated teaching is a bonus, never a blocker */ }
+
     let teachingLine: string | null = null;
-    if (!noteLine) {
+    if (!noteLine && !curatedLine) {
       try {
         // 🔒 PASS THE OPENING. It was `null`, which switches OFF
         // `noteOpeningConflicts` — the guard whose entire job is stopping a
@@ -5396,7 +5421,7 @@ export function CoachTeachPage(): JSX.Element {
     // turn did, corpus included. Promoting it alongside the others is how the
     // coach ends up narrating "your pawn on a2 is isolated" over a real tactic.
     let positionalLine: string | null = null;
-    if (!gemLine && !alertLine && !announceLine && !computedLine && !noteLine && !teachingLine) {
+    if (!gemLine && !alertLine && !announceLine && !computedLine && !noteLine && !curatedLine && !teachingLine) {
       try {
         const pr = buildPositionalRead(args.fenAfterReply, playerColor, positionalSaidRef.current);
         if (pr) { positionalLine = pr; factLines.push(`Positional read: ${pr}`); }
@@ -5413,6 +5438,9 @@ export function CoachTeachPage(): JSX.Element {
       ...(alertLine ? [{ kind: 'alert' as const, text: alertLine, fen: args.fenAfterReply }] : []),
       ...(announceLine ? [{ kind: 'opening' as const, text: announceLine, fen: args.fenAfterReply }] : []),
       ...(computedLine ? [{ kind: 'computed' as const, text: computedLine, fen: args.fenAfterReply }] : []),
+      // The masterclass beat first among the teaching lanes — it is the only
+      // one verified before it shipped.
+      ...(curatedLine ? [{ kind: 'note' as const, text: curatedLine, fen: args.fenAfterReply }] : []),
       ...(noteLine ? [{ kind: 'note' as const, text: noteLine, fen: args.fenAfterReply }] : []),
       // Corpus teaching reached by structure/concept transfer. Same `note`
       // rank as the exact-position tier — both are the corpus speaking, and

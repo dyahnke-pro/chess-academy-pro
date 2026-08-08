@@ -12,6 +12,7 @@ import { loadProGameReferenceData } from './proGameReferenceData';
 import { loadFarmedCorpora } from './farmedCorpusData';
 import { loadSpokenBake } from './spokenNoteBake';
 import { warmSecondaryPositionIndex } from './secondaryCorpora';
+import { warmCuratedBeatIndex } from './curatedBeatSource';
 import middlegamePlansData from '../data/middlegame-plans.json';
 // Separate-lane gambit-tab plans (David 2026-05-27): own file so the masterclass
 // lane never touches them; merged into the shared plan store here at load time,
@@ -990,6 +991,9 @@ export function seedDatabase(): Promise<void> {
     // critical path, and CHUNKED with a yield between batches so it never holds
     // the main thread. A lookup that beats it finishes the index itself.
     void warmSecondaryPositionIndex().catch(() => { /* the corpus is a bonus, never a blocker */ });
+    // The masterclass beats, same deal: 5.0s of chess.js replay that must not
+    // land on the main thread when the student makes their first move.
+    void warmCuratedBeatIndex().catch(() => { /* curated teaching is a bonus, never a blocker */ });
   });
   // Reuse the in-flight promise so concurrent callers share one run.
   // Resolves after the CRITICAL seed (repertoire) — the heavy ECO/pro/
