@@ -319,20 +319,28 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       const phaseLookahead = phaseTactics ? speakDeepestLookahead(phaseTactics) : null;
       if (phaseLookahead) transitionSentence += ` ${phaseLookahead}`;
 
-      // ── NO NOTE, NO NARRATION ──────────────────────────────────────────────
+      // ── NOTHING CONCRETE, NOTHING SPOKEN ───────────────────────────────────
       // David 2026-08-08: "phase narration stays silent if no notes are
-      // available." The corpus is what the coach has to say here; without one
-      // there is nothing left but a status announcement and an eval readout,
-      // and neither is teaching. Returning here also skips the engine read and
-      // the fallback templates, which is the point — a timeout used to produce
-      // "* We're entering the middlegame", which is the same noise with an
-      // asterisk on it.
-      if (!ritualSpoken) {
+      // available", and the label it used to open with is "just useless noise".
+      // What is left after removing those two is exactly his 90/10: the corpus
+      // note is the teaching, the look-ahead is the threat detection, and
+      // NEITHER of them is a status announcement or an eval readout.
+      //
+      // Both count. Gating the whole transition on the corpus alone was too
+      // blunt — it silenced a real three-move threat, named with its pattern,
+      // its depth and its moves, whenever the corpus happened to have nothing
+      // for that position. That line is the most concrete thing the coach can
+      // say (voice rule 1) and it comes from the engine, not the corpus.
+      //
+      // Returning here also skips the engine read and the timeout templates,
+      // which is the point: "* We're entering the middlegame" is the same noise
+      // with an asterisk on it.
+      if (!ritualSpoken && !phaseLookahead) {
         void logAppAudit({
           kind: 'coach-surface-migrated',
           category: 'subsystem',
           source: 'usePhaseNarration.silent',
-          summary: `no corpus note at this ${event.kind} — staying silent`,
+          summary: `nothing concrete at this ${event.kind} (no note, no look-ahead) — staying silent`,
           fen: event.fen,
         });
         if (token === activeTokenRef.current) setIsNarrating(false);
