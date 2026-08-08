@@ -276,5 +276,13 @@ describe('review corpus sweep — no board-untrue line hides in any path (David 
       }
     }
     expect(violations, `board-untrue lines: ${violations.slice(0, 12).map((v) => `${v.rule}@${v.game}#${v.ply}`).join(', ')}`).toEqual([]);
-  }, 240000);
+    // 900s, because 240s was a budget the sweep had outgrown and the overrun
+    // was INVISIBLE: the run always ended "Test timed out in 240000ms", which
+    // reads exactly the same whether the scan found nothing or never finished.
+    // A gate that cannot reach its own assertion reports nothing — the same
+    // vacuous-gate failure as one that asserts too little, wearing a stopwatch.
+    // Measured 2026-08-08: 569s for 8 games here (1271s before this session's
+    // engine-coalescing and tactic-position caching landed). Not in
+    // ship-check's curated list, so the length costs a push nothing.
+  }, 900000);
 });

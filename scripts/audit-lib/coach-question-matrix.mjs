@@ -322,6 +322,15 @@ export const ACTIONS = [
   },
   {
     id: 'teach-opening', kind: 'teach',
+    // Routing WORKS; it just cannot be exercised without data. The walkthrough
+    // branch calls matchOpeningForSubject → searchOpenings, a Dexie read, and a
+    // bare vitest process has no seeded openings store — the promise never
+    // settles. The unit test's `.catch(() => null)` then renders the stall as
+    // "routed NO action", which reads as a product hole that does not exist.
+    // NOT `knownGap`: that label means an unbuilt feature, and this one is
+    // built. The Playwright audits share this matrix and run against the real
+    // app with a seeded DB, so the probe still runs for real over there.
+    needsOpeningsDb: 'walkthrough routing reads the openings store',
     qs: ['teach me the Vienna', 'walk me through the Najdorf', 'teach me the London'],
     qs2: ['show me how the Caro-Kann works', 'I want to learn the French', 'go through the Italian with me'],
     qs3: ['teach me the Vienna', 'walk me through the French', 'study the London'],
@@ -444,7 +453,8 @@ export const STRUCTURAL_PROBES = [
   { id: 'review-due', cat: 'self-knowledge', q: 'anything to review' },
   { id: 'set-hints', cat: 'action', q: 'hints on' },
   { id: 'set-verbosity', cat: 'action', q: 'narration to full' },
-  { id: 'teach-opening', cat: 'action', q: 'teach the caro' },
+  // Same reason as the teach-opening row above — needs a seeded openings store.
+  { id: 'teach-opening', cat: 'action', q: 'teach the caro', needsOpeningsDb: 'walkthrough routing reads the openings store' },
   // Pass 6 — common typos (normalized by the COMMON_TYPOS map).
   { id: 'progress', cat: 'self-knowledge', q: 'am i improvng at all' },
   { id: 'stats', cat: 'self-knowledge', q: 'whats my ratng' },

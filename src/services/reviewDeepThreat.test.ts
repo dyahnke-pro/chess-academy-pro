@@ -64,12 +64,18 @@ describe('teaching refrains speak ONCE per review (David 2026-07-22)', () => {
       playerRating: 1500, coachNarration: 'silent', uncapped: true,
     });
     const texts = n.segments.map((s) => s.narration ?? '');
+    // PAST TENSE. Review is the retrospective register — the student's own,
+    // finished game — so `pastTenseReviewNarration` converts every head before
+    // it ships ("the pawn GAVE up d3"). These assertions were written against
+    // the present-tense output and never updated when that landed, so they had
+    // been failing on a contract the code deliberately left behind.
+    //
     // A square its remaining pawns still cover is NOT called weakened (1.e4).
-    expect(texts[0]).not.toMatch(/gives up .* for good/);
+    expect(texts[0]).not.toMatch(/g(?:ives|ave) up .* for good/);
     // Ply 3 (c4) teaches the principle with the fact…
-    expect(texts[2]).toMatch(/gives up d3 for good — pawns don't move back/);
+    expect(texts[2]).toMatch(/gave up d3 for good — pawns don't move back/);
     // …ply 5 (g4) keeps the FACT but not the refrain.
-    expect(texts[4]).toMatch(/gives up f3 for good/);
+    expect(texts[4]).toMatch(/gave up f3 for good/);
     expect(texts[4]).not.toMatch(/pawns don't move back/);
     // The development nag ("boxed in at home") appears in exactly one segment.
     const nagCount = texts.filter((t) => t.includes('boxed in at home')).length;
@@ -110,7 +116,11 @@ describe('uncapped narration never leaks a facet tag or a mate-sentinel eval (pr
     // The mating segment does not narrate a mate-sentinel as a pawn drift.
     const mateSeg = n.segments.find((s) => s.san === 'Rd8#');
     expect(mateSeg?.narration ?? '').not.toMatch(/eval bar.*\b\d{3}(\.\d)? /);
-  });
+    // 30s, because this generates the FULL narration for a 33-ply game and had
+    // no declared budget — ~2s alone, past the 5s default whenever it runs
+    // beside anything else. It failed on the clock, not on the contract, so the
+    // tag-leak check it exists for silently stopped being performed.
+  }, 30000);
 });
 
 describe('deep threat AGAINST the student (#5c)', () => {
@@ -143,7 +153,9 @@ describe('deep threat AGAINST the student (#5c)', () => {
 
     const oppSeg = n.segments.find((s) => s.ply === 4); // ...Bc5, opponent 'good'
     expect(oppSeg).toBeTruthy();
-    expect(oppSeg?.narration ?? '').toMatch(/Watch what they're building/);
+    // Past tense for the same reason as above — review looks back, so the
+    // authored "Watch what they're building" ships as "…they were building".
+    expect(oppSeg?.narration ?? '').toMatch(/Watch what they were building/);
     // The line is rendered ply-by-ply (Bxf2 appears in the narrated run).
     expect(oppSeg?.narration ?? '').toMatch(/Bxf2/);
     // The DEFENSE from the stored analysis (the student's next best move).
