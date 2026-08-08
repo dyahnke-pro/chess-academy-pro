@@ -186,6 +186,19 @@ async function main() {
   const page = await context.newPage();
   page.on('pageerror', (e) => pageErrors.push(e.message));
 
+  // COST TRIPWIRE (David 2026-08-08: "Make sure they don't cost me any money").
+  // `muteTtsForAudit` above already skips synthesis, but a mute is a flag the
+  // product code has to honour, and the $100 day happened because a flag like
+  // that was not being honoured. This does not trust it: every billable request
+  // is ABORTED at the network layer and counted, so the run cannot spend even
+  // if the mute regresses. A non-zero count FAILS the audit — it means the mute
+  // is broken and the next unmuted run would bill for real.
+  const billableAttempts = [];
+  await context.route(/\/api\/tts|api\.deepseek\.com|api\.anthropic\.com|texttospeech\.googleapis/i, (route) => {
+    billableAttempts.push(route.request().url());
+    return route.abort();
+  });
+
   /** Per-ply record: the position BEFORE the student's move, and the events
    *  that arrived while that turn was in flight. */
   const plies = [];
@@ -337,6 +350,10 @@ async function main() {
     }
 
     record('E. no uncaught page errors', pageErrors.length === 0, pageErrors.slice(0, 2).join(' | ') || 'clean');
+    // The run cost nothing — and that is asserted, not assumed. Any attempt
+    // means the audit mute stopped working, which is a ship-blocker in itself.
+    record('F. zero billable requests (mute honoured)', billableAttempts.length === 0,
+      billableAttempts.length === 0 ? 'no TTS/LLM call attempted' : `ATTEMPTED ${billableAttempts.length}: ${billableAttempts.slice(0, 2).join(' | ')}`);
 
     await mkdir(OUT_DIR, { recursive: true });
     await writeFile(`${OUT_DIR}/report.json`, JSON.stringify({

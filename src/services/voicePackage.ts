@@ -90,9 +90,28 @@ export interface VoicePackage {
 
 /** Verify one fact against its own board. Returns the text to speak — possibly
  *  trimmed by the grader — or a reason it may not be spoken at all. */
+/** Scaffolding a student must never hear. Prompt blocks, section headers,
+ *  control tags, instructions to a model.
+ *
+ *  Rule 1 of this file says every entry must be speakable, and until 2026-08-08
+ *  it said so while enforcing nothing — the package trusted its callers. The
+ *  cross-surface scorecard then fed it `formatReadingFacts`, a model-input block
+ *  opening "READING FACTS (GROUND TRUTH — Static Exchange Eval…", and the
+ *  package passed all 61 of them through to be spoken. That is precisely the
+ *  failure `voiceFacts` documents from a prod run: the coach reading its own
+ *  directive out loud. A law with no check is a comment. */
+const NOT_SPEAKABLE: Array<{ re: RegExp; why: string }> = [
+  { re: /\n/, why: 'multi-line block, not an utterance' },
+  { re: /\[(?:BOARD|VOICE|EVAL|FACT)S?\b/i, why: 'control tag' },
+  { re: /\b[A-Z][A-Z0-9]{2,}(?:\s+[A-Z][A-Z0-9]{2,})+/, why: 'shouted header (prompt scaffolding)' },
+  { re: /\b(?:REQUIRED|GROUND TRUTH|DO NOT|NEVER (?:say|invent|repeat)|you MUST)\b/i, why: 'instruction to a model' },
+];
+
 function verify(fact: VoiceFact): { text: string } | { reason: string } {
   const raw = fact.text.trim();
   if (!raw) return { reason: 'empty' };
+
+  for (const s of NOT_SPEAKABLE) if (s.re.test(raw)) return { reason: s.why };
 
   // Square-anchored claims: "the knight on f6" when f6 is empty.
   const graded = gradeNarrationText(raw, fact.fen, `voicePackage.${fact.kind}`)?.trim();

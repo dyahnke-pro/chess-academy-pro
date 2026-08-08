@@ -763,7 +763,21 @@ class VoiceService {
     // on iOS. Idempotent — only the first call installs the listeners.
     this.installStreamingAudioUnlock();
 
-    if (prefs?.pollyEnabled && prefs.voiceEnabled) {
+    // THE PROBE IS A REAL SYNTHESIS AND THE MUTE DID NOT COVER IT.
+    //
+    // Caught 2026-08-08 by a network-level tripwire on the live-game prod audit
+    // (David: "make sure they don't cost me any money"): a muted run still sent
+    // `/api/tts?text=.&voice=ruth&v=2&_cb=…`. Every other tier honours
+    // `isAuditMuted`; this one is upstream of them all, so it slipped through —
+    // and the cache-buster below means it can never be served from the CDN, so
+    // it is a fresh one-character synthesis on EVERY page load rather than once
+    // globally.
+    //
+    // Under audit mute there is nothing to warm: `speakInternal` skips every
+    // synthesis tier, so probing whether Polly is reachable answers a question
+    // no one will ask. Skipping keeps a muted audit at exactly zero billable
+    // requests, which is the property the audit now asserts.
+    if (prefs?.pollyEnabled && prefs.voiceEnabled && !this.isAuditMuted()) {
       // Probe Polly availability with a short timeout
       try {
         const controller = new AbortController();
