@@ -3,6 +3,7 @@ import { getCoachChatResponse } from '../services/coachApi';
 import { isSpokenSentenceGrounded } from '../services/coachAnswerGates';
 import { buildFedTacticsContext, speakDeepestLookahead } from '../services/liveTacticsContext';
 import { voiceService } from '../services/voiceService';
+import { buildVoicePackage } from '../services/voicePackage';
 import { stockfishEngine, resolveWorkerUrl } from '../services/stockfishEngine';
 import { buildChessContextMessage, POSITION_NARRATION_ADDITION } from '../services/coachPrompts';
 import { formatReadingFacts } from '../services/positionReadingService';
@@ -278,8 +279,22 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
             fen: args.fen,
           });
         }
+        // PACKAGED. Read-this-position speaks per sentence straight to TTS as
+        // the stream arrives, so there is no final chokepoint downstream — the
+        // check has to be here or it is nowhere. `args.fen` is the board the
+        // student asked to have read, which is the board every sentence in the
+        // read is about.
         speechChain = speechChain
-          .then(() => voiceService.speakReadAloud(trimmed))
+          .then(() => {
+            const pkg = buildVoicePackage([{ kind: 'computed', text: trimmed, fen: args.fen }]);
+            // speakReadAloud, not speakPackage: this is the G5 read-aloud
+            // carve-out — the student TAPPED to hear it, so it bypasses the
+            // verbosity gate. Packaging governs TRUTH; the carve-out governs
+            // WHETHER a tapped read is allowed to speak at all. Routing it
+            // through speakPackage would silently re-apply the gate and make
+            // the button dead on Silent/Brief again.
+            return pkg.spoken ? voiceService.speakReadAloud(pkg.spoken) : undefined;
+          })
           .catch(() => undefined);
       };
       // `+` (not `*`) so a bare terminator like "..." can't match a

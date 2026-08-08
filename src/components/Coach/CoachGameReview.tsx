@@ -2,6 +2,7 @@ import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { RotateCcw, Home, ArrowLeft, MessageCircle, Loader2, Volume2, VolumeX, Target, Crosshair } from 'lucide-react';
 import { ChessBoard } from '../Board/ChessBoard';
 import { voiceService } from '../../services/voiceService';
+import { buildVoicePackage } from '../../services/voicePackage';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { explorationAnchorAction } from '../../services/reviewExplorationAnchor';
 import { usePieceSound } from '../../hooks/usePieceSound';
@@ -1412,7 +1413,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       const line = warmed.get(i) ?? b.fact;
       setTheoryCaption(line); // visible even if voice is muted (David 2026-07-21)
       const beatStart = performance.now();
-      try { await voiceService.speakForced(line); } catch { /* voice off */ }
+      // PACKAGED. This is the densest board-claim path in the app — a beat per
+      // ply, each one about a specific position — and `b.fenBefore` is that
+      // exact position, so the claim is judged against the board it describes
+      // rather than trusted because it came from a warmed cache.
+      try { await voiceService.speakPackage(buildVoicePackage([{ kind: 'computed', text: line, fen: b.fenBefore }])); } catch { /* voice off */ }
       await waitIdle();
       // MUTED-DEVICE PACING: with voice off, speakForced resolves ~instantly and
       // the whole lecture used to race by in a blink — board positions flashing
@@ -1449,7 +1454,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           if (stepWhy) {
             setTheoryCaption(`${step.san} — ${stepWhy}`);
             const stepStart = performance.now();
-            try { await voiceService.speakForced(stepWhy); } catch { /* voice off */ }
+            // The why for THIS step, judged on the board the step produced.
+            try { await voiceService.speakPackage(buildVoicePackage([{ kind: 'computed', text: stepWhy, fen: step.fenAfter }])); } catch { /* voice off */ }
             await waitIdle();
             const stepElapsed = performance.now() - stepStart;
             const stepDwell = Math.min(4000, 1000 + stepWhy.length * 22);
