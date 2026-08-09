@@ -363,7 +363,12 @@ async function main() {
   if (FOLLOW) {
     const taught = report.openingPliesTaught;
     console.log(`opening line        ${report.spineReached}/${FOLLOW.spine.length} plies of ${FOLLOW.name} played`);
-    console.log(`opening taught      ${taught.length} of those${taught.length ? ` (moves ${taught.join(', ')})` : ''}`);
+    // Two plies happen per turn and the coach says one thing per turn, so a
+    // fully-taught opening reads as half its plies. Say that, rather than
+    // leave a "7 of 14" to be read as half the teaching going missing.
+    const turns = transcript.filter((t) => t.ply && report.spineReached >= t.ply * 2 - 1).length;
+    console.log(`opening taught      ${taught.length} plies over ${turns} turn(s) on the line — one per turn by design`);
+    if (taught.length) console.log(`                    moves ${taught.join(', ')}`);
   }
   console.log(`FALSE board claims  ${allFalse.length}`);
   console.log(`page errors         ${pageErrors.length}`);
