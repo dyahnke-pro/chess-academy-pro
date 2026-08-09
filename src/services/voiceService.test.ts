@@ -496,13 +496,18 @@ describe('voiceService', () => {
       expect(voiceService.currentStopGeneration).toBe(before + 1);
     });
 
-    it('throttles a DIFFERENT line fired back-to-back in the same instant', async () => {
+    it('SPEAKS a different line fired back-to-back — the rate cap delays, never discards', async () => {
+      // This asserted the opposite until 2026-08-09: the second line was
+      // dropped by the rate cap and only the first was ever heard. That is
+      // how David's prod game lost "you've got a skewer coming, 2 deep: Bb5,
+      // then Qd4" — computed, ranked, and thrown away by a throttle. Two
+      // distinct things to say are two things the student must hear; the cap
+      // now spaces them instead of eating one.
       const before = voiceService.currentStopGeneration;
       const p1 = voiceService.speakForced('First idea.');
       const p2 = voiceService.speakForced('Second idea, totally different text.');
       await Promise.all([p1, p2]);
-      // First admitted (+1), second throttled by the rate cap (0).
-      expect(voiceService.currentStopGeneration).toBe(before + 1);
+      expect(voiceService.currentStopGeneration).toBe(before + 2);
     });
 
     it('does NOT throttle/dedup explicit read-aloud taps (bypassVerbosity)', async () => {

@@ -575,6 +575,38 @@ class VoiceService {
    *  pipeline + its timestamp. Explicit read-aloud taps (bypassVerbosity)
    *  skip it — those are deliberate user gestures, never a flood. */
   private lastAdmittedSpeak: { text: string; ts: number } | null = null;
+
+  /** How many lines are WAITING for their turn to speak.
+   *
+   *  🔒 NO RATE-LIMIT DROPS (David 2026-08-09: "Why are we still rate
+   *  limiting?? I told you to remove that!"). The overlap and throttle guards
+   *  used to `simulateSpeechDuration(text); return;` — wait exactly as long as
+   *  speaking would have taken, and then say nothing. That reads as pacing and
+   *  is actually a silent discard: his prod game lost three computed lines
+   *  that way, two of them the most useful in the report ("you've got a skewer
+   *  coming, 2 deep: Bb5, then Qd4"). The coach believed it had spoken.
+   *
+   *  Waiting serves the reason those guards existed BETTER than dropping did.
+   *  They protect the iOS AVAudioSession from CONCURRENT decodes (the build-119
+   *  mic crash), and speaking strictly one-at-a-time makes concurrency
+   *  impossible by construction — where a rate limit only made it less likely,
+   *  and paid for that with lost teaching.
+   *
+   *  Bounded so a runaway caller degrades into drops rather than a backlog the
+   *  student hears minutes late. A drop here is AUDITED, because a silent one
+   *  is exactly what caused this. */
+  private speakWaiting = 0;
+
+  private static readonly MAX_SPEAK_WAITING = 8;
+
+  /** Resolve once nothing is being spoken, so the next line can take its turn.
+   *  Capped: a stuck `playing` flag must delay a line, never strand it. */
+  private async whenNotSpeaking(timeoutMs = 20_000): Promise<void> {
+    const deadline = Date.now() + timeoutMs;
+    while (this.playing && Date.now() < deadline) {
+      await new Promise<void>((resolve) => { setTimeout(resolve, 80); });
+    }
+  }
   /** Window within which an IDENTICAL narration line is treated as a
    *  re-fire and dropped. Deliberately TIGHTER than the 6s per-component
    *  useNarration window: a real user replay (they listened, then tapped
@@ -1275,7 +1307,7 @@ class VoiceService {
     // Explicit read-aloud taps (bypassVerbosity) are a deliberate user
     // gesture — never a flood — so they skip all three.
     if (!opts?.bypassVerbosity) {
-      const now = Date.now();
+      let now = Date.now();
       const last = this.lastAdmittedSpeak;
       // (1) DEDUP — identical line within the tight window = a remount
       // re-fire. Drop it. (A real replay is always >1.5s later.)
@@ -1318,17 +1350,34 @@ class VoiceService {
             details: `prevTier=${this.lastTier}`,
           });
         }).catch(() => undefined);
-        // Resolve on READING PACE, never instantly. Auto-advance is
-        // voice-promise gated (the locked strict-narration contract), so an
-        // instant resolve here handed a walkthrough beat a zero-length clock:
-        // the chain advanced early and the NEXT beat's cleanup `stop()` cut
-        // the still-playing sentence mid-word — David 2026-08-05, "sentences
-        // getting cut off by other sentences", with these very audit entries
-        // as the fingerprint. Same mechanism the audit mute uses, and for the
-        // same reason ("returning instantly would rip the walkthrough through
-        // its beats").
-        await this.simulateSpeechDuration(text);
-        return;
+        // WAIT YOUR TURN — do not discard. Auto-advance is voice-promise
+        // gated (the locked strict-narration contract), so this must not
+        // resolve instantly either: the chain would advance early and the next
+        // beat's cleanup `stop()` would cut the still-playing sentence
+        // mid-word (David 2026-08-05). Waiting for the line ahead satisfies
+        // both — real pacing AND the words actually spoken.
+        if (this.speakWaiting >= VoiceService.MAX_SPEAK_WAITING) {
+          void import('./appAuditor').then(({ logAppAudit }) => {
+            void logAppAudit({
+              kind: 'voice-speak-invoked',
+              category: 'subsystem',
+              source: 'voiceService.speakInternal.queueFull',
+              summary: `dropped — ${this.speakWaiting} lines already waiting: "${text.slice(0, 40)}"`,
+              narrationText: text,
+            });
+          }).catch(() => undefined);
+          await this.simulateSpeechDuration(text);
+          return;
+        }
+        this.speakWaiting += 1;
+        try {
+          await this.whenNotSpeaking();
+        } finally {
+          this.speakWaiting -= 1;
+        }
+        // The clock moved while waiting, so the throttle floor below must be
+        // measured from now rather than from when this call arrived.
+        now = Date.now();
       }
       // (3) THROTTLE — cap the rate of DISTINCT narration lines so a burst
       // of remounts / rapid tips can't stack clips faster than the iOS
@@ -1349,12 +1398,14 @@ class VoiceService {
             details: `sinceLastMs=${now - last.ts}`,
           });
         }).catch(() => undefined);
-        // Reading-pace resolve — same pacing contract as the no-overlap drop
-        // above. (Dedup stays instant on purpose: a duplicate within the tight
-        // window is the SAME caller double-firing, not a second beat pacing
-        // anything real.)
-        await this.simulateSpeechDuration(text);
-        return;
+        // Wait out the remaining window, then SPEAK — the floor exists to
+        // space clips for the iOS decoder, and waiting spaces them just as
+        // well as dropping did without costing the student the line. (Dedup
+        // above still drops, and should: a duplicate inside the tight window
+        // is the same caller double-firing, not a second thing to say.)
+        await new Promise<void>((resolve) => {
+          setTimeout(resolve, VoiceService.THROTTLE_MS - (now - last.ts));
+        });
       }
       this.lastAdmittedSpeak = { text, ts: now };
     }
