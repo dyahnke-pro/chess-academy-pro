@@ -17,33 +17,30 @@
  *   AUDIT_SMOKE_HEADED=1 node scripts/audit-tactics.mjs
  */
 import { chromium } from 'playwright';
-import { mkdir, writeFile, access } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { join } from 'node:path';
 
 // Sandbox/CI environments often have a Chromium build pre-installed
 // at /opt/pw-browsers but at a different build number than the npm
 // `playwright` package expects. Probing the installed path lets the
-// audit run without a fresh `npx playwright install`, which is
-// frequently blocked by network policy. Same path the previous
-// session's runs used (the sandbox image carries
-// chromium_headless_shell-1194 + chromium-1194). When the binary is
-// absent (developer's laptop with a normal install), `playwright`
-// uses its own resolved path — we only override if the file exists.
-async function resolveExecutablePath(headed) {
-  const candidates = headed
-    ? ['/opt/pw-browsers/chromium-1194/chrome-linux/chrome']
-    : [
-        '/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell',
-        '/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
-      ];
-  for (const p of candidates) {
-    try {
-      await access(p);
-      return p;
-    } catch {}
-  }
-  return undefined;
-}
+// 🔒 USES THE SHARED RESOLVER. This file used to pick its own binary and
+// preferred `headless_shell` in headless mode — the ONE binary that cannot
+// reach prod through the agent egress proxy. CLAUDE.md has the rule locked:
+// headless_shell IGNORES --ssl-version-max and the MITM endpoint (TLS 1.2
+// only) resets the tunnel, so every navigation dies with
+// ERR_CONNECTION_RESET; the full `chrome` binary honours the flag.
+//
+// The symptom is maximally misleading: every scenario fails against
+// `chrome-error://chromewebdata/`, so the run reads as "tactics is broken on
+// prod" when the page never loaded at all. Measured 2026-08-09 — 6 scenarios
+// FAIL, then a fatal timeout, purely from the binary choice.
+//
+// `resolveChromiumExecutable` + `sandboxLaunchArgs` already encode the whole
+// rule (prefer full chrome when AUDIT_PROXY is set, add --ssl-version-max).
+// A second copy of that logic is a second thing to get wrong, and this is
+// what getting it wrong looks like.
+
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'https://chess-academy-pro.vercel.app';
 const SECRET =
@@ -75,12 +72,12 @@ async function main() {
   console.log(`[tactics] outDir  = ${OUT_DIR}`);
   console.log(`[tactics] headed  = ${HEADED}`);
 
-  const executablePath = await resolveExecutablePath(HEADED);
+  const executablePath = await resolveChromiumExecutable(HEADED);
   if (executablePath) console.log(`[tactics] chromium  = ${executablePath}`);
   const sandbox = process.env.AUDIT_SANDBOX === '1';
-  const browser = await chromium.launch({ headless: !HEADED, executablePath, args: sandbox ? ['--ignore-certificate-errors'] : [] });
+  const browser = await chromium.launch({ headless: !HEADED, executablePath, args: sandboxLaunchArgs() });
   const ctx = await browser.newContext({
-    ...(sandbox ? { ignoreHTTPSErrors: true } : {}),
+    ...sandboxContextOptions(),
     viewport: { width: 414, height: 896 },
     deviceScaleFactor: 2,
     userAgent: 'AuditTacticsBot/1.0 (chromium)',
@@ -252,10 +249,39 @@ async function main() {
   }
 
   // Nav helpers
+  // NAVIGATE, AND SAY SO IF IT DID NOT.
+  //
+  // This swallowed a failed click with `.catch(() => {})` and carried on, so
+  // when the role-link lookup missed, every later scenario asserted against
+  // whatever page happened to be showing and reported six FAILs — reading as
+  // "tactics is broken on prod" when the audit had simply never left `/`.
+  // A silent no-op that reports a failure it caused is as bad as one that
+  // reports success (CLAUDE.md: "A SILENT NO-OP IS A FAILED TEST, NOT A PASS").
+  //
+  // So: try the nav the way a user taps it, fall back to a direct navigation,
+  // and if the page still is not up, throw — the run stops with the real
+  // reason instead of burying it under downstream noise.
   async function clickTacticsNav() {
-    await page.getByRole('link', { name: 'Tactics' }).first().click().catch(() => {});
-    await page.locator('[data-testid="tactics-page"]').waitFor({ timeout: 12_000 }).catch(() => {});
-    await page.waitForTimeout(600);
+    const mounted = () => page.locator('[data-testid="tactics-page"]')
+      .waitFor({ timeout: 12_000 }).then(() => true).catch(() => false);
+
+    await page.getByRole('link', { name: 'Tactics' }).first().click({ timeout: 8000 }).catch(() => {});
+    if (await mounted()) { await page.waitForTimeout(600); await closeHelp(); return; }
+
+    // The tap did not land (an overlay, a renamed control, a different role).
+    // Go straight there so the surface still gets audited, and record that the
+    // NAV is what failed rather than the page.
+    console.log('  [nav] Tactics link did not land — navigating directly');
+    await page.goto(`${BASE_URL}/tactics`, { waitUntil: 'domcontentloaded', timeout: 30_000 }).catch(() => {});
+    // ALWAYS close the help modal after landing. It auto-opens on a surface's
+    // FIRST visit and covers the tiles: probed on prod, `section-spot` exists
+    // (count=1) and the click still times out because `page-help-modal` is on
+    // top. The boot-time pagehelp-seen seeding runs on `/`, so the tactics
+    // surface can still open its own — the dismissal has to happen HERE, at
+    // the moment of arrival, not once at startup.
+    if (await mounted()) { await page.waitForTimeout(600); await closeHelp(); return; }
+
+    throw new Error('tactics-page never mounted — neither the nav tap nor a direct goto reached it');
   }
 
   // Close any open "How X works" page-help modal (auto-opens on a surface's
