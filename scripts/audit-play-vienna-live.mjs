@@ -252,18 +252,35 @@ async function main() {
     chess.move(legal.san);
     ply += 1;
 
-    // WAIT PROPERLY FOR THE REPLY. Six seconds was my own bug: Stockfish is a
-    // Web Worker that can take 45s+ to boot cold (and this environment logs
-    // `stockfish-analysis-stalled` before falling back to the single-threaded
-    // variant). Poll the board instead of guessing a duration.
+    // WAIT PROPERLY FOR THE REPLY. Two of my own bugs here, both of which
+    // reported a working app as broken:
+    //
+    // 1. Six seconds was never enough — Stockfish is a Web Worker that can take
+    //    45s+ to boot cold. Poll the board instead of guessing a duration.
+    // 2. Waiting for "the board changed" broke on the STUDENT'S OWN MOVE: the
+    //    snapshot was taken before the click had rendered, so the first change
+    //    seen was e5 landing, and the reply-resolver then looked for a White
+    //    move reproducing a board the mirror had already reached. It found
+    //    none, logged "(no reply read)", desynced, and the run stopped at one
+    //    ply — while the audit stream showed the coach had played Nc3 and
+    //    spoken a corpus note. Wait for the student's move to RENDER first,
+    //    then wait for the next change; that one is the coach's.
     const wantReply = ply === 1 ? 120_000 : 45_000;
+    const mine = placementOf(chess.fen());
+    const settleDeadline = Date.now() + 20_000;
+    while (Date.now() < settleDeadline) {
+      if (samePlacement(await readPlacement(page), mine)) break;
+      await sleep(1000);
+    }
     const replyDeadline = Date.now() + wantReply;
-    const beforePlacement = await readPlacement(page);
     while (Date.now() < replyDeadline) {
       await sleep(2500);
-      const now = await readPlacement(page);
-      if (!samePlacement(now, beforePlacement)) break;
+      if (!samePlacement(await readPlacement(page), mine)) break;
     }
+    // The narration lands a beat behind the board — give the speak events time
+    // to be posted before slicing this ply's transcript, or every line is
+    // attributed to the NEXT ply (or lost at the end of the run).
+    await sleep(3000);
 
     // READ THE BOARD FROM THE DOM. There is no data-fen on this surface (I
     // checked rather than assumed the second time) — squares are

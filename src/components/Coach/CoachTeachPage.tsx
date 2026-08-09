@@ -5171,6 +5171,7 @@ export function CoachTeachPage(): JSX.Element {
     getOpeningName: () => walkthrough.tree?.openingName
       ?? useCoachMemoryStore.getState().intendedOpening?.name
       ?? null,
+    getLiveFen: () => liveFenRef.current,
     onReport: (text) => setMessages((prev) => [...prev, {
       id: uid('phase'), role: 'assistant', content: text, timestamp: Date.now(),
     }]),

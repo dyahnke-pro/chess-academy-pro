@@ -1741,6 +1741,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   const phaseNarration = usePhaseNarration({
     getPgn: () => game.history.join(' '),
     getOpeningName: () => detectedOpening?.name ?? null,
+    getLiveFen: () => game.fen,
     // Persist the phase-transition report in the chat messages under the board
     // (David 2026-07-01) instead of the transient narration banner that pops
     // up then disappears. Voice still plays live via the hook.

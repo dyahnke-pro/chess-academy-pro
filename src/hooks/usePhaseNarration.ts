@@ -10,6 +10,7 @@ import { buildFedTacticsContext, speakDeepestLookahead } from '../services/liveT
 import { transitionTeachingSourceForGame, generalizedTeaching } from '../services/danyaTeachingService';
 import { buildVoicePackage } from '../services/voicePackage';
 import { detectOpening } from '../services/openingDetectionService';
+import { splitSpeakableSentences } from '../utils/sentenceSplit';
 import type { PhaseNarrationVerbosity, StockfishAnalysis } from '../types';
 import type { PhaseTransitionEvent } from '../services/phaseTransitionDetector';
 
@@ -18,6 +19,22 @@ export interface UsePhaseNarrationArgs {
   getPgn: () => string;
   /** Opening name as detected by the coach game screen. */
   getOpeningName: () => string | null;
+  /**
+   * The board the student is looking at RIGHT NOW.
+   *
+   * A transition report is computed from the position where the transition was
+   * detected, but it is spoken sentence by sentence over the seconds that
+   * follow — by which time the game has usually moved on. In a live Learn game
+   * (2026-08-09) the coach said "The best move is fxe7. It wins the bishop on
+   * e7." having ALREADY played fxe7: true of the detection position, and a
+   * plain falsehood about the board in front of the student, who was looking
+   * at a white pawn on e7.
+   *
+   * Given this, each sentence is judged against the live board instead, so a
+   * claim the position has outrun is dropped rather than spoken. Optional: a
+   * caller that does not pass it keeps the old detection-position behaviour.
+   */
+  getLiveFen?: () => string;
   /** Persist the finished phase-transition report as a chat message (David
    *  2026-07-01: the report should live in the messages under the board, not
    *  a transient banner that pops up then disappears). Called once with the
@@ -369,7 +386,12 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
         // before it's spoken. Pass phaseTactics so the tactic half fires too —
         // it was omitted, so a hallucinated fork/pin was board-checked only and
         // still SPOKEN (David 2026-07-04 PostHog sweep).
-        if (!isSpokenSentenceGrounded(trimmed, event.fen, 'usePhaseNarration', phaseTactics)) return;
+        // Judged against the board the student can SEE — see `getLiveFen`.
+        // A report about the detection position is only worth speaking while
+        // that is still the position; once the game moves past it, a sentence
+        // that no longer holds is silence, not narration.
+        const judgeFen = argsRef.current.getLiveFen?.() ?? event.fen;
+        if (!isSpokenSentenceGrounded(trimmed, judgeFen, 'usePhaseNarration', phaseTactics)) return;
         keptSentences.push(trimmed);
         sentenceCount += 1;
         if (sentenceCount === 1) {
@@ -396,23 +418,20 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
         // is the board it must be judged against.
         speechChain = speechChain
           .then(() => voiceService.speakPackage(
-            buildVoicePackage([{ kind: 'computed', text: trimmed, fen: event.fen }]),
+            // The SAME board the sentence was judged against — handing the
+            // package a different fen than the gate used is how a line passes
+            // one check and fails the other.
+            buildVoicePackage([{ kind: 'computed', text: trimmed, fen: argsRef.current.getLiveFen?.() ?? event.fen }]),
           ))
           .catch(() => undefined);
       };
-      // `+` (not `*`) so a bare terminator like "..." can't match a
-      // zero-char sentence. Requires ≥1 non-terminator char before the
-      // `.`/`!`/`?` so we dispatch only actual sentences.
-      const SENTENCE_END_RE = /([^.!?]+[.!?])(?=\s|$)/g;
+      // The splitter lives in `sentenceSplit` — extracted because the regex it
+      // replaces shipped a defect a unit test would have caught in a second
+      // (a lone "7 points)." spoken out loud; see that module's header).
       const flushCompletedSentences = (): void => {
-        SENTENCE_END_RE.lastIndex = 0;
-        let match: RegExpExecArray | null;
-        let lastEnd = 0;
-        while ((match = SENTENCE_END_RE.exec(sentenceBuffer)) !== null) {
-          dispatchSentence(match[1]);
-          lastEnd = SENTENCE_END_RE.lastIndex;
-        }
-        if (lastEnd > 0) sentenceBuffer = sentenceBuffer.slice(lastEnd);
+        const { sentences, rest } = splitSpeakableSentences(sentenceBuffer);
+        for (const s of sentences) dispatchSentence(s);
+        if (sentences.length > 0) sentenceBuffer = rest;
       };
 
       void logAppAudit({
