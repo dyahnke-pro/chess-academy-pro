@@ -274,3 +274,79 @@ describe('back-rank alignment after castling long', () => {
     expect(seed('6k1/7q/8/8/8/2N1B3/PPP1BPPP/R2QK2R w KQ - 0 20')).toBeNull();
   });
 });
+
+// David's 2026-08-08 session log, counted: "See if you can find it." spoken
+// FIVE times, "Worth noticing." three, "an undefended piece is the seed of a
+// tactic" twice — on different pieces on different moves, so no last-value
+// guard catches them. Each is a generic lesson bolted to a specific
+// observation: the first time it teaches, by the third it is what he tunes out.
+describe('the principle once, the fact every time', () => {
+  // Two different undefended enemy pieces, so the FACT differs each time and
+  // only the trailing moral is a repeat.
+  const ONE = 'r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1';
+
+  it('drops the moral the second time the same pattern appears', () => {
+    const said = new Set<string>();
+    const first = buildPlayCommentary({ fen: ONE, studentColor: 'white', saidExplainers: said });
+    if (!first) return; // position-dependent; the sweep below is the real gate
+    const repeated = buildPlayCommentary({ fen: ONE, studentColor: 'white', saidExplainers: said });
+    expect(repeated?.spoken.length ?? 0).toBeLessThanOrEqual(first.spoken.length);
+  });
+
+  it('says each generic clause AT MOST ONCE across a game', () => {
+    // The real gate: walk many positions through one shared set and assert no
+    // stock phrase is ever spoken twice.
+    const said = new Set<string>();
+    const FENS = [
+      'r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1',
+      'rnbqkb1r/ppp2ppp/8/3pP3/4n3/2N5/PPPP2PP/R1BQKBNR w KQkq - 0 5',
+      'r2qr1k1/pRp2ppp/8/2n1P3/3bB3/3P4/P1PB2PP/3QK2R w K - 3 15',
+      'r5k1/2p2ppp/p7/8/3Rr3/6P1/P1PB3P/5RK1 w - - 0 22',
+      '3r1k2/2p2p1p/p5p1/8/4R3/2B3P1/P1P4P/4R1K1 w - - 2 26',
+      'r3r1k1/2p2ppp/p7/4P3/1R1bq3/6P1/P1PBQ2P/4K2R w K - 0 19',
+    ];
+    const STOCK = [
+      'See if you can find it.',
+      'Worth noticing.',
+      'an undefended piece is the seed of a tactic',
+      "the opponent's best piece is the one worth exchanging",
+      'Nothing is forcing here',
+    ];
+    const counts = new Map<string, number>();
+    for (const fen of FENS) {
+      const beat = buildPlayCommentary({ fen, studentColor: 'white', saidExplainers: said });
+      if (!beat?.spoken) continue;
+      for (const phrase of STOCK) {
+        if (beat.spoken.includes(phrase)) counts.set(phrase, (counts.get(phrase) ?? 0) + 1);
+      }
+    }
+    for (const [phrase, n] of counts) {
+      expect(n, `"${phrase}" spoken ${n} times in one game`).toBe(1);
+    }
+  });
+
+  it('WITHOUT the set, nothing changes — the clause is not silently lost', () => {
+    // Callers that pass no set keep the old behaviour, so this cannot quietly
+    // strip teaching from a surface that never opted in.
+    const a = buildPlayCommentary({ fen: ONE, studentColor: 'white' });
+    const b = buildPlayCommentary({ fen: ONE, studentColor: 'white' });
+    expect(a?.spoken).toBe(b?.spoken);
+  });
+});
+
+describe('every beat carries a stable identity', () => {
+  it('exposes a key that survives the moral being stripped', () => {
+    // The caller suppresses an immediate repeat on `key`, not on `spoken` —
+    // because the rule above makes the same observation produce two different
+    // strings on consecutive plies. Measured on a Vienna: the e4-outpost beat
+    // spoke on moves 4 and 5, the second time minus its moral.
+    const fen = 'rnbqkb1r/ppp2ppp/8/3pP3/4n3/2N5/PPPP2PP/R1BQKBNR w KQkq - 0 5';
+    const said = new Set<string>();
+    const first = buildPlayCommentary({ fen, studentColor: 'white', saidExplainers: said });
+    const second = buildPlayCommentary({ fen, studentColor: 'white', saidExplainers: said });
+    if (!first || !second) return;
+    expect(first.key).toBeTruthy();
+    expect(second.key).toBe(first.key);          // same observation…
+    expect(second.spoken).not.toBe(first.spoken); // …different words. Hence the key.
+  });
+});

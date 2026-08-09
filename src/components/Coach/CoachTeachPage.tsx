@@ -1236,6 +1236,16 @@ export function CoachTeachPage(): JSX.Element {
   const gemSeenRef = useRef<string | null>(null);
   /** Last spoken tactics-alert key (David 2026-08-07: "I saw no tactics
    *  alerts") — a persisting danger alerts once, not every turn. */
+  /** Generic teaching clauses `buildPlayCommentary` has already used this game.
+   *  The principle is worth saying once; the fact speaks every time. */
+  const saidExplainersRef = useRef(new Set<string>());
+  /** The last computed read spoken. A standing board feature (an outpost, an
+   *  open file) survives many plies, and the lane had NO repeat guard at all —
+   *  the tactic and threat lanes each had one — so it re-narrated the identical
+   *  sentence turn after turn. Measured on a Vienna walk: the e4-outpost line
+   *  spoke on two consecutive moves, verbatim. */
+  const lastComputedRef = useRef('');
+
   /** Last spoken TACTIC key, so a standing opportunity does not nag every ply. */
   const lastTacticRef = useRef('');
   /** Last spoken THREAT key. Separate from the tactic key — one lane repeating
@@ -5328,7 +5338,11 @@ export function CoachTeachPage(): JSX.Element {
     // position, which is the correct answer most of the time.
     let computedLine: string | null = null;
     try {
-      const beat = buildPlayCommentary({ fen: args.fenAfterReply, studentColor: playerColor });
+      const beat = buildPlayCommentary({
+        fen: args.fenAfterReply,
+        studentColor: playerColor,
+        saidExplainers: saidExplainersRef.current,
+      });
       if (beat) {
         // `spoken`, NOT `facts`. The facts are written at a phrasing model —
         // shouted header, then an instruction ("Do NOT name the winning move")
@@ -5337,7 +5351,22 @@ export function CoachTeachPage(): JSX.Element {
         // FILL the silence: the corpus can only reach ~14% of the plies we
         // teach, and the computed read is what the other 86% was always
         // supposed to hear. Feeding it directives made it contribute nothing.
-        computedLine = beat.spoken;
+        // Immediate repeat only — the same guard shape the tactic and threat
+        // lanes use. A feature that comes BACK after other content is fair to
+        // mention again; the same observation twice running is not.
+        //
+        // Keyed on `beat.key`, NOT on the text: the say-the-principle-once rule
+        // strips a trailing clause the second time a pattern appears, so the
+        // same observation yields two different strings on consecutive plies
+        // and a text guard sails straight past it. Measured on a Vienna walk —
+        // the e4-outpost beat spoke on moves 4 and 5, the second time minus
+        // its moral.
+        if (beat.key && beat.key === lastComputedRef.current) {
+          computedLine = null;
+        } else {
+          computedLine = beat.spoken;
+          lastComputedRef.current = beat.key;
+        }
         factLines.push(`Computed from the board (${beat.kind}): ${beat.facts.join(' ')}`);
       }
     } catch { /* commentary is a bonus, never a blocker */ }

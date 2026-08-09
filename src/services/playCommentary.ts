@@ -25,6 +25,16 @@ export type CommentaryKind =
 
 export interface PlayCommentary {
   kind: CommentaryKind;
+  /** Stable identity of the OBSERVATION — kind plus the square(s) it is about.
+   *
+   *  A caller suppressing immediate repeats cannot key on `spoken`: the
+   *  say-the-principle-once rule strips a trailing clause the second time a
+   *  pattern appears, so the same observation produces two different strings
+   *  on consecutive plies and an exact-match guard sails right past it. That
+   *  is exactly what happened on a Vienna walk — the e4-outpost beat spoke on
+   *  moves 4 and 5, the second time minus its moral. Key on this instead; it
+   *  is the same shape as the tactic/threat keys in CoachTeachPage. */
+  key: string;
   /** Grounded fact lines for the narration package. Each is TRUE of the board
    *  passed in; the model rephrases, it does not extend. */
   facts: string[];
@@ -437,6 +447,12 @@ export function buildPlayCommentary(args: {
    *  already board-verified. Passed in rather than recomputed so this file
    *  stays a composer, not a second source of truth. */
   bestMoveWhy?: string | null;
+  /** Generic teaching clauses already used this game. See `once` below — the
+   *  principle behind a beat is worth saying ONCE; repeating it every time the
+   *  same pattern appears is what makes a coach drone. Caller owns the set for
+   *  the game; omit it and every clause is spoken every time (the old
+   *  behaviour). */
+  saidExplainers?: Set<string>;
 }): PlayCommentary | null {
   let chess: Chess;
   try {
@@ -444,6 +460,26 @@ export function buildPlayCommentary(args: {
   } catch {
     return null;
   }
+  // THE PRINCIPLE ONCE, THE FACT EVERY TIME.
+  //
+  // Measured in David's own 2026-08-08 session log: "See if you can find it."
+  // spoken FIVE times, "Worth noticing." three, "an undefended piece is the
+  // seed of a tactic" twice — across different pieces on different moves, so
+  // no last-value guard catches them. Each clause is a generic lesson bolted
+  // to a specific observation; the first time it teaches, and by the third it
+  // is the thing he tunes out. The narration voice rules say it directly:
+  // "Vary stems. When a phrase MUST repeat, alternate stems rather than
+  // copying the same opener verbatim."
+  //
+  // The FACT ("their bishop on f3 is undefended") always speaks — it is what
+  // is true of this board. Only the attached moral goes quiet.
+  const once = (key: string, clause: string): string => {
+    const said = args.saidExplainers;
+    if (!said) return clause;
+    if (said.has(key)) return '';
+    said.add(key);
+    return clause;
+  };
   const me: 'w' | 'b' = args.studentColor === 'white' ? 'w' : 'b';
   const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
   if (chess.turn() !== me) return null; // not the student's move — say nothing
@@ -474,6 +510,7 @@ export function buildPlayCommentary(args: {
       if (tac.type === 'mate_threat') {
         return {
           kind: 'tactic',
+          key: 'tactic:mate_threat',
           spoken: 'There is a checkmate available right now — look for the forcing move.',
           facts: [
             'MATE IS ON THE BOARD for the student. Say plainly that a checkmate is available right now and they should look for the forcing move. Do NOT name the move or the square.',
@@ -482,7 +519,8 @@ export function buildPlayCommentary(args: {
       }
       return {
         kind: 'tactic',
-        spoken: `${tac.description}. See if you can find it.`,
+        key: `tactic:${tac.type}:${tac.involvedSquares.join('')}`,
+        spoken: `${tac.description}.${once('find-it', ' See if you can find it.')}`,
         facts: [
           `TACTIC ON THE BOARD for the student: ${tac.description}. Name the PATTERN and why the geometry works. Do NOT name the winning move — let them find it.`,
         ],
@@ -497,7 +535,8 @@ export function buildPlayCommentary(args: {
       const h = theirHanging[0];
       return {
         kind: 'tactic',
-        spoken: `Their ${NAME[h.piece] ?? 'piece'} on ${h.square} is undefended — an undefended piece is the seed of a tactic.`,
+        key: `hanging:${h.piece}${h.square}`,
+        spoken: `Their ${NAME[h.piece] ?? 'piece'} on ${h.square} is undefended${once('undefended-seed', ' — an undefended piece is the seed of a tactic')}.`,
         facts: [
           `UNDEFENDED: the opponent's ${NAME[h.piece] ?? 'piece'} on ${h.square} is not defended. Say what you notice — an undefended piece is the seed of a tactic — without naming the move that wins it.`,
         ],
@@ -513,7 +552,8 @@ export function buildPlayCommentary(args: {
   if (seed) {
     return {
       kind: 'seeding-observation',
-      spoken: `Their ${seed.what} line up on the same ${seed.line}, and you have a ${seed.tool} that moves along it. Worth noticing.`,
+      key: `seed:${seed.what}:${seed.line}`,
+      spoken: `Their ${seed.what} line up on the same ${seed.line}, and you have a ${seed.tool} that moves along it.${once('worth-noticing', ' Worth noticing.')}`,
       facts: [
         `ALIGNMENT: the opponent's ${seed.what} line up on the same ${seed.line}. The student owns a ${seed.tool} that moves along that geometry. Point out the alignment as something worth noticing — nothing more. Do NOT suggest a move.`,
       ],
@@ -528,7 +568,8 @@ export function buildPlayCommentary(args: {
     if (trades.length > 0) {
       return {
         kind: 'trade-the-best-piece',
-        spoken: `${best.why}. You can trade it off right now — the opponent's best piece is the one worth exchanging.`,
+        key: `trade:${best.piece.square}`,
+        spoken: `${best.why}. You can trade it off right now${once('trade-best', " — the opponent's best piece is the one worth exchanging")}.`,
         facts: [
           `THEIR BEST PIECE: ${best.why}. The student can trade it off right now. Teach the idea — the opponent's best piece is the one worth exchanging — and name the piece and its square. Do NOT give the capturing move.`,
         ],
@@ -557,7 +598,8 @@ export function buildPlayCommentary(args: {
     if (moved && isQuiet) {
       return {
         kind: 'improving-move',
-        spoken: `Nothing is forcing here, so improve a piece — the ${NAME[moved.type] ?? 'piece'} on ${from} is the one with a better square. ${args.bestMoveWhy}`,
+        key: `improve:${from}`,
+        spoken: `${once('nothing-forcing', 'Nothing is forcing here, so improve a piece — t') || 'T'}he ${NAME[moved.type] ?? 'piece'} on ${from} is the one with a better square. ${args.bestMoveWhy}`,
         facts: [
           `IMPROVING MOVE: nothing is forcing here, so the move is to improve a piece. The ${NAME[moved.type] ?? 'piece'} on ${from} is the one with a better square available. Grounded reason: ${args.bestMoveWhy}. Teach the HABIT — when there is no tactic, find your worst-placed piece and improve it — and name the piece, NOT its destination.`,
         ],
