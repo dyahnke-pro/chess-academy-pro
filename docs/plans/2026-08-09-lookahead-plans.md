@@ -13,6 +13,21 @@
 > defender to attack over here, now is your chance to take control of the key
 > square' things like that."
 
+And the corrections that followed, which change two of the pieces below:
+
+> "First of all the coach should never apologize. Second I don't have a
+> deterministic answer for that. If the coach plays a worse move that clearly
+> has a draw back then coach needs to tell alert the user and point them in the
+> direction of the punishment (don't just give them the answer, but something
+> subtle that makes them think) this is probably the hardest concept to get
+> right so far. But it's the most important. Also again, coach is adaptive. So
+> higher ranked players get more subtle hints. This needs to be coded for. We
+> use the same adaptive hint system that I think has been coded already."
+
+> "Acknowledge that it's not a hint button, but the coach narrations that act
+> like hints throughout the game. Stronger player more subtle and less often
+> hints. Weaker player much more obvious and more often."
+
 ## Why this is the right shape
 
 It resolves a question I had parked as a product decision. The coach plays at
@@ -76,7 +91,7 @@ Group the PV's plies by `moverColor` and read each side's intention off its own
 moves: which squares it heads for, what it is trying to trade, which file it is
 opening. Two plans, one search.
 
-### 3. Hints, not dictation
+### 3. Hints, not dictation — and the hint IS the narration
 The locked honesty contract already says name the opportunity and withhold the
 move. This extends it to plans:
 
@@ -86,19 +101,60 @@ move. This extends it to plans:
 
 The student is led to the move; they are not handed it.
 
+David 2026-08-09, and this is the part to get right before writing any code:
+**"it's not a hint button, but the coach narrations that act like hints
+throughout the game. Stronger player more subtle and less often hints. Weaker
+player much more obvious and more often."**
+
+So there is nothing to press. The adaptation is not a separate feature bolted
+next to the narration — it IS the narration, turned up or down. Two dials, both
+driven by one number:
+
+- **Frequency** — how many positions earn a beat at all.
+- **Subtlety** — how far the same fact sits from the move. The identical
+  position yields *"e5 is the square this game turns on"* to a strong player and
+  *"my knight is coming to e5 and nothing of yours is watching it"* to a
+  beginner. Same computed fact, different distance from the answer.
+
+**The dial is how often the student is finding the right move** (David
+2026-08-09) — not rating. Rating is a stale prior, entered once and often wrong;
+whether they found the last six moves is a live read on the player sitting there
+right now. It is already computed: `isNearBest(cpLoss)` (≤20cp) runs on every
+player move for the slip detector, so the running found/missed tally costs
+nothing new. Keep the rating band as the OPENING position of the dial — it is
+all we know at move one — and let the tally move it from there. A 1200 who finds
+five straight gets left alone; a 1900 who has missed four in a row is handed
+something obvious, whatever their profile says.
+
+Two things to get right when it is built: a window short enough to track a
+student warming up or tiring (a handful of moves, not the whole game), and
+hysteresis, so the register does not flip every other move — a coach that
+alternates between cryptic and blunt reads as broken rather than adaptive.
+
 ### 4. The concession beat — the part that is genuinely new
 Compare the coach's ACTUAL move against the PV move for its side.
 
-- Same move → nothing to say.
-- Materially worse (a cp threshold, tuned) → the coach just made a real
-  concession, and it knows what it gave up. It says so in the first person, in
-  the voice built for exactly this (`opponentVoice.ts`), and points the student
-  at what opened up: *"I don't rate your attack — I've taken a defender off e5
-  to play on the other wing. That's your chance to take the square."*
+**The trigger is a NAMEABLE DRAWBACK, not a cp threshold** (David 2026-08-09:
+*"I don't have a deterministic answer for that. If the coach plays a worse move
+that clearly has a draw back then coach needs to alert the user and point them
+in the direction of the punishment"*). That is a better test than a number and
+also a stricter one: the beat fires only when code can SAY what was given up — a
+defender left a square, a file was opened, a piece went offside, a pawn became
+weak. A move that is 80cp worse for reasons the board-reader cannot name gets no
+beat, because there is nothing to point at. This makes the detector, not a tuned
+constant, the thing that decides — and it is the same positional-read machinery
+being built up below, which is why the two are one job.
 
-This is the highest-value beat in the design and the only one with no
-precedent in the app. It also makes the coach's weakness into a feature rather
-than something to apologise for.
+Then point at the punishment **without giving it**: *"I don't rate your attack —
+I've taken a defender off e5 to play on the other wing."* Never *"so play Nxe5."*
+Distance from the answer follows the dial in piece 3.
+
+**The coach never apologizes** (David, locked). Not "sorry", not "that was
+careless of me", not a hedge in either direction. It states what it did and what
+that hands over — a strong player showing you the hole they just made, not a
+teacher confessing. This is the highest-value beat in the design, the only one
+with no precedent in the app, and it turns the coach's weakness into the lesson
+instead of something to excuse.
 
 ## Building up the positional read
 
@@ -119,16 +175,19 @@ Steps 1–3 change how it sounds. Step 4 only makes it say more.
 
 ## Open questions
 
-- **Concession threshold.** How much worse than the PV move counts as a
-  concession worth announcing? Too low and the coach apologises every move; too
-  high and it stays silent through real gifts. Needs measuring against real
-  games, not picking.
+~~**Concession threshold**~~ — **CLOSED.** It was never a threshold; the trigger
+is a nameable drawback (piece 4).
+
+~~**Rating adaptation**~~ — **CLOSED.** The dial is the student's live
+found-the-move rate, opened at their rating band (piece 3).
+
 - **PV depth to narrate.** The first 6–8 plies are worth describing as
   intention. Past that both sides are being credited with a future neither has
   committed to.
-- **Rating adaptation.** A 1684 coach against a 900 student concedes constantly.
-  Does every concession get announced, or only ones the student could plausibly
-  punish?
+- **Window and hysteresis for the dial.** How many recent moves the found/missed
+  tally reads, and how much movement it takes to change register. Both want
+  measuring against real games rather than picking — but neither blocks the
+  build, since a fixed window ships and then gets tuned.
 
 ## Owed before this starts
 
