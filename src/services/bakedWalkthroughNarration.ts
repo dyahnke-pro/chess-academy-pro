@@ -196,12 +196,22 @@ export interface BakedPlyTeaching {
  * returned was authored for the position the student is looking at — which is
  * why this needs no board grading downstream and cannot narrate a line that is
  * not being played.
+ *
+ * THE MOVES PICK THE TEACHING; THE NAME ONLY BREAKS TIES. Requiring the name
+ * made the whole thing unreachable in a game, and the audit caught it: four
+ * plies of the Latvian went by with nothing taught, because at `e4 e5 Nf3` the
+ * position has no name yet and by the time it earns one the line has usually
+ * moved on. A name that arrives two moves late cannot be the key to teaching
+ * that had to be spoken two moves ago. So candidates come from the board, and
+ * the name is consulted only when several baked openings share this prefix —
+ * where refusing to guess is the honest answer, since the game genuinely is
+ * not yet one opening rather than another.
  */
 export function bakedTeachingForPly(
   openingName: string | null | undefined,
   historySans: string[],
 ): BakedPlyTeaching | null {
-  if (!openingName || historySans.length === 0) return null;
+  if (historySans.length === 0) return null;
 
   /** Is `history` an exact prefix of this bake's spine, with an idea here? */
   const prefixIdea = (entry: BakedNarration): BakedPlyTeaching | null => {
@@ -221,21 +231,32 @@ export function bakedTeachingForPly(
     };
   };
 
-  const exact = DATA.narrations[norm(openingName)];
-  const fromExact = exact ? prefixIdea(exact) : null;
-  if (fromExact) return fromExact;
-
-  let best: BakedPlyTeaching | null = null;
-  let bestScore = 0;
+  // Every bake these moves could be on. The board asks the question.
+  const candidates: Array<{ key: string; hit: BakedPlyTeaching }> = [];
   for (const [key, entry] of Object.entries(DATA.narrations)) {
-    const score = nameScore(openingName, key);
-    if (score < 0.6 || score < bestScore) continue;
     const hit = prefixIdea(entry);
-    if (!hit) continue;
-    // Same name score: prefer the bake that keeps teaching furthest.
-    if (score === bestScore && best && hit.remaining <= best.remaining) continue;
-    best = hit;
-    bestScore = score;
+    if (hit) candidates.push({ key, hit });
   }
-  return best;
+  if (candidates.length === 0) return null;
+
+  if (openingName) {
+    const exact = candidates.find((c) => c.key === norm(openingName));
+    if (exact) return exact.hit;
+    let best: BakedPlyTeaching | null = null;
+    let bestScore = 0;
+    for (const { key, hit } of candidates) {
+      const score = nameScore(openingName, key);
+      if (score < 0.6 || score < bestScore) continue;
+      // Same name score: prefer the bake that keeps teaching furthest.
+      if (score === bestScore && best && hit.remaining <= best.remaining) continue;
+      best = hit;
+      bestScore = score;
+    }
+    if (best) return best;
+  }
+
+  // No name, or a name that agrees with none of them. One candidate means the
+  // moves have already decided; several means the game has not yet committed
+  // to an opening, and saying which one it is would be the invention.
+  return candidates.length === 1 ? candidates[0].hit : null;
 }

@@ -5467,7 +5467,13 @@ export function CoachTeachPage(): JSX.Element {
     // A farmed note that merely transposes into this FEN is the weaker claim.
     let bakedLine: string | null = null;
     try {
-      const baked = bakedTeachingForPly(announcedOpeningNameRef.current, history);
+      // The opening the student ASKED for beats the one the detector has got
+      // to so far. "Play the Latvian against me" names the line before a
+      // single move is on the board; detection cannot name it until f5, which
+      // is three plies of teaching too late.
+      const wanted = useCoachMemoryStore.getState().intendedOpening?.name
+        ?? announcedOpeningNameRef.current;
+      const baked = bakedTeachingForPly(wanted, history);
       if (baked && !bakedPlySeenRef.current.has(baked.ply)) {
         bakedPlySeenRef.current.add(baked.ply);
         bakedLine = baked.text;

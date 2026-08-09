@@ -70,13 +70,40 @@ describe('it can never narrate a line that is not being played', () => {
     expect(bakedTeachingForPly('Latvian Gambit', [...entry.spine, 'a3'])).toBeNull();
   });
 
-  it('an unknown opening name gets nothing', () => {
-    expect(bakedTeachingForPly('Not A Real Opening', ['e4', 'e5'])).toBeNull();
+  it('no moves, no teaching', () => {
+    expect(bakedTeachingForPly('Latvian Gambit', [])).toBeNull();
+  });
+});
+
+// The name arrives late — detection cannot call it the Latvian until f5 — so
+// requiring it left the first plies of every game untaught. The moves decide;
+// the name only breaks ties.
+describe('the board picks the teaching, the name breaks ties', () => {
+  it('teaches a line only one bake can be on, with no name at all', () => {
+    // e4 e5 Nf3 f5 is the Latvian and nothing else in the bake.
+    const hit = bakedTeachingForPly(null, ['e4', 'e5', 'Nf3', 'f5']);
+    expect(hit?.openingName).toBe('Latvian Gambit');
   });
 
-  it('no name, no teaching', () => {
-    expect(bakedTeachingForPly(null, ['e4'])).toBeNull();
-    expect(bakedTeachingForPly('Latvian Gambit', [])).toBeNull();
+  it('stays silent while several baked openings still share the moves', () => {
+    // e4 e5 Nf3 is the Latvian, the Glek and the Elephant alike. Naming one
+    // would be the invention; the game has not committed yet.
+    expect(bakedTeachingForPly(null, ['e4', 'e5', 'Nf3'])).toBeNull();
+  });
+
+  it('a name the student gave resolves that ambiguity', () => {
+    const hit = bakedTeachingForPly('Latvian Gambit', ['e4', 'e5', 'Nf3']);
+    expect(hit?.openingName).toBe('Latvian Gambit');
+    expect(hit?.ply).toBe(3);
+  });
+
+  it('an unrelated name never overrides the moves', () => {
+    // The name agrees with nothing on this line, so it falls back to what the
+    // board says — and the board says exactly one bake.
+    expect(bakedTeachingForPly('Not A Real Opening', ['e4', 'e5', 'Nf3', 'f5'])?.openingName)
+      .toBe('Latvian Gambit');
+    // …and a line no bake is on stays null whatever it is called.
+    expect(bakedTeachingForPly('Latvian Gambit', ['a4', 'a5'])).toBeNull();
   });
 });
 

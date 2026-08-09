@@ -371,12 +371,21 @@ async function main() {
   console.log(`PostHog: SELECT timestamp, properties.source, properties.narration_text FROM events`);
   console.log(`  WHERE event='coach_narration_spoken' AND properties.audit_run_id='${RUN_ID}' ORDER BY timestamp`);
 
-  const missedBeats = !histogram['IMPROVING MOVE'] && !histogram['THEIR BEST PIECE'];
+  // The two David named are REPORTED unconditionally, but they cannot be the
+  // pass condition: the ladder speaks one thing per turn and both sit below
+  // the tactical rungs, so a sharp game legitimately never reaches them. What
+  // is a defect is a middlegame the coach had nothing at all to say about.
+  const middlegameBeats = transcript
+    .filter((t) => t.phase === 'middlegame')
+    .reduce((n, t) => n + (t.beats?.length ?? 0), 0);
+  const mutedMiddlegame = transcript.filter((t) => t.phase === 'middlegame').length >= 8
+    && middlegameBeats === 0;
+  if (mutedMiddlegame) console.log('❌ a real middlegame went by with no computed beat at all');
   // A game that stayed on a baked line and got no opening teaching is the
   // failure this run exists to catch — silence there is what David heard.
   const untaughtOpening = Boolean(FOLLOW) && report.spineReached >= 4 && report.openingPliesTaught.length === 0;
   if (untaughtOpening) console.log(`❌ played ${report.spineReached} plies of a BAKED opening and taught none of them`);
-  process.exit(allFalse.length > 0 || pageErrors.length > 0 || missedBeats || untaughtOpening ? 1 : 0);
+  process.exit(allFalse.length > 0 || pageErrors.length > 0 || mutedMiddlegame || untaughtOpening ? 1 : 0);
 }
 
 main().catch((e) => { console.error('FATAL', e); process.exit(1); });
