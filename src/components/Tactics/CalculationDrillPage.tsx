@@ -10,9 +10,12 @@ import { CalculationTab } from '../Coach/CalculationTab';
  */
 export function CalculationDrillPage(): JSX.Element {
   const navigate = useNavigate();
-  return (
-    <div className="flex flex-col gap-4 p-4 flex-1 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6">
-      <CalculationTab onExit={() => { void navigate('/tactics'); }} />
-    </div>
-  );
+  // No wrapping scroll/padding container here: CalculationTab's drill view
+  // renders ChessLessonLayout, which must be the DIRECT child of <main> to
+  // correctly cap the board height and reserve space above the mobile bottom
+  // nav (see ChessLessonLayout.tsx). Nesting it inside another overflow-y-auto
+  // + padded div stacks two bottom-padding reserves and pushes the Skip/Hint/
+  // Next control row off-screen with no way to scroll to it. The picker and
+  // rationale views own their own scroll/padding wrapper for the same reason.
+  return <CalculationTab onExit={() => { void navigate('/tactics'); }} />;
 }
