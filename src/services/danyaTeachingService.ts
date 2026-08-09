@@ -23,7 +23,7 @@ import { secondarySupportNotes, secondaryNotesForPosition, secondaryNotesForFen 
 import { detectOpening } from './openingDetectionService';
 import { noteContradictsLine, notePhaseMismatchesBoard } from './noteLineGuard';
 import { boardConcepts, phaseOfFen } from './boardConcepts';
-import { noteDescribesPosition, noteTeachesChessNotItsSource, noteStaysInScope } from './noteAnchorIntegrity';
+import { noteDescribesPosition, noteTeachesChessNotItsSource, noteStaysInScope, notePhaseMatchesBoardWords, noteRecommendsALegalMove } from './noteAnchorIntegrity';
 import { bakedSpoken } from './spokenNoteBake';
 import { falseConfigurationClaim } from './configurationClaims';
 import { logAppAudit } from './appAuditor';
@@ -468,9 +468,24 @@ export function teachingSourceForBoard(
   // middlegame plan is a middlegame note) and lets the board-read tiers answer
   // where they belong.
   const boardPhase = phaseOfFen(fen);
+  // 🔒 EVERY TIER IS CHECKED AGAINST THE BOARD, not just the position tier.
+  //
+  // A whole game (2026-08-09) heard, from the family and concept tiers: "After
+  // Qd2, Black has the option of Bg4" with Qd2 illegal; "The move Bh4 is a
+  // strong choice because it keeps the pin" with no Bh4 and no pin; and "The
+  // rook endgame turns on removing both white pawns" in a middlegame with both
+  // bishops and all four rooks on the board. Each was fluent, each was true
+  // somewhere, none was about the board in front of the student.
+  //
+  // These three checks read the note's own words against this position, which
+  // is the only thing that separates the right note from a plausible one (G0 —
+  // fix the package, don't validate the phrasing afterwards).
   const phaseFits = (note: DanyaNote): boolean =>
     noteTeachesChessNotItsSource(note)
-    && (!boardPhase || note.phase === 'concept' || note.phase === boardPhase);
+    && (!boardPhase || note.phase === 'concept' || note.phase === boardPhase)
+    && notePhaseMatchesBoardWords(note, boardPhase)
+    && noteRecommendsALegalMove(note, fen)
+    && noteDescribesPosition(note, fen);
   // GAP TIER — an opening the primary corpus never covers still gets a note in
   // the FACTS PACKAGE, so the coach can teach its ideas instead of going quiet.
   //

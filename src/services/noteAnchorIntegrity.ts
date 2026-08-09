@@ -94,6 +94,73 @@ export function noteDescribesPosition(note: DanyaNote, fen: string | undefined):
   }
 }
 
+/** "the rook endgame", "in the endgame", "out of the opening" — a note that
+ *  says outright which phase it is about. */
+const PHASE_WORD = /\b(?:the\s+)?(opening|middlegame|endgame|ending)\b/i;
+
+/**
+ * True when the note's own words do not contradict the board's PHASE.
+ *
+ * A full game (2026-08-09) heard, in a middlegame with both bishops and both
+ * rooks on: "The rook endgame turns on removing both white pawns while keeping
+ * at least one black pawn." The note is fine teaching and it is filed as a
+ * general CONCEPT, which is what let it through — the phase filter exempts
+ * concept-tagged notes so they can apply anywhere, and most genuinely can. This
+ * one names its phase in its first breath, and that name was wrong for the
+ * board.
+ *
+ * Only a note that NAMES a phase is judged; everything else passes untouched.
+ * "Opening" is deliberately not rejected in the middlegame — talking about what
+ * came out of the opening is normal middlegame teaching — while an ENDGAME
+ * claim on a board full of pieces is not.
+ */
+export function notePhaseMatchesBoardWords(
+  note: DanyaNote,
+  boardPhase: 'opening' | 'middlegame' | 'endgame' | null,
+): boolean {
+  if (!boardPhase || boardPhase === 'endgame') return true;
+  try {
+    const first = (note.explains ?? '').split(/(?<=[.!?])\s/)[0] ?? '';
+    const named = PHASE_WORD.exec(first);
+    if (!named) return true;
+    const phase = named[1].toLowerCase();
+    return phase !== 'endgame' && phase !== 'ending';
+  } catch {
+    return true;
+  }
+}
+
+/** "The move Bh4 is a strong choice", "Bh4 is best here" — a note whose first
+ *  sentence RECOMMENDS a specific move. */
+const RECOMMENDS_MOVE = /^(?:The move\s+)?(O-O(?:-O)?|[NBRQK][a-h1-8]?x?[a-h][1-8]|[a-h]x[a-h][1-8])\b(?=[^.]*\b(?:is|works|wins|holds)\b)/;
+
+/**
+ * True when a move the note recommends OUTRIGHT is legal on this board.
+ *
+ * The same game heard "The move Bh4 is a strong choice because it keeps the pin
+ * on the knight" at a position where Bh4 was not available and no such pin
+ * existed. `noteDescribesPosition` cannot catch it: that check only fires on an
+ * explicit hypothetical opener ("After…", "If…"), and this sentence opens with
+ * the recommendation itself.
+ *
+ * A recommendation is the strongest claim a note can make about a board, so it
+ * is the one most worth checking — and the check is exact: either the move is
+ * legal here or the note is about somewhere else.
+ */
+export function noteRecommendsALegalMove(note: DanyaNote, fen: string | undefined): boolean {
+  if (!fen) return true;
+  try {
+    const first = ((note.explains ?? '').split(/(?<=[.!?])\s/)[0] ?? '').trim();
+    const rec = RECOMMENDS_MOVE.exec(first);
+    if (!rec) return true;
+    const san = rec[1].replace(/[+#]/g, '');
+    const reachable = movesReachableFrom(fen);
+    return reachable.size === 0 || reachable.has(san);
+  } catch {
+    return true;
+  }
+}
+
 /** Phrases that give away a note describing its own SOURCE rather than a chess
  *  position: the video it was distilled from, the course it belongs to, the
  *  person talking. */

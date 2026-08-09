@@ -20,7 +20,7 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import './../test/loadFullCorpus';
 import { teachingSourceForBoard } from './danyaTeachingService';
-import { noteStaysInScope } from './noteAnchorIntegrity';
+import { noteStaysInScope, notePhaseMatchesBoardWords, noteRecommendsALegalMove } from './noteAnchorIntegrity';
 
 /** Board after a list of SAN moves. */
 function boardAfter(sans: string[]): { history: string[]; fen: string } {
@@ -158,5 +158,54 @@ describe('a bare opening name is still an opening name', () => {
     'The endgame favours the side with the passed pawn.',
   ])('keeps ordinary prose: "%s"', (text) => {
     expect(noteStaysInScope(note(text) as never, 'Vienna Game: Vienna Gambit')).toBe(true);
+  });
+});
+
+// ── Every tier reads its own words against the board ───────────────────────
+//
+// These three sentences were all spoken in the 2026-08-09 game, and none of
+// them was about the board the student was looking at. They came from the
+// family and concept tiers, which were checked for phase TAG and opening tag
+// but never against the position itself.
+describe('a note whose words contradict the board is not selected', () => {
+  const note = (text: string) => ({
+    id: 't', opening: null, phase: 'concept' as const, lineSan: [],
+    explains: text, teaches: '', plans: '', concepts: [], source: 't',
+  });
+  const MIDDLEGAME = 'r2q1rk1/pp2bppp/2n1bn2/3pp3/3PP3/2N1BN2/PPPQ1PPP/2KR1B1R w - - 0 11';
+
+  it('an ENDGAME claim on a full board', () => {
+    expect(notePhaseMatchesBoardWords(
+      note('The rook endgame turns on removing both white pawns.') as never,
+      'middlegame',
+    )).toBe(false);
+  });
+
+  it('but talking about the opening in a middlegame is normal', () => {
+    expect(notePhaseMatchesBoardWords(
+      note('Out of the opening Black has the freer game.') as never,
+      'middlegame',
+    )).toBe(true);
+  });
+
+  it('a RECOMMENDED move that is not legal here', () => {
+    expect(noteRecommendsALegalMove(
+      note('The move Bh4 is a strong choice because it keeps the pin.') as never,
+      MIDDLEGAME,
+    )).toBe(false);
+  });
+
+  it('a recommended move that IS legal passes', () => {
+    expect(noteRecommendsALegalMove(
+      note('The move Nb5 is a strong choice because it eyes the outpost.') as never,
+      MIDDLEGAME,
+    )).toBe(true);
+  });
+
+  it('a note that recommends nothing is never judged on this', () => {
+    expect(noteRecommendsALegalMove(
+      note('Space on the queenside is what both sides are playing for.') as never,
+      MIDDLEGAME,
+    )).toBe(true);
   });
 });
