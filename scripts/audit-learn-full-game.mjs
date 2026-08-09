@@ -31,6 +31,7 @@ import { writeFileSync, mkdirSync } from 'node:fs';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { pickStudentMove } from './audit-lib/student-player.mjs';
+import BAKE from '../src/data/walkthrough-narrations.json' with { type: 'json' };
 
 const BASE = process.env.AUDIT_SMOKE_URL ?? 'https://chess-academy-pro.vercel.app';
 const RUN_ID = process.env.AUDIT_RUN_ID ?? `learn-full-${Math.random().toString(36).slice(2, 10)}`;
@@ -41,6 +42,34 @@ const OUT = `audit-reports/learn-full-game-${new Date().toISOString().replace(/[
 /** The opening the coach is asked to play, so the game starts from real theory
  *  and then leaves it — which is exactly where the middlegame beats live. */
 const ASK = process.env.AUDIT_ASK ?? 'play the Vienna Gambit against me';
+
+/** FOLLOW THE LINE YOU ASKED FOR.
+ *
+ *  The first run of this audit asked for the Latvian and then played Nc6 on
+ *  move one, because the student player only knows material and development —
+ *  so the game left theory before it entered it, and the opening teaching had
+ *  nothing to attach to. A student who asks for the Latvian plays the Latvian.
+ *
+ *  While the game is still a prefix of the named opening's baked spine the
+ *  student plays the spine's next move; the moment the coach steps off it the
+ *  audit reverts to its own player, which is where the middlegame lives. */
+const FOLLOW = (() => {
+  const wanted = (process.env.AUDIT_FOLLOW ?? ASK).toLowerCase();
+  const entries = Object.values(BAKE.narrations ?? {});
+  const hit = entries
+    .filter((e) => wanted.includes(e.openingName.toLowerCase()))
+    .sort((a, b) => b.openingName.length - a.openingName.length)[0];
+  return hit ? { name: hit.openingName, spine: hit.spine } : null;
+})();
+
+/** The spine's next move, or null once the game has left the line. */
+const spineMove = (history) => {
+  if (!FOLLOW || history.length >= FOLLOW.spine.length) return null;
+  for (let i = 0; i < history.length; i += 1) {
+    if (FOLLOW.spine[i] !== history[i]) return null;
+  }
+  return FOLLOW.spine[history.length];
+};
 
 const sleep = (ms) => new Promise((r) => { setTimeout(r, ms); });
 
@@ -140,6 +169,7 @@ async function main() {
   const pageErrors = [];
   const spoken = [];
   const beats = [];        // { beat, fen } from the app's own turnFacts details
+  const bakedPlies = [];   // which plies of the named opening the bake taught
   const rawPayloads = [];
   page.on('pageerror', (e) => pageErrors.push(String(e)));
   page.on('request', (req) => {
@@ -153,6 +183,13 @@ async function main() {
           try {
             for (const b of (JSON.parse(e.details).beats ?? [])) beats.push({ beat: b, fen: e.fen });
           } catch { /* details not ours */ }
+        }
+        // The bake announces WHICH ply of the opening it taught, so "the whole
+        // opening got taught" is read off the app's own event instead of being
+        // pattern-matched back out of the model's phrasing.
+        if (e.source === 'CoachTeachPage.bakedOpeningTeaching') {
+          const n = /move (\d+)/.exec(String(e.summary ?? ''));
+          if (n) bakedPlies.push(Number(n[1]));
         }
         if (kind.includes('narration') || kind.includes('voice')) {
           spoken.push({ kind, source: e.source, text: e.narrationText ?? e.summary, fen: e.fen });
@@ -218,7 +255,13 @@ async function main() {
   }
 
   while (ply < MAX_PLIES && !chess.isGameOver()) {
-    const legal = pickStudentMove(chess.fen(), chess.history().length);
+    const onSpine = spineMove(chess.history());
+    let legal = null;
+    if (onSpine) {
+      const m = chess.moves({ verbose: true }).find((v) => v.san === onSpine);
+      if (m) legal = { from: m.from, to: m.to, san: m.san };
+    }
+    legal ??= pickStudentMove(chess.fen(), chess.history().length);
     if (!legal) { transcript.push({ note: 'no legal student move — game over' }); break; }
 
     const spokenBefore = spoken.length;
@@ -288,6 +331,18 @@ async function main() {
     runId: RUN_ID, base: BASE, ask: ASK,
     pliesPlayed: ply, gameOver: chess.isGameOver(), result: chess.isCheckmate() ? 'checkmate' : chess.isDraw() ? 'draw' : 'unfinished',
     phasesReached: phases, beatHistogram: histogram,
+    followed: FOLLOW?.name ?? null,
+    openingPliesInBake: FOLLOW?.spine.length ?? 0,
+    // How far the game actually stayed on the line — the coach picks its own
+    // replies, so the reachable teaching stops wherever it steps off.
+    spineReached: (() => {
+      if (!FOLLOW) return 0;
+      const h = chess.history();
+      let n = 0;
+      while (n < h.length && n < FOLLOW.spine.length && h[n] === FOLLOW.spine[n]) n += 1;
+      return n;
+    })(),
+    openingPliesTaught: [...new Set(bakedPlies)].sort((a, b) => a - b),
     linesSpoken: totalSpoken, silentPlies, falseClaims: allFalse, pageErrors,
     streamDelta: postEvents.length - preEvents.length,
     pgn: chess.pgn(), transcript,
@@ -305,6 +360,11 @@ async function main() {
   for (const want of ['IMPROVING MOVE', 'THEIR BEST PIECE']) {
     console.log(`${histogram[want] ? '✅' : '❌'} ${want}: ${histogram[want] ?? 0}`);
   }
+  if (FOLLOW) {
+    const taught = report.openingPliesTaught;
+    console.log(`opening line        ${report.spineReached}/${FOLLOW.spine.length} plies of ${FOLLOW.name} played`);
+    console.log(`opening taught      ${taught.length} of those${taught.length ? ` (moves ${taught.join(', ')})` : ''}`);
+  }
   console.log(`FALSE board claims  ${allFalse.length}`);
   console.log(`page errors         ${pageErrors.length}`);
   console.log(`report              ${OUT}/report.json`);
@@ -312,7 +372,11 @@ async function main() {
   console.log(`  WHERE event='coach_narration_spoken' AND properties.audit_run_id='${RUN_ID}' ORDER BY timestamp`);
 
   const missedBeats = !histogram['IMPROVING MOVE'] && !histogram['THEIR BEST PIECE'];
-  process.exit(allFalse.length > 0 || pageErrors.length > 0 || missedBeats ? 1 : 0);
+  // A game that stayed on a baked line and got no opening teaching is the
+  // failure this run exists to catch — silence there is what David heard.
+  const untaughtOpening = Boolean(FOLLOW) && report.spineReached >= 4 && report.openingPliesTaught.length === 0;
+  if (untaughtOpening) console.log(`❌ played ${report.spineReached} plies of a BAKED opening and taught none of them`);
+  process.exit(allFalse.length > 0 || pageErrors.length > 0 || missedBeats || untaughtOpening ? 1 : 0);
 }
 
 main().catch((e) => { console.error('FATAL', e); process.exit(1); });

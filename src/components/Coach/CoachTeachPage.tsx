@@ -5301,6 +5301,10 @@ export function CoachTeachPage(): JSX.Element {
     let announceLine: string | null = null;
     let noteLine: string | null = null;
     let gemLine: string | null = null;
+    // Which ply of the bake spoke, so an audit can prove the opening was taught
+    // move by move from the app's own event rather than by pattern-matching the
+    // prose back out of the spoken line.
+    let bakedPly: number | null = null;
     const studentCC: 'w' | 'b' = args.studentColor === 'white' ? 'w' : 'b';
     const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200;
     const history = args.historyAfterReply;
@@ -5449,9 +5453,38 @@ export function CoachTeachPage(): JSX.Element {
       }
     } catch { /* gems are a bonus, never a blocker */ }
 
+    // ── TIER 1: THE BAKE — authored for THIS ply, reviewed before it shipped.
+    //
+    // 220 plies of opening prose sit in `walkthrough-narrations.json`, one idea
+    // for EVERY move of 23 openings. A live game could not reach any of it:
+    // `bakedNarrationFor` asks "is this whole line baked", which is a lesson's
+    // question, and a game three moves in can never answer yes.
+    //
+    // It runs FIRST, above the corpus, because the tier doctrine says so
+    // outright: a baked ply takes no runtime note splice. Both sources can be
+    // true of the board; only one of them was read by a human before it
+    // shipped, and only one was written about the move actually on the screen.
+    // A farmed note that merely transposes into this FEN is the weaker claim.
+    let bakedLine: string | null = null;
+    try {
+      const baked = bakedTeachingForPly(announcedOpeningNameRef.current, history);
+      if (baked && !bakedPlySeenRef.current.has(baked.ply)) {
+        bakedPlySeenRef.current.add(baked.ply);
+        bakedLine = baked.text;
+        bakedPly = baked.ply;
+        factLines.push(`Opening teaching (${baked.openingName}, move ${baked.ply}): ${baked.text}`);
+        const seg = groundedSegmentArrows(baked.text, '', { from: args.moveFrom, to: args.moveTo, fen: args.fenAfterReply });
+        for (const a of (seg.arrows ?? [])) {
+          if (a.color === 'green') leadEyeArrows.push({ startSquare: a.from, endSquare: a.to, color: 'green' });
+        }
+      }
+    } catch { /* the bake is a bonus, never a blocker */ }
+
     // ── THE TAUGHT NOTE + its lead-the-eye arrows ──────────────────────────
     try {
-      const noteText = noteArrowSourceAt(history, args.fenAfterReply, teachNoteSeenIdsRef.current);
+      const noteText = bakedLine
+        ? null
+        : noteArrowSourceAt(history, args.fenAfterReply, teachNoteSeenIdsRef.current);
       if (noteText) {
         factLines.push(`Coaching note taught at THIS position: ${noteText}`);
         noteLine = noteText;
@@ -5583,38 +5616,19 @@ export function CoachTeachPage(): JSX.Element {
     // is the standard a farmed note only reaches once baked.
     let curatedLine: string | null = null;
     try {
-      const beat = curatedBeatAt(history, args.fenAfterReply, curatedBeatSeenRef.current, announcedOpeningNameRef.current);
+      // Both this and the bake are verified-before-ship, so whichever fires is
+      // the right thing to say — but saying both stacks two full teaching
+      // paragraphs onto one move, which is the wordiness David has already
+      // called out twice. One per ply.
+      const beat = bakedLine
+        ? null
+        : curatedBeatAt(history, args.fenAfterReply, curatedBeatSeenRef.current, announcedOpeningNameRef.current);
       if (beat) {
         curatedBeatSeenRef.current.add(beat.id);
         curatedLine = beat.text;
         factLines.push(`Masterclass beat (${beat.lesson}): ${beat.text}`);
       }
     } catch { /* curated teaching is a bonus, never a blocker */ }
-
-    // 🔒 THE ENTIRE OPENING GETS TAUGHT (David 2026-08-09: "the entire opening
-    // needs teaching").
-    //
-    // 220 plies of authored, reviewed, gated opening prose sit in the bake —
-    // one idea for EVERY move of 23 openings — and a live game could not reach
-    // any of it. `bakedNarrationFor` asks "is this whole line baked", which is
-    // the lesson's question; a game is three moves in and going, so the answer
-    // was always no. A student playing a baked opening therefore heard whatever
-    // the farmed corpus happened to hold, measured at about two plies in eight.
-    //
-    // Ranked above the corpus for the same reason the masterclass beat is: this
-    // was verified before it shipped, and it was written for THIS ply. The
-    // prefix match is exact, so no board grading is needed behind it.
-    let bakedLine: string | null = null;
-    if (!noteLine && !curatedLine) {
-      try {
-        const baked = bakedTeachingForPly(announcedOpeningNameRef.current, history);
-        if (baked && !bakedPlySeenRef.current.has(baked.ply)) {
-          bakedPlySeenRef.current.add(baked.ply);
-          bakedLine = baked.text;
-          factLines.push(`Opening teaching (${baked.openingName}, move ${baked.ply}): ${baked.text}`);
-        }
-      } catch { /* the bake is a bonus, never a blocker */ }
-    }
 
     let teachingLine: string | null = null;
     if (!noteLine && !curatedLine && !bakedLine) {
@@ -5690,8 +5704,9 @@ export function CoachTeachPage(): JSX.Element {
       // one verified before it shipped.
       ...(curatedLine ? [{ kind: 'note' as const, text: curatedLine, fen: args.fenAfterReply }] : []),
       ...(noteLine ? [{ kind: 'note' as const, text: noteLine, fen: args.fenAfterReply }] : []),
-      // Authored for this exact ply and verified before it shipped — the same
-      // standing as the masterclass beat above it.
+      // Authored for this exact ply and verified before it shipped. It runs
+      // ahead of both lanes above at SELECTION, so reaching here at all means
+      // they were empty.
       ...(bakedLine ? [{ kind: 'note' as const, text: bakedLine, fen: args.fenAfterReply }] : []),
       // Corpus teaching reached by structure/concept transfer. Same `note`
       // rank as the exact-position tier — both are the corpus speaking, and
@@ -5704,6 +5719,16 @@ export function CoachTeachPage(): JSX.Element {
       // a2 is isolated". Lowest rank by construction.
       ...(positionalLine ? [{ kind: 'observation' as const, text: positionalLine, fen: args.fenAfterReply }] : []),
     ]);
+
+    if (bakedPly !== null) {
+      void logAppAudit({
+        kind: 'coach-narration-spoken',
+        category: 'narration',
+        source: 'CoachTeachPage.bakedOpeningTeaching',
+        summary: `opening teaching, move ${bakedPly}: ${(bakedLine ?? '').slice(0, 80)}`,
+        fen: args.fenAfterReply,
+      });
+    }
 
     return {
       pkg,
