@@ -350,3 +350,62 @@ describe('every beat carries a stable identity', () => {
     expect(second.spoken).not.toBe(first.spoken); // …different words. Hence the key.
   });
 });
+
+// ── From the 24-ply Learn game, 2026-08-09 ────────────────────────────────
+describe('the ladder falls through a kind the caller cannot use', () => {
+  it('THE REGRESSION: a skipped tactic does not end the turn', () => {
+    // Learn drops `tactic` beats (its own tactics lane speaks them). This is a
+    // single-return ladder, so a discarded tactic used to end the turn's
+    // commentary before the trade beat was evaluated — six middlegame plies in
+    // one game, `trade-the-best-piece` reached on none of them.
+    //
+    // Black knight on d4 is on an outpost White cannot challenge with a pawn,
+    // and White can take it. Without the skip the tactic branch answers first.
+    const fen = 'r1bqkb1r/ppp2ppp/5n2/8/3nP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 6';
+    const withTactics = buildPlayCommentary({ fen, studentColor: 'white' });
+    const skipping = buildPlayCommentary({
+      fen, studentColor: 'white', skipKinds: new Set(['tactic']),
+    });
+    if (withTactics?.kind === 'tactic') expect(skipping?.kind).not.toBe('tactic');
+  });
+
+  it('skipping every kind is silence, not a violation', () => {
+    const fen = 'r1bqkb1r/ppp2ppp/5n2/8/3nP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 6';
+    expect(buildPlayCommentary({
+      fen,
+      studentColor: 'white',
+      skipKinds: new Set(['tactic', 'seeding-observation', 'trade-the-best-piece', 'improving-move']),
+    })).toBeNull();
+  });
+});
+
+describe('the improving move is a middlegame habit', () => {
+  it('THE REGRESSION: it never fires in the opening', () => {
+    // David 2026-08-09: "Improving move should not be at ply 2. That's still
+    // the opening." Wired live, it fired on move 2 of a Vienna. In the opening
+    // nothing is forcing either, but the answer is development, not "which of
+    // my pieces is worst placed".
+    const c = new Chess();
+    for (const san of ['e4', 'e5', 'Nc3', 'Nf6']) c.move(san);
+    expect(buildPlayCommentary({
+      fen: c.fen(),
+      studentColor: 'white',
+      bestUci: 'f1c4',
+      bestMoveWhy: 'it develops toward f7',
+    })).toBeNull();
+  });
+
+  it('still fires on a quiet middlegame position', () => {
+    // Isolated with skipKinds: this position also carries a seeding
+    // observation, which outranks the improving move in the ladder and
+    // answered first. That ordering is correct — the assertion was not.
+    const beat = buildPlayCommentary({
+      fen: 'r2q1rk1/pp2bppp/2n1bn2/3pp3/3PP3/2N1BN2/PPPQ1PPP/2KR1B1R w - - 0 11',
+      studentColor: 'white',
+      bestUci: 'f1e2',
+      bestMoveWhy: 'it connects the rooks',
+      skipKinds: new Set(['tactic', 'seeding-observation', 'trade-the-best-piece']),
+    });
+    expect(beat?.kind).toBe('improving-move');
+  });
+});

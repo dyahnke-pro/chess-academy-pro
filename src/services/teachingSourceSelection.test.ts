@@ -103,3 +103,60 @@ describe('the scope guard reads openings named with "Game"', () => {
     )).toBe(true);
   });
 });
+
+// ── The full-game run, 2026-08-09 ──────────────────────────────────────────
+//
+// David asked for a whole game rather than an opening probe, and the middlegame
+// is where the corpus went wrong. 24 plies, and the opening-family tier spoke on
+// nearly every one of them: "In this line of the Petrov" on a board that was
+// never a Petrov, "After Qd2, Black has the option of Bg4" with no queen on d2,
+// "The Bogo-Indian demands deep understanding" — and on move 17 the run's one
+// genuinely false board claim, a bishop on g2 where a pawn stood.
+//
+// That tier is reached by opening NAME, so it cannot be about a position it was
+// never shown. Past the opening the board-read tiers answer instead, and if they
+// have nothing, silence.
+describe('past the opening, teaching is board-read or silent', () => {
+  const MIDDLEGAME = 'r2q1rk1/pp2bppp/2n1bn2/3pp3/3PP3/2N1BN2/PPPQ1PPP/2KR1B1R w - - 0 11';
+  const ENDGAME = '8/5ppp/8/3k4/8/2K2P2/6PP/8 w - - 0 30';
+
+  it.each([['a middlegame', MIDDLEGAME], ['an endgame', ENDGAME]])(
+    'never answers %s from the opening-family tier',
+    (_label, fen) => {
+      const src = teachingSourceForBoard([], fen, 'Vienna Game: Vienna Gambit');
+      if (src) expect(src.origin).not.toBe('opening-family');
+    },
+  );
+
+  it('still answers an opening position from it', () => {
+    // The tier is not disabled — it is scoped. An opening board is exactly
+    // where "a general idea in this opening" is a true and useful thing to say.
+    const { history, fen } = boardAfter(['e4', 'e5', 'Nc3']);
+    const src = teachingSourceForBoard(history, fen, 'Vienna Game: Vienna Gambit');
+    if (src) expect(['position', 'opening-family']).toContain(src.origin);
+  });
+});
+
+describe('a bare opening name is still an opening name', () => {
+  const note = (text: string) => ({
+    id: 't', opening: null, phase: 'opening' as const, lineSan: [],
+    explains: text, teaches: '', plans: '', concepts: [], source: 't',
+  });
+
+  it.each([
+    'In this line of the Petrov, White sacrifices a piece for attacking chances.',
+    'The Bogo-Indian demands deep understanding of its pawn structures.',
+  ])('drops "%s" from a Vienna', (text) => {
+    // No class noun to key on — "the Petrov", not "the Petrov Defense" — which
+    // is how the live game heard both of these spoken about a Vienna.
+    expect(noteStaysInScope(note(text) as never, 'Vienna Game: Vienna Gambit')).toBe(false);
+  });
+
+  it.each([
+    'The rook belongs on the open file.',
+    'The kingside is where White must play.',
+    'The endgame favours the side with the passed pawn.',
+  ])('keeps ordinary prose: "%s"', (text) => {
+    expect(noteStaysInScope(note(text) as never, 'Vienna Game: Vienna Gambit')).toBe(true);
+  });
+});

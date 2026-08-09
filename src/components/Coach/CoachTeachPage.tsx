@@ -23,6 +23,7 @@ import { buildVoicePackage, describeVoicePackage, type VoicePackage } from '../.
 import { buildPositionalRead } from '../../services/positionalRead';
 import { curatedBeatAt } from '../../services/curatedBeatSource';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence } from '../../services/playCommentary';
+import type { CommentaryKind } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
 // Walkthrough arrows/highlights render through the SAME react-chessboard
@@ -176,6 +177,9 @@ const FORK_TALK_MAX_PER_GAME = 3;
 // room to breathe between firings or every quiet move gets a "priority".
 const REJECTED_TEMPTING_MAX_PER_GAME = 2;
 const PRIORITY_FIRST_MIN_PLY_GAP = 10;
+/** Beat kinds Learn cannot use — its tactics lane already speaks them. Hoisted
+ *  so the set is not rebuilt on every turn. */
+const SKIP_TACTIC_BEATS: ReadonlySet<CommentaryKind> = new Set(['tactic']);
 import { captureEvent } from '../../services/analytics';
 
 import { getNeonColor, scaledShadow } from '../../utils/neonColors';
@@ -1256,6 +1260,8 @@ export function CoachTeachPage(): JSX.Element {
   /** Last spoken THREAT key. Separate from the tactic key — one lane repeating
    *  must not silence the other lane's fresh news. */
   const lastThreatRef = useRef('');
+  /** Every tactic sentence already spoken this game — see the guard below. */
+  const spokenTacticLinesRef = useRef<Set<string>>(new Set());
   /** Track A generation — bumped per coach reply so a chain link created in
    *  an older turn can't speak a line about a position the student already
    *  left (and can't steal the throttle window from the current line). */
@@ -5357,10 +5363,20 @@ export function CoachTeachPage(): JSX.Element {
       // One callout per danger — a persisting threat must not nag every ply.
       // Two keys now, because one lane's repeat must not silence the other's
       // fresh news.
-      if (tacticLine && tacticKey === lastTacticRef.current) {
+      // 🔒 THE KEY IS NOT THE SENTENCE. Keying the repeat guard on the tactic's
+      // squares lets the SAME WORDS come back whenever a different instance of
+      // the same pattern appears: a live game (2026-08-09) heard "There's a
+      // real pin here for you — look for it." on ply 10 and again on ply 12,
+      // two genuinely different pins, one identical utterance. The line names
+      // the pattern and withholds the geometry — by design, so the student
+      // finds it — which is exactly what makes two of them indistinguishable
+      // out loud. Guard on the words the student hears, not on the board state
+      // behind them.
+      if (tacticLine && (tacticKey === lastTacticRef.current || spokenTacticLinesRef.current.has(tacticLine))) {
         tacticLine = null;
       } else if (tacticLine) {
         lastTacticRef.current = tacticKey;
+        spokenTacticLinesRef.current.add(tacticLine);
         captureEvent('tactics_alert_spoken', { surface: 'coach-teach', alert: tacticKey });
       }
       if (threatLine && threatKey === lastThreatRef.current) {
@@ -6103,13 +6119,22 @@ export function CoachTeachPage(): JSX.Element {
                 // THIS move — so most turns it stays silent (G0: the read is
                 // computed; the model only phrases it).
                 try {
-                  const beat = buildPlayCommentary({ fen: probe.fen(), studentColor: playerColor });
-                  // 'tactic' beats are deliberately dropped here — tacticsFacts
-                  // above already speaks the side-attributed tactic library, and
-                  // one position must never be narrated twice. The seeding
-                  // observation (the speedrun's opening beat — "there is an
-                  // alignment of the rooks") and the trade beat have no other
-                  // voice, so they ride through.
+                  // ASK FOR WHAT WE CAN USE. 'tactic' beats are dropped here —
+                  // tacticsFacts above already speaks the side-attributed
+                  // library, and one position must never be narrated twice —
+                  // but this used to build the beat and THEN discard it. The
+                  // builder is a single-return ladder, so a discarded tactic
+                  // ended the turn's commentary before the trade beat was ever
+                  // evaluated: a whole 24-ply game (2026-08-09) produced a
+                  // tactic on six middlegame plies and reached
+                  // `trade-the-best-piece` on none of them. Naming the skip up
+                  // front lets the ladder fall through to a beat that has no
+                  // other voice.
+                  const beat = buildPlayCommentary({
+                    fen: probe.fen(),
+                    studentColor: playerColor,
+                    skipKinds: SKIP_TACTIC_BEATS,
+                  });
                   if (beat && (beat.kind === 'trade-the-best-piece' || beat.kind === 'seeding-observation')) {
                     facts.push(...beat.facts);
                   }
@@ -6129,6 +6154,7 @@ export function CoachTeachPage(): JSX.Element {
                       teachNoteSeenIdsRef.current.clear();
                       lastTacticRef.current = '';
                       lastThreatRef.current = '';
+                      spokenTacticLinesRef.current.clear();
                       forkTalkCountRef.current = 0;
                       pendingForkRef.current = null;
                       rejectedTemptingCountRef.current = 0;

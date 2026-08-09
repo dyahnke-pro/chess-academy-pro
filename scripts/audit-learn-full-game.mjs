@@ -75,7 +75,14 @@ const placementOf = (fen) => {
   return out;
 };
 
-const LETTER = { p: 'P', n: 'N', b: 'B', r: 'R', q: 'Q', k: 'K' };
+// The claim names a piece in WORDS ("bishop on d3"); chess.js answers in
+// letters ("b"). Comparing the two through one letter-map keyed by letters
+// made every claim mismatch — the first run of this script reported 39 false
+// claims, of which the overwhelming majority were "bishop on d3 — actually a
+// b". A checker that flags true statements is worse than no checker: it buries
+// the real ones, and this run had real ones in it.
+const TYPE_OF = { pawn: 'p', knight: 'n', bishop: 'b', rook: 'r', queen: 'q', king: 'k' };
+const NAME_OF = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const CLAIM_RE = /\b(pawn|knight|bishop|rook|queen|king)\s+on\s+([a-h][1-8])\b/gi;
 
 /** Piece-on-square claims in `text` that are not true of `fen`. */
@@ -86,11 +93,11 @@ function falseBoardClaims(text, fen) {
   CLAIM_RE.lastIndex = 0;
   let m;
   while ((m = CLAIM_RE.exec(text)) !== null) {
-    const piece = m[1].toLowerCase();
+    const claimed = TYPE_OF[m[1].toLowerCase()];
     const square = m[2].toLowerCase();
     const at = chess.get(square);
-    if (!at) bad.push(`${piece} on ${square} — square is empty`);
-    else if (LETTER[at.type] !== LETTER[piece]) bad.push(`${piece} on ${square} — actually a ${at.type}`);
+    if (!at) bad.push(`${m[1]} on ${square} — square is empty`);
+    else if (at.type !== claimed) bad.push(`${m[1]} on ${square} — actually a ${NAME_OF[at.type]}`);
   }
   return bad;
 }

@@ -16,6 +16,7 @@
 import { Chess } from 'chess.js';
 import type { Square } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
+import { phaseOfFen } from './boardConcepts';
 
 export type CommentaryKind =
   | 'tactic'
@@ -453,6 +454,19 @@ export function buildPlayCommentary(args: {
    *  the game; omit it and every clause is spoken every time (the old
    *  behaviour). */
   saidExplainers?: Set<string>;
+  /**
+   * Beat kinds the CALLER cannot use, so the ladder keeps looking instead of
+   * returning one that will be thrown away.
+   *
+   * This is a single-return ladder, and Learn discards `tactic` beats because
+   * its own tactics lane already speaks them. The two interact badly: a whole
+   * game (2026-08-09, 24 plies) produced a tactic on six middlegame plies —
+   * each one returned early, each one discarded — so `trade-the-best-piece`
+   * was never once evaluated. It read as "the trade beat never fires" when the
+   * truth was "the trade beat is never reached". Naming what the caller can't
+   * use is what lets the ladder do its job.
+   */
+  skipKinds?: ReadonlySet<CommentaryKind>;
 }): PlayCommentary | null {
   let chess: Chess;
   try {
@@ -460,6 +474,9 @@ export function buildPlayCommentary(args: {
   } catch {
     return null;
   }
+  /** A beat the caller can use, else null so the ladder continues. */
+  const usable = (beat: PlayCommentary): PlayCommentary | null =>
+    (args.skipKinds?.has(beat.kind) ? null : beat);
   // THE PRINCIPLE ONCE, THE FACT EVERY TIME.
   //
   // Measured in David's own 2026-08-08 session log: "See if you can find it."
@@ -508,7 +525,7 @@ export function buildPlayCommentary(args: {
     if (mine.length > 0) {
       const tac = mine[0];
       if (tac.type === 'mate_threat') {
-        return {
+        const mate: PlayCommentary = {
           kind: 'tactic',
           key: 'tactic:mate_threat',
           spoken: 'There is a checkmate available right now — look for the forcing move.',
@@ -516,8 +533,9 @@ export function buildPlayCommentary(args: {
             'MATE IS ON THE BOARD for the student. Say plainly that a checkmate is available right now and they should look for the forcing move. Do NOT name the move or the square.',
           ],
         };
+        if (usable(mate)) return mate;
       }
-      return {
+      const found: PlayCommentary = {
         kind: 'tactic',
         key: `tactic:${tac.type}:${tac.involvedSquares.join('')}`,
         spoken: `${tac.description}.${once('find-it', ' See if you can find it.')}`,
@@ -525,6 +543,7 @@ export function buildPlayCommentary(args: {
           `TACTIC ON THE BOARD for the student: ${tac.description}. Name the PATTERN and why the geometry works. Do NOT name the winning move — let them find it.`,
         ],
       };
+      if (usable(found)) return found;
     }
     // Pieces only — a "hanging" PAWN on a repertoire line is usually the
     // gambit itself (measured: 7.9% of theory plies have a pawn en prise,
@@ -533,7 +552,7 @@ export function buildPlayCommentary(args: {
     const theirHanging = t.hangingPieces.filter((h) => h.color === them && h.piece !== 'p');
     if (theirHanging.length > 0) {
       const h = theirHanging[0];
-      return {
+      const loose: PlayCommentary = {
         kind: 'tactic',
         key: `hanging:${h.piece}${h.square}`,
         spoken: `Their ${NAME[h.piece] ?? 'piece'} on ${h.square} is undefended${once('undefended-seed', ' — an undefended piece is the seed of a tactic')}.`,
@@ -541,6 +560,7 @@ export function buildPlayCommentary(args: {
           `UNDEFENDED: the opponent's ${NAME[h.piece] ?? 'piece'} on ${h.square} is not defended. Say what you notice — an undefended piece is the seed of a tactic — without naming the move that wins it.`,
         ],
       };
+      if (usable(loose)) return loose;
     }
   } catch { /* the detector is a bonus, never a blocker */ }
 
@@ -550,7 +570,7 @@ export function buildPlayCommentary(args: {
   // precedes one, which is exactly what he teaches students to see first.
   const seed = findAlignmentSeed(all, me, them);
   if (seed) {
-    return {
+    const seedBeat: PlayCommentary = {
       kind: 'seeding-observation',
       key: `seed:${seed.what}:${seed.line}`,
       spoken: `Their ${seed.what} line up on the same ${seed.line}, and you have a ${seed.tool} that moves along it.${once('worth-noticing', ' Worth noticing.')}`,
@@ -558,6 +578,7 @@ export function buildPlayCommentary(args: {
         `ALIGNMENT: the opponent's ${seed.what} line up on the same ${seed.line}. The student owns a ${seed.tool} that moves along that geometry. Point out the alignment as something worth noticing — nothing more. Do NOT suggest a move.`,
       ],
     };
+    if (usable(seedBeat)) return seedBeat;
   }
 
   // ── 2. TRADE OFF THEIR BEST PIECE. Only when the trade is actually
@@ -566,7 +587,7 @@ export function buildPlayCommentary(args: {
   if (best) {
     const trades = capturesOf(chess, best.piece.square);
     if (trades.length > 0) {
-      return {
+      const tradeBeat: PlayCommentary = {
         kind: 'trade-the-best-piece',
         key: `trade:${best.piece.square}`,
         spoken: `${best.why}. You can trade it off right now${once('trade-best', " — the opponent's best piece is the one worth exchanging")}.`,
@@ -574,6 +595,7 @@ export function buildPlayCommentary(args: {
           `THEIR BEST PIECE: ${best.why}. The student can trade it off right now. Teach the idea — the opponent's best piece is the one worth exchanging — and name the piece and its square. Do NOT give the capturing move.`,
         ],
       };
+      if (usable(tradeBeat)) return tradeBeat;
     }
   }
 
@@ -581,6 +603,14 @@ export function buildPlayCommentary(args: {
   // teach: nothing is forcing, so the plan is to put a piece on a better square.
   // Requires the engine to have said which — otherwise there is no fact here,
   // only an opinion, and this file does not deal in those.
+  //
+  // 🔒 NOT IN THE OPENING (David 2026-08-09: "Improving move should not be at
+  // ply 2. That's still the opening."). The beat teaches a MIDDLEGAME habit —
+  // when nothing is forcing, find your worst-placed piece and improve it. In
+  // the opening nothing is forcing either, but the answer is development and
+  // theory, not "which of my pieces is worst". Wired live, it fired on move 2
+  // of a Vienna, which is the wrong lesson at the right-looking moment.
+  if (phaseOfFen(args.fen) === 'opening') return null;
   if (args.bestMoveWhy && args.bestUci && args.bestUci.length >= 4) {
     const from = args.bestUci.slice(0, 2) as Square;
     const moved = all.find((p) => p.square === from);
@@ -596,7 +626,7 @@ export function buildPlayCommentary(args: {
       }
     })();
     if (moved && isQuiet) {
-      return {
+      const improveBeat: PlayCommentary = {
         kind: 'improving-move',
         key: `improve:${from}`,
         spoken: `${once('nothing-forcing', 'Nothing is forcing here, so improve a piece — t') || 'T'}he ${NAME[moved.type] ?? 'piece'} on ${from} is the one with a better square. ${args.bestMoveWhy}`,
@@ -604,6 +634,7 @@ export function buildPlayCommentary(args: {
           `IMPROVING MOVE: nothing is forcing here, so the move is to improve a piece. The ${NAME[moved.type] ?? 'piece'} on ${from} is the one with a better square available. Grounded reason: ${args.bestMoveWhy}. Teach the HABIT — when there is no tactic, find your worst-placed piece and improve it — and name the piece, NOT its destination.`,
         ],
       };
+      if (usable(improveBeat)) return improveBeat;
     }
   }
 

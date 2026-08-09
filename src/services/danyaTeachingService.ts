@@ -498,13 +498,35 @@ export function teachingSourceForBoard(
   const resolvedOpening = openingName ?? (() => {
     try { return detectOpening(historySans)?.name ?? null; } catch { return null; }
   })();
-  const support = secondarySupportNotes({
-    historySans,
-    openingName: resolvedOpening,
-    maxNotes: 1,
-    accept: (n) => !noteOpeningConflicts(n.opening, resolvedOpening) && phaseFits(n) && accept(n, 'opening-family'),
-  })[0];
-  if (support) return { note: support, origin: 'opening-family' };
+  // 🔒 OPENING TEACHING BELONGS TO THE OPENING. This tier is reached by opening
+  // NAME, not by position, and it frames what it finds as "A general idea in
+  // this opening" — true and useful while the opening is what the student is
+  // looking at.
+  //
+  // Past that it is the loudest thing in the room and none of it is about the
+  // game. A full 24-ply game (2026-08-09) heard it on nearly every ply: "In
+  // this line of the Petrov" on a board that was never a Petrov; "After Qd2,
+  // Black has the option of Bg4" with no queen on d2; "White can play Rh2";
+  // "The Bogo-Indian demands deep understanding" — and, on move 17, the run's
+  // ONE genuinely false board claim, a bishop on g2 where a pawn stood. It also
+  // shadowed the two tiers that ARE board-checked, so the structure and concept
+  // notes that exist for a middlegame never got a turn.
+  //
+  // The fix is not a better filter on the prose. It is that a tier selected by
+  // name has nothing to say about a position it was never shown: past the
+  // opening, the board-read tiers below answer, and if they have nothing the
+  // honest result is silence.
+  if (boardPhase && boardPhase !== 'opening') {
+    // fall through to the board-read tiers
+  } else {
+    const support = secondarySupportNotes({
+      historySans,
+      openingName: resolvedOpening,
+      maxNotes: 1,
+      accept: (n) => !noteOpeningConflicts(n.opening, resolvedOpening) && phaseFits(n) && accept(n, 'opening-family'),
+    })[0];
+    if (support) return { note: support, origin: 'opening-family' };
+  }
   // STRUCTURE TRANSFER is deliberately cross-opening (a note from anywhere whose
   // structure provably matches this board), so no tag check applies — its
   // licence to borrow is the proven signature match plus the live-board claim

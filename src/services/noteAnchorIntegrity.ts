@@ -144,10 +144,25 @@ export function noteTeachesChessNotItsSource(note: DanyaNote): boolean {
 // It cannot over-fire on ordinary prose — the name before it must be
 // capitalised, and the lowercase words that pass that shape are in
 // NOT_A_VARIATION.
-const NAMED_VARIATION = /\b([A-Z][a-zA-Z'-]+(?:[ -][A-Z][a-zA-Z'-]+){0,2})\s+(?:Variation|Defense|Defence|Attack|Gambit|System|Opening|Game)\b|\bthe\s+([A-Z][a-zA-Z'-]+)\s+variation\b/g;
+//
+// The third arm catches a BARE name — "in this line of the Petrov", "the
+// Bogo-Indian demands deep understanding". Openings are named that way as often
+// as not, and without it a live game heard both of those spoken about a board
+// that was neither. A capitalised word after "the" is the shape; the common
+// words that fit it and are not openings are listed in NOT_A_VARIATION.
+const NAMED_VARIATION = /\b([A-Z][a-zA-Z'-]+(?:[ -][A-Z][a-zA-Z'-]+){0,2})\s+(?:Variation|Defense|Defence|Attack|Gambit|System|Opening|Game)\b|\bthe\s+([A-Z][a-zA-Z'-]+)\s+variation\b|\b[Tt]he\s+([A-Z][a-zA-Z'-]+(?:-[A-Z][a-zA-Z'-]+)*)\b/g;
 
 /** Words that pass the capitalised-name shape without naming an opening. */
-const NOT_A_VARIATION = new Set(['the', 'this', 'that', 'a', 'an', 'his', 'her', 'their', 'in', 'main', 'king', 'queen']);
+const NOT_A_VARIATION = new Set([
+  'the', 'this', 'that', 'a', 'an', 'his', 'her', 'their', 'in', 'main', 'king', 'queen',
+  // Words that follow "the" and pass the capitalised-name shape without naming
+  // an opening. Chess prose is full of them, and the bare-name arm above would
+  // otherwise read every one as a foreign variation and drop a fine note.
+  'white', 'black', 'centre', 'center', 'rook', 'bishop', 'knight', 'pawn',
+  'kingside', 'queenside', 'exchange', 'endgame', 'middlegame', 'opening',
+  'first', 'second', 'third', 'same', 'other', 'best', 'only', 'idea', 'plan',
+  'move', 'position', 'board', 'game', 'line', 'point', 'key', 'both', 'engine',
+]);
 
 /**
  * True when every variation the note NAMES belongs to the lesson being taught.
@@ -180,7 +195,7 @@ export function noteStaysInScope(
     );
     NAMED_VARIATION.lastIndex = 0;
     for (const m of prose.matchAll(NAMED_VARIATION)) {
-      const name = (m[1] ?? m[2] ?? '').trim();
+      const name = (m[1] ?? m[2] ?? m[3] ?? '').trim();
       if (!name) continue;
       const tokens = name
         .toLowerCase()
