@@ -16,6 +16,7 @@ import { writeFileSync, mkdirSync } from 'node:fs';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { pickStudentMove } from './audit-lib/student-player.mjs';
+import OPENINGS_DB from '../src/data/openings-lichess.json' with { type: 'json' };
 import { clickMove, awaitCoachReply, outcomeOf, appEndedGame } from './audit-lib/board-drive.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL ?? 'https://chess-academy-pro.vercel.app';
@@ -78,7 +79,22 @@ async function main() {
   await ctx.addInitScript((id) => { localStorage.setItem('auditRunId', id); }, RUN_ID);
   const page = await ctx.newPage();
   const pageErrors = [];
+  const tiers = [];
   page.on('pageerror', (e) => pageErrors.push(String(e)));
+  // WHICH TIER taught each ply, straight from the app's own fact bundle. The
+  // question "are the corpus notes firing" was answered three times by hand
+  // before the app was simply asked.
+  page.on('request', (req) => {
+    if (!req.url().includes('/api/audit')) return;
+    try {
+      const body = JSON.parse(req.postData() ?? '{}');
+      for (const e of (body.events ?? body.entries ?? [body])) {
+        if (e.source !== 'CoachTeachPage.turnFacts' || !e.details) continue;
+        const t = JSON.parse(e.details).teaching;
+        if (t) tiers.push(t);
+      }
+    } catch { /* not ours */ }
+  });
 
   console.log(`[audit-run-id] ${RUN_ID}`);
   await page.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 60_000 });
@@ -153,6 +169,23 @@ async function main() {
   // opens a game and a game that finishes are different claims, and only the
   // second one says the pick produced a real playable session rather than a
   // board that stalls three moves in.
+  // 🔒 PLAY THE OPENING YOU ASKED FOR. The first version of this drove a
+  // material-and-development bot from move one, so a run that asked for the
+  // Dragon opened 1.Nc3 and never played e4 — the Dragon existed only on the
+  // coach's side of the board. Every conclusion drawn from that run about how
+  // fast a game leaves theory was really a measurement of the bot refusing to
+  // play the opening. The student now plays the chosen line's own moves while
+  // the game is on it, which is what the person who tapped that tile would do.
+  const dbEntry = (Array.isArray(OPENINGS_DB) ? OPENINGS_DB : [])
+    .find((e) => e.name === chosen);
+  const LINE = dbEntry ? dbEntry.pgn.split(/\s+/).filter(Boolean) : [];
+  console.log(`   line: ${LINE.length ? LINE.join(' ') : 'no DB entry for this tile'}`);
+  const lineMove = (history) => {
+    if (history.length >= LINE.length) return null;
+    for (let i = 0; i < history.length; i += 1) if (LINE[i] !== history[i]) return null;
+    return LINE[history.length];
+  };
+
   const chess = new Chess();
   // The coach opens when the student is Black. Here the student is White, so
   // the first move is ours — but read the board first either way rather than
@@ -168,7 +201,13 @@ async function main() {
   let stalledAt = null;
   let appOutcome = null;
   while (plies < MAX_PLIES && !chess.isGameOver()) {
-    const mine = pickStudentMove(chess.fen(), chess.history().length);
+    let mine = null;
+    const onLine = lineMove(chess.history());
+    if (onLine) {
+      const m = chess.moves({ verbose: true }).find((v) => v.san === onLine);
+      if (m) mine = { from: m.from, to: m.to, san: m.san };
+    }
+    mine ??= pickStudentMove(chess.fen(), chess.history().length);
     if (!mine) { stalledAt = 'no legal student move'; break; }
     const probe = new Chess(chess.fen());
     probe.move(mine.san);
@@ -227,6 +266,21 @@ async function main() {
   );
   check('the coach answered every move', stalledAt === null, stalledAt ?? 'no stall');
 
+  // Did the game actually BECOME the opening that was picked?
+  const onLinePlies = (() => {
+    const h = chess.history(); let n = 0;
+    while (n < h.length && n < LINE.length && h[n] === LINE[n]) n += 1;
+    return n;
+  })();
+  check(
+    'the game actually played the line that was picked',
+    LINE.length > 0 && onLinePlies === LINE.length,
+    `${onLinePlies}/${LINE.length} plies of ${chosen}`,
+  );
+
+  const mix = tiers.reduce((acc, t) => { acc[t] = (acc[t] ?? 0) + 1; return acc; }, {});
+  console.log(`   teaching tiers: ${Object.entries(mix).map(([k, v]) => `${k}=${v}`).join(' ') || 'none recorded'}`);
+
   // ── 4. AN ALREADY-NAMED LINE STILL STARTS IMMEDIATELY ──────────────────
   // The gate that keeps this from costing a tap for a student who already
   // said what they wanted.
@@ -254,6 +308,7 @@ async function main() {
   writeFileSync(`${OUT}/report.json`, JSON.stringify({
     runId: RUN_ID, base: BASE, results, pageErrors,
     picked: chosen, studentSide: side, plies, outcome, pgn: chess.pgn(),
+    line: LINE, onLinePlies, teachingTiers: mix,
   }, null, 2));
   process.exit(passed === results.length ? 0 : 1);
 }

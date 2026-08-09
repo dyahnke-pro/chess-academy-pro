@@ -1283,6 +1283,13 @@ export function CoachTeachPage(): JSX.Element {
   /** Baked opening plies already taught this game — the bake is one idea per
    *  move, so a repeat means the same move was re-narrated. */
   const bakedPlySeenRef = useRef<Set<number>>(new Set());
+  // Which teaching tier taught the ply just narrated — read by the turnFacts
+  // audit so a run reports its tier MIX instead of having it grepped out of the
+  // transcript afterwards. `position` is a note authored AT this board;
+  // `structure`/`concept` are borrowed by idea; `baked` is reviewed opening
+  // prose. Three rounds of hand-grepping went into answering "are the notes
+  // firing" and the answer was always in the app — it just never said it.
+  const teachingTierRef = useRef<string>('none');
   /** Track A generation — bumped per coach reply so a chain link created in
    *  an older turn can't speak a line about a position the student already
    *  left (and can't steal the throttle window from the current line). */
@@ -5440,6 +5447,7 @@ export function CoachTeachPage(): JSX.Element {
     // move by move from the app's own event rather than by pattern-matching the
     // prose back out of the spoken line.
     let bakedPly: number | null = null;
+    teachingTierRef.current = 'none';
     const studentCC: 'w' | 'b' = args.studentColor === 'white' ? 'w' : 'b';
     const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200;
     const history = args.historyAfterReply;
@@ -5625,6 +5633,7 @@ export function CoachTeachPage(): JSX.Element {
         bakedPlySeenRef.current.add(baked.ply);
         bakedLine = baked.text;
         bakedPly = baked.ply;
+        teachingTierRef.current = 'baked';
         factLines.push(`Opening teaching (${baked.openingName}, move ${baked.ply}): ${baked.text}`);
         const seg = groundedSegmentArrows(baked.text, '', { from: args.moveFrom, to: args.moveTo, fen: args.fenAfterReply });
         for (const a of (seg.arrows ?? [])) {
@@ -5641,6 +5650,7 @@ export function CoachTeachPage(): JSX.Element {
       if (noteText) {
         factLines.push(`Coaching note taught at THIS position: ${noteText}`);
         noteLine = noteText;
+        teachingTierRef.current = 'position';
         const seg = groundedSegmentArrows(noteText, '', { from: args.moveFrom, to: args.moveTo, fen: args.fenAfterReply });
         for (const a of (seg.arrows ?? [])) {
           if (a.color === 'green') leadEyeArrows.push({ startSquare: a.from, endSquare: a.to, color: 'green' });
@@ -5779,6 +5789,7 @@ export function CoachTeachPage(): JSX.Element {
       if (beat) {
         curatedBeatSeenRef.current.add(beat.id);
         curatedLine = beat.text;
+        teachingTierRef.current = 'curated';
         factLines.push(`Masterclass beat (${beat.lesson}): ${beat.text}`);
       }
     } catch { /* curated teaching is a bonus, never a blocker */ }
@@ -5830,6 +5841,7 @@ export function CoachTeachPage(): JSX.Element {
           const t = gradeBorrowedTeaching(spokenBeatText(src.note), args.fenAfterReply, 'coachTeach.teachingTier');
           if (t.trim()) {
             teachingLine = generalizedTeaching(src.origin, t);
+            teachingTierRef.current = src.origin;
             teachNoteSeenIdsRef.current.add(src.note.id);
             factLines.push(`Teaching (${src.origin}): ${teachingLine}`);
           }
@@ -6604,6 +6616,14 @@ export function CoachTeachPage(): JSX.Element {
                     beats: facts
                       .map((f) => /^([A-Z][A-Z ]{2,}):/.exec(f)?.[1] ?? null)
                       .filter((t): t is string => t !== null),
+                    // WHICH TIER TAUGHT THIS PLY. Three rounds of hand-grepping
+                    // went into answering "are the corpus notes firing", and the
+                    // answer was always in the app — it just never said it out
+                    // loud. `position` means a note authored AT this board;
+                    // `structure`/`concept` mean one borrowed by idea; `baked`
+                    // is the reviewed opening prose. Without this an audit can
+                    // only read the model's phrasing and guess.
+                    teaching: teachingTierRef.current,
                   }),
                   fen: probe.fen(),
                 });
