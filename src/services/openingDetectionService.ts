@@ -1741,3 +1741,28 @@ export function inferStudentSideFromName(name: string): 'white' | 'black' {
   for (const kw of blackKeywords) if (lower.includes(kw)) return 'black';
   return 'white';
 }
+
+/** Which side the STUDENT ends up on when they ask to play an opening.
+ *
+ *  Three inputs, in strict precedence: an explicit side ("as black") wins
+ *  outright; otherwise "play X AGAINST me" hands the line to the coach and
+ *  puts the student on the other end of it; otherwise the student plays the
+ *  side the line belongs to.
+ *
+ *  Shared rather than re-derived because it is asked in three places that must
+ *  agree — the request itself, the subline picker's tile, and the side dot
+ *  drawn on that tile. A dot that disagrees with the game it starts is worse
+ *  than no dot.
+ */
+export function studentSideForPlay(args: {
+  /** The line's own side: `inferStudentSideFromName`, or a picker option's. */
+  lineSide: 'white' | 'black';
+  /** "play the Sicilian AGAINST me" — the coach takes the line. */
+  coachPlaysIt: boolean;
+  /** An explicit "as white" / "as black" in the request. */
+  sideOverride?: 'white' | 'black' | null;
+}): 'white' | 'black' {
+  if (args.sideOverride) return args.sideOverride;
+  if (!args.coachPlaysIt) return args.lineSide;
+  return args.lineSide === 'white' ? 'black' : 'white';
+}

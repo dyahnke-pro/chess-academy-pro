@@ -105,6 +105,7 @@ import {
   findOpeningByPgnPrefix,
   resolveCuratedVariation,
   inferStudentSideFromName,
+  studentSideForPlay,
   detectOpening,
   type LinePickerOption,
 } from '../../services/openingDetectionService';
@@ -919,6 +920,22 @@ export function CoachTeachPage(): JSX.Element {
   // → White learns to face it via English Attack or similar). The
   // mode flips on toggle and re-renders the dot+routing on each tile.
   const [linePickerMode, setLinePickerMode] = useState<'play' | 'face'>('play');
+  // Set when the picker was raised by a request to PLAY a family rather than
+  // to be taught one. "Play the Sicilian against me" used to drop the student
+  // straight into the family's bare stub — three moves of theory shared by a
+  // dozen different games — because the picker was skipped for any request
+  // carrying a stage hint. A family is not a line you can play; picking which
+  // one is the first real decision. Carries the side semantics of the original
+  // ask so the tile can start the game without re-parsing the sentence.
+  const [linePickerPlay, setLinePickerPlay] = useState<{
+    coachPlaysIt: boolean;
+    sideOverride: 'white' | 'black' | null;
+  } | null>(null);
+  // `handleSubmit` closes over its render's state, so a typed pick would read
+  // a stale null and fall back to teaching. The ref is what the submit path
+  // asks.
+  const linePickerPlayRef = useRef<{ coachPlaysIt: boolean; sideOverride: 'white' | 'black' | null } | null>(null);
+  linePickerPlayRef.current = linePickerPlay;
   // Coach-drawn arrows + square highlights. The LLM uses
   // `[BOARD: arrow:e2-e4:green]` markers to suggest hypothetical
   // moves WITHOUT committing them on the board — the arrow channel
@@ -1478,6 +1495,70 @@ export function CoachTeachPage(): JSX.Element {
       return false;
     }
   }, []);
+
+  /** Start a real game of a named opening, here on Learn.
+   *
+   *  Lifted out of the play-intent branch so the LINE PICKER can start one
+   *  too. A tile could otherwise only re-submit a synthesised sentence
+   *  ("play the Najdorf against me") for the parser to take apart again —
+   *  which loses an explicit "as black" and re-derives a side the caller had
+   *  already worked out. The picker knows the answer; it should be able to
+   *  say it. */
+  const startOpeningPlay = useCallback((openingName: string, studentSide: 'white' | 'black'): void => {
+    walkthrough.stop();
+    voiceService.stop();
+    gameRef.current.resetGame();
+    gameRef.current.setOrientation(studentSide);
+    setPlayerColor(studentSide);
+    liveFenRef.current = gameRef.current.fen;
+    setArrows([]);
+    setHighlights([]);
+    chainArrowsRef.current = [];
+    chainHighlightsRef.current = [];
+    useCoachMemoryStore.getState().setIntendedOpening({
+      name: openingName,
+      color: studentSide,
+      capturedFromSurface: 'chat-teach-play',
+    });
+
+    const say = (line: string): void => {
+      setMessages((prev) => [...prev, {
+        id: freshTurnId('play-intent'), role: 'assistant', content: line, timestamp: Date.now(),
+      }]);
+      useCoachMemoryStore.getState().appendConversationMessage({
+        surface: 'chat-teach', role: 'coach', text: line, fen: liveFenRef.current, trigger: null,
+      });
+      void voiceService.speakForced(line).catch(() => undefined);
+    };
+
+    // When the coach has White it MUST open, or the game just sits there
+    // (David 2026-07-12, on flipping to Black for the Benko and having to push
+    // the coach's d4 himself). Same resolver the colour selector uses — the
+    // baked spine and the opening's own book line first, engine behind them —
+    // so an opening with no book entry still gets a first move.
+    if (studentSide === 'black') {
+      say(`You're Black — I'll play the ${openingName}.`);
+      void (async () => {
+        const opener = await resolveCoachReplyMoveRef.current?.(liveFenRef.current);
+        if (
+          opener
+          && gameRef.current.history.length === 0
+          && liveFenRef.current.split(' ')[1] === 'w'
+          && playDictatedMove(opener)
+        ) {
+          say(`${sanToSpeech(opener)} — your move.`);
+          void logAppAudit({
+            kind: 'coach-surface-migrated',
+            category: 'subsystem',
+            source: 'CoachTeachPage.handleSubmit.playIntent',
+            summary: `coach opened ${opener} for "${openingName}"`,
+          });
+        }
+      })();
+    } else {
+      say(`You're White — play the ${openingName} and I'll talk you through it.`);
+    }
+  }, [playDictatedMove, walkthrough]);
 
   const handleTakeBack = useCallback((count: number): { ok: boolean; reason?: string } => {
     const finish = (result: { ok: boolean; reason?: string }): { ok: boolean; reason?: string } => {
@@ -2053,6 +2134,7 @@ export function CoachTeachPage(): JSX.Element {
         handleResetBoard();
         setArrows([]);
         setLinePicker(null);
+        setLinePickerPlay(null);
         setCoachChoices(null);
         const ack = control === 'new'
           ? `Done with ${priorOpening ?? 'that line'}. What would you like to learn next? Name an opening and we'll dive in.`
@@ -2864,6 +2946,29 @@ export function CoachTeachPage(): JSX.Element {
           break;
         }
       }
+      // THE PICKER'S OFFER IS HONOURED BOTH WAYS. Its acknowledgement says
+      // "pick the one you want to play, or just type its name" — and a typed
+      // name carries no stage word, so it would have been read as a request to
+      // be TAUGHT the line the student just said they wanted to play. The
+      // pending intent stands until a line is chosen or the picker is
+      // dismissed.
+      //
+      // Only for something that could BE a name. A stage hint sends the input
+      // down a branch that takes whatever is left as the opening — no
+      // question-mark guard, no control-word guard, unlike bare-name routing —
+      // so inheriting it unconditionally would turn "which of those is
+      // sharpest?" into a request to play an opening by that name. These are
+      // the bare-name branch's own guards, applied where the intent is
+      // inherited rather than trusted downstream.
+      if (
+        !stageHint
+        && linePickerPlayRef.current
+        && trimmed.length <= 60
+        && !trimmed.includes('?')
+        && !isWalkthroughControlPhrase(trimmed)
+      ) {
+        stageHint = 'play-real';
+      }
       // FACE-mode routing: when the line picker submits "Face: X" we
       // strip the prefix, set the face flag, and proceed through the
       // normal name-resolution path. Generation later passes the flag
@@ -3258,64 +3363,77 @@ export function CoachTeachPage(): JSX.Element {
           // takes the other side. Any other phrasing ("let's play the Caro")
           // is the student wanting to play it themselves. `sideOverride` (an
           // explicit "as black") still wins over both.
-          const coachPlaysIt = /\b(?:against|versus|vs\.?)\s+me\b/i.test(text);
-          const owner = inferStudentSideFromName(requestedName);
-          const flipped: 'white' | 'black' = owner === 'white' ? 'black' : 'white';
-          const studentSide = sideOverride ?? (coachPlaysIt ? flipped : owner);
-
-          walkthrough.stop();
-          voiceService.stop();
-          gameRef.current.resetGame();
-          gameRef.current.setOrientation(studentSide);
-          setPlayerColor(studentSide);
-          liveFenRef.current = gameRef.current.fen;
-          setArrows([]);
-          setHighlights([]);
-          chainArrowsRef.current = [];
-          chainHighlightsRef.current = [];
-          useCoachMemoryStore.getState().setIntendedOpening({
-            name: requestedName,
-            color: studentSide,
-            capturedFromSurface: 'chat-teach-play',
+          //
+          // A name TYPED into a raised play-picker inherits that request's
+          // terms. "Play the Sicilian against me" then "Najdorf" is still
+          // against me — re-reading the second message alone would silently
+          // hand the student the side they had just asked the coach to take.
+          const pending = linePickerPlayRef.current;
+          const coachPlaysIt = pending
+            ? pending.coachPlaysIt
+            : /\b(?:against|versus|vs\.?)\s+me\b/i.test(text);
+          const studentSide = studentSideForPlay({
+            lineSide: inferStudentSideFromName(requestedName),
+            coachPlaysIt,
+            sideOverride: sideOverride ?? pending?.sideOverride ?? null,
           });
 
-          const say = (line: string): void => {
+          // 🔒 A FAMILY IS NOT A LINE YOU CAN PLAY — PICK THE SUBLINE FIRST
+          // (David 2026-08-09: "add pickers for sublines when player requests
+          // an opening to be played").
+          //
+          // The picker below already exists for "teach me the Sicilian", and
+          // it was skipped for anything carrying a stage hint — so a request to
+          // PLAY a family started a game on the family's bare stub: three moves
+          // of theory a dozen genuinely different games share, with no way to
+          // say which one you meant. Asking is not a detour; choosing between
+          // the Najdorf and the Dragon IS the first real decision of playing
+          // the Sicilian, and it is the decision that determines every line
+          // the coach follows and every note it can reach afterwards.
+          //
+          // Only a BROAD family raises it. `findLinePickerOptions` returns null
+          // for a name that already names a line, so "play the Latvian Gambit
+          // against me" still starts immediately — no extra tap for a student
+          // who already said what they wanted.
+          const playPicker = findLinePickerOptions(requestedName);
+          if (playPicker) {
+            const ack = `The ${playPicker.canonicalName} splits into several different games. Pick the one you want to play, or just type its name.`;
+            const variationList = playPicker.options
+              .map((o) => (o.keyMove ? `${o.label} (${o.keyMove})` : o.label))
+              .join(', ');
             setMessages((prev) => [...prev, {
-              id: freshTurnId('play-intent'), role: 'assistant', content: line, timestamp: Date.now(),
+              id: freshTurnId('play-picker'), role: 'assistant', content: ack, timestamp: Date.now(),
             }]);
             useCoachMemoryStore.getState().appendConversationMessage({
-              surface: 'chat-teach', role: 'coach', text: line, fen: liveFenRef.current, trigger: null,
+              surface: 'chat-teach', role: 'coach', text: ack, fen: gameRef.current.fen, trigger: null,
             });
-            void voiceService.speakForced(line).catch(() => undefined);
-          };
-
-          // When the coach has White it MUST open, or the game just sits there
-          // (David 2026-07-12, on flipping to Black for the Benko and having to
-          // push the coach's d4 himself). Same resolver the colour selector
-          // uses — the opening's own book line first, engine behind it — so an
-          // opening with no book entry still gets a first move.
-          if (studentSide === 'black') {
-            say(`You're Black — I'll play the ${requestedName}.`);
-            void (async () => {
-              const opener = await resolveCoachReplyMoveRef.current?.(liveFenRef.current);
-              if (
-                opener &&
-                gameRef.current.history.length === 0 &&
-                liveFenRef.current.split(' ')[1] === 'w' &&
-                playDictatedMove(opener)
-              ) {
-                say(`${sanToSpeech(opener)} — your move.`);
-                void logAppAudit({
-                  kind: 'coach-surface-migrated',
-                  category: 'subsystem',
-                  source: 'CoachTeachPage.handleSubmit.playIntent',
-                  summary: `coach opened ${opener} for "${requestedName}"`,
-                });
-              }
-            })();
-          } else {
-            say(`You're White — play the ${requestedName} and I'll talk you through it.`);
+            // Hidden context so a follow-up ("which of those is sharpest?") is
+            // answerable from what is actually on screen. Never rendered, never
+            // spoken — same shape the teach picker uses.
+            useCoachMemoryStore.getState().appendConversationMessage({
+              surface: 'chat-teach',
+              role: 'coach',
+              text: `[ui-state: line picker visible for "${playPicker.canonicalName}" to PLAY. Variations on screen: ${variationList}.]`,
+              fen: gameRef.current.fen,
+              trigger: null,
+            });
+            voiceService.stop();
+            void voiceService.speakForced(ack).catch(() => undefined);
+            setLinePickerPlay({ coachPlaysIt, sideOverride: sideOverride ?? null });
+            setLinePicker(playPicker);
+            void logAppAudit({
+              kind: 'coach-surface-migrated',
+              category: 'subsystem',
+              source: 'CoachTeachPage.handleSubmit.playIntent',
+              summary: `play request for the ${playPicker.canonicalName} family → subline picker, ${playPicker.options.length} options`,
+            });
+            return;
           }
+
+          setLinePicker(null);
+          setLinePickerPlay(null);
+          linePickerPlayRef.current = null;
+          startOpeningPlay(requestedName, studentSide);
           void logAppAudit({
             kind: 'coach-surface-migrated',
             category: 'subsystem',
@@ -7879,17 +7997,29 @@ export function CoachTeachPage(): JSX.Element {
             because findLinePickerOptions returns null for specific
             variation names. */}
         {linePicker && (
-          <div className="px-3 py-2 border-b border-theme-border bg-theme-bg" data-testid="line-picker">
+          <div
+            className="px-3 py-2 border-b border-theme-border bg-theme-bg"
+            data-testid="line-picker"
+            data-picker-intent={linePickerPlay ? 'play' : 'learn'}
+          >
             <div className="flex items-center justify-between px-1 pb-2">
               <div className="text-xs font-medium text-theme-text-muted">
-                Pick a {linePicker.canonicalName} line to {linePickerMode === 'face' ? 'face' : 'learn'}
+                {linePickerPlay
+                  ? `Pick a ${linePicker.canonicalName} line to play`
+                  : `Pick a ${linePicker.canonicalName} line to ${linePickerMode === 'face' ? 'face' : 'learn'}`}
               </div>
               {/* Play / Face toggle. Switches what each tile does:
                   PLAY → study the variation as its natural side.
                   FACE → study the main-line counter from the
                   opposite side (LLM picks the counter). Tile dots
-                  flip color to reflect which side you'll be on. */}
-              <div className="inline-flex rounded-md border border-theme-border bg-theme-surface text-[10px] font-medium overflow-hidden">
+                  flip color to reflect which side you'll be on.
+                  Hidden when the picker is choosing a line to PLAY: the
+                  student already said what they want done with it, and the
+                  toggle would offer to study the line they asked to play. */}
+              <div
+                className="inline-flex rounded-md border border-theme-border bg-theme-surface text-[10px] font-medium overflow-hidden"
+                hidden={Boolean(linePickerPlay)}
+              >
                 <button
                   type="button"
                   onClick={() => setLinePickerMode('play')}
@@ -7928,11 +8058,21 @@ export function CoachTeachPage(): JSX.Element {
                 const showLeadingChip = sides.size > 1;
                 return linePicker.options.map((opt) => {
                 const neon = getNeonColor(opt.style);
-                // In FACE mode the student plays the OPPOSITE side
-                // (counter the variation, not play it).
-                const effectiveSide: 'white' | 'black' =
-                  linePickerMode === 'face'
-                    ? opt.studentSide === 'white' ? 'black' : 'white'
+                // The dot is the side the student will actually be on, so it
+                // has to answer whichever question the picker is asking. In
+                // FACE mode that is the opposite side (counter the variation,
+                // don't play it); when the picker is choosing a game to PLAY
+                // it follows the original ask — "against me" puts the student
+                // on the other end of the line, an explicit side beats both.
+                const flipSide = (s: 'white' | 'black'): 'white' | 'black' => (s === 'white' ? 'black' : 'white');
+                const effectiveSide: 'white' | 'black' = linePickerPlay
+                  ? studentSideForPlay({
+                    lineSide: opt.studentSide,
+                    coachPlaysIt: linePickerPlay.coachPlaysIt,
+                    sideOverride: linePickerPlay.sideOverride,
+                  })
+                  : linePickerMode === 'face'
+                    ? flipSide(opt.studentSide)
                     : opt.studentSide;
                 return (
                   <button
@@ -7960,6 +8100,25 @@ export function CoachTeachPage(): JSX.Element {
                         fen: gameRef.current.fen,
                       });
                       setLinePicker(null);
+                      // Raised by a request to PLAY the family: the tile
+                      // STARTS THE GAME on the chosen line rather than
+                      // teaching it. The side comes from the original ask —
+                      // "against me" hands the line to the coach and the
+                      // student takes the other end of it, an explicit "as
+                      // black" beats both — computed here rather than by
+                      // synthesising a sentence for the parser to take apart
+                      // again.
+                      if (linePickerPlay) {
+                        const side = studentSideForPlay({
+                          lineSide: opt.studentSide,
+                          coachPlaysIt: linePickerPlay.coachPlaysIt,
+                          sideOverride: linePickerPlay.sideOverride,
+                        });
+                        setLinePickerPlay(null);
+                        linePickerPlayRef.current = null;
+                        startOpeningPlay(opt.fullName, side);
+                        return;
+                      }
                       // FACE mode submits a "Face: X" prefix that
                       // handleSubmit recognizes and routes to a
                       // counter-gen flow. PLAY mode submits the
@@ -8015,7 +8174,7 @@ export function CoachTeachPage(): JSX.Element {
               })()}
             </div>
             <button
-              onClick={() => setLinePicker(null)}
+              onClick={() => { setLinePicker(null); setLinePickerPlay(null); linePickerPlayRef.current = null; }}
               className="mt-2 w-full px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-xs transition-colors"
               data-testid="line-picker-dismiss"
             >
