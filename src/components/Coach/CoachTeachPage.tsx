@@ -166,7 +166,7 @@ const NOTE_PRIMARY_MIN_PLIES = 3;
 import { findLivePunishment } from '../../services/gemCrushLines';
 
 import { buildThinkAloud } from '../../services/thinkAloud';
-import { scaleGap } from '../../services/hintRegister';
+import { scaleGap, hintDirective } from '../../services/hintRegister';
 import { warmAmateurPlay, buildRatingRealityFact } from '../../services/amateurPlayCache';
 import { masterPlayCache } from '../../services/masterPlayCache';
 
@@ -6273,7 +6273,7 @@ export function CoachTeachPage(): JSX.Element {
                       if (thinkMoment) {
                         thinkAloudLastPlyRef.current = plyNow;
                         captureEvent('think_aloud_offered', { surface: 'coach-teach', withheld: thinkMoment.withheldSan });
-                        facts.push(thinkMoment.facts);
+                        facts.push(hintDirective(thinkMoment.facts, discussion.hintDial.register));
                       } else if (recUci && recUci.length >= 4) {
                         // PRIORITY-FIRST (the speedrun's framing beat): when
                         // the best move attacks a structurally weak enemy
@@ -6286,7 +6286,7 @@ export function CoachTeachPage(): JSX.Element {
                         if (pf) {
                           priorityFirstLastPlyRef.current = plyNow;
                           captureEvent('priority_first_offered', { surface: 'coach-teach', target: pf.targetSquare });
-                          facts.push(pf.facts);
+                          facts.push(hintDirective(pf.facts, discussion.hintDial.register));
                         } else {
                           const recProbe = new Chess(probe.fen());
                           const recMove = recProbe.move({ from: recUci.slice(0, 2), to: recUci.slice(2, 4), promotion: recUci.slice(4, 5) || undefined });
@@ -6371,7 +6371,7 @@ export function CoachTeachPage(): JSX.Element {
                       if (rt) {
                         rejectedTemptingCountRef.current += 1;
                         captureEvent('rejected_tempting_offered', { surface: 'coach-teach', tempting: rt.temptingSan, refutation: rt.refutationSan });
-                        facts.push(rt.facts);
+                        facts.push(hintDirective(rt.facts, discussion.hintDial.register));
                       }
                     }
                   }

@@ -7,7 +7,8 @@
 // clear run, and it does not move on a mixed one.
 import { describe, it, expect } from 'vitest';
 import {
-  openingRegister, startDial, recordAttempt, hintPlyGap, hintIsDue, scaleGap, WINDOW,
+  openingRegister, startDial, recordAttempt, hintPlyGap, hintIsDue, scaleGap,
+  hintDirective, WINDOW,
 } from './hintRegister';
 
 const FOUND = 0;     // cpLoss 0 — the engine's own move
@@ -140,5 +141,37 @@ describe('near-best is the found/missed line, not a second opinion', () => {
     // one place — the dial must never grow its own definition of a good move.
     expect(play(1200, [20, 20, 20]).register).toBe('subtle');
     expect(play(1200, [21, 21, 21]).register).toBe('obvious');
+  });
+});
+
+describe('subtlety rides on the beat directive', () => {
+  const FACTS = 'PRIORITY FIRST: the pawn on d5 is isolated. Do NOT name the move.';
+
+  it('leaves the tuned default alone', () => {
+    // The beats were written and measured at this register; a rewrite here
+    // would silently retune every one of them.
+    expect(hintDirective(FACTS, 'moderate')).toBe(FACTS);
+  });
+
+  it('keeps the computed facts intact at every register', () => {
+    // The register changes distance from the answer, never what is true (G0).
+    for (const r of ['obvious', 'moderate', 'subtle'] as const) {
+      expect(hintDirective(FACTS, r)).toContain(FACTS);
+    }
+  });
+
+  it('never lets a louder hint hand over the move', () => {
+    // "More obvious" is a shorter walk to the answer, not the answer. A hint
+    // that names the move is a different and worse feature.
+    expect(hintDirective(FACTS, 'obvious').toLowerCase()).toContain('never name the move');
+  });
+
+  it('says something different at each end', () => {
+    expect(hintDirective(FACTS, 'obvious')).not.toBe(hintDirective(FACTS, 'subtle'));
+  });
+
+  it('adds nothing to an empty directive', () => {
+    expect(hintDirective('', 'obvious')).toBe('');
+    expect(hintDirective('   ', 'subtle')).toBe('   ');
   });
 });
