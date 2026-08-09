@@ -6022,6 +6022,37 @@ export function CoachTeachPage(): JSX.Element {
                             // with invented reasons). chess.js supplies the
                             // concrete consequence; empty when there is none.
                             const recWhy = describeMoveConsequence(probe.fen(), recMove.san);
+                            // THE IMPROVING MOVE — the speedrun's quiet beat,
+                            // and the middlegame teaching this lane was missing
+                            // (David 2026-08-09: "improving pieces").
+                            //
+                            // `buildPlayCommentary` has always been able to
+                            // build it, and Learn has always called that
+                            // builder — but with `{fen, studentColor}` only,
+                            // and the branch requires `bestUci`+`bestMoveWhy`.
+                            // So it was unreachable code on this surface while
+                            // the engine data it needed sat in scope four lines
+                            // away. Nothing had to be built; it had to be
+                            // HANDED the facts.
+                            //
+                            // It REPLACES the plain recommendation on a quiet
+                            // move rather than riding beside it — the same
+                            // upgrade relationship priority-first has, and for
+                            // the same reason: naming the piece to improve and
+                            // then also naming the move is two coaches talking.
+                            const improve = buildPlayCommentary({
+                              fen: probe.fen(),
+                              studentColor: playerColor,
+                              bestUci: recUci,
+                              // The builder appends this after its own sentence,
+                              // so it needs the reason as prose, not as the
+                              // clause-tail the rec line splices onto a SAN.
+                              bestMoveWhy: recWhy.replace(/^[\s,—-]+/, '').trim() || undefined,
+                            });
+                            if (improve?.kind === 'improving-move') {
+                              captureEvent('improving_move_offered', { surface: 'coach-teach', from: recUci.slice(0, 2) });
+                              facts.push(...improve.facts);
+                            } else {
                             const recLine = `Your strongest reply here is ${recMove.san}${recWhy}.`;
                             facts.push(recLine);
                             // Track A candidate — ONLY set here, where no
@@ -6029,6 +6060,7 @@ export function CoachTeachPage(): JSX.Element {
                             // move (speaking it then would leak the answer).
                             trackABestReply = recLine;
                             trackABestReplyArrow = { startSquare: recMove.from, endSquare: recMove.to, color: 'green' };
+                            }
                           }
                         }
                       }
@@ -6314,7 +6346,20 @@ export function CoachTeachPage(): JSX.Element {
                   kind: 'coach-narration-spoken',
                   category: 'subsystem',
                   source: 'CoachTeachPage.turnFacts',
+                  // WHICH beats fired, not just how many facts. A count cannot
+                  // answer "does the trade-off-their-best-piece beat work in a
+                  // real middlegame" — the question this lane exists for — so
+                  // an audit had no way to prove any of it beyond reading the
+                  // model's paraphrase and guessing. Each computed fact opens
+                  // with its own uppercase tag (THEIR BEST PIECE, IMPROVING
+                  // MOVE, ALIGNMENT, FORK…); listing the tags is the cheapest
+                  // honest signal and leaks nothing the summary didn't.
                   summary: `computed ${facts.length} fact(s) for the turn`,
+                  details: JSON.stringify({
+                    beats: facts
+                      .map((f) => /^([A-Z][A-Z ]{2,}):/.exec(f)?.[1] ?? null)
+                      .filter((t): t is string => t !== null),
+                  }),
                   fen: probe.fen(),
                 });
               }

@@ -1,365 +1,311 @@
-/**
- * audit-learn-full-game — plays a full game on /coach/teach (Learn with
- * Coach) against the live prod build and verifies the grounding-truth fixes:
- *
- *   1. The ENGINE plays the coach's reply (not the LLM) — after each student
- *      move the board advances by an opponent move within the settle window.
- *   2. Arrows GO AWAY between turns — the SVG arrow count drops to ~0 right
- *      after a student move (no piling).
- *   3. The "why did you play that?" question POPS UP on a blunder
- *      (data-testid="discussion-prompt"), rating-adaptive bar permitting.
- *
- * Navigates IN-APP via the hub tile (coach-action-teach) so it never does a
- * direct page.goto to /coach/teach (that re-validates the resigned sandbox
- * cert and fails). Models on audit-coach-play.mjs.
- *
- * Run: AUDIT_SANDBOX=1 AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app \
- *        node scripts/audit-learn-full-game.mjs
- */
-import { chromium } from 'playwright-core';
+#!/usr/bin/env node
+// A FULL game in Learn with Coach — does the MIDDLEGAME teaching work?
+//
+// David 2026-08-09: "Run a full game. We need to make sure middle game
+// teachings work. Improving pieces, trading off opponents best piece."
+//
+// The previous Learn audit drove the board from a list of preferred moves and
+// stopped at ply 8 — still in the opening — so it could not have answered this
+// even in principle. The beats in question only fire in a real middlegame:
+//   • IMPROVING MOVE      — nothing forcing, so name the piece with a better
+//                           square (and withhold the square).
+//   • THEIR BEST PIECE    — their strongest piece can be traded off right now.
+//   • ALIGNMENT           — the seeding observation that precedes a tactic.
+// This plays a whole game with a real (small) player and reports which beats
+// actually fired, per phase.
+//
+// PROVEN, NOT INFERRED. Every computed fact opens with its own uppercase tag,
+// and `CoachTeachPage.turnFacts` now lists those tags in its audit details, so
+// the beats are read from the app's own events rather than guessed at from the
+// model's paraphrase. Reading the prose would only prove the model said
+// something adjacent.
+//
+// MUTED (`muteTtsForAudit`) — same narration events, same full text, zero TTS
+// spend. Instruments per §G1: Playwright drives, the prod audit-stream is
+// pulled before/after, and the run is stamped with an audit_run_id so the full
+// spoken text is queryable from PostHog (the local listener cannot attach over
+// https).
+import { chromium } from 'playwright';
+import { Chess } from 'chess.js';
+import { writeFileSync, mkdirSync } from 'node:fs';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
-import { mkdir, writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
+import { pickStudentMove } from './audit-lib/student-player.mjs';
 
-const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'https://chess-academy-pro.vercel.app';
-const HEADED = process.env.AUDIT_SMOKE_HEADED === '1';
-const stamp = new Date().toISOString().replace(/[:.]/g, '-');
-const OUT_DIR = `audit-reports/learn-full-game-${stamp}`;
+const BASE = process.env.AUDIT_SMOKE_URL ?? 'https://chess-academy-pro.vercel.app';
+const RUN_ID = process.env.AUDIT_RUN_ID ?? `learn-full-${Math.random().toString(36).slice(2, 10)}`;
+const SECRET = process.env.AUDIT_STREAM_SECRET ?? '';
+const MAX_PLIES = Number(process.env.AUDIT_MAX_PLIES ?? 40);
+const OUT = `audit-reports/learn-full-game-${new Date().toISOString().replace(/[:.]/g, '-')}`;
 
-const BOOT_TIMEOUT_MS = 30_000;
-const MOVE_SETTLE_MS = 9000; // student move + engine reply + narration
+/** The opening the coach is asked to play, so the game starts from real theory
+ *  and then leaves it — which is exactly where the middlegame beats live. */
+const ASK = process.env.AUDIT_ASK ?? 'play the Vienna Gambit against me';
 
-// A line that walks White into a catastrophic blunder (Fool's-Mate setup):
-// 1.f3 then 2.g4 — if Black answers 1...e5 and 2...Qh4# the eval craters,
-// which must trip the faucet. The engine plays Black, so the exact replies
-// vary; we still play f3 + g4 and watch for the prompt.
-const STUDENT_MOVES = [
-  ['e2', 'e4'],
-  ['g1', 'f3'],
-  ['f1', 'c4'],
-  ['b1', 'c3'],
-];
-// King-walk (Bongcloud) — reliably craters the eval regardless of the
-// opponent's reply, so the eval-based slip-check must trip. e1→e2 is legal
-// right after 1.e4 (e2 emptied); e2→f3 deepens the blunder.
-const BLUNDER_MOVES = [
-  ['e1', 'e2'],
-  ['e2', 'f3'],
-];
+const sleep = (ms) => new Promise((r) => { setTimeout(r, ms); });
 
-async function main() {
-  await mkdir(OUT_DIR, { recursive: true });
-  console.log(`[learn] base   = ${BASE_URL}`);
-  console.log(`[learn] outDir = ${OUT_DIR}`);
-
-  const executablePath = await resolveChromiumExecutable(HEADED);
-  const browser = await chromium.launch({ headless: !HEADED, executablePath, args: sandboxLaunchArgs() });
-  const ctx = await browser.newContext({
-    ...sandboxContextOptions(),
-    viewport: { width: 414, height: 896 },
-    deviceScaleFactor: 2,
-    userAgent: 'AuditLearnFullGameBot/1.0 (chromium)',
+const readPlacement = (page) => page.evaluate(() => {
+  const out = {};
+  document.querySelectorAll('[data-square]').forEach((sq) => {
+    const p = sq.querySelector('[data-piece]');
+    const name = sq.getAttribute('data-square');
+    if (p && name) out[name] = p.getAttribute('data-piece');
   });
-  const page = await ctx.newPage();
+  return out;
+}).catch(() => ({}));
 
-  const consoleErrors = [];
-  const pageErrors = [];
-  page.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(m.text().slice(0, 300)); });
-  page.on('pageerror', (e) => pageErrors.push(e.message.slice(0, 300)));
+const samePlacement = (a, b) => {
+  const ka = Object.keys(a); const kb = Object.keys(b);
+  if (ka.length !== kb.length) return false;
+  return ka.every((k) => a[k] === b[k]);
+};
 
-  // ── VOICE INSTRUMENT (the missing 3rd instrument) ──────────────────────
-  // Every spoken line streams Polly audio from POST /api/tts. We capture the
-  // request body text so we can tell a REAL narration ("...develops the
-  // knight...") from the warmup "." probe, and timestamp each so we can
-  // measure the delta around a specific move (did the coach speak THIS reply,
-  // not just the kickoff?). David 2026-06-04: "not hearing narrations like I
-  // should" — the prior audit never checked voice at all.
-  const ttsReqs = []; // { t, text }
-  page.on('request', (r) => {
-    if (!/\/api\/tts/.test(r.url())) return;
-    // /api/tts is a GET — getTtsUrl() builds `/api/tts?text=…` and the primed
-    // <audio> element plays it by src. (A POST body path also exists for some
-    // callers.) Capture BOTH methods; pull the spoken text from the query
-    // param for GET, the body for POST.
-    let text = '';
-    try {
-      const u = new URL(r.url());
-      text = u.searchParams.get('text') ?? '';
-      if (!text && r.method() === 'POST') {
-        const body = r.postDataJSON();
-        text = (body?.text ?? body?.input ?? body?.ssml ?? '').toString();
-      }
-    } catch { text = (r.postData() || '').slice(0, 200); }
-    ttsReqs.push({ t: Date.now(), text: text.slice(0, 160) });
-  });
-  // A "real" narration = more than the warmup "." probe / a couple chars.
-  const isRealNarration = (s) => typeof s === 'string' && s.replace(/[\s.]/g, '').length >= 3;
-  const realTtsSince = (since) => ttsReqs.filter((r) => r.t >= since && isRealNarration(r.text));
-
-  const results = [];
-  const log = (name, ok, detail) => {
-    results.push({ name, ok, detail });
-    console.log(`  ${ok ? '✓' : '✗'} ${name}${detail ? ` — ${detail}` : ''}`);
-  };
-
-  // Count rendered board arrows. react-chessboard draws each arrow as an SVG
-  // <line> / <marker>; count line elements inside any board svg as a proxy.
-  const countArrows = async () => {
-    try {
-      return await page.evaluate(() => {
-        const board = document.querySelector('[data-testid="chessboard"], .cg-wrap, [class*="board"]') ?? document.body;
-        return board.querySelectorAll('svg line, svg marker, svg polygon[class*="arrow"]').length;
-      });
-    } catch { return -1; }
-  };
-
-  // Dump the in-page forensic audit log (window.__AUDIT__.dump) and return
-  // entries whose kind matches `kinds`.
-  const dumpAudit = async (kinds) => {
-    try {
-      const all = await page.evaluate(async () => {
-        const a = window.__AUDIT__;
-        if (!a || typeof a.dump !== 'function') return [];
-        try { return await a.dump(); } catch { return []; }
-      });
-      return all.filter((e) => kinds.includes(e.kind));
-    } catch { return []; }
-  };
-
-  const tryMove = async (from, to) => {
-    const f = page.locator(`[data-square="${from}"]`).first();
-    const t = page.locator(`[data-square="${to}"]`).first();
-    if ((await f.count()) === 0 || (await t.count()) === 0) throw new Error(`square missing ${from}/${to}`);
-    await f.click({ timeout: 3000 });
-    await page.waitForTimeout(180);
-    await t.click({ timeout: 3000 });
-  };
-
-  // A signature of the occupied squares — changes whenever a piece moves.
-  // react-chessboard renders a piece element inside (or referencing) each
-  // occupied [data-square]; we hash which squares are occupied.
-  const boardSig = async () => {
-    try {
-      return await page.evaluate(() => {
-        const occupied = [];
-        document.querySelectorAll('[data-square]').forEach((sq) => {
-          const hasPiece = sq.querySelector('[data-piece], img, [draggable="true"], [class*="piece"]') ||
-            (sq.getAttribute('data-piece'));
-          if (hasPiece) occupied.push(sq.getAttribute('data-square'));
-        });
-        return occupied.sort().join(',');
-      });
-    } catch { return ''; }
-  };
-  const isSquareEmpty = async (square) => {
-    try {
-      return await page.evaluate((s) => {
-        const sq = document.querySelector(`[data-square="${s}"]`);
-        if (!sq) return true;
-        return !(sq.querySelector('[data-piece], img, [draggable="true"], [class*="piece"]') || sq.getAttribute('data-piece'));
-      }, square);
-    } catch { return false; }
-  };
-
-  try {
-    // ── Boot + dismiss onboarding ──────────────────────────────────────
-    await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
-    await page.waitForTimeout(2500);
-    const calib = page.locator('[data-testid="strength-calibration-bubble"]');
-    if (await calib.count().catch(() => 0)) {
-      await page.locator('[data-testid="skill-band-intermediate"]').first().click({ timeout: 5000 }).catch(() => {});
-      await calib.waitFor({ state: 'detached', timeout: 15000 }).catch(() => {});
+const placementOf = (fen) => {
+  const out = {};
+  const rows = fen.split(' ')[0].split('/');
+  for (let r = 0; r < 8; r += 1) {
+    let file = 0;
+    for (const ch of rows[r]) {
+      if (/\d/.test(ch)) { file += Number(ch); continue; }
+      const square = 'abcdefgh'[file] + String(8 - r);
+      out[square] = (ch === ch.toUpperCase() ? 'w' : 'b') + ch.toUpperCase();
+      file += 1;
     }
-    log('dashboard boots', true);
-
-    // ── Navigate to Learn via the hub (in-app, no direct goto) ─────────
-    await page.goto(`${BASE_URL}/coach/home`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS }).catch(() => {});
-    await page.waitForTimeout(2000);
-    // Dismiss the "How the Coach works" page-help modal that auto-opens on
-    // the hub — it intercepts pointer events on the tiles.
-    const hubHelp = page.locator('[data-testid="page-help-modal"]');
-    if (await hubHelp.count().catch(() => 0)) {
-      await page.locator('[data-testid="page-help-close"]').first().click({ timeout: 4000 }).catch(() => {});
-      await hubHelp.waitFor({ state: 'detached', timeout: 8000 }).catch(() => {});
-    }
-    const learnTile = page.locator('[data-testid="coach-action-teach"]').first();
-    await learnTile.waitFor({ state: 'visible', timeout: 15000 });
-    await learnTile.click();
-    await page.waitForTimeout(2500);
-    // Dismiss any page-help modal on the destination.
-    const help = page.locator('[data-testid="page-help-close"]').first();
-    if (await help.count().catch(() => 0)) await help.click({ timeout: 3000 }).catch(() => {});
-    await page.waitForURL(/\/coach\/teach/, { timeout: 10000 }).catch(() => {});
-    log('Learn (/coach/teach) mounts via hub', /\/coach\/teach/.test(page.url()), page.url());
-
-    // Board present?
-    await page.locator('[data-square="e2"]').first().waitFor({ state: 'visible', timeout: 15000 });
-    log('board is playable from the start', true);
-
-    // VOICE — the coach's KICKOFF narration ("welcome to my classroom…") must
-    // stream from /api/tts shortly after mount. If this is silent, the whole
-    // narration path is dead before any move. Give it up to 12s (brain trip +
-    // first Polly stream).
-    let kickoffSpoke = false;
-    for (let i = 0; i < 12 && !kickoffSpoke; i++) {
-      await page.waitForTimeout(1000);
-      kickoffSpoke = realTtsSince(0).length > 0;
-    }
-    const kickoffSample = realTtsSince(0)[0]?.text ?? '';
-    log('coach SPEAKS the kickoff narration (/api/tts streamed)', kickoffSpoke,
-      kickoffSpoke ? `first TTS: "${kickoffSample}"` : 'no real /api/tts request — narration path silent');
-
-    // Snapshot which black squares (rank 7/8) are occupied BEFORE any move.
-    const blackOcc = async () => {
-      try {
-        return await page.evaluate(() => {
-          const out = [];
-          document.querySelectorAll('[data-square]').forEach((sq) => {
-            const s = sq.getAttribute('data-square') || '';
-            if (!/[78]$/.test(s)) return;
-            const has = sq.querySelector('[data-piece], img, [draggable="true"], [class*="piece"]') || sq.getAttribute('data-piece');
-            if (has) out.push(s);
-          });
-          return out.sort().join(',');
-        });
-      } catch { return ''; }
-    };
-    const blackBefore = await blackOcc();
-
-    // Wait out the coach's kickoff narration — the board is non-interactive
-    // (busy) until it finishes, so clicks before that no-op. Poll until the
-    // first move registers (e2 empties after e2→e4).
-    let boardLive = false;
-    let arrowsRightAfterE4 = -1;
-    for (let i = 0; i < 8; i++) {
-      await tryMove('e2', 'e4').catch(() => {});
-      await page.waitForTimeout(700);
-      if (arrowsRightAfterE4 < 0) arrowsRightAfterE4 = await countArrows();
-      await page.waitForTimeout(1200);
-      if (await isSquareEmpty('e2')) { boardLive = true; break; }
-      await page.waitForTimeout(2000);
-    }
-    log('board accepts the student move (e4) after kickoff', boardLive,
-      boardLive ? 'e2 emptied → e4 played' : 'board stayed non-interactive');
-
-    // Arrows from the previous coach turn must clear the instant the student
-    // moves (handleStudentMove → setArrows([])).
-    log('arrows go away on the student move (no piling)', boardLive && arrowsRightAfterE4 <= 1,
-      `arrows right after e4 = ${arrowsRightAfterE4}`);
-
-    // Mark the moment just before the engine reply so we can measure whether
-    // the coach SPOKE this specific reply (delta), not just the kickoff.
-    const beforeReplyT = Date.now();
-
-    // The ENGINE must play the coach's reply: after e4 + settle, a black
-    // piece (rank 7/8) must have moved. This is the grounding-truth check —
-    // the LLM is OUT of move selection; the engine replies.
-    let blackMoved = false;
-    for (let i = 0; i < 6 && !blackMoved; i++) {
-      await page.waitForTimeout(4000);
-      const blackNow = await blackOcc();
-      blackMoved = blackNow !== blackBefore && blackNow.length > 0;
-      console.log(`  engine-reply poll ${i}: blackChanged=${blackMoved}`);
-    }
-    log('engine plays the coach reply (a black piece moved after e4)', blackMoved,
-      blackMoved ? 'black occupancy changed → engine replied' : 'no black move detected');
-
-    // VOICE — the coach must NARRATE the reply it just played. Give the brain
-    // trip + Polly stream up to 12s after the move landed. This is the check
-    // that catches "engine moved but the coach said nothing" — the exact
-    // symptom David reported (board advances, silence).
-    let replySpoke = false;
-    for (let i = 0; i < 12 && !replySpoke; i++) {
-      await page.waitForTimeout(1000);
-      replySpoke = realTtsSince(beforeReplyT).length > 0;
-    }
-    const replySample = realTtsSince(beforeReplyT)[0]?.text ?? '';
-    const narrationEvents = await dumpAudit(['coach-narration-spoken', 'voice-speak-invoked']);
-    log('coach NARRATES the engine reply (voice fired for THIS move)', replySpoke,
-      replySpoke
-        ? `TTS after reply: "${replySample}"`
-        : `SILENT after engine reply — voice-speak audit events=${narrationEvents.length}`);
-
-    // Move SOURCE — confirm the reply came from masters/lichess/Stockfish,
-    // NOT the last-resort random fallback (David 2026-06-04).
-    const srcEvents = await dumpAudit(['coach-opponent-move-source']);
-    const sources = srcEvents.map((e) => (e.summary || '').match(/source=(\S+)/)?.[1]).filter(Boolean);
-    const lastSrc = sources[sources.length - 1] ?? 'unknown';
-    // 'local' = the local masters DB; 'lichess'/'lichess-games' = live
-    // masters/games; 'stockfish-*' = rating-matched engine. Only 'random' is
-    // the bad last-resort fallback.
-    const goodSource = lastSrc !== 'random' && lastSrc !== 'unknown';
-    log('engine reply source is masters/Stockfish (not random)', goodSource,
-      sources.length ? `sources=[${sources.join(', ')}]` : 'no source event captured');
-
-    // ── Make a blunder; verify the slip-check RUNS + the "why?" pops up ──
-    // Do NOT restart (that resets to the start, where e2 is occupied and the
-    // king-walk is illegal). Continue from the e4 position: e2 is empty, so
-    // the Bongcloud king-walk (Ke2, Kf3) is legal and craters the eval.
-    const waitForStudentTurn = async (prevBlackSig) => {
-      for (let i = 0; i < 8; i++) {
-        await page.waitForTimeout(2500);
-        const now = await blackOcc();
-        if (now !== prevBlackSig) return now; // engine moved ⇒ White to move
-      }
-      return prevBlackSig;
-    };
-    let promptSeen = false;
-    let blackSig = await blackOcc();
-    for (const [from, to] of BLUNDER_MOVES) {
-      let played = false;
-      for (let k = 0; k < 6 && !played; k++) {
-        await tryMove(from, to).catch(() => {});
-        await page.waitForTimeout(1200);
-        played = await isSquareEmpty(from);
-        if (!played) await page.waitForTimeout(2000);
-      }
-      console.log(`  blunder ${from}${to}: played=${played}`);
-      for (let p = 0; p < 6 && !promptSeen; p++) {
-        await page.waitForTimeout(2000);
-        promptSeen = (await page.locator('[data-testid="discussion-prompt"]').count().catch(() => 0)) > 0;
-      }
-      if (promptSeen) break;
-      blackSig = await waitForStudentTurn(blackSig);
-    }
-    // The slip-check now RUNS (the fix: 'brain' priority, no longer dropped).
-    // faucet-slip-detected proves it fired even if the eval drop stayed below
-    // the rating-adaptive interjection bar (so no visible prompt).
-    const faucetEvents = await dumpAudit(['faucet-slip-detected']);
-    log('slip-check runs on the move (faucet fired — the prefetch-dropped fix)',
-      faucetEvents.length > 0 || promptSeen,
-      `faucet-slip-detected events=${faucetEvents.length}${promptSeen ? ' + prompt visible' : ''}`);
-    log('"why did you play that?" question pops up on a blunder', promptSeen,
-      promptSeen ? 'discussion-prompt visible' : 'no prompt (could not trigger a scored blunder in the scripted line; logic is unit-tested)');
-
-    // GROUNDING — the coach must NOT stock-out narrating the move it just
-    // played. David's iPhone (2026-06-04, PostHog): every engine reply (c5,
-    // e6, Qc7) tripped the SAN claim validator (kind=san, retry=2) because the
-    // played move isn't legal from the post-move position, exhausting retries
-    // → the stock "I can't verify which moves are sound" fallback. A SAN trip
-    // or an enforcement fallback during this walk is the bug back. (Arrow-kind
-    // trips are self-healing synthesis — those are allowed; only kind=san and
-    // the stock-out fallback are failures.)
-    const cvTrips = await dumpAudit(['claim-validator-trip']);
-    const sanTrips = cvTrips.filter((e) => /kind=san/.test(e.summary || ''));
-    const stockOuts = await dumpAudit(['master-play-enforcement-fallback']);
-    log('coach does NOT stock-out naming the move it just played (no kind=san trip)',
-      sanTrips.length === 0 && stockOuts.length === 0,
-      `san-trips=${sanTrips.length} enforcement-fallbacks=${stockOuts.length}${sanTrips[0] ? ` e.g. ${sanTrips[0].summary}` : ''}`);
-
-    log('no console errors', consoleErrors.length === 0, consoleErrors.slice(0, 2).join(' | '));
-    log('no page errors', pageErrors.length === 0, pageErrors.slice(0, 2).join(' | '));
-
-    await page.screenshot({ path: join(OUT_DIR, 'final.png'), fullPage: false }).catch(() => {});
-  } catch (e) {
-    log('FATAL', false, String(e?.message ?? e));
-  } finally {
-    const pass = results.filter((r) => r.ok).length;
-    const report = { base: BASE_URL, startedAt: stamp, pass, total: results.length, results, consoleErrors, pageErrors };
-    await writeFile(join(OUT_DIR, 'report.json'), JSON.stringify(report, null, 2));
-    console.log(`\n[learn] ${pass}/${results.length} checks passed — report: ${OUT_DIR}/report.json`);
-    await browser.close();
   }
+  return out;
+};
+
+const LETTER = { p: 'P', n: 'N', b: 'B', r: 'R', q: 'Q', k: 'K' };
+const CLAIM_RE = /\b(pawn|knight|bishop|rook|queen|king)\s+on\s+([a-h][1-8])\b/gi;
+
+/** Piece-on-square claims in `text` that are not true of `fen`. */
+function falseBoardClaims(text, fen) {
+  const bad = [];
+  let chess;
+  try { chess = new Chess(fen); } catch { return bad; }
+  CLAIM_RE.lastIndex = 0;
+  let m;
+  while ((m = CLAIM_RE.exec(text)) !== null) {
+    const piece = m[1].toLowerCase();
+    const square = m[2].toLowerCase();
+    const at = chess.get(square);
+    if (!at) bad.push(`${piece} on ${square} — square is empty`);
+    else if (LETTER[at.type] !== LETTER[piece]) bad.push(`${piece} on ${square} — actually a ${at.type}`);
+  }
+  return bad;
 }
 
-main().catch((e) => { console.error(e); process.exit(1); });
+async function pullStream(since) {
+  if (!SECRET) return [];
+  try {
+    const res = await fetch(`${BASE}/api/audit-stream?since=${since}`, { headers: { 'x-audit-secret': SECRET } });
+    if (!res.ok) return [];
+    const body = await res.json();
+    return body.events ?? body.entries ?? [];
+  } catch { return []; }
+}
+
+/** Which phase a position is in — the same three buckets the app narrates. */
+function phaseOf(fen) {
+  const chess = new Chess(fen);
+  const pieces = chess.board().flat().filter(Boolean);
+  const heavy = pieces.filter((p) => p.type === 'q' || p.type === 'r').length;
+  const minors = pieces.filter((p) => p.type === 'n' || p.type === 'b').length;
+  if (pieces.length <= 12 || (heavy <= 2 && minors <= 2)) return 'endgame';
+  const moved = 32 - pieces.length;
+  return moved >= 2 || minors < 8 ? 'middlegame' : 'opening';
+}
+
+async function main() {
+  mkdirSync(OUT, { recursive: true });
+  const before = Date.now() - 60_000;
+  const preEvents = await pullStream(before);
+  console.log(`[stream] pre-run: ${preEvents.length} events`);
+  console.log(`[audit-run-id] ${RUN_ID}`);
+
+  const executablePath = await resolveChromiumExecutable();
+  const browser = await chromium.launch({ executablePath, args: sandboxLaunchArgs() });
+  const ctx = await browser.newContext(sandboxContextOptions());
+  await ctx.addInitScript(muteTtsForAudit);
+  await ctx.addInitScript(`localStorage.setItem('auditRunId', ${JSON.stringify(RUN_ID)});`);
+
+  const page = await ctx.newPage();
+  const pageErrors = [];
+  const spoken = [];
+  const beats = [];        // { beat, fen } from the app's own turnFacts details
+  const rawPayloads = [];
+  page.on('pageerror', (e) => pageErrors.push(String(e)));
+  page.on('request', (req) => {
+    if (!req.url().includes('/api/audit')) return;
+    try {
+      const body = JSON.parse(req.postData() ?? '{}');
+      rawPayloads.push(body);
+      for (const e of (body.events ?? body.entries ?? [body])) {
+        const kind = String(e.kind ?? '');
+        if (e.source === 'CoachTeachPage.turnFacts' && e.details) {
+          try {
+            for (const b of (JSON.parse(e.details).beats ?? [])) beats.push({ beat: b, fen: e.fen });
+          } catch { /* details not ours */ }
+        }
+        if (kind.includes('narration') || kind.includes('voice')) {
+          spoken.push({ kind, source: e.source, text: e.narrationText ?? e.summary, fen: e.fen });
+        }
+      }
+    } catch { /* not our payload */ }
+  });
+
+  await page.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 60_000 });
+
+  const OVERLAYS = [
+    ['[data-testid="ai-consent-modal"]', '[data-testid="ai-consent-allow"]'],
+    ['[data-testid="strength-calibration-bubble"]', '[data-testid="skill-band-intermediate"]'],
+    ['[data-testid="page-help-modal"]', '[data-testid="page-help-close"]'],
+  ];
+  const deadline = Date.now() + 45_000;
+  for (;;) {
+    let acted = false;
+    for (const [gate, btn] of OVERLAYS) {
+      const g = page.locator(gate);
+      if (await g.isVisible().catch(() => false)) {
+        await page.locator(btn).first().click({ timeout: 6000 }).catch(() => {});
+        await g.waitFor({ state: 'detached', timeout: 15_000 }).catch(() => {});
+        acted = true;
+      }
+    }
+    if (!acted) {
+      await sleep(1500);
+      const left = await Promise.all(OVERLAYS.map(([g]) => page.locator(g).isVisible().catch(() => false)));
+      if (!left.some(Boolean)) break;
+    }
+    if (Date.now() > deadline) break;
+  }
+
+  const input = page.locator('[data-testid="chat-text-input"]');
+  await input.waitFor({ state: 'visible', timeout: 45_000 });
+  await input.click();
+  await input.pressSequentially(ASK, { delay: 20 });
+  await page.keyboard.press('Enter');
+  console.log(`[ask] "${ASK}"`);
+
+  await page.locator('[data-square="e2"]').first().waitFor({ state: 'visible', timeout: 90_000 });
+  await sleep(6000);
+
+  const chess = new Chess();
+  const transcript = [];
+  let ply = 0;
+
+  // The coach has White and opens on its own; read that off the board first or
+  // the mirror is a move behind for the whole game.
+  {
+    const openDeadline = Date.now() + 90_000;
+    while (Date.now() < openDeadline && chess.history().length === 0) {
+      const now = await readPlacement(page);
+      for (const m of chess.moves({ verbose: true })) {
+        const probe = new Chess(chess.fen());
+        probe.move(m.san);
+        if (samePlacement(placementOf(probe.fen()), now)) { chess.move(m.san); break; }
+      }
+      if (chess.history().length === 0) await sleep(3000);
+    }
+    console.log(`[open] coach played ${chess.history().at(-1) ?? 'NOTHING — it never opened'}`);
+  }
+
+  while (ply < MAX_PLIES && !chess.isGameOver()) {
+    const legal = pickStudentMove(chess.fen(), chess.history().length);
+    if (!legal) { transcript.push({ note: 'no legal student move — game over' }); break; }
+
+    const spokenBefore = spoken.length;
+    const beatsBefore = beats.length;
+    await page.locator(`[data-square="${legal.from}"]`).first().click({ timeout: 8000, force: true });
+    await page.waitForTimeout(200);
+    await page.locator(`[data-square="${legal.to}"]`).first().click({ timeout: 8000, force: true });
+    chess.move(legal.san);
+    ply += 1;
+    if (chess.isGameOver()) { transcript.push({ ply, studentMove: legal.san, note: 'game over on the student move' }); break; }
+
+    // Wait for the student's move to RENDER, then for the next change — that
+    // one is the coach's. Waiting only for "something changed" catches the
+    // student's own move and desyncs the mirror (2026-08-09).
+    const mine = placementOf(chess.fen());
+    const settle = Date.now() + 20_000;
+    while (Date.now() < settle) {
+      if (samePlacement(await readPlacement(page), mine)) break;
+      await sleep(1000);
+    }
+    const replyBy = Date.now() + (ply === 1 ? 120_000 : 45_000);
+    while (Date.now() < replyBy) {
+      await sleep(2500);
+      if (!samePlacement(await readPlacement(page), mine)) break;
+    }
+    await sleep(2500); // let this turn's narration events post before slicing
+
+    const placement = await readPlacement(page);
+    let replySan = null;
+    if (Object.keys(placement).length > 0) {
+      for (const m of chess.moves({ verbose: true })) {
+        const probe = new Chess(chess.fen());
+        probe.move(m.san);
+        if (samePlacement(placementOf(probe.fen()), placement)) { replySan = m.san; break; }
+      }
+      if (replySan) chess.move(replySan);
+    }
+    if (!replySan) { transcript.push({ ply, studentMove: legal.san, note: 'coach never replied — stopping' }); break; }
+
+    const said = spoken.slice(spokenBefore).map((s) => ({
+      ...s,
+      falseClaims: s.text ? falseBoardClaims(s.text, s.fen ?? chess.fen()) : [],
+    }));
+    const turnBeats = beats.slice(beatsBefore).map((b) => b.beat);
+    const phase = phaseOf(chess.fen());
+    transcript.push({ ply, phase, studentMove: legal.san, coachReply: replySan, fen: chess.fen(), beats: turnBeats, said });
+    const spokenLine = said.find((s) => s.source === 'CoachTeachPage.voicePackage' || s.source === 'CoachTeachPage.trackA');
+    console.log(`[${ply}|${phase}] you ${legal.san} / coach ${replySan}${turnBeats.length ? `   beats: ${turnBeats.join(', ')}` : ''}`);
+    if (spokenLine?.text) console.log(`     🔊 ${String(spokenLine.text).slice(0, 150)}`);
+    for (const s of said) for (const f of s.falseClaims) console.log(`     ❌ FALSE: ${f}`);
+  }
+
+  await page.screenshot({ path: `${OUT}/final.png`, fullPage: true }).catch(() => {});
+  await browser.close();
+
+  await sleep(3000);
+  const postEvents = await pullStream(before);
+
+  const allBeats = transcript.flatMap((t) => t.beats ?? []);
+  const histogram = allBeats.reduce((acc, b) => { acc[b] = (acc[b] ?? 0) + 1; return acc; }, {});
+  const phases = [...new Set(transcript.map((t) => t.phase).filter(Boolean))];
+  const allFalse = transcript.flatMap((t) => (t.said ?? []).flatMap((s) => s.falseClaims ?? []));
+  const totalSpoken = transcript.reduce((n, t) => n + (t.said?.length ?? 0), 0);
+  const silentPlies = transcript.filter((t) => t.ply && !(t.said ?? []).length).length;
+
+  const report = {
+    runId: RUN_ID, base: BASE, ask: ASK,
+    pliesPlayed: ply, gameOver: chess.isGameOver(), result: chess.isCheckmate() ? 'checkmate' : chess.isDraw() ? 'draw' : 'unfinished',
+    phasesReached: phases, beatHistogram: histogram,
+    linesSpoken: totalSpoken, silentPlies, falseClaims: allFalse, pageErrors,
+    streamDelta: postEvents.length - preEvents.length,
+    pgn: chess.pgn(), transcript,
+  };
+  writeFileSync(`${OUT}/report.json`, JSON.stringify(report, null, 2));
+
+  console.log('\n──────── SUMMARY ────────');
+  console.log(`plies played        ${ply} (${report.result})`);
+  console.log(`phases reached      ${phases.join(', ') || 'none'}`);
+  console.log(`lines spoken        ${totalSpoken}   silent plies: ${silentPlies}`);
+  console.log('beats fired:');
+  for (const [b, n] of Object.entries(histogram).sort((a, b2) => b2[1] - a[1])) console.log(`   ${String(n).padStart(3)}  ${b}`);
+  // The two David named. Absence is the finding, so it is stated outright
+  // rather than left to be noticed in a histogram.
+  for (const want of ['IMPROVING MOVE', 'THEIR BEST PIECE']) {
+    console.log(`${histogram[want] ? '✅' : '❌'} ${want}: ${histogram[want] ?? 0}`);
+  }
+  console.log(`FALSE board claims  ${allFalse.length}`);
+  console.log(`page errors         ${pageErrors.length}`);
+  console.log(`report              ${OUT}/report.json`);
+  console.log(`PostHog: SELECT timestamp, properties.source, properties.narration_text FROM events`);
+  console.log(`  WHERE event='coach_narration_spoken' AND properties.audit_run_id='${RUN_ID}' ORDER BY timestamp`);
+
+  const missedBeats = !histogram['IMPROVING MOVE'] && !histogram['THEIR BEST PIECE'];
+  process.exit(allFalse.length > 0 || pageErrors.length > 0 || missedBeats ? 1 : 0);
+}
+
+main().catch((e) => { console.error('FATAL', e); process.exit(1); });
