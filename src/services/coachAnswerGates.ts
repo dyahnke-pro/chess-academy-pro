@@ -244,6 +244,44 @@ export function gradeNarrationText(
   }
 }
 
+/** Grade teaching BORROWED from another game — the structure and concept
+ *  tiers, spoken under "the same idea shows up in positions like this" and
+ *  "as a rule in these positions".
+ *
+ *  Same stripper, one difference: hypothetical clauses are judged too. The
+ *  ordinary gate exempts them because the coach's own "after Be2, the bishop
+ *  on e2 eyes h5" describes a board one move away, and deleting that would
+ *  delete real teaching. A borrowed note's hypothetical board is not one move
+ *  away — it is a different game, and the squares it names are not coming.
+ *  A full-game prod run heard two of these in sixteen plies, both riding the
+ *  exemption: "White should snap off the bishop on d6" with d6 empty, and "the
+ *  king on g1" with the king still on e1. The honest framing is what makes the
+ *  borrow legitimate and is exactly what makes the squares dangerous — the
+ *  sentence reads as a generalization right up to the square the student then
+ *  goes looking for. */
+export function gradeBorrowedTeaching(
+  text: string | undefined,
+  fen: string | null | undefined,
+  source: string,
+): string {
+  if (!text || !text.trim()) return '';
+  if (!fen) return text;
+  try {
+    const res = stripDisprovenSentences(text, fen, { strictHypotheticals: true });
+    if (res.dropped.length > 0) {
+      void logAppAudit({
+        kind: 'claim-validator-trip',
+        category: 'subsystem',
+        source: `${source}.borrowedTeachingGate`,
+        summary: `dropped ${res.dropped.length} sentence(s) naming squares this board does not have`,
+      });
+    }
+    return res.clean.trim();
+  } catch {
+    return text;
+  }
+}
+
 export interface CoachAnswerGateOptions {
   /** The board FEN the prose describes (board + arrow gates need it). When
    *  absent, those two gates are skipped — a surface with no live board

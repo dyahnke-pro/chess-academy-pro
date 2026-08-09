@@ -5,7 +5,7 @@ import { groundedMoveFeedback } from '../services/coachApi';
 import { logAppAudit } from '../services/appAuditor';
 import { db } from '../db/schema';
 import { getCachedStockfish, setCachedStockfish } from './stockfishFenCache';
-import { isSpokenSentenceGrounded, gradeNarrationText } from '../services/coachAnswerGates';
+import { isSpokenSentenceGrounded, gradeNarrationText, gradeBorrowedTeaching } from '../services/coachAnswerGates';
 import { buildFedTacticsContext, speakDeepestLookahead } from '../services/liveTacticsContext';
 import { transitionTeachingSourceForGame, generalizedTeaching } from '../services/danyaTeachingService';
 import { buildVoicePackage } from '../services/voicePackage';
@@ -317,9 +317,16 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             // not, which is how a "trade rooks" plan reached a king-and-pawn
             // ending (David's K+P sample, 2026-08-05). A trip here logs under
             // `usePhaseNarration.transitionNote.narrationGate` — expect ZERO.
-            const ritual = rawRitual.trim()
-              ? (gradeNarrationText(rawRitual, event.fen, 'usePhaseNarration.transitionNote') ?? '')
-              : '';
+            // A BORROWED tier is graded strictly: its hypothetical clauses are
+            // about the game it came from, not a board one move from this one,
+            // so "White should snap off the bishop on d6" must not ride through
+            // on the word "should". The position tier keeps the ordinary gate,
+            // which is right for prose about the line actually being played.
+            const ritual = !rawRitual.trim()
+              ? ''
+              : origin === 'position'
+                ? (gradeNarrationText(rawRitual, event.fen, 'usePhaseNarration.transitionNote') ?? '')
+                : gradeBorrowedTeaching(rawRitual, event.fen, 'usePhaseNarration.transitionNote');
             if (ritual.trim()) transitionSentence += ` ${ritual}`;
             if (ritual.trim()) ritualSpoken = true;
           }

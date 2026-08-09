@@ -217,7 +217,7 @@ import { stockfishEngine } from '../../services/stockfishEngine';
 import { buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
 import { explainBestMoveGrounded } from '../../services/groundedAnswer';
 import { stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
-import { applyCandidateArrows, candidateHighlightMarkers, gradeNarrationText } from '../../services/coachAnswerGates';
+import { applyCandidateArrows, candidateHighlightMarkers, gradeNarrationText, gradeBorrowedTeaching } from '../../services/coachAnswerGates';
 import { groundArrows, dedupeArrowsBySquarePair } from '../../utils/arrowGrounding';
 import type { StockfishAnalysis } from '../../types';
 import { fetchLichessExplorer } from '../../services/lichessExplorerService';
@@ -5698,10 +5698,18 @@ export function CoachTeachPage(): JSX.Element {
             // Italian Game… avoid the Fried Liver") is off-topic in this game
             // however honestly it is framed. Same guard the lesson path uses.
             && noteStaysInScope(note, openingNow)
-            && spokenBeatText(note).trim().length > 0,
+            // WHAT SURVIVES THE BOARD IS WHAT COUNTS. A borrowed note is
+            // framed honestly ("as a rule in these positions") and then names
+            // concrete squares from the game it was authored in: a full-game
+            // run heard "White should snap off the bishop on d6" with d6
+            // empty, twice in one game. The honest framing does not make the
+            // squares true, and the student hears squares. Grading here rather
+            // than after selection is what lets the tier keep looking — a note
+            // that grades to nothing is skipped, not spoken hollow.
+            && gradeBorrowedTeaching(spokenBeatText(note), args.fenAfterReply, 'coachTeach.teachingTier').length > 0,
         );
         if (src) {
-          const t = spokenBeatText(src.note);
+          const t = gradeBorrowedTeaching(spokenBeatText(src.note), args.fenAfterReply, 'coachTeach.teachingTier');
           if (t.trim()) {
             teachingLine = generalizedTeaching(src.origin, t);
             teachNoteSeenIdsRef.current.add(src.note.id);

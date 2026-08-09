@@ -208,7 +208,26 @@ function splitSentences(text: string): string[] {
 }
 
 /** Validate every board-fact claim in `text` against `fen`. */
-export function validateBoardClaims(text: string, fen: string): BoardClaimResult {
+export interface BoardClaimOptions {
+  /** Judge the WHOLE sentence, hypothetical clauses included.
+   *
+   *  The future-marker skip below is right for the coach's own prose about the
+   *  line it is playing: "after Be2, the bishop on e2 eyes h5" describes a
+   *  board one move away, and calling it false would delete real teaching. It
+   *  is wrong for a note BORROWED from another game, whose hypothetical board
+   *  is not one move away — it is a different game. A prod run heard "White
+   *  should snap off the bishop on d6" with d6 empty, and "the king on g1"
+   *  with the king on e1, both riding through on the words "should" and "if".
+   *  Callers speaking borrowed teaching set this; callers narrating their own
+   *  line must not. */
+  strictHypotheticals?: boolean;
+}
+
+export function validateBoardClaims(
+  text: string,
+  fen: string,
+  options?: BoardClaimOptions,
+): BoardClaimResult {
   let chess: Chess;
   try {
     chess = new Chess(fen);
@@ -322,7 +341,7 @@ export function validateBoardClaims(text: string, fen: string): BoardClaimResult
     // f6 threatens your queen" (empty f6) rode through on the word
     // "threatens" (David 2026-06-05 — "the gate must FULLY close every
     // time there is a contradiction").
-    const fm = FUTURE_MARKER_RE.exec(fullSentence);
+    const fm = options?.strictHypotheticals ? null : FUTURE_MARKER_RE.exec(fullSentence);
     const sentence = fm ? fullSentence.slice(0, fm.index) : fullSentence;
     if (!sentence.trim()) continue;
     const claims: Array<{ type: PieceSymbol; color?: 'w' | 'b'; square: string; raw: string }> = [];
@@ -430,6 +449,7 @@ export function groundCoachAnswerBoardClaims(
 export function stripDisprovenSentences(
   text: string,
   fen: string,
+  options?: BoardClaimOptions,
 ): { clean: string; dropped: Array<{ sentence: string; violations: BoardClaimViolation[] }> } {
   const sentences = text.split(/(?<=[.!?])\s+/);
   const kept: string[] = [];
@@ -437,7 +457,7 @@ export function stripDisprovenSentences(
   for (const s of sentences) {
     const trimmed = s.trim();
     if (!trimmed) continue;
-    const { violations } = validateBoardClaims(trimmed, fen);
+    const { violations } = validateBoardClaims(trimmed, fen, options);
     if (violations.length > 0) dropped.push({ sentence: trimmed, violations });
     else kept.push(trimmed);
   }
