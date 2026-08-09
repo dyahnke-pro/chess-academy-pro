@@ -16,7 +16,7 @@ import { writeFileSync, mkdirSync } from 'node:fs';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { pickStudentMove } from './audit-lib/student-player.mjs';
-import { clickMove, awaitCoachReply, outcomeOf } from './audit-lib/board-drive.mjs';
+import { clickMove, awaitCoachReply, outcomeOf, appEndedGame } from './audit-lib/board-drive.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL ?? 'https://chess-academy-pro.vercel.app';
 const RUN_ID = process.env.AUDIT_RUN_ID ?? `play-picker-${Math.random().toString(36).slice(2, 10)}`;
@@ -166,26 +166,63 @@ async function main() {
 
   let plies = chess.history().length;
   let stalledAt = null;
+  let appOutcome = null;
   while (plies < MAX_PLIES && !chess.isGameOver()) {
     const mine = pickStudentMove(chess.fen(), chess.history().length);
     if (!mine) { stalledAt = 'no legal student move'; break; }
-    await clickMove(page, mine);
+    const probe = new Chess(chess.fen());
+    probe.move(mine.san);
+    const landed = await clickMove(page, mine, probe.fen());
+    if (!landed) {
+      // The audit's own dropped click, not the coach's silence. Said plainly
+      // so a stall is never mis-attributed.
+      await page.screenshot({ path: `${OUT}/rejected-ply-${plies + 1}.png`, fullPage: true }).catch(() => {});
+      stalledAt = `the board did not accept ${mine.san} at ply ${plies + 1}`;
+      break;
+    }
     chess.move(mine.san);
     plies += 1;
     if (chess.isGameOver()) break;
 
     const reply = await awaitCoachReply(page, chess, { firstMove: plies === 1 });
-    if (!reply) { stalledAt = `coach stopped replying at ply ${plies}`; break; }
+    if (!reply) {
+      // Before calling it a stall, ask the app. A finished game hands off to
+      // post-game review, whose progress screen replaces the board — so the
+      // board going still is what a COMPLETED game looks like from here.
+      const ended = await appEndedGame(page);
+      if (ended) { appOutcome = ended; break; }
+      // WHY it stopped, in the same run. A silent stall is the least
+      // actionable failure there is, and re-running to find out costs another
+      // full game. The likeliest benign cause is that the APP ended the game
+      // (overlay up, no more moves to render) while the mirror still thinks
+      // it is someone's turn — so ask the page before calling it a stall.
+      const body = await page.locator('body').innerText().catch(() => '');
+      const over = /game over|checkmate|stalemate|draw|resign|you (?:win|won|lost)/i.test(body);
+      await page.screenshot({ path: `${OUT}/stall-ply-${plies}.png`, fullPage: true }).catch(() => {});
+      // The transcript renders NEWEST FIRST, so the tail of the page is the
+      // oldest thing on it. Taking `slice(-1500)` handed back the opening
+      // greeting and read as though the surface had reset.
+      writeFileSync(
+        `${OUT}/stall.txt`,
+        `ply ${plies}\nfen ${chess.fen()}\nappSaysOver=${over}\n\n--- newest first ---\n${body.slice(0, 2500)}`,
+      );
+      stalledAt = `coach stopped replying at ply ${plies}${over ? ' (the app says the game is over)' : ''}`;
+      break;
+    }
     chess.move(reply);
     plies += 1;
     if (plies % 10 === 0) console.log(`   …${plies} plies`);
   }
 
-  const outcome = outcomeOf(chess);
+  // The mirror sees a natural end only when the LAST move it played made one.
+  // The app is the other witness, and on this surface the more common one: the
+  // game ends, review takes the screen, and the board stops changing.
+  const outcome = appOutcome ?? outcomeOf(chess);
+  const finished = chess.isGameOver() || Boolean(appOutcome);
   console.log(`   game: ${plies} plies, ${outcome}${stalledAt ? ` (${stalledAt})` : ''}`);
   check(
     'the picked line plays a whole game through to a natural end',
-    chess.isGameOver(),
+    finished,
     `${plies} plies, ${outcome}${stalledAt ? ` — ${stalledAt}` : ''}`,
   );
   check('the coach answered every move', stalledAt === null, stalledAt ?? 'no stall');

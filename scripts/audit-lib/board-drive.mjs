@@ -50,11 +50,31 @@ export const placementOf = (fen) => {
   return out;
 };
 
-/** Play one move by clicking its two squares. */
-export async function clickMove(page, move) {
+/**
+ * Play one move by clicking its two squares, and say whether it LANDED.
+ *
+ * The click used to be fire-and-forget, which made every later assertion
+ * unsafe: if the board declines the move — locked while the coach is thinking,
+ * a stray overlay, a click that misses — the mirror advances and the DOM does
+ * not, and from that ply on the two describe different games. The next reply
+ * can then never be matched, so the run blames the coach for a stall that was
+ * the audit's own dropped click. Two prod runs stopped at unrelated plies
+ * before this was checked.
+ *
+ * `expectedFen` is the position AFTER the move.
+ */
+export async function clickMove(page, move, expectedFen, { timeout = 12_000 } = {}) {
   await page.locator(`[data-square="${move.from}"]`).first().click({ timeout: 8000, force: true });
   await page.waitForTimeout(200);
   await page.locator(`[data-square="${move.to}"]`).first().click({ timeout: 8000, force: true });
+  if (!expectedFen) return true;
+  const want = placementOf(expectedFen);
+  const deadline = Date.now() + timeout;
+  while (Date.now() < deadline) {
+    if (samePlacement(await readPlacement(page), want)) return true;
+    await sleep(500);
+  }
+  return false;
 }
 
 /**
@@ -86,6 +106,27 @@ export async function awaitCoachReply(page, chess, { firstMove = false } = {}) {
     if (samePlacement(placementOf(probe.fen()), placement)) return m.san;
   }
   return null;
+}
+
+/**
+ * Did the APP end the game, whatever the mirror thinks?
+ *
+ * A finished game does not sit still on a board — it hands off, and on this
+ * surface the hand-off is post-game review, whose progress screen ("Analyzing
+ * move 2 of 75…") replaces the board entirely. An audit watching only for the
+ * position to change therefore reads a completed game as a coach that went
+ * quiet, which is exactly backwards: it is the strongest evidence the game ran
+ * to the end. Returns what the app is showing, or null if it is still playing.
+ */
+export async function appEndedGame(page) {
+  const body = await page.locator('body').innerText().catch(() => '');
+  const analysing = /Analyz(?:ing|e) move (\d+) of (\d+)/i.exec(body);
+  if (analysing) return `game over — the app is reviewing it (${analysing[2]} plies)`;
+  if (await page.locator('[data-testid="skip-to-review-btn"]').count().catch(() => 0)) {
+    return 'game over — the review hand-off is on screen';
+  }
+  const worded = /\b(checkmate|stalemate|resigns?|draw by [a-z- ]+|game over)\b/i.exec(body);
+  return worded ? `game over — ${worded[1].toLowerCase()}` : null;
 }
 
 /** How the game ended, in the words a report should use. */
