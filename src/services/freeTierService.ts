@@ -18,6 +18,8 @@
  */
 import { db, type FreeTierRecord } from '../db/schema';
 import openingManifests from '../data/opening-manifests.json';
+import gambitsData from '../data/gambits.json';
+import proRepertoireData from '../data/pro-repertoires.json';
 
 /** Lifetime free puzzle allowance (one-time bucket, not per-day). */
 export const FREE_PUZZLE_LIMIT = 20;
@@ -35,21 +37,23 @@ export const KID_FREE_MS = 7 * 24 * 60 * 60 * 1000;
 const SINGLETON_ID = 'singleton';
 
 /**
- * The pool of openings eligible for the ONE free opening pick = EXACTLY what
- * the app's MAIN opening tab (Masterclasses) shows. David 2026-07-14:
- * "Anything in the main opening tab is ok. If not in the main opening tab,
- * don't include it." The main tab's list is `getMasterclassOpeningIds()` =
- * every `opening-manifests.json` key (minus the `_comment`/`_schema` meta
- * keys) — so we derive the pool from the SAME source, and it auto-tracks the
- * tab as manifests are added/removed. Deliberately INCLUDES the masterclass
- * gambits that live in the main tab (King's/Evans/Benko/Budapest/Albin/
- * Schliemann); EXCLUDES the separate Gambits tab (`gambits.json`), the Elite/
- * pro-rep tab (`/openings/pro/*`), the Counter-Weapons tab, and the raw ECO
- * "All" tab.
+ * The pool of openings eligible for the ONE free opening pick. Originally
+ * EXACTLY the main opening tab (David 2026-07-14: "Anything in the main
+ * opening tab is ok. If not in the main opening tab, don't include it"),
+ * derived from `opening-manifests.json` so it auto-tracks the tab as
+ * manifests are added/removed.
+ *
+ * Widened 2026-08-09 (David: "They can pick an opening from the pro reps or
+ * gambits, that's fine") to also include the separate Gambits tab
+ * (`gambits.json`) and the Elite/pro-rep tab (`pro-repertoires.json`), now
+ * that both are browsable free at the route (accessPolicy). Still EXCLUDES
+ * the Counter-Weapons tab and the raw ECO "All" tab — those stay walled.
  */
-export const FREE_OPENING_POOL: ReadonlySet<string> = new Set(
-  Object.keys(openingManifests).filter((k) => !k.startsWith('_')),
-);
+export const FREE_OPENING_POOL: ReadonlySet<string> = new Set([
+  ...Object.keys(openingManifests).filter((k) => !k.startsWith('_')),
+  ...gambitsData.map((g) => g.id),
+  ...proRepertoireData.openings.map((o) => o.id),
+]);
 
 /** True when `openingId` is one of the eligible free-pick openings. */
 export function isEligibleFreeOpening(openingId: string): boolean {

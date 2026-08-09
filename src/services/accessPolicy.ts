@@ -11,7 +11,7 @@
  * whole app, so today's behavior is unchanged until the flag flips.
  */
 import type { FreeTierRecord } from '../db/schema';
-import { isEligibleFreeOpening, hasPuzzlesLeft, kidWindowActive, hasCoachAccessLeft } from './freeTierService';
+import { hasPuzzlesLeft, kidWindowActive, hasCoachAccessLeft } from './freeTierService';
 
 /** Which premium surface a wall/meter is for — drives the paywall's contextual
  *  copy and analytics. */
@@ -54,18 +54,6 @@ function startsWith(pathname: string, prefix: string): boolean {
   return pathname === prefix || pathname.startsWith(prefix + '/');
 }
 
-/** Parse `/openings/:id` (but NOT `/openings`, `/openings/srs`, or
- *  `/openings/pro/...`). Returns the opening id or null. */
-function masterclassOpeningId(pathname: string): string | null {
-  if (!startsWith(pathname, '/openings')) return null;
-  const rest = pathname.slice('/openings'.length).replace(/^\//, '');
-  if (rest === '' || rest === 'srs') return null; // explorer / SRS
-  if (rest.startsWith('pro/')) return null; // pro-rep — walled
-  // First segment is the opening id (ignore any trailing sub-route).
-  const id = rest.split('/')[0];
-  return id || null;
-}
-
 /**
  * Resolve the access decision for the current route. Pure.
  */
@@ -88,20 +76,15 @@ export function resolveAccess(input: AccessInput): AccessDecision {
     return kidWindowActive(freeTier, now) ? { decision: 'allow' } : { decision: 'wall', feature: 'kid' };
   }
 
-  // Openings.
-  if (startsWith(pathname, '/openings')) {
-    // Explorer list is browsable free.
-    if (pathname === '/openings') return { decision: 'allow' };
-    const openingId = masterclassOpeningId(pathname);
-    // Any MAIN-TAB masterclass opening page is browsable free (browse + watch
-    // model games), regardless of which opening the user has claimed. The
-    // one-free-opening limit is enforced IN-PAGE at the first WLPP deep-dive
-    // tap (David 2026-07-14: claim on deep dive, not on page open) — see
-    // OpeningDetailPage. Non-eligible pages (pro-rep, SRS, Gambits-tab, raw
-    // ECO) stay walled at the route.
-    if (openingId && isEligibleFreeOpening(openingId)) return { decision: 'allow' };
-    return { decision: 'wall', feature: 'opening' };
-  }
+  // Openings — every page (explorer, masterclass, pro-rep, SRS, Gambits-tab,
+  // raw ECO) is browsable free. Nothing walls on mere navigation; the ONLY
+  // real gate left is the one-free-masterclass-opening claim, enforced
+  // IN-PAGE at the first WLPP deep-dive tap (OpeningDetailPage /
+  // canViewOpening — a genuine metered parameter, not a route wall). David
+  // 2026-08-09: "unlock all other functions... nothing triggers until other
+  // parameters are met." Previously pro-rep/SRS/Gambits-tab/raw-ECO pages
+  // were walled at the route before a user could even browse them.
+  if (startsWith(pathname, '/openings')) return { decision: 'allow' };
 
   // Tactics / puzzles — meter against the free bucket. Mount so the board can
   // show the "puzzles left" state and self-wall on the last one; but if the
@@ -122,8 +105,12 @@ export function resolveAccess(input: AccessInput): AccessDecision {
       ? { decision: 'meter', feature: 'coach' }
       : { decision: 'wall', feature: 'coach' };
   }
-  // Academy — Pro only.
-  if (startsWith(pathname, '/academy')) return { decision: 'wall', feature: 'academy' };
+  // Academy — course access itself is fully open (resolveCourseAccess, David
+  // 2026-06-17: "PAYWALLS REMOVED — everything unlocked for everyone"). Walling
+  // the ROUTE here contradicted that and popped the paywall before a user ever
+  // saw a course (David 2026-08-09: "keep that paywall hidden until it
+  // absolutely needs to pop up").
+  if (startsWith(pathname, '/academy')) return { decision: 'allow' };
 
   // Anything else → walled by default (fail closed on unknown premium routes).
   return { decision: 'wall', feature: 'app' };

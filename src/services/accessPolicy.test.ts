@@ -53,13 +53,14 @@ describe('accessPolicy — openings', () => {
     // kings-gambit / evans-gambit are IN the main opening tab → eligible.
     expect(decide('/openings/kings-gambit').decision).toBe('allow');
   });
-  it('walls a Gambits-tab course (not in the main tab)', () => {
-    expect(decide('/openings/smith-morra-gambit')).toEqual({ decision: 'wall', feature: 'opening' });
-    expect(decide('/openings/scotch-gambit')).toEqual({ decision: 'wall', feature: 'opening' });
-  });
-  it('walls pro-reps and SRS', () => {
-    expect(decide('/openings/pro/naroditsky/caro-kann')).toEqual({ decision: 'wall', feature: 'opening' });
-    expect(decide('/openings/srs')).toEqual({ decision: 'wall', feature: 'opening' });
+  it('allows browsing a Gambits-tab course, pro-reps, and SRS (route never walls navigation)', () => {
+    // The in-page deep-dive claim (OpeningDetailPage / canViewOpening) is the
+    // only real gate left — these route-level checks just prove nothing walls
+    // on mere navigation (David 2026-08-09).
+    expect(decide('/openings/smith-morra-gambit').decision).toBe('allow');
+    expect(decide('/openings/scotch-gambit').decision).toBe('allow');
+    expect(decide('/openings/pro/naroditsky/caro-kann').decision).toBe('allow');
+    expect(decide('/openings/srs').decision).toBe('allow');
   });
 });
 
@@ -116,11 +117,8 @@ describe('accessPolicy — coach free tier (7 lessons + 50 chat turns)', () => {
   });
 });
 
-describe('accessPolicy — walled premium', () => {
-  it.each([
-    ['/academy', 'academy'],
-    ['/academy/course/x', 'academy'],
-  ])('walls %s as %s', (p, feature) => {
-    expect(decide(p)).toEqual({ decision: 'wall', feature });
+describe('accessPolicy — academy is open (route gate matches resolveCourseAccess)', () => {
+  it.each(['/academy', '/academy/course/x'])('allows %s', (p) => {
+    expect(decide(p)).toEqual({ decision: 'allow' });
   });
 });

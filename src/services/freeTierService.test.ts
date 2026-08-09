@@ -33,8 +33,10 @@ beforeEach(async () => {
 });
 
 describe('FREE_OPENING_POOL', () => {
-  it('is the full main opening tab (43 masterclass manifest openings)', () => {
-    expect(FREE_OPENING_POOL.size).toBe(43);
+  it('is the main opening tab + Gambits tab + pro-reps (132 openings)', () => {
+    // Widened 2026-08-09 (David: "They can pick an opening from the pro reps
+    // or gambits, that's fine") — was 43 (main tab only) before this.
+    expect(FREE_OPENING_POOL.size).toBe(132);
   });
   it('includes every opening shown in the main tab — incl. the masterclass gambits', () => {
     for (const id of [
@@ -45,11 +47,10 @@ describe('FREE_OPENING_POOL', () => {
       expect(isEligibleFreeOpening(id)).toBe(true);
     }
   });
-  it('excludes pro-reps and the separate Gambits-tab courses', () => {
-    expect(isEligibleFreeOpening('pro-naroditsky-caro-kann')).toBe(false);
-    // gambits.json courses live in the Gambits TAB, not the main tab
+  it('includes pro-reps and the separate Gambits-tab courses', () => {
+    expect(isEligibleFreeOpening('pro-naroditsky-caro-kann')).toBe(true);
     for (const id of ['scotch-gambit', 'smith-morra-gambit', 'danish-gambit', 'englund-gambit']) {
-      expect(isEligibleFreeOpening(id)).toBe(false);
+      expect(isEligibleFreeOpening(id)).toBe(true);
     }
   });
 });
@@ -86,8 +87,13 @@ describe('free opening claim', () => {
 
     expect(canViewOpening('caro-kann', { freeOpeningId: 'italian-game' })).toBe(false);
   });
-  it('refuses to claim a non-eligible opening (a Gambits-tab course)', async () => {
-    const r = await claimFreeOpening('smith-morra-gambit');
+  it('claims a Gambits-tab course or a pro-rep opening as the free pick', async () => {
+    const gambit = await claimFreeOpening('smith-morra-gambit');
+    expect(gambit.result).toBe('ok');
+    expect(gambit.row.freeOpeningId).toBe('smith-morra-gambit');
+  });
+  it('refuses to claim a genuinely non-eligible opening (raw ECO / Counter-Weapons)', async () => {
+    const r = await claimFreeOpening('not-a-real-opening-id');
     expect(r.result).toBe('not-eligible');
     expect(r.row.freeOpeningId).toBeNull();
   });
