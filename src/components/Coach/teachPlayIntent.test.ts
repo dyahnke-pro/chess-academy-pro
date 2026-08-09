@@ -14,6 +14,11 @@
 // actually types, and — just as important — the ones that must KEEP their
 // walkthrough.
 //
+// The game itself stays on LEARN. Routing it to /coach/play (the first fix)
+// was backwards: Play is silent by contract, and Learn is the surface that
+// carries the corpus teaching. Proven by driving both — the Play run spoke
+// "Pawn to e4." and "A small slip — there was better." for a whole game.
+//
 // The patterns are duplicated here rather than exported: CoachTeachPage is a
 // 9k-line component that cannot be imported in a unit test, and a copy that
 // drifts is caught by the prod audit that found this in the first place. The
@@ -71,6 +76,40 @@ describe('asking the coach to PLAY an opening', () => {
 
   it('still honours the original "for real" phrasing', () => {
     expect(route('play it for real the Vienna').stage).toBe('play-real');
+  });
+});
+
+// Who plays the opening. "play X AGAINST me" hands it to the coach; anything
+// else is the student wanting to play it. Mirrors the play-intent branch in
+// CoachTeachPage.handleSubmit — see the note above on why it is duplicated.
+function studentSide(
+  input: string,
+  owner: 'white' | 'black',
+  override?: 'white' | 'black',
+): 'white' | 'black' {
+  if (override) return override;
+  const coachPlaysIt = /\b(?:against|versus|vs\.?)\s+me\b/i.test(input);
+  if (!coachPlaysIt) return owner;
+  return owner === 'white' ? 'black' : 'white';
+}
+
+describe('who gets the opening', () => {
+  it('"play the Vienna Gambit against me" puts the COACH on the Vienna', () => {
+    // The Vienna is White's. Asked to play it against the student, the coach
+    // takes White and the student answers as Black.
+    expect(studentSide('play the Vienna Gambit against me', 'white')).toBe('black');
+  });
+
+  it('"play the Caro-Kann against me" leaves the student White', () => {
+    expect(studentSide('play the Caro-Kann against me', 'black')).toBe('white');
+  });
+
+  it("\"let's play the Italian\" keeps the student on it", () => {
+    expect(studentSide("let's play the Italian", 'white')).toBe('white');
+  });
+
+  it('an explicit side wins over both readings', () => {
+    expect(studentSide('play the Vienna against me', 'white', 'white')).toBe('white');
   });
 });
 

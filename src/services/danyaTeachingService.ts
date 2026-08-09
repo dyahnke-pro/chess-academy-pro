@@ -428,9 +428,32 @@ export function teachingSourceForBoard(
   historySans: string[],
   fen: string,
   openingName?: string | null,
+  /**
+   * A note the CALLER can actually use. Every tier keeps looking until one
+   * passes, instead of handing back its first pick and letting the caller
+   * discard it into silence.
+   *
+   * That was measured, not imagined: walking a Vienna Gambit game ply by ply,
+   * five of twelve plies selected a real note and then said nothing, because
+   * `spokenBeatText` strips a note whose prose is a move-list recitation — and
+   * three of those five were the SAME note re-picked on consecutive plies after
+   * the caller had already rejected it. The corpus had teaching for those
+   * positions; the pipeline threw it away one step before the voice.
+   *
+   * Default accepts everything, so callers that make no demands are unchanged.
+   */
+  accept: (note: DanyaNote, origin: TeachingOrigin) => boolean = () => true,
 ): TeachingSource | null {
-  const exact = noteAtPosition(historySans, fen, openingName);
-  if (exact) return { note: exact, origin: 'position' };
+  // The exact tier answers with ONE note, so retrying means asking again with
+  // the rejects excluded. Bounded — after a few passes the position genuinely
+  // has nothing more to offer and the next tier is the better answer.
+  const rejected = new Set<string>();
+  for (let attempt = 0; attempt < 4; attempt += 1) {
+    const exact = noteAtPosition(historySans, fen, openingName, rejected);
+    if (!exact) break;
+    if (accept(exact, 'position')) return { note: exact, origin: 'position' };
+    rejected.add(exact.id);
+  }
   // THE NOTE'S PHASE MUST MATCH THE BOARD'S (2026-08-05). Sampling what this
   // function actually returned past book came back 14 for 14 `opening-family`,
   // reciting opening theory at ply 34, 51, 68 — "After c4 c5 Nc3, if Black
@@ -479,7 +502,7 @@ export function teachingSourceForBoard(
     historySans,
     openingName: resolvedOpening,
     maxNotes: 1,
-    accept: (n) => !noteOpeningConflicts(n.opening, resolvedOpening) && phaseFits(n),
+    accept: (n) => !noteOpeningConflicts(n.opening, resolvedOpening) && phaseFits(n) && accept(n, 'opening-family'),
   })[0];
   if (support) return { note: support, origin: 'opening-family' };
   // STRUCTURE TRANSFER is deliberately cross-opening (a note from anywhere whose
@@ -488,7 +511,20 @@ export function teachingSourceForBoard(
   // filter inside `notesForStructure`. It is honest teaching about a DIFFERENT
   // position, which is why it carries `origin: 'structure'` and must never be
   // announced as a fact about this board.
-  const transferred = notesForStructure(fen).filter(phaseFits)[0];
+  //
+  // 🔒 NOT IN THE OPENING. Both borrow-tiers below answer "this KIND of
+  // position" — and in the opening there is no kind yet, only a specific line.
+  // Measured on a Vienna Gambit game: plies 2, 3 and 4 borrowed a King's-Indian
+  // pawn-storm note, a Four Knights Scotch note, and a note about a bishop on
+  // e3 that did not exist. Every one was honestly framed ("the same idea shows
+  // up in positions like this") and every one was noise two moves into a game.
+  // Opening teaching is position-specific by nature: if the corpus taught this
+  // line it is in the exact or family tier already, and if it did not, silence
+  // is the honest answer (empty > generic). The other lanes — tactics, threats,
+  // gems, the improving move — still speak on those plies, so this is quieter
+  // corpus, not a quieter coach.
+  if (boardPhase === 'opening') return null;
+  const transferred = notesForStructure(fen).find((n) => phaseFits(n) && accept(n, 'structure'));
   if (transferred) return { note: transferred, origin: 'structure' };
   // CONCEPT TIER — last, because it is the least specific: teaching about this
   // KIND of position rather than this one. It earns its place at the end of the
@@ -502,8 +538,8 @@ export function teachingSourceForBoard(
   // the ideas, the model only phrases the note (G0).
   const derived = boardConcepts(fen);
   if (!derived) return null;
-  const concept = conceptNotesFor({ phase: derived.phase, concepts: derived.concepts, limit: 1 })
-    .filter(phaseFits)[0];
+  const concept = conceptNotesFor({ phase: derived.phase, concepts: derived.concepts, limit: 8 })
+    .find((n) => phaseFits(n) && accept(n, 'concept'));
   return concept ? { note: concept, origin: 'concept' } : null;
 }
 

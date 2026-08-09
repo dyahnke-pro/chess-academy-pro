@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Play a REAL game on /coach/play and read back everything the coach said.
+// Play a REAL game in Learn with Coach and read back everything it said.
 //
 // David 2026-08-09: "You need to run an actual game in play with coach. Not a
 // teach me x opening, but play an opening you know and evaluate the responses."
@@ -37,11 +37,22 @@ const RUN_ID = process.env.AUDIT_RUN_ID ?? `play-vienna-${Math.random().toString
 const SECRET = process.env.AUDIT_STREAM_SECRET ?? '';
 const OUT = `audit-reports/play-vienna-${new Date().toISOString().replace(/[:.]/g, '-')}`;
 
-// THE VIENNA GAMBIT, as White. An opening I know and one we teach, so the
-// coach has both curated beats and corpus notes for it — if it is going to
-// speak anywhere, it is here. The student side only; the coach picks its own
-// replies and this walks whatever it actually plays.
-const STUDENT_PLAN = ['e4', 'Nc3', 'f4', 'fxe5', 'Nf3', 'd4', 'Bc4', 'O-O', 'd3', 'Be3'];
+// THE VIENNA GAMBIT — an opening we teach, so the coach has both curated beats
+// and corpus notes for it. If it is going to speak anywhere, it is here.
+//
+// The student is BLACK. "Play X against me" hands the opening to the COACH
+// (David 2026-08-09: "Ask it to play a certain opening against you"), so the
+// coach opens with the Vienna and this answers it.
+//
+// PREFERENCES, NOT A SCRIPT. A fixed move list breaks the moment the coach
+// deviates, and then the audit reports "coach went off-book" as if that were
+// the finding. Each turn plays the first of these that is legal — a sane Black
+// setup against a king's-pawn opening, whatever White actually does.
+const STUDENT_PREFS = [
+  'e5', 'Nf6', 'd5', 'Nxe4', 'Nc6', 'Be7', 'O-O', 'd6', 'Bg4', 'Nxd4',
+  'Bd6', 'Re8', 'c6', 'Qe7', 'Bf5', 'Nd7', 'h6', 'a6', 'Rb8', 'Kh8',
+];
+const MAX_PLIES = 10;
 
 const sleep = (ms) => new Promise((r) => { setTimeout(r, ms); });
 
@@ -186,10 +197,10 @@ async function main() {
     console.log('[picker] chose play mode');
     await sleep(3000);
   }
-  const whiteBtn = page.locator('[data-testid="color-white-btn"]');
-  if (await whiteBtn.isVisible().catch(() => false)) {
-    await whiteBtn.first().click({ timeout: 5000 }).catch(() => {});
-    console.log('[color] chose white');
+  const blackBtn = page.locator('[data-testid="color-black-btn"]');
+  if (await blackBtn.isVisible().catch(() => false)) {
+    await blackBtn.first().click({ timeout: 5000 }).catch(() => {});
+    console.log('[color] chose black');
     await sleep(3000);
   }
 
@@ -201,9 +212,38 @@ async function main() {
   const transcript = [];
   let ply = 0;
 
-  for (const want of STUDENT_PLAN) {
-    const legal = chess.moves({ verbose: true }).find((m) => m.san.replace(/[+#]/g, '') === want);
-    if (!legal) { transcript.push({ note: `plan move ${want} not legal — coach went off-book, stopping` }); break; }
+  // THE COACH MOVES FIRST. It has White, so read its opening move off the
+  // board before the student answers — otherwise the mirror is a move behind
+  // and every reply after it fails to resolve.
+  {
+    const opened = await readPlacement(page);
+    for (const m of chess.moves({ verbose: true })) {
+      const probe = new Chess(chess.fen());
+      probe.move(m.san);
+      if (samePlacement(placementOf(probe.fen()), opened)) { chess.move(m.san); break; }
+    }
+    console.log(`[open] coach played ${chess.history().at(-1) ?? '(nothing yet — waiting)'}`);
+    if (chess.history().length === 0) {
+      // It may still be thinking. Give it the cold-boot budget once.
+      const deadlineOpen = Date.now() + 90_000;
+      while (Date.now() < deadlineOpen && chess.history().length === 0) {
+        await sleep(3000);
+        const now = await readPlacement(page);
+        for (const m of chess.moves({ verbose: true })) {
+          const probe = new Chess(chess.fen());
+          probe.move(m.san);
+          if (samePlacement(placementOf(probe.fen()), now)) { chess.move(m.san); break; }
+        }
+      }
+      console.log(`[open] after wait: ${chess.history().at(-1) ?? 'STILL NOTHING — the coach never opened'}`);
+    }
+  }
+
+  while (ply < MAX_PLIES) {
+    const legal = STUDENT_PREFS
+      .map((want) => chess.moves({ verbose: true }).find((m) => m.san.replace(/[+#]/g, '') === want))
+      .find(Boolean);
+    if (!legal) { transcript.push({ note: 'no preferred move is legal here — stopping' }); break; }
 
     const spokenBefore = spoken.length;
     await page.locator(`[data-square="${legal.from}"]`).first().click({ timeout: 5000, force: true });

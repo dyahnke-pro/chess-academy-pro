@@ -137,7 +137,14 @@ export function noteTeachesChessNotItsSource(note: DanyaNote): boolean {
 // is unreliable (notes filed "Indian Defense" teach the Caro-Kann Fantasy).
 /** "in the Fantasy Variation", "against the Advance", "the Botvinnik-Carls
  *  System" — a capitalised name attached to a variation-class noun. */
-const NAMED_VARIATION = /\b([A-Z][a-zA-Z'-]+(?:[ -][A-Z][a-zA-Z'-]+){0,2})\s+(?:Variation|Defense|Defence|Attack|Gambit|System|Opening)\b|\bthe\s+([A-Z][a-zA-Z'-]+)\s+variation\b/g;
+//
+// `Game` earns its place in the class list: "Italian Game", "Vienna Game",
+// "Four Knights Game", "Scotch Game" are how those openings are named, and
+// without it a live Vienna heard "In the Italian Game… avoid the Fried Liver".
+// It cannot over-fire on ordinary prose — the name before it must be
+// capitalised, and the lowercase words that pass that shape are in
+// NOT_A_VARIATION.
+const NAMED_VARIATION = /\b([A-Z][a-zA-Z'-]+(?:[ -][A-Z][a-zA-Z'-]+){0,2})\s+(?:Variation|Defense|Defence|Attack|Gambit|System|Opening|Game)\b|\bthe\s+([A-Z][a-zA-Z'-]+)\s+variation\b/g;
 
 /** Words that pass the capitalised-name shape without naming an opening. */
 const NOT_A_VARIATION = new Set(['the', 'this', 'that', 'a', 'an', 'his', 'her', 'their', 'in', 'main', 'king', 'queen']);

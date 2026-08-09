@@ -149,6 +149,7 @@ import { parseCoachMoveCommand } from '../../services/coachMoveCommand';
 import { sanToSpeech } from '../../utils/sanToSpeech';
 import { teachingSourceForBoard, teachingFactLine, generalizedTeaching, noteCoverageForLine, spokenBeatText, notesForOpening } from '../../services/danyaTeachingService';
 import { secondarySupportNotes } from '../../services/secondaryCorpora';
+import { noteStaysInScope } from '../../services/noteAnchorIntegrity';
 
 /** How many note-covered plies an opening needs before the NOTES take the
  *  lesson from a hand-authored masterclass.
@@ -1025,6 +1026,10 @@ export function CoachTeachPage(): JSX.Element {
   /** Latest handleStudentMove — lets the (earlier-declared) handleSubmit hand a
    *  typed move report to the exact board-move flow without a TDZ dep. */
   const handleStudentMoveRef = useRef<((move: MoveResult) => void) | null>(null);
+  /** Latest resolveCoachReplyMove — same reason. The play-intent branch needs
+   *  the coach's opening move (book, else engine) and is declared far above
+   *  the resolver. */
+  const resolveCoachReplyMoveRef = useRef<((fen: string) => Promise<string | null>) | null>(null);
   // Active in-place drill (David 2026-07-03: the coach sets a REAL puzzle
   // up ON THE BOARD under Learn, no tab routing). `step` indexes the NEXT
   // expected move in `drill.solutionSan` (student moves at even indices,
@@ -3225,17 +3230,88 @@ export function CoachTeachPage(): JSX.Element {
         // ask was understood and then quietly turned back into a lecture.
         //
         // Playing needs no generated walkthrough at all — just the opening and
-        // the play room — so this runs ahead of the tier choice and does not
-        // care which tier would have won.
+        // a board — so this runs ahead of the tier choice and does not care
+        // which tier would have won.
+        //
+        // 🔒 THE GAME STAYS ON THIS SURFACE. This first shipped as a navigate
+        // to `/coach/play`, which is exactly backwards: Play is a PURE PLAYING
+        // SURFACE by contract — silent unless the student asks — while LEARN is
+        // "a game the coach talks you through" and is the only surface carrying
+        // the corpus lanes (the note splice, the instant teaching pass, phase
+        // narration, the commentary beats). Driving a real game through the
+        // navigate proved it: five plies, and every spoken line came from
+        // `CoachGamePage.move` — "Pawn to e4.", "A small slip — there was
+        // better." Correct, board-true, and none of it teaching. A request to
+        // play an opening is a request to be taught while playing it.
         if (stageHint === 'play-real' && requestedName) {
+          // "play X AGAINST me" hands the opening to the COACH; the student
+          // takes the other side. Any other phrasing ("let's play the Caro")
+          // is the student wanting to play it themselves. `sideOverride` (an
+          // explicit "as black") still wins over both.
+          const coachPlaysIt = /\b(?:against|versus|vs\.?)\s+me\b/i.test(text);
+          const owner = inferStudentSideFromName(requestedName);
+          const flipped: 'white' | 'black' = owner === 'white' ? 'black' : 'white';
+          const studentSide = sideOverride ?? (coachPlaysIt ? flipped : owner);
+
+          walkthrough.stop();
+          voiceService.stop();
+          gameRef.current.resetGame();
+          gameRef.current.setOrientation(studentSide);
+          setPlayerColor(studentSide);
+          liveFenRef.current = gameRef.current.fen;
+          setArrows([]);
+          setHighlights([]);
+          chainArrowsRef.current = [];
+          chainHighlightsRef.current = [];
+          useCoachMemoryStore.getState().setIntendedOpening({
+            name: requestedName,
+            color: studentSide,
+            capturedFromSurface: 'chat-teach-play',
+          });
+
+          const say = (line: string): void => {
+            setMessages((prev) => [...prev, {
+              id: freshTurnId('play-intent'), role: 'assistant', content: line, timestamp: Date.now(),
+            }]);
+            useCoachMemoryStore.getState().appendConversationMessage({
+              surface: 'chat-teach', role: 'coach', text: line, fen: liveFenRef.current, trigger: null,
+            });
+            void voiceService.speakForced(line).catch(() => undefined);
+          };
+
+          // When the coach has White it MUST open, or the game just sits there
+          // (David 2026-07-12, on flipping to Black for the Benko and having to
+          // push the coach's d4 himself). Same resolver the colour selector
+          // uses — the opening's own book line first, engine behind it — so an
+          // opening with no book entry still gets a first move.
+          if (studentSide === 'black') {
+            say(`You're Black — I'll play the ${requestedName}.`);
+            void (async () => {
+              const opener = await resolveCoachReplyMoveRef.current?.(liveFenRef.current);
+              if (
+                opener &&
+                gameRef.current.history.length === 0 &&
+                liveFenRef.current.split(' ')[1] === 'w' &&
+                playDictatedMove(opener)
+              ) {
+                say(`${sanToSpeech(opener)} — your move.`);
+                void logAppAudit({
+                  kind: 'coach-surface-migrated',
+                  category: 'subsystem',
+                  source: 'CoachTeachPage.handleSubmit.playIntent',
+                  summary: `coach opened ${opener} for "${requestedName}"`,
+                });
+              }
+            })();
+          } else {
+            say(`You're White — play the ${requestedName} and I'll talk you through it.`);
+          }
           void logAppAudit({
             kind: 'coach-surface-migrated',
             category: 'subsystem',
             source: 'CoachTeachPage.handleSubmit.playIntent',
-            summary: `play request "${text.slice(0, 60)}" → play room for "${requestedName}"`,
+            summary: `play request "${text.slice(0, 60)}" → game on Learn: "${requestedName}", student=${studentSide}`,
           });
-          walkthrough.stop();
-          void navigate(`/coach/play?opening=${encodeURIComponent(requestedName)}`);
           return;
         }
 
@@ -5508,8 +5584,28 @@ export function CoachTeachPage(): JSX.Element {
         // The board cannot catch this: at ply 1 the position is consistent with
         // both openings. Only the note's own tag can, and only if it is given
         // something to disagree with.
-        const src = teachingSourceForBoard(history, args.fenAfterReply, announcedOpeningNameRef.current);
-        if (src && !teachNoteSeenIdsRef.current.has(src.note.id)) {
+        //
+        // WHAT THE VOICE WILL TAKE IS PART OF THE SELECTION. This used to
+        // accept the first note offered and then drop it — already-said, or
+        // stripped to nothing by `spokenBeatText` — leaving the ply silent with
+        // teaching still sitting in the corpus. Walking a Vienna Gambit game,
+        // five of twelve plies died that way, three of them re-picking the
+        // exact note the previous ply had already rejected. The predicate makes
+        // every tier keep looking instead.
+        const openingNow = announcedOpeningNameRef.current;
+        const src = teachingSourceForBoard(
+          history,
+          args.fenAfterReply,
+          openingNow,
+          (note) =>
+            !teachNoteSeenIdsRef.current.has(note.id)
+            // A note whose own prose teaches a DIFFERENT opening ("In the
+            // Italian Game… avoid the Fried Liver") is off-topic in this game
+            // however honestly it is framed. Same guard the lesson path uses.
+            && noteStaysInScope(note, openingNow)
+            && spokenBeatText(note).trim().length > 0,
+        );
+        if (src) {
           const t = spokenBeatText(src.note);
           if (t.trim()) {
             teachingLine = generalizedTeaching(src.origin, t);
@@ -6728,6 +6824,7 @@ export function CoachTeachPage(): JSX.Element {
   // Keep the latest board-move handler reachable from handleSubmit's typed
   // move-report branch (declared earlier in the file — ref avoids the TDZ).
   handleStudentMoveRef.current = handleStudentMove;
+  resolveCoachReplyMoveRef.current = resolveCoachReplyMove;
 
   // Captured-pieces tray (David 2026-06-15: "make Learn identical to Play —
   // it also shows which pieces have been captured"). Computed from the board's
