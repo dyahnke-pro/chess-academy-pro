@@ -152,7 +152,8 @@ import { sanToSpeech } from '../../utils/sanToSpeech';
 import { teachingSourceForBoard, teachingFactLine, generalizedTeaching, noteCoverageForLine, spokenBeatText, notesForOpening } from '../../services/danyaTeachingService';
 import { secondarySupportNotes } from '../../services/secondaryCorpora';
 import { bakedTeachingForPly, bakedSpineNextMove } from '../../services/bakedWalkthroughNarration';
-import { noteStaysInScope, noteSuitsStudentSide } from '../../services/noteAnchorIntegrity';
+import { framedOpponentPlan } from '../../services/opponentVoice';
+import { noteStaysInScope, noteSuitsStudentSide, noteAdvisesSide } from '../../services/noteAnchorIntegrity';
 
 /** How many note-covered plies an opening needs before the NOTES take the
  *  lesson from a hand-authored masterclass.
@@ -5448,6 +5449,13 @@ export function CoachTeachPage(): JSX.Element {
     // prose back out of the spoken line.
     let bakedPly: number | null = null;
     teachingTierRef.current = 'none';
+    // THE COACH IS THE OPPONENT ON THIS PATH. This builder runs once per coach
+    // REPLY in a live game — it is handed the move the coach just played and
+    // the board after it — so the side opposite the student is being played by
+    // the coach, and a note written for that side is the coach's own plan
+    // rather than misdirected advice. A lesson does not come through here; the
+    // lesson player drives its own beats.
+    const coachIsOpponent = Boolean(args.studentColor);
     const studentCC: 'w' | 'b' = args.studentColor === 'white' ? 'w' : 'b';
     const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200;
     const history = args.historyAfterReply;
@@ -5827,14 +5835,19 @@ export function CoachTeachPage(): JSX.Element {
             // Italian Game… avoid the Fried Liver") is off-topic in this game
             // however honestly it is framed. Same guard the lesson path uses.
             && noteStaysInScope(note, openingNow)
-            // NEVER COACH THE OPPONENT. A note carries no side field, and the
-            // corpus is written from whichever perspective its opening is
-            // taught from — the Sicilian from Black's. Playing White against
-            // one, David was told "trading those bishops is safe, White has
-            // too few pieces to attack the king" and "Black can play Bd7…
-            // keeping the extra pawn and a big advantage". Both are sound
-            // teaching. Neither was for him.
-            && noteSuitsStudentSide(note, args.studentColor)
+            // NOT COACHING FOR THE OPPONENT — SPEAKING AS THEM. A note carries
+            // no side field, and the corpus is written from whichever
+            // perspective its opening is taught from, so a White student was
+            // handed Black's repertoire as coaching. Dropping those notes was
+            // the first fix and it threw away one note in six.
+            //
+            // The coach IS the opponent here, so the note was never wrong —
+            // only mis-attributed. Kept and spoken in the first person below
+            // (David 2026-08-09: "I still want to know what my opponent's
+            // plans are. That is very important in chess."). Only a note
+            // advising the opponent on a surface where the coach ISN'T playing
+            // has nobody to say it, and that is what the guard still catches.
+            && (coachIsOpponent || noteSuitsStudentSide(note, args.studentColor))
             // WHAT SURVIVES THE BOARD IS WHAT COUNTS. A borrowed note is
             // framed honestly ("as a rule in these positions") and then names
             // concrete squares from the game it was authored in: a full-game
@@ -5848,7 +5861,18 @@ export function CoachTeachPage(): JSX.Element {
         if (src) {
           const t = gradeBorrowedTeaching(spokenBeatText(src.note), args.fenAfterReply, 'coachTeach.teachingTier');
           if (t.trim()) {
-            teachingLine = generalizedTeaching(src.origin, t);
+            // A note written for the side the COACH is playing is the
+            // opponent's own plan. It is spoken as theirs, behind a lead-in
+            // that says so — "clear distinction is necessary" — rather than
+            // handed to the student as though it were advice.
+            const forOpponent = coachIsOpponent
+              && noteAdvisesSide(src.note) === (args.studentColor === 'white' ? 'black' : 'white');
+            teachingLine = forOpponent
+              ? framedOpponentPlan(t, {
+                coachSide: args.studentColor === 'white' ? 'black' : 'white',
+                ply: history.length,
+              })
+              : generalizedTeaching(src.origin, t);
             teachingTierRef.current = src.origin;
             teachNoteSeenIdsRef.current.add(src.note.id);
             factLines.push(`Teaching (${src.origin}): ${teachingLine}`);
