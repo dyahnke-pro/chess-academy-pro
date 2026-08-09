@@ -317,6 +317,15 @@ export function assembleMoveEvalAnswer(opts: {
   bestMoveUci: string | null;
   evalCp?: number | null;
   mateIn?: number | null;
+  /** Whose game this is. When the position is NOT the student's to move, the
+   *  engine's best move belongs to the OPPONENT and must be named as theirs.
+   *
+   *  Without this the phase report told David, playing White, "The best move
+   *  is Qb6" on a Black-to-move board — and the coach played exactly that
+   *  twenty-one seconds later. Every "best move" in that report was advice for
+   *  his opponent, read to him as his own. He described it as the hints being
+   *  bad moves; they were good moves for the wrong player. */
+  studentColor?: 'white' | 'black' | null;
 }): GroundedAnswer | null {
   const { fen, bestMoveUci } = opts;
   if (!bestMoveUci || bestMoveUci.length < 4) return null;
@@ -352,7 +361,12 @@ export function assembleMoveEvalAnswer(opts: {
   const why = explainBestMoveGrounded(fen, null, bestMoveUci, mover);
   const evalText = evalPhrase(opts.evalCp, opts.mateIn, mover);
 
-  const parts: string[] = [`The best move is ${bestMoveSan}.`];
+  const theirMove = Boolean(opts.studentColor) && opts.studentColor !== mover;
+  const parts: string[] = [
+    theirMove
+      ? `Their strongest reply is ${bestMoveSan}.`
+      : `The best move is ${bestMoveSan}.`,
+  ];
   if (why) parts.push(why);
   if (evalText) parts.push(`${evalText.charAt(0).toUpperCase()}${evalText.slice(1)}.`);
 

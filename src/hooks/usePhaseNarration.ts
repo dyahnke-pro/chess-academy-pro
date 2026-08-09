@@ -293,7 +293,14 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
         try {
           const sans = (getPgn() ?? '').split(/\s+/).filter((t) => t && !/^\d+\.$/.test(t));
           const openingName = getOpeningName?.() ?? detectOpening(sans)?.name ?? null;
-          const source = transitionTeachingSourceForGame({ historySans: sans, fen: event.fen, openingName });
+          // The transition event knows whose game it is, so the ritual can
+          // stop handing the student their opponent's plan.
+          const source = transitionTeachingSourceForGame({
+            historySans: sans,
+            fen: event.fen,
+            openingName,
+            studentSide: event.playerColor,
+          });
           if (source) {
             // HOW MUCH of the note may be spoken depends on WHERE it came from
             // (2026-08-04). Only the exact-position tier was authored at the

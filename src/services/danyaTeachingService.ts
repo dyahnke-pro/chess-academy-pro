@@ -23,7 +23,7 @@ import { secondarySupportNotes, secondaryNotesForPosition, secondaryNotesForFen 
 import { detectOpening } from './openingDetectionService';
 import { noteContradictsLine, notePhaseMismatchesBoard } from './noteLineGuard';
 import { boardConcepts, phaseOfFen } from './boardConcepts';
-import { noteDescribesPosition, noteTeachesChessNotItsSource, noteStaysInScope, notePhaseMatchesBoardWords, noteRecommendsALegalMove } from './noteAnchorIntegrity';
+import { noteDescribesPosition, noteTeachesChessNotItsSource, noteStaysInScope, notePhaseMatchesBoardWords, noteRecommendsALegalMove, noteSuitsStudentSide } from './noteAnchorIntegrity';
 import { bakedSpoken } from './spokenNoteBake';
 import { falseConfigurationClaim } from './configurationClaims';
 import { logAppAudit } from './appAuditor';
@@ -538,7 +538,16 @@ export function teachingSourceForBoard(
       historySans,
       openingName: resolvedOpening,
       maxNotes: 1,
-      accept: (n) => !noteOpeningConflicts(n.opening, resolvedOpening) && phaseFits(n) && accept(n, 'opening-family'),
+      // THE ONE TIER WITH NO BOARD TEST, until now. It reaches by NAME, and a
+      // name says nothing about the position — David's prod game, playing a
+      // Sicilian, was taught "After e4 e5, if White plays Bb5+… Black can play
+      // Bd7" (the Spanish) and "White prefers Re1 over d3… Black plays Nh6"
+      // (the Italian), both announced as "a general idea in this opening".
+      // It now has to clear the same truth filter its board-read siblings do.
+      accept: (n) => !noteOpeningConflicts(n.opening, resolvedOpening)
+        && phaseFits(n)
+        && noteClaimsHoldOnBoard(n, fen)
+        && accept(n, 'opening-family'),
     })[0];
     if (support) return { note: support, origin: 'opening-family' };
   }
@@ -740,6 +749,9 @@ export function transitionTeachingSourceForGame(args: {
   historySans: string[];
   fen?: string;
   openingName?: string | null;
+  /** The side the student is playing, so the ritual never coaches their
+   *  opponent. See `noteSuitsStudentSide`. */
+  studentSide?: 'white' | 'black' | null;
 }): TransitionTeaching | null {
   // WHICH phase's teaching this transition wants. Hardcoded to 'middlegame'
   // until 2026-08-05, which was invisible while the caller only ran this on the
@@ -757,7 +769,8 @@ export function transitionTeachingSourceForGame(args: {
   const usable = (n: DanyaNote): boolean =>
     Boolean(n.plans?.trim())
     && noteTeachesChessNotItsSource(n)
-    && noteStaysInScope(n, args.openingName);
+    && noteStaysInScope(n, args.openingName)
+    && noteSuitsStudentSide(n, args.studentSide);
   const exact = args.fen ? notesForFen(args.fen).find(usable) : undefined;
   if (exact) return { note: exact, origin: 'position' };
   const recent = notesForPrefix(args.historySans, Infinity, 12).find(usable);
@@ -886,6 +899,19 @@ export function namedPiecesExistOnBoard(text: string, fen: string): boolean {
  *  opening — deterministic transfer. Excludes exact-position hits (the FEN
  *  tier owns those) and drops any note making a claim that is false on THIS
  *  board. */
+/** Does everything this note asserts hold on THIS board?
+ *
+ *  The same pair of checks the structure and concept tiers have always run,
+ *  lifted out so the name-matched tier can be held to it too. */
+function noteClaimsHoldOnBoard(n: DanyaNote, fen: string): boolean {
+  try {
+    if (validateBoardClaims(`${n.explains} ${n.teaches} ${n.plans}`, fen).violations.length > 0) return false;
+    return namedPiecesExistOnBoard(n.plans ?? '', fen);
+  } catch {
+    return false;
+  }
+}
+
 export function notesForStructure(fen: string, maxNotes = Infinity): DanyaNote[] {
   ensureSignatureIndex();
   ensureFenIndex();

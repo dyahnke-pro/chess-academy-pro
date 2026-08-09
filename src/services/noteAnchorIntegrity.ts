@@ -282,3 +282,65 @@ export function noteStaysInScope(
     return true;
   }
 }
+
+/**
+ * Which side a note gives its ADVICE to, or null when it advises neither.
+ *
+ * A corpus note carries no side field — the schema is
+ * `id, lineSan, opening, phase, explains, teaches, plans, concepts, sources`
+ * — and until 2026-08-09 nothing in selection looked at side at all. A note is
+ * written from whichever perspective its opening is usually taught from, and
+ * the Sicilian is Black's defence, so a WHITE student playing against it was
+ * handed Black's repertoire as coaching. David's prod game, playing White:
+ *
+ *   "Trading those bishops is safe. White has too few pieces to attack the
+ *    king, and Black's pawns leave no weakness to exploit."
+ *
+ * That is reassurance to BLACK, and he heard it as advice. Others in the same
+ * game — "Black can play Bd7… keeping the extra pawn and a big advantage" —
+ * narrate his opponent winning.
+ *
+ * RECOMMENDATION VERBS ONLY, deliberately. A note may mention either side
+ * freely while describing a position ("White has too few pieces") — that is
+ * commentary, not advice, and filtering on mere mention would delete most of
+ * the corpus. What makes a note belong to a side is that it tells that side
+ * what to do. Measured over 8,162 primary notes: 964 advise White, 1,265
+ * advise Black, 214 advise both, and 5,719 advise neither and are safe for
+ * anyone.
+ */
+const ADVICE_TO_SIDE = /\b(white|black)\s+(?:should|must|needs? to|wants? to|has to|ought to|will want to)\b/gi;
+
+export function noteAdvisesSide(note: {
+  explains?: string;
+  teaches?: string;
+  plans?: string;
+}): 'white' | 'black' | 'both' | null {
+  const text = `${note.explains ?? ''} ${note.teaches ?? ''} ${note.plans ?? ''}`;
+  let white = false;
+  let black = false;
+  for (const m of text.matchAll(ADVICE_TO_SIDE)) {
+    if (m[1].toLowerCase() === 'white') white = true;
+    else black = true;
+  }
+  if (white && black) return 'both';
+  if (white) return 'white';
+  if (black) return 'black';
+  return null;
+}
+
+/**
+ * May this note be spoken to a student playing `studentSide`?
+ *
+ * Advice to the OTHER side only is rejected. A note advising both sides is
+ * kept — it is comparing plans, which is teaching — and a note advising
+ * neither is kept, which is most of the corpus.
+ */
+export function noteSuitsStudentSide(
+  note: { explains?: string; teaches?: string; plans?: string },
+  studentSide: 'white' | 'black' | null | undefined,
+): boolean {
+  if (!studentSide) return true; // no side known, nothing to violate
+  const advises = noteAdvisesSide(note);
+  if (advises === null || advises === 'both') return true;
+  return advises === studentSide;
+}

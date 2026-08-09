@@ -1827,7 +1827,7 @@ async function serveGroundedPositionDefault(
       typeof grounding.engineMateIn === 'number'
         ? (blackToMove ? -grounding.engineMateIn : grounding.engineMateIn)
         : null;
-    const answer = assembleMoveEvalAnswer({ fen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn });
+    const answer = assembleMoveEvalAnswer({ fen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn, studentColor: grounding.studentColor ?? null });
     if (computedOnly && answer?.facts?.trim()) return `${prefix}${answer.facts}`.trim();
     if (answer) {
       const voiced = await voiceFacts(`${prefix}${answer.facts}`, { studentMessage, providerConfig: config, intent: 'safe-default-bestmove', preferRaw: !warm, warm });

@@ -152,7 +152,7 @@ import { sanToSpeech } from '../../utils/sanToSpeech';
 import { teachingSourceForBoard, teachingFactLine, generalizedTeaching, noteCoverageForLine, spokenBeatText, notesForOpening } from '../../services/danyaTeachingService';
 import { secondarySupportNotes } from '../../services/secondaryCorpora';
 import { bakedTeachingForPly, bakedSpineNextMove } from '../../services/bakedWalkthroughNarration';
-import { noteStaysInScope } from '../../services/noteAnchorIntegrity';
+import { noteStaysInScope, noteSuitsStudentSide } from '../../services/noteAnchorIntegrity';
 
 /** How many note-covered plies an opening needs before the NOTES take the
  *  lesson from a hand-authored masterclass.
@@ -5827,6 +5827,14 @@ export function CoachTeachPage(): JSX.Element {
             // Italian Game… avoid the Fried Liver") is off-topic in this game
             // however honestly it is framed. Same guard the lesson path uses.
             && noteStaysInScope(note, openingNow)
+            // NEVER COACH THE OPPONENT. A note carries no side field, and the
+            // corpus is written from whichever perspective its opening is
+            // taught from — the Sicilian from Black's. Playing White against
+            // one, David was told "trading those bishops is safe, White has
+            // too few pieces to attack the king" and "Black can play Bd7…
+            // keeping the extra pawn and a big advantage". Both are sound
+            // teaching. Neither was for him.
+            && noteSuitsStudentSide(note, args.studentColor)
             // WHAT SURVIVES THE BOARD IS WHAT COUNTS. A borrowed note is
             // framed honestly ("as a rule in these positions") and then names
             // concrete squares from the game it was authored in: a full-game
