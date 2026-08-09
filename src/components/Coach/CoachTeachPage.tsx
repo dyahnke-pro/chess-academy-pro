@@ -3209,6 +3209,36 @@ export function CoachTeachPage(): JSX.Element {
         // something real to say about THIS line. An opening the corpora never
         // covered would otherwise trade a good lesson for a slow, thinner one,
         // so coverage below the floor keeps the masterclass.
+        // 🔒 A REQUEST TO PLAY IS ANSWERED BEFORE ANY TEACHING TIER CLAIMS IT.
+        //
+        // `play-real` used to be handled INSIDE the static-masterclass branch,
+        // so it only worked when a static tree served the ask. Tonight's
+        // notes-primary tier sets `staticTree = null` whenever the corpus
+        // covers the line — which is exactly the openings a student is most
+        // likely to want to play — so the branch was skipped and the play
+        // intent fell through into `mode=learn` generation.
+        //
+        // Caught by driving prod: "play the Vienna Gambit against me"
+        // canonicalized correctly ("Vienna Gambit", score 1.00, intent set to
+        // colour=white) and then logged `notes lead … skipping the static
+        // masterclass` followed by `generation requested (mode=learn)`. The
+        // ask was understood and then quietly turned back into a lecture.
+        //
+        // Playing needs no generated walkthrough at all — just the opening and
+        // the play room — so this runs ahead of the tier choice and does not
+        // care which tier would have won.
+        if (stageHint === 'play-real' && requestedName) {
+          void logAppAudit({
+            kind: 'coach-surface-migrated',
+            category: 'subsystem',
+            source: 'CoachTeachPage.handleSubmit.playIntent',
+            summary: `play request "${text.slice(0, 60)}" → play room for "${requestedName}"`,
+          });
+          walkthrough.stop();
+          void navigate(`/coach/play?opening=${encodeURIComponent(requestedName)}`);
+          return;
+        }
+
         const candidateStatic =
           resolveWalkthroughTree(requestedName) ??
           (!faceMode && pace !== 'tour'
