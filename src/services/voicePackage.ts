@@ -42,16 +42,23 @@ import { falseConfigurationClaim } from './configurationClaims';
 
 /** What produced this line. Also its priority — see `RANK`. */
 export type VoiceFactKind =
-  /** A verified punishable slip by the coach. The sharpest thing that happens. */
+  /** TEACHING: a masterclass beat or a corpus note. The heart of the coach. */
+  | 'note'
+  /** An opportunity the detectors proved FOR the student — mate in one, a
+   *  hanging enemy piece, a fork that is really there. */
+  | 'tactic'
+  /** A verified punishable slip by the coach. */
   | 'gem'
-  /** A threat or opportunity the detectors proved on this board. */
-  | 'alert'
+  /** Danger TO the student — a tactic against them, or their own piece
+   *  hanging. */
+  | 'threat'
   /** A newly resolved opening name. */
   | 'opening'
   /** The computed read — true of this position by construction. */
   | 'computed'
-  /** Corpus teaching. Fills silence; never displaces a computed fact. */
-  | 'note';
+  /** A positional observation — the filler lane. Speaks only when a turn had
+   *  nothing else, and may never displace teaching. */
+  | 'observation';
 
 export interface VoiceFact {
   kind: VoiceFactKind;
@@ -67,15 +74,36 @@ export interface VoiceFact {
 
 /** Priority, high wins. Declared once, here, so no caller re-invents an order.
  *
- *  The computed read outranks the note deliberately. The corpus is ~90% of what
- *  the coach says and the detectors are the urgent 10% — an interrupt that
- *  cannot preempt is not an interrupt. */
+ *  🔒 THE ORDER IS DAVID'S, VERBATIM (2026-08-09): "Corpus needs to be first.
+ *  Then tactics Then gems and then threats." With "Remember I need to hear
+ *  those teaching notes! Danya teaching next to me!"
+ *
+ *  It used to run the other way — `note` ranked DEAD LAST of five, justified in
+ *  a comment by the 90/10 rule, which is the rule it got backwards. "90% of
+ *  what needs to be said lives within these notes; the other 10% comes from
+ *  threat and gem detection" is an argument for teaching ranking FIRST. Paired
+ *  with the old 3-fact budget, it meant any turn with a busy detector threw the
+ *  teaching away unheard: computed, verified, logged, never spoken.
+ *
+ *  Rank no longer decides WHETHER a fact is spoken — nothing is dropped for
+ *  budget any more — only the ORDER it is spoken in. So this is a statement
+ *  about what the student should hear FIRST, and the teaching leads.
+ *
+ *  `tactic` (an opportunity FOR the student) and `threat` (danger TO them) were
+ *  one `alert` kind until this order needed them apart.
+ *
+ *  Below the four David named, in descending usefulness: the opening
+ *  announcement, the computed read, and `observation` — the positional-read
+ *  filler, split out from `note` so "your pawn on a2 is isolated" can never
+ *  again share a rank with a masterclass beat. */
 const RANK: Record<VoiceFactKind, number> = {
-  gem: 5,
-  alert: 4,
-  opening: 3,
-  computed: 2,
-  note: 1,
+  note: 6,
+  tactic: 5,
+  gem: 4,
+  threat: 3,
+  opening: 2,
+  computed: 1,
+  observation: 0,
 };
 
 export interface VoicePackage {
@@ -129,10 +157,26 @@ function verify(fact: VoiceFact): { text: string } | { reason: string } {
 /**
  * Assemble the utterance. Deterministic: same facts in, same words out.
  *
- * `maxFacts` exists because the utterance is ONE TTS clip and a student is
- * waiting through it. Three lines is already a long time to hold the board.
+ * 🔒 NO BUDGET (David 2026-08-09: "No budget on the coach narrations! They
+ * should all be free now!!").
+ *
+ * There used to be a 3-fact cap here, and it was the last thing silently
+ * dropping teaching: every fact was computed and verified, then the lowest-
+ * ranked ones were thrown away unheard. The justification was that an utterance
+ * is one TTS clip and the student waits through it — but the reason to ration
+ * was never really time, it was the per-call cost of the model that used to
+ * write these lines. That model is gone; the package is assembled in code and
+ * handed to Google TTS, which is free at this volume. Nothing is being spent,
+ * so nothing needs rationing. It also matches the standing rule that quality is
+ * the only metric and cost is never a factor, and David's earlier call on the
+ * same trade: "if we cap to three sentences we lose important information about
+ * the position."
+ *
+ * RANK still decides ORDER, which is what makes an uncapped utterance safe: the
+ * most important thing is said first, so a student who moves again mid-sentence
+ * only ever loses the tail.
  */
-export function buildVoicePackage(facts: VoiceFact[], maxFacts = 3): VoicePackage {
+export function buildVoicePackage(facts: VoiceFact[]): VoicePackage {
   const kept: VoiceFact[] = [];
   const dropped: VoicePackage['dropped'] = [];
   const seen = new Set<string>();
@@ -144,7 +188,6 @@ export function buildVoicePackage(facts: VoiceFact[], maxFacts = 3): VoicePackag
     .sort((a, b) => RANK[b.f.kind] - RANK[a.f.kind] || a.i - b.i);
 
   for (const { f } of ordered) {
-    if (kept.length >= maxFacts) { dropped.push({ fact: f, reason: 'over budget' }); continue; }
     const result = verify(f);
     if ('reason' in result) { dropped.push({ fact: f, reason: result.reason }); continue; }
     // Same sentence from two producers is one sentence to the ear.

@@ -31,27 +31,25 @@ describe('the voice package', () => {
     // something the student never heard.
     const pkg = buildVoicePackage([
       fact('computed', 'The knight on f6 is your most active piece.'),
-      fact('alert', 'Their pawn on d4 is undefended.'),
+      fact('threat', 'Their pawn on d4 is undefended.'),
     ]);
     expect(pkg.spoken).toBe(pkg.kept.map((f) => f.text).join(' '));
     expect(pkg.spoken).not.toBe('');
-    expect(describeVoicePackage(pkg)).toContain('alert');
+    expect(describeVoicePackage(pkg)).toContain('threat');
   });
 
-  it('rank is declared — the computed read outranks the note, always', () => {
-    // Order used to be the accident of a `??` chain, and the chain had no
-    // computed lane at all, which is why David heard "no threat detection, no
-    // tactics, no positional read. Nothing!!"
+  it('the filler lane can never displace teaching', () => {
+    // `observation` exists because the positional read shared the note rank,
+    // which let "your pawn on a2 is isolated" outrank a masterclass beat.
     const pkg = buildVoicePackage([
+      fact('observation', 'Your pawn on a2 is isolated.'),
       fact('note', 'Fight for the centre early.'),
-      fact('computed', 'The knight on f6 is your most active piece.'),
-      fact('gem', 'That last move can be punished — look for it.'),
     ]);
-    expect(pkg.kept.map((f) => f.kind)).toEqual(['gem', 'computed', 'note']);
+    expect(pkg.kept.map((f) => f.kind)).toEqual(['note', 'observation']);
   });
 
   it('is deterministic — same facts in, same words out', () => {
-    const facts = [fact('alert', 'Their pawn on d4 is undefended.'), fact('note', 'Fight for the centre early.')];
+    const facts = [fact('threat', 'Their pawn on d4 is undefended.'), fact('note', 'Fight for the centre early.')];
     expect(buildVoicePackage(facts).spoken).toBe(buildVoicePackage([...facts]).spoken);
   });
 
@@ -76,14 +74,22 @@ describe('the voice package', () => {
     expect(pkg.dropped[0]?.reason).toBe('duplicate');
   });
 
-  it('holds the utterance to a budget — the student is waiting through it', () => {
+  it('NO BUDGET — every verified fact is spoken', () => {
+    // David 2026-08-09: "No budget on the coach narrations! They should all be
+    // free now!!" A 3-fact cap used to discard verified facts unheard; the
+    // rationing existed for a per-call model cost that no longer exists.
     const board = new Chess(PIRC_3);
     expect(board.turn()).toBe('w');
     const pkg = buildVoicePackage([
-      fact('gem', 'One.'), fact('alert', 'Two.'), fact('opening', 'Three.'), fact('computed', 'Four.'),
+      fact('gem', 'One.'), fact('alert', 'Two.'), fact('opening', 'Three.'),
+      fact('computed', 'Four.'), fact('note', 'Five.'), fact('observation', 'Six.'),
     ]);
-    expect(pkg.kept).toHaveLength(3);
-    expect(pkg.dropped.map((d) => d.reason)).toEqual(['over budget']);
+    expect(pkg.kept).toHaveLength(6);
+    expect(pkg.dropped).toEqual([]);
+    // Rank still orders it, which is what makes an uncapped utterance safe: a
+    // student who moves again mid-sentence only ever loses the tail.
+    expect(pkg.kept.map((f) => f.kind))
+      .toEqual(['gem', 'alert', 'note', 'opening', 'computed', 'observation']);
   });
 });
 
@@ -98,7 +104,7 @@ describe('the join', () => {
     // if continuing a clause.
     const fen = 'rnbqkb1r/ppp2ppp/8/3pP3/4n3/2N5/PPPP2PP/R1BQKBNR w KQkq - 0 5';
     const pkg = buildVoicePackage([
-      { kind: 'alert', text: 'That takes your pawn.', fen },
+      { kind: 'threat', text: 'That takes your pawn.', fen },
       { kind: 'computed', text: 'the knight on e4 sits on an outpost no pawn can challenge.', fen },
     ]);
     expect(pkg.spoken).toBe('That takes your pawn. The knight on e4 sits on an outpost no pawn can challenge.');
@@ -107,7 +113,7 @@ describe('the join', () => {
   it('leaves a move name lowercase — capitalising a SAN would be wrong', () => {
     const fen = 'rnbqkb1r/ppp2ppp/8/3pP3/4n3/2N5/PPPP2PP/R1BQKBNR w KQkq - 0 5';
     const pkg = buildVoicePackage([
-      { kind: 'alert', text: 'Careful.', fen },
+      { kind: 'threat', text: 'Careful.', fen },
       { kind: 'computed', text: 'dxe5 would open the file.', fen },
     ]);
     expect(pkg.spoken).toContain('dxe5');
@@ -116,6 +122,6 @@ describe('the join', () => {
 
   it('does not touch a first fact that is already a sentence', () => {
     const fen = 'rnbqkb1r/ppp2ppp/8/3pP3/4n3/2N5/PPPP2PP/R1BQKBNR w KQkq - 0 5';
-    expect(buildVoicePackage([{ kind: 'alert', text: 'Careful here.', fen }]).spoken).toBe('Careful here.');
+    expect(buildVoicePackage([{ kind: 'threat', text: 'Careful here.', fen }]).spoken).toBe('Careful here.');
   });
 });

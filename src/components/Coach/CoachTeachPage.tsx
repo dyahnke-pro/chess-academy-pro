@@ -1236,7 +1236,11 @@ export function CoachTeachPage(): JSX.Element {
   const gemSeenRef = useRef<string | null>(null);
   /** Last spoken tactics-alert key (David 2026-08-07: "I saw no tactics
    *  alerts") — a persisting danger alerts once, not every turn. */
-  const lastTacticsAlertRef = useRef('');
+  /** Last spoken TACTIC key, so a standing opportunity does not nag every ply. */
+  const lastTacticRef = useRef('');
+  /** Last spoken THREAT key. Separate from the tactic key — one lane repeating
+   *  must not silence the other lane's fresh news. */
+  const lastThreatRef = useRef('');
   /** Track A generation — bumped per coach reply so a chain link created in
    *  an older turn can't speak a line about a position the student already
    *  left (and can't steal the throttle window from the current line). */
@@ -5139,7 +5143,8 @@ export function CoachTeachPage(): JSX.Element {
     const AV: Record<string, number> = { n: 3, b: 3, r: 5, q: 9 };
     const factLines: string[] = [];
     const leadEyeArrows: BoardArrow[] = [];
-    let alertLine: string | null = null;
+    let tacticLine: string | null = null;
+    let threatLine: string | null = null;
     let alertArrow: BoardArrow | null = null;
     let announceLine: string | null = null;
     let noteLine: string | null = null;
@@ -5154,7 +5159,8 @@ export function CoachTeachPage(): JSX.Element {
     // the engine — it only loses the wait.
     try {
       const tctx = buildTacticsLiveContext(args.fenAfterReply, null, studentCC, rating);
-      let alertKey = '';
+      let tacticKey = '';
+      let threatKey = '';
       const myHanging = tctx.hanging
         .filter((h) => h.color === studentCC && AV[h.piece] !== undefined)
         .sort((a, b) => (AV[b.piece] ?? 0) - (AV[a.piece] ?? 0));
@@ -5168,17 +5174,35 @@ export function CoachTeachPage(): JSX.Element {
       const againstMe = tctx.immediate.filter(
         (t) => t.side === 'opponent' && !theirLoose.has(t.squares[0] ?? ''),
       );
+      // TACTIC (an opportunity FOR the student) and THREAT (danger TO them) are
+      // computed SEPARATELY. They were one `alert` in a single if/else chain,
+      // so a turn that had both told the student only about the loudest — and
+      // with the budget gone there is no reason to choose. David's order
+      // (2026-08-09) also ranks them differently: corpus, then tactics, then
+      // gems, then threats.
       if (tctx.boardFacts?.mateInOne) {
-        alertKey = `mate1:${tctx.boardFacts.mateInOne}`;
-        alertLine = 'You have a checkmate in one — find it.';
-      } else if (againstMe.length > 0) {
+        tacticKey = `mate1:${tctx.boardFacts.mateInOne}`;
+        tacticLine = 'You have a checkmate in one — find it.';
+      } else if (theirHanging.length > 0) {
+        const prize = theirHanging[0];
+        tacticKey = `win:${prize.piece}${prize.square}`;
+        tacticLine = `Their ${NAME[prize.piece] ?? 'piece'} on ${prize.square} is undefended — there's something to win here.`;
+      } else {
+        const mine = tctx.immediate.filter((t) => t.side === 'student');
+        if (mine.length > 0) {
+          const t = mine[0];
+          tacticKey = `opp:${t.type}:${t.squares.join('')}`;
+          tacticLine = `There's a real ${t.type.replace(/_/g, ' ')} here for you — look for it.`;
+        }
+      }
+      if (againstMe.length > 0) {
         const t = againstMe[0];
-        alertKey = `vs:${t.type}:${t.squares.join('')}`;
-        alertLine = `Watch out — ${t.description.charAt(0).toLowerCase()}${t.description.slice(1)}.`;
+        threatKey = `vs:${t.type}:${t.squares.join('')}`;
+        threatLine = `Watch out — ${t.description.charAt(0).toLowerCase()}${t.description.slice(1)}.`;
       } else if (myHanging.length > 0) {
         const worst = myHanging[0];
-        alertKey = `hang:${worst.piece}${worst.square}`;
-        alertLine = `Careful — your ${NAME[worst.piece] ?? 'piece'} on ${worst.square} is attacked and undefended.`;
+        threatKey = `hang:${worst.piece}${worst.square}`;
+        threatLine = `Careful — your ${NAME[worst.piece] ?? 'piece'} on ${worst.square} is attacked and undefended.`;
         const flip = args.fenAfterReply.split(' ');
         flip[1] = studentCC === 'w' ? 'b' : 'w';
         flip[3] = '-';
@@ -5187,25 +5211,22 @@ export function CoachTeachPage(): JSX.Element {
           .filter((cm) => cm.to === worst.square && cm.isCapture())
           .sort((a, b) => (AV[a.piece] ?? 1) - (AV[b.piece] ?? 1))[0];
         if (cap) alertArrow = { startSquare: cap.from, endSquare: cap.to, color: 'red' };
-      } else if (theirHanging.length > 0) {
-        const prize = theirHanging[0];
-        alertKey = `win:${prize.piece}${prize.square}`;
-        alertLine = `Their ${NAME[prize.piece] ?? 'piece'} on ${prize.square} is undefended — there's something to win here.`;
-      } else {
-        const mine = tctx.immediate.filter((t) => t.side === 'student');
-        if (mine.length > 0) {
-          const t = mine[0];
-          alertKey = `opp:${t.type}:${t.squares.join('')}`;
-          alertLine = `There's a real ${t.type.replace(/_/g, ' ')} here for you — look for it.`;
-        }
       }
-      // One alert per danger — a persisting threat must not nag every ply.
-      if (alertLine && alertKey === lastTacticsAlertRef.current) {
-        alertLine = null;
+      // One callout per danger — a persisting threat must not nag every ply.
+      // Two keys now, because one lane's repeat must not silence the other's
+      // fresh news.
+      if (tacticLine && tacticKey === lastTacticRef.current) {
+        tacticLine = null;
+      } else if (tacticLine) {
+        lastTacticRef.current = tacticKey;
+        captureEvent('tactics_alert_spoken', { surface: 'coach-teach', alert: tacticKey });
+      }
+      if (threatLine && threatKey === lastThreatRef.current) {
+        threatLine = null;
         alertArrow = null;
-      } else if (alertLine) {
-        lastTacticsAlertRef.current = alertKey;
-        captureEvent('tactics_alert_spoken', { surface: 'coach-teach', alert: alertKey });
+      } else if (threatLine) {
+        lastThreatRef.current = threatKey;
+        captureEvent('tactics_alert_spoken', { surface: 'coach-teach', alert: threatKey });
       }
     } catch { /* the alert is a bonus — never block the teaching */ }
 
@@ -5421,7 +5442,7 @@ export function CoachTeachPage(): JSX.Element {
     // turn did, corpus included. Promoting it alongside the others is how the
     // coach ends up narrating "your pawn on a2 is isolated" over a real tactic.
     let positionalLine: string | null = null;
-    if (!gemLine && !alertLine && !announceLine && !computedLine && !noteLine && !curatedLine && !teachingLine) {
+    if (!gemLine && !tacticLine && !threatLine && !announceLine && !computedLine && !noteLine && !curatedLine && !teachingLine) {
       try {
         const pr = buildPositionalRead(args.fenAfterReply, playerColor, positionalSaidRef.current);
         if (pr) { positionalLine = pr; factLines.push(`Positional read: ${pr}`); }
@@ -5435,7 +5456,8 @@ export function CoachTeachPage(): JSX.Element {
     // three foreign notes reach David as "the pin on the board".
     const pkg = buildVoicePackage([
       ...(gemLine ? [{ kind: 'gem' as const, text: gemLine, fen: args.fenAfterReply }] : []),
-      ...(alertLine ? [{ kind: 'alert' as const, text: alertLine, fen: args.fenAfterReply }] : []),
+      ...(tacticLine ? [{ kind: 'tactic' as const, text: tacticLine, fen: args.fenAfterReply }] : []),
+      ...(threatLine ? [{ kind: 'threat' as const, text: threatLine, fen: args.fenAfterReply }] : []),
       ...(announceLine ? [{ kind: 'opening' as const, text: announceLine, fen: args.fenAfterReply }] : []),
       ...(computedLine ? [{ kind: 'computed' as const, text: computedLine, fen: args.fenAfterReply }] : []),
       // The masterclass beat first among the teaching lanes — it is the only
@@ -5448,9 +5470,10 @@ export function CoachTeachPage(): JSX.Element {
       // ("The same idea shows up in positions like this"), so it is never
       // heard as a claim about these squares.
       ...(teachingLine ? [{ kind: 'note' as const, text: teachingLine, fen: args.fenAfterReply }] : []),
-      // Lowest rank by construction — it only exists because nothing above it
-      // fired, and it must never displace a tactic, a threat or a taught note.
-      ...(positionalLine ? [{ kind: 'note' as const, text: positionalLine, fen: args.fenAfterReply }] : []),
+      // `observation`, not `note` — it is filler, and while it shared the
+      // teaching rank it could displace a masterclass beat with "your pawn on
+      // a2 is isolated". Lowest rank by construction.
+      ...(positionalLine ? [{ kind: 'observation' as const, text: positionalLine, fen: args.fenAfterReply }] : []),
     ]);
 
     return {
@@ -5891,7 +5914,8 @@ export function CoachTeachPage(): JSX.Element {
                       announcedTrapsRef.current.clear(); // fresh game
                       announcedOpeningNameRef.current = null;
                       teachNoteSeenIdsRef.current.clear();
-                      lastTacticsAlertRef.current = '';
+                      lastTacticRef.current = '';
+                      lastThreatRef.current = '';
                       forkTalkCountRef.current = 0;
                       pendingForkRef.current = null;
                       rejectedTemptingCountRef.current = 0;
@@ -6219,14 +6243,20 @@ export function CoachTeachPage(): JSX.Element {
                 });
                 if (instant.pkg.spoken) {
                   lines.push(instant.pkg.spoken);
-                  // The alert's arrow rides only when the alert actually
-                  // SURVIVED into the utterance — an arrow pointing at a claim
-                  // the package refused is the same lie drawn instead of said.
-                  if (instant.alertArrow && instant.pkg.kept.some((f) => f.kind === 'alert')) {
+                  // The arrow rides only when the THREAT actually SURVIVED
+                  // into the utterance — an arrow pointing at a claim the
+                  // package refused is the same lie drawn instead of said.
+                  // `alertArrow` is set in the threat branch alone (the capture
+                  // that takes the student's hanging piece).
+                  if (instant.alertArrow && instant.pkg.kept.some((f) => f.kind === 'threat')) {
                     const arrow = instant.alertArrow;
                     void padDone.then(() => setArrows((prev) => uniqueArrows([...prev, arrow]).slice(0, 4)));
                   }
-                  if (instant.pkg.kept.some((f) => f.kind !== 'alert')) hasInstantTeaching = true;
+                  // "We said something beyond a bare callout." The two callout
+                  // kinds were one `alert` before the split, so both are named.
+                  if (instant.pkg.kept.some((f) => f.kind !== 'threat' && f.kind !== 'tactic')) {
+                    hasInstantTeaching = true;
+                  }
                 }
                 if (instant.leadEyeArrows.length > 0) {
                   const leadEye = instant.leadEyeArrows;
