@@ -163,3 +163,79 @@ export function bakedNarrationFor(
   }
   return best;
 }
+
+/** The baked idea for the move just played, when the game is following a
+ *  baked line. */
+export interface BakedPlyTeaching {
+  openingName: string;
+  /** Authored prose for THIS ply. */
+  text: string;
+  /** The ≤8-word cue, when the bake carries one. */
+  shortText?: string;
+  /** 1-based ply this teaches — the move the student just saw. */
+  ply: number;
+  /** Plies of baked teaching still ahead on this line. */
+  remaining: number;
+}
+
+/**
+ * Teaching for the ply just played, from the bake, while a LIVE GAME is still
+ * on a baked line.
+ *
+ * `bakedNarrationFor` answers "is this whole line baked" — the right question
+ * for a lesson, which walks the spine start to finish, and the wrong one for a
+ * game, which is three moves in and going. So 220 plies of authored, reviewed,
+ * gated opening teaching across 23 openings were reachable only by asking to be
+ * taught, and a student PLAYING one of those openings heard whatever the farmed
+ * corpus happened to have — measured at roughly two plies in eight, most of it
+ * general rather than about the move on the board (David 2026-08-09: "the
+ * entire opening needs teaching").
+ *
+ * SAFE BY THE SAME RULE AS ITS SIBLING. The name match is fuzzy; the MOVES are
+ * not. The history must be an exact prefix of the bake's spine, so the text
+ * returned was authored for the position the student is looking at — which is
+ * why this needs no board grading downstream and cannot narrate a line that is
+ * not being played.
+ */
+export function bakedTeachingForPly(
+  openingName: string | null | undefined,
+  historySans: string[],
+): BakedPlyTeaching | null {
+  if (!openingName || historySans.length === 0) return null;
+
+  /** Is `history` an exact prefix of this bake's spine, with an idea here? */
+  const prefixIdea = (entry: BakedNarration): BakedPlyTeaching | null => {
+    if (entry.ideas.length !== entry.spine.length) return null;
+    if (historySans.length > entry.spine.length) return null;
+    for (let i = 0; i < historySans.length; i += 1) {
+      if (entry.spine[i] !== historySans[i]) return null;
+    }
+    const idea = entry.ideas[historySans.length - 1];
+    if (!idea?.text?.trim()) return null;
+    return {
+      openingName: entry.openingName,
+      text: idea.text.trim(),
+      ...(idea.shortText?.trim() ? { shortText: idea.shortText.trim() } : {}),
+      ply: historySans.length,
+      remaining: entry.spine.length - historySans.length,
+    };
+  };
+
+  const exact = DATA.narrations[norm(openingName)];
+  const fromExact = exact ? prefixIdea(exact) : null;
+  if (fromExact) return fromExact;
+
+  let best: BakedPlyTeaching | null = null;
+  let bestScore = 0;
+  for (const [key, entry] of Object.entries(DATA.narrations)) {
+    const score = nameScore(openingName, key);
+    if (score < 0.6 || score < bestScore) continue;
+    const hit = prefixIdea(entry);
+    if (!hit) continue;
+    // Same name score: prefer the bake that keeps teaching furthest.
+    if (score === bestScore && best && hit.remaining <= best.remaining) continue;
+    best = hit;
+    bestScore = score;
+  }
+  return best;
+}

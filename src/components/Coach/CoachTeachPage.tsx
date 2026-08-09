@@ -150,6 +150,7 @@ import { parseCoachMoveCommand } from '../../services/coachMoveCommand';
 import { sanToSpeech } from '../../utils/sanToSpeech';
 import { teachingSourceForBoard, teachingFactLine, generalizedTeaching, noteCoverageForLine, spokenBeatText, notesForOpening } from '../../services/danyaTeachingService';
 import { secondarySupportNotes } from '../../services/secondaryCorpora';
+import { bakedTeachingForPly } from '../../services/bakedWalkthroughNarration';
 import { noteStaysInScope } from '../../services/noteAnchorIntegrity';
 
 /** How many note-covered plies an opening needs before the NOTES take the
@@ -1262,6 +1263,9 @@ export function CoachTeachPage(): JSX.Element {
   const lastThreatRef = useRef('');
   /** Every tactic sentence already spoken this game — see the guard below. */
   const spokenTacticLinesRef = useRef<Set<string>>(new Set());
+  /** Baked opening plies already taught this game — the bake is one idea per
+   *  move, so a repeat means the same move was re-narrated. */
+  const bakedPlySeenRef = useRef<Set<number>>(new Set());
   /** Track A generation — bumped per coach reply so a chain link created in
    *  an older turn can't speak a line about a position the student already
    *  left (and can't steal the throttle window from the current line). */
@@ -5587,8 +5591,33 @@ export function CoachTeachPage(): JSX.Element {
       }
     } catch { /* curated teaching is a bonus, never a blocker */ }
 
-    let teachingLine: string | null = null;
+    // 🔒 THE ENTIRE OPENING GETS TAUGHT (David 2026-08-09: "the entire opening
+    // needs teaching").
+    //
+    // 220 plies of authored, reviewed, gated opening prose sit in the bake —
+    // one idea for EVERY move of 23 openings — and a live game could not reach
+    // any of it. `bakedNarrationFor` asks "is this whole line baked", which is
+    // the lesson's question; a game is three moves in and going, so the answer
+    // was always no. A student playing a baked opening therefore heard whatever
+    // the farmed corpus happened to hold, measured at about two plies in eight.
+    //
+    // Ranked above the corpus for the same reason the masterclass beat is: this
+    // was verified before it shipped, and it was written for THIS ply. The
+    // prefix match is exact, so no board grading is needed behind it.
+    let bakedLine: string | null = null;
     if (!noteLine && !curatedLine) {
+      try {
+        const baked = bakedTeachingForPly(announcedOpeningNameRef.current, history);
+        if (baked && !bakedPlySeenRef.current.has(baked.ply)) {
+          bakedPlySeenRef.current.add(baked.ply);
+          bakedLine = baked.text;
+          factLines.push(`Opening teaching (${baked.openingName}, move ${baked.ply}): ${baked.text}`);
+        }
+      } catch { /* the bake is a bonus, never a blocker */ }
+    }
+
+    let teachingLine: string | null = null;
+    if (!noteLine && !curatedLine && !bakedLine) {
       try {
         // 🔒 PASS THE OPENING. It was `null`, which switches OFF
         // `noteOpeningConflicts` — the guard whose entire job is stopping a
@@ -5661,6 +5690,9 @@ export function CoachTeachPage(): JSX.Element {
       // one verified before it shipped.
       ...(curatedLine ? [{ kind: 'note' as const, text: curatedLine, fen: args.fenAfterReply }] : []),
       ...(noteLine ? [{ kind: 'note' as const, text: noteLine, fen: args.fenAfterReply }] : []),
+      // Authored for this exact ply and verified before it shipped — the same
+      // standing as the masterclass beat above it.
+      ...(bakedLine ? [{ kind: 'note' as const, text: bakedLine, fen: args.fenAfterReply }] : []),
       // Corpus teaching reached by structure/concept transfer. Same `note`
       // rank as the exact-position tier — both are the corpus speaking, and
       // `generalizedTeaching` has already framed the borrowed one honestly
@@ -6155,6 +6187,7 @@ export function CoachTeachPage(): JSX.Element {
                       lastTacticRef.current = '';
                       lastThreatRef.current = '';
                       spokenTacticLinesRef.current.clear();
+                      bakedPlySeenRef.current.clear();
                       forkTalkCountRef.current = 0;
                       pendingForkRef.current = null;
                       rejectedTemptingCountRef.current = 0;
