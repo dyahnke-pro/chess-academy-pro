@@ -2801,7 +2801,32 @@ export function CoachTeachPage(): JSX.Element {
         { regex: /\b(?:quiz\s+me\s+on|quiz)\s+(?:the\s+)?/i, stage: 'concepts' },
         { regex: /\b(?:concept(?:\s+check)?|concepts)\s+(?:for\s+|of\s+)?(?:the\s+)?/i, stage: 'concepts' },
         { regex: /\b(?:find(?:\s+the)?\s+moves?|recognition)\s+(?:in\s+|for\s+)?(?:the\s+)?/i, stage: 'findMove' },
+        // 🔒 "PLAY X AGAINST ME" IS A REQUEST FOR A GAME, NOT A LECTURE
+        // (David 2026-08-09: "Ask it to play a certain opening against you").
+        //
+        // Until now the ONLY route to a game required the literal word
+        // "real" — "play it for real the Vienna". Nobody says that. Driving a
+        // live game on prod, "play the Vienna Gambit against me" resolved the
+        // opening perfectly (score=1.00) and then started a WALKTHROUGH:
+        // "Ready — let's walk through the Vienna Game: Vienna Gambit." The
+        // board never moved because it was waiting to be watched.
+        //
+        // Exactly the same bug as the traps patterns above — "nobody asks for
+        // 'punish lines', they ask for traps… this is purely the missing
+        // word" — one verb further along.
+        //
+        // Each pattern strips only its connective so the opening NAME survives
+        // for resolution: "play the Vienna Gambit against me" → "Vienna
+        // Gambit". Order matters — the against/with-me arm runs first because
+        // it is the most specific.
         { regex: /\bplay\s+(?:it\s+)?(?:for\s+)?real\s+(?:the\s+)?/i, stage: 'play-real' },
+        // "play the Vienna against me" / "…with me" / "…versus me"
+        { regex: /\b(?:let'?s\s+|can\s+we\s+|could\s+we\s+|i\s+want\s+to\s+|wanna\s+)?play\s+(?:the\s+)?(?=.*\b(?:against|versus|vs\.?|with)\s+(?:me|you)\b)|\s*\b(?:against|versus|vs\.?|with)\s+(?:me|you)\b/gi, stage: 'play-real' },
+        // "play me the Italian" — the coach is the opponent, not the lecturer.
+        { regex: /\bplay\s+me\s+(?:the\s+)?/i, stage: 'play-real' },
+        // "let's play the Caro" / "can we play the London". NOT "play through
+        // the Vienna" — that is a watch ask and keeps its walkthrough.
+        { regex: /\b(?:let'?s|can\s+we|could\s+we|wanna|i\s+want\s+to)\s+play\s+(?!through\b)(?:the\s+)?/i, stage: 'play-real' },
       ];
       const trimmed = text.trim();
       // `userMessageAppended` is hoisted to the outer scope — see the
