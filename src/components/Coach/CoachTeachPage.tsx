@@ -8016,9 +8016,13 @@ export function CoachTeachPage(): JSX.Element {
                   Hidden when the picker is choosing a line to PLAY: the
                   student already said what they want done with it, and the
                   toggle would offer to study the line they asked to play. */}
+              {/* NOT the `hidden` attribute — the UA's `[hidden] { display:
+                  none }` loses to this element's `inline-flex`, so the toggle
+                  stayed fully on screen and a prod probe read both its buttons
+                  off the page. It has to not be rendered. */}
+              {!linePickerPlay && (
               <div
                 className="inline-flex rounded-md border border-theme-border bg-theme-surface text-[10px] font-medium overflow-hidden"
-                hidden={Boolean(linePickerPlay)}
               >
                 <button
                   type="button"
@@ -8045,6 +8049,7 @@ export function CoachTeachPage(): JSX.Element {
                   Face
                 </button>
               </div>
+              )}
             </div>
             <div className="grid grid-cols-2 gap-1.5">
               {(() => {
