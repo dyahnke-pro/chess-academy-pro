@@ -17,6 +17,7 @@ import { Chess } from 'chess.js';
 import type { Square } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
 import { phaseOfFen } from './boardConcepts';
+import { packageForRegister, type HintPackage } from './hintRegister';
 
 export type CommentaryKind =
   | 'tactic'
@@ -336,7 +337,7 @@ export function buildRejectedTempting(args: {
   /** Engine multipv lines, best first: first move + its reply (UCI), eval
    *  from the STUDENT's perspective in centipawns. */
   lines: Array<{ uci: string; replyUci?: string | null; evalCp: number }>;
-}): { facts: string; temptingSan: string; refutationSan: string } | null {
+}): { facts: string; hint: HintPackage; temptingSan: string; refutationSan: string } | null {
   if (args.lines.length < 2) return null;
   const me: 'w' | 'b' = args.studentColor === 'white' ? 'w' : 'b';
   let base: Chess;
@@ -362,10 +363,21 @@ export function buildRejectedTempting(args: {
       const why = tempting.captured !== undefined
         ? `it grabs the ${NAME[tempting.captured] ?? 'piece'} on ${tempting.to}`
         : 'it comes with check';
+      // Tiered so the REGISTER decides how much of this is handed over
+      // (hintRegister.packageForRegister). The anchor carries both moves
+      // because the tempting move alone, without its refutation, would read as
+      // a recommendation — every tier has to stand on its own.
+      const hint: HintPackage = {
+        anchor: `TEMPTING BUT REFUTED: ${tempting.san} looks natural — ${why} — but the reply ${refutation.san} refutes it.`,
+        detail: `That line leaves the student about ${dropPawns} pawns worse than the best plan.`,
+        stakes: 'Teach the habit from this: calculate the opponent\'s most forcing reply BEFORE trusting a tempting move.',
+        withhold: `Name ${tempting.san} and ${refutation.san} exactly as given. Do NOT name or hint at the best move.`,
+      };
       return {
         temptingSan: tempting.san,
         refutationSan: refutation.san,
-        facts: `TEMPTING BUT REFUTED: ${tempting.san} looks natural — ${why} — but the reply ${refutation.san} leaves the student about ${dropPawns} pawns worse than the best plan. Teach the habit from this: calculate the opponent's most forcing reply BEFORE trusting a tempting move. Name ${tempting.san} and ${refutation.san} exactly as given. Do NOT name or hint at the best move.`,
+        hint,
+        facts: packageForRegister(hint, 'moderate'),
       };
     } catch { /* malformed line — try the next */ }
   }
@@ -384,7 +396,7 @@ export function buildPriorityFirst(args: {
   studentColor: 'white' | 'black';
   /** Engine best move for the student, UCI. */
   bestUci: string;
-}): { facts: string; targetSquare: string } | null {
+}): { facts: string; hint: HintPackage; targetSquare: string } | null {
   const me: 'w' | 'b' = args.studentColor === 'white' ? 'w' : 'b';
   const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
   let chess: Chess;
@@ -419,9 +431,19 @@ export function buildPriorityFirst(args: {
     const flaw = !theirFiles.has(fileOf(target.square) - 1) && !theirFiles.has(fileOf(target.square) + 1)
       ? 'isolated — no pawn can ever defend it'
       : 'doubled — its file is a lasting weakness';
+    // The detail tier deliberately does NOT name the attacking piece: naming
+    // it is naming the move on most boards, and the withhold below would then
+    // be contradicting the package it ships with.
+    const hint: HintPackage = {
+      anchor: `PRIORITY FIRST: the opponent's pawn on ${target.square} is ${flaw}, and the strongest plan ATTACKS it.`,
+      detail: `Frame the thought the way strong players do — "our priority is the ${target.square} pawn" — and let them find the move that fits the priority.`,
+      stakes: `A pawn like that cannot run and cannot be defended by a pawn, so every piece aimed at ${target.square} keeps working for free.`,
+      withhold: 'Do NOT name the move or the piece that attacks it.',
+    };
     return {
       targetSquare: target.square,
-      facts: `PRIORITY FIRST: the opponent's pawn on ${target.square} is ${flaw}, and the strongest plan ATTACKS it. Frame the thought the way strong players do — "our priority is the ${target.square} pawn" — and let them find the move that fits the priority. Do NOT name the move or the piece that attacks it.`,
+      hint,
+      facts: packageForRegister(hint, 'moderate'),
     };
   } catch {
     return null;

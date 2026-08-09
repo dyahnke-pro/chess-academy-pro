@@ -126,6 +126,51 @@ export function hintIsDue(register: HintRegister, ply: number, lastHintPly: numb
 }
 
 /**
+ * A hint, taken apart by how close each piece of it sits to the answer.
+ *
+ * This is the deterministic form of subtlety, and it replaces asking the model
+ * to "be subtle" — which was the first version and was wrong for the reason G0
+ * gives: a prompt that says be careful is the LLM still deciding. It could
+ * drift louder or quieter than the register, and the only testable claim was
+ * that the prompt contained the word "subtle".
+ *
+ * Here the register decides WHICH COMPUTED FACTS ARE IN THE PACKAGE. A subtle
+ * hint cannot mention the stakes because the stakes were never handed over.
+ * Nothing to validate, nothing to strip.
+ *
+ *   subtle   anchor                    "e5 is the square this turns on."
+ *   moderate anchor + detail           "…my knight is heading there."
+ *   obvious  anchor + detail + stakes  "…and nothing of yours is watching it."
+ */
+export interface HintPackage {
+  /** The fact itself. Spoken at EVERY register, so it has to stand alone —
+   *  true, complete, and not misleading without the tiers below it. */
+  anchor: string;
+  /** The supporting specifics. Moderate and plain. */
+  detail?: string;
+  /** What it costs them, spelled out. Plain only — this is the tier that
+   *  turns a pointer into an almost-answer. */
+  stakes?: string;
+  /** What must never be said, at any register. Always included. */
+  withhold?: string;
+}
+
+/**
+ * Assemble the package for a register.
+ *
+ * `withhold` rides every tier: the honesty contract does not relax as the hint
+ * gets louder. Plain means a shorter walk to the answer, never being handed
+ * it — a hint that names the move is not a loud hint, it is a worse feature.
+ */
+export function packageForRegister(pkg: HintPackage, register: HintRegister): string {
+  const parts = [pkg.anchor];
+  if (register !== 'subtle' && pkg.detail) parts.push(pkg.detail);
+  if (register === 'obvious' && pkg.stakes) parts.push(pkg.stakes);
+  if (pkg.withhold) parts.push(pkg.withhold);
+  return parts.join(' ');
+}
+
+/**
  * Stretch or shrink an existing beat's cooldown by the register.
  *
  * The Learn surface already carries hand-tuned gaps per beat (think-aloud every
@@ -137,37 +182,25 @@ export function hintIsDue(register: HintRegister, ply: number, lastHintPly: numb
  * Rounded UP so a scaled gap can never collapse to zero and turn a beat into
  * per-move chatter.
  */
-/**
- * The subtlety half, as a clause appended to a beat's directive.
- *
- * The beats hand the model a FACTS block — what is true and what to withhold —
- * so the register belongs there too rather than in a second phrasing pass. The
- * fact never changes; only how far the sentence sits from the answer:
- *
- *   subtle   "e5 is the square this game turns on."
- *   moderate "My knight is heading for e5."
- *   obvious  "My knight is coming to e5 and nothing of yours is watching it."
- *
- * The honesty contract holds at EVERY register — even `obvious` names the piece
- * and the square without naming the move. "More obvious" means a shorter walk
- * to the answer, never being handed it; a hint that gives the move is not a
- * loud hint, it is a different (and worse) feature.
- *
- * `moderate` returns the facts untouched, because that is what the beats were
- * written and tuned to produce.
- */
-export function hintDirective(facts: string, register: HintRegister): string {
-  if (register === 'moderate' || !facts.trim()) return facts;
-  if (register === 'subtle') {
-    return `${facts}\nREGISTER — SUBTLE: this student is finding the moves. Keep the pointer to one short clause: name the square or the idea and stop. Do not walk them toward it, do not list what it threatens.`;
-  }
-  return `${facts}\nREGISTER — PLAIN: this student has been missing these. Make the pointer unmissable — name the piece and the square it concerns, and say plainly what is happening to them. Still never name the move itself; they play it.`;
-}
-
 export function scaleGap(baseGap: number, register: HintRegister): number {
   switch (register) {
     case 'obvious': return Math.max(1, Math.ceil(baseGap / 2));
     case 'moderate': return baseGap;
     case 'subtle': return baseGap * 2;
+  }
+}
+
+/**
+ * How many computed reads a think-aloud deliberation may weigh.
+ *
+ * The same principle as `packageForRegister`, applied to a beat whose content
+ * is already a LIST of facts: subtlety is how many you hand over. One read is
+ * a nudge; four walks the student most of the way there.
+ */
+export function readsForRegister(register: HintRegister): number {
+  switch (register) {
+    case 'obvious': return 4;
+    case 'moderate': return 2;
+    case 'subtle': return 1;
   }
 }

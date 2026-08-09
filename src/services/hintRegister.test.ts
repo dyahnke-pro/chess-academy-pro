@@ -8,7 +8,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   openingRegister, startDial, recordAttempt, hintPlyGap, hintIsDue, scaleGap,
-  hintDirective, WINDOW,
+  packageForRegister, readsForRegister, WINDOW,
 } from './hintRegister';
 
 const FOUND = 0;     // cpLoss 0 — the engine's own move
@@ -144,34 +144,101 @@ describe('near-best is the found/missed line, not a second opinion', () => {
   });
 });
 
-describe('subtlety rides on the beat directive', () => {
-  const FACTS = 'PRIORITY FIRST: the pawn on d5 is isolated. Do NOT name the move.';
+describe('subtlety is WHICH FACTS are handed over, not how they are worded', () => {
+  // The first version of this appended "be subtle" to the prompt and let the
+  // model decide. That is the thing G0 names as the disease: the LLM still
+  // deciding, with a validator bolted on after. The only assertion available
+  // was that the prompt contained the word "subtle" — which proves nothing
+  // about what the student hears.
+  //
+  // Now the register picks the TIERS. A subtle hint cannot mention the stakes
+  // because the stakes were never in the package, so there is nothing to
+  // validate and nothing to strip.
+  const PKG = {
+    anchor: 'PRIORITY FIRST: the pawn on d5 is isolated.',
+    detail: 'Frame it as "our priority is the d5 pawn".',
+    stakes: 'A pawn like that cannot run, so every piece aimed at it works for free.',
+    withhold: 'Do NOT name the move.',
+  };
 
-  it('leaves the tuned default alone', () => {
-    // The beats were written and measured at this register; a rewrite here
-    // would silently retune every one of them.
-    expect(hintDirective(FACTS, 'moderate')).toBe(FACTS);
+  it('hands over strictly more as the register gets plainer', () => {
+    const subtle = packageForRegister(PKG, 'subtle');
+    const moderate = packageForRegister(PKG, 'moderate');
+    const obvious = packageForRegister(PKG, 'obvious');
+    expect(subtle.length).toBeLessThan(moderate.length);
+    expect(moderate.length).toBeLessThan(obvious.length);
   });
 
-  it('keeps the computed facts intact at every register', () => {
-    // The register changes distance from the answer, never what is true (G0).
+  it('OMITS the louder tiers rather than asking for restraint', () => {
+    // The load-bearing assertion of the whole rebuild: the fact is ABSENT, not
+    // present-with-an-instruction-to-downplay-it.
+    expect(packageForRegister(PKG, 'subtle')).not.toContain(PKG.stakes);
+    expect(packageForRegister(PKG, 'subtle')).not.toContain(PKG.detail);
+    expect(packageForRegister(PKG, 'moderate')).not.toContain(PKG.stakes);
+    expect(packageForRegister(PKG, 'obvious')).toContain(PKG.stakes);
+  });
+
+  it('speaks the anchor at every register', () => {
     for (const r of ['obvious', 'moderate', 'subtle'] as const) {
-      expect(hintDirective(FACTS, r)).toContain(FACTS);
+      expect(packageForRegister(PKG, r)).toContain(PKG.anchor);
     }
   });
 
-  it('never lets a louder hint hand over the move', () => {
-    // "More obvious" is a shorter walk to the answer, not the answer. A hint
-    // that names the move is a different and worse feature.
-    expect(hintDirective(FACTS, 'obvious').toLowerCase()).toContain('never name the move');
+  it('carries the withhold at every register — the contract does not relax', () => {
+    // Plain means a shorter walk to the answer, never being handed it.
+    for (const r of ['obvious', 'moderate', 'subtle'] as const) {
+      expect(packageForRegister(PKG, r)).toContain('Do NOT name the move.');
+    }
   });
 
-  it('says something different at each end', () => {
-    expect(hintDirective(FACTS, 'obvious')).not.toBe(hintDirective(FACTS, 'subtle'));
+  it('survives a beat that only has an anchor', () => {
+    expect(packageForRegister({ anchor: 'A.' }, 'obvious')).toBe('A.');
   });
 
-  it('adds nothing to an empty directive', () => {
-    expect(hintDirective('', 'obvious')).toBe('');
-    expect(hintDirective('   ', 'subtle')).toBe('   ');
+  it('weighs fewer reads when the deliberation should be subtle', () => {
+    expect(readsForRegister('subtle')).toBeLessThan(readsForRegister('moderate'));
+    expect(readsForRegister('moderate')).toBeLessThan(readsForRegister('obvious'));
+    expect(readsForRegister('subtle')).toBeGreaterThanOrEqual(1);
+  });
+});
+
+describe('ADAPTIVE end to end: the package follows the student, not the profile', () => {
+  const PKG = {
+    anchor: 'The e5 square is the one this position turns on.',
+    detail: 'My knight is heading there.',
+    stakes: 'And nothing of yours is watching it.',
+  };
+
+  it('a student who starts missing hears more of the same fact', () => {
+    // One player, one position, one computed fact. What changes is the student.
+    let dial = startDial(1200);
+    const before = packageForRegister(PKG, dial.register);
+
+    for (const cp of [MISSED, MISSED, MISSED]) dial = recordAttempt(dial, cp);
+    const afterMissing = packageForRegister(PKG, dial.register);
+
+    expect(afterMissing.length).toBeGreaterThan(before.length);
+    expect(afterMissing).toContain(PKG.stakes);
+  });
+
+  it('…and then hears less of it once they recover', () => {
+    let dial = startDial(1200);
+    for (const cp of [MISSED, MISSED, MISSED]) dial = recordAttempt(dial, cp);
+    const loud = packageForRegister(PKG, dial.register);
+
+    // A full window of found moves — enough to flush the bad run out.
+    for (let i = 0; i < WINDOW + 2; i += 1) dial = recordAttempt(dial, FOUND);
+    const quiet = packageForRegister(PKG, dial.register);
+
+    expect(quiet.length).toBeLessThan(loud.length);
+    expect(quiet).toContain(PKG.anchor); // the fact never leaves
+  });
+
+  it('the frequency moves with it, in the same direction', () => {
+    let dial = startDial(1200);
+    for (const cp of [MISSED, MISSED, MISSED]) dial = recordAttempt(dial, cp);
+    const loudGap = scaleGap(6, dial.register);
+    for (let i = 0; i < WINDOW + 2; i += 1) dial = recordAttempt(dial, FOUND);
+    expect(scaleGap(6, dial.register)).toBeGreaterThan(loudGap);
   });
 });

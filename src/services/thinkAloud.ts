@@ -51,7 +51,11 @@ export function buildThinkAloud(opts: {
   historySans: string[];
   studentColor: 'white' | 'black';
   lines: ThinkAloudLine[];
+  /** How many computed reads the deliberation may weigh — the subtlety dial
+   *  (see `readsForRegister`). Omit for every read that survived the guard. */
+  maxReads?: number;
 }): ThinkAloudMoment | null {
+  const args = opts;
   const { fen, historySans, studentColor, lines } = opts;
   if (lines.length < 2) return null;
   const [best, second] = lines;
@@ -127,8 +131,15 @@ export function buildThinkAloud(opts: {
   // appear anywhere in the block. A read that happens to name it (e.g. a
   // pawn-break square colliding with the best move) is dropped.
   const bare = best.san.replace(/[+#]$/, '');
-  const safe = facts.filter((f) => !f.includes(bare));
-  if (safe.length === 0) return null;
+  const all = facts.filter((f) => !f.includes(bare));
+  if (all.length === 0) return null;
+
+  // SUBTLETY IS HOW MANY READS ARE HANDED OVER, not how the model is asked to
+  // word them (hintRegister). A deliberation weighing one read is a nudge; one
+  // weighing four walks the student most of the way there. The model cannot
+  // drift louder than the register because the extra reads are not in the
+  // package at all.
+  const safe = args.maxReads === undefined ? all : all.slice(0, Math.max(1, args.maxReads));
 
   const block =
     `THINK ALOUD (the student is choosing a move — deliberate, do NOT answer): ` +
