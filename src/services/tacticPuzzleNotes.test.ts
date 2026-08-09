@@ -8,13 +8,21 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 import { tacticNoteForPuzzleThemes, PUZZLE_THEME_TO_TACTIC } from './danyaTeachingService';
 import { loadFullCorpus } from '../test/loadFullCorpus';
+import { loadSpokenBake } from '../test/loadSpokenBake';
 import puzzles from '../data/puzzles.json';
 
 
 interface Puzzle { id: string; fen: string; themes: string[] }
 
 describe('tactic notes by puzzle theme', () => {
-  beforeAll(() => { loadFullCorpus(); });
+  // The BAKE too, not just the corpus. Every note this surface reaches is
+  // FLOATING (theme-tier, no move prefix), and `spokenBeatText` returns '' for
+  // a floating note that has no bake — its original prose describes another
+  // game's squares, and stripping that geometry is what the bake is for. In
+  // the app `loadSpokenBake` runs at boot; nothing in vitest fetches it, so
+  // without this the whole tier is silent and the test measures the harness.
+  // Same reason `loadFullCorpus` exists.
+  beforeAll(() => { loadFullCorpus(); loadSpokenBake(); });
 
   it('a back-rank puzzle gets a note that teaches the back rank', () => {
     const hit = tacticNoteForPuzzleThemes({ themes: ['backRankMate', 'endgame', 'mate', 'mateIn2', 'short'] });
