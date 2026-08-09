@@ -27,6 +27,7 @@ import { useCallback, useRef, useState } from 'react';
 import { Chess } from 'chess.js';
 import { stockfishEngine } from '../services/stockfishEngine';
 import { detectSlip, slipWarrantsInterjection, isNearBest, slipSeverityLabel, type SlipSeverity } from '../services/slipDetector';
+import { startDial, recordAttempt, type HintDial } from '../services/hintRegister';
 import { buildWhyPrompt, buildGroundedReveal, buildSlipReveal, captureMisconception, findMoverTactic, withReasonLead } from '../services/discussionPractice';
 import { buildMisconceptionCallback } from '../services/misconceptionCallbacks';
 import { buildMoveReasonOptions } from '../services/moveReasonOptions';
@@ -114,6 +115,11 @@ export interface UseDiscussionPracticeResult {
   teach: string | null;
   /** Non-blocking good-move recognition (spoken + flashable), or null. */
   goodMove: GoodMoveRecognition | null;
+  /** How obvious the coach's hints should be right now, and how often they
+   *  should come — driven by how many of the last few moves the student
+   *  actually found (David 2026-08-09). Read it at narration time; it moves on
+   *  its own as the game goes. */
+  hintDial: HintDial;
   evaluatePlayerMove: (args: EvaluatePlayerMoveArgs) => Promise<void>;
   raiseSlipPrompt: (args: RaiseSlipPromptArgs) => void;
   submitReason: (reason: string) => Promise<void>;
@@ -212,6 +218,11 @@ export function useDiscussionPractice(
   const busyRef = useRef(false);
   /** Ply of the last good-move recognition — the atta-boy cooldown. */
   const goodMoveLastPlyRef = useRef(-999);
+  /** How subtle the coach's hints should be, moved by the student's own
+   *  found/missed run. Seeded from the rating on the first move evaluated,
+   *  because the rating arrives per-move rather than at construction. */
+  const [hintDial, setHintDial] = useState<HintDial>(() => startDial(undefined));
+  const dialSeededRef = useRef(false);
 
   // TWO different switches, deliberately separated (David 2026-08-05).
   //
@@ -271,6 +282,27 @@ export function useDiscussionPractice(
       const cpLoss = evalBeforeMover - evalAfterMover;
       const moverChar: 'w' | 'b' = args.playerColor === 'white' ? 'w' : 'b';
       const bestSan = uciToSan(args.fenBefore, bestUci);
+
+      // ── THE HINT DIAL, BEFORE ANY GATE ──────────────────────────────────
+      // Same lesson as the capture above: what the coach REMEMBERS about the
+      // student must never be a side effect of what it happens to SHOW. This
+      // runs on every evaluated move.
+      //
+      // Book moves are excluded, and that exclusion is load-bearing: following
+      // theory the coach just played is not finding a move, and counting it
+      // would let a dozen prepared plies talk the register up to subtle right
+      // before the student reaches the middlegame — the exact moment they need
+      // the help most.
+      const followedBook = args.inBook && !!args.bookMoveSan
+        && args.playedSan.replace(/[+#]$/, '') === args.bookMoveSan.replace(/[+#]$/, '');
+      if (!followedBook) {
+        if (!dialSeededRef.current) {
+          dialSeededRef.current = true;
+          setHintDial(recordAttempt(startDial(args.studentRating), cpLoss));
+        } else {
+          setHintDial((d) => recordAttempt(d, cpLoss));
+        }
+      }
 
       const slip = detectSlip({
         inBook: args.inBook,
@@ -596,6 +628,7 @@ export function useDiscussionPractice(
     prompt,
     teach,
     goodMove,
+    hintDial,
     evaluatePlayerMove,
     raiseSlipPrompt,
     submitReason,

@@ -166,11 +166,19 @@ const NOTE_PRIMARY_MIN_PLIES = 3;
 import { findLivePunishment } from '../../services/gemCrushLines';
 
 import { buildThinkAloud } from '../../services/thinkAloud';
+import { scaleGap } from '../../services/hintRegister';
 import { warmAmateurPlay, buildRatingRealityFact } from '../../services/amateurPlayCache';
 import { masterPlayCache } from '../../services/masterPlayCache';
 
 /** Min plies between think-aloud deliberations — a coach who deliberates on
- *  every move stops being listened to (same cadence family as the questions). */
+ *  every move stops being listened to (same cadence family as the questions).
+ *
+ *  This and `PRIORITY_FIRST_MIN_PLY_GAP` below are BASE gaps now: `scaleGap`
+ *  stretches or shrinks them by the student's hint register, so a player who
+ *  is finding everything hears these beats half as often and one who has lost
+ *  the thread hears them twice as often (David 2026-08-09: "Stronger player
+ *  more subtle and less often hints. Weaker player much more obvious and more
+ *  often"). The tuned RATIO between the beats is what these constants hold. */
 const THINK_ALOUD_MIN_PLY_GAP = 6;
 
 /** Fork-in-the-road deliberations per game (David 2026-07-11: "3 total"). */
@@ -6236,7 +6244,7 @@ export function CoachTeachPage(): JSX.Element {
                       // plain recommendation is the fallback.
                       let thinkMoment = null;
                       const thinkEligible =
-                        plyNow - thinkAloudLastPlyRef.current >= THINK_ALOUD_MIN_PLY_GAP &&
+                        plyNow - thinkAloudLastPlyRef.current >= scaleGap(THINK_ALOUD_MIN_PLY_GAP, discussion.hintDial.register) &&
                         classifyPhase(probe.fen(), historyAfterReply.length) === 'middlegame';
                       if (thinkEligible) {
                         try {
@@ -6272,7 +6280,7 @@ export function CoachTeachPage(): JSX.Element {
                         // pawn, name the PRIORITY and withhold the move —
                         // the upgrade of the plain recommendation, never an
                         // addition to it.
-                        const pf = plyNow - priorityFirstLastPlyRef.current >= PRIORITY_FIRST_MIN_PLY_GAP
+                        const pf = plyNow - priorityFirstLastPlyRef.current >= scaleGap(PRIORITY_FIRST_MIN_PLY_GAP, discussion.hintDial.register)
                           ? buildPriorityFirst({ fen: probe.fen(), studentColor: playerColor, bestUci: recUci })
                           : null;
                         if (pf) {
