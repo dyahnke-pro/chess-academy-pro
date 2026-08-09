@@ -747,8 +747,17 @@ export function transitionTeachingSourceForGame(args: {
   // using it, that hardcoding would have handed a student entering a rook
   // ending a middlegame plan.
   const wantPhase = (args.fen ? phaseOfFen(args.fen) : null) ?? 'middlegame';
+  // SCOPE IS NOT OPTIONAL ON THIS PATH EITHER. Every other selection site asks
+  // `noteStaysInScope`; this one never did, and a full Sicilian game on prod
+  // was told "the critical moment is when white plays Ba4; black must choose
+  // between ...Ra6 and ...d5" — the Ruy Lopez, named move for named move, at a
+  // phase transition in a Dragon. The honest "a general idea in this opening"
+  // framing makes it worse, not better: it presents another opening's theory
+  // as this one's.
   const usable = (n: DanyaNote): boolean =>
-    Boolean(n.plans?.trim()) && noteTeachesChessNotItsSource(n);
+    Boolean(n.plans?.trim())
+    && noteTeachesChessNotItsSource(n)
+    && noteStaysInScope(n, args.openingName);
   const exact = args.fen ? notesForFen(args.fen).find(usable) : undefined;
   if (exact) return { note: exact, origin: 'position' };
   const recent = notesForPrefix(args.historySans, Infinity, 12).find(usable);
