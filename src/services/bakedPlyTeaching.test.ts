@@ -12,7 +12,8 @@
 // about it.
 import { describe, it, expect } from 'vitest';
 import bakedData from '../data/walkthrough-narrations.json';
-import { bakedTeachingForPly, bakedNarrationFor } from './bakedWalkthroughNarration';
+import { Chess } from 'chess.js';
+import { bakedTeachingForPly, bakedNarrationFor, bakedSpineNextMove } from './bakedWalkthroughNarration';
 
 const DATA = bakedData as {
   narrations: Record<string, { openingName: string; spine: string[]; ideas: { text: string }[] }>;
@@ -114,5 +115,42 @@ describe('the corpus is measured, not assumed', () => {
     // already shipped should fail loudly rather than quietly go quiet.
     expect(plies).toBeGreaterThanOrEqual(220);
     expect(Object.keys(DATA.narrations).length).toBeGreaterThanOrEqual(23);
+  });
+});
+
+// The coach had a book continuation, and the book and the bake are two
+// different continuations of the same opening. Asked for the Latvian, the book
+// answered Nxe5 where the authored spine runs Bc4 — so the game left the taught
+// line at move three and most of its reviewed prose was unreachable in the very
+// game the student asked to be shown.
+describe('the coach plays the line it has teaching for', () => {
+  const play = (sans: string[]) => {
+    const board = new Chess();
+    for (const s of sans) board.move(s);
+    return board.fen();
+  };
+
+  it('answers with the baked spine move, not the book one', () => {
+    expect(bakedSpineNextMove('Latvian Gambit', play(['e4', 'e5', 'Nf3', 'f5']))).toBe('Bc4');
+  });
+
+  it('follows the whole line to its end and then stops', () => {
+    const entry = DATA.narrations['latvian gambit'];
+    for (let n = 0; n < entry.spine.length; n += 1) {
+      expect(bakedSpineNextMove('Latvian Gambit', play(entry.spine.slice(0, n))))
+        .toBe(entry.spine[n]);
+    }
+    expect(bakedSpineNextMove('Latvian Gambit', play(entry.spine))).toBeNull();
+  });
+
+  it('picks the line up through a transposition', () => {
+    // Same position, other move order — a bake is about the board, not the
+    // route taken to it.
+    expect(bakedSpineNextMove('Latvian Gambit', play(['Nf3', 'f5', 'e4', 'e5']))).toBe('Bc4');
+  });
+
+  it('never steers a game that is somewhere the bake does not go', () => {
+    expect(bakedSpineNextMove('Latvian Gambit', play(['d4', 'd5']))).toBeNull();
+    expect(bakedSpineNextMove(null, play(['e4', 'e5']))).toBeNull();
   });
 });

@@ -150,7 +150,7 @@ import { parseCoachMoveCommand } from '../../services/coachMoveCommand';
 import { sanToSpeech } from '../../utils/sanToSpeech';
 import { teachingSourceForBoard, teachingFactLine, generalizedTeaching, noteCoverageForLine, spokenBeatText, notesForOpening } from '../../services/danyaTeachingService';
 import { secondarySupportNotes } from '../../services/secondaryCorpora';
-import { bakedTeachingForPly } from '../../services/bakedWalkthroughNarration';
+import { bakedTeachingForPly, bakedSpineNextMove } from '../../services/bakedWalkthroughNarration';
 import { noteStaysInScope } from '../../services/noteAnchorIntegrity';
 
 /** How many note-covered plies an opening needs before the NOTES take the
@@ -5114,6 +5114,23 @@ export function CoachTeachPage(): JSX.Element {
       walkthrough.tree?.openingName ??
       useCoachMemoryStore.getState().intendedOpening?.name ??
       null;
+    // 1a) THE LINE WE HAVE TEACHING FOR, when the student asked for it and the
+    //     game is still on it. The book and the bake are two different
+    //     continuations of the same opening: asked for the Latvian, the book
+    //     answered Nxe5 while the authored spine runs Bc4, so the game left
+    //     the taught line at move three and 10 of its 14 plies of reviewed
+    //     prose were unreachable in the game the student asked for. Same
+    //     provenance rules — the bake is DB-derived and gated before it ships
+    //     — so preferring it costs nothing and buys the whole opening.
+    if (openingName) {
+      try {
+        const next = bakedSpineNextMove(openingName, fen);
+        if (next) {
+          const probe = new Chess(fen);
+          if (probe.move(next)) return next;
+        }
+      } catch { /* fall through to the book */ }
+    }
     if (openingName) {
       try {
         const bookMoves = getOpeningMoves(openingName);
@@ -5473,8 +5490,20 @@ export function CoachTeachPage(): JSX.Element {
       // is three plies of teaching too late.
       const wanted = useCoachMemoryStore.getState().intendedOpening?.name
         ?? announcedOpeningNameRef.current;
-      const baked = bakedTeachingForPly(wanted, history);
-      if (baked && !bakedPlySeenRef.current.has(baked.ply)) {
+      // TWO plies happened this turn — yours and mine — and this runs once,
+      // after the reply. So the only ply ever asked about was the coach's, and
+      // when the coach stepped off the line the student's own move went
+      // untaught even though it was still on it. The audit watched f5 go by in
+      // silence: the move that IS the Latvian, on the line, with authored
+      // prose about it sitting on disk. Ask about the reply first, then about
+      // the move the student actually made.
+      const unspoken = (h: string[]) => {
+        const hit = bakedTeachingForPly(wanted, h);
+        return hit && !bakedPlySeenRef.current.has(hit.ply) ? hit : null;
+      };
+      const baked = unspoken(history)
+        ?? (history.length > 1 ? unspoken(history.slice(0, -1)) : null);
+      if (baked) {
         bakedPlySeenRef.current.add(baked.ply);
         bakedLine = baked.text;
         bakedPly = baked.ply;

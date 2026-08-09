@@ -10,6 +10,7 @@
 // lookup: a hit replaces the generator's LLM spine narration with the baked
 // script — deterministic, the same words every session, zero runtime
 // generation for the covered line (G0: nothing is decided at runtime).
+import { Chess } from 'chess.js';
 import bakedFile from '../data/walkthrough-narrations.json';
 
 interface BakedIdea {
@@ -259,4 +260,60 @@ export function bakedTeachingForPly(
   // moves have already decided; several means the game has not yet committed
   // to an opening, and saying which one it is would be the invention.
   return candidates.length === 1 ? candidates[0].hit : null;
+}
+
+/** Placement + side to move — the part of a FEN that says what the position
+ *  IS. Clocks and move numbers differ between two routes to the same board,
+ *  and a transposition is still the same position to teach. */
+const positionKey = (fen: string): string => fen.split(' ').slice(0, 4).join(' ');
+
+/**
+ * The baked line's next move from this position, when the student asked for an
+ * opening we have authored teaching for and the game is still on it.
+ *
+ * The coach already had a book continuation, and the book and the bake are two
+ * different continuations of the same opening: asked for the Latvian, the book
+ * answered Nxe5 where the authored spine runs Bc4. The game left the taught
+ * line at move three, so 10 of its 14 plies of reviewed prose could not be
+ * reached in the very game the student asked to be shown (David 2026-08-09:
+ * "the entire opening needs teaching").
+ *
+ * Position-keyed rather than history-keyed, so a transposition into the line
+ * still picks it up. Returns null the moment the board is somewhere the bake
+ * never goes, which is what keeps this from steering a game off its own course.
+ */
+export function bakedSpineNextMove(
+  openingName: string | null | undefined,
+  fen: string,
+): string | null {
+  if (!openingName) return null;
+  const want = positionKey(fen);
+
+  const walk = (entry: BakedNarration): string | null => {
+    try {
+      const board = new Chess();
+      for (const san of entry.spine) {
+        if (positionKey(board.fen()) === want) return san;
+        if (!board.move(san)) return null;
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  };
+
+  const exact = DATA.narrations[norm(openingName)];
+  if (exact) return walk(exact);
+
+  let best: string | null = null;
+  let bestScore = 0;
+  for (const [key, entry] of Object.entries(DATA.narrations)) {
+    const score = nameScore(openingName, key);
+    if (score < 0.6 || score < bestScore) continue;
+    const san = walk(entry);
+    if (!san) continue;
+    best = san;
+    bestScore = score;
+  }
+  return best;
 }
