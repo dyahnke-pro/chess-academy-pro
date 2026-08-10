@@ -14,7 +14,7 @@
 // here comes with the specific thing that changed on the board.
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { findConcession, concessionPackage } from './concessionBeat';
+import { findConcession, concessionPackage, findStudentDrawback } from './concessionBeat';
 
 describe('the beat fires only on a drawback code can NAME', () => {
   it('says nothing when the coach played the engine\'s move', () => {
@@ -186,5 +186,50 @@ describe('it survives nonsense without inventing anything', () => {
     expect(findConcession({
       fen: 'not a fen', playedSan: 'e4', bestSan: 'd4', coachColor: 'white',
     })).toBeNull();
+  });
+});
+
+describe('the backward look — why the STUDENT\'s move was bad', () => {
+  // David 2026-08-10: "it can't see the last move or inaccuracy. Can we have
+  // the coach mention why my previous move was bad? Have the PV look backward?"
+  //
+  // The look-ahead only faces forward — it reads the engine's line from HERE,
+  // so a move already played is behind it. The comparison that names a drawback
+  // does not care which direction it points: give it the student's move and it
+  // says what THEY gave up, by the same rule (only when code can name it).
+  const FEN = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 6 5';
+
+  it('names what the student\'s own move handed over', () => {
+    const d = findStudentDrawback({ fen: FEN, playedSan: 'Bb3', bestSan: 'O-O', studentColor: 'white' });
+    expect(d, 'the backward look said nothing about a real concession').not.toBeNull();
+    expect(d?.square).toBe('b4');
+    expect(d?.said).toContain('b4');
+  });
+
+  it('speaks to the student, not as them', () => {
+    const d = findStudentDrawback({ fen: FEN, playedSan: 'Bb3', bestSan: 'O-O', studentColor: 'white' });
+    expect(d?.said).toMatch(/\byour\b/i);
+    expect(d?.said, 'the coach spoke as if it had played the move').not.toMatch(/^I\b|\bmy\b/i);
+  });
+
+  it('never scolds and never apologises', () => {
+    const d = findStudentDrawback({ fen: FEN, playedSan: 'Bb3', bestSan: 'O-O', studentColor: 'white' });
+    const whole = `${d?.said} ${d?.opening}`.toLowerCase();
+    for (const word of ['blunder', 'careless', 'mistake', 'bad move', 'sorry', 'should have']) {
+      expect(whole, `the coach lectured: ${whole}`).not.toContain(word);
+    }
+  });
+
+  it('never hands over the punishing move', () => {
+    const d = findStudentDrawback({ fen: FEN, playedSan: 'Bb3', bestSan: 'O-O', studentColor: 'white' });
+    for (const part of [d?.said ?? '', d?.opening ?? '']) {
+      expect(part, `a move leaked: ${part}`).not.toMatch(/\b[NBRQK][a-h]?[1-8]?x?[a-h][1-8]\b/);
+    }
+  });
+
+  it('stays silent on a move with no nameable drawback', () => {
+    for (const quiet of ['Nc3', 'd3', 'h3']) {
+      expect(findStudentDrawback({ fen: FEN, playedSan: quiet, bestSan: 'O-O', studentColor: 'white' })).toBeNull();
+    }
   });
 });

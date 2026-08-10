@@ -28,6 +28,7 @@ import { Chess } from 'chess.js';
 import { stockfishEngine } from '../services/stockfishEngine';
 import { detectSlip, slipWarrantsInterjection, isNearBest, slipSeverityLabel, type SlipSeverity } from '../services/slipDetector';
 import { startDial, recordAttempt, type HintDial } from '../services/hintRegister';
+import { findStudentDrawback } from '../services/concessionBeat';
 import { buildWhyPrompt, buildGroundedReveal, buildSlipReveal, captureMisconception, findMoverTactic, withReasonLead } from '../services/discussionPractice';
 import { buildMisconceptionCallback } from '../services/misconceptionCallbacks';
 import { buildMoveReasonOptions } from '../services/moveReasonOptions';
@@ -120,6 +121,12 @@ export interface UseDiscussionPracticeResult {
    *  actually found (David 2026-08-09). Read it at narration time; it moves on
    *  its own as the game goes. */
   hintDial: HintDial;
+  /** WHY THE LAST MOVE WAS BAD, when code can name it (David 2026-08-10: "can
+   *  we have the coach mention why my previous move was bad? Have the PV look
+   *  backward?"). The look-ahead only faces forward, so a move already played
+   *  is behind it; this is the same drawback comparison aimed at the student's
+   *  own move. Null when nothing nameable was given up — which is most moves. */
+  lastMoveDrawback: { line: string; square: string } | null;
   evaluatePlayerMove: (args: EvaluatePlayerMoveArgs) => Promise<void>;
   raiseSlipPrompt: (args: RaiseSlipPromptArgs) => void;
   submitReason: (reason: string) => Promise<void>;
@@ -222,6 +229,7 @@ export function useDiscussionPractice(
    *  found/missed run. Seeded from the rating on the first move evaluated,
    *  because the rating arrives per-move rather than at construction. */
   const [hintDial, setHintDial] = useState<HintDial>(() => startDial(undefined));
+  const [lastMoveDrawback, setLastMoveDrawback] = useState<{ line: string; square: string } | null>(null);
   const dialSeededRef = useRef(false);
 
   // TWO different switches, deliberately separated (David 2026-08-05).
@@ -293,6 +301,21 @@ export function useDiscussionPractice(
       // would let a dozen prepared plies talk the register up to subtle right
       // before the student reaches the middlegame — the exact moment they need
       // the help most.
+      // THE BACKWARD LOOK. Same comparison the coach runs on its own moves,
+      // pointed at the student's — so it fires only when code can NAME what the
+      // move handed over, never on "that was worse by 80 centipawns".
+      setLastMoveDrawback(bestSan
+        ? (() => {
+          const d = findStudentDrawback({
+            fen: args.fenBefore,
+            playedSan: args.playedSan,
+            bestSan,
+            studentColor: args.playerColor,
+          });
+          return d ? { line: `${d.said} ${d.opening}`, square: d.square } : null;
+        })()
+        : null);
+
       const followedBook = args.inBook && !!args.bookMoveSan
         && args.playedSan.replace(/[+#]$/, '') === args.bookMoveSan.replace(/[+#]$/, '');
       if (!followedBook) {
@@ -629,6 +652,7 @@ export function useDiscussionPractice(
     teach,
     goodMove,
     hintDial,
+    lastMoveDrawback,
     evaluatePlayerMove,
     raiseSlipPrompt,
     submitReason,

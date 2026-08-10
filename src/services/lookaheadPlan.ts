@@ -303,7 +303,16 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
  * Empty when there is nothing to say — honest, and better than a sentence that
  * means nothing.
  */
-export function describePlan(plan: SidePlan, voice: 'mine' | 'theirs'): string {
+export function describePlan(
+  plan: SidePlan,
+  voice: 'mine' | 'theirs',
+  /** Clauses already spoken this game. A plan is stable across several plies by
+   *  nature — the same pin is still coming three moves later — so without this
+   *  the coach says "you want to land a pin" three turns running. Measured on a
+   *  five-ply sample: "There is already a pin on the board" four plies in a row
+   *  and the same intention repeated three times. Caller owns the set. */
+  said?: Set<string>,
+): string {
   const subject = voice === 'mine' ? 'You' : 'They';
   const possessive = voice === 'mine' ? 'your' : 'their';
   const theirKing = voice === 'mine' ? 'their king' : 'your king';
@@ -349,8 +358,11 @@ export function describePlan(plan: SidePlan, voice: 'mine' | 'theirs'): string {
   if (plan.outposts.length > 0) add(35, `plant a piece on ${plan.outposts[0]} where no pawn can chase it`);
   if (plan.opening.length > 0) add(25, `open the ${plan.opening[0]}-file`);
   if (plan.trading.length > 0) {
-    const unique = [...new Set(plan.trading)];
-    add(20, `trade off ${unique.length > 1 ? 'pieces' : `the ${unique[0]}`}`);
+    // A PAWN TRADE IS NOT A PLAN. "They want to trade off the pawn" was in the
+    // five-narration sample and says nothing — pawns come off in almost every
+    // line. Trading a PIECE is a real intention; trading a pawn is weather.
+    const unique = [...new Set(plan.trading)].filter((p) => p !== 'pawn');
+    if (unique.length > 0) add(20, `trade off ${unique.length > 1 ? 'pieces' : `the ${unique[0]}`}`);
   }
 
   if (clauses.length === 0) {
@@ -361,7 +373,15 @@ export function describePlan(plan: SidePlan, voice: 'mine' | 'theirs'): string {
     return `${subject} bring ${possessive} pieces toward ${squares} over the next few moves.`;
   }
 
-  const shown = clauses.sort((a, b) => b.weight - a.weight).slice(0, 3).map((c) => c.text);
+  const ranked = clauses.sort((a, b) => b.weight - a.weight);
+  // Skip what has already been said and DESCEND, rather than suppressing and
+  // falling silent — the same rule the positional read follows, and for the
+  // same reason: a repeated line and a missing line are both failures, and
+  // there is usually a third true thing to say.
+  const fresh = said ? ranked.filter((c) => !said.has(c.text)) : ranked;
+  const shown = (fresh.length > 0 ? fresh : []).slice(0, 3).map((c) => c.text);
+  if (shown.length === 0) return '';
+  for (const t of shown) said?.add(t);
   const list = shown.length === 1
     ? shown[0]
     : `${shown.slice(0, -1).join(', ')} and ${shown[shown.length - 1]}`;
@@ -379,6 +399,8 @@ export function describePlan(plan: SidePlan, voice: 'mine' | 'theirs'): string {
 export function buildLookaheadPlan(
   line: PvLine,
   studentColor: 'white' | 'black',
+  /** Clauses already spoken this game — see `describePlan`. */
+  said?: Set<string>,
 ): LookaheadPlan | null {
   if (line.plies.length < 4) return null;
 
@@ -386,8 +408,8 @@ export function buildLookaheadPlan(
   const black = planFor(line.plies, 'black');
   const mine = studentColor === 'white' ? white : black;
   const theirs = studentColor === 'white' ? black : white;
-  mine.text = describePlan(mine, 'mine');
-  theirs.text = describePlan(theirs, 'theirs');
+  mine.text = describePlan(mine, 'mine', said);
+  theirs.text = describePlan(theirs, 'theirs', said);
   // Assign back so `white`/`black` carry the same strings as `mine`/`theirs` —
   // they are the same objects, but say so rather than relying on it.
   if (!white.text) white.text = white === mine ? mine.text : theirs.text;
@@ -433,7 +455,16 @@ function readPosition(line: PvLine): PositionRead {
  * the first. Same construction rules — fixed templates, computed values, no
  * model.
  */
-export function positionReadLine(read: PositionRead, studentColor: 'white' | 'black'): string {
+export function positionReadLine(
+  read: PositionRead,
+  studentColor: 'white' | 'black',
+  said?: Set<string>,
+): string {
+  const once = (key: string, line: string): string | null => {
+    if (said?.has(key)) return null;
+    said?.add(key);
+    return line;
+  };
   const mine = studentColor === 'white' ? read.islands.white : read.islands.black;
   const theirs = studentColor === 'white' ? read.islands.black : read.islands.white;
   const myHalfOpen = studentColor === 'white' ? read.halfOpen.white : read.halfOpen.black;
@@ -441,20 +472,25 @@ export function positionReadLine(read: PositionRead, studentColor: 'white' | 'bl
   // Opposite wings first: it reframes everything else. Both sides get to
   // attack without being attacked back, so speed beats material.
   if (read.oppositeWings) {
-    return 'The kings have gone to opposite wings — both sides can attack without being attacked back, so speed matters more than material here.';
+    const l = once('opposite-wings', 'The kings have gone to opposite wings — both sides can attack without being attacked back, so speed matters more than material here.');
+    if (l) return l;
   }
   const named = read.tacticsNow.map(tacticWord).filter((t): t is string => t !== null);
   if (named.length > 0) {
-    return `There is already a ${named[0]} on the board — it is there whether or not anyone plays into it.`;
+    const l = once(`tactic-${named[0]}`, `There is already a ${named[0]} on the board — it is there whether or not anyone plays into it.`);
+    if (l) return l;
   }
   if (read.endgameType) {
-    return `This is a ${read.endgameType} endgame; the pawns decide it from here.`;
+    const l = once('endgame', `This is a ${read.endgameType} endgame; the pawns decide it from here.`);
+    if (l) return l;
   }
   if (theirs > mine) {
-    return `They have ${theirs} pawn islands to your ${mine} — more islands means more things to defend.`;
+    const l = once('islands', `They have ${theirs} pawn islands to your ${mine} — more islands means more things to defend.`);
+    if (l) return l;
   }
   if (myHalfOpen.length > 0) {
-    return `The ${myHalfOpen[0]}-file is half-open for you; that is where a rook belongs.`;
+    const l = once(`halfopen-${myHalfOpen[0]}`, `The ${myHalfOpen[0]}-file is half-open for you; that is where a rook belongs.`);
+    if (l) return l;
   }
   return '';
 }
@@ -496,6 +532,7 @@ export function planFromUci(
   fen: string,
   uciMoves: readonly string[],
   studentColor: 'white' | 'black',
+  said?: Set<string>,
 ): LookaheadPlan | null {
   if (uciMoves.length < 4) return null;
   let board: ChessCtor;
@@ -531,5 +568,6 @@ export function planFromUci(
   return buildLookaheadPlan(
     { plies, rootEvalCp: 0, terminalEvalCp: null, delivers: true, closeAlternative: null },
     studentColor,
+    said,
   );
 }

@@ -288,3 +288,58 @@ export function concessionPackage(c: Concession): {
     withhold: `Do NOT name the move that punishes this, and do NOT apologise for the concession — state it plainly and let them find it.`,
   };
 }
+
+/**
+ * THE BACKWARD LOOK — why the STUDENT's last move was bad.
+ *
+ * David 2026-08-10: "it can't see the last move or inaccuracy. Can we have the
+ * coach mention why my previous move was bad? Have the PV look backward?"
+ *
+ * The look-ahead only ever faces forward: it reads the engine's line from HERE,
+ * so a move the student has already played is behind it and invisible. The
+ * comparison that names a drawback does not care which direction it points,
+ * though — it takes a played move, the engine's move, and a colour. Aim it at
+ * the student's own last move and it says what THEY gave up, by the same rule:
+ * only when code can name it.
+ *
+ * Second person, and no scolding. The coach states what the move handed over
+ * and stops; it is the same register as its own concessions, and for the same
+ * reason — a player who is told what changed learns more than one who is told
+ * they were careless.
+ */
+export function findStudentDrawback(args: {
+  /** The position BEFORE the student moved. */
+  fen: string;
+  /** What the student played. */
+  playedSan: string;
+  /** What the engine preferred. */
+  bestSan: string;
+  /** The student's colour. */
+  studentColor: 'white' | 'black';
+}): Concession | null {
+  const found = findConcession({
+    fen: args.fen,
+    playedSan: args.playedSan,
+    bestSan: args.bestSan,
+    coachColor: args.studentColor,
+  });
+  if (!found) return null;
+  // The same fact, spoken to the person who caused it. `findConcession` writes
+  // in the first person because the coach is describing its OWN move; here the
+  // mover is the student, so the pronouns flip and nothing else changes.
+  const said = ({
+    'defender-left': `That took your last defender off ${found.square}.`,
+    'pawn-weakened': `That leaves your pawn on ${found.square} isolated — no pawn of yours can defend it now.`,
+    'file-opened': `That opened the file next to your own king.`,
+    'piece-offside': `Your piece has gone a long way from your king on ${found.square}.`,
+    'outpost-conceded': `That hands me ${found.square} — ${found.opening.toLowerCase()}`,
+  })[found.kind];
+  return {
+    kind: found.kind,
+    square: found.square,
+    said,
+    // What it costs them, without naming the move that punishes it — the
+    // honesty contract holds looking backward as much as forward.
+    opening: `Worth seeing before it costs you something.`,
+  };
+}

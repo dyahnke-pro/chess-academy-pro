@@ -1271,6 +1271,10 @@ export function CoachTeachPage(): JSX.Element {
    *  spoken about a position it was not computed from — the stale-beat class of
    *  bug, prevented rather than validated. */
   const lookaheadPlanRef = useRef<{ fen: string; text: string } | null>(null);
+  /** Plan clauses already spoken this game. A plan is stable across plies — the
+   *  same pin is still coming three moves later — so without this the coach
+   *  chants. A five-ply sample from a real game repeated one line four times. */
+  const planSaidRef = useRef<Set<string>>(new Set());
   /** Positional observations already spoken this game — see `buildPositionalRead`.
    *  Without it an uncastled king repeats the same sentence every ply until it
    *  castles, and the boundary repeat-guard turns each of those back into the
@@ -1533,6 +1537,11 @@ export function CoachTeachPage(): JSX.Element {
     walkthrough.stop();
     voiceService.stop();
     gameRef.current.resetGame();
+    // A new game is a new set of things to say. Both said-sets are per-GAME,
+    // not per-session — without the reset the second game inherits the first
+    // one's memory and starts out quieter than it should.
+    planSaidRef.current.clear();
+    positionalSaidRef.current.clear();
     gameRef.current.setOrientation(studentSide);
     setPlayerColor(studentSide);
     liveFenRef.current = gameRef.current.fen;
@@ -5907,6 +5916,13 @@ export function CoachTeachPage(): JSX.Element {
     // primary first heard by user when corpus runs out" — so it is offered
     // whenever it was computed for THIS board, and `voicePackage` ranks it
     // above the borrowed corpus tiers and below a note authored right here.
+    // WHY THE LAST MOVE WAS BAD — the look-ahead pointed backward. Ranked as a
+    // `threat` because that is exactly what it is: danger the student created
+    // and has not dealt with. Fires only when code could NAME the drawback, so
+    // it is rare and never "that was worse by 80 centipawns".
+    const drawbackLine = discussion.lastMoveDrawback?.line ?? null;
+    if (drawbackLine) factLines.push(`Last move gave up: ${drawbackLine}`);
+
     let planLine: string | null = null;
     if (lookaheadPlanRef.current?.fen === args.fenAfterReply) {
       planLine = lookaheadPlanRef.current.text;
@@ -5947,6 +5963,7 @@ export function CoachTeachPage(): JSX.Element {
       // it: a plan about THIS board beats a real note about a different one.
       // `generalizedTeaching` still frames it honestly, so it is never heard as
       // a claim about these squares — it just no longer outranks one.
+      ...(drawbackLine ? [{ kind: 'threat' as const, text: drawbackLine, fen: args.fenAfterReply }] : []),
       ...(planLine ? [{ kind: 'plan' as const, text: planLine, fen: args.fenAfterReply }] : []),
       ...(teachingLine ? [{ kind: 'borrowed' as const, text: teachingLine, fen: args.fenAfterReply }] : []),
       // `observation`, not `note` — it is filler, and while it shared the
@@ -6417,7 +6434,7 @@ export function CoachTeachPage(): JSX.Element {
                     try {
                       const pv = studentBest?.topLines?.[0]?.moves;
                       const plan = Array.isArray(pv)
-                        ? planFromUci(probe.fen(), pv, playerColor)
+                        ? planFromUci(probe.fen(), pv, playerColor, planSaidRef.current)
                         : null;
                       if (plan) {
                         const key = keySquareLine(plan.keySquares);
@@ -6425,7 +6442,7 @@ export function CoachTeachPage(): JSX.Element {
                         // to it — a student needs the first to understand the
                         // second. Deterministic like the rest: fixed templates,
                         // computed values, no model between board and words.
-                        const board = positionReadLine(plan.read, playerColor);
+                        const board = positionReadLine(plan.read, playerColor, planSaidRef.current);
                         const said = [key, board, plan.theirs.text, plan.mine.text]
                           .filter(Boolean)
                           .slice(0, discussion.hintDial.register === 'obvious' ? 3 : 2)

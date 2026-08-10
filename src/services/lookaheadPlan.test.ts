@@ -95,7 +95,26 @@ describe('two plans, one line', () => {
     );
     expect(plan?.white.trading).toContain('pawn');
     expect(plan?.black.trading).toContain('pawn');
-    expect(plan?.white.text).toContain('trade');
+  });
+
+  it('does not call a PAWN trade a plan', () => {
+    // It was in the five-narration sample — "They want to win a pawn, open the
+    // d-file and trade off the pawn" — and says nothing: pawns come off in
+    // almost every line. Trading a PIECE is an intention; trading a pawn is
+    // weather.
+    const plan = buildLookaheadPlan(line(plies(START, ['e4', 'd5', 'exd5', 'Qxd5'])), 'white');
+    expect(plan?.white.text).not.toContain('trade off the pawn');
+  });
+
+  it('DOES call a piece trade a plan', () => {
+    const plan = buildLookaheadPlan(
+      line(plies(START, ['e4', 'e5', 'Nf3', 'Nc6', 'Nxe5', 'Nxe5'])),
+      'white',
+    );
+    // White's Nxe5 takes a PAWN; it is Black who takes the knight back — so
+    // the piece-trade clause belongs to Black, which is also a second check
+    // that trades land on the side that made them.
+    expect(plan?.black.text).toContain('trade off the knight');
   });
 
   it('refuses to call a move and a reply a plan', () => {
@@ -444,5 +463,54 @@ describe('the read sees the board as it stands, not only what the line changes',
     // whose weakness it is, not lose it.
     expect(positionReadLine(read, 'white')).toContain('They have 3');
     expect(positionReadLine(read, 'black')).not.toContain('They have 3');
+  });
+});
+
+describe('the plan does not repeat itself', () => {
+  // A plan is stable across several plies by nature — the same pin is still
+  // coming three moves later — so without a said-set the coach chants. Measured
+  // on a five-narration sample from a real game: "There is already a pin on the
+  // board" four plies running, and the same intention three times.
+  const P: SidePlan = {
+    color: 'white', headingFor: ['e4', 'f3'], opening: ['d'], trading: ['knight'],
+    outposts: ['e5'], passedPawns: [], materialSwing: 1, shieldStripped: 0,
+    tactic: 'pin', mates: false, nearEnemyKing: 0, text: '',
+  };
+
+  it('says something different on the next ply', () => {
+    const said = new Set<string>();
+    const first = describePlan(P, 'mine', said);
+    const second = describePlan(P, 'mine', said);
+    expect(first).not.toBe('');
+    expect(second, 'the coach repeated itself verbatim').not.toBe(first);
+  });
+
+  it('DESCENDS rather than falling silent while it still has facts', () => {
+    // Suppressing without descending turns the ply into silence, which is the
+    // other half of the same failure.
+    const said = new Set<string>();
+    const lines = [1, 2].map(() => describePlan(P, 'mine', said)).filter(Boolean);
+    expect(lines.length).toBe(2);
+    expect(new Set(lines).size).toBe(2);
+  });
+
+  it('goes quiet once it has genuinely said everything', () => {
+    const said = new Set<string>();
+    for (let i = 0; i < 6; i += 1) describePlan(P, 'mine', said);
+    expect(describePlan(P, 'mine', said)).toBe('');
+  });
+
+  it('the board read stops repeating too', () => {
+    const read = {
+      tacticsNow: ['pin'], oppositeWings: false,
+      islands: { white: 1, black: 3 }, halfOpen: { white: ['c'], black: [] },
+      endgameType: null, materialBalance: 0, evalSwingCp: null,
+    };
+    const said = new Set<string>();
+    const a = positionReadLine(read, 'white', said);
+    const b = positionReadLine(read, 'white', said);
+    expect(a).toContain('pin');
+    expect(b, 'the same board fact was spoken twice running').not.toBe(a);
+    expect(b, 'it fell silent instead of descending to the next true fact').not.toBe('');
   });
 });
