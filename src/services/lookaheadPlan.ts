@@ -391,6 +391,12 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
   // more striking idea than two.
   const maneuver = [...journeys.values()]
     .filter((j) => j.path.length >= 3)
+    // A PIECE THAT COMES HOME HAS NOT BEEN REROUTED. From the prod transcript:
+    // "walk the queen round from d1 to d1, by way of f3" — a real journey, and
+    // a nonsense sentence. A round trip is a piece being chased back, or the
+    // engine marking time; either way it is not the regrouping this clause is
+    // for.
+    .filter((j) => j.path[0] !== j.path[j.path.length - 1])
     .sort((a, b) => b.path.length - a.path.length)[0] ?? null;
 
   const headingFor = [...destinations.entries()]
@@ -504,15 +510,6 @@ export function describePlan(
   // survive move by move.
   if (plan.checks >= 2) {
     add(30, `check you ${plan.checks === 2 ? 'twice' : `${plan.checks} times`} along the way`);
-  }
-  // THE REROUTE — the most characteristic thing a coach says about a line, and
-  // the plan had the data and no sentence for it. `headingFor` kept the
-  // destinations and lost the journey, so a three-move regrouping read as two
-  // unrelated squares. Ranked just under a landing tactic: concrete, visual,
-  // and the thing a student can actually copy next game.
-  if (plan.maneuver) {
-    const { piece, path } = plan.maneuver;
-    add(80, `walk the ${piece} round from ${path[0]} to ${path[path.length - 1]}, by way of ${path.slice(1, -1).join(' and ')}`, path);
   }
   // King attack, scaled by how many pieces are really arriving. Two is a
   // gesture; four is an assault and the sentence should lead with it.

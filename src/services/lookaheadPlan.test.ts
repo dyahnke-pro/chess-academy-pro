@@ -862,3 +862,27 @@ describe('the rest of what the line has to say', () => {
     }
   });
 });
+
+describe('the reroute clause survived its own prod run', () => {
+  // Both of these were found by READING the transcript of an 8/8-green audit,
+  // not by the checks passing. A green run is not the bar.
+  it('says the reroute ONCE', () => {
+    // The clause had been added twice — an interrupted edit that partly
+    // applied — so the coach said "walk the knight round to c6, by way of f3
+    // and d4, walk the knight round from g1 to c6, by way of f3 and d4".
+    const p = buildLookaheadPlan(line(plies(START, ['Nf3', 'e5', 'Nd4', 'd5', 'Nb5', 'a6'])), 'white');
+    const said = p?.white.text ?? '';
+    expect(said.match(/walk the/g)?.length ?? 0, `doubled: ${said}`).toBeLessThanOrEqual(1);
+  });
+
+  it('never calls a round trip a reroute', () => {
+    // "walk the queen round from d1 to d1, by way of f3" — a real journey and
+    // a nonsense sentence. A piece that comes home was chased back or is
+    // marking time; neither is the regrouping this clause is for.
+    // g1 → f3 → g1: the knight ends where it started. (The first fixture I
+    // wrote added a third hop and ended on f3, which is a genuine reroute —
+    // the test was wrong, not the guard.)
+    const p = buildLookaheadPlan(line(plies(START, ['Nf3', 'e5', 'Ng1', 'd5'])), 'white');
+    expect(p?.white.maneuver, 'a round trip was reported as a reroute').toBeNull();
+  });
+});
