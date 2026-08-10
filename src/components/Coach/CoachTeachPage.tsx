@@ -5916,10 +5916,9 @@ export function CoachTeachPage(): JSX.Element {
     // primary first heard by user when corpus runs out" — so it is offered
     // whenever it was computed for THIS board, and `voicePackage` ranks it
     // above the borrowed corpus tiers and below a note authored right here.
-    // WHY THE LAST MOVE WAS BAD — the look-ahead pointed backward. Ranked as a
-    // `threat` because that is exactly what it is: danger the student created
-    // and has not dealt with. Fires only when code could NAME the drawback, so
-    // it is rare and never "that was worse by 80 centipawns".
+    // WHY THE LAST MOVE WAS BAD — the look-ahead pointed backward, and the
+    // FIRST thing spoken when it fires. Rare by construction: only when code
+    // could NAME the drawback, never "that was worse by 80 centipawns".
     const drawbackLine = discussion.lastMoveDrawback?.line ?? null;
     if (drawbackLine) factLines.push(`Last move gave up: ${drawbackLine}`);
 
@@ -5963,7 +5962,9 @@ export function CoachTeachPage(): JSX.Element {
       // it: a plan about THIS board beats a real note about a different one.
       // `generalizedTeaching` still frames it honestly, so it is never heard as
       // a claim about these squares — it just no longer outranks one.
-      ...(drawbackLine ? [{ kind: 'threat' as const, text: drawbackLine, fen: args.fenAfterReply }] : []),
+      // FIRST, above everything (David 2026-08-10). Retrospective before
+      // prospective: what your last move gave up, then what the line does next.
+      ...(drawbackLine ? [{ kind: 'drawback' as const, text: drawbackLine, fen: args.fenAfterReply }] : []),
       ...(planLine ? [{ kind: 'plan' as const, text: planLine, fen: args.fenAfterReply }] : []),
       ...(teachingLine ? [{ kind: 'borrowed' as const, text: teachingLine, fen: args.fenAfterReply }] : []),
       // `observation`, not `note` — it is filler, and while it shared the

@@ -42,6 +42,15 @@ import { falseConfigurationClaim } from './configurationClaims';
 
 /** What produced this line. Also its priority — see `RANK`. */
 export type VoiceFactKind =
+  /** WHY THE MOVE JUST PLAYED WAS BAD — the backward look (`concessionBeat`).
+   *
+   *  David 2026-08-10: "I want the reason for a bad move to come first then
+   *  forward looking to be spoke second." It outranks even the corpus, and the
+   *  90/10 rule survives that because this is not a competing teaching lane: it
+   *  fires only when code can NAME what the student's own move handed over,
+   *  which is rare, and when it does it is the most immediate thing on the
+   *  board. Nothing is dropped — the note is still spoken, right behind it. */
+  | 'drawback'
   /** TEACHING: a masterclass beat or a corpus note. The heart of the coach. */
   | 'note'
   /** An opportunity the detectors proved FOR the student — mate in one, a
@@ -111,11 +120,21 @@ export interface VoiceFact {
  *  filler, split out from `note` so "your pawn on a2 is isolated" can never
  *  again share a rank with a masterclass beat. */
 const RANK: Record<VoiceFactKind, number> = {
+  // THE ORDER DAVID NAMED (2026-08-10): "I want backwards first, then forward,
+  // then gem, then threat." Retrospective before prospective before
+  // opportunity before danger — what your last move cost, what the line does
+  // next, the punishable slip, the thing coming at you.
+  drawback: 12,
+  plan: 11,
+  gem: 10,
+  threat: 9,
+  // ⚠️ This puts the corpus note BELOW those four, which reverses the locked
+  // "teaching leads" ordering (the 90/10 rule). Nothing is dropped — rank only
+  // decides what is heard FIRST, and the note is still spoken right behind —
+  // but it is a deliberate reordering of a locked rule, recorded here so a
+  // future session does not quietly "fix" it back.
   note: 8,
   tactic: 7,
-  gem: 6,
-  threat: 5,
-  plan: 4,
   borrowed: 3,
   opening: 2,
   computed: 1,
