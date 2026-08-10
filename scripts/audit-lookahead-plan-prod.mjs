@@ -259,7 +259,35 @@ async function main() {
       );
     }
 
-    const rawId = lines.filter((l) => /want to land a [a-z]+_[a-z]+/.test(l));
+    // ── NO DOUBLE SENTENCE. David 2026-08-10: "I think I heard a double
+    //    sentence." He had, five times in one session — two lanes reading the
+    //    same loose piece and both saying so, differing only in the moral
+    //    bolted on the end. The package now refuses them; this proves it on
+    //    the running app, where the lanes actually meet.
+    const doubles = [];
+    for (const utterance of lines) {
+      const sents = utterance.split(/(?<=[.!?])\s+/)
+        .map((s) => s.toLowerCase().replace(/[^a-z0-9]/g, ''))
+        .filter((s) => s.length > 12);
+      for (let i = 0; i < sents.length; i += 1) {
+        for (let j = i + 1; j < sents.length; j += 1) {
+          let n = 0;
+          while (n < Math.min(sents[i].length, sents[j].length) && sents[i][n] === sents[j][n]) n += 1;
+          if (n >= 24 && /[a-h][1-8]/.test(sents[i].slice(0, n))) doubles.push(sents[i].slice(0, n));
+        }
+      }
+    }
+    record(
+      'no sentence said twice with a different moral',
+      doubles.length === 0,
+      doubles.slice(0, 2).join(' | ') || `clean across ${lines.length} utterance(s)`,
+    );
+
+    // A detector enum read aloud, in either of the two shapes it has taken:
+    // "land a mate_threat" (the plan lane) and "a real back rank here for you"
+    // (the alert lane, underscore-stripped rather than named).
+    const rawId = lines.filter((l) => /want to land a [a-z]+_[a-z]+/.test(l)
+      || /a real (back rank|removal of guard|trapped piece|mate threat) here/i.test(l));
     record('no raw detector identifier reached the voice', rawId.length === 0, rawId.slice(0, 2).join(' | ') || 'clean');
 
     record('no page errors', pageErrors.length === 0, pageErrors.slice(0, 2).join(' | ') || 'clean');

@@ -675,7 +675,17 @@ export function keySquareLine(
   if (said?.has(key)) return '';
   said?.add(key);
   if (top.contested && top.weight >= 16) {
-    return `${top.square} is the square this position turns on — both sides keep coming back to it.`;
+    // "THE square this position turns on" is a SINGULAR claim, and a live prod
+    // run made it twice in five seconds about two different squares — d5, then
+    // d3 (2026-08-10). Each was true of its own line; together they cancel, and
+    // a coach that names the decisive square every move has named nothing. The
+    // superlative is spent once; every later square that earns attention gets
+    // the honest, weaker form.
+    if (!said?.has('keysquare-superlative')) {
+      said?.add('keysquare-superlative');
+      return `${top.square} is the square this position turns on — both sides keep coming back to it.`;
+    }
+    return `${top.square} is contested too — both sides have designs on it.`;
   }
   if (top.contested) {
     return `${top.square} is contested — both sides have designs on it.`;

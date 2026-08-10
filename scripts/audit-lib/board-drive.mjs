@@ -69,9 +69,30 @@ export async function clickMove(page, move, expectedFen, { timeout = 12_000 } = 
   await page.locator(`[data-square="${move.to}"]`).first().click({ timeout: 8000, force: true });
   if (!expectedFen) return true;
   const want = placementOf(expectedFen);
+  // THE COACH CAN BEAT US TO THE CHECK. Waiting only for the post-student-move
+  // placement makes this a race: when the reply lands inside the polling window
+  // the board has already moved PAST the position being waited for, and the
+  // helper reports the move rejected. The audit then blames the app for a move
+  // it accepted — a false red that cost a real castling investigation
+  // (2026-08-10: "the board did not accept O-O", and a hand-driven probe on the
+  // same prod build castled first try).
+  //
+  // So a position ONE LEGAL REPLY past the expectation counts as landed too:
+  // the only way to reach it is through the move we just played.
+  const past = [];
+  try {
+    const board = new Chess(expectedFen);
+    for (const m of board.moves({ verbose: true })) {
+      const probe = new Chess(expectedFen);
+      probe.move(m.san);
+      past.push(placementOf(probe.fen()));
+    }
+  } catch { /* unreadable expectation — fall back to the exact match */ }
   const deadline = Date.now() + timeout;
   while (Date.now() < deadline) {
-    if (samePlacement(await readPlacement(page), want)) return true;
+    const now = await readPlacement(page);
+    if (samePlacement(now, want)) return true;
+    if (past.some((p) => samePlacement(now, p))) return true;
     await sleep(500);
   }
   return false;

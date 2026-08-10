@@ -533,6 +533,38 @@ describe('the read sees the board as it stands, not only what the line changes',
   });
 });
 
+describe('"the square this position turns on" is said once', () => {
+  // From the prod audit transcript, 2026-08-10, five seconds apart:
+  //   "d5 is the square this position turns on — both sides keep coming back."
+  //   "d3 is the square this position turns on — both sides keep coming back."
+  // Each was true of its own line. Together they cancel: a coach that names
+  // THE decisive square every move has named nothing.
+  const hot = () => keySquaresOf(plies(START, ['e4', 'd5', 'exd5', 'Qxd5', 'Nc3', 'Qd8']));
+
+  it('spends the superlative once, then speaks honestly', () => {
+    const said = new Set<string>();
+    expect(keySquareLine(hot(), said)).toContain('turns on');
+    // A different square, same game — it may still be worth naming, but not as
+    // the one the position turns on.
+    const other = keySquaresOf(plies(START, ['d4', 'e5', 'dxe5', 'Nc6', 'Nf3', 'Nxe5']));
+    const second = keySquareLine(other, said);
+    expect(second, `said "turns on" twice: ${second}`).not.toContain('turns on');
+  });
+
+  it('still names the second square rather than going silent', () => {
+    const said = new Set<string>();
+    keySquareLine(hot(), said);
+    const other = keySquaresOf(plies(START, ['d4', 'e5', 'dxe5', 'Nc6', 'Nf3', 'Nxe5']));
+    const second = keySquareLine(other, said);
+    expect(second, 'the weaker form should still speak').not.toBe('');
+  });
+
+  it('without a said-set every caller still gets the strong form', () => {
+    // The set is the caller's memory of ONE game; a fresh game starts fresh.
+    expect(keySquareLine(hot())).toContain('turns on');
+  });
+});
+
 describe('the two sides never say the same sentence twice', () => {
   // David 2026-08-10, after listening back: "I think I heard a double
   // sentence." His iPhone transcript, 02:47:57 —
