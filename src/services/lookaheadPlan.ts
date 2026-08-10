@@ -253,7 +253,20 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
     const taken = capturedPiece(ply.facts.captured);
     if (taken) trading.push(taken);
     if (ply.facts.outpostGained) outposts.push(ply.facts.outpostGained);
-    passedPawns.push(...ply.facts.newPassedPawns);
+    // VERIFY THE PAWN IS ACTUALLY THIS SIDE'S, ON THE BOARD, BEFORE CLAIMING
+    // IT. `newPassedPawns` pools both colours into one untagged list, so
+    // crediting the mover with everything it contains hands a side the
+    // OPPONENT's passed pawn — and a full-game walk duly produced "you want to
+    // create a passed pawn on c2" about a pawn that was neither newly passed
+    // nor, on inspection, passed at all. The board settles it: the square must
+    // hold a pawn of this colour after the ply.
+    const owner = color === 'white' ? 'w' : 'b';
+    for (const sq of ply.facts.newPassedPawns) {
+      try {
+        const piece = new Chess(ply.fenAfter).get(sq as never) as { type?: string; color?: string } | undefined;
+        if (piece?.type === 'p' && piece.color === owner) passedPawns.push(sq);
+      } catch { /* unreadable board — claim nothing */ }
+    }
     materialSwing += ply.facts.materialGained;
     shieldStripped += ply.facts.shieldLost;
     if (!tactic && ply.facts.tacticLanded) tactic = ply.facts.tacticLanded;

@@ -533,3 +533,42 @@ describe('the plan does not repeat itself', () => {
     expect(b, 'it fell silent instead of descending to the next true fact').not.toBe('');
   });
 });
+
+describe('a passed pawn belongs to the side that has it', () => {
+  // `newPassedPawns` pools BOTH colours into one untagged list, so crediting
+  // the mover with everything in it hands a side the opponent's passed pawn.
+  // The board settles it: the square must hold a pawn of that colour.
+  //
+  // Found while chasing "you want to create a passed pawn on c2" in a full-game
+  // walk. That particular claim turned out to be TRUE — by then Bxb5+ had taken
+  // the last black pawn off the b-file and c2 really was passed — but the hole
+  // it exposed was real, so the check stays.
+  it('never credits a side with the other side\'s passed pawn', () => {
+    const GAME = ['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5', 'Bxf3', 'Qxf3', 'dxe5',
+      'Bc4', 'Nf6', 'Qb3', 'Qe7', 'Nc3', 'c6', 'Bg5', 'b5', 'Nxb5', 'cxb5', 'Bxb5+'];
+    const all = new Chess();
+    const uci: string[] = [];
+    for (const san of GAME) { const m = all.move(san); uci.push(`${m.from}${m.to}${m.promotion ?? ''}`); }
+
+    const board = new Chess();
+    for (let i = 0; i < GAME.length; i += 1) {
+      board.move(GAME[i]);
+      const plan = planFromUci(board.fen(), uci.slice(i + 1, i + 9), 'white');
+      if (!plan) continue;
+      // Every claimed passer must be a pawn of that colour somewhere in the
+      // line — verified independently here, from the same board the coach saw.
+      for (const [side, colour] of [[plan.white, 'w'], [plan.black, 'b']] as const) {
+        for (const sq of side.passedPawns) {
+          const probe = new Chess(board.fen());
+          let seen = false;
+          for (const u of uci.slice(i + 1, i + 9)) {
+            try { probe.move({ from: u.slice(0, 2), to: u.slice(2, 4) }); } catch { break; }
+            const piece = probe.get(sq as never) as { type?: string; color?: string } | undefined;
+            if (piece?.type === 'p' && piece.color === colour) { seen = true; break; }
+          }
+          expect(seen, `${colour} was credited with a passed pawn on ${sq} it never had`).toBe(true);
+        }
+      }
+    }
+  });
+});
