@@ -34,6 +34,7 @@ import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } f
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit, stampAuditRunId } from './audit-lib/mute-tts.mjs';
+import { clickMove, awaitCoachReply, appEndedGame } from './audit-lib/board-drive.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
@@ -115,34 +116,42 @@ async function main() {
     await dismissConsent(page);
     await page.waitForTimeout(6000);
 
-    // ── PLAY A REAL GAME. Node-side chess.js mirror picks legal moves only
-    //    (G3); the coach answers on the live board with the real engine.
+    // ── PLAY A REAL GAME. The node-side chess.js mirror picks only legal
+    //    moves (G3); the coach answers on the live board with the real engine,
+    //    and `awaitCoachReply` reads its reply back OFF THE BOARD to keep the
+    //    mirror in step. Without that read-back the mirror desynced after one
+    //    move and the run reported a stalled coach — the audit's bug, blamed on
+    //    the app, which is the failure mode this helper exists to prevent.
     const mirror = new Chess();
-    const OPENING = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'd3', 'Nf6', 'O-O', 'd6'];
+    const OPENING = ['e4', 'Nf3', 'Bc4', 'd3', 'O-O', 'Nc3', 'Bg5', 'h3', 'a3', 'Re1'];
     let played = 0;
-    for (const san of OPENING) {
-      const mv = mirror.moves({ verbose: true }).find((m) => m.san === san);
+    for (const want of OPENING) {
+      const mv = mirror.moves({ verbose: true }).find((m) => m.san === want)
+        ?? mirror.moves({ verbose: true })[0];
       if (!mv) break;
-      const from = page.locator(`[data-square="${mv.from}"]`);
-      const to = page.locator(`[data-square="${mv.to}"]`);
-      if (await from.count() === 0 || await to.count() === 0) break;
-      await from.click({ force: true, timeout: 8000 }).catch(() => {});
-      await to.click({ force: true, timeout: 8000 }).catch(() => {});
-      // The coach thinks; the reply lands on the board and the narration lanes
-      // run behind it. Generous, because a cold engine on prod is slow.
-      await page.waitForTimeout(9000);
-      const landed = await page.evaluate((sq) => !!document.querySelector(`[data-square="${sq}"] [data-piece]`), mv.to);
-      if (!landed) break;
-      mirror.move(san);
+      const probe = new Chess(mirror.fen());
+      probe.move(mv.san);
+      const ok = await clickMove(page, mv, probe.fen());
+      if (!ok) {
+        const ended = await appEndedGame(page);
+        record('the game ran without stalling', !!ended, ended ?? `the board did not accept ${mv.san} at ply ${played * 2}`);
+        break;
+      }
+      mirror.move(mv.san);
       played += 1;
-      // Replay the coach's reply into the mirror by reading the board back.
-      const boardFen = await page.evaluate(() => window.__coachFen ?? null).catch(() => null);
-      if (boardFen) { try { mirror.load(boardFen); } catch { /* keep the mirror as-is */ } }
+      const reply = await awaitCoachReply(page, mirror, { firstMove: played === 1 });
+      if (!reply) {
+        const ended = await appEndedGame(page);
+        if (ended) { record('the game ran to a real end', true, ended); break; }
+        record('the coach replied every turn', false, `no reply after ${mv.san} (ply ${played * 2 - 1})`);
+        break;
+      }
+      mirror.move(reply);
     }
     record('drove a real game on Learn', played >= 4, `${played} student moves landed`);
 
     // ── INSTRUMENT 3a: the local listener (localhost only, by construction).
-    const spoken = listener.events
+    const spoken = listener.getCapturedEvents()
       .filter((e) => e.kind === 'coach-narration-spoken' || e.kind === 'voice-speak-invoked')
       .map((e) => e.narrationText ?? e.summary ?? '')
       .filter(Boolean);
