@@ -193,7 +193,7 @@ export function findConcession(args: {
       square: abandoned,
       said: wentAcross
         ? `I don't rate your play over there, so I've taken a defender off ${abandoned} to play on the other wing.`
-        : `That takes my last defender off ${abandoned}.`,
+        : `That took my last defender off ${abandoned}.`,
       opening: `Nothing of mine is watching ${abandoned} now.`,
     };
   }
@@ -206,7 +206,7 @@ export function findConcession(args: {
     return {
       kind: 'pawn-weakened',
       square: newIsolated,
-      said: `That leaves my pawn on ${newIsolated} isolated — no pawn of mine can ever defend it.`,
+      said: `That left my pawn on ${newIsolated} isolated — no pawn of mine can ever defend it.`,
       opening: `A pawn that can only be defended by pieces is a target for the rest of the game.`,
     };
   }
@@ -222,7 +222,7 @@ export function findConcession(args: {
       return {
         kind: 'file-opened',
         square: `${file}${king[1]}`,
-        said: `Pushing that pawn opens the ${file}-file next to my own king.`,
+        said: `Pushing that pawn opened the ${file}-file next to my own king.`,
         opening: `An open file beside a king is a road, and roads get used.`,
       };
     }
@@ -255,7 +255,7 @@ export function findConcession(args: {
     return {
       kind: 'outpost-conceded',
       square: conceded.square,
-      said: `That hands you ${conceded.square} — ${conceded.reason}.`,
+      said: `That handed you ${conceded.square} — ${conceded.reason}.`,
       opening: `A square my pawns can never challenge is yours for as long as you want it.`,
     };
   }
@@ -327,12 +327,16 @@ export function findStudentDrawback(args: {
   // The same fact, spoken to the person who caused it. `findConcession` writes
   // in the first person because the coach is describing its OWN move; here the
   // mover is the student, so the pronouns flip and nothing else changes.
+  // PAST TENSE, because this is retroactive by definition (David 2026-08-10:
+  // "Retroactive look should be past tense. Future tense when needed"). The
+  // ACTION is finished; a consequence that is still true of the board stays in
+  // the present, which is why the second clauses read as they do.
   const said = ({
     'defender-left': `That took your last defender off ${found.square}.`,
-    'pawn-weakened': `That leaves your pawn on ${found.square} isolated — no pawn of yours can defend it now.`,
+    'pawn-weakened': `That left your pawn on ${found.square} isolated — no pawn of yours can defend it now.`,
     'file-opened': `That opened the file next to your own king.`,
-    'piece-offside': `Your piece has gone a long way from your king on ${found.square}.`,
-    'outpost-conceded': `That hands me ${found.square} — ${found.opening.toLowerCase()}`,
+    'piece-offside': `Your piece went a long way from your king, to ${found.square}.`,
+    'outpost-conceded': `That handed me ${found.square} — ${found.opening.toLowerCase()}`,
   })[found.kind];
   return {
     kind: found.kind,
@@ -340,6 +344,8 @@ export function findStudentDrawback(args: {
     said,
     // What it costs them, without naming the move that punishes it — the
     // honesty contract holds looking backward as much as forward.
+    // FUTURE, deliberately: the drawback has happened, but what it will
+    // cost has not. Both tenses in one beat is the point, not an oversight.
     opening: `Worth seeing before it costs you something.`,
   };
 }

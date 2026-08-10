@@ -233,3 +233,66 @@ describe('the backward look — why the STUDENT\'s move was bad', () => {
     }
   });
 });
+
+describe('tense: retroactive is past, what is coming is future', () => {
+  // David 2026-08-10: "Retroactive look should be past tense. Future tense when
+  // needed." Both halves matter, and they live in the SAME beat — the drawback
+  // has happened, what it will cost has not. Present tense on a finished action
+  // is the drift this guards; so is losing the future clause while fixing it.
+  const FEN = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 6 5';
+  const PRESENT_ACTIONS = /\b(takes|leaves|hands|opens|goes)\b/;
+
+  it('the student-facing drawback speaks of the move in the past', () => {
+    const d = findStudentDrawback({ fen: FEN, playedSan: 'Bb3', bestSan: 'O-O', studentColor: 'white' });
+    expect(d?.said).toMatch(/\b(took|left|opened|went|handed)\b/);
+    expect(d?.said, `present tense on a finished move: ${d?.said}`).not.toMatch(PRESENT_ACTIONS);
+  });
+
+  it('…and of what it will cost in the future', () => {
+    const d = findStudentDrawback({ fen: FEN, playedSan: 'Bb3', bestSan: 'O-O', studentColor: 'white' });
+    expect(d?.opening, 'the future half was lost').toMatch(/\bwill\b|\bbefore it\b/);
+  });
+
+  it('the coach\'s own concession is past for the action too', () => {
+    const c = findConcession({ fen: FEN, playedSan: 'Bb3', bestSan: 'O-O', coachColor: 'white' });
+    expect(c?.said, `present tense on the coach's own played move: ${c?.said}`).not.toMatch(PRESENT_ACTIONS);
+  });
+
+  it('a consequence still true of the board stays present', () => {
+    // "Nothing of mine is watching b4 now" is not a past event — it is the
+    // board as it stands, and past-tensing it would be wrong in the other
+    // direction.
+    const c = findConcession({ fen: FEN, playedSan: 'Bb3', bestSan: 'O-O', coachColor: 'white' });
+    expect(c?.opening).toMatch(/\bis\b|\bare\b/);
+  });
+
+  it('sweeps every drawback kind for a present-tense action verb', () => {
+    // Not just the one position: any move in a spread of real boards, both
+    // colours, both directions.
+    const boards = [
+      FEN,
+      'rnbqkb1r/pppp1ppp/5n2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3',
+      'r1bq1rk1/pp2bppp/2n1pn2/2pp4/3P1B2/2PBPN2/PP1N1PPP/R2Q1RK1 w - - 0 9',
+      'rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2',
+    ];
+    let seen = 0;
+    for (const fen of boards) {
+      const probe = new Chess(fen);
+      const colour = probe.turn() === 'w' ? 'white' : 'black';
+      const legal = probe.moves();
+      for (const played of legal) {
+        const best = legal.find((m) => m !== played);
+        if (!best) continue;
+        for (const found of [
+          findConcession({ fen, playedSan: played, bestSan: best, coachColor: colour }),
+          findStudentDrawback({ fen, playedSan: played, bestSan: best, studentColor: colour }),
+        ]) {
+          if (!found) continue;
+          seen += 1;
+          expect(found.said, `present-tense action: "${found.said}"`).not.toMatch(PRESENT_ACTIONS);
+        }
+      }
+    }
+    expect(seen, 'the sweep never fired — it proved nothing').toBeGreaterThan(0);
+  });
+});
