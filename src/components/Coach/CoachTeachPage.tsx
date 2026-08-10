@@ -167,7 +167,7 @@ import { findLivePunishment } from '../../services/gemCrushLines';
 
 import { buildThinkAloud } from '../../services/thinkAloud';
 import { scaleGap, packageForRegister, readsForRegister } from '../../services/hintRegister';
-import { planFromUci, keySquareLine, positionReadLine, lineShapeLine, tacticWord } from '../../services/lookaheadPlan';
+import { planFromUci, keySquareLine, positionReadLine, lineShapeLine, terminalReadLine, tacticWord } from '../../services/lookaheadPlan';
 import type { LookaheadPlan } from '../../services/lookaheadPlan';
 import { planMarks } from '../../services/planMarks';
 import {
@@ -6692,6 +6692,9 @@ export function CoachTeachPage(): JSX.Element {
                         // for an ending. Read off the same plies; nothing here
                         // costs a second search.
                         const shape = lineShapeLine(plan.shape, planSaidRef.current);
+                        // WHAT THE LINE LEAVES BEHIND — the board where it
+                        // ends, which the read never looked at before.
+                        const after = terminalReadLine(plan.terminal, planSaidRef.current);
                         // EVERYTHING THE PV HAS TO SAY (David 2026-08-10: "I
                         // want to hear everything the PV has to say. Do not
                         // limit it."). This used to keep TWO of the four PV
@@ -6706,7 +6709,7 @@ export function CoachTeachPage(): JSX.Element {
                         // kind of limit: `planSaidRef` stops the same clause
                         // being spoken twice across plies. Saying less is not
                         // the same as not repeating.
-                        const said = [key, board, shape, plan.theirs.text, plan.mine.text]
+                        const said = [key, board, shape, plan.theirs.text, plan.mine.text, after]
                           .filter(Boolean)
                           .join(' ');
                         if (said) {

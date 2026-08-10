@@ -127,6 +127,10 @@ export interface SidePlan {
   tradeSquares: string[];
   /** Where the tactic lands, when one does. */
   tacticSquare: string | null;
+  /** This side's pieces that never move in the whole line, by square — "your
+   *  queenside sleeps through this". A plan is as much about what is left out
+   *  as what is included, and the journeys already say which pieces moved. */
+  idlePieces: string[];
   /** A piece that MOVES TWICE OR MORE inside the horizon, with the squares it
    *  travels through — "the knight goes f3, d2, then c4".
    *
@@ -198,6 +202,27 @@ export interface PlanStep {
  *  A coach watching a variation says "this is all forced" or "everything comes
  *  off here" long before saying who ends up better, and none of it needed new
  *  data — it is the shape of the plies we already replay. */
+/** What the board looks like WHERE THE LINE ENDS, and how that differs from
+ *  where it starts.
+ *
+ *  The read has only ever looked at the root, so every claim about what a line
+ *  LEAVES BEHIND — better pawns, a king on an open file, pieces with nowhere to
+ *  go — had no source. The terminal position is already computed on the last
+ *  ply; nothing here costs a search. */
+export interface TerminalRead {
+  /** Undefended enemy pieces standing at the end of the line, by square. */
+  loose: string[];
+  /** Legal-move count at the terminus for each side, against the root — the
+   *  computable form of "their pieces run out of squares". */
+  mobilityShift: { mine: number; theirs: number };
+  /** Whose king ends up on a file with no pawns on it. */
+  kingOnOpenFile: 'mine' | 'theirs' | null;
+  /** Who comes out of the line with fewer pawn islands. */
+  betterPawns: 'mine' | 'theirs' | null;
+  /** Pawn breaks available once the line finishes, by destination square. */
+  breaks: string[];
+}
+
 export interface LineShape {
   /** Leading plies where the side to move had exactly ONE legal move. There is
    *  nothing to calculate while this is running, and saying so is what tells a
@@ -210,12 +235,32 @@ export interface LineShape {
   traded: number;
   /** The line ends with the queens off and few pieces left. */
   endsInEndgame: boolean;
+  /** A position occurs twice — the line is heading for a repetition, which is
+   *  a draw offer neither side has to accept and a fact the student should
+   *  hear before assuming they are winning. */
+  repeats: boolean;
+  /** Plies before anything is captured. A line where nothing touches for six
+   *  moves is a manoeuvring line, and saying so tells the student what KIND of
+   *  calculation they are doing. Null when nothing is captured at all. */
+  pliesToFirstCapture: number | null;
+  /** A NON-forcing move sitting inside a run of forcing ones — the in-between
+   *  move, and the point of most tactics. Held as its index so a caller can
+   *  count moves rather than plies. */
+  quietMoveIndex: number | null;
+  /** Root → terminal eval swing, mover's perspective, when the line was
+   *  engine-verified. Null on the engine-free path — stated as null rather
+   *  than guessed at. */
+  evalSwingCp: number | null;
+  /** Whose king loses the right to castle inside the line. */
+  castlingLost: 'mine' | 'theirs' | 'both' | null;
 }
 
 export interface LookaheadPlan {
   keySquares: KeySquare[];
   /** How the line behaves — forced, simplifying, heading for an ending. */
   shape: LineShape;
+  /** What the board looks like where the line ends. */
+  terminal: TerminalRead;
   /** The line itself, inside the horizon — where every piece actually goes. */
   path: PlanStep[];
   /** The board as it stands, beside what the line does to it. */
@@ -386,6 +431,25 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
     }
   }
 
+  // WHAT NEVER MOVED. A plan is as much about what is left out as what is in
+  // it — "your queenside sleeps through this line" is a real criticism of a
+  // plan and the journeys already say which pieces took part. Non-pawns only:
+  // pawns sitting still is the normal state of a pawn.
+  const movedFrom = new Set<string>();
+  for (const j of journeys.values()) for (const sq of j.path) movedFrom.add(sq);
+  const idlePieces: string[] = [];
+  try {
+    const rootFen = mine[0]?.fenBefore;
+    if (rootFen) {
+      const want = color === 'white' ? 'w' : 'b';
+      for (const cell of new Chess(rootFen).board().flat()) {
+        if (!cell || cell.color !== want) continue;
+        if (cell.type === 'p' || cell.type === 'k') continue;
+        if (!movedFrom.has(cell.square)) idlePieces.push(cell.square);
+      }
+    }
+  } catch { /* unreadable root — claim nothing */ }
+
   // A piece that moved once went somewhere; a piece that moved twice is being
   // REROUTED, and that is the sentence. Longest journey wins — three hops is a
   // more striking idea than two.
@@ -414,6 +478,7 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
     shieldStripped,
     tactic,
     tacticSquare,
+    idlePieces,
     maneuver,
     checks,
     promotes,
@@ -510,6 +575,16 @@ export function describePlan(
   // survive move by move.
   if (plan.checks >= 2) {
     add(30, `check you ${plan.checks === 2 ? 'twice' : `${plan.checks} times`} along the way`);
+  }
+  // WHAT THE PLAN LEAVES OUT. Three or more pieces never touched across four
+  // moves is a real criticism of a plan, and low-ranked because it is a caveat
+  // rather than an intention — it should follow what the side IS doing.
+  // Read defensively: a SidePlan arrives from several builders and a field
+  // added later must never throw inside narration — silence is always
+  // available, an exception mid-utterance is not.
+  const idle = plan.idlePieces ?? [];
+  if (voice === 'mine' && idle.length >= 3) {
+    add(15, `leave ${idle.slice(0, 3).join(', ')} exactly where they are`, idle.slice(0, 3));
   }
   // King attack, scaled by how many pieces are really arriving. Two is a
   // gesture; four is an assault and the sentence should lead with it.
@@ -631,7 +706,8 @@ export function buildLookaheadPlan(
 
   return {
     keySquares: keySquaresOf(line.plies),
-    shape: shapeOf(line.plies),
+    shape: { ...shapeOf(line.plies, studentColor), evalSwingCp: line.terminalEvalCp !== null ? line.terminalEvalCp - line.rootEvalCp : null },
+    terminal: terminalRead(line.plies, studentColor),
     path: pathOf(line.plies),
     read: readPosition(line),
     white, black, mine, theirs,
@@ -682,7 +758,7 @@ function mergeTwinDrift(mine: SidePlan, theirs: SidePlan): void {
  * material off, both sides, which distinguishes a line where twelve points
  * change hands from one where a pawn does even when the two end level.
  */
-function shapeOf(plies: readonly PvPly[]): LineShape {
+function shapeOf(plies: readonly PvPly[], studentColor: 'white' | 'black'): LineShape {
   const horizon = plies.slice(0, PLAN_HORIZON);
   let forcedPlies = 0;
   let counting = true;
@@ -708,7 +784,144 @@ function shapeOf(plies: readonly PvPly[]): LineShape {
       endsInEndgame = men.length <= 4 && !men.some((c) => c && c.type === 'q');
     } catch { /* unreadable — claim nothing */ }
   }
-  return { forcedPlies, traded, endsInEndgame };
+  // REPETITION. A position seen twice inside the horizon means the line is
+  // heading for a draw neither side has to accept — and a student assuming
+  // they are winning should hear it.
+  const seen = new Set<string>();
+  let repeats = false;
+  for (const ply of horizon) {
+    const key = ply.fenAfter.split(' ').slice(0, 4).join(' ');
+    if (seen.has(key)) { repeats = true; break; }
+    seen.add(key);
+  }
+
+  // HOW LONG BEFORE ANYTHING TOUCHES. A line where nothing is captured for six
+  // plies is a manoeuvring line, and saying so tells the student what KIND of
+  // calculation they are doing.
+  let pliesToFirstCapture: number | null = null;
+  for (let i = 0; i < horizon.length; i += 1) {
+    if (horizon[i].facts.captured) { pliesToFirstCapture = i; break; }
+  }
+
+  // THE IN-BETWEEN MOVE — a quiet ply wedged inside forcing ones, and the point
+  // of most tactics. Requires forcing on BOTH sides of it, which is what makes
+  // it the surprise rather than just a slow move in a slow line.
+  const forcing = horizon.map((p) => Boolean(p.facts.captured || p.facts.isCheck));
+  let quietMoveIndex: number | null = null;
+  for (let i = 1; i < horizon.length - 1; i += 1) {
+    if (!forcing[i] && forcing[i - 1] && forcing[i + 1]) { quietMoveIndex = i; break; }
+  }
+
+  // CASTLING RIGHTS GIVEN UP inside the line — read off the FEN's own field
+  // rather than inferred from king moves, so a rook move counts too.
+  const rights = (fen: string): string => fen.split(' ')[2] ?? '-';
+  const rootRights = rights(horizon[0]?.fenBefore ?? '');
+  const endRights = rights(horizon[horizon.length - 1]?.fenAfter ?? '');
+  const lostFor = (chars: string): boolean =>
+    [...chars].some((c) => rootRights.includes(c) && !endRights.includes(c));
+  const whiteLost = lostFor('KQ');
+  const blackLost = lostFor('kq');
+
+  const mineLost = studentColor === 'white' ? whiteLost : blackLost;
+  const theirsLost = studentColor === 'white' ? blackLost : whiteLost;
+  const castlingLost = mineLost && theirsLost ? 'both' as const
+    : mineLost ? 'mine' as const
+      : theirsLost ? 'theirs' as const
+        : null;
+
+  return {
+    forcedPlies, traded, endsInEndgame, repeats, pliesToFirstCapture, quietMoveIndex,
+    evalSwingCp: null, castlingLost,
+  };
+}
+
+/** Nothing known about the terminus — a short line has no ending to read. */
+const EMPTY_TERMINAL: TerminalRead = {
+  loose: [], mobilityShift: { mine: 0, theirs: 0 }, kingOnOpenFile: null,
+  betterPawns: null, breaks: [],
+};
+
+/**
+ * The board WHERE THE LINE ENDS, against where it starts.
+ *
+ * Every claim about what a line LEAVES BEHIND — better pawns, a king on an open
+ * file, pieces with nowhere to go — had no source before this, because the read
+ * only ever looked at the root. The terminal FEN is already on the last ply.
+ */
+function terminalRead(plies: readonly PvPly[], studentColor: 'white' | 'black'): TerminalRead {
+  const horizon = plies.slice(0, PLAN_HORIZON);
+  const rootFen = horizon[0]?.fenBefore;
+  const endFen = horizon[horizon.length - 1]?.fenAfter;
+  if (!rootFen || !endFen) return EMPTY_TERMINAL;
+  const me = studentColor === 'white' ? 'w' : 'b';
+  const them = me === 'w' ? 'b' : 'w';
+  try {
+    const end = new Chess(endFen);
+    const root = new Chess(rootFen);
+
+    // How many moves each side has at the end, against the start. Counted from
+    // the same side-to-move by flipping the FEN, so the two numbers compare.
+    const movesFor = (fen: string, side: 'w' | 'b'): number => {
+      const parts = fen.split(' ');
+      parts[1] = side;
+      try { return new Chess(parts.join(' ')).moves().length; } catch { return 0; }
+    };
+    const mobilityShift = {
+      mine: movesFor(endFen, me) - movesFor(rootFen, me),
+      theirs: movesFor(endFen, them) - movesFor(rootFen, them),
+    };
+
+    // Undefended enemy pieces standing at the terminus — what is left loose
+    // once the dust settles.
+    const loose: string[] = [];
+    try {
+      for (const h of detectTactics(endFen).hangingPieces ?? []) {
+        if (h.color === them && h.piece !== 'p') loose.push(h.square);
+      }
+    } catch { /* geometry is a bonus */ }
+
+    const structure = describeStructure(endFen);
+    const islands = structure?.pawns.islands;
+    const myIslands = islands ? (me === 'w' ? islands.w : islands.b) : 0;
+    const theirIslands = islands ? (me === 'w' ? islands.b : islands.w) : 0;
+    const betterPawns = myIslands < theirIslands ? 'mine' as const
+      : theirIslands < myIslands ? 'theirs' as const
+        : null;
+
+    // A king on a file with no pawns at all is a king with a draught through
+    // its position — the file an attack comes down.
+    const cells = end.board().flat();
+    const fileHasPawn = (file: string): boolean =>
+      cells.some((c) => c && c.type === 'p' && c.square[0] === file);
+    let kingOnOpenFile: 'mine' | 'theirs' | null = null;
+    for (const c of cells) {
+      if (!c || c.type !== 'k') continue;
+      if (fileHasPawn(c.square[0])) continue;
+      kingOnOpenFile = c.color === me ? 'mine' : 'theirs';
+      if (kingOnOpenFile === 'mine') break; // the student's own king matters more
+    }
+
+    // Pawn breaks the student can play once the line finishes — where the plan
+    // picks up after the variation ends.
+    const breaks: string[] = [];
+    const parts = endFen.split(' ');
+    parts[1] = me;
+    try {
+      for (const m of new Chess(parts.join(' ')).moves({ verbose: true })) {
+        if (m.piece === 'p' && m.captured && !breaks.includes(m.to)) breaks.push(m.to);
+      }
+    } catch { /* nothing to offer */ }
+
+    // NB: a "permanent hole" read was scoped OUT of this batch rather than
+    // guessed at — `describeStructure` has no hole field, and inventing a
+    // second definition beside the outpost detector (which already answers
+    // "a square no pawn can challenge") would give two lanes a chance to
+    // disagree about the same square.
+
+    return { loose, mobilityShift, kingOnOpenFile, betterPawns, breaks };
+  } catch {
+    return EMPTY_TERMINAL;
+  }
 }
 
 /** The horizon's moves, from/to/colour — the raw material for the arrows. */
@@ -841,6 +1054,89 @@ export function lineShapeLine(shape: LineShape, said?: Set<string>): string {
   if (shape.endsInEndgame) {
     once('to-endgame', 'This trades down into an endgame, so the pawns are about to matter more than the pieces.');
   }
+  // A REPETITION is a draw neither side has to accept, and a student assuming
+  // they are winning should hear it before they bank on the line.
+  if (shape.repeats) {
+    once('repeats', 'This line repeats the position — it is a draw unless somebody deviates.');
+  }
+  // THE IN-BETWEEN MOVE. Named without its square, because finding the quiet
+  // one is the exercise; saying it EXISTS is the hint.
+  // `typeof`, not `!== null`: a caller passing an object literal without the
+  // field yields `undefined`, which is not null and would fire the clause on a
+  // line that has no quiet move at all.
+  if (typeof shape.quietMoveIndex === 'number') {
+    once('quiet', 'There is a quiet move buried in the middle of this — the forcing moves are not the whole idea.');
+  }
+  // NOTHING TOUCHES FOR A WHILE. Six plies is three moves each with no capture:
+  // a manoeuvring line, which tells the student what KIND of calculation this
+  // is before they start counting.
+  if (shape.pliesToFirstCapture === null || (typeof shape.pliesToFirstCapture === 'number' && shape.pliesToFirstCapture >= 6)) {
+    once('quiet-line', 'Nothing gets taken for a good while here — this is a manoeuvring line, not a calculating one.');
+  }
+  if (shape.castlingLost === 'mine' || shape.castlingLost === 'both') {
+    once('castling', 'Your king loses the right to castle in this line — decide whether that is a price worth paying.');
+  } else if (shape.castlingLost === 'theirs') {
+    once('castling-theirs', 'They lose the right to castle here, and a king stuck in the middle is a target.');
+  }
+  // THE EVAL, IN WORDS AND ONLY WHEN IT MOVED. A swing under about a third of a
+  // pawn is noise; announcing it would teach a student to read precision into
+  // a number that has none.
+  if (typeof shape.evalSwingCp === 'number' && Math.abs(shape.evalSwingCp) >= 35) {
+    const better = shape.evalSwingCp > 0;
+    const size = Math.abs(shape.evalSwingCp) >= 300 ? 'a piece'
+      : Math.abs(shape.evalSwingCp) >= 100 ? 'about a pawn'
+        : 'a fraction of a pawn';
+    once('swing', better
+      ? `Playing this through is worth ${size} to you.`
+      : `Playing this through costs you ${size}.`);
+  }
+  return lines.join(' ');
+}
+
+/**
+ * What the line LEAVES BEHIND — the board where it ends, against where it
+ * started.
+ *
+ * The read only ever looked at the root, so none of this had a source: better
+ * pawns, a king on an open file, pieces with nowhere to go, the break that is
+ * ready once the variation finishes. All of it comes off the terminal FEN,
+ * which the last ply already carries.
+ */
+export function terminalReadLine(read: TerminalRead, said?: Set<string>): string {
+  const lines: string[] = [];
+  const once = (key: string, line: string): void => {
+    if (said?.has(key)) return;
+    said?.add(key);
+    lines.push(line);
+  };
+  // A king with a draught through its position leads: it reframes everything
+  // else about the ending.
+  if (read.kingOnOpenFile === 'mine') {
+    once('king-open-mine', 'Your king ends up on a file with no pawns on it — that is the road an attack comes down.');
+  } else if (read.kingOnOpenFile === 'theirs') {
+    once('king-open-theirs', 'Their king ends up on a file with no pawns on it, which is where you should be looking.');
+  }
+  // MOBILITY, as a real count. Eight moves is a big enough swing to be visible
+  // to a student; below that it is engine noise dressed as a plan.
+  const squeeze = read.mobilityShift.theirs - read.mobilityShift.mine;
+  if (squeeze <= -8) {
+    once('squeeze', 'Their pieces come out of this with noticeably fewer squares than they went in with.');
+  } else if (squeeze >= 8) {
+    once('squeezed', 'You come out of this with fewer squares than you went in with — worth knowing before you choose it.');
+  }
+  if (read.betterPawns === 'mine') {
+    once('pawns-mine', 'You come out of this line with the tidier pawns.');
+  } else if (read.betterPawns === 'theirs') {
+    once('pawns-theirs', 'They come out of this line with the tidier pawns.');
+  }
+  if (read.loose.length > 0) {
+    once(`loose-${read.loose[0]}`, `When the dust settles, their piece on ${read.loose[0]} is still standing there undefended.`);
+  }
+  // WHERE THE PLAN PICKS UP once the variation is over — the single most
+  // useful thing to know about a line you are about to enter.
+  if (read.breaks.length > 0) {
+    once(`break-${read.breaks[0]}`, `Once that is done, the pawn break on ${read.breaks[0]} is ready.`);
+  }
   return lines.join(' ');
 }
 
@@ -935,7 +1231,7 @@ function shortLineRead(
   const empty = (color: 'white' | 'black'): SidePlan => ({
     color, headingFor: [], opening: [], trading: [], outposts: [],
     passedPawns: [], materialSwing: 0, shieldStripped: 0, tactic: null,
-    tacticSquare: null, maneuver: null, checks: 0, promotes: null,
+    tacticSquare: null, idlePieces: [], maneuver: null, checks: 0, promotes: null,
     mates: false, nearEnemyKing: 0,
     kingAttackSquares: [], materialSquares: [], tradeSquares: [],
     text: '', spokenClauses: [],
@@ -967,7 +1263,12 @@ function shortLineRead(
     rootEvalCp: 0, terminalEvalCp: null, delivers: true, closeAlternative: null,
   };
   return {
-    keySquares: [], shape: { forcedPlies: 0, traded: 0, endsInEndgame: false },
+    keySquares: [],
+    shape: {
+      forcedPlies: 0, traded: 0, endsInEndgame: false, repeats: false,
+      pliesToFirstCapture: null, quietMoveIndex: null, evalSwingCp: null, castlingLost: null,
+    },
+    terminal: EMPTY_TERMINAL,
     path: [], read: readPosition(stub), white, black, mine, theirs,
   };
 }

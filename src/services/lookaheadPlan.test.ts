@@ -14,9 +14,9 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import {
   buildLookaheadPlan, keySquaresOf, keySquareLine, describePlan, planFromUci,
-  positionReadLine, lineShapeLine, PLAN_HORIZON,
+  positionReadLine, lineShapeLine, terminalReadLine, PLAN_HORIZON,
 } from './lookaheadPlan';
-import type { SidePlan, LookaheadPlan } from './lookaheadPlan';
+import type { SidePlan, LookaheadPlan, LineShape, TerminalRead } from './lookaheadPlan';
 import type { PvLine, PvPly, PlyFacts } from './pvPlayback';
 
 const EMPTY: PlyFacts = {
@@ -884,5 +884,97 @@ describe('the reroute clause survived its own prod run', () => {
     // the test was wrong, not the guard.)
     const p = buildLookaheadPlan(line(plies(START, ['Nf3', 'e5', 'Ng1', 'd5'])), 'white');
     expect(p?.white.maneuver, 'a round trip was reported as a reroute').toBeNull();
+  });
+});
+
+describe('the rest of the inventory — everything the line leaves behind', () => {
+  // David 2026-08-10, given the list of what the PV could still yield: "I want
+  // them all. Spoken when they apply." These are the remainder.
+  const shape = (over: Partial<LineShape> = {}): LineShape => ({
+    forcedPlies: 0, traded: 0, endsInEndgame: false, repeats: false,
+    pliesToFirstCapture: 0, quietMoveIndex: null, evalSwingCp: null,
+    castlingLost: null, ...over,
+  });
+  const terminal = (over: Partial<TerminalRead> = {}): TerminalRead => ({
+    loose: [], mobilityShift: { mine: 0, theirs: 0 }, kingOnOpenFile: null,
+    betterPawns: null, breaks: [], ...over,
+  });
+
+  it('calls a repetition what it is', () => {
+    expect(lineShapeLine(shape({ repeats: true }))).toContain('repeats the position');
+  });
+
+  it('says a quiet move is buried in there WITHOUT naming its square', () => {
+    // Finding the in-between move is the exercise; saying it exists is the hint.
+    const said = lineShapeLine(shape({ quietMoveIndex: 3 }));
+    expect(said).toContain('quiet move');
+    expect(said).not.toMatch(/\b[a-h][1-8]\b/);
+  });
+
+  it('names a manoeuvring line by how long nothing is taken', () => {
+    expect(lineShapeLine(shape({ pliesToFirstCapture: 7 }))).toContain('manoeuvring');
+    expect(lineShapeLine(shape({ pliesToFirstCapture: 1 }))).not.toContain('manoeuvring');
+  });
+
+  it('tells the student whose castling rights went', () => {
+    expect(lineShapeLine(shape({ castlingLost: 'mine' }))).toContain('Your king loses');
+    expect(lineShapeLine(shape({ castlingLost: 'theirs' }))).toContain('They lose');
+  });
+
+  it('speaks the eval only once it has actually moved', () => {
+    expect(lineShapeLine(shape({ evalSwingCp: 20 })), 'announced noise as a swing').not.toContain('worth');
+    expect(lineShapeLine(shape({ evalSwingCp: 150 }))).toContain('worth about a pawn to you');
+    expect(lineShapeLine(shape({ evalSwingCp: -400 }))).toContain('costs you a piece');
+  });
+
+  it('reads the king on an open file at the END of the line', () => {
+    expect(terminalReadLine(terminal({ kingOnOpenFile: 'mine' }))).toContain('Your king ends up');
+    expect(terminalReadLine(terminal({ kingOnOpenFile: 'theirs' }))).toContain('Their king ends up');
+  });
+
+  it('reports a real squeeze, not engine noise', () => {
+    expect(terminalReadLine(terminal({ mobilityShift: { mine: 0, theirs: -12 } })))
+      .toContain('fewer squares');
+    expect(terminalReadLine(terminal({ mobilityShift: { mine: 0, theirs: -3 } }))).toBe('');
+  });
+
+  it('says who comes out with the tidier pawns', () => {
+    expect(terminalReadLine(terminal({ betterPawns: 'mine' }))).toContain('tidier pawns');
+  });
+
+  it('names the break that is ready once the line finishes', () => {
+    expect(terminalReadLine(terminal({ breaks: ['c5'] }))).toContain('pawn break on c5');
+  });
+
+  it('says each of these once a game, not once a ply', () => {
+    const said = new Set<string>();
+    const t = terminal({ kingOnOpenFile: 'mine', betterPawns: 'mine', breaks: ['c5'] });
+    expect(terminalReadLine(t, said)).not.toBe('');
+    expect(terminalReadLine(t, said), 'the terminal read chanted').toBe('');
+  });
+
+  it('never hands over a move in any of it', () => {
+    const all = [
+      lineShapeLine(shape({ repeats: true, quietMoveIndex: 2, castlingLost: 'both', evalSwingCp: 400 })),
+      terminalReadLine(terminal({ kingOnOpenFile: 'theirs', loose: ['e5'], breaks: ['c5'], betterPawns: 'mine' })),
+    ];
+    for (const t of all) expect(t, `a move leaked: ${t}`).not.toMatch(/\b[NBRQK][a-h]?[1-8]?x?[a-h][1-8]\b/);
+  });
+
+  it('names the pieces a plan leaves behind', () => {
+    // "Your queenside sleeps through this line" — a plan is as much about what
+    // it leaves out as what it includes.
+    const P: SidePlan = {
+      color: 'white', headingFor: [], opening: [], trading: [], outposts: [],
+      passedPawns: [], materialSwing: 0, shieldStripped: 0, tactic: null,
+      tacticSquare: null, idlePieces: ['a1', 'b1', 'c1'], maneuver: null,
+      checks: 0, promotes: null, mates: false, nearEnemyKing: 0,
+      kingAttackSquares: [], materialSquares: [], tradeSquares: [],
+      text: '', spokenClauses: [],
+    };
+    expect(describePlan(P, 'mine')).toContain('a1, b1, c1');
+    // …and never says it about the opponent, whose idle pieces are not the
+    // student's business.
+    expect(describePlan({ ...P }, 'theirs')).not.toContain('a1');
   });
 });

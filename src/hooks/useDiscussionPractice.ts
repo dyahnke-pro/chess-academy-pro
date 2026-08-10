@@ -29,6 +29,7 @@ import { stockfishEngine } from '../services/stockfishEngine';
 import { detectSlip, slipWarrantsInterjection, isNearBest, slipSeverityLabel, type SlipSeverity } from '../services/slipDetector';
 import { startDial, recordAttempt, type HintDial } from '../services/hintRegister';
 import { findStudentDrawback, whatItAllowed } from '../services/concessionBeat';
+import { callInaccuracy } from '../services/inaccuracyCall';
 import { buildWhyPrompt, buildGroundedReveal, buildSlipReveal, captureMisconception, findMoverTactic, withReasonLead } from '../services/discussionPractice';
 import { buildMisconceptionCallback } from '../services/misconceptionCallbacks';
 import { buildMoveReasonOptions } from '../services/moveReasonOptions';
@@ -320,6 +321,27 @@ export function useDiscussionPractice(
             studentColor: args.playerColor,
           });
           if (d) return { line: `${d.said} ${d.opening}`, square: d.square };
+        }
+        // WHAT SHOULD HAVE BEEN PLAYED, AND WHY (David 2026-08-10: "The coach
+        // needs to call out inaccurate play for both sides and explain what
+        // should have been played and why"). The backward look says what the
+        // move GAVE UP and the rear-facing PV says what it LET THEM DO;
+        // neither ever named the better move. Severity comes from
+        // `moveRating.classifyMove` — the same bands the review uses, so a
+        // word means the same thing on both surfaces.
+        if (bestSan) {
+          const call = callInaccuracy({
+            fenBefore: args.fenBefore,
+            playedSan: args.playedSan,
+            bestSan,
+            bestLineUci: bestPvUci,
+            cpLoss,
+            missedMate: null,
+            allowedMate: null,
+            side: 'student',
+            moverColor: args.playerColor,
+          });
+          if (call) return { line: call.said, square: call.square };
         }
         // THEN the rear-facing PV. The structural read covers five nameable
         // concessions and stays silent on everything else — measured on a real
