@@ -18,7 +18,8 @@ import {
   buildMistakePuzzleFromCapture,
 } from './mistakePuzzleService';
 import { classifyPhase } from './gamePhaseService';
-import type { MistakePuzzle } from '../types';
+import { isMateEval } from './engineConstants';
+import type { MistakePuzzle, MoveAnnotation } from '../types';
 
 export interface BlunderForAnalysis {
   /** Position BEFORE the move (FEN). */
@@ -141,7 +142,25 @@ export async function autoAnalyzeGameMisconceptions(
       fen,
       playedSan: ann.san,
       bestSan: ann.bestMove ? uciToSan(fen, ann.bestMove) : undefined,
-      cpLoss: ann.classification === 'blunder' ? 350 : 175,
+      // 🔒 STOCKFISH'S OWN NUMBER, NEVER ONE INFERRED FROM THE LABEL (David
+      // 2026-08-10: "Use stockfish as the standard… Stockfish to measure
+      // mistake vs inaccuracy"). This read `ann.classification === 'blunder' ?
+      // 350 : 175` — the CLASSIFICATION deciding the measurement it was derived
+      // from, which is backwards, and which then flowed on as if measured into
+      // the misconception classifier, the mistake puzzles and the weakness
+      // spine. Every "blunder" in the app's history was recorded as costing
+      // exactly 350 centipawns.
+      //
+      // The real delta is already stored on the annotation: `bestMoveEval` is
+      // what the position was worth had the engine's move been played, and
+      // `evaluation` is what it is worth after the move actually played. Both
+      // are White-POV, so flipping to the mover gives what they gave up.
+      //
+      // The band midpoint survives ONLY as a fallback for annotations written
+      // before `bestMoveEval` existed (`gameNeedsAnalysis` re-analyses those, so
+      // it drains) and for mate-encoded evals, where a centipawn difference is a
+      // six-figure sentinel rather than a cost.
+      cpLoss: measuredCpLoss(ann) ?? (ann.classification === 'blunder' ? 350 : 175),
       gamePhase: classifyPhase(fen, ann.moveNumber),
       moveNumber: ann.moveNumber,
     });
@@ -162,6 +181,25 @@ export async function autoAnalyzeGameMisconceptions(
     sourceGameId: gameId,
     learned: false,
   });
+}
+
+/** What the move actually cost, in centipawns, from the MOVER's perspective —
+ *  measured by Stockfish rather than read off the label.
+ *
+ *  Null when it cannot be measured honestly: no stored best-move eval (an
+ *  annotation older than that field), or either side of the comparison is a
+ *  mate-encoded sentinel, where subtracting produces a number in the tens of
+ *  thousands that is not a cost. Callers fall back explicitly. */
+function measuredCpLoss(ann: MoveAnnotation): number | null {
+  const after = ann.evaluation;
+  const best = ann.bestMoveEval;
+  if (after === null || best === null || best === undefined) return null;
+  if (isMateEval(after) || isMateEval(best)) return null;
+  const moverSign = ann.color === 'white' ? 1 : -1;
+  // Both are White-POV. Flipped to the mover, "best minus actual" is what the
+  // move gave up; clamped at zero because a move that BEAT the shallow best-move
+  // eval has cost nothing.
+  return Math.max(0, (best - after) * moverSign);
 }
 
 /** Persist drillable mistakePuzzles for a game's blunders, deduped by position

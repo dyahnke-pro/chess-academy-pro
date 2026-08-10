@@ -13,13 +13,19 @@ function mk(evaluation: number, bestMove: string, mateIn: number | null = null) 
 }
 
 describe('classifyMove — thresholds + mate override', () => {
-  it('bands cpLoss correctly', () => {
+  it('bands cpLoss correctly — on the SHARED Stockfish thresholds', () => {
+    // Rewritten 2026-08-10. These used to read 80→good, 150→inaccuracy,
+    // 300→mistake, which is this file's OWN old set (20/50/100/200/400). The
+    // post-game review graded the identical deltas 50/100/300, so a 150 was an
+    // inaccuracy here and a mistake there, in the same session, about the same
+    // move. The review's numbers won (Stockfish/chess.com convention, and what
+    // the app's accuracy percentages have always shown); the coach conforms.
     expect(classifyMove({ wasBest: true, cpLoss: 0, missedMate: null, allowedMate: null })).toBe('best');
     expect(classifyMove({ wasBest: false, cpLoss: 10, missedMate: null, allowedMate: null })).toBe('best');
     expect(classifyMove({ wasBest: false, cpLoss: 40, missedMate: null, allowedMate: null })).toBe('excellent');
-    expect(classifyMove({ wasBest: false, cpLoss: 80, missedMate: null, allowedMate: null })).toBe('good');
-    expect(classifyMove({ wasBest: false, cpLoss: 150, missedMate: null, allowedMate: null })).toBe('inaccuracy');
-    expect(classifyMove({ wasBest: false, cpLoss: 300, missedMate: null, allowedMate: null })).toBe('mistake');
+    expect(classifyMove({ wasBest: false, cpLoss: 80, missedMate: null, allowedMate: null })).toBe('inaccuracy');
+    expect(classifyMove({ wasBest: false, cpLoss: 150, missedMate: null, allowedMate: null })).toBe('mistake');
+    expect(classifyMove({ wasBest: false, cpLoss: 300, missedMate: null, allowedMate: null })).toBe('blunder');
     expect(classifyMove({ wasBest: false, cpLoss: 900, missedMate: null, allowedMate: null })).toBe('blunder');
   });
   it('mate context always outranks cp bands', () => {
@@ -70,9 +76,10 @@ describe('computeLastMoveRating', () => {
     const r = await computeLastMoveRating(['e4', 'a6']);
     expect(r).not.toBeNull();
     expect(r!.studentColor).toBe('black');
-    // studentPOV: pre = -20, post = -120 → cpLoss = 100 → inaccuracy.
+    // studentPOV: pre = -20, post = -120 → cpLoss = 100 → mistake on the shared
+    // Stockfish bands (it read 'inaccuracy' under this file's old private set).
     expect(r!.cpLoss).toBe(100);
-    expect(r!.quality).toBe('inaccuracy');
+    expect(r!.quality).toBe('mistake');
     expect(r!.betterSan).toBe('c5');
   });
 
@@ -125,7 +132,9 @@ describe('computeLastMoveRating', () => {
     expect(r).not.toBeNull();
     expect(r!.studentColor).toBe('black');
     expect(r!.cpLoss).toBe(150);       // -10 - (-160) = 150 in student POV
-    expect(r!.quality).toBe('inaccuracy');
+    // The comment above this test always said "→ mistake, NOT best". It was the
+    // ASSERTION that said inaccuracy, on the old private bands. Now they agree.
+    expect(r!.quality).toBe('mistake');
   });
 
   it('returns null on empty history or engine failure', async () => {

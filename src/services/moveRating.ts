@@ -12,7 +12,7 @@
  */
 import { Chess } from 'chess.js';
 import { stockfishEngine } from './stockfishEngine';
-import { isMateEval } from './engineConstants';
+import { isMateEval, INACCURACY_CP, MISTAKE_CP, BLUNDER_CP } from './engineConstants';
 import type { MoveClassification } from '../types';
 
 export type MoveQuality = 'best' | 'excellent' | 'good' | 'inaccuracy' | 'mistake' | 'blunder';
@@ -45,11 +45,20 @@ export function classifyMove(r: {
   allowedMate: number | null;
 }): MoveQuality {
   if (r.allowedMate !== null || r.missedMate !== null) return 'blunder';
+  // 🔒 STOCKFISH MEASURES MISTAKE VS INACCURACY, AND IT MEASURES IT ONCE
+  // (David 2026-08-10). These bands were 20 / 50 / 100 / 200 / 400 here and
+  // 50 / 100 / 300 in the review's `classifyCpLoss`, so one engine delta got two
+  // different names depending on which surface said it out loud. See
+  // `engineConstants` for which set won and why.
+  //
+  // 'good' loses its band as a result — 50–99 is an inaccuracy now, as the review
+  // has always called it. That is the drift being paid off, not a regression, and
+  // it does NOT make the coach chattier: what is worth SPEAKING about is a
+  // separate decision and lives in `callInaccuracy`'s floor.
   if (r.wasBest || r.cpLoss < 20) return 'best';
-  if (r.cpLoss < 50) return 'excellent';
-  if (r.cpLoss < 100) return 'good';
-  if (r.cpLoss < 200) return 'inaccuracy';
-  if (r.cpLoss < 400) return 'mistake';
+  if (r.cpLoss < INACCURACY_CP) return 'excellent';
+  if (r.cpLoss < MISTAKE_CP) return 'inaccuracy';
+  if (r.cpLoss < BLUNDER_CP) return 'mistake';
   return 'blunder';
 }
 

@@ -30,9 +30,10 @@ export interface BatchAnalysisProgress {
 // it, so existing depth-12 games refresh to the deeper number once.
 export const ANALYSIS_DEPTH = 16;
 const BEST_MOVE_DEPTH = 18;
-const BLUNDER_CP = 300;
-const MISTAKE_CP = 100;
-const INACCURACY_CP = 50;
+// BLUNDER_CP / MISTAKE_CP / INACCURACY_CP moved to `engineConstants` (imported
+// below). They were duplicated in `moveRating` with DIFFERENT numbers, so the
+// same Stockfish delta produced a different word in the review than in the
+// coach's mouth. One home, one meaning.
 /**
  * How many Stockfish engines to run in parallel for batch analysis.
  *
@@ -86,7 +87,7 @@ async function waitWhilePaused(): Promise<void> {
 
 // MATE_EVAL_THRESHOLD is now exported from engineConstants so all
 // subsystems share the same value. Local alias kept for readability.
-import { MATE_EVAL_THRESHOLD, MATE_EVAL_VALUE } from './engineConstants';
+import { MATE_EVAL_THRESHOLD, MATE_EVAL_VALUE, INACCURACY_CP, MISTAKE_CP, BLUNDER_CP } from './engineConstants';
 
 /**
  * True when the engine's deep best-move (UCI) for `fenBefore` is the very move

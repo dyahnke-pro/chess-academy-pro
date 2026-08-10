@@ -19,6 +19,7 @@ import { verifyForkOnBoard } from './tacticVerification';
 import { seatPieceReferences, describeStudentThreat } from './groundedAnswer';
 import { describeStructure } from './boardStructure';
 import { assessPositionalEdge } from './reviewPositionalAssessment';
+import { isMateEval } from './engineConstants';
 import { computeBoardDelta } from './boardDelta';
 import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShield } from './reviewSacrifice';
 import { explainMatingSacMechanism } from './reviewForcedSequence';
@@ -200,7 +201,14 @@ export function computeMoveFacets(ctx: MoveFactContext): string[] {
   }
 
   // ── 2. MOVE QUALITY (classification + eval swing + the better move) ──
+  // MATE IS NOT A NUMBER OF PAWNS. A mate-encoded eval is a ±30,000 sentinel, so
+  // subtracting one from a centipawn score and dividing by 100 told the student
+  // "eval swung 300.0" on the move that walked into mate — the same six-figure
+  // leak the coach's own callout had. When either side of the comparison is a
+  // mate score there is no swing to report; the classification already says
+  // 'blunder', and `[eval] mate` facets carry the rest.
   const swing = ctx.evaluation != null && ctx.preMoveEval != null
+    && !isMateEval(ctx.evaluation) && !isMateEval(ctx.preMoveEval)
     ? Math.abs(ctx.evaluation - ctx.preMoveEval)
     : null;
   // SUPPRESS a NEGATIVE classification on the student's own move when that move is

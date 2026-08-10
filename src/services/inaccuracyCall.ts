@@ -9,12 +9,16 @@
 // a mistake is the COMPARISON — eval before the move against eval after — and
 // the PV supplies only the second half: WHY the better move was better.
 //
-// 🔒 THE BANDS ARE NOT MINE. `classifyMove` in `moveRating` already owns them
-// (20/50/100/200/400) and this file defers to it completely. The first draft of
-// this module invented its own thresholds at 50/100/200 — which would have made
-// the same move a "mistake" here and an "inaccuracy" in review, teaching the
-// student that the words mean nothing. David caught it: "We already have a delta
-// built for review with coach."
+// 🔒 THE BANDS ARE NOT MINE. `classifyMove` in `moveRating` owns them and this
+// file defers to it completely. The first draft invented its own thresholds at
+// 50/100/200 — which would have made the same move a "mistake" here and an
+// "inaccuracy" in review, teaching the student that the words mean nothing.
+// David caught it: "We already have a delta built for review with coach."
+//
+// The bands themselves have since moved to `engineConstants` and are SHARED with
+// the review's own classifier (50/100/300, the Stockfish convention), because
+// `moveRating` and `classifyCpLoss` had been carrying different numbers all
+// along — the same drift, one level up. See that file.
 //
 // It also costs NO extra search. The eval after the student's move is the eval
 // BEFORE the coach's reply, and the eval after the coach's reply is already
@@ -26,6 +30,7 @@
 import { Chess } from 'chess.js';
 import { planFromUci } from './lookaheadPlan';
 import { classifyMove, type MoveQuality } from './moveRating';
+import { MISTAKE_CP } from './engineConstants';
 
 export interface InaccuracyCall {
   /** Straight from `moveRating.classifyMove` — never re-derived here. */
@@ -111,6 +116,16 @@ export function callInaccuracy(args: {
     allowedMate: args.allowedMate ?? null,
   });
   if (!WORTH_SAYING.has(quality)) return null;
+  // THE BANDS ARE STOCKFISH'S; THE FLOOR IS PEDAGOGY, AND THEY ARE NOT THE SAME
+  // DECISION. Sharing `classifyMove`'s thresholds with the review (2026-08-10)
+  // moved the start of 'inaccuracy' from 100 centipawns down to 50, which is
+  // what the review has always called it — but a coach that stops to comment on
+  // every half-pawn wobble teaches the student to stop listening. So the WORD
+  // now means the same thing on both surfaces while the coach speaks from
+  // exactly the same point it always did. Mate is exempt: walking into one is
+  // worth saying whatever the centipawns read.
+  const forcedMate = (args.missedMate ?? null) !== null || (args.allowedMate ?? null) !== null;
+  if (!forcedMate && Math.max(0, args.cpLoss) < MISTAKE_CP) return null;
   if (!args.bestSan || wasBest) return null;
 
   // A "best move" that is not legal from this board means the caller handed in

@@ -13,6 +13,7 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { callInaccuracy } from './inaccuracyCall';
 import { classifyMove } from './moveRating';
+import { MISTAKE_CP } from './engineConstants';
 
 /** Italian, White to move at a real branch. */
 const FEN = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQK2R w KQkq - 0 6';
@@ -22,13 +23,21 @@ describe('the severity bands are the review\'s, not this file\'s', () => {
   it('agrees with classifyMove at every boundary', () => {
     // If these ever diverge, the same move is a mistake on one surface and an
     // inaccuracy on the other, and the words stop meaning anything.
+    //
+    // The WORD and the decision to SPEAK are two things. Sharing the bands with
+    // the review (2026-08-10) moved 'inaccuracy' down to 50 centipawns, which is
+    // what the review has always called it — but a coach that stops on every
+    // half-pawn wobble teaches the student to stop listening, so this file keeps
+    // its own floor at MISTAKE_CP. Below the floor it goes quiet WITHOUT
+    // disagreeing about the name.
     for (const cpLoss of [0, 19, 20, 49, 50, 99, 100, 199, 200, 399, 400, 900]) {
       const expected = classifyMove({ wasBest: false, cpLoss, missedMate: null, allowedMate: null });
       const call = callInaccuracy({
         fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', bestLineUci: BEST_LINE,
         cpLoss, side: 'student', moverColor: 'white',
       });
-      const worthSaying = ['inaccuracy', 'mistake', 'blunder'].includes(expected);
+      const worthSaying = ['inaccuracy', 'mistake', 'blunder'].includes(expected)
+        && cpLoss >= MISTAKE_CP;
       expect(Boolean(call), `cpLoss=${cpLoss} → ${expected}`).toBe(worthSaying);
       if (call) expect(call.quality).toBe(expected);
     }
@@ -74,11 +83,25 @@ describe('the coach owns its own mistakes', () => {
   });
 
   it('does NOT promise a punishment for a mere inaccuracy', () => {
-    const call = callInaccuracy({
+    // 120cp was an inaccuracy on this file's old private bands and is a MISTAKE
+    // on the shared Stockfish ones. The rule is unchanged — an inaccuracy is too
+    // small to promise anything — so the case moved to a delta that is still one,
+    // which now also has to clear the speaking floor. Hence exactly MISTAKE_CP-…
+    // no: an inaccuracy below the floor says nothing at all, so the honest test
+    // of this rule is that a mistake DOES promise and the quality is what draws
+    // the line.
+    const inaccurate = callInaccuracy({
+      fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', bestLineUci: BEST_LINE,
+      cpLoss: 60, side: 'coach', moverColor: 'white',
+    });
+    expect(inaccurate, 'an inaccuracy under the floor is silent, not chatty').toBeNull();
+    const mistake = callInaccuracy({
       fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', bestLineUci: BEST_LINE,
       cpLoss: 120, side: 'coach', moverColor: 'white',
     });
-    expect(call?.said).not.toContain('something here for you');
+    expect(mistake?.quality).toBe('mistake');
+    expect(mistake?.said, 'a real mistake owes the student the opportunity')
+      .toContain('something here for you');
   });
 
   it('names its own move — that one is already on the board', () => {
