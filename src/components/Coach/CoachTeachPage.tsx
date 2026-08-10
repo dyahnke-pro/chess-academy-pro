@@ -6210,16 +6210,23 @@ export function CoachTeachPage(): JSX.Element {
       // Red for what is coming AT the student, green for what is theirs to
       // find; neither hands over a move, because a tactic's squares are the
       // pieces involved, not a from-to.
-      const markTactic = (squares: string[], color: string): void => {
+      // ONLY THE SQUARES THE LINE ACTUALLY NAMED. A detector reports every
+      // square in the geometry; the sentence built from it mentions some of
+      // them. Marking the rest points the student at squares the coach never
+      // said — the same defect the plan marks are coupled against, arriving
+      // through the detector instead of through the plan.
+      const markTactic = (squares: string[], color: string, saidIn: string | null): void => {
+        const named = saidIn ?? '';
         for (const sq of squares.slice(0, 3)) {
+          if (!named.includes(sq)) continue;
           if (!planHighlights.some((h) => h.square === sq)) planHighlights.push({ square: sq, color });
         }
       };
       if (threatSquares.length > 0 && pkg.kept.some((f) => f.kind === 'threat')) {
-        markTactic(threatSquares, '#ef4444');
+        markTactic(threatSquares, '#ef4444', threatLine);
       }
       if (tacticSquares.length > 0 && pkg.kept.some((f) => f.kind === 'tactic')) {
-        markTactic(tacticSquares, '#22c55e');
+        markTactic(tacticSquares, '#22c55e', tacticLine);
       }
       // THE SQUARE THE LAST MOVE GAVE UP is marked in the LATE lane, with the
       // sentence that names it — see the backward-look block in the reply
@@ -7461,10 +7468,22 @@ export function CoachTeachPage(): JSX.Element {
                     });
                     if (look) {
                       queueSpokenHint(fenAfterReply, look.line, look.kind);
-                      // THE SQUARE IT GAVE UP, pointed at with the sentence that
-                      // names it. Amber: a cost already paid, not a threat
-                      // arriving. Only when the board still shows this turn.
-                      if (/^[a-h][1-8]$/.test(look.square) && liveFenRef.current === fenAfterReply) {
+                      // THE SQUARE IT GAVE UP, pointed at ONLY WHEN THE SENTENCE
+                      // NAMES IT. Amber: a cost already paid, not a threat
+                      // arriving.
+                      //
+                      // The `look.line.includes` is the whole rule and it was
+                      // missing. `square` comes from the better move's plan
+                      // clauses, so the concession lane names it out loud ("that
+                      // took your last defender off e5") while the MISTAKE lane
+                      // does not — "Nd4 was a mistake. Nf6 was the move." carries
+                      // a square the student never hears. A prod run caught it
+                      // marking d8 and e7 with nothing spoken behind them, which
+                      // is the lie drawn instead of said, and the one thing every
+                      // other mark in this file is coupled against.
+                      if (/^[a-h][1-8]$/.test(look.square)
+                        && look.line.includes(look.square)
+                        && liveFenRef.current === fenAfterReply) {
                         const sq = look.square;
                         setHighlights((prev) => (prev.some((h) => h.square === sq)
                           ? prev

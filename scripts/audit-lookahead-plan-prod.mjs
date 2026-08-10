@@ -247,7 +247,20 @@ async function main() {
       .filter((e) => String(e.source ?? '').includes('planMarks'));
     const markedSquares = markEvents
       .flatMap((e) => String(e.summary ?? '').match(/\b[a-h][1-8]\b/g) ?? []);
-    const namedInSpeech = new Set(planSentences.flatMap((sn) => sn.match(/\b[a-h][1-8]\b/g) ?? []));
+    // EVERY SQUARE THE COACH SAID, not only the ones the PLAN said.
+    //
+    // This was scoped to `planSentences`, and the tightened mark check below
+    // then failed on squares the coach HAD justified out loud — just from a
+    // different lane. `planMarks` is not the only thing logging under that
+    // source: the instant package marks the threat and the tactic it named, and
+    // those sentences are not plan sentences. Judging a threat mark against the
+    // plan's wording blames the app for the audit's own scoping.
+    //
+    // The per-ply coupling — a mark only for a clause that SURVIVED into the
+    // utterance — is enforced offline by `planMarks.test.ts`. What a live run
+    // can honestly prove is the weaker, still-valuable thing: nothing was drawn
+    // that the coach never mentioned at all.
+    const namedInSpeech = new Set(lines.flatMap((l) => l.match(/\b[a-h][1-8]\b/g) ?? []));
     record(
       'the board marked what the coach named',
       markEvents.length > 0,
@@ -257,16 +270,38 @@ async function main() {
     );
     // Only meaningful once marks exist; skipped rather than vacuously green.
     if (markEvents.length > 0) {
-      const unspoken = [...new Set(markedSquares)].filter((sq) => !namedInSpeech.has(sq));
+      // AN ARROW'S ORIGIN IS NEVER SPOKEN, AND THAT IS CORRECT.
+      //
+      // This check used to pass whenever ANY marked square had been pronounced
+      // (`unspoken.length < markedSquares.length`) while printing the ones that
+      // had not — so it reported "unspoken: a2, b1, d1, c2, f3, f1" and called
+      // itself green, which reads exactly like the false greens this audit
+      // exists to catch. It was measuring the wrong set rather than being too
+      // lenient: the summary carries arrows as `from-to`, and the narration
+      // names where a piece is GOING, never the square it is leaving. Six
+      // "unspoken" squares were six arrow tails.
+      //
+      // So split them. An arrow's DESTINATION and every HIGHLIGHT must have been
+      // said out loud — those are the marks that claim something. Origins are
+      // exempt by construction. Now the check can hold its own name.
+      const summaries = markEvents.map((e) => String(e.summary ?? ''));
+      const arrowPairs = summaries.flatMap((t) => [...t.matchAll(/\b([a-h][1-8])-([a-h][1-8])\b/g)]);
+      const arrowOrigins = new Set(arrowPairs.map((m) => m[1]));
+      const claiming = [...new Set(
+        markedSquares.filter((sq) => !arrowOrigins.has(sq)),
+      )];
+      const unspoken = claiming.filter((sq) => !namedInSpeech.has(sq));
       record(
         'every mark traces back to something spoken',
         // A plan clause can name no square out loud ("bring pieces at your
         // king") and still be marked — that is the point of the clause-square
-        // coupling — so this checks the marks are not WILD, not that every one
-        // was literally pronounced. A run where NOTHING marked was spoken is
-        // the failure: it means the marks came from somewhere else entirely.
-        markedSquares.length === 0 || unspoken.length < markedSquares.length,
-        unspoken.length > 0 ? `unspoken: ${unspoken.slice(0, 6).join(', ')}` : 'every marked square was named aloud',
+        // coupling. But it is marked from a clause that SURVIVED into the
+        // utterance, and the utterance names the destination, so a claiming
+        // mark with nothing spoken behind it is the lie drawn instead of said.
+        unspoken.length === 0,
+        unspoken.length > 0
+          ? `${unspoken.length} mark(s) nothing justified: ${unspoken.slice(0, 6).join(', ')} (${arrowOrigins.size} arrow origin(s) exempt)`
+          : `all ${claiming.length} claiming mark(s) named aloud, ${arrowOrigins.size} arrow origin(s) exempt`,
       );
     }
 
