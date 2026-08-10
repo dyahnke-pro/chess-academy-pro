@@ -6733,6 +6733,26 @@ export function CoachTeachPage(): JSX.Element {
                           try {
                             const planFen = probe.fen();
                             const graded = gradeNarrationText(said, planFen, 'CoachTeachPage.planMarks')?.trim();
+                            // AND SPEAK IT. THE PLAN WAS BEING DRAWN AND NEVER
+                            // SAID (found by the prod audit, 2026-08-10: four
+                            // annotation events, zero plan sentences — the
+                            // board pointing at squares the voice never
+                            // mentioned, which is the original bug inverted and
+                            // worse).
+                            //
+                            // The cause is the same async ordering that made
+                            // the marks paint here in the first place: the
+                            // instant package is assembled in the SAME TICK
+                            // this engine read is started, so by the time the
+                            // plan exists that package has shipped, and the
+                            // `lookaheadPlanRef` fen-guard it reads can never
+                            // match on the turn the plan was computed for.
+                            // Marking here and speaking there was half a fix.
+                            //
+                            // Queued rather than spoken outright so it joins
+                            // the one utterance the hint lane already builds on
+                            // `factsReady` — same board, same grading, one clip.
+                            if (graded) queueSpokenHint(planFen, graded);
                             if (graded && liveFenRef.current === planFen) {
                               const marks = planMarks({ plan, spoken: graded, fen: planFen, studentColor: playerColor });
                               if (marks.arrows.length > 0 || marks.highlights.length > 0) {
@@ -7242,8 +7262,17 @@ export function CoachTeachPage(): JSX.Element {
                 // starts. Graded against the board they were computed from, so
                 // a hint cannot outlive its position, and dropped entirely if
                 // the student has already moved on.
+                // Compared on the POSITION, not the whole FEN: the queued fen
+                // is reconstructed from the move while `fenAfterReply` is read
+                // off the live board, and the two can disagree on the halfmove
+                // and fullmove counters while describing the identical
+                // position. A guard that fails on a clock silently drops the
+                // whole utterance — the failure mode this build has now hit
+                // twice.
+                const samePosition = (a: string, b: string): boolean =>
+                  a.split(' ').slice(0, 4).join(' ') === b.split(' ').slice(0, 4).join(' ');
                 const pending = pendingVoiceRef.current;
-                if (pending && pending.fen === fenAfterReply && pending.lines.length > 0) {
+                if (pending && samePosition(pending.fen, fenAfterReply) && pending.lines.length > 0) {
                   pendingVoiceRef.current = null;
                   const hintPkg = buildVoicePackage(
                     pending.lines.map((text) => ({ kind: 'computed' as const, text, fen: pending.fen })),

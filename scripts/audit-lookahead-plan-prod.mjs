@@ -213,7 +213,13 @@ async function main() {
       // An audit keyed on prose it no longer recognises reports "the plan never
       // spoke" and looks like a regression in the app — so the two move
       // together, deliberately.
-      .filter((sn) => /\b(want to|running through|keep half an eye|matters here too|is the contested one|bringing pieces to|going for)\b/i.test(sn));
+      // 🔒 THIS FILTER MUST MOVE WITH THE PROSE. It has now reported "the plan
+      // never spoke" twice for the wrong reason — once against a mid-flight
+      // bundle, once because the wording was softened underneath it. An audit
+      // keyed on prose it no longer recognises accuses the app of a regression
+      // it does not have, and the third time it cries wolf nobody will check.
+      // Every phrase the plan lane can emit belongs here.
+      .filter((sn) => /\b(want to|running through|keep half an eye|both sides want|is the contested one|bringing pieces to|going for|walk the|are forced|comes off in this line|trades down into|already a .*sitting on the board|pawn islands|half-open for you)\b/i.test(sn));
     const leakedMove = planSentences.filter((sn) => movesIn(sn).length > 0);
     record(
       'no plan sentence handed over a move',
