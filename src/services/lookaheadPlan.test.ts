@@ -233,12 +233,31 @@ describe('the read sees the whole line, not just where pieces land', () => {
     }
   });
 
-  it('refuses a line too short to read', () => {
-    expect(planFromUci(START, uci(['e2e4', 'c7c5']), 'white')).toBeNull();
+  it('reads the board even when the line is too short to be a plan', () => {
+    // It used to return null here, which meant the coach went SILENT for the
+    // last moves of every game — a full-game walk ended with three silent
+    // plies including the checkmate, the worst possible moment to have nothing
+    // to say. A plan needs four plies; a board read needs none.
+    const plan = planFromUci(START, uci(['e2e4', 'c7c5']), 'white');
+    expect(plan, 'a short line went silent again').not.toBeNull();
+    expect(plan?.mine.headingFor, 'a two-ply line was described as an intention').toEqual([]);
+    expect(plan?.read).toBeTruthy();
   });
 
-  it('stops at the first illegal move instead of guessing past it', () => {
-    expect(planFromUci(START, uci(['e2e4', 'e7e5', 'zzzz', 'd7d5']), 'white')).toBeNull();
+  it('claims no intention it cannot support from a short line', () => {
+    const plan = planFromUci(START, uci(['e2e4', 'e7e5', 'zzzz', 'd7d5']), 'white');
+    expect(plan?.mine.materialSwing).toBe(0);
+    expect(plan?.mine.trading).toEqual([]);
+    expect(plan?.keySquares).toEqual([]);
+  });
+
+  it('still announces a mate on the board with no line left to read', () => {
+    // Fool's mate: the game is over, there is no continuation, and this is
+    // exactly the moment the coach must not be quiet.
+    const board = new Chess();
+    for (const san of ['f3', 'e5', 'g4', 'Qh4#']) board.move(san);
+    const plan = planFromUci(board.fen(), [], 'white');
+    expect(plan?.theirs.text.toLowerCase(), 'silent at checkmate').toContain('mate');
   });
 });
 

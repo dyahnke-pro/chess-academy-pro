@@ -6438,7 +6438,7 @@ export function CoachTeachPage(): JSX.Element {
                         ? planFromUci(probe.fen(), pv, playerColor, planSaidRef.current)
                         : null;
                       if (plan) {
-                        const key = keySquareLine(plan.keySquares);
+                        const key = keySquareLine(plan.keySquares, planSaidRef.current);
                         // What the board already IS, beside what the line does
                         // to it — a student needs the first to understand the
                         // second. Deterministic like the rest: fixed templates,

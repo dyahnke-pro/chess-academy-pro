@@ -44,7 +44,7 @@ const TACTIC_WORD: Record<string, string> = {
   back_rank: 'back-rank threat',
   mate_threat: 'mating threat',
   removal_of_guard: 'removal of the defender',
-  trapped_piece: 'trapped piece',
+  trapped_piece: 'piece trap',
 };
 
 /** Speakable name for a tactic, or null when it has none — an unknown tactic
@@ -503,9 +503,20 @@ export function positionReadLine(
  *   contested by both sides → "the square this position turns on"
  *   touched repeatedly by one → "a square worth watching"
  */
-export function keySquareLine(keys: readonly KeySquare[]): string {
+export function keySquareLine(
+  keys: readonly KeySquare[],
+  /** Clauses already spoken this game. Without this the key square is the
+   *  loudest repeat in the coach: a full-game walk said "f3 is the square this
+   *  position turns on" three plies running, then b5 five times, then d7 four.
+   *  A key square STAYS the key square for many moves — that is what makes it
+   *  one — so the line has to be said once and then left alone. */
+  said?: Set<string>,
+): string {
   const top = keys[0];
   if (!top) return '';
+  const key = `keysquare-${top.square}`;
+  if (said?.has(key)) return '';
+  said?.add(key);
   if (top.contested && top.weight >= 16) {
     return `${top.square} is the square this position turns on — both sides keep coming back to it.`;
   }
@@ -513,6 +524,48 @@ export function keySquareLine(keys: readonly KeySquare[]): string {
     return `${top.square} is contested — both sides have designs on it.`;
   }
   return `${top.square} is worth watching; the play keeps running through it.`;
+}
+
+/** Too few plies to call anything a plan — but the board is still a board.
+ *
+ *  Returns a plan with EMPTY intentions and a real position read, so callers
+ *  get the endgame/mate moments instead of silence. Saying "there is a forced
+ *  mate here" is exactly the sort of thing a short line contains. */
+function shortLineRead(
+  fen: string,
+  uciMoves: readonly string[],
+  studentColor: 'white' | 'black',
+): LookaheadPlan | null {
+  let board: ChessCtor;
+  try { board = new Chess(fen); } catch { return null; }
+  const empty = (color: 'white' | 'black'): SidePlan => ({
+    color, headingFor: [], opening: [], trading: [], outposts: [],
+    passedPawns: [], materialSwing: 0, shieldStripped: 0, tactic: null,
+    mates: false, nearEnemyKing: 0, text: '',
+  });
+  // A mate ON THE BOARD is the one intention a zero-ply line still has.
+  const mated = board.isCheckmate();
+  const white = empty('white');
+  const black = empty('black');
+  const loserIsWhite = board.turn() === 'w';
+  if (mated) (loserIsWhite ? black : white).mates = true;
+  const mine = studentColor === 'white' ? white : black;
+  const theirs = studentColor === 'white' ? black : white;
+  mine.text = describePlan(mine, 'mine');
+  theirs.text = describePlan(theirs, 'theirs');
+  const stub: PvLine = {
+    plies: [{
+      san: '', uci: uciMoves[0] ?? '', moverColor: board.turn() === 'w' ? 'black' : 'white',
+      fenBefore: fen, fenAfter: fen,
+      facts: {
+        captured: null, isCheck: board.isCheck(), isMate: mated, promotion: null,
+        tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [],
+        outpostGained: null, shieldLost: 0,
+      },
+    }],
+    rootEvalCp: 0, terminalEvalCp: null, delivers: true, closeAlternative: null,
+  };
+  return { keySquares: [], read: readPosition(stub), white, black, mine, theirs };
 }
 
 /**
@@ -534,7 +587,13 @@ export function planFromUci(
   studentColor: 'white' | 'black',
   said?: Set<string>,
 ): LookaheadPlan | null {
-  if (uciMoves.length < 4) return null;
+  // A SHORT LINE IS NOT NOTHING. This used to bail at fewer than four plies,
+  // which meant the coach went silent for the last moves of every game — a
+  // full-game walk ended with three silent plies INCLUDING the checkmate,
+  // which is the worst possible moment to have nothing to say. The plan needs
+  // four plies to describe an intention; the BOARD READ needs none, so a short
+  // line still gets read.
+  if (uciMoves.length < 4) return shortLineRead(fen, uciMoves, studentColor);
   let board: ChessCtor;
   try { board = new Chess(fen); } catch { return null; }
   const plies: PvPly[] = [];
@@ -564,7 +623,7 @@ export function planFromUci(
     });
     prevCap = { square: mv.to, capturedValue: mv.captured ? (PIECE_POINTS[PIECE_WORD[mv.captured] ?? ''] ?? 0) : 0 };
   }
-  if (plies.length < 4) return null;
+  if (plies.length < 4) return shortLineRead(fen, uciMoves, studentColor);
   return buildLookaheadPlan(
     { plies, rootEvalCp: 0, terminalEvalCp: null, delivers: true, closeAlternative: null },
     studentColor,
