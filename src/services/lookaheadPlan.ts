@@ -49,7 +49,7 @@ const TACTIC_WORD: Record<string, string> = {
 
 /** Speakable name for a tactic, or null when it has none — an unknown tactic
  *  is dropped rather than read out as its identifier. */
-function tacticWord(kind: string | null): string | null {
+export function tacticWord(kind: string | null): string | null {
   if (!kind) return null;
   return TACTIC_WORD[kind] ?? null;
 }
@@ -504,6 +504,7 @@ export function buildLookaheadPlan(
   const theirs = studentColor === 'white' ? black : white;
   mine.text = describePlan(mine, 'mine', said);
   theirs.text = describePlan(theirs, 'theirs', said);
+  mergeTwinDrift(mine, theirs);
   // Assign back so `white`/`black` carry the same strings as `mine`/`theirs` —
   // they are the same objects, but say so rather than relying on it.
   if (!white.text) white.text = white === mine ? mine.text : theirs.text;
@@ -515,6 +516,40 @@ export function buildLookaheadPlan(
     read: readPosition(line),
     white, black, mine, theirs,
   };
+}
+
+/** The drift sentence, in either voice. */
+const DRIFT = /^(You|They) bring (your|their) pieces toward (.+) over the next few moves\.$/;
+
+/**
+ * ONE SENTENCE, NOT THE SAME SENTENCE TWICE.
+ *
+ * David 2026-08-10: "I think I heard a double sentence." He did. His iPhone
+ * transcript, 02:47:57:
+ *
+ *   "They bring their pieces toward c6 and d7 over the next few moves.
+ *    You bring your pieces toward c3 and d3 over the next few moves."
+ *
+ * Two sentences, identical word for word except the pronouns and the squares.
+ * Neither is wrong — that is what makes it insidious — but heard aloud it is a
+ * stutter, and it fires on exactly the quiet positions where the drift clause
+ * is the ONLY thing either side has to say, which is most of them. The two
+ * sides were described by separate calls that could not see each other.
+ *
+ * Both halves survive; they just share a sentence.
+ */
+function mergeTwinDrift(mine: SidePlan, theirs: SidePlan): void {
+  const m = DRIFT.exec(mine.text);
+  const t = DRIFT.exec(theirs.text);
+  if (!m || !t) return;
+  theirs.text = `They are heading for ${t[3]}; you are heading for ${m[3]}.`;
+  mine.text = '';
+  // The squares keep their owners, so the board still marks each half in its
+  // own colour — the merge is a sentence change, never a fact change.
+  const merged = theirs.spokenClauses.concat(mine.spokenClauses)
+    .map((c) => ({ text: theirs.text, squares: c.squares }));
+  theirs.spokenClauses = merged.filter((_, i) => i < 1);
+  mine.spokenClauses = merged.slice(1).map((c) => ({ text: theirs.text, squares: c.squares }));
 }
 
 /** The horizon's moves, from/to/colour — the raw material for the arrows. */

@@ -211,6 +211,22 @@ function verify(fact: VoiceFact): { text: string } | { reason: string } {
  * most important thing is said first, so a student who moves again mid-sentence
  * only ever loses the tail.
  */
+/** How much shared opening it takes before two facts are the same observation.
+ *
+ *  Twenty-four normalised characters is about "theirknightonc3isundefend" — a
+ *  subject, a square and a predicate. Shorter than that and a shared opener is
+ *  just a shared opener ("watchout"), which two genuinely different warnings
+ *  are entitled to. */
+const TWIN_PREFIX = 24;
+
+/** Length of the common leading run of two normalised strings. */
+function sharedPrefix(a: string, b: string): number {
+  const n = Math.min(a.length, b.length);
+  let i = 0;
+  while (i < n && a[i] === b[i]) i += 1;
+  return i;
+}
+
 export function buildVoicePackage(facts: VoiceFact[]): VoicePackage {
   const kept: VoiceFact[] = [];
   const dropped: VoicePackage['dropped'] = [];
@@ -228,6 +244,29 @@ export function buildVoicePackage(facts: VoiceFact[]): VoicePackage {
     // Same sentence from two producers is one sentence to the ear.
     const key = result.text.toLowerCase().replace(/[^a-z0-9]/g, '');
     if (seen.has(key)) { dropped.push({ fact: f, reason: 'duplicate' }); continue; }
+    // ── THE SAME OBSERVATION, TWICE, WITH DIFFERENT MORALS ────────────────
+    // David 2026-08-10: "I think I heard a double sentence." He did, five
+    // times in one session:
+    //
+    //   "Their knight on c3 is undefended — there's something to win here.
+    //    Their knight on c3 is undefended — an undefended piece is the seed
+    //    of a tactic."
+    //
+    // Two lanes — the alert and the running commentary — both read the same
+    // loose piece off the same board and both said so. Neither is wrong and
+    // the exact-match guard above cannot see it, because the sentences differ
+    // in their TAILS: the observation is shared, the moral bolted to it is
+    // not. To the ear it is a stutter.
+    //
+    // Matched on the shared leading clause rather than on the whole string,
+    // and only when that clause is long enough to be a real observation AND
+    // names a square — so it cannot collapse two genuinely different warnings
+    // that happen to open "Watch out —".
+    const twin = [...seen].find((prior) => {
+      const n = sharedPrefix(prior, key);
+      return n >= TWIN_PREFIX && /[a-h][1-8]/.test(key.slice(0, n));
+    });
+    if (twin) { dropped.push({ fact: f, reason: 'same observation, different moral' }); continue; }
     seen.add(key);
     kept.push({ ...f, text: result.text });
   }
@@ -242,17 +281,23 @@ export function buildVoicePackage(facts: VoiceFact[]): VoicePackage {
   //
   // Fixed here rather than in each producer: this is the only place that knows
   // a fact is about to follow a sentence boundary.
-  const sentence = (t: string, isFirst: boolean): string => {
+  //
+  // THE FIRST SENTENCE WAS THE ONE IT NEVER FIXED. The guard read
+  // `isFirst || alreadyCapital ? leaveAlone : capitalise`, which exempts
+  // exactly the sentence that most needs a capital — the one that opens the
+  // utterance. David's log, 20:26:40: "the knight on e4 sits on an outpost no
+  // pawn can challenge." leading a whole turn. The position of a sentence has
+  // no bearing on whether it starts with a capital; only whether it opens with
+  // a move name does.
+  const sentence = (t: string): string => {
     const trimmed = t.trim();
     if (!trimmed) return trimmed;
     // Leave an intentional lowercase opener alone when it is a SAN token
     // ("dxe5 wins a pawn") — capitalising a move name would be wrong.
     if (/^[a-h][1-8x]/.test(trimmed) || /^[KQRBN]x?[a-h][1-8]/.test(trimmed)) return trimmed;
-    return isFirst || /^[A-Z]/.test(trimmed)
-      ? trimmed
-      : trimmed[0].toUpperCase() + trimmed.slice(1);
+    return trimmed[0].toUpperCase() + trimmed.slice(1);
   };
-  const spoken = kept.map((f, i) => sentence(f.text, i === 0)).join(' ');
+  const spoken = kept.map((f) => sentence(f.text)).join(' ');
   return { spoken, kept, dropped };
 }
 

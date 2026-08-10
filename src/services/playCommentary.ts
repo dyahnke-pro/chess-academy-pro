@@ -590,8 +590,21 @@ export function buildPlayCommentary(args: {
   // alignment of the Rooks…"): two big enemy pieces sharing a line the
   // student owns a matching slider for. Not a tactic yet — the NOTICING that
   // precedes one, which is exactly what he teaches students to see first.
+  //
+  // ONCE A GAME, NOT ONCE A PLY. The alignment key carries the two pieces and
+  // the line, so a caller deduping on the key sees a FRESH beat every time one
+  // of those pieces moves — and David's log has four in a row:
+  //   "Their queen on d8 and rook on f8 line up on the same 8th rank…"
+  //   "Their queen on d8 and rook on e8 line up on the same 8th rank…"
+  // Different rook, same observation, same breath four plies running. The
+  // seeding beat teaches a WAY OF LOOKING; hearing it repeatedly is the
+  // tuned-out failure the narration rules name outright. `once` here is keyed
+  // on the LINE alone, so a genuinely new geometry — a different file, a
+  // diagonal — still speaks.
   const seed = findAlignmentSeed(all, me, them);
-  if (seed) {
+  if (seed && once(`alignment-${seed.line}`, 'x') === '') {
+    // Already taught this line's alignment — fall through to a quieter beat.
+  } else if (seed) {
     const seedBeat: PlayCommentary = {
       kind: 'seeding-observation',
       key: `seed:${seed.what}:${seed.line}`,

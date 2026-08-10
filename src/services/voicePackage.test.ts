@@ -110,6 +110,19 @@ describe('the join', () => {
     expect(pkg.spoken).toBe('That takes your pawn. The knight on e4 sits on an outpost no pawn can challenge.');
   });
 
+  it('capitalises the FIRST sentence too — the one it used to exempt', () => {
+    // The guard read `isFirst || alreadyCapital ? leaveAlone : capitalise`,
+    // which spared exactly the sentence that most needs a capital. David's
+    // 2026-08-08 log opened a whole turn with "the knight on e4 sits on an
+    // outpost no pawn can challenge." A sentence's POSITION has no bearing on
+    // whether it starts with a capital.
+    const fen = 'rnbqkb1r/ppp2ppp/8/3pP3/4n3/2N5/PPPP2PP/R1BQKBNR w KQkq - 0 5';
+    const pkg = buildVoicePackage([
+      { kind: 'computed', text: 'the knight on e4 sits on an outpost no pawn can challenge.', fen },
+    ]);
+    expect(pkg.spoken).toBe('The knight on e4 sits on an outpost no pawn can challenge.');
+  });
+
   it('leaves a move name lowercase — capitalising a SAN would be wrong', () => {
     const fen = 'rnbqkb1r/ppp2ppp/8/3pP3/4n3/2N5/PPPP2PP/R1BQKBNR w KQkq - 0 5';
     const pkg = buildVoicePackage([
@@ -167,5 +180,51 @@ describe('the corpus note is always first', () => {
     // A plan about THIS board beats a real note about a different one.
     const pkg = buildVoicePackage([at('borrowed', 'Borrowed line.'), at('plan', 'Plan line.')]);
     expect(pkg.spoken.indexOf('Plan')).toBeLessThan(pkg.spoken.indexOf('Borrowed'));
+  });
+});
+
+// David 2026-08-10, having listened back to a live game: "I think I heard a
+// double sentence." His iPhone transcript had five, all this shape.
+describe('the same observation is never said twice with different morals', () => {
+  const FEN = 'r1bqkb1r/pppp1ppp/2n5/4p3/2B1n3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 0 5';
+
+  it('THE REGRESSION: drops the second reading of the same loose piece', () => {
+    // The alert lane and the running commentary both read the same undefended
+    // knight off the same board, and both said so. Neither is wrong, and the
+    // exact-match guard cannot see it because the sentences differ in their
+    // TAILS — the observation is shared, the moral bolted to it is not.
+    const pkg = buildVoicePackage([
+      { kind: 'tactic', text: "Their knight on c3 is undefended — there's something to win here.", fen: FEN },
+      { kind: 'observation', text: 'Their knight on c3 is undefended — an undefended piece is the seed of a tactic.', fen: FEN },
+    ]);
+    expect(pkg.kept.length, `heard twice: ${pkg.spoken}`).toBe(1);
+    expect(pkg.dropped[0]?.reason).toContain('same observation');
+  });
+
+  it('keeps the FIRST one — the ranked lane wins, as everywhere else', () => {
+    const pkg = buildVoicePackage([
+      { kind: 'tactic', text: "Their knight on c3 is undefended — there's something to win here.", fen: FEN },
+      { kind: 'observation', text: 'Their knight on c3 is undefended — an undefended piece is the seed of a tactic.', fen: FEN },
+    ]);
+    expect(pkg.spoken).toContain("something to win here");
+  });
+
+  it('does NOT collapse two different warnings that share an opener', () => {
+    // "Watch out —" is an opener two genuinely different threats are entitled
+    // to. Collapsing on it would silence real news, which is the opposite
+    // failure and a worse one.
+    const pkg = buildVoicePackage([
+      { kind: 'threat', text: 'Watch out — the knight on c6 is attacked.', fen: FEN },
+      { kind: 'tactic', text: 'Watch out — your bishop on c4 has no retreat.', fen: FEN },
+    ]);
+    expect(pkg.kept.length, 'a real second warning was swallowed').toBe(2);
+  });
+
+  it('does not collapse two facts about the same piece that say different things', () => {
+    const pkg = buildVoicePackage([
+      { kind: 'threat', text: 'Watch out — the knight on e4 is attacked and undefended.', fen: FEN },
+      { kind: 'computed', text: 'The knight on e4 sits on an outpost no pawn can challenge.', fen: FEN },
+    ]);
+    expect(pkg.kept.length).toBe(2);
   });
 });

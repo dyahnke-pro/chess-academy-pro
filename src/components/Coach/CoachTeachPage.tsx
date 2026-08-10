@@ -167,7 +167,7 @@ import { findLivePunishment } from '../../services/gemCrushLines';
 
 import { buildThinkAloud } from '../../services/thinkAloud';
 import { scaleGap, packageForRegister, readsForRegister } from '../../services/hintRegister';
-import { planFromUci, keySquareLine, positionReadLine } from '../../services/lookaheadPlan';
+import { planFromUci, keySquareLine, positionReadLine, tacticWord } from '../../services/lookaheadPlan';
 import type { LookaheadPlan } from '../../services/lookaheadPlan';
 import { planMarks } from '../../services/planMarks';
 import {
@@ -1347,6 +1347,17 @@ export function CoachTeachPage(): JSX.Element {
   /** Last spoken THREAT key. Separate from the tactic key — one lane repeating
    *  must not silence the other lane's fresh news. */
   const lastThreatRef = useRef('');
+  /** EVERY threat sentence already spoken this game.
+   *
+   *  `lastThreatRef` alone remembers one ply, so an ALTERNATING pair walks
+   *  straight through it. David's 02:47-02:53 transcript: "queen on a5 pins
+   *  knight on c3 against king on e1" at 02:50, a fork callout at 02:52, then
+   *  the SAME pin sentence again, word for word, at 02:53 — the fork in the
+   *  middle cleared the guard. A standing threat stays true for many plies,
+   *  which is exactly why saying it identically over and over teaches nothing
+   *  and grates. The tactic lane already keeps a set for this reason; the
+   *  threat lane keeping only a single slot was the oversight. */
+  const spokenThreatLinesRef = useRef<Set<string>>(new Set());
   /** Every tactic sentence already spoken this game — see the guard below. */
   const spokenTacticLinesRef = useRef<Set<string>>(new Set());
   /** Baked opening plies already taught this game — the bake is one idea per
@@ -5558,6 +5569,9 @@ export function CoachTeachPage(): JSX.Element {
       const tctx = buildTacticsLiveContext(args.fenAfterReply, null, studentCC, rating);
       let tacticKey = '';
       let threatKey = '';
+      /** The tactic type the STUDENT has available, so the threat lane can tell
+       *  when both lanes are about to describe the same shape. */
+      let myTacticType: string | null = null;
       const myHanging = tctx.hanging
         .filter((h) => h.color === studentCC && AV[h.piece] !== undefined)
         .sort((a, b) => (AV[b.piece] ?? 0) - (AV[a.piece] ?? 0));
@@ -5589,13 +5603,32 @@ export function CoachTeachPage(): JSX.Element {
         if (mine.length > 0) {
           const t = mine[0];
           tacticKey = `opp:${t.type}:${t.squares.join('')}`;
-          tacticLine = `There's a real ${t.type.replace(/_/g, ' ')} here for you — look for it.`;
+          // NAME IT IN ENGLISH. Underscore-stripping a detector enum produced
+          // "There's a real back rank here for you" and "a real removal of
+          // guard" in David's log — the coach reading a variable name with the
+          // underscores taken out. `tacticWord` is the same map the plan lane
+          // uses; an unnamed pattern says nothing rather than saying its id.
+          const word = tacticWord(t.type);
+          tacticLine = word ? `There's a real ${word} here for you — look for it.` : null;
+          myTacticType = word ? t.type : null;
         }
       }
       if (againstMe.length > 0) {
         const t = againstMe[0];
         threatKey = `vs:${t.type}:${t.squares.join('')}`;
         threatLine = `Watch out — ${t.description.charAt(0).toLowerCase()}${t.description.slice(1)}.`;
+        // SAY WHOSE, WHEN BOTH ARE THE SAME SHAPE. David's transcript, 02:50:
+        // "Watch out — queen on a5 pins knight on c3 against king on e1.
+        //  There's a real pin here for you — look for it."
+        //
+        // Two DIFFERENT pins, both true — and heard back to back the second
+        // sounds like it means the first, which turns "look for it" into an
+        // instruction to find something the coach just named. The lanes each
+        // read correctly alone and collide only when they land on the same
+        // tactic type in one utterance, so that is where it is fixed.
+        if (myTacticType && myTacticType === t.type) {
+          tacticLine = `You have a ${tacticWord(myTacticType) ?? 'chance'} of your own available here — a different one. See it?`;
+        }
       } else if (myHanging.length > 0) {
         const worst = myHanging[0];
         threatKey = `hang:${worst.piece}${worst.square}`;
@@ -5628,11 +5661,12 @@ export function CoachTeachPage(): JSX.Element {
         spokenTacticLinesRef.current.add(tacticLine);
         captureEvent('tactics_alert_spoken', { surface: 'coach-teach', alert: tacticKey });
       }
-      if (threatLine && threatKey === lastThreatRef.current) {
+      if (threatLine && (threatKey === lastThreatRef.current || spokenThreatLinesRef.current.has(threatLine))) {
         threatLine = null;
         alertArrow = null;
       } else if (threatLine) {
         lastThreatRef.current = threatKey;
+        spokenThreatLinesRef.current.add(threatLine);
         captureEvent('tactics_alert_spoken', { surface: 'coach-teach', alert: threatKey });
       }
     } catch { /* the alert is a bonus — never block the teaching */ }
@@ -6654,6 +6688,7 @@ export function CoachTeachPage(): JSX.Element {
                       lastTacticRef.current = '';
                       lastThreatRef.current = '';
                       spokenTacticLinesRef.current.clear();
+                      spokenThreatLinesRef.current.clear();
                       bakedPlySeenRef.current.clear();
                       forkTalkCountRef.current = 0;
                       pendingForkRef.current = null;

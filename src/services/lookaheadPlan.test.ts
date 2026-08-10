@@ -16,7 +16,7 @@ import {
   buildLookaheadPlan, keySquaresOf, keySquareLine, describePlan, planFromUci,
   positionReadLine, PLAN_HORIZON,
 } from './lookaheadPlan';
-import type { SidePlan } from './lookaheadPlan';
+import type { SidePlan, LookaheadPlan } from './lookaheadPlan';
 import type { PvLine, PvPly, PlyFacts } from './pvPlayback';
 
 const EMPTY: PlyFacts = {
@@ -84,8 +84,15 @@ describe('two plans, one line', () => {
 
   it('speaks the student\'s plan as "you" and the opponent\'s as "they"', () => {
     const plan = buildLookaheadPlan(line(plies(START, ['e4', 'c5', 'Nf3', 'd6'])), 'white');
-    expect(plan?.mine.text).toMatch(/^You\b/);
-    expect(plan?.theirs.text).toMatch(/^They\b/);
+    // When BOTH sides fall back to the drift clause the two are merged into one
+    // sentence (see the twin-drift describe below — David heard the unmerged
+    // pair as a stutter), so the contract is about the whole utterance rather
+    // than about each field: the student is "you", the opponent is "they", and
+    // neither is missing.
+    const said = [plan?.theirs.text, plan?.mine.text].filter(Boolean).join(' ');
+    expect(said).toMatch(/\byou\b/i);
+    expect(said).toMatch(/\bthey\b/i);
+    expect(said, 'the opponent half is not first').toMatch(/^They\b/);
   });
 
   it('reports a trade on the side that made it', () => {
@@ -524,6 +531,66 @@ describe('the read sees the board as it stands, not only what the line changes',
     // No board handed in → say nothing rather than guess.
     expect(positionReadLine(read, 'white')).not.toContain('rook');
   });
+});
+
+describe('the two sides never say the same sentence twice', () => {
+  // David 2026-08-10, after listening back: "I think I heard a double
+  // sentence." His iPhone transcript, 02:47:57 —
+  //   "They bring their pieces toward c6 and d7 over the next few moves.
+  //    You bring your pieces toward c3 and d3 over the next few moves."
+  // Identical word for word bar the pronouns and the squares. Both true, which
+  // is what made it survive every board-truth gate we have; it is a VOICE
+  // defect, and it fires on quiet positions, which is most of them.
+  const QUIET = 'rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2';
+
+  /** A line where neither side captures anything — the drift case. */
+  function driftPlan(studentColor: 'white' | 'black'): LookaheadPlan | null {
+    return planFromUci(QUIET, ['b8c6', 'd2d4', 'g8f6', 'b1c3'], studentColor);
+  }
+
+  it('merges the twin drift sentence into one', () => {
+    const plan = driftPlan('black');
+    expect(plan).not.toBeNull();
+    if (!plan) return;
+    const spoken = [plan.theirs.text, plan.mine.text].filter(Boolean);
+    const drifting = spoken.filter((s) => /bring (your|their) pieces toward/.test(s));
+    expect(drifting.length, `two drift sentences in one breath: ${spoken.join(' ')}`)
+      .toBeLessThanOrEqual(1);
+  });
+
+  it('keeps BOTH sides in the merged sentence', () => {
+    const plan = driftPlan('black');
+    if (!plan) return;
+    const said = [plan.theirs.text, plan.mine.text].filter(Boolean).join(' ');
+    if (!/heading for/.test(said)) return; // the merge did not apply here
+    expect(said).toMatch(/heading for .+; you are heading for /);
+  });
+
+  it('never says two sentences with the same shape back to back', () => {
+    // The general form of the defect, swept over a real game: no two spoken
+    // plan sentences in one utterance may reduce to the same template.
+    const game = new Chess();
+    for (const san of ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6', 'Be3', 'e5']) {
+      game.move(san);
+      const fen = game.fen();
+      const probe = new Chess(fen);
+      const uci: string[] = [];
+      for (let i = 0; i < 6; i += 1) {
+        const ms = probe.moves({ verbose: true });
+        if (!ms.length) break;
+        probe.move(ms[0].san);
+        uci.push(`${ms[0].from}${ms[0].to}`);
+      }
+      const studentColor = new Chess(fen).turn() === 'w' ? 'white' : 'black';
+      const plan = planFromUci(fen, uci, studentColor);
+      if (!plan) continue;
+      const shapes = [plan.theirs.text, plan.mine.text].filter(Boolean)
+        // Strip everything that differs between the two voices, leaving the
+        // template — if two survive identical, the student heard a stutter.
+        .map((s) => s.replace(/\b(You|They|your|their)\b/g, '_').replace(/\b[a-h][1-8]\b/g, '#'));
+      expect(new Set(shapes).size, `${san}: same sentence twice — ${shapes[0]}`).toBe(shapes.length);
+    }
+  }, 30_000);
 });
 
 describe('the plan does not repeat itself', () => {

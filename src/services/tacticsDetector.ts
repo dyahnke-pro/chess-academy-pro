@@ -45,6 +45,12 @@ function capitalize(s: string): string {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
+/** A list a person would say out loud: "a, b and c" — never "a and b and c". */
+function listOf(items: readonly string[]): string {
+  if (items.length <= 1) return items[0] ?? '';
+  return `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`;
+}
+
 // ─── Board Helpers ──────────────────────────────────────────────────────────
 
 /**
@@ -138,7 +144,10 @@ function findForks(chess: Chess): TacticPattern[] {
           type: 'fork',
           beneficiary: piece.color,
           involvedSquares: [sq, ...targets.map((t) => t.square)],
-          description: `${capitalize(forkerName)} on ${sq} forks ${targetDescs.join(' and ')}`,
+          // A three-way fork read out as "and … and …" — David's log:
+          // "queen on d3 forks knight on d4 and bishop on e3 and knight on b1".
+          // Spoken aloud that is a list with no breath in it.
+          description: `${capitalize(forkerName)} on ${sq} forks ${listOf(targetDescs)}`,
         });
       }
     }
