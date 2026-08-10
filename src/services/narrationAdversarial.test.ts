@@ -62,7 +62,7 @@ describe('ADVERSARIAL: 60 machine-played games through every computed lane', () 
           plansBuilt += 1;
           const parts = [
             keySquareLine(plan.keySquares, said),
-            positionReadLine(plan.read, studentColor, said),
+            positionReadLine(plan.read, studentColor, said, fen),
             plan.theirs.text,
             plan.mine.text,
           ].filter(Boolean);

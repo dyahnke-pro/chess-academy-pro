@@ -117,8 +117,26 @@ export interface SidePlan {
   /** How many of this side's moves land within a king's-walk of the ENEMY
    *  king — the computable form of "they are coming for you". */
   nearEnemyKing: number;
+  /** Where those moves land. The clause "bring pieces at your king" names no
+   *  square, which is exactly why it needs marks: the student is told an attack
+   *  is coming and given nowhere to look. */
+  kingAttackSquares: string[];
+  /** Where the material actually changes hands. */
+  materialSquares: string[];
+  /** Where a PIECE (never a pawn) gets traded off. */
+  tradeSquares: string[];
+  /** Where the tactic lands, when one does. */
+  tacticSquare: string | null;
   /** Speakable, or '' when the line gives this side nothing describable. */
   text: string;
+  /** THE CLAUSES THAT REACHED `text`, each with the squares it is about.
+   *
+   *  This is what lets the board draw a plan the words never spelled out — "they
+   *  want to bring pieces at your king" points nowhere by itself — while keeping
+   *  the coupling that makes marks honest: a caller draws a clause's squares
+   *  only after confirming that clause is in the utterance the student actually
+   *  heard. See `planMarks`. */
+  spokenClauses: Array<{ text: string; squares: string[] }>;
 }
 
 /** What is TRUE OF THE BOARD RIGHT NOW, as opposed to what the line does next.
@@ -149,8 +167,21 @@ export interface PositionRead {
   evalSwingCp: number | null;
 }
 
+/** One move of the line, reduced to what a board can draw.
+ *
+ *  Kept alongside the prose because an arrow has to come from the SAME line the
+ *  sentence was read off — a mark computed from a second source is a second
+ *  claim, and the two drift. See `planMarks`. */
+export interface PlanStep {
+  from: string;
+  to: string;
+  color: 'white' | 'black';
+}
+
 export interface LookaheadPlan {
   keySquares: KeySquare[];
+  /** The line itself, inside the horizon — where every piece actually goes. */
+  path: PlanStep[];
   /** The board as it stands, beside what the line does to it. */
   read: PositionRead;
   white: SidePlan;
@@ -250,15 +281,22 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
   let materialSwing = 0;
   let shieldStripped = 0;
   let tactic: string | null = null;
+  let tacticSquare: string | null = null;
   let mates = false;
   let nearEnemyKing = 0;
+  const kingAttackSquares: string[] = [];
+  const materialSquares: string[] = [];
+  const tradeSquares: string[] = [];
 
   for (const ply of mine) {
     const { to } = squaresOf(ply);
     destinations.set(to, (destinations.get(to) ?? 0) + 1);
     for (const f of ply.facts.newOpenFiles) opening.add(f);
     const taken = capturedPiece(ply.facts.captured);
-    if (taken) trading.push(taken);
+    if (taken) {
+      trading.push(taken);
+      if (taken !== 'pawn') tradeSquares.push(to);
+    }
     if (ply.facts.outpostGained) outposts.push(ply.facts.outpostGained);
     // VERIFY THE PAWN IS ACTUALLY THIS SIDE'S, ON THE BOARD, BEFORE CLAIMING
     // IT. `newPassedPawns` pools both colours into one untagged list, so
@@ -275,15 +313,22 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
       } catch { /* unreadable board — claim nothing */ }
     }
     materialSwing += ply.facts.materialGained;
+    if (ply.facts.materialGained > 0) materialSquares.push(to);
     shieldStripped += ply.facts.shieldLost;
-    if (!tactic && ply.facts.tacticLanded) tactic = ply.facts.tacticLanded;
+    if (!tactic && ply.facts.tacticLanded) {
+      tactic = ply.facts.tacticLanded;
+      tacticSquare = to;
+    }
     if (ply.facts.isMate) mates = true;
     // "They are coming for your king" as arithmetic: how many of this side's
     // moves land within a king's-walk of the OTHER king. Read off the board
     // before the move, so it describes where the piece is heading rather than
     // where the king ended up after being chased.
     const enemyKing = kingSquare(ply.fenBefore, color === 'white' ? 'b' : 'w');
-    if (enemyKing && chebyshev(to, enemyKing) <= KING_ZONE) nearEnemyKing += 1;
+    if (enemyKing && chebyshev(to, enemyKing) <= KING_ZONE) {
+      nearEnemyKing += 1;
+      kingAttackSquares.push(to);
+    }
   }
 
   const headingFor = [...destinations.entries()]
@@ -300,10 +345,15 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
     passedPawns,
     shieldStripped,
     tactic,
+    tacticSquare,
     mates,
     mateDelivered: false,
     nearEnemyKing,
+    kingAttackSquares,
+    materialSquares,
+    tradeSquares,
     text: '',
+    spokenClauses: [],
   };
 }
 
@@ -351,16 +401,24 @@ export function describePlan(
       : 'They have a forced mate in this line. This is the moment to stop it.';
   }
 
-  const clauses: Array<{ weight: number; text: string }> = [];
-  const add = (weight: number, text: string): void => { clauses.push({ weight, text }); };
+  // Every clause carries the squares it is ABOUT, so the board can point at
+  // what the sentence describes even when the words name no square — "bring
+  // pieces at your king" is a warning with nowhere to look until the marks
+  // arrive. Squares are the plan's own computed ones; nothing is inferred.
+  const clauses: Array<{ weight: number; text: string; squares: string[] }> = [];
+  const add = (weight: number, text: string, squares: string[] = []): void => {
+    clauses.push({ weight, text, squares });
+  };
 
   // A tactic that actually lands is the single most concrete thing the line
   // contains, so it starts above everything except mate.
   const tactic = tacticWord(plan.tactic);
-  if (tactic) add(90, `land a ${tactic}`);
+  if (tactic) add(90, `land a ${tactic}`, plan.tacticSquare ? [plan.tacticSquare] : []);
   // King attack, scaled by how many pieces are really arriving. Two is a
   // gesture; four is an assault and the sentence should lead with it.
-  if (plan.nearEnemyKing >= 2) add(50 + plan.nearEnemyKing * 12, `bring pieces at ${theirKing}`);
+  if (plan.nearEnemyKing >= 2) {
+    add(50 + plan.nearEnemyKing * 12, `bring pieces at ${theirKing}`, plan.kingAttackSquares);
+  }
   // Shield pawns are worth more per pawn than a piece walking over: a pawn that
   // has gone is not coming back.
   if (plan.shieldStripped > 0) add(45 + plan.shieldStripped * 18, `strip the pawns in front of ${theirKing}`);
@@ -368,7 +426,7 @@ export function describePlan(
   // should not pretend otherwise.
   if (plan.materialSwing >= 1) {
     const what = plan.materialSwing >= 5 ? 'a rook' : plan.materialSwing >= 3 ? 'a piece' : 'a pawn';
-    add(35 + plan.materialSwing * 10, `win ${what}`);
+    add(35 + plan.materialSwing * 10, `win ${what}`, plan.materialSquares);
   }
   // A passed pawn matters more the closer it is to promoting — the one fact
   // here whose SQUARE changes its importance, not just its wording.
@@ -379,24 +437,32 @@ export function describePlan(
     // Steep on purpose: a passer on the seventh is close to decisive, one on
     // the third is a long-term asset that should not outrank a knight sitting
     // on an outpost right now.
-    add(10 + advanced * 8, `create a passed pawn on ${sq}`);
+    add(10 + advanced * 8, `create a passed pawn on ${sq}`, [sq]);
   }
-  if (plan.outposts.length > 0) add(35, `plant a piece on ${plan.outposts[0]} where no pawn can chase it`);
+  if (plan.outposts.length > 0) {
+    add(35, `plant a piece on ${plan.outposts[0]} where no pawn can chase it`, [plan.outposts[0]]);
+  }
   if (plan.opening.length > 0) add(25, `open the ${plan.opening[0]}-file`);
   if (plan.trading.length > 0) {
     // A PAWN TRADE IS NOT A PLAN. "They want to trade off the pawn" was in the
     // five-narration sample and says nothing — pawns come off in almost every
     // line. Trading a PIECE is a real intention; trading a pawn is weather.
     const unique = [...new Set(plan.trading)].filter((p) => p !== 'pawn');
-    if (unique.length > 0) add(20, `trade off ${unique.length > 1 ? 'pieces' : `the ${unique[0]}`}`);
+    if (unique.length > 0) {
+      add(20, `trade off ${unique.length > 1 ? 'pieces' : `the ${unique[0]}`}`, plan.tradeSquares);
+    }
   }
 
+  plan.spokenClauses = [];
   if (clauses.length === 0) {
     // Nothing concrete happens in the line, but the pieces still go SOMEWHERE,
     // and where they go is the plan when nothing is captured.
     if (plan.headingFor.length === 0) return '';
-    const squares = plan.headingFor.slice(0, 2).join(' and ');
-    return `${subject} bring ${possessive} pieces toward ${squares} over the next few moves.`;
+    const heading = plan.headingFor.slice(0, 2);
+    const squares = heading.join(' and ');
+    const line = `${subject} bring ${possessive} pieces toward ${squares} over the next few moves.`;
+    plan.spokenClauses = [{ text: line, squares: heading }];
+    return line;
   }
 
   const ranked = clauses.sort((a, b) => b.weight - a.weight);
@@ -405,8 +471,10 @@ export function describePlan(
   // same reason: a repeated line and a missing line are both failures, and
   // there is usually a third true thing to say.
   const fresh = said ? ranked.filter((c) => !said.has(c.text)) : ranked;
-  const shown = (fresh.length > 0 ? fresh : []).slice(0, 3).map((c) => c.text);
+  const chosen = (fresh.length > 0 ? fresh : []).slice(0, 3);
+  const shown = chosen.map((c) => c.text);
   if (shown.length === 0) return '';
+  plan.spokenClauses = chosen.filter((c) => c.squares.length > 0).map((c) => ({ text: c.text, squares: c.squares }));
   for (const t of shown) said?.add(t);
   const list = shown.length === 1
     ? shown[0]
@@ -443,9 +511,18 @@ export function buildLookaheadPlan(
 
   return {
     keySquares: keySquaresOf(line.plies),
+    path: pathOf(line.plies),
     read: readPosition(line),
     white, black, mine, theirs,
   };
+}
+
+/** The horizon's moves, from/to/colour — the raw material for the arrows. */
+function pathOf(plies: readonly PvPly[]): PlanStep[] {
+  return plies.slice(0, PLAN_HORIZON).map((p) => ({
+    ...squaresOf(p),
+    color: p.moverColor,
+  }));
 }
 
 /** The board as it stands at the root of the line. */
@@ -485,6 +562,14 @@ export function positionReadLine(
   read: PositionRead,
   studentColor: 'white' | 'black',
   said?: Set<string>,
+  /** The board, when the caller has it. Only the half-open-file line needs it,
+   *  and only to answer one question: does this side still HAVE a rook? A
+   *  half-open file is a pawn fact, so it survives into endings where the rooks
+   *  are long gone — and the line then advises a student to post a piece they
+   *  do not own. That is a `voicePackage.plan` grading drop in the live log
+   *  (2026-08-10), and per G0 the cure is not to let the gate catch it: it is
+   *  to not compute the claim. */
+  fen?: string,
 ): string {
   const once = (key: string, line: string): string | null => {
     if (said?.has(key)) return null;
@@ -514,11 +599,22 @@ export function positionReadLine(
     const l = once('islands', `They have ${theirs} pawn islands to your ${mine} — more islands means more things to defend.`);
     if (l) return l;
   }
-  if (myHalfOpen.length > 0) {
+  if (myHalfOpen.length > 0 && hasRook(fen, studentColor)) {
     const l = once(`halfopen-${myHalfOpen[0]}`, `The ${myHalfOpen[0]}-file is half-open for you; that is where a rook belongs.`);
     if (l) return l;
   }
   return '';
+}
+
+/** Does this side still own a rook? Unknown board → assume not, and say
+ *  nothing: silence is always available and a wrong claim is not. */
+function hasRook(fen: string | undefined, color: 'white' | 'black'): boolean {
+  if (!fen) return false;
+  try {
+    const want = color === 'white' ? 'w' : 'b';
+    return new Chess(fen).board().flat()
+      .some((c) => c && c.type === 'r' && c.color === want);
+  } catch { return false; }
 }
 
 /**
@@ -573,7 +669,9 @@ function shortLineRead(
   const empty = (color: 'white' | 'black'): SidePlan => ({
     color, headingFor: [], opening: [], trading: [], outposts: [],
     passedPawns: [], materialSwing: 0, shieldStripped: 0, tactic: null,
-    mates: false, nearEnemyKing: 0, text: '',
+    tacticSquare: null, mates: false, nearEnemyKing: 0,
+    kingAttackSquares: [], materialSquares: [], tradeSquares: [],
+    text: '', spokenClauses: [],
   });
   // A mate ON THE BOARD is the one intention a zero-ply line still has.
   const mated = board.isCheckmate();
@@ -601,7 +699,7 @@ function shortLineRead(
     }],
     rootEvalCp: 0, terminalEvalCp: null, delivers: true, closeAlternative: null,
   };
-  return { keySquares: [], read: readPosition(stub), white, black, mine, theirs };
+  return { keySquares: [], path: [], read: readPosition(stub), white, black, mine, theirs };
 }
 
 /**

@@ -375,6 +375,14 @@ export type AuditKind =
   // Joins with the existing `voice-speak-invoked` audit on timestamp
   // for the full picture.
   | 'coach-narration-spoken'
+  // What the BOARD said alongside the voice — the lead-the-eye arrows and
+  // square highlights a narration lane painted. Pairs with the
+  // `coach-narration-spoken` event on the same fen so an audit can prove the
+  // locked rule held: every square the coach NAMED was also marked. A log with
+  // narration events and no annotation events on the same turn is the exact
+  // defect David caught on prod (2026-08-10) — four squares spoken, a bare
+  // board.
+  | 'coach-board-annotation'
   // WO-COACH-FX-DIAG. Diagnostic checkpoints inside the coach-turn
   // flow so the next audit log can pinpoint exactly where the FX
   // path breaks. Joined with the existing coach-move-fx-emitted

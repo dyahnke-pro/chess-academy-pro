@@ -505,6 +505,25 @@ describe('the read sees the board as it stands, not only what the line changes',
     expect(positionReadLine(read, 'white')).toContain('They have 3');
     expect(positionReadLine(read, 'black')).not.toContain('They have 3');
   });
+
+  it('never tells a rookless side where a rook belongs', () => {
+    // A half-open file is a PAWN fact, so it outlives the rooks — and the line
+    // then advises a student to post a piece they no longer own. It showed up
+    // as a `voicePackage.plan` grading drop in David's live log (2026-08-10);
+    // per G0 the fix is that the claim is never computed, not that a gate
+    // catches it.
+    const read: PositionRead = {
+      tacticsNow: [], oppositeWings: false, islands: { white: 2, black: 2 },
+      halfOpen: { white: ['e'], black: [] }, endgameType: null,
+      materialBalance: 0, evalSwingCp: null,
+    };
+    const ROOKLESS = '4k3/5ppp/8/8/8/8/PPP2PPP/4K3 w - - 0 1';
+    const WITH_ROOK = '4k3/5ppp/8/8/8/8/PPP2PPP/R3K3 w - - 0 1';
+    expect(positionReadLine(read, 'white', undefined, ROOKLESS)).not.toContain('rook');
+    expect(positionReadLine(read, 'white', undefined, WITH_ROOK)).toContain('rook');
+    // No board handed in → say nothing rather than guess.
+    expect(positionReadLine(read, 'white')).not.toContain('rook');
+  });
 });
 
 describe('the plan does not repeat itself', () => {
@@ -515,7 +534,9 @@ describe('the plan does not repeat itself', () => {
   const P: SidePlan = {
     color: 'white', headingFor: ['e4', 'f3'], opening: ['d'], trading: ['knight'],
     outposts: ['e5'], passedPawns: [], materialSwing: 1, shieldStripped: 0,
-    tactic: 'pin', mates: false, nearEnemyKing: 0, text: '',
+    tactic: 'pin', tacticSquare: 'e4', mates: false, nearEnemyKing: 0,
+    kingAttackSquares: [], materialSquares: ['e4'], tradeSquares: ['e5'],
+    text: '', spokenClauses: [],
   };
 
   it('says something different on the next ply', () => {

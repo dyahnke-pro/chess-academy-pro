@@ -168,6 +168,8 @@ import { findLivePunishment } from '../../services/gemCrushLines';
 import { buildThinkAloud } from '../../services/thinkAloud';
 import { scaleGap, packageForRegister, readsForRegister } from '../../services/hintRegister';
 import { planFromUci, keySquareLine, positionReadLine } from '../../services/lookaheadPlan';
+import type { LookaheadPlan } from '../../services/lookaheadPlan';
+import { planMarks } from '../../services/planMarks';
 import {
   noteFamilyFork, markWalked, unwalked, nextForkToOffer, progressAt,
   type ForkLog, type Fork,
@@ -1312,7 +1314,10 @@ export function CoachTeachPage(): JSX.Element {
    *  which are different scopes. The FEN travels with it so a plan can never be
    *  spoken about a position it was not computed from — the stale-beat class of
    *  bug, prevented rather than validated. */
-  const lookaheadPlanRef = useRef<{ fen: string; text: string } | null>(null);
+  // The plan rides along with its prose so the BOARD can be drawn from the
+  // same line the sentence was read off (see `planMarks`). Keeping only the
+  // text here is what left the marks with no source and the board bare.
+  const lookaheadPlanRef = useRef<{ fen: string; text: string; plan: LookaheadPlan } | null>(null);
   /** Plan clauses already spoken this game. A plan is stable across plies — the
    *  same pin is still coming three moves later — so without this the coach
    *  chants. A five-ply sample from a real game repeated one line four times. */
@@ -5488,6 +5493,11 @@ export function CoachTeachPage(): JSX.Element {
     pkg: VoicePackage;
     alertArrow: BoardArrow | null;
     leadEyeArrows: BoardArrow[];
+    /** Lead-the-eye for the COMPUTED lanes — the plan's future moves and key
+     *  squares, and the square the last move gave up. Computed from what
+     *  SURVIVED into `pkg.spoken`, so a mark can never outlive its claim. */
+    planArrows: BoardArrow[];
+    planHighlights: BoardHighlight[];
     factLines: string[];
   } => {
     // THE GAME IS OVER — SAY NOTHING MORE. David's 2026-08-08 run ended in
@@ -5507,7 +5517,10 @@ export function CoachTeachPage(): JSX.Element {
     try {
       const over = new Chess(args.fenAfterReply);
       if (over.isGameOver()) {
-        return { pkg: buildVoicePackage([]), alertArrow: null, leadEyeArrows: [], factLines: [] };
+        return {
+          pkg: buildVoicePackage([]), alertArrow: null, leadEyeArrows: [],
+          planArrows: [], planHighlights: [], factLines: [],
+        };
       }
     } catch { /* unreadable FEN — fall through and let the lanes gate it */ }
 
@@ -6034,13 +6047,55 @@ export function CoachTeachPage(): JSX.Element {
       });
     }
 
+    // ── LEAD THE EYE ON THE COMPUTED LANES ─────────────────────────────────
+    // David 2026-08-10, after a live run in which the coach named d6, b5, c6
+    // and d7 across one game and the board never marked one of them: "I want
+    // square highlights and arrows drawn about future moves, plans, and key
+    // squares."
+    //
+    // Drawn from `pkg.spoken` — the text that SURVIVED verification — rather
+    // than from the plan directly, so a claim the package refused takes its
+    // marks down with it. That coupling is why these cannot lie: the board can
+    // only ever repeat what the student just heard.
+    const planArrows: BoardArrow[] = [];
+    const planHighlights: BoardHighlight[] = [];
+    if (pkg.spoken) {
+      const planned = lookaheadPlanRef.current;
+      if (planned?.fen === args.fenAfterReply && pkg.kept.some((f) => f.kind === 'plan')) {
+        try {
+          const marks = planMarks({
+            plan: planned.plan,
+            // Only the plan's OWN sentences may claim the plan's squares. The
+            // package is one utterance built from several producers, and
+            // scanning all of it would let a corpus note's square be drawn as
+            // if the engine's line went there.
+            spoken: pkg.kept.filter((f) => f.kind === 'plan').map((f) => f.text).join(' '),
+            fen: args.fenAfterReply,
+            studentColor: args.studentColor,
+          });
+          planArrows.push(...marks.arrows);
+          planHighlights.push(...marks.highlights);
+        } catch { /* the marks are lead-the-eye, never a blocker */ }
+      }
+      // THE SQUARE THE LAST MOVE GAVE UP. The backward look already names it
+      // out loud ("…that gives up control of d5"); this is the same fact,
+      // pointed at. Amber rather than red: it is a cost already paid, not a
+      // threat arriving.
+      const conceded = discussion.lastMoveDrawback?.square;
+      if (conceded && pkg.kept.some((f) => f.kind === 'drawback') && /\b[a-h][1-8]\b/.test(conceded)) {
+        planHighlights.push({ square: conceded, color: '#f59e0b' });
+      }
+    }
+
     return {
       pkg,
       alertArrow,
       leadEyeArrows,
+      planArrows,
+      planHighlights,
       factLines,
     };
-  }, [activeProfile?.puzzleRating, activeProfile?.currentRating]);
+  }, [activeProfile?.puzzleRating, activeProfile?.currentRating, discussion.lastMoveDrawback]);
 
   const handleStudentMove = useCallback((move: MoveResult): void => {
     // A board move DISMISSES the "Read this position" banner (clears its
@@ -6494,13 +6549,13 @@ export function CoachTeachPage(): JSX.Element {
                         // to it — a student needs the first to understand the
                         // second. Deterministic like the rest: fixed templates,
                         // computed values, no model between board and words.
-                        const board = positionReadLine(plan.read, playerColor, planSaidRef.current);
+                        const board = positionReadLine(plan.read, playerColor, planSaidRef.current, probe.fen());
                         const said = [key, board, plan.theirs.text, plan.mine.text]
                           .filter(Boolean)
                           .slice(0, discussion.hintDial.register === 'obvious' ? 3 : 2)
                           .join(' ');
                         if (said) {
-                          lookaheadPlanRef.current = { fen: probe.fen(), text: said };
+                          lookaheadPlanRef.current = { fen: probe.fen(), text: said, plan };
                           captureEvent('lookahead_plan_offered', {
                             surface: 'coach-teach',
                             key_square: plan.keySquares[0]?.square ?? null,
@@ -6941,6 +6996,31 @@ export function CoachTeachPage(): JSX.Element {
                   const leadEye = instant.leadEyeArrows;
                   chainArrowsRef.current = [...chainArrowsRef.current, ...leadEye];
                   void padDone.then(() => setArrows((prev) => uniqueArrows([...prev, ...leadEye]).slice(0, 4)));
+                }
+                // THE PLAN'S MARKS. They ride the same `padDone` gate as every
+                // other mark on this turn, so they land with the voice rather
+                // than ahead of it, and the same stale-turn guard: if the
+                // student has already moved, the plan they describe belongs to
+                // a board that is gone.
+                if (instant.planArrows.length > 0 || instant.planHighlights.length > 0) {
+                  const { planArrows: pa, planHighlights: ph } = instant;
+                  void padDone.then(() => {
+                    if (liveFenRef.current !== fenAfterReply) return;
+                    if (pa.length > 0) setArrows((prev) => uniqueArrows([...prev, ...pa]).slice(0, 4));
+                    if (ph.length > 0) {
+                      setHighlights((prev) => {
+                        const have = new Set(prev.map((h) => h.square));
+                        return [...prev, ...ph.filter((h) => !have.has(h.square))].slice(0, 6);
+                      });
+                    }
+                    void logAppAudit({
+                      kind: 'coach-board-annotation',
+                      category: 'narration',
+                      source: 'CoachTeachPage.planMarks',
+                      summary: `lead-the-eye on the computed plan: ${pa.length} arrow(s), ${ph.length} highlight(s) — ${[...pa.map((a) => `${a.startSquare}-${a.endSquare}`), ...ph.map((h) => h.square)].join(', ')}`,
+                      fen: fenAfterReply,
+                    });
+                  });
                 }
               }
               if (lines.length > 0) speakTrackA(lines.join(' '));
