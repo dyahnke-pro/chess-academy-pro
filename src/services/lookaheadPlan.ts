@@ -107,6 +107,13 @@ export interface SidePlan {
   tactic: string | null;
   /** The line ends in mate delivered by this side. */
   mates: boolean;
+  /** The mate is ALREADY ON THE BOARD — the game is over, not coming.
+   *
+   *  Without this the coach announced "there is a forced mate in this line —
+   *  it is there if you find it" on the move that DELIVERED mate, inviting the
+   *  student to find something they had just played. Tense is not decoration
+   *  when the game has ended. */
+  mateDelivered?: boolean;
   /** How many of this side's moves land within a king's-walk of the ENEMY
    *  king — the computable form of "they are coming for you". */
   nearEnemyKing: number;
@@ -294,6 +301,7 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
     shieldStripped,
     tactic,
     mates,
+    mateDelivered: false,
     nearEnemyKing,
     text: '',
   };
@@ -333,6 +341,11 @@ export function describePlan(
   // Mate ends the sentence before it starts: nothing else in the position
   // matters, and burying it behind "and open the c-file" would be absurd.
   if (plan.mates) {
+    if (plan.mateDelivered) {
+      return voice === 'mine'
+        ? 'That is checkmate — the game is over.'
+        : 'That is checkmate. The game is over.';
+    }
     return voice === 'mine'
       ? 'There is a forced mate in this line — it is there if you find it.'
       : 'They have a forced mate in this line. This is the moment to stop it.';
@@ -561,7 +574,11 @@ function shortLineRead(
   const white = empty('white');
   const black = empty('black');
   const loserIsWhite = board.turn() === 'w';
-  if (mated) (loserIsWhite ? black : white).mates = true;
+  if (mated) {
+    const winner = loserIsWhite ? black : white;
+    winner.mates = true;
+    winner.mateDelivered = true; // on the board, not coming — see `mateDelivered`
+  }
   const mine = studentColor === 'white' ? white : black;
   const theirs = studentColor === 'white' ? black : white;
   mine.text = describePlan(mine, 'mine');

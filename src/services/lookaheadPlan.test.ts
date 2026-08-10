@@ -259,6 +259,28 @@ describe('the read sees the whole line, not just where pieces land', () => {
     const plan = planFromUci(board.fen(), [], 'white');
     expect(plan?.theirs.text.toLowerCase(), 'silent at checkmate').toContain('mate');
   });
+
+  it('does not invite the student to FIND a mate that has already landed', () => {
+    // The full-game walk ended with "there is a forced mate in this line — it
+    // is there if you find it" spoken on the move that DELIVERED mate. Tense
+    // is not decoration once the game is over.
+    const board = new Chess();
+    for (const san of ['f3', 'e5', 'g4', 'Qh4#']) board.move(san);
+    const plan = planFromUci(board.fen(), [], 'white');
+    const said = `${plan?.mine.text} ${plan?.theirs.text}`.toLowerCase();
+    expect(said, 'invited the student to find a mate already on the board').not.toContain('if you find it');
+    expect(said).toContain('game is over');
+  });
+
+  it('still speaks the future tense for a mate the line is HEADING toward', () => {
+    const base = {
+      color: 'white' as const, headingFor: [], opening: [], trading: [], outposts: [],
+      passedPawns: [], materialSwing: 0, shieldStripped: 0, tactic: null,
+      nearEnemyKing: 0, text: '',
+    };
+    expect(describePlan({ ...base, mates: true }, 'mine')).toContain('if you find it');
+    expect(describePlan({ ...base, mates: true, mateDelivered: true }, 'mine')).toContain('game is over');
+  });
 });
 
 describe('the sentence is ordered by the position, not by a fixed ladder', () => {
