@@ -7464,7 +7464,15 @@ export function CoachTeachPage(): JSX.Element {
                       kind: 'coach-board-annotation',
                       category: 'narration',
                       source: 'CoachTeachPage.planMarks',
-                      summary: `lead-the-eye on the computed plan: ${pa.length} arrow(s), ${ph.length} highlight(s) — ${[...pa.map((a) => `${a.startSquare}-${a.endSquare}`), ...ph.map((h) => h.square)].join(', ')}`,
+                      // Same provenance the late paint emits — an audit outside
+                      // the app cannot tell a correct mark from a lie by reading
+                      // the prose, so the app says which claim entitled it.
+                      summary: `lead-the-eye on the computed plan: ${pa.length} arrow(s), ${ph.length} highlight(s) — ${[...pa.map((a) => `${a.startSquare}-${a.endSquare}`), ...ph.map((h) => h.square)].join(', ')} | justified: ${[...new Set([
+                        ...(lookaheadPlanRef.current?.saidParts ?? []).flatMap((p) => p.squares),
+                        ...(lookaheadPlanRef.current?.plan.mine.maneuver?.path ?? []),
+                        ...(lookaheadPlanRef.current?.plan.theirs.maneuver?.path ?? []),
+                        ...ph.map((h) => h.square),
+                      ])].join(' ')}`,
                       fen: fenAfterReply,
                     });
                   });

@@ -274,6 +274,7 @@ async function main() {
       // walks entitle it to draw — and this asserts the marks are a subset. The
       // invariant is exact, and it is the architecture's own: a refused claim
       // takes its squares with it.
+      const summaries = markEvents.map((e) => String(e.summary ?? ''));
       const justified = new Set(
         summaries.flatMap((t) => (/\|\s*justified:\s*([a-h1-8 ]*)/.exec(t)?.[1] ?? '')
           .split(/\s+/).filter(Boolean)),
@@ -288,9 +289,13 @@ async function main() {
         : claiming.filter((sq) => !justified.has(sq));
       record(
         'every mark belongs to a claim that survived',
-        unjustified.length === 0,
+        // A SKIP IS NOT A PASS. Marks fired and none of them said what entitled
+        // them: that is the app drawing on the board without recording why, and
+        // reporting it green is the exact false-green shape this check has
+        // already worn twice.
+        justified.size > 0 && unjustified.length === 0,
         justified.size === 0
-          ? 'no provenance in the annotation events — check skipped rather than faked'
+          ? `${claiming.length} mark(s) drawn with no provenance recorded — the app never said what justified them`
           : unjustified.length > 0
             ? `${unjustified.length} mark(s) nothing justified: ${unjustified.slice(0, 6).join(', ')}`
             : `all ${claiming.length} claiming mark(s) traced to a surviving claim, ${arrowOrigins.size} arrow origin(s) exempt`,
