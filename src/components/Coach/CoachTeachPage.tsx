@@ -5163,11 +5163,15 @@ export function CoachTeachPage(): JSX.Element {
         // fen, the arrows are history: skip the paint (the chat text still
         // lands; only the board decoration is dropped).
         if (liveFenRef.current === fen) {
-          // Cap the MERGED set too — the candidate pass and the opening
-          // chain each obey their own cap, but together they flooded
-          // David's board with 5 arrows (2026-08-07 screenshots). Four
-          // is the ceiling for one position.
-          const mergedArrows = uniqueArrows(groundArrows([...codeArrows, ...chainArrowsRef.current], fen)).slice(0, 4);
+          // THE MERGED SET IS UNCAPPED. It used to be `.slice(0, 4)`, added when
+          // two passes together put five arrows on David's board (2026-08-07).
+          // The ceiling was the wrong cure: it does not decide WHICH arrow is
+          // noise, it drops whichever sorts last, so a move the coach stated out
+          // loud can vanish from the board. David 2026-08-10: "If the coach says
+          // a move or square they need to be arrowed or highlighted." Volume is
+          // controlled by only ever marking what a surviving claim entitles —
+          // upstream, where it can be judged — not by truncating here.
+          const mergedArrows = uniqueArrows(groundArrows([...codeArrows, ...chainArrowsRef.current], fen));
           const mergedHighlights = [...codeHighlights, ...chainHighlightsRef.current];
           // LEAD-THE-EYE SYNC (David 2026-08-07: "make sure they fire on
           // every mentioned move, AS it's being mentioned — mirror how we
@@ -7425,7 +7429,7 @@ export function CoachTeachPage(): JSX.Element {
                   // that takes the student's hanging piece).
                   if (instant.alertArrow && instant.pkg.kept.some((f) => f.kind === 'threat')) {
                     const arrow = instant.alertArrow;
-                    void padDone.then(() => setArrows((prev) => uniqueArrows([...prev, arrow]).slice(0, 4)));
+                    void padDone.then(() => setArrows((prev) => uniqueArrows([...prev, arrow])));
                   }
                   // "We said something beyond a bare callout." The two callout
                   // kinds were one `alert` before the split, so both are named.
@@ -7436,7 +7440,7 @@ export function CoachTeachPage(): JSX.Element {
                 if (instant.leadEyeArrows.length > 0) {
                   const leadEye = instant.leadEyeArrows;
                   chainArrowsRef.current = [...chainArrowsRef.current, ...leadEye];
-                  void padDone.then(() => setArrows((prev) => uniqueArrows([...prev, ...leadEye]).slice(0, 4)));
+                  void padDone.then(() => setArrows((prev) => uniqueArrows([...prev, ...leadEye])));
                 }
                 // THE PLAN'S MARKS. They ride the same `padDone` gate as every
                 // other mark on this turn, so they land with the voice rather
@@ -7453,11 +7457,11 @@ export function CoachTeachPage(): JSX.Element {
                   const { planArrows: pa, planHighlights: ph } = instant;
                   void padDone.then(() => {
                     if (liveFenRef.current !== fenAfterReply) return;
-                    if (pa.length > 0) setArrows((prev) => uniqueArrows([...prev, ...pa]).slice(0, 4));
+                    if (pa.length > 0) setArrows((prev) => uniqueArrows([...prev, ...pa]));
                     if (ph.length > 0) {
                       setHighlights((prev) => {
                         const have = new Set(prev.map((h) => h.square));
-                        return [...prev, ...ph.filter((h) => !have.has(h.square))].slice(0, 6);
+                        return [...prev, ...ph.filter((h) => !have.has(h.square))];
                       });
                     }
                     void logAppAudit({
@@ -7633,7 +7637,7 @@ export function CoachTeachPage(): JSX.Element {
                       setHighlights((prev) => {
                         const have = new Set(prev.map((h) => h.square));
                         return [...prev, ...owed.filter((sq) => !have.has(sq))
-                          .map((square) => ({ square, color: '#f59e0b' }))].slice(0, 6);
+                          .map((square) => ({ square, color: '#f59e0b' }))];
                       });
                     }
                     void logAppAudit({
@@ -7654,7 +7658,7 @@ export function CoachTeachPage(): JSX.Element {
                   // later when the warm beat's arrow pass lands.
                   if (trackABestReplyArrow) {
                     const arrow = trackABestReplyArrow;
-                    setArrows((prev) => uniqueArrows([...prev, arrow]).slice(0, 4));
+                    setArrows((prev) => uniqueArrows([...prev, arrow]));
                   }
                 }
               } catch { /* bonus */ }
