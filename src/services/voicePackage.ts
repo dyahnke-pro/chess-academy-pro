@@ -50,6 +50,19 @@ export type VoiceFactKind =
    *  once the corpus has nothing for the position. It fires only when code can
    *  NAME what the student's own move handed over, so it is rare. */
   | 'drawback'
+  /** THE MISTAKE CALLOUT — what was just played, why it was wrong, and what
+   *  should have been played instead (`inaccuracyCall`).
+   *
+   *  David 2026-08-10: "Should be number two on the list, right behind the
+   *  mistake call out." So the student's own mistake leads the computed lanes
+   *  and the COACH's own sits immediately behind it. That order is the whole
+   *  point: a student hears their own move judged before they hear anyone
+   *  else's, and the coach admitting its blunder lands as the second thing,
+   *  not the first. */
+  | 'mistake'
+  /** The coach's own inaccuracy, owned in the first person, with the
+   *  punishment handed over but never named. Number two, right behind. */
+  | 'coachMistake'
   /** TEACHING: a masterclass beat or a corpus note. The heart of the coach. */
   | 'note'
   /** An opportunity the detectors proved FOR the student — mate in one, a
@@ -124,10 +137,14 @@ const RANK: Record<VoiceFactKind, number> = {
   // talking about AFTER corpus has ran out and we are on computer
   // narrations"). The 90/10 rule stands untouched — a note authored at this
   // board outranks anything computed about it.
-  note: 12,
+  note: 14,
   // Then the computed lanes, in the order he named: "backwards first, then
   // forward, then gem, then threat" — what your last move cost, what the line
   // does next, the punishable slip, the thing coming at you.
+  // David 2026-08-10, on where the mistake callout belongs: first among the
+  // computed lanes, with the coach's own admission immediately behind it.
+  mistake: 13,
+  coachMistake: 12,
   drawback: 11,
   plan: 10,
   gem: 9,
@@ -263,7 +280,10 @@ export function buildVoicePackage(facts: VoiceFact[]): VoicePackage {
   // corpus as well would turn one dropped sentence into a silent turn. Rank
   // makes this safe — `plan` and `drawback` both outrank `borrowed`, so by the
   // time a borrowed fact is considered, their verdict is already in.
-  const pvSpoke = (): boolean => kept.some((f) => f.kind === 'plan' || f.kind === 'drawback');
+  const pvSpoke = (): boolean => kept.some(
+    (f) => f.kind === 'plan' || f.kind === 'drawback'
+      || f.kind === 'mistake' || f.kind === 'coachMistake',
+  );
 
   for (const { f } of ordered) {
     if (f.kind === 'borrowed' && pvSpoke()) {

@@ -817,10 +817,13 @@ function shapeOf(plies: readonly PvPly[], studentColor: 'white' | 'black'): Line
   const rights = (fen: string): string => fen.split(' ')[2] ?? '-';
   const rootRights = rights(horizon[0]?.fenBefore ?? '');
   const endRights = rights(horizon[horizon.length - 1]?.fenAfter ?? '');
-  const lostFor = (chars: string): boolean =>
-    [...chars].some((c) => rootRights.includes(c) && !endRights.includes(c));
-  const whiteLost = lostFor('KQ');
-  const blackLost = lostFor('kq');
+  // `split('')`/spread on a string is banned by lint for surrogate-pair
+  // reasons; these are ASCII castling flags, but the rule is right in general
+  // and an explicit list is clearer anyway.
+  const lostFor = (chars: readonly string[]): boolean =>
+    chars.some((c) => rootRights.includes(c) && !endRights.includes(c));
+  const whiteLost = lostFor(['K', 'Q']);
+  const blackLost = lostFor(['k', 'q']);
 
   const mineLost = studentColor === 'white' ? whiteLost : blackLost;
   const theirsLost = studentColor === 'white' ? blackLost : whiteLost;
@@ -857,7 +860,6 @@ function terminalRead(plies: readonly PvPly[], studentColor: 'white' | 'black'):
   const them = me === 'w' ? 'b' : 'w';
   try {
     const end = new Chess(endFen);
-    const root = new Chess(rootFen);
 
     // How many moves each side has at the end, against the start. Counted from
     // the same side-to-move by flipping the FEN, so the two numbers compare.

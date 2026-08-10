@@ -6087,6 +6087,10 @@ export function CoachTeachPage(): JSX.Element {
     // FIRST thing spoken when it fires. Rare by construction: only when code
     // could NAME the drawback, never "that was worse by 80 centipawns".
     const drawbackLine = discussion.lastMoveDrawback?.line ?? null;
+    // Which lane it rides: the MISTAKE CALLOUT ("that was a mistake — X was the
+    // move, to …") leads the computed lanes; the concession and the rear-facing
+    // consequence sit a rung below it.
+    const drawbackKind = discussion.lastMoveDrawback?.kind ?? 'drawback';
     if (drawbackLine) factLines.push(`Last move gave up: ${drawbackLine}`);
 
     let planLine: string | null = null;
@@ -6131,7 +6135,7 @@ export function CoachTeachPage(): JSX.Element {
       // a claim about these squares — it just no longer outranks one.
       // FIRST, above everything (David 2026-08-10). Retrospective before
       // prospective: what your last move gave up, then what the line does next.
-      ...(drawbackLine ? [{ kind: 'drawback' as const, text: drawbackLine, fen: args.fenAfterReply }] : []),
+      ...(drawbackLine ? [{ kind: drawbackKind, text: drawbackLine, fen: args.fenAfterReply }] : []),
       ...(planLine ? [{ kind: 'plan' as const, text: planLine, fen: args.fenAfterReply }] : []),
       ...(teachingLine ? [{ kind: 'borrowed' as const, text: teachingLine, fen: args.fenAfterReply }] : []),
       // `observation`, not `note` — it is filler, and while it shared the
@@ -6202,7 +6206,7 @@ export function CoachTeachPage(): JSX.Element {
       // pointed at. Amber rather than red: it is a cost already paid, not a
       // threat arriving.
       const conceded = discussion.lastMoveDrawback?.square;
-      if (conceded && pkg.kept.some((f) => f.kind === 'drawback') && /\b[a-h][1-8]\b/.test(conceded)) {
+      if (conceded && pkg.kept.some((f) => f.kind === 'drawback' || f.kind === 'mistake') && /\b[a-h][1-8]\b/.test(conceded)) {
         planHighlights.push({ square: conceded, color: '#f59e0b' });
       }
     }

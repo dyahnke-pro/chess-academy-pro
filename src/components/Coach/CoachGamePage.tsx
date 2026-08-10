@@ -140,63 +140,7 @@ import type {
 } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { TacticsLiveContext } from '../../coach/types';
-import { isMateEval } from '../../services/engineConstants';
-
-function classifyMove(
-  preMoveEval: number | null,
-  postMoveEval: number,
-  bestMoveEval: number | null,
-  isEngineBestMove: boolean,
-  playerColor: 'white' | 'black',
-  secondBestEval?: number | null,
-): MoveClassification {
-  if (preMoveEval === null) return 'good';
-  // Both evals are from White's perspective (normalized by stockfishEngine).
-
-  // If the player delivered checkmate or found a forced mate, it's brilliant/great
-  const postMoveGoodForPlayer = playerColor === 'white' ? postMoveEval > 0 : postMoveEval < 0;
-  if (isMateEval(postMoveEval) && postMoveGoodForPlayer) {
-    return isEngineBestMove ? 'brilliant' : 'great';
-  }
-
-  // If the player walked into a forced mate against them (was fine before), it's a blunder
-  const postMoveBadForPlayer = playerColor === 'white' ? postMoveEval < 0 : postMoveEval > 0;
-  if (isMateEval(postMoveEval) && postMoveBadForPlayer && !isMateEval(preMoveEval)) {
-    return 'blunder';
-  }
-
-  // If both pre and post are mate evals (e.g. forced mate was already on the board),
-  // the player maintained the line — classify as good unless they lost the mate
-  if (isMateEval(preMoveEval) && isMateEval(postMoveEval)) {
-    return 'good';
-  }
-
-  // cpLostVsBest = how much worse the played move is vs the engine's best
-  const cpLostVsBest = bestMoveEval !== null
-    ? (playerColor === 'white'
-        ? bestMoveEval - postMoveEval
-        : postMoveEval - bestMoveEval)
-    : 0;
-
-  // Brilliant: player found the engine's best move AND second-best was significantly worse.
-  // This means the move was the *only* good option in a critical position (Chess.com-style).
-  // We require second-best to be ≥150cp worse than best to qualify as brilliant.
-  if (isEngineBestMove && secondBestEval !== null && secondBestEval !== undefined) {
-    const secondBestGap = playerColor === 'white'
-      ? (bestMoveEval ?? postMoveEval) - secondBestEval
-      : secondBestEval - (bestMoveEval ?? postMoveEval);
-    if (secondBestGap >= 150) return 'brilliant';
-  }
-
-  // Great: played the best move or very close (<10cp off)
-  if (cpLostVsBest <= 10) return 'great';
-  // Good: small inaccuracy vs best
-  if (cpLostVsBest < 50) return 'good';
-  // Suboptimal classifications based on cp lost vs best move
-  if (cpLostVsBest < 100) return 'inaccuracy';
-  if (cpLostVsBest < 250) return 'mistake';
-  return 'blunder';
-}
+import { classifyMoveFull } from '../../services/moveRating';
 
 function findKeyMoments(moves: CoachGameMove[]): KeyMoment[] {
   const evaluated = moves.filter((m) => m.evaluation !== null && !m.isCoachMove);
@@ -2656,14 +2600,14 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         const coachColor: 'white' | 'black' = playerColor === 'white' ? 'black' : 'white';
         const isEngineBest = !!analysis.bestMove && move === analysis.bestMove;
         const secondBestEval = analysis.topLines.length > 1 ? analysis.topLines[1].evaluation : null;
-        const coachClassification = classifyMove(
-          analysis.evaluation,
-          postCoachEval,
-          analysis.evaluation,
-          isEngineBest,
-          coachColor,
+        const coachClassification = classifyMoveFull({
+          preMoveEval: analysis.evaluation,
+          postMoveEval: postCoachEval,
+          bestMoveEval: analysis.evaluation,
+          isEngineBestMove: isEngineBest,
+          playerColor: coachColor,
           secondBestEval,
-        );
+        });
         const coachFlashMap = new Map<string, 'blunder' | 'inaccuracy' | 'good'>([
           ['blunder', 'blunder'],
           ['mistake', 'blunder'],
@@ -3012,7 +2956,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     const prevMoves = gameState.moves;
     const preMoveEval = prevMoves.length > 0 ? (prevMoves[prevMoves.length - 1].evaluation ?? null) : 0;
     let classification = analysis
-      ? classifyMove(preMoveEval, analysis.evaluation, bestMoveEval, isEngineBestMove, playerColor, secondBestEval)
+      ? classifyMoveFull({ preMoveEval, postMoveEval: analysis.evaluation, bestMoveEval, isEngineBestMove, playerColor, secondBestEval })
       : 'good';
 
     const evalLoss = analysis && preMoveEval !== null

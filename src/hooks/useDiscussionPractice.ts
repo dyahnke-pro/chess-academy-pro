@@ -127,7 +127,7 @@ export interface UseDiscussionPracticeResult {
    *  backward?"). The look-ahead only faces forward, so a move already played
    *  is behind it; this is the same drawback comparison aimed at the student's
    *  own move. Null when nothing nameable was given up — which is most moves. */
-  lastMoveDrawback: { line: string; square: string } | null;
+  lastMoveDrawback: { line: string; square: string; kind: 'mistake' | 'drawback' } | null;
   evaluatePlayerMove: (args: EvaluatePlayerMoveArgs) => Promise<void>;
   raiseSlipPrompt: (args: RaiseSlipPromptArgs) => void;
   submitReason: (reason: string) => Promise<void>;
@@ -230,7 +230,7 @@ export function useDiscussionPractice(
    *  found/missed run. Seeded from the rating on the first move evaluated,
    *  because the rating arrives per-move rather than at construction. */
   const [hintDial, setHintDial] = useState<HintDial>(() => startDial(undefined));
-  const [lastMoveDrawback, setLastMoveDrawback] = useState<{ line: string; square: string } | null>(null);
+  const [lastMoveDrawback, setLastMoveDrawback] = useState<{ line: string; square: string; kind: 'mistake' | 'drawback' } | null>(null);
   const dialSeededRef = useRef(false);
 
   // TWO different switches, deliberately separated (David 2026-08-05).
@@ -320,7 +320,7 @@ export function useDiscussionPractice(
             bestSan,
             studentColor: args.playerColor,
           });
-          if (d) return { line: `${d.said} ${d.opening}`, square: d.square };
+          if (d) return { line: `${d.said} ${d.opening}`, square: d.square, kind: 'drawback' as const };
         }
         // WHAT SHOULD HAVE BEEN PLAYED, AND WHY (David 2026-08-10: "The coach
         // needs to call out inaccurate play for both sides and explain what
@@ -341,7 +341,9 @@ export function useDiscussionPractice(
             side: 'student',
             moverColor: args.playerColor,
           });
-          if (call) return { line: call.said, square: call.square };
+          // `mistake`, not `drawback` — the callout outranks the concession in
+          // the package (David 2026-08-10: it leads the computed lanes).
+          if (call) return { line: call.said, square: call.square, kind: 'mistake' as const };
         }
         // THEN the rear-facing PV. The structural read covers five nameable
         // concessions and stays silent on everything else — measured on a real
@@ -350,12 +352,13 @@ export function useDiscussionPractice(
         // opponent's own best line from here says what the move allowed, in
         // moves they would really play.
         try {
-          return whatItAllowed({
+          const allowed = whatItAllowed({
             fenAfter: args.fenAfter,
             opponentPv: replyPvUci,
             studentColor: args.playerColor,
             cpLoss,
           });
+          return allowed ? { ...allowed, kind: 'drawback' as const } : null;
         } catch { return null; }
       })());
 

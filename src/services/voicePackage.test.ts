@@ -289,3 +289,46 @@ describe('the general rule yields to the particular board', () => {
     expect(pkg.kept.map((f) => f.kind)).toEqual(['note', 'plan']);
   });
 });
+
+describe('the mistake callout leads, the coach\'s own sits behind it', () => {
+  // David 2026-08-10: "Should be number two on the list, right behind the
+  // mistake call out." A student hears their own move judged before they hear
+  // anyone else's; the coach admitting its blunder lands second, not first.
+  const FEN = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQK2R w KQkq - 0 6';
+  const at = (kind: VoiceFact['kind'], text: string): VoiceFact => ({ kind, text, fen: FEN });
+
+  it('puts the student\'s mistake ahead of every other computed lane', () => {
+    const pkg = buildVoicePackage([
+      at('threat', 'Careful here.'),
+      at('plan', 'They want to win a pawn.'),
+      at('drawback', 'That took your last defender off d5.'),
+      at('mistake', 'a3 was a mistake. Bg5 was the move.'),
+    ]);
+    expect(pkg.kept[0]?.kind).toBe('mistake');
+  });
+
+  it('puts the coach\'s own admission immediately behind it', () => {
+    const pkg = buildVoicePackage([
+      at('drawback', 'That took your last defender off d5.'),
+      at('coachMistake', 'That was a blunder from me.'),
+      at('mistake', 'a3 was a mistake.'),
+    ]);
+    expect(pkg.kept.map((f) => f.kind)).toEqual(['mistake', 'coachMistake', 'drawback']);
+  });
+
+  it('still leaves the corpus note first — that rule is untouched', () => {
+    const pkg = buildVoicePackage([
+      at('mistake', 'a3 was a mistake.'),
+      at('note', 'The knight on c6 guards e5.'),
+    ]);
+    expect(pkg.kept[0]?.kind).toBe('note');
+  });
+
+  it('a callout makes the borrowed tier stand down, same as the plan', () => {
+    const pkg = buildVoicePackage([
+      at('borrowed', 'As a rule in these positions: trade when ahead.'),
+      at('mistake', 'a3 was a mistake.'),
+    ]);
+    expect(pkg.kept.map((f) => f.kind)).toEqual(['mistake']);
+  });
+});
