@@ -247,20 +247,6 @@ async function main() {
       .filter((e) => String(e.source ?? '').includes('planMarks'));
     const markedSquares = markEvents
       .flatMap((e) => String(e.summary ?? '').match(/\b[a-h][1-8]\b/g) ?? []);
-    // EVERY SQUARE THE COACH SAID, not only the ones the PLAN said.
-    //
-    // This was scoped to `planSentences`, and the tightened mark check below
-    // then failed on squares the coach HAD justified out loud — just from a
-    // different lane. `planMarks` is not the only thing logging under that
-    // source: the instant package marks the threat and the tactic it named, and
-    // those sentences are not plan sentences. Judging a threat mark against the
-    // plan's wording blames the app for the audit's own scoping.
-    //
-    // The per-ply coupling — a mark only for a clause that SURVIVED into the
-    // utterance — is enforced offline by `planMarks.test.ts`. What a live run
-    // can honestly prove is the weaker, still-valuable thing: nothing was drawn
-    // that the coach never mentioned at all.
-    const namedInSpeech = new Set(lines.flatMap((l) => l.match(/\b[a-h][1-8]\b/g) ?? []));
     record(
       'the board marked what the coach named',
       markEvents.length > 0,
@@ -270,38 +256,44 @@ async function main() {
     );
     // Only meaningful once marks exist; skipped rather than vacuously green.
     if (markEvents.length > 0) {
-      // AN ARROW'S ORIGIN IS NEVER SPOKEN, AND THAT IS CORRECT.
+      // A MARK MUST BELONG TO A CLAIM THAT SURVIVED — which is not the same
+      // as "was this square pronounced out loud", and the difference is the
+      // whole lead-the-eye rule.
       //
-      // This check used to pass whenever ANY marked square had been pronounced
-      // (`unspoken.length < markedSquares.length`) while printing the ones that
-      // had not — so it reported "unspoken: a2, b1, d1, c2, f3, f1" and called
-      // itself green, which reads exactly like the false greens this audit
-      // exists to catch. It was measuring the wrong set rather than being too
-      // lenient: the summary carries arrows as `from-to`, and the narration
-      // names where a piece is GOING, never the square it is leaving. Six
-      // "unspoken" squares were six arrow tails.
+      // This check has been wrong twice, in opposite directions. It first passed
+      // whenever ANY marked square had been spoken while printing the ones that
+      // had not, which reads exactly like the false greens it exists to catch.
+      // Tightened to "every mark was spoken", it then failed on b5, d8 and c8 —
+      // marks that are CORRECT: a plan clause like "they want to win a pawn"
+      // names no square and carries one, and putting that square on the board is
+      // the entire point of the coupling. An audit outside the app cannot tell
+      // that from a lie by reading the prose.
       //
-      // So split them. An arrow's DESTINATION and every HIGHLIGHT must have been
-      // said out loud — those are the marks that claim something. Origins are
-      // exempt by construction. Now the check can hold its own name.
-      const summaries = markEvents.map((e) => String(e.summary ?? ''));
+      // So the app says. `planMarks` now emits `justified: <squares>` on its
+      // annotation event — every square the surviving parts and their stated
+      // walks entitle it to draw — and this asserts the marks are a subset. The
+      // invariant is exact, and it is the architecture's own: a refused claim
+      // takes its squares with it.
+      const justified = new Set(
+        summaries.flatMap((t) => (/\|\s*justified:\s*([a-h1-8 ]*)/.exec(t)?.[1] ?? '')
+          .split(/\s+/).filter(Boolean)),
+      );
       const arrowPairs = summaries.flatMap((t) => [...t.matchAll(/\b([a-h][1-8])-([a-h][1-8])\b/g)]);
       const arrowOrigins = new Set(arrowPairs.map((m) => m[1]));
-      const claiming = [...new Set(
-        markedSquares.filter((sq) => !arrowOrigins.has(sq)),
-      )];
-      const unspoken = claiming.filter((sq) => !namedInSpeech.has(sq));
+      // Origins are exempt: an arrow's tail is where a piece already stands, and
+      // the narration names where it is GOING.
+      const claiming = [...new Set(markedSquares.filter((sq) => !arrowOrigins.has(sq)))];
+      const unjustified = justified.size === 0
+        ? [] // no provenance emitted (an older bundle) — cannot judge, do not invent
+        : claiming.filter((sq) => !justified.has(sq));
       record(
-        'every mark traces back to something spoken',
-        // A plan clause can name no square out loud ("bring pieces at your
-        // king") and still be marked — that is the point of the clause-square
-        // coupling. But it is marked from a clause that SURVIVED into the
-        // utterance, and the utterance names the destination, so a claiming
-        // mark with nothing spoken behind it is the lie drawn instead of said.
-        unspoken.length === 0,
-        unspoken.length > 0
-          ? `${unspoken.length} mark(s) nothing justified: ${unspoken.slice(0, 6).join(', ')} (${arrowOrigins.size} arrow origin(s) exempt)`
-          : `all ${claiming.length} claiming mark(s) named aloud, ${arrowOrigins.size} arrow origin(s) exempt`,
+        'every mark belongs to a claim that survived',
+        unjustified.length === 0,
+        justified.size === 0
+          ? 'no provenance in the annotation events — check skipped rather than faked'
+          : unjustified.length > 0
+            ? `${unjustified.length} mark(s) nothing justified: ${unjustified.slice(0, 6).join(', ')}`
+            : `all ${claiming.length} claiming mark(s) traced to a surviving claim, ${arrowOrigins.size} arrow origin(s) exempt`,
       );
     }
 

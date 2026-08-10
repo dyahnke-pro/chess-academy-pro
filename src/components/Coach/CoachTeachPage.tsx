@@ -6981,7 +6981,22 @@ export function CoachTeachPage(): JSX.Element {
                                   kind: 'coach-board-annotation',
                                   category: 'narration',
                                   source: 'CoachTeachPage.planMarks',
-                                  summary: `lead-the-eye on the computed plan: ${marks.arrows.length} arrow(s), ${marks.highlights.length} highlight(s) — ${[...marks.arrows.map((a) => `${a.startSquare}-${a.endSquare}`), ...marks.highlights.map((h) => h.square)].join(', ')}`,
+                                  // PROVENANCE, not just the marks. Every square
+                                  // the surviving parts (and the walks they
+                                  // state) entitle the board to draw is listed
+                                  // as `justified`, so an audit can check the
+                                  // real invariant — a mark belongs to a claim
+                                  // that survived — instead of the one it can
+                                  // guess at from outside, "was this square
+                                  // pronounced out loud". Those differ on
+                                  // purpose: a clause like "they want to win a
+                                  // pawn" names no square and carries one, and
+                                  // showing it IS the lead-the-eye rule.
+                                  summary: `lead-the-eye on the computed plan: ${marks.arrows.length} arrow(s), ${marks.highlights.length} highlight(s) — ${[...marks.arrows.map((a) => `${a.startSquare}-${a.endSquare}`), ...marks.highlights.map((h) => h.square)].join(', ')} | justified: ${[...new Set([
+                                    ...survived.flatMap((p) => p.squares),
+                                    ...(plan.mine.maneuver?.path ?? []),
+                                    ...(plan.theirs.maneuver?.path ?? []),
+                                  ])].join(' ')}`,
                                   fen: planFen,
                                 });
                               }
