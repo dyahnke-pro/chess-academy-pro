@@ -738,3 +738,39 @@ describe('an uncontested square has to earn the sentence', () => {
     expect(keySquareLine(key({ whiteTouches: 1, blackTouches: 1, contested: true }))).not.toBe('');
   });
 });
+
+describe('the drift line does not repeat itself', () => {
+  // From the prod transcript, two plies running:
+  //   "You bring your pieces toward d4 and c3 over the next few moves."
+  //   "You bring your pieces toward d4 and c3 over the next few moves."
+  // Every SCORED clause is filtered against the said-set; the drift fallback
+  // returned early and skipped the check entirely, so the one line most likely
+  // to hold across a quiet stretch was the one line free to chant.
+  const drift = (): SidePlan => ({
+    color: 'white', headingFor: ['d4', 'c3'], opening: [], trading: [], outposts: [],
+    passedPawns: [], materialSwing: 0, shieldStripped: 0, tactic: null,
+    tacticSquare: null, mates: false, nearEnemyKing: 0,
+    kingAttackSquares: [], materialSquares: [], tradeSquares: [],
+    text: '', spokenClauses: [],
+  });
+
+  it('says it once', () => {
+    const said = new Set<string>();
+    const first = describePlan(drift(), 'mine', said);
+    expect(first).not.toBe('');
+    expect(describePlan(drift(), 'mine', said), 'chanted the same destinations').toBe('');
+  });
+
+  it('speaks again when the pieces head somewhere NEW', () => {
+    const said = new Set<string>();
+    describePlan(drift(), 'mine', said);
+    const moved = { ...drift(), headingFor: ['e5', 'f6'] };
+    expect(describePlan(moved, 'mine', said), 'new destinations are real news').not.toBe('');
+  });
+
+  it('keeps the two voices apart — "you" and "they" are different claims', () => {
+    const said = new Set<string>();
+    expect(describePlan(drift(), 'mine', said)).not.toBe('');
+    expect(describePlan(drift(), 'theirs', said)).not.toBe('');
+  });
+});

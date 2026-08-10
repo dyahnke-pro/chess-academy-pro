@@ -459,6 +459,16 @@ export function describePlan(
     if (plan.headingFor.length === 0) return '';
     const heading = plan.headingFor.slice(0, 2);
     const squares = heading.join(' and ');
+    // THE DRIFT LINE OBEYS THE SAID-SET TOO. Every scored clause above is
+    // filtered against it; this early return skipped the check entirely, so on
+    // a quiet stretch the coach repeated itself word for word — from the prod
+    // transcript, two plies running: "You bring your pieces toward d4 and c3
+    // over the next few moves." Keyed on the SQUARES rather than the sentence,
+    // because the pieces genuinely heading somewhere NEW is worth saying again
+    // and the same destinations are not.
+    const key = `drift-${voice}-${heading.join('')}`;
+    if (said?.has(key)) return '';
+    said?.add(key);
     const line = `${subject === 'You' ? "You're" : "They're"} bringing pieces to ${squares} over the next few moves.`;
     plan.spokenClauses = [{ text: line, squares: heading }];
     return line;
