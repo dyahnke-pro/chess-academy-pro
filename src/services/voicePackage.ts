@@ -238,7 +238,38 @@ export function buildVoicePackage(facts: VoiceFact[]): VoicePackage {
     .map((f, i) => ({ f, i }))
     .sort((a, b) => RANK[b.f.kind] - RANK[a.f.kind] || a.i - b.i);
 
+  // THE GENERAL RULE YIELDS TO THE PARTICULAR BOARD (David 2026-08-10: "I want
+  // more out of the PV and less from general rules. They do not match the board
+  // well enough." Then, asked whether they should yield entirely: "Do it.").
+  //
+  // `borrowed` is corpus teaching reached by structure or concept transfer —
+  // honest, framed as such ("As a rule in these positions…"), and about a
+  // DIFFERENT board. It dominated his transcript: five of twelve utterances in
+  // one game led with it, including "with three extra pawns, trading pieces is
+  // the fastest road to promotion" in a level middlegame and "the pawn
+  // advantage makes development the priority" with no pawn advantage. Each is
+  // true somewhere; none was true there.
+  //
+  // So when the look-ahead has produced something about THIS position — the
+  // forward plan or the rear-facing consequence — the borrowed tier stands
+  // down. It still carries whole turns the PV cannot reach, which is most of
+  // its value and all of its reason to exist.
+  //
+  // A note authored AT this exact board is a different kind and is untouched:
+  // the corpus note is always first (the 90/10 rule), and this is about the
+  // tier that borrows, not the tier that belongs.
+  // Read off `kept`, never off the facts supplied: a plan that was COMPUTED but
+  // then refused by board-grading has said nothing, and letting it silence the
+  // corpus as well would turn one dropped sentence into a silent turn. Rank
+  // makes this safe — `plan` and `drawback` both outrank `borrowed`, so by the
+  // time a borrowed fact is considered, their verdict is already in.
+  const pvSpoke = (): boolean => kept.some((f) => f.kind === 'plan' || f.kind === 'drawback');
+
   for (const { f } of ordered) {
+    if (f.kind === 'borrowed' && pvSpoke()) {
+      dropped.push({ fact: f, reason: 'the look-ahead had something about THIS board' });
+      continue;
+    }
     const result = verify(f);
     if ('reason' in result) { dropped.push({ fact: f, reason: result.reason }); continue; }
     // Same sentence from two producers is one sentence to the ear.

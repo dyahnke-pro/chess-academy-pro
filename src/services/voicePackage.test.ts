@@ -176,10 +176,15 @@ describe('the corpus note is always first', () => {
     }
   });
 
-  it('keeps a borrowed note below the computed plan', () => {
-    // A plan about THIS board beats a real note about a different one.
+  it('the borrowed note now YIELDS to the computed plan, not just ranks below it', () => {
+    // This used to assert the borrowed line was spoken AFTER the plan. David
+    // 2026-08-10 went further — "I want more out of the PV and less from
+    // general rules. They do not match the board well enough" → "Do it." A
+    // plan about THIS board does not merely outrank a rule about some other
+    // one; when it speaks, the rule stands down. See the dedicated block below.
     const pkg = buildVoicePackage([at('borrowed', 'Borrowed line.'), at('plan', 'Plan line.')]);
-    expect(pkg.spoken.indexOf('Plan')).toBeLessThan(pkg.spoken.indexOf('Borrowed'));
+    expect(pkg.spoken).toContain('Plan');
+    expect(pkg.spoken).not.toContain('Borrowed');
   });
 });
 
@@ -226,5 +231,61 @@ describe('the same observation is never said twice with different morals', () =>
       { kind: 'computed', text: 'The knight on e4 sits on an outpost no pawn can challenge.', fen: FEN },
     ]);
     expect(pkg.kept.length).toBe(2);
+  });
+});
+
+describe('the general rule yields to the particular board', () => {
+  // David 2026-08-10: "I want more out of the PV and less from general rules.
+  // They do not match the board well enough." Then, asked whether they should
+  // yield entirely: "Do it."
+  //
+  // His transcript is the case: five of twelve utterances in one game led with
+  // borrowed teaching, including "with three extra pawns, trading pieces is the
+  // fastest road to promotion" in a level middlegame. True somewhere; not there.
+  const FEN = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQK2R w KQkq - 0 6';
+  const borrowed = fact('borrowed', 'As a rule in these positions: trade pieces when ahead.', FEN);
+
+  it('drops the borrowed tier when the forward plan spoke', () => {
+    const pkg = buildVoicePackage([
+      borrowed,
+      fact('plan', 'They want to win a pawn.', FEN),
+    ]);
+    expect(pkg.kept.map((f) => f.kind)).toEqual(['plan']);
+    expect(pkg.dropped[0]?.reason).toContain('look-ahead');
+  });
+
+  it('drops it for the REAR-facing plan too', () => {
+    const pkg = buildVoicePackage([
+      borrowed,
+      fact('drawback', 'That let them win a piece.', FEN),
+    ]);
+    expect(pkg.kept.map((f) => f.kind)).toEqual(['drawback']);
+  });
+
+  it('still speaks it when the PV had nothing — most turns', () => {
+    // The borrowed tier carries whole turns the look-ahead cannot reach. That
+    // is most of its value and all of its reason to exist.
+    const pkg = buildVoicePackage([borrowed, fact('threat', 'Careful — your knight on c6 is attacked.', FEN)]);
+    expect(pkg.kept.map((f) => f.kind)).toContain('borrowed');
+  });
+
+  it('a plan REFUSED by grading does not silence it', () => {
+    // Otherwise one dropped sentence turns into a silent turn. The check reads
+    // what survived, not what was offered.
+    const pkg = buildVoicePackage([
+      borrowed,
+      fact('plan', 'Doubled rooks on the open file decide it.', FEN), // false here
+    ]);
+    expect(pkg.kept.map((f) => f.kind), 'the turn went quiet').toEqual(['borrowed']);
+  });
+
+  it('never touches a note authored AT this board', () => {
+    // The corpus note is always first (the 90/10 rule). This is about the tier
+    // that BORROWS, not the tier that belongs.
+    const pkg = buildVoicePackage([
+      fact('note', 'The knight on c6 guards e5.', FEN),
+      fact('plan', 'They want to win a pawn.', FEN),
+    ]);
+    expect(pkg.kept.map((f) => f.kind)).toEqual(['note', 'plan']);
   });
 });
