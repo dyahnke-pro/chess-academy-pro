@@ -112,7 +112,7 @@ async function main() {
   page.on('pageerror', (e) => pageErrors.push(String(e)));
 
   try {
-    await page.goto(`${BASE_URL}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
+    await page.goto(`${BASE_URL}/coach/teach${(process.env.AUDIT_OPENING ?? '').match(/sicilian|french/) ? '?side=black' : ''}`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
     await dismissConsent(page);
     await page.waitForTimeout(6000);
 
@@ -122,9 +122,35 @@ async function main() {
     //    mirror in step. Without that read-back the mirror desynced after one
     //    move and the run reported a stalled coach — the audit's bug, blamed on
     //    the app, which is the failure mode this helper exists to prevent.
+    // EVERY EARLIER RUN DROVE THE SAME ITALIAN AS WHITE, which means everything
+    // it proved was proved on one pawn structure and one side of the board.
+    // Side-attribution — the failure that hurts most, a student told the
+    // opponent's plan is their own — is only genuinely exercised by playing the
+    // other colour. Openings are named, not scripted move-for-move: the mirror
+    // falls back to a legal move whenever the coach steers somewhere else.
+    const REPERTOIRE = {
+      italian: { side: 'white', moves: ['e4', 'Nf3', 'Bc4', 'd3', 'O-O', 'Nc3', 'Bg5', 'h3', 'a3', 'Re1'] },
+      // A closed queen's-pawn game: no early contact, different structure, and
+      // the quiet middle where the positional read has to carry the narration.
+      london: { side: 'white', moves: ['d4', 'Bf4', 'e3', 'Nf3', 'c3', 'Bd3', 'Nbd2', 'O-O', 'h3', 'Re1'] },
+      // Black, sharp, asymmetric — and the side flip is the point.
+      sicilian: { side: 'black', moves: ['c5', 'd6', 'cxd4', 'Nf6', 'a6', 'e5', 'Be7', 'O-O', 'Be6', 'Nbd7'] },
+      // Black, closed, opposite structure to the Sicilian.
+      french: { side: 'black', moves: ['e6', 'd5', 'c5', 'Nc6', 'Qb6', 'Nge7', 'cxd4', 'Nf5', 'Bb4+', 'O-O'] },
+    };
+    const chosen = REPERTOIRE[process.env.AUDIT_OPENING ?? 'italian'] ?? REPERTOIRE.italian;
+    const STUDENT_SIDE = chosen.side;
+    console.log(`[game] ${process.env.AUDIT_OPENING ?? 'italian'} as ${STUDENT_SIDE}`);
     const mirror = new Chess();
-    const OPENING = ['e4', 'Nf3', 'Bc4', 'd3', 'O-O', 'Nc3', 'Bg5', 'h3', 'a3', 'Re1'];
+    const OPENING = chosen.moves;
     let played = 0;
+    // Playing Black means the coach moves FIRST — wait for it before the mirror
+    // tries anything, or every move is illegal from the wrong side.
+    if (STUDENT_SIDE === 'black') {
+      const first = await awaitCoachReply(page, mirror, { firstMove: true });
+      if (first) mirror.move(first);
+      else record('the coach opened the game', false, 'no first move from the coach as White');
+    }
     for (const want of OPENING) {
       const mv = mirror.moves({ verbose: true }).find((m) => m.san === want)
         ?? mirror.moves({ verbose: true })[0];
