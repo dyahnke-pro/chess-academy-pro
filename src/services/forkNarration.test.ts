@@ -207,3 +207,57 @@ describe('the review form — the roads not taken', () => {
     expect(r.said.toLowerCase()).not.toMatch(/should have|mistake|blunder|wrong|better would/);
   });
 });
+
+describe('review points at the USER\'s lines, not the opponent\'s', () => {
+  // David 2026-08-10: "I want the review portion more pointing towards the
+  // users lines instead of the opponents."
+  //
+  // A road the student COULD HAVE TAKEN, described by what the opponent would
+  // have been doing on it, answers a question nobody asked. The point of
+  // showing the road is what THEY would have got to play down it.
+  const fenOf = (sans: string[]): string => {
+    const b = new Chess();
+    for (const s of sans) b.move(s);
+    return b.fen();
+  };
+  const CASES: Array<[string[], string, 'white' | 'black']> = [
+    [['e4', 'c5'], 'Nf3', 'white'],
+    [['e4', 'e5'], 'f4', 'white'],
+    [['e4', 'e6', 'd4', 'd5'], 'Nc3', 'white'],
+    [['d4', 'Nf6'], 'c4', 'white'],
+    [['e4', 'c6'], 'd4', 'white'],
+  ];
+
+  it('never describes a road by what the OPPONENT would have done on it', () => {
+    for (const [hist, played, side] of CASES) {
+      const r = roadsNotTakenAt({
+        historySans: hist, fen: fenOf(hist), playedSan: played, studentColor: side,
+      });
+      if (!r) continue;
+      expect(r.said, `the review described the opponent's plan: ${r.said}`)
+        .not.toMatch(/\bthey would have been trying to\b|\btheir pieces would have headed\b/);
+    }
+  });
+
+  it('speaks to the student about their own pieces', () => {
+    for (const [hist, played, side] of CASES) {
+      const r = roadsNotTakenAt({
+        historySans: hist, fen: fenOf(hist), playedSan: played, studentColor: side,
+      });
+      if (!r) continue;
+      expect(r.said, `nothing in this is about the student: ${r.said}`)
+        .toMatch(/\byou\b|\byour\b/i);
+    }
+  });
+
+  it('LIVE teaching still hears both sides — the change is review-only', () => {
+    // Choosing a road in a lesson needs to know what the opponent wants; that
+    // is half the decision. Only the retrospective drops it.
+    const hist = ['e4', 'c5'];
+    const live = forkOfferAt(hist, fenOf(hist), 'black');
+    expect(live).not.toBeNull();
+    const anyOpponentClause = live!.roads.some((r) => /^They /.test(r.preview));
+    const anyStudentClause = live!.roads.some((r) => /^You /.test(r.preview));
+    expect(anyStudentClause || anyOpponentClause).toBe(true);
+  });
+});

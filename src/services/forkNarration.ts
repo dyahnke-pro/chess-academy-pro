@@ -73,6 +73,17 @@ function previewsOf(
   branch: OpeningBranch,
   historyLength: number,
   studentColor: 'white' | 'black',
+  /** 'student' drops the opponent's half entirely.
+   *
+   *  REVIEW WANTS THE USER'S OWN LINES (David 2026-08-10: "I want the review
+   *  portion more pointing towards the users lines instead of the opponents").
+   *  A road the student COULD HAVE TAKEN, described by what the opponent would
+   *  have been doing on it, answers a question nobody asked — the point of
+   *  showing the road is what THEY would have got to play down it.
+   *
+   *  Live teaching keeps both halves: there, knowing what the opponent wants is
+   *  half of choosing. */
+  perspective: 'student' | 'both' = 'both',
 ): string[] {
   // The branch's deepest line INCLUDES the moves already played, so the part
   // that is new starts where the history ends.
@@ -82,7 +93,9 @@ function previewsOf(
   if (uci.length < 4) return [];
   const plan = planFromUci(fen, uci, studentColor);
   if (!plan) return [];
-  return [plan.mine.text, plan.theirs.text, keySquareLine(plan.keySquares)].filter(Boolean);
+  const mine = [plan.mine.text, keySquareLine(plan.keySquares)];
+  return (perspective === 'student' ? mine : [plan.mine.text, plan.theirs.text, keySquareLine(plan.keySquares)])
+    .filter(Boolean);
 }
 
 /**
@@ -98,12 +111,14 @@ export function forkOfferAt(
   studentColor: 'white' | 'black',
   /** How many roads to offer. Three is a choice; six is a menu. */
   max = 3,
+  /** See `previewsOf`. Review passes 'student'. */
+  perspective: 'student' | 'both' = 'both',
 ): ForkOffer | null {
   const branches = branchesAt(historySans);
   if (branches.length < 2) return null;
 
   const shown = branches.slice(0, max);
-  const options = shown.map((b) => previewsOf(fen, b, historySans.length, studentColor));
+  const options = shown.map((b) => previewsOf(fen, b, historySans.length, studentColor, perspective));
 
   // SAY WHAT IS DIFFERENT ABOUT EACH ROAD. Taking each road's best line
   // produced "Sicilian: you want to win a pawn. Closed Sicilian: you want to
@@ -168,7 +183,9 @@ export function roadsNotTakenAt(args: {
   studentColor: 'white' | 'black';
   max?: number;
 }): { roads: ForkRoad[]; said: string } | null {
-  const offer = forkOfferAt(args.historySans, args.fen, args.studentColor, args.max ?? 3);
+  // 'student' — a review is about the user's own game, and a road they could
+  // have taken is worth describing by what THEY would have played down it.
+  const offer = forkOfferAt(args.historySans, args.fen, args.studentColor, args.max ?? 3, 'student');
   if (!offer) return null;
 
   const bare = args.playedSan.replace(/[+#]$/, '');
