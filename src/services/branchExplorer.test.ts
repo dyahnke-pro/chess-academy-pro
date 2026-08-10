@@ -1,8 +1,7 @@
 // The story book: walk a road, come back, walk another — and it remembers.
 import { describe, it, expect } from 'vitest';
 import {
-  noteFork, markWalked, unwalked, nextForkToOffer, hasUnexplored, progressAt,
-  type ForkLog,
+  hasUnexplored, markWalked, nextForkToOffer, noteFamilyFork, noteFork, progressAt, type ForkLog, unwalked,
 } from './branchExplorer';
 
 const sans = (s: string) => s.split(/\s+/).filter(Boolean);
@@ -84,5 +83,68 @@ describe('where to go back to', () => {
     // Returning is REPLAYING a recorded list, never reconstructing from memory.
     const log = noteFork(noteFork([], sans('e4')), sans('e4 c5'));
     expect(log[1].historySans).toEqual(['e4', 'c5']);
+  });
+});
+
+describe('the family fork — the roads the student was actually SHOWN', () => {
+  // `noteFork` reads roads out of the opening DB for a position. The line
+  // PICKER has already chosen its own set — the named variations of a family —
+  // and those are the roads the student saw. A fork the DB knows about and a
+  // fork the student was offered are not the same thing, and the one worth
+  // remembering is the one on their screen.
+  const ROADS = [
+    { id: 'Sicilian Defense: Dragon Variation', label: 'Dragon Variation' },
+    { id: 'Sicilian Defense: Najdorf Variation', label: 'Najdorf Variation' },
+    { id: 'Sicilian Defense: Richter-Rauzer', label: 'Richter-Rauzer' },
+  ];
+
+  it('records what was offered, and remembers it after one is taken', () => {
+    let log = noteFamilyFork([], 'Sicilian Defense', ROADS);
+    expect(log[0].branches).toHaveLength(3);
+    log = markWalked(log, 'Sicilian Defense', ROADS[0].id, 1);
+    expect(unwalked(log[0]).map((b) => b.name)).toEqual(['Najdorf Variation', 'Richter-Rauzer']);
+    expect(progressAt(log[0])).toEqual({ walked: 1, total: 3 });
+  });
+
+  it('SURVIVES meeting the same family again — the persistence David asked for', () => {
+    // "as long as the selection persists". Walking the Dragon, coming back to
+    // the Sicilian, and being offered the Dragon again as though it were new is
+    // exactly the picker-that-forgets this replaces.
+    let log = noteFamilyFork([], 'Sicilian Defense', ROADS);
+    log = markWalked(log, 'Sicilian Defense', ROADS[0].id, 1);
+    log = noteFamilyFork(log, 'Sicilian Defense', ROADS);
+    expect(log).toHaveLength(1);
+    expect(progressAt(log[0]).walked, 'the walk was forgotten on the return trip').toBe(1);
+    expect(unwalked(log[0]).some((b) => b.name === 'Dragon Variation')).toBe(false);
+  });
+
+  it('picks up a road that only appears on the second visit', () => {
+    let log = noteFamilyFork([], 'Sicilian Defense', ROADS.slice(0, 2));
+    log = markWalked(log, 'Sicilian Defense', ROADS[0].id, 1);
+    log = noteFamilyFork(log, 'Sicilian Defense', ROADS);
+    expect(log[0].branches).toHaveLength(3);
+    expect(progressAt(log[0]).walked).toBe(1);
+  });
+
+  it('keeps two families apart', () => {
+    let log = noteFamilyFork([], 'Sicilian Defense', ROADS);
+    log = noteFamilyFork(log, 'French Defense', [
+      { id: 'French Defense: Winawer', label: 'Winawer' },
+      { id: 'French Defense: Tarrasch', label: 'Tarrasch' },
+    ]);
+    log = markWalked(log, 'Sicilian Defense', ROADS[0].id, 1);
+    expect(progressAt(log[0]).walked).toBe(1);
+    expect(progressAt(log[1]).walked, 'a walk leaked across families').toBe(0);
+  });
+
+  it('offers nothing when there was never a real choice', () => {
+    expect(noteFamilyFork([], 'Some Line', [{ id: 'a', label: 'A' }])).toHaveLength(0);
+  });
+
+  it('stops offering once every road has been walked', () => {
+    let log = noteFamilyFork([], 'Sicilian Defense', ROADS);
+    for (const r of ROADS) log = markWalked(log, 'Sicilian Defense', r.id, 1);
+    expect(nextForkToOffer(log)).toBeNull();
+    expect(hasUnexplored(log)).toBe(false);
   });
 });

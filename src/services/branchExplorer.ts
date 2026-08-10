@@ -122,3 +122,48 @@ export function progressAt(fork: Fork): { walked: number; total: number } {
     total: fork.branches.length,
   };
 }
+
+/**
+ * Record a fork the student was SHOWN rather than one derived from the board.
+ *
+ * `noteFork` reads the roads out of the opening DB for a position. The line
+ * PICKER has already chosen its own set — the named variations of a family,
+ * with their ECO codes — and those are the roads the student actually saw. A
+ * fork the student was offered and a fork the database knows about are not the
+ * same thing, and the one worth remembering is the one they were shown.
+ *
+ * Keyed by the family name, so returning to the Sicilian later meets the same
+ * fork with its history intact.
+ */
+export function noteFamilyFork(
+  log: ForkLog,
+  familyName: string,
+  roads: ReadonlyArray<{ id: string; label: string }>,
+): ForkLog {
+  if (roads.length < 2) return log; // one road is not a choice
+  const existing = log.find((f) => f.id === familyName);
+  if (existing) {
+    // Met again — keep every walk, and add any road that is new to the offer.
+    const known = new Set(existing.branches.map((b) => b.san));
+    const fresh = roads.filter((r) => !known.has(r.id));
+    if (fresh.length === 0) return log;
+    return log.map((f) => (f.id !== familyName ? f : {
+      ...f,
+      branches: [...f.branches, ...fresh.map((r) => ({
+        san: r.id, name: r.label, eco: r.id, lines: 1, deepestPgn: [],
+        walked: false, depth: 0,
+      }))],
+    }));
+  }
+  return [
+    ...log,
+    {
+      id: familyName,
+      historySans: [],
+      branches: roads.map((r) => ({
+        san: r.id, name: r.label, eco: r.id, lines: 1, deepestPgn: [],
+        walked: false, depth: 0,
+      })),
+    },
+  ];
+}

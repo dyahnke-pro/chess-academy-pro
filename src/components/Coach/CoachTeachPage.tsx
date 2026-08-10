@@ -168,6 +168,10 @@ import { findLivePunishment } from '../../services/gemCrushLines';
 import { buildThinkAloud } from '../../services/thinkAloud';
 import { scaleGap, packageForRegister, readsForRegister } from '../../services/hintRegister';
 import { planFromUci, keySquareLine, positionReadLine } from '../../services/lookaheadPlan';
+import {
+  noteFamilyFork, markWalked, unwalked, nextForkToOffer, progressAt,
+  type ForkLog, type Fork,
+} from '../../services/branchExplorer';
 import { warmAmateurPlay, buildRatingRealityFact } from '../../services/amateurPlayCache';
 import { masterPlayCache } from '../../services/masterPlayCache';
 
@@ -920,10 +924,48 @@ export function CoachTeachPage(): JSX.Element {
       cancelled = true;
     };
   }, []);
+  // THE ADVENTURE BOOK. David 2026-08-09: "Like a build your own story book…
+  // Once the user is done exploring one branch, however far he wants to take
+  // it, he can hit the next picker — as long as the selection persists — and
+  // then walk the other paths."
+  //
+  // The picker itself already offered the roads; what was missing was MEMORY.
+  // Taking the Dragon closed the picker and nothing ever offered the Najdorf
+  // again — a hand-driven prod walk (2026-08-10) confirmed the only thing
+  // resembling a way back was `Takeback`, which takes back a MOVE. So each set
+  // of roads is recorded when it is offered and the chosen one is marked
+  // walked; `nextForkToOffer` then knows what is left.
+  const forkLogRef = useRef<ForkLog>([]);
+  const [roadsBack, setRoadsBack] = useState<{ fork: Fork; walked: number; total: number } | null>(null);
   const [linePicker, setLinePicker] = useState<{
     canonicalName: string;
     options: LinePickerOption[];
   } | null>(null);
+  // Remember every set of roads the student is SHOWN, keyed by the family, so
+  // returning to it later knows which ones are already behind them.
+  // WHEN THE ROADS COME BACK. Closing the picker by TAKING a road means the
+  // student is off exploring; the offer belongs at the end of that, not on top
+  // of it. So the log is checked when the picker closes and again whenever a
+  // lesson finishes, and the offer is raised only if a road is genuinely left.
+  //
+  // Deliberately not a nag: `Not now` clears it, and it is only re-raised by
+  // the next fork or the next finished lesson.
+  const offerRoadsBack = useCallback((): void => {
+    const fork = nextForkToOffer(forkLogRef.current);
+    if (!fork) return;
+    const { walked, total } = progressAt(fork);
+    if (walked === 0) return; // they have not taken one yet — the picker is enough
+    setRoadsBack({ fork, walked, total });
+  }, []);
+
+  useEffect(() => {
+    if (!linePicker) return;
+    forkLogRef.current = noteFamilyFork(
+      forkLogRef.current,
+      linePicker.canonicalName,
+      linePicker.options.map((o) => ({ id: o.fullName, label: o.label })),
+    );
+  }, [linePicker]);
   // 'play' = student studies the chosen variation as its natural side
   // (Black for Sicilian, White for Italian, etc.); 'face' = student
   // studies the OPPOSITE side's main-line counter (Sicilian Najdorf
@@ -1943,6 +1985,15 @@ export function CoachTeachPage(): JSX.Element {
       summary: `leaf reached — asked student to play out "${openingName}"`,
     });
   }, [walkthrough.phase, walkthrough.tree?.openingName, walkthrough.tree?.derived]);
+
+  // A LEAF IS THE END OF A ROAD. That is the moment the story-book offer
+  // belongs — the student has walked this branch as far as it goes, so now is
+  // when "you took the Dragon; the Najdorf is still there" is useful rather
+  // than an interruption.
+  useEffect(() => {
+    if (walkthrough.phase !== 'leaf') return;
+    offerRoadsBack();
+  }, [walkthrough.phase, offerRoadsBack]);
 
   const handleSubmit = useCallback(async (
     text: string,
@@ -8153,6 +8204,42 @@ export function CoachTeachPage(): JSX.Element {
             through handleSubmit, which routes straight to LLM gen
             because findLinePickerOptions returns null for specific
             variation names. */}
+        {/* THE WAY BACK. A fork with roads left is the whole point of the
+            story-book: walk the Dragon as far as you like, then be offered the
+            Najdorf you never took. Shown only when the picker is CLOSED — the
+            picker is the fork; this is the memory of it. */}
+        {!linePicker && roadsBack && (
+          <div className="mb-3 rounded-2xl border-2 border-indigo-500/30 bg-indigo-500/10 p-3" data-testid="roads-back">
+            <p className="mb-2 text-sm opacity-80">
+              {`You've walked ${roadsBack.walked} of ${roadsBack.total} roads out of the ${roadsBack.fork.id}. Want another?`}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {unwalked(roadsBack.fork).map((b) => (
+                <button
+                  key={b.san}
+                  type="button"
+                  data-testid={`road-back-${b.san.replace(/\s+/g, '-')}`}
+                  className="rounded-xl border-2 border-indigo-500/40 px-3 py-2 text-sm"
+                  onClick={() => {
+                    forkLogRef.current = markWalked(forkLogRef.current, roadsBack.fork.id, b.san, 1);
+                    setRoadsBack(null);
+                    void handleSubmit(`teach me the ${b.name}`);
+                  }}
+                >
+                  {b.name}
+                </button>
+              ))}
+              <button
+                type="button"
+                data-testid="roads-back-dismiss"
+                className="rounded-xl px-3 py-2 text-sm opacity-70"
+                onClick={() => setRoadsBack(null)}
+              >
+                Not now
+              </button>
+            </div>
+          </div>
+        )}
         {linePicker && (
           <div
             className="px-3 py-2 border-b border-theme-border bg-theme-bg"
@@ -8261,6 +8348,13 @@ export function CoachTeachPage(): JSX.Element {
                         }),
                         fen: gameRef.current.fen,
                       });
+                      forkLogRef.current = markWalked(
+                        forkLogRef.current,
+                        linePicker.canonicalName,
+                        opt.fullName,
+                        1,
+                      );
+                      setRoadsBack(null); // the picker IS the fork right now
                       setLinePicker(null);
                       // Raised by a request to PLAY the family: the tile
                       // STARTS THE GAME on the chosen line rather than
