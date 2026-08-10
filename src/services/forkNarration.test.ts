@@ -10,7 +10,7 @@
 // is the out-of-book version, and a later decision.)
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { forkOfferAt } from './forkNarration';
+import { forkOfferAt, roadsNotTakenAt } from './forkNarration';
 
 const fenAfter = (sans: string[]): string => {
   const b = new Chess();
@@ -138,5 +138,72 @@ describe('each road says what is DIFFERENT about it', () => {
         expect(r.lines).toBeGreaterThan(0);
       }
     }
+  });
+});
+
+describe('the review form — the roads not taken', () => {
+  // David 2026-08-10: "in review it will help show what the user could have
+  // played. If you played x it could have won a pawn." Same machinery pointed
+  // at a finished game: past tense, and compared against a move already on the
+  // board rather than asking for one.
+  const fenOf = (sans: string[]): string => {
+    const b = new Chess();
+    for (const s of sans) b.move(s);
+    return b.fen();
+  };
+
+  it('names what you took, then what was there too', () => {
+    const hist = ['e4', 'c5'];
+    const r = roadsNotTakenAt({
+      historySans: hist, fen: fenOf(hist), playedSan: 'Nf3', studentColor: 'white',
+    })!;
+    expect(r.said).toMatch(/^You took the /);
+    expect(r.said).toContain('was there too');
+  });
+
+  it('speaks in the PAST, because the game already happened', () => {
+    const hist = ['e4', 'e5'];
+    const r = roadsNotTakenAt({
+      historySans: hist, fen: fenOf(hist), playedSan: 'f4', studentColor: 'white',
+    })!;
+    expect(r.said).toMatch(/could have|would have|was there/);
+    expect(r.said, `present tense in a review: ${r.said}`).not.toMatch(/\bYou want to\b|\bThey want to\b/);
+  });
+
+  it('never offers back the road you actually took', () => {
+    const hist = ['e4', 'c5'];
+    const r = roadsNotTakenAt({
+      historySans: hist, fen: fenOf(hist), playedSan: 'Nf3', studentColor: 'white',
+    })!;
+    expect(r.roads.some((x) => x.san === 'Nf3'), 'the review suggested the move you played').toBe(false);
+  });
+
+  it('says nothing when the position never forked', () => {
+    const hist = ['a4', 'h5', 'Ra3', 'Rh6', 'Rg3', 'Rb6'];
+    expect(roadsNotTakenAt({
+      historySans: hist, fen: fenOf(hist), playedSan: 'Rgg6', studentColor: 'white',
+    })).toBeNull();
+  });
+
+  it('never hands over a move in the prose', () => {
+    for (const [hist, played] of [
+      [['e4', 'c5'], 'Nf3'], [['e4', 'e5'], 'f4'], [['e4', 'e6', 'd4', 'd5'], 'Nc3'],
+    ] as Array<[string[], string]>) {
+      const r = roadsNotTakenAt({
+        historySans: hist, fen: fenOf(hist), playedSan: played, studentColor: 'white',
+      });
+      if (!r) continue;
+      expect(r.said, `a move leaked: ${r.said}`).not.toMatch(/\b[NBRQK][a-h]?[1-8]?x?[a-h][1-8]\b/);
+    }
+  });
+
+  it('does not scold', () => {
+    // Showing the map is not second-guessing. A review that opens "you should
+    // have" is a different, worse product.
+    const hist = ['e4', 'c5'];
+    const r = roadsNotTakenAt({
+      historySans: hist, fen: fenOf(hist), playedSan: 'Nf3', studentColor: 'white',
+    })!;
+    expect(r.said.toLowerCase()).not.toMatch(/should have|mistake|blunder|wrong|better would/);
   });
 });

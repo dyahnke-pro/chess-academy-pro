@@ -142,3 +142,67 @@ export function forkOfferAt(
     said: `The theory splits here. ${sentences.join(' ')}${tail} Which one do you want to walk?`,
   };
 }
+
+/**
+ * THE ROADS NOT TAKEN — the review form of the same fork.
+ *
+ * David 2026-08-10: "in review it will help show what the user could have
+ * played. If you played x it could have won a pawn."
+ *
+ * Identical machinery, pointed at a game already finished: the position had a
+ * real branch point, the student took one road, and the others are still
+ * describable. The only differences are tense and audience — this is
+ * RETROSPECTIVE (the locked review register), and it compares against a move
+ * that is already on the board rather than asking for one.
+ *
+ * Returns null when the student's move WAS a road out of the fork and the
+ * others carry nothing to say, and null off-book, and null when the position
+ * never forked. A review that lists alternatives at every ply is noise; the
+ * point is the moments where the game could have gone somewhere describable.
+ */
+export function roadsNotTakenAt(args: {
+  historySans: readonly string[];
+  fen: string;
+  /** What the student actually played from this position. */
+  playedSan: string;
+  studentColor: 'white' | 'black';
+  max?: number;
+}): { roads: ForkRoad[]; said: string } | null {
+  const offer = forkOfferAt(args.historySans, args.fen, args.studentColor, args.max ?? 3);
+  if (!offer) return null;
+
+  const bare = args.playedSan.replace(/[+#]$/, '');
+  const others = offer.roads.filter((r) => r.san.replace(/[+#]$/, '') !== bare && r.preview);
+  if (others.length === 0) return null;
+
+  const took = offer.roads.find((r) => r.san.replace(/[+#]$/, '') === bare);
+  // PAST TENSE, per the retroactive rule: the move happened, so what the other
+  // roads WOULD have given is a conditional about a game that is over.
+  const lead = took
+    ? `You took the ${took.name} here.`
+    : 'This was a branch point.';
+  const alts = others.map((r) => `The ${r.name} was there too — ${asCouldHave(r.preview)}`);
+  return {
+    roads: others,
+    said: `${lead} ${alts.join(' ')}`,
+  };
+}
+
+/** "You want to win a pawn" → "it could have won you a pawn."
+ *
+ *  A deterministic re-voicing, not a re-computation: the fact is the same, the
+ *  tense and the person are what change. Anything the rewriter does not
+ *  recognise is passed through inside a conditional frame rather than guessed
+ *  at, so an unfamiliar clause reads as clumsy at worst, never as false. */
+function asCouldHave(preview: string): string {
+  const p = preview.trim().replace(/\.$/, '');
+  const mine = /^You want to (.+)$/.exec(p);
+  if (mine) return `it could have let you ${mine[1]}.`;
+  const theirs = /^They want to (.+)$/.exec(p);
+  if (theirs) return `they would have been trying to ${theirs[1]}.`;
+  const drift = /^You bring your pieces toward (.+?) over the next few moves$/.exec(p);
+  if (drift) return `your pieces would have headed for ${drift[1]}.`;
+  const drift2 = /^They bring their pieces toward (.+?) over the next few moves$/.exec(p);
+  if (drift2) return `their pieces would have headed for ${drift2[1]}.`;
+  return `that road led toward: ${p}.`;
+}
