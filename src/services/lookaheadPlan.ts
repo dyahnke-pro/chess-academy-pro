@@ -127,6 +127,21 @@ export interface SidePlan {
   tradeSquares: string[];
   /** Where the tactic lands, when one does. */
   tacticSquare: string | null;
+  /** A piece that MOVES TWICE OR MORE inside the horizon, with the squares it
+   *  travels through — "the knight goes f3, d2, then c4".
+   *
+   *  The single most characteristic thing a strong coach says about a line, and
+   *  the plan was throwing it away: `headingFor` kept the destinations and lost
+   *  the journey, so a three-move regrouping read as two unrelated squares. The
+   *  chain was already being reconstructed inside `planMarks` to place an
+   *  arrow; here it becomes the sentence it always was. */
+  maneuver: { piece: string; path: string[] } | null;
+  /** Checks this side gives inside the horizon. `isCheck` has been computed on
+   *  every ply since `pvPlayback` was written and read by nothing. */
+  checks: number;
+  /** A pawn this side promotes, by square — the loudest thing a line can
+   *  contain and, until now, invisible for the same reason. */
+  promotes: string | null;
   /** Speakable, or '' when the line gives this side nothing describable. */
   text: string;
   /** THE CLAUSES THAT REACHED `text`, each with the squares it is about.
@@ -178,8 +193,29 @@ export interface PlanStep {
   color: 'white' | 'black';
 }
 
+/** How the LINE behaves, as opposed to what either side gets out of it.
+ *
+ *  A coach watching a variation says "this is all forced" or "everything comes
+ *  off here" long before saying who ends up better, and none of it needed new
+ *  data — it is the shape of the plies we already replay. */
+export interface LineShape {
+  /** Leading plies where the side to move had exactly ONE legal move. There is
+   *  nothing to calculate while this is running, and saying so is what tells a
+   *  student when calculation actually starts. */
+  forcedPlies: number;
+  /** Material that comes off the board in TOTAL, both sides, in points — the
+   *  volume of the trade rather than the net. A line where twelve points change
+   *  hands is a different animal from one where a pawn does, even when the two
+   *  end level. */
+  traded: number;
+  /** The line ends with the queens off and few pieces left. */
+  endsInEndgame: boolean;
+}
+
 export interface LookaheadPlan {
   keySquares: KeySquare[];
+  /** How the line behaves — forced, simplifying, heading for an ending. */
+  shape: LineShape;
   /** The line itself, inside the horizon — where every piece actually goes. */
   path: PlanStep[];
   /** The board as it stands, beside what the line does to it. */
@@ -287,10 +323,29 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
   const kingAttackSquares: string[] = [];
   const materialSquares: string[] = [];
   const tradeSquares: string[] = [];
+  let checks = 0;
+  let promotes: string | null = null;
+  /** Where each of this side's pieces has travelled so far, keyed by the square
+   *  it currently stands on. A move off a tracked square EXTENDS that piece's
+   *  path instead of starting a new one — which is what turns two destinations
+   *  back into one regrouping. */
+  const journeys = new Map<string, { piece: string; path: string[] }>();
 
   for (const ply of mine) {
-    const { to } = squaresOf(ply);
+    const { from, to } = squaresOf(ply);
     destinations.set(to, (destinations.get(to) ?? 0) + 1);
+    if (ply.facts.isCheck) checks += 1;
+    if (ply.facts.promotion) promotes = to;
+    const carried = journeys.get(from);
+    if (carried) {
+      journeys.delete(from);
+      journeys.set(to, { piece: carried.piece, path: [...carried.path, to] });
+    } else {
+      // The SAN says which piece moved without a board read: a leading piece
+      // letter, or a pawn when there is none.
+      const letter = /^[KQRBN]/.exec(ply.san)?.[0] ?? 'P';
+      journeys.set(to, { piece: PIECE_WORD[letter.toLowerCase()] ?? 'pawn', path: [from, to] });
+    }
     for (const f of ply.facts.newOpenFiles) opening.add(f);
     const taken = capturedPiece(ply.facts.captured);
     if (taken) {
@@ -331,6 +386,13 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
     }
   }
 
+  // A piece that moved once went somewhere; a piece that moved twice is being
+  // REROUTED, and that is the sentence. Longest journey wins — three hops is a
+  // more striking idea than two.
+  const maneuver = [...journeys.values()]
+    .filter((j) => j.path.length >= 3)
+    .sort((a, b) => b.path.length - a.path.length)[0] ?? null;
+
   const headingFor = [...destinations.entries()]
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
     .map(([sq]) => sq);
@@ -346,6 +408,9 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
     shieldStripped,
     tactic,
     tacticSquare,
+    maneuver,
+    checks,
+    promotes,
     mates,
     mateDelivered: false,
     nearEnemyKing,
@@ -411,8 +476,22 @@ export function describePlan(
 
   // A tactic that actually lands is the single most concrete thing the line
   // contains, so it starts above everything except mate.
+  // PROMOTION outranks everything short of mate: a pawn reaching the eighth is
+  // a new queen, and no other clause competes with that.
+  if (plan.promotes) {
+    add(150, `push a pawn through to a new queen on ${plan.promotes}`, [plan.promotes]);
+  }
   const tactic = tacticWord(plan.tactic);
   if (tactic) add(90, `land a ${tactic}`, plan.tacticSquare ? [plan.tacticSquare] : []);
+  // THE REROUTE — the most characteristic thing a coach says about a line, and
+  // the plan had the data and no sentence for it. `headingFor` kept the
+  // destinations and lost the journey, so a three-move regrouping read as two
+  // unrelated squares. Ranked just under a landing tactic: concrete, visual,
+  // and the thing a student can actually copy next game.
+  if (plan.maneuver) {
+    const { piece, path } = plan.maneuver;
+    add(80, `walk the ${piece} round from ${path[0]} to ${path[path.length - 1]}, by way of ${path.slice(1, -1).join(' and ')}`, path);
+  }
   // King attack, scaled by how many pieces are really arriving. Two is a
   // gesture; four is an assault and the sentence should lead with it.
   if (plan.nearEnemyKing >= 2) {
@@ -533,6 +612,7 @@ export function buildLookaheadPlan(
 
   return {
     keySquares: keySquaresOf(line.plies),
+    shape: shapeOf(line.plies),
     path: pathOf(line.plies),
     read: readPosition(line),
     white, black, mine, theirs,
@@ -571,6 +651,45 @@ function mergeTwinDrift(mine: SidePlan, theirs: SidePlan): void {
     .map((c) => ({ text: theirs.text, squares: c.squares }));
   theirs.spokenClauses = merged.filter((_, i) => i < 1);
   mine.spokenClauses = merged.slice(1).map((c) => ({ text: theirs.text, squares: c.squares }));
+}
+
+/**
+ * How the LINE behaves — forced, simplifying, heading for an ending.
+ *
+ * All three come off plies already replayed. `forcedPlies` counts the LEADING
+ * run where the side to move had exactly one legal move: while that lasts there
+ * is nothing to calculate, and telling a student where the choices start is
+ * more useful than any claim about who stands better. `traded` is total
+ * material off, both sides, which distinguishes a line where twelve points
+ * change hands from one where a pawn does even when the two end level.
+ */
+function shapeOf(plies: readonly PvPly[]): LineShape {
+  const horizon = plies.slice(0, PLAN_HORIZON);
+  let forcedPlies = 0;
+  let counting = true;
+  let traded = 0;
+  for (const ply of horizon) {
+    if (counting) {
+      try {
+        if (new Chess(ply.fenBefore).moves().length === 1) forcedPlies += 1;
+        else counting = false;
+      } catch { counting = false; }
+    }
+    const taken = capturedPiece(ply.facts.captured);
+    if (taken) traded += PIECE_POINTS[taken] ?? 0;
+  }
+  // The terminal board decides the ending claim — the root cannot, which is
+  // precisely why "this trades into an endgame" was never sayable before.
+  let endsInEndgame = false;
+  const last = horizon[horizon.length - 1]?.fenAfter;
+  if (last) {
+    try {
+      const board = new Chess(last);
+      const men = board.board().flat().filter((c) => c && c.type !== 'k' && c.type !== 'p');
+      endsInEndgame = men.length <= 4 && !men.some((c) => c && c.type === 'q');
+    } catch { /* unreadable — claim nothing */ }
+  }
+  return { forcedPlies, traded, endsInEndgame };
 }
 
 /** The horizon's moves, from/to/colour — the raw material for the arrows. */
@@ -668,6 +787,39 @@ export function positionReadLine(
   return lines.join(' ');
 }
 
+/**
+ * How the LINE behaves, in one sentence — forced, simplifying, or heading for
+ * an ending.
+ *
+ * Distinct from both the plan (what a side gets) and the board read (what is
+ * already true): this is what a coach says while a variation is playing out,
+ * and none of it was sayable before because the shape was never read off the
+ * plies. Same construction as everything else here — fixed templates, computed
+ * values, and silence when the numbers do not earn a sentence.
+ */
+export function lineShapeLine(shape: LineShape, said?: Set<string>): string {
+  const lines: string[] = [];
+  const once = (key: string, line: string): void => {
+    if (said?.has(key)) return;
+    said?.add(key);
+    lines.push(line);
+  };
+  // Two plies is a move and a reply with no choices — worth saying, because it
+  // tells the student exactly where calculation starts.
+  if (shape.forcedPlies >= 2) {
+    once('forced', `The next ${shape.forcedPlies === 2 ? 'move' : `${shape.forcedPlies} moves`} are forced — there's nothing to choose until after that.`);
+  }
+  // Nine points is roughly a queen, or two rooks, or three minor pieces: past
+  // that the board genuinely empties out and the game changes character.
+  if (shape.traded >= 9) {
+    once('trades', "A lot comes off in this line — it's a simplifying one, so count the material before you commit.");
+  }
+  if (shape.endsInEndgame) {
+    once('to-endgame', 'This line trades down into an endgame, so pawns are about to matter more than pieces.');
+  }
+  return lines.join(' ');
+}
+
 /** Does this side still own a rook? Unknown board → assume not, and say
  *  nothing: silence is always available and a wrong claim is not. */
 function hasRook(fen: string | undefined, color: 'white' | 'black'): boolean {
@@ -759,7 +911,8 @@ function shortLineRead(
   const empty = (color: 'white' | 'black'): SidePlan => ({
     color, headingFor: [], opening: [], trading: [], outposts: [],
     passedPawns: [], materialSwing: 0, shieldStripped: 0, tactic: null,
-    tacticSquare: null, mates: false, nearEnemyKing: 0,
+    tacticSquare: null, maneuver: null, checks: 0, promotes: null,
+    mates: false, nearEnemyKing: 0,
     kingAttackSquares: [], materialSquares: [], tradeSquares: [],
     text: '', spokenClauses: [],
   });
@@ -789,7 +942,10 @@ function shortLineRead(
     }],
     rootEvalCp: 0, terminalEvalCp: null, delivers: true, closeAlternative: null,
   };
-  return { keySquares: [], path: [], read: readPosition(stub), white, black, mine, theirs };
+  return {
+    keySquares: [], shape: { forcedPlies: 0, traded: 0, endsInEndgame: false },
+    path: [], read: readPosition(stub), white, black, mine, theirs,
+  };
 }
 
 /**
