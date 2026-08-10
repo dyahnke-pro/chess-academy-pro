@@ -921,10 +921,17 @@ describe('the rest of the inventory — everything the line leaves behind', () =
     expect(lineShapeLine(shape({ castlingLost: 'theirs' }))).toContain('They lose');
   });
 
-  it('speaks the eval only once it has actually moved', () => {
-    expect(lineShapeLine(shape({ evalSwingCp: 20 })), 'announced noise as a swing').not.toContain('worth');
-    expect(lineShapeLine(shape({ evalSwingCp: 150 }))).toContain('worth about a pawn to you');
-    expect(lineShapeLine(shape({ evalSwingCp: -400 }))).toContain('costs you a piece');
+  it('says NOTHING about the eval swing — it would be meaningless', () => {
+    // A first draft spoke "playing this through is worth about a pawn to you"
+    // from the root→terminal swing. On this path the line IS the engine's
+    // principal variation, and a PV's terminal eval equals its root eval by
+    // definition — that is what makes it principal. The swing is structurally
+    // zero, so the sentence could only ever say nothing or say something false.
+    // Found by auditing whether each new lane could actually fire, not by a
+    // test failing.
+    for (const cp of [20, 150, -400, 900]) {
+      expect(lineShapeLine(shape({ evalSwingCp: cp })), `spoke a PV swing at ${cp}`).toBe('');
+    }
   });
 
   it('reads the king on an open file at the END of the line', () => {

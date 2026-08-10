@@ -140,7 +140,13 @@ export interface UseDiscussionPracticeResult {
    *
    *  Handed up rather than acted on here, because this hook never sees the
    *  reply — only the surface does. */
-  coachToMove: { fen: string; evalWhiteCp: number; bestUci: string | null; pvUci: string[] } | null;
+  /** A REF, not state, and deliberately so. The surface reads this from inside
+   *  a callback that was created BEFORE the engine finished — a state value
+   *  captured in that closure is the value from the previous render, i.e. null
+   *  on exactly the turn it is needed. Found by auditing whether the lane could
+   *  fire rather than by a test failing, because a stale closure does not throw:
+   *  it silently reads null and the coach never calls its own mistakes. */
+  coachToMove: { current: { fen: string; evalWhiteCp: number; bestUci: string | null; pvUci: string[] } | null };
   evaluatePlayerMove: (args: EvaluatePlayerMoveArgs) => Promise<void>;
   raiseSlipPrompt: (args: RaiseSlipPromptArgs) => void;
   submitReason: (reason: string) => Promise<void>;
@@ -244,7 +250,7 @@ export function useDiscussionPractice(
    *  because the rating arrives per-move rather than at construction. */
   const [hintDial, setHintDial] = useState<HintDial>(() => startDial(undefined));
   const [lastMoveDrawback, setLastMoveDrawback] = useState<{ line: string; square: string; kind: 'mistake' | 'drawback' } | null>(null);
-  const [coachToMove, setCoachToMove] = useState<UseDiscussionPracticeResult['coachToMove']>(null);
+  const coachToMove = useRef<UseDiscussionPracticeResult['coachToMove']['current']>(null);
   const dialSeededRef = useRef(false);
 
   // TWO different switches, deliberately separated (David 2026-08-05).
@@ -302,12 +308,12 @@ export function useDiscussionPractice(
         replyPvUci = after.topLines?.[0]?.moves ?? (after.bestMove ? [after.bestMove] : []);
         // Hand the pre-reply analysis up so the surface can judge the coach's
         // own move against it — no second search, the numbers are right here.
-        setCoachToMove({
+        coachToMove.current = {
           fen: args.fenAfter,
           evalWhiteCp: after.evaluation,
           bestUci: after.bestMove ?? null,
           pvUci: replyPvUci,
-        });
+        };
       } catch {
         return; // engine down → never guess (G0/G3)
       }

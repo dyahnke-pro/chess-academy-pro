@@ -1080,18 +1080,21 @@ export function lineShapeLine(shape: LineShape, said?: Set<string>): string {
   } else if (shape.castlingLost === 'theirs') {
     once('castling-theirs', 'They lose the right to castle here, and a king stuck in the middle is a target.');
   }
-  // THE EVAL, IN WORDS AND ONLY WHEN IT MOVED. A swing under about a third of a
-  // pawn is noise; announcing it would teach a student to read precision into
-  // a number that has none.
-  if (typeof shape.evalSwingCp === 'number' && Math.abs(shape.evalSwingCp) >= 35) {
-    const better = shape.evalSwingCp > 0;
-    const size = Math.abs(shape.evalSwingCp) >= 300 ? 'a piece'
-      : Math.abs(shape.evalSwingCp) >= 100 ? 'about a pawn'
-        : 'a fraction of a pawn';
-    once('swing', better
-      ? `Playing this through is worth ${size} to you.`
-      : `Playing this through costs you ${size}.`);
-  }
+  // NO EVAL SENTENCE, AND NOT BECAUSE IT IS UNWIRED — because it would be
+  // MEANINGLESS. A first draft said "playing this through is worth about a pawn
+  // to you" from `terminalEvalCp - rootEvalCp`. On the Learn path the line IS
+  // the engine's principal variation, and a PV's terminal eval equals its root
+  // eval by definition: that is what makes it the principal variation. The
+  // swing is structurally zero, so the sentence could only ever say nothing or
+  // say something false.
+  //
+  // What a student actually wants there — "am I better here?" — is the ROOT
+  // eval, which the eval bar already shows and `positionReadLine` already
+  // frames. A swing only means something for a line that is NOT best (a
+  // hypothetical, a refuted try), and none of those reach this function.
+  //
+  // `evalSwingCp` stays on the interface for a caller that has a genuine
+  // non-PV line to describe; it just gets no sentence here.
   return lines.join(' ');
 }
 

@@ -1335,6 +1335,13 @@ export function CoachTeachPage(): JSX.Element {
    *  package has shipped, and a hint about a board the student has moved past
    *  is worse than no hint. */
   const pendingVoiceRef = useRef<{ fen: string; lines: Array<{ kind: VoiceFactKind; text: string }> } | null>(null);
+  /** The coach's own last move, captured for judging. See the callout below —
+   *  the inputs are gathered while the engine work runs and the verdict is
+   *  taken where the line is spoken, so a race between two engine reads cannot
+   *  silently swallow it. */
+  const coachMoveRef = useRef<{
+    fenBefore: string; playedSan: string; evalAfterWhiteCp: number; fenAfter: string;
+  } | null>(null);
   /** Plan clauses already spoken this game. A plan is stable across plies — the
    *  same pin is still coming three moves later — so without this the coach
    *  chants. A five-ply sample from a real game repeated one line four times. */
@@ -5526,6 +5533,9 @@ export function CoachTeachPage(): JSX.Element {
      *  SURVIVED into `pkg.spoken`, so a mark can never outlive its claim. */
     planArrows: BoardArrow[];
     planHighlights: BoardHighlight[];
+    /** Borrowed corpus teaching, for the caller to queue with the plan — see
+     *  the note at the package assembly below. */
+    borrowedLine: string | null;
     factLines: string[];
   } => {
     // THE GAME IS OVER — SAY NOTHING MORE. David's 2026-08-08 run ended in
@@ -5547,7 +5557,7 @@ export function CoachTeachPage(): JSX.Element {
       if (over.isGameOver()) {
         return {
           pkg: buildVoicePackage([]), alertArrow: null, leadEyeArrows: [],
-          planArrows: [], planHighlights: [], factLines: [],
+          planArrows: [], planHighlights: [], borrowedLine: null, factLines: [],
         };
       }
     } catch { /* unreadable FEN — fall through and let the lanes gate it */ }
@@ -6138,7 +6148,14 @@ export function CoachTeachPage(): JSX.Element {
       // prospective: what your last move gave up, then what the line does next.
       ...(drawbackLine ? [{ kind: drawbackKind, text: drawbackLine, fen: args.fenAfterReply }] : []),
       ...(planLine ? [{ kind: 'plan' as const, text: planLine, fen: args.fenAfterReply }] : []),
-      ...(teachingLine ? [{ kind: 'borrowed' as const, text: teachingLine, fen: args.fenAfterReply }] : []),
+      // NOT HERE ANY MORE. The borrowed tier is meant to STAND DOWN when the
+      // look-ahead has something about this board (David 2026-08-10: "less from
+      // general rules") — but the plan is computed asynchronously and lands in
+      // the LATE package, so a yield rule evaluated here could never see it.
+      // Two packages, and the rule only works within one. The borrowed line is
+      // handed back and queued alongside the plan, where the comparison is real.
+      // It is corpus teaching about a DIFFERENT board, so nothing is lost by it
+      // arriving with the plan rather than ahead of it.
       // `observation`, not `note` — it is filler, and while it shared the
       // teaching rank it could displace a masterclass beat with "your pawn on
       // a2 is isolated". Lowest rank by construction.
@@ -6218,6 +6235,7 @@ export function CoachTeachPage(): JSX.Element {
       leadEyeArrows,
       planArrows,
       planHighlights,
+      borrowedLine: teachingLine,
       factLines,
     };
   }, [activeProfile?.puzzleRating, activeProfile?.currentRating, discussion.lastMoveDrawback]);
@@ -6425,50 +6443,18 @@ export function CoachTeachPage(): JSX.Element {
                 // the curated gem list — blunder anywhere uncatalogued and it
                 // said nothing, leaving the student to spot a free piece alone.
                 //
-                // No second search. `coachToMove` is the analysis of the board
-                // the coach just moved FROM (computed to judge the student's
-                // move, then discarded), and `studentBest` is the board it
-                // moved TO. The coach's cost is the difference, in its own
-                // perspective.
-                try {
-                  const pre = discussion.coachToMove;
-                  if (pre && pre.fen === move.fen && studentBest) {
-                    const coachColor = playerColor === 'white' ? 'black' : 'white';
-                    const sign = coachColor === 'white' ? 1 : -1;
-                    const cpLoss = (pre.evalWhiteCp * sign) - (studentBest.evaluation * sign);
-                    // UCI → SAN on the pre-reply board. Inline because the
-                    // page's other converter is scoped to the move-picker.
-                    let bestSan: string | null = null;
-                    if (pre.bestUci) {
-                      try {
-                        const b = new Chess(pre.fen);
-                        const mv = b.move({
-                          from: pre.bestUci.slice(0, 2),
-                          to: pre.bestUci.slice(2, 4),
-                          promotion: pre.bestUci.slice(4, 5) || undefined,
-                        });
-                        bestSan = mv?.san ?? null;
-                      } catch { bestSan = null; }
-                    }
-                    const call = callInaccuracy({
-                      fenBefore: pre.fen,
-                      playedSan: m.san,
-                      bestSan,
-                      bestLineUci: pre.pvUci,
-                      cpLoss,
-                      side: 'coach',
-                      moverColor: coachColor,
-                    });
-                    if (call) {
-                      queueSpokenHint(probe.fen(), call.said, 'coachMistake');
-                      captureEvent('coach_inaccuracy_called', {
-                        surface: 'coach-teach',
-                        quality: call.quality,
-                        cost: call.cost,
-                      });
-                    }
-                  }
-                } catch { /* the callout is a bonus, never a blocker */ }
+                // No second search: the engine read that judges the STUDENT's
+                // move analyses the board the coach then moves FROM, so its
+                // `bestMove` is the coach's best and its eval the one the reply
+                // starts from. All of it was computed and discarded.
+                //
+                // CAPTURED HERE, DECIDED LATER. That hook's analysis and this
+                // one race — reading it now loses the callout on any turn the
+                // hook happens to finish second, silently. The verdict is taken
+                // where the line is actually spoken, which is strictly later.
+                coachMoveRef.current = studentBest
+                  ? { fenBefore: move.fen, playedSan: m.san, evalAfterWhiteCp: studentBest.evaluation, fenAfter: probe.fen() }
+                  : null;
 
                 const tctx = buildTacticsLiveContext(probe.fen(), studentBest, studentCC, rating);
                 // Tactics facts are held back until the question decision
@@ -6811,7 +6797,16 @@ export function CoachTeachPage(): JSX.Element {
                             // Queued rather than spoken outright so it joins
                             // the one utterance the hint lane already builds on
                             // `factsReady` — same board, same grading, one clip.
-                            if (graded) queueSpokenHint(planFen, graded);
+                            // AT THE 'plan' RANK, not the default 'computed'.
+                            // The instant package's own plan lane can never
+                            // match its fen-guard (it is assembled in the same
+                            // tick this read starts), so THIS is the only route
+                            // the plan takes to the voice — and tagging it
+                            // 'computed' put it at rank 1, below the borrowed
+                            // corpus instead of above it. Every rule built on
+                            // the plan rank was inert: the general-rules tier
+                            // never stood down, and the plan spoke last.
+                            if (graded) queueSpokenHint(planFen, graded, 'plan');
                             if (graded && liveFenRef.current === planFen) {
                               const marks = planMarks({ plan, spoken: graded, fen: planFen, studentColor: playerColor });
                               if (marks.arrows.length > 0 || marks.highlights.length > 0) {
@@ -7275,6 +7270,12 @@ export function CoachTeachPage(): JSX.Element {
                 // than ahead of it, and the same stale-turn guard: if the
                 // student has already moved, the plan they describe belongs to
                 // a board that is gone.
+                // The borrowed corpus rides the LATE package with the plan, so
+                // the yield rule has both in front of it — see the note at the
+                // instant assembly.
+                if (instant.borrowedLine) {
+                  queueSpokenHint(fenAfterReply, instant.borrowedLine, 'borrowed');
+                }
                 if (instant.planArrows.length > 0 || instant.planHighlights.length > 0) {
                   const { planArrows: pa, planHighlights: ph } = instant;
                   void padDone.then(() => {
@@ -7330,6 +7331,46 @@ export function CoachTeachPage(): JSX.Element {
                 // twice.
                 const samePosition = (a: string, b: string): boolean =>
                   a.split(' ').slice(0, 4).join(' ') === b.split(' ').slice(0, 4).join(' ');
+                // THE COACH'S OWN VERDICT, taken here because both engine
+                // reads have now resolved — see the capture site above.
+                try {
+                  const cm = coachMoveRef.current;
+                  const pre = discussion.coachToMove.current;
+                  if (cm && pre && pre.fen === cm.fenBefore && samePosition(cm.fenAfter, fenAfterReply)) {
+                    coachMoveRef.current = null;
+                    const coachColor = playerColor === 'white' ? 'black' : 'white';
+                    const sign = coachColor === 'white' ? 1 : -1;
+                    const cpLoss = (pre.evalWhiteCp * sign) - (cm.evalAfterWhiteCp * sign);
+                    let bestSan: string | null = null;
+                    if (pre.bestUci) {
+                      try {
+                        const b = new Chess(pre.fen);
+                        const mv = b.move({
+                          from: pre.bestUci.slice(0, 2),
+                          to: pre.bestUci.slice(2, 4),
+                          promotion: pre.bestUci.slice(4, 5) || undefined,
+                        });
+                        bestSan = mv?.san ?? null;
+                      } catch { bestSan = null; }
+                    }
+                    const call = callInaccuracy({
+                      fenBefore: pre.fen,
+                      playedSan: cm.playedSan,
+                      bestSan,
+                      bestLineUci: pre.pvUci,
+                      cpLoss,
+                      side: 'coach',
+                      moverColor: coachColor,
+                    });
+                    if (call) {
+                      queueSpokenHint(cm.fenAfter, call.said, 'coachMistake');
+                      captureEvent('coach_inaccuracy_called', {
+                        surface: 'coach-teach', quality: call.quality, cost: call.cost,
+                      });
+                    }
+                  }
+                } catch { /* the callout is a bonus, never a blocker */ }
+
                 const pending = pendingVoiceRef.current;
                 if (pending && samePosition(pending.fen, fenAfterReply) && pending.lines.length > 0) {
                   pendingVoiceRef.current = null;
