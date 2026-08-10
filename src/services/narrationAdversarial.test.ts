@@ -138,7 +138,15 @@ describe('ADVERSARIAL: 60 machine-played games through every computed lane', () 
     // proxy for "the sweep produced narration"; a line count would now fail for
     // the feature working.
     expect(lines, 'the sweep produced no narration at all — it proved nothing').toBeGreaterThan(800);
-    expect(chars, 'the narration got thinner, not just fewer-sentenced').toBeGreaterThan(90_000);
+    // 90,000 → 75,000 (2026-08-10): the floor was measured with two clause
+    // families that have since been DELETED for lying, not for length — the
+    // pawn "rerouted by way of b6" (pawns are not manoeuvred) and the idle-piece
+    // caveat, which promoted "and leave a1, d1, f1 where they are" into a stated
+    // intention. The second fired on nearly every ply of these deliberately-poor
+    // games, which is where most of the 6k went. Lowering a volume floor to
+    // absorb a real cut is honest; lowering it to absorb a regression is not, so
+    // the margin below the measured 83,981 is deliberately narrow.
+    expect(chars, 'the narration got thinner, not just fewer-sentenced').toBeGreaterThan(75_000);
     expect(concessions, 'the concession beat never fired across 400 games').toBeGreaterThan(0);
   }, 240000);
 });

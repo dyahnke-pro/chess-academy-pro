@@ -147,6 +147,7 @@ import { narrateContinuationMove } from '../../services/continuationMoveNarratio
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { buildOpeningChainFacts } from '../../services/openingFactChains';
 import { buildForkTalk, type ForkTalk } from '../../services/forkTalk';
+import { forkOfferAt } from '../../services/forkNarration';
 import { parseCoachMoveCommand } from '../../services/coachMoveCommand';
 import { sanToSpeech } from '../../utils/sanToSpeech';
 import { teachingSourceForBoard, teachingFactLine, generalizedTeaching, noteCoverageForLine, spokenBeatText, notesForOpening } from '../../services/danyaTeachingService';
@@ -170,7 +171,7 @@ import { scaleGap, packageForRegister, readsForRegister } from '../../services/h
 import { planFromUci, keySquareLine, positionReadLine, lineShapeLine, terminalReadLine, tacticWord } from '../../services/lookaheadPlan';
 import type { LookaheadPlan } from '../../services/lookaheadPlan';
 import { planMarks } from '../../services/planMarks';
-import { callInaccuracy } from '../../services/inaccuracyCall';
+import { backwardLook } from '../../services/backwardLook';
 import {
   noteFamilyFork, markWalked, unwalked, nextForkToOffer, progressAt,
   type ForkLog, type Fork,
@@ -1340,7 +1341,8 @@ export function CoachTeachPage(): JSX.Element {
    *  taken where the line is spoken, so a race between two engine reads cannot
    *  silently swallow it. */
   const coachMoveRef = useRef<{
-    fenBefore: string; playedSan: string; evalAfterWhiteCp: number; fenAfter: string;
+    fenBefore: string; playedSan: string; evalAfterWhiteCp: number;
+    afterIsMate: boolean; afterMateIn: number | null; fenAfter: string;
   } | null>(null);
   /** Plan clauses already spoken this game. A plan is stable across plies — the
    *  same pin is still coming three moves later — so without this the coach
@@ -6094,16 +6096,19 @@ export function CoachTeachPage(): JSX.Element {
     // primary first heard by user when corpus runs out" — so it is offered
     // whenever it was computed for THIS board, and `voicePackage` ranks it
     // above the borrowed corpus tiers and below a note authored right here.
-    // WHY THE LAST MOVE WAS BAD — the look-ahead pointed backward, and the
-    // FIRST thing spoken when it fires. Rare by construction: only when code
-    // could NAME the drawback, never "that was worse by 80 centipawns".
-    const drawbackLine = discussion.lastMoveDrawback?.line ?? null;
-    // Which lane it rides: the MISTAKE CALLOUT ("that was a mistake — X was the
-    // move, to …") leads the computed lanes; the concession and the rear-facing
-    // consequence sit a rung below it.
-    const drawbackKind = discussion.lastMoveDrawback?.kind ?? 'drawback';
-    if (drawbackLine) factLines.push(`Last move gave up: ${drawbackLine}`);
-
+    // ── WHY THE LAST MOVE WAS BAD IS NOT ASSEMBLED HERE ──────────────────────
+    // It used to be, reading `discussion.lastMoveDrawback`, and it was WRONG BY
+    // ONE TURN on every single move. That hook's analysis is fired behind a
+    // deliberate `setTimeout(…, 6000)` so the engine worker stays free for
+    // narration, and this pass runs about two seconds after the student moves —
+    // so the state it read was the result of the PREVIOUS move, attributed out
+    // loud to this one. It does not fall silent when it is stale; it
+    // MISATTRIBUTES, fluently, and the board-grading cannot catch it because
+    // "that took your last defender off e5" is often still true two plies later.
+    //
+    // The backward look now rides the LATE package, built in the reply handler
+    // from this turn's own engine read — the only place its inputs exist. See
+    // `backwardLook` for the one shared model both callers use.
     let planLine: string | null = null;
     if (lookaheadPlanRef.current?.fen === args.fenAfterReply) {
       planLine = lookaheadPlanRef.current.text;
@@ -6144,9 +6149,6 @@ export function CoachTeachPage(): JSX.Element {
       // it: a plan about THIS board beats a real note about a different one.
       // `generalizedTeaching` still frames it honestly, so it is never heard as
       // a claim about these squares — it just no longer outranks one.
-      // FIRST, above everything (David 2026-08-10). Retrospective before
-      // prospective: what your last move gave up, then what the line does next.
-      ...(drawbackLine ? [{ kind: drawbackKind, text: drawbackLine, fen: args.fenAfterReply }] : []),
       ...(planLine ? [{ kind: 'plan' as const, text: planLine, fen: args.fenAfterReply }] : []),
       // NOT HERE ANY MORE. The borrowed tier is meant to STAND DOWN when the
       // look-ahead has something about this board (David 2026-08-10: "less from
@@ -6219,14 +6221,10 @@ export function CoachTeachPage(): JSX.Element {
       if (tacticSquares.length > 0 && pkg.kept.some((f) => f.kind === 'tactic')) {
         markTactic(tacticSquares, '#22c55e');
       }
-      // THE SQUARE THE LAST MOVE GAVE UP. The backward look already names it
-      // out loud ("…that gives up control of d5"); this is the same fact,
-      // pointed at. Amber rather than red: it is a cost already paid, not a
-      // threat arriving.
-      const conceded = discussion.lastMoveDrawback?.square;
-      if (conceded && pkg.kept.some((f) => f.kind === 'drawback' || f.kind === 'mistake') && /\b[a-h][1-8]\b/.test(conceded)) {
-        planHighlights.push({ square: conceded, color: '#f59e0b' });
-      }
+      // THE SQUARE THE LAST MOVE GAVE UP is marked in the LATE lane, with the
+      // sentence that names it — see the backward-look block in the reply
+      // handler. It cannot be marked here for the same reason it can no longer
+      // be SAID here: nothing about the student's own move is known yet.
     }
 
     return {
@@ -6238,7 +6236,7 @@ export function CoachTeachPage(): JSX.Element {
       borrowedLine: teachingLine,
       factLines,
     };
-  }, [activeProfile?.puzzleRating, activeProfile?.currentRating, discussion.lastMoveDrawback]);
+  }, [activeProfile?.puzzleRating, activeProfile?.currentRating]);
 
   /** Queue a computed line to be SPOKEN once the engine work settles.
    *
@@ -6276,6 +6274,22 @@ export function CoachTeachPage(): JSX.Element {
     // Pre-move FEN (before we overwrite liveFenRef below) — the slip faucet
     // needs the position the student moved FROM.
     const fenBefore = liveFenRef.current;
+    // AND THE READ OF IT, taken in the same breath. The eval-bar effect has
+    // been analysing every position the board reaches at depth 12 and storing
+    // it here keyed by FEN; the position the student just moved FROM is the one
+    // it most recently finished. So the engine's best move at `fenBefore`, its
+    // line, and the eval the move started from are all sitting in memory,
+    // already paid for — and were being thrown away, which is why judging the
+    // student's move needed a second search that then had to be deferred six
+    // seconds to stay out of narration's way.
+    //
+    // Captured HERE because the effect overwrites the ref as soon as the board
+    // settles on the new position. A guard on the FEN, not a hope: if the read
+    // is for any other board this stays null and the backward look simply does
+    // not fire, which is the honest failure.
+    const preStudentRead = latestEvalRef.current?.fen === fenBefore
+      ? latestEvalRef.current.analysis ?? null
+      : null;
     // An open "why did you play that?" is closed by playing on — the coach
     // lets it go and the slip is captured silently for review/drills (David
     // 2026-07-11: never a stale card over a live board).
@@ -6354,6 +6368,27 @@ export function CoachTeachPage(): JSX.Element {
             }
           } catch { /* warming is a bonus, never a blocker */ }
         }
+        // THE BOARD BETWEEN THE TWO MOVES, read once and used twice.
+        //
+        // `move.fen` is the position the student's move ARRIVED at and the one
+        // the coach is about to move FROM, so a single analysis of it answers
+        // both of the questions this turn asks about a move already played:
+        //   • the student's — what their move cost (this eval against the
+        //     pre-move one) and what it let the opponent do (this line);
+        //   • the coach's own — the eval its reply starts from, and the move it
+        //     should have played instead.
+        // Queued behind the warm probe deliberately: that one is on the
+        // critical path to the voice, this one is only read by the LATE package.
+        //
+        // It replaces `discussion.coachToMove`, which could never work here.
+        // That ref is filled by the same six-second-deferred call as the
+        // backward look, so at this point it still holds the PREVIOUS turn's
+        // position — and the FEN guard at the verdict site, doing its job,
+        // therefore refused every single turn. The coach's own mistake callout
+        // was wired end to end and could not fire once.
+        const midTurnRead = stockfishEngine
+          .analyzeWithBudget(move.fen, 12, 1500)
+          .catch(() => null);
         // THE PAD IS THEATER, NOT A PIPELINE STAGE (David 2026-08-07: "The
         // two second wait time is for the opponents move… That doesn't mean
         // the llm needs to stop and think"). The opponent's 1-2s "thinking"
@@ -6453,7 +6488,17 @@ export function CoachTeachPage(): JSX.Element {
                 // hook happens to finish second, silently. The verdict is taken
                 // where the line is actually spoken, which is strictly later.
                 coachMoveRef.current = studentBest
-                  ? { fenBefore: move.fen, playedSan: m.san, evalAfterWhiteCp: studentBest.evaluation, fenAfter: probe.fen() }
+                  ? {
+                    fenBefore: move.fen,
+                    playedSan: m.san,
+                    evalAfterWhiteCp: studentBest.evaluation,
+                    // Mate travels in its own field. Folded into the
+                    // centipawns it becomes a six-figure sentinel, and the
+                    // coach reports walking into mate as a cost of 100,000.
+                    afterIsMate: studentBest.isMate,
+                    afterMateIn: studentBest.mateIn,
+                    fenAfter: probe.fen(),
+                  }
                   : null;
 
                 const tctx = buildTacticsLiveContext(probe.fen(), studentBest, studentCC, rating);
@@ -6542,7 +6587,43 @@ export function CoachTeachPage(): JSX.Element {
                       .slice(0, 3)
                       .filter((l) => typeof l.moves?.[0] === 'string' && typeof l.evaluation === 'number')
                       .map((l) => ({ uci: l.moves[0], evalCp: playerColor === 'white' ? l.evaluation : -l.evaluation }));
-                    const fork = forkTalkCountRef.current < FORK_TALK_MAX_PER_GAME && forkLines.length >= 2
+                    // ── THE BOOK FORK, FIRST ────────────────────────────────
+                    // David 2026-08-10: "Have the coach narrate with the forward
+                    // PV the two different paths and have the coach ask which
+                    // path they want to walk down. This happens only when still
+                    // in book/theory."
+                    //
+                    // It goes AHEAD of the engine fork below because the two
+                    // answer different questions and only one should be asked at
+                    // a time. `buildForkTalk` fires when the ENGINE's top options
+                    // are near-equal; this fires where the THEORY splits, which
+                    // the engine's top three need not agree with — in the
+                    // Sicilian after 1.e4 c5 the book offers half a dozen real
+                    // roads the engine may rank as one best move and two also-
+                    // rans. Out of book it returns null on its own, so "only in
+                    // book" needs no flag.
+                    //
+                    // They SHARE the per-game budget: a student who has been
+                    // asked to choose three times has been asked enough,
+                    // whichever kind of fork did the asking.
+                    const bookFork = forkTalkCountRef.current < FORK_TALK_MAX_PER_GAME
+                      ? forkOfferAt(historyAfterReply, probe.fen(), playerColor)
+                      : null;
+                    if (bookFork) {
+                      forkTalkCountRef.current += 1;
+                      captureEvent('fork_offer_book', {
+                        surface: 'coach-teach',
+                        roads: bookFork.roads.map((r) => r.san).join('|'),
+                        count: forkTalkCountRef.current,
+                      });
+                      // SPOKEN, not prompted. `said` is already a finished
+                      // utterance — it names each road and asks, and it is
+                      // built entirely from the DB and the forward line, so
+                      // there is nothing for a model to add and one more thing
+                      // for it to get wrong (G0).
+                      queueSpokenHint(probe.fen(), bookFork.said, 'fork');
+                    }
+                    const fork = !bookFork && forkTalkCountRef.current < FORK_TALK_MAX_PER_GAME && forkLines.length >= 2
                       ? buildForkTalk({ fen: probe.fen(), historySans: historyAfterReply, options: forkLines })
                       : null;
                     if (fork) {
@@ -6751,7 +6832,12 @@ export function CoachTeachPage(): JSX.Element {
                         // kind of limit: `planSaidRef` stops the same clause
                         // being spoken twice across plies. Saying less is not
                         // the same as not repeating.
-                        const said = [key, board, shape, plan.theirs.text, plan.mine.text, after]
+                        // `mine.aside` LAST and separate: it is an observation
+                        // about what the plan leaves out, not something the
+                        // student wants, and it is its own field precisely so a
+                        // compact caller (the fork offer's road previews) can
+                        // leave it off. The full narration is not compact.
+                        const said = [key, board, shape, plan.theirs.text, plan.mine.text, plan.mine.aside, after]
                           .filter(Boolean)
                           .join(' ');
                         if (said) {
@@ -7302,7 +7388,7 @@ export function CoachTeachPage(): JSX.Element {
             // Registered BEFORE the `await factsReady` below, so this
             // callback runs first when the facts settle — handleSubmit
             // always sees the complete instantSpokenText.
-            void factsReady.then(() => {
+            void factsReady.then(async () => {
               try {
                 if (liveFenRef.current !== fenAfterReply) return;
                 // The alert and the taught note already spoke WITH the move
@@ -7333,39 +7419,103 @@ export function CoachTeachPage(): JSX.Element {
                   a.split(' ').slice(0, 4).join(' ') === b.split(' ').slice(0, 4).join(' ');
                 // THE COACH'S OWN VERDICT, taken here because both engine
                 // reads have now resolved — see the capture site above.
+                // ONE READ, BOTH VERDICTS. `midTurnRead` analysed `move.fen`
+                // during the think pad: the board the student's move arrived at
+                // and the coach then moved from. `uciSanAt` turns either side's
+                // best move into something speakable.
+                const mid = await midTurnRead;
+                const uciSanAt = (fen: string, uci: string | null | undefined): string | null => {
+                  if (!uci || uci.length < 4) return null;
+                  try {
+                    const b = new Chess(fen);
+                    return b.move({
+                      from: uci.slice(0, 2),
+                      to: uci.slice(2, 4),
+                      promotion: uci.slice(4, 5) || undefined,
+                    })?.san ?? null;
+                  } catch { return null; }
+                };
+
+                // ── THE STUDENT'S OWN LAST MOVE ────────────────────────────
+                // Built HERE, not in the instant pass, because this is the
+                // first moment its inputs exist: the pre-move read was
+                // captured when the move was made, and `mid` is the board it
+                // arrived at. Queued into the same late package as the plan, at
+                // the rank the callout owns, so a student hears what their move
+                // cost before they hear what the line does next.
+                try {
+                  if (preStudentRead && mid && !preStudentRead.isMate && !mid.isMate) {
+                    const sign = playerColor === 'white' ? 1 : -1;
+                    const cpLoss = (preStudentRead.evaluation * sign) - (mid.evaluation * sign);
+                    const look = backwardLook({
+                      fenBefore,
+                      fenAfter: move.fen,
+                      playedSan: move.san,
+                      bestSan: uciSanAt(fenBefore, preStudentRead.bestMove),
+                      bestPvUci: preStudentRead.topLines?.[0]?.moves ?? [],
+                      replyPvUci: mid.topLines?.[0]?.moves ?? [],
+                      cpLoss,
+                      studentColor: playerColor,
+                      missedMate: preStudentRead.isMate ? preStudentRead.mateIn : null,
+                      allowedMate: mid.isMate ? mid.mateIn : null,
+                    });
+                    if (look) {
+                      queueSpokenHint(fenAfterReply, look.line, look.kind);
+                      // THE SQUARE IT GAVE UP, pointed at with the sentence that
+                      // names it. Amber: a cost already paid, not a threat
+                      // arriving. Only when the board still shows this turn.
+                      if (/^[a-h][1-8]$/.test(look.square) && liveFenRef.current === fenAfterReply) {
+                        const sq = look.square;
+                        setHighlights((prev) => (prev.some((h) => h.square === sq)
+                          ? prev
+                          : [...prev, { square: sq, color: '#f59e0b' }].slice(0, 6)));
+                      }
+                      captureEvent('coach_backward_look', {
+                        surface: 'coach-teach', kind: look.kind, cp_loss: Math.round(cpLoss),
+                      });
+                    }
+                  }
+                } catch { /* the backward look is a bonus, never a blocker */ }
+
+                // ── THE COACH'S OWN MOVE ───────────────────────────────────
                 try {
                   const cm = coachMoveRef.current;
-                  const pre = discussion.coachToMove.current;
-                  if (cm && pre && pre.fen === cm.fenBefore && samePosition(cm.fenAfter, fenAfterReply)) {
+                  // No FEN guard on `mid`: it is the analysis of `move.fen` by
+                  // construction, and `cm.fenBefore` IS `move.fen`. The guard
+                  // that matters is the board still showing this turn.
+                  if (cm && mid && samePosition(cm.fenAfter, fenAfterReply)) {
                     coachMoveRef.current = null;
                     const coachColor = playerColor === 'white' ? 'black' : 'white';
                     const sign = coachColor === 'white' ? 1 : -1;
-                    const cpLoss = (pre.evalWhiteCp * sign) - (cm.evalAfterWhiteCp * sign);
-                    let bestSan: string | null = null;
-                    if (pre.bestUci) {
-                      try {
-                        const b = new Chess(pre.fen);
-                        const mv = b.move({
-                          from: pre.bestUci.slice(0, 2),
-                          to: pre.bestUci.slice(2, 4),
-                          promotion: pre.bestUci.slice(4, 5) || undefined,
-                        });
-                        bestSan = mv?.san ?? null;
-                      } catch { bestSan = null; }
-                    }
-                    const call = callInaccuracy({
-                      fenBefore: pre.fen,
+                    // Mate is carried in its own field rather than through the
+                    // centipawns: a mate score is a six-figure sentinel, so a
+                    // swing into or out of one would be reported to the student
+                    // as a cost of a hundred thousand centipawns.
+                    const bothCp = !mid.isMate && !cm.afterIsMate;
+                    const cpLoss = bothCp ? (mid.evaluation * sign) - (cm.evalAfterWhiteCp * sign) : 0;
+                    // THE SAME MODEL THE STUDENT'S MOVE GOES THROUGH, pointed at
+                    // the coach's. It asks the identical question, so it runs the
+                    // identical lanes: name the thing conceded if code can —
+                    // which catches the QUIET giveaways the eval never punishes,
+                    // the last defender leaving, the file cracked open beside its
+                    // own king — and otherwise judge the move against the
+                    // engine's. Only the pronoun differs.
+                    const look = backwardLook({
+                      fenBefore: cm.fenBefore,
+                      fenAfter: cm.fenAfter,
                       playedSan: cm.playedSan,
-                      bestSan,
-                      bestLineUci: pre.pvUci,
+                      bestSan: uciSanAt(cm.fenBefore, mid.bestMove),
+                      bestPvUci: mid.topLines?.[0]?.moves ?? [],
                       cpLoss,
+                      studentColor: coachColor,
+                      missedMate: mid.isMate ? mid.mateIn : null,
+                      allowedMate: cm.afterIsMate ? cm.afterMateIn : null,
                       side: 'coach',
-                      moverColor: coachColor,
                     });
-                    if (call) {
-                      queueSpokenHint(cm.fenAfter, call.said, 'coachMistake');
+                    if (look) {
+                      queueSpokenHint(cm.fenAfter, look.line, look.kind);
                       captureEvent('coach_inaccuracy_called', {
-                        surface: 'coach-teach', quality: call.quality, cost: call.cost,
+                        surface: 'coach-teach', kind: look.kind, cost: Math.round(cpLoss),
                       });
                     }
                   }

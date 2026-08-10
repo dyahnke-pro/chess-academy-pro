@@ -28,8 +28,7 @@ import { Chess } from 'chess.js';
 import { stockfishEngine } from '../services/stockfishEngine';
 import { detectSlip, slipWarrantsInterjection, isNearBest, slipSeverityLabel, type SlipSeverity } from '../services/slipDetector';
 import { startDial, recordAttempt, type HintDial } from '../services/hintRegister';
-import { findStudentDrawback, whatItAllowed } from '../services/concessionBeat';
-import { callInaccuracy } from '../services/inaccuracyCall';
+import { backwardLook, type BackwardLook } from '../services/backwardLook';
 import { buildWhyPrompt, buildGroundedReveal, buildSlipReveal, captureMisconception, findMoverTactic, withReasonLead } from '../services/discussionPractice';
 import { buildMisconceptionCallback } from '../services/misconceptionCallbacks';
 import { buildMoveReasonOptions } from '../services/moveReasonOptions';
@@ -127,26 +126,19 @@ export interface UseDiscussionPracticeResult {
    *  backward?"). The look-ahead only faces forward, so a move already played
    *  is behind it; this is the same drawback comparison aimed at the student's
    *  own move. Null when nothing nameable was given up — which is most moves. */
-  lastMoveDrawback: { line: string; square: string; kind: 'mistake' | 'drawback' } | null;
-  /** THE POSITION THE COACH IS ABOUT TO MOVE FROM, already analysed.
-   *
-   *  The engine read for the student's own move analyses the board AFTER it —
-   *  which is the board BEFORE the coach replies, with `bestMove` being the
-   *  COACH's best move and `evaluation` the eval it starts from. Everything
-   *  needed to judge the coach's reply was already computed here and thrown
-   *  away, which is why Learn could only call out the coach on a curated gem
-   *  and stayed silent when it blundered anywhere else (David 2026-08-10:
-   *  "the coach side needs wiring").
-   *
-   *  Handed up rather than acted on here, because this hook never sees the
-   *  reply — only the surface does. */
-  /** A REF, not state, and deliberately so. The surface reads this from inside
-   *  a callback that was created BEFORE the engine finished — a state value
-   *  captured in that closure is the value from the previous render, i.e. null
-   *  on exactly the turn it is needed. Found by auditing whether the lane could
-   *  fire rather than by a test failing, because a stale closure does not throw:
-   *  it silently reads null and the coach never calls its own mistakes. */
-  coachToMove: { current: { fen: string; evalWhiteCp: number; bestUci: string | null; pvUci: string[] } | null };
+  lastMoveDrawback: BackwardLook | null;
+  // THE COACH'S OWN PRE-MOVE POSITION IS NO LONGER HANDED UP.
+  //
+  // It used to be, as a ref, so the Learn surface could judge the coach's reply
+  // without a second search. The ref was the right shape and the wrong SOURCE:
+  // this whole callback is fired behind a deliberate `setTimeout(…, 6000)` on
+  // that surface, so by the time it filled the ref the coach had already
+  // replied and the verdict — correctly FEN-guarded — had already refused. The
+  // callout was wired end to end and could not fire once.
+  //
+  // The surface now analyses that board itself, during the coach's think pad,
+  // and this hook stays what it is: bookkeeping for My Mistakes, the drill
+  // queue and the weakness spine.
   evaluatePlayerMove: (args: EvaluatePlayerMoveArgs) => Promise<void>;
   raiseSlipPrompt: (args: RaiseSlipPromptArgs) => void;
   submitReason: (reason: string) => Promise<void>;
@@ -249,8 +241,7 @@ export function useDiscussionPractice(
    *  found/missed run. Seeded from the rating on the first move evaluated,
    *  because the rating arrives per-move rather than at construction. */
   const [hintDial, setHintDial] = useState<HintDial>(() => startDial(undefined));
-  const [lastMoveDrawback, setLastMoveDrawback] = useState<{ line: string; square: string; kind: 'mistake' | 'drawback' } | null>(null);
-  const coachToMove = useRef<UseDiscussionPracticeResult['coachToMove']['current']>(null);
+  const [lastMoveDrawback, setLastMoveDrawback] = useState<BackwardLook | null>(null);
   const dialSeededRef = useRef(false);
 
   // TWO different switches, deliberately separated (David 2026-08-05).
@@ -306,14 +297,6 @@ export function useDiscussionPractice(
         bestLineEvalW = before.isMate ? undefined : before.evaluation;
         bestLineMate = before.isMate ? before.mateIn : null;
         replyPvUci = after.topLines?.[0]?.moves ?? (after.bestMove ? [after.bestMove] : []);
-        // Hand the pre-reply analysis up so the surface can judge the coach's
-        // own move against it — no second search, the numbers are right here.
-        coachToMove.current = {
-          fen: args.fenAfter,
-          evalWhiteCp: after.evaluation,
-          bestUci: after.bestMove ?? null,
-          pvUci: replyPvUci,
-        };
       } catch {
         return; // engine down → never guess (G0/G3)
       }
@@ -338,57 +321,29 @@ export function useDiscussionPractice(
       // THE BACKWARD LOOK. Same comparison the coach runs on its own moves,
       // pointed at the student's — so it fires only when code can NAME what the
       // move handed over, never on "that was worse by 80 centipawns".
-      setLastMoveDrawback((() => {
-        // FIRST the structural read — it NAMES the thing given up ("that took
-        // your last defender off d5"), which is the most teachable form.
-        if (bestSan) {
-          const d = findStudentDrawback({
-            fen: args.fenBefore,
-            playedSan: args.playedSan,
-            bestSan,
-            studentColor: args.playerColor,
-          });
-          if (d) return { line: `${d.said} ${d.opening}`, square: d.square, kind: 'drawback' as const };
-        }
-        // WHAT SHOULD HAVE BEEN PLAYED, AND WHY (David 2026-08-10: "The coach
-        // needs to call out inaccurate play for both sides and explain what
-        // should have been played and why"). The backward look says what the
-        // move GAVE UP and the rear-facing PV says what it LET THEM DO;
-        // neither ever named the better move. Severity comes from
-        // `moveRating.classifyMove` — the same bands the review uses, so a
-        // word means the same thing on both surfaces.
-        if (bestSan) {
-          const call = callInaccuracy({
-            fenBefore: args.fenBefore,
-            playedSan: args.playedSan,
-            bestSan,
-            bestLineUci: bestPvUci,
-            cpLoss,
-            missedMate: null,
-            allowedMate: null,
-            side: 'student',
-            moverColor: args.playerColor,
-          });
-          // `mistake`, not `drawback` — the callout outranks the concession in
-          // the package (David 2026-08-10: it leads the computed lanes).
-          if (call) return { line: call.said, square: call.square, kind: 'mistake' as const };
-        }
-        // THEN the rear-facing PV. The structural read covers five nameable
-        // concessions and stays silent on everything else — measured on a real
-        // game, eight slips including a 648-centipawn blunder produced ZERO
-        // backward looks, because dropping a piece concedes no outpost. The
-        // opponent's own best line from here says what the move allowed, in
-        // moves they would really play.
-        try {
-          const allowed = whatItAllowed({
-            fenAfter: args.fenAfter,
-            opponentPv: replyPvUci,
-            studentColor: args.playerColor,
-            cpLoss,
-          });
-          return allowed ? { ...allowed, kind: 'drawback' as const } : null;
-        } catch { return null; }
-      })());
+      // ONE MODEL, TWO CALLERS. The three lanes used to be an inline IIFE here;
+      // they now live in `backwardLook` because the LEARN SURFACE needs the same
+      // answer SOONER than this hook can give it. This call is deferred by a
+      // deliberate `setTimeout(…, 6000)` at the call site so the engine worker
+      // stays free for narration — right for bookkeeping, fatal for speech,
+      // since the voice was reading this state two seconds after the move and
+      // therefore describing the PREVIOUS one. The surface now computes it
+      // itself, from the same function, off analyses it already holds.
+      setLastMoveDrawback(backwardLook({
+        fenBefore: args.fenBefore,
+        fenAfter: args.fenAfter,
+        playedSan: args.playedSan,
+        // `?? null` and not just `bestSan`: the rest of this hook carries it as
+        // `string | undefined`, the model asks for `string | null`, and "no best
+        // move" must mean the same thing on both sides of that boundary.
+        bestSan: bestSan ?? null,
+        bestPvUci,
+        replyPvUci,
+        cpLoss,
+        studentColor: args.playerColor,
+        missedMate: bestLineMate ?? null,
+        allowedMate: null,
+      }));
 
       const followedBook = args.inBook && !!args.bookMoveSan
         && args.playedSan.replace(/[+#]$/, '') === args.bookMoveSan.replace(/[+#]$/, '');
@@ -727,7 +682,6 @@ export function useDiscussionPractice(
     goodMove,
     hintDial,
     lastMoveDrawback,
-    coachToMove,
     evaluatePlayerMove,
     raiseSlipPrompt,
     submitReason,

@@ -146,8 +146,21 @@ export interface SidePlan {
   /** A pawn this side promotes, by square — the loudest thing a line can
    *  contain and, until now, invisible for the same reason. */
   promotes: string | null;
-  /** Speakable, or '' when the line gives this side nothing describable. */
+  /** Speakable, or '' when the line gives this side nothing describable.
+   *
+   *  The WANT-LIST only — one sentence. Callers that want a compact preview
+   *  (the fork offer describes three roads in a breath) use this alone; the
+   *  full narration appends `aside`. */
   text: string;
+  /** A separate observation about the line that is NOT something this side
+   *  wants — today, the pieces the whole plan happens without.
+   *
+   *  It is its own field for the same reason it is its own sentence: folded into
+   *  the want-list it reads as an intention ("you want to … and leave a1, d1, f1
+   *  exactly where they are"), and folded into `text` it repeats once per road
+   *  in a fork offer, which a probe caught doing exactly that. '' when there is
+   *  nothing to notice, which is most lines. */
+  aside: string;
   /** THE CLAUSES THAT REACHED `text`, each with the squares it is about.
    *
    *  This is what lets the board draw a plan the words never spelled out — "they
@@ -455,6 +468,12 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
   // more striking idea than two.
   const maneuver = [...journeys.values()]
     .filter((j) => j.path.length >= 3)
+    // A PAWN IS NOT REROUTED. A live probe produced "they want to walk the pawn
+    // round to a5, by way of b6" — that is not a regrouping, it is a pawn
+    // capturing twice, and no coach has ever described it that way. The reroute
+    // is a PIECE idea: a knight or bishop taking the long way to a better
+    // square. Pawns only go forwards.
+    .filter((j) => j.piece !== 'pawn')
     // A PIECE THAT COMES HOME HAS NOT BEEN REROUTED. From the prod transcript:
     // "walk the queen round from d1 to d1, by way of f3" — a real journey, and
     // a nonsense sentence. A round trip is a piece being chased back, or the
@@ -489,6 +508,7 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
     materialSquares,
     tradeSquares,
     text: '',
+    aside: '',
     spokenClauses: [],
   };
 }
@@ -576,16 +596,9 @@ export function describePlan(
   if (plan.checks >= 2) {
     add(30, `check you ${plan.checks === 2 ? 'twice' : `${plan.checks} times`} along the way`);
   }
-  // WHAT THE PLAN LEAVES OUT. Three or more pieces never touched across four
-  // moves is a real criticism of a plan, and low-ranked because it is a caveat
-  // rather than an intention — it should follow what the side IS doing.
-  // Read defensively: a SidePlan arrives from several builders and a field
-  // added later must never throw inside narration — silence is always
-  // available, an exception mid-utterance is not.
-  const idle = plan.idlePieces ?? [];
-  if (voice === 'mine' && idle.length >= 3) {
-    add(15, `leave ${idle.slice(0, 3).join(', ')} exactly where they are`, idle.slice(0, 3));
-  }
+  // WHAT THE PLAN LEAVES OUT IS NOT A CLAUSE — it is its own sentence, added
+  // after the want-list at the bottom of this function. See the note there.
+
   // King attack, scaled by how many pieces are really arriving. Two is a
   // gesture; four is an assault and the sentence should lead with it.
   if (plan.nearEnemyKing >= 2) {
@@ -673,6 +686,31 @@ export function describePlan(
   const list = shown.length === 1
     ? shown[0]
     : `${shown.slice(0, -1).join(', ')} and ${shown[shown.length - 1]}`;
+  // WHAT THE PLAN LEAVES OUT — its own sentence, in its own FIELD.
+  //
+  // It was briefly a clause in the want-list and a live probe read it back as
+  // "You want to swing pieces toward their king, park a piece on d5 and leave
+  // a1, d1, f1 exactly where they are." The grammar of a want-list turns a
+  // CAVEAT into an INTENTION: nobody plans to leave their rooks at home.
+  //
+  // Making it a trailing sentence on `text` fixed the grammar and broke
+  // something else, which the same probe caught: the fork offer previews three
+  // roads using `text`, so all three ended "Worth noticing: your pieces on a1,
+  // c1 and d1 sit this one out entirely" — identical tails on options that
+  // exist to be told apart. So it is a separate field, and the caller decides:
+  // the full narration speaks it, a compact preview does not.
+  //
+  // Own-side only. Cataloguing which of the OPPONENT'S pieces stay home reads
+  // as a complaint about their play and is not the student's problem.
+  const idle = plan.idlePieces ?? [];
+  if (voice === 'mine' && idle.length >= 3) {
+    const three = idle.slice(0, 3);
+    const key = `idle-${three.join('-')}`;
+    if (!said?.has(key)) {
+      said?.add(key);
+      plan.aside = `Worth noticing: your pieces on ${three.slice(0, -1).join(', ')} and ${three[three.length - 1]} sit this one out entirely.`;
+    }
+  }
   return `${subject} want to ${list}.`;
 }
 
@@ -1239,7 +1277,7 @@ function shortLineRead(
     tacticSquare: null, idlePieces: [], maneuver: null, checks: 0, promotes: null,
     mates: false, nearEnemyKing: 0,
     kingAttackSquares: [], materialSquares: [], tradeSquares: [],
-    text: '', spokenClauses: [],
+    text: '', aside: '', spokenClauses: [],
   });
   // A mate ON THE BOARD is the one intention a zero-ply line still has.
   const mated = board.isCheckmate();

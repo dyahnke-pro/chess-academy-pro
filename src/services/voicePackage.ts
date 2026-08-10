@@ -87,6 +87,17 @@ export type VoiceFactKind =
    *  ("The same idea shows up in positions like this"), but it is not about
    *  these squares and now ranks below the plan that is. */
   | 'borrowed'
+  /** THE FORK IN THE ROAD, while still in book (`forkNarration.forkOfferAt`).
+   *
+   *  David 2026-08-10: "Have the coach narrate with the forward PV the two
+   *  different paths and have the coach ask which path they want to walk down.
+   *  This happens only when still in book/theory."
+   *
+   *  Distinct from `forkTalk`, which fires on near-EQUAL ENGINE options anywhere
+   *  in the game. This one fires where the THEORY splits, which the engine's
+   *  top-three need not agree with. Answered by PLAYING one of the roads — it
+   *  never blocks the board. */
+  | 'fork'
   /** A newly resolved opening name. */
   | 'opening'
   /** The computed read — true of this position by construction. */
@@ -150,6 +161,11 @@ const RANK: Record<VoiceFactKind, number> = {
   gem: 9,
   threat: 8,
   tactic: 7,
+  // A CHOICE OF ROADS, offered while the game is still in theory. Below the
+  // urgent lanes on purpose — a hanging piece is happening now, a fork in the
+  // road is a question — and above the borrowed corpus, because a question
+  // about THIS position beats a rule from another one.
+  fork: 6,
   // Corpus teaching BORROWED from a different board still sits below the
   // computed plan: a plan about THIS position beats a real note about another.
   borrowed: 3,

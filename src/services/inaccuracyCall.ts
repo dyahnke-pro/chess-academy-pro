@@ -62,7 +62,15 @@ function whyBetter(
   if (!text) return null;
   // "You want to win a pawn and open the d-file." → "win a pawn and open the
   // d-file". The clause is reused; the frame is not.
-  const want = /^You want to (.+?)\.?$/.exec(text);
+  //
+  // FIRST SENTENCE ONLY (`[^.]+`, not `.+?` to the end of the string). The plan
+  // may append a second, separate observation — "Worth noticing: your pieces on
+  // a1, d1 and f1 sit this one out entirely" — and an end-anchored match
+  // swallows it, so the callout becomes "Na5 was the move — it would win a pawn.
+  // Worth noticing: your pieces on a1…". Grammatically it promotes a noticing
+  // into a reason; that is the same defect that took the idle-piece clause out
+  // of the want-list in the first place, arriving by a different door.
+  const want = /^You want to ([^.]+)\./.exec(text);
   if (!want) return null;
   const square = plan?.mine.spokenClauses.flatMap((c) => c.squares)[0] ?? '';
   return { why: want[1], square };

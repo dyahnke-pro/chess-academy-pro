@@ -267,28 +267,20 @@ export function findConcession(args: {
   return null;
 }
 
-/**
- * The spoken beat, at the register the student has earned.
- *
- * The tiers are the same idea as everywhere else (`hintRegister`): the anchor
- * is what the coach did, the detail is what opened up, and the stakes spell out
- * why it matters. A strong student hears only the first and goes looking; a
- * struggling one is told what to look at — and neither is handed the move.
- */
-export function concessionPackage(c: Concession): {
-  anchor: string; detail: string; stakes: string; withhold: string;
-} {
-  return {
-    anchor: c.said,
-    detail: c.opening,
-    stakes: `Now is the moment to do something about ${c.square}.`,
-    // The honesty contract, and the never-apologize rule, travel together
-    // because they fail together: a coach that apologises is inviting
-    // reassurance, and a coach that names the punishing move has ended the
-    // lesson it just started.
-    withhold: `Do NOT name the move that punishes this, and do NOT apologise for the concession — state it plainly and let them find it.`,
-  };
-}
+// `concessionPackage` LIVED HERE and is gone (2026-08-10). It built a
+// four-field block for a phrasing model — anchor / detail / stakes / withhold —
+// and the last field was a DIRECTIVE ("Do NOT name the move that punishes
+// this"). That shape belongs to the architecture before `voicePackage`, which
+// has no field for an instruction on purpose: a directive that cannot be
+// represented cannot be read aloud, and the coach reading its own instructions
+// out loud is a failure this codebase has actually shipped.
+//
+// It had no caller but its own test. The rules it encoded did not go with it —
+// "never apologise" is held by the no-apology tests below and in
+// `backwardLook.test.ts`, and "never name the punishing move" is held by
+// `inaccuracyCall`'s coach branch and its own gate. Nothing was lost except a
+// tempting way to put an instruction back into an utterance.
+
 
 /**
  * THE BACKWARD LOOK — why the STUDENT's last move was bad.

@@ -262,3 +262,71 @@ model; hand-before removes it.
   measurement errors were made against it on 2026-07-31; read its header first.
 - Keep the per-ply arrow cap's audit (`C5`) — a silently dropped arrow is the
   regression that started this whole thread.
+
+---
+
+# PLAN — the computed-narration lanes, wired for real (2026-08-10)
+
+David: *"I want you making sure that every thing we have added is wired and
+working 100% like it should!! … Ex: delta, PV structure, backwards PV, package
+delivery, order of package, etc."*
+
+The audit method that found everything below: enumerate every exported symbol in
+the narration services, count NON-TEST consumers, then trace each survivor to
+the VOICE rather than to the prompt array. None of these threw. None failed a
+test. Each just quietly said nothing — or, worse, said the right sentence about
+the wrong move.
+
+## What was actually broken
+
+1. **The backward look was one turn stale on every move.** The voice read
+   `discussion.lastMoveDrawback`, which is set by `evaluatePlayerMove` — fired
+   behind a deliberate `setTimeout(…, 6000)` on Learn so the engine worker stays
+   free for narration. The instant package assembles ~2s after the move, so it
+   always read the PREVIOUS move's result. It does not go quiet when stale; it
+   MISATTRIBUTES, and board-grading cannot catch it because "that took your last
+   defender off e5" is often still true two plies later.
+2. **The coach's own mistake callout could not fire once.** Same deferral: the
+   verdict's FEN guard compared against `coachToMove`, filled 6s late, so it
+   correctly refused every single turn. Wired end to end, dead.
+3. **`findConcession` had no consumer** — the coach's QUIET concessions (last
+   defender leaving, file cracked beside its own king) were computed and mute.
+4. **`forkOfferAt` had no consumer** — the in-book fork David asked for the same
+   day. `forkTalk` covers the ENGINE-near-equal case, not the theory split.
+5. **`concessionPackage` had no consumer but its own test**, and its `withhold`
+   field was a directive to a model — the shape `voicePackage` deliberately has
+   no room for.
+6. **`npx tsc --noEmit` checks NOTHING here.** The root tsconfig is a solution
+   file with `files: []`. Use `npm run typecheck` (`tsc -b --force`); it found
+   five real errors the root config had been reporting as clean.
+
+## The fix
+
+- **`src/services/backwardLook.ts`** — ONE model, both sides, both callers. The
+  hook keeps calling it for bookkeeping (My Mistakes / drills / weakness spine);
+  the surface calls it for speech, from a read this turn owns.
+- **One engine read of `move.fen`**, started during the coach's think pad,
+  answers both questions: it is where the student's move ARRIVED and where the
+  coach moves FROM. The pre-move read is free — the eval-bar effect had already
+  analysed that board and was throwing it away.
+- Mate travels in its own field. Folded into centipawns it is a six-figure
+  sentinel, and the coach reports walking into mate as a cost of 100,000.
+- **`fork` lane** added to the package at rank 6.
+- **`SidePlan.aside`** — "your pieces on a1, c1 and d1 sit this one out" is a
+  noticing, not a want. Its own sentence AND its own field: as a tail on `text`
+  it repeated once per road in the fork offer's previews.
+
+## Order, verified end to end
+`note > mistake > coachMistake > drawback > plan > gem > threat > tactic > fork
+> opening > computed > observation`, with `borrowed` yielding to the plan.
+
+## Gates
+`backwardLook.test.ts` (18), `coachLaneWiring.test.ts` (28 — rewritten: the old
+version asserted the broken shape and passed), plus the idle-piece and
+fork-budget rules. The wiring gate now reads COMMENT-STRIPPED source, so a rule
+about what the code must not do cannot trip on the note explaining why.
+
+## Still open, deliberately
+- **`roadsNotTakenAt`** — built and tested, no consumer. It is the REVIEW form,
+  and David asked for review wiring to be designed with him first. Not included
+  in any "everything wired" claim.

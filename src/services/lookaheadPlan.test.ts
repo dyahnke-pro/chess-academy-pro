@@ -968,6 +968,36 @@ describe('the rest of the inventory — everything the line leaves behind', () =
     for (const t of all) expect(t, `a move leaked: ${t}`).not.toMatch(/\b[NBRQK][a-h]?[1-8]?x?[a-h][1-8]\b/);
   });
 
+  it('a PAWN is never described as being rerouted', () => {
+    // A live probe produced "they want to walk the pawn round to a5, by way of
+    // b6" — that is a pawn capturing twice, not a regrouping, and no coach has
+    // ever described it that way. Found by printing what the lane actually
+    // says, not by an assertion failing.
+    // A black pawn walking b5 → b4 → b3: three squares, one pawn.
+    const p = buildLookaheadPlan(line(plies(START, ['e4', 'b5', 'd4', 'b4', 'Nf3', 'b3'])), 'black');
+    expect(p?.black.maneuver, 'a pawn was called a reroute').toBeNull();
+    expect(p?.black.text ?? '').not.toContain('walk the pawn');
+  });
+
+  it('does NOT list the idle pieces as something a side WANTS', () => {
+    // The same probe read back "You want to swing pieces toward their king,
+    // park a piece on d5 and leave a1, d1, f1 exactly where they are" — a
+    // caveat grammatically promoted to an intention. Inside the mistake
+    // callout it became "Na5 was the move, to … leave a1, d1, f1 exactly where
+    // they are." Empty beats wrong.
+    const P: SidePlan = {
+      color: 'white', headingFor: [], opening: [], trading: [], outposts: ['d5'],
+      passedPawns: [], materialSwing: 0, shieldStripped: 0, tactic: null,
+      tacticSquare: null, idlePieces: ['a1', 'd1', 'f1'], maneuver: null,
+      checks: 0, promotes: null, mates: false, nearEnemyKing: 0,
+      kingAttackSquares: [], materialSquares: [], tradeSquares: [],
+      text: '', spokenClauses: [],
+    };
+    const said = describePlan(P, 'mine');
+    expect(said, `spoke a caveat as a want: ${said}`).not.toContain('exactly where they are');
+    expect(said, 'the real intention was lost with it').toContain('d5');
+  });
+
   it('names the pieces a plan leaves behind', () => {
     // "Your queenside sleeps through this line" — a plan is as much about what
     // it leaves out as what it includes.
@@ -979,9 +1009,61 @@ describe('the rest of the inventory — everything the line leaves behind', () =
       kingAttackSquares: [], materialSquares: [], tradeSquares: [],
       text: '', spokenClauses: [],
     };
-    expect(describePlan(P, 'mine')).toContain('a1, b1, c1');
-    // …and never says it about the opponent, whose idle pieces are not the
-    // student's business.
-    expect(describePlan({ ...P }, 'theirs')).not.toContain('a1');
+    // The FIELD is still computed — it is a real observation and a future
+    // sentence of its own. It is just not a clause in the list of wants; see
+    // the test above for why.
+    expect(P.idlePieces).toEqual(['a1', 'b1', 'c1']);
+    expect(describePlan(P, 'mine')).not.toContain('a1, b1, c1');
+  });
+});
+
+describe('what the plan leaves out gets its OWN sentence', () => {
+  // A live probe once read this back as "You want to swing pieces toward their
+  // king, park a piece on d5 and leave a1, d1, f1 exactly where they are." The
+  // want-list grammar turned a caveat into an intention — nobody plans to leave
+  // their rooks at home. It is still worth saying, so it says itself.
+  const planWithIdle = (idle: string[]): SidePlan => ({
+    color: 'white', headingFor: ['d5'], opening: [], trading: [], outposts: ['d5'],
+    materialSwing: 0, passedPawns: [], shieldStripped: 0, tactic: null, mates: false,
+    nearEnemyKing: 0, kingAttackSquares: [], materialSquares: [], tradeSquares: [],
+    tacticSquare: null, idlePieces: idle, maneuver: null, checks: 0, promotes: null,
+    text: '', aside: '', spokenClauses: [],
+  });
+
+  it('never lets an idle piece become something the side WANTS', () => {
+    const said = describePlan(planWithIdle(['a1', 'd1', 'f1']), 'mine');
+    expect(said, 'the caveat is still inside the want-list')
+      .not.toMatch(/want to [^.]*\b(leave|sit)\b/);
+  });
+
+  it('says it, in the register of a noticing, in its OWN field', () => {
+    // `aside`, not the return value. A trailing sentence on `text` repeated
+    // once per road in the fork offer's previews — three options that exist to
+    // be told apart, all ending identically. The caller decides now.
+    const plan = planWithIdle(['a1', 'd1', 'f1']);
+    describePlan(plan, 'mine');
+    expect(plan.aside).toMatch(/Worth noticing: your pieces on a1, d1 and f1 sit this one out/);
+  });
+
+  it('stays quiet when only one or two pieces sit out — that is every plan', () => {
+    const plan = planWithIdle(['a1', 'd1']);
+    describePlan(plan, 'mine');
+    expect(plan.aside).toBe('');
+  });
+
+  it('never catalogues the OPPONENT\'s idle pieces — that is not the student\'s problem', () => {
+    const plan = planWithIdle(['a1', 'd1', 'f1']);
+    describePlan(plan, 'theirs');
+    expect(plan.aside).toBe('');
+  });
+
+  it('says it once per game, not every ply', () => {
+    const said = new Set<string>();
+    const first = planWithIdle(['a1', 'd1', 'f1']);
+    describePlan(first, 'mine', said);
+    const second = planWithIdle(['a1', 'd1', 'f1']);
+    describePlan(second, 'mine', said);
+    expect(first.aside).toMatch(/sit this one out/);
+    expect(second.aside).toBe('');
   });
 });

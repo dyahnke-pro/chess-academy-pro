@@ -14,7 +14,7 @@
 // here comes with the specific thing that changed on the board.
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { findConcession, concessionPackage, findStudentDrawback, whatItAllowed } from './concessionBeat';
+import { findConcession, findStudentDrawback, whatItAllowed } from './concessionBeat';
 
 describe('the beat fires only on a drawback code can NAME', () => {
   it('says nothing when the coach played the engine\'s move', () => {
@@ -138,39 +138,33 @@ describe('the voice — first person, no apology, no answer', () => {
     expect(sample.said).not.toMatch(/\bWhite\b|\bBlack\b/);
   });
 
+  // These four used to run against `concessionPackage`, the model-prompt block
+  // that has since been deleted (see the note in the source). The RULES were
+  // never about that block — they are about the concession itself — so they now
+  // run against the thing that is actually spoken.
   it('NEVER apologises — locked', () => {
     // David, verbatim: "the coach should never apologize." Not sorry, not "my
     // mistake", not a hedge. It states what it did; a strong player showing you
     // the hole they made, not a teacher confessing.
-    const pkg = concessionPackage(sample);
-    const whole = `${pkg.anchor} ${pkg.detail} ${pkg.stakes}`.toLowerCase();
+    const whole = `${sample.said} ${sample.opening}`.toLowerCase();
     for (const word of ['sorry', 'apolog', 'my mistake', 'i shouldn', 'careless', 'oops', 'my bad']) {
       expect(whole, `the coach apologised: ${whole}`).not.toContain(word);
     }
   });
 
-  it('instructs against apologising, so the phrasing cannot reintroduce it', () => {
-    expect(concessionPackage(sample).withhold.toLowerCase()).toContain('apolog');
-  });
-
   it('points at the square and withholds the move', () => {
-    const pkg = concessionPackage(sample);
-    expect(pkg.stakes).toContain('e5');
-    for (const part of [pkg.anchor, pkg.detail, pkg.stakes]) {
+    expect(sample.square).toMatch(/^[a-h][1-8]$/);
+    for (const part of [sample.said, sample.opening]) {
       expect(part, `a move leaked into the concession: ${part}`)
         .not.toMatch(/\b[NBRQK][a-h]?[1-8]?x?[a-h][1-8]\b/);
     }
-    expect(pkg.withhold.toLowerCase()).toContain('do not name the move');
   });
 
-  it('tiers like every other hint, so the register still governs it', () => {
-    const pkg = concessionPackage(sample);
-    expect(pkg.anchor).toBeTruthy();
-    expect(pkg.detail).toBeTruthy();
-    expect(pkg.stakes).toBeTruthy();
-    // The anchor alone has to stand on its own — it is what a strong student
-    // hears, and the whole beat for them.
-    expect(pkg.anchor.length).toBeGreaterThan(20);
+  it('stands on its own — the said line IS the beat', () => {
+    expect(sample.said).toBeTruthy();
+    expect(sample.opening).toBeTruthy();
+    // It is what a strong student hears, and the whole beat for them.
+    expect(sample.said.length).toBeGreaterThan(20);
   });
 });
 

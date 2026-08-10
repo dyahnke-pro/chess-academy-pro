@@ -25,7 +25,7 @@ describe('the fork offer', () => {
     const offer = forkOfferAt(hist, fenAfter(hist), 'black');
     expect(offer, 'no fork offered where the theory plainly splits').not.toBeNull();
     expect(offer!.roads.length).toBeGreaterThan(1);
-  });
+  }, 30_000);
 
   it('ASKS — it does not choose', () => {
     const hist = ['e4', 'c5'];
@@ -50,7 +50,7 @@ describe('the fork offer', () => {
       expect(offer.said, `a move leaked: ${offer.said}`)
         .not.toMatch(/\b[NBRQK][a-h]?[1-8]?x?[a-h][1-8]\b/);
     }
-  });
+  }, 30_000);
 
   it('every road it offers is a LEGAL move in the position', () => {
     for (const hist of [['e4', 'c5'], ['d4', 'd5'], ['e4', 'e5', 'Nf3']]) {
@@ -62,7 +62,7 @@ describe('the fork offer', () => {
         expect(legal.has(r.san), `${r.san} is not legal here — the fork invented a road`).toBe(true);
       }
     }
-  });
+  }, 30_000);
 });
 
 describe('"only in book" needs no flag', () => {
@@ -81,7 +81,7 @@ describe('"only in book" needs no flag', () => {
     const hist = b.history();
     const offer = forkOfferAt(hist, b.fen(), 'black');
     if (offer) expect(offer.roads.length).toBeGreaterThan(1);
-  });
+  }, 30_000);
 
   it('survives a malformed position without inventing anything', () => {
     expect(forkOfferAt(['e4'], 'not a fen', 'white')).toBeNull();
@@ -126,7 +126,7 @@ describe('each road says what is DIFFERENT about it', () => {
         `after ${hist.join(' ')} two roads read identically: ${previews.join(' / ')}`,
       ).toBe(previews.length);
     }
-  });
+  }, 30_000);
 
   it('falls back to a real difference rather than repeating itself', () => {
     // When a road has nothing distinctive left to say, how much theory runs

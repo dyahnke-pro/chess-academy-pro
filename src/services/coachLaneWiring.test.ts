@@ -18,6 +18,17 @@ import { readFileSync } from 'node:fs';
 const read = (p: string): string => readFileSync(p, 'utf8');
 const TEACH = read('src/components/Coach/CoachTeachPage.tsx');
 const HOOK = read('src/hooks/useDiscussionPractice.ts');
+const BACKWARD = read('src/services/backwardLook.ts');
+const FORK = read('src/services/forkNarration.ts');
+/** Comments stripped. A rule about what the code must NOT DO has to read the
+ *  code — the note explaining WHY a call was removed contains the very string
+ *  the rule forbids, and a gate that trips on its own documentation teaches the
+ *  next session to delete the documentation. */
+const code = (s: string): string => s
+  .replace(/\/\*[\s\S]*?\*\//g, '')
+  .split('\n').map((l) => l.replace(/(^|\s)\/\/.*$/, '$1')).join('\n');
+const TEACH_CODE = code(TEACH);
+const HOOK_CODE = code(HOOK);
 
 describe('every producer we added has a live consumer', () => {
   const wired: Array<[string, string, string]> = [
@@ -27,10 +38,16 @@ describe('every producer we added has a live consumer', () => {
     ['the line-shape read', TEACH, 'lineShapeLine('],
     ['the terminal read', TEACH, 'terminalReadLine('],
     ['the board marks', TEACH, 'planMarks('],
-    ['the coach-side callout', TEACH, 'callInaccuracy('],
-    ['the student-side callout', HOOK, 'callInaccuracy('],
-    ['the rear-facing PV', HOOK, 'whatItAllowed('],
-    ['the structural drawback', HOOK, 'findStudentDrawback('],
+    ['the coach-side callout', BACKWARD, "side: 'coach'"],
+    ['the coach-side concession', BACKWARD, 'findConcession('],
+    // The three student-side lanes moved into `backwardLook`, which BOTH the
+    // hook (bookkeeping) and the surface (voice) call — see the timing coupling
+    // below for why the surface could not use the hook's answer.
+    ['the student-side callout', BACKWARD, 'callInaccuracy('],
+    ['the rear-facing PV', BACKWARD, 'whatItAllowed('],
+    ['the structural drawback', BACKWARD, 'findStudentDrawback('],
+    ['the backward look, from the surface', TEACH, 'backwardLook('],
+    ['the backward look, from the hook', HOOK, 'backwardLook('],
   ];
   for (const [name, file, symbol] of wired) {
     it(`${name} is called`, () => {
@@ -47,8 +64,17 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     expect(TEACH).toMatch(/queueSpokenHint\(planFen, graded, 'plan'\)/);
   });
 
-  it('the coach callout is queued at the coachMistake rank', () => {
-    expect(TEACH).toMatch(/queueSpokenHint\(.*?call\.said, 'coachMistake'\)/);
+  it('the coach callout is queued at the rank the model gives it', () => {
+    // Not a literal 'coachMistake' any more: the coach half runs through
+    // `backwardLook`, which returns the lane along with the line, so the rank
+    // is decided in ONE place for both sides instead of at each call site.
+    expect(TEACH).toMatch(/queueSpokenHint\(cm\.fenAfter, look\.line, look\.kind\)/);
+    expect(BACKWARD, "the coach's lane is not the one David ranked second")
+      .toMatch(/kind: 'coachMistake'/);
+  });
+
+  it('the student backward look is queued at the rank the model gives it', () => {
+    expect(TEACH).toMatch(/queueSpokenHint\(fenAfterReply, look\.line, look\.kind\)/);
   });
 
   it('the borrowed tier is queued WITH the plan, so the yield rule can see both', () => {
@@ -65,17 +91,82 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     expect(hintSpeaks, 'hints go to the prompt but never to the voice').toBeGreaterThanOrEqual(hintPushes - 1);
   });
 
+  it('the in-book fork is offered, and shares the fork budget', () => {
+    // Two fork beats, one question at a time: the BOOK fork (theory splits)
+    // goes first and the ENGINE fork (near-equal options) stands down behind
+    // it, both counting against the same per-game budget.
+    expect(TEACH).toMatch(/forkOfferAt\(historyAfterReply/);
+    expect(TEACH).toMatch(/queueSpokenHint\(probe\.fen\(\), bookFork\.said, 'fork'\)/);
+    expect(TEACH, 'the engine fork can still fire on top of the book fork')
+      .toMatch(/const fork = !bookFork &&/);
+  });
+
+  it("what the plan leaves out reaches the voice, and only the FULL narration", () => {
+    // Its own field, not a tail on `text`: a probe caught all three fork roads
+    // ending "Worth noticing: your pieces on a1, c1 and d1 sit this one out
+    // entirely" — identical tails on options that exist to be told apart.
+    expect(TEACH, 'the aside is computed and never spoken')
+      .toMatch(/plan\.mine\.text, plan\.mine\.aside/);
+    expect(FORK, 'the compact road preview picked the aside back up')
+      .not.toContain('.aside');
+  });
+
   it('the queued package is actually spoken', () => {
     expect(TEACH).toMatch(/speakTrackA\(hintPkg\.spoken\)/);
   });
 });
 
 describe('the couplings that make the wiring safe', () => {
-  it('the coach verdict reads a REF, never a state value from a closure', () => {
-    // State captured in a callback created before the engine finished is the
-    // PREVIOUS render's value — null on exactly the turn it is needed.
-    expect(HOOK).toMatch(/coachToMove: \{ current:/);
-    expect(TEACH).toContain('discussion.coachToMove.current');
+  // ── THE TIMING COUPLING ───────────────────────────────────────────────────
+  // This block used to assert that the coach verdict read `coachToMove` as a
+  // REF rather than as state, and it passed, and the lane could not fire once.
+  // Both halves of that assertion were true and the conclusion was false: the
+  // ref was filled by a callback the Learn surface fires behind a deliberate
+  // `setTimeout(…, 6000)`, so it always held the PREVIOUS turn's position and
+  // the FEN guard — doing its job — refused every turn.
+  //
+  // Shape is not wiring. What these now hold is the SOURCE: anything the voice
+  // says about a move already played must be computed from a read this turn
+  // owns, never borrowed from the bookkeeping pass.
+  it('the voice never reads what the deferred bookkeeping call writes', () => {
+    expect(HOOK, 'the six-second deferral is what makes this hook unusable for speech')
+      .toBeTruthy();
+    expect(TEACH_CODE, 'the deferral the whole coupling turns on')
+      .toMatch(/setTimeout\(\(\) => \{\s*void discussion\.evaluatePlayerMove/);
+    expect(TEACH_CODE, 'the voice is reading the drawback the deferred call sets — it is one turn stale')
+      .not.toContain('discussion.lastMoveDrawback');
+    expect(TEACH_CODE, 'the coach verdict is reading the deferred ref again')
+      .not.toContain('discussion.coachToMove');
+    expect(HOOK_CODE, 'the hook still hands up a pre-move position nothing can use in time')
+      .not.toMatch(/coachToMove: \{ current:/);
+  });
+
+  it('both verdicts come from ONE read of the board between the two moves', () => {
+    // `move.fen` is where the student's move arrived AND where the coach moves
+    // from, so one analysis answers both questions and costs one search.
+    expect(TEACH).toMatch(/const midTurnRead = stockfishEngine\s*\n?\s*\.analyzeWithBudget\(move\.fen/);
+    expect(TEACH).toMatch(/const mid = await midTurnRead;/);
+    expect(TEACH, 'the student half never reaches the backward look').toMatch(/backwardLook\(\{/);
+    expect(TEACH, 'the coach half never reaches the callout').toMatch(/side: 'coach'/);
+    // Both halves go through the SAME model — the one thing that keeps
+    // "inaccuracy" meaning the same on both sides of the board.
+    expect((TEACH.match(/backwardLook\(\{/g) ?? []).length,
+      'only one side is routed through the shared model').toBeGreaterThanOrEqual(2);
+  });
+
+  it('the pre-move read is captured before the eval bar overwrites it', () => {
+    // The eval-bar effect re-keys `latestEvalRef` as soon as the board settles
+    // on the new position, so the read of the board the student moved FROM has
+    // to be taken in the move handler itself — and FEN-guarded, so a read of
+    // any other board goes silent instead of being misattributed.
+    expect(TEACH).toMatch(/const preStudentRead = latestEvalRef\.current\?\.fen === fenBefore/);
+  });
+
+  it('one model computes the backward look, so the two callers cannot drift', () => {
+    expect(HOOK_CODE, 'the hook re-implements the lanes instead of calling the model')
+      .toMatch(/backwardLook\(\{/);
+    expect(HOOK_CODE).not.toMatch(/findStudentDrawback\(\{/);
+    expect(TEACH).toMatch(/import \{ backwardLook \}/);
   });
 
   it('the pending-speak guard compares POSITION, not the whole FEN', () => {
