@@ -5618,7 +5618,14 @@ export function CoachTeachPage(): JSX.Element {
       }
       if (againstMe.length > 0) {
         const t = againstMe[0];
-        threatKey = `vs:${t.type}:${t.squares.join('')}`;
+        // KEYED ON THE PATTERN, NOT EVERY SQUARE IN IT. A pin is the same pin
+        // when the pinned piece shuffles — from the prod transcript, two plies
+        // apart: "queen on d8 pins pawn on d2 against queen on d1" then
+        // "…pins pawn on d3 against queen on d1". Including the middle square
+        // made the second look like fresh news. The attacker and the piece it
+        // is pinning against are what identify the threat.
+        const ends = [t.squares[0] ?? '', t.squares[t.squares.length - 1] ?? ''];
+        threatKey = `vs:${t.type}:${ends.join('')}`;
         threatLine = `Watch out — ${t.description.charAt(0).toLowerCase()}${t.description.slice(1)}.`;
         // SAY WHOSE, WHEN BOTH ARE THE SAME SHAPE. David's transcript, 02:50:
         // "Watch out — queen on a5 pins knight on c3 against king on e1.

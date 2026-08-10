@@ -694,7 +694,10 @@ export function keySquareLine(
       said?.add('keysquare-superlative');
       return `Everything's running through ${top.square} — both sides keep coming back to it.`;
     }
-    return `${top.square} matters here too — they both want it.`;
+    // No dangling "too": the superlative may have been SPENT on a turn whose
+    // sentence never reached the voice, so this can be the first key square the
+    // student actually hears. It has to stand on its own.
+    return `Both sides want ${top.square} here.`;
   }
   if (top.contested) {
     return `${top.square} is the contested one — you both want it.`;
