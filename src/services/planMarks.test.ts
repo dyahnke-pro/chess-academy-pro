@@ -13,7 +13,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { planFromUci, keySquareLine } from './lookaheadPlan';
-import { planMarks, squaresNamedIn } from './planMarks';
+import { planMarks } from './planMarks';
 import type { LookaheadPlan } from './lookaheadPlan';
 
 /** Italian, after 5…exd4 — White to move, a real branch with a real fight over
@@ -27,23 +27,35 @@ function italianPlan(studentColor: 'white' | 'black'): LookaheadPlan {
   return plan as LookaheadPlan;
 }
 
-/** What the caller actually speaks: the key-square line plus both plans. */
-function utterance(plan: LookaheadPlan): string {
-  return [keySquareLine(plan.keySquares), plan.theirs.text, plan.mine.text]
-    .filter(Boolean).join(' ');
+/** THE PARTS THE CALLER HANDS OVER — the same shape `CoachTeachPage` builds
+ *  after grading each part separately. Marks are drawn from THIS, never from the
+ *  utterance, so the tests exercise the real coupling (David 2026-08-10: "It
+ *  needs to be deterministic, handed in the package"). */
+type Said = Array<{ squares: string[]; side: 'key' | 'mine' | 'theirs' }>;
+function saidAll(plan: LookaheadPlan): Said {
+  const parts: Said = [];
+  if (keySquareLine(plan.keySquares) && plan.keySquares[0]) {
+    parts.push({ squares: [plan.keySquares[0].square], side: 'key' });
+  }
+  if (plan.theirs.text) parts.push({ squares: plan.theirs.spokenClauses.flatMap((c) => c.squares), side: 'theirs' });
+  if (plan.mine.text) parts.push({ squares: plan.mine.spokenClauses.flatMap((c) => c.squares), side: 'mine' });
+  return parts;
+}
+function saidTheirs(plan: LookaheadPlan): Said {
+  return saidAll(plan).filter((p) => p.side !== 'mine');
 }
 
 describe('marks are drawn only for what was spoken', () => {
   it('marks the squares of the utterance', () => {
     const plan = italianPlan('black');
-    const marks = planMarks({ plan, spoken: utterance(plan), fen: ITALIAN, studentColor: 'black' });
+    const marks = planMarks({ plan, saidParts: saidAll(plan), fen: ITALIAN, studentColor: 'black' });
     expect(marks.highlights.length, 'the board stayed bare while the coach named squares').toBeGreaterThan(0);
     expect(marks.arrows.length, 'no future move was drawn').toBeGreaterThan(0);
   });
 
   it('draws NOTHING when the plan said nothing', () => {
     const plan = italianPlan('black');
-    expect(planMarks({ plan, spoken: '', fen: ITALIAN, studentColor: 'black' }))
+    expect(planMarks({ plan, saidParts: [], fen: ITALIAN, studentColor: 'black' }))
       .toEqual({ arrows: [], highlights: [] });
   });
 
@@ -52,10 +64,10 @@ describe('marks are drawn only for what was spoken', () => {
     // routinely goes unspoken. Marking it anyway would put a claim on the board
     // that was never made out loud.
     const plan = italianPlan('black');
-    const full = planMarks({ plan, spoken: utterance(plan), fen: ITALIAN, studentColor: 'black' });
+    const full = planMarks({ plan, saidParts: saidAll(plan), fen: ITALIAN, studentColor: 'black' });
     const theirsOnly = planMarks({
       plan,
-      spoken: [keySquareLine(plan.keySquares), plan.theirs.text].filter(Boolean).join(' '),
+      saidParts: saidTheirs(plan),
       fen: ITALIAN,
       studentColor: 'black',
     });
@@ -72,13 +84,14 @@ describe('marks are drawn only for what was spoken', () => {
   it('ignores a square named by some OTHER lane in the same utterance', () => {
     // The package is one sentence built from several producers. A corpus note
     // naming h7 must not have h7 drawn as though the engine's line went there.
+    //
+    // Under the old prose-scanning contract this was a live risk: the marks read
+    // the whole utterance and a note's square looked exactly like a plan's. It
+    // is now structural — a lane can only offer the squares it was handed, and
+    // the plan is handed the plan's — so the test asserts the property still
+    // holds rather than guarding a scan that no longer exists.
     const plan = italianPlan('black');
-    const marks = planMarks({
-      plan,
-      spoken: `${utterance(plan)} The pawn on h7 is worth remembering.`,
-      fen: ITALIAN,
-      studentColor: 'black',
-    });
+    const marks = planMarks({ plan, saidParts: saidAll(plan), fen: ITALIAN, studentColor: 'black' });
     expect(marks.highlights.some((h) => h.square === 'h7')).toBe(false);
     expect(marks.arrows.some((a) => a.endSquare === 'h7')).toBe(false);
   });
@@ -88,7 +101,7 @@ describe('every arrow is true of the board it is drawn on', () => {
   it('starts on a real piece of the moving side', () => {
     for (const side of ['white', 'black'] as const) {
       const plan = italianPlan(side);
-      const marks = planMarks({ plan, spoken: utterance(plan), fen: ITALIAN, studentColor: side });
+      const marks = planMarks({ plan, saidParts: saidAll(plan), fen: ITALIAN, studentColor: side });
       const board = new Chess(ITALIAN);
       for (const a of marks.arrows) {
         const piece = board.get(a.startSquare as never) as { color?: string } | undefined;
@@ -99,7 +112,7 @@ describe('every arrow is true of the board it is drawn on', () => {
 
   it('points where the line really goes', () => {
     const plan = italianPlan('black');
-    const marks = planMarks({ plan, spoken: utterance(plan), fen: ITALIAN, studentColor: 'black' });
+    const marks = planMarks({ plan, saidParts: saidAll(plan), fen: ITALIAN, studentColor: 'black' });
     for (const a of marks.arrows) {
       expect(
         plan.path.some((s) => s.to === a.endSquare),
@@ -110,14 +123,14 @@ describe('every arrow is true of the board it is drawn on', () => {
 
   it('never draws an arrow onto its own start square', () => {
     const plan = italianPlan('black');
-    for (const a of planMarks({ plan, spoken: utterance(plan), fen: ITALIAN, studentColor: 'black' }).arrows) {
+    for (const a of planMarks({ plan, saidParts: saidAll(plan), fen: ITALIAN, studentColor: 'black' }).arrows) {
       expect(a.startSquare).not.toBe(a.endSquare);
     }
   });
 
   it('says nothing at all about an unreadable board', () => {
     const plan = italianPlan('black');
-    expect(planMarks({ plan, spoken: utterance(plan), fen: 'not a fen', studentColor: 'black' }))
+    expect(planMarks({ plan, saidParts: saidAll(plan), fen: 'not a fen', studentColor: 'black' }))
       .toEqual({ arrows: [], highlights: [] });
   });
 });
@@ -127,7 +140,7 @@ describe('the student\'s own next move is never handed over', () => {
     // White is to move in the fixture, so a WHITE student is the one on move —
     // and the first ply of the line is the move they have to find.
     const plan = italianPlan('white');
-    const marks = planMarks({ plan, spoken: utterance(plan), fen: ITALIAN, studentColor: 'white' });
+    const marks = planMarks({ plan, saidParts: saidAll(plan), fen: ITALIAN, studentColor: 'white' });
     const first = plan.path[0];
     expect(
       marks.arrows.some((a) => a.startSquare === first.from && a.endSquare === first.to),
@@ -137,49 +150,51 @@ describe('the student\'s own next move is never handed over', () => {
 
   it('still highlights that square — led, not told', () => {
     const plan = italianPlan('white');
-    const spoken = utterance(plan);
-    const marks = planMarks({ plan, spoken, fen: ITALIAN, studentColor: 'white' });
-    if (squaresNamedIn(spoken).includes(plan.path[0].to)) {
+    const said = saidAll(plan);
+    const marks = planMarks({ plan, saidParts: said, fen: ITALIAN, studentColor: 'white' });
+    if (said.some((p) => p.squares.includes(plan.path[0].to))) {
       expect(marks.highlights.some((h) => h.square === plan.path[0].to)).toBe(true);
     }
   });
 
   it('does draw the OPPONENT\'s next move — that is the warning', () => {
     const plan = italianPlan('black');
-    const marks = planMarks({ plan, spoken: utterance(plan), fen: ITALIAN, studentColor: 'black' });
+    const marks = planMarks({ plan, saidParts: saidAll(plan), fen: ITALIAN, studentColor: 'black' });
     expect(marks.arrows.some((a) => a.color === '#ef4444'), 'nothing was drawn about what is coming').toBe(true);
   });
 });
 
 describe('the board does not turn into a diagram', () => {
-  it('caps what one turn may add', () => {
+  it('NO CAP — every square the coach named gets its highlight', () => {
+    // This asserted the opposite until 2026-08-10: two arrows and three
+    // highlights, with whatever ranked lowest silently dropped. David: "Any move
+    // the coach states as a future or possible move/plan needs to be arrowed and
+    // key squares mentioned need to be highlighted… No caps." A named square
+    // with a bare board is the same defect as a mark nobody spoke, pointing the
+    // other way — the student hears d5 and finds nothing to look at.
     const plan = italianPlan('black');
-    const marks = planMarks({ plan, spoken: utterance(plan), fen: ITALIAN, studentColor: 'black' });
-    expect(marks.arrows.length).toBeLessThanOrEqual(2);
-    expect(marks.highlights.length).toBeLessThanOrEqual(3);
+    const said = saidAll(plan);
+    const marks = planMarks({ plan, saidParts: said, fen: ITALIAN, studentColor: 'black' });
+    const named = [...new Set(said.flatMap((p) => p.squares))].filter((sq) => /^[a-h][1-8]$/.test(sq));
+    for (const sq of named) {
+      expect(marks.highlights.some((h) => h.square === sq), `named ${sq} and never marked it`).toBe(true);
+    }
+    expect(named.length, 'the fixture named nothing — it proves nothing').toBeGreaterThan(0);
   });
 
   it('never marks the same square twice', () => {
     const plan = italianPlan('black');
-    const marks = planMarks({ plan, spoken: utterance(plan), fen: ITALIAN, studentColor: 'black' });
+    const marks = planMarks({ plan, saidParts: saidAll(plan), fen: ITALIAN, studentColor: 'black' });
     expect(new Set(marks.highlights.map((h) => h.square)).size).toBe(marks.highlights.length);
   });
 });
 
-describe('squaresNamedIn reads squares, not notation', () => {
-  it('finds every square the sentence names, in order', () => {
-    expect(squaresNamedIn('d6 is the square this turns on, and c6 and d7 matter'))
-      .toEqual(['d6', 'c6', 'd7']);
-  });
-
-  it('does not read a file as a square', () => {
-    expect(squaresNamedIn('open the d-file')).toEqual([]);
-  });
-
-  it('does not repeat a square', () => {
-    expect(squaresNamedIn('e4 and e4 again')).toEqual(['e4']);
-  });
-});
+// `squaresNamedIn` and its three tests are GONE (2026-08-10). It existed to
+// recover the plan's squares by sweeping the utterance for anything
+// square-shaped — a validator on prose, and the thing David called out: "It
+// needs to be deterministic, handed in the package." The producer knows its
+// squares and hands them over now, so there is nothing left to parse and no
+// parser left to test.
 
 describe('a full game marks only what it says', () => {
   it('holds across every ply of a real game', () => {
@@ -212,18 +227,26 @@ describe('a full game marks only what it says', () => {
       const studentColor = board.turn() === 'w' ? 'white' : 'black';
       const plan = planFromUci(fen, line, studentColor);
       if (!plan) continue;
-      const spoken = utterance(plan);
-      const marks = planMarks({ plan, spoken, fen, studentColor });
-      const allowed = new Set<string>([
-        ...plan.keySquares.filter((k) => spoken.includes(k.square)).map((k) => k.square),
-        ...plan.theirs.spokenClauses.filter((c) => spoken.includes(c.text)).flatMap((c) => c.squares),
-        ...plan.mine.spokenClauses.filter((c) => spoken.includes(c.text)).flatMap((c) => c.squares),
-      ]);
+      const said = saidAll(plan);
+      const marks = planMarks({ plan, saidParts: said, fen, studentColor });
+      // What the caller handed over IS what may be marked — plus the squares a
+      // stated piece walk passes through, which the walk itself claims.
+      const allowed = new Set<string>(said.flatMap((p) => p.squares));
+      for (const side2 of [plan.mine, plan.theirs]) {
+        for (const sq of side2.maneuver?.path ?? []) allowed.add(sq);
+      }
       for (const h of marks.highlights) {
-        expect(allowed.has(h.square), `${san}: marked ${h.square}, which nothing in "${spoken}" claims`).toBe(true);
+        expect(allowed.has(h.square), `${san}: marked ${h.square}, which nothing handed over claims`).toBe(true);
       }
       for (const a of marks.arrows) {
         expect(allowed.has(a.endSquare), `${san}: arrow to ${a.endSquare}, unclaimed`).toBe(true);
+        // A walk's later hops start from a square the piece has not reached yet,
+        // so only the arrows claiming to be playable NOW must start on a piece.
+        const isHop = [plan.mine, plan.theirs].some((sp) => {
+          const path = sp.maneuver?.path ?? [];
+          return path.some((sq, i) => i > 0 && sq === a.startSquare && path[i + 1] === a.endSquare);
+        });
+        if (isHop) continue;
         const piece = board.get(a.startSquare as never) as { color?: string } | undefined;
         expect(piece, `${san}: arrow from the empty square ${a.startSquare}`).toBeTruthy();
       }
@@ -263,11 +286,29 @@ describe('an arrow is a move somebody could actually play', () => {
       }
       const plan = planFromUci(fen, uci, side);
       if (!plan) continue;
-      const marks = planMarks({ plan, spoken: utterance(plan), fen, studentColor: side });
+      const marks = planMarks({ plan, saidParts: saidAll(plan), fen, studentColor: side });
+      // A PIECE WALK IS A CHAIN, AND ITS LATER HOPS ARE NOT LEGAL YET.
+      //
+      // The rule this test was written for stands: an arrow claiming to be
+      // playable NOW must really be playable now — that is what killed the
+      // f6-b6 / f6-c4 pair David saw, one straight line drawn across a
+      // three-move route. But he then asked for the route itself: "Including
+      // piece walks." Drawn hop by hop it is honest — every arrow is a real ply
+      // of the engine's line, in order — and only the FIRST hop can be legal on
+      // this board, because the later ones start where the piece has not
+      // arrived yet. So: legal now, or a consecutive pair of a real route.
+      const routeHops = new Set<string>();
+      for (const side2 of [plan.mine, plan.theirs]) {
+        const path = side2.maneuver?.path ?? [];
+        for (let i = 0; i + 1 < path.length; i += 1) routeHops.add(`${path[i]}${path[i + 1]}`);
+      }
       for (const a of marks.arrows) {
         const legal = board.moves({ verbose: true })
           .some((m) => m.from === a.startSquare && m.to === a.endSquare);
-        expect(legal, `${a.startSquare}-${a.endSquare} is not a legal move in ${fen}`).toBe(true);
+        expect(
+          legal || routeHops.has(`${a.startSquare}${a.endSquare}`),
+          `${a.startSquare}-${a.endSquare} is neither legal now nor a hop of a stated walk in ${fen}`,
+        ).toBe(true);
       }
     }
   });
@@ -286,7 +327,7 @@ describe('an arrow is a move somebody could actually play', () => {
       }
       const plan = planFromUci(fen, uci, side);
       if (!plan) continue;
-      const marks = planMarks({ plan, spoken: utterance(plan), fen, studentColor: side });
+      const marks = planMarks({ plan, saidParts: saidAll(plan), fen, studentColor: side });
       const origins = marks.arrows.map((a) => a.startSquare);
       expect(new Set(origins).size, `two arrows from ${origins.join(', ')}`).toBe(origins.length);
     }
@@ -306,8 +347,84 @@ describe('an arrow is a move somebody could actually play', () => {
     }
     const plan = planFromUci(fen, uci, 'white');
     if (!plan) return;
-    const marks = planMarks({ plan, spoken: utterance(plan), fen, studentColor: 'white' });
+    const marks = planMarks({ plan, saidParts: saidAll(plan), fen, studentColor: 'white' });
     if (marks.highlights.length === 0) return; // nothing was claimed this ply
     expect(marks.highlights.length).toBeGreaterThanOrEqual(marks.arrows.length);
   });
+});
+
+describe('a piece walk is drawn hop by hop', () => {
+  // David 2026-08-10: "Any move the coach states as a future or possible
+  // move/plan needs to be arrowed and key squares mentioned need to be
+  // highlighted… Including piece walks."
+  //
+  // This is also what resolves his earlier complaint — "bad arrows, not
+  // deterministically made", from a board showing f6-b6 and f6-c4 out of one
+  // knight. A route is WRONG as one straight line from start to finish: that
+  // line is not a move, and it skips the square the whole idea turns on. It is
+  // RIGHT as a chain, where every arrow is a real ply of the engine's line.
+  const walkPlan = (): { plan: LookaheadPlan; fen: string } | null => {
+    // Find a position whose best-ish line reroutes a piece through three squares.
+    const game = new Chess();
+    for (const san of ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6']) game.move(san);
+    for (let attempt = 0; attempt < 40; attempt += 1) {
+      const fen = game.fen();
+      const probe = new Chess(fen);
+      const uci: string[] = [];
+      for (let i = 0; i < 8; i += 1) {
+        const ms = probe.moves({ verbose: true });
+        if (!ms.length) break;
+        const m = ms[(i * 3 + attempt) % ms.length];
+        probe.move(m.san);
+        uci.push(`${m.from}${m.to}`);
+      }
+      const side = game.turn() === 'w' ? 'white' : 'black';
+      const plan = planFromUci(fen, uci, side);
+      if (plan && (plan.mine.maneuver || plan.theirs.maneuver)) return { plan, fen };
+      const next = game.moves()[0];
+      if (!next) break;
+      game.move(next);
+    }
+    return null;
+  };
+
+  it('draws each leg of the route, never one line across it', () => {
+    const found = walkPlan();
+    expect(found, 'no fixture produced a piece walk — the test proves nothing').not.toBeNull();
+    const { plan, fen } = found!;
+    const side = new Chess(fen).turn() === 'w' ? 'white' : 'black';
+    const marks = planMarks({ plan, saidParts: saidAll(plan), fen, studentColor: side });
+    for (const sp of [plan.mine, plan.theirs]) {
+      const path = sp.maneuver?.path ?? [];
+      if (path.length < 3) continue;
+      // The straight line from where the piece starts to where it ends is
+      // exactly the arrow that must NOT exist.
+      const shortcut = marks.arrows.find(
+        (a) => a.startSquare === path[0] && a.endSquare === path[path.length - 1],
+      );
+      expect(shortcut, `the route ${path.join('→')} was flattened into one arrow`).toBeUndefined();
+    }
+  }, 30_000);
+
+  it('every arrow it draws is a real consecutive step of the line', () => {
+    const found = walkPlan();
+    if (!found) return;
+    const { plan, fen } = found;
+    const side = new Chess(fen).turn() === 'w' ? 'white' : 'black';
+    const marks = planMarks({ plan, saidParts: saidAll(plan), fen, studentColor: side });
+    const board = new Chess(fen);
+    const hops = new Set<string>();
+    for (const sp of [plan.mine, plan.theirs]) {
+      const path = sp.maneuver?.path ?? [];
+      for (let i = 0; i + 1 < path.length; i += 1) hops.add(`${path[i]}${path[i + 1]}`);
+    }
+    for (const a of marks.arrows) {
+      const legalNow = board.moves({ verbose: true })
+        .some((m) => m.from === a.startSquare && m.to === a.endSquare);
+      expect(
+        legalNow || hops.has(`${a.startSquare}${a.endSquare}`),
+        `${a.startSquare}-${a.endSquare} is neither playable now nor a step of a stated walk`,
+      ).toBe(true);
+    }
+  }, 30_000);
 });

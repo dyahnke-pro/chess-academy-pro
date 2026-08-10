@@ -4,7 +4,7 @@
 // Deterministically… same rules apply, just now to Google voice."
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { buildVoicePackage, describeVoicePackage, type VoiceFact } from './voicePackage';
+import { buildVoicePackage, describeVoicePackage, type VoiceFact, markableSquares } from './voicePackage';
 
 /** Move 3 of the Pirc David played on prod — quiet, everything home. */
 const PIRC_3 = 'rnbqkb1r/ppp1pppp/3p1n2/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3';
@@ -330,5 +330,57 @@ describe('the mistake callout leads, the coach\'s own sits behind it', () => {
       at('mistake', 'a3 was a mistake.'),
     ]);
     expect(pkg.kept.map((f) => f.kind)).toEqual(['mistake']);
+  });
+});
+
+describe('the board is drawn from the package, not from the prose', () => {
+  // David 2026-08-10: "It needs to be deterministic, handed in the package."
+  //
+  // Marks used to be coupled to speech by scanning the utterance for something
+  // square-shaped — `said.includes('e5')`. That is a validator on text: it
+  // passes on an accidental substring and fails on a square the sentence names
+  // in words, and per G0 it is the shape to stop writing. The squares now come
+  // in ON the fact, so a mark exists because its claim survived.
+  const FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
+  it('offers the squares of a fact that survived', () => {
+    const pkg = buildVoicePackage([
+      { kind: 'threat', text: 'Careful — that piece is under fire.', fen: FEN, squares: ['e5'] },
+    ]);
+    expect(pkg.kept.length).toBe(1);
+    expect(markableSquares(pkg)).toEqual(['e5']);
+  });
+
+  it('marks a square the sentence never spells out', () => {
+    // The exact case the substring check got wrong. "That piece is under fire"
+    // names no square, and the mark is the whole point of saying it.
+    const pkg = buildVoicePackage([
+      { kind: 'threat', text: 'Careful — that piece is under fire.', fen: FEN, squares: ['c6'] },
+    ]);
+    expect(markableSquares(pkg)).toContain('c6');
+  });
+
+  it('takes the marks away with a claim it REFUSED', () => {
+    // The coupling, in one line, for every lane at once: a dropped fact cannot
+    // be drawn, because its squares left with it.
+    const pkg = buildVoicePackage([
+      { kind: 'threat', text: 'READING FACTS (GROUND TRUTH): e5', fen: FEN, squares: ['e5'] },
+    ]);
+    expect(pkg.kept.length, 'a directive was allowed into the package').toBe(0);
+    expect(markableSquares(pkg)).toEqual([]);
+  });
+
+  it('never offers something that is not a square', () => {
+    const pkg = buildVoicePackage([
+      { kind: 'tactic', text: 'There is a loose piece here.', fen: FEN, squares: ['e5', 'z9', '', 'e5'] },
+    ]);
+    expect(markableSquares(pkg)).toEqual(['e5']);
+  });
+
+  it('is empty for a package whose facts carry no squares', () => {
+    const pkg = buildVoicePackage([
+      { kind: 'note', text: 'The bishop pin is the point of this opening.', fen: FEN },
+    ]);
+    expect(markableSquares(pkg)).toEqual([]);
   });
 });

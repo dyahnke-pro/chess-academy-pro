@@ -116,6 +116,39 @@ export interface VoiceFact {
    *  those differ during an animation, and judging a fact by the wrong board is
    *  the bug this whole file exists to prevent. */
   fen: string;
+  /** THE SQUARES THIS FACT IS ABOUT — the board's half of the package.
+   *
+   *  David 2026-08-10: "It needs to be deterministic, handed in the package."
+   *
+   *  Rule 1 says every entry must be speakable; this is the same idea pointed at
+   *  the board. A mark is drawn because the fact that carries it SURVIVED into
+   *  the utterance — by identity, not by scanning the prose for something that
+   *  looks like a square. The first attempt at coupling them did exactly that,
+   *  `said.includes(square)`, which is a validator on text: it passes on an
+   *  accidental substring, fails on a square the sentence names in words, and it
+   *  is precisely the shape G0 says to stop writing. Compute the squares where
+   *  the claim is computed, hand them over with it, and there is nothing left to
+   *  validate.
+   *
+   *  Marks ride `kept` out of `buildVoicePackage`. A fact that was DROPPED takes
+   *  its squares with it, so a refused claim can never be drawn — which is the
+   *  whole coupling, in one line, for every lane at once. */
+  squares?: readonly string[];
+}
+
+/** Every square the package is allowed to draw — the squares of the facts that
+ *  actually survived, in spoken order, deduplicated.
+ *
+ *  The board asks the package what it may mark instead of re-deriving it from
+ *  the utterance, so voice and board cannot disagree. */
+export function markableSquares(pkg: { kept: VoiceFact[] }): string[] {
+  const seen = new Set<string>();
+  for (const f of pkg.kept) {
+    for (const sq of f.squares ?? []) {
+      if (/^[a-h][1-8]$/.test(sq)) seen.add(sq);
+    }
+  }
+  return [...seen];
 }
 
 /** Priority, high wins. Declared once, here, so no caller re-invents an order.

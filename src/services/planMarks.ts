@@ -42,30 +42,23 @@ const THEIRS = '#ef4444';
  *  at once, "the arrows are hallucinating"), and the turn's other producers —
  *  the threat arrow, the note's lead-the-eye pass — draw into the same budget.
  *  Two arrows is the plan showing where the play goes; a third is a diagram. */
-const MAX_ARROWS = 2;
-const MAX_HIGHLIGHTS = 3;
+// NO CAPS (David 2026-08-10). `MAX_ARROWS = 2` and `MAX_HIGHLIGHTS = 3` lived
+// here and quietly discarded whatever ranked lowest, so a move the coach had
+// stated could go unarrowed and a square it named unmarked.
 
 export interface PlanMarks {
   arrows: BoardArrow[];
   highlights: BoardHighlight[];
 }
 
-/** Squares the utterance actually names, in the order it names them.
- *
- *  Order matters: the sentence is ranked most-important-first by `describePlan`,
- *  so reading squares left to right and taking the first few gives the marks the
- *  same priority the words have, for free. */
-export function squaresNamedIn(text: string): string[] {
-  const out: string[] = [];
-  const seen = new Set<string>();
-  // Bounded so "d-file" and "e4-pawn" are read correctly (`d` alone is not a
-  // square; `e4` inside a hyphenated compound is) and a stray "1.e4" cannot
-  // contribute a square that was never spoken as one.
-  for (const m of text.matchAll(/\b([a-h][1-8])\b/g)) {
-    if (!seen.has(m[1])) { seen.add(m[1]); out.push(m[1]); }
-  }
-  return out;
-}
+// `squaresNamedIn` LIVED HERE and is gone (2026-08-10). It swept an utterance
+// for anything square-shaped so the marks could be recovered from the prose,
+// which is a validator — it cannot tell a square the sentence NAMED from one
+// that merely appears in it, and it loses a mark whenever the grader trims a
+// clause by a word. David: "It needs to be deterministic, handed in the
+// package." The producer hands its squares over now; nothing parses them back
+// out.
+
 
 /**
  * Where the piece that ends up on `square` is standing RIGHT NOW.
@@ -124,87 +117,127 @@ function isLegalNow(board: Chess, from: string, to: string): boolean {
  */
 export function planMarks(args: {
   plan: LookaheadPlan;
-  spoken: string;
+  /** THE PARTS OF THE UTTERANCE THAT SURVIVED, each still carrying its own
+   *  squares — handed in, never recovered from the prose.
+   *
+   *  David 2026-08-10: "It needs to be deterministic, handed in the package."
+   *
+   *  This used to be a single `spoken: string`, and the marks were recovered
+   *  from it two ways: a regex sweep for anything square-shaped, and a substring
+   *  test of each clause's text against the joined utterance. Both are
+   *  validators on prose. A regex cannot tell a square the sentence NAMED from
+   *  one that merely appears in it, and a clause the grader trimmed by a word
+   *  stops matching and silently loses its mark. The caller grades part by part
+   *  now, so what survived is known exactly — it says so rather than leaving it
+   *  to be inferred. */
+  saidParts: ReadonlyArray<{ squares: readonly string[]; side: 'key' | 'mine' | 'theirs' }>;
   /** The live board. Every mark is checked against it. */
   fen: string;
   studentColor: 'white' | 'black';
 }): PlanMarks {
-  const { plan, spoken, fen, studentColor } = args;
+  const { plan, saidParts, fen, studentColor } = args;
   let board: Chess;
   try { board = new Chess(fen); } catch { return { arrows: [], highlights: [] }; }
 
-  // WHAT WAS ACTUALLY SAID, square by square, IN SPOKEN ORDER.
-  //
-  // Two sources, and both are gated on the same thing — presence in `spoken`:
-  //
-  //  · the KEY SQUARE, which names itself out loud ("d6 is the square this
-  //    position turns on"), so a text scan settles it;
-  //  · each PLAN CLAUSE, which often names nothing ("bring pieces at your
-  //    king") and carries its own computed squares. A clause is only drawn when
-  //    its exact text is in the utterance, which matters because the caller
-  //    slices the plan's sentences by hint register — an unspoken half of the
-  //    plan must not reach the board.
-  const named = new Set(squaresNamedIn(spoken));
   const wanted: Array<{ square: string; side: 'key' | 'mine' | 'theirs' }> = [];
   const push = (square: string, side: 'key' | 'mine' | 'theirs'): void => {
     if (!/^[a-h][1-8]$/.test(square)) return;
     if (!wanted.some((w) => w.square === square)) wanted.push({ square, side });
   };
-
-  // The key square first: it is the one fact about the position rather than
-  // about a side, and it is what David quoted back.
-  for (const k of plan.keySquares) if (named.has(k.square)) push(k.square, 'key');
-  // Then THEIRS before MINE, matching the order the caller speaks them in —
-  // what is coming at you before what you are doing about it.
-  for (const clause of plan.theirs.spokenClauses) {
-    if (!spoken.includes(clause.text)) continue;
-    for (const sq of clause.squares) push(sq, 'theirs');
-  }
-  for (const clause of plan.mine.spokenClauses) {
-    if (!spoken.includes(clause.text)) continue;
-    for (const sq of clause.squares) push(sq, 'mine');
-  }
-  if (wanted.length === 0) return { arrows: [], highlights: [] };
+  // Spoken order, exactly as handed over. Which comes first is the caller's
+  // decision — it says the key square before the plans, and theirs before mine,
+  // what is coming at you before what you are doing about it — and none of that
+  // is re-decided here.
+  for (const part of saidParts) for (const sq of part.squares) push(sq, part.side);
 
   const myColor = studentColor === 'white' ? 'white' : 'black';
   const arrows: BoardArrow[] = [];
   const highlights: BoardHighlight[] = [];
+  const addArrow = (startSquare: string, endSquare: string, color: string): void => {
+    if (startSquare === endSquare) return;
+    if (arrows.some((a) => a.startSquare === startSquare && a.endSquare === endSquare)) return;
+    arrows.push({ startSquare, endSquare, color });
+  };
 
-  for (const { square, side } of wanted) {
-    if (highlights.length < MAX_HIGHLIGHTS) {
-      highlights.push({ square, color: side === 'key' ? KEY : side === 'mine' ? MINE : THEIRS });
+  // ── THE PIECE WALKS, DRAWN HOP BY HOP ────────────────────────────────────
+  // David 2026-08-10: "Any move the coach states as a future or possible
+  // move/plan needs to be arrowed and key squares mentioned need to be
+  // highlighted… Including piece walks."
+  //
+  // This is also what resolves his earlier complaint about "bad arrows, not
+  // deterministically made" — f6-b6 and f6-c4 drawn out of one knight. A route
+  // is wrong as ONE straight line from where the piece starts to where it ends
+  // up: that line is not a move, and it skips the square the whole idea turns
+  // on. It is right as a CHAIN — f3 to d2, then d2 to c4 — where every arrow is
+  // a real ply of the engine's line and the student can see the order.
+  //
+  // Only the FIRST hop is checked for legality on this board, because it is the
+  // only one that claims to be playable now. The later hops start from squares
+  // the piece has not reached yet; that is what a plan IS, and the chain says so
+  // by drawing them in sequence rather than pretending they are available.
+  const spokeFor = new Set(saidParts.map((p) => p.side));
+  const walks: Array<{ path: string[]; color: string }> = [];
+  if (spokeFor.has('theirs') && plan.theirs.maneuver) {
+    walks.push({ path: plan.theirs.maneuver.path, color: THEIRS });
+  }
+  if (spokeFor.has('mine') && plan.mine.maneuver) {
+    walks.push({ path: plan.mine.maneuver.path, color: MINE });
+  }
+  for (const walk of walks) {
+    const path = walk.path.filter((sq) => /^[a-h][1-8]$/.test(sq));
+    if (path.length < 3) continue; // two squares is a move, not a walk
+    // The piece has to actually be standing where the walk begins, or the plan
+    // was computed for a board that has since moved on.
+    if (!board.get(path[0] as never)) continue;
+    for (let i = 0; i + 1 < path.length; i += 1) {
+      if (i === 0 && !isLegalNow(board, path[0], path[1])) break;
+      addArrow(path[i], path[i + 1], walk.color);
+      // Every square the walk passes through is a square the coach just named.
+      push(path[i + 1], walk.color === MINE ? 'mine' : 'theirs');
     }
+  }
+
+  // ── EVERY SQUARE NAMED GETS ITS HIGHLIGHT. NO CAP ────────────────────────
+  // There were caps here — two arrows, three highlights — and they silently
+  // dropped whatever ranked lowest, so a stated move could go unarrowed and a
+  // named square unmarked. That is the same defect as marking something never
+  // said, pointing the other way: the student hears a square and finds nothing
+  // on the board to look at. David: "No caps."
+  for (const { square, side } of wanted) {
+    if (highlights.some((h) => h.square === square)) continue;
+    highlights.push({ square, color: side === 'key' ? KEY : side === 'mine' ? MINE : THEIRS });
 
     // THE FUTURE MOVE. The first time the line lands a piece on this square is
     // the move the sentence is describing; anything later is a different idea.
-    if (arrows.length >= MAX_ARROWS) continue;
     const index = plan.path.findIndex((s) => s.to === square);
     if (index < 0) continue;
     // NEVER DRAW THE STUDENT'S OWN NEXT MOVE. An arrow is a from AND a to,
     // which is a move — and the one move that must stay theirs to find is the
     // one they are about to play. Everything deeper in the line is a plan
     // rather than an answer, and the square still gets its highlight here, so
-    // the eye is led without the move being handed over. This is the honesty
-    // contract the plan lane keeps in words (it is SAN-free by construction);
-    // the marks have to keep it too or the words were pointless.
+    // the eye is led without the move being handed over. Consistent with the
+    // rule above, too: the coach never STATES that move, so nothing goes
+    // unarrowed that was spoken.
     if (index === 0 && plan.path[0].color === myColor) continue;
     const origin = originOf(plan.path, index, board);
     if (!origin || origin === square) continue;
+    // Already drawn as part of a walk — the chain owns that piece's route.
+    if (arrows.some((a) => a.endSquare === square)) continue;
     // Legal, from THIS board, in ONE move — or no arrow at all. See `isLegalNow`.
     if (!isLegalNow(board, origin, square)) continue;
-    if (arrows.some((a) => a.startSquare === origin && a.endSquare === square)) continue;
-    // ONE ARROW PER PIECE. The same knight heading for two squares at two
-    // different moments drew two lines out of one square — even when both were
-    // legal, that reads as the piece going to both places at once.
+    // ONE ARROW PER PIECE, outside a walk. The same knight heading for two
+    // squares at two different moments drew two lines out of one square — even
+    // when both were legal, that reads as the piece going to both places at
+    // once. A walk is the honest way to say that, and it is drawn above.
     if (arrows.some((a) => a.startSquare === origin)) continue;
-    arrows.push({
-      startSquare: origin,
-      endSquare: square,
+    addArrow(
+      origin,
+      square,
       // The arrow's colour follows whose MOVE it is, not whose square it is: a
       // piece of theirs arriving on a contested square is still a thing coming
       // at the student, and drawing that in "key square yellow" reads neutral.
-      color: plan.path[index].color === myColor ? MINE : THEIRS,
-    });
+      plan.path[index].color === myColor ? MINE : THEIRS,
+    );
   }
 
   return { arrows, highlights };

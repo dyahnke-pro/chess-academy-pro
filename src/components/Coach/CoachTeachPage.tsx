@@ -19,7 +19,7 @@ import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
-import { buildVoicePackage, describeVoicePackage, type VoicePackage, type VoiceFactKind } from '../../services/voicePackage';
+import { buildVoicePackage, describeVoicePackage, markableSquares, type VoicePackage, type VoiceFactKind } from '../../services/voicePackage';
 import { buildPositionalRead } from '../../services/positionalRead';
 import { curatedBeatAt } from '../../services/curatedBeatSource';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence } from '../../services/playCommentary';
@@ -1319,7 +1319,14 @@ export function CoachTeachPage(): JSX.Element {
   // The plan rides along with its prose so the BOARD can be drawn from the
   // same line the sentence was read off (see `planMarks`). Keeping only the
   // text here is what left the marks with no source and the board bare.
-  const lookaheadPlanRef = useRef<{ fen: string; text: string; plan: LookaheadPlan } | null>(null);
+  const lookaheadPlanRef = useRef<{
+    fen: string;
+    text: string;
+    plan: LookaheadPlan;
+    /** The parts that survived grading, each with the squares it is about — so
+     *  any consumer marks from what was SAID without re-reading the prose. */
+    saidParts: Array<{ squares: string[]; side: 'key' | 'mine' | 'theirs' }>;
+  } | null>(null);
   /** Lines computed during the engine block that the student must actually
    *  HEAR — the subtle hints, and the line-shape read.
    *
@@ -1335,7 +1342,12 @@ export function CoachTeachPage(): JSX.Element {
    *  Keyed by fen because these are computed asynchronously, after the instant
    *  package has shipped, and a hint about a board the student has moved past
    *  is worse than no hint. */
-  const pendingVoiceRef = useRef<{ fen: string; lines: Array<{ kind: VoiceFactKind; text: string }> } | null>(null);
+  const pendingVoiceRef = useRef<{
+    fen: string;
+    /** `squares` rides along so the board can be drawn from what SURVIVED the
+     *  package rather than re-derived from its prose — see `VoiceFact.squares`. */
+    lines: Array<{ kind: VoiceFactKind; text: string; squares?: readonly string[] }>;
+  } | null>(null);
   /** The coach's own last move, captured for judging. See the callout below —
    *  the inputs are gathered while the engine work runs and the verdict is
    *  taken where the line is spoken, so a race between two engine reads cannot
@@ -6130,8 +6142,8 @@ export function CoachTeachPage(): JSX.Element {
     // three foreign notes reach David as "the pin on the board".
     const pkg = buildVoicePackage([
       ...(gemLine ? [{ kind: 'gem' as const, text: gemLine, fen: args.fenAfterReply }] : []),
-      ...(tacticLine ? [{ kind: 'tactic' as const, text: tacticLine, fen: args.fenAfterReply }] : []),
-      ...(threatLine ? [{ kind: 'threat' as const, text: threatLine, fen: args.fenAfterReply }] : []),
+      ...(tacticLine ? [{ kind: 'tactic' as const, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares }] : []),
+      ...(threatLine ? [{ kind: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares }] : []),
       ...(announceLine ? [{ kind: 'opening' as const, text: announceLine, fen: args.fenAfterReply }] : []),
       ...(computedLine ? [{ kind: 'computed' as const, text: computedLine, fen: args.fenAfterReply }] : []),
       // The masterclass beat first among the teaching lanes — it is the only
@@ -6192,11 +6204,12 @@ export function CoachTeachPage(): JSX.Element {
         try {
           const marks = planMarks({
             plan: planned.plan,
-            // Only the plan's OWN sentences may claim the plan's squares. The
-            // package is one utterance built from several producers, and
-            // scanning all of it would let a corpus note's square be drawn as
-            // if the engine's line went there.
-            spoken: pkg.kept.filter((f) => f.kind === 'plan').map((f) => f.text).join(' '),
+            // The plan's OWN surviving parts, carried on the ref from where they
+            // were graded. Only the plan may claim the plan's squares: the
+            // package is one utterance from several producers, and re-reading it
+            // would let a corpus note's square be drawn as if the engine's line
+            // went there.
+            saidParts: planned.saidParts,
             fen: args.fenAfterReply,
             studentColor: args.studentColor,
           });
@@ -6210,23 +6223,32 @@ export function CoachTeachPage(): JSX.Element {
       // Red for what is coming AT the student, green for what is theirs to
       // find; neither hands over a move, because a tactic's squares are the
       // pieces involved, not a from-to.
-      // ONLY THE SQUARES THE LINE ACTUALLY NAMED. A detector reports every
-      // square in the geometry; the sentence built from it mentions some of
-      // them. Marking the rest points the student at squares the coach never
-      // said — the same defect the plan marks are coupled against, arriving
-      // through the detector instead of through the plan.
-      const markTactic = (squares: string[], color: string, saidIn: string | null): void => {
-        const named = saidIn ?? '';
-        for (const sq of squares.slice(0, 3)) {
-          if (!named.includes(sq)) continue;
+      // THE PACKAGE SAYS WHAT MAY BE DRAWN. Each fact carried its own squares in
+      // (see the `squares` field on `VoiceFact`), so a lane that survived brings
+      // its marks with it and a lane that was refused takes them away — by
+      // identity, with nothing to re-derive.
+      //
+      // This replaces two attempts at the same coupling. The first drew every
+      // detector square whether the sentence mentioned it or not, which put
+      // marks on squares the student never heard. The second tested
+      // `said.includes(square)`, which is a validator on prose: it passes on an
+      // accidental substring and fails on a square the sentence names in words.
+      // Both were re-deriving downstream what the producer already knew.
+      const COLOR_FOR: Partial<Record<VoiceFactKind, string>> = {
+        threat: '#ef4444',   // coming AT the student
+        tactic: '#22c55e',   // theirs to find
+        gem: '#22c55e',
+        // A cost already paid, not a threat arriving.
+        drawback: '#f59e0b',
+        mistake: '#f59e0b',
+      };
+      for (const f of pkg.kept) {
+        const color = COLOR_FOR[f.kind];
+        if (!color) continue;
+        for (const sq of (f.squares ?? []).slice(0, 3)) {
+          if (!/^[a-h][1-8]$/.test(sq)) continue;
           if (!planHighlights.some((h) => h.square === sq)) planHighlights.push({ square: sq, color });
         }
-      };
-      if (threatSquares.length > 0 && pkg.kept.some((f) => f.kind === 'threat')) {
-        markTactic(threatSquares, '#ef4444', threatLine);
-      }
-      if (tacticSquares.length > 0 && pkg.kept.some((f) => f.kind === 'tactic')) {
-        markTactic(tacticSquares, '#22c55e', tacticLine);
       }
       // THE SQUARE THE LAST MOVE GAVE UP is marked in the LATE lane, with the
       // sentence that names it — see the backward-look block in the reply
@@ -6251,13 +6273,21 @@ export function CoachTeachPage(): JSX.Element {
    *  instruction) belongs in `facts` and stays there. `buildVoicePackage`
    *  refuses scaffolding anyway, so this is the honest filter rather than the
    *  last line of defence. */
-  const queueSpokenHint = useCallback((fen: string, line: string, kind: VoiceFactKind = 'computed'): void => {
+  const queueSpokenHint = useCallback((
+    fen: string,
+    line: string,
+    kind: VoiceFactKind = 'computed',
+    /** The squares this line is about. Handed in with the text so a mark is
+     *  drawn because the fact survived, never because the prose contained
+     *  something square-shaped. */
+    squares?: readonly string[],
+  ): void => {
     const text = line.trim();
     if (!text) return;
     const pending = pendingVoiceRef.current?.fen === fen
       ? pendingVoiceRef.current
-      : { fen, lines: [] as Array<{ kind: VoiceFactKind; text: string }> };
-    if (!pending.lines.some((l) => l.text === text)) pending.lines.push({ kind, text });
+      : { fen, lines: [] as Array<{ kind: VoiceFactKind; text: string; squares?: readonly string[] }> };
+    if (!pending.lines.some((l) => l.text === text)) pending.lines.push({ kind, text, squares });
     pendingVoiceRef.current = pending;
   }, []);
 
@@ -6844,11 +6874,35 @@ export function CoachTeachPage(): JSX.Element {
                         // student wants, and it is its own field precisely so a
                         // compact caller (the fork offer's road previews) can
                         // leave it off. The full narration is not compact.
-                        const said = [key, board, shape, plan.theirs.text, plan.mine.text, plan.mine.aside, after]
-                          .filter(Boolean)
-                          .join(' ');
+                        // GRADED PART BY PART, so what survived is KNOWN rather
+                        // than recovered from the joined blob afterwards. Each
+                        // part carries the squares it is about; the ones that
+                        // live become both the utterance and the marks, which is
+                        // the only way the two cannot disagree.
+                        const parts: Array<{ text: string; squares: string[]; side: 'key' | 'mine' | 'theirs' | null }> = [
+                          { text: key, squares: plan.keySquares[0] ? [plan.keySquares[0].square] : [], side: 'key' },
+                          { text: board, squares: [], side: null },
+                          { text: shape, squares: [], side: null },
+                          { text: plan.theirs.text, squares: plan.theirs.spokenClauses.flatMap((c) => c.squares), side: 'theirs' },
+                          { text: plan.mine.text, squares: plan.mine.spokenClauses.flatMap((c) => c.squares), side: 'mine' },
+                          { text: plan.mine.aside, squares: [], side: null },
+                          { text: after, squares: [], side: null },
+                        ];
+                        const planFen = probe.fen();
+                        const survived = parts
+                          .filter((p) => Boolean(p.text))
+                          .map((p) => ({ ...p, text: gradeNarrationText(p.text, planFen, 'CoachTeachPage.planMarks')?.trim() ?? '' }))
+                          .filter((p) => Boolean(p.text));
+                        const said = survived.map((p) => p.text).join(' ');
                         if (said) {
-                          lookaheadPlanRef.current = { fen: probe.fen(), text: said, plan };
+                          lookaheadPlanRef.current = {
+                            fen: planFen,
+                            text: said,
+                            plan,
+                            saidParts: survived
+                              .filter((p): p is typeof p & { side: 'key' | 'mine' | 'theirs' } => p.side !== null)
+                              .map((p) => ({ squares: p.squares, side: p.side })),
+                          };
                           captureEvent('lookahead_plan_offered', {
                             surface: 'coach-teach',
                             key_square: plan.keySquares[0]?.square ?? null,
@@ -6869,8 +6923,7 @@ export function CoachTeachPage(): JSX.Element {
                           // speech is refused on the board too. Then marked
                           // from the graded text, so the two can never diverge.
                           try {
-                            const planFen = probe.fen();
-                            const graded = gradeNarrationText(said, planFen, 'CoachTeachPage.planMarks')?.trim();
+                            const graded = said;
                             // AND SPEAK IT. THE PLAN WAS BEING DRAWN AND NEVER
                             // SAID (found by the prod audit, 2026-08-10: four
                             // annotation events, zero plan sentences — the
@@ -6901,15 +6954,27 @@ export function CoachTeachPage(): JSX.Element {
                             // never stood down, and the plan spoke last.
                             if (graded) queueSpokenHint(planFen, graded, 'plan');
                             if (graded && liveFenRef.current === planFen) {
-                              const marks = planMarks({ plan, spoken: graded, fen: planFen, studentColor: playerColor });
+                              const marks = planMarks({
+                                plan,
+                                // The parts that SURVIVED grading, each with its
+                                // own squares — nothing re-derived from prose.
+                                saidParts: survived
+                                  .filter((p): p is typeof p & { side: 'key' | 'mine' | 'theirs' } => p.side !== null)
+                                  .map((p) => ({ squares: p.squares, side: p.side })),
+                                fen: planFen,
+                                studentColor: playerColor,
+                              });
                               if (marks.arrows.length > 0 || marks.highlights.length > 0) {
                                 if (marks.arrows.length > 0) {
-                                  setArrows((prev) => uniqueArrows([...prev, ...marks.arrows]).slice(0, 4));
+                                  // NO CAP (David 2026-08-10). Every move the
+                                  // coach stated gets its arrow; a slice here
+                                  // drops the ones it happens to sort last.
+                                  setArrows((prev) => uniqueArrows([...prev, ...marks.arrows]));
                                 }
                                 if (marks.highlights.length > 0) {
                                   setHighlights((prev) => {
                                     const have = new Set(prev.map((h) => h.square));
-                                    return [...prev, ...marks.highlights.filter((h) => !have.has(h.square))].slice(0, 6);
+                                    return [...prev, ...marks.highlights.filter((h) => !have.has(h.square))];
                                   });
                                 }
                                 void logAppAudit({
@@ -7467,28 +7532,14 @@ export function CoachTeachPage(): JSX.Element {
                       allowedMate: mid.isMate ? mid.mateIn : null,
                     });
                     if (look) {
-                      queueSpokenHint(fenAfterReply, look.line, look.kind);
-                      // THE SQUARE IT GAVE UP, pointed at ONLY WHEN THE SENTENCE
-                      // NAMES IT. Amber: a cost already paid, not a threat
-                      // arriving.
-                      //
-                      // The `look.line.includes` is the whole rule and it was
-                      // missing. `square` comes from the better move's plan
-                      // clauses, so the concession lane names it out loud ("that
-                      // took your last defender off e5") while the MISTAKE lane
-                      // does not — "Nd4 was a mistake. Nf6 was the move." carries
-                      // a square the student never hears. A prod run caught it
-                      // marking d8 and e7 with nothing spoken behind them, which
-                      // is the lie drawn instead of said, and the one thing every
-                      // other mark in this file is coupled against.
-                      if (/^[a-h][1-8]$/.test(look.square)
-                        && look.line.includes(look.square)
-                        && liveFenRef.current === fenAfterReply) {
-                        const sq = look.square;
-                        setHighlights((prev) => (prev.some((h) => h.square === sq)
-                          ? prev
-                          : [...prev, { square: sq, color: '#f59e0b' }].slice(0, 6)));
-                      }
+                      // THE SQUARE TRAVELS WITH THE SENTENCE, and is drawn below
+                      // only if the package KEPT it. Not `look.line.includes(sq)`
+                      // — that was a validator on prose, passing on an accidental
+                      // substring and failing on a square the sentence names in
+                      // words. The producer already knows the square; handing it
+                      // over leaves nothing to re-derive and nothing to check.
+                      queueSpokenHint(fenAfterReply, look.line, look.kind,
+                        /^[a-h][1-8]$/.test(look.square) ? [look.square] : []);
                       captureEvent('coach_backward_look', {
                         surface: 'coach-teach', kind: look.kind, cp_loss: Math.round(cpLoss),
                       });
@@ -7544,10 +7595,24 @@ export function CoachTeachPage(): JSX.Element {
                 if (pending && samePosition(pending.fen, fenAfterReply) && pending.lines.length > 0) {
                   pendingVoiceRef.current = null;
                   const hintPkg = buildVoicePackage(
-                    pending.lines.map(({ kind, text }) => ({ kind, text, fen: pending.fen })),
+                    pending.lines.map(({ kind, text, squares }) => ({ kind, text, squares, fen: pending.fen })),
                   );
                   if (hintPkg.spoken) {
                     speakTrackA(hintPkg.spoken);
+                    // AND MARK WHAT SURVIVED. The squares came in on the facts,
+                    // so the board draws the ones belonging to lanes the package
+                    // KEPT — a refused claim takes its marks away with it, which
+                    // is the whole coupling and needs no check of its own.
+                    // Amber throughout: everything queued here is retrospective
+                    // (a cost already paid), never a threat arriving.
+                    const owed = markableSquares(hintPkg);
+                    if (owed.length > 0 && liveFenRef.current === fenAfterReply) {
+                      setHighlights((prev) => {
+                        const have = new Set(prev.map((h) => h.square));
+                        return [...prev, ...owed.filter((sq) => !have.has(sq))
+                          .map((square) => ({ square, color: '#f59e0b' }))].slice(0, 6);
+                      });
+                    }
                     void logAppAudit({
                       kind: 'coach-narration-spoken',
                       category: 'narration',

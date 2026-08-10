@@ -74,7 +74,9 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
   });
 
   it('the student backward look is queued at the rank the model gives it', () => {
-    expect(TEACH).toMatch(/queueSpokenHint\(fenAfterReply, look\.line, look\.kind\)/);
+    // The 4th argument is the point: the square travels WITH the sentence, so
+    // the board can be drawn from what the package kept.
+    expect(TEACH).toMatch(/queueSpokenHint\(fenAfterReply, look\.line, look\.kind,/);
   });
 
   it('the borrowed tier is queued WITH the plan, so the yield rule can see both', () => {
@@ -105,8 +107,11 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     // Its own field, not a tail on `text`: a probe caught all three fork roads
     // ending "Worth noticing: your pieces on a1, c1 and d1 sit this one out
     // entirely" — identical tails on options that exist to be told apart.
+    // It is a part of the graded utterance now, carrying no squares of its own —
+    // it is a noticing about what the plan LEAVES OUT, so there is nothing on
+    // the board for it to point at.
     expect(TEACH, 'the aside is computed and never spoken')
-      .toMatch(/plan\.mine\.text, plan\.mine\.aside/);
+      .toMatch(/\{ text: plan\.mine\.aside, squares: \[\], side: null \}/);
     expect(FORK, 'the compact road preview picked the aside back up')
       .not.toContain('.aside');
   });
@@ -176,7 +181,13 @@ describe('the couplings that make the wiring safe', () => {
   });
 
   it('the marks are computed from what SURVIVED grading', () => {
-    expect(TEACH).toMatch(/gradeNarrationText\(said, planFen/);
-    expect(TEACH).toMatch(/planMarks\(\{\s*plan,\s*spoken: graded/);
+    // Graded PART BY PART, so what survived is known rather than recovered from
+    // the joined blob afterwards — and the marks are handed the survivors, not
+    // the prose. `spoken: graded` was the old shape and it meant planMarks had
+    // to parse squares back out of a sentence.
+    expect(TEACH).toMatch(/gradeNarrationText\(p\.text, planFen/);
+    expect(TEACH).toMatch(/saidParts: survived/);
+    expect(TEACH_CODE, 'the marks are reading the prose again')
+      .not.toMatch(/spoken: graded/);
   });
 });
