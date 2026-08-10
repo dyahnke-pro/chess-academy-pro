@@ -22,7 +22,7 @@
 // what that hands over — a strong player showing you the hole they just made,
 // not a teacher confessing. The coach's weakness becomes the lesson instead of
 // something to excuse.
-import { Chess, type Color, type Square } from 'chess.js';
+import { Chess, type Color } from 'chess.js';
 import { findWeakPawns, findPieceQuality } from './positionReadingService';
 
 export type DrawbackKind =

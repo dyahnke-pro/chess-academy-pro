@@ -13,8 +13,9 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import {
-  buildLookaheadPlan, keySquaresOf, keySquareLine, PLAN_HORIZON,
+  buildLookaheadPlan, keySquaresOf, keySquareLine, describePlan, planFromUci, PLAN_HORIZON,
 } from './lookaheadPlan';
+import type { SidePlan } from './lookaheadPlan';
 import type { PvLine, PvPly, PlyFacts } from './pvPlayback';
 
 const EMPTY: PlyFacts = {
@@ -175,5 +176,110 @@ describe('every claim traces to a move the engine actually played', () => {
       expect(text, `a move leaked into the plan: ${text}`)
         .not.toMatch(/\b[NBRQK][a-h]?[1-8]?x?[a-h][1-8]\b/);
     }
+  });
+});
+
+describe('the read sees the whole line, not just where pieces land', () => {
+  // David 2026-08-09: "make sure the PV calculates or sees as much as possible,
+  // not just key squares." The first version hand-filled four fields and left
+  // the engine path's other six empty — a quietly thinner copy. `planFromUci`
+  // now replays through the SAME `computePlyFacts` the engine path uses, so
+  // these are the real numbers, not a mock's.
+  const uci = (moves: string[]): string[] => moves;
+
+  it('reports material won across the line', () => {
+    // 1.e4 d5 2.exd5 Qxd5 3.Nc3 Qa5 — White is a pawn up inside the horizon.
+    const plan = planFromUci(START, uci(['e2e4', 'd7d5', 'e4d5', 'd8d5', 'b1c3', 'd5a5']), 'white');
+    expect(plan, 'the line did not replay').not.toBeNull();
+    expect(plan?.white.materialSwing).toBeGreaterThan(0);
+  });
+
+  it('counts pieces converging on the enemy king', () => {
+    // Scholar's shape: queen and bishop both arrive next to the black king.
+    // "They are coming for you" as arithmetic rather than atmosphere.
+    const plan = planFromUci(START, uci(['e2e4', 'e7e5', 'f1c4', 'b8c6', 'd1h5', 'g8f6', 'h5f7', 'e8f7']), 'white');
+    expect(plan?.white.nearEnemyKing).toBeGreaterThanOrEqual(2);
+  });
+
+  it('fills every field the engine path computes, not a subset', () => {
+    const plan = planFromUci(START, uci(['e2e4', 'c7c5', 'g1f3', 'd7d6', 'd2d4', 'c5d4']), 'white');
+    for (const side of [plan?.white, plan?.black]) {
+      expect(side).toBeTruthy();
+      expect(typeof side?.materialSwing).toBe('number');
+      expect(typeof side?.shieldStripped).toBe('number');
+      expect(typeof side?.nearEnemyKing).toBe('number');
+      expect(Array.isArray(side?.passedPawns)).toBe(true);
+      expect(Array.isArray(side?.opening)).toBe(true);
+    }
+  });
+
+  it('refuses a line too short to read', () => {
+    expect(planFromUci(START, uci(['e2e4', 'c7c5']), 'white')).toBeNull();
+  });
+
+  it('stops at the first illegal move instead of guessing past it', () => {
+    expect(planFromUci(START, uci(['e2e4', 'e7e5', 'zzzz', 'd7d5']), 'white')).toBeNull();
+  });
+});
+
+describe('the sentence is ordered by the position, not by a fixed ladder', () => {
+  // Drives the REAL scorer. An earlier draft of this block reimplemented the
+  // weights inside the test, which would have passed against any code at all.
+  const base: SidePlan = {
+    color: 'white', headingFor: [], opening: [], trading: [], outposts: [],
+    passedPawns: [], materialSwing: 0, shieldStripped: 0, tactic: null,
+    mates: false, nearEnemyKing: 0, text: '',
+  };
+  const say = (over: Partial<SidePlan>): string => describePlan({ ...base, ...over }, 'mine');
+
+  it('leads with a four-piece attack over winning a pawn', () => {
+    expect(say({ nearEnemyKing: 4, materialSwing: 1 })).toMatch(/^You want to bring pieces at their king/);
+  });
+
+  it('leads with a rook over a two-piece gesture at the king', () => {
+    expect(say({ nearEnemyKing: 2, materialSwing: 5 })).toMatch(/^You want to win a rook/);
+  });
+
+  it('weighs a passed pawn by how close it is to promoting', () => {
+    const near = say({ passedPawns: ['a7'], trading: ['pawn'] });
+    const far = say({ passedPawns: ['a3'], outposts: ['e5'] });
+    expect(near).toMatch(/^You want to create a passed pawn on a7/);
+    expect(far).not.toMatch(/^You want to create a passed pawn/);
+  });
+
+  it('says a rook is a rook and a pawn is a pawn', () => {
+    expect(say({ materialSwing: 5 })).toContain('a rook');
+    expect(say({ materialSwing: 3 })).toContain('a piece');
+    expect(say({ materialSwing: 1 })).toContain('a pawn');
+  });
+
+  it('puts mate above everything else in the position', () => {
+    const loud = say({
+      mates: true, tactic: 'fork', nearEnemyKing: 4, shieldStripped: 3, materialSwing: 9,
+    });
+    expect(loud.toLowerCase()).toContain('mate');
+    expect(loud).not.toContain('fork');
+  });
+
+  it('warns rather than congratulates when the mate is THEIRS', () => {
+    expect(describePlan({ ...base, mates: true }, 'theirs').toLowerCase())
+      .toContain('stop it');
+  });
+
+  it('never lists more than three things', () => {
+    const loud = say({
+      tactic: 'fork', nearEnemyKing: 4, shieldStripped: 3, materialSwing: 5,
+      passedPawns: ['a7'], outposts: ['e5'], opening: ['c'], trading: ['rook'],
+    });
+    // Eight facts available; a coach that lists eight has said nothing.
+    expect(loud.split(/,| and /).length).toBeLessThanOrEqual(3);
+  });
+
+  it('falls back to where the pieces are going when nothing concrete happens', () => {
+    expect(say({ headingFor: ['e4', 'f3'] })).toContain('toward e4 and f3');
+  });
+
+  it('says nothing when there is nothing', () => {
+    expect(say({})).toBe('');
   });
 });

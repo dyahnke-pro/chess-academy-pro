@@ -167,6 +167,7 @@ import { findLivePunishment } from '../../services/gemCrushLines';
 
 import { buildThinkAloud } from '../../services/thinkAloud';
 import { scaleGap, packageForRegister, readsForRegister } from '../../services/hintRegister';
+import { planFromUci, keySquareLine } from '../../services/lookaheadPlan';
 import { warmAmateurPlay, buildRatingRealityFact } from '../../services/amateurPlayCache';
 import { masterPlayCache } from '../../services/masterPlayCache';
 
@@ -1262,6 +1263,14 @@ export function CoachTeachPage(): JSX.Element {
    *  idea at several plies; hearing it twice is what makes a coach sound stuck. */
   const curatedBeatSeenRef = useRef(new Set<string>());
 
+  /** The most recent look-ahead plan, KEYED BY THE FEN IT DESCRIBES.
+   *
+   *  The plan is computed where the engine read already exists (the submit
+   *  path) and spoken where the narration package is built (the reply path),
+   *  which are different scopes. The FEN travels with it so a plan can never be
+   *  spoken about a position it was not computed from — the stale-beat class of
+   *  bug, prevented rather than validated. */
+  const lookaheadPlanRef = useRef<{ fen: string; text: string } | null>(null);
   /** Positional observations already spoken this game — see `buildPositionalRead`.
    *  Without it an uncastled king repeats the same sentence every ply until it
    *  castles, and the boundary repeat-guard turns each of those back into the
@@ -5894,8 +5903,18 @@ export function CoachTeachPage(): JSX.Element {
     // FILLER rather than teaching, so it speaks only when nothing else in the
     // turn did, corpus included. Promoting it alongside the others is how the
     // coach ends up narrating "your pawn on a2 is isolated" over a real tactic.
+    // THE LOOK-AHEAD PLAN. David 2026-08-09: it "replaces the corpus notes as
+    // primary first heard by user when corpus runs out" — so it is offered
+    // whenever it was computed for THIS board, and `voicePackage` ranks it
+    // above the borrowed corpus tiers and below a note authored right here.
+    let planLine: string | null = null;
+    if (lookaheadPlanRef.current?.fen === args.fenAfterReply) {
+      planLine = lookaheadPlanRef.current.text;
+      factLines.push(`Look-ahead plan: ${planLine}`);
+    }
+
     let positionalLine: string | null = null;
-    if (!gemLine && !tacticLine && !threatLine && !announceLine && !computedLine && !noteLine && !curatedLine && !teachingLine) {
+    if (!gemLine && !tacticLine && !threatLine && !announceLine && !computedLine && !noteLine && !curatedLine && !teachingLine && !planLine) {
       try {
         const pr = buildPositionalRead(args.fenAfterReply, playerColor, positionalSaidRef.current);
         if (pr) { positionalLine = pr; factLines.push(`Positional read: ${pr}`); }
@@ -5921,12 +5940,15 @@ export function CoachTeachPage(): JSX.Element {
       // ahead of both lanes above at SELECTION, so reaching here at all means
       // they were empty.
       ...(bakedLine ? [{ kind: 'note' as const, text: bakedLine, fen: args.fenAfterReply }] : []),
-      // Corpus teaching reached by structure/concept transfer. Same `note`
-      // rank as the exact-position tier — both are the corpus speaking, and
-      // `generalizedTeaching` has already framed the borrowed one honestly
-      // ("The same idea shows up in positions like this"), so it is never
-      // heard as a claim about these squares.
-      ...(teachingLine ? [{ kind: 'note' as const, text: teachingLine, fen: args.fenAfterReply }] : []),
+      // Corpus teaching reached by structure/concept transfer — BORROWED, and
+      // now ranked as such. It used to ship at the same `note` rank as the
+      // exact-position tier on the grounds that both are the corpus speaking.
+      // David's reordering (2026-08-09) puts the computed look-ahead plan above
+      // it: a plan about THIS board beats a real note about a different one.
+      // `generalizedTeaching` still frames it honestly, so it is never heard as
+      // a claim about these squares — it just no longer outranks one.
+      ...(planLine ? [{ kind: 'plan' as const, text: planLine, fen: args.fenAfterReply }] : []),
+      ...(teachingLine ? [{ kind: 'borrowed' as const, text: teachingLine, fen: args.fenAfterReply }] : []),
       // `observation`, not `note` — it is filler, and while it shared the
       // teaching rank it could displace a masterclass beat with "your pawn on
       // a2 is isolated". Lowest rank by construction.
@@ -6341,7 +6363,12 @@ export function CoachTeachPage(): JSX.Element {
                             });
                             if (improve?.kind === 'improving-move') {
                               captureEvent('improving_move_offered', { surface: 'coach-teach', from: recUci.slice(0, 2) });
-                              facts.push(...improve.facts);
+                              // A HINT, so it rides the register like the rest:
+                              // the improving-move beat names the piece and
+                              // withholds the square, and how many of its
+                              // computed reads travel is the subtlety dial
+                              // (same rule as the think-aloud).
+                              facts.push(...improve.facts.slice(0, readsForRegister(discussion.hintDial.register)));
                             } else {
                             const recLine = `Your strongest reply here is ${recMove.san}${recWhy}.`;
                             facts.push(recLine);
@@ -6378,6 +6405,37 @@ export function CoachTeachPage(): JSX.Element {
                         facts.push(packageForRegister(rt.hint, discussion.hintDial.register));
                       }
                     }
+
+                    // BOTH SIDES' PLANS, off the SAME engine read (David
+                    // 2026-08-09: "We will need to know the plans for both
+                    // sides. That is the most important part of teaching
+                    // chess."). No second search — the PV above is already both
+                    // sides playing well in alternation, so reading it once per
+                    // colour is free. The opponent's half is the part a student
+                    // cannot get anywhere else: a strong player tells you what
+                    // they are trying to do to you, in time to meet it.
+                    try {
+                      const pv = studentBest?.topLines?.[0]?.moves;
+                      const plan = Array.isArray(pv)
+                        ? planFromUci(probe.fen(), pv, playerColor)
+                        : null;
+                      if (plan) {
+                        const key = keySquareLine(plan.keySquares);
+                        const said = [key, plan.theirs.text, plan.mine.text]
+                          .filter(Boolean)
+                          .slice(0, discussion.hintDial.register === 'obvious' ? 3 : 2)
+                          .join(' ');
+                        if (said) {
+                          lookaheadPlanRef.current = { fen: probe.fen(), text: said };
+                          captureEvent('lookahead_plan_offered', {
+                            surface: 'coach-teach',
+                            key_square: plan.keySquares[0]?.square ?? null,
+                            register: discussion.hintDial.register,
+                          });
+                          facts.push(`LOOK-AHEAD PLAN (computed from the engine's own line — state it, do NOT name a move): ${said}`);
+                        }
+                      }
+                    } catch { /* the plan is a bonus, never a blocker */ }
                   }
                 } catch { /* engine down → no move named; the prompt keeps the prompt-for-next-move general */ }
                 // Tactics facts reach the narration ONLY when no question is
@@ -6620,7 +6678,19 @@ export function CoachTeachPage(): JSX.Element {
                       // which is what a coach does anyway: point out that
                       // something is there, and let the student look.
                       // Still withholds the move and the square.
-                      facts.push(`GEM ALERT (known verified inaccuracy by the coach's last move): ${gem.callout} Invite the student to FIND the punishing move — do NOT name or hint the move or its square.`);
+                      // A HINT — the loudest one the coach has, and until now
+                      // the only one that spoke at one volume for every
+                      // student. Tiered like the others: a strong player gets
+                      // the callout and goes hunting; one who has been missing
+                      // things is told it came from the last move and that it
+                      // is worth material. The square is withheld at EVERY
+                      // register — plainer is a shorter walk, never the answer.
+                      facts.push(packageForRegister({
+                        anchor: `GEM ALERT (known verified inaccuracy by the coach's last move): ${gem.callout}`,
+                        detail: 'Invite the student to FIND the punishing move.',
+                        stakes: 'Tell them it came from the move just played and that there is real material in it.',
+                        withhold: 'Do NOT name or hint the move or its square.',
+                      }, discussion.hintDial.register));
                       void logAppAudit({
                         kind: 'coach-narration-spoken',
                         category: 'narration',

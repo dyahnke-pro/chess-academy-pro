@@ -52,6 +52,20 @@ export type VoiceFactKind =
   /** Danger TO the student — a tactic against them, or their own piece
    *  hanging. */
   | 'threat'
+  /** BOTH SIDES' PLANS, read off the engine's own line (`lookaheadPlan`).
+   *
+   *  David 2026-08-09: this "replaces the corpus notes as primary first heard by
+   *  user when corpus runs out" — so it sits ABOVE the borrowed tiers and below
+   *  a note authored at this exact board. A computed plan about THIS position
+   *  outranks a real note about a DIFFERENT one, which is the reordering he
+   *  asked for and is plainly right given that 44.6% of the notes selection
+   *  reaches name an opening that never gets to the board they were filed at. */
+  | 'plan'
+  /** Corpus teaching borrowed from a DIFFERENT board — structure transfer, the
+   *  concept tier, an opening-family note. Honest teaching, framed as such
+   *  ("The same idea shows up in positions like this"), but it is not about
+   *  these squares and now ranks below the plan that is. */
+  | 'borrowed'
   /** A newly resolved opening name. */
   | 'opening'
   /** The computed read — true of this position by construction. */
@@ -97,10 +111,12 @@ export interface VoiceFact {
  *  filler, split out from `note` so "your pawn on a2 is isolated" can never
  *  again share a rank with a masterclass beat. */
 const RANK: Record<VoiceFactKind, number> = {
-  note: 6,
-  tactic: 5,
-  gem: 4,
-  threat: 3,
+  note: 8,
+  tactic: 7,
+  gem: 6,
+  threat: 5,
+  plan: 4,
+  borrowed: 3,
   opening: 2,
   computed: 1,
   observation: 0,

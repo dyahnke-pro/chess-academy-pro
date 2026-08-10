@@ -28,6 +28,7 @@ import { bakedSpoken } from './spokenNoteBake';
 import { falseConfigurationClaim } from './configurationClaims';
 import { logAppAudit } from './appAuditor';
 import { applyDerivedAnchors } from './noteAnchorOverrides';
+import { openingReachesPosition } from './openingBranches';
 
 export interface DanyaNote {
   id: string;
@@ -375,20 +376,43 @@ export function noteAtPosition(
     // run heard "In the Fantasy…" inside a Tartakower lesson.
     && noteStaysInScope(n, openingName)
     && !exclude?.has(n.id);
-  const bucket = (byPrefix.get(historySans.join(' ')) ?? []).filter(onThisLine);
+  // WHEN SEVERAL NOTES SIT AT ONE BOARD, PREFER THE ONE WHOSE OWN OPENING GETS
+  // HERE. Measured over the 1,310 plies of repertoire.json: 44.6% of selected
+  // notes name an opening whose real DB line never reaches the board they were
+  // picked at — ply 4 of the Italian selecting a note tagged "King's Gambit
+  // Accepted: Allgaier", ply 10 of the Ruy selecting "Ruy Lopez: Alapin
+  // Defense" (a line that plays 3…Bb4 and never arrives here).
+  //
+  // Deliberately a PREFERENCE, not a reject. Dropping all 44.6% would cut
+  // per-ply coverage from 12.7% to 7.0%, and it would be throwing away notes
+  // that are fine: the anchor and the tag disagree, and when the prose already
+  // passed `noteDescribesPosition` the ANCHOR is the half that is trustworthy —
+  // the tag is just noise from distillation. Sorting costs nothing and fixes
+  // the case that matters, because a note that both names a foreign opening AND
+  // fails board truth was already dropped above.
+  const preferReachable = (notes: DanyaNote[]): DanyaNote[] => {
+    if (notes.length < 2) return notes;
+    return [...notes].sort((a, b) => {
+      const ok = (n: DanyaNote): number =>
+        (!n.opening || openingReachesPosition(n.opening, historySans) ? 1 : 0);
+      return ok(b) - ok(a);
+    });
+  };
+
+  const bucket = preferReachable((byPrefix.get(historySans.join(' ')) ?? []).filter(onThisLine));
   if (bucket[0]) return bucket[0];
   if (fen) {
     // Uncapped: `notesForFen(fen, 1)` handed the filter a single candidate, so
     // one note failing `onThisLine` (or already spoken) meant silence at a
     // position the corpus does teach.
-    const viaFen = notesForFen(fen).filter(onThisLine)[0];
+    const viaFen = preferReachable(notesForFen(fen).filter(onThisLine))[0];
     if (viaFen) return viaFen;
   }
   // GAP TIER, exact positions only. This is the walkthrough splice's source, so
   // without it the narration goes silent on an opening the primary corpus never
   // covers. The "exactly at this position" contract is preserved — only a
   // secondary note keyed at THIS very line qualifies, never an opening-level one.
-  const viaSecondaryPrefix = secondaryNotesForPosition(historySans).filter(onThisLine)[0];
+  const viaSecondaryPrefix = preferReachable(secondaryNotesForPosition(historySans).filter(onThisLine))[0];
   if (viaSecondaryPrefix) return viaSecondaryPrefix;
   // SECONDARY TRANSPOSITION — same contract, other corpora. Until 2026-08-04
   // only the primary corpus was indexed by position, so 5,412 position-keyed
@@ -396,7 +420,7 @@ export function noteAtPosition(
   // That scarcity is what made the fuzzy opening-name arm look necessary; this
   // is the deterministic way to get the reach back, and the note is provably
   // about THIS board.
-  return fen ? secondaryNotesForFen(fen).filter(onThisLine)[0] ?? null : null;
+  return fen ? preferReachable(secondaryNotesForFen(fen).filter(onThisLine))[0] ?? null : null;
 }
 
 /** The best teaching note for a live position, for FACT-PACKAGE builders

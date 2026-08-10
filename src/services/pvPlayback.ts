@@ -92,7 +92,10 @@ const PIECE_WORD: Record<string, string> = {
   p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
 };
 
-function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
+/** Exported so a surface that already holds a raw PV can replay it with the
+ *  SAME facts the engine path computes, instead of a thinner hand-rolled copy
+ *  that quietly sees less (see `lookaheadPlan.planFromUci`). */
+export function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
   captured?: string; san: string; color: 'w' | 'b'; promotion?: string;
 }, prev?: PrevCaptureContext): PlyFacts {
   const before = describeStructure(fenBefore);

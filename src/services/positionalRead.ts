@@ -25,7 +25,7 @@
 // It is the LOWEST-priority lane by design. It should never displace a tactic,
 // a threat, a gem or a taught note — it is what plays when none of them have
 // anything, which per the measurement is about half the game.
-import { Chess, type Color, type Square } from 'chess.js';
+import { Chess, type Color } from 'chess.js';
 import {
   kingSafetyRead,
   developmentRead,
@@ -80,7 +80,6 @@ function withTurn(fen: string, color: Color): string | null {
   parts[1] = color;
   parts[3] = '-';
   try {
-    // eslint-disable-next-line no-new
     new Chess(parts.join(' '));
   } catch {
     return null;
@@ -238,7 +237,7 @@ function joinsFor(
       // The piece must not merely have MOVED out of the list — it has to still
       // be on its square and no longer be bad.
       if (stillBad.has(b.square)) continue;
-      const piece = after.get(b.square as Square);
+      const piece = after.get(b.square);
       if (!piece || piece.type !== b.piece || piece.color !== color) continue;
       out.push({
         key: `${side}-join-${b.square}-${mv.to}`,

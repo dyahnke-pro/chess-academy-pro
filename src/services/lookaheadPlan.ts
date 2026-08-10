@@ -18,7 +18,24 @@
 // EVERY claim here is arithmetic over moves the engine actually played (G0/G3).
 // Nothing is inferred about intentions: "heading for e5" means a piece of that
 // colour lands on e5 inside the line, not that the model believes it wants to.
-import type { PvLine, PvPly } from './pvPlayback';
+import { Chess } from 'chess.js';
+import { computePlyFacts } from './pvPlayback';
+import type { PvLine, PvPly, PrevCaptureContext } from './pvPlayback';
+
+type ChessCtor = InstanceType<typeof Chess>;
+
+const PIECE_WORD: Record<string, string> = {
+  p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen',
+};
+
+/** How close a landing square has to be to a king to count as "coming at it".
+ *
+ *  Three, not two. Two is the ring of squares touching the king, which almost
+ *  nothing reaches inside eight plies — measured on a Scholar's-mate line, only
+ *  the final queen move qualified, so an obvious four-piece attack scored 1 and
+ *  the beat never fired. Three is a knight's working radius from the king and
+ *  matches what "bringing pieces at your king" actually looks like. */
+const KING_ZONE = 3;
 
 /** How far into the line is worth describing as INTENTION.
  *
@@ -54,6 +71,19 @@ export interface SidePlan {
   trading: string[];
   /** Outposts this side establishes. */
   outposts: string[];
+  /** Net material this side wins across the horizon, in points. */
+  materialSwing: number;
+  /** Passed pawns this side creates. */
+  passedPawns: string[];
+  /** Enemy king-shield pawns this side strips away. */
+  shieldStripped: number;
+  /** A tactic that LANDS inside the line ('fork' | 'pin' | 'skewer' | …). */
+  tactic: string | null;
+  /** The line ends in mate delivered by this side. */
+  mates: boolean;
+  /** How many of this side's moves land within a king's-walk of the ENEMY
+   *  king — the computable form of "they are coming for you". */
+  nearEnemyKing: number;
   /** Speakable, or '' when the line gives this side nothing describable. */
   text: string;
 }
@@ -77,6 +107,24 @@ function capturedPiece(fact: string | null): string | null {
   if (!fact) return null;
   const m = /\b(pawn|knight|bishop|rook|queen)\b/i.exec(fact);
   return m ? m[1].toLowerCase() : null;
+}
+
+/** Where a colour's king stands, or null on a malformed board. */
+function kingSquare(fen: string, color: 'w' | 'b'): string | null {
+  try {
+    for (const cell of new Chess(fen).board().flat()) {
+      if (cell && cell.type === 'k' && cell.color === color) return cell.square;
+    }
+  } catch { /* fall through */ }
+  return null;
+}
+
+/** King-walk distance between two squares. */
+function chebyshev(a: string, b: string): number {
+  return Math.max(
+    Math.abs(a.charCodeAt(0) - b.charCodeAt(0)),
+    Math.abs(Number(a[1]) - Number(b[1])),
+  );
 }
 
 function squaresOf(ply: PvPly): { from: string; to: string } {
@@ -135,6 +183,12 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
   const opening = new Set<string>();
   const trading: string[] = [];
   const outposts: string[] = [];
+  const passedPawns: string[] = [];
+  let materialSwing = 0;
+  let shieldStripped = 0;
+  let tactic: string | null = null;
+  let mates = false;
+  let nearEnemyKing = 0;
 
   for (const ply of mine) {
     const { to } = squaresOf(ply);
@@ -143,6 +197,17 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
     const taken = capturedPiece(ply.facts.captured);
     if (taken) trading.push(taken);
     if (ply.facts.outpostGained) outposts.push(ply.facts.outpostGained);
+    passedPawns.push(...ply.facts.newPassedPawns);
+    materialSwing += ply.facts.materialGained;
+    shieldStripped += ply.facts.shieldLost;
+    if (!tactic && ply.facts.tacticLanded) tactic = ply.facts.tacticLanded;
+    if (ply.facts.isMate) mates = true;
+    // "They are coming for your king" as arithmetic: how many of this side's
+    // moves land within a king's-walk of the OTHER king. Read off the board
+    // before the move, so it describes where the piece is heading rather than
+    // where the king ended up after being chased.
+    const enemyKing = kingSquare(ply.fenBefore, color === 'white' ? 'b' : 'w');
+    if (enemyKing && chebyshev(to, enemyKing) <= KING_ZONE) nearEnemyKing += 1;
   }
 
   const headingFor = [...destinations.entries()]
@@ -155,40 +220,97 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
     opening: [...opening],
     trading,
     outposts,
+    materialSwing,
+    passedPawns,
+    shieldStripped,
+    tactic,
+    mates,
+    nearEnemyKing,
     text: '',
   };
 }
 
-/** Turn a computed plan into one sentence. Empty when there is nothing to say —
- *  which is honest, and better than a sentence that means nothing. */
-function describe(plan: SidePlan, voice: 'mine' | 'theirs'): string {
+/**
+ * Turn a computed plan into one sentence, MOST IMPORTANT THING FIRST.
+ *
+ * The order is SCORED, not a fixed ladder. Every clause carries a weight
+ * computed from the position's own numbers — four pieces converging on a king
+ * outranks two, winning a rook outranks winning a pawn, a passed pawn on the
+ * seventh outranks one on the fourth — so the ranking answers to the board
+ * rather than to the order somebody happened to write the branches in. A static
+ * ladder says the same thing first in every game.
+ *
+ * Capped at three clauses. The read now sees ten things, and a coach that lists
+ * ten things has told the student nothing; the cap is what makes the ranking
+ * mean anything.
+ *
+ * Empty when there is nothing to say — honest, and better than a sentence that
+ * means nothing.
+ */
+export function describePlan(plan: SidePlan, voice: 'mine' | 'theirs'): string {
   const subject = voice === 'mine' ? 'You' : 'They';
   const possessive = voice === 'mine' ? 'your' : 'their';
-  const parts: string[] = [];
+  const theirKing = voice === 'mine' ? 'their king' : 'your king';
 
-  if (plan.outposts.length > 0) {
-    parts.push(`plant a piece on ${plan.outposts[0]} where no pawn can chase it`);
+  // Mate ends the sentence before it starts: nothing else in the position
+  // matters, and burying it behind "and open the c-file" would be absurd.
+  if (plan.mates) {
+    return voice === 'mine'
+      ? 'There is a forced mate in this line — it is there if you find it.'
+      : 'They have a forced mate in this line. This is the moment to stop it.';
   }
+
+  const clauses: Array<{ weight: number; text: string }> = [];
+  const add = (weight: number, text: string): void => { clauses.push({ weight, text }); };
+
+  // A tactic that actually lands is the single most concrete thing the line
+  // contains, so it starts above everything except mate.
+  if (plan.tactic) add(90, `land a ${plan.tactic}`);
+  // King attack, scaled by how many pieces are really arriving. Two is a
+  // gesture; four is an assault and the sentence should lead with it.
+  if (plan.nearEnemyKing >= 2) add(50 + plan.nearEnemyKing * 12, `bring pieces at ${theirKing}`);
+  // Shield pawns are worth more per pawn than a piece walking over: a pawn that
+  // has gone is not coming back.
+  if (plan.shieldStripped > 0) add(45 + plan.shieldStripped * 18, `strip the pawns in front of ${theirKing}`);
+  // Material, by what it actually is. A rook is not a pawn and the ranking
+  // should not pretend otherwise.
+  if (plan.materialSwing >= 1) {
+    const what = plan.materialSwing >= 5 ? 'a rook' : plan.materialSwing >= 3 ? 'a piece' : 'a pawn';
+    add(35 + plan.materialSwing * 10, `win ${what}`);
+  }
+  // A passed pawn matters more the closer it is to promoting — the one fact
+  // here whose SQUARE changes its importance, not just its wording.
+  if (plan.passedPawns.length > 0) {
+    const sq = plan.passedPawns[0];
+    const rank = Number(sq[1]);
+    const advanced = plan.color === 'white' ? rank : 9 - rank;
+    // Steep on purpose: a passer on the seventh is close to decisive, one on
+    // the third is a long-term asset that should not outrank a knight sitting
+    // on an outpost right now.
+    add(10 + advanced * 8, `create a passed pawn on ${sq}`);
+  }
+  if (plan.outposts.length > 0) add(35, `plant a piece on ${plan.outposts[0]} where no pawn can chase it`);
+  if (plan.opening.length > 0) add(25, `open the ${plan.opening[0]}-file`);
   if (plan.trading.length > 0) {
     const unique = [...new Set(plan.trading)];
-    parts.push(`trade off ${unique.length > 1 ? 'pieces' : `the ${unique[0]}`}`);
+    add(20, `trade off ${unique.length > 1 ? 'pieces' : `the ${unique[0]}`}`);
   }
-  if (plan.opening.length > 0) {
-    parts.push(`open the ${plan.opening[0]}-file`);
-  }
-  if (parts.length === 0 && plan.headingFor.length > 0) {
+
+  if (clauses.length === 0) {
     // Nothing concrete happens in the line, but the pieces still go SOMEWHERE,
     // and where they go is the plan when nothing is captured.
+    if (plan.headingFor.length === 0) return '';
     const squares = plan.headingFor.slice(0, 2).join(' and ');
     return `${subject} bring ${possessive} pieces toward ${squares} over the next few moves.`;
   }
-  if (parts.length === 0) return '';
 
-  const list = parts.length === 1
-    ? parts[0]
-    : `${parts.slice(0, -1).join(', ')} and ${parts[parts.length - 1]}`;
+  const shown = clauses.sort((a, b) => b.weight - a.weight).slice(0, 3).map((c) => c.text);
+  const list = shown.length === 1
+    ? shown[0]
+    : `${shown.slice(0, -1).join(', ')} and ${shown[shown.length - 1]}`;
   return `${subject} want to ${list}.`;
 }
+
 
 /**
  * Both plans and the key squares, from one line.
@@ -207,8 +329,8 @@ export function buildLookaheadPlan(
   const black = planFor(line.plies, 'black');
   const mine = studentColor === 'white' ? white : black;
   const theirs = studentColor === 'white' ? black : white;
-  mine.text = describe(mine, 'mine');
-  theirs.text = describe(theirs, 'theirs');
+  mine.text = describePlan(mine, 'mine');
+  theirs.text = describePlan(theirs, 'theirs');
   // Assign back so `white`/`black` carry the same strings as `mine`/`theirs` —
   // they are the same objects, but say so rather than relying on it.
   if (!white.text) white.text = white === mine ? mine.text : theirs.text;
@@ -235,4 +357,59 @@ export function keySquareLine(keys: readonly KeySquare[]): string {
     return `${top.square} is contested — both sides have designs on it.`;
   }
   return `${top.square} is worth watching; the play keeps running through it.`;
+}
+
+/**
+ * The plan from a raw engine PV, with no second search and no engine handle.
+ *
+ * `computePvLine` gives a richer `PvLine` but needs an engine to verify the
+ * line's terminal eval. Surfaces that already hold `topLines[0].moves` from a
+ * read they made for another reason — Learn does, for the think-aloud and
+ * priority-first beats — can get both plans for free by replaying it here.
+ *
+ * The facts filled are the ones chess.js can settle alone: what each move
+ * captures, and where it lands. Opened files and outposts are left empty rather
+ * than guessed, so `describe` falls back to the squares the pieces are heading
+ * for — less to say, and nothing invented (G0).
+ */
+export function planFromUci(
+  fen: string,
+  uciMoves: readonly string[],
+  studentColor: 'white' | 'black',
+): LookaheadPlan | null {
+  if (uciMoves.length < 4) return null;
+  let board: ChessCtor;
+  try { board = new Chess(fen); } catch { return null; }
+  const plies: PvPly[] = [];
+  // Carried so a recapture is recognised as one, exactly as the engine path
+  // does — without it every exchange reads as two separate captures.
+  let prevCap: PrevCaptureContext = { square: null, capturedValue: 0 };
+  for (const uci of uciMoves.slice(0, PLAN_HORIZON)) {
+    if (!uci || uci.length < 4) break;
+    const fenBefore = board.fen();
+    let mv;
+    try {
+      mv = board.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.slice(4, 5) || undefined });
+    } catch { break; }
+    if (!mv) break;
+    plies.push({
+      san: mv.san,
+      uci,
+      moverColor: mv.color === 'w' ? 'white' : 'black',
+      fenBefore,
+      fenAfter: board.fen(),
+      facts: computePlyFacts(fenBefore, board.fen(), {
+        captured: mv.captured,
+        san: mv.san,
+        color: mv.color,
+        promotion: mv.promotion,
+      }, prevCap),
+    });
+    prevCap = { square: mv.to, capturedValue: mv.captured ? (PIECE_POINTS[PIECE_WORD[mv.captured] ?? ''] ?? 0) : 0 };
+  }
+  if (plies.length < 4) return null;
+  return buildLookaheadPlan(
+    { plies, rootEvalCp: 0, terminalEvalCp: null, delivers: true, closeAlternative: null },
+    studentColor,
+  );
 }
