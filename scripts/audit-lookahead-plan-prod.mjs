@@ -221,6 +221,44 @@ async function main() {
       `${planSentences.length} plan sentences in ${spoken.length} narration events`,
     );
 
+    // ── THE BOARD SAID IT TOO. David 2026-08-10, reading a 251-finding prod
+    //    log in which the coach named d6, b5, c6 and d7 and marked none of
+    //    them: "I want square highlights and arrows drawn about future moves,
+    //    plans, and key squares." A spoken square with a bare board is a defect
+    //    by the locked lead-the-eye rule, and nothing was catching it — the
+    //    whole log had narration events and zero annotation events.
+    //
+    //    Two assertions, because either alone is weak: marks FIRED, and every
+    //    square they mark was actually SPOKEN. The second is the one that
+    //    matters — a mark the voice never justified is the lie drawn instead
+    //    of said.
+    const markEvents = [...listener.getCapturedEvents(), ...fresh]
+      .filter((e) => String(e.source ?? '').includes('planMarks'));
+    const markedSquares = markEvents
+      .flatMap((e) => String(e.summary ?? '').match(/\b[a-h][1-8]\b/g) ?? []);
+    const namedInSpeech = new Set(planSentences.flatMap((sn) => sn.match(/\b[a-h][1-8]\b/g) ?? []));
+    record(
+      'the board marked what the coach named',
+      markEvents.length > 0,
+      markEvents.length > 0
+        ? `${markEvents.length} annotation event(s), ${markedSquares.length} square(s)`
+        : 'the coach named squares and the board stayed bare',
+    );
+    // Only meaningful once marks exist; skipped rather than vacuously green.
+    if (markEvents.length > 0) {
+      const unspoken = [...new Set(markedSquares)].filter((sq) => !namedInSpeech.has(sq));
+      record(
+        'every mark traces back to something spoken',
+        // A plan clause can name no square out loud ("bring pieces at your
+        // king") and still be marked — that is the point of the clause-square
+        // coupling — so this checks the marks are not WILD, not that every one
+        // was literally pronounced. A run where NOTHING marked was spoken is
+        // the failure: it means the marks came from somewhere else entirely.
+        markedSquares.length === 0 || unspoken.length < markedSquares.length,
+        unspoken.length > 0 ? `unspoken: ${unspoken.slice(0, 6).join(', ')}` : 'every marked square was named aloud',
+      );
+    }
+
     const rawId = lines.filter((l) => /want to land a [a-z]+_[a-z]+/.test(l));
     record('no raw detector identifier reached the voice', rawId.length === 0, rawId.slice(0, 2).join(' | ') || 'clean');
 

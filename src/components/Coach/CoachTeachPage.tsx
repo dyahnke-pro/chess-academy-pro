@@ -6562,6 +6562,44 @@ export function CoachTeachPage(): JSX.Element {
                             register: discussion.hintDial.register,
                           });
                           facts.push(`LOOK-AHEAD PLAN (computed from the engine's own line — state it, do NOT name a move): ${said}`);
+                          // ── LEAD THE EYE, HERE, WHERE THE PLAN LIVES ──────
+                          // The instant package is assembled SYNCHRONOUSLY, in
+                          // the same tick this engine read was started — so by
+                          // the time the plan exists that package has already
+                          // shipped, and marking from it alone would draw
+                          // nothing on most turns. This is the moment the plan
+                          // is real, so this is where the board learns it.
+                          //
+                          // Graded first, with the SAME grader the package uses
+                          // and against the SAME board the plan was computed
+                          // from, so a claim that would have been refused in
+                          // speech is refused on the board too. Then marked
+                          // from the graded text, so the two can never diverge.
+                          try {
+                            const planFen = probe.fen();
+                            const graded = gradeNarrationText(said, planFen, 'CoachTeachPage.planMarks')?.trim();
+                            if (graded && liveFenRef.current === planFen) {
+                              const marks = planMarks({ plan, spoken: graded, fen: planFen, studentColor: playerColor });
+                              if (marks.arrows.length > 0 || marks.highlights.length > 0) {
+                                if (marks.arrows.length > 0) {
+                                  setArrows((prev) => uniqueArrows([...prev, ...marks.arrows]).slice(0, 4));
+                                }
+                                if (marks.highlights.length > 0) {
+                                  setHighlights((prev) => {
+                                    const have = new Set(prev.map((h) => h.square));
+                                    return [...prev, ...marks.highlights.filter((h) => !have.has(h.square))].slice(0, 6);
+                                  });
+                                }
+                                void logAppAudit({
+                                  kind: 'coach-board-annotation',
+                                  category: 'narration',
+                                  source: 'CoachTeachPage.planMarks',
+                                  summary: `lead-the-eye on the computed plan: ${marks.arrows.length} arrow(s), ${marks.highlights.length} highlight(s) — ${[...marks.arrows.map((a) => `${a.startSquare}-${a.endSquare}`), ...marks.highlights.map((h) => h.square)].join(', ')}`,
+                                  fen: planFen,
+                                });
+                              }
+                            }
+                          } catch { /* the marks are lead-the-eye, never a blocker */ }
                         }
                       }
                     } catch { /* the plan is a bonus, never a blocker */ }
