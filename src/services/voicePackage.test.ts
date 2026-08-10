@@ -125,3 +125,47 @@ describe('the join', () => {
     expect(buildVoicePackage([{ kind: 'threat', text: 'Careful here.', fen }]).spoken).toBe('Careful here.');
   });
 });
+
+describe('the corpus note is always first', () => {
+  // David 2026-08-10, correcting a reading of his ordering that had put the
+  // note fifth: "Corpus notes are always first. I was talking about after
+  // corpus has ran out and we are on computer narrations."
+  //
+  // This is a gate rather than a comment because the mistake was easy to make
+  // and invisible once made — everything still gets spoken, so nothing looks
+  // broken; the student just hears the computed line where the taught one
+  // should have led.
+  const at = (kind, text) => ({ kind, text, fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1' });
+
+  it('leads with the note even against every computed lane at once', () => {
+    const pkg = buildVoicePackage([
+      at('threat', 'Threat line.'),
+      at('gem', 'Gem line.'),
+      at('plan', 'Plan line.'),
+      at('drawback', 'Drawback line.'),
+      at('note', 'Note line.'),
+    ]);
+    expect(pkg.spoken.startsWith('Note line.'), `note did not lead: ${pkg.spoken}`).toBe(true);
+  });
+
+  it('orders the computed lanes backwards, forward, gem, threat', () => {
+    const pkg = buildVoicePackage([
+      at('threat', 'Threat line.'),
+      at('gem', 'Gem line.'),
+      at('plan', 'Plan line.'),
+      at('drawback', 'Drawback line.'),
+    ]);
+    const order = ['Drawback', 'Plan', 'Gem', 'Threat']
+      .map((w) => pkg.spoken.indexOf(w));
+    expect(order.every((i) => i >= 0), `a lane was dropped: ${pkg.spoken}`).toBe(true);
+    for (let i = 1; i < order.length; i += 1) {
+      expect(order[i - 1], `wrong order: ${pkg.spoken}`).toBeLessThan(order[i]);
+    }
+  });
+
+  it('keeps a borrowed note below the computed plan', () => {
+    // A plan about THIS board beats a real note about a different one.
+    const pkg = buildVoicePackage([at('borrowed', 'Borrowed line.'), at('plan', 'Plan line.')]);
+    expect(pkg.spoken.indexOf('Plan')).toBeLessThan(pkg.spoken.indexOf('Borrowed'));
+  });
+});

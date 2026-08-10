@@ -45,11 +45,10 @@ export type VoiceFactKind =
   /** WHY THE MOVE JUST PLAYED WAS BAD — the backward look (`concessionBeat`).
    *
    *  David 2026-08-10: "I want the reason for a bad move to come first then
-   *  forward looking to be spoke second." It outranks even the corpus, and the
-   *  90/10 rule survives that because this is not a competing teaching lane: it
-   *  fires only when code can NAME what the student's own move handed over,
-   *  which is rare, and when it does it is the most immediate thing on the
-   *  board. Nothing is dropped — the note is still spoken, right behind it. */
+   *  forward looking to be spoke second" — first among the COMPUTED lanes. The
+   *  corpus note still leads everything; this ordering governs what is said
+   *  once the corpus has nothing for the position. It fires only when code can
+   *  NAME what the student's own move handed over, so it is rare. */
   | 'drawback'
   /** TEACHING: a masterclass beat or a corpus note. The heart of the coach. */
   | 'note'
@@ -120,21 +119,22 @@ export interface VoiceFact {
  *  filler, split out from `note` so "your pawn on a2 is isolated" can never
  *  again share a rank with a masterclass beat. */
 const RANK: Record<VoiceFactKind, number> = {
-  // THE ORDER DAVID NAMED (2026-08-10): "I want backwards first, then forward,
-  // then gem, then threat." Retrospective before prospective before
-  // opportunity before danger — what your last move cost, what the line does
-  // next, the punishable slip, the thing coming at you.
-  drawback: 12,
-  plan: 11,
-  gem: 10,
-  threat: 9,
-  // ⚠️ This puts the corpus note BELOW those four, which reverses the locked
-  // "teaching leads" ordering (the 90/10 rule). Nothing is dropped — rank only
-  // decides what is heard FIRST, and the note is still spoken right behind —
-  // but it is a deliberate reordering of a locked rule, recorded here so a
-  // future session does not quietly "fix" it back.
-  note: 8,
+  // THE CORPUS NOTE IS ALWAYS FIRST (David 2026-08-10, correcting a reading of
+  // his ordering that had put it fifth: "Corpus notes are always first. I was
+  // talking about AFTER corpus has ran out and we are on computer
+  // narrations"). The 90/10 rule stands untouched — a note authored at this
+  // board outranks anything computed about it.
+  note: 12,
+  // Then the computed lanes, in the order he named: "backwards first, then
+  // forward, then gem, then threat" — what your last move cost, what the line
+  // does next, the punishable slip, the thing coming at you.
+  drawback: 11,
+  plan: 10,
+  gem: 9,
+  threat: 8,
   tactic: 7,
+  // Corpus teaching BORROWED from a different board still sits below the
+  // computed plan: a plan about THIS position beats a real note about another.
   borrowed: 3,
   opening: 2,
   computed: 1,
