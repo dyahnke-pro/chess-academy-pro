@@ -128,6 +128,19 @@ export interface UseDiscussionPracticeResult {
    *  is behind it; this is the same drawback comparison aimed at the student's
    *  own move. Null when nothing nameable was given up — which is most moves. */
   lastMoveDrawback: { line: string; square: string; kind: 'mistake' | 'drawback' } | null;
+  /** THE POSITION THE COACH IS ABOUT TO MOVE FROM, already analysed.
+   *
+   *  The engine read for the student's own move analyses the board AFTER it —
+   *  which is the board BEFORE the coach replies, with `bestMove` being the
+   *  COACH's best move and `evaluation` the eval it starts from. Everything
+   *  needed to judge the coach's reply was already computed here and thrown
+   *  away, which is why Learn could only call out the coach on a curated gem
+   *  and stayed silent when it blundered anywhere else (David 2026-08-10:
+   *  "the coach side needs wiring").
+   *
+   *  Handed up rather than acted on here, because this hook never sees the
+   *  reply — only the surface does. */
+  coachToMove: { fen: string; evalWhiteCp: number; bestUci: string | null; pvUci: string[] } | null;
   evaluatePlayerMove: (args: EvaluatePlayerMoveArgs) => Promise<void>;
   raiseSlipPrompt: (args: RaiseSlipPromptArgs) => void;
   submitReason: (reason: string) => Promise<void>;
@@ -231,6 +244,7 @@ export function useDiscussionPractice(
    *  because the rating arrives per-move rather than at construction. */
   const [hintDial, setHintDial] = useState<HintDial>(() => startDial(undefined));
   const [lastMoveDrawback, setLastMoveDrawback] = useState<{ line: string; square: string; kind: 'mistake' | 'drawback' } | null>(null);
+  const [coachToMove, setCoachToMove] = useState<UseDiscussionPracticeResult['coachToMove']>(null);
   const dialSeededRef = useRef(false);
 
   // TWO different switches, deliberately separated (David 2026-08-05).
@@ -286,6 +300,14 @@ export function useDiscussionPractice(
         bestLineEvalW = before.isMate ? undefined : before.evaluation;
         bestLineMate = before.isMate ? before.mateIn : null;
         replyPvUci = after.topLines?.[0]?.moves ?? (after.bestMove ? [after.bestMove] : []);
+        // Hand the pre-reply analysis up so the surface can judge the coach's
+        // own move against it — no second search, the numbers are right here.
+        setCoachToMove({
+          fen: args.fenAfter,
+          evalWhiteCp: after.evaluation,
+          bestUci: after.bestMove ?? null,
+          pvUci: replyPvUci,
+        });
       } catch {
         return; // engine down → never guess (G0/G3)
       }
@@ -699,6 +721,7 @@ export function useDiscussionPractice(
     goodMove,
     hintDial,
     lastMoveDrawback,
+    coachToMove,
     evaluatePlayerMove,
     raiseSlipPrompt,
     submitReason,

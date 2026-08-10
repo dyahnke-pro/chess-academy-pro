@@ -19,7 +19,7 @@ import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
-import { buildVoicePackage, describeVoicePackage, type VoicePackage } from '../../services/voicePackage';
+import { buildVoicePackage, describeVoicePackage, type VoicePackage, type VoiceFactKind } from '../../services/voicePackage';
 import { buildPositionalRead } from '../../services/positionalRead';
 import { curatedBeatAt } from '../../services/curatedBeatSource';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence } from '../../services/playCommentary';
@@ -170,6 +170,7 @@ import { scaleGap, packageForRegister, readsForRegister } from '../../services/h
 import { planFromUci, keySquareLine, positionReadLine, lineShapeLine, terminalReadLine, tacticWord } from '../../services/lookaheadPlan';
 import type { LookaheadPlan } from '../../services/lookaheadPlan';
 import { planMarks } from '../../services/planMarks';
+import { callInaccuracy } from '../../services/inaccuracyCall';
 import {
   noteFamilyFork, markWalked, unwalked, nextForkToOffer, progressAt,
   type ForkLog, type Fork,
@@ -1333,7 +1334,7 @@ export function CoachTeachPage(): JSX.Element {
    *  Keyed by fen because these are computed asynchronously, after the instant
    *  package has shipped, and a hint about a board the student has moved past
    *  is worse than no hint. */
-  const pendingVoiceRef = useRef<{ fen: string; lines: string[] } | null>(null);
+  const pendingVoiceRef = useRef<{ fen: string; lines: Array<{ kind: VoiceFactKind; text: string }> } | null>(null);
   /** Plan clauses already spoken this game. A plan is stable across plies — the
    *  same pin is still coming three moves later — so without this the coach
    *  chants. A five-ply sample from a real game repeated one line four times. */
@@ -6227,13 +6228,13 @@ export function CoachTeachPage(): JSX.Element {
    *  instruction) belongs in `facts` and stays there. `buildVoicePackage`
    *  refuses scaffolding anyway, so this is the honest filter rather than the
    *  last line of defence. */
-  const queueSpokenHint = useCallback((fen: string, line: string): void => {
+  const queueSpokenHint = useCallback((fen: string, line: string, kind: VoiceFactKind = 'computed'): void => {
     const text = line.trim();
     if (!text) return;
     const pending = pendingVoiceRef.current?.fen === fen
       ? pendingVoiceRef.current
-      : { fen, lines: [] };
-    if (!pending.lines.includes(text)) pending.lines.push(text);
+      : { fen, lines: [] as Array<{ kind: VoiceFactKind; text: string }> };
+    if (!pending.lines.some((l) => l.text === text)) pending.lines.push({ kind, text });
     pendingVoiceRef.current = pending;
   }, []);
 
@@ -6418,6 +6419,57 @@ export function CoachTeachPage(): JSX.Element {
                 try {
                   studentBest = await stockfishEngine.analyzeWithBudget(probe.fen(), 12, 1200);
                 } catch { /* engine down → thin (chess.js-only) context below */ }
+                // ── THE COACH JUDGES ITS OWN MOVE ──────────────────────────
+                // David 2026-08-10: "the coach side needs wiring." Until now
+                // Learn could only call out the coach when the position was in
+                // the curated gem list — blunder anywhere uncatalogued and it
+                // said nothing, leaving the student to spot a free piece alone.
+                //
+                // No second search. `coachToMove` is the analysis of the board
+                // the coach just moved FROM (computed to judge the student's
+                // move, then discarded), and `studentBest` is the board it
+                // moved TO. The coach's cost is the difference, in its own
+                // perspective.
+                try {
+                  const pre = discussion.coachToMove;
+                  if (pre && pre.fen === move.fen && studentBest) {
+                    const coachColor = playerColor === 'white' ? 'black' : 'white';
+                    const sign = coachColor === 'white' ? 1 : -1;
+                    const cpLoss = (pre.evalWhiteCp * sign) - (studentBest.evaluation * sign);
+                    // UCI → SAN on the pre-reply board. Inline because the
+                    // page's other converter is scoped to the move-picker.
+                    let bestSan: string | null = null;
+                    if (pre.bestUci) {
+                      try {
+                        const b = new Chess(pre.fen);
+                        const mv = b.move({
+                          from: pre.bestUci.slice(0, 2),
+                          to: pre.bestUci.slice(2, 4),
+                          promotion: pre.bestUci.slice(4, 5) || undefined,
+                        });
+                        bestSan = mv?.san ?? null;
+                      } catch { bestSan = null; }
+                    }
+                    const call = callInaccuracy({
+                      fenBefore: pre.fen,
+                      playedSan: m.san,
+                      bestSan,
+                      bestLineUci: pre.pvUci,
+                      cpLoss,
+                      side: 'coach',
+                      moverColor: coachColor,
+                    });
+                    if (call) {
+                      queueSpokenHint(probe.fen(), call.said, 'coachMistake');
+                      captureEvent('coach_inaccuracy_called', {
+                        surface: 'coach-teach',
+                        quality: call.quality,
+                        cost: call.cost,
+                      });
+                    }
+                  }
+                } catch { /* the callout is a bonus, never a blocker */ }
+
                 const tctx = buildTacticsLiveContext(probe.fen(), studentBest, studentCC, rating);
                 // Tactics facts are held back until the question decision
                 // below — when a guided-find or threat-check question arms,
@@ -7282,7 +7334,7 @@ export function CoachTeachPage(): JSX.Element {
                 if (pending && samePosition(pending.fen, fenAfterReply) && pending.lines.length > 0) {
                   pendingVoiceRef.current = null;
                   const hintPkg = buildVoicePackage(
-                    pending.lines.map((text) => ({ kind: 'computed' as const, text, fen: pending.fen })),
+                    pending.lines.map(({ kind, text }) => ({ kind, text, fen: pending.fen })),
                   );
                   if (hintPkg.spoken) {
                     speakTrackA(hintPkg.spoken);

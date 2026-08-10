@@ -140,3 +140,53 @@ describe('it stays silent rather than guessing', () => {
     }
   });
 });
+
+describe('the sign convention — the classic way this goes wrong', () => {
+  // CLAUDE.md carries this as a named trap ("the Stockfish `score cp` sign
+  // convention for pitfall verification = studentEval = -rawEval always"), and
+  // the coach-side callout is where it bites: the coach is the side the student
+  // is NOT, so every eval has to be flipped twice and it is easy to flip once.
+  //
+  // A sign error here does not crash or go silent — it congratulates the coach
+  // for blundering and apologises for its best moves, which is worse.
+  const FEN = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQK2R w KQkq - 0 6';
+
+  /** The arithmetic the surface performs, extracted so it can be tested. */
+  const coachCpLoss = (evalBeforeWhite: number, evalAfterWhite: number, coachColor: 'white' | 'black'): number => {
+    const sign = coachColor === 'white' ? 1 : -1;
+    return (evalBeforeWhite * sign) - (evalAfterWhite * sign);
+  };
+
+  it('a WHITE coach that drops a pawn shows a positive cost', () => {
+    // +50 → -50 in White's favour is 100 centipawns handed over.
+    expect(coachCpLoss(50, -50, 'white')).toBe(100);
+  });
+
+  it('a BLACK coach that drops a pawn shows a positive cost', () => {
+    // White-POV -50 → +50 is the BLACK coach getting worse by 100.
+    expect(coachCpLoss(-50, 50, 'black')).toBe(100);
+  });
+
+  it('a coach that IMPROVES its position shows a negative cost, and says nothing', () => {
+    expect(coachCpLoss(0, 120, 'white')).toBeLessThan(0);
+    expect(callInaccuracy({
+      fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5',
+      cpLoss: coachCpLoss(0, 120, 'white'), side: 'coach', moverColor: 'white',
+    }), 'the coach apologised for a good move').toBeNull();
+  });
+
+  it('speaks when the cost is real, whichever colour the coach is', () => {
+    for (const color of ['white', 'black'] as const) {
+      const cp = color === 'white' ? coachCpLoss(50, -200, 'white') : coachCpLoss(-50, 200, 'black');
+      const call = callInaccuracy({
+        fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', cpLoss: cp,
+        side: 'coach', moverColor: 'white',
+      });
+      // MISTAKE, not blunder — 250cp is a blunder only under CoachGamePage's
+      // old private band, which is exactly the divergence the consolidation
+      // removed. Writing this expectation from memory got it wrong first try,
+      // which is the argument for having one classifier rather than two.
+      expect(call?.quality, `${color} coach at ${cp}cp`).toBe('mistake');
+    }
+  });
+});
