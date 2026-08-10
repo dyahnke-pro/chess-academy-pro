@@ -594,3 +594,27 @@ describe('a passed pawn belongs to the side that has it', () => {
     }
   });
 });
+
+describe('an uncontested square has to earn the sentence', () => {
+  // Also found on PROD: "a7 is worth watching; the play keeps running through
+  // it" — in a quiet Italian, about a rim square nothing was fighting over. It
+  // reached the top slot on two touches and no contest. Contest is the whole
+  // signal; without it the traffic has to be heavy enough to mean something.
+  const key = (over: Partial<{ square: string; whiteTouches: number; blackTouches: number }>) => ([{
+    square: 'a7', whiteTouches: 2, blackTouches: 0, materialOnSquare: 0,
+    weight: 3, contested: false, ...over,
+  }]);
+
+  it('says nothing about a square one side merely passed through', () => {
+    expect(keySquareLine(key({}))).toBe('');
+  });
+
+  it('still speaks when one side keeps returning to it', () => {
+    expect(keySquareLine(key({ whiteTouches: 5 }))).toContain('worth watching');
+  });
+
+  it('always speaks for a contested square, however light the traffic', () => {
+    // Contest is the signal that does not need volume behind it.
+    expect(keySquareLine(key({ whiteTouches: 1, blackTouches: 1, contested: true }))).not.toBe('');
+  });
+});

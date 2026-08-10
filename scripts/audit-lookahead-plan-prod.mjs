@@ -165,17 +165,35 @@ async function main() {
     const planEvents = fresh.filter((e) => String(e.source ?? '').includes('lookahead')
       || String(e.summary ?? '').toLowerCase().includes('turns on')
       || String(e.summary ?? '').toLowerCase().includes('want to'));
-    record(
-      'the audit-stream saw this run',
-      after.ok ? fresh.length > 0 : true,
-      after.ok ? `${fresh.length} events, ${planEvents.length} plan-shaped` : `stream unavailable (${after.reason}) — informational`,
-    );
+    // INFORMATIONAL, not a check. The init script points the app's stream at
+    // the LOCAL listener, so prod's stream cannot also receive these events —
+    // asserting on it fails by construction and blames the app for the audit's
+    // own wiring. The listener is the instrument here; the prod stream is
+    // context for whatever else was happening.
+    console.log(`[stream] ${fresh.length} prod events in the window, ${planEvents.length} plan-shaped (informational)`);
 
     // ── THE CONTRACT. Every spoken line the run captured must obey the rules
     //    the unit gates prove offline: no move handed over, no raw identifier.
     const lines = [...spoken, ...fresh.map((e) => String(e.summary ?? ''))].filter(Boolean);
-    const leakedMove = lines.filter((l) => /LOOK-AHEAD|want to|turns on/i.test(l) && movesIn(l).length > 0);
-    record('no plan line handed over a move', leakedMove.length === 0, leakedMove.slice(0, 2).join(' | ') || 'clean');
+    // SCOPE THE CHECK TO THE PLAN'S OWN SENTENCES. An utterance bundles the
+    // corpus note AND the computed lanes, and a corpus note is ALLOWED to name
+    // moves — that is what an opening note is. Testing the whole bundle flagged
+    // "Bxh2 gives black a passive bishop" as the plan handing over a move,
+    // which is the audit reading the wrong half of the string.
+    const planSentences = lines
+      .flatMap((l) => l.split(/(?<=[.!?])\s+/))
+      .filter((sn) => /\b(want to|turns on|is worth watching|is contested|bring (your|their) pieces)\b/i.test(sn));
+    const leakedMove = planSentences.filter((sn) => movesIn(sn).length > 0);
+    record(
+      'no plan sentence handed over a move',
+      leakedMove.length === 0,
+      leakedMove.slice(0, 2).join(' | ') || `clean across ${planSentences.length} plan sentences`,
+    );
+    record(
+      'the plan actually spoke on prod',
+      planSentences.length > 0,
+      `${planSentences.length} plan sentences in ${spoken.length} narration events`,
+    );
 
     const rawId = lines.filter((l) => /want to land a [a-z]+_[a-z]+/.test(l));
     record('no raw detector identifier reached the voice', rawId.length === 0, rawId.slice(0, 2).join(' | ') || 'clean');

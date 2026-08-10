@@ -176,3 +176,48 @@ describe('the one-sentence face still behaves', () => {
     expect(buildPositionalRead('8/8/4k3/8/8/4K3/8/8 w - - 0 1', 'white')).toBe('');
   });
 });
+
+describe('a piece that has not moved is not a problem piece', () => {
+  // Found on PROD, not in the unit gates, because it was TRUE and useless
+  // rather than false. A live run said at move two: "Your bishop on f1 is your
+  // problem piece — bad bishop (hemmed in by its own pawns) — and the pawn move
+  // to a3 is what fixes it." a3 "fixes" it only because a2 is a light square,
+  // so pushing it drops the pawn count below the bad-bishop threshold.
+  //
+  // Every game starts with both bishops hemmed in. The test was firing on the
+  // starting position itself.
+  const AFTER_NC6 = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 5 4';
+
+  it('never calls a home-rank piece the problem piece', () => {
+    for (const side of ['white', 'black'] as const) {
+      for (const o of readPosition(AFTER_NC6, side)) {
+        if (o.kind !== 'piece' || !o.text.includes('problem piece')) continue;
+        const square = o.key.split('-').pop() ?? '';
+        expect(square, `"${o.text}" — that piece has not moved yet`).not.toMatch(/^[a-h][18]$/);
+      }
+    }
+  });
+
+  it('never joins a home-rank piece to a pawn move', () => {
+    for (const side of ['white', 'black'] as const) {
+      for (const o of readPosition(AFTER_NC6, side)) {
+        if (o.kind !== 'plan') continue;
+        const pieceSquare = o.key.split('-')[2];
+        expect(pieceSquare, `"${o.text}" — the "problem" piece is still at home`)
+          .not.toMatch(/^[a-h][18]$/);
+      }
+    }
+  });
+
+  it('still names a genuinely bad piece once it has moved', () => {
+    // The guard must not silence the real case. A French-structure bishop that
+    // has developed and IS walled in is exactly what this observation is for.
+    const FRENCH = 'r1bqk2r/pp1n1ppp/2n1p3/2ppP3/3P4/2PB1N2/PP3PPP/RNBQK2R w KQkq - 0 8';
+    const obs = [...readPosition(FRENCH, 'white'), ...readPosition(FRENCH, 'black')];
+    for (const o of obs) {
+      if (!o.text.includes('problem piece')) continue;
+      expect(o.key.split('-').pop()).not.toMatch(/^[a-h][18]$/);
+    }
+    expect(obs.length, 'the guard silenced the whole read').toBeGreaterThan(0);
+  });
+});

@@ -155,7 +155,10 @@ function observationsFor(
         : `Their ${NAME[outpost.piece] ?? 'piece'} on ${outpost.square} is their best-placed piece — ${outpost.reason}. Trading it off is a plan in itself.`,
     });
   }
-  const bad = quality.find((q) => q.color === color && q.quality === 'bad');
+  // Same rule as the join: a piece still on its starting square is not a
+  // problem piece, it is a piece that has not been developed yet.
+  const startRank = color === 'w' ? '1' : '8';
+  const bad = quality.find((q) => q.color === color && q.quality === 'bad' && q.square[1] !== startRank);
   if (bad) {
     out.push({
       key: `${side}-bad-${bad.square}`, side, kind: 'piece', rank: rank('piece'),
@@ -221,6 +224,15 @@ function joinsFor(
   const out: PositionalObservation[] = [];
   let probe: Chess;
   try { probe = new Chess(turned); } catch { return []; }
+  // A PIECE THAT HAS NOT MOVED IS NOT A PROBLEM PIECE. Every game starts with
+  // both bishops hemmed in by their own pawns, so the bad-bishop test is true
+  // of the opening position itself. A live prod run duly said, at move two,
+  // "your bishop on f1 is your problem piece … and the pawn move to a3 is what
+  // fixes it" — a3 "fixes" it only because a2 is a light square, so pushing it
+  // drops the count below the threshold. True arithmetic, absurd teaching.
+  const homeRank = color === 'w' ? '1' : '8';
+  const atHome = new Set(badBefore.filter((b) => b.square[1] === homeRank).map((b) => b.square as string));
+
   for (const mv of probe.moves({ verbose: true })) {
     if (mv.piece !== 'p') continue;
     let after: Chess;
@@ -234,6 +246,7 @@ function joinsFor(
         .map((q) => q.square as string),
     );
     for (const b of badBefore) {
+      if (atHome.has(b.square)) continue; // see `atHome`
       // The piece must not merely have MOVED out of the list — it has to still
       // be on its square and no longer be bad.
       if (stillBad.has(b.square)) continue;

@@ -549,6 +549,12 @@ export function keySquareLine(
   if (top.contested) {
     return `${top.square} is contested — both sides have designs on it.`;
   }
+  // AN UNCONTESTED SQUARE HAS TO EARN THE SENTENCE. One side passing through
+  // twice is not "the play keeps running through it" — a live prod run offered
+  // "a7 is worth watching" in a quiet Italian, which is a rim square nothing
+  // was fighting over. Contest is the whole signal; without it, the traffic has
+  // to be heavy enough to mean something on its own.
+  if (top.whiteTouches + top.blackTouches < 4) return '';
   return `${top.square} is worth watching; the play keeps running through it.`;
 }
 
