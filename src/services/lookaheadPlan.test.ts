@@ -334,13 +334,26 @@ describe('the sentence is ordered by the position, not by a fixed ladder', () =>
       .toContain('stop it');
   });
 
-  it('never lists more than three things', () => {
+  it('says EVERYTHING the line earned, most important first', () => {
+    // There was a three-clause cap here. David removed it (2026-08-10: "I want
+    // to hear everything the PV has to say. Do not limit it.") — every clause
+    // is a distinct board-true fact the engine's own line produced, and a cap
+    // silently discarded the lowest-ranked ones. What keeps an uncapped
+    // sentence safe is the RANKING, so that is what this now holds.
     const loud = say({
       tactic: 'fork', nearEnemyKing: 4, shieldStripped: 3, materialSwing: 5,
       passedPawns: ['a7'], outposts: ['e5'], opening: ['c'], trading: ['rook'],
     });
-    // Eight facts available; a coach that lists eight has said nothing.
-    expect(loud.split(/,| and /).length).toBeLessThanOrEqual(3);
+    expect(loud.split(/,| and /).length, 'clauses were dropped').toBeGreaterThan(3);
+    // Ranking still decides the ORDER, which is what makes an uncapped
+    // sentence safe: a student who moves again mid-sentence loses only the
+    // tail. Stripping three shield pawns scores 99 and a fork 90, so the
+    // pawns lead here — the scorer answering to the position rather than to a
+    // fixed ladder is the whole design.
+    const lead = loud.replace(/^You want to /, '');
+    expect(lead).toMatch(/^pull the pawns away/);
+    // …and the cheapest clause is last, not missing.
+    expect(loud).toContain('open the c-file');
   });
 
   it('falls back to where the pieces are going when nothing concrete happens', () => {
@@ -646,13 +659,16 @@ describe('the plan does not repeat itself', () => {
     expect(second, 'the coach repeated itself verbatim').not.toBe(first);
   });
 
-  it('DESCENDS rather than falling silent while it still has facts', () => {
-    // Suppressing without descending turns the ply into silence, which is the
-    // other half of the same failure.
+  it('says it ALL on the first ply, then has nothing left to repeat', () => {
+    // Before the cap came off, the plan trickled out three clauses at a time
+    // and this test held it to descending rather than falling silent. Uncapped,
+    // the first ply says everything the line earned — so silence afterwards is
+    // the CORRECT answer, not a regression. What must never happen is the same
+    // clause twice.
     const said = new Set<string>();
-    const lines = [1, 2].map(() => describePlan(P, 'mine', said)).filter(Boolean);
-    expect(lines.length).toBe(2);
-    expect(new Set(lines).size).toBe(2);
+    const first = describePlan(P, 'mine', said);
+    expect(first).not.toBe('');
+    expect(describePlan(P, 'mine', said), 'repeated a clause it had already spoken').toBe('');
   });
 
   it('goes quiet once it has genuinely said everything', () => {
@@ -670,9 +686,12 @@ describe('the plan does not repeat itself', () => {
     const said = new Set<string>();
     const a = positionReadLine(read, 'white', said);
     const b = positionReadLine(read, 'white', said);
+    // Uncapped, the first call says every fresh rung — the pin, the islands and
+    // the half-open file — so the second correctly has nothing left.
     expect(a).toContain('pin');
+    expect(a, 'the read spoke one rung and discarded the rest').toContain('islands');
     expect(b, 'the same board fact was spoken twice running').not.toBe(a);
-    expect(b, 'it fell silent instead of descending to the next true fact').not.toBe('');
+    expect(b, 'nothing was left, so silence is right').toBe('');
   });
 });
 

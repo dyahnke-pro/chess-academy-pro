@@ -14,7 +14,7 @@
 // here comes with the specific thing that changed on the board.
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { findConcession, concessionPackage, findStudentDrawback } from './concessionBeat';
+import { findConcession, concessionPackage, findStudentDrawback, whatItAllowed } from './concessionBeat';
 
 describe('the beat fires only on a drawback code can NAME', () => {
   it('says nothing when the coach played the engine\'s move', () => {
@@ -294,5 +294,73 @@ describe('tense: retroactive is past, what is coming is future', () => {
       }
     }
     expect(seen, 'the sweep never fired — it proved nothing').toBeGreaterThan(0);
+  });
+});
+
+describe('the rear-facing PV — what the move let them do', () => {
+  // David 2026-08-10: "I did not hear the rear facing PV." He hadn't: across a
+  // full game with EIGHT captured slips — one at 648 centipawns — the backward
+  // look fired zero times. `findStudentDrawback` names five structural
+  // concessions and stays silent on everything else, and a blunder that hands
+  // over a piece concedes no outpost and abandons no defender.
+  const AFTER_SLIP = 'r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 5 4';
+
+  /** A real line for the side to move, straight off chess.js. */
+  function lineFrom(fen: string, plies = 8): string[] {
+    const board = new Chess(fen);
+    const out: string[] = [];
+    for (let i = 0; i < plies; i += 1) {
+      const ms = board.moves({ verbose: true });
+      if (!ms.length) break;
+      const m = ms[i % ms.length];
+      board.move(m.san);
+      out.push(`${m.from}${m.to}`);
+    }
+    return out;
+  }
+
+  it('speaks when the structural read has nothing to say', () => {
+    const said = whatItAllowed({
+      fenAfter: AFTER_SLIP,
+      opponentPv: lineFrom(AFTER_SLIP),
+      studentColor: 'white',
+      cpLoss: 200,
+    });
+    // Not every line describes something, but when it does it must be framed
+    // as a consequence rather than as a forecast.
+    if (said) expect(said.line).toMatch(/^That (let|gave) them/);
+  });
+
+  it('stays quiet on a move that cost nothing', () => {
+    // Below the bar the opponent's line is just a normal reply, and "that let
+    // them…" about ordinary play teaches the student to distrust the coach.
+    expect(whatItAllowed({
+      fenAfter: AFTER_SLIP,
+      opponentPv: lineFrom(AFTER_SLIP),
+      studentColor: 'white',
+      cpLoss: 20,
+    })).toBeNull();
+  });
+
+  it('stays quiet when the line is too short to read', () => {
+    expect(whatItAllowed({
+      fenAfter: AFTER_SLIP, opponentPv: ['b8c6'], studentColor: 'white', cpLoss: 300,
+    })).toBeNull();
+  });
+
+  it('NEVER hands over a move', () => {
+    // The honesty contract holds looking backward as much as forward.
+    for (const cp of [80, 200, 900]) {
+      const said = whatItAllowed({
+        fenAfter: AFTER_SLIP, opponentPv: lineFrom(AFTER_SLIP), studentColor: 'white', cpLoss: cp,
+      });
+      if (said) expect(said.line).not.toMatch(/\b[NBRQK][a-h]?[1-8]?x?[a-h][1-8]\b/);
+    }
+  });
+
+  it('survives an unreadable board without throwing', () => {
+    expect(() => whatItAllowed({
+      fenAfter: 'not a fen', opponentPv: lineFrom(AFTER_SLIP), studentColor: 'white', cpLoss: 300,
+    })).not.toThrow();
   });
 });

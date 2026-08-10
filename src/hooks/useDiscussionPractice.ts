@@ -28,7 +28,7 @@ import { Chess } from 'chess.js';
 import { stockfishEngine } from '../services/stockfishEngine';
 import { detectSlip, slipWarrantsInterjection, isNearBest, slipSeverityLabel, type SlipSeverity } from '../services/slipDetector';
 import { startDial, recordAttempt, type HintDial } from '../services/hintRegister';
-import { findStudentDrawback } from '../services/concessionBeat';
+import { findStudentDrawback, whatItAllowed } from '../services/concessionBeat';
 import { buildWhyPrompt, buildGroundedReveal, buildSlipReveal, captureMisconception, findMoverTactic, withReasonLead } from '../services/discussionPractice';
 import { buildMisconceptionCallback } from '../services/misconceptionCallbacks';
 import { buildMoveReasonOptions } from '../services/moveReasonOptions';
@@ -264,6 +264,10 @@ export function useDiscussionPractice(
       let bestPvUci: string[] | undefined;
       let bestLineEvalW: number | undefined;
       let bestLineMate: number | null | undefined;
+      /** The OPPONENT's best line from the position after the student moved —
+       *  the rear-facing PV. Already computed for the eval; it was being
+       *  discarded. See `whatItAllowed`. */
+      let replyPvUci: string[] = [];
       try {
         const [before, after] = await Promise.all([
           stockfishEngine.analyzePosition(args.fenBefore, ANALYSIS_DEPTH),
@@ -280,6 +284,7 @@ export function useDiscussionPractice(
         bestPvUci = before.topLines?.[0]?.moves ?? (before.bestMove ? [before.bestMove] : []);
         bestLineEvalW = before.isMate ? undefined : before.evaluation;
         bestLineMate = before.isMate ? before.mateIn : null;
+        replyPvUci = after.topLines?.[0]?.moves ?? (after.bestMove ? [after.bestMove] : []);
       } catch {
         return; // engine down → never guess (G0/G3)
       }
@@ -304,17 +309,33 @@ export function useDiscussionPractice(
       // THE BACKWARD LOOK. Same comparison the coach runs on its own moves,
       // pointed at the student's — so it fires only when code can NAME what the
       // move handed over, never on "that was worse by 80 centipawns".
-      setLastMoveDrawback(bestSan
-        ? (() => {
+      setLastMoveDrawback((() => {
+        // FIRST the structural read — it NAMES the thing given up ("that took
+        // your last defender off d5"), which is the most teachable form.
+        if (bestSan) {
           const d = findStudentDrawback({
             fen: args.fenBefore,
             playedSan: args.playedSan,
             bestSan,
             studentColor: args.playerColor,
           });
-          return d ? { line: `${d.said} ${d.opening}`, square: d.square } : null;
-        })()
-        : null);
+          if (d) return { line: `${d.said} ${d.opening}`, square: d.square };
+        }
+        // THEN the rear-facing PV. The structural read covers five nameable
+        // concessions and stays silent on everything else — measured on a real
+        // game, eight slips including a 648-centipawn blunder produced ZERO
+        // backward looks, because dropping a piece concedes no outpost. The
+        // opponent's own best line from here says what the move allowed, in
+        // moves they would really play.
+        try {
+          return whatItAllowed({
+            fenAfter: args.fenAfter,
+            opponentPv: replyPvUci,
+            studentColor: args.playerColor,
+            cpLoss,
+          });
+        } catch { return null; }
+      })());
 
       const followedBook = args.inBook && !!args.bookMoveSan
         && args.playedSan.replace(/[+#]$/, '') === args.bookMoveSan.replace(/[+#]$/, '');

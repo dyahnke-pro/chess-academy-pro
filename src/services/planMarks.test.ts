@@ -232,3 +232,82 @@ describe('a full game marks only what it says', () => {
     expect(checked, 'the sweep never computed a plan — the fixture is broken').toBeGreaterThan(5);
   }, 30_000);
 });
+
+describe('an arrow is a move somebody could actually play', () => {
+  // David 2026-08-10, from a live screenshot: "bad arrows, not deterministically
+  // made." The board drew `f6-b6` and `f6-c4` — a knight on f6 reaching neither
+  // square in one move, two straight lines out of the same piece.
+  //
+  // The cause was this file's own cleverness: `originOf` walks the chain back so
+  // a knight going f3→d4→b5 is drawn from where the student can SEE it. That
+  // reads well in prose and draws a line through squares the piece never
+  // travels, which is indistinguishable from a hallucination.
+  const positions: Array<[string, 'white' | 'black']> = [
+    ['rnbqk2r/1p2bppp/p3pn2/3p4/3PP3/2NBBN2/PP3PPP/R2QK2R w KQkq - 0 9', 'white'],
+    ['r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQK2R b KQkq - 0 5', 'black'],
+    ['r3k2r/1b2bppp/p3p3/1p2P3/1P2B3/P1B5/4nPPP/R3NRK1 w kq - 1 20', 'white'],
+  ];
+
+  it('THE REGRESSION: never draws a move that is not legal right now', () => {
+    for (const [fen, side] of positions) {
+      const board = new Chess(fen);
+      // Drive real engine-shaped lines: the first legal move and five replies.
+      const probe = new Chess(fen);
+      const uci: string[] = [];
+      for (let i = 0; i < 8; i += 1) {
+        const ms = probe.moves({ verbose: true });
+        if (!ms.length) break;
+        const m = ms[i % ms.length];
+        probe.move(m.san);
+        uci.push(`${m.from}${m.to}`);
+      }
+      const plan = planFromUci(fen, uci, side);
+      if (!plan) continue;
+      const marks = planMarks({ plan, spoken: utterance(plan), fen, studentColor: side });
+      for (const a of marks.arrows) {
+        const legal = board.moves({ verbose: true })
+          .some((m) => m.from === a.startSquare && m.to === a.endSquare);
+        expect(legal, `${a.startSquare}-${a.endSquare} is not a legal move in ${fen}`).toBe(true);
+      }
+    }
+  });
+
+  it('never draws two arrows out of the same piece', () => {
+    // "f6-b6 AND f6-c4" — even when both are legal, one piece going to two
+    // places at once is not a thing a board can show.
+    for (const [fen, side] of positions) {
+      const probe = new Chess(fen);
+      const uci: string[] = [];
+      for (let i = 0; i < 8; i += 1) {
+        const ms = probe.moves({ verbose: true });
+        if (!ms.length) break;
+        probe.move(ms[i % ms.length].san);
+        uci.push(`${ms[i % ms.length].from}${ms[i % ms.length].to}`);
+      }
+      const plan = planFromUci(fen, uci, side);
+      if (!plan) continue;
+      const marks = planMarks({ plan, spoken: utterance(plan), fen, studentColor: side });
+      const origins = marks.arrows.map((a) => a.startSquare);
+      expect(new Set(origins).size, `two arrows from ${origins.join(', ')}`).toBe(origins.length);
+    }
+  });
+
+  it('still HIGHLIGHTS a destination it will not arrow', () => {
+    // Losing the arrow must not lose the lead-the-eye. A journey the piece
+    // cannot make in one move still marks where the play is going.
+    const fen = 'rnbqk2r/1p2bppp/p3pn2/3p4/3PP3/2NBBN2/PP3PPP/R2QK2R w KQkq - 0 9';
+    const probe = new Chess(fen);
+    const uci: string[] = [];
+    for (let i = 0; i < 8; i += 1) {
+      const ms = probe.moves({ verbose: true });
+      if (!ms.length) break;
+      probe.move(ms[0].san);
+      uci.push(`${ms[0].from}${ms[0].to}`);
+    }
+    const plan = planFromUci(fen, uci, 'white');
+    if (!plan) return;
+    const marks = planMarks({ plan, spoken: utterance(plan), fen, studentColor: 'white' });
+    if (marks.highlights.length === 0) return; // nothing was claimed this ply
+    expect(marks.highlights.length).toBeGreaterThanOrEqual(marks.arrows.length);
+  });
+});

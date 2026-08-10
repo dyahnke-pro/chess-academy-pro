@@ -92,6 +92,31 @@ function originOf(path: readonly PlanStep[], index: number, board: Chess): strin
 }
 
 /**
+ * IS THIS ARROW A MOVE SOMEBODY COULD ACTUALLY PLAY, RIGHT NOW?
+ *
+ * David 2026-08-10, from a live screenshot: "bad arrows, not deterministically
+ * made." The board showed `f6-b6` and `f6-c4` — a knight on f6 reaching neither
+ * square in one move, drawn as two straight lines out of the same piece.
+ *
+ * The cause was this file's own cleverness. `originOf` walks the chain back so a
+ * knight going f3→d4→b5 is drawn from where the student can SEE it, which reads
+ * well in prose and draws a line through squares the piece never travels. Three
+ * moves compressed into one arrow is indistinguishable from a hallucination, and
+ * the student is right not to trust it.
+ *
+ * So the arrow now has to survive chess.js: legal, from this position, this
+ * move. Journeys keep their destination HIGHLIGHT — the eye is still led, and
+ * nothing on the board claims a move that isn't there.
+ */
+function isLegalNow(board: Chess, from: string, to: string): boolean {
+  try {
+    return board.moves({ verbose: true }).some((m) => m.from === from && m.to === to);
+  } catch {
+    return false;
+  }
+}
+
+/**
  * The marks for one spoken utterance.
  *
  * `spoken` is the text the student HEARD — post-verification, post-grading. Pass
@@ -165,7 +190,13 @@ export function planMarks(args: {
     if (index === 0 && plan.path[0].color === myColor) continue;
     const origin = originOf(plan.path, index, board);
     if (!origin || origin === square) continue;
+    // Legal, from THIS board, in ONE move — or no arrow at all. See `isLegalNow`.
+    if (!isLegalNow(board, origin, square)) continue;
     if (arrows.some((a) => a.startSquare === origin && a.endSquare === square)) continue;
+    // ONE ARROW PER PIECE. The same knight heading for two squares at two
+    // different moments drew two lines out of one square — even when both were
+    // legal, that reads as the piece going to both places at once.
+    if (arrows.some((a) => a.startSquare === origin)) continue;
     arrows.push({
       startSquare: origin,
       endSquare: square,

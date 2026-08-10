@@ -5538,6 +5538,17 @@ export function CoachTeachPage(): JSX.Element {
     /** Squares the alert lane has already spoken about on this turn — see the
      *  root-cause note at the `buildPlayCommentary` call below. */
     const spokenSquaresThisTurn = new Set<string>();
+    /** The squares of the tactic each lane NAMED — the geometry to draw.
+     *
+     *  David 2026-08-10: "I did not… see middlegame forks." He HEARD them —
+     *  "pawn on d4 forks bishop on e3 and knight on c3" is in his log three
+     *  times — and the board never marked one square of any of them. The only
+     *  arrow the alert lane could paint was the capture of a hanging piece, so
+     *  a fork, a pin, a skewer and a back-rank threat all spoke to a bare
+     *  board. The detector already returns the squares involved; this draws
+     *  what was computed rather than computing something new. */
+    let tacticSquares: string[] = [];
+    let threatSquares: string[] = [];
     const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
     const AV: Record<string, number> = { n: 3, b: 3, r: 5, q: 9 };
     const factLines: string[] = [];
@@ -5575,6 +5586,16 @@ export function CoachTeachPage(): JSX.Element {
       /** The tactic type the STUDENT has available, so the threat lane can tell
        *  when both lanes are about to describe the same shape. */
       let myTacticType: string | null = null;
+      /** The squares of the tactic each lane NAMED — the geometry to draw.
+       *
+       *  David 2026-08-10: "I did not… see middlegame forks." He HEARD them —
+       *  "pawn on d4 forks bishop on e3 and knight on c3" is in his log three
+       *  times — and the board never marked one square of any of them. The only
+       *  arrow the alert lane could paint was the capture of a hanging piece;
+       *  a fork, a pin, a skewer, a back-rank threat all spoke to a bare board.
+       *  The detector already returns the squares involved, so this is drawing
+       *  what was computed, not computing something new. */
+
       const myHanging = tctx.hanging
         .filter((h) => h.color === studentCC && AV[h.piece] !== undefined)
         .sort((a, b) => (AV[b.piece] ?? 0) - (AV[a.piece] ?? 0));
@@ -5600,6 +5621,7 @@ export function CoachTeachPage(): JSX.Element {
       } else if (theirHanging.length > 0) {
         const prize = theirHanging[0];
         tacticKey = `win:${prize.piece}${prize.square}`;
+        tacticSquares = [prize.square];
         tacticLine = `Their ${NAME[prize.piece] ?? 'piece'} on ${prize.square} has nothing defending it — there's something to win here.`;
       } else {
         const mine = tctx.immediate.filter((t) => t.side === 'student');
@@ -5614,6 +5636,7 @@ export function CoachTeachPage(): JSX.Element {
           const word = tacticWord(t.type);
           tacticLine = word ? `There's a ${word} here for you — have a look.` : null;
           myTacticType = word ? t.type : null;
+          if (word) tacticSquares = t.squares.filter((sq) => /^[a-h][1-8]$/.test(sq));
         }
       }
       if (againstMe.length > 0) {
@@ -5626,6 +5649,7 @@ export function CoachTeachPage(): JSX.Element {
         // is pinning against are what identify the threat.
         const ends = [t.squares[0] ?? '', t.squares[t.squares.length - 1] ?? ''];
         threatKey = `vs:${t.type}:${ends.join('')}`;
+        threatSquares = t.squares.filter((sq) => /^[a-h][1-8]$/.test(sq));
         threatLine = `Watch out — ${t.description.charAt(0).toLowerCase()}${t.description.slice(1)}.`;
         // SAY WHOSE, WHEN BOTH ARE THE SAME SHAPE. David's transcript, 02:50:
         // "Watch out — queen on a5 pins knight on c3 against king on e1.
@@ -5642,6 +5666,7 @@ export function CoachTeachPage(): JSX.Element {
       } else if (myHanging.length > 0) {
         const worst = myHanging[0];
         threatKey = `hang:${worst.piece}${worst.square}`;
+        threatSquares = [worst.square];
         threatLine = `Careful — your ${NAME[worst.piece] ?? 'piece'} on ${worst.square} is attacked and nothing's defending it.`;
         const flip = args.fenAfterReply.split(' ');
         flip[1] = studentCC === 'w' ? 'b' : 'w';
@@ -5665,6 +5690,7 @@ export function CoachTeachPage(): JSX.Element {
       // out loud. Guard on the words the student hears, not on the board state
       // behind them.
       if (tacticLine && (tacticKey === lastTacticRef.current || spokenTacticLinesRef.current.has(tacticLine))) {
+        tacticSquares = [];
         tacticLine = null;
       } else if (tacticLine) {
         lastTacticRef.current = tacticKey;
@@ -5674,6 +5700,7 @@ export function CoachTeachPage(): JSX.Element {
       if (threatLine && (threatKey === lastThreatRef.current || spokenThreatLinesRef.current.has(threatLine))) {
         threatLine = null;
         alertArrow = null;
+        threatSquares = [];
       } else if (threatLine) {
         lastThreatRef.current = threatKey;
         spokenThreatLinesRef.current.add(threatLine);
@@ -6136,6 +6163,23 @@ export function CoachTeachPage(): JSX.Element {
           planArrows.push(...marks.arrows);
           planHighlights.push(...marks.highlights);
         } catch { /* the marks are lead-the-eye, never a blocker */ }
+      }
+      // THE TACTIC THE COACH JUST NAMED. Only for a line that SURVIVED into
+      // the utterance — a mark for a claim the package refused is the same lie
+      // drawn instead of said, which is the rule the whole marks build keeps.
+      // Red for what is coming AT the student, green for what is theirs to
+      // find; neither hands over a move, because a tactic's squares are the
+      // pieces involved, not a from-to.
+      const markTactic = (squares: string[], color: string): void => {
+        for (const sq of squares.slice(0, 3)) {
+          if (!planHighlights.some((h) => h.square === sq)) planHighlights.push({ square: sq, color });
+        }
+      };
+      if (threatSquares.length > 0 && pkg.kept.some((f) => f.kind === 'threat')) {
+        markTactic(threatSquares, '#ef4444');
+      }
+      if (tacticSquares.length > 0 && pkg.kept.some((f) => f.kind === 'tactic')) {
+        markTactic(tacticSquares, '#22c55e');
       }
       // THE SQUARE THE LAST MOVE GAVE UP. The backward look already names it
       // out loud ("…that gives up control of d5"); this is the same fact,
@@ -6610,9 +6654,22 @@ export function CoachTeachPage(): JSX.Element {
                         // second. Deterministic like the rest: fixed templates,
                         // computed values, no model between board and words.
                         const board = positionReadLine(plan.read, playerColor, planSaidRef.current, probe.fen());
+                        // EVERYTHING THE PV HAS TO SAY (David 2026-08-10: "I
+                        // want to hear everything the PV has to say. Do not
+                        // limit it."). This used to keep TWO of the four PV
+                        // sentences on most registers — the key square, the
+                        // board read, and the two plans are all computed from
+                        // the same line, all board-true, and half of them were
+                        // being thrown away unheard. The hint REGISTER governs
+                        // how much help a HINT gives; it has no business
+                        // truncating what the position actually says.
+                        //
+                        // Repetition is still governed, and that is the right
+                        // kind of limit: `planSaidRef` stops the same clause
+                        // being spoken twice across plies. Saying less is not
+                        // the same as not repeating.
                         const said = [key, board, plan.theirs.text, plan.mine.text]
                           .filter(Boolean)
-                          .slice(0, discussion.hintDial.register === 'obvious' ? 3 : 2)
                           .join(' ');
                         if (said) {
                           lookaheadPlanRef.current = { fen: probe.fen(), text: said, plan };

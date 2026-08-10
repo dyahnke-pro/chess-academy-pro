@@ -24,6 +24,7 @@
 // something to excuse.
 import { Chess, type Color } from 'chess.js';
 import { findWeakPawns, findPieceQuality } from './positionReadingService';
+import { planFromUci } from './lookaheadPlan';
 
 export type DrawbackKind =
   | 'defender-left'
@@ -348,4 +349,64 @@ export function findStudentDrawback(args: {
     // cost has not. Both tenses in one beat is the point, not an oversight.
     opening: `Worth seeing before it costs you something.`,
   };
+}
+
+/**
+ * THE REAR-FACING PV — what the move you just played lets them do.
+ *
+ * David 2026-08-10: "I did not hear the rear facing PV." He hadn't: across a
+ * full game with eight captured slips — including one at 648 centipawns — the
+ * backward look fired ZERO times. `findStudentDrawback` above is deliberately
+ * narrow (five nameable structural concessions, forcing moves excluded), and
+ * narrow turns out to mean "almost never" on a real board. A blunder that hands
+ * over a piece concedes no outpost and abandons no defender, so it says nothing
+ * — which is the worst possible moment for the backward look to be silent.
+ *
+ * The engine already answers this and we were throwing the answer away. The
+ * analysis of the position AFTER the student moves carries the OPPONENT's best
+ * line, and that line IS the consequence: what they get to do now, in moves
+ * they would really play. Reading it with the same `planFromUci` the forward
+ * plan uses costs no extra search — it is the read that was missing, not the
+ * data. (Exactly the argument that produced the two-sided forward plan.)
+ *
+ * Returns null when the line is too short to describe, or when it describes
+ * nothing worth a sentence. No move is ever named: the honesty contract holds
+ * looking backward as much as forward.
+ */
+export function whatItAllowed(args: {
+  /** The position AFTER the student's move — the opponent is to play. */
+  fenAfter: string;
+  /** The opponent's best line from there, UCI, straight off the engine. */
+  opponentPv: readonly string[];
+  studentColor: 'white' | 'black';
+  /** How much the move actually cost, centipawns. Below the bar the line
+   *  describes a normal reply rather than a consequence, and saying "that let
+   *  them…" about ordinary play teaches the student to distrust the coach. */
+  cpLoss: number;
+}): { line: string; square: string } | null {
+  if (args.cpLoss < 60) return null;
+  if (args.opponentPv.length < 4) return null;
+  const plan = planFromUci(args.fenAfter, args.opponentPv, args.studentColor);
+  // `theirs` is the opponent — the side to move here, whose line this is.
+  const said = plan?.theirs.text?.trim();
+  if (!said) return null;
+
+  // "They want to win a piece." → "That let them win a piece." The fact is
+  // unchanged; the tense and the frame are what make it a backward look, and
+  // both are rewritten deterministically rather than regenerated.
+  const want = /^They want to (.+?)\.?$/.exec(said);
+  const drift = /^They're bringing pieces to (.+?) over the next few moves\.?$/.exec(said);
+  const line = want
+    ? `That let them ${want[1]}.`
+    : drift
+      ? `That gave them the run of ${drift[1]}.`
+      : null;
+  if (!line) return null;
+
+  // The square to mark: where their line actually lands first, so the eye goes
+  // to the consequence rather than to the move that caused it.
+  const square = plan?.theirs.spokenClauses.flatMap((c) => c.squares)[0]
+    ?? plan?.path.find((p) => p.color !== args.studentColor)?.to
+    ?? '';
+  return { line, square };
 }

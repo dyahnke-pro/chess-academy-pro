@@ -480,7 +480,19 @@ export function describePlan(
   // same reason: a repeated line and a missing line are both failures, and
   // there is usually a third true thing to say.
   const fresh = said ? ranked.filter((c) => !said.has(c.text)) : ranked;
-  const chosen = (fresh.length > 0 ? fresh : []).slice(0, 3);
+  // EVERY CLAUSE THE LINE EARNED (David 2026-08-10: "I want to hear everything
+  // the PV has to say. Do not limit it."). There was a three-clause cap here,
+  // justified by "a coach that lists ten things has told the student nothing" —
+  // but every clause is a distinct, board-true fact the engine's own line
+  // produced, and a cap silently discards the ones ranked lowest. Ranking
+  // still runs, so the most important thing is still said FIRST; that is what
+  // makes an uncapped sentence safe, and it is the same argument that removed
+  // the fact budget from the package.
+  //
+  // The said-set is the limit that stays, because it governs REPETITION rather
+  // than content: nothing is dropped for being the fourth thing, only for
+  // having been said already.
+  const chosen = fresh;
   const shown = chosen.map((c) => c.text);
   if (shown.length === 0) return '';
   plan.spokenClauses = chosen.filter((c) => c.squares.length > 0).map((c) => ({ text: c.text, squares: c.squares }));
@@ -615,10 +627,20 @@ export function positionReadLine(
    *  to not compute the claim. */
   fen?: string,
 ): string {
-  const once = (key: string, line: string): string | null => {
-    if (said?.has(key)) return null;
+  // EVERY FRESH RUNG, NOT THE FIRST ONE (David 2026-08-10: "I want to hear
+  // everything the PV has to say. Do not limit it."). Each `if` here returned
+  // immediately, so a position that was an opposite-wings race AND had a pin
+  // standing AND left the student a half-open file said exactly one of those
+  // three things and discarded the other two, forever — the said-set marks a
+  // rung used whether or not it was spoken, so the discarded ones never came
+  // back on a later ply either.
+  //
+  // Order is unchanged, and it still matters: the most reframing fact leads.
+  const lines: string[] = [];
+  const once = (key: string, line: string): void => {
+    if (said?.has(key)) return;
     said?.add(key);
-    return line;
+    lines.push(line);
   };
   const mine = studentColor === 'white' ? read.islands.white : read.islands.black;
   const theirs = studentColor === 'white' ? read.islands.black : read.islands.white;
@@ -627,27 +649,23 @@ export function positionReadLine(
   // Opposite wings first: it reframes everything else. Both sides get to
   // attack without being attacked back, so speed beats material.
   if (read.oppositeWings) {
-    const l = once('opposite-wings', 'The kings have gone to opposite wings, so you can both attack without being attacked back. Speed matters more than material now.');
-    if (l) return l;
+    once('opposite-wings', 'The kings have gone to opposite wings, so you can both attack without being attacked back. Speed matters more than material now.');
   }
-  const named = read.tacticsNow.map(tacticWord).filter((t): t is string => t !== null);
-  if (named.length > 0) {
-    const l = once(`tactic-${named[0]}`, `There's already a ${named[0]} sitting on the board, whether or not anyone plays into it.`);
-    if (l) return l;
+  // EVERY tactic already standing, not just the first — a board with a pin and
+  // a fork on it has two things to see.
+  for (const named of read.tacticsNow.map(tacticWord).filter((t): t is string => t !== null)) {
+    once(`tactic-${named}`, `There's already a ${named} sitting on the board, whether or not anyone plays into it.`);
   }
   if (read.endgameType) {
-    const l = once('endgame', `We're in a ${read.endgameType} endgame now — the pawns decide it from here.`);
-    if (l) return l;
+    once('endgame', `We're in a ${read.endgameType} endgame now — the pawns decide it from here.`);
   }
   if (theirs > mine) {
-    const l = once('islands', `They've got ${theirs} pawn islands to your ${mine}, and more islands means more to look after.`);
-    if (l) return l;
+    once('islands', `They've got ${theirs} pawn islands to your ${mine}, and more islands means more to look after.`);
   }
   if (myHalfOpen.length > 0 && hasRook(fen, studentColor)) {
-    const l = once(`halfopen-${myHalfOpen[0]}`, `The ${myHalfOpen[0]}-file is half-open for you — that's where a rook wants to be.`);
-    if (l) return l;
+    once(`halfopen-${myHalfOpen[0]}`, `The ${myHalfOpen[0]}-file is half-open for you — that's where a rook wants to be.`);
   }
-  return '';
+  return lines.join(' ');
 }
 
 /** Does this side still own a rook? Unknown board → assume not, and say
@@ -678,8 +696,23 @@ export function keySquareLine(
    *  one — so the line has to be said once and then left alone. */
   said?: Set<string>,
 ): string {
-  const top = keys[0];
-  if (!top) return '';
+  // EVERY CONTESTED SQUARE THE LINE FOUND, not only the top one (David
+  // 2026-08-10: "I want to hear everything the PV has to say"). A line that
+  // fights over two squares has two things to tell the student; this returned
+  // after the first and the second was never mentioned on any ply.
+  //
+  // The said-set still holds each square to one mention across the game, so
+  // this widens what is SAID without widening what is repeated.
+  const spoken: string[] = [];
+  for (const k of keys) {
+    const line = oneKeySquare(k, said);
+    if (line) spoken.push(line);
+  }
+  return spoken.join(' ');
+}
+
+/** One square's sentence, at the strength its counts support. */
+function oneKeySquare(top: KeySquare, said?: Set<string>): string {
   const key = `keysquare-${top.square}`;
   if (said?.has(key)) return '';
   said?.add(key);
