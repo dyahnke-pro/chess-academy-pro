@@ -43,7 +43,8 @@ const MOVE_RE = /\b[NBRQK][a-h]?[1-8]?x?[a-h][1-8]\b/;
 
 describe('ADVERSARIAL: 60 machine-played games through every computed lane', () => {
   it('never crashes, never hands over a move, never names an empty square', () => {
-    let lines = 0; let plansBuilt = 0; let concessions = 0; let drawbacks = 0; let reads = 0;
+    let lines = 0;
+    let chars = 0; let plansBuilt = 0; let concessions = 0; let drawbacks = 0; let reads = 0;
     for (let g = 0; g < 60; g += 1) {
       const { sans, fens } = randomGame(g + 1, 30);
       const all = new Chess();
@@ -68,6 +69,7 @@ describe('ADVERSARIAL: 60 machine-played games through every computed lane', () 
           ].filter(Boolean);
           for (const p of parts) {
             lines += 1;
+            chars += p.length;
             expect(MOVE_RE.test(p), `game ${g} ply ${i}: a move leaked — "${p}"`).toBe(false);
             expect(p, `game ${g} ply ${i}: raw identifier — "${p}"`).not.toMatch(/\b[a-z]+_[a-z]+\b/);
             expect(p.trim().length, `game ${g} ply ${i}: empty fragment`).toBeGreaterThan(0);
@@ -125,8 +127,18 @@ describe('ADVERSARIAL: 60 machine-played games through every computed lane', () 
         }
       }
     }
-    console.log(`SWEEP lines=${lines} plans=${plansBuilt} reads=${reads} concessions=${concessions} drawbacks=${drawbacks}`);
-    expect(lines, 'the sweep produced no narration at all — it proved nothing').toBeGreaterThan(1500);
+    console.log(`SWEEP lines=${lines} chars=${chars} plans=${plansBuilt} reads=${reads} concessions=${concessions} drawbacks=${drawbacks}`);
+    // MEASURE CONTENT, NOT SENTENCE COUNT. The floor used to be 1,500 lines,
+    // which quietly assumed the old caps: with the plan limited to three
+    // clauses and the board read returning after one rung, the same material
+    // arrived as many short sentences across many plies. Uncapped (David
+    // 2026-08-10: "I want to hear everything the PV has to say") the first ply
+    // says it all and the said-set correctly quiets the rest — so LINES fell
+    // while what the student actually hears did not. Characters is the honest
+    // proxy for "the sweep produced narration"; a line count would now fail for
+    // the feature working.
+    expect(lines, 'the sweep produced no narration at all — it proved nothing').toBeGreaterThan(800);
+    expect(chars, 'the narration got thinner, not just fewer-sentenced').toBeGreaterThan(90_000);
     expect(concessions, 'the concession beat never fired across 400 games').toBeGreaterThan(0);
   }, 240000);
 });

@@ -14,7 +14,7 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import {
   buildLookaheadPlan, keySquaresOf, keySquareLine, describePlan, planFromUci,
-  positionReadLine, PLAN_HORIZON,
+  positionReadLine, lineShapeLine, PLAN_HORIZON,
 } from './lookaheadPlan';
 import type { SidePlan, LookaheadPlan } from './lookaheadPlan';
 import type { PvLine, PvPly, PlyFacts } from './pvPlayback';
@@ -791,5 +791,74 @@ describe('the drift line does not repeat itself', () => {
     const said = new Set<string>();
     expect(describePlan(drift(), 'mine', said)).not.toBe('');
     expect(describePlan(drift(), 'theirs', said)).not.toBe('');
+  });
+});
+
+describe('the rest of what the line has to say', () => {
+  // David 2026-08-10, asked what more the PV could yield: "I want them all.
+  // Spoken when they apply." Each of these was computable from plies already
+  // replayed and read by nothing.
+  const plan = (sans: string[], color: 'white' | 'black' = 'white') =>
+    buildLookaheadPlan(line(plies(START, sans)), color);
+
+  it('names the piece being REROUTED, with the squares it travels', () => {
+    // The most characteristic thing a coach says about a line, and the plan had
+    // the data and no sentence: `headingFor` kept the destinations and lost the
+    // journey, so a three-hop regrouping read as two unrelated squares.
+    const p = plan(['Nf3', 'e5', 'Nd4', 'd5', 'Nb5', 'a6']);
+    expect(p?.white.maneuver?.path, 'the journey was not tracked').toEqual(['g1', 'f3', 'd4', 'b5']);
+    expect(p?.white.maneuver?.piece).toBe('knight');
+    expect(p?.white.text).toContain('walk the knight round to b5');
+  });
+
+  it('does not call a single move a reroute', () => {
+    expect(plan(['Nf3', 'e5', 'd4', 'd5'])?.white.maneuver).toBeNull();
+  });
+
+  it('counts the checks each side gives', () => {
+    // Through `planFromUci`, which computes the per-ply facts for real — the
+    // hand-built fixture above fills them from a blank template, so `isCheck`
+    // there is always false and would test nothing.
+    const real = planFromUci(START, ['e2e4', 'f7f5', 'd1h5', 'g7g6', 'h5g6', 'h7g6'], 'white');
+    expect(real?.white.checks, 'checks were never read off the plies').toBeGreaterThanOrEqual(2);
+  });
+
+  it('reports how much material comes off in TOTAL, not just the net', () => {
+    // A line where twelve points change hands is a different animal from one
+    // where a pawn does, even when the two end level.
+    const p = plan(['e4', 'd5', 'exd5', 'Qxd5', 'Nc3', 'Qxg2']);
+    expect(p?.shape.traded).toBeGreaterThan(0);
+  });
+
+  it('says a forced run out loud, and stays quiet when there are choices', () => {
+    const said = new Set<string>();
+    expect(lineShapeLine({ forcedPlies: 3, traded: 0, endsInEndgame: false }, said))
+      .toContain('forced');
+    expect(lineShapeLine({ forcedPlies: 0, traded: 0, endsInEndgame: false })).toBe('');
+  });
+
+  it('says the line trades down into an ending', () => {
+    expect(lineShapeLine({ forcedPlies: 0, traded: 12, endsInEndgame: true }))
+      .toMatch(/comes off.*endgame|endgame/s);
+  });
+
+  it('says each shape fact once a game, not once a ply', () => {
+    const said = new Set<string>();
+    const shape = { forcedPlies: 3, traded: 12, endsInEndgame: true };
+    expect(lineShapeLine(shape, said)).not.toBe('');
+    expect(lineShapeLine(shape, said), 'the shape read chanted').toBe('');
+  });
+
+  it('never hands over a move in any of it', () => {
+    for (const sans of [
+      ['Nf3', 'e5', 'Nd4', 'd5', 'Nb5', 'a6'],
+      ['e4', 'f5', 'Qh5+', 'g6', 'Qxg6+', 'hxg6'],
+      ['e4', 'd5', 'exd5', 'Qxd5', 'Nc3', 'Qxg2'],
+    ]) {
+      const p = plan(sans);
+      for (const t of [p?.white.text, p?.black.text, lineShapeLine(p?.shape ?? { forcedPlies: 0, traded: 0, endsInEndgame: false })]) {
+        expect(t ?? '', `a move leaked: ${t}`).not.toMatch(/\b[NBRQK][a-h]?[1-8]?x?[a-h][1-8]\b/);
+      }
+    }
   });
 });

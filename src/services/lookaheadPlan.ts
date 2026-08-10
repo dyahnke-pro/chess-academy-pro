@@ -481,8 +481,30 @@ export function describePlan(
   if (plan.promotes) {
     add(150, `push a pawn through to a new queen on ${plan.promotes}`, [plan.promotes]);
   }
+  // PROMOTION outranks everything short of mate: a pawn reaching the eighth is
+  // a new queen, and no other clause competes with that. `promotion` has sat in
+  // PlyFacts since pvPlayback was written and been read by nothing.
+  if (plan.promotes) {
+    add(150, `push a pawn through to a new queen on ${plan.promotes}`, [plan.promotes]);
+  }
   const tactic = tacticWord(plan.tactic);
   if (tactic) add(90, `land a ${tactic}`, plan.tacticSquare ? [plan.tacticSquare] : []);
+  // THE REROUTE — the most characteristic thing a coach says about a line, and
+  // the plan had the data and no sentence for it: `headingFor` kept the
+  // destinations and lost the journey, so a three-move regrouping read as two
+  // unrelated squares. Ranked just under a landing tactic — concrete, visual,
+  // and the thing a student can copy next game.
+  if (plan.maneuver) {
+    const { piece, path } = plan.maneuver;
+    const via = path.slice(1, -1).join(' and ');
+    add(80, `walk the ${piece} round to ${path[path.length - 1]}, by way of ${via}`, path);
+  }
+  // CHECKS ON THE WAY. Low weight on purpose — it is texture, not a plan — but
+  // it is the difference between a quiet line and one the student has to
+  // survive move by move.
+  if (plan.checks >= 2) {
+    add(30, `check you ${plan.checks === 2 ? 'twice' : `${plan.checks} times`} along the way`);
+  }
   // THE REROUTE — the most characteristic thing a coach says about a line, and
   // the plan had the data and no sentence for it. `headingFor` kept the
   // destinations and lost the journey, so a three-move regrouping read as two
@@ -788,14 +810,17 @@ export function positionReadLine(
 }
 
 /**
- * How the LINE behaves, in one sentence — forced, simplifying, or heading for
- * an ending.
+ * How the LINE behaves, in one or more sentences — forced, simplifying, or
+ * heading for an ending.
  *
- * Distinct from both the plan (what a side gets) and the board read (what is
- * already true): this is what a coach says while a variation is playing out,
- * and none of it was sayable before because the shape was never read off the
- * plies. Same construction as everything else here — fixed templates, computed
- * values, and silence when the numbers do not earn a sentence.
+ * Distinct from both the plan (what a side gets out of the line) and the board
+ * read (what is already true of the position): this is what a coach says while
+ * a variation is playing out. None of it was sayable before, because the shape
+ * was never read off the plies — the structure call only ever looked at the
+ * root, so "this trades into an endgame" had no source.
+ *
+ * Same construction as everything else here: fixed templates, computed values,
+ * and silence when the numbers do not earn a sentence.
  */
 export function lineShapeLine(shape: LineShape, said?: Set<string>): string {
   const lines: string[] = [];
@@ -804,18 +829,20 @@ export function lineShapeLine(shape: LineShape, said?: Set<string>): string {
     said?.add(key);
     lines.push(line);
   };
-  // Two plies is a move and a reply with no choices — worth saying, because it
-  // tells the student exactly where calculation starts.
+  // Two plies is a move and a reply with nothing to choose — worth saying,
+  // because telling a student where calculation STARTS is more useful than any
+  // claim about who stands better.
   if (shape.forcedPlies >= 2) {
-    once('forced', `The next ${shape.forcedPlies === 2 ? 'move' : `${shape.forcedPlies} moves`} are forced — there's nothing to choose until after that.`);
+    once('forced', `The next ${shape.forcedPlies === 2 ? 'move is' : `${shape.forcedPlies} moves are`} forced — nothing to work out until after that.`);
   }
-  // Nine points is roughly a queen, or two rooks, or three minor pieces: past
-  // that the board genuinely empties out and the game changes character.
+  // Nine points is roughly a queen, two rooks, or three minor pieces. Past that
+  // the board genuinely empties and the game changes character, which is a
+  // different fact from who comes out ahead.
   if (shape.traded >= 9) {
-    once('trades', "A lot comes off in this line — it's a simplifying one, so count the material before you commit.");
+    once('trades', "A lot comes off in this line — count the material before you commit to it.");
   }
   if (shape.endsInEndgame) {
-    once('to-endgame', 'This line trades down into an endgame, so pawns are about to matter more than pieces.');
+    once('to-endgame', 'This trades down into an endgame, so the pawns are about to matter more than the pieces.');
   }
   return lines.join(' ');
 }

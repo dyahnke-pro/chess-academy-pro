@@ -167,7 +167,7 @@ import { findLivePunishment } from '../../services/gemCrushLines';
 
 import { buildThinkAloud } from '../../services/thinkAloud';
 import { scaleGap, packageForRegister, readsForRegister } from '../../services/hintRegister';
-import { planFromUci, keySquareLine, positionReadLine, tacticWord } from '../../services/lookaheadPlan';
+import { planFromUci, keySquareLine, positionReadLine, lineShapeLine, tacticWord } from '../../services/lookaheadPlan';
 import type { LookaheadPlan } from '../../services/lookaheadPlan';
 import { planMarks } from '../../services/planMarks';
 import {
@@ -1318,6 +1318,22 @@ export function CoachTeachPage(): JSX.Element {
   // same line the sentence was read off (see `planMarks`). Keeping only the
   // text here is what left the marks with no source and the board bare.
   const lookaheadPlanRef = useRef<{ fen: string; text: string; plan: LookaheadPlan } | null>(null);
+  /** Lines computed during the engine block that the student must actually
+   *  HEAR — the subtle hints, and the line-shape read.
+   *
+   *  🔒 THE BUG THIS EXISTS TO FIX (David 2026-08-10: "Remember I want the
+   *  subtle hints as well. Heard non of that in my run/audit"). He hadn't: the
+   *  hint packages were pushed into `facts`, and `facts` is the array that
+   *  feeds the PROMPT. Once the phrasing model came out of the live lane, the
+   *  prompt only runs when the student TYPES something — so during ordinary
+   *  play every hint was computed, tiered by register, logged as a beat, and
+   *  spoken to nobody. `playCommentary` learned this exact lesson already
+   *  ("`spoken`, NOT `facts`") and the hint lane never got the memo.
+   *
+   *  Keyed by fen because these are computed asynchronously, after the instant
+   *  package has shipped, and a hint about a board the student has moved past
+   *  is worse than no hint. */
+  const pendingVoiceRef = useRef<{ fen: string; lines: string[] } | null>(null);
   /** Plan clauses already spoken this game. A plan is stable across plies — the
    *  same pin is still coming three moves later — so without this the coach
    *  chants. A five-ply sample from a real game repeated one line four times. */
@@ -6201,6 +6217,22 @@ export function CoachTeachPage(): JSX.Element {
     };
   }, [activeProfile?.puzzleRating, activeProfile?.currentRating, discussion.lastMoveDrawback]);
 
+  /** Queue a computed line to be SPOKEN once the engine work settles.
+   *
+   *  Speakable only: anything written AT a phrasing model (a shouted header, an
+   *  instruction) belongs in `facts` and stays there. `buildVoicePackage`
+   *  refuses scaffolding anyway, so this is the honest filter rather than the
+   *  last line of defence. */
+  const queueSpokenHint = useCallback((fen: string, line: string): void => {
+    const text = line.trim();
+    if (!text) return;
+    const pending = pendingVoiceRef.current?.fen === fen
+      ? pendingVoiceRef.current
+      : { fen, lines: [] };
+    if (!pending.lines.includes(text)) pending.lines.push(text);
+    pendingVoiceRef.current = pending;
+  }, []);
+
   const handleStudentMove = useCallback((move: MoveResult): void => {
     // A board move DISMISSES the "Read this position" banner (clears its
     // text) — same as Play. The student answered the position by playing.
@@ -6541,6 +6573,7 @@ export function CoachTeachPage(): JSX.Element {
                           priorityFirstLastPlyRef.current = plyNow;
                           captureEvent('priority_first_offered', { surface: 'coach-teach', target: pf.targetSquare });
                           facts.push(packageForRegister(pf.hint, discussion.hintDial.register));
+                          queueSpokenHint(probe.fen(), packageForRegister(pf.hint, discussion.hintDial.register));
                         } else {
                           const recProbe = new Chess(probe.fen());
                           const recMove = recProbe.move({ from: recUci.slice(0, 2), to: recUci.slice(2, 4), promotion: recUci.slice(4, 5) || undefined });
@@ -6631,6 +6664,7 @@ export function CoachTeachPage(): JSX.Element {
                         rejectedTemptingCountRef.current += 1;
                         captureEvent('rejected_tempting_offered', { surface: 'coach-teach', tempting: rt.temptingSan, refutation: rt.refutationSan });
                         facts.push(packageForRegister(rt.hint, discussion.hintDial.register));
+                        queueSpokenHint(probe.fen(), packageForRegister(rt.hint, discussion.hintDial.register));
                       }
                     }
 
@@ -6654,6 +6688,10 @@ export function CoachTeachPage(): JSX.Element {
                         // second. Deterministic like the rest: fixed templates,
                         // computed values, no model between board and words.
                         const board = positionReadLine(plan.read, playerColor, planSaidRef.current, probe.fen());
+                        // HOW THE LINE BEHAVES — forced, simplifying, heading
+                        // for an ending. Read off the same plies; nothing here
+                        // costs a second search.
+                        const shape = lineShapeLine(plan.shape, planSaidRef.current);
                         // EVERYTHING THE PV HAS TO SAY (David 2026-08-10: "I
                         // want to hear everything the PV has to say. Do not
                         // limit it."). This used to keep TWO of the four PV
@@ -6668,7 +6706,7 @@ export function CoachTeachPage(): JSX.Element {
                         // kind of limit: `planSaidRef` stops the same clause
                         // being spoken twice across plies. Saying less is not
                         // the same as not repeating.
-                        const said = [key, board, plan.theirs.text, plan.mine.text]
+                        const said = [key, board, shape, plan.theirs.text, plan.mine.text]
                           .filter(Boolean)
                           .join(' ');
                         if (said) {
@@ -7192,6 +7230,36 @@ export function CoachTeachPage(): JSX.Element {
                 // engine-derived recommendation, and it stays quiet when the
                 // instant utterance already taught this turn — one thing per
                 // turn, never a second lesson seconds late.
+                // ── THE HINTS, FINALLY OUT LOUD ────────────────────────────
+                // David 2026-08-10: "Remember I want the subtle hints as well.
+                // Heard non of that in my run/audit." They were computed on
+                // most plies and pushed into `facts`, which feeds the PROMPT —
+                // and the prompt only runs when the student types. So the whole
+                // hint register was tiering lines nobody could hear.
+                //
+                // Spoken HERE because this is the first moment they exist: the
+                // instant package ships in the same tick the engine read
+                // starts. Graded against the board they were computed from, so
+                // a hint cannot outlive its position, and dropped entirely if
+                // the student has already moved on.
+                const pending = pendingVoiceRef.current;
+                if (pending && pending.fen === fenAfterReply && pending.lines.length > 0) {
+                  pendingVoiceRef.current = null;
+                  const hintPkg = buildVoicePackage(
+                    pending.lines.map((text) => ({ kind: 'computed' as const, text, fen: pending.fen })),
+                  );
+                  if (hintPkg.spoken) {
+                    speakTrackA(hintPkg.spoken);
+                    void logAppAudit({
+                      kind: 'coach-narration-spoken',
+                      category: 'narration',
+                      source: 'CoachTeachPage.hintRegister',
+                      summary: `${describeVoicePackage(hintPkg)} — ${hintPkg.spoken.slice(0, 200)}`,
+                      narrationText: hintPkg.spoken,
+                      fen: pending.fen,
+                    });
+                  }
+                }
                 const teachLine = hasInstantTeaching ? null : trackABestReply;
                 if (teachLine) {
                   speakTrackA(teachLine);
