@@ -5535,6 +5535,9 @@ export function CoachTeachPage(): JSX.Element {
       }
     } catch { /* unreadable FEN — fall through and let the lanes gate it */ }
 
+    /** Squares the alert lane has already spoken about on this turn — see the
+     *  root-cause note at the `buildPlayCommentary` call below. */
+    const spokenSquaresThisTurn = new Set<string>();
     const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
     const AV: Record<string, number> = { n: 3, b: 3, r: 5, q: 9 };
     const factLines: string[] = [];
@@ -5593,11 +5596,11 @@ export function CoachTeachPage(): JSX.Element {
       // gems, then threats.
       if (tctx.boardFacts?.mateInOne) {
         tacticKey = `mate1:${tctx.boardFacts.mateInOne}`;
-        tacticLine = 'You have a checkmate in one — find it.';
+        tacticLine = "There's a mate in one here — see if you can find it.";
       } else if (theirHanging.length > 0) {
         const prize = theirHanging[0];
         tacticKey = `win:${prize.piece}${prize.square}`;
-        tacticLine = `Their ${NAME[prize.piece] ?? 'piece'} on ${prize.square} is undefended — there's something to win here.`;
+        tacticLine = `Their ${NAME[prize.piece] ?? 'piece'} on ${prize.square} has nothing defending it — there's something to win here.`;
       } else {
         const mine = tctx.immediate.filter((t) => t.side === 'student');
         if (mine.length > 0) {
@@ -5609,7 +5612,7 @@ export function CoachTeachPage(): JSX.Element {
           // underscores taken out. `tacticWord` is the same map the plan lane
           // uses; an unnamed pattern says nothing rather than saying its id.
           const word = tacticWord(t.type);
-          tacticLine = word ? `There's a real ${word} here for you — look for it.` : null;
+          tacticLine = word ? `There's a ${word} here for you — have a look.` : null;
           myTacticType = word ? t.type : null;
         }
       }
@@ -5627,12 +5630,12 @@ export function CoachTeachPage(): JSX.Element {
         // read correctly alone and collide only when they land on the same
         // tactic type in one utterance, so that is where it is fixed.
         if (myTacticType && myTacticType === t.type) {
-          tacticLine = `You have a ${tacticWord(myTacticType) ?? 'chance'} of your own available here — a different one. See it?`;
+          tacticLine = `You've got a ${tacticWord(myTacticType) ?? 'chance'} of your own here — a different one. See it?`;
         }
       } else if (myHanging.length > 0) {
         const worst = myHanging[0];
         threatKey = `hang:${worst.piece}${worst.square}`;
-        threatLine = `Careful — your ${NAME[worst.piece] ?? 'piece'} on ${worst.square} is attacked and undefended.`;
+        threatLine = `Careful — your ${NAME[worst.piece] ?? 'piece'} on ${worst.square} is attacked and nothing's defending it.`;
         const flip = args.fenAfterReply.split(' ');
         flip[1] = studentCC === 'w' ? 'b' : 'w';
         flip[3] = '-';
@@ -5668,6 +5671,14 @@ export function CoachTeachPage(): JSX.Element {
         lastThreatRef.current = threatKey;
         spokenThreatLinesRef.current.add(threatLine);
         captureEvent('tactics_alert_spoken', { surface: 'coach-teach', alert: threatKey });
+      }
+      // What the alert lane has CLAIMED this turn. The keys carry their squares
+      // by construction (`vs:pin:e1c3`, `hang:nc3`), so this reads them back
+      // rather than re-deriving them from the prose — and only for the lines
+      // that SURVIVED the repeat guards above, since a suppressed alert has
+      // said nothing and has no claim on its square.
+      for (const k of [tacticLine ? tacticKey : '', threatLine ? threatKey : '']) {
+        for (const sq of k.match(/[a-h][1-8]/g) ?? []) spokenSquaresThisTurn.add(sq);
       }
     } catch { /* the alert is a bonus — never block the teaching */ }
 
@@ -5822,6 +5833,14 @@ export function CoachTeachPage(): JSX.Element {
         fen: args.fenAfterReply,
         studentColor: playerColor,
         saidExplainers: saidExplainersRef.current,
+        // ROOT CAUSE, not the gate. Both this composer and the tactics alert
+        // above read `detectTactics` off THIS board, and neither knew the
+        // other had spoken — so both announced the same loose piece and the
+        // student heard the observation twice with a different moral bolted on
+        // each time. Handing over the squares already spoken means the
+        // duplicate is never composed: the ladder descends to the next real
+        // thing, so the turn GAINS a beat rather than losing one to a filter.
+        skipSquares: spokenSquaresThisTurn,
       });
       if (beat) {
         // `spoken`, NOT `facts`. The facts are written at a phrasing model —

@@ -489,6 +489,22 @@ export function buildPlayCommentary(args: {
    * use is what lets the ladder do its job.
    */
   skipKinds?: ReadonlySet<CommentaryKind>;
+  /** Squares the caller has ALREADY said something about on this turn.
+   *
+   *  THE ROOT-CAUSE HALF OF THE DOUBLE-SENTENCE FIX (David 2026-08-10:
+   *  "Remember root cause fixes. Gates are backups"). The tactics alert and
+   *  this composer both read `detectTactics` off the same board, neither aware
+   *  of the other, so both announced the same loose piece:
+   *
+   *    "Their knight on c3 is undefended — there's something to win here."
+   *    "Their knight on c3 is undefended — an undefended piece is the seed of
+   *     a tactic."
+   *
+   *  The package can refuse the second, and does, but refusing it is catching
+   *  a mistake rather than not making one. Given the alert's square here, the
+   *  duplicate is never composed: the ladder falls through to the next real
+   *  thing it has to say, so the turn gains a beat instead of losing one. */
+  skipSquares?: ReadonlySet<string>;
 }): PlayCommentary | null {
   let chess: Chess;
   try {
@@ -496,9 +512,20 @@ export function buildPlayCommentary(args: {
   } catch {
     return null;
   }
-  /** A beat the caller can use, else null so the ladder continues. */
-  const usable = (beat: PlayCommentary): PlayCommentary | null =>
-    (args.skipKinds?.has(beat.kind) ? null : beat);
+  /** A beat the caller can use, else null so the ladder continues.
+   *
+   *  A beat about a square the caller has already spoken about is dropped the
+   *  same way a skipped KIND is — the ladder keeps descending and the turn
+   *  still gets a beat, just a different one. */
+  const usable = (beat: PlayCommentary): PlayCommentary | null => {
+    if (args.skipKinds?.has(beat.kind)) return null;
+    if (args.skipSquares?.size) {
+      for (const sq of beat.spoken.match(/\b[a-h][1-8]\b/g) ?? []) {
+        if (args.skipSquares.has(sq)) return null;
+      }
+    }
+    return beat;
+  };
   // THE PRINCIPLE ONCE, THE FACT EVERY TIME.
   //
   // Measured in David's own 2026-08-08 session log: "See if you can find it."

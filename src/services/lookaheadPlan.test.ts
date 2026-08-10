@@ -172,10 +172,10 @@ describe('key squares are counted, not felt', () => {
     // "The square this position turns on" is a different claim from "a square
     // worth watching", and which one is spoken is decided by arithmetic.
     const hot = keySquaresOf(plies(START, ['e4', 'd5', 'exd5', 'Qxd5', 'Nc3', 'Qd8']));
-    expect(keySquareLine(hot)).toContain('turns on');
+    expect(keySquareLine(hot)).toContain("Everything's running through");
 
     const quiet = keySquaresOf(plies(START, ['Nf3', 'Nf6', 'Ng1', 'Ng8']));
-    expect(keySquareLine(quiet)).not.toContain('turns on');
+    expect(keySquareLine(quiet)).not.toContain("Everything's running through");
   });
 
   it('says nothing when the line touches nothing twice', () => {
@@ -275,8 +275,8 @@ describe('the read sees the whole line, not just where pieces land', () => {
     for (const san of ['f3', 'e5', 'g4', 'Qh4#']) board.move(san);
     const plan = planFromUci(board.fen(), [], 'white');
     const said = `${plan?.mine.text} ${plan?.theirs.text}`.toLowerCase();
-    expect(said, 'invited the student to find a mate already on the board').not.toContain('if you find it');
-    expect(said).toContain('game is over');
+    expect(said, 'invited the student to find a mate already on the board').not.toContain("if you can find it");
+    expect(said).toContain('game over');
   });
 
   it('still speaks the future tense for a mate the line is HEADING toward', () => {
@@ -285,8 +285,8 @@ describe('the read sees the whole line, not just where pieces land', () => {
       passedPawns: [], materialSwing: 0, shieldStripped: 0, tactic: null,
       nearEnemyKing: 0, text: '',
     };
-    expect(describePlan({ ...base, mates: true }, 'mine')).toContain('if you find it');
-    expect(describePlan({ ...base, mates: true, mateDelivered: true }, 'mine')).toContain('game is over');
+    expect(describePlan({ ...base, mates: true }, 'mine')).toContain("if you can find it");
+    expect(describePlan({ ...base, mates: true, mateDelivered: true }, 'mine')).toContain('game over');
   });
 });
 
@@ -301,7 +301,7 @@ describe('the sentence is ordered by the position, not by a fixed ladder', () =>
   const say = (over: Partial<SidePlan>): string => describePlan({ ...base, ...over }, 'mine');
 
   it('leads with a four-piece attack over winning a pawn', () => {
-    expect(say({ nearEnemyKing: 4, materialSwing: 1 })).toMatch(/^You want to bring pieces at their king/);
+    expect(say({ nearEnemyKing: 4, materialSwing: 1 })).toMatch(/^You want to swing pieces toward their king/);
   });
 
   it('leads with a rook over a two-piece gesture at the king', () => {
@@ -344,7 +344,7 @@ describe('the sentence is ordered by the position, not by a fixed ladder', () =>
   });
 
   it('falls back to where the pieces are going when nothing concrete happens', () => {
-    expect(say({ headingFor: ['e4', 'f3'] })).toContain('toward e4 and f3');
+    expect(say({ headingFor: ['e4', 'f3'] })).toContain('to e4 and f3');
   });
 
   it('says nothing when there is nothing', () => {
@@ -509,8 +509,8 @@ describe('the read sees the board as it stands, not only what the line changes',
     };
     // For White the opponent has more islands; flipping the student must flip
     // whose weakness it is, not lose it.
-    expect(positionReadLine(read, 'white')).toContain('They have 3');
-    expect(positionReadLine(read, 'black')).not.toContain('They have 3');
+    expect(positionReadLine(read, 'white')).toContain("They've got 3");
+    expect(positionReadLine(read, 'black')).not.toContain("They've got 3");
   });
 
   it('never tells a rookless side where a rook belongs', () => {
@@ -543,12 +543,12 @@ describe('"the square this position turns on" is said once', () => {
 
   it('spends the superlative once, then speaks honestly', () => {
     const said = new Set<string>();
-    expect(keySquareLine(hot(), said)).toContain('turns on');
+    expect(keySquareLine(hot(), said)).toContain("Everything's running through");
     // A different square, same game — it may still be worth naming, but not as
     // the one the position turns on.
     const other = keySquaresOf(plies(START, ['d4', 'e5', 'dxe5', 'Nc6', 'Nf3', 'Nxe5']));
     const second = keySquareLine(other, said);
-    expect(second, `said "turns on" twice: ${second}`).not.toContain('turns on');
+    expect(second, `said the superlative twice: ${second}`).not.toContain("Everything's running through");
   });
 
   it('still names the second square rather than going silent', () => {
@@ -561,7 +561,7 @@ describe('"the square this position turns on" is said once', () => {
 
   it('without a said-set every caller still gets the strong form', () => {
     // The set is the caller's memory of ONE game; a fresh game starts fresh.
-    expect(keySquareLine(hot())).toContain('turns on');
+    expect(keySquareLine(hot())).toContain("Everything's running through");
   });
 });
 
@@ -585,7 +585,7 @@ describe('the two sides never say the same sentence twice', () => {
     expect(plan).not.toBeNull();
     if (!plan) return;
     const spoken = [plan.theirs.text, plan.mine.text].filter(Boolean);
-    const drifting = spoken.filter((s) => /bring (your|their) pieces toward/.test(s));
+    const drifting = spoken.filter((s) => /(You|They)'re bringing pieces to /.test(s));
     expect(drifting.length, `two drift sentences in one breath: ${spoken.join(' ')}`)
       .toBeLessThanOrEqual(1);
   });
@@ -730,7 +730,7 @@ describe('an uncontested square has to earn the sentence', () => {
   });
 
   it('still speaks when one side keeps returning to it', () => {
-    expect(keySquareLine(key({ whiteTouches: 5 }))).toContain('worth watching');
+    expect(keySquareLine(key({ whiteTouches: 5 }))).toContain('Keep half an eye on');
   });
 
   it('always speaks for a contested square, however light the traffic', () => {

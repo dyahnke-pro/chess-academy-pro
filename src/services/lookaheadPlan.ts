@@ -385,7 +385,6 @@ export function describePlan(
   said?: Set<string>,
 ): string {
   const subject = voice === 'mine' ? 'You' : 'They';
-  const possessive = voice === 'mine' ? 'your' : 'their';
   const theirKing = voice === 'mine' ? 'their king' : 'your king';
 
   // Mate ends the sentence before it starts: nothing else in the position
@@ -393,12 +392,12 @@ export function describePlan(
   if (plan.mates) {
     if (plan.mateDelivered) {
       return voice === 'mine'
-        ? 'That is checkmate — the game is over.'
-        : 'That is checkmate. The game is over.';
+        ? "That's checkmate — game over."
+        : "That's checkmate. Game over.";
     }
     return voice === 'mine'
-      ? 'There is a forced mate in this line — it is there if you find it.'
-      : 'They have a forced mate in this line. This is the moment to stop it.';
+      ? "There's a forced mate in this line — it's there if you can find it."
+      : "They've got a forced mate in this line. This is the moment to stop it.";
   }
 
   // Every clause carries the squares it is ABOUT, so the board can point at
@@ -417,11 +416,11 @@ export function describePlan(
   // King attack, scaled by how many pieces are really arriving. Two is a
   // gesture; four is an assault and the sentence should lead with it.
   if (plan.nearEnemyKing >= 2) {
-    add(50 + plan.nearEnemyKing * 12, `bring pieces at ${theirKing}`, plan.kingAttackSquares);
+    add(50 + plan.nearEnemyKing * 12, `swing pieces toward ${theirKing}`, plan.kingAttackSquares);
   }
   // Shield pawns are worth more per pawn than a piece walking over: a pawn that
   // has gone is not coming back.
-  if (plan.shieldStripped > 0) add(45 + plan.shieldStripped * 18, `strip the pawns in front of ${theirKing}`);
+  if (plan.shieldStripped > 0) add(45 + plan.shieldStripped * 18, `pull the pawns away from ${theirKing}`);
   // Material, by what it actually is. A rook is not a pawn and the ranking
   // should not pretend otherwise.
   if (plan.materialSwing >= 1) {
@@ -440,9 +439,9 @@ export function describePlan(
     add(10 + advanced * 8, `create a passed pawn on ${sq}`, [sq]);
   }
   if (plan.outposts.length > 0) {
-    add(35, `plant a piece on ${plan.outposts[0]} where no pawn can chase it`, [plan.outposts[0]]);
+    add(35, `park a piece on ${plan.outposts[0]}, where no pawn can chase it off`, [plan.outposts[0]]);
   }
-  if (plan.opening.length > 0) add(25, `open the ${plan.opening[0]}-file`);
+  if (plan.opening.length > 0) add(25, `prise open the ${plan.opening[0]}-file`);
   if (plan.trading.length > 0) {
     // A PAWN TRADE IS NOT A PLAN. "They want to trade off the pawn" was in the
     // five-narration sample and says nothing — pawns come off in almost every
@@ -460,7 +459,7 @@ export function describePlan(
     if (plan.headingFor.length === 0) return '';
     const heading = plan.headingFor.slice(0, 2);
     const squares = heading.join(' and ');
-    const line = `${subject} bring ${possessive} pieces toward ${squares} over the next few moves.`;
+    const line = `${subject === 'You' ? "You're" : "They're"} bringing pieces to ${squares} over the next few moves.`;
     plan.spokenClauses = [{ text: line, squares: heading }];
     return line;
   }
@@ -519,7 +518,7 @@ export function buildLookaheadPlan(
 }
 
 /** The drift sentence, in either voice. */
-const DRIFT = /^(You|They) bring (your|their) pieces toward (.+) over the next few moves\.$/;
+const DRIFT = /^(You|They)'re bringing pieces to (.+) over the next few moves\.$/;
 
 /**
  * ONE SENTENCE, NOT THE SAME SENTENCE TWICE.
@@ -542,7 +541,7 @@ function mergeTwinDrift(mine: SidePlan, theirs: SidePlan): void {
   const m = DRIFT.exec(mine.text);
   const t = DRIFT.exec(theirs.text);
   if (!m || !t) return;
-  theirs.text = `They are heading for ${t[3]}; you are heading for ${m[3]}.`;
+  theirs.text = `They're going for ${t[2]}, and you're going for ${m[2]}.`;
   mine.text = '';
   // The squares keep their owners, so the board still marks each half in its
   // own colour — the merge is a sentence change, never a fact change.
@@ -618,24 +617,24 @@ export function positionReadLine(
   // Opposite wings first: it reframes everything else. Both sides get to
   // attack without being attacked back, so speed beats material.
   if (read.oppositeWings) {
-    const l = once('opposite-wings', 'The kings have gone to opposite wings — both sides can attack without being attacked back, so speed matters more than material here.');
+    const l = once('opposite-wings', 'The kings have gone to opposite wings, so you can both attack without being attacked back. Speed matters more than material now.');
     if (l) return l;
   }
   const named = read.tacticsNow.map(tacticWord).filter((t): t is string => t !== null);
   if (named.length > 0) {
-    const l = once(`tactic-${named[0]}`, `There is already a ${named[0]} on the board — it is there whether or not anyone plays into it.`);
+    const l = once(`tactic-${named[0]}`, `There's already a ${named[0]} sitting on the board, whether or not anyone plays into it.`);
     if (l) return l;
   }
   if (read.endgameType) {
-    const l = once('endgame', `This is a ${read.endgameType} endgame; the pawns decide it from here.`);
+    const l = once('endgame', `We're in a ${read.endgameType} endgame now — the pawns decide it from here.`);
     if (l) return l;
   }
   if (theirs > mine) {
-    const l = once('islands', `They have ${theirs} pawn islands to your ${mine} — more islands means more things to defend.`);
+    const l = once('islands', `They've got ${theirs} pawn islands to your ${mine}, and more islands means more to look after.`);
     if (l) return l;
   }
   if (myHalfOpen.length > 0 && hasRook(fen, studentColor)) {
-    const l = once(`halfopen-${myHalfOpen[0]}`, `The ${myHalfOpen[0]}-file is half-open for you; that is where a rook belongs.`);
+    const l = once(`halfopen-${myHalfOpen[0]}`, `The ${myHalfOpen[0]}-file is half-open for you — that's where a rook wants to be.`);
     if (l) return l;
   }
   return '';
@@ -683,12 +682,12 @@ export function keySquareLine(
     // the honest, weaker form.
     if (!said?.has('keysquare-superlative')) {
       said?.add('keysquare-superlative');
-      return `${top.square} is the square this position turns on — both sides keep coming back to it.`;
+      return `Everything's running through ${top.square} — both sides keep coming back to it.`;
     }
-    return `${top.square} is contested too — both sides have designs on it.`;
+    return `${top.square} matters here too — they both want it.`;
   }
   if (top.contested) {
-    return `${top.square} is contested — both sides have designs on it.`;
+    return `${top.square} is the contested one — you both want it.`;
   }
   // AN UNCONTESTED SQUARE HAS TO EARN THE SENTENCE. One side passing through
   // twice is not "the play keeps running through it" — a live prod run offered
@@ -696,7 +695,7 @@ export function keySquareLine(
   // was fighting over. Contest is the whole signal; without it, the traffic has
   // to be heavy enough to mean something on its own.
   if (top.whiteTouches + top.blackTouches < 4) return '';
-  return `${top.square} is worth watching; the play keeps running through it.`;
+  return `Keep half an eye on ${top.square} — the play keeps running through it.`;
 }
 
 /** Too few plies to call anything a plan — but the board is still a board.

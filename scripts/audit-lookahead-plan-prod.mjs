@@ -189,7 +189,7 @@ async function main() {
     console.log(`[stream] post-run pull: ${after.ok ? `${fresh.length} events` : `unavailable (${after.reason})`}`);
 
     const planEvents = fresh.filter((e) => String(e.source ?? '').includes('lookahead')
-      || String(e.summary ?? '').toLowerCase().includes('turns on')
+      || String(e.summary ?? '').toLowerCase().includes('running through')
       || String(e.summary ?? '').toLowerCase().includes('want to'));
     // INFORMATIONAL, not a check. The init script points the app's stream at
     // the LOCAL listener, so prod's stream cannot also receive these events —
@@ -208,7 +208,12 @@ async function main() {
     // which is the audit reading the wrong half of the string.
     const planSentences = lines
       .flatMap((l) => l.split(/(?<=[.!?])\s+/))
-      .filter((sn) => /\b(want to|turns on|is worth watching|is contested|bring (your|their) pieces)\b/i.test(sn));
+      // Tracks the SPOKEN wording, which changed when the lines were softened
+      // (David 2026-08-10: "Make it sound more human. Soften the language").
+      // An audit keyed on prose it no longer recognises reports "the plan never
+      // spoke" and looks like a regression in the app — so the two move
+      // together, deliberately.
+      .filter((sn) => /\b(want to|running through|keep half an eye|matters here too|is the contested one|bringing pieces to|going for)\b/i.test(sn));
     const leakedMove = planSentences.filter((sn) => movesIn(sn).length > 0);
     record(
       'no plan sentence handed over a move',
