@@ -13,7 +13,8 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import {
-  buildLookaheadPlan, keySquaresOf, keySquareLine, describePlan, planFromUci, PLAN_HORIZON,
+  buildLookaheadPlan, keySquaresOf, keySquareLine, describePlan, planFromUci,
+  positionReadLine, PLAN_HORIZON,
 } from './lookaheadPlan';
 import type { SidePlan } from './lookaheadPlan';
 import type { PvLine, PvPly, PlyFacts } from './pvPlayback';
@@ -281,5 +282,167 @@ describe('the sentence is ordered by the position, not by a fixed ladder', () =>
 
   it('says nothing when there is nothing', () => {
     expect(say({})).toBe('');
+  });
+});
+
+describe('hallucination is impossible by construction, not by gate', () => {
+  // David 2026-08-10: "we need to make sure they are deterministically computed
+  // and handed to the TTS. Make hallucinations impossible. Gates are there only
+  // for redundancy."
+  //
+  // The sentence is assembled from fixed templates with computed values
+  // interpolated, and `pkg.spoken` carries it to the voice verbatim — no model
+  // sits between the board and the words. This proves the property rather than
+  // asserting it: across a few thousand generated plans, EVERY square the
+  // sentence names has to have come from the input. A template that invented
+  // one would be caught here, not by a validator downstream.
+  const SQUARES = ['a1', 'b4', 'c6', 'd5', 'e5', 'f7', 'g2', 'h8', 'a7', 'e4'];
+  const TACTICS = [null, 'fork', 'pin', 'skewer', 'discovery', 'back_rank', 'mate_threat', 'trapped_piece'];
+
+  /** Deterministic pseudo-random — no Math.random, per the audit-harness rule,
+   *  and a failing case is reproducible from its index alone. */
+  const pick = <T,>(list: readonly T[], seed: number): T => list[seed % list.length];
+
+  it('never names a square that was not in the computed input', () => {
+    for (let i = 0; i < 2000; i += 1) {
+      const plan: SidePlan = {
+        color: i % 2 ? 'white' : 'black',
+        headingFor: i % 3 === 0 ? [pick(SQUARES, i), pick(SQUARES, i + 1)] : [],
+        opening: i % 4 === 0 ? [pick(['a', 'c', 'e', 'h'], i)] : [],
+        trading: i % 5 === 0 ? [pick(['pawn', 'knight', 'rook'], i)] : [],
+        outposts: i % 6 === 0 ? [pick(SQUARES, i + 2)] : [],
+        passedPawns: i % 7 === 0 ? [pick(SQUARES, i + 3)] : [],
+        materialSwing: i % 11,
+        shieldStripped: i % 4,
+        tactic: pick(TACTICS, i),
+        mates: i % 97 === 0,
+        nearEnemyKing: i % 6,
+        text: '',
+      };
+      const said = describePlan(plan, i % 2 ? 'mine' : 'theirs');
+      const allowed = new Set([...plan.headingFor, ...plan.outposts, ...plan.passedPawns]);
+      for (const square of said.match(/\b[a-h][1-8]\b/g) ?? []) {
+        expect(
+          allowed.has(square),
+          `case ${i} invented the square ${square}: "${said}"`,
+        ).toBe(true);
+      }
+    }
+  });
+
+  it('never emits a raw detector identifier', () => {
+    // The 60-gem sweep caught "You want to land a mate_threat" — the coach
+    // reading a variable name aloud. A detector enum is a program's word for a
+    // thing, never a person's, and an unknown tactic is DROPPED rather than
+    // spoken as its identifier.
+    for (const tactic of TACTICS) {
+      const said = describePlan({
+        color: 'white', headingFor: [], opening: [], trading: [], outposts: [],
+        passedPawns: [], materialSwing: 0, shieldStripped: 0, tactic,
+        mates: false, nearEnemyKing: 0, text: '',
+      }, 'mine');
+      expect(said, `a raw identifier reached the voice: "${said}"`).not.toMatch(/_/);
+    }
+    expect(describePlan({
+      color: 'white', headingFor: [], opening: [], trading: [], outposts: [],
+      passedPawns: [], materialSwing: 0, shieldStripped: 0,
+      tactic: 'some_future_detector', mates: false, nearEnemyKing: 0, text: '',
+    }, 'mine'), 'an unrecognised tactic was spoken instead of dropped').toBe('');
+  });
+
+  it('never emits a move, at any combination of facts', () => {
+    for (let i = 0; i < 2000; i += 1) {
+      const said = describePlan({
+        color: i % 2 ? 'white' : 'black',
+        headingFor: [pick(SQUARES, i)],
+        opening: [pick(['a', 'd', 'f'], i)],
+        trading: [pick(['pawn', 'bishop', 'queen'], i)],
+        outposts: [pick(SQUARES, i + 1)],
+        passedPawns: [pick(SQUARES, i + 2)],
+        materialSwing: i % 9,
+        shieldStripped: i % 3,
+        tactic: pick(TACTICS, i),
+        mates: i % 53 === 0,
+        nearEnemyKing: i % 5,
+        text: '',
+      }, i % 2 ? 'mine' : 'theirs');
+      expect(said, `case ${i} handed over a move: "${said}"`)
+        .not.toMatch(/\b[NBRQK][a-h]?[1-8]?x?[a-h][1-8]\b/);
+    }
+  });
+
+  it('is a pure function of its input — same plan, same words, every time', () => {
+    // The TTS clip cache keys on the exact string, so a sentence that varies
+    // run to run is both a re-synthesis bill and a sign something nondeterministic
+    // crept in.
+    const plan: SidePlan = {
+      color: 'white', headingFor: ['e4'], opening: ['c'], trading: ['knight'],
+      outposts: ['d5'], passedPawns: ['a7'], materialSwing: 3, shieldStripped: 1,
+      tactic: 'fork', mates: false, nearEnemyKing: 3, text: '',
+    };
+    const first = describePlan(plan, 'mine');
+    for (let i = 0; i < 50; i += 1) expect(describePlan(plan, 'mine')).toBe(first);
+  });
+});
+
+describe('the read sees the board as it stands, not only what the line changes', () => {
+  // David 2026-08-10, asked why these were missing: they were. The plan was
+  // built from the diffs `computePlyFacts` exposes, so it saw everything the
+  // line CHANGED and nothing the position already IS. A pin standing on the
+  // board that no move in the line touches was invisible, and
+  // `describeStructure` was computed twice per ply and then discarded except
+  // for two of its fields. Both are chess.js geometry — no engine, no excuse.
+  it('reports material balance and pawn islands from the root position', () => {
+    const plan = planFromUci(START, ['e2e4', 'd7d5', 'e4d5', 'd8d5'], 'white');
+    expect(plan?.read).toBeTruthy();
+    expect(typeof plan?.read.materialBalance).toBe('number');
+    expect(plan?.read.islands.white).toBeGreaterThan(0);
+    expect(plan?.read.islands.black).toBeGreaterThan(0);
+  });
+
+  it('leaves the eval swing NULL rather than guessing when no engine verified the line', () => {
+    // `planFromUci` has no engine, so it has no terminal eval. Saying so beats
+    // inventing a number the student would take as measured.
+    expect(planFromUci(START, ['e2e4', 'c7c5', 'g1f3', 'd7d6'], 'white')?.read.evalSwingCp).toBeNull();
+  });
+
+  it('leads with opposite-wing kings, because it reframes everything else', () => {
+    const read = {
+      tacticsNow: ['fork'], oppositeWings: true,
+      islands: { white: 3, black: 1 }, halfOpen: { white: ['c'], black: [] },
+      endgameType: null, materialBalance: 0, evalSwingCp: null,
+    };
+    expect(positionReadLine(read, 'white')).toContain('opposite wings');
+  });
+
+  it('names a tactic already on the board, in English', () => {
+    const read = {
+      tacticsNow: ['mate_threat'], oppositeWings: false,
+      islands: { white: 2, black: 2 }, halfOpen: { white: [], black: [] },
+      endgameType: null, materialBalance: 0, evalSwingCp: null,
+    };
+    const said = positionReadLine(read, 'white');
+    expect(said).toContain('mating threat');
+    expect(said, 'a raw identifier reached the voice').not.toMatch(/_/);
+  });
+
+  it('says nothing when the board has nothing worth saying', () => {
+    expect(positionReadLine({
+      tacticsNow: [], oppositeWings: false,
+      islands: { white: 1, black: 1 }, halfOpen: { white: [], black: [] },
+      endgameType: null, materialBalance: 0, evalSwingCp: null,
+    }, 'white')).toBe('');
+  });
+
+  it('reads islands from the STUDENT\'s side of the board', () => {
+    const read = {
+      tacticsNow: [], oppositeWings: false,
+      islands: { white: 1, black: 3 }, halfOpen: { white: [], black: [] },
+      endgameType: null, materialBalance: 0, evalSwingCp: null,
+    };
+    // For White the opponent has more islands; flipping the student must flip
+    // whose weakness it is, not lose it.
+    expect(positionReadLine(read, 'white')).toContain('They have 3');
+    expect(positionReadLine(read, 'black')).not.toContain('They have 3');
   });
 });

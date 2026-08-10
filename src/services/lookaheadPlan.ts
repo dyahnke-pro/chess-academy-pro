@@ -20,6 +20,8 @@
 // colour lands on e5 inside the line, not that the model believes it wants to.
 import { Chess } from 'chess.js';
 import { computePlyFacts } from './pvPlayback';
+import { describeStructure } from './boardStructure';
+import { detectTactics } from './tacticsDetector';
 import type { PvLine, PvPly, PrevCaptureContext } from './pvPlayback';
 
 type ChessCtor = InstanceType<typeof Chess>;
@@ -27,6 +29,30 @@ type ChessCtor = InstanceType<typeof Chess>;
 const PIECE_WORD: Record<string, string> = {
   p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen',
 };
+
+/** Tactic names in English.
+ *
+ *  `tacticsDetector` types are snake_case identifiers, and the first version of
+ *  this spoke them raw — a 60-gem sweep produced "You want to land a
+ *  mate_threat", which is the coach reading a variable name aloud. A detector
+ *  enum is a program's word for a thing, never a person's. */
+const TACTIC_WORD: Record<string, string> = {
+  fork: 'fork',
+  pin: 'pin',
+  skewer: 'skewer',
+  discovery: 'discovered attack',
+  back_rank: 'back-rank threat',
+  mate_threat: 'mating threat',
+  removal_of_guard: 'removal of the defender',
+  trapped_piece: 'trapped piece',
+};
+
+/** Speakable name for a tactic, or null when it has none — an unknown tactic
+ *  is dropped rather than read out as its identifier. */
+function tacticWord(kind: string | null): string | null {
+  if (!kind) return null;
+  return TACTIC_WORD[kind] ?? null;
+}
 
 /** How close a landing square has to be to a king to count as "coming at it".
  *
@@ -88,8 +114,38 @@ export interface SidePlan {
   text: string;
 }
 
+/** What is TRUE OF THE BOARD RIGHT NOW, as opposed to what the line does next.
+ *
+ *  David 2026-08-10, asked why these were missing: they were. The plan was built
+ *  from the diffs `computePlyFacts` exposes, so it saw everything the line
+ *  CHANGED and nothing the position already IS — a pin standing on the board
+ *  that no move in the line touches was invisible, and `describeStructure` was
+ *  being computed twice per ply and then discarded except for two of its
+ *  fields. Both are free: chess.js geometry, no engine. */
+export interface PositionRead {
+  /** Tactics already on the board at the root — not created by the line. */
+  tacticsNow: string[];
+  /** Kings on opposite wings: both sides can attack without being attacked
+   *  back, which changes what every other fact here is worth. */
+  oppositeWings: boolean;
+  /** Pawn islands per side. More islands = more weaknesses to defend. */
+  islands: { white: number; black: number };
+  /** Half-open files per side — where a rook belongs. */
+  halfOpen: { white: string[]; black: string[] };
+  /** Endgame classification once material is low enough, else null. */
+  endgameType: string | null;
+  /** Material balance in points, positive = White ahead. */
+  materialBalance: number;
+  /** Root → terminal eval swing in centipawns, mover's perspective, when the
+   *  line was verified by an engine. Null on the engine-free path — stated as
+   *  null rather than guessed at. */
+  evalSwingCp: number | null;
+}
+
 export interface LookaheadPlan {
   keySquares: KeySquare[];
+  /** The board as it stands, beside what the line does to it. */
+  read: PositionRead;
   white: SidePlan;
   black: SidePlan;
   /** The student's own plan, for convenience at the call site. */
@@ -265,7 +321,8 @@ export function describePlan(plan: SidePlan, voice: 'mine' | 'theirs'): string {
 
   // A tactic that actually lands is the single most concrete thing the line
   // contains, so it starts above everything except mate.
-  if (plan.tactic) add(90, `land a ${plan.tactic}`);
+  const tactic = tacticWord(plan.tactic);
+  if (tactic) add(90, `land a ${tactic}`);
   // King attack, scaled by how many pieces are really arriving. Two is a
   // gesture; four is an assault and the sentence should lead with it.
   if (plan.nearEnemyKing >= 2) add(50 + plan.nearEnemyKing * 12, `bring pieces at ${theirKing}`);
@@ -336,7 +393,70 @@ export function buildLookaheadPlan(
   if (!white.text) white.text = white === mine ? mine.text : theirs.text;
   if (!black.text) black.text = black === mine ? mine.text : theirs.text;
 
-  return { keySquares: keySquaresOf(line.plies), white, black, mine, theirs };
+  return {
+    keySquares: keySquaresOf(line.plies),
+    read: readPosition(line),
+    white, black, mine, theirs,
+  };
+}
+
+/** The board as it stands at the root of the line. */
+function readPosition(line: PvLine): PositionRead {
+  const rootFen = line.plies[0]?.fenBefore ?? '';
+  const structure = rootFen ? describeStructure(rootFen) : null;
+  let tacticsNow: string[] = [];
+  try {
+    tacticsNow = [...new Set(detectTactics(rootFen).tactics.map((t) => t.type as string))];
+  } catch { /* geometry is a bonus, never a blocker */ }
+  const swing = line.terminalEvalCp !== null
+    ? line.terminalEvalCp - line.rootEvalCp
+    : null;
+  return {
+    tacticsNow,
+    oppositeWings: structure?.kings.oppositeWings ?? false,
+    islands: { white: structure?.pawns.islands.w ?? 0, black: structure?.pawns.islands.b ?? 0 },
+    halfOpen: {
+      white: structure?.pawns.halfOpenFiles.w ?? [],
+      black: structure?.pawns.halfOpenFiles.b ?? [],
+    },
+    endgameType: structure?.material.endgameType ?? null,
+    materialBalance: structure?.material.balance ?? 0,
+    evalSwingCp: swing,
+  };
+}
+
+/**
+ * One sentence about the board itself, most-telling fact first.
+ *
+ * Separate from the plan on purpose: the plan says what is ABOUT to happen and
+ * this says what is already true, and a student needs the second to understand
+ * the first. Same construction rules — fixed templates, computed values, no
+ * model.
+ */
+export function positionReadLine(read: PositionRead, studentColor: 'white' | 'black'): string {
+  const mine = studentColor === 'white' ? read.islands.white : read.islands.black;
+  const theirs = studentColor === 'white' ? read.islands.black : read.islands.white;
+  const myHalfOpen = studentColor === 'white' ? read.halfOpen.white : read.halfOpen.black;
+
+  // Opposite wings first: it reframes everything else. Both sides get to
+  // attack without being attacked back, so speed beats material.
+  if (read.oppositeWings) {
+    return 'The kings have gone to opposite wings — both sides can attack without being attacked back, so speed matters more than material here.';
+  }
+  const named = read.tacticsNow.map(tacticWord).filter((t): t is string => t !== null);
+  if (named.length > 0) {
+    return `There is already a ${named[0]} on the board — it is there whether or not anyone plays into it.`;
+  }
+  if (read.endgameType) {
+    return `This is a ${read.endgameType} endgame; the pawns decide it from here.`;
+  }
+  if (theirs > mine) {
+    return `They have ${theirs} pawn islands to your ${mine} — more islands means more things to defend.`;
+  }
+  if (myHalfOpen.length > 0) {
+    return `The ${myHalfOpen[0]}-file is half-open for you; that is where a rook belongs.`;
+  }
+  return '';
 }
 
 /**

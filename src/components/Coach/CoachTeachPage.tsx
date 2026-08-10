@@ -167,7 +167,7 @@ import { findLivePunishment } from '../../services/gemCrushLines';
 
 import { buildThinkAloud } from '../../services/thinkAloud';
 import { scaleGap, packageForRegister, readsForRegister } from '../../services/hintRegister';
-import { planFromUci, keySquareLine } from '../../services/lookaheadPlan';
+import { planFromUci, keySquareLine, positionReadLine } from '../../services/lookaheadPlan';
 import { warmAmateurPlay, buildRatingRealityFact } from '../../services/amateurPlayCache';
 import { masterPlayCache } from '../../services/masterPlayCache';
 
@@ -6421,7 +6421,12 @@ export function CoachTeachPage(): JSX.Element {
                         : null;
                       if (plan) {
                         const key = keySquareLine(plan.keySquares);
-                        const said = [key, plan.theirs.text, plan.mine.text]
+                        // What the board already IS, beside what the line does
+                        // to it — a student needs the first to understand the
+                        // second. Deterministic like the rest: fixed templates,
+                        // computed values, no model between board and words.
+                        const board = positionReadLine(plan.read, playerColor);
+                        const said = [key, board, plan.theirs.text, plan.mine.text]
                           .filter(Boolean)
                           .slice(0, discussion.hintDial.register === 'obvious' ? 3 : 2)
                           .join(' ');
