@@ -307,24 +307,6 @@ const WHY_BEST_MOVE_RE = anyOf([
   // better" — a position-assessment question that has its own lane and would
   // start getting an engine-line walk instead of an assessment.
   String.raw`\bwhy\s+(?:is|was|would)\s+(?:that|this|it|(?:the|that|this)\s+move|[NBRQK]?[a-h]?[1-8]?x?[a-h][1-8](?:=[NBRQ])?[+#]?|O-O(?:-O)?)\s+(?:so\s+much\s+)?(?:better|stronger|preferable|superior)\b`,
-  // ── "WHY PLAY Nc3?" — THE VERB FORM ────────────────────────────────────
-  //
-  // 🔒 THE SAME LANE, MISSED AGAIN BY A DIFFERENT PHRASING. Fixing "why is h3
-  // better" taught the matcher one shape of the question and left the most
-  // natural one out. David asked "Why play night c3?" on prod 2026-08-11 and
-  // got "The best move is Nc3. It develops the knight to c3" — the move he had
-  // just named, read back to him, followed by a tautology.
-  //
-  // "why <verb> X" is how a person actually asks this: play, go, move, put,
-  // develop, take, castle. The move may be spelled by SAN or in words ("night
-  // c3" — his typo, and "knight c3" without the SAN capital is just as common),
-  // so the object is deliberately loose: what identifies the intent is the
-  // WHY + the verb, not the notation.
-  String.raw`\bwhy\s+(?:play|playing|go|going|move|moving|put|putting|develop|developing|take|taking|castle|castling|push|pushing|trade|trading)\b`,
-  // And the barest form of all — "why Nc3?" / "why h3?" — a WHY immediately
-  // followed by something move-shaped and nothing else. Anchored tightly so it
-  // cannot swallow "why not", "why does", "why is my position better".
-  String.raw`^\s*why\s+(?:the\s+)?(?:[NBRQK]?[a-h][1-8]|[NBRQK]?x?[a-h][1-8](?:=[NBRQ])?[+#]?|O-O(?:-O)?|(?:knight|bishop|rook|queen|king|pawn|night)\s*(?:to\s*)?[a-h]\s*[1-8])\s*\??\s*$`,
   // "why does the engine/computer/stockfish like/pick/choose/prefer/play/want X"
   String.raw`\bwhy\s+(?:does|would|did|is|are)?\s*(?:the\s+)?(?:engine|computer|stockfish|it)\s+(?:like|likes|pick|picks|choose|chooses|prefer|prefers|play|plays|want|wants|recommend|recommending|suggest|suggesting|suggests|consider|considering|go(?:es|ing)?\s+for|point(?:ing)?\s+(?:to|at))\b`,
   // "why not <my move>" / "why not just <SAN>" — why the alternative is worse.
@@ -341,12 +323,39 @@ const WHY_BEST_MOVE_RE = anyOf([
   // bare "why is it best / why though" right after a best-move answer.
   String.raw`\bwhy\s+(?:is\s+it|though|that|is\s+that)\b`,
 ]);
+/** "Why play Nc3?" / "why h3?" — a WHY about a SPECIFIC move.
+ *
+ *  🔒 THIS IS A DIFFERENT QUESTION FROM "why is the engine's move best", and
+ *  answering it with the engine's move is how the coach talked past David on
+ *  prod 2026-08-11. He asked "Why play night c3?" and heard "The engine plays
+ *  e4. If d5, then exd5…" — a correct, grounded answer to a question nobody
+ *  asked. The move he named never appeared.
+ *
+ *  So when a move IS named, this routes to the CANDIDATE lane, which evaluates
+ *  the named move against the best one. When no move is named ("why play
+ *  that?"), it is the engine-reasoning ask after all and stays where it was.
+ *
+ *  "why <verb>" is how a person actually asks: play, go, move, put, develop,
+ *  take, castle, push, trade. The object is deliberately loose — SAN or words
+ *  ("night c3") — because what identifies the intent is the WHY plus the verb,
+ *  not the notation. `extractCandidateSan` resolves either. */
+const WHY_THIS_MOVE_RE = anyOf([
+  String.raw`\bwhy\s+(?:play|playing|go|going|move|moving|put|putting|develop|developing|take|taking|castle|castling|push|pushing|trade|trading)\b`,
+  // The barest form — "why Nc3?" — a WHY immediately followed by something
+  // move-shaped and nothing else. Anchored tightly so it cannot swallow "why
+  // not", "why does", or "why is my position better".
+  String.raw`^\s*why\s+(?:the\s+)?(?:[NBRQK]?[a-h][1-8]|[NBRQK]?x?[a-h][1-8](?:=[NBRQ])?[+#]?|O-O(?:-O)?|(?:knight|bishop|rook|queen|king|pawn|night)\s*(?:to\s*)?[a-h]\s*[1-8])\s*\??\s*$`,
+]);
+
 export function isWhyBestMoveQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
   // "why did I lose / blunder / play badly" is a self-review ask, not engine
   // reasoning about a best move — keep it out.
   if (/\bwhy\s+(?:did|do|am|are|is)\s+(?:i|my|we)\b[\s\S]{0,20}\b(?:los(?:e|ing|t)|blunder|bad|worse|struggl|drop)/i.test(ask)) return false;
-  return WHY_BEST_MOVE_RE.test(ask);
+  if (WHY_BEST_MOVE_RE.test(ask)) return true;
+  // A "why <verb> <move>" with no move named is an engine-reasoning ask; with
+  // one, it belongs to the candidate lane (see WHY_THIS_MOVE_RE).
+  return WHY_THIS_MOVE_RE.test(ask) && !extractCandidateSan(ask);
 }
 
 /** SAN-shaped token — the move the student NAMED ("is Qf3 ok", "what about
@@ -373,6 +382,26 @@ function normalizeSan(tok: string): string {
  *  "would castling long be ok" resolve to a real move. */
 export function extractCandidateSan(ask: string | undefined): string | null {
   if (!ask) return null;
+  // ── A MOVE SPOKEN IN WORDS, BEFORE THE SAN SCAN ─────────────────────────
+  //
+  // 🔒 "night c3" MUST RESOLVE TO Nc3, AND IT MUST WIN OVER THE BARE SQUARE.
+  // David typed "Why play night c3?" on prod 2026-08-11. `SAN_TOKEN_RE` finds
+  // no piece letter in "night", walks on, matches "c3" — and the coach would
+  // then have evaluated the PAWN move c3 while he was asking about the KNIGHT.
+  // Being confidently wrong about which move he meant is worse than not
+  // answering, so this runs first.
+  //
+  // "night" is in the list on purpose. It is what people type for a spoken
+  // knight, constantly, and it is not a typo worth punishing — the word maps
+  // to exactly one piece and nothing else in chess is called that.
+  const WORD_PIECE: Record<string, string> = {
+    knight: 'N', night: 'N', bishop: 'B', rook: 'R', queen: 'Q', king: 'K', pawn: '',
+  };
+  const spoken = /\b(knight|night|bishop|rook|queen|king|pawn)\s*(?:to\s*|takes\s*|x\s*)?([a-h])\s*([1-8])\b/i.exec(ask);
+  if (spoken) {
+    const letter = WORD_PIECE[spoken[1].toLowerCase()] ?? '';
+    return `${letter}${spoken[2].toLowerCase()}${spoken[3]}`;
+  }
   const m = ask.match(SAN_TOKEN_RE);
   if (m) return normalizeSan(m[1]);
   if (/\bcastl(?:e|ing|es)\b/i.test(ask)) {
@@ -406,6 +435,10 @@ const CANDIDATE_MOVE_RE = anyOf([
   // Castling named in words — "is castling ok", "would castling long be ok",
   // "should I castle here". extractCandidateSan maps it to O-O / O-O-O.
   String.raw`\b(?:is|would|can|could|should)\b[\s\S]{0,20}\bcastl(?:e|ing)\b`,
+  // "why play Nc3" — a WHY about a move the student NAMED. Same lane as "is
+  // Nc3 ok": the answer must be about Nc3. See WHY_THIS_MOVE_RE.
+  String.raw`\bwhy\s+(?:play|playing|go|going|move|moving|put|putting|develop|developing|take|taking|castle|castling|push|pushing|trade|trading)\b`,
+  String.raw`^\s*why\s+(?:the\s+)?(?:[NBRQK]?[a-h][1-8]|[NBRQK]?x?[a-h][1-8](?:=[NBRQ])?[+#]?|O-O(?:-O)?|(?:knight|bishop|rook|queen|king|pawn|night)\s*(?:to\s*)?[a-h]\s*[1-8])\s*\??\s*$`,
 ]);
 export function isCandidateMoveQuestion(ask: string | undefined): boolean {
   if (!ask) return false;

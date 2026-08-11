@@ -215,6 +215,49 @@ try {
     planAsk.includes(CANNED) ? 'served "I can\'t verify that precisely"' : 'grounded',
   );
 
+  // ── 2b. THE SAME QUESTION, ASKED THE WAY HE ACTUALLY ASKS IT ────────────
+  //
+  // He typed "What is the plan for white and black?" on prod 2026-08-11 and the
+  // plan lane never saw it — the intent only knew the first person, so a
+  // question about BOTH sides fell through to the general path, which has no
+  // plan to hand over. The lane was fine. The routing was the defect, and no
+  // check here would have caught it because every question in this file was
+  // phrased the one way the regex already matched.
+  const bothPlanAsk = (await ask('What is the plan for white and black?')).toLowerCase();
+  record(
+    'a plan question about BOTH sides reaches the plan lane',
+    isAnswer(bothPlanAsk)
+      && /\bplan\b|\bwant to\b|\bidea\b|\bthen\b|\bfollowed by\b|\bnext\b/.test(bothPlanAsk)
+      && !bothPlanAsk.includes(CANNED),
+    bothPlanAsk ? `"${bothPlanAsk.replace(/\s+/g, ' ').slice(0, 150)}"` : 'no reply in 45s',
+  );
+  // AND IT MUST NOT OPEN ON A PRONOUN WITH NOTHING IN FRONT OF IT. This is the
+  // shape he actually heard — "No pawn can ever defend it, so White's pieces
+  // get tied down…" — after the fidelity gate stripped the opening sentence and
+  // served the remainder that had been written to lean on it.
+  record(
+    'the answer does not open on a dangling reference',
+    isAnswer(bothPlanAsk) && !/^\s*(?:no\s+\w+\s+can\s+ever\s+\w+\s+it\b|it\s|its\s|they\s|them\s|those\s|these\s|that\s+\w+\s+is\b)/.test(bothPlanAsk),
+    `opens: "${bothPlanAsk.replace(/\s+/g, ' ').slice(0, 80)}"`,
+  );
+
+  // ── 2c. "WHY PLAY <MOVE>?" — HIS THIRD QUESTION ─────────────────────────
+  //
+  // "Why play night c3?" got "The best move is Nc3. It develops the knight to
+  // c3" — his own move restated, then a tautology. Two misses in one: the verb
+  // form ("why PLAY x", not "why IS x best") and the spelling everybody types
+  // for a spoken knight.
+  const whyAsk = (await ask('Why play night c3?')).toLowerCase();
+  record(
+    'a "why play <move>" question is answered, not restated',
+    isAnswer(whyAsk)
+      && !whyAsk.includes(CANNED)
+      // The tautology: "it develops the knight to c3" says the move's own
+      // name back. A real answer names what the move is FOR.
+      && !/^\W*the best move is \S+\.\s*it (?:develops|moves|plays) the \w+ to [a-h][1-8]\.?\s*$/.test(whyAsk.trim()),
+    whyAsk ? `"${whyAsk.replace(/\s+/g, ' ').slice(0, 150)}"` : 'no reply in 45s',
+  );
+
   // ── 3. THE PLAIN BEST-MOVE ASK ──────────────────────────────────────────
   // The control. This one always worked on Learn, and if it broke while the
   // other two were being fixed, that is the regression to catch.

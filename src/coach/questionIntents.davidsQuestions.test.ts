@@ -10,14 +10,33 @@
 // answer, so the question fell through to the general path, which has no
 // grounded package to voice and can only phrase.
 import { describe, it, expect } from 'vitest';
-import { isPlanQuestion, isWhyBestMoveQuestion } from './questionIntents';
+import {
+  isPlanQuestion, isWhyBestMoveQuestion, isCandidateMoveQuestion, extractCandidateSan,
+} from './questionIntents';
 
 describe("David's questions, verbatim", () => {
-  it('routes "why play night c3?" to the why-this-move lane', () => {
-    // "night" is his typing, and it is the common one — the spoken word for a
-    // knight is spelled that way by everybody typing fast. It must not be the
-    // reason the question misses.
-    expect(isWhyBestMoveQuestion('Why play night c3?')).toBe(true);
+  it('routes "why play night c3?" to the lane that talks about Nc3', () => {
+    // TWO misses in one question. The phrasing missed every why-lane, and the
+    // move extractor — reached at last — read "night c3" as the PAWN move c3,
+    // because "night" carries no SAN piece letter and "c3" does. So the first
+    // prod fix routed it to the engine-reasoning lane and heard back "The
+    // engine plays e4. If d5, then exd5…": a grounded, correct answer to a
+    // question nobody asked.
+    //
+    // A WHY about a move the student NAMED is a question about THAT move.
+    expect(isCandidateMoveQuestion('Why play night c3?')).toBe(true);
+    expect(extractCandidateSan('Why play night c3?')).toBe('Nc3');
+    expect(isWhyBestMoveQuestion('Why play night c3?'), 'not the engine-reasoning lane').toBe(false);
+  });
+
+  it('resolves a move spoken in words, never the bare square inside it', () => {
+    expect(extractCandidateSan('why knight c3')).toBe('Nc3');
+    expect(extractCandidateSan('why the knight to c3?')).toBe('Nc3');
+    expect(extractCandidateSan('is bishop b5 any good')).toBe('Bb5');
+    expect(extractCandidateSan('what about queen h5')).toBe('Qh5');
+    expect(extractCandidateSan('why push pawn d4')).toBe('d4');
+    // Plain SAN still wins when there is no spoken form.
+    expect(extractCandidateSan('why Nc3?')).toBe('Nc3');
   });
 
   it('routes the same question however the verb is inflected', () => {
@@ -26,15 +45,20 @@ describe("David's questions, verbatim", () => {
       'why playing Nc3?',
       'why move the knight to c3',
       'why develop the bishop to b5?',
-      'why take on e5',
       'why castle here?',
       'why push d4',
-      'why trade queens',
       'why Nc3?',
       'why the knight to c3?',
     ]) {
-      expect(isWhyBestMoveQuestion(ask), ask).toBe(true);
+      expect(isCandidateMoveQuestion(ask), ask).toBe(true);
     }
+  });
+
+  it('a WHY with no move named is still the engine-reasoning ask', () => {
+    // "why play that?" names nothing, so there is nothing to evaluate and the
+    // engine's own line IS the answer.
+    expect(isWhyBestMoveQuestion('why play that?')).toBe(true);
+    expect(isWhyBestMoveQuestion('why is Nc3 better?'), 'the comparative form is unchanged').toBe(true);
   });
 
   it('routes a plan question asked about BOTH sides', () => {
@@ -59,6 +83,7 @@ describe("David's questions, verbatim", () => {
 
   it('does not swallow questions that belong to another lane', () => {
     expect(isWhyBestMoveQuestion('why is this position better for white?')).toBe(false);
+    expect(isCandidateMoveQuestion('why is this position better for white?')).toBe(false);
     expect(isPlanQuestion('what piece should I take with?')).toBe(false);
   });
 });

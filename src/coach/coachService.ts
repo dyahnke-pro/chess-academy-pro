@@ -1274,12 +1274,30 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // move (and draws its arrow) on every surface that pre-injects a
             // plan (game-chat, teach), not just the eval (David 2026-07-09 live
             // prod: best-move asks were stock-ing out during eval-bar stalls).
-            engineBestMoveUci: input.liveState.engineBestMoveUci ?? input.liveState.enginePlan?.bestMoveUci,
+            // 🔒 `resolvedEnginePlan`, NOT `input.liveState.enginePlan`. THE
+            // ON-DEMAND BUILD FED EVERY CONSUMER EXCEPT THE ONE IT WAS ADDED
+            // FOR. The build above exists so a best-move ask can ground on a
+            // surface that threads no engine data — and then this line read the
+            // THREADED plan, which in exactly that case is undefined. So the
+            // search ran, `enginePlan:` below received it, and the best-move
+            // dispatch (which reads `engineBestMoveUci`) found nothing and
+            // served the stock "I can't verify that precisely".
+            //
+            // Measured on prod 2026-08-11: "What is the best move here?" —
+            // the plainest question in the app — answered with the canned
+            // refusal in 113ms, while "What is my plan?" and "Why play Nc3?"
+            // both answered correctly from the same cached plan seconds
+            // earlier. The two working lanes read `enginePlan`; the broken one
+            // read a field nothing had filled.
+            //
+            // `resolvedEnginePlan` IS `input.liveState.enginePlan` whenever the
+            // surface threaded one, so this only ever adds the on-demand case.
+            engineBestMoveUci: input.liveState.engineBestMoveUci ?? resolvedEnginePlan?.bestMoveUci,
             // enginePlan carries a white-perspective eval for plan turns; the
             // eval-bar snapshot carries one for every turn. Either is fine — both
             // are white-perspective (the interception converts to side-to-move).
-            engineEvalCp: input.liveState.enginePlan?.evalCp ?? input.liveState.evalCp,
-            engineMateIn: input.liveState.enginePlan?.mateIn ?? input.liveState.evalMateIn,
+            engineEvalCp: resolvedEnginePlan?.evalCp ?? input.liveState.evalCp,
+            engineMateIn: resolvedEnginePlan?.mateIn ?? input.liveState.evalMateIn,
             // STEP D Phase 3 — the engine PV backs a PLAN answer (assemblePlanAnswer).
             enginePlan: resolvedEnginePlan,
             tactics: input.liveState.tactics,
@@ -1330,7 +1348,20 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             masterPlayQuestion: isMasterPlayQuestion(askForIntents),
             // STEP D Phase 5 — "what's a fork?" voices the book corpus
             // (assembleConceptAnswer); the interception confirms a real concept.
-            conceptQuestion: isConceptQuestion(askForIntents),
+            //
+            // 🔒 A QUESTION ABOUT THIS BOARD IS NOT A GLOSSARY LOOKUP. The
+            // concept lane is keyed on "what is <chess noun>", which "What is
+            // the plan for white and black?" matches — and it dispatches first,
+            // so David asked about the position on prod 2026-08-11 and was
+            // taught what a fork is: "The knight is the natural forker, jumping
+            // over defenders to hit king and queen together…" True, well
+            // written, and about nothing he could see.
+            //
+            // The plan lane is the specific one: it has an answer computed from
+            // the engine's line at THIS position, which is strictly what he
+            // asked for. So it wins, and the corpus keeps every question the
+            // board cannot answer.
+            conceptQuestion: conceptQuestionEngage && !planQuestionEngage,
             // STEP D Phase 4 (cont) — "how does <pro> play this?" voices the
             // player's REAL games (assemblePlayerGamesAnswer); gated on the
             // playerGames context being present.

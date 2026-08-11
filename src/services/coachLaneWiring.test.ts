@@ -207,7 +207,14 @@ describe('a question lane can REACH the branch that answers it', () => {
       .toMatch(/!input\.liveState\.engineBestMoveUci/);
     // The handoff has to actually fall back to the plan's move, or the build
     // above is wasted work.
-    expect(SERVICE).toMatch(/engineBestMoveUci: input\.liveState\.engineBestMoveUci \?\? input\.liveState\.enginePlan\?\.bestMoveUci/);
+    //
+    // 🔒 AND IT MUST BE `resolvedEnginePlan`, NOT `input.liveState.enginePlan`.
+    // This line used to assert the latter — so the test PINNED the bug: on a
+    // surface that threads nothing (the whole reason the build exists) that
+    // field is undefined, and the best-move dispatch got nothing while the plan
+    // lane got the fresh search. See the dedicated case further down for the
+    // prod measurement.
+    expect(SERVICE).toMatch(/engineBestMoveUci: input\.liveState\.engineBestMoveUci \?\? resolvedEnginePlan\?\.bestMoveUci/);
   });
 
   it('the piece a question narrowed to reaches the answer', () => {
@@ -404,5 +411,35 @@ describe('the couplings that make the wiring safe', () => {
     expect(TEACH).toMatch(/saidParts: survived/);
     expect(TEACH_CODE, 'the marks are reading the prose again')
       .not.toMatch(/spoken: graded/);
+  });
+
+  it('the best-move ask reads the plan the coach just BUILT for it', () => {
+    // 🔒 THE ON-DEMAND BUILD FED EVERY CONSUMER EXCEPT THE ONE IT WAS ADDED
+    // FOR. `buildEnginePlan` runs here so a best-move question can ground on a
+    // surface that threads no engine data — and the grounding then read
+    // `input.liveState.enginePlan`, which in exactly that case is undefined.
+    // So the search ran, the plan lane got it, and the best-move dispatch —
+    // which reads `engineBestMoveUci` — found nothing.
+    //
+    // Measured on prod 2026-08-11: "What is the best move here?" answered with
+    // the canned "I can't verify that precisely" in 113ms, while "What is my
+    // plan?" and a why-ask both answered correctly from the same cached plan
+    // seconds earlier. The two working lanes read the built plan; the broken
+    // one read a field nothing had filled.
+    const SERVICE = code(read('src/coach/coachService.ts'));
+    expect(SERVICE).toMatch(/engineBestMoveUci: input\.liveState\.engineBestMoveUci \?\? resolvedEnginePlan\?\.bestMoveUci/);
+    expect(SERVICE, 'the eval is back on the threaded plan')
+      .toMatch(/engineEvalCp: resolvedEnginePlan\?\.evalCp/);
+    expect(SERVICE, 'the best move is read from a plan the build never fills')
+      .not.toMatch(/engineBestMoveUci: input\.liveState\.engineBestMoveUci \?\? input\.liveState\.enginePlan/);
+  });
+
+  it('a question about THIS board is not answered as a glossary lookup', () => {
+    // "What is the plan for white and black?" matches the concept lane too,
+    // and the concept lane dispatches first — so David asked about the
+    // position and was taught what a fork is. The plan lane has an answer
+    // computed from the engine's line at this position; it wins.
+    const SERVICE = code(read('src/coach/coachService.ts'));
+    expect(SERVICE).toMatch(/conceptQuestion: conceptQuestionEngage && !planQuestionEngage/);
   });
 });
