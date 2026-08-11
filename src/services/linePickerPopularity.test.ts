@@ -13,13 +13,20 @@ vi.mock('./lichessExplorerService', () => ({
 import { rankByPopularity, popularityLabel } from './linePickerPopularity';
 import type { LinePickerOption } from './openingDetectionService';
 
-const opt = (label: string, keyMove: string): LinePickerOption => ({
+/** `pgn` is what matters now: a line is located by where it LEAVES the trunk,
+ *  not by the move that names it. `keyMove` is display text and stays. */
+const opt = (label: string, pgn: string, keyMove = ''): LinePickerOption => ({
   label, fullName: `Sicilian Defense: ${label}`, eco: 'B20', style: 'sharp',
-  pgnLength: 6, studentSide: 'black', leadingSide: 'white', keyMove,
+  pgnLength: pgn.split(' ').length, pgn, studentSide: 'black',
+  leadingSide: 'white', keyMove,
 });
 
 // A Sicilian picker: the student has played 1.e4 c5 and these are the replies.
-const OPTIONS = [opt('Alapin', '3.c3'), opt('Open', '3.Nf3'), opt('Closed', '3.Nc3')];
+const OPTIONS = [
+  opt('Alapin', 'e4 c5 c3'),
+  opt('Open', 'e4 c5 Nf3'),
+  opt('Closed', 'e4 c5 Nc3'),
+];
 const SICILIAN = 'e4 c5';
 
 const moves = (rows: Array<[string, number]>) => ({
@@ -80,12 +87,44 @@ describe('rankByPopularity', () => {
     expect(fetchLichessExplorer).not.toHaveBeenCalled();
   });
 
-  it('reads a display keyMove — move number and ellipsis and all', async () => {
-    // keyMove is authored for the eye ("5...a6"); the explorer keys on bare SAN.
-    fetchLichessExplorer.mockResolvedValue(moves([['a6', 500], ['Nf3', 100]]));
-    const ranked = await rankByPopularity([opt('Najdorf', '5...a6'), opt('Open', '3.Nf3')], SICILIAN, 1300);
-    expect(ranked[0].label).toBe('Najdorf');
-    expect(ranked[0].games).toBe(500);
+  it('locates a DEEP line by where it leaves the trunk, not by its name move', async () => {
+    // 🔒 THE BUG THE PROD AUDIT CAUGHT. Matching on the naming move returned
+    // zero captions on a real Sicilian picker: the Najdorf is named by …a6 at
+    // ply 9 of `e4 c5`, which is not a continuation of that position, so the
+    // explorer has no entry for it. Located by its BRANCH move (Nf3) it is
+    // found — the assumption was wrong, not the plumbing.
+    fetchLichessExplorer.mockResolvedValue(moves([['Nf3', 700], ['c3', 300]]));
+    const ranked = await rankByPopularity(
+      [opt('Alapin', 'e4 c5 c3'), opt('Najdorf', 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6', '5...a6')],
+      SICILIAN, 1300,
+    );
+    const najdorf = ranked.find((o) => o.label === 'Najdorf');
+    expect(najdorf?.games, 'a deep line found by its branch move').toBe(700);
+  });
+
+  it('a SHARED branch earns no number on either tile', async () => {
+    // The Najdorf and the Dragon both leave `e4 c5` by Nf3. Putting Nf3's share
+    // on both would tell the student two different lines are each played 70% of
+    // the time — false twice over, and worse than saying nothing.
+    fetchLichessExplorer.mockResolvedValue(moves([['Nf3', 700], ['c3', 300]]));
+    const ranked = await rankByPopularity(
+      [
+        opt('Najdorf', 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6'),
+        opt('Dragon', 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6'),
+        opt('Alapin', 'e4 c5 c3'),
+      ],
+      SICILIAN, 1300,
+    );
+    expect(ranked.find((o) => o.label === 'Najdorf')?.games, 'shared branch claimed').toBeNull();
+    expect(ranked.find((o) => o.label === 'Dragon')?.games, 'shared branch claimed').toBeNull();
+    // The one that branches alone still gets its real share.
+    expect(ranked.find((o) => o.label === 'Alapin')?.games).toBe(300);
+  });
+
+  it('a line that IS the trunk gets no number', async () => {
+    fetchLichessExplorer.mockResolvedValue(moves([['Nf3', 700]]));
+    const ranked = await rankByPopularity([opt('Bare', 'e4 c5')], SICILIAN, 1300);
+    expect(ranked[0].games).toBeNull();
   });
 });
 

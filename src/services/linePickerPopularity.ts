@@ -49,13 +49,22 @@ export interface RankedLineOption extends LinePickerOption {
   games: number | null;
 }
 
-/** The move that first distinguishes an option from its siblings, as SAN.
+/** The move by which a line FIRST leaves the family trunk.
  *
- *  `keyMove` is authored for DISPLAY ("5...a6"), so it carries a move number
- *  and the ellipsis a Black move is written with. The explorer keys on bare
- *  SAN. */
-function bareSan(keyMove: string): string {
-  return keyMove.replace(/^\d+\s*(?:\.{1,3}|…)\s*/, '').trim();
+ *  🔒 NOT `keyMove`. The first version of this file matched on the naming move,
+ *  and the prod audit caught it returning zero captions on a real Sicilian
+ *  picker: the move that NAMES a variation is usually several plies past the
+ *  family position (the Najdorf is …a6 at ply 9 of `e4 c5`), so it is not a
+ *  continuation of that position and the explorer has no entry for it. The
+ *  assumption was wrong, not the plumbing — the request went out correctly
+ *  banded and every lookup missed.
+ *
+ *  The branch move IS a continuation by construction: it is the option's own
+ *  next ply after the shared trunk. Null when the line is not longer than the
+ *  trunk, which means it is the trunk. */
+function branchMove(optionPgn: string, trunkPlies: number): string | null {
+  const moves = optionPgn.split(/\s+/).filter(Boolean);
+  return moves.length > trunkPlies ? moves[trunkPlies] : null;
 }
 
 /**
@@ -104,8 +113,22 @@ export async function rankByPopularity(
   const bySan = new Map<string, number>();
   for (const m of result.moves) bySan.set(m.san, m.white + m.draws + m.black);
 
-  const ranked: RankedLineOption[] = options.map((o) => {
-    const games = bySan.get(bareSan(o.keyMove)) ?? null;
+  const trunkPlies = canonicalPgn.split(/\s+/).filter(Boolean).length;
+  const branchOf = options.map((o) => branchMove(o.pgn, trunkPlies));
+  // ── A SHARED BRANCH IS NOT THIS LINE'S SHARE ────────────────────────────
+  //
+  // The Najdorf and the Dragon both leave `e4 c5` by Nf3. Reporting Nf3's
+  // popularity on BOTH tiles would tell the student that two different lines
+  // are each played 70% of the time, which is false twice over and worse than
+  // saying nothing. A branch move only earns a number when it belongs to
+  // exactly ONE option on screen; the rest keep taxonomy order and no caption.
+  const shareCount = new Map<string, number>();
+  for (const b of branchOf) if (b) shareCount.set(b, (shareCount.get(b) ?? 0) + 1);
+
+  const ranked: RankedLineOption[] = options.map((o, i) => {
+    const branch = branchOf[i];
+    const unique = branch !== null && shareCount.get(branch) === 1;
+    const games = unique ? bySan.get(branch) ?? null : null;
     return {
       ...o,
       games,

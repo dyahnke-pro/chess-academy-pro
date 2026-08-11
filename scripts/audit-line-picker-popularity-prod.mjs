@@ -109,14 +109,17 @@ try {
         ? decodeURIComponent(banded[0]).replace(/^.*?(ratings=[^&]*).*$/, '$1')
         : `${explorerCalls.length} explorer call(s), none banded`);
 
-    // The caption is the visible proof a real number reached the tile. Absent
-    // captions are LEGITIMATE — a thin sample gets none on purpose — so this is
-    // reported either way rather than failed blind.
+    // Absent captions are LEGITIMATE in two cases and a defect in a third, so
+    // the message has to say which. A thin sample gets none on purpose, and a
+    // branch SHARED by two tiles gets none on purpose (reporting Nf3's share on
+    // both the Najdorf and the Dragon would be false twice over). What would be
+    // a defect is every tile silent while the request went out fine — which is
+    // exactly what this audit caught on its first run.
     const captioned = after.filter((t) => /% at your level|under 0\.1%/.test(t));
     record('a tile shows real game share at the student\'s level', captioned.length > 0,
       captioned.length > 0
         ? `${captioned.length}/${after.length} tiles captioned`
-        : 'no captions — explorer miss, thin sample, or the pass never ran');
+        : 'no captions — every branch shared, sample too thin, or the pass never ran');
 
     // Tiles must never VANISH or duplicate when the re-rank lands. Losing an
     // option to a background pass would be worse than the ordering it fixes.
@@ -124,12 +127,21 @@ try {
       after.length === orderBefore.length && new Set(after).size === new Set(orderBefore).size,
       `${orderBefore.length} before, ${after.length} after`);
 
-    // And the picker still WORKS: a tile has to start its lesson.
+    // And the picker still WORKS. Careful about what "works" means: a tile
+    // submits its variation NAME, and a sub-family with enough named lines of
+    // its own legitimately opens a SECOND picker. So "a picker is on screen" is
+    // not a failure — the same tiles still being on screen is. Comparing the
+    // labels tells those two apart; counting tiles cannot.
+    const labelsBefore = await tiles.allInnerTexts();
     await tiles.first().click();
-    await page.waitForTimeout(6000);
-    const gone = (await tiles.count()) === 0;
-    record('picking a line still starts the lesson', gone,
-      gone ? 'picker closed' : 'picker still open after clicking a tile');
+    await page.waitForTimeout(7000);
+    const stillOpen = (await tiles.count()) > 0;
+    const labelsAfter = stillOpen ? await tiles.allInnerTexts() : [];
+    const movedOn = !stillOpen || labelsAfter.join('|') !== labelsBefore.join('|');
+    record('picking a line moves the student on', movedOn,
+      !stillOpen ? 'picker closed — lesson started'
+        : movedOn ? 'a sub-family picker opened (a real next step)'
+          : 'the SAME tiles are still on screen — the click did nothing');
   }
 } catch (err) {
   record('the run completed', false, `ERROR ${String(err).slice(0, 200)}`);

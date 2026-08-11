@@ -1315,6 +1315,11 @@ export interface LinePickerOption {
    *  that the Paulsen Attack, a name he had no reason to know. Showing the move
    *  on the tile is what connects the two. */
   keyMove: string;
+  /** The variation's own move sequence. Carried so a consumer can work out
+   *  where this line FIRST leaves the family's shared trunk — the naming move
+   *  is often several plies deeper than that and is not a continuation of the
+   *  family position at all (Najdorf's …a6 is ply 9 of `e4 c5`). */
+  pgn: string;
 }
 
 /** "5.Qf3" / "5...a6" — the numbered form of the LAST move in a line, which is
@@ -1558,12 +1563,15 @@ export function findLinePickerOptions(
         const v = variations[tab.index];
         const moves = v.pgn.split(/\s+/).filter(Boolean);
         const pgnLength = moves.length;
+        const pgn = v.pgn;
         return {
           label: tab.label,
           fullName: `${curatedEntry.name}: ${v.name}`,
           eco: findOpeningByPgnPrefix(moves)?.eco ?? curatedEntry.eco ?? bareCandidate.eco,
           style: classifyVariationStyle(v.name),
           pgnLength,
+        pgn,
+       
           studentSide,
           // A curated variation is the OPPONENT's named system (White's
           // attack vs the Pirc; Black's defense vs the Ruy), so the leading
@@ -1613,6 +1621,7 @@ export function findLinePickerOptions(
         // colored by ITS character, not the parent's.
         style: classifyVariationStyle(label),
         pgnLength,
+        pgn: e.pgn,
         studentSide,
         leadingSide,
         keyMove: namingMove(e.pgn),
