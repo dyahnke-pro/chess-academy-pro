@@ -75,6 +75,15 @@ export function mapRevenueCatEvent(rc: RevenueCatEvent | undefined | null): Post
   if (type === 'INITIAL_PURCHASE' && isTrial(rc.period_type)) {
     event = 'trial_started';
   }
+  // A trial converting into its first paid charge fires as RENEWAL, not
+  // INITIAL_PURCHASE — RevenueCat flags it with `is_trial_conversion`. Without
+  // this, the moment someone actually becomes a paying customer is
+  // indistinguishable from their 10th routine renewal, and `purchase_completed`
+  // never fires for anyone who came in through a trial.
+  const isTrialConversion = type === 'RENEWAL' && rc.is_trial_conversion === true;
+  if (isTrialConversion) {
+    event = 'purchase_completed';
+  }
 
   const amount =
     typeof rc.price_in_purchased_currency === 'number'
@@ -92,6 +101,7 @@ export function mapRevenueCatEvent(rc: RevenueCatEvent | undefined | null): Post
     environment: rc.environment,
     price: amount,
     currency: rc.currency,
+    ...(isTrialConversion ? { is_trial_conversion: true } : {}),
   };
 
   // Revenue value only on money-moving events (never on cancel/expire/trial).

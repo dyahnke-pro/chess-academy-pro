@@ -83,6 +83,27 @@ describe('mapRevenueCatEvent — lifecycle (the closed-app events clients miss)'
     expect(m?.properties.rc_event_type).toBe('SOME_NEW_EVENT');
   });
 
+  it('a RENEWAL with is_trial_conversion is the FIRST paid charge, not a routine renewal', () => {
+    const m = mapRevenueCatEvent({
+      ...BASE,
+      type: 'RENEWAL',
+      period_type: 'NORMAL',
+      is_trial_conversion: true,
+    });
+    expect(m?.event).toBe('purchase_completed');
+    expect(m?.properties.revenue).toBe(7.99);
+    expect(m?.properties.is_trial_conversion).toBe(true);
+    const set = m?.properties.$set as Record<string, unknown>;
+    expect(set.is_pro).toBe(true);
+    expect(set.subscription_status).toBe('subscription');
+  });
+
+  it('a RENEWAL without is_trial_conversion stays a routine renewal', () => {
+    const m = mapRevenueCatEvent({ ...BASE, type: 'RENEWAL', period_type: 'NORMAL', is_trial_conversion: false });
+    expect(m?.event).toBe('subscription_renewed');
+    expect(m?.properties).not.toHaveProperty('is_trial_conversion');
+  });
+
   it('uses price_in_purchased_currency when present, else falls back to price', () => {
     const m = mapRevenueCatEvent({
       type: 'RENEWAL',
