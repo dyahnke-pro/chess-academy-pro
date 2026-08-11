@@ -75,6 +75,29 @@ function whyBetter(
   // Worth noticing: your pieces on a1…". Grammatically it promotes a noticing
   // into a reason; that is the same defect that took the idle-piece clause out
   // of the want-list in the first place, arriving by a different door.
+  // ── ONE REASON, THE BEST ONE — NOT THE WHOLE WANT-LIST ──────────────────
+  //
+  // Caught on prod 2026-08-11: "Nxe5 was the move — it would walk the bishop
+  // round to b3, by way of f7, swing pieces toward their king, pull the pawns
+  // away from their king and win a pawn." Five clauses in one breath. Every one
+  // true and board-verified; the sentence is still unusable.
+  //
+  // The plan is UNCAPPED on purpose (David 2026-08-10: "I want to hear
+  // everything the PV has to say. Do not limit it.") and that is right FOR THE
+  // PLAN — it is the forward-looking read, and the student is listening to it
+  // as such. The callout is a different register: it names one move and says
+  // why that move, so it wants the single strongest reason.
+  //
+  // This is not a cap put back. `describePlan` already SORTS its clauses by
+  // weight and `spokenClauses` preserves that order, so the leader is the plan's
+  // own answer to "the most important thing this move does". Taking it is a
+  // selection from ranked data, and it reads the STRUCTURE rather than
+  // re-splitting the joined prose — which cannot be split safely anyway, since a
+  // clause carries its own commas ("walk the bishop round to b3, by way of f7").
+  const lead = plan?.mine.spokenClauses[0];
+  if (lead?.text) return { why: lead.text, square: lead.squares[0] ?? '' };
+  // No clause carried a square (the drift line, and anything square-less that
+  // outranked it) — fall back to the sentence, which in that case IS one clause.
   const want = /^You want to ([^.]+)\./.exec(text);
   if (!want) return null;
   const square = plan?.mine.spokenClauses.flatMap((c) => c.squares)[0] ?? '';

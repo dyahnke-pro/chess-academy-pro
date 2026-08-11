@@ -213,3 +213,62 @@ describe('the sign convention — the classic way this goes wrong', () => {
     }
   });
 });
+
+// ── ONE REASON, NOT THE WHOLE WANT-LIST ───────────────────────────────────
+// Caught on prod 2026-08-11, from a real game the audit drove:
+//
+//   "Nxe5 was the move — it would walk the bishop round to b3, by way of f7,
+//    swing pieces toward their king, pull the pawns away from their king and
+//    win a pawn."
+//
+// Every clause true and board-verified; the sentence still unusable. The plan
+// is uncapped deliberately and stays that way — the callout is a different
+// register and wants the single strongest reason, which the plan has already
+// ranked for it.
+describe('the callout gives one reason, the highest-ranked one', () => {
+  // A real middlegame where the engine's best move does several things at once,
+  // so the want-list has more than one clause to choose between.
+  const FEN = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 6 5';
+
+  const said = (): string => callInaccuracy({
+    fenBefore: FEN,
+    playedSan: 'a3',
+    bestSan: 'O-O',
+    bestLineUci: ['e1g1', 'e8g8', 'd2d3', 'd7d6', 'c1g5', 'c8g4'],
+    cpLoss: 300,
+    side: 'student',
+    moverColor: 'white',
+  })?.said ?? '';
+
+  it('never runs four or more clauses together', () => {
+    const line = said();
+    if (!line.includes('it would ')) return; // no PV reason on this board
+    const why = line.slice(line.indexOf('it would ') + 9);
+    // The joined want-list is "A, B, C and D". A reason with three or more
+    // separators is the run-on this test exists to prevent.
+    const parts = why.split(/,| and /).filter((s) => s.trim());
+    expect(parts.length, `run-on reason: ${why}`).toBeLessThanOrEqual(2);
+  });
+
+  it('still gives a reason rather than going quiet', () => {
+    // The failure mode on the other side: "fixing" the run-on by dropping the
+    // reason entirely leaves "O-O was the move." and teaches nothing.
+    expect(said()).toMatch(/was the move/);
+  });
+
+  it('the coach half is held to the same bar', () => {
+    const c = callInaccuracy({
+      fenBefore: FEN,
+      playedSan: 'a3',
+      bestSan: 'O-O',
+      bestLineUci: ['e1g1', 'e8g8', 'd2d3', 'd7d6', 'c1g5', 'c8g4'],
+      cpLoss: 300,
+      side: 'coach',
+      moverColor: 'white',
+    })?.said ?? '';
+    if (!c.includes(', to ')) return;
+    const why = c.slice(c.indexOf(', to ') + 5);
+    const parts = why.split(/,| and /).filter((s) => s.trim());
+    expect(parts.length, `run-on reason: ${why}`).toBeLessThanOrEqual(2);
+  });
+});
