@@ -88,10 +88,41 @@ export async function rankByPopularity(
     options.map((o) => ({ ...o, playedPct: null, games: null }));
   if (options.length === 0) return [];
 
+  // ── ASK AT THE POSITION WHERE THESE LINES ACTUALLY PART ────────────────
+  //
+  // 🔒 NOT THE FAMILY ROOT. A live prod picker for the Sicilian offered exactly
+  // three tiles — Dragon, Najdorf, Richter-Rauzer — and all three run
+  // `e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3` before they differ. Asked at `e4 c5`
+  // their branch move is Nf3 for all of them, so the shared-branch rule below
+  // correctly refused to caption ANY of them and the feature did nothing for
+  // the case it exists to serve: named variations.
+  //
+  // The question "how often is this line chosen" is only meaningful at the
+  // board where the choice is made. So the trunk is the deepest prefix the
+  // SHOWN options have in common, not the family's canonical PGN — at that
+  // position each option's next ply is a genuine, distinguishable alternative
+  // and the explorer has a real number for it.
+  //
+  // Falls back to `canonicalPgn` when a common prefix cannot be walked, and
+  // never goes SHORTER than it: a prefix outside the family would be asking
+  // about a different opening entirely.
+  const lineOf = (pgn: string): string[] => pgn.split(/\s+/).filter(Boolean);
+  const familyPlies = lineOf(canonicalPgn).length;
+  const commonPrefix = (): string[] => {
+    const lines = options.map((o) => lineOf(o.pgn)).filter((l) => l.length > 0);
+    if (lines.length === 0) return lineOf(canonicalPgn);
+    let i = 0;
+    while (lines.every((l) => l.length > i && l[i] === lines[0][i])) i += 1;
+    // Never shorter than the family, and never the whole of any single line —
+    // a trunk that consumed an option entirely would leave it no branch move.
+    return i >= familyPlies ? lines[0].slice(0, i) : lineOf(canonicalPgn);
+  };
+  const trunk = commonPrefix();
+
   let fen: string;
   try {
     const board = new Chess();
-    for (const san of canonicalPgn.split(/\s+/).filter(Boolean)) {
+    for (const san of trunk) {
       if (!board.move(san)) return unranked();
     }
     fen = board.fen();
@@ -113,8 +144,7 @@ export async function rankByPopularity(
   const bySan = new Map<string, number>();
   for (const m of result.moves) bySan.set(m.san, m.white + m.draws + m.black);
 
-  const trunkPlies = canonicalPgn.split(/\s+/).filter(Boolean).length;
-  const branchOf = options.map((o) => branchMove(o.pgn, trunkPlies));
+  const branchOf = options.map((o) => branchMove(o.pgn, trunk.length));
   // ── A SHARED BRANCH IS NOT THIS LINE'S SHARE ────────────────────────────
   //
   // The Najdorf and the Dragon both leave `e4 c5` by Nf3. Reporting Nf3's

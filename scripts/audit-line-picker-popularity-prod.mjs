@@ -86,7 +86,13 @@ try {
   await box.pressSequentially('Teach me the Sicilian Defense', { delay: 10 });
   await box.press('Enter');
 
-  const tiles = page.locator('[data-testid^="line-picker-"]');
+  // 🔒 `[data-testid^="line-picker-"]` IS NOT THE TILES. It also matches the
+  // Play/Face mode toggles and the "Never mind" escape — six matches where a
+  // real Sicilian picker has three variations. So `tiles.first()` clicked the
+  // PLAY TOGGLE, which correctly does nothing, and this audit reported "the
+  // click did nothing" as a product bug. It was not. `data-fullname` is on the
+  // variation tiles and nothing else, which is what makes it the right handle.
+  const tiles = page.locator('[data-testid^="line-picker-"][data-fullname]');
   let opened = false;
   for (let i = 0; i < 30; i++) {
     await page.waitForTimeout(1500);

@@ -102,6 +102,31 @@ describe('rankByPopularity', () => {
     expect(najdorf?.games, 'a deep line found by its branch move').toBe(700);
   });
 
+  it('asks at the position where the lines actually PART, not the family root', async () => {
+    // 🔒 THE LIVE PROD PICKER THAT FORCED THIS. The Sicilian offered exactly
+    // three tiles — Dragon, Najdorf, Richter-Rauzer — and all three run
+    // `e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3` before they differ. Asked at `e4 c5`
+    // every branch move is Nf3, the shared-branch rule refuses all three, and
+    // the feature does nothing for the case it exists to serve.
+    fetchLichessExplorer.mockResolvedValue(moves([['a6', 600], ['g6', 300], ['e6', 100]]));
+    const spine = 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3';
+    const ranked = await rankByPopularity(
+      [opt('Dragon', `${spine} g6`), opt('Najdorf', `${spine} a6`)],
+      SICILIAN, 1300,
+    );
+    expect(ranked[0].label, 'the more-played line should lead').toBe('Najdorf');
+    expect(ranked[0].games).toBe(600);
+    expect(ranked.find((o) => o.label === 'Dragon')?.games).toBe(300);
+  });
+
+  it('never asks ABOVE the family — that would be a different opening', async () => {
+    // A single option cannot drag the trunk out of its own family.
+    fetchLichessExplorer.mockResolvedValue(moves([['Nf3', 500]]));
+    await rankByPopularity([opt('Open', 'e4 c5 Nf3')], SICILIAN, 1300);
+    const askedFen = fetchLichessExplorer.mock.calls[0][0];
+    expect(askedFen, 'the trunk left the Sicilian').toContain('2p5'); // black pawn on c5
+  });
+
   it('a SHARED branch earns no number on either tile', async () => {
     // The Najdorf and the Dragon both leave `e4 c5` by Nf3. Putting Nf3's share
     // on both would tell the student two different lines are each played 70% of
