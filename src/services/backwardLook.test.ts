@@ -290,3 +290,83 @@ describe('nothing is called against a move the engine says gained', () => {
     expect(at(0, 'coach')).toBe(at(0, 'coach'));
   });
 });
+
+// ── THE ATTEMPT AND THE COST, IN THAT ORDER ─────────────────────────────────
+//
+// David 2026-08-11, on wiring the why-your-move-failed geometry into Learn:
+// "Have its placement compliment the other."
+//
+// The concession says what the move COST; `whyItFailed` says why what it
+// ATTEMPTED does not work. Different halves of one move — and the concession
+// doctrine's own opening line is "so I remove one defender to attack over
+// here", which is exactly the move where both fire.
+describe('why the move failed complements what it cost', () => {
+  it('opens on the attempt, not the cost', () => {
+    // Rook to a5 hits the guarded pawn on d5 — the geometry lane fires, and
+    // the sentence has to START there: the cost sounds arbitrary until the
+    // reason for paying it has been said.
+    const out = backwardLook({
+      fenBefore: '4k3/8/2p5/3p4/8/8/4K3/R7 w - - 0 1',
+      fenAfter: '4k3/8/2p5/R2p4/8/8/4K3/8 b - - 1 1',
+      playedSan: 'Ra5',
+      bestSan: 'Kd3',
+      cpLoss: 120,
+      studentColor: 'white',
+    });
+    expect(out, 'the geometry lane never fired').not.toBeNull();
+    expect(out!.kind, 'it should ride the concession lane, not outrank the callout')
+      .toBe('drawback');
+    expect(out!.line).toContain('d5');
+    // The mark follows the sentence — it opens on the attempt, so the mark is
+    // the attempt's square.
+    expect(out!.square).toBe('d5');
+  });
+
+  it('stays silent about a move that measurably improved the position', () => {
+    // A move that GAINED is not a failed idea, whatever it happens to attack.
+    // Without this gate every developing move that eyes a guarded pawn would
+    // collect a sentence explaining why it "fails".
+    const out = backwardLook({
+      fenBefore: '4k3/8/2p5/3p4/8/8/4K3/R7 w - - 0 1',
+      fenAfter: '4k3/8/2p5/R2p4/8/8/4K3/8 b - - 1 1',
+      playedSan: 'Ra5',
+      bestSan: 'Kd3',
+      cpLoss: -400,          // the engine says this improved things
+      studentColor: 'white',
+    });
+    if (out) expect(out.kind).not.toBe('drawback');
+  });
+
+  it('never lets the coach borrow the student\'s pronouns', () => {
+    // The geometry prose is second person ("your rook"), so the coach cannot
+    // use it to describe its OWN move without saying something false about
+    // whose piece it is. The coach branch must not reach this lane at all.
+    const out = backwardLook({
+      fenBefore: '4k3/8/2p5/3p4/8/8/4K3/R7 w - - 0 1',
+      fenAfter: '4k3/8/2p5/R2p4/8/8/4K3/8 b - - 1 1',
+      playedSan: 'Ra5',
+      bestSan: 'Kd3',
+      cpLoss: 120,
+      studentColor: 'white',
+      side: 'coach',
+    });
+    if (out) expect(out.line).not.toContain('your rook');
+  });
+
+  it('still names the cost alone when there is no attempt to explain', () => {
+    // The concession lane keeps working exactly as it did — this is an
+    // addition, not a replacement, and a quiet giveaway with no attack in it
+    // must still be named.
+    const out = backwardLook({
+      fenBefore: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+      fenAfter: 'rnbqkbnr/pppppppp/8/8/8/7P/PPPPPPP1/RNBQKBNR b KQkq - 0 1',
+      playedSan: 'h3',
+      bestSan: 'e4',
+      cpLoss: 60,
+      studentColor: 'white',
+    });
+    // Either lane may answer or neither may; what must NOT happen is a
+    // geometry sentence about a move that attacks nothing.
+    if (out) expect(out.line).not.toContain('is holding it');
+  });
+});

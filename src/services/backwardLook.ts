@@ -29,6 +29,7 @@
 // line. Nothing here asks a model anything.
 import { findConcession, findStudentDrawback, whatItAllowed } from './concessionBeat';
 import { callInaccuracy } from './inaccuracyCall';
+import { whyItFailed } from './whyItFailed';
 import { INACCURACY_CP } from './engineConstants';
 
 export interface BackwardLook {
@@ -142,16 +143,65 @@ export function backwardLook(args: {
 
   // FIRST the structural read — it NAMES the thing given up ("that took your
   // last defender off d5"), which is the most teachable form there is.
-  if (args.bestSan && !gained) {
+  //
+  // ── AND WHAT THE MOVE WAS TRYING TO DO ──────────────────────────────────
+  //
+  // The concession says what the move COST. `whyItFailed` says why what it
+  // ATTEMPTED does not work — the target was guarded by a piece the student
+  // never looked at, or nothing guarded it and the reply comes with check on
+  // the attacker. Different halves of one move, and the second is the half
+  // that speaks to the student's own idea rather than to the eval.
+  //
+  // 🔒 THEY ARE STRONGEST TOGETHER, IN THIS ORDER. The concession doctrine's
+  // own opening line is "so I remove one defender to attack over here" — which
+  // is exactly the move where both lanes fire, and saying only one of them
+  // tells half the story. Attempt first, then cost, reads as one thought:
+  // *you went for the pawn on f7, but the king holds it — and it took your
+  // last defender off d5.* Reversing that makes the cost sound arbitrary,
+  // because the reason for paying it has not been said yet.
+  //
+  // Rank is unchanged — this rides `drawback`, below the mistake callout, so
+  // the student still hears their own move judged first and then the
+  // alternative. Nothing about the existing order moves.
+  //
+  // Gated on `!gained` with everything else: a move that measurably improved
+  // the position is not a failed idea, whatever it happens to attack. Without
+  // that, every developing move that eyes a guarded pawn would collect a
+  // sentence explaining why it "fails".
+  if (!gained) {
+    let attempt: string | null = null;
+    let attemptSquare = '';
     try {
-      const d = findStudentDrawback({
-        fen: args.fenBefore,
+      // Student side only. The prose is written in the second person ("your
+      // knight"), so the coach cannot borrow it to describe its own move
+      // without saying something false about whose piece it is.
+      const f = whyItFailed({
+        fenBefore: args.fenBefore,
         playedSan: args.playedSan,
-        bestSan: args.bestSan,
         studentColor: args.studentColor,
       });
-      if (d) return { line: `${d.said} ${d.opening}`, square: d.square, kind: 'drawback' };
-    } catch { /* fall through — a lane that throws must not silence the rest */ }
+      if (f) { attempt = f.line; attemptSquare = f.squares[0] ?? ''; }
+    } catch { /* a lane that throws must not silence the rest */ }
+
+    let cost: { said: string; opening: string; square: string } | null = null;
+    if (args.bestSan) {
+      try {
+        cost = findStudentDrawback({
+          fen: args.fenBefore,
+          playedSan: args.playedSan,
+          bestSan: args.bestSan,
+          studentColor: args.studentColor,
+        });
+      } catch { /* fall through */ }
+    }
+
+    if (attempt || cost) {
+      const line = [attempt, cost ? `${cost.said} ${cost.opening}` : '']
+        .filter(Boolean).join(' ');
+      // The mark follows the same order: the square the ATTEMPT is about when
+      // there is one, because that is what the sentence opens on.
+      return { line, square: attemptSquare || cost?.square || '', kind: 'drawback' };
+    }
   }
 
   // THEN what should have been played, and why. Severity comes from
