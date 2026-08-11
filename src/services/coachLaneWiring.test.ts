@@ -131,6 +131,24 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
       'two producers are painting the plan').toBe(1);
   });
 
+  it('the line picker is ranked by real games, and never blocks its own render', () => {
+    // David 2026-08-11 handed this one over: "I leave you to build the
+    // line/leaf picker." The taxonomy count it ranked by measures how finely
+    // theory subdivided a line, not how often anyone plays it — so the top tile
+    // asserted something the ordering had no data for.
+    expect(TEACH).toMatch(/rankByPopularity\(options, canonicalPgn/);
+    // Banded to the student, or the ordering is somebody else's repertoire.
+    expect(TEACH).toMatch(/activeProfile\?\.puzzleRating \?\? activeProfile\?\.currentRating/);
+    // ASYNC and in place. A lookup wired IN FRONT of a surface turns an instant
+    // wrong answer into a slow one — the exact defect fixed in enginePlanContext
+    // the same night — so the tiles must not await it.
+    expect(TEACH_CODE, 'the picker awaits its own ranking').not.toMatch(/await rankByPopularity/);
+    // The base position has to survive into state; destructuring the picker
+    // result to name/options alone would silently make the whole pass inert.
+    expect(TEACH).toMatch(/canonicalPgn\?: string;/);
+    expect(TEACH, 'the caption is computed but never rendered').toMatch(/popularityLabel\(\{/);
+  });
+
   it('the queued package is actually spoken', () => {
     expect(TEACH).toMatch(/speakTrackA\(hintPkg\.spoken\)/);
   });

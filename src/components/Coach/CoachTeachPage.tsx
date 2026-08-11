@@ -235,6 +235,7 @@ import type { ChatMessage as ChatMessageType, BoardArrow, BoardHighlight } from 
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
 import { explainBestMoveGrounded } from '../../services/groundedAnswer';
+import { rankByPopularity, popularityLabel, type RankedLineOption } from '../../services/linePickerPopularity';
 import { stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
 import { applyCandidateArrows, candidateHighlightMarkers, gradeNarrationText, gradeBorrowedTeaching } from '../../services/coachAnswerGates';
 import { groundArrows, dedupeArrowsBySquarePair } from '../../utils/arrowGrounding';
@@ -944,7 +945,45 @@ export function CoachTeachPage(): JSX.Element {
   const [linePicker, setLinePicker] = useState<{
     canonicalName: string;
     options: LinePickerOption[];
+    /** The bare family's PGN — the position every option branches from, and
+     *  what the popularity pass needs to ask the explorer one question instead
+     *  of one per tile. Optional so every existing caller still compiles; a
+     *  picker without it simply keeps taxonomy order. */
+    canonicalPgn?: string;
   } | null>(null);
+  // ── WHAT PEOPLE AT YOUR LEVEL ACTUALLY PLAY ──────────────────────────────
+  //
+  // 🔒 THE PICKER'S ORDER IS A TEACHING CLAIM (David 2026-08-11, handing this
+  // one over: "I leave you to build the line/leaf picker. Ok for you to take
+  // charge on that.").
+  //
+  // `findLinePickerOptions` ranks by how many DB entries fall under a sub-name
+  // — which measures how finely theory has SUBDIVIDED a line, not how often
+  // anyone plays it. A heavily-catalogued sideline outranks a common main line,
+  // and the student reads the top tile as "this is what people play".
+  //
+  // Ranked here, ASYNC and in place, never in front of the render. Tonight's
+  // other lesson was that a lookup wired ahead of a surface turns an instant
+  // wrong answer into a slow one, so the tiles appear immediately in taxonomy
+  // order and re-rank if and when real data arrives. Rate-limited, offline,
+  // circuit-open, unknown line — every one of those leaves the picker exactly
+  // as it is today.
+  const [rankedLines, setRankedLines] = useState<RankedLineOption[] | null>(null);
+  useEffect(() => {
+    if (!linePicker?.canonicalPgn || linePicker.options.length === 0) { setRankedLines(null); return; }
+    let live = true;
+    const { options, canonicalPgn } = linePicker;
+    // The same rating the coach's own move strength is derived from, so the
+    // tiles and the opponent are describing one level rather than two.
+    void rankByPopularity(options, canonicalPgn, activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200)
+      .then((ranked) => {
+        // The picker may have closed or moved on while the request was out.
+        if (!live) return;
+        if (ranked.some((o) => o.games !== null)) setRankedLines(ranked);
+      })
+      .catch(() => undefined);
+    return () => { live = false; };
+  }, [linePicker, activeProfile?.puzzleRating, activeProfile?.currentRating]);
   // Remember every set of roads the student is SHOWN, keyed by the family, so
   // returning to it later knows which ones are already behind them.
   // WHEN THE ROADS COME BACK. Closing the picker by TAKING a road means the
@@ -9038,9 +9077,16 @@ export function CoachTeachPage(): JSX.Element {
                 // every tile as "W-led" because every named Pirc
                 // variation is White's attack system — the chip is
                 // pure visual noise. Drop it when uniform.
-                const sides = new Set(linePicker.options.map((o) => o.leadingSide));
+                // The ranked list when the games have answered, the taxonomy
+                // order until then — same tiles either way, so nothing pops in
+                // or disappears; only the ORDER settles, plus a caption.
+                const shown: Array<LinePickerOption & { playedPct?: number | null; games?: number | null }> =
+                  rankedLines && rankedLines.length === linePicker.options.length
+                    ? rankedLines
+                    : linePicker.options;
+                const sides = new Set(shown.map((o) => o.leadingSide));
                 const showLeadingChip = sides.size > 1;
-                return linePicker.options.map((opt) => {
+                return shown.map((opt) => {
                 const neon = getNeonColor(opt.style);
                 // The dot is the side the student will actually be on, so it
                 // has to answer whichever question the picker is asking. In
@@ -9158,6 +9204,18 @@ export function CoachTeachPage(): JSX.Element {
                         Attack") doesn't tell you it's the Qf3 line (David 2026-08-02). */}
                     {opt.keyMove && (
                       <span className="text-[10px] font-mono text-theme-text-muted leading-tight">{opt.keyMove}</span>
+                    )}
+                    {/* Real games at the student's own rating band. Absent
+                        entirely when the sample is too thin to quote at
+                        anyone — silence beats a misleading number, and an
+                        unknown line must never render as 0%. */}
+                    {popularityLabel({
+                      playedPct: opt.playedPct ?? null,
+                      games: opt.games ?? null,
+                    }) && (
+                      <span className="text-[10px] text-theme-text-muted leading-tight opacity-80">
+                        {popularityLabel({ playedPct: opt.playedPct ?? null, games: opt.games ?? null })}
+                      </span>
                     )}
                   </button>
                 );
