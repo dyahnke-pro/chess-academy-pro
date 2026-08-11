@@ -33,6 +33,7 @@ import { voiceFacts, voiceReviewLines } from './coachApi';
 // `voiceFacts` — no coachService.ask / free-LLM prose, no per-move segment
 // LLM call (those are deterministic via `buildReviewSegments`).
 import { logAppAudit } from './appAuditor';
+import { whyItFailed } from './whyItFailed';
 import { resolveCoachNarration } from '../utils/coachNarration';
 import type { BadHabit, CoachContext, UserProfile, CoachNarration } from '../types';
 
@@ -574,6 +575,22 @@ export interface ReviewMoveCitation {
    *  mechanism (empty > generic > invented). David 2026-06-27: "I want to
    *  hear the coach say why the move was better." */
   whyBetter: string | null;
+  /** Grounded one-line "why YOUR move failed" — the other half of the pair.
+   *
+   *  🔒 `whyBetter` explains the ENGINE's move; this explains the student's.
+   *  They are not the same lesson, and the second one is the thing they
+   *  actually did: told only that the stronger move was X, they learn a move;
+   *  told why their own idea failed, they learn the reason it will fail again.
+   *
+   *  Two board-provable geometries — the target was held by a guard the
+   *  student did not look at, or nothing guarded it and the reply comes with
+   *  check on the attacker. Null for every other shape, which is most of them.
+   *  See `whyItFailed`. */
+  whyItFailedLine: string | null;
+  /** Squares behind `whyItFailedLine` — the target, then the piece that
+   *  refutes it. Carried so a mark is drawn from the fact rather than parsed
+   *  back out of the sentence. */
+  whyItFailedSquares: string[];
 }
 
 /** Reconstruct the FEN at each ply from the move list. Uses chess.js
@@ -693,6 +710,14 @@ export function buildReviewCitations(
         })?.text ?? null
       : null;
 
+    // WHY THE PLAYED MOVE FAILED — the companion to `whyBetter` above. Pure
+    // chess.js geometry, no engine, so it costs nothing and cannot invent.
+    const failed = whyItFailed({
+      fenBefore,
+      playedSan: m.san,
+      studentColor: isWhiteMove ? 'white' : 'black',
+    });
+
     out.push({
       ply: m.ply,
       moveNumber: Math.ceil(m.ply / 2),
@@ -706,6 +731,8 @@ export function buildReviewCitations(
       playedSquares,
       suggestedSquares,
       whyBetter,
+      whyItFailedLine: failed?.line ?? null,
+      whyItFailedSquares: failed?.squares ?? [],
     });
   }
 
