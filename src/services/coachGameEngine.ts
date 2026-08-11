@@ -6,6 +6,10 @@ import { lookupMasterPlay } from './masterPlayLookup';
 import { pickBookMove } from './coachBookMove';
 import { fetchLichessExplorer } from './lichessExplorerService';
 import { teachableSlipAt } from './gemCrushLines';
+// The ONE owner of "how strong is the engine at this rating" — see
+// `getSkillLevelForElo` below. coachPlaySession does not import this file, so
+// the dependency is one-way.
+import { configFromTargetElo } from './coachPlaySession';
 import { logAppAudit } from './appAuditor';
 import type { StockfishAnalysis, CoachDifficulty } from '../types';
 
@@ -56,18 +60,20 @@ const FALLBACK_ANALYSIS: StockfishAnalysis = {
 
 /**
  * Maps target ELO to Stockfish Skill Level (0–20).
- * Skill Level controls how many intentional "errors" the engine makes —
- * much more natural than picking random non-best moves.
+ *
+ * 🔒 ONE OWNER, BECAUSE THE TWO COPIES DISAGREED AND BOTH WERE TOO STRONG.
+ * This file had its own ladder and `coachPlaySession` had anchors, and at
+ * David's 1729 they answered 16 and 12 — the same question, two numbers, and
+ * the Learn surface happened to call the harsher one. CLAUDE.md already names
+ * the owner ("never hard-code Stockfish strength — go through
+ * coachPlaySession.resolveConfig"); this now obeys it instead of shadowing it.
+ *
+ * The correction to the curve itself lives with the anchors: Skill Level is
+ * not Elo, and reading it as though it were is what handed a 1729 player an
+ * opponent around 2500 the moment the game left book.
  */
 function getSkillLevelForElo(targetElo: number): number {
-  if (targetElo < 800) return 2;
-  if (targetElo < 1000) return 5;
-  if (targetElo < 1200) return 8;
-  if (targetElo < 1400) return 11;
-  if (targetElo < 1600) return 14;
-  if (targetElo < 1800) return 16;
-  if (targetElo < 2000) return 18;
-  return 20;
+  return configFromTargetElo(targetElo).skill;
 }
 
 /**

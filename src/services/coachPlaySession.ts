@@ -38,14 +38,35 @@ export interface PlaySessionConfig {
   label: string;
 }
 
-/** ELO → (skill, moveTimeMs) anchors. Linearly interpolated between. */
+/** ELO → (skill, moveTimeMs) anchors. Linearly interpolated between.
+ *
+ * 🔒 SKILL LEVEL IS NOT ELO, AND TREATING IT AS IF IT WERE HANDED A 1729
+ * PLAYER A ~2500 OPPONENT (David 2026-08-11: "Computer seemed to be playing a
+ * lot of best moves"). His game bears it out — through move 7 the coach played
+ * real amateur moves off the rating band, then the book ran dry and every move
+ * after that came from the engine at `skill=16`.
+ *
+ * Stockfish's own scale runs from roughly 1320 at skill 0 to roughly 2850 at
+ * skill 20 — about 75 Elo per level. The old anchors read as though the scale
+ * ran 800→2400 over the same range, so EVERY band was several hundred points
+ * too strong, and the effect compounds exactly where a student notices it: an
+ * opponent that never errs.
+ *
+ * These anchors are that real curve, inverted. Note the floor: skill 0 still
+ * plays around 1320, so below that the number cannot go lower and the honest
+ * levers are elsewhere (breaking book, the amateur bands, shorter movetime) —
+ * which is why the sub-1300 anchors all sit at 0 rather than pretending.
+ *
+ * Move time is a SEPARATE axis and is unchanged; it is about how long the
+ * student waits, not how well the engine plays.
+ */
 const ELO_ANCHORS: ReadonlyArray<{ elo: number; skill: number; moveTimeMs: number }> = [
-  { elo: 800, skill: 1, moveTimeMs: 100 },
-  { elo: 1200, skill: 5, moveTimeMs: 250 },
-  { elo: 1500, skill: 9, moveTimeMs: 500 },
-  { elo: 1800, skill: 13, moveTimeMs: 800 },
-  { elo: 2100, skill: 17, moveTimeMs: 1200 },
-  { elo: 2400, skill: 20, moveTimeMs: 2000 },
+  { elo: 800, skill: 0, moveTimeMs: 100 },
+  { elo: 1200, skill: 0, moveTimeMs: 250 },
+  { elo: 1500, skill: 2, moveTimeMs: 500 },
+  { elo: 1800, skill: 6, moveTimeMs: 800 },
+  { elo: 2100, skill: 10, moveTimeMs: 1200 },
+  { elo: 2400, skill: 14, moveTimeMs: 2000 },
 ];
 
 function lerp(a: number, b: number, t: number): number {

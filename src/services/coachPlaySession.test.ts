@@ -35,10 +35,23 @@ describe('configFromTargetElo', () => {
   });
 
   it('interpolates between anchors (not a hard threshold)', () => {
-    // Between 1200 (skill 5) and 1500 (skill 9).
-    const mid = configFromTargetElo(1350);
-    expect(mid.skill).toBeGreaterThan(5);
-    expect(mid.skill).toBeLessThan(9);
+    // Asserted against the anchors the function ACTUALLY has, not against
+    // numbers copied out of them — this test is about interpolation, and it
+    // used to fail whenever the curve was corrected, which is the one thing
+    // it should not care about. (It did exactly that when the skill→Elo scale
+    // was fixed on 2026-08-11.)
+    const lo = configFromTargetElo(1200).skill;
+    const hi = configFromTargetElo(1500).skill;
+    const mid = configFromTargetElo(1350).skill;
+    expect(hi, 'the bracketing anchors must differ or there is nothing to interpolate').toBeGreaterThan(lo);
+    expect(mid).toBeGreaterThanOrEqual(lo);
+    expect(mid).toBeLessThanOrEqual(hi);
+    // And it is a real interpolation, not a step: the midpoint is strictly
+    // inside the bracket whenever the bracket is wide enough to hold a value.
+    if (hi - lo >= 2) {
+      expect(mid).toBeGreaterThan(lo);
+      expect(mid).toBeLessThan(hi);
+    }
   });
 });
 
@@ -164,3 +177,56 @@ describe('buildOpeningSeed / nextSeededMove', () => {
   });
 });
 
+
+// SKILL LEVEL IS NOT ELO (David 2026-08-11: "Computer seemed to be playing a
+// lot of best moves").
+//
+// His game, read back from PostHog: through move 7 the coach played real
+// amateur moves off the rating band, then the book ran dry and every move
+// after that came from the engine at `skill=16` — while he is rated 1729.
+// Stockfish's scale runs roughly 1320 at skill 0 to 2850 at skill 20, so 16 is
+// around 2500. The anchors had been written as though the scale ran 800→2400.
+describe('the engine plays at the rating it was asked for', () => {
+  /** Stockfish's own approximate skill→Elo relationship, ~75 Elo per level
+   *  from a floor near 1320. The assertion is deliberately loose (±1 level) —
+   *  what must hold is the SCALE, not a specific interpolation. */
+  const eloOfSkill = (skill: number): number => 1320 + 75 * skill;
+
+  for (const elo of [1500, 1729, 1800, 2100, 2400]) {
+    it(`a ${elo} opponent is not hundreds of points stronger than ${elo}`, () => {
+      const { skill } = configFromTargetElo(elo);
+      const implied = eloOfSkill(skill);
+      expect(implied, `skill ${skill} plays ~${implied}, asked for ${elo}`)
+        .toBeLessThanOrEqual(elo + 120);
+    });
+  }
+
+  it("David's exact rating no longer maps to a ~2500 opponent", () => {
+    const { skill } = configFromTargetElo(1729);
+    expect(skill, 'skill 16 was ~800 Elo too strong').toBeLessThanOrEqual(7);
+  });
+
+  it('is still monotonic — a stronger target is never a weaker engine', () => {
+    let last = -1;
+    for (let elo = 800; elo <= 2400; elo += 50) {
+      const { skill } = configFromTargetElo(elo);
+      expect(skill).toBeGreaterThanOrEqual(last);
+      last = skill;
+    }
+  });
+
+  it('bottoms out at 0 rather than pretending it can go lower', () => {
+    // Skill 0 still plays around 1320. Below that the honest levers are
+    // elsewhere (breaking book, the amateur bands) — the number cannot lie.
+    expect(configFromTargetElo(600).skill).toBe(0);
+    expect(configFromTargetElo(1000).skill).toBe(0);
+  });
+
+  it('the coach engine asks THIS module rather than keeping its own ladder', async () => {
+    // Two copies answered 16 and 12 for the same 1729 player, and Learn
+    // happened to call the harsher one. CLAUDE.md already names the owner.
+    const src = await import('node:fs').then((fs) => fs.readFileSync('src/services/coachGameEngine.ts', 'utf8'));
+    expect(src).toMatch(/configFromTargetElo\(targetElo\)\.skill/);
+    expect(src, 'the second ladder has grown back').not.toMatch(/targetElo < 1600\) return 14/);
+  });
+});

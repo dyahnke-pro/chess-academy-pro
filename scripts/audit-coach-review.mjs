@@ -26,7 +26,7 @@
  *     - engine-lines toggle expands the panel
  *     - grounded board previews for flagged moves (Phase 1c, 2026-06-28):
  *       the ReviewCitationPreviews cards render with the "why better" line,
- *       and tapping one jumps the main board (fires review-nav)
+ *       and tapping one jumps the main board (fires review-playback-step)
  *     - ask panel toggle expands the input
  *     - bottom bar: play-again + back-to-coach buttons present
  *
@@ -341,8 +341,12 @@ async function main() {
     await page.waitForTimeout(400);
     await fwd.click();
   }, NAV_SETTLE_MS, [
-    { kind: 'audit-present', audit: 'review-nav', label: '2.7 review-nav audit on forward' },
-    { kind: 'audit-present', audit: 'review-playback-step', label: 'review-playback-step audit per forward' },
+    // `review-playback-step`, not `review-nav`: the nav event was a strict
+    // subset (target ply only) firing alongside this one on every key press,
+    // and it was deleted because four events per arrow key evicted David's
+    // whole game from the 300-entry buffer. This event carries the target ply
+    // AND the delta, the nav source and the target SAN — a stronger assertion.
+    { kind: 'audit-present', audit: 'review-playback-step', label: '2.7 review-playback-step audit on forward' },
   ]);
 
   await record('review-back-2', async () => {
@@ -397,7 +401,7 @@ async function main() {
     await page.waitForTimeout(200);
     await page.keyboard.press('ArrowLeft');
   }, NAV_SETTLE_MS, [
-    { kind: 'audit-present', audit: 'review-nav', label: '2.8 keyboard fires review-nav' },
+    { kind: 'audit-present', audit: 'review-playback-step', label: '2.8 keyboard fires review-playback-step' },
   ]);
 
   // ── Engine lines toggle ─────────────────────────────────────────
@@ -412,7 +416,7 @@ async function main() {
   // The walk scroll-middle renders ReviewCitationPreviews when the student
   // had flagged moves (sample morphy-opera has blunders). Scroll the middle
   // to find them, assert the cards + the grounded "why better" line, and that
-  // tapping a card jumps the main board (fires review-nav).
+  // tapping a card jumps the main board (fires review-playback-step).
   await record('review-citation-previews', async () => {
     const middle = page.locator('[data-testid="review-scroll-middle"]');
     if (await middle.count() > 0) {

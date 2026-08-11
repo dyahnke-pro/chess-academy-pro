@@ -468,4 +468,36 @@ describe('the couplings that make the wiring safe', () => {
     expect(TEACH).toMatch(/CoachTeachPage\.planMarks\.boardMovedOn/);
     expect(TEACH).toMatch(/CoachTeachPage\.planMarks\.drewNothing/);
   });
+
+  it('a finished game keeps its board and OFFERS the review', () => {
+    // 🔒 IT USED TO NAVIGATE THE INSTANT MATE LANDED. David, 2026-08-11:
+    // "Screen went black with checkmate (didn't show the final move). I want
+    // the board to persist and an option to review to pop up instead of
+    // transitioning to black without showing the final move."
+    //
+    // His game ended at 20:39:22 and the review became usable at 20:40:53 —
+    // ninety-one seconds of empty screen, because the route change fired
+    // before the review page had anything to draw, and the mating move was
+    // never on a board he could look at.
+    //
+    // The RECORD is still written immediately (the review, the mistake
+    // puzzles and the weakness spine all hang off it and must not wait for a
+    // tap); only the navigation moved behind the button.
+    expect(TEACH).toMatch(/data-testid="teach-game-over"/);
+    expect(TEACH).toMatch(/data-testid="teach-review-game"/);
+    expect(TEACH).toMatch(/setFinishedGame\(\{/);
+    expect(TEACH_CODE, 'the game-over effect navigates on its own again')
+      .not.toMatch(/\}\s*\n\s*void navigate\(`\/coach\/review\/\$\{gameId\}`\);/);
+  });
+
+  it('the review does not re-log what the step event already carries', () => {
+    // Four audit events per arrow key filled David's 300-entry buffer with
+    // playback bookkeeping and evicted the game he had just played — so he
+    // reported "no forks noted" about a game whose fork offers had simply
+    // aged out of the window. `review-nav` was a strict subset of
+    // `review-playback-step`.
+    const PLAYBACK = code(read('src/hooks/useReviewPlayback.ts'));
+    expect(PLAYBACK, 'the duplicate nav event is back').not.toMatch(/kind: 'review-nav'/);
+    expect(PLAYBACK).toMatch(/kind: 'review-playback-step'/);
+  });
 });

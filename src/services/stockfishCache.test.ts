@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { stockfishCache } from './stockfishCache';
 import type { StockfishAnalysis } from '../types';
 
@@ -36,39 +36,47 @@ describe('stockfishCache', () => {
   it('keys by depth — same FEN at different depths is two entries', () => {
     stockfishCache.set(STARTING, 12, buildAnalysis('e2e4', 12));
     stockfishCache.set(STARTING, 18, buildAnalysis('d2d4', 18));
+    expect(stockfishCache.size()).toBe(2);
+    // Each depth keeps its OWN result — the deeper-answers-shallower rule
+    // added below is a fallback for a MISS, never an overwrite of a hit.
     expect(stockfishCache.get(STARTING, 12)?.bestMove).toBe('e2e4');
     expect(stockfishCache.get(STARTING, 18)?.bestMove).toBe('d2d4');
   });
 
+  // 🔒 THESE VARY THE POSITION, NOT THE DEPTH. Both filled the cache with one
+  // FEN at 256 different depths — a convenient way to mint unique keys back
+  // when the depth was just part of a string. It is not any more: a miss now
+  // falls back to a DEEPER entry for the same position, so an evicted depth-0
+  // ask found depth 1 and the eviction assertion failed for a reason that had
+  // nothing to do with eviction. A test for the LRU should not be able to
+  // fail because of a rule about depths.
+  const posAt = (i: number): string => `${'8/'.repeat(7)}${i % 8 === 0 ? 'K6k' : 'K5k1'} w - - ${i} ${i + 1}`;
+
   it('LRU evicts the oldest entry when capacity is exceeded', () => {
-    // Fill to capacity (256). Use depth as a counter to vary keys.
     for (let i = 0; i < 256; i++) {
-      stockfishCache.set(STARTING, i, buildAnalysis(`m${i}`, i));
+      stockfishCache.set(posAt(i), 18, buildAnalysis(`m${i}`, 18));
     }
     expect(stockfishCache.size()).toBe(256);
 
-    // Insert one more — depth=0 (the first inserted) should evict.
-    // Don't `get` before this point or we'd bump entries to MRU and
-    // change which one is oldest.
+    // Insert one more — the first inserted should evict. Don't `get` before
+    // this point or we'd bump entries to MRU and change which one is oldest.
     stockfishCache.set(E4, 18, buildAnalysis('e7e5', 18));
     expect(stockfishCache.size()).toBe(256);
-    expect(stockfishCache.get(STARTING, 0)).toBeUndefined();
-    expect(stockfishCache.get(STARTING, 1)?.bestMove).toBe('m1');
+    expect(stockfishCache.get(posAt(0), 18)).toBeUndefined();
+    expect(stockfishCache.get(posAt(1), 18)?.bestMove).toBe('m1');
     expect(stockfishCache.get(E4, 18)?.bestMove).toBe('e7e5');
   });
 
   it('access bumps an entry to MRU so it survives eviction', () => {
-    stockfishCache.set(STARTING, 1, buildAnalysis('m1', 1));
+    stockfishCache.set(posAt(1), 18, buildAnalysis('m1', 18));
     for (let i = 2; i < 257; i++) {
-      stockfishCache.set(STARTING, i, buildAnalysis(`m${i}`, i));
+      stockfishCache.set(posAt(i), 18, buildAnalysis(`m${i}`, 18));
     }
-    // Touch depth=1 right before the eviction wave; it should now be MRU.
-    stockfishCache.get(STARTING, 1);
-    // Add one more entry beyond capacity. depth=2 should evict (it's now
-    // the oldest) — depth=1 must still be present.
+    // Touch the first one right before the eviction wave; it is now MRU.
+    stockfishCache.get(posAt(1), 18);
     stockfishCache.set(E4, 99, buildAnalysis('e7e5', 99));
-    expect(stockfishCache.get(STARTING, 1)?.bestMove).toBe('m1');
-    expect(stockfishCache.get(STARTING, 2)).toBeUndefined();
+    expect(stockfishCache.get(posAt(1), 18)?.bestMove).toBe('m1');
+    expect(stockfishCache.get(posAt(2), 18)).toBeUndefined();
   });
 
   it('overwriting an existing key keeps capacity steady and replaces the value', () => {
@@ -86,8 +94,11 @@ describe('stockfishCache', () => {
 
       // A second asker for the same (fen, depth) sees the running search.
       expect(stockfishCache.inflight(STARTING, 18)).toBe(tracked);
-      // A different depth is a different search — never shared.
-      expect(stockfishCache.inflight(STARTING, 12)).toBeUndefined();
+      // A SHALLOWER ask now rides the running deeper search rather than
+      // starting a second one beside it on the single worker (see the
+      // deeper-answers-shallower cases below). A DEEPER ask still does not.
+      expect(stockfishCache.inflight(STARTING, 12)).toBe(tracked);
+      expect(stockfishCache.inflight(STARTING, 20)).toBeUndefined();
       expect(stockfishCache.inflight(E4, 18)).toBeUndefined();
 
       resolve(buildAnalysis('e2e4', 18));
@@ -115,5 +126,57 @@ describe('stockfishCache', () => {
       stockfishCache.clear();
       expect(stockfishCache.inflightSize()).toBe(0);
     });
+  });
+});
+
+// A DEEPER ANSWER ALREADY ANSWERS A SHALLOWER QUESTION.
+//
+// Measured on David's game review of 2026-08-11: 80 cache misses against 4
+// hits, running in depth-12/depth-14 pairs over the SAME positions, two and a
+// half minutes of engine time for a game that had already been analysed. The
+// key was `${fen}::${depth}` and nothing else, so an ask for depth 12 missed
+// even with depth 14 for that identical board sitting in the map.
+describe('a deeper result serves a shallower ask', () => {
+  const FEN = 'r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
+  const analysis = (depth: number): StockfishAnalysis => ({
+    bestMove: 'd2d4', evaluation: 30, isMate: false, mateIn: null,
+    depth, topLines: [], nodesPerSecond: 0,
+  });
+
+  beforeEach(() => { stockfishCache.clear(); });
+
+  it('answers a depth-12 ask from a cached depth-14 search', () => {
+    stockfishCache.set(FEN, 14, analysis(14));
+    expect(stockfishCache.get(FEN, 12)?.depth).toBe(14);
+  });
+
+  it('never answers a depth-14 ask from a shallower search', () => {
+    // The rule is one-directional on purpose: a depth-12 result did not look
+    // as far and cannot stand in for the deeper question.
+    stockfishCache.set(FEN, 12, analysis(12));
+    expect(stockfishCache.get(FEN, 14)).toBeUndefined();
+  });
+
+  it('prefers the exact depth when it has one', () => {
+    stockfishCache.set(FEN, 12, analysis(12));
+    stockfishCache.set(FEN, 18, analysis(18));
+    expect(stockfishCache.get(FEN, 12)?.depth).toBe(12);
+  });
+
+  it('does not borrow another position\'s answer', () => {
+    stockfishCache.set(FEN, 20, analysis(20));
+    expect(stockfishCache.get('8/8/8/8/8/8/8/K6k w - - 0 1', 12)).toBeUndefined();
+  });
+
+  // This is where the review's paired asks actually collide: the two depths
+  // are requested moments apart, so the deeper one is usually still in flight
+  // rather than already cached — and the single worker would otherwise run
+  // both, one behind the other.
+  it('waits on a deeper search already running instead of starting a second', async () => {
+    const run = Promise.resolve(analysis(14));
+    const tracked = stockfishCache.trackInflight(FEN, 14, run);
+    expect(stockfishCache.inflight(FEN, 12)).toBe(tracked);
+    expect(stockfishCache.inflight(FEN, 16), 'a deeper ask must not ride a shallower search').toBeUndefined();
+    await tracked; // settle so the entry deregisters before the next case
   });
 });

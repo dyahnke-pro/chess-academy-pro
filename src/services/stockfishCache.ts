@@ -33,15 +33,54 @@ function cacheKey(fen: string, depth: number): string {
   return `${fen}::${depth}`;
 }
 
+/** Every depth this cache holds for a position, deepest first.
+ *
+ *  The key encodes the depth, so this reads it back off the keys rather than
+ *  keeping a second index that could disagree with the first. */
+function depthsFor(fen: string): number[] {
+  const prefix = `${fen}::`;
+  const out: number[] = [];
+  for (const key of cache.keys()) {
+    if (key.startsWith(prefix)) {
+      const d = Number(key.slice(prefix.length));
+      if (Number.isFinite(d)) out.push(d);
+    }
+  }
+  return out.sort((a, b) => b - a);
+}
+
 export const stockfishCache = {
   get(fen: string, depth: number): StockfishAnalysis | undefined {
     const key = cacheKey(fen, depth);
     const hit = cache.get(key);
-    if (!hit) return undefined;
-    // Bump to MRU so the next eviction targets a colder entry.
-    cache.delete(key);
-    cache.set(key, hit);
-    return hit;
+    if (hit) {
+      // Bump to MRU so the next eviction targets a colder entry.
+      cache.delete(key);
+      cache.set(key, hit);
+      return hit;
+    }
+    // ── A DEEPER ANSWER ALREADY ANSWERS A SHALLOWER QUESTION ────────────────
+    //
+    // 🔒 THE CACHE COULD NOT ANSWER ITS OWN QUESTION. The key is
+    // `${fen}::${depth}` and nothing else, so an ask for depth 12 missed even
+    // when depth 14 for the IDENTICAL position was already sitting right
+    // there — and the game review asks nearly every position at both depths.
+    //
+    // Measured on David's review of 2026-08-11: 80 cache misses against 4
+    // hits, the misses running in depth-12/depth-14 pairs over the same FENs,
+    // two and a half minutes of engine time for a game already analysed.
+    //
+    // A search to depth 14 examined everything a search to depth 12 would
+    // have and then kept going; its answer is not merely acceptable for the
+    // shallower ask, it is strictly better. Serving it is not an
+    // approximation. (The reverse is NOT true, which is why this only ever
+    // looks deeper — a depth-12 result can never stand in for a depth-14 ask.)
+    for (const have of depthsFor(fen)) {
+      if (have <= depth) break; // sorted deepest-first: nothing left is deeper
+      const deeper = cache.get(cacheKey(fen, have));
+      if (deeper) return deeper;
+    }
+    return undefined;
   },
 
   set(fen: string, depth: number, analysis: StockfishAnalysis): void {
@@ -58,7 +97,22 @@ export const stockfishCache = {
   /** The promise of an analysis already running for this exact
    *  `(fen, depth)`, or undefined when nothing is in flight. */
   inflight(fen: string, depth: number): Promise<StockfishAnalysis> | undefined {
-    return inflight.get(cacheKey(fen, depth));
+    const exact = inflight.get(cacheKey(fen, depth));
+    if (exact) return exact;
+    // Same rule as `get`: a DEEPER search already running will answer this
+    // shallower ask, so wait for it rather than starting a second one beside
+    // it on the single worker. This is where the review's paired asks actually
+    // collide — the two depths are requested moments apart, so the deeper one
+    // is usually still running rather than already cached.
+    const prefix = `${fen}::`;
+    let best: { d: number; run: Promise<StockfishAnalysis> } | null = null;
+    for (const [key, run] of inflight) {
+      if (!key.startsWith(prefix)) continue;
+      const d = Number(key.slice(prefix.length));
+      if (!Number.isFinite(d) || d <= depth) continue;
+      if (!best || d < best.d) best = { d, run }; // the shallowest that still qualifies = soonest to finish
+    }
+    return best?.run;
   },
 
   /** Register a running analysis so concurrent askers can share it, and

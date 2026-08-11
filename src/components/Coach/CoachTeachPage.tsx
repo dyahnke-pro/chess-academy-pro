@@ -8189,8 +8189,26 @@ export function CoachTeachPage(): JSX.Element {
   // board never declared mate and never advanced to review. Ref-guarded so it
   // fires exactly once per finished game.
   const teachGameOverHandledRef = useRef(false);
+  // ── THE FINISHED BOARD STAYS ON SCREEN ──────────────────────────────────
+  //
+  // 🔒 IT USED TO NAVIGATE THE INSTANT MATE LANDED, AND THE LAST MOVE WAS
+  // NEVER SEEN (David 2026-08-11: "Screen went black with checkmate (didn't
+  // show the final move). I want the board to persist and an option to review
+  // to pop up instead of transitioning to black without showing the final
+  // move.").
+  //
+  // Measured on his game: it ended at 20:39:22 and the review became usable at
+  // 20:40:53 — NINETY-ONE SECONDS of an empty screen, because the route change
+  // fired first and the review page's analysis ran before it had anything to
+  // draw. The move that mated him is the single most interesting position of
+  // the game and he never saw it on a board.
+  //
+  // So the record is still written immediately — the review, the mistake
+  // puzzles and the weakness spine all hang off that write and must not wait
+  // for a tap — and only the NAVIGATION is held back behind a button.
+  const [finishedGame, setFinishedGame] = useState<{ id: string; result: 'win' | 'loss' | 'draw'; byMate: boolean } | null>(null);
   useEffect(() => {
-    if (!game.isGameOver) { teachGameOverHandledRef.current = false; return; }
+    if (!game.isGameOver) { teachGameOverHandledRef.current = false; setFinishedGame(null); return; }
     if (walkthrough.isActive || teachGameOverHandledRef.current || game.history.length < 4) return;
     teachGameOverHandledRef.current = true;
     const studentLoss = game.isCheckmate &&
@@ -8225,9 +8243,15 @@ export function CoachTeachPage(): JSX.Element {
           openingId,
         });
       } catch {
-        /* save is best-effort; still route to review */
+        /* save is best-effort; the offer below still stands */
       }
-      void navigate(`/coach/review/${gameId}`);
+      // The offer, NOT the navigation. The board keeps the mating move on it
+      // until he chooses to leave.
+      setFinishedGame({
+        id: gameId,
+        result: game.isCheckmate ? (won ? 'win' : 'loss') : 'draw',
+        byMate: game.isCheckmate,
+      });
     })();
   }, [game.isGameOver, game.isCheckmate, game.turn, walkthrough.isActive, playerColor, game.history, activeProfile, navigate, walkthrough.tree?.openingName]);
   // Keep the latest board-move handler reachable from handleSubmit's typed
@@ -8910,6 +8934,42 @@ export function CoachTeachPage(): JSX.Element {
             )}
           </div>
         </div>
+
+        {/* THE GAME IS OVER AND THE BOARD IS STILL THERE. The mating move is
+            on the squares behind this card; the review is a tap, not a
+            redirect. See the note on `finishedGame` above for the ninety-one
+            seconds of black screen this replaces. */}
+        {finishedGame && (
+          <div className="px-3 pb-2 space-y-2" data-testid="teach-game-over">
+            <div className="text-sm font-semibold text-theme-text px-1">
+              {finishedGame.result === 'win'
+                ? (finishedGame.byMate ? 'Checkmate — you win.' : 'You win.')
+                : finishedGame.result === 'loss'
+                  ? (finishedGame.byMate ? "Checkmate — that's the game." : "That's the game.")
+                  : "That's a draw."}
+            </div>
+            <div className="text-xs text-theme-text-muted px-1">
+              The final position is on the board. Take a look before you move on.
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => { void navigate(`/coach/review/${finishedGame.id}`); }}
+                className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-theme-accent text-theme-bg text-sm font-semibold min-h-[44px] transition-colors"
+                data-testid="teach-review-game"
+              >
+                <ChevronRight size={16} />
+                Review this game
+              </button>
+              <button
+                onClick={() => setFinishedGame(null)}
+                className="px-3 py-2.5 rounded-lg border border-theme-border bg-theme-surface hover:bg-theme-bg text-sm font-medium text-theme-text min-h-[44px] transition-colors"
+                data-testid="teach-stay-on-board"
+              >
+                Stay here
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* ENDGAME AS ITS OWN STEP (David 2026-07-31: "no option for endgame
             viewing"). The play-out stops at the opening→endgame boundary and

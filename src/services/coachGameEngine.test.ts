@@ -21,6 +21,21 @@ vi.mock('./stockfishEngine', () => ({
 import { getAdaptiveMove, getTargetStrength, tryOpeningBookMove, breakBookProbability, explorerBandForElo, slipsAllowed, pickTaughtSlip } from './coachGameEngine';
 import { stockfishEngine } from './stockfishEngine';
 import type { StockfishAnalysis } from '../types';
+import { configFromTargetElo } from './coachPlaySession';
+
+/** The rating→skill answer from its ONE owner.
+ *
+ *  🔒 THESE TESTS USED TO HARDCODE THE LADDER'S OUTPUT (skill 16 at 1684,
+ *  skill 5 at 900, skill 20 at 2000+) — so when the scale was corrected on
+ *  2026-08-11, eight of them failed for asserting the bug. Skill Level is not
+ *  Elo, and reading it as though it were handed David's 1729 an opponent
+ *  playing around 2500 the moment his game left book.
+ *
+ *  What these tests are FOR is the wiring: that the engine is called with the
+ *  rating-matched skill rather than full strength, and that a weaker target is
+ *  genuinely weaker. Asking the owner keeps them testing exactly that and
+ *  stops them breaking every time the curve is tuned. */
+const skillFor = (elo: number): number => configFromTargetElo(elo).skill;
 
 const analyzePositionMock = vi.mocked(stockfishEngine).analyzePosition;
 const getBestMoveMock = vi.mocked(stockfishEngine).getBestMove;
@@ -59,13 +74,13 @@ describe('coachGameEngine', () => {
 
     it('uses the bounded THREADED movetime with the rating-matched skill', async () => {
       await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1200);
-      expect(getBestMoveMock).toHaveBeenCalledWith(expect.any(String), 1200, 11);
+      expect(getBestMoveMock).toHaveBeenCalledWith(expect.any(String), 1200, skillFor(1200));
     });
 
     it('uses the longer single-threaded movetime when not cross-origin isolated', async () => {
       vi.stubGlobal('crossOriginIsolated', false);
       await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1500);
-      expect(getBestMoveMock).toHaveBeenCalledWith(expect.any(String), 2500, 14);
+      expect(getBestMoveMock).toHaveBeenCalledWith(expect.any(String), 2500, skillFor(1500));
     });
   });
 
@@ -90,12 +105,12 @@ describe('coachGameEngine', () => {
 
     it('uses depth 10 for < 1000 ELO', async () => {
       await getAdaptiveMove('startfen', 900);
-      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 10, { 'Skill Level': 5 });
+      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 10, { 'Skill Level': skillFor(900) });
     });
 
     it('uses depth 12 for 1000-1199 ELO', async () => {
       await getAdaptiveMove('startfen', 1100);
-      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 12, { 'Skill Level': 8 });
+      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 12, { 'Skill Level': skillFor(1100) });
     });
 
     it('uses depth 14 for 1200-1499 ELO', async () => {
@@ -121,14 +136,17 @@ describe('coachGameEngine', () => {
       expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 10, expect.any(Object));
     });
 
-    it('uses skill 2 for < 800 ELO', async () => {
+    it('a weak opponent is weakened as far as the scale goes', async () => {
       await getAdaptiveMove('startfen', 700);
-      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), expect.any(Number), { 'Skill Level': 2 });
+      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), expect.any(Number), { 'Skill Level': skillFor(700) });
+      // Skill 0 still plays around 1320, so this is the floor, not a choice.
+      expect(skillFor(700)).toBe(0);
     });
 
-    it('uses skill 20 for 2000+ ELO', async () => {
+    it('a strong opponent is genuinely stronger than a weak one', async () => {
       await getAdaptiveMove('startfen', 2100);
-      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), expect.any(Number), { 'Skill Level': 20 });
+      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), expect.any(Number), { 'Skill Level': skillFor(2100) });
+      expect(skillFor(2100)).toBeGreaterThan(skillFor(1200));
     });
   });
 
@@ -243,14 +261,16 @@ describe('getAdaptiveMove — the single-threaded (iOS) opponent', () => {
     const skillArgs = getBestMoveMock.mock.calls.map((c) => c[2]);
     expect(skillArgs.length).toBeGreaterThan(0);
     for (const skill of skillArgs) {
-      expect(skill).toBe(16); // getSkillLevelForElo(1684)
+      expect(skill).toBe(skillFor(1684));
       expect(skill).not.toBe(20);
     }
   });
 
   it('a weaker opponent gets a weaker skill level', async () => {
     await getAdaptiveMove('r3k2r/pp2bppp/2n5/3pP3/2pP2Q1/5N2/P1P1B1PP/q3BK1R b kq - 1 15', 900);
-    expect(getBestMoveMock.mock.calls.some((c) => c[2] === 5)).toBe(true);
+    const weak = getBestMoveMock.mock.calls.map((c) => c[2]);
+    expect(weak.every((s) => s === skillFor(900))).toBe(true);
+    expect(skillFor(900)).toBeLessThan(skillFor(1684));
   });
 });
 

@@ -248,13 +248,17 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
     const fromPly = currentPlyRef.current;
     setCurrentPly(bounded);
     onPlyChange?.(bounded);
-    void logAppAudit({
-      kind: 'review-nav',
-      category: 'subsystem',
-      source: 'useReviewPlayback',
-      summary: `target ply ${bounded}`,
-      details: JSON.stringify({ ply: bounded, speak: opts.speak }),
-    });
+    // (`review-nav` used to fire here too, saying "target ply N" — every field
+    //  of which the step event below already carries, alongside the delta, the
+    //  nav source and the target SAN. Two events for one key press, and the
+    //  narrower one first.
+    //
+    //  🔒 THE BOOKKEEPING ATE THE EVIDENCE. David's audit log of 2026-08-11 was
+    //  300 findings of which ~208 were review playback — four events per arrow
+    //  key — so the GAME he had just played had been evicted from the rolling
+    //  buffer before he could copy it, and he reported "no forks noted" about a
+    //  game whose fork offers were simply no longer in the window. A diagnostic
+    //  that crowds out the thing being diagnosed is worse than no diagnostic.)
     // Step trail — captures the actual delta and nav source so a
     // "review skipped a ply" report has concrete from→to evidence.
     // Look for entries where (bounded - fromPly) is not 1 from a
