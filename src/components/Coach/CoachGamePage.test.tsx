@@ -67,6 +67,9 @@ vi.mock('../../services/coachGameEngine', () => ({
   // via coachService.ask. getRandomLegalMove is the safety fallback
   // when the brain emits no play_move.
   getTargetStrength: vi.fn().mockReturnValue(1320),
+  // The one owner of "how strong is this student as a player" — the real one
+  // prefers the rating they SET over their puzzle rating (see its note).
+  studentPlayingRating: vi.fn((p) => p?.currentRating ?? p?.puzzleRating ?? 1200),
   getRandomLegalMove: vi.fn().mockReturnValue('e7e5'),
 }));
 

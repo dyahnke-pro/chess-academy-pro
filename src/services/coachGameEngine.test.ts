@@ -18,7 +18,8 @@ vi.mock('./stockfishEngine', () => ({
   },
 }));
 
-import { getAdaptiveMove, getTargetStrength, tryOpeningBookMove, breakBookProbability, explorerBandForElo, slipsAllowed, pickTaughtSlip } from './coachGameEngine';
+import { getAdaptiveMove, getTargetStrength, tryOpeningBookMove, breakBookProbability, explorerBandForElo, slipsAllowed, pickTaughtSlip, studentPlayingRating } from './coachGameEngine';
+import { readFileSync } from 'node:fs';
 import { stockfishEngine } from './stockfishEngine';
 import type { StockfishAnalysis } from '../types';
 import { configFromTargetElo } from './coachPlaySession';
@@ -543,4 +544,53 @@ describe('pickTaughtSlip — one lane, two surfaces', () => {
         .resolves.not.toThrow();
     }
   }, 20000);
+});
+
+// "MY ELO IS 1300 DOES THAT TRANSFER OVER? WHERE DID YOU GET 1729 FROM?"
+// (David 2026-08-11.)
+//
+// It did not transfer. 1729 was his PUZZLE rating — the app's own tactics Elo,
+// seeded at 1200 and drifting up as he solved puzzles — and Learn was matching
+// the opponent against it while Play used the 1300 he had actually entered.
+// Same app, same student, two different opponents, and the wrong one was on
+// the surface he was playing.
+describe('the opponent is matched against the rating the student SET', () => {
+  it("takes the entered rating, not the puzzle rating", () => {
+    expect(studentPlayingRating({ currentRating: 1300, puzzleRating: 1729 })).toBe(1300);
+  });
+
+  it('falls back to the puzzle rating only when nothing was entered', () => {
+    // A poor proxy, but better than a constant — and on a fresh profile the
+    // two are equal anyway.
+    expect(studentPlayingRating({ currentRating: null, puzzleRating: 1729 })).toBe(1729);
+    expect(studentPlayingRating({ puzzleRating: 1450 })).toBe(1450);
+  });
+
+  it('survives a missing or nonsense profile rather than guessing high', () => {
+    expect(studentPlayingRating(null)).toBe(1200);
+    expect(studentPlayingRating(undefined)).toBe(1200);
+    expect(studentPlayingRating({ currentRating: 0, puzzleRating: 0 })).toBe(1200);
+    expect(studentPlayingRating({ currentRating: Number.NaN, puzzleRating: 1500 })).toBe(1500);
+  });
+
+  it("David's profile now faces an opponent aimed at 1300, not 1729", () => {
+    // The two bugs compounded: the wrong INPUT (1729 instead of 1300) and the
+    // wrong SCALE (skill read as though it were Elo). Together they put a
+    // ~2500-strength engine in front of a 1300 player.
+    const profile = { currentRating: 1300, puzzleRating: 1729 };
+    const target = getTargetStrength(studentPlayingRating(profile), 'medium');
+    expect(target).toBe(1300);
+    expect(configFromTargetElo(target).skill).toBeLessThanOrEqual(2);
+  });
+
+  it('both coach surfaces read the ONE owner', () => {
+    // They disagreed for as long as both existed. A shared function is the
+    // only thing that stops them disagreeing again.
+    const read = (p: string): string => readFileSync(p, 'utf8');
+    for (const f of ['src/components/Coach/CoachTeachPage.tsx', 'src/components/Coach/CoachGamePage.tsx']) {
+      expect(read(f), `${f} does not use the shared playing rating`).toContain('studentPlayingRating(activeProfile)');
+    }
+    expect(read('src/components/Coach/CoachTeachPage.tsx'), 'Learn is matching the opponent to a puzzle rating again')
+      .not.toContain('getTargetStrength(activeProfile?.puzzleRating');
+  });
 });

@@ -917,6 +917,44 @@ export async function getAdaptiveMove(
   return { move: analysis.bestMove, analysis, source: 'stockfish-best' };
 }
 
+/**
+ * How strong the student is AS A PLAYER — the number the opponent is matched
+ * against.
+ *
+ * 🔒 ONE OWNER, BECAUSE THE TWO SURFACES READ DIFFERENT FIELDS AND ONE OF THEM
+ * WAS NOT A PLAYING RATING AT ALL (David 2026-08-11: "My elo is 1300 does that
+ * transfer over? Where did you get 1729 from?").
+ *
+ * It did not transfer. `currentRating` is what the student SETS — onboarding,
+ * Settings, the strength-calibration bubble all write it. `puzzleRating` is
+ * something else entirely: the app's own tactics-puzzle Elo, seeded at 1200 and
+ * drifting upward as they solve puzzles. Nobody sets it; it is earned, and it
+ * runs high, because solving a tactic with unlimited time is not the same skill
+ * as playing a game.
+ *
+ * Play read `currentRating`. Learn read `puzzleRating`. So the same student had
+ * two different opponents in the same app, and the surface he was playing on
+ * was aiming ~430 points above the rating he had entered — his 1300 set against
+ * a 1729 puzzle rating. That is the whole of "the computer seemed to be playing
+ * a lot of best moves", before any question of how skill maps to Elo.
+ *
+ * Puzzle rating is still exactly right for PICKING PUZZLES and for sizing the
+ * tactics look-ahead, and those callers are untouched. It is wrong only as an
+ * answer to "how well does this person play chess", which is the one question
+ * this function exists to answer.
+ */
+export function studentPlayingRating(
+  profile: { currentRating?: number | null; puzzleRating?: number | null } | null | undefined,
+): number {
+  const set = profile?.currentRating;
+  if (typeof set === 'number' && Number.isFinite(set) && set > 0) return set;
+  // No rating entered yet: the puzzle rating is a poor proxy but a better one
+  // than a constant, and a fresh profile has them equal anyway.
+  const puzzles = profile?.puzzleRating;
+  if (typeof puzzles === 'number' && Number.isFinite(puzzles) && puzzles > 0) return puzzles;
+  return 1200;
+}
+
 /** ELO offset per difficulty level relative to the player rating. */
 const DIFFICULTY_OFFSET: Record<CoachDifficulty, number> = {
   easy: -300,

@@ -46,7 +46,7 @@ import { useCoachSessionStore } from '../../stores/coachSessionStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { narrateMove } from '../../services/coachAgentRunner';
 import { useSettings } from '../../hooks/useSettings';
-import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, pickTaughtSlip } from '../../services/coachGameEngine';
+import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, pickTaughtSlip, studentPlayingRating } from '../../services/coachGameEngine';
 import { DEFAULT_TIME_CONTROL_ID, TIME_CONTROLS, getTimeControlById, type ClockState } from '../../services/chessClock';
 import { shouldPersistFinishedGame } from '../../utils/coachGamePersistence';
 import { useChessClock } from '../../hooks/useChessClock';
@@ -391,7 +391,10 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     [navigate],
   );
 
-  const playerRating = activeProfile?.currentRating ?? 1420;
+  // The SAME owner Learn uses, so the two surfaces cannot drift into matching
+  // the student against two different numbers again (they did: this read the
+  // rating he set, Learn read his puzzle rating).
+  const playerRating = studentPlayingRating(activeProfile);
 
   // Dynamic sessions redirect here with query params set by SmartSearchBar
   // / chat intent routing ("play the Sicilian against me as black hard").
