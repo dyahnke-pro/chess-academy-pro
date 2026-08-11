@@ -7086,7 +7086,40 @@ export function CoachTeachPage(): JSX.Element {
                                   ])].join(' ')}`,
                                   fen: planFen,
                                 });
+                              } else {
+                                // ── DREW NOTHING, AND SAID WHY ──────────────
+                                // Same lesson as the coach verdict: a lane that
+                                // can only be observed when it FIRES cannot be
+                                // debugged when it doesn't. Measured on prod
+                                // after the guard fix — 6 plans offered on one
+                                // real game, 1 board annotation — so the guard
+                                // was not the whole story and the remaining
+                                // silence had no witness at all.
+                                //
+                                // The squares the surviving parts carry are the
+                                // whole input to `planMarks`, so listing them
+                                // separates "the plan named nothing markable"
+                                // from "it did and the marks were refused".
+                                void logAppAudit({
+                                  kind: 'coach-board-annotation',
+                                  category: 'narration',
+                                  source: 'CoachTeachPage.planMarks.drewNothing',
+                                  summary: `plan spoke, board stayed blank — parts=${survived.length} withSquares=${survived.filter((p) => p.squares.length > 0).length} squares=[${[...new Set(survived.flatMap((p) => p.squares))].join(' ')}] walks=[${[...(plan.mine.maneuver?.path ?? []), ...(plan.theirs.maneuver?.path ?? [])].join(' ')}]`,
+                                  fen: planFen,
+                                });
                               }
+                            } else {
+                              // The other way to be silent: the board moved on
+                              // between starting the read and finishing it. Say
+                              // so, with both positions, rather than leaving it
+                              // indistinguishable from the case above.
+                              void logAppAudit({
+                                kind: 'coach-board-annotation',
+                                category: 'narration',
+                                source: 'CoachTeachPage.planMarks.boardMovedOn',
+                                summary: `plan spoke for a position that is no longer live — plan=${planFen.split(' ').slice(0, 2).join(' ')} live=${(liveFenRef.current ?? '').split(' ').slice(0, 2).join(' ')}`,
+                                fen: planFen,
+                              });
                             }
                           } catch { /* the marks are lead-the-eye, never a blocker */ }
                         }
