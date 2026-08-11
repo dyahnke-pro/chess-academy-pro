@@ -230,3 +230,35 @@ describe('a multi-word directive tag is still a directive', () => {
     expect(sanitizeForTTS('He said [A] was better.')).toBe('He said [A] was better.');
   });
 });
+
+// ── CHECK AND MATE ARE WORDS ──────────────────────────────────────────────
+// David's phone transcript, 2026-08-11 00:30:12, pulled from PostHog: the app
+// spoke "bishop to h7+ was a blunder" — Ruth reads that as "h seven plus". The
+// SAN patterns stop at the destination square, so the suffix, which is the most
+// important thing about the move, was the one part handed over raw.
+describe('check and mate suffixes are spoken, not punctuated', () => {
+  it('expands a checking piece move (the exact line from his game)', () => {
+    expect(sanitizeForTTS('Bh7+ was a blunder.')).toBe('bishop to h7, check was a blunder.');
+  });
+
+  it('expands mate', () => {
+    expect(sanitizeForTTS('Rd8#')).toBe('rook to d8, checkmate');
+  });
+
+  it('expands a checking capture', () => {
+    expect(sanitizeForTTS('Nxe5+')).toBe('knight takes e5, check');
+  });
+
+  it('expands a checking pawn capture', () => {
+    expect(sanitizeForTTS('exd5+')).toBe('e-pawn takes d5, check');
+  });
+
+  it('expands a checking castle', () => {
+    expect(sanitizeForTTS('O-O-O+')).toBe('castle queenside, check');
+  });
+
+  it('leaves ordinary prose punctuation alone', () => {
+    expect(sanitizeForTTS('You are up 2+ pawns.')).toBe('You are up 2+ pawns.');
+    expect(sanitizeForTTS('Use the #1 plan.')).toBe('Use the #1 plan.');
+  });
+});

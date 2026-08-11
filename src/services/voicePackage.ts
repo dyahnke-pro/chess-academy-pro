@@ -293,10 +293,58 @@ function sharedPrefix(a: string, b: string): number {
   return i;
 }
 
-export function buildVoicePackage(facts: VoiceFact[]): VoicePackage {
+/** Sentences, for dedupe purposes. Our prose is generated, so a full stop
+ *  followed by whitespace is a sentence boundary and nothing else is. */
+function sentencesOf(text: string): string[] {
+  return text.split(/(?<=[.!?])\s+/).map((s) => s.trim()).filter(Boolean);
+}
+
+/** The comparison key: letters and digits only, so punctuation and casing
+ *  cannot make two identical claims look different. */
+const sayKey = (s: string): string => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+export function buildVoicePackage(
+  facts: VoiceFact[],
+  /** WHAT THIS TURN HAS ALREADY SAID OUT LOUD.
+   *
+   *  🔒 ONE FACT, ONE UTTERANCE — ACROSS BOTH PACKAGES (David 2026-08-11:
+   *  "Lots of double narrations").
+   *
+   *  A turn speaks twice by design: an INSTANT package that lands with the
+   *  coach's move, and a LATE one that lands when the engine read settles. Two
+   *  assemblies, and every dedupe rule below lived inside ONE of them — so a
+   *  fact computed by both producers passed both packages and was spoken twice,
+   *  eight to twenty seconds apart. His phone transcript has eleven of them in a
+   *  twenty-minute game, e.g. at 00:29:16 and again at 00:29:25:
+   *
+   *    "They want to walk the rook round to d5, by way of d8. You want to walk
+   *     the bishop round to d5, by way of e4."
+   *
+   *  Removing the plan from the instant package fixed ONE duplicated lane. The
+   *  board read, the key squares, the line shape and the terminal read all
+   *  duplicated the same way, because the two producers read the same board.
+   *  Chasing them producer by producer is the bandaid; the turn knowing what it
+   *  has already said is the fix, and it holds for lanes not yet written.
+   *
+   *  Matched SENTENCE by sentence, not fact by fact: the late package's facts
+   *  routinely carry one new sentence bolted to one already spoken, and dropping
+   *  the whole fact would lose the new half. A fact left with nothing new is
+   *  refused outright — and takes its marks with it, per the `squares` coupling.
+   *
+   *  NOT a validator on prose (G0). Both strings here are this package's own
+   *  output — it is comparing what it is about to say against what it already
+   *  said, which is bookkeeping, not judgement. */
+  alreadySaid?: string,
+): VoicePackage {
   const kept: VoiceFact[] = [];
   const dropped: VoicePackage['dropped'] = [];
   const seen = new Set<string>();
+  // Kept apart from `seen` ONLY so a refusal can name its cause. A silent
+  // package is diagnosable or it is not diagnosable at all, and "duplicate",
+  // "same observation, different moral" and "already said this turn" point at
+  // three different bugs.
+  const saidEarlier = new Set<string>();
+  for (const s of sentencesOf(alreadySaid ?? '')) { seen.add(sayKey(s)); saidEarlier.add(sayKey(s)); }
 
   // Sort by rank, then by the order the caller supplied — stable, so two facts
   // of the same kind keep the sequence the caller computed them in.
@@ -341,9 +389,36 @@ export function buildVoicePackage(facts: VoiceFact[]): VoicePackage {
     }
     const result = verify(f);
     if ('reason' in result) { dropped.push({ fact: f, reason: result.reason }); continue; }
-    // Same sentence from two producers is one sentence to the ear.
-    const key = result.text.toLowerCase().replace(/[^a-z0-9]/g, '');
-    if (seen.has(key)) { dropped.push({ fact: f, reason: 'duplicate' }); continue; }
+    // Same sentence from two producers is one sentence to the ear — and the two
+    // producers are often the two PACKAGES of one turn, which is why `seen` is
+    // seeded above rather than starting empty.
+    const fresh: string[] = [];
+    const why = new Set<string>();
+    for (const s of sentencesOf(result.text)) {
+      const k = sayKey(s);
+      if (seen.has(k)) { why.add(saidEarlier.has(k) ? 'already said this turn' : 'duplicate'); continue; }
+      const near = [...seen].find((prior) => {
+        const n = sharedPrefix(prior, k);
+        return n >= TWIN_PREFIX && /[a-h][1-8]/.test(k.slice(0, n));
+      });
+      if (near) {
+        why.add(saidEarlier.has(near) ? 'already said this turn' : 'same observation, different moral');
+        continue;
+      }
+      seen.add(k);
+      fresh.push(s);
+    }
+    if (fresh.length === 0) {
+      // Whole-fact refusals report the STRONGEST cause, so a fact that lost one
+      // sentence to a twin and one to the earlier package reads as the twin —
+      // the within-package collision is the one worth chasing.
+      const reason = why.has('same observation, different moral')
+        ? 'same observation, different moral'
+        : why.has('duplicate') ? 'duplicate' : 'already said this turn';
+      dropped.push({ fact: f, reason });
+      continue;
+    }
+    const key = sayKey(fresh.join(' '));
     // ── THE SAME OBSERVATION, TWICE, WITH DIFFERENT MORALS ────────────────
     // David 2026-08-10: "I think I heard a double sentence." He did, five
     // times in one session:
@@ -362,13 +437,8 @@ export function buildVoicePackage(facts: VoiceFact[]): VoicePackage {
     // and only when that clause is long enough to be a real observation AND
     // names a square — so it cannot collapse two genuinely different warnings
     // that happen to open "Watch out —".
-    const twin = [...seen].find((prior) => {
-      const n = sharedPrefix(prior, key);
-      return n >= TWIN_PREFIX && /[a-h][1-8]/.test(key.slice(0, n));
-    });
-    if (twin) { dropped.push({ fact: f, reason: 'same observation, different moral' }); continue; }
     seen.add(key);
-    kept.push({ ...f, text: result.text });
+    kept.push({ ...f, text: fresh.join(' ') });
   }
 
   // SENTENCE CASE AT THE JOIN. David's 2026-08-08 run: "That takes your pawn.

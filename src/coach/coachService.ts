@@ -197,7 +197,7 @@ function pickProvider(_name: ProviderName): Provider {
 // here and re-exported for back-compat with existing callers.
 import {
   coachSurfaceToRoute,
-  isPlanQuestion, isBestMoveQuestion, isCounterRepertoireQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
+  isPlanQuestion, isBestMoveQuestion, restrictedPieceInAsk, isCounterRepertoireQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
   isMasterPlayQuestion, isEndgameQuestion, isPlayerGamesQuestion, isConceptQuestion,
   isProgressQuestion, isImprovementTrendQuestion, isOpeningProfileQuestion, openingProfileKind, buildQuestionGrounding,
   isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion,
@@ -209,7 +209,7 @@ import {
   isWhyBestMoveQuestion, isCandidateMoveQuestion, extractCandidateSan, isAlternativesQuestion,
 } from './questionIntents';
 export {
-  isPlanQuestion, isBestMoveQuestion, isCounterRepertoireQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
+  isPlanQuestion, isBestMoveQuestion, restrictedPieceInAsk, isCounterRepertoireQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
   isMasterPlayQuestion, isEndgameQuestion, isPlayerGamesQuestion, isConceptQuestion,
   isProgressQuestion, isImprovementTrendQuestion, isOpeningProfileQuestion, openingProfileKind, buildQuestionGrounding,
   isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion,
@@ -1114,12 +1114,31 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     // so EVERY surface gets the reasoning walk — not just the ones that pre-inject
     // a plan. Build it on demand when the surface didn't; best-effort + null-safe.
     const whyBestMoveEngage = isWhyBestMoveQuestion(askForIntents);
+    // ── AND "WHAT IS MY PLAN?" NEEDS ONE TOO ──────────────────────────────
+    //
+    // 🔒 THE PLAN LANE WAS DEAD ON EVERY SURFACE BUT ONE (David's game,
+    // 2026-08-11, read back from PostHog: he asked "What is my plan?" on
+    // /coach/teach and was told "The best move is e5. It stakes out the centre
+    // with the pawn to e5. White is winning (about 2.9 points)." — one move, no
+    // plan, on a turn where the app had already computed and SPOKEN a plan).
+    //
+    // `assemblePlanAnswer` is guarded by `grounding.enginePlan`, and the only
+    // producer of that field was `GameChatPanel`, which pre-injects it. The
+    // on-demand build below covered `whyBestMove` and nothing else — so on Learn
+    // the plan question was classified correctly, arrived at a branch it could
+    // never enter, and fell through to the generic best-move readout. The lane
+    // computed correctly, its tests passed, and it reached nobody: the same
+    // shape as the four lanes found on 2026-08-10.
+    //
+    // The intent already knows. Build the plan whenever the student asked for
+    // one, on the same time-boxed, best-effort terms.
+    const planQuestionEngage = isPlanQuestion(askForIntents);
     let resolvedEnginePlan = input.liveState.enginePlan;
     // The review threads its STORED analysis (reviewFlaggedMove) — no fresh
     // engine search needed, and on a stalling device engine (iOS ios-native,
     // David 2026-07-21) that search left the Ask silent for 12s+. Time-box the
     // on-demand build so a stuck engine can never hold the turn hostage.
-    if (!resolvedEnginePlan && whyBestMoveEngage && input.liveState.fen && !input.liveState.reviewFlaggedMove) {
+    if (!resolvedEnginePlan && (whyBestMoveEngage || planQuestionEngage) && input.liveState.fen && !input.liveState.reviewFlaggedMove) {
       const sideToMove: 'white' | 'black' = (input.liveState.fen.split(' ')[1] ?? 'w') === 'b' ? 'black' : 'white';
       resolvedEnginePlan = (await Promise.race([
         buildEnginePlan(input.liveState.fen, input.liveState.studentColor ?? sideToMove),
@@ -1185,7 +1204,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // names forward moves several plies ahead, not "masters play
             // X"). Detected from the user's ask. The stat / count / player /
             // comparative guards still apply. (Response-loop audit 2026-06-05.)
-            planQuestion: isPlanQuestion(askForIntents),
+            planQuestion: planQuestionEngage,
             // BEST-MOVE / SOUNDNESS questions exempt the bare-SAN gate too:
             // the honest answer names the engine's best move + the short
             // line that proves it (forward moves not legal now). The
@@ -1201,6 +1220,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // the curated recommendation (David 2026-07-15 live screenshot).
             counterRepertoireQuestion: counterRepertoireQuestionEngage,
             bestMoveQuestion: isBestMoveQuestion(askForIntents) && !candidateMoveEngage && !counterRepertoireQuestionEngage,
+            askedPiece: restrictedPieceInAsk(askForIntents),
             whyBestMoveQuestion: whyBestMoveEngage,
             reviewFlaggedMove: input.liveState.reviewFlaggedMove,
             // Comparative ask — dispatched BEFORE whyBestMove/bestMove so the

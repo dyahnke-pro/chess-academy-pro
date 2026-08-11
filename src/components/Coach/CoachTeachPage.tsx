@@ -7656,8 +7656,14 @@ export function CoachTeachPage(): JSX.Element {
                 const pending = pendingVoiceRef.current;
                 if (pending && samePosition(pending.fen, fenAfterReply) && pending.lines.length > 0) {
                   pendingVoiceRef.current = null;
+                  // `instantSpokenText` is everything Track A has said on this
+                  // turn — the event line and the instant package. Handing it
+                  // over is what stops the late package repeating a sentence the
+                  // student heard eight seconds ago; see the parameter's note in
+                  // `voicePackage`.
                   const hintPkg = buildVoicePackage(
                     pending.lines.map(({ kind, text, squares }) => ({ kind, text, squares, fen: pending.fen })),
+                    instantSpokenText,
                   );
                   if (hintPkg.spoken) {
                     speakTrackA(hintPkg.spoken);

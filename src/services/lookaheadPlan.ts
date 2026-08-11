@@ -705,7 +705,17 @@ export function describePlan(
   const idle = plan.idlePieces ?? [];
   if (voice === 'mine' && idle.length >= 3) {
     const three = idle.slice(0, 3);
-    const key = `idle-${three.join('-')}`;
+    // ── ONCE PER GAME MEANS ONCE, NOT ONCE PER LINE-UP ────────────────────
+    // The key used to be the three squares, so the moment one of them woke up
+    // the sample changed and the caveat introduced itself all over again. In
+    // David's 2026-08-11 game it fired EIGHT times in twenty minutes — a1/c1/d1,
+    // then d3/f3/a1, then c3/f3/a1, then f3/a1/f1 — while the comment above
+    // said "own-side only" and the code believed it was speaking once.
+    //
+    // It is one observation ("your pieces are asleep") sampled differently each
+    // turn, not eight observations, so the key is the observation. A caveat the
+    // student has already heard is noise however the squares have shuffled.
+    const key = 'idle-pieces';
     if (!said?.has(key)) {
       said?.add(key);
       plan.aside = `Worth noticing: your pieces on ${three.slice(0, -1).join(', ')} and ${three[three.length - 1]} sit this one out entirely.`;

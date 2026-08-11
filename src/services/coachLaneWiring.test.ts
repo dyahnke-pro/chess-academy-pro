@@ -136,6 +136,43 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
   });
 });
 
+describe('a question lane can REACH the branch that answers it', () => {
+  // ── THE PLAN LANE WAS DEAD ON EVERY SURFACE BUT ONE ──────────────────────
+  // David 2026-08-11: "the coach could not answer my questions when asked."
+  // PostHog: he asked "What is my plan?" on /coach/teach and was told "The best
+  // move is e5" — one move, no plan, on a turn where the app had already
+  // computed and spoken a plan twenty-five times.
+  //
+  // `assemblePlanAnswer` is guarded by `grounding.enginePlan`, and the ONLY
+  // producer of that field was GameChatPanel's pre-injection. coachService
+  // built one on demand for `whyBestMove` questions and nothing else, so a
+  // correctly-classified plan question arrived at a branch it could never
+  // enter. The lane computed, its tests passed, and it reached nobody — the
+  // fourth instance of that shape in two days.
+  const SERVICE = read('src/coach/coachService.ts');
+  const API = read('src/services/coachApi.ts');
+
+  it('a plan question builds the engine plan the plan branch requires', () => {
+    expect(SERVICE, 'the on-demand build still only covers why-best-move')
+      .toMatch(/whyBestMoveEngage \|\| planQuestionEngage/);
+  });
+
+  it('the branch it reaches is still guarded by that field', () => {
+    // If this guard is ever dropped the fix above becomes pointless; if the
+    // guard moves, this test says so rather than passing silently.
+    expect(API).toMatch(/grounding\.planQuestion && grounding\.enginePlan/);
+  });
+
+  it('the piece a question narrowed to reaches the answer', () => {
+    // "Which pawn should I push?" → "The best move is O-O." The lane answers
+    // from the engine and never sees the words unless the restriction is
+    // threaded to it.
+    expect(SERVICE).toMatch(/askedPiece: restrictedPieceInAsk\(/);
+    expect(API, 'the restriction is computed and then dropped on the floor')
+      .toMatch(/askedPiece: grounding\.askedPiece/);
+  });
+});
+
 describe('the couplings that make the wiring safe', () => {
   // ── THE TIMING COUPLING ───────────────────────────────────────────────────
   // This block used to assert that the coach verdict read `coachToMove` as a

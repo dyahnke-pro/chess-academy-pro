@@ -1066,4 +1066,21 @@ describe('what the plan leaves out gets its OWN sentence', () => {
     expect(first.aside).toMatch(/sit this one out/);
     expect(second.aside).toBe('');
   });
+
+  it('THE REGRESSION: once per game even as the sleepers change', () => {
+    // The test above repeated the SAME three squares, which is the one case the
+    // old square-keyed guard handled — so it passed while David heard the caveat
+    // EIGHT times in one game. These are his actual samples, in order, from the
+    // PostHog transcript of 2026-08-11: one piece wakes up, the sample shifts,
+    // and the "once per game" guard saw a brand-new observation every time.
+    const said = new Set<string>();
+    const samples = [['a1', 'c1', 'd1'], ['d3', 'f3', 'a1'], ['c3', 'f3', 'a1'], ['f3', 'a1', 'f1']];
+    const spoke = samples.map((idle) => {
+      const plan = planWithIdle(idle);
+      describePlan(plan, 'mine', said);
+      return plan.aside;
+    });
+    expect(spoke.filter(Boolean), `heard ${spoke.filter(Boolean).length} times`).toHaveLength(1);
+    expect(spoke[0]).toMatch(/a1, c1 and d1/);
+  });
 });

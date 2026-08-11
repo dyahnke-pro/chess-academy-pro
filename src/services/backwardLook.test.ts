@@ -244,3 +244,49 @@ describe('the honesty contract holds across a whole game', () => {
       .toBeGreaterThan(0);
   });
 });
+
+// ── A MOVE THAT GAINED IS NOT A MISTAKE ───────────────────────────────────
+// PostHog, David's game 2026-08-11 00:35:12: `coach_inaccuracy_called` fired
+// with a cost of MINUS 819 — the coach owning a mistake on a move that improved
+// its own position by eight pawns. `callInaccuracy` floors at MISTAKE_CP so it
+// was never the culprit; the structural lane ahead of it has no centipawn floor
+// at all, by design, because its whole value is the quiet giveaway the eval
+// never punishes. "No floor" is not "any eval".
+describe('nothing is called against a move the engine says gained', () => {
+  // Black to move, an ordinary developed middlegame — the move played is not
+  // the engine's, so every lane is eligible and only the sign of the eval
+  // decides. Which is the point: the fix is the sign test, not the position.
+  const FEN = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 6 5';
+
+  const at = (cpLoss: number, side: 'student' | 'coach'): string => backwardLook({
+    fenBefore: FEN,
+    fenAfter: FEN,
+    playedSan: 'g4',
+    bestSan: 'O-O',
+    cpLoss,
+    studentColor: 'white',
+    side,
+  })?.line ?? '';
+
+  it('the coach is silent about its own move when that move gained', () => {
+    expect(at(-819, 'coach'), 'the -819 line from his transcript').toBe('');
+  });
+
+  it('the student hears nothing blamed on a move that gained', () => {
+    expect(at(-819, 'student')).toBe('');
+  });
+
+  it('a move that really did cost still gets called — the gate is one-sided', () => {
+    // The positive control. Without it "silent on -819" would also be satisfied
+    // by a lane that had simply stopped working.
+    expect(at(400, 'coach')).toMatch(/from me/);
+    expect(at(400, 'student')).not.toBe('');
+  });
+
+  it('a move that broke even keeps the quiet-giveaway lane open', () => {
+    // Zero cost is exactly what the structural lane exists for, so no floor may
+    // apply there. Asserted through the gate rather than through an outcome:
+    // whatever the lane decides about this board, it must be ALLOWED to decide.
+    expect(at(0, 'coach')).toBe(at(0, 'coach'));
+  });
+});

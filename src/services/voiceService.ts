@@ -327,6 +327,12 @@ const ISOLATED_PIECE_LETTER_RE =
 /** Castling shorthand → plain English. "O-O" sounds nothing like
  *  "castle kingside" when read aloud. */
 const CASTLE_KING_RE = /\bO-O\b(?!-)/g;
+/** The check / mate mark left behind after a SAN has been expanded to speech.
+ *
+ *  Applied to the EXPANDED string, so it matches "h7+" and "castle kingside#",
+ *  never "Bh7+" — by the time it runs there are no piece letters left. Anchored
+ *  on a destination square or a castle so a stray "+" in prose survives. */
+const SAN_SUFFIX_RE = /((?:castle (?:king|queen)side)|[a-h][1-8])([+#])/g;
 const CASTLE_QUEEN_RE = /\bO-O-O\b/g;
 
 /** Defense-in-depth second-layer check. Returns true if `text` still
@@ -470,6 +476,19 @@ export function sanitizeForTTS(text: string): string {
     pieceExpansions.push({ san, spoken });
     return spoken;
   });
+  // CHECK AND MATE ARE WORDS, NOT PUNCTUATION. The SAN patterns above stop at
+  // the destination square, so the `+`/`#` a real SAN carries survived into the
+  // spoken string — David's 2026-08-11 game, from his own phone transcript:
+  // "bishop to h7+ was a blunder", read aloud as "bishop to h seven plus". The
+  // suffix is the most important thing about the move and it was the one part
+  // the sanitizer handed over raw.
+  //
+  // Run AFTER both expansions so it sees "h7+" / "castle kingside+" rather than
+  // "Bh7+", and anchored on a square or a castle so ordinary prose punctuation
+  // is untouched. Comma before the word: TTS gives it the beat a check deserves.
+  out = out.replace(SAN_SUFFIX_RE, (_m, move: string, mark: string) => (
+    `${move}${mark === '#' ? ', checkmate' : ', check'}`
+  ));
   // Audit-instrumentation phase-1: log every SAN→speech expansion
   // pair so Bug F-style regressions ("Nb4" → "knight to b") surface
   // the moment they happen, not after the user reports them. Only

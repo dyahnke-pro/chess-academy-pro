@@ -306,6 +306,13 @@ export function assembleTeachingAnswer(opts: {
   return { facts: parts.join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: ['app:lesson-method'] };
 }
 
+/** chess.js piece letter → the singular word a student says. Deliberately NOT
+ *  the plural `PIECE_WORD` further down this file: that one counts material
+ *  ("2 knights"), this one names one move's mover. */
+const MOVER_WORD: Record<string, string> = {
+  p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
+};
+
 /**
  * Assemble the grounded facts for a move / best-move / eval question.
  * Returns null when there's no engine move to ground on (caller falls back
@@ -326,6 +333,20 @@ export function assembleMoveEvalAnswer(opts: {
    *  his opponent, read to him as his own. He described it as the hints being
    *  bad moves; they were good moves for the wrong player. */
   studentColor?: 'white' | 'black' | null;
+  /** THE PIECE THE STUDENT ASKED ABOUT, when they restricted the question.
+   *
+   *  🔒 ANSWER THE QUESTION THAT WAS ASKED (David 2026-08-11: "the coach could
+   *  not answer my questions when asked"). From his game, via PostHog: he asked
+   *  "Which pawn should I push?" and was told "The best move is O-O. White is
+   *  clearly better." Castling is not a pawn. The classifier matched
+   *  "should i … push", routed it to the best-move lane, and the lane — which
+   *  never sees the question, only the engine — answered a different question
+   *  confidently.
+   *
+   *  The honest repair is not to suppress the best move: it is still the true
+   *  answer to "what should I play". It is to SAY that it isn't the thing they
+   *  asked about, so the student can tell an answer from a non-answer. */
+  askedPiece?: 'pawn' | 'knight' | 'bishop' | 'rook' | 'queen' | 'king' | null;
 }): GroundedAnswer | null {
   const { fen, bestMoveUci } = opts;
   if (!bestMoveUci || bestMoveUci.length < 4) return null;
@@ -341,6 +362,7 @@ export function assembleMoveEvalAnswer(opts: {
   // SAN + from/to from the UCI — chess.js is the truth, not the LLM.
   let bestMoveSan: string | null = null;
   let fromTo: { from: string; to: string } | null = null;
+  let bestMovePiece: string | null = null;
   try {
     const probe = new Chess(fen);
     const from = bestMoveUci.slice(0, 2);
@@ -350,6 +372,7 @@ export function assembleMoveEvalAnswer(opts: {
     if (mv) {
       bestMoveSan = mv.san;
       fromTo = { from, to };
+      bestMovePiece = MOVER_WORD[mv.piece] ?? null;
     }
   } catch {
     return null; // illegal best move → don't ground (never fabricate)
@@ -362,10 +385,17 @@ export function assembleMoveEvalAnswer(opts: {
   const evalText = evalPhrase(opts.evalCp, opts.mateIn, mover);
 
   const theirMove = Boolean(opts.studentColor) && opts.studentColor !== mover;
+  // The student named a piece and the engine's answer is a different one. Say
+  // so BEFORE naming the move — chess.js supplied the piece, so this is a fact
+  // about the board, not a hedge.
+  const wrongPiece = Boolean(opts.askedPiece) && Boolean(bestMovePiece)
+    && opts.askedPiece !== bestMovePiece;
   const parts: string[] = [
     theirMove
       ? `Their strongest reply is ${bestMoveSan}.`
-      : `The best move is ${bestMoveSan}.`,
+      : wrongPiece
+        ? `No ${opts.askedPiece} move is the answer here — the strongest is ${bestMoveSan}.`
+        : `The best move is ${bestMoveSan}.`,
   ];
   if (why) parts.push(why);
   if (evalText) parts.push(`${evalText.charAt(0).toUpperCase()}${evalText.slice(1)}.`);

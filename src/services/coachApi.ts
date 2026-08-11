@@ -1032,6 +1032,14 @@ export interface MasterGroundingOptions {
    *  turn while every fabrication guard stays in force. Detected via
    *  `isBestMoveQuestion` in coachService (David 2026-06-09 "No bueno"). */
   bestMoveQuestion?: boolean;
+  /** THE PIECE A MOVE QUESTION NARROWED TO, when it narrowed to one.
+   *
+   *  "Which pawn should I push?" is a best-move question — the classifier is
+   *  right — but the lane answers from the engine alone and never sees the
+   *  words, so David's game answered it with "The best move is O-O". Carrying
+   *  the restriction lets the reply say the answer is not a pawn move instead
+   *  of appearing to answer a question it did not answer. */
+  askedPiece?: 'pawn' | 'knight' | 'bishop' | 'rook' | 'queen' | 'king' | null;
   /** "WHY does the engine like this move / walk me through Stockfish's line"
    *  (David 2026-07-10). Distinct from `bestMoveQuestion` (names the move +
    *  eval): this walks the engine PV via `assembleEngineReasoning` so the coach
@@ -3945,7 +3953,7 @@ export async function getCoachChatResponse(
               typeof grounding.engineMateIn === 'number'
                 ? (blackToMove ? -grounding.engineMateIn : grounding.engineMateIn)
                 : null;
-            const answer = assembleMoveEvalAnswer({ fen: bestFen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn });
+            const answer = assembleMoveEvalAnswer({ fen: bestFen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn, askedPiece: grounding.askedPiece ?? null });
             if (answer) {
               const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'best-move', preferRaw: true });
               if (voiced) {

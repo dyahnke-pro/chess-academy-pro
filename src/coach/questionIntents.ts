@@ -199,6 +199,31 @@ const BEST_MOVE_QUESTION_RE = anyOf([
   String.raw`\b(?:cleanest|clearest|quickest|fastest|simplest|most\s+direct|surest)\s+(?:win|path|way\s+to\s+(?:win|finish)|route)\b`,
   String.raw`\bhow\s+do\s+i\s+(?:finish|win|convert)\s+(?:this|it|him|her|them)\s+off\b`,
 ]);
+/** THE PIECE A MOVE QUESTION WAS RESTRICTED TO, or null when it wasn't.
+ *
+ *  🔒 ANSWER THE QUESTION THAT WAS ASKED (David 2026-08-11: "the coach could
+ *  not answer my questions when asked"). "Which pawn should I push?" matches the
+ *  best-move pattern on `should i … push`, and the best-move lane then answers
+ *  from the engine alone — it never sees the words. His game got "The best move
+ *  is O-O", which is castling, in reply to a question about pawns.
+ *
+ *  This does NOT re-route the question: the engine's move is still the true
+ *  answer to "what should I play". It hands the lane the ONE thing it was
+ *  missing — what the student narrowed to — so the reply can say plainly that
+ *  the answer is not the kind of move they asked about, instead of appearing to
+ *  answer and not answering. Deterministic, and it decides nothing (G0). */
+// Plural too: "which of my PAWNS should I push" is the same restriction as
+// "which pawn", and a singular-only pattern silently returned null on it.
+const RESTRICTED_PIECE_RE = /\b(?:which|what)\s+(?:\w+\s+){0,2}?(pawn|knight|bishop|rook|queen|king)s?\b/i;
+export type AskedPiece = 'pawn' | 'knight' | 'bishop' | 'rook' | 'queen' | 'king';
+export function restrictedPieceInAsk(ask: string | undefined): AskedPiece | null {
+  if (!ask) return null;
+  // "which piece" is not a restriction — it is the general question, and the
+  // best-move lane already answers it correctly.
+  const m = RESTRICTED_PIECE_RE.exec(ask);
+  return m ? (m[1].toLowerCase() as AskedPiece) : null;
+}
+
 export function isBestMoveQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
   // "my best OPENING / defence / repertoire" is an opening-profile question, not

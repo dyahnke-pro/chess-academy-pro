@@ -29,6 +29,7 @@
 // line. Nothing here asks a model anything.
 import { findConcession, findStudentDrawback, whatItAllowed } from './concessionBeat';
 import { callInaccuracy } from './inaccuracyCall';
+import { INACCURACY_CP } from './engineConstants';
 
 export interface BackwardLook {
   /** The spoken line. Past tense — the move has happened. */
@@ -91,13 +92,28 @@ export function backwardLook(args: {
   const side = args.side ?? 'student';
   const mover = args.studentColor;
 
+  // ── A MOVE THAT GAINED IS NOT A CONCESSION ──────────────────────────────
+  // The structural lane deliberately has no centipawn floor: its whole value is
+  // catching the QUIET giveaway the eval does not punish, and a floor would
+  // delete exactly that. But "no floor" was read as "any eval", and PostHog
+  // caught the consequence in David's own game — `coach_inaccuracy_called` with
+  // a cost of MINUS 819, the coach owning a mistake on a move that improved its
+  // position by eight pawns.
+  //
+  // So the refusal is one-sided: nothing is required of a move that broke even,
+  // and a move the engine says measurably IMPROVED things may not be described
+  // as having given something up. Half a pawn is the boundary because that is
+  // where Stockfish stops calling a difference noise (`INACCURACY_CP`), which
+  // keeps a depth-to-depth wobble from silencing a real concession.
+  const gained = args.cpLoss <= -INACCURACY_CP;
+
   // ── THE COACH'S OWN MOVE ────────────────────────────────────────────────
   // Same two lanes, same order: name the thing conceded if code can, otherwise
   // judge the move against the engine's. There is no third lane here — the
   // rear-facing "what it allowed" is the STUDENT'S opportunity, and
   // `callInaccuracy` already hands that over without naming the punishment.
   if (side === 'coach') {
-    if (args.bestSan) {
+    if (args.bestSan && !gained) {
       try {
         const c = findConcession({
           fen: args.fenBefore,
@@ -126,7 +142,7 @@ export function backwardLook(args: {
 
   // FIRST the structural read — it NAMES the thing given up ("that took your
   // last defender off d5"), which is the most teachable form there is.
-  if (args.bestSan) {
+  if (args.bestSan && !gained) {
     try {
       const d = findStudentDrawback({
         fen: args.fenBefore,

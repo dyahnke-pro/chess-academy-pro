@@ -384,3 +384,62 @@ describe('the board is drawn from the package, not from the prose', () => {
     expect(markableSquares(pkg)).toEqual([]);
   });
 });
+
+// ── ONE FACT, ONE UTTERANCE, ACROSS BOTH PACKAGES ─────────────────────────
+// David's own game, 2026-08-11, read back from PostHog by session id. A turn
+// speaks twice by design (instant + late) and every dedupe rule lived inside
+// ONE assembly, so a fact both producers computed was spoken twice, seconds
+// apart. Eleven times in a twenty-minute game. Each case below is a verbatim
+// pair from that transcript.
+describe('the late package does not repeat what the turn already said', () => {
+  // Kings only: every claim here is squareless prose about plans, so board
+  // grading has nothing to refuse and the dedupe is what is under test.
+  const FEN = '4k3/8/8/8/8/8/8/4K3 w - - 0 1';
+
+  it('drops a fact the instant package already spoke verbatim (00:29:16 → 00:29:25)', () => {
+    const said = 'They want to walk the rook round to d5, by way of d8. You want to walk the bishop round to d5, by way of e4.';
+    const pkg = buildVoicePackage([{ kind: 'plan', text: said, fen: FEN }], said);
+    expect(pkg.spoken).toBe('');
+    expect(pkg.dropped[0]?.reason).toBe('already said this turn');
+  });
+
+  it('keeps the NEW half and drops the repeated half (00:32:14 → 00:32:32)', () => {
+    // The late fact bolts one new sentence onto one already spoken. Dropping
+    // the whole fact would lose the new half; keeping it repeats the old one.
+    const instant = 'They want to walk the bishop round to e5, by way of c7, pull the pawns away from your king and prise open the h-file.';
+    const late = `That let them land a skewer, swing pieces toward your king and trade off the bishop. ${instant}`;
+    const pkg = buildVoicePackage([{ kind: 'drawback', text: late, fen: FEN }], instant);
+    expect(pkg.spoken).toBe('That let them land a skewer, swing pieces toward your king and trade off the bishop.');
+  });
+
+  it('drops the event line without swallowing the teaching behind it (00:16:27 → 00:16:38)', () => {
+    const teaching = "The d-file is half-open for you — that's where a rook wants to be.";
+    const pkg = buildVoicePackage(
+      [{ kind: 'observation', text: teaching, fen: FEN }],
+      `That takes your pawn. ${teaching}`,
+    );
+    expect(pkg.spoken).toBe('');
+  });
+
+  it('a fact the turn has NOT said is untouched', () => {
+    const pkg = buildVoicePackage(
+      [{ kind: 'plan', text: 'You want to prise open the c-file.', fen: FEN }],
+      'That takes your pawn. The d-file is half-open for you.',
+    );
+    expect(pkg.spoken).toBe('You want to prise open the c-file.');
+  });
+
+  it('with nothing said yet, behaves exactly as before', () => {
+    const pkg = buildVoicePackage([{ kind: 'plan', text: 'You want to win a pawn.', fen: FEN }]);
+    expect(pkg.spoken).toBe('You want to win a pawn.');
+  });
+
+  it("a refused fact takes its marks with it", () => {
+    const said = 'You want to prise open the c-file.';
+    const pkg = buildVoicePackage(
+      [{ kind: 'plan', text: said, fen: FEN, squares: ['c4'] }],
+      said,
+    );
+    expect(markableSquares(pkg)).toEqual([]);
+  });
+});
