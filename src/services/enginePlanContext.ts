@@ -26,6 +26,10 @@ import type { LiveState } from '../coach/types';
 /** Search depth for the plan PV. Deep enough for a meaningful line, shallow
  *  enough to return within ~1-2s so the plan answer isn't sluggish. */
 const PLAN_DEPTH = 18;
+/** Wall-clock ceiling for a fresh plan search. Two and a half seconds is long
+ *  enough for a useful line on a threaded engine and short enough that the
+ *  single-threaded one returns something rather than being abandoned. */
+const PLAN_BUDGET_MS = 2500;
 /** How many plies of the PV to surface (≈ "three moves" each side). */
 const PLAN_PLIES = 6;
 
@@ -40,6 +44,11 @@ type EnginePlan = NonNullable<LiveState['enginePlan']>;
 export async function buildEnginePlan(
   fen: string,
   studentSide: 'white' | 'black',
+  /** How long a FRESH search may run when the cache has nothing. Ignored on a
+   *  cache hit, which is the common case on any surface with a live board.
+   *  Default sized so an answer arrives while the student is still looking at
+   *  it — see the note at the search below for why a budget, not a race. */
+  budgetMs: number = PLAN_BUDGET_MS,
 ): Promise<EnginePlan | null> {
   // PREFER the eval-bar's CACHED analysis for this exact FEN (David 2026-07-10:
   // "I'm getting two best moves … not the most accurate read"). The eval bar +
@@ -56,7 +65,24 @@ export async function buildEnginePlan(
   let analysis: StockfishAnalysis | undefined = getCachedStockfish(fen);
   if (!hasLine(analysis)) {
     try {
-      analysis = await stockfishEngine.analyzePosition(fen, PLAN_DEPTH);
+      // ── A BUDGET, NOT A DEADLINE SOMEONE ELSE ENFORCES ──────────────────
+      //
+      // This was `analyzePosition(fen, PLAN_DEPTH)` — an UNBOUNDED search to
+      // depth 18 — while the only caller wrapped it in a 6s `Promise.race`.
+      // A race abandons the WAITER; it does not stop the ENGINE. So on a
+      // surface with no eval bar keeping the cache warm (home-chat, review,
+      // masterclass — the six this build just reached), a move question
+      // started a depth-18 search, the student got the canned "I can't verify
+      // that precisely" line at six seconds, and the worker kept grinding on a
+      // result nobody would ever read, with the next question queued behind
+      // it. On the single-threaded iOS engine that is the whole budget for
+      // several moves, spent on an answer that was already thrown away.
+      //
+      // `analyzeWithBudget` is the primitive that actually self-limits: it
+      // checks its own depth-keyed cache, stops the search when the budget is
+      // up, and returns the best line found SO FAR. A shallower real answer
+      // beats a deep abandoned one, and beats the canned line outright.
+      analysis = await stockfishEngine.analyzeWithBudget(fen, PLAN_DEPTH, budgetMs);
     } catch {
       analysis = undefined;
     }

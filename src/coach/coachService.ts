@@ -1165,6 +1165,13 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
         || (bestMoveQuestionEngage && !input.liveState.engineBestMoveUci))
       && input.liveState.fen && !input.liveState.reviewFlaggedMove) {
       const sideToMove: 'white' | 'black' = (input.liveState.fen.split(' ')[1] ?? 'w') === 'b' ? 'black' : 'white';
+      // THE BUDGET IS INSIDE THE SEARCH NOW, and the race is only the backstop
+      // for a worker that has stopped answering at all. Before, the race WAS
+      // the limit — and a race abandons the waiter without stopping the
+      // engine, so a six-second timeout produced the canned reply while the
+      // search ground on behind it. `buildEnginePlan` self-limits at 2.5s and
+      // returns the best line it has, so this outer bound should now only ever
+      // fire on a genuinely dead worker.
       resolvedEnginePlan = (await Promise.race([
         buildEnginePlan(input.liveState.fen, input.liveState.studentColor ?? sideToMove),
         new Promise<null>((r) => setTimeout(() => r(null), 6000)),
