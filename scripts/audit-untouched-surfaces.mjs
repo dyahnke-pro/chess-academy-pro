@@ -300,7 +300,10 @@ async function main() {
     const input = page.locator('[data-testid="fen-input"]');
     await input.fill(startFen);
     await page.locator('[data-testid="load-fen-btn"]').click();
-    await page.waitForTimeout(1500);
+    // Wait for the board itself — see the note on the mid-game scenario below.
+    try {
+      await page.locator('[data-square="a1"]').waitFor({ state: 'visible', timeout: 30000 });
+    } catch { /* the expectation below reports it */ }
   }, SHORT_SETTLE_MS, [
     {
       kind: 'visible',
@@ -323,7 +326,19 @@ async function main() {
     const input = page.locator('[data-testid="fen-input"]');
     await input.fill(greekGiftFen);
     await page.locator('[data-testid="load-fen-btn"]').click();
-    await page.waitForTimeout(1500);
+    // WAIT FOR THE BOARD, NOT FOR A NUMBER.
+    //
+    // This was `waitForTimeout(1500)` and it reported the board missing on prod
+    // — three red expectations, a screenshot of a blank page, and zero console
+    // or page errors. Driven by hand, alone or with the start-position scenario
+    // ahead of it, the same FEN renders all 64 squares every time. What differs
+    // in the suite is everything BEFORE it: this scenario runs fifteen surfaces
+    // deep, with engine workers and Dexie work still settling, and a fixed
+    // 1500ms is a guess about a machine that is busier than it was when the
+    // number was chosen. Waiting on the thing being asserted removes the guess.
+    try {
+      await page.locator('[data-square="a1"]').waitFor({ state: 'visible', timeout: 30000 });
+    } catch { /* leave it to the expectations below to report honestly */ }
   }, SHORT_SETTLE_MS, [
     { kind: 'visible', selector: '[data-square="a1"]', label: 'board mounts after mid-game FEN' },
     { kind: 'visible', selector: '[data-square="d3"]', label: 'd3 square rendered (Bishop position)' },
