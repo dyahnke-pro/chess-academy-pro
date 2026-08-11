@@ -419,16 +419,42 @@ async function main() {
   // already moved past, so every report it ever built was abandoned as stale.
   // A crossing with no `phase-transition-detected` in the stream is that bug;
   // a crossing that detects and then says nothing is its downstream half.
-  const crossedIntoMiddlegame = phases.includes('middlegame') && phases.includes('opening');
+  // 🔒 ASSERT AGAINST THE APP'S DEFINITION, NOT THIS FILE'S. `phaseOf` above
+  // calls it a middlegame as soon as TWO pieces have come off, which can be
+  // move four; the app's detector needs both sides developed past move eight,
+  // or a castle with connected rooks, or a MAJOR piece captured, or move
+  // fifteen. Asserting one against the other cries wolf on a game that is
+  // simply still in its opening by the only definition that matters — and the
+  // first version of this check did exactly that, twice, and nearly had the
+  // phase lane reported broken a third time.
+  //
+  // So the trigger is the two rules that are unambiguous and cheap to replay
+  // here: a queen or rook off the board (rule 3), or full move 15 (rule 4).
+  // Either one and the detector MUST have fired. Conservative on purpose —
+  // this can miss a real defect, and will never invent one.
+  const mustHaveFired = (() => {
+    const replay = new Chess();
+    for (const san of chess.history()) {
+      replay.move(san);
+      const placement = replay.fen().split(' ')[0];
+      const count = (ch) => (placement.match(new RegExp(ch, 'g')) ?? []).length;
+      const majorOff = count('Q') < 1 || count('q') < 1 || count('R') < 2 || count('r') < 2;
+      if (majorOff) return `a major piece came off at move ${replay.moveNumber()}`;
+      if (replay.moveNumber() >= 15) return 'the game reached move 15';
+    }
+    return null;
+  })();
+  const crossedIntoMiddlegame = Boolean(mustHaveFired);
   const phaseEvents = postEvents.filter((e) => String(e?.kind ?? '').startsWith('phase-'));
   const phaseDetected = phaseEvents.filter((e) => e.kind === 'phase-transition-detected');
   const phaseAbandoned = postEvents.filter((e) => String(e?.source ?? '').includes('usePhaseNarration.stale'));
   report.phaseEvents = phaseEvents.map((e) => ({ kind: e.kind, source: e.source, summary: e.summary }));
-  console.log(`phase events        detected=${phaseDetected.length} abandoned-stale=${phaseAbandoned.length} (crossed=${crossedIntoMiddlegame})`);
+  console.log(`phase events        detected=${phaseDetected.length} abandoned-stale=${phaseAbandoned.length}`);
+  console.log(`                    boundary owed: ${mustHaveFired ?? 'no — the game never left the opening by the app\u2019s own rules'}`);
   for (const e of phaseEvents.slice(0, 6)) console.log(`   ${e.kind} :: ${String(e.summary ?? '').slice(0, 110)}`);
   const silentBoundary = crossedIntoMiddlegame && phaseDetected.length === 0;
   const abandonedBoundary = phaseDetected.length > 0 && phaseAbandoned.length >= phaseDetected.length;
-  if (silentBoundary) console.log('❌ the game crossed into the middlegame and no phase transition was detected');
+  if (silentBoundary) console.log(`❌ ${mustHaveFired}, and no phase transition was detected`);
   if (abandonedBoundary) console.log('❌ every detected phase transition was abandoned as stale before it could speak');
   const mutedMiddlegame = transcript.filter((t) => t.phase === 'middlegame').length >= 8
     && middlegameBeats === 0;
