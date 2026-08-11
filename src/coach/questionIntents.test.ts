@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { isAppHelpQuestion } from './questionIntents';
+import { isAppHelpQuestion, isWhyBestMoveQuestion } from './questionIntents';
 import {
   isAlternativesQuestion,
   isPlanQuestion,
@@ -1036,5 +1036,38 @@ describe('isAlternativesQuestion — comparative "why are the alternatives worse
     expect(isAlternativesQuestion('why is Qe3 best?')).toBe(false);
     expect(isAlternativesQuestion('is Qf3 ok to play?')).toBe(false);
     expect(isAlternativesQuestion(undefined)).toBe(false);
+  });
+});
+
+// ── "WHY IS h3 BETTER?" ───────────────────────────────────────────────────
+// 🔒 THE LANE COULD NOT BE TRIGGERED BY ITS OWN QUESTION. The review's
+// why-best-move answer exists for exactly this ask — its code comment quotes
+// David verbatim, "why h3 was the better move" — and the pattern listed
+// `best|the move|winning|right|correct|strong|good` without `better`. So
+// "Why is h3 better?" matched NO intent at all: not why, not best-move, not
+// plan, not candidate. It fell through to the generic path and came back as the
+// stock "I can't verify that precisely", on a surface holding the analysis that
+// would have answered it.
+describe('why-is-X-better reaches the why lane', () => {
+  it('matches the natural phrasings, with a SAN or a pronoun', () => {
+    for (const q of [
+      'Why is h3 better?',
+      'why is h3 better',
+      'Why is Nf3 better?',
+      'Why was Qxd5 better?',
+      'Why is O-O better?',
+      'Why is this move better?',
+      'Why is that move stronger?',
+    ]) {
+      expect(isWhyBestMoveQuestion(q), q).toBe(true);
+    }
+  });
+
+  it('does NOT swallow a question about the POSITION', () => {
+    // The reason `better` is anchored on a move-shaped subject instead of
+    // being dropped into the existing alternation: a bare `better` there turns
+    // "why is my position better" into an engine-line walk when the student
+    // asked for an assessment.
+    expect(isWhyBestMoveQuestion('Why is my position better?')).toBe(false);
   });
 });

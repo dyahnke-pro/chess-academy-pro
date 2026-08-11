@@ -275,6 +275,22 @@ export function isAlternativesQuestion(ask: string | undefined): boolean {
 const WHY_BEST_MOVE_RE = anyOf([
   // "why is that/this/Nf5 (the) best/right/winning move" — a reason ask.
   String.raw`\bwhy\s+(?:is|would|does|should|was)\b[\s\S]{0,30}\b(?:best|the\s+move|winning|right|correct|strong(?:est)?|good)\b`,
+  // ── "WHY IS h3 BETTER?" ────────────────────────────────────────────────
+  //
+  // 🔒 THE LANE COULD NOT BE TRIGGERED BY ITS OWN QUESTION. The review's
+  // why-best-move answer was built for exactly this ask — its code comment
+  // quotes David verbatim, "why h3 was the better move" — and the pattern
+  // above lists `best|the move|winning|right|correct|strong|good` without
+  // `better`. So "Why is h3 better?" matched NO intent at all (not why, not
+  // best-move, not plan, not candidate), fell through to the generic path, and
+  // came back as the stock "I can't verify that precisely". Caught on prod
+  // 2026-08-11 by reading the one review question that failed.
+  //
+  // Anchored on a MOVE-shaped subject rather than added to the alternation
+  // above, because a bare `better` there would swallow "why is my position
+  // better" — a position-assessment question that has its own lane and would
+  // start getting an engine-line walk instead of an assessment.
+  String.raw`\bwhy\s+(?:is|was|would)\s+(?:that|this|it|(?:the|that|this)\s+move|[NBRQK]?[a-h]?[1-8]?x?[a-h][1-8](?:=[NBRQ])?[+#]?|O-O(?:-O)?)\s+(?:so\s+much\s+)?(?:better|stronger|preferable|superior)\b`,
   // "why does the engine/computer/stockfish like/pick/choose/prefer/play/want X"
   String.raw`\bwhy\s+(?:does|would|did|is|are)?\s*(?:the\s+)?(?:engine|computer|stockfish|it)\s+(?:like|likes|pick|picks|choose|chooses|prefer|prefers|play|plays|want|wants|recommend|recommending|suggest|suggesting|suggests|consider|considering|go(?:es|ing)?\s+for|point(?:ing)?\s+(?:to|at))\b`,
   // "why not <my move>" / "why not just <SAN>" — why the alternative is worse.
