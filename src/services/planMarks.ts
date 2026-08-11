@@ -103,7 +103,30 @@ function originOf(path: readonly PlanStep[], index: number, board: Chess): strin
  */
 function isLegalNow(board: Chess, from: string, to: string): boolean {
   try {
-    return board.moves({ verbose: true }).some((m) => m.from === from && m.to === to);
+    const piece = board.get(from as never) as { color?: 'w' | 'b' } | undefined;
+    if (!piece?.color) return false;
+    // FROM THE MOVER'S SIDE OF THE BOARD, NOT WHOEVER HAPPENS TO BE ON MOVE.
+    //
+    // This asked `board.moves()`, which only ever returns moves for the side to
+    // move — so every arrow about the OPPONENT's plan was impossible by
+    // construction. David's game log, 2026-08-11: "They want to walk the bishop
+    // round to b2, by way of f6" with ZERO arrows, four times in one game, and
+    // the same silence on his own plans whenever it was the opponent's turn. He
+    // read it as the feature not working, and he was right — it could not.
+    //
+    // A plan is about what happens NEXT, so the question is whether the piece
+    // could make that move when it is its turn. A null move answers it: same
+    // position, other side to play. `narrationArrows` has flipped turn for this
+    // exact reason since it was written; the marks never learned to.
+    if (piece.color === board.turn()) {
+      return board.moves({ verbose: true }).some((m) => m.from === from && m.to === to);
+    }
+    const parts = board.fen().split(' ');
+    if (parts.length < 4) return false;
+    parts[1] = piece.color;
+    parts[3] = '-'; // an en-passant square belongs to the side that just moved
+    return new Chess(parts.join(' ')).moves({ verbose: true })
+      .some((m) => m.from === from && m.to === to);
   } catch {
     return false;
   }
@@ -184,7 +207,18 @@ export function planMarks(args: {
     walks.push({ path: plan.mine.maneuver.path, color: MINE });
   }
   for (const walk of walks) {
-    const path = walk.path.filter((sq) => /^[a-h][1-8]$/.test(sq));
+    const raw = walk.path.filter((sq) => /^[a-h][1-8]$/.test(sq));
+    // STOP AT THE FIRST SQUARE THE PIECE COMES BACK TO. A route that revisits
+    // c3 draws c3→a4 and later c3→e8, and two arrows out of one square read as
+    // the piece going to both places at once — the very thing the one-arrow-per-
+    // piece rule exists to prevent. `lookaheadPlan` already refuses a journey
+    // that ENDS where it began ("a piece that comes home has not been
+    // rerouted"); this is the same judgement applied mid-route.
+    const path: string[] = [];
+    for (const sq of raw) {
+      if (path.includes(sq)) break;
+      path.push(sq);
+    }
     if (path.length < 3) continue; // two squares is a move, not a walk
     // The piece has to actually be standing where the walk begins, or the plan
     // was computed for a board that has since moved on.

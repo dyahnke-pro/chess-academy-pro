@@ -6125,11 +6125,25 @@ export function CoachTeachPage(): JSX.Element {
     // The backward look now rides the LATE package, built in the reply handler
     // from this turn's own engine read — the only place its inputs exist. See
     // `backwardLook` for the one shared model both callers use.
-    let planLine: string | null = null;
-    if (lookaheadPlanRef.current?.fen === args.fenAfterReply) {
-      planLine = lookaheadPlanRef.current.text;
-      factLines.push(`Look-ahead plan: ${planLine}`);
-    }
+    // ── THE PLAN IS NOT SPOKEN HERE. IT RIDES THE LATE PACKAGE, ONCE. ───────
+    //
+    // David's game log, 2026-08-11: "Lots of double narrations." He was right,
+    // and this was the mechanism. When the engine read happened to resolve
+    // before this synchronous pass ran, `lookaheadPlanRef` matched — so the plan
+    // went into the INSTANT package here AND was queued into the LATE one where
+    // it is built, and both spoke. On his turn 21 the instant utterance was
+    // "Both sides want f3 here. You want to walk the bishop round to f3, by way
+    // of d5." and the late one repeated those same two sentences behind a
+    // mistake callout. At ~194 characters the first clip runs about seventeen
+    // seconds, which is exactly the gap he heard before the second started.
+    //
+    // The comment that used to sit at the queue site claimed this guard "can
+    // never match". It matched constantly. One producer, one package: the plan
+    // is queued where it is computed, and nothing reads the ref for speech.
+    const planLine: string | null = lookaheadPlanRef.current?.fen === args.fenAfterReply
+      ? lookaheadPlanRef.current.text
+      : null;
+    if (planLine) factLines.push(`Look-ahead plan: ${planLine}`);
 
     let positionalLine: string | null = null;
     if (!gemLine && !tacticLine && !threatLine && !announceLine && !computedLine && !noteLine && !curatedLine && !teachingLine && !planLine) {
@@ -6165,7 +6179,6 @@ export function CoachTeachPage(): JSX.Element {
       // it: a plan about THIS board beats a real note about a different one.
       // `generalizedTeaching` still frames it honestly, so it is never heard as
       // a claim about these squares — it just no longer outranks one.
-      ...(planLine ? [{ kind: 'plan' as const, text: planLine, fen: args.fenAfterReply }] : []),
       // NOT HERE ANY MORE. The borrowed tier is meant to STAND DOWN when the
       // look-ahead has something about this board (David 2026-08-10: "less from
       // general rules") — but the plan is computed asynchronously and lands in
@@ -6203,24 +6216,9 @@ export function CoachTeachPage(): JSX.Element {
     const planArrows: BoardArrow[] = [];
     const planHighlights: BoardHighlight[] = [];
     if (pkg.spoken) {
-      const planned = lookaheadPlanRef.current;
-      if (planned?.fen === args.fenAfterReply && pkg.kept.some((f) => f.kind === 'plan')) {
-        try {
-          const marks = planMarks({
-            plan: planned.plan,
-            // The plan's OWN surviving parts, carried on the ref from where they
-            // were graded. Only the plan may claim the plan's squares: the
-            // package is one utterance from several producers, and re-reading it
-            // would let a corpus note's square be drawn as if the engine's line
-            // went there.
-            saidParts: planned.saidParts,
-            fen: args.fenAfterReply,
-            studentColor: args.studentColor,
-          });
-          planArrows.push(...marks.arrows);
-          planHighlights.push(...marks.highlights);
-        } catch { /* the marks are lead-the-eye, never a blocker */ }
-      }
+      // THE PLAN'S MARKS ARE NOT DRAWN HERE EITHER. They are painted where the
+      // plan is computed and spoken, for the same reason the text is: two
+      // producers of one thing is how it got said twice.
       // THE TACTIC THE COACH JUST NAMED. Only for a line that SURVIVED into
       // the utterance — a mark for a claim the package refused is the same lie
       // drawn instead of said, which is the rule the whole marks build keeps.

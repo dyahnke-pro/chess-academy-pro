@@ -302,12 +302,29 @@ describe('an arrow is a move somebody could actually play', () => {
         const path = side2.maneuver?.path ?? [];
         for (let i = 0; i + 1 < path.length; i += 1) routeHops.add(`${path[i]}${path[i + 1]}`);
       }
+      // LEGAL FOR THE PIECE THAT OWNS IT, not for whoever is on move.
+      //
+      // This asked `board.moves()`, which only returns the side to move — so it
+      // demanded that a plan about the OPPONENT be playable on the student's
+      // turn, which is never. It passed only because the marks had the same bug:
+      // David's game log showed "They want to walk the bishop round to b2" with
+      // zero arrows, four times. A plan is about what happens NEXT, so the
+      // question is whether the piece could play that move when it is its turn.
+      const legalForMover = (from: string, to: string): boolean => {
+        const piece = board.get(from as never) as { color?: 'w' | 'b' } | undefined;
+        if (!piece?.color) return false;
+        const parts = board.fen().split(' ');
+        parts[1] = piece.color;
+        parts[3] = '-';
+        try {
+          return new Chess(parts.join(' ')).moves({ verbose: true })
+            .some((m) => m.from === from && m.to === to);
+        } catch { return false; }
+      };
       for (const a of marks.arrows) {
-        const legal = board.moves({ verbose: true })
-          .some((m) => m.from === a.startSquare && m.to === a.endSquare);
         expect(
-          legal || routeHops.has(`${a.startSquare}${a.endSquare}`),
-          `${a.startSquare}-${a.endSquare} is neither legal now nor a hop of a stated walk in ${fen}`,
+          legalForMover(a.startSquare, a.endSquare) || routeHops.has(`${a.startSquare}${a.endSquare}`),
+          `${a.startSquare}-${a.endSquare} is neither playable by its own piece nor a hop of a stated walk in ${fen}`,
         ).toBe(true);
       }
     }

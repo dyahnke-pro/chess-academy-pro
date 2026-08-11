@@ -116,6 +116,21 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
       .not.toContain('.aside');
   });
 
+  it('the plan rides ONE package — never both', () => {
+    // David's game log, 2026-08-11: "Lots of double narrations." When the engine
+    // read resolved before the synchronous instant pass, `lookaheadPlanRef`
+    // matched, the plan went into the instant package AND was queued into the
+    // late one, and both spoke — the second clip starting as the first (about
+    // seventeen seconds of it) finished.
+    expect(TEACH_CODE, 'the instant package carries the plan again')
+      .not.toMatch(/kind: 'plan' as const, text: planLine/);
+    expect(TEACH, 'the plan lost its one route to the voice')
+      .toMatch(/queueSpokenHint\(planFen, graded, 'plan'\)/);
+    // And only one producer draws its marks, for the same reason.
+    expect((TEACH_CODE.match(/planMarks\(\{/g) ?? []).length,
+      'two producers are painting the plan').toBe(1);
+  });
+
   it('the queued package is actually spoken', () => {
     expect(TEACH).toMatch(/speakTrackA\(hintPkg\.spoken\)/);
   });
