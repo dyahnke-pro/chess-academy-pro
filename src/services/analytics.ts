@@ -122,6 +122,17 @@ const AUDIT_EVENT_MAP: Partial<Record<AuditKind, string>> = {
   // narration was even attempted upstream before speak.
   'voice-speak-invoked': 'voice_spoken',
   'coach-narration-spoken': 'coach_narration_spoken',
+  // THE BOARD IS HALF OF WHAT THE COACH SAYS, and until now none of it was
+  // durable. David 2026-08-11, on his own game: "No arrows when talking about
+  // future plans or piece walks" — the exact defect this event records, and it
+  // was mirrored nowhere, so the claim could be neither confirmed nor refuted
+  // from PostHog. The only trace lived in the audit-stream, which is an
+  // in-memory buffer wiped on every deploy.
+  //
+  // The summary carries the marks AND the claims that entitled them ("2
+  // arrow(s), 3 highlight(s) — d2-d4, … | justified: d4 e5"), so one query
+  // answers both "did the board draw" and "was it allowed to".
+  'coach-board-annotation': 'coach_board_annotation',
   'coach-move-narration-fired': 'coach_narration_fired',
   'coach-move-narration-skipped': 'coach_narration_skipped',
   // Mirror the actual TTS playback failure (iOS <audio> autoplay rejection,
