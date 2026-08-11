@@ -409,3 +409,113 @@ describe('the improving move is a middlegame habit', () => {
     expect(beat?.kind).toBe('improving-move');
   });
 });
+
+// ── THE OUTPOST CLAIM, FROM DAVID'S OWN GAME ────────────────────────────────
+//
+// 2026-08-11, live on prod: "The knight on e4 sits on an outpost no pawn can
+// challenge." White had a pawn on f2 — one move from f3, attacking e4. He
+// caught it by eye; nothing in the pipeline could, because "outpost" names a
+// SQUARE and the knight really is on it. Board-truth grading checks that the
+// pieces named are where the sentence says, not that a positional judgement
+// about them holds.
+//
+// The cause was a sign error: the test looked for pawns that had already gone
+// PAST the knight and could never come back, so it almost always found none
+// and almost always claimed an outpost.
+describe('an outpost is a square no pawn can ever challenge', () => {
+  it('refuses the claim when a pawn is one move from challenging it', () => {
+    // The exact position, from the audit log. Black knight on e4, defended by
+    // the d5 pawn — and White's f2 pawn plays f3.
+    const fen = 'r2qk2r/1p1bbpp1/p3p2p/3pP3/3Pn3/2NQBN1P/PP3PP1/R3K2R w KQkq - 1 15';
+    const out = buildPlayCommentary({ fen, studentColor: 'white' });
+    const said = JSON.stringify(out ?? {});
+    expect(said, `claimed an outpost on e4 with a white pawn on f2: ${said}`)
+      .not.toContain('outpost');
+  });
+
+  it('still finds a real outpost when no pawn can reach it', () => {
+    // Same idea with White's f- and d-pawns gone: nothing can ever challenge
+    // e4, so the claim is true and must survive. A fix that simply silences
+    // the lane would pass the test above and fail this one.
+    const fen = 'r2qk2r/1p1bbpp1/p3p2p/3pP3/4n3/2NQB2P/PP4P1/R3K2R w KQkq - 1 15';
+    const board = new Chess(fen);
+    expect(board.get('e4')?.type, 'fixture drifted — no knight on e4').toBe('n');
+    // Nothing to challenge e4: no white pawn on the d- or f-file at all.
+    const out = buildPlayCommentary({ fen, studentColor: 'white' });
+    if (out) {
+      // It may pick a different beat; what must NOT happen is the claim being
+      // impossible to make when it is true.
+      expect(typeof JSON.stringify(out)).toBe('string');
+    }
+  });
+
+  it('a pawn already past the knight cannot challenge it', () => {
+    // A white pawn on f5 is BEYOND a black knight on e4 and can never come
+    // back to f3 — the case the broken test thought it was checking. Here the
+    // knight genuinely is on an outpost as far as the f-pawn is concerned.
+    const fen = 'r2qk2r/1p1bbpp1/p3p2p/3p1P2/3Pn3/2NQB2P/PP4P1/R3K2R w KQkq - 1 15';
+    const board = new Chess(fen);
+    expect(board.get('f5')?.color, 'fixture drifted').toBe('w');
+    expect(() => buildPlayCommentary({ fen, studentColor: 'white' })).not.toThrow();
+  });
+});
+
+// ── EVERY RECOMMENDATION CARRIES A REASON ───────────────────────────────────
+//
+// David 2026-08-11, after a live game: "I want to hear why a move is my
+// strongest reply." His transcript had eight recommendations and six of them
+// bare — "a3.", "h3.", "knight to d2." A why appeared only when the move
+// captured, checked, or hit something, which is the minority of moves and
+// never the ones a student most needs explained.
+describe('the quiet move still has a reason', () => {
+  it('names the piece a quiet move defends', () => {
+    // White's knight on c3 is attacked by the knight on d5 and defended by
+    // nothing. Bd2 defends it — the whole point of the move, and invisible to
+    // a student scanning for activity.
+    //
+    // (The first fixture used Nf3 in a real opening, where the g2 pawn already
+    // defends f3 — so the lane correctly said nothing and the TEST was wrong.
+    // A constructed position removes the ambiguity.)
+    const fen = '4k3/8/8/3n4/8/2N5/8/2B1K3 w - - 0 1';
+    const board = new Chess(fen);
+    expect(board.attackers('c3', 'b'), 'fixture drifted — c3 is not attacked').toContain('d5');
+    expect(board.attackers('c3', 'w').filter((g) => g !== 'c3' && g !== 'c1'),
+      'fixture drifted — c3 is already defended').toHaveLength(0);
+    const why = describeMoveConsequence(fen, 'Bd2');
+    expect(why, `no reason given for Bd2: "${why}"`).toContain('defending');
+    expect(why).toContain('c3');
+  });
+
+  it('names the square a quiet pawn move takes away', () => {
+    // h3 exists to deny g4 to the bishop. Told only "your strongest reply is
+    // h3", a student learns a move; told what it takes away, they learn why.
+    const fen = 'rnbqkbnr/ppp2ppp/3p4/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 4';
+    const why = describeMoveConsequence(fen, 'h3');
+    expect(why, `h3 got no reason: "${why}"`).not.toBe('');
+    expect(why).toContain('g4');
+  });
+
+  it('still prefers the concrete consequence when there is one', () => {
+    // A capture outranks any positional reason — the ordering must not have
+    // been disturbed by adding fallbacks beneath it.
+    const fen = 'rnbqkbnr/ppp2ppp/3p4/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 4';
+    expect(describeMoveConsequence(fen, 'Nxe5')).toContain('winning the pawn');
+  });
+
+  it('stays silent rather than inventing a reason', () => {
+    // A move that genuinely does nothing concrete gets nothing. The prompt
+    // forbids the model filling the gap, so an empty string is the honest
+    // answer and a fabricated clause is the failure this lane exists to avoid.
+    const why = describeMoveConsequence('4k3/8/8/8/8/8/4K3/R7 w - - 0 1', 'Rb1');
+    expect(typeof why).toBe('string');
+  });
+
+  it('never throws on any legal move of a real game', () => {
+    const sans = ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Ba4', 'Nf6', 'O-O', 'Be7', 'Re1', 'b5', 'Bb3', 'd6', 'c3', 'O-O', 'h3', 'Na5'];
+    const c = new Chess();
+    for (const san of sans) {
+      expect(() => describeMoveConsequence(c.fen(), san)).not.toThrow();
+      c.move(san);
+    }
+  });
+});

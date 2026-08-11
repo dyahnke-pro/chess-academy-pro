@@ -242,6 +242,7 @@ import { groundArrows, dedupeArrowsBySquarePair } from '../../utils/arrowGroundi
 import type { StockfishAnalysis } from '../../types';
 import { fetchLichessExplorer } from '../../services/lichessExplorerService';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength } from '../../services/coachGameEngine';
+import { samePosition } from '../../utils/samePosition';
 import { withTimeout } from '../../coach/withTimeout';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -7030,7 +7031,16 @@ export function CoachTeachPage(): JSX.Element {
                             // the plan rank was inert: the general-rules tier
                             // never stood down, and the plan spoke last.
                             if (graded) queueSpokenHint(planFen, graded, 'plan');
-                            if (graded && liveFenRef.current === planFen) {
+                            // 🔒 THE SAME COMPARISON THE SPEECH USES. This was
+                            // `liveFenRef.current === planFen` — whole-FEN
+                            // equality — while the line immediately above
+                            // queues the SPEECH through a guard that compares
+                            // POSITION. So the plan spoke and the board stayed
+                            // blank: David's game, 18 plans offered, 12 mark
+                            // events. A halfmove clock ticking is not the board
+                            // moving, and two guards on one utterance must not
+                            // disagree about what "still here" means.
+                            if (graded && samePosition(liveFenRef.current, planFen)) {
                               const marks = planMarks({
                                 plan,
                                 // The parts that SURVIVED grading, each with its
@@ -7593,8 +7603,6 @@ export function CoachTeachPage(): JSX.Element {
                 // position. A guard that fails on a clock silently drops the
                 // whole utterance — the failure mode this build has now hit
                 // twice.
-                const samePosition = (a: string, b: string): boolean =>
-                  a.split(' ').slice(0, 4).join(' ') === b.split(' ').slice(0, 4).join(' ');
                 // THE COACH'S OWN VERDICT, taken here because both engine
                 // reads have now resolved — see the capture site above.
                 // ONE READ, BOTH VERDICTS. `midTurnRead` analysed `move.fen`

@@ -311,8 +311,15 @@ describe('the couplings that make the wiring safe', () => {
 
   it('the pending-speak guard compares POSITION, not the whole FEN', () => {
     // A guard that fails on a halfmove clock silently drops the utterance.
-    expect(TEACH).toMatch(/const samePosition = /);
-    expect(TEACH).toMatch(/slice\(0, 4\)\.join\(' '\)/);
+    //
+    // This asserted the LOCAL `const samePosition = …` for as long as there was
+    // one. There is not, and that is the fix rather than a regression: the
+    // comparison was rebuilt from scratch in nine places and the plan's MARKS
+    // path used none of them, so speech and board drifted apart and a third of
+    // the plans drew nothing. One owner now, imported.
+    expect(TEACH).toMatch(/import \{ samePosition \} from '\.\.\/\.\.\/utils\/samePosition'/);
+    expect(read('src/utils/samePosition.ts')).toMatch(/slice\(0, 4\)\.join\(' '\)/);
+    expect(TEACH).toMatch(/samePosition\(pending\.fen, fenAfterReply\)/);
   });
 
   it('the taught slip is reachable on PLAY, above the engine fast path', () => {
@@ -367,6 +374,25 @@ describe('the couplings that make the wiring safe', () => {
     const PLAY = code(read('src/components/Coach/CoachGamePage.tsx'));
     expect(PLAY, 'play announces the punish and hands over the answer')
       .not.toMatch(/findLivePunishment/);
+  });
+
+  it('the plan\'s marks use the SAME guard as the plan\'s speech', () => {
+    // 🔒 THE MISSING-ARROWS BUG, MEASURED. David's game 2026-08-11: 18 plans
+    // offered, 12 mark events. The speech was queued through a POSITION
+    // comparison and passed; the marks were gated on whole-FEN `===` and
+    // failed. So the coach said "you want to walk the knight round to b3, by
+    // way of d2" and the board stayed empty — a third of the time.
+    //
+    // Two guards on one utterance must not disagree about what "still here"
+    // means, and a halfmove clock ticking is not the board moving.
+    expect(TEACH).toMatch(/if \(graded && samePosition\(liveFenRef\.current, planFen\)\)/);
+    expect(TEACH_CODE, 'the marks are back on whole-FEN equality')
+      .not.toMatch(/liveFenRef\.current === planFen/);
+    // ONE OWNER. The comparison was rebuilt from scratch in nine places and the
+    // marks path used none of them; that is how the two halves drifted apart.
+    expect(TEACH).toMatch(/import \{ samePosition \} from '\.\.\/\.\.\/utils\/samePosition'/);
+    expect(TEACH_CODE, 'a local copy of the comparison has grown back')
+      .not.toMatch(/const samePosition = \(a: string, b: string\)/);
   });
 
   it('the marks are computed from what SURVIVED grading', () => {

@@ -113,10 +113,28 @@ function opponentsBestPiece(
       Math.abs(fileOf(p.square) - f) === 1 && rankOf(p.square) === r - dir);
     if (!defended) continue;
     // No pawn of ours can ever challenge it.
+    //
+    // 🔒 THE DIRECTION WAS BACKWARDS, AND IT SHIPPED A FALSE CLAIM. David's
+    // game, 2026-08-11: "the knight on e4 sits on an outpost no pawn can
+    // challenge" — with a white pawn on f2, one move from f3, attacking e4.
+    //
+    // A pawn challenges a knight by advancing to the square DIAGONALLY BEHIND
+    // it, so the pawns that can ever do so are the ones that have not yet
+    // passed it. White pawns advance up the board, so a white pawn threatens a
+    // BLACK knight from below it; black pawns advance down, so a black pawn
+    // threatens a WHITE knight from above. The test asked for the opposite in
+    // both cases — it looked for pawns that had already gone by and could never
+    // come back, which is why it almost always found none and almost always
+    // claimed an outpost.
+    //
+    // The gate could not catch this: "outpost" names a SQUARE, and the knight
+    // really is on it. Board-truth grading checks that the pieces named are
+    // where the sentence says, not that a positional judgement about them
+    // holds. Which is exactly why the judgement has to be right here.
     const challengeable = myPawns.some((p) => {
       const pf = fileOf(p.square);
       const pr = rankOf(p.square);
-      return Math.abs(pf - f) === 1 && (them === 'w' ? pr < r : pr > r);
+      return Math.abs(pf - f) === 1 && (them === 'w' ? pr > r : pr < r);
     });
     if (!challengeable) {
       return { piece: n, why: `the knight on ${n.square} sits on an outpost no pawn can challenge` };
@@ -316,7 +334,83 @@ export function describeMoveConsequence(fenBefore: string, san: string): string 
       const score = value[t.captured] ?? 0;
       if (!best || score > best.score) best = { name: NAME[t.captured] ?? 'piece', to: t.to, score };
     }
-    return best ? `, attacking the ${best.name} on ${best.to}` : '';
+    if (best) return `, attacking the ${best.name} on ${best.to}`;
+
+    // ── THE QUIET MOVE STILL HAS A REASON ────────────────────────────────
+    //
+    // 🔒 DAVID 2026-08-11: "I want to hear why a move is my strongest reply."
+    // His game is the evidence — eight recommendations, and six of them bare:
+    // "Your strongest reply here is a3." / "h3." / "knight to d2." A why
+    // appeared only when the move captured, checked, or hit something, which is
+    // the minority of moves and never the ones a student most needs explained.
+    //
+    // He asked whether the ENGINE DELTA should be wired in for this. It should
+    // not, on its own: "it is worth about a third of a pawn" is a number, not a
+    // reason, and a student who hears it still does not know what the move DID.
+    // The two clauses below are what a coach actually says about a quiet move,
+    // and both are provable from the board with no second search.
+    const after = probe.fen();
+
+    // IT DEFENDS SOMETHING THAT WAS HANGING. The strongest quiet move is very
+    // often the one that quietly saves a piece, and that is invisible to a
+    // student looking for activity.
+    try {
+      const beforeBoard = new Chess(fenBefore);
+      const afterBoard = new Chess(after);
+      for (const row of afterBoard.board()) {
+        for (const sq of row) {
+          if (!sq || sq.color !== mv.color || sq.type === 'k') continue;
+          if (sq.square === mv.to) continue; // the piece that just moved
+          const attacked = afterBoard.attackers(sq.square, mv.color === 'w' ? 'b' : 'w').length > 0;
+          if (!attacked) continue;
+          const guardedBefore = beforeBoard.attackers(sq.square, mv.color)
+            .filter((g) => g !== sq.square && g !== mv.from).length > 0;
+          const guardedNow = afterBoard.attackers(sq.square, mv.color)
+            .filter((g) => g !== sq.square).length > 0;
+          // Newly guarded, by THIS move — it must be the mover doing the
+          // guarding, or the sentence credits it with someone else's work.
+          if (guardedBefore || !guardedNow) continue;
+          if (!afterBoard.attackers(sq.square, mv.color).includes(mv.to)) continue;
+          return `, defending the ${NAME[sq.type] ?? 'piece'} on ${sq.square}`;
+        }
+      }
+    } catch { /* the quiet why is a bonus, never a blocker */ }
+
+    // IT TAKES A SQUARE AWAY. The other half of what a quiet move does: h3 and
+    // a3 exist to deny g4 and b4, and a student told only the move name never
+    // learns that is the whole point. Named only when an enemy PIECE really
+    // could have gone there and now cannot — a square nobody wanted is not a
+    // reason.
+    //
+    // 🔒 ATTACKED SQUARES, NOT LEGAL MOVES. The first version asked
+    // `moves({square: mv.to})`, which for a pawn on h3 returns h4 — its PUSH —
+    // and never g4, the square it actually controls. So the one case the clause
+    // exists for produced nothing. A pawn's control of an empty square is a
+    // capture that is not legal, so it is invisible to the move generator and
+    // has to be read off `attackers`.
+    try {
+      const beforeBoard = new Chess(fenBefore);
+      const afterBoard = new Chess(after);
+      const them = mv.color === 'w' ? 'b' : 'w';
+      const theirTurn = beforeBoard.fen().split(' ');
+      theirTurn[1] = them;
+      theirTurn[3] = '-';
+      let theirMoves: Array<{ to: string; piece: string }> = [];
+      try {
+        theirMoves = new Chess(theirTurn.join(' ')).moves({ verbose: true })
+          .filter((t) => t.piece !== 'p' && t.piece !== 'k')
+          .map((t) => ({ to: t.to, piece: t.piece }));
+      } catch { theirMoves = []; }
+      for (const cand of theirMoves) {
+        const sqr = cand.to as never;
+        if (afterBoard.get(sqr)) continue;                       // not an empty square
+        if (!afterBoard.attackers(sqr, mv.color).includes(mv.to)) continue;
+        if (beforeBoard.attackers(sqr, mv.color).length > 0) continue; // already covered
+        return `, taking ${cand.to} away from their ${NAME[cand.piece] ?? 'piece'}`;
+      }
+    } catch { /* the quiet why is a bonus, never a blocker */ }
+
+    return '';
   } catch {
     return '';
   }
