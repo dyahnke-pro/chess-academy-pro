@@ -7575,9 +7575,32 @@ export function CoachTeachPage(): JSX.Element {
                 // ── THE COACH'S OWN MOVE ───────────────────────────────────
                 try {
                   const cm = coachMoveRef.current;
-                  // No FEN guard on `mid`: it is the analysis of `move.fen` by
-                  // construction, and `cm.fenBefore` IS `move.fen`. The guard
-                  // that matters is the board still showing this turn.
+                  // ── WHY IT DECLINED, EVERY TIME IT DECLINES ────────────────
+                  //
+                  // David's 2026-08-11 game: 300 findings, 13 coach moves, and
+                  // not one `coachMistake` in any package. The lane was wired,
+                  // every audit was green, and a whole game went by without it
+                  // making a sound — which is indistinguishable, from outside,
+                  // between "the coach played 13 clean moves" and "a guard is
+                  // refusing every turn". A lane that can only be observed when
+                  // it fires cannot be debugged when it doesn't.
+                  //
+                  // So it reports its own silence. The reason is computed before
+                  // any early exit and logged with the numbers behind it, so one
+                  // real game says which of the two it is.
+                  const declineReason = !cm ? 'no coach move captured (engine read failed)'
+                    : !mid ? 'no analysis of the pre-reply board'
+                      : !samePosition(cm.fenAfter, fenAfterReply) ? 'board moved on before the verdict'
+                        : null;
+                  if (declineReason) {
+                    void logAppAudit({
+                      kind: 'coach-narration-spoken',
+                      category: 'subsystem',
+                      source: 'CoachTeachPage.coachVerdict.declined',
+                      summary: `coach verdict skipped: ${declineReason}`,
+                      fen: fenAfterReply,
+                    });
+                  }
                   if (cm && mid && samePosition(cm.fenAfter, fenAfterReply)) {
                     coachMoveRef.current = null;
                     const coachColor = playerColor === 'white' ? 'black' : 'white';
@@ -7611,6 +7634,20 @@ export function CoachTeachPage(): JSX.Element {
                       queueSpokenHint(cm.fenAfter, look.line, look.kind);
                       captureEvent('coach_inaccuracy_called', {
                         surface: 'coach-teach', kind: look.kind, cost: Math.round(cpLoss),
+                      });
+                    } else {
+                      // REACHED THE MODEL AND IT SAID NOTHING. The interesting
+                      // case, and the one the log could not distinguish before:
+                      // the guards all passed and the coach's move simply was
+                      // not worth a word. The centipawns go with it, so "the
+                      // coach never speaks" can be read as "it played well" or
+                      // "the floor is too high" instead of guessed at.
+                      void logAppAudit({
+                        kind: 'coach-narration-spoken',
+                        category: 'subsystem',
+                        source: 'CoachTeachPage.coachVerdict.nothingToSay',
+                        summary: `coach move ${cm.playedSan} cost ${Math.round(cpLoss)}cp — under the floor, nothing to call`,
+                        fen: cm.fenAfter,
                       });
                     }
                   }

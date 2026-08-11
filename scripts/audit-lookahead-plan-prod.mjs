@@ -302,6 +302,32 @@ async function main() {
       );
     }
 
+    // ── THE COACH'S OWN VERDICT: DID IT EVEN GET ASKED? ────────────────────
+    //
+    // David's 2026-08-11 game had 13 coach moves and zero `coachMistake` lines.
+    // From outside, "the coach played 13 clean moves" and "a guard refuses every
+    // turn" look identical — which is why the lane now reports its own silence.
+    // This reads that back: how often it was asked, and when it declined, why.
+    const verdictEvents = [...listener.getCapturedEvents(), ...fresh]
+      .filter((e) => String(e.source ?? '').includes('coachVerdict'));
+    const declined = verdictEvents.filter((e) => String(e.source).endsWith('declined'));
+    const nothing = verdictEvents.filter((e) => String(e.source).endsWith('nothingToSay'));
+    const spokeCoach = [...listener.getCapturedEvents(), ...fresh]
+      .filter((e) => /coachMistake/.test(String(e.summary ?? '')));
+    console.log(`[coach-verdict] asked ${verdictEvents.length + spokeCoach.length}× — `
+      + `${spokeCoach.length} spoke, ${nothing.length} nothing-to-say, ${declined.length} declined`);
+    for (const d of declined.slice(0, 4)) console.log(`  declined: ${d.summary}`);
+    for (const n of nothing.slice(0, 4)) console.log(`  quiet:    ${n.summary}`);
+    // A GUARD REFUSING EVERY TURN IS A BUG; a coach playing well is not. The
+    // check fails only on the first, which the reason string now distinguishes.
+    record(
+      'the coach verdict is reachable, not blocked',
+      declined.length === 0 || declined.length < verdictEvents.length,
+      verdictEvents.length === 0
+        ? 'the verdict never ran at all — no coach reply reached it'
+        : `${declined.length} of ${verdictEvents.length} turns blocked by a guard`,
+    );
+
     // ── NO DOUBLE SENTENCE. David 2026-08-10: "I think I heard a double
     //    sentence." He had, five times in one session — two lanes reading the
     //    same loose piece and both saying so, differing only in the moral
