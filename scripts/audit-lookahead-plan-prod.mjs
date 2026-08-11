@@ -219,7 +219,21 @@ async function main() {
       // keyed on prose it no longer recognises accuses the app of a regression
       // it does not have, and the third time it cries wolf nobody will check.
       // Every phrase the plan lane can emit belongs here.
-      .filter((sn) => /\b(want to|running through|keep half an eye|both sides want|is the contested one|bringing pieces to|going for|walk the|are forced|comes off in this line|trades down into|already a .*sitting on the board|pawn islands|half-open for you)\b/i.test(sn));
+      .filter((sn) => /\b(want to|running through|keep half an eye|both sides want|is the contested one|bringing pieces to|going for|walk the|are forced|comes off in this line|trades down into|already a .*sitting on the board|pawn islands|half-open for you)\b/i.test(sn))
+      // ── AND EXCLUDE THE BACKWARD LOOK, WHICH IS ENTITLED TO NAME THE MOVE ──
+      // The SAME wrong-half-of-the-string problem as the corpus-note case
+      // above, arriving by a different door. `inaccuracyCall.whyBetter` builds
+      // the callout's reason by REUSING the plan's own clause ("it would walk
+      // the bishop round to b3…"), so the callout inherits plan vocabulary and
+      // matches the filter — while its contract explicitly allows naming the
+      // better move, because a move already played is on the board and hiding
+      // it would be coyness, not teaching. The honesty contract withholds the
+      // move the student has yet to FIND; it never withheld this one.
+      //
+      // Flagged on prod 2026-08-11: "Nxe5 was the move — it would walk the
+      // bishop round to b3, by way of f7…". Real sentence, correct behaviour,
+      // audit reading it as the forward plan.
+      .filter((sn) => !/\b(was the move|was a mistake|was a blunder|was a little loose|from me)\b/i.test(sn));
     const leakedMove = planSentences.filter((sn) => movesIn(sn).length > 0);
     record(
       'no plan sentence handed over a move',
