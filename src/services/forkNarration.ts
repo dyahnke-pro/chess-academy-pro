@@ -22,10 +22,22 @@
 // look-ahead does. So "this one opens the d-file and trades the knights" is
 // arithmetic over moves the database actually contains.
 import { Chess } from 'chess.js';
+import { teachableSlipAt } from './gemCrushLines';
 import { branchesAt, type OpeningBranch } from './openingBranches';
 import { planFromUci, keySquareLine } from './lookaheadPlan';
 
 export interface ForkRoad {
+  /** THE TRAP ROAD. Set when this road is one the COACH will deliberately walk
+   *  into if the student picks it — a curated, engine-verified gem whose
+   *  punishment they then have to find.
+   *
+   *  🔒 DAVID'S IDEA (2026-08-11): "We can also tie the gems error into the
+   *  fork/leaf picker!! Pos a question to the user if they want to walk that
+   *  then." It is a better shape than the coach silently slipping: an OFFER
+   *  rather than a trick. The student chooses to be shown the trap, so when it
+   *  springs it reads as a lesson they asked for instead of an opponent
+   *  blundering for no reason. */
+  trap?: { punishSan: string };
   /** The move that commits to this road. */
   san: string;
   /** What it is called — the name a student would recognise. */
@@ -116,6 +128,10 @@ export function forkOfferAt(
 ): ForkOffer | null {
   const branches = branchesAt(historySans);
   if (branches.length < 2) return null;
+  // Is one of the roads out of here a trap the coach can walk into? Looked up
+  // by POSITION, so a transposition finds it, and re-verified legal by
+  // `teachableSlipAt` before it can be offered.
+  const slip = teachableSlipAt(fen);
 
   const shown = branches.slice(0, max);
   const options = shown.map((b) => previewsOf(fen, b, historySans.length, studentColor, perspective));
@@ -137,6 +153,25 @@ export function forkOfferAt(
         : '');
     return { san: b.san, name: b.name, eco: b.eco, lines: b.lines, preview };
   });
+
+  // ── THE ROAD WITH A TRAP DOWN IT ────────────────────────────────────────
+  //
+  // Offered as its own road rather than folded into an existing one, because
+  // the student is choosing something different in kind: not "which opening do
+  // I want to learn" but "do you want to see me fall into something". Named
+  // for what it is, and its preview WITHHOLDS the punishment — the whole value
+  // is in finding it, and a road that gives away its own answer is a spoiler
+  // with extra steps.
+  if (slip && !roads.some((r) => r.san === slip.san)) {
+    roads.push({
+      san: slip.san,
+      name: 'The trap line',
+      eco: '',
+      lines: 0,
+      preview: 'I walk into something here, and there is a punish for you to find',
+      trap: { punishSan: slip.punishSan },
+    });
+  }
 
   // A road nobody can describe is still a road — it keeps its name and its
   // theory count. But if NOTHING can be described, the question is empty.

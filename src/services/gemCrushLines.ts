@@ -145,7 +145,24 @@ function positionIndex(): Map<string, PunishGem[]> {
  * caller is allowed to play it — the index is keyed by position, so a
  * transposition finds the gem, and the legality check is what makes that safe.
  */
-export function teachableSlipAt(fen: string): { san: string; opening: string; punishSan: string } | null {
+export function teachableSlipAt(
+  fen: string,
+  /** SANs that players at the student's OWN rating band actually play from this
+   *  position, straight off the amateur explorer.
+   *
+   *  🔒 DAVID (2026-08-11): "Can you still tie it into the amateur database?"
+   *  Yes, and it closes the loop the gems came from: every one of them was
+   *  MINED from this explorer precisely because real humans blunder that way.
+   *  Checking the slip back against the band makes the coach's error one the
+   *  student will actually MEET — a beginner walks into beginner mistakes, not
+   *  into a trap that only exists at 2000 — so the realism and the adaptivity
+   *  come from the same fact rather than from a rule bolted on top.
+   *
+   *  Omitted, every curated gem is eligible: the caller may have no explorer
+   *  (offline, rate-limited, circuit open) and a curated, engine-verified slip
+   *  is still a good lesson without the frequency check. */
+  humanMoves?: ReadonlySet<string>,
+): { san: string; opening: string; punishSan: string } | null {
   let board: Chess;
   try {
     board = new Chess(fen);
@@ -157,6 +174,9 @@ export function teachableSlipAt(fen: string): { san: string; opening: string; pu
     // Only the tiers that ship as weapons. A gem the student would never be
     // shown is not one worth walking into.
     if (gem.tier !== 'confirmed' && gem.tier !== 'positional') continue;
+    // A slip nobody at this level plays teaches a trap the student will never
+    // be sprung by. When the band is known, it decides.
+    if (humanMoves && !humanMoves.has(gem.inaccuracy)) continue;
     const punishSan = gem.punishSeq?.[0] ?? gem.punish;
     if (!gem.inaccuracy || !punishSan) continue;
     try {

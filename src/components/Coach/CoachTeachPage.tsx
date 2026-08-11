@@ -5458,7 +5458,15 @@ export function CoachTeachPage(): JSX.Element {
     //    2026-06-21 "coach is not playing good moves at all").
     try {
       const rating = getTargetStrength(activeProfile?.puzzleRating ?? 1200, difficulty);
-      const adaptive = await getAdaptiveMove(fen, rating);
+      // The student's OWN strength and the setting they chose, both — the
+      // taught-slip matrix needs them apart, and `rating` has already folded
+      // them together (a 1500 on easy and an 800 on medium land on the same
+      // number). Without these the slip lane stays off, which is the safe way
+      // round for a feature that hands the student a won position.
+      const adaptive = await getAdaptiveMove(fen, rating, {
+        studentElo: activeProfile?.puzzleRating ?? 1200,
+        difficulty,
+      });
       if (adaptive.move) {
         const san = uciToSan(adaptive.move);
         if (san) return san;

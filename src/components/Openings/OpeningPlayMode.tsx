@@ -626,7 +626,12 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
         // which layer answered. Surface it via an opponent-move audit
         // so the play surface is debuggable end-to-end.
         try {
-          const adaptive = await getAdaptiveMove(game.fen, targetStrength);
+          // Student strength + chosen difficulty, kept apart: the taught-slip
+          // matrix needs both and `targetStrength` has already merged them.
+          const adaptive = await getAdaptiveMove(game.fen, targetStrength, {
+            studentElo: activeProfile?.puzzleRating ?? 1200,
+            difficulty,
+          });
           if (isCancelled()) return;
           const { move, source } = adaptive;
 

@@ -4,6 +4,7 @@ import { getNextOpeningBookMove } from './openingDetectionService';
 import { findHangingPieces } from './tacticClassifier';
 import { lookupMasterPlay } from './masterPlayLookup';
 import { pickBookMove } from './coachBookMove';
+import { fetchLichessExplorer } from './lichessExplorerService';
 import { teachableSlipAt } from './gemCrushLines';
 import { logAppAudit } from './appAuditor';
 import type { StockfishAnalysis, CoachDifficulty } from '../types';
@@ -141,6 +142,47 @@ async function withBudget<T>(work: Promise<T>, ms: number): Promise<T | null> {
     work,
     new Promise<null>((resolve) => setTimeout(() => resolve(null), ms)),
   ]);
+}
+
+/**
+ * May the coach deliberately walk into a curated trap for THIS student, at THIS
+ * difficulty?
+ *
+ * 🔒 DAVID'S MATRIX (2026-08-11, verbatim): "Intermediate should only get them
+ * on easy. Beginners should get them on easy and medium. Advanced players
+ * should never get them."
+ *
+ *                  easy    medium   hard
+ *   beginner        yes      yes      no
+ *   intermediate    yes      no       no
+ *   advanced        no       no       no
+ *
+ * TWO INPUTS, NOT ONE. The first cut of this gated on the resolved
+ * `targetElo`, which cannot express the matrix at all: `resolveConfig` folds
+ * difficulty INTO that number, so a 1500 on easy (1200) and an 800 on medium
+ * (800) are indistinguishable from their own strength. Who the student IS and
+ * what they ASKED FOR are separate questions and both belong in the answer.
+ *
+ * The bands are the app's existing ones — beginner < 1000, intermediate
+ * 1000-2000, advanced > 2000, the same split `slipDetector` uses to decide what
+ * is worth interrupting for. A second, private definition of "beginner" is how
+ * two surfaces end up disagreeing about the same student.
+ *
+ * The shape of it: a deliberate slip is a TEACHING aid, so it belongs where the
+ * student is asking to be taught. Easy is that request. A stronger player, or
+ * anyone who chose a harder game, asked for an opponent — and an opponent that
+ * hands you a won position is not one.
+ */
+export function slipsAllowed(
+  studentElo: number,
+  difficulty: CoachDifficulty | 'auto' | undefined,
+): boolean {
+  if (studentElo > 2000) return false;              // advanced: never
+  const setting = difficulty ?? 'auto';
+  if (setting === 'hard') return false;             // nobody, at any strength
+  if (setting === 'easy') return true;              // beginner and intermediate
+  // medium (and 'auto', which resolves to medium's offset) — beginners only.
+  return studentElo < 1000;
 }
 
 export function explorerBandForElo(targetElo: number): string {
@@ -304,6 +346,12 @@ function pickMasterMove(
 export async function getAdaptiveMove(
   fen: string,
   targetElo: number,
+  /** WHO the student is and WHAT they asked for. Both are needed for the slip
+   *  matrix; `targetElo` alone has already folded them together and cannot tell
+   *  a 1500 on easy from an 800 on medium. Optional so every existing caller
+   *  still compiles — and absent, no slip is offered, which is the safe way
+   *  round for a feature that hands the student a won position. */
+  opts?: { studentElo?: number; difficulty?: CoachDifficulty | 'auto' },
 ): Promise<{ move: string; analysis: StockfishAnalysis; source: 'masters' | 'lichess-games' | 'amateur-band' | 'taught-slip' | 'stockfish-best' | 'stockfish-variety' | 'stockfish-fallback' | 'random' }> {
   // Single-threaded Stockfish (iOS / any context without SharedArrayBuffer +
   // cross-origin isolation) is ~5-10x slower than the threaded build, so a
@@ -366,9 +414,40 @@ export async function getAdaptiveMove(
   // game; a hard opponent walking into a known amateur trap is not a teaching
   // moment, it is a broken difficulty setting. Easy and medium is where a
   // deliberate slip belongs, which is also where the gems came from.
-  if (slipsThisGame < 1 && targetElo < 2000) {
+  if (slipsThisGame < 1
+    && opts?.studentElo !== undefined
+    && slipsAllowed(opts.studentElo, opts.difficulty)) {
     try {
-      const slip = teachableSlipAt(fen);
+      // ── AND THE SLIP ITSELF COMES FROM THE BAND ──────────────────────────
+      //
+      // David: "Can you still tie it into the amateur database?" — yes, and it
+      // closes the loop the gems came from. Every one of the 344 was MINED from
+      // this explorer precisely because real humans blunder that way, so
+      // checking the slip back against the student's OWN band makes the coach's
+      // error one they will actually MEET: a beginner walks into beginner
+      // mistakes, not into a trap that only exists at 2000. Realism and
+      // adaptivity then come from the same fact instead of from a second rule
+      // bolted on top of the first.
+      //
+      // Looked up ONLY once a gem is already known to sit at this position,
+      // which is rare — so the common case pays nothing — and an explorer that
+      // is offline, rate-limited or circuit-open simply leaves the curated,
+      // engine-verified gem eligible on its own merits.
+      const local = teachableSlipAt(fen);
+      let bandChecked = false;
+      let slip = local;
+      if (local) {
+        try {
+          const seen = await withBudget(
+            fetchLichessExplorer(fen, 'lichess', { ratings: explorerBandForElo(targetElo) }),
+            BAND_BUDGET_MS,
+          );
+          if (seen?.moves?.length) {
+            bandChecked = true;
+            slip = teachableSlipAt(fen, new Set(seen.moves.map((m) => m.san)));
+          }
+        } catch { /* no band read — the curated gem stands on its own */ }
+      }
       if (slip) {
         const uci = sanToUci(fen, slip.san);
         if (uci) {
@@ -377,7 +456,7 @@ export async function getAdaptiveMove(
             kind: 'coach-opponent-move-source',
             category: 'subsystem',
             source: 'coachGameEngine.getAdaptiveMove',
-            summary: `source=taught-slip san=${slip.san} punish=${slip.punishSan} opening=${slip.opening} elo=${targetElo}`,
+            summary: `source=taught-slip san=${slip.san} punish=${slip.punishSan} opening=${slip.opening} studentElo=${opts.studentElo} difficulty=${opts.difficulty ?? 'auto'} bandConfirmed=${bandChecked}`,
             fen,
           });
           return {

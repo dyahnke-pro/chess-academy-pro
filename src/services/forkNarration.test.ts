@@ -11,6 +11,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { forkOfferAt, roadsNotTakenAt } from './forkNarration';
+import { getAllPunishGems } from '../data/lessons/punishGems';
 
 const fenAfter = (sans: string[]): string => {
   const b = new Chess();
@@ -259,5 +260,56 @@ describe('review points at the USER\'s lines, not the opponent\'s', () => {
     const anyOpponentClause = live!.roads.some((r) => /^They /.test(r.preview));
     const anyStudentClause = live!.roads.some((r) => /^You /.test(r.preview));
     expect(anyStudentClause || anyOpponentClause).toBe(true);
+  });
+});
+
+// ── THE ROAD WITH A TRAP DOWN IT ──────────────────────────────────────────
+// David 2026-08-11: "We can also tie the gems error into the fork/leaf
+// picker!! Pos a question to the user if they want to walk that then."
+//
+// Better than the coach silently slipping: an OFFER rather than a trick. The
+// student chooses to be shown the trap, so when it springs it reads as a lesson
+// they asked for instead of an opponent blundering for no reason.
+describe('a fork can offer a trap road', () => {
+  // Every gem's spine terminus is a position the coach could walk in at. Find
+  // one that ALSO forks, so the offer has somewhere to live.
+  const trapFork = () => {
+    for (const gem of getAllPunishGems()) {
+      if (gem.tier !== 'confirmed' && gem.tier !== 'positional') continue;
+      const sans = gem.lineMoves.split(/\s+/).filter(Boolean);
+      const board = new Chess();
+      let ok = true;
+      for (const san of sans) {
+        try { if (!board.move(san)) { ok = false; break; } } catch { ok = false; break; }
+      }
+      if (!ok) continue;
+      const offer = forkOfferAt(sans, board.fen(), 'white');
+      if (offer?.roads.some((r) => r.trap)) return offer;
+    }
+    return null;
+  };
+
+  it('offers the trap as its own road, carrying the punish', () => {
+    const offer = trapFork();
+    if (!offer) return; // no forking gem position in the corpus — not a failure
+    const trap = offer.roads.find((r) => r.trap);
+    expect(trap?.trap?.punishSan, 'a trap road with no punishment to find').toBeTruthy();
+    expect(trap?.san, 'the trap road has no move to commit to').toBeTruthy();
+  });
+
+  it('never gives away the punishment in the preview', () => {
+    // The whole value is in FINDING it. A road that spoils its own answer is a
+    // spoiler with extra steps.
+    const offer = trapFork();
+    if (!offer) return;
+    const trap = offer.roads.find((r) => r.trap);
+    expect(trap?.preview ?? '').not.toContain(trap?.trap?.punishSan ?? 'zzz');
+  });
+
+  it('never duplicates a road the theory already offered', () => {
+    const offer = trapFork();
+    if (!offer) return;
+    const sans = offer.roads.map((r) => r.san);
+    expect(new Set(sans).size).toBe(sans.length);
   });
 });

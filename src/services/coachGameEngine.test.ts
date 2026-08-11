@@ -18,7 +18,7 @@ vi.mock('./stockfishEngine', () => ({
   },
 }));
 
-import { getAdaptiveMove, getTargetStrength, tryOpeningBookMove, breakBookProbability, explorerBandForElo } from './coachGameEngine';
+import { getAdaptiveMove, getTargetStrength, tryOpeningBookMove, breakBookProbability, explorerBandForElo, slipsAllowed } from './coachGameEngine';
 import { stockfishEngine } from './stockfishEngine';
 import type { StockfishAnalysis } from '../types';
 
@@ -393,4 +393,61 @@ describe('the coach walks into a curated trap, but only as a lesson', () => {
       expect(res.move, `elo ${elo}`).toMatch(/^[a-h][1-8][a-h][1-8][qrbn]?$/);
     }
   }, 30000);
+});
+
+// ── WHO GETS WALKED INTO A TRAP ───────────────────────────────────────────
+// David 2026-08-11, verbatim: "Intermediate should only get them on easy.
+// Beginners should get them on easy and medium. Advanced players should never
+// get them."
+describe('slipsAllowed — the matrix, exactly', () => {
+  const BEGINNER = 800;
+  const INTERMEDIATE = 1500;
+  const ADVANCED = 2200;
+
+  it('beginners: easy and medium, never hard', () => {
+    expect(slipsAllowed(BEGINNER, 'easy')).toBe(true);
+    expect(slipsAllowed(BEGINNER, 'medium')).toBe(true);
+    expect(slipsAllowed(BEGINNER, 'hard')).toBe(false);
+  });
+
+  it('intermediate: easy ONLY', () => {
+    expect(slipsAllowed(INTERMEDIATE, 'easy')).toBe(true);
+    expect(slipsAllowed(INTERMEDIATE, 'medium')).toBe(false);
+    expect(slipsAllowed(INTERMEDIATE, 'hard')).toBe(false);
+  });
+
+  it('advanced: never, at any setting', () => {
+    for (const d of ['easy', 'medium', 'hard', undefined] as const) {
+      expect(slipsAllowed(ADVANCED, d), `advanced on ${d}`).toBe(false);
+    }
+  });
+
+  it('reads the band and the setting SEPARATELY', () => {
+    // The bug this replaces: gating on the resolved targetElo, which folds
+    // difficulty in. A 1500 on easy resolves to 1200 and an 800 on medium to
+    // 800 — one should get a slip and one should too, but a 1500 on MEDIUM
+    // (1500) must not, and no single number can express that.
+    expect(slipsAllowed(1500, 'easy')).toBe(true);
+    expect(slipsAllowed(1500, 'medium')).toBe(false);
+  });
+
+  it('an unknown setting is treated as medium, not as permission', () => {
+    expect(slipsAllowed(INTERMEDIATE, undefined)).toBe(false);
+    expect(slipsAllowed(BEGINNER, undefined)).toBe(true);
+  });
+
+  it('the band edges land on the documented side', () => {
+    expect(slipsAllowed(999, 'medium'), 'just under beginner ceiling').toBe(true);
+    expect(slipsAllowed(1000, 'medium'), 'exactly 1000 is intermediate').toBe(false);
+    expect(slipsAllowed(2000, 'easy'), 'exactly 2000 is still intermediate').toBe(true);
+    expect(slipsAllowed(2001, 'easy'), 'over 2000 is advanced').toBe(false);
+  });
+
+  it('no slip at all when the caller did not say who the student is', async () => {
+    // Absent identity, the lane stays OFF. The safe way round for a feature
+    // that hands the student a won position.
+    pickBookMoveMock.mockResolvedValue(null);
+    const res = await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 900);
+    expect(res.source).not.toBe('taught-slip');
+  }, 20000);
 });
