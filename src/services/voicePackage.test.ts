@@ -150,10 +150,9 @@ describe('the corpus note is always first', () => {
   // should have led.
   const at = (kind, text) => ({ kind, text, fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1' });
 
-  it('leads with the note even against every computed lane at once', () => {
+  it('leads with the note against every computed lane at once', () => {
     const pkg = buildVoicePackage([
       at('threat', 'Threat line.'),
-      at('gem', 'Gem line.'),
       at('plan', 'Plan line.'),
       at('drawback', 'Drawback line.'),
       at('note', 'Note line.'),
@@ -161,14 +160,29 @@ describe('the corpus note is always first', () => {
     expect(pkg.spoken.startsWith('Note line.'), `note did not lead: ${pkg.spoken}`).toBe(true);
   });
 
-  it('orders the computed lanes backwards, forward, gem, threat', () => {
+  it('yields to the gem — the one documented exception', () => {
+    // David 2026-08-11, shown that the gem callout sat sixth: "You can change
+    // the order." It is the only lane that asks the student to ACT ON THIS
+    // MOVE — a note about the structure is as true thirty seconds later, and
+    // "your opponent just slipped, there is a punish here" expires the instant
+    // they play something else. The coach now walks into these traps on
+    // purpose, so the walk-in IS the turn.
+    //
+    // Narrow by construction: the gem withholds the move, so leading with it
+    // costs about a second and hands nothing over.
+    const pkg = buildVoicePackage([at('note', 'Note line.'), at('gem', 'Gem line.')]);
+    expect(pkg.spoken.startsWith('Gem line.'), `gem did not lead: ${pkg.spoken}`).toBe(true);
+    expect(pkg.spoken, 'the note was dropped rather than following').toContain('Note line.');
+  });
+
+  it('orders the computed lanes gem, backwards, forward, threat', () => {
     const pkg = buildVoicePackage([
       at('threat', 'Threat line.'),
       at('gem', 'Gem line.'),
       at('plan', 'Plan line.'),
       at('drawback', 'Drawback line.'),
     ]);
-    const order = ['Drawback', 'Plan', 'Gem', 'Threat']
+    const order = ['Gem', 'Drawback', 'Plan', 'Threat']
       .map((w) => pkg.spoken.indexOf(w));
     expect(order.every((i) => i >= 0), `a lane was dropped: ${pkg.spoken}`).toBe(true);
     for (let i = 1; i < order.length; i += 1) {

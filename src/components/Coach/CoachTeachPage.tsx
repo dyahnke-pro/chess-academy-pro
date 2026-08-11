@@ -1407,6 +1407,14 @@ export function CoachTeachPage(): JSX.Element {
   /** The last gem callout spoken, so a gem that stays live across plies is
    *  named once rather than nagged every move. */
   const gemSeenRef = useRef<string | null>(null);
+  /** The board a gem callout was spoken ON, so the coach's own verdict can tell
+   *  whether the curated lane already named THIS move.
+   *
+   *  🔒 NOT `gemSeenRef`. That one holds the last callout for the whole game —
+   *  reading it as "a gem fired" would mute every coach verdict from the first
+   *  gem to the final move. The question is never "has a gem ever fired", it is
+   *  "did one fire about the move I am judging". */
+  const gemFenRef = useRef<string | null>(null);
   /** Last spoken tactics-alert key (David 2026-08-07: "I saw no tactics
    *  alerts") — a persisting danger alerts once, not every turn. */
   /** Generic teaching clauses `buildPlayCommentary` has already used this game.
@@ -5859,6 +5867,7 @@ export function CoachTeachPage(): JSX.Element {
       const gem = findLivePunishment(null, history);
       if (gem && gem.callout && gemSeenRef.current !== gem.callout) {
         gemSeenRef.current = gem.callout;
+        gemFenRef.current = args.fenAfterReply;
         gemLine = gem.callout;
         factLines.push(`GEM ALERT (verified inaccuracy by the coach's last move): ${gem.callout}`);
         captureEvent('gem_alert_spoken', { surface: 'coach-teach' });
@@ -7702,10 +7711,35 @@ export function CoachTeachPage(): JSX.Element {
                       allowedMate: cm.afterIsMate ? cm.afterMateIn : null,
                       side: 'coach',
                     });
-                    if (look) {
+                    // ── THE CURATED CALLOUT ALREADY SAID THIS, BETTER ──────
+                    //
+                    // A deliberate walk-in is judged by BOTH lanes: the gem
+                    // fires instantly off a curated lookup, and this verdict
+                    // then re-derives the same slip from the eval a few seconds
+                    // later. Two admissions of one move, in a row — "there is a
+                    // punish here, can you find it?" followed by the coach
+                    // explaining the move it just apologised for.
+                    //
+                    // The cross-package dedupe cannot catch it: both are true,
+                    // both are about the same move, and they share no leading
+                    // clause to match on. So the generic lane stands down when
+                    // the curated one has spoken. The gem is strictly the better
+                    // sentence — engine-verified, hand-narrated, tiered — and it
+                    // withholds the move, which this one has no reason to.
+                    const gemCalledIt = gemFenRef.current !== null
+                      && samePosition(gemFenRef.current, cm.fenAfter);
+                    if (look && !gemCalledIt) {
                       queueSpokenHint(cm.fenAfter, look.line, look.kind);
                       captureEvent('coach_inaccuracy_called', {
                         surface: 'coach-teach', kind: look.kind, cost: Math.round(cpLoss),
+                      });
+                    } else if (look && gemCalledIt) {
+                      void logAppAudit({
+                        kind: 'coach-narration-spoken',
+                        category: 'subsystem',
+                        source: 'CoachTeachPage.coachVerdict.gemSaidIt',
+                        summary: `coach verdict stood down — the gem callout already named ${cm.playedSan}`,
+                        fen: cm.fenAfter,
                       });
                     } else {
                       // REACHED THE MODEL AND IT SAID NOTHING. The interesting

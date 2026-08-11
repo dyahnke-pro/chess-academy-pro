@@ -342,6 +342,22 @@ describe('the couplings that make the wiring safe', () => {
     expect(PLAY, 'the slip is not told who the student is').toMatch(/studentElo: playerRating/);
   });
 
+  it('the coach does not admit the same move twice', () => {
+    // A deliberate walk-in is judged by BOTH lanes: the gem fires instantly off
+    // a curated lookup, and the coach's own verdict re-derives the same slip
+    // from the eval seconds later. Two admissions of one move in a row, and the
+    // cross-package dedupe cannot catch them — both true, no shared clause to
+    // match on. So the generic lane stands down when the curated one spoke.
+    expect(TEACH).toMatch(/const gemCalledIt = gemFenRef\.current !== null/);
+    expect(TEACH, 'the stand-down is not tied to the move being judged')
+      .toMatch(/samePosition\(gemFenRef\.current, cm\.fenAfter\)/);
+    // 🔒 AND NOT OFF `gemSeenRef`. That holds the last callout for the WHOLE
+    // GAME, so reading it as "a gem fired" would mute every coach verdict from
+    // the first gem to the final move. The question is never "has a gem ever
+    // fired" but "did one fire about the move I am judging".
+    expect(TEACH_CODE).not.toMatch(/gemCalledIt = gemSeenRef\.current !== null/);
+  });
+
   it('play stays silent about the slip it walked into', () => {
     // The locked pure-playing-surface rule: no blocking card, no callout
     // naming the refutation. David, on the Learn picker offer: "But not in the
