@@ -149,6 +149,20 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     expect(TEACH, 'the caption is computed but never rendered').toMatch(/popularityLabel\(\{/);
   });
 
+  it('every commentary beat is measurable, and reports whether it SPOKE', () => {
+    // `playCommentary` knows nine kinds and not one emitted an event, so "does
+    // the seeding observation ever fire?" had no answer short of reading a
+    // transcript by hand. That blind spot is exactly what let
+    // `gem_alert_spoken` sit at zero for its entire life.
+    expect(TEACH).toMatch(/captureEvent\('coach_beat_offered'/);
+    // The KIND, or the event cannot tell nine lanes apart.
+    expect(TEACH).toMatch(/kind: beat\.kind/);
+    // And computed-vs-spoken, which is the distinction every dead lane this
+    // week turned on: each computed correctly and reached nobody, so counting
+    // computations would have reported all of them healthy.
+    expect(TEACH).toMatch(/spoke: computedLine !== null/);
+  });
+
   it('the queued package is actually spoken', () => {
     expect(TEACH).toMatch(/speakTrackA\(hintPkg\.spoken\)/);
   });

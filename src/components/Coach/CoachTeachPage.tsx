@@ -5984,6 +5984,25 @@ export function CoachTeachPage(): JSX.Element {
           computedLine = beat.spoken;
           lastComputedRef.current = beat.key;
         }
+        // ── WHICH BEATS ACTUALLY REACH ANYONE ──────────────────────────────
+        //
+        // 🔒 A LANE NOBODY CAN MEASURE IS A LANE NOBODY CAN FIX. `playCommentary`
+        // knows nine kinds and NOT ONE of them emitted an event, so "does the
+        // seeding observation ever fire?" had no answer short of reading a
+        // transcript by hand. That is the same blind spot that let
+        // `gem_alert_spoken` sit at zero events for its entire life, and the
+        // same one that hid four dead lanes this week.
+        //
+        // Emitted HERE, where the beat became `computedLine` and is on its way
+        // to the voice — not where it was computed. The distinction is the
+        // whole point: every lane that failed this week computed correctly and
+        // reached nobody, so counting computations would have reported all of
+        // them healthy. `spoke` separates the two in one field.
+        captureEvent('coach_beat_offered', {
+          surface: 'coach-teach',
+          kind: beat.kind,
+          spoke: computedLine !== null,
+        });
         factLines.push(`Computed from the board (${beat.kind}): ${beat.facts.join(' ')}`);
       }
     } catch { /* commentary is a bonus, never a blocker */ }
@@ -7079,6 +7098,12 @@ export function CoachTeachPage(): JSX.Element {
                   });
                   if (beat && (beat.kind === 'trade-the-best-piece' || beat.kind === 'seeding-observation')) {
                     facts.push(...beat.facts);
+                    // The prompt-only half of the same lane. `spoke:false` is
+                    // honest here by construction — these reach the model's
+                    // fact list, never the voice — and keeping them in the same
+                    // event means one query answers "did this beat happen" for
+                    // both routes instead of two half-answers.
+                    captureEvent('coach_beat_offered', { surface: 'coach-teach', kind: beat.kind, spoke: false });
                   }
                 } catch { /* commentary is a bonus, never a blocker */ }
                 // OPENING FACT-CHAIN (David 2026-07-11: "the purpose of each
