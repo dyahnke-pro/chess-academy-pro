@@ -1,6 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // Mock stockfishEngine before importing
+// The band layer calls the explorer. Left un-mocked it makes a real network
+// request from a unit test; mocked as a HANG it reproduces the regression.
+const pickBookMoveMock = vi.fn();
+vi.mock('./coachBookMove', () => ({
+  pickBookMove: (...a: unknown[]) => pickBookMoveMock(...a),
+}));
+
 vi.mock('./stockfishEngine', () => ({
   stockfishEngine: {
     analyzePosition: vi.fn(),
@@ -297,4 +304,59 @@ describe('explorerBandForElo — the band follows the difficulty', () => {
     const hard = explorerBandForElo(1500 + 300);
     expect(new Set([easy, medium, hard]).size, `easy=${easy} medium=${medium} hard=${hard}`).toBe(3);
   });
+});
+
+
+// ── THE COACH MUST ALWAYS MOVE ────────────────────────────────────────────
+// The first version of the rating-band layer stopped the coach moving at all.
+// The prod audit right after it drove ten student moves and got ZERO coach
+// replies -- 0 plan sentences where the run before had 84, and a verdict lane
+// that never ran because no reply reached it. Two faults: an unbounded network
+// await in front of the move, and a layer that never incremented the shared
+// miss-streak so the "stop asking" breaker could not trip for it.
+describe('the rating band never holds the coach hostage', () => {
+  beforeEach(() => {
+    pickBookMoveMock.mockReset();
+    analyzePositionMock.mockResolvedValue(mockAnalysis);
+    getBestMoveMock.mockResolvedValue('e2e4');
+  });
+
+  it('still returns a move when the explorer never answers', async () => {
+    // The exact failure: a promise that never settles. Without the time box
+    // this test hangs, which is what the student experienced.
+    pickBookMoveMock.mockImplementation(() => new Promise(() => {}));
+    const res = await getAdaptiveMove(
+      'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+      1300,
+    );
+    expect(res.move, 'the coach produced no move').toBeTruthy();
+    expect(res.source).not.toBe('amateur-band');
+  }, 20000);
+
+  it('still returns a move when the explorer throws', async () => {
+    pickBookMoveMock.mockRejectedValue(new Error('lichess-rate-limited'));
+    const res = await getAdaptiveMove(
+      'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+      1300,
+    );
+    expect(res.move).toBeTruthy();
+  }, 20000);
+
+  it('plays the human move when the band has one', async () => {
+    // The positive control. Without it, "always returns a move" would also be
+    // satisfied by a layer that had quietly stopped working.
+    pickBookMoveMock.mockResolvedValue({ san: 'e4', uci: 'e2e4', openingName: null });
+    const res = await getAdaptiveMove(
+      'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+      1300,
+    );
+    expect(res.source).toBe('amateur-band');
+    expect(res.move).toBe('e2e4');
+  }, 20000);
+
+  it('asks the explorer for the band the rating implies', async () => {
+    pickBookMoveMock.mockResolvedValue({ san: 'e4', uci: 'e2e4', openingName: null });
+    await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1300);
+    expect((pickBookMoveMock.mock.calls[0][1] as { ratings: string }).ratings).toBe('1200,1400');
+  }, 20000);
 });

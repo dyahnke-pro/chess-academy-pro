@@ -117,6 +117,28 @@ const EXPLORER_BUCKETS = [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2500] as con
  * openings DB either, so the book layer could not produce one and the engine
  * would not.
  */
+/** Cap any lookup that sits in front of the coach's move.
+ *
+ *  🔒 NOTHING ON THE MOVE PATH MAY WAIT WITHOUT A CEILING. The rating-band
+ *  layer shipped without one and the prod audit that followed drove ten student
+ *  moves for ZERO coach replies — the board simply stopped answering. Writing
+ *  the guard revealed the same hazard already sitting on the broad-lichess
+ *  layer below, which had been one slow proxy away from the identical symptom
+ *  since long before tonight.
+ *
+ *  Resolves `null` on expiry rather than rejecting: a lookup that ran out of
+ *  time is a MISS, and every caller here already knows what to do with one. */
+/** The ceiling for any pre-move lookup, band or theory. Long enough for a warm
+ *  proxy, short enough that a cold one is never felt as the coach freezing. */
+const BAND_BUDGET_MS = 1200;
+
+async function withBudget<T>(work: Promise<T>, ms: number): Promise<T | null> {
+  return Promise.race([
+    work,
+    new Promise<null>((resolve) => setTimeout(() => resolve(null), ms)),
+  ]);
+}
+
 export function explorerBandForElo(targetElo: number): string {
   const floors = EXPLORER_BUCKETS.filter((b) => b <= targetElo);
   const base = floors.length > 0 ? floors[floors.length - 1] : EXPLORER_BUCKETS[0];
@@ -353,14 +375,36 @@ export async function getAdaptiveMove(
   // Thresholds are deliberately loose — a band is a fraction of the whole DB,
   // so the 500-game floor of the theory picker would starve it — and a miss is
   // free: it falls through to the engine exactly as before.
+  //
+  // ── AND IT MAY NEVER MAKE THE STUDENT WAIT ──────────────────────────────
+  //
+  // 🔒 THE FIRST VERSION OF THIS BLOCK STOPPED THE COACH FROM MOVING AT ALL.
+  // The prod audit right after it drove ten student moves and got ZERO coach
+  // replies: 0 plan sentences where the previous run had 84, and a verdict lane
+  // that never ran because no reply ever reached it.
+  //
+  // Two faults, both mine, both the shape of defects fixed hours earlier the
+  // same night:
+  //
+  //   1. NO TIME BOX. `await pickBookMove(...)` is a network call and the
+  //      coach's move sat behind it. That is exactly the `enginePlanContext`
+  //      lesson — a lookup wired in front of a surface turns an instant answer
+  //      into a slow one — repeated in another file within the hour.
+  //   2. IT DID NOT PARTICIPATE IN THE MISS-STREAK BREAKER. It reset
+  //      `bookMissStreak` on a hit but never incremented it on a miss, so the
+  //      existing "two misses and stop asking" guard could never trip for this
+  //      layer, and a game past the band's coverage paid the call on every
+  //      remaining move.
+  //
+  // A hard ceiling the move can never exceed, and a miss that counts. The
+  // teaching value of a human move is not worth a student staring at a board
+  // that will not answer.
   if (!skipBookLookups) try {
     const band = explorerBandForElo(targetElo);
-    const human = await pickBookMove(fen, {
-      ratings: band,
-      maxPly: 200,
-      minTotalGames: 20,
-      topN: 6,
-    });
+    const human = await withBudget(
+      pickBookMove(fen, { ratings: band, maxPly: 200, minTotalGames: 20, topN: 6 }),
+      BAND_BUDGET_MS,
+    );
     if (human) {
       const uci = `${human.uci.slice(0, 2)}${human.uci.slice(2, 4)}${human.uci.length > 4 ? human.uci[4] : ''}`;
       bookMissStreak = 0;
@@ -377,7 +421,13 @@ export async function getAdaptiveMove(
         source: 'amateur-band',
       };
     }
-  } catch { /* the band is a bonus — the engine still answers below */ }
+    // A miss COUNTS, or the shared breaker can never stand this layer down.
+    bookMissStreak += 1;
+  } catch {
+    // A throw is a miss too — a rate-limit or an open circuit means the next
+    // move should not pay for the same answer.
+    bookMissStreak += 1;
+  }
 
   // Layer 0 — master play. Consult the canonical masters DB (local
   // first, then live Lichess) BEFORE Stockfish. When this position has
@@ -449,13 +499,17 @@ export async function getAdaptiveMove(
   // off-book positions still get a Lichess-played move (which any
   // user has tried before) instead of a chess.js random walk.
   if (!breakBook && !skipBookLookups) try {
-    const lichess = await pickBookMove(fen, {
+    // Budgeted for the same reason as the band above, and found by the same
+    // test: this call has always been unbounded, so one slow proxy stopped the
+    // coach replying at all. It predates tonight's build; the regression that
+    // exposed it does not excuse leaving it.
+    const lichess = await withBudget(pickBookMove(fen, {
       maxPly: 200,        // no horizon — try at any depth
       minTotalGames: 50,  // sparser than the 500-game cutoff for the
                           // primary book picker, but enough to filter
                           // out one-off games
       topN: 5,
-    });
+    }), BAND_BUDGET_MS);
     if (lichess) {
       const uci = `${lichess.uci.slice(0, 2)}${lichess.uci.slice(2, 4)}${lichess.uci.length > 4 ? lichess.uci[4] : ''}`;
       bookMissStreak = 0;
