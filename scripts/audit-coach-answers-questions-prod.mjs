@@ -148,12 +148,22 @@ async function ask(question) {
   // the OLDEST text every time and the audit graded the greeting and the
   // picker prompt as the coach's answer to a question it never saw. Comparing
   // the set of lines finds what arrived wherever it landed.
+  // 🔒 WAIT FOR A SENTENCE, NOT FOR ANY NEW LINE. The transcript renders the
+  // coach's avatar initial — a bare "c" — as its own line, so EVERY answer this
+  // audit captured was prefixed with it, and one answer was captured as
+  // literally "c" and nothing else. That check then went GREEN: a check that
+  // can pass on an empty capture is worse than no check.
+  //
+  // The real reply to that question took 8.2 seconds (the candidate lane runs
+  // its own engine search) and said "Nc3 is perfectly fine — essentially equal
+  // to the best move e4." The audit had already returned on the avatar.
+  const SUBSTANTIVE = (l) => l.length >= 20 && l.includes(' ');
   for (let i = 0; i < 30; i++) {
     await page.waitForTimeout(1500);
     const fresh = freshFrom(await linesOf());
-    if (fresh.length > 0) {
+    if (fresh.some(SUBSTANTIVE)) {
       await page.waitForTimeout(2500); // let the reply finish streaming
-      return freshFrom(await linesOf()).join(' ');
+      return freshFrom(await linesOf()).filter(SUBSTANTIVE).join(' ');
     }
   }
   return '';
@@ -161,7 +171,11 @@ async function ask(question) {
 
 /** Did we actually get a coach answer, rather than a UI surface? */
 function isAnswer(text) {
-  if (!text.trim()) return false;
+  // A LENGTH FLOOR, because `.trim()` alone passed the single character "c".
+  // No coach answer is shorter than a short sentence, and treating a fragment
+  // as an answer is how this file reported 8/8 on a run that captured nothing
+  // for one of the eight.
+  if (text.trim().length < 20 || !text.includes(' ')) return false;
   return !/pick the one you want to play|splits into several different games/i.test(text);
 }
 
