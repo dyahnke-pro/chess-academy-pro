@@ -445,3 +445,45 @@ describe('a piece walk is drawn hop by hop', () => {
     }
   }, 30_000);
 });
+
+describe("the OPPONENT's plan gets arrows too", () => {
+  // David's game log, 2026-08-11: "No arrows when talking about future plans or
+  // piece walks." Four turns in one game spoke "They want to walk the bishop
+  // round to b2, by way of f6" and drew ZERO arrows.
+  //
+  // `isLegalNow` asked `board.moves()`, which only ever returns moves for the
+  // side TO MOVE. Every arrow about the opponent's plan was therefore impossible
+  // by construction — and so was every arrow about the student's own plan
+  // whenever it was the opponent's turn, which is half of all turns.
+  it('draws a walk for the side that is NOT on move', () => {
+    // White to move; the plan is about BLACK's bishop walking g5 → f6 → b2.
+    const fen = '4rrk1/5pp1/p6q/1p4bQ/3RB3/P5PP/1P3P2/3R2K1 w - - 3 30';
+    const plan = italianPlan('white');
+    // Hand the walk in directly — this is a rule about legality, not about
+    // whether this particular engine line happens to produce that route.
+    plan.theirs.maneuver = { piece: 'bishop', path: ['g5', 'f6', 'b2'] };
+    const marks = planMarks({
+      plan,
+      saidParts: [{ squares: ['b2'], side: 'theirs' }],
+      fen,
+      studentColor: 'white',
+    });
+    expect(marks.arrows.length, "the opponent's walk drew nothing").toBeGreaterThan(0);
+    expect(marks.arrows.map((a) => `${a.startSquare}-${a.endSquare}`)).toContain('g5-f6');
+  });
+
+  it('still refuses a first hop the piece could not make on its own turn', () => {
+    const fen = '4rrk1/5pp1/p6q/1p4bQ/3RB3/P5PP/1P3P2/3R2K1 w - - 3 30';
+    const plan = italianPlan('white');
+    // g5 to a1 is not a bishop move from there — colour of the square aside, the
+    // path is blocked. Flipping the turn must not become "anything goes".
+    plan.theirs.maneuver = { piece: 'bishop', path: ['g5', 'a1', 'b2'] };
+    const marks = planMarks({
+      plan,
+      saidParts: [{ squares: ['b2'], side: 'theirs' }],
+      fen,
+      studentColor: 'white',
+    });
+    expect(marks.arrows.map((a) => `${a.startSquare}-${a.endSquare}`)).not.toContain('g5-a1');
+  });
+});
