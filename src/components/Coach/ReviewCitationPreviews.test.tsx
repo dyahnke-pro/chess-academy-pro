@@ -23,6 +23,8 @@ function cite(overrides: Partial<ReviewMoveCitation> & { ply: number }): ReviewM
     playedSquares: ['d1', 'h5'],
     suggestedSquares: ['g1', 'f3'],
     whyBetter: null,
+    whyItFailedLine: null,
+    whyItFailedSquares: [],
     ...overrides,
   };
 }
@@ -77,5 +79,42 @@ describe('ReviewCitationPreviews', () => {
     render(<ReviewCitationPreviews citations={[cite({ ply: 3, suggestedSan: null, suggestedSquares: null })]} onJumpToPly={() => {}} />);
     expect(screen.queryByText('Nf3')).not.toBeInTheDocument();
     expect(screen.getByText('Qh5')).toBeInTheDocument();
+  });
+});
+
+// ── THE REASON YOUR MOVE FAILED ─────────────────────────────────────────────
+//
+// 🔒 COMPUTED AND RENDERED BY NOBODY is the defect this session found four
+// times: the field lands on the citation, every test passes, and the student
+// never sees a word of it. The service test proves the sentence exists; this
+// proves it reaches the screen, and in the right order.
+describe('why the played move failed', () => {
+  it('shows the reason the student\'s own move did not work', () => {
+    render(<ReviewCitationPreviews
+      citations={[cite({ ply: 5, whyItFailedLine: 'That hit the pawn on f7, but the king on e8 is holding it.' })]}
+      onJumpToPly={() => {}}
+    />);
+    expect(screen.getByTestId('review-citation-failed-5')).toHaveTextContent('king on e8');
+  });
+
+  it('puts it AHEAD of why the engine\'s move was better', () => {
+    // They played the move for a reason; why it failed is what they came back
+    // to find out. "The stronger move was X" answers a different question.
+    const { container } = render(<ReviewCitationPreviews
+      citations={[cite({
+        ply: 5,
+        whyItFailedLine: 'The guard was holding it.',
+        whyBetter: 'Nf3 develops with a threat.',
+      })]}
+      onJumpToPly={() => {}}
+    />);
+    const text = container.textContent ?? '';
+    expect(text.indexOf('The guard was holding it.'))
+      .toBeLessThan(text.indexOf('Nf3 develops with a threat.'));
+  });
+
+  it('renders nothing extra when the board had no geometry to name', () => {
+    render(<ReviewCitationPreviews citations={[cite({ ply: 5 })]} onJumpToPly={() => {}} />);
+    expect(screen.queryByTestId('review-citation-failed-5')).toBeNull();
   });
 });

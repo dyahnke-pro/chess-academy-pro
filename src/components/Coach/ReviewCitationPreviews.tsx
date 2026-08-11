@@ -101,6 +101,15 @@ export function ReviewCitationPreviews({ citations, onJumpToPly, limit }: Review
                 </>
               ) : null}
             </div>
+            {/* WHY YOUR MOVE FAILED, ahead of why theirs was better.
+                The student played this move for a reason; the reason it did
+                not work is the thing they came back to find out. "The stronger
+                move was X" answers a different question, so it follows. */}
+            {c.whyItFailedLine ? (
+              <div className="mt-1 text-[10px] leading-snug" style={{ color: 'var(--color-text)' }} data-testid={`review-citation-failed-${c.ply}`}>
+                {c.whyItFailedLine}
+              </div>
+            ) : null}
             {c.whyBetter ? (
               <div className="mt-1 text-[10px] leading-snug" style={{ color: 'var(--color-text)' }} data-testid={`review-citation-why-${c.ply}`}>
                 {c.whyBetter}
