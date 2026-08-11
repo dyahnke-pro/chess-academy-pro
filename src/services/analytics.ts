@@ -133,6 +133,20 @@ const AUDIT_EVENT_MAP: Partial<Record<AuditKind, string>> = {
   // arrow(s), 3 highlight(s) — d2-d4, … | justified: d4 e5"), so one query
   // answers both "did the board draw" and "was it allowed to".
   'coach-board-annotation': 'coach_board_annotation',
+  // PHASE TRANSITIONS — the lane David reported dead twice, and which no
+  // query could confirm or refute because not one of its events was mirrored.
+  // Asking PostHog whether `phase-transition-detected` had ever fired returned
+  // "that event does not exist in this project", which reads exactly like a
+  // dead lane and means only that nothing was listening. The instrument is the
+  // first thing to fix, before the app.
+  //
+  // Four events, because the interesting question is never just "did it fire"
+  // — it is WHERE it stopped: detected but suppressed, detected but abandoned
+  // stale, or detected and served from the fallback template.
+  'phase-transition-detected': 'phase_transition_detected',
+  'phase-transition-suppressed': 'phase_transition_suppressed',
+  'phase-narration-latency': 'phase_narration_latency',
+  'phase-narration-fallback-shown': 'phase_narration_fallback_shown',
   'coach-move-narration-fired': 'coach_narration_fired',
   'coach-move-narration-skipped': 'coach_narration_skipped',
   // Mirror the actual TTS playback failure (iOS <audio> autoplay rejection,

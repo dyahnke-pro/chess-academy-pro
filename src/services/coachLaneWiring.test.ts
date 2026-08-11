@@ -500,4 +500,49 @@ describe('the couplings that make the wiring safe', () => {
     expect(PLAYBACK, 'the duplicate nav event is back').not.toMatch(/kind: 'review-nav'/);
     expect(PLAYBACK).toMatch(/kind: 'review-playback-step'/);
   });
+
+  it('LEARN detects the phase change on the board the student is LOOKING AT', () => {
+    // 🔒 WHY LEARN NEVER SAID A WORD AT A PHASE CHANGE (David, twice: "Still
+    // no phase transition").
+    //
+    // The call passed `move.fen` — the position after the STUDENT's move —
+    // from a site that runs inside `played.ok`, AFTER the coach's reply has
+    // landed. `usePhaseNarration` then compares the report's position against
+    // the live board and, finding them a ply apart, abandons the WHOLE report
+    // as stale. Not sometimes: every transition Learn ever detected, by
+    // construction.
+    //
+    // The detector was innocent — replaying his real game through it fires
+    // `opening-to-middlegame` at ply 15, his move 8 — and a prod probe caught
+    // it being called with correct arguments. The report was built and thrown
+    // away, which is the hardest kind of dead lane to see: everything works.
+    expect(TEACH).toMatch(/runPhaseTransition\(liveFenRef\.current, move\.san/);
+    expect(TEACH_CODE, 'the transition is judged against a board that has already moved on')
+      .not.toMatch(/runPhaseTransition\(move\.fen/);
+  });
+
+  it('the phase lane is visible in durable analytics', () => {
+    // Asking PostHog whether `phase-transition-detected` had ever fired came
+    // back "that event does not exist in this project" — which reads exactly
+    // like a dead lane and meant only that nothing was listening. A lane
+    // David has now reported twice must be answerable from analytics, and
+    // the interesting answer is never just "did it fire" but where it
+    // stopped: suppressed, abandoned stale, or served from the fallback.
+    const ANALYTICS = read('src/services/analytics.ts');
+    for (const kind of [
+      'phase-transition-detected', 'phase-transition-suppressed',
+      'phase-narration-latency', 'phase-narration-fallback-shown',
+    ]) {
+      expect(ANALYTICS, `${kind} is emitted but mirrored nowhere`).toContain(`'${kind}':`);
+    }
+  });
+
+  it('the temporary phase devtools logging is gone', () => {
+    // Labelled "temporary devtools instrumentation — remove once Dave
+    // reproduces and we diagnose" and shipped to paying users ever since.
+    // He reproduced; it is diagnosed; the PostHog mirror above replaces it
+    // with something durable and queryable.
+    expect(read('src/services/phaseTransitionDetector.ts')).not.toContain("console.log('[PHASE");
+    expect(read('src/components/Coach/CoachGamePage.tsx')).not.toContain("console.log('[PHASE");
+  });
 });

@@ -1709,25 +1709,10 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     // WO-PHASE-FIX-02 temporary devtools instrumentation — remove once
     // Dave reproduces and we diagnose. Prefixed [PHASE-*] for easy
     // devtools filtering / later grep-and-remove.
-    console.log('[PHASE-01] detection effect fired', {
-      movesLength: gameState.moves.length,
-      status: gameState.status,
-      blunderPauseActive: gameState.status === 'blunder_pause' || blunderPause !== null,
-      positionNarrating: positionNarration.isNarrating,
-      phaseNarrationVerbosity: resolvePhaseNarrationVerbosity(
-        useAppStore.getState().activeProfile?.preferences,
-      ),
-      ledger: { ...phaseStateRef.current },
-      lastMove: lastMove
-        ? { san: lastMove.san, moveNumber: lastMove.moveNumber, isCoachMove: lastMove.isCoachMove }
-        : null,
-    });
     if (!lastMove) {
-      console.log('[PHASE-02] skipped: no lastMove (moves array empty)');
       return;
     }
     if (lastMove.isCoachMove) {
-      console.log('[PHASE-02] skipped: was coach move, not student move');
       // Full-trail audit (WO-PHASE-FIX-02): every time the effect fires
       // we record what it saw, so a silent-detector regression never
       // vanishes into a gap. Coach moves get a lightweight entry.
@@ -1743,10 +1728,8 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
 
     const diag = phaseTransitionDiagnostic(lastMove, phaseStateRef.current, playerColor);
     const event = detectPhaseTransition(lastMove, phaseStateRef.current, playerColor);
-    console.log('[PHASE-03] detector result:', event ? { ...event, diag } : { event: null, diag });
 
     if (!event) {
-      console.log('[PHASE-02] skipped: detector returned null');
       // WO-PHASE-FIX-03: summary now shows which of the 4 rules are
       // close to firing so a silent game is diagnosable at a glance.
       void logAppAudit({
@@ -1776,7 +1759,6 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         : blunderActive
           ? 'blunder-priority'
           : 'position-narration-active';
-      console.log('[PHASE-02] skipped:', reason);
       void logAppAudit({
         kind: 'phase-transition-suppressed',
         category: 'subsystem',
@@ -1788,7 +1770,6 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       return;
     }
 
-    console.log('[PHASE-04] dispatching phase narration', { kind: event.kind, verbosity });
     // Detection success — dedicated kind so Dave can filter the audit
     // log for 'phase-transition-detected' and see exactly when/where
     // each boundary fired. Narration voice is traced separately via

@@ -68,6 +68,15 @@ export interface PhaseTransitionEvent {
   moveNumber: number;
   playerColor: 'white' | 'black';
   triggeringMoveSan: string;
+  /** WHICH of the seven opening-end rules ended the opening.
+   *
+   *  This used to exist only inside a `console.log` — computed, printed to a
+   *  devtools console nobody was watching in production, and thrown away. It
+   *  is the single most useful field for tuning the boundary ("we keep firing
+   *  on move-15-safety, so the real rules are too strict"), so it rides the
+   *  event and reaches the audit instead. Absent on the endgame boundary,
+   *  which has one rule. */
+  triggeringRule?: string;
 }
 
 export interface PhaseTransitionState {
@@ -237,20 +246,9 @@ export function detectPhaseTransition(
   state: PhaseTransitionState,
   playerColor: 'white' | 'black',
 ): PhaseTransitionEvent | null {
-  console.log('[PHASE-DETECT-01] called', {
-    fen: lastMove.fen,
-    moveNumber: lastMove.moveNumber,
-    san: lastMove.san,
-    isCoachMove: lastMove.isCoachMove,
-    playerColor,
-    stockfishPhase: null, // not emitted by current engine
-    ledgerOpeningToMiddlegame: state.openingToMiddlegameFired,
-    ledgerMiddlegameToEndgame: state.middlegameToEndgameFired,
-  });
 
   // Only the student's moves trigger narration — coach moves don't.
   if (lastMove.isCoachMove) {
-    console.log('[PHASE-DETECT-02] reject: coach move');
     return null;
   }
 
@@ -308,42 +306,15 @@ export function detectPhaseTransition(
                 : rule6
                   ? 'asymmetric-full-development'
                   : 'early-tempo';
-      console.log('[PHASE-DETECT-03] EVENT EMITTED: opening-to-middlegame', {
-        fen: lastMove.fen,
-        moveNumber: lastMove.moveNumber,
-        san: lastMove.san,
-        triggeringRule,
-        fullMoveNumber,
-        dev,
-        castled,
-        connected,
-        majorCaptured,
-      });
       return {
         kind: 'opening-to-middlegame',
         fen: lastMove.fen,
         moveNumber: lastMove.moveNumber,
         playerColor,
         triggeringMoveSan: lastMove.san,
+        triggeringRule,
       };
     }
-    console.log('[PHASE-DETECT-02] reject: no opening-end rule satisfied', {
-      fullMoveNumber,
-      dev,
-      castled,
-      connected,
-      majorCaptured,
-      centralResolved,
-      rule1,
-      rule2,
-      rule3,
-      rule4,
-      rule5,
-      rule6,
-      rule7,
-    });
-  } else {
-    console.log('[PHASE-DETECT-02] reject: already fired opening→middlegame');
   }
 
   // ── Middlegame → endgame ─────────────────────────────────────────
@@ -351,11 +322,6 @@ export function detectPhaseTransition(
     const inEndgame = phase === 'endgame' || isEndgameByMaterial(lastMove.fen);
     if (inEndgame) {
       state.middlegameToEndgameFired = true;
-      console.log('[PHASE-DETECT-03] EVENT EMITTED: middlegame-to-endgame', {
-        fen: lastMove.fen,
-        moveNumber: lastMove.moveNumber,
-        san: lastMove.san,
-      });
       return {
         kind: 'middlegame-to-endgame',
         fen: lastMove.fen,
@@ -364,12 +330,6 @@ export function detectPhaseTransition(
         triggeringMoveSan: lastMove.san,
       };
     }
-    console.log('[PHASE-DETECT-02] reject: endgame conditions not met', {
-      phase,
-      endgameByMaterialFallback: isEndgameByMaterial(lastMove.fen),
-    });
-  } else {
-    console.log('[PHASE-DETECT-02] reject: already fired middlegame→endgame');
   }
 
   return null;

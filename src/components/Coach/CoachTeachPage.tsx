@@ -7882,7 +7882,30 @@ export function CoachTeachPage(): JSX.Element {
             // PHASE TRANSITION on the settled position. Keyed off the
             // STUDENT's move (the detector ignores coach moves), fired here
             // so the board has stopped moving before the coach speaks.
-            runPhaseTransition(move.fen, move.san, (move.moveNumber ?? 1) * 2);
+            //
+            // 🔒 THE LIVE BOARD, NOT `move.fen`. THIS IS WHY LEARN NEVER SAID
+            // A WORD AT A PHASE CHANGE (David, twice: "Still no phase
+            // transition").
+            //
+            // `move.fen` is the position after the STUDENT's move. This call
+            // site runs inside `played.ok` — AFTER the coach's reply has
+            // landed — so `liveFenRef` is already a ply further on. The hook
+            // then compares the report's position against the live board and,
+            // finding them different, abandons the WHOLE report as stale. Not
+            // sometimes: every single time, by construction, on every
+            // transition Learn has ever detected.
+            //
+            // Proven two ways. The detector is innocent — replaying his real
+            // game through it fires `opening-to-middlegame` at ply 15, his
+            // move 8, exactly as it should. And a prod probe caught the
+            // detector being called with correct arguments, so nothing
+            // upstream was broken either. The report was built and thrown away.
+            //
+            // The board the student is LOOKING AT is the one the transition is
+            // about, so that is the one it is computed from. The stale guard
+            // keeps its real job — the student moving again while the report is
+            // being phrased — instead of firing on the coach's own reply.
+            runPhaseTransition(liveFenRef.current, move.san, (move.moveNumber ?? 1) * 2);
             // The beat needs the full fact bundle — normally already done.
             await factsReady;
             setOpponentThinking(false);

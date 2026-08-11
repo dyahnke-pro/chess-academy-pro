@@ -1,3 +1,4 @@
+import { Chess } from 'chess.js';
 import { describe, it, expect } from 'vitest';
 import {
   centralPawnsResolved,
@@ -481,5 +482,58 @@ describe('WO-PHASE-FIX-02 — broadened opening→middlegame triggers', () => {
       'white',
     );
     expect(second).toBeNull();
+  });
+});
+
+// DAVID'S OWN GAME, 2026-08-11 — the one he reported as "still no phase
+// transition", reconstructed from its review narration. He was White.
+//
+// This exists to pin WHERE the fault was NOT. Walking his real moves through
+// the detector fires `opening-to-middlegame` at ply 15 (his move 8, d4),
+// exactly as it should — so the detector was innocent and the silence came
+// from the call site handing the hook a board the coach's reply had already
+// moved past. A future session looking at a dead phase lane should start
+// downstream of here.
+describe("David's game reaches the middlegame", () => {
+  const SANS = [
+    'e4', 'c5', 'Bc4', 'd6', 'Qf3', 'Nf6', 'Ne2', 'e6', 'Bb5+', 'Nbd7',
+    'Bxd7+', 'Bxd7', 'c3', 'Be7', 'd4', 'O-O', 'Bg5', 'Qb6', 'b3', 'cxd4',
+  ];
+
+  it('fires opening-to-middlegame on a real played game', () => {
+    const game = new Chess();
+    const state = createPhaseTransitionState();
+    const fired: Array<{ ply: number; san: string; kind: string }> = [];
+    let ply = 0;
+    for (const san of SANS) {
+      expect(game.move(san), `${san} is not legal at ply ${ply}`).toBeTruthy();
+      ply += 1;
+      if (ply % 2 === 0) continue; // the student is White — odd plies
+      const ev = detectPhaseTransition(
+        { fen: game.fen(), san, moveNumber: ply, isCoachMove: false },
+        state,
+        'white',
+      );
+      if (ev) fired.push({ ply, san, kind: ev.kind });
+    }
+    expect(fired.length, 'the whole game passed without a single transition').toBeGreaterThan(0);
+    expect(fired[0].kind).toBe('opening-to-middlegame');
+    expect(state.openingToMiddlegameFired).toBe(true);
+  });
+
+  it('fires at most once, however long the game runs', () => {
+    const game = new Chess();
+    const state = createPhaseTransitionState();
+    let count = 0;
+    let ply = 0;
+    for (const san of SANS) {
+      game.move(san);
+      ply += 1;
+      if (ply % 2 === 0) continue;
+      if (detectPhaseTransition({ fen: game.fen(), san, moveNumber: ply, isCoachMove: false }, state, 'white')) {
+        count += 1;
+      }
+    }
+    expect(count).toBe(1);
   });
 });

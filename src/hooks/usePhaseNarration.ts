@@ -161,7 +161,13 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       kind: 'phase-transition-detected',
       category: 'subsystem',
       source: 'usePhaseNarration',
-      summary: `received: ${event.kind} verbosity=${verbosity}`,
+      // The triggering RULE rides the summary, where PostHog keeps it. It is
+      // the field that answers "why did the opening end HERE" — and it used to
+      // live only in a console.log printed to a devtools console nobody was
+      // watching in production. A boundary that keeps firing on
+      // `move-15-safety` means the seven real rules are too strict; that is
+      // tunable only if the reason is durable.
+      summary: `received: ${event.kind} verbosity=${verbosity}${event.triggeringRule ? ` rule=${event.triggeringRule}` : ''} move=${event.triggeringMoveSan}`,
       details: JSON.stringify(event),
       fen: event.fen,
     });
