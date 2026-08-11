@@ -219,11 +219,36 @@ export function gradeNarrationText(
       out = ev.dropped.length > 0 ? ev.clean : out;
     }
     if (droppedCount > 0) {
+      // ── SAY WHAT WAS DROPPED, NOT ONLY WHAT SURVIVED ────────────────────
+      //
+      // A gate is a backup that should never fire (G0), so when one DOES the
+      // only useful question is which producer emitted a board-false sentence
+      // and what it said. This logged neither: the summary carried a count,
+      // the dropped text was nowhere, and the fen rode inside a `details` JSON
+      // string the PostHog bridge does not forward on this kind. So the 2026-08-11
+      // sweep found `CoachTeachPage.planMarks.narrationGate` tripping seven
+      // times in fourteen days with `narration_text` and `fen` both null —
+      // undiagnosable from the durable store, which is the only store that
+      // outlives a deploy.
+      //
+      // The refused sentence goes in `narrationText` because that is the field
+      // the bridge already forwards, and it is the honest name for it: this IS
+      // the narration, it just never reached anyone.
+      // The two strippers disagree on shape: the board one returns
+      // `{ sentence, violations }` records, the eval one returns plain strings.
+      // Joining them blind gave "[object Object]" — caught by the test before
+      // it reached the stream, where it would have made every trip unreadable
+      // in a new way.
+      const refused = [
+        ...board.dropped.map((d) => d.sentence),
+        ...(typeof evalCp === 'number' ? stripDisprovenEvalSentences(text, evalCp).dropped : []),
+      ].filter(Boolean).join(' ');
       void logAppAudit({
         kind: 'claim-validator-trip',
         category: 'subsystem',
         source: `${source}.narrationGate`,
-        summary: `dropped ${droppedCount} board/eval-false narration sentence(s)`,
+        summary: `dropped ${droppedCount} board/eval-false narration sentence(s): "${refused.slice(0, 160)}"`,
+        narrationText: refused,
         // `kept` is a PREVIEW. Twice on 2026-07-31 a 120-char slice was read
         // as a sentence that had been cut off mid-clause, and reported as a
         // bug that didn't exist — so say outright how long the real text is
