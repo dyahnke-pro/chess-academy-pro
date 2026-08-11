@@ -391,6 +391,14 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       // speech as board-false still landed in the transcript in writing.
       // One gate, one truth: what was speakable is what is kept.
       const keptSentences: string[] = [];
+      // Abandon-once bookkeeping for the staleness decision below.
+      let staleLogged = false;
+      /** Same POSITION, ignoring the clocks. A halfmove counter ticking is not
+       *  the board moving, and comparing whole FENs would abandon a perfectly
+       *  current report — the same guard shape `CoachTeachPage.samePosition`
+       *  uses for its pending speech. */
+      const samePhasePosition = (a: string, b: string): boolean =>
+        a.split(' ').slice(0, 4).join(' ') === b.split(' ').slice(0, 4).join(' ');
       const dispatchSentence = (sentence: string): void => {
         const trimmed = sentence.trim();
         if (!trimmed) return;
@@ -400,12 +408,46 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
         // before it's spoken. Pass phaseTactics so the tactic half fires too —
         // it was omitted, so a hallucinated fork/pin was board-checked only and
         // still SPOKEN (David 2026-07-04 PostHog sweep).
-        // Judged against the board the student can SEE — see `getLiveFen`.
-        // A report about the detection position is only worth speaking while
-        // that is still the position; once the game moves past it, a sentence
-        // that no longer holds is silence, not narration.
-        const judgeFen = argsRef.current.getLiveFen?.() ?? event.fen;
-        if (!isSpokenSentenceGrounded(trimmed, judgeFen, 'usePhaseNarration', phaseTactics)) return;
+        // ── ONE DECISION ABOUT STALENESS, NOT ONE PER SENTENCE ─────────────
+        //
+        // 🔒 THE COACH WAS GOING SILENT EXACTLY WHERE IT SHOULD TEACH. The
+        // 2026-08-11 PostHog sweep found this gate dropping lines like "Queen
+        // on d8 pins pawn on d3 against queen on d1" — and they were NOT
+        // hallucinations. The claim is computed at `event.fen`, the transition
+        // position, and this graded it against `getLiveFen()`, the board right
+        // now. Both are correct boards; they are just different ones. So a
+        // sentence that was true when detected became "board-false" purely
+        // because the student moved while the narration was being phrased and
+        // streamed.
+        //
+        // Worse than the silence was its GRANULARITY. Judged per sentence
+        // against a board that moves underneath them, some survived and some
+        // did not — so the student heard a narration with holes in it, one
+        // clause referring to a piece the next clause had already abandoned.
+        // Half a teaching line is not half as good as a whole one.
+        //
+        // Staleness is a property of the TRANSITION, not of each sentence, so
+        // it is decided once, up front. If the board has already moved past the
+        // position this report is about, the whole report is abandoned — no
+        // half-narration, and the reason is logged rather than looking like the
+        // gate eating content. If it has not, every sentence is graded against
+        // `event.fen`: the board it was actually computed from, which is what
+        // grading is supposed to mean and removes the race entirely.
+        const liveNow = argsRef.current.getLiveFen?.() ?? event.fen;
+        if (!samePhasePosition(liveNow, event.fen)) {
+          if (!staleLogged) {
+            staleLogged = true;
+            void logAppAudit({
+              kind: 'coach-surface-migrated',
+              category: 'subsystem',
+              source: 'usePhaseNarration.stale',
+              summary: `the board moved past this ${event.kind} before the narration could speak — abandoning it whole`,
+              fen: event.fen,
+            });
+          }
+          return;
+        }
+        if (!isSpokenSentenceGrounded(trimmed, event.fen, 'usePhaseNarration', phaseTactics)) return;
         keptSentences.push(trimmed);
         sentenceCount += 1;
         if (sentenceCount === 1) {
@@ -435,7 +477,10 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             // The SAME board the sentence was judged against — handing the
             // package a different fen than the gate used is how a line passes
             // one check and fails the other.
-            buildVoicePackage([{ kind: 'computed', text: trimmed, fen: argsRef.current.getLiveFen?.() ?? event.fen }]),
+            // The SAME board the gate used, which is the board the sentence
+            // was computed from. Handing the package a different fen than the
+            // gate is how a line passes one check and fails the other.
+            buildVoicePackage([{ kind: 'computed', text: trimmed, fen: event.fen }]),
           ))
           .catch(() => undefined);
       };

@@ -20,6 +20,7 @@ const TEACH = read('src/components/Coach/CoachTeachPage.tsx');
 const HOOK = read('src/hooks/useDiscussionPractice.ts');
 const BACKWARD = read('src/services/backwardLook.ts');
 const FORK = read('src/services/forkNarration.ts');
+const PHASE = read('src/hooks/usePhaseNarration.ts');
 /** Comments stripped. A rule about what the code must NOT DO has to read the
  *  code — the note explaining WHY a call was removed contains the very string
  *  the rule forbids, and a gate that trips on its own documentation teaches the
@@ -216,6 +217,42 @@ describe('a question lane can REACH the branch that answers it', () => {
     expect(SERVICE).toMatch(/askedPiece: restrictedPieceInAsk\(/);
     expect(API, 'the restriction is computed and then dropped on the floor')
       .toMatch(/askedPiece: grounding\.askedPiece/);
+  });
+});
+
+describe('phase narration is judged against the board it was computed from', () => {
+  // 🔒 THE COACH WENT SILENT EXACTLY WHERE IT SHOULD TEACH. The 2026-08-11
+  // PostHog sweep found this gate dropping "Queen on d8 pins pawn on d3 against
+  // queen on d1" and similar — none of them hallucinations. The claim is
+  // computed at `event.fen`, the transition position; the gate judged it
+  // against `getLiveFen()`, the board right now. Both are real boards, just
+  // different ones, so a sentence true when detected became "board-false"
+  // because the student moved while it was being phrased and streamed.
+  it('grades against event.fen, not against whatever is on screen', () => {
+    expect(PHASE).toMatch(/isSpokenSentenceGrounded\(trimmed, event\.fen/);
+    expect(PHASE, 'the sentence is graded against a board it was not computed from')
+      .not.toMatch(/isSpokenSentenceGrounded\(trimmed, judgeFen/);
+  });
+
+  it('hands the package the same board the gate used', () => {
+    // Handing the package a different fen than the gate is how a line passes
+    // one check and fails the other.
+    expect(PHASE).toMatch(/kind: 'computed', text: trimmed, fen: event\.fen/);
+  });
+
+  it('decides staleness ONCE, for the whole transition', () => {
+    // Judged per sentence against a moving board, some survived and some did
+    // not — so the student heard a narration with holes in it, one clause
+    // naming a piece the next had abandoned. Half a teaching line is not half
+    // as good as a whole one, so the report is abandoned entire and says so.
+    expect(PHASE).toMatch(/samePhasePosition\(liveNow, event\.fen\)/);
+    expect(PHASE).toMatch(/usePhaseNarration\.stale/);
+  });
+
+  it('a ticking halfmove clock is not the board moving', () => {
+    // Comparing whole FENs would abandon a perfectly current report — the same
+    // guard shape CoachTeachPage.samePosition uses for its pending speech.
+    expect(PHASE).toMatch(/split\(' '\)\.slice\(0, 4\)/);
   });
 });
 
