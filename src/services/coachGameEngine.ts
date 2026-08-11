@@ -141,6 +141,19 @@ const EXPLORER_BUCKETS = [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2500] as con
 /** The ceiling for any pre-move lookup, band or theory. Long enough for a warm
  *  proxy, short enough that a cold one is never felt as the coach freezing. */
 const BAND_BUDGET_MS = 1200;
+/** The ceiling for the SLIP's band check specifically — deliberately longer.
+ *
+ *  🔒 MEASURED, NOT GUESSED. At 1200ms this check timed out on prod every time
+ *  and the audit read `bandConfirmed=false`: a cold call to a narrow amateur
+ *  bucket measures ~1.3s (warm ~0.3-0.6s), so the one call that mattered — the
+ *  first of a game — never landed. It failed soft, so the curated gem still
+ *  fired and nothing looked broken; the amateur-DB filter simply never ran.
+ *
+ *  It can afford the room precisely because it is RARE. Every other lookup on
+ *  this path runs on ordinary moves, where a slow proxy is felt as the coach
+ *  freezing; this one runs only when a curated gem already sits at the live
+ *  position, which is a handful of boards in a game at most. */
+const SLIP_BAND_BUDGET_MS = 2500;
 
 async function withBudget<T>(work: Promise<T>, ms: number): Promise<T | null> {
   return Promise.race([
@@ -411,7 +424,7 @@ export async function pickTaughtSlip(
     try {
       const seen = await withBudget(
         fetchLichessExplorer(fen, 'lichess', { ratings: explorerBandForElo(targetElo) }),
-        BAND_BUDGET_MS,
+        SLIP_BAND_BUDGET_MS,
       );
       if (seen?.moves?.length) {
         bandChecked = true;

@@ -144,12 +144,23 @@ try {
   record('the slip is reported as a taught slip, not as an engine pick',
     Boolean(easy.source),
     easy.source ? easy.source.slice(0, 150) : 'no source=taught-slip audit event');
-  // The band read is the amateur-DB tie-in David asked for. It is allowed to
-  // be absent — offline, rate-limited, circuit-open all leave the curated gem
-  // eligible on its own merits — so this reports rather than fails.
-  console.log(`   ↳ band: ${/bandConfirmed=true/.test(easy.source ?? '')
-    ? 'confirmed against the student\'s rating band'
-    : 'not consulted this run (explorer miss/timeout — gem stands alone)'}`);
+  // ── THE AMATEUR-DB TIE-IN, CHECKED RATHER THAN NOTED ────────────────────
+  //
+  // David asked for it directly: "Can you still tie it into the amateur
+  // database?" — the slip is filtered against the moves real players at the
+  // student's own band actually play, so a beginner meets beginner mistakes.
+  //
+  // 🔒 THIS WAS A `console.log` ON THE FIRST GREEN RUN, AND THAT IS HOW THE
+  // BUG GOT PAST. The run printed "not consulted this run" beside six green
+  // checks and read as a pass; the real cause was a 1200ms budget against a
+  // ~1.3s cold bucket, so the filter timed out EVERY time and simply never
+  // ran. It fails soft — the curated gem still fires — which is exactly what
+  // made it invisible. A note nobody has to satisfy is not an assertion.
+  record('the slip was confirmed against the student\'s own rating band',
+    /bandConfirmed=true/.test(easy.source ?? ''),
+    /bandConfirmed=true/.test(easy.source ?? '')
+      ? 'the amateur DB agreed real players at this level play it'
+      : 'band never consulted — budget too tight, or the explorer is down');
 
   // ── HARD: the same student on the same board must NOT be handed it ──────
   const hard = await runOnce('hard');
