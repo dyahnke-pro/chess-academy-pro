@@ -11,7 +11,7 @@ vi.mock('./stockfishEngine', () => ({
   },
 }));
 
-import { getAdaptiveMove, getTargetStrength, tryOpeningBookMove, breakBookProbability } from './coachGameEngine';
+import { getAdaptiveMove, getTargetStrength, tryOpeningBookMove, breakBookProbability, explorerBandForElo } from './coachGameEngine';
 import { stockfishEngine } from './stockfishEngine';
 import type { StockfishAnalysis } from '../types';
 
@@ -244,5 +244,57 @@ describe('getAdaptiveMove — the single-threaded (iOS) opponent', () => {
   it('a weaker opponent gets a weaker skill level', async () => {
     await getAdaptiveMove('r3k2r/pp2bppp/2n5/3pP3/2pP2Q1/5N2/P1P1B1PP/q3BK1R b kq - 1 15', 900);
     expect(getBestMoveMock.mock.calls.some((c) => c[2] === 5)).toBe(true);
+  });
+});
+
+// ── THE COACH MAKES THE MISTAKES OF ITS RATING ────────────────────────────
+// David 2026-08-11: "Based on rating I want coach making mistakes! Maybe have
+// coach use the amateur database for openings?" — and, on where the lookup
+// hangs: "The DB check should be attached to easy and medium and hard
+// settings."
+//
+// Both halves matter. A weakened engine plays WORSE, and worse is not HUMAN:
+// its errors are diffuse and arbitrary, a 1300's are specific and repeat. And
+// the band has to follow the SETTING, not a coin flip — the first draft hung it
+// off `shouldBreakBook`, whose probability is zero at 1600 and above, so medium
+// and hard would never have consulted it.
+describe('explorerBandForElo — the band follows the difficulty', () => {
+  it('gives a weak opponent a weak band', () => {
+    expect(explorerBandForElo(1000)).toBe('1000,1200');
+    expect(explorerBandForElo(1150)).toBe('1000,1200');
+  });
+
+  it('gives a strong opponent a strong band', () => {
+    expect(explorerBandForElo(2300)).toBe('2200,2500');
+  });
+
+  it('always names two real explorer buckets', () => {
+    const BUCKETS = new Set(['1000', '1200', '1400', '1600', '1800', '2000', '2200', '2500']);
+    for (let elo = 400; elo <= 3000; elo += 50) {
+      const parts = explorerBandForElo(elo).split(',');
+      expect(parts, `elo ${elo}`).toHaveLength(2);
+      for (const p of parts) expect(BUCKETS.has(p), `elo ${elo} → ${p}`).toBe(true);
+    }
+  });
+
+  it('never hands a weaker player a stronger band than a stronger player', () => {
+    // Monotonic, which is what makes "easy blunders more than hard" true rather
+    // than hoped for. resolveConfig maps easy/medium/hard to elo-300 / elo /
+    // elo+300, so monotonic-in-elo IS monotonic-in-difficulty.
+    let prev = -1;
+    for (let elo = 400; elo <= 3000; elo += 50) {
+      const floor = Number(explorerBandForElo(elo).split(',')[0]);
+      expect(floor, `elo ${elo} went backwards`).toBeGreaterThanOrEqual(prev);
+      prev = floor;
+    }
+  });
+
+  it('the three difficulties land on different bands for a typical student', () => {
+    // A 1500 student: easy 1200, medium 1500, hard 1800. If these collapsed to
+    // one band the setting would be decorative.
+    const easy = explorerBandForElo(1500 - 300);
+    const medium = explorerBandForElo(1500);
+    const hard = explorerBandForElo(1500 + 300);
+    expect(new Set([easy, medium, hard]).size, `easy=${easy} medium=${medium} hard=${hard}`).toBe(3);
   });
 });

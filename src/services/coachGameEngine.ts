@@ -91,6 +91,43 @@ export function breakBookProbability(targetElo: number): number {
   return 0.1; // 1500–1600: mostly book, the occasional own move
 }
 
+/** Lichess explorer rating buckets. A bucket labelled 1600 holds games by
+ *  players rated 1600-1799, so the label is the FLOOR of the band. */
+const EXPLORER_BUCKETS = [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2500] as const;
+
+/**
+ * The two buckets closest to `targetElo` — the pool a player at this level
+ * actually comes from.
+ *
+ * 🔒 THE COACH MAKES THE MISTAKES OF ITS LEVEL (David 2026-08-11: "Based on
+ * rating I want coach making mistakes! Maybe have coach use the amateur
+ * database for openings?").
+ *
+ * Two buckets rather than one so the sample stays wide enough to have moves at
+ * all in a sideline, and adjacent rather than centred so a weak opponent never
+ * borrows a strong player's move. Nothing is invented (G3): every move it
+ * yields was played, by humans, at this strength.
+ *
+ * Why this and not a weaker engine — the old answer, measured 2026-08-11:
+ * skill-limited Stockfish plays WORSE, and worse is not HUMAN. Its errors are
+ * diffuse and arbitrary; a 1300's errors are specific and repeat. It is also
+ * exactly why `gem_alert_spoken` had NEVER fired in production: all 344 gems
+ * were mined from the amateur explorer, and the coach never drew from it, so
+ * its inaccuracies could not appear. Zero of 344 gem lines exist in the
+ * openings DB either, so the book layer could not produce one and the engine
+ * would not.
+ */
+export function explorerBandForElo(targetElo: number): string {
+  const floors = EXPLORER_BUCKETS.filter((b) => b <= targetElo);
+  const base = floors.length > 0 ? floors[floors.length - 1] : EXPLORER_BUCKETS[0];
+  const i = EXPLORER_BUCKETS.indexOf(base);
+  // Pair downward at the top of the range so the strongest band still has two.
+  const pair = i + 1 < EXPLORER_BUCKETS.length
+    ? [EXPLORER_BUCKETS[i], EXPLORER_BUCKETS[i + 1]]
+    : [EXPLORER_BUCKETS[i - 1], EXPLORER_BUCKETS[i]];
+  return pair.join(',');
+}
+
 function shouldBreakBook(targetElo: number): boolean {
   const p = breakBookProbability(targetElo);
   return p > 0 && Math.random() < p;
@@ -241,7 +278,7 @@ function pickMasterMove(
 export async function getAdaptiveMove(
   fen: string,
   targetElo: number,
-): Promise<{ move: string; analysis: StockfishAnalysis; source: 'masters' | 'lichess-games' | 'stockfish-best' | 'stockfish-variety' | 'stockfish-fallback' | 'random' }> {
+): Promise<{ move: string; analysis: StockfishAnalysis; source: 'masters' | 'lichess-games' | 'amateur-band' | 'stockfish-best' | 'stockfish-variety' | 'stockfish-fallback' | 'random' }> {
   // Single-threaded Stockfish (iOS / any context without SharedArrayBuffer +
   // cross-origin isolation) is ~5-10x slower than the threaded build, so a
   // depth 14-16 search blows the COACH_MOVE_TIMEOUT_MS budget → timeout →
@@ -262,19 +299,85 @@ export async function getAdaptiveMove(
   const fullmove = Number(fen.split(' ')[5] ?? '1');
   if (fullmove <= 4) bookMissStreak = 0;
   const skipBookLookups = bookMissStreak >= 2;
-  // BREAK BOOK for weak opponents: roll per move. When it hits, skip BOTH book
-  // layers so Stockfish-at-Skill-Level plays the opening itself (rating-
-  // appropriate, includes real slips). Strong opponents (>=1600) never break.
+  // BREAK BOOK for weak opponents: roll per move. When it hits, MASTER theory
+  // stands down so a weak opponent is not handed a grandmaster's move. The
+  // human band below is consulted either way — see the note there.
   const breakBook = shouldBreakBook(targetElo);
   if (breakBook) {
     void logAppAudit({
       kind: 'coach-opponent-move-source',
       category: 'subsystem',
       source: 'coachGameEngine.getAdaptiveMove',
-      summary: `break-book elo=${targetElo} — skipping masters/lichess, Stockfish skill=${skillLevel} plays this opening move`,
+      summary: `break-book elo=${targetElo} — master theory stands down for this move`,
       fen,
     });
   }
+
+  // ── LAYER 0.1 — WHAT PLAYERS AT THIS LEVEL ACTUALLY PLAY ────────────────
+  //
+  // 🔒 THE COACH MAKES THE MISTAKES OF ITS RATING, ON EVERY DIFFICULTY (David
+  // 2026-08-11: "Based on rating I want coach making mistakes! Maybe have coach
+  // use the amateur database for openings?" and, on where it hangs: "The DB
+  // check should be attached to easy and medium and hard settings.").
+  //
+  // It is attached to the SETTING by construction: `resolveConfig` folds the
+  // difficulty into the target rating before this runs — easy is the student's
+  // rating minus 300, medium is their rating, hard is plus 300 — so banding on
+  // `targetElo` bands on the setting. Easy samples weaker players and blunders
+  // more; hard samples stronger ones and blunders less; one mechanism covers
+  // all three with no per-difficulty special case to drift.
+  //
+  // The first draft hung this off `shouldBreakBook`, a per-move coin flip whose
+  // probability is ZERO at 1600 and above — so medium and hard would never have
+  // consulted it at all. That is the bug David caught before it shipped, and it
+  // is why this runs unconditionally now.
+  //
+  // Breaking book used to mean handing the opening to Stockfish at a reduced
+  // skill level. That is the wrong instrument and the 2026-08-11 measurement
+  // says so: a weakened engine plays WORSE, and worse is not HUMAN. Its errors
+  // are diffuse and arbitrary; a 1300's errors are specific, common, and
+  // repeat — which is the only kind worth teaching against.
+  //
+  // The amateur explorer IS the rating-ranked popularity source, and Stockfish
+  // has no equivalent: it holds no book and no game statistics at all. So we
+  // sample the difficulty's own band, weighted by real frequency. Humans there play the bad move at the rate they really play it,
+  // so mistakes arrive on their own — no "now blunder" logic, nothing invented
+  // (G3: every move came from real games).
+  //
+  // It also reopens `gem_alert_spoken`, which had NEVER fired in production:
+  // all 344 gems were mined from this exact distribution, and the coach was
+  // drawing from theory and an engine instead, so a gem's inaccuracy could
+  // not appear. Whether it actually fires now is a MEASUREMENT to take, not a
+  // claim to make here.
+  //
+  // Thresholds are deliberately loose — a band is a fraction of the whole DB,
+  // so the 500-game floor of the theory picker would starve it — and a miss is
+  // free: it falls through to the engine exactly as before.
+  if (!skipBookLookups) try {
+    const band = explorerBandForElo(targetElo);
+    const human = await pickBookMove(fen, {
+      ratings: band,
+      maxPly: 200,
+      minTotalGames: 20,
+      topN: 6,
+    });
+    if (human) {
+      const uci = `${human.uci.slice(0, 2)}${human.uci.slice(2, 4)}${human.uci.length > 4 ? human.uci[4] : ''}`;
+      bookMissStreak = 0;
+      void logAppAudit({
+        kind: 'coach-opponent-move-source',
+        category: 'subsystem',
+        source: 'coachGameEngine.getAdaptiveMove',
+        summary: `source=amateur-band san=${human.san} uci=${uci} band=${band} elo=${targetElo}`,
+        fen,
+      });
+      return {
+        move: uci,
+        analysis: { ...FALLBACK_ANALYSIS, bestMove: uci },
+        source: 'amateur-band',
+      };
+    }
+  } catch { /* the band is a bonus — the engine still answers below */ }
 
   // Layer 0 — master play. Consult the canonical masters DB (local
   // first, then live Lichess) BEFORE Stockfish. When this position has

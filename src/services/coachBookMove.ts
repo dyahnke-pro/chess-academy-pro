@@ -31,6 +31,25 @@ export interface BookMoveOptions {
   rng?: () => number;
   /** Pre-fetched explorer payload — tests inject this to avoid network calls. */
   __explorerResultForTests?: LichessExplorerResult | null;
+  /** THE RATING BAND TO SAMPLE FROM — the whole point of using this DB.
+   *
+   *  🔒 A COACH SHOULD MAKE THE MISTAKES OF THE LEVEL IT IS PLAYING (David
+   *  2026-08-11: "Based on rating I want coach making mistakes! Maybe have
+   *  coach use the amateur database for openings?").
+   *
+   *  Left unset this asks for "1600,1800,2000,2200,2500" — every band at once,
+   *  masters-adjacent players included — so a 1300 opponent was sampling moves
+   *  from players up to 2500. Narrowed to the student's own band it samples
+   *  what people at that level ACTUALLY play, blunders at their real
+   *  frequency, and nothing is invented (G3): every move came from real games.
+   *
+   *  This is why it beats degrading the engine, which was the old answer.
+   *  Skill-limited Stockfish plays WORSE, and worse is not HUMAN — it is
+   *  diffuse, arbitrary degradation, not the specific errors a 1300 makes. It
+   *  is also why zero of 344 curated gems had ever fired in a coach game:
+   *  the gems were mined from exactly this distribution, and the coach was
+   *  never drawing from it. */
+  ratings?: string;
 }
 
 export interface BookMoveResult {
@@ -67,7 +86,7 @@ export async function pickBookMove(
   try {
     result = options.__explorerResultForTests !== undefined
       ? options.__explorerResultForTests
-      : await fetchLichessExplorer(fen, 'lichess');
+      : await fetchLichessExplorer(fen, 'lichess', opts.ratings ? { ratings: opts.ratings } : undefined);
   } catch {
     return null;
   }
