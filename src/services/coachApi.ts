@@ -1924,6 +1924,43 @@ export function resolveWarmRegister(intent: string | undefined): 'review' | 'liv
   return /^(game-review\b|review-)/.test(intent) ? 'review' : 'live';
 }
 
+/**
+ * Drop every sentence carrying one of `tokens`, or return '' when what is left
+ * is no longer an answer.
+ *
+ * The proportionate penalty for a fidelity/containment trip (David 2026-08-07,
+ * after one introduced "9" nuked a good beat and the raw fact bundle was read
+ * aloud for ninety seconds): a violation costs its SENTENCE, not the beat.
+ *
+ * 🔒 A STRIP MUST NOT LEAVE A SENTENCE POINTING AT NOTHING. David, on prod
+ * 2026-08-11, asked "What is the plan for white and black?" and heard: "No pawn
+ * can ever defend IT, so White's pieces get tied down to guard duty…" — an
+ * answer opening on a pronoun with no antecedent. The gate had stripped the
+ * sentence in front of it (one introduced number), taking the noun that "it"
+ * referred to, and served the wreckage. He re-asked immediately, and the app
+ * logged its own `coach_non_answer, reason: re-ask`.
+ *
+ * A sentence removed from the MIDDLE or the END is genuinely surgical. Removing
+ * the OPENING is different in kind: everything after it may have been written to
+ * lean on it. So when the answer no longer starts where it started AND the new
+ * first sentence leans on a bare back-reference, the thread is broken and the
+ * remainder is not an answer — '' sends the caller to the computed prose, which
+ * is coach-voiced and correct.
+ *
+ * Scoped to the opening deliberately. A dangle deeper in the answer is possible,
+ * far less damaging, and much harder to detect without guessing — and guessing
+ * is how a gate starts causing the problem it exists to prevent.
+ */
+export function stripSentencesWith(text: string, tokens: readonly string[]): string {
+  const all = text.split(/(?<=[.!?])\s+/);
+  const kept = all.filter((s) => !tokens.some((t) => s.toLowerCase().includes(t.toLowerCase())));
+  if (kept.length === 0) return '';
+  const openingRemoved = kept[0] !== all[0];
+  const leansBackward = /\b(?:it|its|they|them|their|those|these|that|this|the\s+same)\b/i.test(kept[0]);
+  if (openingRemoved && leansBackward) return '';
+  return kept.join(' ').trim();
+}
+
 /** A fallback must never speak a DIRECTIVE.
  *
  *  Every net in `voiceFacts` falls back to serving `facts` verbatim, so any
@@ -2174,12 +2211,6 @@ export async function voiceFacts(
       // re-check the remainder, and only when nothing clean survives fall
       // back to the computed prose. Gates unchanged in WHAT they catch —
       // only the penalty is now surgical.
-      const stripSentencesWith = (text: string, tokens: string[]): string =>
-        text
-          .split(/(?<=[.!?])\s+/)
-          .filter((s) => !tokens.some((t) => s.toLowerCase().includes(t.toLowerCase())))
-          .join(' ')
-          .trim();
       let vetted = out;
       const introduced = introducedNumbers(facts, vetted);
       const dropped = droppedTokens(opts.mustPreserve, vetted);

@@ -108,6 +108,22 @@ const PLAN_QUESTION_RE = anyOf([
   String.raw`\bgame\s*plan\b`,
   String.raw`\bhow\s+(?:do\s+i|should\s+i|to)\s+(?:proceed|continue|play|approach|handle|develop|set\s+up)\b`,
   String.raw`\bwhat(?:'?s| is)?\s+(?:the|my)\s+(?:plan|idea|strategy|approach|goal|aim)\b`,
+  // ── THE PLAN FOR BOTH SIDES ────────────────────────────────────────────
+  //
+  // 🔒 THE SINGULAR WORKED AND THE PLURAL DID NOT. David asked "What is the
+  // plan for white and black?" on prod 2026-08-11 and got a paragraph about
+  // one structural weakness; he re-asked "What is my plan" and got the real
+  // answer — "Your plan: Nc3, then Nf3, then Bd3" — from the lane the first
+  // question never reached. The app logged its own failure: `coach_non_answer,
+  // reason: re-ask`.
+  //
+  // Which is the worst possible miss, because the plan lane computes BOTH
+  // sides from one engine line and always has. The one question that asks for
+  // exactly what it produces was the one that could not get there.
+  String.raw`\bplan\s+(?:for|of)\s+(?:both|each|either|white|black|w\b|b\b)`,
+  String.raw`\b(?:both\s+sides?|each\s+side|either\s+side)\b[\s\S]{0,20}\b(?:plan|idea|doing|want)`,
+  String.raw`\bwhat\s+(?:are|is)\s+(?:the\s+)?(?:plans?|ideas?)\b`,
+  String.raw`\bwhat(?:'?s| is| are)?\s+(?:white|black|they|we|my\s+opponent)\s+(?:trying\s+to\s+do|up\s+to|planning|aiming\s+for|going\s+for)\b`,
   String.raw`\bwhat(?:'?s| is| am)?\s+i\s+(?:trying|aiming|looking)\s+to\s+(?:do|achieve)\b`,
   String.raw`\bwhat\s+am\s+i\s+doing\s+(?:here|in\s+this)\b`,
   String.raw`\boutline\s+(?:a|my|the)?\s*(?:plan|strategy)\b`,
@@ -291,6 +307,24 @@ const WHY_BEST_MOVE_RE = anyOf([
   // better" — a position-assessment question that has its own lane and would
   // start getting an engine-line walk instead of an assessment.
   String.raw`\bwhy\s+(?:is|was|would)\s+(?:that|this|it|(?:the|that|this)\s+move|[NBRQK]?[a-h]?[1-8]?x?[a-h][1-8](?:=[NBRQ])?[+#]?|O-O(?:-O)?)\s+(?:so\s+much\s+)?(?:better|stronger|preferable|superior)\b`,
+  // ── "WHY PLAY Nc3?" — THE VERB FORM ────────────────────────────────────
+  //
+  // 🔒 THE SAME LANE, MISSED AGAIN BY A DIFFERENT PHRASING. Fixing "why is h3
+  // better" taught the matcher one shape of the question and left the most
+  // natural one out. David asked "Why play night c3?" on prod 2026-08-11 and
+  // got "The best move is Nc3. It develops the knight to c3" — the move he had
+  // just named, read back to him, followed by a tautology.
+  //
+  // "why <verb> X" is how a person actually asks this: play, go, move, put,
+  // develop, take, castle. The move may be spelled by SAN or in words ("night
+  // c3" — his typo, and "knight c3" without the SAN capital is just as common),
+  // so the object is deliberately loose: what identifies the intent is the
+  // WHY + the verb, not the notation.
+  String.raw`\bwhy\s+(?:play|playing|go|going|move|moving|put|putting|develop|developing|take|taking|castle|castling|push|pushing|trade|trading)\b`,
+  // And the barest form of all — "why Nc3?" / "why h3?" — a WHY immediately
+  // followed by something move-shaped and nothing else. Anchored tightly so it
+  // cannot swallow "why not", "why does", "why is my position better".
+  String.raw`^\s*why\s+(?:the\s+)?(?:[NBRQK]?[a-h][1-8]|[NBRQK]?x?[a-h][1-8](?:=[NBRQ])?[+#]?|O-O(?:-O)?|(?:knight|bishop|rook|queen|king|pawn|night)\s*(?:to\s*)?[a-h]\s*[1-8])\s*\??\s*$`,
   // "why does the engine/computer/stockfish like/pick/choose/prefer/play/want X"
   String.raw`\bwhy\s+(?:does|would|did|is|are)?\s*(?:the\s+)?(?:engine|computer|stockfish|it)\s+(?:like|likes|pick|picks|choose|chooses|prefer|prefers|play|plays|want|wants|recommend|recommending|suggest|suggesting|suggests|consider|considering|go(?:es|ing)?\s+for|point(?:ing)?\s+(?:to|at))\b`,
   // "why not <my move>" / "why not just <SAN>" — why the alternative is worse.

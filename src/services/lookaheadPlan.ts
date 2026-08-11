@@ -47,6 +47,39 @@ const TACTIC_WORD: Record<string, string> = {
   trapped_piece: 'piece trap',
 };
 
+/**
+ * The squares a journey ACTUALLY passes through — start and destination
+ * removed, repeats collapsed, order kept.
+ *
+ * 🔒 A ROUTE MAY NOT NAME ITS OWN DESTINATION. `path` is the raw list of
+ * squares a piece touched, so a piece that goes c2 → b3 → c2 has c2 in the
+ * middle of its own journey, and `path.slice(1, -1)` handed that straight to
+ * the sentence: "walk the queen round to c2, by way of c2 and b3." Real
+ * journey, nonsense sentence, and it happened twice in one game.
+ */
+export function waypointsOf(path: readonly string[]): string[] {
+  if (path.length < 3) return [];
+  const start = path[0];
+  const end = path[path.length - 1];
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const sq of path.slice(1, -1)) {
+    if (sq === start || sq === end || seen.has(sq)) continue;
+    seen.add(sq);
+    out.push(sq);
+  }
+  return out;
+}
+
+/** "a fork and a removal of the defender" — one article per item, because the
+ *  names are plural-shaped ("removal of the defender") and a shared article
+ *  reads as one thing. */
+function listWithArticles(words: readonly string[]): string {
+  const withArticle = words.map((w) => `${/^[aeiou]/i.test(w) ? 'an' : 'a'} ${w}`);
+  if (withArticle.length === 1) return withArticle[0];
+  return `${withArticle.slice(0, -1).join(', ')} and ${withArticle[withArticle.length - 1]}`;
+}
+
 /** Speakable name for a tactic, or null when it has none — an unknown tactic
  *  is dropped rather than read out as its identifier. */
 export function tacticWord(kind: string | null): string | null {
@@ -468,6 +501,15 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
   // more striking idea than two.
   const maneuver = [...journeys.values()]
     .filter((j) => j.path.length >= 3)
+    // A ROUTE MAY NOT NAME ITS OWN DESTINATION AS A WAYPOINT. From David's game
+    // of 2026-08-11: "walk the queen round to c2, by way of c2 and b3" — and
+    // again "walk the knight round to c6, by way of c6 and a5". Both are real
+    // journeys (the piece went c2, b3, c2) but the sentence is nonsense: you do
+    // not travel to a square by way of that square. A piece that leaves and
+    // comes back has been chased, not rerouted, so once the destination and the
+    // start are removed from the waypoints there has to be something LEFT for
+    // this to be a regrouping at all.
+    .filter((j) => waypointsOf(j.path).length > 0)
     // A PAWN IS NOT REROUTED. A live probe produced "they want to walk the pawn
     // round to a5, by way of b6" — that is not a regrouping, it is a pawn
     // capturing twice, and no coach has ever described it that way. The reroute
@@ -569,12 +611,10 @@ export function describePlan(
   // contains, so it starts above everything except mate.
   // PROMOTION outranks everything short of mate: a pawn reaching the eighth is
   // a new queen, and no other clause competes with that.
-  if (plan.promotes) {
-    add(150, `push a pawn through to a new queen on ${plan.promotes}`, [plan.promotes]);
-  }
-  // PROMOTION outranks everything short of mate: a pawn reaching the eighth is
-  // a new queen, and no other clause competes with that. `promotion` has sat in
-  // PlyFacts since pvPlayback was written and been read by nothing.
+  // (`promotion` had sat in PlyFacts since pvPlayback was written and been read
+  // by nothing. It was then added TWICE in one edit — the same clause, same
+  // weight, appended to the list back to back, so a promoting line said "push a
+  // pawn through to a new queen on a8" and then said it again.)
   if (plan.promotes) {
     add(150, `push a pawn through to a new queen on ${plan.promotes}`, [plan.promotes]);
   }
@@ -587,8 +627,14 @@ export function describePlan(
   // and the thing a student can copy next game.
   if (plan.maneuver) {
     const { piece, path } = plan.maneuver;
-    const via = path.slice(1, -1).join(' and ');
-    add(80, `walk the ${piece} round to ${path[path.length - 1]}, by way of ${via}`, path);
+    const via = waypointsOf(path);
+    // Belt and braces with the selection filter: if the journey has no waypoint
+    // that is not also its destination, there is no reroute to describe and the
+    // clause says nothing rather than saying something false.
+    if (via.length > 0) {
+      const dest = path[path.length - 1];
+      add(80, `walk the ${piece} round to ${dest}, by way of ${via.join(' and ')}`, [path[0], ...via, dest]);
+    }
   }
   // CHECKS ON THE WAY. Low weight on purpose — it is texture, not a plan — but
   // it is the difference between a quiet line and one the student has to
@@ -1053,9 +1099,24 @@ export function positionReadLine(
     once('opposite-wings', 'The kings have gone to opposite wings, so you can both attack without being attacked back. Speed matters more than material now.');
   }
   // EVERY tactic already standing, not just the first — a board with a pin and
-  // a fork on it has two things to see.
+  // a fork on it has two things to see. But ONE FRAME, however many of them:
+  // each tactic still gets its own said-key so a fork named on one ply is not
+  // re-announced on the next, and the ones that are fresh THIS ply share a
+  // sentence. Repeating the frame verbatim is what David's game of 2026-08-11
+  // actually said — "There's already a fork sitting on the board, whether or
+  // not anyone plays into it. There's already a removal of the defender sitting
+  // on the board, whether or not anyone plays into it." — and a coach that says
+  // the same fourteen words twice in a row sounds broken, however true both
+  // halves are.
+  const freshTactics: string[] = [];
   for (const named of read.tacticsNow.map(tacticWord).filter((t): t is string => t !== null)) {
-    once(`tactic-${named}`, `There's already a ${named} sitting on the board, whether or not anyone plays into it.`);
+    const key = `tactic-${named}`;
+    if (said?.has(key) || freshTactics.includes(named)) continue;
+    said?.add(key);
+    freshTactics.push(named);
+  }
+  if (freshTactics.length > 0) {
+    lines.push(`There's already ${listWithArticles(freshTactics)} sitting on the board, whether or not anyone plays into it.`);
   }
   if (read.endgameType) {
     once('endgame', `We're in a ${read.endgameType} endgame now — the pawns decide it from here.`);

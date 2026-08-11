@@ -1084,3 +1084,81 @@ describe('what the plan leaves out gets its OWN sentence', () => {
     expect(spoke[0]).toMatch(/a1, c1 and d1/);
   });
 });
+
+// ─── DAVID'S GAME OF 2026-08-11: THREE SENTENCES THAT READ AS BROKEN ─────────
+//
+// All three are the same class of defect — every clause was TRUE and the
+// utterance was still unusable, because nothing checked what the sentence said
+// once the values were substituted in.
+describe('sentences that were true and still wrong', () => {
+  const planWith = (over: Partial<SidePlan>): SidePlan => ({
+    color: 'white', headingFor: [], opening: [], trading: [], outposts: [],
+    materialSwing: 0, passedPawns: [], shieldStripped: 0, tactic: null, mates: false,
+    nearEnemyKing: 0, kingAttackSquares: [], materialSquares: [], tradeSquares: [],
+    tacticSquare: null, idlePieces: [], maneuver: null, checks: 0, promotes: null,
+    text: '', aside: '', spokenClauses: [], ...over,
+  });
+
+  it('never routes a piece to a square "by way of" that same square', () => {
+    // His exact utterances: "walk the queen round to c2, by way of c2 and b3"
+    // and "walk the knight round to c6, by way of c6 and a5". The journeys are
+    // real — the piece left and came back — the sentences are not.
+    const said = describePlan(planWith({
+      maneuver: { piece: 'queen', path: ['d1', 'c2', 'b3', 'c2'] },
+    }), 'mine');
+    expect(said).not.toMatch(/to c2, by way of[^.]*\bc2\b/);
+    if (/walk the queen/.test(said)) expect(said).toMatch(/to c2, by way of b3/);
+  });
+
+  it('says nothing at all when the only waypoint IS the destination', () => {
+    // d1 → c2 → d1 → c2. Every intermediate square is either where it started
+    // or where it ends up, so there is no reroute left to describe and the
+    // clause must drop rather than reach for a phrasing.
+    const said = describePlan(planWith({
+      maneuver: { piece: 'knight', path: ['d1', 'c2', 'd1', 'c2'] },
+    }), 'mine');
+    expect(said).not.toMatch(/by way of/);
+  });
+
+  it('the marks follow the route it actually described', () => {
+    const plan = planWith({ maneuver: { piece: 'bishop', path: ['f1', 'e2', 'g4', 'e2'] } });
+    describePlan(plan, 'mine');
+    const clause = plan.spokenClauses.find((c) => /by way of/.test(c.text));
+    expect(clause?.squares).toEqual(['f1', 'g4', 'e2']);
+  });
+
+  it('promotes to a new queen once, not twice', () => {
+    // The clause was added to the list twice in one edit — same weight, same
+    // text, back to back — so a promoting line said it and then said it again.
+    const said = describePlan(planWith({ promotes: 'a8' }), 'mine');
+    expect(said.match(/new queen on a8/g) ?? []).toHaveLength(1);
+  });
+
+  it('names every standing tactic in ONE frame, not one frame each', () => {
+    // Verbatim from the transcript: "There's already a fork sitting on the
+    // board, whether or not anyone plays into it. There's already a removal of
+    // the defender sitting on the board, whether or not anyone plays into it."
+    const read = {
+      tacticsNow: ['fork', 'removal_of_guard'], oppositeWings: false,
+      islands: { white: 1, black: 1 }, halfOpen: { white: [], black: [] },
+      endgameType: null, materialBalance: 0, evalSwingCp: null,
+    };
+    const line = positionReadLine(read, 'white', new Set());
+    expect(line.match(/sitting on the board/g) ?? []).toHaveLength(1);
+    expect(line).toMatch(/a fork and a removal of the defender/);
+  });
+
+  it('still refuses to re-announce a tactic named on an earlier ply', () => {
+    const said = new Set<string>();
+    const read = (tactics: string[]) => ({
+      tacticsNow: tactics, oppositeWings: false,
+      islands: { white: 1, black: 1 }, halfOpen: { white: [], black: [] },
+      endgameType: null, materialBalance: 0, evalSwingCp: null,
+    });
+    const first = positionReadLine(read(['fork']), 'white', said);
+    const second = positionReadLine(read(['fork', 'pin']), 'white', said);
+    expect(first).toMatch(/a fork sitting/);
+    expect(second).toMatch(/a pin sitting/);
+    expect(second, 'the fork was already said').not.toMatch(/fork/);
+  });
+});
