@@ -1,0 +1,30 @@
+name: ASC Customer Reviews
+
+# Pulls recent App Store customer reviews via the App Store Connect API and
+# prints them in the job log. Read-only, on-demand — used to confirm real
+# reviews landed without relying on a screenshot or recollection.
+
+on:
+  workflow_dispatch:
+    inputs:
+      since_days:
+        description: only print reviews created within this many days
+        type: string
+        default: '30'
+
+jobs:
+  reviews:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Pull customer reviews
+        env:
+          ASC_KEY_P8: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          APP_BUNDLE_ID: com.chessacademy.pro
+          SINCE_DAYS: ${{ inputs.since_days || '30' }}
+        run: node scripts/ci/asc-reviews.mjs
