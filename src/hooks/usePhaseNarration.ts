@@ -173,216 +173,56 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
     let reportText = '';
 
     try {
-      // WO-PHASE-LAG-02: check the shared Stockfish FEN cache first.
-      // When Read Position ran the engine on this exact board a few
-      // seconds ago (or another phase transition produced the same
-      // position), we skip the engine cycle entirely and jump straight
-      // to LLM dispatch. Emits narration-stockfish-cache-hit for
-      // observability parity with usePositionNarration.
-      let stockfishAnalysis: StockfishAnalysis | null;
-      const cachedAnalysis = getCachedStockfish(event.fen);
-      if (cachedAnalysis) {
-        void logAppAudit({
-          kind: 'narration-stockfish-cache-hit',
-          category: 'subsystem',
-          source: 'usePhaseNarration',
-          summary: 'skipped Stockfish — cached analysis',
-          fen: event.fen,
-        });
-        stockfishAnalysis = cachedAnalysis;
-        console.log('[PHASE-HOOK-03] stockfish cache hit');
-      } else {
-        // WO-PHASE-LAG-01: mirror WO-POLISH-03's parallel + race pattern.
-        // Stockfish runs alongside the rest of setup; we race it against
-        // a short budget so LLM dispatch isn't blocked by engine
-        // analysis. PHASE_NARRATION_ADDITION already handles missing
-        // stockfishAnalysis gracefully. WO-PHASE-LAG-02: depth 12 → 10,
-        // budget 500ms → 300ms, successful analyses cached for reuse.
-        console.log('[PHASE-HOOK-03] stockfish analysis call (budgeted)');
-        // David 2026-07-03: the old `analyzePosition(depth) raced-to-null`
-        // pattern searched to a FIXED depth (unbounded time) and threw the
-        // result away on timeout — so the slow iOS asm.js build (the WASM
-        // builds OOM / call_indirect-trap on iPhone) NEVER returned an eval and
-        // the brain guessed "equal material." `analyzeWithBudget` instead lets
-        // the engine search for the budget, then `stop()`s it and returns the
-        // BEST line it reached so far — depth 5/6 on asm, full depth on desktop
-        // (which resolves early). We take whatever it found in the time instead
-        // of demanding a target depth; a real shallow eval beats null. The
-        // code-counted material balance still covers a truly dead engine (G0).
-        // Budget is generous because desktop resolves on depth well before it,
-        // so it only bounds the genuinely-slow asm path.
-        const engineIsAsm = resolveWorkerUrl().variant === 'asm';
-        const budgetMs = engineIsAsm ? 5000 : 1200;
-        stockfishAnalysis = await stockfishEngine
-          .analyzeWithBudget(event.fen, STOCKFISH_DEPTH, budgetMs)
-          .then((r) => {
-            setCachedStockfish(event.fen, r);
-            return r as StockfishAnalysis | null;
-          })
-          .catch(() => null as StockfishAnalysis | null);
-        console.log('[PHASE-HOOK-04] stockfish budget resolved', {
-          hasAnalysis: stockfishAnalysis !== null,
-        });
-      }
-      if (token !== activeTokenRef.current) return;
-
-      const profile = await db.profiles.get('main');
-      const rating = profile?.currentRating ?? 1200;
-      const { getPgn, getOpeningName } = argsRef.current;
-
-      // GROUNDING INVERSION (G0): hand the brain the REAL, code-computed tactics
-      // for this position so it can only VOICE them — instead of free-reasoning
-      // over the board and naming a pin/fork that isn't there (PostHog
-      // `phase-narration.tacticClaimGate … no tactics context`, David 2026-06-22).
-      // The prompt below already promises a "Tactics analysis block"; without
-      // this the block was never sent, so the LLM invented tactics and the gate
-      // stripped them. Reuses the Stockfish read just done — no extra round trip.
-      const phaseTactics = await buildFedTacticsContext(
-        event.fen,
-        event.playerColor === 'white' ? 'w' : 'b',
-        rating,
-        stockfishAnalysis,
-        undefined, // default analyzer
-        profile?.skillRadar?.tactics, // adaptive lookahead (David 2026-07-03)
-      ).catch(() => undefined);
-      if (token !== activeTokenRef.current) return;
-
-      const transitionLabel = event.kind === 'opening-to-middlegame'
-        ? 'Opening → Middlegame'
-        : 'Middlegame → Endgame';
-
-      // Verbosity is not a length knob here — a phase transition is a rich
-      // moment. Kept as a param for API compatibility.
-      void verbosity;
-      void transitionLabel;
-      // GROUNDED framing (David 2026-07-09 + the 2026-07-06 voice law):
-      // in-game narration VOICES facts computed in code and DECIDES nothing.
-      // The transition label is the ONLY authored framing; the eval + tactics
-      // that follow are all code-computed. `bestUci` is the engine PV[0] at
-      // `event.fen` (the FEN's side-to-move is the OPPONENT — the transition
-      // fires right after the student's move — and serveGroundedPositionDefault
-      // handles the perspective flip + the student-relative assessment).
-      const bestUci = stockfishAnalysis?.bestMove || stockfishAnalysis?.topLines?.[0]?.moves?.[0];
+      // ── THE TEACHING GOES OUT BEFORE THE ENGINE IS ASKED ANYTHING ────────
+      //
+      // 🔒 THIS IS WHY THE COACH WENT QUIET AT TRANSITIONS (David 2026-08-11:
+      // the PostHog sweep that found this gate dropping true claims, and the
+      // register entry that called the latency the real defect).
+      //
+      // The corpus note is a JSON lookup on the history and the FEN. It needs
+      // no engine, no model, and no network — it is ready in milliseconds. It
+      // was nevertheless computed AFTER an `analyzeWithBudget` (1.2s on
+      // desktop, 5s on the iOS asm build) and a tactics scan, so the 90% of
+      // the teaching queued behind the 10% that needs a search.
+      //
+      // And the report is abandoned WHOLE when the board moves past it — which
+      // is correct, and which is exactly what kept happening: the student plays
+      // their next move inside five seconds, so the note that was ready almost
+      // immediately was thrown away having never been spoken. Silence, on the
+      // one moment in the game the corpus was written for.
+      //
+      // So the note now speaks first and the engine's look-ahead follows it.
+      // Nothing is loosened: the note is still board-graded against the
+      // transition position before a word of it is spoken, and the look-ahead
+      // is still abandoned if the board has moved by the time it lands. What
+      // changes is that losing the race now costs the look-ahead instead of
+      // costing the teaching.
+      //
+      // `phaseTactics` is read by `dispatchSentence` at CALL time, so the note
+      // dispatched here is board-checked only — right for curated prose that
+      // was already graded — while everything after the engine also gets the
+      // tactic-vocabulary half.
+      // Explicitly undefined until the engine lands. `prefer-const` reads a
+      // bare `let x;` with one later assignment as a const candidate — it does
+      // not count the reads inside `dispatchSentence`, which is the whole point
+      // of the declaration sitting up here.
+      let phaseTactics: Awaited<ReturnType<typeof buildFedTacticsContext>> | undefined = undefined;
+      /** Whether the search had landed by the time a sentence went out.
+       *
+       *  🔒 A PLAIN FLAG, NOT A READ OF `stockfishAnalysis`. The latency audit
+       *  used to report `stockfishAnalysis !== null` — fine when every dispatch
+       *  happened after the engine, and a temporal-dead-zone ReferenceError the
+       *  moment one happens before it. That throw landed in the corpus block's
+       *  catch, which swallows by design, so the note simply never spoke and
+       *  nothing was logged: the exact silent-failure shape this hook keeps
+       *  producing. It is also the more useful number now — 'did the teaching
+       *  beat the search' is the question the reorder exists to answer. */
+      let engineResolved = false;
       /** True once a corpus note has been spliced. NOTHING is spoken without
        *  one — see the silence rule below. */
       let ritualSpoken = false;
-      // THE LABEL IS GONE (David 2026-08-08: "that phase transition you showed
-      // me was just useless noise"). It used to open with "The opening's set —
-      // we're into the middlegame now", which names no square, no piece and no
-      // idea; the student is looking at the board and can see that already.
-      // Narration voice rule 1 asks every spoken sentence to name something
-      // concrete, and rule 4 says silence is a legitimate answer. A phase
-      // boundary is a good MOMENT to teach — it is not, by itself, teaching.
       let transitionSentence = '';
-      // TEACHING at the transition (David 2026-07-12: "make the phase
-      // transitions match more closely to danya's teachings"): his
-      // opening→middlegame ritual is structure → idea → plan, so the whole
-      // teaching note rides in — chosen by tightening circles (exact
-      // position → recent path → the opening FAMILY's middlegame teaching,
-      // since most real games have left book by the transition). Curated
-      // note, code-selected; the model still only phrases (G0), and the
-      // per-sentence board gate drops any family-level specific that isn't
-      // true on this exact board.
-      // BOTH transitions, not just the first (David 2026-08-05: "need middle
-      // and endgame notes"). The splice used to sit inside an
-      // `opening-to-middlegame` guard, so the endgame transition got the
-      // computed lookahead and nothing else — 7,120 endgame notes in the
-      // corpus and not one reachable, because the code that fetches them never
-      // ran on that branch.
-      {
-        try {
-          const sans = (getPgn() ?? '').split(/\s+/).filter((t) => t && !/^\d+\.$/.test(t));
-          const openingName = getOpeningName?.() ?? detectOpening(sans)?.name ?? null;
-          // The transition event knows whose game it is, so the ritual can
-          // stop handing the student their opponent's plan.
-          const source = transitionTeachingSourceForGame({
-            historySans: sans,
-            fen: event.fen,
-            openingName,
-            studentSide: event.playerColor,
-          });
-          if (source) {
-            // HOW MUCH of the note may be spoken depends on WHERE it came from
-            // (2026-08-04). Only the exact-position tier was authored at the
-            // board the student is looking at; the recent-path, opening-family
-            // and structure-transfer tiers describe a DIFFERENT position, and
-            // speaking their `explains`/`teaches` narrated that position as if
-            // it were this one. `plans` survives the move — it says where this
-            // kind of position is heading, which is the point of a transition
-            // ritual and stays true when the note is borrowed.
-            const { note, origin } = source;
-            const rawRitual = (origin === 'position'
-              ? [note.explains, note.teaches, note.plans ? `The plan: ${note.plans}` : '']
-              : [note.plans ? generalizedTeaching(origin, note.plans) : ''])
-              .filter((s) => s && s.trim())
-              .join(' ');
-            // THE BACKUP THAT SHOULD NEVER FIRE (G0). Selection now refuses a
-            // note whose spoken text names pieces this board no longer has —
-            // but this text is about to ride into the model's package as
-            // grounding, and grounding must be board-true by construction.
-            // Every other splice site grades before speaking; this one did
-            // not, which is how a "trade rooks" plan reached a king-and-pawn
-            // ending (David's K+P sample, 2026-08-05). A trip here logs under
-            // `usePhaseNarration.transitionNote.narrationGate` — expect ZERO.
-            // A BORROWED tier is graded strictly: its hypothetical clauses are
-            // about the game it came from, not a board one move from this one,
-            // so "White should snap off the bishop on d6" must not ride through
-            // on the word "should". The position tier keeps the ordinary gate,
-            // which is right for prose about the line actually being played.
-            const ritual = !rawRitual.trim()
-              ? ''
-              : origin === 'position'
-                ? (gradeNarrationText(rawRitual, event.fen, 'usePhaseNarration.transitionNote') ?? '')
-                : gradeBorrowedTeaching(rawRitual, event.fen, 'usePhaseNarration.transitionNote');
-            if (ritual.trim()) transitionSentence += ` ${ritual}`;
-            if (ritual.trim()) ritualSpoken = true;
-          }
-        } catch { /* corpus is a bonus, never a blocker */ }
-      }
 
-
-      // P5 — GUARANTEED deep look-ahead (David 2026-07-26: "add it to the package
-      // gen to the llm — it will have no choice but to speak the words"). The
-      // deepest foresight (phaseTactics' PV scan) rode into the prompt only as
-      // context, so the model could skip it. PRE-COMPOSE the exact spoken line in
-      // code (G0) and fold it into extraFacts, which the grounded path VOICES —
-      // so entering the middlegame the coach states what's coming as computed
-      // fact, not an LLM afterthought. Null on a quiet position.
-      const phaseLookahead = phaseTactics ? speakDeepestLookahead(phaseTactics) : null;
-      if (phaseLookahead) transitionSentence += ` ${phaseLookahead}`;
-
-      // ── NOTHING CONCRETE, NOTHING SPOKEN ───────────────────────────────────
-      // David 2026-08-08: "phase narration stays silent if no notes are
-      // available", and the label it used to open with is "just useless noise".
-      // What is left after removing those two is exactly his 90/10: the corpus
-      // note is the teaching, the look-ahead is the threat detection, and
-      // NEITHER of them is a status announcement or an eval readout.
-      //
-      // Both count. Gating the whole transition on the corpus alone was too
-      // blunt — it silenced a real three-move threat, named with its pattern,
-      // its depth and its moves, whenever the corpus happened to have nothing
-      // for that position. That line is the most concrete thing the coach can
-      // say (voice rule 1) and it comes from the engine, not the corpus.
-      //
-      // Returning here also skips the engine read and the timeout templates,
-      // which is the point: "* We're entering the middlegame" is the same noise
-      // with an asterisk on it.
-      if (!ritualSpoken && !phaseLookahead) {
-        void logAppAudit({
-          kind: 'coach-surface-migrated',
-          category: 'subsystem',
-          source: 'usePhaseNarration.silent',
-          summary: `nothing concrete at this ${event.kind} (no note, no look-ahead) — staying silent`,
-          fen: event.fen,
-        });
-        if (token === activeTokenRef.current) setIsNarrating(false);
-        return;
-      }
-
-      // Sentence-buffered streaming TTS. Every sentence chains through
-      // speakForced so each Polly call awaits the previous one's
-      // audio. Single-engine consistency: no Polly+Web-Speech overlap,
-      // no dropped sentences from the dead speakQueuedForced path.
       let sentenceBuffer = '';
       let speechChain: Promise<void> = Promise.resolve();
       let sentenceCount = 0;
@@ -391,6 +231,17 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       // speech as board-false still landed in the transcript in writing.
       // One gate, one truth: what was speakable is what is kept.
       const keptSentences: string[] = [];
+      /** Every sentence already spoken on this transition, normalised.
+       *
+       *  🔒 THE CORPUS NOTE ARRIVES TWICE BY DESIGN. It is spoken the moment
+       *  it is computed — that head start is the entire fix — and it ALSO
+       *  rides into `extraFacts`, so it comes back inside the grounded text
+       *  and would be read out a second time. Keeping it in `extraFacts` is
+       *  deliberate: the chat report should read as one whole thing. So the
+       *  voice dedupes instead, which is the same rule the turn packages
+       *  already follow — a sentence the student has heard is not said again. */
+      const spokenKeys = new Set<string>();
+      const sayKey = (s: string): string => s.toLowerCase().replace(/[^a-z0-9]/g, '');
       // Abandon-once bookkeeping for the staleness decision below.
       let staleLogged = false;
       /** Same POSITION, ignoring the clocks. A halfmove counter ticking is not
@@ -448,6 +299,9 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
           return;
         }
         if (!isSpokenSentenceGrounded(trimmed, event.fen, 'usePhaseNarration', phaseTactics)) return;
+        const key = sayKey(trimmed);
+        if (key && spokenKeys.has(key)) return; // already said on this transition
+        if (key) spokenKeys.add(key);
         keptSentences.push(trimmed);
         sentenceCount += 1;
         if (sentenceCount === 1) {
@@ -460,7 +314,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             details: JSON.stringify({
               tapToFirstDispatchMs: firstDispatchMs,
               firstSentenceChars: trimmed.length,
-              stockfishResolved: stockfishAnalysis !== null,
+              stockfishResolved: engineResolved,
               transitionKind: event.kind,
             }),
             fen: event.fen,
@@ -492,6 +346,230 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
         for (const s of sentences) dispatchSentence(s);
         if (sentences.length > 0) sentenceBuffer = rest;
       };
+
+      // TEACHING at the transition (David 2026-07-12: "make the phase
+      // transitions match more closely to danya's teachings"): his
+      // opening→middlegame ritual is structure → idea → plan, so the whole
+      // teaching note rides in — chosen by tightening circles (exact
+      // position → recent path → the opening FAMILY's middlegame teaching,
+      // since most real games have left book by the transition). Curated
+      // note, code-selected; the model still only phrases (G0), and the
+      // per-sentence board gate drops any family-level specific that isn't
+      // true on this exact board.
+      // BOTH transitions, not just the first (David 2026-08-05: "need middle
+      // and endgame notes"). The splice used to sit inside an
+      // `opening-to-middlegame` guard, so the endgame transition got the
+      // computed lookahead and nothing else — 7,120 endgame notes in the
+      // corpus and not one reachable, because the code that fetches them never
+      // ran on that branch.
+      {
+        try {
+          const sans = (argsRef.current.getPgn() ?? '').split(/\s+/).filter((t) => t && !/^\d+\.$/.test(t));
+          const openingName = argsRef.current.getOpeningName?.() ?? detectOpening(sans)?.name ?? null;
+          // The transition event knows whose game it is, so the ritual can
+          // stop handing the student their opponent's plan.
+          const source = transitionTeachingSourceForGame({
+            historySans: sans,
+            fen: event.fen,
+            openingName,
+            studentSide: event.playerColor,
+          });
+          if (source) {
+            // HOW MUCH of the note may be spoken depends on WHERE it came from
+            // (2026-08-04). Only the exact-position tier was authored at the
+            // board the student is looking at; the recent-path, opening-family
+            // and structure-transfer tiers describe a DIFFERENT position, and
+            // speaking their `explains`/`teaches` narrated that position as if
+            // it were this one. `plans` survives the move — it says where this
+            // kind of position is heading, which is the point of a transition
+            // ritual and stays true when the note is borrowed.
+            const { note, origin } = source;
+            const rawRitual = (origin === 'position'
+              ? [note.explains, note.teaches, note.plans ? `The plan: ${note.plans}` : '']
+              : [note.plans ? generalizedTeaching(origin, note.plans) : ''])
+              .filter((s) => s && s.trim())
+              .join(' ');
+            // THE BACKUP THAT SHOULD NEVER FIRE (G0). Selection now refuses a
+            // note whose spoken text names pieces this board no longer has —
+            // but this text is about to ride into the model's package as
+            // grounding, and grounding must be board-true by construction.
+            // Every other splice site grades before speaking; this one did
+            // not, which is how a "trade rooks" plan reached a king-and-pawn
+            // ending (David's K+P sample, 2026-08-05). A trip here logs under
+            // `usePhaseNarration.transitionNote.narrationGate` — expect ZERO.
+            // A BORROWED tier is graded strictly: its hypothetical clauses are
+            // about the game it came from, not a board one move from this one,
+            // so "White should snap off the bishop on d6" must not ride through
+            // on the word "should". The position tier keeps the ordinary gate,
+            // which is right for prose about the line actually being played.
+            const ritual = !rawRitual.trim()
+              ? ''
+              : origin === 'position'
+                ? (gradeNarrationText(rawRitual, event.fen, 'usePhaseNarration.transitionNote') ?? '')
+                : gradeBorrowedTeaching(rawRitual, event.fen, 'usePhaseNarration.transitionNote');
+            if (ritual.trim()) {
+              transitionSentence += ` ${ritual}`;
+              ritualSpoken = true;
+              // ── SPEAK IT NOW, NOT AFTER THE SEARCH ───────────────────────
+              //
+              // The whole point of hoisting this block. It is graded, it is
+              // about the board the student is looking at, and it is ready —
+              // so it goes out while that is still true, instead of waiting on
+              // an engine budget that is 1.2s on desktop and 5s on the iOS asm
+              // build and then being abandoned as stale.
+              //
+              // Through the ordinary sentence pipeline, so the split, the
+              // per-sentence gate, the staleness check and the packaging are
+              // all exactly as they were — this is a change of WHEN, not of
+              // what may be said.
+              sentenceBuffer += ` ${ritual}`;
+              flushCompletedSentences();
+              // A note that ends without terminal punctuation would sit in the
+              // buffer behind the look-ahead and lose the head start entirely.
+              if (sentenceBuffer.trim()) {
+                dispatchSentence(sentenceBuffer);
+                sentenceBuffer = '';
+              }
+            }
+          }
+        } catch { /* corpus is a bonus, never a blocker */ }
+      }
+
+      // WO-PHASE-LAG-02: check the shared Stockfish FEN cache first.
+      // When Read Position ran the engine on this exact board a few
+      // seconds ago (or another phase transition produced the same
+      // position), we skip the engine cycle entirely and jump straight
+      // to LLM dispatch. Emits narration-stockfish-cache-hit for
+      // observability parity with usePositionNarration.
+      let stockfishAnalysis: StockfishAnalysis | null;
+      const cachedAnalysis = getCachedStockfish(event.fen);
+      if (cachedAnalysis) {
+        void logAppAudit({
+          kind: 'narration-stockfish-cache-hit',
+          category: 'subsystem',
+          source: 'usePhaseNarration',
+          summary: 'skipped Stockfish — cached analysis',
+          fen: event.fen,
+        });
+        stockfishAnalysis = cachedAnalysis;
+        engineResolved = true;
+        console.log('[PHASE-HOOK-03] stockfish cache hit');
+      } else {
+        // WO-PHASE-LAG-01: mirror WO-POLISH-03's parallel + race pattern.
+        // Stockfish runs alongside the rest of setup; we race it against
+        // a short budget so LLM dispatch isn't blocked by engine
+        // analysis. PHASE_NARRATION_ADDITION already handles missing
+        // stockfishAnalysis gracefully. WO-PHASE-LAG-02: depth 12 → 10,
+        // budget 500ms → 300ms, successful analyses cached for reuse.
+        console.log('[PHASE-HOOK-03] stockfish analysis call (budgeted)');
+        // David 2026-07-03: the old `analyzePosition(depth) raced-to-null`
+        // pattern searched to a FIXED depth (unbounded time) and threw the
+        // result away on timeout — so the slow iOS asm.js build (the WASM
+        // builds OOM / call_indirect-trap on iPhone) NEVER returned an eval and
+        // the brain guessed "equal material." `analyzeWithBudget` instead lets
+        // the engine search for the budget, then `stop()`s it and returns the
+        // BEST line it reached so far — depth 5/6 on asm, full depth on desktop
+        // (which resolves early). We take whatever it found in the time instead
+        // of demanding a target depth; a real shallow eval beats null. The
+        // code-counted material balance still covers a truly dead engine (G0).
+        // Budget is generous because desktop resolves on depth well before it,
+        // so it only bounds the genuinely-slow asm path.
+        const engineIsAsm = resolveWorkerUrl().variant === 'asm';
+        const budgetMs = engineIsAsm ? 5000 : 1200;
+        stockfishAnalysis = await stockfishEngine
+          .analyzeWithBudget(event.fen, STOCKFISH_DEPTH, budgetMs)
+          .then((r) => {
+            setCachedStockfish(event.fen, r);
+            return r as StockfishAnalysis | null;
+          })
+          .catch(() => null as StockfishAnalysis | null);
+        engineResolved = stockfishAnalysis !== null;
+        console.log('[PHASE-HOOK-04] stockfish budget resolved', {
+          hasAnalysis: stockfishAnalysis !== null,
+        });
+      }
+      if (token !== activeTokenRef.current) return;
+
+      const profile = await db.profiles.get('main');
+      const rating = profile?.currentRating ?? 1200;
+
+      // GROUNDING INVERSION (G0): hand the brain the REAL, code-computed tactics
+      // for this position so it can only VOICE them — instead of free-reasoning
+      // over the board and naming a pin/fork that isn't there (PostHog
+      // `phase-narration.tacticClaimGate … no tactics context`, David 2026-06-22).
+      // The prompt below already promises a "Tactics analysis block"; without
+      // this the block was never sent, so the LLM invented tactics and the gate
+      // stripped them. Reuses the Stockfish read just done — no extra round trip.
+      phaseTactics = await buildFedTacticsContext(
+        event.fen,
+        event.playerColor === 'white' ? 'w' : 'b',
+        rating,
+        stockfishAnalysis,
+        undefined, // default analyzer
+        profile?.skillRadar?.tactics, // adaptive lookahead (David 2026-07-03)
+      ).catch(() => undefined);
+      if (token !== activeTokenRef.current) return;
+
+      const transitionLabel = event.kind === 'opening-to-middlegame'
+        ? 'Opening → Middlegame'
+        : 'Middlegame → Endgame';
+
+      // Verbosity is not a length knob here — a phase transition is a rich
+      // moment. Kept as a param for API compatibility.
+      void verbosity;
+      void transitionLabel;
+      // GROUNDED framing (David 2026-07-09 + the 2026-07-06 voice law):
+      // in-game narration VOICES facts computed in code and DECIDES nothing.
+      // The transition label is the ONLY authored framing; the eval + tactics
+      // that follow are all code-computed. `bestUci` is the engine PV[0] at
+      // `event.fen` (the FEN's side-to-move is the OPPONENT — the transition
+      // fires right after the student's move — and serveGroundedPositionDefault
+      // handles the perspective flip + the student-relative assessment).
+      const bestUci = stockfishAnalysis?.bestMove || stockfishAnalysis?.topLines?.[0]?.moves?.[0];
+
+
+      // P5 — GUARANTEED deep look-ahead (David 2026-07-26: "add it to the package
+      // gen to the llm — it will have no choice but to speak the words"). The
+      // deepest foresight (phaseTactics' PV scan) rode into the prompt only as
+      // context, so the model could skip it. PRE-COMPOSE the exact spoken line in
+      // code (G0) and fold it into extraFacts, which the grounded path VOICES —
+      // so entering the middlegame the coach states what's coming as computed
+      // fact, not an LLM afterthought. Null on a quiet position.
+      const phaseLookahead = phaseTactics ? speakDeepestLookahead(phaseTactics) : null;
+      if (phaseLookahead) transitionSentence += ` ${phaseLookahead}`;
+
+      // ── NOTHING CONCRETE, NOTHING SPOKEN ───────────────────────────────────
+      // David 2026-08-08: "phase narration stays silent if no notes are
+      // available", and the label it used to open with is "just useless noise".
+      // What is left after removing those two is exactly his 90/10: the corpus
+      // note is the teaching, the look-ahead is the threat detection, and
+      // NEITHER of them is a status announcement or an eval readout.
+      //
+      // Both count. Gating the whole transition on the corpus alone was too
+      // blunt — it silenced a real three-move threat, named with its pattern,
+      // its depth and its moves, whenever the corpus happened to have nothing
+      // for that position. That line is the most concrete thing the coach can
+      // say (voice rule 1) and it comes from the engine, not the corpus.
+      //
+      // Returning here also skips the engine read and the timeout templates,
+      // which is the point: "* We're entering the middlegame" is the same noise
+      // with an asterisk on it.
+      if (!ritualSpoken && !phaseLookahead) {
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'usePhaseNarration.silent',
+          summary: `nothing concrete at this ${event.kind} (no note, no look-ahead) — staying silent`,
+          fen: event.fen,
+        });
+        if (token === activeTokenRef.current) setIsNarrating(false);
+        return;
+      }
+
+      // Sentence-buffered streaming TTS. Every sentence chains through
+      // speakForced so each Polly call awaits the previous one's
+      // audio. Single-engine consistency: no Polly+Web-Speech overlap,
+      // no dropped sentences from the dead speakQueuedForced path.
 
       void logAppAudit({
         kind: 'coach-surface-migrated',
@@ -590,6 +668,27 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
           setCurrentText(apiTrimmed);
           reportText = apiTrimmed;
           dispatchSentence(apiTrimmed);
+        } else if (staleLogged) {
+          // ── ABANDONED MEANS ABANDONED ────────────────────────────────────
+          //
+          // 🔒 THE FALLBACK WAS RESURRECTING THE NOISE. When the board moves
+          // past the transition, every sentence is dropped — correctly — which
+          // leaves the grounded text empty, which looked identical to an API
+          // outage. So the branch below fired and spoke "We're entering the
+          // middlegame. The opening is set…": the exact status announcement
+          // David had removed as "just useless noise", now also describing a
+          // position the student had already left.
+          //
+          // A stale report is a decision to say nothing, not a failure to
+          // produce something. The fallback stays for genuine outages.
+          void logAppAudit({
+            kind: 'coach-surface-migrated',
+            category: 'subsystem',
+            source: 'usePhaseNarration.staleNoFallback',
+            summary: `board moved past this ${event.kind} — staying silent rather than serving the template`,
+            fen: event.fen,
+          });
+          return;
         } else if (apiTimedOut || apiTrimmed.startsWith('⚠️') || !apiTrimmed) {
           // WO-REAL-FIXES — render the deterministic template so the
           // user sees / hears SOMETHING for the transition. Audio
