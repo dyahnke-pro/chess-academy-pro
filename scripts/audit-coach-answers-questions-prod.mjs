@@ -87,7 +87,15 @@ async function dismissGates() {
  *  anything, and the answer has to be read from the transcript rather than
  *  from the whole page. */
 async function resolvePicker() {
-  const tile = page.locator('[data-testid^="line-picker-"]').first();
+  // 🔒 `[data-testid^="line-picker-"]` IS NOT THE TILES. It also matches the
+  // Play/Face mode toggles and the "Never mind" escape, so `.first()` clicked
+  // a TOGGLE — which correctly does nothing — and left the picker wide open.
+  // Every question after that was swallowed, and this audit reported 0/5 while
+  // capturing the picker's own prompt text. `data-fullname` is on the
+  // variation tiles and nothing else, which is what makes it the right handle.
+  // (Same bug, same fix, as `audit-line-picker-popularity-prod`. Swept here
+  // because it was fixed there and not carried across.)
+  const tile = page.locator('[data-testid^="line-picker-"][data-fullname]').first();
   try {
     await tile.waitFor({ timeout: 4000 });
     await tile.click();
@@ -103,25 +111,49 @@ async function resolvePicker() {
  *  or the send button stays disabled and the message never submits, which would
  *  read as "the coach said nothing" when nothing was ever asked. */
 async function ask(question) {
+  // PACE THE BRAIN-HEAVY ASKS. Firing questions back to back saturates the
+  // provider, so a later one exceeds the timeout and reads as a hang that a
+  // real user would never see. An un-paced run cannot legitimately go green:
+  // it manufactures the failure it then reports.
+  await page.waitForTimeout(4000);
   await resolvePicker(); // a picker left open swallows the question entirely
   const box = page.locator('[data-testid="chat-text-input"]');
   await box.waitFor({ timeout: 20000 });
   const transcript = page.locator('[data-testid="teach-transcript"]');
-  const before = (await transcript.innerText().catch(() => '')).length;
+  const linesOf = async () => (await transcript.innerText().catch(() => ''))
+    .split('\n').map((l) => l.trim()).filter(Boolean);
+  // A MULTISET, NOT A SET. "What is the best move here?" and "Which pawn
+  // should I push?" get the SAME answer on the same board — correctly — so a
+  // membership test filtered the third reply out as already-seen and reported
+  // "no reply in 45s" for a coach that had answered in two seconds. Counting
+  // occurrences finds a repeat; membership cannot.
+  const tally = (ls) => ls.reduce((m, l) => m.set(l, (m.get(l) ?? 0) + 1), new Map());
+  const seen = tally(await linesOf());
+  const freshFrom = (ls) => {
+    const now = tally(ls);
+    const out = [];
+    for (const [line, n] of now) {
+      const extra = n - (seen.get(line) ?? 0);
+      for (let k = 0; k < extra; k++) out.push(line);
+    }
+    return out.filter((l) => !l.includes(question));
+  };
   await box.click();
   await box.pressSequentially(question, { delay: 10 });
   await box.press('Enter');
-  // Cold grounding can take a real search; wait for the TRANSCRIPT to grow
-  // rather than for a fixed interval or for any part of the page to change.
+
+  // 🔒 READ THE DIFF, NOT A TAIL SLICE. The first version took
+  // `text.slice(previousLength)` — which only finds new content if the
+  // transcript APPENDS. This one renders newest-FIRST, so the slice returned
+  // the OLDEST text every time and the audit graded the greeting and the
+  // picker prompt as the coach's answer to a question it never saw. Comparing
+  // the set of lines finds what arrived wherever it landed.
   for (let i = 0; i < 30; i++) {
     await page.waitForTimeout(1500);
-    const now = await transcript.innerText().catch(() => '');
-    if (now.length > before + question.length + 40) {
+    const fresh = freshFrom(await linesOf());
+    if (fresh.length > 0) {
       await page.waitForTimeout(2500); // let the reply finish streaming
-      const settled = await transcript.innerText().catch(() => '');
-      // Drop the echo of the question itself, so a check can never pass on the
-      // student's own words.
-      return settled.slice(before).replace(question, ' ');
+      return freshFrom(await linesOf()).join(' ');
     }
   }
   return '';
