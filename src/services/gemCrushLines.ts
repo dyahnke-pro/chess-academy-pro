@@ -121,6 +121,59 @@ function positionIndex(): Map<string, PunishGem[]> {
   return index;
 }
 
+/**
+ * A curated slip the coach could DELIBERATELY play from this position, so the
+ * student gets a real punish to find.
+ *
+ * 🔒 DAVID ASKED FOR THIS (2026-08-11, on the gem lane having never fired once
+ * in production: "68 yes!"). The measurement behind it: all 344 gems fire
+ * correctly when handed their own line, the call site passes the right shape,
+ * and ZERO of 344 gem inaccuracy continuations exist in the openings DB. The
+ * coach plays the most-played book move and then Stockfish, and a gem's
+ * inaccuracy is mined from the AMATEUR explorer precisely BECAUSE it is a
+ * punishable human error — neither book theory nor an engine choice. Disjoint
+ * populations, so the lane could only ever fire if a skill-limited engine
+ * happened to land on one of 344 exact SANs at one of 344 exact positions.
+ * Zero events in 63 sessions was the expected result, not a defect.
+ *
+ * So the coach walks in on purpose. That is not the coach playing badly: it is
+ * how you teach a trap — someone has to fall into it, and a curated slip whose
+ * refutation is engine-verified is the safest possible thing to fall into.
+ *
+ * Nothing is invented (G3). The move comes from the curated gem, and both it
+ * and its punishment are re-verified as legal from THIS board before the
+ * caller is allowed to play it — the index is keyed by position, so a
+ * transposition finds the gem, and the legality check is what makes that safe.
+ */
+export function teachableSlipAt(fen: string): { san: string; opening: string; punishSan: string } | null {
+  let board: Chess;
+  try {
+    board = new Chess(fen);
+  } catch {
+    return null;
+  }
+  const gems = positionIndex().get(positionKey(fen)) ?? [];
+  for (const gem of gems) {
+    // Only the tiers that ship as weapons. A gem the student would never be
+    // shown is not one worth walking into.
+    if (gem.tier !== 'confirmed' && gem.tier !== 'positional') continue;
+    const punishSan = gem.punishSeq?.[0] ?? gem.punish;
+    if (!gem.inaccuracy || !punishSan) continue;
+    try {
+      const probe = new Chess(fen);
+      if (!probe.move(gem.inaccuracy)) continue;
+      // The punishment has to be there for the student the moment the slip
+      // lands, or the callout promises something the board cannot pay.
+      if (!probe.moves().includes(punishSan)) continue;
+      void board;
+      return { san: gem.inaccuracy, opening: gem.openingId, punishSan };
+    } catch {
+      continue;
+    }
+  }
+  return null;
+}
+
 /** The gems whose spine reaches the position `pathSans` stands in. */
 function gemsAtPosition(pathSans: string[]): PunishGem[] {
   try {

@@ -4,6 +4,7 @@ import { getNextOpeningBookMove } from './openingDetectionService';
 import { findHangingPieces } from './tacticClassifier';
 import { lookupMasterPlay } from './masterPlayLookup';
 import { pickBookMove } from './coachBookMove';
+import { teachableSlipAt } from './gemCrushLines';
 import { logAppAudit } from './appAuditor';
 import type { StockfishAnalysis, CoachDifficulty } from '../types';
 
@@ -33,6 +34,9 @@ const THREADED_MOVETIME_MS = 1200;
  *  miss pair costs ~0.5-1.5s of dead time before the engine starts. Reset
  *  by any hit or a fresh game (fullmove ≤ 4). */
 let bookMissStreak = 0;
+/** Curated slips walked into so far this game. One is a lesson; a second is a
+ *  pattern the student stops trusting. Reset when a fresh game starts. */
+let slipsThisGame = 0;
 
 const FALLBACK_ANALYSIS: StockfishAnalysis = {
   bestMove: '',
@@ -300,7 +304,7 @@ function pickMasterMove(
 export async function getAdaptiveMove(
   fen: string,
   targetElo: number,
-): Promise<{ move: string; analysis: StockfishAnalysis; source: 'masters' | 'lichess-games' | 'amateur-band' | 'stockfish-best' | 'stockfish-variety' | 'stockfish-fallback' | 'random' }> {
+): Promise<{ move: string; analysis: StockfishAnalysis; source: 'masters' | 'lichess-games' | 'amateur-band' | 'taught-slip' | 'stockfish-best' | 'stockfish-variety' | 'stockfish-fallback' | 'random' }> {
   // Single-threaded Stockfish (iOS / any context without SharedArrayBuffer +
   // cross-origin isolation) is ~5-10x slower than the threaded build, so a
   // depth 14-16 search blows the COACH_MOVE_TIMEOUT_MS budget → timeout →
@@ -319,7 +323,7 @@ export async function getAdaptiveMove(
   // even starts. Two consecutive both-layers misses ⇒ skip the lookups for
   // the rest of the game; a fresh game (low fullmove number) re-arms them.
   const fullmove = Number(fen.split(' ')[5] ?? '1');
-  if (fullmove <= 4) bookMissStreak = 0;
+  if (fullmove <= 4) { bookMissStreak = 0; slipsThisGame = 0; }
   const skipBookLookups = bookMissStreak >= 2;
   // BREAK BOOK for weak opponents: roll per move. When it hits, MASTER theory
   // stands down so a weak opponent is not handed a grandmaster's move. The
@@ -333,6 +337,57 @@ export async function getAdaptiveMove(
       summary: `break-book elo=${targetElo} — master theory stands down for this move`,
       fen,
     });
+  }
+
+  // ── LAYER 0.05 — WALK INTO A CURATED TRAP, ON PURPOSE ───────────────────
+  //
+  // 🔒 DAVID SAID YES (2026-08-11: "68 yes!") to the coach deliberately playing
+  // a gem's inaccuracy so the student has a real punish to find.
+  //
+  // The measurement that made this necessary: `gem_alert_spoken` had NEVER
+  // fired in production, not once. All 344 gems fire correctly when handed
+  // their own line and the call site passes the right shape — but ZERO of 344
+  // gem inaccuracy continuations exist in the openings DB, and the coach plays
+  // book then Stockfish. A gem's inaccuracy is mined from the AMATEUR explorer
+  // precisely BECAUSE it is a punishable human error, so it is neither book
+  // theory nor an engine pick. Disjoint populations: the lane could only fire
+  // if a skill-limited engine landed on one of 344 exact SANs at one of 344
+  // exact positions. Zero was the expected result, not a defect.
+  //
+  // This is not the coach playing badly. It is how you teach a trap — someone
+  // has to fall into it — and a curated slip whose refutation is engine-
+  // verified is the safest thing in the app to fall into. `findLivePunishment`
+  // then fires on the very next turn and hands the student the callout.
+  //
+  // ONE PER GAME. A second walk-in stops being a lesson and becomes a pattern
+  // the student learns to expect, which teaches the wrong thing entirely.
+  //
+  // AND NOT AGAINST A STRONG OPPONENT. At 2000+ the student asked for a hard
+  // game; a hard opponent walking into a known amateur trap is not a teaching
+  // moment, it is a broken difficulty setting. Easy and medium is where a
+  // deliberate slip belongs, which is also where the gems came from.
+  if (slipsThisGame < 1 && targetElo < 2000) {
+    try {
+      const slip = teachableSlipAt(fen);
+      if (slip) {
+        const uci = sanToUci(fen, slip.san);
+        if (uci) {
+          slipsThisGame += 1;
+          void logAppAudit({
+            kind: 'coach-opponent-move-source',
+            category: 'subsystem',
+            source: 'coachGameEngine.getAdaptiveMove',
+            summary: `source=taught-slip san=${slip.san} punish=${slip.punishSan} opening=${slip.opening} elo=${targetElo}`,
+            fen,
+          });
+          return {
+            move: uci,
+            analysis: { ...FALLBACK_ANALYSIS, bestMove: uci },
+            source: 'taught-slip',
+          };
+        }
+      }
+    } catch { /* a missed teaching moment is never worth a broken move */ }
   }
 
   // ── LAYER 0.1 — WHAT PLAYERS AT THIS LEVEL ACTUALLY PLAY ────────────────

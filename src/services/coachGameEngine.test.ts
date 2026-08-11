@@ -360,3 +360,37 @@ describe('the rating band never holds the coach hostage', () => {
     expect((pickBookMoveMock.mock.calls[0][1] as { ratings: string }).ratings).toBe('1200,1400');
   }, 20000);
 });
+
+// ── WALKING INTO A TRAP, ON PURPOSE ───────────────────────────────────────
+// David 2026-08-11, on the gem lane having never fired once in production:
+// "68 yes!" — let the coach deliberately play a curated slip so the student
+// has a real punish to find. Zero of 344 gem inaccuracies exist in the openings
+// DB and none is an engine pick, so the lane could never fire by accident.
+describe('the coach walks into a curated trap, but only as a lesson', () => {
+  // The Englund Gambit trap position: 1.d4 e5 2.dxe5 Nc6 3.Nf3 Qe7 and White's
+  // natural-looking Bf4 walks into ...Qb4+ picking up the b2 pawn. A real gem.
+  const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
+  beforeEach(() => {
+    analyzePositionMock.mockResolvedValue(mockAnalysis);
+    getBestMoveMock.mockResolvedValue('e2e4');
+    pickBookMoveMock.mockReset();
+    pickBookMoveMock.mockResolvedValue(null);
+  });
+
+  it('never walks in against a strong opponent', async () => {
+    // A hard game is a hard game. A strong opponent falling into a known
+    // amateur trap is a broken difficulty setting, not a teaching moment.
+    const res = await getAdaptiveMove(START, 2200);
+    expect(res.source).not.toBe('taught-slip');
+  }, 20000);
+
+  it('still produces a legal move on every path', async () => {
+    // The whole layer is wrapped so a missed teaching moment can never cost a
+    // move — the failure that took the coach silent earlier tonight.
+    for (const elo of [800, 1200, 1600, 2400]) {
+      const res = await getAdaptiveMove(START, elo);
+      expect(res.move, `elo ${elo}`).toMatch(/^[a-h][1-8][a-h][1-8][qrbn]?$/);
+    }
+  }, 30000);
+});
