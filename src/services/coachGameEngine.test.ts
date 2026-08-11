@@ -18,7 +18,7 @@ vi.mock('./stockfishEngine', () => ({
   },
 }));
 
-import { getAdaptiveMove, getTargetStrength, tryOpeningBookMove, breakBookProbability, explorerBandForElo, slipsAllowed } from './coachGameEngine';
+import { getAdaptiveMove, getTargetStrength, tryOpeningBookMove, breakBookProbability, explorerBandForElo, slipsAllowed, pickTaughtSlip } from './coachGameEngine';
 import { stockfishEngine } from './stockfishEngine';
 import type { StockfishAnalysis } from '../types';
 
@@ -449,5 +449,78 @@ describe('slipsAllowed — the matrix, exactly', () => {
     pickBookMoveMock.mockResolvedValue(null);
     const res = await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 900);
     expect(res.source).not.toBe('taught-slip');
+  }, 20000);
+});
+
+// ── THE SHARED PICKER ─────────────────────────────────────────────────────
+// David asked for the slip on Play as well as Learn, and the two surfaces pick
+// their moves by completely different routes: Learn goes through
+// `getAdaptiveMove`, Play has its own book→Stockfish fast path and reaches
+// `getAdaptiveMove` only when both fail. One picker, called at the same
+// precedence in both, is what keeps the matrix and the budget from drifting
+// apart — and what stops the Play wiring from being a grep that never fires.
+describe('pickTaughtSlip — one lane, two surfaces', () => {
+  /** Stafford Gambit after 1.e4 e5 2.Nf3 Nf6 3.Nxe5 Nc6 — White to move, and a
+   *  curated gem (Nxf7, the "oh no, my queen" walk-in) sits exactly here. */
+  const GEM = 'r1bqkb1r/pppp1ppp/2n2n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 1 4';
+  /** A fresh game, so the budget re-arms. */
+  const NEW_GAME = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
+  beforeEach(async () => {
+    analyzePositionMock.mockResolvedValue(mockAnalysis);
+    getBestMoveMock.mockResolvedValue('e2e4');
+    pickBookMoveMock.mockReset();
+    pickBookMoveMock.mockResolvedValue(null);
+    // The budget is module state and one slip per game is the whole point, so
+    // a test that ran before this one has legitimately spent it. Start each
+    // test from a fresh game the way a student would.
+    await pickTaughtSlip(NEW_GAME, 1100, { studentElo: 1420, difficulty: 'easy' }, 'test-arm');
+  });
+
+  it('offers the curated slip on a real gem board', async () => {
+    // 1420 is the app's default rating — an intermediate — so easy is the one
+    // setting that should hand it over.
+    const slip = await pickTaughtSlip(GEM, 1100, { studentElo: 1420, difficulty: 'easy' }, 'test');
+    expect(slip, 'no slip offered on a board a gem is filed at').not.toBeNull();
+    expect(slip?.san).toBe('Nxf7');
+    expect(slip?.punishSan, 'the punish did not come with it').toBeTruthy();
+    // UCI, because both call sites need a move they can actually play.
+    expect(slip?.uci).toMatch(/^[a-h][1-8][a-h][1-8][qrbn]?$/);
+  }, 20000);
+
+  it('spends its budget once, then re-arms on a new game', async () => {
+    const first = await pickTaughtSlip(GEM, 1100, { studentElo: 1420, difficulty: 'easy' }, 'test');
+    expect(first, 'the first ask should be answered').not.toBeNull();
+    const second = await pickTaughtSlip(GEM, 1100, { studentElo: 1420, difficulty: 'easy' }, 'test');
+    expect(second, 'a second walk-in in the same game teaches the wrong thing').toBeNull();
+
+    // 🔒 THE RE-ARM IS THE POINT. Play reaches `getAdaptiveMove` only when its
+    // book and engine BOTH fail, so a budget that reset only there would give
+    // that surface one slip per SESSION — a student's second game would
+    // silently never get one, which is the invisible-dead-lane shape this whole
+    // feature exists to fix.
+    await pickTaughtSlip(NEW_GAME, 1100, { studentElo: 1420, difficulty: 'easy' }, 'test');
+    const afterNewGame = await pickTaughtSlip(GEM, 1100, { studentElo: 1420, difficulty: 'easy' }, 'test');
+    expect(afterNewGame, 'the budget never re-armed for the next game').not.toBeNull();
+  }, 30000);
+
+  it('obeys the matrix on the very board that would otherwise slip', async () => {
+    // Same gem board, same student — only the setting changes. This is the half
+    // a "did it fire" check cannot see: a lane that fires unconditionally
+    // passes the fire test and fails this one.
+    await pickTaughtSlip(NEW_GAME, 1100, { studentElo: 1420, difficulty: 'easy' }, 'test');
+    expect(await pickTaughtSlip(GEM, 1700, { studentElo: 1420, difficulty: 'hard' }, 'test'),
+      'an intermediate on hard was handed the trap').toBeNull();
+    expect(await pickTaughtSlip(GEM, 1420, { studentElo: 1420, difficulty: 'medium' }, 'test'),
+      'an intermediate on medium was handed the trap').toBeNull();
+    expect(await pickTaughtSlip(GEM, 1900, { studentElo: 2400, difficulty: 'easy' }, 'test'),
+      'an advanced player was handed the trap').toBeNull();
+  }, 30000);
+
+  it('never throws, whatever it is handed', async () => {
+    for (const fen of ['', 'not a fen', GEM, NEW_GAME]) {
+      await expect(pickTaughtSlip(fen, 1100, { studentElo: 900, difficulty: 'easy' }, 'test'))
+        .resolves.not.toThrow();
+    }
   }, 20000);
 });

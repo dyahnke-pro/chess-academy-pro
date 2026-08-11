@@ -315,6 +315,44 @@ describe('the couplings that make the wiring safe', () => {
     expect(TEACH).toMatch(/slice\(0, 4\)\.join\(' '\)/);
   });
 
+  it('the taught slip is reachable on PLAY, above the engine fast path', () => {
+    // David asked for the slip on Play specifically ("Also add the gem slip
+    // adaptivity into play"). Play does NOT route its ordinary moves through
+    // `getAdaptiveMove` — it has its own book→Stockfish fast path and falls
+    // back to `getAdaptiveMove` only when both fail. So passing the options
+    // into that fallback would satisfy a grep and fire approximately never,
+    // which is the exact defect the slip lane exists to fix.
+    //
+    // The rule is therefore about ORDER, not presence: the slip is consulted
+    // BEFORE the Stockfish fast path (else the engine always wins) and AFTER
+    // the opening book (else a slip breaks the line the student asked to
+    // practise).
+    const PLAY = code(read('src/components/Coach/CoachGamePage.tsx'));
+    expect(PLAY, 'play never asks for a slip').toMatch(/pickTaughtSlip\(/);
+    const slipAt = PLAY.indexOf('pickTaughtSlip(');
+    const engineAt = PLAY.indexOf('resolvePlayConfig(difficulty');
+    const bookAt = PLAY.indexOf('getOpeningMoves(intendedOpeningName)');
+    expect(slipAt, 'the slip sits below the engine — the engine always wins')
+      .toBeLessThan(engineAt);
+    expect(slipAt, 'the slip sits above the book — it would break the taught line')
+      .toBeGreaterThan(bookAt);
+    // And it is the SHARED picker, so the matrix and the once-per-game budget
+    // cannot drift between the two surfaces.
+    expect(PLAY).toMatch(/pickTaughtSlip\s*\(\s*game\.fen/);
+    expect(PLAY, 'the slip is not told who the student is').toMatch(/studentElo: playerRating/);
+  });
+
+  it('play stays silent about the slip it walked into', () => {
+    // The locked pure-playing-surface rule: no blocking card, no callout
+    // naming the refutation. David, on the Learn picker offer: "But not in the
+    // picker form. Keep it silent." Learn offers the trap as a road; Play just
+    // plays the mistake and lets the student find it (or not — the post-game
+    // review is where it gets discussed).
+    const PLAY = code(read('src/components/Coach/CoachGamePage.tsx'));
+    expect(PLAY, 'play announces the punish and hands over the answer')
+      .not.toMatch(/findLivePunishment/);
+  });
+
   it('the marks are computed from what SURVIVED grading', () => {
     // Graded PART BY PART, so what survived is known rather than recovered from
     // the joined blob afterwards — and the marks are handed the survivors, not

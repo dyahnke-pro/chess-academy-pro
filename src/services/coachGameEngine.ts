@@ -38,6 +38,11 @@ let bookMissStreak = 0;
 /** Curated slips walked into so far this game. One is a lesson; a second is a
  *  pattern the student stops trusting. Reset when a fresh game starts. */
 let slipsThisGame = 0;
+/** Move number the slip lane last saw. Within a game it only climbs, so a DROP
+ *  is the one reliable signal that a different game has started — see the note
+ *  in `pickTaughtSlip`, where copying the book-miss streak's "fullmove ≤ 4"
+ *  test silently disabled the once-per-game budget for every opening position. */
+let lastSlipFullmove = 0;
 
 const FALLBACK_ANALYSIS: StockfishAnalysis = {
   bestMove: '',
@@ -343,6 +348,93 @@ function pickMasterMove(
   return candidates[candidates.length - 1];
 }
 
+/**
+ * The curated slip the coach may walk into at this position, or null.
+ *
+ * 🔒 SHARED ON PURPOSE — the two play surfaces pick their moves by different
+ * routes and the lane has to live at the same PRECEDENCE in both, or "wired"
+ * means nothing on one of them. `getAdaptiveMove` consults it first, before
+ * any book or engine layer. `/coach/play` (CoachGamePage) does NOT route
+ * through `getAdaptiveMove` for its ordinary moves at all — it has its own
+ * book→Stockfish fast path and reaches `getAdaptiveMove` only when both fail —
+ * so simply passing the options through there would have left the lane firing
+ * approximately never while looking connected. Both call this instead.
+ *
+ * Returns the slip's UCI plus the punish, and BOOKS the once-per-game budget
+ * as a side effect, so two surfaces in one session cannot each spend it.
+ */
+export async function pickTaughtSlip(
+  fen: string,
+  targetElo: number,
+  opts: { studentElo?: number; difficulty?: CoachDifficulty | 'auto' } | undefined,
+  /** Which surface asked — carried into the audit so a live run says where. */
+  caller: string,
+): Promise<{ uci: string; san: string; punishSan: string; opening: string } | null> {
+  // ONE PER GAME — and the budget has to re-arm HERE, not in `getAdaptiveMove`.
+  // Play reaches `getAdaptiveMove` only when its book and engine both fail, so
+  // a counter reset that lived only there would make the slip once per SESSION
+  // on that surface: a student's second game would silently never get one,
+  // which is the invisible-dead-lane shape this feature exists to fix.
+  //
+  // 🔒 A NEW GAME IS THE MOVE NUMBER GOING BACKWARDS, NOT A LOW ONE. The first
+  // version re-armed on `fullmove <= 4`, copying the book-miss streak's signal
+  // — and that reads TRUE on every call in the opening, so on a gem board at
+  // move 4 the budget reset each time and "once per game" was not enforced at
+  // all. Within a game the move number only ever climbs; a drop is the only
+  // reliable evidence that this is a different game.
+  const fullmoveNow = Number(fen.split(' ')[5] ?? '1');
+  if (fullmoveNow <= 1 || fullmoveNow < lastSlipFullmove) slipsThisGame = 0;
+  lastSlipFullmove = Number.isFinite(fullmoveNow) ? fullmoveNow : 1;
+  if (slipsThisGame >= 1) return null;
+  if (opts?.studentElo === undefined) return null;
+  if (!slipsAllowed(opts.studentElo, opts.difficulty)) return null;
+  try {
+    // ── AND THE SLIP ITSELF COMES FROM THE BAND ──────────────────────────
+    //
+    // David: "Can you still tie it into the amateur database?" — yes, and it
+    // closes the loop the gems came from. Every one of the 344 was MINED from
+    // this explorer precisely because real humans blunder that way, so
+    // checking the slip back against the student's OWN band makes the coach's
+    // error one they will actually MEET: a beginner walks into beginner
+    // mistakes, not into a trap that only exists at 2000. Realism and
+    // adaptivity then come from the same fact instead of from a second rule
+    // bolted on top of the first.
+    //
+    // Looked up ONLY once a gem is already known to sit at this position,
+    // which is rare — so the common case pays nothing — and an explorer that
+    // is offline, rate-limited or circuit-open simply leaves the curated,
+    // engine-verified gem eligible on its own merits.
+    const local = teachableSlipAt(fen);
+    if (!local) return null;
+    let bandChecked = false;
+    let slip: ReturnType<typeof teachableSlipAt> = local;
+    try {
+      const seen = await withBudget(
+        fetchLichessExplorer(fen, 'lichess', { ratings: explorerBandForElo(targetElo) }),
+        BAND_BUDGET_MS,
+      );
+      if (seen?.moves?.length) {
+        bandChecked = true;
+        slip = teachableSlipAt(fen, new Set(seen.moves.map((m) => m.san)));
+      }
+    } catch { /* no band read — the curated gem stands on its own */ }
+    if (!slip) return null;
+    const uci = sanToUci(fen, slip.san);
+    if (!uci) return null;
+    slipsThisGame += 1;
+    void logAppAudit({
+      kind: 'coach-opponent-move-source',
+      category: 'subsystem',
+      source: `coachGameEngine.${caller}`,
+      summary: `source=taught-slip san=${slip.san} punish=${slip.punishSan} opening=${slip.opening} studentElo=${opts.studentElo} difficulty=${opts.difficulty ?? 'auto'} bandConfirmed=${bandChecked}`,
+      fen,
+    });
+    return { uci, san: slip.san, punishSan: slip.punishSan, opening: slip.opening };
+  } catch {
+    return null; // a missed teaching moment is never worth a broken move
+  }
+}
+
 export async function getAdaptiveMove(
   fen: string,
   targetElo: number,
@@ -371,7 +463,9 @@ export async function getAdaptiveMove(
   // even starts. Two consecutive both-layers misses ⇒ skip the lookups for
   // the rest of the game; a fresh game (low fullmove number) re-arms them.
   const fullmove = Number(fen.split(' ')[5] ?? '1');
-  if (fullmove <= 4) { bookMissStreak = 0; slipsThisGame = 0; }
+  // (The slip budget re-arms inside `pickTaughtSlip` — one owner, so the two
+  // surfaces that call it cannot disagree about when a game is new.)
+  if (fullmove <= 4) { bookMissStreak = 0; }
   const skipBookLookups = bookMissStreak >= 2;
   // BREAK BOOK for weak opponents: roll per move. When it hits, MASTER theory
   // stands down so a weak opponent is not handed a grandmaster's move. The
@@ -414,59 +508,13 @@ export async function getAdaptiveMove(
   // game; a hard opponent walking into a known amateur trap is not a teaching
   // moment, it is a broken difficulty setting. Easy and medium is where a
   // deliberate slip belongs, which is also where the gems came from.
-  if (slipsThisGame < 1
-    && opts?.studentElo !== undefined
-    && slipsAllowed(opts.studentElo, opts.difficulty)) {
-    try {
-      // ── AND THE SLIP ITSELF COMES FROM THE BAND ──────────────────────────
-      //
-      // David: "Can you still tie it into the amateur database?" — yes, and it
-      // closes the loop the gems came from. Every one of the 344 was MINED from
-      // this explorer precisely because real humans blunder that way, so
-      // checking the slip back against the student's OWN band makes the coach's
-      // error one they will actually MEET: a beginner walks into beginner
-      // mistakes, not into a trap that only exists at 2000. Realism and
-      // adaptivity then come from the same fact instead of from a second rule
-      // bolted on top of the first.
-      //
-      // Looked up ONLY once a gem is already known to sit at this position,
-      // which is rare — so the common case pays nothing — and an explorer that
-      // is offline, rate-limited or circuit-open simply leaves the curated,
-      // engine-verified gem eligible on its own merits.
-      const local = teachableSlipAt(fen);
-      let bandChecked = false;
-      let slip = local;
-      if (local) {
-        try {
-          const seen = await withBudget(
-            fetchLichessExplorer(fen, 'lichess', { ratings: explorerBandForElo(targetElo) }),
-            BAND_BUDGET_MS,
-          );
-          if (seen?.moves?.length) {
-            bandChecked = true;
-            slip = teachableSlipAt(fen, new Set(seen.moves.map((m) => m.san)));
-          }
-        } catch { /* no band read — the curated gem stands on its own */ }
-      }
-      if (slip) {
-        const uci = sanToUci(fen, slip.san);
-        if (uci) {
-          slipsThisGame += 1;
-          void logAppAudit({
-            kind: 'coach-opponent-move-source',
-            category: 'subsystem',
-            source: 'coachGameEngine.getAdaptiveMove',
-            summary: `source=taught-slip san=${slip.san} punish=${slip.punishSan} opening=${slip.opening} studentElo=${opts.studentElo} difficulty=${opts.difficulty ?? 'auto'} bandConfirmed=${bandChecked}`,
-            fen,
-          });
-          return {
-            move: uci,
-            analysis: { ...FALLBACK_ANALYSIS, bestMove: uci },
-            source: 'taught-slip',
-          };
-        }
-      }
-    } catch { /* a missed teaching moment is never worth a broken move */ }
+  const taught = await pickTaughtSlip(fen, targetElo, opts, 'getAdaptiveMove');
+  if (taught) {
+    return {
+      move: taught.uci,
+      analysis: { ...FALLBACK_ANALYSIS, bestMove: taught.uci },
+      source: 'taught-slip',
+    };
   }
 
   // ── LAYER 0.1 — WHAT PLAYERS AT THIS LEVEL ACTUALLY PLAY ────────────────

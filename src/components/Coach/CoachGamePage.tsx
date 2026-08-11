@@ -46,7 +46,7 @@ import { useCoachSessionStore } from '../../stores/coachSessionStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { narrateMove } from '../../services/coachAgentRunner';
 import { useSettings } from '../../hooks/useSettings';
-import { getAdaptiveMove, getRandomLegalMove, getTargetStrength } from '../../services/coachGameEngine';
+import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, pickTaughtSlip } from '../../services/coachGameEngine';
 import { DEFAULT_TIME_CONTROL_ID, TIME_CONTROLS, getTimeControlById, type ClockState } from '../../services/chessClock';
 import { shouldPersistFinishedGame } from '../../utils/coachGamePersistence';
 import { useChessClock } from '../../hooks/useChessClock';
@@ -2263,6 +2263,43 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
             }
           } catch {
             /* fall through */
+          }
+        }
+        // ── WALK INTO A CURATED TRAP, ON PURPOSE ────────────────────────────
+        //
+        // David 2026-08-11: "Also add the gem slip adaptivity into play. Again
+        // based off of elo and easy/med/hard settings." — and, on how it should
+        // arrive here: "But not in the picker form. Keep it silent."
+        //
+        // So Play gets the SLIP and not the announcement. The Learn surface
+        // offers the trap as a road the student can choose; here the coach
+        // simply plays the mistake and the student either finds the punish or
+        // does not. That is the locked pure-playing-surface rule holding — no
+        // blocking card, no callout naming the refutation — and it is why
+        // `findLivePunishment` is deliberately NOT mounted on this page.
+        //
+        // 🔒 IT SITS ABOVE THE STOCKFISH FAST PATH, not in the getAdaptiveMove
+        // fallback below. This page reaches `getAdaptiveMove` only when both
+        // the book and the engine fail, which is rare — wiring the slip there
+        // would have read as connected while firing approximately never, the
+        // exact shape of the defect this whole feature exists to fix. Below the
+        // book, though: a slip inside the student's own taught line would break
+        // the line they asked to practise.
+        if (!brainPickSan) {
+          try {
+            const slip = await pickTaughtSlip(
+              game.fen,
+              targetStrength,
+              { studentElo: playerRating, difficulty },
+              'CoachGamePage.coachTurn',
+            );
+            if (slip) {
+              const probe = new Chess(game.fen);
+              const played = probe.move(slip.san);
+              if (played) brainPickSan = played.san;
+            }
+          } catch {
+            /* a missed teaching moment is never worth a broken move */
           }
         }
         if (!brainPickSan) {
