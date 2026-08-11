@@ -7040,7 +7040,35 @@ export function CoachTeachPage(): JSX.Element {
                             // events. A halfmove clock ticking is not the board
                             // moving, and two guards on one utterance must not
                             // disagree about what "still here" means.
-                            if (graded && samePosition(liveFenRef.current, planFen)) {
+                            // ── OR THE BOARD IS ONE PLY BEHIND, WITH THE REPLY
+                            //    ALREADY IN FLIGHT ────────────────────────────
+                            //
+                            // 🔒 THE GUARD WAS REFUSING THE VERY TURN IT WAS
+                            // WRITTEN FOR. `planFen` is the position AFTER the
+                            // coach's reply — that is what the plan is about and
+                            // what the student is about to be looking at. But
+                            // `liveFenRef` is board state, and it does not carry
+                            // the reply until React has rendered it, so at this
+                            // moment it still holds `move.fen`: the position
+                            // before the reply. Comparing the two and demanding
+                            // equality therefore fails on a perfectly ordinary
+                            // turn where nothing went wrong at all.
+                            //
+                            // Measured on prod after the `samePosition` fix, on
+                            // a real game driven through Learn: 6 plans offered,
+                            // 1 board annotation — and the new diagnostic named
+                            // both blanks `boardMovedOn` with the live position
+                            // exactly one ply BEHIND the plan, not ahead of it.
+                            // The first fix was real (whole-FEN equality was
+                            // wrong too) and it was not the whole story.
+                            //
+                            // So: paint when the board is at the plan's position
+                            // OR at the one immediately before it, which is the
+                            // reply landing. Anything else means the student has
+                            // genuinely moved on, and that still refuses.
+                            const boardIsHereOrArriving = samePosition(liveFenRef.current, planFen)
+                              || samePosition(liveFenRef.current, move.fen);
+                            if (graded && boardIsHereOrArriving) {
                               const marks = planMarks({
                                 plan,
                                 // The parts that SURVIVED grading, each with its

@@ -392,7 +392,10 @@ describe('the couplings that make the wiring safe', () => {
     //
     // Two guards on one utterance must not disagree about what "still here"
     // means, and a halfmove clock ticking is not the board moving.
-    expect(TEACH).toMatch(/if \(graded && samePosition\(liveFenRef\.current, planFen\)\)/);
+    // (The guard has since grown a second, equally position-based arm — the
+    // reply still being in flight — which has its own case below. What this
+    // one holds is that BOTH arms compare positions rather than whole FENs.)
+    expect(TEACH).toMatch(/samePosition\(liveFenRef\.current, planFen\)/);
     expect(TEACH_CODE, 'the marks are back on whole-FEN equality')
       .not.toMatch(/liveFenRef\.current === planFen/);
     // ONE OWNER. The comparison was rebuilt from scratch in nine places and the
@@ -441,5 +444,28 @@ describe('the couplings that make the wiring safe', () => {
     // computed from the engine's line at this position; it wins.
     const SERVICE = code(read('src/coach/coachService.ts'));
     expect(SERVICE).toMatch(/conceptQuestion: conceptQuestionEngage && !planQuestionEngage/);
+  });
+
+  it('the plan\'s marks survive the reply still being in flight', () => {
+    // 🔒 THE GUARD REFUSED THE VERY TURN IT WAS WRITTEN FOR. `planFen` is the
+    // position AFTER the coach's reply — what the plan is about, and what the
+    // student is about to see. `liveFenRef` is board state and does not carry
+    // the reply until React renders it, so at the moment the marks run it still
+    // holds `move.fen`. Demanding equality therefore failed on an ordinary turn.
+    //
+    // Measured on prod: 6 plans offered on one real game, 1 annotation, and the
+    // diagnostic named both blanks with the live position exactly one ply
+    // BEHIND the plan. Painting is allowed at the plan's position or the one
+    // immediately before it; a student who has genuinely moved on still gets
+    // nothing.
+    expect(TEACH).toMatch(/samePosition\(liveFenRef\.current, planFen\)\s*\|\|\s*samePosition\(liveFenRef\.current, move\.fen\)/);
+    expect(TEACH).toMatch(/if \(graded && boardIsHereOrArriving\)/);
+  });
+
+  it('a blank board says WHICH way it went blank', () => {
+    // A lane that can only be observed when it fires cannot be debugged when it
+    // doesn't — the same lesson as the coach verdict. Both silent branches emit.
+    expect(TEACH).toMatch(/CoachTeachPage\.planMarks\.boardMovedOn/);
+    expect(TEACH).toMatch(/CoachTeachPage\.planMarks\.drewNothing/);
   });
 });
