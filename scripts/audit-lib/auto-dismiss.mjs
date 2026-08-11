@@ -50,9 +50,38 @@ export function autoDismissCalibration() {
   // dialog and every audit click times out. Must be a real click (it writes the
   // consent decision) — a coach audit's whole point is exercising the LLM, which
   // requires consent. Reappears after an IndexedDB clear, so the sweep re-runs.
+  //
+  // AND, IF IT WILL NOT GO, STOP LETTING IT BLOCK THE BOARD.
+  //
+  // The click writes a consent decision through Dexie, so when that write
+  // stalls the modal stays up forever while the sweep keeps clicking a button
+  // that never takes effect — the exact failure the calibration bubble taught
+  // us, one dialog along, and the reason it was neutralized by CSS rather than
+  // by clicking. `ai-consent-modal` never got the same treatment, so it sat at
+  // z-120 intercepting every click behind it.
+  //
+  // NOT neutralized immediately, though: a healthy run records real consent,
+  // and a coach audit's whole point is exercising the LLM, which needs it. Only
+  // after the modal has survived several sweeps (~3s of clicking) is it
+  // declared stuck and made click-through — and a flag is left on `window` so a
+  // run that proceeded WITHOUT consent can say so instead of quietly testing
+  // the no-consent path and calling it green.
+  let consentTries = 0;
   const acceptAiConsent = () => {
+    const modal = document.querySelector('[data-testid="ai-consent-modal"]');
+    if (!modal) return;
     const allow = document.querySelector('[data-testid="ai-consent-allow"]');
     if (allow) allow.click();
+    consentTries += 1;
+    if (consentTries >= 6 && !document.getElementById('__audit_kill_consent')) {
+      const s2 = document.createElement('style');
+      s2.id = '__audit_kill_consent';
+      s2.textContent =
+        '[data-testid="ai-consent-modal"]{pointer-events:none!important;opacity:0!important;}' +
+        '[data-testid="ai-consent-modal"] *{pointer-events:none!important;}';
+      (document.head || document.documentElement).appendChild(s2);
+      window.__auditConsentStuck = true;
+    }
   };
   const sweep = () => { inject(); clickBand(); closePageHelp(); acceptAiConsent(); };
   const start = () => {

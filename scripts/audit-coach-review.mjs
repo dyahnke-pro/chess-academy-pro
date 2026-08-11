@@ -257,8 +257,17 @@ async function main() {
 
   // ── Filter click → swaps active state ───────────────────────────
   await record('review-filter-coach', async () => {
+    // A SILENT NO-OP IS A FAILED TEST, NOT A PASS (CLAUDE.md). This read
+    // `if (count > 0) click()`, so when the chip was not there — or was still
+    // off-screen in its own `overflow-x-auto` row — the step did nothing,
+    // logged fine, and the expectation below failed with "audit absent",
+    // blaming the app for the harness sitting on its hands. The button and its
+    // audit both exist in `CoachReviewListPage`; what was missing was actually
+    // pressing it.
     const coachFilter = page.locator('[data-testid="review-filter-coach"]');
-    if (await coachFilter.count() > 0) await coachFilter.first().click();
+    await coachFilter.first().waitFor({ state: 'visible', timeout: 20000 });
+    await coachFilter.first().scrollIntoViewIfNeeded();
+    await coachFilter.first().click();
   }, NAV_SETTLE_MS, [
     { kind: 'audit-present', audit: 'coach-surface-migrated', label: '1.5 filter click emits audit' },
   ]);
