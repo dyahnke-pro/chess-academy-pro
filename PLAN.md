@@ -1,3 +1,92 @@
+# CHECKLIST — David's 2026-08-11 game (PostHog session 019fee2b, iOS)
+
+Everything below was read back from PostHog against his real 20-minute game,
+not inferred from the code. His pasted audit log truncates at 300 entries; the
+session carried 283 narration events, so the doubles and the -819cp self-blame
+below were invisible in the export and only showed up in the durable store.
+
+Status is honest: `DONE` = on `main` AND verified on prod by the 9/9
+post-deploy audit. `OPEN` = not started.
+
+## Shipped tonight — 8d92e7db, 02eb18d2, da077c0b
+
+- [x] **Double narrations.** Both packages of a turn computed the same facts and
+      both spoke, 8-20s apart -- 11 times in 20 minutes. Every dedupe rule lived
+      inside ONE assembly. The turn now tells the late package what it already
+      said, matched sentence by sentence. Removing the plan had fixed 1 of ~5
+      duplicated lanes. **Verified: 103 utterances on prod, zero repeats.**
+- [x] **"What is my plan?" -> "The best move is e5."** The plan lane was
+      unreachable outside `GameChatPanel`: `assemblePlanAnswer` is guarded by
+      `grounding.enginePlan` and nothing else produced that field. Classified
+      right, arrived at a branch it could never enter. Now built on demand on
+      every surface. (Fourth lane in two days with this shape.)
+- [x] **"Which pawn should I push?" -> "The best move is O-O."** Castling is not
+      a pawn. The lane answers from the engine and never saw the words. It now
+      says "No pawn move is the answer here -- the strongest is O-O".
+- [x] **"bishop to h seven plus."** The SAN patterns stop at the destination
+      square, so the check mark reached TTS raw. Now spoken as a word.
+- [x] **Coach blamed itself for a move that GAINED 819cp.** The structural lane
+      has no centipawn floor on purpose; "no floor" is not "any eval".
+- [x] **Idle-pieces caveat spoken 8x, not once.** Its once-per-game key was the
+      three squares, so one piece waking up made it a new remark. Its own test
+      reused the same three squares -- the one case the broken key handled.
+- [x] **Arrows and highlights were invisible in PostHog.** `coach-board-annotation`
+      was mirrored nowhere, so his headline complaint ("no arrows on future plans
+      or piece walks") could be neither confirmed nor refuted. Now mirrored.
+
+## Open, ranked
+
+- [ ] **#68 gem_alert_spoken has NEVER fired -- zero events, ever.** Not in the
+      taxonomy at all across 63 sessions / 14 days. 344 verified gems ship in
+      `punish-gems.json`; rank 9 in `voicePackage`. `findLivePunishment` matches
+      the whole path from move one, with a `gemsAtPosition` fallback -- one of
+      those two is not reaching. A whole feature nobody has ever heard.
+      Task #43 called this healthy; PostHog says otherwise. **Investigate, do
+      not guess.**
+- [ ] **#66 Best-move grounding is threaded by 2 of 8 coach surfaces.** Only
+      `CoachGamePage` and `CoachTeachPage` pass `engineBestMoveUci`. This is the
+      root of the two below -- one centralization fixes both, the same way the
+      plan lane just got fixed.
+- [ ] **#64 home-chat answers 78% canned** (7 of 9 replies were exactly 150
+      chars = the stock "I can't verify that precisely" fallback).
+- [ ] **#65 review 67% canned, and 2 hint taps returned NOTHING** (4
+      `coach_question_asked`, 2 `coach_answer`, 2026-07-18 and 07-20 -- a student
+      tapped for the answer mid-game and got silence).
+- [ ] **#67 Backup gates fired 811x in 14 days.** They should never fire (G0).
+      `openingGenerator.concepts` 246 + `punish` 231 (59%, the known C4
+      campaign); `voiceFacts.containmentTripwire` 57 -- the phrasing model
+      INTRODUCING chess terms on chat, which is the model deciding, not voicing;
+      `borrowedTeachingGate` 56; `usePhaseNarration.spokenSentenceGate` 11, real
+      example "It forks the knight on b7 and the pawn on b2" -- a hallucinated
+      fork.
+- [ ] **#63 The plan should reuse the turn's PV, not start a fresh 6s search.**
+      David's own point: the plan IS the PV. Learn already holds it
+      (`lookaheadPlanRef`, spoke 25x in his game) and the chat path ignores it.
+- [ ] **#69 Two commentary beats emit nothing.** `seeding-observation` and
+      `trade-the-best-piece` have no `captureEvent`, so nobody can tell whether
+      they fire -- the exact blind spot that hid the gem lane. Also near-dead:
+      `session_closer_spoken` fired once ever, `coach_move_command` twice.
+- [ ] **#70 The mistake callout's "why" is a five-clause run-on.** "Nxe5 was the
+      move -- it would walk the bishop round to b3, by way of f7, swing pieces
+      toward their king, pull the pawns away from their king and win a pawn."
+      Every clause true and board-verified; unspeakable in one breath.
+      `whyBetter` takes the plan's whole first sentence. Fix = rank the
+      want-list and speak its leading clause. **NOT a cap** -- those came out
+      on purpose.
+
+## Correction on the record
+
+I told David the coach's own callout had never fired. It had: 13
+`coach_inaccuracy_called` events, 4 in his game, spoken ("That was a mistake
+from me. d6 is not what the position wanted."). I read a taxonomy listing and
+called the lane dead without counting it. The genuinely dead lane was the PLAN
+lane, which is a different lane. The prod audit now prints the verdict's
+arithmetic on every turn (`e5 0cp`, `Nc6 0cp`, `Bc5 25cp`, `Nf6 -1cp`, 0 of 10
+blocked) so "the coach played well" is distinguishable from "a guard refused",
+which is what I got wrong.
+
+---
+
 # PLAN — coach-tab error checklist (2026-07-31, active)
 
 David: *"I want a full check list of ALL errors found so I can see the progress

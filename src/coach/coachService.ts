@@ -1133,12 +1133,37 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     // The intent already knows. Build the plan whenever the student asked for
     // one, on the same time-boxed, best-effort terms.
     const planQuestionEngage = isPlanQuestion(askForIntents);
+    // ── AND THE BEST-MOVE QUESTION, WHICH 6 OF 8 SURFACES COULD NOT ANSWER ──
+    //
+    // 🔒 GROUNDING BELONGS TO THE COACH, NOT TO WHICHEVER SURFACE REMEMBERED
+    // TO THREAD IT (David 2026-07-10: "coach is master of all now, no isolated
+    // tabs"; 2026-08-11: "the coach could not answer my questions when asked").
+    //
+    // `assembleMoveEvalAnswer` needs `engineBestMoveUci`, and only
+    // `CoachGamePage` and `CoachTeachPage` ever supplied it. On the other six
+    // surfaces a move question could ground ONLY if the masters DB happened to
+    // cover the position, and off book it fell straight through to the stock
+    // "I can't verify that precisely" line. Measured over 30 days on prod:
+    // home-chat served that canned reply for 7 of 9 answers (78%), review for
+    // 2 of 3 — including "Why is h3 better?", a question the engine could have
+    // answered outright.
+    //
+    // The plan below already computes `bestMoveUci`, and the LiveState handoff
+    // already falls back to `enginePlan.bestMoveUci`. So the whole repair is
+    // letting this build run for a best-move ask too: one condition, six
+    // surfaces, and no new engine call on the two that already thread it.
+    const bestMoveQuestionEngage = isBestMoveQuestion(askForIntents);
     let resolvedEnginePlan = input.liveState.enginePlan;
     // The review threads its STORED analysis (reviewFlaggedMove) — no fresh
     // engine search needed, and on a stalling device engine (iOS ios-native,
     // David 2026-07-21) that search left the Ask silent for 12s+. Time-box the
     // on-demand build so a stuck engine can never hold the turn hostage.
-    if (!resolvedEnginePlan && (whyBestMoveEngage || planQuestionEngage) && input.liveState.fen && !input.liveState.reviewFlaggedMove) {
+    if (!resolvedEnginePlan
+      && (whyBestMoveEngage || planQuestionEngage
+        // Only when the surface didn't already hand one over — the two that do
+        // must not pay for a second search.
+        || (bestMoveQuestionEngage && !input.liveState.engineBestMoveUci))
+      && input.liveState.fen && !input.liveState.reviewFlaggedMove) {
       const sideToMove: 'white' | 'black' = (input.liveState.fen.split(' ')[1] ?? 'w') === 'b' ? 'black' : 'white';
       resolvedEnginePlan = (await Promise.race([
         buildEnginePlan(input.liveState.fen, input.liveState.studentColor ?? sideToMove),
@@ -1219,7 +1244,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // the best-move branch and set the flag so coachApi dispatches
             // the curated recommendation (David 2026-07-15 live screenshot).
             counterRepertoireQuestion: counterRepertoireQuestionEngage,
-            bestMoveQuestion: isBestMoveQuestion(askForIntents) && !candidateMoveEngage && !counterRepertoireQuestionEngage,
+            bestMoveQuestion: bestMoveQuestionEngage && !candidateMoveEngage && !counterRepertoireQuestionEngage,
             askedPiece: restrictedPieceInAsk(askForIntents),
             whyBestMoveQuestion: whyBestMoveEngage,
             reviewFlaggedMove: input.liveState.reviewFlaggedMove,

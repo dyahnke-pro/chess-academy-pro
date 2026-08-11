@@ -163,6 +163,20 @@ describe('a question lane can REACH the branch that answers it', () => {
     expect(API).toMatch(/grounding\.planQuestion && grounding\.enginePlan/);
   });
 
+  it('a best-move question builds its own grounding when the surface did not', () => {
+    // 6 of 8 coach surfaces never threaded `engineBestMoveUci`, so a move
+    // question there could ground only if the masters DB covered the position.
+    // Measured on prod over 30 days: home-chat served the stock "I can't verify
+    // that precisely" for 7 of 9 answers, review for 2 of 3.
+    expect(SERVICE).toMatch(/bestMoveQuestionEngage && !input\.liveState\.engineBestMoveUci/);
+    // And the two surfaces that DO thread one must not pay for a second search.
+    expect(SERVICE, 'the guard that keeps the already-grounded surfaces free')
+      .toMatch(/!input\.liveState\.engineBestMoveUci/);
+    // The handoff has to actually fall back to the plan's move, or the build
+    // above is wasted work.
+    expect(SERVICE).toMatch(/engineBestMoveUci: input\.liveState\.engineBestMoveUci \?\? input\.liveState\.enginePlan\?\.bestMoveUci/);
+  });
+
   it('the piece a question narrowed to reaches the answer', () => {
     // "Which pawn should I push?" → "The best move is O-O." The lane answers
     // from the engine and never sees the words unless the restriction is
