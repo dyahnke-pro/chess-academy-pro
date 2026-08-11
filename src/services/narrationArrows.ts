@@ -76,7 +76,13 @@ const MOVE_SHAPED = /[x+#]/;
 // position. "Bc4 (or Bb5)", "d4 instead of d3", "Nf3 rather than Nc3".
 const ALTERNATIVE_BEFORE = /\b(or|instead\s+of|rather\s+than|versus|vs\.?|not|never|avoid(?:ing)?)\s*\(?\s*$/i;
 
-const MAX_ARROWS = 6;
+// NO CAP (David 2026-08-10: "If the coach says a move or square they need to be
+// arrowed or highlighted… Remove all caps. We can add them back on once I see
+// everything working."). This was 6 per ply. A mention beyond the sixth was
+// recorded as rejected and never drawn — which is a coach naming a move and the
+// board staying quiet about it. `rejected` still carries tokens turned down for
+// real reasons (not a move, an alternative, illegal here); it no longer carries
+// ones turned down for arriving seventh.
 
 /** Null move: same position, other side to move. Lets the prose name the
  *  OPPONENT's reply ("Black answers …d6") from a position where it isn't
@@ -154,12 +160,6 @@ export function deriveNarrationArrows(
   const LIST_JOIN = /^[\s,]*(and|or|,)?[\s,]*\(?$/i;
 
   const consider = (token: string, index: number, alternative: boolean): void => {
-    // Never drop a mention silently — a capped tail reads as full coverage
-    // when it isn't, so the overflow is recorded for the review pass.
-    if (arrows.length >= MAX_ARROWS) {
-      rejected.push({ token, index, reason: `over the ${MAX_ARROWS}-arrow cap for one ply` });
-      return;
-    }
     const before = text.slice(Math.max(0, index - 24), index);
     const after = text.slice(index + token.length, index + token.length + 14);
 

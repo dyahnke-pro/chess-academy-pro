@@ -140,10 +140,22 @@ export function narrateContinuationMove(
     for (const a of threat.arrows) arrows.push(a);
   }
 
-  const body = clauses.slice(0, 2).join(', ');
+  // NO CAP ON EITHER SIDE, AND THE TWO STAY TOGETHER.
+  //
+  // This spoke `clauses.slice(0, 2)` and drew `arrows.slice(0, 4)`, two
+  // independent ceilings on the same turn — so a third clause (the live threat,
+  // added last and often the most useful thing here) was dropped from the
+  // sentence while the arrows it had already pushed stayed on the board. A mark
+  // with nothing spoken behind it, and a truth the student never heard, from one
+  // pair of slices.
+  //
+  // David 2026-08-10: "Remove all caps. We can add them back on once I see
+  // everything working." If brevity is wanted back, cap the CLAUSES and drop
+  // their arrows with them — never the two separately.
+  const body = clauses.join(', ');
   return {
     say: `${who}'s ${pieceWord} to ${to}, ${body}.`,
     short: `${san} — ${clauses[0].split(',')[0]}`.slice(0, 60),
-    arrows: arrows.slice(0, 4),
+    arrows,
   };
 }

@@ -131,7 +131,10 @@ export function buildOpponentMoveTeaching(
       if (eyed.length > 0) {
         return {
           text: `Your opponent's ${movedLabel} steps in eyeing ${eyed.join(' and ')} — contesting the centre.`,
-          arrows: eyed.slice(0, 2).map((sq) => ({ startSquare: to, endSquare: sq, color: OPP_AMBER })),
+          // EVERY square the sentence just named. The text says
+          // `eyed.join(' and ')` — all of them — while this drew the first two,
+          // so the student heard three squares and found two arrows.
+          arrows: eyed.map((sq) => ({ startSquare: to, endSquare: sq, color: OPP_AMBER })),
         };
       }
     } catch { /* fall through */ }
