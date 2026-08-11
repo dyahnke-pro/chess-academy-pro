@@ -542,7 +542,14 @@ describe('the couplings that make the wiring safe', () => {
     // reproduces and we diagnose" and shipped to paying users ever since.
     // He reproduced; it is diagnosed; the PostHog mirror above replaces it
     // with something durable and queryable.
-    expect(read('src/services/phaseTransitionDetector.ts')).not.toContain("console.log('[PHASE");
-    expect(read('src/components/Coach/CoachGamePage.tsx')).not.toContain("console.log('[PHASE");
+    // All THREE files — the hook had eleven of its own that a first pass
+    // missed, which is exactly the argument for a gate over a grep.
+    for (const f of [
+      'src/services/phaseTransitionDetector.ts',
+      'src/components/Coach/CoachGamePage.tsx',
+      'src/hooks/usePhaseNarration.ts',
+    ]) {
+      expect(read(f), `${f} still ships devtools logging`).not.toContain("console.log('[PHASE");
+    }
   });
 });

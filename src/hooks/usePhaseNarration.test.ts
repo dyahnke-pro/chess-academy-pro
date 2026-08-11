@@ -187,11 +187,42 @@ describe('staleness is decided once, for the whole report', () => {
     //
     // The live board is reported as a DIFFERENT position from the start here,
     // so everything the hook tries to say after that point must be dropped.
+    // The event carries no `moveNumber`, so the ply distance is UNKNOWN — and
+    // an unknown distance collapses to the strict exact-position rule rather
+    // than quietly skipping the guard (`NaN > 3` is false, which is how a
+    // widened guard stops guarding without anyone noticing).
     const { result } = setup(() => MOVED_ON);
     act(() => { void result.current.narrate(EVENT, 'full'); });
     engineGate.resolve(ANALYSIS);
     await new Promise((r) => setTimeout(r, 80));
     expect(spoken.join(' '), `spoke about a board that is gone: ${spoken.join(' ')}`).toBe('');
+  });
+
+  it('still speaks when the board is only a move or two past the boundary', async () => {
+    // 🔒 A BOUNDARY IS NOT A TACTIC. "The opening is over" does not stop being
+    // true because one more move was played — unlike "the knight on f6 is
+    // pinned", which does. Judging a structural announcement by a tactical
+    // rule threw away teaching that was still correct, and the prod audit
+    // caught it doing so even after the call site was fixed to hand over the
+    // live board (`detected=1 abandoned-stale=1`).
+    //
+    // The fixture pgn is 6 plies; an event detected at ply 5 is one ply back —
+    // inside the window — so the report speaks even though the board moved.
+    const { result } = setup(() => MOVED_ON);
+    act(() => { void result.current.narrate({ ...EVENT, moveNumber: 5 } as PhaseTransitionEvent, 'full'); });
+    engineGate.resolve(ANALYSIS);
+    await vi.waitFor(() => expect(spoken.length).toBeGreaterThan(0), { timeout: 2000 });
+    expect(spoken.join(' ')).not.toBe('');
+  });
+
+  it('abandons once the board is genuinely far past the boundary', async () => {
+    // Same fixture, but detected 6 plies ago: the student has moved on to a
+    // different problem and the announcement is old news.
+    const { result } = setup(() => MOVED_ON);
+    act(() => { void result.current.narrate({ ...EVENT, moveNumber: 0 } as PhaseTransitionEvent, 'full'); });
+    engineGate.resolve(ANALYSIS);
+    await new Promise((r) => setTimeout(r, 80));
+    expect(spoken.join(' '), `spoke about a board six plies gone: ${spoken.join(' ')}`).toBe('');
   });
 
   it('speaks normally when the board is still the one it is describing', async () => {

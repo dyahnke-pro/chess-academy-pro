@@ -301,9 +301,27 @@ async function main() {
     }
     if (!replySan) { transcript.push({ ply, studentMove: legal.san, note: 'coach never replied — stopping' }); break; }
 
+    // ── ONLY CHECK WHAT WE CAN ACTUALLY ANCHOR ────────────────────────────
+    //
+    // 🔒 THE FALLBACK MANUFACTURED A FAILURE. This read `s.fen ?? chess.fen()`
+    // — and `chess.fen()` here is the board at the END of the turn, two plies
+    // after some of these lines were spoken. The 2026-08-11 run flagged "your
+    // strongest reply here is d5, attacking the pawn on e4" as a false claim;
+    // the pawn WAS on e4 when the coach said it, and had advanced to e5 by the
+    // time the audit looked.
+    //
+    // Every app-side event (voicePackage, trackA, hintRegister) carries the
+    // board it was computed at. The `voiceService.*` events do not, and should
+    // not — the voice layer has no board and threading one in would be a
+    // layering violation. Their text is already board-checked via the app-side
+    // event that produced it, so an unanchored duplicate adds no coverage and,
+    // guessed at, subtracts trust.
+    //
+    // An audit that cannot substantiate a claim must say so, not invent one.
     const said = spoken.slice(spokenBefore).map((s) => ({
       ...s,
-      falseClaims: s.text ? falseBoardClaims(s.text, s.fen ?? chess.fen()) : [],
+      boardChecked: Boolean(s.fen),
+      falseClaims: s.text && s.fen ? falseBoardClaims(s.text, s.fen) : [],
     }));
     const turnBeats = beats.slice(beatsBefore).map((b) => b.beat);
     const phase = phaseOf(chess.fen());
@@ -324,6 +342,11 @@ async function main() {
   const histogram = allBeats.reduce((acc, b) => { acc[b] = (acc[b] ?? 0) + 1; return acc; }, {});
   const phases = [...new Set(transcript.map((t) => t.phase).filter(Boolean))];
   const allFalse = transcript.flatMap((t) => (t.said ?? []).flatMap((s) => s.falseClaims ?? []));
+  // Reported, not hidden: how much of what was spoken this run could be
+  // anchored to a board at all. A shrinking number here is a real regression
+  // in the instrument even when `falseClaims` stays at zero.
+  const spokenAll = transcript.flatMap((t) => t.said ?? []);
+  const anchored = spokenAll.filter((s) => s.boardChecked).length;
   const totalSpoken = transcript.reduce((n, t) => n + (t.said?.length ?? 0), 0);
   const silentPlies = transcript.filter((t) => t.ply && !(t.said ?? []).length).length;
 
@@ -370,6 +393,7 @@ async function main() {
     console.log(`opening taught      ${taught.length} plies over ${turns} turn(s) on the line — one per turn by design`);
     if (taught.length) console.log(`                    moves ${taught.join(', ')}`);
   }
+  console.log(`board-checked       ${anchored}/${spokenAll.length} spoken events carried a position to check against`);
   console.log(`FALSE board claims  ${allFalse.length}`);
   console.log(`page errors         ${pageErrors.length}`);
   console.log(`report              ${OUT}/report.json`);
@@ -383,6 +407,29 @@ async function main() {
   const middlegameBeats = transcript
     .filter((t) => t.phase === 'middlegame')
     .reduce((n, t) => n + (t.beats?.length ?? 0), 0);
+
+  // ── THE PHASE BOUNDARY ITSELF ─────────────────────────────────────────────
+  //
+  // 🔒 THIS AUDIT PLAYED A FULL GAME INTO THE MIDDLEGAME AND NEVER ASKED
+  // WHETHER THE COACH MARKED THE MOMENT. David reported "no phase transition"
+  // TWICE while this run was green, because reaching a phase and being TOLD
+  // you have reached it are different things and only the first was checked.
+  //
+  // Learn's call site handed the narration hook a board the coach's reply had
+  // already moved past, so every report it ever built was abandoned as stale.
+  // A crossing with no `phase-transition-detected` in the stream is that bug;
+  // a crossing that detects and then says nothing is its downstream half.
+  const crossedIntoMiddlegame = phases.includes('middlegame') && phases.includes('opening');
+  const phaseEvents = postEvents.filter((e) => String(e?.kind ?? '').startsWith('phase-'));
+  const phaseDetected = phaseEvents.filter((e) => e.kind === 'phase-transition-detected');
+  const phaseAbandoned = postEvents.filter((e) => String(e?.source ?? '').includes('usePhaseNarration.stale'));
+  report.phaseEvents = phaseEvents.map((e) => ({ kind: e.kind, source: e.source, summary: e.summary }));
+  console.log(`phase events        detected=${phaseDetected.length} abandoned-stale=${phaseAbandoned.length} (crossed=${crossedIntoMiddlegame})`);
+  for (const e of phaseEvents.slice(0, 6)) console.log(`   ${e.kind} :: ${String(e.summary ?? '').slice(0, 110)}`);
+  const silentBoundary = crossedIntoMiddlegame && phaseDetected.length === 0;
+  const abandonedBoundary = phaseDetected.length > 0 && phaseAbandoned.length >= phaseDetected.length;
+  if (silentBoundary) console.log('❌ the game crossed into the middlegame and no phase transition was detected');
+  if (abandonedBoundary) console.log('❌ every detected phase transition was abandoned as stale before it could speak');
   const mutedMiddlegame = transcript.filter((t) => t.phase === 'middlegame').length >= 8
     && middlegameBeats === 0;
   if (mutedMiddlegame) console.log('❌ a real middlegame went by with no computed beat at all');
@@ -390,7 +437,8 @@ async function main() {
   // failure this run exists to catch — silence there is what David heard.
   const untaughtOpening = Boolean(FOLLOW) && report.spineReached >= 4 && report.openingPliesTaught.length === 0;
   if (untaughtOpening) console.log(`❌ played ${report.spineReached} plies of a BAKED opening and taught none of them`);
-  process.exit(allFalse.length > 0 || pageErrors.length > 0 || mutedMiddlegame || untaughtOpening ? 1 : 0);
+  process.exit(allFalse.length > 0 || pageErrors.length > 0 || mutedMiddlegame || untaughtOpening
+    || silentBoundary || abandonedBoundary ? 1 : 0);
 }
 
 main().catch((e) => { console.error('FATAL', e); process.exit(1); });

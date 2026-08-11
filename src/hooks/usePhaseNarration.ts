@@ -3,6 +3,7 @@ import { voiceService } from '../services/voiceService';
 import { stockfishEngine, resolveWorkerUrl } from '../services/stockfishEngine';
 import { groundedMoveFeedback } from '../services/coachApi';
 import { logAppAudit } from '../services/appAuditor';
+
 import { db } from '../db/schema';
 import { getCachedStockfish, setCachedStockfish } from './stockfishFenCache';
 import { isSpokenSentenceGrounded, gradeNarrationText, gradeBorrowedTeaching } from '../services/coachAnswerGates';
@@ -49,6 +50,17 @@ export interface UsePhaseNarrationResult {
   currentText: string;
   error: string | null;
 }
+
+/** How far the board may travel past a detected phase boundary and still have
+ *  the report spoken, in plies.
+ *
+ *  Three: the coach's reply, the student's next move, and its reply — the
+ *  realistic span between detecting the boundary and finishing a spoken
+ *  report. A structural announcement ("the opening is over") stays true across
+ *  that window; a tactical one would not, which is why the per-sentence board
+ *  grading is untouched and still judges every claim against the position it
+ *  was computed from. */
+const PHASE_REPORT_PLY_GRACE = 3;
 
 /** Stockfish analysis depth for phase narration. PHASE-LAG-01 set 12;
  *  PHASE-LAG-02 drops to 10 to match Read Position. Deterministic
@@ -137,10 +149,6 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
     event: PhaseTransitionEvent,
     verbosity: Exclude<PhaseNarrationVerbosity, 'off'>,
   ): Promise<void> => {
-    console.log('[PHASE-HOOK-01] received event', { event, verbosity });
-    if (activeTokenRef.current > 0) {
-      console.log('[PHASE-HOOK-02] aborting prior narration (token supersession)');
-    }
     activeTokenRef.current += 1;
     const token = activeTokenRef.current;
     voiceService.stop();
@@ -290,15 +298,47 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
         // gate eating content. If it has not, every sentence is graded against
         // `event.fen`: the board it was actually computed from, which is what
         // grading is supposed to mean and removes the race entirely.
+        // ── A BOUNDARY IS NOT A TACTIC: IT SURVIVES THE NEXT MOVE ──────────
+        //
+        // 🔒 EXACT-POSITION STALENESS WAS TOO STRICT FOR THIS PARTICULAR
+        // CLAIM, and it is why the audit still caught a transition being
+        // abandoned even after the call site was fixed to hand over the live
+        // board. "The opening is over" does not stop being true because one
+        // more move was played — unlike "the knight on f6 is pinned", which
+        // does. Judging a structural announcement by a tactical rule threw
+        // away teaching that was still perfectly correct.
+        //
+        // So the window is measured in PLIES, not in exact equality. Three is
+        // the coach's reply, the student's next move, and its reply — the
+        // realistic span between detecting a boundary and finishing a spoken
+        // report. Past that it is genuinely old news and the whole-abandon
+        // rule stands, because a student four plies on has moved to a
+        // different problem.
+        //
+        // The per-sentence grading below is UNCHANGED and still runs against
+        // `event.fen`: the board each claim was computed from. This relaxes
+        // only which reports get to speak, never what they may assert.
+        const sansNow = (argsRef.current.getPgn() ?? '')
+          .split(/\s+/).filter((t) => t && !/^\d+\.$/.test(t));
+        const pliesSince = sansNow.length - event.moveNumber;
         const liveNow = argsRef.current.getLiveFen?.() ?? event.fen;
-        if (!samePhasePosition(liveNow, event.fen)) {
+        const movedOn = !samePhasePosition(liveNow, event.fen);
+        // An UNKNOWN distance is not a short one. If the ply arithmetic cannot
+        // be done — no `moveNumber` on the event, an unreadable pgn — the
+        // grace window is not merely skipped, it collapses back to the strict
+        // exact-position rule. A widened guard that silently stops guarding
+        // when its input goes missing is worse than the narrow one it
+        // replaced, and `NaN > 3` is false, which is the quiet way to get
+        // there.
+        const distanceKnown = Number.isFinite(pliesSince);
+        if (movedOn && (!distanceKnown || pliesSince > PHASE_REPORT_PLY_GRACE)) {
           if (!staleLogged) {
             staleLogged = true;
             void logAppAudit({
               kind: 'coach-surface-migrated',
               category: 'subsystem',
               source: 'usePhaseNarration.stale',
-              summary: `the board moved past this ${event.kind} before the narration could speak — abandoning it whole`,
+              summary: `the board moved ${pliesSince} plies past this ${event.kind} before the narration could speak — abandoning it whole`,
               fen: event.fen,
             });
           }
@@ -459,7 +499,6 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
         });
         stockfishAnalysis = cachedAnalysis;
         engineResolved = true;
-        console.log('[PHASE-HOOK-03] stockfish cache hit');
       } else {
         // WO-PHASE-LAG-01: mirror WO-POLISH-03's parallel + race pattern.
         // Stockfish runs alongside the rest of setup; we race it against
@@ -467,7 +506,6 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
         // analysis. PHASE_NARRATION_ADDITION already handles missing
         // stockfishAnalysis gracefully. WO-PHASE-LAG-02: depth 12 → 10,
         // budget 500ms → 300ms, successful analyses cached for reuse.
-        console.log('[PHASE-HOOK-03] stockfish analysis call (budgeted)');
         // David 2026-07-03: the old `analyzePosition(depth) raced-to-null`
         // pattern searched to a FIXED depth (unbounded time) and threw the
         // result away on timeout — so the slow iOS asm.js build (the WASM
@@ -490,9 +528,6 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
           })
           .catch(() => null as StockfishAnalysis | null);
         engineResolved = stockfishAnalysis !== null;
-        console.log('[PHASE-HOOK-04] stockfish budget resolved', {
-          hasAnalysis: stockfishAnalysis !== null,
-        });
       }
       if (token !== activeTokenRef.current) return;
 
@@ -628,13 +663,8 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
           sentenceBuffer = apiResponse;
           flushCompletedSentences();
         }
-        console.log('[PHASE-HOOK-06] grounded narration ready', {
-          length: apiResponse.length,
-          startsWithWarning: apiResponse.startsWith('⚠️'),
-        });
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : String(err);
-        console.log('[PHASE-HOOK-06] grounded narration errored', msg);
         setError(msg);
         if (msg.endsWith('-timeout')) {
           apiTimedOut = true;
@@ -734,7 +764,6 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             /* swallow — TTS hangs / device failures audit elsewhere */
           });
         } else {
-          console.log('[PHASE-HOOK-07] speech SKIPPED: no speakable text');
           return;
         }
       }
@@ -754,9 +783,6 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       // intent so a future reader doesn't reintroduce the freeze.
       if (fallbackPath) return;
 
-      console.log('[PHASE-HOOK-07] streaming speech dispatched', {
-        sentenceCount,
-      });
       // Block isNarrating true until the speech chain drains —
       // preserves the "board frozen while main voice speaks"
       // invariant. Single-engine Polly chain plays under this gate.
@@ -766,10 +792,8 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
           NARRATION_SPEAK_TIMEOUT_MS,
           'phase-narration-speak',
         );
-        console.log('[PHASE-HOOK-08] speech chain drained');
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : String(err);
-        console.log('[PHASE-HOOK-08] speech errored / timed out', msg);
         setError(msg);
         if (msg.endsWith('-timeout')) {
           voiceService.stop();
