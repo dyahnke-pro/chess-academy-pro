@@ -86,7 +86,11 @@ async function waitWhilePaused(): Promise<void> {
 
 // MATE_EVAL_THRESHOLD is now exported from engineConstants so all
 // subsystems share the same value. Local alias kept for readability.
-import { MATE_EVAL_THRESHOLD, MATE_EVAL_VALUE, INACCURACY_CP, MISTAKE_CP, BLUNDER_CP } from './engineConstants';
+import {
+  MATE_EVAL_THRESHOLD, MATE_EVAL_VALUE, INACCURACY_CP, MISTAKE_CP, BLUNDER_CP,
+  INACCURACY_WIN_PCT, MISTAKE_WIN_PCT, BLUNDER_WIN_PCT, EXCELLENT_WIN_PCT,
+} from './engineConstants';
+import { winPercent } from './accuracyService';
 
 /**
  * True when the engine's deep best-move (UCI) for `fenBefore` is the very move
@@ -151,25 +155,51 @@ export function classifyCpLoss(
     return 'good'; // Mate was already on the board
   }
 
-  // A move that leaves the player STILL CLEARLY WINNING is never a blunder, and
-  // at worst a mistake — you gave back some edge, but the game's result category
-  // didn't change (this is how chess.com grades; a winning move isn't a
-  // "blunder"). Kills the "your winning combination was a genuine blunder"
-  // mislabel when a shallow eval dips on a move that in fact forces the win
-  // (audit 2026-07-20: Bxd7+ in a forced mate flagged a blunder because the
-  // post-move eval dropped from +8 to +3 — still completely winning).
-  const STILL_WINNING_CP = 250; // +2.5 pawns from the player's perspective
-  const playerPovAfter = evalAfter !== undefined && evalAfter !== null
-    ? (isPlayerWhiteMove ? evalAfter : -evalAfter)
-    : null;
-  const stillWinning = playerPovAfter !== null && playerPovAfter >= STILL_WINNING_CP;
+  // ── GRADE IN EXPECTED POINTS, THE WAY CHESS.COM DOES ──────────────────────
+  //
+  // The accuracy percentage on this same screen was already built from win%
+  // (sigmoid → exponential decay → harmonic mean, the published model). The
+  // LABELS were raw centipawns, so the two halves of one review graded in
+  // different currencies and the move counts could never line up with the
+  // report David compares them against.
+  //
+  // chess.com bands on EXPECTED POINTS LOST — the same quantity — and says
+  // plainly why: "the same centipawn loss can be a mistake in a tense position
+  // and barely an inaccuracy in a decided one." Giving back 300cp at +9.0
+  // barely moves the win probability; dropping 100cp at 0.00 moves it a lot.
+  // Centipawns cannot express that, which is why this function used to need a
+  // hand-rolled `STILL_WINNING_CP = 250` escape hatch to stop calling a winning
+  // move a blunder. Grading in win% handles it natively, so that patch is gone
+  // rather than reimplemented.
+  //
+  // When we have both evals, use them. Falling back to the centipawn bands only
+  // when an eval is missing keeps a partial analysis labelled rather than blank.
+  if (
+    evalBefore !== undefined && evalBefore !== null
+    && evalAfter !== undefined && evalAfter !== null
+  ) {
+    // Win% from the MOVER's side, so a drop is always "what this move gave up".
+    const sign = isPlayerWhiteMove ? 1 : -1;
+    const before = winPercent(evalBefore * sign);
+    const after = winPercent(evalAfter * sign);
+    const lost = before - after;
 
-  if (cpLoss >= BLUNDER_CP) return stillWinning ? 'inaccuracy' : 'blunder';
-  if (cpLoss >= MISTAKE_CP) return stillWinning ? 'inaccuracy' : 'mistake';
+    if (lost >= BLUNDER_WIN_PCT) return 'blunder';
+    if (lost >= MISTAKE_WIN_PCT) return 'mistake';
+    if (lost >= INACCURACY_WIN_PCT) return 'inaccuracy';
+    // Gains. A move that IMPROVES the position beyond noise is the student
+    // finding something; the thresholds mirror the loss side.
+    if (lost <= -BLUNDER_WIN_PCT) return 'brilliant';
+    if (lost <= -EXCELLENT_WIN_PCT) return 'great';
+    return 'good';
+  }
+
+  // No eval pair — fall back to the centipawn bands.
+  if (cpLoss >= BLUNDER_CP) return 'blunder';
+  if (cpLoss >= MISTAKE_CP) return 'mistake';
   if (cpLoss >= INACCURACY_CP) return 'inaccuracy';
   if (cpLoss <= -150) return 'brilliant';
   if (cpLoss <= -10) return 'great';
-  if (cpLoss <= 10) return 'good';
   return 'good';
 }
 

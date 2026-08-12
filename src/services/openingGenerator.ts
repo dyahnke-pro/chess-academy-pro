@@ -48,6 +48,8 @@ import { gradeNarrationText, gradeNarrationAcrossLine } from './coachAnswerGates
 import { narrateContinuationMove } from './continuationMoveNarration';
 import { logAppAudit } from './appAuditor';
 import { buildDanyaTeachingBlock, noteAtPosition, spokenBeatText } from './danyaTeachingService';
+import { authoredNoteAt, authoredEntryFor } from './authoredOpeningNotes';
+import authoredRepertoire from '../data/repertoire.json';
 import { deriveNarrationArrows } from './narrationArrows';
 import { splitSentences, squaresInText } from './narrationSegments';
 import { bakedNarrationFor } from './bakedWalkthroughNarration';
@@ -353,7 +355,10 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 // ONE bump covering the whole 2026-08-05 narration batch (spoken-register cap,
 // move-recitation drop, variation-scope filter) — batched per the locked cost
 // rule: every bump makes cached lessons regenerate and their TTS re-synthesise.
-const WALKTHROUGH_GEN_REV = '2026-08-05-spoken-register';
+// Bumped for the authored-prose tier: the splice order changed (corpus →
+// HAND-WRITTEN → generated), and beats bake at generation time, so a cached
+// tree would serve the old order forever. One bump for this deploy.
+const WALKTHROUGH_GEN_REV = '2026-08-12-authored-tier';
 
 export async function getCachedOpening(
   name: string,
@@ -2024,7 +2029,10 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
     narration = {
       intro: `${entry.canonicalName} — book moves from the Lichess opening database. Quick walkthrough of the canonical line.`,
       outro: `That's the canonical book line for the ${entry.canonicalName}. Drill the moves to lock them in, or ask for a deeper variation.`,
-      ideas: positions.map((p) => ({ text: synthesizeIdeaFromSan(p.san, p.movedBy) })),
+      // Silent, not canned. If this fed templates back in, the tier chain
+      // above could not tell them from real prose and would append them after
+      // the authored text — filler in the one slot that is supposed to teach.
+      ideas: positions.map(() => ({ text: '' })),
     };
   }
   if (baked) {
@@ -2138,7 +2146,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       const extNote = baked ? null : branchNoteSources[j + 1] ?? null;
       const text = extNote
         ? (extGenerated ? `${extNote} ${extGenerated}` : extNote)
-        : (extGenerated || synthesizeIdeaFromSan(extSan, extMovedBy));
+        : extGenerated;
       const shortText =
         typeof ideaEntry === 'object' && ideaEntry?.shortText?.trim()
           ? ideaEntry.shortText.trim()
@@ -2203,6 +2211,15 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
   // model did with the advisory block. Once per note id, so an opening-level
   // note can't spam every ply.
   const splicedNoteIds = new Set<string>();
+  // One introduction per variation per lesson — see `authoredNoteAt`.
+  const authoredNamesUsed = new Set<string>();
+  // The repertoire entry that actually HOLDS the authored prose. The generator's
+  // own `entry` is a DB record with no variations — passing it was how the first
+  // cut of this tier shipped dead. Resolved once per lesson, not per ply.
+  const authoredEntry = authoredEntryFor(
+    entry.canonicalName,
+    authoredRepertoire as unknown as Parameters<typeof authoredEntryFor>[1],
+  );
   // The GROUNDED arrow source per spine ply — the note's graded teaching text,
   // captured BEFORE the house-voice reword so the arrows can never drift with
   // the model's phrasing (G0, see `noteArrowSourceAt`). null = ungrounded ply.
@@ -2218,11 +2235,12 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
   // with the note puts voice and board on the same source, which is the G0
   // posture: the note is the fact, the model only phrases it.
   //
-  // Nothing is discarded — the generated idea still follows, and PASS 2's
-  // house-voice reword fuses the two into one voice. The ONE exception is the
-  // bare `synthesizeIdeaFromSan` template ("White plays Nc3"): when a real note
-  // is teaching this ply, restating the move the board just showed is filler
-  // (narration rule #3), so the note stands alone.
+  // Nothing real is discarded — the generated idea still follows the note, and
+  // PASS 2's house-voice reword fuses them into one voice. What used to sit
+  // here was a SAN-shaped template ("Nc3 — developing toward the center and
+  // eyeing key squares") standing in whenever nothing real existed. It named
+  // nothing about the position in front of the student, so it is gone: those
+  // plies are silent now, which the narration rules explicitly allow.
   const rawPlyTexts: string[] = positions.map((p, i) => {
     const ideaEntry = narration.ideas[i];
     const generated =
@@ -2231,16 +2249,45 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       // pre-arrows extension might still produce them).
       (typeof ideaEntry === 'string' ? (ideaEntry as string).trim() : '') ||
       '';
-    const fallback = generated || synthesizeIdeaFromSan(p.san, p.movedBy);
+    // NO CANNED LINE WHEN NOTHING REAL IS AVAILABLE (David 2026-08-12: "adds
+    // no value. It can be removed"). This used to emit a template chosen by SAN
+    // shape — "Nc3 — developing toward the center and eyeing key squares" —
+    // which names nothing about THIS position and is filler by the project's
+    // own rule: a spoken sentence must name a square, a piece, or a concept the
+    // student can look at. Silence is explicitly allowed; an empty idea is no
+    // narration, and the board is the lesson on those plies.
+    const fallback = generated;
     try {
       // Baked video narration IS the teaching for this ply — splicing a
       // corpus note on top would double-teach the same source material.
       if (baked) return fallback;
       const prefix = positions.slice(0, i + 1).map((q) => q.san);
       const teaching = noteArrowSourceAt(prefix, p.fen, splicedNoteIds, entry.canonicalName);
-      if (!teaching) return fallback;
-      plyNoteText[i] = teaching;
-      return generated ? `${teaching} ${generated}` : teaching;
+      if (teaching) {
+        plyNoteText[i] = teaching;
+        return generated ? `${teaching} ${generated}` : teaching;
+      }
+      // TIER 3 — THE HAND-WRITTEN PROSE, BEFORE ANYTHING COMPUTED.
+      //
+      // David 2026-08-12: "I still want the computer narrations to fire after
+      // the handwritten narrations." All 318 variations in repertoire.json
+      // carry an authored `explanation` and none of it reached the voice —
+      // the splice went straight from corpus note to model output, so on every
+      // ply the corpus could not reach (about six in seven) the model wrote
+      // from scratch over the top of text that was already written.
+      //
+      // Graded like every other tier. Being hand-written earns it no exemption:
+      // it speaks only at the ply its own variation begins (see
+      // `authoredNoteAt`), and only if it is true of that board.
+      const authored = authoredEntry ? authoredNoteAt(authoredEntry, prefix, authoredNamesUsed) : null;
+      if (authored) {
+        const graded = gradeNarrationText(authored.text, p.fen, 'openingGenerator.authoredNote');
+        if (graded?.trim()) {
+          plyNoteText[i] = graded;
+          return generated ? `${graded} ${generated}` : graded;
+        }
+      }
+      return fallback;
     } catch {
       /* the corpus is a bonus, never a blocker */
       return fallback;
@@ -2437,7 +2484,7 @@ function buildFallbackTreeFromDb(
   for (let i = entry.moves.length - 1; i >= 0; i -= 1) {
     const san = entry.moves[i];
     const movedBy: 'white' | 'black' = i % 2 === 0 ? 'white' : 'black';
-    const idea = synthesizeIdeaFromSan(san, movedBy);
+    const idea = '';
     const node: WalkthroughTreeNode = {
       san,
       movedBy,
@@ -2465,84 +2512,6 @@ function buildFallbackTreeFromDb(
 /** Same logic as inferStudentSide in src/data/openingWalkthroughs/index.ts
  *  but local so this module doesn't import from a sibling. */
 
-/** Build a short idea sentence for a SAN — the template fallback used
- *  only when the LLM narration call is unavailable.
- *
- *  Names the ACTUAL destination square and reacts to captures / checks
- *  so the spoken line is concrete, not a stuck-record "pawn move
- *  shaping the center" on every push. The per-move pick is keyed off
- *  the square so the same move is stable while different moves diverge.
- *  Per-piece templates DESCRIBE WHAT THE MOVE DOES rather than just
- *  announcing the SAN. User: "I don't want fen calls I want
- *  descriptions of what the moves do." */
-function synthesizeIdeaFromSan(
-  san: string,
-  movedBy: 'white' | 'black',
-): string {
-  // No move-number prefix — the voice reads "5." as "five" and the
-  // count drifts off across forks (David 2026-06-02). Lead with the
-  // bare SAN; the board shows the move number, the voice describes the
-  // idea.
-  const prefix = san;
-  const side = movedBy === 'white' ? 'White' : 'Black';
-  // The voice announces the move itself (the SAN prefix expands to "knight
-  // to c6" in TTS), so the idea half must NEVER restate piece+destination —
-  // "knight to c6 — knight jumps to c6" is the redundancy David flagged
-  // (2026-07-30). Idea text carries ONLY what the announcement doesn't.
-  if (san === 'O-O' || san === '0-0') {
-    return `${prefix} — ${side}'s king tucks to safety and the rooks connect.`;
-  }
-  if (san === 'O-O-O' || san === '0-0-0') {
-    return `${prefix} — ${side}'s rook comes to bear on the central d-file.`;
-  }
-  const piece = /^[NBRQK]/.test(san) ? san[0] : 'P';
-  const destMatch = san.match(/([a-h][1-8])(?:=[NBRQ])?[+#]?$/);
-  const dest = destMatch ? destMatch[1] : '';
-  const isCapture = san.includes('x');
-  const isCheck = /[+#]/.test(san);
-  // Two phrasings per piece, chosen by the destination square so the
-  // fallback varies move-to-move instead of repeating one sentence.
-  const variant = dest ? (dest.charCodeAt(0) + Number(dest[1])) % 2 : 0;
-  const pick = (a: string, b: string): string => (variant === 0 ? a : b);
-  if (isCheck) {
-    return `${prefix} — check, forcing a reply before anything else.`;
-  }
-  if (piece === 'N') {
-    return isCapture
-      ? `${prefix} — trading off a defender.`
-      : `${prefix} — ${pick('developing toward the center and eyeing key squares.', 'adding pressure on the central squares.')}`;
-  }
-  if (piece === 'B') {
-    return isCapture
-      ? `${prefix} — giving up the pair for structure or tempo.`
-      : `${prefix} — ${pick('raking a long diagonal toward the center.', 'pinning or pressuring along the diagonal.')}`;
-  }
-  if (piece === 'R') {
-    return isCapture
-      ? `${prefix} — winning material on the file.`
-      : `${prefix} — ${pick('claiming an open or soon-to-open file.', 'preparing to double or contest the file.')}`;
-  }
-  if (piece === 'Q') {
-    return isCapture
-      ? `${prefix} — grabbing material; watch she isn't chased with tempo.`
-      : `${prefix} — ${pick('joining the attack while keeping flexibility.', 'coordinating the pieces and eyeing weak squares.')}`;
-  }
-  if (piece === 'K') {
-    return `${prefix} — walking to safety or activating in the late opening.`;
-  }
-  // Pawn move.
-  if (isCapture) {
-    return `${prefix} — opening lines and reshaping the center.`;
-  }
-  const central = dest && (dest[0] === 'd' || dest[0] === 'e');
-  if (central) {
-    return `${prefix} — staking a claim in the center, fighting for space and open lines.`;
-  }
-  return pick(
-    `${prefix} — gaining space, supporting the center and freeing the pieces behind.`,
-    `${prefix} — a pawn break, challenging the structure and opening the position.`,
-  );
-}
 
 /** PASS-2 house-voice reword. Hands the assembled per-move script to the
  *  model with one job: say the SAME content as ONE coach in the house
@@ -2698,7 +2667,7 @@ export function buildTrapWalkthroughTreeFromPgn(opts: {
     const node: WalkthroughTreeNode = {
       san: p.san,
       movedBy: p.movedBy,
-      idea: synthesizeIdeaFromSan(p.san, p.movedBy),
+      idea: '',
       children: nextChildren,
     };
     nextChildren = [{ node }];

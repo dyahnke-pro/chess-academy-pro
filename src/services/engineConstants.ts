@@ -67,3 +67,41 @@ export const INACCURACY_CP = 50;
 export const MISTAKE_CP = 100;
 /** At or above this, a blunder — unless the mover is still clearly winning. */
 export const BLUNDER_CP = 300;
+
+// ── THE CHESS.COM BANDS, IN CHESS.COM'S OWN CURRENCY ────────────────────────
+//
+// 🔒 THE COUNTS DID NOT MATCH CHESS.COM BECAUSE THE TWO HALVES OF THE REVIEW
+// SPOKE DIFFERENT LANGUAGES (David 2026-08-12: "I want the review to match
+// chess.com's level so inaccuracies, mistakes, and blunders are listed the
+// same, as well as the move percentage").
+//
+// The ACCURACY percentage already used the published model — win% via the
+// lichess sigmoid, exponential decay, harmonic mean. But the move LABELS were
+// raw centipawns (50/100/300), and chess.com does not grade in centipawns. It
+// grades on EXPECTED POINTS LOST, which is the same quantity the accuracy
+// figure is built from:
+//
+//     Best        0.00          Inaccuracy  0.05 – 0.10
+//     Excellent   0.00 – 0.02   Mistake     0.10 – 0.20
+//     Good        0.02 – 0.05   Blunder     0.20 – 1.00
+//
+// Expected points run 0–1 and win% runs 0–100, so the bands below are those
+// numbers × 100. chess.com's own explanation of why this matters is exactly
+// the bug we had: "the same centipawn loss can be a mistake in a tense
+// position and barely an inaccuracy in a decided one."
+//
+// That is also why the old code needed a hand-rolled `STILL_WINNING_CP = 250`
+// escape hatch — it was approximating, in the wrong currency, what win% does
+// natively. Giving back 300cp at +9 barely moves the win probability; losing
+// 100cp at 0.00 moves it a lot. Grade in win% and the patch is unnecessary.
+//
+// Source: https://support.chess.com/en/articles/8572705
+/** Win-percentage points lost. At or above this, an inaccuracy. */
+export const INACCURACY_WIN_PCT = 5;
+/** At or above this, a mistake. */
+export const MISTAKE_WIN_PCT = 10;
+/** At or above this, a blunder. */
+export const BLUNDER_WIN_PCT = 20;
+/** Below this the move is "good"; above it and under inaccuracy, still good but
+ *  no longer excellent. Kept so the bands stay a faithful copy of the table. */
+export const EXCELLENT_WIN_PCT = 2;
