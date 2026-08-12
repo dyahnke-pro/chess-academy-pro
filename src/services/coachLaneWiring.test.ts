@@ -483,7 +483,11 @@ describe('the couplings that make the wiring safe', () => {
     // The RECORD is still written immediately (the review, the mistake
     // puzzles and the weakness spine all hang off it and must not wait for a
     // tap); only the navigation moved behind the button.
-    expect(TEACH).toMatch(/data-testid="teach-game-over"/);
+    // The card moved into its own component so it could be RENDERED in a test
+    // rather than only grepped — see TeachGameOverCard.test.tsx for the
+    // behaviour. This gate keeps the wiring: the page still mounts it.
+    expect(TEACH).toMatch(/<TeachGameOverCard/);
+    expect(read('src/components/Coach/TeachGameOverCard.tsx')).toMatch(/data-testid="teach-game-over"/);
     // 🔒 THE NINETY-ONE SECONDS OF BLACK SCREEN, PINNED AT ITS CAUSE. The old
     // effect called `navigate('/coach/review/…')` the instant `isGameOver`
     // flipped: David never saw the mating move and sat on an empty screen for
@@ -504,10 +508,10 @@ describe('the couplings that make the wiring safe', () => {
     expect(gameOverEffect.length, 'could not locate the game-over effect').toBeGreaterThan(200);
     expect(gameOverEffect, 'the finished game still redirects on its own')
       .not.toMatch(/navigate\(`\/coach\/review\//);
-    // And the way OUT is a button the student presses.
-    expect(TEACH).toMatch(/onClick=\{\(\) => \{ void navigate\(`\/coach\/review\/\$\{finishedGame\.id\}`\); \}\}/);
-    expect(TEACH).toMatch(/data-testid="teach-review-game"/);
-    expect(TEACH).toMatch(/data-testid="teach-review-game"/);
+    // And the way OUT is a callback the card invokes on a press — never
+    // anything the page does to itself.
+    expect(TEACH).toMatch(/onReview=\{\(\) => \{ void navigate\(`\/coach\/review\/\$\{finishedGame\.id\}`\); \}\}/);
+    expect(read('src/components/Coach/TeachGameOverCard.tsx')).toMatch(/data-testid="teach-review-game"/);
     expect(TEACH).toMatch(/setFinishedGame\(\{/);
     expect(TEACH_CODE, 'the game-over effect navigates on its own again')
       .not.toMatch(/\}\s*\n\s*void navigate\(`\/coach\/review\/\$\{gameId\}`\);/);

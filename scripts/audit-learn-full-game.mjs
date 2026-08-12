@@ -299,6 +299,23 @@ async function main() {
       }
       if (replySan) chess.move(replySan);
     }
+    // ── ONE MORE LOOK BEFORE GIVING UP ────────────────────────────────────
+    //
+    // A single miss ended the game at ply 21 with "coach never replied", and
+    // the run then reported `unfinished` — which is how the game-over screen
+    // has never once been exercised by this audit. The reply can be late (a
+    // hung worker gets force-respawned and retried, which is seconds) or land
+    // between two polls. Look again, longer, before calling it.
+    if (!replySan) {
+      await sleep(12_000);
+      const late = await readPlacement(page);
+      for (const m of chess.moves({ verbose: true })) {
+        const probe = new Chess(chess.fen());
+        probe.move(m.san);
+        if (samePlacement(placementOf(probe.fen()), late)) { replySan = m.san; break; }
+      }
+      if (replySan) chess.move(replySan);
+    }
     if (!replySan) { transcript.push({ ply, studentMove: legal.san, note: 'coach never replied — stopping' }); break; }
 
     // ── ONLY CHECK WHAT WE CAN ACTUALLY ANCHOR ────────────────────────────

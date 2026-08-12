@@ -15,6 +15,7 @@ import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Chess } from 'chess.js';
 import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, ChevronLeft, X, Check, MessageCircle, Zap, Undo2, RotateCcw, Volume2, Swords } from 'lucide-react';
+import { TeachGameOverCard } from './TeachGameOverCard';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
@@ -8971,35 +8972,12 @@ export function CoachTeachPage(): JSX.Element {
             redirect. See the note on `finishedGame` above for the ninety-one
             seconds of black screen this replaces. */}
         {finishedGame && (
-          <div className="px-3 pb-2 space-y-2" data-testid="teach-game-over">
-            <div className="text-sm font-semibold text-theme-text px-1">
-              {finishedGame.result === 'win'
-                ? (finishedGame.byMate ? 'Checkmate — you win.' : 'You win.')
-                : finishedGame.result === 'loss'
-                  ? (finishedGame.byMate ? "Checkmate — that's the game." : "That's the game.")
-                  : "That's a draw."}
-            </div>
-            <div className="text-xs text-theme-text-muted px-1">
-              The final position is on the board. Take a look before you move on.
-            </div>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => { void navigate(`/coach/review/${finishedGame.id}`); }}
-                className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-theme-accent text-theme-bg text-sm font-semibold min-h-[44px] transition-colors"
-                data-testid="teach-review-game"
-              >
-                <ChevronRight size={16} />
-                Review this game
-              </button>
-              <button
-                onClick={() => setFinishedGame(null)}
-                className="px-3 py-2.5 rounded-lg border border-theme-border bg-theme-surface hover:bg-theme-bg text-sm font-medium text-theme-text min-h-[44px] transition-colors"
-                data-testid="teach-stay-on-board"
-              >
-                Stay here
-              </button>
-            </div>
-          </div>
+          <TeachGameOverCard
+            result={finishedGame.result}
+            byMate={finishedGame.byMate}
+            onReview={() => { void navigate(`/coach/review/${finishedGame.id}`); }}
+            onStay={() => setFinishedGame(null)}
+          />
         )}
 
         {/* ENDGAME AS ITS OWN STEP (David 2026-07-31: "no option for endgame
