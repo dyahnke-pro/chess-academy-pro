@@ -192,6 +192,9 @@ async function main() {
     try {
       const d = JSON.parse(a.details ?? '{}');
       console.log(`     resolved: ${d.resolved ?? 'nothing'} (${d.variationsAvailable ?? 0} variations)`);
+      for (const r of (d.refused ?? [])) {
+        console.log(`     refused @ply ${r.ply} "${r.variation}": ${r.text}`);
+      }
       console.log(`     spine: ${(d.spine ?? []).join(' ')}`);
     } catch { /* details are a bonus */ }
   }

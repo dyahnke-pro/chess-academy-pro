@@ -2231,6 +2231,9 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
   // reading authored coverage off it would over-report every corpus hit as a
   // hand-written one.
   const authoredSpoke: Array<{ ply: number; variation: string; text: string }> = [];
+  // Selected for the right ply and then refused by the board-truth gate. Kept
+  // apart from silence: they are different failures with different fixes.
+  const authoredRefused: Array<{ ply: number; variation: string; text: string }> = [];
   // The repertoire entry that actually HOLDS the authored prose. The generator's
   // own `entry` is a DB record with no variations — passing it was how the first
   // cut of this tier shipped dead. Resolved once per lesson, not per ply.
@@ -2313,6 +2316,12 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
           authoredSpoke.push({ ply: i, variation: authored.variationName, text: graded });
           return generated ? `${graded} ${generated}` : graded;
         }
+        // SELECTED, THEN REFUSED BY THE GATE. A different outcome from never
+        // being selected, and the two were reported as one — which sent three
+        // prod runs chasing a selection bug that offline could not reproduce,
+        // because offline the selection was fine and the grading was the step
+        // that dropped it.
+        authoredRefused.push({ ply: i, variation: authored.variationName, text: authored.text.slice(0, 160) });
       }
       return fallback;
     } catch {
@@ -2346,17 +2355,21 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
     // not to exist — while offline the same data fired correctly every time.
     // Three guesses is two too many. The failure has exactly three possible
     // causes and the generator knows which one it hit, so it reports it.
+    const why = !authoredEntry
+      ? `resolved to NO repertoire entry`
+      : authoredRefused.length > 0
+        ? `selected ${authoredRefused.length} variation(s) and the board-truth gate refused every one`
+        : `resolved to "${authoredEntry.name ?? '(unnamed)'}" but no variation began on this spine`;
     void logAppAudit({
       kind: 'coach-surface-migrated',
       category: 'subsystem',
       source: 'openingGenerator.authoredTier.silent',
-      summary: authoredEntry
-        ? `authored tier silent: "${entry.canonicalName}" resolved to "${authoredEntry.name ?? '(unnamed)'}" but no variation began on this spine`
-        : `authored tier silent: "${entry.canonicalName}" resolved to NO repertoire entry`,
+      summary: `authored tier silent: "${entry.canonicalName}" — ${why}`,
       details: JSON.stringify({
         canonicalName: entry.canonicalName,
         resolved: authoredEntry?.name ?? null,
         variationsAvailable: (authoredEntry?.variations ?? []).length,
+        refused: authoredRefused,
         spine: positions.slice(0, 12).map((p) => p.san),
       }),
     });
