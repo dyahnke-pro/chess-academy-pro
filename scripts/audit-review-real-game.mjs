@@ -158,6 +158,52 @@ const run = async () => {
   await page.goto(`${BASE}/coach/review/${GID}`, { waitUntil: 'domcontentloaded', timeout: 45000 });
   await dismiss();
 
+  // ── HOW LONG THE STUDENT WAITS, AND WHETHER THE CACHE EARNS ITS KEEP ─────
+  //
+  // David 2026-08-11: "Also load times very slow for review." His own log
+  // showed why — 80 `stockfish-cache-miss` against 4 hits, because the cache
+  // keyed `${fen}::${depth}` EXACTLY and the review asks every position at
+  // depth 12 AND 14. Every depth-12 ask missed the depth-14 answer already
+  // sitting in the cache. A deeper result serves a shallower ask now, and this
+  // is the measurement that says whether that reached the student.
+  //
+  // Counted by intercepting the app's own audit POSTs rather than by pulling
+  // the stream afterwards: the stream's buffer trims to 500 entries and a
+  // review emits more than that, which is exactly how three earlier runs
+  // misread a working phase lane as dead. Nothing is blocked — the request
+  // continues untouched.
+  // The RATE alone cannot answer the question. A deeper result can only serve
+  // a shallower ask when the deeper one ran FIRST — his log had depth 14 at
+  // 20:43:10 and depth 12 for the same position at 20:43:16, which is the
+  // order the fix exists for. If a run asks shallow-first, 0% is correct
+  // behaviour and not a regression. So record the (fen, depth) pairs and
+  // report how many positions were asked at more than one depth at all: that
+  // is the OPPORTUNITY, and without it the rate is unreadable.
+  const cacheTally = { hit: 0, miss: 0 };
+  const askedDepths = new Map();
+  await page.route('**/api/audit-stream**', async (route) => {
+    try {
+      const body = route.request().postData();
+      if (body) {
+        const entry = JSON.parse(body);
+        const kind = entry?.kind;
+        if (kind === 'stockfish-cache-hit') cacheTally.hit += 1;
+        else if (kind === 'stockfish-cache-miss') cacheTally.miss += 1;
+        if (kind === 'stockfish-cache-hit' || kind === 'stockfish-cache-miss') {
+          // `fen=<first 32 chars>… depth=N` — the summary is all we get.
+          const m = /fen=(\S+)\s+depth=(\d+)/.exec(String(entry?.summary ?? ''));
+          if (m) {
+            const seen = askedDepths.get(m[1]) ?? [];
+            seen.push(Number(m[2]));
+            askedDepths.set(m[1], seen);
+          }
+        }
+      }
+    } catch { /* a malformed body is not this audit's business */ }
+    await route.continue();
+  });
+  const analysisStartedAt = Date.now();
+
   let ready = false;
   // Uncapped mode adds ~50s (3 Stockfish PV projections + the 8k-token cover-all
   // voice pass) on top of the ~120s game analysis, so allow a longer settle when
@@ -174,8 +220,24 @@ const run = async () => {
     if ((await btn.count()) && (await btn.getAttribute('disabled')) === null) { ready = true; break; }
     if (i % 8 === 0) log(`  …analysing (${(i * 1.5).toFixed(0)}s)`);
   }
+  const readyInMs = Date.now() - analysisStartedAt;
+  const lookups = cacheTally.hit + cacheTally.miss;
+  const hitRate = lookups > 0 ? Math.round((cacheTally.hit / lookups) * 100) : 0;
   const summaryBody = (await txt(page, 'main')) || (await txt(page, 'body'));
-  log(`[analysis] ready=${ready}`);
+  log(`[analysis] ready=${ready} in ${(readyInMs / 1000).toFixed(1)}s`);
+  // His baseline, from the game he reported: 4 hits / 84 lookups = 5%.
+  const multiDepth = [...askedDepths.values()].filter((ds) => new Set(ds).size > 1);
+  const deeperFirst = multiDepth.filter((ds) => {
+    const first = ds[0];
+    return ds.some((d) => d < first);
+  }).length;
+  log(`[cache] ${cacheTally.hit} hit / ${cacheTally.miss} miss = ${hitRate}% of ${lookups} lookups (was 5% on his 2026-08-11 review)`);
+  // ⚠️ READ THIS NUMBER LOOSELY. The audit summary truncates the FEN
+  // (`fen=r2q1rk1/pp1b1ppp/3ppn2/2p5/3PP…`), so positions sharing a prefix
+  // collide and the multi-depth count is an UPPER bound. It is here to answer
+  // "does the double-depth pattern happen at all", not to be divided into the
+  // hit count. The hit RATE below it is exact; the opportunity count is not.
+  log(`[cache] ≤${multiDepth.length} position(s) asked at more than one depth (truncated-fen upper bound); ${deeperFirst} deeper-first`);
   log(`[summary] ${summaryBody.slice(0, 500)}`);
   if (!ready) { log('[FATAL] analysis never settled'); if (voice) await voice.stop(); await browser.close(); process.exit(1); }
 
