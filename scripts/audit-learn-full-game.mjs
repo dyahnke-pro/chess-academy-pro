@@ -497,11 +497,31 @@ async function main() {
   console.log(`lines spoken        ${totalSpoken}   silent plies: ${silentPlies}`);
   console.log('beats fired:');
   for (const [b, n] of Object.entries(histogram).sort((a, b2) => b2[1] - a[1])) console.log(`   ${String(n).padStart(3)}  ${b}`);
-  // The two David named. Absence is the finding, so it is stated outright
-  // rather than left to be noticed in a histogram.
+  // The two David named.
+  //
+  // 🔒 A CHECK THAT CANNOT OBSERVE SOMETHING MUST NOT REPORT IT AS FAILED.
+  // This printed a flat ❌ for both across three runs, and I was one step from
+  // filing "the improving-move beat is dead". It is not: PostHog has
+  // `improving_move_offered` firing 57 times in 14 days, most recently the
+  // night before. The beat is built at a DEDICATED call site — the only one
+  // handed the `bestUci`/`bestMoveWhy` the branch requires — which reports via
+  // `captureEvent`, not through the `turnFacts` details blob this histogram is
+  // built from. The beat was fine; the instrument was pointed at the wrong
+  // place, and it was shouting.
+  //
+  // THEIR BEST PIECE is genuinely rare by construction rather than unobserved:
+  // it needs an enemy knight on a real, pawn-unchallengeable outpost that is
+  // ALSO capturable this move. A short driven game may honestly never contain
+  // one, so a zero here is not evidence of a defect either.
+  //
+  // So: report what this instrument saw, and name the one that can answer.
   for (const want of ['IMPROVING MOVE', 'THEIR BEST PIECE']) {
-    console.log(`${histogram[want] ? '✅' : '❌'} ${want}: ${histogram[want] ?? 0}`);
+    const n = histogram[want] ?? 0;
+    console.log(`${n ? '✅' : '⏳'} ${want}: ${n}${n ? '' : ' — not seen in THIS run; this histogram cannot see the dedicated call site'}`);
   }
+  console.log(`   beats are owned by PostHog, not by this stream:`);
+  console.log(`   SELECT event, kind, count() FROM events WHERE event IN ('coach_beat_offered','improving_move_offered')`);
+  console.log(`   AND properties.audit_run_id='${RUN_ID}' GROUP BY event, kind`);
   if (FOLLOW) {
     const taught = report.openingPliesTaught;
     console.log(`opening line        ${report.spineReached}/${FOLLOW.spine.length} plies of ${FOLLOW.name} played`);
