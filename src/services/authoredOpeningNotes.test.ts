@@ -13,6 +13,8 @@
 // sentence on the wrong board is still a lie. So it speaks once, at the ply its
 // own line departs from the main line, selected by moves and never by name.
 import { describe, it, expect } from 'vitest';
+import { Chess } from 'chess.js';
+import { gradeNarrationText } from './coachAnswerGates';
 import { authoredNoteAt, authoredEntryFor, divergencePly, sansOf } from './authoredOpeningNotes';
 import repertoire from '../data/repertoire.json';
 
@@ -198,5 +200,51 @@ describe('the wire, not just the function', () => {
       if (hit && hit.text.length > 0) spoke += 1;
     }
     expect(spoke, 'no authored prose reached the voice for a real opening').toBeGreaterThan(0);
+  });
+});
+
+describe('the tier reaches most of what was written', () => {
+  // A coverage FLOOR, not a description. The tier only speaks a variation's
+  // prose at the ply that variation begins, and only if it is true of that
+  // board — two conditions that could quietly starve it as the repertoire
+  // grows. This measures both against the shipped file so a regression shows
+  // up as a number rather than as silence nobody notices.
+  const entries = repertoire as unknown as {
+    name: string; pgn?: string;
+    variations?: { name: string; pgn?: string; explanation?: string }[];
+  }[];
+
+  it('almost every authored explanation survives grading at its entry ply', () => {
+    let eligible = 0;
+    let survived = 0;
+    for (const e of entries) {
+      const main = sansOf(e.pgn);
+      for (const v of (e.variations ?? [])) {
+        const sans = sansOf(v.pgn);
+        const at = divergencePly(main, sans);
+        if (at === null || !(v.explanation ?? '').trim()) continue;
+        const g = new Chess();
+        let legal = true;
+        for (const san of sans.slice(0, at + 1)) {
+          try { g.move(san); } catch { legal = false; break; }
+        }
+        if (!legal) continue;
+        eligible += 1;
+        if (gradeNarrationText(v.explanation ?? '', g.fen(), 'authoredTierReach')?.trim()) survived += 1;
+      }
+    }
+    expect(eligible).toBeGreaterThan(280);
+    // Measured 304/305 = 99.7% on 2026-08-12. The floor is deliberately well
+    // under that: the point is to catch a collapse, not to freeze a number.
+    expect(survived / eligible, `only ${survived}/${eligible} survived grading`).toBeGreaterThan(0.9);
+  });
+
+  it('every opening has at least one variation that can introduce itself', () => {
+    for (const e of entries) {
+      const main = sansOf(e.pgn);
+      const any = (e.variations ?? []).some((v) => (v.explanation ?? '').trim()
+        && divergencePly(main, sansOf(v.pgn)) !== null);
+      expect(any, `no variation of "${e.name}" can ever speak`).toBe(true);
+    }
   });
 });

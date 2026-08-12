@@ -513,7 +513,16 @@ async function main() {
         selector: '[data-testid="walkthrough-stage-menu"], [data-testid="walkthrough-drill-picker"], [data-testid="walkthrough-drill-active"], [data-testid="walkthrough-drill-empty"]',
         label: 'jumped to a drill-related phase (menu / picker / active / empty)',
       },
-      { kind: 'audit-summary-contains', value: 'stage=drill', label: 'stage-hint=drill captured in routing audit' },
+      // `[stage=drill]` is a bracket only the STATIC and CACHED routes print.
+      // A cold ask GENERATES the lesson first and then announces the jump as
+      // `skipped walkthrough; landed at drill` — same behaviour, different
+      // words, and the words are the app's to choose.
+      {
+        kind: 'audit-summary-contains',
+        value: '\\[stage=drill\\]|landed at drill',
+        label: 'the drill stage is what the ask routed to',
+        regex: true,
+      },
     ],
   });
 
