@@ -36,7 +36,10 @@ import BAKE from '../src/data/walkthrough-narrations.json' with { type: 'json' }
 const BASE = process.env.AUDIT_SMOKE_URL ?? 'https://chess-academy-pro.vercel.app';
 const RUN_ID = process.env.AUDIT_RUN_ID ?? `learn-full-${Math.random().toString(36).slice(2, 10)}`;
 const SECRET = process.env.AUDIT_STREAM_SECRET ?? '';
-const MAX_PLIES = Number(process.env.AUDIT_MAX_PLIES ?? 40);
+// Room to actually FINISH. At 40 the last run was cut off at ply 34 with the
+// student a rook up and checking — the game was heading for the mate that
+// would have exercised the game-over card, and the cap ended it first.
+const MAX_PLIES = Number(process.env.AUDIT_MAX_PLIES ?? 80);
 const OUT = `audit-reports/learn-full-game-${new Date().toISOString().replace(/[:.]/g, '-')}`;
 
 /** The opening the coach is asked to play, so the game starts from real theory
@@ -282,41 +285,85 @@ async function main() {
       if (samePlacement(await readPlacement(page), mine)) break;
       await sleep(1000);
     }
-    const replyBy = Date.now() + (ply === 1 ? 120_000 : 45_000);
-    while (Date.now() < replyBy) {
-      await sleep(2500);
-      if (!samePlacement(await readPlacement(page), mine)) break;
-    }
-    await sleep(2500); // let this turn's narration events post before slicing
-
-    const placement = await readPlacement(page);
-    let replySan = null;
-    if (Object.keys(placement).length > 0) {
-      for (const m of chess.moves({ verbose: true })) {
-        const probe = new Chess(chess.fen());
-        probe.move(m.san);
-        if (samePlacement(placementOf(probe.fen()), placement)) { replySan = m.san; break; }
-      }
-      if (replySan) chess.move(replySan);
-    }
-    // ── ONE MORE LOOK BEFORE GIVING UP ────────────────────────────────────
+    // ── OUTWAIT A DYING ENGINE INSTEAD OF CALLING IT A SILENT COACH ───────
     //
-    // A single miss ended the game at ply 21 with "coach never replied", and
-    // the run then reported `unfinished` — which is how the game-over screen
-    // has never once been exercised by this audit. The reply can be late (a
-    // hung worker gets force-respawned and retried, which is seconds) or land
-    // between two polls. Look again, longer, before calling it.
-    if (!replySan) {
-      await sleep(12_000);
-      const late = await readPlacement(page);
+    // 🔒 THE ROADBLOCK WAS NEVER THE APP. Three runs in a row ended mid-game
+    // with "coach never replied — stopping", and every one of them was read as
+    // the coach going silent. It wasn't. The app's own telemetry for the run
+    // that stopped at ply 34 says:
+    //
+    //     stockfish_variant_fallback — multi failed at runtime, fell back to
+    //     single (reason: no uciok within 5s of spawn)
+    //
+    // The headless worker dies late in a long game, and the app does the right
+    // thing: it respawns single-variant and re-searches. That recovery costs
+    // more than the flat 45s this loop allowed, so the audit walked away from a
+    // coach that was in the middle of coming back — and the game-over screen,
+    // the thing David actually asked to be fixed, was never once reached.
+    //
+    // So the wait ESCALATES on evidence rather than expiring on a constant:
+    // keep polling while the page is alive, all the way to REPLY_CEILING, and
+    // only give up when the board has genuinely stopped moving. A slow reply
+    // costs wall-clock; a missed one costs the whole run.
+    const REPLY_CEILING = ply === 1 ? 120_000 : 150_000;
+    const replyBy = Date.now() + REPLY_CEILING;
+    let replySan = null;
+    let late = {};
+    while (Date.now() < replyBy && !replySan) {
+      await sleep(2500);
+      late = await readPlacement(page);
+      if (Object.keys(late).length === 0) continue;
+      if (samePlacement(late, mine)) continue; // board hasn't moved yet
+      await sleep(2500); // let this turn's narration events post before slicing
+      late = await readPlacement(page);
       for (const m of chess.moves({ verbose: true })) {
         const probe = new Chess(chess.fen());
         probe.move(m.san);
         if (samePlacement(placementOf(probe.fen()), late)) { replySan = m.san; break; }
       }
-      if (replySan) chess.move(replySan);
+      if (replySan) { chess.move(replySan); break; }
+      // ── RECOVER FROM A SLIPPED PLY INSTEAD OF QUITTING ──────────────────
+      //
+      // The mirror can fall a full move behind — a reply landing between two
+      // polls, or a `source=random` last-resort move from a respawning worker
+      // arriving while we were not looking. After that NO single legal move
+      // reproduces the board, and the run ended with "coach never replied"
+      // even though the app had replied perfectly well (`c3b1`, twice,
+      // confirmed in its own log).
+      //
+      // Two plies is a slipped pair. ~900 chess.js probes, only after the
+      // single-move search has already failed — cheap next to abandoning the
+      // game. A 64-square placement match cannot collide by accident.
+      outer: for (const a of chess.moves({ verbose: true })) {
+        const first = new Chess(chess.fen());
+        first.move(a.san);
+        for (const b of first.moves({ verbose: true })) {
+          const second = new Chess(first.fen());
+          second.move(b.san);
+          if (samePlacement(placementOf(second.fen()), late)) {
+            chess.move(a.san);
+            chess.move(b.san);
+            replySan = b.san;
+            transcript.push({ ply, note: `mirror resynced across a slipped ply (…${b.san})` });
+            break outer;
+          }
+        }
+      }
     }
-    if (!replySan) { transcript.push({ ply, studentMove: legal.san, note: 'coach never replied — stopping' }); break; }
+    if (!replySan) {
+      // Say WHICH of the two this was. "Coach never replied" read as an app
+      // defect for three runs when the board had in fact moved and only the
+      // mirror was lost — a different bug with a different owner.
+      const moved = Object.keys(late).length > 0 && !samePlacement(late, mine);
+      transcript.push({
+        ply,
+        studentMove: legal.san,
+        note: moved
+          ? `board moved but the mirror could not place it within ${REPLY_CEILING / 1000}s — stopping`
+          : `coach never replied within ${REPLY_CEILING / 1000}s — stopping`,
+      });
+      break;
+    }
 
     // ── ONLY CHECK WHAT WE CAN ACTUALLY ANCHOR ────────────────────────────
     //

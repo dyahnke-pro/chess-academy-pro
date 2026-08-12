@@ -81,6 +81,22 @@ export function pickStudentMove(fen, ply) {
   const chess = new Chess(fen);
   const moves = chess.moves({ verbose: true });
   if (moves.length === 0) return null;
+  // ── TAKE THE MATE ────────────────────────────────────────────────────────
+  //
+  // 🔒 THIS PLAYER WOULD NOT DELIVER CHECKMATE. It scored moves for
+  // development, material and centre, and mate scores none of those — so with
+  // mate-in-one on the board it played a developing move instead, and the game
+  // rolled on.
+  //
+  // That is why no driven game had EVER reached a natural end, which is why
+  // the game-over screen — the fix for David's black-screen report — had never
+  // once been exercised by an audit. A "roadblock" that was really this
+  // player declining to win.
+  for (const m of moves) {
+    const probe = new Chess(fen);
+    probe.move(m.san);
+    if (probe.isCheckmate()) return m;
+  }
   let best = null;
   for (const m of moves) {
     const s = score(fen, m, ply);
