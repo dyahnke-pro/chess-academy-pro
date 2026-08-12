@@ -42,6 +42,28 @@ describe('an authored explanation speaks where its line begins', () => {
     expect(hit?.text).toContain('e7');
   });
 
+  it('still introduces itself when the departing ply was taken by something else', () => {
+    // 🔒 THE CORPUS CONSULTS FIRST AND RETURNS AS SOON AS IT FINDS A NOTE, so on
+    // a well-covered opening the divergence ply never reaches this tier at all.
+    // With one eligible ply per variation that was silently fatal: the French
+    // Exchange went quiet on prod for exactly this reason while firing every
+    // time offline, where the replay called this selector directly and no
+    // corpus stood in the way. The introduction now survives a ply or two.
+    const used = new Set<string>();
+    const line = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Be7', 'd4'];
+    // Ply 5 is the departure; pretend it was claimed and ask at ply 6.
+    const hit = authoredNoteAt(ENTRY, line, used);
+    expect(hit?.variationName).toBe('Hungarian');
+  });
+
+  it('closes the window before the introduction stops being one', () => {
+    // Deep inside the line, an "introduction" is a comment on a position the
+    // student has been in for a while. It does not open there.
+    const used = new Set<string>();
+    const deep = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Be7', 'd4', 'd6', 'O-O', 'Nf6', 'Re1'];
+    expect(authoredNoteAt(ENTRY, deep, used)).toBeNull();
+  });
+
   it('does not speak a variation the game is not actually in', () => {
     // Sharing a prefix is not being on the line. After …Bc5 the Hungarian is
     // ruled out, and its prose must never appear.

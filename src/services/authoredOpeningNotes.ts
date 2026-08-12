@@ -226,6 +226,16 @@ export function sansOf(pgn: string | undefined): string[] {
     .filter((t) => t && !/^\d+\.+$/.test(t) && !/^(1-0|0-1|1\/2-1\/2|\*)$/.test(t));
 }
 
+/**
+ * How long a variation's introduction stays available after its opening move.
+ *
+ * Four plies — two moves each side. Long enough to survive the corpus taking
+ * the divergence ply, short enough that the sentence still reads as an
+ * introduction rather than a comment on a position the student is already deep
+ * inside.
+ */
+const INTRODUCTION_WINDOW_PLIES = 4;
+
 const isPrefix = (short: readonly string[], long: readonly string[]): boolean =>
   short.length <= long.length && short.every((s, i) => s === long[i]);
 
@@ -262,21 +272,50 @@ export function authoredNoteAt(
 
   const candidates = (entry.variations ?? [])
     .filter((v) => (v.explanation ?? '').trim().length > 0)
-    .map((v) => ({ v, sans: sansOf(v.pgn) }))
+    .map((v) => {
+      const sans = sansOf(v.pgn);
+      const at = divergencePly(main, sans);
+      return { v, sans, since: at === null ? Number.MAX_SAFE_INTEGER : here - at };
+    })
     .filter(({ v, sans }) => {
       if (sans.length === 0) return false;
       if (used.has(v.name)) return false;
       // We must actually be walking THIS line, not merely sharing a prefix with
       // it by accident: everything played so far has to be its opening moves.
       if (!isPrefix(sansSoFar, sans)) return false;
-      return divergencePly(main, sans) === here;
+      const at = divergencePly(main, sans);
+      if (at === null) return false;
+      // The introduction opens at the ply the variation becomes itself — but it
+      // must not be LOST if that ply is already spoken for.
+      //
+      // 🔒 THE CORPUS TAKES ITS PLY FIRST, AND THAT WAS SILENTLY FATAL. The
+      // splice consults the farmed corpus before this tier and returns as soon
+      // as it finds a note, so on a well-covered opening the divergence ply is
+      // usually claimed — and with `=== here` this tier had exactly one chance
+      // per variation and lost it. The French Exchange went quiet on prod for
+      // precisely this reason while firing every time offline, where the replay
+      // called this selector directly and no corpus was in the way.
+      //
+      // So the window opens at the divergence and stays open a few plies, and
+      // the first ply that actually reaches this tier takes it. Every ply in
+      // the window is still INSIDE the variation — `isPrefix` above has already
+      // proven the game is walking this exact line — and the text is still
+      // graded against that board before it can be spoken. What the window
+      // cannot do is drift: past it the student is deep in the line and an
+      // introduction is no longer an introduction.
+      return here >= at && here <= at + INTRODUCTION_WINDOW_PLIES;
     });
 
   if (candidates.length === 0) return null;
   // Several variations can branch at the same ply. Take the deepest — it is the
   // most specific line consistent with what has actually been played — and
   // break ties by name so a regenerated lesson reads identically.
-  candidates.sort((a, b) => (b.sans.length - a.sans.length) || a.v.name.localeCompare(b.v.name));
+  // Earliest introduction first — a variation that began on THIS ply outranks
+  // one still inside its window from two plies ago — then the most specific
+  // line, then the name so a regenerated lesson reads identically.
+  candidates.sort((a, b) => (a.since - b.since)
+    || (b.sans.length - a.sans.length)
+    || a.v.name.localeCompare(b.v.name));
   const pick = candidates[0];
   used.add(pick.v.name);
   return { text: (pick.v.explanation ?? '').trim(), variationName: pick.v.name };
