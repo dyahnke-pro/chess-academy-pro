@@ -579,4 +579,34 @@ describe('the couplings that make the wiring safe', () => {
       expect(read(f), `${f} still ships devtools logging`).not.toContain("console.log('[PHASE");
     }
   });
+
+  it('a game finished under a PAUSED walkthrough is still a finished game', () => {
+    // 🔒 FOUND BY THE FIRST DRIVEN GAME THAT EVER REACHED AN ENDING. The audit
+    // asked for the Vienna, left theory at ply 4 and played on to a threefold
+    // repetition — a real, complete game — and nothing happened: no result
+    // card, no review offer, and no `db.games` row.
+    //
+    // The guard read `walkthrough.isActive` alone. But the free-play board is
+    // interactive whenever the walkthrough is inactive OR PAUSED — that is the
+    // predicate `useEnginePonder` uses to decide the board is live — and
+    // pausing mid-lesson to play the position out is the ordinary way a Learn
+    // game happens. So every such game fell straight through this guard.
+    //
+    // The card was the visible half. The invisible half was worse: `db.games`
+    // is the row the review, the mistake puzzles and the weakness spine all
+    // hang off, so those games were never learned from at all.
+    expect(TEACH).toMatch(/const boardWasPlayable = !walkthrough\.isActive \|\| walkthrough\.phase === 'paused'/);
+    expect(TEACH).toMatch(/if \(!boardWasPlayable \|\| teachGameOverHandledRef\.current/);
+    expect(TEACH_CODE, 'the finished game is gated on the bare active flag again')
+      .not.toMatch(/if \(walkthrough\.isActive \|\| teachGameOverHandledRef\.current/);
+  });
+
+  it('the finished game is stamped with the PLAYING rating, not the puzzle one', () => {
+    // Same duplication that put a puzzle rating on the opponent's strength:
+    // an inline `currentRating ?? puzzleRating` rebuilt beside the one owner.
+    // The row this writes is what the review and the weakness spine read.
+    expect(TEACH).toMatch(/const rating = studentPlayingRating\(activeProfile\)/);
+    expect(TEACH_CODE, 'the game record rebuilt the rating resolution inline')
+      .not.toMatch(/const rating = activeProfile\?\.currentRating \?\? activeProfile\?\.puzzleRating/);
+  });
 });

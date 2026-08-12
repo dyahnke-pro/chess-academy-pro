@@ -396,9 +396,6 @@ async function main() {
     for (const s of said) for (const f of s.falseClaims) console.log(`     ❌ FALSE: ${f}`);
   }
 
-  await page.screenshot({ path: `${OUT}/final.png`, fullPage: true }).catch(() => {});
-  await browser.close();
-
   // ── THE GAME ENDED: DOES THE BOARD SURVIVE IT? ────────────────────────────
   //
   // 🔒 THE NINETY-ONE SECONDS OF BLACK SCREEN. Learn used to navigate to the
@@ -408,22 +405,30 @@ async function main() {
   // Review button. It shipped with no live proof, which is how the phase lane
   // stayed dead for two rounds, so it gets checked here.
   //
+  // 🚨 AND THIS CHECK ITSELF SHIPPED BROKEN: it sat BELOW `browser.close()`,
+  // so on the first run that ever reached a real ending every locator threw
+  // into its own `.catch(() => false)` and the audit reported
+  // `BROKEN — card=false button=false board=false` about a page that no longer
+  // existed. A closed browser is not a verdict. Nothing may read the page below
+  // this point — the close now happens after.
+  //
   // Only assertable when the game actually ended — the driver plays to a ply
   // cap and often stops unfinished. Skipped is reported, never counted green.
   let gameOverUi = 'not reached — game unfinished';
   if (chess.isGameOver()) {
-    await sleep(2500);
-    const card = page.locator('[data-testid="teach-game-over"]');
-    const reviewBtn = page.locator('[data-testid="teach-review-game"]');
-    const boardStillThere = await page.locator('[data-square="e4"]').count().catch(() => 0);
-    const hasCard = await card.count().then((n) => n > 0).catch(() => false);
-    const hasBtn = await reviewBtn.count().then((n) => n > 0).catch(() => false);
+    await sleep(4000);
+    const boardStillThere = await page.locator('[data-square="e4"]').count();
+    const hasCard = (await page.locator('[data-testid="teach-game-over"]').count()) > 0;
+    const hasBtn = (await page.locator('[data-testid="teach-review-game"]').count()) > 0;
     const onReviewRoute = /\/coach\/review\//.test(page.url());
     gameOverUi = hasCard && hasBtn && boardStillThere > 0 && !onReviewRoute
       ? 'board kept, result shown, review offered'
       : `BROKEN — card=${hasCard} button=${hasBtn} board=${boardStillThere > 0} redirected=${onReviewRoute}`;
   }
   console.log(`game-over screen     ${gameOverUi}`);
+
+  await page.screenshot({ path: `${OUT}/final.png`, fullPage: true }).catch(() => {});
+  await browser.close();
 
   await sleep(3000);
   const postEvents = await pullStream(before);

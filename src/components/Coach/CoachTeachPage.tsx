@@ -8241,14 +8241,28 @@ export function CoachTeachPage(): JSX.Element {
   const [finishedGame, setFinishedGame] = useState<{ id: string; result: 'win' | 'loss' | 'draw'; byMate: boolean } | null>(null);
   useEffect(() => {
     if (!game.isGameOver) { teachGameOverHandledRef.current = false; setFinishedGame(null); return; }
-    if (walkthrough.isActive || teachGameOverHandledRef.current || game.history.length < 4) return;
+    // 🔒 A PAUSED WALKTHROUGH IS STILL A PLAYABLE BOARD. This used to bail on
+    // `walkthrough.isActive` alone — but the free-play board is interactive
+    // whenever the walkthrough is inactive OR PAUSED (the same predicate
+    // `useEnginePonder` uses above), and pausing mid-lesson to play the
+    // position out is the normal way a Learn game happens. So a game finished
+    // under a paused walkthrough fell through this guard entirely: no card, no
+    // review offer, and — worse — NO `db.games` WRITE, which is the row the
+    // review, the mistake puzzles and the weakness spine all hang off. The
+    // board's own liveness decides, not the walkthrough's bare flag.
+    const boardWasPlayable = !walkthrough.isActive || walkthrough.phase === 'paused';
+    if (!boardWasPlayable || teachGameOverHandledRef.current || game.history.length < 4) return;
     teachGameOverHandledRef.current = true;
     const studentLoss = game.isCheckmate &&
       ((game.turn === 'w' && playerColor === 'white') ||
        (game.turn === 'b' && playerColor === 'black'));
     const won = game.isCheckmate && !studentLoss;
     const playerName = activeProfile?.name ?? 'Player';
-    const rating = activeProfile?.currentRating ?? activeProfile?.puzzleRating ?? 1200;
+    // One owner for "what is this student's playing strength" — the same
+    // resolver the opponent is configured from. The inline
+    // `currentRating ?? puzzleRating` that used to live here is exactly the
+    // duplication that stamped a puzzle rating on a played game.
+    const rating = studentPlayingRating(activeProfile);
     const gameId = `teach-${Date.now()}`;
     const pgn = game.history.join(' ');
     const openingId = walkthrough.tree?.openingName ?? null;
