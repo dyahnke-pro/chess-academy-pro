@@ -114,6 +114,7 @@ jobs:
 
       # --- Web: Vercel production deploy --------------------------------------
       - name: Deploy web to Vercel production
+        id: webdeploy
         if: steps.gate.outputs.run == 'true' && steps.changed.outputs.ship == 'true'
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
@@ -125,8 +126,38 @@ jobs:
           npm install -g vercel@latest
           vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
           vercel build --prod --token="$VERCEL_TOKEN"
+
+          # 🔒 NEVER DEPLOY A COMMIT THAT MAIN HAS ALREADY MOVED PAST.
+          #
+          # TWO PATHS DEPLOY PRODUCTION — Vercel's git integration on every push
+          # to main, and this step. They race, and the one that FINISHES last
+          # takes the alias regardless of which commit is newer.
+          #
+          # Measured 2026-08-12: this workflow started at 04:44:13 and checked
+          # out b1ba9836. Fifty seconds later a fix landed on main; its git-
+          # integration deploy went live at 04:45:03. This step then finished at
+          # 04:46:44 and rolled production back to b1ba9836. The fix was on main,
+          # CI was green, and paying users were served the code without it —
+          # exactly the class of silent non-ship the post-deploy audit exists to
+          # catch, arriving from our own pipeline.
+          #
+          # A scheduled run can sit queued for an hour on a busy repo, so this
+          # window is wide and hit regularly. Re-check main at DEPLOY time: if it
+          # has moved, the git integration is already shipping something newer
+          # and our job is to get out of its way.
+          git fetch origin main --quiet
+          REMOTE_MAIN="$(git rev-parse origin/main)"
+          BUILT="$(git rev-parse HEAD)"
+          if [ "$REMOTE_MAIN" != "$BUILT" ]; then
+            echo "::warning::main advanced to ${REMOTE_MAIN:0:8} while this run built ${BUILT:0:8} — skipping the web deploy so a newer commit is not rolled back."
+            echo "## Web deploy skipped — main moved to \`${REMOTE_MAIN:0:8}\`" >> "$GITHUB_STEP_SUMMARY"
+            echo "shipped=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
           url=$(vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN")
           echo "Production deploy: $url"
+          echo "shipped=true" >> "$GITHUB_OUTPUT"
           echo "## Web deploy 🚀 $url" >> "$GITHUB_STEP_SUMMARY"
 
       # Publish the just-built web bundle as a self-hosted OTA update (David
@@ -136,8 +167,12 @@ jobs:
       # hiccup must not red the deploy or block the iOS build. `vercel build`
       # above left dist/ in place and `vercel pull` wrote the project env
       # (BLOB_READ_WRITE_TOKEN + KV creds) to .vercel/.env.production.local.
+      # Gated on the web deploy having ACTUALLY shipped: if the step above stood
+      # down because main moved, this dist/ is the superseded commit's, and
+      # pushing it as an OTA would roll every auto-updating device back to the
+      # code production just stopped serving.
       - name: Publish OTA bundle
-        if: steps.gate.outputs.run == 'true' && steps.changed.outputs.ship == 'true'
+        if: steps.gate.outputs.run == 'true' && steps.changed.outputs.ship == 'true' && steps.webdeploy.outputs.shipped == 'true'
         continue-on-error: true
         run: |
           set -a

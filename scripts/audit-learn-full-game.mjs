@@ -172,6 +172,7 @@ async function main() {
   const pageErrors = [];
   const spoken = [];
   const beats = [];        // { beat, fen } from the app's own turnFacts details
+  const committedReplies = []; // { san, fen } — the coach's own account of each reply
   const bakedPlies = [];   // which plies of the named opening the bake taught
   const rawPayloads = [];
   page.on('pageerror', (e) => pageErrors.push(String(e)));
@@ -193,6 +194,15 @@ async function main() {
         if (e.source === 'CoachTeachPage.bakedOpeningTeaching') {
           const n = /move (\d+)/.exec(String(e.summary ?? ''));
           if (n) bakedPlies.push(Number(n[1]));
+        }
+        // THE COACH'S OWN ACCOUNT OF ITS MOVE — no inference required.
+        // Learn now publishes `coach-turn-checkpoint` the way Play always has.
+        // Reading the committed SAN here replaces diffing piece placement off
+        // the rendered board, which is what slipped and ended three runs as
+        // "coach never replied" when the coach had replied perfectly well.
+        if (kind === 'coach-turn-checkpoint') {
+          const san = /san=(\S+)/.exec(String(e.summary ?? ''))?.[1];
+          if (san) committedReplies.push({ san, fen: e.fen });
         }
         if (kind.includes('narration') || kind.includes('voice')) {
           spoken.push({ kind, source: e.source, text: e.narrationText ?? e.summary, fen: e.fen });
@@ -307,10 +317,24 @@ async function main() {
     // costs wall-clock; a missed one costs the whole run.
     const REPLY_CEILING = ply === 1 ? 120_000 : 150_000;
     const replyBy = Date.now() + REPLY_CEILING;
+    const repliesSeen = committedReplies.length;
     let replySan = null;
     let late = {};
     while (Date.now() < replyBy && !replySan) {
       await sleep(2500);
+      // ── ASK THE APP, DON'T READ THE PIXELS ────────────────────────────────
+      //
+      // Learn publishes `coach-turn-checkpoint` with the SAN it committed, so
+      // the reply is now KNOWN rather than reconstructed. Placement diffing
+      // stays underneath as the fallback (an event can be dropped in transit),
+      // but it is no longer the primary — and it was the primary that lost
+      // three runs, each reported as a silent coach.
+      const fresh = committedReplies.slice(repliesSeen);
+      for (const c of fresh) {
+        const legalHere = chess.moves({ verbose: true }).find((m) => m.san === c.san);
+        if (legalHere) { chess.move(c.san); replySan = c.san; break; }
+      }
+      if (replySan) break;
       late = await readPlacement(page);
       if (Object.keys(late).length === 0) continue;
       if (samePlacement(late, mine)) continue; // board hasn't moved yet

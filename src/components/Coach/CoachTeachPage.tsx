@@ -7483,6 +7483,27 @@ export function CoachTeachPage(): JSX.Element {
           // above have been computing underneath it the whole time.
           await padDone;
           const played = handlePlayMove(reply);
+          // 🔒 PUBLISH THE TURN. Play emits `coach-turn-checkpoint` with the
+          // committed SAN and the resulting FEN; Learn never did, so a Learn
+          // game left no record of what the coach actually played.
+          //
+          // That gap has a cost at both ends. For diagnosis, a Learn game in
+          // PostHog shows narration with no moves under it, so "the coach
+          // replied wrongly" and "the coach never replied" look identical after
+          // the fact. For the audit it is worse: with nothing published, the
+          // driver has to INFER each reply by diffing piece placement off the
+          // rendered board, and when that inference slips the run ends —
+          // three runs died as "coach never replied" when the coach had
+          // replied fine and only the guess was lost.
+          //
+          // Publishing what the app already knows removes the guess entirely.
+          void logAppAudit({
+            kind: 'coach-turn-checkpoint',
+            category: 'subsystem',
+            source: 'CoachTeachPage.coachReply',
+            summary: `move-committed san=${reply} ok=${played.ok}`,
+            fen: played.ok ? liveFenRef.current : move.fen,
+          });
           if (played.ok) {
             // UNLOCK THE INSTANT THE REPLY IS ON THE BOARD (David 2026-08-06:
             // "board slow to let me move after opponent") — narration prep

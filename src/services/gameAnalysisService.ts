@@ -413,7 +413,7 @@ async function analyzeGameOnWorker(
 async function analyzeGamePositions(
   game: GameRecord,
   onPosition?: (current: number, total: number) => void,
-): Promise<MoveAnnotation[] | null> {
+): Promise<{ annotations: MoveAnnotation[]; achievedDepth: number } | null> {
   const { fens, moves } = replayPgnToFens(game.pgn);
   if (fens.length < 2) return null;
 
@@ -423,12 +423,37 @@ async function analyzeGamePositions(
     return null;
   }
 
+  // 🔒 RECORD THE DEPTH THE SEARCH ACTUALLY REACHED, NOT THE ONE WE ASKED FOR.
+  //
+  // `analyzePosition` is bounded by a per-variant `movetime` budget, so on a
+  // slow engine the search returns whatever depth it got to when the clock ran
+  // out — `ANALYSIS_DEPTH` is a ceiling, not a promise.
+  //
+  // Measured on David's iPhone 2026-08-11 (PostHog, his own review URL): iOS
+  // routes to the asm.js build BY DESIGN — the WASM builds `call_indirect`-trap
+  // on WebKit — and asm gets a 5s budget per position. His 66-position review
+  // took 216s, ~3.3s a position: the searches were running to the clock, not
+  // to depth 16.
+  //
+  // The record was then stamped `analysisDepth: ANALYSIS_DEPTH` regardless. So
+  // an iPhone review claimed a depth it never reached, `gameNeedsAnalysis` read
+  // it as current, and the game could NEVER be re-deepened — not on a desktop,
+  // not ever. The shallow numbers were frozen in as if they were the deep ones.
+  // Accuracy is computed off these evals, which is the metric he raised the
+  // depth to fix in the first place.
+  //
+  // Stamping what we got means a game analysed on the phone is re-analysed when
+  // it is next opened somewhere the full depth is reachable.
   const evals: (number | null)[] = [];
+  let achievedDepth = Number.POSITIVE_INFINITY;
   for (const fen of fens) {
     onPosition?.(evals.length + 1, fens.length);
     try {
       const analysis: StockfishAnalysis = await stockfishEngine.analyzePosition(fen, ANALYSIS_DEPTH);
       evals.push(analysis.evaluation);
+      if (Number.isFinite(analysis.depth) && analysis.depth > 0) {
+        achievedDepth = Math.min(achievedDepth, analysis.depth);
+      }
     } catch {
       evals.push(null);
     }
@@ -486,7 +511,12 @@ async function analyzeGamePositions(
     });
   }
 
-  return annotations;
+  return {
+    annotations,
+    // A game where every position threw measured nothing, so it claims nothing —
+    // 0 reads as stale, which is exactly right.
+    achievedDepth: Number.isFinite(achievedDepth) ? Math.min(achievedDepth, ANALYSIS_DEPTH) : 0,
+  };
 }
 
 // ─── Public API ─────────────────────────────────────────────────────────────
@@ -513,13 +543,16 @@ export async function analyzeSingleGame(
   pauseBatchAnalysis();
   try {
     onProgress?.('Analyzing positions with Stockfish…');
-    const annotations = await analyzeGamePositions(game, (current, total) => {
+    const result = await analyzeGamePositions(game, (current, total) => {
       onProgress?.(`Analyzing move ${current} of ${total}…`);
     });
-    if (!annotations) return null;
+    if (!result) return null;
+    const { annotations, achievedDepth } = result;
 
-    // Store back to DB
-    await db.games.update(gameId, { annotations, fullyAnalyzed: true, analysisDepth: ANALYSIS_DEPTH });
+    // Store back to DB — stamped with the depth the search REACHED, so a game
+    // analysed on a slow engine is re-deepened next time it is opened on a fast
+    // one. See the note in `analyzeGamePositions`.
+    await db.games.update(gameId, { annotations, fullyAnalyzed: true, analysisDepth: achievedDepth });
 
     return annotations;
   } finally {
@@ -628,9 +661,11 @@ export async function analyzeRecentGames(
       label: `Analyzing game ${i + 1} of ${batch.length}…`,
     });
     try {
-      const annotations = await analyzeGamePositions(game);
-      if (annotations && annotations.length > 0) {
-        await db.games.update(game.id, { annotations, fullyAnalyzed: true, analysisDepth: ANALYSIS_DEPTH });
+      const result = await analyzeGamePositions(game);
+      if (result && result.annotations.length > 0) {
+        await db.games.update(game.id, {
+          annotations: result.annotations, fullyAnalyzed: true, analysisDepth: result.achievedDepth,
+        });
         analyzed++;
       }
     } catch (err) {
@@ -775,12 +810,14 @@ export async function analyzeAllGames(
           phase: 'analyzing',
         });
 
-        const annotations = await analyzeGamePositions(game);
-        if (annotations && annotations.length > 0) {
-          await db.games.update(game.id, { annotations, fullyAnalyzed: true, analysisDepth: ANALYSIS_DEPTH });
+        const result = await analyzeGamePositions(game);
+        if (result && result.annotations.length > 0) {
+          await db.games.update(game.id, {
+            annotations: result.annotations, fullyAnalyzed: true, analysisDepth: result.achievedDepth,
+          });
           analyzedGameIds.push(game.id);
           analyzed++;
-          await generateInsightsForGame(game.id, game.source, annotations);
+          await generateInsightsForGame(game.id, game.source, result.annotations);
         }
       }
     }

@@ -146,6 +146,53 @@ describe('gameAnalysisService', () => {
       expect(updated?.annotations?.length).toBe(4);
     });
 
+    it('stamps the depth the search REACHED, so a shallow analysis can be re-deepened', async () => {
+      // 🔒 THE FROZEN-SHALLOW REVIEW. `analyzePosition` is bounded by a
+      // per-variant `movetime` budget, so ANALYSIS_DEPTH is a ceiling the search
+      // may never reach. The record was stamped with the ceiling regardless.
+      //
+      // Measured on David's iPhone 2026-08-11 (PostHog, his own review URL): iOS
+      // routes to the asm.js build by design, which gets a 5s budget per
+      // position; his 66-position review took 216s — ~3.3s a position, running
+      // to the clock rather than to depth 16. It was then filed as depth 16, so
+      // `gameNeedsAnalysis` read it as current and it could never be re-deepened
+      // — on any device, ever. Accuracy is computed off these evals, which is
+      // the exact metric the depth bump existed to fix.
+      const game = buildGameRecord({
+        id: 'truncated', pgn: '1. e4 e5 2. Nf3 Nc6 1/2-1/2', annotations: null, isMasterGame: false,
+      });
+      await db.games.add(game);
+      // The mock reports depth 12 — a search that ran out of time short of 16.
+      mockAnalyzePosition.mockResolvedValue(mockAnalysis(25, 'e2e4'));
+
+      await analyzeAllGames();
+
+      const updated = await db.games.get('truncated');
+      expect(updated?.analysisDepth, 'stamped the depth we ASKED for, not the one we got')
+        .toBe(12);
+      expect(updated?.analysisDepth).toBeLessThan(ANALYSIS_DEPTH);
+      // The whole point: it must read as stale so a faster engine redoes it.
+      expect(gameNeedsAnalysis({ ...game, ...updated! }), 'a truncated analysis was filed as final')
+        .toBe(true);
+    });
+
+    it('a full-depth search is filed as final and not re-analyzed', async () => {
+      // The other half — the fix must not condemn every game to re-analysis.
+      const game = buildGameRecord({
+        id: 'full-depth', pgn: '1. e4 e5 2. Nf3 Nc6 1/2-1/2', annotations: null, isMasterGame: false,
+      });
+      await db.games.add(game);
+      mockAnalyzePosition.mockResolvedValue({
+        ...mockAnalysis(25, 'e2e4'), depth: ANALYSIS_DEPTH,
+      });
+
+      await analyzeAllGames();
+
+      const updated = await db.games.get('full-depth');
+      expect(updated?.analysisDepth).toBe(ANALYSIS_DEPTH);
+      expect(gameNeedsAnalysis({ ...game, ...updated! })).toBe(false);
+    });
+
     it('generates mistake puzzles INLINE per analyzed game, not batched at the end', async () => {
       // The fix (David 2026-06-06): mistakes must be generated as each game
       // finishes, so an interrupted run still produces puzzles for the games it
