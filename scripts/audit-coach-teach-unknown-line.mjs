@@ -231,9 +231,13 @@ async function main() {
           actual = kinds[a.audit] ? `${kinds[a.audit]}× present` : 'absent';
           ok = !!kinds[a.audit];
         } else if (a.kind === 'audit-summary-contains') {
-          const matchEv = events.find(
-            (e) => (e.summary ?? '').toLowerCase().includes(String(a.value).toLowerCase()),
-          );
+          // `regex: true` lets one assertion accept either of two legitimate
+          // outcomes (refuse OR disambiguate) without spawning a second
+          // scenario whose only difference is which branch it hopes for.
+          const rx = a.regex ? new RegExp(String(a.value), 'i') : null;
+          const matchEv = events.find((e) => (rx
+            ? rx.test(e.summary ?? '')
+            : (e.summary ?? '').toLowerCase().includes(String(a.value).toLowerCase())));
           actual = matchEv ? `${matchEv.kind}: ${(matchEv.summary ?? '').slice(0, 80)}` : 'absent';
           ok = !!matchEv;
         } else if (a.kind === 'transcript-contains') {
@@ -297,7 +301,11 @@ async function main() {
   await recordScenario('S1b_boot_coach_teach', {
     run: async () => {
       await page.goto(`${BASE_URL}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
-      await page.locator('[data-testid="coach-teach-page"]').waitFor({ timeout: 15_000 });
+      // 60s, and tolerant: prod boots in 35-47s from this container, so a 15s
+      // wait threw an error onto a scenario whose eleven checks all pass — the
+      // summary then printed ✗ next to a surface that was working. Let the
+      // assertions be the verdict.
+      await page.locator('[data-testid="coach-teach-page"]').waitFor({ timeout: 60_000 }).catch(() => undefined);
       await page.waitForTimeout(HYDRATE_SETTLE_MS);
     },
     assertions: [
@@ -369,9 +377,22 @@ async function main() {
       // not a fixed timeout. After the very first clearSessionAndReload
       // the Dexie warmup (profile + completed-stages) measurably stalls
       // the static-routed branch for 20-25s in the sandbox; bump to 45s.
+      // WHICH LESSON SOURCE WINS IS NO LONGER THE STATIC REGISTRY'S BY
+      // DEFAULT. Since 4b80362f (2026-08-02) the farmed corpus LEADS a lesson
+      // whenever it covers enough plies of the line about to be walked, and
+      // Vienna is covered — so the app emits `notes lead "Vienna Game"` and
+      // deliberately skips the masterclass tree. This scenario went on waiting
+      // 45s for `surface-routed (static)` for ten days and failed every check
+      // downstream of that wait: a stale contract reported as a broken surface.
+      // (G9.3 Gate A is about the openings page's WLPP Watch; it does not
+      // govern which source this chat surface generates from.)
+      //
+      // What is still contract, and is what the scenario now asserts: the ask
+      // routes a lesson from SOME source, and that lesson reaches a leaf with
+      // its play-out hand-off.
       await waitForEvent(intercepted, (e) =>
         e.kind === 'coach-surface-migrated' &&
-        (e.summary ?? '').includes('surface-routed (static): "Vienna"'),
+        /surface-routed \(static\): "Vienna"|notes lead "Vienna/.test(e.summary ?? ''),
         45_000,
       );
       // Drive walkthrough to leaf
@@ -381,8 +402,7 @@ async function main() {
       { kind: 'visible', selector: '[data-testid="walkthrough-leaf-panel"]', label: 'leaf panel reached' },
       { kind: 'visible', selector: '[data-testid="walkthrough-leaf-play-real"]', label: 'leaf "play this line out" button visible' },
       { kind: 'visible', selector: '[data-testid="walkthrough-continue-learning"]', label: 'continue-learning button visible' },
-      { kind: 'transcript-contains', value: 'play it out yourself', label: 'chat ask "play it out yourself"' },
-      { kind: 'audit-summary-contains', value: 'surface-routed (static)', label: 'static-registry surface-routed audit' },
+      { kind: 'transcript-contains', value: 'play the line out yourself', label: 'chat ask "play it out yourself"' },
     ],
   });
 
@@ -393,7 +413,15 @@ async function main() {
       await page.waitForTimeout(2500);
     },
     assertions: [
-      { kind: 'url-matches', value: /\/coach\/play\?opening=/, label: 'navigated to /coach/play with opening' },
+      // 🔒 NOT `/coach/play`. CLAUDE.md locks the WLPP Play rung to the IN-PAGE
+      // `OpeningPlayMode` precisely so the student stays on the taught line —
+      // the generic room picks its own moves and wanders off it, which is the
+      // bug David reported and the rule was written to ban. The app now logs
+      // `in-page play-out (locked to taught line, N plies)` and stays on
+      // /coach/teach. Asserting the old navigation would ask a future session
+      // to reintroduce the banned hand-off to make the audit green.
+      { kind: 'url-matches', value: /\/coach\/teach/, label: 'stays on the teaching surface (no generic /coach/play hand-off)' },
+      { kind: 'audit-summary-contains', value: 'in-page play-out', label: 'play-out is locked to the taught line' },
     ],
   });
 
@@ -414,8 +442,18 @@ async function main() {
       { kind: 'visible', selector: '[data-testid="walkthrough-leaf-panel"]', label: 'leaf panel reached' },
       { kind: 'visible', selector: '[data-testid="walkthrough-leaf-play-real"]', label: 'leaf "play this line out" button visible' },
       { kind: 'transcript-contains', value: 'frankenstein-dracula variation', label: 'opening mentioned in transcript' },
-      { kind: 'transcript-contains', value: 'play it out yourself', label: 'leaf ask reaches chat' },
-      { kind: 'audit-summary-contains', value: 'generation OK via DB-narration path', label: 'DB-narration generation succeeded' },
+      { kind: 'transcript-contains', value: 'play the line out yourself', label: 'leaf ask reaches chat' },
+      // NOT `generation OK via DB-narration path` any more: the sub-line now
+      // resolves to a static tree ("surface-routed (static): … →
+      // Frankenstein-Dracula"), so no DB generation runs and the old string
+      // can never appear. Resolving instead of generating is the better
+      // outcome, and F1 is where the DB-narration tier is actually proven.
+      {
+        kind: 'audit-summary-contains',
+        value: 'generation OK via DB-narration path|surface-routed \\((?:static|cached)\\): "Vienna Game: Frankenstein',
+        label: 'the sub-line resolves to a lesson (static tree or DB generation)',
+        regex: true,
+      },
     ],
     extras: { spineNarrationSkips: () => frankSkips }, // captured below
   });
@@ -444,7 +482,18 @@ async function main() {
       await page.locator('[data-testid="chat-text-input"]').click();
       await page.locator('[data-testid="chat-text-input"]').fill('drill Vienna');
       await page.locator('[data-testid="chat-send-btn"]').click();
-      await page.waitForTimeout(SHORT_SETTLE_MS + 1500);
+      // A FIXED 5s IS A GUESS ABOUT A COLD GENERATION. On the warm pass (E2,
+      // same words) the routing carries `[stage=drill]` and the drill picker
+      // is up almost at once; here the lesson has to be GENERATED first, so
+      // five seconds in the routing still read `mode=learn` and the scenario
+      // reported a lost stage hint that was merely not applied yet. Wait for
+      // the stage to land, the way E2 does.
+      await waitForEvent(intercepted, (e) =>
+        e.kind === 'coach-surface-migrated' &&
+        /\[stage=drill\]|landed at drill/i.test(e.summary ?? ''),
+        90_000,
+      ).catch(() => undefined);
+      await page.waitForTimeout(SHORT_SETTLE_MS);
     },
     assertions: [
       // Stage menu OR drill picker should be the destination — both
@@ -468,7 +517,17 @@ async function main() {
       await page.waitForTimeout(SHORT_SETTLE_MS + 5000);
     },
     assertions: [
-      { kind: 'audit-summary-contains', value: 'pre-flight rejected non-opening', label: 'pre-flight reject audit fires' },
+      // WHAT MATTERS IS THAT NOTHING IS FABRICATED, not which refusal path
+      // runs. The nonsense name now scores above the fuzzy floor against real
+      // entries ("Modern Defense: Anti-Modern", 0.77) so the app surfaces a
+      // did-you-mean picker instead of a pre-flight reject — still no invented
+      // opening, and a better answer for the student. Assert the outcome.
+      {
+        kind: 'audit-summary-contains',
+        value: 'pre-flight rejected non-opening|fuzzy ambiguity for',
+        label: 'nonsense name is refused or disambiguated — never fabricated',
+        regex: true,
+      },
       // No walkthrough phase should be active.
       { kind: 'visible', selector: '[data-testid="coach-teach-page"]', label: 'teach page still mounted' },
     ],
@@ -490,8 +549,14 @@ async function main() {
     assertions: [
       {
         kind: 'audit-summary-contains',
-        value: 'surface-routed (static): "Vienna" → Vienna Game',
-        label: 'static-registry hit (instant, no LLM gen)',
+        // WAS `surface-routed (static)`. Notes-lead (4b80362f) means a
+        // covered opening no longer takes the static registry, so the old
+        // string can never appear for Vienna. What the scenario is really
+        // for — that a known family resolves instantly instead of paying a
+        // cold generation — is still checked by the no-progress assertion
+        // below; this one just has to name a routing that exists.
+        value: 'notes lead "Vienna Game"',
+        label: 'known family resolves without a cold LLM generation',
       },
       // teach-generation-progress would indicate a slow LLM gen —
       // it must NOT appear for a static or cached hit.
@@ -519,11 +584,18 @@ async function main() {
       await page.locator('[data-testid="chat-text-input"]').click();
       await page.locator('[data-testid="chat-text-input"]').fill('Vienna');
       await page.locator('[data-testid="chat-send-btn"]').click();
+      // Since 4b80362f the farmed corpus LEADS a covered lesson, so Vienna no
+      // longer routes through the static registry — it emits `notes lead
+      // "Vienna Game"` instead. Waiting only for the static summary timed out
+      // here and left the walkthrough unstarted, which is why every control
+      // word below then hit an IDLE surface and got the idle ack.
       await waitForEvent(intercepted, (e) =>
         e.kind === 'coach-surface-migrated' &&
-        (e.summary ?? '').includes('surface-routed (static): "Vienna"'),
+        /surface-routed \((?:static|cached)\): "Vienna"|notes lead "Vienna/.test(e.summary ?? ''),
         45_000,
       );
+      // …and a family name lands on the picker, not on a lesson.
+      await pickFirstLine(page, 20_000);
       // Wait for a walkthrough panel to actually RENDER — proves React
       // committed the re-render so walkthrough.isActive is true in the
       // next handleSubmit closure (the surface-routed AUDIT fires inside
@@ -557,11 +629,18 @@ async function main() {
       await page.locator('[data-testid="chat-text-input"]').click();
       await page.locator('[data-testid="chat-text-input"]').fill('Vienna');
       await page.locator('[data-testid="chat-send-btn"]').click();
+      // Since 4b80362f the farmed corpus LEADS a covered lesson, so Vienna no
+      // longer routes through the static registry — it emits `notes lead
+      // "Vienna Game"` instead. Waiting only for the static summary timed out
+      // here and left the walkthrough unstarted, which is why every control
+      // word below then hit an IDLE surface and got the idle ack.
       await waitForEvent(intercepted, (e) =>
         e.kind === 'coach-surface-migrated' &&
-        (e.summary ?? '').includes('surface-routed (static): "Vienna"'),
+        /surface-routed \((?:static|cached)\): "Vienna"|notes lead "Vienna/.test(e.summary ?? ''),
         45_000,
       );
+      // …and a family name lands on the picker, not on a lesson.
+      await pickFirstLine(page, 20_000);
       // Wait for the walkthrough panel to render (commit) before the
       // control word — see S9a note on the audit-vs-commit race.
       await page.locator('[data-testid="walkthrough-choose-mode"], [data-testid="walkthrough-narrating-panel"], [data-testid="walkthrough-paused-panel"], [data-testid="walkthrough-leaf-panel"]').first().waitFor({ state: 'visible', timeout: 20_000 }).catch(() => undefined);
@@ -603,11 +682,18 @@ async function main() {
       await page.locator('[data-testid="chat-text-input"]').click();
       await page.locator('[data-testid="chat-text-input"]').fill('Vienna');
       await page.locator('[data-testid="chat-send-btn"]').click();
+      // Since 4b80362f the farmed corpus LEADS a covered lesson, so Vienna no
+      // longer routes through the static registry — it emits `notes lead
+      // "Vienna Game"` instead. Waiting only for the static summary timed out
+      // here and left the walkthrough unstarted, which is why every control
+      // word below then hit an IDLE surface and got the idle ack.
       await waitForEvent(intercepted, (e) =>
         e.kind === 'coach-surface-migrated' &&
-        (e.summary ?? '').includes('surface-routed (static): "Vienna"'),
+        /surface-routed \((?:static|cached)\): "Vienna"|notes lead "Vienna/.test(e.summary ?? ''),
         45_000,
       );
+      // …and a family name lands on the picker, not on a lesson.
+      await pickFirstLine(page, 20_000);
       // Wait for the walkthrough panel to RENDER (commit) before deciding
       // whether we're in the chooser — the surface-routed audit fires
       // inside start() before React commits, so checking the chooser off
@@ -670,7 +756,11 @@ async function main() {
         45_000,
       );
       // Wait for the quiz panel to mount.
-      await page.locator('[data-testid="walkthrough-quiz-panel"]').waitFor({ timeout: 15_000 });
+      // Tolerant: the stage that lands here is sometimes `concepts` rather
+      // than a quiz panel, and both are legitimate — the assertion below
+      // accepts either. Throwing on the narrower one marked the scenario ✗
+      // while both of its checks passed.
+      await page.locator('[data-testid="walkthrough-quiz-panel"]').waitFor({ timeout: 15_000 }).catch(() => undefined);
       // Pick choice 0, see the feedback render, advance.
       await page.locator('[data-testid="walkthrough-quiz-choice-0"]').click();
       await page.locator('[data-testid="walkthrough-quiz-next"]').waitFor({ timeout: 8_000 });
@@ -785,17 +875,24 @@ async function main() {
       await page.locator('[data-testid="chat-text-input"]').click();
       await page.locator('[data-testid="chat-text-input"]').fill('Vienna');
       await page.locator('[data-testid="chat-send-btn"]').click();
+      // Since 4b80362f the farmed corpus LEADS a covered lesson, so Vienna no
+      // longer routes through the static registry — it emits `notes lead
+      // "Vienna Game"` instead. Waiting only for the static summary timed out
+      // here and left the walkthrough unstarted, which is why every control
+      // word below then hit an IDLE surface and got the idle ack.
       await waitForEvent(intercepted, (e) =>
         e.kind === 'coach-surface-migrated' &&
-        (e.summary ?? '').includes('surface-routed (static): "Vienna"'),
+        /surface-routed \((?:static|cached)\): "Vienna"|notes lead "Vienna/.test(e.summary ?? ''),
         45_000,
       );
+      // …and a family name lands on the picker, not on a lesson.
+      await pickFirstLine(page, 20_000);
       await driveToLeaf(page);
     },
     assertions: [
       { kind: 'visible', selector: '[data-testid="walkthrough-leaf-panel"]', label: 'walkthrough reaches leaf' },
       { kind: 'visible', selector: '[data-testid="walkthrough-leaf-play-real"]', label: '"play this line out" leaf button visible' },
-      { kind: 'transcript-contains', value: 'play it out yourself', label: 'coach asks in chat at the leaf' },
+      { kind: 'transcript-contains', value: 'play the line out yourself', label: 'coach asks in chat at the leaf' },
     ],
   });
 
@@ -806,16 +903,29 @@ async function main() {
       await page.locator('[data-testid="chat-text-input"]').click();
       await page.locator('[data-testid="chat-text-input"]').fill('play it for real Vienna');
       await page.locator('[data-testid="chat-send-btn"]').click();
-      // Surface routing should set stageHint='play-real' and navigate
-      // to /coach/play. Wait for the URL to change.
-      await page.waitForURL(/\/coach\/play/, { timeout: 20_000 }).catch(() => undefined);
+      // THE GAME STAYS ON LEARN NOW. A "play it for real" request used to
+      // navigate to /coach/play; since the Learn-keeps-the-game change it
+      // starts the game on THIS surface (routing: `play request … → game on
+      // Learn: "<opening>", student=<side>`), because /coach/play is a pure
+      // playing surface by contract and the coach is meant to talk you
+      // through this one. Waiting for a URL that will never change is why
+      // both play scenarios read as dead — the game had in fact started and
+      // the coach had already opened a move.
+      // Pick the line FIRST. "play … Vienna" is a FAMILY ask, so it lands on
+      // the subline picker; waiting for the game before choosing a line spent
+      // the budget staring at a picker nobody had answered.
+      await pickFirstLine(page, 25_000);
+      await waitForEvent(intercepted, (e) =>
+        e.kind === 'coach-surface-migrated' && /game on Learn/.test(e.summary ?? ''),
+        45_000,
+      );
       await page.waitForTimeout(3000);
       // Board renders — make a move (e2-e4).
-      await tryMove(page, 'e2', 'e4').catch(() => undefined);
+      await playFirstStudentMove(page);
       await page.waitForTimeout(2500);
     },
     assertions: [
-      { kind: 'url-matches', value: /\/coach\/play/, label: 'navigated to /coach/play' },
+      { kind: 'audit-summary-contains', value: 'game on Learn', label: 'the game starts on Learn (not shipped to /coach/play)' },
       // Either the coach echoed our move via a coach-turn audit OR a
       // post-move audit fired. Both indicate the live game pipeline
       // accepted the move.
@@ -860,7 +970,7 @@ async function main() {
     assertions: [
       { kind: 'visible', selector: '[data-testid="walkthrough-leaf-panel"]', label: 'walkthrough reaches leaf' },
       { kind: 'visible', selector: '[data-testid="walkthrough-leaf-play-real"]', label: 'leaf "play this line out" button visible' },
-      { kind: 'transcript-contains', value: 'play it out yourself', label: 'coach asks in chat at leaf' },
+      { kind: 'transcript-contains', value: 'play the line out yourself', label: 'coach asks in chat at leaf' },
       { kind: 'audit-summary-contains', value: 'generation OK via DB-narration path', label: 'DB-narration tier 3 fired' },
       { kind: 'audit-summary-contains', value: NON_VIENNA.toLowerCase(), label: `opening "${NON_VIENNA}" referenced in routing` },
     ],
@@ -987,13 +1097,24 @@ async function main() {
       await page.locator('[data-testid="chat-text-input"]').click();
       await page.locator('[data-testid="chat-text-input"]').fill(`play it for real ${NON_VIENNA}`);
       await page.locator('[data-testid="chat-send-btn"]').click();
-      await page.waitForURL(/\/coach\/play/, { timeout: 30_000 }).catch(() => undefined);
+      // THE GAME STAYS ON LEARN NOW. A "play it for real" request used to
+      // navigate to /coach/play; since the Learn-keeps-the-game change it
+      // starts the game on THIS surface (routing: `play request … → game on
+      // Learn: "<opening>", student=<side>`), because /coach/play is a pure
+      // playing surface by contract and the coach is meant to talk you
+      // through this one. Waiting for a URL that will never change is why
+      // both play scenarios read as dead — the game had in fact started and
+      // the coach had already opened a move.
+      await waitForEvent(intercepted, (e) =>
+        e.kind === 'coach-surface-migrated' && /game on Learn/.test(e.summary ?? ''),
+        30_000,
+      ).catch(() => undefined);
       await page.waitForTimeout(3000);
-      await tryMove(page, 'e2', 'e4').catch(() => undefined);
+      await playFirstStudentMove(page);
       await page.waitForTimeout(2500);
     },
     assertions: [
-      { kind: 'url-matches', value: /\/coach\/play/, label: 'navigated to /coach/play' },
+      { kind: 'audit-summary-contains', value: 'game on Learn', label: 'the game starts on Learn (not shipped to /coach/play)' },
       {
         kind: 'audit-present',
         audit: 'coach-turn-checkpoint',
@@ -1046,19 +1167,88 @@ async function tryMove(page, from, to) {
   await toSq.click({ timeout: 2000 });
 }
 
-async function waitForEvent(intercepted, predicate, timeoutMs) {
+/**
+ * Wait for a matching audit event to ARRIVE — not for one to already exist.
+ *
+ * 🔒 THIS SCANNED THE WHOLE RUN'S HISTORY. `intercepted` accumulates across
+ * every scenario, so a wait would match an identical event from an EARLIER
+ * scenario and return instantly, and the scenario would then assert against a
+ * surface that had done nothing yet. S6 waited 90s for "landed at drill",
+ * matched S1d's drill from minutes earlier, returned in 12s, and reported a
+ * lost stage hint on a lesson that was still generating. A wait that can be
+ * satisfied by the past measures nothing.
+ *
+ * `fromIndex` defaults to "everything from this moment on", which is what
+ * every caller here means.
+ */
+/**
+ * Play whatever move the STUDENT is actually allowed to play right now.
+ *
+ * 🔒 THIS WAS HARDCODED `e2 → e4`, which is a WHITE move. The non-static play
+ * scenario is a Caro-Kann, where the student is BLACK and the coach has
+ * already opened e4 — so the audit pushed a piece that was not the student's,
+ * nothing happened, and it reported the engine pipeline dead. Ask the board
+ * which piece can move instead of assuming the colour.
+ */
+async function playFirstStudentMove(page) {
+  const squares = page.locator('[data-square]');
+  const n = await squares.count().catch(() => 0);
+  if (n === 0) return false;
+  for (const [from, to] of [
+    ['e2', 'e4'], ['d2', 'd4'], ['g1', 'f3'],   // student is White
+    ['c7', 'c6'], ['e7', 'e5'], ['g8', 'f6'],   // student is Black
+  ]) {
+    const src = page.locator(`[data-square="${from}"] [data-piece], [data-square="${from}"] img`).first();
+    if (!(await src.isVisible().catch(() => false))) continue;
+    const before = await page.locator('[data-square]').count();
+    await tryMove(page, from, to).catch(() => undefined);
+    await page.waitForTimeout(1200);
+    // A legal move empties the origin square.
+    const stillThere = await src.isVisible().catch(() => false);
+    if (!stillThere && before > 0) return true;
+  }
+  return false;
+}
+
+async function waitForEvent(intercepted, predicate, timeoutMs, fromIndex = intercepted.length) {
   const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline) {
-    if (intercepted.some(predicate)) return true;
+    for (let i = fromIndex; i < intercepted.length; i += 1) {
+      if (predicate(intercepted[i])) return true;
+    }
     await new Promise((r) => setTimeout(r, 250));
   }
   return false;
+}
+
+/**
+ * A broad family name opens the LINE PICKER, not a lesson. Pick a line.
+ *
+ * The tiles are keyed by ECO (`line-picker-C56`); the picker's own controls
+ * share that prefix (`-mode-play`, `-mode-face`, `-dismiss`), so a naive
+ * prefix match clicks the Play TOGGLE and reports a lesson it never opened.
+ * Returns the tile's label, or null when no picker was showing.
+ */
+async function pickFirstLine(page, timeoutMs = 8000) {
+  const picker = page.locator('[data-testid="line-picker"]').first();
+  const shown = await picker.waitFor({ state: 'visible', timeout: timeoutMs }).then(() => true).catch(() => false);
+  if (!shown) return null;
+  const tile = page.locator(
+    '[data-testid="line-picker"] button[data-testid^="line-picker-"]'
+    + ':not([data-testid*="-mode-"]):not([data-testid="line-picker-dismiss"])',
+  ).first();
+  if (!(await tile.isVisible().catch(() => false))) return null;
+  const label = (await tile.innerText().catch(() => '')).replace(/\s+/g, ' ').trim();
+  await tile.click({ timeout: 4000 }).catch(() => undefined);
+  return label || 'line';
 }
 
 async function driveToLeaf(page) {
   const deadline = Date.now() + SKIP_TO_LEAF_TIMEOUT_MS;
   let lastPhase = '';
   let skips = 0;
+  let consecutiveNone = 0;
+  const NONE_POLLS_BEFORE_GIVING_UP = 12; // ~7s at SKIP_INTERVAL_MS
   while (Date.now() < deadline) {
     const phase = await detectWalkthroughPhase(page);
     if (phase !== lastPhase) {
@@ -1084,13 +1274,41 @@ async function driveToLeaf(page) {
       if (await skipTrap.isVisible().catch(() => false)) {
         await skipTrap.click().catch(() => undefined);
       }
+    } else if (phase === 'line-picker') {
+      // THE PICKER WAS DETECTED AND THEN IGNORED. `detectWalkthroughPhase`
+      // has listed 'line-picker' all along, but the loop had no branch for
+      // it — so a request that opens the picker sat here until the deadline
+      // and returned `timeout`, taking every downstream assertion with it
+      // (S2's five checks, S3's click on a leaf button that was never
+      // rendered). An unhandled fork that silently swallows the rest of the
+      // run is the failure mode the interactive-audit rule exists to kill.
+      //
+      // The tiles are keyed by ECO (`line-picker-C56`); the picker's own
+      // controls share the prefix (`-mode-play`, `-mode-face`, `-dismiss`)
+      // and a naive prefix match clicks the Play TOGGLE instead of a line.
+      const tile = page.locator(
+        '[data-testid="line-picker"] button[data-testid^="line-picker-"]'
+        + ':not([data-testid*="-mode-"]):not([data-testid="line-picker-dismiss"])',
+      ).first();
+      if (await tile.isVisible().catch(() => false)) {
+        await tile.click({ timeout: 4000 }).catch(() => undefined);
+      }
     } else if (phase === 'walkthrough-choose-mode') {
       const c = page.locator('[data-testid="walkthrough-choose-walkthrough"]');
       if (await c.isVisible().catch(() => false)) {
         await c.click().catch(() => undefined);
       }
     } else if (phase === 'none') {
-      return { reached: 'none', skips };
+      // ONE EMPTY POLL IS NOT AN ENDED WALKTHROUGH. This returned on the very
+      // first frame with no panel showing — and there is such a frame right
+      // after generation resolves, between the progress panel unmounting and
+      // the narrating panel mounting. A lesson that had generated fine was
+      // reported as never reaching its leaf because the drive gave up inside
+      // that gap. Give the render a few polls to land before calling it over.
+      consecutiveNone += 1;
+      if (consecutiveNone >= NONE_POLLS_BEFORE_GIVING_UP) return { reached: 'none', skips };
+    } else {
+      consecutiveNone = 0;
     }
     await page.waitForTimeout(SKIP_INTERVAL_MS);
   }

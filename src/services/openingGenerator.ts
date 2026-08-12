@@ -2213,6 +2213,11 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
   const splicedNoteIds = new Set<string>();
   // One introduction per variation per lesson — see `authoredNoteAt`.
   const authoredNamesUsed = new Set<string>();
+  // Which plies the AUTHORED tier spoke on, and in what words — kept apart
+  // from `plyNoteText` because that array also holds corpus-note text, so
+  // reading authored coverage off it would over-report every corpus hit as a
+  // hand-written one.
+  const authoredSpoke: Array<{ ply: number; variation: string; text: string }> = [];
   // The repertoire entry that actually HOLDS the authored prose. The generator's
   // own `entry` is a DB record with no variations — passing it was how the first
   // cut of this tier shipped dead. Resolved once per lesson, not per ply.
@@ -2284,6 +2289,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
         const graded = gradeNarrationText(authored.text, p.fen, 'openingGenerator.authoredNote');
         if (graded?.trim()) {
           plyNoteText[i] = graded;
+          authoredSpoke.push({ ply: i, variation: authored.variationName, text: graded });
           return generated ? `${graded} ${generated}` : graded;
         }
       }
@@ -2293,6 +2299,26 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       return fallback;
     }
   });
+
+  // A TIER NOBODY CAN SEE FIRE IS A TIER NOBODY CAN TELL IS DEAD. This one
+  // already shipped dead once — wired to an object with no `variations`, with
+  // green unit tests over it the whole time — and a prod audit could not tell
+  // the difference either, because PASS 2 rewords the authored sentence into
+  // the house voice and no literal phrase survives to match on. So say it out
+  // loud: which variation spoke, at which ply, in its pre-reword words.
+  if (authoredSpoke.length > 0) {
+    void logAppAudit({
+      kind: 'coach-surface-migrated',
+      category: 'subsystem',
+      source: 'openingGenerator.authoredTier',
+      summary: `authored prose spoke on ${authoredSpoke.length} ply(s) of "${entry.canonicalName}": ${authoredSpoke.map((a) => a.variation).join(' | ')}`,
+      details: JSON.stringify({
+        plies: authoredSpoke.map((a) => a.ply),
+        variations: authoredSpoke.map((a) => a.variation),
+        firstText: authoredSpoke[0].text.slice(0, 240),
+      }),
+    });
+  }
 
   // PASS 2 — HOUSE-VOICE REWORD (David 2026-07-30: "hand the entire narration
   // to the llm and have it reword it in our coaches voice"). Template ideas
