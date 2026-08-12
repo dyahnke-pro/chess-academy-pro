@@ -357,8 +357,21 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 // rule: every bump makes cached lessons regenerate and their TTS re-synthesise.
 // Bumped for the authored-prose tier: the splice order changed (corpus →
 // HAND-WRITTEN → generated), and beats bake at generation time, so a cached
-// tree would serve the old order forever. One bump for this deploy.
-const WALKTHROUGH_GEN_REV = '2026-08-12-authored-tier';
+// tree would serve the old order forever.
+//
+// 🔒 AND BUMPED AGAIN, BECAUSE THE FIRST BUMP SHIPPED WITH THE TIER HALF DEAD.
+// The authored lookup matched opening names raw, so the 18 British-spelled
+// entries in repertoire.json ("French Defence", "Caro-Kann Defence") never
+// resolved. Every lesson generated during that window cached at THIS revision
+// — correct rev, missing teaching — and the fix could not reach a single one
+// of them, because the cache only regenerates when the revision MOVES. A
+// prod run confirmed it: the French Exchange lesson spoke 79 lines and not
+// one of them was the hand-written prose that had been repaired hours earlier.
+//
+// The general rule, which cost a build to learn: a fix to what generation
+// PRODUCES is invisible to every already-generated lesson until this string
+// changes. Shipping the code is not shipping the behaviour.
+const WALKTHROUGH_GEN_REV = '2026-08-12-authored-tier-spelling';
 
 export async function getCachedOpening(
   name: string,
