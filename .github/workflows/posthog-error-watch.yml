@@ -48,6 +48,9 @@ jobs:
     timeout-minutes: 10
     outputs:
       hasErrors: ${{ steps.watch.outputs.hasErrors }}
+      # Genuine defects only — self-healing telemetry is reported but never
+      # spawns a fixer. See SELF_HEALING in scripts/posthog-error-watch.mjs.
+      hasActionable: ${{ steps.watch.outputs.hasActionable }}
       digest: ${{ steps.watch.outputs.digest }}
     steps:
       - name: Checkout
@@ -127,12 +130,17 @@ jobs:
             await github.rest.issues.update({ owner, repo, issue_number: issueNumber, body: next });
 
   # Auto-spawn a Claude session to triage + fix the new errors and open a
-  # DRAFT PR. Runs once per cycle that has new errors (the cursor dedups, so
-  # each distinct error triggers a fix at most once). secrets: inherit passes
-  # the Anthropic credential through to the called workflow.
+  # DRAFT PR. secrets: inherit passes the Anthropic credential through.
+  #
+  # 🔒 GATED ON `hasActionable`, NOT `hasErrors` (2026-08-12). The old gate
+  # fired on ANY row, so the app recovering from a wedged worker — a 2×/1-user
+  # `forced worker respawn`, which is the self-heal REPORTING that it worked —
+  # spawned a full session every fifteen minutes to go find the bug. Six of the
+  # last six runs went red that way. Everything is still reported on the
+  # tracking issue above; only a genuine defect gets a fixer.
   autofix:
     needs: watch
-    if: needs.watch.outputs.hasErrors == 'true'
+    if: needs.watch.outputs.hasActionable == 'true'
     uses: ./.github/workflows/claude-autofix.yml
     with:
       error_digest: ${{ needs.watch.outputs.digest }}

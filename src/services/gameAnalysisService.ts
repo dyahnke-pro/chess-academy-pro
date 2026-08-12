@@ -1,7 +1,7 @@
 import { Capacitor } from '@capacitor/core';
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
-import { stockfishEngine } from './stockfishEngine';
+import { stockfishEngine, resolveWorkerUrl } from './stockfishEngine';
 import { computeWeaknessProfile } from './weaknessAnalyzer';
 import { generateMistakePuzzlesFromGame } from './mistakePuzzleService';
 import { autoAnalyzeGameMisconceptions } from './autoAnalyzeGame';
@@ -57,7 +57,6 @@ function resolveWorkerPoolSize(): number {
   return Math.max(2, Math.min(6, cores - 1));
 }
 const WORKER_POOL_SIZE = resolveWorkerPoolSize();
-const INIT_TIMEOUT_MS = 45_000;
 
 // Abort signal for background suspension
 let _abortAnalysis = false;
@@ -214,14 +213,25 @@ class DedicatedWorker {
     this.worker = worker;
   }
 
-  analyzePosition(fen: string, depth: number): Promise<{ evaluation: number; bestMove: string }> {
+  /** @param budgetMs optional `movetime` cap. REQUIRED on a slow engine: this
+   *  used to send a bare `go depth 16` against a hard 10s reject, so on the
+   *  asm.js build (every iPhone) a deep search simply blew the timeout and the
+   *  caller lost the position. With a budget the search returns whatever depth
+   *  it reached in time — and reports it, so the caller can record what it
+   *  actually got instead of what it asked for. */
+  analyzePosition(
+    fen: string,
+    depth: number,
+    budgetMs?: number,
+  ): Promise<{ evaluation: number; bestMove: string; depth: number }> {
     return new Promise((resolve, reject) => {
       const timeoutId = setTimeout(() => {
         reject(new Error('Analysis timed out'));
-      }, 10_000);
+      }, budgetMs ? budgetMs + 4_000 : 10_000);
 
       const blackToMove = fen.split(' ')[1] === 'b';
       let lastEval = 0;
+      let lastDepth = 0;
 
       const handler = (event: MessageEvent<string>): void => {
         const data = event.data;
@@ -233,6 +243,8 @@ class DedicatedWorker {
         if (typeof data !== 'string') return;
 
         if (data.startsWith('info ')) {
+          const depthMatch = /\bdepth (\d+)/.exec(data);
+          if (depthMatch) lastDepth = Number(depthMatch[1]) || lastDepth;
           const scoreMatch = /score (cp|mate) (-?\d+)/.exec(data);
           if (scoreMatch) {
             const scoreType = scoreMatch[1];
@@ -248,7 +260,7 @@ class DedicatedWorker {
           clearTimeout(timeoutId);
           this.worker.removeEventListener('message', handler);
           const flip = blackToMove ? -1 : 1;
-          resolve({ evaluation: lastEval * flip, bestMove: bmMatch[1] });
+          resolve({ evaluation: lastEval * flip, bestMove: bmMatch[1], depth: lastDepth });
         }
       };
 
@@ -256,7 +268,7 @@ class DedicatedWorker {
         this.worker.addEventListener('message', handler);
         this.worker.postMessage('ucinewgame');
         this.worker.postMessage(`position fen ${fen}`);
-        this.worker.postMessage(`go depth ${depth}`);
+        this.worker.postMessage(budgetMs ? `go depth ${depth} movetime ${budgetMs}` : `go depth ${depth}`);
       } catch {
         clearTimeout(timeoutId);
         this.worker.removeEventListener('message', handler);
@@ -282,14 +294,41 @@ class DedicatedWorker {
 /**
  * Spawn a dedicated Stockfish worker, wait for it to be ready.
  */
+/** How long to wait for a POOL worker before giving up on the pool.
+ *
+ *  🔒 NOT the engine's 45s init budget. The pool is an OPTIMISATION — if its workers
+ *  can't boot we fall back to the singleton and the review still runs. Waiting
+ *  45s to learn that is 45 seconds of a blank progress bar added to the front of
+ *  every review on any platform where the pool can't spawn, which until the fix
+ *  below was every iPhone. A worker that hasn't said `readyok` in 8s is not
+ *  coming; take the fallback and start analysing. */
+const POOL_SPAWN_TIMEOUT_MS = 8_000;
+
 function spawnDedicatedWorker(index: number): Promise<DedicatedWorker> {
   return new Promise((resolve, reject) => {
     const timeoutId = setTimeout(() => {
       reject(new Error(`Worker ${index} init timed out`));
-    }, INIT_TIMEOUT_MS);
+    }, POOL_SPAWN_TIMEOUT_MS);
 
     try {
-      const worker = new Worker('/stockfish/stockfish-18-lite-single.js');
+      // 🔒 ASK THE ENGINE WHICH BUILD RUNS HERE — DO NOT HARDCODE ONE.
+      //
+      // This said `/stockfish/stockfish-18-lite-single.js` outright: the WASM
+      // single build. `stockfishEngine.resolveWorkerUrl` routes iOS AWAY from
+      // that exact file because it `call_indirect`-traps on WebKit — that is
+      // why the asm.js build exists at all.
+      //
+      // So on every iPhone the pool spawned workers that could never signal
+      // ready, waited out the timeout, logged "Worker pool failed, falling back
+      // to single engine", and analysed the whole game SEQUENTIALLY on the
+      // slowest engine we ship. That is the 216-second review David reported:
+      // 66 positions × ~3.3s, one at a time, after a dead wait for a pool that
+      // never had a chance.
+      //
+      // One owner for "which engine build runs on this device". The pool is a
+      // second consumer of that decision, not a place to re-guess it.
+      const resolved = resolveWorkerUrl();
+      const worker = new Worker(resolved.url, resolved.workerType === 'module' ? { type: 'module' } : undefined);
 
       worker.onerror = () => {
         clearTimeout(timeoutId);
@@ -313,6 +352,78 @@ function spawnDedicatedWorker(index: number): Promise<DedicatedWorker> {
       reject(new Error(`Worker ${index} spawn failed`));
     }
   });
+}
+
+/** Per-position search budget for the REVIEW's eval curve, mirroring the
+ *  singleton's variant budgets. A slow engine must be capped or a single deep
+ *  position eats the whole wait. */
+const REVIEW_POSITION_BUDGET_MS = 5_000;
+
+/**
+ * Evaluate every position of one game ACROSS a pool of workers.
+ *
+ * 🔒 THE REVIEW ANALYSED ONE POSITION AT A TIME, ON THE SLOWEST ENGINE WE SHIP.
+ * The pool existed only for the BATCH sweep (`analyzeAllGames`), which is the
+ * path nobody is waiting on. The single-game review — the one with a person
+ * staring at a progress bar — walked its ~66 positions sequentially through the
+ * singleton. Measured on David's iPhone: 216 seconds, and PostHog says 11 of
+ * his 14 reviews were abandoned before they finished.
+ *
+ * A work QUEUE, not a fixed split: positions differ by an order of magnitude in
+ * cost, so handing worker N every Nth position leaves one worker grinding a
+ * tactical middlegame while the others idle. Each worker takes the next index
+ * whenever it comes free.
+ *
+ * Returns null when no pool could be spawned — the caller falls back to the
+ * sequential singleton, which is exactly today's behaviour and always works.
+ */
+async function evaluateFensPooled(
+  fens: string[],
+  onPosition?: (current: number, total: number) => void,
+): Promise<{ evals: (number | null)[]; achievedDepth: number } | null> {
+  const size = Math.max(1, Math.min(WORKER_POOL_SIZE, fens.length));
+  let workers: DedicatedWorker[] = [];
+  try {
+    workers = await Promise.all(
+      Array.from({ length: size }, (_, i) => spawnDedicatedWorker(i)),
+    );
+  } catch {
+    // Pool unavailable on this device — the singleton path still works.
+    workers.forEach((w) => w.destroy());
+    return null;
+  }
+
+  const evals: (number | null)[] = fens.map(() => null);
+  let achievedDepth = Number.POSITIVE_INFINITY;
+  let next = 0;
+  let done = 0;
+
+  const run = async (w: DedicatedWorker): Promise<void> => {
+    for (;;) {
+      const i = next;
+      next += 1;
+      if (i >= fens.length) return;
+      try {
+        const a = await w.analyzePosition(fens[i], ANALYSIS_DEPTH, REVIEW_POSITION_BUDGET_MS);
+        evals[i] = a.evaluation;
+        if (Number.isFinite(a.depth) && a.depth > 0) achievedDepth = Math.min(achievedDepth, a.depth);
+      } catch {
+        evals[i] = null; // one dead position must not sink the whole review
+      }
+      done += 1;
+      onPosition?.(done, fens.length);
+    }
+  };
+
+  try {
+    await Promise.all(workers.map((w) => run(w)));
+  } finally {
+    workers.forEach((w) => w.destroy());
+  }
+  return {
+    evals,
+    achievedDepth: Number.isFinite(achievedDepth) ? Math.min(achievedDepth, ANALYSIS_DEPTH) : 0,
+  };
 }
 
 // ─── Core Analysis ──────────────────────────────────────────────────────────
@@ -444,18 +555,29 @@ async function analyzeGamePositions(
   //
   // Stamping what we got means a game analysed on the phone is re-analysed when
   // it is next opened somewhere the full depth is reachable.
-  const evals: (number | null)[] = [];
+  // PARALLEL FIRST. The pool cuts the wait by its width (2 on a phone, up to 6
+  // on desktop); the sequential singleton below is the fallback for any device
+  // where the pool can't spawn — which is what every device did until the pool
+  // stopped hardcoding a build iOS can't run.
+  let evals: (number | null)[];
   let achievedDepth = Number.POSITIVE_INFINITY;
-  for (const fen of fens) {
-    onPosition?.(evals.length + 1, fens.length);
-    try {
-      const analysis: StockfishAnalysis = await stockfishEngine.analyzePosition(fen, ANALYSIS_DEPTH);
-      evals.push(analysis.evaluation);
-      if (Number.isFinite(analysis.depth) && analysis.depth > 0) {
-        achievedDepth = Math.min(achievedDepth, analysis.depth);
+  const pooled = await evaluateFensPooled(fens, onPosition);
+  if (pooled) {
+    evals = pooled.evals;
+    achievedDepth = pooled.achievedDepth;
+  } else {
+    evals = [];
+    for (const fen of fens) {
+      onPosition?.(evals.length + 1, fens.length);
+      try {
+        const analysis: StockfishAnalysis = await stockfishEngine.analyzePosition(fen, ANALYSIS_DEPTH);
+        evals.push(analysis.evaluation);
+        if (Number.isFinite(analysis.depth) && analysis.depth > 0) {
+          achievedDepth = Math.min(achievedDepth, analysis.depth);
+        }
+      } catch {
+        evals.push(null);
       }
-    } catch {
-      evals.push(null);
     }
   }
 
@@ -949,3 +1071,14 @@ export function runBackgroundAnalysis(): void {
       }
     });
 }
+
+/** Internals exposed for gating only.
+ *
+ *  `evaluateFensPooled` is the review's parallel eval curve and it cannot be
+ *  reached from the public API in a test: jsdom has no `Worker`, so every
+ *  existing test in `gameAnalysisService.test.ts` silently takes the sequential
+ *  fallback. Its correctness — that the pool asks `resolveWorkerUrl` for the
+ *  build rather than naming one, and that a work queue still returns each eval
+ *  against the position it belongs to — is exactly what needs a gate.
+ *  See `gameAnalysisPool.test.ts`. */
+export const __testables = { evaluateFensPooled, POOL_SPAWN_TIMEOUT_MS };

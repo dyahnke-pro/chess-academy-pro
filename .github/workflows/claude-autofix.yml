@@ -160,3 +160,56 @@ jobs:
           claude_args: |
             --max-turns 100
             --allowedTools Edit,Write,Read,Grep,Glob,Bash
+
+      # ── SAY WHY IT FAILED ──────────────────────────────────────────────────
+      #
+      # 🔒 A RED RUN THAT EXPLAINS NOTHING IS A RED RUN NOBODY ACTS ON. Six
+      # consecutive watch cycles failed here and the only evidence anywhere was
+      # `Action failed with error: Claude execution failed: result is_error:true`
+      # — the action hides its output by design (`show_full_output` would dump
+      # the transcript, and this repo's runners carry real credentials, so
+      # turning that on is not an option).
+      #
+      # The action does leave a structured result at a known path. This reads
+      # ONLY the scalar outcome fields — subtype, is_error, num_turns,
+      # duration, cost, permission denials — never the transcript, so nothing
+      # secret can ride out. That handful of numbers is enough to separate the
+      # three failure modes that actually happen:
+      #   num_turns 1 + $0            → the API call never landed (auth, credit,
+      #                                 rate limit) — an ops fix, not a code one
+      #   num_turns at the cap        → ran out of turns mid-task
+      #   subtype error_during_execution → it genuinely fell over working
+      #
+      # Measured 2026-08-12 on run 31557114583: 1 turn, $0, 178s. That is the
+      # first case, and no amount of staring at the workflow would have said so.
+      - name: Report why the fixer failed
+        if: failure() && steps.cred.outputs.have == 'true'
+        run: |
+          LOG=/home/runner/work/_temp/claude-execution-output.json
+          if [ ! -f "$LOG" ]; then
+            echo "::warning::autofix failed before it produced a result file — the action did not start."
+            exit 0
+          fi
+          node -e '
+            const fs = require("fs");
+            let raw;
+            try { raw = JSON.parse(fs.readFileSync(process.argv[1], "utf8")); }
+            catch { console.log("::warning::autofix result file was not valid JSON"); process.exit(0); }
+            const rows = Array.isArray(raw) ? raw : [raw];
+            const r = rows.reverse().find((x) => x && x.type === "result") ?? {};
+            const turns = r.num_turns ?? 0;
+            const cost = r.total_cost_usd ?? 0;
+            const secs = Math.round((r.duration_ms ?? 0) / 1000);
+            let why = "unclassified — read the run log";
+            if (turns <= 1 && cost === 0) {
+              why = "the model API call never landed (auth / credit / rate limit). "
+                  + "Rotate ANTHROPIC_API_KEY or CLAUDE_CODE_OAUTH_TOKEN in repo secrets — this is an ops fix, not a code one.";
+            } else if (r.subtype === "error_max_turns") {
+              why = "ran out of turns before finishing the fix — raise --max-turns or narrow the task.";
+            } else if (r.subtype === "error_during_execution") {
+              why = "the session failed partway through the task.";
+            }
+            const line = `autofix did not complete: ${why} [subtype=${r.subtype ?? "?"} turns=${turns} cost=$${cost} ${secs}s]`;
+            console.log(`::warning::${line}`);
+            fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `## Autofix did not complete\n\n${why}\n\n\`subtype=${r.subtype ?? "?"} turns=${turns} cost=$${cost} duration=${secs}s\`\n`);
+          ' "$LOG"

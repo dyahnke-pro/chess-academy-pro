@@ -66,6 +66,44 @@ async function emitEmpty(reason) {
   if (reason) console.log(`[posthog-watch] ${reason}`);
   await setOutput('count', '0');
   await setOutput('hasErrors', 'false');
+  await setOutput('hasActionable', 'false');
+}
+
+// ── REPORTABLE IS NOT THE SAME AS ACTIONABLE ────────────────────────────────
+//
+// 🔒 THE CRON WENT RED EVERY FIFTEEN MINUTES FOR SOMETHING NOBODY WOULD EVER
+// FIX. `hasErrors` was true if ANY row came back, and it gated BOTH the issue
+// comment and the autofix job — so the app successfully recovering from a
+// wedged worker ("forced worker respawn — 2×/1 user") spawned a full Claude
+// session to go find the "bug".
+//
+// Those events are the app's SELF-HEALING working. `recoverStuckAnalysis`
+// respawns a dead worker and reports that it did; `stockfish-variant-fallback`
+// is a by-design demotion; a Lichess 429 is an upstream rate limit. None of
+// them is a crash, and the workflow's own triage rules already say not to
+// patch them — but it burned a run finding that out, every quarter hour, and a
+// cron that is permanently red trains you to stop reading it.
+//
+// So the two questions are separated. Everything still gets REPORTED on the
+// tracking issue — the telemetry is worth having. Only genuine defects spawn a
+// fixer.
+//
+// Unknown classes count as ACTIONABLE on purpose: this list mutes what we have
+// positively identified as self-healing, and anything new fails toward getting
+// looked at. Silence by default is how a real crash goes unnoticed.
+const SELF_HEALING = [
+  /forced worker respawn/i,          // recoverStuckAnalysis did its job
+  /variant fallback/i,               // by-design demotion to a slower engine
+  /fell back to single/i,
+  /init cooldown/i,                  // transient, retried automatically
+  /rate-limit cooldown/i,            // upstream 429 — ops, not code
+  /upstream-blocked/i,
+  /HTTP 429/i,
+];
+
+export function isActionable(e) {
+  const text = `${e.type ?? ''} ${e.value ?? ''}`;
+  return !SELF_HEALING.some((re) => re.test(text));
 }
 
 async function api(key, path, init = {}) {
@@ -185,24 +223,31 @@ async function main() {
   errors.sort((a, b) => a.lastTs - b.lastTs);
 
   const maxTs = errors.length ? errors[errors.length - 1].lastTs : SINCE_MS;
+  const actionable = errors.filter(isActionable);
+  const selfHealed = errors.length - actionable.length;
   console.log(
     `[posthog-watch] project=${projectId} window-since=${new Date(SINCE_MS).toISOString()} ` +
-      `issues=${errors.length}`,
+      `issues=${errors.length} actionable=${actionable.length} self-healing=${selfHealed}`,
   );
   for (const e of errors) {
     console.log(
-      `    ${new Date(e.lastTs).toISOString()}  ${e.type || '(no type)'}: ${e.value || '(no message)'} ` +
+      `    ${isActionable(e) ? 'FIX ' : 'self'}  ${new Date(e.lastTs).toISOString()}  ` +
+        `${e.type || '(no type)'}: ${e.value || '(no message)'} ` +
         `— ${e.occurrences}x / ${e.users} user(s)`,
     );
   }
 
-  await writeFile(OUT_FILE, JSON.stringify({ since: SINCE_MS, maxTs, errors }, null, 2));
+  await writeFile(OUT_FILE, JSON.stringify({ since: SINCE_MS, maxTs, errors, actionable }, null, 2));
   await setOutput('count', String(errors.length));
   await setOutput('maxTs', String(maxTs));
+  // Everything is REPORTED on the tracking issue…
   await setOutput('hasErrors', errors.length > 0 ? 'true' : 'false');
+  // …but only a genuine defect spawns a fixer. See SELF_HEALING above.
+  await setOutput('hasActionable', actionable.length > 0 ? 'true' : 'false');
 
-  // A compact plain-text digest for the auto-fix prompt (newest first).
-  const digest = [...errors]
+  // The autofix prompt gets ONLY the actionable rows — handing it self-healing
+  // telemetry is what made it burn a session deciding not to act on one.
+  const digest = [...actionable]
     .reverse()
     .map((e) => `- ${e.type || '(no type)'}: ${e.value || '(no message)'} — ${e.occurrences}x / ${e.users} user(s), last ${new Date(e.lastTs).toISOString()}`)
     .join('\n');
@@ -226,4 +271,8 @@ function cleanStr(v) {
   return s.replace(/^"|"$/g, '').slice(0, 300);
 }
 
-main();
+// Run only when invoked as the script, so the classifier above can be imported
+// and gated without firing a live PostHog query.
+if (process.argv[1] && import.meta.url === `file://${process.argv[1]}`) {
+  main();
+}
