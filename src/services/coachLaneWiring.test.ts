@@ -484,6 +484,29 @@ describe('the couplings that make the wiring safe', () => {
     // puzzles and the weakness spine all hang off it and must not wait for a
     // tap); only the navigation moved behind the button.
     expect(TEACH).toMatch(/data-testid="teach-game-over"/);
+    // 🔒 THE NINETY-ONE SECONDS OF BLACK SCREEN, PINNED AT ITS CAUSE. The old
+    // effect called `navigate('/coach/review/…')` the instant `isGameOver`
+    // flipped: David never saw the mating move and sat on an empty screen for
+    // a minute and a half while the review analysed. The record is still
+    // written immediately — the fix is that LEAVING is a tap, not a
+    // consequence.
+    //
+    // Asserted structurally because it is a structural property: the effect
+    // may only set state, and the only navigation to the review must live
+    // inside a click handler. A component render could show the card and
+    // still miss a redirect racing it.
+    expect(TEACH, 'the game-over effect navigates instead of offering')
+      .toMatch(/The offer, NOT the navigation[\s\S]{0,200}setFinishedGame\(\{/);
+    const gameOverEffect = TEACH.slice(
+      TEACH.indexOf('const teachGameOverHandledRef'),
+      TEACH.indexOf('handleStudentMoveRef.current = handleStudentMove'),
+    );
+    expect(gameOverEffect.length, 'could not locate the game-over effect').toBeGreaterThan(200);
+    expect(gameOverEffect, 'the finished game still redirects on its own')
+      .not.toMatch(/navigate\(`\/coach\/review\//);
+    // And the way OUT is a button the student presses.
+    expect(TEACH).toMatch(/onClick=\{\(\) => \{ void navigate\(`\/coach\/review\/\$\{finishedGame\.id\}`\); \}\}/);
+    expect(TEACH).toMatch(/data-testid="teach-review-game"/);
     expect(TEACH).toMatch(/data-testid="teach-review-game"/);
     expect(TEACH).toMatch(/setFinishedGame\(\{/);
     expect(TEACH_CODE, 'the game-over effect navigates on its own again')

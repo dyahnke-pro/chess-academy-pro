@@ -335,6 +335,32 @@ async function main() {
   await page.screenshot({ path: `${OUT}/final.png`, fullPage: true }).catch(() => {});
   await browser.close();
 
+  // ── THE GAME ENDED: DOES THE BOARD SURVIVE IT? ────────────────────────────
+  //
+  // 🔒 THE NINETY-ONE SECONDS OF BLACK SCREEN. Learn used to navigate to the
+  // review the instant mate landed — David never saw the mating move, and sat
+  // on an empty screen for a minute and a half while the review analysed. The
+  // fix keeps the finished board on screen behind a card with the result and a
+  // Review button. It shipped with no live proof, which is how the phase lane
+  // stayed dead for two rounds, so it gets checked here.
+  //
+  // Only assertable when the game actually ended — the driver plays to a ply
+  // cap and often stops unfinished. Skipped is reported, never counted green.
+  let gameOverUi = 'not reached — game unfinished';
+  if (chess.isGameOver()) {
+    await sleep(2500);
+    const card = page.locator('[data-testid="teach-game-over"]');
+    const reviewBtn = page.locator('[data-testid="teach-review-game"]');
+    const boardStillThere = await page.locator('[data-square="e4"]').count().catch(() => 0);
+    const hasCard = await card.count().then((n) => n > 0).catch(() => false);
+    const hasBtn = await reviewBtn.count().then((n) => n > 0).catch(() => false);
+    const onReviewRoute = /\/coach\/review\//.test(page.url());
+    gameOverUi = hasCard && hasBtn && boardStillThere > 0 && !onReviewRoute
+      ? 'board kept, result shown, review offered'
+      : `BROKEN — card=${hasCard} button=${hasBtn} board=${boardStillThere > 0} redirected=${onReviewRoute}`;
+  }
+  console.log(`game-over screen     ${gameOverUi}`);
+
   await sleep(3000);
   const postEvents = await pullStream(before);
 
@@ -366,7 +392,7 @@ async function main() {
       return n;
     })(),
     openingPliesTaught: [...new Set(bakedPlies)].sort((a, b) => a - b),
-    linesSpoken: totalSpoken, silentPlies, falseClaims: allFalse, pageErrors,
+    linesSpoken: totalSpoken, silentPlies, falseClaims: allFalse, pageErrors, gameOverUi,
     streamDelta: postEvents.length - preEvents.length,
     pgn: chess.pgn(), transcript,
   };
@@ -452,7 +478,28 @@ async function main() {
   console.log(`phase events        detected=${phaseDetected.length} abandoned-stale=${phaseAbandoned.length}`);
   console.log(`                    boundary owed: ${mustHaveFired ?? 'no — the game never left the opening by the app\u2019s own rules'}`);
   for (const e of phaseEvents.slice(0, 6)) console.log(`   ${e.kind} :: ${String(e.summary ?? '').slice(0, 110)}`);
-  const silentBoundary = crossedIntoMiddlegame && phaseDetected.length === 0;
+  // 🔒 STREAM SILENCE IS NOT PROOF OF APP SILENCE. The audit-stream's
+  // in-memory buffer trims to the newest 500 entries, and a full game emits
+  // more than that — so an early detection (move 8-12, which is exactly when
+  // the opening ends) is EVICTED before the post-run pull. Three runs read
+  // `detected=0` on a working app, and PostHog — durable, and now carrying
+  // these events — showed both boundaries firing with a 3ms dispatch.
+  //
+  // So on https the absence of a stream event is PENDING, not FAIL: the run
+  // prints the query and the session answers it. This is the same
+  // exit-2-means-verify-via-PostHog shape the spoken-corpus audit already
+  // uses, and the reason the locked doctrine retired the local listener for
+  // prod runs in the first place. On localhost the stream is reliable and the
+  // check stays hard.
+  const streamIsAuthoritative = !/^https:/i.test(BASE);
+  const boundaryUnproven = crossedIntoMiddlegame && phaseDetected.length === 0;
+  const silentBoundary = boundaryUnproven && streamIsAuthoritative;
+  if (boundaryUnproven && !streamIsAuthoritative) {
+    console.log(`⏳ PENDING — ${mustHaveFired}, and the stream carried no detection.`);
+    console.log('   The stream evicts early events on a long game; confirm against PostHog:');
+    console.log(`   SELECT event, properties.summary FROM events`);
+    console.log(`   WHERE event LIKE 'phase%' AND properties.audit_run_id='${RUN_ID}'`);
+  }
   const abandonedBoundary = phaseDetected.length > 0 && phaseAbandoned.length >= phaseDetected.length;
   if (silentBoundary) console.log(`❌ ${mustHaveFired}, and no phase transition was detected`);
   if (abandonedBoundary) console.log('❌ every detected phase transition was abandoned as stale before it could speak');
@@ -463,8 +510,13 @@ async function main() {
   // failure this run exists to catch — silence there is what David heard.
   const untaughtOpening = Boolean(FOLLOW) && report.spineReached >= 4 && report.openingPliesTaught.length === 0;
   if (untaughtOpening) console.log(`❌ played ${report.spineReached} plies of a BAKED opening and taught none of them`);
-  process.exit(allFalse.length > 0 || pageErrors.length > 0 || mutedMiddlegame || untaughtOpening
-    || silentBoundary || abandonedBoundary ? 1 : 0);
+  const gameOverBroken = gameOverUi.startsWith('BROKEN');
+  if (gameOverBroken) console.log(`❌ the finished game did not keep the board: ${gameOverUi}`);
+  if (gameOverBroken || allFalse.length > 0 || pageErrors.length > 0 || mutedMiddlegame || untaughtOpening
+    || silentBoundary || abandonedBoundary) process.exit(1);
+  // 2 = ran clean, but one claim is owed to a PostHog query rather than
+  // asserted here. Never silently green.
+  process.exit(boundaryUnproven && !streamIsAuthoritative ? 2 : 0);
 }
 
 main().catch((e) => { console.error('FATAL', e); process.exit(1); });
