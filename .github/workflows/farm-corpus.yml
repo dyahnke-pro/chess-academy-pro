@@ -177,7 +177,34 @@ jobs:
               echo "::notice::nothing left to farm for this creator — backlog is empty"
               exit 0
             fi
-            echo "::error::farm ran but added no notes (${WAS} -> ${NOW}, backlog was ${LEFT}) — the pull or distill produced nothing"
+            # ── SAY WHICH STAGE PRODUCED NOTHING ────────────────────────────
+            #
+            # 🔒 "the pull or distill produced nothing" names two stages with
+            # completely different owners and gives no way to tell them apart,
+            # so this job sat red and undiagnosed. `.pull-status.json` already
+            # records `done` and `failed` per run — the guard just never read
+            # them.
+            #
+            # Measured 2026-08-12: the merge logged `0 videos → 36530 notes`.
+            # ZERO transcripts reached the distiller, so nothing downstream had
+            # any input. yt-dlp pulls those same videos fine from a residential
+            # path (verified this session), which makes it YouTube refusing the
+            # runner's datacenter IP — an upstream block with no code fix, and
+            # emphatically not the distiller being broken.
+            #
+            # Still RED either way: a farm that ships nothing has failed at its
+            # one job. But it now says which half to go and look at.
+            PULLED=$(node -e "
+              try { console.log(JSON.parse(require('fs').readFileSync('.pull-status.json','utf8')).done) }
+              catch { console.log('unknown') }")
+            FAILED=$(node -e "
+              try { console.log(JSON.parse(require('fs').readFileSync('.pull-status.json','utf8')).failed) }
+              catch { console.log('unknown') }")
+            if [ "$PULLED" = "0" ]; then
+              echo "::error::farm added no notes because it pulled NO TRANSCRIPTS (0 of ${LEFT} wanted, ${FAILED} failed). The distiller never had input. yt-dlp works from a residential path, so this is YouTube blocking the runner's IP — re-run the farm from a session environment; there is no code fix here."
+            else
+              echo "::error::farm pulled ${PULLED} transcript(s) but added no notes (${WAS} -> ${NOW}) — the DISTILL produced nothing. This one is ours."
+            fi
             exit 1
           fi
           git commit -m "feat(corpus): farm ${{ github.event.inputs.creator || 'saintlouis' }} — ${NOW} notes (+$((NOW-WAS)))"
