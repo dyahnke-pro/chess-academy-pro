@@ -435,17 +435,35 @@ async function evaluateFensPooled(
 async function analyzeGameOnWorker(
   game: GameRecord,
   worker: DedicatedWorker,
-): Promise<MoveAnnotation[] | null> {
+): Promise<{ annotations: MoveAnnotation[]; achievedDepth: number } | null> {
   const { fens, moves } = replayPgnToFens(game.pgn);
   if (fens.length < 2) return null;
 
-  // Build eval curve: evaluate every position sequentially on this worker
+  // 🔒 BUDGET THE SEARCH HERE TOO, OR THE POOL FIX BECOMES A DATA BUG.
+  //
+  // This asked for an uncapped `go depth 16` against `analyzePosition`'s hard
+  // 10s reject. That was survivable while the pool only ever ran the fast WASM
+  // build — but the pool now resolves the build per device, so on iOS it runs
+  // asm.js, where a complex middlegame does not reach depth 16 in ten seconds.
+  //
+  // The failure would have been SILENT and worse than the slowness it replaced:
+  // a rejected position pushes `null`, a null eval pair classifies as `good`,
+  // and the game is then written back `fullyAnalyzed`. Every move in a chunk of
+  // the user's library marked fine, permanently, with nothing logged.
+  //
+  // With a budget the search returns the depth it reached instead of throwing,
+  // and the caller stamps THAT — so a game analysed on a slow engine stays
+  // re-analysable rather than being frozen shallow behind a depth-16 claim.
   const evals: (number | null)[] = [];
+  let achievedDepth = Number.POSITIVE_INFINITY;
   for (const fen of fens) {
     if (_abortAnalysis) return null;
     try {
-      const result = await worker.analyzePosition(fen, ANALYSIS_DEPTH);
+      const result = await worker.analyzePosition(fen, ANALYSIS_DEPTH, REVIEW_POSITION_BUDGET_MS);
       evals.push(result.evaluation);
+      if (Number.isFinite(result.depth) && result.depth > 0) {
+        achievedDepth = Math.min(achievedDepth, result.depth);
+      }
     } catch {
       evals.push(null);
     }
@@ -515,7 +533,10 @@ async function analyzeGameOnWorker(
     }
   }
 
-  return annotations;
+  return {
+    annotations,
+    achievedDepth: Number.isFinite(achievedDepth) ? Math.min(achievedDepth, ANALYSIS_DEPTH) : 0,
+  };
 }
 
 /**
@@ -904,14 +925,19 @@ export async function analyzeAllGames(
             phase: 'analyzing',
           });
 
-          const annotations = await analyzeGameOnWorker(game, worker);
-          if (annotations && annotations.length > 0) {
-            await db.games.update(game.id, { annotations, fullyAnalyzed: true, analysisDepth: ANALYSIS_DEPTH });
+          const worked = await analyzeGameOnWorker(game, worker);
+          if (worked && worked.annotations.length > 0) {
+            // Stamp what the search REACHED, not what it was asked for — the
+            // same correction the review path got. A game analysed shallow on
+            // a slow engine must stay re-analysable.
+            await db.games.update(game.id, {
+              annotations: worked.annotations, fullyAnalyzed: true, analysisDepth: worked.achievedDepth,
+            });
             analyzedGameIds.push(game.id);
             analyzed++;
             // Generate this game's mistakes NOW — don't wait for the whole
             // batch to finish (it often never does on a big library).
-            await generateInsightsForGame(game.id, game.source, annotations);
+            await generateInsightsForGame(game.id, game.source, worked.annotations);
           }
           completed++;
         }

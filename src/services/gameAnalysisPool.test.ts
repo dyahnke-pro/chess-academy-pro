@@ -176,6 +176,37 @@ describe('the review evaluates its positions in parallel', () => {
     vi.useRealTimers();
   }, 30_000);
 
+  it('the BATCH path budgets its search too, so a slow build cannot null out a library', async () => {
+    // 🔒 THE REGRESSION THE POOL FIX ALMOST SHIPPED. Making the pool resolve the
+    // build per device means it now RUNS on iOS, where the engine is asm.js.
+    // The batch path asked for an uncapped `go depth 16` against
+    // analyzePosition's hard 10s reject, which asm does not meet on a complex
+    // position — and a rejected position pushes a null eval, a null pair
+    // classifies as `good`, and the game is written back `fullyAnalyzed`.
+    // Silently marking a chunk of the user's library fine, permanently.
+    //
+    // Asserted at the wire: every `go` the batch sends must carry a movetime.
+    const gos: string[] = [];
+    class RecordingWorker extends FakeStockfishWorker {
+      postMessage(msg: string): void {
+        if (msg.startsWith('go ')) gos.push(msg);
+        super.postMessage(msg);
+      }
+    }
+    vi.stubGlobal('Worker', RecordingWorker);
+    vi.doMock('./stockfishEngine', () => ({
+      stockfishEngine: { initialize: vi.fn(), analyzePosition: vi.fn() },
+      resolveWorkerUrl: () => ({ url: IOS_ASM_URL, variant: 'asm', reason: 'iOS', workerType: 'classic' }),
+    }));
+    const { __testables } = await import('./gameAnalysisService');
+    await __testables.evaluateFensPooled(['8/8/8/8/8/8/8/K6k w - - 0 1', '8/8/8/8/8/8/8/K6k b - - 0 1']);
+
+    expect(gos.length).toBeGreaterThan(0);
+    for (const g of gos) {
+      expect(g, `an uncapped search would reject on a slow build: "${g}"`).toMatch(/movetime \d+/);
+    }
+  }, 30_000);
+
   it('waits seconds for the pool, not the 45s engine-init budget', async () => {
     // The pool is an OPTIMISATION. Spending the full engine init timeout to
     // discover it cannot spawn adds that dead time to the front of every

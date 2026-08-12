@@ -12,6 +12,7 @@
 // too loose and the cron goes permanently red until it's ignored, too tight and
 // a live crash reaches nobody.
 import { describe, it, expect } from 'vitest';
+import { readFileSync } from 'node:fs';
 import { isActionable } from './posthog-error-watch.mjs';
 
 const err = (type: string, value: string) => ({ type, value });
@@ -59,5 +60,30 @@ describe('self-healing telemetry does not spawn a fixer', () => {
     // "stockfish" is not the mute key — the RECOVERY phrasing is. A genuine
     // Stockfish crash must still reach the fixer.
     expect(isActionable(err('uncaught-error', 'stockfishEngine.analyzePosition threw before any worker existed'))).toBe(true);
+  });
+});
+
+describe('the watcher reads real users, not the test harness', () => {
+  const SRC = readFileSync('scripts/posthog-error-watch.mjs', 'utf8');
+
+  it('excludes audit traffic from BOTH queries', () => {
+    // 🔒 MEASURED 2026-08-12, 24h window: real users produced 2 error groups
+    // across 4 events. The audit harness produced 13 groups across 743. So 87%
+    // of what the watcher triaged — and could spawn a fixer for — was my own
+    // headless container throwing while driving prod, dressed up as beta
+    // testers crashing.
+    //
+    // Audit runs stamp `audit_run_id` as a super property on every event, so
+    // the discriminator was already there and simply unused.
+    const filters = SRC.match(/coalesce\(properties\.audit_run_id, ''\) = ''/g) ?? [];
+    expect(filters.length, 'the exception query and the non-answer query must BOTH filter')
+      .toBeGreaterThanOrEqual(2);
+  });
+
+  it('keeps the filter on the query that feeds the fixer', () => {
+    // Narrow check: the $exception query specifically. It is the one whose
+    // output becomes the autofix prompt.
+    const exc = SRC.slice(SRC.indexOf("WHERE event = '$exception'"));
+    expect(exc.slice(0, 600)).toMatch(/coalesce\(properties\.audit_run_id, ''\) = ''/);
   });
 });

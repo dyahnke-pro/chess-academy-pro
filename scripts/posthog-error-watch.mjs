@@ -152,6 +152,12 @@ async function main() {
       ) AS groupKey
     FROM events
     WHERE event = '$exception' AND timestamp > toDateTime('${sinceIso}')
+      -- REAL USERS ONLY. Audit runs stamp audit_run_id on every event, and
+      -- the headless container throws freely: 166 forced worker respawns and 3
+      -- engine init timeouts in a single day of driving prod. Without this the
+      -- watcher reads my own test harness as beta testers crashing, and can
+      -- spawn a fixer to go and repair a browser that does not exist.
+      AND coalesce(properties.audit_run_id, '') = ''
     GROUP BY groupKey
     ORDER BY lastTs DESC
     LIMIT 50`;
@@ -195,6 +201,9 @@ async function main() {
       any(properties.surface) AS surface
     FROM events
     WHERE event = 'coach_non_answer' AND timestamp > toDateTime('${sinceIso}')
+      -- Same reason as above: 8 of the 33 re-asks measured on 2026-08-12 were
+      -- an audit driving scripted questions, not a person not getting answered.
+      AND coalesce(properties.audit_run_id, '') = ''
     GROUP BY properties.reason, properties.question
     ORDER BY lastTs DESC
     LIMIT 25`;
