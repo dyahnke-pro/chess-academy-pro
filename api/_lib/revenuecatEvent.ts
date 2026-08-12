@@ -13,6 +13,11 @@
  * Pure + total — the handler (`api/revenuecat-webhook.ts`) owns auth + the
  * fetch to PostHog; this owns only the shape, so it's unit-testable.
  * Docs: docs/plans/2026-06-02-productization.md (§PostHog event catalog).
+ *
+ * SANDBOX events (TestFlight / App Store sandbox purchases) are dropped
+ * entirely, never forwarded — see the check at the top of
+ * `mapRevenueCatEvent`. They are not real revenue and must never leak into
+ * the production funnel.
  */
 
 /** The subset of a RevenueCat webhook `event` object we read. */
@@ -69,6 +74,15 @@ export function mapRevenueCatEvent(rc: RevenueCatEvent | undefined | null): Post
   const type = typeof rc.type === 'string' ? rc.type : '';
   const distinctId = rc.app_user_id || rc.original_app_user_id || '';
   if (!type || !distinctId) return null;
+  // SANDBOX = TestFlight / App Store sandbox testing, never real money. Apple's
+  // sandbox renews subscriptions on an accelerated clock (a monthly plan can
+  // renew every ~1-2 days), so a single test session emits a burst of
+  // `subscription_renewed`/`purchase_completed`-shaped events that read as a
+  // real, fast-churning paying customer if forwarded. Drop it here rather than
+  // tag-and-hope — real revenue analysis must never have to remember to filter
+  // `environment`. (Discovered 2026-08-11: sandbox test renewals had already
+  // been misread as a real customer who paid five days then churned.)
+  if (typeof rc.environment === 'string' && rc.environment.toUpperCase() === 'SANDBOX') return null;
 
   // INITIAL_PURCHASE with a trial period is a trial START, not a paid conversion.
   let event = TYPE_MAP[type] ?? `rc_${type.toLowerCase()}`;

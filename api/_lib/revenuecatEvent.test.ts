@@ -29,6 +29,27 @@ describe('mapRevenueCatEvent — identity + drops', () => {
   });
 });
 
+describe('mapRevenueCatEvent — sandbox is never real revenue', () => {
+  it('drops a SANDBOX event outright, even a money-moving one', () => {
+    expect(mapRevenueCatEvent({ ...BASE, type: 'INITIAL_PURCHASE', period_type: 'NORMAL', environment: 'SANDBOX' })).toBeNull();
+    expect(mapRevenueCatEvent({ ...BASE, type: 'RENEWAL', period_type: 'NORMAL', environment: 'SANDBOX' })).toBeNull();
+  });
+
+  it('is case-insensitive on the environment value', () => {
+    expect(mapRevenueCatEvent({ ...BASE, type: 'RENEWAL', environment: 'sandbox' })).toBeNull();
+  });
+
+  it('keeps a PRODUCTION event with the same shape', () => {
+    const m = mapRevenueCatEvent({ ...BASE, type: 'RENEWAL', period_type: 'NORMAL', environment: 'PRODUCTION' });
+    expect(m?.event).toBe('subscription_renewed');
+  });
+
+  it('keeps an event with no environment field at all (webhook payload may omit it)', () => {
+    const m = mapRevenueCatEvent({ ...BASE, type: 'RENEWAL', period_type: 'NORMAL', environment: undefined });
+    expect(m?.event).toBe('subscription_renewed');
+  });
+});
+
 describe('mapRevenueCatEvent — trial vs paid split', () => {
   it('INITIAL_PURCHASE with a TRIAL period is a trial start, no revenue', () => {
     const m = mapRevenueCatEvent({ ...BASE, type: 'INITIAL_PURCHASE', period_type: 'TRIAL' });
