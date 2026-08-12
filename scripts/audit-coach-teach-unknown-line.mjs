@@ -488,11 +488,21 @@ async function main() {
       // five seconds in the routing still read `mode=learn` and the scenario
       // reported a lost stage hint that was merely not applied yet. Wait for
       // the stage to land, the way E2 does.
+      // Two waits, because there are two things happening and only the second
+      // one is what this scenario is about. On a COLD ask the lesson has to be
+      // generated before any stage can be jumped to, and that generation ran
+      // past 90s on prod — so a single 90s wait expired mid-generation and
+      // reported a lost drill hint on a lesson that did not exist yet.
+      await waitForEvent(intercepted, (e) =>
+        e.kind === 'coach-surface-migrated' &&
+        /generation OK|surface-routed \((?:static|cached)\)/i.test(e.summary ?? ''),
+        180_000,
+      );
       await waitForEvent(intercepted, (e) =>
         e.kind === 'coach-surface-migrated' &&
         /\[stage=drill\]|landed at drill/i.test(e.summary ?? ''),
-        90_000,
-      ).catch(() => undefined);
+        45_000,
+      );
       await page.waitForTimeout(SHORT_SETTLE_MS);
     },
     assertions: [
@@ -925,7 +935,12 @@ async function main() {
       await page.waitForTimeout(2500);
     },
     assertions: [
-      { kind: 'audit-summary-contains', value: 'game on Learn', label: 'the game starts on Learn (not shipped to /coach/play)' },
+      // A FAMILY ask reaches the game through the subline PICKER, and answering
+      // a picker tile is a chip tap — so it starts the game by a different
+      // route than F5's direct ask and never emits `game on Learn`. What both
+      // paths owe is the same thing, and it is what the locked rule is about:
+      // the game runs HERE, not in the generic play room.
+      { kind: 'url-matches', value: /\/coach\/teach/, label: 'the game runs on Learn (not shipped to /coach/play)' },
       // Either the coach echoed our move via a coach-turn audit OR a
       // post-move audit fired. Both indicate the live game pipeline
       // accepted the move.

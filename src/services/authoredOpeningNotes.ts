@@ -55,21 +55,49 @@ export interface AuthoredEntry {
  * Matching is on the opening NAME because that is the only key the two sources
  * share; the note it eventually speaks is still selected by MOVES.
  */
+/**
+ * Both spellings of the same opening, reduced to one key.
+ *
+ * 🔒 THE TWO SOURCES DISAGREE ON SPELLING, AND THE TIER WENT SILENT ON 18 OF
+ * 43 OPENINGS BECAUSE OF IT. `repertoire.json` is hand-written in British
+ * English — "Caro-Kann Defence", "French Defence", "Grünfeld Defence",
+ * "Alekhine's Defence" — while the canonical name comes from the Lichess
+ * database in American English without the possessive. So `authoredEntryFor`
+ * matched on 25 openings and returned null on the other 18, and every one of
+ * those lessons quietly went back to model prose over hand-written text that
+ * was sitting right there.
+ *
+ * This is normalisation, not fuzzy matching: the comparison stays exact, it
+ * just happens after both sides are spelled the same way. Nothing here can
+ * make one opening match a different one.
+ */
+function nameKey(raw: string): string {
+  return raw
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // Grünfeld → Grunfeld
+    .toLowerCase()
+    .replace(/\bdefence\b/g, 'defense')
+    .replace(/\bcentre\b/g, 'center')
+    .replace(/'s\b/g, '')                              // Alekhine's → Alekhine
+    .replace(/[^a-z0-9: ]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 export function authoredEntryFor(
   openingName: string | undefined,
   all: readonly AuthoredEntry[],
 ): AuthoredEntry | null {
   if (!openingName) return null;
-  const want = openingName.trim().toLowerCase();
+  const want = nameKey(openingName);
   if (!want) return null;
-  const exact = all.find((e) => (e.name ?? '').trim().toLowerCase() === want);
+  const exact = all.find((e) => nameKey(e.name ?? '') === want);
   if (exact) return exact;
   // A generated lesson's canonical name can carry a variation suffix the
   // repertoire files under its parent ("Italian Game: Giuoco Piano" →
   // "Italian Game"). Longest prefix wins so a more specific entry is preferred.
   const prefixed = all
     .filter((e) => {
-      const n = (e.name ?? '').trim().toLowerCase();
+      const n = nameKey(e.name ?? '');
       return n.length > 0 && (want.startsWith(`${n}:`) || want.startsWith(`${n} `));
     })
     .sort((a, b) => (b.name ?? '').length - (a.name ?? '').length);

@@ -144,6 +144,40 @@ describe('the wire, not just the function', () => {
       .toBeNull();
   });
 
+  it('reaches the British-spelled entries too', () => {
+    // 🔒 42% OF THE REPERTOIRE WAS UNREACHABLE. repertoire.json is written in
+    // British English ("Caro-Kann Defence", "Grünfeld Defence", "Alekhine's
+    // Defence"); the canonical name arrives from the Lichess database in
+    // American English with no possessive. Matching raw strings meant the tier
+    // resolved on 25 openings and returned null on the other 18 — silently
+    // handing those lessons back to the model with the hand-written prose
+    // sitting one file away.
+    for (const [canonical, filedAs] of [
+      ['Caro-Kann Defense', 'Caro-Kann Defence'],
+      ['French Defense', 'French Defence'],
+      ['Grunfeld Defense', 'Grünfeld Defence'],
+      ['Alekhine Defense', "Alekhine's Defence"],
+      ['Caro-Kann Defense: Classical Variation', 'Caro-Kann Defence'],
+    ] as const) {
+      expect(authoredEntryFor(canonical, all)?.name, canonical).toBe(filedAs);
+    }
+  });
+
+  it('every repertoire entry is reachable by its own name', () => {
+    // The floor: whatever spelling a future entry lands in, it must resolve.
+    for (const e of all) {
+      expect(authoredEntryFor(e.name, all), `unreachable: ${e.name}`).toBeTruthy();
+    }
+  });
+
+  it('normalising spelling does not make one opening match another', () => {
+    // Normalisation is not fuzziness. These are genuinely different openings
+    // and must stay apart no matter how the spelling is folded.
+    expect(authoredEntryFor('French Defense', all)?.name).toBe('French Defence');
+    expect(authoredEntryFor('Sicilian Defense', all)?.name).not.toBe('French Defence');
+    expect(authoredEntryFor('Not A Real Opening', all)).toBeNull();
+  });
+
   it('an unknown opening resolves to nothing rather than the wrong entry', () => {
     expect(authoredEntryFor('Not A Real Opening', all)).toBeNull();
     expect(authoredEntryFor(undefined, all)).toBeNull();

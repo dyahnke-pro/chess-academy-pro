@@ -32,7 +32,19 @@ const sleep = (ms) => new Promise((r) => { setTimeout(r, ms); });
 /** Distinctive multi-word phrases from the authored prose for this opening. */
 function authoredPhrases(openingName) {
   const rep = JSON.parse(readFileSync('src/data/repertoire.json', 'utf8'));
-  const entry = rep.find((e) => (e.name ?? '').toLowerCase() === openingName.toLowerCase());
+  // Same normalisation the app uses — repertoire.json is British-spelled
+  // ("Caro-Kann Defence") while the canonical name is American, so a raw
+  // comparison here throws on the openings most worth testing.
+  const key = (n) => String(n ?? '')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/\bdefence\b/g, 'defense')
+    .replace(/\bcentre\b/g, 'center')
+    .replace(/'s\b/g, '')
+    .replace(/[^a-z0-9: ]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  const entry = rep.find((e) => key(e.name) === key(openingName));
   if (!entry) throw new Error(`no repertoire entry named "${openingName}"`);
   const out = [];
   for (const v of entry.variations ?? []) {
