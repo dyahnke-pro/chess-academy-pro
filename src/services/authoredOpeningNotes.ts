@@ -73,28 +73,132 @@ export interface AuthoredEntry {
  */
 function nameKey(raw: string): string {
   return raw
-    .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // Grünfeld → Grunfeld
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')  // Grünfeld → Grunfeld
     .toLowerCase()
+    // ø, æ, å and ß carry the mark INSIDE the glyph, so NFD has no combining
+    // character to strip and leaves them exactly as they were. The database
+    // already ships ø; the rest are one keystroke away in any Scandinavian or
+    // German name, and each would be a silent miss of the kind British
+    // spelling already caused once.
+    .replace(/ø/g, 'o').replace(/æ/g, 'ae').replace(/å/g, 'a').replace(/ß/g, 'ss')
     .replace(/\bdefence\b/g, 'defense')
     .replace(/\bcentre\b/g, 'center')
-    .replace(/'s\b/g, '')                              // Alekhine's → Alekhine
+    .replace(/'s\b/g, '')                               // Alekhine's → Alekhine
     .replace(/[^a-z0-9: ]+/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
 }
 
+/**
+ * Every spelling of a name that a human source might legitimately have used.
+ *
+ * 🔒 THERE IS NO SINGLE CORRECT FOLD FOR AN UMLAUT, so do not try to pick one.
+ * A writer without the key types "Gruenfeld"; stripping the diacritic from the
+ * other source gives "Grunfeld"; the two do not meet. Folding the digraph the
+ * other way — ue → u — is worse than useless, because it also turns "Queen"
+ * into "Qun" and quietly corrupts a third of the repertoire.
+ *
+ * So generate both legitimate forms and match if ANY pair agrees. This is still
+ * exact matching, over a set of two, and it cannot make one opening match a
+ * different one: no real opening name differs only by an umlaut.
+ */
+function nameKeys(raw: string): string[] {
+  const stripped = nameKey(raw);
+  const expanded = nameKey(
+    raw.replace(/ü/g, 'ue').replace(/ö/g, 'oe').replace(/ä/g, 'ae')
+      .replace(/Ü/g, 'Ue').replace(/Ö/g, 'Oe').replace(/Ä/g, 'Ae'),
+  );
+  return expanded === stripped ? [stripped] : [stripped, expanded];
+}
+
+const namesAgree = (a: string, b: string): boolean => {
+  const ka = nameKeys(a);
+  return nameKeys(b).some((k) => ka.includes(k));
+};
+
+/** The words in a name that actually identify an opening. */
+const NAME_STOPWORDS = new Set([
+  'defense', 'defence', 'variation', 'game', 'opening', 'attack', 'system',
+  'line', 'main', 'classical', 'modern', 'old', 'traditional', 'declined',
+  'accepted', 'the',
+]);
+
+const nameTokens = (raw: string): string[] =>
+  nameKey(raw).split(/[: ]+/).filter((t) => t.length > 0 && !NAME_STOPWORDS.has(t));
+
 export function authoredEntryFor(
   openingName: string | undefined,
   all: readonly AuthoredEntry[],
+  spineSans?: readonly string[],
 ): AuthoredEntry | null {
+  // ── MOVES FIRST, NAMES SECOND ────────────────────────────────────────────
+  //
+  // 🔒 SPELLING WAS THE SMALL HALF OF THIS PROBLEM. After the British fix, a
+  // sweep of all 43 entries against the names the database actually produces
+  // still missed 12 — and none of those were spelling:
+  //
+  //   · the repertoire files families in shorthand ("Sicilian: Najdorf") while
+  //     the database says "Sicilian Defense: Najdorf Variation, Opocensky
+  //     Variation, Traditional Line" — not a prefix, so: nothing;
+  //   · sub-openings are their own entry here ("Evans Gambit", "Two Knights
+  //     Defence", "Schliemann Defence") but live under a parent there
+  //     ("Italian Game: Evans Gambit, Morphy Attack"), so longest-prefix
+  //     resolved to the PARENT — worse than a miss, because the lesson would
+  //     be offered the wrong opening's variations.
+  //
+  // Names are a translation layer between two independent human conventions,
+  // and translation layers leak. The moves do not: if the lesson's spine walks
+  // this entry's line, it IS this entry, in any language and under any naming
+  // convention. So the spine decides when we have it, and the name only
+  // arbitrates when we do not.
+  if (spineSans && spineSans.length > 0) {
+    // When two entries follow the spine equally far, the name breaks the tie —
+    // "Four Knights Game: Glek System" agrees with the Four Knights main line
+    // for its whole length, so depth alone hands the Glek's lesson to its
+    // parent. Counting which entry's identifying words the canonical name
+    // actually carries picks the specific one.
+    const canonicalTokens = new Set(nameTokens(openingName ?? ''));
+    let best: { entry: AuthoredEntry; depth: number; named: number } | null = null;
+    for (const e of all) {
+      // How far this entry's own lines follow the spine. Variations count too:
+      // a lesson on the Advance French follows that variation, not the main
+      // line, and would otherwise score barely above every other French entry.
+      let depth = 0;
+      for (const pgn of [e.pgn, ...(e.variations ?? []).map((v) => v.pgn)]) {
+        const line = sansOf(pgn);
+        let i = 0;
+        while (i < line.length && i < spineSans.length && line[i] === spineSans[i]) i += 1;
+        if (i > depth) depth = i;
+      }
+      if (depth < MIN_SPINE_AGREEMENT) continue;
+      const named = nameTokens(e.name ?? '').filter((t) => canonicalTokens.has(t)).length;
+      if (!best || depth > best.depth || (depth === best.depth && named > best.named)) {
+        best = { entry: e, depth, named };
+      }
+    }
+    if (best) return best.entry;
+  }
+
   if (!openingName) return null;
   const want = nameKey(openingName);
   if (!want) return null;
-  const exact = all.find((e) => nameKey(e.name ?? '') === want);
+  const exact = all.find((e) => namesAgree(e.name ?? '', openingName));
   if (exact) return exact;
-  // A generated lesson's canonical name can carry a variation suffix the
-  // repertoire files under its parent ("Italian Game: Giuoco Piano" →
-  // "Italian Game"). Longest prefix wins so a more specific entry is preferred.
+
+  // Failing that, the most specific entry whose identifying words are ALL
+  // present in the canonical name. Subset, not prefix: it reaches
+  // "Sicilian: Najdorf" from "Sicilian Defense: Najdorf Variation, …", which
+  // prefix matching could not, and it prefers "Evans Gambit" over its parent
+  // "Italian Game" because it matches more identifying words.
+  const wantTokens = new Set(nameTokens(openingName));
+  const scored = all
+    .map((e) => ({ e, t: nameTokens(e.name ?? '') }))
+    .filter(({ t }) => t.length > 0 && t.every((tok) => wantTokens.has(tok)))
+    .sort((a, b) => b.t.length - a.t.length || (b.e.name ?? '').length - (a.e.name ?? '').length);
+  if (scored.length > 0) return scored[0].e;
+
+  // Last resort, the original prefix rule, for a name whose identifying words
+  // the canonical form drops entirely.
   const prefixed = all
     .filter((e) => {
       const n = nameKey(e.name ?? '');
@@ -103,6 +207,14 @@ export function authoredEntryFor(
     .sort((a, b) => (b.name ?? '').length - (a.name ?? '').length);
   return prefixed[0] ?? null;
 }
+
+/**
+ * How many plies of agreement make a spine identify an entry.
+ *
+ * Four, because every 1.e4 e5 opening shares three and picking on fewer would
+ * hand the Italian's prose to the Ruy. Below this the name decides instead.
+ */
+const MIN_SPINE_AGREEMENT = 4;
 
 /** SAN tokens from a PGN move string — move numbers and results dropped. */
 export function sansOf(pgn: string | undefined): string[] {

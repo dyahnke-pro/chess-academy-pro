@@ -17,6 +17,7 @@ import { Chess } from 'chess.js';
 import { gradeNarrationText } from './coachAnswerGates';
 import { authoredNoteAt, authoredEntryFor, divergencePly, sansOf } from './authoredOpeningNotes';
 import repertoire from '../data/repertoire.json';
+import openingsDb from '../data/openings-lichess.json';
 
 const ENTRY = {
   pgn: 'e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4',
@@ -245,6 +246,87 @@ describe('the tier reaches most of what was written', () => {
       const any = (e.variations ?? []).some((v) => (v.explanation ?? '').trim()
         && divergencePly(main, sansOf(v.pgn)) !== null);
       expect(any, `no variation of "${e.name}" can ever speak`).toBe(true);
+    }
+  });
+});
+
+describe('the moves decide, not the name', () => {
+  // 🔒 NAMES LEAKED TWICE IN ONE DAY. First British spelling (18 of 43 silent),
+  // then — after that was fixed — the repertoire's own naming conventions:
+  // families in shorthand ("Sicilian: Najdorf" vs the database's "Sicilian
+  // Defense: Najdorf Variation, Opocensky Variation, Traditional Line"), and
+  // sub-openings filed as their own entry here but under a parent there
+  // ("Evans Gambit" → "Italian Game: Evans Gambit, Morphy Attack"), which
+  // resolved to the PARENT — worse than a miss, because the lesson is then
+  // offered the wrong opening's prose to choose from.
+  //
+  // A line that walks an entry IS that entry, in any language and under any
+  // convention. This measures the whole file against the names the database
+  // actually produces.
+  const all = repertoire as unknown as Parameters<typeof authoredEntryFor>[1];
+  const rep = repertoire as unknown as { name: string; pgn?: string }[];
+  const db = openingsDb as unknown as { name?: string; moves?: string[]; pgn?: string }[];
+
+  /** The database name a lesson for this repertoire entry would carry. */
+  const canonicalNameFor = (pgn?: string): string | null => {
+    const want = sansOf(pgn);
+    let best: { name: string; len: number } | null = null;
+    for (const o of db) {
+      const m = o.moves ?? sansOf(o.pgn);
+      if (m.length === 0 || m.length > want.length) continue;
+      if (!m.every((x, i) => x === want[i])) continue;
+      if (!best || m.length > best.len) best = { name: o.name ?? '', len: m.length };
+    }
+    return best?.name ?? null;
+  };
+
+  it('every opening resolves from the database name its lesson would carry', () => {
+    const misses: string[] = [];
+    for (const e of rep) {
+      const canonical = canonicalNameFor(e.pgn);
+      if (!canonical) { misses.push(`${e.name}: no database line matches its pgn`); continue; }
+      const got = authoredEntryFor(canonical, all, sansOf(e.pgn));
+      if (got?.name !== e.name) misses.push(`"${canonical}" → ${got?.name ?? 'nothing'} (wanted ${e.name})`);
+    }
+    expect(misses, `${misses.length} openings unreachable:\n${misses.join('\n')}`).toEqual([]);
+  });
+
+  it('the spine wins when the name would have picked the parent', () => {
+    // The Evans Gambit is its own authored entry; the database files it under
+    // the Italian Game. Name matching alone hands this lesson the Italian's
+    // variations.
+    const evans = rep.find((e) => e.name === 'Evans Gambit');
+    expect(evans).toBeTruthy();
+    const got = authoredEntryFor('Italian Game: Evans Gambit, Morphy Attack', all, sansOf(evans!.pgn));
+    expect(got?.name).toBe('Evans Gambit');
+  });
+
+  it('a spine too short to identify anything falls back to the name', () => {
+    // Three plies are shared by half the 1.e4 e5 world; picking on them would
+    // hand the Italian's prose to the Ruy.
+    expect(authoredEntryFor('Ruy Lopez', all, ['e4', 'e5', 'Nf3'])?.name).toBe('Ruy Lopez');
+    expect(authoredEntryFor(undefined, all, ['e4', 'e5'])).toBeNull();
+  });
+
+  it('folds the diacritics that do not decompose', () => {
+    // ø, æ, å and ß carry the mark INSIDE the glyph, so NFD has no combining
+    // character to strip and leaves them exactly as they were. The database
+    // already ships ø today; the rest are one keystroke away in any
+    // Scandinavian or German opening name, and each would be a silent miss of
+    // the same kind British spelling already caused once.
+    //
+    // Each case files the entry under one spelling and asks for it in the
+    // other — which is the situation that actually occurs, the two sources
+    // being written by different people.
+    for (const [filedAs, askedAs] of [
+      ['Bjorn Defense', 'Bjørn Defence'],
+      ['Bjørn Defence', 'Bjorn Defense'],
+      ['Gruenfeld Defense', 'Grünfeld Defence'],
+      ['Kadas Opening', 'Kádas Opening'],
+      ['Duesseldorf Gambit', 'Düsseldorf Gambit'],
+    ] as const) {
+      const probe: Parameters<typeof authoredEntryFor>[1] = [{ name: filedAs, pgn: 'e4 e5', variations: [] }];
+      expect(authoredEntryFor(askedAs, probe)?.name, `${askedAs} → ${filedAs}`).toBe(filedAs);
     }
   });
 });

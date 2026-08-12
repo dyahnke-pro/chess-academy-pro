@@ -2234,9 +2234,17 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
   // The repertoire entry that actually HOLDS the authored prose. The generator's
   // own `entry` is a DB record with no variations — passing it was how the first
   // cut of this tier shipped dead. Resolved once per lesson, not per ply.
+  // The SPINE is passed, and it is what actually decides. Name matching is a
+  // translation layer between two independent human conventions and it leaked
+  // twice in one day — first on British spelling, then on the repertoire's
+  // family shorthand ("Sicilian: Najdorf") and its own sub-opening entries
+  // ("Evans Gambit", filed under "Italian Game" in the database). Names resolved
+  // 31 of 43 openings; the moves resolve all 43, because a line that walks this
+  // entry IS this entry regardless of what either source calls it.
   const authoredEntry = authoredEntryFor(
     entry.canonicalName,
     authoredRepertoire as unknown as Parameters<typeof authoredEntryFor>[1],
+    positions.map((p) => p.san).filter((san): san is string => typeof san === 'string'),
   );
   // The GROUNDED arrow source per spine ply — the note's graded teaching text,
   // captured BEFORE the house-voice reword so the arrows can never drift with
@@ -2329,6 +2337,27 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
         plies: authoredSpoke.map((a) => a.ply),
         variations: authoredSpoke.map((a) => a.variation),
         firstText: authoredSpoke[0].text.slice(0, 240),
+      }),
+    });
+  } else if (!baked) {
+    // SAY WHY IT DIDN'T SPEAK. Three prod runs went silent on the French and
+    // each time the cause had to be guessed at from the outside — a stale
+    // cache, then a name that would not resolve, then a bake that turned out
+    // not to exist — while offline the same data fired correctly every time.
+    // Three guesses is two too many. The failure has exactly three possible
+    // causes and the generator knows which one it hit, so it reports it.
+    void logAppAudit({
+      kind: 'coach-surface-migrated',
+      category: 'subsystem',
+      source: 'openingGenerator.authoredTier.silent',
+      summary: authoredEntry
+        ? `authored tier silent: "${entry.canonicalName}" resolved to "${authoredEntry.name ?? '(unnamed)'}" but no variation began on this spine`
+        : `authored tier silent: "${entry.canonicalName}" resolved to NO repertoire entry`,
+      details: JSON.stringify({
+        canonicalName: entry.canonicalName,
+        resolved: authoredEntry?.name ?? null,
+        variationsAvailable: (authoredEntry?.variations ?? []).length,
+        spine: positions.slice(0, 12).map((p) => p.san),
       }),
     });
   }

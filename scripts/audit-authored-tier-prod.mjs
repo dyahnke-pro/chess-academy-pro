@@ -77,6 +77,7 @@ async function main() {
 
   const spoken = [];
   const authoredEvents = [];
+  const silentEvents = [];
   const pageErrors = [];
   page.on('pageerror', (e) => pageErrors.push(String(e)));
   page.on('request', (req) => {
@@ -84,8 +85,15 @@ async function main() {
     try {
       const body = JSON.parse(req.postData() ?? '{}');
       for (const e of (body.events ?? body.entries ?? [body])) {
-        if (String(e.source ?? '') === 'openingGenerator.authoredTier') {
+        const src = String(e.source ?? '');
+        if (src === 'openingGenerator.authoredTier') {
           authoredEvents.push({ summary: e.summary, details: e.details });
+        }
+        // The silence report is the whole point of this run when the tier does
+        // not fire — it names which of the three conditions failed instead of
+        // leaving the reader to guess from an empty result.
+        if (src === 'openingGenerator.authoredTier.silent') {
+          silentEvents.push({ summary: e.summary, details: e.details });
         }
         const text = e.narrationText ?? e.summary ?? '';
         if (String(e.kind ?? '').includes('narration') || String(e.kind ?? '').includes('voice')) {
@@ -146,7 +154,7 @@ async function main() {
 
   // A cold generation is slow; the tier only exists inside a generated lesson.
   const deadline = Date.now() + 240_000;
-  while (Date.now() < deadline && authoredEvents.length === 0) await sleep(4000);
+  while (Date.now() < deadline && authoredEvents.length === 0 && silentEvents.length === 0) await sleep(4000);
   // Belt and braces: if an authored sentence DID survive the reword verbatim,
   // say so — it costs nothing and it is the strongest possible evidence.
   const said = spoken.map((s) => s.text.toLowerCase()).join(' \n ');
@@ -160,6 +168,7 @@ async function main() {
     authoredPhrasesChecked: phrases.length,
     spokenLines: spoken.length,
     authoredEvents,
+    silentEvents,
     hits,
     pageErrors,
     spoken: spoken.slice(0, 60),
@@ -176,6 +185,14 @@ async function main() {
       const d = JSON.parse(a.details ?? '{}');
       if (d.firstText) console.log(`     first authored line (pre-reword): "${d.firstText}"`);
       if (d.plies) console.log(`     plies: ${JSON.stringify(d.plies)}`);
+    } catch { /* details are a bonus */ }
+  }
+  for (const a of silentEvents) {
+    console.log(`   ⏳ ${a.summary}`);
+    try {
+      const d = JSON.parse(a.details ?? '{}');
+      console.log(`     resolved: ${d.resolved ?? 'nothing'} (${d.variationsAvailable ?? 0} variations)`);
+      console.log(`     spine: ${(d.spine ?? []).join(' ')}`);
     } catch { /* details are a bonus */ }
   }
   console.log(`verbatim phrase hits    ${hits.length} (0 is expected — PASS 2 rewords)`);
