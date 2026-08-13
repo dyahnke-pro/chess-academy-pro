@@ -443,7 +443,19 @@ async function main() {
     // `subject` tells the coach which opening to play (its book side), for
     // plans whose family identity depends on the coach's cooperation (Italian).
     const subjectQ = plan.subject ? `&subject=${encodeURIComponent(plan.subject)}` : '';
-    await page.goto(`${BASE_URL}/coach/play?side=${plan.side}${subjectQ}`, { waitUntil: 'domcontentloaded', timeout: 60_000 });
+    // One retry, and NEVER let a transient prod-navigation hiccup crash the
+    // whole run: run 31678116078 lost 8 games to a single 60s goto timeout on
+    // game 2. A failed navigation fails THAT game and the loop moves on.
+    let navOk = false;
+    for (let attempt = 0; attempt < 2 && !navOk; attempt += 1) {
+      navOk = await page.goto(`${BASE_URL}/coach/play?side=${plan.side}${subjectQ}`, { waitUntil: 'domcontentloaded', timeout: 90_000 })
+        .then(() => true)
+        .catch((e) => { console.log(`[full-games] ${tag}: goto attempt ${attempt + 1} failed — ${String(e).slice(0, 120)}`); return false; });
+    }
+    if (!navOk) {
+      results.push({ tag, plan: plan.name, side: plan.side, error: 'navigation failed twice' });
+      continue;
+    }
     await page.waitForTimeout(4000);
     await clearFirstRunOverlays();
     const boardUp = await page.locator('[data-square="e4"]').first()
