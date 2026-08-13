@@ -279,7 +279,7 @@ describe('assembleOpeningTrapsAnswer — grounded "traps in my strongest opening
     expect(a!.facts).toMatch(/Trap weapons you can spring: Fried Liver Attack; Legal Mate\./);
     expect(a!.facts).toMatch(/Watch out for: Blackburne Shilling Gambit\./);
     expect(a!.facts).toMatch(/Your strongest Black opening is the Caro-Kann Defense\./);
-    expect(a!.facts).toMatch(/Say "punish lines for the Italian Game" and I'll run the drill\./);
+    expect(a!.facts).toMatch(/Want me to show you\? Say "teach me the traps in the Italian Game" and I'll build a lesson plan that walks every one of them\./);
     expect(a!.sources).toContain('data:your-games');
   });
   it('caps trap weapons at 3', () => {

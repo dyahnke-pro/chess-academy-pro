@@ -177,3 +177,15 @@ describe('licensedFacts — code-computed facts license their own tactic vocabul
     expect(skewer.dropped.length).toBe(1);
   });
 });
+
+describe('definition exemption (2026-08-13 all-questions audit)', () => {
+  it('keeps a glossary definition — no live-board claim to grade', () => {
+    const text = 'The knight is the classic forker, leaping over defenders to hit king and queen together.';
+    const { dropped } = stripUngroundedTacticSentences(text, EMPTY_CTX);
+    expect(dropped).toHaveLength(0);
+  });
+  it('still drops a live claim wearing definitional grammar', () => {
+    const { dropped } = stripUngroundedTacticSentences('There is a pin on the e-file.', EMPTY_CTX);
+    expect(dropped).toHaveLength(1);
+  });
+});

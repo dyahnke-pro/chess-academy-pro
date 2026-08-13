@@ -2188,7 +2188,10 @@ export function CoachTeachPage(): JSX.Element {
       const favMatch = text.trim().match(
         /^(?:please\s+)?(?:favou?rite|star|bookmark)\s+(?:the\s+)?(.{2,60})$/i,
       ) ?? text.trim().match(
-        /^(?:please\s+)?add\s+(?:the\s+)?(.{2,60}?)\s+to\s+my\s+favou?rites?$/i,
+        // "…to my repertoire" is the same command — favorites ARE the
+        // repertoire shelf today (2026-08-13 all-questions audit: the ask
+        // fell to the best-move default).
+        /^(?:please\s+)?add\s+(?:the\s+)?(.{2,60}?)\s+to\s+my\s+(?:favou?rites?|repertoire)$/i,
       );
       if (favMatch) {
         setMessages((prev) => [...prev, { id: uid('fav-u'), role: 'user', content: text, timestamp: Date.now() }]);
@@ -2227,6 +2230,16 @@ export function CoachTeachPage(): JSX.Element {
           void navigate(route);
           return;
         }
+      }
+      // "explain this position" gets the FULL deterministic read — material,
+      // structure, plans — through the same path as the Read-position button,
+      // not the thin best-move readout (David 2026-08-13 all-questions audit:
+      // "the full read with the move at the end"). The hook mirrors its text
+      // into the chat as it reads.
+      if (/^(?:please\s+)?(?:explain|describe|read)\s+(?:this|the)\s+(?:position|board)(?:\s+(?:to|for)\s+me)?[?!.\s]*$/i.test(text.trim())) {
+        setMessages((prev) => [...prev, { id: uid('read-u'), role: 'user', content: text, timestamp: Date.now() }]);
+        void positionNarration.narrate();
+        return;
       }
       if (routed && (routed.kind === 'take_back_move' || routed.kind === 'reset_board')) {
         setMessages((prev) => [...prev, { id: uid('cmd-u'), role: 'user', content: text, timestamp: Date.now() }]);

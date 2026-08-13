@@ -67,7 +67,7 @@ const ACCEPT = {
   'transfer-gap': /transfer|games?|puzzle|haven'?t|not enough/i,
   'skill-radar': /radar|skill|tactic|strateg|endgame|haven'?t|not enough/i,
   'time-trouble': /time|fast|clock|haven'?t|untimed|not enough/i,
-  'last-game': /won|lost|drew|draw|last game|no games|haven'?t played/i,
+  'last-game': /won|lost|drew|draw|last game|no games|games on file|haven'?t played|don'?t have any of your games/i,
   concept: /fork(?:er)?.{0,120}(two|attack|hit|strike|same time|both|together|more than one)/i,
   'teaching-method': /teach|watch|learn|practice|lesson|walk/i,
   'settings-query': /voice|narration|on|off|enabled|disabled/i,
@@ -134,16 +134,29 @@ async function ask(q, budgetLoops = 30) {
   const box = page.locator('[data-testid="chat-text-input"]:visible').first();
   try { await box.waitFor({ timeout: 30000 }); } catch { return { reply: '', sent: false }; }
   const t = page.locator('[data-testid="teach-transcript"]:visible').first();
-  const before = (await t.innerText().catch(() => '')) || '';
+  // Count LINES, not content: two lanes can serve IDENTICAL empty-state text
+  // (stats + records both say "You haven't imported or played any games
+  // yet…"), so a content-dedupe filter hid the second lane's real answer and
+  // reported "no reply" (run allq-mss0y9qr — the app's own PostHog tape
+  // showed every one of those turns answered). New lines past the baseline
+  // count are the reply, whatever they say.
+  const lines = async () => ((await t.innerText().catch(() => '')) || '')
+    .split('\n').map((l) => l.trim()).filter((l) => l.length >= 12 && l.includes(' '));
+  const baseArr = await lines();
   await box.click({ force: true });
   await box.pressSequentially(q, { delay: 8 });
   await box.press('Enter');
   for (let i = 0; i < budgetLoops; i++) {
     await page.waitForTimeout(1500);
-    const now = (await t.innerText().catch(() => '')) || '';
-    const fresh = now.split('\n').map((l) => l.trim())
-      .filter((l) => l.length >= 12 && l.includes(' ') && !before.includes(l) && !l.includes(q));
-    if (fresh.length) { await page.waitForTimeout(2000); return { reply: fresh.join(' '), sent: true }; }
+    const now = await lines();
+    const n = now.length - baseArr.length;
+    if (n > 0) {
+      // The transcript renders newest-at-top; take whichever end changed so
+      // this stays correct if that ever flips.
+      const tailIsOld = now.slice(n).join('|') === baseArr.join('|');
+      const fresh = (tailIsOld ? now.slice(0, n) : now.slice(baseArr.length)).filter((l) => !l.includes(q));
+      if (fresh.length) { await page.waitForTimeout(2000); return { reply: fresh.join(' '), sent: true }; }
+    }
   }
   return { reply: '', sent: true };
 }
@@ -167,6 +180,11 @@ for (const [section, ids] of SECTIONS) {
     if (!entry) { record(id, false, 'not in matrix'); continue; }
     const q = (entry.qs ?? [])[0];
     if (!q) { record(id, false, 'matrix entry has no phrasing'); continue; }
+    // A fresh surface for the session-starting asks — run 2 proved the
+    // previous ask's Italian lesson-gen completing DURING "play the
+    // Caro-Kann against me" polluted both the surface state and the reply
+    // the reader attributed to it.
+    if (id === 'play-against' || id === 'teach-opening') { await gotoTeach(); }
     const urlBefore = page.url();
     const budget = id === 'teach-opening' ? 80 : id === 'continue-middlegame' ? 50 : 30;
     const { reply, sent } = await ask(q, budget);

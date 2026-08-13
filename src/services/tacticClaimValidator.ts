@@ -179,7 +179,21 @@ export function stripUngroundedTacticSentences(
       };
       const outOfVocab = violations.filter((v) =>
         v.reason === 'not-in-vocabulary' && !typeLicensed(v.type));
-      if (prose && outOfVocab.length > 0 && !TACTIC_NEGATION_GUARD.test(prose)) {
+      // A DEFINITION is not a board claim. "The knight is the classic forker,
+      // leaping over defenders to hit king and queen together" teaches what a
+      // fork IS — it names no square and points at nothing live, so grading it
+      // against this board's tactic context gutted the glossary answer
+      // (2026-08-13 all-questions audit, "what's a fork?" run 2). Definitional
+      // shape + zero live-board cues = exempt; anything that says "you/here/
+      // this position" or names a square is still graded in full.
+      const isDefinition =
+        /\b(?:is|are)\s+(?:a|an|the|when)\b|\bmeans\b|\bhappens\s+when\b|\bin\s+chess\b/i.test(prose)
+        // …but never the EXISTENTIAL form ("there is a pin on the e-file" is
+        // a live claim, not a definition) and never anything that points at
+        // this board: a square, a file/rank/diagonal, or the student.
+        && !/\bthere\s+(?:is|are)\b/i.test(prose)
+        && !/[a-h][1-8]\b|\b[a-h][- ]file\b|\brank\b|\bdiagonal\b|\byours?\b|\byou\b|\bhere\b|\bright now\b|\bthis (?:position|board|game)\b|\bon the board\b/i.test(prose);
+      if (prose && outOfVocab.length > 0 && !TACTIC_NEGATION_GUARD.test(prose) && !isDefinition) {
         dropped.push(prose);
         // Preserve any tool markers (arrow / action) that shared the dropped
         // sentence — they belong to the move, not the fabricated claim.

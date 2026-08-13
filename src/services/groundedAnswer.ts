@@ -2126,6 +2126,9 @@ export interface OpeningTrapsSideLike {
 export function assembleOpeningTrapsAnswer(opts: {
   sides: ReadonlyArray<OpeningTrapsSideLike>;
   explainSystem?: boolean;
+  /** True when the student NAMED the opening ("traps in the Italian") — the
+   *  phrasing then describes THAT opening, not "your strongest". */
+  named?: boolean;
 }): GroundedAnswer | null {
   const clean = (xs: ReadonlyArray<string>): string[] =>
     xs.filter((s) => !!s && s.trim().length > 0).map((s) => s.trim());
@@ -2156,14 +2159,19 @@ export function assembleOpeningTrapsAnswer(opts: {
     const traps = clean(s.traps).slice(0, 3);
     const warns = clean(s.warnings).slice(0, 2);
     const side = s.color === 'white' ? 'White' : 'Black';
-    let line = `Your strongest ${side} opening is the ${s.name}.`;
+    let line = opts.named
+      ? `The ${s.name} (a ${side} opening) has real, verified traps.`
+      : `Your strongest ${side} opening is the ${s.name}.`;
     if (traps.length) line += ` Trap weapons you can spring: ${traps.join('; ')}.`;
     if (warns.length) line += ` Watch out for: ${warns.join('; ')}.`;
     parts.push(line);
   }
 
+  // The OFFER (David 2026-08-13: "coach should ask to show them / make a
+  // lesson plan of all opening traps"): every trap answer ends by offering
+  // the full walk — the traps stage already teaches each one WLPP-style.
   const next = firstDrillName
-    ? ` Say "punish lines for the ${firstDrillName}" and I'll run the drill.`
+    ? ` Want me to show you? Say "teach me the traps in the ${firstDrillName}" and I'll build a lesson plan that walks every one of them.`
     : '';
 
   const systemTail = system ? ' ' + system : '';

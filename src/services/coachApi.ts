@@ -3089,7 +3089,20 @@ export async function getCoachChatResponse(
 
             let sides: OpeningTrapsSideLike[] = [];
             let primaryOpening: OpeningRecord | undefined;
-            const ctx = grounding.openingId ? await getOpeningById(grounding.openingId) : undefined;
+            let ctx = grounding.openingId ? await getOpeningById(grounding.openingId) : undefined;
+            // A NAMED opening in the ask wins over the profile: "what traps can
+            // I play in the ITALIAN?" answers about the Italian's own curated
+            // traps, never "your strongest openings" (David 2026-08-13: "the
+            // coach should ask to show them / make a lesson plan of all
+            // opening traps"). Name extracted after in/for/of/against and
+            // resolved against the real openings DB — no match, no override.
+            if (!ctx) {
+              const named = /\b(?:in|for|of|against)\s+(?:the\s+)?([a-z'\-\s]{3,40}?)[?!.\s]*$/i.exec(lastUserMessage() ?? '');
+              if (named) {
+                const { searchOpenings } = await import('./openingService');
+                ctx = (await searchOpenings(named[1].trim()).catch(() => []))[0];
+              }
+            }
             if (ctx) {
               sides = [toSide(ctx)];
               primaryOpening = ctx;
@@ -3106,7 +3119,7 @@ export async function getCoachChatResponse(
               sides = both.map(toSide);
               primaryOpening = both[0];
             }
-            const answer = assembleOpeningTrapsAnswer({ sides, explainSystem: grounding.openingTrapsSystemAsk });
+            const answer = assembleOpeningTrapsAnswer({ sides, explainSystem: grounding.openingTrapsSystemAsk, named: !!ctx });
             if (answer) {
               const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-traps', preferRaw: true });
               if (voiced) {
@@ -4150,6 +4163,15 @@ export async function getCoachChatResponse(
             const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'player-games', preferRaw: true });
             if (voiced) return voiced;
           }
+        }
+        // No player context loaded → honest ask-back, never the best-move
+        // default ("how does he play this line?" answered "The best move is
+        // Nf3" — 2026-08-13 all-questions audit, run allq-mss0y9qr).
+        if (grounding.playerGamesQuestion && !grounding.playerGames) {
+          const askBack = "Which player do you mean? Open a pro's opening page and I can walk you through their real games in this line.";
+          const voicedAskBack = await voiceFacts(askBack, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'player-games', preferRaw: true });
+          if (voicedAskBack) return voicedAskBack;
+          return askBack;
         }
 
         // ── ENDGAME (Phase 5) — voice the SYZYGY TABLEBASE verdict ──────────
