@@ -371,7 +371,13 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 // The general rule, which cost a build to learn: a fix to what generation
 // PRODUCES is invisible to every already-generated lesson until this string
 // changes. Shipping the code is not shipping the behaviour.
-const WALKTHROUGH_GEN_REV = '2026-08-12-authored-tier-spelling';
+// …and bumped a THIRD time, for the same reason as the second, caught on a
+// session-end reread. The moves-first resolution and the introduction window
+// both changed what PASS 1 produces, and neither moved this string — so every
+// lesson cached at the '-spelling' rev keeps its dead-tier prose forever while
+// the audits (fresh browser, cold cache, always regenerating) show green.
+// One bump batching both fixes, per the locked cost rule.
+const WALKTHROUGH_GEN_REV = '2026-08-13-authored-window';
 
 export async function getCachedOpening(
   name: string,
