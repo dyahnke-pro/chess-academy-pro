@@ -1840,7 +1840,24 @@ export function CoachTeachPage(): JSX.Element {
     walkthrough.stop();
     voiceService.stop();
     loadDrillOntoBoard(drill, progress);
-    const intro = `${lead ? `${lead} ` : ''}${drill.prompt} Play your move on the board.`;
+    // THE FRAMING BEAT (David 2026-08-13: "Add the framing beat") — one
+    // hand-written teaching line naming WHAT this drill sharpens and what to
+    // look for, before the board demands a move. Keyed on the aid slug, so
+    // it is authored, never generated (corpus / hand-written / computed).
+    const FRAMING: Record<string, string> = {
+      fork: "Let's sharpen your forks — hunt for one move that attacks two targets at once.",
+      pin: "Pin practice — look for a piece that can't move without exposing something bigger behind it.",
+      skewer: 'Skewer practice — attack the big piece first and collect what stands behind it.',
+      'back-rank': 'Back-rank alert — their king is short of air; look at the heavy pieces.',
+      mate: 'Mate hunt — checks first: one of them ends the game.',
+      trap: "Trap work — the opponent's last move looks natural and loses; find the punishment.",
+      calculation: 'Calculation rep — force the sequence in your head to the end before you touch a piece.',
+      discovery: 'Discovered-attack drill — move one piece to unmask another.',
+      hanging: 'Loose-piece hunt — something is undefended; find it and take it.',
+    };
+    const frameKey = Object.keys(FRAMING).find((k) => drill.aid.includes(k) || drill.label.toLowerCase().includes(k));
+    const framing = frameKey ? `${FRAMING[frameKey]} ` : '';
+    const intro = `${lead ? `${lead} ` : ''}${framing}${drill.prompt} Play your move on the board.`;
     setMessages((prev) => [...prev, {
       id: uid('drill-intro'), role: 'assistant', content: intro, timestamp: Date.now(),
     }]);
